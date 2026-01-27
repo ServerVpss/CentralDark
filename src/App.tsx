@@ -10,11 +10,11 @@ import Auth from "./pages/Auth";
 import Bots from "./pages/Bots";
 import BotSettingsPage from "./pages/BotSettings";
 import Security from "./pages/Security";
-import Subscribers from "./pages/Subscribers";
-import Gamification from "./pages/Gamification";
 import Plans from "./pages/Plans";
 import Settings from "./pages/Settings";
 import Consultas from "./pages/Consultas";
+import TelegramUsers from "./pages/TelegramUsers";
+import QueryLogs from "./pages/QueryLogs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,8 +33,8 @@ const App = () => (
             <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
             <Route path="/bots/:botId/settings" element={<ProtectedRoute><BotSettingsPage /></ProtectedRoute>} />
             <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
-            <Route path="/subscribers" element={<ProtectedRoute><Subscribers /></ProtectedRoute>} />
-            <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} />
+            <Route path="/telegram-users" element={<ProtectedRoute><TelegramUsers /></ProtectedRoute>} />
+            <Route path="/logs" element={<ProtectedRoute><QueryLogs /></ProtectedRoute>} />
             <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
