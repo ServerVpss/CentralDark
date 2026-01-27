@@ -44,30 +44,110 @@ import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/hooks/us
 import { BotHealthMonitor } from "@/components/bots/BotHealthMonitor";
 import { AnalyticsChart } from "@/components/dashboard/AnalyticsChart";
 
+// Regex para validar formato do token do Telegram: ID:HASH
+const TELEGRAM_TOKEN_REGEX = /^\d{8,10}:[A-Za-z0-9_-]{35}$/;
+
+// Mensagens de erro amigáveis
+const getTokenErrorMessage = (error: string): string => {
+  if (error.includes("Not Found") || error.includes("404")) {
+    return "Token inválido ou bot não existe. Verifique se o token está correto ou crie um novo bot no @BotFather.";
+  }
+  if (error.includes("Unauthorized") || error.includes("401")) {
+    return "Token não autorizado. O token pode ter sido revogado. Gere um novo token no @BotFather.";
+  }
+  if (error.includes("Invalid")) {
+    return "Formato do token inválido. O token deve estar no formato: 1234567890:ABCdefGHIjklMNOpqrsTUVwxyz";
+  }
+  return error;
+};
+
 export default function Bots() {
   const { bots, loading, createBot, syncBot, deleteBot } = useTelegramBots();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newBotName, setNewBotName] = useState("");
   const [newBotToken, setNewBotToken] = useState("");
+  const [tokenError, setTokenError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [selectedBot, setSelectedBot] = useState<TelegramBot | null>(null);
   const [showToken, setShowToken] = useState<string | null>(null);
   const [syncingBot, setSyncingBot] = useState<string | null>(null);
 
+  // Validar formato do token em tempo real
+  const validateToken = (token: string): boolean => {
+    if (!token.trim()) {
+      setTokenError(null);
+      return false;
+    }
+    
+    // Verificar se contém ":" (separador básico)
+    if (!token.includes(":")) {
+      setTokenError("O token deve conter ':' separando o ID do hash");
+      return false;
+    }
+    
+    const parts = token.split(":");
+    if (parts.length !== 2) {
+      setTokenError("Formato inválido. Use: ID:HASH");
+      return false;
+    }
+    
+    const [botId, hash] = parts;
+    
+    // Verificar se o ID é numérico
+    if (!/^\d+$/.test(botId)) {
+      setTokenError("O ID do bot (antes do ':') deve conter apenas números");
+      return false;
+    }
+    
+    // Verificar comprimento do ID (geralmente 9-10 dígitos)
+    if (botId.length < 8 || botId.length > 12) {
+      setTokenError("O ID do bot deve ter entre 8 e 12 dígitos");
+      return false;
+    }
+    
+    // Verificar hash
+    if (hash.length < 30 || hash.length > 50) {
+      setTokenError("O hash do token parece incorreto. Verifique se copiou o token completo");
+      return false;
+    }
+    
+    // Verificar caracteres válidos no hash
+    if (!/^[A-Za-z0-9_-]+$/.test(hash)) {
+      setTokenError("O hash contém caracteres inválidos");
+      return false;
+    }
+    
+    setTokenError(null);
+    return true;
+  };
+
+  const handleTokenChange = (value: string) => {
+    setNewBotToken(value);
+    validateToken(value);
+  };
+
   const handleCreateBot = async () => {
-    if (!newBotToken.trim()) {
+    const trimmedToken = newBotToken.trim();
+    
+    if (!trimmedToken) {
       toast.error("Digite o token do bot");
       return;
     }
 
+    if (!validateToken(trimmedToken)) {
+      toast.error(tokenError || "Token inválido");
+      return;
+    }
+
     setIsCreating(true);
-    const result = await createBot(newBotName || "Novo Bot", newBotToken.trim());
+    const result = await createBot(newBotName || "Novo Bot", trimmedToken);
     setIsCreating(false);
 
     if (result) {
       setShowAddDialog(false);
       setNewBotName("");
       setNewBotToken("");
+      setTokenError(null);
     }
   };
 
@@ -150,12 +230,26 @@ export default function Bots() {
                     id="botToken"
                     placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz"
                     value={newBotToken}
-                    onChange={(e) => setNewBotToken(e.target.value)}
-                    className="bg-secondary/50 font-mono text-sm"
+                    onChange={(e) => handleTokenChange(e.target.value)}
+                    className={`bg-secondary/50 font-mono text-sm ${
+                      tokenError ? "border-destructive focus-visible:ring-destructive" : ""
+                    }`}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Obtenha o token através do @BotFather no Telegram
-                  </p>
+                  {tokenError ? (
+                    <p className="text-xs text-destructive flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {tokenError}
+                    </p>
+                  ) : newBotToken && !tokenError ? (
+                    <p className="text-xs text-success flex items-center gap-1">
+                      <CheckCircle className="h-3 w-3" />
+                      Formato do token válido
+                    </p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      Obtenha o token através do @BotFather no Telegram
+                    </p>
+                  )}
                 </div>
               </div>
               <DialogFooter>
