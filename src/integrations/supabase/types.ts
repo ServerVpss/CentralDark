@@ -82,6 +82,121 @@ export type Database = {
           },
         ]
       }
+      bot_analytics: {
+        Row: {
+          active_users: number | null
+          blocked_messages: number | null
+          bot_id: string | null
+          created_at: string
+          date: string
+          id: string
+          links_blocked: number | null
+          messages_received: number | null
+          messages_sent: number | null
+          new_users: number | null
+          spam_detected: number | null
+        }
+        Insert: {
+          active_users?: number | null
+          blocked_messages?: number | null
+          bot_id?: string | null
+          created_at?: string
+          date?: string
+          id?: string
+          links_blocked?: number | null
+          messages_received?: number | null
+          messages_sent?: number | null
+          new_users?: number | null
+          spam_detected?: number | null
+        }
+        Update: {
+          active_users?: number | null
+          blocked_messages?: number | null
+          bot_id?: string | null
+          created_at?: string
+          date?: string
+          id?: string
+          links_blocked?: number | null
+          messages_received?: number | null
+          messages_sent?: number | null
+          new_users?: number | null
+          spam_detected?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_analytics_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bot_security_settings: {
+        Row: {
+          anti_flood_action: string | null
+          anti_flood_enabled: boolean | null
+          anti_flood_interval_seconds: number | null
+          anti_flood_max_messages: number | null
+          anti_link_action: string | null
+          anti_link_enabled: boolean | null
+          anti_spam_action: string | null
+          anti_spam_enabled: boolean | null
+          anti_spam_interval_seconds: number | null
+          anti_spam_max_messages: number | null
+          bot_id: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          welcome_message: string | null
+          welcome_message_enabled: boolean | null
+        }
+        Insert: {
+          anti_flood_action?: string | null
+          anti_flood_enabled?: boolean | null
+          anti_flood_interval_seconds?: number | null
+          anti_flood_max_messages?: number | null
+          anti_link_action?: string | null
+          anti_link_enabled?: boolean | null
+          anti_spam_action?: string | null
+          anti_spam_enabled?: boolean | null
+          anti_spam_interval_seconds?: number | null
+          anti_spam_max_messages?: number | null
+          bot_id?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          welcome_message?: string | null
+          welcome_message_enabled?: boolean | null
+        }
+        Update: {
+          anti_flood_action?: string | null
+          anti_flood_enabled?: boolean | null
+          anti_flood_interval_seconds?: number | null
+          anti_flood_max_messages?: number | null
+          anti_link_action?: string | null
+          anti_link_enabled?: boolean | null
+          anti_spam_action?: string | null
+          anti_spam_enabled?: boolean | null
+          anti_spam_interval_seconds?: number | null
+          anti_spam_max_messages?: number | null
+          bot_id?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          welcome_message?: string | null
+          welcome_message_enabled?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_security_settings_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: true
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       query_history: {
         Row: {
           created_at: string
@@ -119,6 +234,110 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "api_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      telegram_bots: {
+        Row: {
+          bot_id: number | null
+          bot_username: string | null
+          created_at: string
+          health_status: string | null
+          id: string
+          is_active: boolean | null
+          last_health_check: string | null
+          name: string
+          token: string
+          updated_at: string
+          webhook_active: boolean | null
+          webhook_url: string | null
+        }
+        Insert: {
+          bot_id?: number | null
+          bot_username?: string | null
+          created_at?: string
+          health_status?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_health_check?: string | null
+          name: string
+          token: string
+          updated_at?: string
+          webhook_active?: boolean | null
+          webhook_url?: string | null
+        }
+        Update: {
+          bot_id?: number | null
+          bot_username?: string | null
+          created_at?: string
+          health_status?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_health_check?: string | null
+          name?: string
+          token?: string
+          updated_at?: string
+          webhook_active?: boolean | null
+          webhook_url?: string | null
+        }
+        Relationships: []
+      }
+      telegram_messages: {
+        Row: {
+          blocked_reason: string | null
+          bot_id: string | null
+          chat_id: number
+          chat_type: string | null
+          created_at: string
+          from_first_name: string | null
+          from_user_id: number | null
+          from_username: string | null
+          id: string
+          is_blocked: boolean | null
+          message_text: string | null
+          message_type: string | null
+          raw_data: Json | null
+          telegram_message_id: number | null
+        }
+        Insert: {
+          blocked_reason?: string | null
+          bot_id?: string | null
+          chat_id: number
+          chat_type?: string | null
+          created_at?: string
+          from_first_name?: string | null
+          from_user_id?: number | null
+          from_username?: string | null
+          id?: string
+          is_blocked?: boolean | null
+          message_text?: string | null
+          message_type?: string | null
+          raw_data?: Json | null
+          telegram_message_id?: number | null
+        }
+        Update: {
+          blocked_reason?: string | null
+          bot_id?: string | null
+          chat_id?: number
+          chat_type?: string | null
+          created_at?: string
+          from_first_name?: string | null
+          from_user_id?: number | null
+          from_username?: string | null
+          id?: string
+          is_blocked?: boolean | null
+          message_text?: string | null
+          message_type?: string | null
+          raw_data?: Json | null
+          telegram_message_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_messages_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
             referencedColumns: ["id"]
           },
         ]
