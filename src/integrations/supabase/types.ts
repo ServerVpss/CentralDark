@@ -14,7 +14,115 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      api_providers: {
+        Row: {
+          base_url: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          port: number | null
+          updated_at: string
+        }
+        Insert: {
+          base_url: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          port?: number | null
+          updated_at?: string
+        }
+        Update: {
+          base_url?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          port?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      api_usage_logs: {
+        Row: {
+          created_at: string
+          credits_used: number | null
+          id: string
+          provider_id: string | null
+          query_type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          credits_used?: number | null
+          id?: string
+          provider_id?: string | null
+          query_type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          credits_used?: number | null
+          id?: string
+          provider_id?: string | null
+          query_type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_usage_logs_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "api_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      query_history: {
+        Row: {
+          created_at: string
+          id: string
+          provider_id: string | null
+          query_input: string
+          query_result: Json | null
+          query_type: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          provider_id?: string | null
+          query_input: string
+          query_result?: Json | null
+          query_type: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          provider_id?: string | null
+          query_input?: string
+          query_result?: Json | null
+          query_type?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "query_history_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "api_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

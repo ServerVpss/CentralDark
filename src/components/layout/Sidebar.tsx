@@ -11,12 +11,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Zap,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  { icon: Search, label: "Consultas", path: "/consultas" },
   { icon: Bot, label: "Bots", path: "/bots" },
   { icon: Shield, label: "Segurança", path: "/security" },
   { icon: Users, label: "Assinantes", path: "/subscribers" },
