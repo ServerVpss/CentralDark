@@ -1,1 +1,13 @@
 project_id = "kagejpghnwdfymddwxuf"
+
+[functions.telegram-bot]
+verify_jwt = false
+
+[functions.telegram-webhook]
+verify_jwt = false
+
+[functions.api-query]
+verify_jwt = false
+
+[functions.pix-payment]
+verify_jwt = false
