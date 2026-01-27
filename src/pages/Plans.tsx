@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, Crown, Edit2, Plus, Sparkles, Star, Trash2, Zap, Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { usePayments, SubscriptionPlan } from "@/hooks/usePayments";
 import { PixPaymentDialog } from "@/components/payments/PixPaymentDialog";
+import { supabase } from "@/integrations/supabase/client";
 
 const planIcons: Record<string, React.ElementType> = {
   diaria: Star,
@@ -48,6 +49,8 @@ export default function Plans() {
   const [isPixDialogOpen, setIsPixDialogOpen] = useState(false);
   const [editingPlan, setEditingPlan] = useState<SubscriptionPlan | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
+  const [totalSubscribers, setTotalSubscribers] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
   
   const [editForm, setEditForm] = useState({
     name: '',
@@ -72,8 +75,28 @@ export default function Plans() {
     max_messages_per_day: '100',
   });
 
-  const totalRevenue = plans.reduce((acc, plan) => acc + Number(plan.price) * 100, 0); // Mock subscriber count
-  const totalSubscribers = plans.length * 50; // Mock data
+  // Fetch real stats from database
+  useEffect(() => {
+    const fetchStats = async () => {
+      // Count active subscriptions
+      const { count: subsCount } = await supabase
+        .from("telegram_subscriptions")
+        .select("*", { count: "exact", head: true })
+        .gte("expires_at", new Date().toISOString());
+      
+      setTotalSubscribers(subsCount || 0);
+
+      // Sum revenue from subscriptions
+      const { data: revenueData } = await supabase
+        .from("telegram_subscriptions")
+        .select("value");
+      
+      const revenue = (revenueData || []).reduce((acc, s) => acc + Number(s.value), 0);
+      setTotalRevenue(revenue);
+    };
+
+    fetchStats();
+  }, []);
 
   const handleEditPlan = (plan: SubscriptionPlan) => {
     setEditingPlan(plan);
