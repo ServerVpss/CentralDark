@@ -272,7 +272,7 @@ serve(async (req) => {
 
       case "createBot": {
         // Create new bot with token
-        const { name } = params;
+        const { name, userId } = params;
         
         const getMeResponse = await telegramRequest(botToken, "getMe");
         
@@ -283,7 +283,7 @@ serve(async (req) => {
         
         const botInfo = getMeResponse.result as { id: number; username: string; first_name: string };
         
-        // Insert bot
+        // Insert bot with user_id
         const { data: newBot, error: insertError } = await supabase
           .from("telegram_bots")
           .insert({
@@ -293,6 +293,7 @@ serve(async (req) => {
             bot_username: botInfo.username,
             health_status: "online",
             last_health_check: new Date().toISOString(),
+            user_id: userId,
           })
           .select()
           .single();
@@ -316,10 +317,10 @@ serve(async (req) => {
           .update({ webhook_url: webhookUrl, webhook_active: true })
           .eq("id", newBot.id);
         
-        // Create default security settings
+        // Create default security settings with user_id
         await supabase
           .from("bot_security_settings")
-          .insert({ bot_id: newBot.id });
+          .insert({ bot_id: newBot.id, user_id: userId });
         
         result = {
           success: true,
