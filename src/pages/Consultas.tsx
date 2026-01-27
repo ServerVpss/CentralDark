@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,6 +69,23 @@ export default function Consultas() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<QueryResult | null>(null);
   const [queryHistory, setQueryHistory] = useState<any[]>([]);
+  const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
+
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const isNetworkBlockedError = (err: unknown) => {
+    const e = err as any;
+    const name = String(e?.name || "");
+    const message = String(e?.message || "");
+    const contextMessage = String(e?.context?.message || e?.context?.value?.message || "");
+    const combined = `${name} ${message} ${contextMessage}`.toLowerCase();
+
+    return (
+      name === "FunctionsFetchError" ||
+      combined.includes("failed to send a request to the edge function") ||
+      combined.includes("failed to fetch")
+    );
+  };
 
   const handleQuery = async () => {
     if (!queryInput.trim()) {
@@ -77,38 +95,77 @@ export default function Consultas() {
 
     setIsLoading(true);
     setResult(null);
+    setNetworkBlockedHint(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("api-query", {
-        body: {
-          queryType: selectedType,
-          queryInput: queryInput.trim(),
-          estado: selectedType === "foto" ? selectedState : undefined,
-        },
-      });
+      const maxRetries = 1; // total: 2 tentativas
+      const retryDelayMs = 800;
 
-      if (error) {
+      let lastError: any = null;
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        const { data, error } = await supabase.functions.invoke("api-query", {
+          body: {
+            queryType: selectedType,
+            queryInput: queryInput.trim(),
+            estado: selectedType === "foto" ? selectedState : undefined,
+          },
+        });
+
+        if (!error) {
+          setResult(data as QueryResult);
+
+          if (data?.success) {
+            toast.success(`Consulta realizada em ${data.duration_ms}ms`);
+            setQueryHistory((prev) =>
+              [
+                {
+                  type: selectedType,
+                  input: queryInput,
+                  timestamp: new Date().toISOString(),
+                  success: true,
+                },
+                ...prev.slice(0, 9),
+              ],
+            );
+          } else {
+            toast.error("Consulta retornou erro");
+          }
+
+          return;
+        }
+
+        lastError = error;
+
+        if (isNetworkBlockedError(error) && attempt < maxRetries) {
+          toast.message("Falha de conexão — tentando novamente...");
+          await sleep(retryDelayMs);
+          continue;
+        }
+
         console.error("Query error:", error);
-        toast.error("Erro na consulta: " + error.message);
+        if (isNetworkBlockedError(error)) {
+          setNetworkBlockedHint(
+            "Uma extensão do navegador (VPN/AdBlock/Proxy) ou firewall pode estar bloqueando a requisição. Teste em aba anônima ou desative extensões temporariamente.",
+          );
+          toast.error("Erro na consulta: conexão bloqueada no navegador");
+        } else {
+          toast.error("Erro na consulta: " + (error.message || "Erro desconhecido"));
+        }
         return;
       }
 
-      setResult(data as QueryResult);
-      
-      if (data?.success) {
-        toast.success(`Consulta realizada em ${data.duration_ms}ms`);
-        setQueryHistory(prev => [{
-          type: selectedType,
-          input: queryInput,
-          timestamp: new Date().toISOString(),
-          success: true,
-        }, ...prev.slice(0, 9)]);
-      } else {
-        toast.error("Consulta retornou erro");
-      }
+      // fallback (não deve acontecer)
+      if (lastError) throw lastError;
     } catch (err) {
       console.error("Fetch error:", err);
-      toast.error("Falha na comunicação com o servidor");
+      if (isNetworkBlockedError(err)) {
+        setNetworkBlockedHint(
+          "Uma extensão do navegador (VPN/AdBlock/Proxy) ou firewall pode estar bloqueando a requisição. Teste em aba anônima ou desative extensões temporariamente.",
+        );
+        toast.error("Falha na comunicação: conexão bloqueada no navegador");
+      } else {
+        toast.error("Falha na comunicação com o servidor");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -251,6 +308,19 @@ export default function Consultas() {
                       </SelectContent>
                     </Select>
                   </div>
+                )}
+
+                {networkBlockedHint && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <div>
+                      <AlertTitle>Não foi possível conectar</AlertTitle>
+                      <AlertDescription>
+                        <p>{networkBlockedHint}</p>
+                        <p className="mt-2">Dica rápida: tente em uma janela anônima/privada.</p>
+                      </AlertDescription>
+                    </div>
+                  </Alert>
                 )}
 
                 {/* Submit Button */}
