@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Bell,
   CreditCard,
@@ -33,12 +33,12 @@ import { PaymentGatewaySettings } from "@/components/payments/PaymentGatewaySett
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Settings() {
-  const { profile, updateProfile } = useAuth();
+  const { user, profile, updateProfile } = useAuth();
   
   const [settings, setSettings] = useState({
     // Profile
-    name: profile?.full_name || "Admin Principal",
-    email: "admin@telepanel.com",
+    name: "",
+    email: "",
     timezone: "America/Sao_Paulo",
     language: "pt-BR",
     
@@ -58,8 +58,28 @@ export default function Settings() {
     apiKey: "sk_live_xxxxxxxxxxxxxxxxxxxxx",
   });
 
+  // Atualizar settings quando profile/user carregar
+  useState(() => {
+    if (profile?.full_name || user?.email) {
+      setSettings(prev => ({
+        ...prev,
+        name: profile?.full_name || "",
+        email: user?.email || "",
+      }));
+    }
+  });
+
+  // Effect para atualizar quando dados carregarem
+  useEffect(() => {
+    setSettings(prev => ({
+      ...prev,
+      name: profile?.full_name || "",
+      email: user?.email || "",
+    }));
+  }, [profile, user]);
+
   const handleSave = async () => {
-    if (profile && settings.name !== profile.full_name) {
+    if (settings.name && settings.name !== profile?.full_name) {
       await updateProfile({ full_name: settings.name });
     } else {
       toast.success("Configurações salvas com sucesso!");
