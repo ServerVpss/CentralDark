@@ -42,6 +42,7 @@ import {
 import { toast } from "sonner";
 import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/hooks/useTelegramBots";
 import { BotHealthMonitor } from "@/components/bots/BotHealthMonitor";
+import { BotConfigCard } from "@/components/bots/BotConfigCard";
 import { AnalyticsChart } from "@/components/dashboard/AnalyticsChart";
 
 // Regex para validar formato do token do Telegram: ID:HASH
@@ -62,7 +63,7 @@ const getTokenErrorMessage = (error: string): string => {
 };
 
 export default function Bots() {
-  const { bots, loading, createBot, syncBot, deleteBot } = useTelegramBots();
+  const { bots, loading, createBot, syncBot, deleteBot, updateBot } = useTelegramBots();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newBotName, setNewBotName] = useState("");
   const [newBotToken, setNewBotToken] = useState("");
@@ -426,12 +427,21 @@ export default function Bots() {
 
           {/* Sidebar */}
           <div className="space-y-4">
+            {/* Bot Config */}
+            {selectedBot && (
+              <BotConfigCard 
+                bot={selectedBot} 
+                onSync={syncBot}
+                onUpdate={updateBot}
+              />
+            )}
+
             {/* Health Monitor */}
             <BotHealthMonitor bots={bots} />
 
             {/* Bot Settings */}
             {selectedBot && (
-              <BotSettingsCard bot={selectedBot} />
+              <BotSecurityCard bot={selectedBot} />
             )}
           </div>
         </div>
@@ -440,7 +450,7 @@ export default function Bots() {
   );
 }
 
-function BotSettingsCard({ bot }: { bot: TelegramBot }) {
+function BotSecurityCard({ bot }: { bot: TelegramBot }) {
   const { settings, loading, updateSettings } = useBotSecuritySettings(bot.id);
   const [localSettings, setLocalSettings] = useState(settings);
 
@@ -469,8 +479,8 @@ function BotSettingsCard({ bot }: { bot: TelegramBot }) {
   return (
     <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-lg">Configurações</CardTitle>
-        <CardDescription>{bot.name}</CardDescription>
+        <CardTitle className="text-lg">Proteção do Grupo</CardTitle>
+        <CardDescription>Configurações de segurança</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Tabs defaultValue="security" className="w-full">
