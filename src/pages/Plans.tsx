@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { usePayments, SubscriptionPlan } from "@/hooks/usePayments";
-import { SubscriptionStatus } from "@/components/payments/SubscriptionStatus";
 import { PixPaymentDialog } from "@/components/payments/PixPaymentDialog";
 
 const planIcons: Record<string, React.ElementType> = {
@@ -187,8 +186,6 @@ export default function Plans() {
           </Button>
         </div>
 
-        {/* Current Subscription Status */}
-        <SubscriptionStatus onUpgrade={() => {}} />
 
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-3">
