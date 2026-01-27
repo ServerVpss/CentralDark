@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Bot,
   Plus,
@@ -63,6 +64,7 @@ const getTokenErrorMessage = (error: string): string => {
 };
 
 export default function Bots() {
+  const navigate = useNavigate();
   const { bots, loading, createBot, syncBot, deleteBot, updateBot } = useTelegramBots();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newBotName, setNewBotName] = useState("");
@@ -367,8 +369,9 @@ export default function Bots() {
                             size="icon"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setSelectedBot(bot);
+                              navigate(`/bots/${bot.id}/settings`);
                             }}
+                            title="Configurações do Bot"
                           >
                             <Settings className="h-4 w-4" />
                           </Button>
