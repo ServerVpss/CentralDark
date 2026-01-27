@@ -203,6 +203,158 @@ export type Database = {
           },
         ]
       }
+      payment_gateway_settings: {
+        Row: {
+          auto_approve: boolean | null
+          created_at: string
+          gateway_type: string | null
+          id: string
+          is_sandbox: boolean | null
+          notification_enabled: boolean | null
+          pix_key: string | null
+          updated_at: string
+          user_id: string
+          webhook_url: string | null
+        }
+        Insert: {
+          auto_approve?: boolean | null
+          created_at?: string
+          gateway_type?: string | null
+          id?: string
+          is_sandbox?: boolean | null
+          notification_enabled?: boolean | null
+          pix_key?: string | null
+          updated_at?: string
+          user_id: string
+          webhook_url?: string | null
+        }
+        Update: {
+          auto_approve?: boolean | null
+          created_at?: string
+          gateway_type?: string | null
+          id?: string
+          is_sandbox?: boolean | null
+          notification_enabled?: boolean | null
+          pix_key?: string | null
+          updated_at?: string
+          user_id?: string
+          webhook_url?: string | null
+        }
+        Relationships: []
+      }
+      payment_history: {
+        Row: {
+          amount: number
+          created_at: string
+          gateway_response: Json | null
+          id: string
+          payment_method: string | null
+          plan_id: string | null
+          status: string
+          subscription_id: string | null
+          txid: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          gateway_response?: Json | null
+          id?: string
+          payment_method?: string | null
+          plan_id?: string | null
+          status: string
+          subscription_id?: string | null
+          txid?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          gateway_response?: Json | null
+          id?: string
+          payment_method?: string | null
+          plan_id?: string | null
+          status?: string
+          subscription_id?: string | null
+          txid?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_history_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_history_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "user_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pending_payments: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          loc_id: string | null
+          pix_copy_paste: string | null
+          pix_qrcode: string | null
+          plan_code: string
+          plan_days: number
+          plan_id: string | null
+          plan_name: string
+          status: string | null
+          txid: string
+          user_id: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          loc_id?: string | null
+          pix_copy_paste?: string | null
+          pix_qrcode?: string | null
+          plan_code: string
+          plan_days: number
+          plan_id?: string | null
+          plan_name: string
+          status?: string | null
+          txid: string
+          user_id: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          loc_id?: string | null
+          pix_copy_paste?: string | null
+          pix_qrcode?: string | null
+          plan_code?: string
+          plan_days?: number
+          plan_id?: string | null
+          plan_name?: string
+          status?: string | null
+          txid?: string
+          user_id?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pending_payments_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -270,6 +422,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      subscription_plans: {
+        Row: {
+          code: string
+          created_at: string
+          days: number
+          description: string | null
+          features: string[] | null
+          id: string
+          is_active: boolean | null
+          is_popular: boolean | null
+          max_bots: number | null
+          max_messages_per_day: number | null
+          name: string
+          price: number
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          days: number
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          max_bots?: number | null
+          max_messages_per_day?: number | null
+          name: string
+          price: number
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          days?: number
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          is_popular?: boolean | null
+          max_bots?: number | null
+          max_messages_per_day?: number | null
+          name?: string
+          price?: number
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       telegram_bots: {
         Row: {
@@ -401,6 +607,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          plan_code: string
+          plan_days: number
+          plan_id: string | null
+          plan_name: string
+          started_at: string
+          status: string | null
+          txid: string | null
+          user_id: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          plan_code: string
+          plan_days: number
+          plan_id?: string | null
+          plan_name: string
+          started_at?: string
+          status?: string | null
+          txid?: string | null
+          user_id: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          plan_code?: string
+          plan_days?: number
+          plan_id?: string | null
+          plan_name?: string
+          started_at?: string
+          status?: string | null
+          txid?: string | null
+          user_id?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

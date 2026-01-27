@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Bell,
+  CreditCard,
   Globe,
   Key,
   Laptop,
@@ -28,11 +29,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { PaymentGatewaySettings } from "@/components/payments/PaymentGatewaySettings";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Settings() {
+  const { profile, updateProfile } = useAuth();
+  
   const [settings, setSettings] = useState({
     // Profile
-    name: "Admin Principal",
+    name: profile?.full_name || "Admin Principal",
     email: "admin@telepanel.com",
     timezone: "America/Sao_Paulo",
     language: "pt-BR",
@@ -53,8 +58,12 @@ export default function Settings() {
     apiKey: "sk_live_xxxxxxxxxxxxxxxxxxxxx",
   });
 
-  const handleSave = () => {
-    toast.success("Configurações salvas com sucesso!");
+  const handleSave = async () => {
+    if (profile && settings.name !== profile.full_name) {
+      await updateProfile({ full_name: settings.name });
+    } else {
+      toast.success("Configurações salvas com sucesso!");
+    }
   };
 
   return (
@@ -75,10 +84,14 @@ export default function Settings() {
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="bg-secondary/50 p-1">
+          <TabsList className="bg-secondary/50 p-1 flex-wrap h-auto gap-1">
             <TabsTrigger value="profile" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <User className="h-4 w-4" />
               Perfil
+            </TabsTrigger>
+            <TabsTrigger value="payments" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <CreditCard className="h-4 w-4" />
+              Pagamentos
             </TabsTrigger>
             <TabsTrigger value="notifications" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Bell className="h-4 w-4" />
@@ -139,9 +152,9 @@ export default function Settings() {
                       </SelectTrigger>
                       <SelectContent className="bg-popover border-border">
                         <SelectItem value="America/Sao_Paulo">São Paulo (GMT-3)</SelectItem>
-                        <SelectItem value="America/New_York">New York (GMT-5)</SelectItem>
-                        <SelectItem value="Europe/London">London (GMT+0)</SelectItem>
-                        <SelectItem value="Asia/Tokyo">Tokyo (GMT+9)</SelectItem>
+                        <SelectItem value="America/Bahia">Bahia (GMT-3)</SelectItem>
+                        <SelectItem value="America/Fortaleza">Fortaleza (GMT-3)</SelectItem>
+                        <SelectItem value="America/Manaus">Manaus (GMT-4)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -164,6 +177,11 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Payments Tab - NEW */}
+          <TabsContent value="payments">
+            <PaymentGatewaySettings />
           </TabsContent>
 
           {/* Notifications Tab */}
@@ -338,6 +356,8 @@ export default function Settings() {
                     <span>• spam.blocked</span>
                     <span>• user.joined</span>
                     <span>• subscription.created</span>
+                    <span>• payment.received</span>
+                    <span>• payment.confirmed</span>
                   </div>
                 </div>
               </CardContent>
