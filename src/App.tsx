@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Bots from "./pages/Bots";
+import BotSettingsPage from "./pages/BotSettings";
 import Security from "./pages/Security";
 import Subscribers from "./pages/Subscribers";
 import Gamification from "./pages/Gamification";
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/consultas" element={<ProtectedRoute><Consultas /></ProtectedRoute>} />
             <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
+            <Route path="/bots/:botId/settings" element={<ProtectedRoute><BotSettingsPage /></ProtectedRoute>} />
             <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
             <Route path="/subscribers" element={<ProtectedRoute><Subscribers /></ProtectedRoute>} />
             <Route path="/gamification" element={<ProtectedRoute><Gamification /></ProtectedRoute>} />
