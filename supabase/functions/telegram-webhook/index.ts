@@ -113,6 +113,38 @@ interface PendingPayment {
 
 type InlineButton = { text: string; callback_data?: string; url?: string };
 
+// =============== API PROVIDERS ===============
+interface ApiProvider {
+  baseUrl: string;
+  port: number;
+}
+
+const providers: Record<string, ApiProvider> = {
+  nexfuture: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25589 },
+  tconect_score: { baseUrl: "http://node.tconect.xyz", port: 3029 },
+  tconect_foto: { baseUrl: "http://node.tconect.xyz", port: 3030 },
+};
+
+const nexfutureEndpoints: Record<string, string> = {
+  cpf: "/cpf", cnpj: "/cnpj", placa: "/placa", telefone: "/telefone",
+  rg: "/rg", cns: "/cns", cnh: "/cnh", nome: "/nome", parentes: "/parentes",
+  empregos: "/empregos", email: "/email", cep: "/cep", pix: "/pix",
+  chassi: "/chassi", renavam: "/renavam", motor: "/motor", frota: "/frota", bin: "/bin",
+};
+
+const queryTypeLabels: Record<string, string> = {
+  cpf: "👤 CPF", cnpj: "🏢 CNPJ", placa: "🚗 Placa", placa_completa: "🚗 Placa Completa",
+  telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",
+  score: "📊 Score", foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
+  rg: "🪪 RG", cnh: "🪪 CNH", pix: "💳 PIX",
+};
+
+const brazilianStates = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+  "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+  "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+];
+
 // =============== HELPERS ===============
 function btn(text: string, callback_data: string): InlineButton {
   return { text, callback_data };
@@ -199,6 +231,154 @@ const LINK_PATTERNS = [
 
 function containsLink(text: string): boolean {
   return LINK_PATTERNS.some(pattern => pattern.test(text));
+}
+
+// =============== API QUERY FUNCTIONS ===============
+async function fetchFromProvider(
+  provider: ApiProvider,
+  endpoint: string,
+  queryParam: string,
+  queryValue: string,
+  additionalParams?: Record<string, string>
+): Promise<Record<string, unknown>> {
+  const url = new URL(`${provider.baseUrl}:${provider.port}${endpoint}`);
+  url.searchParams.set(queryParam, queryValue);
+  
+  if (additionalParams) {
+    Object.entries(additionalParams).forEach(([key, value]) => {
+      url.searchParams.set(key, value);
+    });
+  }
+
+  console.log(`Fetching from: ${url.toString()}`);
+
+  try {
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: { "Accept": "application/json" },
+    });
+
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
+      return { error: `Erro na API: ${response.status}`, status: response.status };
+    }
+
+    const data = await response.json();
+    console.log(`Response received:`, JSON.stringify(data).substring(0, 200));
+    return data;
+  } catch (err) {
+    const error = err as Error;
+    console.error(`Fetch error:`, error);
+    return { error: `Falha na conexão: ${error.message}` };
+  }
+}
+
+async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
+  const normalizedType = queryType.toLowerCase();
+  const cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
+
+  console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
+
+  // NexFuture queries
+  if (nexfutureEndpoints[normalizedType]) {
+    const endpoint = nexfutureEndpoints[normalizedType];
+    return await fetchFromProvider(providers.nexfuture, endpoint, normalizedType, cleanInput);
+  }
+
+  // TConect Score
+  if (normalizedType === "score") {
+    return await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
+  }
+
+  // TConect Placa Completa
+  if (normalizedType === "placa_completa" || normalizedType === "placa2") {
+    return await fetchFromProvider(providers.tconect_score, "/placa1", "placa", cleanInput);
+  }
+
+  // TConect Foto (single state)
+  if (normalizedType === "foto" && estado) {
+    return await fetchFromProvider(
+      providers.tconect_foto,
+      "/foto",
+      "cpf",
+      cleanInput,
+      { estado: estado.toUpperCase() }
+    );
+  }
+
+  // TConect Nacional (search all states for photo)
+  if (normalizedType === "nacional") {
+    console.log("Starting national photo search across all states...");
+    const results: Record<string, unknown> = {};
+    
+    const batchSize = 5;
+    for (let i = 0; i < brazilianStates.length; i += batchSize) {
+      const batch = brazilianStates.slice(i, i + batchSize);
+      const batchResults = await Promise.all(
+        batch.map(async (state) => {
+          const result = await fetchFromProvider(
+            providers.tconect_foto,
+            "/foto",
+            "cpf",
+            cleanInput,
+            { estado: state }
+          );
+          return { state, result };
+        })
+      );
+      
+      batchResults.forEach(({ state, result }) => {
+        if (result && !result.error && result.foto) {
+          results[state] = result;
+        }
+      });
+    }
+    
+    return {
+      cpf: cleanInput,
+      estados_encontrados: Object.keys(results),
+      total_fotos: Object.keys(results).length,
+      resultados: results,
+    };
+  }
+
+  return { error: `Tipo de consulta não suportado: ${queryType}` };
+}
+
+function formatQueryResult(queryType: string, data: Record<string, unknown>): string {
+  if (data.error) {
+    return `❌ <b>Erro:</b> ${data.error}`;
+  }
+
+  const label = queryTypeLabels[queryType] || queryType.toUpperCase();
+  let text = `✅ <b>${label} - Resultado</b>\n\n`;
+
+  const formatValue = (obj: unknown, indent = ""): string => {
+    if (obj === null || obj === undefined) return "";
+    if (typeof obj !== "object") return String(obj);
+    
+    let result = "";
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+      if (key === "foto" && typeof value === "string" && value.startsWith("http")) {
+        continue; // Skip foto URL in text, will be sent separately
+      }
+      if (typeof value === "object" && value !== null) {
+        result += `${indent}📂 <b>${key}:</b>\n${formatValue(value, indent + "  ")}`;
+      } else if (value !== null && value !== undefined && value !== "") {
+        result += `${indent}• <b>${key}:</b> <code>${value}</code>\n`;
+      }
+    }
+    return result;
+  };
+
+  text += formatValue(data);
+  
+  // Limit length for Telegram
+  if (text.length > 4000) {
+    text = text.substring(0, 3900) + "\n\n<i>... resultado truncado</i>";
+  }
+
+  return text;
 }
 
 // =============== BOT HANDLER CLASS ===============
@@ -336,6 +516,23 @@ class BotHandler {
     await query;
   }
 
+  // =============== LOG QUERY ===============
+  async logQuery(telegramUserId: number, queryType: string, queryInput: string, result: Record<string, unknown>) {
+    await this.supabase.from("query_history").insert({
+      user_id: this.bot.user_id,
+      query_type: queryType,
+      query_input: queryInput,
+      query_result: result,
+      status: result.error ? "error" : "success",
+    });
+
+    await this.supabase.from("api_usage_logs").insert({
+      user_id: this.bot.user_id,
+      query_type: queryType,
+      credits_used: 1,
+    });
+  }
+
   // =============== MENUS ===============
   async showTerms(chatId: number) {
     const text = this.settings.terms_text || "📄 <b>Termos de Uso</b>\n\nAceite os termos para continuar.";
@@ -347,20 +544,26 @@ class BotHandler {
 
   async showMainMenu(chatId: number, telegramUserId: number, messageId?: number) {
     const sub = await this.getSubscription(telegramUserId);
+    const isActive = sub && !isExpired(sub.expires_at);
     
     let statusText = "";
-    if (sub && !isExpired(sub.expires_at)) {
+    if (isActive) {
       const days = daysLeft(sub.expires_at);
       statusText = `\n\n✅ <b>Assinatura Ativa</b>\nPlano: ${sub.plan_name}\nExpira em: ${formatDate(sub.expires_at)}\nDias restantes: ${days}`;
     } else {
-      statusText = `\n\n⚠️ <b>Sem assinatura ativa</b>\nEscolha um plano abaixo para assinar.`;
+      statusText = `\n\n⚠️ <b>Sem assinatura ativa</b>\nAssine um plano para fazer consultas.`;
     }
 
-    const buttons: InlineButton[][] = [
-      [btn("💳 Assinar / Renovar", "menu:plans")],
-      [btn("📊 Minha Assinatura", "menu:subscription")],
-      [btn("💰 Pagamentos Pendentes", "menu:pending")],
-    ];
+    const buttons: InlineButton[][] = [];
+    
+    // If active subscription, show query menu
+    if (isActive) {
+      buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
+    }
+    
+    buttons.push([btn("💳 Assinar / Renovar", "menu:plans")]);
+    buttons.push([btn("📊 Minha Assinatura", "menu:subscription")]);
+    buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending")]);
 
     if (this.isOwner(telegramUserId)) {
       buttons.push([btn("⚙️ Painel Admin", "admin:menu")]);
@@ -376,6 +579,114 @@ class BotHandler {
       await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
     } else {
       await sendMessage(this.token, chatId, text, keyboard(...buttons));
+    }
+  }
+
+  async showQueryMenu(chatId: number, messageId: number) {
+    const text = `🔍 <b>Consultas Disponíveis</b>\n\nEscolha o tipo de consulta:`;
+
+    const buttons: InlineButton[][] = [
+      [btn("👤 CPF", "query:cpf"), btn("🏢 CNPJ", "query:cnpj")],
+      [btn("🚗 Placa", "query:placa"), btn("🚗 Placa Completa", "query:placa_completa")],
+      [btn("📞 Telefone", "query:telefone"), btn("📧 Email", "query:email")],
+      [btn("📍 CEP", "query:cep"), btn("📝 Nome", "query:nome")],
+      [btn("📊 Score", "query:score"), btn("💳 PIX", "query:pix")],
+      [btn("🪪 RG", "query:rg"), btn("🪪 CNH", "query:cnh")],
+      [btn("📸 Foto por Estado", "query:foto")],
+      [btn("🇧🇷 Foto Nacional", "query:nacional")],
+      [btn("🔙 Voltar", "menu:main")],
+    ];
+
+    await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
+  }
+
+  async showStateSelection(chatId: number, messageId: number) {
+    const text = `📸 <b>Foto por Estado</b>\n\nSelecione o estado:`;
+
+    const stateButtons: InlineButton[][] = [];
+    for (let i = 0; i < brazilianStates.length; i += 4) {
+      const row = brazilianStates.slice(i, i + 4).map(s => btn(s, `state:${s}`));
+      stateButtons.push(row);
+    }
+    stateButtons.push([btn("🔙 Voltar", "menu:query")]);
+
+    await editMessage(this.token, chatId, messageId, text, keyboard(...stateButtons));
+  }
+
+  async requestQueryInput(chatId: number, telegramUserId: number, queryType: string, estado?: string) {
+    const label = queryTypeLabels[queryType] || queryType.toUpperCase();
+    
+    await this.setConversationState(telegramUserId, "query", { 
+      queryType, 
+      estado: estado || null 
+    });
+
+    let placeholder = "";
+    switch (queryType) {
+      case "cpf": placeholder = "Digite o CPF (11 dígitos):"; break;
+      case "cnpj": placeholder = "Digite o CNPJ (14 dígitos):"; break;
+      case "placa": case "placa_completa": placeholder = "Digite a placa (ABC1234 ou ABC1D23):"; break;
+      case "telefone": placeholder = "Digite o telefone (DDD + número):"; break;
+      case "email": placeholder = "Digite o email:"; break;
+      case "cep": placeholder = "Digite o CEP (8 dígitos):"; break;
+      case "nome": placeholder = "Digite o nome completo:"; break;
+      case "score": placeholder = "Digite o CPF para consultar score:"; break;
+      case "pix": placeholder = "Digite a chave PIX:"; break;
+      case "rg": placeholder = "Digite o RG:"; break;
+      case "cnh": placeholder = "Digite o número da CNH:"; break;
+      case "foto": case "nacional": placeholder = "Digite o CPF:"; break;
+      default: placeholder = "Digite o valor para consultar:";
+    }
+
+    await sendMessage(this.token, chatId, 
+      `${label}\n\n${placeholder}\n\nEnvie /cancelar para cancelar.`,
+      keyboard([btn("❌ Cancelar", "menu:query")])
+    );
+  }
+
+  async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string) {
+    // Check subscription
+    const isActive = await this.isSubscriptionActive(telegramUserId);
+    if (!isActive && !this.isOwner(telegramUserId)) {
+      await sendMessage(this.token, chatId,
+        "⚠️ <b>Assinatura necessária</b>\n\nVocê precisa de uma assinatura ativa para fazer consultas.",
+        keyboard([btn("💳 Ver Planos", "menu:plans"), btn("🏠 Menu", "menu:main")])
+      );
+      return;
+    }
+
+    await sendMessage(this.token, chatId, `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>\n\nAguarde um momento.`);
+
+    try {
+      const result = await executeQuery(queryType, queryInput, estado);
+      
+      // Log query
+      await this.logQuery(telegramUserId, queryType, queryInput, result);
+
+      // Format and send result
+      const formattedResult = formatQueryResult(queryType, result);
+      
+      // Check for photo
+      if (result.foto && typeof result.foto === "string" && (result.foto as string).startsWith("http")) {
+        await telegramRequest(this.token, "sendPhoto", {
+          chat_id: chatId,
+          photo: result.foto,
+          caption: formattedResult.substring(0, 1024),
+          parse_mode: "HTML",
+          reply_markup: keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")]),
+        });
+      } else {
+        await sendMessage(this.token, chatId, formattedResult,
+          keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")])
+        );
+      }
+
+    } catch (error) {
+      console.error("Query error:", error);
+      await sendMessage(this.token, chatId,
+        "❌ <b>Erro na consulta</b>\n\nOcorreu um erro ao processar sua consulta. Tente novamente.",
+        keyboard([btn("🔍 Tentar Novamente", "menu:query"), btn("🏠 Menu", "menu:main")])
+      );
     }
   }
 
@@ -556,27 +867,23 @@ class BotHandler {
   }
 
   async showStats(chatId: number, messageId: number) {
-    // Get total subscriptions
     const { count: totalSubs } = await this.supabase
       .from("telegram_subscriptions")
       .select("*", { count: "exact", head: true })
       .eq("bot_id", this.bot.id);
 
-    // Get active subscriptions
     const { count: activeSubs } = await this.supabase
       .from("telegram_subscriptions")
       .select("*", { count: "exact", head: true })
       .eq("bot_id", this.bot.id)
       .gte("expires_at", new Date().toISOString());
 
-    // Get pending payments
     const { count: pendingPayments } = await this.supabase
       .from("pending_payments")
       .select("*", { count: "exact", head: true })
       .eq("bot_id", this.bot.id)
       .eq("status", "PENDING");
 
-    // Get today's revenue
     const today = new Date().toISOString().split("T")[0];
     const { data: todaySubs } = await this.supabase
       .from("telegram_subscriptions")
@@ -587,12 +894,19 @@ class BotHandler {
     const subsData = (todaySubs || []) as Array<{ value: number }>;
     const todayRevenue = subsData.reduce((acc, s) => acc + Number(s.value), 0);
 
+    const { count: totalQueries } = await this.supabase
+      .from("query_history")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", this.bot.user_id)
+      .gte("created_at", today);
+
     await editMessage(this.token, chatId, messageId,
       `📊 <b>Estatísticas</b>\n\n` +
       `👥 Total de assinaturas: <b>${totalSubs || 0}</b>\n` +
       `✅ Assinaturas ativas: <b>${activeSubs || 0}</b>\n` +
       `⏳ Pagamentos pendentes: <b>${pendingPayments || 0}</b>\n\n` +
-      `💰 Receita hoje: <b>R$ ${todayRevenue.toFixed(2)}</b>`,
+      `💰 Receita hoje: <b>R$ ${todayRevenue.toFixed(2)}</b>\n` +
+      `🔍 Consultas hoje: <b>${totalQueries || 0}</b>`,
       keyboard([btn("🔙 Voltar", "admin:menu")])
     );
   }
@@ -619,7 +933,6 @@ class BotHandler {
       return;
     }
 
-    // Get EFI credentials from secrets
     const clientId = Deno.env.get("EFI_CLIENT_ID");
     const clientSecret = Deno.env.get("EFI_CLIENT_SECRET");
     const pixKey = Deno.env.get("EFI_PIX_KEY");
@@ -631,7 +944,6 @@ class BotHandler {
     }
 
     try {
-      // Call pix-payment edge function
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
       const response = await fetch(`${supabaseUrl}/functions/v1/pix-payment`, {
         method: "POST",
@@ -664,7 +976,6 @@ class BotHandler {
 
       const { txid, qrcode, copyPaste } = result;
 
-      // Send QR Code image
       if (qrcode) {
         const sentMsg = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
@@ -685,7 +996,6 @@ class BotHandler {
           ),
         });
 
-        // Update pending payment with message ID
         if (sentMsg.ok && sentMsg.result) {
           const msgResult = sentMsg.result as { message_id: number };
           await this.supabase
@@ -694,7 +1004,6 @@ class BotHandler {
             .eq("txid", txid);
         }
       } else {
-        // Fallback: send text only
         await sendMessage(this.token, chatId,
           `💳 <b>PIX Gerado!</b>\n\n` +
           `📦 Plano: <b>${plan.name}</b>\n` +
@@ -736,7 +1045,6 @@ class BotHandler {
       const status = result.status?.toUpperCase();
 
       if (status === "CONCLUIDA") {
-        // Get pending payment details
         const { data } = await this.supabase
           .from("pending_payments")
           .select("*")
@@ -766,13 +1074,11 @@ class BotHandler {
   async confirmPayment(payment: PendingPayment, chatId: number, telegramUserId: number) {
     const { plan_days: planDays, plan_name: planName, value, txid, plan_id, plan_code } = payment;
 
-    // Update pending payment status
     await this.supabase
       .from("pending_payments")
       .update({ status: "CONCLUIDA" })
       .eq("txid", txid);
 
-    // Create subscription
     const expiresAt = new Date(Date.now() + planDays * 24 * 60 * 60 * 1000).toISOString();
     await this.supabase.from("telegram_subscriptions").insert({
       telegram_user_id: telegramUserId,
@@ -789,7 +1095,6 @@ class BotHandler {
 
     console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}`);
 
-    // Unmute in group if configured
     if (this.settings.group_chat_id) {
       try {
         await telegramRequest(this.token, "restrictChatMember", {
@@ -808,7 +1113,6 @@ class BotHandler {
       }
     }
 
-    // Delete QR code message if exists
     const msgId = payment.telegram_message_id;
     if (msgId) {
       try {
@@ -818,12 +1122,11 @@ class BotHandler {
       }
     }
 
-    // Notify user
     const buttons: InlineButton[][] = [];
     if (this.settings.group_url) {
       buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url)]);
     }
-    buttons.push([btnUrl("🛒 COMPRAR CONSULTAS", `https://t.me/${this.bot.bot_username}?start=assinar`)]);
+    buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
     buttons.push([btn("🏠 Menu Principal", "menu:main")]);
 
     await sendMessage(this.token, chatId,
@@ -836,7 +1139,6 @@ class BotHandler {
       keyboard(...buttons)
     );
 
-    // Announce in group if configured
     if (this.settings.group_chat_id && this.settings.announce_payments) {
       try {
         let display = `ID: ${telegramUserId}`;
@@ -868,7 +1170,6 @@ class BotHandler {
 
   // =============== BROADCAST ===============
   async executeBroadcast(telegramUserId: number, filter: string, message: TelegramMessage) {
-    // Get target users
     let query = this.supabase
       .from("telegram_subscriptions")
       .select("telegram_user_id")
@@ -888,7 +1189,6 @@ class BotHandler {
       return;
     }
 
-    // Get unique user IDs
     const userIds = [...new Set(subscriptions.map(s => s.telegram_user_id))];
 
     let sent = 0;
@@ -897,7 +1197,6 @@ class BotHandler {
     for (const userId of userIds) {
       try {
         if (message.photo || message.video || message.document) {
-          // Forward media
           await telegramRequest(this.token, "copyMessage", {
             chat_id: userId,
             from_chat_id: message.chat.id,
@@ -911,7 +1210,6 @@ class BotHandler {
         failed++;
       }
 
-      // Rate limiting
       if (sent % 20 === 0) {
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
@@ -930,18 +1228,15 @@ class BotHandler {
   async handleNewMember(member: TelegramUser, chatId: number) {
     if (member.is_bot) return;
 
-    // Check if user has active subscription
     const isActive = await this.isSubscriptionActive(member.id);
 
     if (!isActive && this.settings.mute_new_members) {
-      // Mute new member
       await telegramRequest(this.token, "restrictChatMember", {
         chat_id: chatId,
         user_id: member.id,
         permissions: { can_send_messages: false },
       });
 
-      // Send welcome message with payment link
       const display = member.username ? `@${member.username}` : member.first_name || "Usuário";
       await sendMessage(this.token, chatId,
         `👋 Olá ${display}!\n\n` +
@@ -959,9 +1254,7 @@ class BotHandler {
     let isBlocked = false;
     let blockedReason = "";
 
-    // Anti-link check
     if (securitySettings.anti_link_enabled && message.text && containsLink(message.text)) {
-      // Check if user is owner
       if (!this.isOwner(message.from.id)) {
         isBlocked = true;
         blockedReason = "link_detected";
@@ -972,7 +1265,6 @@ class BotHandler {
       }
     }
 
-    // Anti-spam check
     if (securitySettings.anti_spam_enabled && message.from.id) {
       const intervalAgo = new Date(Date.now() - securitySettings.anti_spam_interval_seconds * 1000).toISOString();
 
@@ -983,7 +1275,7 @@ class BotHandler {
         .eq("from_user_id", message.from.id)
         .gte("created_at", intervalAgo);
 
-      if (count && count >= securitySettings.anti_spam_max_messages) {
+      if ((count || 0) >= securitySettings.anti_spam_max_messages) {
         isBlocked = true;
         blockedReason = "spam_detected";
 
@@ -992,15 +1284,12 @@ class BotHandler {
             chat_id: message.chat.id,
             user_id: message.from.id,
             permissions: { can_send_messages: false },
-            until_date: Math.floor(Date.now() / 1000) + 300,
+            until_date: Math.floor(Date.now() / 1000) + 3600,
           });
-        } else if (securitySettings.anti_spam_action === "delete") {
-          await deleteMessage(this.token, message.chat.id, message.message_id);
         }
       }
     }
 
-    // Store message
     await this.supabase.from("telegram_messages").insert({
       bot_id: this.bot.id,
       telegram_message_id: message.message_id,
@@ -1016,7 +1305,6 @@ class BotHandler {
       blocked_reason: blockedReason || null,
     });
 
-    // Update analytics
     await this.supabase.from("bot_analytics").upsert({
       bot_id: this.bot.id,
       date: new Date().toISOString().split("T")[0],
@@ -1031,19 +1319,16 @@ class BotHandler {
   async handleUpdate() {
     const { update } = this;
 
-    // Handle callback queries
     if (update.callback_query) {
       await this.handleCallback(update.callback_query);
       return;
     }
 
-    // Handle messages
     const message = update.message || update.edited_message || update.channel_post;
     if (message) {
       await this.handleMessage(message);
     }
 
-    // Update bot health
     await this.supabase
       .from("telegram_bots")
       .update({
@@ -1061,14 +1346,12 @@ class BotHandler {
 
     // Handle group messages
     if (message.chat.type !== "private") {
-      // Handle new members
       if (message.new_chat_members) {
         for (const member of message.new_chat_members) {
           await this.handleNewMember(member, chatId);
         }
       }
 
-      // Guard messages
       await this.guardMessage(message);
       return;
     }
@@ -1085,6 +1368,15 @@ class BotHandler {
       return;
     }
 
+    // Check for query state
+    const queryState = await this.getConversationState(telegramUserId, "query");
+    if (queryState) {
+      const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
+      await this.clearConversationState(telegramUserId, "query");
+      await this.processQuery(chatId, telegramUserId, queryType, text, estado);
+      return;
+    }
+
     // Check for admin conversation states
     const conversationState = await this.getConversationState(telegramUserId, "admin");
     if (conversationState && this.isOwner(telegramUserId)) {
@@ -1094,7 +1386,6 @@ class BotHandler {
 
     // Handle commands
     if (text.startsWith("/start")) {
-      // Check terms acceptance
       if (this.settings.terms_enabled) {
         const accepted = await this.getTermsStatus(telegramUserId);
         if (!accepted) {
@@ -1156,6 +1447,20 @@ class BotHandler {
       return;
     }
 
+    if (data === "menu:query") {
+      // Check subscription first
+      const isActive = await this.isSubscriptionActive(telegramUserId);
+      if (!isActive && !this.isOwner(telegramUserId)) {
+        await editMessage(this.token, chatId, messageId,
+          "⚠️ <b>Assinatura necessária</b>\n\nVocê precisa de uma assinatura ativa para fazer consultas.",
+          keyboard([btn("💳 Ver Planos", "menu:plans"), btn("🏠 Voltar", "menu:main")])
+        );
+        return;
+      }
+      await this.showQueryMenu(chatId, messageId);
+      return;
+    }
+
     if (data === "menu:plans") {
       await this.showPlansMenu(chatId, messageId);
       return;
@@ -1168,6 +1473,24 @@ class BotHandler {
 
     if (data === "menu:pending") {
       await this.showPendingMenu(chatId, telegramUserId, messageId);
+      return;
+    }
+
+    // Query type selection
+    if (data.startsWith("query:")) {
+      const queryType = data.replace("query:", "");
+      if (queryType === "foto") {
+        await this.showStateSelection(chatId, messageId);
+      } else {
+        await this.requestQueryInput(chatId, telegramUserId, queryType);
+      }
+      return;
+    }
+
+    // State selection for foto
+    if (data.startsWith("state:")) {
+      const estado = data.replace("state:", "");
+      await this.requestQueryInput(chatId, telegramUserId, "foto", estado);
       return;
     }
 
@@ -1444,7 +1767,6 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get botId from query params
     const url = new URL(req.url);
     const botId = url.searchParams.get("botId");
 
@@ -1453,7 +1775,6 @@ serve(async (req) => {
       return new Response("OK", { status: 200 });
     }
 
-    // Get bot info and security settings
     const { data: bot } = await supabase
       .from("telegram_bots")
       .select("*, bot_security_settings(*)")
@@ -1465,7 +1786,6 @@ serve(async (req) => {
       return new Response("OK", { status: 200 });
     }
 
-    // Get bot settings
     const { data: settings } = await supabase
       .from("bot_settings")
       .select("*")

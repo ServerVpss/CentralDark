@@ -5,7 +5,6 @@ import {
   Bot,
   Shield,
   Users,
-  Trophy,
   Settings,
   CreditCard,
   ChevronLeft,
@@ -13,6 +12,8 @@ import {
   Zap,
   Search,
   X,
+  History,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,12 +21,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Search, label: "Consultas", path: "/consultas" },
-  { icon: Bot, label: "Bots", path: "/bots" },
-  { icon: Shield, label: "Segurança", path: "/security" },
-  { icon: Users, label: "Assinantes", path: "/subscribers" },
-  { icon: Trophy, label: "Gamificação", path: "/gamification" },
+  { icon: Bot, label: "Bot Config", path: "/bots" },
+  { icon: Users, label: "Usuários Telegram", path: "/telegram-users" },
   { icon: CreditCard, label: "Planos", path: "/plans" },
+  { icon: History, label: "Logs de Consultas", path: "/logs" },
+  { icon: Search, label: "Testar Consultas", path: "/consultas" },
+  { icon: Shield, label: "Segurança", path: "/security" },
   { icon: Settings, label: "Configurações", path: "/settings" },
 ];
 
