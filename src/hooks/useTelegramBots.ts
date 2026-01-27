@@ -15,6 +15,7 @@ export interface TelegramBot {
   health_status: string;
   created_at: string;
   updated_at: string;
+  user_id: string | null;
 }
 
 export interface BotSecuritySettings {
@@ -32,11 +33,19 @@ export interface BotSecuritySettings {
   anti_flood_action: string;
   welcome_message_enabled: boolean;
   welcome_message: string | null;
+  user_id: string | null;
 }
 
 export function useTelegramBots() {
   const [bots, setBots] = useState<TelegramBot[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUserId(user?.id ?? null);
+    });
+  }, []);
 
   const fetchBots = async () => {
     const { data, error } = await supabase
@@ -85,9 +94,14 @@ export function useTelegramBots() {
   }, []);
 
   const createBot = async (name: string, token: string) => {
+    if (!userId) {
+      toast.error("Você precisa estar logado para criar um bot");
+      return null;
+    }
+
     try {
       const { data, error } = await supabase.functions.invoke("telegram-bot", {
-        body: { action: "createBot", name, token },
+        body: { action: "createBot", name, token, userId },
       });
 
       if (error) throw error;
