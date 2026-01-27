@@ -127,6 +127,8 @@ export default function Bots() {
     validateToken(value);
   };
 
+  const [createStatus, setCreateStatus] = useState<string>("");
+
   const handleCreateBot = async () => {
     const trimmedToken = newBotToken.trim();
     
@@ -141,8 +143,16 @@ export default function Bots() {
     }
 
     setIsCreating(true);
+    setCreateStatus("Verificando token...");
+    
+    // Simular um pequeno delay para mostrar o status
+    await new Promise(resolve => setTimeout(resolve, 300));
+    setCreateStatus("Conectando ao Telegram...");
+    
     const result = await createBot(newBotName || "Novo Bot", trimmedToken);
+    
     setIsCreating(false);
+    setCreateStatus("");
 
     if (result) {
       setShowAddDialog(false);
@@ -261,7 +271,7 @@ export default function Bots() {
                   {isCreating ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Criando...
+                      {createStatus || "Criando..."}
                     </>
                   ) : (
                     "Criar e Sincronizar"

@@ -89,6 +89,78 @@ export function useTelegramBots() {
     };
   }, [fetchBots]);
 
+  // Helper para extrair bot_id do token
+  const extractBotIdFromToken = (token: string): string | null => {
+    const parts = token.split(":");
+    if (parts.length >= 1 && /^\d+$/.test(parts[0])) {
+      return parts[0];
+    }
+    return null;
+  };
+
+  // Helper para delay
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  // Verificar se bot já existe
+  const checkExistingBot = async (token: string): Promise<TelegramBot | null> => {
+    const botIdFromToken = extractBotIdFromToken(token);
+    if (!botIdFromToken) return null;
+
+    const { data } = await supabase
+      .from("telegram_bots")
+      .select("*")
+      .eq("bot_id", parseInt(botIdFromToken))
+      .single();
+
+    return data as TelegramBot | null;
+  };
+
+  // Invocar Edge Function com retry
+  const invokeWithRetry = async (
+    body: Record<string, unknown>,
+    maxRetries: number = 2
+  ): Promise<{ data: unknown; error: Error | null }> => {
+    let lastError: Error | null = null;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        console.log(`Attempt ${attempt}/${maxRetries} - Invoking telegram-bot function`);
+        
+        const { data, error } = await supabase.functions.invoke("telegram-bot", {
+          body,
+        });
+
+        if (error) {
+          // Check if it's a network/fetch error (likely extension blocking)
+          const isNetworkError = 
+            error.message?.includes("FunctionsFetchError") ||
+            error.message?.includes("Failed to fetch") ||
+            error.message?.includes("NetworkError") ||
+            error.message?.includes("fetch");
+
+          if (isNetworkError && attempt < maxRetries) {
+            console.log(`Network error on attempt ${attempt}, retrying in 1s...`);
+            lastError = error;
+            await delay(1000);
+            continue;
+          }
+          throw error;
+        }
+
+        return { data, error: null };
+      } catch (err) {
+        lastError = err as Error;
+        console.error(`Attempt ${attempt} failed:`, err);
+
+        if (attempt < maxRetries) {
+          await delay(1000);
+        }
+      }
+    }
+
+    return { data: null, error: lastError };
+  };
+
   const createBot = async (name: string, token: string) => {
     if (!user?.id) {
       toast.error("Você precisa estar logado para criar um bot");
@@ -99,24 +171,57 @@ export function useTelegramBots() {
     console.log("Creating bot with userId:", user.id, "token:", token.substring(0, 10) + "...");
 
     try {
-      const { data, error } = await supabase.functions.invoke("telegram-bot", {
-        body: { action: "createBot", name, token, userId: user.id },
+      // 1. Verificar se o bot já existe no banco
+      const existingBot = await checkExistingBot(token);
+      if (existingBot) {
+        toast.info("Este bot já está cadastrado! Sincronizando...", {
+          duration: 4000,
+        });
+        // Sincronizar o bot existente
+        await syncBot(existingBot.id);
+        await fetchBots();
+        return existingBot;
+      }
+
+      // 2. Tentar criar com retry automático
+      const { data, error } = await invokeWithRetry({
+        action: "createBot",
+        name,
+        token,
+        userId: user.id,
       });
 
       console.log("createBot response:", data, error);
 
       if (error) {
-        console.error("Edge function error:", error);
-        throw error;
+        console.error("Edge function error after retries:", error);
+        
+        // Verificar se é erro de rede (extensão bloqueando)
+        const isNetworkError = 
+          error.message?.includes("FunctionsFetchError") ||
+          error.message?.includes("Failed to fetch") ||
+          error.message?.includes("NetworkError");
+
+        if (isNetworkError) {
+          toast.error("Erro de conexão com o servidor", {
+            duration: 8000,
+            description: "Uma extensão do navegador pode estar bloqueando a requisição. Tente desabilitar extensões de VPN, proxy ou ad blockers.",
+          });
+        } else {
+          toast.error("Erro ao conectar com o servidor. Tente novamente.");
+        }
+        return null;
       }
 
-      if (data?.success) {
+      const responseData = data as { success?: boolean; error?: string; bot?: TelegramBot };
+
+      if (responseData?.success) {
         toast.success("Bot criado e webhook configurado com sucesso!");
         await fetchBots();
-        return data.bot;
+        return responseData.bot;
       } else {
         // Mensagens de erro detalhadas baseadas na resposta do Telegram
-        const errorMsg = data?.error || "Erro desconhecido";
+        const errorMsg = responseData?.error || "Erro desconhecido";
         let userMessage = "Erro ao criar bot";
         
         if (errorMsg.includes("Not Found") || errorMsg.includes("404")) {
@@ -139,7 +244,7 @@ export function useTelegramBots() {
       }
     } catch (err) {
       console.error("Create bot error:", err);
-      toast.error("Erro de conexão ao criar bot. Tente novamente.");
+      toast.error("Erro inesperado ao criar bot. Tente novamente.");
       return null;
     }
   };
