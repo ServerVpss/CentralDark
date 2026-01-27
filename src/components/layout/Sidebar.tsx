@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -35,7 +36,38 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const [activeBots, setActiveBots] = useState(0);
   const location = useLocation();
+
+  // Fetch real bot count from database
+  useEffect(() => {
+    const fetchBotCount = async () => {
+      const { count } = await supabase
+        .from("telegram_bots")
+        .select("*", { count: "exact", head: true })
+        .eq("is_active", true);
+      
+      setActiveBots(count || 0);
+    };
+
+    fetchBotCount();
+
+    // Subscribe to realtime updates
+    const channel = supabase
+      .channel("sidebar_bots_count")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "telegram_bots" },
+        () => {
+          fetchBotCount();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const handleNavClick = () => {
     // Close sidebar on mobile when clicking a link
@@ -144,7 +176,9 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
             collapsed && "lg:hidden"
           )}>
             <p className="text-xs font-medium text-foreground truncate">Sistema Online</p>
-            <p className="text-xs text-muted-foreground">3 bots ativos</p>
+            <p className="text-xs text-muted-foreground">
+              {activeBots} {activeBots === 1 ? "bot ativo" : "bots ativos"}
+            </p>
           </div>
         </div>
       </div>
