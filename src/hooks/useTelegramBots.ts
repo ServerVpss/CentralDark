@@ -112,15 +112,34 @@ export function useTelegramBots() {
 
       if (data?.success) {
         toast.success("Bot criado e webhook configurado com sucesso!");
-        await fetchBots(); // Recarregar lista
+        await fetchBots();
         return data.bot;
       } else {
-        toast.error(data?.error || "Erro ao criar bot");
+        // Mensagens de erro detalhadas baseadas na resposta do Telegram
+        const errorMsg = data?.error || "Erro desconhecido";
+        let userMessage = "Erro ao criar bot";
+        
+        if (errorMsg.includes("Not Found") || errorMsg.includes("404")) {
+          userMessage = "Token inválido ou bot não existe no Telegram. Verifique o token no @BotFather.";
+        } else if (errorMsg.includes("Unauthorized") || errorMsg.includes("401")) {
+          userMessage = "Token não autorizado. O token pode ter sido revogado. Gere um novo no @BotFather.";
+        } else if (errorMsg.includes("duplicate") || errorMsg.includes("unique")) {
+          userMessage = "Este bot já está cadastrado no sistema.";
+        } else if (errorMsg.includes("Invalid")) {
+          userMessage = "Formato do token inválido.";
+        } else {
+          userMessage = `Erro: ${errorMsg}`;
+        }
+        
+        toast.error(userMessage, {
+          duration: 6000,
+          description: "Verifique o token e tente novamente",
+        });
         return null;
       }
     } catch (err) {
       console.error("Create bot error:", err);
-      toast.error("Erro ao criar bot");
+      toast.error("Erro de conexão ao criar bot. Tente novamente.");
       return null;
     }
   };
