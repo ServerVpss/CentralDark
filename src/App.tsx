@@ -10,6 +10,7 @@ import Subscribers from "./pages/Subscribers";
 import Gamification from "./pages/Gamification";
 import Plans from "./pages/Plans";
 import Settings from "./pages/Settings";
+import Consultas from "./pages/Consultas";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/consultas" element={<Consultas />} />
           <Route path="/bots" element={<Bots />} />
           <Route path="/security" element={<Security />} />
           <Route path="/subscribers" element={<Subscribers />} />
