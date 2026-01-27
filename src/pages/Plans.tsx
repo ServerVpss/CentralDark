@@ -21,17 +21,17 @@ import { SubscriptionStatus } from "@/components/payments/SubscriptionStatus";
 import { PixPaymentDialog } from "@/components/payments/PixPaymentDialog";
 
 const planIcons: Record<string, React.ElementType> = {
-  free: Star,
-  basic: Zap,
-  pro: Crown,
-  enterprise: Sparkles,
+  diaria: Star,
+  semanal: Zap,
+  quinzenal: Crown,
+  mensal: Sparkles,
 };
 
 const planColors: Record<string, string> = {
-  free: "from-muted-foreground/20 to-muted-foreground/5",
-  basic: "from-primary/20 to-primary/5",
-  pro: "from-warning/20 to-warning/5",
-  enterprise: "from-accent/20 to-accent/5",
+  diaria: "from-muted-foreground/20 to-muted-foreground/5",
+  semanal: "from-primary/20 to-primary/5",
+  quinzenal: "from-warning/20 to-warning/5",
+  mensal: "from-accent/20 to-accent/5",
 };
 
 export default function Plans() {

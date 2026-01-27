@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { AlertTriangle, Ban, Link, MessageSquare, Shield, ShieldCheck, Users } from "lucide-react";
+import { useState, useEffect } from "react";
+import { AlertTriangle, Ban, Link, MessageSquare, Shield, ShieldCheck, Users, Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SecuritySetting {
   id: string;
@@ -16,6 +17,12 @@ interface SecuritySetting {
   enabled: boolean;
   icon: React.ElementType;
   iconColor: string;
+}
+
+interface SecurityStats {
+  linksBlocked: number;
+  spamRemoved: number;
+  protectionRate: number;
 }
 
 export default function Security() {
@@ -70,9 +77,69 @@ export default function Security() {
     },
   ]);
 
+  const [stats, setStats] = useState<SecurityStats>({
+    linksBlocked: 0,
+    spamRemoved: 0,
+    protectionRate: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
   const [spamThreshold, setSpamThreshold] = useState([5]);
   const [floodLimit, setFloodLimit] = useState([3]);
   const [whitelistedDomains, setWhitelistedDomains] = useState("telegram.me, t.me");
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Fetch today's analytics
+        const { data: analyticsData } = await supabase
+          .from("bot_analytics")
+          .select("links_blocked, spam_detected, blocked_messages, messages_received")
+          .gte("date", today.toISOString().split("T")[0]);
+
+        const linksBlocked = analyticsData?.reduce(
+          (acc, item) => acc + (item.links_blocked || 0),
+          0
+        ) || 0;
+
+        const spamRemoved = analyticsData?.reduce(
+          (acc, item) => acc + (item.spam_detected || 0),
+          0
+        ) || 0;
+
+        const blockedMessages = analyticsData?.reduce(
+          (acc, item) => acc + (item.blocked_messages || 0),
+          0
+        ) || 0;
+
+        const messagesReceived = analyticsData?.reduce(
+          (acc, item) => acc + (item.messages_received || 0),
+          0
+        ) || 0;
+
+        // Calculate protection rate (avoid division by zero)
+        const totalActions = messagesReceived + blockedMessages;
+        const protectionRate = totalActions > 0
+          ? ((blockedMessages / totalActions) * 100)
+          : 0;
+
+        setStats({
+          linksBlocked,
+          spamRemoved,
+          protectionRate: Math.min(protectionRate, 100),
+        });
+      } catch (error) {
+        console.error("Error fetching security stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   const toggleSetting = (id: string) => {
     setSettings((prev) =>
@@ -86,6 +153,16 @@ export default function Security() {
   const saveSettings = () => {
     toast.success("Todas as configurações foram salvas!");
   };
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -112,7 +189,7 @@ export default function Security() {
                   <Ban className="h-6 w-6 text-destructive" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">847</p>
+                  <p className="text-2xl font-bold">{stats.linksBlocked}</p>
                   <p className="text-sm text-muted-foreground">Links bloqueados hoje</p>
                 </div>
               </div>
@@ -125,7 +202,7 @@ export default function Security() {
                   <AlertTriangle className="h-6 w-6 text-warning" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">234</p>
+                  <p className="text-2xl font-bold">{stats.spamRemoved}</p>
                   <p className="text-sm text-muted-foreground">Spam removido hoje</p>
                 </div>
               </div>
@@ -138,7 +215,9 @@ export default function Security() {
                   <ShieldCheck className="h-6 w-6 text-success" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">99.2%</p>
+                  <p className="text-2xl font-bold">
+                    {stats.protectionRate > 0 ? `${stats.protectionRate.toFixed(1)}%` : "0%"}
+                  </p>
                   <p className="text-sm text-muted-foreground">Taxa de proteção</p>
                 </div>
               </div>
