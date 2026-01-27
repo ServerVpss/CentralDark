@@ -10,6 +10,16 @@ interface PixRequest {
   action: 'create' | 'check' | 'confirm' | 'cancel';
   planCode?: string;
   txid?: string;
+  // New fields for Telegram integration
+  amount?: number;
+  description?: string;
+  planId?: string;
+  planName?: string;
+  planDays?: number;
+  userId?: string;
+  telegramUserId?: number;
+  telegramChatId?: number;
+  botId?: string;
 }
 
 // Efí API Configuration
@@ -32,6 +42,8 @@ async function getEfiToken(): Promise<string> {
   });
 
   if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Efí token error:', errorText);
     throw new Error('Failed to get Efí token');
   }
 
@@ -40,7 +52,14 @@ async function getEfiToken(): Promise<string> {
 }
 
 // Create immediate PIX charge
-async function createPixCharge(value: number, description: string): Promise<any> {
+async function createPixCharge(value: number, description: string): Promise<{
+  txid: string;
+  locId: string;
+  status: string;
+  qrcode: string;
+  imagemQrcode: string;
+  valor: number;
+}> {
   const token = await getEfiToken();
   const txid = generateTxid();
   
@@ -59,6 +78,8 @@ async function createPixCharge(value: number, description: string): Promise<any>
     solicitacaoPagador: description,
   };
 
+  console.log(`Creating PIX charge with txid: ${txid}, value: ${value}`);
+
   const response = await fetch(`${EFI_BASE_URL}/v2/cob/${txid}`, {
     method: 'PUT',
     headers: {
@@ -75,6 +96,7 @@ async function createPixCharge(value: number, description: string): Promise<any>
   }
 
   const chargeData = await response.json();
+  console.log(`Charge created, getting QR code for loc: ${chargeData.loc.id}`);
   
   // Get QR Code
   const qrResponse = await fetch(`${EFI_BASE_URL}/v2/loc/${chargeData.loc.id}/qrcode`, {
@@ -84,6 +106,8 @@ async function createPixCharge(value: number, description: string): Promise<any>
   });
 
   if (!qrResponse.ok) {
+    const qrError = await qrResponse.text();
+    console.error('QR code error:', qrError);
     throw new Error('Failed to generate QR Code');
   }
 
@@ -100,7 +124,7 @@ async function createPixCharge(value: number, description: string): Promise<any>
 }
 
 // Check payment status
-async function checkPaymentStatus(txid: string): Promise<any> {
+async function checkPaymentStatus(txid: string): Promise<{ status: string; [key: string]: unknown }> {
   const token = await getEfiToken();
   
   const response = await fetch(`${EFI_BASE_URL}/v2/cob/${txid}`, {
@@ -110,6 +134,8 @@ async function checkPaymentStatus(txid: string): Promise<any> {
   });
 
   if (!response.ok) {
+    const error = await response.text();
+    console.error('Check payment error:', error);
     throw new Error('Failed to check payment status');
   }
 
@@ -132,31 +158,98 @@ serve(async (req: Request) => {
   }
 
   try {
+    // Check if this is a service role request (from other edge functions)
+    const authHeader = req.headers.get('Authorization');
+    const isServiceRole = authHeader?.includes(Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '');
+    
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
+      isServiceRole 
+        ? Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+        : Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      isServiceRole ? {} : {
         global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
+          headers: { Authorization: authHeader! },
         },
       }
     );
 
-    // Get authenticated user
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-    
-    if (authError || !user) {
+    let userId: string | null = null;
+
+    // For non-service-role requests, get authenticated user
+    if (!isServiceRole) {
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      
+      if (authError || !user) {
+        return new Response(
+          JSON.stringify({ error: 'Unauthorized' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      userId = user.id;
+    }
+
+    const requestData: PixRequest = await req.json();
+    const { action, planCode, txid } = requestData;
+
+    // CREATE PIX CHARGE (from Telegram bot)
+    if (action === 'create' && requestData.amount && requestData.telegramUserId) {
+      console.log(`Creating PIX charge for Telegram user: ${requestData.telegramUserId}`);
+      
+      const { amount, description, planId, planCode: pCode, planName, planDays, telegramUserId, telegramChatId, botId } = requestData;
+      userId = requestData.userId || userId;
+
+      // Create PIX charge
+      const pixCharge = await createPixCharge(
+        Number(amount),
+        description || `Plano - TelePanel`
+      );
+
+      // Save pending payment with Telegram info
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+      
+      const { error: saveError } = await supabaseClient
+        .from('pending_payments')
+        .insert({
+          user_id: userId,
+          plan_id: planId,
+          plan_code: pCode,
+          plan_name: planName,
+          plan_days: planDays,
+          txid: pixCharge.txid,
+          loc_id: pixCharge.locId,
+          value: amount,
+          pix_qrcode: pixCharge.imagemQrcode,
+          pix_copy_paste: pixCharge.qrcode,
+          status: 'PENDING',
+          expires_at: expiresAt,
+          telegram_user_id: telegramUserId,
+          telegram_chat_id: telegramChatId,
+          bot_id: botId,
+        });
+
+      if (saveError) {
+        console.error('Error saving pending payment:', saveError);
+        throw new Error('Failed to save payment');
+      }
+
+      console.log(`PIX charge created for Telegram: ${pixCharge.txid}`);
+
       return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({
+          success: true,
+          txid: pixCharge.txid,
+          qrcode: pixCharge.imagemQrcode,
+          copyPaste: pixCharge.qrcode,
+          expiresAt,
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const { action, planCode, txid }: PixRequest = await req.json();
-
-    // CREATE PIX CHARGE
+    // CREATE PIX CHARGE (from web app with planCode)
     if (action === 'create' && planCode) {
-      console.log(`Creating PIX charge for plan: ${planCode}, user: ${user.id}`);
+      console.log(`Creating PIX charge for plan: ${planCode}, user: ${userId}`);
       
       // Get plan details
       const { data: plan, error: planError } = await supabaseClient
@@ -185,7 +278,7 @@ serve(async (req: Request) => {
       const { data: pendingPayment, error: saveError } = await supabaseClient
         .from('pending_payments')
         .insert({
-          user_id: user.id,
+          user_id: userId,
           plan_id: plan.id,
           plan_code: plan.code,
           plan_name: plan.name,
@@ -233,7 +326,7 @@ serve(async (req: Request) => {
       const status = await checkPaymentStatus(txid);
       const isPaid = status.status === 'CONCLUIDA';
 
-      if (isPaid) {
+      if (isPaid && !isServiceRole) {
         // Get pending payment
         const { data: payment } = await supabaseClient
           .from('pending_payments')
@@ -254,7 +347,7 @@ serve(async (req: Request) => {
           await supabaseClient
             .from('user_subscriptions')
             .insert({
-              user_id: user.id,
+              user_id: userId,
               plan_id: payment.plan_id,
               plan_code: payment.plan_code,
               plan_name: payment.plan_name,
@@ -269,7 +362,7 @@ serve(async (req: Request) => {
           await supabaseClient
             .from('payment_history')
             .insert({
-              user_id: user.id,
+              user_id: userId,
               plan_id: payment.plan_id,
               txid: txid,
               amount: payment.value,
@@ -294,11 +387,16 @@ serve(async (req: Request) => {
 
     // CANCEL PAYMENT
     if (action === 'cancel' && txid) {
-      await supabaseClient
+      const query = supabaseClient
         .from('pending_payments')
         .update({ status: 'CANCELLED' })
-        .eq('txid', txid)
-        .eq('user_id', user.id);
+        .eq('txid', txid);
+      
+      if (userId) {
+        query.eq('user_id', userId);
+      }
+      
+      await query;
 
       return new Response(
         JSON.stringify({ success: true }),
@@ -311,10 +409,11 @@ serve(async (req: Request) => {
       { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('PIX payment error:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

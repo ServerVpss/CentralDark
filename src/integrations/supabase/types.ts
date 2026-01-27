@@ -135,6 +135,44 @@ export type Database = {
           },
         ]
       }
+      bot_conversation_states: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          state_data: Json | null
+          state_type: string
+          telegram_user_id: number
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          state_data?: Json | null
+          state_type: string
+          telegram_user_id: number
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          state_data?: Json | null
+          state_type?: string
+          telegram_user_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_conversation_states_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bot_security_settings: {
         Row: {
           anti_flood_action: string | null
@@ -196,6 +234,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "bot_security_settings_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: true
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bot_settings: {
+        Row: {
+          announce_payments: boolean | null
+          bot_id: string | null
+          created_at: string
+          group_chat_id: number | null
+          group_url: string | null
+          id: string
+          mute_new_members: boolean | null
+          owner_ids: number[] | null
+          terms_enabled: boolean | null
+          terms_text: string | null
+          updated_at: string
+        }
+        Insert: {
+          announce_payments?: boolean | null
+          bot_id?: string | null
+          created_at?: string
+          group_chat_id?: number | null
+          group_url?: string | null
+          id?: string
+          mute_new_members?: boolean | null
+          owner_ids?: number[] | null
+          terms_enabled?: boolean | null
+          terms_text?: string | null
+          updated_at?: string
+        }
+        Update: {
+          announce_payments?: boolean | null
+          bot_id?: string | null
+          created_at?: string
+          group_chat_id?: number | null
+          group_url?: string | null
+          id?: string
+          mute_new_members?: boolean | null
+          owner_ids?: number[] | null
+          terms_enabled?: boolean | null
+          terms_text?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_settings_bot_id_fkey"
             columns: ["bot_id"]
             isOneToOne: true
             referencedRelation: "telegram_bots"
@@ -298,6 +386,7 @@ export type Database = {
       }
       pending_payments: {
         Row: {
+          bot_id: string | null
           created_at: string
           expires_at: string
           id: string
@@ -309,11 +398,15 @@ export type Database = {
           plan_id: string | null
           plan_name: string
           status: string | null
+          telegram_chat_id: number | null
+          telegram_message_id: number | null
+          telegram_user_id: number | null
           txid: string
           user_id: string
           value: number
         }
         Insert: {
+          bot_id?: string | null
           created_at?: string
           expires_at: string
           id?: string
@@ -325,11 +418,15 @@ export type Database = {
           plan_id?: string | null
           plan_name: string
           status?: string | null
+          telegram_chat_id?: number | null
+          telegram_message_id?: number | null
+          telegram_user_id?: number | null
           txid: string
           user_id: string
           value: number
         }
         Update: {
+          bot_id?: string | null
           created_at?: string
           expires_at?: string
           id?: string
@@ -341,11 +438,21 @@ export type Database = {
           plan_id?: string | null
           plan_name?: string
           status?: string | null
+          telegram_chat_id?: number | null
+          telegram_message_id?: number | null
+          telegram_user_id?: number | null
           txid?: string
           user_id?: string
           value?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "pending_payments_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "pending_payments_plan_id_fkey"
             columns: ["plan_id"]
@@ -580,6 +687,107 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "telegram_messages_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      telegram_subscriptions: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          plan_code: string
+          plan_days: number
+          plan_id: string | null
+          plan_name: string
+          started_at: string
+          status: string | null
+          telegram_user_id: number
+          txid: string | null
+          value: number
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          plan_code: string
+          plan_days: number
+          plan_id?: string | null
+          plan_name: string
+          started_at?: string
+          status?: string | null
+          telegram_user_id: number
+          txid?: string | null
+          value: number
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          plan_code?: string
+          plan_days?: number
+          plan_id?: string | null
+          plan_name?: string
+          started_at?: string
+          status?: string | null
+          telegram_user_id?: number
+          txid?: string | null
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_subscriptions_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "telegram_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      telegram_user_terms: {
+        Row: {
+          accepted: boolean
+          accepted_at: string | null
+          bot_id: string | null
+          created_at: string
+          id: string
+          telegram_user_id: number
+          updated_at: string
+        }
+        Insert: {
+          accepted?: boolean
+          accepted_at?: string | null
+          bot_id?: string | null
+          created_at?: string
+          id?: string
+          telegram_user_id: number
+          updated_at?: string
+        }
+        Update: {
+          accepted?: boolean
+          accepted_at?: string | null
+          bot_id?: string | null
+          created_at?: string
+          id?: string
+          telegram_user_id?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_user_terms_bot_id_fkey"
             columns: ["bot_id"]
             isOneToOne: false
             referencedRelation: "telegram_bots"
