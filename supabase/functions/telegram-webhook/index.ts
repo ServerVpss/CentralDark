@@ -1344,6 +1344,8 @@ class BotHandler {
 
     if (!telegramUserId) return;
 
+    const text = message.text || "";
+
     // Handle group messages
     if (message.chat.type !== "private") {
       if (message.new_chat_members) {
@@ -1352,12 +1354,22 @@ class BotHandler {
         }
       }
 
+      // Process commands in group for owners and subscribers
+      if (text.startsWith("/")) {
+        const isActive = await this.isSubscriptionActive(telegramUserId);
+        const canQuery = this.isOwner(telegramUserId) || isActive;
+
+        if (canQuery) {
+          await this.handleGroupCommand(message, text);
+          return;
+        }
+      }
+
       await this.guardMessage(message);
       return;
     }
 
     // Private chat handling
-    const text = message.text || "";
 
     // Check for broadcast state
     const broadcastState = await this.getConversationState(telegramUserId, "broadcast");
@@ -1413,6 +1425,138 @@ class BotHandler {
       }
     }
     await this.showMainMenu(chatId, telegramUserId);
+  }
+
+  // =============== GROUP COMMAND HANDLER ===============
+  async handleGroupCommand(message: TelegramMessage, text: string) {
+    const chatId = message.chat.id;
+    const telegramUserId = message.from!.id;
+    const replyToId = message.message_id;
+
+    // Parse command: /cpf 12345678900 or /cpf
+    const parts = text.trim().split(/\s+/);
+    const command = parts[0].toLowerCase().replace("/", "").split("@")[0]; // Remove @botusername
+    const queryInput = parts.slice(1).join(" ");
+
+    // Map commands to query types
+    const commandMap: Record<string, string> = {
+      cpf: "cpf", cnpj: "cnpj", placa: "placa", placa2: "placa_completa",
+      telefone: "telefone", tel: "telefone", email: "email",
+      cep: "cep", nome: "nome", score: "score",
+      rg: "rg", cnh: "cnh", pix: "pix",
+      foto: "foto", nacional: "nacional",
+    };
+
+    const queryType = commandMap[command];
+
+    if (!queryType) {
+      // Not a query command, ignore
+      return;
+    }
+
+    // If no input provided, show usage
+    if (!queryInput) {
+      const examples: Record<string, string> = {
+        cpf: "/cpf 12345678900",
+        cnpj: "/cnpj 12345678000100",
+        placa: "/placa ABC1234",
+        placa_completa: "/placa2 ABC1234",
+        telefone: "/telefone 11999998888",
+        email: "/email exemplo@email.com",
+        cep: "/cep 01310100",
+        nome: "/nome João Silva",
+        score: "/score 12345678900",
+        rg: "/rg MG12345678",
+        cnh: "/cnh 12345678900",
+        pix: "/pix chave@pix.com",
+        foto: "/foto 12345678900 SP",
+        nacional: "/nacional 12345678900",
+      };
+
+      await telegramRequest(this.token, "sendMessage", {
+        chat_id: chatId,
+        text: `⚠️ <b>Você deve preencher os dados corretamente</b>\n\nExemplo: <code>${examples[queryType] || `/${command} valor`}</code>`,
+        parse_mode: "HTML",
+        reply_to_message_id: replyToId,
+      });
+      return;
+    }
+
+    // For foto, check if state is provided
+    let estado: string | undefined;
+    if (queryType === "foto") {
+      const inputParts = queryInput.split(/\s+/);
+      if (inputParts.length >= 2) {
+        estado = inputParts[inputParts.length - 1].toUpperCase();
+        if (estado.length === 2) {
+          // Valid state code
+        } else {
+          estado = undefined;
+        }
+      }
+      if (!estado) {
+        await telegramRequest(this.token, "sendMessage", {
+          chat_id: chatId,
+          text: `⚠️ <b>Para foto, informe o estado</b>\n\nExemplo: <code>/foto 12345678900 SP</code>`,
+          parse_mode: "HTML",
+          reply_to_message_id: replyToId,
+        });
+        return;
+      }
+    }
+
+    // Send processing message
+    const processingMsg = await telegramRequest(this.token, "sendMessage", {
+      chat_id: chatId,
+      text: `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>`,
+      parse_mode: "HTML",
+      reply_to_message_id: replyToId,
+    });
+
+    try {
+      const result = await executeQuery(queryType, queryInput, estado);
+      
+      // Log query
+      await this.logQuery(telegramUserId, queryType, queryInput, result);
+
+      // Delete processing message
+      if (processingMsg.ok && processingMsg.result) {
+        const msgResult = processingMsg.result as { message_id: number };
+        try {
+          await deleteMessage(this.token, chatId, msgResult.message_id);
+        } catch (_e) { /* ignore */ }
+      }
+
+      // Format and send result
+      const formattedResult = formatQueryResult(queryType, result);
+
+      // Check for photo
+      if (result.foto && typeof result.foto === "string" && (result.foto as string).startsWith("http")) {
+        await telegramRequest(this.token, "sendPhoto", {
+          chat_id: chatId,
+          photo: result.foto,
+          caption: formattedResult.substring(0, 1024),
+          parse_mode: "HTML",
+          reply_to_message_id: replyToId,
+        });
+      } else {
+        await telegramRequest(this.token, "sendMessage", {
+          chat_id: chatId,
+          text: formattedResult,
+          parse_mode: "HTML",
+          reply_to_message_id: replyToId,
+        });
+      }
+
+    } catch (error) {
+      console.error("Group query error:", error);
+      await telegramRequest(this.token, "sendMessage", {
+        chat_id: chatId,
+        text: "❌ <b>Erro na consulta</b>\n\nTente novamente.",
+        parse_mode: "HTML",
+        reply_to_message_id: replyToId,
+      });
+    }
   }
 
   async handleCallback(callback: TelegramCallbackQuery) {
