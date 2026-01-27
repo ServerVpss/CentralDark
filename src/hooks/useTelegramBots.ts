@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface TelegramBot {
   id: string;
@@ -39,15 +40,10 @@ export interface BotSecuritySettings {
 export function useTelegramBots() {
   const [bots, setBots] = useState<TelegramBot[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUserId(user?.id ?? null);
-    });
-  }, []);
-
-  const fetchBots = async () => {
+  const fetchBots = useCallback(async () => {
+    setLoading(true);
     const { data, error } = await supabase
       .from("telegram_bots")
       .select("*")
@@ -60,7 +56,7 @@ export function useTelegramBots() {
       setBots(data || []);
     }
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     fetchBots();
@@ -91,23 +87,32 @@ export function useTelegramBots() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [fetchBots]);
 
   const createBot = async (name: string, token: string) => {
-    if (!userId) {
+    if (!user?.id) {
       toast.error("Você precisa estar logado para criar um bot");
+      console.error("createBot: user not logged in", { user });
       return null;
     }
 
+    console.log("Creating bot with userId:", user.id, "token:", token.substring(0, 10) + "...");
+
     try {
       const { data, error } = await supabase.functions.invoke("telegram-bot", {
-        body: { action: "createBot", name, token, userId },
+        body: { action: "createBot", name, token, userId: user.id },
       });
 
-      if (error) throw error;
+      console.log("createBot response:", data, error);
+
+      if (error) {
+        console.error("Edge function error:", error);
+        throw error;
+      }
 
       if (data?.success) {
         toast.success("Bot criado e webhook configurado com sucesso!");
+        await fetchBots(); // Recarregar lista
         return data.bot;
       } else {
         toast.error(data?.error || "Erro ao criar bot");
