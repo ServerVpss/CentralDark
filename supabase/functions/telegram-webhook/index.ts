@@ -352,7 +352,11 @@ async function fetchFromProvider(
   } catch (err) {
     const error = err as Error;
     console.error(`Fetch error:`, error);
-    return { error: `Falha na conexão: ${error.message}` };
+    // Mensagem amigável para o usuário
+    if (error.message.includes('Connection refused') || error.message.includes('connect error')) {
+      return { error: `⚠️ Servidor da API temporariamente indisponível. Tente novamente em alguns minutos.` };
+    }
+    return { error: `⚠️ Erro de conexão. Tente novamente.` };
   }
 }
 
@@ -397,10 +401,14 @@ async function fetchFromProviderWithTimeout(
   } catch (err) {
     const error = err as Error;
     if (error.name === 'AbortError') {
-      return { error: "Timeout na requisição", notFound: true };
+      return { error: "⏱️ Tempo limite excedido. Tente novamente.", notFound: true };
     }
     console.error(`Fetch error:`, error);
-    return { error: `Falha na conexão: ${error.message}` };
+    // Mensagem amigável para o usuário
+    if (error.message.includes('Connection refused') || error.message.includes('connect error')) {
+      return { error: `⚠️ Servidor da API temporariamente indisponível. Tente novamente em alguns minutos.` };
+    }
+    return { error: `⚠️ Erro de conexão. Tente novamente.` };
   }
 }
 
