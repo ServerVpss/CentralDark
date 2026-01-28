@@ -51,12 +51,51 @@ Deno.serve(async (req) => {
         continue
       }
 
-      // Buscar transação pelo txid
-      const { data: transaction, error: txError } = await supabase
+      // Buscar transação pelo txid OU pelo txid contido no qr_code_text
+      let transaction: any = null
+      let txError: any = null
+
+      // Primeiro tentar buscar pelo external_id exato
+      const result1 = await supabase
         .from('pix_transactions')
         .select('*')
         .eq('external_id', txid)
         .single()
+      
+      if (result1.data) {
+        transaction = result1.data
+      } else {
+        // Se não encontrou, buscar pelo txid no qr_code_text (a Efí usa o txid dela no QR code)
+        const result2 = await supabase
+          .from('pix_transactions')
+          .select('*')
+          .like('qr_code_text', `%${txid}%`)
+          .eq('status', 'pending')
+          .single()
+        
+        if (result2.data) {
+          transaction = result2.data
+        } else {
+          // Última tentativa: buscar transação pendente recente com mesmo valor
+          const result3 = await supabase
+            .from('pix_transactions')
+            .select('*')
+            .eq('status', 'pending')
+            .eq('amount', parseFloat(valor))
+            .eq('gateway', 'efi')
+            .gt('expires_at', new Date().toISOString())
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single()
+          
+          if (result3.data) {
+            transaction = result3.data
+            console.log(`Transação encontrada por valor: ${transaction.id}`)
+          } else {
+            txError = 'not_found'
+          }
+        }
+      }
 
       if (txError || !transaction) {
         console.log(`Transação não encontrada para txid: ${txid}`)
