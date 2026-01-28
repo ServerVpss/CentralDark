@@ -214,9 +214,14 @@ async function sendMessage(token: string, chatId: number, text: string, replyMar
   });
 }
 
-// Função para enviar mensagens longas divididas em partes
-async function sendLongMessage(token: string, chatId: number, text: string, replyToId?: number) {
+// Função para enviar mensagens longas divididas em partes com botão de apagar
+async function sendLongMessage(token: string, chatId: number, text: string, replyToId?: number, includeDeleteButton = true) {
   const MAX_LENGTH = 4000; // Deixar margem para o Telegram
+  
+  // Criar botão de apagar
+  const deleteKeyboard = includeDeleteButton ? {
+    inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]]
+  } : undefined;
   
   if (text.length <= MAX_LENGTH) {
     return telegramRequest(token, "sendMessage", {
@@ -224,6 +229,7 @@ async function sendLongMessage(token: string, chatId: number, text: string, repl
       text,
       parse_mode: "HTML",
       reply_to_message_id: replyToId,
+      reply_markup: deleteKeyboard,
     });
   }
   
@@ -252,14 +258,16 @@ async function sendLongMessage(token: string, chatId: number, text: string, repl
     remaining = remaining.substring(breakPoint).trim();
   }
   
-  // Enviar cada parte
+  // Enviar cada parte - só a última tem botão de apagar
   for (let i = 0; i < parts.length; i++) {
     const partHeader = parts.length > 1 ? `📄 <b>Parte ${i + 1}/${parts.length}</b>\n\n` : '';
+    const isLastPart = i === parts.length - 1;
     await telegramRequest(token, "sendMessage", {
       chat_id: chatId,
       text: partHeader + parts[i],
       parse_mode: "HTML",
       reply_to_message_id: i === 0 ? replyToId : undefined,
+      reply_markup: isLastPart ? deleteKeyboard : undefined,
     });
   }
 }
@@ -1193,11 +1201,17 @@ class BotHandler {
           photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
           parse_mode: "HTML",
-          reply_markup: keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")]),
+          reply_markup: keyboard(
+            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
+            [btn("🗑️ Apagar", "delete_msg")]
+          ),
         });
       } else {
         await sendMessage(this.token, chatId, formattedResult,
-          keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")])
+          keyboard(
+            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
+            [btn("🗑️ Apagar", "delete_msg")]
+          )
         );
       }
 
@@ -2171,6 +2185,7 @@ class BotHandler {
           caption: simpleCaption.substring(0, 1024),
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
+          reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
         });
 
         if (!sentPhoto.ok) {
@@ -2212,7 +2227,14 @@ class BotHandler {
 
     await answerCallback(this.token, callback.id);
 
-    // Terms handling
+    // Delete message button handler
+    if (data === "delete_msg") {
+      try {
+        await deleteMessage(this.token, chatId, messageId);
+      } catch (_e) { /* ignore */ }
+      return;
+    }
+
     if (data === "terms:accept") {
       await this.setTermsStatus(telegramUserId, true);
       try {
