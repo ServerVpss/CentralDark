@@ -9,7 +9,6 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Bots from "./pages/Bots";
 import BotSettingsPage from "./pages/BotSettings";
-import Security from "./pages/Security";
 import Plans from "./pages/Plans";
 import Settings from "./pages/Settings";
 import Consultas from "./pages/Consultas";
@@ -32,7 +31,6 @@ const App = () => (
             <Route path="/consultas" element={<ProtectedRoute><Consultas /></ProtectedRoute>} />
             <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
             <Route path="/bots/:botId/settings" element={<ProtectedRoute><BotSettingsPage /></ProtectedRoute>} />
-            <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
             <Route path="/telegram-users" element={<ProtectedRoute><TelegramUsers /></ProtectedRoute>} />
             <Route path="/logs" element={<ProtectedRoute><QueryLogs /></ProtectedRoute>} />
             <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
