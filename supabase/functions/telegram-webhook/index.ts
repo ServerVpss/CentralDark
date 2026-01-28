@@ -1026,13 +1026,8 @@ class BotHandler {
          [btn("🔙 Voltar", "menu:plans")]
        );
 
-       // O Telegram NÃO aceita "data:image/...base64" direto no sendPhoto.
-       // Se vier como dataURL, enviamos somente o texto (copia e cola).
-       const isDataUrl =
-         typeof qr_code_image === "string" &&
-         qr_code_image.startsWith("data:image/");
-
-       if (qr_code_image && !isDataUrl) {
+       // telegramRequest agora converte data:image/...base64 para multipart automaticamente
+       if (qr_code_image) {
          const sentMsg = await telegramRequest(this.token, "sendPhoto", {
            chat_id: chatId,
            photo: qr_code_image,
