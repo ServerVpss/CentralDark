@@ -1,67 +1,95 @@
 
-# Plano: Corrigir Registro Automático de Webhook Efí
 
-## Resumo
-O botão "Registrar Webhook" no painel não está enviando a URL correta para a função de registro. Vamos corrigir isso para que o webhook seja registrado automaticamente para a chave PIX configurada.
+# Plano: Corrigir Expiração de Pagamentos PIX Pendentes
 
 ## Problema Identificado
-A função `handleRegisterWebhook` no componente `EfiGatewayConfigDialog.tsx` está chamando a edge function com um body vazio, mas a função `efi-register-webhook` espera receber o parâmetro `webhook_url`.
 
-## Tarefas
+Atualmente o sistema tem as seguintes configuracoes:
 
-### 1. Corrigir o componente EfiGatewayConfigDialog
-Atualizar a função `handleRegisterWebhook` para enviar a URL do webhook automaticamente:
-- Gerar a URL do webhook usando o project ID do Supabase
-- URL: `https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/efi-webhook`
+1. **PIX expira em 10 minutos** - tempo muito curto para o usuario pagar
+2. **Transacoes expiradas nao sao atualizadas** - ficam eternamente com status "pending" no banco
+3. **Polling ignora expiradas** - a funcao `efi-poll-pending` so verifica transacoes que ainda nao expiraram
 
-### 2. Melhorar feedback do registro
-- Mostrar a URL do webhook registrado no sucesso
-- Exibir detalhes do erro se falhar
+## Solucao Proposta
+
+### 1. Aumentar tempo de expiracao para 1 hora
+
+Modificar `supabase/functions/efi-generate-pix/index.ts`:
+- Linha 101: Mudar de `10 * 60 * 1000` (10 min) para `60 * 60 * 1000` (60 min)
+- Linha 110: Mudar `expiracao: 600` para `expiracao: 3600`
+
+### 2. Marcar automaticamente como expirado
+
+Adicionar logica no `efi-poll-pending` para atualizar transacoes expiradas:
+
+```typescript
+// Atualizar transacoes expiradas para status "expired"
+await supabase
+  .from('pix_transactions')
+  .update({ status: 'expired' })
+  .eq('status', 'pending')
+  .lt('expires_at', new Date().toISOString())
+```
+
+### 3. Continuar mostrando na tabela
+
+As transacoes expiradas continuarao visiveis na tabela do relatorio mas com badge "Expirado" (ja existe suporte para isso no componente `PixTransactionsTable`).
 
 ---
 
 ## Detalhes Tecnicos
 
-### Arquivo: `src/components/payments/EfiGatewayConfigDialog.tsx`
+### Arquivo: `supabase/functions/efi-generate-pix/index.ts`
 
-**Modificacao na funcao handleRegisterWebhook (linhas 106-126):**
-
+**Linha 101:**
 ```typescript
-const handleRegisterWebhook = async () => {
-  setIsRegistering(true);
-  try {
-    // URL do webhook do projeto
-    const webhookUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/efi-webhook`;
-    
-    const { data, error } = await supabase.functions.invoke("efi-register-webhook", {
-      body: { webhook_url: webhookUrl },
-    });
+// ANTES
+const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutos
 
-    if (error) throw error;
-
-    if (data?.success) {
-      toast.success(`Webhook registrado: ${data.webhook_url}`);
-    } else {
-      toast.error(data?.error || "Erro ao registrar webhook");
-    }
-  } catch (error) {
-    console.error("Register webhook error:", error);
-    toast.error("Erro ao registrar webhook");
-  } finally {
-    setIsRegistering(false);
-  }
-};
+// DEPOIS
+const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // 1 hora
 ```
 
-### Fluxo apos correcao
+**Linha 110:**
+```typescript
+// ANTES
+expiracao: 600, // 10 minutos em segundos
 
-1. Usuario clica em "Registrar" no painel
-2. Sistema envia URL do webhook + credenciais para o proxy PHP
-3. Proxy faz chamada mTLS para Efi: `PUT /v2/webhook/{pix_key}`
-4. Efi associa o webhook a chave PIX configurada
-5. Quando um pagamento for feito naquela chave, Efi envia notificacao para o endpoint
+// DEPOIS
+expiracao: 3600, // 1 hora em segundos
+```
 
-### Resultado esperado
-- Clique em "Registrar" vai cadastrar automaticamente o webhook
-- Pagamentos PIX serao confirmados automaticamente via webhook
-- Usuarios serao liberados no grupo do Telegram sem intervencao manual
+### Arquivo: `supabase/functions/efi-poll-pending/index.ts`
+
+**Adicionar apos linha 18 (apos o console.log inicial):**
+
+```typescript
+// Primeiro, marcar transacoes expiradas
+const { data: expiredCount } = await supabase
+  .from('pix_transactions')
+  .update({ status: 'expired' })
+  .eq('gateway', 'efi')
+  .eq('status', 'pending')
+  .lt('expires_at', new Date().toISOString())
+  .select('id')
+
+if (expiredCount && expiredCount.length > 0) {
+  console.log(`${expiredCount.length} transacoes marcadas como expiradas`)
+  
+  // Atualizar tambem em pending_payments
+  for (const tx of expiredCount) {
+    await supabase
+      .from('pending_payments')
+      .update({ status: 'EXPIRED' })
+      .eq('txid', tx.external_id)
+  }
+}
+```
+
+## Resultado Esperado
+
+- Usuarios terao **1 hora** para completar o pagamento PIX (em vez de 10 minutos)
+- Transacoes que passarem do prazo serao automaticamente marcadas como "expired"
+- O relatorio de lucros continuara mostrando todas as transacoes com o status correto
+- O polling focara apenas em transacoes validas
+
