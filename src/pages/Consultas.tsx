@@ -21,7 +21,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -32,6 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { QueryResultFormatter } from "@/components/consultas/QueryResultFormatter";
 
 interface QueryResult {
   success: boolean;
@@ -173,60 +173,6 @@ export default function Consultas() {
 
   const selectedQueryType = queryTypes.find(q => q.value === selectedType);
 
-  const renderResultData = (data: any) => {
-    if (!data) return null;
-
-    if (typeof data === "string") {
-      return <p className="text-muted-foreground">{data}</p>;
-    }
-
-    if (data.error) {
-      return (
-        <div className="flex items-center gap-2 text-destructive">
-          <AlertCircle className="h-5 w-5" />
-          <span>{data.error}</span>
-        </div>
-      );
-    }
-
-    return (
-      <div className="space-y-3">
-        {Object.entries(data).map(([key, value]) => {
-          if (key === "foto" && typeof value === "string" && value.startsWith("http")) {
-            return (
-              <div key={key} className="space-y-2">
-                <Label className="text-muted-foreground capitalize">{key.replace(/_/g, " ")}</Label>
-                <img 
-                  src={value} 
-                  alt="Foto" 
-                  className="max-w-xs rounded-lg border border-border"
-                />
-              </div>
-            );
-          }
-
-          if (typeof value === "object" && value !== null) {
-            return (
-              <div key={key} className="space-y-2">
-                <Label className="text-muted-foreground capitalize font-semibold">{key.replace(/_/g, " ")}</Label>
-                <div className="pl-4 border-l-2 border-primary/30">
-                  {renderResultData(value)}
-                </div>
-              </div>
-            );
-          }
-
-          return (
-            <div key={key} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-              <Label className="text-muted-foreground capitalize min-w-[150px]">{key.replace(/_/g, " ")}:</Label>
-              <span className="font-medium break-all">{String(value)}</span>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
   return (
     <DashboardLayout>
       <div className="animate-fade-in space-y-6">
@@ -359,11 +305,9 @@ export default function Consultas() {
                     Consulta realizada em {result.duration_ms}ms
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="bg-secondary/30 rounded-lg p-4 overflow-auto max-h-[500px]">
-                    {renderResultData(result.data)}
-                  </div>
-                </CardContent>
+              <CardContent>
+                <QueryResultFormatter data={result.data} />
+              </CardContent>
               </Card>
             )}
           </div>
