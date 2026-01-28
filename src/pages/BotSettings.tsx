@@ -493,12 +493,16 @@ export default function BotSettings() {
           </TabsContent>
 
           <TabsContent value="engagement" className="mt-6 space-y-6">
+            <EngagementMessagesManager 
+              botId={botId || ""} 
+              settings={settings}
+              onSettingsUpdate={() => {}}
+            />
             <FakeEngagementSettings
               botId={botId || ""}
               settings={settings}
               onUpdate={() => {}}
             />
-            <EngagementMessagesManager botId={botId || ""} />
           </TabsContent>
 
           <TabsContent value="payments" className="mt-6">
