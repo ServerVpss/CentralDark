@@ -291,6 +291,10 @@ async function fetchFromProvider(
 
     if (!response.ok) {
       console.error(`API error: ${response.status} ${response.statusText}`);
+      // Tratamento especial para 404 - geralmente significa "não encontrado"
+      if (response.status === 404) {
+        return { error: "Dados não encontrados", status: 404, notFound: true };
+      }
       return { error: `Erro na API: ${response.status}`, status: response.status };
     }
 
@@ -328,13 +332,22 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
 
   // TConect Foto - with state (e.g., /foto SP 12345678900)
   if (normalizedType === "foto" && estado) {
-    return await fetchFromProvider(
+    const result = await fetchFromProvider(
       providers.tconect_foto,
       "/foto",
       "cpf",
       cleanInput,
       { estado: estado.toUpperCase() }
     );
+    
+    // Se não encontrou no estado específico, retorna mensagem amigável
+    if (result.notFound || result.status === 404) {
+      return { 
+        error: `📸 Foto não encontrada no estado ${estado.toUpperCase()}\n\n💡 Dica: Use /foto ${cleanInput} (sem estado) para buscar em todos os estados.`,
+        notFound: true 
+      };
+    }
+    return result;
   }
 
   // TConect Foto - search ALL states (default when no state specified)
