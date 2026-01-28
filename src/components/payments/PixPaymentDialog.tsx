@@ -49,6 +49,28 @@ export function PixPaymentDialog({ open, onOpenChange, plan }: PixPaymentDialogP
     }
   }, [open, plan]);
 
+  // Polling automático a cada 5 segundos para verificar pagamento
+  useEffect(() => {
+    if (!paymentData || showConfetti) return;
+
+    const checkPaymentAutomatically = async () => {
+      try {
+        const result = await checkPaymentStatus.mutateAsync(paymentData.txid);
+        if (result.isPaid) {
+          setShowConfetti(true);
+          toast.success('Pagamento confirmado com sucesso!');
+        }
+      } catch (error) {
+        console.error('Erro no polling automático:', error);
+      }
+    };
+
+    // Verificar imediatamente e depois a cada 5 segundos
+    const interval = setInterval(checkPaymentAutomatically, 5000);
+
+    return () => clearInterval(interval);
+  }, [paymentData, showConfetti, checkPaymentStatus]);
+
   // Timer countdown
   useEffect(() => {
     if (!paymentData) return;

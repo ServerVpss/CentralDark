@@ -69,8 +69,8 @@ Deno.serve(async (req) => {
       client_secret: string 
     }
 
-    const proxyUrl = gateway.proxy_url?.replace('generate', 'check-status') 
-      || 'https://api.segredounlock.com/efi-check-status.php'
+    // Usar o proxy unificado com action check_status
+    const proxyUrl = 'https://api.segredounlock.com/efi-pix-proxy.php'
 
     let processed = 0
     let paid = 0
@@ -82,13 +82,23 @@ Deno.serve(async (req) => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            action: 'check_status',
             client_id: config.client_id,
             client_secret: config.client_secret,
             txid: tx.external_id
           })
         })
 
-        const proxyData = await proxyResponse.json()
+        // Tratar resposta como texto primeiro para verificar se é JSON válido
+        const responseText = await proxyResponse.text()
+        let proxyData
+        try {
+          proxyData = JSON.parse(responseText)
+        } catch (e) {
+          console.error(`Resposta inválida do proxy para ${tx.external_id}: ${responseText.substring(0, 100)}`)
+          results.push({ txid: tx.external_id, error: 'Resposta inválida do proxy' })
+          continue
+        }
         const efiStatus = proxyData.data?.status || proxyData.status
         const isPaid = efiStatus === 'CONCLUIDA'
 

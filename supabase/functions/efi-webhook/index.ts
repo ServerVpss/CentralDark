@@ -76,14 +76,15 @@ Deno.serve(async (req) => {
         if (result2.data) {
           transaction = result2.data
         } else {
-          // Última tentativa: buscar transação pendente recente com mesmo valor
+          // Terceira tentativa: buscar transação pendente/expirada das últimas 24h com mesmo valor (sem restrição de expires_at)
+          const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
           const result3 = await supabase
             .from('pix_transactions')
             .select('*')
-            .eq('status', 'pending')
+            .in('status', ['pending', 'expired'])
             .eq('amount', parseFloat(valor))
             .eq('gateway', 'efi')
-            .gt('expires_at', new Date().toISOString())
+            .gt('created_at', last24h)
             .order('created_at', { ascending: false })
             .limit(1)
             .single()
@@ -92,7 +93,36 @@ Deno.serve(async (req) => {
             transaction = result3.data
             console.log(`Transação encontrada por valor: ${transaction.id}`)
           } else {
-            txError = 'not_found'
+            // Quarta tentativa: buscar via pending_payments pelo valor e depois encontrar a pix_transaction
+            const result4 = await supabase
+              .from('pending_payments')
+              .select('*')
+              .eq('status', 'PENDING')
+              .eq('value', parseFloat(valor))
+              .gt('created_at', last24h)
+              .order('created_at', { ascending: false })
+              .limit(1)
+              .single()
+
+            if (result4.data && result4.data.telegram_user_id) {
+              const result5 = await supabase
+                .from('pix_transactions')
+                .select('*')
+                .eq('telegram_user_id', result4.data.telegram_user_id)
+                .in('status', ['pending', 'expired'])
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .single()
+
+              if (result5.data) {
+                transaction = result5.data
+                console.log(`Transação encontrada via pending_payments: ${transaction.id}`)
+              } else {
+                txError = 'not_found'
+              }
+            } else {
+              txError = 'not_found'
+            }
           }
         }
       }
