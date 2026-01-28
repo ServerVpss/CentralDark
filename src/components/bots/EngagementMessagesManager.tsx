@@ -65,6 +65,7 @@ export function EngagementMessagesManager({ botId, settings, onSettingsUpdate }:
   const [enabled, setEnabled] = useState(settings?.fake_engagement_enabled ?? false);
   const [interval, setIntervalValue] = useState(settings?.fake_engagement_interval_minutes ?? 30);
   const [savingSettings, setSavingSettings] = useState(false);
+  const [testing, setTesting] = useState(false);
 
   useEffect(() => {
     setEnabled(settings?.fake_engagement_enabled ?? false);
@@ -227,6 +228,32 @@ export function EngagementMessagesManager({ botId, settings, onSettingsUpdate }:
     }
   };
 
+  const handleTest = async () => {
+    setTesting(true);
+    try {
+      // Temporarily reset last_sent to force sending
+      await supabase
+        .from('bot_settings')
+        .update({ 
+          fake_engagement_enabled: true,
+          fake_engagement_last_sent: null 
+        })
+        .eq('bot_id', botId);
+
+      const response = await supabase.functions.invoke('fake-engagement');
+      
+      if (response.error) throw response.error;
+      
+      toast.success('Mensagem de teste enviada no grupo!');
+      onSettingsUpdate?.();
+    } catch (error) {
+      console.error('Erro ao testar:', error);
+      toast.error('Erro ao enviar mensagem de teste');
+    } finally {
+      setTesting(false);
+    }
+  };
+
   return (
     <Card className="p-6 border-border/50 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur">
       <div className="flex items-center justify-between mb-6">
@@ -306,14 +333,24 @@ export function EngagementMessagesManager({ botId, settings, onSettingsUpdate }:
           </div>
         </div>
 
-        {/* Botão Salvar Configurações */}
-        <Button
-          onClick={handleSaveSettings}
-          disabled={savingSettings}
-          className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
-        >
-          {savingSettings ? 'Salvando...' : 'Salvar Configurações'}
-        </Button>
+        {/* Botões */}
+        <div className="flex gap-3">
+          <Button
+            onClick={handleSaveSettings}
+            disabled={savingSettings}
+            className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+          >
+            {savingSettings ? 'Salvando...' : 'Salvar Configurações'}
+          </Button>
+          <Button
+            onClick={handleTest}
+            disabled={testing}
+            variant="outline"
+            className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10"
+          >
+            {testing ? 'Enviando...' : 'Testar Agora'}
+          </Button>
+        </div>
       </div>
 
       {loading ? (
