@@ -88,6 +88,12 @@ Deno.serve(async (req) => {
       }
 
       // Atualizar pending_payments
+      const { data: pending } = await supabase
+        .from('pending_payments')
+        .select('*')
+        .eq('txid', txid)
+        .single()
+
       await supabase
         .from('pending_payments')
         .update({ status: 'PAID' })
@@ -95,20 +101,28 @@ Deno.serve(async (req) => {
 
       // Criar/atualizar assinatura se telegram_user_id existir
       if (transaction.telegram_user_id && transaction.bot_id) {
-        const expiresAt = new Date()
-        expiresAt.setDate(expiresAt.getDate() + 30)
+        const planDays = Number((pending as any)?.plan_days ?? 30)
+        const planName = (pending as any)?.plan_name || transaction.description || 'Assinatura PIX'
+        const planCode = (pending as any)?.plan_code || 'custom'
+        const planId = (pending as any)?.plan_id || null
+
+        const now = new Date()
+        const expiresAt = new Date(now)
+        expiresAt.setDate(expiresAt.getDate() + planDays)
 
         const { error: subError } = await supabase
           .from('telegram_subscriptions')
           .upsert({
             telegram_user_id: transaction.telegram_user_id,
             bot_id: transaction.bot_id,
-            plan_code: 'custom',
-            plan_name: transaction.description || 'Assinatura PIX',
-            plan_days: 30,
+            plan_id: planId,
+            plan_code: planCode,
+            plan_name: planName,
+            plan_days: planDays,
             value: transaction.amount,
             txid,
             status: 'active',
+            started_at: now.toISOString(),
             expires_at: expiresAt.toISOString()
           }, {
             onConflict: 'telegram_user_id,bot_id'
@@ -120,7 +134,7 @@ Deno.serve(async (req) => {
           console.log(`Assinatura criada para telegram_user_id: ${transaction.telegram_user_id}`)
         }
 
-        // Tentar enviar notificação via Telegram
+        // Tentar enviar notificação via Telegram + liberar no grupo automaticamente
         try {
           const { data: bot } = await supabase
             .from('telegram_bots')
@@ -128,10 +142,17 @@ Deno.serve(async (req) => {
             .eq('id', transaction.bot_id)
             .single()
 
+          const { data: settings } = await supabase
+            .from('bot_settings')
+            .select('group_chat_id')
+            .eq('bot_id', transaction.bot_id)
+            .single()
+
           if (bot?.token) {
             const message = `✅ *Pagamento Confirmado!*\n\n` +
               `💰 Valor: R$ ${Number(transaction.amount).toFixed(2)}\n` +
-              `📋 Plano: ${transaction.description || 'Assinatura'}\n` +
+              `📋 Plano: ${(pending as any)?.plan_name || transaction.description || 'Assinatura'}\n` +
+              `⏳ Dias: ${Number((pending as any)?.plan_days ?? 30)}\n` +
               `🔑 TXID: \`${txid.slice(0, 12)}...\`\n\n` +
               `Seu acesso foi liberado! 🎉`
 
@@ -145,7 +166,29 @@ Deno.serve(async (req) => {
               })
             })
 
-            console.log(`Notificação enviada para ${transaction.telegram_user_id}`)
+            // Se tiver grupo configurado, libera o usuário no grupo
+            if (settings?.group_chat_id) {
+              await fetch(`https://api.telegram.org/bot${bot.token}/restrictChatMember`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: settings.group_chat_id,
+                  user_id: transaction.telegram_user_id,
+                  permissions: {
+                    can_send_messages: true,
+                    can_send_media_messages: true,
+                    can_send_polls: true,
+                    can_send_other_messages: true,
+                    can_add_web_page_previews: true,
+                    can_change_info: false,
+                    can_invite_users: true,
+                    can_pin_messages: false,
+                  },
+                })
+              })
+            }
+
+            console.log(`Notificação enviada e liberação aplicada para ${transaction.telegram_user_id}`)
           }
         } catch (notifyError) {
           console.error('Erro ao notificar via Telegram:', notifyError)
