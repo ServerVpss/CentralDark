@@ -529,8 +529,31 @@ function parseDataString(dataStr: string): Record<string, unknown> {
     // Detectar linha de lista com marcador - (mas não linhas de separação)
     if (trimmed.startsWith('-') && !trimmed.match(/^-+$/)) {
       const itemValue = trimmed.substring(1).trim();
-      if (itemValue && !itemValue.match(/^[\-=_]+$/)) {
+      
+      // Verificar se é formato "Chave: Valor" (seção Interesses Pessoais)
+      const keyValueMatch = itemValue.match(/^([^:]+):\s*(.+)$/);
+      if (keyValueMatch) {
+        const key = keyValueMatch[1].trim().toLowerCase().replace(/\s+/g, '_');
+        const value = keyValueMatch[2].trim();
+        if (value && value !== '-') {
+          result[key] = value;
+        }
+      } else if (itemValue && !itemValue.match(/^[\-=_]+$/)) {
         currentList.push(itemValue);
+      }
+      continue;
+    }
+    
+    // Tratar formato especial de parentes: TIPO ⎯ NOME ⎯ ou TIPO ⎯ NOME
+    const parentMatch = trimmed.match(/^(MAE|PAI|CONJUGE|FILHO|FILHA|IRMAO|IRMA|IRMÃ|AVÔ|AVÓ|TIO|TIA|SOBRINHO|SOBRINHA|NETO|NETA)\s*[⎯—-]\s*([^⎯—-]+)/i);
+    if (parentMatch) {
+      const parentType = parentMatch[1].toUpperCase();
+      const parentName = parentMatch[2].trim();
+      if (parentName) {
+        if (result.parentes === undefined) {
+          result.parentes = [];
+        }
+        (result.parentes as string[]).push(`${parentType}: ${parentName}`);
       }
       continue;
     }
@@ -605,7 +628,14 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     basic: {
       icon: '[✦]',
       label: 'DADOS BÁSICOS',
-      fields: ['nome', 'cpf', 'data_nascimento', 'dataNascimento', 'nascimento', 'rg', 'sexo', 'mae', 'pai', 'nome_mae', 'nome_pai', 'naturalidade', 'nacionalidade', 'idade', 'signo', 'obito', 'status']
+      fields: ['nome', 'cpf', 'data_nascimento', 'dataNascimento', 'nascimento', 'rg', 'sexo', 'nome_mae', 'nome_pai', 
+               'naturalidade', 'nacionalidade', 'idade', 'signo', 'obito', 'status', 'municipio_nascimento', 
+               'raca', 'tipo_sanguineo', 'estado_civil', 'status_receita']
+    },
+    documents: {
+      icon: '[✦]',
+      label: 'DOCUMENTOS',
+      fields: ['pis', 'nis', 'cns', 'titulo_eleitor', 'zona', 'secao', 'ctps', 'titulo']
     },
     contact: {
       icon: '[✦]',
@@ -615,22 +645,32 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     address: {
       icon: '[✦]',
       label: 'ENDEREÇO',
-      fields: ['endereco', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'estado', 'cep', 'municipio', 'pais', 'tipo_logradouro']
+      fields: ['endereco', 'enderecos', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'estado', 'cep', 'municipio', 'pais', 'tipo_logradouro']
     },
     financial: {
       icon: '[✦]',
       label: 'DADOS FINANCEIROS',
-      fields: ['renda', 'rendaEstimada', 'score', 'classe', 'poder_aquisitivo', 'credito', 'situacao', 'situacao_cpf', 'situacao_cadastral']
+      fields: ['renda', 'rendaEstimada', 'score', 'classe', 'classe_social', 'poder_aquisitivo', 'credito', 'situacao', 'situacao_cpf', 'situacao_cadastral', 'recebe_inss', 'bancos']
+    },
+    family: {
+      icon: '[✦]',
+      label: 'PARENTES',
+      fields: ['parentes', 'mae', 'pai', 'conjuge', 'filhos', 'irmaos']
     },
     vehicle: {
       icon: '[✦]',
       label: 'VEÍCULO',
-      fields: ['placa', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anoModelo', 'anoFabricacao', 'cor', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'especie', 'categoria', 'proprietario']
+      fields: ['placa', 'veiculos', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anoModelo', 'anoFabricacao', 'cor', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'especie', 'categoria', 'proprietario']
     },
     work: {
       icon: '[✦]',
       label: 'DADOS PROFISSIONAIS',
-      fields: ['emprego', 'empresa', 'cargo', 'ctps', 'pis', 'profissao', 'ocupacao', 'cnpj_empresa', 'razao_social', 'admissao', 'demissao', 'salario']
+      fields: ['emprego', 'empregos', 'empresa', 'cargo', 'profissao', 'ocupacao', 'escolaridade', 'cnpj_empresa', 'cnpj_contratante', 'razao_social', 'admissao', 'demissao', 'salario']
+    },
+    interests: {
+      icon: '[✦]',
+      label: 'INTERESSES PESSOAIS',
+      fields: ['interesses', 'turismo', 'luxo', 'internet', 'celular', 'cartao', 'seguro', 'investidor', 'apostador', 'viagens']
     },
     company: {
       icon: '[✦]',
