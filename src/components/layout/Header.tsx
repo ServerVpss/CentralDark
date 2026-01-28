@@ -35,11 +35,11 @@ export function Header({ className }: HeaderProps) {
       backdropFilter: "blur(16px) saturate(180%)",
     }}>
       <div className="flex h-full items-center px-4 lg:px-6">
-        {/* Left spacer - for centering search */}
-        <div className="flex-1" />
+        {/* Left spacer - takes up space to center search */}
+        <div className="hidden lg:flex flex-1 min-w-0" />
 
         {/* Search - centered */}
-        <div className="relative w-full max-w-md group">
+        <div className="relative w-full max-w-sm lg:max-w-md group mx-4">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             placeholder="Buscar bots, assinantes, configurações..."
@@ -47,9 +47,9 @@ export function Header({ className }: HeaderProps) {
           />
         </div>
 
-        {/* Right spacer + Actions - pushes to right corner */}
-        <div className="flex-1 flex justify-end">
-          <div className="flex items-center gap-2">
+        {/* Right spacer + Actions - pushes to far right corner */}
+        <div className="flex-1 flex justify-end min-w-0">
+          <div className="flex items-center gap-3">
           {/* Notifications */}
           <Button 
             variant="ghost" 
