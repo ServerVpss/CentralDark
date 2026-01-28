@@ -933,36 +933,22 @@ class BotHandler {
       return;
     }
 
-    const clientId = Deno.env.get("EFI_CLIENT_ID");
-    const clientSecret = Deno.env.get("EFI_CLIENT_SECRET");
-    const pixKey = Deno.env.get("EFI_PIX_KEY");
-
-    if (!clientId || !clientSecret || !pixKey) {
-      console.error("EFI credentials not configured");
-      await sendMessage(this.token, chatId, "❌ Sistema de pagamento não configurado. Contate o administrador.");
-      return;
-    }
-
     try {
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const response = await fetch(`${supabaseUrl}/functions/v1/pix-payment`, {
+      const response = await fetch(`${supabaseUrl}/functions/v1/efi-generate-pix`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
         },
         body: JSON.stringify({
-          action: "create",
           amount: plan.price,
-          description: `${plan.name} - Telegram ${telegramUserId}`,
-          planId: plan.id,
-          planCode: plan.code,
-          planName: plan.name,
-          planDays: plan.days,
-          userId: this.bot.user_id,
-          telegramUserId,
-          telegramChatId: chatId,
-          botId: this.bot.id,
+          user_id: this.bot.user_id,
+          telegram_user_id: telegramUserId,
+          bot_id: this.bot.id,
+          plan_name: plan.name,
+          plan_code: plan.code,
+          plan_days: plan.days,
         }),
       });
 
@@ -974,20 +960,38 @@ class BotHandler {
         return;
       }
 
-      const { txid, qrcode, copyPaste } = result;
+      const { txid, qr_code, qr_code_image } = result.data;
 
-      if (qrcode) {
+      // Also save to pending_payments for compatibility
+      await this.supabase.from("pending_payments").insert({
+        user_id: this.bot.user_id,
+        bot_id: this.bot.id,
+        telegram_user_id: telegramUserId,
+        telegram_chat_id: chatId,
+        txid,
+        value: plan.price,
+        plan_id: plan.id,
+        plan_code: plan.code,
+        plan_name: plan.name,
+        plan_days: plan.days,
+        pix_copy_paste: qr_code,
+        pix_qrcode: qr_code_image,
+        expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+        status: "PENDING",
+      });
+
+      if (qr_code_image) {
         const sentMsg = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
-          photo: qrcode,
+          photo: qr_code_image,
           caption:
             `💳 <b>PIX Gerado!</b>\n\n` +
             `📦 Plano: <b>${plan.name}</b>\n` +
             `💰 Valor: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
             `📅 Validade: <b>${plan.days} dias</b>\n` +
-            `⏰ Expira em: <b>60 minutos</b>\n\n` +
+            `⏰ Expira em: <b>10 minutos</b>\n\n` +
             `🎫 TXID: <code>${txid}</code>\n\n` +
-            `🔹 <b>Pix Copia e Cola:</b>\n<pre>${copyPaste}</pre>`,
+            `🔹 <b>Pix Copia e Cola:</b>\n<pre>${qr_code}</pre>`,
           parse_mode: "HTML",
           reply_markup: keyboard(
             [btn("✅ Já Paguei - Confirmar", `chk_${txid}`)],
@@ -1008,9 +1012,10 @@ class BotHandler {
           `💳 <b>PIX Gerado!</b>\n\n` +
           `📦 Plano: <b>${plan.name}</b>\n` +
           `💰 Valor: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
-          `📅 Validade: <b>${plan.days} dias</b>\n\n` +
+          `📅 Validade: <b>${plan.days} dias</b>\n` +
+          `⏰ Expira em: <b>10 minutos</b>\n\n` +
           `🎫 TXID: <code>${txid}</code>\n\n` +
-          `🔹 <b>Pix Copia e Cola:</b>\n<pre>${copyPaste}</pre>`,
+          `🔹 <b>Pix Copia e Cola:</b>\n<pre>${qr_code}</pre>`,
           keyboard(
             [btn("✅ Já Paguei - Confirmar", `chk_${txid}`)],
             [btn("🔙 Voltar", "menu:plans")]
@@ -1029,16 +1034,13 @@ class BotHandler {
   async checkPayment(chatId: number, telegramUserId: number, txid: string) {
     try {
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const response = await fetch(`${supabaseUrl}/functions/v1/pix-payment`, {
+      const response = await fetch(`${supabaseUrl}/functions/v1/efi-check-status`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
         },
-        body: JSON.stringify({
-          action: "check",
-          txid,
-        }),
+        body: JSON.stringify({ txid }),
       });
 
       const result = await response.json();
