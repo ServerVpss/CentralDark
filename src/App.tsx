@@ -17,6 +17,7 @@ import TelegramUsers from "./pages/TelegramUsers";
 import QueryLogs from "./pages/QueryLogs";
 import PixTransactions from "./pages/PixTransactions";
 import NotFound from "./pages/NotFound";
+import Security from "./pages/Security";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
             <Route path="/pix" element={<ProtectedRoute><PixTransactions /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
