@@ -1356,9 +1356,40 @@ class BotHandler {
         }
       }
 
+      // AUTO-DETECT GROUP: If no group is configured yet and an owner sends a message, auto-configure
+      const isOwner = this.isOwner(telegramUserId);
+      
+      if (!this.settings.group_chat_id && isOwner) {
+        // Auto-configure this group
+        const groupTitle = message.chat.title || "Grupo";
+        const groupUsername = (message.chat as { username?: string }).username;
+        const groupUrl = groupUsername ? `https://t.me/${groupUsername}` : null;
+        
+        await this.supabase
+          .from("bot_settings")
+          .update({ 
+            group_chat_id: chatId,
+            group_url: groupUrl,
+          })
+          .eq("bot_id", this.bot.id);
+        
+        // Update local settings
+        this.settings.group_chat_id = chatId;
+        this.settings.group_url = groupUrl;
+        
+        console.log(`AUTO-DETECT: Group ${chatId} (${groupTitle}) configured automatically`);
+        
+        await sendMessage(this.token, chatId,
+          `✅ <b>Grupo Detectado!</b>\n\n` +
+          `📍 <b>Grupo:</b> ${groupTitle}\n` +
+          `🆔 <b>ID:</b> <code>${chatId}</code>\n` +
+          `🔗 <b>Link:</b> ${groupUrl || "Não disponível"}\n\n` +
+          `O Fiscal de Grupo agora está ativo aqui!`
+        );
+      }
+
       // FISCAL DE GRUPO: Check if user can send messages in configured group
       const isConfiguredGroup = this.settings.group_chat_id && chatId === this.settings.group_chat_id;
-      const isOwner = this.isOwner(telegramUserId);
       
       if (isConfiguredGroup && this.settings.mute_new_members && !isOwner) {
         const isActive = await this.isSubscriptionActive(telegramUserId);
