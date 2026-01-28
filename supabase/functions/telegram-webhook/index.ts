@@ -686,17 +686,20 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     if (typeof obj !== 'object') return items;
 
     // Campos de metadados a ignorar completamente (apenas os que são realmente metadados, não dados reais)
-    const ignoredKeys = ['comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado'];
+    const ignoredKeys = ['comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado', 'fotobase64', 'foto', 'image', 'photo', 'base64'];
     
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
       const keyLower = key.toLowerCase();
       
-      // Ignorar campos de metadados
+      // Ignorar campos de metadados e fotos
       if (ignoredKeys.includes(keyLower)) continue;
       
-      // Ignorar campos de foto e valores indesejados
-      if (key === 'foto' && typeof value === 'string' && value.startsWith('http')) continue;
+      // Ignorar valores que parecem ser Base64 (strings muito longas sem espaços)
+      if (typeof value === 'string' && value.length > 100 && !value.includes(' ') && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
+      
+      // Ignorar campos de foto URLs
+      if (typeof value === 'string' && (value.startsWith('http') && (keyLower.includes('foto') || keyLower.includes('image')))) continue;
       if (shouldIgnore(value)) continue;
       if (value === null || value === undefined || value === '') continue;
 
