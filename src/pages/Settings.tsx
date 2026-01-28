@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   Bell,
-  CreditCard,
   Key,
   Laptop,
   Moon,
@@ -27,7 +26,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { PaymentGatewaySettings } from "@/components/payments/PaymentGatewaySettings";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Settings() {
@@ -102,10 +100,6 @@ export default function Settings() {
             <TabsTrigger value="profile" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <User className="h-4 w-4" />
               Perfil
-            </TabsTrigger>
-            <TabsTrigger value="payments" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <CreditCard className="h-4 w-4" />
-              Pagamentos
             </TabsTrigger>
             <TabsTrigger value="notifications" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Bell className="h-4 w-4" />
@@ -187,11 +181,6 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          {/* Payments Tab - NEW */}
-          <TabsContent value="payments">
-            <PaymentGatewaySettings />
           </TabsContent>
 
           {/* Notifications Tab */}
