@@ -14,6 +14,7 @@ import {
   VolumeX,
   CreditCard,
   Settings,
+  Upload,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -178,6 +179,10 @@ export default function BotSettings() {
               </div>
             </div>
           </div>
+          <Button variant="outline" onClick={() => navigate(`/bots/${botId}/migrate`)}>
+            <Upload className="h-4 w-4 mr-2" />
+            Migrar
+          </Button>
           <Button variant="glow" onClick={handleSave} disabled={saving}>
             {saving ? (
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
