@@ -213,7 +213,7 @@ Deno.serve(async (req) => {
 
           const { data: settings } = await supabase
             .from('bot_settings')
-            .select('group_chat_id, group_url')
+            .select('group_chat_id, group_url, announce_payments')
             .eq('bot_id', transaction.bot_id)
             .single()
 
@@ -298,6 +298,40 @@ Deno.serve(async (req) => {
                   },
                 })
               })
+            }
+
+            // Anunciar pagamento no grupo se habilitado
+            if (settings?.announce_payments && settings?.group_chat_id) {
+              try {
+                // Buscar info do usuário no Telegram
+                const userInfoRes = await fetch(`https://api.telegram.org/bot${bot.token}/getChat`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ chat_id: transaction.telegram_user_id })
+                })
+                const userInfo = await userInfoRes.json()
+                const userName = userInfo.result?.first_name || `Usuário ${transaction.telegram_user_id}`
+                
+                const groupMessage = `🎉 *NOVA ASSINATURA!*\n\n` +
+                  `👤 *${userName}* acabou de assinar!\n` +
+                  `📋 Plano: *${planName}*\n` +
+                  `💰 Valor: *R$ ${Number(transaction.amount).toFixed(2)}*\n\n` +
+                  `🚀 Bem-vindo(a) à família! 🎊`
+                
+                await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    chat_id: settings.group_chat_id,
+                    text: groupMessage,
+                    parse_mode: 'Markdown',
+                    message_effect_id: CONFETTI_EFFECT_ID
+                  })
+                })
+                console.log(`Anúncio de pagamento enviado no grupo ${settings.group_chat_id}`)
+              } catch (announceErr) {
+                console.error('Erro ao anunciar no grupo:', announceErr)
+              }
             }
 
             console.log(`Notificação enviada e liberação aplicada para ${transaction.telegram_user_id}`)
