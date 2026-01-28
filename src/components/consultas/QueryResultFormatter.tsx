@@ -389,8 +389,27 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
     // Check if there's a nested data field with string
     if (data.data && typeof data.data === 'string') {
       parsedData = parseRawText(data.data);
+    } else if (data.TEXTO && typeof data.TEXTO === 'string') {
+      // Parse TEXTO field and merge with other fields
+      const textoData = parseConcatenatedString(data.TEXTO);
+      // Get other fields from data (excluding TEXTO and photo fields)
+      const otherFields: ParsedData = {};
+      for (const [key, value] of Object.entries(data)) {
+        if (key !== 'TEXTO' && key !== 'fotoBase64' && key !== 'foto' && typeof value === 'string') {
+          otherFields[key] = value;
+        }
+      }
+      // Merge: texto parsed data takes precedence for rich data
+      parsedData = { ...otherFields, ...textoData };
     } else {
-      parsedData = data;
+      // Filter out TEXTO field from direct object assignment
+      const filtered: ParsedData = {};
+      for (const [key, value] of Object.entries(data)) {
+        if (key !== 'TEXTO') {
+          filtered[key] = value as string | string[];
+        }
+      }
+      parsedData = filtered;
     }
   } else {
     return <pre className="text-sm text-muted-foreground">{JSON.stringify(data, null, 2)}</pre>;
