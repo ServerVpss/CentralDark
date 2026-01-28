@@ -29,9 +29,19 @@ interface ParsedData {
 // Lista de chaves conhecidas para parsing de strings concatenadas (ordenadas por tamanho decrescente para evitar conflitos)
 const KNOWN_KEYS = [
   // Chaves compostas (mais longas primeiro)
+  'MUNICÍPIO DE NASCIMENTO', 'TIPO SANGÚINEO', 'STATUS NA RECEITA', 'RECEBE INSS',
+  'TITULO ELEITOR', 'CLASSE SOCIAL', 'ESTADO CIVIL', 'NOME SOCIAL',
   'Orientação Sexual', 'Identidade de Gênero', 'Nome Social', 'Classe Social', 'Estado Civil',
   'Título Eleitor', 'Raça/Cor', 'Deficiência',
+  // Chaves médias
+  'NASCIMENTO', 'NATURALIDADE', 'NACIONALIDADE', 'ESCOLARIDADE', 'PROFISSÃO',
+  'LOGRADOURO', 'COMPLEMENTO', 'MUNICÍPIO', 'ENDEREÇO', 'TELEFONE', 'ALCUNHA',
+  'NOME MÃE', 'NOME PAI', 'PARENTES', 'VEICULOS', 'EMPREGOS', 'EMPRESAS',
+  'BANCOS', 'EMAILS', 'TELEFONES', 'ENDERECOS',
   // Chaves simples
+  'NOME', 'CPF', 'MÃE', 'PAI', 'SEXO', 'RG', 'CNH', 'PIS', 'NIS', 'CNS',
+  'RAÇA', 'COR', 'ÓBITO', 'RENDA', 'SCORE', 'CLASSE',
+  'ZONA', 'SEÇÃO', 'SECAO', 'EMAIL', 'CEP', 'BAIRRO', 'CIDADE', 'ESTADO', 'UF', 'NÚMERO',
   'Naturalidade', 'Nacionalidade', 'Escolaridade', 'Nascimento', 'Logradouro', 'Complemento',
   'Município', 'Profissão', 'Endereço', 'Telefone', 'Alcunha',
   'Nome', 'CPF', 'Mãe', 'Pai', 'Sexo', 'RG', 'CNH', 'PIS', 'NIS', 'CNS',
@@ -144,6 +154,125 @@ function parseMultiBaseFormat(text: string): ParsedData {
   return result;
 }
 
+// Parse CPF-style full response with sections
+function parseCpfFullResponse(text: string): ParsedData {
+  const result: ParsedData = {};
+  
+  // Clean text
+  let cleanText = text
+    .replace(/@\w+/g, '')
+    .replace(/https?:\/\/[^\s]+/g, '')
+    .trim();
+  
+  // Split by lines
+  const lines = cleanText.split(/\\n|\n/).filter(line => line.trim());
+  
+  let currentSection = '';
+  const sectionItems: string[] = [];
+  
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+    if (!trimmedLine) continue;
+    
+    // Check for section headers like "EMAILS: ( 5 - Encontrados)"
+    const sectionMatch = trimmedLine.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+):\s*\(\s*(\d+)\s*-\s*Encontrados?\s*\)/i);
+    if (sectionMatch) {
+      // Save previous section if exists
+      if (currentSection && sectionItems.length > 0) {
+        result[currentSection] = [...sectionItems];
+        sectionItems.length = 0;
+      }
+      currentSection = sectionMatch[1].trim();
+      const count = parseInt(sectionMatch[2]);
+      if (count > 0) {
+        result[currentSection] = [];
+      }
+      continue;
+    }
+    
+    // Check for bullet points
+    if (trimmedLine.startsWith('•')) {
+      const item = trimmedLine.replace(/^•\s*/, '').trim();
+      if (currentSection && item) {
+        sectionItems.push(item);
+      }
+      continue;
+    }
+    
+    // Check for key ⎯ value format (common in NexFuture)
+    const dashMatch = trimmedLine.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+)\s*⎯\s*(.*)$/i);
+    if (dashMatch) {
+      const key = dashMatch[1].trim();
+      const value = dashMatch[2].trim();
+      
+      // Skip empty or placeholder values
+      if (value && value !== '-' && !value.toLowerCase().startsWith('não informad')) {
+        // Normalize key name
+        const normalizedKey = normalizeKeyName(key);
+        
+        // Skip metadata
+        if (['TEXTO', 'COMANDO', 'VALOR'].includes(key.toUpperCase())) continue;
+        
+        result[normalizedKey] = value;
+      }
+      continue;
+    }
+    
+    // Check for simple key: value format
+    const simpleMatch = trimmedLine.match(/^([^:]+):\s*(.+)$/);
+    if (simpleMatch && !currentSection) {
+      const key = simpleMatch[1].trim();
+      const value = simpleMatch[2].trim();
+      
+      // Skip empty, placeholder, or section header values
+      if (value && value !== '-' && 
+          !value.toLowerCase().startsWith('não informad') &&
+          !value.match(/^\(\s*\d+\s*-\s*Encontrados?\s*\)/i)) {
+        const normalizedKey = normalizeKeyName(key);
+        
+        // Skip metadata
+        if (['TEXTO', 'COMANDO', 'VALOR'].includes(key.toUpperCase())) continue;
+        
+        result[normalizedKey] = value;
+      }
+      continue;
+    }
+    
+    // If we're in a section, add non-empty lines as items
+    if (currentSection && trimmedLine && !trimmedLine.match(/^[A-Z\s]+:\s*$/)) {
+      sectionItems.push(trimmedLine);
+    }
+  }
+  
+  // Save last section
+  if (currentSection && sectionItems.length > 0) {
+    result[currentSection] = [...sectionItems];
+  }
+  
+  return result;
+}
+
+// Normalize key names
+function normalizeKeyName(key: string): string {
+  const keyMap: Record<string, string> = {
+    'NOME MÃE': 'Mãe',
+    'NOME PAI': 'Pai',
+    'MUNICÍPIO DE NASCIMENTO': 'Naturalidade',
+    'TIPO SANGÚINEO': 'Tipo Sanguíneo',
+    'STATUS NA RECEITA': 'Status Receita',
+    'RECEBE INSS': 'Recebe INSS',
+    'TITULO ELEITOR': 'Título Eleitor',
+    'CLASSE SOCIAL': 'Classe Social',
+    'ESTADO CIVIL': 'Estado Civil',
+  };
+  
+  const upperKey = key.toUpperCase().trim();
+  if (keyMap[upperKey]) return keyMap[upperKey];
+  
+  // Title case for single words
+  return key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
+}
+
 // Parse the raw text response into structured data
 function parseRawText(text: string): ParsedData {
   const result: ParsedData = {};
@@ -152,6 +281,14 @@ function parseRawText(text: string): ParsedData {
   let cleanText = text.replace(/@\w+\\n/g, '').replace(/@\w+\n/g, '').replace(/@\w+/g, '');
   // Remove URLs
   cleanText = cleanText.replace(/https?:\/\/[^\s]+/g, '');
+  
+  // Check if this looks like a full CPF response with sections
+  if (cleanText.includes('⎯') || cleanText.includes('Encontrados)')) {
+    const parsed = parseCpfFullResponse(cleanText);
+    if (Object.keys(parsed).length > 0) {
+      return parsed;
+    }
+  }
   
   // Try parsing multi-base format first (RESULTADOS ENCONTRADOS PARA...)
   if (cleanText.includes('BASE') || cleanText.includes('RESULTADOS ENCONTRADOS')) {
@@ -302,7 +439,9 @@ function groupFields(data: ParsedData): Record<string, ParsedData> {
     'Contatos': {},
     'Financeiro': {},
     'Profissional': {},
+    'Família': {},
     'Localização': {},
+    'Veículos': {},
     'Outros': {},
   };
 
@@ -317,27 +456,55 @@ function groupFields(data: ParsedData): Record<string, ParsedData> {
       continue;
     }
     
+    // Dados Pessoais
     if (keyLower.includes('nome') || keyLower.includes('sexo') || keyLower.includes('nascimento') || 
-        keyLower.includes('civil') || keyLower.includes('mãe') || keyLower.includes('pai') ||
-        keyLower.includes('raça') || keyLower.includes('sangue') || keyLower.includes('obito')) {
+        keyLower.includes('civil') || keyLower.includes('raça') || keyLower.includes('sangue') || 
+        keyLower.includes('sanguíneo') || keyLower.includes('obito') || keyLower.includes('óbito') ||
+        keyLower.includes('naturalidade')) {
       groups['Dados Pessoais'][key] = value;
-    } else if (keyLower.includes('cpf') || keyLower.includes('rg') || keyLower.includes('cnh') ||
+    } 
+    // Documentos
+    else if (keyLower.includes('cpf') || keyLower.includes('rg') || keyLower.includes('cnh') ||
                keyLower.includes('pis') || keyLower.includes('nis') || keyLower.includes('cns') ||
-               keyLower.includes('titulo') || keyLower.includes('eleitor')) {
+               keyLower.includes('titulo') || keyLower.includes('eleitor') || keyLower.includes('título')) {
       groups['Documentos'][key] = value;
-    } else if (keyLower.includes('email') || keyLower.includes('telefone') || keyLower.includes('whatsapp')) {
+    } 
+    // Contatos (emails e telefones)
+    else if (keyLower.includes('email') || keyLower === 'emails' || 
+             keyLower.includes('telefone') || keyLower === 'telefones' || 
+             keyLower.includes('whatsapp')) {
       groups['Contatos'][key] = value;
-    } else if (keyLower.includes('renda') || keyLower.includes('score') || keyLower.includes('banco') ||
-               keyLower.includes('receita') || keyLower.includes('inss')) {
+    } 
+    // Financeiro
+    else if (keyLower.includes('renda') || keyLower.includes('score') || keyLower.includes('banco') ||
+               keyLower === 'bancos' || keyLower.includes('receita') || keyLower.includes('inss') ||
+               keyLower.includes('status receita')) {
       groups['Financeiro'][key] = value;
-    } else if (keyLower.includes('profissão') || keyLower.includes('emprego') || keyLower.includes('empresa') ||
+    } 
+    // Profissional
+    else if (keyLower.includes('profissão') || keyLower.includes('emprego') || keyLower === 'empregos' ||
+               keyLower.includes('empresa') || keyLower === 'empresas' ||
                keyLower.includes('escolaridade') || keyLower.includes('classe') || keyLower.includes('cnpj') ||
                keyLower.includes('admissão') || keyLower.includes('demissão') || keyLower.includes('razao')) {
       groups['Profissional'][key] = value;
-    } else if (keyLower.includes('município') || keyLower.includes('endereço') || keyLower.includes('cep') ||
-               keyLower.includes('cidade') || keyLower.includes('estado') || keyLower.includes('zona')) {
+    } 
+    // Família (parentes)
+    else if (keyLower.includes('mãe') || keyLower.includes('mae') || keyLower.includes('pai') || 
+             keyLower.includes('parente') || keyLower === 'parentes') {
+      groups['Família'][key] = value;
+    }
+    // Localização
+    else if (keyLower.includes('município') || keyLower.includes('endereço') || keyLower === 'enderecos' ||
+               keyLower.includes('cep') || keyLower.includes('cidade') || keyLower.includes('estado') || 
+               keyLower.includes('zona') || keyLower.includes('bairro') || keyLower.includes('logradouro')) {
       groups['Localização'][key] = value;
-    } else {
+    } 
+    // Veículos
+    else if (keyLower.includes('veiculo') || keyLower === 'veiculos' || keyLower.includes('placa') ||
+             keyLower.includes('chassi') || keyLower.includes('renavam')) {
+      groups['Veículos'][key] = value;
+    }
+    else {
       groups['Outros'][key] = value;
     }
   }
