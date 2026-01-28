@@ -411,9 +411,9 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
       const batch = brazilianStates.slice(i, i + batchSize);
       const batchResults = await Promise.all(
         batch.map(async (state) => {
-          // OTIMIZAÇÃO: Adicionar timeout de 3s por estado para não travar
+          // OTIMIZAÇÃO: Timeout de 8s por estado para dar tempo à API TConect
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 3000);
+          const timeoutId = setTimeout(() => controller.abort(), 8000);
           
           try {
             const result = await fetchFromProviderWithTimeout(
@@ -435,13 +435,21 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
       );
       
       for (const { state, result } of batchResults) {
-        if (result && !result.error && result.foto) {
-          results[state] = result;
+        // LOG: Ver o que a API TConect retorna para debug
+        console.log(`Foto result for ${state}:`, JSON.stringify(result).substring(0, 500));
+        
+        // Verificar múltiplos campos possíveis para a foto
+        const fotoUrl = result?.foto || result?.image || result?.url || result?.photo || result?.base64;
+        
+        if (result && !result.error && fotoUrl) {
+          // Normalizar o campo foto no resultado
+          results[state] = { ...result, foto: fotoUrl };
           // Keep the first photo found for quick response
           if (!foundFoto) {
-            foundFoto = result.foto;
+            foundFoto = fotoUrl;
             foundNome = result.nome;
             foundEstado = state;
+            console.log(`Photo found in ${state}, URL: ${String(fotoUrl).substring(0, 100)}`);
           }
         }
       }
@@ -1043,11 +1051,15 @@ class BotHandler {
       // Format and send result
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
       
-      // Check for photo
-      if (result.foto && typeof result.foto === "string" && (result.foto as string).startsWith("http")) {
+      // Check for photo - verificar múltiplos campos possíveis
+      const fotoUrl = result.foto || result.image || result.url || result.photo;
+      const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
+        (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+
+      if (isValidPhotoUrl) {
         await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
-          photo: result.foto,
+          photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
           parse_mode: "HTML",
           reply_markup: keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")]),
@@ -1994,11 +2006,15 @@ class BotHandler {
       // Format and send result
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
 
-      // Check for photo
-      if (result.foto && typeof result.foto === "string" && (result.foto as string).startsWith("http")) {
+      // Check for photo - verificar múltiplos campos possíveis
+      const fotoUrl = result.foto || result.image || result.url || result.photo;
+      const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
+        (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+
+      if (isValidPhotoUrl) {
         await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
-          photo: result.foto,
+          photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
