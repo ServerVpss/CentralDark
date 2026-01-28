@@ -12,6 +12,12 @@ export interface BotSettings {
   terms_text: string | null;
   mute_new_members: boolean;
   announce_payments: boolean;
+  auto_delete_messages: boolean;
+  show_typing: boolean;
+  react_to_messages: boolean;
+  reaction_mode: string;
+  fixed_emoji: string;
+  custom_emojis: string[];
   created_at: string;
   updated_at: string;
 }

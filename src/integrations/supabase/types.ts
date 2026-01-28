@@ -244,39 +244,57 @@ export type Database = {
       bot_settings: {
         Row: {
           announce_payments: boolean | null
+          auto_delete_messages: boolean | null
           bot_id: string | null
           created_at: string
+          custom_emojis: string[] | null
+          fixed_emoji: string | null
           group_chat_id: number | null
           group_url: string | null
           id: string
           mute_new_members: boolean | null
           owner_ids: number[] | null
+          react_to_messages: boolean | null
+          reaction_mode: string | null
+          show_typing: boolean | null
           terms_enabled: boolean | null
           terms_text: string | null
           updated_at: string
         }
         Insert: {
           announce_payments?: boolean | null
+          auto_delete_messages?: boolean | null
           bot_id?: string | null
           created_at?: string
+          custom_emojis?: string[] | null
+          fixed_emoji?: string | null
           group_chat_id?: number | null
           group_url?: string | null
           id?: string
           mute_new_members?: boolean | null
           owner_ids?: number[] | null
+          react_to_messages?: boolean | null
+          reaction_mode?: string | null
+          show_typing?: boolean | null
           terms_enabled?: boolean | null
           terms_text?: string | null
           updated_at?: string
         }
         Update: {
           announce_payments?: boolean | null
+          auto_delete_messages?: boolean | null
           bot_id?: string | null
           created_at?: string
+          custom_emojis?: string[] | null
+          fixed_emoji?: string | null
           group_chat_id?: number | null
           group_url?: string | null
           id?: string
           mute_new_members?: boolean | null
           owner_ids?: number[] | null
+          react_to_messages?: boolean | null
+          reaction_mode?: string | null
+          show_typing?: boolean | null
           terms_enabled?: boolean | null
           terms_text?: string | null
           updated_at?: string

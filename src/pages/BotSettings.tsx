@@ -26,6 +26,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PaymentGatewaysGrid } from "@/components/payments/PaymentGatewaysGrid";
+import { TypingReactionsSettings } from "@/components/bots/TypingReactionsSettings";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
 import { useBotSettings } from "@/hooks/useBotSettings";
@@ -46,6 +47,14 @@ export default function BotSettings() {
   const [termsEnabled, setTermsEnabled] = useState(true);
   const [termsText, setTermsText] = useState(defaultTerms);
   const [muteNewMembers, setMuteNewMembers] = useState(true);
+  
+  // Typing & Reactions state
+  const [autoDeleteMessages, setAutoDeleteMessages] = useState(true);
+  const [showTyping, setShowTyping] = useState(true);
+  const [reactToMessages, setReactToMessages] = useState(true);
+  const [reactionMode, setReactionMode] = useState<"fixed" | "random">("random");
+  const [fixedEmoji, setFixedEmoji] = useState("👍");
+  const [customEmojis, setCustomEmojis] = useState<string[]>([]);
   const [announcePayments, setAnnouncePayments] = useState(true);
 
   // Find current bot
@@ -70,6 +79,12 @@ export default function BotSettings() {
       setTermsText(settings.terms_text || defaultTerms);
       setMuteNewMembers(settings.mute_new_members ?? true);
       setAnnouncePayments(settings.announce_payments ?? true);
+      setAutoDeleteMessages(settings.auto_delete_messages ?? true);
+      setShowTyping(settings.show_typing ?? true);
+      setReactToMessages(settings.react_to_messages ?? true);
+      setReactionMode((settings.reaction_mode as "fixed" | "random") ?? "random");
+      setFixedEmoji(settings.fixed_emoji ?? "👍");
+      setCustomEmojis(settings.custom_emojis ?? []);
     }
   }, [settings, defaultTerms]);
 
@@ -83,6 +98,12 @@ export default function BotSettings() {
       terms_text: termsText,
       mute_new_members: muteNewMembers,
       announce_payments: announcePayments,
+      auto_delete_messages: autoDeleteMessages,
+      show_typing: showTyping,
+      react_to_messages: reactToMessages,
+      reaction_mode: reactionMode,
+      fixed_emoji: fixedEmoji,
+      custom_emojis: customEmojis,
     });
 
     setSaving(false);
@@ -368,6 +389,24 @@ export default function BotSettings() {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Typing & Reactions Settings */}
+              <div className="lg:col-span-2">
+                <TypingReactionsSettings
+                  autoDeleteMessages={autoDeleteMessages}
+                  setAutoDeleteMessages={setAutoDeleteMessages}
+                  showTyping={showTyping}
+                  setShowTyping={setShowTyping}
+                  reactToMessages={reactToMessages}
+                  setReactToMessages={setReactToMessages}
+                  reactionMode={reactionMode}
+                  setReactionMode={setReactionMode}
+                  fixedEmoji={fixedEmoji}
+                  setFixedEmoji={setFixedEmoji}
+                  customEmojis={customEmojis}
+                  setCustomEmojis={setCustomEmojis}
+                />
+              </div>
             </div>
           </TabsContent>
 
