@@ -5,20 +5,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 }
 
-// Planos disponíveis para sortear (com variação de preço)
-const PLANS = [
-  { name: 'Diário', basePrice: 2.00, variation: 0.50 },
-  { name: 'Semanal', basePrice: 15.00, variation: 2.00 },
-  { name: 'Quinzenal', basePrice: 20.00, variation: 3.00 },
-  { name: 'Mensal', basePrice: 30.00, variation: 5.00 },
-  { name: 'Trimestral', basePrice: 75.00, variation: 10.00 },
-  { name: 'Semestral', basePrice: 140.00, variation: 15.00 },
-  { name: 'Anual', basePrice: 250.00, variation: 25.00 },
-  { name: 'VIP Bronze', basePrice: 25.00, variation: 3.00 },
-  { name: 'VIP Prata', basePrice: 45.00, variation: 5.00 },
-  { name: 'VIP Ouro', basePrice: 80.00, variation: 8.00 },
-  { name: 'VIP Diamante', basePrice: 150.00, variation: 15.00 },
-]
+// Interface para planos do banco
+interface SubscriptionPlan {
+  name: string;
+  title: string;
+  price: number;
+}
 
 // Nicks/apelidos para variar
 const NICKS = [
@@ -110,11 +102,6 @@ function generateRandomName(customNames?: string[]): string {
   return `${firstName} ${lastName}`
 }
 
-// Função para gerar preço com variação
-function generatePrice(plan: typeof PLANS[0]): number {
-  const variation = (Math.random() - 0.5) * 2 * plan.variation
-  return Math.max(plan.basePrice + variation, plan.basePrice * 0.8)
-}
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -175,7 +162,7 @@ Deno.serve(async (req) => {
       // Buscar token do bot
       const { data: bot } = await supabase
         .from('telegram_bots')
-        .select('token, bot_username')
+        .select('token, bot_username, user_id')
         .eq('id', setting.bot_id)
         .single()
 
@@ -185,17 +172,42 @@ Deno.serve(async (req) => {
         continue
       }
 
-      // Sortear nome e plano com variação
+      // Buscar planos REAIS do banco de dados
+      const { data: realPlans } = await supabase
+        .from('subscription_plans')
+        .select('name, title, price')
+        .eq('is_active', true)
+        .eq('user_id', bot.user_id)
+        .order('price')
+
+      // Se não tiver planos do usuário, buscar planos sem user_id (globais)
+      let plansToUse = realPlans
+      if (!plansToUse || plansToUse.length === 0) {
+        const { data: globalPlans } = await supabase
+          .from('subscription_plans')
+          .select('name, title, price')
+          .eq('is_active', true)
+          .is('user_id', null)
+          .order('price')
+        plansToUse = globalPlans
+      }
+
+      if (!plansToUse || plansToUse.length === 0) {
+        console.log(`Bot ${setting.bot_id}: nenhum plano encontrado`)
+        results.push({ bot_id: setting.bot_id, status: 'error', error: 'Nenhum plano cadastrado' })
+        continue
+      }
+
+      // Sortear nome e plano REAL
       const customNames = setting.fake_engagement_names as string[] | undefined
       const randomName = generateRandomName(customNames)
-      const randomPlan = PLANS[Math.floor(Math.random() * PLANS.length)]
-      const randomPrice = generatePrice(randomPlan)
+      const randomPlan = plansToUse[Math.floor(Math.random() * plansToUse.length)]
 
-      // Montar mensagem
+      // Montar mensagem com valores REAIS
       const message = `🎉 *NOVA ASSINATURA!*\n\n` +
         `👤 *${randomName}* acabou de assinar!\n` +
-        `📋 Plano: *${randomPlan.name}*\n` +
-        `💰 Valor: *R$ ${randomPrice.toFixed(2)}*\n\n` +
+        `📋 Plano: *${randomPlan.title || randomPlan.name}*\n` +
+        `💰 Valor: *R$ ${Number(randomPlan.price).toFixed(2)}*\n\n` +
         `🚀 Bem-vindo(a) à família! 🎊`
 
       // Botão para adquirir VIP
