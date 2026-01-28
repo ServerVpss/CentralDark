@@ -473,8 +473,8 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     if (obj === null || obj === undefined) return items;
     if (typeof obj !== 'object') return items;
 
-    // Campos de metadados a ignorar completamente
-    const ignoredKeys = ['comando', 'valor', 'status', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado'];
+    // Campos de metadados a ignorar completamente (apenas os que são realmente metadados, não dados reais)
+    const ignoredKeys = ['comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado'];
     
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
