@@ -250,6 +250,7 @@ export type Database = {
           custom_emojis: string[] | null
           fixed_emoji: string | null
           group_chat_id: number | null
+          group_title: string | null
           group_url: string | null
           id: string
           mute_new_members: boolean | null
@@ -269,6 +270,7 @@ export type Database = {
           custom_emojis?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
+          group_title?: string | null
           group_url?: string | null
           id?: string
           mute_new_members?: boolean | null
@@ -288,6 +290,7 @@ export type Database = {
           custom_emojis?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
+          group_title?: string | null
           group_url?: string | null
           id?: string
           mute_new_members?: boolean | null
