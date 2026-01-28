@@ -677,7 +677,7 @@ function parseDataString(dataStr: string): Record<string, unknown> {
   return result;
 }
 
-function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string): string {
+function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string, telegramUserName?: string): string {
   if (data.error) {
     return `❌ <b>Erro:</b> ${data.error}`;
   }
@@ -827,9 +827,8 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     }
   }
 
-  // Nome do usuário para saudação
-  const nomeField = allItems.find(i => i.key.toLowerCase().includes('nome') && !i.key.toLowerCase().includes('fantasia'));
-  const userName = nomeField ? String(nomeField.value).split(' ')[0] : 'usuário';
+  // Nome do usuário do Telegram para saudação (NÃO o nome da pessoa consultada)
+  const userName = telegramUserName || 'usuário';
 
   // Função para escapar caracteres HTML
   const escapeHtml = (str: string): string => {
@@ -1156,7 +1155,7 @@ class BotHandler {
     );
   }
 
-  async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string) {
+  async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string, telegramUserName?: string) {
     // Check subscription
     const isActive = await this.isSubscriptionActive(telegramUserId);
     if (!isActive && !this.isOwner(telegramUserId)) {
@@ -1175,8 +1174,8 @@ class BotHandler {
       // Log query
       await this.logQuery(telegramUserId, queryType, queryInput, result);
 
-      // Format and send result
-      const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
+      // Format and send result - usar nome do usuário do Telegram
+      const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, telegramUserName);
       
       // Check for photo - verificar múltiplos campos possíveis (incluindo fotoBase64)
       let fotoUrl = result.foto || result.image || result.url || result.photo || result.fotoBase64;
@@ -1999,7 +1998,9 @@ class BotHandler {
     if (queryState) {
       const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
       await this.clearConversationState(telegramUserId, "query");
-      await this.processQuery(chatId, telegramUserId, queryType, text, estado);
+      // Passar o nome do perfil do Telegram do usuário
+      const userFirstName = message.from?.first_name || 'usuário';
+      await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName);
       return;
     }
 
@@ -2155,8 +2156,8 @@ class BotHandler {
       
       const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 📝 @${userIdDisplay}\n├ 📞 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
 
-      // Format and send result
-      const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
+      // Format and send result - usar nome do perfil do Telegram do usuário
+      const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, userName);
 
       // Check for photo - verificar múltiplos campos possíveis (incluindo fotoBase64)
       let fotoUrl = result.foto || result.image || result.url || result.photo || result.fotoBase64;
