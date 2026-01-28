@@ -163,6 +163,37 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
   console.log(`Telegram API: ${method}`);
   
   try {
+    // Telegram não aceita dataURL (data:image/...base64) em JSON no sendPhoto.
+    // Quando vier base64, fazemos upload multipart/form-data.
+    if (method === "sendPhoto" && body && typeof body.photo === "string" && body.photo.startsWith("data:image/")) {
+      const dataUrl = body.photo;
+      const match = dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
+      if (!match) {
+        return { ok: false, description: "Invalid data URL for photo" };
+      }
+
+      const mime = match[1];
+      const b64 = match[2];
+      const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const blob = new Blob([bin], { type: mime });
+
+      const form = new FormData();
+      // Required fields
+      if (body.chat_id !== undefined) form.set("chat_id", String(body.chat_id));
+      // Optional fields
+      if (body.caption !== undefined) form.set("caption", String(body.caption));
+      if (body.parse_mode !== undefined) form.set("parse_mode", String(body.parse_mode));
+      if (body.reply_markup !== undefined) form.set("reply_markup", JSON.stringify(body.reply_markup));
+
+      // File
+      const ext = mime.split("/")[1] || "png";
+      form.set("photo", new File([blob], `qrcode.${ext}`, { type: mime }));
+
+      const response = await fetch(url, { method: "POST", body: form });
+      const data = await response.json();
+      return data;
+    }
+
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
