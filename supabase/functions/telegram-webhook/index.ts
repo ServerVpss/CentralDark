@@ -1330,8 +1330,10 @@ class BotHandler {
       const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
+      let resultMessageId: number | undefined;
+      
       if (isValidPhotoUrl) {
-        await telegramRequest(this.token, "sendPhoto", {
+        const photoResult = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
@@ -1341,19 +1343,24 @@ class BotHandler {
             [btn("🗑️ Apagar", "delete_msg")]
           ),
         });
+        if (photoResult.ok && photoResult.result) {
+          resultMessageId = (photoResult.result as { message_id?: number }).message_id;
+        }
       } else {
         // Usar paginação por botões para resultados longos
-        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase);
+        if (paginatedResult.ok && paginatedResult.result) {
+          resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
+        }
       }
       
       // Adicionar reação positiva ao resultado (se configurado)
       if (this.settings.react_to_messages && !result.error && !result.notFound) {
         try {
           const emoji = chooseReactionEmoji(this.settings);
-          // Reagir na mensagem original do comando (se for em grupo/supergroup)
-          const originalMessageId = this.update.message?.message_id;
-          if (originalMessageId) {
-            await setMessageReaction(this.token, chatId, originalMessageId, emoji);
+          // Reagir na mensagem de resultado
+          if (resultMessageId) {
+            await setMessageReaction(this.token, chatId, resultMessageId, emoji);
           }
         } catch (reactionErr) {
           console.log("Could not add reaction:", reactionErr);
@@ -2321,6 +2328,8 @@ class BotHandler {
       const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
+      let resultMessageId: number | undefined;
+      
       if (isValidPhotoUrl) {
         // Criar caption simples e segura para a foto (sem HTML complexo)
         const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}${consultaFooter}`;
@@ -2346,17 +2355,25 @@ class BotHandler {
         }
         
         // Enviar dados completos como mensagem separada com paginação por botões
-        await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+        if (paginatedResult.ok && paginatedResult.result) {
+          resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
+        }
       } else {
         // Enviar resultado com paginação por botões
-        await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+        if (paginatedResult.ok && paginatedResult.result) {
+          resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
+        }
       }
       
-      // Adicionar reação positiva ao comando original (se configurado)
+      // Adicionar reação positiva à mensagem de resultado (se configurado)
       if (this.settings.react_to_messages && !result.error && !result.notFound) {
         try {
           const emoji = chooseReactionEmoji(this.settings);
-          await setMessageReaction(this.token, chatId, replyToId, emoji);
+          if (resultMessageId) {
+            await setMessageReaction(this.token, chatId, resultMessageId, emoji);
+          }
         } catch (reactionErr) {
           console.log("Could not add reaction to group message:", reactionErr);
         }
