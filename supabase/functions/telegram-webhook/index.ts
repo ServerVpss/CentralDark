@@ -8,6 +8,9 @@ const corsHeaders = {
 
 const TELEGRAM_API = "https://api.telegram.org/bot";
 
+// Efeitos visuais do Telegram
+const CONFETTI_EFFECT_ID = '5046509860385561286';
+
 // =============== TYPES ===============
 interface TelegramUser {
   id: number;
@@ -277,7 +280,8 @@ async function sendLongMessagePaginated(
   chatId: number, 
   text: string, 
   supabase: SupabaseClient,
-  replyToId?: number
+  replyToId?: number,
+  messageEffectId?: string
 ) {
   const MAX_LENGTH = 3800;
   
@@ -288,6 +292,7 @@ async function sendLongMessagePaginated(
       text,
       parse_mode: "HTML",
       reply_to_message_id: replyToId,
+      message_effect_id: messageEffectId,
       reply_markup: { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] },
     });
   }
@@ -329,6 +334,7 @@ async function sendLongMessagePaginated(
     text: pageHeader + pages[0],
     parse_mode: "HTML",
     reply_to_message_id: replyToId,
+    message_effect_id: messageEffectId,
     reply_markup: keyboard,
   });
   
@@ -1338,6 +1344,7 @@ class BotHandler {
           photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
           parse_mode: "HTML",
+          message_effect_id: CONFETTI_EFFECT_ID,
           reply_markup: keyboard(
             [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
             [btn("🗑️ Apagar", "delete_msg")]
@@ -1348,7 +1355,7 @@ class BotHandler {
         }
       } else {
         // Usar paginação por botões para resultados longos
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, CONFETTI_EFFECT_ID);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -2341,6 +2348,7 @@ class BotHandler {
           caption: simpleCaption.substring(0, 1024),
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
+          message_effect_id: CONFETTI_EFFECT_ID,
           reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
         });
 
@@ -2358,13 +2366,13 @@ class BotHandler {
         }
         
         // Enviar dados completos como mensagem separada com paginação por botões
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, CONFETTI_EFFECT_ID);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
       } else {
         // Enviar resultado com paginação por botões
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, CONFETTI_EFFECT_ID);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
