@@ -705,58 +705,58 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return ignoredPatterns.some(pattern => pattern.test(value));
   };
 
-  // Categorização de campos
+  // Categorização de campos com emojis únicos
   const categories: Record<string, { icon: string; label: string; fields: string[] }> = {
     basic: {
-      icon: '[✦]',
-      label: 'DADOS BÁSICOS',
+      icon: '👤',
+      label: 'DADOS PESSOAIS',
       fields: ['nome', 'cpf', 'data_nascimento', 'dataNascimento', 'nascimento', 'rg', 'sexo', 'nome_mae', 'nome_pai', 
                'naturalidade', 'nacionalidade', 'idade', 'signo', 'obito', 'status', 'municipio_nascimento', 
                'raca', 'tipo_sanguineo', 'estado_civil', 'status_receita']
     },
     documents: {
-      icon: '[✦]',
+      icon: '📄',
       label: 'DOCUMENTOS',
       fields: ['pis', 'nis', 'cns', 'titulo_eleitor', 'zona', 'secao', 'ctps', 'titulo']
     },
     contact: {
-      icon: '[✦]',
-      label: 'DADOS DE CONTATO',
+      icon: '📱',
+      label: 'CONTATO',
       fields: ['telefone', 'telefones', 'celular', 'email', 'emails', 'data_inclusao', 'dataInclusao', 'whatsapp']
     },
     address: {
-      icon: '[✦]',
+      icon: '📍',
       label: 'ENDEREÇO',
       fields: ['endereco', 'enderecos', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'estado', 'cep', 'municipio', 'pais', 'tipo_logradouro']
     },
     financial: {
-      icon: '[✦]',
-      label: 'DADOS FINANCEIROS',
+      icon: '💰',
+      label: 'FINANCEIRO',
       fields: ['renda', 'rendaEstimada', 'score', 'classe', 'classe_social', 'poder_aquisitivo', 'credito', 'situacao', 'situacao_cpf', 'situacao_cadastral', 'recebe_inss', 'bancos']
     },
     family: {
-      icon: '[✦]',
-      label: 'PARENTES',
+      icon: '👨‍👩‍👧‍👦',
+      label: 'FAMÍLIA',
       fields: ['parentes', 'mae', 'pai', 'conjuge', 'filhos', 'irmaos']
     },
     vehicle: {
-      icon: '[✦]',
+      icon: '🚗',
       label: 'VEÍCULO',
       fields: ['placa', 'veiculos', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anoModelo', 'anoFabricacao', 'cor', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'especie', 'categoria', 'proprietario']
     },
     work: {
-      icon: '[✦]',
-      label: 'DADOS PROFISSIONAIS',
+      icon: '💼',
+      label: 'PROFISSIONAL',
       fields: ['emprego', 'empregos', 'empresa', 'cargo', 'profissao', 'ocupacao', 'escolaridade', 'cnpj_empresa', 'cnpj_contratante', 'razao_social', 'admissao', 'demissao', 'salario']
     },
     interests: {
-      icon: '[✦]',
-      label: 'INTERESSES PESSOAIS',
+      icon: '🎯',
+      label: 'INTERESSES',
       fields: ['interesses', 'turismo', 'luxo', 'internet', 'celular', 'cartao', 'seguro', 'investidor', 'apostador', 'viagens']
     },
     company: {
-      icon: '[✦]',
-      label: 'DADOS EMPRESARIAIS',
+      icon: '🏢',
+      label: 'EMPRESA',
       fields: ['cnpj', 'razao_social', 'nome_fantasia', 'capital_social', 'atividade', 'porte', 'natureza_juridica', 'data_abertura', 'socios', 'matriz', 'filial']
     }
   };
@@ -838,8 +838,12 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       .replace(/>/g, '&gt;');
   };
 
-  // Construir mensagem formatada
-  let text = `Olá, <b>${escapeHtml(userName)}</b>\nAqui você pode ver os dados da consulta 🤩\n\n`;
+  // Construir mensagem formatada profissional
+  let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `✨ <b>RESULTADO DA CONSULTA</b> ✨\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+  text += `👋 Olá, <b>${escapeHtml(userName)}</b>!\n`;
+  text += `📊 Confira os dados encontrados:\n\n`;
 
   const formatKey = (key: string): string => {
     const lastPart = key.split('.').pop() || key;
@@ -856,37 +860,44 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     const items = categorizedData[catKey];
     if (!items || items.length === 0) continue;
 
-    text += `${catInfo.icon} <b>${catInfo.label}</b>\n`;
+    text += `┌─────────────────────\n`;
+    text += `│ ${catInfo.icon} <b>${catInfo.label}</b>\n`;
+    text += `├─────────────────────\n`;
     
     for (const item of items) {
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `• ${displayKey}: ${displayValue}\n`;
+        text += `│ ▸ <b>${displayKey}:</b> ${displayValue}\n`;
       }
     }
     
-    text += `\n`;
+    text += `└─────────────────────\n\n`;
   }
 
   // Adicionar itens não categorizados
   if (uncategorized.length > 0) {
-    text += `[✦] <b>OUTROS DADOS</b>\n`;
+    text += `┌─────────────────────\n`;
+    text += `│ 📋 <b>OUTROS DADOS</b>\n`;
+    text += `├─────────────────────\n`;
     
     for (const item of uncategorized) {
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `• ${displayKey}: ${displayValue}\n`;
+        text += `│ ▸ <b>${displayKey}:</b> ${displayValue}\n`;
       }
     }
     
-    text += `\n`;
+    text += `└─────────────────────\n\n`;
   }
 
   // Footer com @ do bot
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
-  text += `\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n${botTag}`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `❤️ <b>OBRIGADO POR USAR</b> ❤️\n`;
+  text += `🤖 ${botTag}\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━`;
 
   // NÃO truncar aqui - sendLongMessage fará a paginação automática
   return text;
