@@ -21,10 +21,67 @@ interface FakeEngagementSettingsProps {
 }
 
 const DEFAULT_NAMES = [
-  'João Silva', 'Maria Santos', 'Pedro Oliveira', 'Ana Costa', 'Lucas Souza',
-  'Juliana Lima', 'Rafael Pereira', 'Camila Rodrigues', 'Bruno Almeida', 'Fernanda Martins',
-  'Gabriel Ferreira', 'Larissa Gomes', 'Thiago Ribeiro', 'Beatriz Carvalho', 'Matheus Nascimento',
-  'Amanda Barbosa', 'Felipe Araújo', 'Letícia Dias', 'Gustavo Moreira', 'Carolina Nunes'
+  // Nomes masculinos
+  'João Silva', 'Pedro Oliveira', 'Lucas Souza', 'Rafael Pereira', 'Bruno Almeida',
+  'Gabriel Ferreira', 'Thiago Ribeiro', 'Matheus Nascimento', 'Felipe Araújo', 'Gustavo Moreira',
+  'Leonardo Santos', 'Carlos Eduardo', 'André Luiz', 'Rodrigo Costa', 'Fernando Lima',
+  'Vinícius Martins', 'Diego Carvalho', 'Marcelo Gomes', 'Ricardo Dias', 'Alexandre Nunes',
+  'Henrique Barbosa', 'Paulo César', 'Eduardo Mendes', 'Caio Henrique', 'Victor Hugo',
+  'Daniel Rocha', 'Leandro Cardoso', 'Fábio Junior', 'Roberto Campos', 'Guilherme Lopes',
+  'Renato Freitas', 'Sérgio Melo', 'Anderson Silva', 'Marcos Vinícius', 'Adriano Castro',
+  'Cristiano Ramos', 'Maurício Teixeira', 'Rogério Azevedo', 'Luciano Pinto', 'Márcio Correia',
+  'Antônio Carlos', 'José Roberto', 'Francisco Assis', 'Manoel Filho', 'Sebastião Neto',
+  'Raimundo Costa', 'Geraldo Souza', 'Valdecir Lima', 'Cláudio Silva', 'Reginaldo Santos',
+  'Alessandro Fernandes', 'Evandro Nascimento', 'Emerson Oliveira', 'Wesley Rodrigues', 'Igor Alves',
+  'Douglas Pereira', 'Jonathan Costa', 'Patrick Sousa', 'William Borges', 'Bryan Santos',
+  'Ryan Ferreira', 'Kevin Lima', 'Nathan Ribeiro', 'Enzo Gabriel', 'Pietro Carvalho',
+  'Davi Lucca', 'Miguel Artur', 'Arthur Henrique', 'Heitor Augusto', 'Bernardo Luís',
+  'Samuel Costa', 'Benício Santos', 'Lorenzo Oliveira', 'Joaquim Filho', 'Théo Gabriel',
+  'Noah Henrique', 'Isaac Miguel', 'Gael Lucas', 'Benjamin Costa', 'Anthony Silva',
+  'Murilo Henrique', 'Cauã Gabriel', 'Erick Matheus', 'Kaique Santos', 'Luís Felipe',
+  'Otávio Augusto', 'Raul Henrique', 'Pietro Gabriel', 'Henry Lucas', 'Yuri Alexandre',
+  
+  // Nomes femininos
+  'Maria Santos', 'Ana Costa', 'Juliana Lima', 'Camila Rodrigues', 'Fernanda Martins',
+  'Larissa Gomes', 'Beatriz Carvalho', 'Amanda Barbosa', 'Letícia Dias', 'Carolina Nunes',
+  'Gabriela Silva', 'Isabela Oliveira', 'Mariana Souza', 'Bruna Ferreira', 'Jéssica Almeida',
+  'Aline Pereira', 'Vanessa Costa', 'Patrícia Lima', 'Tatiana Santos', 'Priscila Ribeiro',
+  'Natália Carvalho', 'Daniela Gomes', 'Débora Martins', 'Renata Dias', 'Michele Nunes',
+  'Cristiane Barbosa', 'Simone Araújo', 'Andréia Moreira', 'Luciana Freitas', 'Cláudia Melo',
+  'Sandra Regina', 'Mônica Lima', 'Rosana Costa', 'Elaine Santos', 'Adriana Oliveira',
+  'Flávia Souza', 'Viviane Ferreira', 'Carla Mendes', 'Roberta Alves', 'Alessandra Ramos',
+  'Bianca Teixeira', 'Thais Azevedo', 'Mayara Pinto', 'Sabrina Correia', 'Rafaela Castro',
+  'Lívia Cardoso', 'Helena Campos', 'Laura Lopes', 'Giovanna Freitas', 'Sophia Santos',
+  'Alice Costa', 'Valentina Oliveira', 'Cecília Souza', 'Manuela Lima', 'Lara Beatriz',
+  'Lorena Santos', 'Isadora Silva', 'Melissa Carvalho', 'Yasmin Costa', 'Marina Fernandes',
+  'Clara Ribeiro', 'Luísa Nascimento', 'Antonella Martins', 'Emanuelly Dias', 'Heloísa Nunes',
+  'Catarina Barbosa', 'Esther Araújo', 'Lavínia Moreira', 'Maria Eduarda', 'Maria Luísa',
+  'Ana Clara', 'Ana Beatriz', 'Ana Júlia', 'Ana Luíza', 'Maria Fernanda',
+  'Maria Vitória', 'Maria Alice', 'Maria Cecília', 'Stella Maris', 'Aurora Costa',
+  'Eloá Santos', 'Alícia Oliveira', 'Luna Souza', 'Isis Helena', 'Olívia Lima',
+  'Elisa Carvalho', 'Agatha Ferreira', 'Milena Almeida', 'Sarah Pereira', 'Nicole Costa',
+  'Rebeca Santos', 'Emily Oliveira', 'Sophie Lima', 'Vitória Santos', 'Luana Costa',
+  
+  // Nomes compostos e variações
+  'João Pedro Silva', 'Pedro Henrique Oliveira', 'Lucas Gabriel Souza', 'Rafael Augusto Costa',
+  'Maria Clara Santos', 'Ana Laura Lima', 'Luiz Fernando Ribeiro', 'José Carlos Almeida',
+  'Francisco José Costa', 'Antônio José Lima', 'Maria José Santos', 'Ana Maria Oliveira',
+  'João Victor Pereira', 'Pedro Lucas Ferreira', 'Gabriel Santos Silva', 'Miguel Costa Souza',
+  'Arthur Silva Lima', 'Enzo Gabriel Costa', 'Heitor Augusto Santos', 'Davi Lucas Oliveira',
+  'Bernardo Costa Lima', 'Théo Gabriel Santos', 'Samuel Henrique Souza', 'Joaquim Pedro Lima',
+  'Maria Eduarda Santos', 'Julia Beatriz Costa', 'Ana Sophia Lima', 'Isabella Maria Santos',
+  'Valentina Costa Souza', 'Helena Santos Lima', 'Laura Maria Oliveira', 'Giovanna Costa Santos',
+  'Sophia Helena Lima', 'Alice Maria Costa', 'Cecília Santos Souza', 'Manuela Costa Lima',
+  'Lorena Maria Santos', 'Isadora Costa Oliveira', 'Marina Helena Souza', 'Clara Beatriz Lima',
+  
+  // Nomes regionais e tradicionais
+  'Raimundo Nonato', 'Francisco das Chagas', 'José Maria', 'Maria da Conceição',
+  'Antônio Francisco', 'João Batista', 'Pedro Paulo', 'Carlos Alberto', 'Luiz Carlos',
+  'José Roberto', 'Paulo Roberto', 'Roberto Carlos', 'Carlos Roberto', 'Luiz Roberto',
+  'Maria das Graças', 'Maria Aparecida', 'Maria de Fátima', 'Maria do Socorro',
+  'Ana Paula', 'Paula Fernanda', 'Fernanda Paula', 'Paula Regina', 'Regina Célia',
+  'Célia Regina', 'Vera Lúcia', 'Lúcia Helena', 'Helena Maria', 'Maria Helena',
+  'Rosângela Maria', 'Maria Rosa', 'Rosa Maria', 'Terezinha Maria', 'Maria Terezinha'
 ];
 
 export function FakeEngagementSettings({ botId, settings, onUpdate }: FakeEngagementSettingsProps) {
