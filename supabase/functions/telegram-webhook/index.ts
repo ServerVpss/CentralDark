@@ -980,48 +980,49 @@ class BotHandler {
         status: "PENDING",
       });
 
-      if (qr_code_image) {
-        const sentMsg = await telegramRequest(this.token, "sendPhoto", {
-          chat_id: chatId,
-          photo: qr_code_image,
-          caption:
-            `💳 <b>PIX Gerado!</b>\n\n` +
-            `📦 Plano: <b>${plan.name}</b>\n` +
-            `💰 Valor: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
-            `📅 Validade: <b>${plan.days} dias</b>\n` +
-            `⏰ Expira em: <b>10 minutos</b>\n\n` +
-            `🎫 TXID: <code>${txid}</code>\n\n` +
-            `🔹 <b>Pix Copia e Cola:</b>\n<pre>${qr_code}</pre>`,
-          parse_mode: "HTML",
-          reply_markup: keyboard(
-            [btn("✅ Já Paguei - Confirmar", `chk_${txid}`)],
-            [btnUrl("🏦 Abrir App do Banco", "https://www.bcb.gov.br/estabilidadefinanceira/pix")],
-            [btn("🔙 Voltar", "menu:plans")]
-          ),
-        });
+       const pixText =
+         `💳 <b>PIX Gerado!</b>\n\n` +
+         `📦 Plano: <b>${plan.name}</b>\n` +
+         `💰 Valor: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
+         `📅 Validade: <b>${plan.days} dias</b>\n` +
+         `⏰ Expira em: <b>10 minutos</b>\n\n` +
+         `🎫 TXID: <code>${txid}</code>\n\n` +
+         `🔹 <b>Pix Copia e Cola:</b>\n<pre>${qr_code}</pre>`;
 
-        if (sentMsg.ok && sentMsg.result) {
-          const msgResult = sentMsg.result as { message_id: number };
-          await this.supabase
-            .from("pending_payments")
-            .update({ telegram_message_id: msgResult.message_id })
-            .eq("txid", txid);
-        }
-      } else {
-        await sendMessage(this.token, chatId,
-          `💳 <b>PIX Gerado!</b>\n\n` +
-          `📦 Plano: <b>${plan.name}</b>\n` +
-          `💰 Valor: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
-          `📅 Validade: <b>${plan.days} dias</b>\n` +
-          `⏰ Expira em: <b>10 minutos</b>\n\n` +
-          `🎫 TXID: <code>${txid}</code>\n\n` +
-          `🔹 <b>Pix Copia e Cola:</b>\n<pre>${qr_code}</pre>`,
-          keyboard(
-            [btn("✅ Já Paguei - Confirmar", `chk_${txid}`)],
-            [btn("🔙 Voltar", "menu:plans")]
-          )
-        );
-      }
+       const pixKeyboard = keyboard(
+         [btn("✅ Já Paguei - Confirmar", `chk_${txid}`)],
+         [btnUrl("🏦 Abrir App do Banco", "https://www.bcb.gov.br/estabilidadefinanceira/pix")],
+         [btn("🔙 Voltar", "menu:plans")]
+       );
+
+       // O Telegram NÃO aceita "data:image/...base64" direto no sendPhoto.
+       // Se vier como dataURL, enviamos somente o texto (copia e cola).
+       const isDataUrl =
+         typeof qr_code_image === "string" &&
+         qr_code_image.startsWith("data:image/");
+
+       if (qr_code_image && !isDataUrl) {
+         const sentMsg = await telegramRequest(this.token, "sendPhoto", {
+           chat_id: chatId,
+           photo: qr_code_image,
+           caption: pixText,
+           parse_mode: "HTML",
+           reply_markup: pixKeyboard,
+         });
+
+         if (!sentMsg.ok) {
+           console.error("sendPhoto failed, falling back to sendMessage:", sentMsg);
+           await sendMessage(this.token, chatId, pixText, pixKeyboard);
+         } else if (sentMsg.result) {
+           const msgResult = sentMsg.result as { message_id: number };
+           await this.supabase
+             .from("pending_payments")
+             .update({ telegram_message_id: msgResult.message_id })
+             .eq("txid", txid);
+         }
+       } else {
+         await sendMessage(this.token, chatId, pixText, pixKeyboard);
+       }
 
       console.log(`PIX generated: User ${telegramUserId}, Plan ${planCode}, TXID ${txid}`);
 
