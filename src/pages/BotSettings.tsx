@@ -5,16 +5,15 @@ import {
   Bot,
   Save,
   Users,
-  MessageSquare,
-  Shield,
   Bell,
   Link,
   Plus,
   Trash2,
   Loader2,
   FileText,
-  Volume2,
   VolumeX,
+  CreditCard,
+  Settings,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -25,6 +24,8 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PaymentGatewaysGrid } from "@/components/payments/PaymentGatewaysGrid";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
 import { useBotSettings } from "@/hooks/useBotSettings";
@@ -166,195 +167,214 @@ export default function BotSettings() {
           </Button>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Owners Section */}
-          <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" />
-                Administradores (Owners)
-              </CardTitle>
-              <CardDescription>
-                IDs do Telegram que terão acesso ao painel admin do bot
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="ID do Telegram (ex: 123456789)"
-                  value={newOwnerId}
-                  onChange={(e) => setNewOwnerId(e.target.value)}
-                  className="bg-secondary/50"
-                />
-                <Button variant="outline" onClick={handleAddOwner}>
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
+        <Tabs defaultValue="general" className="w-full">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="general" className="gap-2">
+              <Settings className="h-4 w-4" />
+              Configurações
+            </TabsTrigger>
+            <TabsTrigger value="payments" className="gap-2">
+              <CreditCard className="h-4 w-4" />
+              Pagamentos
+            </TabsTrigger>
+          </TabsList>
 
-              <div className="space-y-2">
-                {settings?.owner_ids && settings.owner_ids.length > 0 ? (
-                  settings.owner_ids.map((ownerId) => (
-                    <div
-                      key={ownerId}
-                      className="flex items-center justify-between p-3 rounded-lg bg-secondary/50"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">{ownerId}</Badge>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleRemoveOwner(ownerId)}
-                        className="text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    Nenhum owner configurado. Adicione seu ID do Telegram para acessar o painel admin.
-                  </p>
-                )}
-              </div>
-
-              <p className="text-xs text-muted-foreground">
-                💡 Para descobrir seu ID, envie /start para @userinfobot no Telegram
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Group Settings */}
-          <Card className="bg-card border-border">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Link className="h-5 w-5 text-primary" />
-                Grupo VIP
-              </CardTitle>
-              <CardDescription>
-                Configure o grupo privado para assinantes
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="groupChatId">ID do Grupo</Label>
-                <Input
-                  id="groupChatId"
-                  placeholder="-1001234567890"
-                  value={groupChatId}
-                  onChange={(e) => setGroupChatId(e.target.value)}
-                  className="bg-secondary/50 font-mono"
-                />
-                <p className="text-xs text-muted-foreground">
-                  ID do chat do grupo (número negativo começando com -100)
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="groupUrl">Link do Grupo</Label>
-                <Input
-                  id="groupUrl"
-                  placeholder="https://t.me/+ABC123xyz"
-                  value={groupUrl}
-                  onChange={(e) => setGroupUrl(e.target.value)}
-                  className="bg-secondary/50"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Link de convite para o grupo VIP (será enviado após pagamento)
-                </p>
-              </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label className="flex items-center gap-2">
-                    <VolumeX className="h-4 w-4" />
-                    Mutar novos membros
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Novos membros são silenciados até confirmar pagamento
-                  </p>
-                </div>
-                <Switch
-                  checked={muteNewMembers}
-                  onCheckedChange={setMuteNewMembers}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label className="flex items-center gap-2">
-                    <Bell className="h-4 w-4" />
-                    Anunciar pagamentos
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Enviar mensagem no grupo quando alguém assina
-                  </p>
-                </div>
-                <Switch
-                  checked={announcePayments}
-                  onCheckedChange={setAnnouncePayments}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Terms Settings */}
-          <Card className="bg-card border-border lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-primary" />
-                Termos de Uso
-              </CardTitle>
-              <CardDescription>
-                Termos que os usuários devem aceitar antes de usar o bot
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Ativar termos obrigatórios</Label>
-                  <p className="text-xs text-muted-foreground">
-                    Usuários precisam aceitar os termos antes de assinar
-                  </p>
-                </div>
-                <Switch
-                  checked={termsEnabled}
-                  onCheckedChange={setTermsEnabled}
-                />
-              </div>
-
-              {termsEnabled && (
-                <>
-                  <Separator />
-                  <div className="space-y-2">
-                    <Label htmlFor="termsText">Texto dos Termos (suporta HTML)</Label>
-                    <Textarea
-                      id="termsText"
-                      placeholder="Digite os termos de uso..."
-                      value={termsText}
-                      onChange={(e) => setTermsText(e.target.value)}
-                      className="bg-secondary/50 min-h-[200px] font-mono text-sm"
+          <TabsContent value="general" className="mt-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Owners Section */}
+              <Card className="bg-card border-border">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5 text-primary" />
+                    Administradores (Owners)
+                  </CardTitle>
+                  <CardDescription>
+                    IDs do Telegram que terão acesso ao painel admin do bot
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="ID do Telegram (ex: 123456789)"
+                      value={newOwnerId}
+                      onChange={(e) => setNewOwnerId(e.target.value)}
+                      className="bg-secondary/50"
                     />
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs text-muted-foreground">
-                        Use tags HTML: &lt;b&gt;negrito&lt;/b&gt;, &lt;i&gt;itálico&lt;/i&gt;, &lt;code&gt;código&lt;/code&gt;
-                      </p>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setTermsText(defaultTerms)}
-                      >
-                        Restaurar padrão
-                      </Button>
-                    </div>
+                    <Button variant="outline" onClick={handleAddOwner}>
+                      <Plus className="h-4 w-4" />
+                    </Button>
                   </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+
+                  <div className="space-y-2">
+                    {settings?.owner_ids && settings.owner_ids.length > 0 ? (
+                      settings.owner_ids.map((ownerId) => (
+                        <div
+                          key={ownerId}
+                          className="flex items-center justify-between p-3 rounded-lg bg-secondary/50"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline">{ownerId}</Badge>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleRemoveOwner(ownerId)}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground text-center py-4">
+                        Nenhum owner configurado. Adicione seu ID do Telegram para acessar o painel admin.
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="text-xs text-muted-foreground">
+                    💡 Para descobrir seu ID, envie /start para @userinfobot no Telegram
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Group Settings */}
+              <Card className="bg-card border-border">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Link className="h-5 w-5 text-primary" />
+                    Grupo VIP
+                  </CardTitle>
+                  <CardDescription>
+                    Configure o grupo privado para assinantes
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="groupChatId">ID do Grupo</Label>
+                    <Input
+                      id="groupChatId"
+                      placeholder="-1001234567890"
+                      value={groupChatId}
+                      onChange={(e) => setGroupChatId(e.target.value)}
+                      className="bg-secondary/50 font-mono"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      ID do chat do grupo (número negativo começando com -100)
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="groupUrl">Link do Grupo</Label>
+                    <Input
+                      id="groupUrl"
+                      placeholder="https://t.me/+ABC123xyz"
+                      value={groupUrl}
+                      onChange={(e) => setGroupUrl(e.target.value)}
+                      className="bg-secondary/50"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Link de convite para o grupo VIP (será enviado após pagamento)
+                    </p>
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="flex items-center gap-2">
+                        <VolumeX className="h-4 w-4" />
+                        Mutar novos membros
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Novos membros são silenciados até confirmar pagamento
+                      </p>
+                    </div>
+                    <Switch
+                      checked={muteNewMembers}
+                      onCheckedChange={setMuteNewMembers}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="flex items-center gap-2">
+                        <Bell className="h-4 w-4" />
+                        Anunciar pagamentos
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        Enviar mensagem no grupo quando alguém assina
+                      </p>
+                    </div>
+                    <Switch
+                      checked={announcePayments}
+                      onCheckedChange={setAnnouncePayments}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Terms Settings */}
+              <Card className="bg-card border-border lg:col-span-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-primary" />
+                    Termos de Uso
+                  </CardTitle>
+                  <CardDescription>
+                    Termos que os usuários devem aceitar antes de usar o bot
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label>Ativar termos obrigatórios</Label>
+                      <p className="text-xs text-muted-foreground">
+                        Usuários precisam aceitar os termos antes de assinar
+                      </p>
+                    </div>
+                    <Switch
+                      checked={termsEnabled}
+                      onCheckedChange={setTermsEnabled}
+                    />
+                  </div>
+
+                  {termsEnabled && (
+                    <>
+                      <Separator />
+                      <div className="space-y-2">
+                        <Label htmlFor="termsText">Texto dos Termos (suporta HTML)</Label>
+                        <Textarea
+                          id="termsText"
+                          placeholder="Digite os termos de uso..."
+                          value={termsText}
+                          onChange={(e) => setTermsText(e.target.value)}
+                          className="bg-secondary/50 min-h-[200px] font-mono text-sm"
+                        />
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs text-muted-foreground">
+                            Use tags HTML: &lt;b&gt;negrito&lt;/b&gt;, &lt;i&gt;itálico&lt;/i&gt;, &lt;code&gt;código&lt;/code&gt;
+                          </p>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setTermsText(defaultTerms)}
+                          >
+                            Restaurar padrão
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="payments" className="mt-6">
+            <PaymentGatewaysGrid />
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );
