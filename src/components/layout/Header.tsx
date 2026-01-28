@@ -1,16 +1,7 @@
-import { Bell, Search, User, LogOut, Settings, Sparkles, Crown } from "lucide-react";
+import { Bell, Search, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useAuthContext } from "@/components/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
@@ -18,13 +9,7 @@ interface HeaderProps {
 }
 
 export function Header({ className }: HeaderProps) {
-  const { user, profile, signOut } = useAuthContext();
   const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/auth", { replace: true });
-  };
 
   return (
     <header className={cn(
@@ -48,85 +33,29 @@ export function Header({ className }: HeaderProps) {
         <div className="flex-1 min-w-8" />
 
         {/* Actions - far right corner */}
-        <div className="flex items-center gap-3 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Settings */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => navigate("/settings")}
+            className="h-8 w-8 rounded-lg hover:bg-white/5 transition-colors"
+          >
+            <Settings className="h-4 w-4 text-muted-foreground" />
+          </Button>
+
           {/* Notifications */}
           <Button 
             variant="ghost" 
             size="icon" 
-            className="relative h-10 w-10 rounded-xl hover:bg-white/5 transition-colors"
+            className="relative h-8 w-8 rounded-lg hover:bg-white/5 transition-colors"
           >
-            <Bell className="h-5 w-5 text-muted-foreground" />
-            <span className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-40" />
-              <span className="relative inline-flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-primary to-amber-600 text-[9px] font-bold text-primary-foreground">
-                3
-              </span>
+            <Bell className="h-4 w-4 text-muted-foreground" />
+            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+              50
             </span>
           </Button>
 
-          {/* Profile Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-3 px-3 h-11 rounded-xl hover:bg-white/5">
-                <div className="relative flex-shrink-0">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/30">
-                    <User className="h-4 w-4 text-primary" />
-                  </div>
-                  {/* Online indicator */}
-                  <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-gradient-to-br from-emerald-400 to-green-500" />
-                </div>
-                <div className="hidden lg:flex flex-col items-start text-left">
-                  <span className="text-sm font-semibold text-foreground leading-tight">
-                    {profile?.full_name || user?.email?.split("@")[0] || "Usuário"}
-                  </span>
-                  <span className="text-xs text-primary flex items-center gap-1 leading-tight">
-                    <Crown className="h-3 w-3" />
-                    Premium
-                  </span>
-                </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64 p-2" style={{
-              background: "linear-gradient(145deg, hsl(220 20% 10%), hsl(220 20% 8%))",
-              border: "1px solid hsl(220 15% 15%)",
-            }}>
-              <DropdownMenuLabel className="pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/30">
-                    <User className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold">
-                      {profile?.full_name || "Usuário"}
-                    </span>
-                    <span className="text-xs text-muted-foreground truncate max-w-[150px]">
-                      {user?.email}
-                    </span>
-                    <span className="text-xs text-primary flex items-center gap-1 mt-0.5">
-                      <Sparkles className="h-3 w-3" />
-                      Plano Premium
-                    </span>
-                  </div>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-border/50" />
-              <DropdownMenuItem 
-                onClick={() => navigate("/settings")}
-                className="rounded-lg py-2.5 px-3 cursor-pointer hover:bg-white/5 focus:bg-white/5"
-              >
-                <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
-                <span>Configurações</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-border/50" />
-              <DropdownMenuItem 
-                onClick={handleSignOut} 
-                className="rounded-lg py-2.5 px-3 cursor-pointer text-destructive focus:text-destructive hover:bg-destructive/10 focus:bg-destructive/10"
-              >
-                <LogOut className="mr-3 h-4 w-4" />
-                <span>Sair da conta</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </header>
