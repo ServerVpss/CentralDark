@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {
   Bell,
   CreditCard,
-  Globe,
   Key,
   Laptop,
   Moon,
@@ -11,7 +10,6 @@ import {
   Shield,
   Sun,
   User,
-  Webhook,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -52,10 +50,6 @@ export default function Settings() {
     twoFactor: true,
     sessionTimeout: "30",
     ipWhitelist: "",
-    
-    // API
-    webhookUrl: "",
-    apiKey: "sk_live_xxxxxxxxxxxxxxxxxxxxx",
   });
 
   // Atualizar settings quando profile/user carregar
@@ -120,10 +114,6 @@ export default function Settings() {
             <TabsTrigger value="security" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Shield className="h-4 w-4" />
               Segurança
-            </TabsTrigger>
-            <TabsTrigger value="api" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              <Webhook className="h-4 w-4" />
-              API
             </TabsTrigger>
             <TabsTrigger value="appearance" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Palette className="h-4 w-4" />
@@ -325,64 +315,6 @@ export default function Settings() {
             </Card>
           </TabsContent>
 
-          {/* API Tab */}
-          <TabsContent value="api">
-            <Card className="bg-card border-border">
-              <CardHeader>
-                <CardTitle>Configurações de API</CardTitle>
-                <CardDescription>
-                  Gerencie suas chaves de API e webhooks
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="apiKey">Chave de API</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="apiKey"
-                      value={settings.apiKey}
-                      readOnly
-                      className="bg-secondary/50 font-mono text-sm"
-                    />
-                    <Button variant="outline">Regenerar</Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Use esta chave para autenticar requisições à API
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="webhook">URL do Webhook</Label>
-                  <Input
-                    id="webhook"
-                    placeholder="https://seu-servidor.com/webhook"
-                    value={settings.webhookUrl}
-                    onChange={(e) =>
-                      setSettings({ ...settings, webhookUrl: e.target.value })
-                    }
-                    className="bg-secondary/50"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Receba eventos em tempo real no seu servidor
-                  </p>
-                </div>
-
-                <div className="rounded-lg bg-secondary/30 p-4">
-                  <h4 className="font-medium mb-2">Eventos Disponíveis</h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
-                    <span>• bot.started</span>
-                    <span>• bot.stopped</span>
-                    <span>• message.received</span>
-                    <span>• spam.blocked</span>
-                    <span>• user.joined</span>
-                    <span>• subscription.created</span>
-                    <span>• payment.received</span>
-                    <span>• payment.confirmed</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Appearance Tab */}
           <TabsContent value="appearance">
