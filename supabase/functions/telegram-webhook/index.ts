@@ -2357,7 +2357,6 @@ class BotHandler {
           caption: simpleCaption.substring(0, 1024),
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
-          message_effect_id: CONFETTI_EFFECT_ID,
           reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
         });
 
@@ -2374,14 +2373,14 @@ class BotHandler {
           });
         }
         
-        // Enviar dados completos como mensagem separada com paginação por botões
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, CONFETTI_EFFECT_ID);
+        // Enviar dados completos como mensagem separada com paginação por botões (sem efeito em grupos)
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
       } else {
-        // Enviar resultado com paginação por botões
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, CONFETTI_EFFECT_ID);
+        // Enviar resultado com paginação por botões (sem efeito em grupos)
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
