@@ -2329,6 +2329,7 @@ class BotHandler {
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
       let resultMessageId: number | undefined;
+      let photoMessageId: number | undefined;
       
       if (isValidPhotoUrl) {
         // Criar caption simples e segura para a foto (sem HTML complexo)
@@ -2343,7 +2344,9 @@ class BotHandler {
           reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
         });
 
-        if (!sentPhoto.ok) {
+        if (sentPhoto.ok && sentPhoto.result) {
+          photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
+        } else {
           console.error("sendPhoto failed for query result:", sentPhoto);
           // Fallback: enviar apenas texto formatado
           await telegramRequest(this.token, "sendMessage", {
@@ -2367,10 +2370,15 @@ class BotHandler {
         }
       }
       
-      // Adicionar reação positiva à mensagem de resultado (se configurado)
+      // Adicionar reação positiva às mensagens de resultado (se configurado)
       if (this.settings.react_to_messages && !result.error && !result.notFound) {
         try {
           const emoji = chooseReactionEmoji(this.settings);
+          // Reagir na foto (se houver)
+          if (photoMessageId) {
+            await setMessageReaction(this.token, chatId, photoMessageId, emoji);
+          }
+          // Reagir na mensagem de dados
           if (resultMessageId) {
             await setMessageReaction(this.token, chatId, resultMessageId, emoji);
           }
