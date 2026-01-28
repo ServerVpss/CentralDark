@@ -67,19 +67,25 @@ export function Header({ className }: HeaderProps) {
           {/* Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-3 px-3 h-11 rounded-xl hover:bg-white/5">
+              <Button 
+                variant="ghost" 
+                className="gap-2.5 px-2.5 py-1 h-auto rounded-xl hover:bg-white/5"
+                style={{ background: "rgba(255, 255, 255, 0.04)" }}
+              >
+                {/* Avatar com borda e status */}
                 <div className="relative flex-shrink-0">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/30">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-amber-600/10 border-2 border-primary">
                     <User className="h-4 w-4 text-primary" />
                   </div>
                   {/* Online indicator */}
-                  <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-gradient-to-br from-emerald-400 to-green-500" />
+                  <div className="absolute bottom-0.5 right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-emerald-500" />
                 </div>
-                <div className="hidden lg:flex flex-col items-start text-left">
-                  <span className="text-sm font-semibold text-foreground leading-tight">
+                {/* Nome + Badge */}
+                <div className="hidden lg:flex flex-col items-start leading-tight">
+                  <span className="text-sm font-semibold text-foreground">
                     {profile?.full_name || user?.email?.split("@")[0] || "Usuário"}
                   </span>
-                  <span className="text-xs text-primary flex items-center gap-1 leading-tight">
+                  <span className="text-[11px] text-primary flex items-center gap-1">
                     <Crown className="h-3 w-3" />
                     Premium
                   </span>
@@ -92,7 +98,7 @@ export function Header({ className }: HeaderProps) {
             }}>
               <DropdownMenuLabel className="pb-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/30">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-amber-600/10 border-2 border-primary">
                     <User className="h-6 w-6 text-primary" />
                   </div>
                   <div className="flex flex-col">
