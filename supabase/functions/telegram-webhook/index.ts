@@ -2405,38 +2405,57 @@ class BotHandler {
       let photoMessageId: number | undefined;
       
       if (isValidPhotoUrl) {
-        // Criar caption simples e segura para a foto (sem HTML complexo)
-        const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}${consultaFooter}`;
+        // Tentar enviar tudo em uma mensagem só (foto + dados + footer)
+        const fullCaption = formattedResult + consultaFooter;
         
-        const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
-          chat_id: chatId,
-          photo: fotoUrl,
-          caption: simpleCaption.substring(0, 1024),
-          parse_mode: "HTML",
-          reply_to_message_id: replyToId,
-          reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
-        });
-
-        if (sentPhoto.ok && sentPhoto.result) {
-          photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
-        } else {
-          console.error("sendPhoto failed for query result:", sentPhoto);
-          // Fallback: enviar apenas texto formatado
-          await telegramRequest(this.token, "sendMessage", {
+        if (fullCaption.length <= 1024) {
+          // Cabe no caption - enviar tudo junto em UMA ÚNICA mensagem
+          const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
-            text: `⚠️ <b>Foto encontrada, mas não consegui enviar pelo Telegram.</b>\n\nTente novamente mais tarde.${consultaFooter}`,
+            photo: fotoUrl,
+            caption: fullCaption,
             parse_mode: "HTML",
             reply_to_message_id: replyToId,
+            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
           });
-        }
-        
-        // Enviar dados completos como mensagem separada com paginação por botões (sem efeito em grupos)
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
-        if (paginatedResult.ok && paginatedResult.result) {
-          resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
+
+          if (sentPhoto.ok && sentPhoto.result) {
+            photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
+          } else {
+            console.error("sendPhoto failed for query result:", sentPhoto);
+            // Fallback: enviar apenas texto formatado
+            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId);
+            if (paginatedResult.ok && paginatedResult.result) {
+              resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
+            }
+          }
+        } else {
+          // Não cabe no caption - manter comportamento atual (foto simples + texto separado)
+          const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}${consultaFooter}`;
+          
+          const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
+            chat_id: chatId,
+            photo: fotoUrl,
+            caption: simpleCaption.substring(0, 1024),
+            parse_mode: "HTML",
+            reply_to_message_id: replyToId,
+            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
+          });
+
+          if (sentPhoto.ok && sentPhoto.result) {
+            photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
+          } else {
+            console.error("sendPhoto failed for query result:", sentPhoto);
+          }
+          
+          // Enviar dados completos como mensagem separada com paginação
+          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+          if (paginatedResult.ok && paginatedResult.result) {
+            resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
+          }
         }
       } else {
-        // Enviar resultado com paginação por botões (sem efeito em grupos)
+        // Sem foto - Enviar resultado com paginação por botões
         const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
