@@ -855,41 +855,39 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       .toUpperCase();
   };
 
-  // Adicionar categorias com dados
+  // Adicionar categorias com dados - formato limpo e profissional
   for (const [catKey, catInfo] of Object.entries(categories)) {
     const items = categorizedData[catKey];
     if (!items || items.length === 0) continue;
 
-    text += `┌─────────────────────\n`;
-    text += `│ ${catInfo.icon} <b>${catInfo.label}</b>\n`;
-    text += `├─────────────────────\n`;
+    text += `${catInfo.icon} <b>${catInfo.label}</b>\n`;
+    text += `━━━━━━━━━━━━━━━━━━━━\n`;
     
     for (const item of items) {
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `│ ▸ <b>${displayKey}:</b> ${displayValue}\n`;
+        text += `  ▷ <b>${displayKey}:</b> ${displayValue}\n`;
       }
     }
     
-    text += `└─────────────────────\n\n`;
+    text += `\n`;
   }
 
   // Adicionar itens não categorizados
   if (uncategorized.length > 0) {
-    text += `┌─────────────────────\n`;
-    text += `│ 📋 <b>OUTROS DADOS</b>\n`;
-    text += `├─────────────────────\n`;
+    text += `📋 <b>OUTROS DADOS</b>\n`;
+    text += `━━━━━━━━━━━━━━━━━━━━\n`;
     
     for (const item of uncategorized) {
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `│ ▸ <b>${displayKey}:</b> ${displayValue}\n`;
+        text += `  ▷ <b>${displayKey}:</b> ${displayValue}\n`;
       }
     }
     
-    text += `└─────────────────────\n\n`;
+    text += `\n`;
   }
 
   // Footer com @ do bot
