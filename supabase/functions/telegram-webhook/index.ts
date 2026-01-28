@@ -472,9 +472,59 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
   return { error: `Tipo de consulta não suportado: ${queryType}` };
 }
 
+// =============== PARSE DATA STRING ===============
+// Converte campo 'data' string (formato texto da API) em objeto estruturado
+function parseDataString(dataStr: string): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  
+  // Limpar referências ao bot antigo e URLs
+  let cleaned = dataStr
+    .replace(/@QueryBuscasBot/gi, '')
+    .replace(/https?:\/\/t\.me\/querybuscas/gi, '')
+    .replace(/QueryBuscasBot/gi, '')
+    .replace(/querybuscas/gi, '')
+    .replace(/https?:\/\/t\.me\/[^\s]+/gi, '')
+    .trim();
+  
+  // Extrair pares CHAVE: valor (formato comum da API)
+  const lines = cleaned.split('\n');
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    
+    // Ignorar linhas de seção ou cabeçalho
+    if (trimmed.match(/^(BASE \d+|RESULTADOS|---)/i)) continue;
+    if (trimmed.match(/^[=\-_*]+$/)) continue; // Linhas de separação
+    
+    // Extrair CHAVE: VALOR (suporta chaves com espaços e underscores)
+    const match = trimmed.match(/^([A-ZÀ-Ú\s_]+):\s*(.+)$/i);
+    if (match) {
+      const key = match[1].trim().toLowerCase().replace(/\s+/g, '_');
+      const value = match[2].trim();
+      // Ignorar valores vazios, placeholders ou muito curtos
+      if (value && value !== '-' && value !== '--' && value.length > 0) {
+        result[key] = value;
+      }
+    }
+  }
+  
+  return result;
+}
+
 function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string): string {
   if (data.error) {
     return `❌ <b>Erro:</b> ${data.error}`;
+  }
+
+  // PRÉ-PROCESSAMENTO: Se o campo 'data' é uma string, fazer parse
+  if (typeof data.data === 'string') {
+    console.log('Parsing data string field...');
+    const parsedData = parseDataString(data.data);
+    console.log('Parsed data:', JSON.stringify(parsedData).substring(0, 200));
+    // Mesclar dados parseados com dados originais (exceto data, comando, valor)
+    const { data: _dataField, comando: _cmd, valor: _val, ...rest } = data;
+    data = { ...rest, ...parsedData };
   }
 
   // Campos a ignorar (referências a outros bots, links, etc.)
