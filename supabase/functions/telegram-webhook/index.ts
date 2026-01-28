@@ -497,8 +497,8 @@ function parseDataString(dataStr: string): Record<string, unknown> {
     if (trimmed.match(/^(BASE \d+|RESULTADOS|---)/i)) continue;
     if (trimmed.match(/^[=\-_*]+$/)) continue; // Linhas de separação
     
-    // Extrair CHAVE: VALOR (suporta chaves com espaços e underscores)
-    const match = trimmed.match(/^([A-ZÀ-Ú\s_]+):\s*(.+)$/i);
+    // Extrair CHAVE: VALOR ou CHAVE ⎯ VALOR (suporta separadores : ⎯ -)
+    const match = trimmed.match(/^([A-ZÀ-Ú\s_]+)(?::|⎯|-)\s*(.+)$/i);
     if (match) {
       const key = match[1].trim().toLowerCase().replace(/\s+/g, '_');
       const value = match[2].trim();
