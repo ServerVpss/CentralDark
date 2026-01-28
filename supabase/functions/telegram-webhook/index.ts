@@ -356,14 +356,33 @@ async function fetchFromProviderWithTimeout(
 
 async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
   const normalizedType = queryType.toLowerCase();
-  const cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
+  
+  // Para nome, preservar espaços e permitir caracteres acentuados
+  // Para outros tipos, remover caracteres especiais
+  let cleanInput: string;
+  if (normalizedType === "nome") {
+    // Preservar espaços e letras acentuadas para busca por nome
+    cleanInput = queryInput.replace(/[^\w\sáéíóúãõâêîôûàèìòùç.-]/gi, "").trim();
+  } else {
+    cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
+  }
 
   console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
 
   // NexFuture queries
   if (nexfutureEndpoints[normalizedType]) {
     const endpoint = nexfutureEndpoints[normalizedType];
-    return await fetchFromProvider(providers.nexfuture, endpoint, normalizedType, cleanInput);
+    const result = await fetchFromProvider(providers.nexfuture, endpoint, normalizedType, cleanInput);
+    
+    // Tratar respostas "NÃO ENCONTRADO" da API
+    if (result.data && typeof result.data === 'string' && result.data.toUpperCase().includes('NÃO ENCONTRADO')) {
+      return { 
+        error: `❌ ${normalizedType.toUpperCase()} não encontrado na base de dados.\n\n💡 Verifique se digitou corretamente.`,
+        notFound: true 
+      };
+    }
+    
+    return result;
   }
 
   // TConect Score
