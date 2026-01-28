@@ -106,14 +106,17 @@ export function EfiGatewayConfigDialog({ open, onOpenChange }: EfiGatewayConfigD
   const handleRegisterWebhook = async () => {
     setIsRegistering(true);
     try {
+      // URL do webhook do projeto
+      const webhookUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/efi-webhook`;
+      
       const { data, error } = await supabase.functions.invoke("efi-register-webhook", {
-        body: {},
+        body: { webhook_url: webhookUrl },
       });
 
       if (error) throw error;
 
       if (data?.success) {
-        toast.success("Webhook registrado com sucesso!");
+        toast.success(`Webhook registrado: ${data.webhook_url}`);
       } else {
         toast.error(data?.error || "Erro ao registrar webhook");
       }
