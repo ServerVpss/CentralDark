@@ -77,6 +77,11 @@ interface BotSettings {
   terms_enabled: boolean;
   mute_new_members: boolean;
   announce_payments: boolean;
+  // Configurações de reações
+  react_to_messages: boolean;
+  reaction_mode: string | null; // 'fixed' ou 'random'
+  fixed_emoji: string | null;
+  custom_emojis: string[] | null;
 }
 
 interface Plan {
@@ -396,6 +401,30 @@ async function deleteMessage(token: string, chatId: number, messageId: number) {
     chat_id: chatId,
     message_id: messageId,
   });
+}
+
+// Função para enviar reação a uma mensagem
+async function setMessageReaction(token: string, chatId: number, messageId: number, emoji: string) {
+  return telegramRequest(token, "setMessageReaction", {
+    chat_id: chatId,
+    message_id: messageId,
+    reaction: [{ type: "emoji", emoji }],
+    is_big: false,
+  });
+}
+
+// Função para escolher emoji de reação baseado nas configurações
+function chooseReactionEmoji(settings: BotSettings): string {
+  if (settings.reaction_mode === 'fixed' && settings.fixed_emoji) {
+    return settings.fixed_emoji;
+  }
+  
+  // Modo aleatório
+  const emojis = settings.custom_emojis && settings.custom_emojis.length > 0 
+    ? settings.custom_emojis 
+    : ['👍', '❤️', '🔥', '🎉', '👏', '⚡', '✨', '💯'];
+  
+  return emojis[Math.floor(Math.random() * emojis.length)];
 }
 
 function isExpired(expiresAt: string): boolean {
@@ -1316,7 +1345,20 @@ class BotHandler {
         // Usar paginação por botões para resultados longos
         await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase);
       }
-
+      
+      // Adicionar reação positiva ao resultado (se configurado)
+      if (this.settings.react_to_messages && !result.error && !result.notFound) {
+        try {
+          const emoji = chooseReactionEmoji(this.settings);
+          // Reagir na mensagem original do comando (se for em grupo/supergroup)
+          const originalMessageId = this.update.message?.message_id;
+          if (originalMessageId) {
+            await setMessageReaction(this.token, chatId, originalMessageId, emoji);
+          }
+        } catch (reactionErr) {
+          console.log("Could not add reaction:", reactionErr);
+        }
+      }
     } catch (error) {
       console.error("Query error:", error);
       await sendMessage(this.token, chatId,
@@ -2309,7 +2351,16 @@ class BotHandler {
         // Enviar resultado com paginação por botões
         await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
       }
-
+      
+      // Adicionar reação positiva ao comando original (se configurado)
+      if (this.settings.react_to_messages && !result.error && !result.notFound) {
+        try {
+          const emoji = chooseReactionEmoji(this.settings);
+          await setMessageReaction(this.token, chatId, replyToId, emoji);
+        } catch (reactionErr) {
+          console.log("Could not add reaction to group message:", reactionErr);
+        }
+      }
     } catch (error) {
       console.error("Group query error:", error);
       await telegramRequest(this.token, "sendMessage", {
@@ -2772,14 +2823,18 @@ serve(async (req) => {
       .eq("bot_id", botId)
       .single();
 
-    const botSettings: BotSettings = (settings as BotSettings | null) || {
-      owner_ids: [],
-      group_chat_id: null,
-      group_url: null,
-      terms_text: "",
-      terms_enabled: false,
-      mute_new_members: false,
-      announce_payments: true,
+    const botSettings: BotSettings = {
+      owner_ids: (settings as { owner_ids?: number[] } | null)?.owner_ids || [],
+      group_chat_id: (settings as { group_chat_id?: number } | null)?.group_chat_id || null,
+      group_url: (settings as { group_url?: string } | null)?.group_url || null,
+      terms_text: (settings as { terms_text?: string } | null)?.terms_text || "",
+      terms_enabled: (settings as { terms_enabled?: boolean } | null)?.terms_enabled || false,
+      mute_new_members: (settings as { mute_new_members?: boolean } | null)?.mute_new_members || false,
+      announce_payments: (settings as { announce_payments?: boolean } | null)?.announce_payments ?? true,
+      react_to_messages: (settings as { react_to_messages?: boolean } | null)?.react_to_messages || false,
+      reaction_mode: (settings as { reaction_mode?: string } | null)?.reaction_mode || 'random',
+      fixed_emoji: (settings as { fixed_emoji?: string } | null)?.fixed_emoji || '👍',
+      custom_emojis: (settings as { custom_emojis?: string[] } | null)?.custom_emojis || ['👍', '❤️', '🔥', '🎉', '👏'],
     };
 
     const update: TelegramUpdate = await req.json();
