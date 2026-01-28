@@ -214,6 +214,56 @@ async function sendMessage(token: string, chatId: number, text: string, replyMar
   });
 }
 
+// Função para enviar mensagens longas divididas em partes
+async function sendLongMessage(token: string, chatId: number, text: string, replyToId?: number) {
+  const MAX_LENGTH = 4000; // Deixar margem para o Telegram
+  
+  if (text.length <= MAX_LENGTH) {
+    return telegramRequest(token, "sendMessage", {
+      chat_id: chatId,
+      text,
+      parse_mode: "HTML",
+      reply_to_message_id: replyToId,
+    });
+  }
+  
+  // Dividir em partes
+  const parts: string[] = [];
+  let remaining = text;
+  
+  while (remaining.length > 0) {
+    if (remaining.length <= MAX_LENGTH) {
+      parts.push(remaining);
+      break;
+    }
+    
+    // Tentar quebrar em uma linha
+    let breakPoint = remaining.lastIndexOf('\n', MAX_LENGTH);
+    if (breakPoint === -1 || breakPoint < MAX_LENGTH / 2) {
+      // Se não encontrar quebra de linha boa, quebrar no espaço
+      breakPoint = remaining.lastIndexOf(' ', MAX_LENGTH);
+    }
+    if (breakPoint === -1 || breakPoint < MAX_LENGTH / 2) {
+      // Fallback: cortar no limite
+      breakPoint = MAX_LENGTH;
+    }
+    
+    parts.push(remaining.substring(0, breakPoint));
+    remaining = remaining.substring(breakPoint).trim();
+  }
+  
+  // Enviar cada parte
+  for (let i = 0; i < parts.length; i++) {
+    const partHeader = parts.length > 1 ? `📄 <b>Parte ${i + 1}/${parts.length}</b>\n\n` : '';
+    await telegramRequest(token, "sendMessage", {
+      chat_id: chatId,
+      text: partHeader + parts[i],
+      parse_mode: "HTML",
+      reply_to_message_id: i === 0 ? replyToId : undefined,
+    });
+  }
+}
+
 async function editMessage(token: string, chatId: number, messageId: number, text: string, replyMarkup?: unknown) {
   return telegramRequest(token, "editMessageText", {
     chat_id: chatId,
@@ -2126,20 +2176,11 @@ class BotHandler {
           });
         }
         
-        // Enviar dados completos como mensagem separada
-        await telegramRequest(this.token, "sendMessage", {
-          chat_id: chatId,
-          text: formattedResult + consultaFooter,
-          parse_mode: "HTML",
-          reply_to_message_id: replyToId,
-        });
+        // Enviar dados completos como mensagem separada (pode ser longa)
+        await sendLongMessage(this.token, chatId, formattedResult + consultaFooter, replyToId);
       } else {
-        await telegramRequest(this.token, "sendMessage", {
-          chat_id: chatId,
-          text: formattedResult + consultaFooter,
-          parse_mode: "HTML",
-          reply_to_message_id: replyToId,
-        });
+        // Enviar resultado (pode ser longo - múltiplas mensagens se necessário)
+        await sendLongMessage(this.token, chatId, formattedResult + consultaFooter, replyToId);
       }
 
     } catch (error) {
