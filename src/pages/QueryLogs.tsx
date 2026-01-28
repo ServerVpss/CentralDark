@@ -5,11 +5,7 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  User,
   RefreshCw,
-  Filter,
-  ChevronDown,
-  FileText,
   Eye,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -43,6 +39,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import { Json } from "@/integrations/supabase/types";
+import { QueryResultFormatter } from "@/components/consultas/QueryResultFormatter";
 
 interface QueryLog {
   id: string;
@@ -356,11 +353,7 @@ export default function QueryLogs() {
                   )}
                 </div>
               </div>
-              <div className="bg-secondary/30 rounded-lg p-4 overflow-auto">
-                <pre className="text-sm whitespace-pre-wrap">
-                  {selectedLog && JSON.stringify(selectedLog.query_result, null, 2)}
-                </pre>
-              </div>
+              <QueryResultFormatter data={selectedLog?.query_result} />
             </div>
           </DialogContent>
         </Dialog>
