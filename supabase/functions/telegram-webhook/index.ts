@@ -2065,13 +2065,23 @@ class BotHandler {
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
       if (isValidPhotoUrl) {
-        await telegramRequest(this.token, "sendPhoto", {
+        const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
         });
+
+        if (!sentPhoto.ok) {
+          console.error("sendPhoto failed for query result:", sentPhoto);
+          await telegramRequest(this.token, "sendMessage", {
+            chat_id: chatId,
+            text: `⚠️ <b>Foto encontrada, mas não consegui enviar pelo Telegram.</b>\n\n${formattedResult}`.substring(0, 4096),
+            parse_mode: "HTML",
+            reply_to_message_id: replyToId,
+          });
+        }
       } else {
         await telegramRequest(this.token, "sendMessage", {
           chat_id: chatId,
