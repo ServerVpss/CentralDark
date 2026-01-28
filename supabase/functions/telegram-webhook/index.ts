@@ -842,7 +842,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
   text += `✨ <b>RESULTADO DA CONSULTA</b> ✨\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-  text += `👋 Olá, <b>${escapeHtml(userName)}</b>!\n`;
+  text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n`;
   text += `📊 Confira os dados encontrados:\n\n`;
 
   const formatKey = (key: string): string => {
