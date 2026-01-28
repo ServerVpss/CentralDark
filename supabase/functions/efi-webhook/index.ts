@@ -329,14 +329,22 @@ Deno.serve(async (req) => {
                   `💰 Valor: *R$ ${Number(transaction.amount).toFixed(2)}*\n\n` +
                   `🚀 Bem-vindo(a) à família! 🎊`
                 
+                // Buscar username do bot para o link
+                let botUsername = null
+                try {
+                  const meRes = await fetch(`https://api.telegram.org/bot${bot.token}/getMe`)
+                  const meData = await meRes.json()
+                  botUsername = meData.result?.username
+                } catch {}
+                
                 // Botão para adquirir VIP (link para o bot no privado)
-                const botUsername = bot.token ? await getBotUsername(bot.token) : null
                 const acquireButton = botUsername ? {
                   inline_keyboard: [[
                     { text: '💎 ADQUIRIR VIP', url: `https://t.me/${botUsername}?start=planos` }
                   ]]
                 } : undefined
                 
+                // Nota: efeitos de mensagem não funcionam em grupos, então não usamos
                 await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -344,8 +352,7 @@ Deno.serve(async (req) => {
                     chat_id: settings.group_chat_id,
                     text: groupMessage,
                     parse_mode: 'Markdown',
-                    reply_markup: acquireButton,
-                    message_effect_id: CONFETTI_EFFECT_ID
+                    reply_markup: acquireButton
                   })
                 })
                 console.log(`Anúncio de pagamento enviado no grupo ${settings.group_chat_id}`)
