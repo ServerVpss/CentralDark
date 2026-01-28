@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
     }
 
     const proxyUrl = gateway.proxy_url || 'https://api.segredounlock.com/efi-generate-pix.php'
-    const txid = generateTxid()
+    const localTxid = generateTxid() // TXID local para enviar, a Efí pode retornar um diferente
     const cpf = generateValidCpf()
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutos
 
@@ -105,7 +105,7 @@ Deno.serve(async (req) => {
       client_id: config.client_id,
       client_secret: config.client_secret,
       pix_key: config.pix_key,
-      txid,
+      txid: localTxid,
       amount: Number(amount).toFixed(2),
       expiracao: 600, // 10 minutos em segundos
       devedor: {
@@ -136,7 +136,12 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Salvar transação no banco
+    // IMPORTANTE: Usar o TXID que a Efí retorna, não o que geramos!
+    // A Efí retorna o txid no campo data.txid
+    const efiTxid = proxyData.data?.txid || localTxid
+    console.log(`TXID local: ${localTxid}, TXID da Efí: ${efiTxid}`)
+
+    // Salvar transação no banco com o TXID da Efí
     const { data: transaction, error: txError } = await supabase
       .from('pix_transactions')
       .insert({
@@ -145,7 +150,7 @@ Deno.serve(async (req) => {
         bot_id,
         amount,
         gateway: 'efi',
-        external_id: txid,
+        external_id: efiTxid, // TXID da Efí
         loc_id: proxyData.data?.loc_id,
         qr_code_text: proxyData.data?.pixCopiaECola,
         qr_code_url: proxyData.data?.qrcode,
@@ -172,7 +177,7 @@ Deno.serve(async (req) => {
           user_id,
           bot_id,
           telegram_user_id,
-          txid,
+          txid: efiTxid, // TXID da Efí
           value: amount,
           plan_name: plan_name || 'Recarga',
           plan_code: plan_code || 'custom',
@@ -189,7 +194,7 @@ Deno.serve(async (req) => {
         success: true,
         data: {
           id: transaction.id,
-          txid,
+          txid: efiTxid, // Retornar o TXID da Efí
           amount,
           qr_code: proxyData.data?.pixCopiaECola,
           qr_code_image: proxyData.data?.qrcode,
