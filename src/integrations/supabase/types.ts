@@ -248,6 +248,10 @@ export type Database = {
           bot_id: string | null
           created_at: string
           custom_emojis: string[] | null
+          fake_engagement_enabled: boolean | null
+          fake_engagement_interval_minutes: number | null
+          fake_engagement_last_sent: string | null
+          fake_engagement_names: string[] | null
           fixed_emoji: string | null
           group_chat_id: number | null
           group_title: string | null
@@ -269,6 +273,10 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           custom_emojis?: string[] | null
+          fake_engagement_enabled?: boolean | null
+          fake_engagement_interval_minutes?: number | null
+          fake_engagement_last_sent?: string | null
+          fake_engagement_names?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
           group_title?: string | null
@@ -290,6 +298,10 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           custom_emojis?: string[] | null
+          fake_engagement_enabled?: boolean | null
+          fake_engagement_interval_minutes?: number | null
+          fake_engagement_last_sent?: string | null
+          fake_engagement_names?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
           group_title?: string | null

@@ -32,6 +32,7 @@ import { PaymentGatewaysGrid } from "@/components/payments/PaymentGatewaysGrid";
 import { TypingReactionsSettings } from "@/components/bots/TypingReactionsSettings";
 import { MessageEffectSettings } from "@/components/bots/MessageEffectSettings";
 import { BroadcastDialog } from "@/components/bots/BroadcastDialog";
+import { FakeEngagementSettings } from "@/components/bots/FakeEngagementSettings";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
 import { useBotSettings, MessageEffectType } from "@/hooks/useBotSettings";
@@ -483,6 +484,15 @@ export default function BotSettings() {
                 <MessageEffectSettings
                   messageEffect={messageEffect}
                   setMessageEffect={setMessageEffect}
+                />
+              </div>
+
+              {/* Fake Engagement Settings */}
+              <div className="lg:col-span-2">
+                <FakeEngagementSettings
+                  botId={botId || ""}
+                  settings={settings}
+                  onUpdate={() => {}}
                 />
               </div>
             </div>
