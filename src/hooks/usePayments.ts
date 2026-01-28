@@ -39,16 +39,17 @@ export interface PendingPayment {
   created_at: string;
 }
 
-export interface UserSubscription {
+export interface TelegramSubscription {
   id: string;
-  user_id: string;
+  telegram_user_id: number;
+  bot_id: string | null;
   plan_id: string | null;
   plan_code: string;
   plan_name: string;
   plan_days: number;
   txid: string | null;
   value: number;
-  status: string;
+  status: string | null;
   started_at: string;
   expires_at: string;
   created_at: string;
@@ -87,26 +88,20 @@ export function usePayments() {
     },
   });
 
-  // Fetch user's current subscription
-  const { data: currentSubscription, isLoading: loadingSubscription } = useQuery({
-    queryKey: ['user-subscription', user?.id],
+  // Fetch telegram subscriptions (active ones)
+  const { data: telegramSubscriptions = [], isLoading: loadingSubscription } = useQuery({
+    queryKey: ['telegram-subscriptions'],
     queryFn: async () => {
-      if (!user) return null;
-      
       const { data, error } = await supabase
-        .from('user_subscriptions')
+        .from('telegram_subscriptions')
         .select('*')
-        .eq('user_id', user.id)
         .eq('status', 'active')
         .gte('expires_at', new Date().toISOString())
-        .order('expires_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .order('expires_at', { ascending: false });
 
       if (error) throw error;
-      return data as UserSubscription | null;
+      return data as TelegramSubscription[];
     },
-    enabled: !!user,
   });
 
   // Fetch pending payments
@@ -186,7 +181,7 @@ export function usePayments() {
     onSuccess: (data) => {
       if (data.isPaid) {
         queryClient.invalidateQueries({ queryKey: ['pending-payments'] });
-        queryClient.invalidateQueries({ queryKey: ['user-subscription'] });
+        queryClient.invalidateQueries({ queryKey: ['telegram-subscriptions'] });
         toast.success('Pagamento confirmado! Assinatura ativada.');
       }
     },
@@ -297,6 +292,9 @@ export function usePayments() {
     },
   });
 
+  // Get current subscription for display (first active one)
+  const currentSubscription = telegramSubscriptions[0] || null;
+
   const isSubscriptionActive = currentSubscription && 
     new Date(currentSubscription.expires_at) > new Date();
 
@@ -307,6 +305,7 @@ export function usePayments() {
   return {
     plans,
     currentSubscription,
+    telegramSubscriptions,
     pendingPayments,
     gatewaySettings,
     isSubscriptionActive,

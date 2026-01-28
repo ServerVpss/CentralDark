@@ -3,7 +3,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   Bot,
-  Shield,
   Users,
   Settings,
   CreditCard,
@@ -13,7 +12,6 @@ import {
   Search,
   X,
   History,
-  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,12 +19,11 @@ import { supabase } from "@/integrations/supabase/client";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Bot, label: "Bot Config", path: "/bots" },
-  { icon: Users, label: "Usuários Telegram", path: "/telegram-users" },
+  { icon: Bot, label: "Meu Bot", path: "/bots" },
+  { icon: Users, label: "Usuários", path: "/telegram-users" },
   { icon: CreditCard, label: "Planos", path: "/plans" },
-  { icon: History, label: "Logs de Consultas", path: "/logs" },
-  { icon: Search, label: "Testar Consultas", path: "/consultas" },
-  { icon: Shield, label: "Segurança", path: "/security" },
+  { icon: History, label: "Consultas", path: "/logs" },
+  { icon: Search, label: "Testar", path: "/consultas" },
   { icon: Settings, label: "Configurações", path: "/settings" },
 ];
 

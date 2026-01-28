@@ -1,92 +1,20 @@
-import { useEffect, useState } from "react";
-import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
+import { Bot, CreditCard, MessageSquare, Users, Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { BotStatusCard } from "@/components/dashboard/BotStatusCard";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { QuickActions } from "@/components/dashboard/QuickActions";
-import { useTelegramBots } from "@/hooks/useTelegramBots";
-import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
-
-interface DashboardStats {
-  totalBots: number;
-  activeSubscribers: number;
-  messagesReceived: number;
-  monthlyRevenue: number;
-}
+import { useAdminData } from "@/hooks/useAdminData";
 
 export default function Index() {
-  const { bots, loading: botsLoading } = useTelegramBots();
-  const [stats, setStats] = useState<DashboardStats>({
-    totalBots: 0,
-    activeSubscribers: 0,
-    messagesReceived: 0,
-    monthlyRevenue: 0,
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        // Fetch active subscribers count
-        const { count: subscribersCount } = await supabase
-          .from("user_subscriptions")
-          .select("*", { count: "exact", head: true })
-          .eq("status", "active")
-          .gte("expires_at", new Date().toISOString());
-
-        // Fetch today's messages
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const { data: analyticsData } = await supabase
-          .from("bot_analytics")
-          .select("messages_received")
-          .gte("date", today.toISOString().split("T")[0]);
-
-        const totalMessages = analyticsData?.reduce(
-          (acc, item) => acc + (item.messages_received || 0),
-          0
-        ) || 0;
-
-        // Fetch monthly revenue
-        const monthStart = new Date();
-        monthStart.setDate(1);
-        monthStart.setHours(0, 0, 0, 0);
-        const { data: subscriptionsData } = await supabase
-          .from("user_subscriptions")
-          .select("value")
-          .gte("created_at", monthStart.toISOString());
-
-        const monthlyRevenue = subscriptionsData?.reduce(
-          (acc, item) => acc + Number(item.value || 0),
-          0
-        ) || 0;
-
-        setStats({
-          totalBots: bots.length,
-          activeSubscribers: subscribersCount || 0,
-          messagesReceived: totalMessages,
-          monthlyRevenue: monthlyRevenue,
-        });
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (!botsLoading) {
-      fetchStats();
-    }
-  }, [bots, botsLoading]);
+  const { bots, stats, loading } = useAdminData();
 
   const statsCards = [
     {
       title: "Total de Bots",
-      value: stats.totalBots,
-      change: stats.totalBots > 0 ? `${stats.totalBots} configurado(s)` : "Nenhum bot",
-      changeType: stats.totalBots > 0 ? ("positive" as const) : ("neutral" as const),
+      value: bots.length,
+      change: bots.length > 0 ? `${bots.length} configurado(s)` : "Nenhum bot",
+      changeType: bots.length > 0 ? ("positive" as const) : ("neutral" as const),
       icon: Bot,
     },
     {
@@ -97,10 +25,10 @@ export default function Index() {
       icon: Users,
     },
     {
-      title: "Mensagens Hoje",
-      value: stats.messagesReceived,
-      change: stats.messagesReceived > 0 ? "Mensagens recebidas" : "Nenhuma mensagem",
-      changeType: stats.messagesReceived > 0 ? ("positive" as const) : ("neutral" as const),
+      title: "Consultas Hoje",
+      value: stats.queriesToday,
+      change: stats.queriesToday > 0 ? "Consultas realizadas" : "Nenhuma consulta",
+      changeType: stats.queriesToday > 0 ? ("positive" as const) : ("neutral" as const),
       icon: MessageSquare,
     },
     {
@@ -112,7 +40,7 @@ export default function Index() {
     },
   ];
 
-  if (loading || botsLoading) {
+  if (loading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-64">
@@ -192,7 +120,7 @@ export default function Index() {
             <ActivityFeed />
           </div>
 
-          {/* Gamification Preview */}
+          {/* System Status */}
           <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="mb-4 text-lg font-semibold">Status do Sistema</h2>
             <div className="text-center">
@@ -225,20 +153,20 @@ export default function Index() {
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">
                 {bots.length > 0
-                  ? `${bots.filter((b) => b.health_status === "online").length} bot(s) online`
+                  ? `${stats.botsOnline} bot(s) online`
                   : "Configure seu primeiro bot"}
               </p>
               <div className="mt-4 h-2 w-full rounded-full bg-secondary">
                 <div
                   className="h-2 rounded-full bg-gradient-to-r from-primary to-accent transition-all"
                   style={{
-                    width: `${bots.length > 0 ? (bots.filter((b) => b.health_status === "online").length / bots.length) * 100 : 0}%`,
+                    width: `${bots.length > 0 ? (stats.botsOnline / bots.length) * 100 : 0}%`,
                   }}
                 />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
                 {bots.length > 0
-                  ? `${Math.round((bots.filter((b) => b.health_status === "online").length / bots.length) * 100)}% online`
+                  ? `${Math.round((stats.botsOnline / bots.length) * 100)}% online`
                   : "0% ativo"}
               </p>
             </div>

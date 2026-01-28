@@ -375,13 +375,6 @@ export type Database = {
             referencedRelation: "subscription_plans"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "payment_history_subscription_id_fkey"
-            columns: ["subscription_id"]
-            isOneToOne: false
-            referencedRelation: "user_subscriptions"
-            referencedColumns: ["id"]
-          },
         ]
       }
       pending_payments: {
@@ -815,59 +808,6 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
-      }
-      user_subscriptions: {
-        Row: {
-          created_at: string
-          expires_at: string
-          id: string
-          plan_code: string
-          plan_days: number
-          plan_id: string | null
-          plan_name: string
-          started_at: string
-          status: string | null
-          txid: string | null
-          user_id: string
-          value: number
-        }
-        Insert: {
-          created_at?: string
-          expires_at: string
-          id?: string
-          plan_code: string
-          plan_days: number
-          plan_id?: string | null
-          plan_name: string
-          started_at?: string
-          status?: string | null
-          txid?: string | null
-          user_id: string
-          value: number
-        }
-        Update: {
-          created_at?: string
-          expires_at?: string
-          id?: string
-          plan_code?: string
-          plan_days?: number
-          plan_id?: string | null
-          plan_name?: string
-          started_at?: string
-          status?: string | null
-          txid?: string | null
-          user_id?: string
-          value?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_subscriptions_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "subscription_plans"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {
