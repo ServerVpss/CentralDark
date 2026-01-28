@@ -167,6 +167,22 @@ function keyboard(...rows: InlineButton[][]) {
 async function telegramRequest(token: string, method: string, body?: Record<string, unknown>): Promise<{ ok: boolean; result?: unknown; description?: string }> {
   const url = `${TELEGRAM_API}${token}/${method}`;
   console.log(`Telegram API: ${method}`);
+
+  const stripMessageEffect = (payload?: Record<string, unknown>) => {
+    if (!payload) return payload;
+    if (payload.message_effect_id === undefined) return payload;
+    const { message_effect_id: _ignored, ...rest } = payload;
+    return rest;
+  };
+
+  const shouldRetryWithoutEffect = (data: any) => {
+    const desc = String(data?.description || "");
+    return (
+      desc.includes("EFFECT_ID_INVALID") ||
+      desc.includes("can't use message effects") ||
+      desc.includes("can't use message effect")
+    );
+  };
   
   try {
     // Telegram não aceita dataURL (data:image/...base64) em JSON no sendPhoto.
@@ -206,6 +222,23 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
       body: JSON.stringify(body),
     });
     const data = await response.json();
+
+    // Fallback: se o efeito não for suportado/for inválido, reenviar sem message_effect_id
+    if (!data.ok && body?.message_effect_id !== undefined && shouldRetryWithoutEffect(data)) {
+      console.warn(`Telegram effect failed (${data?.description}); retrying without message_effect_id`);
+      const retryBody = stripMessageEffect(body);
+      const retryRes = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(retryBody),
+      });
+      const retryData = await retryRes.json();
+      if (!retryData.ok) {
+        console.error(`Telegram API error for ${method} (retry):`, JSON.stringify(retryData));
+      }
+      return retryData;
+    }
+
     if (!data.ok) {
       console.error(`Telegram API error for ${method}:`, JSON.stringify(data));
     }
