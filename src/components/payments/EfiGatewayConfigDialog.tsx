@@ -105,24 +105,39 @@ export function EfiGatewayConfigDialog({ open, onOpenChange }: EfiGatewayConfigD
 
   const handleRegisterWebhook = async () => {
     setIsRegistering(true);
+    
+    const webhookUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/efi-webhook`;
+    
+    const attemptRegister = async (attempt: number): Promise<{ data: unknown; error: unknown }> => {
+      try {
+        const { data, error } = await supabase.functions.invoke("efi-register-webhook", {
+          body: { webhook_url: webhookUrl },
+        });
+        return { data, error };
+      } catch (err) {
+        if (attempt < 2) {
+          console.log(`Tentativa ${attempt + 1} falhou, tentando novamente...`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return attemptRegister(attempt + 1);
+        }
+        throw err;
+      }
+    };
+    
     try {
-      // URL do webhook do projeto
-      const webhookUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/efi-webhook`;
-      
-      const { data, error } = await supabase.functions.invoke("efi-register-webhook", {
-        body: { webhook_url: webhookUrl },
-      });
+      const { data, error } = await attemptRegister(0);
 
       if (error) throw error;
 
-      if (data?.success) {
-        toast.success(`Webhook registrado: ${data.webhook_url}`);
+      const result = data as { success?: boolean; error?: string; webhook_url?: string };
+      if (result?.success) {
+        toast.success(`Webhook registrado: ${result.webhook_url}`);
       } else {
-        toast.error(data?.error || "Erro ao registrar webhook");
+        toast.error(result?.error || "Erro ao registrar webhook");
       }
     } catch (error) {
       console.error("Register webhook error:", error);
-      toast.error("Erro ao registrar webhook");
+      toast.error("Erro ao registrar webhook. Verifique sua conexão e tente novamente.");
     } finally {
       setIsRegistering(false);
     }
