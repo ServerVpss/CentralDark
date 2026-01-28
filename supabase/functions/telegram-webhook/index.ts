@@ -8,8 +8,14 @@ const corsHeaders = {
 
 const TELEGRAM_API = "https://api.telegram.org/bot";
 
-// Efeitos visuais do Telegram
-const CONFETTI_EFFECT_ID = '5046509860385561286';
+// Efeitos visuais do Telegram (IDs oficiais válidos)
+// 🔥 Fire: 5104841245755180586
+// 👍 Like: 5107584321108051014  
+// 👎 Dislike: 5104858069142078462
+// ❤️ Heart: 5159385139981059251
+// 🎉 Party: 5046509860389126442
+// 💩 Poop: 5046589136895476101
+const CONFETTI_EFFECT_ID = '5046509860389126442'; // 🎉 Party/Confetti
 
 // =============== TYPES ===============
 interface TelegramUser {
