@@ -5,6 +5,17 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Helper para obter username do bot
+async function getBotUsername(token: string): Promise<string | null> {
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/getMe`)
+    const data = await res.json()
+    return data.result?.username || null
+  } catch {
+    return null
+  }
+}
+
 Deno.serve(async (req) => {
   // Permitir GET para verificação de saúde do webhook
   if (req.method === 'GET') {
@@ -318,6 +329,14 @@ Deno.serve(async (req) => {
                   `💰 Valor: *R$ ${Number(transaction.amount).toFixed(2)}*\n\n` +
                   `🚀 Bem-vindo(a) à família! 🎊`
                 
+                // Botão para adquirir VIP (link para o bot no privado)
+                const botUsername = bot.token ? await getBotUsername(bot.token) : null
+                const acquireButton = botUsername ? {
+                  inline_keyboard: [[
+                    { text: '💎 ADQUIRIR VIP', url: `https://t.me/${botUsername}?start=planos` }
+                  ]]
+                } : undefined
+                
                 await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
@@ -325,6 +344,7 @@ Deno.serve(async (req) => {
                     chat_id: settings.group_chat_id,
                     text: groupMessage,
                     parse_mode: 'Markdown',
+                    reply_markup: acquireButton,
                     message_effect_id: CONFETTI_EFFECT_ID
                   })
                 })
