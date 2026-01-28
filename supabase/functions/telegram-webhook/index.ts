@@ -1370,6 +1370,7 @@ class BotHandler {
           .update({ 
             group_chat_id: chatId,
             group_url: groupUrl,
+            group_title: groupTitle,
           })
           .eq("bot_id", this.bot.id);
         

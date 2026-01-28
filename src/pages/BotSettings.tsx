@@ -271,33 +271,84 @@ export default function BotSettings() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="groupChatId">ID do Grupo</Label>
-                    <Input
-                      id="groupChatId"
-                      placeholder="-1001234567890"
-                      value={groupChatId}
-                      onChange={(e) => setGroupChatId(e.target.value)}
-                      className="bg-secondary/50 font-mono"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      ID do chat do grupo (número negativo começando com -100)
-                    </p>
-                  </div>
+                  {/* Show detected group info */}
+                  {settings?.group_title && settings?.group_chat_id && (
+                    <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+                            <Users className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-foreground">{settings.group_title}</p>
+                            <p className="text-xs text-muted-foreground font-mono">{settings.group_chat_id}</p>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-green-500 border-green-500/50">
+                          Conectado
+                        </Badge>
+                      </div>
+                      {settings.group_url && (
+                        <a 
+                          href={settings.group_url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-primary hover:underline"
+                        >
+                          {settings.group_url}
+                        </a>
+                      )}
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="w-full mt-2 text-destructive hover:text-destructive"
+                        onClick={() => {
+                          setGroupChatId("");
+                          setGroupUrl("");
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Desconectar Grupo
+                      </Button>
+                    </div>
+                  )}
 
-                  <div className="space-y-2">
-                    <Label htmlFor="groupUrl">Link do Grupo</Label>
-                    <Input
-                      id="groupUrl"
-                      placeholder="https://t.me/+ABC123xyz"
-                      value={groupUrl}
-                      onChange={(e) => setGroupUrl(e.target.value)}
-                      className="bg-secondary/50"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Link de convite para o grupo VIP (será enviado após pagamento)
-                    </p>
-                  </div>
+                  {/* Manual configuration (hidden when group is detected) */}
+                  {!settings?.group_title && (
+                    <>
+                      <div className="p-4 rounded-lg bg-secondary/50 border border-dashed border-muted-foreground/30">
+                        <p className="text-sm text-muted-foreground text-center">
+                          📍 <strong>Detecção Automática:</strong> Adicione o bot ao grupo desejado e envie uma mensagem. O grupo será detectado automaticamente!
+                        </p>
+                      </div>
+
+                      <Separator />
+
+                      <p className="text-xs text-muted-foreground text-center">Ou configure manualmente:</p>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="groupChatId">ID do Grupo</Label>
+                        <Input
+                          id="groupChatId"
+                          placeholder="-1001234567890"
+                          value={groupChatId}
+                          onChange={(e) => setGroupChatId(e.target.value)}
+                          className="bg-secondary/50 font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="groupUrl">Link do Grupo</Label>
+                        <Input
+                          id="groupUrl"
+                          placeholder="https://t.me/+ABC123xyz"
+                          value={groupUrl}
+                          onChange={(e) => setGroupUrl(e.target.value)}
+                          className="bg-secondary/50"
+                        />
+                      </div>
+                    </>
+                  )}
 
                   <Separator />
 
@@ -305,10 +356,10 @@ export default function BotSettings() {
                     <div className="space-y-0.5">
                       <Label className="flex items-center gap-2">
                         <VolumeX className="h-4 w-4" />
-                        Mutar novos membros
+                        Fiscal de Grupo
                       </Label>
                       <p className="text-xs text-muted-foreground">
-                        Novos membros são silenciados até confirmar pagamento
+                        Mutar usuários sem assinatura ativa no grupo
                       </p>
                     </div>
                     <Switch
