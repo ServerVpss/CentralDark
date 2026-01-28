@@ -9,13 +9,19 @@ const corsHeaders = {
 const TELEGRAM_API = "https://api.telegram.org/bot";
 
 // Efeitos visuais do Telegram (IDs oficiais válidos)
-// 🔥 Fire: 5104841245755180586
-// 👍 Like: 5107584321108051014  
-// 👎 Dislike: 5104858069142078462
-// ❤️ Heart: 5159385139981059251
-// 🎉 Party: 5046509860389126442
-// 💩 Poop: 5046589136895476101
-const CONFETTI_EFFECT_ID = '5046509860389126442'; // 🎉 Party/Confetti
+const MESSAGE_EFFECTS: Record<string, string> = {
+  fire: '5104841245755180586',   // 🔥
+  like: '5107584321108051014',   // 👍
+  heart: '5159385139981059251',  // ❤️
+  party: '5046509860389126442',  // 🎉
+  none: '',                       // Sem efeito
+};
+
+// Função para obter o effect_id baseado na configuração
+function getMessageEffectId(effectType: string | null | undefined): string | undefined {
+  if (!effectType || effectType === 'none') return undefined;
+  return MESSAGE_EFFECTS[effectType] || MESSAGE_EFFECTS.party;
+}
 
 // =============== TYPES ===============
 interface TelegramUser {
@@ -91,6 +97,8 @@ interface BotSettings {
   reaction_mode: string | null; // 'fixed' ou 'random'
   fixed_emoji: string | null;
   custom_emojis: string[] | null;
+  // Efeito visual nas mensagens
+  message_effect: string | null; // 'fire', 'like', 'heart', 'party', 'none'
 }
 
 interface Plan {
@@ -1386,13 +1394,16 @@ class BotHandler {
 
       let resultMessageId: number | undefined;
       
+      // Obter o efeito configurado para este bot
+      const effectId = getMessageEffectId(this.settings.message_effect);
+
       if (isValidPhotoUrl) {
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
           parse_mode: "HTML",
-          message_effect_id: CONFETTI_EFFECT_ID,
+          ...(effectId && { message_effect_id: effectId }),
           reply_markup: keyboard(
             [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
             [btn("🗑️ Apagar", "delete_msg")]
@@ -1403,7 +1414,7 @@ class BotHandler {
         }
       } else {
         // Usar paginação por botões para resultados longos
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, CONFETTI_EFFECT_ID);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -1867,15 +1878,22 @@ class BotHandler {
     buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
     buttons.push([btn("🏠 Menu Principal", "menu:main")]);
 
-    await sendMessage(this.token, chatId,
-      `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
-      `📦 Plano: <b>${planName}</b>\n` +
-      `💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
-      `📅 Válido até: <b>${formatDate(expiresAt)}</b>\n\n` +
-      `🎫 TXID: <code>${txid}</code>\n\n` +
-      `${this.settings.group_chat_id ? "🚪 <b>Seu acesso foi liberado no grupo!</b>" : "✅ <b>Assinatura ativada com sucesso!</b>"}`,
-      keyboard(...buttons)
-    );
+    // Obter o efeito configurado para este bot
+    const effectId = getMessageEffectId(this.settings.message_effect);
+
+    // Enviar mensagem de confirmação com efeito visual
+    await telegramRequest(this.token, "sendMessage", {
+      chat_id: chatId,
+      text: `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
+        `📦 Plano: <b>${planName}</b>\n` +
+        `💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
+        `📅 Válido até: <b>${formatDate(expiresAt)}</b>\n\n` +
+        `🎫 TXID: <code>${txid}</code>\n\n` +
+        `${this.settings.group_chat_id ? "🚪 <b>Seu acesso foi liberado no grupo!</b>" : "✅ <b>Assinatura ativada com sucesso!</b>"}`,
+      parse_mode: "HTML",
+      ...(effectId && { message_effect_id: effectId }),
+      reply_markup: keyboard(...buttons),
+    });
 
     if (this.settings.group_chat_id && this.settings.announce_payments) {
       try {
@@ -2915,6 +2933,7 @@ serve(async (req) => {
       reaction_mode: (settings as { reaction_mode?: string } | null)?.reaction_mode || 'random',
       fixed_emoji: (settings as { fixed_emoji?: string } | null)?.fixed_emoji || '👍',
       custom_emojis: (settings as { custom_emojis?: string[] } | null)?.custom_emojis || ['👍', '❤️', '🔥', '🎉', '👏'],
+      message_effect: (settings as { message_effect?: string } | null)?.message_effect || 'party',
     };
 
     const update: TelegramUpdate = await req.json();

@@ -30,10 +30,11 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PaymentGatewaysGrid } from "@/components/payments/PaymentGatewaysGrid";
 import { TypingReactionsSettings } from "@/components/bots/TypingReactionsSettings";
+import { MessageEffectSettings } from "@/components/bots/MessageEffectSettings";
 import { BroadcastDialog } from "@/components/bots/BroadcastDialog";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
-import { useBotSettings } from "@/hooks/useBotSettings";
+import { useBotSettings, MessageEffectType } from "@/hooks/useBotSettings";
 
 export default function BotSettings() {
   const { botId } = useParams<{ botId: string }>();
@@ -60,6 +61,7 @@ export default function BotSettings() {
   const [fixedEmoji, setFixedEmoji] = useState("👍");
   const [customEmojis, setCustomEmojis] = useState<string[]>([]);
   const [announcePayments, setAnnouncePayments] = useState(true);
+  const [messageEffect, setMessageEffect] = useState<MessageEffectType>("party");
   
   // Broadcast dialog state
   const [broadcastOpen, setBroadcastOpen] = useState(false);
@@ -92,6 +94,7 @@ export default function BotSettings() {
       setReactionMode((settings.reaction_mode as "fixed" | "random") ?? "random");
       setFixedEmoji(settings.fixed_emoji ?? "👍");
       setCustomEmojis(settings.custom_emojis ?? []);
+      setMessageEffect((settings.message_effect as MessageEffectType) ?? "party");
     }
   }, [settings, defaultTerms]);
 
@@ -111,6 +114,7 @@ export default function BotSettings() {
       reaction_mode: reactionMode,
       fixed_emoji: fixedEmoji,
       custom_emojis: customEmojis,
+      message_effect: messageEffect,
     });
 
     setSaving(false);
@@ -471,6 +475,14 @@ export default function BotSettings() {
                   setFixedEmoji={setFixedEmoji}
                   customEmojis={customEmojis}
                   setCustomEmojis={setCustomEmojis}
+                />
+              </div>
+
+              {/* Message Effect Settings */}
+              <div className="lg:col-span-2">
+                <MessageEffectSettings
+                  messageEffect={messageEffect}
+                  setMessageEffect={setMessageEffect}
                 />
               </div>
             </div>

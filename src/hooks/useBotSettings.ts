@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+export type MessageEffectType = 'fire' | 'like' | 'heart' | 'party' | 'none';
+
 export interface BotSettings {
   id: string;
   bot_id: string;
@@ -19,6 +21,7 @@ export interface BotSettings {
   reaction_mode: string;
   fixed_emoji: string;
   custom_emojis: string[];
+  message_effect: MessageEffectType;
   created_at: string;
   updated_at: string;
 }
