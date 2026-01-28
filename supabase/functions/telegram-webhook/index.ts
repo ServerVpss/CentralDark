@@ -1356,10 +1356,42 @@ class BotHandler {
         }
       }
 
+      // FISCAL DE GRUPO: Check if user can send messages in configured group
+      const isConfiguredGroup = this.settings.group_chat_id && chatId === this.settings.group_chat_id;
+      const isOwner = this.isOwner(telegramUserId);
+      
+      if (isConfiguredGroup && this.settings.mute_new_members && !isOwner) {
+        const isActive = await this.isSubscriptionActive(telegramUserId);
+        
+        if (!isActive) {
+          // Mute user who doesn't have active subscription
+          await telegramRequest(this.token, "restrictChatMember", {
+            chat_id: chatId,
+            user_id: telegramUserId,
+            permissions: { can_send_messages: false },
+          });
+          
+          // Delete their message
+          await deleteMessage(this.token, chatId, message.message_id);
+          
+          // Notify user
+          const display = message.from?.username ? `@${message.from.username}` : message.from?.first_name || "Usuário";
+          await sendMessage(this.token, chatId,
+            `🚫 <b>FISCAL</b>\n\n` +
+            `${display}, você foi mutado por não ter assinatura ativa.\n\n` +
+            `Clique no botão abaixo para assinar e liberar seu acesso:`,
+            keyboard([btnUrl("🛒 Assinar Agora", `https://t.me/${this.bot.bot_username}?start=assinar`)])
+          );
+          
+          console.log(`FISCAL: User ${telegramUserId} muted for not having active subscription`);
+          return;
+        }
+      }
+
       // Process commands in group for owners and subscribers
       if (text.startsWith("/")) {
         const isActive = await this.isSubscriptionActive(telegramUserId);
-        const canQuery = this.isOwner(telegramUserId) || isActive;
+        const canQuery = isOwner || isActive;
 
         if (canQuery) {
           await this.handleGroupCommand(message, text);
