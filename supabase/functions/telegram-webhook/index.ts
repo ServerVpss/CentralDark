@@ -486,28 +486,80 @@ function parseDataString(dataStr: string): Record<string, unknown> {
     .replace(/https?:\/\/t\.me\/[^\s]+/gi, '')
     .trim();
   
-  // Extrair pares CHAVE: valor (formato comum da API)
   const lines = cleaned.split('\n');
+  let currentListKey: string | null = null;
+  let currentList: string[] = [];
+  
+  const saveCurrentList = () => {
+    if (currentListKey && currentList.length > 0) {
+      result[currentListKey] = currentList.join('\n');
+      currentList = [];
+    }
+    currentListKey = null;
+  };
   
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
     
     // Ignorar linhas de seção ou cabeçalho
-    if (trimmed.match(/^(BASE \d+|RESULTADOS|---)/i)) continue;
-    if (trimmed.match(/^[=\-_*]+$/)) continue; // Linhas de separação
+    if (trimmed.match(/^(BASE \d+|RESULTADOS|---)/i)) {
+      saveCurrentList();
+      continue;
+    }
+    if (trimmed.match(/^[=\-_*]+$/)) continue;
     
-    // Extrair CHAVE: VALOR ou CHAVE ⎯ VALOR (suporta separadores : ⎯ -)
-    const match = trimmed.match(/^([A-ZÀ-Ú\s_]+)(?::|⎯|-)\s*(.+)$/i);
+    // Detectar linha de lista com marcador •
+    if (trimmed.startsWith('•')) {
+      const itemValue = trimmed.substring(1).trim();
+      if (itemValue) {
+        currentList.push(itemValue);
+      }
+      continue;
+    }
+    
+    // Detectar linha de lista com marcador - (mas não linhas de separação)
+    if (trimmed.startsWith('-') && !trimmed.match(/^-+$/)) {
+      const itemValue = trimmed.substring(1).trim();
+      if (itemValue && !itemValue.match(/^[\-=_]+$/)) {
+        currentList.push(itemValue);
+      }
+      continue;
+    }
+    
+    // Extrair CHAVE: VALOR (aceita chaves com ou sem espaço antes do separador)
+    const match = trimmed.match(/^([A-ZÀ-Úa-zà-ú\s_]+?)\s*(?::|⎯|—|-)\s*(.*)$/i);
     if (match) {
+      saveCurrentList(); // Salvar lista anterior se houver
+      
       const key = match[1].trim().toLowerCase().replace(/\s+/g, '_');
       const value = match[2].trim();
-      // Ignorar valores vazios, placeholders ou muito curtos
-      if (value && value !== '-' && value !== '--' && value.length > 0) {
+      
+      // Se o valor indica uma lista (ex: "( 5 - Encontrados)"), preparar para coletar itens
+      if (value.match(/\(\s*\d+\s*-\s*Encontrados?\s*\)/i)) {
+        currentListKey = key;
+        currentList = [];
+        continue;
+      }
+      
+      // Ignorar valores vazios ou placeholders
+      if (!value || value === '-' || value === '--') continue;
+      
+      // Se a chave já existe, converter para array ou adicionar
+      if (result[key] !== undefined) {
+        if (Array.isArray(result[key])) {
+          (result[key] as string[]).push(value);
+        } else {
+          result[key] = [result[key] as string, value];
+        }
+      } else {
         result[key] = value;
       }
     }
   }
+  
+  // Salvar última lista pendente
+  saveCurrentList();
   
   return result;
 }
