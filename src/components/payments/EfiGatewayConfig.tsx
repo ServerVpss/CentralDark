@@ -43,7 +43,7 @@ interface EfiConfig {
 }
 
 export function EfiGatewayConfig() {
-  const { gatewaySettings, updateGatewaySettings, loadingSettings } = usePayments();
+  const { efiGateway, updateEfiGateway, loadingEfiGateway } = usePayments();
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -63,18 +63,19 @@ export function EfiGatewayConfig() {
   });
 
   useEffect(() => {
-    if (gatewaySettings) {
+    if (efiGateway) {
+      const gatewayConfig = efiGateway.config as { client_id?: string; client_secret?: string; pix_key?: string } || {};
       setConfig({
-        display_name: "EFI (Gerencianet) PIX",
-        min_deposit: 2,
-        client_id: gatewaySettings.pix_key?.includes("Client_Id") ? gatewaySettings.pix_key : "",
-        client_secret: "",
-        pix_key: gatewaySettings.pix_key || "",
+        display_name: efiGateway.name || "EFI (Gerencianet) PIX",
+        min_deposit: efiGateway.min_deposit || 2,
+        client_id: gatewayConfig.client_id || "",
+        client_secret: gatewayConfig.client_secret || "",
+        pix_key: gatewayConfig.pix_key || "",
         certificate_name: "cert.p12",
-        is_active: gatewaySettings.gateway_type === "efi",
+        is_active: efiGateway.is_active || false,
       });
     }
-  }, [gatewaySettings]);
+  }, [efiGateway]);
 
   const handleCertificateUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -119,11 +120,6 @@ export function EfiGatewayConfig() {
       
       if (data?.success) {
         toast.success("Webhook registrado com sucesso!");
-        if (data.webhook_url) {
-          await updateGatewaySettings.mutateAsync({
-            webhook_url: data.webhook_url,
-          });
-        }
       } else {
         toast.error(data?.error || "Erro ao registrar webhook");
       }
@@ -136,13 +132,19 @@ export function EfiGatewayConfig() {
   };
 
   const handleSave = async () => {
+    if (!config.client_id || !config.client_secret || !config.pix_key) {
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+    
     setIsSaving(true);
     try {
-      await updateGatewaySettings.mutateAsync({
-        gateway_type: "efi",
+      await updateEfiGateway.mutateAsync({
+        client_id: config.client_id,
+        client_secret: config.client_secret,
         pix_key: config.pix_key,
-        auto_approve: true,
-        notification_enabled: true,
+        min_deposit: config.min_deposit,
+        is_active: config.is_active,
       });
       setIsConfigOpen(false);
     } catch (error) {
@@ -153,18 +155,31 @@ export function EfiGatewayConfig() {
   };
 
   const handleToggleActive = async (checked: boolean) => {
+    if (!efiGateway && checked) {
+      toast.error("Configure as credenciais antes de ativar");
+      setIsConfigOpen(true);
+      return;
+    }
+    
     setConfig({ ...config, is_active: checked });
-    try {
-      await updateGatewaySettings.mutateAsync({
-        gateway_type: checked ? "efi" : "",
-      });
-      toast.success(checked ? "Gateway ativado!" : "Gateway desativado!");
-    } catch (error) {
-      setConfig({ ...config, is_active: !checked });
+    
+    if (efiGateway) {
+      try {
+        const gatewayConfig = efiGateway.config as { client_id?: string; client_secret?: string; pix_key?: string } || {};
+        await updateEfiGateway.mutateAsync({
+          client_id: gatewayConfig.client_id || config.client_id,
+          client_secret: gatewayConfig.client_secret || config.client_secret,
+          pix_key: gatewayConfig.pix_key || config.pix_key,
+          is_active: checked,
+        });
+        toast.success(checked ? "Gateway ativado!" : "Gateway desativado!");
+      } catch (error) {
+        setConfig({ ...config, is_active: !checked });
+      }
     }
   };
 
-  if (loadingSettings) {
+  if (loadingEfiGateway) {
     return (
       <Card className="bg-card border-border">
         <CardContent className="flex items-center justify-center py-12">

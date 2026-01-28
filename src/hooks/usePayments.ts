@@ -68,6 +68,23 @@ export interface PaymentGatewaySettings {
   updated_at: string;
 }
 
+export interface EfiGatewayConfig {
+  id: string;
+  user_id: string;
+  name: string;
+  gateway_type: string;
+  config: {
+    client_id: string;
+    client_secret: string;
+    pix_key: string;
+  };
+  proxy_url: string | null;
+  min_deposit: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export function usePayments() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -138,6 +155,25 @@ export function usePayments() {
 
       if (error) throw error;
       return data as PaymentGatewaySettings | null;
+    },
+    enabled: !!user,
+  });
+
+  // Fetch EFI gateway config (from payment_gateways table)
+  const { data: efiGateway, isLoading: loadingEfiGateway } = useQuery({
+    queryKey: ['efi-gateway', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      
+      const { data, error } = await supabase
+        .from('payment_gateways')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('gateway_type', 'efi')
+        .maybeSingle();
+
+      if (error && error.code !== 'PGRST116') throw error;
+      return data as EfiGatewayConfig | null;
     },
     enabled: !!user,
   });
@@ -220,6 +256,61 @@ export function usePayments() {
     },
     onError: (error: Error) => {
       toast.error(`Erro ao salvar: ${error.message}`);
+    },
+  });
+
+  // Update EFI gateway config
+  const updateEfiGateway = useMutation({
+    mutationFn: async (config: { 
+      client_id: string; 
+      client_secret: string; 
+      pix_key: string;
+      min_deposit?: number;
+      is_active?: boolean;
+      proxy_url?: string;
+    }) => {
+      if (!user) throw new Error('Não autenticado');
+      
+      const { data: existing } = await supabase
+        .from('payment_gateways')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('gateway_type', 'efi')
+        .maybeSingle();
+
+      const gatewayData = {
+        name: 'EFI (Gerencianet) PIX',
+        gateway_type: 'efi',
+        config: {
+          client_id: config.client_id,
+          client_secret: config.client_secret,
+          pix_key: config.pix_key,
+        },
+        min_deposit: config.min_deposit ?? 2,
+        is_active: config.is_active ?? true,
+        proxy_url: config.proxy_url ?? 'https://api.segredounlock.com/efi-generate-pix.php',
+        user_id: user.id,
+      };
+
+      if (existing) {
+        const { error } = await supabase
+          .from('payment_gateways')
+          .update(gatewayData)
+          .eq('id', existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('payment_gateways')
+          .insert(gatewayData);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['efi-gateway'] });
+      toast.success('Gateway EFI configurado com sucesso!');
+    },
+    onError: (error: Error) => {
+      toast.error(`Erro ao salvar gateway: ${error.message}`);
     },
   });
 
@@ -308,6 +399,7 @@ export function usePayments() {
     telegramSubscriptions,
     pendingPayments,
     gatewaySettings,
+    efiGateway,
     isSubscriptionActive,
     daysRemaining,
     isProcessing,
@@ -315,9 +407,11 @@ export function usePayments() {
     loadingSubscription,
     loadingPending,
     loadingSettings,
+    loadingEfiGateway,
     createPixPayment,
     checkPaymentStatus,
     updateGatewaySettings,
+    updateEfiGateway,
     updatePlan,
     createPlan,
     deletePlan,
