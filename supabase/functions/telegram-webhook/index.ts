@@ -867,7 +867,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `  ▷ <b>${displayKey}:</b> ${displayValue}\n`;
+        text += `  ▷ <code>${displayKey}:</code> ${displayValue}\n`;
       }
     }
     
@@ -883,7 +883,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `  ▷ <b>${displayKey}:</b> ${displayValue}\n`;
+        text += `  ▷ <code>${displayKey}:</code> ${displayValue}\n`;
       }
     }
     
