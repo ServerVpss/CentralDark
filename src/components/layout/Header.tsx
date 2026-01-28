@@ -34,9 +34,9 @@ export function Header({ className }: HeaderProps) {
       background: "linear-gradient(to right, hsl(220 20% 5% / 0.95), hsl(220 20% 6% / 0.95))",
       backdropFilter: "blur(16px) saturate(180%)",
     }}>
-      <div className="flex h-full items-center px-4 lg:px-6 gap-4">
-        {/* Search */}
-        <div className="relative w-full max-w-md group">
+      <div className="flex h-full items-center px-4 lg:px-6">
+        {/* Search - fixed width */}
+        <div className="relative max-w-md w-80 lg:w-96 group flex-shrink-0">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             placeholder="Buscar bots, assinantes, configurações..."
@@ -44,11 +44,11 @@ export function Header({ className }: HeaderProps) {
           />
         </div>
 
-        {/* Spacer */}
-        <div className="flex-1" />
+        {/* Spacer - pushes actions to right */}
+        <div className="flex-1 min-w-4" />
 
-        {/* Actions */}
-        <div className="flex items-center gap-2">
+        {/* Actions - aligned right */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Notifications */}
           <Button 
             variant="ghost" 
