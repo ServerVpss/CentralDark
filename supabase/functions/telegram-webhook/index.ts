@@ -405,41 +405,30 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
     let foundNome: unknown = null;
     let foundEstado: string | null = null;
     
-    // OTIMIZAÇÃO: Aumentar batch size para 9 (27/9 = 3 batches = ~10-15s)
-    const batchSize = 9;
-    for (let i = 0; i < brazilianStates.length; i += batchSize) {
-      const batch = brazilianStates.slice(i, i + batchSize);
-      const batchResults = await Promise.all(
-        batch.map(async (state) => {
-          // OTIMIZAÇÃO: Timeout de 8s por estado para dar tempo à API TConect
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 8000);
-          
-          try {
-            const result = await fetchFromProviderWithTimeout(
-              providers.tconect_foto,
-              "/foto",
-              "cpf",
-              cleanInput,
-              { estado: state },
-              controller.signal
-            );
-            clearTimeout(timeoutId);
-            return { state, result };
-          } catch (err) {
-            clearTimeout(timeoutId);
-            console.log(`Timeout or error for state ${state}:`, (err as Error).message);
-            return { state, result: { error: "timeout", notFound: true } };
-          }
-        })
-      );
+    // BUSCA SEQUENCIAL: Um estado por vez com timeout maior (25s) para dar tempo à API
+    // Estados prioritários já definidos em brazilianStates
+    for (const state of brazilianStates) {
+      console.log(`Searching photo in ${state}...`);
       
-      for (const { state, result } of batchResults) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 segundos de timeout
+      
+      try {
+        const result = await fetchFromProviderWithTimeout(
+          providers.tconect_foto,
+          "/foto",
+          "cpf",
+          cleanInput,
+          { estado: state },
+          controller.signal
+        );
+        clearTimeout(timeoutId);
+        
         // LOG: Ver o que a API TConect retorna para debug
         console.log(`Foto result for ${state}:`, JSON.stringify(result).substring(0, 500));
         
-        // Verificar múltiplos campos possíveis para a foto (incluindo fotoBase64)
-        let fotoData = result?.foto || result?.image || result?.url || result?.photo || result?.fotoBase64;
+        // Verificar múltiplos campos possíveis para a foto
+        let fotoData = result?.foto || result?.image || result?.url || result?.photo || result?.fotoBase64 || result?.base64;
         
         // Se é Base64 puro (começa com /9j/ para JPEG ou iVBOR para PNG), adicionar prefixo
         if (fotoData && typeof fotoData === 'string') {
@@ -448,38 +437,39 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
           }
         }
         
-        if (result && !result.error && fotoData) {
+        if (result && !result.error && !result.notFound && fotoData) {
           // Normalizar o campo foto no resultado
           results[state] = { ...result, foto: fotoData };
-          // Keep the first photo found for quick response
-          if (!foundFoto) {
-            foundFoto = fotoData;
-            foundNome = result.nome;
-            foundEstado = state;
-            console.log(`Photo found in ${state}, URL: ${String(fotoData).substring(0, 100)}`);
-          }
+          foundFoto = fotoData;
+          foundNome = result.nome;
+          foundEstado = state;
+          console.log(`Photo found in ${state}! Stopping search.`);
+          break; // Encontrou foto, para a busca
         }
-      }
-      
-      // OTIMIZAÇÃO: Se já encontrou foto, para a busca (early exit)
-      if (foundFoto) {
-        console.log(`Photo found in ${foundEstado}, stopping search early`);
-        break;
+      } catch (err) {
+        clearTimeout(timeoutId);
+        console.log(`Error for state ${state}:`, (err as Error).message);
+        // Continue para o próximo estado
       }
     }
     
-    // If only one photo found, return it directly with data
-    if (Object.keys(results).length === 1 && foundEstado) {
-      return { ...results[foundEstado], estado_encontrado: foundEstado };
+    // If photo found, return it directly with data
+    if (foundFoto && foundEstado && results[foundEstado]) {
+      return { 
+        ...results[foundEstado], 
+        estado_encontrado: foundEstado,
+        cpf: cleanInput
+      };
     }
     
-    // Multiple photos or national query - return summary with first photo
+    // Nenhuma foto encontrada - return summary
     return {
       cpf: cleanInput,
       estados_encontrados: Object.keys(results),
       total_fotos: Object.keys(results).length,
-      foto: foundFoto,
-      nome: foundNome,
+      foto: null,
+      nome: null,
+      message: "Foto não encontrada nos estados pesquisados",
       resultados: results,
     };
   }
