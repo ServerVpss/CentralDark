@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import Consultas from "./pages/Consultas";
 import TelegramUsers from "./pages/TelegramUsers";
 import QueryLogs from "./pages/QueryLogs";
+import PixTransactions from "./pages/PixTransactions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/telegram-users" element={<ProtectedRoute><TelegramUsers /></ProtectedRoute>} />
             <Route path="/logs" element={<ProtectedRoute><QueryLogs /></ProtectedRoute>} />
             <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
+            <Route path="/pix" element={<ProtectedRoute><PixTransactions /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>

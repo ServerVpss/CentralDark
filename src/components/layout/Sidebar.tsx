@@ -22,6 +22,7 @@ const menuItems = [
   { icon: Bot, label: "Meu Bot", path: "/bots" },
   { icon: Users, label: "Usuários", path: "/telegram-users" },
   { icon: CreditCard, label: "Planos", path: "/plans" },
+  { icon: CreditCard, label: "Transações PIX", path: "/pix" },
   { icon: History, label: "Consultas", path: "/logs" },
   { icon: Search, label: "Testar", path: "/consultas" },
   { icon: Settings, label: "Configurações", path: "/settings" },
