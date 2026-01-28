@@ -889,11 +889,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
   text += `\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n${botTag}`;
 
-  // Limit length for Telegram (4096 for messages, 1024 for captions)
-  if (text.length > 4000) {
-    text = text.substring(0, 3950) + `\n\n<i>... resultado truncado</i>`;
-  }
-
+  // NÃO truncar aqui - sendLongMessage fará a paginação automática
   return text;
 }
 
