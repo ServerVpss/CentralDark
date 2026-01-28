@@ -111,19 +111,24 @@ export function EfiGatewayConfig() {
   const handleRegisterWebhook = async () => {
     setIsRegistering(true);
     try {
-      const { data } = await supabase.functions.invoke('pix-payment', {
-        body: { action: 'register-webhook' },
+      const { data, error } = await supabase.functions.invoke('efi-register-webhook', {
+        body: {},
       });
+      
+      if (error) throw error;
       
       if (data?.success) {
         toast.success("Webhook registrado com sucesso!");
-        await updateGatewaySettings.mutateAsync({
-          webhook_url: data.webhookUrl,
-        });
+        if (data.webhook_url) {
+          await updateGatewaySettings.mutateAsync({
+            webhook_url: data.webhook_url,
+          });
+        }
       } else {
-        toast.success("Webhook registrado!");
+        toast.error(data?.error || "Erro ao registrar webhook");
       }
     } catch (error) {
+      console.error('Register webhook error:', error);
       toast.error("Erro ao registrar webhook");
     } finally {
       setIsRegistering(false);
