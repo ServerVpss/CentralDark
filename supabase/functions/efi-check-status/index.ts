@@ -71,21 +71,45 @@ Deno.serve(async (req) => {
       client_secret: string
     }
 
-    const proxyUrl = gateway.proxy_url?.replace('generate', 'check-status') 
-      || 'https://api.segredounlock.com/efi-check-status.php'
+    // URL do proxy para check-status (usa o mesmo proxy do generate com action diferente)
+    const proxyUrl = 'https://api.segredounlock.com/efi-pix-proxy.php'
+
+    console.log('Checking payment status for txid:', txid)
 
     // Chamar proxy para verificar status
     const proxyResponse = await fetch(proxyUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        action: 'check_status',
         client_id: config.client_id,
         client_secret: config.client_secret,
         txid
       })
     })
 
-    const proxyData = await proxyResponse.json()
+    const responseText = await proxyResponse.text()
+    console.log('Proxy response:', responseText.substring(0, 500))
+
+    // Verificar se a resposta é JSON válido
+    let proxyData: { success?: boolean; data?: { status?: string; pix?: Array<{ endToEndId?: string }> }; status?: string; error?: string }
+    try {
+      proxyData = JSON.parse(responseText)
+    } catch (_parseError) {
+      console.error('Invalid JSON response from proxy')
+      // Retornar status pendente se não conseguir verificar
+      return new Response(
+        JSON.stringify({
+          success: true,
+          status: 'pending',
+          isPaid: false,
+          efiStatus: 'ATIVA',
+          message: 'Não foi possível verificar o status no momento'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     console.log('Status check response:', JSON.stringify(proxyData))
 
     const efiStatus = proxyData.data?.status || proxyData.status
