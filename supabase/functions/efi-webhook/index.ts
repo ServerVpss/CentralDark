@@ -213,17 +213,54 @@ Deno.serve(async (req) => {
 
           const { data: settings } = await supabase
             .from('bot_settings')
-            .select('group_chat_id')
+            .select('group_chat_id, group_url')
             .eq('bot_id', transaction.bot_id)
             .single()
 
           if (bot?.token) {
-            const message = `✅ *Pagamento Confirmado!*\n\n` +
-              `💰 Valor: R$ ${Number(transaction.amount).toFixed(2)}\n` +
-              `📋 Plano: ${(pending as any)?.plan_name || transaction.description || 'Assinatura'}\n` +
-              `⏳ Dias: ${Number((pending as any)?.plan_days ?? 30)}\n` +
-              `🔑 TXID: \`${txid.slice(0, 12)}...\`\n\n` +
-              `Seu acesso foi liberado! 🎉`
+            // Deletar a mensagem anterior do PIX (se tiver o message_id salvo)
+            if ((pending as any)?.telegram_message_id && (pending as any)?.telegram_chat_id) {
+              try {
+                await fetch(`https://api.telegram.org/bot${bot.token}/deleteMessage`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    chat_id: (pending as any).telegram_chat_id,
+                    message_id: (pending as any).telegram_message_id
+                  })
+                })
+                console.log(`Mensagem PIX anterior deletada: ${(pending as any).telegram_message_id}`)
+              } catch (delErr) {
+                console.log('Não foi possível deletar mensagem anterior:', delErr)
+              }
+            }
+
+            const planName = (pending as any)?.plan_name || transaction.description || 'Assinatura'
+            const planDaysMsg = Number((pending as any)?.plan_days ?? 30)
+            
+            // Mensagem de confirmação com emojis de celebração
+            const message = `🎉🎊 *PAGAMENTO CONFIRMADO!* 🎊🎉\n\n` +
+              `✅ Seu pagamento foi aprovado com sucesso!\n\n` +
+              `💰 *Valor:* R$ ${Number(transaction.amount).toFixed(2)}\n` +
+              `📋 *Plano:* ${planName}\n` +
+              `📅 *Dias:* ${planDaysMsg}\n` +
+              `🔑 *TXID:* \`${txid.slice(0, 12)}...\`\n\n` +
+              `🚀 *Seu acesso foi liberado!*\n\n` +
+              `Clique no botão abaixo para fazer suas consultas! 👇`
+
+            // Montar botão inline para ir ao grupo
+            const inlineKeyboard: any = { inline_keyboard: [] }
+            
+            if (settings?.group_url) {
+              inlineKeyboard.inline_keyboard.push([
+                { text: '🔍 Fazer Consulta', url: settings.group_url }
+              ])
+            } else if (settings?.group_chat_id) {
+              // Se não tiver URL mas tiver chat_id, tentar criar link
+              inlineKeyboard.inline_keyboard.push([
+                { text: '🔍 Fazer Consulta', callback_data: 'go_to_group' }
+              ])
+            }
 
             await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
               method: 'POST',
@@ -231,7 +268,8 @@ Deno.serve(async (req) => {
               body: JSON.stringify({
                 chat_id: transaction.telegram_user_id,
                 text: message,
-                parse_mode: 'Markdown'
+                parse_mode: 'Markdown',
+                reply_markup: inlineKeyboard.inline_keyboard.length > 0 ? inlineKeyboard : undefined
               })
             })
 
