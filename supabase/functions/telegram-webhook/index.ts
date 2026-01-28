@@ -743,8 +743,16 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   const nomeField = allItems.find(i => i.key.toLowerCase().includes('nome') && !i.key.toLowerCase().includes('fantasia'));
   const userName = nomeField ? String(nomeField.value).split(' ')[0] : 'usuário';
 
+  // Função para escapar caracteres HTML
+  const escapeHtml = (str: string): string => {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  };
+
   // Construir mensagem formatada
-  let text = `Olá, <b>${userName}</b>\nAqui você pode ver os dados da consulta 🤩\n\n`;
+  let text = `Olá, <b>${escapeHtml(userName)}</b>\nAqui você pode ver os dados da consulta 🤩\n\n`;
 
   const formatKey = (key: string): string => {
     const lastPart = key.split('.').pop() || key;
@@ -762,42 +770,40 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     if (!items || items.length === 0) continue;
 
     text += `${catInfo.icon} <b>${catInfo.label}</b>\n`;
-    text += `<pre>`;
     
     for (const item of items) {
       const displayKey = formatKey(item.key);
-      const displayValue = String(item.value);
+      const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `${displayKey} => ${displayValue}\n`;
+        text += `• ${displayKey}: ${displayValue}\n`;
       }
     }
     
-    text += `</pre>\n`;
+    text += `\n`;
   }
 
   // Adicionar itens não categorizados
   if (uncategorized.length > 0) {
     text += `[✦] <b>OUTROS DADOS</b>\n`;
-    text += `<pre>`;
     
     for (const item of uncategorized) {
       const displayKey = formatKey(item.key);
-      const displayValue = String(item.value);
+      const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `${displayKey} => ${displayValue}\n`;
+        text += `• ${displayKey}: ${displayValue}\n`;
       }
     }
     
-    text += `</pre>\n`;
+    text += `\n`;
   }
 
   // Footer com @ do bot
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
   text += `\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n${botTag}`;
 
-  // Limit length for Telegram
+  // Limit length for Telegram (4096 for messages, 1024 for captions)
   if (text.length > 4000) {
-    text = text.substring(0, 3900) + "\n\n<i>... resultado truncado</i>";
+    text = text.substring(0, 3950) + `\n\n<i>... resultado truncado</i>`;
   }
 
   return text;
@@ -2065,23 +2071,35 @@ class BotHandler {
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
       if (isValidPhotoUrl) {
+        // Criar caption simples e segura para a foto (sem HTML complexo)
+        const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}`;
+        
         const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
-          caption: formattedResult.substring(0, 1024),
+          caption: simpleCaption,
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
         });
 
         if (!sentPhoto.ok) {
           console.error("sendPhoto failed for query result:", sentPhoto);
+          // Fallback: enviar apenas texto formatado
           await telegramRequest(this.token, "sendMessage", {
             chat_id: chatId,
-            text: `⚠️ <b>Foto encontrada, mas não consegui enviar pelo Telegram.</b>\n\n${formattedResult}`.substring(0, 4096),
+            text: `⚠️ <b>Foto encontrada, mas não consegui enviar pelo Telegram.</b>\n\nTente novamente mais tarde.`,
             parse_mode: "HTML",
             reply_to_message_id: replyToId,
           });
         }
+        
+        // Enviar dados completos como mensagem separada
+        await telegramRequest(this.token, "sendMessage", {
+          chat_id: chatId,
+          text: formattedResult,
+          parse_mode: "HTML",
+          reply_to_message_id: replyToId,
+        });
       } else {
         await telegramRequest(this.token, "sendMessage", {
           chat_id: chatId,
