@@ -86,14 +86,82 @@ function parseConcatenatedString(text: string): ParsedData {
   return result;
 }
 
+// Parse data that comes in multiple "BASE" sections
+function parseMultiBaseFormat(text: string): ParsedData {
+  const result: ParsedData = {};
+  
+  // Remove bot references and URLs
+  let cleanText = text
+    .replace(/@\w+/g, '')
+    .replace(/https?:\/\/[^\s]+/g, '')
+    .trim();
+  
+  // Check if this is multi-base format
+  if (!cleanText.includes('BASE')) {
+    return result;
+  }
+  
+  // Split by BASE sections
+  const baseSections = cleanText.split(/BASE\s+\d+/i).filter(s => s.trim());
+  
+  // Arrays to collect multiple values
+  const cpfs: string[] = [];
+  const nomes: string[] = [];
+  const otherData: Record<string, string[]> = {};
+  
+  for (const section of baseSections) {
+    const lines = section.split(/\n/).filter(l => l.trim());
+    
+    for (const line of lines) {
+      const match = line.match(/^([^:]+):\s*(.+)$/);
+      if (match) {
+        const key = match[1].trim().toUpperCase();
+        const value = match[2].trim();
+        
+        if (!value || value === '-') continue;
+        
+        if (key === 'CPF' || key === 'CPF_CNPJ') {
+          if (!cpfs.includes(value)) cpfs.push(value);
+        } else if (key === 'NOME') {
+          if (!nomes.includes(value)) nomes.push(value);
+        } else {
+          if (!otherData[key]) otherData[key] = [];
+          if (!otherData[key].includes(value)) otherData[key].push(value);
+        }
+      }
+    }
+  }
+  
+  // Build result with unique values
+  if (cpfs.length > 0) result['CPF'] = cpfs.length === 1 ? cpfs[0] : cpfs;
+  if (nomes.length > 0) result['Nome'] = nomes.length === 1 ? nomes[0] : nomes;
+  
+  for (const [key, values] of Object.entries(otherData)) {
+    const formattedKey = key.charAt(0) + key.slice(1).toLowerCase();
+    result[formattedKey] = values.length === 1 ? values[0] : values;
+  }
+  
+  return result;
+}
+
 // Parse the raw text response into structured data
 function parseRawText(text: string): ParsedData {
   const result: ParsedData = {};
   
   // Remove the bot reference if present
-  let cleanText = text.replace(/@\w+\\n/g, '').replace(/@\w+\n/g, '');
+  let cleanText = text.replace(/@\w+\\n/g, '').replace(/@\w+\n/g, '').replace(/@\w+/g, '');
+  // Remove URLs
+  cleanText = cleanText.replace(/https?:\/\/[^\s]+/g, '');
   
-  // First, try to parse as concatenated string (no line breaks)
+  // Try parsing multi-base format first (RESULTADOS ENCONTRADOS PARA...)
+  if (cleanText.includes('BASE') || cleanText.includes('RESULTADOS ENCONTRADOS')) {
+    const parsed = parseMultiBaseFormat(cleanText);
+    if (Object.keys(parsed).length > 0) {
+      return parsed;
+    }
+  }
+  
+  // Try to parse as concatenated string (no line breaks)
   if (!cleanText.includes('\n') && !cleanText.includes('\\n')) {
     const parsed = parseConcatenatedString(cleanText);
     if (Object.keys(parsed).length > 0) {
@@ -110,10 +178,26 @@ function parseRawText(text: string): ParsedData {
     const trimmedLine = line.trim();
     if (!trimmedLine) continue;
     
+    // Skip header lines
+    if (trimmedLine.includes('RESULTADOS ENCONTRADOS') || trimmedLine.startsWith('BASE')) {
+      continue;
+    }
+    
     // Try parsing each line as concatenated string
     const parsedLine = parseConcatenatedString(trimmedLine);
     if (Object.keys(parsedLine).length > 1) {
-      Object.assign(result, parsedLine);
+      // Merge arrays for duplicate keys
+      for (const [key, value] of Object.entries(parsedLine)) {
+        if (result[key]) {
+          if (Array.isArray(result[key])) {
+            (result[key] as string[]).push(String(value));
+          } else if (result[key] !== value) {
+            result[key] = [String(result[key]), String(value)];
+          }
+        } else {
+          result[key] = value;
+        }
+      }
       continue;
     }
     
@@ -128,26 +212,33 @@ function parseRawText(text: string): ParsedData {
       continue;
     }
     
-    // Check for key-value pairs
-    const kvMatch = trimmedLine.match(/^([^:–\-]+)\s*[–\-]\s*(.+)$/);
-    if (kvMatch) {
-      const key = kvMatch[1].trim();
-      const value = kvMatch[2].trim();
-      
-      if (currentSection && Array.isArray(result[currentSection])) {
-        (result[currentSection] as string[]).push(`${key}: ${value}`);
-      } else if (value && value.toLowerCase() !== 'não informado') {
-        result[key] = value;
-      }
-      continue;
-    }
-    
     // Check for simple key: value format
     const simpleKvMatch = trimmedLine.match(/^([^:]+):\s*(.+)$/);
     if (simpleKvMatch) {
       const key = simpleKvMatch[1].trim();
       const value = simpleKvMatch[2].trim();
-      if (value && value.toLowerCase() !== 'não informado' && key.toUpperCase() !== 'TEXTO') {
+      const lowerValue = value.toLowerCase();
+      
+      // Skip unwanted values
+      if (!value || value === '-' || lowerValue.startsWith('não informad') || lowerValue.startsWith('não informa')) {
+        continue;
+      }
+      
+      // Skip metadata keys
+      if (key.toUpperCase() === 'TEXTO' || key.toUpperCase() === 'COMANDO' || key.toUpperCase() === 'VALOR') {
+        continue;
+      }
+      
+      // Handle duplicate keys by creating arrays
+      if (result[key]) {
+        if (Array.isArray(result[key])) {
+          if (!(result[key] as string[]).includes(value)) {
+            (result[key] as string[]).push(value);
+          }
+        } else if (result[key] !== value) {
+          result[key] = [String(result[key]), value];
+        }
+      } else {
         result[key] = value;
       }
       continue;
