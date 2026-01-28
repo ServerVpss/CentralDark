@@ -34,7 +34,7 @@ export function Header({ className }: HeaderProps) {
       background: "linear-gradient(to right, hsl(220 20% 5% / 0.95), hsl(220 20% 6% / 0.95))",
       backdropFilter: "blur(16px) saturate(180%)",
     }}>
-      <div className="flex h-full items-center justify-between px-4 lg:px-6 gap-4">
+      <div className="flex h-full items-center px-4 lg:px-6 gap-4">
         {/* Search */}
         <div className="relative w-full max-w-md group">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
@@ -43,6 +43,9 @@ export function Header({ className }: HeaderProps) {
             className="pl-11 h-11 bg-white/5 border-white/10 rounded-xl focus:border-primary/50 focus:bg-white/10 transition-all placeholder:text-muted-foreground/70"
           />
         </div>
+
+        {/* Spacer */}
+        <div className="flex-1" />
 
         {/* Actions */}
         <div className="flex items-center gap-2">
