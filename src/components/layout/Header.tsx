@@ -1,4 +1,4 @@
-import { Bell, Search, User, LogOut, Settings } from "lucide-react";
+import { Bell, Search, User, LogOut, Settings, Sparkles, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -28,64 +28,99 @@ export function Header({ className }: HeaderProps) {
 
   return (
     <header className={cn(
-      "sticky top-0 z-30 h-16 border-b border-border bg-background/80 backdrop-blur-xl",
+      "sticky top-0 z-30 h-16 border-b border-border/30",
       className
-    )}>
+    )} style={{
+      background: "linear-gradient(to right, hsl(220 20% 5% / 0.95), hsl(220 20% 6% / 0.95))",
+      backdropFilter: "blur(16px) saturate(180%)",
+    }}>
       <div className="flex h-full items-center justify-between px-4 lg:px-6">
         {/* Search */}
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <div className="relative w-full max-w-md group">
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             placeholder="Buscar bots, assinantes, configurações..."
-            className="pl-10 bg-secondary/50 border-border/50 focus:border-primary/50 transition-colors"
+            className="pl-11 h-11 bg-white/5 border-white/10 rounded-xl focus:border-primary/50 focus:bg-white/10 transition-all placeholder:text-muted-foreground/70"
           />
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 lg:gap-3">
+        <div className="flex items-center gap-3">
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
-              3
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="relative h-10 w-10 rounded-xl hover:bg-white/5 transition-colors"
+          >
+            <Bell className="h-5 w-5 text-muted-foreground" />
+            <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-50" />
+              <span className="relative inline-flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-br from-primary to-amber-600 text-[8px] font-bold text-primary-foreground">
+                3
+              </span>
             </span>
           </Button>
 
           {/* Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-2 px-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 border border-primary/30">
-                  <User className="h-4 w-4 text-primary" />
+              <Button variant="ghost" className="gap-3 px-2 h-11 rounded-xl hover:bg-white/5">
+                <div className="relative">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/30">
+                    <User className="h-4 w-4 text-primary" />
+                  </div>
+                  {/* Online indicator */}
+                  <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-gradient-to-br from-emerald-400 to-green-500" />
                 </div>
-                <div className="hidden md:flex flex-col items-start">
-                  <span className="text-sm font-medium">
+                <div className="hidden lg:flex flex-col items-start">
+                  <span className="text-sm font-semibold text-foreground">
                     {profile?.full_name || user?.email?.split("@")[0] || "Usuário"}
                   </span>
-                  <span className="text-xs text-muted-foreground">Pro Plan</span>
+                  <span className="text-xs text-primary flex items-center gap-1">
+                    <Crown className="h-3 w-3" />
+                    Premium
+                  </span>
                 </div>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium">
-                    {profile?.full_name || "Usuário"}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {user?.email}
-                  </p>
+            <DropdownMenuContent align="end" className="w-64 p-2" style={{
+              background: "linear-gradient(145deg, hsl(220 20% 10%), hsl(220 20% 8%))",
+              border: "1px solid hsl(220 15% 15%)",
+            }}>
+              <DropdownMenuLabel className="pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/30">
+                    <User className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold">
+                      {profile?.full_name || "Usuário"}
+                    </span>
+                    <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+                      {user?.email}
+                    </span>
+                    <span className="text-xs text-primary flex items-center gap-1 mt-0.5">
+                      <Sparkles className="h-3 w-3" />
+                      Plano Premium
+                    </span>
+                  </div>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate("/settings")}>
-                <Settings className="mr-2 h-4 w-4" />
-                Configurações
+              <DropdownMenuSeparator className="bg-border/50" />
+              <DropdownMenuItem 
+                onClick={() => navigate("/settings")}
+                className="rounded-lg py-2.5 px-3 cursor-pointer hover:bg-white/5 focus:bg-white/5"
+              >
+                <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
+                <span>Configurações</span>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
-                <LogOut className="mr-2 h-4 w-4" />
-                Sair
+              <DropdownMenuSeparator className="bg-border/50" />
+              <DropdownMenuItem 
+                onClick={handleSignOut} 
+                className="rounded-lg py-2.5 px-3 cursor-pointer text-destructive focus:text-destructive hover:bg-destructive/10 focus:bg-destructive/10"
+              >
+                <LogOut className="mr-3 h-4 w-4" />
+                <span>Sair da conta</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
