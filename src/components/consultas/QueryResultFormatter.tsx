@@ -118,6 +118,9 @@ function formatLabel(key: string): string {
     .join(' ');
 }
 
+// Campos de foto que devem ser ocultados (já exibimos a imagem real)
+const PHOTO_FIELDS = ['foto', 'fotobase64', 'image', 'photo', 'url', 'base64'];
+
 // Group fields by category
 function groupFields(data: ParsedData): Record<string, ParsedData> {
   const groups: Record<string, ParsedData> = {
@@ -132,6 +135,14 @@ function groupFields(data: ParsedData): Record<string, ParsedData> {
 
   for (const [key, value] of Object.entries(data)) {
     const keyLower = key.toLowerCase();
+    
+    // Pular campos de foto (já exibimos a imagem real separadamente)
+    if (PHOTO_FIELDS.includes(keyLower)) continue;
+    
+    // Pular valores que parecem ser Base64 (strings muito longas começando com /9j/ ou iVBOR)
+    if (typeof value === 'string' && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) {
+      continue;
+    }
     
     if (keyLower.includes('nome') || keyLower.includes('sexo') || keyLower.includes('nascimento') || 
         keyLower.includes('civil') || keyLower.includes('mãe') || keyLower.includes('pai') ||
