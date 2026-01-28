@@ -1,201 +1,167 @@
 
-# Plano: Corrigir Parser para Exibir Todos os Resultados
 
-## Problema Identificado
+## Plano: Corrigir Exibição de Fotos no Bot Telegram
 
-A API NexFuture retorna dados em **3 formatos diferentes** que o parser atual não está tratando corretamente:
+### Problema Identificado
 
-### Formato 1: Campos simples com travessão
-```
-CPF ⎯ 00119020270
-NOME ⎯ EVA JOSE DE ALMEIDA
-```
-✅ **Funcionando** - O regex com `:`, `⎯` e `-` já captura.
+Analisando os logs da edge function `telegram-webhook`:
 
-### Formato 2: Listas com marcador `•` (PROBLEMA PRINCIPAL)
-```
-TELEFONES: ( 5 - Encontrados)
-• 63992184799 - POSSUI WHATSAPP
-• 63992030010 - POSSUI WHATSAPP
-• 63992783358 - NÃO POSSUI WHATSAPP
-```
-❌ **Não funciona** - O parser só captura `"telefones": "( 5 - Encontrados)"` e ignora os itens da lista.
+1. **Requisições são enviadas corretamente:**
+   ```
+   Fetching from: http://node.tconect.xyz:3030/foto?cpf=38244335831&estado=RJ
+   Fetching from: http://node.tconect.xyz:3030/foto?cpf=38244335831&estado=BA
+   ...
+   ```
 
-### Formato 3: Múltiplos registros com BASE
-```
-BASE 1
-CPF: 00119020270
-NOME: EVA JOSE DE ALMEIDA
+2. **Nenhuma resposta é logada** - não há "Response received" para as requisições de foto
 
-BASE 2
-CPF: 00017837260
-NOME: MARINEIDE DE JESUS DE ALMEIDA
-```
-❌ **Não funciona** - O parser sobrescreve valores duplicados e retorna apenas o último CPF/NOME.
+3. **Nenhuma foto é encontrada** - não há log "Photo found in X, stopping search early"
 
----
+4. **Resultado enviado sem foto** - "Telegram API: sendMessage" em vez de "sendPhoto"
 
-## Solução
+### Causas Prováveis
 
-Reescrever a função `parseDataString` para:
+| Causa | Probabilidade | Descrição |
+|-------|---------------|-----------|
+| Timeout muito curto | Alta | 3 segundos pode não ser suficiente para a API TConect responder |
+| Campo foto incorreto | Média | A API pode retornar a foto em campo diferente (image, base64, url, data) |
+| API não retorna JSON válido | Baixa | A resposta pode não ser um JSON parseável |
 
-1. **Detectar e armazenar itens de lista** (`•`) associados à última categoria vista
-2. **Agrupar múltiplos registros** em arrays quando há duplicação de chaves
-3. **Aceitar chaves sem espaço** antes do separador (`CPF:` além de `CPF :`)
+### Solução
 
----
+#### Parte 1: Adicionar Logs de Debug
 
-## Mudanças Técnicas
-
-### Arquivo: `supabase/functions/telegram-webhook/index.ts`
-
-### Função: `parseDataString` (linhas 477-513)
-
-**Novo código:**
+Adicionar logs detalhados para entender o que a API retorna:
 
 ```typescript
-function parseDataString(dataStr: string): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
+for (const { state, result } of batchResults) {
+  // LOG: Ver o que a API retornou para cada estado
+  console.log(`Photo search result for ${state}:`, JSON.stringify(result).substring(0, 300));
   
-  // Limpar referências ao bot antigo e URLs
-  let cleaned = dataStr
-    .replace(/@QueryBuscasBot/gi, '')
-    .replace(/https?:\/\/t\.me\/querybuscas/gi, '')
-    .replace(/QueryBuscasBot/gi, '')
-    .replace(/querybuscas/gi, '')
-    .replace(/https?:\/\/t\.me\/[^\s]+/gi, '')
-    .trim();
+  // Verificar múltiplos campos possíveis para a foto
+  const fotoUrl = result.foto || result.image || result.url || result.base64;
   
-  const lines = cleaned.split('\n');
-  let currentListKey: string | null = null;
-  let currentList: string[] = [];
-  
-  const saveCurrentList = () => {
-    if (currentListKey && currentList.length > 0) {
-      result[currentListKey] = currentList.join('\n');
-      currentList = [];
-    }
-    currentListKey = null;
-  };
-  
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    
-    // Ignorar linhas de seção ou cabeçalho
-    if (trimmed.match(/^(BASE \d+|RESULTADOS|---)/i)) {
-      saveCurrentList();
-      continue;
-    }
-    if (trimmed.match(/^[=\-_*]+$/)) continue;
-    
-    // Detectar linha de lista com marcador •
-    if (trimmed.startsWith('•')) {
-      const itemValue = trimmed.substring(1).trim();
-      if (itemValue) {
-        currentList.push(itemValue);
-      }
-      continue;
-    }
-    
-    // Detectar linha de lista com marcador -
-    if (trimmed.startsWith('-') && !trimmed.match(/^-+$/)) {
-      const itemValue = trimmed.substring(1).trim();
-      if (itemValue && !itemValue.match(/^[\-=_]+$/)) {
-        currentList.push(itemValue);
-      }
-      continue;
-    }
-    
-    // Extrair CHAVE: VALOR (aceita chaves com ou sem espaço antes do separador)
-    // Formato: "CHAVE: valor", "CHAVE ⎯ valor", "CHAVE - valor"
-    const match = trimmed.match(/^([A-ZÀ-Úa-zà-ú\s_]+?)\s*(?::|⎯|—|-)\s*(.*)$/i);
-    if (match) {
-      saveCurrentList(); // Salvar lista anterior se houver
-      
-      const key = match[1].trim().toLowerCase().replace(/\s+/g, '_');
-      const value = match[2].trim();
-      
-      // Se o valor indica uma lista (ex: "( 5 - Encontrados)"), preparar para coletar itens
-      if (value.match(/\(\s*\d+\s*-\s*Encontrados?\s*\)/i)) {
-        currentListKey = key;
-        currentList = [];
-        continue;
-      }
-      
-      // Ignorar valores vazios ou placeholders
-      if (!value || value === '-' || value === '--') continue;
-      
-      // Se a chave já existe, converter para array ou adicionar
-      if (result[key] !== undefined) {
-        if (Array.isArray(result[key])) {
-          (result[key] as string[]).push(value);
-        } else {
-          result[key] = [result[key] as string, value];
-        }
-      } else {
-        result[key] = value;
-      }
+  if (result && !result.error && fotoUrl) {
+    results[state] = { ...result, foto: fotoUrl };
+    if (!foundFoto) {
+      foundFoto = fotoUrl;
+      foundNome = result.nome;
+      foundEstado = state;
     }
   }
-  
-  // Salvar última lista pendente
-  saveCurrentList();
-  
-  return result;
 }
 ```
 
----
+#### Parte 2: Aumentar Timeout
 
-### Mudanças na função `formatQueryResult` (linhas 515-700)
-
-Adicionar suporte para exibir arrays como lista:
+Aumentar o timeout de 3s para 5s ou 8s para dar mais tempo à API:
 
 ```typescript
-// Na parte de formatação dos valores (linha ~672-676)
-for (const item of items) {
-  const displayKey = formatKey(item.key);
-  let displayValue = item.value;
-  
-  // Se é um array, formatar como lista
-  if (Array.isArray(displayValue)) {
-    displayValue = displayValue.join('\n    ');
+// De: 3000ms (muito curto)
+const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+// Para: 8000ms (mais seguro)
+const timeoutId = setTimeout(() => controller.abort(), 8000);
+```
+
+#### Parte 3: Verificar Múltiplos Campos de Foto
+
+Atualizar a lógica para aceitar diferentes nomes de campo:
+
+```typescript
+// Verificar múltiplos campos possíveis
+const getFotoUrl = (result: Record<string, unknown>): string | null => {
+  const possibleFields = ['foto', 'image', 'url', 'photo', 'base64', 'data'];
+  for (const field of possibleFields) {
+    const value = result[field];
+    if (typeof value === 'string' && value.length > 10) {
+      // É uma URL ou base64
+      if (value.startsWith('http') || value.startsWith('data:image')) {
+        return value;
+      }
+    }
   }
+  return null;
+};
+```
+
+---
+
+### Arquivo a Modificar
+
+| Arquivo | Mudança |
+|---------|---------|
+| `supabase/functions/telegram-webhook/index.ts` | Adicionar logs, aumentar timeout, verificar múltiplos campos |
+
+---
+
+### Mudanças Detalhadas
+
+**Linha 416** - Aumentar timeout:
+```typescript
+// De:
+const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+// Para:
+const timeoutId = setTimeout(() => controller.abort(), 8000);
+```
+
+**Linhas 437-446** - Adicionar logs e verificar múltiplos campos:
+```typescript
+for (const { state, result } of batchResults) {
+  // LOG: Ver o que a API retorna
+  console.log(`Foto result for ${state}:`, JSON.stringify(result).substring(0, 500));
   
-  const valueStr = String(displayValue);
-  if (!shouldIgnore(valueStr)) {
-    text += `${displayKey} => ${valueStr}\n`;
+  // Verificar múltiplos campos possíveis para a foto
+  const fotoUrl = result.foto || result.image || result.url || result.photo;
+  
+  if (result && !result.error && fotoUrl) {
+    results[state] = { ...result, foto: fotoUrl };
+    if (!foundFoto) {
+      foundFoto = fotoUrl;
+      foundNome = result.nome;
+      foundEstado = state;
+      console.log(`Photo found in ${state}, URL: ${String(fotoUrl).substring(0, 100)}`);
+    }
   }
+}
+```
+
+**Linhas 1047 e 1998** - Melhorar verificação de foto para envio:
+```typescript
+// Verificar múltiplos formatos de foto
+const fotoUrl = result.foto || result.image || result.url || result.photo;
+const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
+  (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+
+if (isValidPhotoUrl) {
+  await telegramRequest(this.token, "sendPhoto", {
+    chat_id: chatId,
+    photo: fotoUrl,
+    caption: formattedResult.substring(0, 1024),
+    parse_mode: "HTML",
+    reply_markup: keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")]),
+  });
+} else {
+  // ... sendMessage fallback
 }
 ```
 
 ---
 
-## Resultado Esperado
-
-### Antes (atual):
-```
-Parsed data: {"empresas":"( 0 - Encontrados)","emails":"( 3 - Encontrados)","telefones":"( 5 - Encontrados)"}
-```
-
-### Depois (corrigido):
-```
-Parsed data: {
-  "cpf": "00119020270",
-  "nome": "EVA JOSE DE ALMEIDA",
-  "emails": "fabriciomenezes13@gmail.com\njoanasm01@gmail.com\nJOANASM01@GMAIL.COM",
-  "telefones": "63992184799 - POSSUI WHATSAPP\n63992030010 - POSSUI WHATSAPP\n63992783358 - NÃO POSSUI WHATSAPP"
-}
-```
-
----
-
-## Resumo das Mudanças
+### Resumo das Mudanças
 
 | Item | Descrição |
 |------|-----------|
-| Parser de listas | Captura itens com marcador `•` ou `-` e associa à última categoria |
-| Suporte a arrays | Chaves duplicadas viram arrays em vez de sobrescrever |
-| Regex melhorado | Aceita chaves sem espaço antes do separador |
-| Formatação | Arrays exibidos como lista com quebras de linha |
+| Timeout | Aumentar de 3s para 8s |
+| Logs | Adicionar log do resultado de cada estado |
+| Campos | Verificar `foto`, `image`, `url`, `photo` e `base64` |
+| Debug | Log completo para identificar formato real da API |
+
+### Resultado Esperado
+
+Após as mudanças:
+1. Os logs mostrarão exatamente o que a API TConect retorna
+2. Se a foto existir em qualquer campo, será detectada e exibida
+3. O timeout maior dará tempo suficiente para a API responder
+
