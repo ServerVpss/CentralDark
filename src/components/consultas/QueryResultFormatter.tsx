@@ -26,29 +26,39 @@ interface ParsedData {
   [key: string]: string | string[] | ParsedData[];
 }
 
-// Lista de chaves conhecidas para parsing de strings concatenadas
+// Lista de chaves conhecidas para parsing de strings concatenadas (ordenadas por tamanho decrescente para evitar conflitos)
 const KNOWN_KEYS = [
-  'Nome', 'CPF', 'Mãe', 'Pai', 'Nascimento', 'Sexo', 'RG', 'CNH', 'PIS', 'NIS', 'CNS',
-  'Alcunha', 'Nome Social', 'Orientação Sexual', 'Identidade de Gênero', 'Deficiência',
-  'Raça/Cor', 'Raça', 'Cor', 'Estado Civil', 'Naturalidade', 'Nacionalidade', 'Óbito',
-  'Escolaridade', 'Profissão', 'Renda', 'Score', 'Classe', 'Classe Social', 'Título Eleitor',
-  'Zona', 'Seção', 'Email', 'Telefone', 'Endereço', 'CEP', 'Bairro', 'Cidade', 'Estado', 'UF',
-  'Município', 'Logradouro', 'Número', 'Complemento', 'TEXTO'
-];
+  // Chaves compostas (mais longas primeiro)
+  'Orientação Sexual', 'Identidade de Gênero', 'Nome Social', 'Classe Social', 'Estado Civil',
+  'Título Eleitor', 'Raça/Cor', 'Deficiência',
+  // Chaves simples
+  'Naturalidade', 'Nacionalidade', 'Escolaridade', 'Nascimento', 'Logradouro', 'Complemento',
+  'Município', 'Profissão', 'Endereço', 'Telefone', 'Alcunha',
+  'Nome', 'CPF', 'Mãe', 'Pai', 'Sexo', 'RG', 'CNH', 'PIS', 'NIS', 'CNS',
+  'Raça', 'Cor', 'Óbito', 'Renda', 'Score', 'Classe',
+  'Zona', 'Seção', 'Email', 'CEP', 'Bairro', 'Cidade', 'Estado', 'UF', 'Número'
+].sort((a, b) => b.length - a.length); // Ordenar por tamanho decrescente
 
 // Parse concatenated string like "Nome: X Mãe: Y CPF: Z"
 function parseConcatenatedString(text: string): ParsedData {
   const result: ParsedData = {};
   
-  // Build regex to split by known keys
+  // Remover prefixo "TEXTO:" se existir
+  let cleanText = text.replace(/^TEXTO:\s*/i, '').trim();
+  
+  // Build regex to split by known keys (case insensitive)
   const keysPattern = KNOWN_KEYS.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-  const regex = new RegExp(`(${keysPattern}):\\s*`, 'gi');
+  const regex = new RegExp(`\\b(${keysPattern}):\\s*`, 'gi');
   
   // Find all matches with positions
-  const matches: { key: string; index: number }[] = [];
+  const matches: { key: string; index: number; length: number }[] = [];
   let match;
-  while ((match = regex.exec(text)) !== null) {
-    matches.push({ key: match[1], index: match.index });
+  while ((match = regex.exec(cleanText)) !== null) {
+    matches.push({ 
+      key: match[1], 
+      index: match.index,
+      length: match[0].length 
+    });
   }
   
   // Extract values between keys
@@ -56,20 +66,20 @@ function parseConcatenatedString(text: string): ParsedData {
     const currentMatch = matches[i];
     const nextMatch = matches[i + 1];
     
-    const valueStart = currentMatch.index + currentMatch.key.length + 1; // +1 for ':'
-    const valueEnd = nextMatch ? nextMatch.index : text.length;
+    const valueStart = currentMatch.index + currentMatch.length;
+    const valueEnd = nextMatch ? nextMatch.index : cleanText.length;
     
-    let value = text.substring(valueStart, valueEnd).trim();
+    let value = cleanText.substring(valueStart, valueEnd).trim();
     
-    // Remove trailing space before next key
-    value = value.replace(/\s+$/, '');
-    
-    // Skip "Não informado" or empty values
-    if (value && value.toLowerCase() !== 'não informado' && value !== '-') {
-      // Skip TEXTO field as it's just a wrapper
-      if (currentMatch.key.toUpperCase() !== 'TEXTO') {
-        result[currentMatch.key] = value;
-      }
+    // Skip "Não informado", "Não informa" or empty values
+    const lowerValue = value.toLowerCase();
+    if (value && 
+        !lowerValue.startsWith('não informad') && 
+        !lowerValue.startsWith('não informa') &&
+        value !== '-') {
+      // Normalizar nome da chave (primeira letra maiúscula)
+      const normalizedKey = currentMatch.key.charAt(0).toUpperCase() + currentMatch.key.slice(1).toLowerCase();
+      result[normalizedKey] = value;
     }
   }
   
