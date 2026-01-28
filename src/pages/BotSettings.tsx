@@ -15,6 +15,8 @@ import {
   CreditCard,
   Settings,
   Upload,
+  Send,
+  Zap,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PaymentGatewaysGrid } from "@/components/payments/PaymentGatewaysGrid";
 import { TypingReactionsSettings } from "@/components/bots/TypingReactionsSettings";
+import { BroadcastDialog } from "@/components/bots/BroadcastDialog";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
 import { useBotSettings } from "@/hooks/useBotSettings";
@@ -57,6 +60,9 @@ export default function BotSettings() {
   const [fixedEmoji, setFixedEmoji] = useState("👍");
   const [customEmojis, setCustomEmojis] = useState<string[]>([]);
   const [announcePayments, setAnnouncePayments] = useState(true);
+  
+  // Broadcast dialog state
+  const [broadcastOpen, setBroadcastOpen] = useState(false);
 
   // Find current bot
   useEffect(() => {
@@ -179,6 +185,10 @@ export default function BotSettings() {
               </div>
             </div>
           </div>
+          <Button variant="outline" onClick={() => setBroadcastOpen(true)}>
+            <Send className="h-4 w-4 mr-2" />
+            Broadcast
+          </Button>
           <Button variant="outline" onClick={() => navigate(`/bots/${botId}/migrate`)}>
             <Upload className="h-4 w-4 mr-2" />
             Migrar
@@ -470,6 +480,14 @@ export default function BotSettings() {
             <PaymentGatewaysGrid />
           </TabsContent>
         </Tabs>
+
+        {/* Broadcast Dialog */}
+        <BroadcastDialog
+          open={broadcastOpen}
+          onOpenChange={setBroadcastOpen}
+          botId={botId || ""}
+          botToken={bot.token}
+        />
       </div>
     </DashboardLayout>
   );

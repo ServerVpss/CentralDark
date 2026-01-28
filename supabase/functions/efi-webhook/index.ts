@@ -262,6 +262,10 @@ Deno.serve(async (req) => {
               ])
             }
 
+            // Enviar mensagem com efeito de confete 🎉
+            // ID do efeito "Festa/Confetti" do Telegram: 5046509860385561286
+            const CONFETTI_EFFECT_ID = '5046509860385561286'
+            
             await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -269,7 +273,8 @@ Deno.serve(async (req) => {
                 chat_id: transaction.telegram_user_id,
                 text: message,
                 parse_mode: 'Markdown',
-                reply_markup: inlineKeyboard.inline_keyboard.length > 0 ? inlineKeyboard : undefined
+                reply_markup: inlineKeyboard.inline_keyboard.length > 0 ? inlineKeyboard : undefined,
+                message_effect_id: CONFETTI_EFFECT_ID
               })
             })
 
