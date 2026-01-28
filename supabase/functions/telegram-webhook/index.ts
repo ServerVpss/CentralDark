@@ -2076,6 +2076,17 @@ class BotHandler {
         } catch (_e) { /* ignore */ }
       }
 
+      // Criar footer com informações da consulta
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const userInfo = message.from;
+      const userName = userInfo?.first_name || 'Usuário';
+      const userIdDisplay = userInfo?.id || telegramUserId;
+      const userPhone = userInfo?.username ? `@${userInfo.username}` : `ID: ${userIdDisplay}`;
+      
+      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 📝 @${userIdDisplay}\n├ 📞 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
+
       // Format and send result
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
 
@@ -2094,12 +2105,12 @@ class BotHandler {
 
       if (isValidPhotoUrl) {
         // Criar caption simples e segura para a foto (sem HTML complexo)
-        const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}`;
+        const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}${consultaFooter}`;
         
         const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
-          caption: simpleCaption,
+          caption: simpleCaption.substring(0, 1024),
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
         });
@@ -2109,7 +2120,7 @@ class BotHandler {
           // Fallback: enviar apenas texto formatado
           await telegramRequest(this.token, "sendMessage", {
             chat_id: chatId,
-            text: `⚠️ <b>Foto encontrada, mas não consegui enviar pelo Telegram.</b>\n\nTente novamente mais tarde.`,
+            text: `⚠️ <b>Foto encontrada, mas não consegui enviar pelo Telegram.</b>\n\nTente novamente mais tarde.${consultaFooter}`,
             parse_mode: "HTML",
             reply_to_message_id: replyToId,
           });
@@ -2118,14 +2129,14 @@ class BotHandler {
         // Enviar dados completos como mensagem separada
         await telegramRequest(this.token, "sendMessage", {
           chat_id: chatId,
-          text: formattedResult,
+          text: formattedResult + consultaFooter,
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
         });
       } else {
         await telegramRequest(this.token, "sendMessage", {
           chat_id: chatId,
-          text: formattedResult,
+          text: formattedResult + consultaFooter,
           parse_mode: "HTML",
           reply_to_message_id: replyToId,
         });
