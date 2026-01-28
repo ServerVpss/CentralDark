@@ -214,11 +214,137 @@ async function sendMessage(token: string, chatId: number, text: string, replyMar
   });
 }
 
-// Função para enviar mensagens longas divididas em partes com botão de apagar
-async function sendLongMessage(token: string, chatId: number, text: string, replyToId?: number, includeDeleteButton = true) {
-  const MAX_LENGTH = 4000; // Deixar margem para o Telegram
+// Função para dividir texto em páginas
+function splitIntoPages(text: string, maxLength: number = 3800): string[] {
+  const pages: string[] = [];
+  let remaining = text;
   
-  // Criar botão de apagar
+  while (remaining.length > 0) {
+    if (remaining.length <= maxLength) {
+      pages.push(remaining);
+      break;
+    }
+    
+    // Tentar quebrar em uma linha
+    let breakPoint = remaining.lastIndexOf('\n', maxLength);
+    if (breakPoint === -1 || breakPoint < maxLength / 2) {
+      breakPoint = remaining.lastIndexOf(' ', maxLength);
+    }
+    if (breakPoint === -1 || breakPoint < maxLength / 2) {
+      breakPoint = maxLength;
+    }
+    
+    pages.push(remaining.substring(0, breakPoint));
+    remaining = remaining.substring(breakPoint).trim();
+  }
+  
+  return pages;
+}
+
+// Função para criar botões de paginação
+function createPaginationKeyboard(paginationId: string, currentPage: number, totalPages: number) {
+  const buttons: InlineButton[] = [];
+  
+  // Botão anterior
+  if (currentPage > 0) {
+    buttons.push({ text: "◀️ Anterior", callback_data: `page:${paginationId}:${currentPage - 1}` });
+  }
+  
+  // Indicador de página
+  buttons.push({ text: `${currentPage + 1}/${totalPages}`, callback_data: "noop" });
+  
+  // Botão próximo
+  if (currentPage < totalPages - 1) {
+    buttons.push({ text: "Próximo ▶️", callback_data: `page:${paginationId}:${currentPage + 1}` });
+  }
+  
+  return {
+    inline_keyboard: [
+      buttons,
+      [{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]
+    ]
+  };
+}
+
+// Função para enviar mensagens longas com paginação por botões
+async function sendLongMessagePaginated(
+  token: string, 
+  chatId: number, 
+  text: string, 
+  supabase: SupabaseClient,
+  replyToId?: number
+) {
+  const MAX_LENGTH = 3800;
+  
+  // Se cabe em uma mensagem, enviar normalmente
+  if (text.length <= MAX_LENGTH) {
+    return telegramRequest(token, "sendMessage", {
+      chat_id: chatId,
+      text,
+      parse_mode: "HTML",
+      reply_to_message_id: replyToId,
+      reply_markup: { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] },
+    });
+  }
+  
+  // Dividir em páginas
+  const pages = splitIntoPages(text, MAX_LENGTH);
+  
+  // Criar registro no banco
+  const { data: paginationData, error } = await supabase
+    .from("paginated_results")
+    .insert({
+      chat_id: chatId,
+      pages: pages,
+      current_page: 0,
+      total_pages: pages.length,
+    })
+    .select("id")
+    .single();
+  
+  if (error || !paginationData) {
+    console.error("Failed to create pagination record:", error);
+    // Fallback: enviar primeira página sem paginação
+    return telegramRequest(token, "sendMessage", {
+      chat_id: chatId,
+      text: `📄 <b>Página 1/${pages.length}</b>\n\n${pages[0]}\n\n<i>⚠️ Paginação indisponível</i>`,
+      parse_mode: "HTML",
+      reply_to_message_id: replyToId,
+      reply_markup: { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] },
+    });
+  }
+  
+  const paginationId = paginationData.id;
+  const keyboard = createPaginationKeyboard(paginationId, 0, pages.length);
+  
+  // Enviar primeira página
+  const pageHeader = `📄 <b>Página 1/${pages.length}</b>\n\n`;
+  const result = await telegramRequest(token, "sendMessage", {
+    chat_id: chatId,
+    text: pageHeader + pages[0],
+    parse_mode: "HTML",
+    reply_to_message_id: replyToId,
+    reply_markup: keyboard,
+  });
+  
+  // Atualizar message_id no banco
+  if (result.ok && result.result) {
+    const messageResult = result.result as { message_id?: number };
+    if (messageResult.message_id) {
+      await supabase
+        .from("paginated_results")
+        .update({ message_id: messageResult.message_id })
+        .eq("id", paginationId);
+    }
+  }
+  
+  return result;
+}
+
+// Função legada para compatibilidade
+async function sendLongMessage(token: string, chatId: number, text: string, replyToId?: number, includeDeleteButton = true) {
+  const MAX_LENGTH = 4000;
+  
   const deleteKeyboard = includeDeleteButton ? {
     inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]]
   } : undefined;
@@ -233,38 +359,14 @@ async function sendLongMessage(token: string, chatId: number, text: string, repl
     });
   }
   
-  // Dividir em partes
-  const parts: string[] = [];
-  let remaining = text;
+  const pages = splitIntoPages(text, MAX_LENGTH);
   
-  while (remaining.length > 0) {
-    if (remaining.length <= MAX_LENGTH) {
-      parts.push(remaining);
-      break;
-    }
-    
-    // Tentar quebrar em uma linha
-    let breakPoint = remaining.lastIndexOf('\n', MAX_LENGTH);
-    if (breakPoint === -1 || breakPoint < MAX_LENGTH / 2) {
-      // Se não encontrar quebra de linha boa, quebrar no espaço
-      breakPoint = remaining.lastIndexOf(' ', MAX_LENGTH);
-    }
-    if (breakPoint === -1 || breakPoint < MAX_LENGTH / 2) {
-      // Fallback: cortar no limite
-      breakPoint = MAX_LENGTH;
-    }
-    
-    parts.push(remaining.substring(0, breakPoint));
-    remaining = remaining.substring(breakPoint).trim();
-  }
-  
-  // Enviar cada parte - só a última tem botão de apagar
-  for (let i = 0; i < parts.length; i++) {
-    const partHeader = parts.length > 1 ? `📄 <b>Parte ${i + 1}/${parts.length}</b>\n\n` : '';
-    const isLastPart = i === parts.length - 1;
+  for (let i = 0; i < pages.length; i++) {
+    const partHeader = pages.length > 1 ? `📄 <b>Parte ${i + 1}/${pages.length}</b>\n\n` : '';
+    const isLastPart = i === pages.length - 1;
     await telegramRequest(token, "sendMessage", {
       chat_id: chatId,
-      text: partHeader + parts[i],
+      text: partHeader + pages[i],
       parse_mode: "HTML",
       reply_to_message_id: i === 0 ? replyToId : undefined,
       reply_markup: isLastPart ? deleteKeyboard : undefined,
@@ -1211,12 +1313,8 @@ class BotHandler {
           ),
         });
       } else {
-        await sendMessage(this.token, chatId, formattedResult,
-          keyboard(
-            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
-            [btn("🗑️ Apagar", "delete_msg")]
-          )
-        );
+        // Usar paginação por botões para resultados longos
+        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase);
       }
 
     } catch (error) {
@@ -2205,11 +2303,11 @@ class BotHandler {
           });
         }
         
-        // Enviar dados completos como mensagem separada (pode ser longa)
-        await sendLongMessage(this.token, chatId, formattedResult + consultaFooter, replyToId);
+        // Enviar dados completos como mensagem separada com paginação por botões
+        await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
       } else {
-        // Enviar resultado (pode ser longo - múltiplas mensagens se necessário)
-        await sendLongMessage(this.token, chatId, formattedResult + consultaFooter, replyToId);
+        // Enviar resultado com paginação por botões
+        await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
       }
 
     } catch (error) {
@@ -2238,6 +2336,32 @@ class BotHandler {
       try {
         await deleteMessage(this.token, chatId, messageId);
       } catch (_e) { /* ignore */ }
+      return;
+    }
+
+    // Pagination handlers
+    if (data.startsWith("page:")) {
+      const parts = data.split(":");
+      if (parts.length === 3) {
+        const paginationId = parts[1];
+        const targetPage = parseInt(parts[2], 10);
+        await this.handlePagination(chatId, messageId, paginationId, targetPage);
+      }
+      return;
+    }
+
+    if (data.startsWith("page_delete:")) {
+      const paginationId = data.replace("page_delete:", "");
+      // Deletar registro de paginação e mensagem
+      await this.supabase.from("paginated_results").delete().eq("id", paginationId);
+      try {
+        await deleteMessage(this.token, chatId, messageId);
+      } catch (_e) { /* ignore */ }
+      return;
+    }
+
+    if (data === "noop") {
+      // Botão de indicador de página - não faz nada
       return;
     }
 
@@ -2568,6 +2692,47 @@ class BotHandler {
         return;
       }
     }
+  }
+
+  // Handler para paginação por botões
+  async handlePagination(chatId: number, messageId: number, paginationId: string, targetPage: number) {
+    // Buscar dados de paginação
+    const { data: paginationData, error } = await this.supabase
+      .from("paginated_results")
+      .select("*")
+      .eq("id", paginationId)
+      .maybeSingle();
+
+    if (error || !paginationData) {
+      console.error("Pagination data not found:", error);
+      // Paginação expirou ou não existe
+      await editMessage(this.token, chatId, messageId,
+        "⚠️ <b>Sessão expirada</b>\n\nFaça uma nova consulta.",
+        { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] }
+      );
+      return;
+    }
+
+    const pages = paginationData.pages as string[];
+    const totalPages = paginationData.total_pages as number;
+
+    // Validar página
+    if (targetPage < 0 || targetPage >= totalPages) {
+      return;
+    }
+
+    // Atualizar página atual no banco
+    await this.supabase
+      .from("paginated_results")
+      .update({ current_page: targetPage })
+      .eq("id", paginationId);
+
+    // Criar keyboard de navegação
+    const keyboard = createPaginationKeyboard(paginationId, targetPage, totalPages);
+
+    // Atualizar mensagem
+    const pageHeader = `📄 <b>Página ${targetPage + 1}/${totalPages}</b>\n\n`;
+    await editMessage(this.token, chatId, messageId, pageHeader + pages[targetPage], keyboard);
   }
 }
 

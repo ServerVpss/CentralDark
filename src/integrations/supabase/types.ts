@@ -312,6 +312,39 @@ export type Database = {
           },
         ]
       }
+      paginated_results: {
+        Row: {
+          chat_id: number
+          created_at: string
+          current_page: number
+          expires_at: string
+          id: string
+          message_id: number | null
+          pages: Json
+          total_pages: number
+        }
+        Insert: {
+          chat_id: number
+          created_at?: string
+          current_page?: number
+          expires_at?: string
+          id?: string
+          message_id?: number | null
+          pages: Json
+          total_pages: number
+        }
+        Update: {
+          chat_id?: number
+          created_at?: string
+          current_page?: number
+          expires_at?: string
+          id?: string
+          message_id?: number | null
+          pages?: Json
+          total_pages?: number
+        }
+        Relationships: []
+      }
       payment_gateway_settings: {
         Row: {
           auto_approve: boolean | null
