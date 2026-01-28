@@ -330,6 +330,45 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_gateways: {
+        Row: {
+          config: Json
+          created_at: string | null
+          gateway_type: string
+          id: string
+          is_active: boolean | null
+          min_deposit: number | null
+          name: string
+          proxy_url: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string | null
+          gateway_type: string
+          id?: string
+          is_active?: boolean | null
+          min_deposit?: number | null
+          name: string
+          proxy_url?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string | null
+          gateway_type?: string
+          id?: string
+          is_active?: boolean | null
+          min_deposit?: number | null
+          name?: string
+          proxy_url?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       payment_history: {
         Row: {
           amount: number
@@ -451,6 +490,74 @@ export type Database = {
             columns: ["plan_id"]
             isOneToOne: false
             referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pix_transactions: {
+        Row: {
+          amount: number
+          bot_id: string | null
+          created_at: string | null
+          description: string | null
+          e2e_id: string | null
+          expires_at: string | null
+          external_id: string | null
+          gateway: string
+          id: string
+          loc_id: string | null
+          paid_at: string | null
+          qr_code_text: string | null
+          qr_code_url: string | null
+          status: string | null
+          telegram_user_id: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          bot_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          e2e_id?: string | null
+          expires_at?: string | null
+          external_id?: string | null
+          gateway?: string
+          id?: string
+          loc_id?: string | null
+          paid_at?: string | null
+          qr_code_text?: string | null
+          qr_code_url?: string | null
+          status?: string | null
+          telegram_user_id?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          bot_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          e2e_id?: string | null
+          expires_at?: string | null
+          external_id?: string | null
+          gateway?: string
+          id?: string
+          loc_id?: string | null
+          paid_at?: string | null
+          qr_code_text?: string | null
+          qr_code_url?: string | null
+          status?: string | null
+          telegram_user_id?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pix_transactions_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
             referencedColumns: ["id"]
           },
         ]
