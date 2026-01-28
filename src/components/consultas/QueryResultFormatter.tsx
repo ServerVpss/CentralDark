@@ -119,7 +119,7 @@ function parseRawText(text: string): ParsedData {
     }
     
     // Check for key-value pairs
-    const kvMatch = trimmedLine.match(/^([^–-:]+)\s*[–-]\s*(.+)$/);
+    const kvMatch = trimmedLine.match(/^([^:–\-]+)\s*[–\-]\s*(.+)$/);
     if (kvMatch) {
       const key = kvMatch[1].trim();
       const value = kvMatch[2].trim();
