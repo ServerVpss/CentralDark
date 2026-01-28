@@ -1,259 +1,280 @@
 
+# Plano: Sistema de Notificações de Compras em Tempo Real
 
-# Plano: Refatoração Completa do TelePanel para Admin Único
+## Problema Identificado
 
-## Visão Geral
+O sistema de notificações atual tem as seguintes falhas:
+1. **ActivityFeed usa dados mockados** - Os dados de atividade no dashboard são estáticos (hardcoded)
+2. **Sem notificações push no painel** - Quando uma compra é confirmada, o admin não recebe notificação visual
+3. **Realtime não conectado ao ActivityFeed** - Não há subscription para novas assinaturas/pagamentos
 
-Este plano recria o sistema do zero, focado em um **único administrador** que gerencia seu bot de consultas. Eliminamos toda a complexidade de multi-usuário e consolidamos as tabelas de dados.
-
-## Problemas Identificados
-
-1. **Dashboard busca tabela errada** - `user_subscriptions` em vez de `telegram_subscriptions`
-2. **Duas tabelas de assinaturas** - Confusão entre `user_subscriptions` e `telegram_subscriptions`
-3. **Sem bots no banco** - Sistema não tem dados configurados
-4. **RLS policies permissivas** - Avisos de segurança
-5. **Hooks fragmentados** - Muitos hooks fazendo consultas separadas
-6. **Páginas desnecessárias** - Assinantes, Gamificação, etc. que não fazem sentido para admin único
-
----
-
-## Arquitetura Simplificada
+## Arquitetura da Solução
 
 ```text
-+------------------+     +-------------------+     +------------------+
-|  Painel Web      | --> |  Edge Functions   | --> |   Telegram Bot   |
-|  (Admin único)   |     |  - telegram-bot   |     |   (Consultas)    |
-+------------------+     |  - telegram-webhook|     +------------------+
-        |                |  - pix-payment    |             |
-        v                +-------------------+             v
-+---------------------------------------------------+
-|                    Supabase                       |
-|  - telegram_bots (1 bot do admin)                 |
-|  - telegram_subscriptions (assinaturas unificadas)|
-|  - subscription_plans (planos do admin)           |
-|  - query_history (logs de consultas)              |
-|  - pending_payments (pagamentos pendentes)        |
-|  - bot_settings (configurações do bot)            |
-+---------------------------------------------------+
++--------------------+     +---------------------+     +------------------+
+|  Telegram Bot      | --> |  telegram_webhook   | --> |  Supabase DB     |
+|  (Pagamento PIX)   |     |  confirmPayment()   |     |  - subscriptions |
++--------------------+     +---------------------+     |  - payments      |
+                                                       +------------------+
+                                                              |
+                                    Realtime Channel (postgres_changes)
+                                                              |
+                                                              v
+                                                       +------------------+
+                                                       |  Painel Web      |
+                                                       |  - ActivityFeed  |
+                                                       |  - Toast notif   |
+                                                       +------------------+
 ```
 
----
+## Componentes a Implementar
 
-## Fase 1: Limpeza do Banco de Dados
+### 1. Tabela de Notificações (opcional, mas recomendado)
+Criar uma tabela `admin_notifications` para armazenar histórico:
 
-### 1.1 Remover tabela duplicada
 ```sql
--- Mover dados de user_subscriptions para telegram_subscriptions (se houver)
--- Depois remover user_subscriptions
-DROP TABLE IF EXISTS user_subscriptions CASCADE;
+CREATE TABLE admin_notifications (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  type TEXT NOT NULL, -- 'payment', 'subscription', 'security', etc.
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  data JSONB DEFAULT '{}',
+  is_read BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
 ```
 
-### 1.2 Corrigir RLS Policies
-- Remover policies `USING (true)` para INSERT/UPDATE/DELETE
-- Criar policies baseadas em `auth.uid()` para tabelas sensíveis
-- Manter SELECT público apenas onde necessário
+### 2. Hook de Notificações (`useNotifications.ts`)
 
----
-
-## Fase 2: Simplificação do Frontend
-
-### 2.1 Remover páginas desnecessárias
-- `src/pages/Subscribers.tsx` - Não necessário (usar TelegramUsers)
-- `src/pages/Gamification.tsx` - Não aplicável a admin único
-
-### 2.2 Atualizar Sidebar
-```typescript
-const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Bot, label: "Meu Bot", path: "/bots" },
-  { icon: Users, label: "Usuários", path: "/telegram-users" },
-  { icon: CreditCard, label: "Planos", path: "/plans" },
-  { icon: History, label: "Consultas", path: "/logs" },
-  { icon: Settings, label: "Configurações", path: "/settings" },
-];
-```
-
-### 2.3 Corrigir Dashboard (Index.tsx)
-- Buscar de `telegram_subscriptions` em vez de `user_subscriptions`
-- Simplificar cards de estatísticas
-- Adicionar realtime para atualização automática
-
----
-
-## Fase 3: Novo Hook Centralizado
-
-### 3.1 Criar `useAdminData.ts`
-Hook único que gerencia todos os dados do admin:
+Novo hook centralizado para:
+- Buscar notificações do banco (ou montar a partir de telegram_subscriptions)
+- Escutar eventos realtime de novas assinaturas
+- Disparar toast sonner quando nova compra for detectada
+- Marcar notificações como lidas
 
 ```typescript
-// src/hooks/useAdminData.ts
-interface AdminData {
-  bot: TelegramBot | null;
-  subscriptions: TelegramSubscription[];
-  plans: SubscriptionPlan[];
-  stats: {
-    totalSubscribers: number;
-    activeSubscribers: number;
-    monthlyRevenue: number;
-    queriesTotal: number;
-    queriesToday: number;
-  };
-  loading: boolean;
-  refresh: () => Promise<void>;
+// Estrutura básica
+interface Notification {
+  id: string;
+  type: 'payment' | 'subscription' | 'security' | 'message';
+  title: string;
+  description: string;
+  time: string;
+  isRead: boolean;
+  data?: Record<string, unknown>;
+}
+
+export function useNotifications() {
+  // 1. Buscar últimas assinaturas como "atividades"
+  // 2. Subscription realtime para telegram_subscriptions
+  // 3. Quando nova assinatura chegar, disparar toast
+  // 4. Retornar lista de atividades formatadas
 }
 ```
 
-### 3.2 Implementar Realtime
-- Subscription para `telegram_subscriptions`
-- Subscription para `telegram_bots`
-- Atualização automática de contadores
+### 3. ActivityFeed Refatorado
 
----
+Modificar `ActivityFeed.tsx` para:
+- Usar o novo hook `useNotifications`
+- Exibir dados reais em vez de mockados
+- Mostrar últimas 10 atividades (compras, consultas, etc.)
+- Atualizar em tempo real
 
-## Fase 4: Refatoração de Páginas
+### 4. Sistema de Toast para Novas Compras
 
-### 4.1 Dashboard Simplificado
-```text
-+----------------------------------+
-|  Dashboard                       |
-+----------------------------------+
-|  [Stats Cards - 4 cards]         |
-|  - Usuários Ativos               |
-|  - Receita do Mês                |
-|  - Consultas Hoje                |
-|  - Status do Bot                 |
-+----------------------------------+
-|  [Status do Bot]   [Ações]       |
-|  - Online/Offline  - Sync        |
-|  - Webhook ativo   - Configurar  |
-+----------------------------------+
-|  [Últimas Assinaturas]           |
-|  - Lista das 5 últimas           |
-+----------------------------------+
-```
-
-### 4.2 Página de Bot Única
-- Configuração centralizada do único bot
-- Não permitir múltiplos bots
-- Wizard de setup se não houver bot
-
-### 4.3 Usuários Telegram (já existe)
-- Manter funcionalidade atual
-- Corrigir busca de dados
-
-### 4.4 Planos (já existe)
-- Manter funcionalidade atual
-- Corrigir estatísticas
-
----
-
-## Fase 5: Edge Functions
-
-### 5.1 telegram-webhook (já funcional)
-- Apenas verificar se está respondendo
-- Adicionar health check periódico
-
-### 5.2 telegram-bot (já funcional)
-- Manter como está
-
-### 5.3 pix-payment (já funcional)
-- Manter como está
-
----
-
-## Fase 6: Setup Inicial
-
-### 6.1 Criar planos padrão (se não existirem)
-```sql
-INSERT INTO subscription_plans (user_id, code, name, title, price, days, is_active)
-VALUES 
-  ('admin-user-id', 'diario', 'Diário', 'Acesso Diário', 5.00, 1, true),
-  ('admin-user-id', 'semanal', 'Semanal', 'Acesso Semanal', 15.00, 7, true),
-  ('admin-user-id', 'mensal', 'Mensal', 'Acesso Mensal', 35.00, 30, true)
-ON CONFLICT (code) DO NOTHING;
-```
-
----
+Quando uma nova assinatura for inserida no banco:
+- O hook detecta via realtime
+- Dispara um toast success com som (opcional)
+- Adiciona à lista de atividades
 
 ## Arquivos a Criar/Modificar
 
 ### Criar:
-1. `src/hooks/useAdminData.ts` - Hook centralizado
+1. `src/hooks/useNotifications.ts` - Hook centralizado de notificações
+2. Migration para tabela `admin_notifications` (opcional)
 
 ### Modificar:
-1. `src/pages/Index.tsx` - Dashboard simplificado com dados corretos
-2. `src/pages/Bots.tsx` - Página única de bot (não lista)
-3. `src/components/layout/Sidebar.tsx` - Menu simplificado
-4. `src/App.tsx` - Remover rotas desnecessárias
-
-### Remover:
-1. `src/pages/Subscribers.tsx`
-2. `src/pages/Gamification.tsx`
-
-### Banco de Dados:
-1. Migration para remover `user_subscriptions`
-2. Migration para corrigir RLS policies
-
----
-
-## Ordem de Implementação
-
-1. **Migração do banco** - Corrigir tabelas e RLS
-2. **Hook centralizado** - `useAdminData.ts`
-3. **Dashboard** - Corrigir estatísticas
-4. **Sidebar** - Simplificar menu
-5. **Bots** - Página única de configuração
-6. **Limpeza** - Remover páginas e rotas desnecessárias
-7. **Testes** - Verificar fluxo completo
+1. `src/components/dashboard/ActivityFeed.tsx` - Usar dados reais
+2. `src/pages/Index.tsx` - Integrar notificações toast
 
 ---
 
 ## Seção Técnica
 
-### Consultas Corrigidas
+### Hook useNotifications.ts
 
-**Dashboard Stats:**
 ```typescript
-// ANTES (errado):
-const { count } = await supabase
-  .from("user_subscriptions")  // Tabela errada!
-  .select("*", { count: "exact", head: true })
-  .eq("status", "active");
+import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-// DEPOIS (correto):
-const { count } = await supabase
-  .from("telegram_subscriptions")
-  .select("*", { count: "exact", head: true })
-  .gte("expires_at", new Date().toISOString());
+interface Activity {
+  id: string;
+  type: "payment" | "subscription" | "security" | "message" | "query";
+  title: string;
+  description: string;
+  time: string;
+  data?: Record<string, unknown>;
+}
+
+export function useNotifications() {
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchActivities = useCallback(async () => {
+    // Buscar últimas 20 assinaturas
+    const { data: subs } = await supabase
+      .from("telegram_subscriptions")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(20);
+
+    // Buscar últimas 10 consultas
+    const { data: queries } = await supabase
+      .from("query_history")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    // Formatar como atividades
+    const formattedActivities: Activity[] = [
+      ...(subs || []).map((s) => ({
+        id: s.id,
+        type: "payment" as const,
+        title: "Nova Assinatura",
+        description: `${s.plan_name} - R$ ${s.value?.toFixed(2)}`,
+        time: formatTimeAgo(s.created_at),
+        data: s,
+      })),
+      ...(queries || []).map((q) => ({
+        id: q.id,
+        type: "query" as const,
+        title: `Consulta ${q.query_type.toUpperCase()}`,
+        description: q.query_input,
+        time: formatTimeAgo(q.created_at),
+      })),
+    ].sort((a, b) => /* ordenar por data */).slice(0, 15);
+
+    setActivities(formattedActivities);
+    setLoading(false);
+  }, []);
+
+  // Realtime subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel("notifications")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "telegram_subscriptions" },
+        (payload) => {
+          const newSub = payload.new;
+          // Disparar toast
+          toast.success("💰 Nova Compra!", {
+            description: `${newSub.plan_name} - R$ ${newSub.value?.toFixed(2)}`,
+            duration: 5000,
+          });
+          // Atualizar lista
+          fetchActivities();
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "query_history" },
+        () => fetchActivities()
+      )
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
+  }, [fetchActivities]);
+
+  return { activities, loading, refresh: fetchActivities };
+}
 ```
 
-### Realtime Setup
+### ActivityFeed Modificado
+
 ```typescript
-const channel = supabase
-  .channel('admin-realtime')
-  .on('postgres_changes', 
-    { event: '*', schema: 'public', table: 'telegram_subscriptions' },
-    () => refetch()
-  )
-  .on('postgres_changes',
-    { event: '*', schema: 'public', table: 'telegram_bots' },
-    () => refetch()
-  )
-  .subscribe();
+import { useNotifications } from "@/hooks/useNotifications";
+import { CreditCard, Search, Shield, Clock } from "lucide-react";
+
+const iconMap = {
+  payment: CreditCard,
+  query: Search,
+  security: Shield,
+  subscription: CreditCard,
+  message: MessageSquare,
+};
+
+export function ActivityFeed() {
+  const { activities, loading } = useNotifications();
+
+  if (loading) {
+    return <Skeleton />;
+  }
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h2 className="text-lg font-semibold mb-4">Atividade Recente</h2>
+      {activities.length === 0 ? (
+        <p className="text-muted-foreground text-center py-8">
+          Nenhuma atividade recente
+        </p>
+      ) : (
+        <div className="space-y-4">
+          {activities.map((activity) => {
+            const Icon = iconMap[activity.type];
+            return (
+              <div key={activity.id} className="flex items-start gap-4">
+                <Icon className="h-5 w-5" />
+                <div>
+                  <p className="font-medium">{activity.title}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {activity.description}
+                  </p>
+                </div>
+                <span className="text-xs text-muted-foreground ml-auto">
+                  {activity.time}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 ```
 
-### RLS Policies Corrigidas
-```sql
--- Política correta para telegram_subscriptions
-CREATE POLICY "Admin can manage subscriptions"
-ON telegram_subscriptions
-FOR ALL
-USING (
-  EXISTS (
-    SELECT 1 FROM user_roles
-    WHERE user_id = auth.uid()
-    AND role = 'admin'
-  )
-);
+### Função formatTimeAgo
+
+```typescript
+function formatTimeAgo(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 1) return "Agora";
+  if (diffMins < 60) return `${diffMins} min atrás`;
+  if (diffHours < 24) return `${diffHours}h atrás`;
+  return `${diffDays}d atrás`;
+}
 ```
 
+---
+
+## Ordem de Implementação
+
+1. **Criar hook `useNotifications.ts`** - Lógica centralizada
+2. **Atualizar `ActivityFeed.tsx`** - Consumir dados reais
+3. **Testar realtime** - Adicionar assinatura via bot e ver toast
+4. (Opcional) Criar tabela `admin_notifications` para persistência
+
+## Resultado Esperado
+
+- Quando um usuário pagar via PIX e a assinatura for confirmada:
+  1. Toast aparece no canto da tela: "💰 Nova Compra! Plano Mensal - R$ 35.00"
+  2. ActivityFeed atualiza automaticamente com a nova entrada
+  3. Stats do dashboard (receita, assinantes) atualizam em tempo real
