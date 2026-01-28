@@ -17,6 +17,7 @@ import {
   Upload,
   Send,
   Zap,
+  Sparkles,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -194,10 +195,6 @@ export default function BotSettings() {
             <Send className="h-4 w-4 mr-2" />
             Broadcast
           </Button>
-          <Button variant="outline" onClick={() => navigate(`/bots/${botId}/migrate`)}>
-            <Upload className="h-4 w-4 mr-2" />
-            Migrar
-          </Button>
           <Button variant="glow" onClick={handleSave} disabled={saving}>
             {saving ? (
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -209,10 +206,14 @@ export default function BotSettings() {
         </div>
 
         <Tabs defaultValue="general" className="w-full">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsList className="grid w-full max-w-lg grid-cols-3">
             <TabsTrigger value="general" className="gap-2">
               <Settings className="h-4 w-4" />
               Configurações
+            </TabsTrigger>
+            <TabsTrigger value="engagement" className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Engajamento
             </TabsTrigger>
             <TabsTrigger value="payments" className="gap-2">
               <CreditCard className="h-4 w-4" />
@@ -487,15 +488,15 @@ export default function BotSettings() {
                 />
               </div>
 
-              {/* Fake Engagement Settings */}
-              <div className="lg:col-span-2">
-                <FakeEngagementSettings
-                  botId={botId || ""}
-                  settings={settings}
-                  onUpdate={() => {}}
-                />
-              </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="engagement" className="mt-6">
+            <FakeEngagementSettings
+              botId={botId || ""}
+              settings={settings}
+              onUpdate={() => {}}
+            />
           </TabsContent>
 
           <TabsContent value="payments" className="mt-6">
