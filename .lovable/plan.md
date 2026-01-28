@@ -1,151 +1,160 @@
 
 
-## Plano: Corrigir Exibição de Fotos no Bot Telegram
+## Plano: Exibir Todas as Informações da Consulta CPF
 
 ### Problema Identificado
 
-Analisando os logs da edge function `telegram-webhook`:
+Analisando a consulta CPF completa fornecida, identificamos várias seções que não estão sendo exibidas corretamente:
 
-1. **Requisições são enviadas corretamente:**
-   ```
-   Fetching from: http://node.tconect.xyz:3030/foto?cpf=38244335831&estado=RJ
-   Fetching from: http://node.tconect.xyz:3030/foto?cpf=38244335831&estado=BA
-   ...
-   ```
-
-2. **Nenhuma resposta é logada** - não há "Response received" para as requisições de foto
-
-3. **Nenhuma foto é encontrada** - não há log "Photo found in X, stopping search early"
-
-4. **Resultado enviado sem foto** - "Telegram API: sendMessage" em vez de "sendPhoto"
-
-### Causas Prováveis
-
-| Causa | Probabilidade | Descrição |
-|-------|---------------|-----------|
-| Timeout muito curto | Alta | 3 segundos pode não ser suficiente para a API TConect responder |
-| Campo foto incorreto | Média | A API pode retornar a foto em campo diferente (image, base64, url, data) |
-| API não retorna JSON válido | Baixa | A resposta pode não ser um JSON parseável |
+| Seção | Formato | Problema |
+|-------|---------|----------|
+| **INTERESSES PESSOAIS** | `- Turismo: Não` | Parser trata como item de lista, perde chave/valor |
+| **PARENTES** | `MAE ⎯ NOME ⎯` | Dois travessões confundem o parser |
+| **EMPREGOS** | `• CNPJ CONTRATANTE: ...` | Itens longos com múltiplos campos |
+| **ENDERECOS** | Lista com linhas vazias entre itens | Parser pode estar perdendo items |
+| **CNS, PIS, TÍTULO ELEITOR** | Campos novos | Não categorizados |
+| **CLASSE SOCIAL, PROFISSÃO** | Campos novos | Não categorizados |
 
 ### Solução
 
-#### Parte 1: Adicionar Logs de Debug
+#### Parte 1: Adicionar Novas Categorias
 
-Adicionar logs detalhados para entender o que a API retorna:
+Adicionar categorias para campos que estão indo para "OUTROS DADOS":
 
 ```typescript
-for (const { state, result } of batchResults) {
-  // LOG: Ver o que a API retornou para cada estado
-  console.log(`Photo search result for ${state}:`, JSON.stringify(result).substring(0, 300));
-  
-  // Verificar múltiplos campos possíveis para a foto
-  const fotoUrl = result.foto || result.image || result.url || result.base64;
-  
-  if (result && !result.error && fotoUrl) {
-    results[state] = { ...result, foto: fotoUrl };
-    if (!foundFoto) {
-      foundFoto = fotoUrl;
-      foundNome = result.nome;
-      foundEstado = state;
-    }
+const categories: Record<string, { icon: string; label: string; fields: string[] }> = {
+  basic: {
+    icon: '[✦]',
+    label: 'DADOS BÁSICOS',
+    fields: ['nome', 'cpf', 'nascimento', 'rg', 'sexo', 'mae', 'pai', 'nome_mae', 'nome_pai', 
+             'naturalidade', 'nacionalidade', 'idade', 'obito', 'status', 'municipio_nascimento', 
+             'raca', 'tipo_sanguineo', 'estado_civil', 'status_receita']
+  },
+  documents: {
+    icon: '[✦]',
+    label: 'DOCUMENTOS',
+    fields: ['pis', 'nis', 'cns', 'titulo_eleitor', 'zona', 'secao', 'ctps']
+  },
+  financial: {
+    icon: '[✦]',
+    label: 'DADOS FINANCEIROS',
+    fields: ['renda', 'score', 'classe', 'classe_social', 'recebe_inss', 'poder_aquisitivo', 'bancos']
+  },
+  work: {
+    icon: '[✦]',
+    label: 'DADOS PROFISSIONAIS',
+    fields: ['emprego', 'empregos', 'empresa', 'profissao', 'escolaridade', 'ocupacao', 'admissao', 'demissao']
+  },
+  contact: {
+    icon: '[✦]',
+    label: 'DADOS DE CONTATO',
+    fields: ['telefone', 'telefones', 'celular', 'email', 'emails', 'whatsapp']
+  },
+  address: {
+    icon: '[✦]',
+    label: 'ENDEREÇO',
+    fields: ['endereco', 'enderecos', 'logradouro', 'numero', 'bairro', 'cidade', 'uf', 'cep', 'municipio']
+  },
+  family: {
+    icon: '[✦]',
+    label: 'PARENTES',
+    fields: ['parentes', 'mae', 'pai', 'conjuge', 'filhos']
+  },
+  vehicle: {
+    icon: '[✦]',
+    label: 'VEÍCULOS',
+    fields: ['placa', 'veiculos', 'chassi', 'renavam', 'marca', 'modelo', 'ano', 'cor']
+  },
+  interests: {
+    icon: '[✦]',
+    label: 'INTERESSES PESSOAIS',
+    fields: ['interesses', 'turismo', 'luxo', 'internet', 'celular', 'cartao', 'seguro', 'investidor']
   }
+};
+```
+
+#### Parte 2: Melhorar Parser para Seção "INTERESSES PESSOAIS"
+
+O formato `- Turismo: Não` precisa ser tratado diferentemente. Quando há `:` após o `-`, é um par chave/valor, não um item de lista:
+
+```typescript
+// Detectar linha de lista com marcador - (mas não linhas de separação)
+if (trimmed.startsWith('-') && !trimmed.match(/^-+$/)) {
+  const itemValue = trimmed.substring(1).trim();
+  
+  // NOVO: Verificar se é formato "Chave: Valor" (seção Interesses Pessoais)
+  const keyValueMatch = itemValue.match(/^([^:]+):\s*(.+)$/);
+  if (keyValueMatch) {
+    const key = keyValueMatch[1].trim().toLowerCase().replace(/\s+/g, '_');
+    const value = keyValueMatch[2].trim();
+    if (value && value !== '-') {
+      result[key] = value;
+    }
+  } else if (itemValue && !itemValue.match(/^[\-=_]+$/)) {
+    currentList.push(itemValue);
+  }
+  continue;
 }
 ```
 
-#### Parte 2: Aumentar Timeout
+#### Parte 3: Tratar Formato PARENTES Especial
 
-Aumentar o timeout de 3s para 5s ou 8s para dar mais tempo à API:
-
-```typescript
-// De: 3000ms (muito curto)
-const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-// Para: 8000ms (mais seguro)
-const timeoutId = setTimeout(() => controller.abort(), 8000);
-```
-
-#### Parte 3: Verificar Múltiplos Campos de Foto
-
-Atualizar a lógica para aceitar diferentes nomes de campo:
+O formato `MAE ⎯ AURIA MARIA ⎯` tem dois travessões. Precisamos identificar o padrão:
 
 ```typescript
-// Verificar múltiplos campos possíveis
-const getFotoUrl = (result: Record<string, unknown>): string | null => {
-  const possibleFields = ['foto', 'image', 'url', 'photo', 'base64', 'data'];
-  for (const field of possibleFields) {
-    const value = result[field];
-    if (typeof value === 'string' && value.length > 10) {
-      // É uma URL ou base64
-      if (value.startsWith('http') || value.startsWith('data:image')) {
-        return value;
-      }
-    }
+// Tratar formato especial de parentes: TIPO ⎯ NOME ⎯
+const parentMatch = trimmed.match(/^(MAE|PAI|CONJUGE|FILHO|IRMAO|IRMA|AVÔ|AVÓ|TIO|TIA)\s*⎯\s*([^⎯]+)/i);
+if (parentMatch) {
+  const parentType = parentMatch[1].toLowerCase();
+  const parentName = parentMatch[2].trim();
+  if (result.parentes === undefined) {
+    result.parentes = [];
   }
-  return null;
-};
+  (result.parentes as string[]).push(`${parentType.toUpperCase()}: ${parentName}`);
+  continue;
+}
 ```
 
 ---
 
-### Arquivo a Modificar
+### Arquivos a Modificar
 
 | Arquivo | Mudança |
 |---------|---------|
-| `supabase/functions/telegram-webhook/index.ts` | Adicionar logs, aumentar timeout, verificar múltiplos campos |
+| `supabase/functions/telegram-webhook/index.ts` | Atualizar categorias, melhorar parser |
 
 ---
 
 ### Mudanças Detalhadas
 
-**Linha 416** - Aumentar timeout:
-```typescript
-// De:
-const timeoutId = setTimeout(() => controller.abort(), 3000);
+**Linhas 604-640** - Atualizar categorias:
 
-// Para:
-const timeoutId = setTimeout(() => controller.abort(), 8000);
-```
+- Adicionar campos: `municipio_nascimento`, `raca`, `tipo_sanguineo`, `estado_civil`, `status_receita`
+- Nova categoria `documents`: PIS, NIS, CNS, TÍTULO ELEITOR
+- Nova categoria `family`: parentes
+- Nova categoria `interests`: interesses pessoais
+- Expandir `financial`: classe_social, recebe_inss
 
-**Linhas 437-446** - Adicionar logs e verificar múltiplos campos:
-```typescript
-for (const { state, result } of batchResults) {
-  // LOG: Ver o que a API retorna
-  console.log(`Foto result for ${state}:`, JSON.stringify(result).substring(0, 500));
-  
-  // Verificar múltiplos campos possíveis para a foto
-  const fotoUrl = result.foto || result.image || result.url || result.photo;
-  
-  if (result && !result.error && fotoUrl) {
-    results[state] = { ...result, foto: fotoUrl };
-    if (!foundFoto) {
-      foundFoto = fotoUrl;
-      foundNome = result.nome;
-      foundEstado = state;
-      console.log(`Photo found in ${state}, URL: ${String(fotoUrl).substring(0, 100)}`);
-    }
-  }
-}
-```
+**Linhas 529-536** - Melhorar parser de lista com `-`:
 
-**Linhas 1047 e 1998** - Melhorar verificação de foto para envio:
-```typescript
-// Verificar múltiplos formatos de foto
-const fotoUrl = result.foto || result.image || result.url || result.photo;
-const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
-  (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+- Detectar formato `- Chave: Valor` e extrair como campo separado
+- Manter comportamento de lista para itens simples
 
-if (isValidPhotoUrl) {
-  await telegramRequest(this.token, "sendPhoto", {
-    chat_id: chatId,
-    photo: fotoUrl,
-    caption: formattedResult.substring(0, 1024),
-    parse_mode: "HTML",
-    reply_markup: keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")]),
-  });
-} else {
-  // ... sendMessage fallback
-}
-```
+**Linhas 538-566** - Adicionar detecção de formato PARENTES:
+
+- Detectar padrão `TIPO ⎯ NOME ⎯`
+- Armazenar em array `parentes`
+
+---
+
+### Resultado Esperado
+
+| Antes | Depois |
+|-------|--------|
+| Muitos campos em "OUTROS DADOS" | Campos organizados por categoria |
+| Interesses perdidos | Seção [✦] INTERESSES PESSOAIS com todos os campos |
+| Parentes não formatado | Seção [✦] PARENTES: MAE: NOME |
+| PIS, CNS em outros | Seção [✦] DOCUMENTOS com PIS, CNS, TÍTULO |
 
 ---
 
@@ -153,15 +162,9 @@ if (isValidPhotoUrl) {
 
 | Item | Descrição |
 |------|-----------|
-| Timeout | Aumentar de 3s para 8s |
-| Logs | Adicionar log do resultado de cada estado |
-| Campos | Verificar `foto`, `image`, `url`, `photo` e `base64` |
-| Debug | Log completo para identificar formato real da API |
-
-### Resultado Esperado
-
-Após as mudanças:
-1. Os logs mostrarão exatamente o que a API TConect retorna
-2. Se a foto existir em qualquer campo, será detectada e exibida
-3. O timeout maior dará tempo suficiente para a API responder
+| **Novas categorias** | documents, family, interests |
+| **Campos expandidos** | +15 campos nas categorias existentes |
+| **Parser `-`** | Detecta `Chave: Valor` após hífen |
+| **Parser parentes** | Trata formato especial com dois travessões |
+| **Linhas vazias** | Ignorar linhas vazias dentro de listas |
 
