@@ -206,6 +206,9 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
       body: JSON.stringify(body),
     });
     const data = await response.json();
+    if (!data.ok) {
+      console.error(`Telegram API error for ${method}:`, JSON.stringify(data));
+    }
     return data;
   } catch (error) {
     console.error(`Telegram API error:`, error);
@@ -287,14 +290,17 @@ async function sendLongMessagePaginated(
   
   // Se cabe em uma mensagem, enviar normalmente
   if (text.length <= MAX_LENGTH) {
-    return telegramRequest(token, "sendMessage", {
+    const payload: Record<string, unknown> = {
       chat_id: chatId,
       text,
       parse_mode: "HTML",
       reply_to_message_id: replyToId,
-      message_effect_id: messageEffectId,
       reply_markup: { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] },
-    });
+    };
+    if (messageEffectId) {
+      payload.message_effect_id = messageEffectId;
+    }
+    return telegramRequest(token, "sendMessage", payload);
   }
   
   // Dividir em páginas
@@ -329,14 +335,17 @@ async function sendLongMessagePaginated(
   
   // Enviar primeira página
   const pageHeader = `📄 <b>Página 1/${pages.length}</b>\n\n`;
-  const result = await telegramRequest(token, "sendMessage", {
+  const paginatedPayload: Record<string, unknown> = {
     chat_id: chatId,
     text: pageHeader + pages[0],
     parse_mode: "HTML",
     reply_to_message_id: replyToId,
-    message_effect_id: messageEffectId,
     reply_markup: keyboard,
-  });
+  };
+  if (messageEffectId) {
+    paginatedPayload.message_effect_id = messageEffectId;
+  }
+  const result = await telegramRequest(token, "sendMessage", paginatedPayload);
   
   // Atualizar message_id no banco
   if (result.ok && result.result) {
