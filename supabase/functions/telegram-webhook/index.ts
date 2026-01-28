@@ -326,7 +326,7 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
     return await fetchFromProvider(providers.tconect_score, "/placa1", "placa", cleanInput);
   }
 
-  // TConect Foto (single state)
+  // TConect Foto - with state (e.g., /foto SP 12345678900)
   if (normalizedType === "foto" && estado) {
     return await fetchFromProvider(
       providers.tconect_foto,
@@ -337,10 +337,14 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
     );
   }
 
-  // TConect Nacional (search all states for photo)
-  if (normalizedType === "nacional") {
-    console.log("Starting national photo search across all states...");
-    const results: Record<string, unknown> = {};
+  // TConect Foto - search ALL states (default when no state specified)
+  // Also handles /nacional command
+  if (normalizedType === "foto" || normalizedType === "nacional") {
+    console.log(`Starting national photo search across all states for ${normalizedType}...`);
+    const results: Record<string, Record<string, unknown>> = {};
+    let foundFoto: unknown = null;
+    let foundNome: unknown = null;
+    let foundEstado: string | null = null;
     
     const batchSize = 5;
     for (let i = 0; i < brazilianStates.length; i += batchSize) {
@@ -358,17 +362,31 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
         })
       );
       
-      batchResults.forEach(({ state, result }) => {
+      for (const { state, result } of batchResults) {
         if (result && !result.error && result.foto) {
           results[state] = result;
+          // Keep the first photo found for quick response
+          if (!foundFoto) {
+            foundFoto = result.foto;
+            foundNome = result.nome;
+            foundEstado = state;
+          }
         }
-      });
+      }
     }
     
+    // If only one photo found, return it directly with data
+    if (Object.keys(results).length === 1 && foundEstado) {
+      return { ...results[foundEstado], estado_encontrado: foundEstado };
+    }
+    
+    // Multiple photos or national query - return summary with first photo
     return {
       cpf: cleanInput,
       estados_encontrados: Object.keys(results),
       total_fotos: Object.keys(results).length,
+      foto: foundFoto,
+      nome: foundNome,
       resultados: results,
     };
   }
@@ -764,8 +782,8 @@ class BotHandler {
       [btn("📍 CEP", "query:cep"), btn("📝 Nome", "query:nome")],
       [btn("📊 Score", "query:score"), btn("💳 PIX", "query:pix")],
       [btn("🪪 RG", "query:rg"), btn("🪪 CNH", "query:cnh")],
+      [btn("📸 Foto (Todos Estados)", "query:nacional")],
       [btn("📸 Foto por Estado", "query:foto")],
-      [btn("🇧🇷 Foto Nacional", "query:nacional")],
       [btn("🔙 Voltar", "menu:main")],
     ];
 
@@ -1678,7 +1696,7 @@ class BotHandler {
       telefone: "telefone", tel: "telefone", email: "email",
       cep: "cep", nome: "nome", score: "score",
       rg: "rg", cnh: "cnh", pix: "pix",
-      foto: "foto", nacional: "nacional",
+      foto: "foto", nacional: "foto", // nacional agora usa a mesma lógica de foto sem estado
     };
 
     const queryType = commandMap[command];
@@ -1703,8 +1721,7 @@ class BotHandler {
         rg: "/rg MG12345678",
         cnh: "/cnh 12345678900",
         pix: "/pix chave@pix.com",
-        foto: "/foto 12345678900 SP",
-        nacional: "/nacional 12345678900",
+        foto: "/foto 12345678900 (busca em todos estados) ou /foto SP 12345678900 (estado específico)",
       };
 
       await telegramRequest(this.token, "sendMessage", {
@@ -1716,42 +1733,46 @@ class BotHandler {
       return;
     }
 
-    // For foto, check if state is provided
+    // For foto, check if state is provided (optional now)
+    // Format: /foto 12345678900 (all states) or /foto SP 12345678900 (specific state)
     let estado: string | undefined;
+    let actualInput = queryInput;
+    
     if (queryType === "foto") {
       const inputParts = queryInput.split(/\s+/);
-      if (inputParts.length >= 2) {
+      
+      // Check if first part is a state code (2 letters)
+      if (inputParts.length >= 2 && inputParts[0].length === 2 && brazilianStates.includes(inputParts[0].toUpperCase())) {
+        // Format: /foto SP 12345678900
+        estado = inputParts[0].toUpperCase();
+        actualInput = inputParts.slice(1).join(" ");
+      } else if (inputParts.length >= 2 && inputParts[inputParts.length - 1].length === 2 && brazilianStates.includes(inputParts[inputParts.length - 1].toUpperCase())) {
+        // Format: /foto 12345678900 SP
         estado = inputParts[inputParts.length - 1].toUpperCase();
-        if (estado.length === 2) {
-          // Valid state code
-        } else {
-          estado = undefined;
-        }
+        actualInput = inputParts.slice(0, -1).join(" ");
       }
-      if (!estado) {
-        await telegramRequest(this.token, "sendMessage", {
-          chat_id: chatId,
-          text: `⚠️ <b>Para foto, informe o estado</b>\n\nExemplo: <code>/foto 12345678900 SP</code>`,
-          parse_mode: "HTML",
-          reply_to_message_id: replyToId,
-        });
-        return;
-      }
+      // If no state found, estado remains undefined - will search all states
     }
 
-    // Send processing message
+    // Use actualInput for foto queries (CPF extracted from format)
+    const inputForQuery = queryType === "foto" ? actualInput : queryInput;
+
+    // Send processing message - show if searching all states
+    const searchingAllStates = queryType === "foto" && !estado;
     const processingMsg = await telegramRequest(this.token, "sendMessage", {
       chat_id: chatId,
-      text: `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>`,
+      text: searchingAllStates 
+        ? `⏳ <b>Buscando foto em todos os estados...</b>\n\nIsso pode levar alguns segundos.`
+        : `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>`,
       parse_mode: "HTML",
       reply_to_message_id: replyToId,
     });
 
     try {
-      const result = await executeQuery(queryType, queryInput, estado);
+      const result = await executeQuery(queryType, inputForQuery, estado);
       
       // Log query
-      await this.logQuery(telegramUserId, queryType, queryInput, result);
+      await this.logQuery(telegramUserId, queryType, inputForQuery, result);
 
       // Delete processing message
       if (processingMsg.ok && processingMsg.result) {
