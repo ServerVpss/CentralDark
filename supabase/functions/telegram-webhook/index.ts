@@ -438,18 +438,25 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
         // LOG: Ver o que a API TConect retorna para debug
         console.log(`Foto result for ${state}:`, JSON.stringify(result).substring(0, 500));
         
-        // Verificar múltiplos campos possíveis para a foto
-        const fotoUrl = result?.foto || result?.image || result?.url || result?.photo || result?.base64;
+        // Verificar múltiplos campos possíveis para a foto (incluindo fotoBase64)
+        let fotoData = result?.foto || result?.image || result?.url || result?.photo || result?.fotoBase64;
         
-        if (result && !result.error && fotoUrl) {
+        // Se é Base64 puro (começa com /9j/ para JPEG ou iVBOR para PNG), adicionar prefixo
+        if (fotoData && typeof fotoData === 'string') {
+          if (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR')) {
+            fotoData = `data:image/jpeg;base64,${fotoData}`;
+          }
+        }
+        
+        if (result && !result.error && fotoData) {
           // Normalizar o campo foto no resultado
-          results[state] = { ...result, foto: fotoUrl };
+          results[state] = { ...result, foto: fotoData };
           // Keep the first photo found for quick response
           if (!foundFoto) {
-            foundFoto = fotoUrl;
+            foundFoto = fotoData;
             foundNome = result.nome;
             foundEstado = state;
-            console.log(`Photo found in ${state}, URL: ${String(fotoUrl).substring(0, 100)}`);
+            console.log(`Photo found in ${state}, URL: ${String(fotoData).substring(0, 100)}`);
           }
         }
       }
@@ -1091,8 +1098,16 @@ class BotHandler {
       // Format and send result
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
       
-      // Check for photo - verificar múltiplos campos possíveis
-      const fotoUrl = result.foto || result.image || result.url || result.photo;
+      // Check for photo - verificar múltiplos campos possíveis (incluindo fotoBase64)
+      let fotoUrl = result.foto || result.image || result.url || result.photo || result.fotoBase64;
+      
+      // Se é Base64 puro, adicionar prefixo data URL
+      if (fotoUrl && typeof fotoUrl === 'string') {
+        if (fotoUrl.startsWith('/9j/') || fotoUrl.startsWith('iVBOR')) {
+          fotoUrl = `data:image/jpeg;base64,${fotoUrl}`;
+        }
+      }
+      
       const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
@@ -2046,8 +2061,16 @@ class BotHandler {
       // Format and send result
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
 
-      // Check for photo - verificar múltiplos campos possíveis
-      const fotoUrl = result.foto || result.image || result.url || result.photo;
+      // Check for photo - verificar múltiplos campos possíveis (incluindo fotoBase64)
+      let fotoUrl = result.foto || result.image || result.url || result.photo || result.fotoBase64;
+      
+      // Se é Base64 puro, adicionar prefixo data URL
+      if (fotoUrl && typeof fotoUrl === 'string') {
+        if (fotoUrl.startsWith('/9j/') || fotoUrl.startsWith('iVBOR')) {
+          fotoUrl = `data:image/jpeg;base64,${fotoUrl}`;
+        }
+      }
+      
       const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
