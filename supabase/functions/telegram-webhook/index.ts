@@ -473,8 +473,15 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     if (obj === null || obj === undefined) return items;
     if (typeof obj !== 'object') return items;
 
+    // Campos de metadados a ignorar completamente
+    const ignoredKeys = ['comando', 'valor', 'status', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado'];
+    
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
+      const keyLower = key.toLowerCase();
+      
+      // Ignorar campos de metadados
+      if (ignoredKeys.includes(keyLower)) continue;
       
       // Ignorar campos de foto e valores indesejados
       if (key === 'foto' && typeof value === 'string' && value.startsWith('http')) continue;
