@@ -308,6 +308,54 @@ async function fetchFromProvider(
   }
 }
 
+// Versão com suporte a AbortSignal para timeout
+async function fetchFromProviderWithTimeout(
+  provider: ApiProvider,
+  endpoint: string,
+  queryParam: string,
+  queryValue: string,
+  additionalParams?: Record<string, string>,
+  signal?: AbortSignal
+): Promise<Record<string, unknown>> {
+  const url = new URL(`${provider.baseUrl}:${provider.port}${endpoint}`);
+  url.searchParams.set(queryParam, queryValue);
+  
+  if (additionalParams) {
+    Object.entries(additionalParams).forEach(([key, value]) => {
+      url.searchParams.set(key, value);
+    });
+  }
+
+  console.log(`Fetching from: ${url.toString()}`);
+
+  try {
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: { "Accept": "application/json" },
+      signal,
+    });
+
+    if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
+      if (response.status === 404) {
+        return { error: "Dados não encontrados", status: 404, notFound: true };
+      }
+      return { error: `Erro na API: ${response.status}`, status: response.status };
+    }
+
+    const data = await response.json();
+    console.log(`Response received:`, JSON.stringify(data).substring(0, 200));
+    return data;
+  } catch (err) {
+    const error = err as Error;
+    if (error.name === 'AbortError') {
+      return { error: "Timeout na requisição", notFound: true };
+    }
+    console.error(`Fetch error:`, error);
+    return { error: `Falha na conexão: ${error.message}` };
+  }
+}
+
 async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
   const normalizedType = queryType.toLowerCase();
   const cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
@@ -359,19 +407,32 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
     let foundNome: unknown = null;
     let foundEstado: string | null = null;
     
-    const batchSize = 5;
+    // OTIMIZAÇÃO: Aumentar batch size para 9 (27/9 = 3 batches = ~10-15s)
+    const batchSize = 9;
     for (let i = 0; i < brazilianStates.length; i += batchSize) {
       const batch = brazilianStates.slice(i, i + batchSize);
       const batchResults = await Promise.all(
         batch.map(async (state) => {
-          const result = await fetchFromProvider(
-            providers.tconect_foto,
-            "/foto",
-            "cpf",
-            cleanInput,
-            { estado: state }
-          );
-          return { state, result };
+          // OTIMIZAÇÃO: Adicionar timeout de 3s por estado para não travar
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 3000);
+          
+          try {
+            const result = await fetchFromProviderWithTimeout(
+              providers.tconect_foto,
+              "/foto",
+              "cpf",
+              cleanInput,
+              { estado: state },
+              controller.signal
+            );
+            clearTimeout(timeoutId);
+            return { state, result };
+          } catch (err) {
+            clearTimeout(timeoutId);
+            console.log(`Timeout or error for state ${state}:`, (err as Error).message);
+            return { state, result: { error: "timeout", notFound: true } };
+          }
         })
       );
       
@@ -385,6 +446,12 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
             foundEstado = state;
           }
         }
+      }
+      
+      // OTIMIZAÇÃO: Se já encontrou foto, para a busca (early exit)
+      if (foundFoto) {
+        console.log(`Photo found in ${foundEstado}, stopping search early`);
+        break;
       }
     }
     
@@ -1526,6 +1593,28 @@ class BotHandler {
   // =============== MAIN HANDLER ===============
   async handleUpdate() {
     const { update } = this;
+    const updateId = update.update_id;
+
+    // ========== PROTEÇÃO CONTRA DUPLICATAS ==========
+    // Verifica se já processamos este update_id para evitar loops
+    const { data: existing } = await this.supabase
+      .from("processed_updates")
+      .select("id")
+      .eq("update_id", updateId)
+      .eq("bot_id", this.bot.id)
+      .single();
+
+    if (existing) {
+      console.log(`Update ${updateId} already processed, skipping duplicate`);
+      return;
+    }
+
+    // Marcar como processado ANTES de executar (evita race conditions)
+    await this.supabase.from("processed_updates").insert({
+      update_id: updateId,
+      bot_id: this.bot.id
+    });
+    // ================================================
 
     if (update.callback_query) {
       await this.handleCallback(update.callback_query);
