@@ -15,6 +15,7 @@ import {
   Droplets,
   Star,
   AlertCircle,
+  Camera,
 } from "lucide-react";
 
 interface QueryResultFormatterProps {
@@ -163,6 +164,26 @@ function groupFields(data: ParsedData): Record<string, ParsedData> {
   );
 }
 
+// Extrair foto Base64 dos dados
+function extractPhoto(data: any): string | null {
+  if (!data || typeof data !== 'object') return null;
+  
+  const fotoData = data?.foto || data?.fotoBase64 || data?.image || data?.photo || data?.url;
+  if (!fotoData || typeof fotoData !== 'string') return null;
+  
+  // Se é Base64 puro (começa com /9j/ para JPEG ou iVBOR para PNG), adicionar prefixo
+  if (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR')) {
+    return `data:image/jpeg;base64,${fotoData}`;
+  }
+  
+  // Se já é data URL ou HTTP URL
+  if (fotoData.startsWith('data:image') || fotoData.startsWith('http')) {
+    return fotoData;
+  }
+  
+  return null;
+}
+
 export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
   if (!data) return null;
 
@@ -201,10 +222,35 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
     );
   }
 
+  // Extrair foto dos dados originais ou parseados
+  const photoUrl = extractPhoto(data) || extractPhoto(parsedData);
+  
   const groupedData = groupFields(parsedData);
 
   return (
     <div className="space-y-4">
+      {/* Card de Foto - exibido primeiro se houver foto */}
+      {photoUrl && (
+        <Card className="bg-secondary/30 border-border/50">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold text-primary flex items-center gap-2">
+              <Camera className="h-4 w-4" />
+              Foto
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <img 
+              src={photoUrl} 
+              alt="Foto do documento" 
+              className="max-w-[200px] rounded-lg border border-border shadow-sm"
+              onError={(e) => {
+                // Esconder imagem se falhar o carregamento
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          </CardContent>
+        </Card>
+      )}
       {Object.entries(groupedData).map(([groupName, fields]) => (
         <Card key={groupName} className="bg-secondary/30 border-border/50">
           <CardHeader className="pb-2">
