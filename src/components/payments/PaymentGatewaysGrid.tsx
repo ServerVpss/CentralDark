@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Building2,
   Wallet,
@@ -127,11 +127,19 @@ const PAYMENT_GATEWAYS: PaymentGateway[] = [
 ];
 
 export function PaymentGatewaysGrid() {
-  const { gatewaySettings } = usePayments();
-  const [activeGateways, setActiveGateways] = useState<Record<string, boolean>>({
-    efi: gatewaySettings?.gateway_type === "efi",
-  });
+  const { efiGateway } = usePayments();
+  const [activeGateways, setActiveGateways] = useState<Record<string, boolean>>({});
   const [configGateway, setConfigGateway] = useState<string | null>(null);
+
+  // Sync EFI gateway status
+  useEffect(() => {
+    if (efiGateway) {
+      setActiveGateways((prev) => ({
+        ...prev,
+        efi: efiGateway.is_active || false,
+      }));
+    }
+  }, [efiGateway]);
 
   const handleToggleGateway = (gatewayId: string, checked: boolean) => {
     setActiveGateways((prev) => ({
@@ -156,13 +164,12 @@ export function PaymentGatewaysGrid() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {PAYMENT_GATEWAYS.map((gateway) => {
           const isActive = activeGateways[gateway.id] || false;
-          const isEfiActive = gateway.id === "efi" && gatewaySettings?.gateway_type === "efi";
 
           return (
             <Card
               key={gateway.id}
               className={`bg-card border-border transition-all duration-200 ${
-                isActive || isEfiActive
+                isActive
                   ? "border-primary/50 bg-gradient-to-br from-card to-primary/5"
                   : "hover:border-border/80"
               }`}
@@ -183,14 +190,14 @@ export function PaymentGatewaysGrid() {
                     </div>
                   </div>
                   <Badge
-                    variant={isActive || isEfiActive ? "default" : "secondary"}
+                    variant={isActive ? "default" : "secondary"}
                     className={
-                      isActive || isEfiActive
+                      isActive
                         ? "bg-success/20 text-success border-success/30 text-xs"
                         : "bg-secondary text-muted-foreground text-xs"
                     }
                   >
-                    {isActive || isEfiActive ? "Ativo" : "Inativo"}
+                    {isActive ? "Ativo" : "Inativo"}
                   </Badge>
                 </div>
 
@@ -219,7 +226,7 @@ export function PaymentGatewaysGrid() {
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm text-muted-foreground">Ativar Gateway</span>
                   <Switch
-                    checked={isActive || isEfiActive}
+                    checked={isActive}
                     onCheckedChange={(checked) => handleToggleGateway(gateway.id, checked)}
                   />
                 </div>

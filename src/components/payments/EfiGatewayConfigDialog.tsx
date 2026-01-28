@@ -41,7 +41,7 @@ interface EfiGatewayConfigDialogProps {
 }
 
 export function EfiGatewayConfigDialog({ open, onOpenChange }: EfiGatewayConfigDialogProps) {
-  const { gatewaySettings, updateGatewaySettings } = usePayments();
+  const { efiGateway, updateEfiGateway, loadingEfiGateway } = usePayments();
   const [isSaving, setIsSaving] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -59,17 +59,18 @@ export function EfiGatewayConfigDialog({ open, onOpenChange }: EfiGatewayConfigD
   });
 
   useEffect(() => {
-    if (gatewaySettings) {
+    if (efiGateway) {
+      const gatewayConfig = efiGateway.config as { client_id?: string; client_secret?: string; pix_key?: string } || {};
       setConfig({
-        display_name: "EFI (Gerencianet) PIX",
-        min_deposit: 2,
-        client_id: gatewaySettings.pix_key?.includes("Client_Id") ? gatewaySettings.pix_key : "",
-        client_secret: "",
-        pix_key: gatewaySettings.pix_key || "",
+        display_name: efiGateway.name || "EFI (Gerencianet) PIX",
+        min_deposit: efiGateway.min_deposit || 2,
+        client_id: gatewayConfig.client_id || "",
+        client_secret: gatewayConfig.client_secret || "",
+        pix_key: gatewayConfig.pix_key || "",
         certificate_name: "cert.p12",
       });
     }
-  }, [gatewaySettings]);
+  }, [efiGateway]);
 
   const handleCertificateUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -105,19 +106,19 @@ export function EfiGatewayConfigDialog({ open, onOpenChange }: EfiGatewayConfigD
   const handleRegisterWebhook = async () => {
     setIsRegistering(true);
     try {
-      const { data } = await supabase.functions.invoke("pix-payment", {
-        body: { action: "register-webhook" },
+      const { data, error } = await supabase.functions.invoke("efi-register-webhook", {
+        body: {},
       });
+
+      if (error) throw error;
 
       if (data?.success) {
         toast.success("Webhook registrado com sucesso!");
-        await updateGatewaySettings.mutateAsync({
-          webhook_url: data.webhookUrl,
-        });
       } else {
-        toast.success("Webhook registrado!");
+        toast.error(data?.error || "Erro ao registrar webhook");
       }
     } catch (error) {
+      console.error("Register webhook error:", error);
       toast.error("Erro ao registrar webhook");
     } finally {
       setIsRegistering(false);
@@ -125,13 +126,19 @@ export function EfiGatewayConfigDialog({ open, onOpenChange }: EfiGatewayConfigD
   };
 
   const handleSave = async () => {
+    if (!config.client_id || !config.client_secret || !config.pix_key) {
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+
     setIsSaving(true);
     try {
-      await updateGatewaySettings.mutateAsync({
-        gateway_type: "efi",
+      await updateEfiGateway.mutateAsync({
+        client_id: config.client_id,
+        client_secret: config.client_secret,
         pix_key: config.pix_key,
-        auto_approve: true,
-        notification_enabled: true,
+        min_deposit: config.min_deposit,
+        is_active: true,
       });
       onOpenChange(false);
     } catch (error) {
