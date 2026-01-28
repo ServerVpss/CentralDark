@@ -26,12 +26,70 @@ interface ParsedData {
   [key: string]: string | string[] | ParsedData[];
 }
 
+// Lista de chaves conhecidas para parsing de strings concatenadas
+const KNOWN_KEYS = [
+  'Nome', 'CPF', 'Mãe', 'Pai', 'Nascimento', 'Sexo', 'RG', 'CNH', 'PIS', 'NIS', 'CNS',
+  'Alcunha', 'Nome Social', 'Orientação Sexual', 'Identidade de Gênero', 'Deficiência',
+  'Raça/Cor', 'Raça', 'Cor', 'Estado Civil', 'Naturalidade', 'Nacionalidade', 'Óbito',
+  'Escolaridade', 'Profissão', 'Renda', 'Score', 'Classe', 'Classe Social', 'Título Eleitor',
+  'Zona', 'Seção', 'Email', 'Telefone', 'Endereço', 'CEP', 'Bairro', 'Cidade', 'Estado', 'UF',
+  'Município', 'Logradouro', 'Número', 'Complemento', 'TEXTO'
+];
+
+// Parse concatenated string like "Nome: X Mãe: Y CPF: Z"
+function parseConcatenatedString(text: string): ParsedData {
+  const result: ParsedData = {};
+  
+  // Build regex to split by known keys
+  const keysPattern = KNOWN_KEYS.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  const regex = new RegExp(`(${keysPattern}):\\s*`, 'gi');
+  
+  // Find all matches with positions
+  const matches: { key: string; index: number }[] = [];
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    matches.push({ key: match[1], index: match.index });
+  }
+  
+  // Extract values between keys
+  for (let i = 0; i < matches.length; i++) {
+    const currentMatch = matches[i];
+    const nextMatch = matches[i + 1];
+    
+    const valueStart = currentMatch.index + currentMatch.key.length + 1; // +1 for ':'
+    const valueEnd = nextMatch ? nextMatch.index : text.length;
+    
+    let value = text.substring(valueStart, valueEnd).trim();
+    
+    // Remove trailing space before next key
+    value = value.replace(/\s+$/, '');
+    
+    // Skip "Não informado" or empty values
+    if (value && value.toLowerCase() !== 'não informado' && value !== '-') {
+      // Skip TEXTO field as it's just a wrapper
+      if (currentMatch.key.toUpperCase() !== 'TEXTO') {
+        result[currentMatch.key] = value;
+      }
+    }
+  }
+  
+  return result;
+}
+
 // Parse the raw text response into structured data
 function parseRawText(text: string): ParsedData {
   const result: ParsedData = {};
   
   // Remove the bot reference if present
   let cleanText = text.replace(/@\w+\\n/g, '').replace(/@\w+\n/g, '');
+  
+  // First, try to parse as concatenated string (no line breaks)
+  if (!cleanText.includes('\n') && !cleanText.includes('\\n')) {
+    const parsed = parseConcatenatedString(cleanText);
+    if (Object.keys(parsed).length > 0) {
+      return parsed;
+    }
+  }
   
   // Split by \n or actual newlines
   const lines = cleanText.split(/\\n|\n/).filter(line => line.trim());
@@ -41,6 +99,13 @@ function parseRawText(text: string): ParsedData {
   for (const line of lines) {
     const trimmedLine = line.trim();
     if (!trimmedLine) continue;
+    
+    // Try parsing each line as concatenated string
+    const parsedLine = parseConcatenatedString(trimmedLine);
+    if (Object.keys(parsedLine).length > 1) {
+      Object.assign(result, parsedLine);
+      continue;
+    }
     
     // Check for section headers like "EMAILS: ( 2 - Encontrados)"
     const sectionMatch = trimmedLine.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+):\s*\(\s*(\d+)\s*-\s*Encontrados?\s*\)/i);
@@ -54,14 +119,25 @@ function parseRawText(text: string): ParsedData {
     }
     
     // Check for key-value pairs
-    const kvMatch = trimmedLine.match(/^([^–-]+)\s*[–-]\s*(.+)$/);
+    const kvMatch = trimmedLine.match(/^([^–-:]+)\s*[–-]\s*(.+)$/);
     if (kvMatch) {
       const key = kvMatch[1].trim();
       const value = kvMatch[2].trim();
       
       if (currentSection && Array.isArray(result[currentSection])) {
         (result[currentSection] as string[]).push(`${key}: ${value}`);
-      } else {
+      } else if (value && value.toLowerCase() !== 'não informado') {
+        result[key] = value;
+      }
+      continue;
+    }
+    
+    // Check for simple key: value format
+    const simpleKvMatch = trimmedLine.match(/^([^:]+):\s*(.+)$/);
+    if (simpleKvMatch) {
+      const key = simpleKvMatch[1].trim();
+      const value = simpleKvMatch[2].trim();
+      if (value && value.toLowerCase() !== 'não informado' && key.toUpperCase() !== 'TEXTO') {
         result[key] = value;
       }
       continue;
@@ -78,11 +154,7 @@ function parseRawText(text: string): ParsedData {
     
     // Handle items in current section
     if (currentSection && Array.isArray(result[currentSection]) && trimmedLine) {
-      // Check if it's a continuation or new item
-      const simpleKv = trimmedLine.match(/^(.+?):\s*(.+)$/);
-      if (simpleKv) {
-        (result[currentSection] as string[]).push(trimmedLine);
-      }
+      (result[currentSection] as string[]).push(trimmedLine);
     }
   }
   
