@@ -376,34 +376,175 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
   return { error: `Tipo de consulta não suportado: ${queryType}` };
 }
 
-function formatQueryResult(queryType: string, data: Record<string, unknown>): string {
+function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string): string {
   if (data.error) {
     return `❌ <b>Erro:</b> ${data.error}`;
   }
 
-  const label = queryTypeLabels[queryType] || queryType.toUpperCase();
-  let text = `✅ <b>${label} - Resultado</b>\n\n`;
+  // Campos a ignorar (referências a outros bots, links, etc.)
+  const ignoredPatterns = [
+    /@QueryBuscasBot/i,
+    /QueryBuscasBot/i,
+    /t\.me\/querybuscas/i,
+    /querybuscas/i,
+  ];
 
-  const formatValue = (obj: unknown, indent = ""): string => {
-    if (obj === null || obj === undefined) return "";
-    if (typeof obj !== "object") return String(obj);
-    
-    let result = "";
-    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
-      if (key === "foto" && typeof value === "string" && value.startsWith("http")) {
-        continue; // Skip foto URL in text, will be sent separately
-      }
-      if (typeof value === "object" && value !== null) {
-        result += `${indent}📂 <b>${key}:</b>\n${formatValue(value, indent + "  ")}`;
-      } else if (value !== null && value !== undefined && value !== "") {
-        result += `${indent}• <b>${key}:</b> <code>${value}</code>\n`;
-      }
-    }
-    return result;
+  const shouldIgnore = (value: unknown): boolean => {
+    if (typeof value !== 'string') return false;
+    return ignoredPatterns.some(pattern => pattern.test(value));
   };
 
-  text += formatValue(data);
-  
+  // Categorização de campos
+  const categories: Record<string, { icon: string; label: string; fields: string[] }> = {
+    basic: {
+      icon: '[✦]',
+      label: 'DADOS BÁSICOS',
+      fields: ['nome', 'cpf', 'data_nascimento', 'dataNascimento', 'nascimento', 'rg', 'sexo', 'mae', 'pai', 'nome_mae', 'nome_pai', 'naturalidade', 'nacionalidade', 'idade', 'signo', 'obito', 'status']
+    },
+    contact: {
+      icon: '[✦]',
+      label: 'DADOS DE CONTATO',
+      fields: ['telefone', 'telefones', 'celular', 'email', 'emails', 'data_inclusao', 'dataInclusao', 'whatsapp']
+    },
+    address: {
+      icon: '[✦]',
+      label: 'ENDEREÇO',
+      fields: ['endereco', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'estado', 'cep', 'municipio', 'pais', 'tipo_logradouro']
+    },
+    financial: {
+      icon: '[✦]',
+      label: 'DADOS FINANCEIROS',
+      fields: ['renda', 'rendaEstimada', 'score', 'classe', 'poder_aquisitivo', 'credito', 'situacao', 'situacao_cpf', 'situacao_cadastral']
+    },
+    vehicle: {
+      icon: '[✦]',
+      label: 'VEÍCULO',
+      fields: ['placa', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anoModelo', 'anoFabricacao', 'cor', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'especie', 'categoria', 'proprietario']
+    },
+    work: {
+      icon: '[✦]',
+      label: 'DADOS PROFISSIONAIS',
+      fields: ['emprego', 'empresa', 'cargo', 'ctps', 'pis', 'profissao', 'ocupacao', 'cnpj_empresa', 'razao_social', 'admissao', 'demissao', 'salario']
+    },
+    company: {
+      icon: '[✦]',
+      label: 'DADOS EMPRESARIAIS',
+      fields: ['cnpj', 'razao_social', 'nome_fantasia', 'capital_social', 'atividade', 'porte', 'natureza_juridica', 'data_abertura', 'socios', 'matriz', 'filial']
+    }
+  };
+
+  // Organizar dados por categoria
+  const categorizedData: Record<string, Array<{ key: string; value: unknown }>> = {};
+  const uncategorized: Array<{ key: string; value: unknown }> = [];
+
+  const flattenObject = (obj: unknown, prefix = ''): Array<{ key: string; value: unknown }> => {
+    const items: Array<{ key: string; value: unknown }> = [];
+    if (obj === null || obj === undefined) return items;
+    if (typeof obj !== 'object') return items;
+
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+      const fullKey = prefix ? `${prefix}.${key}` : key;
+      
+      // Ignorar campos de foto e valores indesejados
+      if (key === 'foto' && typeof value === 'string' && value.startsWith('http')) continue;
+      if (shouldIgnore(value)) continue;
+      if (value === null || value === undefined || value === '') continue;
+
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        items.push(...flattenObject(value, fullKey));
+      } else if (Array.isArray(value)) {
+        // Handle arrays
+        if (value.length > 0 && typeof value[0] === 'object') {
+          value.forEach((item, i) => {
+            items.push(...flattenObject(item, `${fullKey}[${i}]`));
+          });
+        } else {
+          items.push({ key: fullKey, value: value.filter(v => !shouldIgnore(v)).join(', ') });
+        }
+      } else {
+        items.push({ key: fullKey, value });
+      }
+    }
+    return items;
+  };
+
+  const allItems = flattenObject(data);
+
+  // Categorizar cada item
+  for (const item of allItems) {
+    const keyLower = item.key.toLowerCase().split('.').pop() || item.key.toLowerCase();
+    let found = false;
+
+    for (const [catKey, catInfo] of Object.entries(categories)) {
+      if (catInfo.fields.some(f => keyLower.includes(f.toLowerCase()))) {
+        if (!categorizedData[catKey]) categorizedData[catKey] = [];
+        categorizedData[catKey].push(item);
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      uncategorized.push(item);
+    }
+  }
+
+  // Nome do usuário para saudação
+  const nomeField = allItems.find(i => i.key.toLowerCase().includes('nome') && !i.key.toLowerCase().includes('fantasia'));
+  const userName = nomeField ? String(nomeField.value).split(' ')[0] : 'usuário';
+
+  // Construir mensagem formatada
+  let text = `Olá, <b>${userName}</b>\nAqui você pode ver os dados da consulta 🤩\n\n`;
+
+  const formatKey = (key: string): string => {
+    const lastPart = key.split('.').pop() || key;
+    return lastPart
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/_/g, ' ')
+      .replace(/\[(\d+)\]/g, ' $1')
+      .trim()
+      .toUpperCase();
+  };
+
+  // Adicionar categorias com dados
+  for (const [catKey, catInfo] of Object.entries(categories)) {
+    const items = categorizedData[catKey];
+    if (!items || items.length === 0) continue;
+
+    text += `${catInfo.icon} <b>${catInfo.label}</b>\n`;
+    text += `<pre>`;
+    
+    for (const item of items) {
+      const displayKey = formatKey(item.key);
+      const displayValue = String(item.value);
+      if (!shouldIgnore(displayValue)) {
+        text += `${displayKey} => ${displayValue}\n`;
+      }
+    }
+    
+    text += `</pre>\n`;
+  }
+
+  // Adicionar itens não categorizados
+  if (uncategorized.length > 0) {
+    text += `[✦] <b>OUTROS DADOS</b>\n`;
+    text += `<pre>`;
+    
+    for (const item of uncategorized) {
+      const displayKey = formatKey(item.key);
+      const displayValue = String(item.value);
+      if (!shouldIgnore(displayValue)) {
+        text += `${displayKey} => ${displayValue}\n`;
+      }
+    }
+    
+    text += `</pre>\n`;
+  }
+
+  // Footer com @ do bot
+  const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
+  text += `\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n${botTag}`;
+
   // Limit length for Telegram
   if (text.length > 4000) {
     text = text.substring(0, 3900) + "\n\n<i>... resultado truncado</i>";
@@ -695,7 +836,7 @@ class BotHandler {
       await this.logQuery(telegramUserId, queryType, queryInput, result);
 
       // Format and send result
-      const formattedResult = formatQueryResult(queryType, result);
+      const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
       
       // Check for photo
       if (result.foto && typeof result.foto === "string" && (result.foto as string).startsWith("http")) {
@@ -1621,7 +1762,7 @@ class BotHandler {
       }
 
       // Format and send result
-      const formattedResult = formatQueryResult(queryType, result);
+      const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username);
 
       // Check for photo
       if (result.foto && typeof result.foto === "string" && (result.foto as string).startsWith("http")) {
