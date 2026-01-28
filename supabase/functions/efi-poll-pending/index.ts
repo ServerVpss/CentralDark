@@ -15,38 +15,21 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    console.log('Iniciando polling de transações EFI pendentes...')
+    console.log('Iniciando polling de transações EFI...')
 
-    // Primeiro, marcar transações expiradas
-    const { data: expiredTxs } = await supabase
-      .from('pix_transactions')
-      .update({ status: 'expired' })
-      .eq('gateway', 'efi')
-      .eq('status', 'pending')
-      .lt('expires_at', new Date().toISOString())
-      .select('id, external_id')
+    // Data de 24 horas atrás
+    const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
 
-    if (expiredTxs && expiredTxs.length > 0) {
-      console.log(`${expiredTxs.length} transações marcadas como expiradas`)
-      
-      // Atualizar também em pending_payments
-      for (const tx of expiredTxs) {
-        await supabase
-          .from('pending_payments')
-          .update({ status: 'EXPIRED' })
-          .eq('txid', tx.external_id)
-      }
-    }
-
-    // Buscar transações pendentes que ainda não expiraram
-    const { data: pendingTxs, error: txError } = await supabase
+    // Buscar TODAS as transações das últimas 24 horas que ainda não foram confirmadas
+    // Isso inclui pending E expired (caso tenham sido pagas após expirar no sistema)
+    const { data: txsToCheck, error: txError } = await supabase
       .from('pix_transactions')
       .select('*')
       .eq('gateway', 'efi')
-      .eq('status', 'pending')
-      .gt('expires_at', new Date().toISOString())
-      .order('created_at', { ascending: true })
-      .limit(50)
+      .in('status', ['pending', 'expired'])
+      .gt('created_at', last24h)
+      .order('created_at', { ascending: false })
+      .limit(100)
 
     if (txError) {
       console.error('Erro ao buscar transações:', txError)
@@ -56,13 +39,15 @@ Deno.serve(async (req) => {
       )
     }
 
-    if (!pendingTxs || pendingTxs.length === 0) {
-      console.log('Nenhuma transação pendente encontrada')
+    if (!txsToCheck || txsToCheck.length === 0) {
+      console.log('Nenhuma transação para verificar nas últimas 24h')
       return new Response(
-        JSON.stringify({ success: true, message: 'Nenhuma transação pendente', processed: 0 }),
+        JSON.stringify({ success: true, message: 'Nenhuma transação para verificar', processed: 0 }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
+
+    console.log(`Verificando ${txsToCheck.length} transações das últimas 24h...`)
 
     // Buscar configuração do gateway
     const { data: gateway } = await supabase
@@ -91,7 +76,7 @@ Deno.serve(async (req) => {
     let paid = 0
     const results: any[] = []
 
-    for (const tx of pendingTxs) {
+    for (const tx of txsToCheck) {
       try {
         const proxyResponse = await fetch(proxyUrl, {
           method: 'POST',
