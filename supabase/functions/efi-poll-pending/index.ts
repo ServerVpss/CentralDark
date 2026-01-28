@@ -17,6 +17,27 @@ Deno.serve(async (req) => {
 
     console.log('Iniciando polling de transações EFI pendentes...')
 
+    // Primeiro, marcar transações expiradas
+    const { data: expiredTxs } = await supabase
+      .from('pix_transactions')
+      .update({ status: 'expired' })
+      .eq('gateway', 'efi')
+      .eq('status', 'pending')
+      .lt('expires_at', new Date().toISOString())
+      .select('id, external_id')
+
+    if (expiredTxs && expiredTxs.length > 0) {
+      console.log(`${expiredTxs.length} transações marcadas como expiradas`)
+      
+      // Atualizar também em pending_payments
+      for (const tx of expiredTxs) {
+        await supabase
+          .from('pending_payments')
+          .update({ status: 'EXPIRED' })
+          .eq('txid', tx.external_id)
+      }
+    }
+
     // Buscar transações pendentes que ainda não expiraram
     const { data: pendingTxs, error: txError } = await supabase
       .from('pix_transactions')
