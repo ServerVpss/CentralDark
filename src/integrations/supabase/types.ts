@@ -583,6 +583,35 @@ export type Database = {
           },
         ]
       }
+      processed_updates: {
+        Row: {
+          bot_id: string
+          created_at: string | null
+          id: string
+          update_id: number
+        }
+        Insert: {
+          bot_id: string
+          created_at?: string | null
+          id?: string
+          update_id: number
+        }
+        Update: {
+          bot_id?: string
+          created_at?: string | null
+          id?: string
+          update_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "processed_updates_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
