@@ -327,6 +327,44 @@ export type Database = {
           },
         ]
       }
+      engagement_messages: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          message_template: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          message_template: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          message_template?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "engagement_messages_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       paginated_results: {
         Row: {
           chat_id: number

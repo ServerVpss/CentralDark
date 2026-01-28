@@ -12,6 +12,22 @@ interface SubscriptionPlan {
   price: number;
 }
 
+// Interface para mensagens personalizadas
+interface EngagementMessage {
+  id: string;
+  message_template: string;
+  is_active: boolean;
+}
+
+// Mensagem padrão caso não tenha nenhuma cadastrada
+const DEFAULT_MESSAGE_TEMPLATE = `🎉 *NOVA ASSINATURA!*
+
+👤 *{nome}* acabou de assinar!
+📋 Plano: *{plano}*
+💰 Valor: *R$ {valor}*
+
+🚀 Bem-vindo(a) à família! 🎊`
+
 // Nicks/apelidos para variar
 const NICKS = [
   'brabo_022', 'rei_do_pix', 'magnata_sp', 'chefe_rj', 'boss_mg',
@@ -203,12 +219,25 @@ Deno.serve(async (req) => {
       const randomName = generateRandomName(customNames)
       const randomPlan = plansToUse[Math.floor(Math.random() * plansToUse.length)]
 
-      // Montar mensagem com valores REAIS
-      const message = `🎉 *NOVA ASSINATURA!*\n\n` +
-        `👤 *${randomName}* acabou de assinar!\n` +
-        `📋 Plano: *${randomPlan.title || randomPlan.name}*\n` +
-        `💰 Valor: *R$ ${Number(randomPlan.price).toFixed(2)}*\n\n` +
-        `🚀 Bem-vindo(a) à família! 🎊`
+      // Buscar mensagens personalizadas do banco
+      const { data: customMessages } = await supabase
+        .from('engagement_messages')
+        .select('id, message_template, is_active')
+        .eq('bot_id', setting.bot_id)
+        .eq('is_active', true)
+
+      // Escolher mensagem: personalizada ou padrão
+      let messageTemplate = DEFAULT_MESSAGE_TEMPLATE
+      if (customMessages && customMessages.length > 0) {
+        const randomMsg = customMessages[Math.floor(Math.random() * customMessages.length)]
+        messageTemplate = randomMsg.message_template
+      }
+
+      // Substituir variáveis na mensagem
+      const message = messageTemplate
+        .replace(/\{nome\}/g, randomName)
+        .replace(/\{plano\}/g, randomPlan.title || randomPlan.name)
+        .replace(/\{valor\}/g, Number(randomPlan.price).toFixed(2))
 
       // Botão para adquirir VIP
       const acquireButton = bot.bot_username ? {

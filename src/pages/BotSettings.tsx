@@ -34,6 +34,7 @@ import { TypingReactionsSettings } from "@/components/bots/TypingReactionsSettin
 import { MessageEffectSettings } from "@/components/bots/MessageEffectSettings";
 import { BroadcastDialog } from "@/components/bots/BroadcastDialog";
 import { FakeEngagementSettings } from "@/components/bots/FakeEngagementSettings";
+import { EngagementMessagesManager } from "@/components/bots/EngagementMessagesManager";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
 import { useBotSettings, MessageEffectType } from "@/hooks/useBotSettings";
@@ -491,12 +492,13 @@ export default function BotSettings() {
             </div>
           </TabsContent>
 
-          <TabsContent value="engagement" className="mt-6">
+          <TabsContent value="engagement" className="mt-6 space-y-6">
             <FakeEngagementSettings
               botId={botId || ""}
               settings={settings}
               onUpdate={() => {}}
             />
+            <EngagementMessagesManager botId={botId || ""} />
           </TabsContent>
 
           <TabsContent value="payments" className="mt-6">
