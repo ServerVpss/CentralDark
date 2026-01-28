@@ -22,6 +22,11 @@ export interface BotSettings {
   fixed_emoji: string;
   custom_emojis: string[];
   message_effect: MessageEffectType;
+  // Fake engagement fields
+  fake_engagement_enabled?: boolean;
+  fake_engagement_interval_minutes?: number;
+  fake_engagement_names?: string[];
+  fake_engagement_last_sent?: string | null;
   created_at: string;
   updated_at: string;
 }
