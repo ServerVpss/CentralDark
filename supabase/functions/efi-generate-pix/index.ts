@@ -98,7 +98,7 @@ Deno.serve(async (req) => {
     const proxyUrl = gateway.proxy_url || 'https://api.segredounlock.com/efi-generate-pix.php'
     const txid = generateTxid()
     const cpf = generateValidCpf()
-    const expiresAt = new Date(Date.now() + 3600 * 1000) // 1 hora
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutos
 
     // Chamar proxy PHP para gerar PIX
     const proxyPayload = {
@@ -107,6 +107,7 @@ Deno.serve(async (req) => {
       pix_key: config.pix_key,
       txid,
       amount: Number(amount).toFixed(2),
+      expiracao: 600, // 10 minutos em segundos
       devedor: {
         cpf,
         nome: 'Cliente'
