@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { usePayments, SubscriptionPlan } from "@/hooks/usePayments";
+import { ConfettiCelebration } from "@/components/gamification/ConfettiCelebration";
 
 interface PixPaymentDialogProps {
   open: boolean;
@@ -35,6 +36,7 @@ export function PixPaymentDialog({ open, onOpenChange, plan }: PixPaymentDialogP
   const [isChecking, setIsChecking] = useState(false);
   const [copied, setCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState<string>('');
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // Generate PIX when dialog opens
   useEffect(() => {
@@ -43,6 +45,7 @@ export function PixPaymentDialog({ open, onOpenChange, plan }: PixPaymentDialogP
     }
     if (!open) {
       setPaymentData(null);
+      setShowConfetti(false);
     }
   }, [open, plan]);
 
@@ -103,7 +106,9 @@ export function PixPaymentDialog({ open, onOpenChange, plan }: PixPaymentDialogP
     try {
       const result = await checkPaymentStatus.mutateAsync(paymentData.txid);
       if (result.isPaid) {
-        onOpenChange(false);
+        // Show celebration!
+        setShowConfetti(true);
+        toast.success('Pagamento confirmado com sucesso!');
       } else {
         toast.info('Pagamento ainda não confirmado. Tente novamente em alguns segundos.');
       }
@@ -114,10 +119,24 @@ export function PixPaymentDialog({ open, onOpenChange, plan }: PixPaymentDialogP
     }
   };
 
+  const handleConfettiComplete = () => {
+    setShowConfetti(false);
+    onOpenChange(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-card border-border sm:max-w-md">
-        <DialogHeader>
+    <>
+      <ConfettiCelebration
+        isActive={showConfetti}
+        onComplete={handleConfettiComplete}
+        message="Pagamento Confirmado!"
+        subMessage={`Seu plano ${paymentData?.planName || ''} foi ativado com sucesso.`}
+        icon="party"
+      />
+      
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="bg-card border-border sm:max-w-md">
+          <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5 text-primary" />
             Pagamento PIX
@@ -226,7 +245,8 @@ export function PixPaymentDialog({ open, onOpenChange, plan }: PixPaymentDialogP
             </div>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
