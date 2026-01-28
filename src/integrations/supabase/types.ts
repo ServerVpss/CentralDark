@@ -253,6 +253,7 @@ export type Database = {
           group_title: string | null
           group_url: string | null
           id: string
+          message_effect: string | null
           mute_new_members: boolean | null
           owner_ids: number[] | null
           react_to_messages: boolean | null
@@ -273,6 +274,7 @@ export type Database = {
           group_title?: string | null
           group_url?: string | null
           id?: string
+          message_effect?: string | null
           mute_new_members?: boolean | null
           owner_ids?: number[] | null
           react_to_messages?: boolean | null
@@ -293,6 +295,7 @@ export type Database = {
           group_title?: string | null
           group_url?: string | null
           id?: string
+          message_effect?: string | null
           mute_new_members?: boolean | null
           owner_ids?: number[] | null
           react_to_messages?: boolean | null
