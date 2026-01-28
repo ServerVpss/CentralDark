@@ -34,7 +34,7 @@ export function Header({ className }: HeaderProps) {
       background: "linear-gradient(to right, hsl(220 20% 5% / 0.95), hsl(220 20% 6% / 0.95))",
       backdropFilter: "blur(16px) saturate(180%)",
     }}>
-      <div className="flex h-full items-center justify-between px-4 lg:px-6">
+      <div className="flex h-full items-center justify-between px-4 lg:px-6 gap-4">
         {/* Search */}
         <div className="relative w-full max-w-md group">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
@@ -45,7 +45,7 @@ export function Header({ className }: HeaderProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Notifications */}
           <Button 
             variant="ghost" 
@@ -53,9 +53,9 @@ export function Header({ className }: HeaderProps) {
             className="relative h-10 w-10 rounded-xl hover:bg-white/5 transition-colors"
           >
             <Bell className="h-5 w-5 text-muted-foreground" />
-            <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-50" />
-              <span className="relative inline-flex h-3 w-3 items-center justify-center rounded-full bg-gradient-to-br from-primary to-amber-600 text-[8px] font-bold text-primary-foreground">
+            <span className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-40" />
+              <span className="relative inline-flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-primary to-amber-600 text-[9px] font-bold text-primary-foreground">
                 3
               </span>
             </span>
@@ -64,19 +64,19 @@ export function Header({ className }: HeaderProps) {
           {/* Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-3 px-2 h-11 rounded-xl hover:bg-white/5">
-                <div className="relative">
+              <Button variant="ghost" className="gap-3 px-3 h-11 rounded-xl hover:bg-white/5">
+                <div className="relative flex-shrink-0">
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/30">
                     <User className="h-4 w-4 text-primary" />
                   </div>
                   {/* Online indicator */}
                   <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-gradient-to-br from-emerald-400 to-green-500" />
                 </div>
-                <div className="hidden lg:flex flex-col items-start">
-                  <span className="text-sm font-semibold text-foreground">
+                <div className="hidden lg:flex flex-col items-start text-left">
+                  <span className="text-sm font-semibold text-foreground leading-tight">
                     {profile?.full_name || user?.email?.split("@")[0] || "Usuário"}
                   </span>
-                  <span className="text-xs text-primary flex items-center gap-1">
+                  <span className="text-xs text-primary flex items-center gap-1 leading-tight">
                     <Crown className="h-3 w-3" />
                     Premium
                   </span>
