@@ -427,33 +427,50 @@ const txtBotReferences = [
   "https://t.me/querybuscas", "@QueryBuscasBot", "querybuscas"
 ];
 
+// Lines to skip entirely in TXT
+const txtSkipPatterns = [
+  /^@querybuscasbot$/i,
+  /^https?:\/\/t\.me\/querybuscas$/i,
+  /^resultados encontrados/i,
+  /^base \d+$/i,
+  /^\( \d+ - encontrados?\)$/i,
+  /^empresas:/i,
+  /^emails:/i,
+  /^telefones:/i,
+  /^parentes:/i,
+  /^endereços:/i,
+];
+
 function shouldIgnoreTxtKey(key: string): boolean {
   const keyLower = key.toLowerCase();
-  // Only ignore exact matches for technical keys
   return txtIgnoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik));
 }
 
-function shouldIgnoreTxtValue(value: unknown): boolean {
-  if (value === null || value === undefined || value === "") {
+function shouldIgnoreTxtSingleValue(value: string): boolean {
+  const trimmed = value.trim();
+  if (trimmed === "" || trimmed === "-" || trimmed === "N/A" || trimmed === "null" || trimmed === "undefined") {
     return true;
   }
-  if (typeof value === "string") {
-    const trimmed = value.trim();
-    // Skip only truly empty values
-    if (trimmed === "" || trimmed === "-" || trimmed === "N/A" || trimmed === "null" || trimmed === "undefined") {
-      return true;
-    }
-    // Skip base64 image data
-    if (trimmed.startsWith("/9j/") || trimmed.startsWith("iVBOR") || trimmed.startsWith("data:image")) {
-      return true;
-    }
-    // Skip bot references
-    const valueLower = trimmed.toLowerCase();
-    if (txtBotReferences.some(ref => valueLower.includes(ref.toLowerCase()))) {
-      return true;
-    }
+  // Skip base64 image data
+  if (trimmed.startsWith("/9j/") || trimmed.startsWith("iVBOR") || trimmed.startsWith("data:image")) {
+    return true;
+  }
+  // Skip lines that are just bot references
+  const valueLower = trimmed.toLowerCase();
+  if (valueLower === "@querybuscasbot" || valueLower === "https://t.me/querybuscas" || valueLower === "querybuscas") {
+    return true;
   }
   return false;
+}
+
+function cleanTxtBotReferences(str: string): string {
+  if (!str) return str;
+  // Remove bot reference lines but keep the data
+  let result = str;
+  for (const ref of txtBotReferences) {
+    result = result.replace(new RegExp(ref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '');
+  }
+  return result;
 }
 
 function parseTxtDelimitedKey(key: string): { realKey: string; realValue: string } | null {
@@ -474,39 +491,89 @@ function parseTxtDelimitedKey(key: string): { realKey: string; realValue: string
   return null;
 }
 
-function parseTxtStringData(str: string): Record<string, string> {
-  const result: Record<string, string> = {};
-  if (!str || typeof str !== "string") return result;
+function parseTxtStringData(str: string): Array<{ key: string; value: string }> {
+  const items: Array<{ key: string; value: string }> = [];
+  if (!str || typeof str !== "string") return items;
   
-  const lines = str.split('\n');
+  // First clean bot references
+  const cleanStr = cleanTxtBotReferences(str);
+  const lines = cleanStr.split('\n');
+  
+  let currentSection = "";
+  let sectionItems: string[] = [];
   
   for (const line of lines) {
     const trimmedLine = line.trim();
     if (!trimmedLine) continue;
     
+    // Skip lines that match skip patterns
+    if (txtSkipPatterns.some(p => p.test(trimmedLine))) {
+      // Check if it's a section header
+      if (/^(empresas|emails|telefones|parentes|endereços):/i.test(trimmedLine)) {
+        // Save previous section
+        if (currentSection && sectionItems.length > 0) {
+          items.push({ key: currentSection, value: sectionItems.join(" | ") });
+        }
+        currentSection = trimmedLine.replace(/:/g, '').toLowerCase().trim();
+        sectionItems = [];
+      }
+      continue;
+    }
+    
     // Skip lines that are just separators or headers
     if (trimmedLine.match(/^[═─┌┐└┘├┤│]+$/) || trimmedLine.startsWith('═')) continue;
     
-    const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
+    // Check for bullet point items (part of a list)
+    if (trimmedLine.startsWith('•')) {
+      const itemValue = trimmedLine.substring(1).trim();
+      if (itemValue && !shouldIgnoreTxtSingleValue(itemValue)) {
+        sectionItems.push(itemValue);
+      }
+      continue;
+    }
+    
+    // Try to parse as key-value pair
+    const delimiters = [' ⎯ ', ' — ', ': '];
+    let found = false;
     
     for (const delim of delimiters) {
       const idx = trimmedLine.indexOf(delim);
       if (idx > 0) {
         const key = trimmedLine.substring(0, idx).trim()
-          .replace(/^[•\-\s📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧🔍📊🏢🚗📝│├└┌]+/, '')
+          .replace(/^[•\-\s📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧🔍📊🏢🚗📝│├└┌`]+/, '')
           .toLowerCase()
           .replace(/\s+/g, '_');
         const value = trimmedLine.substring(idx + delim.length).trim();
         
-        if (key && key.length > 1 && value && value !== '-' && value !== 'N/A' && !shouldIgnoreTxtValue(value)) {
-          result[key] = value;
+        if (key && key.length > 1 && value && !shouldIgnoreTxtSingleValue(value)) {
+          // Save any pending section items
+          if (currentSection && sectionItems.length > 0) {
+            items.push({ key: currentSection, value: sectionItems.join(" | ") });
+            currentSection = "";
+            sectionItems = [];
+          }
+          items.push({ key, value });
+          found = true;
         }
         break;
       }
     }
+    
+    // If not a key-value pair and not empty, could be part of a list
+    if (!found && trimmedLine.length > 2 && !shouldIgnoreTxtSingleValue(trimmedLine)) {
+      // Check if it looks like a data item (has numbers or known format)
+      if (/\d/.test(trimmedLine) || trimmedLine.includes(' - ')) {
+        sectionItems.push(trimmedLine);
+      }
+    }
   }
   
-  return result;
+  // Save last section if any
+  if (currentSection && sectionItems.length > 0) {
+    items.push({ key: currentSection, value: sectionItems.join(" | ") });
+  }
+  
+  return items;
 }
 
 function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; value: string }> {
@@ -518,49 +585,52 @@ function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; valu
   
   for (const [key, value] of Object.entries(record)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
-    const keyLower = key.toLowerCase();
     
     // Skip only strict technical keys
     if (shouldIgnoreTxtKey(key)) continue;
     
     // Check if key contains embedded value (NexFuture format: "Nome ⎯ João Silva")
     const parsed = parseTxtDelimitedKey(key);
-    if (parsed && !shouldIgnoreTxtValue(parsed.realValue)) {
+    if (parsed && !shouldIgnoreTxtSingleValue(parsed.realValue)) {
       items.push({ key: parsed.realKey, value: parsed.realValue });
       continue;
     }
     
-    // Skip ignored values
-    if (shouldIgnoreTxtValue(value)) continue;
-    
-    // Handle string values
+    // Handle string values - always try to parse even if contains bot refs
     if (typeof value === "string") {
       const trimmedValue = value.trim();
       
+      // Skip completely empty or useless values
+      if (!trimmedValue || trimmedValue === "-" || trimmedValue === "N/A") continue;
+      
+      // Skip base64 image data
+      if (trimmedValue.startsWith("/9j/") || trimmedValue.startsWith("iVBOR") || trimmedValue.startsWith("data:image")) continue;
+      
       // Check if it's multi-line formatted data (parse it line by line)
       if (trimmedValue.includes('\n')) {
-        const parsedLines = parseTxtStringData(trimmedValue);
-        const parsedEntries = Object.entries(parsedLines);
+        const parsedItems = parseTxtStringData(trimmedValue);
         
-        if (parsedEntries.length > 0) {
-          for (const [pk, pv] of parsedEntries) {
-            if (!shouldIgnoreTxtKey(pk) && !shouldIgnoreTxtValue(pv)) {
-              items.push({ key: pk, value: pv });
+        if (parsedItems.length > 0) {
+          for (const item of parsedItems) {
+            if (!shouldIgnoreTxtKey(item.key) && !shouldIgnoreTxtSingleValue(item.value)) {
+              items.push(item);
             }
           }
         } else {
           // If parsing fails, include raw text (but clean it)
-          const cleanValue = trimmedValue
+          const cleanValue = cleanTxtBotReferences(trimmedValue)
             .replace(/[═─┌┐└┘├┤│]+/g, '')
             .replace(/\n+/g, ' ')
             .trim();
-          if (cleanValue && cleanValue.length > 2) {
+          if (cleanValue && cleanValue.length > 2 && !shouldIgnoreTxtSingleValue(cleanValue)) {
             items.push({ key: fullKey, value: cleanValue });
           }
         }
       } else {
-        // Single-line value - add directly
-        items.push({ key: fullKey, value: trimmedValue });
+        // Single-line value - add directly if not a bot reference
+        if (!shouldIgnoreTxtSingleValue(trimmedValue)) {
+          items.push({ key: fullKey, value: trimmedValue });
+        }
       }
       continue;
     }
@@ -573,20 +643,18 @@ function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; valu
     
     // Handle arrays
     if (Array.isArray(value)) {
-      // For arrays of objects, extract each item
       const validItems: string[] = [];
       for (const item of value) {
-        if (shouldIgnoreTxtValue(item)) continue;
-        
-        if (typeof item === "object" && item !== null) {
-          // Extract object properties
+        if (typeof item === "string") {
+          if (!shouldIgnoreTxtSingleValue(item)) {
+            validItems.push(item);
+          }
+        } else if (typeof item === "object" && item !== null) {
           const subItems = extractAllTxtData(item, "");
           for (const subItem of subItems) {
             validItems.push(`${getTxtLabel(subItem.key)}: ${subItem.value}`);
           }
-        } else if (typeof item === "string") {
-          validItems.push(item);
-        } else {
+        } else if (item !== null && item !== undefined) {
           validItems.push(String(item));
         }
       }
@@ -626,19 +694,31 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
   console.log("TXT Generation - Extracted items count:", items.length);
   
   if (items.length === 0) {
-    // If no items were extracted, dump raw data
+    // If no items were extracted, try to parse raw 'data' field directly
+    const rawData = data.data || data.texto || data.text;
+    if (typeof rawData === "string" && rawData.includes('\n')) {
+      const parsedItems = parseTxtStringData(rawData);
+      if (parsedItems.length > 0) {
+        items.push(...parsedItems);
+      }
+    }
+  }
+  
+  if (items.length === 0) {
+    // If still no items, dump raw data
     txt += `┌─────────────────────────────────────────────────────────────\n`;
     txt += `│ DADOS BRUTOS\n`;
     txt += `├─────────────────────────────────────────────────────────────\n`;
     
     for (const [key, value] of Object.entries(data)) {
       if (shouldIgnoreTxtKey(key)) continue;
-      if (shouldIgnoreTxtValue(value)) continue;
       
       const label = getTxtLabel(key);
       let displayValue: string;
       
-      if (typeof value === "object") {
+      if (typeof value === "string") {
+        displayValue = cleanTxtBotReferences(value).trim();
+      } else if (typeof value === "object") {
         displayValue = JSON.stringify(value, null, 2)
           .replace(/[{}[\]"]/g, '')
           .replace(/,\n/g, '\n')
@@ -647,7 +727,9 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
         displayValue = String(value);
       }
       
-      txt += `│ ${label}: ${displayValue}\n`;
+      if (displayValue && displayValue.length > 2) {
+        txt += `│ ${label}: ${displayValue}\n`;
+      }
     }
     
     txt += `└─────────────────────────────────────────────────────────────\n\n`;
