@@ -18,7 +18,7 @@ interface EngagementMessage {
   message_template: string;
   is_active: boolean;
   interval_minutes: number | null;
-  last_sent_at?: string | null;
+  last_sent_at: string | null;
 }
 
 // Mensagem padrão caso não tenha nenhuma cadastrada
@@ -213,14 +213,14 @@ Deno.serve(async (req) => {
       const randomName = generateRandomName(customNames)
       const randomPlan = plansToUse[Math.floor(Math.random() * plansToUse.length)]
 
-      // Buscar mensagens personalizadas do banco com seus intervalos individuais
+      // Buscar mensagens personalizadas do banco com seus intervalos individuais e last_sent_at
       const { data: customMessages } = await supabase
         .from('engagement_messages')
-        .select('id, message_template, is_active, interval_minutes')
+        .select('id, message_template, is_active, interval_minutes, last_sent_at')
         .eq('bot_id', setting.bot_id)
         .eq('is_active', true)
 
-      // Filtrar mensagens que já podem ser enviadas com base no intervalo individual
+      // Filtrar mensagens que já podem ser enviadas com base no intervalo INDIVIDUAL de cada uma
       const now = new Date()
       const eligibleMessages: EngagementMessage[] = []
       
@@ -228,11 +228,13 @@ Deno.serve(async (req) => {
         for (const msg of customMessages) {
           const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
           
-          // Usar o último envio global como referência para cada mensagem
-          // Cada mensagem tem seu próprio intervalo
-          const timeSinceLast = now.getTime() - lastSent.getTime()
+          // Usar o last_sent_at INDIVIDUAL de cada mensagem
+          const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
+          const timeSinceMsgSent = now.getTime() - msgLastSent.getTime()
           
-          if (timeSinceLast >= msgInterval) {
+          console.log(`Mensagem ${msg.id}: intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
+          
+          if (timeSinceMsgSent >= msgInterval) {
             eligibleMessages.push(msg as EngagementMessage)
           }
         }
@@ -250,8 +252,9 @@ Deno.serve(async (req) => {
         // Tem mensagens personalizadas mas nenhuma elegível ainda
         const nextEligible = customMessages?.reduce((min, msg) => {
           const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
-          const timeUntilEligible = msgInterval - (now.getTime() - lastSent.getTime())
-          return timeUntilEligible < min ? timeUntilEligible : min
+          const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
+          const timeUntilEligible = msgInterval - (now.getTime() - msgLastSent.getTime())
+          return timeUntilEligible > 0 && timeUntilEligible < min ? timeUntilEligible : min
         }, Infinity) || 0
         
         console.log(`Bot ${setting.bot_id}: aguardando próxima mensagem elegível (faltam ${Math.round(nextEligible / 60000)} min)`)
@@ -296,11 +299,21 @@ Deno.serve(async (req) => {
       const result = await response.json()
 
       if (result.ok) {
-        // Atualizar timestamp do último envio
+        // Atualizar timestamp do último envio GLOBAL
         await supabase
           .from('bot_settings')
           .update({ fake_engagement_last_sent: now.toISOString() })
           .eq('id', setting.id)
+
+        // Se foi uma mensagem personalizada, atualizar o last_sent_at INDIVIDUAL dela
+        if (selectedMessage) {
+          await supabase
+            .from('engagement_messages')
+            .update({ last_sent_at: now.toISOString() })
+            .eq('id', selectedMessage.id)
+          
+          console.log(`Atualizado last_sent_at da mensagem ${selectedMessage.id}`)
+        }
 
         console.log(`Bot ${setting.bot_id}: mensagem enviada para ${setting.group_chat_id}`)
         results.push({ 
