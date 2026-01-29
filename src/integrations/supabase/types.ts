@@ -334,6 +334,7 @@ export type Database = {
           id: string
           interval_minutes: number | null
           is_active: boolean | null
+          last_sent_at: string | null
           message_template: string
           updated_at: string
           user_id: string
@@ -344,6 +345,7 @@ export type Database = {
           id?: string
           interval_minutes?: number | null
           is_active?: boolean | null
+          last_sent_at?: string | null
           message_template: string
           updated_at?: string
           user_id: string
@@ -354,6 +356,7 @@ export type Database = {
           id?: string
           interval_minutes?: number | null
           is_active?: boolean | null
+          last_sent_at?: string | null
           message_template?: string
           updated_at?: string
           user_id?: string
