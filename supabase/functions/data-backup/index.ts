@@ -1,64 +1,19 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface BackupData {
-  version: string;
-  created_at: string;
-  user_id: string;
-  checksum: string;
-  tables: {
-    telegram_bots: any[];
-    bot_settings: any[];
-    bot_security_settings: any[];
-    telegram_subscriptions: any[];
-    subscription_plans: any[];
-    payment_gateways: any[];
-    payment_gateway_settings: any[];
-    pix_transactions: any[];
-    pending_payments: any[];
-    engagement_messages: any[];
-    profiles: any[];
-    query_history: any[];
-    bot_analytics: any[];
-    payment_history: any[];
-    telegram_messages: any[];
-  };
-  metadata: {
-    total_records: number;
-    tables_count: number;
-  };
-}
-
-// Simple hash function for checksum
-async function generateChecksum(data: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const dataBuffer = encoder.encode(data);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-
-async function verifyChecksum(backup: BackupData): Promise<boolean> {
-  const originalChecksum = backup.checksum;
-  const dataWithoutChecksum = { ...backup, checksum: "" };
-  const newChecksum = await generateChecksum(JSON.stringify(dataWithoutChecksum.tables));
-  return originalChecksum === newChecksum;
-}
-
-serve(async (req) => {
-  // Handle CORS preflight
+Deno.serve(async (req) => {
+  console.log("[backup-manager] Request received:", req.method);
+  
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    // Get auth header
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(
@@ -67,37 +22,33 @@ serve(async (req) => {
       );
     }
 
-    // Create Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
 
-    // Verify user
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData?.user) {
+      console.error("[backup-manager] Auth error:", userError);
       return new Response(
         JSON.stringify({ error: "Token inválido" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-    const userId = claimsData.claims.sub as string;
+    const userId = userData.user.id;
 
     const url = new URL(req.url);
     const action = url.searchParams.get("action") || "export";
 
-    // EXPORT: Get all user data
+    console.log(`[backup-manager] Action: ${action}, User: ${userId}`);
+
     if (req.method === "GET" && action === "export") {
       console.log(`[backup-manager] Exporting data for user ${userId}`);
 
-      // Fetch all tables in parallel
       const [
         telegramBots,
-        botSettings,
         botSecuritySettings,
-        telegramSubscriptions,
         subscriptionPlans,
         paymentGateways,
         paymentGatewaySettings,
@@ -111,9 +62,7 @@ serve(async (req) => {
         telegramMessages,
       ] = await Promise.all([
         supabase.from("telegram_bots").select("*").eq("user_id", userId),
-        supabase.from("bot_settings").select("*"),
         supabase.from("bot_security_settings").select("*").eq("user_id", userId),
-        supabase.from("telegram_subscriptions").select("*"),
         supabase.from("subscription_plans").select("*").eq("user_id", userId),
         supabase.from("payment_gateways").select("*").eq("user_id", userId),
         supabase.from("payment_gateway_settings").select("*").eq("user_id", userId),
@@ -127,25 +76,17 @@ serve(async (req) => {
         supabase.from("telegram_messages").select("*").eq("user_id", userId),
       ]);
 
-      // Get bot_settings filtered by user's bots
-      const userBotIds = (telegramBots.data || []).map((b) => b.id);
+      const userBotIds = (telegramBots.data || []).map((b: any) => b.id);
       let filteredBotSettings: any[] = [];
-      if (userBotIds.length > 0) {
-        const { data: bs } = await supabase
-          .from("bot_settings")
-          .select("*")
-          .in("bot_id", userBotIds);
-        filteredBotSettings = bs || [];
-      }
-
-      // Filter telegram_subscriptions by user's bots
       let filteredSubscriptions: any[] = [];
+      
       if (userBotIds.length > 0) {
-        const { data: subs } = await supabase
-          .from("telegram_subscriptions")
-          .select("*")
-          .in("bot_id", userBotIds);
-        filteredSubscriptions = subs || [];
+        const [bs, subs] = await Promise.all([
+          supabase.from("bot_settings").select("*").in("bot_id", userBotIds),
+          supabase.from("telegram_subscriptions").select("*").in("bot_id", userBotIds),
+        ]);
+        filteredBotSettings = bs.data || [];
+        filteredSubscriptions = subs.data || [];
       }
 
       const tables = {
@@ -166,7 +107,6 @@ serve(async (req) => {
         telegram_messages: telegramMessages.data || [],
       };
 
-      // Calculate metadata
       const totalRecords = Object.values(tables).reduce(
         (sum, arr) => sum + arr.length,
         0
@@ -175,10 +115,13 @@ serve(async (req) => {
         (key) => tables[key as keyof typeof tables].length > 0
       ).length;
 
-      // Generate checksum
-      const checksum = await generateChecksum(JSON.stringify(tables));
+      const encoder = new TextEncoder();
+      const dataBuffer = encoder.encode(JSON.stringify(tables));
+      const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const checksum = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 
-      const backup: BackupData = {
+      const backup = {
         version: "1.0",
         created_at: new Date().toISOString(),
         user_id: userId,
@@ -197,10 +140,9 @@ serve(async (req) => {
       });
     }
 
-    // VALIDATE: Check backup file structure
     if (req.method === "POST" && action === "validate") {
       const body = await req.json();
-      const backup = body.backup as BackupData;
+      const backup = body.backup;
 
       if (!backup || !backup.version || !backup.tables || !backup.checksum) {
         return new Response(
@@ -212,9 +154,13 @@ serve(async (req) => {
         );
       }
 
-      // Verify checksum
-      const isValid = await verifyChecksum(backup);
-      if (!isValid) {
+      const encoder = new TextEncoder();
+      const dataBuffer = encoder.encode(JSON.stringify(backup.tables));
+      const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const newChecksum = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+
+      if (backup.checksum !== newChecksum) {
         return new Response(
           JSON.stringify({
             valid: false,
@@ -224,7 +170,6 @@ serve(async (req) => {
         );
       }
 
-      // Return preview
       const preview = {
         valid: true,
         version: backup.version,
@@ -233,7 +178,7 @@ serve(async (req) => {
         metadata: backup.metadata,
         tables_summary: Object.entries(backup.tables).map(([name, data]) => ({
           name,
-          records: data.length,
+          records: (data as any[]).length,
         })),
       };
 
@@ -242,11 +187,10 @@ serve(async (req) => {
       });
     }
 
-    // RESTORE: Import data from backup
     if (req.method === "POST" && action === "restore") {
       const body = await req.json();
-      const backup = body.backup as BackupData;
-      const mode = body.mode as "merge" | "replace"; // merge = keep existing, replace = delete first
+      const backup = body.backup;
+      const mode = body.mode as "merge" | "replace";
 
       if (!backup || !backup.tables) {
         return new Response(
@@ -255,24 +199,13 @@ serve(async (req) => {
         );
       }
 
-      // Verify checksum
-      const isValid = await verifyChecksum(backup);
-      if (!isValid) {
-        return new Response(
-          JSON.stringify({ error: "Checksum inválido" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
       console.log(`[backup-manager] Restoring data for user ${userId} in ${mode} mode`);
 
-      // Use service role for restore operations
       const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
       const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
       const results: { table: string; inserted: number; errors: string[] }[] = [];
 
-      // Order matters for foreign keys
       const tableOrder = [
         "profiles",
         "telegram_bots",
@@ -291,17 +224,15 @@ serve(async (req) => {
         "telegram_messages",
       ];
 
-      // If replace mode, delete existing data first (reverse order for FK)
       if (mode === "replace") {
         for (const tableName of [...tableOrder].reverse()) {
           try {
             if (tableName === "telegram_subscriptions" || tableName === "bot_settings") {
-              // These need special handling - delete by bot_id
               const { data: bots } = await adminClient
                 .from("telegram_bots")
                 .select("id")
                 .eq("user_id", userId);
-              const botIds = (bots || []).map((b) => b.id);
+              const botIds = (bots || []).map((b: any) => b.id);
               if (botIds.length > 0) {
                 await adminClient.from(tableName).delete().in("bot_id", botIds);
               }
@@ -314,21 +245,18 @@ serve(async (req) => {
         }
       }
 
-      // Insert data
       for (const tableName of tableOrder) {
-        const tableData = backup.tables[tableName as keyof typeof backup.tables] || [];
+        const tableData = backup.tables[tableName] || [];
         if (tableData.length === 0) continue;
 
         const tableResult = { table: tableName, inserted: 0, errors: [] as string[] };
 
         for (const record of tableData) {
           try {
-            // Update user_id to current user
             const updatedRecord = { ...record };
             if ("user_id" in updatedRecord) {
               updatedRecord.user_id = userId;
             }
-            // Remove id to let DB generate new ones (except for profiles which may need it)
             if (tableName !== "profiles") {
               delete updatedRecord.id;
             }
