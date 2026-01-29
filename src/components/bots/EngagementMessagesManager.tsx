@@ -201,20 +201,14 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
         .update({ last_sent_at: null })
         .eq('id', messageId);
 
-      // Resetar também o last_sent global
-      await supabase
-        .from('bot_settings')
-        .update({ 
-          fake_engagement_enabled: true,
-          fake_engagement_last_sent: null 
-        })
-        .eq('bot_id', botId);
-
-      const response = await supabase.functions.invoke('fake-engagement');
+      // Chamar a função com parâmetro para usar mensagem ESPECÍFICA
+      const response = await supabase.functions.invoke('fake-engagement', {
+        body: { messageId: messageId }
+      });
       
       if (response.error) throw response.error;
       
-      toast.success('Mensagem de teste enviada no grupo!');
+      toast.success('Mensagem de engajamento enviada!');
       fetchMessages();
     } catch (error) {
       console.error('Erro ao testar:', error);

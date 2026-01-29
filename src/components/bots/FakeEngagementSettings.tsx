@@ -140,17 +140,14 @@ export function FakeEngagementSettings({ botId, settings, onUpdate }: FakeEngage
         })
         .eq('bot_id', botId);
 
-      // IMPORTANTE: Também resetar o last_sent_at de TODAS as mensagens de engajamento
-      await supabase
-        .from('engagement_messages')
-        .update({ last_sent_at: null })
-        .eq('bot_id', botId);
-
-      const response = await supabase.functions.invoke('fake-engagement');
+      // Chamar a função com parâmetro para usar mensagem PADRÃO de assinatura
+      const response = await supabase.functions.invoke('fake-engagement', {
+        body: { useDefaultMessage: true }
+      });
       
       if (response.error) throw response.error;
       
-      toast.success('Mensagem de teste enviada no grupo!');
+      toast.success('Mensagem de simulação de assinatura enviada!');
       onUpdate();
     } catch (error) {
       console.error('Erro ao testar:', error);
