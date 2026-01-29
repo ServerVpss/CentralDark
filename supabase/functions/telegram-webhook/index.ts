@@ -1731,7 +1731,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
 }
 
-// =============== FORMATAÇÃO ESPECÍFICA PARA CPF ===============
+// =============== FORMATAÇÃO ESPECÍFICA PARA CPF (MONOESPAÇADO) ===============
 function formatCpfResult(
   data: Record<string, unknown>, 
   userName: string, 
@@ -1746,7 +1746,7 @@ function formatCpfResult(
       for (const [k, v] of Object.entries(data)) {
         if (k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) {
           if (v && typeof v === 'string' && v.trim() && v !== '-' && !shouldIgnore(v)) {
-            return v.trim();
+            return v.trim().toUpperCase();
           }
         }
       }
@@ -1761,9 +1761,9 @@ function formatCpfResult(
       for (const [k, v] of Object.entries(data)) {
         if (k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) {
           if (Array.isArray(v)) {
-            results.push(...v.map(item => String(item).trim()).filter(item => item && item !== '-'));
+            results.push(...v.map(item => String(item).trim().toUpperCase()).filter(item => item && item !== '-'));
           } else if (v && typeof v === 'string' && v.trim() && v !== '-' && !shouldIgnore(v)) {
-            const items = v.split(/[,\n]/).map(item => item.trim()).filter(item => item && item !== '-');
+            const items = v.split(/[,\n]/).map(item => item.trim().toUpperCase()).filter(item => item && item !== '-');
             results.push(...items);
           }
         }
@@ -1808,112 +1808,109 @@ function formatCpfResult(
   const pai = getValue(['pai', 'nome_pai', 'nomepai']);
   const parentes = getArray(['parentes', 'conjuge', 'filhos', 'irmaos']);
 
-  // ============= CONSTRUIR MENSAGEM FORMATADA (Telegram style) =============
-  let text = `👤 <b>CONSULTA CPF</b> 👤\n`;
-  text += `/CPF ${cpf || ''}\n\n`;
-  text += `👋 Olá, ${botTag}!\n\n`;
+  // ============= CONSTRUIR MENSAGEM MONOESPAÇADA =============
+  let lines: string[] = [];
+  
+  // Header
+  lines.push(`👤 CONSULTA CPF`);
+  lines.push(`/CPF ${cpf || ''}`);
+  lines.push(``);
 
   // 👤 DADOS PESSOAIS
-  let hasBasicData = false;
-  let basicSection = `┌─────────────────────────────\n`;
-  basicSection += `│ 👤 <b>DADOS PESSOAIS</b>\n`;
-  basicSection += `├─────────────────────────────\n`;
-  
-  if (nome) { basicSection += `│ 👑 <b>Nome:</b> ${escapeHtml(nome)}\n`; hasBasicData = true; }
-  if (cpf) { basicSection += `│ 🆔 <b>CPF:</b> <code>${escapeHtml(cpf)}</code>\n`; hasBasicData = true; }
-  if (nascimento) { basicSection += `│ 📅 <b>Nascimento:</b> ${escapeHtml(nascimento)}\n`; hasBasicData = true; }
-  if (sexo) { basicSection += `│ 👤 <b>Sexo:</b> ${escapeHtml(sexo)}\n`; hasBasicData = true; }
-  if (raca) { basicSection += `│ 👤 <b>Raça:</b> ${escapeHtml(raca)}\n`; hasBasicData = true; }
-  if (obito) { basicSection += `│ ⚰️ <b>Óbito:</b> ${escapeHtml(obito)}\n`; hasBasicData = true; }
-  if (statusReceita) { basicSection += `│ 📊 <b>Status Receita:</b> ${escapeHtml(statusReceita)}\n`; hasBasicData = true; }
-  
-  basicSection += `└─────────────────────────────\n\n`;
-  if (hasBasicData) text += basicSection;
+  let hasBasicData = nome || cpf || nascimento || sexo || raca || obito || statusReceita;
+  if (hasBasicData) {
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 👤 DADOS PESSOAIS`);
+    lines.push(`├─────────────────────────────`);
+    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
+    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
+    if (nascimento) lines.push(`│ 📅 Nascimento: ${nascimento}`);
+    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
+    if (raca) lines.push(`│ 🎨 Raça: ${raca}`);
+    if (obito) lines.push(`│ ⚰️ Óbito: ${obito}`);
+    if (statusReceita) lines.push(`│ 📊 Status Receita: ${statusReceita}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  }
 
   // 📄 DOCUMENTOS
-  let hasDocuments = false;
-  let docSection = `┌─────────────────────────────\n`;
-  docSection += `│ 📄 <b>DOCUMENTOS</b>\n`;
-  docSection += `├─────────────────────────────\n`;
-  
-  if (rg) { docSection += `│ 🪪 <b>RG:</b> <code>${escapeHtml(rg)}</code>\n`; hasDocuments = true; }
-  if (cns) { docSection += `│ 🏥 <b>CNS:</b> <code>${escapeHtml(cns)}</code>\n`; hasDocuments = true; }
-  if (tituloEleitor) { 
-    docSection += `│ 🗳️ <b>Título:</b> <code>${escapeHtml(tituloEleitor)}</code>`;
-    if (zona) docSection += ` ZONA: ${escapeHtml(zona)}`;
-    if (secao) docSection += ` SECAO: ${escapeHtml(secao)}`;
-    docSection += `\n`;
-    hasDocuments = true; 
+  let hasDocuments = rg || cns || tituloEleitor;
+  if (hasDocuments) {
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 📄 DOCUMENTOS`);
+    lines.push(`├─────────────────────────────`);
+    if (rg) lines.push(`│ 🪪 RG: ${rg}`);
+    if (cns) lines.push(`│ 🏥 CNS: ${cns}`);
+    if (tituloEleitor) {
+      let tituloLine = `│ 🗳️ Título: ${tituloEleitor}`;
+      if (zona) tituloLine += ` ZONA: ${zona}`;
+      if (secao) tituloLine += ` SEÇÃO: ${secao}`;
+      lines.push(tituloLine);
+    }
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   }
-  
-  docSection += `└─────────────────────────────\n\n`;
-  if (hasDocuments) text += docSection;
 
   // 📱 CONTATO
   if (telefones.length > 0) {
-    text += `┌─────────────────────────────\n`;
-    text += `│ 📱 <b>CONTATO</b>\n`;
-    text += `├─────────────────────────────\n`;
-    text += `│ 📞 <b>Telefones:</b>\n`;
-    
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 📱 CONTATO`);
+    lines.push(`├─────────────────────────────`);
+    lines.push(`│ 📞 Telefones:`);
     telefones.slice(0, 8).forEach(tel => {
       const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
       const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
       const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
-      text += `│   • ${escapeHtml(cleanTel)}${wppIcon}\n`;
+      lines.push(`│   • ${cleanTel}${wppIcon}`);
     });
-    if (telefones.length > 8) text += `│   <i>... e mais ${telefones.length - 8}</i>\n`;
-    
-    text += `└─────────────────────────────\n\n`;
+    if (telefones.length > 8) lines.push(`│   ... e mais ${telefones.length - 8}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   }
 
   // 📍 ENDEREÇOS
   if (enderecos.length > 0) {
-    text += `┌─────────────────────────────\n`;
-    text += `│ 📍 <b>ENDEREÇOS</b>\n`;
-    text += `├─────────────────────────────\n`;
-    
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 📍 ENDEREÇOS`);
+    lines.push(`├─────────────────────────────`);
     enderecos.slice(0, 10).forEach(endereco => {
       const cleanEndereco = endereco
         .replace(/^\[empty\]\s*/gi, '')
         .replace(/^enderecos?\s*:?\s*/gi, '')
         .trim();
       if (cleanEndereco && cleanEndereco.length > 5) {
-        text += `│ 🏠 ${escapeHtml(cleanEndereco)}\n`;
+        lines.push(`│ 🏠 ${cleanEndereco}`);
       }
     });
-    if (enderecos.length > 10) text += `│ <i>... e mais ${enderecos.length - 10}</i>\n`;
-    
-    text += `└─────────────────────────────\n\n`;
+    if (enderecos.length > 10) lines.push(`│ ... e mais ${enderecos.length - 10}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   }
 
   // 💰 FINANCEIRO
-  let hasFinancial = false;
-  let finSection = `┌─────────────────────────────\n`;
-  finSection += `│ 💰 <b>FINANCEIRO</b>\n`;
-  finSection += `├─────────────────────────────\n`;
-  
-  if (renda) { finSection += `│ 💵 <b>Renda:</b> R$ ${escapeHtml(renda)}\n`; hasFinancial = true; }
-  if (classeSocial) { finSection += `│ 📊 <b>Poder Aquisitivo:</b> ${escapeHtml(classeSocial)}\n`; hasFinancial = true; }
-  if (csb8) { finSection += `│ 📈 <b>CSB8:</b> ${escapeHtml(csb8)}\n`; hasFinancial = true; }
-  if (csb8Faixa) { finSection += `│ ⚠️ <b>CSB8 Faixa de Risco:</b> ${escapeHtml(csb8Faixa)}\n`; hasFinancial = true; }
-  if (csba) { finSection += `│ 📈 <b>CSBA:</b> ${escapeHtml(csba)}\n`; hasFinancial = true; }
-  if (csbaFaixa) { finSection += `│ ⚠️ <b>CSBA Faixa de Risco:</b> ${escapeHtml(csbaFaixa)}\n`; hasFinancial = true; }
-  
-  finSection += `└─────────────────────────────\n\n`;
-  if (hasFinancial) text += finSection;
+  let hasFinancial = renda || classeSocial || csb8 || csba || csb8Faixa || csbaFaixa;
+  if (hasFinancial) {
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 💰 FINANCEIRO`);
+    lines.push(`├─────────────────────────────`);
+    if (renda) lines.push(`│ 💵 Renda: R$ ${renda}`);
+    if (classeSocial) lines.push(`│ 📊 Poder Aquisitivo: ${classeSocial}`);
+    if (csb8) lines.push(`│ 📈 CSB8: ${csb8}`);
+    if (csb8Faixa) lines.push(`│ ⚠️ CSB8 Faixa de Risco: ${csb8Faixa}`);
+    if (csba) lines.push(`│ 📈 CSBA: ${csba}`);
+    if (csbaFaixa) lines.push(`│ ⚠️ CSBA Faixa de Risco: ${csbaFaixa}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  }
 
   // 👨‍👩‍👧‍👦 FAMÍLIA
   if (mae || pai || parentes.length > 0) {
-    text += `┌─────────────────────────────\n`;
-    text += `│ 👨‍👩‍👧‍👦 <b>FAMILIARES</b>\n`;
-    text += `├─────────────────────────────\n`;
-    
-    if (mae) text += `│ 👩 <b>Mãe:</b> ${escapeHtml(mae)}\n`;
-    if (pai) text += `│ 👨 <b>Pai:</b> ${escapeHtml(pai)}\n`;
-    
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 👨‍👩‍👧‍👦 FAMILIARES`);
+    lines.push(`├─────────────────────────────`);
+    if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
+    if (pai) lines.push(`│ 👨 Pai: ${pai}`);
     parentes.slice(0, 10).forEach(parente => {
-      // Detectar tipo de parente
       const parenteUpper = parente.toUpperCase();
       let icon = '👤';
       if (parenteUpper.includes('IRMA') || parenteUpper.includes('IRMÃ')) icon = '👧';
@@ -1921,14 +1918,15 @@ function formatCpfResult(
       if (parenteUpper.includes('FILHO')) icon = '👦';
       if (parenteUpper.includes('FILHA')) icon = '👧';
       if (parenteUpper.includes('CONJUGE') || parenteUpper.includes('CÔNJUGE')) icon = '💑';
-      text += `│ ${icon} ${escapeHtml(parente)}\n`;
+      lines.push(`│ ${icon} ${parente}`);
     });
-    if (parentes.length > 10) text += `│ <i>... e mais ${parentes.length - 10}</i>\n`;
-    
-    text += `└─────────────────────────────\n\n`;
+    if (parentes.length > 10) lines.push(`│ ... e mais ${parentes.length - 10}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   }
 
-  return text;
+  // Retornar como bloco <pre> monoespaçado
+  return `<pre>${lines.join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS ===============
