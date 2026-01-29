@@ -21,10 +21,25 @@ import {
   Users,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  Search,
 } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface QueryResultFormatterProps {
   data: any;
+  showCopyButton?: boolean;
+  onQueryCpf?: (cpf: string) => void;
 }
 
 interface ParsedData {
@@ -43,6 +58,8 @@ interface PersonRecord {
   cep?: string;
   [key: string]: string | undefined;
 }
+
+const RECORDS_PER_PAGE = 10;
 
 // Lista de chaves conhecidas para parsing de strings concatenadas (ordenadas por tamanho decrescente para evitar conflitos)
 const KNOWN_KEYS = [
@@ -641,8 +658,10 @@ function isMultiPersonResult(data: any): boolean {
   return false;
 }
 
-export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
+export function QueryResultFormatter({ data, showCopyButton, onQueryCpf }: QueryResultFormatterProps) {
   const [expandedRecords, setExpandedRecords] = useState<Set<number>>(new Set([0]));
+  const [currentPage, setCurrentPage] = useState(0);
+  const [loadingCpf, setLoadingCpf] = useState<string | null>(null);
   
   if (!data) return null;
 
@@ -662,6 +681,11 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
     const records = parseMultiplePersonRecords(rawText);
     
     if (records.length > 1) {
+      const totalPages = Math.ceil(records.length / RECORDS_PER_PAGE);
+      const startIdx = currentPage * RECORDS_PER_PAGE;
+      const endIdx = Math.min(startIdx + RECORDS_PER_PAGE, records.length);
+      const pageRecords = records.slice(startIdx, endIdx);
+      
       const toggleRecord = (index: number) => {
         setExpandedRecords(prev => {
           const newSet = new Set(prev);
@@ -675,22 +699,63 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
       };
       
       const toggleAll = () => {
-        if (expandedRecords.size === records.length) {
-          setExpandedRecords(new Set([0]));
+        const pageIndices = pageRecords.map((_, i) => startIdx + i);
+        const allExpanded = pageIndices.every(i => expandedRecords.has(i));
+        
+        if (allExpanded) {
+          setExpandedRecords(new Set([startIdx]));
         } else {
-          setExpandedRecords(new Set(records.map((_, i) => i)));
+          setExpandedRecords(new Set([...expandedRecords, ...pageIndices]));
+        }
+      };
+
+      const handleQueryCpf = async (cpf: string) => {
+        if (onQueryCpf) {
+          onQueryCpf(cpf);
+          return;
+        }
+        
+        // Fallback: fazer a consulta diretamente
+        const cleanCpf = cpf.replace(/[^\d]/g, '');
+        setLoadingCpf(cleanCpf);
+        
+        try {
+          const { data: result, error } = await supabase.functions.invoke("api-query", {
+            body: {
+              queryType: "cpf",
+              queryInput: cleanCpf,
+            },
+          });
+          
+          if (error) {
+            toast.error("Erro ao consultar CPF: " + error.message);
+          } else if (result?.success) {
+            toast.success("CPF consultado! Veja o resultado abaixo.");
+            // O resultado será exibido onde o componente pai controlar
+          } else {
+            toast.error("Consulta retornou erro");
+          }
+        } catch (err) {
+          toast.error("Erro ao consultar CPF");
+        } finally {
+          setLoadingCpf(null);
         }
       };
       
       return (
         <div className="space-y-4">
           {/* Header com contagem */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
               <span className="font-semibold">
                 {records.length} pessoas encontradas
               </span>
+              {totalPages > 1 && (
+                <Badge variant="outline" className="text-xs">
+                  Página {currentPage + 1}/{totalPages}
+                </Badge>
+              )}
             </div>
             <Button
               variant="outline"
@@ -698,7 +763,7 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
               onClick={toggleAll}
               className="text-xs"
             >
-              {expandedRecords.size === records.length ? (
+              {pageRecords.every((_, i) => expandedRecords.has(startIdx + i)) ? (
                 <>
                   <ChevronUp className="h-3 w-3 mr-1" />
                   Recolher Todos
@@ -714,23 +779,24 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
           
           {/* Cards de pessoas */}
           <div className="grid gap-3">
-            {records.map((record, index) => {
-              const isExpanded = expandedRecords.has(index);
+            {pageRecords.map((record, index) => {
+              const globalIndex = startIdx + index;
+              const isExpanded = expandedRecords.has(globalIndex);
               
               return (
                 <Card 
-                  key={index} 
+                  key={globalIndex} 
                   className="bg-secondary/30 border-border/50 overflow-hidden transition-all"
                 >
                   {/* Header do card - sempre visível */}
                   <CardHeader 
                     className="pb-2 cursor-pointer hover:bg-secondary/50 transition-colors"
-                    onClick={() => toggleRecord(index)}
+                    onClick={() => toggleRecord(globalIndex)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm">
-                          {index + 1}
+                          {globalIndex + 1}
                         </div>
                         <div>
                           <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -749,6 +815,27 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
                           <Badge variant="outline" className="bg-success/10 text-success border-success/30 text-xs">
                             R$ {record.renda}
                           </Badge>
+                        )}
+                        {record.cpf && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 px-2 text-xs"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQueryCpf(record.cpf!);
+                            }}
+                            disabled={loadingCpf === record.cpf?.replace(/[^\d]/g, '')}
+                          >
+                            {loadingCpf === record.cpf?.replace(/[^\d]/g, '') ? (
+                              <span className="animate-spin">⏳</span>
+                            ) : (
+                              <>
+                                <Search className="h-3 w-3 mr-1" />
+                                Consultar
+                              </>
+                            )}
+                          </Button>
                         )}
                         {isExpanded ? (
                           <ChevronUp className="h-4 w-4 text-muted-foreground" />
@@ -861,6 +948,64 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
               );
             })}
           </div>
+
+          {/* Paginação */}
+          {totalPages > 1 && (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                    disabled={currentPage === 0}
+                    className="gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Anterior
+                  </Button>
+                </PaginationItem>
+                
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum: number;
+                  if (totalPages <= 5) {
+                    pageNum = i;
+                  } else if (currentPage < 3) {
+                    pageNum = i;
+                  } else if (currentPage > totalPages - 4) {
+                    pageNum = totalPages - 5 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <PaginationItem key={pageNum}>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(pageNum)}
+                        isActive={currentPage === pageNum}
+                        className="cursor-pointer"
+                      >
+                        {pageNum + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+                
+                <PaginationItem>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
+                    disabled={currentPage === totalPages - 1}
+                    className="gap-1"
+                  >
+                    Próximo
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       );
     }
