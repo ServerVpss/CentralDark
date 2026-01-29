@@ -199,13 +199,13 @@ export function FakeEngagementSettings({ botId, settings, onUpdate }: FakeEngage
           <Slider
             value={[interval]}
             onValueChange={(v) => setInterval(v[0])}
-            min={5}
+            min={1}
             max={120}
-            step={5}
+            step={1}
             className="w-full"
           />
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>5 min</span>
+            <span>1 min</span>
             <span>30 min</span>
             <span>1 hora</span>
             <span>2 horas</span>
