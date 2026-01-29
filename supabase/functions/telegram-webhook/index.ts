@@ -870,9 +870,186 @@ function parseDataString(dataStr: string): Record<string, unknown> {
   return result;
 }
 
+// =============== PARSE MULTIPLE PERSON RECORDS (CEP) ===============
+interface PersonRecord {
+  cpf?: string;
+  nome?: string;
+  nascimento?: string;
+  email?: string;
+  renda?: string;
+  bairro?: string;
+  cidade?: string;
+  uf?: string;
+  cep?: string;
+  sexo?: string;
+  mae?: string;
+  pai?: string;
+  telefone?: string;
+  [key: string]: string | undefined;
+}
+
+function parseMultiplePersonRecords(dataStr: string): PersonRecord[] {
+  const records: PersonRecord[] = [];
+  
+  // Limpar a string
+  const cleaned = dataStr
+    .replace(/@\w+/g, '')
+    .replace(/https?:\/\/[^\s]+/g, '')
+    .trim();
+  
+  // Dividir por linhas
+  const lines = cleaned.split('\n').map(l => l.trim()).filter(Boolean);
+  
+  let currentRecord: PersonRecord = {};
+  let hasData = false;
+  
+  for (const line of lines) {
+    // Check for key — value format (with em-dash ⎯ or regular dash —)
+    const match = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+)\s*[⎯—-]\s*(.*)$/i);
+    
+    if (match) {
+      const key = match[1].trim().toUpperCase();
+      const value = match[2].trim();
+      
+      // Skip empty values
+      if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) {
+        continue;
+      }
+      
+      // If we find a new CPF and already have data, save current record and start new
+      if (key === 'CPF' && hasData && currentRecord.cpf) {
+        records.push({ ...currentRecord });
+        currentRecord = {};
+        hasData = false;
+      }
+      
+      // Map the key to our record structure
+      const keyMap: Record<string, keyof PersonRecord> = {
+        'CPF': 'cpf',
+        'NOME': 'nome',
+        'NASCIMENTO': 'nascimento',
+        'EMAIL': 'email',
+        'RENDA': 'renda',
+        'BAIRRO': 'bairro',
+        'CIDADE': 'cidade',
+        'UF': 'uf',
+        'CEP': 'cep',
+        'SEXO': 'sexo',
+        'MÃE': 'mae',
+        'PAI': 'pai',
+        'LOGRADOURO': 'logradouro',
+        'ENDEREÇO': 'endereco',
+        'COMPLEMENTO': 'complemento',
+        'ESTADO': 'estado',
+        'TELEFONE': 'telefone',
+        'RG': 'rg',
+      };
+      
+      const mappedKey = keyMap[key] || key.toLowerCase().replace(/\s+/g, '_');
+      currentRecord[mappedKey] = value;
+      hasData = true;
+    }
+  }
+  
+  // Don't forget the last record
+  if (hasData && Object.keys(currentRecord).length > 0) {
+    records.push(currentRecord);
+  }
+  
+  return records;
+}
+
+// Check if data looks like multiple person records (CEP query result)
+function isMultiPersonResult(dataStr: string): boolean {
+  // Count how many CPF entries there are
+  const cpfMatches = dataStr.match(/CPF\s*[⎯—-]/gi);
+  return cpfMatches !== null && cpfMatches.length > 1;
+}
+
+// Format multiple person records for Telegram
+function formatMultiPersonResult(records: PersonRecord[], botUsername?: string, telegramUserName?: string): string {
+  const userName = telegramUserName || 'usuário';
+  const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
+  
+  // Função para escapar caracteres HTML
+  const escapeHtml = (str: string): string => {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  };
+  
+  let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `📍 <b>CONSULTA DE CEP</b> 📍\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+  text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n`;
+  text += `👥 <b>${records.length} pessoas encontradas</b>\n\n`;
+  
+  records.forEach((record, index) => {
+    text += `┌─────────────────────\n`;
+    text += `│ 👤 <b>PESSOA ${index + 1}</b>\n`;
+    text += `├─────────────────────\n`;
+    
+    // Dados principais
+    if (record.nome) {
+      text += `│ 📛 <b>Nome:</b> ${escapeHtml(record.nome)}\n`;
+    }
+    if (record.cpf) {
+      text += `│ 🆔 <b>CPF:</b> <code>${escapeHtml(record.cpf)}</code>\n`;
+    }
+    if (record.nascimento) {
+      text += `│ 📅 <b>Nasc:</b> ${escapeHtml(record.nascimento)}\n`;
+    }
+    if (record.renda) {
+      text += `│ 💰 <b>Renda:</b> R$ ${escapeHtml(record.renda)}\n`;
+    }
+    
+    // Contato
+    if (record.email && record.email.toLowerCase() !== 'não informado') {
+      text += `│ 📧 <b>Email:</b> ${escapeHtml(record.email)}\n`;
+    }
+    if (record.telefone) {
+      text += `│ 📞 <b>Tel:</b> ${escapeHtml(record.telefone)}\n`;
+    }
+    
+    // Endereço (compacto)
+    const addressParts = [];
+    if (record.bairro) addressParts.push(record.bairro);
+    if (record.cidade) addressParts.push(record.cidade);
+    if (record.uf) addressParts.push(record.uf);
+    
+    if (addressParts.length > 0) {
+      text += `│ 📍 <b>Local:</b> ${escapeHtml(addressParts.join(' - '))}\n`;
+    }
+    if (record.cep) {
+      text += `│ 📮 <b>CEP:</b> ${escapeHtml(record.cep)}\n`;
+    }
+    
+    text += `└─────────────────────\n\n`;
+  });
+  
+  // Footer
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `❤️ <b>OBRIGADO POR USAR</b> ❤️\n`;
+  text += `🤖 ${botTag}\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━`;
+  
+  return text;
+}
+
 function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string, telegramUserName?: string): string {
   if (data.error) {
     return `❌ <b>Erro:</b> ${data.error}`;
+  }
+
+  // VERIFICAR SE É RESULTADO DE CEP COM MÚLTIPLOS REGISTROS
+  const rawDataStr = typeof data.data === 'string' ? data.data : '';
+  if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr)) {
+    console.log('Detected multi-person CEP result, using special formatting...');
+    const records = parseMultiplePersonRecords(rawDataStr);
+    if (records.length > 1) {
+      return formatMultiPersonResult(records, botUsername, telegramUserName);
+    }
   }
 
   // PRÉ-PROCESSAMENTO: Se o campo 'data' é uma string, fazer parse
