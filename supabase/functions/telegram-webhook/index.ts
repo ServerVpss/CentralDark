@@ -415,10 +415,10 @@ function getTxtLabel(key: string): string {
     .join(" ");
 }
 
-// Keys to ignore in TXT
+// Keys to ignore in TXT (strict - only technical/internal keys)
 const txtIgnoredKeys = [
-  "comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64",
-  "texto", "info", "text", "raw", "status", "success", "message"
+  "comando", "error", "fotobase64", "foto", "image", "photo", "base64",
+  "raw", "status", "success", "notfound"
 ];
 
 // Bot references to filter out in TXT
@@ -429,22 +429,27 @@ const txtBotReferences = [
 
 function shouldIgnoreTxtKey(key: string): boolean {
   const keyLower = key.toLowerCase();
+  // Only ignore exact matches for technical keys
   return txtIgnoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik));
 }
 
 function shouldIgnoreTxtValue(value: unknown): boolean {
-  if (value === null || value === undefined || value === "" || value === "-" || value === "N/A") {
+  if (value === null || value === undefined || value === "") {
     return true;
   }
   if (typeof value === "string") {
-    if (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image")) {
+    const trimmed = value.trim();
+    // Skip only truly empty values
+    if (trimmed === "" || trimmed === "-" || trimmed === "N/A" || trimmed === "null" || trimmed === "undefined") {
       return true;
     }
-    const valueLower = value.toLowerCase();
+    // Skip base64 image data
+    if (trimmed.startsWith("/9j/") || trimmed.startsWith("iVBOR") || trimmed.startsWith("data:image")) {
+      return true;
+    }
+    // Skip bot references
+    const valueLower = trimmed.toLowerCase();
     if (txtBotReferences.some(ref => valueLower.includes(ref.toLowerCase()))) {
-      return true;
-    }
-    if (value.trim().length < 2) {
       return true;
     }
   }
@@ -456,7 +461,10 @@ function parseTxtDelimitedKey(key: string): { realKey: string; realValue: string
   for (const delim of delimiters) {
     const idx = key.indexOf(delim);
     if (idx > 0) {
-      const realKey = key.substring(0, idx).trim().toLowerCase().replace(/\s+/g, '_');
+      const realKey = key.substring(0, idx).trim()
+        .replace(/^[•\-\s📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧🔍📊🏢🚗📝]+/, '')
+        .toLowerCase()
+        .replace(/\s+/g, '_');
       const realValue = key.substring(idx + delim.length).trim();
       if (realKey && realValue && realValue !== '-' && realValue !== 'N/A') {
         return { realKey, realValue };
@@ -473,18 +481,24 @@ function parseTxtStringData(str: string): Record<string, string> {
   const lines = str.split('\n');
   
   for (const line of lines) {
+    const trimmedLine = line.trim();
+    if (!trimmedLine) continue;
+    
+    // Skip lines that are just separators or headers
+    if (trimmedLine.match(/^[═─┌┐└┘├┤│]+$/) || trimmedLine.startsWith('═')) continue;
+    
     const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
     
     for (const delim of delimiters) {
-      const idx = line.indexOf(delim);
+      const idx = trimmedLine.indexOf(delim);
       if (idx > 0) {
-        const key = line.substring(0, idx).trim()
-          .replace(/^[•\-\s📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧]+/, '')
+        const key = trimmedLine.substring(0, idx).trim()
+          .replace(/^[•\-\s📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧🔍📊🏢🚗📝│├└┌]+/, '')
           .toLowerCase()
           .replace(/\s+/g, '_');
-        const value = line.substring(idx + delim.length).trim();
+        const value = trimmedLine.substring(idx + delim.length).trim();
         
-        if (key && value && value !== '-' && value !== 'N/A' && !shouldIgnoreTxtValue(value)) {
+        if (key && key.length > 1 && value && value !== '-' && value !== 'N/A' && !shouldIgnoreTxtValue(value)) {
           result[key] = value;
         }
         break;
@@ -504,48 +518,89 @@ function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; valu
   
   for (const [key, value] of Object.entries(record)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
+    const keyLower = key.toLowerCase();
     
+    // Skip only strict technical keys
     if (shouldIgnoreTxtKey(key)) continue;
     
+    // Check if key contains embedded value (NexFuture format: "Nome ⎯ João Silva")
     const parsed = parseTxtDelimitedKey(key);
     if (parsed && !shouldIgnoreTxtValue(parsed.realValue)) {
       items.push({ key: parsed.realKey, value: parsed.realValue });
       continue;
     }
     
+    // Skip ignored values
     if (shouldIgnoreTxtValue(value)) continue;
     
+    // Handle string values
     if (typeof value === "string") {
-      if (value.includes('\n') && value.includes(':')) {
-        const parsedLines = parseTxtStringData(value);
-        for (const [pk, pv] of Object.entries(parsedLines)) {
-          if (!shouldIgnoreTxtKey(pk) && !shouldIgnoreTxtValue(pv)) {
-            items.push({ key: pk, value: pv });
+      const trimmedValue = value.trim();
+      
+      // Check if it's multi-line formatted data (parse it line by line)
+      if (trimmedValue.includes('\n')) {
+        const parsedLines = parseTxtStringData(trimmedValue);
+        const parsedEntries = Object.entries(parsedLines);
+        
+        if (parsedEntries.length > 0) {
+          for (const [pk, pv] of parsedEntries) {
+            if (!shouldIgnoreTxtKey(pk) && !shouldIgnoreTxtValue(pv)) {
+              items.push({ key: pk, value: pv });
+            }
+          }
+        } else {
+          // If parsing fails, include raw text (but clean it)
+          const cleanValue = trimmedValue
+            .replace(/[═─┌┐└┘├┤│]+/g, '')
+            .replace(/\n+/g, ' ')
+            .trim();
+          if (cleanValue && cleanValue.length > 2) {
+            items.push({ key: fullKey, value: cleanValue });
           }
         }
       } else {
-        items.push({ key: fullKey, value: value });
+        // Single-line value - add directly
+        items.push({ key: fullKey, value: trimmedValue });
       }
       continue;
     }
     
-    if (typeof value === "object" && !Array.isArray(value)) {
+    // Handle nested objects
+    if (typeof value === "object" && !Array.isArray(value) && value !== null) {
       items.push(...extractAllTxtData(value, fullKey));
       continue;
     }
     
+    // Handle arrays
     if (Array.isArray(value)) {
-      const validItems = value
-        .filter(v => !shouldIgnoreTxtValue(v))
-        .map(v => typeof v === "string" ? v : JSON.stringify(v));
+      // For arrays of objects, extract each item
+      const validItems: string[] = [];
+      for (const item of value) {
+        if (shouldIgnoreTxtValue(item)) continue;
+        
+        if (typeof item === "object" && item !== null) {
+          // Extract object properties
+          const subItems = extractAllTxtData(item, "");
+          for (const subItem of subItems) {
+            validItems.push(`${getTxtLabel(subItem.key)}: ${subItem.value}`);
+          }
+        } else if (typeof item === "string") {
+          validItems.push(item);
+        } else {
+          validItems.push(String(item));
+        }
+      }
       
       if (validItems.length > 0) {
-        items.push({ key: fullKey, value: validItems.join(", ") });
+        items.push({ key: fullKey, value: validItems.join(" | ") });
       }
       continue;
     }
     
-    items.push({ key: fullKey, value: String(value) });
+    // Handle other primitives (numbers, booleans)
+    if (value !== null && value !== undefined) {
+      items.push({ key: fullKey, value: String(value) });
+    }
   }
   
   return items;
@@ -554,6 +609,9 @@ function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; valu
 function generateTxtContent(queryType: string, queryInput: string, data: Record<string, unknown>): string {
   const now = new Date();
   const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+  
+  console.log("TXT Generation - Input data keys:", Object.keys(data));
+  console.log("TXT Generation - Data preview:", JSON.stringify(data).substring(0, 1000));
   
   let txt = `════════════════════════════════════════════════════════════\n`;
   txt += `                  RELATÓRIO DE CONSULTA\n`;
@@ -565,39 +623,99 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
   
   // Extract and organize data
   const items = extractAllTxtData(data);
+  console.log("TXT Generation - Extracted items count:", items.length);
   
-  // Remove duplicates
-  const seen = new Set<string>();
-  const uniqueItems = items.filter(item => {
-    const keyNorm = item.key.toLowerCase().replace(/\./g, '_');
-    if (seen.has(keyNorm)) return false;
-    seen.add(keyNorm);
-    return true;
-  });
-  
-  // Group by category
-  const grouped: Record<string, Array<{ key: string; value: string }>> = {};
-  for (const item of uniqueItems) {
-    const cat = getTxtCategory(item.key);
-    if (!grouped[cat]) grouped[cat] = [];
-    grouped[cat].push(item);
-  }
-  
-  // Write categories in order
-  for (const category of txtCategoryOrder) {
-    const catItems = grouped[category];
-    if (!catItems || catItems.length === 0) continue;
-    
+  if (items.length === 0) {
+    // If no items were extracted, dump raw data
     txt += `┌─────────────────────────────────────────────────────────────\n`;
-    txt += `│ ${category}\n`;
+    txt += `│ DADOS BRUTOS\n`;
     txt += `├─────────────────────────────────────────────────────────────\n`;
     
-    for (const item of catItems) {
-      const label = getTxtLabel(item.key.split(".").pop() || item.key);
-      txt += `│ ${label}: ${item.value}\n`;
+    for (const [key, value] of Object.entries(data)) {
+      if (shouldIgnoreTxtKey(key)) continue;
+      if (shouldIgnoreTxtValue(value)) continue;
+      
+      const label = getTxtLabel(key);
+      let displayValue: string;
+      
+      if (typeof value === "object") {
+        displayValue = JSON.stringify(value, null, 2)
+          .replace(/[{}[\]"]/g, '')
+          .replace(/,\n/g, '\n')
+          .trim();
+      } else {
+        displayValue = String(value);
+      }
+      
+      txt += `│ ${label}: ${displayValue}\n`;
     }
     
     txt += `└─────────────────────────────────────────────────────────────\n\n`;
+  } else {
+    // Remove duplicates
+    const seen = new Set<string>();
+    const uniqueItems = items.filter(item => {
+      const keyNorm = item.key.toLowerCase().replace(/[.\s]/g, '_');
+      if (seen.has(keyNorm)) return false;
+      seen.add(keyNorm);
+      return true;
+    });
+    
+    console.log("TXT Generation - Unique items count:", uniqueItems.length);
+    
+    // Group by category
+    const grouped: Record<string, Array<{ key: string; value: string }>> = {};
+    for (const item of uniqueItems) {
+      const cat = getTxtCategory(item.key);
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(item);
+    }
+    
+    // Write categories in order
+    let hasContent = false;
+    for (const category of txtCategoryOrder) {
+      const catItems = grouped[category];
+      if (!catItems || catItems.length === 0) continue;
+      
+      hasContent = true;
+      txt += `┌─────────────────────────────────────────────────────────────\n`;
+      txt += `│ ${category}\n`;
+      txt += `├─────────────────────────────────────────────────────────────\n`;
+      
+      for (const item of catItems) {
+        const label = getTxtLabel(item.key.split(".").pop() || item.key);
+        // Word wrap long values
+        const maxLineLength = 55;
+        let value = item.value;
+        if (value.length > maxLineLength) {
+          const words = value.split(' ');
+          const lines: string[] = [];
+          let currentLine = '';
+          for (const word of words) {
+            if (currentLine.length + word.length + 1 <= maxLineLength) {
+              currentLine += (currentLine ? ' ' : '') + word;
+            } else {
+              if (currentLine) lines.push(currentLine);
+              currentLine = word;
+            }
+          }
+          if (currentLine) lines.push(currentLine);
+          
+          txt += `│ ${label}: ${lines[0]}\n`;
+          for (let i = 1; i < lines.length; i++) {
+            txt += `│   ${lines[i]}\n`;
+          }
+        } else {
+          txt += `│ ${label}: ${value}\n`;
+        }
+      }
+      
+      txt += `└─────────────────────────────────────────────────────────────\n\n`;
+    }
+    
+    if (!hasContent) {
+      txt += `(Nenhum dado encontrado)\n\n`;
+    }
   }
   
   txt += `════════════════════════════════════════════════════════════\n`;
