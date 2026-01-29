@@ -267,22 +267,101 @@ Deno.serve(async (req) => {
           messageTemplate = specificMsg.message_template
         }
       }
-      // Comportamento padrão do cron: SEMPRE usar mensagem padrão de simulação de assinatura
-      // A lógica de intervalo é baseada no fake_engagement_interval_minutes e fake_engagement_last_sent
+      // Comportamento padrão do cron: processar AMBOS os sistemas independentemente
       else {
-        // Verificar intervalo global para enviar a mensagem padrão de simulação
+        // =====================================================
+        // SISTEMA 1: Mensagens de Engajamento Personalizadas
+        // Cada mensagem tem seu próprio intervalo e last_sent_at
+        // =====================================================
+        const { data: customMessages } = await supabase
+          .from('engagement_messages')
+          .select('id, message_template, is_active, interval_minutes, last_sent_at')
+          .eq('bot_id', setting.bot_id)
+          .eq('is_active', true)
+
+        if (customMessages && customMessages.length > 0) {
+          for (const msg of customMessages) {
+            const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
+            const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
+            const timeSinceMsgSent = now.getTime() - msgLastSent.getTime()
+            
+            console.log(`[Mensagem ${msg.id}] intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
+            
+            if (timeSinceMsgSent >= msgInterval) {
+              // Enviar esta mensagem personalizada
+              const customMessage = msg.message_template
+                .replace(/\{nome\}/g, randomName)
+                .replace(/\{plano\}/g, randomPlan.title || randomPlan.name)
+                .replace(/\{valor\}/g, Number(randomPlan.price).toFixed(2))
+
+              const customButton = bot.bot_username ? {
+                inline_keyboard: [[
+                  { text: '💎 ADQUIRIR VIP', url: `https://t.me/${bot.bot_username}?start=planos` }
+                ]]
+              } : undefined
+
+              const customResponse = await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: setting.group_chat_id,
+                  text: customMessage,
+                  parse_mode: 'Markdown',
+                  reply_markup: customButton
+                })
+              })
+
+              const customResult = await customResponse.json()
+
+              if (customResult.ok) {
+                // Atualizar APENAS o last_sent_at desta mensagem específica
+                await supabase
+                  .from('engagement_messages')
+                  .update({ last_sent_at: now.toISOString() })
+                  .eq('id', msg.id)
+                
+                console.log(`[Mensagem Personalizada ${msg.id}] enviada com sucesso`)
+                results.push({ 
+                  bot_id: setting.bot_id, 
+                  type: 'custom_message',
+                  message_id: msg.id,
+                  status: 'sent'
+                })
+              } else {
+                console.error(`[Mensagem Personalizada ${msg.id}] erro:`, customResult)
+                results.push({ 
+                  bot_id: setting.bot_id, 
+                  type: 'custom_message',
+                  message_id: msg.id,
+                  status: 'error', 
+                  error: customResult.description 
+                })
+              }
+            }
+          }
+        }
+
+        // =====================================================
+        // SISTEMA 2: Simulação de Assinatura (mensagem padrão)
+        // Usa fake_engagement_interval_minutes e fake_engagement_last_sent
+        // =====================================================
         const timeSinceLastSent = now.getTime() - lastSent.getTime()
         
-        console.log(`Bot ${setting.bot_id}: intervalo global=${setting.fake_engagement_interval_minutes}min, último envio=${setting.fake_engagement_last_sent || 'nunca'}, tempo desde=${Math.round(timeSinceLastSent/60000)}min`)
+        console.log(`[Simulação Assinatura] Bot ${setting.bot_id}: intervalo=${setting.fake_engagement_interval_minutes}min, último envio=${setting.fake_engagement_last_sent || 'nunca'}, tempo desde=${Math.round(timeSinceLastSent/60000)}min`)
         
         if (timeSinceLastSent < globalIntervalMs) {
-          console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
-          results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
+          console.log(`[Simulação Assinatura] Bot ${setting.bot_id}: aguardando intervalo (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
+          results.push({ 
+            bot_id: setting.bot_id, 
+            type: 'subscription_simulation',
+            status: 'waiting', 
+            minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) 
+          })
           continue
         }
         
-        console.log(`Bot ${setting.bot_id}: enviando mensagem padrão de simulação de assinatura`)
-        // messageTemplate já é DEFAULT_MESSAGE_TEMPLATE
+        console.log(`[Simulação Assinatura] Bot ${setting.bot_id}: enviando mensagem de simulação`)
+        // messageTemplate já é DEFAULT_MESSAGE_TEMPLATE - continua o fluxo normal abaixo
       }
 
       // Substituir variáveis na mensagem
