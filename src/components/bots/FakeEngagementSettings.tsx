@@ -131,13 +131,19 @@ export function FakeEngagementSettings({ botId, settings, onUpdate }: FakeEngage
   const handleTest = async () => {
     setTesting(true);
     try {
-      // Temporariamente resetar o last_sent para forçar envio
+      // Resetar o last_sent global para forçar envio
       await supabase
         .from('bot_settings')
         .update({ 
           fake_engagement_enabled: true,
           fake_engagement_last_sent: null 
         })
+        .eq('bot_id', botId);
+
+      // IMPORTANTE: Também resetar o last_sent_at de TODAS as mensagens de engajamento
+      await supabase
+        .from('engagement_messages')
+        .update({ last_sent_at: null })
         .eq('bot_id', botId);
 
       const response = await supabase.functions.invoke('fake-engagement');
