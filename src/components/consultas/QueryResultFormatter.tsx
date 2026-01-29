@@ -24,6 +24,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
+  Download,
+  Loader2,
 } from "lucide-react";
 import {
   Pagination,
@@ -40,6 +42,8 @@ interface QueryResultFormatterProps {
   data: any;
   showCopyButton?: boolean;
   onQueryCpf?: (cpf: string) => void;
+  queryType?: string;
+  queryInput?: string;
 }
 
 interface ParsedData {
@@ -658,12 +662,62 @@ function isMultiPersonResult(data: any): boolean {
   return false;
 }
 
-export function QueryResultFormatter({ data, showCopyButton, onQueryCpf }: QueryResultFormatterProps) {
+export function QueryResultFormatter({ data, showCopyButton, onQueryCpf, queryType, queryInput }: QueryResultFormatterProps) {
   const [expandedRecords, setExpandedRecords] = useState<Set<number>>(new Set([0]));
   const [currentPage, setCurrentPage] = useState(0);
   const [loadingCpf, setLoadingCpf] = useState<string | null>(null);
+  const [generatingPdf, setGeneratingPdf] = useState(false);
   
   if (!data) return null;
+
+  // Handler para gerar e baixar PDF
+  const handleDownloadPdf = async () => {
+    setGeneratingPdf(true);
+    try {
+      const { data: result, error } = await supabase.functions.invoke("generate-pdf", {
+        body: {
+          queryType: queryType || "dados",
+          queryInput: queryInput || "",
+          data: data,
+          botName: "Painel Administrativo",
+        },
+      });
+
+      if (error) {
+        toast.error("Erro ao gerar PDF: " + error.message);
+        return;
+      }
+
+      if (result?.success && result?.pdf) {
+        // Converter base64 para blob
+        const byteCharacters = atob(result.pdf);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+        
+        // Criar link de download
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = result.filename || `consulta_${queryType || "dados"}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        toast.success("PDF gerado com sucesso!");
+      } else {
+        toast.error("Erro ao gerar PDF");
+      }
+    } catch (err) {
+      toast.error("Erro ao gerar PDF");
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
 
   // Handle error responses
   if (data.error) {
@@ -757,24 +811,40 @@ export function QueryResultFormatter({ data, showCopyButton, onQueryCpf }: Query
                 </Badge>
               )}
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleAll}
-              className="text-xs"
-            >
-              {pageRecords.every((_, i) => expandedRecords.has(startIdx + i)) ? (
-                <>
-                  <ChevronUp className="h-3 w-3 mr-1" />
-                  Recolher Todos
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="h-3 w-3 mr-1" />
-                  Expandir Todos
-                </>
-              )}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDownloadPdf}
+                disabled={generatingPdf}
+                className="text-xs"
+              >
+                {generatingPdf ? (
+                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                ) : (
+                  <Download className="h-3 w-3 mr-1" />
+                )}
+                Baixar PDF
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleAll}
+                className="text-xs"
+              >
+                {pageRecords.every((_, i) => expandedRecords.has(startIdx + i)) ? (
+                  <>
+                    <ChevronUp className="h-3 w-3 mr-1" />
+                    Recolher Todos
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="h-3 w-3 mr-1" />
+                    Expandir Todos
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
           
           {/* Cards de pessoas */}
@@ -1062,6 +1132,23 @@ export function QueryResultFormatter({ data, showCopyButton, onQueryCpf }: Query
 
   return (
     <div className="space-y-4">
+      {/* Botão de download PDF */}
+      <div className="flex justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleDownloadPdf}
+          disabled={generatingPdf}
+          className="text-xs"
+        >
+          {generatingPdf ? (
+            <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+          ) : (
+            <Download className="h-3 w-3 mr-1" />
+          )}
+          Baixar PDF
+        </Button>
+      </div>
       {/* Card de Foto - exibido primeiro se houver foto */}
       {photoUrl && (
         <Card className="bg-secondary/30 border-border/50">

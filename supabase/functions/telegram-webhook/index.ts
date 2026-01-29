@@ -331,9 +331,30 @@ async function sendLongMessagePaginated(
   text: string, 
   supabase: SupabaseClient,
   replyToId?: number,
-  messageEffectId?: string
+  messageEffectId?: string,
+  queryType?: string,
+  queryInput?: string
 ) {
   const MAX_LENGTH = 3800;
+  
+  // Criar teclado com botão de PDF se tivermos os dados da consulta
+  const createKeyboard = (paginationId?: string) => {
+    const buttons: InlineButton[][] = [];
+    
+    // Botão de PDF se tiver dados da consulta
+    if (queryType && queryInput) {
+      buttons.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
+    }
+    
+    // Botão de apagar
+    if (paginationId) {
+      buttons.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]);
+    } else {
+      buttons.push([{ text: "🗑️ Apagar", callback_data: "delete_msg" }]);
+    }
+    
+    return { inline_keyboard: buttons };
+  };
   
   // Se cabe em uma mensagem, enviar normalmente
   if (text.length <= MAX_LENGTH) {
@@ -342,7 +363,7 @@ async function sendLongMessagePaginated(
       text,
       parse_mode: "HTML",
       reply_to_message_id: replyToId,
-      reply_markup: { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] },
+      reply_markup: createKeyboard(),
     };
     if (messageEffectId) {
       payload.message_effect_id = messageEffectId;
@@ -1112,7 +1133,10 @@ function createMultiPersonKeyboard(
     keyboard.push(navRow);
   }
   
-  // Botão de apagar
+  // Botão de PDF e apagar
+  if (paginationId) {
+    keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:cep:${records[0]?.cep || ''}` }]);
+  }
   keyboard.push([{ text: "🗑️ Apagar", callback_data: paginationId ? `page_delete:${paginationId}` : "delete_msg" }]);
   
   return { inline_keyboard: keyboard };
@@ -1749,6 +1773,7 @@ class BotHandler {
           parse_mode: "HTML",
           ...(effectId && { message_effect_id: effectId }),
           reply_markup: keyboard(
+            [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)],
             [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
             [btn("🗑️ Apagar", "delete_msg")]
           ),
@@ -1758,7 +1783,7 @@ class BotHandler {
         }
       } else {
         // Usar paginação por botões para resultados longos
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, queryType, queryInput);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -2988,6 +3013,93 @@ class BotHandler {
         console.error("Quick CPF query error:", error);
         await editMessage(this.token, chatId, messageId,
           "❌ <b>Erro na consulta de CPF</b>\n\nTente novamente.",
+          keyboard([btn("🗑️ Apagar", "delete_msg")])
+        );
+      }
+      return;
+    }
+
+    // PDF Download handler
+    if (data.startsWith("pdf:")) {
+      const parts = data.replace("pdf:", "").split(":");
+      const queryType = parts[0];
+      const queryInput = parts.slice(1).join(":");
+      
+      if (!queryType || !queryInput) {
+        await answerCallback(this.token, callback.id);
+        return;
+      }
+      
+      // Send loading message
+      await editMessage(this.token, chatId, messageId, 
+        `📄 <b>Gerando PDF...</b>\n\nAguarde um momento.`,
+        undefined
+      );
+      
+      try {
+        // Re-execute query to get data for PDF
+        const result = await executeQuery(queryType, queryInput);
+        
+        // Call PDF generation function
+        const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+        const response = await fetch(`${supabaseUrl}/functions/v1/generate-pdf`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          },
+          body: JSON.stringify({
+            queryType,
+            queryInput,
+            data: result,
+            botName: this.bot.bot_username || "Telegram Bot",
+          }),
+        });
+        
+        const pdfResult = await response.json();
+        
+        if (pdfResult.success && pdfResult.pdf) {
+          // Convert base64 to bytes and send as document
+          const pdfBytes = Uint8Array.from(atob(pdfResult.pdf), c => c.charCodeAt(0));
+          const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+          
+          // Create FormData for file upload
+          const form = new FormData();
+          form.set("chat_id", String(chatId));
+          form.set("document", new File([blob], pdfResult.filename || `consulta_${queryType}.pdf`, { type: 'application/pdf' }));
+          form.set("caption", `📄 <b>Relatório de Consulta</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n🤖 @${this.bot.bot_username || 'bot'}`);
+          form.set("parse_mode", "HTML");
+          
+          const sendDocResult = await fetch(`${TELEGRAM_API}${this.token}/sendDocument`, {
+            method: "POST",
+            body: form,
+          });
+          
+          const docResponse = await sendDocResult.json();
+          
+          if (docResponse.ok) {
+            // Delete loading message
+            try {
+              await deleteMessage(this.token, chatId, messageId);
+            } catch (_e) { /* ignore */ }
+          } else {
+            console.error("Failed to send PDF document:", docResponse);
+            await editMessage(this.token, chatId, messageId,
+              "❌ <b>Erro ao enviar PDF</b>\n\nTente novamente.",
+              keyboard([btn("🗑️ Apagar", "delete_msg")])
+            );
+          }
+        } else {
+          console.error("PDF generation failed:", pdfResult);
+          await editMessage(this.token, chatId, messageId,
+            "❌ <b>Erro ao gerar PDF</b>\n\nTente novamente.",
+            keyboard([btn("🗑️ Apagar", "delete_msg")])
+          );
+        }
+      } catch (error) {
+        console.error("PDF generation error:", error);
+        await editMessage(this.token, chatId, messageId,
+          "❌ <b>Erro ao gerar PDF</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
         );
       }
