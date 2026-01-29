@@ -21,17 +21,21 @@ const fieldLabels: Record<string, string> = {
   cpf: "CPF",
   nascimento: "Data de Nascimento",
   data_nascimento: "Data de Nascimento",
+  data_de_nascimento: "Data de Nascimento",
   sexo: "Sexo",
   mae: "Nome da Mãe",
   nome_mae: "Nome da Mãe",
+  nome_da_mae: "Nome da Mãe",
   pai: "Nome do Pai",
   nome_pai: "Nome do Pai",
+  nome_do_pai: "Nome do Pai",
   rg: "RG",
   cnh: "CNH",
   pis: "PIS",
   nis: "NIS",
   cns: "CNS",
   titulo_eleitor: "Título de Eleitor",
+  titulo: "Título de Eleitor",
   zona: "Zona Eleitoral",
   secao: "Seção",
   email: "E-mail",
@@ -45,6 +49,7 @@ const fieldLabels: Record<string, string> = {
   cidade: "Cidade",
   uf: "UF",
   estado: "Estado",
+  estado_encontrado: "Estado Encontrado",
   cep: "CEP",
   renda: "Renda Estimada",
   score: "Score",
@@ -67,25 +72,41 @@ const fieldLabels: Record<string, string> = {
   cnpj: "CNPJ",
   razao_social: "Razão Social",
   nome_fantasia: "Nome Fantasia",
+  idade: "Idade",
+  raca: "Raça",
+  signo: "Signo",
 };
 
-// Category mapping
+// Category mapping with priority order
+const categoryOrder = [
+  "DADOS PESSOAIS",
+  "DOCUMENTOS", 
+  "CONTATO",
+  "ENDEREÇO",
+  "FINANCEIRO",
+  "FAMÍLIA",
+  "PROFISSIONAL",
+  "VEÍCULO",
+  "EMPRESA",
+  "OUTROS"
+];
+
 const categories: Record<string, string[]> = {
-  "DADOS PESSOAIS": ["nome", "cpf", "nascimento", "data_nascimento", "sexo", "idade", "naturalidade", "nacionalidade", "raca", "tipo_sanguineo", "estado_civil", "obito", "status_receita"],
-  "DOCUMENTOS": ["rg", "cnh", "pis", "nis", "cns", "titulo_eleitor", "zona", "secao", "ctps"],
-  "CONTATO": ["email", "emails", "telefone", "telefones", "celular", "whatsapp"],
-  "ENDEREÇO": ["endereco", "logradouro", "numero", "complemento", "bairro", "cidade", "uf", "estado", "cep", "municipio"],
+  "DADOS PESSOAIS": ["nome", "cpf", "nascimento", "data_nascimento", "data_de_nascimento", "sexo", "idade", "naturalidade", "nacionalidade", "raca", "tipo_sanguineo", "estado_civil", "obito", "status_receita", "signo"],
+  "DOCUMENTOS": ["rg", "cnh", "pis", "nis", "cns", "titulo_eleitor", "titulo", "zona", "secao", "ctps"],
+  "CONTATO": ["email", "emails", "telefone", "telefones", "celular", "whatsapp", "ddd"],
+  "ENDEREÇO": ["endereco", "logradouro", "numero", "complemento", "bairro", "cidade", "uf", "estado", "estado_encontrado", "cep", "municipio"],
   "FINANCEIRO": ["renda", "score", "classe_social", "classe", "poder_aquisitivo", "bancos"],
-  "FAMÍLIA": ["mae", "nome_mae", "pai", "nome_pai", "parentes", "conjuge", "filhos"],
+  "FAMÍLIA": ["mae", "nome_mae", "nome_da_mae", "pai", "nome_pai", "nome_do_pai", "parentes", "conjuge", "filhos"],
   "PROFISSIONAL": ["profissao", "escolaridade", "emprego", "empregos", "cargo", "empresa"],
   "VEÍCULO": ["placa", "chassi", "renavam", "marca", "modelo", "ano", "cor", "combustivel", "tipo_veiculo"],
   "EMPRESA": ["cnpj", "razao_social", "nome_fantasia", "capital_social", "atividade", "porte"],
 };
 
 function getCategory(key: string): string {
-  const keyLower = key.toLowerCase();
+  const keyLower = key.toLowerCase().replace(/\./g, '_');
   for (const [category, fields] of Object.entries(categories)) {
-    if (fields.some(f => keyLower.includes(f))) {
+    if (fields.some(f => keyLower.includes(f) || keyLower === f)) {
       return category;
     }
   }
@@ -93,9 +114,20 @@ function getCategory(key: string): string {
 }
 
 function getLabel(key: string): string {
-  const keyLower = key.toLowerCase();
-  return fieldLabels[keyLower] || key
+  const keyLower = key.toLowerCase().replace(/\./g, '_');
+  
+  // Check exact match first
+  if (fieldLabels[keyLower]) return fieldLabels[keyLower];
+  
+  // Check if key contains any known field
+  for (const [field, label] of Object.entries(fieldLabels)) {
+    if (keyLower.includes(field)) return label;
+  }
+  
+  // Format key as readable label
+  return key
     .replace(/_/g, " ")
+    .replace(/\./g, " ")
     .replace(/([A-Z])/g, " $1")
     .trim()
     .split(" ")
@@ -103,39 +135,86 @@ function getLabel(key: string): string {
     .join(" ");
 }
 
-// Parse object keys in format "NOME ⎯ VALOR" from NexFuture
-function parseObjectWithDelimitedKeys(obj: Record<string, unknown>): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
-  const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
+// Keys to completely ignore
+const ignoredKeys = [
+  "comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64",
+  "texto", "info", "text", "raw", "status", "success", "message"
+];
+
+// Bot references to filter out
+const botReferences = [
+  "@querybuscasbot", "querybuscasbot", "t.me/querybuscas", 
+  "https://t.me/querybuscas", "@QueryBuscasBot", "querybuscas"
+];
+
+function shouldIgnoreKey(key: string): boolean {
+  const keyLower = key.toLowerCase();
+  return ignoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik));
+}
+
+function shouldIgnoreValue(value: unknown): boolean {
+  if (value === null || value === undefined || value === "" || value === "-" || value === "N/A") {
+    return true;
+  }
   
-  for (const [key, value] of Object.entries(obj)) {
-    // Se a chave contém delimitador, extrair key/value dela
-    let parsed = false;
-    for (const delim of delimiters) {
-      const idx = key.indexOf(delim);
-      if (idx > 0) {
-        const realKey = key.substring(0, idx).trim().toLowerCase().replace(/\s+/g, '_');
-        const realValue = key.substring(idx + delim.length).trim();
-        if (realKey && realValue) {
-          result[realKey] = realValue;
-          parsed = true;
-          break;
-        }
+  if (typeof value === "string") {
+    // Skip base64 data
+    if (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image")) {
+      return true;
+    }
+    // Skip bot references
+    const valueLower = value.toLowerCase();
+    if (botReferences.some(ref => valueLower.includes(ref.toLowerCase()))) {
+      return true;
+    }
+    // Skip very short meaningless values
+    if (value.trim().length < 2) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+// Parse "NOME ⎯ VALOR" format from keys
+function parseDelimitedKey(key: string): { realKey: string; realValue: string } | null {
+  const delimiters = [' ⎯ ', ' — ', ': '];
+  for (const delim of delimiters) {
+    const idx = key.indexOf(delim);
+    if (idx > 0) {
+      const realKey = key.substring(0, idx).trim().toLowerCase().replace(/\s+/g, '_');
+      const realValue = key.substring(idx + delim.length).trim();
+      if (realKey && realValue && realValue !== '-' && realValue !== 'N/A') {
+        return { realKey, realValue };
       }
     }
+  }
+  return null;
+}
+
+// Parse string data with multiple lines
+function parseStringData(str: string): Record<string, string> {
+  const result: Record<string, string> = {};
+  if (!str || typeof str !== "string") return result;
+  
+  const lines = str.split('\n');
+  
+  for (const line of lines) {
+    const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
     
-    // Se não foi parsed da chave, e valor é string/número válido, usar normalmente
-    if (!parsed && value !== null && value !== undefined && value !== '') {
-      // Se é o campo "data" com string formatada, parsear
-      if (key.toLowerCase() === 'data' && typeof value === 'string') {
-        const parsedData = parseStringData(value);
-        Object.assign(result, parsedData);
-      } else if (typeof value === 'object' && !Array.isArray(value)) {
-        // Recursão para objetos aninhados
-        const nested = parseObjectWithDelimitedKeys(value as Record<string, unknown>);
-        Object.assign(result, nested);
-      } else {
-        result[key.toLowerCase().replace(/\s+/g, '_')] = value;
+    for (const delim of delimiters) {
+      const idx = line.indexOf(delim);
+      if (idx > 0) {
+        const key = line.substring(0, idx).trim()
+          .replace(/^[•\-\s📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧]+/, '')
+          .toLowerCase()
+          .replace(/\s+/g, '_');
+        const value = line.substring(idx + delim.length).trim();
+        
+        if (key && value && value !== '-' && value !== 'N/A' && !shouldIgnoreValue(value)) {
+          result[key] = value;
+        }
+        break;
       }
     }
   }
@@ -143,62 +222,68 @@ function parseObjectWithDelimitedKeys(obj: Record<string, unknown>): Record<stri
   return result;
 }
 
-// Flatten nested objects
-function flattenData(obj: unknown, prefix = ""): Array<{ key: string; value: string }> {
+// Recursively extract all data into flat key-value pairs
+function extractAllData(obj: unknown, prefix = ""): Array<{ key: string; value: string }> {
   const items: Array<{ key: string; value: string }> = [];
-  if (!obj || typeof obj !== "object") return items;
-
-  // Keys to ignore - remove photo keys as we handle them separately
-  const ignoredKeys = ["comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64"];
   
-  // Bot references to filter out
-  const botReferences = ["@querybuscasbot", "querybuscasbot", "t.me/querybuscas", "https://t.me/querybuscas", "@QueryBuscasBot"];
-
-  // Primeiro, verificar se precisa parsear chaves delimitadas
-  let processedObj = obj as Record<string, unknown>;
-  const hasDelimitedKeys = Object.keys(processedObj).some(k => 
-    k.includes(' ⎯ ') || k.includes(' — ') || k.includes(': ')
-  );
-  if (hasDelimitedKeys || (processedObj.data && typeof processedObj.data === 'string')) {
-    processedObj = parseObjectWithDelimitedKeys(processedObj);
-  }
-
-  for (const [key, value] of Object.entries(processedObj)) {
-    const keyLower = key.toLowerCase();
-    if (ignoredKeys.includes(keyLower)) continue;
-    if (value === null || value === undefined || value === "" || value === "-") continue;
+  if (!obj || typeof obj !== "object") return items;
+  
+  const record = obj as Record<string, unknown>;
+  
+  for (const [key, value] of Object.entries(record)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
     
-    // Skip base64 data (handled separately for photo)
-    if (typeof value === "string" && (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image"))) continue;
+    // Skip ignored keys
+    if (shouldIgnoreKey(key)) continue;
     
-    // Skip bot references
+    // Check if key contains embedded value (NexFuture format)
+    const parsed = parseDelimitedKey(key);
+    if (parsed && !shouldIgnoreValue(parsed.realValue)) {
+      items.push({ key: parsed.realKey, value: parsed.realValue });
+      continue;
+    }
+    
+    // Skip ignored values
+    if (shouldIgnoreValue(value)) continue;
+    
+    // Handle string values (might be formatted text)
     if (typeof value === "string") {
-      const valueLower = value.toLowerCase();
-      if (botReferences.some(ref => valueLower.includes(ref.toLowerCase()))) continue;
-    }
-
-    if (typeof value === "object" && !Array.isArray(value)) {
-      items.push(...flattenData(value, prefix ? `${prefix}.${key}` : key));
-    } else if (Array.isArray(value)) {
-      if (value.length > 0) {
-        // Filter out bot references from arrays
-        const filteredValues = value
-          .filter(v => {
-            if (typeof v === "string") {
-              const vLower = v.toLowerCase();
-              return !botReferences.some(ref => vLower.includes(ref.toLowerCase()));
-            }
-            return true;
-          })
-          .map(v => typeof v === "string" ? v : JSON.stringify(v));
-        if (filteredValues.length > 0) {
-          items.push({ key: prefix ? `${prefix}.${key}` : key, value: filteredValues.join(", ") });
+      // Check if it's multi-line formatted data
+      if (value.includes('\n') && value.includes(':')) {
+        const parsedLines = parseStringData(value);
+        for (const [pk, pv] of Object.entries(parsedLines)) {
+          if (!shouldIgnoreKey(pk) && !shouldIgnoreValue(pv)) {
+            items.push({ key: pk, value: pv });
+          }
         }
+      } else {
+        items.push({ key: fullKey, value: value });
       }
-    } else {
-      items.push({ key: prefix ? `${prefix}.${key}` : key, value: String(value) });
+      continue;
     }
+    
+    // Handle nested objects
+    if (typeof value === "object" && !Array.isArray(value)) {
+      items.push(...extractAllData(value, fullKey));
+      continue;
+    }
+    
+    // Handle arrays
+    if (Array.isArray(value)) {
+      const validItems = value
+        .filter(v => !shouldIgnoreValue(v))
+        .map(v => typeof v === "string" ? v : JSON.stringify(v));
+      
+      if (validItems.length > 0) {
+        items.push({ key: fullKey, value: validItems.join(", ") });
+      }
+      continue;
+    }
+    
+    // Handle other primitives
+    items.push({ key: fullKey, value: String(value) });
   }
+  
   return items;
 }
 
@@ -219,68 +304,16 @@ function sanitizeText(text: string): string {
     .replace(/[ÙÚÛÜ]/g, 'U')
     .replace(/[Ç]/g, 'C')
     .replace(/[Ñ]/g, 'N')
-    .replace(/[—–⎯]/g, '-');
-}
-
-// Parse string data (formato NexFuture) para objeto
-function parseStringData(str: string): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
-  if (!str || typeof str !== "string") return result;
-  
-  // Detectar múltiplas linhas
-  const lines = str.split('\n');
-  
-  for (const line of lines) {
-    // Tentar diferentes delimitadores: ":", "⎯", "—", "-"
-    const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
-    let matched = false;
-    
-    for (const delim of delimiters) {
-      const idx = line.indexOf(delim);
-      if (idx > 0) {
-        const key = line.substring(0, idx).trim()
-          .replace(/^[•\-\s]+/, '') // Remover marcadores
-          .toLowerCase()
-          .replace(/\s+/g, '_');
-        const value = line.substring(idx + delim.length).trim();
-        
-        if (key && value && value !== '-' && value !== 'N/A') {
-          // Se já existe a chave, converter para array
-          if (result[key]) {
-            if (Array.isArray(result[key])) {
-              (result[key] as string[]).push(value);
-            } else {
-              result[key] = [result[key] as string, value];
-            }
-          } else {
-            result[key] = value;
-          }
-          matched = true;
-          break;
-        }
-      }
-    }
-    
-    // Se não encontrou delimitador, verificar se é um texto formatado simples
-    if (!matched && line.trim()) {
-      const cleanLine = line.trim().replace(/^[•\-\s]+/, '');
-      if (cleanLine.length > 3 && !cleanLine.startsWith('===') && !cleanLine.startsWith('---')) {
-        // Adicionar como campo "info" se não for header
-        if (!result["info"]) result["info"] = [];
-        (result["info"] as string[]).push(cleanLine);
-      }
-    }
-  }
-  
-  return result;
+    .replace(/[—–⎯]/g, '-')
+    .replace(/[📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧📄🗑️]/g, '');
 }
 
 // Extract photo from data object
 function extractPhotoBase64(data: Record<string, unknown>): string | null {
-  const photoKeys = ["fotobase64", "foto", "image", "photo", "base64", "fotoBase64"];
+  const photoKeys = ["fotobase64", "foto", "image", "photo", "base64", "fotoBase64", "photoBase64"];
   
-  const findPhoto = (obj: unknown): string | null => {
-    if (!obj || typeof obj !== "object") return null;
+  const findPhoto = (obj: unknown, depth = 0): string | null => {
+    if (!obj || typeof obj !== "object" || depth > 5) return null;
     
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const keyLower = key.toLowerCase();
@@ -293,13 +326,15 @@ function extractPhotoBase64(data: Record<string, unknown>): string | null {
       }
       
       // Check if value looks like base64 image
-      if (typeof value === "string" && (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image"))) {
-        return value;
+      if (typeof value === "string" && value.length > 100) {
+        if (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image")) {
+          return value;
+        }
       }
       
       // Recurse into nested objects
       if (typeof value === "object" && value !== null) {
-        const found = findPhoto(value);
+        const found = findPhoto(value, depth + 1);
         if (found) return found;
       }
     }
@@ -307,6 +342,25 @@ function extractPhotoBase64(data: Record<string, unknown>): string | null {
   };
   
   return findPhoto(data);
+}
+
+// Word wrap for long text
+function wrapText(text: string, maxChars: number): string[] {
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let currentLine = '';
+  
+  for (const word of words) {
+    if (currentLine.length + word.length + 1 <= maxChars) {
+      currentLine += (currentLine ? ' ' : '') + word;
+    } else {
+      if (currentLine) lines.push(currentLine);
+      currentLine = word;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+  
+  return lines;
 }
 
 async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
@@ -319,12 +373,16 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
   const margin = 50;
   const lineHeight = 16;
   const contentWidth = pageWidth - 2 * margin;
+  const labelWidth = 140;
+  const valueMaxChars = 55; // Max chars per line for values
 
   let page = pdfDoc.addPage([pageWidth, pageHeight]);
   let y = pageHeight - margin;
   
-  // Try to extract photo from data or use provided photoBase64
-  let photoBase64 = queryData.photoBase64 || extractPhotoBase64(queryData.data);
+  // Extract photo
+  const photoBase64 = queryData.photoBase64 || extractPhotoBase64(queryData.data);
+  let photoEmbedded = false;
+  let photoHeight = 0;
 
   const addPage = () => {
     page = pdfDoc.addPage([pageWidth, pageHeight]);
@@ -335,17 +393,6 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
     if (y - neededHeight < margin) {
       addPage();
     }
-  };
-
-  const drawText = (text: string, x: number, yPos: number, size: number, useFont = font, color = rgb(0.1, 0.1, 0.1)) => {
-    // Sanitize and truncate long text
-    const sanitized = sanitizeText(text);
-    const maxWidth = contentWidth - (x - margin);
-    const avgCharWidth = size * 0.5;
-    const maxChars = Math.floor(maxWidth / avgCharWidth);
-    const displayText = sanitized.length > maxChars ? sanitized.substring(0, maxChars - 3) + "..." : sanitized;
-    
-    page.drawText(displayText, { x, y: yPos, size, font: useFont, color });
   };
 
   // Header
@@ -387,19 +434,16 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
 
   y = pageHeight - 100;
   
-  // Add photo if available
+  // Add photo if available (only once, in top right)
   if (photoBase64) {
     try {
-      // Clean up base64 string
       let cleanBase64 = photoBase64;
       if (cleanBase64.startsWith("data:image")) {
         cleanBase64 = cleanBase64.split(",")[1];
       }
       
-      // Decode base64 to bytes
       const photoBytes = Uint8Array.from(atob(cleanBase64), c => c.charCodeAt(0));
       
-      // Try to embed as JPEG first, then PNG
       let embeddedImage;
       try {
         embeddedImage = await pdfDoc.embedJpg(photoBytes);
@@ -412,9 +456,8 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
       }
       
       if (embeddedImage) {
-        // Calculate dimensions to fit nicely (max 150x180)
-        const maxWidth = 150;
-        const maxHeight = 180;
+        const maxWidth = 120;
+        const maxHeight = 150;
         const imgWidth = embeddedImage.width;
         const imgHeight = embeddedImage.height;
         
@@ -426,22 +469,20 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
           drawWidth = (imgWidth / imgHeight) * drawHeight;
         }
         
-        // Draw photo frame
-        const photoX = pageWidth - margin - drawWidth - 10;
-        const photoY = y - drawHeight - 20;
+        const photoX = pageWidth - margin - drawWidth;
+        const photoY = y - drawHeight - 10;
         
         // Photo border
         page.drawRectangle({
-          x: photoX - 5,
-          y: photoY - 5,
-          width: drawWidth + 10,
-          height: drawHeight + 10,
+          x: photoX - 4,
+          y: photoY - 4,
+          width: drawWidth + 8,
+          height: drawHeight + 8,
           borderColor: rgb(0.3, 0.3, 0.35),
-          borderWidth: 2,
-          color: rgb(0.95, 0.95, 0.95),
+          borderWidth: 1.5,
+          color: rgb(0.98, 0.98, 0.98),
         });
         
-        // Draw the image
         page.drawImage(embeddedImage, {
           x: photoX,
           y: photoY,
@@ -449,14 +490,8 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
           height: drawHeight,
         });
         
-        // Add "FOTO" label
-        page.drawText("FOTO", {
-          x: photoX + drawWidth / 2 - 15,
-          y: photoY - 18,
-          size: 10,
-          font: fontBold,
-          color: rgb(0.4, 0.4, 0.4),
-        });
+        photoEmbedded = true;
+        photoHeight = drawHeight + 30;
         
         console.log("Photo embedded successfully");
       }
@@ -465,37 +500,57 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
     }
   }
 
-  // Parse data
-  const items = flattenData(queryData.data);
+  // Extract and organize data
+  const items = extractAllData(queryData.data);
+  console.log(`Extracted ${items.length} data items`);
+  
+  // Remove duplicates (keep first occurrence)
+  const seen = new Set<string>();
+  const uniqueItems = items.filter(item => {
+    const keyNorm = item.key.toLowerCase().replace(/\./g, '_');
+    if (seen.has(keyNorm)) return false;
+    seen.add(keyNorm);
+    return true;
+  });
   
   // Group by category
   const grouped: Record<string, Array<{ key: string; value: string }>> = {};
-  for (const item of items) {
+  for (const item of uniqueItems) {
     const cat = getCategory(item.key);
     if (!grouped[cat]) grouped[cat] = [];
     grouped[cat].push(item);
   }
 
-  // Draw categories
-  for (const [category, catItems] of Object.entries(grouped)) {
-    if (catItems.length === 0) continue;
+  // Adjust content width if photo is present
+  const effectiveContentWidth = photoEmbedded ? contentWidth - 140 : contentWidth;
+  const effectiveMaxChars = photoEmbedded ? 40 : valueMaxChars;
+
+  // Draw categories in order
+  for (const category of categoryOrder) {
+    const catItems = grouped[category];
+    if (!catItems || catItems.length === 0) continue;
 
     checkNewPage(60);
 
+    // Reset to full width after photo section
+    if (photoEmbedded && y < (pageHeight - 100 - photoHeight)) {
+      photoEmbedded = false;
+    }
+
     // Category header
-    y -= 25;
+    y -= 20;
     page.drawRectangle({
       x: margin,
-      y: y - 5,
-      width: contentWidth,
-      height: 22,
+      y: y - 3,
+      width: photoEmbedded ? effectiveContentWidth : contentWidth,
+      height: 20,
       color: rgb(0.2, 0.2, 0.25),
     });
 
     page.drawText(sanitizeText(category), {
-      x: margin + 10,
-      y: y,
-      size: 12,
+      x: margin + 8,
+      y: y + 2,
+      size: 11,
       font: fontBold,
       color: rgb(0.96, 0.76, 0.1),
     });
@@ -504,30 +559,54 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
 
     // Draw items
     for (const item of catItems) {
-      checkNewPage(lineHeight + 5);
-
       const label = getLabel(item.key.split(".").pop() || item.key);
+      const sanitizedValue = sanitizeText(item.value);
       
-      drawText(`${label}:`, margin + 10, y, 10, fontBold, rgb(0.4, 0.4, 0.4));
-      drawText(item.value, margin + 140, y, 10, font, rgb(0.1, 0.1, 0.1));
+      // Word wrap long values
+      const maxChars = photoEmbedded ? effectiveMaxChars : valueMaxChars;
+      const valueLines = sanitizedValue.length > maxChars 
+        ? wrapText(sanitizedValue, maxChars) 
+        : [sanitizedValue];
+      
+      const neededHeight = valueLines.length * lineHeight + 5;
+      checkNewPage(neededHeight);
 
-      y -= lineHeight;
+      // Label
+      page.drawText(sanitizeText(label + ":"), {
+        x: margin + 10,
+        y: y,
+        size: 9,
+        font: fontBold,
+        color: rgb(0.4, 0.4, 0.4),
+      });
+
+      // Value (possibly multi-line)
+      for (let i = 0; i < valueLines.length; i++) {
+        page.drawText(valueLines[i], {
+          x: margin + labelWidth,
+          y: y - (i * lineHeight),
+          size: 10,
+          font: font,
+          color: rgb(0.1, 0.1, 0.1),
+        });
+      }
+
+      y -= neededHeight;
     }
 
     y -= 10;
   }
 
   // Footer on last page
-  const footerY = 40;
+  const footerY = 35;
   page.drawLine({
-    start: { x: margin, y: footerY + 15 },
-    end: { x: pageWidth - margin, y: footerY + 15 },
-    thickness: 1,
-    color: rgb(0.3, 0.3, 0.3),
+    start: { x: margin, y: footerY + 12 },
+    end: { x: pageWidth - margin, y: footerY + 12 },
+    thickness: 0.5,
+    color: rgb(0.4, 0.4, 0.4),
   });
 
-  // Generic footer without bot references
-  page.drawText("Relatorio de Consulta - Documento Oficial", {
+  page.drawText("Documento Oficial - Uso Restrito", {
     x: margin,
     y: footerY,
     size: 8,
@@ -535,8 +614,8 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
     color: rgb(0.5, 0.5, 0.5),
   });
 
-  page.drawText("Documento confidencial - Uso restrito", {
-    x: pageWidth - margin - 150,
+  page.drawText(dateStr, {
+    x: pageWidth - margin - 100,
     y: footerY,
     size: 8,
     font: font,
@@ -547,16 +626,17 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const body: QueryData = await req.json();
-    console.log("Generating PDF for query:", body.queryType, body.queryInput);
-    console.log("Data received type:", typeof body.data);
-    console.log("Data preview:", JSON.stringify(body.data).substring(0, 500));
+    console.log("=== PDF Generation Request ===");
+    console.log("Query type:", body.queryType);
+    console.log("Query input:", body.queryInput);
+    console.log("Data keys:", Object.keys(body.data || {}));
+    console.log("Data preview:", JSON.stringify(body.data).substring(0, 800));
 
     if (!body.data) {
       return new Response(
@@ -565,16 +645,10 @@ serve(async (req) => {
       );
     }
 
-    // Se data vier como string (formato NexFuture), tentar parsear
-    let dataToProcess = body.data;
-    if (typeof body.data === "string") {
-      console.log("Data is a string, attempting to parse...");
-      dataToProcess = parseStringData(body.data);
-      console.log("Parsed data:", JSON.stringify(dataToProcess).substring(0, 300));
-    }
-
-    const pdfBytes = await generatePDF({ ...body, data: dataToProcess as Record<string, unknown> });
+    const pdfBytes = await generatePDF(body);
     const base64Pdf = btoa(String.fromCharCode(...pdfBytes));
+
+    console.log("PDF generated successfully, size:", pdfBytes.length);
 
     return new Response(
       JSON.stringify({
