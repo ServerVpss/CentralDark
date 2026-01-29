@@ -1697,7 +1697,7 @@ class BotHandler {
               console.error("Failed to create CEP pagination record:", error);
               // Fallback: enviar primeira página sem paginação
               const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName);
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, "cep", queryInput);
               return;
             }
             
@@ -1778,9 +1778,9 @@ class BotHandler {
           parse_mode: "HTML",
           ...(effectId && { message_effect_id: effectId }),
           reply_markup: keyboard(
-            [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)],
             [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
-            [btn("🗑️ Apagar", "delete_msg")]
+            [btn("🗑️ Apagar", "delete_msg")],
+            [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]
           ),
         });
         if (photoResult.ok && photoResult.result) {
@@ -2784,7 +2784,7 @@ class BotHandler {
               console.error("Failed to create CEP pagination record:", error);
               // Fallback: enviar primeira página sem paginação
               const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName) + consultaFooter;
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId, undefined, queryType, queryInput);
               return;
             }
             
@@ -2859,15 +2859,14 @@ class BotHandler {
             caption: fullCaption,
             parse_mode: "HTML",
             reply_to_message_id: replyToId,
-            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
+            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")], [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]),
           });
-
           if (sentPhoto.ok && sentPhoto.result) {
             photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
           } else {
             console.error("sendPhoto failed for query result:", sentPhoto);
             // Fallback: enviar apenas texto formatado
-            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId);
+            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId, undefined, queryType, queryInput);
             if (paginatedResult.ok && paginatedResult.result) {
               resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
             }
@@ -2882,7 +2881,7 @@ class BotHandler {
             caption: simpleCaption.substring(0, 1024),
             parse_mode: "HTML",
             reply_to_message_id: replyToId,
-            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
+            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")], [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]),
           });
 
           if (sentPhoto.ok && sentPhoto.result) {
@@ -2892,14 +2891,14 @@ class BotHandler {
           }
           
           // Enviar dados completos como mensagem separada com paginação
-          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput);
           if (paginatedResult.ok && paginatedResult.result) {
             resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
           }
         }
       } else {
         // Sem foto - Enviar resultado com paginação por botões
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -3008,7 +3007,7 @@ class BotHandler {
         const formattedResult = formatQueryResult("cpf", result, this.bot.bot_username, telegramUserName);
         
         // Send result with pagination
-        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase);
+        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, undefined, "cpf", cpf);
         
         // Delete the loading message
         try {
