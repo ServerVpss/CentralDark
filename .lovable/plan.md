@@ -1,208 +1,55 @@
 
+## Animação de Pulsação para Indicador Online dos Bots
 
-# Plano: Módulo de Backup e Restauração
+### Objetivo
+Adicionar uma animação de pulsação atraente ao indicador verde "online" dos bots, criando um efeito visual que chama a atenção quando o bot está ativo.
 
-## Visão Geral
+### Componentes Afetados
+1. **BotStatusCard** (Dashboard) - O card exibido na página inicial
+2. **Bots.tsx** - A lista de bots na página de gerenciamento
+3. **BotHealthMonitor** - O monitor de saúde dos bots
 
-Criar um sistema completo de backup e restauração que permite:
-1. **Exportar** todos os dados do banco em um clique (download JSON)
-2. **Restaurar** dados a partir de um arquivo de backup
-3. **Histórico** de backups realizados
+### Implementação
 
-## Arquitetura Proposta
-
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                    MÓDULO DE BACKUP                             │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ┌──────────────────┐    ┌──────────────────┐                   │
-│  │   BACKUP         │    │   RESTAURAÇÃO    │                   │
-│  ├──────────────────┤    ├──────────────────┤                   │
-│  │ • Um clique      │    │ • Upload JSON    │                   │
-│  │ • Todas tabelas  │    │ • Validação      │                   │
-│  │ • Download JSON  │    │ • Merge/Replace  │                   │
-│  │ • Comprimido     │    │ • Histórico      │                   │
-│  └──────────────────┘    └──────────────────┘                   │
-│                                                                 │
-│  Tabelas incluídas:                                             │
-│  ✓ telegram_bots       ✓ telegram_subscriptions                 │
-│  ✓ bot_settings        ✓ bot_security_settings                  │
-│  ✓ subscription_plans  ✓ payment_gateways                       │
-│  ✓ pix_transactions    ✓ pending_payments                       │
-│  ✓ engagement_messages ✓ profiles                               │
-│  ✓ query_history       ✓ bot_analytics                          │
-│  ✓ payment_history     ✓ telegram_messages                      │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-## Componentes a Criar
-
-### 1. Edge Function: `backup-manager`
-
-Responsável por:
-- **GET**: Exportar todos os dados do usuário autenticado
-- **POST**: Importar/restaurar dados de um backup
-
-```typescript
-// Estrutura do backup
-interface BackupData {
-  version: string;
-  created_at: string;
-  user_id: string;
-  tables: {
-    telegram_bots: any[];
-    bot_settings: any[];
-    bot_security_settings: any[];
-    telegram_subscriptions: any[];
-    subscription_plans: any[];
-    payment_gateways: any[];
-    pix_transactions: any[];
-    pending_payments: any[];
-    engagement_messages: any[];
-    profiles: any[];
-    query_history: any[];
-    bot_analytics: any[];
-    payment_history: any[];
-    telegram_messages: any[];
-  };
-  metadata: {
-    total_records: number;
-    tables_count: number;
-  };
-}
-```
-
-### 2. Componente React: `BackupManager.tsx`
-
-Interface visual com:
-- Card para criar backup (botão com ícone de download)
-- Card para restaurar backup (upload de arquivo)
-- Lista de backups anteriores (se implementarmos storage)
-- Indicador de progresso durante operações
-- Confirmações de segurança
-
-### 3. Nova Tab em Settings.tsx
-
-Adicionar aba "Backup" na página de configurações:
+#### 1. Nova Animação no Tailwind
+Adicionar uma animação personalizada `pulse-glow` no `tailwind.config.ts` que cria um efeito de pulsação com brilho verde:
 
 ```text
-┌────────────────────────────────────────────────────────────────┐
-│ Tabs: [Perfil] [Notificações] [Segurança] [Aparência] [Backup] │
-└────────────────────────────────────────────────────────────────┘
-
-Tab Backup:
-┌────────────────────────────────────────────────────────────────┐
-│ 💾 Backup Completo                                             │
-│ ──────────────────────────────────────────                     │
-│ Faça um backup de todos os seus dados: bots, assinaturas,      │
-│ planos, configurações e histórico.                             │
-│                                                                │
-│ Último backup: 29/01/2026 às 14:30                             │
-│                                                                │
-│ [📥 Criar Backup Agora]                                        │
-└────────────────────────────────────────────────────────────────┘
-
-┌────────────────────────────────────────────────────────────────┐
-│ 🔄 Restaurar Backup                                            │
-│ ──────────────────────────────────────                         │
-│ Restaure seus dados a partir de um arquivo de backup.          │
-│                                                                │
-│ ⚠️ ATENÇÃO: Isso substituirá seus dados atuais!                │
-│                                                                │
-│ [📤 Selecionar Arquivo de Backup]                              │
-│                                                                │
-│ Opções:                                                        │
-│ ○ Mesclar com dados existentes                                 │
-│ ○ Substituir tudo (limpar antes)                               │
-└────────────────────────────────────────────────────────────────┘
-```
-
-## Detalhes Técnicos
-
-### Edge Function: `supabase/functions/backup-manager/index.ts`
-
-| Método | Ação | Descrição |
-|--------|------|-----------|
-| GET | export | Exporta todas as tabelas do usuário para JSON |
-| POST | restore | Importa dados de um backup JSON |
-| POST | validate | Valida estrutura do arquivo antes de restaurar |
-
-### Segurança
-
-- Apenas usuários autenticados podem criar/restaurar backups
-- Backups incluem apenas dados do próprio usuário (respeitando RLS)
-- Validação de estrutura do JSON antes da importação
-- Confirmação dupla antes de restaurar (evitar perda acidental)
-- Hash de verificação para integridade do backup
-
-### Formato do Arquivo
-
-```json
-{
-  "version": "1.0",
-  "created_at": "2026-01-29T14:30:00Z",
-  "user_id": "uuid",
-  "checksum": "sha256...",
-  "tables": {
-    "telegram_bots": [...],
-    "bot_settings": [...],
-    ...
-  },
-  "metadata": {
-    "total_records": 1234,
-    "tables_count": 14
+keyframes: {
+  "pulse-glow": {
+    "0%, 100%": {
+      opacity: "1",
+      boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)"
+    },
+    "50%": {
+      opacity: "0.8",
+      boxShadow: "0 0 0 8px rgba(34, 197, 94, 0)"
+    }
   }
 }
+animation: {
+  "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
+}
 ```
 
-## Arquivos a Criar/Modificar
+#### 2. Atualizar BotStatusCard.tsx
+Modificar o indicador de status (linha 41-48) para incluir a nova animação quando o status for "online":
 
-### Novos Arquivos
+- Adicionar a classe `animate-pulse-glow` ao círculo verde
+- Manter o gradiente existente de `emerald-400` para `green-500`
 
-1. **`supabase/functions/backup-manager/index.ts`**
-   - Edge function para exportar/importar dados
+#### 3. Atualizar Bots.tsx
+Na lista de bots (linha 327-329), melhorar o indicador existente com a animação `pulse-glow` para um efeito mais visível.
 
-2. **`src/components/backup/BackupManager.tsx`**
-   - Componente principal de backup/restauração
-
-3. **`src/hooks/useBackup.ts`**
-   - Hook para gerenciar operações de backup
+### Resultado Visual
+O indicador verde irá:
+- Pulsar suavemente em um ciclo de 2 segundos
+- Emitir um "glow" (brilho) verde que expande e desaparece
+- Criar uma sensação de "bot vivo/ativo" no dashboard
 
 ### Arquivos a Modificar
-
-1. **`src/pages/Settings.tsx`**
-   - Adicionar aba "Backup" com o novo componente
-
-2. **`supabase/config.toml`**
-   - Registrar nova edge function
-
-## Fluxo de Uso
-
-### Criar Backup
-
-1. Usuário clica em "Criar Backup Agora"
-2. Sistema mostra loading e progresso
-3. Edge function busca dados de todas as tabelas
-4. Gera JSON com metadados e checksum
-5. Arquivo baixa automaticamente no navegador
-6. Toast de sucesso com estatísticas
-
-### Restaurar Backup
-
-1. Usuário seleciona arquivo JSON
-2. Sistema valida estrutura e checksum
-3. Mostra preview: quantos registros, quais tabelas
-4. Usuário escolhe: mesclar ou substituir
-5. Confirmação com input de segurança
-6. Sistema importa dados em transação
-7. Toast de sucesso com relatório
-
-## Considerações
-
-- **Tamanho**: Para projetos grandes, pode ser necessário paginação
-- **Tempo**: Backups muito grandes podem demorar
-- **Storage**: Opcionalmente, salvar backups no Supabase Storage para histórico
-- **Automático**: Futuramente, implementar backups agendados
-
+| Arquivo | Alteração |
+|---------|-----------|
+| `tailwind.config.ts` | Adicionar keyframes e animation `pulse-glow` |
+| `src/components/dashboard/BotStatusCard.tsx` | Aplicar `animate-pulse-glow` ao indicador online |
+| `src/pages/Bots.tsx` | Aplicar `animate-pulse-glow` ao indicador online |
