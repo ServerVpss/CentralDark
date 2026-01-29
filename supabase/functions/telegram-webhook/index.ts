@@ -299,6 +299,315 @@ function splitIntoPages(text: string, maxLength: number = 3800): string[] {
   return pages;
 }
 
+// =============== GERADOR DE TXT COMPLETO ===============
+interface TxtFieldLabels {
+  [key: string]: string;
+}
+
+const txtFieldLabels: TxtFieldLabels = {
+  nome: "Nome",
+  cpf: "CPF",
+  nascimento: "Data de Nascimento",
+  data_nascimento: "Data de Nascimento",
+  data_de_nascimento: "Data de Nascimento",
+  sexo: "Sexo",
+  idade: "Idade",
+  mae: "Nome da Mãe",
+  nome_mae: "Nome da Mãe",
+  nome_da_mae: "Nome da Mãe",
+  pai: "Nome do Pai",
+  nome_pai: "Nome do Pai",
+  nome_do_pai: "Nome do Pai",
+  rg: "RG",
+  cnh: "CNH",
+  pis: "PIS",
+  nis: "NIS",
+  cns: "CNS",
+  titulo_eleitor: "Título de Eleitor",
+  titulo: "Título de Eleitor",
+  zona: "Zona Eleitoral",
+  secao: "Seção",
+  email: "E-mail",
+  telefone: "Telefone",
+  celular: "Celular",
+  endereco: "Endereço",
+  logradouro: "Logradouro",
+  numero: "Número",
+  complemento: "Complemento",
+  bairro: "Bairro",
+  cidade: "Cidade",
+  uf: "UF",
+  estado: "Estado",
+  cep: "CEP",
+  renda: "Renda Estimada",
+  score: "Score",
+  classe_social: "Classe Social",
+  estado_civil: "Estado Civil",
+  profissao: "Profissão",
+  escolaridade: "Escolaridade",
+  naturalidade: "Naturalidade",
+  nacionalidade: "Nacionalidade",
+  tipo_sanguineo: "Tipo Sanguíneo",
+  obito: "Óbito",
+  status_receita: "Status na Receita",
+  placa: "Placa",
+  chassi: "Chassi",
+  renavam: "RENAVAM",
+  marca: "Marca",
+  modelo: "Modelo",
+  ano: "Ano",
+  cor: "Cor",
+  cnpj: "CNPJ",
+  razao_social: "Razão Social",
+  nome_fantasia: "Nome Fantasia",
+  raca: "Raça",
+  signo: "Signo",
+};
+
+const txtCategories: Record<string, string[]> = {
+  "DADOS PESSOAIS": ["nome", "cpf", "nascimento", "data_nascimento", "data_de_nascimento", "sexo", "idade", "naturalidade", "nacionalidade", "raca", "tipo_sanguineo", "estado_civil", "obito", "status_receita", "signo"],
+  "DOCUMENTOS": ["rg", "cnh", "pis", "nis", "cns", "titulo_eleitor", "titulo", "zona", "secao", "ctps"],
+  "CONTATO": ["email", "emails", "telefone", "telefones", "celular", "whatsapp", "ddd"],
+  "ENDEREÇO": ["endereco", "logradouro", "numero", "complemento", "bairro", "cidade", "uf", "estado", "cep", "municipio"],
+  "FINANCEIRO": ["renda", "score", "classe_social", "classe", "poder_aquisitivo", "bancos"],
+  "FAMÍLIA": ["mae", "nome_mae", "nome_da_mae", "pai", "nome_pai", "nome_do_pai", "parentes", "conjuge", "filhos"],
+  "PROFISSIONAL": ["profissao", "escolaridade", "emprego", "empregos", "cargo", "empresa"],
+  "VEÍCULO": ["placa", "chassi", "renavam", "marca", "modelo", "ano", "cor", "combustivel", "tipo_veiculo"],
+  "EMPRESA": ["cnpj", "razao_social", "nome_fantasia", "capital_social", "atividade", "porte"],
+};
+
+const txtCategoryOrder = [
+  "DADOS PESSOAIS",
+  "DOCUMENTOS", 
+  "CONTATO",
+  "ENDEREÇO",
+  "FINANCEIRO",
+  "FAMÍLIA",
+  "PROFISSIONAL",
+  "VEÍCULO",
+  "EMPRESA",
+  "OUTROS"
+];
+
+function getTxtCategory(key: string): string {
+  const keyLower = key.toLowerCase().replace(/\./g, '_');
+  for (const [category, fields] of Object.entries(txtCategories)) {
+    if (fields.some(f => keyLower.includes(f) || keyLower === f)) {
+      return category;
+    }
+  }
+  return "OUTROS";
+}
+
+function getTxtLabel(key: string): string {
+  const keyLower = key.toLowerCase().replace(/\./g, '_');
+  if (txtFieldLabels[keyLower]) return txtFieldLabels[keyLower];
+  for (const [field, label] of Object.entries(txtFieldLabels)) {
+    if (keyLower.includes(field)) return label;
+  }
+  return key
+    .replace(/_/g, " ")
+    .replace(/\./g, " ")
+    .replace(/([A-Z])/g, " $1")
+    .trim()
+    .split(" ")
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
+}
+
+// Keys to ignore in TXT
+const txtIgnoredKeys = [
+  "comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64",
+  "texto", "info", "text", "raw", "status", "success", "message"
+];
+
+// Bot references to filter out in TXT
+const txtBotReferences = [
+  "@querybuscasbot", "querybuscasbot", "t.me/querybuscas", 
+  "https://t.me/querybuscas", "@QueryBuscasBot", "querybuscas"
+];
+
+function shouldIgnoreTxtKey(key: string): boolean {
+  const keyLower = key.toLowerCase();
+  return txtIgnoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik));
+}
+
+function shouldIgnoreTxtValue(value: unknown): boolean {
+  if (value === null || value === undefined || value === "" || value === "-" || value === "N/A") {
+    return true;
+  }
+  if (typeof value === "string") {
+    if (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image")) {
+      return true;
+    }
+    const valueLower = value.toLowerCase();
+    if (txtBotReferences.some(ref => valueLower.includes(ref.toLowerCase()))) {
+      return true;
+    }
+    if (value.trim().length < 2) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function parseTxtDelimitedKey(key: string): { realKey: string; realValue: string } | null {
+  const delimiters = [' ⎯ ', ' — ', ': '];
+  for (const delim of delimiters) {
+    const idx = key.indexOf(delim);
+    if (idx > 0) {
+      const realKey = key.substring(0, idx).trim().toLowerCase().replace(/\s+/g, '_');
+      const realValue = key.substring(idx + delim.length).trim();
+      if (realKey && realValue && realValue !== '-' && realValue !== 'N/A') {
+        return { realKey, realValue };
+      }
+    }
+  }
+  return null;
+}
+
+function parseTxtStringData(str: string): Record<string, string> {
+  const result: Record<string, string> = {};
+  if (!str || typeof str !== "string") return result;
+  
+  const lines = str.split('\n');
+  
+  for (const line of lines) {
+    const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
+    
+    for (const delim of delimiters) {
+      const idx = line.indexOf(delim);
+      if (idx > 0) {
+        const key = line.substring(0, idx).trim()
+          .replace(/^[•\-\s📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧]+/, '')
+          .toLowerCase()
+          .replace(/\s+/g, '_');
+        const value = line.substring(idx + delim.length).trim();
+        
+        if (key && value && value !== '-' && value !== 'N/A' && !shouldIgnoreTxtValue(value)) {
+          result[key] = value;
+        }
+        break;
+      }
+    }
+  }
+  
+  return result;
+}
+
+function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; value: string }> {
+  const items: Array<{ key: string; value: string }> = [];
+  
+  if (!obj || typeof obj !== "object") return items;
+  
+  const record = obj as Record<string, unknown>;
+  
+  for (const [key, value] of Object.entries(record)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    
+    if (shouldIgnoreTxtKey(key)) continue;
+    
+    const parsed = parseTxtDelimitedKey(key);
+    if (parsed && !shouldIgnoreTxtValue(parsed.realValue)) {
+      items.push({ key: parsed.realKey, value: parsed.realValue });
+      continue;
+    }
+    
+    if (shouldIgnoreTxtValue(value)) continue;
+    
+    if (typeof value === "string") {
+      if (value.includes('\n') && value.includes(':')) {
+        const parsedLines = parseTxtStringData(value);
+        for (const [pk, pv] of Object.entries(parsedLines)) {
+          if (!shouldIgnoreTxtKey(pk) && !shouldIgnoreTxtValue(pv)) {
+            items.push({ key: pk, value: pv });
+          }
+        }
+      } else {
+        items.push({ key: fullKey, value: value });
+      }
+      continue;
+    }
+    
+    if (typeof value === "object" && !Array.isArray(value)) {
+      items.push(...extractAllTxtData(value, fullKey));
+      continue;
+    }
+    
+    if (Array.isArray(value)) {
+      const validItems = value
+        .filter(v => !shouldIgnoreTxtValue(v))
+        .map(v => typeof v === "string" ? v : JSON.stringify(v));
+      
+      if (validItems.length > 0) {
+        items.push({ key: fullKey, value: validItems.join(", ") });
+      }
+      continue;
+    }
+    
+    items.push({ key: fullKey, value: String(value) });
+  }
+  
+  return items;
+}
+
+function generateTxtContent(queryType: string, queryInput: string, data: Record<string, unknown>): string {
+  const now = new Date();
+  const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+  
+  let txt = `════════════════════════════════════════════════════════════\n`;
+  txt += `                  RELATÓRIO DE CONSULTA\n`;
+  txt += `════════════════════════════════════════════════════════════\n\n`;
+  txt += `Tipo: ${queryType.toUpperCase()}\n`;
+  txt += `Consulta: ${queryInput}\n`;
+  txt += `Gerado em: ${dateStr}\n\n`;
+  txt += `════════════════════════════════════════════════════════════\n\n`;
+  
+  // Extract and organize data
+  const items = extractAllTxtData(data);
+  
+  // Remove duplicates
+  const seen = new Set<string>();
+  const uniqueItems = items.filter(item => {
+    const keyNorm = item.key.toLowerCase().replace(/\./g, '_');
+    if (seen.has(keyNorm)) return false;
+    seen.add(keyNorm);
+    return true;
+  });
+  
+  // Group by category
+  const grouped: Record<string, Array<{ key: string; value: string }>> = {};
+  for (const item of uniqueItems) {
+    const cat = getTxtCategory(item.key);
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(item);
+  }
+  
+  // Write categories in order
+  for (const category of txtCategoryOrder) {
+    const catItems = grouped[category];
+    if (!catItems || catItems.length === 0) continue;
+    
+    txt += `┌─────────────────────────────────────────────────────────────\n`;
+    txt += `│ ${category}\n`;
+    txt += `├─────────────────────────────────────────────────────────────\n`;
+    
+    for (const item of catItems) {
+      const label = getTxtLabel(item.key.split(".").pop() || item.key);
+      txt += `│ ${label}: ${item.value}\n`;
+    }
+    
+    txt += `└─────────────────────────────────────────────────────────────\n\n`;
+  }
+  
+  txt += `════════════════════════════════════════════════════════════\n`;
+  txt += `                  Documento Oficial\n`;
+  txt += `                  Uso Restrito\n`;
+  txt += `════════════════════════════════════════════════════════════\n`;
+  
+  return txt;
+}
+
 // Função para criar botões de paginação
 function createPaginationKeyboard(paginationId: string, currentPage: number, totalPages: number, queryType?: string, queryInput?: string) {
   const buttons: InlineButton[] = [];
@@ -321,9 +630,13 @@ function createPaginationKeyboard(paginationId: string, currentPage: number, tot
   // Botão de apagar primeiro
   keyboard.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]);
   
-  // Botão de PDF por último (abaixo do apagar)
+  // Botões de download (PDF e TXT - exceto para foto que não tem TXT)
   if (queryType && queryInput) {
+    const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
     keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
+    if (!isPhotoQuery) {
+      keyboard.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
+    }
   }
   
   return { inline_keyboard: keyboard };
@@ -342,7 +655,7 @@ async function sendLongMessagePaginated(
 ) {
   const MAX_LENGTH = 3800;
   
-  // Criar teclado com botão de PDF abaixo do Apagar
+  // Criar teclado com botões de PDF e TXT abaixo do Apagar
   const createKeyboard = (paginationId?: string) => {
     const buttons: InlineButton[][] = [];
     
@@ -353,9 +666,13 @@ async function sendLongMessagePaginated(
       buttons.push([{ text: "🗑️ Apagar", callback_data: "delete_msg" }]);
     }
     
-    // Botão de PDF abaixo do apagar
+    // Botões de download (PDF e TXT - exceto para foto que não tem TXT)
     if (queryType && queryInput) {
+      const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
       buttons.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
+      if (!isPhotoQuery) {
+        buttons.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
+      }
     }
     
     return { inline_keyboard: buttons };
@@ -1141,8 +1458,9 @@ function createMultiPersonKeyboard(
   // Botão de apagar primeiro
   keyboard.push([{ text: "🗑️ Apagar", callback_data: paginationId ? `page_delete:${paginationId}` : "delete_msg" }]);
   
-  // Botão de PDF abaixo do apagar
+  // Botões de PDF e TXT abaixo do apagar
   keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:cep:${records[0]?.cep || ''}` }]);
+  keyboard.push([{ text: "📝 Ver TXT", callback_data: `txt:cep:${records[0]?.cep || ''}` }]);
   
   return { inline_keyboard: keyboard };
 }
@@ -2027,17 +2345,23 @@ class BotHandler {
       const effectId = getMessageEffectId(this.settings.message_effect);
 
       if (isValidPhotoUrl) {
+        const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
+        const actionButtons: InlineButton[][] = [
+          [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
+          [btn("🗑️ Apagar", "delete_msg")],
+          [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]
+        ];
+        if (!isPhotoQuery) {
+          actionButtons.push([btn("📝 Ver TXT", `txt:${queryType}:${queryInput}`)]);
+        }
+        
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
           caption: formattedResult.substring(0, 1024),
           parse_mode: "HTML",
           ...(effectId && { message_effect_id: effectId }),
-          reply_markup: keyboard(
-            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
-            [btn("🗑️ Apagar", "delete_msg")],
-            [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]
-          ),
+          reply_markup: { inline_keyboard: actionButtons },
         });
         if (photoResult.ok && photoResult.result) {
           resultMessageId = (photoResult.result as { message_id?: number }).message_id;
@@ -3360,6 +3684,70 @@ class BotHandler {
         console.error("PDF generation error:", error);
         await editMessage(this.token, chatId, messageId,
           "❌ <b>Erro ao gerar PDF</b>\n\nTente novamente.",
+          keyboard([btn("🗑️ Apagar", "delete_msg")])
+        );
+      }
+      return;
+    }
+
+    // TXT Download handler
+    if (data.startsWith("txt:")) {
+      const parts = data.replace("txt:", "").split(":");
+      const queryType = parts[0];
+      const queryInput = parts.slice(1).join(":");
+      
+      if (!queryType || !queryInput) {
+        await answerCallback(this.token, callback.id);
+        return;
+      }
+      
+      // Send loading message
+      await editMessage(this.token, chatId, messageId, 
+        `📝 <b>Gerando TXT...</b>\n\nAguarde um momento.`,
+        undefined
+      );
+      
+      try {
+        // Re-execute query to get data for TXT
+        const result = await executeQuery(queryType, queryInput);
+        
+        // Generate TXT content
+        const txtContent = generateTxtContent(queryType, queryInput, result as Record<string, unknown>);
+        
+        // Convert to blob and send as document
+        const txtBytes = new TextEncoder().encode(txtContent);
+        const blob = new Blob([txtBytes], { type: 'text/plain; charset=utf-8' });
+        
+        // Create FormData for file upload
+        const form = new FormData();
+        form.set("chat_id", String(chatId));
+        form.set("document", new File([blob], `consulta_${queryType}_${queryInput}.txt`, { type: 'text/plain' }));
+        form.set("caption", `📝 <b>Relatório Completo (TXT)</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n✅ Todos os dados da consulta estão neste arquivo.`);
+        form.set("parse_mode", "HTML");
+        
+        const sendDocResult = await fetch(`${TELEGRAM_API}${this.token}/sendDocument`, {
+          method: "POST",
+          body: form,
+        });
+        
+        const docResponse = await sendDocResult.json();
+        
+        if (docResponse.ok) {
+          // Delete loading message
+          try {
+            await deleteMessage(this.token, chatId, messageId);
+          } catch (_e) { /* ignore */ }
+        } else {
+          console.error("Failed to send TXT document:", docResponse);
+          await editMessage(this.token, chatId, messageId,
+            "❌ <b>Erro ao enviar TXT</b>\n\nTente novamente.",
+            keyboard([btn("🗑️ Apagar", "delete_msg")])
+          );
+        }
+      } catch (error) {
+        console.error("TXT generation error:", error);
+        await editMessage(this.token, chatId, messageId,
+          "❌ <b>Erro ao gerar TXT</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
         );
       }
