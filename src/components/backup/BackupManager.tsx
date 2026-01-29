@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,6 +37,7 @@ export function BackupManager() {
     isValidating,
     isRestoring,
     backupPreview,
+    progress,
     exportBackup,
     validateBackup,
     restoreBackup,
@@ -102,7 +104,21 @@ export function BackupManager() {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          {/* Progress Bar for Export */}
+          {isExporting && progress && (
+            <div className="space-y-3 p-4 rounded-lg border border-primary/30 bg-primary/5 animate-fade-in">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-foreground font-medium">{progress.step}</span>
+                <span className="text-primary font-bold">{progress.percentage}%</span>
+              </div>
+              <Progress value={progress.percentage} className="h-3" />
+              <p className="text-xs text-muted-foreground">
+                Processando dados... Por favor, aguarde.
+              </p>
+            </div>
+          )}
+
           <Button
             variant="glow"
             size="lg"
@@ -286,6 +302,20 @@ export function BackupManager() {
                   </Label>
                 </div>
               </RadioGroup>
+
+              {/* Progress Bar for Restore */}
+              {isRestoring && progress && (
+                <div className="space-y-3 p-4 rounded-lg border border-warning/30 bg-warning/5 animate-fade-in">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-foreground font-medium">{progress.step}</span>
+                    <span className="text-warning font-bold">{progress.percentage}%</span>
+                  </div>
+                  <Progress value={progress.percentage} className="h-3" />
+                  <p className="text-xs text-muted-foreground">
+                    Restaurando dados... Não feche esta página.
+                  </p>
+                </div>
+              )}
 
               <Button
                 variant={restoreMode === "replace" ? "destructive" : "default"}

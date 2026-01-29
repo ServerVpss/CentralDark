@@ -51,6 +51,13 @@ export interface RestoreResult {
   total_errors: number;
 }
 
+export interface ProgressState {
+  current: number;
+  total: number;
+  step: string;
+  percentage: number;
+}
+
 async function generateChecksum(data: string): Promise<string> {
   const encoder = new TextEncoder();
   const dataBuffer = encoder.encode(data);
@@ -59,16 +66,47 @@ async function generateChecksum(data: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+const TABLE_NAMES: Record<string, string> = {
+  telegram_bots: "Bots do Telegram",
+  bot_settings: "Configurações dos Bots",
+  bot_security_settings: "Configurações de Segurança",
+  telegram_subscriptions: "Assinaturas",
+  subscription_plans: "Planos",
+  payment_gateways: "Gateways de Pagamento",
+  payment_gateway_settings: "Config. de Gateway",
+  pix_transactions: "Transações PIX",
+  pending_payments: "Pagamentos Pendentes",
+  engagement_messages: "Mensagens de Engajamento",
+  profiles: "Perfis",
+  query_history: "Histórico de Consultas",
+  bot_analytics: "Análises",
+  payment_history: "Histórico de Pagamentos",
+  telegram_messages: "Mensagens do Telegram",
+};
+
 export function useBackup() {
   const [isExporting, setIsExporting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
   const [backupPreview, setBackupPreview] = useState<BackupPreview | null>(null);
+  const [progress, setProgress] = useState<ProgressState | null>(null);
+
+  const updateProgress = (current: number, total: number, step: string) => {
+    setProgress({
+      current,
+      total,
+      step,
+      percentage: Math.round((current / total) * 100),
+    });
+  };
 
   const exportBackup = async (): Promise<BackupData | null> => {
     setIsExporting(true);
+    setProgress({ current: 0, total: 100, step: "Iniciando backup...", percentage: 0 });
+
     try {
       // Get current user
+      updateProgress(5, 100, "Autenticando usuário...");
       const { data: { user }, error: authError } = await supabase.auth.getUser();
       if (authError || !user) {
         throw new Error("Usuário não autenticado");
@@ -77,43 +115,54 @@ export function useBackup() {
 
       console.log("[backup] Exporting data for user:", userId);
 
-      // Fetch all user data in parallel
-      const [
-        telegramBots,
-        botSecuritySettings,
-        subscriptionPlans,
-        paymentGateways,
-        paymentGatewaySettings,
-        pixTransactions,
-        pendingPayments,
-        engagementMessages,
-        profiles,
-        queryHistory,
-        botAnalytics,
-        paymentHistory,
-        telegramMessages,
-      ] = await Promise.all([
-        supabase.from("telegram_bots").select("*").eq("user_id", userId),
-        supabase.from("bot_security_settings").select("*").eq("user_id", userId),
-        supabase.from("subscription_plans").select("*").eq("user_id", userId),
-        supabase.from("payment_gateways").select("*").eq("user_id", userId),
-        supabase.from("payment_gateway_settings").select("*").eq("user_id", userId),
-        supabase.from("pix_transactions").select("*").eq("user_id", userId),
-        supabase.from("pending_payments").select("*").eq("user_id", userId),
-        supabase.from("engagement_messages").select("*").eq("user_id", userId),
-        supabase.from("profiles").select("*").eq("user_id", userId),
-        supabase.from("query_history").select("*").eq("user_id", userId),
-        supabase.from("bot_analytics").select("*").eq("user_id", userId),
-        supabase.from("payment_history").select("*").eq("user_id", userId),
-        supabase.from("telegram_messages").select("*").eq("user_id", userId),
-      ]);
+      // Fetch all user data
+      updateProgress(10, 100, "Buscando bots...");
+      const telegramBots = await supabase.from("telegram_bots").select("*").eq("user_id", userId);
+
+      updateProgress(15, 100, "Buscando configurações de segurança...");
+      const botSecuritySettings = await supabase.from("bot_security_settings").select("*").eq("user_id", userId);
+
+      updateProgress(20, 100, "Buscando planos...");
+      const subscriptionPlans = await supabase.from("subscription_plans").select("*").eq("user_id", userId);
+
+      updateProgress(25, 100, "Buscando gateways de pagamento...");
+      const paymentGateways = await supabase.from("payment_gateways").select("*").eq("user_id", userId);
+
+      updateProgress(30, 100, "Buscando configurações de gateway...");
+      const paymentGatewaySettings = await supabase.from("payment_gateway_settings").select("*").eq("user_id", userId);
+
+      updateProgress(35, 100, "Buscando transações PIX...");
+      const pixTransactions = await supabase.from("pix_transactions").select("*").eq("user_id", userId);
+
+      updateProgress(40, 100, "Buscando pagamentos pendentes...");
+      const pendingPayments = await supabase.from("pending_payments").select("*").eq("user_id", userId);
+
+      updateProgress(45, 100, "Buscando mensagens de engajamento...");
+      const engagementMessages = await supabase.from("engagement_messages").select("*").eq("user_id", userId);
+
+      updateProgress(50, 100, "Buscando perfis...");
+      const profiles = await supabase.from("profiles").select("*").eq("user_id", userId);
+
+      updateProgress(55, 100, "Buscando histórico de consultas...");
+      const queryHistory = await supabase.from("query_history").select("*").eq("user_id", userId);
+
+      updateProgress(60, 100, "Buscando análises...");
+      const botAnalytics = await supabase.from("bot_analytics").select("*").eq("user_id", userId);
+
+      updateProgress(65, 100, "Buscando histórico de pagamentos...");
+      const paymentHistory = await supabase.from("payment_history").select("*").eq("user_id", userId);
+
+      updateProgress(70, 100, "Buscando mensagens do Telegram...");
+      const telegramMessages = await supabase.from("telegram_messages").select("*").eq("user_id", userId);
 
       // Get bot_settings and subscriptions filtered by user's bots
+      updateProgress(75, 100, "Buscando configurações dos bots...");
       const userBotIds = (telegramBots.data || []).map((b) => b.id);
       let filteredBotSettings: any[] = [];
       let filteredSubscriptions: any[] = [];
 
       if (userBotIds.length > 0) {
+        updateProgress(80, 100, "Buscando assinaturas...");
         const [bs, subs] = await Promise.all([
           supabase.from("bot_settings").select("*").in("bot_id", userBotIds),
           supabase.from("telegram_subscriptions").select("*").in("bot_id", userBotIds),
@@ -122,6 +171,7 @@ export function useBackup() {
         filteredSubscriptions = subs.data || [];
       }
 
+      updateProgress(85, 100, "Montando backup...");
       const tables = {
         telegram_bots: telegramBots.data || [],
         bot_settings: filteredBotSettings,
@@ -150,6 +200,7 @@ export function useBackup() {
       ).length;
 
       // Generate checksum
+      updateProgress(90, 100, "Gerando checksum de integridade...");
       const checksum = await generateChecksum(JSON.stringify(tables));
 
       const backup: BackupData = {
@@ -165,6 +216,7 @@ export function useBackup() {
       };
 
       // Trigger download
+      updateProgress(95, 100, "Preparando download...");
       const blob = new Blob([JSON.stringify(backup, null, 2)], {
         type: "application/json",
       });
@@ -177,6 +229,7 @@ export function useBackup() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
+      updateProgress(100, 100, "Backup concluído!");
       console.log(`[backup] Export complete: ${totalRecords} records from ${tablesCount} tables`);
       toast.success(
         `Backup criado com sucesso! ${backup.metadata.total_records} registros exportados.`
@@ -188,7 +241,10 @@ export function useBackup() {
       toast.error(`Erro ao criar backup: ${error.message}`);
       return null;
     } finally {
-      setIsExporting(false);
+      setTimeout(() => {
+        setIsExporting(false);
+        setProgress(null);
+      }, 1000);
     }
   };
 
@@ -257,19 +313,23 @@ export function useBackup() {
     mode: "merge" | "replace"
   ): Promise<RestoreResult | null> => {
     setIsRestoring(true);
+    setProgress({ current: 0, total: 100, step: "Iniciando restauração...", percentage: 0 });
 
     try {
       // Get current user
+      updateProgress(5, 100, "Autenticando usuário...");
       const { data: { user }, error: authError } = await supabase.auth.getUser();
       if (authError || !user) {
         throw new Error("Usuário não autenticado");
       }
       const userId = user.id;
 
+      updateProgress(10, 100, "Lendo arquivo de backup...");
       const text = await file.text();
       const backup = JSON.parse(text) as BackupData;
 
       // Verify checksum
+      updateProgress(15, 100, "Verificando integridade...");
       const newChecksum = await generateChecksum(JSON.stringify(backup.tables));
       if (backup.checksum !== newChecksum) {
         throw new Error("Checksum inválido");
@@ -300,10 +360,15 @@ export function useBackup() {
 
       // If replace mode, delete existing data first (reverse order for FK)
       if (mode === "replace") {
-        for (const tableName of [...tableOrder].reverse()) {
+        updateProgress(20, 100, "Removendo dados existentes...");
+        const reverseOrder = [...tableOrder].reverse();
+        for (let i = 0; i < reverseOrder.length; i++) {
+          const tableName = reverseOrder[i];
+          const progressPercent = 20 + Math.round((i / reverseOrder.length) * 15);
+          updateProgress(progressPercent, 100, `Limpando ${TABLE_NAMES[tableName] || tableName}...`);
+          
           try {
             if (tableName === "telegram_subscriptions" || tableName === "bot_settings") {
-              // These need special handling - delete by bot_id
               const { data: bots } = await supabase
                 .from("telegram_bots")
                 .select("id")
@@ -313,7 +378,6 @@ export function useBackup() {
                 await supabase.from(tableName).delete().in("bot_id", botIds);
               }
             } else if (tableName !== "profiles") {
-              // Don't delete profiles - update instead
               await supabase.from(tableName).delete().eq("user_id", userId);
             }
           } catch (e) {
@@ -323,20 +387,31 @@ export function useBackup() {
       }
 
       // Insert data
-      for (const tableName of tableOrder) {
+      const startPercent = mode === "replace" ? 35 : 20;
+      const endPercent = 95;
+      const progressRange = endPercent - startPercent;
+
+      for (let i = 0; i < tableOrder.length; i++) {
+        const tableName = tableOrder[i];
         const tableData = backup.tables[tableName] || [];
+        const progressPercent = startPercent + Math.round((i / tableOrder.length) * progressRange);
+        
+        updateProgress(
+          progressPercent,
+          100,
+          `Restaurando ${TABLE_NAMES[tableName] || tableName} (${tableData.length} registros)...`
+        );
+
         if (tableData.length === 0) continue;
 
         const tableResult = { table: tableName, inserted: 0, errors: [] as string[] };
 
         for (const record of tableData) {
           try {
-            // Update user_id to current user
             const updatedRecord = { ...record };
             if ("user_id" in updatedRecord) {
               updatedRecord.user_id = userId;
             }
-            // Remove id to let DB generate new ones (except for profiles which may need it)
             if (tableName !== "profiles") {
               delete updatedRecord.id;
             }
@@ -358,6 +433,8 @@ export function useBackup() {
 
         results.push(tableResult);
       }
+
+      updateProgress(100, 100, "Restauração concluída!");
 
       const totalInserted = results.reduce((sum, r) => sum + r.inserted, 0);
       const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
@@ -384,8 +461,11 @@ export function useBackup() {
       toast.error(`Erro ao restaurar: ${error.message}`);
       return null;
     } finally {
-      setIsRestoring(false);
-      setBackupPreview(null);
+      setTimeout(() => {
+        setIsRestoring(false);
+        setProgress(null);
+        setBackupPreview(null);
+      }, 1500);
     }
   };
 
@@ -398,6 +478,7 @@ export function useBackup() {
     isValidating,
     isRestoring,
     backupPreview,
+    progress,
     exportBackup,
     validateBackup,
     restoreBackup,
