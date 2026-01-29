@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Copy, Check, AlertCircle, Download } from "lucide-react";
+import { Copy, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -11,27 +11,156 @@ interface MonospaceResultDisplayProps {
   showCopyButton?: boolean;
 }
 
-// Category definitions with emojis
+// Category definitions with emojis (Telegram style)
 const categoryConfig: Record<string, { emoji: string; title: string }> = {
-  dados_basicos: { emoji: "[✶]", title: "DADOS BÁSICOS" },
-  dados_tse: { emoji: "[✶]", title: "DADOS DO TSE" },
-  dados_score: { emoji: "[✶]", title: "DADOS DE SCORE" },
-  dados_renda: { emoji: "[✶]", title: "DADOS DE RENDA" },
-  dados_contato: { emoji: "[✶]", title: "DADOS DE CONTATO" },
-  dados_moradia: { emoji: "[✶]", title: "DADOS DE MORADIA" },
-  dados_familiares: { emoji: "[✶]", title: "DADOS DE FAMILIARES" },
-  dados_profissional: { emoji: "[✶]", title: "DADOS PROFISSIONAIS" },
-  dados_veiculos: { emoji: "[✶]", title: "DADOS DE VEÍCULOS" },
-  dados_outros: { emoji: "[✶]", title: "OUTROS DADOS" },
+  dados_pessoais: { emoji: "👤", title: "DADOS PESSOAIS" },
+  dados_tse: { emoji: "🗳️", title: "DADOS DO TSE" },
+  dados_score: { emoji: "📊", title: "DADOS DE SCORE" },
+  dados_renda: { emoji: "💰", title: "DADOS DE RENDA" },
+  dados_contato: { emoji: "📞", title: "DADOS DE CONTATO" },
+  dados_moradia: { emoji: "🏠", title: "DADOS DE MORADIA" },
+  dados_familiares: { emoji: "👨‍👩‍👧", title: "DADOS DE FAMILIARES" },
+  dados_profissional: { emoji: "💼", title: "DADOS PROFISSIONAIS" },
+  dados_veiculos: { emoji: "🚗", title: "DADOS DE VEÍCULOS" },
+  dados_outros: { emoji: "📋", title: "OUTROS DADOS" },
 };
 
-// Field mappings per category
+// Field emoji mappings (Telegram style)
+const fieldEmojis: Record<string, string> = {
+  nome: "👤",
+  cpf: "🆔",
+  nascimento: "📅",
+  data_nascimento: "📅",
+  sexo: "⚧",
+  raca: "🎨",
+  cor: "🎨",
+  obito: "⚰️",
+  óbito: "⚰️",
+  status_receita: "📋",
+  mae: "👩",
+  nome_mae: "👩",
+  pai: "👨",
+  nome_pai: "👨",
+  rg: "🪪",
+  orgao_emissor: "🏛️",
+  titulo_eleitor: "🗳️",
+  zona: "📍",
+  secao: "📍",
+  sessao: "📍",
+  csb8: "📊",
+  csba: "📊",
+  score: "⭐",
+  faixa_risco: "⚠️",
+  renda: "💵",
+  poder_aquisitivo: "💎",
+  classe_social: "🏆",
+  telefone: "📱",
+  telefones: "📱",
+  celular: "📱",
+  email: "📧",
+  emails: "📧",
+  endereco: "🏠",
+  enderecos: "🏠",
+  logradouro: "🛣️",
+  numero: "🔢",
+  complemento: "📝",
+  bairro: "🏘️",
+  cidade: "🌆",
+  uf: "🗺️",
+  estado: "🗺️",
+  cep: "📮",
+  municipio: "🏙️",
+  parentes: "👨‍👩‍👧‍👦",
+  irma: "👧",
+  irmao: "👦",
+  profissao: "💼",
+  cargo: "👔",
+  empresa: "🏢",
+  escolaridade: "🎓",
+  placa: "🚗",
+  veiculo: "🚙",
+  marca: "🏭",
+  modelo: "📋",
+  chassi: "🔧",
+  renavam: "📄",
+  pis: "📋",
+  nis: "📋",
+  cns: "🏥",
+  cnh: "🪪",
+  naturalidade: "🌍",
+  nacionalidade: "🌐",
+  estado_civil: "💍",
+  tipo_sanguineo: "🩸",
+};
+
+// Field label mappings
+const fieldLabels: Record<string, string> = {
+  cpf: "CPF",
+  nome: "Nome",
+  sexo: "Sexo",
+  nascimento: "Nascimento",
+  data_nascimento: "Nascimento",
+  mae: "Nome da Mãe",
+  nome_mae: "Nome da Mãe",
+  pai: "Nome do Pai",
+  nome_pai: "Nome do Pai",
+  rg: "RG",
+  orgao_emissor: "Órgão Emissor",
+  estado_emissao: "Estado de Emissão",
+  obito: "Óbito",
+  óbito: "Óbito",
+  status_receita: "Status Receita",
+  titulo_eleitor: "Título Eleitor",
+  zona: "Zona",
+  secao: "Seção",
+  sessao: "Sessão",
+  csb8: "CSB8",
+  csba: "CSBA",
+  score: "Score",
+  faixa_risco: "Faixa de Risco",
+  renda: "Renda",
+  poder_aquisitivo: "Poder Aquisitivo",
+  classe_social: "Classe Social",
+  telefone: "Telefone",
+  telefones: "Telefones",
+  email: "E-mail",
+  emails: "E-mails",
+  endereco: "Endereço",
+  logradouro: "Logradouro",
+  numero: "Número",
+  complemento: "Complemento",
+  bairro: "Bairro",
+  cidade: "Cidade",
+  uf: "UF",
+  estado: "Estado",
+  cep: "CEP",
+  municipio: "Município",
+  raca: "Raça",
+  cor: "Cor",
+  naturalidade: "Naturalidade",
+  nacionalidade: "Nacionalidade",
+  estado_civil: "Estado Civil",
+  tipo_sanguineo: "Tipo Sanguíneo",
+  profissao: "Profissão",
+  escolaridade: "Escolaridade",
+  pis: "PIS",
+  nis: "NIS",
+  cns: "CNS",
+  cnh: "CNH",
+  placa: "Placa",
+  veiculo: "Veículo",
+  marca: "Marca",
+  modelo: "Modelo",
+  chassi: "Chassi",
+  renavam: "Renavam",
+};
+
+// Field categories mapping
 const fieldCategories: Record<string, string[]> = {
-  dados_basicos: [
+  dados_pessoais: [
     "cpf", "nome", "sexo", "nascimento", "data_nascimento", "datanascimento",
-    "nome_mae", "mae", "nome_mãe", "nome_pai", "pai", "rg", "orgao_emissor",
-    "estado_emissao", "obito", "óbito", "naturalidade", "nacionalidade",
-    "raca", "cor", "tipo_sanguineo", "estado_civil"
+    "rg", "orgao_emissor", "estado_emissao", "obito", "óbito", "naturalidade", 
+    "nacionalidade", "raca", "cor", "tipo_sanguineo", "estado_civil", "status_receita"
   ],
   dados_tse: [
     "titulo_eleitor", "titulo", "eleitor", "zona", "secao", "sessao", "seção"
@@ -50,74 +179,17 @@ const fieldCategories: Record<string, string[]> = {
     "bairro", "cidade", "uf", "estado", "cep", "municipio"
   ],
   dados_familiares: [
-    "parentes", "irma", "irmao", "filho", "filha", "conjuge", "esposa", "esposo"
+    "mae", "nome_mae", "pai", "nome_pai", "parentes", "irma", "irmao", 
+    "filho", "filha", "conjuge", "esposa", "esposo"
   ],
   dados_profissional: [
     "profissao", "cargo", "empresa", "empresas", "emprego", "empregos",
-    "cnpj", "razao_social", "escolaridade", "pis", "nis", "ctps"
+    "cnpj", "razao_social", "escolaridade", "pis", "nis", "ctps", "cns", "cnh"
   ],
   dados_veiculos: [
     "placa", "veiculo", "veiculos", "marca", "modelo", "ano", "cor_veiculo",
     "chassi", "renavam", "combustivel"
   ],
-};
-
-// Friendly field labels
-const fieldLabels: Record<string, string> = {
-  cpf: "CPF",
-  nome: "NOME",
-  sexo: "SEXO",
-  nascimento: "DATA DE NASCIMENTO",
-  data_nascimento: "DATA DE NASCIMENTO",
-  datanascimento: "DATA DE NASCIMENTO",
-  mae: "NOME DA MÃE",
-  nome_mae: "NOME DA MÃE",
-  "nome_mãe": "NOME DA MÃE",
-  pai: "NOME DO PAI",
-  nome_pai: "NOME DO PAI",
-  rg: "RG",
-  orgao_emissor: "ORGÃO EMISSOR",
-  estado_emissao: "ESTADO DE EMISSÃO",
-  obito: "ÓBITO",
-  óbito: "ÓBITO",
-  titulo_eleitor: "TITULO DO ELEITOR",
-  titulo: "TITULO DO ELEITOR",
-  zona: "ZONA",
-  secao: "SESSÃO",
-  sessao: "SESSÃO",
-  seção: "SESSÃO",
-  csb8: "CSB8",
-  csba: "CSBA",
-  csb8_faixa: "CSB8 FAIXA DE RISCO",
-  csba_faixa: "CSBA FAIXA DE RISCO",
-  score: "SCORE",
-  faixa_risco: "FAIXA DE RISCO",
-  renda: "RENDA",
-  poder_aquisitivo: "PODER AQUISITIVO",
-  classe_social: "CLASSE SOCIAL",
-  telefone: "TELEFONES/CELULARES",
-  telefones: "TELEFONES/CELULARES",
-  email: "E-MAILS",
-  emails: "E-MAILS",
-  endereco: "ENDEREÇO",
-  enderecos: "ENDEREÇOS",
-  logradouro: "LOGRADOURO",
-  numero: "NÚMERO",
-  complemento: "COMPLEMENTO",
-  bairro: "BAIRRO",
-  cidade: "CIDADE",
-  uf: "UF",
-  estado: "ESTADO",
-  cep: "CEP",
-  municipio: "MUNICÍPIO",
-  parentes: "PARENTES",
-  irma: "IRMÃ(O)",
-  profissao: "PROFISSÃO",
-  cargo: "CARGO",
-  empresa: "EMPRESA",
-  escolaridade: "ESCOLARIDADE",
-  placa: "PLACA",
-  veiculo: "VEÍCULO",
 };
 
 // Extract and flatten data from nested structures
@@ -140,7 +212,6 @@ function extractData(data: any): Record<string, any> {
   for (const [key, value] of Object.entries(data)) {
     if (value === null || value === undefined) continue;
     if (typeof value === "object" && !Array.isArray(value)) {
-      // Flatten nested objects
       const nested = extractData(value);
       Object.assign(result, nested);
     } else {
@@ -155,17 +226,14 @@ function extractData(data: any): Record<string, any> {
 function parseTextData(text: string): Record<string, any> {
   const result: Record<string, any> = {};
   
-  // Clean text
   let cleanText = text
     .replace(/@\w+/g, "")
     .replace(/https?:\/\/[^\s]+/g, "")
     .trim();
 
-  // Split by lines
   const lines = cleanText.split(/\\n|\n/).filter((l) => l.trim());
 
   for (const line of lines) {
-    // Try key: value, key => value, key ⎯ value, key — value
     const match = line.match(/^([^:⎯—=>]+)[:\s⎯—=>]+\s*(.*)$/);
     if (match) {
       const key = match[1].trim().toLowerCase().replace(/\s+/g, "_");
@@ -186,18 +254,15 @@ function categorizeData(data: Record<string, any>): Record<string, Record<string
   for (const [key, value] of Object.entries(data)) {
     if (value === null || value === undefined) continue;
     
-    // Skip photo fields
     const keyLower = key.toLowerCase();
     if (keyLower.includes("foto") || keyLower.includes("base64") || keyLower.includes("image")) {
       continue;
     }
     
-    // Skip base64 strings
     if (typeof value === "string" && (value.startsWith("/9j/") || value.startsWith("iVBOR"))) {
       continue;
     }
 
-    // Find category
     let category = "dados_outros";
     for (const [cat, fields] of Object.entries(fieldCategories)) {
       if (fields.some((f) => keyLower.includes(f) || f.includes(keyLower))) {
@@ -215,60 +280,57 @@ function categorizeData(data: Record<string, any>): Record<string, Record<string
   return categorized;
 }
 
-// Format value with status indicators
-function formatValue(key: string, value: any): { text: string; hasX: boolean } {
-  const keyLower = key.toLowerCase();
-
-  // Empty or null values
-  if (value === null || value === undefined || value === "" || value === "-") {
-    return { text: "", hasX: true };
-  }
-
-  // Boolean handling
-  if (typeof value === "boolean") {
-    return value ? { text: "SIM", hasX: false } : { text: "NÃO", hasX: false };
-  }
-
-  // Array handling
-  if (Array.isArray(value)) {
-    return { text: value.join(", "), hasX: false };
-  }
-
-  const strValue = String(value);
-
-  // Check for "não informado" type values
-  if (strValue.toLowerCase().includes("não informad") || strValue === "Não informa") {
-    return { text: "", hasX: true };
-  }
-
-  return { text: strValue, hasX: false };
+// Get field emoji
+function getFieldEmoji(key: string): string {
+  const normalized = key.toLowerCase().replace(/\s+/g, "_");
+  return fieldEmojis[normalized] || "📌";
 }
 
 // Get field label
 function getFieldLabel(key: string): string {
   const normalized = key.toLowerCase().replace(/\s+/g, "_");
-  return fieldLabels[normalized] || key.toUpperCase().replace(/_/g, " ");
+  return fieldLabels[normalized] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " ");
 }
 
-// Generate copy text
-function generateCopyText(categorizedData: Record<string, Record<string, any>>): string {
+// Format value
+function formatValue(value: any): string {
+  if (value === null || value === undefined || value === "" || value === "-") {
+    return "❌";
+  }
+  if (typeof value === "boolean") {
+    return value ? "SIM" : "NÃO";
+  }
+  if (Array.isArray(value)) {
+    return value.join(", ");
+  }
+  const strValue = String(value);
+  if (strValue.toLowerCase().includes("não informad")) {
+    return "❌";
+  }
+  return strValue.toUpperCase();
+}
+
+// Generate copy text for a category
+function generateCategoryCopyText(category: string, fields: Record<string, any>): string {
+  const config = categoryConfig[category] || { emoji: "📋", title: category.toUpperCase() };
   const lines: string[] = [];
+  
+  lines.push(`${config.emoji} ${config.title}`);
+  lines.push("");
 
-  for (const [category, fields] of Object.entries(categorizedData)) {
-    const config = categoryConfig[category] || { emoji: "[✶]", title: category.toUpperCase() };
-    lines.push(`${config.emoji} ${config.title}`);
-    lines.push("");
-
-    for (const [key, value] of Object.entries(fields)) {
-      const formatted = formatValue(key, value);
-      const label = getFieldLabel(key);
-      if (formatted.hasX) {
-        lines.push(`${label} => ❌`);
-      } else {
-        lines.push(`${label} => ${formatted.text}`);
-      }
+  for (const [key, value] of Object.entries(fields)) {
+    const emoji = getFieldEmoji(key);
+    const label = getFieldLabel(key);
+    const formatted = formatValue(value);
+    
+    if (Array.isArray(value) && value.length > 0) {
+      lines.push(`- ${label.toUpperCase()} -`);
+      value.forEach((item, idx) => {
+        lines.push(`${idx} => ${String(item)}`);
+      });
+    } else {
+      lines.push(`${emoji} ${label}: ${formatted}`);
     }
-    lines.push("");
   }
 
   return lines.join("\n");
@@ -285,27 +347,11 @@ function CategorySection({
   index: number;
 }) {
   const [copied, setCopied] = useState(false);
-  const config = categoryConfig[category] || { emoji: "[✶]", title: category.toUpperCase().replace(/_/g, " ") };
+  const config = categoryConfig[category] || { emoji: "📋", title: category.toUpperCase().replace(/_/g, " ") };
 
   const handleCopy = async () => {
-    const lines: string[] = [];
-    for (const [key, value] of Object.entries(fields)) {
-      const formatted = formatValue(key, value);
-      const label = getFieldLabel(key);
-      if (formatted.hasX) {
-        lines.push(`${label} => ❌`);
-      } else if (Array.isArray(value)) {
-        // Format arrays with index
-        value.forEach((item, idx) => {
-          lines.push(`${idx} => ${item}`);
-        });
-      } else {
-        lines.push(`${label} => ${formatted.text}`);
-      }
-    }
-
     try {
-      await navigator.clipboard.writeText(lines.join("\n"));
+      await navigator.clipboard.writeText(generateCategoryCopyText(category, fields));
       setCopied(true);
       toast.success("Copiado!");
       setTimeout(() => setCopied(false), 2000);
@@ -319,37 +365,43 @@ function CategorySection({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="rounded-lg border border-cyan-900/50 bg-slate-950/80 overflow-hidden"
+      className="rounded-lg border border-cyan-900/60 bg-[#0d1117] overflow-hidden"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 bg-cyan-950/30 border-b border-cyan-900/50">
-        <span className="font-mono text-sm text-cyan-400 font-semibold">
-          {config.emoji} {config.title}
-        </span>
+      {/* Copy button */}
+      <div className="px-3 py-1.5 border-b border-cyan-900/40">
         <Button
           variant="ghost"
           size="sm"
           onClick={handleCopy}
-          className="h-6 px-2 text-xs text-cyan-500 hover:text-cyan-300 hover:bg-cyan-900/30"
+          className="h-5 px-2 text-[10px] text-cyan-600 hover:text-cyan-400 hover:bg-transparent p-0"
         >
-          {copied ? <Check className="h-3 w-3" /> : "copiar"}
+          {copied ? <Check className="h-3 w-3 mr-1" /> : null}
+          {copied ? "copiado!" : "copiar"}
         </Button>
       </div>
 
-      {/* Content */}
-      <div className="p-3 font-mono text-xs leading-relaxed">
-        {Object.entries(fields).map(([key, value], idx) => {
-          const formatted = formatValue(key, value);
-          const label = getFieldLabel(key);
+      {/* Category Header */}
+      <div className="px-3 py-2 border-b border-cyan-900/40 bg-[#161b22]">
+        <span className="font-mono text-sm text-cyan-300 font-medium">
+          {config.emoji} {config.title}
+        </span>
+      </div>
 
-          // Handle arrays (telefones, endereços, etc)
+      {/* Content */}
+      <div className="p-3 font-mono text-[13px] leading-relaxed space-y-1">
+        {Object.entries(fields).map(([key, value]) => {
+          const emoji = getFieldEmoji(key);
+          const label = getFieldLabel(key);
+          const formatted = formatValue(value);
+
+          // Handle arrays
           if (Array.isArray(value) && value.length > 0) {
             return (
-              <div key={key} className="mb-2">
-                <div className="text-cyan-500 mb-1">- {label} -</div>
+              <div key={key} className="space-y-0.5">
+                <div className="text-cyan-500 text-xs">- {label.toUpperCase()} -</div>
                 {value.map((item, itemIdx) => (
-                  <div key={itemIdx} className="text-cyan-100 ml-2">
-                    {itemIdx} {'=>'} {String(item)}
+                  <div key={itemIdx} className="text-cyan-100 pl-2">
+                    {itemIdx} {'=>'} {String(item).toUpperCase()}
                   </div>
                 ))}
               </div>
@@ -357,14 +409,10 @@ function CategorySection({
           }
 
           return (
-            <div key={key} className="flex items-start gap-2 py-0.5">
-              <span className="text-cyan-100 whitespace-pre-wrap break-all">
-                {label} {'=>'} {formatted.hasX ? (
-                  <span className="text-red-500">❌</span>
-                ) : (
-                  formatted.text
-                )}
-              </span>
+            <div key={key} className="text-cyan-100">
+              <span>{emoji} </span>
+              <span className="text-cyan-400">{label}:</span>
+              <span className="text-cyan-50"> {formatted}</span>
             </div>
           );
         })}
@@ -402,20 +450,18 @@ export function MonospaceResultDisplay({
   const extractedData = extractData(result);
   const categorizedData = categorizeData(extractedData);
 
-  // Filter empty categories
   const nonEmptyCategories = Object.entries(categorizedData).filter(
     ([_, fields]) => Object.keys(fields).length > 0
   );
 
-  // Order categories
   const categoryOrder = [
-    "dados_basicos",
+    "dados_pessoais",
+    "dados_familiares",
     "dados_tse",
     "dados_score",
     "dados_renda",
     "dados_contato",
     "dados_moradia",
-    "dados_familiares",
     "dados_profissional",
     "dados_veiculos",
     "dados_outros",
@@ -429,7 +475,10 @@ export function MonospaceResultDisplay({
 
   const handleCopyAll = async () => {
     try {
-      await navigator.clipboard.writeText(generateCopyText(categorizedData));
+      const allText = sortedCategories
+        .map(([cat, fields]) => generateCategoryCopyText(cat, fields))
+        .join("\n\n");
+      await navigator.clipboard.writeText(allText);
       setCopiedAll(true);
       toast.success("Resultado completo copiado!");
       setTimeout(() => setCopiedAll(false), 2000);
@@ -440,7 +489,7 @@ export function MonospaceResultDisplay({
 
   if (sortedCategories.length === 0) {
     return (
-      <div className={cn("text-muted-foreground text-center py-4", className)}>
+      <div className={cn("text-muted-foreground text-center py-4 font-mono", className)}>
         Nenhum dado encontrado para exibir.
       </div>
     );
@@ -455,12 +504,12 @@ export function MonospaceResultDisplay({
     >
       {/* Copy All Button */}
       {showCopyButton && (
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-end">
           <Button
             variant="outline"
             size="sm"
             onClick={handleCopyAll}
-            className="gap-2 text-xs border-cyan-900/50 bg-slate-950/50 hover:bg-cyan-950/30 text-cyan-400"
+            className="gap-2 text-xs border-cyan-900/50 bg-[#0d1117] hover:bg-cyan-950/30 text-cyan-400"
           >
             {copiedAll ? (
               <>
