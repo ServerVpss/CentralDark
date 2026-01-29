@@ -43,11 +43,24 @@ export interface BackupPreview {
   tables_summary?: { name: string; records: number }[];
 }
 
+export interface TableResult {
+  table: string;
+  count: number;
+  errors: string[];
+}
+
 export interface RestoreResult {
   success: boolean;
   message: string;
-  results: { table: string; inserted: number; errors: string[] }[];
+  results: TableResult[];
   total_inserted: number;
+  total_errors: number;
+}
+
+export interface ExportResult {
+  success: boolean;
+  results: TableResult[];
+  total_records: number;
   total_errors: number;
 }
 
@@ -100,9 +113,11 @@ export function useBackup() {
     });
   };
 
-  const exportBackup = async (): Promise<BackupData | null> => {
+  const exportBackup = async (): Promise<ExportResult | null> => {
     setIsExporting(true);
     setProgress({ current: 0, total: 100, step: "Iniciando backup...", percentage: 0 });
+
+    const results: TableResult[] = [];
 
     try {
       // Get current user
@@ -115,79 +130,84 @@ export function useBackup() {
 
       console.log("[backup] Exporting data for user:", userId);
 
-      // Fetch all user data
-      updateProgress(10, 100, "Buscando bots...");
-      const telegramBots = await supabase.from("telegram_bots").select("*").eq("user_id", userId);
+      // Fetch all user data with individual tracking
+      const tableQueries = [
+        { name: "telegram_bots", query: supabase.from("telegram_bots").select("*").eq("user_id", userId), progress: 10 },
+        { name: "bot_security_settings", query: supabase.from("bot_security_settings").select("*").eq("user_id", userId), progress: 15 },
+        { name: "subscription_plans", query: supabase.from("subscription_plans").select("*").eq("user_id", userId), progress: 20 },
+        { name: "payment_gateways", query: supabase.from("payment_gateways").select("*").eq("user_id", userId), progress: 25 },
+        { name: "payment_gateway_settings", query: supabase.from("payment_gateway_settings").select("*").eq("user_id", userId), progress: 30 },
+        { name: "pix_transactions", query: supabase.from("pix_transactions").select("*").eq("user_id", userId), progress: 35 },
+        { name: "pending_payments", query: supabase.from("pending_payments").select("*").eq("user_id", userId), progress: 40 },
+        { name: "engagement_messages", query: supabase.from("engagement_messages").select("*").eq("user_id", userId), progress: 45 },
+        { name: "profiles", query: supabase.from("profiles").select("*").eq("user_id", userId), progress: 50 },
+        { name: "query_history", query: supabase.from("query_history").select("*").eq("user_id", userId), progress: 55 },
+        { name: "bot_analytics", query: supabase.from("bot_analytics").select("*").eq("user_id", userId), progress: 60 },
+        { name: "payment_history", query: supabase.from("payment_history").select("*").eq("user_id", userId), progress: 65 },
+        { name: "telegram_messages", query: supabase.from("telegram_messages").select("*").eq("user_id", userId), progress: 70 },
+      ];
 
-      updateProgress(15, 100, "Buscando configurações de segurança...");
-      const botSecuritySettings = await supabase.from("bot_security_settings").select("*").eq("user_id", userId);
+      const tableData: Record<string, any[]> = {};
 
-      updateProgress(20, 100, "Buscando planos...");
-      const subscriptionPlans = await supabase.from("subscription_plans").select("*").eq("user_id", userId);
-
-      updateProgress(25, 100, "Buscando gateways de pagamento...");
-      const paymentGateways = await supabase.from("payment_gateways").select("*").eq("user_id", userId);
-
-      updateProgress(30, 100, "Buscando configurações de gateway...");
-      const paymentGatewaySettings = await supabase.from("payment_gateway_settings").select("*").eq("user_id", userId);
-
-      updateProgress(35, 100, "Buscando transações PIX...");
-      const pixTransactions = await supabase.from("pix_transactions").select("*").eq("user_id", userId);
-
-      updateProgress(40, 100, "Buscando pagamentos pendentes...");
-      const pendingPayments = await supabase.from("pending_payments").select("*").eq("user_id", userId);
-
-      updateProgress(45, 100, "Buscando mensagens de engajamento...");
-      const engagementMessages = await supabase.from("engagement_messages").select("*").eq("user_id", userId);
-
-      updateProgress(50, 100, "Buscando perfis...");
-      const profiles = await supabase.from("profiles").select("*").eq("user_id", userId);
-
-      updateProgress(55, 100, "Buscando histórico de consultas...");
-      const queryHistory = await supabase.from("query_history").select("*").eq("user_id", userId);
-
-      updateProgress(60, 100, "Buscando análises...");
-      const botAnalytics = await supabase.from("bot_analytics").select("*").eq("user_id", userId);
-
-      updateProgress(65, 100, "Buscando histórico de pagamentos...");
-      const paymentHistory = await supabase.from("payment_history").select("*").eq("user_id", userId);
-
-      updateProgress(70, 100, "Buscando mensagens do Telegram...");
-      const telegramMessages = await supabase.from("telegram_messages").select("*").eq("user_id", userId);
+      for (const { name, query, progress: prog } of tableQueries) {
+        updateProgress(prog, 100, `Buscando ${TABLE_NAMES[name] || name}...`);
+        const { data, error } = await query;
+        
+        const tableResult: TableResult = {
+          table: name,
+          count: data?.length || 0,
+          errors: error ? [error.message] : [],
+        };
+        results.push(tableResult);
+        tableData[name] = data || [];
+      }
 
       // Get bot_settings and subscriptions filtered by user's bots
       updateProgress(75, 100, "Buscando configurações dos bots...");
-      const userBotIds = (telegramBots.data || []).map((b) => b.id);
-      let filteredBotSettings: any[] = [];
-      let filteredSubscriptions: any[] = [];
-
+      const userBotIds = (tableData.telegram_bots || []).map((b: any) => b.id);
+      
       if (userBotIds.length > 0) {
+        updateProgress(78, 100, "Buscando configurações dos bots...");
+        const { data: botSettingsData, error: bsError } = await supabase.from("bot_settings").select("*").in("bot_id", userBotIds);
+        results.push({
+          table: "bot_settings",
+          count: botSettingsData?.length || 0,
+          errors: bsError ? [bsError.message] : [],
+        });
+        tableData.bot_settings = botSettingsData || [];
+
         updateProgress(80, 100, "Buscando assinaturas...");
-        const [bs, subs] = await Promise.all([
-          supabase.from("bot_settings").select("*").in("bot_id", userBotIds),
-          supabase.from("telegram_subscriptions").select("*").in("bot_id", userBotIds),
-        ]);
-        filteredBotSettings = bs.data || [];
-        filteredSubscriptions = subs.data || [];
+        const { data: subsData, error: subsError } = await supabase.from("telegram_subscriptions").select("*").in("bot_id", userBotIds);
+        results.push({
+          table: "telegram_subscriptions",
+          count: subsData?.length || 0,
+          errors: subsError ? [subsError.message] : [],
+        });
+        tableData.telegram_subscriptions = subsData || [];
+      } else {
+        results.push({ table: "bot_settings", count: 0, errors: [] });
+        results.push({ table: "telegram_subscriptions", count: 0, errors: [] });
+        tableData.bot_settings = [];
+        tableData.telegram_subscriptions = [];
       }
 
       updateProgress(85, 100, "Montando backup...");
       const tables = {
-        telegram_bots: telegramBots.data || [],
-        bot_settings: filteredBotSettings,
-        bot_security_settings: botSecuritySettings.data || [],
-        telegram_subscriptions: filteredSubscriptions,
-        subscription_plans: subscriptionPlans.data || [],
-        payment_gateways: paymentGateways.data || [],
-        payment_gateway_settings: paymentGatewaySettings.data || [],
-        pix_transactions: pixTransactions.data || [],
-        pending_payments: pendingPayments.data || [],
-        engagement_messages: engagementMessages.data || [],
-        profiles: profiles.data || [],
-        query_history: queryHistory.data || [],
-        bot_analytics: botAnalytics.data || [],
-        payment_history: paymentHistory.data || [],
-        telegram_messages: telegramMessages.data || [],
+        telegram_bots: tableData.telegram_bots || [],
+        bot_settings: tableData.bot_settings || [],
+        bot_security_settings: tableData.bot_security_settings || [],
+        telegram_subscriptions: tableData.telegram_subscriptions || [],
+        subscription_plans: tableData.subscription_plans || [],
+        payment_gateways: tableData.payment_gateways || [],
+        payment_gateway_settings: tableData.payment_gateway_settings || [],
+        pix_transactions: tableData.pix_transactions || [],
+        pending_payments: tableData.pending_payments || [],
+        engagement_messages: tableData.engagement_messages || [],
+        profiles: tableData.profiles || [],
+        query_history: tableData.query_history || [],
+        bot_analytics: tableData.bot_analytics || [],
+        payment_history: tableData.payment_history || [],
+        telegram_messages: tableData.telegram_messages || [],
       };
 
       // Calculate metadata
@@ -231,11 +251,19 @@ export function useBackup() {
 
       updateProgress(100, 100, "Backup concluído!");
       console.log(`[backup] Export complete: ${totalRecords} records from ${tablesCount} tables`);
+      
+      const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
+      
       toast.success(
-        `Backup criado com sucesso! ${backup.metadata.total_records} registros exportados.`
+        `Backup criado com sucesso! ${totalRecords} registros exportados.`
       );
 
-      return backup;
+      return {
+        success: true,
+        results,
+        total_records: totalRecords,
+        total_errors: totalErrors,
+      };
     } catch (error: any) {
       console.error("Erro ao exportar backup:", error);
       toast.error(`Erro ao criar backup: ${error.message}`);
@@ -337,7 +365,7 @@ export function useBackup() {
 
       console.log(`[backup] Restoring data for user ${userId} in ${mode} mode`);
 
-      const results: { table: string; inserted: number; errors: string[] }[] = [];
+      const results: TableResult[] = [];
 
       // Order matters for foreign keys
       const tableOrder = [
@@ -402,9 +430,7 @@ export function useBackup() {
           `Restaurando ${TABLE_NAMES[tableName] || tableName} (${tableData.length} registros)...`
         );
 
-        if (tableData.length === 0) continue;
-
-        const tableResult = { table: tableName, inserted: 0, errors: [] as string[] };
+        const tableResult: TableResult = { table: tableName, count: 0, errors: [] as string[] };
 
         for (const record of tableData) {
           try {
@@ -422,12 +448,12 @@ export function useBackup() {
             });
 
             if (error) {
-              tableResult.errors.push(`${tableName}: ${error.message}`);
+              tableResult.errors.push(error.message);
             } else {
-              tableResult.inserted++;
+              tableResult.count++;
             }
           } catch (e: any) {
-            tableResult.errors.push(`${tableName}: ${e.message}`);
+            tableResult.errors.push(e.message);
           }
         }
 
@@ -436,7 +462,7 @@ export function useBackup() {
 
       updateProgress(100, 100, "Restauração concluída!");
 
-      const totalInserted = results.reduce((sum, r) => sum + r.inserted, 0);
+      const totalInserted = results.reduce((sum, r) => sum + r.count, 0);
       const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
 
       const result: RestoreResult = {
