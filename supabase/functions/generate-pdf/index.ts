@@ -12,6 +12,7 @@ interface QueryData {
   data: Record<string, unknown>;
   userName?: string;
   botName?: string;
+  photoBase64?: string;
 }
 
 // Field labels in Portuguese
@@ -147,7 +148,11 @@ function flattenData(obj: unknown, prefix = ""): Array<{ key: string; value: str
   const items: Array<{ key: string; value: string }> = [];
   if (!obj || typeof obj !== "object") return items;
 
+  // Keys to ignore - remove photo keys as we handle them separately
   const ignoredKeys = ["comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64"];
+  
+  // Bot references to filter out
+  const botReferences = ["@querybuscasbot", "querybuscasbot", "t.me/querybuscas", "https://t.me/querybuscas", "@QueryBuscasBot"];
 
   // Primeiro, verificar se precisa parsear chaves delimitadas
   let processedObj = obj as Record<string, unknown>;
@@ -163,15 +168,32 @@ function flattenData(obj: unknown, prefix = ""): Array<{ key: string; value: str
     if (ignoredKeys.includes(keyLower)) continue;
     if (value === null || value === undefined || value === "" || value === "-") continue;
     
-    // Skip base64 data
+    // Skip base64 data (handled separately for photo)
     if (typeof value === "string" && (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image"))) continue;
+    
+    // Skip bot references
+    if (typeof value === "string") {
+      const valueLower = value.toLowerCase();
+      if (botReferences.some(ref => valueLower.includes(ref.toLowerCase()))) continue;
+    }
 
     if (typeof value === "object" && !Array.isArray(value)) {
       items.push(...flattenData(value, prefix ? `${prefix}.${key}` : key));
     } else if (Array.isArray(value)) {
       if (value.length > 0) {
-        const strValues = value.map(v => typeof v === "string" ? v : JSON.stringify(v)).join(", ");
-        items.push({ key: prefix ? `${prefix}.${key}` : key, value: strValues });
+        // Filter out bot references from arrays
+        const filteredValues = value
+          .filter(v => {
+            if (typeof v === "string") {
+              const vLower = v.toLowerCase();
+              return !botReferences.some(ref => vLower.includes(ref.toLowerCase()));
+            }
+            return true;
+          })
+          .map(v => typeof v === "string" ? v : JSON.stringify(v));
+        if (filteredValues.length > 0) {
+          items.push({ key: prefix ? `${prefix}.${key}` : key, value: filteredValues.join(", ") });
+        }
       }
     } else {
       items.push({ key: prefix ? `${prefix}.${key}` : key, value: String(value) });
@@ -253,6 +275,40 @@ function parseStringData(str: string): Record<string, unknown> {
   return result;
 }
 
+// Extract photo from data object
+function extractPhotoBase64(data: Record<string, unknown>): string | null {
+  const photoKeys = ["fotobase64", "foto", "image", "photo", "base64", "fotoBase64"];
+  
+  const findPhoto = (obj: unknown): string | null => {
+    if (!obj || typeof obj !== "object") return null;
+    
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+      const keyLower = key.toLowerCase();
+      
+      // Check if this key is a photo key
+      if (photoKeys.some(pk => keyLower.includes(pk))) {
+        if (typeof value === "string" && value.length > 100) {
+          return value;
+        }
+      }
+      
+      // Check if value looks like base64 image
+      if (typeof value === "string" && (value.startsWith("/9j/") || value.startsWith("iVBOR") || value.startsWith("data:image"))) {
+        return value;
+      }
+      
+      // Recurse into nested objects
+      if (typeof value === "object" && value !== null) {
+        const found = findPhoto(value);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+  
+  return findPhoto(data);
+}
+
 async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
   const pdfDoc = await PDFDocument.create();
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -266,6 +322,9 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
 
   let page = pdfDoc.addPage([pageWidth, pageHeight]);
   let y = pageHeight - margin;
+  
+  // Try to extract photo from data or use provided photoBase64
+  let photoBase64 = queryData.photoBase64 || extractPhotoBase64(queryData.data);
 
   const addPage = () => {
     page = pdfDoc.addPage([pageWidth, pageHeight]);
@@ -327,6 +386,84 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
   });
 
   y = pageHeight - 100;
+  
+  // Add photo if available
+  if (photoBase64) {
+    try {
+      // Clean up base64 string
+      let cleanBase64 = photoBase64;
+      if (cleanBase64.startsWith("data:image")) {
+        cleanBase64 = cleanBase64.split(",")[1];
+      }
+      
+      // Decode base64 to bytes
+      const photoBytes = Uint8Array.from(atob(cleanBase64), c => c.charCodeAt(0));
+      
+      // Try to embed as JPEG first, then PNG
+      let embeddedImage;
+      try {
+        embeddedImage = await pdfDoc.embedJpg(photoBytes);
+      } catch {
+        try {
+          embeddedImage = await pdfDoc.embedPng(photoBytes);
+        } catch (e) {
+          console.log("Could not embed image:", e);
+        }
+      }
+      
+      if (embeddedImage) {
+        // Calculate dimensions to fit nicely (max 150x180)
+        const maxWidth = 150;
+        const maxHeight = 180;
+        const imgWidth = embeddedImage.width;
+        const imgHeight = embeddedImage.height;
+        
+        let drawWidth = maxWidth;
+        let drawHeight = (imgHeight / imgWidth) * drawWidth;
+        
+        if (drawHeight > maxHeight) {
+          drawHeight = maxHeight;
+          drawWidth = (imgWidth / imgHeight) * drawHeight;
+        }
+        
+        // Draw photo frame
+        const photoX = pageWidth - margin - drawWidth - 10;
+        const photoY = y - drawHeight - 20;
+        
+        // Photo border
+        page.drawRectangle({
+          x: photoX - 5,
+          y: photoY - 5,
+          width: drawWidth + 10,
+          height: drawHeight + 10,
+          borderColor: rgb(0.3, 0.3, 0.35),
+          borderWidth: 2,
+          color: rgb(0.95, 0.95, 0.95),
+        });
+        
+        // Draw the image
+        page.drawImage(embeddedImage, {
+          x: photoX,
+          y: photoY,
+          width: drawWidth,
+          height: drawHeight,
+        });
+        
+        // Add "FOTO" label
+        page.drawText("FOTO", {
+          x: photoX + drawWidth / 2 - 15,
+          y: photoY - 18,
+          size: 10,
+          font: fontBold,
+          color: rgb(0.4, 0.4, 0.4),
+        });
+        
+        console.log("Photo embedded successfully");
+      }
+    } catch (e) {
+      console.log("Error embedding photo:", e);
+    }
+  }
 
   // Parse data
   const items = flattenData(queryData.data);
@@ -389,8 +526,8 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
     color: rgb(0.3, 0.3, 0.3),
   });
 
-  const botName = queryData.botName || "Sistema de Consultas";
-  page.drawText(sanitizeText(`Documento gerado por ${botName}`), {
+  // Generic footer without bot references
+  page.drawText("Relatorio de Consulta - Documento Oficial", {
     x: margin,
     y: footerY,
     size: 8,
