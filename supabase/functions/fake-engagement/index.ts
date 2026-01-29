@@ -17,6 +17,8 @@ interface EngagementMessage {
   id: string;
   message_template: string;
   is_active: boolean;
+  interval_minutes: number | null;
+  last_sent_at?: string | null;
 }
 
 // Mensagem padrão caso não tenha nenhuma cadastrada
@@ -161,19 +163,11 @@ Deno.serve(async (req) => {
     const now = new Date()
 
     for (const setting of settings) {
-      const intervalMs = (setting.fake_engagement_interval_minutes || 30) * 60 * 1000
+      // Verificar intervalo global apenas se não usar mensagens individuais
+      const globalIntervalMs = (setting.fake_engagement_interval_minutes || 30) * 60 * 1000
       const lastSent = setting.fake_engagement_last_sent 
         ? new Date(setting.fake_engagement_last_sent) 
         : new Date(0)
-      
-      const timeSinceLastSent = now.getTime() - lastSent.getTime()
-      
-      // Verificar se já passou o intervalo
-      if (timeSinceLastSent < intervalMs) {
-        console.log(`Bot ${setting.bot_id}: aguardando intervalo (faltam ${Math.round((intervalMs - timeSinceLastSent) / 60000)} min)`)
-        results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((intervalMs - timeSinceLastSent) / 60000) })
-        continue
-      }
 
       // Buscar token do bot
       const { data: bot } = await supabase
@@ -219,18 +213,59 @@ Deno.serve(async (req) => {
       const randomName = generateRandomName(customNames)
       const randomPlan = plansToUse[Math.floor(Math.random() * plansToUse.length)]
 
-      // Buscar mensagens personalizadas do banco
+      // Buscar mensagens personalizadas do banco com seus intervalos individuais
       const { data: customMessages } = await supabase
         .from('engagement_messages')
-        .select('id, message_template, is_active')
+        .select('id, message_template, is_active, interval_minutes')
         .eq('bot_id', setting.bot_id)
         .eq('is_active', true)
 
-      // Escolher mensagem: personalizada ou padrão
-      let messageTemplate = DEFAULT_MESSAGE_TEMPLATE
+      // Filtrar mensagens que já podem ser enviadas com base no intervalo individual
+      const now = new Date()
+      const eligibleMessages: EngagementMessage[] = []
+      
       if (customMessages && customMessages.length > 0) {
-        const randomMsg = customMessages[Math.floor(Math.random() * customMessages.length)]
-        messageTemplate = randomMsg.message_template
+        for (const msg of customMessages) {
+          const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
+          
+          // Usar o último envio global como referência para cada mensagem
+          // Cada mensagem tem seu próprio intervalo
+          const timeSinceLast = now.getTime() - lastSent.getTime()
+          
+          if (timeSinceLast >= msgInterval) {
+            eligibleMessages.push(msg as EngagementMessage)
+          }
+        }
+      }
+
+      // Se não há mensagens elegíveis, verificar intervalo global para usar mensagem padrão
+      if (eligibleMessages.length === 0 && (!customMessages || customMessages.length === 0)) {
+        const timeSinceLastSent = now.getTime() - lastSent.getTime()
+        if (timeSinceLastSent < globalIntervalMs) {
+          console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
+          results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
+          continue
+        }
+      } else if (eligibleMessages.length === 0) {
+        // Tem mensagens personalizadas mas nenhuma elegível ainda
+        const nextEligible = customMessages?.reduce((min, msg) => {
+          const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
+          const timeUntilEligible = msgInterval - (now.getTime() - lastSent.getTime())
+          return timeUntilEligible < min ? timeUntilEligible : min
+        }, Infinity) || 0
+        
+        console.log(`Bot ${setting.bot_id}: aguardando próxima mensagem elegível (faltam ${Math.round(nextEligible / 60000)} min)`)
+        results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round(nextEligible / 60000) })
+        continue
+      }
+
+      // Escolher mensagem: personalizada elegível ou padrão
+      let messageTemplate = DEFAULT_MESSAGE_TEMPLATE
+      let selectedMessage: EngagementMessage | null = null
+      
+      if (eligibleMessages.length > 0) {
+        selectedMessage = eligibleMessages[Math.floor(Math.random() * eligibleMessages.length)]
+        messageTemplate = selectedMessage.message_template
       }
 
       // Substituir variáveis na mensagem

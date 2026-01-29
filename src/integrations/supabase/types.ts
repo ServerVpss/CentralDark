@@ -332,6 +332,7 @@ export type Database = {
           bot_id: string | null
           created_at: string
           id: string
+          interval_minutes: number | null
           is_active: boolean | null
           message_template: string
           updated_at: string
@@ -341,6 +342,7 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           id?: string
+          interval_minutes?: number | null
           is_active?: boolean | null
           message_template: string
           updated_at?: string
@@ -350,6 +352,7 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           id?: string
+          interval_minutes?: number | null
           is_active?: boolean | null
           message_template?: string
           updated_at?: string
