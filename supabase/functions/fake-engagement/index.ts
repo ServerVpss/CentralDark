@@ -267,61 +267,22 @@ Deno.serve(async (req) => {
           messageTemplate = specificMsg.message_template
         }
       }
-      // Comportamento padrão: buscar mensagens personalizadas
+      // Comportamento padrão do cron: SEMPRE usar mensagem padrão de simulação de assinatura
+      // A lógica de intervalo é baseada no fake_engagement_interval_minutes e fake_engagement_last_sent
       else {
-        // Buscar mensagens personalizadas do banco com seus intervalos individuais e last_sent_at
-        const { data: customMessages } = await supabase
-          .from('engagement_messages')
-          .select('id, message_template, is_active, interval_minutes, last_sent_at')
-          .eq('bot_id', setting.bot_id)
-          .eq('is_active', true)
-
-        // Filtrar mensagens que já podem ser enviadas com base no intervalo INDIVIDUAL de cada uma
-        const eligibleMessages: EngagementMessage[] = []
+        // Verificar intervalo global para enviar a mensagem padrão de simulação
+        const timeSinceLastSent = now.getTime() - lastSent.getTime()
         
-        if (customMessages && customMessages.length > 0) {
-          for (const msg of customMessages) {
-            const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
-            
-            // Usar o last_sent_at INDIVIDUAL de cada mensagem
-            const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
-            const timeSinceMsgSent = now.getTime() - msgLastSent.getTime()
-            
-            console.log(`Mensagem ${msg.id}: intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
-            
-            if (timeSinceMsgSent >= msgInterval) {
-              eligibleMessages.push(msg as EngagementMessage)
-            }
-          }
-        }
-
-        // Se não há mensagens elegíveis, verificar intervalo global para usar mensagem padrão
-        if (eligibleMessages.length === 0 && (!customMessages || customMessages.length === 0)) {
-          const timeSinceLastSent = now.getTime() - lastSent.getTime()
-          if (timeSinceLastSent < globalIntervalMs) {
-            console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
-            results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
-            continue
-          }
-        } else if (eligibleMessages.length === 0) {
-          // Tem mensagens personalizadas mas nenhuma elegível ainda
-          const nextEligible = customMessages?.reduce((min, msg) => {
-            const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
-            const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
-            const timeUntilEligible = msgInterval - (now.getTime() - msgLastSent.getTime())
-            return timeUntilEligible > 0 && timeUntilEligible < min ? timeUntilEligible : min
-          }, Infinity) || 0
-          
-          console.log(`Bot ${setting.bot_id}: aguardando próxima mensagem elegível (faltam ${Math.round(nextEligible / 60000)} min)`)
-          results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round(nextEligible / 60000) })
+        console.log(`Bot ${setting.bot_id}: intervalo global=${setting.fake_engagement_interval_minutes}min, último envio=${setting.fake_engagement_last_sent || 'nunca'}, tempo desde=${Math.round(timeSinceLastSent/60000)}min`)
+        
+        if (timeSinceLastSent < globalIntervalMs) {
+          console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
+          results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
           continue
         }
-
-        // Escolher mensagem: personalizada elegível ou padrão
-        if (eligibleMessages.length > 0) {
-          selectedMessage = eligibleMessages[Math.floor(Math.random() * eligibleMessages.length)]
-          messageTemplate = selectedMessage.message_template
-        }
+        
+        console.log(`Bot ${setting.bot_id}: enviando mensagem padrão de simulação de assinatura`)
+        // messageTemplate já é DEFAULT_MESSAGE_TEMPLATE
       }
 
       // Substituir variáveis na mensagem
