@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   Bell,
+  Database,
   Key,
   Laptop,
   Moon,
@@ -27,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
+import { BackupManager } from "@/components/backup/BackupManager";
 
 export default function Settings() {
   const { user, profile, updateProfile } = useAuth();
@@ -112,6 +114,10 @@ export default function Settings() {
             <TabsTrigger value="appearance" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Palette className="h-4 w-4" />
               Aparência
+            </TabsTrigger>
+            <TabsTrigger value="backup" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Database className="h-4 w-4" />
+              Backup
             </TabsTrigger>
           </TabsList>
 
@@ -353,6 +359,11 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Backup Tab */}
+          <TabsContent value="backup">
+            <BackupManager />
           </TabsContent>
         </Tabs>
       </div>

@@ -1,1 +1,4 @@
 project_id = "ykccspmxlaxkojrloxqi"
+
+[functions.backup-manager]
+verify_jwt = false
