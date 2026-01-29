@@ -1192,6 +1192,272 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return ignoredPatterns.some(pattern => pattern.test(value));
   };
 
+  // Função para escapar caracteres HTML
+  const escapeHtml = (str: string): string => {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  };
+
+  // Nome do usuário do Telegram para saudação (NÃO o nome da pessoa consultada)
+  const userName = telegramUserName || 'usuário';
+  const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
+
+  // ============= FORMATAÇÃO ESPECÍFICA PARA CPF =============
+  if (queryType === 'cpf') {
+    return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
+  return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA CPF ===============
+function formatCpfResult(
+  data: Record<string, unknown>, 
+  userName: string, 
+  botTag: string, 
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  // Extrair dados de forma segura
+  const getValue = (keys: string[]): string | null => {
+    for (const key of keys) {
+      const lowerKey = key.toLowerCase();
+      for (const [k, v] of Object.entries(data)) {
+        if (k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) {
+          if (v && typeof v === 'string' && v.trim() && v !== '-' && !shouldIgnore(v)) {
+            return v.trim();
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  const getArray = (keys: string[]): string[] => {
+    const results: string[] = [];
+    for (const key of keys) {
+      const lowerKey = key.toLowerCase();
+      for (const [k, v] of Object.entries(data)) {
+        if (k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) {
+          if (Array.isArray(v)) {
+            results.push(...v.map(item => String(item).trim()).filter(item => item && item !== '-'));
+          } else if (v && typeof v === 'string' && v.trim() && v !== '-' && !shouldIgnore(v)) {
+            // Pode ser uma lista separada por vírgulas ou quebras de linha
+            const items = v.split(/[,\n]/).map(item => item.trim()).filter(item => item && item !== '-');
+            results.push(...items);
+          }
+        }
+      }
+    }
+    return [...new Set(results)]; // Remove duplicatas
+  };
+
+  // Dados básicos
+  const nome = getValue(['nome', 'nome_completo']);
+  const cpf = getValue(['cpf']);
+  const nascimento = getValue(['nascimento', 'data_nascimento', 'datanascimento']);
+  const idade = getValue(['idade']);
+  const sexo = getValue(['sexo']);
+  const signo = getValue(['signo']);
+  const raca = getValue(['raca', 'raça', 'cor']);
+  const tipoSanguineo = getValue(['tipo_sanguineo', 'tiposanguineo', 'sangue']);
+  const estadoCivil = getValue(['estado_civil', 'estadocivil']);
+  const obito = getValue(['obito', 'óbito', 'falecido']);
+  const statusReceita = getValue(['status_receita', 'statusreceita', 'situacao_cpf', 'status']);
+  
+  // Documentos
+  const rg = getValue(['rg']);
+  const pis = getValue(['pis', 'nis']);
+  const cns = getValue(['cns']);
+  const tituloEleitor = getValue(['titulo_eleitor', 'tituloeleitor', 'titulo']);
+  const zona = getValue(['zona']);
+  const secao = getValue(['secao', 'seção']);
+  
+  // Contato
+  const emails = getArray(['email', 'emails']);
+  const telefones = getArray(['telefone', 'telefones', 'celular']);
+  
+  // Endereços
+  const enderecos = getArray(['endereco', 'enderecos', 'logradouro']);
+  
+  // Financeiro
+  const renda = getValue(['renda', 'rendaestimada', 'renda_estimada']);
+  const recebeInss = getValue(['recebe_inss', 'recebeinss', 'inss', 'beneficio']);
+  const classeSocial = getValue(['classe_social', 'classesocial', 'classe', 'poder_aquisitivo']);
+  
+  // Família
+  const mae = getValue(['mae', 'mãe', 'nome_mae', 'nomemae']);
+  const pai = getValue(['pai', 'nome_pai', 'nomepai']);
+  const parentes = getArray(['parentes', 'conjuge', 'filhos', 'irmaos']);
+  
+  // Profissional
+  const empresas = getArray(['empresa', 'empresas', 'emprego', 'empregos']);
+
+  // ============= CONSTRUIR MENSAGEM FORMATADA =============
+  let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `👤 <b>CONSULTA CPF</b> 👤\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+  text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n\n`;
+
+  // 👤 DADOS PESSOAIS
+  let hasBasicData = false;
+  let basicSection = `┌─────────────────────\n`;
+  basicSection += `│ 👤 <b>DADOS PESSOAIS</b>\n`;
+  basicSection += `├─────────────────────\n`;
+  
+  if (nome) { basicSection += `│ 📛 <b>Nome:</b> ${escapeHtml(nome)}\n`; hasBasicData = true; }
+  if (cpf) { basicSection += `│ 🆔 <b>CPF:</b> <code>${escapeHtml(cpf)}</code>\n`; hasBasicData = true; }
+  if (nascimento) { basicSection += `│ 📅 <b>Nascimento:</b> ${escapeHtml(nascimento)}\n`; hasBasicData = true; }
+  if (idade) { basicSection += `│ 🎂 <b>Idade:</b> ${escapeHtml(idade)} anos\n`; hasBasicData = true; }
+  if (sexo) { basicSection += `│ ⚧ <b>Sexo:</b> ${escapeHtml(sexo)}\n`; hasBasicData = true; }
+  if (signo) { basicSection += `│ ♈ <b>Signo:</b> ${escapeHtml(signo)}\n`; hasBasicData = true; }
+  if (raca) { basicSection += `│ 👤 <b>Raça:</b> ${escapeHtml(raca)}\n`; hasBasicData = true; }
+  if (tipoSanguineo) { basicSection += `│ 🩸 <b>Tipo Sanguíneo:</b> ${escapeHtml(tipoSanguineo)}\n`; hasBasicData = true; }
+  if (estadoCivil) { basicSection += `│ 💍 <b>Estado Civil:</b> ${escapeHtml(estadoCivil)}\n`; hasBasicData = true; }
+  if (obito) { basicSection += `│ ⚰️ <b>Óbito:</b> ${escapeHtml(obito)}\n`; hasBasicData = true; }
+  if (statusReceita) { basicSection += `│ 📊 <b>Status Receita:</b> ${escapeHtml(statusReceita)}\n`; hasBasicData = true; }
+  
+  basicSection += `└─────────────────────\n\n`;
+  if (hasBasicData) text += basicSection;
+
+  // 📄 DOCUMENTOS
+  let hasDocuments = false;
+  let docSection = `┌─────────────────────\n`;
+  docSection += `│ 📄 <b>DOCUMENTOS</b>\n`;
+  docSection += `├─────────────────────\n`;
+  
+  if (rg) { docSection += `│ 🪪 <b>RG:</b> <code>${escapeHtml(rg)}</code>\n`; hasDocuments = true; }
+  if (pis) { docSection += `│ 📋 <b>PIS/NIS:</b> <code>${escapeHtml(pis)}</code>\n`; hasDocuments = true; }
+  if (cns) { docSection += `│ 🏥 <b>CNS:</b> <code>${escapeHtml(cns)}</code>\n`; hasDocuments = true; }
+  if (tituloEleitor) { 
+    let tituloInfo = `│ 🗳️ <b>Título:</b> <code>${escapeHtml(tituloEleitor)}</code>`;
+    if (zona) tituloInfo += ` Zona: ${escapeHtml(zona)}`;
+    if (secao) tituloInfo += ` Seção: ${escapeHtml(secao)}`;
+    docSection += tituloInfo + `\n`;
+    hasDocuments = true; 
+  }
+  
+  docSection += `└─────────────────────\n\n`;
+  if (hasDocuments) text += docSection;
+
+  // 📱 CONTATO
+  if (emails.length > 0 || telefones.length > 0) {
+    text += `┌─────────────────────\n`;
+    text += `│ 📱 <b>CONTATO</b>\n`;
+    text += `├─────────────────────\n`;
+    
+    if (emails.length > 0) {
+      text += `│ 📧 <b>Emails:</b>\n`;
+      emails.slice(0, 5).forEach(email => {
+        text += `│   • ${escapeHtml(email)}\n`;
+      });
+      if (emails.length > 5) text += `│   <i>... e mais ${emails.length - 5}</i>\n`;
+    }
+    
+    if (telefones.length > 0) {
+      text += `│ 📞 <b>Telefones:</b>\n`;
+      telefones.slice(0, 8).forEach(tel => {
+        // Detectar se tem WhatsApp
+        const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
+        const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
+        const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
+        text += `│   • ${escapeHtml(cleanTel)}${wppIcon}\n`;
+      });
+      if (telefones.length > 8) text += `│   <i>... e mais ${telefones.length - 8}</i>\n`;
+    }
+    
+    text += `└─────────────────────\n\n`;
+  }
+
+  // 📍 ENDEREÇO
+  if (enderecos.length > 0) {
+    text += `┌─────────────────────\n`;
+    text += `│ 📍 <b>ENDEREÇOS</b>\n`;
+    text += `├─────────────────────\n`;
+    
+    enderecos.slice(0, 10).forEach(endereco => {
+      // Limpar endereço de prefixos desnecessários
+      const cleanEndereco = endereco
+        .replace(/^\[empty\]\s*/gi, '')
+        .replace(/^enderecos?\s*:?\s*/gi, '')
+        .trim();
+      if (cleanEndereco && cleanEndereco.length > 5) {
+        text += `│ 🏠 ${escapeHtml(cleanEndereco)}\n`;
+      }
+    });
+    if (enderecos.length > 10) text += `│ <i>... e mais ${enderecos.length - 10}</i>\n`;
+    
+    text += `└─────────────────────\n\n`;
+  }
+
+  // 💰 FINANCEIRO
+  let hasFinancial = false;
+  let finSection = `┌─────────────────────\n`;
+  finSection += `│ 💰 <b>FINANCEIRO</b>\n`;
+  finSection += `├─────────────────────\n`;
+  
+  if (renda) { finSection += `│ 💵 <b>Renda:</b> R$ ${escapeHtml(renda)}\n`; hasFinancial = true; }
+  if (recebeInss) { finSection += `│ 🏛️ <b>Recebe INSS:</b> ${escapeHtml(recebeInss)}\n`; hasFinancial = true; }
+  if (classeSocial) { finSection += `│ 📊 <b>Classe Social:</b> ${escapeHtml(classeSocial)}\n`; hasFinancial = true; }
+  
+  finSection += `└─────────────────────\n\n`;
+  if (hasFinancial) text += finSection;
+
+  // 👨‍👩‍👧‍👦 FAMÍLIA
+  if (mae || pai || parentes.length > 0) {
+    text += `┌─────────────────────\n`;
+    text += `│ 👨‍👩‍👧‍👦 <b>FAMÍLIA</b>\n`;
+    text += `├─────────────────────\n`;
+    
+    if (mae) text += `│ 👩 <b>Mãe:</b> ${escapeHtml(mae)}\n`;
+    if (pai) text += `│ 👨 <b>Pai:</b> ${escapeHtml(pai)}\n`;
+    
+    if (parentes.length > 0) {
+      text += `│ 👥 <b>Parentes:</b>\n`;
+      parentes.slice(0, 10).forEach(parente => {
+        text += `│   • ${escapeHtml(parente)}\n`;
+      });
+      if (parentes.length > 10) text += `│   <i>... e mais ${parentes.length - 10}</i>\n`;
+    }
+    
+    text += `└─────────────────────\n\n`;
+  }
+
+  // 💼 PROFISSIONAL
+  if (empresas.length > 0) {
+    text += `┌─────────────────────\n`;
+    text += `│ 💼 <b>PROFISSIONAL</b>\n`;
+    text += `├─────────────────────\n`;
+    
+    empresas.slice(0, 5).forEach(empresa => {
+      text += `│ 🏢 ${escapeHtml(empresa)}\n`;
+    });
+    if (empresas.length > 5) text += `│ <i>... e mais ${empresas.length - 5}</i>\n`;
+    
+    text += `└─────────────────────\n\n`;
+  }
+
+  // Footer
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `❤️ <b>OBRIGADO POR USAR</b> ❤️\n`;
+  text += `🤖 ${botTag}\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━`;
+
+  return text;
+}
+
+// =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS ===============
+function formatGenericResult(
+  queryType: string,
+  data: Record<string, unknown>, 
+  userName: string, 
+  botTag: string, 
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
   // Categorização de campos com emojis únicos
   const categories: Record<string, { icon: string; label: string; fields: string[] }> = {
     basic: {
@@ -1314,24 +1580,6 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     }
   }
 
-  // Nome do usuário do Telegram para saudação (NÃO o nome da pessoa consultada)
-  const userName = telegramUserName || 'usuário';
-
-  // Função para escapar caracteres HTML
-  const escapeHtml = (str: string): string => {
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-  };
-
-  // Construir mensagem formatada profissional
-  let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
-  text += `✨ <b>RESULTADO DA CONSULTA</b> ✨\n`;
-  text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-  text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n`;
-  text += `📊 Confira os dados encontrados:\n\n`;
-
   const formatKey = (key: string): string => {
     const lastPart = key.split('.').pop() || key;
     return lastPart
@@ -1342,49 +1590,57 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       .toUpperCase();
   };
 
-  // Adicionar categorias com dados - formato limpo e profissional
+  // Construir mensagem formatada profissional com boxes
+  const typeLabel = queryTypeLabels[queryType] || `📋 ${queryType.toUpperCase()}`;
+  
+  let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `${typeLabel} <b>RESULTADO</b>\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+  text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n\n`;
+
+  // Adicionar categorias com dados - formato com boxes
   for (const [catKey, catInfo] of Object.entries(categories)) {
     const items = categorizedData[catKey];
     if (!items || items.length === 0) continue;
 
-    text += `${catInfo.icon} <b>${catInfo.label}</b>\n`;
-    text += `━━━━━━━━━━━━━━━━━━━━\n`;
+    text += `┌─────────────────────\n`;
+    text += `│ ${catInfo.icon} <b>${catInfo.label}</b>\n`;
+    text += `├─────────────────────\n`;
     
     for (const item of items) {
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `  ▷ <code>${displayKey}:</code> ${displayValue}\n`;
+        text += `│ ▷ <b>${displayKey}:</b> ${displayValue}\n`;
       }
     }
     
-    text += `\n`;
+    text += `└─────────────────────\n\n`;
   }
 
   // Adicionar itens não categorizados
   if (uncategorized.length > 0) {
-    text += `📋 <b>OUTROS DADOS</b>\n`;
-    text += `━━━━━━━━━━━━━━━━━━━━\n`;
+    text += `┌─────────────────────\n`;
+    text += `│ 📋 <b>OUTROS DADOS</b>\n`;
+    text += `├─────────────────────\n`;
     
     for (const item of uncategorized) {
       const displayKey = formatKey(item.key);
       const displayValue = escapeHtml(String(item.value));
       if (!shouldIgnore(displayValue)) {
-        text += `  ▷ <code>${displayKey}:</code> ${displayValue}\n`;
+        text += `│ ▷ <b>${displayKey}:</b> ${displayValue}\n`;
       }
     }
     
-    text += `\n`;
+    text += `└─────────────────────\n\n`;
   }
 
-  // Footer com @ do bot
-  const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
+  // Footer
   text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
   text += `❤️ <b>OBRIGADO POR USAR</b> ❤️\n`;
   text += `🤖 ${botTag}\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━━`;
 
-  // NÃO truncar aqui - sendLongMessage fará a paginação automática
   return text;
 }
 
