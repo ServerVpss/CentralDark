@@ -130,12 +130,16 @@ Deno.serve(async (req) => {
     // Parâmetros opcionais para controlar o comportamento
     let useDefaultMessage = false // Forçar uso da mensagem padrão de assinatura
     let specificMessageId: string | null = null // ID de uma mensagem específica para testar
+    let onlyBotId: string | null = null // Limitar execução a um bot específico
+    let forceSend = false // Ignorar intervalos e enviar imediatamente
     
     try {
       const body = await req.json()
       useDefaultMessage = body.useDefaultMessage === true
       specificMessageId = body.messageId || null
-      console.log(`Parâmetros: useDefaultMessage=${useDefaultMessage}, specificMessageId=${specificMessageId}`)
+      onlyBotId = body.botId || null
+      forceSend = body.forceSend === true
+      console.log(`Parâmetros: useDefaultMessage=${useDefaultMessage}, specificMessageId=${specificMessageId}, botId=${onlyBotId}, forceSend=${forceSend}`)
     } catch {
       // Sem body ou body inválido - usar comportamento padrão
     }
@@ -145,7 +149,7 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
     // Buscar todos os bots com fake engagement habilitado
-    const { data: settings, error: settingsError } = await supabase
+    let settingsQuery = supabase
       .from('bot_settings')
       .select(`
         id,
@@ -158,6 +162,12 @@ Deno.serve(async (req) => {
       `)
       .eq('fake_engagement_enabled', true)
       .not('group_chat_id', 'is', null)
+
+    if (onlyBotId) {
+      settingsQuery = settingsQuery.eq('bot_id', onlyBotId)
+    }
+
+    const { data: settings, error: settingsError } = await settingsQuery
 
     if (settingsError) {
       console.error('Erro ao buscar configurações:', settingsError)
@@ -232,13 +242,15 @@ Deno.serve(async (req) => {
       
       // Se forçar mensagem padrão (do "Engajamento Automático"), usar sempre a padrão
       if (useDefaultMessage) {
-        console.log('Usando mensagem padrão (forçado por parâmetro)')
-        // Verificar intervalo global
-        const timeSinceLastSent = now.getTime() - lastSent.getTime()
-        if (timeSinceLastSent < globalIntervalMs) {
-          console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
-          results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
-          continue
+        console.log(forceSend ? 'Usando mensagem padrão (forçado) - ignorando intervalo' : 'Usando mensagem padrão (forçado por parâmetro)')
+        // Verificar intervalo global (a não ser que esteja forçado)
+        if (!forceSend) {
+          const timeSinceLastSent = now.getTime() - lastSent.getTime()
+          if (timeSinceLastSent < globalIntervalMs) {
+            console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
+            results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
+            continue
+          }
         }
       } 
       // Se uma mensagem específica foi requisitada (teste individual)
