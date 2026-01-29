@@ -325,7 +325,7 @@ export default function Bots() {
                               <Bot className="h-6 w-6 text-primary" />
                             </div>
                             {bot.health_status === "online" && (
-                              <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-success animate-pulse" />
+                              <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-success animate-pulse-glow" />
                             )}
                           </div>
                           <div className="min-w-0">
