@@ -4,12 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap } from "lucide-react";
+import { MessageSquarePlus, Trash2, Edit2, Save, X, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
-import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -31,11 +29,6 @@ interface EngagementMessage {
 
 interface EngagementMessagesManagerProps {
   botId: string;
-  settings?: {
-    fake_engagement_enabled?: boolean;
-    fake_engagement_interval_minutes?: number;
-  } | null;
-  onSettingsUpdate?: () => void;
 }
 
 const DEFAULT_MESSAGE = `🎉 *NOVA ASSINATURA!*
@@ -52,7 +45,7 @@ const PLACEHOLDERS_INFO = [
   { placeholder: "{valor}", description: "Valor do plano (ex: 29.90)" },
 ];
 
-export function EngagementMessagesManager({ botId, settings, onSettingsUpdate }: EngagementMessagesManagerProps) {
+export function EngagementMessagesManager({ botId }: EngagementMessagesManagerProps) {
   const { user } = useAuth();
   const [messages, setMessages] = useState<EngagementMessage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,17 +53,6 @@ export function EngagementMessagesManager({ botId, settings, onSettingsUpdate }:
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  
-  // Engagement settings state
-  const [enabled, setEnabled] = useState(settings?.fake_engagement_enabled ?? false);
-  const [interval, setIntervalValue] = useState(settings?.fake_engagement_interval_minutes ?? 30);
-  const [savingSettings, setSavingSettings] = useState(false);
-  const [testing, setTesting] = useState(false);
-
-  useEffect(() => {
-    setEnabled(settings?.fake_engagement_enabled ?? false);
-    setIntervalValue(settings?.fake_engagement_interval_minutes ?? 30);
-  }, [settings]);
 
   const fetchMessages = async () => {
     try {
@@ -205,55 +187,6 @@ export function EngagementMessagesManager({ botId, settings, onSettingsUpdate }:
     }
   };
 
-  const handleSaveSettings = async () => {
-    setSavingSettings(true);
-    try {
-      const { error } = await supabase
-        .from('bot_settings')
-        .update({
-          fake_engagement_enabled: enabled,
-          fake_engagement_interval_minutes: interval,
-        })
-        .eq('bot_id', botId);
-
-      if (error) throw error;
-      
-      toast.success('Configurações salvas!');
-      onSettingsUpdate?.();
-    } catch (error) {
-      console.error('Erro ao salvar:', error);
-      toast.error('Erro ao salvar configurações');
-    } finally {
-      setSavingSettings(false);
-    }
-  };
-
-  const handleTest = async () => {
-    setTesting(true);
-    try {
-      // Temporarily reset last_sent to force sending
-      await supabase
-        .from('bot_settings')
-        .update({ 
-          fake_engagement_enabled: true,
-          fake_engagement_last_sent: null 
-        })
-        .eq('bot_id', botId);
-
-      const response = await supabase.functions.invoke('fake-engagement');
-      
-      if (response.error) throw response.error;
-      
-      toast.success('Mensagem de teste enviada no grupo!');
-      onSettingsUpdate?.();
-    } catch (error) {
-      console.error('Erro ao testar:', error);
-      toast.error('Erro ao enviar mensagem de teste');
-    } finally {
-      setTesting(false);
-    }
-  };
-
   return (
     <Card className="p-6 border-border/50 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur">
       <div className="flex items-center justify-between mb-6">
@@ -286,71 +219,6 @@ export function EngagementMessagesManager({ botId, settings, onSettingsUpdate }:
             </ul>
           </TooltipContent>
         </Tooltip>
-      </div>
-
-      {/* Controles de Ativação e Tempo */}
-      <div className="space-y-4 mb-6 pb-6 border-b border-border/30">
-        {/* Toggle Principal */}
-        <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-border/50">
-          <div className="flex items-center gap-3">
-            <Zap className={cn(
-              "h-5 w-5 transition-colors",
-              enabled ? "text-emerald-400" : "text-muted-foreground"
-            )} />
-            <div>
-              <Label className="text-base font-medium">Ativar Engajamento</Label>
-              <p className="text-xs text-muted-foreground">
-                Envia mensagens automáticas no grupo
-              </p>
-            </div>
-          </div>
-          <Switch
-            checked={enabled}
-            onCheckedChange={setEnabled}
-            className="data-[state=checked]:bg-emerald-500"
-          />
-        </div>
-
-        {/* Intervalo */}
-        <div className="space-y-3 p-4 rounded-xl bg-muted/20 border border-border/30">
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <Label>Intervalo entre mensagens: <span className="text-emerald-400 font-semibold">{interval} minutos</span></Label>
-          </div>
-          <Slider
-            value={[interval]}
-            onValueChange={(v) => setIntervalValue(v[0])}
-            min={5}
-            max={120}
-            step={5}
-            className="w-full"
-          />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>5 min</span>
-            <span>30 min</span>
-            <span>1 hora</span>
-            <span>2 horas</span>
-          </div>
-        </div>
-
-        {/* Botões */}
-        <div className="flex gap-3">
-          <Button
-            onClick={handleSaveSettings}
-            disabled={savingSettings}
-            className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
-          >
-            {savingSettings ? 'Salvando...' : 'Salvar Configurações'}
-          </Button>
-          <Button
-            onClick={handleTest}
-            disabled={testing}
-            variant="outline"
-            className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10"
-          >
-            {testing ? 'Enviando...' : 'Testar Agora'}
-          </Button>
-        </div>
       </div>
 
       {loading ? (
