@@ -102,14 +102,63 @@ function getLabel(key: string): string {
     .join(" ");
 }
 
+// Parse object keys in format "NOME ⎯ VALOR" from NexFuture
+function parseObjectWithDelimitedKeys(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
+  
+  for (const [key, value] of Object.entries(obj)) {
+    // Se a chave contém delimitador, extrair key/value dela
+    let parsed = false;
+    for (const delim of delimiters) {
+      const idx = key.indexOf(delim);
+      if (idx > 0) {
+        const realKey = key.substring(0, idx).trim().toLowerCase().replace(/\s+/g, '_');
+        const realValue = key.substring(idx + delim.length).trim();
+        if (realKey && realValue) {
+          result[realKey] = realValue;
+          parsed = true;
+          break;
+        }
+      }
+    }
+    
+    // Se não foi parsed da chave, e valor é string/número válido, usar normalmente
+    if (!parsed && value !== null && value !== undefined && value !== '') {
+      // Se é o campo "data" com string formatada, parsear
+      if (key.toLowerCase() === 'data' && typeof value === 'string') {
+        const parsedData = parseStringData(value);
+        Object.assign(result, parsedData);
+      } else if (typeof value === 'object' && !Array.isArray(value)) {
+        // Recursão para objetos aninhados
+        const nested = parseObjectWithDelimitedKeys(value as Record<string, unknown>);
+        Object.assign(result, nested);
+      } else {
+        result[key.toLowerCase().replace(/\s+/g, '_')] = value;
+      }
+    }
+  }
+  
+  return result;
+}
+
 // Flatten nested objects
 function flattenData(obj: unknown, prefix = ""): Array<{ key: string; value: string }> {
   const items: Array<{ key: string; value: string }> = [];
   if (!obj || typeof obj !== "object") return items;
 
-  const ignoredKeys = ["comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64", "data", "texto"];
+  const ignoredKeys = ["comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64"];
 
-  for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+  // Primeiro, verificar se precisa parsear chaves delimitadas
+  let processedObj = obj as Record<string, unknown>;
+  const hasDelimitedKeys = Object.keys(processedObj).some(k => 
+    k.includes(' ⎯ ') || k.includes(' — ') || k.includes(': ')
+  );
+  if (hasDelimitedKeys || (processedObj.data && typeof processedObj.data === 'string')) {
+    processedObj = parseObjectWithDelimitedKeys(processedObj);
+  }
+
+  for (const [key, value] of Object.entries(processedObj)) {
     const keyLower = key.toLowerCase();
     if (ignoredKeys.includes(keyLower)) continue;
     if (value === null || value === undefined || value === "" || value === "-") continue;
@@ -149,6 +198,59 @@ function sanitizeText(text: string): string {
     .replace(/[Ç]/g, 'C')
     .replace(/[Ñ]/g, 'N')
     .replace(/[—–⎯]/g, '-');
+}
+
+// Parse string data (formato NexFuture) para objeto
+function parseStringData(str: string): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  if (!str || typeof str !== "string") return result;
+  
+  // Detectar múltiplas linhas
+  const lines = str.split('\n');
+  
+  for (const line of lines) {
+    // Tentar diferentes delimitadores: ":", "⎯", "—", "-"
+    const delimiters = [' ⎯ ', ' — ', ': ', ' - '];
+    let matched = false;
+    
+    for (const delim of delimiters) {
+      const idx = line.indexOf(delim);
+      if (idx > 0) {
+        const key = line.substring(0, idx).trim()
+          .replace(/^[•\-\s]+/, '') // Remover marcadores
+          .toLowerCase()
+          .replace(/\s+/g, '_');
+        const value = line.substring(idx + delim.length).trim();
+        
+        if (key && value && value !== '-' && value !== 'N/A') {
+          // Se já existe a chave, converter para array
+          if (result[key]) {
+            if (Array.isArray(result[key])) {
+              (result[key] as string[]).push(value);
+            } else {
+              result[key] = [result[key] as string, value];
+            }
+          } else {
+            result[key] = value;
+          }
+          matched = true;
+          break;
+        }
+      }
+    }
+    
+    // Se não encontrou delimitador, verificar se é um texto formatado simples
+    if (!matched && line.trim()) {
+      const cleanLine = line.trim().replace(/^[•\-\s]+/, '');
+      if (cleanLine.length > 3 && !cleanLine.startsWith('===') && !cleanLine.startsWith('---')) {
+        // Adicionar como campo "info" se não for header
+        if (!result["info"]) result["info"] = [];
+        (result["info"] as string[]).push(cleanLine);
+      }
+    }
+  }
+  
+  return result;
 }
 
 async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
@@ -316,6 +418,8 @@ serve(async (req) => {
   try {
     const body: QueryData = await req.json();
     console.log("Generating PDF for query:", body.queryType, body.queryInput);
+    console.log("Data received type:", typeof body.data);
+    console.log("Data preview:", JSON.stringify(body.data).substring(0, 500));
 
     if (!body.data) {
       return new Response(
@@ -324,7 +428,15 @@ serve(async (req) => {
       );
     }
 
-    const pdfBytes = await generatePDF(body);
+    // Se data vier como string (formato NexFuture), tentar parsear
+    let dataToProcess = body.data;
+    if (typeof body.data === "string") {
+      console.log("Data is a string, attempting to parse...");
+      dataToProcess = parseStringData(body.data);
+      console.log("Parsed data:", JSON.stringify(dataToProcess).substring(0, 300));
+    }
+
+    const pdfBytes = await generatePDF({ ...body, data: dataToProcess as Record<string, unknown> });
     const base64Pdf = btoa(String.fromCharCode(...pdfBytes));
 
     return new Response(
