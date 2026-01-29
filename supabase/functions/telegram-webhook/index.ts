@@ -300,7 +300,7 @@ function splitIntoPages(text: string, maxLength: number = 3800): string[] {
 }
 
 // Função para criar botões de paginação
-function createPaginationKeyboard(paginationId: string, currentPage: number, totalPages: number) {
+function createPaginationKeyboard(paginationId: string, currentPage: number, totalPages: number, queryType?: string, queryInput?: string) {
   const buttons: InlineButton[] = [];
   
   // Botão anterior
@@ -316,12 +316,17 @@ function createPaginationKeyboard(paginationId: string, currentPage: number, tot
     buttons.push({ text: "Próximo ▶️", callback_data: `page:${paginationId}:${currentPage + 1}` });
   }
   
-  return {
-    inline_keyboard: [
-      buttons,
-      [{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]
-    ]
-  };
+  const keyboard: InlineButton[][] = [buttons];
+  
+  // Botão de apagar primeiro
+  keyboard.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]);
+  
+  // Botão de PDF por último (abaixo do apagar)
+  if (queryType && queryInput) {
+    keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
+  }
+  
+  return { inline_keyboard: keyboard };
 }
 
 // Função para enviar mensagens longas com paginação por botões
@@ -337,20 +342,20 @@ async function sendLongMessagePaginated(
 ) {
   const MAX_LENGTH = 3800;
   
-  // Criar teclado com botão de PDF se tivermos os dados da consulta
+  // Criar teclado com botão de PDF abaixo do Apagar
   const createKeyboard = (paginationId?: string) => {
     const buttons: InlineButton[][] = [];
     
-    // Botão de PDF se tiver dados da consulta
-    if (queryType && queryInput) {
-      buttons.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
-    }
-    
-    // Botão de apagar
+    // Botão de apagar primeiro
     if (paginationId) {
       buttons.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]);
     } else {
       buttons.push([{ text: "🗑️ Apagar", callback_data: "delete_msg" }]);
+    }
+    
+    // Botão de PDF abaixo do apagar
+    if (queryType && queryInput) {
+      buttons.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
     }
     
     return { inline_keyboard: buttons };
@@ -399,7 +404,7 @@ async function sendLongMessagePaginated(
   }
   
   const paginationId = paginationData.id;
-  const keyboard = createPaginationKeyboard(paginationId, 0, pages.length);
+  const keyboard = createPaginationKeyboard(paginationId, 0, pages.length, queryType, queryInput);
   
   // Enviar primeira página
   const pageHeader = `📄 <b>Página 1/${pages.length}</b>\n\n`;
@@ -1133,11 +1138,11 @@ function createMultiPersonKeyboard(
     keyboard.push(navRow);
   }
   
-  // Botão de PDF e apagar
-  if (paginationId) {
-    keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:cep:${records[0]?.cep || ''}` }]);
-  }
+  // Botão de apagar primeiro
   keyboard.push([{ text: "🗑️ Apagar", callback_data: paginationId ? `page_delete:${paginationId}` : "delete_msg" }]);
+  
+  // Botão de PDF abaixo do apagar
+  keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:cep:${records[0]?.cep || ''}` }]);
   
   return { inline_keyboard: keyboard };
 }
@@ -3468,7 +3473,7 @@ class BotHandler {
       .update({ current_page: targetPage })
       .eq("id", paginationId);
 
-    // Criar keyboard de navegação
+    // Criar keyboard de navegação (sem PDF pois não temos queryType/queryInput salvos)
     const keyboard = createPaginationKeyboard(paginationId, targetPage, totalPages);
 
     // Atualizar mensagem
