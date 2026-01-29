@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { MessageSquarePlus, Trash2, Edit2, Save, X, Info } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -25,6 +26,7 @@ interface EngagementMessage {
   id: string;
   message_template: string;
   is_active: boolean;
+  interval_minutes: number;
 }
 
 interface EngagementMessagesManagerProps {
@@ -50,8 +52,10 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const [messages, setMessages] = useState<EngagementMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState("");
+  const [newInterval, setNewInterval] = useState(30);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
+  const [editingInterval, setEditingInterval] = useState(30);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const fetchMessages = async () => {
@@ -85,13 +89,15 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
           bot_id: botId,
           user_id: user.id,
           message_template: newMessage.trim(),
-          is_active: true
+          is_active: true,
+          interval_minutes: newInterval
         });
 
       if (error) throw error;
 
       toast.success('Mensagem adicionada!');
       setNewMessage("");
+      setNewInterval(30);
       setDialogOpen(false);
       fetchMessages();
     } catch (error) {
@@ -136,6 +142,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const handleEdit = (msg: EngagementMessage) => {
     setEditingId(msg.id);
     setEditingText(msg.message_template);
+    setEditingInterval(msg.interval_minutes || 30);
   };
 
   const handleSaveEdit = async () => {
@@ -144,7 +151,10 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     try {
       const { error } = await supabase
         .from('engagement_messages')
-        .update({ message_template: editingText.trim() })
+        .update({ 
+          message_template: editingText.trim(),
+          interval_minutes: editingInterval
+        })
         .eq('id', editingId);
 
       if (error) throw error;
@@ -152,6 +162,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
       toast.success('Mensagem atualizada!');
       setEditingId(null);
       setEditingText("");
+      setEditingInterval(30);
       fetchMessages();
     } catch (error) {
       console.error('Erro ao salvar:', error);
@@ -162,6 +173,22 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const handleCancelEdit = () => {
     setEditingId(null);
     setEditingText("");
+    setEditingInterval(30);
+  };
+
+  const handleUpdateInterval = async (id: string, interval: number) => {
+    try {
+      const { error } = await supabase
+        .from('engagement_messages')
+        .update({ interval_minutes: interval })
+        .eq('id', id);
+
+      if (error) throw error;
+      fetchMessages();
+    } catch (error) {
+      console.error('Erro ao atualizar intervalo:', error);
+      toast.error('Erro ao atualizar intervalo');
+    }
   };
 
   const handleAddDefault = async () => {
@@ -174,7 +201,8 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
           bot_id: botId,
           user_id: user.id,
           message_template: DEFAULT_MESSAGE,
-          is_active: true
+          is_active: true,
+          interval_minutes: 30
         });
 
       if (error) throw error;
@@ -262,6 +290,25 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                     placeholder={DEFAULT_MESSAGE}
                     className="min-h-[200px] bg-muted/20 border-border/50"
                   />
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <Label className="text-sm">Intervalo: {newInterval} minutos</Label>
+                    </div>
+                    <Slider
+                      value={[newInterval]}
+                      onValueChange={(v) => setNewInterval(v[0])}
+                      min={5}
+                      max={120}
+                      step={5}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>5 min</span>
+                      <span>1 hora</span>
+                      <span>2 horas</span>
+                    </div>
+                  </div>
                   <Button onClick={handleAdd} className="w-full bg-gradient-to-r from-emerald-500 to-teal-600">
                     Adicionar Mensagem
                   </Button>
@@ -286,6 +333,20 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                       onChange={(e) => setEditingText(e.target.value)}
                       className="min-h-[120px] bg-background/50 border-border/50"
                     />
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <Label className="text-sm">Intervalo: {editingInterval} minutos</Label>
+                      </div>
+                      <Slider
+                        value={[editingInterval]}
+                        onValueChange={(v) => setEditingInterval(v[0])}
+                        min={5}
+                        max={120}
+                        step={5}
+                        className="w-full"
+                      />
+                    </div>
                     <div className="flex gap-2 justify-end">
                       <Button
                         onClick={handleCancelEdit}
@@ -310,6 +371,29 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                     <pre className="text-sm whitespace-pre-wrap font-mono text-foreground/80">
                       {msg.message_template}
                     </pre>
+                    
+                    {/* Intervalo individual */}
+                    <div className="p-3 rounded-lg bg-muted/20 border border-border/30 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-emerald-400" />
+                        <Label className="text-xs">Intervalo: {msg.interval_minutes || 30} minutos</Label>
+                      </div>
+                      <Slider
+                        value={[msg.interval_minutes || 30]}
+                        onValueChange={(v) => handleUpdateInterval(msg.id, v[0])}
+                        min={5}
+                        max={120}
+                        step={5}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>5 min</span>
+                        <span>30 min</span>
+                        <span>1h</span>
+                        <span>2h</span>
+                      </div>
+                    </div>
+
                     <div className="flex items-center justify-between pt-2 border-t border-border/30">
                       <div className="flex items-center gap-2">
                         <Switch
@@ -378,6 +462,25 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                   placeholder={DEFAULT_MESSAGE}
                   className="min-h-[200px] bg-muted/20 border-border/50"
                 />
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <Label className="text-sm">Intervalo: {newInterval} minutos</Label>
+                  </div>
+                  <Slider
+                    value={[newInterval]}
+                    onValueChange={(v) => setNewInterval(v[0])}
+                    min={5}
+                    max={120}
+                    step={5}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>5 min</span>
+                    <span>1 hora</span>
+                    <span>2 horas</span>
+                  </div>
+                </div>
                 <Button onClick={handleAdd} className="w-full bg-gradient-to-r from-emerald-500 to-teal-600">
                   Adicionar Mensagem
                 </Button>
