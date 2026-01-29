@@ -966,8 +966,17 @@ function isMultiPersonResult(dataStr: string): boolean {
   return cpfMatches !== null && cpfMatches.length > 1;
 }
 
-// Format multiple person records for Telegram
-function formatMultiPersonResult(records: PersonRecord[], botUsername?: string, telegramUserName?: string): string {
+// Constantes para paginação de múltiplos registros
+const RECORDS_PER_PAGE = 10;
+
+// Format a single page of multiple person records for Telegram
+function formatMultiPersonPage(
+  records: PersonRecord[], 
+  page: number, 
+  totalPages: number,
+  botUsername?: string, 
+  telegramUserName?: string
+): string {
   const userName = telegramUserName || 'usuário';
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
   
@@ -979,15 +988,24 @@ function formatMultiPersonResult(records: PersonRecord[], botUsername?: string, 
       .replace(/>/g, '&gt;');
   };
   
+  const startIdx = page * RECORDS_PER_PAGE;
+  const endIdx = Math.min(startIdx + RECORDS_PER_PAGE, records.length);
+  const pageRecords = records.slice(startIdx, endIdx);
+  
   let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
   text += `📍 <b>CONSULTA DE CEP</b> 📍\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
   text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n`;
-  text += `👥 <b>${records.length} pessoas encontradas</b>\n\n`;
+  text += `👥 <b>${records.length} pessoas encontradas</b>\n`;
+  if (totalPages > 1) {
+    text += `📄 <b>Página ${page + 1}/${totalPages}</b> (${startIdx + 1}-${endIdx})\n`;
+  }
+  text += `\n`;
   
-  records.forEach((record, index) => {
+  pageRecords.forEach((record, index) => {
+    const globalIndex = startIdx + index;
     text += `┌─────────────────────\n`;
-    text += `│ 👤 <b>PESSOA ${index + 1}</b>\n`;
+    text += `│ 👤 <b>PESSOA ${globalIndex + 1}</b>\n`;
     text += `├─────────────────────\n`;
     
     // Dados principais
@@ -1030,11 +1048,79 @@ function formatMultiPersonResult(records: PersonRecord[], botUsername?: string, 
   
   // Footer
   text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-  text += `❤️ <b>OBRIGADO POR USAR</b> ❤️\n`;
+  text += `💡 <i>Clique no CPF para consultar</i>\n`;
   text += `🤖 ${botTag}\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━━`;
   
   return text;
+}
+
+// Create keyboard for multi-person result with CPF buttons and pagination
+function createMultiPersonKeyboard(
+  records: PersonRecord[], 
+  page: number, 
+  totalPages: number,
+  paginationId?: string
+): { inline_keyboard: InlineButton[][] } {
+  const keyboard: InlineButton[][] = [];
+  
+  const startIdx = page * RECORDS_PER_PAGE;
+  const endIdx = Math.min(startIdx + RECORDS_PER_PAGE, records.length);
+  const pageRecords = records.slice(startIdx, endIdx);
+  
+  // Botões de consulta CPF em linhas de 2
+  for (let i = 0; i < pageRecords.length; i += 2) {
+    const row: InlineButton[] = [];
+    
+    // Primeiro botão
+    const record1 = pageRecords[i];
+    if (record1.cpf) {
+      const cleanCpf = record1.cpf.replace(/[^\d]/g, '');
+      const shortName = record1.nome ? record1.nome.split(' ')[0].substring(0, 10) : `Pessoa ${startIdx + i + 1}`;
+      row.push({ text: `🔍 ${shortName}`, callback_data: `qcpf:${cleanCpf}` });
+    }
+    
+    // Segundo botão (se existir)
+    if (i + 1 < pageRecords.length) {
+      const record2 = pageRecords[i + 1];
+      if (record2.cpf) {
+        const cleanCpf = record2.cpf.replace(/[^\d]/g, '');
+        const shortName = record2.nome ? record2.nome.split(' ')[0].substring(0, 10) : `Pessoa ${startIdx + i + 2}`;
+        row.push({ text: `🔍 ${shortName}`, callback_data: `qcpf:${cleanCpf}` });
+      }
+    }
+    
+    if (row.length > 0) {
+      keyboard.push(row);
+    }
+  }
+  
+  // Botões de navegação se houver mais de uma página
+  if (totalPages > 1) {
+    const navRow: InlineButton[] = [];
+    
+    if (page > 0) {
+      navRow.push({ text: "◀️ Anterior", callback_data: `cep_page:${paginationId}:${page - 1}` });
+    }
+    
+    navRow.push({ text: `${page + 1}/${totalPages}`, callback_data: "noop" });
+    
+    if (page < totalPages - 1) {
+      navRow.push({ text: "Próximo ▶️", callback_data: `cep_page:${paginationId}:${page + 1}` });
+    }
+    
+    keyboard.push(navRow);
+  }
+  
+  // Botão de apagar
+  keyboard.push([{ text: "🗑️ Apagar", callback_data: paginationId ? `page_delete:${paginationId}` : "delete_msg" }]);
+  
+  return { inline_keyboard: keyboard };
+}
+
+// Format multiple person records for Telegram (legacy compatibility - single page)
+function formatMultiPersonResult(records: PersonRecord[], botUsername?: string, telegramUserName?: string): string {
+  return formatMultiPersonPage(records, 0, 1, botUsername, telegramUserName);
 }
 
 function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string, telegramUserName?: string): string {
@@ -1043,12 +1129,14 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   }
 
   // VERIFICAR SE É RESULTADO DE CEP COM MÚLTIPLOS REGISTROS
+  // Nota: A formatação agora é tratada diretamente no handleQuery com paginação
   const rawDataStr = typeof data.data === 'string' ? data.data : '';
   if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr)) {
     console.log('Detected multi-person CEP result, using special formatting...');
     const records = parseMultiplePersonRecords(rawDataStr);
     if (records.length > 1) {
-      return formatMultiPersonResult(records, botUsername, telegramUserName);
+      // Para resultados < 10 registros, usar formatação simples
+      return formatMultiPersonPage(records, 0, 1, botUsername, telegramUserName);
     }
   }
 
@@ -1552,6 +1640,85 @@ class BotHandler {
       
       // Log query
       await this.logQuery(telegramUserId, queryType, queryInput, result);
+
+      // Verificar se é resultado de CEP com múltiplos registros
+      const rawDataStr = typeof result.data === 'string' ? result.data : '';
+      if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr)) {
+        const records = parseMultiplePersonRecords(rawDataStr);
+        
+        if (records.length > 1) {
+          // Obter o efeito configurado para este bot
+          const effectId = getMessageEffectId(this.settings.message_effect);
+          const totalPages = Math.ceil(records.length / RECORDS_PER_PAGE);
+          
+          if (records.length > RECORDS_PER_PAGE) {
+            // Precisa de paginação - salvar registros no banco
+            const { data: paginationData, error } = await this.supabase
+              .from("paginated_results")
+              .insert({
+                chat_id: chatId,
+                pages: records, // Salvar registros como JSON
+                current_page: 0,
+                total_pages: totalPages,
+              })
+              .select("id")
+              .single();
+            
+            if (error || !paginationData) {
+              console.error("Failed to create CEP pagination record:", error);
+              // Fallback: enviar primeira página sem paginação
+              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId);
+              return;
+            }
+            
+            const paginationId = paginationData.id;
+            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName);
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId);
+            
+            const paginatedPayload: Record<string, unknown> = {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_markup: pageKeyboard,
+            };
+            if (effectId) {
+              paginatedPayload.message_effect_id = effectId;
+            }
+            
+            const msgResult = await telegramRequest(this.token, "sendMessage", paginatedPayload);
+            
+            // Atualizar message_id no banco
+            if (msgResult.ok && msgResult.result) {
+              const resultMessage = msgResult.result as { message_id?: number };
+              if (resultMessage.message_id) {
+                await this.supabase
+                  .from("paginated_results")
+                  .update({ message_id: resultMessage.message_id })
+                  .eq("id", paginationId);
+              }
+            }
+          } else {
+            // Menos de 10 registros - enviar sem paginação mas com botões de CPF
+            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName);
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1);
+            
+            const payload: Record<string, unknown> = {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_markup: pageKeyboard,
+            };
+            if (effectId) {
+              payload.message_effect_id = effectId;
+            }
+            
+            await telegramRequest(this.token, "sendMessage", payload);
+          }
+          
+          return;
+        }
+      }
 
       // Format and send result - usar nome do usuário do Telegram
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, telegramUserName);
@@ -2562,6 +2729,75 @@ class BotHandler {
       
       const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 📝 @${userIdDisplay}\n├ 📞 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
 
+      // VERIFICAR SE É RESULTADO DE CEP COM MÚLTIPLOS REGISTROS
+      const rawDataStr = typeof result.data === 'string' ? result.data : '';
+      if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr)) {
+        const records = parseMultiplePersonRecords(rawDataStr);
+        
+        if (records.length > 1) {
+          const totalPages = Math.ceil(records.length / RECORDS_PER_PAGE);
+          
+          if (records.length > RECORDS_PER_PAGE) {
+            // Precisa de paginação - salvar registros no banco
+            const { data: paginationData, error } = await this.supabase
+              .from("paginated_results")
+              .insert({
+                chat_id: chatId,
+                pages: records, // Salvar registros como JSON
+                current_page: 0,
+                total_pages: totalPages,
+              })
+              .select("id")
+              .single();
+            
+            if (error || !paginationData) {
+              console.error("Failed to create CEP pagination record:", error);
+              // Fallback: enviar primeira página sem paginação
+              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName) + consultaFooter;
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId);
+              return;
+            }
+            
+            const paginationId = paginationData.id;
+            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId);
+            
+            const msgResult = await telegramRequest(this.token, "sendMessage", {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_to_message_id: replyToId,
+              reply_markup: pageKeyboard,
+            });
+            
+            // Atualizar message_id no banco
+            if (msgResult.ok && msgResult.result) {
+              const resultMessage = msgResult.result as { message_id?: number };
+              if (resultMessage.message_id) {
+                await this.supabase
+                  .from("paginated_results")
+                  .update({ message_id: resultMessage.message_id })
+                  .eq("id", paginationId);
+              }
+            }
+          } else {
+            // Menos de 10 registros - enviar sem paginação mas com botões de CPF
+            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, userName) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1);
+            
+            await telegramRequest(this.token, "sendMessage", {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_to_message_id: replyToId,
+              reply_markup: pageKeyboard,
+            });
+          }
+          
+          return;
+        }
+      }
+
       // Format and send result - usar nome do perfil do Telegram do usuário
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, userName);
 
@@ -2707,6 +2943,54 @@ class BotHandler {
 
     if (data === "noop") {
       // Botão de indicador de página - não faz nada
+      return;
+    }
+
+    // CEP multi-person pagination
+    if (data.startsWith("cep_page:")) {
+      const parts = data.split(":");
+      if (parts.length === 3) {
+        const paginationId = parts[1];
+        const targetPage = parseInt(parts[2], 10);
+        await this.handleCepPagination(chatId, messageId, paginationId, targetPage);
+      }
+      return;
+    }
+
+    // Quick CPF query from CEP results
+    if (data.startsWith("qcpf:")) {
+      const cpf = data.replace("qcpf:", "");
+      const telegramUserName = callback.from?.first_name || 'usuário';
+      
+      // Send loading message
+      await editMessage(this.token, chatId, messageId, 
+        `⏳ <b>Consultando CPF...</b>\n\n<code>${cpf}</code>`,
+        undefined
+      );
+      
+      try {
+        const result = await executeQuery("cpf", cpf);
+        
+        // Log query
+        await this.logQuery(telegramUserId, "cpf", cpf, result);
+        
+        // Format result
+        const formattedResult = formatQueryResult("cpf", result, this.bot.bot_username, telegramUserName);
+        
+        // Send result with pagination
+        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase);
+        
+        // Delete the loading message
+        try {
+          await deleteMessage(this.token, chatId, messageId);
+        } catch (_e) { /* ignore */ }
+      } catch (error) {
+        console.error("Quick CPF query error:", error);
+        await editMessage(this.token, chatId, messageId,
+          "❌ <b>Erro na consulta de CPF</b>\n\nTente novamente.",
+          keyboard([btn("🗑️ Apagar", "delete_msg")])
+        );
+      }
       return;
     }
 
@@ -3078,6 +3362,47 @@ class BotHandler {
     // Atualizar mensagem
     const pageHeader = `📄 <b>Página ${targetPage + 1}/${totalPages}</b>\n\n`;
     await editMessage(this.token, chatId, messageId, pageHeader + pages[targetPage], keyboard);
+  }
+
+  // Handler para paginação de múltiplos registros de CEP
+  async handleCepPagination(chatId: number, messageId: number, paginationId: string, targetPage: number) {
+    // Buscar dados de paginação
+    const { data: paginationData, error } = await this.supabase
+      .from("paginated_results")
+      .select("*")
+      .eq("id", paginationId)
+      .maybeSingle();
+
+    if (error || !paginationData) {
+      console.error("CEP pagination data not found:", error);
+      await editMessage(this.token, chatId, messageId,
+        "⚠️ <b>Sessão expirada</b>\n\nFaça uma nova consulta de CEP.",
+        { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] }
+      );
+      return;
+    }
+
+    // Pages contém os registros serializados como JSON
+    const records = paginationData.pages as PersonRecord[];
+    const totalPages = paginationData.total_pages as number;
+
+    // Validar página
+    if (targetPage < 0 || targetPage >= totalPages) {
+      return;
+    }
+
+    // Atualizar página atual no banco
+    await this.supabase
+      .from("paginated_results")
+      .update({ current_page: targetPage })
+      .eq("id", paginationId);
+
+    // Formatar página atual
+    const pageText = formatMultiPersonPage(records, targetPage, totalPages, this.bot.bot_username);
+    const keyboard = createMultiPersonKeyboard(records, targetPage, totalPages, paginationId);
+
+    // Atualizar mensagem
+    await editMessage(this.token, chatId, messageId, pageText, keyboard);
   }
 }
 
