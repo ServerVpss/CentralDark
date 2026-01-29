@@ -298,9 +298,9 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                     <Slider
                       value={[newInterval]}
                       onValueChange={(v) => setNewInterval(v[0])}
-                      min={5}
+                      min={1}
                       max={120}
-                      step={5}
+                      step={1}
                       className="w-full"
                     />
                     <div className="flex justify-between text-xs text-muted-foreground">
@@ -341,9 +341,9 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                       <Slider
                         value={[editingInterval]}
                         onValueChange={(v) => setEditingInterval(v[0])}
-                        min={5}
+                        min={1}
                         max={120}
-                        step={5}
+                        step={1}
                         className="w-full"
                       />
                     </div>
@@ -381,9 +381,9 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                       <Slider
                         value={[msg.interval_minutes || 30]}
                         onValueChange={(v) => handleUpdateInterval(msg.id, v[0])}
-                        min={5}
+                        min={1}
                         max={120}
-                        step={5}
+                        step={1}
                         className="w-full"
                       />
                       <div className="flex justify-between text-xs text-muted-foreground">
@@ -470,9 +470,9 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                   <Slider
                     value={[newInterval]}
                     onValueChange={(v) => setNewInterval(v[0])}
-                    min={5}
+                    min={1}
                     max={120}
-                    step={5}
+                    step={1}
                     className="w-full"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
