@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock } from "lucide-react";
+import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -57,6 +57,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const [editingText, setEditingText] = useState("");
   const [editingInterval, setEditingInterval] = useState(30);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [testingId, setTestingId] = useState<string | null>(null);
 
   const fetchMessages = async () => {
     try {
@@ -188,6 +189,38 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     } catch (error) {
       console.error('Erro ao atualizar intervalo:', error);
       toast.error('Erro ao atualizar intervalo');
+    }
+  };
+
+  const handleTestMessage = async (messageId: string) => {
+    setTestingId(messageId);
+    try {
+      // Resetar o last_sent_at da mensagem específica para forçar envio
+      await supabase
+        .from('engagement_messages')
+        .update({ last_sent_at: null })
+        .eq('id', messageId);
+
+      // Resetar também o last_sent global
+      await supabase
+        .from('bot_settings')
+        .update({ 
+          fake_engagement_enabled: true,
+          fake_engagement_last_sent: null 
+        })
+        .eq('bot_id', botId);
+
+      const response = await supabase.functions.invoke('fake-engagement');
+      
+      if (response.error) throw response.error;
+      
+      toast.success('Mensagem de teste enviada no grupo!');
+      fetchMessages();
+    } catch (error) {
+      console.error('Erro ao testar:', error);
+      toast.error('Erro ao enviar mensagem de teste');
+    } finally {
+      setTestingId(null);
     }
   };
 
@@ -406,6 +439,16 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                         </Label>
                       </div>
                       <div className="flex gap-1">
+                        <Button
+                          onClick={() => handleTestMessage(msg.id)}
+                          disabled={testingId === msg.id}
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 px-2 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
+                        >
+                          <Zap className="h-4 w-4 mr-1" />
+                          {testingId === msg.id ? 'Enviando...' : 'Testar'}
+                        </Button>
                         <Button
                           onClick={() => handleEdit(msg)}
                           variant="ghost"
