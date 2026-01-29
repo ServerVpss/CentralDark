@@ -40,8 +40,8 @@ export function BotStatusCard({ name, username, status, messages, users, botId }
             </div>
             <div
               className={cn(
-                "absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 shadow-lg",
-                status === "online" && "border-background bg-gradient-to-br from-emerald-400 to-green-500 shadow-emerald-500/50 animate-pulse-glow",
+                "absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2",
+                status === "online" && "border-background bg-gradient-to-br from-emerald-400 to-green-500 animate-ping",
                 status === "offline" && "border-background bg-gradient-to-br from-slate-400 to-slate-500",
                 status === "error" && "border-background bg-gradient-to-br from-rose-400 to-red-500 shadow-rose-500/50"
               )}
