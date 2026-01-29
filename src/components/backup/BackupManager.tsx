@@ -9,6 +9,8 @@ import {
   Database,
   RefreshCw,
   Trash2,
+  ChevronDown,
+  XCircle,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +19,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,9 +35,156 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useBackup, RestoreResult } from "@/hooks/useBackup";
+import { useBackup, RestoreResult, ExportResult, TableResult } from "@/hooks/useBackup";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+const TABLE_DISPLAY_NAMES: Record<string, string> = {
+  telegram_bots: "Bots do Telegram",
+  bot_settings: "Configurações dos Bots",
+  bot_security_settings: "Configurações de Segurança",
+  telegram_subscriptions: "Assinaturas",
+  subscription_plans: "Planos",
+  payment_gateways: "Gateways de Pagamento",
+  payment_gateway_settings: "Config. de Gateway",
+  pix_transactions: "Transações PIX",
+  pending_payments: "Pagamentos Pendentes",
+  engagement_messages: "Mensagens de Engajamento",
+  profiles: "Perfis",
+  query_history: "Histórico de Consultas",
+  bot_analytics: "Análises",
+  payment_history: "Histórico de Pagamentos",
+  telegram_messages: "Mensagens do Telegram",
+};
+
+function TableResultItem({ result }: { result: TableResult }) {
+  const hasErrors = result.errors.length > 0;
+  const displayName = TABLE_DISPLAY_NAMES[result.table] || result.table;
+  
+  return (
+    <AccordionItem value={result.table} className="border-b border-border/50">
+      <AccordionTrigger className="py-2 hover:no-underline">
+        <div className="flex items-center gap-3 w-full">
+          {hasErrors ? (
+            <XCircle className="h-4 w-4 text-destructive flex-shrink-0" />
+          ) : (
+            <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />
+          )}
+          <span className="text-sm font-medium flex-1 text-left">{displayName}</span>
+          <div className="flex items-center gap-2">
+            {result.count > 0 && (
+              <Badge variant="secondary" className="text-xs">
+                {result.count} registros
+              </Badge>
+            )}
+            {hasErrors && (
+              <Badge variant="destructive" className="text-xs">
+                {result.errors.length} erro{result.errors.length > 1 ? "s" : ""}
+              </Badge>
+            )}
+          </div>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pb-3">
+        <div className="pl-7 space-y-2">
+          {result.count > 0 && (
+            <p className="text-sm text-muted-foreground">
+              ✓ {result.count} registro{result.count > 1 ? "s" : ""} processado{result.count > 1 ? "s" : ""} com sucesso
+            </p>
+          )}
+          {hasErrors && (
+            <div className="space-y-1">
+              <p className="text-sm text-destructive font-medium">Erros encontrados:</p>
+              {result.errors.map((error, idx) => (
+                <p key={idx} className="text-xs text-destructive/80 pl-2 border-l-2 border-destructive/30">
+                  {error}
+                </p>
+              ))}
+            </div>
+          )}
+          {result.count === 0 && !hasErrors && (
+            <p className="text-sm text-muted-foreground">Nenhum registro para processar</p>
+          )}
+        </div>
+      </AccordionContent>
+    </AccordionItem>
+  );
+}
+
+function ResultsSummary({ 
+  results, 
+  type,
+  totalCount,
+  totalErrors,
+}: { 
+  results: TableResult[];
+  type: "export" | "restore";
+  totalCount: number;
+  totalErrors: number;
+}) {
+  const hasErrors = totalErrors > 0;
+  const successTables = results.filter(r => r.errors.length === 0 && r.count > 0);
+  const errorTables = results.filter(r => r.errors.length > 0);
+  const emptyTables = results.filter(r => r.count === 0 && r.errors.length === 0);
+  
+  return (
+    <div className="space-y-4 animate-fade-in">
+      {/* Summary Header */}
+      <div className={`rounded-lg border p-4 ${
+        hasErrors 
+          ? "border-warning/50 bg-warning/5" 
+          : "border-success/50 bg-success/5"
+      }`}>
+        <div className="flex items-center gap-2 mb-3">
+          {hasErrors ? (
+            <AlertTriangle className="h-5 w-5 text-warning" />
+          ) : (
+            <CheckCircle2 className="h-5 w-5 text-success" />
+          )}
+          <span className={`font-medium ${hasErrors ? "text-warning" : "text-success"}`}>
+            {type === "export" ? "Backup" : "Restauração"} {hasErrors ? "concluído com avisos" : "concluído com sucesso"}
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+          <div className="bg-background/50 rounded-lg p-2 text-center">
+            <p className="text-2xl font-bold text-foreground">{totalCount}</p>
+            <p className="text-xs text-muted-foreground">Registros</p>
+          </div>
+          <div className="bg-background/50 rounded-lg p-2 text-center">
+            <p className="text-2xl font-bold text-success">{successTables.length}</p>
+            <p className="text-xs text-muted-foreground">Tabelas OK</p>
+          </div>
+          <div className="bg-background/50 rounded-lg p-2 text-center">
+            <p className={`text-2xl font-bold ${errorTables.length > 0 ? "text-destructive" : "text-muted-foreground"}`}>
+              {errorTables.length}
+            </p>
+            <p className="text-xs text-muted-foreground">Com Erros</p>
+          </div>
+          <div className="bg-background/50 rounded-lg p-2 text-center">
+            <p className="text-2xl font-bold text-muted-foreground">{emptyTables.length}</p>
+            <p className="text-xs text-muted-foreground">Vazias</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Detailed Results */}
+      <div className="rounded-lg border border-border bg-card/50">
+        <div className="p-3 border-b border-border bg-muted/30">
+          <h4 className="text-sm font-medium flex items-center gap-2">
+            <Database className="h-4 w-4" />
+            Detalhes por Tabela
+          </h4>
+        </div>
+        <Accordion type="multiple" className="px-3">
+          {results.map((result) => (
+            <TableResultItem key={result.table} result={result} />
+          ))}
+        </Accordion>
+      </div>
+    </div>
+  );
+}
 
 export function BackupManager() {
   const {
@@ -50,6 +205,15 @@ export function BackupManager() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [confirmText, setConfirmText] = useState("");
   const [restoreResult, setRestoreResult] = useState<RestoreResult | null>(null);
+  const [exportResult, setExportResult] = useState<ExportResult | null>(null);
+
+  const handleExport = async () => {
+    setExportResult(null);
+    const result = await exportBackup();
+    if (result) {
+      setExportResult(result);
+    }
+  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -123,7 +287,7 @@ export function BackupManager() {
             variant="glow"
             size="lg"
             className="gap-2 w-full sm:w-auto"
-            onClick={exportBackup}
+            onClick={handleExport}
             disabled={isExporting}
           >
             {isExporting ? (
@@ -138,6 +302,16 @@ export function BackupManager() {
               </>
             )}
           </Button>
+
+          {/* Export Results Summary */}
+          {exportResult && !isExporting && (
+            <ResultsSummary
+              results={exportResult.results}
+              type="export"
+              totalCount={exportResult.total_records}
+              totalErrors={exportResult.total_errors}
+            />
+          )}
         </CardContent>
       </Card>
 
@@ -339,38 +513,14 @@ export function BackupManager() {
             </div>
           )}
 
-          {/* Restore Result */}
-          {restoreResult && (
-            <div
-              className={`rounded-lg border p-4 ${
-                restoreResult.success
-                  ? "border-success/50 bg-success/5"
-                  : "border-destructive/50 bg-destructive/5"
-              }`}
-            >
-              <div className="space-y-3">
-                <div
-                  className={`flex items-center gap-2 ${
-                    restoreResult.success ? "text-success" : "text-destructive"
-                  }`}
-                >
-                  {restoreResult.success ? (
-                    <CheckCircle2 className="h-5 w-5" />
-                  ) : (
-                    <AlertTriangle className="h-5 w-5" />
-                  )}
-                  <span className="font-medium">{restoreResult.message}</span>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  <p>Registros importados: {restoreResult.total_inserted}</p>
-                  {restoreResult.total_errors > 0 && (
-                    <p className="text-destructive">
-                      Erros: {restoreResult.total_errors}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
+          {/* Restore Results Summary */}
+          {restoreResult && !isRestoring && (
+            <ResultsSummary
+              results={restoreResult.results}
+              type="restore"
+              totalCount={restoreResult.total_inserted}
+              totalErrors={restoreResult.total_errors}
+            />
           )}
         </CardContent>
       </Card>
