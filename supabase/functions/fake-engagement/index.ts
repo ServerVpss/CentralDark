@@ -127,6 +127,19 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Parâmetros opcionais para controlar o comportamento
+    let useDefaultMessage = false // Forçar uso da mensagem padrão de assinatura
+    let specificMessageId: string | null = null // ID de uma mensagem específica para testar
+    
+    try {
+      const body = await req.json()
+      useDefaultMessage = body.useDefaultMessage === true
+      specificMessageId = body.messageId || null
+      console.log(`Parâmetros: useDefaultMessage=${useDefaultMessage}, specificMessageId=${specificMessageId}`)
+    } catch {
+      // Sem body ou body inválido - usar comportamento padrão
+    }
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
@@ -213,62 +226,90 @@ Deno.serve(async (req) => {
       const randomName = generateRandomName(customNames)
       const randomPlan = plansToUse[Math.floor(Math.random() * plansToUse.length)]
 
-      // Buscar mensagens personalizadas do banco com seus intervalos individuais e last_sent_at
-      const { data: customMessages } = await supabase
-        .from('engagement_messages')
-        .select('id, message_template, is_active, interval_minutes, last_sent_at')
-        .eq('bot_id', setting.bot_id)
-        .eq('is_active', true)
-
-      // Filtrar mensagens que já podem ser enviadas com base no intervalo INDIVIDUAL de cada uma
-      const now = new Date()
-      const eligibleMessages: EngagementMessage[] = []
+      // Escolher mensagem baseado nos parâmetros
+      let messageTemplate = DEFAULT_MESSAGE_TEMPLATE
+      let selectedMessage: EngagementMessage | null = null
       
-      if (customMessages && customMessages.length > 0) {
-        for (const msg of customMessages) {
-          const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
-          
-          // Usar o last_sent_at INDIVIDUAL de cada mensagem
-          const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
-          const timeSinceMsgSent = now.getTime() - msgLastSent.getTime()
-          
-          console.log(`Mensagem ${msg.id}: intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
-          
-          if (timeSinceMsgSent >= msgInterval) {
-            eligibleMessages.push(msg as EngagementMessage)
-          }
-        }
-      }
-
-      // Se não há mensagens elegíveis, verificar intervalo global para usar mensagem padrão
-      if (eligibleMessages.length === 0 && (!customMessages || customMessages.length === 0)) {
+      // Se forçar mensagem padrão (do "Engajamento Automático"), usar sempre a padrão
+      if (useDefaultMessage) {
+        console.log('Usando mensagem padrão (forçado por parâmetro)')
+        // Verificar intervalo global
         const timeSinceLastSent = now.getTime() - lastSent.getTime()
         if (timeSinceLastSent < globalIntervalMs) {
           console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
           results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
           continue
         }
-      } else if (eligibleMessages.length === 0) {
-        // Tem mensagens personalizadas mas nenhuma elegível ainda
-        const nextEligible = customMessages?.reduce((min, msg) => {
-          const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
-          const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
-          const timeUntilEligible = msgInterval - (now.getTime() - msgLastSent.getTime())
-          return timeUntilEligible > 0 && timeUntilEligible < min ? timeUntilEligible : min
-        }, Infinity) || 0
+      } 
+      // Se uma mensagem específica foi requisitada (teste individual)
+      else if (specificMessageId) {
+        const { data: specificMsg } = await supabase
+          .from('engagement_messages')
+          .select('id, message_template, is_active, interval_minutes, last_sent_at')
+          .eq('id', specificMessageId)
+          .single()
         
-        console.log(`Bot ${setting.bot_id}: aguardando próxima mensagem elegível (faltam ${Math.round(nextEligible / 60000)} min)`)
-        results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round(nextEligible / 60000) })
-        continue
+        if (specificMsg) {
+          console.log(`Usando mensagem específica: ${specificMessageId}`)
+          selectedMessage = specificMsg as EngagementMessage
+          messageTemplate = specificMsg.message_template
+        }
       }
+      // Comportamento padrão: buscar mensagens personalizadas
+      else {
+        // Buscar mensagens personalizadas do banco com seus intervalos individuais e last_sent_at
+        const { data: customMessages } = await supabase
+          .from('engagement_messages')
+          .select('id, message_template, is_active, interval_minutes, last_sent_at')
+          .eq('bot_id', setting.bot_id)
+          .eq('is_active', true)
 
-      // Escolher mensagem: personalizada elegível ou padrão
-      let messageTemplate = DEFAULT_MESSAGE_TEMPLATE
-      let selectedMessage: EngagementMessage | null = null
-      
-      if (eligibleMessages.length > 0) {
-        selectedMessage = eligibleMessages[Math.floor(Math.random() * eligibleMessages.length)]
-        messageTemplate = selectedMessage.message_template
+        // Filtrar mensagens que já podem ser enviadas com base no intervalo INDIVIDUAL de cada uma
+        const eligibleMessages: EngagementMessage[] = []
+        
+        if (customMessages && customMessages.length > 0) {
+          for (const msg of customMessages) {
+            const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
+            
+            // Usar o last_sent_at INDIVIDUAL de cada mensagem
+            const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
+            const timeSinceMsgSent = now.getTime() - msgLastSent.getTime()
+            
+            console.log(`Mensagem ${msg.id}: intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
+            
+            if (timeSinceMsgSent >= msgInterval) {
+              eligibleMessages.push(msg as EngagementMessage)
+            }
+          }
+        }
+
+        // Se não há mensagens elegíveis, verificar intervalo global para usar mensagem padrão
+        if (eligibleMessages.length === 0 && (!customMessages || customMessages.length === 0)) {
+          const timeSinceLastSent = now.getTime() - lastSent.getTime()
+          if (timeSinceLastSent < globalIntervalMs) {
+            console.log(`Bot ${setting.bot_id}: aguardando intervalo global (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
+            results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) })
+            continue
+          }
+        } else if (eligibleMessages.length === 0) {
+          // Tem mensagens personalizadas mas nenhuma elegível ainda
+          const nextEligible = customMessages?.reduce((min, msg) => {
+            const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
+            const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
+            const timeUntilEligible = msgInterval - (now.getTime() - msgLastSent.getTime())
+            return timeUntilEligible > 0 && timeUntilEligible < min ? timeUntilEligible : min
+          }, Infinity) || 0
+          
+          console.log(`Bot ${setting.bot_id}: aguardando próxima mensagem elegível (faltam ${Math.round(nextEligible / 60000)} min)`)
+          results.push({ bot_id: setting.bot_id, status: 'waiting', minutes_left: Math.round(nextEligible / 60000) })
+          continue
+        }
+
+        // Escolher mensagem: personalizada elegível ou padrão
+        if (eligibleMessages.length > 0) {
+          selectedMessage = eligibleMessages[Math.floor(Math.random() * eligibleMessages.length)]
+          messageTemplate = selectedMessage.message_template
+        }
       }
 
       // Substituir variáveis na mensagem
