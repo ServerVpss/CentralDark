@@ -1,55 +1,34 @@
 
-## Animação de Pulsação para Indicador Online dos Bots
+## Aplicar Animação Pulse-Glow na Sidebar "Seus Bots"
 
 ### Objetivo
-Adicionar uma animação de pulsação atraente ao indicador verde "online" dos bots, criando um efeito visual que chama a atenção quando o bot está ativo.
+Adicionar a animação de pulsação `pulse-glow` ao indicador verde "Sistema Online" que aparece no card inferior da sidebar, criando o mesmo efeito visual atraente que foi implementado nos cards de bots.
 
-### Componentes Afetados
-1. **BotStatusCard** (Dashboard) - O card exibido na página inicial
-2. **Bots.tsx** - A lista de bots na página de gerenciamento
-3. **BotHealthMonitor** - O monitor de saúde dos bots
-
-### Implementação
-
-#### 1. Nova Animação no Tailwind
-Adicionar uma animação personalizada `pulse-glow` no `tailwind.config.ts` que cria um efeito de pulsação com brilho verde:
-
-```text
-keyframes: {
-  "pulse-glow": {
-    "0%, 100%": {
-      opacity: "1",
-      boxShadow: "0 0 0 0 rgba(34, 197, 94, 0.7)"
-    },
-    "50%": {
-      opacity: "0.8",
-      boxShadow: "0 0 0 8px rgba(34, 197, 94, 0)"
-    }
-  }
-}
-animation: {
-  "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
-}
+### Local Atual
+No arquivo `src/components/layout/Sidebar.tsx` (linhas 275-278), existe:
+```tsx
+<div className="relative">
+  <div className="h-3 w-3 rounded-full bg-gradient-to-br from-emerald-400 to-green-500" />
+  <div className="absolute inset-0 h-3 w-3 rounded-full bg-emerald-400 animate-ping opacity-40" />
+</div>
 ```
 
-#### 2. Atualizar BotStatusCard.tsx
-Modificar o indicador de status (linha 41-48) para incluir a nova animação quando o status for "online":
+### Alteração Proposta
+Substituir a animação `animate-ping` pelo efeito `animate-pulse-glow` que já foi criado no Tailwind, unificando o estilo visual em todo o sistema:
 
-- Adicionar a classe `animate-pulse-glow` ao círculo verde
-- Manter o gradiente existente de `emerald-400` para `green-500`
+```tsx
+<div className="relative">
+  <div className="h-3 w-3 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 shadow-lg shadow-emerald-500/50 animate-pulse-glow" />
+</div>
+```
 
-#### 3. Atualizar Bots.tsx
-Na lista de bots (linha 327-329), melhorar o indicador existente com a animação `pulse-glow` para um efeito mais visível.
+### Benefícios
+- Efeito visual consistente em toda a aplicação
+- Animação mais suave e elegante (2s) vs ping rápido
+- Brilho verde que expande e desaparece, indicando "sistema vivo"
+- Código simplificado (remove o elemento duplicado de ping)
 
-### Resultado Visual
-O indicador verde irá:
-- Pulsar suavemente em um ciclo de 2 segundos
-- Emitir um "glow" (brilho) verde que expande e desaparece
-- Criar uma sensação de "bot vivo/ativo" no dashboard
-
-### Arquivos a Modificar
+### Arquivo a Modificar
 | Arquivo | Alteração |
 |---------|-----------|
-| `tailwind.config.ts` | Adicionar keyframes e animation `pulse-glow` |
-| `src/components/dashboard/BotStatusCard.tsx` | Aplicar `animate-pulse-glow` ao indicador online |
-| `src/pages/Bots.tsx` | Aplicar `animate-pulse-glow` ao indicador online |
+| `src/components/layout/Sidebar.tsx` | Aplicar `animate-pulse-glow` ao indicador do card "Sistema Online" (linhas 275-278) |
