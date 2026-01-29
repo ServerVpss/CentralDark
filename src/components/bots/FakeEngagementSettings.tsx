@@ -131,21 +131,32 @@ export function FakeEngagementSettings({ botId, settings, onUpdate }: FakeEngage
   const handleTest = async () => {
     setTesting(true);
     try {
-      // Resetar o last_sent global para forçar envio
-      await supabase
+      // Forçar envio imediato (mesmo que exista intervalo) e limitar ao bot atual
+      const { error: upsertError } = await supabase
         .from('bot_settings')
-        .update({ 
-          fake_engagement_enabled: true,
-          fake_engagement_last_sent: null 
-        })
-        .eq('bot_id', botId);
+        .upsert(
+          {
+            bot_id: botId,
+            fake_engagement_enabled: true,
+            fake_engagement_last_sent: null,
+          },
+          { onConflict: 'bot_id' }
+        );
+
+      if (upsertError) throw upsertError;
 
       // Chamar a função com parâmetro para usar mensagem PADRÃO de assinatura
       const response = await supabase.functions.invoke('fake-engagement', {
-        body: { useDefaultMessage: true }
+        body: { useDefaultMessage: true, botId, forceSend: true }
       });
       
       if (response.error) throw response.error;
+
+      const results = (response.data as any)?.results as Array<{ bot_id: string; status: string; error?: string }> | undefined;
+      const mine = results?.find(r => r.bot_id === botId);
+      if (mine && mine.status !== 'sent') {
+        throw new Error(mine.error || 'Mensagem não foi enviada (status inesperado)');
+      }
       
       toast.success('Mensagem de simulação de assinatura enviada!');
       onUpdate();
