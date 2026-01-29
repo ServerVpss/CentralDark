@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   User,
   Mail,
@@ -16,6 +18,9 @@ import {
   Star,
   AlertCircle,
   Camera,
+  Users,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 interface QueryResultFormatterProps {
@@ -24,6 +29,19 @@ interface QueryResultFormatterProps {
 
 interface ParsedData {
   [key: string]: string | string[] | ParsedData[];
+}
+
+interface PersonRecord {
+  cpf?: string;
+  nome?: string;
+  nascimento?: string;
+  email?: string;
+  renda?: string;
+  bairro?: string;
+  cidade?: string;
+  uf?: string;
+  cep?: string;
+  [key: string]: string | undefined;
 }
 
 // Lista de chaves conhecidas para parsing de strings concatenadas (ordenadas por tamanho decrescente para evitar conflitos)
@@ -535,7 +553,97 @@ function extractPhoto(data: any): string | null {
   return null;
 }
 
+// Parse CEP response that returns multiple person records
+function parseMultiplePersonRecords(text: string): PersonRecord[] {
+  const records: PersonRecord[] = [];
+  
+  // Clean the text
+  let cleanText = text
+    .replace(/@\w+/g, '')
+    .replace(/https?:\/\/[^\s]+/g, '')
+    .trim();
+  
+  // Split by double newlines or by CPF pattern to separate records
+  const lines = cleanText.split(/\n/).map(l => l.trim()).filter(Boolean);
+  
+  let currentRecord: PersonRecord = {};
+  let hasData = false;
+  
+  for (const line of lines) {
+    // Check for key — value format (with em-dash ⎯ or regular dash —)
+    const match = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+)\s*[⎯—-]\s*(.*)$/i);
+    
+    if (match) {
+      const key = match[1].trim().toUpperCase();
+      const value = match[2].trim();
+      
+      // Skip empty values
+      if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) {
+        continue;
+      }
+      
+      // If we find a new CPF and already have data, save current record and start new
+      if (key === 'CPF' && hasData && currentRecord.cpf) {
+        records.push({ ...currentRecord });
+        currentRecord = {};
+        hasData = false;
+      }
+      
+      // Map the key to our record structure
+      const keyMap: Record<string, keyof PersonRecord> = {
+        'CPF': 'cpf',
+        'NOME': 'nome',
+        'NASCIMENTO': 'nascimento',
+        'EMAIL': 'email',
+        'RENDA': 'renda',
+        'BAIRRO': 'bairro',
+        'CIDADE': 'cidade',
+        'UF': 'uf',
+        'CEP': 'cep',
+        'SEXO': 'sexo',
+        'MÃE': 'mae',
+        'PAI': 'pai',
+        'LOGRADOURO': 'logradouro',
+        'ENDEREÇO': 'endereco',
+        'COMPLEMENTO': 'complemento',
+        'ESTADO': 'estado',
+        'TELEFONE': 'telefone',
+        'RG': 'rg',
+      };
+      
+      const mappedKey = keyMap[key] || key.toLowerCase();
+      currentRecord[mappedKey] = value;
+      hasData = true;
+    }
+  }
+  
+  // Don't forget the last record
+  if (hasData && Object.keys(currentRecord).length > 0) {
+    records.push(currentRecord);
+  }
+  
+  return records;
+}
+
+// Check if data looks like multiple person records (CEP query result)
+function isMultiPersonResult(data: any): boolean {
+  if (typeof data === 'string') {
+    // Count how many CPF entries there are
+    const cpfMatches = data.match(/CPF\s*[⎯—-]/gi);
+    return cpfMatches !== null && cpfMatches.length > 1;
+  }
+  
+  if (typeof data === 'object' && data.data && typeof data.data === 'string') {
+    const cpfMatches = data.data.match(/CPF\s*[⎯—-]/gi);
+    return cpfMatches !== null && cpfMatches.length > 1;
+  }
+  
+  return false;
+}
+
 export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
+  const [expandedRecords, setExpandedRecords] = useState<Set<number>>(new Set([0]));
+  
   if (!data) return null;
 
   // Handle error responses
@@ -546,6 +654,216 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
         <span>{data.error}</span>
       </div>
     );
+  }
+
+  // Check if this is a multi-person result (like CEP queries)
+  const rawText = typeof data === 'string' ? data : (data.data || '');
+  if (isMultiPersonResult(data)) {
+    const records = parseMultiplePersonRecords(rawText);
+    
+    if (records.length > 1) {
+      const toggleRecord = (index: number) => {
+        setExpandedRecords(prev => {
+          const newSet = new Set(prev);
+          if (newSet.has(index)) {
+            newSet.delete(index);
+          } else {
+            newSet.add(index);
+          }
+          return newSet;
+        });
+      };
+      
+      const toggleAll = () => {
+        if (expandedRecords.size === records.length) {
+          setExpandedRecords(new Set([0]));
+        } else {
+          setExpandedRecords(new Set(records.map((_, i) => i)));
+        }
+      };
+      
+      return (
+        <div className="space-y-4">
+          {/* Header com contagem */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              <span className="font-semibold">
+                {records.length} pessoas encontradas
+              </span>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleAll}
+              className="text-xs"
+            >
+              {expandedRecords.size === records.length ? (
+                <>
+                  <ChevronUp className="h-3 w-3 mr-1" />
+                  Recolher Todos
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-3 w-3 mr-1" />
+                  Expandir Todos
+                </>
+              )}
+            </Button>
+          </div>
+          
+          {/* Cards de pessoas */}
+          <div className="grid gap-3">
+            {records.map((record, index) => {
+              const isExpanded = expandedRecords.has(index);
+              
+              return (
+                <Card 
+                  key={index} 
+                  className="bg-secondary/30 border-border/50 overflow-hidden transition-all"
+                >
+                  {/* Header do card - sempre visível */}
+                  <CardHeader 
+                    className="pb-2 cursor-pointer hover:bg-secondary/50 transition-colors"
+                    onClick={() => toggleRecord(index)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold text-sm">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                            <User className="h-4 w-4 text-primary" />
+                            {record.nome || 'Nome não informado'}
+                          </CardTitle>
+                          {record.cpf && (
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              CPF: {record.cpf}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {record.renda && (
+                          <Badge variant="outline" className="bg-success/10 text-success border-success/30 text-xs">
+                            R$ {record.renda}
+                          </Badge>
+                        )}
+                        {isExpanded ? (
+                          <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  {/* Conteúdo expandível */}
+                  {isExpanded && (
+                    <CardContent className="pt-0 border-t border-border/30">
+                      <div className="grid gap-2 pt-3">
+                        {/* Dados Pessoais */}
+                        {(record.nascimento || record.sexo) && (
+                          <div className="space-y-1">
+                            {record.nascimento && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Nascimento:</span>
+                                <span className="font-medium">{record.nascimento}</span>
+                              </div>
+                            )}
+                            {record.sexo && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <User className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Sexo:</span>
+                                <span className="font-medium">{record.sexo}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Contato */}
+                        {(record.email || record.telefone) && (
+                          <div className="space-y-1">
+                            {record.email && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Email:</span>
+                                <span className="font-medium">{record.email}</span>
+                              </div>
+                            )}
+                            {record.telefone && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Telefone:</span>
+                                <span className="font-medium">{record.telefone}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Endereço */}
+                        {(record.bairro || record.cidade || record.uf || record.cep) && (
+                          <div className="bg-background/50 rounded-lg p-2 space-y-1">
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                              <MapPin className="h-3 w-3" />
+                              Endereço
+                            </div>
+                            {record.logradouro && (
+                              <p className="text-sm">{record.logradouro}</p>
+                            )}
+                            {record.bairro && (
+                              <p className="text-sm">Bairro: {record.bairro}</p>
+                            )}
+                            <p className="text-sm">
+                              {[record.cidade, record.uf].filter(Boolean).join(' - ')}
+                              {record.cep && ` • CEP: ${record.cep}`}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Família */}
+                        {(record.mae || record.pai) && (
+                          <div className="space-y-1">
+                            {record.mae && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Heart className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Mãe:</span>
+                                <span className="font-medium">{record.mae}</span>
+                              </div>
+                            )}
+                            {record.pai && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <Heart className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span className="text-xs text-muted-foreground">Pai:</span>
+                                <span className="font-medium">{record.pai}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Outros campos não mapeados */}
+                        {Object.entries(record)
+                          .filter(([key]) => !['cpf', 'nome', 'nascimento', 'email', 'renda', 'bairro', 'cidade', 'uf', 'cep', 'sexo', 'mae', 'pai', 'logradouro', 'endereco', 'complemento', 'estado', 'telefone', 'rg'].includes(key))
+                          .map(([key, value]) => value && (
+                            <div key={key} className="flex items-center gap-2 text-sm">
+                              <Star className="h-3.5 w-3.5 text-muted-foreground" />
+                              <span className="text-xs text-muted-foreground uppercase">{key}:</span>
+                              <span className="font-medium">{value}</span>
+                            </div>
+                          ))
+                        }
+                      </div>
+                    </CardContent>
+                  )}
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
   }
 
   // If data is a string, parse it
@@ -584,10 +902,10 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
 
   // If parsing didn't find anything useful, show raw
   if (Object.keys(parsedData).length === 0) {
-    const rawText = typeof data === 'string' ? data : (data.data || JSON.stringify(data, null, 2));
+    const displayText = typeof data === 'string' ? data : (data.data || JSON.stringify(data, null, 2));
     return (
       <pre className="text-sm text-muted-foreground whitespace-pre-wrap break-all">
-        {rawText}
+        {displayText}
       </pre>
     );
   }
@@ -630,7 +948,9 @@ export function QueryResultFormatter({ data }: QueryResultFormatterProps) {
               {groupName === 'Contatos' && <Phone className="h-4 w-4" />}
               {groupName === 'Financeiro' && <CreditCard className="h-4 w-4" />}
               {groupName === 'Profissional' && <Briefcase className="h-4 w-4" />}
+              {groupName === 'Família' && <Heart className="h-4 w-4" />}
               {groupName === 'Localização' && <MapPin className="h-4 w-4" />}
+              {groupName === 'Veículos' && <Building2 className="h-4 w-4" />}
               {groupName === 'Outros' && <Star className="h-4 w-4" />}
               {groupName}
             </CardTitle>
