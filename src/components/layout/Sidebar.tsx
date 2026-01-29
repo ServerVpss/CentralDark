@@ -273,7 +273,8 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         
         <div className={cn("relative flex items-center gap-3", collapsed && "lg:justify-center")}>
           <div className="relative">
-            <div className="h-3 w-3 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 shadow-lg shadow-emerald-500/50 animate-pulse-glow" />
+            <div className="h-3 w-3 rounded-full bg-gradient-to-br from-emerald-400 to-green-500" />
+            <div className="absolute inset-0 h-3 w-3 rounded-full bg-emerald-400 animate-ping opacity-40" />
           </div>
           
           <div className={cn("flex-1 min-w-0", collapsed && "lg:hidden")}>
