@@ -1512,7 +1512,7 @@ function isMultiPersonResult(dataStr: string): boolean {
 // Constantes para paginação de múltiplos registros
 const RECORDS_PER_PAGE = 10;
 
-// Format a single page of multiple person records for Telegram
+// Format a single page of multiple person records for Telegram (MONOESPAÇADO)
 function formatMultiPersonPage(
   records: PersonRecord[], 
   page: number, 
@@ -1523,54 +1523,47 @@ function formatMultiPersonPage(
   const userName = telegramUserName || 'usuário';
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
   
-  // Função para escapar caracteres HTML
-  const escapeHtml = (str: string): string => {
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-  };
-  
   const startIdx = page * RECORDS_PER_PAGE;
   const endIdx = Math.min(startIdx + RECORDS_PER_PAGE, records.length);
   const pageRecords = records.slice(startIdx, endIdx);
   
-  let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
-  text += `📍 <b>CONSULTA DE CEP</b> 📍\n`;
-  text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-  text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n`;
-  text += `👥 <b>${records.length} pessoas encontradas</b>\n`;
+  const lines: string[] = [];
+  
+  lines.push(`📍 CONSULTA DE CEP`);
+  lines.push(``);
+  lines.push(`👋 Olá, ${userName}!`);
+  lines.push(`👥 ${records.length} pessoas encontradas`);
   if (totalPages > 1) {
-    text += `📄 <b>Página ${page + 1}/${totalPages}</b> (${startIdx + 1}-${endIdx})\n`;
+    lines.push(`📄 Página ${page + 1}/${totalPages} (${startIdx + 1}-${endIdx})`);
   }
-  text += `\n`;
+  lines.push(``);
   
   pageRecords.forEach((record, index) => {
     const globalIndex = startIdx + index;
-    text += `┌─────────────────────\n`;
-    text += `│ 👤 <b>PESSOA ${globalIndex + 1}</b>\n`;
-    text += `├─────────────────────\n`;
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 👤 PESSOA ${globalIndex + 1}`);
+    lines.push(`├─────────────────────────────`);
     
     // Dados principais
     if (record.nome) {
-      text += `│ 📛 <b>Nome:</b> ${escapeHtml(record.nome)}\n`;
+      lines.push(`│ 📛 Nome: ${record.nome.toUpperCase()}`);
     }
     if (record.cpf) {
-      text += `│ 🆔 <b>CPF:</b> <code>${escapeHtml(record.cpf)}</code>\n`;
+      lines.push(`│ 🆔 CPF: ${record.cpf}`);
     }
     if (record.nascimento) {
-      text += `│ 📅 <b>Nasc:</b> ${escapeHtml(record.nascimento)}\n`;
+      lines.push(`│ 📅 Nasc: ${record.nascimento}`);
     }
     if (record.renda) {
-      text += `│ 💰 <b>Renda:</b> R$ ${escapeHtml(record.renda)}\n`;
+      lines.push(`│ 💰 Renda: R$ ${record.renda}`);
     }
     
     // Contato
     if (record.email && record.email.toLowerCase() !== 'não informado') {
-      text += `│ 📧 <b>Email:</b> ${escapeHtml(record.email)}\n`;
+      lines.push(`│ 📧 Email: ${record.email.toUpperCase()}`);
     }
     if (record.telefone) {
-      text += `│ 📞 <b>Tel:</b> ${escapeHtml(record.telefone)}\n`;
+      lines.push(`│ 📞 Tel: ${record.telefone}`);
     }
     
     // Endereço (compacto)
@@ -1580,22 +1573,21 @@ function formatMultiPersonPage(
     if (record.uf) addressParts.push(record.uf);
     
     if (addressParts.length > 0) {
-      text += `│ 📍 <b>Local:</b> ${escapeHtml(addressParts.join(' - '))}\n`;
+      lines.push(`│ 📍 Local: ${addressParts.join(' - ').toUpperCase()}`);
     }
     if (record.cep) {
-      text += `│ 📮 <b>CEP:</b> ${escapeHtml(record.cep)}\n`;
+      lines.push(`│ 📮 CEP: ${record.cep}`);
     }
     
-    text += `└─────────────────────\n\n`;
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   });
   
   // Footer
-  text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-  text += `💡 <i>Clique no CPF para consultar</i>\n`;
-  text += `🤖 ${botTag}\n`;
-  text += `━━━━━━━━━━━━━━━━━━━━━━`;
+  lines.push(`💡 Clique no CPF para consultar`);
+  lines.push(`🤖 ${botTag}`);
   
-  return text;
+  return `<pre>${lines.join('\n')}</pre>`;
 }
 
 // Create keyboard for multi-person result with CPF buttons and pagination
@@ -1929,13 +1921,13 @@ function formatCpfResult(
   return `<pre>${lines.join('\n')}</pre>`;
 }
 
-// =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS ===============
+// =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS (MONOESPAÇADO) ===============
 function formatGenericResult(
   queryType: string,
   data: Record<string, unknown>, 
   userName: string, 
   botTag: string, 
-  escapeHtml: (str: string) => string,
+  _escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
   // Categorização de campos com emojis únicos
@@ -2003,20 +1995,15 @@ function formatGenericResult(
     if (obj === null || obj === undefined) return items;
     if (typeof obj !== 'object') return items;
 
-    // Campos de metadados a ignorar completamente (apenas os que são realmente metadados, não dados reais)
+    // Campos de metadados a ignorar completamente
     const ignoredKeys = ['comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado', 'fotobase64', 'foto', 'image', 'photo', 'base64'];
     
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
       const keyLower = key.toLowerCase();
       
-      // Ignorar campos de metadados e fotos
       if (ignoredKeys.includes(keyLower)) continue;
-      
-      // Ignorar valores que parecem ser Base64 (strings muito longas sem espaços)
       if (typeof value === 'string' && value.length > 100 && !value.includes(' ') && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
-      
-      // Ignorar campos de foto URLs
       if (typeof value === 'string' && (value.startsWith('http') && (keyLower.includes('foto') || keyLower.includes('image')))) continue;
       if (shouldIgnore(value)) continue;
       if (value === null || value === undefined || value === '') continue;
@@ -2024,7 +2011,6 @@ function formatGenericResult(
       if (typeof value === 'object' && !Array.isArray(value)) {
         items.push(...flattenObject(value, fullKey));
       } else if (Array.isArray(value)) {
-        // Handle arrays
         if (value.length > 0 && typeof value[0] === 'object') {
           value.forEach((item, i) => {
             items.push(...flattenObject(item, `${fullKey}[${i}]`));
@@ -2070,58 +2056,57 @@ function formatGenericResult(
       .toUpperCase();
   };
 
-  // Construir mensagem formatada profissional com boxes
-  const typeLabel = queryTypeLabels[queryType] || `📋 ${queryType.toUpperCase()}`;
+  // ============= CONSTRUIR MENSAGEM MONOESPAÇADA =============
+  const typeLabel = queryTypeLabels[queryType]?.replace(/[^\w\s]/g, '').trim() || queryType.toUpperCase();
+  const lines: string[] = [];
   
-  let text = `━━━━━━━━━━━━━━━━━━━━━━\n`;
-  text += `${typeLabel} <b>RESULTADO</b>\n`;
-  text += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-  text += `👋 Olá, <code>${escapeHtml(userName)}</code>!\n\n`;
+  lines.push(`${queryTypeLabels[queryType] || '📋'} ${typeLabel} RESULTADO`);
+  lines.push(``);
 
-  // Adicionar categorias com dados - formato com boxes
+  // Adicionar categorias com dados
   for (const [catKey, catInfo] of Object.entries(categories)) {
     const items = categorizedData[catKey];
     if (!items || items.length === 0) continue;
 
-    text += `┌─────────────────────\n`;
-    text += `│ ${catInfo.icon} <b>${catInfo.label}</b>\n`;
-    text += `├─────────────────────\n`;
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ ${catInfo.icon} ${catInfo.label}`);
+    lines.push(`├─────────────────────────────`);
     
     for (const item of items) {
       const displayKey = formatKey(item.key);
-      const displayValue = escapeHtml(String(item.value));
+      const displayValue = String(item.value).toUpperCase();
       if (!shouldIgnore(displayValue)) {
-        text += `│ ▷ <b>${displayKey}:</b> ${displayValue}\n`;
+        lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
       }
     }
     
-    text += `└─────────────────────\n\n`;
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   }
 
   // Adicionar itens não categorizados
   if (uncategorized.length > 0) {
-    text += `┌─────────────────────\n`;
-    text += `│ 📋 <b>OUTROS DADOS</b>\n`;
-    text += `├─────────────────────\n`;
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 📋 OUTROS DADOS`);
+    lines.push(`├─────────────────────────────`);
     
     for (const item of uncategorized) {
       const displayKey = formatKey(item.key);
-      const displayValue = escapeHtml(String(item.value));
+      const displayValue = String(item.value).toUpperCase();
       if (!shouldIgnore(displayValue)) {
-        text += `│ ▷ <b>${displayKey}:</b> ${displayValue}\n`;
+        lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
       }
     }
     
-    text += `└─────────────────────\n\n`;
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   }
 
   // Footer
-  text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-  text += `❤️ <b>OBRIGADO POR USAR</b> ❤️\n`;
-  text += `🤖 ${botTag}\n`;
-  text += `━━━━━━━━━━━━━━━━━━━━━━`;
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
 
-  return text;
+  return `<pre>${lines.join('\n')}</pre>`;
 }
 
 // =============== BOT HANDLER CLASS ===============
