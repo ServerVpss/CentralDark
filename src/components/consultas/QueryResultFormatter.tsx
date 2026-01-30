@@ -1215,11 +1215,11 @@ export function QueryResultFormatter({ data, showCopyButton, onQueryCpf, queryTy
                 }
 
                 return (
-                  <div key={key} className="flex items-start gap-2 py-1">
+                  <div key={key} className="flex items-start gap-2 py-1.5 border-b border-border/20 last:border-0">
                     <Icon className="h-3.5 w-3.5 text-muted-foreground mt-0.5 shrink-0" />
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
-                      <span className="text-xs text-muted-foreground uppercase shrink-0">
-                        {formatLabel(key)}:
+                    <div className="flex flex-col min-w-0 w-full">
+                      <span className="text-xs text-muted-foreground uppercase">
+                        {formatLabel(key)}
                       </span>
                       <span className="text-sm font-medium break-all">
                         {String(value)}
