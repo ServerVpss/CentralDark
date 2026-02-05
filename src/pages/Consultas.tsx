@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   CreditCard,
   Search,
@@ -11,7 +11,6 @@ import {
   Camera,
   FileText,
   Loader2,
-  History,
   Star,
   AlertCircle,
 } from "lucide-react";
@@ -19,8 +18,6 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -28,10 +25,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ResultDisplay } from "@/components/consultation/ResultDisplay";
+import { QueryInput } from "@/components/consultation/QueryInput";
+import { QueryHistoryList } from "@/components/consultation/QueryHistoryList";
+import { ProviderStatusList } from "@/components/consultation/ProviderStatusList";
 import { ConfettiCelebration } from "@/components/gamification/ConfettiCelebration";
 import { MotionPage, MotionFadeIn } from "@/components/ui/motion";
 
@@ -67,14 +68,28 @@ const brazilianStates = [
 export default function Consultas() {
   const [selectedType, setSelectedType] = useState("cpf");
   const [queryInput, setQueryInput] = useState("");
+  const [cleanQueryInput, setCleanQueryInput] = useState("");
+  const [isInputValid, setIsInputValid] = useState(true);
   const [selectedState, setSelectedState] = useState("SP");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<QueryResult | null>(null);
-  const [queryHistory, setQueryHistory] = useState<any[]>([]);
   const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const handleInputChange = useCallback((value: string, cleanValue: string, isValid: boolean) => {
+    setQueryInput(value);
+    setCleanQueryInput(cleanValue);
+    setIsInputValid(isValid);
+  }, []);
+
+  const handleHistorySelect = useCallback((type: string, input: string) => {
+    setSelectedType(type);
+    setQueryInput(input);
+    setCleanQueryInput(input.replace(/\D/g, '') || input);
+    setIsInputValid(true);
+  }, []);
 
   const isNetworkBlockedError = (err: unknown) => {
     const e = err as any;
@@ -96,10 +111,18 @@ export default function Consultas() {
       return;
     }
 
+    if (!isInputValid) {
+      toast.error("Corrija o valor antes de consultar");
+      return;
+    }
+
     setIsLoading(true);
     setResult(null);
     setNetworkBlockedHint(null);
     setShowConfetti(false);
+
+    // Use cleaned input for the query
+    const inputToQuery = cleanQueryInput || queryInput.trim();
 
     try {
       const maxRetries = 1; // total: 2 tentativas
@@ -110,7 +133,7 @@ export default function Consultas() {
         const { data, error } = await supabase.functions.invoke("api-query", {
           body: {
             queryType: selectedType,
-            queryInput: queryInput.trim(),
+            queryInput: inputToQuery,
             estado: selectedType === "foto" ? selectedState : undefined,
           },
         });
@@ -128,17 +151,6 @@ export default function Consultas() {
             }
             
             toast.success(`Consulta realizada em ${data.duration_ms}ms`);
-            setQueryHistory((prev) =>
-              [
-                {
-                  type: selectedType,
-                  input: queryInput,
-                  timestamp: new Date().toISOString(),
-                  success: true,
-                },
-                ...prev.slice(0, 9),
-              ],
-            );
           } else {
             toast.error("Consulta retornou erro");
           }
@@ -244,19 +256,13 @@ export default function Consultas() {
                   </div>
 
                   {/* Input Field */}
-                  <div className="space-y-2">
-                    <Label htmlFor="queryInput">
-                      {selectedQueryType?.label || "Valor"} para consultar
-                    </Label>
-                    <Input
-                      id="queryInput"
-                      placeholder={`Digite o ${selectedQueryType?.label.toLowerCase() || "valor"}...`}
-                      value={queryInput}
-                      onChange={(e) => setQueryInput(e.target.value)}
-                      className="bg-secondary/50"
-                      onKeyDown={(e) => e.key === "Enter" && handleQuery()}
-                    />
-                  </div>
+                  <QueryInput
+                    queryType={selectedType}
+                    value={queryInput}
+                    onChange={handleInputChange}
+                    onSubmit={handleQuery}
+                    disabled={isLoading}
+                  />
 
                   {/* State Selection for Foto */}
                   {selectedType === "foto" && (
@@ -295,7 +301,7 @@ export default function Consultas() {
                     variant="glow"
                     className="w-full gap-2"
                     onClick={handleQuery}
-                    disabled={isLoading}
+                    disabled={isLoading || !isInputValid}
                   >
                     {isLoading ? (
                       <>
@@ -340,79 +346,12 @@ export default function Consultas() {
           <div className="space-y-6">
             {/* Providers Status */}
             <MotionFadeIn delay={0.2}>
-              <Card className="bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="text-lg">Provedores</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {[
-                    { name: "NexFuture", port: 25589, status: "online" },
-                    { name: "TConect Score", port: 3029, status: "online" },
-                    { name: "TConect Foto", port: 3030, status: "online" },
-                  ].map((provider) => (
-                    <div
-                      key={provider.name}
-                      className="flex items-center justify-between p-3 rounded-lg bg-secondary/20"
-                    >
-                      <div>
-                        <p className="font-medium text-sm">{provider.name}</p>
-                        <p className="text-xs text-muted-foreground">Porta {provider.port}</p>
-                      </div>
-                      <Badge
-                        variant="outline"
-                        className="bg-success/10 text-success border-success/30"
-                      >
-                        Online
-                      </Badge>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+              <ProviderStatusList />
             </MotionFadeIn>
 
-            {/* Recent Queries */}
+            {/* Recent Queries - Persistent from Database */}
             <MotionFadeIn delay={0.3}>
-              <Card className="bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <History className="h-4 w-4" />
-                    Histórico Recente
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {queryHistory.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-4">
-                      Nenhuma consulta realizada
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      {queryHistory.map((query, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center justify-between p-2 rounded-lg bg-secondary/20 text-sm"
-                        >
-                          <div className="min-w-0">
-                            <p className="font-medium truncate">{query.type.toUpperCase()}</p>
-                            <p className="text-xs text-muted-foreground truncate">
-                              {query.input}
-                            </p>
-                          </div>
-                          <Badge
-                            variant="outline"
-                            className={
-                              query.success
-                                ? "bg-success/10 text-success border-success/30"
-                                : "bg-destructive/10 text-destructive border-destructive/30"
-                            }
-                          >
-                            {query.success ? "OK" : "Erro"}
-                          </Badge>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              <QueryHistoryList onSelectQuery={handleHistorySelect} />
             </MotionFadeIn>
 
             {/* Quick Tips */}
