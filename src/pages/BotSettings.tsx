@@ -101,6 +101,11 @@ export default function BotSettings() {
     }
   }, [settings, defaultTerms]);
 
+  // Auto-save function for toggles
+  const autoSaveToggle = async (key: string, value: boolean) => {
+    await updateSettings({ [key]: value });
+  };
+
   const handleSave = async () => {
     setSaving(true);
     
@@ -386,7 +391,10 @@ export default function BotSettings() {
                     </div>
                     <Switch
                       checked={muteNewMembers}
-                      onCheckedChange={setMuteNewMembers}
+                      onCheckedChange={(checked) => {
+                        setMuteNewMembers(checked);
+                        autoSaveToggle("mute_new_members", checked);
+                      }}
                     />
                   </div>
 
@@ -402,7 +410,10 @@ export default function BotSettings() {
                     </div>
                     <Switch
                       checked={announcePayments}
-                      onCheckedChange={setAnnouncePayments}
+                      onCheckedChange={(checked) => {
+                        setAnnouncePayments(checked);
+                        autoSaveToggle("announce_payments", checked);
+                      }}
                     />
                   </div>
                 </CardContent>
@@ -429,7 +440,10 @@ export default function BotSettings() {
                     </div>
                     <Switch
                       checked={termsEnabled}
-                      onCheckedChange={setTermsEnabled}
+                      onCheckedChange={(checked) => {
+                        setTermsEnabled(checked);
+                        autoSaveToggle("terms_enabled", checked);
+                      }}
                     />
                   </div>
 
@@ -478,6 +492,7 @@ export default function BotSettings() {
                   setFixedEmoji={setFixedEmoji}
                   customEmojis={customEmojis}
                   setCustomEmojis={setCustomEmojis}
+                  onAutoSave={autoSaveToggle}
                 />
               </div>
 
@@ -497,6 +512,7 @@ export default function BotSettings() {
               botId={botId || ""}
               settings={settings}
               onUpdate={() => {}}
+              onAutoSave={autoSaveToggle}
             />
             <EngagementMessagesManager botId={botId || ""} />
           </TabsContent>
