@@ -26,19 +26,38 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // Validate JWT
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return ok({ success: false, error: "Não autorizado" });
+    }
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return ok({ success: false, error: "Token inválido" });
+    }
+
     const { bot_id } = await req.json().catch(() => ({}));
 
     if (!bot_id) {
       return ok({ success: false, error: "bot_id é obrigatório" });
     }
 
-    const supabase = createClient(
+    // Use service role for database operations
+    const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
     // Bot token
-    const { data: bot, error: botError } = await supabase
+    const { data: bot, error: botError } = await supabaseAdmin
       .from("telegram_bots")
       .select("token")
       .eq("id", bot_id)
@@ -49,7 +68,7 @@ serve(async (req) => {
     }
 
     // Group chat id
-    const { data: settings, error: settingsError } = await supabase
+    const { data: settings, error: settingsError } = await supabaseAdmin
       .from("bot_settings")
       .select("group_chat_id")
       .eq("bot_id", bot_id)
@@ -103,7 +122,7 @@ serve(async (req) => {
     }
 
     // Update DB
-    const { error: updateError } = await supabase
+    const { error: updateError } = await supabaseAdmin
       .from("bot_settings")
       .update({
         group_photo_url: groupPhotoUrl,
