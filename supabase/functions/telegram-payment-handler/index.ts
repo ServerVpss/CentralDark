@@ -1,5 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,7 +20,7 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
   }
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -90,9 +89,9 @@ serve(async (req) => {
 
       const result = await response.json();
       const status = result.status?.toUpperCase();
+      const isPaid = status === "CONCLUIDA" || status === "PAID" || result.isPaid === true;
 
-      if (status === "CONCLUIDA") {
-        const { data: payment } = await supabase.from("pending_payments").select("*").eq("txid", txid).single();
+      if (isPaid) {
 
         if (payment) {
           await supabase.from("pending_payments").update({ status: "CONCLUIDA" }).eq("txid", txid);

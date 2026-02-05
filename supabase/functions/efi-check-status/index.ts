@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           success: true, 
-          status: 'paid',
+          status: 'CONCLUIDA',
           isPaid: true,
           transaction 
         }),
@@ -129,7 +129,7 @@ Deno.serve(async (req) => {
       // Atualizar pending_payments se existir
       await supabase
         .from('pending_payments')
-        .update({ status: 'PAID' })
+        .update({ status: 'CONCLUIDA' })
         .eq('txid', txid)
 
       // Criar/atualizar assinatura do Telegram se aplicável
@@ -158,7 +158,7 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        status: isPaid ? 'paid' : 'pending',
+        status: isPaid ? 'CONCLUIDA' : (efiStatus || 'EM_ABERTO'),
         isPaid,
         efiStatus,
         transaction: isPaid ? { ...transaction, status: 'paid' } : transaction
