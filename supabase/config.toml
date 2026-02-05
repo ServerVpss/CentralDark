@@ -32,3 +32,12 @@ verify_jwt = false
 
 [functions.telegram-bot]
 verify_jwt = false
+
+[functions.telegram-format-result]
+verify_jwt = false
+
+[functions.telegram-api-query]
+verify_jwt = false
+
+[functions.telegram-payment-handler]
+verify_jwt = false
