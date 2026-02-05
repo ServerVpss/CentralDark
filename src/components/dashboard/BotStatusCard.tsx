@@ -1,4 +1,5 @@
-import { Bot, MoreVertical, Power, Settings, Users, MessageSquare, ExternalLink } from "lucide-react";
+import { Bot, MoreVertical, Power, Settings, Users, MessageSquare, ExternalLink, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -8,6 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface BotStatusCardProps {
   name: string;
@@ -16,10 +19,50 @@ interface BotStatusCardProps {
   messages: number;
   users: number;
   botId?: string;
+  isActive?: boolean;
+  onToggleActive?: (botId: string, newState: boolean) => void;
 }
 
-export function BotStatusCard({ name, username, status, messages, users, botId }: BotStatusCardProps) {
+export function BotStatusCard({ name, username, status, messages, users, botId, isActive = true, onToggleActive }: BotStatusCardProps) {
   const navigate = useNavigate();
+  const [isToggling, setIsToggling] = useState(false);
+
+  const handleConfigure = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (botId) {
+      navigate(`/bots/${botId}/settings`);
+    } else {
+      navigate('/bots');
+    }
+  };
+
+  const handleTogglePower = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!botId) return;
+
+    setIsToggling(true);
+    try {
+      const newState = !isActive;
+      
+      const { error } = await supabase
+        .from("telegram_bots")
+        .update({ is_active: newState })
+        .eq("id", botId);
+
+      if (error) throw error;
+
+      toast.success(newState ? "Bot ativado com sucesso!" : "Bot desativado com sucesso!");
+      
+      if (onToggleActive) {
+        onToggleActive(botId, newState);
+      }
+    } catch (err) {
+      console.error("Error toggling bot:", err);
+      toast.error("Erro ao alterar status do bot");
+    } finally {
+      setIsToggling(false);
+    }
+  };
 
   return (
     <div 
@@ -70,11 +113,24 @@ export function BotStatusCard({ name, username, status, messages, users, botId }
           <DropdownMenuContent align="end" className="bg-popover border-border/50" style={{
             background: "linear-gradient(145deg, hsl(220 20% 10%), hsl(220 20% 8%))",
           }}>
-            <DropdownMenuItem className="gap-2 cursor-pointer">
-              <Settings className="h-4 w-4" /> Configurar
+            <DropdownMenuItem className="gap-2 cursor-pointer" onClick={handleConfigure}>
+              <Settings className="h-4 w-4" />
+              Configurar
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-2 cursor-pointer">
-              <Power className="h-4 w-4" /> {status === "online" ? "Desligar" : "Ligar"}
+            <DropdownMenuItem 
+              className={cn(
+                "gap-2 cursor-pointer",
+                isActive ? "text-destructive focus:text-destructive" : "text-success focus:text-success"
+              )}
+              onClick={handleTogglePower}
+              disabled={isToggling}
+            >
+              {isToggling ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Power className="h-4 w-4" />
+              )}
+              {isActive ? "Desligar" : "Ligar"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
