@@ -25,7 +25,7 @@ const providers: Record<string, ApiProvider> = {
   },
   tconect_score: {
     baseUrl: "http://node.tconect.xyz",
-    port: 3029,
+    port: 3041, // Porta correta para score
   },
   tconect_placa: {
     baseUrl: "http://node.tconect.xyz",
