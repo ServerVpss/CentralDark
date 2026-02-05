@@ -18,6 +18,7 @@ interface FakeEngagementSettingsProps {
     fake_engagement_names?: string[];
   } | null;
   onUpdate: () => void;
+  onAutoSave?: (key: string, value: boolean) => void;
 }
 
 const DEFAULT_NAMES = [
@@ -84,7 +85,7 @@ const DEFAULT_NAMES = [
   'Rosângela Maria', 'Maria Rosa', 'Rosa Maria', 'Terezinha Maria', 'Maria Terezinha'
 ];
 
-export function FakeEngagementSettings({ botId, settings, onUpdate }: FakeEngagementSettingsProps) {
+export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }: FakeEngagementSettingsProps) {
   const [enabled, setEnabled] = useState(settings?.fake_engagement_enabled ?? false);
   const [interval, setInterval] = useState(settings?.fake_engagement_interval_minutes ?? 30);
   const [names, setNames] = useState(
@@ -199,7 +200,10 @@ export function FakeEngagementSettings({ botId, settings, onUpdate }: FakeEngage
           </div>
           <Switch
             checked={enabled}
-            onCheckedChange={setEnabled}
+            onCheckedChange={(checked) => {
+              setEnabled(checked);
+              onAutoSave?.("fake_engagement_enabled", checked);
+            }}
             className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-violet-500 data-[state=checked]:to-purple-600"
           />
         </div>

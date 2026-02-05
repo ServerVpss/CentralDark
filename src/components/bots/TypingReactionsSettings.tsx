@@ -24,6 +24,7 @@ interface TypingReactionsSettingsProps {
   setFixedEmoji: (value: string) => void;
   customEmojis: string[];
   setCustomEmojis: (value: string[]) => void;
+  onAutoSave?: (key: string, value: boolean | string) => void;
 }
 
 export function TypingReactionsSettings({
@@ -39,6 +40,7 @@ export function TypingReactionsSettings({
   setFixedEmoji,
   customEmojis,
   setCustomEmojis,
+  onAutoSave,
 }: TypingReactionsSettingsProps) {
   const [newEmoji, setNewEmoji] = useState("");
 
@@ -80,7 +82,10 @@ export function TypingReactionsSettings({
           </div>
           <Switch
             checked={autoDeleteMessages}
-            onCheckedChange={setAutoDeleteMessages}
+            onCheckedChange={(checked) => {
+              setAutoDeleteMessages(checked);
+              onAutoSave?.("auto_delete_messages", checked);
+            }}
           />
         </div>
 
@@ -97,7 +102,10 @@ export function TypingReactionsSettings({
           </div>
           <Switch
             checked={showTyping}
-            onCheckedChange={setShowTyping}
+            onCheckedChange={(checked) => {
+              setShowTyping(checked);
+              onAutoSave?.("show_typing", checked);
+            }}
           />
         </div>
 
@@ -115,7 +123,10 @@ export function TypingReactionsSettings({
             </div>
             <Switch
               checked={reactToMessages}
-              onCheckedChange={setReactToMessages}
+              onCheckedChange={(checked) => {
+                setReactToMessages(checked);
+                onAutoSave?.("react_to_messages", checked);
+              }}
             />
           </div>
 
