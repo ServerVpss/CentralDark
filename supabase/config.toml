@@ -41,3 +41,7 @@ verify_jwt = false
 
 [functions.telegram-payment-handler]
 verify_jwt = false
+
+[functions.telegram-update-group-photo]
+verify_jwt = true
+
