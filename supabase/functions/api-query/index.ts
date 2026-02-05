@@ -1,5 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -178,18 +177,17 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
   return { error: `Tipo de consulta não suportado: ${queryType}` };
 }
 
-serve(async (req) => {
-  // Handle CORS preflight
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
 
-    // Get request body
     const body: QueryRequest = await req.json();
     console.log("Request body:", JSON.stringify(body));
 
@@ -200,14 +198,12 @@ serve(async (req) => {
       );
     }
 
-    // Execute the query
     const startTime = Date.now();
     const result = await handleQuery(body);
     const duration = Date.now() - startTime;
 
     console.log(`Query completed in ${duration}ms`);
 
-    // Get user ID from auth header if present
     const authHeader = req.headers.get("Authorization");
     let userId = null;
     
@@ -217,7 +213,6 @@ serve(async (req) => {
       userId = user?.id;
     }
 
-    // Log the query to history if user is authenticated
     if (userId) {
       await supabase.from("query_history").insert({
         user_id: userId,
@@ -227,7 +222,6 @@ serve(async (req) => {
         status: result.error ? "error" : "success",
       });
 
-      // Log usage
       await supabase.from("api_usage_logs").insert({
         user_id: userId,
         query_type: body.queryType,
