@@ -3294,12 +3294,29 @@ class BotHandler {
         const groupUsername = (message.chat as { username?: string }).username;
         const groupUrl = groupUsername ? `https://t.me/${groupUsername}` : null;
         
+        // Try to get group photo
+        let groupPhotoUrl: string | null = null;
+        try {
+          const chatInfo = await telegramRequest(this.token, "getChat", { chat_id: chatId });
+          if (chatInfo.ok && (chatInfo.result as { photo?: { big_file_id?: string } })?.photo?.big_file_id) {
+            const fileId = (chatInfo.result as { photo: { big_file_id: string } }).photo.big_file_id;
+            const fileInfo = await telegramRequest(this.token, "getFile", { file_id: fileId });
+            if (fileInfo.ok && (fileInfo.result as { file_path?: string })?.file_path) {
+              const filePath = (fileInfo.result as { file_path: string }).file_path;
+              groupPhotoUrl = `https://api.telegram.org/file/bot${this.token}/${filePath}`;
+            }
+          }
+        } catch (e) {
+          console.error("Error fetching group photo:", e);
+        }
+        
         await this.supabase
           .from("bot_settings")
           .update({ 
             group_chat_id: chatId,
             group_url: groupUrl,
             group_title: groupTitle,
+            group_photo_url: groupPhotoUrl,
           })
           .eq("bot_id", this.bot.id);
         
