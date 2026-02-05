@@ -11,6 +11,7 @@ export interface BotSettings {
   group_chat_id: number | null;
   group_url: string | null;
   group_title: string | null;
+  group_photo_url: string | null;
   terms_enabled: boolean;
   terms_text: string | null;
   mute_new_members: boolean;

@@ -290,6 +290,7 @@ export type Database = {
           fake_engagement_names: string[] | null
           fixed_emoji: string | null
           group_chat_id: number | null
+          group_photo_url: string | null
           group_title: string | null
           group_url: string | null
           id: string
@@ -315,6 +316,7 @@ export type Database = {
           fake_engagement_names?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
+          group_photo_url?: string | null
           group_title?: string | null
           group_url?: string | null
           id?: string
@@ -340,6 +342,7 @@ export type Database = {
           fake_engagement_names?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
+          group_photo_url?: string | null
           group_title?: string | null
           group_url?: string | null
           id?: string
