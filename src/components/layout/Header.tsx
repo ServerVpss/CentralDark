@@ -28,37 +28,34 @@ export function Header({ className }: HeaderProps) {
 
   return (
     <header className={cn(
-      "sticky top-0 z-30 h-16 border-b border-border/30",
+      "sticky top-0 z-30 h-14 border-b border-border/30",
       className
     )} style={{
       background: "linear-gradient(to right, hsl(220 20% 5% / 0.95), hsl(220 20% 6% / 0.95))",
       backdropFilter: "blur(16px) saturate(180%)",
     }}>
-      <div className="flex h-full items-center pl-4 lg:pl-6 pr-2 lg:pr-3">
-        {/* Search - left aligned but with max width */}
-        <div className="relative w-full max-w-sm lg:max-w-md group">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
+      <div className="flex h-full items-center justify-between px-4 lg:px-6">
+        {/* Search - left aligned */}
+        <div className="relative w-full max-w-xs lg:max-w-sm group">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             placeholder="Buscar bots, assinantes, configurações..."
-            className="pl-11 h-11 bg-white/5 border-white/10 rounded-xl focus:border-primary/50 focus:bg-white/10 transition-all placeholder:text-muted-foreground/70"
+            className="pl-10 h-9 bg-white/5 border-white/10 rounded-lg focus:border-primary/50 focus:bg-white/10 transition-all placeholder:text-muted-foreground/70 text-sm"
           />
         </div>
 
-        {/* Spacer - pushes actions to far right */}
-        <div className="flex-1 min-w-8" />
-
-        {/* Actions - far right corner */}
-        <div className="flex items-center gap-3 flex-shrink-0">
+        {/* Actions - right aligned and centered vertically */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Notifications */}
           <Button 
             variant="ghost" 
             size="icon" 
-            className="relative h-10 w-10 rounded-xl hover:bg-white/5 transition-colors"
+            className="relative h-9 w-9 rounded-lg hover:bg-white/5 transition-colors"
           >
-            <Bell className="h-5 w-5 text-muted-foreground" />
-            <span className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center">
+            <Bell className="h-4 w-4 text-muted-foreground" />
+            <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-40" />
-              <span className="relative inline-flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-primary to-amber-600 text-[9px] font-bold text-primary-foreground">
+              <span className="relative inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gradient-to-br from-primary to-amber-600 text-[8px] font-bold text-primary-foreground">
                 3
               </span>
             </span>
@@ -69,24 +66,23 @@ export function Header({ className }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
-                className="gap-2.5 px-2.5 py-1 h-auto rounded-xl hover:bg-white/5"
-                style={{ background: "rgba(255, 255, 255, 0.04)" }}
+                className="gap-2 px-2 h-9 rounded-lg hover:bg-white/5 bg-white/[0.03]"
               >
                 {/* Avatar com borda e status */}
                 <div className="relative flex-shrink-0">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-amber-600/10 border-2 border-primary">
-                    <User className="h-4 w-4 text-primary" />
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-amber-600/10 border-2 border-primary">
+                    <User className="h-3.5 w-3.5 text-primary" />
                   </div>
                   {/* Online indicator */}
-                  <div className="absolute bottom-0.5 right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-emerald-500" />
+                  <div className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-background bg-emerald-500" />
                 </div>
                 {/* Nome + Badge */}
                 <div className="hidden lg:flex flex-col items-start leading-tight">
-                  <span className="text-sm font-semibold text-foreground">
+                  <span className="text-xs font-semibold text-foreground">
                     {profile?.full_name || user?.email?.split("@")[0] || "Usuário"}
                   </span>
-                  <span className="text-[11px] text-primary flex items-center gap-1">
-                    <Crown className="h-3 w-3" />
+                  <span className="text-[10px] text-primary flex items-center gap-0.5">
+                    <Crown className="h-2.5 w-2.5" />
                     Premium
                   </span>
                 </div>
