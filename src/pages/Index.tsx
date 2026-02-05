@@ -128,11 +128,13 @@ export default function Index() {
                 {bots.slice(0, 3).map((bot, index) => (
                   <div key={bot.id} className="animate-scale-in" style={{ animationDelay: `${index * 100}ms` }}>
                     <BotStatusCard
+                      botId={bot.id}
                       name={bot.name}
                       username={bot.bot_username || "Não sincronizado"}
                       status={bot.health_status === "online" ? "online" : "offline"}
                       messages={0}
                       users={0}
+                      isActive={bot.is_active}
                     />
                   </div>
                 ))}
