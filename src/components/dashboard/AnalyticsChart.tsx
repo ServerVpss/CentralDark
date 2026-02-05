@@ -15,15 +15,19 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBotAnalytics } from "@/hooks/useBotAnalytics";
-import { Loader2 } from "lucide-react";
+import { Loader2, Calendar } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface AnalyticsChartProps {
   botId?: string;
-  days?: number;
 }
 
-export function AnalyticsChart({ botId, days = 30 }: AnalyticsChartProps) {
-  const { analytics, loading } = useBotAnalytics(botId, days);
+type PeriodFilter = 7 | 15 | 30;
+
+export function AnalyticsChart({ botId }: AnalyticsChartProps) {
+  const [period, setPeriod] = useState<PeriodFilter>(30);
+  const { analytics, loading } = useBotAnalytics(botId, period);
 
   if (loading) {
     return (
@@ -51,7 +55,7 @@ export function AnalyticsChart({ botId, days = 30 }: AnalyticsChartProps) {
   // Fill in missing dates with zeros
   const filledData = [];
   const today = new Date();
-  for (let i = days - 1; i >= 0; i--) {
+  for (let i = period - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
     const dateStr = date.toLocaleDateString("pt-BR", {
@@ -97,7 +101,25 @@ export function AnalyticsChart({ botId, days = 30 }: AnalyticsChartProps) {
   return (
     <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle>Analytics - Últimos {days} dias</CardTitle>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="h-5 w-5 text-primary" />
+            Analytics - Últimos {period} dias
+          </CardTitle>
+          <div className="flex gap-1 bg-secondary/50 p-1 rounded-lg">
+            {([7, 15, 30] as PeriodFilter[]).map((days) => (
+              <Button
+                key={days}
+                variant={period === days ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setPeriod(days)}
+                className={period === days ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}
+              >
+                {days}d
+              </Button>
+            ))}
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="messages" className="space-y-4">
