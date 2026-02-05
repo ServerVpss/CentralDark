@@ -162,7 +162,7 @@ Deno.serve(async (req) => {
           // Buscar dados do pending_payment para pegar plan_days correto
           const { data: pendingPayment } = await supabase
             .from('pending_payments')
-            .select('plan_days, plan_name, plan_code, plan_id, telegram_chat_id')
+            .select('plan_days, plan_name, plan_code, plan_id, telegram_chat_id, telegram_message_id')
             .eq('txid', tx.external_id)
             .maybeSingle()
 
@@ -202,6 +202,23 @@ Deno.serve(async (req) => {
               .maybeSingle()
 
             if (bot?.token && chatId) {
+              // Deletar mensagem do QR Code PIX antes de enviar confirmação
+              if (pendingPayment?.telegram_message_id) {
+                try {
+                  await fetch(`${TELEGRAM_API}${bot.token}/deleteMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      chat_id: chatId,
+                      message_id: pendingPayment.telegram_message_id
+                    }),
+                  })
+                  console.log(`Mensagem PIX deletada: ${pendingPayment.telegram_message_id}`)
+                } catch (e) {
+                  console.error("Erro ao deletar mensagem PIX:", e)
+                }
+              }
+
               const expiresAtFormatted = formatDate(expiresAt.toISOString())
               const buttons: { text: string; callback_data?: string; url?: string }[][] = []
               
