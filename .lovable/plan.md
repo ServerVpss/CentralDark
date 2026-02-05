@@ -1,176 +1,135 @@
 
-# Plano: Fazer o Webhook Efí Funcionar (além do Polling)
+# Plano: Corrigir Deleção Automática da Mensagem PIX após Pagamento
 
-## Diagnóstico Atual
+## Diagnóstico
 
-### O que ESTÁ funcionando:
-- ✅ Edge Function `efi-webhook` está **ONLINE e processando pagamentos** (logs confirmam)
-- ✅ Polling via `efi-poll-pending` funciona corretamente
-- ✅ Transações são confirmadas e usuários notificados
+### Problema Identificado
+A mensagem do QR Code PIX não está sendo deletada automaticamente após o pagamento ser confirmado porque o campo `telegram_chat_id` está **NULL** no banco de dados.
 
-### O que NÃO está funcionando:
-- ❌ Edge Function `efi-register-webhook` **não está deployada** (404)
-- ❌ Webhook da Efí não está registrado apontando para seu servidor
+### Causa Raiz
+Existe um **conflito de inserção dupla** na tabela `pending_payments`:
 
-### Por que só o polling funciona:
-O polling faz verificação ativa a cada minuto. O webhook dependeria de:
-1. Registro do webhook na Efí → apontar para `api.segredounlock.com/webhook-efi-relay.php`
-2. PHP relay encaminhar notificações para `efi-webhook` do Supabase
-3. Efí enviar notificações instantâneas após cada pagamento
+| Ordem | Origem | Inclui `telegram_chat_id`? |
+|-------|--------|---------------------------|
+| 1º | `efi-generate-pix` (linha 173-190) | ❌ NÃO |
+| 2º | `telegram-webhook` (linha 2852-2867) | ✅ SIM |
+
+O `efi-generate-pix` insere primeiro (sem o `chat_id`), e quando o `telegram-webhook` tenta inserir o segundo registro, ele falha silenciosamente devido ao TXID duplicado.
+
+### Evidência no Banco
+```
+telegram_message_id: 24966  ✅ (atualizado corretamente depois)
+telegram_chat_id: null      ❌ (nunca foi inserido)
+```
 
 ---
 
 ## Solução
 
-### Etapa 1: Corrigir e Deployar `efi-register-webhook`
+### Opção Escolhida: Modificar `efi-generate-pix`
+Adicionar o parâmetro `telegram_chat_id` que é passado pelo `telegram-webhook` e incluí-lo no INSERT.
 
-A função está com import `esm.sh` que causa timeout. Precisa mudar para `jsr:@supabase/supabase-js@2`.
+### Alterações Necessárias
+
+#### 1. Arquivo: `supabase/functions/efi-generate-pix/index.ts`
+
+**Modificação A** - Receber `telegram_chat_id` nos parâmetros (linha ~52-60):
 
 ```typescript
-// Linha 1: Mudar de
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-// Para
-import { createClient } from "jsr:@supabase/supabase-js@2";
+const { 
+  amount, 
+  user_id, 
+  telegram_user_id,
+  telegram_chat_id,  // ADICIONAR
+  bot_id, 
+  plan_name,
+  plan_code,
+  plan_days 
+} = await req.json()
 ```
 
-### Etapa 2: Corrigir PHP `webhook-efi-relay.php`
+**Modificação B** - Incluir no INSERT de `pending_payments` (linha ~176-189):
 
-O arquivo atual está correto, mas precisa estar **no servidor** `api.segredounlock.com` com:
-
-```php
-// URL da Edge Function (já correto)
-$edgeFunctionUrl = 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/efi-webhook';
+```typescript
+await supabase.from('pending_payments').insert({
+  user_id,
+  bot_id,
+  telegram_user_id,
+  telegram_chat_id,  // ADICIONAR
+  txid: efiTxid,
+  value: amount,
+  plan_name: plan_name || 'Recarga',
+  plan_code: plan_code || 'custom',
+  plan_days: plan_days || 30,
+  pix_copy_paste: proxyData.data?.pixCopiaECola,
+  pix_qrcode: proxyData.data?.qrcode,
+  expires_at: expiresAt.toISOString(),
+  status: 'PENDING'
+})
 ```
 
-Arquivo a colocar em `api.segredounlock.com`:
+#### 2. Arquivo: `supabase/functions/telegram-webhook/index.ts`
 
-```php
-<?php
-/**
- * webhook-efi-relay.php
- * Recebe notificações da EFI e encaminha para Edge Function do Supabase
- */
-header('Content-Type: application/json');
+**Modificação A** - Passar `telegram_chat_id` na chamada ao `efi-generate-pix` (linha ~2830-2838):
 
-// IMPORTANTE: A EFI exige resposta rápida 2xx
-// Responder imediatamente e processar em background
-
-$edgeFunctionUrl = 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/efi-webhook';
-
-// Ler body cru
-$input = file_get_contents('php://input');
-
-// Log para debug
-error_log("EFI Webhook recebido: " . $input);
-
-// Encaminhar para Edge Function
-$ch = curl_init($edgeFunctionUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $input);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Content-Type: application/json'
-]);
-curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$error = curl_error($ch);
-curl_close($ch);
-
-// Log resultado
-error_log("Relay para Supabase: HTTP $httpCode - $response");
-
-if ($error) {
-    error_log("Curl error: $error");
-}
-
-// Retornar 200 para a EFI não retentar
-http_response_code(200);
-echo json_encode([
-    'received' => true,
-    'forwarded' => $httpCode >= 200 && $httpCode < 300
-]);
+```typescript
+body: JSON.stringify({
+  amount: plan.price,
+  user_id: this.bot.user_id,
+  telegram_user_id: telegramUserId,
+  telegram_chat_id: chatId,  // ADICIONAR
+  bot_id: this.bot.id,
+  plan_name: plan.name,
+  plan_code: plan.code,
+  plan_days: plan.days,
+}),
 ```
 
-### Etapa 3: Registrar Webhook na Efí
+**Modificação B** - Remover INSERT duplicado em `pending_payments` (linhas 2851-2867):
 
-Após deploy, registrar o webhook chamando:
-
-```bash
-POST /functions/v1/efi-register-webhook
-{
-  "webhook_url": "https://api.segredounlock.com/webhook-efi-relay.php"
-}
-```
-
-Isso vai usar o `efi-webhook-register.php` no seu servidor para fazer o registro mTLS na Efí.
-
-### Etapa 4: Verificar Registro
-
-Usar `efi-get-webhook.php` para confirmar que está registrado:
-
-```bash
-POST https://api.segredounlock.com/efi-get-webhook.php
-{
-  "client_id": "...",
-  "client_secret": "...",
-  "pix_key": "dc976027-6f59-4808-af31-787f7f9bccb4"
-}
-```
+Como o `efi-generate-pix` já faz o INSERT, o código do `telegram-webhook` que insere em `pending_payments` deve ser **REMOVIDO** para evitar duplicação.
 
 ---
 
-## Arquivos PHP Necessários em `api.segredounlock.com`
-
-| Arquivo | Função |
-|---------|--------|
-| `cert.p12` | Certificado mTLS da Efí |
-| `efi-generate-pix.php` | Gerar cobrança PIX |
-| `efi-check-status.php` | Verificar status de cobrança |
-| `efi-webhook-register.php` | Registrar webhook na Efí |
-| `efi-get-webhook.php` | Consultar webhook registrado |
-| `webhook-efi-relay.php` | Receber notificação e encaminhar para Supabase |
-
----
-
-## Fluxo Completo após Implementação
+## Fluxo Corrigido
 
 ```text
-1. Usuário paga PIX no banco
+1. Usuário clica em um plano no Telegram
        ↓
-2. Efí detecta pagamento
+2. telegram-webhook chama efi-generate-pix com telegram_chat_id
        ↓
-3. Efí envia POST para api.segredounlock.com/webhook-efi-relay.php
+3. efi-generate-pix:
+   - Gera o PIX via proxy PHP
+   - Insere em pix_transactions
+   - Insere em pending_payments COM telegram_chat_id ← CORRIGIDO
        ↓
-4. PHP relay encaminha para Supabase /functions/v1/efi-webhook
+4. telegram-webhook:
+   - Recebe resposta do PIX
+   - Envia mensagem com QR Code
+   - Atualiza telegram_message_id no pending_payments
        ↓
-5. Edge Function:
-   - Busca transação pelo txid
-   - Marca como paga
-   - Cria assinatura
-   - Deleta mensagem do QR
-   - Envia confirmação no Telegram
-   - Anuncia no grupo (se habilitado)
-       ↓
-6. Usuário recebe "PAGAMENTO CONFIRMADO!" instantaneamente
+5. Pagamento confirmado via webhook (efi-webhook):
+   - Busca pending_payment com telegram_chat_id e telegram_message_id
+   - DELETA a mensagem do QR Code ← AGORA FUNCIONA!
+   - Envia mensagem de confirmação com confete
 ```
 
 ---
 
-## Resumo das Alterações
+## Detalhes Técnicos
 
-### No Supabase:
-1. Corrigir import em `efi-register-webhook/index.ts` (esm.sh → jsr:)
-2. Redeploy da função
+### Arquivos a Modificar
+| Arquivo | Tipo de Alteração |
+|---------|-------------------|
+| `supabase/functions/efi-generate-pix/index.ts` | Adicionar parâmetro + incluir no INSERT |
+| `supabase/functions/telegram-webhook/index.ts` | Passar chatId + remover INSERT duplicado |
 
-### No seu servidor `api.segredounlock.com`:
-1. Garantir que `webhook-efi-relay.php` está no servidor
-2. Registrar webhook apontando para esse PHP
-3. Testar com pagamento real
+### Deploy Necessário
+- `efi-generate-pix`
+- `telegram-webhook`
 
-### Teste Final:
-1. Gerar PIX pelo bot
-2. Pagar
-3. Verificar se confirmação chega ANTES do polling (menos de 30 segundos)
-
+### Teste Recomendado
+1. Gerar um novo PIX pelo bot
+2. Verificar no banco se `telegram_chat_id` está preenchido
+3. Realizar o pagamento
+4. Confirmar que a mensagem do QR foi deletada automaticamente
