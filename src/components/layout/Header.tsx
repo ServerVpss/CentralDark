@@ -36,7 +36,7 @@ export function Header({ className }: HeaderProps) {
     }}>
       <div className="flex h-full items-center justify-between px-4 lg:px-6">
         {/* Search - left aligned */}
-        <div className="relative w-full max-w-xs lg:max-w-sm group">
+        <div className="relative max-w-xs lg:max-w-sm w-64 lg:w-80 group">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
           <Input
             placeholder="Buscar bots, assinantes, configurações..."
