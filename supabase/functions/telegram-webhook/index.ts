@@ -2831,6 +2831,7 @@ class BotHandler {
           amount: plan.price,
           user_id: this.bot.user_id,
           telegram_user_id: telegramUserId,
+          telegram_chat_id: chatId,
           bot_id: this.bot.id,
           plan_name: plan.name,
           plan_code: plan.code,
@@ -2848,23 +2849,7 @@ class BotHandler {
 
       const { txid, qr_code, qr_code_image } = result.data;
 
-      // Also save to pending_payments for compatibility
-      await this.supabase.from("pending_payments").insert({
-        user_id: this.bot.user_id,
-        bot_id: this.bot.id,
-        telegram_user_id: telegramUserId,
-        telegram_chat_id: chatId,
-        txid,
-        value: plan.price,
-        plan_id: plan.id,
-        plan_code: plan.code,
-        plan_name: plan.name,
-        plan_days: plan.days,
-        pix_copy_paste: qr_code,
-        pix_qrcode: qr_code_image,
-        expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
-        status: "PENDING",
-      });
+      // INSERT removido - agora feito exclusivamente pelo efi-generate-pix
 
        const pixText =
          `💳 <b>PIX Gerado!</b>\n\n` +
