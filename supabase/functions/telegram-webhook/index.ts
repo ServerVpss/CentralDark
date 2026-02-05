@@ -3185,29 +3185,15 @@ class BotHandler {
       }
     }
 
-    await this.supabase.from("telegram_messages").insert({
-      bot_id: this.bot.id,
-      telegram_message_id: message.message_id,
-      chat_id: message.chat.id,
-      chat_type: message.chat.type,
-      from_user_id: message.from?.id,
-      from_username: message.from?.username,
-      from_first_name: message.from?.first_name,
-      message_text: message.text,
-      message_type: message.text ? "text" : "other",
-      raw_data: this.update,
-      is_blocked: isBlocked,
-      blocked_reason: blockedReason || null,
-    });
-
-     // Use atomic increment function for accurate analytics
-     await this.supabase.rpc("increment_bot_analytics", {
-       p_bot_id: this.bot.id,
-       p_messages_received: 1,
-       p_blocked_messages: isBlocked ? 1 : 0,
-       p_links_blocked: blockedReason === "link_detected" ? 1 : 0,
-       p_spam_detected: blockedReason === "spam_detected" ? 1 : 0,
-     });
+    // Track blocked messages only (message logging is in handleMessage now)
+    if (isBlocked) {
+      await this.supabase.rpc("increment_bot_analytics", {
+        p_bot_id: this.bot.id,
+        p_blocked_messages: 1,
+        p_links_blocked: blockedReason === "link_detected" ? 1 : 0,
+        p_spam_detected: blockedReason === "spam_detected" ? 1 : 0,
+      });
+    }
   }
 
   // =============== MAIN HANDLER ===============
@@ -3260,6 +3246,34 @@ class BotHandler {
     const telegramUserId = message.from?.id;
 
     if (!telegramUserId) return;
+
+    // ===== ANALYTICS: Track ALL incoming messages =====
+    try {
+      await this.supabase.from("telegram_messages").insert({
+        bot_id: this.bot.id,
+        telegram_message_id: message.message_id,
+        chat_id: message.chat.id,
+        chat_type: message.chat.type,
+        from_user_id: message.from?.id,
+        from_username: message.from?.username,
+        from_first_name: message.from?.first_name,
+        message_text: message.text,
+        message_type: message.text ? "text" : "other",
+        raw_data: this.update,
+        is_blocked: false,
+        blocked_reason: null,
+      });
+
+      await this.supabase.rpc("increment_bot_analytics", {
+        p_bot_id: this.bot.id,
+        p_messages_received: 1,
+      });
+
+      console.log(`Analytics: Message tracked - bot ${this.bot.id}, chat ${message.chat.type}`);
+    } catch (error) {
+      console.error("Error tracking message:", error);
+    }
+    // ================================================
 
     const text = message.text || "";
 
