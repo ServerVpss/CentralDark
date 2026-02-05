@@ -303,15 +303,23 @@ export default function BotSettings() {
                     <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
-                            <Users className="h-5 w-5 text-primary" />
-                          </div>
+                          {settings.group_photo_url ? (
+                            <img 
+                              src={settings.group_photo_url} 
+                              alt={settings.group_title}
+                              className="h-10 w-10 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+                              <Users className="h-5 w-5 text-primary" />
+                            </div>
+                          )}
                           <div>
                             <p className="font-semibold text-foreground">{settings.group_title}</p>
                             <p className="text-xs text-muted-foreground font-mono">{settings.group_chat_id}</p>
                           </div>
                         </div>
-                        <Badge variant="outline" className="text-green-500 border-green-500/50">
+                        <Badge variant="outline" className="text-success border-success/50">
                           Conectado
                         </Badge>
                       </div>
