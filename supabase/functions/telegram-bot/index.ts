@@ -148,12 +148,11 @@ serve(async (req) => {
         });
         
         if (response.ok && botId) {
-          // Update analytics
-          await supabase.from("bot_analytics").upsert({
-            bot_id: botId,
-            date: new Date().toISOString().split("T")[0],
-            messages_sent: 1,
-          }, { onConflict: "bot_id,date" });
+           // Use atomic increment function for accurate analytics
+           await supabase.rpc("increment_bot_analytics", {
+             p_bot_id: botId,
+             p_messages_sent: 1,
+           });
         }
         
         result = { success: response.ok, message: response.result };

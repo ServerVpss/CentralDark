@@ -1074,6 +1074,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_bot_analytics: {
+        Args: {
+          p_active_users?: number
+          p_blocked_messages?: number
+          p_bot_id: string
+          p_links_blocked?: number
+          p_messages_received?: number
+          p_messages_sent?: number
+          p_new_users?: number
+          p_spam_detected?: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
