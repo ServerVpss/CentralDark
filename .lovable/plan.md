@@ -1,75 +1,69 @@
 
-# Plano: Corrigir deleção automática da mensagem PIX após confirmação de pagamento
+# Plano: Corrigir Erro "Erro ao gerar PIX" no Bot Telegram
 
-## Problema Identificado
+## Diagnóstico
 
-O pagamento PIX foi confirmado corretamente, mas a mensagem com o QR Code não foi deletada automaticamente. Isso ocorreu porque:
+O problema é que várias Edge Functions críticas para o fluxo de pagamento **não estão deployadas**:
 
-1. **O polling automático (`efi-poll-pending`) não deleta a mensagem** - Esta edge function confirma pagamentos via cron job a cada minuto, mas não tem código para deletar a mensagem do QR Code
-2. **O `telegram_chat_id` está NULL** no registro do `pending_payments`, o que impossibilitaria a deleção mesmo se o código existisse
+| Edge Function | Status | Crítico para PIX? |
+|--------------|--------|-------------------|
+| `telegram-webhook` | ✅ Online | Sim |
+| `efi-poll-pending` | ✅ Online | Sim (polling) |
+| `api-query` | ✅ Online | Não |
+| `efi-generate-pix` | ❌ **404 Not Found** | **SIM - Geração PIX** |
+| `efi-check-status` | ❌ **404 Not Found** | Sim (verificação) |
+| `efi-webhook` | ❌ **404 Not Found** | Sim (callback) |
+| `pix-payment` | ❌ **404 Not Found** | Sim (web app) |
+| `telegram-format-result` | ❌ **404 Not Found** | Não |
+| `telegram-payment-handler` | ❌ **404 Not Found** | Sim (alternativo) |
 
-## Análise Técnica
+### Fluxo de falha atual
 
-### Fluxos de Confirmação de Pagamento
+Quando o usuário escolhe um plano no bot:
+1. Bot chama `${SUPABASE_URL}/functions/v1/efi-generate-pix`
+2. Função retorna **404 Not Found** 
+3. Bot exibe "❌ Erro ao gerar PIX. Tente novamente em instantes."
 
-| Método | Deleta Mensagem? |
-|--------|-----------------|
-| Botão "Já Paguei" no chat | ✅ Sim |
-| Webhook da Efí (tempo real) | ✅ Sim |
-| Polling automático (cron) | ❌ **NÃO** |
-
-### Problema no `efi-poll-pending`
-
-1. A busca no `pending_payments` (linha 165) não inclui `telegram_message_id`:
-```typescript
-.select('plan_days, plan_name, plan_code, plan_id, telegram_chat_id')
-```
-
-2. Não existe código para chamar `deleteMessage` após confirmar o pagamento
-
----
-
-## Solução Proposta
-
-### Modificar `supabase/functions/efi-poll-pending/index.ts`
-
-1. **Incluir `telegram_message_id` na query** do `pending_payments`
-
-2. **Adicionar lógica de deleção da mensagem** antes de enviar a confirmação:
-
-```typescript
-// Após buscar o bot e antes de enviar notificação:
-if (pendingPayment?.telegram_message_id && chatId) {
-  try {
-    await fetch(`${TELEGRAM_API}${bot.token}/deleteMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        message_id: pendingPayment.telegram_message_id
-      }),
-    })
-    console.log(`Mensagem PIX deletada: ${pendingPayment.telegram_message_id}`)
-  } catch (e) {
-    console.error("Erro ao deletar mensagem PIX:", e)
-  }
-}
-```
-
-### Correção do `telegram_chat_id` NULL
-
-Verificar se a função que gera o PIX está salvando corretamente o `telegram_chat_id`. Pelo código analisado, o insert parece correto (linha 2856 do webhook), então pode ser um caso isolado ou uma race condition.
+### Causa raiz
+As Edge Functions existem no código-fonte mas **não foram deployadas** na plataforma.
 
 ---
 
-## Mudanças Necessárias
+## Solução
 
-| Arquivo | Alteração |
-|---------|-----------|
-| `supabase/functions/efi-poll-pending/index.ts` | Adicionar `telegram_message_id` no select e lógica de deleção |
+### Etapa 1: Deploy das Edge Functions de Pagamento
+
+Deployar as seguintes funções que estão faltando:
+
+- `efi-generate-pix` (geração do QR Code PIX)
+- `efi-check-status` (verificação de status)
+- `efi-webhook` (callback da Efí)
+- `pix-payment` (pagamento via web app)
+- `telegram-payment-handler` (handler delegado)
+- `telegram-format-result` (formatação de resultados)
+
+### Etapa 2: Verificar Configuração no config.toml
+
+Confirmar que todas as funções têm `verify_jwt = false` no arquivo de configuração.
+
+### Etapa 3: Teste Funcional
+
+Após deploy, testar chamando a função `efi-generate-pix` diretamente.
+
+---
 
 ## Resultado Esperado
 
-Após a implementação, quando o polling confirmar um pagamento:
-1. A mensagem do QR Code PIX será deletada automaticamente
-2. Apenas a mensagem de confirmação "PAGAMENTO CONFIRMADO!" permanecerá no chat
+Após o deploy:
+1. Usuário escolhe plano no bot
+2. `efi-generate-pix` é chamada com sucesso
+3. QR Code PIX é gerado e enviado ao usuário
+4. Pagamento pode ser confirmado via polling ou webhook
+
+---
+
+## Observação sobre Insert Duplicado
+
+O código do `telegram-webhook` (linha 2852) e `efi-generate-pix` (linha 141) ambos fazem insert em `pending_payments`, causando possível **duplicação**. No entanto, como `txid` tem constraint UNIQUE, o segundo insert falhará silenciosamente.
+
+Isso não é crítico, mas pode ser otimizado futuramente removendo o insert redundante em um dos dois locais.
