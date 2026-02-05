@@ -18,7 +18,9 @@ import {
   Send,
   Zap,
   Sparkles,
+  RefreshCw,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -68,6 +70,9 @@ export default function BotSettings() {
   
   // Broadcast dialog state
   const [broadcastOpen, setBroadcastOpen] = useState(false);
+  
+  // Photo update state
+  const [updatingPhoto, setUpdatingPhoto] = useState(false);
 
   // Find current bot
   useEffect(() => {
@@ -149,6 +154,35 @@ export default function BotSettings() {
   const handleRemoveOwner = async (ownerId: number) => {
     if (confirm(`Remover owner ${ownerId}?`)) {
       await removeOwner(ownerId);
+    }
+  };
+
+  const handleUpdateGroupPhoto = async () => {
+    if (!botId || !settings?.group_chat_id) {
+      toast.error("Nenhum grupo configurado");
+      return;
+    }
+
+    setUpdatingPhoto(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("telegram-update-group-photo", {
+        body: { bot_id: botId },
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        toast.success("Foto do grupo atualizada!");
+        // Reload settings to get the new photo
+        window.location.reload();
+      } else {
+        toast.error(data.error || "Erro ao atualizar foto");
+      }
+    } catch (error) {
+      console.error("Error updating group photo:", error);
+      toast.error("Erro ao atualizar foto do grupo");
+    } finally {
+      setUpdatingPhoto(false);
     }
   };
 
@@ -333,18 +367,34 @@ export default function BotSettings() {
                           {settings.group_url}
                         </a>
                       )}
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="w-full mt-2 text-destructive hover:text-destructive"
-                        onClick={() => {
-                          setGroupChatId("");
-                          setGroupUrl("");
-                        }}
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Desconectar Grupo
-                      </Button>
+                      <div className="flex gap-2 mt-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex-1"
+                          onClick={handleUpdateGroupPhoto}
+                          disabled={updatingPhoto}
+                        >
+                          {updatingPhoto ? (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          ) : (
+                            <RefreshCw className="h-4 w-4 mr-2" />
+                          )}
+                          Atualizar Foto
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="flex-1 text-destructive hover:text-destructive"
+                          onClick={() => {
+                            setGroupChatId("");
+                            setGroupUrl("");
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Desconectar
+                        </Button>
+                      </div>
                     </div>
                   )}
 
