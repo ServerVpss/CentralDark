@@ -100,8 +100,8 @@ Deno.serve(async (req) => {
       client_secret: string 
     }
 
-    // Usar o proxy unificado com action check_status
-    const proxyUrl = 'https://api.segredounlock.com/efi-pix-proxy.php'
+    // Usar o proxy existente para verificar status
+    const proxyUrl = 'https://api.segredounlock.com/efi-check-status.php'
 
     let processed = 0
     let paid = 0
