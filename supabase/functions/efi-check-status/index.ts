@@ -71,8 +71,8 @@ Deno.serve(async (req) => {
       client_secret: string
     }
 
-    // URL do proxy para check-status (usa o mesmo proxy do generate com action diferente)
-    const proxyUrl = 'https://api.segredounlock.com/efi-pix-proxy.php'
+    // URL do proxy existente para check-status
+    const proxyUrl = 'https://api.segredounlock.com/efi-check-status.php'
 
     console.log('Checking payment status for txid:', txid)
 
