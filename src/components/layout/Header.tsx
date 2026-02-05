@@ -34,7 +34,7 @@ export function Header({ className }: HeaderProps) {
       background: "linear-gradient(to right, hsl(220 20% 5% / 0.95), hsl(220 20% 6% / 0.95))",
       backdropFilter: "blur(16px) saturate(180%)",
     }}>
-      <div className="flex h-full items-center justify-between px-4 lg:px-6">
+      <div className="flex h-14 items-center justify-between px-4 lg:px-6">
         {/* Search - left aligned */}
         <div className="relative max-w-xs lg:max-w-sm w-64 lg:w-80 group">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
