@@ -2244,6 +2244,41 @@ class BotHandler {
     await query;
   }
 
+   // =============== NEW USER TRACKING ===============
+   async trackNewUser(telegramUserId: number) {
+     try {
+       // Check if user already has any interaction with this bot
+       const { data: existingUser } = await this.supabase
+         .from("telegram_subscriptions")
+         .select("id")
+         .eq("telegram_user_id", telegramUserId)
+         .eq("bot_id", this.bot.id)
+         .limit(1)
+         .single();
+ 
+       // Also check telegram_user_terms as fallback
+       const { data: existingTerms } = await this.supabase
+         .from("telegram_user_terms")
+         .select("id")
+         .eq("telegram_user_id", telegramUserId)
+         .eq("bot_id", this.bot.id)
+         .limit(1)
+         .single();
+ 
+       // If user is new (no subscription and no terms record), increment counter
+       if (!existingUser && !existingTerms) {
+         console.log(`New user detected: ${telegramUserId}`);
+         await this.supabase.rpc("increment_bot_analytics", {
+           p_bot_id: this.bot.id,
+           p_new_users: 1,
+         });
+       }
+     } catch (error) {
+       // Log error but don't block the flow
+       console.error("Error tracking new user:", error);
+     }
+   }
+ 
   // =============== LOG QUERY ===============
   async logQuery(telegramUserId: number, queryType: string, queryInput: string, result: Record<string, unknown>) {
     await this.supabase.from("query_history").insert({
@@ -3085,6 +3120,9 @@ class BotHandler {
   async handleNewMember(member: TelegramUser, chatId: number) {
     if (member.is_bot) return;
 
+     // Track new user for analytics
+     await this.trackNewUser(member.id);
+ 
     const isActive = await this.isSubscriptionActive(member.id);
 
     if (!isActive && this.settings.mute_new_members) {
@@ -3902,6 +3940,8 @@ class BotHandler {
     }
 
     if (data === "terms:accept") {
+       // Track new user when accepting terms for the first time
+       await this.trackNewUser(telegramUserId);
       await this.setTermsStatus(telegramUserId, true);
       try {
         await deleteMessage(this.token, chatId, messageId);
