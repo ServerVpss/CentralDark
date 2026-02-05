@@ -1,24 +1,35 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+type JsonResponse = {
+  success: boolean;
+  error?: string;
+  details?: unknown;
+  group_photo_url?: string | null;
+  group_title?: string | null;
+};
+
+function ok(body: JsonResponse) {
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { bot_id } = await req.json();
+    const { bot_id } = await req.json().catch(() => ({}));
 
     if (!bot_id) {
-      return new Response(
-        JSON.stringify({ error: "bot_id is required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return ok({ success: false, error: "bot_id é obrigatório" });
     }
 
     const supabase = createClient(
@@ -26,47 +37,53 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Get bot token
-    const { data: bot } = await supabase
+    // Bot token
+    const { data: bot, error: botError } = await supabase
       .from("telegram_bots")
       .select("token")
       .eq("id", bot_id)
       .single();
 
-    if (!bot?.token) {
-      return new Response(
-        JSON.stringify({ error: "Bot not found" }),
-        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (botError || !bot?.token) {
+      return ok({ success: false, error: "Bot não encontrado", details: botError });
     }
 
-    // Get group_chat_id
-    const { data: settings } = await supabase
+    // Group chat id
+    const { data: settings, error: settingsError } = await supabase
       .from("bot_settings")
       .select("group_chat_id")
       .eq("bot_id", bot_id)
       .single();
 
-    if (!settings?.group_chat_id) {
-      return new Response(
-        JSON.stringify({ error: "No group configured" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (settingsError) {
+      return ok({
+        success: false,
+        error: "Não foi possível carregar as configurações do bot",
+        details: settingsError,
+      });
     }
 
-    // Get chat info
+    if (!settings?.group_chat_id) {
+      return ok({ success: false, error: "Nenhum grupo configurado" });
+    }
+
+    // Telegram getChat
     const chatRes = await fetch(`https://api.telegram.org/bot${bot.token}/getChat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: settings.group_chat_id }),
     });
-    const chatInfo = await chatRes.json();
 
-    if (!chatInfo.ok) {
-      return new Response(
-        JSON.stringify({ error: "Failed to get chat info" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    const chatInfo = await chatRes.json().catch(() => null);
+
+    if (!chatInfo?.ok) {
+      return ok({
+        success: false,
+        error:
+          chatInfo?.description ||
+          "Falha ao obter informações do grupo (verifique se o bot está no grupo e tem permissão)",
+        details: chatInfo,
+      });
     }
 
     let groupPhotoUrl: string | null = null;
@@ -77,35 +94,38 @@ serve(async (req) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ file_id: chatInfo.result.photo.big_file_id }),
       });
-      const fileInfo = await fileRes.json();
 
-      if (fileInfo.ok && fileInfo.result?.file_path) {
+      const fileInfo = await fileRes.json().catch(() => null);
+
+      if (fileInfo?.ok && fileInfo.result?.file_path) {
         groupPhotoUrl = `https://api.telegram.org/file/bot${bot.token}/${fileInfo.result.file_path}`;
       }
     }
 
-    // Update database
-    await supabase
+    // Update DB
+    const { error: updateError } = await supabase
       .from("bot_settings")
-      .update({ 
+      .update({
         group_photo_url: groupPhotoUrl,
-        group_title: chatInfo.result?.title,
+        group_title: chatInfo.result?.title || null,
       })
       .eq("bot_id", bot_id);
 
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        group_photo_url: groupPhotoUrl,
-        group_title: chatInfo.result?.title,
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    if (updateError) {
+      return ok({
+        success: false,
+        error: "Erro ao salvar foto/título do grupo",
+        details: updateError,
+      });
+    }
 
+    return ok({
+      success: true,
+      group_photo_url: groupPhotoUrl,
+      group_title: chatInfo.result?.title || null,
+    });
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: String(error) }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return ok({ success: false, error: "Erro inesperado", details: String(error) });
   }
 });
+
