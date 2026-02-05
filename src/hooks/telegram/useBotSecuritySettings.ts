@@ -34,9 +34,19 @@ export function useBotSecuritySettings(botId: string | null) {
     if (!botId) return false;
 
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error("Usuário não autenticado");
+        return false;
+      }
+
       const { error } = await supabase
         .from("bot_security_settings")
-        .upsert({ bot_id: botId, ...updates }, { onConflict: "bot_id" });
+        .upsert(
+          { bot_id: botId, user_id: user.id, ...updates },
+          { onConflict: "bot_id" }
+        );
 
       if (error) throw error;
 
