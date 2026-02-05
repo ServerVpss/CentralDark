@@ -43,5 +43,5 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.telegram-update-group-photo]
-verify_jwt = true
+verify_jwt = false
 
