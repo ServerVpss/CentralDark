@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Bot,
   Save,
+  Check,
   Users,
   Bell,
   Link,
@@ -74,6 +75,7 @@ export default function BotSettings() {
   
   // Photo update state
   const [updatingPhoto, setUpdatingPhoto] = useState(false);
+  const [photoUpdateStep, setPhotoUpdateStep] = useState<"idle" | "connecting" | "fetching" | "saving" | "done">("idle");
   const [photoLoading, setPhotoLoading] = useState(true);
   const [photoError, setPhotoError] = useState(false);
 
@@ -167,25 +169,49 @@ export default function BotSettings() {
     }
 
     setUpdatingPhoto(true);
+    setPhotoUpdateStep("connecting");
+    
     try {
+      // Simulate step progress for better UX
+      await new Promise(r => setTimeout(r, 300));
+      setPhotoUpdateStep("fetching");
+      
       const { data, error } = await supabase.functions.invoke("telegram-update-group-photo", {
         body: { bot_id: botId },
       });
 
       if (error) throw error;
 
+      setPhotoUpdateStep("saving");
+      await new Promise(r => setTimeout(r, 300));
+
       if (data.success) {
+        setPhotoUpdateStep("done");
         toast.success("Foto do grupo atualizada!");
+        // Small delay to show success state
+        await new Promise(r => setTimeout(r, 800));
         // Reload settings to get the new photo
         window.location.reload();
       } else {
         toast.error(data.error || "Erro ao atualizar foto");
+        setPhotoUpdateStep("idle");
       }
     } catch (error) {
       console.error("Error updating group photo:", error);
       toast.error("Erro ao atualizar foto do grupo");
+      setPhotoUpdateStep("idle");
     } finally {
       setUpdatingPhoto(false);
+    }
+  };
+
+  const getPhotoUpdateStepLabel = () => {
+    switch (photoUpdateStep) {
+      case "connecting": return "Conectando ao Telegram...";
+      case "fetching": return "Buscando foto do grupo...";
+      case "saving": return "Salvando...";
+      case "done": return "Concluído!";
+      default: return "Atualizar Foto";
     }
   };
 
@@ -380,11 +406,42 @@ export default function BotSettings() {
                           {settings.group_url}
                         </a>
                       )}
+                      {/* Photo update with progress */}
+                      {updatingPhoto && (
+                        <div className="p-3 rounded-lg bg-secondary/80 border border-primary/30 animate-fade-in">
+                          <div className="flex items-center gap-3">
+                            {photoUpdateStep === "done" ? (
+                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-success/20">
+                                <Check className="h-4 w-4 text-success" />
+                              </div>
+                            ) : (
+                              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                            )}
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">{getPhotoUpdateStepLabel()}</p>
+                              <div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                                <div 
+                                  className={`h-full rounded-full transition-all duration-500 ${
+                                    photoUpdateStep === "done" ? "bg-success" : "bg-primary"
+                                  }`}
+                                  style={{
+                                    width: photoUpdateStep === "connecting" ? "25%" : 
+                                           photoUpdateStep === "fetching" ? "50%" : 
+                                           photoUpdateStep === "saving" ? "75%" : 
+                                           photoUpdateStep === "done" ? "100%" : "0%"
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
                       <div className="flex gap-2 mt-2">
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="flex-1"
+                          className={`flex-1 transition-all ${updatingPhoto ? "opacity-50" : ""}`}
                           onClick={handleUpdateGroupPhoto}
                           disabled={updatingPhoto}
                         >
@@ -393,7 +450,7 @@ export default function BotSettings() {
                           ) : (
                             <RefreshCw className="h-4 w-4 mr-2" />
                           )}
-                          Atualizar Foto
+                          {updatingPhoto ? "Atualizando..." : "Atualizar Foto"}
                         </Button>
                         <Button 
                           variant="ghost" 
