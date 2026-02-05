@@ -7,6 +7,79 @@
 
 @layer base {
   :root {
+    /* Light Theme */
+    --background: 0 0% 100%;
+    --foreground: 220 20% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 10%;
+
+    /* Gold/Bronze primary accent */
+    --primary: 38 95% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 95%;
+    --secondary-foreground: 220 20% 20%;
+
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 10% 45%;
+
+    /* Cyan accent for contrast */
+    --accent: 185 85% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 160 75% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 45 100% 45%;
+    --warning-foreground: 220 20% 10%;
+
+    --border: 220 15% 90%;
+    --input: 220 15% 92%;
+    --ring: 38 95% 45%;
+
+    --radius: 1rem;
+
+    /* Sidebar - Light */
+    --sidebar-background: 220 15% 98%;
+    --sidebar-foreground: 220 15% 30%;
+    --sidebar-primary: 38 95% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 94%;
+    --sidebar-accent-foreground: 220 20% 10%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 38 95% 45%;
+
+    /* Light gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(38 95% 45%), hsl(28 90% 40%));
+    --gradient-gold-soft: linear-gradient(135deg, hsl(38 95% 45% / 0.1), hsl(28 90% 40% / 0.05));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 15% 98%));
+    --gradient-card-hover: linear-gradient(145deg, hsl(220 15% 99%), hsl(220 15% 97%));
+    --gradient-radial-gold: radial-gradient(ellipse at top, hsl(38 95% 45% / 0.05), transparent 60%);
+    --gradient-mesh: radial-gradient(at 40% 20%, hsl(38 95% 45% / 0.03) 0px, transparent 50%),
+                     radial-gradient(at 80% 0%, hsl(185 85% 45% / 0.02) 0px, transparent 50%),
+                     radial-gradient(at 0% 50%, hsl(38 95% 45% / 0.02) 0px, transparent 50%);
+    
+    /* Glassmorphism Light */
+    --glass-bg: hsl(0 0% 100% / 0.85);
+    --glass-border: hsl(220 15% 85%);
+    --glass-highlight: hsl(38 95% 45% / 0.05);
+
+    /* Chart colors */
+    --chart-1: 38 95% 45%;
+    --chart-2: 185 85% 45%;
+    --chart-3: 160 75% 40%;
+    --chart-4: 280 70% 50%;
+    --chart-5: 0 75% 50%;
+  }
+
+  .dark {
     /* Premium Dark Theme - Sophisticated dark with gold/bronze accents */
     --background: 220 20% 4%;
     --foreground: 40 20% 95%;

@@ -4,7 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { GlobalSearch } from "@/components/search/GlobalSearch";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Bots from "./pages/Bots";
@@ -22,31 +25,35 @@ import Security from "./pages/Security";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-            <Route path="/consultas" element={<ProtectedRoute><Consultas /></ProtectedRoute>} />
-            <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
-            <Route path="/bots/:botId/settings" element={<ProtectedRoute><BotSettingsPage /></ProtectedRoute>} />
-            <Route path="/bots/:botId/migrate" element={<ProtectedRoute><MigrateSubscriptions /></ProtectedRoute>} />
-            <Route path="/telegram-users" element={<ProtectedRoute><TelegramUsers /></ProtectedRoute>} />
-            <Route path="/logs" element={<ProtectedRoute><QueryLogs /></ProtectedRoute>} />
-            <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
-            <Route path="/pix" element={<ProtectedRoute><PixTransactions /></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-            <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ThemeProvider defaultTheme="dark" storageKey="telepanel-theme">
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <GlobalSearch />
+            <InstallPrompt />
+            <Routes>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              <Route path="/consultas" element={<ProtectedRoute><Consultas /></ProtectedRoute>} />
+              <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
+              <Route path="/bots/:botId/settings" element={<ProtectedRoute><BotSettingsPage /></ProtectedRoute>} />
+              <Route path="/bots/:botId/migrate" element={<ProtectedRoute><MigrateSubscriptions /></ProtectedRoute>} />
+              <Route path="/telegram-users" element={<ProtectedRoute><TelegramUsers /></ProtectedRoute>} />
+              <Route path="/logs" element={<ProtectedRoute><QueryLogs /></ProtectedRoute>} />
+              <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
+              <Route path="/pix" element={<ProtectedRoute><PixTransactions /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;

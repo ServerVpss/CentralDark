@@ -1,4 +1,4 @@
-import { Bell, Search, User, LogOut, Settings, Sparkles, Crown } from "lucide-react";
+import { Bell, Search, User, LogOut, Settings, Sparkles, Crown, Command } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/components/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 interface HeaderProps {
   className?: string;
@@ -24,6 +25,16 @@ export function Header({ className }: HeaderProps) {
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth", { replace: true });
+  };
+
+  const openSearch = () => {
+    // Trigger Ctrl+K programmatically
+    const event = new KeyboardEvent("keydown", {
+      key: "k",
+      ctrlKey: true,
+      bubbles: true,
+    });
+    document.dispatchEvent(event);
   };
 
   return (
@@ -39,15 +50,23 @@ export function Header({ className }: HeaderProps) {
 
         {/* Search - Centered */}
         <div className="relative flex-1 max-w-md mx-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar bots, assinantes, configurações..."
-            className="w-full pl-10 h-9 bg-muted/50 border-border/50 rounded-lg text-sm"
-          />
+          <button
+            onClick={openSearch}
+            className="w-full flex items-center gap-2 pl-3 pr-2 h-9 bg-muted/50 border border-border/50 rounded-lg text-sm text-muted-foreground hover:bg-muted/70 transition-colors"
+          >
+            <Search className="h-4 w-4" />
+            <span className="flex-1 text-left">Buscar...</span>
+            <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+              <Command className="h-3 w-3" />K
+            </kbd>
+          </button>
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-lg">
             <Bell className="h-4 w-4 text-muted-foreground" />

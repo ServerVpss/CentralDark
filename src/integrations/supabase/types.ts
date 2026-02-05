@@ -82,6 +82,42 @@ export type Database = {
           },
         ]
       }
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       bot_analytics: {
         Row: {
           active_users: number | null
@@ -768,6 +804,62 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "api_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduled_broadcasts: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          error_message: string | null
+          failed_count: number | null
+          id: string
+          message_template: string
+          scheduled_at: string
+          sent_count: number | null
+          status: string
+          target_audience: string
+          target_user_ids: number[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          failed_count?: number | null
+          id?: string
+          message_template: string
+          scheduled_at: string
+          sent_count?: number | null
+          status?: string
+          target_audience?: string
+          target_user_ids?: number[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          failed_count?: number | null
+          id?: string
+          message_template?: string
+          scheduled_at?: string
+          sent_count?: number | null
+          status?: string
+          target_audience?: string
+          target_user_ids?: number[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_broadcasts_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
             referencedColumns: ["id"]
           },
         ]
