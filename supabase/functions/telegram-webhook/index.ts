@@ -2927,8 +2927,9 @@ class BotHandler {
 
       const result = await response.json();
       const status = result.status?.toUpperCase();
+      const isPaid = status === "CONCLUIDA" || status === "PAID" || result.isPaid === true;
 
-      if (status === "CONCLUIDA") {
+      if (isPaid) {
         const { data } = await this.supabase
           .from("pending_payments")
           .select("*")
