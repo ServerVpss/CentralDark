@@ -366,6 +366,42 @@ export type Database = {
           },
         ]
       }
+      edge_function_health: {
+        Row: {
+          all_healthy: boolean
+          checked_at: string
+          created_at: string
+          details: Json | null
+          error_count: number
+          id: string
+          offline_count: number
+          online_count: number
+          total_functions: number
+        }
+        Insert: {
+          all_healthy?: boolean
+          checked_at?: string
+          created_at?: string
+          details?: Json | null
+          error_count: number
+          id?: string
+          offline_count: number
+          online_count: number
+          total_functions: number
+        }
+        Update: {
+          all_healthy?: boolean
+          checked_at?: string
+          created_at?: string
+          details?: Json | null
+          error_count?: number
+          id?: string
+          offline_count?: number
+          online_count?: number
+          total_functions?: number
+        }
+        Relationships: []
+      }
       engagement_messages: {
         Row: {
           bot_id: string | null

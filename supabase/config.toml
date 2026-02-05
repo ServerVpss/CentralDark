@@ -45,3 +45,9 @@ verify_jwt = false
 [functions.telegram-update-group-photo]
 verify_jwt = false
 
+[functions.health-check]
+verify_jwt = false
+
+[functions.telegram-unmute-user]
+verify_jwt = false
+
