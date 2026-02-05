@@ -203,8 +203,21 @@ async function processConfirmedPayment(supabase: any, txid: string) {
       .eq('bot_id', payment.bot_id)
       .single();
 
-    if (bot?.token && payment.telegram_chat_id) {
-      if (payment.telegram_message_id) {
+    if (bot?.token) {
+      // SEMPRE desmutar o usuário no grupo, independente do telegram_chat_id
+      if (settings?.group_chat_id) {
+        try {
+          await unmuteTelegramUser(bot.token, settings.group_chat_id, payment.telegram_user_id);
+          console.log(`User ${payment.telegram_user_id} unmuted in group ${settings.group_chat_id}`);
+        } catch (e) {
+          console.error('Failed to unmute user:', e);
+        }
+      }
+
+      // Notificações apenas se telegram_chat_id existir
+      const chatId = payment.telegram_chat_id || payment.telegram_user_id;
+      
+      if (payment.telegram_chat_id && payment.telegram_message_id) {
         try {
           await deleteTelegramMessage(bot.token, payment.telegram_chat_id, payment.telegram_message_id);
         } catch (e) {
@@ -212,34 +225,33 @@ async function processConfirmedPayment(supabase: any, txid: string) {
         }
       }
 
-      if (settings?.group_chat_id) {
+      // Enviar confirmação - usa telegram_user_id como fallback
+      if (chatId) {
+        const buttons: Array<{ text: string; callback_data?: string; url?: string }[]> = [];
+        if (settings?.group_url) {
+          buttons.push([{ text: '🚪 Entrar no Grupo', url: settings.group_url }]);
+        }
+        buttons.push([{ text: '🔍 Fazer Consulta', callback_data: 'menu:query' }]);
+        buttons.push([{ text: '🏠 Menu Principal', callback_data: 'menu:main' }]);
+
         try {
-          await unmuteTelegramUser(bot.token, settings.group_chat_id, payment.telegram_user_id);
-          console.log(`User ${payment.telegram_user_id} unmuted in group`);
+          await sendTelegramMessage(
+            bot.token,
+            chatId,
+            `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
+            `📦 Plano: <b>${payment.plan_name}</b>\n` +
+            `💰 Valor: <b>R$ ${Number(payment.value).toFixed(2)}</b>\n` +
+            `📅 Válido até: <b>${new Date(expiresAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}</b>\n\n` +
+            `🎫 TXID: <code>${txid}</code>\n\n` +
+            `${settings?.group_chat_id ? '🚪 <b>Seu acesso foi liberado no grupo!</b>' : '✅ <b>Assinatura ativada com sucesso!</b>'}`,
+            { inline_keyboard: buttons }
+          );
         } catch (e) {
-          console.error('Failed to unmute user:', e);
+          console.error('Failed to send confirmation message:', e);
         }
       }
 
-      const buttons: Array<{ text: string; callback_data?: string; url?: string }[]> = [];
-      if (settings?.group_url) {
-        buttons.push([{ text: '🚪 Entrar no Grupo', url: settings.group_url }]);
-      }
-      buttons.push([{ text: '🔍 Fazer Consulta', callback_data: 'menu:query' }]);
-      buttons.push([{ text: '🏠 Menu Principal', callback_data: 'menu:main' }]);
-
-      await sendTelegramMessage(
-        bot.token,
-        payment.telegram_chat_id,
-        `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
-        `📦 Plano: <b>${payment.plan_name}</b>\n` +
-        `💰 Valor: <b>R$ ${Number(payment.value).toFixed(2)}</b>\n` +
-        `📅 Válido até: <b>${new Date(expiresAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}</b>\n\n` +
-        `🎫 TXID: <code>${txid}</code>\n\n` +
-        `${settings?.group_chat_id ? '🚪 <b>Seu acesso foi liberado no grupo!</b>' : '✅ <b>Assinatura ativada com sucesso!</b>'}`,
-        { inline_keyboard: buttons }
-      );
-
+      // Anunciar no grupo
       if (settings?.group_chat_id && settings?.announce_payments) {
         try {
           let display = `ID: ${payment.telegram_user_id}`;
@@ -432,6 +444,36 @@ serve(async (req: Request) => {
     if (action === 'cancel' && txid) {
       await supabaseClient.from('pending_payments').update({ status: 'CANCELLED' }).eq('txid', txid);
       return new Response(JSON.stringify({ success: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    // MANUAL UNMUTE USER
+    if (action === 'unmute' && requestData.telegramUserId && requestData.botId) {
+      const { telegramUserId, botId } = requestData;
+      
+      const { data: bot } = await supabaseClient
+        .from('telegram_bots')
+        .select('token')
+        .eq('id', botId)
+        .single();
+
+      const { data: settings } = await supabaseClient
+        .from('bot_settings')
+        .select('group_chat_id')
+        .eq('bot_id', botId)
+        .single();
+
+      if (!bot?.token || !settings?.group_chat_id) {
+        return new Response(JSON.stringify({ error: 'Bot or group not configured' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      try {
+        await unmuteTelegramUser(bot.token, settings.group_chat_id, telegramUserId);
+        console.log(`Manual unmute: User ${telegramUserId} unmuted in group ${settings.group_chat_id}`);
+        return new Response(JSON.stringify({ success: true, message: `User ${telegramUserId} unmuted` }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      } catch (e) {
+        console.error('Manual unmute failed:', e);
+        return new Response(JSON.stringify({ error: 'Failed to unmute user', details: String(e) }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
     }
 
     return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

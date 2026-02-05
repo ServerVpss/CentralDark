@@ -92,6 +92,11 @@ Deno.serve(async (req) => {
       const isPaid = status === "CONCLUIDA" || status === "PAID" || result.isPaid === true;
 
       if (isPaid) {
+        const { data: payment } = await supabase
+          .from('pending_payments')
+          .select('*')
+          .eq('txid', txid)
+          .single();
 
         if (payment) {
           await supabase.from("pending_payments").update({ status: "CONCLUIDA" }).eq("txid", txid);
