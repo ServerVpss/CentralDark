@@ -33,9 +33,12 @@ export function Header({ className }: HeaderProps) {
         className
       )}
     >
-      <div className="h-full px-6 flex items-center">
-        {/* Search */}
-        <div className="relative flex-1 max-w-md">
+      <div className="h-full px-6 flex items-center justify-between">
+        {/* Left spacer */}
+        <div className="w-48 hidden lg:block" />
+
+        {/* Search - Centered */}
+        <div className="relative flex-1 max-w-md mx-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Buscar bots, assinantes, configurações..."
@@ -44,7 +47,7 @@ export function Header({ className }: HeaderProps) {
         </div>
 
         {/* Right Actions */}
-        <div className="ml-auto flex items-center gap-3">
+        <div className="flex items-center gap-3">
           {/* Notifications */}
           <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-lg">
             <Bell className="h-4 w-4 text-muted-foreground" />
