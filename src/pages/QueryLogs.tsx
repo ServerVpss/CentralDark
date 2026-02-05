@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   History,
   Search,
@@ -7,6 +7,10 @@ import {
   Clock,
   RefreshCw,
   Eye,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -68,6 +72,8 @@ const queryTypeLabels: Record<string, string> = {
   pix: "PIX",
 };
 
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
+
 export default function QueryLogs() {
   const [logs, setLogs] = useState<QueryLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,10 +81,19 @@ export default function QueryLogs() {
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [selectedLog, setSelectedLog] = useState<QueryLog | null>(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
 
   useEffect(() => {
     fetchLogs();
   }, []);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterType, filterStatus, pageSize]);
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -87,7 +102,7 @@ export default function QueryLogs() {
         .from("query_history")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(500);
+        .limit(1000);
 
       if (error) throw error;
       setLogs((data || []) as QueryLog[]);
@@ -99,18 +114,26 @@ export default function QueryLogs() {
     }
   };
 
-  const filteredLogs = logs.filter((log) => {
-    if (searchTerm && !log.query_input.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return false;
-    }
-    if (filterType !== "all" && log.query_type !== filterType) {
-      return false;
-    }
-    if (filterStatus !== "all" && log.status !== filterStatus) {
-      return false;
-    }
-    return true;
-  });
+  const filteredLogs = useMemo(() => {
+    return logs.filter((log) => {
+      if (searchTerm && !log.query_input.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+      if (filterType !== "all" && log.query_type !== filterType) {
+        return false;
+      }
+      if (filterStatus !== "all" && log.status !== filterStatus) {
+        return false;
+      }
+      return true;
+    });
+  }, [logs, searchTerm, filterType, filterStatus]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredLogs.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedLogs = filteredLogs.slice(startIndex, endIndex);
 
   const stats = {
     total: logs.length,
@@ -124,6 +147,16 @@ export default function QueryLogs() {
 
   const uniqueTypes = [...new Set(logs.map((l) => l.query_type))];
 
+  // Pagination controls
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
+  const goToFirstPage = () => goToPage(1);
+  const goToLastPage = () => goToPage(totalPages);
+  const goToPrevPage = () => goToPage(currentPage - 1);
+  const goToNextPage = () => goToPage(currentPage + 1);
+
   if (loading) {
     return (
       <DashboardLayout>
@@ -136,14 +169,19 @@ export default function QueryLogs() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-6">
+      <div className="animate-fade-in space-y-6 max-w-[1600px] mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold">Logs de Consultas</h1>
-            <p className="text-muted-foreground">
-              Histórico de todas as consultas realizadas
-            </p>
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/20">
+              <History className="h-6 w-6 text-violet-400" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Logs de Consultas</h1>
+              <p className="text-sm text-muted-foreground">
+                Histórico de todas as consultas realizadas
+              </p>
+            </div>
           </div>
           <Button variant="outline" onClick={fetchLogs} className="gap-2">
             <RefreshCw className="h-4 w-4" />
@@ -152,12 +190,12 @@ export default function QueryLogs() {
         </div>
 
         {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-card border-border">
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+          <Card className="bg-card border-border/50">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <History className="h-6 w-6 text-primary" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 shadow-lg">
+                  <History className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.total}</p>
@@ -166,11 +204,11 @@ export default function QueryLogs() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-card border-border">
+          <Card className="bg-card border-border/50">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-success/10">
-                  <CheckCircle className="h-6 w-6 text-success" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 shadow-lg">
+                  <CheckCircle className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.success}</p>
@@ -179,11 +217,11 @@ export default function QueryLogs() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-card border-border">
+          <Card className="bg-card border-border/50">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-destructive/10">
-                  <XCircle className="h-6 w-6 text-destructive" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-red-500 shadow-lg">
+                  <XCircle className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.error}</p>
@@ -192,11 +230,11 @@ export default function QueryLogs() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-card border-border">
+          <Card className="bg-card border-border/50">
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-lg bg-warning/10">
-                  <Clock className="h-6 w-6 text-warning" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-lg">
+                  <Clock className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.today}</p>
@@ -208,7 +246,7 @@ export default function QueryLogs() {
         </div>
 
         {/* Filters */}
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border/50">
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
@@ -218,12 +256,12 @@ export default function QueryLogs() {
                     placeholder="Buscar por valor consultado..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-secondary/50"
+                    className="pl-10 bg-muted/50"
                   />
                 </div>
               </div>
               <Select value={filterType} onValueChange={setFilterType}>
-                <SelectTrigger className="w-[180px] bg-secondary/50">
+                <SelectTrigger className="w-[180px] bg-muted/50">
                   <SelectValue placeholder="Tipo" />
                 </SelectTrigger>
                 <SelectContent>
@@ -236,7 +274,7 @@ export default function QueryLogs() {
                 </SelectContent>
               </Select>
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="w-[150px] bg-secondary/50">
+                <SelectTrigger className="w-[150px] bg-muted/50">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -250,12 +288,31 @@ export default function QueryLogs() {
         </Card>
 
         {/* Logs Table */}
-        <Card className="bg-card border-border">
-          <CardHeader>
-            <CardTitle>Consultas ({filteredLogs.length})</CardTitle>
-            <CardDescription>
-              Últimas 500 consultas realizadas
-            </CardDescription>
+        <Card className="bg-card border-border/50">
+          <CardHeader className="pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <CardTitle>Consultas</CardTitle>
+                <CardDescription>
+                  {filteredLogs.length} resultado(s) encontrado(s)
+                </CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Exibir:</span>
+                <Select value={pageSize.toString()} onValueChange={(v) => setPageSize(Number(v))}>
+                  <SelectTrigger className="w-[80px] h-8 bg-muted/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PAGE_SIZE_OPTIONS.map((size) => (
+                      <SelectItem key={size} value={size.toString()}>
+                        {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             {filteredLogs.length === 0 ? (
@@ -264,59 +321,136 @@ export default function QueryLogs() {
                 <p>Nenhuma consulta encontrada</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data/Hora</TableHead>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Valor</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredLogs.slice(0, 100).map((log) => (
-                      <TableRow key={log.id}>
-                        <TableCell className="text-muted-foreground">
-                          {new Date(log.created_at).toLocaleString("pt-BR")}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {queryTypeLabels[log.query_type] || log.query_type.toUpperCase()}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-mono max-w-[200px] truncate">
-                          {log.query_input}
-                        </TableCell>
-                        <TableCell>
-                          {log.status === "success" ? (
-                            <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-                              <CheckCircle className="h-3 w-3 mr-1" />
-                              Sucesso
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30">
-                              <XCircle className="h-3 w-3 mr-1" />
-                              Erro
-                            </Badge>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setSelectedLog(log)}
-                          >
-                            <Eye className="h-4 w-4 mr-1" />
-                            Ver
-                          </Button>
-                        </TableCell>
+              <>
+                <div className="overflow-x-auto rounded-lg border border-border/50">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-muted/30 hover:bg-muted/30">
+                        <TableHead className="font-semibold">Data/Hora</TableHead>
+                        <TableHead className="font-semibold">Tipo</TableHead>
+                        <TableHead className="font-semibold">Valor</TableHead>
+                        <TableHead className="font-semibold">Status</TableHead>
+                        <TableHead className="text-right font-semibold">Ações</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                    </TableHeader>
+                    <TableBody>
+                      {paginatedLogs.map((log) => (
+                        <TableRow key={log.id} className="hover:bg-muted/20">
+                          <TableCell className="text-muted-foreground text-sm">
+                            {new Date(log.created_at).toLocaleString("pt-BR")}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="font-medium">
+                              {queryTypeLabels[log.query_type] || log.query_type.toUpperCase()}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="font-mono text-sm max-w-[200px] truncate">
+                            {log.query_input}
+                          </TableCell>
+                          <TableCell>
+                            {log.status === "success" ? (
+                              <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
+                                <CheckCircle className="h-3 w-3 mr-1" />
+                                Sucesso
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="bg-rose-500/10 text-rose-400 border-rose-500/30">
+                                <XCircle className="h-3 w-3 mr-1" />
+                                Erro
+                              </Badge>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setSelectedLog(log)}
+                              className="h-8 px-3"
+                            >
+                              <Eye className="h-4 w-4 mr-1" />
+                              Ver
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Pagination Controls */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-border/50">
+                  <div className="text-sm text-muted-foreground">
+                    Mostrando {startIndex + 1} - {Math.min(endIndex, filteredLogs.length)} de {filteredLogs.length}
+                  </div>
+                  
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={goToFirstPage}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronsLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={goToPrevPage}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    
+                    <div className="flex items-center gap-1 mx-2">
+                      {/* Page numbers */}
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum: number;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        return (
+                          <Button
+                            key={pageNum}
+                            variant={currentPage === pageNum ? "default" : "outline"}
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => goToPage(pageNum)}
+                          >
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                    
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={goToNextPage}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8"
+                      onClick={goToLastPage}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronsRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -343,11 +477,11 @@ export default function QueryLogs() {
                 <div>
                   <span className="text-muted-foreground">Status:</span>{" "}
                   {selectedLog?.status === "success" ? (
-                    <Badge variant="outline" className="bg-success/10 text-success border-success/30">
+                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
                       Sucesso
                     </Badge>
                   ) : (
-                    <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30">
+                    <Badge variant="outline" className="bg-rose-500/10 text-rose-400 border-rose-500/30">
                       Erro
                     </Badge>
                   )}
