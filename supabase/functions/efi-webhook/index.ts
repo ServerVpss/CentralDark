@@ -277,17 +277,27 @@ Deno.serve(async (req) => {
             // ID do efeito "Festa/Confetti" do Telegram: 5046509860385561286
             const CONFETTI_EFFECT_ID = '5046509860385561286'
             
-            await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+            // Usar o chat_id do pending se disponível, senão usar o user_id
+            const targetChatId = (pending as any)?.telegram_chat_id || transaction.telegram_user_id
+            
+            const sendMsgRes = await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                chat_id: transaction.telegram_user_id,
+                chat_id: targetChatId,
                 text: message,
                 parse_mode: 'Markdown',
                 reply_markup: inlineKeyboard.inline_keyboard.length > 0 ? inlineKeyboard : undefined,
                 message_effect_id: CONFETTI_EFFECT_ID
               })
             })
+            
+            const sendMsgData = await sendMsgRes.json()
+            if (!sendMsgData.ok) {
+              console.error(`Erro ao enviar confirmação para ${targetChatId}:`, sendMsgData)
+            } else {
+              console.log(`Confirmação enviada com sucesso para chat ${targetChatId}`)
+            }
 
             // Se tiver grupo configurado, libera o usuário no grupo
             if (settings?.group_chat_id) {
