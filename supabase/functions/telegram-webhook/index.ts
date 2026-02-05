@@ -3162,14 +3162,14 @@ class BotHandler {
       blocked_reason: blockedReason || null,
     });
 
-    await this.supabase.from("bot_analytics").upsert({
-      bot_id: this.bot.id,
-      date: new Date().toISOString().split("T")[0],
-      messages_received: 1,
-      blocked_messages: isBlocked ? 1 : 0,
-      links_blocked: blockedReason === "link_detected" ? 1 : 0,
-      spam_detected: blockedReason === "spam_detected" ? 1 : 0,
-    }, { onConflict: "bot_id,date" });
+     // Use atomic increment function for accurate analytics
+     await this.supabase.rpc("increment_bot_analytics", {
+       p_bot_id: this.bot.id,
+       p_messages_received: 1,
+       p_blocked_messages: isBlocked ? 1 : 0,
+       p_links_blocked: blockedReason === "link_detected" ? 1 : 0,
+       p_spam_detected: blockedReason === "spam_detected" ? 1 : 0,
+     });
   }
 
   // =============== MAIN HANDLER ===============
