@@ -222,7 +222,7 @@ export default function TelegramUsers() {
         .from("telegram_subscriptions")
         .update({
           expires_at: newExpiry.toISOString(),
-          plan_days: editingSub.plan_days + additionalDays,
+          // Não atualiza plan_days - mantém o valor original do plano
         })
         .eq("id", editingSub.id);
 
