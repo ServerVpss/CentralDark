@@ -1,21 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import type { TelegramBot } from "@/hooks/telegram/types";
 
-export interface TelegramBot {
-  id: string;
-  name: string;
-  token: string;
-  bot_id: number | null;
-  bot_username: string | null;
-  is_active: boolean;
-  health_status: string | null;
-  webhook_active: boolean;
-  webhook_url: string | null;
-  user_id: string | null;
-  created_at: string;
-  updated_at: string;
-}
+// Re-export for backwards compatibility
+export type { TelegramBot };
 
 export interface TelegramSubscription {
   id: string;
