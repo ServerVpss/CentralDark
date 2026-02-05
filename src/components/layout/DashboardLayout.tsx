@@ -42,7 +42,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <span className="text-lg font-bold gradient-text">TelePanel</span>
         </div>
 
-        <Header className="hidden lg:flex" />
+        <Header className="hidden lg:block" />
         <main className="p-4 lg:p-6">
           {children}
         </main>
