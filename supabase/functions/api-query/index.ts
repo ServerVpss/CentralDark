@@ -30,7 +30,7 @@ const providers: Record<string, ApiProvider> = {
   },
   tconect_foto: {
     baseUrl: "http://node.tconect.xyz",
-    port: 3030,
+    port: 3041,
   },
 };
 
