@@ -27,6 +27,10 @@ const providers: Record<string, ApiProvider> = {
     baseUrl: "http://node.tconect.xyz",
     port: 3029,
   },
+  tconect_placa: {
+    baseUrl: "http://node.tconect.xyz",
+    port: 3041, // Porta correta para placa completa
+  },
   tconect_foto: {
     baseUrl: "http://node.tconect.xyz",
     port: 3041,
@@ -121,9 +125,9 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     return await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
   }
 
-  // TConect Placa Completa
+  // TConect Placa Completa - usa porta 3041
   if (normalizedType === "placa_completa" || normalizedType === "placa2") {
-    return await fetchFromProvider(providers.tconect_score, "/placa1", "placa", cleanInput);
+    return await fetchFromProvider(providers.tconect_placa, "/placa1", "placa", cleanInput);
   }
 
   // TConect Foto (single state)
