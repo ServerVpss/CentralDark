@@ -112,17 +112,22 @@ Deno.serve(async (req) => {
 
     console.log('Status check response:', JSON.stringify(proxyData))
 
-    const efiStatus = proxyData.data?.status || proxyData.status
+    // PHP retorna status e pix diretamente na raiz (não dentro de data)
+    const efiStatus = proxyData.status || proxyData.data?.status
     const isPaid = efiStatus === 'CONCLUIDA'
 
     if (isPaid) {
+      // Extrair e2e_id do formato correto do PHP (pix na raiz)
+      const pixArray = proxyData.pix || proxyData.data?.pix || []
+      const e2eId = pixArray[0]?.endToEndId || null
+      
       // Atualizar status da transação
       await supabase
         .from('pix_transactions')
         .update({ 
           status: 'paid', 
           paid_at: new Date().toISOString(),
-          e2e_id: proxyData.data?.pix?.[0]?.endToEndId
+          e2e_id: e2eId
         })
         .eq('id', transaction.id)
 
