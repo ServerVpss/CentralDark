@@ -52,7 +52,8 @@ Deno.serve(async (req) => {
     const { 
       amount, 
       user_id, 
-      telegram_user_id, 
+      telegram_user_id,
+      telegram_chat_id,
       bot_id, 
       plan_name,
       plan_code,
@@ -177,7 +178,8 @@ Deno.serve(async (req) => {
           user_id,
           bot_id,
           telegram_user_id,
-          txid: efiTxid, // TXID da Efí
+          telegram_chat_id,
+          txid: efiTxid,
           value: amount,
           plan_name: plan_name || 'Recarga',
           plan_code: plan_code || 'custom',
