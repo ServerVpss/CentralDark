@@ -144,7 +144,12 @@ export function BotHealthMonitor({ bots }: BotHealthMonitorProps) {
         {bots.length > 0 && bots[0].last_health_check && (
           <p className="text-xs text-muted-foreground text-center">
             Última verificação:{" "}
-            {new Date(bots[0].last_health_check).toLocaleTimeString("pt-BR")}
+            {new Date(bots[0].last_health_check).toLocaleTimeString("pt-BR", {
+              timeZone: "America/Sao_Paulo",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit"
+            })}
           </p>
         )}
       </CardContent>
