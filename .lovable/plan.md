@@ -1,174 +1,186 @@
 
-# Sistema de Contadores Automáticos para Bot Analytics
 
-## Visão Geral
+# Plano de Melhorias do Sistema de Consultas
 
-Este plano implementa um sistema robusto de contadores automáticos que atualiza corretamente a tabela `bot_analytics` quando mensagens são processadas pelos bots do Telegram.
+## Diagnóstico Atual
 
-## Problema Identificado
-
-O código atual usa `upsert` com valores fixos:
-```javascript
-await this.supabase.from("bot_analytics").upsert({
-  bot_id: this.bot.id,
-  date: new Date().toISOString().split("T")[0],
-  messages_received: 1,  // Isso SUBSTITUI ao invés de INCREMENTAR!
-  ...
-}, { onConflict: "bot_id,date" });
-```
-
-Isso significa que a cada mensagem processada, os contadores são **resetados para 1** ao invés de **incrementados**.
-
-## Solução
-
-Criar uma função PostgreSQL para incrementar contadores de forma atômica e segura.
-
-## Implementação
-
-### Etapa 1: Criar Função de Incremento no Banco de Dados
-
-Criar uma função RPC `increment_bot_analytics` que:
-- Recebe o `bot_id` e os campos a incrementar
-- Faz um `INSERT ... ON CONFLICT ... UPDATE` com incremento real
-- Garante operações atômicas (sem race conditions)
+Analisando o histórico de consultas, identifiquei os seguintes pontos:
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│  FLUXO DE ATUALIZAÇÃO DE ANALYTICS                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  Mensagem Recebida                                          │
-│         │                                                   │
-│         ▼                                                   │
-│  ┌─────────────────┐                                        │
-│  │ telegram-webhook │                                        │
-│  └────────┬────────┘                                        │
-│           │                                                 │
-│           ▼                                                 │
-│  ┌──────────────────────────┐                               │
-│  │ increment_bot_analytics() │  ◄── Nova função RPC         │
-│  └────────────┬─────────────┘                               │
-│               │                                             │
-│               ▼                                             │
-│  ┌─────────────────────────────┐                            │
-│  │  INSERT ... ON CONFLICT     │                            │
-│  │  SET field = field + value  │  ◄── Incremento atômico    │
-│  └─────────────────────────────┘                            │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
++------------------+-------+---------+-------+-----------+
+| Tipo             | Total | Sucesso | Erro  | Taxa      |
++------------------+-------+---------+-------+-----------+
+| CPF              | 290   | 232     | 58    | 80%       |
+| Telefone         | 153   | 97      | 56    | 63%       |
+| Nome             | 145   | 115     | 30    | 79%       |
+| Foto             | 108   | 96      | 12    | 89%       |
+| Placa            | 55    | 52      | 3     | 95%       |
+| PIX              | 13    | 0       | 13    | 0%        |
+| Score            | 15    | 10      | 5     | 67%       |
++------------------+-------+---------+-------+-----------+
 ```
 
-### Etapa 2: Atualizar Edge Function `telegram-webhook`
+---
 
-Modificar o método `guardMessage` para chamar a função RPC:
+## Melhorias Propostas
 
-**Antes:**
-```javascript
-await this.supabase.from("bot_analytics").upsert({
-  messages_received: 1,
-  blocked_messages: isBlocked ? 1 : 0,
-  ...
-}, { onConflict: "bot_id,date" });
+### 1. Sistema de Consultas Favoritas
+Salvar consultas frequentes para acesso rápido com um clique.
+
+**Benefícios:**
+- Agilidade para refazer consultas
+- Histórico organizado por tipo
+- Menos digitação repetitiva
+
+---
+
+### 2. Validação Inteligente de Entrada
+Validar e formatar automaticamente antes de enviar a consulta.
+
+**Exemplos:**
+- CPF: Aceita `123.456.789-00` ou `12345678900`
+- Telefone: Remove espaços e caracteres especiais
+- Placa: Converte para formato correto automaticamente
+
+---
+
+### 3. Cache de Resultados
+Armazenar consultas recentes localmente para acesso instantâneo.
+
+**Benefícios:**
+- Evita reconsultar dados idênticos
+- Economia de créditos/requisições
+- Resposta instantânea para repetições
+
+---
+
+### 4. Histórico Persistente no Banco
+O histórico atual é perdido ao recarregar a página. Implementar carregamento do banco de dados.
+
+**Recursos:**
+- Últimas 50 consultas do usuário
+- Filtro por tipo de consulta
+- Busca no histórico
+
+---
+
+### 5. Busca em Lote (Batch)
+Consultar múltiplos CPFs/telefones de uma vez.
+
+**Exemplo:**
+```text
+Digite até 10 CPFs separados por vírgula:
+12345678900, 98765432100, 11122233344
 ```
 
-**Depois:**
-```javascript
-await this.supabase.rpc("increment_bot_analytics", {
-  p_bot_id: this.bot.id,
-  p_messages_received: 1,
-  p_blocked_messages: isBlocked ? 1 : 0,
-  p_spam_detected: blockedReason === "spam_detected" ? 1 : 0,
-  p_links_blocked: blockedReason === "link_detected" ? 1 : 0
-});
+---
+
+### 6. Exportação de Resultados
+Baixar resultados em diferentes formatos.
+
+**Formatos:**
+- PDF formatado
+- TXT simples (estilo Telegram)
+- JSON para integração
+
+---
+
+### 7. Status em Tempo Real dos Provedores
+Atualmente os provedores mostram sempre "Online". Implementar verificação real.
+
+**Recursos:**
+- Ping automático aos provedores
+- Latência média
+- Alertas de indisponibilidade
+
+---
+
+### 8. Atalhos de Teclado
+Navegação rápida para usuários frequentes.
+
+| Atalho | Ação |
+|--------|------|
+| `Ctrl+1` | Seleciona CPF |
+| `Ctrl+2` | Seleciona Telefone |
+| `Ctrl+Enter` | Executa consulta |
+| `Ctrl+C` | Copia resultado |
+
+---
+
+### 9. Correção do Endpoint PIX
+O tipo PIX tem 0% de sucesso - precisa debug.
+
+---
+
+### 10. Indicadores de Performance
+Mostrar métricas ao usuário:
+- Tempo médio de resposta
+- Taxa de sucesso por tipo
+- Consultas restantes (se houver limite)
+
+---
+
+## Implementação Sugerida
+
+### Fase 1 - Essencial
+1. Validação inteligente de entrada
+2. Histórico persistente do banco
+3. Correção do endpoint PIX
+4. Status real dos provedores
+
+### Fase 2 - Produtividade
+5. Consultas favoritas
+6. Cache de resultados
+7. Atalhos de teclado
+
+### Fase 3 - Avançado
+8. Busca em lote
+9. Exportação de resultados
+10. Indicadores de performance
+
+---
+
+## Estrutura de Dados (Novas Tabelas)
+
+```text
++------------------------+
+|   query_favorites      |
++------------------------+
+| id          | uuid     |
+| user_id     | uuid     |
+| query_type  | text     |
+| query_input | text     |
+| label       | text     |
+| created_at  | timestamp|
++------------------------+
+
++------------------------+
+|   query_cache          |
++------------------------+
+| id          | uuid     |
+| user_id     | uuid     |
+| query_type  | text     |
+| query_input | text     |
+| result      | jsonb    |
+| expires_at  | timestamp|
++------------------------+
 ```
 
-### Etapa 3: Adicionar Contadores para Novos Usuários
-
-Detectar novos usuários e incrementar `new_users`:
-- Verificar se o usuário já existe em `telegram_subscriptions`
-- Se for novo, incrementar o contador
-
-### Etapa 4: Adicionar Contadores para Usuários Ativos
-
-Implementar rastreamento de usuários ativos diários:
-- Criar tabela auxiliar `daily_active_users`
-- Ao final do dia, consolidar contagem para `active_users`
-
-### Etapa 5: Atualizar Edge Function `telegram-bot`
-
-Corrigir o mesmo problema de incremento no arquivo `telegram-bot/index.ts` para `messages_sent`.
+---
 
 ## Arquivos a Modificar
 
-| Arquivo | Mudança |
-|---------|---------|
-| `supabase/migrations/` | Nova migração com função RPC |
-| `supabase/functions/telegram-webhook/index.ts` | Usar função RPC para incrementos |
-| `supabase/functions/telegram-bot/index.ts` | Usar função RPC para incrementos |
+| Arquivo | Alteração |
+|---------|-----------|
+| `src/pages/Consultas.tsx` | Interface principal com novas features |
+| `src/hooks/useQueryFavorites.ts` | Hook para favoritos (novo) |
+| `src/hooks/useQueryCache.ts` | Hook para cache (novo) |
+| `src/hooks/useQueryHistory.ts` | Hook para histórico persistente (novo) |
+| `src/components/consultation/QueryValidator.tsx` | Validador de entrada (novo) |
+| `src/components/consultation/QueryFavorites.tsx` | Lista de favoritos (novo) |
+| `supabase/functions/api-query/index.ts` | Correção do PIX |
 
-## Detalhes Técnicos
+---
 
-### Função PostgreSQL `increment_bot_analytics`
+Qual melhoria você gostaria de implementar primeiro?
 
-```sql
-CREATE OR REPLACE FUNCTION increment_bot_analytics(
-  p_bot_id UUID,
-  p_messages_received INT DEFAULT 0,
-  p_messages_sent INT DEFAULT 0,
-  p_new_users INT DEFAULT 0,
-  p_active_users INT DEFAULT 0,
-  p_blocked_messages INT DEFAULT 0,
-  p_spam_detected INT DEFAULT 0,
-  p_links_blocked INT DEFAULT 0
-)
-RETURNS void
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public
-AS $$
-BEGIN
-  INSERT INTO bot_analytics (
-    bot_id, date, 
-    messages_received, messages_sent, new_users, active_users,
-    blocked_messages, spam_detected, links_blocked
-  )
-  VALUES (
-    p_bot_id, CURRENT_DATE,
-    p_messages_received, p_messages_sent, p_new_users, p_active_users,
-    p_blocked_messages, p_spam_detected, p_links_blocked
-  )
-  ON CONFLICT (bot_id, date) DO UPDATE SET
-    messages_received = bot_analytics.messages_received + EXCLUDED.messages_received,
-    messages_sent = bot_analytics.messages_sent + EXCLUDED.messages_sent,
-    new_users = bot_analytics.new_users + EXCLUDED.new_users,
-    active_users = bot_analytics.active_users + EXCLUDED.active_users,
-    blocked_messages = bot_analytics.blocked_messages + EXCLUDED.blocked_messages,
-    spam_detected = bot_analytics.spam_detected + EXCLUDED.spam_detected,
-    links_blocked = bot_analytics.links_blocked + EXCLUDED.links_blocked;
-END;
-$$;
-```
-
-### Rastreamento de Novos Usuários
-
-Na função `handleNewMember` e na primeira interação privada, verificar se o usuário é novo e incrementar contador.
-
-### Rastreamento de Usuários Ativos
-
-Usar uma abordagem de Set para rastrear IDs únicos por dia (via tabela auxiliar ou Redis-like pattern no Supabase).
-
-## Benefícios
-
-1. **Precisão**: Contadores incrementam corretamente
-2. **Atomicidade**: Sem race conditions em atualizações concorrentes
-3. **Performance**: Operação única no banco (UPSERT com incremento)
-4. **Visibilidade**: Dashboard mostra dados reais de uso
-5. **Análise**: Métricas confiáveis para tomada de decisão
-
-## Próximos Passos
-
-Após implementação, os gráficos de Analytics no dashboard mostrarão:
-- Mensagens recebidas/enviadas por dia
-- Novos usuários registrados
-- Usuários ativos diários
-- Mensagens bloqueadas (spam, links)
