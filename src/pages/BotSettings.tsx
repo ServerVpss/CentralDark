@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -73,6 +74,8 @@ export default function BotSettings() {
   
   // Photo update state
   const [updatingPhoto, setUpdatingPhoto] = useState(false);
+  const [photoLoading, setPhotoLoading] = useState(true);
+  const [photoError, setPhotoError] = useState(false);
 
   // Find current bot
   useEffect(() => {
@@ -337,12 +340,22 @@ export default function BotSettings() {
                     <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          {settings.group_photo_url ? (
-                            <img 
-                              src={settings.group_photo_url} 
-                              alt={settings.group_title}
-                              className="h-10 w-10 rounded-full object-cover"
-                            />
+                          {settings.group_photo_url && !photoError ? (
+                            <div className="relative h-10 w-10">
+                              {photoLoading && (
+                                <Skeleton className="absolute inset-0 h-10 w-10 rounded-full" />
+                              )}
+                              <img 
+                                src={settings.group_photo_url} 
+                                alt={settings.group_title}
+                                className={`h-10 w-10 rounded-full object-cover transition-opacity ${photoLoading ? 'opacity-0' : 'opacity-100'}`}
+                                onLoad={() => setPhotoLoading(false)}
+                                onError={() => {
+                                  setPhotoLoading(false);
+                                  setPhotoError(true);
+                                }}
+                              />
+                            </div>
                           ) : (
                             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
                               <Users className="h-5 w-5 text-primary" />
