@@ -229,9 +229,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   }
 
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@Bot';
-  const categorizedData: Record<string, Array<{ key: string; value: unknown }>> = {};
-  const uncategorized: Array<{ key: string; value: unknown }> = [];
-
+  
   const categories: Record<string, { icon: string; label: string; fields: string[] }> = {
     personal: { icon: "👤", label: "DADOS PESSOAIS", fields: ["nome", "cpf", "nascimento", "sexo", "idade", "raca", "signo", "naturalidade", "nacionalidade"] },
     documents: { icon: "🪪", label: "DOCUMENTOS", fields: ["rg", "cnh", "pis", "titulo", "ctps", "cns"] },
@@ -255,6 +253,99 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return false;
   };
 
+  // Check if data contains multiple person records (array of objects with cpf/nome)
+  const detectMultiplePersons = (obj: unknown): Array<Record<string, unknown>> | null => {
+    if (!obj || typeof obj !== 'object') return null;
+    
+    // Check if it's directly an array of person objects
+    if (Array.isArray(obj)) {
+      if (obj.length > 0 && typeof obj[0] === 'object' && obj[0] !== null) {
+        const firstItem = obj[0] as Record<string, unknown>;
+        if ('cpf' in firstItem || 'nome' in firstItem || 'CPF' in firstItem || 'NOME' in firstItem) {
+          return obj as Array<Record<string, unknown>>;
+        }
+      }
+    }
+    
+    // Check nested properties for arrays of person objects
+    const record = obj as Record<string, unknown>;
+    for (const [key, value] of Object.entries(record)) {
+      if (Array.isArray(value) && value.length > 0 && typeof value[0] === 'object' && value[0] !== null) {
+        const firstItem = value[0] as Record<string, unknown>;
+        if ('cpf' in firstItem || 'nome' in firstItem || 'CPF' in firstItem || 'NOME' in firstItem) {
+          return value as Array<Record<string, unknown>>;
+        }
+      }
+    }
+    
+    // Check if parallel arrays exist (cpf: [...], nome: [...])
+    const cpfArray = record['cpf'] || record['CPF'] || record['cpfs'] || record['CPFs'];
+    const nomeArray = record['nome'] || record['NOME'] || record['nomes'] || record['NOmes'];
+    
+    if (Array.isArray(cpfArray) && Array.isArray(nomeArray) && cpfArray.length === nomeArray.length && cpfArray.length > 1) {
+      // Reconstruct as array of person objects
+      const persons: Array<Record<string, unknown>> = [];
+      for (let i = 0; i < cpfArray.length; i++) {
+        const person: Record<string, unknown> = {};
+        for (const [key, value] of Object.entries(record)) {
+          if (Array.isArray(value) && value.length === cpfArray.length) {
+            person[key] = value[i];
+          } else if (!Array.isArray(value)) {
+            person[key] = value;
+          }
+        }
+        persons.push(person);
+      }
+      return persons;
+    }
+    
+    return null;
+  };
+
+  const multiplePersons = detectMultiplePersons(data);
+  
+  // If multiple persons detected, format each one separately
+  if (multiplePersons && multiplePersons.length > 1) {
+    const lines: string[] = [];
+    const typeLabel = queryTypeLabels[queryType]?.replace(/[^\w\s]/g, '').trim() || queryType.toUpperCase();
+    
+    lines.push(`${queryTypeLabels[queryType] || '📋'} ${typeLabel} RESULTADO`);
+    lines.push(``);
+    lines.push(`👥 ${multiplePersons.length} pessoas encontradas`);
+    lines.push(``);
+    
+    multiplePersons.forEach((person, index) => {
+      lines.push(`┌─────────────────────────────`);
+      lines.push(`│ 👤 PESSOA ${index + 1}`);
+      lines.push(`├─────────────────────────────`);
+      
+      // Extract and display person data
+      for (const [key, value] of Object.entries(person)) {
+        if (ignoredKeys.includes(key.toLowerCase())) continue;
+        if (shouldIgnore(value)) continue;
+        
+        const label = getTxtLabel(key);
+        const displayValue = String(value).toUpperCase();
+        
+        if (displayValue && displayValue.length > 0 && displayValue !== '-') {
+          lines.push(`│ ▷ ${label.toUpperCase()}: ${displayValue}`);
+        }
+      }
+      
+      lines.push(`└─────────────────────────────`);
+      lines.push(``);
+    });
+    
+    lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+    lines.push(`🤖 ${botTag}`);
+    
+    return `<pre>${lines.join('\n')}</pre>`;
+  }
+
+  // Single record formatting (original logic)
+  const categorizedData: Record<string, Array<{ key: string; value: unknown }>> = {};
+  const uncategorized: Array<{ key: string; value: unknown }> = [];
+
   const flattenObject = (obj: unknown, prefix = ""): Array<{ key: string; value: unknown }> => {
     const items: Array<{ key: string; value: unknown }> = [];
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return items;
@@ -273,7 +364,13 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
         if (value.length > 0 && typeof value[0] === 'object') {
           value.forEach((item, i) => items.push(...flattenObject(item, `${fullKey}[${i}]`)));
         } else {
-          items.push({ key: fullKey, value: value.filter(v => !shouldIgnore(v)).join(', ') });
+          // For simple arrays, show each item on its own line if it's a list of values
+          const validItems = value.filter(v => !shouldIgnore(v));
+          if (validItems.length === 1) {
+            items.push({ key: fullKey, value: validItems[0] });
+          } else if (validItems.length > 1) {
+            items.push({ key: fullKey, value: validItems.join(', ') });
+          }
         }
       } else {
         items.push({ key: fullKey, value });
