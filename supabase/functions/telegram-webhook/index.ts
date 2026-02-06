@@ -3443,12 +3443,158 @@ class BotHandler {
     await this.showMainMenu(chatId, telegramUserId);
   }
 
+  // =============== PARSE MULTIPLE COMMANDS ===============
+  private parseMultipleCommands(text: string): Array<{ command: string; queryType: string; queryInput: string }> {
+    const commandMap: Record<string, string> = {
+      cpf: "cpf", cnpj: "cnpj", placa: "placa", placa2: "placa_completa",
+      telefone: "telefone", tel: "telefone", email: "email",
+      cep: "cep", nome: "nome", score: "score",
+      rg: "rg", cnh: "cnh", pix: "pix",
+      foto: "foto", nacional: "foto",
+    };
+    
+    const commands: Array<{ command: string; queryType: string; queryInput: string }> = [];
+    
+    // Split by command patterns, keeping the delimiter
+    // Matches: /cpf, /cnpj, etc. at the start or preceded by whitespace
+    const commandPattern = /(?:^|\s)(\/(?:cpf|cnpj|placa2?|telefone|tel|email|cep|nome|score|rg|cnh|pix|foto|nacional)(?:@\w+)?)/gi;
+    const matches = [...text.matchAll(commandPattern)];
+    
+    if (matches.length === 0) return commands;
+    
+    for (let i = 0; i < matches.length; i++) {
+      const match = matches[i];
+      const fullCommand = match[1].trim();
+      const commandStart = match.index! + (match[0].startsWith(' ') ? 1 : 0);
+      
+      // Find where this command's input ends (at the next command or end of string)
+      const nextCommandStart = (i + 1 < matches.length) ? matches[i + 1].index! : text.length;
+      
+      // Extract the full segment for this command
+      const segment = text.substring(commandStart, nextCommandStart).trim();
+      const segmentParts = segment.split(/\s+/);
+      
+      const command = segmentParts[0].toLowerCase().replace("/", "").split("@")[0];
+      const queryInput = segmentParts.slice(1).join(" ").trim();
+      const queryType = commandMap[command];
+      
+      if (queryType && queryInput) {
+        commands.push({ command, queryType, queryInput });
+      }
+    }
+    
+    return commands;
+  }
+
+  // =============== MAX CONCURRENT QUERIES ===============
+  private readonly MAX_CONCURRENT_QUERIES = 5;
+
+  // =============== HANDLE MULTIPLE QUERIES ===============
+  private async handleMultipleQueries(
+    message: TelegramMessage,
+    commands: Array<{ command: string; queryType: string; queryInput: string }>
+  ) {
+    const chatId = message.chat.id;
+    const telegramUserId = message.from!.id;
+    const replyToId = message.message_id;
+    const userFirstName = message.from?.first_name || 'Usuário';
+    
+    // Limit check message
+    const isLimited = commands.length >= this.MAX_CONCURRENT_QUERIES;
+    const processingText = `⏳ <b>Processando ${commands.length} consulta${commands.length > 1 ? 's' : ''} simultâneas...</b>` +
+      (isLimited ? `\n\n⚠️ Limite de ${this.MAX_CONCURRENT_QUERIES} consultas por mensagem.` : '');
+    
+    const processingMsg = await telegramRequest(this.token, "sendMessage", {
+      chat_id: chatId,
+      text: processingText,
+      parse_mode: "HTML",
+      reply_to_message_id: replyToId,
+    });
+    
+    console.log(`[MultiQuery] Processing ${commands.length} queries for user ${telegramUserId}`);
+    
+    // Execute all queries in parallel
+    const queryPromises = commands.map(async (cmd, index) => {
+      try {
+        const { data: result, fromCache } = await executeQueryWithCache(cmd.queryType, cmd.queryInput);
+        
+        // Log query (respects cache)
+        await this.logQuery(telegramUserId, cmd.queryType, cmd.queryInput, result, fromCache);
+        
+        return { index, success: true, result, cmd, fromCache };
+      } catch (error) {
+        console.error(`[MultiQuery] Error on query ${index}:`, error);
+        return { index, success: false, error, cmd, fromCache: false };
+      }
+    });
+    
+    const results = await Promise.all(queryPromises);
+    
+    // Delete processing message
+    if (processingMsg.ok && processingMsg.result) {
+      const msgResult = processingMsg.result as { message_id: number };
+      try {
+        await deleteMessage(this.token, chatId, msgResult.message_id);
+      } catch (_e) { /* ignore */ }
+    }
+    
+    // Send results one by one (to avoid telegram limits)
+    for (const r of results) {
+      if (r.success && r.result) {
+        const formattedResult = formatQueryResult(r.cmd.queryType, r.result, this.bot.bot_username, userFirstName);
+        
+        // Check for photo
+        let fotoUrl = r.result.foto || r.result.image || r.result.url || r.result.photo || r.result.fotoBase64;
+        if (fotoUrl && typeof fotoUrl === 'string') {
+          if (fotoUrl.startsWith('/9j/') || fotoUrl.startsWith('iVBOR')) {
+            fotoUrl = `data:image/jpeg;base64,${fotoUrl}`;
+          }
+        }
+        const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
+          (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+        
+        const cacheIndicator = r.fromCache ? ' ⚡' : '';
+        const headerLabel = queryTypeLabels[r.cmd.queryType] || r.cmd.queryType.toUpperCase();
+        const resultHeader = `📊 <b>${headerLabel}${cacheIndicator}</b>\n\n`;
+        
+        if (isValidPhotoUrl) {
+          const caption = (resultHeader + formattedResult).substring(0, 1024);
+          await telegramRequest(this.token, "sendPhoto", {
+            chat_id: chatId,
+            photo: fotoUrl,
+            caption,
+            parse_mode: "HTML",
+            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
+          });
+        } else {
+          await sendLongMessagePaginated(this.token, chatId, resultHeader + formattedResult, this.supabase, undefined, undefined, r.cmd.queryType, r.cmd.queryInput);
+        }
+      } else {
+        await telegramRequest(this.token, "sendMessage", {
+          chat_id: chatId,
+          text: `❌ <b>Erro na consulta</b>\n\nTipo: ${r.cmd.queryType.toUpperCase()}\nValor: <code>${r.cmd.queryInput}</code>`,
+          parse_mode: "HTML",
+        });
+      }
+    }
+  }
+
   // =============== GROUP COMMAND HANDLER ===============
   async handleGroupCommand(message: TelegramMessage, text: string) {
     const chatId = message.chat.id;
     const telegramUserId = message.from!.id;
     const replyToId = message.message_id;
 
+    // Check for multiple commands in the same message
+    const multipleCommands = this.parseMultipleCommands(text);
+    
+    if (multipleCommands.length > 1) {
+      // Process multiple queries in parallel (max 5)
+      await this.handleMultipleQueries(message, multipleCommands.slice(0, this.MAX_CONCURRENT_QUERIES));
+      return;
+    }
+
+    // Single command - original logic
     // Parse command: /cpf 12345678900 or /cpf
     const parts = text.trim().split(/\s+/);
     const command = parts[0].toLowerCase().replace("/", "").split("@")[0]; // Remove @botusername
