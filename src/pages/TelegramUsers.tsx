@@ -102,10 +102,6 @@ export default function TelegramUsers() {
   const [editDays, setEditDays] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, [selectedBotId]);
-
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -137,6 +133,47 @@ export default function TelegramUsers() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedBotId]);
+
+  // Realtime subscription for telegram_subscriptions
+  useEffect(() => {
+    const channel = supabase
+      .channel("telegram_subscriptions_realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "telegram_subscriptions" },
+        (payload) => {
+          console.log("Subscription update:", payload);
+          
+          if (payload.eventType === "INSERT") {
+            const newSub = payload.new as TelegramSubscription;
+            // Check if matches current filter
+            if (selectedBotId === "all" || newSub.bot_id === selectedBotId) {
+              setSubscriptions((prev) => [newSub, ...prev]);
+              toast.success("Nova assinatura detectada!", {
+                description: `ID: ${newSub.telegram_user_id} - ${newSub.plan_name}`,
+              });
+            }
+          } else if (payload.eventType === "UPDATE") {
+            setSubscriptions((prev) =>
+              prev.map((sub) =>
+                sub.id === payload.new.id ? (payload.new as TelegramSubscription) : sub
+              )
+            );
+          } else if (payload.eventType === "DELETE") {
+            setSubscriptions((prev) => prev.filter((sub) => sub.id !== payload.old.id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [selectedBotId]);
 
   const isExpired = (expiresAt: string) => new Date(expiresAt).getTime() < Date.now();
   const daysLeft = (expiresAt: string) => {
