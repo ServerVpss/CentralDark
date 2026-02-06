@@ -226,21 +226,92 @@ function extractData(data: any): Record<string, any> {
 function parseTextData(text: string): Record<string, any> {
   const result: Record<string, any> = {};
   
+  // Remove bot references and URLs
   let cleanText = text
     .replace(/@\w+/g, "")
     .replace(/https?:\/\/[^\s]+/g, "")
     .trim();
 
+  // Split by actual newlines (both escaped and real)
   const lines = cleanText.split(/\\n|\n/).filter((l) => l.trim());
 
+  // Track arrays for grouped data
+  const arrays: Record<string, string[]> = {
+    telefones: [],
+    enderecos: [],
+    emails: [],
+    empresas: [],
+    parentes: [],
+    veiculos: [],
+    bancos: [],
+    empregos: [],
+  };
+  
+  let currentArrayKey: string | null = null;
+
   for (const line of lines) {
-    const match = line.match(/^([^:⎯—=>]+)[:\s⎯—=>]+\s*(.*)$/);
-    if (match) {
-      const key = match[1].trim().toLowerCase().replace(/\s+/g, "_");
-      const value = match[2].trim();
-      if (value && value !== "-" && !value.toLowerCase().includes("não informad")) {
+    const trimmedLine = line.trim();
+    
+    // Check for section headers like "TELEFONES: ( 4 - Encontrados)"
+    const sectionMatch = trimmedLine.match(/^(TELEFONES|ENDERECOS|EMAILS|EMPRESAS|PARENTES|VEÍCULOS|VEICULOS|BANCOS|EMPREGOS):\s*\(\s*(\d+)/i);
+    if (sectionMatch) {
+      currentArrayKey = sectionMatch[1].toLowerCase().replace("í", "i");
+      continue;
+    }
+    
+    // Check for list items (starting with •)
+    if (trimmedLine.startsWith("•")) {
+      const itemValue = trimmedLine.substring(1).trim();
+      if (currentArrayKey && arrays[currentArrayKey] && itemValue) {
+        arrays[currentArrayKey].push(itemValue);
+      }
+      continue;
+    }
+    
+    // Check for "INTERESSES PESSOAIS:" section
+    if (trimmedLine.includes("INTERESSES PESSOAIS")) {
+      currentArrayKey = null;
+      continue;
+    }
+    
+    // Check for interest items like "- Turismo: Não"
+    if (trimmedLine.startsWith("-") && trimmedLine.includes(":")) {
+      const interestMatch = trimmedLine.match(/^-\s*([^:]+):\s*(.+)$/);
+      if (interestMatch) {
+        const interestKey = `interesse_${interestMatch[1].toLowerCase().replace(/\s+/g, "_")}`;
+        result[interestKey] = interestMatch[2].trim();
+      }
+      continue;
+    }
+
+    // Parse key-value pairs with ⎯ separator (most common in this API)
+    const dashMatch = trimmedLine.match(/^([A-ZÀ-Ú\s]+)\s*⎯\s*(.*)$/);
+    if (dashMatch) {
+      currentArrayKey = null;
+      const key = dashMatch[1].trim().toLowerCase().replace(/\s+/g, "_");
+      const value = dashMatch[2].trim();
+      if (value && value !== "-" && !value.toLowerCase().includes("não informad") && value !== "SEM INFORMAÇÃO") {
         result[key] = value;
       }
+      continue;
+    }
+
+    // Parse key-value with colon separator
+    const colonMatch = trimmedLine.match(/^([^:⎯—=>]+)[:\s⎯—=>]+\s*(.*)$/);
+    if (colonMatch) {
+      currentArrayKey = null;
+      const key = colonMatch[1].trim().toLowerCase().replace(/\s+/g, "_");
+      const value = colonMatch[2].trim();
+      if (value && value !== "-" && !value.toLowerCase().includes("não informad") && value !== "SEM INFORMAÇÃO") {
+        result[key] = value;
+      }
+    }
+  }
+
+  // Add non-empty arrays to result
+  for (const [key, arr] of Object.entries(arrays)) {
+    if (arr.length > 0) {
+      result[key] = arr;
     }
   }
 
