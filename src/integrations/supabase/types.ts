@@ -806,6 +806,42 @@ export type Database = {
         }
         Relationships: []
       }
+      query_cache: {
+        Row: {
+          cached_result: Json
+          created_at: string
+          expires_at: string
+          hit_count: number
+          id: string
+          last_accessed: string
+          query_hash: string
+          query_input: string
+          query_type: string
+        }
+        Insert: {
+          cached_result: Json
+          created_at?: string
+          expires_at: string
+          hit_count?: number
+          id?: string
+          last_accessed?: string
+          query_hash: string
+          query_input: string
+          query_type: string
+        }
+        Update: {
+          cached_result?: Json
+          created_at?: string
+          expires_at?: string
+          hit_count?: number
+          id?: string
+          last_accessed?: string
+          query_hash?: string
+          query_input?: string
+          query_type?: string
+        }
+        Relationships: []
+      }
       query_history: {
         Row: {
           created_at: string

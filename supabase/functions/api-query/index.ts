@@ -18,6 +18,33 @@ interface ApiProvider {
   port: number;
 }
 
+// TTL configurations per query type (in hours)
+const cacheTTL: Record<string, number> = {
+  cpf: 24,
+  cnpj: 24,
+  placa: 12,
+  placa_completa: 12,
+  placa2: 12,
+  score: 6,
+  foto: 168, // 7 days
+  nacional: 168, // 7 days
+  telefone: 24,
+  email: 24,
+  cep: 720, // 30 days
+  nome: 24,
+  rg: 24,
+  cnh: 24,
+  pix: 24,
+  parentes: 24,
+  empregos: 24,
+  chassi: 24,
+  renavam: 24,
+  motor: 24,
+  frota: 24,
+  bin: 24,
+  cns: 24,
+};
+
 // API Provider configurations
 const providers: Record<string, ApiProvider> = {
   nexfuture: {
@@ -26,15 +53,15 @@ const providers: Record<string, ApiProvider> = {
   },
   tconect_score: {
     baseUrl: "http://node.tconect.xyz",
-    port: 3041, // Porta correta para score
+    port: 3041,
   },
   tconect_placa: {
     baseUrl: "http://node.tconect.xyz",
-    port: 3041, // Porta correta para placa completa
+    port: 3041,
   },
   tconect_foto: {
     baseUrl: "http://node.tconect.xyz",
-    port: 3030, // Porta correta para fotos (igual telegram-api-query)
+    port: 3030,
   },
 };
 
@@ -67,6 +94,73 @@ const brazilianStates = [
   "RS", "RO", "RR", "SC", "SP", "SE", "TO"
 ];
 
+// Generate a simple hash for cache key
+async function generateHash(queryType: string, queryInput: string): Promise<string> {
+  const text = `${queryType.toLowerCase()}:${queryInput}`;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+// Get TTL for query type
+function getTTLHours(queryType: string): number {
+  return cacheTTL[queryType.toLowerCase()] || 24;
+}
+
+// Check cache for existing result
+async function checkCache(
+  supabase: ReturnType<typeof createClient>,
+  queryHash: string
+): Promise<{ hit: boolean; data?: Record<string, unknown> }> {
+  const { data, error } = await supabase
+    .from("query_cache")
+    .select("id, cached_result, hit_count")
+    .eq("query_hash", queryHash)
+    .gt("expires_at", new Date().toISOString())
+    .maybeSingle();
+
+  if (error || !data) {
+    return { hit: false };
+  }
+
+  // Update hit count and last accessed
+  await supabase
+    .from("query_cache")
+    .update({ 
+      hit_count: (data.hit_count || 0) + 1, 
+      last_accessed: new Date().toISOString() 
+    })
+    .eq("id", data.id);
+
+  return { hit: true, data: data.cached_result as Record<string, unknown> };
+}
+
+// Save result to cache
+async function saveToCache(
+  supabase: ReturnType<typeof createClient>,
+  queryType: string,
+  queryInput: string,
+  queryHash: string,
+  result: Record<string, unknown>
+): Promise<void> {
+  const ttlHours = getTTLHours(queryType);
+  const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000).toISOString();
+
+  await supabase
+    .from("query_cache")
+    .upsert({
+      query_type: queryType.toLowerCase(),
+      query_input: queryInput,
+      query_hash: queryHash,
+      cached_result: result,
+      expires_at: expiresAt,
+      hit_count: 0,
+      last_accessed: new Date().toISOString(),
+    }, { onConflict: "query_hash" });
+}
+
 async function fetchFromProvider(
   provider: ApiProvider,
   endpoint: string,
@@ -93,7 +187,6 @@ async function fetchFromProvider(
       },
     });
 
-    // Handle 404 as "not found" instead of error
     if (response.status === 404) {
       console.log(`Data not found (404) for: ${url.toString()}`);
       return { notFound: true, message: "Dados não encontrados" };
@@ -132,7 +225,7 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     return await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
   }
 
-  // TConect Placa Completa - usa porta 3041
+  // TConect Placa Completa
   if (normalizedType === "placa_completa" || normalizedType === "placa2") {
     return await fetchFromProvider(providers.tconect_placa, "/placa1", "placa", cleanInput);
   }
@@ -153,7 +246,6 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     console.log("Starting national photo search across all states...");
     const results: Record<string, unknown> = {};
     
-    // Search all states in parallel (in batches to avoid overwhelming the API)
     const batchSize = 5;
     for (let i = 0; i < brazilianStates.length; i += batchSize) {
       const batch = brazilianStates.slice(i, i + batchSize);
@@ -201,7 +293,7 @@ Deno.serve(async (req) => {
 
     let queryRequest: QueryRequest;
 
-    // Suporte GET via query params
+    // Support GET via query params
     if (req.method === "GET") {
       const url = new URL(req.url);
       const tipo = url.searchParams.get("tipo");
@@ -226,7 +318,6 @@ Deno.serve(async (req) => {
       };
       console.log("GET request params:", JSON.stringify(queryRequest));
     } else {
-      // POST - comportamento original
       queryRequest = await req.json();
       console.log("POST request body:", JSON.stringify(queryRequest));
     }
@@ -239,11 +330,42 @@ Deno.serve(async (req) => {
     }
 
     const startTime = Date.now();
-    const result = await handleQuery(queryRequest);
+    const normalizedType = queryRequest.queryType.toLowerCase();
+    const cleanInput = queryRequest.queryInput.replace(/[^\w@.-]/g, "").trim();
+    
+    // Generate cache key (include estado for foto queries)
+    const cacheKey = normalizedType === "foto" && queryRequest.estado 
+      ? `${normalizedType}:${cleanInput}:${queryRequest.estado.toUpperCase()}`
+      : `${normalizedType}:${cleanInput}`;
+    const queryHash = await generateHash(cacheKey, "");
+
+    // Check cache first
+    const cacheResult = await checkCache(supabase, queryHash);
+    
+    let result: Record<string, unknown>;
+    let fromCache = false;
+
+    if (cacheResult.hit && cacheResult.data) {
+      // CACHE HIT
+      console.log(`Cache HIT for hash: ${queryHash.substring(0, 16)}...`);
+      result = cacheResult.data;
+      fromCache = true;
+    } else {
+      // CACHE MISS - fetch from external API
+      console.log(`Cache MISS for hash: ${queryHash.substring(0, 16)}...`);
+      result = await handleQuery(queryRequest);
+      
+      // Only cache successful results (not errors or not found)
+      if (!result.error && !result.notFound) {
+        await saveToCache(supabase, normalizedType, cleanInput, queryHash, result);
+        console.log(`Saved to cache with TTL: ${getTTLHours(normalizedType)}h`);
+      }
+    }
+
     const duration = Date.now() - startTime;
+    console.log(`Query completed in ${duration}ms (fromCache: ${fromCache})`);
 
-    console.log(`Query completed in ${duration}ms`);
-
+    // Log query for authenticated users
     const authHeader = req.headers.get("Authorization");
     let userId = null;
     
@@ -262,14 +384,16 @@ Deno.serve(async (req) => {
         status: result.error ? "error" : "success",
       });
 
-      await supabase.from("api_usage_logs").insert({
-        user_id: userId,
-        query_type: queryRequest.queryType,
-        credits_used: 1,
-      });
+      // Only count credits for non-cached results
+      if (!fromCache) {
+        await supabase.from("api_usage_logs").insert({
+          user_id: userId,
+          query_type: queryRequest.queryType,
+          credits_used: 1,
+        });
+      }
     }
 
-    // Determine if it's a real error or just "not found"
     const isNotFound = result.notFound === true;
     const isError = result.error && !isNotFound;
 
@@ -278,6 +402,7 @@ Deno.serve(async (req) => {
         success: !isError,
         data: result,
         duration_ms: duration,
+        fromCache,
       }),
       {
         status: isError ? 400 : 200,
