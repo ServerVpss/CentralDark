@@ -283,6 +283,17 @@ function extractPhoto(data: any): string | null {
 function extractData(data: any): Record<string, any> {
   if (!data) return {};
 
+  // Check if this looks like a Score API response with 'resposta' field
+  if (data.data?.resposta || data.resposta) {
+    const resposta = data.data?.resposta || data.resposta;
+    if (typeof resposta === "object") {
+      const scoreData = processScoreResponse(resposta);
+      if (Object.keys(scoreData).length > 0) {
+        return scoreData;
+      }
+    }
+  }
+
   // If data has a nested 'data' property that is a string (API text response)
   if (data.data && typeof data.data === "string") {
     const parsed = parseTextData(data.data);
@@ -312,6 +323,21 @@ function extractData(data: any): Record<string, any> {
     
     // Skip photo fields in main data
     if (["foto", "image", "photo", "fotobase64", "base64"].includes(keyLower)) continue;
+    
+    // Skip junk fields
+    if (keyLower === "atualizado_em" && typeof value === "string" && 
+        (value.toLowerCase().includes("encodeuricomponent") || value.toLowerCase().includes("data:text"))) {
+      continue;
+    }
+    
+    // Check if this is a score-related field that needs parsing
+    if (typeof value === "string" && (value.toUpperCase().includes("CSB") || value.toUpperCase().includes("SCORE"))) {
+      const scoreData = parseScoreData(value);
+      if (scoreData && Object.keys(scoreData).length > 0) {
+        Object.assign(result, scoreData);
+        continue;
+      }
+    }
     
     // Check if this is a "texto" field that should be parsed
     if (["texto", "text", "resultado", "resposta"].includes(keyLower) && typeof value === "string") {
@@ -434,7 +460,7 @@ function parseInlineFields(text: string): Record<string, any> {
 }
 
 // Parse Score-specific format (highly concatenated without spaces)
-// Example: "SCORE SERASASCORE CSB:SEM INFORMAÇÃOFAIXA DE RISCO CSB:SEM INFORMAÇÃOSCORE CSBA:848FAIXA DE RISCO CSBA:BAIXÍSSIMO RISCO"
+// Example input: "SCORE SERASASCORE CSB:484FAIXA DE RISCO CSB:MEDIOSCORE CSBA:368FAIXA DE RISCO CSBA:ALTO"
 function parseScoreData(text: string): Record<string, any> | null {
   // Check if this looks like Score data
   const textUpper = text.toUpperCase();
@@ -444,73 +470,84 @@ function parseScoreData(text: string): Record<string, any> | null {
   
   const result: Record<string, any> = {};
   
-  // Normalize the text - add spaces around key terms to help parsing
-  let normalized = text
-    .replace(/SCORE\s*SERASA/gi, " SCORE_SERASA ")
-    .replace(/SCORE\s*CSB(?!A)/gi, " SCORE_CSB ")
-    .replace(/SCORE\s*CSBA/gi, " SCORE_CSBA ")
-    .replace(/FAIXA\s*(?:DE\s*)?RISCO\s*CSB(?!A)/gi, " FAIXA_RISCO_CSB ")
-    .replace(/FAIXA\s*(?:DE\s*)?RISCO\s*CSBA/gi, " FAIXA_RISCO_CSBA ")
-    .replace(/FAIXA\s*(?:DE\s*)?RISCO(?!\s*CSB)/gi, " FAIXA_RISCO ")
-    .replace(/CSB(?!A|\s*:)/gi, " CSB ")
-    .replace(/CSBA/gi, " CSBA ")
-    .replace(/:/g, ": ")
-    .replace(/\s+/g, " ")
-    .trim();
-  
-  // Extract SCORE CSB (not CSBA)
-  const scoreCsbMatch = normalized.match(/(?:SCORE_CSB|CSB)\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/i);
+  // Method 1: Direct regex extraction from concatenated string
+  // Pattern: "SCORE CSB:484" or "CSB:484"
+  const scoreCsbMatch = text.match(/(?:SCORE\s*)?CSB(?!A)\s*:?\s*(\d+)/i);
   if (scoreCsbMatch && scoreCsbMatch[1]) {
-    const val = scoreCsbMatch[1].trim();
-    if (!val.toUpperCase().includes("SEM INFORMAÇÃO")) {
-      result.score_csb = val;
-    }
+    result.score_csb = scoreCsbMatch[1];
   }
   
-  // Extract SCORE CSBA
-  const scoreCsbaMatch = normalized.match(/(?:SCORE_CSBA|CSBA)\s*:?\s*(\d+)/i);
+  // Pattern: "SCORE CSBA:368" or "CSBA:368"
+  const scoreCsbaMatch = text.match(/(?:SCORE\s*)?CSBA\s*:?\s*(\d+)/i);
   if (scoreCsbaMatch && scoreCsbaMatch[1]) {
-    result.score_csba = scoreCsbaMatch[1].trim();
+    result.score_csba = scoreCsbaMatch[1];
   }
   
-  // Extract FAIXA DE RISCO CSB (not CSBA)
-  const faixaCsbMatch = normalized.match(/FAIXA_RISCO_CSB\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/i);
+  // Pattern: "FAIXA DE RISCO CSB:MEDIO" - extract word(s) before next pattern
+  const faixaCsbMatch = text.match(/FAIXA\s*(?:DE\s*)?RISCO\s*CSB(?!A)\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ]+)/i);
   if (faixaCsbMatch && faixaCsbMatch[1]) {
     const val = faixaCsbMatch[1].trim();
-    if (val && !val.toUpperCase().includes("SEM INFORMAÇÃO")) {
+    if (val && !val.toUpperCase().includes("SEM") && val !== "SCORE") {
       result.faixa_risco_csb = val;
     }
   }
   
-  // Extract FAIXA DE RISCO CSBA
-  const faixaCsbaMatch = normalized.match(/FAIXA_RISCO_CSBA\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/i);
+  // Pattern: "FAIXA DE RISCO CSBA:ALTO"
+  const faixaCsbaMatch = text.match(/FAIXA\s*(?:DE\s*)?RISCO\s*CSBA\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ]+)/i);
   if (faixaCsbaMatch && faixaCsbaMatch[1]) {
     const val = faixaCsbaMatch[1].trim();
-    if (val && !val.toUpperCase().includes("SEM INFORMAÇÃO")) {
+    if (val && !val.toUpperCase().includes("SEM")) {
       result.faixa_risco_csba = val;
     }
   }
   
-  // Extract SCORE SERASA
-  const serasaMatch = normalized.match(/SCORE_SERASA\s*:?\s*(\d+)/i);
+  // Pattern: "SCORE SERASA" followed by number (rare, usually at start)
+  const serasaMatch = text.match(/SCORE\s*SERASA\s*:?\s*(\d+)/i);
   if (serasaMatch && serasaMatch[1]) {
-    result.score_serasa = serasaMatch[1].trim();
-  }
-  
-  // Extract CPF and Nome if present
-  const cpfMatch = text.match(/CPF\s*:?\s*(\d{11}|\d{3}\.\d{3}\.\d{3}-\d{2})/i);
-  if (cpfMatch) result.cpf = cpfMatch[1];
-  
-  const nomeMatch = text.match(/NOME\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=CPF|SCORE|CSB|FAIXA|$)/i);
-  if (nomeMatch && nomeMatch[1].trim()) {
-    const nome = nomeMatch[1].trim();
-    // Avoid capturing partial field names
-    if (nome !== "COPIAR" && nome.length > 2) {
-      result.nome = nome;
-    }
+    result.score_serasa = serasaMatch[1];
   }
   
   return Object.keys(result).length > 0 ? result : null;
+}
+
+// Process score response that may have multiple fields with concatenated data
+function processScoreResponse(data: Record<string, any>): Record<string, any> {
+  const result: Record<string, any> = {};
+  
+  // Fields that may contain score data
+  const scoreFields = ["score", "faixa_score", "classificacao", "resposta"];
+  
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof value === "string") {
+      const keyLower = key.toLowerCase();
+      
+      // Skip junk fields
+      if (keyLower === "atualizado_em" || 
+          value.toLowerCase().includes("encodeuricomponent") ||
+          value.toLowerCase().includes("data:text")) {
+        continue;
+      }
+      
+      // Skip placeholder values
+      if (value === "\\n';" || value.toLowerCase() === "copiar") {
+        continue;
+      }
+      
+      // If it looks like score data, parse it
+      if (value.toUpperCase().includes("CSB") || value.toUpperCase().includes("SCORE")) {
+        const parsed = parseScoreData(value);
+        if (parsed) {
+          Object.assign(result, parsed);
+        }
+      }
+    } else if (typeof value === "object" && value !== null) {
+      // Recurse into nested objects
+      const nested = processScoreResponse(value);
+      Object.assign(result, nested);
+    }
+  }
+  
+  return result;
 }
 
 // Parse text data with various formats
