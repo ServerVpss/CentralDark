@@ -177,7 +177,7 @@ async function notifyOfflineFunctions(
     const message = `⚠️ *ALERTA: Edge Functions Offline*\n\n` +
       `As seguintes funções estão indisponíveis:\n\n` +
       offlineFunctions.map(f => `❌ \`${f.name}\`\n   └ ${f.error || 'Não deployada'}`).join('\n\n') +
-      `\n\n🔧 Acesse o painel Lovable para fazer o redeploy.`;
+      `\n\n🔧 Acesse o painel para fazer o redeploy.`;
     
     // Notificar primeiro owner
     await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
