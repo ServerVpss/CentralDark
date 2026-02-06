@@ -1,160 +1,125 @@
 
-# Sistema de Indexação de Consultas
 
-## Visão Geral
-Criar um sistema de cache e indexação para acelerar consultas repetidas, evitando chamadas desnecessárias às APIs externas quando o mesmo dado já foi consultado recentemente.
+# Integrar Sistema de Cache no Bot Telegram
 
-## Arquitetura da Solução
+## Situacao Atual
+
+O bot Telegram (`telegram-webhook`) possui sua propria implementacao de consultas que **nao usa o cache**:
+- Funcao `executeQuery()` interna (linhas 1158-1295)
+- Chama `fetchFromProvider()` diretamente
+- Cada consulta no bot = chamada para API externa
+- Nao verifica nem salva na tabela `query_cache`
+
+Enquanto isso, o frontend usa `api-query` que:
+- Verifica cache antes de chamar APIs
+- Salva resultados para reuso
+- Indica `fromCache: true` quando usa dados indexados
+
+## Solucao Proposta
+
+Refatorar o `telegram-webhook` para delegar consultas ao `api-query` (que ja tem cache).
+
+### Arquitetura Nova
 
 ```text
-┌─────────────────────────────────────────────────────────────────┐
-│                      FLUXO DE CONSULTA                          │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   [Usuário Consulta CPF]                                        │
-│          │                                                      │
-│          ▼                                                      │
-│   ┌──────────────────┐                                          │
-│   │ Verificar Cache  │◄─── Busca por índice (hash do input)     │
-│   └────────┬─────────┘                                          │
-│            │                                                    │
-│     ┌──────┴──────┐                                             │
-│     │             │                                             │
-│  [CACHE HIT]  [CACHE MISS]                                      │
-│     │             │                                             │
-│     ▼             ▼                                             │
-│  Retorna       Chama API                                        │
-│  Dados         Externa                                          │
-│  Indexados        │                                             │
-│                   ▼                                             │
-│            ┌─────────────┐                                      │
-│            │ Salva Cache │──► Índice por tipo + input           │
-│            └─────────────┘                                      │
-│                   │                                             │
-│                   ▼                                             │
-│            Retorna Dados                                        │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+ANTES (duplicado, sem cache):
+[Bot] --> executeQuery() --> fetchFromProvider() --> API Externa
+
+DEPOIS (unificado, com cache):
+[Bot] --> fetch(api-query) --> [Cache Check] --> API Externa (se miss)
 ```
 
-## Componentes a Implementar
+## Mudancas Necessarias
 
-### 1. Nova Tabela: `query_cache`
-Armazena resultados de consultas para acesso rápido:
+### 1. Criar funcao helper no telegram-webhook
 
-| Coluna | Tipo | Descrição |
-|--------|------|-----------|
-| id | UUID | Identificador único |
-| query_type | TEXT | Tipo (cpf, cnpj, placa, etc.) |
-| query_input | TEXT | Valor consultado (limpo) |
-| query_hash | TEXT | Hash único (tipo + input) - ÍNDICE |
-| cached_result | JSONB | Resultado completo da API |
-| hit_count | INTEGER | Quantas vezes foi acessado do cache |
-| created_at | TIMESTAMPTZ | Data de criação |
-| expires_at | TIMESTAMPTZ | Expiração do cache (24h padrão) |
-| last_accessed | TIMESTAMPTZ | Último acesso |
+Adicionar funcao para chamar o `api-query`:
 
-**Índices:**
-- `idx_query_cache_hash` UNIQUE em `query_hash`
-- `idx_query_cache_expires` em `expires_at`
-- `idx_query_cache_type_input` em `(query_type, query_input)`
-
-### 2. Edge Function: `api-query` (Atualização)
-Modificar para verificar cache antes de chamar APIs externas:
-
-1. Gerar hash do `queryType + queryInput`
-2. Buscar em `query_cache` onde `query_hash = hash AND expires_at > NOW()`
-3. Se encontrar (CACHE HIT):
-   - Incrementar `hit_count`
-   - Atualizar `last_accessed`
-   - Retornar `cached_result`
-4. Se não encontrar (CACHE MISS):
-   - Chamar API externa normalmente
-   - Salvar resultado em `query_cache`
-   - Retornar resultado
-
-### 3. Nova Página: `/consultas/indice` (Opcional)
-Interface para visualizar e gerenciar o índice:
-
-- **Estatísticas**: Total de entradas, taxa de hit/miss, economia estimada
-- **Pesquisa por índice**: Buscar dados já indexados sem nova consulta
-- **Limpeza manual**: Invalidar cache específico ou limpar tudo
-- **Configuração**: Tempo de expiração, tipos a cachear
-
-### 4. Componente: `CacheStats`
-Widget no dashboard mostrando:
-- Entradas no cache
-- Taxa de acerto (hit rate)
-- Economia de créditos/chamadas
-- Consultas mais populares
-
-### 5. Trigger de Limpeza Automática
-Database trigger para limpar entradas expiradas:
-- Executar a cada inserção nova
-- Deletar onde `expires_at < NOW()`
-
-## Configurações de Cache
-
-| Tipo de Consulta | TTL (Tempo de Vida) | Motivo |
-|------------------|---------------------|--------|
-| CPF | 24 horas | Dados pessoais mudam pouco |
-| CNPJ | 24 horas | Dados empresariais estáveis |
-| Placa | 12 horas | Veículos podem mudar de dono |
-| Score | 6 horas | Score pode mudar mais rápido |
-| Foto | 7 dias | Fotos raramente mudam |
-| Telefone | 24 horas | Associações estáveis |
-| CEP | 30 dias | Endereços não mudam |
-
-## Benefícios
-
-1. **Velocidade**: Consultas cacheadas retornam em <100ms vs 300-2000ms
-2. **Economia**: Menos chamadas às APIs externas = menos custo
-3. **Resiliência**: Se API externa cair, dados recentes ainda disponíveis
-4. **Analytics**: Saber quais consultas são mais frequentes
-
-## Arquivos a Criar/Modificar
-
-### Criar:
-- **Migração SQL**: Tabela `query_cache` + índices + trigger de limpeza
-- `src/components/consultation/CacheStats.tsx`: Widget de estatísticas
-- `src/components/consultation/IndexSearch.tsx`: Busca no índice (opcional)
-
-### Modificar:
-- `supabase/functions/api-query/index.ts`: Adicionar lógica de cache
-- `src/pages/Consultas.tsx`: Adicionar indicador de cache hit/miss
-- `src/components/consultation/ProviderStatusList.tsx`: Mostrar stats do cache
-
-## Detalhes Técnicos
-
-### Geração do Hash (Edge Function)
-```text
-hash = SHA256(queryType.toLowerCase() + ":" + cleanInput)
+```typescript
+async function executeQueryWithCache(
+  queryType: string, 
+  queryInput: string, 
+  estado?: string
+): Promise<{ data: Record<string, unknown>; fromCache: boolean }> {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const response = await fetch(`${supabaseUrl}/functions/v1/api-query`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+    },
+    body: JSON.stringify({ queryType, queryInput, estado }),
+  });
+  
+  const result = await response.json();
+  return {
+    data: result.data || result,
+    fromCache: result.fromCache || false
+  };
+}
 ```
 
-### Fluxo no `api-query`
-```text
-1. Recebe request
-2. Limpa input, normaliza tipo
-3. Gera hash
-4. SELECT * FROM query_cache WHERE query_hash = hash AND expires_at > NOW()
-5. Se encontrou:
-   - UPDATE hit_count, last_accessed
-   - Return { fromCache: true, data: cached_result }
-6. Se não:
-   - Chama API externa
-   - INSERT INTO query_cache (...)
-   - Return { fromCache: false, data: result }
+### 2. Substituir chamadas de executeQuery
+
+Localizar todas as chamadas a `executeQuery()` no telegram-webhook:
+- Linha 2524: consulta via callback
+- Linha 3620: consulta via comando direto
+- Linha 3894: consulta de CPF automatica
+- Linha 3938: geracao de PDF
+- Linha 4025: geracao de TXT
+
+Substituir por `executeQueryWithCache()`.
+
+### 3. Ajustar logica de creditos
+
+O `api-query` ja gerencia creditos apenas para cache miss. Remover duplicacao no `telegram-webhook`:
+
+```typescript
+// ANTES (sempre conta credito)
+await this.logQuery(telegramUserId, queryType, queryInput, result);
+
+// DEPOIS (so conta se nao veio do cache)
+if (!fromCache) {
+  await this.logQuery(telegramUserId, queryType, queryInput, result.data);
+}
 ```
 
-### RLS Policy
-- Usuários autenticados podem ler cache de suas próprias consultas
-- Service role pode ler/escrever qualquer cache
-- Cache é compartilhado entre usuários para economia máxima
+### 4. Adicionar indicador visual no bot
 
-## Ordem de Implementação
+Quando resultado vier do cache, mostrar badge na mensagem:
 
-1. Criar migração da tabela `query_cache`
-2. Atualizar Edge Function `api-query` com lógica de cache
-3. Atualizar frontend para mostrar indicador de cache
-4. Criar widget de estatísticas
-5. (Opcional) Criar página de gerenciamento de índice
+```typescript
+const cacheIndicator = fromCache ? "⚡ Cache" : "🔄 Live";
+const headerLine = `${queryTypeLabels[queryType]} | ${cacheIndicator}`;
+```
+
+## Beneficios
+
+1. **Economia**: Consultas repetidas no bot usam cache = menos custo de API
+2. **Velocidade**: Respostas do bot mais rapidas quando dados ja indexados
+3. **Consistencia**: Mesma logica de cache no frontend e no bot
+4. **Manutencao**: Codigo de consulta centralizado em um lugar so
+
+## Arquivos a Modificar
+
+| Arquivo | Mudanca |
+|---------|---------|
+| `supabase/functions/telegram-webhook/index.ts` | Adicionar `executeQueryWithCache()`, substituir chamadas, ajustar logica de creditos |
+| (opcional) Remover funcoes duplicadas | `executeQuery()`, `fetchFromProvider()`, `fetchFromProviderWithTimeout()` - mais de 200 linhas que podem ser removidas |
+
+## Riscos e Mitigacoes
+
+| Risco | Mitigacao |
+|-------|-----------|
+| Latencia adicional (HTTP interno) | Desprezivel (~10-20ms) vs economia de cache |
+| Falha do api-query | Fallback para funcao local existente |
+| Timeout | api-query ja tem timeout de 30s |
+
+## Ordem de Implementacao
+
+1. Adicionar funcao `executeQueryWithCache()` no telegram-webhook
+2. Testar com uma consulta especifica (ex: CPF)
+3. Substituir todas as outras chamadas
+4. Remover codigo duplicado (opcional, pode manter como fallback)
+5. Testar fluxo completo no bot
+
