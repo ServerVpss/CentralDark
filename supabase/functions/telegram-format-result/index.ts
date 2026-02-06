@@ -278,25 +278,59 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       }
     }
     
-    // Check if parallel arrays exist (cpf: [...], nome: [...])
-    const cpfArray = record['cpf'] || record['CPF'] || record['cpfs'] || record['CPFs'];
-    const nomeArray = record['nome'] || record['NOME'] || record['nomes'] || record['NOmes'];
+    // Check if parallel arrays exist (cpf: [...], nome: [...]) - THIS IS THE KEY FIX
+    // Find all array fields and check if they have the same length
+    const arrayFields: Record<string, unknown[]> = {};
+    let maxArrayLength = 0;
     
-    if (Array.isArray(cpfArray) && Array.isArray(nomeArray) && cpfArray.length === nomeArray.length && cpfArray.length > 1) {
+    for (const [key, value] of Object.entries(record)) {
+      if (Array.isArray(value) && value.length > 0) {
+        // Skip arrays that contain objects (they're handled above)
+        if (typeof value[0] === 'object' && value[0] !== null) continue;
+        arrayFields[key] = value;
+        if (value.length > maxArrayLength) maxArrayLength = value.length;
+      }
+    }
+    
+    // If we have arrays with length > 1 and they seem to be parallel person data
+    const hasCpfArray = arrayFields['cpf'] || arrayFields['CPF'] || arrayFields['cpfs'];
+    const hasNomeArray = arrayFields['nome'] || arrayFields['NOME'] || arrayFields['nomes'];
+    
+    if ((hasCpfArray || hasNomeArray) && maxArrayLength > 1) {
       // Reconstruct as array of person objects
       const persons: Array<Record<string, unknown>> = [];
-      for (let i = 0; i < cpfArray.length; i++) {
+      
+      for (let i = 0; i < maxArrayLength; i++) {
         const person: Record<string, unknown> = {};
+        
         for (const [key, value] of Object.entries(record)) {
-          if (Array.isArray(value) && value.length === cpfArray.length) {
-            person[key] = value[i];
+          if (Array.isArray(value)) {
+            // If array has same length, get item at index
+            if (value.length === maxArrayLength) {
+              const item = value[i];
+              if (item !== null && item !== undefined && item !== '' && item !== '-') {
+                person[key] = item;
+              }
+            } else if (value.length === 1) {
+              // Single item array, apply to all
+              person[key] = value[0];
+            }
+            // Skip arrays with different lengths
           } else if (!Array.isArray(value)) {
+            // Non-array value, apply to all persons
             person[key] = value;
           }
         }
-        persons.push(person);
+        
+        // Only add if person has meaningful data
+        if (Object.keys(person).length > 0) {
+          persons.push(person);
+        }
       }
-      return persons;
+      
+      if (persons.length > 1) {
+        return persons;
+      }
     }
     
     return null;
