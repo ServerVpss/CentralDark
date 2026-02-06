@@ -93,6 +93,12 @@ async function fetchFromProvider(
       },
     });
 
+    // Handle 404 as "not found" instead of error
+    if (response.status === 404) {
+      console.log(`Data not found (404) for: ${url.toString()}`);
+      return { notFound: true, message: "Dados não encontrados" };
+    }
+
     if (!response.ok) {
       console.error(`API error: ${response.status} ${response.statusText}`);
       return { error: `Erro na API: ${response.status}`, status: response.status };
@@ -263,14 +269,18 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Determine if it's a real error or just "not found"
+    const isNotFound = result.notFound === true;
+    const isError = result.error && !isNotFound;
+
     return new Response(
       JSON.stringify({
-        success: !result.error,
+        success: !isError,
         data: result,
         duration_ms: duration,
       }),
       {
-        status: result.error ? 400 : 200,
+        status: isError ? 400 : 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
