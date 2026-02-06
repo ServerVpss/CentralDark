@@ -253,9 +253,67 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return false;
   };
 
+  // Parse text format with multiple CPF/NOME entries
+  const parseTextMultiplePersons = (text: string): Array<Record<string, unknown>> | null => {
+    if (!text || typeof text !== 'string') return null;
+    
+    // Clean the text
+    const cleanText = text
+      .replace(/@\w+/g, '')
+      .replace(/https?:\/\/[^\s]+/g, '')
+      .trim();
+    
+    // Check if this looks like multiple person data
+    const cpfMatches = cleanText.match(/CPF[:\s`]+[\d.-]+/gi);
+    if (!cpfMatches || cpfMatches.length < 2) return null;
+    
+    const persons: Array<Record<string, unknown>> = [];
+    
+    // Split by CPF entries to separate each person
+    // Pattern: CPF followed by optional backtick, then digits
+    const sections = cleanText.split(/(?=CPF[:\s`]+[\d.-]+)/gi).filter(s => s.trim());
+    
+    for (const section of sections) {
+      const person: Record<string, unknown> = {};
+      const lines = section.split(/\n/).map(l => l.trim()).filter(Boolean);
+      
+      for (const line of lines) {
+        // Match patterns like "CPF: 12345" or "CPF: `12345" or "NOME: NAME"
+        const match = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\w\s]+)[:\s]+[`]?(.+)$/i);
+        if (match) {
+          const key = match[1].trim().toUpperCase();
+          let value = match[2].trim().replace(/^`/, ''); // Remove leading backtick
+          
+          // Skip empty or invalid values
+          if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) continue;
+          
+          // Skip header lines
+          if (key.includes('RESULTADO') || key.includes('BASE') || key.includes('ENCONTRADO')) continue;
+          
+          person[key.toLowerCase()] = value;
+        }
+      }
+      
+      // Only add if person has CPF or NOME
+      if (person['cpf'] || person['nome']) {
+        persons.push(person);
+      }
+    }
+    
+    return persons.length > 1 ? persons : null;
+  };
+
   // Check if data contains multiple person records (array of objects with cpf/nome)
   const detectMultiplePersons = (obj: unknown): Array<Record<string, unknown>> | null => {
     if (!obj || typeof obj !== 'object') return null;
+    
+    const record = obj as Record<string, unknown>;
+    
+    // FIRST: Check if data field contains text with multiple persons
+    if (record['data'] && typeof record['data'] === 'string') {
+      const parsed = parseTextMultiplePersons(record['data']);
+      if (parsed) return parsed;
+    }
     
     // Check if it's directly an array of person objects
     if (Array.isArray(obj)) {
@@ -268,7 +326,6 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     }
     
     // Check nested properties for arrays of person objects
-    const record = obj as Record<string, unknown>;
     for (const [key, value] of Object.entries(record)) {
       if (Array.isArray(value) && value.length > 0 && typeof value[0] === 'object' && value[0] !== null) {
         const firstItem = value[0] as Record<string, unknown>;
@@ -278,26 +335,22 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       }
     }
     
-    // Check if parallel arrays exist (cpf: [...], nome: [...]) - THIS IS THE KEY FIX
-    // Find all array fields and check if they have the same length
+    // Check if parallel arrays exist (cpf: [...], nome: [...])
     const arrayFields: Record<string, unknown[]> = {};
     let maxArrayLength = 0;
     
     for (const [key, value] of Object.entries(record)) {
       if (Array.isArray(value) && value.length > 0) {
-        // Skip arrays that contain objects (they're handled above)
         if (typeof value[0] === 'object' && value[0] !== null) continue;
         arrayFields[key] = value;
         if (value.length > maxArrayLength) maxArrayLength = value.length;
       }
     }
     
-    // If we have arrays with length > 1 and they seem to be parallel person data
     const hasCpfArray = arrayFields['cpf'] || arrayFields['CPF'] || arrayFields['cpfs'];
     const hasNomeArray = arrayFields['nome'] || arrayFields['NOME'] || arrayFields['nomes'];
     
     if ((hasCpfArray || hasNomeArray) && maxArrayLength > 1) {
-      // Reconstruct as array of person objects
       const persons: Array<Record<string, unknown>> = [];
       
       for (let i = 0; i < maxArrayLength; i++) {
@@ -305,24 +358,19 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
         
         for (const [key, value] of Object.entries(record)) {
           if (Array.isArray(value)) {
-            // If array has same length, get item at index
             if (value.length === maxArrayLength) {
               const item = value[i];
               if (item !== null && item !== undefined && item !== '' && item !== '-') {
                 person[key] = item;
               }
             } else if (value.length === 1) {
-              // Single item array, apply to all
               person[key] = value[0];
             }
-            // Skip arrays with different lengths
           } else if (!Array.isArray(value)) {
-            // Non-array value, apply to all persons
             person[key] = value;
           }
         }
         
-        // Only add if person has meaningful data
         if (Object.keys(person).length > 0) {
           persons.push(person);
         }

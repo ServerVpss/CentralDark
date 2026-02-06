@@ -584,7 +584,67 @@ function parseMultiplePersonRecords(text: string): PersonRecord[] {
     .replace(/https?:\/\/[^\s]+/g, '')
     .trim();
   
-  // Split by double newlines or by CPF pattern to separate records
+  // Check if this is the Telegram format with CPF: `12345 patterns
+  const hasTelegramFormat = cleanText.includes('CPF:') || cleanText.includes('NOME:');
+  
+  if (hasTelegramFormat) {
+    // Split by CPF entries to separate each person
+    const sections = cleanText.split(/(?=CPF[:\s`]+[\d.-]+)/gi).filter(s => s.trim());
+    
+    for (const section of sections) {
+      const person: PersonRecord = {};
+      const lines = section.split(/\n/).map(l => l.trim()).filter(Boolean);
+      
+      for (const line of lines) {
+        // Match patterns like "CPF: 12345" or "CPF: `12345" or "NOME: NAME"
+        const match = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\w\s]+)[:\s]+[`]?(.+)$/i);
+        if (match) {
+          const key = match[1].trim().toUpperCase();
+          let value = match[2].trim().replace(/^`/, ''); // Remove leading backtick
+          
+          // Skip empty or invalid values
+          if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) continue;
+          
+          // Skip header lines
+          if (key.includes('RESULTADO') || key.includes('BASE') || key.includes('ENCONTRADO')) continue;
+          
+          // Map the key to our record structure
+          const keyMap: Record<string, keyof PersonRecord> = {
+            'CPF': 'cpf',
+            'NOME': 'nome',
+            'NASCIMENTO': 'nascimento',
+            'EMAIL': 'email',
+            'RENDA': 'renda',
+            'BAIRRO': 'bairro',
+            'CIDADE': 'cidade',
+            'UF': 'uf',
+            'CEP': 'cep',
+            'SEXO': 'sexo',
+            'MÃE': 'mae',
+            'PAI': 'pai',
+            'LOGRADOURO': 'logradouro',
+            'ENDEREÇO': 'endereco',
+            'COMPLEMENTO': 'complemento',
+            'ESTADO': 'estado',
+            'TELEFONE': 'telefone',
+            'RG': 'rg',
+          };
+          
+          const mappedKey = keyMap[key] || key.toLowerCase();
+          person[mappedKey] = value;
+        }
+      }
+      
+      // Only add if person has CPF or NOME
+      if (person.cpf || person.nome) {
+        records.push(person);
+      }
+    }
+    
+    return records;
+  }
+  
+  // Fallback: Split by double newlines or by CPF pattern to separate records
   const lines = cleanText.split(/\n/).map(l => l.trim()).filter(Boolean);
   
   let currentRecord: PersonRecord = {};
@@ -646,20 +706,25 @@ function parseMultiplePersonRecords(text: string): PersonRecord[] {
   return records;
 }
 
-// Check if data looks like multiple person records (CEP query result)
+// Check if data looks like multiple person records (CEP query result or Telefone query)
 function isMultiPersonResult(data: any): boolean {
-  if (typeof data === 'string') {
-    // Count how many CPF entries there are
-    const cpfMatches = data.match(/CPF\s*[⎯—-]/gi);
-    return cpfMatches !== null && cpfMatches.length > 1;
-  }
+  const getText = (d: any): string => {
+    if (typeof d === 'string') return d;
+    if (typeof d === 'object' && d.data && typeof d.data === 'string') return d.data;
+    return '';
+  };
   
-  if (typeof data === 'object' && data.data && typeof data.data === 'string') {
-    const cpfMatches = data.data.match(/CPF\s*[⎯—-]/gi);
-    return cpfMatches !== null && cpfMatches.length > 1;
-  }
+  const text = getText(data);
+  if (!text) return false;
   
-  return false;
+  // Count how many CPF entries there are (supports multiple formats)
+  // Format 1: CPF ⎯ or CPF — (em-dash)
+  const dashMatches = text.match(/CPF\s*[⎯—-]/gi) || [];
+  // Format 2: CPF: `12345 or CPF: 12345 (Telegram format)
+  const colonMatches = text.match(/CPF[:\s`]+[\d.-]+/gi) || [];
+  
+  const totalMatches = Math.max(dashMatches.length, colonMatches.length);
+  return totalMatches > 1;
 }
 
 export function QueryResultFormatter({ data, showCopyButton, onQueryCpf, queryType, queryInput }: QueryResultFormatterProps) {
