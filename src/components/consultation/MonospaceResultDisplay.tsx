@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Copy, Check, AlertCircle } from "lucide-react";
+import { Copy, Check, AlertCircle, User, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -192,11 +192,46 @@ const fieldCategories: Record<string, string[]> = {
   ],
 };
 
+// Extract photo from data
+function extractPhoto(data: any): string | null {
+  if (!data) return null;
+  
+  // Check common photo field names
+  const photoFields = ["foto", "image", "photo", "fotoBase64", "base64", "url"];
+  
+  for (const field of photoFields) {
+    if (data[field] && typeof data[field] === "string") {
+      let photo = data[field];
+      // Add data URL prefix if it's raw base64
+      if (photo.startsWith("/9j/") || photo.startsWith("iVBOR")) {
+        photo = `data:image/jpeg;base64,${photo}`;
+      }
+      return photo;
+    }
+  }
+  
+  // Check nested data
+  if (data.data && typeof data.data === "object") {
+    return extractPhoto(data.data);
+  }
+  
+  return null;
+}
+
 // Extract and flatten data from nested structures
 function extractData(data: any): Record<string, any> {
   if (!data) return {};
 
-  // If data has a nested 'data' property
+  // If data has a nested 'data' property that is a string (API text response)
+  if (data.data && typeof data.data === "string") {
+    const parsed = parseTextData(data.data);
+    // Also include other fields like "comando", "valor"
+    if (data.comando) parsed.comando = data.comando;
+    if (data.valor) parsed.valor_consulta = data.valor;
+    return parsed;
+  }
+
+  // If data has a nested 'data' property that is an object
   if (data.data && typeof data.data === "object" && !Array.isArray(data.data)) {
     return extractData(data.data);
   }
@@ -211,6 +246,8 @@ function extractData(data: any): Record<string, any> {
   
   for (const [key, value] of Object.entries(data)) {
     if (value === null || value === undefined) continue;
+    // Skip photo fields in main data
+    if (["foto", "image", "photo", "fotoBase64", "base64"].includes(key.toLowerCase())) continue;
     if (typeof value === "object" && !Array.isArray(value)) {
       const nested = extractData(value);
       Object.assign(result, nested);
@@ -508,16 +545,19 @@ export function MonospaceResultDisplay({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "flex items-center gap-3 p-4 bg-red-950/30 rounded-lg border border-red-900/50 font-mono",
+          "flex items-center gap-3 p-4 bg-destructive/10 rounded-lg border border-destructive/30 font-mono",
           className
         )}
       >
-        <AlertCircle className="h-5 w-5 text-red-500 shrink-0" />
-        <span className="text-red-400 text-sm">{String(result.error)}</span>
+        <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
+        <span className="text-destructive text-sm">{String(result.error)}</span>
       </motion.div>
     );
   }
 
+  // Extract photo if available
+  const photoUrl = extractPhoto(result);
+  
   const extractedData = extractData(result);
   const categorizedData = categorizeData(extractedData);
 
@@ -558,7 +598,18 @@ export function MonospaceResultDisplay({
     }
   };
 
-  if (sortedCategories.length === 0) {
+  const handleDownloadPhoto = () => {
+    if (!photoUrl) return;
+    const link = document.createElement("a");
+    link.href = photoUrl;
+    link.download = `foto_${extractedData.cpf || extractedData.valor_consulta || "resultado"}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Foto baixada!");
+  };
+
+  if (sortedCategories.length === 0 && !photoUrl) {
     return (
       <div className={cn("text-muted-foreground text-center py-4 font-mono", className)}>
         Nenhum dado encontrado para exibir.
@@ -573,8 +624,44 @@ export function MonospaceResultDisplay({
       transition={{ duration: 0.3 }}
       className={cn("space-y-3", className)}
     >
+      {/* Photo Display */}
+      {photoUrl && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="rounded-lg border border-cyan-900/60 bg-[#0d1117] overflow-hidden"
+        >
+          <div className="px-3 py-2 border-b border-cyan-900/40 bg-[#161b22] flex items-center justify-between">
+            <span className="font-mono text-sm text-cyan-300 font-medium flex items-center gap-2">
+              <User className="h-4 w-4" />
+              📷 FOTO
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDownloadPhoto}
+              className="h-6 px-2 text-xs text-cyan-400 hover:text-cyan-300 hover:bg-cyan-950/30"
+            >
+              <Download className="h-3 w-3 mr-1" />
+              Baixar
+            </Button>
+          </div>
+          <div className="p-4 flex justify-center">
+            <img
+              src={photoUrl}
+              alt="Foto do resultado"
+              className="max-w-[200px] max-h-[250px] rounded-lg border-2 border-cyan-900/50 shadow-lg object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+          </div>
+        </motion.div>
+      )}
+
       {/* Copy All Button */}
-      {showCopyButton && (
+      {showCopyButton && sortedCategories.length > 0 && (
         <div className="flex justify-end">
           <Button
             variant="outline"
@@ -598,16 +685,18 @@ export function MonospaceResultDisplay({
       )}
 
       {/* Category Sections */}
-      <div className="space-y-3">
-        {sortedCategories.map(([category, fields], index) => (
-          <CategorySection
-            key={category}
-            category={category}
-            fields={fields}
-            index={index}
-          />
-        ))}
-      </div>
+      {sortedCategories.length > 0 && (
+        <div className="space-y-3">
+          {sortedCategories.map(([category, fields], index) => (
+            <CategorySection
+              key={category}
+              category={category}
+              fields={fields}
+              index={index}
+            />
+          ))}
+        </div>
+      )}
     </motion.div>
   );
 }
