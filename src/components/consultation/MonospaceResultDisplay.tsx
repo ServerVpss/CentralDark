@@ -283,14 +283,31 @@ function extractPhoto(data: any): string | null {
 function extractData(data: any): Record<string, any> {
   if (!data) return {};
 
-  // Check if this looks like a Score API response with 'resposta' field
-  if (data.data?.resposta || data.resposta) {
+  // Check if this looks like an enriched Score API response
+  // It will have nome/nascimento at top level AND resposta nested inside
+  if (data.consulta_tipo === "score_enriquecido" || (data.data?.resposta || data.resposta)) {
+    const result: Record<string, any> = {};
+    
+    // First, extract enriched fields from top level (nome, nascimento, cpf)
+    if (data.nome && !isCorruptedField(data.nome)) {
+      result.nome = data.nome;
+    }
+    if (data.nascimento) {
+      result.nascimento = data.nascimento;
+    }
+    if (data.cpf && typeof data.cpf === "string" && data.cpf.match(/^\d+$/)) {
+      result.cpf = data.cpf;
+    }
+    
+    // Then process the Score data from resposta
     const resposta = data.data?.resposta || data.resposta;
-    if (typeof resposta === "object") {
+    if (resposta && typeof resposta === "object") {
       const scoreData = processScoreResponse(resposta);
-      if (Object.keys(scoreData).length > 0) {
-        return scoreData;
-      }
+      Object.assign(result, scoreData);
+    }
+    
+    if (Object.keys(result).length > 0) {
+      return result;
     }
   }
 
@@ -533,6 +550,11 @@ function processScoreResponse(data: Record<string, any>): Record<string, any> {
         continue;
       }
       
+      // Skip corrupted CPF/Nome fields (contain ENDEREÇO, DÉBITOS, etc.)
+      if ((keyLower === "cpf" || keyLower === "nome") && isCorruptedField(value)) {
+        continue;
+      }
+      
       // If it looks like score data, parse it
       if (value.toUpperCase().includes("CSB") || value.toUpperCase().includes("SCORE")) {
         const parsed = parseScoreData(value);
@@ -548,6 +570,34 @@ function processScoreResponse(data: Record<string, any>): Record<string, any> {
   }
   
   return result;
+}
+
+// Check if a field value is corrupted (contains unrelated data concatenated)
+function isCorruptedField(value: string): boolean {
+  const corruptionIndicators = [
+    "ENDEREÇO", "ENDERECO", "DÉBITOS", "DEBITOS", "MULTA", "IPVA",
+    "LICENCIAMENTO", "DPVAT", "RESTRIÇÕES", "RESTRICOES", "STATUS GERAL",
+    "VEÍCULO", "VEICULO", "REGULAR", "CPF:", "CNPJ:",
+    "RUA:", "RUA ", "NÚMERO:", "NUMERO:", "CIDADE:", "UF:", "CEP:"
+  ];
+  
+  const upperValue = value.toUpperCase();
+  
+  // If the value contains multiple corruption indicators, it's corrupted
+  let matches = 0;
+  for (const indicator of corruptionIndicators) {
+    if (upperValue.includes(indicator)) {
+      matches++;
+      if (matches >= 2) return true;
+    }
+  }
+  
+  // Also check if CPF/CNPJ appears in the middle of a nome field
+  if (upperValue.includes("CPF:") || upperValue.includes("CNPJ:")) {
+    return true;
+  }
+  
+  return false;
 }
 
 // Parse text data with various formats
