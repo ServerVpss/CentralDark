@@ -273,8 +273,8 @@ Deno.serve(async (req) => {
               ])
             }
 
-            // Usar o chat_id do pending se disponível, senão usar o user_id
-            const targetChatId = (pending as any)?.telegram_chat_id || transaction.telegram_user_id
+            // SEMPRE enviar confirmação no PRIVADO do usuário (telegram_user_id)
+            const targetChatId = transaction.telegram_user_id
             
             // Mapear efeito configurado para ID do Telegram
             const effectMap: Record<string, string> = {
