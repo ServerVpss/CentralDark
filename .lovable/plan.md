@@ -1,93 +1,160 @@
 
-## Objetivo
-Fazer o resultado “TEXTO/Texto” (que vem como um bloco de string dentro do campo `texto`) ser **quebrado em campos** (Nome, CPF, RG, Data de Nascimento, etc.) e **categorizado** corretamente, em vez de aparecer como um único item dentro de **OUTROS DADOS**.
+# Sistema de Indexação de Consultas
 
-## Diagnóstico (o que está acontecendo agora)
-1. Pelo histórico do backend, o payload típico da consulta de foto vem assim:
-   - `cpf`, `estado`, `fotoBase64`
-   - `texto`: `"Nome: ...\nData de Nascimento: ...\nNome da Mãe: ...\n..."`
+## Visão Geral
+Criar um sistema de cache e indexação para acelerar consultas repetidas, evitando chamadas desnecessárias às APIs externas quando o mesmo dado já foi consultado recentemente.
 
-2. No `MonospaceResultDisplay`, a função `extractData()` **só chama `parseTextData()`** quando:
-   - `data.data` é string, ou
-   - `data` é string diretamente.
+## Arquitetura da Solução
 
-3. Como o texto vem em `result.texto` (e não em `result.data`), o código atual **não parseia** esse conteúdo: ele apenas “achata” e guarda como:
-   - `texto: "Nome: ...\nCPF: ..."`
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                      FLUXO DE CONSULTA                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   [Usuário Consulta CPF]                                        │
+│          │                                                      │
+│          ▼                                                      │
+│   ┌──────────────────┐                                          │
+│   │ Verificar Cache  │◄─── Busca por índice (hash do input)     │
+│   └────────┬─────────┘                                          │
+│            │                                                    │
+│     ┌──────┴──────┐                                             │
+│     │             │                                             │
+│  [CACHE HIT]  [CACHE MISS]                                      │
+│     │             │                                             │
+│     ▼             ▼                                             │
+│  Retorna       Chama API                                        │
+│  Dados         Externa                                          │
+│  Indexados        │                                             │
+│                   ▼                                             │
+│            ┌─────────────┐                                      │
+│            │ Salva Cache │──► Índice por tipo + input           │
+│            └─────────────┘                                      │
+│                   │                                             │
+│                   ▼                                             │
+│            Retorna Dados                                        │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-4. Resultado: a UI vê apenas a chave `texto` e joga isso em **dados_outros**, mostrando “Texto:” com o conteúdo inteiro (parece “do mesmo jeito”).
+## Componentes a Implementar
 
-## Estratégia de correção
-Vamos melhorar a extração/parsing em 3 pontos:
+### 1. Nova Tabela: `query_cache`
+Armazena resultados de consultas para acesso rápido:
 
-### A) Parse automático quando existir `texto` (principal correção)
-Atualizar `extractData()` para:
-- Detectar chaves do tipo `texto` / `text` / `TeXtO` (case-insensitive)
-- Se o valor for string e contiver “padrões de campos” (ex: `:` e múltiplas linhas), então:
-  - rodar `parseTextData(texto)`
-  - fazer merge dos campos parseados no resultado final
-  - opcionalmente manter o texto bruto (ou descartar) para não duplicar informação
+| Coluna | Tipo | Descrição |
+|--------|------|-----------|
+| id | UUID | Identificador único |
+| query_type | TEXT | Tipo (cpf, cnpj, placa, etc.) |
+| query_input | TEXT | Valor consultado (limpo) |
+| query_hash | TEXT | Hash único (tipo + input) - ÍNDICE |
+| cached_result | JSONB | Resultado completo da API |
+| hit_count | INTEGER | Quantas vezes foi acessado do cache |
+| created_at | TIMESTAMPTZ | Data de criação |
+| expires_at | TIMESTAMPTZ | Expiração do cache (24h padrão) |
+| last_accessed | TIMESTAMPTZ | Último acesso |
 
-Isso fará com que `Nome`, `CPF`, `RG`, etc. apareçam como campos normais e entrem nas categorias certas.
+**Índices:**
+- `idx_query_cache_hash` UNIQUE em `query_hash`
+- `idx_query_cache_expires` em `expires_at`
+- `idx_query_cache_type_input` em `(query_type, query_input)`
 
-### B) Normalização de chaves (acentos e variações)
-Hoje podem surgir chaves como:
-- `nome_da_mãe` (com acento) vs `nome_mae` (sem acento)
-- `nome do pai` / `nome_do_pai` / `pai`
+### 2. Edge Function: `api-query` (Atualização)
+Modificar para verificar cache antes de chamar APIs externas:
 
-Vamos criar uma função única de normalização (exemplo de comportamento):
-- lowercase
-- remover acentos (NFD + remove diacríticos)
-- trocar tudo que não for letra/número por `_`
-- colapsar múltiplos `_`
-- trim de `_`
+1. Gerar hash do `queryType + queryInput`
+2. Buscar em `query_cache` onde `query_hash = hash AND expires_at > NOW()`
+3. Se encontrar (CACHE HIT):
+   - Incrementar `hit_count`
+   - Atualizar `last_accessed`
+   - Retornar `cached_result`
+4. Se não encontrar (CACHE MISS):
+   - Chamar API externa normalmente
+   - Salvar resultado em `query_cache`
+   - Retornar resultado
 
-E aplicar essa normalização em:
-- `parseTextData()` (quando monta `key`)
-- `parseInlineFields()` (quando monta `field`)
-- `extractData()` (quando transforma keys de objetos)
+### 3. Nova Página: `/consultas/indice` (Opcional)
+Interface para visualizar e gerenciar o índice:
 
-Assim, `NOME DA MÃE` vira `nome_da_mae` consistentemente.
+- **Estatísticas**: Total de entradas, taxa de hit/miss, economia estimada
+- **Pesquisa por índice**: Buscar dados já indexados sem nova consulta
+- **Limpeza manual**: Invalidar cache específico ou limpar tudo
+- **Configuração**: Tempo de expiração, tipos a cachear
 
-### C) Mapeamento de aliases (para cair nas categorias e labels existentes)
-Mesmo com normalização, ainda queremos padronizar para os nomes que vocês já usam no UI:
-- `nome_da_mae` -> `nome_mae`
-- `nome_do_pai` -> `nome_pai`
-- `data_de_nascimento` -> `data_nascimento` (se vocês preferirem um único padrão)
+### 4. Componente: `CacheStats`
+Widget no dashboard mostrando:
+- Entradas no cache
+- Taxa de acerto (hit rate)
+- Economia de créditos/chamadas
+- Consultas mais populares
 
-Adicionar um objeto `fieldAliases` e, após normalizar, substituir por um “canonical key”.
-Isso melhora:
-- labels (Nome da Mãe sai com label bonitinho)
-- categorização (vai para “DADOS FAMILIARES”)
-- emojis corretos
+### 5. Trigger de Limpeza Automática
+Database trigger para limpar entradas expiradas:
+- Executar a cada inserção nova
+- Deletar onde `expires_at < NOW()`
 
-## Mudanças planejadas (arquivo)
-### 1) `src/components/consultation/MonospaceResultDisplay.tsx`
-**Editar:**
-- `extractData()`:
-  - se encontrar chave `texto` (variações), parsear e mesclar
-- Criar helper(s):
-  - `normalizeKey(raw: string): string`
-  - `applyAlias(key: string): string` (ou `fieldAliases` direto)
-- Ajustar `parseTextData()`:
-  - ao produzir `key`, usar `normalizeKey` + alias
-- Ajustar `parseInlineFields()`:
-  - ao produzir `field`, usar `normalizeKey` + alias
-  - (opcional) melhorar detecção de “inline fields” para aceitar `Nome:` (Title Case), não só ALL CAPS
+## Configurações de Cache
 
-**Por que isso resolve de vez:**
-- O seu caso específico (campo `texto` contendo várias linhas `Label: Valor`) passa a ser decomposto em chaves reais (`nome`, `cpf`, `rg`, etc.), então deixa de existir “um único campo texto gigante”.
+| Tipo de Consulta | TTL (Tempo de Vida) | Motivo |
+|------------------|---------------------|--------|
+| CPF | 24 horas | Dados pessoais mudam pouco |
+| CNPJ | 24 horas | Dados empresariais estáveis |
+| Placa | 12 horas | Veículos podem mudar de dono |
+| Score | 6 horas | Score pode mudar mais rápido |
+| Foto | 7 dias | Fotos raramente mudam |
+| Telefone | 24 horas | Associações estáveis |
+| CEP | 30 dias | Endereços não mudam |
 
-## Como vou validar (checklist)
-1. Em **/consultas**, fazer uma consulta que retorna `texto + fotoBase64` (como a do exemplo Neymar).
-2. Confirmar que aparecem cards como:
-   - 👤 DADOS PESSOAIS: Nome, CPF, RG, Nascimento
-   - 👨‍👩‍👧 DADOS DE FAMILIARES: Nome da Mãe / Nome do Pai
-   - 📷 FOTO: imagem renderizando e botão “Baixar”
-3. Confirmar que **não** fica “Texto:” em OUTROS DADOS (ou, se decidirmos manter, que fique como bloco secundário, não como principal).
+## Benefícios
 
-## Riscos / cuidados
-- Evitar duplicar campos: se parsearmos `texto`, não devemos também manter `texto` como campo principal (ou devemos colocar sob “OUTROS” de forma opcional/colapsável).
-- Alguns provedores podem enviar “Texto” com formatos diferentes; por isso a normalização + aliases é importante.
+1. **Velocidade**: Consultas cacheadas retornam em <100ms vs 300-2000ms
+2. **Economia**: Menos chamadas às APIs externas = menos custo
+3. **Resiliência**: Se API externa cair, dados recentes ainda disponíveis
+4. **Analytics**: Saber quais consultas são mais frequentes
 
-## Resultado esperado (experiência do usuário)
-Em vez de ver um bloco “Texto: ...”, o painel vai mostrar os campos organizados (igual sensação do Telegram), com emojis/labels e categorias corretas, e a foto exibida acima quando existir.
+## Arquivos a Criar/Modificar
+
+### Criar:
+- **Migração SQL**: Tabela `query_cache` + índices + trigger de limpeza
+- `src/components/consultation/CacheStats.tsx`: Widget de estatísticas
+- `src/components/consultation/IndexSearch.tsx`: Busca no índice (opcional)
+
+### Modificar:
+- `supabase/functions/api-query/index.ts`: Adicionar lógica de cache
+- `src/pages/Consultas.tsx`: Adicionar indicador de cache hit/miss
+- `src/components/consultation/ProviderStatusList.tsx`: Mostrar stats do cache
+
+## Detalhes Técnicos
+
+### Geração do Hash (Edge Function)
+```text
+hash = SHA256(queryType.toLowerCase() + ":" + cleanInput)
+```
+
+### Fluxo no `api-query`
+```text
+1. Recebe request
+2. Limpa input, normaliza tipo
+3. Gera hash
+4. SELECT * FROM query_cache WHERE query_hash = hash AND expires_at > NOW()
+5. Se encontrou:
+   - UPDATE hit_count, last_accessed
+   - Return { fromCache: true, data: cached_result }
+6. Se não:
+   - Chama API externa
+   - INSERT INTO query_cache (...)
+   - Return { fromCache: false, data: result }
+```
+
+### RLS Policy
+- Usuários autenticados podem ler cache de suas próprias consultas
+- Service role pode ler/escrever qualquer cache
+- Cache é compartilhado entre usuários para economia máxima
+
+## Ordem de Implementação
+
+1. Criar migração da tabela `query_cache`
+2. Atualizar Edge Function `api-query` com lógica de cache
+3. Atualizar frontend para mostrar indicador de cache
+4. Criar widget de estatísticas
+5. (Opcional) Criar página de gerenciamento de índice
