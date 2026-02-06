@@ -1,6 +1,5 @@
-import { Bell, Search, User, LogOut, Settings, Sparkles, Crown, Command } from "lucide-react";
+import { Bell, Search, User, LogOut, Settings, Sparkles, Crown, Command, CreditCard, Shield, MessageSquare, CheckCircle, Clock, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,18 +8,47 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/components/auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useNotifications } from "@/hooks/useNotifications";
 
 interface HeaderProps {
   className?: string;
 }
 
+const iconMap = {
+  payment: CreditCard,
+  subscription: CreditCard,
+  query: MessageSquare,
+  security: Shield,
+  message: MessageSquare,
+  success: CheckCircle,
+  warning: Shield,
+};
+
+const gradientMap = {
+  payment: "from-emerald-500 to-green-500",
+  subscription: "from-emerald-500 to-green-500",
+  query: "from-cyan-500 to-blue-500",
+  security: "from-amber-500 to-orange-500",
+  message: "from-violet-500 to-purple-500",
+  success: "from-emerald-500 to-green-500",
+  warning: "from-amber-500 to-orange-500",
+};
+
 export function Header({ className }: HeaderProps) {
   const { user, profile, signOut } = useAuthContext();
   const navigate = useNavigate();
+  const { activities, loading, refresh } = useNotifications();
+
+  // Count recent notifications (last 24h)
+  const recentCount = activities.filter((a) => {
+    const hoursDiff = (Date.now() - a.createdAt.getTime()) / (1000 * 60 * 60);
+    return hoursDiff < 24;
+  }).length;
 
   const handleSignOut = async () => {
     await signOut();
@@ -28,7 +56,6 @@ export function Header({ className }: HeaderProps) {
   };
 
   const openSearch = () => {
-    // Trigger Ctrl+K programmatically
     const event = new KeyboardEvent("keydown", {
       key: "k",
       ctrlKey: true,
@@ -67,16 +94,94 @@ export function Header({ className }: HeaderProps) {
           {/* Theme Toggle */}
           <ThemeToggle />
 
-          {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-lg">
-            <Bell className="h-4 w-4 text-muted-foreground" />
-            <span className="absolute top-1.5 right-1.5 h-4 w-4 flex items-center justify-center">
-              <span className="absolute h-full w-full rounded-full bg-primary animate-ping opacity-40" />
-              <span className="relative h-3.5 w-3.5 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">
-                3
-              </span>
-            </span>
-          </Button>
+          {/* Notifications Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-lg">
+                <Bell className="h-4 w-4 text-muted-foreground" />
+                {recentCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 h-4 w-4 flex items-center justify-center">
+                    <span className="absolute h-full w-full rounded-full bg-primary animate-ping opacity-40" />
+                    <span className="relative h-3.5 w-3.5 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">
+                      {recentCount > 9 ? "9+" : recentCount}
+                    </span>
+                  </span>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+              <DropdownMenuLabel className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Bell className="h-4 w-4" />
+                  Notificações
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    refresh();
+                  }}
+                >
+                  <RefreshCw className={cn("h-3 w-3", loading && "animate-spin")} />
+                </Button>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              
+              {loading ? (
+                <div className="p-4 text-center text-sm text-muted-foreground">
+                  <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-2" />
+                  Carregando...
+                </div>
+              ) : activities.length === 0 ? (
+                <div className="p-6 text-center">
+                  <Clock className="h-8 w-8 mx-auto mb-2 text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">Nenhuma notificação</p>
+                </div>
+              ) : (
+                <ScrollArea className="h-[300px]">
+                  <div className="p-1">
+                    {activities.slice(0, 10).map((activity) => {
+                      const Icon = iconMap[activity.type] || MessageSquare;
+                      const gradient = gradientMap[activity.type] || "from-primary to-amber-600";
+                      
+                      return (
+                        <div
+                          key={activity.id}
+                          className="flex items-start gap-3 rounded-lg p-2.5 hover:bg-muted/50 transition-colors cursor-pointer"
+                        >
+                          <div className={cn(
+                            "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br shadow-sm",
+                            gradient
+                          )}>
+                            <Icon className="h-4 w-4 text-white" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium leading-tight">{activity.title}</p>
+                            <p className="text-xs text-muted-foreground truncate mt-0.5">
+                              {activity.description}
+                            </p>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0">
+                            {activity.time}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              )}
+              
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                onClick={() => navigate("/")} 
+                className="cursor-pointer justify-center text-primary text-xs"
+              >
+                Ver todas as atividades
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Profile */}
           <DropdownMenu>
