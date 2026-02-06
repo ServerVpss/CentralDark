@@ -259,6 +259,53 @@ function extractData(data: any): Record<string, any> {
   return result;
 }
 
+// Known field patterns for inline parsing
+const knownFieldPatterns = [
+  "NOME", "CPF", "RG", "DATA DE NASCIMENTO", "NASCIMENTO", "NOME DA MÃE", 
+  "NOME DO PAI", "MAE", "PAI", "SEXO", "ORIGEM", "TITULO ELEITOR", 
+  "ZONA", "SECAO", "SEÇÃO", "ENDERECO", "ENDEREÇO", "BAIRRO", "CIDADE", 
+  "UF", "CEP", "TELEFONE", "CELULAR", "EMAIL", "RENDA", "SCORE",
+  "NATURALIDADE", "NACIONALIDADE", "ESTADO CIVIL", "PROFISSAO", "PROFISSÃO",
+  "ESCOLARIDADE", "PIS", "NIS", "CNS", "CNH", "PLACA", "CHASSI", "RENAVAM",
+  "OBITO", "ÓBITO", "STATUS RECEITA", "PODER AQUISITIVO", "CLASSE SOCIAL"
+];
+
+// Parse inline text like "NOME: VALUE CPF: VALUE RG: VALUE"
+function parseInlineFields(text: string): Record<string, any> {
+  const result: Record<string, any> = {};
+  
+  // Build regex pattern from known fields
+  const fieldsPattern = knownFieldPatterns.join("|");
+  const regex = new RegExp(`(${fieldsPattern}):\\s*`, "gi");
+  
+  // Find all field positions
+  const matches: { field: string; start: number; end: number }[] = [];
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    matches.push({
+      field: match[1].toLowerCase().replace(/\s+/g, "_"),
+      start: match.index,
+      end: match.index + match[0].length
+    });
+  }
+  
+  // Extract values between fields
+  for (let i = 0; i < matches.length; i++) {
+    const currentMatch = matches[i];
+    const nextMatch = matches[i + 1];
+    
+    const valueStart = currentMatch.end;
+    const valueEnd = nextMatch ? nextMatch.start : text.length;
+    const value = text.substring(valueStart, valueEnd).trim();
+    
+    if (value && value !== "-" && !value.toLowerCase().includes("não informad")) {
+      result[currentMatch.field] = value;
+    }
+  }
+  
+  return result;
+}
+
 // Parse text data with various formats
 function parseTextData(text: string): Record<string, any> {
   const result: Record<string, any> = {};
@@ -268,6 +315,12 @@ function parseTextData(text: string): Record<string, any> {
     .replace(/@\w+/g, "")
     .replace(/https?:\/\/[^\s]+/g, "")
     .trim();
+
+  // Check if this is inline format (multiple KEY: VALUE on same line)
+  const hasMultipleInlineFields = (cleanText.match(/[A-ZÀ-Ú\s]+:/g) || []).length >= 2 && !cleanText.includes("\n");
+  if (hasMultipleInlineFields) {
+    return parseInlineFields(cleanText);
+  }
 
   // Split by actual newlines (both escaped and real)
   const lines = cleanText.split(/\\n|\n/).filter((l) => l.trim());
@@ -288,6 +341,14 @@ function parseTextData(text: string): Record<string, any> {
 
   for (const line of lines) {
     const trimmedLine = line.trim();
+    
+    // Check if line has multiple inline fields
+    const lineFieldCount = (trimmedLine.match(/[A-ZÀ-Ú\s]+:/g) || []).length;
+    if (lineFieldCount >= 2) {
+      const inlineResult = parseInlineFields(trimmedLine);
+      Object.assign(result, inlineResult);
+      continue;
+    }
     
     // Check for section headers like "TELEFONES: ( 4 - Encontrados)"
     const sectionMatch = trimmedLine.match(/^(TELEFONES|ENDERECOS|EMAILS|EMPRESAS|PARENTES|VEÍCULOS|VEICULOS|BANCOS|EMPREGOS):\s*\(\s*(\d+)/i);
