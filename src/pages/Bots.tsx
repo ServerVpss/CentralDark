@@ -44,6 +44,7 @@ import { toast } from "sonner";
 import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/hooks/useTelegramBots";
 import { BotHealthMonitor } from "@/components/bots/BotHealthMonitor";
 import { BotConfigCard } from "@/components/bots/BotConfigCard";
+import { EdgeFunctionsStatus } from "@/components/bots/EdgeFunctionsStatus";
 import { AnalyticsChart } from "@/components/dashboard/AnalyticsChart";
 
 // Regex para validar formato do token do Telegram: ID:HASH
@@ -451,6 +452,9 @@ export default function Bots() {
 
             {/* Health Monitor */}
             <BotHealthMonitor bots={bots} />
+
+            {/* Edge Functions Status */}
+            <EdgeFunctionsStatus />
 
             {/* Bot Settings */}
             {selectedBot && (
