@@ -34,7 +34,7 @@ const providers: Record<string, ApiProvider> = {
   },
   tconect_foto: {
     baseUrl: "http://node.tconect.xyz",
-    port: 3041,
+    port: 3030, // Porta correta para fotos (igual telegram-api-query)
   },
 };
 
