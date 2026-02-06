@@ -49,6 +49,8 @@ const fieldEmojis: Record<string, string> = {
   sessao: "📍",
   csb8: "📊",
   csba: "📊",
+  score_csb: "📊",
+  score_csba: "📊",
   score: "⭐",
   score_serasa: "⭐",
   faixa_risco: "⚠️",
@@ -120,6 +122,8 @@ const fieldLabels: Record<string, string> = {
   sessao: "Sessão",
   csb8: "Score CSB8",
   csba: "Score CSBA",
+  score_csb: "Score CSB",
+  score_csba: "Score CSBA",
   score: "Score",
   score_serasa: "Score Serasa",
   faixa_risco: "Faixa de Risco",
@@ -175,7 +179,7 @@ const fieldCategories: Record<string, string[]> = {
   ],
   dados_score: [
     "csb8", "csba", "csb8_faixa", "csba_faixa", "score", "score_serasa",
-    "faixa_risco", "faixa_risco_csb", "faixa_risco_csba", "classificacao"
+    "score_csb", "score_csba", "faixa_risco", "faixa_risco_csb", "faixa_risco_csba", "classificacao"
   ],
   dados_renda: [
     "renda", "poder_aquisitivo", "classe_social", "faixa_renda"
@@ -430,41 +434,67 @@ function parseInlineFields(text: string): Record<string, any> {
 }
 
 // Parse Score-specific format (highly concatenated without spaces)
+// Example: "SCORE SERASASCORE CSB:SEM INFORMAÇÃOFAIXA DE RISCO CSB:SEM INFORMAÇÃOSCORE CSBA:848FAIXA DE RISCO CSBA:BAIXÍSSIMO RISCO"
 function parseScoreData(text: string): Record<string, any> | null {
   // Check if this looks like Score data
-  if (!text.toLowerCase().includes("score") && !text.toLowerCase().includes("csb")) {
+  const textUpper = text.toUpperCase();
+  if (!textUpper.includes("SCORE") && !textUpper.includes("CSB")) {
     return null;
   }
   
   const result: Record<string, any> = {};
   
-  // Score-specific patterns with their output keys
-  const scorePatterns: Array<{ pattern: RegExp; key: string }> = [
-    { pattern: /SCORE\s*SERASA\s*:?\s*(\d+)/gi, key: "score_serasa" },
-    { pattern: /SCORE\s*CSB\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csb8" },
-    { pattern: /SCORE\s*CSBA\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csba" },
-    { pattern: /CSB8?\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csb8" },
-    { pattern: /CSBA\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csba" },
-    { pattern: /FAIXA\s*(?:DE\s*)?RISCO\s*(?:CSB)?\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/gi, key: "faixa_risco_csb" },
-    { pattern: /FAIXA\s*(?:DE\s*)?RISCO\s*CSBA\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/gi, key: "faixa_risco_csba" },
-    { pattern: /CLASSIFICA[ÇC][AÃ]O\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s0-9:]+?)(?=SCORE|CSB|FAIXA|ATUALIZADO|$)/gi, key: "classificacao" },
-  ];
+  // Normalize the text - add spaces around key terms to help parsing
+  let normalized = text
+    .replace(/SCORE\s*SERASA/gi, " SCORE_SERASA ")
+    .replace(/SCORE\s*CSB(?!A)/gi, " SCORE_CSB ")
+    .replace(/SCORE\s*CSBA/gi, " SCORE_CSBA ")
+    .replace(/FAIXA\s*(?:DE\s*)?RISCO\s*CSB(?!A)/gi, " FAIXA_RISCO_CSB ")
+    .replace(/FAIXA\s*(?:DE\s*)?RISCO\s*CSBA/gi, " FAIXA_RISCO_CSBA ")
+    .replace(/FAIXA\s*(?:DE\s*)?RISCO(?!\s*CSB)/gi, " FAIXA_RISCO ")
+    .replace(/CSB(?!A|\s*:)/gi, " CSB ")
+    .replace(/CSBA/gi, " CSBA ")
+    .replace(/:/g, ": ")
+    .replace(/\s+/g, " ")
+    .trim();
   
-  for (const { pattern, key } of scorePatterns) {
-    const match = pattern.exec(text);
-    if (match && match[1]) {
-      let value = match[1].trim();
-      // Clean up the value
-      if (value && value !== "SEM INFORMAÇÃO" && !value.toLowerCase().includes("não informad")) {
-        // Remove trailing patterns from next field
-        value = value.replace(/SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO.*/gi, "").trim();
-        if (value) {
-          result[key] = value;
-        }
-      }
+  // Extract SCORE CSB (not CSBA)
+  const scoreCsbMatch = normalized.match(/(?:SCORE_CSB|CSB)\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/i);
+  if (scoreCsbMatch && scoreCsbMatch[1]) {
+    const val = scoreCsbMatch[1].trim();
+    if (!val.toUpperCase().includes("SEM INFORMAÇÃO")) {
+      result.score_csb = val;
     }
-    // Reset lastIndex for next search
-    pattern.lastIndex = 0;
+  }
+  
+  // Extract SCORE CSBA
+  const scoreCsbaMatch = normalized.match(/(?:SCORE_CSBA|CSBA)\s*:?\s*(\d+)/i);
+  if (scoreCsbaMatch && scoreCsbaMatch[1]) {
+    result.score_csba = scoreCsbaMatch[1].trim();
+  }
+  
+  // Extract FAIXA DE RISCO CSB (not CSBA)
+  const faixaCsbMatch = normalized.match(/FAIXA_RISCO_CSB\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/i);
+  if (faixaCsbMatch && faixaCsbMatch[1]) {
+    const val = faixaCsbMatch[1].trim();
+    if (val && !val.toUpperCase().includes("SEM INFORMAÇÃO")) {
+      result.faixa_risco_csb = val;
+    }
+  }
+  
+  // Extract FAIXA DE RISCO CSBA
+  const faixaCsbaMatch = normalized.match(/FAIXA_RISCO_CSBA\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/i);
+  if (faixaCsbaMatch && faixaCsbaMatch[1]) {
+    const val = faixaCsbaMatch[1].trim();
+    if (val && !val.toUpperCase().includes("SEM INFORMAÇÃO")) {
+      result.faixa_risco_csba = val;
+    }
+  }
+  
+  // Extract SCORE SERASA
+  const serasaMatch = normalized.match(/SCORE_SERASA\s*:?\s*(\d+)/i);
+  if (serasaMatch && serasaMatch[1]) {
+    result.score_serasa = serasaMatch[1].trim();
   }
   
   // Extract CPF and Nome if present
@@ -472,7 +502,13 @@ function parseScoreData(text: string): Record<string, any> | null {
   if (cpfMatch) result.cpf = cpfMatch[1];
   
   const nomeMatch = text.match(/NOME\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=CPF|SCORE|CSB|FAIXA|$)/i);
-  if (nomeMatch && nomeMatch[1].trim()) result.nome = nomeMatch[1].trim();
+  if (nomeMatch && nomeMatch[1].trim()) {
+    const nome = nomeMatch[1].trim();
+    // Avoid capturing partial field names
+    if (nome !== "COPIAR" && nome.length > 2) {
+      result.nome = nome;
+    }
+  }
   
   return Object.keys(result).length > 0 ? result : null;
 }
