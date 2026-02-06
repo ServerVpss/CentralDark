@@ -192,10 +192,39 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const body: QueryRequest = await req.json();
-    console.log("Request body:", JSON.stringify(body));
+    let queryRequest: QueryRequest;
 
-    if (!body.queryType || !body.queryInput) {
+    // Suporte GET via query params
+    if (req.method === "GET") {
+      const url = new URL(req.url);
+      const tipo = url.searchParams.get("tipo");
+      const valor = url.searchParams.get("valor");
+      const estado = url.searchParams.get("estado");
+
+      if (!tipo || !valor) {
+        return new Response(
+          JSON.stringify({ 
+            error: "Parâmetros 'tipo' e 'valor' são obrigatórios",
+            exemplo: "?tipo=telefone&valor=11999999999",
+            tipos_disponiveis: Object.keys(nexfutureEndpoints).concat(["score", "foto", "nacional", "placa_completa"])
+          }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      queryRequest = {
+        queryType: tipo,
+        queryInput: valor,
+        estado: estado || undefined
+      };
+      console.log("GET request params:", JSON.stringify(queryRequest));
+    } else {
+      // POST - comportamento original
+      queryRequest = await req.json();
+      console.log("POST request body:", JSON.stringify(queryRequest));
+    }
+
+    if (!queryRequest.queryType || !queryRequest.queryInput) {
       return new Response(
         JSON.stringify({ error: "queryType e queryInput são obrigatórios" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -203,7 +232,7 @@ Deno.serve(async (req) => {
     }
 
     const startTime = Date.now();
-    const result = await handleQuery(body);
+    const result = await handleQuery(queryRequest);
     const duration = Date.now() - startTime;
 
     console.log(`Query completed in ${duration}ms`);
@@ -220,15 +249,15 @@ Deno.serve(async (req) => {
     if (userId) {
       await supabase.from("query_history").insert({
         user_id: userId,
-        query_type: body.queryType,
-        query_input: body.queryInput,
+        query_type: queryRequest.queryType,
+        query_input: queryRequest.queryInput,
         query_result: result,
         status: result.error ? "error" : "success",
       });
 
       await supabase.from("api_usage_logs").insert({
         user_id: userId,
-        query_type: body.queryType,
+        query_type: queryRequest.queryType,
         credits_used: 1,
       });
     }
