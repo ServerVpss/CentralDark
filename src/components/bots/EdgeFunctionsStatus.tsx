@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Server, CheckCircle, XCircle, AlertCircle, RefreshCw, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,11 +25,14 @@ interface HealthCheckResult {
   total_functions: number;
 }
 
+const AUTO_REFRESH_INTERVAL = 60000; // 1 minute
+
 export function EdgeFunctionsStatus() {
   const [loading, setLoading] = useState(false);
   const [lastCheck, setLastCheck] = useState<HealthCheckResult | null>(null);
+  const [nextRefresh, setNextRefresh] = useState(AUTO_REFRESH_INTERVAL / 1000);
 
-  const runHealthCheck = async () => {
+  const runHealthCheck = useCallback(async (silent = false) => {
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("health-check");
@@ -49,19 +52,45 @@ export function EdgeFunctionsStatus() {
           setLastCheck(dbRecord as unknown as HealthCheckResult);
         }
         
-        if (data.summary.allHealthy) {
-          toast.success("Todas as funções estão online!");
-        } else {
-          toast.warning(`${data.summary.offline} função(ões) offline`);
+        if (!silent) {
+          if (data.summary.allHealthy) {
+            toast.success("Todas as funções estão online!");
+          } else {
+            toast.warning(`${data.summary.offline} função(ões) offline`);
+          }
         }
       }
     } catch (err) {
       console.error("Health check error:", err);
-      toast.error("Erro ao verificar funções");
+      if (!silent) {
+        toast.error("Erro ao verificar funções");
+      }
     } finally {
       setLoading(false);
+      setNextRefresh(AUTO_REFRESH_INTERVAL / 1000);
     }
-  };
+  }, []);
+
+  // Auto-refresh every 1 minute
+  useEffect(() => {
+    // Run initial check
+    runHealthCheck(true);
+
+    // Set up auto-refresh interval
+    const refreshInterval = setInterval(() => {
+      runHealthCheck(true);
+    }, AUTO_REFRESH_INTERVAL);
+
+    // Countdown timer
+    const countdownInterval = setInterval(() => {
+      setNextRefresh((prev) => (prev > 0 ? prev - 1 : AUTO_REFRESH_INTERVAL / 1000));
+    }, 1000);
+
+    return () => {
+      clearInterval(refreshInterval);
+      clearInterval(countdownInterval);
+    };
+  }, [runHealthCheck]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -95,7 +124,7 @@ export function EdgeFunctionsStatus() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={runHealthCheck}
+          onClick={() => runHealthCheck(false)}
           disabled={loading}
         >
           <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
@@ -107,7 +136,7 @@ export function EdgeFunctionsStatus() {
             <p className="text-sm text-muted-foreground mb-2">
               Clique para verificar status das funções
             </p>
-            <Button onClick={runHealthCheck} disabled={loading} variant="outline" size="sm">
+            <Button onClick={() => runHealthCheck(false)} disabled={loading} variant="outline" size="sm">
               {loading ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : null}
               Verificar Agora
             </Button>
@@ -155,16 +184,21 @@ export function EdgeFunctionsStatus() {
               ))}
             </div>
 
-            {/* Last Check Time */}
-            <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
-              <Clock className="h-3 w-3" />
-              Última verificação:{" "}
-              {new Date(lastCheck.checked_at).toLocaleTimeString("pt-BR", {
-                timeZone: "America/Sao_Paulo",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
+            {/* Last Check Time & Next Refresh */}
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                Última: {new Date(lastCheck.checked_at).toLocaleTimeString("pt-BR", {
+                  timeZone: "America/Sao_Paulo",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+              <span className="flex items-center gap-1">
+                <RefreshCw className="h-3 w-3" />
+                Próxima em {nextRefresh}s
+              </span>
+            </div>
           </>
         )}
       </CardContent>
