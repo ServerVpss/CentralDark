@@ -1,73 +1,93 @@
 
+# Plano: Incluir Nome e Data de Nascimento no Resultado de Score
 
-# ✅ Integrar Sistema de Cache no Bot Telegram
+## Situação Atual
+A consulta de **Score** usa o provedor `tconect_score` (porta 3041), que retorna dados corrompidos:
+- `nome: "Copiar"` - valor inválido
+- `cpf: "\n';"` - valor corrompido
+- Os dados de Score (CSB, CSBA, Faixas de Risco) estão corretos
 
-## Status: CONCLUÍDO
+Já a consulta de **CPF** usa o provedor `nexfuture` (porta 25589), que retorna dados completos:
+- Nome completo
+- Data de nascimento
+- E dezenas de outros campos
 
-A integração do sistema de cache no bot Telegram foi implementada com sucesso.
+## Solução Proposta
+Modificar a função `handleQuery` para que consultas do tipo **Score** façam uma chamada adicional ao endpoint de CPF e mesclem os dados, retornando um resultado enriquecido com:
+- Nome
+- Data de Nascimento  
+- Dados de Score (CSB, CSBA, Faixas de Risco)
 
-## Mudanças Realizadas
+## Alterações Técnicas
 
-### 1. Nova Função: `executeQueryWithCache()`
-Adicionada função helper que chama o endpoint `api-query` (que já possui cache):
+### 1. Modificar `supabase/functions/api-query/index.ts`
 
+**Antes (linhas 223-226):**
 ```typescript
-async function executeQueryWithCache(
-  queryType: string, 
-  queryInput: string, 
-  estado?: string
-): Promise<{ data: Record<string, unknown>; fromCache: boolean }>
-```
-
-### 2. Função Legacy: `executeQuery()`
-Mantida para compatibilidade, mas agora delega para `executeQueryWithCache`:
-
-```typescript
-async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
-  const { data } = await executeQueryWithCache(queryType, queryInput, estado);
-  return data;
+if (normalizedType === "score") {
+  return await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
 }
 ```
 
-### 3. Atualizada `logQuery()`
-Novo parâmetro `fromCache` para evitar duplicação de créditos:
-
+**Depois:**
 ```typescript
-async logQuery(telegramUserId: number, queryType: string, queryInput: string, result: Record<string, unknown>, fromCache: boolean = false)
+if (normalizedType === "score") {
+  // Buscar Score e dados básicos do CPF em paralelo
+  const [scoreResult, cpfResult] = await Promise.all([
+    fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput),
+    fetchFromProvider(providers.nexfuture, "/cpf", "cpf", cleanInput)
+  ]);
+  
+  // Extrair nome e nascimento do resultado de CPF
+  let nome = null;
+  let nascimento = null;
+  
+  if (cpfResult && !cpfResult.error) {
+    const cpfData = typeof cpfResult.data === "string" ? cpfResult.data : JSON.stringify(cpfResult);
+    
+    // Extrair NOME
+    const nomeMatch = cpfData.match(/NOME\s*[⎯\-:]\s*([^\n]+)/i);
+    if (nomeMatch) nome = nomeMatch[1].trim();
+    
+    // Extrair NASCIMENTO
+    const nascMatch = cpfData.match(/NASCIMENTO\s*[⎯\-:]\s*([^\n]+)/i);
+    if (nascMatch) nascimento = nascMatch[1].trim();
+  }
+  
+  // Mesclar Score com dados pessoais
+  return {
+    ...scoreResult,
+    cpf: cleanInput,
+    nome: nome || undefined,
+    nascimento: nascimento || undefined,
+    consulta_tipo: "score_enriquecido"
+  };
+}
 ```
-- Só registra crédito em `api_usage_logs` se `fromCache === false`
-- Histórico sempre é registrado
 
-### 4. Pontos de Chamada Atualizados
+## Resultado Esperado
+A consulta de Score retornará:
 
-| Local | Descrição |
-|-------|-----------|
-| `processQuery()` | Consulta via callback de menu |
-| `handleDirectQuery()` | Consulta via comando direto no grupo |
-| `qcpf:` callback | Consulta rápida de CPF a partir de CEP |
-| `pdf:` callback | Re-consulta para gerar PDF (usa cache) |
-| `txt:` callback | Re-consulta para gerar TXT (usa cache) |
-
-## Arquitetura Final
-
-```text
-ANTES (duplicado, sem cache):
-[Bot] --> executeQuery() --> fetchFromProvider() --> API Externa (SEMPRE)
-
-DEPOIS (unificado, com cache):
-[Bot] --> executeQueryWithCache() --> api-query --> [Cache Check]
-                                                     ├── HIT: Retorna dados indexados
-                                                     └── MISS: API Externa + Salva no cache
+```json
+{
+  "cpf": "38244335831",
+  "nome": "NEYMAR DA SILVA SANTOS JUNIOR",
+  "nascimento": "1992-02-05",
+  "data": {
+    "resposta": {
+      "classificacao": "CSB:MEDIOSCORE CSBA:368...",
+      "score": "SCORE SERASA..."
+    }
+  },
+  "consulta_tipo": "score_enriquecido"
+}
 ```
 
-## Benefícios Alcançados
+## Impacto
+- A consulta de Score passa a demorar ~100-200ms a mais (chamada paralela ao CPF)
+- Os dados de nome e nascimento serão exibidos corretamente na UI
+- O cache continua funcionando normalmente
+- Sem impacto em outras consultas
 
-1. **Economia**: Consultas repetidas no bot usam cache = menos custo de API
-2. **Velocidade**: Respostas do bot mais rápidas quando dados já indexados
-3. **Consistência**: Mesma lógica de cache no frontend e no bot
-4. **Manutenção**: Código de consulta centralizado em `api-query`
-5. **Créditos justos**: Só conta crédito em cache miss (evita cobrança dupla)
-
-## Código Removido
-
-As funções `fetchFromProvider()` e `fetchFromProviderWithTimeout()` foram mantidas como fallback interno, mas não são mais usadas para consultas principais.
+## Arquivos a Modificar
+1. `supabase/functions/api-query/index.ts` - Adicionar lógica de enriquecimento para Score
