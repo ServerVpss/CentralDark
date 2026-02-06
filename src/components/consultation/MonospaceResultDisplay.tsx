@@ -50,7 +50,11 @@ const fieldEmojis: Record<string, string> = {
   csb8: "📊",
   csba: "📊",
   score: "⭐",
+  score_serasa: "⭐",
   faixa_risco: "⚠️",
+  faixa_risco_csb: "⚠️",
+  faixa_risco_csba: "⚠️",
+  classificacao: "📈",
   renda: "💵",
   poder_aquisitivo: "💎",
   classe_social: "🏆",
@@ -114,10 +118,14 @@ const fieldLabels: Record<string, string> = {
   zona: "Zona",
   secao: "Seção",
   sessao: "Sessão",
-  csb8: "CSB8",
-  csba: "CSBA",
+  csb8: "Score CSB8",
+  csba: "Score CSBA",
   score: "Score",
+  score_serasa: "Score Serasa",
   faixa_risco: "Faixa de Risco",
+  faixa_risco_csb: "Faixa de Risco CSB",
+  faixa_risco_csba: "Faixa de Risco CSBA",
+  classificacao: "Classificação",
   renda: "Renda",
   poder_aquisitivo: "Poder Aquisitivo",
   classe_social: "Classe Social",
@@ -166,7 +174,8 @@ const fieldCategories: Record<string, string[]> = {
     "titulo_eleitor", "titulo", "eleitor", "zona", "secao", "sessao", "seção"
   ],
   dados_score: [
-    "csb8", "csba", "csb8_faixa", "csba_faixa", "score", "faixa_risco"
+    "csb8", "csba", "csb8_faixa", "csba_faixa", "score", "score_serasa",
+    "faixa_risco", "faixa_risco_csb", "faixa_risco_csba", "classificacao"
   ],
   dados_renda: [
     "renda", "poder_aquisitivo", "classe_social", "faixa_renda"
@@ -336,25 +345,51 @@ const knownFieldPatterns = [
   "UF", "CEP", "TELEFONE", "CELULAR", "EMAIL", "RENDA", "SCORE",
   "NATURALIDADE", "NACIONALIDADE", "ESTADO CIVIL", "PROFISSAO", "PROFISSÃO",
   "ESCOLARIDADE", "PIS", "NIS", "CNS", "CNH", "PLACA", "CHASSI", "RENAVAM",
-  "OBITO", "ÓBITO", "STATUS RECEITA", "PODER AQUISITIVO", "CLASSE SOCIAL"
+  "OBITO", "ÓBITO", "STATUS RECEITA", "PODER AQUISITIVO", "CLASSE SOCIAL",
+  // Score-specific patterns
+  "SCORE SERASA", "CSB", "CSB8", "CSBA", "FAIXA DE RISCO", "FAIXA SCORE",
+  "SCORE CSB", "SCORE CSBA", "CLASSIFICACAO", "CLASSIFICAÇÃO", "ATUALIZADO EM"
 ];
 
+// Score-specific field mappings
+const scoreFieldAliases: Record<string, string> = {
+  "score_serasa": "score",
+  "score_csb": "csb8",
+  "score_csba": "csba",
+  "faixa_de_risco": "faixa_risco",
+  "faixa_score": "faixa_risco",
+  "classificacao": "faixa_risco",
+  "classificação": "faixa_risco",
+  "atualizado_em": "atualizacao",
+};
+
 // Parse inline text like "NOME: VALUE CPF: VALUE RG: VALUE"
+// Also handles Score format: "SCORE SERASA:valueCSB:valueFAIXA DE RISCO:value"
 function parseInlineFields(text: string): Record<string, any> {
   const result: Record<string, any> = {};
   
-  // Build regex pattern from known fields (case insensitive for Title Case support)
-  const fieldsPattern = knownFieldPatterns.join("|");
-  const regex = new RegExp(`(${fieldsPattern}):\\s*`, "gi");
+  // Sort patterns by length descending to match longer patterns first
+  const sortedPatterns = [...knownFieldPatterns].sort((a, b) => b.length - a.length);
+  const fieldsPattern = sortedPatterns.map(p => p.replace(/\s+/g, "\\s*")).join("|");
+  const regex = new RegExp(`(${fieldsPattern})\\s*:\\s*`, "gi");
   
   // Find all field positions
-  const matches: { field: string; start: number; end: number }[] = [];
+  const matches: { field: string; start: number; end: number; rawField: string }[] = [];
   let match;
   while ((match = regex.exec(text)) !== null) {
     const rawField = match[1];
-    const normalizedField = applyAlias(rawField);
+    // Normalize the field name
+    let normalizedField = applyAlias(rawField);
+    
+    // Apply score-specific aliases
+    const scoreKey = normalizedField.toLowerCase().replace(/\s+/g, "_");
+    if (scoreFieldAliases[scoreKey]) {
+      normalizedField = scoreFieldAliases[scoreKey];
+    }
+    
     matches.push({
       field: normalizedField,
+      rawField: rawField,
       start: match.index,
       end: match.index + match[0].length
     });
@@ -367,14 +402,79 @@ function parseInlineFields(text: string): Record<string, any> {
     
     const valueStart = currentMatch.end;
     const valueEnd = nextMatch ? nextMatch.start : text.length;
-    const value = text.substring(valueStart, valueEnd).trim();
+    let value = text.substring(valueStart, valueEnd).trim();
     
-    if (value && value !== "-" && !value.toLowerCase().includes("não informad") && value !== "SEM INFORMAÇÃO") {
-      result[currentMatch.field] = value;
+    // Clean up value - remove trailing field names that might have been captured
+    value = value.replace(/^[:\s]+/, "").replace(/[:\s]+$/, "");
+    
+    // Skip empty, placeholder or uninformative values
+    if (!value || 
+        value === "-" || 
+        value.toLowerCase().includes("não informad") || 
+        value === "SEM INFORMAÇÃO" ||
+        value.toLowerCase().includes("data:text") ||
+        value.toLowerCase().includes("encodeuricomponent")) {
+      continue;
     }
+    
+    // For score fields, clean up concatenated values
+    if (["score", "csb8", "csba", "faixa_risco"].includes(currentMatch.field)) {
+      // Remove numeric suffixes that might be from next field
+      value = value.replace(/\d{3,}$/, "").trim();
+    }
+    
+    result[currentMatch.field] = value;
   }
   
   return result;
+}
+
+// Parse Score-specific format (highly concatenated without spaces)
+function parseScoreData(text: string): Record<string, any> | null {
+  // Check if this looks like Score data
+  if (!text.toLowerCase().includes("score") && !text.toLowerCase().includes("csb")) {
+    return null;
+  }
+  
+  const result: Record<string, any> = {};
+  
+  // Score-specific patterns with their output keys
+  const scorePatterns: Array<{ pattern: RegExp; key: string }> = [
+    { pattern: /SCORE\s*SERASA\s*:?\s*(\d+)/gi, key: "score_serasa" },
+    { pattern: /SCORE\s*CSB\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csb8" },
+    { pattern: /SCORE\s*CSBA\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csba" },
+    { pattern: /CSB8?\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csb8" },
+    { pattern: /CSBA\s*:?\s*(\d+|SEM\s*INFORMA[ÇC][AÃ]O)/gi, key: "csba" },
+    { pattern: /FAIXA\s*(?:DE\s*)?RISCO\s*(?:CSB)?\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/gi, key: "faixa_risco_csb" },
+    { pattern: /FAIXA\s*(?:DE\s*)?RISCO\s*CSBA\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO|$)/gi, key: "faixa_risco_csba" },
+    { pattern: /CLASSIFICA[ÇC][AÃ]O\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s0-9:]+?)(?=SCORE|CSB|FAIXA|ATUALIZADO|$)/gi, key: "classificacao" },
+  ];
+  
+  for (const { pattern, key } of scorePatterns) {
+    const match = pattern.exec(text);
+    if (match && match[1]) {
+      let value = match[1].trim();
+      // Clean up the value
+      if (value && value !== "SEM INFORMAÇÃO" && !value.toLowerCase().includes("não informad")) {
+        // Remove trailing patterns from next field
+        value = value.replace(/SCORE|CSB|FAIXA|CLASSIFICA|ATUALIZADO.*/gi, "").trim();
+        if (value) {
+          result[key] = value;
+        }
+      }
+    }
+    // Reset lastIndex for next search
+    pattern.lastIndex = 0;
+  }
+  
+  // Extract CPF and Nome if present
+  const cpfMatch = text.match(/CPF\s*:?\s*(\d{11}|\d{3}\.\d{3}\.\d{3}-\d{2})/i);
+  if (cpfMatch) result.cpf = cpfMatch[1];
+  
+  const nomeMatch = text.match(/NOME\s*:?\s*([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+?)(?=CPF|SCORE|CSB|FAIXA|$)/i);
+  if (nomeMatch && nomeMatch[1].trim()) result.nome = nomeMatch[1].trim();
+  
+  return Object.keys(result).length > 0 ? result : null;
 }
 
 // Parse text data with various formats
@@ -385,7 +485,15 @@ function parseTextData(text: string): Record<string, any> {
   let cleanText = text
     .replace(/@\w+/g, "")
     .replace(/https?:\/\/[^\s]+/g, "")
+    // Remove data URL artifacts
+    .replace(/STR\s*=\s*"DATA:TEXT\/PLAIN;CHARSET=UTF-8,"\s*\+\s*ENCODEURICOMPONENT\(CONTENT\);?/gi, "")
     .trim();
+
+  // Try Score-specific parser first
+  const scoreResult = parseScoreData(cleanText);
+  if (scoreResult && Object.keys(scoreResult).length >= 2) {
+    return scoreResult;
+  }
 
   // Check if this is inline format (multiple KEY: VALUE on same line)
   const hasMultipleInlineFields = (cleanText.match(/[A-ZÀ-Ú\s]+:/g) || []).length >= 2 && !cleanText.includes("\n");
