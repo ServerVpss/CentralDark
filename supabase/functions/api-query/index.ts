@@ -220,9 +220,64 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     return await fetchFromProvider(providers.nexfuture, endpoint, normalizedType, cleanInput);
   }
 
-  // TConect Score
+  // TConect Score - enriquecido com dados do CPF
   if (normalizedType === "score") {
-    return await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
+    // Primeiro verificar se já temos cache de CPF para este input
+    const cpfCacheKey = `cpf:${cleanInput}`;
+    const cpfCacheHash = await generateHash(cpfCacheKey, "");
+    const cpfCacheResult = await checkCache(
+      createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      ),
+      cpfCacheHash
+    );
+
+    // Buscar Score (sempre necessário)
+    const scoreResult = await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
+    
+    // Extrair nome e nascimento do cache de CPF ou buscar da API
+    let nome: string | null = null;
+    let nascimento: string | null = null;
+    
+    let cpfData: string | null = null;
+    
+    if (cpfCacheResult.hit && cpfCacheResult.data) {
+      // Usar dados do cache de CPF
+      console.log("Using CPF data from cache for score enrichment");
+      cpfData = typeof cpfCacheResult.data.data === "string" 
+        ? cpfCacheResult.data.data 
+        : JSON.stringify(cpfCacheResult.data);
+    } else {
+      // Buscar da API de CPF (pode demorar)
+      console.log("Fetching CPF data for score enrichment...");
+      const cpfResult = await fetchFromProvider(providers.nexfuture, "/cpf", "cpf", cleanInput);
+      
+      if (cpfResult && !cpfResult.error) {
+        cpfData = typeof cpfResult.data === "string" 
+          ? cpfResult.data 
+          : JSON.stringify(cpfResult);
+      }
+    }
+    
+    if (cpfData) {
+      // Extrair NOME (suporta diferentes separadores)
+      const nomeMatch = cpfData.match(/NOME\s*[⎯\-:]\s*([^\n]+)/i);
+      if (nomeMatch) nome = nomeMatch[1].trim();
+      
+      // Extrair NASCIMENTO
+      const nascMatch = cpfData.match(/NASCIMENTO\s*[⎯\-:]\s*([^\n]+)/i);
+      if (nascMatch) nascimento = nascMatch[1].trim();
+    }
+    
+    // Mesclar Score com dados pessoais
+    return {
+      ...scoreResult,
+      cpf: cleanInput,
+      nome: nome || undefined,
+      nascimento: nascimento || undefined,
+      consulta_tipo: "score_enriquecido"
+    };
   }
 
   // TConect Placa Completa
