@@ -16,6 +16,9 @@ interface FunctionHealth {
 // Lista de Edge Functions críticas para monitorar
 const CRITICAL_FUNCTIONS = [
   'telegram-webhook',
+  'telegram-bot',
+  'telegram-format-result',
+  'telegram-api-query',
   'efi-generate-pix',
   'efi-check-status',
   'efi-webhook',
