@@ -397,15 +397,18 @@ Deno.serve(async (req) => {
     const isNotFound = result.notFound === true;
     const isError = result.error && !isNotFound;
 
+    // Always return 200 to allow the bot to process the response
+    // The error information is in the response body
     return new Response(
       JSON.stringify({
         success: !isError,
         data: result,
         duration_ms: duration,
         fromCache,
+        error: isError ? result.error : undefined,
       }),
       {
-        status: isError ? 400 : 200,
+        status: 200, // Always 200 so callers can process the response
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
