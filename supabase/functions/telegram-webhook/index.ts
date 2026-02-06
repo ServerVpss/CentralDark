@@ -1155,146 +1155,57 @@ async function fetchFromProviderWithTimeout(
   }
 }
 
-async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
-  const normalizedType = queryType.toLowerCase();
+// =============== CACHE-ENABLED QUERY ===============
+// Chama o endpoint api-query que já possui sistema de cache integrado
+async function executeQueryWithCache(
+  queryType: string, 
+  queryInput: string, 
+  estado?: string
+): Promise<{ data: Record<string, unknown>; fromCache: boolean }> {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   
-  // Para nome, preservar espaços e permitir caracteres acentuados
-  // Para outros tipos, remover caracteres especiais
-  let cleanInput: string;
-  if (normalizedType === "nome") {
-    // Preservar espaços e letras acentuadas para busca por nome
-    cleanInput = queryInput.replace(/[^\w\sáéíóúãõâêîôûàèìòùç.-]/gi, "").trim();
-  } else {
-    cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
-  }
-
-  console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
-
-  // NexFuture queries
-  if (nexfutureEndpoints[normalizedType]) {
-    const endpoint = nexfutureEndpoints[normalizedType];
-    const result = await fetchFromProvider(providers.nexfuture, endpoint, normalizedType, cleanInput);
+  console.log(`[Cache] Calling api-query: type=${queryType}, input=${queryInput}, estado=${estado || 'N/A'}`);
+  
+  try {
+    const response = await fetch(`${supabaseUrl}/functions/v1/api-query`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${serviceRoleKey}`,
+      },
+      body: JSON.stringify({ queryType, queryInput, estado }),
+    });
     
-    // Tratar respostas "NÃO ENCONTRADO" da API
-    if (result.data && typeof result.data === 'string' && result.data.toUpperCase().includes('NÃO ENCONTRADO')) {
+    if (!response.ok) {
+      console.error(`[Cache] api-query HTTP error: ${response.status}`);
       return { 
-        error: `❌ ${normalizedType.toUpperCase()} não encontrado na base de dados.\n\n💡 Verifique se digitou corretamente.`,
-        notFound: true 
+        data: { error: `Erro na consulta: ${response.status}` }, 
+        fromCache: false 
       };
     }
     
-    return result;
-  }
-
-  // TConect Score
-  if (normalizedType === "score") {
-    return await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
-  }
-
-  // TConect Placa Completa
-  if (normalizedType === "placa_completa" || normalizedType === "placa2") {
-    return await fetchFromProvider(providers.tconect_score, "/placa1", "placa", cleanInput);
-  }
-
-  // TConect Foto - with state (e.g., /foto SP 12345678900)
-  if (normalizedType === "foto" && estado) {
-    const result = await fetchFromProvider(
-      providers.tconect_foto,
-      "/foto",
-      "cpf",
-      cleanInput,
-      { estado: estado.toUpperCase() }
-    );
+    const result = await response.json();
+    const fromCache = result.fromCache === true;
+    const data = result.data || result;
     
-    // Se não encontrou no estado específico, retorna mensagem amigável
-    if (result.notFound || result.status === 404) {
-      return { 
-        error: `📸 Foto não encontrada no estado ${estado.toUpperCase()}\n\n💡 Dica: Use /foto ${cleanInput} (sem estado) para buscar em todos os estados.`,
-        notFound: true 
-      };
-    }
-    return result;
-  }
-
-  // TConect Foto - search ALL states (default when no state specified)
-  // Also handles /nacional command
-  if (normalizedType === "foto" || normalizedType === "nacional") {
-    console.log(`Starting national photo search across all states for ${normalizedType}...`);
-    const results: Record<string, Record<string, unknown>> = {};
-    let foundFoto: unknown = null;
-    let foundNome: unknown = null;
-    let foundEstado: string | null = null;
+    console.log(`[Cache] Result received - fromCache: ${fromCache}, duration: ${result.duration_ms || 'N/A'}ms`);
     
-    // BUSCA SEQUENCIAL: Um estado por vez com timeout maior (25s) para dar tempo à API
-    // Estados prioritários já definidos em brazilianStates
-    for (const state of brazilianStates) {
-      console.log(`Searching photo in ${state}...`);
-      
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 segundos de timeout
-      
-      try {
-        const result = await fetchFromProviderWithTimeout(
-          providers.tconect_foto,
-          "/foto",
-          "cpf",
-          cleanInput,
-          { estado: state },
-          controller.signal
-        );
-        clearTimeout(timeoutId);
-        
-        // LOG: Ver o que a API TConect retorna para debug
-        console.log(`Foto result for ${state}:`, JSON.stringify(result).substring(0, 500));
-        
-        // Verificar múltiplos campos possíveis para a foto
-        let fotoData = result?.foto || result?.image || result?.url || result?.photo || result?.fotoBase64 || result?.base64;
-        
-        // Se é Base64 puro (começa com /9j/ para JPEG ou iVBOR para PNG), adicionar prefixo
-        if (fotoData && typeof fotoData === 'string') {
-          if (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR')) {
-            fotoData = `data:image/jpeg;base64,${fotoData}`;
-          }
-        }
-        
-        if (result && !result.error && !result.notFound && fotoData) {
-          // Normalizar o campo foto no resultado
-          results[state] = { ...result, foto: fotoData };
-          foundFoto = fotoData;
-          foundNome = result.nome;
-          foundEstado = state;
-          console.log(`Photo found in ${state}! Stopping search.`);
-          break; // Encontrou foto, para a busca
-        }
-      } catch (err) {
-        clearTimeout(timeoutId);
-        console.log(`Error for state ${state}:`, (err as Error).message);
-        // Continue para o próximo estado
-      }
-    }
-    
-    // If photo found, return it directly with data
-    if (foundFoto && foundEstado && results[foundEstado]) {
-      return { 
-        ...results[foundEstado], 
-        estado_encontrado: foundEstado,
-        cpf: cleanInput
-      };
-    }
-    
-    // Nenhuma foto encontrada - return summary
-    return {
-      cpf: cleanInput,
-      estados_encontrados: Object.keys(results),
-      total_fotos: Object.keys(results).length,
-      foto: null,
-      nome: null,
-      message: "Foto não encontrada nos estados pesquisados",
-      resultados: results,
+    return { data, fromCache };
+  } catch (err) {
+    const error = err as Error;
+    console.error(`[Cache] Error calling api-query:`, error.message);
+    return { 
+      data: { error: `⚠️ Erro de conexão. Tente novamente.` }, 
+      fromCache: false 
     };
   }
+}
 
-  return { error: `Tipo de consulta não suportado: ${queryType}` };
+// Legacy executeQuery - mantido para compatibilidade, mas delega para executeQueryWithCache
+async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
+  const { data } = await executeQueryWithCache(queryType, queryInput, estado);
+  return data;
 }
 
 // =============== PARSE DATA STRING ===============
@@ -2380,7 +2291,9 @@ class BotHandler {
    }
  
   // =============== LOG QUERY ===============
-  async logQuery(telegramUserId: number, queryType: string, queryInput: string, result: Record<string, unknown>) {
+  // fromCache: se true, não conta crédito (já foi gerenciado pelo api-query)
+  async logQuery(telegramUserId: number, queryType: string, queryInput: string, result: Record<string, unknown>, fromCache: boolean = false) {
+    // Sempre registra no histórico
     await this.supabase.from("query_history").insert({
       user_id: this.bot.user_id,
       query_type: queryType,
@@ -2389,11 +2302,14 @@ class BotHandler {
       status: result.error ? "error" : "success",
     });
 
-    await this.supabase.from("api_usage_logs").insert({
-      user_id: this.bot.user_id,
-      query_type: queryType,
-      credits_used: 1,
-    });
+    // Só conta crédito se não veio do cache (evita duplicação - api-query já gerencia)
+    if (!fromCache) {
+      await this.supabase.from("api_usage_logs").insert({
+        user_id: this.bot.user_id,
+        query_type: queryType,
+        credits_used: 1,
+      });
+    }
   }
 
   // =============== MENUS ===============
@@ -2521,10 +2437,10 @@ class BotHandler {
     await sendMessage(this.token, chatId, `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>\n\nAguarde um momento.`);
 
     try {
-      const result = await executeQuery(queryType, queryInput, estado);
+      const { data: result, fromCache } = await executeQueryWithCache(queryType, queryInput, estado);
       
-      // Log query
-      await this.logQuery(telegramUserId, queryType, queryInput, result);
+      // Log query - passa fromCache para evitar duplicação de créditos
+      await this.logQuery(telegramUserId, queryType, queryInput, result, fromCache);
 
       // Verificar se é resultado de CEP ou TELEFONE com múltiplos registros
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
@@ -3617,10 +3533,10 @@ class BotHandler {
     });
 
     try {
-      const result = await executeQuery(queryType, inputForQuery, estado);
+      const { data: result, fromCache } = await executeQueryWithCache(queryType, inputForQuery, estado);
       
-      // Log query
-      await this.logQuery(telegramUserId, queryType, inputForQuery, result);
+      // Log query - passa fromCache para evitar duplicação de créditos
+      await this.logQuery(telegramUserId, queryType, inputForQuery, result, fromCache);
 
       // Delete processing message
       if (processingMsg.ok && processingMsg.result) {
@@ -3891,10 +3807,10 @@ class BotHandler {
       );
       
       try {
-        const result = await executeQuery("cpf", cpf);
+        const { data: result, fromCache } = await executeQueryWithCache("cpf", cpf);
         
-        // Log query
-        await this.logQuery(telegramUserId, "cpf", cpf, result);
+        // Log query - passa fromCache para evitar duplicação de créditos
+        await this.logQuery(telegramUserId, "cpf", cpf, result, fromCache);
         
         // Format result
         const formattedResult = formatQueryResult("cpf", result, this.bot.bot_username, telegramUserName);
@@ -3934,8 +3850,8 @@ class BotHandler {
       );
       
       try {
-        // Re-execute query to get data for PDF
-        const result = await executeQuery(queryType, queryInput);
+        // Re-execute query to get data for PDF (usa cache - não conta crédito)
+        const { data: result } = await executeQueryWithCache(queryType, queryInput);
         
         // Call PDF generation function
         const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -4021,8 +3937,8 @@ class BotHandler {
       );
       
       try {
-        // Re-execute query to get data for TXT
-        const result = await executeQuery(queryType, queryInput);
+        // Re-execute query to get data for TXT (usa cache - não conta crédito)
+        const { data: result } = await executeQueryWithCache(queryType, queryInput);
         
         // Generate TXT content
         const txtContent = generateTxtContent(queryType, queryInput, result as Record<string, unknown>);
