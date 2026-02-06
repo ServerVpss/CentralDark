@@ -27,9 +27,34 @@ function formatTimeAgo(dateStr: string): string {
   return date.toLocaleDateString("pt-BR");
 }
 
+const READ_NOTIFICATIONS_KEY = "read_notifications";
+
+function getReadNotifications(): Set<string> {
+  try {
+    const stored = localStorage.getItem(READ_NOTIFICATIONS_KEY);
+    if (stored) {
+      return new Set(JSON.parse(stored));
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return new Set();
+}
+
+function saveReadNotifications(ids: Set<string>): void {
+  try {
+    // Keep only the last 100 to avoid localStorage bloat
+    const arr = Array.from(ids).slice(-100);
+    localStorage.setItem(READ_NOTIFICATIONS_KEY, JSON.stringify(arr));
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 export function useNotifications() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [readIds, setReadIds] = useState<Set<string>>(() => getReadNotifications());
 
   const fetchActivities = useCallback(async () => {
     try {
@@ -69,7 +94,7 @@ export function useNotifications() {
 
       // Formatar assinaturas como atividades
       const subActivities: Activity[] = (subs || []).map((s) => ({
-        id: s.id,
+        id: `sub_${s.id}`,
         type: "payment" as const,
         title: "Nova Assinatura",
         description: `${s.plan_name} - R$ ${Number(s.value || 0).toFixed(2)}`,
@@ -80,7 +105,7 @@ export function useNotifications() {
 
       // Formatar consultas como atividades
       const queryActivities: Activity[] = (queries || []).map((q) => ({
-        id: q.id,
+        id: `query_${q.id}`,
         type: "query" as const,
         title: `Consulta ${(q.query_type || "").toUpperCase()}`,
         description: q.query_input?.substring(0, 50) + (q.query_input?.length > 50 ? "..." : ""),
@@ -90,7 +115,7 @@ export function useNotifications() {
 
       // Formatar mensagens bloqueadas como atividades de segurança
       const securityActivities: Activity[] = (blockedMessages || []).map((m) => ({
-        id: m.id,
+        id: `sec_${m.id}`,
         type: "security" as const,
         title: m.blocked_reason === "anti_link" ? "Link Bloqueado" : "Spam Detectado",
         description: `@${m.from_username || "usuário"} - ${m.blocked_reason}`,
@@ -110,6 +135,30 @@ export function useNotifications() {
       setLoading(false);
     }
   }, []);
+
+  // Marcar notificação como lida
+  const markAsRead = useCallback((id: string) => {
+    setReadIds((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(id);
+      saveReadNotifications(newSet);
+      return newSet;
+    });
+  }, []);
+
+  // Marcar todas como lidas
+  const markAllAsRead = useCallback(() => {
+    setReadIds((prev) => {
+      const newSet = new Set(prev);
+      activities.forEach((a) => newSet.add(a.id));
+      saveReadNotifications(newSet);
+      return newSet;
+    });
+  }, [activities]);
+
+  // Notificações não lidas
+  const unreadActivities = activities.filter((a) => !readIds.has(a.id));
+  const unreadCount = unreadActivities.length;
 
   // Buscar dados iniciais
   useEffect(() => {
@@ -168,7 +217,12 @@ export function useNotifications() {
 
   return { 
     activities, 
+    unreadActivities,
+    unreadCount,
     loading, 
-    refresh: fetchActivities 
+    refresh: fetchActivities,
+    markAsRead,
+    markAllAsRead,
+    isRead: (id: string) => readIds.has(id),
   };
 }
