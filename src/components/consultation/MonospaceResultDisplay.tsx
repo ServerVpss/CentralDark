@@ -538,19 +538,34 @@ export function MonospaceResultDisplay({
 
   if (!result) return null;
 
+  // Check for errors at various nesting levels
+  const errorMessage = 
+    result.error || 
+    result.data?.error || 
+    (result.success === false && result.data?.error) ||
+    (result.status && result.status >= 400 && result.data?.error);
+
   // Handle error response
-  if (result.error) {
+  if (errorMessage) {
+    const isApiError = String(errorMessage).includes("Erro na API") || String(errorMessage).includes("500");
     return (
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "flex items-center gap-3 p-4 bg-destructive/10 rounded-lg border border-destructive/30 font-mono",
+          "flex flex-col gap-3 p-4 bg-destructive/10 rounded-lg border border-destructive/30 font-mono",
           className
         )}
       >
-        <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
-        <span className="text-destructive text-sm">{String(result.error)}</span>
+        <div className="flex items-center gap-3">
+          <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
+          <span className="text-destructive text-sm">{String(errorMessage)}</span>
+        </div>
+        {isApiError && (
+          <span className="text-muted-foreground text-xs">
+            ⚠️ O servidor externo está temporariamente indisponível. Tente novamente em alguns minutos.
+          </span>
+        )}
       </motion.div>
     );
   }
