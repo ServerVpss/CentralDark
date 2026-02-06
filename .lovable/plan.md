@@ -1,135 +1,164 @@
 
-# Plano: Corrigir Deleção Automática da Mensagem PIX após Pagamento
+# Plano: Correção da Formatação de Resultados de Telefone com Múltiplas Pessoas
 
-## Diagnóstico
+## Problema Identificado
 
-### Problema Identificado
-A mensagem do QR Code PIX não está sendo deletada automaticamente após o pagamento ser confirmado porque o campo `telegram_chat_id` está **NULL** no banco de dados.
+Quando uma consulta por telefone retorna dados de múltiplas pessoas, os resultados estão sendo misturados ao invés de serem exibidos separadamente. Isso ocorre tanto no Telegram quanto no painel administrativo.
+
+### Formato dos dados da API de telefone:
+```text
+RESULTADOS ENCONTRADOS PARA O TELEFONE 1136517405
+
+BASE 1
+CPF: 82463166487
+NOME: EZENILDO JOSE DA SILVA
+...
+
+BASE 2
+CPF: 01114154113
+NOME: ANNE KATIUSCIA SERPA
+...
+```
 
 ### Causa Raiz
-Existe um **conflito de inserção dupla** na tabela `pending_payments`:
+1. O sistema só aplica formatação especial para múltiplas pessoas em consultas de CEP
+2. A detecção de múltiplas pessoas usa regex que não corresponde ao formato de telefone
+3. O parsing separa dados por formato "CPF ⎯" mas a API retorna "CPF:"
 
-| Ordem | Origem | Inclui `telegram_chat_id`? |
-|-------|--------|---------------------------|
-| 1º | `efi-generate-pix` (linha 173-190) | ❌ NÃO |
-| 2º | `telegram-webhook` (linha 2852-2867) | ✅ SIM |
+---
 
-O `efi-generate-pix` insere primeiro (sem o `chat_id`), e quando o `telegram-webhook` tenta inserir o segundo registro, ele falha silenciosamente devido ao TXID duplicado.
+## Solução Proposta
 
-### Evidência no Banco
+### Arquivo 1: `supabase/functions/telegram-webhook/index.ts`
+
+**Mudanças:**
+
+1. **Atualizar função `isMultiPersonResult`**
+   - Adicionar suporte ao formato `CPF:` (dois pontos) além de `CPF [⎯—-]` (traço)
+   - Detectar também padrões "BASE X"
+
+2. **Atualizar `parseMultiplePersonRecords`**
+   - Suportar o formato de telefone: "CPF: valor" além de "CPF ⎯ valor"
+   - Detectar separadores "BASE X" para dividir registros
+
+3. **Expandir tratamento especial de múltiplas pessoas**
+   - Aplicar a mesma lógica usada para CEP também para consultas de telefone
+   - Na função `processQuery`, adicionar: `if ((queryType === 'cep' || queryType === 'telefone') && ...)`
+
+4. **Atualizar `formatMultiPersonPage`**
+   - Tornar o título dinâmico (não fixo como "CONSULTA DE CEP")
+   - Usar "CONSULTA DE TELEFONE" quando apropriado
+
+---
+
+### Arquivo 2: `supabase/functions/telegram-format-result/index.ts`
+
+**Mudanças:**
+
+1. **Atualizar função `parseMultiplePersonRecords`**
+   - Adicionar suporte ao formato `CPF: valor` (dois pontos)
+   - Detectar separadores "BASE X\n" para dividir registros corretamente
+
+2. **Atualizar `formatMultiPersonPage`**
+   - Receber parâmetro `queryType` para exibir título correto
+   - Usar emojis apropriados para cada tipo de consulta
+
+---
+
+### Arquivo 3: `src/components/consultas/QueryResultFormatter.tsx`
+
+**Mudanças:**
+
+1. **Atualizar função `parseMultiplePersonRecords`**
+   - Adicionar detecção de formato "BASE X" como separador de registros
+   - Suportar formato `CPF: valor` além de `CPF ⎯ valor`
+
+2. **Atualizar header do card de resultados**
+   - Mostrar "X pessoas encontradas para o telefone Y" quando for consulta de telefone
+
+---
+
+## Implementação Técnica
+
+### Nova regex para detecção (isMultiPersonResult):
+```typescript
+function isMultiPersonResult(dataStr: string): boolean {
+  // Formato com traço: CPF ⎯ or CPF — or CPF -
+  const dashMatches = dataStr.match(/CPF\s*[⎯—-]/gi) || [];
+  // Formato com dois pontos: CPF: 12345 or CPF: `12345
+  const colonMatches = dataStr.match(/CPF[:\s`]+[\d.-]+/gi) || [];
+  // Formato BASE X (indica múltiplos registros)
+  const baseMatches = dataStr.match(/BASE\s+\d+/gi) || [];
+  
+  const cpfCount = Math.max(dashMatches.length, colonMatches.length);
+  const hasMultipleBases = baseMatches.length > 1;
+  
+  return cpfCount > 1 || hasMultipleBases;
+}
 ```
-telegram_message_id: 24966  ✅ (atualizado corretamente depois)
-telegram_chat_id: null      ❌ (nunca foi inserido)
+
+### Nova lógica de parsing (parseMultiplePersonRecords):
+```typescript
+// Dividir por "BASE X" se presente
+if (text.includes('BASE')) {
+  const baseSections = text.split(/(?=BASE\s+\d+)/gi).filter(s => s.trim());
+  // Processar cada seção como um registro separado
+}
+
+// Ou dividir por CPF se não houver BASE
+const cpfSections = text.split(/(?=CPF[:\s`]+[\d.-]+)/gi).filter(s => s.trim());
+```
+
+### Condição expandida no processQuery:
+```typescript
+// Antes (só CEP):
+if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr))
+
+// Depois (CEP e Telefone):
+if ((queryType === 'cep' || queryType === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr))
 ```
 
 ---
 
-## Solução
+## Resultado Esperado
 
-### Opção Escolhida: Modificar `efi-generate-pix`
-Adicionar o parâmetro `telegram_chat_id` que é passado pelo `telegram-webhook` e incluí-lo no INSERT.
-
-### Alterações Necessárias
-
-#### 1. Arquivo: `supabase/functions/efi-generate-pix/index.ts`
-
-**Modificação A** - Receber `telegram_chat_id` nos parâmetros (linha ~52-60):
-
-```typescript
-const { 
-  amount, 
-  user_id, 
-  telegram_user_id,
-  telegram_chat_id,  // ADICIONAR
-  bot_id, 
-  plan_name,
-  plan_code,
-  plan_days 
-} = await req.json()
-```
-
-**Modificação B** - Incluir no INSERT de `pending_payments` (linha ~176-189):
-
-```typescript
-await supabase.from('pending_payments').insert({
-  user_id,
-  bot_id,
-  telegram_user_id,
-  telegram_chat_id,  // ADICIONAR
-  txid: efiTxid,
-  value: amount,
-  plan_name: plan_name || 'Recarga',
-  plan_code: plan_code || 'custom',
-  plan_days: plan_days || 30,
-  pix_copy_paste: proxyData.data?.pixCopiaECola,
-  pix_qrcode: proxyData.data?.qrcode,
-  expires_at: expiresAt.toISOString(),
-  status: 'PENDING'
-})
-```
-
-#### 2. Arquivo: `supabase/functions/telegram-webhook/index.ts`
-
-**Modificação A** - Passar `telegram_chat_id` na chamada ao `efi-generate-pix` (linha ~2830-2838):
-
-```typescript
-body: JSON.stringify({
-  amount: plan.price,
-  user_id: this.bot.user_id,
-  telegram_user_id: telegramUserId,
-  telegram_chat_id: chatId,  // ADICIONAR
-  bot_id: this.bot.id,
-  plan_name: plan.name,
-  plan_code: plan.code,
-  plan_days: plan.days,
-}),
-```
-
-**Modificação B** - Remover INSERT duplicado em `pending_payments` (linhas 2851-2867):
-
-Como o `efi-generate-pix` já faz o INSERT, o código do `telegram-webhook` que insere em `pending_payments` deve ser **REMOVIDO** para evitar duplicação.
-
----
-
-## Fluxo Corrigido
-
+### No Telegram:
 ```text
-1. Usuário clica em um plano no Telegram
-       ↓
-2. telegram-webhook chama efi-generate-pix com telegram_chat_id
-       ↓
-3. efi-generate-pix:
-   - Gera o PIX via proxy PHP
-   - Insere em pix_transactions
-   - Insere em pending_payments COM telegram_chat_id ← CORRIGIDO
-       ↓
-4. telegram-webhook:
-   - Recebe resposta do PIX
-   - Envia mensagem com QR Code
-   - Atualiza telegram_message_id no pending_payments
-       ↓
-5. Pagamento confirmado via webhook (efi-webhook):
-   - Busca pending_payment com telegram_chat_id e telegram_message_id
-   - DELETA a mensagem do QR Code ← AGORA FUNCIONA!
-   - Envia mensagem de confirmação com confete
+📞 TELEFONE RESULTADO
+
+👥 2 pessoas encontradas
+
+┌─────────────────────────────
+│ 👤 PESSOA 1
+├─────────────────────────────
+│ 📛 Nome: EZENILDO JOSE DA SILVA
+│ 🆔 CPF: 824.631.664-87
+│ 📅 Nasc: 15/03/1985
+└─────────────────────────────
+
+┌─────────────────────────────
+│ 👤 PESSOA 2
+├─────────────────────────────
+│ 📛 Nome: ANNE KATIUSCIA SERPA
+│ 🆔 CPF: 011.141.541-13
+│ 📅 Nasc: 22/07/1990
+└─────────────────────────────
+
+💡 Clique no CPF para consultar
+🤖 @Bot
 ```
+
+### No Painel Admin:
+Cards separados e expansíveis para cada pessoa, com botão para consultar CPF individual.
 
 ---
 
-## Detalhes Técnicos
+## Arquivos que serão modificados:
 
-### Arquivos a Modificar
-| Arquivo | Tipo de Alteração |
-|---------|-------------------|
-| `supabase/functions/efi-generate-pix/index.ts` | Adicionar parâmetro + incluir no INSERT |
-| `supabase/functions/telegram-webhook/index.ts` | Passar chatId + remover INSERT duplicado |
+1. `supabase/functions/telegram-webhook/index.ts`
+2. `supabase/functions/telegram-format-result/index.ts`  
+3. `src/components/consultas/QueryResultFormatter.tsx`
 
-### Deploy Necessário
-- `efi-generate-pix`
-- `telegram-webhook`
-
-### Teste Recomendado
-1. Gerar um novo PIX pelo bot
-2. Verificar no banco se `telegram_chat_id` está preenchido
-3. Realizar o pagamento
-4. Confirmar que a mensagem do QR foi deletada automaticamente
+## Deploy necessário:
+- telegram-webhook
+- telegram-format-result
