@@ -13,6 +13,7 @@ interface ApiProvider {
 
 const providers: Record<string, ApiProvider> = {
   nexfuture: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25589 },
+  nexfuture_cpf: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25594 },
   tconect_score: { baseUrl: "http://node.tconect.xyz", port: 3029 },
   tconect_foto: { baseUrl: "http://node.tconect.xyz", port: 3030 },
 };
@@ -174,7 +175,9 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
   if (nexfutureEndpoints[normalizedType]) {
     const endpoint = nexfutureEndpoints[normalizedType];
     const paramName = normalizedType === "placa" ? "placa" : normalizedType;
-    return await fetchFromProvider(providers.nexfuture, endpoint, paramName, cleanInput);
+    // CPF usa provider específico com porta 25594
+    const provider = normalizedType === "cpf" ? providers.nexfuture_cpf : providers.nexfuture;
+    return await fetchFromProvider(provider, endpoint, paramName, cleanInput);
   }
 
   // TConect Foto - with specific state

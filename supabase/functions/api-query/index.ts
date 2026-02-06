@@ -51,6 +51,10 @@ const providers: Record<string, ApiProvider> = {
     baseUrl: "http://nxf-2.nexfuture.com.br",
     port: 25589,
   },
+  nexfuture_cpf: {
+    baseUrl: "http://nxf-2.nexfuture.com.br",
+    port: 25594,
+  },
   tconect_score: {
     baseUrl: "http://node.tconect.xyz",
     port: 3041,
@@ -217,7 +221,9 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
   // NexFuture queries
   if (nexfutureEndpoints[normalizedType]) {
     const endpoint = nexfutureEndpoints[normalizedType];
-    return await fetchFromProvider(providers.nexfuture, endpoint, normalizedType, cleanInput);
+    // CPF usa provider específico com porta 25594
+    const provider = normalizedType === "cpf" ? providers.nexfuture_cpf : providers.nexfuture;
+    return await fetchFromProvider(provider, endpoint, normalizedType, cleanInput);
   }
 
   // TConect Score - enriquecido com dados do CPF
@@ -249,9 +255,9 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
         ? cpfCacheResult.data.data 
         : JSON.stringify(cpfCacheResult.data);
     } else {
-      // Buscar da API de CPF (pode demorar)
+      // Buscar da API de CPF (usando provider específico com porta 25594)
       console.log("Fetching CPF data for score enrichment...");
-      const cpfResult = await fetchFromProvider(providers.nexfuture, "/cpf", "cpf", cleanInput);
+      const cpfResult = await fetchFromProvider(providers.nexfuture_cpf, "/cpf", "cpf", cleanInput);
       
       if (cpfResult && !cpfResult.error) {
         cpfData = typeof cpfResult.data === "string" 
