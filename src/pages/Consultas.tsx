@@ -121,67 +121,113 @@ export default function Consultas() {
     setNetworkBlockedHint(null);
     setShowConfetti(false);
 
-    // Use cleaned input for the query
     const inputToQuery = cleanQueryInput || queryInput.trim();
+    const requestBody = {
+      queryType: selectedType,
+      queryInput: inputToQuery,
+      estado: selectedType === "foto" ? selectedState : undefined,
+    };
+
+    // Fallback direto via fetch caso supabase.functions.invoke falhe
+    const directFetch = async (): Promise<QueryResult | null> => {
+      const EDGE_URL = "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/api-query";
+      try {
+        const response = await fetch(EDGE_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return await response.json();
+      } catch (err) {
+        console.error("Direct fetch fallback error:", err);
+        return null;
+      }
+    };
 
     try {
-      const maxRetries = 1; // total: 2 tentativas
+      const maxRetries = 1;
       const retryDelayMs = 800;
 
       let lastError: any = null;
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
         const { data, error } = await supabase.functions.invoke("api-query", {
-          body: {
-            queryType: selectedType,
-            queryInput: inputToQuery,
-            estado: selectedType === "foto" ? selectedState : undefined,
-          },
+          body: requestBody,
         });
 
         if (!error) {
           setResult(data as QueryResult);
 
           if (data?.success) {
-            // Trigger celebration!
             setShowConfetti(true);
-            
-            // Haptic feedback
             if (navigator.vibrate) {
               navigator.vibrate([100, 50, 100]);
             }
-            
             toast.success(`Consulta realizada em ${data.duration_ms}ms`);
           } else {
             toast.error("Consulta retornou erro");
           }
-
           return;
         }
 
         lastError = error;
 
-        if (isNetworkBlockedError(error) && attempt < maxRetries) {
-          toast.message("Falha de conexão — tentando novamente...");
-          await sleep(retryDelayMs);
-          continue;
-        }
-
-        console.error("Query error:", error);
+        // Se for erro de rede, tenta fallback direto
         if (isNetworkBlockedError(error)) {
+          if (attempt < maxRetries) {
+            toast.message("Falha de conexão — tentando novamente...");
+            await sleep(retryDelayMs);
+            continue;
+          }
+
+          // Última tentativa: fallback com fetch direto
+          toast.message("Tentando conexão alternativa...");
+          const fallbackResult = await directFetch();
+          
+          if (fallbackResult) {
+            setResult(fallbackResult);
+            if (fallbackResult.success) {
+              setShowConfetti(true);
+              if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+              }
+              toast.success(`Consulta realizada em ${fallbackResult.duration_ms}ms (via fallback)`);
+            } else {
+              toast.error("Consulta retornou erro");
+            }
+            return;
+          }
+
+          // Fallback também falhou
           setNetworkBlockedHint(
             "Uma extensão do navegador (VPN/AdBlock/Proxy) ou firewall pode estar bloqueando a requisição. Teste em aba anônima ou desative extensões temporariamente.",
           );
           toast.error("Erro na consulta: conexão bloqueada no navegador");
-        } else {
-          toast.error("Erro na consulta: " + (error.message || "Erro desconhecido"));
+          return;
+        }
+
+        console.error("Query error:", error);
+        toast.error("Erro na consulta: " + (error.message || "Erro desconhecido"));
+        return;
+      }
+
+      if (lastError) throw lastError;
+    } catch (err) {
+      console.error("Fetch error:", err);
+      
+      // Tenta fallback mesmo no catch
+      const fallbackResult = await directFetch();
+      if (fallbackResult) {
+        setResult(fallbackResult);
+        if (fallbackResult.success) {
+          setShowConfetti(true);
+          toast.success(`Consulta realizada em ${fallbackResult.duration_ms}ms (via fallback)`);
         }
         return;
       }
 
-      // fallback (não deve acontecer)
-      if (lastError) throw lastError;
-    } catch (err) {
-      console.error("Fetch error:", err);
       if (isNetworkBlockedError(err)) {
         setNetworkBlockedHint(
           "Uma extensão do navegador (VPN/AdBlock/Proxy) ou firewall pode estar bloqueando a requisição. Teste em aba anônima ou desative extensões temporariamente.",
