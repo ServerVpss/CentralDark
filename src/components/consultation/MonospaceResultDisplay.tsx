@@ -192,6 +192,54 @@ const fieldCategories: Record<string, string[]> = {
   ],
 };
 
+// Field aliases for canonical key mapping
+const fieldAliases: Record<string, string> = {
+  nome_da_mae: "nome_mae",
+  nome_da_mãe: "nome_mae",
+  nome_do_pai: "nome_pai",
+  data_de_nascimento: "data_nascimento",
+  datanascimento: "data_nascimento",
+  dt_nascimento: "data_nascimento",
+  orgao_emissor_rg: "orgao_emissor",
+  uf_rg: "estado_emissao",
+  titulo_de_eleitor: "titulo_eleitor",
+  titulo: "titulo_eleitor",
+  secao_eleitoral: "secao",
+  seção_eleitoral: "secao",
+  seção: "secao",
+  sessão: "secao",
+  zona_eleitoral: "zona",
+  mae: "nome_mae",
+  pai: "nome_pai",
+  fone: "telefone",
+  tel: "telefone",
+  cel: "celular",
+  cid: "cidade",
+  mun: "municipio",
+  munic: "municipio",
+  end: "endereco",
+  log: "logradouro",
+  num: "numero",
+  comp: "complemento",
+};
+
+// Normalize key: remove accents, lowercase, replace spaces with underscores
+function normalizeKey(raw: string): string {
+  return raw
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_") // Replace non-alphanumeric with underscore
+    .replace(/_+/g, "_") // Collapse multiple underscores
+    .replace(/^_|_$/g, ""); // Trim underscores
+}
+
+// Apply field alias if exists
+function applyAlias(key: string): string {
+  const normalized = normalizeKey(key);
+  return fieldAliases[normalized] || normalized;
+}
+
 // Extract photo from data
 function extractPhoto(data: any): string | null {
   if (!data) return null;
@@ -246,13 +294,34 @@ function extractData(data: any): Record<string, any> {
   
   for (const [key, value] of Object.entries(data)) {
     if (value === null || value === undefined) continue;
+    
+    const keyLower = key.toLowerCase();
+    
     // Skip photo fields in main data
-    if (["foto", "image", "photo", "fotoBase64", "base64"].includes(key.toLowerCase())) continue;
+    if (["foto", "image", "photo", "fotobase64", "base64"].includes(keyLower)) continue;
+    
+    // Check if this is a "texto" field that should be parsed
+    if (["texto", "text", "resultado", "resposta"].includes(keyLower) && typeof value === "string") {
+      const textValue = value as string;
+      // Only parse if it contains field patterns (colon-separated or multiple lines)
+      if (textValue.includes(":") && (textValue.includes("\n") || textValue.includes("\\n") || (textValue.match(/[A-ZÀ-Ú\s]+:/gi) || []).length >= 2)) {
+        const parsedFields = parseTextData(textValue);
+        // Merge parsed fields into result
+        for (const [parsedKey, parsedValue] of Object.entries(parsedFields)) {
+          const normalizedKey = applyAlias(parsedKey);
+          result[normalizedKey] = parsedValue;
+        }
+        // Skip adding the raw texto field since we parsed it
+        continue;
+      }
+    }
+    
     if (typeof value === "object" && !Array.isArray(value)) {
       const nested = extractData(value);
       Object.assign(result, nested);
     } else {
-      result[key.toLowerCase().replace(/\s+/g, "_")] = value;
+      const normalizedKey = applyAlias(key);
+      result[normalizedKey] = value;
     }
   }
 
@@ -274,7 +343,7 @@ const knownFieldPatterns = [
 function parseInlineFields(text: string): Record<string, any> {
   const result: Record<string, any> = {};
   
-  // Build regex pattern from known fields
+  // Build regex pattern from known fields (case insensitive for Title Case support)
   const fieldsPattern = knownFieldPatterns.join("|");
   const regex = new RegExp(`(${fieldsPattern}):\\s*`, "gi");
   
@@ -282,8 +351,10 @@ function parseInlineFields(text: string): Record<string, any> {
   const matches: { field: string; start: number; end: number }[] = [];
   let match;
   while ((match = regex.exec(text)) !== null) {
+    const rawField = match[1];
+    const normalizedField = applyAlias(rawField);
     matches.push({
-      field: match[1].toLowerCase().replace(/\s+/g, "_"),
+      field: normalizedField,
       start: match.index,
       end: match.index + match[0].length
     });
@@ -298,7 +369,7 @@ function parseInlineFields(text: string): Record<string, any> {
     const valueEnd = nextMatch ? nextMatch.start : text.length;
     const value = text.substring(valueStart, valueEnd).trim();
     
-    if (value && value !== "-" && !value.toLowerCase().includes("não informad")) {
+    if (value && value !== "-" && !value.toLowerCase().includes("não informad") && value !== "SEM INFORMAÇÃO") {
       result[currentMatch.field] = value;
     }
   }
@@ -383,13 +454,14 @@ function parseTextData(text: string): Record<string, any> {
     }
 
     // Parse key-value pairs with ⎯ separator (most common in this API)
-    const dashMatch = trimmedLine.match(/^([A-ZÀ-Ú\s]+)\s*⎯\s*(.*)$/);
+    const dashMatch = trimmedLine.match(/^([A-ZÀ-Úa-zà-ú\s]+)\s*⎯\s*(.*)$/);
     if (dashMatch) {
       currentArrayKey = null;
-      const key = dashMatch[1].trim().toLowerCase().replace(/\s+/g, "_");
+      const rawKey = dashMatch[1].trim();
+      const normalizedKey = applyAlias(rawKey);
       const value = dashMatch[2].trim();
       if (value && value !== "-" && !value.toLowerCase().includes("não informad") && value !== "SEM INFORMAÇÃO") {
-        result[key] = value;
+        result[normalizedKey] = value;
       }
       continue;
     }
@@ -398,10 +470,11 @@ function parseTextData(text: string): Record<string, any> {
     const colonMatch = trimmedLine.match(/^([^:⎯—=>]+)[:\s⎯—=>]+\s*(.*)$/);
     if (colonMatch) {
       currentArrayKey = null;
-      const key = colonMatch[1].trim().toLowerCase().replace(/\s+/g, "_");
+      const rawKey = colonMatch[1].trim();
+      const normalizedKey = applyAlias(rawKey);
       const value = colonMatch[2].trim();
       if (value && value !== "-" && !value.toLowerCase().includes("não informad") && value !== "SEM INFORMAÇÃO") {
-        result[key] = value;
+        result[normalizedKey] = value;
       }
     }
   }
