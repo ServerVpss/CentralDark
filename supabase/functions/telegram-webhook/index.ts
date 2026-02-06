@@ -1439,7 +1439,75 @@ function parseMultiplePersonRecords(dataStr: string): PersonRecord[] {
     .replace(/https?:\/\/[^\s]+/g, '')
     .trim();
   
-  // Dividir por linhas
+  // Check if this contains "BASE X" sections (phone query format)
+  const hasBaseSections = /BASE\s+\d+/i.test(cleaned);
+  
+  if (hasBaseSections) {
+    // Split by BASE sections
+    const baseSections = cleaned.split(/(?=BASE\s+\d+)/gi).filter(s => s.trim());
+    
+    for (const section of baseSections) {
+      // Skip the header section (before first BASE)
+      if (!section.match(/BASE\s+\d+/i)) continue;
+      
+      const person: PersonRecord = {};
+      const lines = section.split(/\n/).map(l => l.trim()).filter(Boolean);
+      
+      for (const line of lines) {
+        // Skip the "BASE X" header line itself
+        if (line.match(/^BASE\s+\d+$/i)) continue;
+        
+        // Match patterns like "CPF: 12345" or "NOME: NAME" (colon format)
+        const colonMatch = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\w\s_]+)[:\s]+[`]?(.+)$/i);
+        if (colonMatch) {
+          const key = colonMatch[1].trim().toUpperCase();
+          let value = colonMatch[2].trim().replace(/^`/, ''); // Remove leading backtick
+          
+          // Skip empty or invalid values
+          if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) continue;
+          
+          // Skip header lines
+          if (key.includes('RESULTADO') || key.includes('ENCONTRADO') || key.includes('BASE')) continue;
+          
+          // Map the key to our record structure
+          const keyMap: Record<string, keyof PersonRecord> = {
+            'CPF': 'cpf', 'CPF_CNPJ': 'cpf',
+            'NOME': 'nome',
+            'NASCIMENTO': 'nascimento', 'DATA_NASCIMENTO': 'nascimento',
+            'EMAIL': 'email',
+            'RENDA': 'renda',
+            'BAIRRO': 'bairro',
+            'CIDADE': 'cidade',
+            'UF': 'uf',
+            'CEP': 'cep',
+            'SEXO': 'sexo',
+            'MÃE': 'mae', 'MAE': 'mae', 'NOME_MAE': 'mae',
+            'PAI': 'pai', 'NOME_PAI': 'pai',
+            'LOGRADOURO': 'logradouro',
+            'ENDEREÇO': 'endereco', 'ENDERECO': 'endereco',
+            'COMPLEMENTO': 'complemento',
+            'ESTADO': 'estado',
+            'TELEFONE': 'telefone',
+            'RG': 'rg',
+          };
+          
+          const mappedKey = keyMap[key] || key.toLowerCase().replace(/\s+/g, '_');
+          person[mappedKey] = value;
+        }
+      }
+      
+      // Only add if person has CPF or NOME
+      if (person.cpf || person.nome) {
+        records.push(person);
+      }
+    }
+    
+    if (records.length > 0) {
+      return records;
+    }
+  }
+  
+  // Fallback: Parse by CPF entries with dash format (CEP query style)
   const lines = cleaned.split('\n').map(l => l.trim()).filter(Boolean);
   
   let currentRecord: PersonRecord = {};
@@ -1447,16 +1515,23 @@ function parseMultiplePersonRecords(dataStr: string): PersonRecord[] {
   
   for (const line of lines) {
     // Check for key — value format (with em-dash ⎯ or regular dash —)
-    const match = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+)\s*[⎯—-]\s*(.*)$/i);
+    const dashMatch = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\s]+)\s*[⎯—-]\s*(.*)$/i);
+    // Also check for colon format
+    const colonMatch = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\w\s_]+)[:\s]+[`]?(.+)$/i);
+    
+    const match = dashMatch || colonMatch;
     
     if (match) {
       const key = match[1].trim().toUpperCase();
-      const value = match[2].trim();
+      let value = match[2].trim().replace(/^`/, '');
       
       // Skip empty values
       if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) {
         continue;
       }
+      
+      // Skip header lines
+      if (key.includes('RESULTADO') || key.includes('ENCONTRADO') || key.includes('BASE')) continue;
       
       // If we find a new CPF and already have data, save current record and start new
       if (key === 'CPF' && hasData && currentRecord.cpf) {
@@ -1467,9 +1542,9 @@ function parseMultiplePersonRecords(dataStr: string): PersonRecord[] {
       
       // Map the key to our record structure
       const keyMap: Record<string, keyof PersonRecord> = {
-        'CPF': 'cpf',
+        'CPF': 'cpf', 'CPF_CNPJ': 'cpf',
         'NOME': 'nome',
-        'NASCIMENTO': 'nascimento',
+        'NASCIMENTO': 'nascimento', 'DATA_NASCIMENTO': 'nascimento',
         'EMAIL': 'email',
         'RENDA': 'renda',
         'BAIRRO': 'bairro',
@@ -1477,10 +1552,10 @@ function parseMultiplePersonRecords(dataStr: string): PersonRecord[] {
         'UF': 'uf',
         'CEP': 'cep',
         'SEXO': 'sexo',
-        'MÃE': 'mae',
-        'PAI': 'pai',
+        'MÃE': 'mae', 'MAE': 'mae', 'NOME_MAE': 'mae',
+        'PAI': 'pai', 'NOME_PAI': 'pai',
         'LOGRADOURO': 'logradouro',
-        'ENDEREÇO': 'endereco',
+        'ENDEREÇO': 'endereco', 'ENDERECO': 'endereco',
         'COMPLEMENTO': 'complemento',
         'ESTADO': 'estado',
         'TELEFONE': 'telefone',
@@ -1501,11 +1576,19 @@ function parseMultiplePersonRecords(dataStr: string): PersonRecord[] {
   return records;
 }
 
-// Check if data looks like multiple person records (CEP query result)
+// Check if data looks like multiple person records (CEP or Telefone query result)
 function isMultiPersonResult(dataStr: string): boolean {
-  // Count how many CPF entries there are
-  const cpfMatches = dataStr.match(/CPF\s*[⎯—-]/gi);
-  return cpfMatches !== null && cpfMatches.length > 1;
+  // Format 1: CPF with dash (CEP style) - CPF ⎯ or CPF — or CPF -
+  const dashMatches = dataStr.match(/CPF\s*[⎯—-]/gi) || [];
+  // Format 2: CPF with colon (Phone style) - CPF: 12345 or CPF: `12345
+  const colonMatches = dataStr.match(/CPF[:\s`]+[\d.-]+/gi) || [];
+  // Format 3: BASE X sections (indicates multiple records from phone API)
+  const baseMatches = dataStr.match(/BASE\s+\d+/gi) || [];
+  
+  const cpfCount = Math.max(dashMatches.length, colonMatches.length);
+  const hasMultipleBases = baseMatches.length > 1;
+  
+  return cpfCount > 1 || hasMultipleBases;
 }
 
 // Constantes para paginação de múltiplos registros
@@ -1517,7 +1600,9 @@ function formatMultiPersonPage(
   page: number, 
   totalPages: number,
   botUsername?: string, 
-  telegramUserName?: string
+  telegramUserName?: string,
+  queryType?: string,
+  queryInput?: string
 ): string {
   const userName = telegramUserName || 'usuário';
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
@@ -1528,7 +1613,14 @@ function formatMultiPersonPage(
   
   const lines: string[] = [];
   
-  lines.push(`📍 CONSULTA DE CEP`);
+  // Dynamic title based on query type
+  const titleIcon = queryType === 'telefone' ? '📞' : '📍';
+  const titleText = queryType === 'telefone' ? 'CONSULTA DE TELEFONE' : 'CONSULTA DE CEP';
+  
+  lines.push(`${titleIcon} ${titleText}`);
+  if (queryInput) {
+    lines.push(`🔍 ${queryInput}`);
+  }
   lines.push(``);
   lines.push(`👋 Olá, ${userName}!`);
   lines.push(`👥 ${records.length} pessoas encontradas`);
@@ -1594,7 +1686,9 @@ function createMultiPersonKeyboard(
   records: PersonRecord[], 
   page: number, 
   totalPages: number,
-  paginationId?: string
+  paginationId?: string,
+  queryType?: string,
+  queryInput?: string
 ): { inline_keyboard: InlineButton[][] } {
   const keyboard: InlineButton[][] = [];
   
@@ -1633,14 +1727,17 @@ function createMultiPersonKeyboard(
   if (totalPages > 1) {
     const navRow: InlineButton[] = [];
     
+    // Use appropriate page callback based on query type
+    const pagePrefix = queryType === 'telefone' ? 'tel_page' : 'cep_page';
+    
     if (page > 0) {
-      navRow.push({ text: "◀️ Anterior", callback_data: `cep_page:${paginationId}:${page - 1}` });
+      navRow.push({ text: "◀️ Anterior", callback_data: `${pagePrefix}:${paginationId}:${page - 1}` });
     }
     
     navRow.push({ text: `${page + 1}/${totalPages}`, callback_data: "noop" });
     
     if (page < totalPages - 1) {
-      navRow.push({ text: "Próximo ▶️", callback_data: `cep_page:${paginationId}:${page + 1}` });
+      navRow.push({ text: "Próximo ▶️", callback_data: `${pagePrefix}:${paginationId}:${page + 1}` });
     }
     
     keyboard.push(navRow);
@@ -1649,9 +1746,13 @@ function createMultiPersonKeyboard(
   // Botão de apagar primeiro
   keyboard.push([{ text: "🗑️ Apagar", callback_data: paginationId ? `page_delete:${paginationId}` : "delete_msg" }]);
   
+  // Determine PDF/TXT callback based on query type
+  const pdfQueryType = queryType || 'cep';
+  const pdfInput = queryInput || records[0]?.cep || '';
+  
   // Botões de PDF e TXT abaixo do apagar
-  keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:cep:${records[0]?.cep || ''}` }]);
-  keyboard.push([{ text: "📝 Ver TXT", callback_data: `txt:cep:${records[0]?.cep || ''}` }]);
+  keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${pdfQueryType}:${pdfInput}` }]);
+  keyboard.push([{ text: "📝 Ver TXT", callback_data: `txt:${pdfQueryType}:${pdfInput}` }]);
   
   return { inline_keyboard: keyboard };
 }
@@ -1666,15 +1767,15 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return `❌ <b>Erro:</b> ${data.error}`;
   }
 
-  // VERIFICAR SE É RESULTADO DE CEP COM MÚLTIPLOS REGISTROS
+  // VERIFICAR SE É RESULTADO DE CEP OU TELEFONE COM MÚLTIPLOS REGISTROS
   // Nota: A formatação agora é tratada diretamente no handleQuery com paginação
   const rawDataStr = typeof data.data === 'string' ? data.data : '';
-  if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr)) {
-    console.log('Detected multi-person CEP result, using special formatting...');
+  if ((queryType === 'cep' || queryType === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr)) {
+    console.log(`Detected multi-person ${queryType} result, using special formatting...`);
     const records = parseMultiplePersonRecords(rawDataStr);
     if (records.length > 1) {
       // Para resultados < 10 registros, usar formatação simples
-      return formatMultiPersonPage(records, 0, 1, botUsername, telegramUserName);
+      return formatMultiPersonPage(records, 0, 1, botUsername, telegramUserName, queryType);
     }
   }
 
@@ -2425,9 +2526,9 @@ class BotHandler {
       // Log query
       await this.logQuery(telegramUserId, queryType, queryInput, result);
 
-      // Verificar se é resultado de CEP com múltiplos registros
+      // Verificar se é resultado de CEP ou TELEFONE com múltiplos registros
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
-      if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr)) {
+      if ((queryType === 'cep' || queryType === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr)) {
         const records = parseMultiplePersonRecords(rawDataStr);
         
         if (records.length > 1) {
@@ -2449,16 +2550,16 @@ class BotHandler {
               .single();
             
             if (error || !paginationData) {
-              console.error("Failed to create CEP pagination record:", error);
+              console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
-              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName);
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, "cep", queryInput);
+              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, queryType, queryInput);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, queryType, queryInput);
               return;
             }
             
             const paginationId = paginationData.id;
-            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName);
-            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId);
+            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, queryType, queryInput);
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId, queryType, queryInput);
             
             const paginatedPayload: Record<string, unknown> = {
               chat_id: chatId,
@@ -2484,8 +2585,8 @@ class BotHandler {
             }
           } else {
             // Menos de 10 registros - enviar sem paginação mas com botões de CPF
-            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName);
-            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1);
+            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName, queryType, queryInput);
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1, undefined, queryType, queryInput);
             
             const payload: Record<string, unknown> = {
               chat_id: chatId,
@@ -3540,9 +3641,9 @@ class BotHandler {
       
       const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 📝 @${userIdDisplay}\n├ 📞 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
 
-      // VERIFICAR SE É RESULTADO DE CEP COM MÚLTIPLOS REGISTROS
+      // VERIFICAR SE É RESULTADO DE CEP OU TELEFONE COM MÚLTIPLOS REGISTROS
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
-      if (queryType === 'cep' && rawDataStr && isMultiPersonResult(rawDataStr)) {
+      if ((queryType === 'cep' || queryType === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr)) {
         const records = parseMultiplePersonRecords(rawDataStr);
         
         if (records.length > 1) {
@@ -3562,16 +3663,16 @@ class BotHandler {
               .single();
             
             if (error || !paginationData) {
-              console.error("Failed to create CEP pagination record:", error);
+              console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
-              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName) + consultaFooter;
+              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName, queryType, queryInput) + consultaFooter;
               await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId, undefined, queryType, queryInput);
               return;
             }
             
             const paginationId = paginationData.id;
-            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName) + consultaFooter;
-            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId);
+            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName, queryType, queryInput) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId, queryType, queryInput);
             
             const msgResult = await telegramRequest(this.token, "sendMessage", {
               chat_id: chatId,
@@ -3593,8 +3694,8 @@ class BotHandler {
             }
           } else {
             // Menos de 10 registros - enviar sem paginação mas com botões de CPF
-            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, userName) + consultaFooter;
-            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1);
+            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, userName, queryType, queryInput) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1, undefined, queryType, queryInput);
             
             await telegramRequest(this.token, "sendMessage", {
               chat_id: chatId,
@@ -3762,7 +3863,18 @@ class BotHandler {
       if (parts.length === 3) {
         const paginationId = parts[1];
         const targetPage = parseInt(parts[2], 10);
-        await this.handleCepPagination(chatId, messageId, paginationId, targetPage);
+        await this.handleMultiPersonPagination(chatId, messageId, paginationId, targetPage, "cep");
+      }
+      return;
+    }
+
+    // Phone (telefone) multi-person pagination
+    if (data.startsWith("tel_page:")) {
+      const parts = data.split(":");
+      if (parts.length === 3) {
+        const paginationId = parts[1];
+        const targetPage = parseInt(parts[2], 10);
+        await this.handleMultiPersonPagination(chatId, messageId, paginationId, targetPage, "telefone");
       }
       return;
     }
@@ -4327,8 +4439,8 @@ class BotHandler {
     await editMessage(this.token, chatId, messageId, pageHeader + pages[targetPage], keyboard);
   }
 
-  // Handler para paginação de múltiplos registros de CEP
-  async handleCepPagination(chatId: number, messageId: number, paginationId: string, targetPage: number) {
+  // Handler para paginação de múltiplos registros (CEP ou Telefone)
+  async handleMultiPersonPagination(chatId: number, messageId: number, paginationId: string, targetPage: number, queryType: string = "cep") {
     // Buscar dados de paginação
     const { data: paginationData, error } = await this.supabase
       .from("paginated_results")
@@ -4337,9 +4449,10 @@ class BotHandler {
       .maybeSingle();
 
     if (error || !paginationData) {
-      console.error("CEP pagination data not found:", error);
+      console.error(`${queryType} pagination data not found:`, error);
+      const label = queryType === 'telefone' ? 'TELEFONE' : 'CEP';
       await editMessage(this.token, chatId, messageId,
-        "⚠️ <b>Sessão expirada</b>\n\nFaça uma nova consulta de CEP.",
+        `⚠️ <b>Sessão expirada</b>\n\nFaça uma nova consulta de ${label}.`,
         { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] }
       );
       return;
@@ -4360,9 +4473,9 @@ class BotHandler {
       .update({ current_page: targetPage })
       .eq("id", paginationId);
 
-    // Formatar página atual
-    const pageText = formatMultiPersonPage(records, targetPage, totalPages, this.bot.bot_username);
-    const keyboard = createMultiPersonKeyboard(records, targetPage, totalPages, paginationId);
+    // Formatar página atual - passar queryType para título dinâmico
+    const pageText = formatMultiPersonPage(records, targetPage, totalPages, this.bot.bot_username, undefined, queryType);
+    const keyboard = createMultiPersonKeyboard(records, targetPage, totalPages, paginationId, queryType);
 
     // Atualizar mensagem
     await editMessage(this.token, chatId, messageId, pageText, keyboard);

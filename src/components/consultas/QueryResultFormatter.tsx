@@ -574,7 +574,7 @@ function extractPhoto(data: any): string | null {
   return null;
 }
 
-// Parse CEP response that returns multiple person records
+// Parse CEP or Phone response that returns multiple person records
 function parseMultiplePersonRecords(text: string): PersonRecord[] {
   const records: PersonRecord[] = [];
   
@@ -583,6 +583,51 @@ function parseMultiplePersonRecords(text: string): PersonRecord[] {
     .replace(/@\w+/g, '')
     .replace(/https?:\/\/[^\s]+/g, '')
     .trim();
+  
+  // Check if this contains "BASE X" sections (phone query format)
+  const hasBaseSections = /BASE\s+\d+/i.test(cleanText);
+  
+  if (hasBaseSections) {
+    // Split by BASE sections
+    const baseSections = cleanText.split(/(?=BASE\s+\d+)/gi).filter(s => s.trim());
+    
+    for (const section of baseSections) {
+      if (!section.match(/BASE\s+\d+/i)) continue;
+      
+      const person: PersonRecord = {};
+      const lines = section.split(/\n/).map(l => l.trim()).filter(Boolean);
+      
+      for (const line of lines) {
+        if (line.match(/^BASE\s+\d+$/i)) continue;
+        
+        const colonMatch = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\w\s_]+)[:\s]+[`]?(.+)$/i);
+        if (colonMatch) {
+          const key = colonMatch[1].trim().toUpperCase();
+          let value = colonMatch[2].trim().replace(/^`/, '');
+          
+          if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) continue;
+          if (key.includes('RESULTADO') || key.includes('ENCONTRADO') || key.includes('BASE')) continue;
+          
+          const keyMap: Record<string, keyof PersonRecord> = {
+            'CPF': 'cpf', 'CPF_CNPJ': 'cpf', 'NOME': 'nome', 'NASCIMENTO': 'nascimento',
+            'EMAIL': 'email', 'RENDA': 'renda', 'BAIRRO': 'bairro', 'CIDADE': 'cidade',
+            'UF': 'uf', 'CEP': 'cep', 'SEXO': 'sexo', 'MÃE': 'mae', 'MAE': 'mae',
+            'PAI': 'pai', 'LOGRADOURO': 'logradouro', 'ENDEREÇO': 'endereco',
+            'COMPLEMENTO': 'complemento', 'ESTADO': 'estado', 'TELEFONE': 'telefone', 'RG': 'rg',
+          };
+          
+          const mappedKey = keyMap[key] || key.toLowerCase().replace(/\s+/g, '_');
+          person[mappedKey] = value;
+        }
+      }
+      
+      if (person.cpf || person.nome) {
+        records.push(person);
+      }
+    }
+    
+    if (records.length > 0) return records;
+  }
   
   // Check if this is the Telegram format with CPF: `12345 patterns
   const hasTelegramFormat = cleanText.includes('CPF:') || cleanText.includes('NOME:');
@@ -706,7 +751,7 @@ function parseMultiplePersonRecords(text: string): PersonRecord[] {
   return records;
 }
 
-// Check if data looks like multiple person records (CEP query result or Telefone query)
+// Check if data looks like multiple person records (CEP or Telefone query result)
 function isMultiPersonResult(data: any): boolean {
   const getText = (d: any): string => {
     if (typeof d === 'string') return d;
@@ -717,14 +762,17 @@ function isMultiPersonResult(data: any): boolean {
   const text = getText(data);
   if (!text) return false;
   
-  // Count how many CPF entries there are (supports multiple formats)
-  // Format 1: CPF ⎯ or CPF — (em-dash)
+  // Format 1: CPF with dash (CEP style) - CPF ⎯ or CPF — or CPF -
   const dashMatches = text.match(/CPF\s*[⎯—-]/gi) || [];
-  // Format 2: CPF: `12345 or CPF: 12345 (Telegram format)
+  // Format 2: CPF with colon (Phone style) - CPF: 12345 or CPF: `12345
   const colonMatches = text.match(/CPF[:\s`]+[\d.-]+/gi) || [];
+  // Format 3: BASE X sections (indicates multiple records from phone API)
+  const baseMatches = text.match(/BASE\s+\d+/gi) || [];
   
-  const totalMatches = Math.max(dashMatches.length, colonMatches.length);
-  return totalMatches > 1;
+  const cpfCount = Math.max(dashMatches.length, colonMatches.length);
+  const hasMultipleBases = baseMatches.length > 1;
+  
+  return cpfCount > 1 || hasMultipleBases;
 }
 
 export function QueryResultFormatter({ data, showCopyButton, onQueryCpf, queryType, queryInput }: QueryResultFormatterProps) {
