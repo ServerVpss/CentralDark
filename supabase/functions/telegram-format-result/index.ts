@@ -253,7 +253,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return false;
   };
 
-  // Parse text format with multiple CPF/NOME entries
+  // Parse text format with multiple CPF/NOME entries (supports both colon and BASE formats)
   const parseTextMultiplePersons = (text: string): Array<Record<string, unknown>> | null => {
     if (!text || typeof text !== 'string') return null;
     
@@ -263,14 +263,52 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       .replace(/https?:\/\/[^\s]+/g, '')
       .trim();
     
-    // Check if this looks like multiple person data
+    // Check if this has BASE sections (phone query format)
+    const hasBaseSections = /BASE\s+\d+/i.test(cleanText);
+    
+    if (hasBaseSections) {
+      const persons: Array<Record<string, unknown>> = [];
+      const baseSections = cleanText.split(/(?=BASE\s+\d+)/gi).filter(s => s.trim());
+      
+      for (const section of baseSections) {
+        // Skip header section (before first BASE)
+        if (!section.match(/BASE\s+\d+/i)) continue;
+        
+        const person: Record<string, unknown> = {};
+        const lines = section.split(/\n/).map(l => l.trim()).filter(Boolean);
+        
+        for (const line of lines) {
+          // Skip the BASE header line
+          if (line.match(/^BASE\s+\d+$/i)) continue;
+          
+          // Match "KEY: value" format
+          const match = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\w\s_]+)[:\s]+[`]?(.+)$/i);
+          if (match) {
+            const key = match[1].trim().toUpperCase();
+            let value = match[2].trim().replace(/^`/, '');
+            
+            if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) continue;
+            if (key.includes('RESULTADO') || key.includes('ENCONTRADO')) continue;
+            
+            person[key.toLowerCase().replace(/_/g, '')] = value;
+          }
+        }
+        
+        if (person['cpf'] || person['nome']) {
+          persons.push(person);
+        }
+      }
+      
+      return persons.length > 1 ? persons : null;
+    }
+    
+    // Check if this looks like multiple person data with CPF entries
     const cpfMatches = cleanText.match(/CPF[:\s`]+[\d.-]+/gi);
     if (!cpfMatches || cpfMatches.length < 2) return null;
     
     const persons: Array<Record<string, unknown>> = [];
     
     // Split by CPF entries to separate each person
-    // Pattern: CPF followed by optional backtick, then digits
     const sections = cleanText.split(/(?=CPF[:\s`]+[\d.-]+)/gi).filter(s => s.trim());
     
     for (const section of sections) {
@@ -278,23 +316,18 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
       const lines = section.split(/\n/).map(l => l.trim()).filter(Boolean);
       
       for (const line of lines) {
-        // Match patterns like "CPF: 12345" or "CPF: `12345" or "NOME: NAME"
         const match = line.match(/^([A-ZÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇ\w\s]+)[:\s]+[`]?(.+)$/i);
         if (match) {
           const key = match[1].trim().toUpperCase();
-          let value = match[2].trim().replace(/^`/, ''); // Remove leading backtick
+          let value = match[2].trim().replace(/^`/, '');
           
-          // Skip empty or invalid values
           if (!value || value === '-' || value.toLowerCase().startsWith('não informad')) continue;
-          
-          // Skip header lines
           if (key.includes('RESULTADO') || key.includes('BASE') || key.includes('ENCONTRADO')) continue;
           
           person[key.toLowerCase()] = value;
         }
       }
       
-      // Only add if person has CPF or NOME
       if (person['cpf'] || person['nome']) {
         persons.push(person);
       }
