@@ -547,23 +547,42 @@ export function MonospaceResultDisplay({
 
   // Handle error response
   if (errorMessage) {
-    const isApiError = String(errorMessage).includes("Erro na API") || String(errorMessage).includes("500");
+    const errorStr = String(errorMessage);
+    const is404 = errorStr.includes("404") || result.status === 404;
+    const is500 = errorStr.includes("500") || result.status === 500;
+    
     return (
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "flex flex-col gap-3 p-4 bg-destructive/10 rounded-lg border border-destructive/30 font-mono",
+          "flex flex-col gap-3 p-4 rounded-lg border font-mono",
+          is404 
+            ? "bg-amber-500/10 border-amber-500/30" 
+            : "bg-destructive/10 border-destructive/30",
           className
         )}
       >
         <div className="flex items-center gap-3">
-          <AlertCircle className="h-5 w-5 text-destructive shrink-0" />
-          <span className="text-destructive text-sm">{String(errorMessage)}</span>
+          <AlertCircle className={cn(
+            "h-5 w-5 shrink-0",
+            is404 ? "text-amber-500" : "text-destructive"
+          )} />
+          <span className={cn(
+            "text-sm",
+            is404 ? "text-amber-400" : "text-destructive"
+          )}>
+            {is404 ? "🔍 Nenhum dado encontrado para esta consulta" : errorStr}
+          </span>
         </div>
-        {isApiError && (
+        {is500 && (
           <span className="text-muted-foreground text-xs">
             ⚠️ O servidor externo está temporariamente indisponível. Tente novamente em alguns minutos.
+          </span>
+        )}
+        {is404 && (
+          <span className="text-muted-foreground text-xs">
+            💡 Verifique se os dados inseridos estão corretos ou tente outro tipo de consulta.
           </span>
         )}
       </motion.div>
