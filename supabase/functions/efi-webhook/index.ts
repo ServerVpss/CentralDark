@@ -224,7 +224,7 @@ Deno.serve(async (req) => {
 
           const { data: settings } = await supabase
             .from('bot_settings')
-            .select('group_chat_id, group_url, announce_payments')
+            .select('group_chat_id, group_url, announce_payments, message_effect')
             .eq('bot_id', transaction.bot_id)
             .single()
 
@@ -276,21 +276,49 @@ Deno.serve(async (req) => {
             // Usar o chat_id do pending se disponível, senão usar o user_id
             const targetChatId = (pending as any)?.telegram_chat_id || transaction.telegram_user_id
             
-            // Tentar enviar com efeito, se falhar envia sem
+            // Mapear efeito configurado para ID do Telegram
+            const effectMap: Record<string, string> = {
+              'fire': '5104841245755180586',
+              'like': '5107584321108051014', 
+              'heart': '5159385139981059251',
+              'party': '5046509860385561286'
+            }
+            const messageEffectId = settings?.message_effect ? effectMap[settings.message_effect] : undefined
+            
+            // Enviar mensagem com efeito se configurado
+            const messageBody: any = {
+              chat_id: targetChatId,
+              text: message,
+              parse_mode: 'Markdown',
+              reply_markup: inlineKeyboard.inline_keyboard.length > 0 ? inlineKeyboard : undefined
+            }
+            
+            if (messageEffectId) {
+              messageBody.message_effect_id = messageEffectId
+            }
+            
             let sendMsgRes = await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: targetChatId,
-                text: message,
-                parse_mode: 'Markdown',
-                reply_markup: inlineKeyboard.inline_keyboard.length > 0 ? inlineKeyboard : undefined
-              })
+              body: JSON.stringify(messageBody)
             })
             
             const sendMsgData = await sendMsgRes.json()
             if (!sendMsgData.ok) {
               console.error(`Erro ao enviar confirmação para ${targetChatId}:`, sendMsgData)
+              // Tentar novamente sem efeito se falhou
+              if (messageEffectId) {
+                delete messageBody.message_effect_id
+                sendMsgRes = await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(messageBody)
+                })
+                const retryData = await sendMsgRes.json()
+                if (retryData.ok) {
+                  console.log(`Confirmação enviada sem efeito para chat ${targetChatId}`)
+                }
+              }
             } else {
               console.log(`Confirmação enviada com sucesso para chat ${targetChatId}`)
             }
