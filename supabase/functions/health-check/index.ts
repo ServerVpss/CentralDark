@@ -79,6 +79,34 @@ async function checkFunction(baseUrl: string, functionName: string): Promise<Fun
   }
 }
 
+// Função com retry para evitar falsos positivos durante deploys
+async function checkFunctionWithRetry(
+  baseUrl: string, 
+  functionName: string
+): Promise<FunctionHealth> {
+  // Primeira verificação
+  const firstCheck = await checkFunction(baseUrl, functionName);
+  
+  // Se online na primeira, retorna imediatamente
+  if (firstCheck.status === 'online') {
+    return firstCheck;
+  }
+  
+  // Se offline/error, aguarda 10 segundos para retry
+  console.log(`⏳ ${functionName} detectada offline, aguardando 10s para retry...`);
+  await new Promise(resolve => setTimeout(resolve, 10000));
+  
+  // Segunda verificação
+  const retryCheck = await checkFunction(baseUrl, functionName);
+  
+  // Atualiza mensagem de erro para indicar que foi confirmado após retry
+  if (retryCheck.status !== 'online') {
+    retryCheck.error = `${retryCheck.error} (confirmado após retry)`;
+  }
+  
+  return retryCheck;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -91,9 +119,9 @@ Deno.serve(async (req) => {
   try {
     console.log('Iniciando health check das Edge Functions...');
     
-    // Verificar todas as funções em paralelo
+    // Verificar todas as funções em paralelo (com retry automático)
     const healthChecks = await Promise.all(
-      CRITICAL_FUNCTIONS.map(fn => checkFunction(supabaseUrl, fn))
+      CRITICAL_FUNCTIONS.map(fn => checkFunctionWithRetry(supabaseUrl, fn))
     );
     
     const onlineFunctions = healthChecks.filter(h => h.status === 'online');
