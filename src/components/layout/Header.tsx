@@ -42,13 +42,7 @@ const gradientMap = {
 export function Header({ className }: HeaderProps) {
   const { user, profile, signOut } = useAuthContext();
   const navigate = useNavigate();
-  const { activities, loading, refresh } = useNotifications();
-
-  // Count recent notifications (last 24h)
-  const recentCount = activities.filter((a) => {
-    const hoursDiff = (Date.now() - a.createdAt.getTime()) / (1000 * 60 * 60);
-    return hoursDiff < 24;
-  }).length;
+  const { unreadActivities, unreadCount, loading, refresh, markAsRead, markAllAsRead, isRead, activities } = useNotifications();
 
   const handleSignOut = async () => {
     await signOut();
@@ -99,11 +93,11 @@ export function Header({ className }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-lg">
                 <Bell className="h-4 w-4 text-muted-foreground" />
-                {recentCount > 0 && (
+                {unreadCount > 0 && (
                   <span className="absolute top-1.5 right-1.5 h-4 w-4 flex items-center justify-center">
                     <span className="absolute h-full w-full rounded-full bg-primary animate-ping opacity-40" />
                     <span className="relative h-3.5 w-3.5 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">
-                      {recentCount > 9 ? "9+" : recentCount}
+                      {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   </span>
                 )}
@@ -114,18 +108,36 @@ export function Header({ className }: HeaderProps) {
                 <span className="flex items-center gap-2">
                   <Bell className="h-4 w-4" />
                   Notificações
+                  {unreadCount > 0 && (
+                    <span className="text-xs text-muted-foreground">({unreadCount} novas)</span>
+                  )}
                 </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    refresh();
-                  }}
-                >
-                  <RefreshCw className={cn("h-3 w-3", loading && "animate-spin")} />
-                </Button>
+                <div className="flex items-center gap-1">
+                  {unreadCount > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 text-xs px-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        markAllAsRead();
+                      }}
+                    >
+                      Limpar
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      refresh();
+                    }}
+                  >
+                    <RefreshCw className={cn("h-3 w-3", loading && "animate-spin")} />
+                  </Button>
+                </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               
@@ -142,33 +154,40 @@ export function Header({ className }: HeaderProps) {
               ) : (
                 <ScrollArea className="h-[300px]">
                   <div className="p-1">
-                    {activities.slice(0, 10).map((activity) => {
-                      const Icon = iconMap[activity.type] || MessageSquare;
-                      const gradient = gradientMap[activity.type] || "from-primary to-amber-600";
-                      
-                      return (
-                        <div
-                          key={activity.id}
-                          className="flex items-start gap-3 rounded-lg p-2.5 hover:bg-muted/50 transition-colors cursor-pointer"
-                        >
-                          <div className={cn(
-                            "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br shadow-sm",
-                            gradient
-                          )}>
-                            <Icon className="h-4 w-4 text-white" />
+                    {unreadActivities.length === 0 ? (
+                      <div className="p-4 text-center text-sm text-muted-foreground">
+                        Nenhuma notificação nova
+                      </div>
+                    ) : (
+                      unreadActivities.slice(0, 10).map((activity) => {
+                        const Icon = iconMap[activity.type] || MessageSquare;
+                        const gradient = gradientMap[activity.type] || "from-primary to-amber-600";
+                        
+                        return (
+                          <div
+                            key={activity.id}
+                            onClick={() => markAsRead(activity.id)}
+                            className="flex items-start gap-3 rounded-lg p-2.5 hover:bg-muted/50 transition-colors cursor-pointer"
+                          >
+                            <div className={cn(
+                              "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br shadow-sm",
+                              gradient
+                            )}>
+                              <Icon className="h-4 w-4 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium leading-tight">{activity.title}</p>
+                              <p className="text-xs text-muted-foreground truncate mt-0.5">
+                                {activity.description}
+                              </p>
+                            </div>
+                            <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0">
+                              {activity.time}
+                            </span>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium leading-tight">{activity.title}</p>
-                            <p className="text-xs text-muted-foreground truncate mt-0.5">
-                              {activity.description}
-                            </p>
-                          </div>
-                          <span className="text-[10px] text-muted-foreground whitespace-nowrap shrink-0">
-                            {activity.time}
-                          </span>
-                        </div>
-                      );
-                    })}
+                        );
+                      })
+                    )}
                   </div>
                 </ScrollArea>
               )}
