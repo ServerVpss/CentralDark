@@ -54,7 +54,7 @@ function saveReadNotifications(ids: Set<string>): void {
 export function useNotifications() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
-  const [readIds, setReadIds] = useState<Set<string>>(() => getReadNotifications());
+  const [readIds, setReadIds] = useState<Set<string>>(new Set());
 
   const fetchActivities = useCallback(async () => {
     try {
@@ -159,6 +159,14 @@ export function useNotifications() {
   // Notificações não lidas
   const unreadActivities = activities.filter((a) => !readIds.has(a.id));
   const unreadCount = unreadActivities.length;
+
+  // Load read notifications on mount
+  useEffect(() => {
+    const stored = getReadNotifications();
+    if (stored.size > 0) {
+      setReadIds(stored);
+    }
+  }, []);
 
   // Buscar dados iniciais
   useEffect(() => {
