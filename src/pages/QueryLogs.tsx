@@ -98,14 +98,31 @@ export default function QueryLogs() {
   const fetchLogs = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("query_history")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1000);
+      // Fetch all logs using pagination to bypass 1000 row limit
+      let allLogs: QueryLog[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      let hasMore = true;
 
-      if (error) throw error;
-      setLogs((data || []) as QueryLog[]);
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from("query_history")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .range(from, from + batchSize - 1);
+
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          allLogs = allLogs.concat(data as QueryLog[]);
+          from += batchSize;
+          hasMore = data.length === batchSize;
+        } else {
+          hasMore = false;
+        }
+      }
+
+      setLogs(allLogs);
     } catch (error) {
       console.error("Error fetching logs:", error);
       toast.error("Erro ao carregar logs");
