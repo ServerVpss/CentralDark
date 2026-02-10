@@ -87,20 +87,16 @@ export function useAdminData(): AdminData {
       setLoading(true);
       setError(null);
 
-      // Fetch all data in parallel
+      // Fetch all data in parallel - use count for queries, paginate large tables
       const [
         botsResult,
-        subscriptionsResult,
         plansResult,
-        queryHistoryResult,
+        queryCountResult,
+        queryTodayCountResult,
         analyticsResult,
       ] = await Promise.all([
         supabase
           .from("telegram_bots")
-          .select("*")
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("telegram_subscriptions")
           .select("*")
           .order("created_at", { ascending: false }),
         supabase
@@ -110,20 +106,45 @@ export function useAdminData(): AdminData {
           .order("price", { ascending: true }),
         supabase
           .from("query_history")
-          .select("created_at", { count: "exact" }),
+          .select("*", { count: "exact", head: true }),
+        supabase
+          .from("query_history")
+          .select("*", { count: "exact", head: true })
+          .gte("created_at", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).toISOString()),
         supabase
           .from("bot_analytics")
           .select("messages_received, date")
           .gte("date", new Date().toISOString().split("T")[0]),
       ]);
 
+      // Fetch all subscriptions with pagination to bypass 1000 limit
+      let allSubs: TelegramSubscription[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      let hasMore = true;
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from("telegram_subscriptions")
+          .select("*")
+          .order("created_at", { ascending: false })
+          .range(from, from + batchSize - 1);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          allSubs = allSubs.concat(data as TelegramSubscription[]);
+          from += batchSize;
+          hasMore = data.length === batchSize;
+        } else {
+          hasMore = false;
+        }
+      }
+
       // Set bots
       const botsData = (botsResult.data || []) as TelegramBot[];
       setBots(botsData);
 
-      // Set subscriptions
-      const subsData = (subscriptionsResult.data || []) as TelegramSubscription[];
-      setSubscriptions(subsData);
+      // Set subscriptions (already fetched with pagination above)
+      setSubscriptions(allSubs);
+      setSubscriptions(allSubs);
 
       // Set plans
       const plansData = (plansResult.data || []) as SubscriptionPlan[];
@@ -132,21 +153,16 @@ export function useAdminData(): AdminData {
       // Calculate stats
       const now = new Date();
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-      const activeSubscribers = subsData.filter(
+      const activeSubscribers = allSubs.filter(
         (s) => new Date(s.expires_at) >= now && s.status === "active"
       ).length;
 
-      const monthlyRevenue = subsData
+      const monthlyRevenue = allSubs
         .filter((s) => new Date(s.created_at) >= monthStart)
         .reduce((acc, s) => acc + Number(s.value || 0), 0);
 
-      const totalRevenue = subsData.reduce((acc, s) => acc + Number(s.value || 0), 0);
-
-      const queriesToday = (queryHistoryResult.data || []).filter(
-        (q) => new Date(q.created_at) >= todayStart
-      ).length;
+      const totalRevenue = allSubs.reduce((acc, s) => acc + Number(s.value || 0), 0);
 
       const messagesReceived = (analyticsResult.data || []).reduce(
         (acc, a) => acc + (a.messages_received || 0),
@@ -156,12 +172,12 @@ export function useAdminData(): AdminData {
       const botsOnline = botsData.filter((b) => b.health_status === "online").length;
 
       setStats({
-        totalSubscribers: subsData.length,
+        totalSubscribers: allSubs.length,
         activeSubscribers,
         monthlyRevenue,
         totalRevenue,
-        queriesTotal: queryHistoryResult.count || 0,
-        queriesToday,
+        queriesTotal: queryCountResult.count || 0,
+        queriesToday: queryTodayCountResult.count || 0,
         messagesReceived,
         botsOnline,
       });
