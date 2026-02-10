@@ -86,12 +86,27 @@ export default function Plans() {
       
       setTotalSubscribers(subsCount || 0);
 
-      // Sum revenue from subscriptions
-      const { data: revenueData } = await supabase
-        .from("telegram_subscriptions")
-        .select("value");
+      // Sum revenue from subscriptions using pagination
+      let allSubs: { value: number }[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      let hasMore = true;
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from("telegram_subscriptions")
+          .select("value")
+          .range(from, from + batchSize - 1);
+        if (error) break;
+        if (data && data.length > 0) {
+          allSubs = allSubs.concat(data);
+          from += batchSize;
+          hasMore = data.length === batchSize;
+        } else {
+          hasMore = false;
+        }
+      }
       
-      const revenue = (revenueData || []).reduce((acc, s) => acc + Number(s.value), 0);
+      const revenue = allSubs.reduce((acc, s) => acc + Number(s.value), 0);
       setTotalRevenue(revenue);
     };
 
