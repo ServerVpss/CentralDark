@@ -1,11 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
-import { Database, Zap, TrendingUp, Clock } from "lucide-react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Database, Zap, TrendingUp, Clock, Trash2, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-interface CacheStats {
+interface CacheStatsData {
   totalEntries: number;
   totalHits: number;
   topQueries: { query_type: string; hit_count: number }[];
@@ -13,10 +27,12 @@ interface CacheStats {
 }
 
 export function CacheStats() {
-  const { data: stats, isLoading } = useQuery<CacheStats>({
+  const queryClient = useQueryClient();
+  const [clearing, setClearing] = useState<string | null>(null);
+
+  const { data: stats, isLoading } = useQuery<CacheStatsData>({
     queryKey: ["cache-stats"],
     queryFn: async () => {
-      // Get total entries and hits
       const { data: cacheData, error } = await supabase
         .from("query_cache")
         .select("query_type, hit_count, created_at");
@@ -26,11 +42,9 @@ export function CacheStats() {
       const totalEntries = cacheData?.length || 0;
       const totalHits = cacheData?.reduce((sum, row) => sum + (row.hit_count || 0), 0) || 0;
 
-      // Count entries from last 24h
       const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const recentEntries = cacheData?.filter(row => row.created_at > oneDayAgo).length || 0;
 
-      // Get top query types by hits
       const hitsByType: Record<string, number> = {};
       cacheData?.forEach(row => {
         const type = row.query_type || "unknown";
@@ -42,15 +56,67 @@ export function CacheStats() {
         .sort((a, b) => b.hit_count - a.hit_count)
         .slice(0, 5);
 
-      return {
-        totalEntries,
-        totalHits,
-        topQueries,
-        recentEntries,
-      };
+      return { totalEntries, totalHits, topQueries, recentEntries };
     },
-    refetchInterval: 30000, // Refresh every 30s
+    refetchInterval: 30000,
   });
+
+  const clearAllCache = async () => {
+    setClearing("all");
+    try {
+      const { error } = await supabase
+        .from("query_cache")
+        .delete()
+        .neq("id", "00000000-0000-0000-0000-000000000000");
+
+      if (error) throw error;
+      toast.success("Cache limpo com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["cache-stats"] });
+    } catch (err) {
+      toast.error("Erro ao limpar cache");
+      console.error(err);
+    } finally {
+      setClearing(null);
+    }
+  };
+
+  const clearExpiredCache = async () => {
+    setClearing("expired");
+    try {
+      const { error } = await supabase
+        .from("query_cache")
+        .delete()
+        .lt("expires_at", new Date().toISOString());
+
+      if (error) throw error;
+      toast.success("Cache expirado removido!");
+      queryClient.invalidateQueries({ queryKey: ["cache-stats"] });
+    } catch (err) {
+      toast.error("Erro ao limpar cache expirado");
+      console.error(err);
+    } finally {
+      setClearing(null);
+    }
+  };
+
+  const clearByType = async (queryType: string) => {
+    setClearing(queryType);
+    try {
+      const { error } = await supabase
+        .from("query_cache")
+        .delete()
+        .eq("query_type", queryType);
+
+      if (error) throw error;
+      toast.success(`Cache de ${queryType.toUpperCase()} limpo!`);
+      queryClient.invalidateQueries({ queryKey: ["cache-stats"] });
+    } catch (err) {
+      toast.error(`Erro ao limpar cache de ${queryType}`);
+      console.error(err);
+    } finally {
+      setClearing(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -77,10 +143,46 @@ export function CacheStats() {
   return (
     <Card className="bg-card border-border">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Database className="h-4 w-4 text-primary" />
-          Cache de Índice
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Database className="h-4 w-4 text-primary" />
+            Cache de Índice
+          </CardTitle>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                disabled={!stats?.totalEntries || clearing !== null}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
+                  Limpar todo o cache?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Isso removerá <strong>{stats?.totalEntries || 0} entradas</strong> do cache. 
+                  As próximas consultas serão feitas diretamente na API externa, 
+                  podendo ser mais lentas e consumir créditos.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={clearAllCache}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Limpar tudo
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Stats Grid */}
@@ -115,21 +217,37 @@ export function CacheStats() {
           <span className="text-sm font-medium">{stats?.recentEntries || 0} novas</span>
         </div>
 
-        {/* Top Query Types */}
+        {/* Cache Actions */}
+        <div className="space-y-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-xs"
+            onClick={clearExpiredCache}
+            disabled={clearing !== null}
+          >
+            <Clock className="h-3 w-3 mr-1.5" />
+            {clearing === "expired" ? "Limpando..." : "Limpar expirados"}
+          </Button>
+        </div>
+
+        {/* Top Query Types with clear per type */}
         {stats?.topQueries && stats.topQueries.length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <TrendingUp className="h-3 w-3" />
-              Mais acessados
+              Mais acessados (clique para limpar)
             </div>
             <div className="flex flex-wrap gap-1">
               {stats.topQueries.map(({ query_type, hit_count }) => (
                 <Badge 
                   key={query_type} 
                   variant="secondary" 
-                  className="text-xs"
+                  className="text-xs cursor-pointer hover:bg-destructive/20 hover:text-destructive transition-colors"
+                  onClick={() => clearByType(query_type)}
                 >
-                  {query_type.toUpperCase()} ({hit_count})
+                  {clearing === query_type ? "..." : `${query_type.toUpperCase()} (${hit_count})`}
+                  <Trash2 className="h-2.5 w-2.5 ml-1 opacity-50" />
                 </Badge>
               ))}
             </div>
