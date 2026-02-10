@@ -53,7 +53,7 @@ const providers: Record<string, ApiProvider> = {
   },
   nexfuture_cpf: {
     baseUrl: "http://nxf-2.nexfuture.com.br",
-    port: 25589,
+    port: 25594,
   },
   tconect_score: {
     baseUrl: "http://node.tconect.xyz",

@@ -13,7 +13,7 @@ interface ApiProvider {
 
 const providers: Record<string, ApiProvider> = {
   nexfuture: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25589 },
-  nexfuture_cpf: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25589 },
+  nexfuture_cpf: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25594 },
   tconect_score: { baseUrl: "http://node.tconect.xyz", port: 3029 },
   tconect_foto: { baseUrl: "http://node.tconect.xyz", port: 3030 },
 };
