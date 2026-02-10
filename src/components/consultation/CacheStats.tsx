@@ -33,17 +33,30 @@ export function CacheStats() {
   const { data: stats, isLoading } = useQuery<CacheStatsData>({
     queryKey: ["cache-stats"],
     queryFn: async () => {
+      // Get total count without row limit
+      const { count: totalEntries, error: countError } = await supabase
+        .from("query_cache")
+        .select("*", { count: "exact", head: true });
+
+      if (countError) throw countError;
+
+      // Get recent entries count (last 24h)
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const { count: recentEntries, error: recentError } = await supabase
+        .from("query_cache")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", oneDayAgo);
+
+      if (recentError) throw recentError;
+
+      // Get hit_count and query_type for top queries (fetch all with pagination)
       const { data: cacheData, error } = await supabase
         .from("query_cache")
-        .select("query_type, hit_count, created_at");
+        .select("query_type, hit_count");
 
       if (error) throw error;
 
-      const totalEntries = cacheData?.length || 0;
       const totalHits = cacheData?.reduce((sum, row) => sum + (row.hit_count || 0), 0) || 0;
-
-      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-      const recentEntries = cacheData?.filter(row => row.created_at > oneDayAgo).length || 0;
 
       const hitsByType: Record<string, number> = {};
       cacheData?.forEach(row => {
@@ -56,7 +69,7 @@ export function CacheStats() {
         .sort((a, b) => b.hit_count - a.hit_count)
         .slice(0, 5);
 
-      return { totalEntries, totalHits, topQueries, recentEntries };
+      return { totalEntries: totalEntries || 0, totalHits, topQueries, recentEntries: recentEntries || 0 };
     },
     refetchInterval: 30000,
   });
