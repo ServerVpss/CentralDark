@@ -302,8 +302,8 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     );
   }
 
-  // TConect Nacional (search all states for photo)
-  if (normalizedType === "nacional") {
+  // TConect Nacional (search all states for photo) - also handles /foto without estado
+  if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
     console.log("Starting national photo search across all states...");
     const results: Record<string, unknown> = {};
     
