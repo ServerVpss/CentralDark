@@ -2,6 +2,8 @@ import { Bot, TrendingUp, Zap, Plus } from "lucide-react";
 import { BotStatusCard } from "./BotStatusCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Bot {
   id: string;
@@ -18,6 +20,52 @@ interface BotsSectionProps {
 
 export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
   const navigate = useNavigate();
+  const [messageCounts, setMessageCounts] = useState<Record<string, number>>({});
+  const [userCounts, setUserCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    if (bots.length === 0) return;
+
+    const fetchCounts = async () => {
+      // Fetch message totals from bot_analytics
+      const { data: analyticsData } = await supabase
+        .from("bot_analytics")
+        .select("bot_id, messages_received");
+
+      if (analyticsData) {
+        const msgMap: Record<string, number> = {};
+        for (const row of analyticsData) {
+          if (row.bot_id) {
+            msgMap[row.bot_id] = (msgMap[row.bot_id] || 0) + (row.messages_received || 0);
+          }
+        }
+        setMessageCounts(msgMap);
+      }
+
+      // Fetch active user counts from telegram_subscriptions
+      const { data: subsData } = await supabase
+        .from("telegram_subscriptions")
+        .select("bot_id, telegram_user_id")
+        .eq("status", "active");
+
+      if (subsData) {
+        const userMap: Record<string, Set<number>> = {};
+        for (const row of subsData) {
+          if (row.bot_id) {
+            if (!userMap[row.bot_id]) userMap[row.bot_id] = new Set();
+            userMap[row.bot_id].add(row.telegram_user_id);
+          }
+        }
+        const countMap: Record<string, number> = {};
+        for (const [botId, userSet] of Object.entries(userMap)) {
+          countMap[botId] = userSet.size;
+        }
+        setUserCounts(countMap);
+      }
+    };
+
+    fetchCounts();
+  }, [bots]);
 
   return (
     <div className="space-y-4">
@@ -73,8 +121,8 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
                 name={bot.name}
                 username={bot.bot_username || "Não sincronizado"}
                 status={bot.health_status === "online" ? "online" : "offline"}
-                messages={0}
-                users={0}
+                messages={messageCounts[bot.id] || 0}
+                users={userCounts[bot.id] || 0}
                 isActive={bot.is_active ?? false}
                 onToggleActive={onToggleActive}
               />
