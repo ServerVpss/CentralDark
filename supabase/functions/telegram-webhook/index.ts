@@ -545,23 +545,41 @@ function parseTxtStringData(str: string): Array<{ key: string; value: string }> 
         const value = trimmedLine.substring(idx + delim.length).trim();
         
         if (key && key.length > 1 && value && !shouldIgnoreTxtSingleValue(value)) {
-          // Save any pending section items
-          if (currentSection && sectionItems.length > 0) {
-            items.push({ key: currentSection, value: sectionItems.join(" | ") });
-            currentSection = "";
+          // Check if value is a count header like "( 2 - Encontrados)"
+          const isCountHeader = /^\(?\s*\d+\s*-?\s*encontrados?\s*\)?$/i.test(value);
+          
+          if (isCountHeader) {
+            // Save any pending section items
+            if (currentSection && sectionItems.length > 0) {
+              items.push({ key: currentSection, value: sectionItems.join(" | ") });
+            }
+            // Set as current section to collect following lines
+            currentSection = key;
             sectionItems = [];
+            // Also add the count as info
+            items.push({ key, value });
+            found = true;
+          } else {
+            // Save any pending section items
+            if (currentSection && sectionItems.length > 0) {
+              items.push({ key: currentSection, value: sectionItems.join(" | ") });
+              currentSection = "";
+              sectionItems = [];
+            }
+            items.push({ key, value });
+            found = true;
           }
-          items.push({ key, value });
-          found = true;
         }
         break;
       }
     }
     
-    // If not a key-value pair and not empty, could be part of a list
+    // If not a key-value pair and not empty, could be part of a list or section content
     if (!found && trimmedLine.length > 2 && !shouldIgnoreTxtSingleValue(trimmedLine)) {
-      // Check if it looks like a data item (has numbers or known format)
-      if (/\d/.test(trimmedLine) || trimmedLine.includes(' - ')) {
+      // If we have a current section, collect all non-empty lines as section items
+      if (currentSection) {
+        sectionItems.push(trimmedLine);
+      } else if (/\d/.test(trimmedLine) || trimmedLine.includes(' - ')) {
         sectionItems.push(trimmedLine);
       }
     }

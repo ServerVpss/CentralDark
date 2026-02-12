@@ -111,6 +111,64 @@ function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; valu
       const trimmedValue = value.trim();
       if (!trimmedValue || trimmedValue === "-" || trimmedValue === "N/A") continue;
       if (trimmedValue.startsWith("/9j/") || trimmedValue.startsWith("iVBOR") || trimmedValue.startsWith("data:image")) continue;
+      
+      // Handle multi-line strings: parse line by line to extract sub-items
+      if (trimmedValue.includes('\n')) {
+        const lines = trimmedValue.split('\n');
+        let currentSection = "";
+        const sectionItems: string[] = [];
+        
+        for (const line of lines) {
+          const tl = line.trim();
+          if (!tl) continue;
+          
+          // Try key-value parse
+          const delimiters = [' ⎯ ', ' — ', ': '];
+          let parsed = false;
+          for (const delim of delimiters) {
+            const idx = tl.indexOf(delim);
+            if (idx > 0) {
+              const k = tl.substring(0, idx).trim().toLowerCase().replace(/\s+/g, '_');
+              const v = tl.substring(idx + delim.length).trim();
+              if (k && v && !shouldIgnoreTxtSingleValue(v)) {
+                const isCountHeader = /^\(?\s*\d+\s*-?\s*encontrados?\s*\)?$/i.test(v);
+                if (isCountHeader) {
+                  // Flush previous section
+                  if (currentSection && sectionItems.length > 0) {
+                    items.push({ key: currentSection, value: sectionItems.join(" | ") });
+                    sectionItems.length = 0;
+                  }
+                  currentSection = k;
+                  items.push({ key: k, value: v });
+                } else {
+                  if (currentSection && sectionItems.length > 0) {
+                    items.push({ key: currentSection, value: sectionItems.join(" | ") });
+                    currentSection = "";
+                    sectionItems.length = 0;
+                  }
+                  items.push({ key: k, value: v });
+                }
+                parsed = true;
+              }
+              break;
+            }
+          }
+          
+          if (!parsed && tl.length > 2 && !shouldIgnoreTxtSingleValue(tl)) {
+            if (currentSection) {
+              sectionItems.push(tl);
+            } else if (/\d/.test(tl) || tl.includes(' - ')) {
+              sectionItems.push(tl);
+            }
+          }
+        }
+        
+        if (currentSection && sectionItems.length > 0) {
+          items.push({ key: currentSection, value: sectionItems.join(" | ") });
+        }
+        continue;
+      }
+      
       if (!shouldIgnoreTxtSingleValue(trimmedValue)) {
         items.push({ key: fullKey, value: cleanTxtBotReferences(trimmedValue) });
       }
