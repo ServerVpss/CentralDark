@@ -9,6 +9,7 @@ export interface ProviderStatus {
   status: 'online' | 'offline' | 'checking';
   latency_ms?: number;
   last_check?: string;
+  error?: string;
 }
 
 interface UseProviderStatusReturn {
@@ -21,69 +22,76 @@ export function useProviderStatus(): UseProviderStatusReturn {
   const [providers, setProviders] = useState<ProviderStatus[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchProviders = useCallback(async () => {
+  const checkStatus = useCallback(async () => {
+    setIsLoading(true);
+
+    // Show "checking" state immediately with known providers
+    setProviders((prev) => {
+      if (prev.length > 0) {
+        return prev.map((p) => ({ ...p, status: 'checking' as const }));
+      }
+      // Default placeholders while loading
+      return [
+        { id: 'nexfuture', name: 'NexFuture', port: 25589, is_active: true, status: 'checking' as const },
+        { id: 'nexfuture_cpf', name: 'NexFuture CPF', port: 25594, is_active: true, status: 'checking' as const },
+        { id: 'tconect_score', name: 'TConect Score', port: 3036, is_active: true, status: 'checking' as const },
+        { id: 'tconect_placa', name: 'TConect Placa', port: 3041, is_active: true, status: 'checking' as const },
+        { id: 'tconect_foto', name: 'TConect Foto', port: 3030, is_active: true, status: 'checking' as const },
+      ];
+    });
+
     try {
-      const { data, error } = await supabase
-        .from("api_providers")
-        .select("*")
-        .eq("is_active", true);
+      const { data, error } = await supabase.functions.invoke("provider-ping");
 
       if (error) {
-        throw error;
+        console.error("Provider ping error:", error);
+        // On error, mark all as offline
+        setProviders((prev) =>
+          prev.map((p) => ({
+            ...p,
+            status: 'offline' as const,
+            last_check: new Date().toISOString(),
+            error: 'Falha ao verificar',
+          }))
+        );
+        setIsLoading(false);
+        return;
       }
 
-      // Initialize providers with checking status
-      const initialProviders: ProviderStatus[] = (data || []).map((p) => ({
+      const pingResults = data?.providers || [];
+      const checkedAt = data?.summary?.checked_at || new Date().toISOString();
+
+      const updatedProviders: ProviderStatus[] = pingResults.map((p: any) => ({
         id: p.id,
         name: p.name,
         port: p.port,
-        is_active: p.is_active ?? true,
-        status: 'checking' as const,
-        last_check: new Date().toISOString(),
+        is_active: true,
+        status: p.status as 'online' | 'offline',
+        latency_ms: p.latency_ms ?? undefined,
+        last_check: checkedAt,
+        error: p.error,
       }));
 
-      setProviders(initialProviders);
-      return initialProviders;
+      setProviders(updatedProviders);
     } catch (err) {
-      console.error("Error fetching providers:", err);
-      return [];
+      console.error("Provider status check failed:", err);
+      setProviders((prev) =>
+        prev.map((p) => ({
+          ...p,
+          status: 'offline' as const,
+          last_check: new Date().toISOString(),
+        }))
+      );
+    } finally {
+      setIsLoading(false);
     }
   }, []);
-
-  const checkStatus = useCallback(async () => {
-    setIsLoading(true);
-    
-    const fetchedProviders = await fetchProviders();
-    
-    if (fetchedProviders.length === 0) {
-      // If no providers in DB, use default hardcoded ones
-      const defaultProviders: ProviderStatus[] = [
-        { id: '1', name: 'NexFuture', port: 25589, is_active: true, status: 'online', last_check: new Date().toISOString() },
-        { id: '2', name: 'TConect Score', port: 3029, is_active: true, status: 'online', last_check: new Date().toISOString() },
-        { id: '3', name: 'TConect Foto', port: 3041, is_active: true, status: 'online', last_check: new Date().toISOString() },
-      ];
-      setProviders(defaultProviders);
-    }
-    
-    // Mark all as online (actual ping requires edge function - CORS prevents direct pings)
-    // Show honest status without fake latency
-    setProviders((prev) => 
-      prev.map((p) => ({
-        ...p,
-        status: 'online' as const,
-        last_check: new Date().toISOString(),
-      }))
-    );
-    
-    setIsLoading(false);
-  }, [fetchProviders]);
 
   useEffect(() => {
     checkStatus();
     
-    // Refresh status every 60 seconds
+    // Refresh every 60 seconds
     const interval = setInterval(checkStatus, 60000);
-    
     return () => clearInterval(interval);
   }, [checkStatus]);
 
