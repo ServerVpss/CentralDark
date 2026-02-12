@@ -65,13 +65,12 @@ export function useProviderStatus(): UseProviderStatusReturn {
       setProviders(defaultProviders);
     }
     
-    // Mark all as online for now (actual ping would require CORS-enabled endpoints)
-    // In production, you'd ping each provider via an edge function
+    // Mark all as online (actual ping requires edge function - CORS prevents direct pings)
+    // Show honest status without fake latency
     setProviders((prev) => 
       prev.map((p) => ({
         ...p,
         status: 'online' as const,
-        latency_ms: Math.floor(Math.random() * 100) + 50, // Simulated latency
         last_check: new Date().toISOString(),
       }))
     );
