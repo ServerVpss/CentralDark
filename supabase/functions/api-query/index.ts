@@ -129,14 +129,15 @@ async function checkCache(
     return { hit: false };
   }
 
-  // Update hit count and last accessed
-  await supabase
+  // Fire-and-forget: don't await hit count update (saves ~50-100ms on cache hits)
+  supabase
     .from("query_cache")
     .update({ 
       hit_count: (data.hit_count || 0) + 1, 
       last_accessed: new Date().toISOString() 
     })
-    .eq("id", data.id);
+    .eq("id", data.id)
+    .then(() => {});
 
   return { hit: true, data: data.cached_result as Record<string, unknown> };
 }
@@ -183,12 +184,16 @@ async function fetchFromProvider(
 
   console.log(`Fetching from: ${url.toString()}`);
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 25000);
+
   try {
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
         "Accept": "application/json",
       },
+      signal: controller.signal,
     });
 
     if (response.status === 404) {
@@ -202,10 +207,16 @@ async function fetchFromProvider(
     }
 
     const data = await response.json();
+    clearTimeout(timeoutId);
     console.log(`Response received:`, JSON.stringify(data).substring(0, 200));
     return data;
   } catch (err) {
+    clearTimeout(timeoutId);
     const error = err as Error;
+    if (error.name === "AbortError") {
+      console.error(`Timeout after 25s for: ${url.toString()}`);
+      return { error: "Timeout na consulta (25s)" };
+    }
     console.error(`Fetch error:`, error);
     return { error: `Falha na conexão: ${error.message}` };
   }
@@ -226,57 +237,48 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     return await fetchFromProvider(provider, endpoint, normalizedType, cleanInput);
   }
 
-  // TConect Score - enriquecido com dados do CPF
+  // TConect Score - enriquecido com dados do CPF (parallelized)
   if (normalizedType === "score") {
-    // Primeiro verificar se já temos cache de CPF para este input
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+    
     const cpfCacheKey = `cpf:${cleanInput}`;
     const cpfCacheHash = await generateHash(cpfCacheKey, "");
-    const cpfCacheResult = await checkCache(
-      createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-      ),
-      cpfCacheHash
-    );
+    const cpfCacheResult = await checkCache(supabaseClient, cpfCacheHash);
 
-    // Buscar Score (sempre necessário)
-    const scoreResult = await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
-    
-    // Extrair nome e nascimento do cache de CPF ou buscar da API
-    let nome: string | null = null;
-    let nascimento: string | null = null;
+    // Parallel: fetch Score + CPF data at the same time (if no cache)
+    const scorePromise = fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
+    const cpfPromise = (!cpfCacheResult.hit)
+      ? fetchFromProvider(providers.nexfuture_cpf, "/cpf", "cpf", cleanInput)
+      : Promise.resolve(null);
+
+    const [scoreResult, cpfFreshResult] = await Promise.all([scorePromise, cpfPromise]);
     
     let cpfData: string | null = null;
     
     if (cpfCacheResult.hit && cpfCacheResult.data) {
-      // Usar dados do cache de CPF
       console.log("Using CPF data from cache for score enrichment");
       cpfData = typeof cpfCacheResult.data.data === "string" 
         ? cpfCacheResult.data.data 
         : JSON.stringify(cpfCacheResult.data);
-    } else {
-      // Buscar da API de CPF (usando provider específico com porta 25594)
-      console.log("Fetching CPF data for score enrichment...");
-      const cpfResult = await fetchFromProvider(providers.nexfuture_cpf, "/cpf", "cpf", cleanInput);
-      
-      if (cpfResult && !cpfResult.error) {
-        cpfData = typeof cpfResult.data === "string" 
-          ? cpfResult.data 
-          : JSON.stringify(cpfResult);
-      }
+    } else if (cpfFreshResult && !cpfFreshResult.error) {
+      cpfData = typeof cpfFreshResult.data === "string" 
+        ? cpfFreshResult.data 
+        : JSON.stringify(cpfFreshResult);
     }
     
+    let nome: string | null = null;
+    let nascimento: string | null = null;
+    
     if (cpfData) {
-      // Extrair NOME (suporta diferentes separadores)
       const nomeMatch = cpfData.match(/NOME\s*[⎯\-:]\s*([^\n]+)/i);
       if (nomeMatch) nome = nomeMatch[1].trim();
-      
-      // Extrair NASCIMENTO
       const nascMatch = cpfData.match(/NASCIMENTO\s*[⎯\-:]\s*([^\n]+)/i);
       if (nascMatch) nascimento = nascMatch[1].trim();
     }
     
-    // Mesclar Score com dados pessoais
     return {
       ...scoreResult,
       cpf: cleanInput,
@@ -305,11 +307,20 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
   // TConect Nacional (search all states for photo) - also handles /foto without estado
   if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
     console.log("Starting national photo search across all states...");
-    const results: Record<string, unknown> = {};
+    
+    // Priority states first (most populated), then rest
+    const priorityStates = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "MA", "ES", "PI"];
+    const otherStates = brazilianStates.filter(s => !priorityStates.includes(s));
+    const orderedStates = [...priorityStates, ...otherStates];
+    
+    let foundResult: Record<string, unknown> | null = null;
+    let foundState: string | null = null;
     
     const batchSize = 5;
-    for (let i = 0; i < brazilianStates.length; i += batchSize) {
-      const batch = brazilianStates.slice(i, i + batchSize);
+    for (let i = 0; i < orderedStates.length; i += batchSize) {
+      if (foundResult) break; // Early exit if found
+      
+      const batch = orderedStates.slice(i, i + batchSize);
       const batchResults = await Promise.all(
         batch.map(async (state) => {
           const result = await fetchFromProvider(
@@ -323,18 +334,30 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
         })
       );
       
-      batchResults.forEach(({ state, result }) => {
-        if (result && !result.error && result.foto) {
-          results[state] = result;
+      for (const { state, result } of batchResults) {
+        if (result && !result.error && !result.notFound && result.foto) {
+          foundResult = result;
+          foundState = state;
+          console.log(`Photo found in ${state}! Stopping search.`);
+          break;
         }
-      });
+      }
+    }
+    
+    if (foundResult && foundState) {
+      return {
+        ...foundResult,
+        cpf: cleanInput,
+        estado_encontrado: foundState,
+      };
     }
     
     return {
       cpf: cleanInput,
-      estados_encontrados: Object.keys(results),
-      total_fotos: Object.keys(results).length,
-      resultados: results,
+      estados_encontrados: [],
+      total_fotos: 0,
+      foto: null,
+      message: "Foto não encontrada nos estados pesquisados",
     };
   }
 
