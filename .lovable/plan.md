@@ -1,77 +1,44 @@
 
-## Plano: Adicionar Retry com Delay no Health Check
 
-### Objetivo
-Implementar uma verificação dupla com delay de 10 segundos para funções detectadas como offline, evitando falsos positivos durante deploys.
+# Conectar contagens reais de Mensagens e Usuarios nos cards de bots
 
-### Alterações
+## Problema
+Os cards de bot no dashboard mostram sempre **0** para Mensagens e Usuarios porque os valores estao hardcoded no componente `BotsSection.tsx`.
 
-**Arquivo:** `supabase/functions/health-check/index.ts`
+## Solucao
+Buscar os dados reais do banco de dados e passar para os cards.
 
-1. **Modificar a função `checkFunction`** para aceitar um parâmetro de retry
-2. **Criar nova função `checkFunctionWithRetry`** que:
-   - Faz a primeira verificação
-   - Se detectar offline/error, aguarda 10 segundos
-   - Faz uma segunda verificação antes de confirmar o status
-   - Retorna o resultado final
+## Fontes de dados
+- **Mensagens**: tabela `bot_analytics` - somar `messages_received` por `bot_id`
+- **Usuarios**: tabela `telegram_subscriptions` - contar usuarios unicos ativos por `bot_id`
 
-### Fluxo Atualizado
+## Implementacao
 
-```text
-┌─────────────────────────────┐
-│   Verificar Função (1ª)     │
-└──────────────┬──────────────┘
-               │
-       ┌───────┴───────┐
-       │               │
-    Online?         Offline/Error?
-       │               │
-       ▼               ▼
-   Retornar      Aguardar 10s
-   "online"            │
-                       ▼
-              ┌────────────────┐
-              │ Verificar (2ª) │
-              └───────┬────────┘
-                      │
-                      ▼
-               Retornar status
-                   final
+### 1. Atualizar `BotsSection.tsx`
+- Adicionar queries ao banco para buscar totais por bot
+- Consultar `bot_analytics` para somar todas as `messages_received` de cada bot
+- Consultar `telegram_subscriptions` para contar `telegram_user_id` distintos com status `active` por bot
+- Passar os valores reais para `BotStatusCard` em vez de `0`
+
+### 2. Detalhes tecnicos
+
+**Query de mensagens:**
+```sql
+SELECT bot_id, SUM(messages_received) as total
+FROM bot_analytics
+GROUP BY bot_id
 ```
 
-### Detalhes Tecnicos
-
-```typescript
-// Nova função com retry
-async function checkFunctionWithRetry(
-  baseUrl: string, 
-  functionName: string
-): Promise<FunctionHealth> {
-  // Primeira verificação
-  const firstCheck = await checkFunction(baseUrl, functionName);
-  
-  // Se online na primeira, retorna imediatamente
-  if (firstCheck.status === 'online') {
-    return firstCheck;
-  }
-  
-  // Se offline/error, aguarda 10 segundos
-  console.log(`⏳ ${functionName} detectada offline, aguardando 10s para retry...`);
-  await new Promise(resolve => setTimeout(resolve, 10000));
-  
-  // Segunda verificação
-  const retryCheck = await checkFunction(baseUrl, functionName);
-  retryCheck.error = retryCheck.status !== 'online' 
-    ? `${retryCheck.error} (confirmado após retry)`
-    : undefined;
-  
-  return retryCheck;
-}
+**Query de usuarios ativos:**
+```sql
+SELECT bot_id, COUNT(DISTINCT telegram_user_id) as total
+FROM telegram_subscriptions
+WHERE status = 'active'
+GROUP BY bot_id
 ```
 
-### Beneficios
+As queries serao feitas via Supabase client dentro do `BotsSection` ou no hook `useBotAnalytics` existente, e mapeadas por `bot_id` para alimentar cada card individualmente.
 
-- Elimina alertas falsos durante janelas de deploy (~30-60s)
-- Mantém detecção real de problemas persistentes
-- Adiciona log indicando quando retry está em andamento
-- Mensagem de erro atualizada indica que foi confirmado após retry
+### 3. Fallback
+Se nao houver dados para um bot, continua mostrando 0 (comportamento atual).
+
