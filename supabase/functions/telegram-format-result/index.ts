@@ -241,13 +241,23 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
     }
     txt += `└─────────────────────────────────────────────────────────────\n\n`;
   } else {
-    const seen = new Set<string>();
-    const uniqueItems = items.filter(item => {
+    // Merge duplicates instead of dropping them
+    const mergedMap = new Map<string, { key: string; values: string[] }>();
+    for (const item of items) {
       const keyNorm = item.key.toLowerCase().replace(/[.\s]/g, '_');
-      if (seen.has(keyNorm)) return false;
-      seen.add(keyNorm);
-      return true;
-    });
+      if (mergedMap.has(keyNorm)) {
+        const existing = mergedMap.get(keyNorm)!;
+        if (!existing.values.includes(item.value)) {
+          existing.values.push(item.value);
+        }
+      } else {
+        mergedMap.set(keyNorm, { key: item.key, values: [item.value] });
+      }
+    }
+    const uniqueItems = Array.from(mergedMap.values()).map(entry => ({
+      key: entry.key,
+      value: entry.values.join(" | "),
+    }));
 
     const grouped: Record<string, Array<{ key: string; value: string }>> = {};
     for (const item of uniqueItems) {
