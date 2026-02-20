@@ -94,10 +94,15 @@ async function fetchFromProvider(
     return data;
   } catch (error) {
     clearTimeout(timeoutId);
-    if ((error as Error).name === "AbortError") {
-      return { error: "Timeout na consulta" };
+    const err = error as Error;
+    console.error(`Fetch error: ${err.message}`);
+    if (err.name === "AbortError") {
+      return { error: "⏱️ Tempo limite excedido. Tente novamente." };
     }
-    return { error: (error as Error).message };
+    if (err.message.includes('Connection refused') || err.message.includes('connect error') || err.message.includes('tcp connect')) {
+      return { error: "⚠️ Servidor temporariamente indisponível. Tente novamente em alguns minutos." };
+    }
+    return { error: "⚠️ Erro de conexão. Tente novamente." };
   }
 }
 
@@ -136,10 +141,15 @@ async function fetchFromProviderWithTimeout(
     const data = await response.json();
     return data;
   } catch (error) {
-    if ((error as Error).name === "AbortError") {
-      return { error: "Timeout na consulta" };
+    const err = error as Error;
+    console.error(`Fetch error: ${err.message}`);
+    if (err.name === "AbortError") {
+      return { error: "⏱️ Tempo limite excedido. Tente novamente." };
     }
-    return { error: (error as Error).message };
+    if (err.message.includes('Connection refused') || err.message.includes('connect error') || err.message.includes('tcp connect')) {
+      return { error: "⚠️ Servidor temporariamente indisponível. Tente novamente em alguns minutos." };
+    }
+    return { error: "⚠️ Erro de conexão. Tente novamente." };
   }
 }
 

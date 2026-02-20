@@ -293,7 +293,15 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
 // =============== TELEGRAM FORMAT ===============
 function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string, telegramUserName?: string): string {
   if (data.error) {
-    return `❌ <b>Erro:</b> ${data.error}`;
+    // Sanitize error: never expose raw URLs or technical details
+    let errorMsg = String(data.error);
+    if (errorMsg.includes('Connection refused') || errorMsg.includes('connect error') || errorMsg.includes('tcp connect') || errorMsg.includes('error sending request')) {
+      errorMsg = "⚠️ Servidor temporariamente indisponível. Tente novamente em alguns minutos.";
+    } else if (errorMsg.includes('http://') || errorMsg.includes('https://')) {
+      // Strip URLs from error messages
+      errorMsg = errorMsg.replace(/https?:\/\/[^\s)]+/g, '[servidor]');
+    }
+    return `❌ <b>Erro:</b> ${errorMsg}`;
   }
 
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@Bot';
