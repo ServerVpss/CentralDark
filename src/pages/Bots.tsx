@@ -429,37 +429,86 @@ export default function Bots() {
                       <div className="mt-4 pt-4 border-t border-border">
                         <Label className="text-xs text-muted-foreground">Token</Label>
                         <div className="flex items-center gap-2 mt-1">
-                          <Input
-                            type={showToken === bot.id ? "text" : "password"}
-                            value={bot.token}
-                            readOnly
-                            className="bg-secondary/50 font-mono text-xs"
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowToken(showToken === bot.id ? null : bot.id);
-                            }}
-                          >
-                            {showToken === bot.id ? (
-                              <EyeOff className="h-4 w-4" />
-                            ) : (
-                              <Eye className="h-4 w-4" />
-                            )}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              copyToClipboard(bot.token);
-                            }}
-                          >
-                            <Copy className="h-4 w-4" />
-                          </Button>
+                          {editingTokenBotId === bot.id ? (
+                            <>
+                              <Input
+                                type="text"
+                                value={editTokenValue}
+                                onChange={(e) => setEditTokenValue(e.target.value)}
+                                placeholder="Cole o novo token aqui..."
+                                className="bg-secondary/50 font-mono text-xs"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled={isSavingToken}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSaveToken(bot.id);
+                                }}
+                              >
+                                {isSavingToken ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 text-green-500" />}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingTokenBotId(null);
+                                  setEditTokenValue("");
+                                }}
+                              >
+                                <X className="h-4 w-4 text-destructive" />
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Input
+                                type={showToken === bot.id ? "text" : "password"}
+                                value={bot.token}
+                                readOnly
+                                className="bg-secondary/50 font-mono text-xs"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingTokenBotId(bot.id);
+                                  setEditTokenValue(bot.token);
+                                }}
+                                title="Editar token"
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowToken(showToken === bot.id ? null : bot.id);
+                                }}
+                              >
+                                {showToken === bot.id ? (
+                                  <EyeOff className="h-4 w-4" />
+                                ) : (
+                                  <Eye className="h-4 w-4" />
+                                )}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  copyToClipboard(bot.token);
+                                }}
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                            </>
+                          )}
                         </div>
                       </div>
                     </CardContent>
