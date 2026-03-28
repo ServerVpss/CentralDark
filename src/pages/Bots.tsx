@@ -75,6 +75,9 @@ export default function Bots() {
   const [selectedBot, setSelectedBot] = useState<TelegramBot | null>(null);
   const [showToken, setShowToken] = useState<string | null>(null);
   const [syncingBot, setSyncingBot] = useState<string | null>(null);
+  const [editingTokenBotId, setEditingTokenBotId] = useState<string | null>(null);
+  const [editTokenValue, setEditTokenValue] = useState("");
+  const [isSavingToken, setIsSavingToken] = useState(false);
 
   // Validar formato do token em tempo real
   const validateToken = (token: string): boolean => {
