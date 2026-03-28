@@ -2392,17 +2392,22 @@ class BotHandler {
     const sub = await this.getSubscription(telegramUserId);
     const isActive = sub && !isExpired(sub.expires_at);
     
-    let statusText = "";
+    let statusBlock = "";
     if (isActive) {
       const days = daysLeft(sub.expires_at);
-      statusText = `\n\n✅ <b>Assinatura Ativa</b>\nPlano: ${sub.plan_name}\nExpira em: ${formatDate(sub.expires_at)}\nDias restantes: ${days}`;
+      const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
+      const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
+      const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
+      statusBlock = `\n\n✅ <b>Assinatura Ativa</b>\n` +
+        `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
+        `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
+        `└ ⏳ Restante: <b>${timeLeft}</b>`;
     } else {
-      statusText = `\n\n⚠️ <b>Sem assinatura ativa</b>\nAssine um plano para fazer consultas.`;
+      statusBlock = `\n\n❌ <b>Sem assinatura ativa</b>\n└ Assine um plano para começar.`;
     }
 
     const buttons: InlineButton[][] = [];
     
-    // If active subscription, show query menu
     if (isActive) {
       buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
     }
@@ -2419,7 +2424,8 @@ class BotHandler {
       buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url)]);
     }
 
-    const text = `🏠 <b>Menu Principal</b>${statusText}`;
+    const botTag = this.bot.bot_username ? `@${this.bot.bot_username}` : '';
+    const text = `🏠 <b>Menu Principal</b>${statusBlock}\n\n<i>${botTag}</i>`;
 
     if (messageId) {
       await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
