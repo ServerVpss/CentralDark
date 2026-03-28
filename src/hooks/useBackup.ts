@@ -172,7 +172,7 @@ export function useBackup() {
         { name: "audit_logs", query: supabase.from("audit_logs").select("*").eq("user_id", userId), progress: 50 },
         { name: "bot_conversation_states", query: supabase.from("bot_conversation_states").select("*"), progress: 53 },
         { name: "edge_function_health", query: supabase.from("edge_function_health").select("*"), progress: 56 },
-        { name: "paginated_results", query: supabase.from("paginated_results").select("*").eq("user_id", userId), progress: 59 },
+        { name: "paginated_results", query: (supabase.from as any)("paginated_results").select("*").eq("user_id", userId), progress: 59 },
         { name: "processed_updates", query: supabase.from("processed_updates").select("*"), progress: 62 },
         { name: "query_cache", query: supabase.from("query_cache").select("*"), progress: 65 },
         { name: "scheduled_broadcasts", query: supabase.from("scheduled_broadcasts").select("*"), progress: 68 },
@@ -457,10 +457,10 @@ export function useBackup() {
                 .eq("user_id", userId);
               const botIds = (bots || []).map((b) => b.id);
               if (botIds.length > 0) {
-                await supabase.from(tableName).delete().in("bot_id", botIds);
+                await (supabase.from as any)(tableName).delete().in("bot_id", botIds);
               }
             } else if (tableName !== "profiles") {
-              await supabase.from(tableName).delete().eq("user_id", userId);
+              await (supabase.from as any)(tableName).delete().eq("user_id", userId);
             }
           } catch (e) {
             console.error(`[backup] Error deleting from ${tableName}:`, e);
