@@ -187,6 +187,45 @@ export default function Bots() {
     }
   };
 
+  const [togglingBotId, setTogglingBotId] = useState<string | null>(null);
+
+  const handleTogglePower = async (bot: TelegramBot) => {
+    setTogglingBotId(bot.id);
+    try {
+      const newState = !bot.is_active;
+      
+      // Update database
+      const { error } = await supabase
+        .from("telegram_bots")
+        .update({ is_active: newState })
+        .eq("id", bot.id);
+      if (error) throw error;
+
+      // Remove or restore webhook
+      if (!newState && bot.token) {
+        // Desligar: remove webhook para o bot parar completamente
+        await fetch(`https://api.telegram.org/bot${bot.token}/deleteWebhook`);
+        await supabase
+          .from("telegram_bots")
+          .update({ webhook_active: false })
+          .eq("id", bot.id);
+        toast.success("Bot desligado! Webhook removido.");
+      } else if (newState && bot.token) {
+        // Ligar: restaura webhook
+        await syncBot(bot.id);
+        toast.success("Bot ligado! Webhook restaurado.");
+      }
+      
+      // Refresh bots list
+      window.location.reload();
+    } catch (err) {
+      console.error("Error toggling bot:", err);
+      toast.error("Erro ao alterar status do bot");
+    } finally {
+      setTogglingBotId(null);
+    }
+  };
+
   const handleSaveToken = async (botId: string) => {
     if (!editTokenValue.trim()) {
       toast.error("Token não pode estar vazio");
