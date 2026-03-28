@@ -2392,17 +2392,22 @@ class BotHandler {
     const sub = await this.getSubscription(telegramUserId);
     const isActive = sub && !isExpired(sub.expires_at);
     
-    let statusText = "";
+    let statusBlock = "";
     if (isActive) {
       const days = daysLeft(sub.expires_at);
-      statusText = `\n\n✅ <b>Assinatura Ativa</b>\nPlano: ${sub.plan_name}\nExpira em: ${formatDate(sub.expires_at)}\nDias restantes: ${days}`;
+      const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
+      const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
+      const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
+      statusBlock = `\n\n✅ <b>Assinatura Ativa</b>\n` +
+        `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
+        `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
+        `└ ⏳ Restante: <b>${timeLeft}</b>`;
     } else {
-      statusText = `\n\n⚠️ <b>Sem assinatura ativa</b>\nAssine um plano para fazer consultas.`;
+      statusBlock = `\n\n❌ <b>Sem assinatura ativa</b>\n└ Assine um plano para começar.`;
     }
 
     const buttons: InlineButton[][] = [];
     
-    // If active subscription, show query menu
     if (isActive) {
       buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
     }
@@ -2419,7 +2424,8 @@ class BotHandler {
       buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url)]);
     }
 
-    const text = `🏠 <b>Menu Principal</b>${statusText}`;
+    const botTag = this.bot.bot_username ? `@${this.bot.bot_username}` : '';
+    const text = `🏠 <b>Menu Principal</b>${statusBlock}\n\n<i>${botTag}</i>`;
 
     if (messageId) {
       await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
@@ -2429,7 +2435,7 @@ class BotHandler {
   }
 
   async showQueryMenu(chatId: number, messageId: number) {
-    const text = `🔍 <b>Consultas Disponíveis</b>\n\nEscolha o tipo de consulta:`;
+    const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado:</i>`;
 
     // Only show enabled query types - hide disabled ones completely
     const qBtn = (label: string, data: string): InlineButton | null => {
@@ -2441,12 +2447,12 @@ class BotHandler {
 
     const allRows: (InlineButton | null)[][] = [
       [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
-      [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa Completa", "query:placa_completa")],
+      [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa+", "query:placa_completa")],
       [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
       [qBtn("📍 CEP", "query:cep"), qBtn("📝 Nome", "query:nome")],
       [qBtn("📊 Score", "query:score"), qBtn("💳 PIX", "query:pix")],
       [qBtn("🪪 RG", "query:rg"), qBtn("🪪 CNH", "query:cnh")],
-      [qBtn("📸 Foto (Todos Estados)", "query:nacional")],
+      [qBtn("📸 Foto Nacional", "query:nacional")],
       [qBtn("📸 Foto por Estado", "query:foto")],
     ];
 
@@ -2457,8 +2463,9 @@ class BotHandler {
 
     buttons.push([btn("🔙 Voltar", "menu:main")]);
 
-    const hasDisabled = Object.values(enabledQueryTypes).some(v => !v);
-    const note = hasDisabled ? "\n\n⚠️ Algumas consultas estão em manutenção e não aparecem no menu." : "";
+    const enabledCount = Object.values(enabledQueryTypes).filter(v => v).length;
+    const totalCount = Object.values(enabledQueryTypes).length;
+    const note = enabledCount < totalCount ? `\n\n⚠️ <i>${totalCount - enabledCount} módulo(s) em manutenção</i>` : "";
     await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
   }
 
@@ -2687,13 +2694,26 @@ class BotHandler {
   async showPlansMenu(chatId: number, messageId: number) {
     const plans = await this.getPlans();
 
-    const text = plans.length === 0
-      ? "⚠️ <b>Nenhum plano disponível no momento.</b>"
-      : "📋 <b>Planos Disponíveis</b>\n\nEscolha um plano:";
+    if (plans.length === 0) {
+      await editMessage(this.token, chatId, messageId,
+        "⚠️ <b>Nenhum plano disponível no momento.</b>\n\n<i>Volte mais tarde.</i>",
+        keyboard([btn("🔙 Voltar", "menu:main")])
+      );
+      return;
+    }
 
-    const buttons: InlineButton[][] = plans.map(p => [
-      btn(`${p.title} - R$ ${p.price.toFixed(2)} (${p.days} dias)`, `plan:${p.code}`)
-    ]);
+    let text = `💎 <b>Planos Disponíveis</b>\n\n`;
+    plans.forEach((p, i) => {
+      const popular = (p as any).is_popular ? " ⭐" : "";
+      text += `${i + 1}. <b>${p.title}</b>${popular}\n`;
+      text += `   💰 R$ ${p.price.toFixed(2)} • ${p.days} dias\n\n`;
+    });
+    text += `<i>Selecione um plano para gerar o PIX:</i>`;
+
+    const buttons: InlineButton[][] = plans.map(p => {
+      const popular = (p as any).is_popular ? " ⭐" : "";
+      return [btn(`${p.title} — R$ ${p.price.toFixed(2)}${popular}`, `plan:${p.code}`)];
+    });
     buttons.push([btn("🔙 Voltar", "menu:main")]);
 
     await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
@@ -2704,9 +2724,11 @@ class BotHandler {
 
     if (!sub || isExpired(sub.expires_at)) {
       await editMessage(this.token, chatId, messageId,
-        "⚠️ <b>Você não tem assinatura ativa</b>\n\nUse o botão abaixo para assinar um plano.",
+        "📊 <b>Minha Assinatura</b>\n\n" +
+        "❌ Nenhuma assinatura ativa encontrada.\n\n" +
+        "<i>Adquira um plano para começar a consultar.</i>",
         keyboard(
-          [btn("💳 Ver Planos", "menu:plans")],
+          [btn("💎 Ver Planos", "menu:plans")],
           [btn("🔙 Voltar", "menu:main")]
         )
       );
@@ -2715,17 +2737,28 @@ class BotHandler {
 
     const days = daysLeft(sub.expires_at);
     const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
+    const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
+    const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
+    
+    // Progress bar visual
+    const totalHours = sub.plan_days * 24;
+    const usedHours = totalHours - (days * 24 + (hours % 24));
+    const progress = Math.min(Math.max(usedHours / totalHours, 0), 1);
+    const barLength = 10;
+    const filled = Math.round(progress * barLength);
+    const bar = "▓".repeat(filled) + "░".repeat(barLength - filled);
 
     await editMessage(this.token, chatId, messageId,
-      `✅ <b>Assinatura Ativa</b>\n\n` +
-      `📦 Plano: <b>${sub.plan_name}</b>\n` +
-      `💰 Valor pago: <b>R$ ${Number(sub.value).toFixed(2)}</b>\n` +
-      `📅 Iniciada em: <b>${formatDate(sub.started_at)}</b>\n` +
-      `⏰ Expira em: <b>${formatDate(sub.expires_at)}</b>\n` +
-      `⏳ Tempo restante: <b>${days} dias (${hours}h)</b>\n\n` +
-      `🎫 TXID: <code>${sub.txid}</code>`,
+      `📊 <b>Minha Assinatura</b>\n\n` +
+      `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
+      `├ 💰 Valor: <b>R$ ${Number(sub.value).toFixed(2)}</b>\n` +
+      `├ 📅 Início: <b>${formatDate(sub.started_at)}</b>\n` +
+      `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
+      `├ ⏳ Restante: <b>${timeLeft}</b>\n` +
+      `├ 📊 [${bar}] ${Math.round((1 - progress) * 100)}%\n` +
+      `└ 🎫 <code>${sub.txid}</code>`,
       keyboard(
-        [btn("🔄 Renovar", "menu:plans")],
+        [btn("🔄 Renovar Plano", "menu:plans")],
         [btn("🔙 Voltar", "menu:main")]
       )
     );
@@ -2736,23 +2769,25 @@ class BotHandler {
 
     if (pending.length === 0) {
       await editMessage(this.token, chatId, messageId,
-        "ℹ️ <b>Sem pagamentos pendentes</b>\n\nVocê não tem pagamentos aguardando confirmação.",
+        "💰 <b>Pagamentos Pendentes</b>\n\n" +
+        "✅ Nenhum pagamento pendente.\n\n" +
+        "<i>Todos os seus pagamentos foram processados.</i>",
         keyboard([btn("🔙 Voltar", "menu:main")])
       );
       return;
     }
 
-    let text = "💰 <b>Pagamentos Pendentes</b>\n\n";
+    let text = `💰 <b>Pagamentos Pendentes</b>\n\n`;
+    text += `📋 ${pending.length} pagamento(s) aguardando:\n\n`;
     const buttons: InlineButton[][] = [];
 
     pending.forEach((p, i) => {
       const createdAt = new Date(p.created_at);
       const ageMinutes = Math.floor((Date.now() - createdAt.getTime()) / 60000);
-      text += `${i + 1}. <b>${p.plan_name}</b> - R$ ${Number(p.value).toFixed(2)}\n`;
-      text += `   TXID: <code>${p.txid}</code>\n`;
-      text += `   Criado há: ${ageMinutes} minutos\n\n`;
-
-      buttons.push([btn(`✅ Verificar #${i + 1}`, `chk_${p.txid}`)]);
+      const ageText = ageMinutes < 60 ? `${ageMinutes}min` : `${Math.floor(ageMinutes / 60)}h ${ageMinutes % 60}min`;
+      text += `${i + 1}. <b>${p.plan_name}</b> — R$ ${Number(p.value).toFixed(2)}\n`;
+      text += `   ⏱ Há ${ageText} • <code>${p.txid.substring(0, 12)}...</code>\n\n`;
+      buttons.push([btn(`✅ Verificar "${p.plan_name}"`, `chk_${p.txid}`)]);
     });
 
     buttons.push([btn("🔙 Voltar", "menu:main")]);
@@ -2763,13 +2798,12 @@ class BotHandler {
   // =============== ADMIN MENUS ===============
   async showAdminMenu(chatId: number, messageId: number) {
     await editMessage(this.token, chatId, messageId,
-      "⚙️ <b>Painel Administrativo</b>\n\nEscolha uma opção:",
+      "⚙️ <b>Painel Administrativo</b>\n\n" +
+      "<i>Gerencie seu bot a partir deste painel:</i>",
       keyboard(
-        [btn("📋 Gerenciar Planos", "admin:plans")],
-        [btn("👥 Usuários Ativos", "admin:users")],
-        [btn("📊 Estatísticas", "admin:stats")],
-        [btn("📢 Broadcast", "admin:broadcast")],
-        [btn("🔙 Voltar", "menu:main")]
+        [btn("📋 Gerenciar Planos", "admin:plans"), btn("👥 Usuários", "admin:users")],
+        [btn("📊 Estatísticas", "admin:stats"), btn("📢 Broadcast", "admin:broadcast")],
+        [btn("🔙 Voltar ao Menu", "menu:main")]
       )
     );
   }
@@ -2778,15 +2812,20 @@ class BotHandler {
     const plans = await this.getAllPlans();
 
     let text = "📋 <b>Gerenciamento de Planos</b>\n\n";
-    const buttons: InlineButton[][] = [];
+    
+    if (plans.length === 0) {
+      text += "<i>Nenhum plano criado ainda.</i>";
+    } else {
+      plans.forEach((p, i) => {
+        const status = p.is_active ? "🟢" : "🔴";
+        text += `${status} <b>${p.name}</b>\n`;
+        text += `   💰 R$ ${p.price.toFixed(2)} • ${p.days} dias • <code>${p.code}</code>\n\n`;
+      });
+    }
 
-    plans.forEach((p, i) => {
-      const status = p.is_active ? "✅" : "❌";
-      text += `${i + 1}. ${status} <b>${p.name}</b>\n`;
-      text += `   R$ ${p.price.toFixed(2)} - ${p.days} dias\n`;
-      text += `   Código: <code>${p.code}</code>\n\n`;
-      buttons.push([btn(`✏️ Editar ${p.name}`, `admin:edit_plan:${p.id}`)]);
-    });
+    const buttons: InlineButton[][] = plans.map(p => [
+      btn(`✏️ ${p.name}`, `admin:edit_plan:${p.id}`)
+    ]);
 
     buttons.push([btn("➕ Novo Plano", "admin:new_plan")]);
     buttons.push([btn("🔙 Voltar", "admin:menu")]);
@@ -2809,21 +2848,19 @@ class BotHandler {
       return;
     }
 
-    const status = plan.is_active ? "✅ Ativo" : "❌ Inativo";
+    const status = plan.is_active ? "🟢 Ativo" : "🔴 Inativo";
 
     await editMessage(this.token, chatId, messageId,
       `✏️ <b>Editar Plano</b>\n\n` +
-      `📦 Nome: <b>${plan.name}</b>\n` +
-      `💰 Preço: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
-      `📅 Dias: <b>${plan.days}</b>\n` +
-      `📊 Status: <b>${status}</b>\n` +
-      `🔑 Código: <code>${plan.code}</code>`,
+      `┌ 📦 Nome: <b>${plan.name}</b>\n` +
+      `├ 💰 Preço: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
+      `├ 📅 Duração: <b>${plan.days} dias</b>\n` +
+      `├ 📊 Status: <b>${status}</b>\n` +
+      `└ 🔑 Código: <code>${plan.code}</code>`,
       keyboard(
-        [btn("💰 Alterar Preço", `admin:change_price:${planId}`)],
-        [btn("📅 Alterar Dias", `admin:change_days:${planId}`)],
-        [btn("📝 Alterar Nome", `admin:change_name:${planId}`)],
-        [btn(plan.is_active ? "❌ Desativar" : "✅ Ativar", `admin:toggle_plan:${planId}`)],
-        [btn("🗑️ Deletar", `admin:delete_plan:${planId}`)],
+        [btn("💰 Preço", `admin:change_price:${planId}`), btn("📅 Dias", `admin:change_days:${planId}`)],
+        [btn("📝 Nome", `admin:change_name:${planId}`), btn(plan.is_active ? "🔴 Desativar" : "🟢 Ativar", `admin:toggle_plan:${planId}`)],
+        [btn("🗑️ Deletar Plano", `admin:delete_plan:${planId}`)],
         [btn("🔙 Voltar", "admin:plans")]
       )
     );
@@ -2839,19 +2876,18 @@ class BotHandler {
 
     const subscriptions = (subs || []) as Array<{ telegram_user_id: number; plan_name: string; expires_at: string }>;
 
-    let text = "👥 <b>Usuários com Assinatura Ativa</b>\n\n";
+    let text = "👥 <b>Usuários Ativos</b>\n\n";
 
     if (subscriptions.length === 0) {
-      text += "Nenhum usuário com assinatura ativa.";
+      text += "<i>Nenhum usuário com assinatura ativa.</i>";
     } else {
-      text += `Total: <b>${subscriptions.length}</b> usuários\n\n`;
+      text += `📊 Total: <b>${subscriptions.length}</b>\n\n`;
       subscriptions.slice(0, 20).forEach((s, i) => {
         const days = daysLeft(s.expires_at);
-        text += `${i + 1}. ID: <code>${s.telegram_user_id}</code>\n`;
-        text += `   Plano: ${s.plan_name} - ${days} dias restantes\n\n`;
+        text += `${i + 1}. <code>${s.telegram_user_id}</code> • ${s.plan_name} • ${days}d\n`;
       });
       if (subscriptions.length > 20) {
-        text += `... e mais ${subscriptions.length - 20} usuários`;
+        text += `\n<i>... e mais ${subscriptions.length - 20} usuários</i>`;
       }
     }
 
@@ -2894,23 +2930,32 @@ class BotHandler {
       .eq("user_id", this.bot.user_id)
       .gte("created_at", today);
 
+    const rate = (totalSubs && totalSubs > 0) ? Math.round(((activeSubs || 0) / totalSubs) * 100) : 0;
+
     await editMessage(this.token, chatId, messageId,
-      `📊 <b>Estatísticas</b>\n\n` +
-      `👥 Total de assinaturas: <b>${totalSubs || 0}</b>\n` +
-      `✅ Assinaturas ativas: <b>${activeSubs || 0}</b>\n` +
-      `⏳ Pagamentos pendentes: <b>${pendingPayments || 0}</b>\n\n` +
-      `💰 Receita hoje: <b>R$ ${todayRevenue.toFixed(2)}</b>\n` +
-      `🔍 Consultas hoje: <b>${totalQueries || 0}</b>`,
-      keyboard([btn("🔙 Voltar", "admin:menu")])
+      `📊 <b>Estatísticas do Bot</b>\n\n` +
+      `<b>👥 ASSINATURAS</b>\n` +
+      `┌ 📋 Total: <b>${totalSubs || 0}</b>\n` +
+      `├ ✅ Ativas: <b>${activeSubs || 0}</b>\n` +
+      `├ 📈 Taxa: <b>${rate}%</b>\n` +
+      `└ ⏳ Pendentes: <b>${pendingPayments || 0}</b>\n\n` +
+      `<b>💰 HOJE</b>\n` +
+      `┌ 💵 Receita: <b>R$ ${todayRevenue.toFixed(2)}</b>\n` +
+      `├ 🔍 Consultas: <b>${totalQueries || 0}</b>\n` +
+      `└ 🆕 Vendas: <b>${subsData.length}</b>`,
+      keyboard([btn("🔄 Atualizar", "admin:stats"), btn("🔙 Voltar", "admin:menu")])
     );
   }
 
   async showBroadcastMenu(chatId: number, messageId: number) {
     await editMessage(this.token, chatId, messageId,
-      "📢 <b>Broadcast</b>\n\nEscolha o público-alvo:",
+      "📢 <b>Broadcast</b>\n\n<i>Selecione o público-alvo da mensagem:</i>",
       keyboard(
-        [btn("📢 Todos os Usuários", "broadcast:all")],
-        [btn("✅ Apenas Ativos", "broadcast:active")],
+        [btn("📢 Todos", "broadcast:all"), btn("✅ Ativos", "broadcast:active")],
+        [btn("❌ Expirados", "broadcast:expired")],
+        [btn("🔙 Voltar", "admin:menu")]
+      )
+    );
         [btn("❌ Apenas Expirados", "broadcast:expired")],
         [btn("🔙 Voltar", "admin:menu")]
       )
@@ -3111,14 +3156,16 @@ class BotHandler {
     const effectId = getMessageEffectId(this.settings.message_effect);
 
     // Enviar mensagem de confirmação com efeito visual
+    const daysText = planDays === 1 ? "1 dia" : `${planDays} dias`;
     await telegramRequest(this.token, "sendMessage", {
       chat_id: chatId,
       text: `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
-        `📦 Plano: <b>${planName}</b>\n` +
-        `💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
-        `📅 Válido até: <b>${formatDate(expiresAt)}</b>\n\n` +
-        `🎫 TXID: <code>${txid}</code>\n\n` +
-        `${this.settings.group_chat_id ? "🚪 <b>Seu acesso foi liberado no grupo!</b>" : "✅ <b>Assinatura ativada com sucesso!</b>"}`,
+        `┌ 📦 Plano: <b>${planName}</b>\n` +
+        `├ 💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
+        `├ ⏰ Duração: <b>${daysText}</b>\n` +
+        `├ 📅 Válido até: <b>${formatDate(expiresAt)}</b>\n` +
+        `└ 🎫 <code>${txid}</code>\n\n` +
+        `${this.settings.group_chat_id ? "🚪 <b>Acesso liberado no grupo!</b>" : "✅ <b>Assinatura ativada!</b>"}`,
       parse_mode: "HTML",
       ...(effectId && { message_effect_id: effectId }),
       reply_markup: keyboard(...buttons),
@@ -3137,15 +3184,13 @@ class BotHandler {
         } catch (_e) { /* ignore */ }
 
         await sendMessage(this.token, this.settings.group_chat_id,
-          `🔥 <b>FISCAL</b>\n` +
-          `🎉 <b>NOVA ASSINATURA ATIVADA!</b>\n\n` +
-          `👤 <b>Usuário:</b> ${display}\n` +
-          `📦 <b>Plano:</b> ${planName}\n` +
-          `⏰ <b>Duração:</b> ${planDays} dia(s)\n` +
-          `💵 <b>Valor:</b> R$ ${Number(value).toFixed(2)}\n` +
-          `🆔 <b>ID:</b> <code>${txid}</code>\n\n` +
-          `🎊 <b>Bem-vindo(a) ao grupo!</b>`,
-          keyboard([btnUrl("🛒 COMPRAR CONSULTAS", `https://t.me/${this.bot.bot_username}?start=assinar`)])
+          `🔥 <b>NOVA ASSINATURA!</b>\n\n` +
+          `┌ 👤 ${display}\n` +
+          `├ 📦 ${planName} • ${planDays}d\n` +
+          `├ 💵 R$ ${Number(value).toFixed(2)}\n` +
+          `└ 🆔 <code>${txid.substring(0, 16)}...</code>\n\n` +
+          `🎊 <b>Bem-vindo(a)!</b>`,
+          keyboard([btnUrl("🛒 ASSINAR", `https://t.me/${this.bot.bot_username}?start=assinar`)])
         );
       } catch (e) {
         console.error("Failed to announce in group:", e);
