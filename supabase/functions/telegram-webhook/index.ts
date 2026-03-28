@@ -153,6 +153,19 @@ const nexfutureEndpoints: Record<string, string> = {
   chassi: "/chassi", renavam: "/renavam", motor: "/motor", frota: "/frota", bin: "/bin",
 };
 
+// =============== QUERY STATUS MAP ===============
+// Servidores offline - todas desativadas para evitar falhas no bot
+// Para reativar, basta trocar para true quando o servidor voltar
+const enabledQueryTypes: Record<string, boolean> = {
+  cpf: false, cnpj: false, placa: false, placa_completa: false,
+  telefone: false, email: false, cep: false, nome: false,
+  score: false, foto: false, nacional: false,
+  rg: false, cnh: false, pix: false,
+  parentes: false, empregos: false, chassi: false,
+  renavam: false, motor: false, frota: false,
+  bin: false, cns: false,
+};
+
 const queryTypeLabels: Record<string, string> = {
   cpf: "👤 CPF", cnpj: "🏢 CNPJ", placa: "🚗 Placa", placa_completa: "🚗 Placa Completa",
   telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",

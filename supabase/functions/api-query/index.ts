@@ -69,6 +69,19 @@ const providers: Record<string, ApiProvider> = {
   },
 };
 
+// =============== QUERY STATUS MAP ===============
+// Servidores offline - todas desativadas para evitar falhas
+// Para reativar, basta trocar para true quando o servidor voltar
+const enabledQueryTypes: Record<string, boolean> = {
+  cpf: false, cnpj: false, placa: false, placa_completa: false,
+  telefone: false, email: false, cep: false, nome: false,
+  score: false, foto: false, nacional: false,
+  rg: false, cnh: false, pix: false,
+  parentes: false, empregos: false, chassi: false,
+  renavam: false, motor: false, frota: false,
+  bin: false, cns: false,
+};
+
 // NexFuture endpoints
 const nexfutureEndpoints: Record<string, string> = {
   cpf: "/cpf",
