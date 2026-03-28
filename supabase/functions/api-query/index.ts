@@ -451,7 +451,7 @@ Deno.serve(async (req) => {
     } else {
       // CACHE MISS - fetch from external API
       console.log(`Cache MISS for hash: ${queryHash.substring(0, 16)}...`);
-      result = await handleQuery(queryRequest);
+      result = await handleQuery(queryRequest, supabase);
       
       // Only cache successful results (not errors or not found)
       if (!result.error && !result.notFound) {
