@@ -244,6 +244,11 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
 
   console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
 
+  // Check if query type is enabled
+  if (enabledQueryTypes[normalizedType] === false) {
+    return { error: `🚫 Consulta "${normalizedType}" temporariamente desativada por manutenção do servidor.` };
+  }
+
   // NexFuture queries
   if (nexfutureEndpoints[normalizedType]) {
     const endpoint = nexfutureEndpoints[normalizedType];

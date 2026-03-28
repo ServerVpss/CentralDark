@@ -2405,19 +2405,27 @@ class BotHandler {
   async showQueryMenu(chatId: number, messageId: number) {
     const text = `🔍 <b>Consultas Disponíveis</b>\n\nEscolha o tipo de consulta:`;
 
+    // Helper to mark disabled queries
+    const qBtn = (label: string, data: string) => {
+      const qType = data.replace("query:", "");
+      const isEnabled = enabledQueryTypes[qType] !== false;
+      return btn(isEnabled ? label : `${label} 🔴`, data);
+    };
+
     const buttons: InlineButton[][] = [
-      [btn("👤 CPF", "query:cpf"), btn("🏢 CNPJ", "query:cnpj")],
-      [btn("🚗 Placa", "query:placa"), btn("🚗 Placa Completa", "query:placa_completa")],
-      [btn("📞 Telefone", "query:telefone"), btn("📧 Email", "query:email")],
-      [btn("📍 CEP", "query:cep"), btn("📝 Nome", "query:nome")],
-      [btn("📊 Score", "query:score"), btn("💳 PIX", "query:pix")],
-      [btn("🪪 RG", "query:rg"), btn("🪪 CNH", "query:cnh")],
-      [btn("📸 Foto (Todos Estados)", "query:nacional")],
-      [btn("📸 Foto por Estado", "query:foto")],
+      [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
+      [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa Completa", "query:placa_completa")],
+      [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
+      [qBtn("📍 CEP", "query:cep"), qBtn("📝 Nome", "query:nome")],
+      [qBtn("📊 Score", "query:score"), qBtn("💳 PIX", "query:pix")],
+      [qBtn("🪪 RG", "query:rg"), qBtn("🪪 CNH", "query:cnh")],
+      [qBtn("📸 Foto (Todos Estados)", "query:nacional")],
+      [qBtn("📸 Foto por Estado", "query:foto")],
       [btn("🔙 Voltar", "menu:main")],
     ];
 
-    await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
+    const statusNote = "\n\n🔴 = Temporariamente indisponível";
+    await editMessage(this.token, chatId, messageId, text + statusNote, keyboard(...buttons));
   }
 
   async showStateSelection(chatId: number, messageId: number) {
@@ -2471,6 +2479,15 @@ class BotHandler {
       await sendMessage(this.token, chatId,
         "⚠️ <b>Assinatura necessária</b>\n\nVocê precisa de uma assinatura ativa para fazer consultas.",
         keyboard([btn("💳 Ver Planos", "menu:plans"), btn("🏠 Menu", "menu:main")])
+      );
+      return;
+    }
+
+    // Check if query type is enabled
+    if (!enabledQueryTypes[queryType]) {
+      await sendMessage(this.token, chatId,
+        `🚫 <b>Consulta Indisponível</b>\n\n${queryTypeLabels[queryType] || queryType} está temporariamente desativada por manutenção do servidor.\n\nTente novamente mais tarde.`,
+        keyboard([btn("🔍 Outras Consultas", "menu:query"), btn("🏠 Menu", "menu:main")])
       );
       return;
     }
