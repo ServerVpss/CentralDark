@@ -2435,7 +2435,7 @@ class BotHandler {
   }
 
   async showQueryMenu(chatId: number, messageId: number) {
-    const text = `🔍 <b>Consultas Disponíveis</b>\n\nEscolha o tipo de consulta:`;
+    const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado:</i>`;
 
     // Only show enabled query types - hide disabled ones completely
     const qBtn = (label: string, data: string): InlineButton | null => {
@@ -2447,12 +2447,12 @@ class BotHandler {
 
     const allRows: (InlineButton | null)[][] = [
       [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
-      [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa Completa", "query:placa_completa")],
+      [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa+", "query:placa_completa")],
       [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
       [qBtn("📍 CEP", "query:cep"), qBtn("📝 Nome", "query:nome")],
       [qBtn("📊 Score", "query:score"), qBtn("💳 PIX", "query:pix")],
       [qBtn("🪪 RG", "query:rg"), qBtn("🪪 CNH", "query:cnh")],
-      [qBtn("📸 Foto (Todos Estados)", "query:nacional")],
+      [qBtn("📸 Foto Nacional", "query:nacional")],
       [qBtn("📸 Foto por Estado", "query:foto")],
     ];
 
@@ -2463,8 +2463,9 @@ class BotHandler {
 
     buttons.push([btn("🔙 Voltar", "menu:main")]);
 
-    const hasDisabled = Object.values(enabledQueryTypes).some(v => !v);
-    const note = hasDisabled ? "\n\n⚠️ Algumas consultas estão em manutenção e não aparecem no menu." : "";
+    const enabledCount = Object.values(enabledQueryTypes).filter(v => v).length;
+    const totalCount = Object.values(enabledQueryTypes).length;
+    const note = enabledCount < totalCount ? `\n\n⚠️ <i>${totalCount - enabledCount} módulo(s) em manutenção</i>` : "";
     await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
   }
 
