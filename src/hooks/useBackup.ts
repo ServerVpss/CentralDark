@@ -23,6 +23,17 @@ export interface BackupData {
     bot_analytics: any[];
     payment_history: any[];
     telegram_messages: any[];
+    api_providers: any[];
+    api_usage_logs: any[];
+    audit_logs: any[];
+    bot_conversation_states: any[];
+    edge_function_health: any[];
+    paginated_results: any[];
+    processed_updates: any[];
+    query_cache: any[];
+    scheduled_broadcasts: any[];
+    telegram_user_terms: any[];
+    user_roles: any[];
   };
   metadata: {
     total_records: number;
@@ -95,6 +106,17 @@ const TABLE_NAMES: Record<string, string> = {
   bot_analytics: "Análises",
   payment_history: "Histórico de Pagamentos",
   telegram_messages: "Mensagens do Telegram",
+  api_providers: "Provedores de API",
+  api_usage_logs: "Logs de Uso da API",
+  audit_logs: "Logs de Auditoria",
+  bot_conversation_states: "Estados de Conversa",
+  edge_function_health: "Saúde das Edge Functions",
+  paginated_results: "Resultados Paginados",
+  processed_updates: "Updates Processados",
+  query_cache: "Cache de Consultas",
+  scheduled_broadcasts: "Broadcasts Agendados",
+  telegram_user_terms: "Termos de Usuários",
+  user_roles: "Papéis de Usuários",
 };
 
 export function useBackup() {
@@ -132,19 +154,29 @@ export function useBackup() {
 
       // Fetch all user data with individual tracking
       const tableQueries = [
-        { name: "telegram_bots", query: supabase.from("telegram_bots").select("*").eq("user_id", userId), progress: 10 },
-        { name: "bot_security_settings", query: supabase.from("bot_security_settings").select("*").eq("user_id", userId), progress: 15 },
-        { name: "subscription_plans", query: supabase.from("subscription_plans").select("*").eq("user_id", userId), progress: 20 },
-        { name: "payment_gateways", query: supabase.from("payment_gateways").select("*").eq("user_id", userId), progress: 25 },
-        { name: "payment_gateway_settings", query: supabase.from("payment_gateway_settings").select("*").eq("user_id", userId), progress: 30 },
-        { name: "pix_transactions", query: supabase.from("pix_transactions").select("*").eq("user_id", userId), progress: 35 },
-        { name: "pending_payments", query: supabase.from("pending_payments").select("*").eq("user_id", userId), progress: 40 },
-        { name: "engagement_messages", query: supabase.from("engagement_messages").select("*").eq("user_id", userId), progress: 45 },
-        { name: "profiles", query: supabase.from("profiles").select("*").eq("user_id", userId), progress: 50 },
-        { name: "query_history", query: supabase.from("query_history").select("*").eq("user_id", userId), progress: 55 },
-        { name: "bot_analytics", query: supabase.from("bot_analytics").select("*").eq("user_id", userId), progress: 60 },
-        { name: "payment_history", query: supabase.from("payment_history").select("*").eq("user_id", userId), progress: 65 },
-        { name: "telegram_messages", query: supabase.from("telegram_messages").select("*").eq("user_id", userId), progress: 70 },
+        { name: "telegram_bots", query: supabase.from("telegram_bots").select("*").eq("user_id", userId), progress: 5 },
+        { name: "bot_security_settings", query: supabase.from("bot_security_settings").select("*").eq("user_id", userId), progress: 8 },
+        { name: "subscription_plans", query: supabase.from("subscription_plans").select("*").eq("user_id", userId), progress: 11 },
+        { name: "payment_gateways", query: supabase.from("payment_gateways").select("*").eq("user_id", userId), progress: 14 },
+        { name: "payment_gateway_settings", query: supabase.from("payment_gateway_settings").select("*").eq("user_id", userId), progress: 17 },
+        { name: "pix_transactions", query: supabase.from("pix_transactions").select("*").eq("user_id", userId), progress: 20 },
+        { name: "pending_payments", query: supabase.from("pending_payments").select("*").eq("user_id", userId), progress: 23 },
+        { name: "engagement_messages", query: supabase.from("engagement_messages").select("*").eq("user_id", userId), progress: 26 },
+        { name: "profiles", query: supabase.from("profiles").select("*").eq("user_id", userId), progress: 29 },
+        { name: "query_history", query: supabase.from("query_history").select("*").eq("user_id", userId), progress: 32 },
+        { name: "bot_analytics", query: supabase.from("bot_analytics").select("*").eq("user_id", userId), progress: 35 },
+        { name: "payment_history", query: supabase.from("payment_history").select("*").eq("user_id", userId), progress: 38 },
+        { name: "telegram_messages", query: supabase.from("telegram_messages").select("*").eq("user_id", userId), progress: 41 },
+        { name: "api_providers", query: supabase.from("api_providers").select("*"), progress: 44 },
+        { name: "api_usage_logs", query: supabase.from("api_usage_logs").select("*").eq("user_id", userId), progress: 47 },
+        { name: "audit_logs", query: supabase.from("audit_logs").select("*").eq("user_id", userId), progress: 50 },
+        { name: "bot_conversation_states", query: supabase.from("bot_conversation_states").select("*"), progress: 53 },
+        { name: "edge_function_health", query: supabase.from("edge_function_health").select("*"), progress: 56 },
+        { name: "paginated_results", query: (supabase.from as any)("paginated_results").select("*").eq("user_id", userId), progress: 59 },
+        { name: "processed_updates", query: supabase.from("processed_updates").select("*"), progress: 62 },
+        { name: "query_cache", query: supabase.from("query_cache").select("*"), progress: 65 },
+        { name: "scheduled_broadcasts", query: supabase.from("scheduled_broadcasts").select("*"), progress: 68 },
+        { name: "telegram_user_terms", query: supabase.from("telegram_user_terms").select("*"), progress: 70 },
       ];
 
       const tableData: Record<string, any[]> = {};
@@ -208,6 +240,17 @@ export function useBackup() {
         bot_analytics: tableData.bot_analytics || [],
         payment_history: tableData.payment_history || [],
         telegram_messages: tableData.telegram_messages || [],
+        api_providers: tableData.api_providers || [],
+        api_usage_logs: tableData.api_usage_logs || [],
+        audit_logs: tableData.audit_logs || [],
+        bot_conversation_states: tableData.bot_conversation_states || [],
+        edge_function_health: tableData.edge_function_health || [],
+        paginated_results: tableData.paginated_results || [],
+        processed_updates: tableData.processed_updates || [],
+        query_cache: tableData.query_cache || [],
+        scheduled_broadcasts: tableData.scheduled_broadcasts || [],
+        telegram_user_terms: tableData.telegram_user_terms || [],
+        user_roles: tableData.user_roles || [],
       };
 
       // Calculate metadata
@@ -370,20 +413,31 @@ export function useBackup() {
       // Order matters for foreign keys
       const tableOrder = [
         "profiles",
+        "user_roles",
+        "api_providers",
         "telegram_bots",
         "bot_settings",
         "bot_security_settings",
+        "bot_conversation_states",
         "subscription_plans",
         "payment_gateways",
         "payment_gateway_settings",
         "engagement_messages",
         "telegram_subscriptions",
+        "telegram_user_terms",
         "pix_transactions",
         "pending_payments",
         "query_history",
+        "query_cache",
         "bot_analytics",
         "payment_history",
         "telegram_messages",
+        "api_usage_logs",
+        "audit_logs",
+        "edge_function_health",
+        "paginated_results",
+        "processed_updates",
+        "scheduled_broadcasts",
       ] as const;
 
       // If replace mode, delete existing data first (reverse order for FK)
@@ -403,10 +457,10 @@ export function useBackup() {
                 .eq("user_id", userId);
               const botIds = (bots || []).map((b) => b.id);
               if (botIds.length > 0) {
-                await supabase.from(tableName).delete().in("bot_id", botIds);
+                await (supabase.from as any)(tableName).delete().in("bot_id", botIds);
               }
             } else if (tableName !== "profiles") {
-              await supabase.from(tableName).delete().eq("user_id", userId);
+              await (supabase.from as any)(tableName).delete().eq("user_id", userId);
             }
           } catch (e) {
             console.error(`[backup] Error deleting from ${tableName}:`, e);
