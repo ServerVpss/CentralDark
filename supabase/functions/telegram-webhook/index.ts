@@ -166,6 +166,32 @@ const enabledQueryTypes: Record<string, boolean> = {
   bin: false, cns: false,
 };
 
+const queryTypeAliases: Record<string, string> = {
+  tel: "telefone",
+  telefone: "telefone",
+  placa2: "placa_completa",
+  nacional: "nacional",
+  foto: "foto",
+};
+
+function normalizeQueryType(queryType: string): string {
+  return queryTypeAliases[queryType] || queryType;
+}
+
+function isQueryTypeEnabled(queryType: string): boolean {
+  const normalizedType = normalizeQueryType(queryType);
+
+  if (normalizedType === "foto") {
+    return enabledQueryTypes.foto === true;
+  }
+
+  if (normalizedType === "nacional") {
+    return enabledQueryTypes.nacional === true;
+  }
+
+  return enabledQueryTypes[normalizedType] === true;
+}
+
 const queryTypeLabels: Record<string, string> = {
   cpf: "👤 CPF", cnpj: "🏢 CNPJ", placa: "🚗 Placa", placa_completa: "🚗 Placa Completa",
   telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",
@@ -2408,7 +2434,7 @@ class BotHandler {
     // Only show enabled query types - hide disabled ones completely
     const qBtn = (label: string, data: string): InlineButton | null => {
       const qType = data.replace("query:", "");
-      const isEnabled = enabledQueryTypes[qType] !== false;
+      const isEnabled = isQueryTypeEnabled(qType);
       if (!isEnabled) return null;
       return btn(label, data);
     };
@@ -2493,8 +2519,8 @@ class BotHandler {
 
     // Check if query type is enabled - SILENTLY ignore if disabled
     // This prevents the bot from responding when module is off,
-    // avoiding confusion with other bots in the group
-    if (!enabledQueryTypes[queryType]) {
+    // avoiding confusion with other bots no grupo
+    if (!isQueryTypeEnabled(queryType)) {
       console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
@@ -3464,7 +3490,10 @@ class BotHandler {
     if (queryState) {
       const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
       await this.clearConversationState(telegramUserId, "query");
-      // Passar o nome do perfil do Telegram do usuário
+      if (!isQueryTypeEnabled(queryType)) {
+        console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
+        return;
+      }
       const userFirstName = message.from?.first_name || 'usuário';
       await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName);
       return;
@@ -3655,7 +3684,7 @@ class BotHandler {
     
     if (multipleCommands.length > 1) {
       // Filter out disabled modules BEFORE processing
-      const enabledCommands = multipleCommands.filter(cmd => enabledQueryTypes[cmd.queryType] === true);
+      const enabledCommands = multipleCommands.filter(cmd => isQueryTypeEnabled(cmd.queryType));
       if (enabledCommands.length === 0) {
         console.log(`Group multi-query: all ${multipleCommands.length} modules disabled. Ignoring silently.`);
         return;
@@ -3687,7 +3716,7 @@ class BotHandler {
     }
 
     // Check if module is enabled FIRST - before any response
-    if (!enabledQueryTypes[queryType]) {
+    if (!isQueryTypeEnabled(queryType)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently (early check).`);
       return;
     }
@@ -3745,7 +3774,7 @@ class BotHandler {
 
     // Check if module is enabled - SILENTLY ignore if disabled
     // This prevents response when module is off, so other bots in the group aren't confused
-    if (!enabledQueryTypes[queryType]) {
+    if (!isQueryTypeEnabled(queryType)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
@@ -4026,6 +4055,11 @@ class BotHandler {
 
     // Quick CPF query from CEP results
     if (data.startsWith("qcpf:")) {
+      if (!isQueryTypeEnabled("cpf")) {
+        console.log(`Quick CPF callback blocked because module "cpf" is disabled.`);
+        return;
+      }
+
       const cpf = data.replace("qcpf:", "");
       const telegramUserName = callback.from?.first_name || 'usuário';
       
@@ -4069,6 +4103,11 @@ class BotHandler {
       
       if (!queryType || !queryInput) {
         await answerCallback(this.token, callback.id);
+        return;
+      }
+
+      if (!isQueryTypeEnabled(queryType)) {
+        console.log(`PDF callback blocked because module "${queryType}" is disabled.`);
         return;
       }
       
@@ -4156,6 +4195,11 @@ class BotHandler {
       
       if (!queryType || !queryInput) {
         await answerCallback(this.token, callback.id);
+        return;
+      }
+
+      if (!isQueryTypeEnabled(queryType)) {
+        console.log(`TXT callback blocked because module "${queryType}" is disabled.`);
         return;
       }
       
@@ -4268,9 +4312,9 @@ class BotHandler {
     if (data.startsWith("query:")) {
       const queryType = data.replace("query:", "");
       // Block disabled modules even via callback
-      if (!enabledQueryTypes[queryType]) {
+      if (!isQueryTypeEnabled(queryType)) {
         await telegramRequest(this.token, "answerCallbackQuery", {
-          callback_query_id: callbackQuery.id,
+          callback_query_id: callback.id,
           text: "⚠️ Este módulo está em manutenção.",
           show_alert: true,
         });
@@ -4286,6 +4330,10 @@ class BotHandler {
 
     // State selection for foto
     if (data.startsWith("state:")) {
+      if (!isQueryTypeEnabled("foto")) {
+        console.log(`Photo state callback blocked because module "foto" is disabled.`);
+        return;
+      }
       const estado = data.replace("state:", "");
       await this.requestQueryInput(chatId, telegramUserId, "foto", estado);
       return;
