@@ -1,44 +1,51 @@
 
 
-# Conectar contagens reais de Mensagens e Usuarios nos cards de bots
+## Varredura Completa das APIs - Plano
 
-## Problema
-Os cards de bot no dashboard mostram sempre **0** para Mensagens e Usuarios porque os valores estao hardcoded no componente `BotsSection.tsx`.
+### Situacao Atual
 
-## Solucao
-Buscar os dados reais do banco de dados e passar para os cards.
+Todas as consultas estao falhando com **"Servidor temporariamente indisponível"** (erro de conexao). Os provedores externos estao fora do ar:
 
-## Fontes de dados
-- **Mensagens**: tabela `bot_analytics` - somar `messages_received` por `bot_id`
-- **Usuarios**: tabela `telegram_subscriptions` - contar usuarios unicos ativos por `bot_id`
+| Provedor | Host | Portas | Endpoints | Status |
+|----------|------|--------|-----------|--------|
+| NexFuture | `nxf-2.nexfuture.com.br` | 25589, 25594 | cpf, cnpj, placa, telefone, rg, cns, cnh, nome, parentes, empregos, email, cep, pix, chassi, renavam, motor, frota, bin | **OFFLINE** |
+| TConect Score | `node.tconect.xyz` | 3029/3036 | score | **OFFLINE** |
+| TConect Foto | `node.tconect.xyz` | 3030 | foto, nacional | **OFFLINE** |
+| TConect Placa | `node.tconect.xyz` | 3041 | placa_completa | **OFFLINE** |
 
-## Implementacao
+Todas as 10 ultimas consultas no historico retornaram erro de servidor indisponível.
 
-### 1. Atualizar `BotsSection.tsx`
-- Adicionar queries ao banco para buscar totais por bot
-- Consultar `bot_analytics` para somar todas as `messages_received` de cada bot
-- Consultar `telegram_subscriptions` para contar `telegram_user_id` distintos com status `active` por bot
-- Passar os valores reais para `BotStatusCard` em vez de `0`
+### O que vou fazer
 
-### 2. Detalhes tecnicos
+1. **Adicionar sistema de status por endpoint** no `telegram-webhook` - um mapa de quais consultas estao ativas/desativadas
+2. **Desativar todas as consultas que dependem dos servidores offline** - o bot vai responder com mensagem amigavel dizendo que aquele tipo de consulta esta temporariamente desativado, em vez de tentar conectar e falhar
+3. **Atualizar o menu de consultas** no bot para mostrar apenas as consultas ativas (ou marcar as desativadas com um icone)
+4. **Facilitar reativacao** - basta mudar `true/false` no mapa de status quando os servidores voltarem
 
-**Query de mensagens:**
-```sql
-SELECT bot_id, SUM(messages_received) as total
-FROM bot_analytics
-GROUP BY bot_id
+### Mudancas Tecnicas
+
+**Arquivo: `supabase/functions/telegram-webhook/index.ts`**
+- Adicionar `enabledQueryTypes` map no topo com todas as consultas como `false` (servidores offline)
+- No `processQuery()`, verificar se o tipo esta ativo antes de chamar a API
+- No `showQueryMenu()`, ocultar ou marcar consultas desativadas
+- Retornar mensagem amigavel: "Esta consulta esta temporariamente desativada por manutencao do servidor"
+
+**Arquivo: `supabase/functions/api-query/index.ts`**
+- Adicionar mesmo mapa de status para consultas via painel web
+- Retornar erro claro quando consulta desativada
+
+### Mapa de Status (Inicial - Tudo Desativado)
+
+```text
+cpf: false        cnpj: false       placa: false
+telefone: false   email: false      cep: false
+nome: false       score: false      foto: false
+nacional: false   placa_completa: false
+rg: false         cnh: false        pix: false
+parentes: false   empregos: false   chassi: false
+renavam: false    motor: false      frota: false
+bin: false        cns: false
 ```
 
-**Query de usuarios ativos:**
-```sql
-SELECT bot_id, COUNT(DISTINCT telegram_user_id) as total
-FROM telegram_subscriptions
-WHERE status = 'active'
-GROUP BY bot_id
-```
-
-As queries serao feitas via Supabase client dentro do `BotsSection` ou no hook `useBotAnalytics` existente, e mapeadas por `bot_id` para alimentar cada card individualmente.
-
-### 3. Fallback
-Se nao houver dados para um bot, continua mostrando 0 (comportamento atual).
+Quando os servidores voltarem, basta trocar para `true` os que funcionarem.
 
