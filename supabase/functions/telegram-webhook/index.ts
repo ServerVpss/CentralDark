@@ -3196,6 +3196,7 @@ class BotHandler {
 
   // =============== BROADCAST ===============
   async executeBroadcast(telegramUserId: number, filter: string, message: TelegramMessage) {
+    const filterText: Record<string, string> = { all: "todos", active: "ativos", expired: "expirados" };
     let query = this.supabase
       .from("telegram_subscriptions")
       .select("telegram_user_id")
@@ -3211,43 +3212,149 @@ class BotHandler {
     const subscriptions = (subs || []) as Array<{ telegram_user_id: number }>;
 
     if (subscriptions.length === 0) {
-      await sendMessage(this.token, message.chat.id, "❌ Nenhum usuário encontrado para o broadcast.");
+      await sendMessage(this.token, message.chat.id,
+        `❌ Nenhum usuário encontrado para o filtro "<b>${filterText[filter] || filter}</b>".`,
+        keyboard([btn("🔙 Voltar", "admin:menu")])
+      );
       return;
     }
 
     const userIds = [...new Set(subscriptions.map(s => s.telegram_user_id))];
+    const total = userIds.length;
+
+    // Detect media type for status message
+    const mediaType = message.photo ? "📷 Foto" :
+      message.video ? "🎬 Vídeo" :
+      message.audio ? "🎵 Áudio" :
+      message.voice ? "🎙️ Voz" :
+      message.animation ? "🎞️ GIF" :
+      message.document ? "📎 Documento" :
+      message.sticker ? "🏷️ Sticker" :
+      message.video_note ? "⏺️ Vídeo circular" :
+      "💬 Texto";
+
+    // Send initial progress message
+    const progressBar = (current: number, t: number) => {
+      const pct = Math.round((current / t) * 100);
+      const filled = Math.round(pct / 5);
+      return "▓".repeat(filled) + "░".repeat(20 - filled) + ` ${pct}%`;
+    };
+
+    const statusMsg = await telegramRequest(this.token, "sendMessage", {
+      chat_id: message.chat.id,
+      text: `📡 <b>BROADCAST INICIADO</b>\n\n` +
+        `${mediaType} → ${total} usuários (${filterText[filter] || filter})\n\n` +
+        `${progressBar(0, total)}\n\n` +
+        `⏳ Enviando...`,
+      parse_mode: "HTML",
+    });
+
+    const statusMessageId = statusMsg?.result?.message_id;
 
     let sent = 0;
     let failed = 0;
+    let blocked = 0;
+    const startTime = Date.now();
 
-    for (const userId of userIds) {
+    // Update progress every N users
+    const UPDATE_INTERVAL = Math.max(5, Math.floor(total / 10));
+
+    for (let i = 0; i < userIds.length; i++) {
+      const userId = userIds[i];
       try {
         if (message.photo || message.video || message.document || message.audio || message.voice || message.animation || message.video_note || message.sticker) {
-          await telegramRequest(this.token, "copyMessage", {
+          const result = await telegramRequest(this.token, "copyMessage", {
             chat_id: userId,
             from_chat_id: message.chat.id,
             message_id: message.message_id,
           });
+          if (result?.ok) {
+            sent++;
+          } else {
+            if (result?.description?.includes("blocked") || result?.description?.includes("deactivated")) {
+              blocked++;
+            }
+            failed++;
+          }
         } else if (message.text) {
-          await sendMessage(this.token, userId, message.text);
+          const result = await telegramRequest(this.token, "sendMessage", {
+            chat_id: userId,
+            text: message.text,
+            parse_mode: "HTML",
+          });
+          if (result?.ok) {
+            sent++;
+          } else {
+            if (result?.description?.includes("blocked") || result?.description?.includes("deactivated")) {
+              blocked++;
+            }
+            failed++;
+          }
         }
-        sent++;
       } catch (_e) {
         failed++;
       }
 
-      if (sent % 20 === 0) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+      // Rate limit: pause every 25 messages
+      if ((sent + failed) % 25 === 0 && i < userIds.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 1100));
+      }
+
+      // Update progress message periodically
+      if (statusMessageId && ((sent + failed) % UPDATE_INTERVAL === 0 || i === userIds.length - 1)) {
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(0);
+        const processed = sent + failed;
+        try {
+          await telegramRequest(this.token, "editMessageText", {
+            chat_id: message.chat.id,
+            message_id: statusMessageId,
+            text: `📡 <b>BROADCAST EM ANDAMENTO</b>\n\n` +
+              `${mediaType} → ${filterText[filter] || filter}\n\n` +
+              `${progressBar(processed, total)}\n\n` +
+              `✅ Enviados: <b>${sent}</b>\n` +
+              `❌ Falhas: <b>${failed}</b>${blocked > 0 ? ` (🚫 ${blocked} bloqueados)` : ""}\n` +
+              `📊 Processados: <b>${processed}/${total}</b>\n` +
+              `⏱️ Tempo: <b>${elapsed}s</b>`,
+            parse_mode: "HTML",
+          });
+        } catch (_e) {
+          // Ignore edit errors (e.g., message not modified)
+        }
       }
     }
 
-    await sendMessage(this.token, message.chat.id,
-      `📢 <b>Broadcast Concluído!</b>\n\n` +
-      `✅ Enviados: <b>${sent}</b>\n` +
-      `❌ Falhas: <b>${failed}</b>\n` +
-      `📊 Total: <b>${userIds.length}</b>`,
-      keyboard([btn("🔙 Voltar", "admin:menu")])
-    );
+    // Final summary
+    const totalTime = ((Date.now() - startTime) / 1000).toFixed(1);
+    const successRate = total > 0 ? Math.round((sent / total) * 100) : 0;
+
+    const finalText = `📢 <b>BROADCAST CONCLUÍDO!</b>\n\n` +
+      `┌ ${mediaType}\n` +
+      `├ 🎯 Audiência: <b>${filterText[filter] || filter}</b>\n` +
+      `├ ✅ Enviados: <b>${sent}</b>\n` +
+      `├ ❌ Falhas: <b>${failed}</b>${blocked > 0 ? ` (🚫 ${blocked} bloqueados)` : ""}\n` +
+      `├ 📊 Taxa: <b>${successRate}%</b>\n` +
+      `└ ⏱️ Tempo: <b>${totalTime}s</b>\n\n` +
+      `${progressBar(total, total)}`;
+
+    if (statusMessageId) {
+      try {
+        await telegramRequest(this.token, "editMessageText", {
+          chat_id: message.chat.id,
+          message_id: statusMessageId,
+          text: finalText,
+          parse_mode: "HTML",
+          reply_markup: { inline_keyboard: [[{ text: "🔙 Voltar", callback_data: "admin:menu" }]] },
+        });
+      } catch (_e) {
+        await sendMessage(this.token, message.chat.id, finalText,
+          keyboard([btn("🔙 Voltar", "admin:menu")])
+        );
+      }
+    } else {
+      await sendMessage(this.token, message.chat.id, finalText,
+        keyboard([btn("🔙 Voltar", "admin:menu")])
+      );
+    }
   }
 
   // =============== GROUP GUARD ===============
