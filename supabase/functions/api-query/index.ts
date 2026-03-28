@@ -241,15 +241,26 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
   const mod = getModuleConfig(modules, normalizedType);
 
   // Check if query type is enabled (from DB)
+  // When disabled, return a "module_disabled" response (NOT an error)
+  // This allows the rest of the system (logging, stats, credits) to continue working normally
   if (mod && !mod.enabled) {
-    return { error: `🚫 Consulta "${normalizedType}" temporariamente desativada por manutenção do servidor.` };
+    return { 
+      module_disabled: true,
+      message: `🚫 Módulo "${normalizedType}" temporariamente desativado.`,
+      queryType: normalizedType,
+      queryInput: cleanInput
+    };
   }
 
   // If module not found in DB, check legacy fallback
   if (!mod) {
-    // Check old hardcoded map as fallback
     if (enabledQueryTypes[normalizedType] === false) {
-      return { error: `🚫 Consulta "${normalizedType}" temporariamente desativada por manutenção do servidor.` };
+      return { 
+        module_disabled: true,
+        message: `🚫 Módulo "${normalizedType}" temporariamente desativado.`,
+        queryType: normalizedType,
+        queryInput: cleanInput
+      };
     }
   }
 
@@ -453,8 +464,8 @@ Deno.serve(async (req) => {
       console.log(`Cache MISS for hash: ${queryHash.substring(0, 16)}...`);
       result = await handleQuery(queryRequest, supabase);
       
-      // Only cache successful results (not errors or not found)
-      if (!result.error && !result.notFound) {
+      // Only cache successful results (not errors, not found, or disabled modules)
+      if (!result.error && !result.notFound && !result.module_disabled) {
         await saveToCache(supabase, normalizedType, cleanInput, queryHash, result);
         console.log(`Saved to cache with TTL: ${getTTLHours(normalizedType)}h`);
       }
@@ -474,39 +485,41 @@ Deno.serve(async (req) => {
     }
 
     if (userId) {
+      // Log ALL queries including disabled modules (they still count as activity)
+      const isDisabled = result.module_disabled === true;
       await supabase.from("query_history").insert({
         user_id: userId,
         query_type: queryRequest.queryType,
         query_input: queryRequest.queryInput,
         query_result: result,
-        status: result.error ? "error" : "success",
+        status: result.error ? "error" : isDisabled ? "disabled" : "success",
       });
 
-      // Only count credits for non-cached results
+      // Count credits for all non-cached queries (including disabled - they still represent usage)
       if (!fromCache) {
         await supabase.from("api_usage_logs").insert({
           user_id: userId,
           query_type: queryRequest.queryType,
-          credits_used: 1,
+          credits_used: isDisabled ? 0 : 1,
         });
       }
     }
 
     const isNotFound = result.notFound === true;
+    const isDisabledModule = result.module_disabled === true;
     const isError = result.error && !isNotFound;
 
-    // Always return 200 to allow the bot to process the response
-    // The error information is in the response body
     return new Response(
       JSON.stringify({
         success: !isError,
         data: result,
         duration_ms: duration,
         fromCache,
+        module_disabled: isDisabledModule || undefined,
         error: isError ? result.error : undefined,
       }),
       {
-        status: 200, // Always 200 so callers can process the response
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );

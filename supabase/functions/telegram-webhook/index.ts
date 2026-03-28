@@ -1741,6 +1741,10 @@ function formatMultiPersonResult(records: PersonRecord[], botUsername?: string, 
 }
 
 function formatQueryResult(queryType: string, data: Record<string, unknown>, botUsername?: string, telegramUserName?: string): string {
+  if (data.module_disabled) {
+    return `⚠️ <b>Módulo desativado:</b> A consulta <code>${queryType}</code> está temporariamente indisponível.\n\n💡 Os demais módulos continuam funcionando normalmente.`;
+  }
+  
   if (data.error) {
     return `❌ <b>Erro:</b> ${data.error}`;
   }
