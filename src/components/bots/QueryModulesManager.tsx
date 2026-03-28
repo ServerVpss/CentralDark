@@ -44,7 +44,7 @@ export function QueryModulesManager() {
 
   const fetchModules = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("query_modules")
       .select("*")
       .order("category", { ascending: true })
@@ -65,7 +65,7 @@ export function QueryModulesManager() {
     const newValue = !mod.enabled;
     setSaving(mod.id);
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("query_modules")
       .update({ enabled: newValue, updated_at: new Date().toISOString() })
       .eq("id", mod.id);
@@ -84,7 +84,7 @@ export function QueryModulesManager() {
     if (!edited) return;
 
     setSaving(mod.id);
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("query_modules")
       .update({
         base_url: edited.base_url,
@@ -113,7 +113,7 @@ export function QueryModulesManager() {
     const categoryModules = modules.filter(m => m.category === category);
     setSaving(category);
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("query_modules")
       .update({ enabled: enable, updated_at: new Date().toISOString() })
       .in("id", categoryModules.map(m => m.id));
