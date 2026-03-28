@@ -2483,12 +2483,11 @@ class BotHandler {
       return;
     }
 
-    // Check if query type is enabled
+    // Check if query type is enabled - SILENTLY ignore if disabled
+    // This prevents the bot from responding when module is off,
+    // avoiding confusion with other bots in the group
     if (!enabledQueryTypes[queryType]) {
-      await sendMessage(this.token, chatId,
-        `🚫 <b>Consulta Indisponível</b>\n\n${queryTypeLabels[queryType] || queryType} está temporariamente desativada por manutenção do servidor.\n\nTente novamente mais tarde.`,
-        keyboard([btn("🔍 Outras Consultas", "menu:query"), btn("🏠 Menu", "menu:main")])
-      );
+      console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
 
@@ -3724,6 +3723,13 @@ class BotHandler {
 
     // Use actualInput for foto queries (CPF extracted from format)
     const inputForQuery = queryType === "foto" ? actualInput : queryInput;
+
+    // Check if module is enabled - SILENTLY ignore if disabled
+    // This prevents response when module is off, so other bots in the group aren't confused
+    if (!enabledQueryTypes[queryType]) {
+      console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
+      return;
+    }
 
     // Send processing message - show if searching all states
     const searchingAllStates = queryType === "foto" && !estado;
