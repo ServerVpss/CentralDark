@@ -241,15 +241,26 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
   const mod = getModuleConfig(modules, normalizedType);
 
   // Check if query type is enabled (from DB)
+  // When disabled, return a "module_disabled" response (NOT an error)
+  // This allows the rest of the system (logging, stats, credits) to continue working normally
   if (mod && !mod.enabled) {
-    return { error: `🚫 Consulta "${normalizedType}" temporariamente desativada por manutenção do servidor.` };
+    return { 
+      module_disabled: true,
+      message: `🚫 Módulo "${normalizedType}" temporariamente desativado.`,
+      queryType: normalizedType,
+      queryInput: cleanInput
+    };
   }
 
   // If module not found in DB, check legacy fallback
   if (!mod) {
-    // Check old hardcoded map as fallback
     if (enabledQueryTypes[normalizedType] === false) {
-      return { error: `🚫 Consulta "${normalizedType}" temporariamente desativada por manutenção do servidor.` };
+      return { 
+        module_disabled: true,
+        message: `🚫 Módulo "${normalizedType}" temporariamente desativado.`,
+        queryType: normalizedType,
+        queryInput: cleanInput
+      };
     }
   }
 
