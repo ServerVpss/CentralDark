@@ -84,9 +84,10 @@ export function BotStatusCard({ name, username, status, messages, users, botId, 
             <div
               className={cn(
                 "absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2",
-                status === "online" && "border-background bg-gradient-to-br from-emerald-400 to-green-500 animate-ping",
-                status === "offline" && "border-background bg-gradient-to-br from-slate-400 to-slate-500",
-                status === "error" && "border-background bg-gradient-to-br from-rose-400 to-red-500 shadow-rose-500/50"
+                !isActive && "border-background bg-gradient-to-br from-rose-400 to-red-500 animate-pulse shadow-rose-500/50",
+                isActive && status === "online" && "border-background bg-gradient-to-br from-emerald-400 to-green-500 animate-ping",
+                isActive && status === "offline" && "border-background bg-gradient-to-br from-slate-400 to-slate-500",
+                isActive && status === "error" && "border-background bg-gradient-to-br from-rose-400 to-red-500 shadow-rose-500/50"
               )}
             />
           </div>
