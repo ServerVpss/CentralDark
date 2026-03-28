@@ -4452,6 +4452,8 @@ class BotHandler {
         `• Texto (com formatação)\n` +
         `• Foto com legenda\n` +
         `• Vídeo com legenda\n` +
+        `• Áudio / Voz\n` +
+        `• GIF animado\n` +
         `• Documento\n\n` +
         `Use /cancelar para cancelar.`,
         keyboard([btn("❌ Cancelar", "broadcast:cancel")])
