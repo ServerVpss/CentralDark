@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -19,6 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const menuItems = [
   { 
@@ -26,76 +27,72 @@ const menuItems = [
     label: "Dashboard", 
     path: "/",
     gradient: "from-amber-500 to-orange-500",
-    glowColor: "amber"
   },
   { 
     icon: Bot, 
     label: "Meu Bot", 
     path: "/bots",
     gradient: "from-cyan-500 to-blue-500",
-    glowColor: "cyan"
   },
   { 
     icon: Users, 
     label: "Usuários", 
     path: "/telegram-users",
     gradient: "from-emerald-500 to-green-500",
-    glowColor: "emerald"
   },
   { 
     icon: CreditCard, 
     label: "Planos", 
     path: "/plans",
     gradient: "from-violet-500 to-purple-500",
-    glowColor: "violet"
   },
   { 
     icon: Wallet, 
     label: "Transações PIX", 
     path: "/pix",
     gradient: "from-green-500 to-emerald-500",
-    glowColor: "green"
   },
   { 
     icon: History, 
     label: "Consultas", 
     path: "/logs",
     gradient: "from-blue-500 to-indigo-500",
-    glowColor: "blue"
   },
   { 
     icon: Search, 
     label: "Testar", 
     path: "/consultas",
     gradient: "from-pink-500 to-rose-500",
-    glowColor: "pink"
   },
   { 
     icon: Shield, 
     label: "Segurança", 
     path: "/security",
     gradient: "from-red-500 to-orange-500",
-    glowColor: "red"
   },
   { 
     icon: Settings, 
     label: "Configurações", 
     path: "/settings",
     gradient: "from-slate-400 to-slate-500",
-    glowColor: "slate"
   },
 ];
 
 interface SidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
+  collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(false);
+export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsedChange }: SidebarProps) {
   const [activeBots, setActiveBots] = useState(0);
   const [activeSubscribers, setActiveSubscribers] = useState(0);
   const location = useLocation();
+
+  const setCollapsed = (value: boolean) => {
+    onCollapsedChange?.(value);
+  };
 
   // Fetch real data from database
   useEffect(() => {
@@ -117,7 +114,6 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
 
     fetchData();
 
-    // Subscribe to realtime updates
     const channel = supabase
       .channel("sidebar_stats")
       .on("postgres_changes", { event: "*", schema: "public", table: "telegram_bots" }, fetchData)
