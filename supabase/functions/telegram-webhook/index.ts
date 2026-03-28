@@ -3654,8 +3654,13 @@ class BotHandler {
     const multipleCommands = this.parseMultipleCommands(text);
     
     if (multipleCommands.length > 1) {
-      // Process multiple queries in parallel (max 5)
-      await this.handleMultipleQueries(message, multipleCommands.slice(0, this.MAX_CONCURRENT_QUERIES));
+      // Filter out disabled modules BEFORE processing
+      const enabledCommands = multipleCommands.filter(cmd => enabledQueryTypes[cmd.queryType] === true);
+      if (enabledCommands.length === 0) {
+        console.log(`Group multi-query: all ${multipleCommands.length} modules disabled. Ignoring silently.`);
+        return;
+      }
+      await this.handleMultipleQueries(message, enabledCommands.slice(0, this.MAX_CONCURRENT_QUERIES));
       return;
     }
 
@@ -3678,6 +3683,12 @@ class BotHandler {
 
     if (!queryType) {
       // Not a query command, ignore
+      return;
+    }
+
+    // Check if module is enabled FIRST - before any response
+    if (!enabledQueryTypes[queryType]) {
+      console.log(`Group query: type "${queryType}" is disabled. Ignoring silently (early check).`);
       return;
     }
 
@@ -4256,6 +4267,15 @@ class BotHandler {
     // Query type selection
     if (data.startsWith("query:")) {
       const queryType = data.replace("query:", "");
+      // Block disabled modules even via callback
+      if (!enabledQueryTypes[queryType]) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callbackQuery.id,
+          text: "⚠️ Este módulo está em manutenção.",
+          show_alert: true,
+        });
+        return;
+      }
       if (queryType === "foto") {
         await this.showStateSelection(chatId, messageId);
       } else {
