@@ -2434,7 +2434,7 @@ class BotHandler {
     // Only show enabled query types - hide disabled ones completely
     const qBtn = (label: string, data: string): InlineButton | null => {
       const qType = data.replace("query:", "");
-      const isEnabled = enabledQueryTypes[qType] !== false;
+      const isEnabled = isQueryTypeEnabled(qType);
       if (!isEnabled) return null;
       return btn(label, data);
     };
