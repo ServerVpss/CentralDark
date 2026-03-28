@@ -119,7 +119,14 @@ export async function deleteBot(botId: string): Promise<boolean> {
       body: { action: "deleteWebhook", botId },
     });
 
-    // Then delete from database
+    // Delete related records first (foreign key constraints)
+    await supabase.from("pending_payments").delete().eq("bot_id", botId);
+    await supabase.from("telegram_subscriptions").delete().eq("bot_id", botId);
+    await supabase.from("bot_analytics").delete().eq("bot_id", botId);
+    await supabase.from("bot_security_settings").delete().eq("bot_id", botId);
+    await supabase.from("bot_settings").delete().eq("bot_id", botId);
+
+    // Then delete the bot
     const { error } = await supabase
       .from("telegram_bots")
       .delete()
