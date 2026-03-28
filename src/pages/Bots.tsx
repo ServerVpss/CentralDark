@@ -204,9 +204,16 @@ export default function Bots() {
         bot_id: newBotNumericId,
       });
       if (success) {
-        toast.success("Token atualizado com sucesso!");
+        toast.success("Token atualizado! Sincronizando webhook...");
         setEditingTokenBotId(null);
         setEditTokenValue("");
+        // Sincronizar webhook com o novo token
+        try {
+          await syncBot(botId);
+          toast.success("Webhook sincronizado com sucesso!");
+        } catch {
+          toast.error("Token salvo, mas falha ao sincronizar webhook. Tente sincronizar manualmente.");
+        }
       }
     } catch {
       toast.error("Erro ao atualizar token");
