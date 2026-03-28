@@ -48,7 +48,7 @@ export default function BotSettings() {
   const { botId } = useParams<{ botId: string }>();
   const navigate = useNavigate();
   const { bots, loading: botsLoading } = useTelegramBots();
-  const { settings, loading: settingsLoading, updateSettings, addOwner, removeOwner, defaultTerms } = useBotSettings(botId || null);
+  const { settings, loading: settingsLoading, updateSettings, addOwner, removeOwner, defaultTerms, refetch: refetchSettings } = useBotSettings(botId || null);
 
   const [bot, setBot] = useState<TelegramBot | null>(null);
   const [saving, setSaving] = useState(false);
