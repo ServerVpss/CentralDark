@@ -2519,8 +2519,8 @@ class BotHandler {
 
     // Check if query type is enabled - SILENTLY ignore if disabled
     // This prevents the bot from responding when module is off,
-    // avoiding confusion with other bots in the group
-    if (!enabledQueryTypes[queryType]) {
+    // avoiding confusion with other bots no grupo
+    if (!isQueryTypeEnabled(queryType)) {
       console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
@@ -3490,7 +3490,10 @@ class BotHandler {
     if (queryState) {
       const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
       await this.clearConversationState(telegramUserId, "query");
-      // Passar o nome do perfil do Telegram do usuário
+      if (!isQueryTypeEnabled(queryType)) {
+        console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
+        return;
+      }
       const userFirstName = message.from?.first_name || 'usuário';
       await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName);
       return;
@@ -3681,7 +3684,7 @@ class BotHandler {
     
     if (multipleCommands.length > 1) {
       // Filter out disabled modules BEFORE processing
-      const enabledCommands = multipleCommands.filter(cmd => enabledQueryTypes[cmd.queryType] === true);
+      const enabledCommands = multipleCommands.filter(cmd => isQueryTypeEnabled(cmd.queryType));
       if (enabledCommands.length === 0) {
         console.log(`Group multi-query: all ${multipleCommands.length} modules disabled. Ignoring silently.`);
         return;
@@ -3713,7 +3716,7 @@ class BotHandler {
     }
 
     // Check if module is enabled FIRST - before any response
-    if (!enabledQueryTypes[queryType]) {
+    if (!isQueryTypeEnabled(queryType)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently (early check).`);
       return;
     }
@@ -3771,7 +3774,7 @@ class BotHandler {
 
     // Check if module is enabled - SILENTLY ignore if disabled
     // This prevents response when module is off, so other bots in the group aren't confused
-    if (!enabledQueryTypes[queryType]) {
+    if (!isQueryTypeEnabled(queryType)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
