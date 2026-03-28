@@ -166,6 +166,32 @@ const enabledQueryTypes: Record<string, boolean> = {
   bin: false, cns: false,
 };
 
+const queryTypeAliases: Record<string, string> = {
+  tel: "telefone",
+  telefone: "telefone",
+  placa2: "placa_completa",
+  nacional: "nacional",
+  foto: "foto",
+};
+
+function normalizeQueryType(queryType: string): string {
+  return queryTypeAliases[queryType] || queryType;
+}
+
+function isQueryTypeEnabled(queryType: string): boolean {
+  const normalizedType = normalizeQueryType(queryType);
+
+  if (normalizedType === "foto") {
+    return enabledQueryTypes.foto === true;
+  }
+
+  if (normalizedType === "nacional") {
+    return enabledQueryTypes.nacional === true;
+  }
+
+  return enabledQueryTypes[normalizedType] === true;
+}
+
 const queryTypeLabels: Record<string, string> = {
   cpf: "👤 CPF", cnpj: "🏢 CNPJ", placa: "🚗 Placa", placa_completa: "🚗 Placa Completa",
   telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",
