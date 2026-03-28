@@ -21,8 +21,8 @@ SELECT cron.schedule(
   '* * * * *',
   $$
   SELECT net.http_post(
-    url := 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/fake-engagement',
-    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE"}'::jsonb,
+    url := 'https://otifzcjioyjmwmgtxbtj.supabase.co/functions/v1/fake-engagement',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90aWZ6Y2ppb3lqbXdtZ3R4YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2ODEyNDAsImV4cCI6MjA5MDI1NzI0MH0.r8EIaGAPxPjpyMaF0C444gXzyj-dRKIZqwaCgRM5s9c"}'::jsonb,
     body := '{}'::jsonb
   ) AS request_id;
   $$
@@ -41,8 +41,8 @@ SELECT cron.schedule(
   '* * * * *',
   $$
   SELECT net.http_post(
-    url := 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/scheduled-broadcasts',
-    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE"}'::jsonb,
+    url := 'https://otifzcjioyjmwmgtxbtj.supabase.co/functions/v1/scheduled-broadcasts',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90aWZ6Y2ppb3lqbXdtZ3R4YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2ODEyNDAsImV4cCI6MjA5MDI1NzI0MH0.r8EIaGAPxPjpyMaF0C444gXzyj-dRKIZqwaCgRM5s9c"}'::jsonb,
     body := '{}'::jsonb
   ) AS request_id;
   $$
@@ -61,8 +61,8 @@ SELECT cron.schedule(
   '*/5 * * * *',
   $$
   SELECT net.http_post(
-    url := 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/health-check',
-    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE"}'::jsonb,
+    url := 'https://otifzcjioyjmwmgtxbtj.supabase.co/functions/v1/health-check',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90aWZ6Y2ppb3lqbXdtZ3R4YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2ODEyNDAsImV4cCI6MjA5MDI1NzI0MH0.r8EIaGAPxPjpyMaF0C444gXzyj-dRKIZqwaCgRM5s9c"}'::jsonb,
     body := '{}'::jsonb
   ) AS request_id;
   $$
@@ -81,8 +81,8 @@ SELECT cron.schedule(
   '*/2 * * * *',
   $$
   SELECT net.http_post(
-    url := 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/efi-poll-pending',
-    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE"}'::jsonb,
+    url := 'https://otifzcjioyjmwmgtxbtj.supabase.co/functions/v1/efi-poll-pending',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90aWZ6Y2ppb3lqbXdtZ3R4YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2ODEyNDAsImV4cCI6MjA5MDI1NzI0MH0.r8EIaGAPxPjpyMaF0C444gXzyj-dRKIZqwaCgRM5s9c"}'::jsonb,
     body := '{}'::jsonb
   ) AS request_id;
   $$
@@ -101,8 +101,8 @@ SELECT cron.schedule(
   '*/10 * * * *',
   $$
   SELECT net.http_post(
-    url := 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/provider-ping',
-    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE"}'::jsonb,
+    url := 'https://otifzcjioyjmwmgtxbtj.supabase.co/functions/v1/provider-ping',
+    headers := '{"Content-Type": "application/json", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90aWZ6Y2ppb3lqbXdtZ3R4YnRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2ODEyNDAsImV4cCI6MjA5MDI1NzI0MH0.r8EIaGAPxPjpyMaF0C444gXzyj-dRKIZqwaCgRM5s9c"}'::jsonb,
     body := '{}'::jsonb
   ) AS request_id;
   $$
