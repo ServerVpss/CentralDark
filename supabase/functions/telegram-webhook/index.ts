@@ -3184,15 +3184,13 @@ class BotHandler {
         } catch (_e) { /* ignore */ }
 
         await sendMessage(this.token, this.settings.group_chat_id,
-          `🔥 <b>FISCAL</b>\n` +
-          `🎉 <b>NOVA ASSINATURA ATIVADA!</b>\n\n` +
-          `👤 <b>Usuário:</b> ${display}\n` +
-          `📦 <b>Plano:</b> ${planName}\n` +
-          `⏰ <b>Duração:</b> ${planDays} dia(s)\n` +
-          `💵 <b>Valor:</b> R$ ${Number(value).toFixed(2)}\n` +
-          `🆔 <b>ID:</b> <code>${txid}</code>\n\n` +
-          `🎊 <b>Bem-vindo(a) ao grupo!</b>`,
-          keyboard([btnUrl("🛒 COMPRAR CONSULTAS", `https://t.me/${this.bot.bot_username}?start=assinar`)])
+          `🔥 <b>NOVA ASSINATURA!</b>\n\n` +
+          `┌ 👤 ${display}\n` +
+          `├ 📦 ${planName} • ${planDays}d\n` +
+          `├ 💵 R$ ${Number(value).toFixed(2)}\n` +
+          `└ 🆔 <code>${txid.substring(0, 16)}...</code>\n\n` +
+          `🎊 <b>Bem-vindo(a)!</b>`,
+          keyboard([btnUrl("🛒 ASSINAR", `https://t.me/${this.bot.bot_username}?start=assinar`)])
         );
       } catch (e) {
         console.error("Failed to announce in group:", e);
