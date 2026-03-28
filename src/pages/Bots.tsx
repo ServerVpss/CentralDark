@@ -186,6 +186,35 @@ export default function Bots() {
     }
   };
 
+  const handleSaveToken = async (botId: string) => {
+    if (!editTokenValue.trim()) {
+      toast.error("Token não pode estar vazio");
+      return;
+    }
+    if (!validateToken(editTokenValue)) {
+      toast.error("Formato de token inválido");
+      return;
+    }
+    setIsSavingToken(true);
+    try {
+      const parts = editTokenValue.split(":");
+      const newBotNumericId = parts.length === 2 ? Number(parts[0]) : undefined;
+      const success = await updateBot(botId, { 
+        token: editTokenValue,
+        bot_id: newBotNumericId,
+      });
+      if (success) {
+        toast.success("Token atualizado com sucesso!");
+        setEditingTokenBotId(null);
+        setEditTokenValue("");
+      }
+    } catch {
+      toast.error("Erro ao atualizar token");
+    } finally {
+      setIsSavingToken(false);
+    }
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success("Copiado!");
