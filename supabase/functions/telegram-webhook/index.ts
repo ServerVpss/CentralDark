@@ -2956,10 +2956,6 @@ class BotHandler {
         [btn("🔙 Voltar", "admin:menu")]
       )
     );
-        [btn("❌ Apenas Expirados", "broadcast:expired")],
-        [btn("🔙 Voltar", "admin:menu")]
-      )
-    );
   }
 
   // =============== PIX PAYMENT ===============
