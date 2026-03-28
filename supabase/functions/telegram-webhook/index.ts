@@ -154,12 +154,13 @@ const nexfutureEndpoints: Record<string, string> = {
 };
 
 // =============== QUERY STATUS MAP ===============
-// Servidores offline - todas desativadas para evitar falhas no bot
-// Para reativar, basta trocar para true quando o servidor voltar
+// NexFuture (porta 25589): OFFLINE - Connection refused
+// TConect Score (porta 3029): ONLINE
+// TConect Foto (porta 3030): ONLINE
 const enabledQueryTypes: Record<string, boolean> = {
   cpf: false, cnpj: false, placa: false, placa_completa: false,
   telefone: false, email: false, cep: false, nome: false,
-  score: false, foto: false, nacional: false,
+  score: true, foto: true, nacional: true,
   rg: false, cnh: false, pix: false,
   parentes: false, empregos: false, chassi: false,
   renavam: false, motor: false, frota: false,
