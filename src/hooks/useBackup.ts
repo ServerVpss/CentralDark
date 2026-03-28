@@ -240,6 +240,17 @@ export function useBackup() {
         bot_analytics: tableData.bot_analytics || [],
         payment_history: tableData.payment_history || [],
         telegram_messages: tableData.telegram_messages || [],
+        api_providers: tableData.api_providers || [],
+        api_usage_logs: tableData.api_usage_logs || [],
+        audit_logs: tableData.audit_logs || [],
+        bot_conversation_states: tableData.bot_conversation_states || [],
+        edge_function_health: tableData.edge_function_health || [],
+        paginated_results: tableData.paginated_results || [],
+        processed_updates: tableData.processed_updates || [],
+        query_cache: tableData.query_cache || [],
+        scheduled_broadcasts: tableData.scheduled_broadcasts || [],
+        telegram_user_terms: tableData.telegram_user_terms || [],
+        user_roles: tableData.user_roles || [],
       };
 
       // Calculate metadata
@@ -402,20 +413,31 @@ export function useBackup() {
       // Order matters for foreign keys
       const tableOrder = [
         "profiles",
+        "user_roles",
+        "api_providers",
         "telegram_bots",
         "bot_settings",
         "bot_security_settings",
+        "bot_conversation_states",
         "subscription_plans",
         "payment_gateways",
         "payment_gateway_settings",
         "engagement_messages",
         "telegram_subscriptions",
+        "telegram_user_terms",
         "pix_transactions",
         "pending_payments",
         "query_history",
+        "query_cache",
         "bot_analytics",
         "payment_history",
         "telegram_messages",
+        "api_usage_logs",
+        "audit_logs",
+        "edge_function_health",
+        "paginated_results",
+        "processed_updates",
+        "scheduled_broadcasts",
       ] as const;
 
       // If replace mode, delete existing data first (reverse order for FK)
