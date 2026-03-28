@@ -4055,6 +4055,11 @@ class BotHandler {
 
     // Quick CPF query from CEP results
     if (data.startsWith("qcpf:")) {
+      if (!isQueryTypeEnabled("cpf")) {
+        console.log(`Quick CPF callback blocked because module "cpf" is disabled.`);
+        return;
+      }
+
       const cpf = data.replace("qcpf:", "");
       const telegramUserName = callback.from?.first_name || 'usuário';
       
@@ -4098,6 +4103,11 @@ class BotHandler {
       
       if (!queryType || !queryInput) {
         await answerCallback(this.token, callback.id);
+        return;
+      }
+
+      if (!isQueryTypeEnabled(queryType)) {
+        console.log(`PDF callback blocked because module "${queryType}" is disabled.`);
         return;
       }
       
@@ -4185,6 +4195,11 @@ class BotHandler {
       
       if (!queryType || !queryInput) {
         await answerCallback(this.token, callback.id);
+        return;
+      }
+
+      if (!isQueryTypeEnabled(queryType)) {
+        console.log(`TXT callback blocked because module "${queryType}" is disabled.`);
         return;
       }
       
@@ -4297,9 +4312,9 @@ class BotHandler {
     if (data.startsWith("query:")) {
       const queryType = data.replace("query:", "");
       // Block disabled modules even via callback
-      if (!enabledQueryTypes[queryType]) {
+      if (!isQueryTypeEnabled(queryType)) {
         await telegramRequest(this.token, "answerCallbackQuery", {
-          callback_query_id: callbackQuery.id,
+          callback_query_id: callback.id,
           text: "⚠️ Este módulo está em manutenção.",
           show_alert: true,
         });
@@ -4315,6 +4330,10 @@ class BotHandler {
 
     // State selection for foto
     if (data.startsWith("state:")) {
+      if (!isQueryTypeEnabled("foto")) {
+        console.log(`Photo state callback blocked because module "foto" is disabled.`);
+        return;
+      }
       const estado = data.replace("state:", "");
       await this.requestQueryInput(chatId, telegramUserId, "foto", estado);
       return;
