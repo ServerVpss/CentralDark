@@ -48,7 +48,7 @@ export default function BotSettings() {
   const { botId } = useParams<{ botId: string }>();
   const navigate = useNavigate();
   const { bots, loading: botsLoading } = useTelegramBots();
-  const { settings, loading: settingsLoading, updateSettings, addOwner, removeOwner, defaultTerms } = useBotSettings(botId || null);
+  const { settings, loading: settingsLoading, updateSettings, addOwner, removeOwner, defaultTerms, refetch: refetchSettings } = useBotSettings(botId || null);
 
   const [bot, setBot] = useState<TelegramBot | null>(null);
   const [saving, setSaving] = useState(false);
@@ -461,9 +461,25 @@ export default function BotSettings() {
                           variant="ghost" 
                           size="sm" 
                           className="flex-1 text-destructive hover:text-destructive"
-                          onClick={() => {
-                            setGroupChatId("");
-                            setGroupUrl("");
+                          onClick={async () => {
+                            try {
+                              const { error } = await supabase
+                                .from("bot_settings")
+                                .update({ 
+                                  group_chat_id: null, 
+                                  group_title: null, 
+                                  group_link: null,
+                                  group_photo_url: null,
+                                })
+                                .eq("bot_id", botId);
+                              if (error) throw error;
+                              setGroupChatId("");
+                              setGroupUrl("");
+                              toast.success("Grupo VIP desconectado com sucesso!");
+                              refetchSettings();
+                            } catch (err: any) {
+                              toast.error("Erro ao desconectar: " + err.message);
+                            }
                           }}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
