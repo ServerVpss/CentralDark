@@ -3222,7 +3222,7 @@ class BotHandler {
 
     for (const userId of userIds) {
       try {
-        if (message.photo || message.video || message.document) {
+        if (message.photo || message.video || message.document || message.audio || message.voice || message.animation || message.video_note || message.sticker) {
           await telegramRequest(this.token, "copyMessage", {
             chat_id: userId,
             from_chat_id: message.chat.id,
