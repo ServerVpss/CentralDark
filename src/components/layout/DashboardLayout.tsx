@@ -11,6 +11,7 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -23,12 +24,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       )}
 
       {/* Sidebar */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        collapsed={sidebarCollapsed}
+        onCollapsedChange={setSidebarCollapsed}
+      />
 
       {/* Main Content */}
       <div className={cn(
         "transition-all duration-300",
-        "lg:ml-64" // Only add margin on desktop
+        sidebarCollapsed ? "lg:ml-[72px]" : "lg:ml-72"
       )}>
         {/* Mobile Header with Menu Button */}
         <div className="lg:hidden sticky top-0 z-20 flex items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 py-3">
