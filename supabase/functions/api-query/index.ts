@@ -45,63 +45,55 @@ const cacheTTL: Record<string, number> = {
   cns: 24,
 };
 
-// API Provider configurations
-const providers: Record<string, ApiProvider> = {
-  nexfuture: {
-    baseUrl: "http://nxf-2.nexfuture.com.br",
-    port: 25589,
-  },
-  nexfuture_cpf: {
-    baseUrl: "http://nxf-2.nexfuture.com.br",
-    port: 25594,
-  },
-  tconect_score: {
-    baseUrl: "http://node.tconect.xyz",
-    port: 3036,
-  },
-  tconect_placa: {
-    baseUrl: "http://node.tconect.xyz",
-    port: 3041,
-  },
-  tconect_foto: {
-    baseUrl: "http://node.tconect.xyz",
-    port: 3030,
-  },
-};
+// Dynamic provider/module loading from DB
+interface DbModule {
+  module_key: string;
+  enabled: boolean;
+  base_url: string;
+  port: number;
+  endpoint: string;
+  query_param: string;
+  provider: string;
+}
 
-// =============== QUERY STATUS MAP ===============
-// Servidores offline - todas desativadas para evitar falhas
-// Para reativar, basta trocar para true quando o servidor voltar
-const enabledQueryTypes: Record<string, boolean> = {
-  cpf: false, cnpj: false, placa: false, placa_completa: false,
-  telefone: false, email: false, cep: false, nome: false,
-  score: false, foto: false, nacional: false,
-  rg: false, cnh: false, pix: false,
-  parentes: false, empregos: false, chassi: false,
-  renavam: false, motor: false, frota: false,
-  bin: false, cns: false,
-};
+// Cache modules in memory for 60 seconds
+let cachedModules: DbModule[] | null = null;
+let cacheTimestamp = 0;
+const MODULE_CACHE_TTL = 60_000; // 60s
 
-// NexFuture endpoints
+async function getModules(supabase: ReturnType<typeof createClient>): Promise<DbModule[]> {
+  const now = Date.now();
+  if (cachedModules && (now - cacheTimestamp) < MODULE_CACHE_TTL) {
+    return cachedModules;
+  }
+
+  const { data, error } = await supabase
+    .from("query_modules")
+    .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
+
+  if (error) {
+    console.error("Error loading modules from DB:", error);
+    // Fallback: return cached or empty
+    return cachedModules || [];
+  }
+
+  cachedModules = (data || []) as DbModule[];
+  cacheTimestamp = now;
+  return cachedModules;
+}
+
+function getModuleConfig(modules: DbModule[], key: string): DbModule | null {
+  return modules.find(m => m.module_key === key) || null;
+}
+
+// Fallback NexFuture endpoints (used only if DB is empty)
 const nexfutureEndpoints: Record<string, string> = {
-  cpf: "/cpf",
-  cnpj: "/cnpj",
-  placa: "/placa",
-  telefone: "/telefone",
-  rg: "/rg",
-  cns: "/cns",
-  cnh: "/cnh",
-  nome: "/nome",
-  parentes: "/parentes",
-  empregos: "/empregos",
-  email: "/email",
-  cep: "/cep",
-  pix: "/pix",
-  chassi: "/chassi",
-  renavam: "/renavam",
-  motor: "/motor",
-  frota: "/frota",
-  bin: "/bin",
+  cpf: "/cpf", cnpj: "/cnpj", placa: "/placa",
+  telefone: "/telefone", rg: "/rg", cns: "/cns",
+  cnh: "/cnh", nome: "/nome", parentes: "/parentes",
+  empregos: "/empregos", email: "/email", cep: "/cep",
+  pix: "/pix", chassi: "/chassi", renavam: "/renavam",
+  motor: "/motor", frota: "/frota", bin: "/bin",
 };
 
 // Brazilian states for national photo search
