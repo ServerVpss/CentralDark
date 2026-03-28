@@ -45,63 +45,55 @@ const cacheTTL: Record<string, number> = {
   cns: 24,
 };
 
-// API Provider configurations
-const providers: Record<string, ApiProvider> = {
-  nexfuture: {
-    baseUrl: "http://nxf-2.nexfuture.com.br",
-    port: 25589,
-  },
-  nexfuture_cpf: {
-    baseUrl: "http://nxf-2.nexfuture.com.br",
-    port: 25594,
-  },
-  tconect_score: {
-    baseUrl: "http://node.tconect.xyz",
-    port: 3036,
-  },
-  tconect_placa: {
-    baseUrl: "http://node.tconect.xyz",
-    port: 3041,
-  },
-  tconect_foto: {
-    baseUrl: "http://node.tconect.xyz",
-    port: 3030,
-  },
-};
+// Dynamic provider/module loading from DB
+interface DbModule {
+  module_key: string;
+  enabled: boolean;
+  base_url: string;
+  port: number;
+  endpoint: string;
+  query_param: string;
+  provider: string;
+}
 
-// =============== QUERY STATUS MAP ===============
-// Servidores offline - todas desativadas para evitar falhas
-// Para reativar, basta trocar para true quando o servidor voltar
-const enabledQueryTypes: Record<string, boolean> = {
-  cpf: false, cnpj: false, placa: false, placa_completa: false,
-  telefone: false, email: false, cep: false, nome: false,
-  score: false, foto: false, nacional: false,
-  rg: false, cnh: false, pix: false,
-  parentes: false, empregos: false, chassi: false,
-  renavam: false, motor: false, frota: false,
-  bin: false, cns: false,
-};
+// Cache modules in memory for 60 seconds
+let cachedModules: DbModule[] | null = null;
+let cacheTimestamp = 0;
+const MODULE_CACHE_TTL = 60_000; // 60s
 
-// NexFuture endpoints
+async function getModules(supabase: ReturnType<typeof createClient>): Promise<DbModule[]> {
+  const now = Date.now();
+  if (cachedModules && (now - cacheTimestamp) < MODULE_CACHE_TTL) {
+    return cachedModules;
+  }
+
+  const { data, error } = await supabase
+    .from("query_modules")
+    .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
+
+  if (error) {
+    console.error("Error loading modules from DB:", error);
+    // Fallback: return cached or empty
+    return cachedModules || [];
+  }
+
+  cachedModules = (data || []) as DbModule[];
+  cacheTimestamp = now;
+  return cachedModules;
+}
+
+function getModuleConfig(modules: DbModule[], key: string): DbModule | null {
+  return modules.find(m => m.module_key === key) || null;
+}
+
+// Fallback NexFuture endpoints (used only if DB is empty)
 const nexfutureEndpoints: Record<string, string> = {
-  cpf: "/cpf",
-  cnpj: "/cnpj",
-  placa: "/placa",
-  telefone: "/telefone",
-  rg: "/rg",
-  cns: "/cns",
-  cnh: "/cnh",
-  nome: "/nome",
-  parentes: "/parentes",
-  empregos: "/empregos",
-  email: "/email",
-  cep: "/cep",
-  pix: "/pix",
-  chassi: "/chassi",
-  renavam: "/renavam",
-  motor: "/motor",
-  frota: "/frota",
-  bin: "/bin",
+  cpf: "/cpf", cnpj: "/cnpj", placa: "/placa",
+  telefone: "/telefone", rg: "/rg", cns: "/cns",
+  cnh: "/cnh", nome: "/nome", parentes: "/parentes",
+  empregos: "/empregos", email: "/email", cep: "/cep",
+  pix: "/pix", chassi: "/chassi", renavam: "/renavam",
+  motor: "/motor", frota: "/frota", bin: "/bin",
 };
 
 // Brazilian states for national photo search
@@ -237,41 +229,57 @@ async function fetchFromProvider(
   }
 }
 
-async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> {
+async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof createClient>): Promise<Record<string, unknown>> {
   const { queryType, queryInput, estado } = req;
   const normalizedType = queryType.toLowerCase();
   const cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
 
   console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
 
-  // Check if query type is enabled
-  if (enabledQueryTypes[normalizedType] === false) {
+  // Load modules from DB
+  const modules = await getModules(supabase);
+  const mod = getModuleConfig(modules, normalizedType);
+
+  // Check if query type is enabled (from DB)
+  if (mod && !mod.enabled) {
     return { error: `🚫 Consulta "${normalizedType}" temporariamente desativada por manutenção do servidor.` };
   }
 
-  // NexFuture queries
-  if (nexfutureEndpoints[normalizedType]) {
-    const endpoint = nexfutureEndpoints[normalizedType];
-    // CPF usa provider específico com porta 25594
-    const provider = normalizedType === "cpf" ? providers.nexfuture_cpf : providers.nexfuture;
-    return await fetchFromProvider(provider, endpoint, normalizedType, cleanInput);
+  // If module not found in DB, check legacy fallback
+  if (!mod) {
+    // Check old hardcoded map as fallback
+    if (enabledQueryTypes[normalizedType] === false) {
+      return { error: `🚫 Consulta "${normalizedType}" temporariamente desativada por manutenção do servidor.` };
+    }
+  }
+
+  // Build provider from DB module config
+  const buildProvider = (m: DbModule): ApiProvider => ({
+    baseUrl: m.base_url,
+    port: m.port,
+  });
+
+  // Standard queries (CPF, CNPJ, telefone, etc.) - use DB config
+  if (mod && nexfutureEndpoints[normalizedType]) {
+    const provider = buildProvider(mod);
+    return await fetchFromProvider(provider, mod.endpoint, mod.query_param, cleanInput);
   }
 
   // TConect Score - enriquecido com dados do CPF (parallelized)
   if (normalizedType === "score") {
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    const scoreMod = mod || { base_url: "http://node.tconect.xyz", port: 3036, endpoint: "/score", query_param: "cpf" };
+    const cpfMod = getModuleConfig(modules, "cpf") || { base_url: "http://nxf-2.nexfuture.com.br", port: 25594, endpoint: "/cpf", query_param: "cpf" };
     
     const cpfCacheKey = `cpf:${cleanInput}`;
     const cpfCacheHash = await generateHash(cpfCacheKey, "");
-    const cpfCacheResult = await checkCache(supabaseClient, cpfCacheHash);
+    const cpfCacheResult = await checkCache(supabase, cpfCacheHash);
 
-    // Parallel: fetch Score + CPF data at the same time (if no cache)
-    const scorePromise = fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
+    const scoreProvider: ApiProvider = { baseUrl: scoreMod.base_url, port: scoreMod.port };
+    const cpfProvider: ApiProvider = { baseUrl: cpfMod.base_url, port: cpfMod.port };
+
+    const scorePromise = fetchFromProvider(scoreProvider, scoreMod.endpoint, scoreMod.query_param || "cpf", cleanInput);
     const cpfPromise = (!cpfCacheResult.hit)
-      ? fetchFromProvider(providers.nexfuture_cpf, "/cpf", "cpf", cleanInput)
+      ? fetchFromProvider(cpfProvider, cpfMod.endpoint, cpfMod.query_param || "cpf", cleanInput)
       : Promise.resolve(null);
 
     const [scoreResult, cpfFreshResult] = await Promise.all([scorePromise, cpfPromise]);
@@ -279,7 +287,6 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     let cpfData: string | null = null;
     
     if (cpfCacheResult.hit && cpfCacheResult.data) {
-      console.log("Using CPF data from cache for score enrichment");
       cpfData = typeof cpfCacheResult.data.data === "string" 
         ? cpfCacheResult.data.data 
         : JSON.stringify(cpfCacheResult.data);
@@ -310,25 +317,25 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
 
   // TConect Placa Completa
   if (normalizedType === "placa_completa" || normalizedType === "placa2") {
-    return await fetchFromProvider(providers.tconect_placa, "/placa1", "placa", cleanInput);
+    const placaMod = getModuleConfig(modules, "placa_completa") || { base_url: "http://node.tconect.xyz", port: 3041, endpoint: "/placa1", query_param: "placa" };
+    const provider: ApiProvider = { baseUrl: placaMod.base_url, port: placaMod.port };
+    return await fetchFromProvider(provider, placaMod.endpoint, placaMod.query_param || "placa", cleanInput);
   }
 
   // TConect Foto (single state)
   if (normalizedType === "foto" && estado) {
-    return await fetchFromProvider(
-      providers.tconect_foto,
-      "/foto",
-      "cpf",
-      cleanInput,
-      { estado: estado.toUpperCase() }
-    );
+    const fotoMod = getModuleConfig(modules, "foto") || { base_url: "http://node.tconect.xyz", port: 3030, endpoint: "/foto", query_param: "cpf" };
+    const provider: ApiProvider = { baseUrl: fotoMod.base_url, port: fotoMod.port };
+    return await fetchFromProvider(provider, fotoMod.endpoint, fotoMod.query_param || "cpf", cleanInput, { estado: estado.toUpperCase() });
   }
 
-  // TConect Nacional (search all states for photo) - also handles /foto without estado
+  // TConect Nacional (search all states for photo)
   if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
+    const fotoMod = getModuleConfig(modules, "foto") || { base_url: "http://node.tconect.xyz", port: 3030, endpoint: "/foto", query_param: "cpf" };
+    const provider: ApiProvider = { baseUrl: fotoMod.base_url, port: fotoMod.port };
+    
     console.log("Starting national photo search across all states...");
     
-    // Priority states first (most populated), then rest
     const priorityStates = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "MA", "ES", "PI"];
     const otherStates = brazilianStates.filter(s => !priorityStates.includes(s));
     const orderedStates = [...priorityStates, ...otherStates];
@@ -338,18 +345,12 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     
     const batchSize = 5;
     for (let i = 0; i < orderedStates.length; i += batchSize) {
-      if (foundResult) break; // Early exit if found
+      if (foundResult) break;
       
       const batch = orderedStates.slice(i, i + batchSize);
       const batchResults = await Promise.all(
         batch.map(async (state) => {
-          const result = await fetchFromProvider(
-            providers.tconect_foto,
-            "/foto",
-            "cpf",
-            cleanInput,
-            { estado: state }
-          );
+          const result = await fetchFromProvider(provider, fotoMod.endpoint, fotoMod.query_param || "cpf", cleanInput, { estado: state });
           return { state, result };
         })
       );
@@ -365,19 +366,12 @@ async function handleQuery(req: QueryRequest): Promise<Record<string, unknown>> 
     }
     
     if (foundResult && foundState) {
-      return {
-        ...foundResult,
-        cpf: cleanInput,
-        estado_encontrado: foundState,
-      };
+      return { ...foundResult, cpf: cleanInput, estado_encontrado: foundState };
     }
     
     return {
-      cpf: cleanInput,
-      estados_encontrados: [],
-      total_fotos: 0,
-      foto: null,
-      message: "Foto não encontrada nos estados pesquisados",
+      cpf: cleanInput, estados_encontrados: [], total_fotos: 0,
+      foto: null, message: "Foto não encontrada nos estados pesquisados",
     };
   }
 
@@ -457,7 +451,7 @@ Deno.serve(async (req) => {
     } else {
       // CACHE MISS - fetch from external API
       console.log(`Cache MISS for hash: ${queryHash.substring(0, 16)}...`);
-      result = await handleQuery(queryRequest);
+      result = await handleQuery(queryRequest, supabase);
       
       // Only cache successful results (not errors or not found)
       if (!result.error && !result.notFound) {

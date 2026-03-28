@@ -39,6 +39,7 @@ import { MessageEffectSettings } from "@/components/bots/MessageEffectSettings";
 import { BroadcastDialog } from "@/components/bots/BroadcastDialog";
 import { FakeEngagementSettings } from "@/components/bots/FakeEngagementSettings";
 import { EngagementMessagesManager } from "@/components/bots/EngagementMessagesManager";
+import { QueryModulesManager } from "@/components/bots/QueryModulesManager";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
 import { useBotSettings, MessageEffectType } from "@/hooks/useBotSettings";
@@ -275,10 +276,14 @@ export default function BotSettings() {
         </div>
 
         <Tabs defaultValue="general" className="w-full">
-          <TabsList className="grid w-full max-w-lg grid-cols-3">
+          <TabsList className="grid w-full max-w-2xl grid-cols-4">
             <TabsTrigger value="general" className="gap-2">
               <Settings className="h-4 w-4" />
               Configurações
+            </TabsTrigger>
+            <TabsTrigger value="modules" className="gap-2">
+              <Zap className="h-4 w-4" />
+              Módulos
             </TabsTrigger>
             <TabsTrigger value="engagement" className="gap-2">
               <Sparkles className="h-4 w-4" />
@@ -643,6 +648,10 @@ export default function BotSettings() {
               onAutoSave={autoSaveToggle}
             />
             <EngagementMessagesManager botId={botId || ""} />
+          </TabsContent>
+
+          <TabsContent value="modules" className="mt-6">
+            <QueryModulesManager />
           </TabsContent>
 
           <TabsContent value="payments" className="mt-6">
