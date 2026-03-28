@@ -408,20 +408,31 @@ export default function Bots() {
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
                               <Bot className="h-6 w-6 text-primary" />
                             </div>
-                            {bot.health_status === "online" && (
+                            {bot.is_active && bot.health_status === "online" && (
                               <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-success animate-pulse-glow" />
+                            )}
+                            {!bot.is_active && (
+                              <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-destructive animate-pulse" />
                             )}
                           </div>
                           <div className="min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
                               <h3 className="font-semibold truncate">{bot.name}</h3>
-                              {getStatusBadge(bot)}
+                              {!bot.is_active ? (
+                                <Badge variant="destructive" className="text-xs">Desligado</Badge>
+                              ) : (
+                                getStatusBadge(bot)
+                              )}
                             </div>
                             <p className="text-sm text-muted-foreground truncate">
                               @{bot.bot_username || "Não sincronizado"}
                             </p>
                             <div className="flex items-center gap-2 mt-1 flex-wrap">
-                              {bot.webhook_active ? (
+                              {!bot.is_active ? (
+                                <span className="text-xs text-destructive flex items-center gap-1">
+                                  <WifiOff className="h-3 w-3" /> Bot desligado
+                                </span>
+                              ) : bot.webhook_active ? (
                                 <span className="text-xs text-success flex items-center gap-1">
                                   <Wifi className="h-3 w-3" /> Webhook ativo
                                 </span>
@@ -435,6 +446,23 @@ export default function Bots() {
                         </div>
 
                         <div className="flex items-center gap-2 justify-end">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTogglePower(bot);
+                            }}
+                            disabled={togglingBotId === bot.id}
+                            className={bot.is_active ? "text-destructive hover:text-destructive" : "text-success hover:text-success"}
+                            title={bot.is_active ? "Desligar Bot" : "Ligar Bot"}
+                          >
+                            {togglingBotId === bot.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Power className="h-4 w-4" />
+                            )}
+                          </Button>
                           <Button
                             variant="ghost"
                             size="icon"
