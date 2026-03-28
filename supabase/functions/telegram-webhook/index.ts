@@ -2405,14 +2405,15 @@ class BotHandler {
   async showQueryMenu(chatId: number, messageId: number) {
     const text = `🔍 <b>Consultas Disponíveis</b>\n\nEscolha o tipo de consulta:`;
 
-    // Helper to mark disabled queries
-    const qBtn = (label: string, data: string) => {
+    // Only show enabled query types - hide disabled ones completely
+    const qBtn = (label: string, data: string): InlineButton | null => {
       const qType = data.replace("query:", "");
       const isEnabled = enabledQueryTypes[qType] !== false;
-      return btn(isEnabled ? label : `${label} 🔴`, data);
+      if (!isEnabled) return null;
+      return btn(label, data);
     };
 
-    const buttons: InlineButton[][] = [
+    const allRows: (InlineButton | null)[][] = [
       [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
       [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa Completa", "query:placa_completa")],
       [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
@@ -2421,11 +2422,18 @@ class BotHandler {
       [qBtn("🪪 RG", "query:rg"), qBtn("🪪 CNH", "query:cnh")],
       [qBtn("📸 Foto (Todos Estados)", "query:nacional")],
       [qBtn("📸 Foto por Estado", "query:foto")],
-      [btn("🔙 Voltar", "menu:main")],
     ];
 
-    const statusNote = "\n\n🔴 = Temporariamente indisponível";
-    await editMessage(this.token, chatId, messageId, text + statusNote, keyboard(...buttons));
+    // Filter out null buttons and empty rows
+    const buttons: InlineButton[][] = allRows
+      .map(row => row.filter((b): b is InlineButton => b !== null))
+      .filter(row => row.length > 0);
+
+    buttons.push([btn("🔙 Voltar", "menu:main")]);
+
+    const hasDisabled = Object.values(enabledQueryTypes).some(v => !v);
+    const note = hasDisabled ? "\n\n⚠️ Algumas consultas estão em manutenção e não aparecem no menu." : "";
+    await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
   }
 
   async showStateSelection(chatId: number, messageId: number) {
