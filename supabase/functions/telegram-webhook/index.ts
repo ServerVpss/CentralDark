@@ -3156,14 +3156,16 @@ class BotHandler {
     const effectId = getMessageEffectId(this.settings.message_effect);
 
     // Enviar mensagem de confirmação com efeito visual
+    const daysText = planDays === 1 ? "1 dia" : `${planDays} dias`;
     await telegramRequest(this.token, "sendMessage", {
       chat_id: chatId,
       text: `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
-        `📦 Plano: <b>${planName}</b>\n` +
-        `💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
-        `📅 Válido até: <b>${formatDate(expiresAt)}</b>\n\n` +
-        `🎫 TXID: <code>${txid}</code>\n\n` +
-        `${this.settings.group_chat_id ? "🚪 <b>Seu acesso foi liberado no grupo!</b>" : "✅ <b>Assinatura ativada com sucesso!</b>"}`,
+        `┌ 📦 Plano: <b>${planName}</b>\n` +
+        `├ 💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
+        `├ ⏰ Duração: <b>${daysText}</b>\n` +
+        `├ 📅 Válido até: <b>${formatDate(expiresAt)}</b>\n` +
+        `└ 🎫 <code>${txid}</code>\n\n` +
+        `${this.settings.group_chat_id ? "🚪 <b>Acesso liberado no grupo!</b>" : "✅ <b>Assinatura ativada!</b>"}`,
       parse_mode: "HTML",
       ...(effectId && { message_effect_id: effectId }),
       reply_markup: keyboard(...buttons),
