@@ -45,6 +45,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/hooks/useTelegramBots";
 import { BotHealthMonitor } from "@/components/bots/BotHealthMonitor";
 import { BotConfigCard } from "@/components/bots/BotConfigCard";
