@@ -44,6 +44,14 @@ export function BotStatusCard({ name, username, status, messages, users, botId, 
     try {
       const newState = !isActive;
       
+      // Get bot token for webhook management
+      const { data: botData } = await supabase
+        .from("telegram_bots")
+        .select("token")
+        .eq("id", botId)
+        .single();
+
+      // Update is_active
       const { error } = await supabase
         .from("telegram_bots")
         .update({ is_active: newState })
@@ -51,7 +59,18 @@ export function BotStatusCard({ name, username, status, messages, users, botId, 
 
       if (error) throw error;
 
-      toast.success(newState ? "Bot ativado com sucesso!" : "Bot desativado com sucesso!");
+      // Remove or restore webhook
+      if (!newState && botData?.token) {
+        // Desligar: remove webhook para o bot parar completamente
+        await fetch(`https://api.telegram.org/bot${botData.token}/deleteWebhook`);
+        await supabase
+          .from("telegram_bots")
+          .update({ webhook_active: false })
+          .eq("id", botId);
+        toast.success("Bot desligado! Webhook removido.");
+      } else {
+        toast.success("Bot ativado com sucesso!");
+      }
       
       if (onToggleActive) {
         onToggleActive(botId, newState);
