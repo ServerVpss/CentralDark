@@ -4616,11 +4616,47 @@ class BotHandler {
   }
 }
 
+// =============== RATE LIMITING ===============
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 30; // max 30 updates per user per minute
+
+function isRateLimited(userId: number): boolean {
+  const key = String(userId);
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+
+  if (!entry || now >= entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX_REQUESTS) {
+    console.warn(`Rate limited user ${userId}: ${entry.count} requests in window`);
+    return true;
+  }
+
+  return false;
+}
+
+// Cleanup stale rate limit entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, entry] of rateLimitMap.entries()) {
+    if (now >= entry.resetAt) {
+      rateLimitMap.delete(key);
+    }
+  }
+}, 300_000);
+
 // =============== MAIN HANDLER ===============
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const startTime = Date.now();
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -4634,6 +4670,18 @@ Deno.serve(async (req) => {
       console.error("No botId provided");
       return new Response("OK", { status: 200 });
     }
+
+    // Parse update early for rate limiting
+    const update: TelegramUpdate = await req.json();
+    
+    // Rate limit check
+    const senderId = update.message?.from?.id || update.callback_query?.from?.id;
+    if (senderId && isRateLimited(senderId)) {
+      console.log(`Rate limited: user ${senderId}, update ${update.update_id}`);
+      return new Response("OK", { status: 200 });
+    }
+
+    console.log(`[${botId.substring(0, 8)}] Update ${update.update_id} from ${senderId || 'unknown'}`);
 
     const { data: bot } = await supabase
       .from("telegram_bots")
@@ -4667,15 +4715,25 @@ Deno.serve(async (req) => {
       message_effect: (settings as { message_effect?: string } | null)?.message_effect || 'party',
     };
 
-    const update: TelegramUpdate = await req.json();
-    console.log("Received update:", JSON.stringify(update).substring(0, 500));
-
     const handler = new BotHandler(supabase, bot as BotData, botSettings, update);
-    await handler.handleUpdate();
+    
+    // Execute with timeout protection (25s max)
+    const timeoutPromise = new Promise<void>((_, reject) => {
+      setTimeout(() => reject(new Error("Handler timeout (25s)")), 25000);
+    });
+
+    await Promise.race([handler.handleUpdate(), timeoutPromise]);
+
+    const duration = Date.now() - startTime;
+    if (duration > 5000) {
+      console.warn(`Slow update ${update.update_id}: ${duration}ms`);
+    }
 
     return new Response("OK", { status: 200 });
   } catch (error) {
-    console.error("Webhook error:", error);
+    const duration = Date.now() - startTime;
+    console.error(`Webhook error after ${duration}ms:`, (error as Error).message);
+    // Always return 200 to Telegram to prevent retries
     return new Response("OK", { status: 200 });
   }
 });

@@ -144,7 +144,6 @@ export function useAdminData(): AdminData {
 
       // Set subscriptions (already fetched with pagination above)
       setSubscriptions(allSubs);
-      setSubscriptions(allSubs);
 
       // Set plans
       const plansData = (plansResult.data || []) as SubscriptionPlan[];
