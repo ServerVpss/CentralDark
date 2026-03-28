@@ -2405,14 +2405,15 @@ class BotHandler {
   async showQueryMenu(chatId: number, messageId: number) {
     const text = `🔍 <b>Consultas Disponíveis</b>\n\nEscolha o tipo de consulta:`;
 
-    // Helper to mark disabled queries
-    const qBtn = (label: string, data: string) => {
+    // Only show enabled query types - hide disabled ones completely
+    const qBtn = (label: string, data: string): InlineButton | null => {
       const qType = data.replace("query:", "");
       const isEnabled = enabledQueryTypes[qType] !== false;
-      return btn(isEnabled ? label : `${label} 🔴`, data);
+      if (!isEnabled) return null;
+      return btn(label, data);
     };
 
-    const buttons: InlineButton[][] = [
+    const allRows: (InlineButton | null)[][] = [
       [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
       [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa Completa", "query:placa_completa")],
       [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
@@ -2421,11 +2422,18 @@ class BotHandler {
       [qBtn("🪪 RG", "query:rg"), qBtn("🪪 CNH", "query:cnh")],
       [qBtn("📸 Foto (Todos Estados)", "query:nacional")],
       [qBtn("📸 Foto por Estado", "query:foto")],
-      [btn("🔙 Voltar", "menu:main")],
     ];
 
-    const statusNote = "\n\n🔴 = Temporariamente indisponível";
-    await editMessage(this.token, chatId, messageId, text + statusNote, keyboard(...buttons));
+    // Filter out null buttons and empty rows
+    const buttons: InlineButton[][] = allRows
+      .map(row => row.filter((b): b is InlineButton => b !== null))
+      .filter(row => row.length > 0);
+
+    buttons.push([btn("🔙 Voltar", "menu:main")]);
+
+    const hasDisabled = Object.values(enabledQueryTypes).some(v => !v);
+    const note = hasDisabled ? "\n\n⚠️ Algumas consultas estão em manutenção e não aparecem no menu." : "";
+    await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
   }
 
   async showStateSelection(chatId: number, messageId: number) {
@@ -2483,12 +2491,11 @@ class BotHandler {
       return;
     }
 
-    // Check if query type is enabled
+    // Check if query type is enabled - SILENTLY ignore if disabled
+    // This prevents the bot from responding when module is off,
+    // avoiding confusion with other bots in the group
     if (!enabledQueryTypes[queryType]) {
-      await sendMessage(this.token, chatId,
-        `🚫 <b>Consulta Indisponível</b>\n\n${queryTypeLabels[queryType] || queryType} está temporariamente desativada por manutenção do servidor.\n\nTente novamente mais tarde.`,
-        keyboard([btn("🔍 Outras Consultas", "menu:query"), btn("🏠 Menu", "menu:main")])
-      );
+      console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
 
@@ -3724,6 +3731,13 @@ class BotHandler {
 
     // Use actualInput for foto queries (CPF extracted from format)
     const inputForQuery = queryType === "foto" ? actualInput : queryInput;
+
+    // Check if module is enabled - SILENTLY ignore if disabled
+    // This prevents response when module is off, so other bots in the group aren't confused
+    if (!enabledQueryTypes[queryType]) {
+      console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
+      return;
+    }
 
     // Send processing message - show if searching all states
     const searchingAllStates = queryType === "foto" && !estado;
