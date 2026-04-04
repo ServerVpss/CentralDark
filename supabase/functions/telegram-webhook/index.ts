@@ -4574,7 +4574,7 @@ class BotHandler {
       if (this.settings.maintenance_mode) {
         await telegramRequest(this.token, "answerCallbackQuery", {
           callback_query_id: callback.id,
-          text: "🔧 Bot em manutenção. Retornaremos em breve.",
+          text: this.settings.maintenance_message || "🔧 Bot em manutenção. Retornaremos em breve.",
           show_alert: true,
         });
         return;
