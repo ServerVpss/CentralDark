@@ -1,25 +1,28 @@
 
+# Filtrar Dados Internos da API nos Resultados
 
-# Atalho de Manutenção no Dashboard
+## Problema
+A API do veiculosapi.com retorna metadados da sua conta/assinatura junto com os dados da consulta. Campos como SUCESSO, PROTOCOLO, USUARIO, CONSUMO HOJE, TOTAL DIARIO, RESET EM, TIPO (TOKEN), INICIO USO, VENCIMENTO, TEMPO RESTANTE, DIAS TOTAIS RESTANTES, DDD, CLASSIFICACAO e MODULO são dados internos do provedor e não devem ser exibidos ao usuário final.
 
-## O que será feito
-Adicionar um card de "Modo Manutenção" na seção de Ações Rápidas do dashboard, com um switch para ativar/desativar diretamente, sem precisar navegar até as configurações do bot.
+## Solução
+Adicionar esses campos às listas de campos ignorados em **3 pontos**:
 
-## Mudanças
+### 1. Edge Function `telegram-webhook` — `formatGenericResult`
+Adicionar ao array `ignoredKeys` (linha ~2129):
+```
+sucesso, protocolo, usuario, consumo_hoje, consumo, total_diario, 
+reset_em, tipo, inicio_uso, vencimento, tempo_restante, 
+tempo_restante_detalhado, dias_totais_restantes, dias_totais, 
+ddd, classificacao, modulo
+```
 
-### 1. Novo componente `src/components/dashboard/MaintenanceToggle.tsx`
-- Card visual com ícone de ferramenta (Wrench) e badge de status (Ativo/Inativo)
-- Switch integrado que lê `bot_settings.maintenance_mode` do primeiro bot do usuário
-- Ao alternar, faz UPDATE direto na tabela `bot_settings`
-- Mostra feedback via toast (sonner)
-- Se não houver bot cadastrado, exibe mensagem informativa
+### 2. Edge Function `telegram-webhook` — `txtIgnoredKeys` (linha ~497)
+Mesmos campos adicionados à lista global de chaves ignoradas no modo TXT.
 
-### 2. Atualizar `src/pages/Index.tsx`
-- Importar e renderizar `MaintenanceToggle` na sidebar do dashboard, abaixo do `QuickActions`
-- Passar o `bots[0]?.id` como prop para o componente
+### 3. Painel Web — `MonospaceResultDisplay.tsx`
+Adicionar os mesmos campos ao filtro do `extractData` para que não apareçam na interface web.
 
-## Detalhes Técnicos
-- O componente usa `supabase` direto para ler/atualizar `bot_settings` (mesmo padrão do `useBotSettings`)
-- Estado local com `useState` + `useEffect` para carregar o status atual
-- Nenhuma mudança no banco de dados necessária (campos `maintenance_mode` e `maintenance_message` já existem em `bot_settings`)
-
+## Resultado
+- Dados do plano/API nunca mais aparecem nos resultados
+- Apenas os dados reais da consulta (nome, CPF, endereço, etc.) são exibidos
+- Funciona tanto no Telegram quanto no painel web
