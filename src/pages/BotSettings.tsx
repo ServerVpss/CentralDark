@@ -298,7 +298,7 @@ export default function BotSettings() {
           <TabsContent value="general" className="mt-6">
             {/* Maintenance Mode Banner */}
             <Card className={`mb-6 border-2 ${settings?.maintenance_mode ? "border-amber-500 bg-amber-500/5" : "border-border bg-card"}`}>
-              <CardContent className="p-4">
+              <CardContent className="p-4 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">{settings?.maintenance_mode ? "🔧" : "✅"}</span>
@@ -320,6 +320,24 @@ export default function BotSettings() {
                     }}
                   />
                 </div>
+                {settings?.maintenance_mode && (
+                  <div className="space-y-2">
+                    <Label className="text-sm">Mensagem de manutenção</Label>
+                    <Textarea
+                      value={settings?.maintenance_message ?? "🔧 Bot em manutenção. Retornaremos em breve."}
+                      onChange={(e) => {
+                        if (settings) {
+                          updateSettings({ maintenance_message: e.target.value });
+                        }
+                      }}
+                      placeholder="Mensagem exibida quando tentam usar consultas"
+                      className="bg-secondary/50 text-sm min-h-[60px]"
+                    />
+                    <p className="text-[10px] text-muted-foreground">
+                      Esta mensagem aparece quando alguém clica nos botões de consulta durante a manutenção.
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
