@@ -213,7 +213,7 @@ async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Reco
   console.log(`[VeiculosAPI] Fetching: modulo=${modulo}, valor=${valor}`);
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
 
   try {
     const response = await fetch(url, {
