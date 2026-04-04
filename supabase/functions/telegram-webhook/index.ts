@@ -3894,7 +3894,12 @@ class BotHandler {
       telefone: "telefone", tel: "telefone", email: "email",
       cep: "cep", nome: "nome", score: "score",
       rg: "rg", cnh: "cnh", pix: "pix",
-      foto: "foto", nacional: "foto", // nacional agora usa a mesma lógica de foto sem estado
+      foto: "foto", nacional: "foto",
+      titulo: "titulo", endereco: "endereco", renda: "renda",
+      processos: "processos", bnmp: "bnmp", siel: "siel",
+      tse: "tse", mae: "mae", credilink: "credilink",
+      spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
     };
 
     const queryType = commandMap[command];
