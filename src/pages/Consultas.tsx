@@ -398,10 +398,6 @@ export default function Consultas() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Cache Stats */}
-            <MotionFadeIn delay={0.15}>
-              <CacheStats />
-            </MotionFadeIn>
 
             {/* Providers Status */}
             <MotionFadeIn delay={0.2}>
