@@ -97,18 +97,6 @@ const fotoStateModules: Record<string, string> = {
 // Priority order for national photo search
 const fotoStatePriority = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"];
 
-// TTL configurations per query type (in hours)
-const cacheTTL: Record<string, number> = {
-  cpf: 24, cnpj: 24, placa: 12, placa_completa: 12, placa_simples: 12, placa_sesp: 12,
-  score: 6, foto: 168, nacional: 168,
-  telefone: 24, email: 24, cep: 720, nome: 24,
-  rg: 24, cnh: 24, pix: 24, parentes: 24,
-  chassi: 24, renavam: 24, motor: 24,
-  titulo: 24, endereco: 24, renda: 24,
-  processos: 24, bnmp: 24, siel: 24, tse: 24,
-  credilink: 24, cpf_spc: 24, poderaquisitivo: 24,
-  mae: 24, pis: 24, cpfsus: 24, cpf_isk: 24,
-};
 
 // All supported query types for GET help
 const allSupportedTypes = Object.keys(veiculosModuleMap).concat(["foto", "nacional"]);
@@ -149,61 +137,6 @@ async function getModules(supabase: ReturnType<typeof createClient>): Promise<Db
   }
 }
 
-// =============== CACHE HELPERS ===============
-async function generateHash(queryType: string, queryInput: string): Promise<string> {
-  const text = `${queryType.toLowerCase()}:${queryInput}`;
-  const data = new TextEncoder().encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-function getTTLHours(queryType: string): number {
-  return cacheTTL[queryType.toLowerCase()] || 24;
-}
-
-async function checkCache(
-  supabase: ReturnType<typeof createClient>,
-  queryHash: string
-): Promise<{ hit: boolean; data?: Record<string, unknown> }> {
-  const { data, error } = await supabase
-    .from("query_cache")
-    .select("id, cached_result, hit_count")
-    .eq("query_hash", queryHash)
-    .gt("expires_at", new Date().toISOString())
-    .maybeSingle();
-
-  if (error || !data) return { hit: false };
-
-  supabase
-    .from("query_cache")
-    .update({ hit_count: (data.hit_count || 0) + 1, last_accessed: new Date().toISOString() })
-    .eq("id", data.id)
-    .then(() => {});
-
-  return { hit: true, data: data.cached_result as Record<string, unknown> };
-}
-
-async function saveToCache(
-  supabase: ReturnType<typeof createClient>,
-  queryType: string,
-  queryInput: string,
-  queryHash: string,
-  result: Record<string, unknown>
-): Promise<void> {
-  const ttlHours = getTTLHours(queryType);
-  const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000).toISOString();
-  await supabase
-    .from("query_cache")
-    .upsert({
-      query_type: queryType.toLowerCase(),
-      query_input: queryInput,
-      query_hash: queryHash,
-      cached_result: result,
-      expires_at: expiresAt,
-      hit_count: 0,
-      last_accessed: new Date().toISOString(),
-    }, { onConflict: "query_hash" });
-}
 
 // Módulos que demoram mais e precisam de timeout estendido (2 min)
 const slowModules = [
@@ -519,60 +452,24 @@ Deno.serve(async (req) => {
     }
 
     const startTime = Date.now();
-    const normalizedType = queryRequest.queryType.toLowerCase();
-    const cleanInput = cleanQueryValue(normalizedType, queryRequest.queryInput);
 
-    const cacheKey = normalizedType === "foto" && queryRequest.estado
-      ? `${normalizedType}:${cleanInput}:${queryRequest.estado.toUpperCase()}`
-      : `${normalizedType}:${cleanInput}`;
-    const queryHash = await generateHash(cacheKey, "");
-
-    const cacheResult = await checkCache(supabase, queryHash);
-
-    let result: Record<string, unknown>;
-    let fromCache = false;
-
-    if (cacheResult.hit && cacheResult.data) {
-      console.log(`Cache HIT for hash: ${queryHash.substring(0, 16)}...`);
-      result = cacheResult.data;
-      fromCache = true;
-    } else {
-      console.log(`Cache MISS for hash: ${queryHash.substring(0, 16)}...`);
-      result = await handleQuery(queryRequest, supabase);
-
-      if (!result.error && !result.notFound && !result.module_disabled) {
-        await saveToCache(supabase, normalizedType, cleanInput, queryHash, result);
-        console.log(`Saved to cache with TTL: ${getTTLHours(normalizedType)}h`);
-      }
-    }
+    const result = await handleQuery(queryRequest, supabase);
 
     const duration = Date.now() - startTime;
 
-    // Log query for authenticated users
+    // Log query for authenticated users (history only, no usage/credits)
     const authHeader = req.headers.get("Authorization");
-    let userId = null;
     if (authHeader) {
       const token = authHeader.replace("Bearer ", "");
       const { data: { user } } = await supabase.auth.getUser(token);
-      userId = user?.id;
-    }
-
-    if (userId) {
-      const isDisabled = result.module_disabled === true;
-      await supabase.from("query_history").insert({
-        user_id: userId,
-        query_type: queryRequest.queryType,
-        query_input: queryRequest.queryInput,
-        query_result: result,
-        status: result.error ? "error" : isDisabled ? "disabled" : "success",
-      });
-
-      if (!fromCache) {
-        await supabase.from("api_usage_logs").insert({
-          user_id: userId,
+      if (user?.id) {
+        supabase.from("query_history").insert({
+          user_id: user.id,
           query_type: queryRequest.queryType,
-          credits_used: isDisabled ? 0 : 1,
-        });
+          query_input: queryRequest.queryInput,
+          query_result: result,
+          status: result.error ? "error" : result.module_disabled ? "disabled" : "success",
+        }).then(() => {});
       }
     }
 
@@ -585,7 +482,6 @@ Deno.serve(async (req) => {
         success: !isError,
         data: result,
         duration_ms: duration,
-        fromCache,
         module_disabled: isDisabledModule || undefined,
         error: isError ? result.error : undefined,
       }),

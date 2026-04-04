@@ -13,7 +13,6 @@ import {
   Loader2,
   Star,
   AlertCircle,
-  Zap,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -34,7 +33,7 @@ import { ResultDisplay } from "@/components/consultation/ResultDisplay";
 import { QueryInput } from "@/components/consultation/QueryInput";
 import { QueryHistoryList } from "@/components/consultation/QueryHistoryList";
 import { ProviderStatusList } from "@/components/consultation/ProviderStatusList";
-import { CacheStats } from "@/components/consultation/CacheStats";
+
 import { ConfettiCelebration } from "@/components/gamification/ConfettiCelebration";
 import { MotionPage, MotionFadeIn } from "@/components/ui/motion";
 
@@ -379,21 +378,12 @@ export default function Consultas() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle>Resultado</CardTitle>
-                      <div className="flex items-center gap-2">
-                        {result.fromCache && (
-                          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 gap-1">
-                            <Zap className="h-3 w-3" />
-                            Cache
-                          </Badge>
-                        )}
-                        <Badge variant={result.success ? "default" : "destructive"}>
-                          {result.success ? "Sucesso" : "Erro"}
-                        </Badge>
-                      </div>
+                      <Badge variant={result.success ? "default" : "destructive"}>
+                        {result.success ? "Sucesso" : "Erro"}
+                      </Badge>
                     </div>
                     <CardDescription>
                       Consulta realizada em {result.duration_ms}ms
-                      {result.fromCache && " (do índice)"}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -406,10 +396,6 @@ export default function Consultas() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Cache Stats */}
-            <MotionFadeIn delay={0.15}>
-              <CacheStats />
-            </MotionFadeIn>
 
             {/* Providers Status */}
             <MotionFadeIn delay={0.2}>
