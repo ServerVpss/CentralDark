@@ -97,18 +97,6 @@ const fotoStateModules: Record<string, string> = {
 // Priority order for national photo search
 const fotoStatePriority = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"];
 
-// TTL configurations per query type (in hours)
-const cacheTTL: Record<string, number> = {
-  cpf: 24, cnpj: 24, placa: 12, placa_completa: 12, placa_simples: 12, placa_sesp: 12,
-  score: 6, foto: 168, nacional: 168,
-  telefone: 24, email: 24, cep: 720, nome: 24,
-  rg: 24, cnh: 24, pix: 24, parentes: 24,
-  chassi: 24, renavam: 24, motor: 24,
-  titulo: 24, endereco: 24, renda: 24,
-  processos: 24, bnmp: 24, siel: 24, tse: 24,
-  credilink: 24, cpf_spc: 24, poderaquisitivo: 24,
-  mae: 24, pis: 24, cpfsus: 24, cpf_isk: 24,
-};
 
 // All supported query types for GET help
 const allSupportedTypes = Object.keys(veiculosModuleMap).concat(["foto", "nacional"]);
