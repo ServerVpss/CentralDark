@@ -1923,41 +1923,115 @@ function formatCpfResult(
     return [...new Set(results)];
   };
 
+  // Helper: extract telefones from structured objects
+  const extractTelefones = (): string[] => {
+    const tels = data.telefones as unknown[] | undefined;
+    if (!Array.isArray(tels)) return getArray(['telefone', 'telefones', 'celular']);
+    return tels.map((t: unknown) => {
+      const tel = t as Record<string, unknown>;
+      const ddd = tel.ddd || tel.DDD || '';
+      const num = tel.telefone || tel.numero || tel.celular || '';
+      const tipo = tel.tipoTelefone === 3 ? 'Celular' : tel.tipoTelefone === 1 ? 'Fixo' : '';
+      const inclusao = tel.dataInclusao ? ` (${String(tel.dataInclusao).substring(0, 10)})` : '';
+      return `(${ddd}) ${num}${tipo ? ' - ' + tipo : ''}${inclusao}`.trim().toUpperCase();
+    }).filter(Boolean);
+  };
+
+  // Helper: extract enderecos from structured objects
+  const extractEnderecos = (): string[] => {
+    const ends = data.enderecos as unknown[] | undefined;
+    if (!Array.isArray(ends)) return getArray(['endereco', 'enderecos', 'logradouro']);
+    return ends.map((e: unknown) => {
+      const end = e as Record<string, unknown>;
+      const tipo = end.tipoLogradouro || '';
+      const logradouro = end.nomeLogradouro || end.logradouro || '';
+      const numero = end.numeroLogradouro || end.numero || '';
+      const compl = end.complementoLogradouro || '';
+      const bairro = end.bairro || '';
+      const cidade = end.cidade || '';
+      const uf = end.uf || '';
+      const cep = end.cep || '';
+      const inclusao = end.dataInclusao ? String(end.dataInclusao).substring(0, 10) : '';
+      const parts = [`${tipo} ${logradouro}`.trim(), numero, compl, bairro, cidade, uf].filter(p => p && String(p).trim());
+      return `${parts.join(', ')}${cep ? ' CEP: ' + cep : ''}${inclusao ? ' (' + inclusao + ')' : ''}`.trim().toUpperCase();
+    }).filter(Boolean);
+  };
+
+  // Helper: extract parentes from structured objects
+  const extractParentes = (): string[] => {
+    const pars = data.parentes as unknown[] | undefined;
+    if (!Array.isArray(pars)) return getArray(['parentes', 'conjuge', 'filhos', 'irmaos']);
+    return pars.filter((p: unknown) => {
+      const par = p as Record<string, unknown>;
+      // Filter out non-person entries (e.g. score entries with numeric nome)
+      return par.nomeVinculo && typeof par.nomeVinculo === 'string' && par.nomeVinculo.length > 2 && isNaN(Number(par.nomeVinculo));
+    }).map((p: unknown) => {
+      const par = p as Record<string, unknown>;
+      const vinculo = par.vinculo || '';
+      const nomeVinculo = par.nomeVinculo || '';
+      return `${vinculo}: ${nomeVinculo}`.trim().toUpperCase();
+    });
+  };
+
+  // Helper: extract emails from structured objects
+  const extractEmails = (): string[] => {
+    const ems = data.emails as unknown[] | undefined;
+    if (!Array.isArray(ems)) return getArray(['email', 'emails']);
+    return ems.map((e: unknown) => {
+      const em = e as Record<string, unknown>;
+      return String(em.email || '').trim();
+    }).filter(e => e && e.includes('@'));
+  };
+
+  // Helper: extract score
+  const extractScore = (): { csb8?: string; csba?: string; csb8Faixa?: string; csbaFaixa?: string } => {
+    const scores = data.score as unknown[] | undefined;
+    if (!Array.isArray(scores) || scores.length === 0) return {};
+    const s = scores[0] as Record<string, unknown>;
+    return {
+      csb8: s.csb8 ? String(s.csb8) : undefined,
+      csba: s.csba ? String(s.csba) : undefined,
+      csb8Faixa: s.csb8Faixa ? String(s.csb8Faixa) : undefined,
+      csbaFaixa: s.csbaFaixa ? String(s.csbaFaixa) : undefined,
+    };
+  };
+
   // Dados básicos
   const nome = getValue(['nome', 'nome_completo']);
   const cpf = getValue(['cpf']);
-  const nascimento = getValue(['nascimento', 'data_nascimento', 'datanascimento']);
+  const nascimento = getValue(['nascimento', 'data_nascimento', 'datanascimento', 'dataNascimento']);
   const sexo = getValue(['sexo']);
   const raca = getValue(['raca', 'raça', 'cor']);
-  const obito = getValue(['obito', 'óbito', 'falecido']);
-  const statusReceita = getValue(['status_receita', 'statusreceita', 'situacao_cpf', 'status']);
+  const obito = getValue(['obito', 'óbito', 'falecido', 'dataObito']);
+  const statusReceita = getValue(['status_receita', 'statusreceita', 'situacao_cpf', 'codigoSituacaoCadastral']);
   
   // Documentos
   const rg = getValue(['rg']);
   const cns = getValue(['cns']);
-  const tituloEleitor = getValue(['titulo_eleitor', 'tituloeleitor', 'titulo']);
+  const tituloEleitor = getValue(['titulo_eleitor', 'tituloeleitor', 'titulo', 'tituloEleitor']);
   const zona = getValue(['zona']);
   const secao = getValue(['secao', 'seção']);
   
   // Contato
-  const emails = getArray(['email', 'emails']);
-  const telefones = getArray(['telefone', 'telefones', 'celular']);
+  const emails = extractEmails();
+  const telefones = extractTelefones();
   
   // Endereços
-  const enderecos = getArray(['endereco', 'enderecos', 'logradouro']);
+  const enderecos = extractEnderecos();
   
   // Financeiro
   const renda = getValue(['renda', 'rendaestimada', 'renda_estimada']);
   const classeSocial = getValue(['classe_social', 'classesocial', 'classe', 'poder_aquisitivo']);
-  const csb8 = getValue(['csb8']);
-  const csba = getValue(['csba']);
-  const csb8Faixa = getValue(['csb8_faixa', 'csb8faixa']);
-  const csbaFaixa = getValue(['csba_faixa', 'csbafaixa']);
+  const scoreData = extractScore();
+  const csb8 = scoreData.csb8 || getValue(['csb8']);
+  const csba = scoreData.csba || getValue(['csba']);
+  const csb8Faixa = scoreData.csb8Faixa || getValue(['csb8_faixa', 'csb8faixa']);
+  const csbaFaixa = scoreData.csbaFaixa || getValue(['csba_faixa', 'csbafaixa']);
   
   // Família
-  const mae = getValue(['mae', 'mãe', 'nome_mae', 'nomemae']);
-  const pai = getValue(['pai', 'nome_pai', 'nomepai']);
-  const parentes = getArray(['parentes', 'conjuge', 'filhos', 'irmaos']);
+  const mae = getValue(['mae', 'mãe', 'nome_mae', 'nomemae', 'nomeMae']);
+  const pai = getValue(['pai', 'nome_pai', 'nomepai', 'nomePai']);
+  const parentes = extractParentes();
 
   // ============= CONSTRUIR MENSAGEM MONOESPAÇADA =============
   let lines: string[] = [];
