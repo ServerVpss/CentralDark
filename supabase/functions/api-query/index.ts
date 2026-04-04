@@ -452,60 +452,24 @@ Deno.serve(async (req) => {
     }
 
     const startTime = Date.now();
-    const normalizedType = queryRequest.queryType.toLowerCase();
-    const cleanInput = cleanQueryValue(normalizedType, queryRequest.queryInput);
 
-    const cacheKey = normalizedType === "foto" && queryRequest.estado
-      ? `${normalizedType}:${cleanInput}:${queryRequest.estado.toUpperCase()}`
-      : `${normalizedType}:${cleanInput}`;
-    const queryHash = await generateHash(cacheKey, "");
-
-    const cacheResult = await checkCache(supabase, queryHash);
-
-    let result: Record<string, unknown>;
-    let fromCache = false;
-
-    if (cacheResult.hit && cacheResult.data) {
-      console.log(`Cache HIT for hash: ${queryHash.substring(0, 16)}...`);
-      result = cacheResult.data;
-      fromCache = true;
-    } else {
-      console.log(`Cache MISS for hash: ${queryHash.substring(0, 16)}...`);
-      result = await handleQuery(queryRequest, supabase);
-
-      if (!result.error && !result.notFound && !result.module_disabled) {
-        await saveToCache(supabase, normalizedType, cleanInput, queryHash, result);
-        console.log(`Saved to cache with TTL: ${getTTLHours(normalizedType)}h`);
-      }
-    }
+    const result = await handleQuery(queryRequest, supabase);
 
     const duration = Date.now() - startTime;
 
-    // Log query for authenticated users
+    // Log query for authenticated users (history only, no usage/credits)
     const authHeader = req.headers.get("Authorization");
-    let userId = null;
     if (authHeader) {
       const token = authHeader.replace("Bearer ", "");
       const { data: { user } } = await supabase.auth.getUser(token);
-      userId = user?.id;
-    }
-
-    if (userId) {
-      const isDisabled = result.module_disabled === true;
-      await supabase.from("query_history").insert({
-        user_id: userId,
-        query_type: queryRequest.queryType,
-        query_input: queryRequest.queryInput,
-        query_result: result,
-        status: result.error ? "error" : isDisabled ? "disabled" : "success",
-      });
-
-      if (!fromCache) {
-        await supabase.from("api_usage_logs").insert({
-          user_id: userId,
+      if (user?.id) {
+        supabase.from("query_history").insert({
+          user_id: user.id,
           query_type: queryRequest.queryType,
-          credits_used: isDisabled ? 0 : 1,
-        });
+          query_input: queryRequest.queryInput,
+          query_result: result,
+          status: result.error ? "error" : result.module_disabled ? "disabled" : "success",
+        }).then(() => {});
       }
     }
 
@@ -518,7 +482,6 @@ Deno.serve(async (req) => {
         success: !isError,
         data: result,
         duration_ms: duration,
-        fromCache,
         module_disabled: isDisabledModule || undefined,
         error: isError ? result.error : undefined,
       }),
