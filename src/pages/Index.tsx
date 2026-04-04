@@ -93,8 +93,9 @@ export default function Index() {
           <div className="lg:col-span-2">
             <BotsSection bots={bots} />
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4">
             <QuickActions />
+            <MaintenanceToggle botId={bots[0]?.id ?? null} />
           </div>
         </section>
 
