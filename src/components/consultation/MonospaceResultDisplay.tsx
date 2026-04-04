@@ -338,8 +338,13 @@ function extractData(data: any): Record<string, any> {
     
     const keyLower = key.toLowerCase();
     
-    // Skip photo fields in main data
-    if (["foto", "image", "photo", "fotobase64", "base64"].includes(keyLower)) continue;
+    // Skip photo fields and API metadata
+    if (["foto", "image", "photo", "fotobase64", "base64",
+      "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario",
+      "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
+      "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
+      "ddd", "classificacao", "modulo"
+    ].includes(keyLower)) continue;
     
     // Skip junk fields
     if (keyLower === "atualizado_em" && typeof value === "string" && 
