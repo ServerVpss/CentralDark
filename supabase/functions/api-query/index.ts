@@ -477,7 +477,7 @@ Deno.serve(async (req) => {
 
     const startTime = Date.now();
     const normalizedType = queryRequest.queryType.toLowerCase();
-    const cleanInput = queryRequest.queryInput.replace(/[^\w@.-]/g, "").trim();
+    const cleanInput = cleanQueryValue(normalizedType, queryRequest.queryInput);
 
     const cacheKey = normalizedType === "foto" && queryRequest.estado
       ? `${normalizedType}:${cleanInput}:${queryRequest.estado.toUpperCase()}`
