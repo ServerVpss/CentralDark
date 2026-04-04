@@ -205,6 +205,19 @@ async function saveToCache(
     }, { onConflict: "query_hash" });
 }
 
+// Módulos que demoram mais e precisam de timeout estendido (2 min)
+const slowModules = [
+  "placa", "placa-serpro", "placa-simples", "placa-sesp",
+  "processos", "bnmp-lc", "siel", "credilink", "cpf-spc",
+  "fotomg", "fotosp", "fotorj", "fotoba", "fotoce", "fotogo",
+  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf", "fototo",
+  "score", "score-3", "tse-3", "poderaquisitivo",
+];
+
+function getModuleTimeout(modulo: string): number {
+  return slowModules.includes(modulo) ? 120_000 : 45_000;
+}
+
 // =============== VEICULOS API FETCH ===============
 async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Record<string, unknown>> {
   const apiKey = Deno.env.get("CONSULTAS_API_KEY");
@@ -213,11 +226,12 @@ async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Reco
     return { error: "⚠️ Chave de API não configurada. Contate o administrador." };
   }
 
+  const timeoutMs = getModuleTimeout(modulo);
   const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(modulo)}&string=${encodeURIComponent(valor)}`;
-  console.log(`[VeiculosAPI] Fetching: modulo=${modulo}, valor=${valor}`);
+  console.log(`[VeiculosAPI] Fetching: modulo=${modulo}, valor=${valor}, timeout=${timeoutMs / 1000}s`);
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 45000);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(url, {
