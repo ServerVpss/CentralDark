@@ -154,17 +154,22 @@ const nexfutureEndpoints: Record<string, string> = {
 };
 
 // =============== QUERY STATUS MAP ===============
-// NexFuture (porta 25589): OFFLINE - Connection refused
-// TConect Score (porta 3029): ONLINE
-// TConect Foto (porta 3030): ONLINE
+// VeiculosAPI: ONLINE — provedor principal para todos os módulos
 const enabledQueryTypes: Record<string, boolean> = {
-  cpf: false, cnpj: false, placa: false, placa_completa: false,
-  telefone: false, email: false, cep: false, nome: false,
+  cpf: true, cnpj: true, placa: true, placa_completa: true,
+  telefone: true, email: true, cep: true, nome: true,
   score: true, foto: true, nacional: true,
-  rg: false, cnh: false, pix: false,
-  parentes: false, empregos: false, chassi: false,
-  renavam: false, motor: false, frota: false,
-  bin: false, cns: false,
+  rg: true, cnh: true, pix: true,
+  parentes: true, chassi: true,
+  renavam: true, motor: true,
+  // Novos módulos VeiculosAPI
+  titulo: true, endereco: true, renda: true,
+  processos: true, bnmp: true, siel: true,
+  tse: true, mae: true, credilink: true,
+  cpf_spc: true, poderaquisitivo: true,
+  cpfsus: true, pis: true,
+  // Desativados (sem provedor ativo)
+  empregos: false, frota: false, bin: false, cns: false,
 };
 
 const queryTypeAliases: Record<string, string> = {
@@ -173,6 +178,18 @@ const queryTypeAliases: Record<string, string> = {
   placa2: "placa_completa",
   nacional: "nacional",
   foto: "foto",
+  titulo: "titulo",
+  endereco: "endereco",
+  renda: "renda",
+  processos: "processos",
+  bnmp: "bnmp",
+  siel: "siel",
+  tse: "tse",
+  mae: "mae",
+  credilink: "credilink",
+  spc: "cpf_spc",
+  poder: "poderaquisitivo",
+  sus: "cpfsus",
 };
 
 function normalizeQueryType(queryType: string): string {
@@ -198,10 +215,17 @@ const queryTypeLabels: Record<string, string> = {
   telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",
   score: "📊 Score", foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
   rg: "🪪 RG", cnh: "🪪 CNH", pix: "💳 PIX",
+  titulo: "📜 Título Eleitor", endereco: "📍 Endereço", renda: "💰 Renda",
+  processos: "⚖️ Processos", bnmp: "🔍 BNMP", siel: "🔎 SIEL",
+  tse: "🗳️ TSE", mae: "👩 Nome da Mãe", credilink: "📊 Credilink",
+  cpf_spc: "📋 SPC", poderaquisitivo: "💎 Poder Aquisitivo",
+  cpfsus: "🏥 SUS", pis: "📋 PIS",
+  parentes: "👨‍👩‍👧‍👦 Parentes", chassi: "🔧 Chassi",
+  renavam: "📋 RENAVAM", motor: "⚙️ Motor",
 };
 
 const brazilianStates = [
-  "RJ", "BA", "MA", "SP", "ES", "CE", "PI"
+  "SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"
 ];
 
 // =============== HELPERS ===============
