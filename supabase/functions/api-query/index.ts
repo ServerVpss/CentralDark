@@ -149,61 +149,6 @@ async function getModules(supabase: ReturnType<typeof createClient>): Promise<Db
   }
 }
 
-// =============== CACHE HELPERS ===============
-async function generateHash(queryType: string, queryInput: string): Promise<string> {
-  const text = `${queryType.toLowerCase()}:${queryInput}`;
-  const data = new TextEncoder().encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-function getTTLHours(queryType: string): number {
-  return cacheTTL[queryType.toLowerCase()] || 24;
-}
-
-async function checkCache(
-  supabase: ReturnType<typeof createClient>,
-  queryHash: string
-): Promise<{ hit: boolean; data?: Record<string, unknown> }> {
-  const { data, error } = await supabase
-    .from("query_cache")
-    .select("id, cached_result, hit_count")
-    .eq("query_hash", queryHash)
-    .gt("expires_at", new Date().toISOString())
-    .maybeSingle();
-
-  if (error || !data) return { hit: false };
-
-  supabase
-    .from("query_cache")
-    .update({ hit_count: (data.hit_count || 0) + 1, last_accessed: new Date().toISOString() })
-    .eq("id", data.id)
-    .then(() => {});
-
-  return { hit: true, data: data.cached_result as Record<string, unknown> };
-}
-
-async function saveToCache(
-  supabase: ReturnType<typeof createClient>,
-  queryType: string,
-  queryInput: string,
-  queryHash: string,
-  result: Record<string, unknown>
-): Promise<void> {
-  const ttlHours = getTTLHours(queryType);
-  const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000).toISOString();
-  await supabase
-    .from("query_cache")
-    .upsert({
-      query_type: queryType.toLowerCase(),
-      query_input: queryInput,
-      query_hash: queryHash,
-      cached_result: result,
-      expires_at: expiresAt,
-      hit_count: 0,
-      last_accessed: new Date().toISOString(),
-    }, { onConflict: "query_hash" });
-}
 
 // Módulos que demoram mais e precisam de timeout estendido (2 min)
 const slowModules = [
