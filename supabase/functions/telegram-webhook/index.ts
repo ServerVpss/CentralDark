@@ -5030,6 +5030,8 @@ Deno.serve(async (req) => {
       fixed_emoji: (settings as { fixed_emoji?: string } | null)?.fixed_emoji || '👍',
       custom_emojis: (settings as { custom_emojis?: string[] } | null)?.custom_emojis || ['👍', '❤️', '🔥', '🎉', '👏'],
       message_effect: (settings as { message_effect?: string } | null)?.message_effect || 'party',
+      maintenance_mode: (settings as { maintenance_mode?: boolean } | null)?.maintenance_mode || false,
+      maintenance_message: (settings as { maintenance_message?: string } | null)?.maintenance_message || '🔧 Bot em manutenção. Retornaremos em breve.',
     };
 
     const handler = new BotHandler(supabase, bot as BotData, botSettings, update);
