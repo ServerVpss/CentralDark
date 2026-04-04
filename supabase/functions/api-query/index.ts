@@ -133,16 +133,20 @@ async function getModules(supabase: ReturnType<typeof createClient>): Promise<Db
   if (cachedModules && (now - cacheTimestamp) < MODULE_CACHE_TTL) {
     return cachedModules;
   }
-  const { data, error } = await supabase
-    .from("query_modules")
-    .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
-  if (error) {
-    console.error("Error loading modules from DB:", error);
+  try {
+    const { data, error } = await supabase
+      .from("query_modules")
+      .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
+    if (error) {
+      // Table may not exist — silently use empty/cached list
+      return cachedModules || [];
+    }
+    cachedModules = (data || []) as DbModule[];
+    cacheTimestamp = now;
+    return cachedModules;
+  } catch {
     return cachedModules || [];
   }
-  cachedModules = (data || []) as DbModule[];
-  cacheTimestamp = now;
-  return cachedModules;
 }
 
 // =============== CACHE HELPERS ===============
