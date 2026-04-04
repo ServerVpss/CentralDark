@@ -294,6 +294,8 @@ export type Database = {
           group_title: string | null
           group_url: string | null
           id: string
+          maintenance_message: string | null
+          maintenance_mode: boolean | null
           message_effect: string | null
           mute_new_members: boolean | null
           owner_ids: number[] | null
@@ -320,6 +322,8 @@ export type Database = {
           group_title?: string | null
           group_url?: string | null
           id?: string
+          maintenance_message?: string | null
+          maintenance_mode?: boolean | null
           message_effect?: string | null
           mute_new_members?: boolean | null
           owner_ids?: number[] | null
@@ -346,6 +350,8 @@ export type Database = {
           group_title?: string | null
           group_url?: string | null
           id?: string
+          maintenance_message?: string | null
+          maintenance_mode?: boolean | null
           message_effect?: string | null
           mute_new_members?: boolean | null
           owner_ids?: number[] | null
