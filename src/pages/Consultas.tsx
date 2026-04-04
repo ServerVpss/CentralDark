@@ -34,7 +34,7 @@ import { ResultDisplay } from "@/components/consultation/ResultDisplay";
 import { QueryInput } from "@/components/consultation/QueryInput";
 import { QueryHistoryList } from "@/components/consultation/QueryHistoryList";
 import { ProviderStatusList } from "@/components/consultation/ProviderStatusList";
-import { CacheStats } from "@/components/consultation/CacheStats";
+
 import { ConfettiCelebration } from "@/components/gamification/ConfettiCelebration";
 import { MotionPage, MotionFadeIn } from "@/components/ui/motion";
 
