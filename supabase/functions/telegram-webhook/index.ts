@@ -496,7 +496,11 @@ function getTxtLabel(key: string): string {
 // Keys to ignore in TXT (strict - only technical/internal keys)
 const txtIgnoredKeys = [
   "comando", "error", "fotobase64", "foto", "image", "photo", "base64",
-  "raw", "status", "success", "notfound"
+  "raw", "status", "success", "notfound",
+  "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario",
+  "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
+  "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
+  "ddd", "classificacao", "modulo"
 ];
 
 // Bot references to filter out in TXT
