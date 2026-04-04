@@ -375,6 +375,31 @@ function extractData(data: any): Record<string, any> {
     if (typeof value === "object" && !Array.isArray(value)) {
       const nested = extractData(value);
       Object.assign(result, nested);
+    } else if (Array.isArray(value)) {
+      // Handle arrays of objects by flattening them
+      if (value.length > 0 && typeof value[0] === "object" && value[0] !== null) {
+        value.forEach((item, idx) => {
+          if (typeof item === "object" && item !== null) {
+            const nested = extractData(item);
+            for (const [nk, nv] of Object.entries(nested)) {
+              const existingKey = applyAlias(nk);
+              if (result[existingKey] && result[existingKey] !== nv) {
+                // If key already exists, convert to array
+                if (Array.isArray(result[existingKey])) {
+                  (result[existingKey] as any[]).push(nv);
+                } else {
+                  result[existingKey] = [result[existingKey], nv];
+                }
+              } else {
+                result[existingKey] = nv;
+              }
+            }
+          }
+        });
+      } else {
+        const normalizedKey = applyAlias(key);
+        result[normalizedKey] = value;
+      }
     } else {
       const normalizedKey = applyAlias(key);
       result[normalizedKey] = value;
