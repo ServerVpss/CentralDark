@@ -212,18 +212,14 @@ function normalizeQueryType(queryType: string): string {
   return queryTypeAliases[queryType] || queryType;
 }
 
-function isQueryTypeEnabled(queryType: string): boolean {
+async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): Promise<boolean> {
   const normalizedType = normalizeQueryType(queryType);
+  const status = await loadModuleStatus(supabase);
 
-  if (normalizedType === "foto") {
-    return enabledQueryTypes.foto === true;
-  }
+  // Se o módulo não existe na tabela, considerar habilitado (fallback seguro)
+  if (!(normalizedType in status)) return true;
 
-  if (normalizedType === "nacional") {
-    return enabledQueryTypes.nacional === true;
-  }
-
-  return enabledQueryTypes[normalizedType] === true;
+  return status[normalizedType] === true;
 }
 
 const queryTypeLabels: Record<string, string> = {
