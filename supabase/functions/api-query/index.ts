@@ -133,16 +133,20 @@ async function getModules(supabase: ReturnType<typeof createClient>): Promise<Db
   if (cachedModules && (now - cacheTimestamp) < MODULE_CACHE_TTL) {
     return cachedModules;
   }
-  const { data, error } = await supabase
-    .from("query_modules")
-    .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
-  if (error) {
-    console.error("Error loading modules from DB:", error);
+  try {
+    const { data, error } = await supabase
+      .from("query_modules")
+      .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
+    if (error) {
+      // Table may not exist — silently use empty/cached list
+      return cachedModules || [];
+    }
+    cachedModules = (data || []) as DbModule[];
+    cacheTimestamp = now;
+    return cachedModules;
+  } catch {
     return cachedModules || [];
   }
-  cachedModules = (data || []) as DbModule[];
-  cacheTimestamp = now;
-  return cachedModules;
 }
 
 // =============== CACHE HELPERS ===============
@@ -213,7 +217,7 @@ async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Reco
   console.log(`[VeiculosAPI] Fetching: modulo=${modulo}, valor=${valor}`);
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
 
   try {
     const response = await fetch(url, {
@@ -317,11 +321,24 @@ async function fetchFromProvider(
   }
 }
 
+// Text-based modules that accept letters and spaces
+const textBasedModules = ["nome", "nomefull", "mae", "maefull", "endereco", "email", "emailfull", "pix"];
+
+function cleanQueryValue(queryType: string, input: string): string {
+  const normalizedType = queryType.toLowerCase();
+  // For text modules, only trim — preserve letters and spaces
+  if (textBasedModules.includes(normalizedType)) {
+    return input.trim();
+  }
+  // For everything else, remove special chars but keep alphanumeric, @, ., -
+  return input.replace(/[^\w@.-]/g, "").trim();
+}
+
 // =============== HANDLE QUERY ===============
 async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof createClient>): Promise<Record<string, unknown>> {
   const { queryType, queryInput, estado } = req;
   const normalizedType = queryType.toLowerCase();
-  const cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
+  const cleanInput = cleanQueryValue(normalizedType, queryInput);
 
   console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
 
@@ -460,7 +477,7 @@ Deno.serve(async (req) => {
 
     const startTime = Date.now();
     const normalizedType = queryRequest.queryType.toLowerCase();
-    const cleanInput = queryRequest.queryInput.replace(/[^\w@.-]/g, "").trim();
+    const cleanInput = cleanQueryValue(normalizedType, queryRequest.queryInput);
 
     const cacheKey = normalizedType === "foto" && queryRequest.estado
       ? `${normalizedType}:${cleanInput}:${queryRequest.estado.toUpperCase()}`

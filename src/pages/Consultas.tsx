@@ -87,10 +87,14 @@ export default function Consultas() {
     setIsInputValid(isValid);
   }, []);
 
+  const textModules = ["nome", "mae", "endereco", "email", "pix"];
+  
   const handleHistorySelect = useCallback((type: string, input: string) => {
     setSelectedType(type);
     setQueryInput(input);
-    setCleanQueryInput(input.replace(/\D/g, '') || input);
+    // For text-based modules, preserve the original input (letters, spaces)
+    const clean = textModules.includes(type) ? input.trim() : (input.replace(/\D/g, '') || input);
+    setCleanQueryInput(clean);
     setIsInputValid(true);
   }, []);
 
