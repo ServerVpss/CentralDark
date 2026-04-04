@@ -2479,14 +2479,14 @@ class BotHandler {
     const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado:</i>`;
 
     // Only show enabled query types - hide disabled ones completely
-    const qBtn = (label: string, data: string): InlineButton | null => {
+    const qBtn = async (label: string, data: string): Promise<InlineButton | null> => {
       const qType = data.replace("query:", "");
       const isEnabled = await isQueryTypeEnabled(qType, this.supabase);
       if (!isEnabled) return null;
       return btn(label, data);
     };
 
-    const allRows: (InlineButton | null)[][] = [
+    const allRowsPromises: Promise<InlineButton | null>[][] = [
       [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
       [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa+", "query:placa_completa")],
       [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
@@ -2506,6 +2506,8 @@ class BotHandler {
       [qBtn("📸 Foto por Estado", "query:foto")],
     ];
 
+    const allRows = await Promise.all(allRowsPromises.map(row => Promise.all(row)));
+
     // Filter out null buttons and empty rows
     const buttons: InlineButton[][] = allRows
       .map(row => row.filter((b): b is InlineButton => b !== null))
@@ -2513,8 +2515,9 @@ class BotHandler {
 
     buttons.push([btn("🔙 Voltar", "menu:main")]);
 
-    const enabledCount = Object.values(enabledQueryTypes).filter(v => v).length;
-    const totalCount = Object.values(enabledQueryTypes).length;
+    const moduleStatus = await loadModuleStatus(this.supabase);
+    const totalCount = Object.keys(moduleStatus).length;
+    const enabledCount = Object.values(moduleStatus).filter(v => v).length;
     const note = enabledCount < totalCount ? `\n\n⚠️ <i>${totalCount - enabledCount} módulo(s) em manutenção</i>` : "";
     await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
   }
