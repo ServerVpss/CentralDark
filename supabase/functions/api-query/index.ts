@@ -321,11 +321,24 @@ async function fetchFromProvider(
   }
 }
 
+// Text-based modules that accept letters and spaces
+const textBasedModules = ["nome", "nomefull", "mae", "maefull", "endereco", "email", "emailfull", "pix"];
+
+function cleanQueryValue(queryType: string, input: string): string {
+  const normalizedType = queryType.toLowerCase();
+  // For text modules, only trim — preserve letters and spaces
+  if (textBasedModules.includes(normalizedType)) {
+    return input.trim();
+  }
+  // For everything else, remove special chars but keep alphanumeric, @, ., -
+  return input.replace(/[^\w@.-]/g, "").trim();
+}
+
 // =============== HANDLE QUERY ===============
 async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof createClient>): Promise<Record<string, unknown>> {
   const { queryType, queryInput, estado } = req;
   const normalizedType = queryType.toLowerCase();
-  const cleanInput = queryInput.replace(/[^\w@.-]/g, "").trim();
+  const cleanInput = cleanQueryValue(normalizedType, queryInput);
 
   console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
 
