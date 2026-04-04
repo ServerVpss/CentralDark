@@ -883,6 +883,42 @@ export type Database = {
           },
         ]
       }
+      query_modules: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          enabled: boolean | null
+          icon: string | null
+          id: string
+          label: string
+          module_key: string
+          provider: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          enabled?: boolean | null
+          icon?: string | null
+          id?: string
+          label: string
+          module_key: string
+          provider?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          enabled?: boolean | null
+          icon?: string | null
+          id?: string
+          label?: string
+          module_key?: string
+          provider?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       scheduled_broadcasts: {
         Row: {
           bot_id: string | null

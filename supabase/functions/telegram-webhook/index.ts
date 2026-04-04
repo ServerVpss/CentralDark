@@ -153,24 +153,40 @@ const nexfutureEndpoints: Record<string, string> = {
   chassi: "/chassi", renavam: "/renavam", motor: "/motor", frota: "/frota", bin: "/bin",
 };
 
-// =============== QUERY STATUS MAP ===============
-// VeiculosAPI: ONLINE — provedor principal para todos os módulos
-const enabledQueryTypes: Record<string, boolean> = {
-  cpf: true, cnpj: true, placa: true, placa_completa: true,
-  telefone: true, email: true, cep: true, nome: true,
-  score: true, foto: true, nacional: true,
-  rg: true, cnh: true, pix: true,
-  parentes: true, chassi: true,
-  renavam: true, motor: true,
-  // Novos módulos VeiculosAPI
-  titulo: true, endereco: true, renda: true,
-  processos: true, bnmp: true, siel: true,
-  tse: true, mae: true, credilink: true,
-  cpf_spc: true, poderaquisitivo: true,
-  cpfsus: true, pis: true,
-  // Desativados (sem provedor ativo)
-  empregos: false, frota: false, bin: false, cns: false,
-};
+// =============== QUERY STATUS MAP (from DB with cache) ===============
+let cachedModuleStatus: Record<string, boolean> | null = null;
+let moduleCacheTime = 0;
+const MODULE_CACHE_TTL = 60_000; // 60 seconds
+
+async function loadModuleStatus(supabase: SupabaseClient): Promise<Record<string, boolean>> {
+  const now = Date.now();
+  if (cachedModuleStatus && (now - moduleCacheTime) < MODULE_CACHE_TTL) {
+    return cachedModuleStatus;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("query_modules")
+      .select("module_key, enabled");
+
+    if (error || !data) {
+      console.warn("[query_modules] Erro ao carregar:", error?.message);
+      // Fallback: tudo habilitado
+      return cachedModuleStatus || {};
+    }
+
+    const status: Record<string, boolean> = {};
+    for (const row of data) {
+      status[row.module_key] = row.enabled ?? true;
+    }
+    cachedModuleStatus = status;
+    moduleCacheTime = now;
+    return status;
+  } catch (e) {
+    console.warn("[query_modules] Exception:", e);
+    return cachedModuleStatus || {};
+  }
+}
 
 const queryTypeAliases: Record<string, string> = {
   tel: "telefone",
@@ -196,18 +212,14 @@ function normalizeQueryType(queryType: string): string {
   return queryTypeAliases[queryType] || queryType;
 }
 
-function isQueryTypeEnabled(queryType: string): boolean {
+async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): Promise<boolean> {
   const normalizedType = normalizeQueryType(queryType);
+  const status = await loadModuleStatus(supabase);
 
-  if (normalizedType === "foto") {
-    return enabledQueryTypes.foto === true;
-  }
+  // Se o módulo não existe na tabela, considerar habilitado (fallback seguro)
+  if (!(normalizedType in status)) return true;
 
-  if (normalizedType === "nacional") {
-    return enabledQueryTypes.nacional === true;
-  }
-
-  return enabledQueryTypes[normalizedType] === true;
+  return status[normalizedType] === true;
 }
 
 const queryTypeLabels: Record<string, string> = {
@@ -2467,14 +2479,14 @@ class BotHandler {
     const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado:</i>`;
 
     // Only show enabled query types - hide disabled ones completely
-    const qBtn = (label: string, data: string): InlineButton | null => {
+    const qBtn = async (label: string, data: string): Promise<InlineButton | null> => {
       const qType = data.replace("query:", "");
-      const isEnabled = isQueryTypeEnabled(qType);
+      const isEnabled = await isQueryTypeEnabled(qType, this.supabase);
       if (!isEnabled) return null;
       return btn(label, data);
     };
 
-    const allRows: (InlineButton | null)[][] = [
+    const allRowsPromises: Promise<InlineButton | null>[][] = [
       [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
       [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa+", "query:placa_completa")],
       [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
@@ -2494,6 +2506,8 @@ class BotHandler {
       [qBtn("📸 Foto por Estado", "query:foto")],
     ];
 
+    const allRows = await Promise.all(allRowsPromises.map(row => Promise.all(row)));
+
     // Filter out null buttons and empty rows
     const buttons: InlineButton[][] = allRows
       .map(row => row.filter((b): b is InlineButton => b !== null))
@@ -2501,8 +2515,9 @@ class BotHandler {
 
     buttons.push([btn("🔙 Voltar", "menu:main")]);
 
-    const enabledCount = Object.values(enabledQueryTypes).filter(v => v).length;
-    const totalCount = Object.values(enabledQueryTypes).length;
+    const moduleStatus = await loadModuleStatus(this.supabase);
+    const totalCount = Object.keys(moduleStatus).length;
+    const enabledCount = Object.values(moduleStatus).filter(v => v).length;
     const note = enabledCount < totalCount ? `\n\n⚠️ <i>${totalCount - enabledCount} módulo(s) em manutenção</i>` : "";
     await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
   }
@@ -2582,7 +2597,7 @@ class BotHandler {
     // Check if query type is enabled - SILENTLY ignore if disabled
     // This prevents the bot from responding when module is off,
     // avoiding confusion with other bots no grupo
-    if (!isQueryTypeEnabled(queryType)) {
+    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
       console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
@@ -3693,7 +3708,7 @@ class BotHandler {
     if (queryState) {
       const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
       await this.clearConversationState(telegramUserId, "query");
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
         return;
       }
@@ -3890,7 +3905,8 @@ class BotHandler {
     
     if (multipleCommands.length > 1) {
       // Filter out disabled modules BEFORE processing
-      const enabledCommands = multipleCommands.filter(cmd => isQueryTypeEnabled(cmd.queryType));
+      const enabledChecks = await Promise.all(multipleCommands.map(async cmd => ({ cmd, enabled: await isQueryTypeEnabled(cmd.queryType, this.supabase) })));
+      const enabledCommands = enabledChecks.filter(c => c.enabled).map(c => c.cmd);
       if (enabledCommands.length === 0) {
         console.log(`Group multi-query: all ${multipleCommands.length} modules disabled. Ignoring silently.`);
         return;
@@ -3927,7 +3943,7 @@ class BotHandler {
     }
 
     // Check if module is enabled FIRST - before any response
-    if (!isQueryTypeEnabled(queryType)) {
+    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently (early check).`);
       return;
     }
@@ -4002,7 +4018,7 @@ class BotHandler {
 
     // Check if module is enabled - SILENTLY ignore if disabled
     // This prevents response when module is off, so other bots in the group aren't confused
-    if (!isQueryTypeEnabled(queryType)) {
+    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
@@ -4283,7 +4299,7 @@ class BotHandler {
 
     // Quick CPF query from CEP results
     if (data.startsWith("qcpf:")) {
-      if (!isQueryTypeEnabled("cpf")) {
+      if (!await isQueryTypeEnabled("cpf", this.supabase)) {
         console.log(`Quick CPF callback blocked because module "cpf" is disabled.`);
         return;
       }
@@ -4334,7 +4350,7 @@ class BotHandler {
         return;
       }
 
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         console.log(`PDF callback blocked because module "${queryType}" is disabled.`);
         return;
       }
@@ -4426,7 +4442,7 @@ class BotHandler {
         return;
       }
 
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         console.log(`TXT callback blocked because module "${queryType}" is disabled.`);
         return;
       }
@@ -4540,7 +4556,7 @@ class BotHandler {
     if (data.startsWith("query:")) {
       const queryType = data.replace("query:", "");
       // Block disabled modules even via callback
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         await telegramRequest(this.token, "answerCallbackQuery", {
           callback_query_id: callback.id,
           text: "⚠️ Este módulo está em manutenção.",
@@ -4558,7 +4574,7 @@ class BotHandler {
 
     // State selection for foto
     if (data.startsWith("state:")) {
-      if (!isQueryTypeEnabled("foto")) {
+      if (!await isQueryTypeEnabled("foto", this.supabase)) {
         console.log(`Photo state callback blocked because module "foto" is disabled.`);
         return;
       }
