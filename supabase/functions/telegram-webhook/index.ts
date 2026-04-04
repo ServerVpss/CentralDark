@@ -4570,6 +4570,15 @@ class BotHandler {
     // Query type selection
     if (data.startsWith("query:")) {
       const queryType = data.replace("query:", "");
+      // Block if maintenance mode is active
+      if (this.settings.maintenance_mode) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "🔧 Bot em manutenção. Retornaremos em breve.",
+          show_alert: true,
+        });
+        return;
+      }
       // Block disabled modules even via callback
       if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         await telegramRequest(this.token, "answerCallbackQuery", {
