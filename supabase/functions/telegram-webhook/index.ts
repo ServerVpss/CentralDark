@@ -2481,7 +2481,7 @@ class BotHandler {
     // Only show enabled query types - hide disabled ones completely
     const qBtn = (label: string, data: string): InlineButton | null => {
       const qType = data.replace("query:", "");
-      const isEnabled = isQueryTypeEnabled(qType);
+      const isEnabled = await isQueryTypeEnabled(qType, this.supabase);
       if (!isEnabled) return null;
       return btn(label, data);
     };
@@ -2594,7 +2594,7 @@ class BotHandler {
     // Check if query type is enabled - SILENTLY ignore if disabled
     // This prevents the bot from responding when module is off,
     // avoiding confusion with other bots no grupo
-    if (!isQueryTypeEnabled(queryType)) {
+    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
       console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
@@ -3705,7 +3705,7 @@ class BotHandler {
     if (queryState) {
       const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
       await this.clearConversationState(telegramUserId, "query");
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
         return;
       }
@@ -3902,7 +3902,7 @@ class BotHandler {
     
     if (multipleCommands.length > 1) {
       // Filter out disabled modules BEFORE processing
-      const enabledCommands = multipleCommands.filter(cmd => isQueryTypeEnabled(cmd.queryType));
+      const enabledCommands = multipleCommands.filter(cmd => await isQueryTypeEnabled(cmd.queryType, this.supabase));
       if (enabledCommands.length === 0) {
         console.log(`Group multi-query: all ${multipleCommands.length} modules disabled. Ignoring silently.`);
         return;
@@ -3939,7 +3939,7 @@ class BotHandler {
     }
 
     // Check if module is enabled FIRST - before any response
-    if (!isQueryTypeEnabled(queryType)) {
+    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently (early check).`);
       return;
     }
@@ -4014,7 +4014,7 @@ class BotHandler {
 
     // Check if module is enabled - SILENTLY ignore if disabled
     // This prevents response when module is off, so other bots in the group aren't confused
-    if (!isQueryTypeEnabled(queryType)) {
+    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
       console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
       return;
     }
@@ -4295,7 +4295,7 @@ class BotHandler {
 
     // Quick CPF query from CEP results
     if (data.startsWith("qcpf:")) {
-      if (!isQueryTypeEnabled("cpf")) {
+      if (!await isQueryTypeEnabled("cpf", this.supabase)) {
         console.log(`Quick CPF callback blocked because module "cpf" is disabled.`);
         return;
       }
@@ -4346,7 +4346,7 @@ class BotHandler {
         return;
       }
 
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         console.log(`PDF callback blocked because module "${queryType}" is disabled.`);
         return;
       }
@@ -4438,7 +4438,7 @@ class BotHandler {
         return;
       }
 
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         console.log(`TXT callback blocked because module "${queryType}" is disabled.`);
         return;
       }
@@ -4552,7 +4552,7 @@ class BotHandler {
     if (data.startsWith("query:")) {
       const queryType = data.replace("query:", "");
       // Block disabled modules even via callback
-      if (!isQueryTypeEnabled(queryType)) {
+      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         await telegramRequest(this.token, "answerCallbackQuery", {
           callback_query_id: callback.id,
           text: "⚠️ Este módulo está em manutenção.",
@@ -4570,7 +4570,7 @@ class BotHandler {
 
     // State selection for foto
     if (data.startsWith("state:")) {
-      if (!isQueryTypeEnabled("foto")) {
+      if (!await isQueryTypeEnabled("foto", this.supabase)) {
         console.log(`Photo state callback blocked because module "foto" is disabled.`);
         return;
       }
