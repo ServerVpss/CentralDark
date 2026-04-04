@@ -911,11 +911,22 @@ function CategorySection({
             return (
               <div key={key} className="space-y-0.5">
                 <div className="text-cyan-500 text-xs">- {label.toUpperCase()} -</div>
-                {value.map((item, itemIdx) => (
-                  <div key={itemIdx} className="text-cyan-100 pl-2">
-                    {itemIdx} {'=>'} {String(item).toUpperCase()}
-                  </div>
-                ))}
+                {value.map((item, itemIdx) => {
+                  let displayText: string;
+                  if (typeof item === "object" && item !== null) {
+                    displayText = Object.entries(item)
+                      .filter(([, v]) => v !== null && v !== undefined && v !== "")
+                      .map(([k, v]) => `${k}: ${v}`)
+                      .join(" | ");
+                  } else {
+                    displayText = String(item);
+                  }
+                  return (
+                    <div key={itemIdx} className="text-cyan-100 pl-2">
+                      {itemIdx} {'=>'} {displayText.toUpperCase()}
+                    </div>
+                  );
+                })}
               </div>
             );
           }
