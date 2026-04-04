@@ -13,7 +13,7 @@ import {
   Loader2,
   Star,
   AlertCircle,
-  Zap,
+  AlertCircle,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
