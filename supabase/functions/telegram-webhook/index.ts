@@ -1875,7 +1875,15 @@ function formatCpfResult(
       for (const [k, v] of Object.entries(data)) {
         if (k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) {
           if (Array.isArray(v)) {
-            results.push(...v.map(item => String(item).trim().toUpperCase()).filter(item => item && item !== '-'));
+            results.push(...v.map(item => {
+              if (typeof item === 'object' && item !== null) {
+                return Object.entries(item)
+                  .filter(([, val]) => val !== null && val !== undefined && val !== '')
+                  .map(([k, val]) => `${k}: ${val}`)
+                  .join(', ');
+              }
+              return String(item).trim().toUpperCase();
+            }).filter(item => item && item !== '-'));
           } else if (v && typeof v === 'string' && v.trim() && v !== '-' && !shouldIgnore(v)) {
             const items = v.split(/[,\n]/).map(item => item.trim().toUpperCase()).filter(item => item && item !== '-');
             results.push(...items);
