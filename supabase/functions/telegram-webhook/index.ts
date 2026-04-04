@@ -154,17 +154,22 @@ const nexfutureEndpoints: Record<string, string> = {
 };
 
 // =============== QUERY STATUS MAP ===============
-// NexFuture (porta 25589): OFFLINE - Connection refused
-// TConect Score (porta 3029): ONLINE
-// TConect Foto (porta 3030): ONLINE
+// VeiculosAPI: ONLINE — provedor principal para todos os módulos
 const enabledQueryTypes: Record<string, boolean> = {
-  cpf: false, cnpj: false, placa: false, placa_completa: false,
-  telefone: false, email: false, cep: false, nome: false,
+  cpf: true, cnpj: true, placa: true, placa_completa: true,
+  telefone: true, email: true, cep: true, nome: true,
   score: true, foto: true, nacional: true,
-  rg: false, cnh: false, pix: false,
-  parentes: false, empregos: false, chassi: false,
-  renavam: false, motor: false, frota: false,
-  bin: false, cns: false,
+  rg: true, cnh: true, pix: true,
+  parentes: true, chassi: true,
+  renavam: true, motor: true,
+  // Novos módulos VeiculosAPI
+  titulo: true, endereco: true, renda: true,
+  processos: true, bnmp: true, siel: true,
+  tse: true, mae: true, credilink: true,
+  cpf_spc: true, poderaquisitivo: true,
+  cpfsus: true, pis: true,
+  // Desativados (sem provedor ativo)
+  empregos: false, frota: false, bin: false, cns: false,
 };
 
 const queryTypeAliases: Record<string, string> = {
@@ -173,6 +178,18 @@ const queryTypeAliases: Record<string, string> = {
   placa2: "placa_completa",
   nacional: "nacional",
   foto: "foto",
+  titulo: "titulo",
+  endereco: "endereco",
+  renda: "renda",
+  processos: "processos",
+  bnmp: "bnmp",
+  siel: "siel",
+  tse: "tse",
+  mae: "mae",
+  credilink: "credilink",
+  spc: "cpf_spc",
+  poder: "poderaquisitivo",
+  sus: "cpfsus",
 };
 
 function normalizeQueryType(queryType: string): string {
@@ -198,10 +215,17 @@ const queryTypeLabels: Record<string, string> = {
   telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",
   score: "📊 Score", foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
   rg: "🪪 RG", cnh: "🪪 CNH", pix: "💳 PIX",
+  titulo: "📜 Título Eleitor", endereco: "📍 Endereço", renda: "💰 Renda",
+  processos: "⚖️ Processos", bnmp: "🔍 BNMP", siel: "🔎 SIEL",
+  tse: "🗳️ TSE", mae: "👩 Nome da Mãe", credilink: "📊 Credilink",
+  cpf_spc: "📋 SPC", poderaquisitivo: "💎 Poder Aquisitivo",
+  cpfsus: "🏥 SUS", pis: "📋 PIS",
+  parentes: "👨‍👩‍👧‍👦 Parentes", chassi: "🔧 Chassi",
+  renavam: "📋 RENAVAM", motor: "⚙️ Motor",
 };
 
 const brazilianStates = [
-  "RJ", "BA", "MA", "SP", "ES", "CE", "PI"
+  "SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"
 ];
 
 // =============== HELPERS ===============
@@ -2457,6 +2481,15 @@ class BotHandler {
       [qBtn("📍 CEP", "query:cep"), qBtn("📝 Nome", "query:nome")],
       [qBtn("📊 Score", "query:score"), qBtn("💳 PIX", "query:pix")],
       [qBtn("🪪 RG", "query:rg"), qBtn("🪪 CNH", "query:cnh")],
+      [qBtn("📜 Título", "query:titulo"), qBtn("📍 Endereço", "query:endereco")],
+      [qBtn("💰 Renda", "query:renda"), qBtn("👩 Mãe", "query:mae")],
+      [qBtn("⚖️ Processos", "query:processos"), qBtn("🔍 BNMP", "query:bnmp")],
+      [qBtn("🗳️ TSE", "query:tse"), qBtn("📊 Credilink", "query:credilink")],
+      [qBtn("💎 Poder Aquis.", "query:poderaquisitivo"), qBtn("📋 SPC", "query:cpf_spc")],
+      [qBtn("🏥 SUS", "query:cpfsus"), qBtn("📋 PIS", "query:pis")],
+      [qBtn("👨‍👩‍👧‍👦 Parentes", "query:parentes"), qBtn("🔎 SIEL", "query:siel")],
+      [qBtn("🔧 Chassi", "query:chassi"), qBtn("📋 RENAVAM", "query:renavam")],
+      [qBtn("⚙️ Motor", "query:motor")],
       [qBtn("📸 Foto Nacional", "query:nacional")],
       [qBtn("📸 Foto por Estado", "query:foto")],
     ];
@@ -2509,6 +2542,23 @@ class BotHandler {
       case "rg": placeholder = "Digite o RG:"; break;
       case "cnh": placeholder = "Digite o número da CNH:"; break;
       case "foto": case "nacional": placeholder = "Digite o CPF:"; break;
+      case "titulo": placeholder = "Digite o CPF para consultar título de eleitor:"; break;
+      case "endereco": placeholder = "Digite o CPF para consultar endereço:"; break;
+      case "renda": placeholder = "Digite o CPF para consultar renda:"; break;
+      case "processos": placeholder = "Digite o CPF para consultar processos:"; break;
+      case "bnmp": placeholder = "Digite o CPF para consultar BNMP:"; break;
+      case "siel": placeholder = "Digite o CPF para consultar SIEL:"; break;
+      case "tse": placeholder = "Digite o CPF para consultar TSE:"; break;
+      case "mae": placeholder = "Digite o CPF para consultar nome da mãe:"; break;
+      case "credilink": placeholder = "Digite o CPF para consultar Credilink:"; break;
+      case "cpf_spc": placeholder = "Digite o CPF para consultar SPC:"; break;
+      case "poderaquisitivo": placeholder = "Digite o CPF para consultar poder aquisitivo:"; break;
+      case "cpfsus": placeholder = "Digite o CPF para consultar SUS:"; break;
+      case "pis": placeholder = "Digite o CPF para consultar PIS:"; break;
+      case "parentes": placeholder = "Digite o CPF para consultar parentes:"; break;
+      case "chassi": placeholder = "Digite o número do chassi:"; break;
+      case "renavam": placeholder = "Digite a placa para consultar RENAVAM:"; break;
+      case "motor": placeholder = "Digite o número do motor:"; break;
       default: placeholder = "Digite o valor para consultar:";
     }
 
@@ -3698,13 +3748,16 @@ class BotHandler {
       cep: "cep", nome: "nome", score: "score",
       rg: "rg", cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
+      titulo: "titulo", endereco: "endereco", renda: "renda",
+      processos: "processos", bnmp: "bnmp", siel: "siel",
+      tse: "tse", mae: "mae", credilink: "credilink",
+      spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
     };
     
     const commands: Array<{ command: string; queryType: string; queryInput: string }> = [];
     
-    // Split by command patterns, keeping the delimiter
-    // Matches: /cpf, /cnpj, etc. at the start or preceded by whitespace
-    const commandPattern = /(?:^|\s)(\/(?:cpf|cnpj|placa2?|telefone|tel|email|cep|nome|score|rg|cnh|pix|foto|nacional)(?:@\w+)?)/gi;
+    const commandPattern = /(?:^|\s)(\/(?:cpf|cnpj|placa2?|telefone|tel|email|cep|nome|score|rg|cnh|pix|foto|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae|credilink|spc|poder|sus|pis|parentes|chassi|renavam|motor)(?:@\w+)?)/gi;
     const matches = [...text.matchAll(commandPattern)];
     
     if (matches.length === 0) return commands;
@@ -3858,7 +3911,12 @@ class BotHandler {
       telefone: "telefone", tel: "telefone", email: "email",
       cep: "cep", nome: "nome", score: "score",
       rg: "rg", cnh: "cnh", pix: "pix",
-      foto: "foto", nacional: "foto", // nacional agora usa a mesma lógica de foto sem estado
+      foto: "foto", nacional: "foto",
+      titulo: "titulo", endereco: "endereco", renda: "renda",
+      processos: "processos", bnmp: "bnmp", siel: "siel",
+      tse: "tse", mae: "mae", credilink: "credilink",
+      spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
     };
 
     const queryType = commandMap[command];
@@ -3889,7 +3947,24 @@ class BotHandler {
         rg: "/rg MG12345678",
         cnh: "/cnh 12345678900",
         pix: "/pix chave@pix.com",
-        foto: "/foto 12345678900 (busca em todos estados) ou /foto SP 12345678900 (estado específico)",
+        foto: "/foto 12345678900",
+        titulo: "/titulo 12345678900",
+        endereco: "/endereco 12345678900",
+        renda: "/renda 12345678900",
+        processos: "/processos 12345678900",
+        bnmp: "/bnmp 12345678900",
+        siel: "/siel 12345678900",
+        tse: "/tse 12345678900",
+        mae: "/mae 12345678900",
+        credilink: "/credilink 12345678900",
+        cpf_spc: "/spc 12345678900",
+        poderaquisitivo: "/poder 12345678900",
+        cpfsus: "/sus 12345678900",
+        pis: "/pis 12345678900",
+        parentes: "/parentes 12345678900",
+        chassi: "/chassi CHASSI123",
+        renavam: "/renavam 12345678900",
+        motor: "/motor MOTOR123",
       };
 
       await telegramRequest(this.token, "sendMessage", {

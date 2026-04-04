@@ -13,39 +13,107 @@ interface QueryRequest {
   estado?: string;
 }
 
-interface ApiProvider {
-  baseUrl: string;
-  port: number;
-}
+// =============== VEICULOS API PROVIDER ===============
+const VEICULOS_API_BASE = "https://veiculosapi.com/api/proxy";
+
+// Map internal query types to VeiculosAPI module names
+const veiculosModuleMap: Record<string, string> = {
+  // Pessoa
+  cpf: "cpffull",
+  nome: "nomefull",
+  rg: "rg",
+  titulo: "titulo",
+  parentes: "parentes",
+  mae: "maefull",
+  // Documentos alternativos
+  cnh: "cnh",
+  pis: "pis",
+  // Contato
+  telefone: "telefonefull",
+  email: "emailfull",
+  cep: "cepfull",
+  endereco: "endereco",
+  // Financeiro
+  pix: "pix",
+  score: "score",
+  renda: "renda",
+  credilink: "credilink",
+  cpf_spc: "cpf-spc",
+  poderaquisitivo: "poderaquisitivo",
+  // Veículos
+  placa: "placa",
+  placa_completa: "placa-serpro",
+  placa_simples: "placa-simples",
+  placa_sesp: "placa-sesp",
+  chassi: "chassi",
+  renavam: "renavam",
+  motor: "motor",
+  // Empresa
+  cnpj: "cnpj-cred",
+  // Justiça
+  processos: "processos",
+  bnmp: "bnmp-lc",
+  siel: "siel",
+  // TSE
+  tse: "tse-3",
+  // SUS
+  cpfsus: "cpfsus",
+  // Alternativas (variantes -3)
+  rg3: "rg-3",
+  pis3: "pis-3",
+  cep3: "cep-3",
+  email3: "email-3",
+  nome3: "nome-3",
+  score3: "score-3",
+  parentes3: "parentes-3",
+  telefone3: "telefone-3",
+  // CPF variantes
+  cpf_isk: "cpf-isk",
+  cpf_basico: "cpf",
+  // Foto por estado
+  fotomg: "fotomg",
+  fotosp: "fotosp",
+  fotorj: "fotorj",
+  fotoba: "fotoba",
+  fotoce: "fotoce",
+  fotogo: "fotogo",
+  fotopr: "fotopr",
+  fotors: "fotors",
+  fotope: "fotope",
+  fotoma: "fotoma",
+  fotoes: "fotoes",
+  fotodf: "fotodf",
+  fototo: "fototo",
+};
+
+// Foto state map for national search
+const fotoStateModules: Record<string, string> = {
+  MG: "fotomg", SP: "fotosp", RJ: "fotorj", BA: "fotoba",
+  CE: "fotoce", GO: "fotogo", PR: "fotopr", RS: "fotors",
+  PE: "fotope", MA: "fotoma", ES: "fotoes", DF: "fotodf",
+  TO: "fototo",
+};
+
+// Priority order for national photo search
+const fotoStatePriority = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"];
 
 // TTL configurations per query type (in hours)
 const cacheTTL: Record<string, number> = {
-  cpf: 24,
-  cnpj: 24,
-  placa: 12,
-  placa_completa: 12,
-  placa2: 12,
-  score: 6,
-  foto: 168, // 7 days
-  nacional: 168, // 7 days
-  telefone: 24,
-  email: 24,
-  cep: 720, // 30 days
-  nome: 24,
-  rg: 24,
-  cnh: 24,
-  pix: 24,
-  parentes: 24,
-  empregos: 24,
-  chassi: 24,
-  renavam: 24,
-  motor: 24,
-  frota: 24,
-  bin: 24,
-  cns: 24,
+  cpf: 24, cnpj: 24, placa: 12, placa_completa: 12, placa_simples: 12, placa_sesp: 12,
+  score: 6, foto: 168, nacional: 168,
+  telefone: 24, email: 24, cep: 720, nome: 24,
+  rg: 24, cnh: 24, pix: 24, parentes: 24,
+  chassi: 24, renavam: 24, motor: 24,
+  titulo: 24, endereco: 24, renda: 24,
+  processos: 24, bnmp: 24, siel: 24, tse: 24,
+  credilink: 24, cpf_spc: 24, poderaquisitivo: 24,
+  mae: 24, pis: 24, cpfsus: 24, cpf_isk: 24,
 };
 
-// Dynamic provider/module loading from DB
+// All supported query types for GET help
+const allSupportedTypes = Object.keys(veiculosModuleMap).concat(["foto", "nacional"]);
+
+// Dynamic module loading from DB
 interface DbModule {
   module_key: string;
   enabled: boolean;
@@ -56,69 +124,39 @@ interface DbModule {
   provider: string;
 }
 
-// Cache modules in memory for 60 seconds
 let cachedModules: DbModule[] | null = null;
 let cacheTimestamp = 0;
-const MODULE_CACHE_TTL = 60_000; // 60s
+const MODULE_CACHE_TTL = 60_000;
 
 async function getModules(supabase: ReturnType<typeof createClient>): Promise<DbModule[]> {
   const now = Date.now();
   if (cachedModules && (now - cacheTimestamp) < MODULE_CACHE_TTL) {
     return cachedModules;
   }
-
   const { data, error } = await supabase
     .from("query_modules")
     .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
-
   if (error) {
     console.error("Error loading modules from DB:", error);
-    // Fallback: return cached or empty
     return cachedModules || [];
   }
-
   cachedModules = (data || []) as DbModule[];
   cacheTimestamp = now;
   return cachedModules;
 }
 
-function getModuleConfig(modules: DbModule[], key: string): DbModule | null {
-  return modules.find(m => m.module_key === key) || null;
-}
-
-// Fallback NexFuture endpoints (used only if DB is empty)
-const nexfutureEndpoints: Record<string, string> = {
-  cpf: "/cpf", cnpj: "/cnpj", placa: "/placa",
-  telefone: "/telefone", rg: "/rg", cns: "/cns",
-  cnh: "/cnh", nome: "/nome", parentes: "/parentes",
-  empregos: "/empregos", email: "/email", cep: "/cep",
-  pix: "/pix", chassi: "/chassi", renavam: "/renavam",
-  motor: "/motor", frota: "/frota", bin: "/bin",
-};
-
-// Brazilian states for national photo search
-const brazilianStates = [
-  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
-  "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
-  "RS", "RO", "RR", "SC", "SP", "SE", "TO"
-];
-
-// Generate a simple hash for cache key
+// =============== CACHE HELPERS ===============
 async function generateHash(queryType: string, queryInput: string): Promise<string> {
   const text = `${queryType.toLowerCase()}:${queryInput}`;
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
+  const data = new TextEncoder().encode(text);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-// Get TTL for query type
 function getTTLHours(queryType: string): number {
   return cacheTTL[queryType.toLowerCase()] || 24;
 }
 
-// Check cache for existing result
 async function checkCache(
   supabase: ReturnType<typeof createClient>,
   queryHash: string
@@ -130,24 +168,17 @@ async function checkCache(
     .gt("expires_at", new Date().toISOString())
     .maybeSingle();
 
-  if (error || !data) {
-    return { hit: false };
-  }
+  if (error || !data) return { hit: false };
 
-  // Fire-and-forget: don't await hit count update (saves ~50-100ms on cache hits)
   supabase
     .from("query_cache")
-    .update({ 
-      hit_count: (data.hit_count || 0) + 1, 
-      last_accessed: new Date().toISOString() 
-    })
+    .update({ hit_count: (data.hit_count || 0) + 1, last_accessed: new Date().toISOString() })
     .eq("id", data.id)
     .then(() => {});
 
   return { hit: true, data: data.cached_result as Record<string, unknown> };
 }
 
-// Save result to cache
 async function saveToCache(
   supabase: ReturnType<typeof createClient>,
   queryType: string,
@@ -157,7 +188,6 @@ async function saveToCache(
 ): Promise<void> {
   const ttlHours = getTTLHours(queryType);
   const expiresAt = new Date(Date.now() + ttlHours * 60 * 60 * 1000).toISOString();
-
   await supabase
     .from("query_cache")
     .upsert({
@@ -171,6 +201,79 @@ async function saveToCache(
     }, { onConflict: "query_hash" });
 }
 
+// =============== VEICULOS API FETCH ===============
+async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Record<string, unknown>> {
+  const apiKey = Deno.env.get("CONSULTAS_API_KEY");
+  if (!apiKey) {
+    console.error("CONSULTAS_API_KEY not configured!");
+    return { error: "⚠️ Chave de API não configurada. Contate o administrador." };
+  }
+
+  const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(modulo)}&string=${encodeURIComponent(valor)}`;
+  console.log(`[VeiculosAPI] Fetching: modulo=${modulo}, valor=${valor}`);
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Accept": "application/json" },
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (response.status === 404) {
+      console.log(`[VeiculosAPI] Not found (404) for modulo=${modulo}`);
+      return { notFound: true, message: "Dados não encontrados" };
+    }
+
+    if (!response.ok) {
+      console.error(`[VeiculosAPI] HTTP error: ${response.status}`);
+      return { error: `Erro na API: ${response.status}` };
+    }
+
+    const contentType = response.headers.get("content-type") || "";
+    
+    // If response is text/html or plain text, return as data string
+    if (!contentType.includes("application/json")) {
+      const text = await response.text();
+      if (!text || text.trim().length === 0) {
+        return { notFound: true, message: "Dados não encontrados" };
+      }
+      return { data: text, modulo };
+    }
+
+    const data = await response.json();
+    
+    // Check for empty/error responses
+    if (data === null || data === undefined) {
+      return { notFound: true, message: "Dados não encontrados" };
+    }
+    
+    // Some modules return { error: ... } or { status: "error" }
+    if (data.error || data.status === "error") {
+      return { notFound: true, message: data.error || data.message || "Dados não encontrados" };
+    }
+
+    return { ...data, modulo };
+  } catch (err) {
+    clearTimeout(timeoutId);
+    const error = err as Error;
+    console.error(`[VeiculosAPI] Error:`, error.message);
+    if (error.name === "AbortError") {
+      return { error: "⏱️ Tempo limite excedido. Tente novamente." };
+    }
+    return { error: "⚠️ Erro de conexão. Tente novamente." };
+  }
+}
+
+// =============== LEGACY PROVIDER FETCH (fallback) ===============
+interface ApiProvider {
+  baseUrl: string;
+  port: number;
+}
+
 async function fetchFromProvider(
   provider: ApiProvider,
   endpoint: string,
@@ -180,55 +283,41 @@ async function fetchFromProvider(
 ): Promise<Record<string, unknown>> {
   const url = new URL(`${provider.baseUrl}:${provider.port}${endpoint}`);
   url.searchParams.set(queryParam, queryValue);
-  
   if (additionalParams) {
     Object.entries(additionalParams).forEach(([key, value]) => {
       url.searchParams.set(key, value);
     });
   }
 
-  console.log(`Fetching from: ${url.toString()}`);
-
+  console.log(`[Legacy] Fetching from: ${url.toString()}`);
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 25000);
 
   try {
     const response = await fetch(url.toString(), {
       method: "GET",
-      headers: {
-        "Accept": "application/json",
-      },
+      headers: { "Accept": "application/json" },
       signal: controller.signal,
     });
 
-    if (response.status === 404) {
-      console.log(`Data not found (404) for: ${url.toString()}`);
-      return { notFound: true, message: "Dados não encontrados" };
-    }
-
-    if (!response.ok) {
-      console.error(`API error: ${response.status} ${response.statusText}`);
-      return { error: `Erro na API: ${response.status}`, status: response.status };
-    }
+    if (response.status === 404) return { notFound: true, message: "Dados não encontrados" };
+    if (!response.ok) return { error: `Erro na API: ${response.status}`, status: response.status };
 
     const data = await response.json();
     clearTimeout(timeoutId);
-    console.log(`Response received:`, JSON.stringify(data).substring(0, 200));
     return data;
   } catch (err) {
     clearTimeout(timeoutId);
     const error = err as Error;
-    console.error(`Fetch error:`, error.message);
-    if (error.name === "AbortError") {
-      return { error: "⏱️ Tempo limite excedido. Tente novamente." };
+    if (error.name === "AbortError") return { error: "⏱️ Tempo limite excedido." };
+    if (error.message.includes('Connection refused') || error.message.includes('connect error') || error.message.includes('tcp connect')) {
+      return { error: "⚠️ Servidor temporariamente indisponível." };
     }
-    if (error.message.includes('Connection refused') || error.message.includes('connect error') || error.message.includes('tcp connect') || error.message.includes('error sending request')) {
-      return { error: "⚠️ Servidor temporariamente indisponível. Tente novamente em alguns minutos." };
-    }
-    return { error: "⚠️ Erro de conexão. Tente novamente." };
+    return { error: "⚠️ Erro de conexão." };
   }
 }
 
+// =============== HANDLE QUERY ===============
 async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof createClient>): Promise<Record<string, unknown>> {
   const { queryType, queryInput, estado } = req;
   const normalizedType = queryType.toLowerCase();
@@ -236,159 +325,97 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
 
   console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
 
-  // Load modules from DB
+  // Load modules from DB for enable/disable check
   const modules = await getModules(supabase);
-  const mod = getModuleConfig(modules, normalizedType);
+  const mod = modules.find(m => m.module_key === normalizedType);
 
-  // Check if query type is enabled (from DB)
-  // When disabled, return a "module_disabled" response (NOT an error)
-  // This allows the rest of the system (logging, stats, credits) to continue working normally
+  // Check if disabled in DB
   if (mod && !mod.enabled) {
-    return { 
+    return {
       module_disabled: true,
       message: `🚫 Módulo "${normalizedType}" temporariamente desativado.`,
       queryType: normalizedType,
-      queryInput: cleanInput
+      queryInput: cleanInput,
     };
   }
 
-  // If module not found in DB, check legacy fallback
-  if (!mod) {
-    if (enabledQueryTypes[normalizedType] === false) {
-      return { 
-        module_disabled: true,
-        message: `🚫 Módulo "${normalizedType}" temporariamente desativado.`,
-        queryType: normalizedType,
-        queryInput: cleanInput
-      };
-    }
-  }
-
-  // Build provider from DB module config
-  const buildProvider = (m: DbModule): ApiProvider => ({
-    baseUrl: m.base_url,
-    port: m.port,
-  });
-
-  // Standard queries (CPF, CNPJ, telefone, etc.) - use DB config
-  if (mod && nexfutureEndpoints[normalizedType]) {
-    const provider = buildProvider(mod);
-    return await fetchFromProvider(provider, mod.endpoint, mod.query_param, cleanInput);
-  }
-
-  // TConect Score - enriquecido com dados do CPF (parallelized)
-  if (normalizedType === "score") {
-    const scoreMod = mod || { base_url: "http://node.tconect.xyz", port: 3036, endpoint: "/score", query_param: "cpf" };
-    const cpfMod = getModuleConfig(modules, "cpf") || { base_url: "http://nxf-2.nexfuture.com.br", port: 25594, endpoint: "/cpf", query_param: "cpf" };
-    
-    const cpfCacheKey = `cpf:${cleanInput}`;
-    const cpfCacheHash = await generateHash(cpfCacheKey, "");
-    const cpfCacheResult = await checkCache(supabase, cpfCacheHash);
-
-    const scoreProvider: ApiProvider = { baseUrl: scoreMod.base_url, port: scoreMod.port };
-    const cpfProvider: ApiProvider = { baseUrl: cpfMod.base_url, port: cpfMod.port };
-
-    const scorePromise = fetchFromProvider(scoreProvider, scoreMod.endpoint, scoreMod.query_param || "cpf", cleanInput);
-    const cpfPromise = (!cpfCacheResult.hit)
-      ? fetchFromProvider(cpfProvider, cpfMod.endpoint, cpfMod.query_param || "cpf", cleanInput)
-      : Promise.resolve(null);
-
-    const [scoreResult, cpfFreshResult] = await Promise.all([scorePromise, cpfPromise]);
-    
-    let cpfData: string | null = null;
-    
-    if (cpfCacheResult.hit && cpfCacheResult.data) {
-      cpfData = typeof cpfCacheResult.data.data === "string" 
-        ? cpfCacheResult.data.data 
-        : JSON.stringify(cpfCacheResult.data);
-    } else if (cpfFreshResult && !cpfFreshResult.error) {
-      cpfData = typeof cpfFreshResult.data === "string" 
-        ? cpfFreshResult.data 
-        : JSON.stringify(cpfFreshResult);
-    }
-    
-    let nome: string | null = null;
-    let nascimento: string | null = null;
-    
-    if (cpfData) {
-      const nomeMatch = cpfData.match(/NOME\s*[⎯\-:]\s*([^\n]+)/i);
-      if (nomeMatch) nome = nomeMatch[1].trim();
-      const nascMatch = cpfData.match(/NASCIMENTO\s*[⎯\-:]\s*([^\n]+)/i);
-      if (nascMatch) nascimento = nascMatch[1].trim();
-    }
-    
-    return {
-      ...scoreResult,
-      cpf: cleanInput,
-      nome: nome || undefined,
-      nascimento: nascimento || undefined,
-      consulta_tipo: "score_enriquecido"
-    };
-  }
-
-  // TConect Placa Completa
-  if (normalizedType === "placa_completa" || normalizedType === "placa2") {
-    const placaMod = getModuleConfig(modules, "placa_completa") || { base_url: "http://node.tconect.xyz", port: 3041, endpoint: "/placa1", query_param: "placa" };
-    const provider: ApiProvider = { baseUrl: placaMod.base_url, port: placaMod.port };
-    return await fetchFromProvider(provider, placaMod.endpoint, placaMod.query_param || "placa", cleanInput);
-  }
-
-  // TConect Foto (single state)
-  if (normalizedType === "foto" && estado) {
-    const fotoMod = getModuleConfig(modules, "foto") || { base_url: "http://node.tconect.xyz", port: 3030, endpoint: "/foto", query_param: "cpf" };
-    const provider: ApiProvider = { baseUrl: fotoMod.base_url, port: fotoMod.port };
-    return await fetchFromProvider(provider, fotoMod.endpoint, fotoMod.query_param || "cpf", cleanInput, { estado: estado.toUpperCase() });
-  }
-
-  // TConect Nacional (search all states for photo)
+  // ---- FOTO: national search across state-specific modules ----
   if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
-    const fotoMod = getModuleConfig(modules, "foto") || { base_url: "http://node.tconect.xyz", port: 3030, endpoint: "/foto", query_param: "cpf" };
-    const provider: ApiProvider = { baseUrl: fotoMod.base_url, port: fotoMod.port };
-    
-    console.log("Starting national photo search across all states...");
-    
-    const priorityStates = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "MA", "ES", "PI"];
-    const otherStates = brazilianStates.filter(s => !priorityStates.includes(s));
-    const orderedStates = [...priorityStates, ...otherStates];
-    
-    let foundResult: Record<string, unknown> | null = null;
-    let foundState: string | null = null;
-    
-    const batchSize = 5;
-    for (let i = 0; i < orderedStates.length; i += batchSize) {
-      if (foundResult) break;
+    console.log("[Foto] Starting national photo search via VeiculosAPI...");
+
+    for (const state of fotoStatePriority) {
+      const fotoModulo = fotoStateModules[state];
+      if (!fotoModulo) continue;
+
+      const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
       
-      const batch = orderedStates.slice(i, i + batchSize);
-      const batchResults = await Promise.all(
-        batch.map(async (state) => {
-          const result = await fetchFromProvider(provider, fotoMod.endpoint, fotoMod.query_param || "cpf", cleanInput, { estado: state });
-          return { state, result };
-        })
-      );
-      
-      for (const { state, result } of batchResults) {
-        if (result && !result.error && !result.notFound && result.foto) {
-          foundResult = result;
-          foundState = state;
-          console.log(`Photo found in ${state}! Stopping search.`);
-          break;
+      // Check if we got valid photo data
+      const hasFoto = result && !result.error && !result.notFound;
+      if (hasFoto) {
+        // Try to extract foto field
+        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
+        if (fotoData && typeof fotoData === 'string') {
+          if (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR')) {
+            fotoData = `data:image/jpeg;base64,${fotoData}`;
+          }
+          return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: state };
+        }
+        // Even without explicit foto field, the result may contain data
+        if (result.data || Object.keys(result).length > 2) {
+          return { ...result, cpf: cleanInput, estado_encontrado: state };
         }
       }
     }
-    
-    if (foundResult && foundState) {
-      return { ...foundResult, cpf: cleanInput, estado_encontrado: foundState };
-    }
-    
+
     return {
       cpf: cleanInput, estados_encontrados: [], total_fotos: 0,
       foto: null, message: "Foto não encontrada nos estados pesquisados",
     };
   }
 
+  // ---- FOTO: specific state ----
+  if (normalizedType === "foto" && estado) {
+    const stateUpper = estado.toUpperCase();
+    const fotoModulo = fotoStateModules[stateUpper];
+    if (fotoModulo) {
+      const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
+      if (result && !result.error && !result.notFound) {
+        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
+        if (fotoData && typeof fotoData === 'string' && (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR'))) {
+          fotoData = `data:image/jpeg;base64,${fotoData}`;
+        }
+        return { ...result, foto: fotoData || null, cpf: cleanInput, estado_encontrado: stateUpper };
+      }
+      return {
+        error: `📸 Foto não encontrada no estado ${stateUpper}`,
+        notFound: true,
+      };
+    }
+    // State not available in VeiculosAPI, try legacy TConect
+    const fotoMod = modules.find(m => m.module_key === "foto");
+    if (fotoMod) {
+      const provider: ApiProvider = { baseUrl: fotoMod.base_url, port: fotoMod.port };
+      return await fetchFromProvider(provider, fotoMod.endpoint, fotoMod.query_param || "cpf", cleanInput, { estado: stateUpper });
+    }
+    return { error: `Estado ${stateUpper} não disponível para foto.`, notFound: true };
+  }
+
+  // ---- Standard queries via VeiculosAPI ----
+  const veiculosModulo = veiculosModuleMap[normalizedType];
+  if (veiculosModulo) {
+    return await fetchFromVeiculosApi(veiculosModulo, cleanInput);
+  }
+
+  // ---- Fallback: try legacy DB-configured providers ----
+  if (mod) {
+    const provider: ApiProvider = { baseUrl: mod.base_url, port: mod.port };
+    return await fetchFromProvider(provider, mod.endpoint, mod.query_param, cleanInput);
+  }
+
   return { error: `Tipo de consulta não suportado: ${queryType}` };
 }
 
+// =============== MAIN HANDLER ===============
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -402,7 +429,6 @@ Deno.serve(async (req) => {
 
     let queryRequest: QueryRequest;
 
-    // Support GET via query params
     if (req.method === "GET") {
       const url = new URL(req.url);
       const tipo = url.searchParams.get("tipo");
@@ -411,24 +437,18 @@ Deno.serve(async (req) => {
 
       if (!tipo || !valor) {
         return new Response(
-          JSON.stringify({ 
+          JSON.stringify({
             error: "Parâmetros 'tipo' e 'valor' são obrigatórios",
-            exemplo: "?tipo=telefone&valor=11999999999",
-            tipos_disponiveis: Object.keys(nexfutureEndpoints).concat(["score", "foto", "nacional", "placa_completa"])
+            exemplo: "?tipo=cpf&valor=12345678900",
+            tipos_disponiveis: allSupportedTypes,
           }),
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
-      queryRequest = {
-        queryType: tipo,
-        queryInput: valor,
-        estado: estado || undefined
-      };
-      console.log("GET request params:", JSON.stringify(queryRequest));
+      queryRequest = { queryType: tipo, queryInput: valor, estado: estado || undefined };
     } else {
       queryRequest = await req.json();
-      console.log("POST request body:", JSON.stringify(queryRequest));
     }
 
     if (!queryRequest.queryType || !queryRequest.queryInput) {
@@ -441,30 +461,25 @@ Deno.serve(async (req) => {
     const startTime = Date.now();
     const normalizedType = queryRequest.queryType.toLowerCase();
     const cleanInput = queryRequest.queryInput.replace(/[^\w@.-]/g, "").trim();
-    
-    // Generate cache key (include estado for foto queries)
-    const cacheKey = normalizedType === "foto" && queryRequest.estado 
+
+    const cacheKey = normalizedType === "foto" && queryRequest.estado
       ? `${normalizedType}:${cleanInput}:${queryRequest.estado.toUpperCase()}`
       : `${normalizedType}:${cleanInput}`;
     const queryHash = await generateHash(cacheKey, "");
 
-    // Check cache first
     const cacheResult = await checkCache(supabase, queryHash);
-    
+
     let result: Record<string, unknown>;
     let fromCache = false;
 
     if (cacheResult.hit && cacheResult.data) {
-      // CACHE HIT
       console.log(`Cache HIT for hash: ${queryHash.substring(0, 16)}...`);
       result = cacheResult.data;
       fromCache = true;
     } else {
-      // CACHE MISS - fetch from external API
       console.log(`Cache MISS for hash: ${queryHash.substring(0, 16)}...`);
       result = await handleQuery(queryRequest, supabase);
-      
-      // Only cache successful results (not errors, not found, or disabled modules)
+
       if (!result.error && !result.notFound && !result.module_disabled) {
         await saveToCache(supabase, normalizedType, cleanInput, queryHash, result);
         console.log(`Saved to cache with TTL: ${getTTLHours(normalizedType)}h`);
@@ -472,12 +487,10 @@ Deno.serve(async (req) => {
     }
 
     const duration = Date.now() - startTime;
-    console.log(`Query completed in ${duration}ms (fromCache: ${fromCache})`);
 
     // Log query for authenticated users
     const authHeader = req.headers.get("Authorization");
     let userId = null;
-    
     if (authHeader) {
       const token = authHeader.replace("Bearer ", "");
       const { data: { user } } = await supabase.auth.getUser(token);
@@ -485,7 +498,6 @@ Deno.serve(async (req) => {
     }
 
     if (userId) {
-      // Log ALL queries including disabled modules (they still count as activity)
       const isDisabled = result.module_disabled === true;
       await supabase.from("query_history").insert({
         user_id: userId,
@@ -495,7 +507,6 @@ Deno.serve(async (req) => {
         status: result.error ? "error" : isDisabled ? "disabled" : "success",
       });
 
-      // Count credits for all non-cached queries (including disabled - they still represent usage)
       if (!fromCache) {
         await supabase.from("api_usage_logs").insert({
           user_id: userId,
@@ -518,10 +529,7 @@ Deno.serve(async (req) => {
         module_disabled: isDisabledModule || undefined,
         error: isError ? result.error : undefined,
       }),
-      {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
     const error = err as Error;
