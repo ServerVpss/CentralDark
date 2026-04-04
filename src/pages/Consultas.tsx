@@ -380,20 +380,12 @@ export default function Consultas() {
                     <div className="flex items-center justify-between">
                       <CardTitle>Resultado</CardTitle>
                       <div className="flex items-center gap-2">
-                        {result.fromCache && (
-                          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 gap-1">
-                            <Zap className="h-3 w-3" />
-                            Cache
-                          </Badge>
-                        )}
                         <Badge variant={result.success ? "default" : "destructive"}>
                           {result.success ? "Sucesso" : "Erro"}
                         </Badge>
-                      </div>
                     </div>
                     <CardDescription>
                       Consulta realizada em {result.duration_ms}ms
-                      {result.fromCache && " (do índice)"}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
