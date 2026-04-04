@@ -375,6 +375,31 @@ function extractData(data: any): Record<string, any> {
     if (typeof value === "object" && !Array.isArray(value)) {
       const nested = extractData(value);
       Object.assign(result, nested);
+    } else if (Array.isArray(value)) {
+      // Handle arrays of objects by flattening them
+      if (value.length > 0 && typeof value[0] === "object" && value[0] !== null) {
+        value.forEach((item, idx) => {
+          if (typeof item === "object" && item !== null) {
+            const nested = extractData(item);
+            for (const [nk, nv] of Object.entries(nested)) {
+              const existingKey = applyAlias(nk);
+              if (result[existingKey] && result[existingKey] !== nv) {
+                // If key already exists, convert to array
+                if (Array.isArray(result[existingKey])) {
+                  (result[existingKey] as any[]).push(nv);
+                } else {
+                  result[existingKey] = [result[existingKey], nv];
+                }
+              } else {
+                result[existingKey] = nv;
+              }
+            }
+          }
+        });
+      } else {
+        const normalizedKey = applyAlias(key);
+        result[normalizedKey] = value;
+      }
     } else {
       const normalizedKey = applyAlias(key);
       result[normalizedKey] = value;
@@ -774,7 +799,21 @@ function formatValue(value: any): string {
     return value ? "SIM" : "NÃO";
   }
   if (Array.isArray(value)) {
-    return value.join(", ");
+    return value.map(item => {
+      if (typeof item === "object" && item !== null) {
+        return Object.entries(item)
+          .filter(([, v]) => v !== null && v !== undefined && v !== "")
+          .map(([k, v]) => `${k}: ${v}`)
+          .join(", ");
+      }
+      return String(item);
+    }).join(", ");
+  }
+  if (typeof value === "object" && value !== null) {
+    return Object.entries(value)
+      .filter(([, v]) => v !== null && v !== undefined && v !== "")
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(", ");
   }
   const strValue = String(value);
   if (strValue.toLowerCase().includes("não informad")) {
@@ -799,7 +838,15 @@ function generateCategoryCopyText(category: string, fields: Record<string, any>)
     if (Array.isArray(value) && value.length > 0) {
       lines.push(`- ${label.toUpperCase()} -`);
       value.forEach((item, idx) => {
-        lines.push(`${idx} => ${String(item)}`);
+        if (typeof item === "object" && item !== null) {
+          const itemText = Object.entries(item)
+            .filter(([, v]) => v !== null && v !== undefined && v !== "")
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(" | ");
+          lines.push(`${idx} => ${itemText}`);
+        } else {
+          lines.push(`${idx} => ${String(item)}`);
+        }
       });
     } else {
       lines.push(`${emoji} ${label}: ${formatted}`);
@@ -872,11 +919,22 @@ function CategorySection({
             return (
               <div key={key} className="space-y-0.5">
                 <div className="text-cyan-500 text-xs">- {label.toUpperCase()} -</div>
-                {value.map((item, itemIdx) => (
-                  <div key={itemIdx} className="text-cyan-100 pl-2">
-                    {itemIdx} {'=>'} {String(item).toUpperCase()}
-                  </div>
-                ))}
+                {value.map((item, itemIdx) => {
+                  let displayText: string;
+                  if (typeof item === "object" && item !== null) {
+                    displayText = Object.entries(item)
+                      .filter(([, v]) => v !== null && v !== undefined && v !== "")
+                      .map(([k, v]) => `${k}: ${v}`)
+                      .join(" | ");
+                  } else {
+                    displayText = String(item);
+                  }
+                  return (
+                    <div key={itemIdx} className="text-cyan-100 pl-2">
+                      {itemIdx} {'=>'} {displayText.toUpperCase()}
+                    </div>
+                  );
+                })}
               </div>
             );
           }

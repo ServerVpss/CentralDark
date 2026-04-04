@@ -1875,7 +1875,15 @@ function formatCpfResult(
       for (const [k, v] of Object.entries(data)) {
         if (k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) {
           if (Array.isArray(v)) {
-            results.push(...v.map(item => String(item).trim().toUpperCase()).filter(item => item && item !== '-'));
+            results.push(...v.map(item => {
+              if (typeof item === 'object' && item !== null) {
+                return Object.entries(item)
+                  .filter(([, val]) => val !== null && val !== undefined && val !== '')
+                  .map(([k, val]) => `${k}: ${val}`)
+                  .join(', ');
+              }
+              return String(item).trim().toUpperCase();
+            }).filter(item => item && item !== '-'));
           } else if (v && typeof v === 'string' && v.trim() && v !== '-' && !shouldIgnore(v)) {
             const items = v.split(/[,\n]/).map(item => item.trim().toUpperCase()).filter(item => item && item !== '-');
             results.push(...items);
@@ -2196,8 +2204,13 @@ function formatGenericResult(
     
     for (const item of items) {
       const displayKey = formatKey(item.key);
-      const displayValue = String(item.value).toUpperCase();
-      if (!shouldIgnore(displayValue)) {
+      let displayValue: string;
+      if (typeof item.value === 'object' && item.value !== null) {
+        displayValue = JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase();
+      } else {
+        displayValue = String(item.value).toUpperCase();
+      }
+      if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
         lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
       }
     }
@@ -2214,8 +2227,13 @@ function formatGenericResult(
     
     for (const item of uncategorized) {
       const displayKey = formatKey(item.key);
-      const displayValue = String(item.value).toUpperCase();
-      if (!shouldIgnore(displayValue)) {
+      let displayValue: string;
+      if (typeof item.value === 'object' && item.value !== null) {
+        displayValue = JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase();
+      } else {
+        displayValue = String(item.value).toUpperCase();
+      }
+      if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
         lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
       }
     }
