@@ -24,34 +24,49 @@ interface ProviderInfo {
 }
 
 const initialModules: ModuleInfo[] = [
-  { key: "cpf", label: "CPF", icon: "👤", enabled: false, provider: "NexFuture", category: "pessoa" },
-  { key: "nome", label: "Nome", icon: "📝", enabled: false, provider: "NexFuture", category: "pessoa" },
-  { key: "foto", label: "Foto", icon: "📸", enabled: false, provider: "TConect", category: "pessoa" },
-  { key: "nacional", label: "Foto Nacional", icon: "🇧🇷", enabled: false, provider: "TConect", category: "pessoa" },
-  { key: "parentes", label: "Parentes", icon: "👨‍👩‍👧‍👦", enabled: false, provider: "NexFuture", category: "pessoa" },
-  { key: "empregos", label: "Empregos", icon: "💼", enabled: false, provider: "NexFuture", category: "pessoa" },
-  { key: "rg", label: "RG", icon: "🪪", enabled: false, provider: "NexFuture", category: "documento" },
-  { key: "cnh", label: "CNH", icon: "🪪", enabled: false, provider: "NexFuture", category: "documento" },
-  { key: "cns", label: "CNS", icon: "🏥", enabled: false, provider: "NexFuture", category: "documento" },
-  { key: "telefone", label: "Telefone", icon: "📞", enabled: false, provider: "NexFuture", category: "contato" },
-  { key: "email", label: "Email", icon: "📧", enabled: false, provider: "NexFuture", category: "contato" },
-  { key: "cep", label: "CEP", icon: "📍", enabled: false, provider: "NexFuture", category: "contato" },
-  { key: "pix", label: "PIX", icon: "💳", enabled: false, provider: "NexFuture", category: "financeiro" },
-  { key: "score", label: "Score", icon: "📊", enabled: false, provider: "TConect", category: "financeiro" },
-  { key: "bin", label: "BIN", icon: "💳", enabled: false, provider: "NexFuture", category: "financeiro" },
-  { key: "placa", label: "Placa", icon: "🚗", enabled: false, provider: "NexFuture", category: "veiculo" },
-  { key: "placa_completa", label: "Placa Completa", icon: "🚗", enabled: false, provider: "TConect", category: "veiculo" },
-  { key: "chassi", label: "Chassi", icon: "🔧", enabled: false, provider: "NexFuture", category: "veiculo" },
-  { key: "renavam", label: "RENAVAM", icon: "📋", enabled: false, provider: "NexFuture", category: "veiculo" },
-  { key: "motor", label: "Motor", icon: "⚙️", enabled: false, provider: "NexFuture", category: "veiculo" },
-  { key: "frota", label: "Frota", icon: "🚛", enabled: false, provider: "NexFuture", category: "veiculo" },
-  { key: "cnpj", label: "CNPJ", icon: "🏢", enabled: false, provider: "NexFuture", category: "empresa" },
+  // Pessoa
+  { key: "cpf", label: "CPF", icon: "👤", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
+  { key: "nome", label: "Nome", icon: "📝", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
+  { key: "foto", label: "Foto", icon: "📸", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
+  { key: "nacional", label: "Foto Nacional", icon: "🇧🇷", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
+  { key: "parentes", label: "Parentes", icon: "👨‍👩‍👧‍👦", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
+  { key: "mae", label: "Nome da Mãe", icon: "👩", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
+  // Documentos
+  { key: "rg", label: "RG", icon: "🪪", enabled: true, provider: "VeiculosAPI", category: "documento" },
+  { key: "cnh", label: "CNH", icon: "🪪", enabled: true, provider: "VeiculosAPI", category: "documento" },
+  { key: "titulo", label: "Título Eleitor", icon: "📜", enabled: true, provider: "VeiculosAPI", category: "documento" },
+  { key: "pis", label: "PIS", icon: "📋", enabled: true, provider: "VeiculosAPI", category: "documento" },
+  // Contato
+  { key: "telefone", label: "Telefone", icon: "📞", enabled: true, provider: "VeiculosAPI", category: "contato" },
+  { key: "email", label: "Email", icon: "📧", enabled: true, provider: "VeiculosAPI", category: "contato" },
+  { key: "cep", label: "CEP", icon: "📍", enabled: true, provider: "VeiculosAPI", category: "contato" },
+  { key: "endereco", label: "Endereço", icon: "🏠", enabled: true, provider: "VeiculosAPI", category: "contato" },
+  // Financeiro
+  { key: "pix", label: "PIX", icon: "💳", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
+  { key: "score", label: "Score", icon: "📊", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
+  { key: "renda", label: "Renda", icon: "💰", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
+  { key: "credilink", label: "Credilink", icon: "📊", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
+  { key: "cpf_spc", label: "SPC", icon: "📋", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
+  { key: "poderaquisitivo", label: "Poder Aquisitivo", icon: "💎", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
+  // Veículos
+  { key: "placa", label: "Placa", icon: "🚗", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
+  { key: "placa_completa", label: "Placa Completa", icon: "🚗", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
+  { key: "chassi", label: "Chassi", icon: "🔧", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
+  { key: "renavam", label: "RENAVAM", icon: "📋", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
+  { key: "motor", label: "Motor", icon: "⚙️", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
+  // Empresa
+  { key: "cnpj", label: "CNPJ", icon: "🏢", enabled: true, provider: "VeiculosAPI", category: "empresa" },
+  // Justiça
+  { key: "processos", label: "Processos", icon: "⚖️", enabled: true, provider: "VeiculosAPI", category: "justica" },
+  { key: "bnmp", label: "BNMP", icon: "🔍", enabled: true, provider: "VeiculosAPI", category: "justica" },
+  { key: "siel", label: "SIEL", icon: "🔎", enabled: true, provider: "VeiculosAPI", category: "justica" },
+  // Outros
+  { key: "tse", label: "TSE", icon: "🗳️", enabled: true, provider: "VeiculosAPI", category: "governo" },
+  { key: "cpfsus", label: "SUS", icon: "🏥", enabled: true, provider: "VeiculosAPI", category: "governo" },
 ];
 
 const initialProviders: ProviderInfo[] = [
-  { name: "NexFuture", baseUrl: "http://nxf-2.nexfuture.com.br", port: 25589, editable: true },
-  { name: "TConect Score", baseUrl: "http://node.tconect.xyz", port: 3029, editable: true },
-  { name: "TConect Foto", baseUrl: "http://node.tconect.xyz", port: 3030, editable: true },
+  { name: "VeiculosAPI", baseUrl: "https://veiculosapi.com/api/proxy", port: 443, editable: false },
 ];
 
 const categories: Record<string, { label: string; icon: string }> = {
@@ -61,9 +76,11 @@ const categories: Record<string, { label: string; icon: string }> = {
   financeiro: { label: "Financeiro", icon: "💰" },
   veiculo: { label: "Veículos", icon: "🚗" },
   empresa: { label: "Empresa", icon: "🏢" },
+  justica: { label: "Justiça", icon: "⚖️" },
+  governo: { label: "Governo", icon: "🏛️" },
 };
 
-const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa"];
+const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa", "justica", "governo"];
 
 export function QueryModulesManager() {
   const [modules, setModules] = useState<ModuleInfo[]>(initialModules);
