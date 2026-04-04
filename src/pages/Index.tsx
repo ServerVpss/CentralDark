@@ -4,6 +4,7 @@ import { StatsCard } from "@/components/dashboard/StatsCard";
 import { BotsSection } from "@/components/dashboard/BotsSection";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import { MaintenanceToggle } from "@/components/dashboard/MaintenanceToggle";
 import { SystemStatus } from "@/components/dashboard/SystemStatus";
 import { useAdminData } from "@/hooks/useAdminData";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
@@ -92,8 +93,9 @@ export default function Index() {
           <div className="lg:col-span-2">
             <BotsSection bots={bots} />
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4">
             <QuickActions />
+            <MaintenanceToggle botId={bots[0]?.id ?? null} />
           </div>
         </section>
 
