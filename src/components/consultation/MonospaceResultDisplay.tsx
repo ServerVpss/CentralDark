@@ -799,7 +799,21 @@ function formatValue(value: any): string {
     return value ? "SIM" : "NÃO";
   }
   if (Array.isArray(value)) {
-    return value.join(", ");
+    return value.map(item => {
+      if (typeof item === "object" && item !== null) {
+        return Object.entries(item)
+          .filter(([, v]) => v !== null && v !== undefined && v !== "")
+          .map(([k, v]) => `${k}: ${v}`)
+          .join(", ");
+      }
+      return String(item);
+    }).join(", ");
+  }
+  if (typeof value === "object" && value !== null) {
+    return Object.entries(value)
+      .filter(([, v]) => v !== null && v !== undefined && v !== "")
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(", ");
   }
   const strValue = String(value);
   if (strValue.toLowerCase().includes("não informad")) {
