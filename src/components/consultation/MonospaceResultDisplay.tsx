@@ -838,7 +838,15 @@ function generateCategoryCopyText(category: string, fields: Record<string, any>)
     if (Array.isArray(value) && value.length > 0) {
       lines.push(`- ${label.toUpperCase()} -`);
       value.forEach((item, idx) => {
-        lines.push(`${idx} => ${String(item)}`);
+        if (typeof item === "object" && item !== null) {
+          const itemText = Object.entries(item)
+            .filter(([, v]) => v !== null && v !== undefined && v !== "")
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(" | ");
+          lines.push(`${idx} => ${itemText}`);
+        } else {
+          lines.push(`${idx} => ${String(item)}`);
+        }
       });
     } else {
       lines.push(`${emoji} ${label}: ${formatted}`);
