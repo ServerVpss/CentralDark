@@ -28,6 +28,9 @@ export interface BotSettings {
   fake_engagement_interval_minutes?: number;
   fake_engagement_names?: string[];
   fake_engagement_last_sent?: string | null;
+  // Maintenance
+  maintenance_mode?: boolean;
+  maintenance_message?: string;
   created_at: string;
   updated_at: string;
 }

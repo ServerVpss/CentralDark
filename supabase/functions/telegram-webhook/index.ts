@@ -98,6 +98,9 @@ interface BotSettings {
   custom_emojis: string[] | null;
   // Efeito visual nas mensagens
   message_effect: string | null; // 'fire', 'like', 'heart', 'party', 'none'
+  // Modo manutenção
+  maintenance_mode: boolean;
+  maintenance_message: string;
 }
 
 interface Plan {
@@ -2584,6 +2587,12 @@ class BotHandler {
   }
 
   async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string, telegramUserName?: string) {
+    // Check maintenance mode - silently ignore so other bots can respond
+    if (this.settings.maintenance_mode) {
+      console.log(`[MAINTENANCE] Query "${queryType}" ignored - bot in maintenance mode.`);
+      return;
+    }
+
     // Check subscription
     const isActive = await this.isSubscriptionActive(telegramUserId);
     if (!isActive && !this.isOwner(telegramUserId)) {
@@ -3900,6 +3909,12 @@ class BotHandler {
     const telegramUserId = message.from!.id;
     const replyToId = message.message_id;
 
+    // Check maintenance mode - silently ignore all query commands
+    if (this.settings.maintenance_mode) {
+      console.log(`[MAINTENANCE] Group command ignored - bot in maintenance mode.`);
+      return;
+    }
+
     // Check for multiple commands in the same message
     const multipleCommands = this.parseMultipleCommands(text);
     
@@ -4555,6 +4570,15 @@ class BotHandler {
     // Query type selection
     if (data.startsWith("query:")) {
       const queryType = data.replace("query:", "");
+      // Block if maintenance mode is active
+      if (this.settings.maintenance_mode) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "🔧 Bot em manutenção. Retornaremos em breve.",
+          show_alert: true,
+        });
+        return;
+      }
       // Block disabled modules even via callback
       if (!await isQueryTypeEnabled(queryType, this.supabase)) {
         await telegramRequest(this.token, "answerCallbackQuery", {
@@ -5027,6 +5051,8 @@ Deno.serve(async (req) => {
       fixed_emoji: (settings as { fixed_emoji?: string } | null)?.fixed_emoji || '👍',
       custom_emojis: (settings as { custom_emojis?: string[] } | null)?.custom_emojis || ['👍', '❤️', '🔥', '🎉', '👏'],
       message_effect: (settings as { message_effect?: string } | null)?.message_effect || 'party',
+      maintenance_mode: (settings as { maintenance_mode?: boolean } | null)?.maintenance_mode || false,
+      maintenance_message: (settings as { maintenance_message?: string } | null)?.maintenance_message || '🔧 Bot em manutenção. Retornaremos em breve.',
     };
 
     const handler = new BotHandler(supabase, bot as BotData, botSettings, update);
