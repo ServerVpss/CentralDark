@@ -379,10 +379,9 @@ export default function Consultas() {
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle>Resultado</CardTitle>
-                      <div className="flex items-center gap-2">
-                        <Badge variant={result.success ? "default" : "destructive"}>
-                          {result.success ? "Sucesso" : "Erro"}
-                        </Badge>
+                      <Badge variant={result.success ? "default" : "destructive"}>
+                        {result.success ? "Sucesso" : "Erro"}
+                      </Badge>
                     </div>
                     <CardDescription>
                       Consulta realizada em {result.duration_ms}ms
