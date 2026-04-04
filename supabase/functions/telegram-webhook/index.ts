@@ -3905,7 +3905,8 @@ class BotHandler {
     
     if (multipleCommands.length > 1) {
       // Filter out disabled modules BEFORE processing
-      const enabledCommands = multipleCommands.filter(cmd => await isQueryTypeEnabled(cmd.queryType, this.supabase));
+      const enabledChecks = await Promise.all(multipleCommands.map(async cmd => ({ cmd, enabled: await isQueryTypeEnabled(cmd.queryType, this.supabase) })));
+      const enabledCommands = enabledChecks.filter(c => c.enabled).map(c => c.cmd);
       if (enabledCommands.length === 0) {
         console.log(`Group multi-query: all ${multipleCommands.length} modules disabled. Ignoring silently.`);
         return;
