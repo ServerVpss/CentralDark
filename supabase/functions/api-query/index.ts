@@ -415,8 +415,18 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
     const fotoModulo = fotoStateModules[stateUpper];
     if (fotoModulo) {
       const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
-      if (result && !result.error && !result.notFound) {
+      // Check for nested error (API returns sucesso:true but data.err says not found)
+      const nestedData = result?.dados as Record<string, unknown> | undefined;
+      const nestedDataInner = nestedData?.data as Record<string, unknown> | undefined;
+      const hasNestedError = nestedDataInner?.err && typeof nestedDataInner.err === 'string' &&
+        nestedDataInner.err.toLowerCase().includes('não encontrad');
+      
+      if (result && !result.error && !result.notFound && !hasNestedError) {
         let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
+        if (!fotoData && nestedDataInner) {
+          fotoData = nestedDataInner.foto || nestedDataInner.image || nestedDataInner.url ||
+                     nestedDataInner.photo || nestedDataInner.fotoBase64 || nestedDataInner.base64;
+        }
         if (fotoData && typeof fotoData === 'string' && (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR'))) {
           fotoData = `data:image/jpeg;base64,${fotoData}`;
         }
