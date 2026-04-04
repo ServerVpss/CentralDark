@@ -3909,6 +3909,12 @@ class BotHandler {
     const telegramUserId = message.from!.id;
     const replyToId = message.message_id;
 
+    // Check maintenance mode - silently ignore all query commands
+    if (this.settings.maintenance_mode) {
+      console.log(`[MAINTENANCE] Group command ignored - bot in maintenance mode.`);
+      return;
+    }
+
     // Check for multiple commands in the same message
     const multipleCommands = this.parseMultipleCommands(text);
     
