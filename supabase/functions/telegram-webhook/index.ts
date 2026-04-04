@@ -2542,6 +2542,23 @@ class BotHandler {
       case "rg": placeholder = "Digite o RG:"; break;
       case "cnh": placeholder = "Digite o número da CNH:"; break;
       case "foto": case "nacional": placeholder = "Digite o CPF:"; break;
+      case "titulo": placeholder = "Digite o CPF para consultar título de eleitor:"; break;
+      case "endereco": placeholder = "Digite o CPF para consultar endereço:"; break;
+      case "renda": placeholder = "Digite o CPF para consultar renda:"; break;
+      case "processos": placeholder = "Digite o CPF para consultar processos:"; break;
+      case "bnmp": placeholder = "Digite o CPF para consultar BNMP:"; break;
+      case "siel": placeholder = "Digite o CPF para consultar SIEL:"; break;
+      case "tse": placeholder = "Digite o CPF para consultar TSE:"; break;
+      case "mae": placeholder = "Digite o CPF para consultar nome da mãe:"; break;
+      case "credilink": placeholder = "Digite o CPF para consultar Credilink:"; break;
+      case "cpf_spc": placeholder = "Digite o CPF para consultar SPC:"; break;
+      case "poderaquisitivo": placeholder = "Digite o CPF para consultar poder aquisitivo:"; break;
+      case "cpfsus": placeholder = "Digite o CPF para consultar SUS:"; break;
+      case "pis": placeholder = "Digite o CPF para consultar PIS:"; break;
+      case "parentes": placeholder = "Digite o CPF para consultar parentes:"; break;
+      case "chassi": placeholder = "Digite o número do chassi:"; break;
+      case "renavam": placeholder = "Digite a placa para consultar RENAVAM:"; break;
+      case "motor": placeholder = "Digite o número do motor:"; break;
       default: placeholder = "Digite o valor para consultar:";
     }
 
