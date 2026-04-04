@@ -5,41 +5,43 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// =============== API PROVIDERS ===============
-interface ApiProvider {
-  baseUrl: string;
-  port: number;
-}
+// =============== VEICULOS API PROVIDER ===============
+const VEICULOS_API_BASE = "https://veiculosapi.com/api/proxy";
 
-const providers: Record<string, ApiProvider> = {
-  nexfuture: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25589 },
-  nexfuture_cpf: { baseUrl: "http://nxf-2.nexfuture.com.br", port: 25594 },
-  tconect_score: { baseUrl: "http://node.tconect.xyz", port: 3036 },
-  tconect_foto: { baseUrl: "http://node.tconect.xyz", port: 3030 },
+// Map internal query types to VeiculosAPI module names
+const veiculosModuleMap: Record<string, string> = {
+  cpf: "cpffull", nome: "nomefull", rg: "rg", titulo: "titulo",
+  parentes: "parentes", mae: "maefull", cnh: "cnh", pis: "pis",
+  telefone: "telefonefull", email: "emailfull", cep: "cepfull", endereco: "endereco",
+  pix: "pix", score: "score", renda: "renda", credilink: "credilink",
+  cpf_spc: "cpf-spc", poderaquisitivo: "poderaquisitivo",
+  placa: "placa", placa_completa: "placa-serpro", chassi: "chassi",
+  renavam: "renavam", motor: "motor",
+  cnpj: "cnpj-cred", processos: "processos", bnmp: "bnmp-lc", siel: "siel",
+  tse: "tse-3", cpfsus: "cpfsus",
 };
 
-const nexfutureEndpoints: Record<string, string> = {
-  cpf: "/cpf", cnpj: "/cnpj", placa: "/placa", telefone: "/telefone",
-  rg: "/rg", cns: "/cns", cnh: "/cnh", nome: "/nome", parentes: "/parentes",
-  empregos: "/empregos", email: "/email", cep: "/cep", pix: "/pix",
-  chassi: "/chassi", renavam: "/renavam", motor: "/motor", frota: "/frota", bin: "/bin",
+// Foto state modules
+const fotoStateModules: Record<string, string> = {
+  MG: "fotomg", SP: "fotosp", RJ: "fotorj", BA: "fotoba",
+  CE: "fotoce", GO: "fotogo", PR: "fotopr", RS: "fotors",
+  PE: "fotope", MA: "fotoma", ES: "fotoes", DF: "fotodf", TO: "fototo",
 };
-
-const brazilianStates = ["RJ", "BA", "MA", "SP", "ES", "CE", "PI"];
+const fotoStatePriority = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"];
 
 // =============== HELPERS ===============
 function validateInput(queryType: string, input: string): boolean {
   const cleanInput = input.replace(/[^\w@.]/g, "");
   switch (queryType) {
-    case "cpf":
-    case "score":
-    case "foto":
-    case "nacional":
+    case "cpf": case "score": case "foto": case "nacional":
+    case "titulo": case "renda": case "mae": case "processos":
+    case "bnmp": case "siel": case "tse": case "credilink":
+    case "cpf_spc": case "poderaquisitivo": case "cpfsus": case "pis":
+    case "parentes": case "endereco":
       return /^\d{11}$/.test(cleanInput);
     case "cnpj":
       return /^\d{14}$/.test(cleanInput);
-    case "placa":
-    case "placa_completa":
+    case "placa": case "placa_completa":
       return /^[A-Z0-9]{7}$/i.test(cleanInput);
     case "cep":
       return /^\d{8}$/.test(cleanInput);
@@ -54,100 +56,51 @@ function validateInput(queryType: string, input: string): boolean {
   }
 }
 
-async function fetchFromProvider(
-  provider: ApiProvider,
-  endpoint: string,
-  paramName: string,
-  paramValue: string,
-  extraParams?: Record<string, string>
-): Promise<Record<string, unknown>> {
-  const url = new URL(`${provider.baseUrl}:${provider.port}${endpoint}`);
-  url.searchParams.set(paramName, paramValue);
-  if (extraParams) {
-    for (const [key, value] of Object.entries(extraParams)) {
-      url.searchParams.set(key, value);
-    }
+async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Record<string, unknown>> {
+  const apiKey = Deno.env.get("CONSULTAS_API_KEY");
+  if (!apiKey) {
+    return { error: "⚠️ Chave de API não configurada." };
   }
 
-  console.log(`Fetching: ${url.toString()}`);
+  const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(modulo)}&string=${encodeURIComponent(valor)}`;
+  console.log(`[VeiculosAPI] Fetching: modulo=${modulo}`);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   try {
-    const response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       method: "GET",
       signal: controller.signal,
     });
-
     clearTimeout(timeoutId);
 
     if (response.status === 404) {
       return { notFound: true, error: "Dados não encontrados" };
     }
-
     if (!response.ok) {
       return { error: `Erro na API: ${response.status}` };
     }
 
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      const text = await response.text();
+      if (!text || text.trim().length === 0) {
+        return { notFound: true, error: "Dados não encontrados" };
+      }
+      return { data: text, modulo };
+    }
+
     const data = await response.json();
-    return data;
+    if (!data || data.error || data.status === "error") {
+      return { notFound: true, error: data?.error || "Dados não encontrados" };
+    }
+    return { ...data, modulo };
   } catch (error) {
     clearTimeout(timeoutId);
     const err = error as Error;
-    console.error(`Fetch error: ${err.message}`);
     if (err.name === "AbortError") {
       return { error: "⏱️ Tempo limite excedido. Tente novamente." };
-    }
-    if (err.message.includes('Connection refused') || err.message.includes('connect error') || err.message.includes('tcp connect')) {
-      return { error: "⚠️ Servidor temporariamente indisponível. Tente novamente em alguns minutos." };
-    }
-    return { error: "⚠️ Erro de conexão. Tente novamente." };
-  }
-}
-
-async function fetchFromProviderWithTimeout(
-  provider: ApiProvider,
-  endpoint: string,
-  paramName: string,
-  paramValue: string,
-  extraParams?: Record<string, string>,
-  signal?: AbortSignal
-): Promise<Record<string, unknown>> {
-  const url = new URL(`${provider.baseUrl}:${provider.port}${endpoint}`);
-  url.searchParams.set(paramName, paramValue);
-  if (extraParams) {
-    for (const [key, value] of Object.entries(extraParams)) {
-      url.searchParams.set(key, value);
-    }
-  }
-
-  console.log(`Fetching with timeout: ${url.toString()}`);
-
-  try {
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      signal,
-    });
-
-    if (response.status === 404) {
-      return { notFound: true, error: "Dados não encontrados" };
-    }
-
-    if (!response.ok) {
-      return { error: `Erro na API: ${response.status}` };
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    const err = error as Error;
-    console.error(`Fetch error: ${err.message}`);
-    if (err.name === "AbortError") {
-      return { error: "⏱️ Tempo limite excedido. Tente novamente." };
-    }
-    if (err.message.includes('Connection refused') || err.message.includes('connect error') || err.message.includes('tcp connect')) {
-      return { error: "⚠️ Servidor temporariamente indisponível. Tente novamente em alguns minutos." };
     }
     return { error: "⚠️ Erro de conexão. Tente novamente." };
   }
@@ -162,115 +115,44 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
     return { error: `Formato inválido para ${queryType}` };
   }
 
-  // Score - TConect
-  if (normalizedType === "score") {
-    return await fetchFromProvider(providers.tconect_score, "/score", "cpf", cleanInput);
-  }
-
-  // Placa completa - merge placa + renavam
-  if (normalizedType === "placa_completa") {
-    const [placaResult, renavamResult] = await Promise.all([
-      fetchFromProvider(providers.nexfuture, "/placa", "placa", cleanInput),
-      fetchFromProvider(providers.nexfuture, "/renavam", "placa", cleanInput),
-    ]);
-
-    return {
-      ...placaResult,
-      renavam_info: renavamResult,
-      consulta_tipo: "placa_completa",
-    };
-  }
-
-  // Standard NexFuture queries
-  if (nexfutureEndpoints[normalizedType]) {
-    const endpoint = nexfutureEndpoints[normalizedType];
-    const paramName = normalizedType === "placa" ? "placa" : normalizedType;
-    // CPF usa provider específico com porta 25594
-    const provider = normalizedType === "cpf" ? providers.nexfuture_cpf : providers.nexfuture;
-    return await fetchFromProvider(provider, endpoint, paramName, cleanInput);
-  }
-
-  // TConect Foto - with specific state
-  if (normalizedType === "foto" && estado) {
-    const result = await fetchFromProvider(
-      providers.tconect_foto,
-      "/foto",
-      "cpf",
-      cleanInput,
-      { estado: estado.toUpperCase() }
-    );
-
-    if (result.notFound || result.status === 404) {
-      return {
-        error: `📸 Foto não encontrada no estado ${estado.toUpperCase()}\n\n💡 Dica: Use /foto ${cleanInput} (sem estado) para buscar em todos os estados.`,
-        notFound: true
-      };
-    }
-    return result;
-  }
-
-  // TConect Foto - search ALL states (nacional)
-  if (normalizedType === "foto" || normalizedType === "nacional") {
-    console.log(`Starting national photo search across all states...`);
-    const results: Record<string, Record<string, unknown>> = {};
-    let foundFoto: unknown = null;
-    let foundEstado: string | null = null;
-
-    for (const state of brazilianStates) {
-      console.log(`Searching photo in ${state}...`);
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 25000);
-
-      try {
-        const result = await fetchFromProviderWithTimeout(
-          providers.tconect_foto,
-          "/foto",
-          "cpf",
-          cleanInput,
-          { estado: state },
-          controller.signal
-        );
-        clearTimeout(timeoutId);
-
-        let fotoData = result?.foto || result?.image || result?.url || result?.photo || result?.fotoBase64 || result?.base64;
-
-        if (fotoData && typeof fotoData === 'string') {
-          if (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR')) {
-            fotoData = `data:image/jpeg;base64,${fotoData}`;
-          }
+  // Foto nacional (search all states)
+  if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
+    for (const state of fotoStatePriority) {
+      const modulo = fotoStateModules[state];
+      if (!modulo) continue;
+      const result = await fetchFromVeiculosApi(modulo, cleanInput);
+      if (result && !result.error && !result.notFound) {
+        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
+        if (fotoData && typeof fotoData === 'string' && (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR'))) {
+          fotoData = `data:image/jpeg;base64,${fotoData}`;
         }
-
-        if (result && !result.error && !result.notFound && fotoData) {
-          results[state] = { ...result, foto: fotoData };
-          foundFoto = fotoData;
-          foundEstado = state;
-          console.log(`Photo found in ${state}! Stopping search.`);
-          break;
-        }
-      } catch (err) {
-        clearTimeout(timeoutId);
-        console.log(`Error for state ${state}:`, (err as Error).message);
+        return { ...result, foto: fotoData || null, cpf: cleanInput, estado_encontrado: state };
       }
     }
+    return { cpf: cleanInput, foto: null, message: "Foto não encontrada nos estados pesquisados" };
+  }
 
-    if (foundFoto && foundEstado && results[foundEstado]) {
-      return {
-        ...results[foundEstado],
-        estado_encontrado: foundEstado,
-        cpf: cleanInput
-      };
+  // Foto specific state
+  if (normalizedType === "foto" && estado) {
+    const modulo = fotoStateModules[estado.toUpperCase()];
+    if (modulo) {
+      const result = await fetchFromVeiculosApi(modulo, cleanInput);
+      if (result && !result.error && !result.notFound) {
+        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
+        if (fotoData && typeof fotoData === 'string' && (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR'))) {
+          fotoData = `data:image/jpeg;base64,${fotoData}`;
+        }
+        return { ...result, foto: fotoData || null, cpf: cleanInput, estado_encontrado: estado.toUpperCase() };
+      }
+      return { error: `📸 Foto não encontrada no estado ${estado.toUpperCase()}`, notFound: true };
     }
+    return { error: `Estado ${estado.toUpperCase()} não disponível.`, notFound: true };
+  }
 
-    return {
-      cpf: cleanInput,
-      estados_encontrados: Object.keys(results),
-      total_fotos: Object.keys(results).length,
-      foto: null,
-      nome: null,
-      message: "Foto não encontrada nos estados pesquisados",
-      resultados: results,
-    };
+  // Standard queries via VeiculosAPI
+  const modulo = veiculosModuleMap[normalizedType];
+  if (modulo) {
+    return await fetchFromVeiculosApi(modulo, cleanInput);
   }
 
   return { error: `Tipo de consulta não suportado: ${queryType}` };
