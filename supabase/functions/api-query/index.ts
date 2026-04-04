@@ -367,19 +367,38 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
       const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
       
       // Check if we got valid photo data
-      const hasFoto = result && !result.error && !result.notFound;
-      if (hasFoto) {
-        // Try to extract foto field
+      // The API may return sucesso:true but with data.err meaning no photo found
+      const hasError = result.error || result.notFound;
+      const nestedData = result.dados as Record<string, unknown> | undefined;
+      const nestedDataInner = nestedData?.data as Record<string, unknown> | undefined;
+      const hasNestedError = nestedDataInner?.err && typeof nestedDataInner.err === 'string' && 
+        nestedDataInner.err.toLowerCase().includes('não encontrad');
+      
+      if (hasError || hasNestedError) {
+        console.log(`[Foto] No photo found in ${state}, trying next...`);
+        continue;
+      }
+      
+      if (result) {
+        // Try to extract foto field from various possible locations
         let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
+        
+        // Also check inside nested dados.data
+        if (!fotoData && nestedDataInner) {
+          fotoData = nestedDataInner.foto || nestedDataInner.image || nestedDataInner.url || 
+                     nestedDataInner.photo || nestedDataInner.fotoBase64 || nestedDataInner.base64;
+        }
+        
         if (fotoData && typeof fotoData === 'string') {
           if (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR')) {
             fotoData = `data:image/jpeg;base64,${fotoData}`;
           }
           return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: state };
         }
-        // Even without explicit foto field, the result may contain data
-        if (result.data || Object.keys(result).length > 2) {
-          return { ...result, cpf: cleanInput, estado_encontrado: state };
+        // Even without explicit foto field, the result may contain meaningful data
+        if (Object.keys(result).length > 2) {
+          console.log(`[Foto] Got data from ${state} but no explicit foto field`);
+          continue; // Keep searching for an actual photo
         }
       }
     }
