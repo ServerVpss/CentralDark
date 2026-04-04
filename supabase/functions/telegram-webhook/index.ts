@@ -98,6 +98,9 @@ interface BotSettings {
   custom_emojis: string[] | null;
   // Efeito visual nas mensagens
   message_effect: string | null; // 'fire', 'like', 'heart', 'party', 'none'
+  // Modo manutenção
+  maintenance_mode: boolean;
+  maintenance_message: string;
 }
 
 interface Plan {
