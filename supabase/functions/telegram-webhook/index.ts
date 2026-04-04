@@ -1857,6 +1857,31 @@ function formatCpfResult(
   escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
+  // PRÉ-PROCESSAMENTO: achatar estrutura aninhada dados.cpf[0]
+  // A API retorna: { dados: { cpf: [{ dadosBasicos: {...}, emails: [...], enderecos: [...], telefones: [...], parentes: [...], score: [...] }] } }
+  const dados = data.dados as Record<string, unknown> | undefined;
+  if (dados && typeof dados === 'object') {
+    const cpfArray = (dados as Record<string, unknown>).cpf as unknown[];
+    if (Array.isArray(cpfArray) && cpfArray.length > 0) {
+      const firstRecord = cpfArray[0] as Record<string, unknown>;
+      // Flatten dadosBasicos to top level
+      const basicos = firstRecord.dadosBasicos as Record<string, unknown> | undefined;
+      if (basicos && typeof basicos === 'object') {
+        for (const [k, v] of Object.entries(basicos)) {
+          if (v !== null && v !== undefined && v !== '') {
+            data[k] = v;
+          }
+        }
+      }
+      // Flatten arrays (emails, enderecos, telefones, parentes, score, pis, tse)
+      for (const arrKey of ['emails', 'enderecos', 'telefones', 'parentes', 'score', 'pis', 'tse']) {
+        if (Array.isArray(firstRecord[arrKey]) && (firstRecord[arrKey] as unknown[]).length > 0) {
+          data[arrKey] = firstRecord[arrKey];
+        }
+      }
+    }
+  }
+
   // Extrair dados de forma segura
   const getValue = (keys: string[]): string | null => {
     for (const key of keys) {
