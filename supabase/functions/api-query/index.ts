@@ -24,7 +24,7 @@ const veiculosModuleMap: Record<string, string> = {
   rg: "rg",
   titulo: "titulo",
   parentes: "parentes",
-  mae: "maefull",
+  mae: "mae",
   // Documentos alternativos
   cnh: "cnh",
   pis: "pis",
