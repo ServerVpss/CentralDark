@@ -296,6 +296,33 @@ export default function BotSettings() {
           </TabsList>
 
           <TabsContent value="general" className="mt-6">
+            {/* Maintenance Mode Banner */}
+            <Card className={`mb-6 border-2 ${settings?.maintenance_mode ? "border-amber-500 bg-amber-500/5" : "border-border bg-card"}`}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-start gap-3">
+                    <span className="text-2xl">{settings?.maintenance_mode ? "🔧" : "✅"}</span>
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-semibold">
+                        Modo Manutenção
+                      </Label>
+                      <p className="text-xs text-muted-foreground">
+                        {settings?.maintenance_mode 
+                          ? "Bot em manutenção — consultas desativadas, outros bots do grupo podem responder"
+                          : "Bot operacional — respondendo consultas normalmente"}
+                      </p>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={settings?.maintenance_mode ?? false}
+                    onCheckedChange={(checked) => {
+                      autoSaveToggle("maintenance_mode", checked);
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Owners Section */}
               <Card className="bg-card border-border">
