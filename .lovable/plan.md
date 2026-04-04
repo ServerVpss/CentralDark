@@ -1,19 +1,38 @@
 
 
-# Correção do Nome do Secret da API
+# Correções Pós-Teste dos Módulos VeiculosAPI
 
-## Problema
-O nome `VEICULOS_API_KEY` é enganoso — a chave serve para **todos os módulos de consulta** (CPF, nome, telefone, placa, foto, score, etc.), não apenas veículos. O provedor se chama "veiculosapi.com" mas o serviço é uma plataforma completa de consultas.
+## Problemas Identificados
 
-## Solução
-Usar um nome genérico e preciso para o secret:
+### 1. Nome perde espaços
+O frontend em `handleHistorySelect` faz `input.replace(/\D/g, '')` que remove TUDO que não é dígito — incluindo letras e espaços. Para módulos de texto (nome, mae, endereco), o valor deve ser preservado como está.
 
-**`CONSULTAS_API_KEY`**
+### 2. Placa timeout (30s não é suficiente)
+Os módulos `placa` e `placa-simples` da VeiculosAPI demoram mais de 30s. Solução: aumentar timeout para 45s e adicionar módulo `placa-sesp` como fallback alternativo.
 
-Valor: `UlPfuQAO0AhCGoUKQcVg8RJWyFdzS8gY`
+### 3. Tabela `query_modules` não existe
+Gera erro no log a cada chamada. Solução: silenciar o erro ou criar a tabela.
+
+---
 
 ## Mudanças
-1. Adicionar o secret com o nome `CONSULTAS_API_KEY`
-2. Referenciar esse nome em todas as edge functions (`api-query`, `telegram-webhook`)
-3. Implementar toda a integração com os módulos do provedor conforme o plano já aprovado
+
+### Arquivo 1: `src/pages/Consultas.tsx`
+- Corrigir `handleHistorySelect` para não remover caracteres de texto em módulos não-numéricos (nome, mae, endereco)
+
+### Arquivo 2: `src/components/consultation/QueryInput.tsx`  
+- Garantir que módulos de texto (nome, mae, endereco) não passem por limpeza de dígitos
+
+### Arquivo 3: `supabase/functions/api-query/index.ts`
+- Aumentar timeout de 30s para 45s no `fetchFromVeiculosApi`
+- Silenciar o erro de `query_modules` (tabela opcional)
+- Preservar espaços no input para módulos de texto (nome, mae, endereco)
+
+### Arquivo 4: `supabase/functions/telegram-webhook/index.ts`
+- Mesma correção de preservação de espaços para comandos /nome, /mae, /endereco
+
+## Resultado Esperado
+- Consulta por nome retorna resultados corretamente
+- Placa tem mais tempo para responder
+- Logs limpos sem erro de tabela inexistente
 
