@@ -3731,13 +3731,16 @@ class BotHandler {
       cep: "cep", nome: "nome", score: "score",
       rg: "rg", cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
+      titulo: "titulo", endereco: "endereco", renda: "renda",
+      processos: "processos", bnmp: "bnmp", siel: "siel",
+      tse: "tse", mae: "mae", credilink: "credilink",
+      spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
     };
     
     const commands: Array<{ command: string; queryType: string; queryInput: string }> = [];
     
-    // Split by command patterns, keeping the delimiter
-    // Matches: /cpf, /cnpj, etc. at the start or preceded by whitespace
-    const commandPattern = /(?:^|\s)(\/(?:cpf|cnpj|placa2?|telefone|tel|email|cep|nome|score|rg|cnh|pix|foto|nacional)(?:@\w+)?)/gi;
+    const commandPattern = /(?:^|\s)(\/(?:cpf|cnpj|placa2?|telefone|tel|email|cep|nome|score|rg|cnh|pix|foto|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae|credilink|spc|poder|sus|pis|parentes|chassi|renavam|motor)(?:@\w+)?)/gi;
     const matches = [...text.matchAll(commandPattern)];
     
     if (matches.length === 0) return commands;
