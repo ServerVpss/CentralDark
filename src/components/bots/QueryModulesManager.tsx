@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Info, Server, Copy, Check, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ModuleInfo {
-  key: string;
+  id: string;
+  module_key: string;
   label: string;
   icon: string;
   enabled: boolean;
@@ -23,48 +25,6 @@ interface ProviderInfo {
   editable: boolean;
 }
 
-const initialModules: ModuleInfo[] = [
-  // Pessoa
-  { key: "cpf", label: "CPF", icon: "👤", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
-  { key: "nome", label: "Nome", icon: "📝", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
-  { key: "foto", label: "Foto", icon: "📸", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
-  { key: "nacional", label: "Foto Nacional", icon: "🇧🇷", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
-  { key: "parentes", label: "Parentes", icon: "👨‍👩‍👧‍👦", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
-  { key: "mae", label: "Nome da Mãe", icon: "👩", enabled: true, provider: "VeiculosAPI", category: "pessoa" },
-  // Documentos
-  { key: "rg", label: "RG", icon: "🪪", enabled: true, provider: "VeiculosAPI", category: "documento" },
-  { key: "cnh", label: "CNH", icon: "🪪", enabled: true, provider: "VeiculosAPI", category: "documento" },
-  { key: "titulo", label: "Título Eleitor", icon: "📜", enabled: true, provider: "VeiculosAPI", category: "documento" },
-  { key: "pis", label: "PIS", icon: "📋", enabled: true, provider: "VeiculosAPI", category: "documento" },
-  // Contato
-  { key: "telefone", label: "Telefone", icon: "📞", enabled: true, provider: "VeiculosAPI", category: "contato" },
-  { key: "email", label: "Email", icon: "📧", enabled: true, provider: "VeiculosAPI", category: "contato" },
-  { key: "cep", label: "CEP", icon: "📍", enabled: true, provider: "VeiculosAPI", category: "contato" },
-  { key: "endereco", label: "Endereço", icon: "🏠", enabled: true, provider: "VeiculosAPI", category: "contato" },
-  // Financeiro
-  { key: "pix", label: "PIX", icon: "💳", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
-  { key: "score", label: "Score", icon: "📊", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
-  { key: "renda", label: "Renda", icon: "💰", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
-  { key: "credilink", label: "Credilink", icon: "📊", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
-  { key: "cpf_spc", label: "SPC", icon: "📋", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
-  { key: "poderaquisitivo", label: "Poder Aquisitivo", icon: "💎", enabled: true, provider: "VeiculosAPI", category: "financeiro" },
-  // Veículos
-  { key: "placa", label: "Placa", icon: "🚗", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
-  { key: "placa_completa", label: "Placa Completa", icon: "🚗", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
-  { key: "chassi", label: "Chassi", icon: "🔧", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
-  { key: "renavam", label: "RENAVAM", icon: "📋", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
-  { key: "motor", label: "Motor", icon: "⚙️", enabled: true, provider: "VeiculosAPI", category: "veiculo" },
-  // Empresa
-  { key: "cnpj", label: "CNPJ", icon: "🏢", enabled: true, provider: "VeiculosAPI", category: "empresa" },
-  // Justiça
-  { key: "processos", label: "Processos", icon: "⚖️", enabled: true, provider: "VeiculosAPI", category: "justica" },
-  { key: "bnmp", label: "BNMP", icon: "🔍", enabled: true, provider: "VeiculosAPI", category: "justica" },
-  { key: "siel", label: "SIEL", icon: "🔎", enabled: true, provider: "VeiculosAPI", category: "justica" },
-  // Outros
-  { key: "tse", label: "TSE", icon: "🗳️", enabled: true, provider: "VeiculosAPI", category: "governo" },
-  { key: "cpfsus", label: "SUS", icon: "🏥", enabled: true, provider: "VeiculosAPI", category: "governo" },
-];
-
 const initialProviders: ProviderInfo[] = [
   { name: "VeiculosAPI", baseUrl: "https://veiculosapi.com/api/proxy", port: 443, editable: false },
 ];
@@ -78,52 +38,111 @@ const categories: Record<string, { label: string; icon: string }> = {
   empresa: { label: "Empresa", icon: "🏢" },
   justica: { label: "Justiça", icon: "⚖️" },
   governo: { label: "Governo", icon: "🏛️" },
+  outros: { label: "Outros", icon: "📋" },
 };
 
-const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa", "justica", "governo"];
+const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa", "justica", "governo", "outros"];
 
 export function QueryModulesManager() {
-  const [modules, setModules] = useState<ModuleInfo[]>(initialModules);
+  const [modules, setModules] = useState<ModuleInfo[]>([]);
   const [providers, setProviders] = useState<ProviderInfo[]>(initialProviders);
-  const [copied, setCopied] = useState(false);
   const [showProviders, setShowProviders] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
+
+  const loadModules = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("query_modules")
+      .select("*")
+      .order("category")
+      .order("label");
+
+    if (error) {
+      toast.error("Erro ao carregar módulos");
+      console.error(error);
+    } else {
+      setModules((data || []).map(m => ({
+        id: m.id,
+        module_key: m.module_key,
+        label: m.label,
+        icon: m.icon || "📋",
+        enabled: m.enabled ?? true,
+        provider: m.provider || "VeiculosAPI",
+        category: m.category || "outros",
+      })));
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => { loadModules(); }, []);
 
   const enabledCount = modules.filter(m => m.enabled).length;
 
-  const toggleModule = (key: string) => {
-    setModules(prev => prev.map(m => m.key === key ? { ...m, enabled: !m.enabled } : m));
+  const toggleModule = async (key: string) => {
+    const mod = modules.find(m => m.module_key === key);
+    if (!mod) return;
+
+    const newEnabled = !mod.enabled;
+    setTogglingKeys(prev => new Set(prev).add(key));
+
+    // Optimistic update
+    setModules(prev => prev.map(m => m.module_key === key ? { ...m, enabled: newEnabled } : m));
+
+    const { error } = await supabase
+      .from("query_modules")
+      .update({ enabled: newEnabled })
+      .eq("module_key", key);
+
+    if (error) {
+      // Revert
+      setModules(prev => prev.map(m => m.module_key === key ? { ...m, enabled: !newEnabled } : m));
+      toast.error(`Erro ao atualizar ${mod.label}`);
+    } else {
+      toast.success(`${mod.label} ${newEnabled ? "ativado" : "desativado"}`);
+    }
+
+    setTogglingKeys(prev => {
+      const next = new Set(prev);
+      next.delete(key);
+      return next;
+    });
   };
 
-  const toggleAll = (enabled: boolean) => {
-    setModules(prev => prev.map(m => ({ ...m, enabled })));
+  const toggleAll = async (enabled: boolean) => {
+    const prev = modules.map(m => ({ ...m }));
+    setModules(modules.map(m => ({ ...m, enabled })));
+
+    const keys = modules.map(m => m.module_key);
+    const { error } = await supabase
+      .from("query_modules")
+      .update({ enabled })
+      .in("module_key", keys);
+
+    if (error) {
+      setModules(prev);
+      toast.error("Erro ao atualizar módulos");
+    } else {
+      toast.success(enabled ? "Todos ativados" : "Todos desativados");
+    }
   };
 
   const updateProviderUrl = (index: number, field: "baseUrl" | "port", value: string) => {
     setProviders(prev => prev.map((p, i) => i === index ? { ...p, [field]: field === "port" ? parseInt(value) || 0 : value } : p));
   };
 
-  const generateCode = () => {
-    const lines = modules.map(m => `  ${m.key}: ${m.enabled},`);
-    return `const enabledQueryTypes: Record<string, boolean> = {\n${lines.join("\n")}\n};`;
-  };
-
-  const generateProviderCode = () => {
-    const p = providers;
-    return `const providers: Record<string, ApiProvider> = {\n  nexfuture: { baseUrl: "${p[0].baseUrl}", port: ${p[0].port} },\n  tconect_score: { baseUrl: "${p[1].baseUrl}", port: ${p[1].port} },\n  tconect_foto: { baseUrl: "${p[2].baseUrl}", port: ${p[2].port} },\n};`;
-  };
-
-  const copyToClipboard = () => {
-    const code = generateCode() + "\n\n" + generateProviderCode();
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    toast.success("Código copiado! Cole no telegram-webhook/index.ts");
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const grouped = categoryOrder.reduce((acc, cat) => {
     acc[cat] = modules.filter(m => m.category === cat);
     return acc;
   }, {} as Record<string, ModuleInfo[]>);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -137,7 +156,7 @@ export function QueryModulesManager() {
                 Módulos desativados = bot ignora silenciosamente
               </p>
               <p className="text-xs text-muted-foreground">
-                Quando desativado, o bot <strong>não responde nada</strong> ao comando — evita confusão com outros bots no grupo.
+                Quando desativado, o bot <strong>não responde nada</strong> ao comando. As alterações são salvas automaticamente no banco e aplicadas em até 60 segundos.
               </p>
             </div>
           </div>
@@ -174,28 +193,20 @@ export function QueryModulesManager() {
         <Button variant="outline" size="sm" onClick={() => toggleAll(false)} className="flex-1">
           ❌ Desativar Todos
         </Button>
-        <Button size="sm" onClick={copyToClipboard} className="flex-1 gap-1">
-          {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-          {copied ? "Copiado!" : "Copiar Código"}
+        <Button size="sm" variant="outline" onClick={loadModules} className="gap-1">
+          <RefreshCw className="h-3 w-3" /> Recarregar
         </Button>
       </div>
 
-      {/* Instructions */}
+      {/* Info */}
       <Card className="bg-card border-border">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Info className="h-4 w-4 text-primary" />
-            Como aplicar as alterações
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ol className="text-sm text-muted-foreground space-y-1 list-decimal list-inside">
-            <li>Ative/desative os módulos abaixo</li>
-            <li>Altere as URLs dos provedores se necessário</li>
-            <li>Clique em <strong>"Copiar Código"</strong></li>
-            <li>Cole no arquivo <code className="text-primary bg-primary/10 px-1.5 py-0.5 rounded text-xs">telegram-webhook/index.ts</code></li>
-            <li>Faça deploy da edge function</li>
-          </ol>
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+            <p className="text-xs text-muted-foreground">
+              As alterações são <strong>salvas automaticamente</strong> no banco de dados. O bot do Telegram atualiza em até 60 segundos.
+            </p>
+          </div>
         </CardContent>
       </Card>
 
@@ -221,14 +232,14 @@ export function QueryModulesManager() {
             <CardContent>
               <div className="space-y-2">
                 {catModules.map(mod => (
-                  <div key={mod.key} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+                  <div key={mod.module_key} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
                     mod.enabled ? "bg-emerald-500/5 border-emerald-500/30" : "bg-secondary/30 border-border"
                   }`}>
                     <div className="flex items-center gap-3 min-w-0">
                       <span className="text-lg">{mod.icon}</span>
                       <div className="min-w-0">
                         <div className="text-sm font-medium truncate">{mod.label}</div>
-                        <div className="text-[10px] text-muted-foreground">{mod.provider}</div>
+                        <div className="text-[10px] text-muted-foreground">{mod.provider} • {mod.module_key}</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -239,7 +250,8 @@ export function QueryModulesManager() {
                       </Badge>
                       <Switch
                         checked={mod.enabled}
-                        onCheckedChange={() => toggleModule(mod.key)}
+                        onCheckedChange={() => toggleModule(mod.module_key)}
+                        disabled={togglingKeys.has(mod.module_key)}
                       />
                     </div>
                   </div>
@@ -250,7 +262,7 @@ export function QueryModulesManager() {
         );
       })}
 
-      {/* Providers with editable URLs */}
+      {/* Providers */}
       <Card className="bg-card border-border">
         <CardHeader className="pb-3 cursor-pointer" onClick={() => setShowProviders(!showProviders)}>
           <div className="flex items-center justify-between">
@@ -266,10 +278,10 @@ export function QueryModulesManager() {
               <div key={p.name} className="space-y-2 p-3 rounded-lg bg-secondary/20 border border-border">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="h-2.5 w-2.5 rounded-full bg-destructive" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
                     <span className="text-sm font-medium">{p.name}</span>
                   </div>
-                  <Badge variant="outline" className="text-destructive border-destructive/30 text-xs">Offline</Badge>
+                  <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 text-xs">Online</Badge>
                 </div>
                 <div className="grid grid-cols-[1fr_80px] gap-2">
                   <Input
@@ -277,6 +289,7 @@ export function QueryModulesManager() {
                     onChange={(e) => updateProviderUrl(idx, "baseUrl", e.target.value)}
                     placeholder="URL base"
                     className="text-xs font-mono h-8"
+                    readOnly
                   />
                   <Input
                     value={String(p.port)}
@@ -284,30 +297,13 @@ export function QueryModulesManager() {
                     placeholder="Porta"
                     className="text-xs font-mono h-8"
                     type="number"
+                    readOnly
                   />
                 </div>
               </div>
             ))}
           </CardContent>
         )}
-      </Card>
-
-      {/* Generated code preview */}
-      <Card className="bg-card border-border">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center justify-between text-base">
-            <span>📋 Código Gerado</span>
-            <Button size="sm" variant="outline" onClick={copyToClipboard} className="gap-1 h-7">
-              {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-              Copiar
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <pre className="text-xs font-mono bg-secondary/30 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap break-all text-foreground">
-            {generateCode()}
-          </pre>
-        </CardContent>
       </Card>
     </div>
   );

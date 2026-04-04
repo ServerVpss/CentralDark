@@ -153,24 +153,40 @@ const nexfutureEndpoints: Record<string, string> = {
   chassi: "/chassi", renavam: "/renavam", motor: "/motor", frota: "/frota", bin: "/bin",
 };
 
-// =============== QUERY STATUS MAP ===============
-// VeiculosAPI: ONLINE — provedor principal para todos os módulos
-const enabledQueryTypes: Record<string, boolean> = {
-  cpf: true, cnpj: true, placa: true, placa_completa: true,
-  telefone: true, email: true, cep: true, nome: true,
-  score: true, foto: true, nacional: true,
-  rg: true, cnh: true, pix: true,
-  parentes: true, chassi: true,
-  renavam: true, motor: true,
-  // Novos módulos VeiculosAPI
-  titulo: true, endereco: true, renda: true,
-  processos: true, bnmp: true, siel: true,
-  tse: true, mae: true, credilink: true,
-  cpf_spc: true, poderaquisitivo: true,
-  cpfsus: true, pis: true,
-  // Desativados (sem provedor ativo)
-  empregos: false, frota: false, bin: false, cns: false,
-};
+// =============== QUERY STATUS MAP (from DB with cache) ===============
+let cachedModuleStatus: Record<string, boolean> | null = null;
+let moduleCacheTime = 0;
+const MODULE_CACHE_TTL = 60_000; // 60 seconds
+
+async function loadModuleStatus(supabase: SupabaseClient): Promise<Record<string, boolean>> {
+  const now = Date.now();
+  if (cachedModuleStatus && (now - moduleCacheTime) < MODULE_CACHE_TTL) {
+    return cachedModuleStatus;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("query_modules")
+      .select("module_key, enabled");
+
+    if (error || !data) {
+      console.warn("[query_modules] Erro ao carregar:", error?.message);
+      // Fallback: tudo habilitado
+      return cachedModuleStatus || {};
+    }
+
+    const status: Record<string, boolean> = {};
+    for (const row of data) {
+      status[row.module_key] = row.enabled ?? true;
+    }
+    cachedModuleStatus = status;
+    moduleCacheTime = now;
+    return status;
+  } catch (e) {
+    console.warn("[query_modules] Exception:", e);
+    return cachedModuleStatus || {};
+  }
+}
 
 const queryTypeAliases: Record<string, string> = {
   tel: "telefone",
