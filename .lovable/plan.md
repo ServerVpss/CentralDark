@@ -1,54 +1,69 @@
 
 
-# Documentação do Sistema de Broadcast — Bot Telegram
+# Integração do Novo Provedor VeiculosAPI
 
-## Objetivo
-Gerar um documento completo e reutilizável com toda a implementação do sistema de broadcast do bot Telegram, incluindo banco de dados, helpers, fluxo de estados e a função principal. O documento será salvo como arquivo Markdown em `/mnt/documents/`.
+## Visão Geral
 
-## Conteúdo da Documentação
+Substituir os provedores antigos (NexFuture offline, TConect parcial) pelo novo provedor **veiculosapi.com**, que já está pronto e cobre praticamente todos os módulos. A API usa um padrão simples:
 
-O documento cobrirá:
-
-### 1. Visão Geral do Fluxo
 ```text
-Admin clica "📢 Broadcast" → Seleciona audiência (todos/ativos/expirados)
-→ Bot salva estado "broadcast" com filtro → Admin envia mídia ou texto
-→ Bot detecta estado broadcast → executeBroadcast() → Progresso em tempo real
-→ Resumo final com estatísticas
+GET https://veiculosapi.com/api/proxy?apikey=CHAVE&modulo=TIPO&string=VALOR
 ```
 
-### 2. Tabelas Necessárias (SQL)
-- `bot_conversation_states` — armazena estado temporário da conversa (broadcast, query, admin)
-- `telegram_subscriptions` — lista de assinantes com filtro por `expires_at`
+## Módulos Disponíveis no Novo Provedor
 
-### 3. Funções Helper (TypeScript/Deno)
-- `telegramRequest()` — wrapper para chamadas à API do Telegram
-- `sendMessage()` / `editMessage()` — atalhos para envio/edição
-- `btn()` / `keyboard()` — construtores de inline keyboard
-- `getConversationState()` / `setConversationState()` / `clearConversationState()` — gerenciamento de estado
+| Módulo API | Comando Bot | Categoria |
+|---|---|---|
+| `cpffull` | `/cpf` | Pessoa |
+| `nome` | `/nome` | Pessoa |
+| `rg` | `/rg` | Documento |
+| `titulo` | `/titulo` | Documento (novo) |
+| `telefonefull` | `/telefone` | Contato |
+| `endereco` | `/endereco` | Contato (novo) |
+| `cep` | `/cep` | Contato |
+| `pix` | `/pix` | Financeiro |
+| `renda` | `/renda` | Financeiro (novo) |
+| `placa` | `/placa` | Veículo |
+| `placa-serpro` | `/placa2` | Veículo |
+| `cnpj-cred` | `/cnpj` | Empresa |
+| `fotomg/fotosp/fotorj/...` (12 estados) | `/foto` | Foto |
 
-### 4. Fluxo de Callback (seleção de audiência)
-- `admin:broadcast` → mostra menu com 3 opções
-- `broadcast:all|active|expired` → salva estado e pede mídia
-- `broadcast:cancel` → limpa estado e volta
+## Mudanças Necessárias
 
-### 5. Handler de Mensagem (detecção do estado)
-- Antes do menu principal, verifica se existe estado "broadcast"
-- Se sim + isOwner → executa broadcast com a mensagem recebida
+### 1. Salvar a API Key como secret
+- Adicionar `VEICULOS_API_KEY` como secret no projeto (valor: `UlPfuQAO0AhCGoUKQcVg8RJWyFdzS8gY`)
 
-### 6. Função `executeBroadcast()` Completa
-- Busca assinantes por filtro
-- Detecta tipo de mídia (foto, vídeo, áudio, voz, GIF, documento, sticker, vídeo circular, texto)
-- Envia mensagem inicial de progresso com barra visual
-- Loop de envio com `copyMessage` (mídia) ou `sendMessage` (texto)
-- Rate limiting (pausa a cada 25 envios)
-- Atualização periódica do progresso em tempo real
-- Resumo final com taxa de sucesso, tempo e contadores
+### 2. Edge Function `api-query/index.ts`
+- Adicionar função `fetchFromVeiculosApi(modulo, valor)` que faz GET para `https://veiculosapi.com/api/proxy?apikey=KEY&modulo=MODULO&string=VALOR`
+- Criar mapeamento de `queryType` interno para `modulo` da API:
+  - `cpf` → `cpffull`, `telefone` → `telefonefull`, `placa_completa` → `placa-serpro`, `cnpj` → `cnpj-cred`, etc.
+- Atualizar `handleQuery()` para usar o novo provedor como **primário**
+- Manter TConect como fallback para `score` e `foto` (busca nacional por estado)
+- Adicionar novos módulos: `titulo`, `endereco`, `renda`
+- Para **foto**: usar os módulos `foto{estado}` (fotomg, fotosp, fotorj, etc.) em vez de iterar estados no TConect
+- Atualizar `cacheTTL` com os novos tipos
 
-### 7. Tipos de Mídia Suportados
-Tabela com todos os tipos e como são enviados
+### 3. Edge Function `telegram-webhook/index.ts`
+- Atualizar `enabledQueryTypes`: ativar **todos** os módulos que o novo provedor suporta
+- Adicionar novos comandos: `/titulo`, `/endereco`, `/renda`
+- Atualizar `queryTypeAliases` e `queryTypeLabels` com os novos tipos
+- Atualizar `showQueryMenu()` com os novos botões
+- Adicionar comandos `/titulo`, `/endereco`, `/renda` no parser de comandos
 
-## Entrega
-- Arquivo: `/mnt/documents/BROADCAST_DOCUMENTATION.md`
-- Formato: Markdown completo com blocos de código SQL e TypeScript prontos para copiar e colar
+### 4. Frontend `QueryModulesManager.tsx`
+- Adicionar os novos módulos (titulo, endereco, renda) na lista
+- Atualizar provider para "VeiculosAPI" nos módulos migrados
+
+### 5. Validação `queryValidation.ts`
+- Adicionar schemas para `titulo`, `endereco`, `renda`
+
+## Segurança
+- A API key fica apenas no backend (edge function), nunca exposta no frontend
+- Continua usando cache para evitar chamadas desnecessárias
+
+## Resultado Esperado
+- Todos os módulos de consulta voltam a funcionar via o novo provedor
+- Novos módulos (titulo, endereco, renda) disponíveis
+- Foto por estado usa endpoints dedicados (fotomg, fotosp, etc.)
+- Score continua via TConect (único provedor que oferece)
 
