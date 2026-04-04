@@ -66,8 +66,66 @@ export const fotoSchema = cpfSchema;
 // Nacional validation (CPF)
 export const nacionalSchema = cpfSchema;
 
+// Titulo validation (CPF)
+export const tituloSchema = cpfSchema;
+
+// Endereco validation (CPF)
+export const enderecoSchema = cpfSchema;
+
+// Renda validation (CPF)
+export const rendaSchema = cpfSchema;
+
+// Processos validation (CPF)
+export const processosSchema = cpfSchema;
+
+// BNMP validation (CPF)
+export const bnmpSchema = cpfSchema;
+
+// SIEL validation (CPF)
+export const sielSchema = cpfSchema;
+
+// TSE validation (CPF)
+export const tseSchema = cpfSchema;
+
+// Mae validation (CPF)
+export const maeSchema = cpfSchema;
+
+// Credilink validation (CPF)
+export const credilinkSchema = cpfSchema;
+
+// SPC validation (CPF)
+export const cpfSpcSchema = cpfSchema;
+
+// Poder Aquisitivo validation (CPF)
+export const poderaquisitivoSchema = cpfSchema;
+
+// SUS validation (CPF)
+export const cpfsusSchema = cpfSchema;
+
+// PIS validation (CPF)
+export const pisSchema = cpfSchema;
+
+// Parentes validation (CPF)
+export const parentesSchema = cpfSchema;
+
+// Chassi validation
+export const chassiSchema = z.string()
+  .min(5, { message: "Chassi inválido" })
+  .max(20, { message: "Chassi muito longo" })
+  .transform((val) => val.trim().toUpperCase());
+
+// Renavam validation
+export const renavamSchema = z.string()
+  .transform((val) => val.replace(/\D/g, ''))
+  .refine((val) => val.length >= 9 && val.length <= 11, { message: "RENAVAM inválido" });
+
+// Motor validation
+export const motorSchema = z.string()
+  .min(3, { message: "Motor inválido" })
+  .max(25, { message: "Motor muito longo" })
+  .transform((val) => val.trim().toUpperCase());
+
 // Map query types to their schemas
-// Using z.ZodType<string, any, string> for flexibility with nested transforms/refines
 const schemaMap: Record<string, z.ZodType<string, z.ZodTypeDef, string>> = {
   cpf: cpfSchema,
   cnpj: cnpjSchema,
@@ -83,6 +141,23 @@ const schemaMap: Record<string, z.ZodType<string, z.ZodTypeDef, string>> = {
   score: scoreSchema,
   foto: fotoSchema,
   nacional: nacionalSchema,
+  titulo: tituloSchema,
+  endereco: enderecoSchema,
+  renda: rendaSchema,
+  processos: processosSchema,
+  bnmp: bnmpSchema,
+  siel: sielSchema,
+  tse: tseSchema,
+  mae: maeSchema,
+  credilink: credilinkSchema,
+  cpf_spc: cpfSpcSchema,
+  poderaquisitivo: poderaquisitivoSchema,
+  cpfsus: cpfsusSchema,
+  pis: pisSchema,
+  parentes: parentesSchema,
+  chassi: chassiSchema,
+  renavam: renavamSchema,
+  motor: motorSchema,
 };
 
 export interface ValidationResult {
