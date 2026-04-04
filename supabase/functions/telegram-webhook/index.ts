@@ -2587,6 +2587,12 @@ class BotHandler {
   }
 
   async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string, telegramUserName?: string) {
+    // Check maintenance mode - silently ignore so other bots can respond
+    if (this.settings.maintenance_mode) {
+      console.log(`[MAINTENANCE] Query "${queryType}" ignored - bot in maintenance mode.`);
+      return;
+    }
+
     // Check subscription
     const isActive = await this.isSubscriptionActive(telegramUserId);
     if (!isActive && !this.isOwner(telegramUserId)) {
