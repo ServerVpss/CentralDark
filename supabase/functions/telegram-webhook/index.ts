@@ -4309,15 +4309,8 @@ class BotHandler {
       // Format and send result - usar nome do perfil do Telegram do usuário
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, userName);
 
-      // Check for photo - verificar múltiplos campos possíveis (incluindo fotoBase64)
-      let fotoUrl = result.foto || result.image || result.url || result.photo || result.fotoBase64;
-      
-      // Se é Base64 puro, adicionar prefixo data URL
-      if (fotoUrl && typeof fotoUrl === 'string') {
-        if (fotoUrl.startsWith('/9j/') || fotoUrl.startsWith('iVBOR')) {
-          fotoUrl = `data:image/jpeg;base64,${fotoUrl}`;
-        }
-      }
+      // Check for photo - deep extraction from nested API response
+      const fotoUrl = deepExtractPhoto(result);
       
       const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
