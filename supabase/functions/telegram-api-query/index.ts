@@ -106,6 +106,43 @@ async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Reco
   }
 }
 
+// Deep search for photo data in nested response
+function findPhotoInResponse(obj: unknown, depth = 0): string | null {
+  if (!obj || typeof obj !== 'object' || depth > 5) return null;
+  const record = obj as Record<string, unknown>;
+
+  // Check for error indicators first
+  const errVal = record.err || record.error;
+  if (errVal && typeof errVal === 'string' && /n[aã]o encontrad/i.test(errVal)) return null;
+
+  const photoKeys = ['foto', 'image', 'photo', 'fotoBase64', 'base64'];
+  for (const key of photoKeys) {
+    const val = record[key];
+    if (val && typeof val === 'string' && val.length > 100) {
+      if (val.startsWith('/9j/') || val.startsWith('iVBOR')) return `data:image/jpeg;base64,${val}`;
+      if (val.startsWith('data:image/') || val.startsWith('http')) return val;
+    }
+    if (val && typeof val === 'object') {
+      const nested = val as Record<string, unknown>;
+      if (nested.base64 && typeof nested.base64 === 'string' && nested.base64.length > 100) {
+        const b64 = nested.base64 as string;
+        if (b64.startsWith('/9j/') || b64.startsWith('iVBOR')) return `data:image/jpeg;base64,${b64}`;
+        if (b64.startsWith('data:image/')) return b64;
+        return `data:image/jpeg;base64,${b64}`;
+      }
+    }
+  }
+
+  const recurseKeys = ['dados', 'data', 'result', 'resultado', 'resposta'];
+  for (const key of recurseKeys) {
+    if (record[key] && typeof record[key] === 'object') {
+      const found = findPhotoInResponse(record[key], depth + 1);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 // =============== EXECUTE QUERY ===============
 async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
   const cleanInput = queryInput.replace(/[^\w@.]/g, "");
@@ -122,11 +159,12 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
       if (!modulo) continue;
       const result = await fetchFromVeiculosApi(modulo, cleanInput);
       if (result && !result.error && !result.notFound) {
-        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
-        if (fotoData && typeof fotoData === 'string' && (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR'))) {
-          fotoData = `data:image/jpeg;base64,${fotoData}`;
+        const fotoData = findPhotoInResponse(result);
+        if (fotoData) {
+          return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: state };
         }
-        return { ...result, foto: fotoData || null, cpf: cleanInput, estado_encontrado: state };
+        // No actual photo found — continue to next state
+        console.log(`[Foto Nacional] ${state}: no photo found, trying next...`);
       }
     }
     return { cpf: cleanInput, foto: null, message: "Foto não encontrada nos estados pesquisados" };
@@ -138,11 +176,10 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
     if (modulo) {
       const result = await fetchFromVeiculosApi(modulo, cleanInput);
       if (result && !result.error && !result.notFound) {
-        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
-        if (fotoData && typeof fotoData === 'string' && (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR'))) {
-          fotoData = `data:image/jpeg;base64,${fotoData}`;
+        const fotoData = findPhotoInResponse(result);
+        if (fotoData) {
+          return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: estado.toUpperCase() };
         }
-        return { ...result, foto: fotoData || null, cpf: cleanInput, estado_encontrado: estado.toUpperCase() };
       }
       return { error: `📸 Foto não encontrada no estado ${estado.toUpperCase()}`, notFound: true };
     }
