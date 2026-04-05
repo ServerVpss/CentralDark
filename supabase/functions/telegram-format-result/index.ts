@@ -321,7 +321,10 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     company: { icon: "🏢", label: "EMPRESA", fields: ["cnpj", "razao", "fantasia", "capital", "atividade", "porte", "situacao"] },
   };
 
-  const ignoredKeys = ["comando", "error", "fotobase64", "foto", "image", "photo", "base64", "raw", "status", "success", "notfound", "data"];
+  const ignoredKeys = ["comando", "error", "fotobase64", "foto", "image", "photo", "base64", "raw", "status", "success", "notfound", "data",
+    "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario", "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
+    "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais", "ddd", "classificacao", "modulo",
+    "conta", "saldo", "tempo_segundos", "cache", "cached_at"];
   const shouldIgnore = (val: unknown) => {
     if (val === null || val === undefined || val === '') return true;
     if (typeof val === 'string') {
