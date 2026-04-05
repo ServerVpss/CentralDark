@@ -281,6 +281,43 @@ function cleanQueryValue(queryType: string, input: string): string {
   return input.replace(/[^\w@.-]/g, "").trim();
 }
 
+// Deep search for photo data in nested response
+function findPhotoInResponse(obj: unknown, depth = 0): string | null {
+  if (!obj || typeof obj !== 'object' || depth > 5) return null;
+  const record = obj as Record<string, unknown>;
+
+  // Check for error indicators first
+  const errVal = record.err || record.error;
+  if (errVal && typeof errVal === 'string' && /n[aã]o encontrad/i.test(errVal)) return null;
+
+  const photoKeys = ['foto', 'image', 'photo', 'fotoBase64', 'base64'];
+  for (const key of photoKeys) {
+    const val = record[key];
+    if (val && typeof val === 'string' && val.length > 100) {
+      if (val.startsWith('/9j/') || val.startsWith('iVBOR')) return `data:image/jpeg;base64,${val}`;
+      if (val.startsWith('data:image/') || val.startsWith('http')) return val;
+    }
+    if (val && typeof val === 'object') {
+      const nested = val as Record<string, unknown>;
+      if (nested.base64 && typeof nested.base64 === 'string' && nested.base64.length > 100) {
+        const b64 = nested.base64 as string;
+        if (b64.startsWith('/9j/') || b64.startsWith('iVBOR')) return `data:image/jpeg;base64,${b64}`;
+        if (b64.startsWith('data:image/')) return b64;
+        return `data:image/jpeg;base64,${b64}`;
+      }
+    }
+  }
+
+  const recurseKeys = ['dados', 'data', 'result', 'resultado', 'resposta'];
+  for (const key of recurseKeys) {
+    if (record[key] && typeof record[key] === 'object') {
+      const found = findPhotoInResponse(record[key], depth + 1);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 // =============== HANDLE QUERY ===============
 async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof createClient>): Promise<Record<string, unknown>> {
   const { queryType, queryInput, estado } = req;
