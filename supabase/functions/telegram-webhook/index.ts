@@ -545,7 +545,8 @@ const txtIgnoredKeys = [
   "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
   "ddd", "classificacao", "modulo",
-  "conta", "saldo", "tempo_segundos", "cache", "cached_at"
+  "conta", "saldo", "tempo_segundos", "temposegundos", "cache", "cached_at",
+  "expiracao", "duration_ms", "limites", "plano"
 ];
 
 // Bot references to filter out in TXT
@@ -2278,7 +2279,7 @@ function formatGenericResult(
     // Campos de metadados a ignorar completamente
     const ignoredKeys = ['comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado', 'fotobase64', 'foto', 'image', 'photo', 'base64',
       'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'consumo', 'total_diario', 'reset_em', 'tipo', 'inicio_uso', 'vencimento', 'tempo_restante', 'tempo_restante_detalhado', 'dias_totais_restantes', 'dias_totais', 'ddd', 'classificacao', 'modulo',
-      'conta', 'saldo', 'tempo_segundos', 'cache', 'cached_at'];
+      'conta', 'saldo', 'tempo_segundos', 'temposegundos', 'cache', 'cached_at', 'expiracao', 'duration_ms', 'limites', 'plano'];
     
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;

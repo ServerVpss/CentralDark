@@ -54,7 +54,7 @@ const queryTypeLabels: Record<string, string> = {
 const txtIgnoredKeys = ["comando", "error", "fotobase64", "foto", "image", "photo", "base64", "raw", "status", "success", "notfound",
   "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario", "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais", "ddd", "classificacao", "modulo",
-  "conta", "saldo", "tempo_segundos", "cache", "cached_at"];
+  "conta", "saldo", "tempo_segundos", "temposegundos", "cache", "cached_at", "expiracao", "duration_ms", "limites", "plano"];
 const txtBotReferences = ["@querybuscasbot", "querybuscasbot", "t.me/querybuscas", "https://t.me/querybuscas", "@QueryBuscasBot", "querybuscas"];
 
 // =============== HELPERS ===============
@@ -326,7 +326,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   const ignoredKeys = ["comando", "error", "fotobase64", "foto", "image", "photo", "base64", "raw", "status", "success", "notfound", "data",
     "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario", "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
     "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais", "ddd", "classificacao", "modulo",
-    "conta", "saldo", "tempo_segundos", "cache", "cached_at"];
+    "conta", "saldo", "tempo_segundos", "temposegundos", "cache", "cached_at", "expiracao", "duration_ms", "limites", "plano"];
   const shouldIgnore = (val: unknown) => {
     if (val === null || val === undefined || val === '') return true;
     if (typeof val === 'string') {
