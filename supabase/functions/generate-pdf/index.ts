@@ -138,7 +138,12 @@ function getLabel(key: string): string {
 // Keys to completely ignore
 const ignoredKeys = [
   "comando", "valor", "error", "fotobase64", "foto", "image", "photo", "base64",
-  "texto", "info", "text", "raw", "status", "success", "message"
+  "texto", "info", "text", "raw", "status", "success", "message",
+  "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario",
+  "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
+  "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
+  "ddd", "classificacao", "modulo",
+  "conta", "saldo", "tempo_segundos", "cache", "cached_at"
 ];
 
 // Bot references to filter out
@@ -149,7 +154,9 @@ const botReferences = [
 
 function shouldIgnoreKey(key: string): boolean {
   const keyLower = key.toLowerCase();
-  return ignoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik));
+  if (ignoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik))) return true;
+  if (keyLower.endsWith('_consultada')) return true;
+  return false;
 }
 
 function shouldIgnoreValue(value: unknown): boolean {
