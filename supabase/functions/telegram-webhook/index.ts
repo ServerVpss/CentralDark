@@ -2695,6 +2695,7 @@ class BotHandler {
     }
   }
 
+  async showMainMenu(chatId: number, telegramUserId: number, messageId?: number) {
     const sub = await this.getSubscription(telegramUserId);
     const isActive = sub && !isExpired(sub.expires_at);
     
