@@ -4079,6 +4079,13 @@ class BotHandler {
       return;
     }
 
+    // /comandos in group
+    const groupCommand = text.trim().split(/\s+/)[0].toLowerCase().replace("/", "").split("@")[0];
+    if (groupCommand === "comandos") {
+      await this.showAvailableCommands(chatId);
+      return;
+    }
+
     // Check for multiple commands in the same message
     const multipleCommands = this.parseMultipleCommands(text);
     
