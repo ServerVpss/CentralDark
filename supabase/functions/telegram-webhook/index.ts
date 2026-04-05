@@ -544,7 +544,8 @@ const txtIgnoredKeys = [
   "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario",
   "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
-  "ddd", "classificacao", "modulo"
+  "ddd", "classificacao", "modulo",
+  "conta", "saldo", "tempo_segundos", "cache", "cached_at"
 ];
 
 // Bot references to filter out in TXT
@@ -569,7 +570,9 @@ const txtSkipPatterns = [
 
 function shouldIgnoreTxtKey(key: string): boolean {
   const keyLower = key.toLowerCase();
-  return txtIgnoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik));
+  if (txtIgnoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik))) return true;
+  if (keyLower.endsWith('_consultada')) return true;
+  return false;
 }
 
 function shouldIgnoreTxtSingleValue(value: string): boolean {
@@ -2274,13 +2277,14 @@ function formatGenericResult(
 
     // Campos de metadados a ignorar completamente
     const ignoredKeys = ['comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado', 'fotobase64', 'foto', 'image', 'photo', 'base64',
-      'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'consumo', 'total_diario', 'reset_em', 'tipo', 'inicio_uso', 'vencimento', 'tempo_restante', 'tempo_restante_detalhado', 'dias_totais_restantes', 'dias_totais', 'ddd', 'classificacao', 'modulo'];
+      'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'consumo', 'total_diario', 'reset_em', 'tipo', 'inicio_uso', 'vencimento', 'tempo_restante', 'tempo_restante_detalhado', 'dias_totais_restantes', 'dias_totais', 'ddd', 'classificacao', 'modulo',
+      'conta', 'saldo', 'tempo_segundos', 'cache', 'cached_at'];
     
     for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
       const keyLower = key.toLowerCase();
       
-      if (ignoredKeys.includes(keyLower)) continue;
+      if (ignoredKeys.includes(keyLower) || keyLower.endsWith('_consultada')) continue;
       if (typeof value === 'string' && value.length > 100 && !value.includes(' ') && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
       if (typeof value === 'string' && (value.startsWith('http') && (keyLower.includes('foto') || keyLower.includes('image')))) continue;
       if (shouldIgnore(value)) continue;
