@@ -4142,10 +4142,10 @@ class BotHandler {
 
     // For foto, check if state is provided (optional now)
     // Format: /foto 12345678900 (all states) or /foto SP 12345678900 (specific state)
-    let estado: string | undefined;
+    let estado: string | undefined = fotoStateFromCommand; // Pre-set from /fotosp, /fotorj, etc.
     let actualInput = queryInput;
     
-    if (queryType === "foto") {
+    if (queryType === "foto" && !estado) {
       const inputParts = queryInput.split(/\s+/);
       
       // Check if first part is a state code (2 letters)
@@ -4159,16 +4159,6 @@ class BotHandler {
         actualInput = inputParts.slice(0, -1).join(" ");
       }
       // If no state found, estado remains undefined - will search all states
-    }
-
-    // Use actualInput for foto queries (CPF extracted from format)
-    const inputForQuery = queryType === "foto" ? actualInput : queryInput;
-
-    // Check if module is enabled - SILENTLY ignore if disabled
-    // This prevents response when module is off, so other bots in the group aren't confused
-    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-      console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
-      return;
     }
 
     // Send processing message - show if searching all states
