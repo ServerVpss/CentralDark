@@ -281,6 +281,43 @@ function cleanQueryValue(queryType: string, input: string): string {
   return input.replace(/[^\w@.-]/g, "").trim();
 }
 
+// Deep search for photo data in nested response
+function findPhotoInResponse(obj: unknown, depth = 0): string | null {
+  if (!obj || typeof obj !== 'object' || depth > 5) return null;
+  const record = obj as Record<string, unknown>;
+
+  // Check for error indicators first
+  const errVal = record.err || record.error;
+  if (errVal && typeof errVal === 'string' && /n[aã]o encontrad/i.test(errVal)) return null;
+
+  const photoKeys = ['foto', 'image', 'photo', 'fotoBase64', 'base64'];
+  for (const key of photoKeys) {
+    const val = record[key];
+    if (val && typeof val === 'string' && val.length > 100) {
+      if (val.startsWith('/9j/') || val.startsWith('iVBOR')) return `data:image/jpeg;base64,${val}`;
+      if (val.startsWith('data:image/') || val.startsWith('http')) return val;
+    }
+    if (val && typeof val === 'object') {
+      const nested = val as Record<string, unknown>;
+      if (nested.base64 && typeof nested.base64 === 'string' && nested.base64.length > 100) {
+        const b64 = nested.base64 as string;
+        if (b64.startsWith('/9j/') || b64.startsWith('iVBOR')) return `data:image/jpeg;base64,${b64}`;
+        if (b64.startsWith('data:image/')) return b64;
+        return `data:image/jpeg;base64,${b64}`;
+      }
+    }
+  }
+
+  const recurseKeys = ['dados', 'data', 'result', 'resultado', 'resposta'];
+  for (const key of recurseKeys) {
+    if (record[key] && typeof record[key] === 'object') {
+      const found = findPhotoInResponse(record[key], depth + 1);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 // =============== HANDLE QUERY ===============
 async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof createClient>): Promise<Record<string, unknown>> {
   const { queryType, queryInput, estado } = req;
@@ -303,51 +340,28 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
     };
   }
 
-  // ---- FOTO: national search across state-specific modules ----
+  // ---- FOTO: national search across state-specific modules (PARALLEL) ----
   if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
-    console.log("[Foto] Starting national photo search via VeiculosAPI...");
+    console.log(`[Foto] Starting parallel national photo search (${fotoStatePriority.length} states)...`);
 
-    for (const state of fotoStatePriority) {
+    const promises = fotoStatePriority.map(async (state) => {
       const fotoModulo = fotoStateModules[state];
-      if (!fotoModulo) continue;
-
+      if (!fotoModulo) return null;
       const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
-      
-      // Check if we got valid photo data
-      // The API may return sucesso:true but with data.err meaning no photo found
-      const hasError = result.error || result.notFound;
-      const nestedData = result.dados as Record<string, unknown> | undefined;
-      const nestedDataInner = nestedData?.data as Record<string, unknown> | undefined;
-      const hasNestedError = nestedDataInner?.err && typeof nestedDataInner.err === 'string' && 
-        nestedDataInner.err.toLowerCase().includes('não encontrad');
-      
-      if (hasError || hasNestedError) {
-        console.log(`[Foto] No photo found in ${state}, trying next...`);
-        continue;
-      }
-      
-      if (result) {
-        // Try to extract foto field from various possible locations
-        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
-        
-        // Also check inside nested dados.data
-        if (!fotoData && nestedDataInner) {
-          fotoData = nestedDataInner.foto || nestedDataInner.image || nestedDataInner.url || 
-                     nestedDataInner.photo || nestedDataInner.fotoBase64 || nestedDataInner.base64;
-        }
-        
-        if (fotoData && typeof fotoData === 'string') {
-          if (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR')) {
-            fotoData = `data:image/jpeg;base64,${fotoData}`;
-          }
+      if (result && !result.error && !result.notFound) {
+        const fotoData = findPhotoInResponse(result);
+        if (fotoData) {
+          console.log(`[Foto] ✅ Photo found in ${state}`);
           return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: state };
         }
-        // Even without explicit foto field, the result may contain meaningful data
-        if (Object.keys(result).length > 2) {
-          console.log(`[Foto] Got data from ${state} but no explicit foto field`);
-          continue; // Keep searching for an actual photo
-        }
+        console.log(`[Foto] ${state}: response OK but no photo data`);
       }
+      return null;
+    });
+
+    const results = await Promise.all(promises);
+    for (const r of results) {
+      if (r) return r;
     }
 
     return {
@@ -362,22 +376,11 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
     const fotoModulo = fotoStateModules[stateUpper];
     if (fotoModulo) {
       const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
-      // Check for nested error (API returns sucesso:true but data.err says not found)
-      const nestedData = result?.dados as Record<string, unknown> | undefined;
-      const nestedDataInner = nestedData?.data as Record<string, unknown> | undefined;
-      const hasNestedError = nestedDataInner?.err && typeof nestedDataInner.err === 'string' &&
-        nestedDataInner.err.toLowerCase().includes('não encontrad');
-      
-      if (result && !result.error && !result.notFound && !hasNestedError) {
-        let fotoData = result.foto || result.image || result.url || result.photo || result.fotoBase64 || result.base64;
-        if (!fotoData && nestedDataInner) {
-          fotoData = nestedDataInner.foto || nestedDataInner.image || nestedDataInner.url ||
-                     nestedDataInner.photo || nestedDataInner.fotoBase64 || nestedDataInner.base64;
+      if (result && !result.error && !result.notFound) {
+        const fotoData = findPhotoInResponse(result);
+        if (fotoData) {
+          return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: stateUpper };
         }
-        if (fotoData && typeof fotoData === 'string' && (fotoData.startsWith('/9j/') || fotoData.startsWith('iVBOR'))) {
-          fotoData = `data:image/jpeg;base64,${fotoData}`;
-        }
-        return { ...result, foto: fotoData || null, cpf: cleanInput, estado_encontrado: stateUpper };
       }
       return {
         error: `📸 Foto não encontrada no estado ${stateUpper}`,
