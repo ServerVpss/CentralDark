@@ -19,7 +19,8 @@ const ignoredKeys = new Set([
   "ddd", "classificacao", "modulo", "success", "duration_ms", "module_disabled",
   "error", "notfound", "fromcache", "cache_ttl_hours",
   "foto", "image", "photo", "fotobase64", "base64",
-  "conta", "saldo", "tempo_segundos", "cache", "cached_at",
+  "conta", "saldo", "tempo_segundos", "temposegundos", "cache", "cached_at",
+  "expiracao", "limites", "plano",
 ]);
 
 // Also filter keys that end with "_consultada" (e.g. fotorj_consultada)
