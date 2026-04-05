@@ -18,7 +18,7 @@ const veiculosModuleMap: Record<string, string> = {
   placa: "placa", placa_completa: "placa-serpro", chassi: "chassi",
   renavam: "renavam", motor: "motor",
   cnpj: "cnpj-cred", processos: "processos", bnmp: "bnmp-lc", siel: "siel",
-  tse: "tse-3", cpfsus: "cpfsus",
+  tse: "tse-3", cpfsus: "cpfsus", placa_sesp: "placa-sesp",
 };
 
 // Foto state modules
