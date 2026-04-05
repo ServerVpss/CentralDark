@@ -570,7 +570,9 @@ const txtSkipPatterns = [
 
 function shouldIgnoreTxtKey(key: string): boolean {
   const keyLower = key.toLowerCase();
-  return txtIgnoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik));
+  if (txtIgnoredKeys.some(ik => keyLower === ik || keyLower.endsWith('.' + ik))) return true;
+  if (keyLower.endsWith('_consultada')) return true;
+  return false;
 }
 
 function shouldIgnoreTxtSingleValue(value: string): boolean {
