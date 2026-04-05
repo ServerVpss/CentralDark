@@ -21,8 +21,9 @@ serve(async (req) => {
       });
     }
 
-    // Try "saldo" module to get account balance/plan info
-    const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=saldo&string=0`;
+    // Use a lightweight query (CPF with dummy) just to extract account metadata
+    // The API returns saldo, plano, limites etc. in every response
+    const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=cpffull&string=00000000000`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -31,20 +32,38 @@ serve(async (req) => {
     });
 
     const data = await response.json();
-    console.log("API status raw:", JSON.stringify(data));
+    console.log("API status raw keys:", Object.keys(data));
+    console.log("API status raw:", JSON.stringify(data).substring(0, 2000));
 
-    // Extract relevant account info
-    const result: Record<string, unknown> = {
-      saldo: data.saldo ?? data.creditos ?? null,
-      plano: data.plano ?? data.tipo ?? null,
-      consumo_hoje: data.consumo_hoje ?? data.consultas_hoje ?? null,
-      total_diario: data.total_diario ?? data.limite_diario ?? null,
-      vencimento: data.vencimento ?? data.expiracao ?? null,
-      ativo: data.ativo ?? data.sucesso ?? null,
-      raw: data, // include raw for debugging
-    };
+    // Extract account metadata from the response
+    const result: Record<string, unknown> = {};
 
-    return new Response(JSON.stringify({ success: true, data: result }), {
+    // Direct fields
+    const metaKeys = [
+      "saldo", "creditos", "conta", "usuario", "plano", "tipo",
+      "consumo_hoje", "consultas_hoje", "total_diario", "limite_diario",
+      "vencimento", "expiracao", "ativo", "sucesso", "limites",
+      "reset_em", "inicio_uso", "tempo_restante", "dias_totais_restantes",
+    ];
+
+    for (const key of metaKeys) {
+      if (data[key] !== undefined) {
+        result[key] = data[key];
+      }
+    }
+
+    // Check nested "conta" or "plano" objects
+    if (typeof data.conta === "object" && data.conta) {
+      result.conta = data.conta;
+    }
+    if (typeof data.plano === "object" && data.plano) {
+      result.plano = data.plano;
+    }
+    if (typeof data.limites === "object" && data.limites) {
+      result.limites = data.limites;
+    }
+
+    return new Response(JSON.stringify({ success: true, data: result, raw_keys: Object.keys(data) }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
