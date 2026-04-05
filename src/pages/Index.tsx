@@ -95,6 +95,7 @@ export default function Index() {
             <BotsSection bots={bots} />
           </div>
           <div className="space-y-4">
+            <ApiStatusCard />
             <QuickActions />
             <MaintenanceToggle botId={bots[0]?.id ?? null} />
           </div>
