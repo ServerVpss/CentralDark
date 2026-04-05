@@ -51,7 +51,10 @@ const queryTypeLabels: Record<string, string> = {
   rg: "🪪 RG", cnh: "🪪 CNH", pix: "💳 PIX",
 };
 
-const txtIgnoredKeys = ["comando", "error", "fotobase64", "foto", "image", "photo", "base64", "raw", "status", "success", "notfound"];
+const txtIgnoredKeys = ["comando", "error", "fotobase64", "foto", "image", "photo", "base64", "raw", "status", "success", "notfound",
+  "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario", "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
+  "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais", "ddd", "classificacao", "modulo",
+  "conta", "saldo", "tempo_segundos", "cache", "cached_at"];
 const txtBotReferences = ["@querybuscasbot", "querybuscasbot", "t.me/querybuscas", "https://t.me/querybuscas", "@QueryBuscasBot", "querybuscas"];
 
 // =============== HELPERS ===============
