@@ -26,7 +26,9 @@ const ignoredKeys = new Set([
 const ignoredSuffixes = ["_consultada"];
 
 function shouldIgnoreKey(key: string): boolean {
-  return ignoredKeys.has(key.toLowerCase().replace(/[\s-]/g, "_"));
+  const normalized = key.toLowerCase().replace(/[\s-]/g, "_");
+  if (ignoredKeys.has(normalized)) return true;
+  return ignoredSuffixes.some(suffix => normalized.endsWith(suffix));
 }
 
 // Extract photo from data recursively
