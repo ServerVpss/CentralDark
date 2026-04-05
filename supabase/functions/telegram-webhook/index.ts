@@ -493,7 +493,51 @@ function getTxtLabel(key: string): string {
     .join(" ");
 }
 
-// Keys to ignore in TXT (strict - only technical/internal keys)
+// Deep extract photo from nested API response (handles dados.data.foto.base64, etc.)
+function deepExtractPhoto(obj: unknown, depth = 0): string | null {
+  if (!obj || typeof obj !== 'object' || depth > 5) return null;
+  const record = obj as Record<string, unknown>;
+  
+  // Check direct photo fields
+  const photoKeys = ['foto', 'image', 'photo', 'fotoBase64', 'base64', 'url'];
+  for (const key of photoKeys) {
+    const val = record[key];
+    if (val && typeof val === 'string' && val.length > 100) {
+      // Likely base64 or URL
+      if (val.startsWith('/9j/') || val.startsWith('iVBOR')) {
+        return `data:image/jpeg;base64,${val}`;
+      }
+      if (val.startsWith('data:image/') || val.startsWith('http')) {
+        return val;
+      }
+    }
+    // foto could be an object like {base64: "..."} 
+    if (val && typeof val === 'object') {
+      const nested = val as Record<string, unknown>;
+      if (nested.base64 && typeof nested.base64 === 'string' && nested.base64.length > 100) {
+        const b64 = nested.base64;
+        if (b64.startsWith('/9j/') || b64.startsWith('iVBOR')) {
+          return `data:image/jpeg;base64,${b64}`;
+        }
+        if (b64.startsWith('data:image/')) return b64;
+        // Assume JPEG if raw base64
+        return `data:image/jpeg;base64,${b64}`;
+      }
+    }
+  }
+  
+  // Recurse into nested objects (dados, data, etc.)
+  const recurseKeys = ['dados', 'data', 'result', 'resultado', 'resposta', 'response'];
+  for (const key of recurseKeys) {
+    if (record[key] && typeof record[key] === 'object') {
+      const found = deepExtractPhoto(record[key], depth + 1);
+      if (found) return found;
+    }
+  }
+  
+  return null;
+}
+
 const txtIgnoredKeys = [
   "comando", "error", "fotobase64", "foto", "image", "photo", "base64",
   "raw", "status", "success", "notfound",
