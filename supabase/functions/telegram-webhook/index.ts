@@ -544,7 +544,8 @@ const txtIgnoredKeys = [
   "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario",
   "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
-  "ddd", "classificacao", "modulo"
+  "ddd", "classificacao", "modulo",
+  "conta", "saldo", "tempo_segundos", "cache", "cached_at"
 ];
 
 // Bot references to filter out in TXT
