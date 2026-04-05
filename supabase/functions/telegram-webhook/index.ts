@@ -4059,6 +4059,13 @@ class BotHandler {
     const queryInput = parts.slice(1).join(" ");
 
     // Map commands to query types
+    // Map for state-specific foto commands: /fotosp, /fotorj, /fotomg, etc.
+    const fotoStateCommandMap: Record<string, string> = {
+      fotosp: "SP", fotorj: "RJ", fotomg: "MG", fotoba: "BA",
+      fotoce: "CE", fotogo: "GO", fotopr: "PR", fotors: "RS",
+      fotope: "PE", fotoma: "MA", fotoes: "ES", fotodf: "DF", fototo: "TO",
+    };
+
     const commandMap: Record<string, string> = {
       cpf: "cpf", cnpj: "cnpj", placa: "placa", placa2: "placa_completa",
       telefone: "telefone", tel: "telefone", email: "email",
@@ -4070,9 +4077,13 @@ class BotHandler {
       tse: "tse", mae: "mae", credilink: "credilink",
       spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
       parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
+      // State-specific foto shortcuts
+      ...Object.fromEntries(Object.keys(fotoStateCommandMap).map(k => [k, "foto"])),
     };
 
     const queryType = commandMap[command];
+    // If command is a state-specific foto shortcut, pre-set the state
+    const fotoStateFromCommand = fotoStateCommandMap[command];
 
     if (!queryType) {
       // Not a query command, ignore
