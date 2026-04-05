@@ -4111,7 +4111,7 @@ class BotHandler {
         rg: "/rg MG12345678",
         cnh: "/cnh 12345678900",
         pix: "/pix chave@pix.com",
-        foto: "/foto 12345678900",
+        foto: "/foto CPF ou /foto SP CPF ou /fotosp CPF",
         titulo: "/titulo 12345678900",
         endereco: "/endereco 12345678900",
         renda: "/renda 12345678900",
