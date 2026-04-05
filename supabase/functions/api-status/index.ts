@@ -19,9 +19,8 @@ serve(async (req) => {
       });
     }
 
-    // Make a lightweight query to get account metadata
-    // Using CPF module with a test to extract saldo/plano/limites info
-    const url = `https://veiculosapi.com/api/proxy?token=${apiKey}&modulo=saldo`;
+    // Try the "saldo" module to get account info
+    const url = `https://veiculosapi.com/api/proxy?token=${apiKey}&modulo=saldo&string=0`;
 
     const response = await fetch(url, {
       method: "GET",
