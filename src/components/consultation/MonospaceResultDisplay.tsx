@@ -163,6 +163,56 @@ export function MonospaceResultDisplay({
 
   // Get the actual data payload
   const rawData = result.data || result;
+  
+  // Check if this is a "photo not found" result
+  const isPhotoNotFound = rawData?.foto === null && rawData?.total_fotos === 0 && rawData?.cpf;
+  
+  if (isPhotoNotFound) {
+    const states = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"];
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={cn(
+          "flex flex-col gap-4 p-5 rounded-lg border bg-amber-500/5 border-amber-500/20",
+          className
+        )}
+      >
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-full bg-amber-500/10">
+            <Camera className="h-5 w-5 text-amber-400" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-amber-300">Foto não encontrada</p>
+            <p className="text-xs text-muted-foreground">
+              Nenhuma foto foi localizada para o CPF <span className="font-mono text-amber-400/80">{rawData.cpf}</span> nos {states.length} estados pesquisados.
+            </p>
+          </div>
+        </div>
+        
+        <div className="rounded-md border border-border/50 bg-secondary/20 p-3 space-y-2">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <MapPin className="h-3.5 w-3.5" />
+            <span className="font-medium">Tente buscar por estado específico:</span>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {states.map((state) => (
+              <span
+                key={state}
+                className="px-2 py-0.5 text-[11px] font-mono rounded bg-secondary/60 text-muted-foreground border border-border/40"
+              >
+                /foto{state.toLowerCase()} {rawData.cpf}
+              </span>
+            ))}
+          </div>
+          <p className="text-[11px] text-muted-foreground/70 mt-1">
+            💡 Algumas fotos podem estar disponíveis apenas em estados específicos e não aparecem na busca nacional.
+          </p>
+        </div>
+      </motion.div>
+    );
+  }
+
   const photoUrl = extractPhoto(rawData);
   const filtered = filterData(rawData);
 
