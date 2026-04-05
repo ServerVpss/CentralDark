@@ -378,6 +378,7 @@ async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof create
     return {
       cpf: cleanInput, estados_encontrados: [], total_fotos: 0,
       foto: null, message: "Foto não encontrada nos estados pesquisados",
+      notFound: true,
     };
   }
 
