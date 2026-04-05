@@ -3917,6 +3917,11 @@ class BotHandler {
       return;
     }
 
+    if (text.startsWith("/comandos")) {
+      await this.showAvailableCommands(chatId);
+      return;
+    }
+
     // Default: show main menu
     if (this.settings.terms_enabled) {
       const accepted = await this.getTermsStatus(telegramUserId);
