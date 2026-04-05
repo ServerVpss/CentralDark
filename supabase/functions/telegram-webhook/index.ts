@@ -4161,6 +4161,9 @@ class BotHandler {
       // If no state found, estado remains undefined - will search all states
     }
 
+    // Use actualInput for foto queries (CPF extracted from format)
+    const inputForQuery = queryType === "foto" ? actualInput : queryInput;
+
     // Send processing message - show if searching all states
     const searchingAllStates = queryType === "foto" && !estado;
     const processingMsg = await telegramRequest(this.token, "sendMessage", {
