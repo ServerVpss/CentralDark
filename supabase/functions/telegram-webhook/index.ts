@@ -5179,18 +5179,23 @@ Deno.serve(async (req) => {
 
     const handler = new BotHandler(supabase, bot as BotData, botSettings, update);
     
-    // Execute with timeout protection (25s max)
-    const timeoutPromise = new Promise<void>((_, reject) => {
-      setTimeout(() => reject(new Error("Handler timeout (25s)")), 25000);
+    // Fire-and-forget: process in background, respond immediately to Telegram
+    const processingPromise = handler.handleUpdate().then(() => {
+      const duration = Date.now() - startTime;
+      if (duration > 5000) {
+        console.warn(`Slow update ${update.update_id}: ${duration}ms`);
+      }
+    }).catch(err => {
+      const duration = Date.now() - startTime;
+      console.error(`Background processing error after ${duration}ms:`, (err as Error).message);
     });
 
-    await Promise.race([handler.handleUpdate(), timeoutPromise]);
-
-    const duration = Date.now() - startTime;
-    if (duration > 5000) {
-      console.warn(`Slow update ${update.update_id}: ${duration}ms`);
+    // Keep the function alive until processing completes
+    if (typeof (globalThis as any).EdgeRuntime !== 'undefined') {
+      (globalThis as any).EdgeRuntime.waitUntil(processingPromise);
     }
 
+    // Respond immediately so Telegram sends the next update without waiting
     return new Response("OK", { status: 200 });
   } catch (error) {
     const duration = Date.now() - startTime;
