@@ -152,20 +152,29 @@ async function executeQuery(queryType: string, queryInput: string, estado?: stri
     return { error: `Formato inválido para ${queryType}` };
   }
 
-  // Foto nacional (search all states)
+  // Foto nacional (search all states in parallel)
   if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
-    for (const state of fotoStatePriority) {
+    console.log(`[Foto Nacional] Buscando em ${fotoStatePriority.length} estados em paralelo...`);
+    
+    const promises = fotoStatePriority.map(async (state) => {
       const modulo = fotoStateModules[state];
-      if (!modulo) continue;
+      if (!modulo) return null;
       const result = await fetchFromVeiculosApi(modulo, cleanInput);
       if (result && !result.error && !result.notFound) {
         const fotoData = findPhotoInResponse(result);
         if (fotoData) {
+          console.log(`[Foto Nacional] ✅ Foto encontrada em ${state}`);
           return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: state };
         }
-        // No actual photo found — continue to next state
-        console.log(`[Foto Nacional] ${state}: no photo found, trying next...`);
+        console.log(`[Foto Nacional] ${state}: resposta OK mas sem foto`);
       }
+      return null;
+    });
+
+    const results = await Promise.all(promises);
+    // Return first found, respecting priority order
+    for (const r of results) {
+      if (r) return r;
     }
     return { cpf: cleanInput, foto: null, message: "Foto não encontrada nos estados pesquisados" };
   }
