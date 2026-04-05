@@ -4026,13 +4026,8 @@ class BotHandler {
       if (r.success && r.result) {
         const formattedResult = formatQueryResult(r.cmd.queryType, r.result, this.bot.bot_username, userFirstName);
         
-        // Check for photo
-        let fotoUrl = r.result.foto || r.result.image || r.result.url || r.result.photo || r.result.fotoBase64;
-        if (fotoUrl && typeof fotoUrl === 'string') {
-          if (fotoUrl.startsWith('/9j/') || fotoUrl.startsWith('iVBOR')) {
-            fotoUrl = `data:image/jpeg;base64,${fotoUrl}`;
-          }
-        }
+        // Check for photo - deep extraction
+        const fotoUrl = deepExtractPhoto(r.result);
         const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
           (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
         
