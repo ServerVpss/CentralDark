@@ -4059,6 +4059,13 @@ class BotHandler {
     const queryInput = parts.slice(1).join(" ");
 
     // Map commands to query types
+    // Map for state-specific foto commands: /fotosp, /fotorj, /fotomg, etc.
+    const fotoStateCommandMap: Record<string, string> = {
+      fotosp: "SP", fotorj: "RJ", fotomg: "MG", fotoba: "BA",
+      fotoce: "CE", fotogo: "GO", fotopr: "PR", fotors: "RS",
+      fotope: "PE", fotoma: "MA", fotoes: "ES", fotodf: "DF", fototo: "TO",
+    };
+
     const commandMap: Record<string, string> = {
       cpf: "cpf", cnpj: "cnpj", placa: "placa", placa2: "placa_completa",
       telefone: "telefone", tel: "telefone", email: "email",
@@ -4070,9 +4077,13 @@ class BotHandler {
       tse: "tse", mae: "mae", credilink: "credilink",
       spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
       parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
+      // State-specific foto shortcuts
+      ...Object.fromEntries(Object.keys(fotoStateCommandMap).map(k => [k, "foto"])),
     };
 
     const queryType = commandMap[command];
+    // If command is a state-specific foto shortcut, pre-set the state
+    const fotoStateFromCommand = fotoStateCommandMap[command];
 
     if (!queryType) {
       // Not a query command, ignore
@@ -4100,7 +4111,7 @@ class BotHandler {
         rg: "/rg MG12345678",
         cnh: "/cnh 12345678900",
         pix: "/pix chave@pix.com",
-        foto: "/foto 12345678900",
+        foto: "/foto CPF ou /foto SP CPF ou /fotosp CPF",
         titulo: "/titulo 12345678900",
         endereco: "/endereco 12345678900",
         renda: "/renda 12345678900",
@@ -4131,10 +4142,10 @@ class BotHandler {
 
     // For foto, check if state is provided (optional now)
     // Format: /foto 12345678900 (all states) or /foto SP 12345678900 (specific state)
-    let estado: string | undefined;
+    let estado: string | undefined = fotoStateFromCommand; // Pre-set from /fotosp, /fotorj, etc.
     let actualInput = queryInput;
     
-    if (queryType === "foto") {
+    if (queryType === "foto" && !estado) {
       const inputParts = queryInput.split(/\s+/);
       
       // Check if first part is a state code (2 letters)
@@ -4152,13 +4163,6 @@ class BotHandler {
 
     // Use actualInput for foto queries (CPF extracted from format)
     const inputForQuery = queryType === "foto" ? actualInput : queryInput;
-
-    // Check if module is enabled - SILENTLY ignore if disabled
-    // This prevents response when module is off, so other bots in the group aren't confused
-    if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-      console.log(`Group query: type "${queryType}" is disabled. Ignoring silently.`);
-      return;
-    }
 
     // Send processing message - show if searching all states
     const searchingAllStates = queryType === "foto" && !estado;
