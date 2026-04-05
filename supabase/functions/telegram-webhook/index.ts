@@ -2284,7 +2284,7 @@ function formatGenericResult(
       const fullKey = prefix ? `${prefix}.${key}` : key;
       const keyLower = key.toLowerCase();
       
-      if (ignoredKeys.includes(keyLower)) continue;
+      if (ignoredKeys.includes(keyLower) || keyLower.endsWith('_consultada')) continue;
       if (typeof value === 'string' && value.length > 100 && !value.includes(' ') && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
       if (typeof value === 'string' && (value.startsWith('http') && (keyLower.includes('foto') || keyLower.includes('image')))) continue;
       if (shouldIgnore(value)) continue;
