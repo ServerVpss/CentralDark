@@ -2345,13 +2345,19 @@ function formatCpfResult(
   escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
-  // PRÉ-PROCESSAMENTO: achatar estrutura aninhada dados.cpf[0]
-  // A API retorna: { dados: { cpf: [{ dadosBasicos: {...}, emails: [...], enderecos: [...], telefones: [...], parentes: [...], score: [...] }] } }
+  // PRÉ-PROCESSAMENTO: achatar estrutura aninhada dados.cpf[0] ou dados.telefone[0]
+  // A API retorna: { dados: { cpf: [{ dadosBasicos: {...}, ... }] } }
+  // ou para telefonefull: { dados: { telefone: [{ dadosBasicos: {...}, dadosTelefone: {...} }] } }
   const dados = data.dados as Record<string, unknown> | undefined;
   if (dados && typeof dados === 'object') {
-    const cpfArray = (dados as Record<string, unknown>).cpf as unknown[];
-    if (Array.isArray(cpfArray) && cpfArray.length > 0) {
-      const firstRecord = cpfArray[0] as Record<string, unknown>;
+    // Tentar achatar qualquer chave que contenha array de objetos com dadosBasicos
+    for (const rootKey of ['cpf', 'telefone', 'cnpj', 'nome']) {
+      const arr = (dados as Record<string, unknown>)[rootKey] as unknown[];
+      if (!Array.isArray(arr) || arr.length === 0) continue;
+      
+      const firstRecord = arr[0] as Record<string, unknown>;
+      if (!firstRecord || typeof firstRecord !== 'object') continue;
+      
       // Flatten dadosBasicos to top level
       const basicos = firstRecord.dadosBasicos as Record<string, unknown> | undefined;
       if (basicos && typeof basicos === 'object') {
@@ -2361,12 +2367,32 @@ function formatCpfResult(
           }
         }
       }
+      
+      // Flatten dadosTelefone (telefonefull) — extrair como array de telefones
+      const dadosTel = firstRecord.dadosTelefone as Record<string, unknown> | undefined;
+      if (dadosTel && typeof dadosTel === 'object') {
+        // Converter o objeto único em array para extractTelefones processar
+        data.telefones = [dadosTel];
+      }
+      
+      // Se houver múltiplos registros com dadosTelefone, montar array completo
+      if (arr.length > 1) {
+        const allTels = arr
+          .map((r: unknown) => (r as Record<string, unknown>).dadosTelefone)
+          .filter(Boolean);
+        if (allTels.length > 0) {
+          data.telefones = allTels;
+        }
+      }
+      
       // Flatten arrays (emails, enderecos, telefones, parentes, score, pis, tse)
       for (const arrKey of ['emails', 'enderecos', 'telefones', 'parentes', 'score', 'pis', 'tse']) {
         if (Array.isArray(firstRecord[arrKey]) && (firstRecord[arrKey] as unknown[]).length > 0) {
           data[arrKey] = firstRecord[arrKey];
         }
       }
+      
+      break; // Processar apenas a primeira chave encontrada
     }
   }
 
