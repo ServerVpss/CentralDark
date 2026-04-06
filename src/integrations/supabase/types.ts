@@ -460,6 +460,7 @@ export type Database = {
           expires_at: string
           id: string
           message_id: number | null
+          metadata: Json | null
           pages: Json
           total_pages: number
         }
@@ -470,6 +471,7 @@ export type Database = {
           expires_at?: string
           id?: string
           message_id?: number | null
+          metadata?: Json | null
           pages: Json
           total_pages: number
         }
@@ -480,6 +482,7 @@ export type Database = {
           expires_at?: string
           id?: string
           message_id?: number | null
+          metadata?: Json | null
           pages?: Json
           total_pages?: number
         }
