@@ -4171,7 +4171,7 @@ class BotHandler {
           return;
         }
       }
-      await this.showMainMenu(chatId, telegramUserId);
+      await this.showMainMenu(chatId, telegramUserId, undefined, 'private');
       return;
     }
 
@@ -4193,7 +4193,7 @@ class BotHandler {
       if (parsed.length > 0) {
         // Check subscription or owner
         const isOwner = this.isOwner(telegramUserId);
-        const isActive = await this.isSubscriptionActive(telegramUserId);
+        const isActive = await this.isSubscriptionActive(telegramUserId, 'private');
         if (!isOwner && !isActive) {
           await sendMessage(this.token, chatId,
             "⚠️ <b>Você não possui uma assinatura ativa.</b>\n\nUse /start para ver os planos disponíveis.",
@@ -4241,7 +4241,7 @@ class BotHandler {
         return;
       }
     }
-    await this.showMainMenu(chatId, telegramUserId);
+    await this.showMainMenu(chatId, telegramUserId, undefined, 'private');
   }
 
   // =============== PARSE MULTIPLE COMMANDS ===============
