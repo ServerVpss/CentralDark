@@ -498,8 +498,18 @@ function formatVehicleResult(
     vehicleData = rest;
   }
 
-  // Normalize SERPRO format fields to standard format
-  const serproMap: Record<string, string> = {
+  // Flatten SESP nested retorno structure
+  if (vehicleData.retorno && typeof vehicleData.retorno === 'object') {
+    vehicleData = { ...vehicleData, ...(vehicleData.retorno as Record<string, unknown>) };
+    delete vehicleData.retorno;
+  }
+  // Remove SESP metadata
+  delete vehicleData.codRetorno;
+  delete vehicleData.msgRetorno;
+
+  // Normalize all provider formats to standard field names
+  const fieldNormMap: Record<string, string> = {
+    // SERPRO format
     codigoRenavam: 'renavam', numeroMotor: 'motor',
     descricaoCor: 'cor', descricaoCombustivel: 'combustivel',
     descricaoTipoVeiculo: 'tipoVeiculo', descricaoMarcaModelo: 'marcaModelo',
@@ -515,10 +525,20 @@ function formatVehicleResult(
     indicadorRestricaoRenajud: 'restricaoRenajud',
     tipoDocFaturado: 'tipoDocFaturado', numeroIdFaturamento: 'docFaturado',
     ufFaturado: 'estadoFaturado',
+    // SESP format
+    marca: 'marcaModelo',
+    tipo: 'tipoVeiculo',
+    especie: 'especieVeiculo',
+    cpfCnpj: 'cpfProprietario',
+    endereco: 'enderecoProprietario',
+    municipioEndereco: 'municipioProprietario',
+    responsavel: 'responsavel',
+    indicativo_DFRV: 'furtoRoubo',
+    indicativo_ALERTA: 'alerta',
   };
-  for (const [serproKey, stdKey] of Object.entries(serproMap)) {
-    if (vehicleData[serproKey] !== undefined && vehicleData[stdKey] === undefined) {
-      vehicleData[stdKey] = vehicleData[serproKey];
+  for (const [srcKey, stdKey] of Object.entries(fieldNormMap)) {
+    if (vehicleData[srcKey] !== undefined && vehicleData[stdKey] === undefined) {
+      vehicleData[stdKey] = vehicleData[srcKey];
     }
   }
 
