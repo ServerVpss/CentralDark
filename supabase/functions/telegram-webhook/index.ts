@@ -2461,11 +2461,22 @@ function formatTelefoneResult(
   escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
+  // Flatten dados.telefone[] structure from API
   const dados = data.dados as Record<string, unknown> | undefined;
   if (dados && typeof dados === 'object') {
     const arr = dados.telefone as unknown[] | undefined;
     if (Array.isArray(arr) && arr.length > 0) {
       const firstRecord = arr[0] as Record<string, unknown>;
+      
+      // Extract top-level fields (cpf, nome, sexo, dataNascimento, nomeMae, uf)
+      for (const [k, v] of Object.entries(firstRecord)) {
+        if (k === 'telefones' || k === 'dadosTelefone' || k === 'dadosBasicos') continue;
+        if (v !== null && v !== undefined && v !== '' && typeof v !== 'object') {
+          data[k] = v;
+        }
+      }
+
+      // Extract dadosBasicos if present
       const basicos = firstRecord?.dadosBasicos as Record<string, unknown> | undefined;
       if (basicos && typeof basicos === 'object') {
         for (const [k, v] of Object.entries(basicos)) {
@@ -2473,11 +2484,21 @@ function formatTelefoneResult(
         }
       }
 
-      const allPhones = arr
-        .map((record) => (record as Record<string, unknown>)?.dadosTelefone)
-        .filter((value): value is Record<string, unknown> => !!value && typeof value === 'object');
-      if (allPhones.length > 0) {
-        data.telefones = allPhones;
+      // Extract phones: support both telefones[] and dadosTelefone[]
+      const directPhones = firstRecord?.telefones as unknown[] | undefined;
+      const dadosTelefone = firstRecord?.dadosTelefone as unknown[] | undefined;
+      if (Array.isArray(directPhones) && directPhones.length > 0) {
+        data.telefones = directPhones;
+      } else if (Array.isArray(dadosTelefone) && dadosTelefone.length > 0) {
+        data.telefones = dadosTelefone;
+      } else {
+        // Collect from all records
+        const allPhones = arr.flatMap((record) => {
+          const r = record as Record<string, unknown>;
+          const t = (r?.telefones || r?.dadosTelefone) as unknown[] | undefined;
+          return Array.isArray(t) ? t : [];
+        });
+        if (allPhones.length > 0) data.telefones = allPhones;
       }
     }
   }
@@ -2498,19 +2519,32 @@ function formatTelefoneResult(
     const tels = data.telefones as unknown[] | undefined;
     if (!Array.isArray(tels)) return [];
 
+    const seen = new Set<string>();
     return tels
       .map((t: unknown) => {
         const tel = t as Record<string, unknown>;
-        const ddd = tel.ddd || tel.DDD || '';
-        const num = tel.telefone || tel.numero || tel.celular || '';
+        const ddd = String(tel.ddd || tel.DDD || '');
+        const num = String(tel.telefone || tel.numero || tel.celular || '');
         const formatted = formatPhoneNumber(ddd, num);
-        const tipoCode = tel.tipoTelefone;
-        const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
+        if (!formatted) return null;
+        // Deduplicate
+        const key = formatted.replace(/\D/g, '');
+        if (seen.has(key)) return null;
+        seen.add(key);
+        
+        const tipoRaw = tel.tipo || tel.tipoTelefone;
+        let tipo = '';
+        if (typeof tipoRaw === 'string') {
+          tipo = tipoRaw.charAt(0).toUpperCase() + tipoRaw.slice(1);
+        } else if (tipoRaw === 3) tipo = 'Celular';
+        else if (tipoRaw === 1) tipo = 'Fixo';
+        else if (tipoRaw === 2) tipo = 'Comercial';
+        
         const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
         const whatsapp = String(tel.whatsapp || '').toLowerCase().includes('possui');
         return { formatted, tipo, data: inclusao, whatsapp };
       })
-      .filter((item) => item.formatted);
+      .filter((item): item is NonNullable<typeof item> => !!item);
   };
 
   const extractRawPhones = (): string[] => {
