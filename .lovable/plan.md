@@ -1,64 +1,110 @@
 
 
-# Sistema de Fila de Retry para Erros 429 do Telegram
+# Redesign Completo do Painel — Layout Profissional e Organizado
 
-## Problema
-Quando muitos comandos são executados simultaneamente, o Telegram retorna erro `429 Too Many Requests`. Atualmente essas mensagens são perdidas.
+## Visão Geral
+Reorganizar todo o painel TelePanel com uma estrutura mais profissional, limpa e empresarial. Manter a mesma stack (React + Tailwind + shadcn/ui) e funcionalidades, mas com layout, hierarquia visual e organização drasticamente melhores.
 
-## Solução
-Adicionar retry com backoff na própria função `telegramRequest`, e para casos onde o retry também falha, salvar a mensagem numa tabela de fila no banco para ser processada depois por um cron job.
+## O que muda
 
-## Passo 1 — Criar tabela `telegram_message_queue`
+### 1. Sidebar — Reorganização por Seções
+Agrupar os itens do menu em categorias claras com labels de seção:
 
-```sql
-CREATE TABLE telegram_message_queue (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  bot_id uuid,
-  method text NOT NULL,          -- sendMessage, editMessageText, sendPhoto...
-  payload jsonb NOT NULL,        -- body completo da requisição
-  retry_count integer DEFAULT 0,
-  max_retries integer DEFAULT 5,
-  retry_after timestamp with time zone,
-  status text DEFAULT 'pending', -- pending, processing, done, failed
-  error_message text,
-  created_at timestamp with time zone DEFAULT now(),
-  updated_at timestamp with time zone DEFAULT now()
-);
-
-ALTER TABLE telegram_message_queue ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Service role full access" ON telegram_message_queue
-  FOR ALL TO public USING (true) WITH CHECK (true);
-
-CREATE INDEX idx_queue_status_retry ON telegram_message_queue (status, retry_after);
+```text
+ PRINCIPAL
+   Dashboard
+   
+ OPERAÇÕES
+   Meu Bot
+   Consultas (testar)
+   Logs de Consultas
+   
+ GESTÃO
+   Usuários
+   Planos
+   Transações PIX
+   
+ SISTEMA
+   Segurança
+   Configurações
 ```
 
-## Passo 2 — Atualizar `telegramRequest` no `telegram-webhook`
+- Separadores visuais entre grupos
+- Labels de seção em uppercase discreto (10px, muted)
+- Manter o collapse/expand funcional
 
-Adicionar na função `telegramRequest`:
-- Detectar resposta 429 e ler `retry_after` do header/body
-- Fazer 1 retry local com `sleep(retry_after)` (se <= 5 segundos)
-- Se retry local falhar ou `retry_after > 5s`, salvar na tabela `telegram_message_queue` com o `retry_after` calculado
-- Retornar `{ ok: true, queued: true }` para que o fluxo não quebre
+### 2. Header — Mais Limpo
+- Remover o espaçador invisível da esquerda
+- Breadcrumb contextual (ex: "Dashboard > Visão Geral")
+- Mover busca para a direita, menor
+- Manter notificações e perfil
 
-## Passo 3 — Criar Edge Function `telegram-retry-queue`
+### 3. Dashboard (Index) — Layout Empresarial
+Reorganizar em seções temáticas com títulos claros:
 
-Nova função que:
-1. Busca mensagens da fila com `status = 'pending'` e `retry_after <= now()`
-2. Para cada mensagem, busca o token do bot e executa a requisição
-3. Se sucesso → marca como `done`
-4. Se 429 novamente → incrementa `retry_count`, calcula novo `retry_after` com backoff exponencial
-5. Se `retry_count >= max_retries` → marca como `failed`
-6. Processa no máximo 20 mensagens por execução
+```text
+┌─────────────────────────────────────────────┐
+│ Bom dia, [Nome] — Resumo do dia             │
+├──────┬──────┬──────┬──────┬─────────────────┤
+│ Bots │ Assi │ Cons │ Rece │  Status API     │
+│      │nante │ultas │ita  │  (compacto)     │
+├──────┴──────┴──────┴──────┴─────────────────┤
+│                                             │
+│  BOTS  (cards dos bots)                     │
+│                                             │
+├─────────────────────┬───────────────────────┤
+│  Atividade Recente  │ Ações Rápidas         │
+│                     │ Status do Sistema     │
+│                     │ Manutenção            │
+└─────────────────────┴───────────────────────┘
+```
 
-## Passo 4 — Cron job a cada 30 segundos (ou 1 minuto)
+**Mudanças específicas:**
+- Saudação personalizada com hora do dia (Bom dia/Boa tarde/Boa noite)
+- Stats cards na mesma linha que API Status (5 colunas em desktop)
+- Cards de stats mais compactos (menos padding, fonte menor)
+- Seções com títulos claros e bordas sutis
+- Reduzir o tamanho dos decorativos (blurs, gradients) — mais sutil
 
-Agendar execução periódica da `telegram-retry-queue` via pg_cron.
+### 4. Componentes — Refinamento Visual
+- **StatsCard**: Reduzir padding de `p-6` para `p-4`, valor de `text-3xl` para `text-2xl`
+- **BotStatusCard**: Menos gradients decorativos, mais dados úteis
+- **QuickActions**: Grid 2x2 mais compacto
+- **ActivityFeed**: Altura fixa de 300px, sem decorações excessivas
+- **SystemStatus**: Gráfico circular menor (96px ao invés de 112px)
 
-## Resultado
-- Nenhuma mensagem é perdida por erro 429
-- Retry local imediato para delays curtos (<=5s)
-- Fila persistente para delays longos
-- Backoff exponencial evita loops de rate-limit
-- Máximo de 5 retries antes de desistir
+### 5. Consistência de Cards
+Padronizar todos os cards:
+- `rounded-xl` (ao invés de misturar `rounded-2xl`)
+- Borda `border-border/40` uniforme
+- Header padrão: ícone 32px + título + subtítulo
+- Padding interno `p-4` padrão
+
+### 6. Tipografia e Espaçamento
+- Títulos de página: `text-xl font-semibold` (reduzir de `text-2xl font-bold`)
+- Subtítulos de seção: `text-sm font-medium text-muted-foreground`
+- Espaçamento entre seções: `gap-5` (reduzir de `gap-6`)
+- Menos uso de gradients decorativos — substituir por bordas e sombras sutis
+
+## Arquivos Modificados
+
+| Arquivo | Mudança |
+|---------|---------|
+| `src/components/layout/Sidebar.tsx` | Reorganizar menu em grupos com labels |
+| `src/components/layout/Header.tsx` | Simplificar, adicionar breadcrumb |
+| `src/pages/Index.tsx` | Novo layout com saudação e seções |
+| `src/components/dashboard/StatsCard.tsx` | Mais compacto |
+| `src/components/dashboard/BotStatusCard.tsx` | Simplificar decorações |
+| `src/components/dashboard/BotsSection.tsx` | Ajustar grid |
+| `src/components/dashboard/QuickActions.tsx` | Mais compacto |
+| `src/components/dashboard/SystemStatus.tsx` | Gráfico menor |
+| `src/components/dashboard/ActivityFeed.tsx` | Altura menor, mais limpo |
+| `src/components/dashboard/ApiStatusCard.tsx` | Integrar melhor no layout |
+| `src/components/dashboard/MaintenanceToggle.tsx` | Padronizar estilo |
+
+## O que NÃO muda
+- Funcionalidades existentes (dados, realtime, hooks)
+- Páginas secundárias (Bots, Settings, Security, etc.) — foco no dashboard e layout
+- Sistema de autenticação
+- Edge functions e backend
 
