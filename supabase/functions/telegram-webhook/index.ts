@@ -2597,6 +2597,9 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     }
   }
 
+  // PRÉ-PROCESSAMENTO: Corrigir encoding quebrado
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+
   // PRÉ-PROCESSAMENTO: Se o campo 'data' é uma string, fazer parse
   if (typeof data.data === 'string') {
     console.log('Parsing data string field...');
@@ -2640,6 +2643,11 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   // ============= FORMATAÇÃO ESPECÍFICA PARA TELEFONE (telefone, telefonefull, telefone-3) =============
   if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // ============= FORMATAÇÃO ESPECÍFICA PARA VEÍCULOS =============
+  if (vehicleModules.includes(queryType)) {
+    return formatVehicleResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
