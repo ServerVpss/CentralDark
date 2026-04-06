@@ -2448,9 +2448,9 @@ function formatGenericResult(
       const displayKey = formatKey(item.key);
       let displayValue: string;
       if (typeof item.value === 'object' && item.value !== null) {
-        displayValue = JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase();
+        displayValue = escapeHtml(JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase());
       } else {
-        displayValue = String(item.value).toUpperCase();
+        displayValue = escapeHtml(String(item.value).toUpperCase());
       }
       if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
         lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
@@ -2471,9 +2471,9 @@ function formatGenericResult(
       const displayKey = formatKey(item.key);
       let displayValue: string;
       if (typeof item.value === 'object' && item.value !== null) {
-        displayValue = JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase();
+        displayValue = escapeHtml(JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase());
       } else {
-        displayValue = String(item.value).toUpperCase();
+        displayValue = escapeHtml(String(item.value).toUpperCase());
       }
       if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
         lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
