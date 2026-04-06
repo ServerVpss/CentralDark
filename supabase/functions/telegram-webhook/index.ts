@@ -3449,10 +3449,28 @@ class BotHandler {
     await sendMessage(this.token, chatId, `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>\n\nAguarde um momento.`);
 
     try {
-      const { data: result, fromCache } = await executeQueryWithCache(queryType, queryInput, estado);
+      // Usar fallback automático para módulos com cadeia de fallback (ex: telefone → telefone-3 → telefonefull)
+      const hasFallback = FALLBACK_CHAINS[queryType];
+      let result: Record<string, unknown>;
+      let fromCache: boolean;
+      let usedModule = queryType;
+      
+      if (hasFallback) {
+        const fb = await executeQueryWithFallback(queryType, queryInput, estado);
+        result = fb.data;
+        fromCache = fb.fromCache;
+        usedModule = fb.usedModule;
+        if (usedModule !== queryType) {
+          logCmd('INFO', 'FALLBACK_USED', { original: queryType, used: usedModule, chatId, userId: telegramUserId });
+        }
+      } else {
+        const r = await executeQueryWithCache(queryType, queryInput, estado);
+        result = r.data;
+        fromCache = r.fromCache;
+      }
       
       // Log query - passa fromCache para evitar duplicação de créditos
-      await this.logQuery(telegramUserId, queryType, queryInput, result, fromCache);
+      await this.logQuery(telegramUserId, usedModule, queryInput, result, fromCache);
 
       // Verificar se é resultado de CEP ou TELEFONE com múltiplos registros
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
