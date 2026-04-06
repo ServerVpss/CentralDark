@@ -1837,7 +1837,8 @@ function formatMultiPersonPage(
   lines.push(`💡 Clique no CPF para consultar`);
   lines.push(`🤖 ${botTag}`);
   
-  return `<pre>${lines.join('\n')}</pre>`;
+  const escapeLine = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return `<pre>${lines.map(escapeLine).join('\n')}</pre>`;
 }
 
 // Create keyboard for multi-person result with CPF buttons and pagination
