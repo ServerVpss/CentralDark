@@ -437,12 +437,22 @@ async function sendMessage(token: string, chatId: number, text: string, replyMar
 
 // Função para dividir texto em páginas
 function splitIntoPages(text: string, maxLength: number = 3800): string[] {
+  // Strip outer <pre> tags before splitting, then re-add per page
+  let content = text;
+  let wrapPre = false;
+  if (content.startsWith('<pre>') && content.endsWith('</pre>')) {
+    content = content.slice(5, -6);
+    wrapPre = true;
+    // Adjust maxLength to account for <pre></pre> tags (11 chars)
+    maxLength = maxLength - 11;
+  }
+
   const pages: string[] = [];
-  let remaining = text;
+  let remaining = content;
   
   while (remaining.length > 0) {
     if (remaining.length <= maxLength) {
-      pages.push(remaining);
+      pages.push(wrapPre ? `<pre>${remaining}</pre>` : remaining);
       break;
     }
     
@@ -455,7 +465,8 @@ function splitIntoPages(text: string, maxLength: number = 3800): string[] {
       breakPoint = maxLength;
     }
     
-    pages.push(remaining.substring(0, breakPoint));
+    const pageContent = remaining.substring(0, breakPoint);
+    pages.push(wrapPre ? `<pre>${pageContent}</pre>` : pageContent);
     remaining = remaining.substring(breakPoint).trim();
   }
   
@@ -2490,8 +2501,7 @@ function formatGenericResult(
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
 
-  const escaped = lines.map(l => escapeHtml(l));
-  return `<pre>${escaped.join('\n')}</pre>`;
+  return `<pre>${lines.join('\n')}</pre>`;
 }
 
 // =============== BOT HANDLER CLASS ===============
