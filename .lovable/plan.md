@@ -1,110 +1,54 @@
 
 
-# Redesign Completo do Painel — Layout Profissional e Organizado
+# Adicionar Botão "Lista de Comandos" + Cores nos Botões do Telegram
 
-## Visão Geral
-Reorganizar todo o painel TelePanel com uma estrutura mais profissional, limpa e empresarial. Manter a mesma stack (React + Tailwind + shadcn/ui) e funcionalidades, mas com layout, hierarquia visual e organização drasticamente melhores.
+## Problema
+1. O botão "📋 Comandos" (lista de comandos) não aparece no Menu Principal — só aparece nos resultados de consulta
+2. Os botões do Telegram estão todos com a cor padrão (cinza)
 
-## O que muda
+## Novidade do Telegram
+A API do Telegram (Bot API 9.4, fevereiro 2026) adicionou o campo `style` nos botões `InlineKeyboardButton`. Valores possíveis:
+- `"primary"` — azul
+- `"success"` — verde  
+- `"danger"` — vermelho
 
-### 1. Sidebar — Reorganização por Seções
-Agrupar os itens do menu em categorias claras com labels de seção:
+## Passo 1 — Adicionar botão "Comandos" no Menu Principal
 
-```text
- PRINCIPAL
-   Dashboard
-   
- OPERAÇÕES
-   Meu Bot
-   Consultas (testar)
-   Logs de Consultas
-   
- GESTÃO
-   Usuários
-   Planos
-   Transações PIX
-   
- SISTEMA
-   Segurança
-   Configurações
+No `telegram-webhook/index.ts`, adicionar o botão `📋 Comandos` no menu principal, logo antes do "Painel Admin":
+
+```
+buttons.push([btn("📋 Comandos", "show_commands")]);
 ```
 
-- Separadores visuais entre grupos
-- Labels de seção em uppercase discreto (10px, muted)
-- Manter o collapse/expand funcional
+## Passo 2 — Adicionar suporte a `style` nos botões
 
-### 2. Header — Mais Limpo
-- Remover o espaçador invisível da esquerda
-- Breadcrumb contextual (ex: "Dashboard > Visão Geral")
-- Mover busca para a direita, menor
-- Manter notificações e perfil
+Atualizar a função `btn()` para aceitar um parâmetro `style` opcional:
 
-### 3. Dashboard (Index) — Layout Empresarial
-Reorganizar em seções temáticas com títulos claros:
-
-```text
-┌─────────────────────────────────────────────┐
-│ Bom dia, [Nome] — Resumo do dia             │
-├──────┬──────┬──────┬──────┬─────────────────┤
-│ Bots │ Assi │ Cons │ Rece │  Status API     │
-│      │nante │ultas │ita  │  (compacto)     │
-├──────┴──────┴──────┴──────┴─────────────────┤
-│                                             │
-│  BOTS  (cards dos bots)                     │
-│                                             │
-├─────────────────────┬───────────────────────┤
-│  Atividade Recente  │ Ações Rápidas         │
-│                     │ Status do Sistema     │
-│                     │ Manutenção            │
-└─────────────────────┴───────────────────────┘
+```ts
+function btn(text: string, data: string, style?: string): InlineButton {
+  const b: any = { text, callback_data: data };
+  if (style) b.style = style;
+  return b;
+}
 ```
 
-**Mudanças específicas:**
-- Saudação personalizada com hora do dia (Bom dia/Boa tarde/Boa noite)
-- Stats cards na mesma linha que API Status (5 colunas em desktop)
-- Cards de stats mais compactos (menos padding, fonte menor)
-- Seções com títulos claros e bordas sutis
-- Reduzir o tamanho dos decorativos (blurs, gradients) — mais sutil
+## Passo 3 — Aplicar cores estratégicas nos botões do menu
 
-### 4. Componentes — Refinamento Visual
-- **StatsCard**: Reduzir padding de `p-6` para `p-4`, valor de `text-3xl` para `text-2xl`
-- **BotStatusCard**: Menos gradients decorativos, mais dados úteis
-- **QuickActions**: Grid 2x2 mais compacto
-- **ActivityFeed**: Altura fixa de 300px, sem decorações excessivas
-- **SystemStatus**: Gráfico circular menor (96px ao invés de 112px)
+| Botão | Estilo |
+|-------|--------|
+| 🔍 Fazer Consulta | `success` (verde) |
+| 💳 Planos Privado / Assinar | `primary` (azul) |
+| 👥 Planos Grupo | `primary` (azul) |
+| 📋 Comandos | sem estilo (padrão) |
+| ⚙️ Painel Admin | sem estilo (padrão) |
+| 🚪 Entrar no Grupo | sem estilo (URL button) |
 
-### 5. Consistência de Cards
-Padronizar todos os cards:
-- `rounded-xl` (ao invés de misturar `rounded-2xl`)
-- Borda `border-border/40` uniforme
-- Header padrão: ícone 32px + título + subtítulo
-- Padding interno `p-4` padrão
+Nos resultados de consulta e confirmações de pagamento, aplicar `success` nos botões de ação principal.
 
-### 6. Tipografia e Espaçamento
-- Títulos de página: `text-xl font-semibold` (reduzir de `text-2xl font-bold`)
-- Subtítulos de seção: `text-sm font-medium text-muted-foreground`
-- Espaçamento entre seções: `gap-5` (reduzir de `gap-6`)
-- Menos uso de gradients decorativos — substituir por bordas e sombras sutis
+## Passo 4 — Deploy
 
-## Arquivos Modificados
+Deploy da edge function `telegram-webhook`.
 
-| Arquivo | Mudança |
-|---------|---------|
-| `src/components/layout/Sidebar.tsx` | Reorganizar menu em grupos com labels |
-| `src/components/layout/Header.tsx` | Simplificar, adicionar breadcrumb |
-| `src/pages/Index.tsx` | Novo layout com saudação e seções |
-| `src/components/dashboard/StatsCard.tsx` | Mais compacto |
-| `src/components/dashboard/BotStatusCard.tsx` | Simplificar decorações |
-| `src/components/dashboard/BotsSection.tsx` | Ajustar grid |
-| `src/components/dashboard/QuickActions.tsx` | Mais compacto |
-| `src/components/dashboard/SystemStatus.tsx` | Gráfico menor |
-| `src/components/dashboard/ActivityFeed.tsx` | Altura menor, mais limpo |
-| `src/components/dashboard/ApiStatusCard.tsx` | Integrar melhor no layout |
-| `src/components/dashboard/MaintenanceToggle.tsx` | Padronizar estilo |
-
-## O que NÃO muda
-- Funcionalidades existentes (dados, realtime, hooks)
-- Páginas secundárias (Bots, Settings, Security, etc.) — foco no dashboard e layout
-- Sistema de autenticação
-- Edge functions e backend
+## Arquivo modificado
+- `supabase/functions/telegram-webhook/index.ts`
 
