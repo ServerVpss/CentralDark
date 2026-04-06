@@ -3837,8 +3837,8 @@ class BotHandler {
       const detectedUf = !isPhotoQuery ? extractUfFromResult((result as Record<string, unknown>).data ?? result) : null;
       const isCpfBased = /^\d{11}$/.test(queryInput.replace(/\D/g, ''));
       const showFotoButton = detectedUf && isCpfBased && ufToFotoModule[detectedUf];
-      // Qualquer consulta com CPF de 11 dígitos que não seja foto e não tenha UF detectada mostra foto nacional
-      const showFotoNacional = !showFotoButton && !isPhotoQuery && isCpfBased;
+      // Só mostra botão de foto se UF foi detectada no resultado — sem UF, sem botão
+      const showFotoNacional = false;
 
       if (isValidPhotoUrl) {
         const actionButtons: InlineButton[][] = [
