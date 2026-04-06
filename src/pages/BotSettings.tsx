@@ -700,6 +700,9 @@ export default function BotSettings() {
               </div>
 
             </div>
+
+            {/* Custom Emojis dos Botões */}
+            <ButtonEmojiConfig botId={botId || ""} settingsId={settings?.id || null} />
           </TabsContent>
 
           <TabsContent value="engagement" className="mt-6 space-y-6">
