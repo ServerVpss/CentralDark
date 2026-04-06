@@ -2501,8 +2501,7 @@ function formatGenericResult(
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
 
-  const escaped = lines.map(l => escapeHtml(l));
-  return `<pre>${escaped.join('\n')}</pre>`;
+  return `<pre>${lines.join('\n')}</pre>`;
 }
 
 // =============== BOT HANDLER CLASS ===============
