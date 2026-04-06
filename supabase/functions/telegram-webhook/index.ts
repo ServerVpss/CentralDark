@@ -3104,7 +3104,7 @@ class BotHandler {
   async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string, telegramUserName?: string) {
     // Check maintenance mode - silently ignore so other bots can respond
     if (this.settings.maintenance_mode) {
-      console.log(`[MAINTENANCE] Query "${queryType}" ignored - bot in maintenance mode.`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'maintenance', queryType, chatId, userId: telegramUserId });
       return;
     }
 
@@ -3122,10 +3122,11 @@ class BotHandler {
     // This prevents the bot from responding when module is off,
     // avoiding confusion with other bots no grupo
     if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-      console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'disabled', queryType, chatId, userId: telegramUserId });
       return;
     }
 
+    logCmd('INFO', 'QUERY_START', { queryType, input: queryInput.substring(0, 20), chatId, userId: telegramUserId, estado: estado || null });
     await sendMessage(this.token, chatId, `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>\n\nAguarde um momento.`);
 
     try {
@@ -3283,7 +3284,7 @@ class BotHandler {
         }
       }
     } catch (error) {
-      console.error("Query error:", error);
+      logCmd('ERROR', 'QUERY_FAIL', { queryType, input: queryInput.substring(0, 20), chatId, userId: telegramUserId, error: (error as Error).message, stack: (error as Error).stack?.substring(0, 200) });
       await sendMessage(this.token, chatId,
         "❌ <b>Erro na consulta</b>\n\nOcorreu um erro ao processar sua consulta. Tente novamente.",
         keyboard([btn("🔍 Tentar Novamente", "menu:query"), btn("🏠 Menu", "menu:main")])
