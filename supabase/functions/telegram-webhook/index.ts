@@ -2287,8 +2287,9 @@ function formatCpfResult(
     lines.push(``);
   }
 
-  // Retornar como bloco <pre> monoespaçado
-  return `<pre>${lines.join('\n')}</pre>`;
+  // Retornar como bloco <pre> monoespaçado (escapar HTML nos valores)
+  const escaped = lines.map(l => escapeHtml(l));
+  return `<pre>${escaped.join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS (MONOESPAÇADO) ===============
@@ -2488,7 +2489,8 @@ function formatGenericResult(
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
 
-  return `<pre>${lines.join('\n')}</pre>`;
+  const escaped = lines.map(l => escapeHtml(l));
+  return `<pre>${escaped.join('\n')}</pre>`;
 }
 
 // =============== BOT HANDLER CLASS ===============
