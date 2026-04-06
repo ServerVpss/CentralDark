@@ -5102,8 +5102,9 @@ class BotHandler {
       return;
     }
 
-    if (data === "menu:plans") {
-      await this.showPlansMenu(chatId, messageId);
+    if (data === "menu:plans" || data.startsWith("menu:plans:")) {
+      const planContext = data.includes(":") && data.split(":").length === 3 ? data.split(":")[2] : 'group';
+      await this.showPlansMenu(chatId, messageId, planContext);
       return;
     }
 
