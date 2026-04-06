@@ -3475,7 +3475,7 @@ class BotHandler {
           "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
         },
         body: JSON.stringify({
-          amount: plan.price,
+          amount: finalPrice,
           user_id: this.bot.user_id,
           telegram_user_id: telegramUserId,
           telegram_chat_id: chatId,
@@ -3483,6 +3483,7 @@ class BotHandler {
           plan_name: plan.name,
           plan_code: plan.code,
           plan_days: plan.days,
+          context: context,
         }),
       });
 
@@ -3498,10 +3499,11 @@ class BotHandler {
 
       // INSERT removido - agora feito exclusivamente pelo efi-generate-pix
 
+      const contextLabel = isPrivate ? "🔒 Privado" : "👥 Grupo";
        const pixText =
          `💳 <b>PIX Gerado!</b>\n\n` +
-         `📦 Plano: <b>${plan.name}</b>\n` +
-         `💰 Valor: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
+         `📦 Plano: <b>${plan.name}</b> (${contextLabel})\n` +
+         `💰 Valor: <b>R$ ${finalPrice.toFixed(2)}</b>\n` +
          `📅 Validade: <b>${plan.days} dias</b>\n` +
          `⏰ Expira em: <b>10 minutos</b>\n\n` +
          `🎫 TXID: <code>${txid}</code>\n\n` +
