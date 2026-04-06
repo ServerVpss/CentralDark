@@ -572,6 +572,63 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
     grouped[cat].push(item);
   }
 
+  // Sub-group labels for numbered items
+  const subGroupLabels: Record<string, string> = {
+    "ENDEREÇO": "Endereco",
+    "CONTATO": "Contato",
+    "FAMÍLIA": "Familiar",
+    "PROFISSIONAL": "Emprego",
+    "VEÍCULO": "Veiculo",
+    "EMPRESA": "Empresa",
+  };
+
+  // Detect numbered sub-groups within category items
+  // Keys like "enderecos_1.logradouro", "enderecos_2.logradouro" or "telefones_1", "telefones_2"
+  function organizeIntoSubGroups(catItems: Array<{ key: string; value: string }>, category: string): Array<{ subHeader: string | null; items: Array<{ key: string; value: string }> }> {
+    const groups: Array<{ subHeader: string | null; items: Array<{ key: string; value: string }> }> = [];
+    const ungrouped: Array<{ key: string; value: string }> = [];
+    const numbered: Record<number, Array<{ key: string; value: string }>> = {};
+    
+    // Detect pattern: key contains _N. or ends with _N (where N is a number)
+    const numberPattern = /[_.](\d+)(?:\.|$)/;
+    
+    for (const item of catItems) {
+      const match = item.key.match(numberPattern);
+      if (match) {
+        const num = parseInt(match[1]);
+        if (num >= 1 && num <= 50) {
+          if (!numbered[num]) numbered[num] = [];
+          numbered[num].push(item);
+          continue;
+        }
+      }
+      ungrouped.push(item);
+    }
+    
+    const numKeys = Object.keys(numbered).map(Number).sort((a, b) => a - b);
+    
+    // If we have numbered groups, organize them
+    if (numKeys.length > 0) {
+      // First add ungrouped items (no sub-header)
+      if (ungrouped.length > 0) {
+        groups.push({ subHeader: null, items: ungrouped });
+      }
+      
+      const label = subGroupLabels[category] || category;
+      for (const num of numKeys) {
+        groups.push({
+          subHeader: `${label} ${num}`,
+          items: numbered[num],
+        });
+      }
+    } else {
+      // No numbered groups, just return all items without sub-headers
+      groups.push({ subHeader: null, items: catItems });
+    }
+    
+    return groups;
+  }
+
   // Adjust content width if photo is present
   const effectiveContentWidth = photoEmbedded ? contentWidth - 140 : contentWidth;
   const effectiveMaxChars = photoEmbedded ? 40 : valueMaxChars;
@@ -608,68 +665,102 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
 
     y -= 25;
 
-    // Draw items
-    for (const item of catItems) {
-      const label = getLabel(item.key.split(".").pop() || item.key);
-      const sanitizedValue = sanitizeText(item.value);
-      
-      // Word wrap long values
-      const maxChars = photoEmbedded ? effectiveMaxChars : valueMaxChars;
-      const valueLines = sanitizedValue.length > maxChars 
-        ? wrapText(sanitizedValue, maxChars) 
-        : [sanitizedValue];
-      
-      const neededHeight = valueLines.length * lineHeight + 5;
-      checkNewPage(neededHeight);
+    // Organize items into sub-groups
+    const subGroups = organizeIntoSubGroups(catItems, category);
 
-      // Label — wrapped in try/catch for encoding safety
-      try {
-        page.drawText(sanitizeText(label + ":"), {
-          x: margin + 10,
-          y: y,
-          size: 9,
-          font: fontBold,
-          color: rgb(0.4, 0.4, 0.4),
+    for (const subGroup of subGroups) {
+      // Draw sub-header if present
+      if (subGroup.subHeader) {
+        checkNewPage(30);
+        y -= 5;
+        
+        // Draw sub-header line
+        page.drawLine({
+          start: { x: margin + 10, y: y + 8 },
+          end: { x: margin + (photoEmbedded ? effectiveContentWidth - 10 : contentWidth - 10), y: y + 8 },
+          thickness: 0.5,
+          color: rgb(0.75, 0.75, 0.75),
         });
-      } catch {
+        
         try {
-          const safeLabel = (label + ":").replace(/[^\x20-\x7E]/g, '');
-          page.drawText(safeLabel || 'Campo:', {
+          page.drawText(sanitizeText(subGroup.subHeader), {
+            x: margin + 12,
+            y: y - 5,
+            size: 9,
+            font: fontBold,
+            color: rgb(0.3, 0.3, 0.5),
+          });
+        } catch { /* skip */ }
+        
+        y -= 18;
+      }
+
+      // Draw items
+      for (const item of subGroup.items) {
+        // Clean up the key: remove numbered prefix for display
+        const rawKey = item.key.split(".").pop() || item.key;
+        // Remove trailing _N from the display label
+        const cleanKey = rawKey.replace(/_\d+$/, '');
+        const label = getLabel(cleanKey);
+        const sanitizedValue = sanitizeText(item.value);
+        
+        // Word wrap long values
+        const maxChars = photoEmbedded ? effectiveMaxChars : valueMaxChars;
+        const valueLines = sanitizedValue.length > maxChars 
+          ? wrapText(sanitizedValue, maxChars) 
+          : [sanitizedValue];
+        
+        const neededHeight = valueLines.length * lineHeight + 5;
+        checkNewPage(neededHeight);
+
+        // Label
+        try {
+          page.drawText(sanitizeText(label + ":"), {
             x: margin + 10,
             y: y,
             size: 9,
             font: fontBold,
             color: rgb(0.4, 0.4, 0.4),
           });
-        } catch { /* skip */ }
-      }
-
-      // Value (possibly multi-line) — wrapped in try/catch for encoding safety
-      for (let i = 0; i < valueLines.length; i++) {
-        try {
-          page.drawText(valueLines[i], {
-            x: margin + labelWidth,
-            y: y - (i * lineHeight),
-            size: 10,
-            font: font,
-            color: rgb(0.1, 0.1, 0.1),
-          });
-        } catch (drawErr) {
-          // If drawText still fails, strip to pure ASCII as last resort
-          const safeText = valueLines[i].replace(/[^\x20-\x7E]/g, '');
+        } catch {
           try {
-            page.drawText(safeText || '(dados indisponiveis)', {
+            const safeLabel = (label + ":").replace(/[^\x20-\x7E]/g, '');
+            page.drawText(safeLabel || 'Campo:', {
+              x: margin + 10,
+              y: y,
+              size: 9,
+              font: fontBold,
+              color: rgb(0.4, 0.4, 0.4),
+            });
+          } catch { /* skip */ }
+        }
+
+        // Value
+        for (let i = 0; i < valueLines.length; i++) {
+          try {
+            page.drawText(valueLines[i], {
               x: margin + labelWidth,
               y: y - (i * lineHeight),
               size: 10,
               font: font,
               color: rgb(0.1, 0.1, 0.1),
             });
-          } catch { /* skip this line entirely */ }
+          } catch {
+            const safeText = valueLines[i].replace(/[^\x20-\x7E]/g, '');
+            try {
+              page.drawText(safeText || '(dados indisponiveis)', {
+                x: margin + labelWidth,
+                y: y - (i * lineHeight),
+                size: 10,
+                font: font,
+                color: rgb(0.1, 0.1, 0.1),
+              });
+            } catch { /* skip */ }
+          }
         }
-      }
 
-      y -= neededHeight;
+        y -= neededHeight;
+      }
     }
 
     y -= 10;
