@@ -62,7 +62,7 @@ const TABLE_DISPLAY_NAMES: Record<string, string> = {
   edge_function_health: "Saúde das Edge Functions",
   paginated_results: "Resultados Paginados",
   processed_updates: "Updates Processados",
-  query_cache: "Cache de Consultas",
+  
   scheduled_broadcasts: "Broadcasts Agendados",
   telegram_user_terms: "Termos de Usuários",
   user_roles: "Papéis de Usuários",
