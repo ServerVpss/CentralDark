@@ -4199,7 +4199,7 @@ class BotHandler {
             undefined, { parse_mode: "HTML" });
           return;
         }
-        await this.processMultipleQueries(chatId, telegramUserId, parsed);
+        await this.handleMultipleQueries(message, parsed);
         return;
       }
 
