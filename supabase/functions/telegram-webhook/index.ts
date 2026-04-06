@@ -250,8 +250,82 @@ const queryTypeLabels: Record<string, string> = {
 };
 
 const brazilianStates = [
-  "SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"
+  "SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO",
+  "MS", "RO", "PI"
 ];
+
+// Mapa de UF para módulo de foto
+const ufToFotoModule: Record<string, string> = {
+  SP: "fotosp", RJ: "fotorj", MG: "fotomg", BA: "fotoba", PR: "fotopr",
+  RS: "fotors", PE: "fotope", CE: "fotoce", GO: "fotogo", MA: "fotoma",
+  ES: "fotoes", DF: "fotodf", TO: "fototo", MS: "fotoms", RO: "fotoro",
+  PI: "fotopi",
+};
+
+// Extrair UF do resultado da consulta (busca profunda)
+function extractUfFromResult(data: unknown): string | null {
+  if (!data || typeof data !== 'object') return null;
+  
+  const obj = data as Record<string, unknown>;
+  
+  // Verificar campos diretos comuns
+  const ufFields = ['uf', 'estado', 'UF', 'Estado', 'uf_nascimento', 'uf_endereco'];
+  for (const field of ufFields) {
+    const val = obj[field];
+    if (typeof val === 'string' && val.length === 2) {
+      const upper = val.toUpperCase();
+      if (upper in ufToFotoModule) return upper;
+    }
+  }
+  
+  // Buscar em objetos aninhados (data, endereco, etc.)
+  const nestedKeys = ['data', 'endereco', 'enderecos', 'resultado', 'result'];
+  for (const key of nestedKeys) {
+    const nested = obj[key];
+    if (nested && typeof nested === 'object' && !Array.isArray(nested)) {
+      const found = extractUfFromResult(nested);
+      if (found) return found;
+    }
+    // Se for array, verificar primeiro elemento
+    if (Array.isArray(nested) && nested.length > 0 && typeof nested[0] === 'object') {
+      const found = extractUfFromResult(nested[0]);
+      if (found) return found;
+    }
+  }
+  
+  // Buscar data como string parseada
+  if (typeof obj.data === 'string') {
+    try {
+      const parsed = JSON.parse(obj.data);
+      const found = extractUfFromResult(parsed);
+      if (found) return found;
+    } catch { /* ignore */ }
+    
+    // Buscar padrão UF: XX na string
+    const ufMatch = (obj.data as string).match(/\bUF[:\s]+([A-Z]{2})\b/i);
+    if (ufMatch) {
+      const upper = ufMatch[1].toUpperCase();
+      if (upper in ufToFotoModule) return upper;
+    }
+  }
+  
+  // Buscar em todas as chaves como último recurso
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'string' && value.length === 2) {
+      const keyLower = key.toLowerCase();
+      if (keyLower.includes('uf') || keyLower.includes('estado')) {
+        const upper = value.toUpperCase();
+        if (upper in ufToFotoModule) return upper;
+      }
+    }
+    if (typeof value === 'object' && value !== null && !Array.isArray(value) && !nestedKeys.includes(key)) {
+      const found = extractUfFromResult(value);
+      if (found) return found;
+    }
+  }
+  
+  return null;
+}
 
 // =============== HELPERS ===============
 function btn(text: string, callback_data: string): InlineButton {
@@ -1019,7 +1093,8 @@ async function sendLongMessagePaginated(
   replyToId?: number,
   messageEffectId?: string,
   queryType?: string,
-  queryInput?: string
+  queryInput?: string,
+  extraButtons?: InlineButton[][]
 ) {
   const MAX_LENGTH = 3800;
   
@@ -1041,8 +1116,11 @@ async function sendLongMessagePaginated(
       if (!isPhotoQuery) {
         buttons.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
       }
-    }
-    
+      }
+      // Botões extras (ex: Consultar Foto)
+      if (extraButtons && extraButtons.length > 0) {
+        buttons.push(...extraButtons);
+      }
     return { inline_keyboard: buttons };
   };
   
@@ -2985,8 +3063,13 @@ class BotHandler {
       // Obter o efeito configurado para este bot
       const effectId = getMessageEffectId(this.settings.message_effect);
 
+      // Detectar UF do resultado para botão "Consultar Foto"
+      const isPhotoQuery = queryType.toLowerCase().startsWith('foto') || queryType.toLowerCase() === 'nacional';
+      const detectedUf = !isPhotoQuery ? extractUfFromResult(result) : null;
+      const isCpfBased = /^\d{11}$/.test(queryInput.replace(/\D/g, ''));
+      const showFotoButton = detectedUf && isCpfBased && ufToFotoModule[detectedUf];
+
       if (isValidPhotoUrl) {
-        const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
         const actionButtons: InlineButton[][] = [
           [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
           [btn("🗑️ Apagar", "delete_msg")],
@@ -2994,6 +3077,9 @@ class BotHandler {
         ];
         if (!isPhotoQuery) {
           actionButtons.push([btn("📝 Ver TXT", `txt:${queryType}:${queryInput}`)]);
+        }
+        if (showFotoButton) {
+          actionButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
         }
         
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
@@ -3009,7 +3095,12 @@ class BotHandler {
         }
       } else {
         // Usar paginação por botões para resultados longos
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, queryType, queryInput);
+        // Adicionar botão de foto se UF detectado
+        const extraButtons: InlineButton[][] = [];
+        if (showFotoButton) {
+          extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
+        }
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, queryType, queryInput, extraButtons);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -4628,6 +4719,67 @@ class BotHandler {
         console.error("Quick CPF query error:", error);
         await editMessage(this.token, chatId, messageId,
           "❌ <b>Erro na consulta de CPF</b>\n\nTente novamente.",
+          keyboard([btn("🗑️ Apagar", "delete_msg")])
+        );
+      }
+      return;
+    }
+
+    // Quick Foto query from result buttons (📸 Consultar Foto)
+    if (data.startsWith("foto_query:")) {
+      const parts = data.replace("foto_query:", "").split(":");
+      const uf = parts[0];
+      const cpf = parts[1];
+      
+      if (!uf || !cpf) return;
+      
+      const fotoModule = ufToFotoModule[uf.toUpperCase()];
+      if (!fotoModule) {
+        await sendMessage(this.token, chatId, "❌ Estado não suportado para busca de foto.");
+        return;
+      }
+      
+      if (!await isQueryTypeEnabled(fotoModule, this.supabase)) {
+        await sendMessage(this.token, chatId, `⚠️ Módulo <code>${fotoModule}</code> está desativado.`);
+        return;
+      }
+      
+      const telegramUserName = callback.from?.first_name || 'usuário';
+      
+      await sendMessage(this.token, chatId, `⏳ <b>Buscando foto (${uf})...</b>\n\n<code>${cpf}</code>`);
+      
+      try {
+        const { data: result, fromCache } = await executeQueryWithCache(fotoModule, cpf);
+        await this.logQuery(telegramUserId, fotoModule, cpf, result, fromCache);
+        
+        const fotoUrl = deepExtractPhoto(result);
+        const isValidPhoto = fotoUrl && typeof fotoUrl === 'string' && 
+          (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+        
+        if (isValidPhoto) {
+          const actionButtons: InlineButton[][] = [
+            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
+            [btn("🗑️ Apagar", "delete_msg")],
+            [btn("📄 Baixar PDF", `pdf:${fotoModule}:${cpf}`)]
+          ];
+          
+          await telegramRequest(this.token, "sendPhoto", {
+            chat_id: chatId,
+            photo: fotoUrl,
+            caption: `📸 <b>Foto encontrada (${uf})</b>\n\n👤 CPF: <code>${cpf}</code>`,
+            parse_mode: "HTML",
+            reply_markup: { inline_keyboard: actionButtons },
+          });
+        } else {
+          await sendMessage(this.token, chatId,
+            `📸 <b>Foto não encontrada (${uf})</b>\n\n👤 CPF: <code>${cpf}</code>\n\n💡 Tente a busca nacional: <code>/foto ${cpf}</code>`,
+            keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🗑️ Apagar", "delete_msg")])
+          );
+        }
+      } catch (error) {
+        console.error("Foto query error:", error);
+        await sendMessage(this.token, chatId,
+          "❌ <b>Erro ao buscar foto</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
         );
       }
