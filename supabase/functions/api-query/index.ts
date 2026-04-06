@@ -32,20 +32,20 @@ const MODULE_WHITELIST = new Set([
   // Variantes -3
   "rg-3", "pis-3", "cep-3", "email-3", "nome-3",
   "score-3", "parentes-3", "telefone-3",
-  // Foto por estado
-  "fotomg", "fotosp", "fotorj", "fotoba", "fotoce", "fotogo",
-  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf",
+  // Foto por estado (12 estados disponíveis)
+  "fotomg", "fotosp", "fotorj", "fotoce",
+  "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
 ]);
 
 // Foto state modules for national search
 const FOTO_STATE_MODULES: Record<string, string> = {
-  SP: "fotosp", RJ: "fotorj", MG: "fotomg", BA: "fotoba",
-  CE: "fotoce", GO: "fotogo", PR: "fotopr", RS: "fotors",
-  PE: "fotope", MA: "fotoma", ES: "fotoes", DF: "fotodf",
-  TO: "fototo", MS: "fotoms", RO: "fotoro", PI: "fotopi",
+  SP: "fotosp", RJ: "fotorj", MG: "fotomg",
+  CE: "fotoce", PR: "fotopr", MA: "fotoma",
+  ES: "fotoes", DF: "fotodf", TO: "fototo",
+  MS: "fotoms", RO: "fotoro", PI: "fotopi",
 };
-const FOTO_STATE_PRIORITY = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO", "MS", "RO", "PI"];
+const FOTO_STATE_PRIORITY = ["SP", "RJ", "MG", "PR", "CE", "MA", "ES", "DF", "TO", "MS", "RO", "PI"];
 
 // Módulos virtuais que não vão direto para a API (são compostos)
 const VIRTUAL_MODULES = new Set(["foto", "nacional"]);
