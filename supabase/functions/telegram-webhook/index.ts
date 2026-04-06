@@ -3156,8 +3156,10 @@ class BotHandler {
     }
   }
 
-  async showPlansMenu(chatId: number, messageId: number) {
+  async showPlansMenu(chatId: number, messageId: number, context: string = 'group') {
     const plans = await this.getPlans();
+    const isPrivate = context === 'private';
+    const PRIVATE_MARKUP = 1; // R$1 a mais para privado
 
     if (plans.length === 0) {
       await editMessage(this.token, chatId, messageId,
@@ -3167,17 +3169,23 @@ class BotHandler {
       return;
     }
 
-    let text = `💎 <b>Planos Disponíveis</b>\n\n`;
+    const contextLabel = isPrivate ? "🔒 Privado" : "👥 Grupo";
+    let text = `💎 <b>Planos Disponíveis — ${contextLabel}</b>\n\n`;
+    if (isPrivate) {
+      text += `<i>ℹ️ Planos do privado incluem +R$ ${PRIVATE_MARKUP.toFixed(2)} sobre o valor do grupo.</i>\n\n`;
+    }
     plans.forEach((p, i) => {
       const popular = (p as any).is_popular ? " ⭐" : "";
+      const price = isPrivate ? p.price + PRIVATE_MARKUP : p.price;
       text += `${i + 1}. <b>${p.title}</b>${popular}\n`;
-      text += `   💰 R$ ${p.price.toFixed(2)} • ${p.days} dias\n\n`;
+      text += `   💰 R$ ${price.toFixed(2)} • ${p.days} dias\n\n`;
     });
     text += `<i>Selecione um plano para gerar o PIX:</i>`;
 
     const buttons: InlineButton[][] = plans.map(p => {
       const popular = (p as any).is_popular ? " ⭐" : "";
-      return [btn(`${p.title} — R$ ${p.price.toFixed(2)}${popular}`, `plan:${p.code}`)];
+      const price = isPrivate ? p.price + PRIVATE_MARKUP : p.price;
+      return [btn(`${p.title} — R$ ${price.toFixed(2)}${popular}`, `plan:${p.code}:${context}`)];
     });
     buttons.push([btn("🔙 Voltar", "menu:main")]);
 
