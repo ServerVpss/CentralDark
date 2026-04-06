@@ -5072,7 +5072,7 @@ class BotHandler {
       try {
         await deleteMessage(this.token, chatId, messageId);
       } catch (_e) { /* ignore */ }
-      await this.showMainMenu(chatId, telegramUserId);
+      await this.showMainMenu(chatId, telegramUserId, undefined, callback.message?.chat?.type);
       return;
     }
 
@@ -5084,13 +5084,15 @@ class BotHandler {
 
     // Menu navigation
     if (data === "menu:main") {
-      await this.showMainMenu(chatId, telegramUserId, messageId);
+      await this.showMainMenu(chatId, telegramUserId, messageId, callback.message?.chat?.type);
       return;
     }
 
     if (data === "menu:query") {
       // Check subscription first
-      const isActive = await this.isSubscriptionActive(telegramUserId);
+      const chatType = callback.message?.chat?.type || 'private';
+      const queryContext = chatType === 'private' ? 'private' : 'group';
+      const isActive = await this.isSubscriptionActive(telegramUserId, queryContext);
       if (!isActive && !this.isOwner(telegramUserId)) {
         await editMessage(this.token, chatId, messageId,
           "⚠️ <b>Assinatura necessária</b>\n\nVocê precisa de uma assinatura ativa para fazer consultas.",
