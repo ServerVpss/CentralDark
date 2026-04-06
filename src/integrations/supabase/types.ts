@@ -1053,6 +1053,56 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_message_queue: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          max_retries: number
+          method: string
+          payload: Json
+          retry_after: string | null
+          retry_count: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          max_retries?: number
+          method: string
+          payload: Json
+          retry_after?: string | null
+          retry_count?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          max_retries?: number
+          method?: string
+          payload?: Json
+          retry_after?: string | null
+          retry_count?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_message_queue_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       telegram_messages: {
         Row: {
           blocked_reason: string | null
