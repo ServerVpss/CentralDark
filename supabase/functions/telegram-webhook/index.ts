@@ -4843,6 +4843,24 @@ class BotHandler {
       const isValidPhotoUrl = fotoUrl && typeof fotoUrl === 'string' && 
         (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
 
+      // Detectar UF para botão de foto (igual ao processQuery)
+      const isPhotoQuery = queryType === 'foto' || queryType.startsWith('foto');
+      let detectedUf: string | null = null;
+      let showFotoButton = false;
+      if (!isPhotoQuery) {
+        detectedUf = extractUfFromResult((result as Record<string, unknown>).data ?? result);
+        if (detectedUf && detectedUf in ufToFotoModule) {
+          showFotoButton = true;
+          logCmd('INFO', 'UF_DETECTED_GROUP', { queryType, uf: detectedUf, input: inputForQuery.substring(0, 15) });
+        }
+      }
+
+      // Montar botões extras (foto)
+      const extraButtons: InlineButton[][] = [];
+      if (showFotoButton && detectedUf) {
+        extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${inputForQuery.replace(/\D/g, '')}`)]);
+      }
+
       let resultMessageId: number | undefined;
       let photoMessageId: number | undefined;
       
@@ -4850,28 +4868,34 @@ class BotHandler {
         // Tentar enviar tudo em uma mensagem só (foto + dados + footer)
         const fullCaption = formattedResult + consultaFooter;
         
+        // Montar botões para foto
+        const photoButtons: InlineButton[][] = [
+          [btn("🗑️ Apagar", "delete_msg")],
+          [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)],
+        ];
+        if (showFotoButton && detectedUf) {
+          photoButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${inputForQuery.replace(/\D/g, '')}`)]);
+        }
+        
         if (fullCaption.length <= 1024) {
-          // Cabe no caption - enviar tudo junto em UMA ÚNICA mensagem
           const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
             photo: fotoUrl,
             caption: fullCaption,
             parse_mode: "HTML",
             reply_to_message_id: replyToId,
-            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")], [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]),
+            reply_markup: keyboard(...photoButtons),
           });
           if (sentPhoto.ok && sentPhoto.result) {
             photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
           } else {
             console.error("sendPhoto failed for query result:", sentPhoto);
-            // Fallback: enviar apenas texto formatado
-            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId, undefined, queryType, queryInput);
+            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
             if (paginatedResult.ok && paginatedResult.result) {
               resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
             }
           }
         } else {
-          // Não cabe no caption - manter comportamento atual (foto simples + texto separado)
           const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}${consultaFooter}`;
           
           const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
@@ -4880,7 +4904,7 @@ class BotHandler {
             caption: simpleCaption.substring(0, 1024),
             parse_mode: "HTML",
             reply_to_message_id: replyToId,
-            reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")], [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]),
+            reply_markup: keyboard(...photoButtons),
           });
 
           if (sentPhoto.ok && sentPhoto.result) {
@@ -4889,15 +4913,14 @@ class BotHandler {
             console.error("sendPhoto failed for query result:", sentPhoto);
           }
           
-          // Enviar dados completos como mensagem separada com paginação
-          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput);
+          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
           if (paginatedResult.ok && paginatedResult.result) {
             resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
           }
         }
       } else {
-        // Sem foto - Enviar resultado com paginação por botões
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput);
+        // Sem foto - Enviar resultado com paginação e botão de foto se UF detectado
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
