@@ -7,6 +7,7 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { MaintenanceToggle } from "@/components/dashboard/MaintenanceToggle";
 import { SystemStatus } from "@/components/dashboard/SystemStatus";
 import { ApiStatusCard } from "@/components/dashboard/ApiStatusCard";
+import { DashboardAnalyticsChart } from "@/components/dashboard/DashboardAnalyticsChart";
 import { useAdminData } from "@/hooks/useAdminData";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
 
