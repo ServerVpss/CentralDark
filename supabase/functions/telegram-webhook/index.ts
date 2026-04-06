@@ -564,9 +564,11 @@ function formatVehicleResult(
 
   const formatField = (key: string, value: unknown): string | null => {
     if (value === null || value === undefined || value === '' || value === '0' || value === 0) return null;
-    const strVal = String(value).trim();
-    if (!strVal || strVal === ',00' || strVal === '01/01/00') return null;
+    let strVal = String(value).trim();
+    if (!strVal || strVal === ',00' || strVal === '01/01/00' || strVal === '0 cv') return null;
     if (shouldIgnore(value)) return null;
+    // Add units
+    if (key === 'cilindradas' && !strVal.includes('cc')) strVal += ' cc';
     const label = labelMap[key] || `📌 ${key}`;
     return `├ ${label}: <b>${escapeHtml(fixBrokenEncoding(strVal))}</b>`;
   };
