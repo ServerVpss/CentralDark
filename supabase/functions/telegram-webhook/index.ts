@@ -557,11 +557,21 @@ function formatVehicleResult(
     );
   }
 
-  // Filter "SEM RESTRICAO" values
+  // Clean SESP placa format "LWM4944 - PI" → keep full (includes state info)
+  // No change needed — it's useful to show the state
+
+  // Filter "SEM RESTRICAO" and "INEXISTENTE" values
   for (const rk of ['restricao1', 'restricao2', 'restricao3', 'restricao4']) {
     const rv = vehicleData[rk];
-    if (rv && typeof rv === 'string' && /sem restri/i.test(rv)) {
+    if (rv && typeof rv === 'string' && (/sem restri/i.test(rv) || /inexistente/i.test(rv))) {
       delete vehicleData[rk];
+    }
+  }
+
+  // Filter "Não" boolean indicators (only show positive alerts)
+  for (const bf of boolFields) {
+    if (vehicleData[bf] === 'Não') {
+      delete vehicleData[bf];
     }
   }
 
