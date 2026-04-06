@@ -4875,6 +4875,8 @@ class BotHandler {
     const telegramUserId = callback.from.id;
     const data = callback.data || "";
 
+    logCmd('INFO', 'CALLBACK', { userId: telegramUserId, chatId, data: data.substring(0, 60), username: callback.from.username });
+
     if (!chatId || !messageId) return;
 
     await answerCallback(this.token, callback.id);
