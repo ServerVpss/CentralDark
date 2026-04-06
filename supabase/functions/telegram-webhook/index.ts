@@ -433,6 +433,213 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
   return b;
 }
 
+// =============== FIX BROKEN UTF-8 ENCODING ===============
+function fixBrokenEncoding(text: string): string {
+  // Common mojibake patterns from Latin-1 misinterpretation of UTF-8
+  const replacements: Record<string, string> = {
+    'Ã¡': 'á', 'Ã ': 'à', 'Ã¢': 'â', 'Ã£': 'ã', 'Ã¤': 'ä',
+    'Ã©': 'é', 'Ã¨': 'è', 'Ãª': 'ê', 'Ã«': 'ë',
+    'Ã­': 'í', 'Ã¬': 'ì', 'Ã®': 'î', 'Ã¯': 'ï',
+    'Ã³': 'ó', 'Ã²': 'ò', 'Ã´': 'ô', 'Ãµ': 'õ', 'Ã¶': 'ö',
+    'Ãº': 'ú', 'Ã¹': 'ù', 'Ã»': 'û', 'Ã¼': 'ü',
+    'Ã§': 'ç', 'Ã±': 'ñ',
+    'Ã\x81': 'Á', 'Ã\x80': 'À', 'Ã\x82': 'Â', 'Ã\x83': 'Ã', 'Ã\x84': 'Ä',
+    'Ã\x89': 'É', 'Ã\x88': 'È', 'Ã\x8A': 'Ê', 'Ã\x8B': 'Ë',
+    'Ã\x8D': 'Í', 'Ã\x8C': 'Ì', 'Ã\x8E': 'Î', 'Ã\x8F': 'Ï',
+    'Ã\x93': 'Ó', 'Ã\x92': 'Ò', 'Ã"': 'Ô', 'Ã\x95': 'Õ', 'Ã\x96': 'Ö',
+    'Ã\x9A': 'Ú', 'Ã\x99': 'Ù', 'Ã\x9B': 'Û', 'Ã\x9C': 'Ü',
+    'Ã\x87': 'Ç', 'Ã\x91': 'Ñ',
+  };
+  let result = text;
+  for (const [broken, fixed] of Object.entries(replacements)) {
+    result = result.split(broken).join(fixed);
+  }
+  return result;
+}
+
+function fixBrokenEncodingDeep(obj: unknown): unknown {
+  if (typeof obj === 'string') return fixBrokenEncoding(obj);
+  if (Array.isArray(obj)) return obj.map(fixBrokenEncodingDeep);
+  if (obj && typeof obj === 'object') {
+    const fixed: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
+      fixed[k] = fixBrokenEncodingDeep(v);
+    }
+    return fixed;
+  }
+  return obj;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA VEÍCULOS ===============
+const vehicleModules = ['placa', 'placa2', 'placa3', 'placa4', 'placasimples', 'placasesp', 'chassi', 'renavam', 'motor', 'frota', 'bin'];
+
+function formatVehicleResult(
+  queryType: string,
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  // Flatten nested dados.dados structure
+  let vehicleData: Record<string, unknown> = {};
+  const rawDados = data.dados as Record<string, unknown> | undefined;
+  if (rawDados && typeof rawDados === 'object') {
+    // Handle dados.dados nesting
+    const inner = rawDados.dados as Record<string, unknown> | undefined;
+    if (inner && typeof inner === 'object') {
+      vehicleData = { ...inner };
+    } else {
+      vehicleData = { ...rawDados };
+    }
+  } else {
+    // Top-level flat data
+    const { dados: _d, comando: _c, valor: _v, ...rest } = data;
+    vehicleData = rest;
+  }
+
+  // Metadata to ignore
+  const ignoreKeys = new Set([
+    'comando', 'valor', 'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'total_diario',
+    'reset_em', 'tipo', 'inicio_uso', 'vencimento', 'tempo_restante', 'tempo_restante_detalhado',
+    'dias_totais_restantes', 'limites', 'plano', 'modulo', 'conta', 'saldo', 'temposegundos',
+    'cache', 'cached_at', 'expiracao', 'duration_ms', 'resultados', 'notfound', 'error',
+    'dataInsercao', 'usuarioInsercao', 'dataUltimaAtualizacao', 'usuarioUltimaAtualizacao',
+    'idTbBin', 'codigoMarcaModelo', 'codigoSituacaoVeiculo', 'codigoSituacaoChassi',
+    'codigoCor', 'codigoCombustivel', 'codigoTipoVeiculo', 'codigoEspecieVeiculo',
+    'codigoTipoCarroceria', 'codigoMunicipio', 'codigoUnidadeSRF', 'tipoDocFaturado',
+    'tipoDocProprietario', 'tipoDocImportacao', 'numIdentificacaoImportacao',
+    'numDocumentoImportacao', 'dataRegistroDI', 'tipoMontagem', 'nacionalidade',
+  ]);
+
+  // Label mapping for human-readable display
+  const labelMap: Record<string, string> = {
+    placa: '🔖 Placa',
+    chassi: '🔧 Chassi',
+    renavam: '📋 RENAVAM',
+    motor: '⚙️ Motor',
+    anoFabricacao: '📅 Ano Fabricação',
+    anoModelo: '📅 Ano Modelo',
+    potencia: '⚡ Potência',
+    cilindradas: '🔩 Cilindradas',
+    cor: '🎨 Cor',
+    combustivel: '⛽ Combustível',
+    tipoVeiculo: '🚘 Tipo Veículo',
+    estadoEmplacamento: '📍 Estado',
+    dataEmplacamento: '📅 Emplacamento',
+    situacaoVeiculo: '📊 Situação',
+    situacaoChassi: '🔎 Situação Chassi',
+    possuiRestricoes: '⚠️ Restrições',
+    restricao1: '🚫 Restrição 1',
+    restricao2: '🚫 Restrição 2',
+    restricao3: '🚫 Restrição 3',
+    restricao4: '🚫 Restrição 4',
+    dataLimiteRestricao: '📅 Limite Restrição',
+    procedencia: '📝 Procedência',
+    ultimaAtualizacao: '🔄 Última Atualização',
+    lugares: '💺 Lugares',
+    carga: '📦 Carga',
+    pesoBrutoTotal: '⚖️ Peso Bruto Total',
+    capacidadeMaximaTracao: '🔗 Cap. Máx. Tração',
+    numCarroceria: '🏗️ Carroceria',
+    numCaixaCambio: '⚙️ Câmbio',
+    numEixoTras: '🔩 Eixo Traseiro',
+    numTercEixo: '🔩 Terceiro Eixo',
+    numEixos: '🔩 Eixos',
+    docFaturado: '📄 Doc. Faturado',
+    estadoFaturado: '📍 Estado Faturado',
+  };
+
+  // Build sections
+  const identification: string[] = [];
+  const specs: string[] = [];
+  const situation: string[] = [];
+  const restrictions: string[] = [];
+  const other: string[] = [];
+
+  const idFields = ['placa', 'chassi', 'renavam', 'motor'];
+  const specFields = ['anoFabricacao', 'anoModelo', 'potencia', 'cilindradas', 'cor', 'combustivel', 'tipoVeiculo', 'lugares', 'carga', 'pesoBrutoTotal', 'capacidadeMaximaTracao'];
+  const sitFields = ['estadoEmplacamento', 'dataEmplacamento', 'situacaoVeiculo', 'situacaoChassi', 'ultimaAtualizacao', 'procedencia'];
+  const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'dataLimiteRestricao'];
+
+  const formatField = (key: string, value: unknown): string | null => {
+    if (value === null || value === undefined || value === '' || value === '0' || value === 0) return null;
+    const strVal = String(value).trim();
+    if (!strVal || strVal === ',00' || strVal === '01/01/00') return null;
+    if (shouldIgnore(value)) return null;
+    const label = labelMap[key] || `📌 ${key}`;
+    return `├ ${label}: <b>${escapeHtml(fixBrokenEncoding(strVal))}</b>`;
+  };
+
+  for (const key of idFields) {
+    if (vehicleData[key] !== undefined) {
+      const line = formatField(key, vehicleData[key]);
+      if (line) identification.push(line);
+    }
+  }
+  for (const key of specFields) {
+    if (vehicleData[key] !== undefined) {
+      const line = formatField(key, vehicleData[key]);
+      if (line) specs.push(line);
+    }
+  }
+  for (const key of sitFields) {
+    if (vehicleData[key] !== undefined) {
+      const line = formatField(key, vehicleData[key]);
+      if (line) situation.push(line);
+    }
+  }
+  for (const key of restrictFields) {
+    if (vehicleData[key] !== undefined) {
+      const line = formatField(key, vehicleData[key]);
+      if (line) restrictions.push(line);
+    }
+  }
+
+  // Remaining fields not in any category
+  const allCategorized = new Set([...idFields, ...specFields, ...sitFields, ...restrictFields]);
+  for (const [key, value] of Object.entries(vehicleData)) {
+    if (allCategorized.has(key) || ignoreKeys.has(key)) continue;
+    const line = formatField(key, value);
+    if (line) other.push(line);
+  }
+
+  const moduleLabel = queryType.toUpperCase().replace(/-/g, ' ');
+  const lines: string[] = [];
+  lines.push(`🚗 <b>CONSULTA ${moduleLabel}</b>`);
+  lines.push(`👋 Olá, <b>${escapeHtml(userName)}</b>!\n`);
+
+  if (identification.length > 0) {
+    lines.push(`🔖 <b>IDENTIFICAÇÃO</b>`);
+    lines.push(...identification);
+    lines.push('');
+  }
+  if (specs.length > 0) {
+    lines.push(`⚙️ <b>ESPECIFICAÇÕES</b>`);
+    lines.push(...specs);
+    lines.push('');
+  }
+  if (situation.length > 0) {
+    lines.push(`📊 <b>SITUAÇÃO</b>`);
+    lines.push(...situation);
+    lines.push('');
+  }
+  if (restrictions.length > 0) {
+    const hasRestriction = vehicleData.possuiRestricoes && String(vehicleData.possuiRestricoes).toLowerCase() === 'sim';
+    lines.push(`${hasRestriction ? '🚨' : '✅'} <b>RESTRIÇÕES</b>`);
+    lines.push(...restrictions);
+    lines.push('');
+  }
+  if (other.length > 0) {
+    lines.push(`📋 <b>OUTROS DADOS</b>`);
+    lines.push(...other);
+    lines.push('');
+  }
+
+  lines.push(`📡 <i>Resultado via ${botTag}</i>`);
+  return lines.join('\n');
+}
+
 
 // Premium Custom Emoji IDs (Telegram API 9.4)
 const DEFAULT_EMOJI: Record<string, string> = {
