@@ -3193,45 +3193,66 @@ class BotHandler {
   }
 
   async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number) {
-    const sub = await this.getSubscription(telegramUserId);
-
-    if (!sub || isExpired(sub.expires_at)) {
+  async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number) {
+    // Show both subscriptions
+    const groupSub = await this.getSubscription(telegramUserId, 'group');
+    const privateSub = await this.getSubscription(telegramUserId, 'private');
+    
+    const groupActive = groupSub && !isExpired(groupSub.expires_at);
+    const privateActive = privateSub && !isExpired(privateSub.expires_at);
+    
+    if (!groupActive && !privateActive) {
       await editMessage(this.token, chatId, messageId,
-        "📊 <b>Minha Assinatura</b>\n\n" +
+        "📊 <b>Minhas Assinaturas</b>\n\n" +
         "❌ Nenhuma assinatura ativa encontrada.\n\n" +
         "<i>Adquira um plano para começar a consultar.</i>",
         keyboard(
-          [btn("💎 Ver Planos", "menu:plans")],
+          [btn("💎 Planos Grupo", "menu:plans:group"), btn("🔒 Planos Privado", "menu:plans:private")],
           [btn("🔙 Voltar", "menu:main")]
         )
       );
       return;
     }
 
-    const days = daysLeft(sub.expires_at);
-    const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
-    const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
-    const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
+    let text = `📊 <b>Minhas Assinaturas</b>\n\n`;
     
-    // Progress bar visual
-    const totalHours = sub.plan_days * 24;
-    const usedHours = totalHours - (days * 24 + (hours % 24));
-    const progress = Math.min(Math.max(usedHours / totalHours, 0), 1);
-    const barLength = 10;
-    const filled = Math.round(progress * barLength);
-    const bar = "▓".repeat(filled) + "░".repeat(barLength - filled);
+    const formatSub = (sub: Subscription, label: string) => {
+      const days = daysLeft(sub.expires_at);
+      const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
+      const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
+      const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
+      const totalHours = sub.plan_days * 24;
+      const usedHours = totalHours - (days * 24 + (hours % 24));
+      const progress = Math.min(Math.max(usedHours / totalHours, 0), 1);
+      const barLength = 10;
+      const filled = Math.round(progress * barLength);
+      const bar = "▓".repeat(filled) + "░".repeat(barLength - filled);
+      return `<b>${label}</b>\n` +
+        `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
+        `├ 💰 Valor: <b>R$ ${Number(sub.value).toFixed(2)}</b>\n` +
+        `├ 📅 Início: <b>${formatDate(sub.started_at)}</b>\n` +
+        `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
+        `├ ⏳ Restante: <b>${timeLeft}</b>\n` +
+        `├ 📊 [${bar}] ${Math.round((1 - progress) * 100)}%\n` +
+        `└ 🎫 <code>${sub.txid}</code>`;
+    };
 
-    await editMessage(this.token, chatId, messageId,
-      `📊 <b>Minha Assinatura</b>\n\n` +
-      `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
-      `├ 💰 Valor: <b>R$ ${Number(sub.value).toFixed(2)}</b>\n` +
-      `├ 📅 Início: <b>${formatDate(sub.started_at)}</b>\n` +
-      `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
-      `├ ⏳ Restante: <b>${timeLeft}</b>\n` +
-      `├ 📊 [${bar}] ${Math.round((1 - progress) * 100)}%\n` +
-      `└ 🎫 <code>${sub.txid}</code>`,
+    if (groupActive) {
+      text += formatSub(groupSub, "👥 Assinatura Grupo") + "\n\n";
+    }
+    if (privateActive) {
+      text += formatSub(privateSub, "🔒 Assinatura Privado") + "\n\n";
+    }
+    if (!groupActive) {
+      text += "👥 <i>Sem assinatura de grupo ativa</i>\n\n";
+    }
+    if (!privateActive) {
+      text += "🔒 <i>Sem assinatura de privado ativa</i>\n\n";
+    }
+
+    await editMessage(this.token, chatId, messageId, text,
       keyboard(
-        [btn("🔄 Renovar Plano", "menu:plans")],
+        [btn("🔄 Renovar Grupo", "menu:plans:group"), btn("🔄 Renovar Privado", "menu:plans:private")],
         [btn("🔙 Voltar", "menu:main")]
       )
     );
