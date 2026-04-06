@@ -250,8 +250,82 @@ const queryTypeLabels: Record<string, string> = {
 };
 
 const brazilianStates = [
-  "SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"
+  "SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO",
+  "MS", "RO", "PI"
 ];
+
+// Mapa de UF para módulo de foto
+const ufToFotoModule: Record<string, string> = {
+  SP: "fotosp", RJ: "fotorj", MG: "fotomg", BA: "fotoba", PR: "fotopr",
+  RS: "fotors", PE: "fotope", CE: "fotoce", GO: "fotogo", MA: "fotoma",
+  ES: "fotoes", DF: "fotodf", TO: "fototo", MS: "fotoms", RO: "fotoro",
+  PI: "fotopi",
+};
+
+// Extrair UF do resultado da consulta (busca profunda)
+function extractUfFromResult(data: unknown): string | null {
+  if (!data || typeof data !== 'object') return null;
+  
+  const obj = data as Record<string, unknown>;
+  
+  // Verificar campos diretos comuns
+  const ufFields = ['uf', 'estado', 'UF', 'Estado', 'uf_nascimento', 'uf_endereco'];
+  for (const field of ufFields) {
+    const val = obj[field];
+    if (typeof val === 'string' && val.length === 2) {
+      const upper = val.toUpperCase();
+      if (upper in ufToFotoModule) return upper;
+    }
+  }
+  
+  // Buscar em objetos aninhados (data, endereco, etc.)
+  const nestedKeys = ['data', 'endereco', 'enderecos', 'resultado', 'result'];
+  for (const key of nestedKeys) {
+    const nested = obj[key];
+    if (nested && typeof nested === 'object' && !Array.isArray(nested)) {
+      const found = extractUfFromResult(nested);
+      if (found) return found;
+    }
+    // Se for array, verificar primeiro elemento
+    if (Array.isArray(nested) && nested.length > 0 && typeof nested[0] === 'object') {
+      const found = extractUfFromResult(nested[0]);
+      if (found) return found;
+    }
+  }
+  
+  // Buscar data como string parseada
+  if (typeof obj.data === 'string') {
+    try {
+      const parsed = JSON.parse(obj.data);
+      const found = extractUfFromResult(parsed);
+      if (found) return found;
+    } catch { /* ignore */ }
+    
+    // Buscar padrão UF: XX na string
+    const ufMatch = (obj.data as string).match(/\bUF[:\s]+([A-Z]{2})\b/i);
+    if (ufMatch) {
+      const upper = ufMatch[1].toUpperCase();
+      if (upper in ufToFotoModule) return upper;
+    }
+  }
+  
+  // Buscar em todas as chaves como último recurso
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'string' && value.length === 2) {
+      const keyLower = key.toLowerCase();
+      if (keyLower.includes('uf') || keyLower.includes('estado')) {
+        const upper = value.toUpperCase();
+        if (upper in ufToFotoModule) return upper;
+      }
+    }
+    if (typeof value === 'object' && value !== null && !Array.isArray(value) && !nestedKeys.includes(key)) {
+      const found = extractUfFromResult(value);
+      if (found) return found;
+    }
+  }
+  
+  return null;
+}
 
 // =============== HELPERS ===============
 function btn(text: string, callback_data: string): InlineButton {
