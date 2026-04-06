@@ -2461,28 +2461,89 @@ function formatTelefoneResult(
   escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
+  const dados = data.dados as Record<string, unknown> | undefined;
+  if (dados && typeof dados === 'object') {
+    const arr = dados.telefone as unknown[] | undefined;
+    if (Array.isArray(arr) && arr.length > 0) {
+      const firstRecord = arr[0] as Record<string, unknown>;
+      const basicos = firstRecord?.dadosBasicos as Record<string, unknown> | undefined;
+      if (basicos && typeof basicos === 'object') {
+        for (const [k, v] of Object.entries(basicos)) {
+          if (v !== null && v !== undefined && v !== '') data[k] = v;
+        }
+      }
+
+      const allPhones = arr
+        .map((record) => (record as Record<string, unknown>)?.dadosTelefone)
+        .filter((value): value is Record<string, unknown> => !!value && typeof value === 'object');
+      if (allPhones.length > 0) {
+        data.telefones = allPhones;
+      }
+    }
+  }
+
   const getValue = (keys: string[]): string => {
-    for (const k of keys) {
-      const v = data[k];
-      if (v !== null && v !== undefined && !shouldIgnore(v)) return String(v).trim().toUpperCase();
+    for (const key of keys) {
+      const lowerKey = key.toLowerCase();
+      for (const [k, v] of Object.entries(data)) {
+        if ((k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) && v !== null && v !== undefined && !shouldIgnore(v)) {
+          return String(v).trim().toUpperCase();
+        }
+      }
     }
     return '';
   };
 
-  // Extrair telefones estruturados com máscara
   const extractPhonesFormatted = (): Array<{ formatted: string; tipo: string; data: string; whatsapp: boolean }> => {
     const tels = data.telefones as unknown[] | undefined;
     if (!Array.isArray(tels)) return [];
-    return tels.map((t: unknown) => {
-      const tel = t as Record<string, unknown>;
-      const ddd = tel.ddd || tel.DDD || '';
-      const num = tel.telefone || tel.numero || tel.celular || '';
-      const tipoCode = tel.tipoTelefone;
-      const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
-      const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
-      const whatsapp = String(tel.whatsapp || '').toLowerCase().includes('possui');
-      return { formatted: formatPhoneNumber(ddd, num), tipo, data: inclusao, whatsapp };
-    }).filter(t => t.formatted);
+
+    return tels
+      .map((t: unknown) => {
+        const tel = t as Record<string, unknown>;
+        const ddd = tel.ddd || tel.DDD || '';
+        const num = tel.telefone || tel.numero || tel.celular || '';
+        const formatted = formatPhoneNumber(ddd, num);
+        const tipoCode = tel.tipoTelefone;
+        const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
+        const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
+        const whatsapp = String(tel.whatsapp || '').toLowerCase().includes('possui');
+        return { formatted, tipo, data: inclusao, whatsapp };
+      })
+      .filter((item) => item.formatted);
+  };
+
+  const extractRawPhones = (): string[] => {
+    const rawPhones: string[] = [];
+
+    const visit = (value: unknown, keyHint = '') => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => visit(item, keyHint));
+        return;
+      }
+
+      if (value && typeof value === 'object') {
+        for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
+          visit(nested, key);
+        }
+        return;
+      }
+
+      if (typeof value !== 'string') return;
+      if (shouldIgnore(value)) return;
+
+      const normalizedKey = keyHint.toLowerCase();
+      const isPhoneField = normalizedKey.includes('numero') || normalizedKey.includes('completo') || normalizedKey === 'telefone' || normalizedKey === 'celular';
+      if (!isPhoneField) return;
+
+      const digits = value.replace(/\D/g, '');
+      if (digits.length >= 8 && digits.length <= 13) {
+        rawPhones.push(formatPhoneNumber('', digits) || digits);
+      }
+    };
+
+    visit(data);
+    return [...new Set(rawPhones)];
   };
 
   const nome = getValue(['nome', 'nome_completo']);
@@ -2490,15 +2551,20 @@ function formatTelefoneResult(
   const nascimento = getValue(['nascimento', 'data_nascimento', 'datanascimento', 'dataNascimento']);
   const sexo = getValue(['sexo']);
   const mae = getValue(['mae', 'mãe', 'nome_mae', 'nomemae', 'nomeMae']);
+  const uf = getValue(['uf', 'estado']);
+  const endereco = getValue(['endereco', 'logradouro']);
+  const bairro = getValue(['bairro']);
+  const cidade = getValue(['cidade', 'municipio']);
+  const cep = getValue(['cep']);
 
   const phones = extractPhonesFormatted();
+  const rawPhones = phones.length === 0 ? extractRawPhones() : [];
   const lines: string[] = [];
 
   const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
   lines.push(`${moduleLabel} RESULTADO`);
   lines.push(``);
 
-  // 👤 DADOS DO TITULAR
   if (nome || cpf) {
     lines.push(`┌─────────────────────────────`);
     lines.push(`│ 👤 DADOS DO TITULAR`);
@@ -2512,7 +2578,6 @@ function formatTelefoneResult(
     lines.push(``);
   }
 
-  // 📞 TELEFONES VINCULADOS
   if (phones.length > 0) {
     lines.push(`┌─────────────────────────────`);
     lines.push(`│ 📞 TELEFONES VINCULADOS`);
@@ -2527,39 +2592,16 @@ function formatTelefoneResult(
     if (phones.length > 12) lines.push(`│ ... e mais ${phones.length - 12}`);
     lines.push(`└─────────────────────────────`);
     lines.push(``);
+  } else if (rawPhones.length > 0) {
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 📞 TELEFONES ENCONTRADOS`);
+    lines.push(`├─────────────────────────────`);
+    rawPhones.slice(0, 12).forEach((p, i) => lines.push(`│ ${i + 1}. ${p}`));
+    if (rawPhones.length > 12) lines.push(`│ ... e mais ${rawPhones.length - 12}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
   }
 
-  // Fallback: dados brutos de texto
-  if (phones.length === 0) {
-    const rawPhones: string[] = [];
-    for (const [k, v] of Object.entries(data)) {
-      if (shouldIgnore(v)) continue;
-      const key = k.toLowerCase();
-      if ((key.includes('numero') || key.includes('completo') || key === 'telefone' || key === 'celular') && typeof v === 'string') {
-        const digits = v.replace(/\D/g, '');
-        if (digits.length >= 8 && digits.length <= 13) {
-          rawPhones.push(formatPhoneNumber('', digits) || digits);
-        }
-      }
-    }
-    if (rawPhones.length > 0) {
-      const unique = [...new Set(rawPhones)];
-      lines.push(`┌─────────────────────────────`);
-      lines.push(`│ 📞 TELEFONES ENCONTRADOS`);
-      lines.push(`├─────────────────────────────`);
-      unique.slice(0, 12).forEach((p, i) => lines.push(`│ ${i + 1}. ${p}`));
-      if (unique.length > 12) lines.push(`│ ... e mais ${unique.length - 12}`);
-      lines.push(`└─────────────────────────────`);
-      lines.push(``);
-    }
-  }
-
-  // Endereço
-  const uf = getValue(['uf', 'estado']);
-  const endereco = getValue(['endereco', 'logradouro']);
-  const bairro = getValue(['bairro']);
-  const cidade = getValue(['cidade', 'municipio']);
-  const cep = getValue(['cep']);
   if (uf || endereco || cidade) {
     lines.push(`┌─────────────────────────────`);
     lines.push(`│ 📍 ENDEREÇO`);
@@ -2571,6 +2613,10 @@ function formatTelefoneResult(
     if (cep) lines.push(`│ 📮 CEP: ${cep}`);
     lines.push(`└─────────────────────────────`);
     lines.push(``);
+  }
+
+  if (lines.length <= 2) {
+    return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
@@ -3661,7 +3707,7 @@ class BotHandler {
 
       // Verificar se é resultado de CEP ou TELEFONE com múltiplos registros
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
-      if ((queryType === 'cep' || queryType === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr)) {
+      if ((usedModule === 'cep' || usedModule === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr)) {
         const records = parseMultiplePersonRecords(rawDataStr);
         
         if (records.length > 1) {
@@ -3685,14 +3731,14 @@ class BotHandler {
             if (error || !paginationData) {
               console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
-              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, queryType, queryInput);
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, queryType, queryInput);
+              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput);
               return;
             }
             
             const paginationId = paginationData.id;
-            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, queryType, queryInput);
-            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId, queryType, queryInput);
+            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId, usedModule, queryInput);
             
             const paginatedPayload: Record<string, unknown> = {
               chat_id: chatId,
@@ -3718,8 +3764,8 @@ class BotHandler {
             }
           } else {
             // Menos de 10 registros - enviar sem paginação mas com botões de CPF
-            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName, queryType, queryInput);
-            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1, undefined, queryType, queryInput);
+            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+            const pageKeyboard = createMultiPersonKeyboard(records, 0, 1, undefined, usedModule, queryInput);
             
             const payload: Record<string, unknown> = {
               chat_id: chatId,
@@ -3738,8 +3784,8 @@ class BotHandler {
         }
       }
 
-      // Format and send result - usar nome do usuário do Telegram
-      const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, telegramUserName);
+      // Format and send result - usar o módulo realmente usado após fallback
+      const formattedResult = formatQueryResult(usedModule, result, this.bot.bot_username, telegramUserName);
       
       // Check for photo - deep extraction from nested API response
       const fotoUrl = deepExtractPhoto(result);
@@ -3762,10 +3808,10 @@ class BotHandler {
         const actionButtons: InlineButton[][] = [
           [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
           [btn("🗑️ Apagar", "delete_msg", "danger")],
-          [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`, "success")]
+          [btn("📄 Baixar PDF", `pdf:${usedModule}:${queryInput}`, "success")]
         ];
         if (!isPhotoQuery) {
-          actionButtons.push([btn("📝 Ver TXT", `txt:${queryType}:${queryInput}`)]);
+          actionButtons.push([btn("📝 Ver TXT", `txt:${usedModule}:${queryInput}`)]);
         }
         if (showFotoButton) {
           actionButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`, "primary")]);
@@ -3789,7 +3835,7 @@ class BotHandler {
         if (showFotoButton) {
           extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
         }
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, queryType, queryInput, extraButtons);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
