@@ -1,4 +1,4 @@
-import { Loader2, LayoutDashboard } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { BotsSection } from "@/components/dashboard/BotsSection";
@@ -10,12 +10,19 @@ import { ApiStatusCard } from "@/components/dashboard/ApiStatusCard";
 import { useAdminData } from "@/hooks/useAdminData";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
 
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Bom dia";
+  if (h < 18) return "Boa tarde";
+  return "Boa noite";
+}
+
 export default function Index() {
   const { bots, stats, loading } = useAdminData();
 
   const statsCards = [
     {
-      title: "Total de Bots",
+      title: "Bots",
       value: bots.length,
       change: bots.length > 0 ? `${bots.length} ativo(s)` : "Nenhum",
       changeType: bots.length > 0 ? ("positive" as const) : ("neutral" as const),
@@ -23,7 +30,7 @@ export default function Index() {
       gradient: "cyan" as const,
     },
     {
-      title: "Assinantes Ativos",
+      title: "Assinantes",
       value: stats.activeSubscribers,
       change: stats.activeSubscribers > 0 ? "Ativos" : "Nenhum",
       changeType: stats.activeSubscribers > 0 ? ("positive" as const) : ("neutral" as const),
@@ -52,12 +59,9 @@ export default function Index() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-[60vh]">
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-amber-600 blur-xl opacity-40 animate-pulse" />
-              <Loader2 className="relative h-10 w-10 animate-spin text-primary" />
-            </div>
-            <span className="text-sm text-muted-foreground">Carregando dashboard...</span>
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="text-sm text-muted-foreground">Carregando...</span>
           </div>
         </div>
       </DashboardLayout>
@@ -66,48 +70,37 @@ export default function Index() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-6 max-w-[1600px] mx-auto">
-        {/* Page Header */}
-        <header className="flex items-center gap-4 pb-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/20 shadow-lg shadow-primary/10">
-            <LayoutDashboard className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-sm text-muted-foreground">
-              Visão geral do seu sistema TelePanel
-            </p>
-          </div>
-        </header>
+      <div className="space-y-5 max-w-[1400px] mx-auto">
+        {/* Greeting */}
+        <div>
+          <h1 className="text-xl font-semibold text-foreground">{getGreeting()} 👋</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Resumo do seu sistema TelePanel</p>
+        </div>
 
-        {/* Stats Grid */}
-        <section className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-          {statsCards.map((stat, index) => (
-            <div key={stat.title} className="animate-slide-up" style={{ animationDelay: `${index * 75}ms` }}>
-              <StatsCard {...stat} />
-            </div>
+        {/* Stats + API Status row */}
+        <section className="grid gap-3 grid-cols-2 lg:grid-cols-5">
+          {statsCards.map((stat) => (
+            <StatsCard key={stat.title} {...stat} />
           ))}
-        </section>
-
-        {/* Main Grid: Bots + Sidebar */}
-        <section className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <BotsSection bots={bots} />
-          </div>
-          <div className="space-y-4">
+          <div className="col-span-2 lg:col-span-1">
             <ApiStatusCard />
-            <QuickActions />
-            <MaintenanceToggle botId={bots[0]?.id ?? null} />
           </div>
         </section>
 
-        {/* Activity + System Status */}
-        <section className="grid gap-6 lg:grid-cols-3">
+        {/* Bots */}
+        <section>
+          <BotsSection bots={bots} />
+        </section>
+
+        {/* Activity + Sidebar */}
+        <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <ActivityFeed />
           </div>
-          <div>
+          <div className="space-y-4">
+            <QuickActions />
             <SystemStatus botsTotal={bots.length} botsOnline={stats.botsOnline} />
+            <MaintenanceToggle botId={bots[0]?.id ?? null} />
           </div>
         </section>
       </div>
