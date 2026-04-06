@@ -3837,6 +3837,9 @@ class BotHandler {
       const detectedUf = !isPhotoQuery ? extractUfFromResult((result as Record<string, unknown>).data ?? result) : null;
       const isCpfBased = /^\d{11}$/.test(queryInput.replace(/\D/g, ''));
       const showFotoButton = detectedUf && isCpfBased && ufToFotoModule[detectedUf];
+      // Módulos CPF que sempre devem ter botão de foto (busca nacional) mesmo sem UF detectada
+      const CPF_MODULES_WITH_PHOTO = new Set(["credilink", "cpf-spc", "score", "score-3", "renda", "poderaquisitivo", "processos", "bnmp-lc", "siel", "tse-3", "parentes", "parentes-3", "cpfsus", "pis", "pis-3", "titulo", "cnh"]);
+      const showFotoNacional = !showFotoButton && !isPhotoQuery && isCpfBased && CPF_MODULES_WITH_PHOTO.has(usedModule);
 
       if (isValidPhotoUrl) {
         const actionButtons: InlineButton[][] = [
