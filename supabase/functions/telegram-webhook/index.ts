@@ -1805,6 +1805,11 @@ async function executeQueryWithCache(
   }
 }
 
+// Campos de metadados da API que não são dados reais da consulta
+const META_FIELDS = new Set(['limites', 'plano', 'protocolo', 'sucesso', 'modulo', 'usuario', 'meta', 'success', 'errors', 'fromCache']);
+// Sufixos de campos que indicam o valor consultado (ex: telefone_consultada, cpf_consultada)
+const CONSULTADA_SUFFIX = '_consultada';
+
 // Verifica se o resultado da API está vazio / sem dados úteis
 function isEmptyResult(result: Record<string, unknown>): boolean {
   if (result.error || result.notFound) return true;
@@ -1817,22 +1822,34 @@ function isEmptyResult(result: Record<string, unknown>): boolean {
     dataStr.includes('nao encontrado')
   )) return true;
   
-  // Checar campo 'dados' (formato novo da API — ex: { dados: { telefone: "Nenhum resultado encontrado" } })
+  // Checar campo 'dados' (formato da API — ex: { dados: { telefone: "Nenhum resultado encontrado" }, limites: {...}, ... })
   const dados = result.dados as Record<string, unknown> | undefined;
   if (dados && typeof dados === 'object') {
-    const values = Object.values(dados);
-    // Se todos os valores são strings com "Nenhum resultado" ou vazios, considerar vazio
-    const meaningfulValues = values.filter(v => {
-      if (typeof v !== 'string') return true; // objetos/arrays são dados úteis
-      const lower = v.trim().toLowerCase();
-      return !lower.includes('nenhum resultado') && !lower.includes('não encontrado') && lower !== '';
+    // Filtrar apenas campos de dados reais (ignorar metadados)
+    const dataKeys = Object.keys(dados).filter(k => !META_FIELDS.has(k) && !k.endsWith(CONSULTADA_SUFFIX));
+    if (dataKeys.length === 0) return true;
+    
+    // Verificar se todos os campos de dados reais contêm "Nenhum resultado" ou estão vazios
+    const allEmpty = dataKeys.every(k => {
+      const v = dados[k];
+      if (v === null || v === undefined) return true;
+      if (typeof v === 'string') {
+        const lower = v.trim().toLowerCase();
+        return lower === '' || lower.includes('nenhum resultado') || lower.includes('não encontrado') || lower.includes('nao encontrado');
+      }
+      return false; // objetos/arrays são dados úteis
     });
-    if (meaningfulValues.length === 0) return true;
+    if (allEmpty) return true;
   }
   
+  // Também verificar campos de metadados no nível raiz (resposta completa da api-query)
+  // Ignorar campos meta e verificar apenas dados reais
+  const rootDataKeys = Object.keys(result).filter(k => !META_FIELDS.has(k) && !k.endsWith(CONSULTADA_SUFFIX) && k !== 'data' && k !== 'dados');
+  if (rootDataKeys.length === 0 && !result.data && !result.dados) return true;
+  
   // Check if data field is empty object or null
-  if (result.data === null || result.data === undefined) return true;
-  if (typeof result.data === 'object' && Object.keys(result.data as object).length === 0) return true;
+  if (result.data === null || result.data === undefined && !result.dados) return true;
+  if (typeof result.data === 'object' && result.data !== null && Object.keys(result.data as object).length === 0) return true;
   return false;
 }
 
