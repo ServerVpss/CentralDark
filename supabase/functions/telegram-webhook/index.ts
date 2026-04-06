@@ -1179,7 +1179,7 @@ function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; valu
   return items;
 }
 
-function generateTxtContent(queryType: string, queryInput: string, data: Record<string, unknown>): string {
+function generateTxtContent(queryType: string, queryInput: string, data: Record<string, unknown>, requesterInfo?: { name: string; username?: string; id: number }): string {
   const now = new Date();
   const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
   
@@ -1191,7 +1191,13 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
   txt += `════════════════════════════════════════════════════════════\n\n`;
   txt += `Tipo: ${queryType.toUpperCase()}\n`;
   txt += `Consulta: ${queryInput}\n`;
-  txt += `Gerado em: ${dateStr}\n\n`;
+  txt += `Gerado em: ${dateStr}\n`;
+  if (requesterInfo) {
+    txt += `Solicitado por: ${requesterInfo.name}`;
+    if (requesterInfo.username) txt += ` (@${requesterInfo.username})`;
+    txt += ` [ID: ${requesterInfo.id}]\n`;
+  }
+  txt += `\n`;
   txt += `════════════════════════════════════════════════════════════\n\n`;
   
   // Extract and organize data
@@ -5859,8 +5865,15 @@ class BotHandler {
         // Re-execute query to get data for TXT (usa cache - não conta crédito)
         const { data: result } = await executeQueryWithCache(queryType, queryInput);
         
+        // Build requester info from callback user
+        const requesterInfo = {
+          name: callback.from.first_name || "Desconhecido",
+          username: callback.from.username,
+          id: callback.from.id,
+        };
+        
         // Generate TXT content
-        const txtContent = generateTxtContent(queryType, queryInput, result as Record<string, unknown>);
+        const txtContent = generateTxtContent(queryType, queryInput, result as Record<string, unknown>, requesterInfo);
         
         // Convert to blob and send as document
         const txtBytes = new TextEncoder().encode(txtContent);
@@ -5870,7 +5883,8 @@ class BotHandler {
         const form = new FormData();
         form.set("chat_id", String(chatId));
         form.set("document", new File([blob], `consulta_${queryType}_${queryInput}.txt`, { type: 'text/plain' }));
-        form.set("caption", `📝 <b>Relatório Completo (TXT)</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n✅ Todos os dados da consulta estão neste arquivo.`);
+        const requesterDisplay = callback.from.username ? `@${callback.from.username}` : `ID: ${callback.from.id}`;
+        form.set("caption", `📝 <b>Relatório Completo (TXT)</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n📋 <b>Solicitado por:</b> ${callback.from.first_name || "?"} (${requesterDisplay})\n\n✅ Todos os dados da consulta estão neste arquivo.`);
         form.set("parse_mode", "HTML");
         
         const sendDocResult = await fetch(`${TELEGRAM_API}${this.token}/sendDocument`, {
