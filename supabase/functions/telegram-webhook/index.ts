@@ -432,7 +432,7 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
 
 
 // Premium Custom Emoji IDs (Telegram API 9.4)
-const EMOJI = {
+const DEFAULT_EMOJI: Record<string, string> = {
   SEARCH: "5368324170671202286",    // 🔍
   DIAMOND: "5471952986970267163",   // 💎
   CHART: "5357506110857498821",     // 📊
@@ -454,6 +454,9 @@ const EMOJI = {
   PLUS: "5370547013043468854",      // ➕
   REFRESH: "5253959696498104346",   // 🔄
 };
+
+// EMOJI is mutable — gets merged with bot_settings.button_emoji_ids at runtime
+let EMOJI: Record<string, string> = { ...DEFAULT_EMOJI };
 
 function keyboard(...rows: InlineButton[][]) {
   return { inline_keyboard: rows };
