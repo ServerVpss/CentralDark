@@ -4725,6 +4725,67 @@ class BotHandler {
       return;
     }
 
+    // Quick Foto query from result buttons (📸 Consultar Foto)
+    if (data.startsWith("foto_query:")) {
+      const parts = data.replace("foto_query:", "").split(":");
+      const uf = parts[0];
+      const cpf = parts[1];
+      
+      if (!uf || !cpf) return;
+      
+      const fotoModule = ufToFotoModule[uf.toUpperCase()];
+      if (!fotoModule) {
+        await sendMessage(this.token, chatId, "❌ Estado não suportado para busca de foto.");
+        return;
+      }
+      
+      if (!await isQueryTypeEnabled(fotoModule, this.supabase)) {
+        await sendMessage(this.token, chatId, `⚠️ Módulo <code>${fotoModule}</code> está desativado.`);
+        return;
+      }
+      
+      const telegramUserName = callback.from?.first_name || 'usuário';
+      
+      await sendMessage(this.token, chatId, `⏳ <b>Buscando foto (${uf})...</b>\n\n<code>${cpf}</code>`);
+      
+      try {
+        const { data: result, fromCache } = await executeQueryWithCache(fotoModule, cpf);
+        await this.logQuery(telegramUserId, fotoModule, cpf, result, fromCache);
+        
+        const fotoUrl = deepExtractPhoto(result);
+        const isValidPhoto = fotoUrl && typeof fotoUrl === 'string' && 
+          (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+        
+        if (isValidPhoto) {
+          const actionButtons: InlineButton[][] = [
+            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
+            [btn("🗑️ Apagar", "delete_msg")],
+            [btn("📄 Baixar PDF", `pdf:${fotoModule}:${cpf}`)]
+          ];
+          
+          await telegramRequest(this.token, "sendPhoto", {
+            chat_id: chatId,
+            photo: fotoUrl,
+            caption: `📸 <b>Foto encontrada (${uf})</b>\n\n👤 CPF: <code>${cpf}</code>`,
+            parse_mode: "HTML",
+            reply_markup: { inline_keyboard: actionButtons },
+          });
+        } else {
+          await sendMessage(this.token, chatId,
+            `📸 <b>Foto não encontrada (${uf})</b>\n\n👤 CPF: <code>${cpf}</code>\n\n💡 Tente a busca nacional: <code>/foto ${cpf}</code>`,
+            keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🗑️ Apagar", "delete_msg")])
+          );
+        }
+      } catch (error) {
+        console.error("Foto query error:", error);
+        await sendMessage(this.token, chatId,
+          "❌ <b>Erro ao buscar foto</b>\n\nTente novamente.",
+          keyboard([btn("🗑️ Apagar", "delete_msg")])
+        );
+      }
+      return;
+    }
+
     // PDF Download handler
     if (data.startsWith("pdf:")) {
       const parts = data.replace("pdf:", "").split(":");
