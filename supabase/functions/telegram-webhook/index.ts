@@ -104,6 +104,8 @@ interface BotSettings {
   // Modo manutenção
   maintenance_mode: boolean;
   maintenance_message: string;
+  // Custom emoji IDs para botões
+  button_emoji_ids: Record<string, string>;
 }
 
 interface Plan {
