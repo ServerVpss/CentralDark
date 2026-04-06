@@ -3592,8 +3592,8 @@ class BotHandler {
       "⚙️ <b>Painel Administrativo</b>\n\n" +
       "<i>Gerencie seu bot a partir deste painel:</i>",
       keyboard(
-        [btn("📋 Gerenciar Planos", "admin:plans"), btn("👥 Usuários", "admin:users")],
-        [btn("📊 Estatísticas", "admin:stats"), btn("📢 Broadcast", "admin:broadcast")],
+        [btn("📋 Gerenciar Planos", "admin:plans", "primary"), btn("👥 Usuários", "admin:users", "primary")],
+        [btn("📊 Estatísticas", "admin:stats", "success"), btn("📢 Broadcast", "admin:broadcast", "danger")],
         [btn("🔙 Voltar ao Menu", "menu:main")]
       )
     );
@@ -3618,7 +3618,7 @@ class BotHandler {
       btn(`✏️ ${p.name}`, `admin:edit_plan:${p.id}`)
     ]);
 
-    buttons.push([btn("➕ Novo Plano", "admin:new_plan")]);
+    buttons.push([btn("➕ Novo Plano", "admin:new_plan", "success")]);
     buttons.push([btn("🔙 Voltar", "admin:menu")]);
 
     await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
@@ -3734,7 +3734,7 @@ class BotHandler {
       `┌ 💵 Receita: <b>R$ ${todayRevenue.toFixed(2)}</b>\n` +
       `├ 🔍 Consultas: <b>${totalQueries || 0}</b>\n` +
       `└ 🆕 Vendas: <b>${subsData.length}</b>`,
-      keyboard([btn("🔄 Atualizar", "admin:stats"), btn("🔙 Voltar", "admin:menu")])
+      keyboard([btn("🔄 Atualizar", "admin:stats", "success"), btn("🔙 Voltar", "admin:menu")])
     );
   }
 
@@ -3742,8 +3742,8 @@ class BotHandler {
     await editMessage(this.token, chatId, messageId,
       "📢 <b>Broadcast</b>\n\n<i>Selecione o público-alvo da mensagem:</i>",
       keyboard(
-        [btn("📢 Todos", "broadcast:all"), btn("✅ Ativos", "broadcast:active")],
-        [btn("❌ Expirados", "broadcast:expired")],
+        [btn("📢 Todos", "broadcast:all", "primary"), btn("✅ Ativos", "broadcast:active", "success")],
+        [btn("❌ Expirados", "broadcast:expired", "danger")],
         [btn("🔙 Voltar", "admin:menu")]
       )
     );
