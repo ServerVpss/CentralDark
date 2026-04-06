@@ -327,12 +327,11 @@ export default function TelegramUsers() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-6">
-        {/* Header */}
+      <div className="space-y-5 max-w-[1400px] mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Usuários do Telegram</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-xl font-semibold text-foreground">Usuários do Telegram</h1>
+            <p className="text-sm text-muted-foreground">
               Gerencie assinaturas dos usuários do bot
             </p>
           </div>

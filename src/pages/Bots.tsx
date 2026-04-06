@@ -287,13 +287,13 @@ export default function Bots() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-4 md:space-y-6">
+      <div className="space-y-5 max-w-[1400px] mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold">Gerenciamento de Bots</h1>
+            <h1 className="text-xl font-semibold text-foreground">Gerenciamento de Bots</h1>
             <p className="text-sm text-muted-foreground">
-              Configure e monitore seus bots do Telegram em tempo real
+              Configure e monitore seus bots do Telegram
             </p>
           </div>
           <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>

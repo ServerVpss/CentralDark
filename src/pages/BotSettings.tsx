@@ -242,7 +242,7 @@ export default function BotSettings() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-6">
+      <div className="space-y-5 max-w-[1400px] mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/bots")}>

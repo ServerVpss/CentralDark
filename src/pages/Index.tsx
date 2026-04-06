@@ -7,6 +7,7 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { MaintenanceToggle } from "@/components/dashboard/MaintenanceToggle";
 import { SystemStatus } from "@/components/dashboard/SystemStatus";
 import { ApiStatusCard } from "@/components/dashboard/ApiStatusCard";
+import { DashboardAnalyticsChart } from "@/components/dashboard/DashboardAnalyticsChart";
 import { useAdminData } from "@/hooks/useAdminData";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
 
@@ -87,9 +88,14 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Bots */}
-        <section>
-          <BotsSection bots={bots} />
+        {/* Bots + Chart */}
+        <section className="grid gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <BotsSection bots={bots} />
+          </div>
+          <div>
+            <DashboardAnalyticsChart />
+          </div>
         </section>
 
         {/* Activity + Sidebar */}
