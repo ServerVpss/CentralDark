@@ -263,80 +263,145 @@ const ufToFotoModule: Record<string, string> = {
   PI: "fotopi",
 };
 
-// Extrair UF do resultado da consulta (busca profunda)
-function extractUfFromResult(data: unknown): string | null {
-  if (!data || typeof data !== 'object') return null;
-  
-  const obj = data as Record<string, unknown>;
-  
-  // Verificar campos diretos comuns
-  const ufFields = ['uf', 'estado', 'UF', 'Estado', 'uf_nascimento', 'uf_endereco'];
-  for (const field of ufFields) {
-    const val = obj[field];
-    if (typeof val === 'string' && val.length === 2) {
-      const upper = val.toUpperCase();
-      if (upper in ufToFotoModule) return upper;
-    }
+const stateNameToUf: Record<string, string> = {
+  ACRE: "AC",
+  ALAGOAS: "AL",
+  AMAPA: "AP",
+  AMAZONAS: "AM",
+  BAHIA: "BA",
+  CEARA: "CE",
+  "DISTRITO FEDERAL": "DF",
+  ESPIRITO SANTO: "ES",
+  GOIAS: "GO",
+  MARANHAO: "MA",
+  MATO GROSSO: "MT",
+  "MATO GROSSO DO SUL": "MS",
+  MINAS GERAIS: "MG",
+  PARA: "PA",
+  PARAIBA: "PB",
+  PARANA: "PR",
+  PERNAMBUCO: "PE",
+  PIAUI: "PI",
+  "RIO DE JANEIRO": "RJ",
+  "RIO GRANDE DO NORTE": "RN",
+  "RIO GRANDE DO SUL": "RS",
+  RONDONIA: "RO",
+  RORAIMA: "RR",
+  "SANTA CATARINA": "SC",
+  "SAO PAULO": "SP",
+  SERGIPE: "SE",
+  TOCANTINS: "TO",
+};
+
+function normalizeStateToken(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .trim()
+    .toUpperCase();
+}
+
+function normalizeUf(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+
+  const normalized = normalizeStateToken(value);
+  if (!normalized) return null;
+  if (normalized in ufToFotoModule) return normalized;
+  if (normalized in stateNameToUf) return stateNameToUf[normalized];
+
+  const ufMatch = normalized.match(/\b([A-Z]{2})\b/);
+  if (ufMatch && ufMatch[1] in ufToFotoModule) {
+    return ufMatch[1];
   }
-  
-  // Buscar em objetos aninhados (data, endereco, etc.)
-  const nestedKeys = ['data', 'endereco', 'enderecos', 'resultado', 'result'];
-  for (const key of nestedKeys) {
-    const nested = obj[key];
-    if (nested && typeof nested === 'object' && !Array.isArray(nested)) {
-      const found = extractUfFromResult(nested);
-      if (found) return found;
-    }
-    // Se for array, verificar primeiro elemento
-    if (Array.isArray(nested) && nested.length > 0 && typeof nested[0] === 'object') {
-      const found = extractUfFromResult(nested[0]);
-      if (found) return found;
-    }
+
+  return null;
+}
+
+function extractUfFromString(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  if (trimmed.length <= 3) {
+    return normalizeUf(trimmed);
   }
-  
-  // Buscar data como string parseada
-  if (typeof obj.data === 'string') {
+
+  if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
     try {
-      const parsed = JSON.parse(obj.data);
+      const parsed = JSON.parse(trimmed);
       const found = extractUfFromResult(parsed);
       if (found) return found;
-    } catch { /* ignore */ }
-    
-    // Buscar padrão UF: XX ou "uf":"XX" na string
-    const ufMatch = (obj.data as string).match(/\bUF[:\s]+([A-Z]{2})\b/i) 
-      || (obj.data as string).match(/"uf"\s*:\s*"([A-Z]{2})"/i);
-    if (ufMatch) {
-      const upper = ufMatch[1].toUpperCase();
-      if (upper in ufToFotoModule) return upper;
+    } catch {
+      // ignore malformed JSON strings
     }
   }
-  
-  // Buscar em qualquer valor string que contenha "uf":"XX"  
-  for (const value of Object.values(obj)) {
-    if (typeof value === 'string' && value.length > 10) {
-      const jsonUfMatch = value.match(/"uf"\s*:\s*"([A-Z]{2})"/i);
-      if (jsonUfMatch) {
-        const upper = jsonUfMatch[1].toUpperCase();
-        if (upper in ufToFotoModule) return upper;
-      }
-    }
-  }
-  
-  // Buscar em todas as chaves como último recurso
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === 'string' && value.length === 2) {
-      const keyLower = key.toLowerCase();
-      if (keyLower.includes('uf') || keyLower.includes('estado')) {
-        const upper = value.toUpperCase();
-        if (upper in ufToFotoModule) return upper;
-      }
-    }
-    if (typeof value === 'object' && value !== null && !Array.isArray(value) && !nestedKeys.includes(key)) {
-      const found = extractUfFromResult(value);
+
+  const patterns = [
+    /"(?:uf|estado|uf_nascimento|uf_endereco|sg_uf)"\s*:\s*"([^"]+)"/i,
+    /\bUF[:=\s-]+([A-Z]{2})\b/i,
+    /\bESTADO[:=\s-]+([A-Z]{2}|[A-ZÀ-Ü\s]+)\b/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = trimmed.match(pattern);
+    if (match) {
+      const found = normalizeUf(match[1]);
       if (found) return found;
     }
   }
-  
+
+  return null;
+}
+
+// Extrair UF do resultado da consulta (busca profunda)
+function extractUfFromResult(data: unknown, depth = 0, seen = new WeakSet<object>()): string | null {
+  if (depth > 8 || data === null || data === undefined) return null;
+
+  if (typeof data === 'string') {
+    return extractUfFromString(data);
+  }
+
+  if (typeof data !== 'object') {
+    return null;
+  }
+
+  const target = data as object;
+  if (seen.has(target)) return null;
+  seen.add(target);
+
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      const found = extractUfFromResult(item, depth + 1, seen);
+      if (found) return found;
+    }
+    return null;
+  }
+
+  const obj = data as Record<string, unknown>;
+  const ufFields = ['uf', 'estado', 'UF', 'Estado', 'uf_nascimento', 'uf_endereco', 'estado_nascimento', 'sg_uf'];
+
+  for (const field of ufFields) {
+    const found = normalizeUf(obj[field]);
+    if (found) return found;
+  }
+
+  for (const [key, value] of Object.entries(obj)) {
+    const normalizedKey = normalizeStateToken(key).toLowerCase();
+
+    if (normalizedKey.includes('uf') || normalizedKey.includes('estado')) {
+      const direct = normalizeUf(value);
+      if (direct) return direct;
+    }
+
+    if (typeof value === 'string') {
+      const found = extractUfFromString(value);
+      if (found) return found;
+      continue;
+    }
+
+    const found = extractUfFromResult(value, depth + 1, seen);
+    if (found) return found;
+  }
+
   return null;
 }
 
@@ -1102,7 +1167,14 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
 }
 
 // Função para criar botões de paginação
-function createPaginationKeyboard(paginationId: string, currentPage: number, totalPages: number, queryType?: string, queryInput?: string) {
+function createPaginationKeyboard(
+  paginationId: string,
+  currentPage: number,
+  totalPages: number,
+  queryType?: string,
+  queryInput?: string,
+  extraButtons?: InlineButton[][]
+) {
   const buttons: InlineButton[] = [];
   
   // Botão anterior
@@ -1130,6 +1202,10 @@ function createPaginationKeyboard(paginationId: string, currentPage: number, tot
     if (!isPhotoQuery) {
       keyboard.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
     }
+  }
+
+  if (extraButtons && extraButtons.length > 0) {
+    keyboard.push(...extraButtons);
   }
   
   return { inline_keyboard: keyboard };
@@ -1224,7 +1300,7 @@ async function sendLongMessagePaginated(
   }
   
   const paginationId = paginationData.id;
-  const keyboard = createPaginationKeyboard(paginationId, 0, pages.length, queryType, queryInput);
+  const keyboard = createPaginationKeyboard(paginationId, 0, pages.length, queryType, queryInput, extraButtons);
   
   // Enviar primeira página
   const pageHeader = `📄 <b>Página 1/${pages.length}</b>\n\n`;
@@ -5522,12 +5598,14 @@ class BotHandler {
     const savedExtraButtons = meta?.extraButtons as InlineButton[][] | undefined;
 
     // Criar keyboard de navegação COM botões de PDF/TXT/Foto preservados
-    const navKeyboard = createPaginationKeyboard(paginationId, targetPage, totalPages, savedQueryType, savedQueryInput);
-    
-    // Adicionar extraButtons (ex: Consultar Foto) ao teclado
-    if (savedExtraButtons && savedExtraButtons.length > 0) {
-      navKeyboard.inline_keyboard.push(...savedExtraButtons);
-    }
+    const navKeyboard = createPaginationKeyboard(
+      paginationId,
+      targetPage,
+      totalPages,
+      savedQueryType,
+      savedQueryInput,
+      savedExtraButtons,
+    );
 
     // Atualizar mensagem
     const pageHeader = `📄 <b>Página ${targetPage + 1}/${totalPages}</b>\n\n`;
