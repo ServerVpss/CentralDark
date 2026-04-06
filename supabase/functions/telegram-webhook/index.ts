@@ -4216,16 +4216,21 @@ class BotHandler {
     };
 
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cnpj: "cnpj", placa: "placa", placa2: "placa_completa",
-      telefone: "telefone", tel: "telefone", email: "email",
-      cep: "cep", nome: "nome", score: "score",
-      rg: "rg", cnh: "cnh", pix: "pix",
+      cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
+      cnpj: "cnpj-cred", placa: "placa", placa2: "placa-serpro",
+      placasimples: "placa-simples", placasesp: "placa-sesp",
+      telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
+      email: "email", emailfull: "emailfull",
+      cep: "cep", cepfull: "cepfull", nome: "nome", nomefull: "nomefull",
+      score: "score", rg: "rg", cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
       titulo: "titulo", endereco: "endereco", renda: "renda",
-      processos: "processos", bnmp: "bnmp", siel: "siel",
-      tse: "tse", mae: "mae", credilink: "credilink",
-      spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      processos: "processos", bnmp: "bnmp-lc", siel: "siel",
+      tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
+      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
       parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
+      rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
+      nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
       // State-specific foto shortcuts
       ...Object.fromEntries(Object.keys(fotoStateCommandMap).map(k => [k, "foto"])),
     };
