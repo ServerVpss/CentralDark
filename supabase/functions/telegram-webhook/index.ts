@@ -1357,15 +1357,15 @@ async function sendLongMessagePaginated(
 
     // Botão de apagar
     if (paginationId) {
-      buttons.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]);
+      buttons.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}`, style: "danger" }]);
     } else {
-      buttons.push([{ text: "🗑️ Apagar", callback_data: "delete_msg" }]);
+      buttons.push([{ text: "🗑️ Apagar", callback_data: "delete_msg", style: "danger" }]);
     }
     
     // Botões de download (PDF e TXT)
     if (queryType && queryInput) {
       const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
-      buttons.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
+      buttons.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}`, style: "success" }]);
       if (!isPhotoQuery) {
         buttons.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
       }
@@ -3401,15 +3401,15 @@ class BotHandler {
 
       if (isValidPhotoUrl) {
         const actionButtons: InlineButton[][] = [
-          [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
-          [btn("🗑️ Apagar", "delete_msg")],
-          [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`)]
+          [btn("🔍 Nova Consulta", "menu:query", "success"), btn("🏠 Menu", "menu:main")],
+          [btn("🗑️ Apagar", "delete_msg", "danger")],
+          [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`, "success")]
         ];
         if (!isPhotoQuery) {
           actionButtons.push([btn("📝 Ver TXT", `txt:${queryType}:${queryInput}`)]);
         }
         if (showFotoButton) {
-          actionButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
+          actionButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`, "primary")]);
         }
         
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
