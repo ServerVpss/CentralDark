@@ -6073,7 +6073,11 @@ Deno.serve(async (req) => {
       message_effect: (settings as { message_effect?: string } | null)?.message_effect || 'party',
       maintenance_mode: (settings as { maintenance_mode?: boolean } | null)?.maintenance_mode || false,
       maintenance_message: (settings as { maintenance_message?: string } | null)?.maintenance_message || '🔧 Bot em manutenção. Retornaremos em breve.',
+      button_emoji_ids: (settings as { button_emoji_ids?: Record<string, string> } | null)?.button_emoji_ids || {},
     };
+
+    // Merge custom emoji IDs from settings
+    EMOJI = { ...DEFAULT_EMOJI, ...botSettings.button_emoji_ids };
 
     const handler = new BotHandler(supabase, bot as BotData, botSettings, update);
     
