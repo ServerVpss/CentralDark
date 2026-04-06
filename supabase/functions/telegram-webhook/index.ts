@@ -5401,16 +5401,10 @@ class BotHandler {
         }
       }
 
-      // Foto nacional para qualquer consulta com CPF sem UF detectada
-      const isCpfBasedGroup = /^\d{11}$/.test(inputForQuery.replace(/\D/g, ''));
-      const showFotoNacionalGroup = !showFotoButton && !isPhotoQuery && isCpfBasedGroup;
-
-      // Montar botões extras (foto)
+      // Só mostra botão de foto se UF foi detectada no resultado
       const extraButtons: InlineButton[][] = [];
       if (showFotoButton && detectedUf) {
         extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${inputForQuery.replace(/\D/g, '')}`)]);
-      } else if (showFotoNacionalGroup) {
-        extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${inputForQuery.replace(/\D/g, '')}`)]);
       }
 
       let resultMessageId: number | undefined;
