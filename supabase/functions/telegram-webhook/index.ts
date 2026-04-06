@@ -234,14 +234,13 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
 
 const queryTypeLabels: Record<string, string> = {
   cpf: "👤 CPF", cpffull: "👤 CPF Full", "cpf-isk": "👤 CPF ISK",
-  "cnpj-cred": "🏢 CNPJ", cnpj: "🏢 CNPJ",
+  "cnpj-cred": "🏢 CNPJ",
   placa: "🚗 Placa", "placa-serpro": "🚗 Placa SERPRO", "placa-simples": "🚗 Placa Simples", "placa-sesp": "🚗 Placa SESP",
   telefone: "📞 Telefone", telefonefull: "📞 Telefone Full", "telefone-3": "📞 Telefone v3",
   email: "📧 Email", emailfull: "📧 Email Full", "email-3": "📧 Email v3",
   cep: "📍 CEP", cepfull: "📍 CEP Full", "cep-3": "📍 CEP v3",
   nome: "📝 Nome", nomefull: "📝 Nome Full", "nome-3": "📝 Nome v3",
   score: "📊 Score", "score-3": "📊 Score v3",
-  foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
   fotosp: "📸 Foto SP", fotorj: "📸 Foto RJ", fotomg: "📸 Foto MG",
   fotopr: "📸 Foto PR", fotoce: "📸 Foto CE", fotoma: "📸 Foto MA",
   fotoes: "📸 Foto ES", fotodf: "📸 Foto DF", fototo: "📸 Foto TO",
