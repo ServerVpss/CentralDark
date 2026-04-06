@@ -1808,14 +1808,28 @@ async function executeQueryWithCache(
 // Verifica se o resultado da API está vazio / sem dados úteis
 function isEmptyResult(result: Record<string, unknown>): boolean {
   if (result.error || result.notFound) return true;
+  
+  // Checar campo 'data' como string (formato antigo)
   const dataStr = typeof result.data === 'string' ? result.data.trim().toLowerCase() : '';
   if (dataStr && (
     dataStr.includes('nenhum resultado') ||
     dataStr.includes('não encontrado') ||
-    dataStr.includes('nao encontrado') ||
-    dataStr === '' ||
-    dataStr === 'null'
+    dataStr.includes('nao encontrado')
   )) return true;
+  
+  // Checar campo 'dados' (formato novo da API — ex: { dados: { telefone: "Nenhum resultado encontrado" } })
+  const dados = result.dados as Record<string, unknown> | undefined;
+  if (dados && typeof dados === 'object') {
+    const values = Object.values(dados);
+    // Se todos os valores são strings com "Nenhum resultado" ou vazios, considerar vazio
+    const meaningfulValues = values.filter(v => {
+      if (typeof v !== 'string') return true; // objetos/arrays são dados úteis
+      const lower = v.trim().toLowerCase();
+      return !lower.includes('nenhum resultado') && !lower.includes('não encontrado') && lower !== '';
+    });
+    if (meaningfulValues.length === 0) return true;
+  }
+  
   // Check if data field is empty object or null
   if (result.data === null || result.data === undefined) return true;
   if (typeof result.data === 'object' && Object.keys(result.data as object).length === 0) return true;
