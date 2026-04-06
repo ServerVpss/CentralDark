@@ -4050,7 +4050,7 @@ class BotHandler {
     
     const commands: Array<{ command: string; queryType: string; queryInput: string }> = [];
     
-    const commandPattern = /(?:^|\s)(\/(?:cpf|cnpj|placa2?|telefone|tel|email|cep|nome|score|rg|cnh|pix|foto|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae|credilink|spc|poder|sus|pis|parentes|chassi|renavam|motor)(?:@\w+)?)/gi;
+    const commandPattern = /(?:^|\s)(\/(?:cpf(?:full|isk|sus)?|cnpj|placa(?:2|simples|sesp)?|telefone(?:full|3)?|tel|email(?:full|3)?|cep(?:full|3)?|nome(?:full|3)?|score3?|rg3?|cnh|pis3?|pix|foto\w*|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae(?:full)?|credilink|spc|poder|sus|parentes3?|chassi|renavam|motor)(?:@\w+)?)/gi;
     const matches = [...text.matchAll(commandPattern)];
     
     if (matches.length === 0) return commands;
