@@ -3837,9 +3837,8 @@ class BotHandler {
       const detectedUf = !isPhotoQuery ? extractUfFromResult((result as Record<string, unknown>).data ?? result) : null;
       const isCpfBased = /^\d{11}$/.test(queryInput.replace(/\D/g, ''));
       const showFotoButton = detectedUf && isCpfBased && ufToFotoModule[detectedUf];
-      // Módulos CPF que sempre devem ter botão de foto (busca nacional) mesmo sem UF detectada
-      const CPF_MODULES_WITH_PHOTO = new Set(["credilink", "cpf-spc", "score", "score-3", "renda", "poderaquisitivo", "processos", "bnmp-lc", "siel", "tse-3", "parentes", "parentes-3", "cpfsus", "pis", "pis-3", "titulo", "cnh"]);
-      const showFotoNacional = !showFotoButton && !isPhotoQuery && isCpfBased && CPF_MODULES_WITH_PHOTO.has(usedModule);
+      // Qualquer consulta com CPF de 11 dígitos que não seja foto e não tenha UF detectada mostra foto nacional
+      const showFotoNacional = !showFotoButton && !isPhotoQuery && isCpfBased;
 
       if (isValidPhotoUrl) {
         const actionButtons: InlineButton[][] = [
@@ -5402,10 +5401,16 @@ class BotHandler {
         }
       }
 
+      // Foto nacional para qualquer consulta com CPF sem UF detectada
+      const isCpfBasedGroup = /^\d{11}$/.test(inputForQuery.replace(/\D/g, ''));
+      const showFotoNacionalGroup = !showFotoButton && !isPhotoQuery && isCpfBasedGroup;
+
       // Montar botões extras (foto)
       const extraButtons: InlineButton[][] = [];
       if (showFotoButton && detectedUf) {
         extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${inputForQuery.replace(/\D/g, '')}`)]);
+      } else if (showFotoNacionalGroup) {
+        extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${inputForQuery.replace(/\D/g, '')}`)]);
       }
 
       let resultMessageId: number | undefined;
