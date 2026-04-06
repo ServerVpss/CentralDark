@@ -133,6 +133,7 @@ interface PendingPayment {
   value: number;
   created_at: string;
   telegram_message_id?: number;
+  context?: string;
 }
 
 type InlineButton = { text: string; callback_data?: string; url?: string };
@@ -2540,20 +2541,26 @@ class BotHandler {
   }
 
   // =============== SUBSCRIPTION ===============
-  async getSubscription(telegramUserId: number): Promise<Subscription | null> {
-    const { data } = await this.supabase
+  async getSubscription(telegramUserId: number, context?: string): Promise<Subscription | null> {
+    let query = this.supabase
       .from("telegram_subscriptions")
       .select("*")
       .eq("telegram_user_id", telegramUserId)
-      .eq("bot_id", this.bot.id)
+      .eq("bot_id", this.bot.id);
+    
+    if (context) {
+      query = query.eq("context", context);
+    }
+    
+    const { data } = await query
       .order("expires_at", { ascending: false })
       .limit(1)
       .single();
     return data as Subscription | null;
   }
 
-  async isSubscriptionActive(telegramUserId: number): Promise<boolean> {
-    const sub = await this.getSubscription(telegramUserId);
+  async isSubscriptionActive(telegramUserId: number, context?: string): Promise<boolean> {
+    const sub = await this.getSubscription(telegramUserId, context);
     return sub ? !isExpired(sub.expires_at) : false;
   }
 
@@ -2783,22 +2790,40 @@ class BotHandler {
     }
   }
 
-  async showMainMenu(chatId: number, telegramUserId: number, messageId?: number) {
-    const sub = await this.getSubscription(telegramUserId);
+  async showMainMenu(chatId: number, telegramUserId: number, messageId?: number, chatType?: string) {
+    // Determine context based on chat type
+    const isPrivateChat = !chatType || chatType === 'private';
+    const context = isPrivateChat ? 'private' : 'group';
+    
+    const sub = await this.getSubscription(telegramUserId, context);
     const isActive = sub && !isExpired(sub.expires_at);
     
+    // Also check the other context for display
+    const otherContext = isPrivateChat ? 'group' : 'private';
+    const otherSub = await this.getSubscription(telegramUserId, otherContext);
+    const otherActive = otherSub && !isExpired(otherSub.expires_at);
+    
     let statusBlock = "";
+    const contextLabel = isPrivateChat ? "Privado" : "Grupo";
+    
     if (isActive) {
       const days = daysLeft(sub.expires_at);
       const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
       const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
       const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
-      statusBlock = `\n\n✅ <b>Assinatura Ativa</b>\n` +
+      statusBlock = `\n\n✅ <b>Assinatura ${contextLabel} Ativa</b>\n` +
         `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
         `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
         `└ ⏳ Restante: <b>${timeLeft}</b>`;
     } else {
-      statusBlock = `\n\n❌ <b>Sem assinatura ativa</b>\n└ Assine um plano para começar.`;
+      statusBlock = `\n\n❌ <b>Sem assinatura ${contextLabel.toLowerCase()}</b>\n└ Assine um plano para usar no ${contextLabel.toLowerCase()}.`;
+    }
+    
+    // Show other context status if active
+    if (otherActive) {
+      const otherLabel = isPrivateChat ? "Grupo" : "Privado";
+      const otherDays = daysLeft(otherSub.expires_at);
+      statusBlock += `\n\n✅ <i>Assinatura ${otherLabel}: ${otherSub.plan_name} (${otherDays}d restantes)</i>`;
     }
 
     const buttons: InlineButton[][] = [];
@@ -2807,7 +2832,12 @@ class BotHandler {
       buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
     }
     
-    buttons.push([btn("💳 Assinar / Renovar", "menu:plans")]);
+    if (isPrivateChat) {
+      buttons.push([btn("💳 Planos Privado", "menu:plans:private")]);
+      buttons.push([btn("👥 Planos Grupo", "menu:plans:group")]);
+    } else {
+      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group")]);
+    }
     buttons.push([btn("📊 Minha Assinatura", "menu:subscription")]);
     buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending")]);
 
@@ -3127,8 +3157,10 @@ class BotHandler {
     }
   }
 
-  async showPlansMenu(chatId: number, messageId: number) {
+  async showPlansMenu(chatId: number, messageId: number, context: string = 'group') {
     const plans = await this.getPlans();
+    const isPrivate = context === 'private';
+    const PRIVATE_MARKUP = 1; // R$1 a mais para privado
 
     if (plans.length === 0) {
       await editMessage(this.token, chatId, messageId,
@@ -3138,17 +3170,23 @@ class BotHandler {
       return;
     }
 
-    let text = `💎 <b>Planos Disponíveis</b>\n\n`;
+    const contextLabel = isPrivate ? "🔒 Privado" : "👥 Grupo";
+    let text = `💎 <b>Planos Disponíveis — ${contextLabel}</b>\n\n`;
+    if (isPrivate) {
+      text += `<i>ℹ️ Planos do privado incluem +R$ ${PRIVATE_MARKUP.toFixed(2)} sobre o valor do grupo.</i>\n\n`;
+    }
     plans.forEach((p, i) => {
       const popular = (p as any).is_popular ? " ⭐" : "";
+      const price = isPrivate ? p.price + PRIVATE_MARKUP : p.price;
       text += `${i + 1}. <b>${p.title}</b>${popular}\n`;
-      text += `   💰 R$ ${p.price.toFixed(2)} • ${p.days} dias\n\n`;
+      text += `   💰 R$ ${price.toFixed(2)} • ${p.days} dias\n\n`;
     });
     text += `<i>Selecione um plano para gerar o PIX:</i>`;
 
     const buttons: InlineButton[][] = plans.map(p => {
       const popular = (p as any).is_popular ? " ⭐" : "";
-      return [btn(`${p.title} — R$ ${p.price.toFixed(2)}${popular}`, `plan:${p.code}`)];
+      const price = isPrivate ? p.price + PRIVATE_MARKUP : p.price;
+      return [btn(`${p.title} — R$ ${price.toFixed(2)}${popular}`, `plan:${p.code}:${context}`)];
     });
     buttons.push([btn("🔙 Voltar", "menu:main")]);
 
@@ -3156,45 +3194,65 @@ class BotHandler {
   }
 
   async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number) {
-    const sub = await this.getSubscription(telegramUserId);
-
-    if (!sub || isExpired(sub.expires_at)) {
+    // Show both subscriptions
+    const groupSub = await this.getSubscription(telegramUserId, 'group');
+    const privateSub = await this.getSubscription(telegramUserId, 'private');
+    
+    const groupActive = groupSub && !isExpired(groupSub.expires_at);
+    const privateActive = privateSub && !isExpired(privateSub.expires_at);
+    
+    if (!groupActive && !privateActive) {
       await editMessage(this.token, chatId, messageId,
-        "📊 <b>Minha Assinatura</b>\n\n" +
+        "📊 <b>Minhas Assinaturas</b>\n\n" +
         "❌ Nenhuma assinatura ativa encontrada.\n\n" +
         "<i>Adquira um plano para começar a consultar.</i>",
         keyboard(
-          [btn("💎 Ver Planos", "menu:plans")],
+          [btn("💎 Planos Grupo", "menu:plans:group"), btn("🔒 Planos Privado", "menu:plans:private")],
           [btn("🔙 Voltar", "menu:main")]
         )
       );
       return;
     }
 
-    const days = daysLeft(sub.expires_at);
-    const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
-    const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
-    const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
+    let text = `📊 <b>Minhas Assinaturas</b>\n\n`;
     
-    // Progress bar visual
-    const totalHours = sub.plan_days * 24;
-    const usedHours = totalHours - (days * 24 + (hours % 24));
-    const progress = Math.min(Math.max(usedHours / totalHours, 0), 1);
-    const barLength = 10;
-    const filled = Math.round(progress * barLength);
-    const bar = "▓".repeat(filled) + "░".repeat(barLength - filled);
+    const formatSub = (sub: Subscription, label: string) => {
+      const days = daysLeft(sub.expires_at);
+      const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
+      const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
+      const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
+      const totalHours = sub.plan_days * 24;
+      const usedHours = totalHours - (days * 24 + (hours % 24));
+      const progress = Math.min(Math.max(usedHours / totalHours, 0), 1);
+      const barLength = 10;
+      const filled = Math.round(progress * barLength);
+      const bar = "▓".repeat(filled) + "░".repeat(barLength - filled);
+      return `<b>${label}</b>\n` +
+        `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
+        `├ 💰 Valor: <b>R$ ${Number(sub.value).toFixed(2)}</b>\n` +
+        `├ 📅 Início: <b>${formatDate(sub.started_at)}</b>\n` +
+        `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
+        `├ ⏳ Restante: <b>${timeLeft}</b>\n` +
+        `├ 📊 [${bar}] ${Math.round((1 - progress) * 100)}%\n` +
+        `└ 🎫 <code>${sub.txid}</code>`;
+    };
 
-    await editMessage(this.token, chatId, messageId,
-      `📊 <b>Minha Assinatura</b>\n\n` +
-      `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
-      `├ 💰 Valor: <b>R$ ${Number(sub.value).toFixed(2)}</b>\n` +
-      `├ 📅 Início: <b>${formatDate(sub.started_at)}</b>\n` +
-      `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
-      `├ ⏳ Restante: <b>${timeLeft}</b>\n` +
-      `├ 📊 [${bar}] ${Math.round((1 - progress) * 100)}%\n` +
-      `└ 🎫 <code>${sub.txid}</code>`,
+    if (groupActive) {
+      text += formatSub(groupSub, "👥 Assinatura Grupo") + "\n\n";
+    }
+    if (privateActive) {
+      text += formatSub(privateSub, "🔒 Assinatura Privado") + "\n\n";
+    }
+    if (!groupActive) {
+      text += "👥 <i>Sem assinatura de grupo ativa</i>\n\n";
+    }
+    if (!privateActive) {
+      text += "🔒 <i>Sem assinatura de privado ativa</i>\n\n";
+    }
+
+    await editMessage(this.token, chatId, messageId, text,
       keyboard(
-        [btn("🔄 Renovar Plano", "menu:plans")],
+        [btn("🔄 Renovar Grupo", "menu:plans:group"), btn("🔄 Renovar Privado", "menu:plans:private")],
         [btn("🔙 Voltar", "menu:main")]
       )
     );
@@ -3395,14 +3453,18 @@ class BotHandler {
   }
 
   // =============== PIX PAYMENT ===============
-  async generatePixPayment(chatId: number, telegramUserId: number, planCode: string) {
+  async generatePixPayment(chatId: number, telegramUserId: number, planCode: string, context: string = 'group') {
     const plans = await this.getPlans();
     const plan = plans.find(p => p.code === planCode);
+    const PRIVATE_MARKUP = 1; // R$1 a mais para privado
+    const isPrivate = context === 'private';
 
     if (!plan) {
       await sendMessage(this.token, chatId, "❌ Plano não encontrado.");
       return;
     }
+
+    const finalPrice = isPrivate ? plan.price + PRIVATE_MARKUP : plan.price;
 
     try {
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -3413,7 +3475,7 @@ class BotHandler {
           "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
         },
         body: JSON.stringify({
-          amount: plan.price,
+          amount: finalPrice,
           user_id: this.bot.user_id,
           telegram_user_id: telegramUserId,
           telegram_chat_id: chatId,
@@ -3421,6 +3483,7 @@ class BotHandler {
           plan_name: plan.name,
           plan_code: plan.code,
           plan_days: plan.days,
+          context: context,
         }),
       });
 
@@ -3436,10 +3499,11 @@ class BotHandler {
 
       // INSERT removido - agora feito exclusivamente pelo efi-generate-pix
 
+      const contextLabel = isPrivate ? "🔒 Privado" : "👥 Grupo";
        const pixText =
          `💳 <b>PIX Gerado!</b>\n\n` +
-         `📦 Plano: <b>${plan.name}</b>\n` +
-         `💰 Valor: <b>R$ ${plan.price.toFixed(2)}</b>\n` +
+         `📦 Plano: <b>${plan.name}</b> (${contextLabel})\n` +
+         `💰 Valor: <b>R$ ${finalPrice.toFixed(2)}</b>\n` +
          `📅 Validade: <b>${plan.days} dias</b>\n` +
          `⏰ Expira em: <b>10 minutos</b>\n\n` +
          `🎫 TXID: <code>${txid}</code>\n\n` +
@@ -3528,6 +3592,7 @@ class BotHandler {
 
   async confirmPayment(payment: PendingPayment, chatId: number, telegramUserId: number) {
     const { plan_days: planDays, plan_name: planName, value, txid, plan_id, plan_code } = payment;
+    const paymentContext = payment.context || 'group';
 
     await this.supabase
       .from("pending_payments")
@@ -3544,13 +3609,15 @@ class BotHandler {
       plan_days: planDays,
       value,
       txid,
+      context: paymentContext,
       started_at: new Date().toISOString(),
       expires_at: expiresAt,
     });
 
-    console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}`);
+    console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}, Context: ${paymentContext}`);
 
-    if (this.settings.group_chat_id) {
+    // Only unmute in group if it's a group subscription
+    if (this.settings.group_chat_id && paymentContext === 'group') {
       try {
         await telegramRequest(this.token, "restrictChatMember", {
           chat_id: this.settings.group_chat_id,
@@ -3577,8 +3644,9 @@ class BotHandler {
       }
     }
 
+    const contextLabel = paymentContext === 'private' ? '🔒 Privado' : '👥 Grupo';
     const buttons: InlineButton[][] = [];
-    if (this.settings.group_url) {
+    if (this.settings.group_url && paymentContext === 'group') {
       buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url)]);
     }
     buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
@@ -3589,15 +3657,18 @@ class BotHandler {
 
     // Enviar mensagem de confirmação com efeito visual
     const daysText = planDays === 1 ? "1 dia" : `${planDays} dias`;
+    const accessMsg = paymentContext === 'group' && this.settings.group_chat_id 
+      ? "🚪 <b>Acesso liberado no grupo!</b>" 
+      : "✅ <b>Assinatura ativada!</b>";
     await telegramRequest(this.token, "sendMessage", {
       chat_id: chatId,
       text: `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
-        `┌ 📦 Plano: <b>${planName}</b>\n` +
+        `┌ 📦 Plano: <b>${planName}</b> (${contextLabel})\n` +
         `├ 💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
         `├ ⏰ Duração: <b>${daysText}</b>\n` +
         `├ 📅 Válido até: <b>${formatDate(expiresAt)}</b>\n` +
         `└ 🎫 <code>${txid}</code>\n\n` +
-        `${this.settings.group_chat_id ? "🚪 <b>Acesso liberado no grupo!</b>" : "✅ <b>Assinatura ativada!</b>"}`,
+        accessMsg,
       parse_mode: "HTML",
       ...(effectId && { message_effect_id: effectId }),
       reply_markup: keyboard(...buttons),
@@ -4016,7 +4087,7 @@ class BotHandler {
       const isConfiguredGroup = this.settings.group_chat_id && chatId === this.settings.group_chat_id;
       
       if (isConfiguredGroup && this.settings.mute_new_members && !isOwner) {
-        const isActive = await this.isSubscriptionActive(telegramUserId);
+        const isActive = await this.isSubscriptionActive(telegramUserId, 'group');
         
         if (!isActive) {
           // Mute user who doesn't have active subscription
@@ -4045,7 +4116,7 @@ class BotHandler {
 
       // Process commands in group for owners and subscribers
       if (text.startsWith("/")) {
-        const isActive = await this.isSubscriptionActive(telegramUserId);
+        const isActive = await this.isSubscriptionActive(telegramUserId, 'group');
         const canQuery = isOwner || isActive;
 
         if (canQuery) {
@@ -4099,7 +4170,7 @@ class BotHandler {
           return;
         }
       }
-      await this.showMainMenu(chatId, telegramUserId);
+      await this.showMainMenu(chatId, telegramUserId, undefined, 'private');
       return;
     }
 
@@ -4121,14 +4192,14 @@ class BotHandler {
       if (parsed.length > 0) {
         // Check subscription or owner
         const isOwner = this.isOwner(telegramUserId);
-        const isActive = await this.isSubscriptionActive(telegramUserId);
+        const isActive = await this.isSubscriptionActive(telegramUserId, 'private');
         if (!isOwner && !isActive) {
           await sendMessage(this.token, chatId,
             "⚠️ <b>Você não possui uma assinatura ativa.</b>\n\nUse /start para ver os planos disponíveis.",
             undefined, { parse_mode: "HTML" });
           return;
         }
-        await this.processMultipleQueries(chatId, telegramUserId, parsed);
+        await this.handleMultipleQueries(message, parsed);
         return;
       }
 
@@ -4169,7 +4240,7 @@ class BotHandler {
         return;
       }
     }
-    await this.showMainMenu(chatId, telegramUserId);
+    await this.showMainMenu(chatId, telegramUserId, undefined, 'private');
   }
 
   // =============== PARSE MULTIPLE COMMANDS ===============
@@ -5000,7 +5071,7 @@ class BotHandler {
       try {
         await deleteMessage(this.token, chatId, messageId);
       } catch (_e) { /* ignore */ }
-      await this.showMainMenu(chatId, telegramUserId);
+      await this.showMainMenu(chatId, telegramUserId, undefined, callback.message?.chat?.type);
       return;
     }
 
@@ -5012,13 +5083,15 @@ class BotHandler {
 
     // Menu navigation
     if (data === "menu:main") {
-      await this.showMainMenu(chatId, telegramUserId, messageId);
+      await this.showMainMenu(chatId, telegramUserId, messageId, callback.message?.chat?.type);
       return;
     }
 
     if (data === "menu:query") {
       // Check subscription first
-      const isActive = await this.isSubscriptionActive(telegramUserId);
+      const chatType = callback.message?.chat?.type || 'private';
+      const queryContext = chatType === 'private' ? 'private' : 'group';
+      const isActive = await this.isSubscriptionActive(telegramUserId, queryContext);
       if (!isActive && !this.isOwner(telegramUserId)) {
         await editMessage(this.token, chatId, messageId,
           "⚠️ <b>Assinatura necessária</b>\n\nVocê precisa de uma assinatura ativa para fazer consultas.",
@@ -5030,8 +5103,9 @@ class BotHandler {
       return;
     }
 
-    if (data === "menu:plans") {
-      await this.showPlansMenu(chatId, messageId);
+    if (data === "menu:plans" || data.startsWith("menu:plans:")) {
+      const planContext = data.includes(":") && data.split(":").length === 3 ? data.split(":")[2] : 'group';
+      await this.showPlansMenu(chatId, messageId, planContext);
       return;
     }
 
@@ -5085,10 +5159,12 @@ class BotHandler {
       return;
     }
 
-    // Plan selection
+    // Plan selection — format: plan:code:context (e.g., plan:diaria:private)
     if (data.startsWith("plan:")) {
-      const planCode = data.replace("plan:", "");
-      await this.generatePixPayment(chatId, telegramUserId, planCode);
+      const parts = data.split(":");
+      const planCode = parts[1];
+      const planContext = parts[2] || 'group';
+      await this.generatePixPayment(chatId, telegramUserId, planCode, planContext);
       return;
     }
 

@@ -613,6 +613,7 @@ export type Database = {
       pending_payments: {
         Row: {
           bot_id: string | null
+          context: string
           created_at: string
           expires_at: string
           id: string
@@ -633,6 +634,7 @@ export type Database = {
         }
         Insert: {
           bot_id?: string | null
+          context?: string
           created_at?: string
           expires_at: string
           id?: string
@@ -653,6 +655,7 @@ export type Database = {
         }
         Update: {
           bot_id?: string | null
+          context?: string
           created_at?: string
           expires_at?: string
           id?: string
@@ -1112,6 +1115,7 @@ export type Database = {
       telegram_subscriptions: {
         Row: {
           bot_id: string | null
+          context: string
           created_at: string
           expires_at: string
           id: string
@@ -1127,6 +1131,7 @@ export type Database = {
         }
         Insert: {
           bot_id?: string | null
+          context?: string
           created_at?: string
           expires_at: string
           id?: string
@@ -1142,6 +1147,7 @@ export type Database = {
         }
         Update: {
           bot_id?: string | null
+          context?: string
           created_at?: string
           expires_at?: string
           id?: string
