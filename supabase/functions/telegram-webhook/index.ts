@@ -4453,7 +4453,7 @@ class BotHandler {
       reply_to_message_id: replyToId,
     });
     
-    console.log(`[MultiQuery] Processing ${commands.length} queries for user ${telegramUserId}`);
+    logCmd('INFO', 'MULTI_QUERY', { userId: telegramUserId, count: commands.length, cmds: commands.map(c => `${c.queryType}:${c.queryInput.substring(0,15)}`).join(',') });
     
     // Execute all queries in parallel
     const queryPromises = commands.map(async (cmd, index) => {
@@ -4465,7 +4465,7 @@ class BotHandler {
         
         return { index, success: true, result, cmd, fromCache };
       } catch (error) {
-        console.error(`[MultiQuery] Error on query ${index}:`, error);
+        logCmd('ERROR', 'MULTI_QUERY_ITEM', { index, queryType: cmd.queryType, input: cmd.queryInput.substring(0,15), error: (error as Error).message });
         return { index, success: false, error, cmd, fromCache: false };
       }
     });
@@ -4524,7 +4524,7 @@ class BotHandler {
 
     // Check maintenance mode - silently ignore all query commands
     if (this.settings.maintenance_mode) {
-      console.log(`[MAINTENANCE] Group command ignored - bot in maintenance mode.`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'maintenance', chatId, userId: telegramUserId, cmd: text.substring(0, 40) });
       return;
     }
 
@@ -4595,7 +4595,7 @@ class BotHandler {
 
     // Check if module is enabled FIRST - before any response
     if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-      console.log(`Group query: type "${queryType}" is disabled. Ignoring silently (early check).`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'disabled', queryType, chatId, userId: telegramUserId });
       return;
     }
 
@@ -4858,7 +4858,7 @@ class BotHandler {
         }
       }
     } catch (error) {
-      console.error("Group query error:", error);
+      logCmd('ERROR', 'GROUP_QUERY', { queryType, input: queryInput?.substring(0, 20), chatId, userId: telegramUserId, error: (error as Error).message, stack: (error as Error).stack?.substring(0, 200) });
       await telegramRequest(this.token, "sendMessage", {
         chat_id: chatId,
         text: "❌ <b>Erro na consulta</b>\n\nTente novamente.",
