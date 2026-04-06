@@ -1805,6 +1805,58 @@ async function executeQueryWithCache(
   }
 }
 
+// Verifica se o resultado da API está vazio / sem dados úteis
+function isEmptyResult(result: Record<string, unknown>): boolean {
+  if (result.error || result.notFound) return true;
+  const dataStr = typeof result.data === 'string' ? result.data.trim().toLowerCase() : '';
+  if (dataStr && (
+    dataStr.includes('nenhum resultado') ||
+    dataStr.includes('não encontrado') ||
+    dataStr.includes('nao encontrado') ||
+    dataStr === '' ||
+    dataStr === 'null'
+  )) return true;
+  // Check if data field is empty object or null
+  if (result.data === null || result.data === undefined) return true;
+  if (typeof result.data === 'object' && Object.keys(result.data as object).length === 0) return true;
+  return false;
+}
+
+// Fallback chains: quando o módulo primário não retorna dados, tenta módulos alternativos
+const FALLBACK_CHAINS: Record<string, string[]> = {
+  'telefone': ['telefone-3', 'telefonefull'],
+};
+
+// Executa consulta com fallback automático se o resultado estiver vazio
+async function executeQueryWithFallback(
+  queryType: string,
+  queryInput: string,
+  estado?: string
+): Promise<{ data: Record<string, unknown>; fromCache: boolean; usedModule: string }> {
+  const { data: result, fromCache } = await executeQueryWithCache(queryType, queryInput, estado);
+  
+  // Se encontrou dados ou não tem fallback, retorna direto
+  const chain = FALLBACK_CHAINS[queryType];
+  if (!chain || !isEmptyResult(result)) {
+    return { data: result, fromCache, usedModule: queryType };
+  }
+  
+  // Tentar cada módulo alternativo na cadeia
+  for (const fallbackModule of chain) {
+    logCmd('INFO', 'FALLBACK_TRY', { originalModule: queryType, fallbackModule, input: queryInput.substring(0, 20) });
+    const { data: fallbackResult, fromCache: fbCache } = await executeQueryWithCache(fallbackModule, queryInput, estado);
+    
+    if (!isEmptyResult(fallbackResult)) {
+      logCmd('INFO', 'FALLBACK_SUCCESS', { originalModule: queryType, fallbackModule });
+      return { data: fallbackResult, fromCache: fbCache, usedModule: fallbackModule };
+    }
+  }
+  
+  // Nenhum fallback retornou dados, retorna o resultado original
+  logCmd('INFO', 'FALLBACK_EXHAUSTED', { originalModule: queryType, triedModules: chain });
+  return { data: result, fromCache, usedModule: queryType };
+}
+
 // Legacy executeQuery - mantido para compatibilidade, mas delega para executeQueryWithCache
 async function executeQuery(queryType: string, queryInput: string, estado?: string): Promise<Record<string, unknown>> {
   const { data } = await executeQueryWithCache(queryType, queryInput, estado);
