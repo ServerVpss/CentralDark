@@ -678,10 +678,10 @@ function formatVehicleResult(
   const restrictions: string[] = [];
   const other: string[] = [];
 
-  const idFields = ['placa', 'chassi', 'renavam', 'motor', 'marcaModelo', 'proprietario'];
+  const idFields = ['placa', 'chassi', 'renavam', 'motor', 'marcaModelo', 'proprietario', 'cpfProprietario', 'enderecoProprietario', 'municipioProprietario'];
   const specFields = ['anoFabricacao', 'anoModelo', 'potencia', 'cilindradas', 'cor', 'combustivel', 'tipoVeiculo', 'especieVeiculo', 'categoria', 'lugares', 'carga', 'pesoBrutoTotal', 'capacidadeMaximaTracao'];
   const sitFields = ['estadoEmplacamento', 'municipioEmplacamento', 'dataEmplacamento', 'situacaoVeiculo', 'situacaoChassi', 'ultimaAtualizacao', 'procedencia'];
-  const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'multaRenainf', 'rouboFurto', 'leilao', 'restricaoRenajud', 'comunicacaoVenda', 'dataLimiteRestricao'];
+  const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'multaRenainf', 'rouboFurto', 'furtoRoubo', 'alerta', 'leilao', 'restricaoRenajud', 'comunicacaoVenda', 'dataLimiteRestricao'];
 
   const formatField = (key: string, value: unknown): string | null => {
     if (value === null || value === undefined || value === '' || value === '0' || value === 0) return null;
