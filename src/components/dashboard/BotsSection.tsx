@@ -1,11 +1,11 @@
-import { Bot, TrendingUp, Zap, Plus } from "lucide-react";
+import { Bot, Plus } from "lucide-react";
 import { BotStatusCard } from "./BotStatusCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-interface Bot {
+interface BotData {
   id: string;
   name: string;
   bot_username: string | null;
@@ -14,7 +14,7 @@ interface Bot {
 }
 
 interface BotsSectionProps {
-  bots: Bot[];
+  bots: BotData[];
   onToggleActive?: (botId: string, newState: boolean) => void;
 }
 
@@ -27,7 +27,6 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
     if (bots.length === 0) return;
 
     const fetchCounts = async () => {
-      // Fetch message totals from bot_analytics
       const { data: analyticsData } = await supabase
         .from("bot_analytics")
         .select("bot_id, messages_received");
@@ -42,7 +41,6 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
         setMessageCounts(msgMap);
       }
 
-      // Fetch active user counts from telegram_subscriptions
       const { data: subsData } = await supabase
         .from("telegram_subscriptions")
         .select("bot_id, telegram_user_id")
@@ -68,65 +66,46 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
   }, [bots]);
 
   return (
-    <div className="space-y-4">
-      {/* Section Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/20">
-            <Bot className="h-4 w-4 text-cyan-400" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-foreground">Seus Bots</h2>
-            <p className="text-xs text-muted-foreground">{bots.length} bot(s) configurado(s)</p>
-          </div>
+    <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
+        <div className="flex items-center gap-2">
+          <Bot className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">Seus Bots</h3>
+          <span className="text-xs text-muted-foreground">({bots.length})</span>
         </div>
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="sm"
-          className="gap-1.5 text-xs h-8 px-3 text-primary hover:text-primary hover:bg-primary/10"
+          className="h-7 px-2 text-xs text-muted-foreground"
           onClick={() => navigate("/bots")}
         >
           Ver todos
-          <TrendingUp className="h-3 w-3" />
         </Button>
       </div>
 
-      {/* Bots Grid or Empty State */}
       {bots.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border/50 bg-card/50 p-8 text-center">
-          <div className="relative mx-auto mb-4 w-fit">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-amber-600/10 blur-xl" />
-            <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-amber-600/10 border border-primary/20">
-              <Bot className="h-8 w-8 text-primary" />
-            </div>
-          </div>
-          <h3 className="text-lg font-semibold mb-2 text-foreground">Nenhum bot configurado</h3>
-          <p className="text-sm text-muted-foreground mb-6 max-w-[280px] mx-auto">
-            Adicione seu primeiro bot do Telegram para gerenciar assinaturas e consultas
-          </p>
-          <Button
-            className="gap-2 bg-gradient-to-r from-primary to-amber-600 hover:opacity-90 shadow-lg shadow-primary/25"
-            onClick={() => navigate("/bots")}
-          >
-            <Plus className="h-4 w-4" />
+        <div className="p-8 text-center">
+          <Bot className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+          <p className="text-sm text-muted-foreground mb-4">Nenhum bot configurado</p>
+          <Button size="sm" onClick={() => navigate("/bots")} className="gap-1.5">
+            <Plus className="h-3.5 w-3.5" />
             Adicionar Bot
           </Button>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {bots.slice(0, 3).map((bot, index) => (
-            <div key={bot.id} className="animate-scale-in" style={{ animationDelay: `${index * 100}ms` }}>
-              <BotStatusCard
-                botId={bot.id}
-                name={bot.name}
-                username={bot.bot_username || "Não sincronizado"}
-                status={bot.health_status === "online" ? "online" : "offline"}
-                messages={messageCounts[bot.id] || 0}
-                users={userCounts[bot.id] || 0}
-                isActive={bot.is_active ?? false}
-                onToggleActive={onToggleActive}
-              />
-            </div>
+        <div className="p-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {bots.slice(0, 3).map((bot) => (
+            <BotStatusCard
+              key={bot.id}
+              botId={bot.id}
+              name={bot.name}
+              username={bot.bot_username || "Não sincronizado"}
+              status={bot.health_status === "online" ? "online" : "offline"}
+              messages={messageCounts[bot.id] || 0}
+              users={userCounts[bot.id] || 0}
+              isActive={bot.is_active ?? false}
+              onToggleActive={onToggleActive}
+            />
           ))}
         </div>
       )}
