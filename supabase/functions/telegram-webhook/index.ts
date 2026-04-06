@@ -3775,13 +3775,13 @@ class BotHandler {
             if (error || !paginationData) {
               console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
-              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
               await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput);
               return;
             }
             
             const paginationId = paginationData.id;
-            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
             const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId, usedModule, queryInput);
             
             const paginatedPayload: Record<string, unknown> = {
@@ -3808,7 +3808,7 @@ class BotHandler {
             }
           } else {
             // Menos de 10 registros - enviar sem paginação mas com botões de CPF
-            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
             const pageKeyboard = createMultiPersonKeyboard(records, 0, 1, undefined, usedModule, queryInput);
             
             const payload: Record<string, unknown> = {
@@ -3868,7 +3868,7 @@ class BotHandler {
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
-          caption: formattedResult.substring(0, 1024),
+          caption: (formattedResult + consultaFooter).substring(0, 1024),
           parse_mode: "HTML",
           ...(effectId && { message_effect_id: effectId }),
           reply_markup: { inline_keyboard: actionButtons },
@@ -3885,7 +3885,7 @@ class BotHandler {
         } else if (showFotoNacional) {
           extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`)]);
         }
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
