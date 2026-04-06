@@ -191,24 +191,27 @@ async function loadModuleStatus(supabase: SupabaseClient): Promise<Record<string
   }
 }
 
+// queryTypeAliases mapeia comandos de atalho para o module_key exato na tabela query_modules.
+// Esses nomes são os mesmos enviados à API — sem tradução ou remapeamento.
 const queryTypeAliases: Record<string, string> = {
   tel: "telefone",
   telefone: "telefone",
-  placa2: "placa_completa",
+  placa2: "placa-serpro",
   nacional: "nacional",
   foto: "foto",
   titulo: "titulo",
   endereco: "endereco",
   renda: "renda",
   processos: "processos",
-  bnmp: "bnmp",
+  bnmp: "bnmp-lc",
   siel: "siel",
-  tse: "tse",
+  tse: "tse-3",
   mae: "mae",
   credilink: "credilink",
-  spc: "cpf_spc",
+  spc: "cpf-spc",
   poder: "poderaquisitivo",
   sus: "cpfsus",
+  cnpj: "cnpj-cred",
 };
 
 function normalizeQueryType(queryType: string): string {
