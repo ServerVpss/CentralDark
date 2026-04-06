@@ -258,8 +258,8 @@ const queryTypeLabels: Record<string, string> = {
   titulo: "📜 Título Eleitor", endereco: "📍 Endereço", renda: "💰 Renda",
   processos: "⚖️ Processos", "bnmp-lc": "🔍 BNMP", siel: "🔎 SIEL",
   "tse-3": "🗳️ TSE", mae: "👩 Mãe", maefull: "👩 Mãe 2",
-  credilink: "📊 Credilink", "cpf-spc": "📋 SPC",
-  poderaquisitivo: "💎 Poder Aquisitivo", cpfsus: "🏥 SUS",
+  credilink: "📊 Credilink", "cpf-spc": "👤 CPF 4 (SPC)",
+  poderaquisitivo: "💎 Poder Aquisitivo", cpfsus: "👤 CPF 5 (SUS)",
   parentes: "👨‍👩‍👧‍👦 Parentes", "parentes-3": "👨‍👩‍👧‍👦 Parentes 2",
   chassi: "🔧 Chassi", renavam: "📋 RENAVAM", motor: "⚙️ Motor",
 };
