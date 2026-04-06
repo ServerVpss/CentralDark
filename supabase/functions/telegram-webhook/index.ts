@@ -4970,7 +4970,7 @@ class BotHandler {
           await deleteMessage(this.token, chatId, messageId);
         } catch (_e) { /* ignore */ }
       } catch (error) {
-        console.error("Quick CPF query error:", error);
+        logCmd('ERROR', 'QUICK_CPF', { cpf: cpf.substring(0, 6) + '...', chatId, error: (error as Error).message });
         await editMessage(this.token, chatId, messageId,
           "❌ <b>Erro na consulta de CPF</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
@@ -5031,7 +5031,7 @@ class BotHandler {
           );
         }
       } catch (error) {
-        console.error("Foto query error:", error);
+        logCmd('ERROR', 'FOTO_QUERY', { uf, cpf: cpf.substring(0, 6) + '...', chatId, error: (error as Error).message });
         await sendMessage(this.token, chatId,
           "❌ <b>Erro ao buscar foto</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
