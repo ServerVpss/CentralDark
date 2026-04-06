@@ -1230,20 +1230,21 @@ function createPaginationKeyboard(
   
   const keyboard: InlineButton[][] = [buttons];
   
-  // Botão de apagar primeiro
+  // Botões extras (ex: Consultar Foto) — aparecem primeiro, acima dos demais
+  if (extraButtons && extraButtons.length > 0) {
+    keyboard.push(...extraButtons);
+  }
+
+  // Botão de apagar
   keyboard.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]);
   
-  // Botões de download (PDF e TXT - exceto para foto que não tem TXT)
+  // Botões de download (PDF e TXT)
   if (queryType && queryInput) {
     const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
     keyboard.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
     if (!isPhotoQuery) {
       keyboard.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
     }
-  }
-
-  if (extraButtons && extraButtons.length > 0) {
-    keyboard.push(...extraButtons);
   }
   
   return { inline_keyboard: keyboard };
@@ -1267,25 +1268,26 @@ async function sendLongMessagePaginated(
   const createKeyboard = (paginationId?: string) => {
     const buttons: InlineButton[][] = [];
     
-    // Botão de apagar primeiro
+    // Botões extras (ex: Consultar Foto) — aparecem primeiro, acima dos demais
+    if (extraButtons && extraButtons.length > 0) {
+      buttons.push(...extraButtons);
+    }
+
+    // Botão de apagar
     if (paginationId) {
       buttons.push([{ text: "🗑️ Apagar", callback_data: `page_delete:${paginationId}` }]);
     } else {
       buttons.push([{ text: "🗑️ Apagar", callback_data: "delete_msg" }]);
     }
     
-    // Botões de download (PDF e TXT - exceto para foto que não tem TXT)
+    // Botões de download (PDF e TXT)
     if (queryType && queryInput) {
       const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
       buttons.push([{ text: "📄 Baixar PDF", callback_data: `pdf:${queryType}:${queryInput}` }]);
       if (!isPhotoQuery) {
         buttons.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
       }
-      }
-      // Botões extras (ex: Consultar Foto)
-      if (extraButtons && extraButtons.length > 0) {
-        buttons.push(...extraButtons);
-      }
+    }
     return { inline_keyboard: buttons };
   };
   
