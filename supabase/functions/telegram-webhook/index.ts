@@ -3469,9 +3469,6 @@ class BotHandler {
 
     const contextLabel = isPrivate ? "🔒 Privado" : "👥 Grupo";
     let text = `💎 <b>Planos Disponíveis — ${contextLabel}</b>\n\n`;
-    if (isPrivate) {
-      text += `<i>ℹ️ Planos do privado incluem +R$ ${PRIVATE_MARKUP.toFixed(2)} sobre o valor do grupo.</i>\n\n`;
-    }
     plans.forEach((p, i) => {
       const popular = (p as any).is_popular ? " ⭐" : "";
       const price = isPrivate ? p.price + PRIVATE_MARKUP : p.price;
