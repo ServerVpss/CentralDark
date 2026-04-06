@@ -4115,6 +4115,52 @@ class BotHandler {
       return;
     }
 
+    // Handle query commands in private chat (e.g. /cpffull 12345678900)
+    if (text.startsWith("/")) {
+      const parsed = this.parseMultipleCommands(text);
+      if (parsed.length > 0) {
+        // Check subscription or owner
+        const isOwner = this.isOwner(telegramUserId);
+        const isActive = await this.isSubscriptionActive(telegramUserId);
+        if (!isOwner && !isActive) {
+          await sendMessage(this.token, chatId,
+            "⚠️ <b>Você não possui uma assinatura ativa.</b>\n\nUse /start para ver os planos disponíveis.",
+            undefined, { parse_mode: "HTML" });
+          return;
+        }
+        await this.processMultipleQueries(chatId, telegramUserId, parsed);
+        return;
+      }
+
+      // Single command without value — show usage hint
+      const cmdMatch = text.match(/^\/(\w+)/);
+      if (cmdMatch) {
+        const cmd = cmdMatch[1].toLowerCase().split("@")[0];
+        const commandMap: Record<string, string> = {
+          cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
+          cnpj: "cnpj-cred", placa: "placa", placa2: "placa-serpro",
+          telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
+          email: "email", emailfull: "emailfull",
+          cep: "cep", cepfull: "cepfull", nome: "nome", nomefull: "nomefull",
+          score: "score", rg: "rg", cnh: "cnh", pix: "pix",
+          foto: "foto", nacional: "foto",
+          titulo: "titulo", endereco: "endereco", renda: "renda",
+          processos: "processos", bnmp: "bnmp-lc", siel: "siel",
+          tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
+          spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+          parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
+          rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
+          nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
+        };
+        if (commandMap[cmd]) {
+          await sendMessage(this.token, chatId,
+            `⚠️ <b>Você deve preencher os dados corretamente</b>\n\nExemplo: <code>/${cmd} valor</code>`,
+            undefined, { parse_mode: "HTML" });
+          return;
+        }
+      }
+    }
+
     // Default: show main menu
     if (this.settings.terms_enabled) {
       const accepted = await this.getTermsStatus(telegramUserId);
