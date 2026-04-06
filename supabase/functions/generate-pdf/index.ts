@@ -616,14 +616,27 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
       const neededHeight = valueLines.length * lineHeight + 5;
       checkNewPage(neededHeight);
 
-      // Label
-      page.drawText(sanitizeText(label + ":"), {
-        x: margin + 10,
-        y: y,
-        size: 9,
-        font: fontBold,
-        color: rgb(0.4, 0.4, 0.4),
-      });
+      // Label — wrapped in try/catch for encoding safety
+      try {
+        page.drawText(sanitizeText(label + ":"), {
+          x: margin + 10,
+          y: y,
+          size: 9,
+          font: fontBold,
+          color: rgb(0.4, 0.4, 0.4),
+        });
+      } catch {
+        try {
+          const safeLabel = (label + ":").replace(/[^\x20-\x7E]/g, '');
+          page.drawText(safeLabel || 'Campo:', {
+            x: margin + 10,
+            y: y,
+            size: 9,
+            font: fontBold,
+            color: rgb(0.4, 0.4, 0.4),
+          });
+        } catch { /* skip */ }
+      }
 
       // Value (possibly multi-line) — wrapped in try/catch for encoding safety
       for (let i = 0; i < valueLines.length; i++) {
