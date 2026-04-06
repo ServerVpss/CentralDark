@@ -543,7 +543,7 @@ function formatVehicleResult(
   }
 
   // Convert boolean indicators to readable strings
-  const boolFields = ['multaRenainf', 'comunicacaoVenda', 'rouboFurto', 'leilao', 'restricaoRenajud'];
+  const boolFields = ['multaRenainf', 'comunicacaoVenda', 'rouboFurto', 'leilao', 'restricaoRenajud', 'furtoRoubo', 'alerta'];
   for (const bf of boolFields) {
     if (typeof vehicleData[bf] === 'boolean') {
       vehicleData[bf] = vehicleData[bf] ? 'Sim' : 'Não';
