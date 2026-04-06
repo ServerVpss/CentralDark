@@ -498,8 +498,18 @@ function formatVehicleResult(
     vehicleData = rest;
   }
 
-  // Normalize SERPRO format fields to standard format
-  const serproMap: Record<string, string> = {
+  // Flatten SESP nested retorno structure
+  if (vehicleData.retorno && typeof vehicleData.retorno === 'object') {
+    vehicleData = { ...vehicleData, ...(vehicleData.retorno as Record<string, unknown>) };
+    delete vehicleData.retorno;
+  }
+  // Remove SESP metadata
+  delete vehicleData.codRetorno;
+  delete vehicleData.msgRetorno;
+
+  // Normalize all provider formats to standard field names
+  const fieldNormMap: Record<string, string> = {
+    // SERPRO format
     codigoRenavam: 'renavam', numeroMotor: 'motor',
     descricaoCor: 'cor', descricaoCombustivel: 'combustivel',
     descricaoTipoVeiculo: 'tipoVeiculo', descricaoMarcaModelo: 'marcaModelo',
@@ -515,15 +525,25 @@ function formatVehicleResult(
     indicadorRestricaoRenajud: 'restricaoRenajud',
     tipoDocFaturado: 'tipoDocFaturado', numeroIdFaturamento: 'docFaturado',
     ufFaturado: 'estadoFaturado',
+    // SESP format
+    marca: 'marcaModelo',
+    tipo: 'tipoVeiculo',
+    especie: 'especieVeiculo',
+    cpfCnpj: 'cpfProprietario',
+    endereco: 'enderecoProprietario',
+    municipioEndereco: 'municipioProprietario',
+    responsavel: 'responsavel',
+    indicativo_DFRV: 'furtoRoubo',
+    indicativo_ALERTA: 'alerta',
   };
-  for (const [serproKey, stdKey] of Object.entries(serproMap)) {
-    if (vehicleData[serproKey] !== undefined && vehicleData[stdKey] === undefined) {
-      vehicleData[stdKey] = vehicleData[serproKey];
+  for (const [srcKey, stdKey] of Object.entries(fieldNormMap)) {
+    if (vehicleData[srcKey] !== undefined && vehicleData[stdKey] === undefined) {
+      vehicleData[stdKey] = vehicleData[srcKey];
     }
   }
 
   // Convert boolean indicators to readable strings
-  const boolFields = ['multaRenainf', 'comunicacaoVenda', 'rouboFurto', 'leilao', 'restricaoRenajud'];
+  const boolFields = ['multaRenainf', 'comunicacaoVenda', 'rouboFurto', 'leilao', 'restricaoRenajud', 'furtoRoubo', 'alerta'];
   for (const bf of boolFields) {
     if (typeof vehicleData[bf] === 'boolean') {
       vehicleData[bf] = vehicleData[bf] ? 'Sim' : 'Não';
@@ -537,11 +557,21 @@ function formatVehicleResult(
     );
   }
 
-  // Filter "SEM RESTRICAO" values
+  // Clean SESP placa format "LWM4944 - PI" → keep full (includes state info)
+  // No change needed — it's useful to show the state
+
+  // Filter "SEM RESTRICAO" and "INEXISTENTE" values
   for (const rk of ['restricao1', 'restricao2', 'restricao3', 'restricao4']) {
     const rv = vehicleData[rk];
-    if (rv && typeof rv === 'string' && /sem restri/i.test(rv)) {
+    if (rv && typeof rv === 'string' && (/sem restri/i.test(rv) || /inexistente/i.test(rv))) {
       delete vehicleData[rk];
+    }
+  }
+
+  // Filter "Não" boolean indicators (only show positive alerts)
+  for (const bf of boolFields) {
+    if (vehicleData[bf] === 'Não') {
+      delete vehicleData[bf];
     }
   }
 
@@ -584,6 +614,18 @@ function formatVehicleResult(
     'anoExercicioLicenciamentoPago', 'dataEmissaoCRLV', 'descricaoTipoCarroceria',
     'cmt', 'pbt', 'cmc', 'qtdEixos', 'numeroEixoTraseiro', 'numeroEixoAuxiliar',
     'numeroCambio', 'numeroCarroceria',
+    // SESP source fields (already normalized)
+    'marca', 'tipo', 'especie', 'cpfCnpj', 'endereco', 'municipioEndereco',
+    'responsavel', 'indicativo_DFRV', 'indicativo_ALERTA',
+    'origemDados', 'placaAnterior', 'anoLicenciamento', 'rg', 'dataAquisicao',
+    'situacaoIPVA', 'situacaoLIC', 'situacaoSEG', 'msgErroBin', 'crlv', 'blindagem',
+    'data_DFRV', 'descricao_DFRV', 'local_DFRV', 'numeroBo_DFRV', 'upBo_DFRV', 'origem_DFRV',
+    'anoBOU_ALERTA', 'numeroBOU_ALERTA', 'numRefem_ALERTA', 'armaBranca_ALERTA',
+    'armaFogo_ALERTA', 'dataFim_ALERTA', 'dataInicio_ALERTA', 'descricao_ALERTA',
+    'indChave_ALERTA', 'indDocumento_ALERTA', 'perigoVida_ALERTA',
+    'bairro_ALERTA', 'municipio_ALERTA', 'siglaEstado_ALERTA', 'complemento_ALERTA',
+    'esquinaCom_ALERTA', 'logradouro_ALERTA', 'numeroResid_ALERTA',
+    'proximidades_ALERTA', 'erro_ALERTA', 'caixa',
   ]);
 
   // Label mapping for human-readable display
@@ -618,6 +660,8 @@ function formatVehicleResult(
     leilao: '🔨 Leilão',
     restricaoRenajud: '⚖️ Restrição RENAJUD',
     comunicacaoVenda: '📝 Comunicação Venda',
+    furtoRoubo: '🚨 Furto/Roubo',
+    alerta: '🚨 Alerta',
     dataLimiteRestricao: '📅 Limite Restrição',
     procedencia: '📝 Procedência',
     ultimaAtualizacao: '🔄 Última Atualização',
@@ -632,6 +676,9 @@ function formatVehicleResult(
     numEixos: '🔩 Eixos',
     docFaturado: '📄 Doc. Faturado',
     estadoFaturado: '📍 Estado Faturado',
+    cpfProprietario: '📄 CPF/CNPJ',
+    enderecoProprietario: '🏠 Endereço',
+    municipioProprietario: '🏙️ Município',
   };
 
   // Build sections
@@ -641,10 +688,10 @@ function formatVehicleResult(
   const restrictions: string[] = [];
   const other: string[] = [];
 
-  const idFields = ['placa', 'chassi', 'renavam', 'motor', 'marcaModelo', 'proprietario'];
+  const idFields = ['placa', 'chassi', 'renavam', 'motor', 'marcaModelo', 'proprietario', 'cpfProprietario', 'enderecoProprietario', 'municipioProprietario'];
   const specFields = ['anoFabricacao', 'anoModelo', 'potencia', 'cilindradas', 'cor', 'combustivel', 'tipoVeiculo', 'especieVeiculo', 'categoria', 'lugares', 'carga', 'pesoBrutoTotal', 'capacidadeMaximaTracao'];
   const sitFields = ['estadoEmplacamento', 'municipioEmplacamento', 'dataEmplacamento', 'situacaoVeiculo', 'situacaoChassi', 'ultimaAtualizacao', 'procedencia'];
-  const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'multaRenainf', 'rouboFurto', 'leilao', 'restricaoRenajud', 'comunicacaoVenda', 'dataLimiteRestricao'];
+  const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'multaRenainf', 'rouboFurto', 'furtoRoubo', 'alerta', 'leilao', 'restricaoRenajud', 'comunicacaoVenda', 'dataLimiteRestricao'];
 
   const formatField = (key: string, value: unknown): string | null => {
     if (value === null || value === undefined || value === '' || value === '0' || value === 0) return null;
