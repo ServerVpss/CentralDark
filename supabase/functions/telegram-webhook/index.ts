@@ -711,7 +711,10 @@ function formatVehicleResult(
     lines.push('');
   }
   if (restrictions.length > 0) {
-    const hasRestriction = vehicleData.possuiRestricoes && String(vehicleData.possuiRestricoes).toLowerCase() === 'sim';
+    const hasRestriction = (vehicleData.possuiRestricoes && String(vehicleData.possuiRestricoes).toLowerCase() === 'sim') ||
+      vehicleData.rouboFurto === 'Sim' || vehicleData.multaRenainf === 'Sim' ||
+      vehicleData.restricaoRenajud === 'Sim' || vehicleData.leilao === 'Sim' ||
+      (vehicleData.restricao1 && !/sem restri/i.test(String(vehicleData.restricao1)));
     lines.push(`${hasRestriction ? '🚨' : '✅'} <b>RESTRIÇÕES</b>`);
     lines.push(...restrictions);
     lines.push('');
