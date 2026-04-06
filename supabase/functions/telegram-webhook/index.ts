@@ -3194,7 +3194,6 @@ class BotHandler {
   }
 
   async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number) {
-  async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number) {
     // Show both subscriptions
     const groupSub = await this.getSubscription(telegramUserId, 'group');
     const privateSub = await this.getSubscription(telegramUserId, 'private');
