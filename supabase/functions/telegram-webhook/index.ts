@@ -642,6 +642,182 @@ function formatVehicleResult(
   return lines.join('\n');
 }
 
+// ============= FORMATAÇÃO ESPECÍFICA PARA CNPJ =============
+function formatCnpjResult(
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  _shouldIgnore: (value: unknown) => boolean
+): string {
+  let cnpjData: Record<string, unknown> = {};
+  const rawDados = data.dados as Record<string, unknown> | undefined;
+  if (rawDados && typeof rawDados === 'object') {
+    const inner = rawDados.dados as Record<string, unknown> | undefined;
+    if (inner && typeof inner === 'object') {
+      cnpjData = inner;
+    } else {
+      cnpjData = rawDados;
+    }
+  }
+
+  const lines: string[] = [];
+  lines.push(`🏢 <b>CONSULTA CNPJ</b>`);
+  lines.push(`👋 Olá, <b>${escapeHtml(userName)}</b>!\n`);
+
+  // 1. DADOS CADASTRAIS
+  const dadosPessoais = cnpjData.dadosPessoais as Record<string, unknown> | undefined;
+  if (dadosPessoais && typeof dadosPessoais === 'object') {
+    lines.push(`📋 <b>DADOS CADASTRAIS</b>`);
+    const fieldOrder = ['Nome', 'CPF', 'Situação cadastral', 'Data de insc.', 'Emitido as'];
+    const labelMap: Record<string, string> = {
+      'Nome': '🏷️ Razão Social',
+      'CPF': '📄 CPF/CNPJ',
+      'Situação cadastral': '📊 Situação',
+      'Data de insc.': '📅 Data Inscrição',
+      'Emitido as': '🕐 Emitido em',
+    };
+    for (const key of fieldOrder) {
+      const val = dadosPessoais[key];
+      if (val && String(val).trim()) {
+        lines.push(`├ ${labelMap[key] || key}: <b>${escapeHtml(fixBrokenEncoding(String(val)))}</b>`);
+      }
+    }
+    for (const [key, val] of Object.entries(dadosPessoais)) {
+      if (fieldOrder.includes(key)) continue;
+      if (val && String(val).trim()) {
+        lines.push(`├ 📌 ${escapeHtml(key)}: <b>${escapeHtml(fixBrokenEncoding(String(val)))}</b>`);
+      }
+    }
+    lines.push('');
+  }
+
+  // 2. SÓCIOS
+  const relacionamentos = cnpjData.relacionamentos as Array<Record<string, unknown>> | undefined;
+  if (relacionamentos && Array.isArray(relacionamentos) && relacionamentos.length > 0) {
+    const seen = new Set<string>();
+    const unique = relacionamentos.filter(r => {
+      const cpf = String(r.CPF || r.cpf || '');
+      if (!cpf || seen.has(cpf)) return false;
+      seen.add(cpf);
+      return true;
+    });
+    lines.push(`👥 <b>SÓCIOS (${unique.length})</b>`);
+    const maxSocios = Math.min(unique.length, 20);
+    for (let i = 0; i < maxSocios; i++) {
+      const socio = unique[i];
+      const nome = socio.Nome || socio.nome || '';
+      const cpf = socio.CPF || socio.cpf || '';
+      const vinculo = socio['Vínculo'] || socio.vinculo || '';
+      const connector = i === maxSocios - 1 ? '└' : '├';
+      lines.push(`${connector} 👤 <b>${escapeHtml(fixBrokenEncoding(String(nome)))}</b>`);
+      if (cpf) lines.push(`│  📄 ${escapeHtml(String(cpf))}`);
+      if (vinculo) lines.push(`│  🔗 ${escapeHtml(fixBrokenEncoding(String(vinculo)))}`);
+    }
+    if (unique.length > 20) {
+      lines.push(`  <i>... e mais ${unique.length - 20} sócios</i>`);
+    }
+    lines.push('');
+  }
+
+  // 3. CONTATOS
+  const contatos = cnpjData.contatos as Record<string, unknown> | undefined;
+  if (contatos && typeof contatos === 'object') {
+    const telefones = contatos.telefones as Array<Record<string, unknown>> | undefined;
+    if (telefones && Array.isArray(telefones) && telefones.length > 0) {
+      const maxTel = Math.min(telefones.length, 15);
+      lines.push(`📞 <b>TELEFONES (${telefones.length})</b>`);
+      for (let i = 0; i < maxTel; i++) {
+        const tel = telefones[i];
+        const numero = tel.numero || tel.completo || '';
+        const connector = i === maxTel - 1 ? '└' : '├';
+        lines.push(`${connector} 📱 <b>${escapeHtml(String(numero))}</b>`);
+      }
+      if (telefones.length > 15) lines.push(`  <i>... e mais ${telefones.length - 15} telefones</i>`);
+      lines.push('');
+    }
+
+    const enderecos = contatos.enderecos as Array<Record<string, unknown>> | undefined;
+    if (enderecos && Array.isArray(enderecos) && enderecos.length > 0) {
+      const maxEnd = Math.min(enderecos.length, 5);
+      lines.push(`📍 <b>ENDEREÇOS (${enderecos.length})</b>`);
+      for (let i = 0; i < maxEnd; i++) {
+        const end = enderecos[i];
+        const logradouro = end.logradouro || '';
+        const cep = end.cep || '';
+        const cidade = end.cidade || '';
+        const connector = i === maxEnd - 1 ? '└' : '├';
+        lines.push(`${connector} 🏠 <b>${escapeHtml(fixBrokenEncoding(String(logradouro)))}</b>`);
+        if (cep || cidade) lines.push(`│  📮 ${escapeHtml(String(cep))} - ${escapeHtml(fixBrokenEncoding(String(cidade)))}`);
+      }
+      if (enderecos.length > 5) lines.push(`  <i>... e mais ${enderecos.length - 5} endereços</i>`);
+      lines.push('');
+    }
+
+    const emails = contatos.emails as Array<Record<string, unknown>> | undefined;
+    if (emails && Array.isArray(emails) && emails.length > 0) {
+      const maxEmail = Math.min(emails.length, 10);
+      lines.push(`📧 <b>EMAILS (${emails.length})</b>`);
+      for (let i = 0; i < maxEmail; i++) {
+        const em = emails[i];
+        const email = em.email || '';
+        const connector = i === maxEmail - 1 ? '└' : '├';
+        lines.push(`${connector} ✉️ ${escapeHtml(String(email))}`);
+      }
+      if (emails.length > 10) lines.push(`  <i>... e mais ${emails.length - 10} emails</i>`);
+      lines.push('');
+    }
+  }
+
+  // 4. EMPRESAS VINCULADAS
+  const dadosProf = cnpjData.dadosProfissionais as Record<string, unknown> | undefined;
+  if (dadosProf && typeof dadosProf === 'object') {
+    const historico = dadosProf.historico as Array<Record<string, unknown>> | undefined;
+    if (historico && Array.isArray(historico) && historico.length > 0) {
+      const seen = new Set<string>();
+      const unique = historico.filter(h => {
+        const key = `${h.cnpj || ''}|${h.empresa || ''}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      const maxHist = Math.min(unique.length, 15);
+      lines.push(`🏭 <b>EMPRESAS VINCULADAS (${unique.length})</b>`);
+      for (let i = 0; i < maxHist; i++) {
+        const emp = unique[i];
+        const empresa = emp.empresa || '';
+        const cnpj = emp.cnpj || '';
+        const connector = i === maxHist - 1 ? '└' : '├';
+        lines.push(`${connector} 🏢 <b>${escapeHtml(fixBrokenEncoding(String(empresa)))}</b>`);
+        if (cnpj) lines.push(`│  📄 ${escapeHtml(String(cnpj))}`);
+      }
+      if (unique.length > 15) lines.push(`  <i>... e mais ${unique.length - 15} empresas</i>`);
+      lines.push('');
+    }
+  }
+
+  // 5. FINANCEIRO
+  const financeiro = cnpjData.financeiro as Record<string, unknown> | undefined;
+  if (financeiro && typeof financeiro === 'object') {
+    const finLines: string[] = [];
+    for (const [, val] of Object.entries(financeiro)) {
+      if (!val || typeof val !== 'object' || Object.keys(val as Record<string, unknown>).length === 0) continue;
+      for (const [fk, fv] of Object.entries(val as Record<string, unknown>)) {
+        if (fv && String(fv).trim()) {
+          finLines.push(`├ 📌 ${escapeHtml(fk)}: <b>${escapeHtml(fixBrokenEncoding(String(fv)))}</b>`);
+        }
+      }
+    }
+    if (finLines.length > 0) {
+      lines.push(`💰 <b>FINANCEIRO</b>`);
+      lines.push(...finLines);
+      lines.push('');
+    }
+  }
+
+  lines.push(`📡 <i>Resultado via ${botTag}</i>`);
+  return lines.join('\n');
+}
 
 // Premium Custom Emoji IDs (Telegram API 9.4)
 const DEFAULT_EMOJI: Record<string, string> = {
@@ -2645,6 +2821,11 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   // ============= FORMATAÇÃO ESPECÍFICA PARA TELEFONE (telefone, telefonefull, telefone-3) =============
   if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // ============= FORMATAÇÃO ESPECÍFICA PARA CNPJ =============
+  if (queryType === 'cnpj-cred') {
+    return formatCnpjResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   // ============= FORMATAÇÃO ESPECÍFICA PARA VEÍCULOS =============
