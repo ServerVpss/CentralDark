@@ -2421,8 +2421,162 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
+  // ============= FORMATAÇÃO ESPECÍFICA PARA TELEFONE (telefone, telefonefull, telefone-3) =============
+  if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
+    return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
   // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
   return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+}
+
+// =============== HELPER: MÁSCARA DE TELEFONE ===============
+function formatPhoneNumber(ddd: string | number, numero: string | number): string {
+  const dddStr = String(ddd).replace(/\D/g, '');
+  const numStr = String(numero).replace(/\D/g, '');
+  if (!numStr) return '';
+  // Se o número já inclui DDD (10+ dígitos), separar
+  if (numStr.length >= 10 && !dddStr) {
+    const d = numStr.substring(0, 2);
+    const n = numStr.substring(2);
+    return formatPhoneNumber(d, n);
+  }
+  let masked: string;
+  if (numStr.length === 9) {
+    masked = `${numStr.substring(0, 5)}-${numStr.substring(5)}`;
+  } else if (numStr.length === 8) {
+    masked = `${numStr.substring(0, 4)}-${numStr.substring(4)}`;
+  } else {
+    masked = numStr;
+  }
+  return dddStr ? `(${dddStr}) ${masked}` : masked;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA TELEFONE (MONOESPAÇADO) ===============
+function formatTelefoneResult(
+  queryType: string,
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  const getValue = (keys: string[]): string => {
+    for (const k of keys) {
+      const v = data[k];
+      if (v !== null && v !== undefined && !shouldIgnore(v)) return String(v).trim().toUpperCase();
+    }
+    return '';
+  };
+
+  // Extrair telefones estruturados com máscara
+  const extractPhonesFormatted = (): Array<{ formatted: string; tipo: string; data: string; whatsapp: boolean }> => {
+    const tels = data.telefones as unknown[] | undefined;
+    if (!Array.isArray(tels)) return [];
+    return tels.map((t: unknown) => {
+      const tel = t as Record<string, unknown>;
+      const ddd = tel.ddd || tel.DDD || '';
+      const num = tel.telefone || tel.numero || tel.celular || '';
+      const tipoCode = tel.tipoTelefone;
+      const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
+      const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
+      const whatsapp = String(tel.whatsapp || '').toLowerCase().includes('possui');
+      return { formatted: formatPhoneNumber(ddd, num), tipo, data: inclusao, whatsapp };
+    }).filter(t => t.formatted);
+  };
+
+  const nome = getValue(['nome', 'nome_completo']);
+  const cpf = getValue(['cpf']);
+  const nascimento = getValue(['nascimento', 'data_nascimento', 'datanascimento', 'dataNascimento']);
+  const sexo = getValue(['sexo']);
+  const mae = getValue(['mae', 'mãe', 'nome_mae', 'nomemae', 'nomeMae']);
+
+  const phones = extractPhonesFormatted();
+  const lines: string[] = [];
+
+  const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
+  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(``);
+
+  // 👤 DADOS DO TITULAR
+  if (nome || cpf) {
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 👤 DADOS DO TITULAR`);
+    lines.push(`├─────────────────────────────`);
+    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
+    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
+    if (nascimento) lines.push(`│ 📅 Nascimento: ${nascimento}`);
+    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
+    if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  }
+
+  // 📞 TELEFONES VINCULADOS
+  if (phones.length > 0) {
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 📞 TELEFONES VINCULADOS`);
+    lines.push(`├─────────────────────────────`);
+    phones.slice(0, 12).forEach((p, i) => {
+      let line = `│ ${i + 1}. ${p.formatted}`;
+      if (p.tipo) line += ` [${p.tipo}]`;
+      if (p.whatsapp) line += ` 💬`;
+      if (p.data) line += ` (${p.data})`;
+      lines.push(line);
+    });
+    if (phones.length > 12) lines.push(`│ ... e mais ${phones.length - 12}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  }
+
+  // Fallback: dados brutos de texto
+  if (phones.length === 0) {
+    const rawPhones: string[] = [];
+    for (const [k, v] of Object.entries(data)) {
+      if (shouldIgnore(v)) continue;
+      const key = k.toLowerCase();
+      if ((key.includes('numero') || key.includes('completo') || key === 'telefone' || key === 'celular') && typeof v === 'string') {
+        const digits = v.replace(/\D/g, '');
+        if (digits.length >= 8 && digits.length <= 13) {
+          rawPhones.push(formatPhoneNumber('', digits) || digits);
+        }
+      }
+    }
+    if (rawPhones.length > 0) {
+      const unique = [...new Set(rawPhones)];
+      lines.push(`┌─────────────────────────────`);
+      lines.push(`│ 📞 TELEFONES ENCONTRADOS`);
+      lines.push(`├─────────────────────────────`);
+      unique.slice(0, 12).forEach((p, i) => lines.push(`│ ${i + 1}. ${p}`));
+      if (unique.length > 12) lines.push(`│ ... e mais ${unique.length - 12}`);
+      lines.push(`└─────────────────────────────`);
+      lines.push(``);
+    }
+  }
+
+  // Endereço
+  const uf = getValue(['uf', 'estado']);
+  const endereco = getValue(['endereco', 'logradouro']);
+  const bairro = getValue(['bairro']);
+  const cidade = getValue(['cidade', 'municipio']);
+  const cep = getValue(['cep']);
+  if (uf || endereco || cidade) {
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 📍 ENDEREÇO`);
+    lines.push(`├─────────────────────────────`);
+    if (endereco) lines.push(`│ 🏠 ${endereco}`);
+    if (bairro) lines.push(`│ 📌 Bairro: ${bairro}`);
+    if (cidade) lines.push(`│ 🏙️ Cidade: ${cidade}`);
+    if (uf) lines.push(`│ 🗺️ UF: ${uf}`);
+    if (cep) lines.push(`│ 📮 CEP: ${cep}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  }
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  const escaped = lines.map(l => escapeHtml(l));
+  return `<pre>${escaped.join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA CPF (MONOESPAÇADO) ===============
@@ -2533,9 +2687,11 @@ function formatCpfResult(
       const tel = t as Record<string, unknown>;
       const ddd = tel.ddd || tel.DDD || '';
       const num = tel.telefone || tel.numero || tel.celular || '';
-      const tipo = tel.tipoTelefone === 3 ? 'Celular' : tel.tipoTelefone === 1 ? 'Fixo' : '';
+      const formatted = formatPhoneNumber(ddd, num);
+      const tipoCode = tel.tipoTelefone;
+      const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
       const inclusao = tel.dataInclusao ? ` (${String(tel.dataInclusao).substring(0, 10)})` : '';
-      return `(${ddd}) ${num}${tipo ? ' - ' + tipo : ''}${inclusao}`.trim().toUpperCase();
+      return `${formatted || String(num)}${tipo ? ' [' + tipo + ']' : ''}${inclusao}`.trim().toUpperCase();
     }).filter(Boolean);
   };
 
