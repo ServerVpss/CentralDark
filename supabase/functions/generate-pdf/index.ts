@@ -289,12 +289,18 @@ function extractAllData(obj: unknown, prefix = ""): Array<{ key: string; value: 
     
     // Handle arrays
     if (Array.isArray(value)) {
-      const validItems = value
-        .filter(v => !shouldIgnoreValue(v))
-        .map(v => typeof v === "string" ? v : JSON.stringify(v));
-      
-      if (validItems.length > 0) {
-        items.push({ key: fullKey, value: validItems.join(", ") });
+      for (let i = 0; i < value.length; i++) {
+        const item = value[i];
+        if (shouldIgnoreValue(item)) continue;
+        if (typeof item === "object" && item !== null) {
+          // Recursively extract each object in the array
+          const arrayPrefix = value.length > 1 ? `${fullKey}_${i + 1}` : fullKey;
+          items.push(...extractAllData(item, arrayPrefix));
+        } else if (typeof item === "string") {
+          items.push({ key: fullKey, value: item });
+        } else {
+          items.push({ key: fullKey, value: String(item) });
+        }
       }
       continue;
     }
