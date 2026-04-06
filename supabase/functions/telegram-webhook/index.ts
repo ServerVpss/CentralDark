@@ -1179,7 +1179,7 @@ function extractAllTxtData(obj: unknown, prefix = ""): Array<{ key: string; valu
   return items;
 }
 
-function generateTxtContent(queryType: string, queryInput: string, data: Record<string, unknown>): string {
+function generateTxtContent(queryType: string, queryInput: string, data: Record<string, unknown>, requesterInfo?: { name: string; username?: string; id: number }): string {
   const now = new Date();
   const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
   
@@ -1191,7 +1191,13 @@ function generateTxtContent(queryType: string, queryInput: string, data: Record<
   txt += `════════════════════════════════════════════════════════════\n\n`;
   txt += `Tipo: ${queryType.toUpperCase()}\n`;
   txt += `Consulta: ${queryInput}\n`;
-  txt += `Gerado em: ${dateStr}\n\n`;
+  txt += `Gerado em: ${dateStr}\n`;
+  if (requesterInfo) {
+    txt += `Solicitado por: ${requesterInfo.name}`;
+    if (requesterInfo.username) txt += ` (@${requesterInfo.username})`;
+    txt += ` [ID: ${requesterInfo.id}]\n`;
+  }
+  txt += `\n`;
   txt += `════════════════════════════════════════════════════════════\n\n`;
   
   // Extract and organize data
