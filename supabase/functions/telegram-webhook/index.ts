@@ -428,6 +428,31 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
   return b;
 }
 
+
+// Premium Custom Emoji IDs (Telegram API 9.4)
+const EMOJI = {
+  SEARCH: "5368324170671202286",    // 🔍
+  DIAMOND: "5471952986970267163",   // 💎
+  CHART: "5357506110857498821",     // 📊
+  LIGHTNING: "5253959696498104346",  // ⚡
+  CHECK: "5370547013043468854",     // ✅
+  HOME: "5237699328843200968",      // 🏠
+  MEGAPHONE: "5424972541023694017", // 📢
+  LIST: "5384162698092301384",      // 📋
+  MONEY: "5271604874513397103",     // 💰
+  DOOR: "5386654873785498449",      // 🚪
+  CART: "5368324170671202286",      // 🛒
+  STAR: "5368324170671202286",      // ⭐
+  TRASH: "5386399931108030284",     // 🗑️
+  PDF: "5386399931108030284",       // 📄
+  PHOTO: "5386654873785498449",     // 📸
+  BACK: "5237699328843200968",      // 🔙
+  USERS: "5384162698092301384",     // 👥
+  PENCIL: "5368324170671202286",    // ✏️
+  PLUS: "5370547013043468854",      // ➕
+  REFRESH: "5253959696498104346",   // 🔄
+};
+
 function keyboard(...rows: InlineButton[][]) {
   return { inline_keyboard: rows };
 }
@@ -3020,7 +3045,7 @@ class BotHandler {
   async showTerms(chatId: number) {
     const text = this.settings.terms_text || "📄 <b>Termos de Uso</b>\n\nAceite os termos para continuar.";
     await sendMessage(this.token, chatId, text, keyboard(
-      [btn("✅ Aceitar Termos", "terms:accept")],
+      [btn("✅ Aceitar Termos", "terms:accept", undefined, EMOJI.CHECK)],
       [btn("❌ Recusar", "terms:decline")]
     ));
   }
@@ -3173,25 +3198,25 @@ class BotHandler {
     const buttons: InlineButton[][] = [];
     
     if (isActive) {
-      buttons.push([btn("🔍 Fazer Consulta", "menu:query", "success")]);
+      buttons.push([btn("🔍 Fazer Consulta", "menu:query", "success", EMOJI.SEARCH)]);
     }
     
     if (isPrivateChat) {
-      buttons.push([btn("💳 Planos Privado", "menu:plans:private", "primary")]);
-      buttons.push([btn("👥 Planos Grupo", "menu:plans:group", "primary")]);
+      buttons.push([btn("💳 Planos Privado", "menu:plans:private", "primary", EMOJI.DIAMOND)]);
+      buttons.push([btn("👥 Planos Grupo", "menu:plans:group", "primary", EMOJI.DIAMOND)]);
     } else {
-      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group", "primary")]);
+      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group", "primary", EMOJI.DIAMOND)]);
     }
-    buttons.push([btn("📊 Minha Assinatura", "menu:subscription")]);
-    buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending")]);
-    buttons.push([btn("📋 Comandos", "show_commands")]);
+    buttons.push([btn("📊 Minha Assinatura", "menu:subscription", undefined, EMOJI.CHART)]);
+    buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending", undefined, EMOJI.MONEY)]);
+    buttons.push([btn("📋 Comandos", "show_commands", undefined, EMOJI.LIST)]);
 
     if (this.isOwner(telegramUserId)) {
-      buttons.push([btn("⚙️ Painel Admin", "admin:menu")]);
+      buttons.push([btn("⚙️ Painel Admin", "admin:menu", undefined, EMOJI.LIGHTNING)]);
     }
 
     if (this.settings.group_url) {
-      buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url)]);
+      buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url, undefined, EMOJI.DOOR)]);
     }
 
     const botTag = this.bot.bot_username ? `@${this.bot.bot_username}` : '';
@@ -3242,7 +3267,7 @@ class BotHandler {
       .map(row => row.filter((b): b is InlineButton => b !== null))
       .filter(row => row.length > 0);
 
-    buttons.push([btn("🔙 Voltar", "menu:main")]);
+    buttons.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
 
     const moduleStatus = await loadModuleStatus(this.supabase);
     const totalCount = Object.keys(moduleStatus).length;
@@ -3259,7 +3284,7 @@ class BotHandler {
       const row = brazilianStates.slice(i, i + 4).map(s => btn(s, `state:${s}`));
       stateButtons.push(row);
     }
-    stateButtons.push([btn("🔙 Voltar", "menu:query")]);
+    stateButtons.push([btn("🔙 Voltar", "menu:query", undefined, EMOJI.BACK)]);
 
     await editMessage(this.token, chatId, messageId, text, keyboard(...stateButtons));
   }
@@ -3324,7 +3349,7 @@ class BotHandler {
     if (!isActive && !this.isOwner(telegramUserId)) {
       await sendMessage(this.token, chatId,
         "⚠️ <b>Assinatura necessária</b>\n\nVocê precisa de uma assinatura ativa para fazer consultas.",
-        keyboard([btn("💳 Ver Planos", "menu:plans"), btn("🏠 Menu", "menu:main")])
+        keyboard([btn("💳 Ver Planos", "menu:plans", undefined, EMOJI.DIAMOND), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)])
       );
       return;
     }
@@ -3447,7 +3472,7 @@ class BotHandler {
 
       if (isValidPhotoUrl) {
         const actionButtons: InlineButton[][] = [
-          [btn("🔍 Nova Consulta", "menu:query", "success"), btn("🏠 Menu", "menu:main")],
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
           [btn("🗑️ Apagar", "delete_msg", "danger")],
           [btn("📄 Baixar PDF", `pdf:${queryType}:${queryInput}`, "success")]
         ];
@@ -3498,7 +3523,7 @@ class BotHandler {
       logCmd('ERROR', 'QUERY_FAIL', { queryType, input: queryInput.substring(0, 20), chatId, userId: telegramUserId, error: (error as Error).message, stack: (error as Error).stack?.substring(0, 200) });
       await sendMessage(this.token, chatId,
         "❌ <b>Erro na consulta</b>\n\nOcorreu um erro ao processar sua consulta. Tente novamente.",
-        keyboard([btn("🔍 Tentar Novamente", "menu:query"), btn("🏠 Menu", "menu:main")])
+        keyboard([btn("🔍 Tentar Novamente", "menu:query"), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)])
       );
     }
   }
@@ -3511,7 +3536,7 @@ class BotHandler {
     if (plans.length === 0) {
       await editMessage(this.token, chatId, messageId,
         "⚠️ <b>Nenhum plano disponível no momento.</b>\n\n<i>Volte mais tarde.</i>",
-        keyboard([btn("🔙 Voltar", "menu:main")])
+        keyboard([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)])
       );
       return;
     }
@@ -3531,7 +3556,7 @@ class BotHandler {
       const price = isPrivate ? p.price + PRIVATE_MARKUP : p.price;
       return [btn(`${p.title} — R$ ${price.toFixed(2)}${popular}`, `plan:${p.code}:${context}`)];
     });
-    buttons.push([btn("🔙 Voltar", "menu:main")]);
+    buttons.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
 
     await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
   }
@@ -3550,8 +3575,8 @@ class BotHandler {
         "❌ Nenhuma assinatura ativa encontrada.\n\n" +
         "<i>Adquira um plano para começar a consultar.</i>",
         keyboard(
-          [btn("💎 Planos Grupo", "menu:plans:group"), btn("🔒 Planos Privado", "menu:plans:private")],
-          [btn("🔙 Voltar", "menu:main")]
+          [btn("💎 Planos Grupo", "menu:plans:group", undefined, EMOJI.DIAMOND), btn("🔒 Planos Privado", "menu:plans:private", undefined, EMOJI.DIAMOND)],
+          [btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]
         )
       );
       return;
@@ -3595,8 +3620,8 @@ class BotHandler {
 
     await editMessage(this.token, chatId, messageId, text,
       keyboard(
-        [btn("🔄 Renovar Grupo", "menu:plans:group"), btn("🔄 Renovar Privado", "menu:plans:private")],
-        [btn("🔙 Voltar", "menu:main")]
+        [btn("🔄 Renovar Grupo", "menu:plans:group", undefined, EMOJI.REFRESH), btn("🔄 Renovar Privado", "menu:plans:private", undefined, EMOJI.REFRESH)],
+        [btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]
       )
     );
   }
@@ -3609,7 +3634,7 @@ class BotHandler {
         "💰 <b>Pagamentos Pendentes</b>\n\n" +
         "✅ Nenhum pagamento pendente.\n\n" +
         "<i>Todos os seus pagamentos foram processados.</i>",
-        keyboard([btn("🔙 Voltar", "menu:main")])
+        keyboard([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)])
       );
       return;
     }
@@ -3627,7 +3652,7 @@ class BotHandler {
       buttons.push([btn(`✅ Verificar "${p.plan_name}"`, `chk_${p.txid}`)]);
     });
 
-    buttons.push([btn("🔙 Voltar", "menu:main")]);
+    buttons.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
 
     await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
   }
@@ -3638,9 +3663,9 @@ class BotHandler {
       "⚙️ <b>Painel Administrativo</b>\n\n" +
       "<i>Gerencie seu bot a partir deste painel:</i>",
       keyboard(
-        [btn("📋 Gerenciar Planos", "admin:plans", "primary"), btn("👥 Usuários", "admin:users", "primary")],
-        [btn("📊 Estatísticas", "admin:stats", "success"), btn("📢 Broadcast", "admin:broadcast", "danger")],
-        [btn("🔙 Voltar ao Menu", "menu:main")]
+        [btn("📋 Gerenciar Planos", "admin:plans", "primary", EMOJI.DIAMOND), btn("👥 Usuários", "admin:users", "primary", EMOJI.USERS)],
+        [btn("📊 Estatísticas", "admin:stats", "success", EMOJI.CHART), btn("📢 Broadcast", "admin:broadcast", "danger", EMOJI.MEGAPHONE)],
+        [btn("🔙 Voltar ao Menu", "menu:main", undefined, EMOJI.BACK)]
       )
     );
   }
@@ -3664,8 +3689,8 @@ class BotHandler {
       btn(`✏️ ${p.name}`, `admin:edit_plan:${p.id}`)
     ]);
 
-    buttons.push([btn("➕ Novo Plano", "admin:new_plan", "success")]);
-    buttons.push([btn("🔙 Voltar", "admin:menu")]);
+    buttons.push([btn("➕ Novo Plano", "admin:new_plan", "success", EMOJI.PLUS)]);
+    buttons.push([btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)]);
 
     await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
   }
@@ -3681,7 +3706,7 @@ class BotHandler {
 
     if (!plan) {
       await editMessage(this.token, chatId, messageId, "❌ Plano não encontrado.",
-        keyboard([btn("🔙 Voltar", "admin:plans")]));
+        keyboard([btn("🔙 Voltar", "admin:plans", undefined, EMOJI.BACK)]));
       return;
     }
 
@@ -3698,7 +3723,7 @@ class BotHandler {
         [btn("💰 Preço", `admin:change_price:${planId}`), btn("📅 Dias", `admin:change_days:${planId}`)],
         [btn("📝 Nome", `admin:change_name:${planId}`), btn(plan.is_active ? "🔴 Desativar" : "🟢 Ativar", `admin:toggle_plan:${planId}`)],
         [btn("🗑️ Deletar Plano", `admin:delete_plan:${planId}`)],
-        [btn("🔙 Voltar", "admin:plans")]
+        [btn("🔙 Voltar", "admin:plans", undefined, EMOJI.BACK)]
       )
     );
   }
@@ -3729,7 +3754,7 @@ class BotHandler {
     }
 
     await editMessage(this.token, chatId, messageId, text,
-      keyboard([btn("🔙 Voltar", "admin:menu")])
+      keyboard([btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)])
     );
   }
 
@@ -3780,7 +3805,7 @@ class BotHandler {
       `┌ 💵 Receita: <b>R$ ${todayRevenue.toFixed(2)}</b>\n` +
       `├ 🔍 Consultas: <b>${totalQueries || 0}</b>\n` +
       `└ 🆕 Vendas: <b>${subsData.length}</b>`,
-      keyboard([btn("🔄 Atualizar", "admin:stats", "success"), btn("🔙 Voltar", "admin:menu")])
+      keyboard([btn("🔄 Atualizar", "admin:stats", "success", EMOJI.REFRESH), btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)])
     );
   }
 
@@ -3788,9 +3813,9 @@ class BotHandler {
     await editMessage(this.token, chatId, messageId,
       "📢 <b>Broadcast</b>\n\n<i>Selecione o público-alvo da mensagem:</i>",
       keyboard(
-        [btn("📢 Todos", "broadcast:all", "primary"), btn("✅ Ativos", "broadcast:active", "success")],
+        [btn("📢 Todos", "broadcast:all", "primary", EMOJI.MEGAPHONE), btn("✅ Ativos", "broadcast:active", "success", EMOJI.CHECK)],
         [btn("❌ Expirados", "broadcast:expired", "danger")],
-        [btn("🔙 Voltar", "admin:menu")]
+        [btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)]
       )
     );
   }
@@ -3855,7 +3880,7 @@ class BotHandler {
        const pixKeyboard = keyboard(
          [btn("✅ Já Paguei - Confirmar", `chk_${txid}`)],
          [btnUrl("🏦 Abrir App do Banco", "https://www.bcb.gov.br/estabilidadefinanceira/pix")],
-         [btn("🔙 Voltar", "menu:plans")]
+         [btn("🔙 Voltar", "menu:plans", undefined, EMOJI.BACK)]
        );
 
        // telegramRequest agora converte data:image/...base64 para multipart automaticamente
@@ -3924,7 +3949,7 @@ class BotHandler {
           `Status atual: <code>${status || "EM_ABERTO"}</code>\n\n` +
           `O pagamento ainda não foi confirmado.\n` +
           `Aguarde alguns instantes e tente novamente.`,
-          keyboard([btn("🔙 Voltar", "menu:pending")])
+          keyboard([btn("🔙 Voltar", "menu:pending", undefined, EMOJI.BACK)])
         );
       }
     } catch (error) {
@@ -3990,10 +4015,10 @@ class BotHandler {
     const contextLabel = paymentContext === 'private' ? '🔒 Privado' : '👥 Grupo';
     const buttons: InlineButton[][] = [];
     if (this.settings.group_url && paymentContext === 'group') {
-      buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url)]);
+      buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url, undefined, EMOJI.DOOR)]);
     }
-    buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
-    buttons.push([btn("🏠 Menu Principal", "menu:main")]);
+    buttons.push([btn("🔍 Fazer Consulta", "menu:query", undefined, EMOJI.SEARCH)]);
+    buttons.push([btn("🏠 Menu Principal", "menu:main", undefined, EMOJI.HOME)]);
 
     // Obter o efeito configurado para este bot
     const effectId = getMessageEffectId(this.settings.message_effect);
@@ -4064,7 +4089,7 @@ class BotHandler {
     if (subscriptions.length === 0) {
       await sendMessage(this.token, message.chat.id,
         `❌ Nenhum usuário encontrado para o filtro "<b>${filterText[filter] || filter}</b>".`,
-        keyboard([btn("🔙 Voltar", "admin:menu")])
+        keyboard([btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)])
       );
       return;
     }
@@ -4197,12 +4222,12 @@ class BotHandler {
         });
       } catch (_e) {
         await sendMessage(this.token, message.chat.id, finalText,
-          keyboard([btn("🔙 Voltar", "admin:menu")])
+          keyboard([btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)])
         );
       }
     } else {
       await sendMessage(this.token, message.chat.id, finalText,
-        keyboard([btn("🔙 Voltar", "admin:menu")])
+        keyboard([btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)])
       );
     }
   }
@@ -4520,7 +4545,7 @@ class BotHandler {
     if (text === "/cancelar") {
       await this.clearConversationState(telegramUserId);
       await sendMessage(this.token, chatId, "❌ Operação cancelada.",
-        keyboard([btn("🔙 Menu Principal", "menu:main")]));
+        keyboard([btn("🔙 Menu Principal", "menu:main", undefined, EMOJI.HOME)]));
       return;
     }
 
@@ -5249,7 +5274,7 @@ class BotHandler {
         
         if (isValidPhoto) {
           const actionButtons: InlineButton[][] = [
-            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
+            [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
             [btn("🗑️ Apagar", "delete_msg")],
             [btn("📄 Baixar PDF", `pdf:${fotoModule}:${cpf}`)]
           ];
@@ -5469,7 +5494,7 @@ class BotHandler {
       if (!isActive && !this.isOwner(telegramUserId)) {
         await editMessage(this.token, chatId, messageId,
           "⚠️ <b>Assinatura necessária</b>\n\nVocê precisa de uma assinatura ativa para fazer consultas.",
-          keyboard([btn("💳 Ver Planos", "menu:plans"), btn("🏠 Voltar", "menu:main")])
+          keyboard([btn("💳 Ver Planos", "menu:plans", undefined, EMOJI.DIAMOND), btn("🏠 Voltar", "menu:main", undefined, EMOJI.HOME)])
         );
         return;
       }
@@ -5553,7 +5578,7 @@ class BotHandler {
     if (data === "admin:menu") {
       if (!this.isOwner(telegramUserId)) {
         await editMessage(this.token, chatId, messageId, "❌ Acesso negado. Apenas administradores.",
-          keyboard([btn("🔙 Voltar", "menu:main")]));
+          keyboard([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]));
         return;
       }
       await this.showAdminMenu(chatId, messageId);
@@ -5705,7 +5730,7 @@ class BotHandler {
         .eq("id", stateData.planId);
       await this.clearConversationState(telegramUserId, "admin");
       await sendMessage(this.token, chatId, `✅ Preço atualizado para R$ ${price.toFixed(2)}!`,
-        keyboard([btn("🔙 Voltar aos Planos", "admin:plans")]));
+        keyboard([btn("🔙 Voltar aos Planos", "admin:plans", undefined, EMOJI.BACK)]));
       return;
     }
 
@@ -5721,7 +5746,7 @@ class BotHandler {
         .eq("id", stateData.planId);
       await this.clearConversationState(telegramUserId, "admin");
       await sendMessage(this.token, chatId, `✅ Dias atualizados para ${days}!`,
-        keyboard([btn("🔙 Voltar aos Planos", "admin:plans")]));
+        keyboard([btn("🔙 Voltar aos Planos", "admin:plans", undefined, EMOJI.BACK)]));
       return;
     }
 
@@ -5732,7 +5757,7 @@ class BotHandler {
         .eq("id", stateData.planId);
       await this.clearConversationState(telegramUserId, "admin");
       await sendMessage(this.token, chatId, `✅ Nome atualizado para "${text}"!`,
-        keyboard([btn("🔙 Voltar aos Planos", "admin:plans")]));
+        keyboard([btn("🔙 Voltar aos Planos", "admin:plans", undefined, EMOJI.BACK)]));
       return;
     }
 
@@ -5791,7 +5816,7 @@ class BotHandler {
           `📅 Dias: ${days}\n` +
           `💰 Preço: R$ ${price.toFixed(2)}\n` +
           `📋 Código: ${code}`,
-          keyboard([btn("🔙 Voltar aos Planos", "admin:plans")])
+          keyboard([btn("🔙 Voltar aos Planos", "admin:plans", undefined, EMOJI.BACK)])
         );
         return;
       }
