@@ -3742,6 +3742,13 @@ class BotHandler {
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, usedModule, queryInput, result, fromCache);
 
+      // Footer "Consulta solicitada por"
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const userName = telegramUserName || 'Usuário';
+      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${userName}\n├ 📝 ID: ${telegramUserId}\n└ 🕐 ${dateStr}, ${timeStr}`;
+
       // Verificar se é resultado de CEP ou TELEFONE com múltiplos registros
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
       if ((usedModule === 'cep' || usedModule === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr)) {
