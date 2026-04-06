@@ -1181,7 +1181,12 @@ async function sendLongMessagePaginated(
   // Dividir em páginas
   const pages = splitIntoPages(text, MAX_LENGTH);
   
-  // Criar registro no banco
+  // Criar registro no banco com metadata para preservar botões ao paginar
+  const paginationMetadata: Record<string, unknown> = {};
+  if (queryType) paginationMetadata.queryType = queryType;
+  if (queryInput) paginationMetadata.queryInput = queryInput;
+  if (extraButtons && extraButtons.length > 0) paginationMetadata.extraButtons = extraButtons;
+
   const { data: paginationData, error } = await supabase
     .from("paginated_results")
     .insert({
@@ -1189,6 +1194,7 @@ async function sendLongMessagePaginated(
       pages: pages,
       current_page: 0,
       total_pages: pages.length,
+      metadata: paginationMetadata,
     })
     .select("id")
     .single();
@@ -3135,7 +3141,7 @@ class BotHandler {
 
       // Detectar UF do resultado para botão "Consultar Foto"
       const isPhotoQuery = queryType.toLowerCase().startsWith('foto') || queryType.toLowerCase() === 'nacional';
-      const detectedUf = !isPhotoQuery ? extractUfFromResult(result) : null;
+      const detectedUf = !isPhotoQuery ? extractUfFromResult((result as Record<string, unknown>).data ?? result) : null;
       const isCpfBased = /^\d{11}$/.test(queryInput.replace(/\D/g, ''));
       const showFotoButton = detectedUf && isCpfBased && ufToFotoModule[detectedUf];
 
@@ -5497,12 +5503,23 @@ class BotHandler {
       .update({ current_page: targetPage })
       .eq("id", paginationId);
 
-    // Criar keyboard de navegação (sem PDF pois não temos queryType/queryInput salvos)
-    const keyboard = createPaginationKeyboard(paginationId, targetPage, totalPages);
+    // Recuperar metadata salvos (queryType, queryInput, extraButtons)
+    const meta = (paginationData as Record<string, unknown>).metadata as Record<string, unknown> | null;
+    const savedQueryType = meta?.queryType as string | undefined;
+    const savedQueryInput = meta?.queryInput as string | undefined;
+    const savedExtraButtons = meta?.extraButtons as InlineButton[][] | undefined;
+
+    // Criar keyboard de navegação COM botões de PDF/TXT/Foto preservados
+    const navKeyboard = createPaginationKeyboard(paginationId, targetPage, totalPages, savedQueryType, savedQueryInput);
+    
+    // Adicionar extraButtons (ex: Consultar Foto) ao teclado
+    if (savedExtraButtons && savedExtraButtons.length > 0) {
+      navKeyboard.inline_keyboard.push(...savedExtraButtons);
+    }
 
     // Atualizar mensagem
     const pageHeader = `📄 <b>Página ${targetPage + 1}/${totalPages}</b>\n\n`;
-    await editMessage(this.token, chatId, messageId, pageHeader + pages[targetPage], keyboard);
+    await editMessage(this.token, chatId, messageId, pageHeader + pages[targetPage], navKeyboard);
   }
 
   // Handler para paginação de múltiplos registros (CEP ou Telefone)
