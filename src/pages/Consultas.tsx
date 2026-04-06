@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   CreditCard,
   Search,
@@ -13,6 +13,14 @@ import {
   Loader2,
   Star,
   AlertCircle,
+  Shield,
+  Hash,
+  Fingerprint,
+  Scale,
+  Heart,
+  Users,
+  Wallet,
+  Cog,
 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -40,26 +48,37 @@ import { MotionPage, MotionFadeIn } from "@/components/ui/motion";
 interface QueryResult {
   success: boolean;
   data: any;
-  duration_ms: number;
-  fromCache?: boolean;
+  meta?: {
+    request_id: string;
+    modulo: string;
+    channel: string;
+    duration_ms: number;
+    provider_duration_ms: number;
+    internal_duration_ms: number;
+    status: string;
+  };
+  errors?: string[];
+  // Legacy fields for backwards compat
+  duration_ms?: number;
 }
 
-const queryTypes = [
-  { value: "cpf", label: "CPF", icon: User, provider: "NexFuture" },
-  { value: "cnpj", label: "CNPJ", icon: Building2, provider: "NexFuture" },
-  { value: "placa", label: "Placa (Básica)", icon: Car, provider: "NexFuture" },
-  { value: "placa_completa", label: "Placa Completa", icon: Car, provider: "TConect" },
-  { value: "telefone", label: "Telefone", icon: Phone, provider: "NexFuture" },
-  { value: "email", label: "Email", icon: Mail, provider: "NexFuture" },
-  { value: "cep", label: "CEP", icon: MapPin, provider: "NexFuture" },
-  { value: "nome", label: "Nome", icon: User, provider: "NexFuture" },
-  { value: "score", label: "Score de Crédito", icon: Star, provider: "TConect" },
-  { value: "foto", label: "Foto por Estado", icon: Camera, provider: "TConect Foto" },
-  { value: "nacional", label: "Foto Nacional", icon: Camera, provider: "TConect Foto" },
-  { value: "rg", label: "RG", icon: FileText, provider: "NexFuture" },
-  { value: "cnh", label: "CNH", icon: FileText, provider: "NexFuture" },
-  { value: "pix", label: "PIX", icon: CreditCard, provider: "NexFuture" },
-];
+interface QueryModule {
+  module_key: string;
+  label: string;
+  icon: string;
+  category: string;
+  enabled: boolean;
+  provider: string;
+}
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  "👤": User, "🏢": Building2, "🚗": Car, "📞": Phone, "📧": Mail,
+  "📍": MapPin, "📸": Camera, "📝": FileText, "📊": Star, "🪪": Fingerprint,
+  "💳": CreditCard, "📜": FileText, "💰": Wallet, "⚖️": Scale, "🔍": Search,
+  "🔎": Search, "🗳️": FileText, "👩": Users, "💎": Star, "🏥": Heart,
+  "📋": FileText, "👨‍👩‍👧‍👦": Users, "🔧": Cog, "⚙️": Cog, "🇧🇷": Camera,
+  "🛡️": Shield, "📦": Hash,
+};
 
 const brazilianStates = [
   "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
@@ -67,7 +86,22 @@ const brazilianStates = [
   "RS", "RO", "RR", "SC", "SP", "SE", "TO"
 ];
 
+// Fallback modules if DB load fails
+const fallbackModules: QueryModule[] = [
+  { module_key: "cpf", label: "CPF", icon: "👤", category: "pessoa", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "cpffull", label: "CPF Full", icon: "👤", category: "pessoa", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "nome", label: "Nome", icon: "📝", category: "pessoa", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "placa", label: "Placa", icon: "🚗", category: "veiculo", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "telefone", label: "Telefone", icon: "📞", category: "contato", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "email", label: "Email", icon: "📧", category: "contato", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "cep", label: "CEP", icon: "📍", category: "contato", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "foto", label: "Foto por Estado", icon: "📸", category: "foto", enabled: true, provider: "VeiculosAPI" },
+  { module_key: "nacional", label: "Foto Nacional", icon: "🇧🇷", category: "foto", enabled: true, provider: "VeiculosAPI" },
+];
+
 export default function Consultas() {
+  const [modules, setModules] = useState<QueryModule[]>([]);
+  const [loadingModules, setLoadingModules] = useState(true);
   const [selectedType, setSelectedType] = useState("cpf");
   const [queryInput, setQueryInput] = useState("");
   const [cleanQueryInput, setCleanQueryInput] = useState("");
@@ -78,6 +112,30 @@ export default function Consultas() {
   const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // Load modules from DB
+  useEffect(() => {
+    const loadModules = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("query_modules")
+          .select("module_key, label, icon, category, enabled, provider")
+          .order("category")
+          .order("label");
+
+        if (error || !data || data.length === 0) {
+          setModules(fallbackModules);
+        } else {
+          setModules(data.filter(m => m.enabled) as QueryModule[]);
+        }
+      } catch {
+        setModules(fallbackModules);
+      } finally {
+        setLoadingModules(false);
+      }
+    };
+    loadModules();
+  }, []);
+
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleInputChange = useCallback((value: string, cleanValue: string, isValid: boolean) => {
@@ -86,12 +144,11 @@ export default function Consultas() {
     setIsInputValid(isValid);
   }, []);
 
-  const textModules = ["nome", "mae", "endereco", "email", "pix"];
+  const textModules = ["nome", "nomefull", "nome-3", "mae", "maefull", "endereco", "email", "emailfull", "email-3", "pix"];
   
   const handleHistorySelect = useCallback((type: string, input: string) => {
     setSelectedType(type);
     setQueryInput(input);
-    // For text-based modules, preserve the original input (letters, spaces)
     const clean = textModules.includes(type) ? input.trim() : (input.replace(/\D/g, '') || input);
     setCleanQueryInput(clean);
     setIsInputValid(true);
@@ -103,7 +160,6 @@ export default function Consultas() {
     const message = String(e?.message || "");
     const contextMessage = String(e?.context?.message || e?.context?.value?.message || "");
     const combined = `${name} ${message} ${contextMessage}`.toLowerCase();
-
     return (
       name === "FunctionsFetchError" ||
       combined.includes("failed to send a request to the edge function") ||
@@ -132,23 +188,20 @@ export default function Consultas() {
       queryType: selectedType,
       queryInput: inputToQuery,
       estado: selectedType === "foto" ? selectedState : undefined,
+      channel: "admin_panel",
     };
 
-    // Fallback direto via fetch caso supabase.functions.invoke falhe
     const directFetch = async (): Promise<QueryResult | null> => {
-      const EDGE_URL = "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/api-query";
+      const EDGE_URL = `https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/api-query`;
       try {
         const response = await fetch(EDGE_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(requestBody),
         });
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return await response.json();
-      } catch (err) {
-        console.error("Direct fetch fallback error:", err);
+      } catch {
         return null;
       }
     };
@@ -156,8 +209,8 @@ export default function Consultas() {
     try {
       const maxRetries = 1;
       const retryDelayMs = 800;
-
       let lastError: any = null;
+
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
         const { data, error } = await supabase.functions.invoke("api-query", {
           body: requestBody,
@@ -165,22 +218,26 @@ export default function Consultas() {
 
         if (!error) {
           setResult(data as QueryResult);
+          const d = data as QueryResult;
+          const durationMs = d.meta?.duration_ms || d.duration_ms || 0;
+          const providerMs = d.meta?.provider_duration_ms;
 
-          if (data?.success) {
+          if (d.success) {
             setShowConfetti(true);
-            if (navigator.vibrate) {
-              navigator.vibrate([100, 50, 100]);
-            }
-            toast.success(`Consulta realizada em ${data.duration_ms}ms`);
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            const timeInfo = providerMs !== undefined
+              ? `${durationMs}ms (provedor: ${providerMs}ms)`
+              : `${durationMs}ms`;
+            toast.success(`Consulta realizada em ${timeInfo}`);
           } else {
-            toast.error("Consulta retornou erro");
+            const errMsg = d.errors?.[0] || "Consulta retornou erro";
+            toast.error(errMsg);
           }
           return;
         }
 
         lastError = error;
 
-        // Se for erro de rede, tenta fallback direto
         if (isNetworkBlockedError(error)) {
           if (attempt < maxRetries) {
             toast.message("Falha de conexão — tentando novamente...");
@@ -188,25 +245,20 @@ export default function Consultas() {
             continue;
           }
 
-          // Última tentativa: fallback com fetch direto
           toast.message("Tentando conexão alternativa...");
           const fallbackResult = await directFetch();
-          
           if (fallbackResult) {
             setResult(fallbackResult);
             if (fallbackResult.success) {
               setShowConfetti(true);
-              if (navigator.vibrate) {
-                navigator.vibrate([100, 50, 100]);
-              }
-              toast.success(`Consulta realizada em ${fallbackResult.duration_ms}ms (via fallback)`);
+              if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+              toast.success(`Consulta realizada (via fallback)`);
             } else {
-              toast.error("Consulta retornou erro");
+              toast.error(fallbackResult.errors?.[0] || "Consulta retornou erro");
             }
             return;
           }
 
-          // Fallback também falhou
           setNetworkBlockedHint(
             "Uma extensão do navegador (VPN/AdBlock/Proxy) ou firewall pode estar bloqueando a requisição. Teste em aba anônima ou desative extensões temporariamente.",
           );
@@ -214,22 +266,18 @@ export default function Consultas() {
           return;
         }
 
-        console.error("Query error:", error);
         toast.error("Erro na consulta: " + (error.message || "Erro desconhecido"));
         return;
       }
 
       if (lastError) throw lastError;
     } catch (err) {
-      console.error("Fetch error:", err);
-      
-      // Tenta fallback mesmo no catch
       const fallbackResult = await directFetch();
       if (fallbackResult) {
         setResult(fallbackResult);
         if (fallbackResult.success) {
           setShowConfetti(true);
-          toast.success(`Consulta realizada em ${fallbackResult.duration_ms}ms (via fallback)`);
+          toast.success(`Consulta realizada (via fallback)`);
         }
         return;
       }
@@ -247,7 +295,11 @@ export default function Consultas() {
     }
   };
 
-  const selectedQueryType = queryTypes.find(q => q.value === selectedType);
+  const selectedModule = modules.find(m => m.module_key === selectedType);
+  const durationMs = result?.meta?.duration_ms || result?.duration_ms || 0;
+  const providerMs = result?.meta?.provider_duration_ms;
+  const internalMs = result?.meta?.internal_duration_ms;
+  const requestId = result?.meta?.request_id;
 
   return (
     <DashboardLayout>
@@ -264,7 +316,7 @@ export default function Consultas() {
         <div>
           <h1 className="text-2xl font-bold">Consultas</h1>
           <p className="text-muted-foreground">
-            Sistema integrado de consulta de dados via APIs
+            Sistema integrado de consulta de dados via API
           </p>
         </div>
 
@@ -279,32 +331,42 @@ export default function Consultas() {
                     Nova Consulta
                   </CardTitle>
                   <CardDescription>
-                    Selecione o tipo de consulta e insira os dados
+                    Selecione o módulo exato e insira os dados
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {/* Query Type Selection */}
+                  {/* Module Selection */}
                   <div className="space-y-2">
-                    <Label>Tipo de Consulta</Label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                      {queryTypes.map((type) => (
-                        <button
-                          key={type.value}
-                          onClick={() => setSelectedType(type.value)}
-                          className={`flex items-center gap-2 p-3 rounded-lg border transition-all text-left ${
-                            selectedType === type.value
-                              ? "border-primary bg-primary/10 text-primary"
-                              : "border-border bg-secondary/20 hover:border-primary/50"
-                          }`}
-                        >
-                          <type.icon className="h-4 w-4 shrink-0" />
-                          <div className="min-w-0">
-                            <p className="font-medium text-sm truncate">{type.label}</p>
-                            <p className="text-xs text-muted-foreground truncate">{type.provider}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
+                    <Label>Módulo de Consulta</Label>
+                    {loadingModules ? (
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Carregando módulos...
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-[400px] overflow-y-auto pr-1">
+                        {modules.map((mod) => {
+                          const IconComp = iconMap[mod.icon] || FileText;
+                          return (
+                            <button
+                              key={mod.module_key}
+                              onClick={() => setSelectedType(mod.module_key)}
+                              className={`flex items-center gap-2 p-3 rounded-lg border transition-all text-left ${
+                                selectedType === mod.module_key
+                                  ? "border-primary bg-primary/10 text-primary"
+                                  : "border-border bg-secondary/20 hover:border-primary/50"
+                              }`}
+                            >
+                              <IconComp className="h-4 w-4 shrink-0" />
+                              <div className="min-w-0">
+                                <p className="font-medium text-sm truncate">{mod.label}</p>
+                                <p className="text-xs text-muted-foreground truncate">{mod.category}</p>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
 
                   {/* Input Field */}
@@ -379,14 +441,35 @@ export default function Consultas() {
                     <div className="flex items-center justify-between">
                       <CardTitle>Resultado</CardTitle>
                       <Badge variant={result.success ? "default" : "destructive"}>
-                        {result.success ? "Sucesso" : "Erro"}
+                        {result.meta?.status || (result.success ? "Sucesso" : "Erro")}
                       </Badge>
                     </div>
-                    <CardDescription>
-                      Consulta realizada em {result.duration_ms}ms
+                    <CardDescription className="space-y-1">
+                      <div className="flex flex-wrap gap-3 text-xs">
+                        <span>⏱️ Total: <b>{durationMs}ms</b></span>
+                        {providerMs !== undefined && (
+                          <span>🌐 Provedor: <b>{providerMs}ms</b></span>
+                        )}
+                        {internalMs !== undefined && (
+                          <span>⚙️ Interno: <b>{internalMs}ms</b></span>
+                        )}
+                      </div>
+                      {requestId && (
+                        <p className="text-xs text-muted-foreground font-mono">
+                          ID: {requestId.substring(0, 8)}...
+                        </p>
+                      )}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
+                    {result.errors && result.errors.length > 0 && !result.success && (
+                      <Alert variant="destructive" className="mb-4">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>
+                          {result.errors.join(". ")}
+                        </AlertDescription>
+                      </Alert>
+                    )}
                     <ResultDisplay result={result.data} showCopyButton={true} />
                   </CardContent>
                 </Card>
@@ -396,13 +479,12 @@ export default function Consultas() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-
             {/* Providers Status */}
             <MotionFadeIn delay={0.2}>
               <ProviderStatusList />
             </MotionFadeIn>
 
-            {/* Recent Queries - Persistent from Database */}
+            {/* Recent Queries */}
             <MotionFadeIn delay={0.3}>
               <QueryHistoryList onSelectQuery={handleHistorySelect} />
             </MotionFadeIn>
@@ -414,11 +496,13 @@ export default function Consultas() {
                   <CardTitle className="text-lg">Dicas</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <p>• CPF: Digite apenas números (11 dígitos)</p>
-                  <p>• CNPJ: Digite apenas números (14 dígitos)</p>
-                  <p>• Placa: Formato ABC1234 ou ABC1D23</p>
-                  <p>• Telefone: DDD + número (11 dígitos)</p>
-                  <p>• CEP: Digite apenas números (8 dígitos)</p>
+                  <p>• <b>CPF:</b> apenas números (11 dígitos)</p>
+                  <p>• <b>CNPJ:</b> apenas números (14 dígitos)</p>
+                  <p>• <b>Placa:</b> formato ABC1234 ou ABC1D23</p>
+                  <p>• <b>Telefone:</b> DDD + número (10-11 dígitos)</p>
+                  <p>• <b>CEP:</b> apenas números (8 dígitos)</p>
+                  <p>• O módulo executado é <b>exatamente</b> o selecionado</p>
+                  <p>• Resultados incluem métricas de tempo</p>
                 </CardContent>
               </Card>
             </MotionFadeIn>

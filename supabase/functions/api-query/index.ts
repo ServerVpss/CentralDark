@@ -6,165 +6,197 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-interface QueryRequest {
-  queryType: string;
-  queryInput: string;
-  provider?: string;
-  estado?: string;
-}
-
-// =============== VEICULOS API PROVIDER ===============
-const VEICULOS_API_BASE = "https://veiculosapi.com/api/proxy";
-
-// Map internal query types to VeiculosAPI module names
-const veiculosModuleMap: Record<string, string> = {
+// =============== WHITELIST EXATA DOS MÓDULOS ===============
+// Cada nome é enviado EXATAMENTE como está para a API externa.
+// Sem tradução, sem remapeamento, sem fallback entre módulos.
+const MODULE_WHITELIST = new Set([
   // Pessoa
-  cpf: "cpffull",
-  nome: "nomefull",
-  rg: "rg",
-  titulo: "titulo",
-  parentes: "parentes",
-  mae: "mae",
-  // Documentos alternativos
-  cnh: "cnh",
-  pis: "pis",
+  "cpf", "cpffull", "cpf-isk", "nome", "nomefull", "rg", "titulo",
+  "parentes", "mae", "maefull", "cnh", "pis",
   // Contato
-  telefone: "telefonefull",
-  email: "emailfull",
-  cep: "cepfull",
-  endereco: "endereco",
+  "telefone", "telefonefull", "email", "emailfull",
+  "cep", "cepfull", "endereco",
   // Financeiro
-  pix: "pix",
-  score: "score",
-  renda: "renda",
-  credilink: "credilink",
-  cpf_spc: "cpf-spc",
-  poderaquisitivo: "poderaquisitivo",
+  "pix", "score", "renda", "credilink", "cpf-spc", "poderaquisitivo",
   // Veículos
-  placa: "placa",
-  placa_completa: "placa-serpro",
-  placa_simples: "placa-simples",
-  placa_sesp: "placa-sesp",
-  chassi: "chassi",
-  renavam: "renavam",
-  motor: "motor",
+  "placa", "placa-serpro", "placa-simples", "placa-sesp",
+  "chassi", "renavam", "motor",
   // Empresa
-  cnpj: "cnpj-cred",
+  "cnpj-cred",
   // Justiça
-  processos: "processos",
-  bnmp: "bnmp-lc",
-  siel: "siel",
+  "processos", "bnmp-lc", "siel",
   // TSE
-  tse: "tse-3",
+  "tse-3",
   // SUS
-  cpfsus: "cpfsus",
-  // Alternativas (variantes -3)
-  rg3: "rg-3",
-  pis3: "pis-3",
-  cep3: "cep-3",
-  email3: "email-3",
-  nome3: "nome-3",
-  score3: "score-3",
-  parentes3: "parentes-3",
-  telefone3: "telefone-3",
-  // CPF variantes
-  cpf_isk: "cpf-isk",
-  cpf_basico: "cpf",
+  "cpfsus",
+  // Variantes -3
+  "rg-3", "pis-3", "cep-3", "email-3", "nome-3",
+  "score-3", "parentes-3", "telefone-3",
   // Foto por estado
-  fotomg: "fotomg",
-  fotosp: "fotosp",
-  fotorj: "fotorj",
-  fotoba: "fotoba",
-  fotoce: "fotoce",
-  fotogo: "fotogo",
-  fotopr: "fotopr",
-  fotors: "fotors",
-  fotope: "fotope",
-  fotoma: "fotoma",
-  fotoes: "fotoes",
-  fotodf: "fotodf",
-  fototo: "fototo",
-};
+  "fotomg", "fotosp", "fotorj", "fotoba", "fotoce", "fotogo",
+  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf",
+  "fototo", "fotoms", "fotoro", "fotopi",
+]);
 
-// Foto state map for national search
-const fotoStateModules: Record<string, string> = {
-  MG: "fotomg", SP: "fotosp", RJ: "fotorj", BA: "fotoba",
+// Foto state modules for national search
+const FOTO_STATE_MODULES: Record<string, string> = {
+  SP: "fotosp", RJ: "fotorj", MG: "fotomg", BA: "fotoba",
   CE: "fotoce", GO: "fotogo", PR: "fotopr", RS: "fotors",
   PE: "fotope", MA: "fotoma", ES: "fotoes", DF: "fotodf",
-  TO: "fototo",
+  TO: "fototo", MS: "fotoms", RO: "fotoro", PI: "fotopi",
 };
+const FOTO_STATE_PRIORITY = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO", "MS", "RO", "PI"];
 
-// Priority order for national photo search
-const fotoStatePriority = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO"];
+// Módulos virtuais que não vão direto para a API (são compostos)
+const VIRTUAL_MODULES = new Set(["foto", "nacional"]);
 
-
-// All supported query types for GET help
-const allSupportedTypes = Object.keys(veiculosModuleMap).concat(["foto", "nacional"]);
-
-// Dynamic module loading from DB
-interface DbModule {
-  module_key: string;
-  enabled: boolean;
-  base_url: string;
-  port: number;
-  endpoint: string;
-  query_param: string;
-  provider: string;
-}
-
-let cachedModules: DbModule[] | null = null;
-let cacheTimestamp = 0;
-const MODULE_CACHE_TTL = 60_000;
-
-async function getModules(supabase: ReturnType<typeof createClient>): Promise<DbModule[]> {
-  const now = Date.now();
-  if (cachedModules && (now - cacheTimestamp) < MODULE_CACHE_TTL) {
-    return cachedModules;
-  }
-  try {
-    const { data, error } = await supabase
-      .from("query_modules")
-      .select("module_key, enabled, base_url, port, endpoint, query_param, provider");
-    if (error) {
-      // Table may not exist — silently use empty/cached list
-      return cachedModules || [];
-    }
-    cachedModules = (data || []) as DbModule[];
-    cacheTimestamp = now;
-    return cachedModules;
-  } catch {
-    return cachedModules || [];
-  }
-}
-
-
-// Módulos que demoram mais e precisam de timeout estendido (2 min)
-const slowModules = [
+// =============== TIMEOUT POR MÓDULO ===============
+const SLOW_MODULES = new Set([
   "placa", "placa-serpro", "placa-simples", "placa-sesp",
   "processos", "bnmp-lc", "siel", "credilink", "cpf-spc",
   "fotomg", "fotosp", "fotorj", "fotoba", "fotoce", "fotogo",
-  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf", "fototo",
+  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf",
+  "fototo", "fotoms", "fotoro", "fotopi",
   "score", "score-3", "tse-3", "poderaquisitivo",
-];
+]);
 
 function getModuleTimeout(modulo: string): number {
-  return slowModules.includes(modulo) ? 120_000 : 45_000;
+  return SLOW_MODULES.has(modulo) ? 120_000 : 45_000;
 }
 
-// =============== VEICULOS API FETCH ===============
-async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Record<string, unknown>> {
+// =============== VALIDAÇÃO DE ENTRADA ===============
+const TEXT_MODULES = new Set(["nome", "nomefull", "nome-3", "mae", "maefull", "endereco", "email", "emailfull", "email-3", "pix"]);
+
+const NUMERIC_MODULES = new Set([
+  "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
+  "rg", "rg-3", "titulo", "cnh", "pis", "pis-3",
+  "telefone", "telefonefull", "telefone-3",
+  "cep", "cepfull", "cep-3",
+  "score", "score-3", "renda", "credilink", "poderaquisitivo",
+  "parentes", "parentes-3",
+  "renavam", "cnpj-cred",
+  "fotomg", "fotosp", "fotorj", "fotoba", "fotoce", "fotogo",
+  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf",
+  "fototo", "fotoms", "fotoro", "fotopi",
+]);
+
+function cleanQueryValue(modulo: string, input: string): string {
+  if (TEXT_MODULES.has(modulo)) return input.trim();
+  if (NUMERIC_MODULES.has(modulo)) return input.replace(/\D/g, "").trim();
+  // placa, chassi, motor — alfanumérico
+  return input.replace(/[^\w]/g, "").trim();
+}
+
+interface ValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
+function validateInput(modulo: string, value: string): ValidationResult {
+  const clean = cleanQueryValue(modulo, value);
+  if (!clean || clean.length === 0) {
+    return { valid: false, error: "Valor não pode ser vazio." };
+  }
+
+  // CPF variants
+  if (["cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus", "score", "score-3", "renda",
+       "credilink", "poderaquisitivo", "parentes", "parentes-3", "processos",
+       "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull"].includes(modulo) ||
+      modulo.startsWith("foto")) {
+    if (!/^\d{11}$/.test(clean)) {
+      return { valid: false, error: "CPF deve conter exatamente 11 dígitos." };
+    }
+  }
+
+  if (modulo === "cnpj-cred") {
+    if (!/^\d{14}$/.test(clean)) {
+      return { valid: false, error: "CNPJ deve conter exatamente 14 dígitos." };
+    }
+  }
+
+  if (["placa", "placa-serpro", "placa-simples", "placa-sesp"].includes(modulo)) {
+    if (!/^[A-Z0-9]{7}$/i.test(clean)) {
+      return { valid: false, error: "Placa deve conter 7 caracteres alfanuméricos." };
+    }
+  }
+
+  if (["cep", "cepfull", "cep-3"].includes(modulo)) {
+    if (!/^\d{8}$/.test(clean)) {
+      return { valid: false, error: "CEP deve conter exatamente 8 dígitos." };
+    }
+  }
+
+  if (["telefone", "telefonefull", "telefone-3"].includes(modulo)) {
+    if (!/^\d{10,11}$/.test(clean)) {
+      return { valid: false, error: "Telefone deve conter 10 ou 11 dígitos (DDD + número)." };
+    }
+  }
+
+  if (["email", "emailfull", "email-3"].includes(modulo)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) {
+      return { valid: false, error: "Formato de email inválido." };
+    }
+  }
+
+  if (["nome", "nomefull", "nome-3"].includes(modulo)) {
+    if (clean.length < 3) {
+      return { valid: false, error: "Nome deve ter pelo menos 3 caracteres." };
+    }
+  }
+
+  if (["rg", "rg-3"].includes(modulo)) {
+    if (!/^\d{5,12}$/.test(clean)) {
+      return { valid: false, error: "RG deve conter entre 5 e 12 dígitos." };
+    }
+  }
+
+  if (["pis", "pis-3"].includes(modulo)) {
+    if (!/^\d{11}$/.test(clean)) {
+      return { valid: false, error: "PIS deve conter 11 dígitos." };
+    }
+  }
+
+  if (modulo === "cnh") {
+    if (!/^\d{11}$/.test(clean)) {
+      return { valid: false, error: "CNH deve conter 11 dígitos." };
+    }
+  }
+
+  if (modulo === "renavam") {
+    if (!/^\d{9,11}$/.test(clean)) {
+      return { valid: false, error: "RENAVAM deve conter entre 9 e 11 dígitos." };
+    }
+  }
+
+  return { valid: true };
+}
+
+// =============== VEÍCULOS API ===============
+const VEICULOS_API_BASE = "https://veiculosapi.com/api/proxy";
+
+interface ProviderResult {
+  data: Record<string, unknown>;
+  provider_duration_ms: number;
+  retried: boolean;
+}
+
+async function fetchFromProvider(modulo: string, valor: string, retry = false): Promise<ProviderResult> {
   const apiKey = Deno.env.get("CONSULTAS_API_KEY");
   if (!apiKey) {
-    console.error("CONSULTAS_API_KEY not configured!");
-    return { error: "⚠️ Chave de API não configurada. Contate o administrador." };
+    return {
+      data: { error: "⚠️ Chave de API não configurada. Contate o administrador." },
+      provider_duration_ms: 0,
+      retried: false,
+    };
   }
 
   const timeoutMs = getModuleTimeout(modulo);
   const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(modulo)}&string=${encodeURIComponent(valor)}`;
-  console.log(`[VeiculosAPI] Fetching: modulo=${modulo}, valor=${valor}, timeout=${timeoutMs / 1000}s`);
+  console.log(`[Provider] modulo=${modulo}, timeout=${timeoutMs / 1000}s${retry ? " (retry)" : ""}`);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  const providerStart = Date.now();
 
   try {
     const response = await fetch(url, {
@@ -173,130 +205,67 @@ async function fetchFromVeiculosApi(modulo: string, valor: string): Promise<Reco
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
+    const provider_duration_ms = Date.now() - providerStart;
 
     if (response.status === 404) {
-      console.log(`[VeiculosAPI] Not found (404) for modulo=${modulo}`);
-      return { notFound: true, message: "Dados não encontrados" };
+      return { data: { notFound: true, message: "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
     if (!response.ok) {
-      console.error(`[VeiculosAPI] HTTP error: ${response.status}`);
-      return { error: `Erro na API: ${response.status}` };
+      // Retry for 5xx
+      if (!retry && response.status >= 500) {
+        console.log(`[Provider] 5xx (${response.status}), retrying in 2s...`);
+        await new Promise(r => setTimeout(r, 2000));
+        return fetchFromProvider(modulo, valor, true);
+      }
+      return { data: { error: `Erro na API: ${response.status}` }, provider_duration_ms, retried: retry };
     }
 
     const contentType = response.headers.get("content-type") || "";
-    
-    // If response is text/html or plain text, return as data string
     if (!contentType.includes("application/json")) {
       const text = await response.text();
       if (!text || text.trim().length === 0) {
-        return { notFound: true, message: "Dados não encontrados" };
+        return { data: { notFound: true, message: "Dados não encontrados" }, provider_duration_ms, retried: retry };
       }
-      return { data: text, modulo };
+      return { data: { data: text, modulo }, provider_duration_ms, retried: retry };
     }
 
     const data = await response.json();
-    
-    // Check for empty/error responses
     if (data === null || data === undefined) {
-      return { notFound: true, message: "Dados não encontrados" };
+      return { data: { notFound: true, message: "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
-    
-    // Some modules return { error: ... } or { status: "error" }
     if (data.error || data.status === "error") {
-      return { notFound: true, message: data.error || data.message || "Dados não encontrados" };
+      return { data: { notFound: true, message: data.error || data.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
-    return { ...data, modulo };
+    return { data: { ...data, modulo }, provider_duration_ms, retried: retry };
   } catch (err) {
     clearTimeout(timeoutId);
     const error = err as Error;
-    console.error(`[VeiculosAPI] Error:`, error.message);
+    const provider_duration_ms = Date.now() - providerStart;
+
     if (error.name === "AbortError") {
-      return { error: "⏱️ Tempo limite excedido. Tente novamente." };
+      // Retry once for timeout
+      if (!retry) {
+        console.log(`[Provider] Timeout, retrying in 2s...`);
+        await new Promise(r => setTimeout(r, 2000));
+        return fetchFromProvider(modulo, valor, true);
+      }
+      return { data: { error: "⏱️ Tempo limite excedido. Tente novamente." }, provider_duration_ms, retried: true };
     }
-    return { error: "⚠️ Erro de conexão. Tente novamente." };
-  }
-}
 
-// =============== LEGACY PROVIDER FETCH (fallback) ===============
-interface ApiProvider {
-  baseUrl: string;
-  port: number;
-}
-
-async function fetchFromProvider(
-  provider: ApiProvider,
-  endpoint: string,
-  queryParam: string,
-  queryValue: string,
-  additionalParams?: Record<string, string>
-): Promise<Record<string, unknown>> {
-  const url = new URL(`${provider.baseUrl}:${provider.port}${endpoint}`);
-  url.searchParams.set(queryParam, queryValue);
-  if (additionalParams) {
-    Object.entries(additionalParams).forEach(([key, value]) => {
-      url.searchParams.set(key, value);
-    });
-  }
-
-  console.log(`[Legacy] Fetching from: ${url.toString()}`);
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 25000);
-
-  try {
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: { "Accept": "application/json" },
-      signal: controller.signal,
-    });
-
-    if (response.status === 404) return { notFound: true, message: "Dados não encontrados" };
-    if (!response.ok) return { error: `Erro na API: ${response.status}`, status: response.status };
-
-    const data = await response.json();
-    clearTimeout(timeoutId);
-    return data;
-  } catch (err) {
-    clearTimeout(timeoutId);
-    const error = err as Error;
-    if (error.name === "AbortError") return { error: "⏱️ Tempo limite excedido." };
-    if (error.message.includes('Connection refused') || error.message.includes('connect error') || error.message.includes('tcp connect')) {
-      return { error: "⚠️ Servidor temporariamente indisponível." };
+    if (error.message?.includes("Connection refused") || error.message?.includes("connect error") || error.message?.includes("tcp connect")) {
+      return { data: { error: "⚠️ Servidor temporariamente indisponível." }, provider_duration_ms, retried: retry };
     }
-    return { error: "⚠️ Erro de conexão." };
+
+    return { data: { error: "⚠️ Erro de conexão. Tente novamente." }, provider_duration_ms, retried: retry };
   }
 }
 
-// Text-based modules that accept letters and spaces
-const textBasedModules = ["nome", "nomefull", "mae", "maefull", "endereco", "email", "emailfull", "pix"];
-
-function cleanQueryValue(queryType: string, input: string): string {
-  const normalizedType = queryType.toLowerCase();
-  // For text modules, only trim — preserve letters and spaces
-  if (textBasedModules.includes(normalizedType)) {
-    return input.trim();
-  }
-  // Numeric modules — strip everything except digits
-  const numericModules = [
-    "cpf", "cpffull", "cpf2", "cnpj", "cnpjfull", "cep", "telefone", "telefonefull",
-    "rg", "titulo", "cnh", "nismulher", "renavam", "chassi",
-    "foto", "fotosp", "fotorj", "fotomg", "fotoba", "fotopr", "fotors", "fotosc",
-    "fotogo", "fotope", "fotoce", "fotopa", "fotoma", "fotodf", "fotoes",
-    "score", "irpf", "sintegra", "ccf", "pis",
-  ];
-  if (numericModules.includes(normalizedType)) {
-    return input.replace(/\D/g, "").trim();
-  }
-  // For everything else (placa, etc.), keep alphanumeric only
-  return input.replace(/[^\w]/g, "").trim();
-}
-
-// Deep search for photo data in nested response
+// =============== FOTO: BUSCA PROFUNDA ===============
 function findPhotoInResponse(obj: unknown, depth = 0): string | null {
-  if (!obj || typeof obj !== 'object' || depth > 8) return null;
+  if (!obj || typeof obj !== "object" || depth > 8) return null;
 
-  // Handle arrays — check each element
   if (Array.isArray(obj)) {
     for (const item of obj) {
       const found = findPhotoInResponse(item, depth + 1);
@@ -306,32 +275,26 @@ function findPhotoInResponse(obj: unknown, depth = 0): string | null {
   }
 
   const record = obj as Record<string, unknown>;
-
-  // Check for error indicators first
   const errVal = record.err || record.error;
-  if (errVal && typeof errVal === 'string' && /n[aã]o encontrad/i.test(errVal)) return null;
+  if (errVal && typeof errVal === "string" && /n[aã]o encontrad/i.test(errVal)) return null;
 
-  // Direct base64/photo string fields
-  const photoKeys = ['foto', 'image', 'photo', 'fotoBase64', 'base64'];
+  const photoKeys = ["foto", "image", "photo", "fotoBase64", "base64"];
   for (const key of photoKeys) {
     const val = record[key];
-    if (val && typeof val === 'string' && val.length > 100) {
-      if (val.startsWith('/9j/') || val.startsWith('iVBOR')) return `data:image/jpeg;base64,${val}`;
-      if (val.startsWith('data:image/') || val.startsWith('http')) return val;
-      // Assume base64 if long enough
+    if (val && typeof val === "string" && val.length > 100) {
+      if (val.startsWith("/9j/") || val.startsWith("iVBOR")) return `data:image/jpeg;base64,${val}`;
+      if (val.startsWith("data:image/") || val.startsWith("http")) return val;
       return `data:image/jpeg;base64,${val}`;
     }
-    // Check if it's an object with base64 inside (e.g. { foto: { base64: "..." } })
-    if (val && typeof val === 'object') {
+    if (val && typeof val === "object") {
       const found = findPhotoInResponse(val, depth + 1);
       if (found) return found;
     }
   }
 
-  // Recurse into ALL keys (not just a whitelist) to find deeply nested photos
   for (const [key, val] of Object.entries(record)) {
-    if (photoKeys.includes(key)) continue; // already checked above
-    if (val && typeof val === 'object') {
+    if (photoKeys.includes(key)) continue;
+    if (val && typeof val === "object") {
       const found = findPhotoInResponse(val, depth + 1);
       if (found) return found;
     }
@@ -340,98 +303,235 @@ function findPhotoInResponse(obj: unknown, depth = 0): string | null {
   return null;
 }
 
+// =============== MODULE STATUS (DB) ===============
+let cachedModuleStatus: Record<string, boolean> | null = null;
+let moduleCacheTime = 0;
+const MODULE_CACHE_TTL = 60_000;
+
+async function isModuleEnabled(modulo: string, supabase: ReturnType<typeof createClient>): Promise<boolean> {
+  const now = Date.now();
+  if (!cachedModuleStatus || (now - moduleCacheTime) >= MODULE_CACHE_TTL) {
+    try {
+      const { data } = await supabase.from("query_modules").select("module_key, enabled");
+      if (data) {
+        cachedModuleStatus = {};
+        for (const row of data) {
+          cachedModuleStatus[row.module_key] = row.enabled ?? true;
+        }
+        moduleCacheTime = now;
+      }
+    } catch {
+      // fallback: allow if can't check
+    }
+  }
+  if (!cachedModuleStatus) return true;
+  if (!(modulo in cachedModuleStatus)) return true;
+  return cachedModuleStatus[modulo] === true;
+}
+
+// =============== INTERFACE ===============
+interface QueryRequest {
+  queryType: string;
+  queryInput: string;
+  estado?: string;
+  channel?: string; // "telegram" | "admin_panel"
+}
+
+interface StandardResponse {
+  success: boolean;
+  data: Record<string, unknown>;
+  meta: {
+    request_id: string;
+    modulo: string;
+    channel: string;
+    duration_ms: number;
+    provider_duration_ms: number;
+    internal_duration_ms: number;
+    status: string;
+  };
+  errors: string[];
+}
+
 // =============== HANDLE QUERY ===============
-async function handleQuery(req: QueryRequest, supabase: ReturnType<typeof createClient>): Promise<Record<string, unknown>> {
-  const { queryType, queryInput, estado } = req;
-  const normalizedType = queryType.toLowerCase();
-  const cleanInput = cleanQueryValue(normalizedType, queryInput);
+async function handleQuery(
+  req: QueryRequest,
+  supabase: ReturnType<typeof createClient>,
+  requestId: string,
+): Promise<StandardResponse> {
+  const startTime = Date.now();
+  const { queryType, queryInput, estado, channel } = req;
+  const modulo = queryType.toLowerCase().trim();
+  const channelName = channel || "unknown";
+  const errors: string[] = [];
 
-  console.log(`Processing query: type=${normalizedType}, input=${cleanInput}`);
-
-  // Load modules from DB for enable/disable check
-  const modules = await getModules(supabase);
-  const mod = modules.find(m => m.module_key === normalizedType);
-
-  // Check if disabled in DB
-  if (mod && !mod.enabled) {
+  // Build standard meta helper
+  const buildMeta = (status: string, providerMs = 0) => {
+    const now = Date.now();
     return {
-      module_disabled: true,
-      message: `🚫 Módulo "${normalizedType}" temporariamente desativado.`,
-      queryType: normalizedType,
-      queryInput: cleanInput,
+      request_id: requestId,
+      modulo,
+      channel: channelName,
+      duration_ms: now - startTime,
+      provider_duration_ms: providerMs,
+      internal_duration_ms: (now - startTime) - providerMs,
+      status,
+    };
+  };
+
+  // 1. Whitelist check
+  const isVirtual = VIRTUAL_MODULES.has(modulo);
+  if (!isVirtual && !MODULE_WHITELIST.has(modulo)) {
+    console.warn(`[Blocked] Module not in whitelist: ${modulo}`);
+    return {
+      success: false,
+      data: {},
+      meta: buildMeta("blocked"),
+      errors: [`Módulo "${modulo}" não é suportado. Verifique os módulos disponíveis.`],
     };
   }
 
-  // ---- FOTO: national search across state-specific modules (PARALLEL) ----
-  if (normalizedType === "nacional" || (normalizedType === "foto" && !estado)) {
-    console.log(`[Foto] Starting parallel national photo search (${fotoStatePriority.length} states)...`);
+  // 2. DB enable/disable check (for non-virtual modules)
+  if (!isVirtual) {
+    const enabled = await isModuleEnabled(modulo, supabase);
+    if (!enabled) {
+      return {
+        success: false,
+        data: { module_disabled: true },
+        meta: buildMeta("disabled"),
+        errors: [`Módulo "${modulo}" temporariamente desativado.`],
+      };
+    }
+  }
 
-    const promises = fotoStatePriority.map(async (state) => {
-      const fotoModulo = fotoStateModules[state];
+  // 3. Clean input
+  const cleanInput = isVirtual
+    ? queryInput.replace(/\D/g, "").trim()
+    : cleanQueryValue(modulo, queryInput);
+
+  // 4. Validate input
+  if (!isVirtual) {
+    const validation = validateInput(modulo, cleanInput);
+    if (!validation.valid) {
+      return {
+        success: false,
+        data: {},
+        meta: buildMeta("validation_error"),
+        errors: [validation.error || "Entrada inválida."],
+      };
+    }
+  } else {
+    // Virtual module (foto/nacional) — basic CPF validation
+    if (!/^\d{11}$/.test(cleanInput)) {
+      return {
+        success: false,
+        data: {},
+        meta: buildMeta("validation_error"),
+        errors: ["CPF deve conter exatamente 11 dígitos."],
+      };
+    }
+  }
+
+  // 5. Execute query
+
+  // ---- FOTO NACIONAL (paralelo) ----
+  if (modulo === "nacional" || (modulo === "foto" && !estado)) {
+    console.log(`[Foto Nacional] Buscando em ${FOTO_STATE_PRIORITY.length} estados...`);
+    let totalProviderMs = 0;
+
+    const promises = FOTO_STATE_PRIORITY.map(async (state) => {
+      const fotoModulo = FOTO_STATE_MODULES[state];
       if (!fotoModulo) return null;
-      const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
-      if (result && !result.error && !result.notFound) {
-        const fotoData = findPhotoInResponse(result);
+      const result = await fetchFromProvider(fotoModulo, cleanInput);
+      totalProviderMs = Math.max(totalProviderMs, result.provider_duration_ms);
+      if (result.data && !result.data.error && !result.data.notFound) {
+        const fotoData = findPhotoInResponse(result.data);
         if (fotoData) {
-          console.log(`[Foto] ✅ Photo found in ${state}`);
-          return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: state };
+          return { ...result.data, foto: fotoData, cpf: cleanInput, estado_encontrado: state };
         }
-        console.log(`[Foto] ${state}: response OK but no photo data`);
       }
       return null;
     });
 
     const results = await Promise.all(promises);
     for (const r of results) {
-      if (r) return r;
+      if (r) {
+        return {
+          success: true,
+          data: r,
+          meta: buildMeta("success", totalProviderMs),
+          errors: [],
+        };
+      }
     }
 
     return {
-      cpf: cleanInput, estados_encontrados: [], total_fotos: 0,
-      foto: null, message: "Foto não encontrada nos estados pesquisados",
-      notFound: true,
+      success: true,
+      data: { cpf: cleanInput, foto: null, message: "Foto não encontrada nos estados pesquisados", notFound: true },
+      meta: buildMeta("not_found", totalProviderMs),
+      errors: [],
     };
   }
 
-  // ---- FOTO: specific state ----
-  if (normalizedType === "foto" && estado) {
+  // ---- FOTO POR ESTADO ----
+  if (modulo === "foto" && estado) {
     const stateUpper = estado.toUpperCase();
-    const fotoModulo = fotoStateModules[stateUpper];
-    if (fotoModulo) {
-      const result = await fetchFromVeiculosApi(fotoModulo, cleanInput);
-      if (result && !result.error && !result.notFound) {
-        const fotoData = findPhotoInResponse(result);
-        if (fotoData) {
-          return { ...result, foto: fotoData, cpf: cleanInput, estado_encontrado: stateUpper };
-        }
-      }
+    const fotoModulo = FOTO_STATE_MODULES[stateUpper];
+    if (!fotoModulo) {
       return {
-        error: `📸 Foto não encontrada no estado ${stateUpper}`,
-        notFound: true,
+        success: false,
+        data: {},
+        meta: buildMeta("validation_error"),
+        errors: [`Estado "${stateUpper}" não disponível para consulta de foto.`],
       };
     }
-    // State not available in VeiculosAPI, try legacy TConect
-    const fotoMod = modules.find(m => m.module_key === "foto");
-    if (fotoMod) {
-      const provider: ApiProvider = { baseUrl: fotoMod.base_url, port: fotoMod.port };
-      return await fetchFromProvider(provider, fotoMod.endpoint, fotoMod.query_param || "cpf", cleanInput, { estado: stateUpper });
+
+    const result = await fetchFromProvider(fotoModulo, cleanInput);
+    if (result.data && !result.data.error && !result.data.notFound) {
+      const fotoData = findPhotoInResponse(result.data);
+      if (fotoData) {
+        return {
+          success: true,
+          data: { ...result.data, foto: fotoData, cpf: cleanInput, estado_encontrado: stateUpper },
+          meta: buildMeta("success", result.provider_duration_ms),
+          errors: [],
+        };
+      }
     }
-    return { error: `Estado ${stateUpper} não disponível para foto.`, notFound: true };
+    return {
+      success: true,
+      data: { cpf: cleanInput, foto: null, estado: stateUpper, notFound: true },
+      meta: buildMeta("not_found", result.provider_duration_ms),
+      errors: [`Foto não encontrada no estado ${stateUpper}`],
+    };
   }
 
-  // ---- Standard queries via VeiculosAPI ----
-  const veiculosModulo = veiculosModuleMap[normalizedType];
-  if (veiculosModulo) {
-    return await fetchFromVeiculosApi(veiculosModulo, cleanInput);
+  // ---- MÓDULO PADRÃO ----
+  const result = await fetchFromProvider(modulo, cleanInput);
+
+  if (result.data.error) {
+    return {
+      success: false,
+      data: result.data,
+      meta: buildMeta("error", result.provider_duration_ms),
+      errors: [String(result.data.error)],
+    };
   }
 
-  // ---- Fallback: try legacy DB-configured providers ----
-  if (mod) {
-    const provider: ApiProvider = { baseUrl: mod.base_url, port: mod.port };
-    return await fetchFromProvider(provider, mod.endpoint, mod.query_param, cleanInput);
+  if (result.data.notFound) {
+    return {
+      success: true,
+      data: result.data,
+      meta: buildMeta("not_found", result.provider_duration_ms),
+      errors: [],
+    };
   }
 
-  return { error: `Tipo de consulta não suportado: ${queryType}` };
+  return {
+    success: true,
+    data: result.data,
+    meta: buildMeta("success", result.provider_duration_ms),
+    errors: [],
+  };
 }
 
 // =============== MAIN HANDLER ===============
@@ -440,10 +540,12 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const requestId = crypto.randomUUID();
+
   try {
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
     let queryRequest: QueryRequest;
@@ -453,72 +555,103 @@ Deno.serve(async (req) => {
       const tipo = url.searchParams.get("tipo");
       const valor = url.searchParams.get("valor");
       const estado = url.searchParams.get("estado");
+      const channel = url.searchParams.get("channel");
 
       if (!tipo || !valor) {
         return new Response(
           JSON.stringify({
-            error: "Parâmetros 'tipo' e 'valor' são obrigatórios",
+            success: false,
+            errors: ["Parâmetros 'tipo' e 'valor' são obrigatórios"],
             exemplo: "?tipo=cpf&valor=12345678900",
-            tipos_disponiveis: allSupportedTypes,
+            modulos_disponiveis: [...MODULE_WHITELIST].sort(),
           }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
 
-      queryRequest = { queryType: tipo, queryInput: valor, estado: estado || undefined };
+      queryRequest = {
+        queryType: tipo,
+        queryInput: valor,
+        estado: estado || undefined,
+        channel: channel || "direct",
+      };
     } else {
-      queryRequest = await req.json();
+      const body = await req.json();
+      queryRequest = {
+        queryType: body.queryType,
+        queryInput: body.queryInput,
+        estado: body.estado,
+        channel: body.channel || "unknown",
+      };
     }
 
     if (!queryRequest.queryType || !queryRequest.queryInput) {
       return new Response(
-        JSON.stringify({ error: "queryType e queryInput são obrigatórios" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          success: false,
+          errors: ["queryType e queryInput são obrigatórios"],
+        }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
-    const startTime = Date.now();
+    const response = await handleQuery(queryRequest, supabase, requestId);
 
-    const result = await handleQuery(queryRequest, supabase);
-
-    const duration = Date.now() - startTime;
-
-    // Log query for authenticated users (history only, no usage/credits)
+    // Log query for audit
     const authHeader = req.headers.get("Authorization");
     if (authHeader) {
       const token = authHeader.replace("Bearer ", "");
-      const { data: { user } } = await supabase.auth.getUser(token);
-      if (user?.id) {
-        supabase.from("query_history").insert({
-          user_id: user.id,
-          query_type: queryRequest.queryType,
-          query_input: queryRequest.queryInput,
-          query_result: result,
-          status: result.error ? "error" : result.module_disabled ? "disabled" : "success",
-        }).then(() => {});
+      try {
+        const { data: { user } } = await supabase.auth.getUser(token);
+        if (user?.id) {
+          supabase.from("query_history").insert({
+            user_id: user.id,
+            query_type: queryRequest.queryType,
+            query_input: queryRequest.queryInput,
+            query_result: response.data,
+            status: response.meta.status,
+          }).then(() => {});
+        }
+      } catch {
+        // Auth check failed — skip logging
       }
     }
 
-    const isNotFound = result.notFound === true;
-    const isDisabledModule = result.module_disabled === true;
-    const isError = result.error && !isNotFound;
+    // Structured log
+    console.log(JSON.stringify({
+      request_id: requestId,
+      channel: response.meta.channel,
+      modulo: response.meta.modulo,
+      status: response.meta.status,
+      duration_ms: response.meta.duration_ms,
+      provider_duration_ms: response.meta.provider_duration_ms,
+      internal_duration_ms: response.meta.internal_duration_ms,
+      has_errors: response.errors.length > 0,
+    }));
 
-    return new Response(
-      JSON.stringify({
-        success: !isError,
-        data: result,
-        duration_ms: duration,
-        module_disabled: isDisabledModule || undefined,
-        error: isError ? result.error : undefined,
-      }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (err) {
     const error = err as Error;
-    console.error("Edge function error:", error);
+    console.error(`[Fatal] request_id=${requestId}`, error);
     return new Response(
-      JSON.stringify({ error: error.message || "Erro interno" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({
+        success: false,
+        data: {},
+        meta: {
+          request_id: requestId,
+          modulo: "unknown",
+          channel: "unknown",
+          duration_ms: 0,
+          provider_duration_ms: 0,
+          internal_duration_ms: 0,
+          status: "internal_error",
+        },
+        errors: ["Erro interno do servidor."],
+      }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 });

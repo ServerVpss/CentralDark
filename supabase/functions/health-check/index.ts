@@ -19,7 +19,7 @@ const CRITICAL_FUNCTIONS = [
   'telegram-webhook',
   'telegram-bot',
   'telegram-format-result',
-  'telegram-api-query',
+  'api-query',
   'efi-generate-pix',
   'efi-check-status',
   'efi-webhook',

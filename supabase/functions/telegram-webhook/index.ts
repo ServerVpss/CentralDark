@@ -191,24 +191,27 @@ async function loadModuleStatus(supabase: SupabaseClient): Promise<Record<string
   }
 }
 
+// queryTypeAliases mapeia comandos de atalho para o module_key exato na tabela query_modules.
+// Esses nomes são os mesmos enviados à API — sem tradução ou remapeamento.
 const queryTypeAliases: Record<string, string> = {
   tel: "telefone",
   telefone: "telefone",
-  placa2: "placa_completa",
+  placa2: "placa-serpro",
   nacional: "nacional",
   foto: "foto",
   titulo: "titulo",
   endereco: "endereco",
   renda: "renda",
   processos: "processos",
-  bnmp: "bnmp",
+  bnmp: "bnmp-lc",
   siel: "siel",
-  tse: "tse",
+  tse: "tse-3",
   mae: "mae",
   credilink: "credilink",
-  spc: "cpf_spc",
+  spc: "cpf-spc",
   poder: "poderaquisitivo",
   sus: "cpfsus",
+  cnpj: "cnpj-cred",
 };
 
 function normalizeQueryType(queryType: string): string {
@@ -226,17 +229,24 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
 }
 
 const queryTypeLabels: Record<string, string> = {
-  cpf: "👤 CPF", cnpj: "🏢 CNPJ", placa: "🚗 Placa", placa_completa: "🚗 Placa Completa",
-  telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",
-  score: "📊 Score", foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
-  rg: "🪪 RG", cnh: "🪪 CNH", pix: "💳 PIX",
+  cpf: "👤 CPF", cpffull: "👤 CPF Full", "cpf-isk": "👤 CPF ISK",
+  "cnpj-cred": "🏢 CNPJ", cnpj: "🏢 CNPJ",
+  placa: "🚗 Placa", "placa-serpro": "🚗 Placa SERPRO", "placa-simples": "🚗 Placa Simples", "placa-sesp": "🚗 Placa SESP",
+  telefone: "📞 Telefone", telefonefull: "📞 Telefone Full", "telefone-3": "📞 Telefone v3",
+  email: "📧 Email", emailfull: "📧 Email Full", "email-3": "📧 Email v3",
+  cep: "📍 CEP", cepfull: "📍 CEP Full", "cep-3": "📍 CEP v3",
+  nome: "📝 Nome", nomefull: "📝 Nome Full", "nome-3": "📝 Nome v3",
+  score: "📊 Score", "score-3": "📊 Score v3",
+  foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
+  rg: "🪪 RG", "rg-3": "🪪 RG v3", cnh: "🪪 CNH", pis: "📋 PIS", "pis-3": "📋 PIS v3",
+  pix: "💳 PIX",
   titulo: "📜 Título Eleitor", endereco: "📍 Endereço", renda: "💰 Renda",
-  processos: "⚖️ Processos", bnmp: "🔍 BNMP", siel: "🔎 SIEL",
-  tse: "🗳️ TSE", mae: "👩 Nome da Mãe", credilink: "📊 Credilink",
-  cpf_spc: "📋 SPC", poderaquisitivo: "💎 Poder Aquisitivo",
-  cpfsus: "🏥 SUS", pis: "📋 PIS",
-  parentes: "👨‍👩‍👧‍👦 Parentes", chassi: "🔧 Chassi",
-  renavam: "📋 RENAVAM", motor: "⚙️ Motor",
+  processos: "⚖️ Processos", "bnmp-lc": "🔍 BNMP", siel: "🔎 SIEL",
+  "tse-3": "🗳️ TSE", mae: "👩 Mãe", maefull: "👩 Mãe Full",
+  credilink: "📊 Credilink", "cpf-spc": "📋 SPC",
+  poderaquisitivo: "💎 Poder Aquisitivo", cpfsus: "🏥 SUS",
+  parentes: "👨‍👩‍👧‍👦 Parentes", "parentes-3": "👨‍👩‍👧‍👦 Parentes v3",
+  chassi: "🔧 Chassi", renavam: "📋 RENAVAM", motor: "⚙️ Motor",
 };
 
 const brazilianStates = [
@@ -1333,7 +1343,7 @@ async function executeQueryWithCache(
         "Content-Type": "application/json",
         "Authorization": `Bearer ${serviceRoleKey}`,
       },
-      body: JSON.stringify({ queryType, queryInput, estado }),
+      body: JSON.stringify({ queryType, queryInput, estado, channel: "telegram" }),
     });
     
     if (!response.ok) {
@@ -4028,21 +4038,26 @@ class BotHandler {
   // =============== PARSE MULTIPLE COMMANDS ===============
   private parseMultipleCommands(text: string): Array<{ command: string; queryType: string; queryInput: string }> {
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cnpj: "cnpj", placa: "placa", placa2: "placa_completa",
-      telefone: "telefone", tel: "telefone", email: "email",
-      cep: "cep", nome: "nome", score: "score",
-      rg: "rg", cnh: "cnh", pix: "pix",
+      cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
+      cnpj: "cnpj-cred", placa: "placa", placa2: "placa-serpro",
+      placasimples: "placa-simples", placasesp: "placa-sesp",
+      telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
+      email: "email", emailfull: "emailfull",
+      cep: "cep", cepfull: "cepfull", nome: "nome", nomefull: "nomefull",
+      score: "score", rg: "rg", cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
       titulo: "titulo", endereco: "endereco", renda: "renda",
-      processos: "processos", bnmp: "bnmp", siel: "siel",
-      tse: "tse", mae: "mae", credilink: "credilink",
-      spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      processos: "processos", bnmp: "bnmp-lc", siel: "siel",
+      tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
+      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
       parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
+      rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
+      nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
     };
     
     const commands: Array<{ command: string; queryType: string; queryInput: string }> = [];
     
-    const commandPattern = /(?:^|\s)(\/(?:cpf|cnpj|placa2?|telefone|tel|email|cep|nome|score|rg|cnh|pix|foto|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae|credilink|spc|poder|sus|pis|parentes|chassi|renavam|motor)(?:@\w+)?)/gi;
+    const commandPattern = /(?:^|\s)(\/(?:cpf(?:full|isk|sus)?|cnpj|placa(?:2|simples|sesp)?|telefone(?:full|3)?|tel|email(?:full|3)?|cep(?:full|3)?|nome(?:full|3)?|score3?|rg3?|cnh|pis3?|pix|foto\w*|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae(?:full)?|credilink|spc|poder|sus|parentes3?|chassi|renavam|motor)(?:@\w+)?)/gi;
     const matches = [...text.matchAll(commandPattern)];
     
     if (matches.length === 0) return commands;
@@ -4208,16 +4223,21 @@ class BotHandler {
     };
 
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cnpj: "cnpj", placa: "placa", placa2: "placa_completa",
-      telefone: "telefone", tel: "telefone", email: "email",
-      cep: "cep", nome: "nome", score: "score",
-      rg: "rg", cnh: "cnh", pix: "pix",
+      cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
+      cnpj: "cnpj-cred", placa: "placa", placa2: "placa-serpro",
+      placasimples: "placa-simples", placasesp: "placa-sesp",
+      telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
+      email: "email", emailfull: "emailfull",
+      cep: "cep", cepfull: "cepfull", nome: "nome", nomefull: "nomefull",
+      score: "score", rg: "rg", cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
       titulo: "titulo", endereco: "endereco", renda: "renda",
-      processos: "processos", bnmp: "bnmp", siel: "siel",
-      tse: "tse", mae: "mae", credilink: "credilink",
-      spc: "cpf_spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      processos: "processos", bnmp: "bnmp-lc", siel: "siel",
+      tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
+      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
       parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
+      rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
+      nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
       // State-specific foto shortcuts
       ...Object.fromEntries(Object.keys(fotoStateCommandMap).map(k => [k, "foto"])),
     };
