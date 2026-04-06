@@ -4963,7 +4963,7 @@ class BotHandler {
           titulo: "titulo", endereco: "endereco", renda: "renda",
           processos: "processos", bnmp: "bnmp-lc", siel: "siel",
           tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
-          spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+          spc: "cpf-spc", cpf4: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", cpf5: "cpfsus", pis: "pis",
           parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
           rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
           nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
