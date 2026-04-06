@@ -4088,7 +4088,7 @@ class BotHandler {
       const isConfiguredGroup = this.settings.group_chat_id && chatId === this.settings.group_chat_id;
       
       if (isConfiguredGroup && this.settings.mute_new_members && !isOwner) {
-        const isActive = await this.isSubscriptionActive(telegramUserId);
+        const isActive = await this.isSubscriptionActive(telegramUserId, 'group');
         
         if (!isActive) {
           // Mute user who doesn't have active subscription
@@ -4117,7 +4117,7 @@ class BotHandler {
 
       // Process commands in group for owners and subscribers
       if (text.startsWith("/")) {
-        const isActive = await this.isSubscriptionActive(telegramUserId);
+        const isActive = await this.isSubscriptionActive(telegramUserId, 'group');
         const canQuery = isOwner || isActive;
 
         if (canQuery) {
