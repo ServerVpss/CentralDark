@@ -1336,7 +1336,7 @@ async function executeQueryWithCache(
         "Content-Type": "application/json",
         "Authorization": `Bearer ${serviceRoleKey}`,
       },
-      body: JSON.stringify({ queryType, queryInput, estado }),
+      body: JSON.stringify({ queryType, queryInput, estado, channel: "telegram" }),
     });
     
     if (!response.ok) {
