@@ -277,8 +277,19 @@ function cleanQueryValue(queryType: string, input: string): string {
   if (textBasedModules.includes(normalizedType)) {
     return input.trim();
   }
-  // For everything else, remove special chars but keep alphanumeric, @, ., -
-  return input.replace(/[^\w@.-]/g, "").trim();
+  // Numeric modules — strip everything except digits
+  const numericModules = [
+    "cpf", "cpffull", "cpf2", "cnpj", "cnpjfull", "cep", "telefone", "telefonefull",
+    "rg", "titulo", "cnh", "nismulher", "renavam", "chassi",
+    "foto", "fotosp", "fotorj", "fotomg", "fotoba", "fotopr", "fotors", "fotosc",
+    "fotogo", "fotope", "fotoce", "fotopa", "fotoma", "fotodf", "fotoes",
+    "score", "irpf", "sintegra", "ccf", "pis",
+  ];
+  if (numericModules.includes(normalizedType)) {
+    return input.replace(/\D/g, "").trim();
+  }
+  // For everything else (placa, etc.), keep alphanumeric only
+  return input.replace(/[^\w]/g, "").trim();
 }
 
 // Deep search for photo data in nested response
