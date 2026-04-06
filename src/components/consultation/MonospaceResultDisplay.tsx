@@ -108,6 +108,9 @@ function renderObject(obj: Record<string, any>, indent = 0): string[] {
     } else if (Array.isArray(value)) {
       lines.push(`${prefix}${key.toUpperCase()}:`);
       lines.push(...renderValue(value, indent + 1));
+    } else if (value !== null && value !== undefined && typeof value === "object") {
+      // Fallback for any remaining objects — serialize as JSON
+      lines.push(`${prefix}${key.toUpperCase()} => ${JSON.stringify(value)}`);
     } else {
       lines.push(`${prefix}${key.toUpperCase()} => ${value === null || value === undefined ? "—" : String(value)}`);
     }
