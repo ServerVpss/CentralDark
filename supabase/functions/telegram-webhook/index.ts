@@ -5421,8 +5421,6 @@ class BotHandler {
         ];
         if (showFotoButton && detectedUf) {
           photoButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${inputForQuery.replace(/\D/g, '')}`)]);
-        } else if (showFotoNacionalGroup) {
-          photoButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${inputForQuery.replace(/\D/g, '')}`)]);
         }
         
         if (fullCaption.length <= 1024) {
