@@ -229,17 +229,24 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
 }
 
 const queryTypeLabels: Record<string, string> = {
-  cpf: "👤 CPF", cnpj: "🏢 CNPJ", placa: "🚗 Placa", placa_completa: "🚗 Placa Completa",
-  telefone: "📞 Telefone", email: "📧 Email", cep: "📍 CEP", nome: "📝 Nome",
-  score: "📊 Score", foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
-  rg: "🪪 RG", cnh: "🪪 CNH", pix: "💳 PIX",
+  cpf: "👤 CPF", cpffull: "👤 CPF Full", "cpf-isk": "👤 CPF ISK",
+  "cnpj-cred": "🏢 CNPJ", cnpj: "🏢 CNPJ",
+  placa: "🚗 Placa", "placa-serpro": "🚗 Placa SERPRO", "placa-simples": "🚗 Placa Simples", "placa-sesp": "🚗 Placa SESP",
+  telefone: "📞 Telefone", telefonefull: "📞 Telefone Full", "telefone-3": "📞 Telefone v3",
+  email: "📧 Email", emailfull: "📧 Email Full", "email-3": "📧 Email v3",
+  cep: "📍 CEP", cepfull: "📍 CEP Full", "cep-3": "📍 CEP v3",
+  nome: "📝 Nome", nomefull: "📝 Nome Full", "nome-3": "📝 Nome v3",
+  score: "📊 Score", "score-3": "📊 Score v3",
+  foto: "📸 Foto", nacional: "🇧🇷 Foto Nacional",
+  rg: "🪪 RG", "rg-3": "🪪 RG v3", cnh: "🪪 CNH", pis: "📋 PIS", "pis-3": "📋 PIS v3",
+  pix: "💳 PIX",
   titulo: "📜 Título Eleitor", endereco: "📍 Endereço", renda: "💰 Renda",
-  processos: "⚖️ Processos", bnmp: "🔍 BNMP", siel: "🔎 SIEL",
-  tse: "🗳️ TSE", mae: "👩 Nome da Mãe", credilink: "📊 Credilink",
-  cpf_spc: "📋 SPC", poderaquisitivo: "💎 Poder Aquisitivo",
-  cpfsus: "🏥 SUS", pis: "📋 PIS",
-  parentes: "👨‍👩‍👧‍👦 Parentes", chassi: "🔧 Chassi",
-  renavam: "📋 RENAVAM", motor: "⚙️ Motor",
+  processos: "⚖️ Processos", "bnmp-lc": "🔍 BNMP", siel: "🔎 SIEL",
+  "tse-3": "🗳️ TSE", mae: "👩 Mãe", maefull: "👩 Mãe Full",
+  credilink: "📊 Credilink", "cpf-spc": "📋 SPC",
+  poderaquisitivo: "💎 Poder Aquisitivo", cpfsus: "🏥 SUS",
+  parentes: "👨‍👩‍👧‍👦 Parentes", "parentes-3": "👨‍👩‍👧‍👦 Parentes v3",
+  chassi: "🔧 Chassi", renavam: "📋 RENAVAM", motor: "⚙️ Motor",
 };
 
 const brazilianStates = [
