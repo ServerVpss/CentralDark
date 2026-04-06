@@ -1,31 +1,32 @@
 
 
-# Incluir CPF-SUS e CPF-SPC na numeração de CPF
+# Adicionar "Consulta solicitada por" em todas as respostas
 
-## Situação Atual
-Os módulos de CPF estão mapeados assim:
-- `/cpf` → cpf (básico)
-- `/cpf2` → cpffull (completo)
-- `/cpf3` → cpf-isk
-- `/spc` → cpf-spc (separado)
-- `/sus` → cpfsus (separado)
-
-O `cpfsus` e `cpf-spc` são módulos de CPF mas ficaram fora da numeração sequencial.
-
-## Proposta
-Renumerar para manter todos os módulos de CPF juntos:
-- `/cpf` → cpf (básico) — sem mudança
-- `/cpf2` → cpffull
-- `/cpf3` → cpf-isk
-- `/cpf4` → cpf-spc (SPC)
-- `/cpf5` → cpfsus (SUS)
-
-Os comandos antigos `/spc` e `/sus` continuam funcionando como aliases.
+## Problema
+O footer com informações de quem solicitou a consulta (`📋 Consulta solicitada por:`) só existe no método `handleGroupCommand` (grupos). O método `processQuery` (chat privado e também usado em grupos) **não inclui** esse footer, por isso os resultados aparecem sem essa informação.
 
 ## Alterações
+
 **Arquivo**: `supabase/functions/telegram-webhook/index.ts`
-- Adicionar `cpf4: "cpf-spc"` e `cpf5: "cpfsus"` em todos os mapas de aliases/comandos (~5 locais)
-- Atualizar labels: `"cpf-spc": "👤 CPF 4 (SPC)"`, `cpfsus: "👤 CPF 5 (SUS)"`
-- Atualizar `moduleToCommand`: `"cpf-spc": "/cpf4"`, `cpfsus: "/cpf5"`
-- Menu de consultas: atualizar os botões de SPC e SUS para mostrar "CPF 4" e "CPF 5"
+
+### 1. Adicionar footer no `processQuery`
+Criar o mesmo bloco de footer que existe em `handleGroupCommand` (linha ~5317-5326) dentro do `processQuery`, logo após o resultado ser formatado (~linha 3824), usando o parâmetro `telegramUserName` já disponível e o `telegramUserId`.
+
+O footer será adicionado a todos os caminhos de envio:
+- Resultados com foto (sendPhoto caption)
+- Resultados sem foto (sendLongMessagePaginated)
+- Resultados multi-pessoa (formatMultiPersonPage)
+
+### 2. Corrigir formato do footer no grupo
+No `handleGroupCommand` (linha 5326), o footer atual mostra `@${userIdDisplay}` (ID numérico) em vez do nome real. Corrigir para usar `userName` (first_name) e `@${userInfo?.username}` quando disponível:
+
+```
+📋 Consulta solicitada por:
+├ 👤 Nome do Usuário
+├ 📝 @username (ou ID: 123456)
+└ 🕐 06/04/2026, 12:39:00
+```
+
+### 3. Deploy
+Deploy da Edge Function `telegram-webhook` atualizada.
 
