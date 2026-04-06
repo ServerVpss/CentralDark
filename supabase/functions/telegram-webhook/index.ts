@@ -569,12 +569,50 @@ function splitIntoPages(text: string, maxLength: number = 3800): string[] {
       breakPoint = maxLength;
     }
     
-    const pageContent = remaining.substring(0, breakPoint);
+    let pageContent = remaining.substring(0, breakPoint);
+    
+    // Sanitizar HTML: fechar tags abertas e remover tags de fechamento órfãs
+    pageContent = sanitizeHtmlPage(pageContent);
+    
     pages.push(wrapPre ? `<pre>${pageContent}</pre>` : pageContent);
     remaining = remaining.substring(breakPoint).trim();
   }
   
   return pages;
+}
+
+// Sanitiza página HTML para evitar tags mal formadas
+function sanitizeHtmlPage(html: string): string {
+  // Tags HTML que o Telegram suporta
+  const supportedTags = ['b', 'i', 'u', 's', 'code', 'pre', 'a', 'em', 'strong'];
+  
+  // Contar tags abertas e fechadas
+  for (const tag of supportedTags) {
+    const openRegex = new RegExp(`<${tag}(\\s[^>]*)?>`, 'gi');
+    const closeRegex = new RegExp(`</${tag}>`, 'gi');
+    const openCount = (html.match(openRegex) || []).length;
+    const closeCount = (html.match(closeRegex) || []).length;
+    
+    // Se há mais tags abertas que fechadas, fechar as que faltam
+    if (openCount > closeCount) {
+      for (let i = 0; i < openCount - closeCount; i++) {
+        html += `</${tag}>`;
+      }
+    }
+    // Se há mais tags de fechamento que abertas, remover as extras do início
+    if (closeCount > openCount) {
+      let excess = closeCount - openCount;
+      html = html.replace(new RegExp(`</${tag}>`, 'gi'), (match) => {
+        if (excess > 0) {
+          excess--;
+          return '';
+        }
+        return match;
+      });
+    }
+  }
+  
+  return html;
 }
 
 // =============== GERADOR DE TXT COMPLETO ===============
