@@ -498,6 +498,53 @@ function formatVehicleResult(
     vehicleData = rest;
   }
 
+  // Normalize SERPRO format fields to standard format
+  const serproMap: Record<string, string> = {
+    codigoRenavam: 'renavam', numeroMotor: 'motor',
+    descricaoCor: 'cor', descricaoCombustivel: 'combustivel',
+    descricaoTipoVeiculo: 'tipoVeiculo', descricaoMarcaModelo: 'marcaModelo',
+    descricaoEspecieVeiculo: 'especieVeiculo', descricaoCategoria: 'categoria',
+    descricaoRemarcacaoChassi: 'situacaoChassi', ufJurisdicao: 'estadoEmplacamento',
+    dataEmissaoCrv: 'dataEmplacamento', nomeProprietario: 'proprietario',
+    descricaoMunicipioEmplacamento: 'municipioEmplacamento',
+    lotacao: 'lugares', situacao: 'situacaoVeiculo',
+    descricaoRestricao1: 'restricao1', descricaoRestricao2: 'restricao2',
+    descricaoRestricao3: 'restricao3', descricaoRestricao4: 'restricao4',
+    indicadorMultaRenainf: 'multaRenainf', indicadorComunicacaoVenda: 'comunicacaoVenda',
+    indicadorRouboFurto: 'rouboFurto', indicadorLeilao: 'leilao',
+    indicadorRestricaoRenajud: 'restricaoRenajud',
+    tipoDocFaturado: 'tipoDocFaturado', numeroIdFaturamento: 'docFaturado',
+    ufFaturado: 'estadoFaturado',
+  };
+  for (const [serproKey, stdKey] of Object.entries(serproMap)) {
+    if (vehicleData[serproKey] !== undefined && vehicleData[stdKey] === undefined) {
+      vehicleData[stdKey] = vehicleData[serproKey];
+    }
+  }
+
+  // Convert boolean indicators to readable strings
+  const boolFields = ['multaRenainf', 'comunicacaoVenda', 'rouboFurto', 'leilao', 'restricaoRenajud'];
+  for (const bf of boolFields) {
+    if (typeof vehicleData[bf] === 'boolean') {
+      vehicleData[bf] = vehicleData[bf] ? 'Sim' : 'Não';
+    }
+  }
+
+  // Normalize situacao SERPRO format (EM_CIRCULACAO -> Em Circulação)
+  if (vehicleData.situacaoVeiculo && typeof vehicleData.situacaoVeiculo === 'string') {
+    vehicleData.situacaoVeiculo = fixBrokenEncoding(
+      String(vehicleData.situacaoVeiculo).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).replace(/\bEm\b/g, 'Em')
+    );
+  }
+
+  // Filter "SEM RESTRICAO" values
+  for (const rk of ['restricao1', 'restricao2', 'restricao3', 'restricao4']) {
+    const rv = vehicleData[rk];
+    if (rv && typeof rv === 'string' && /sem restri/i.test(rv)) {
+      delete vehicleData[rk];
+    }
+  }
+
   // Metadata to ignore
   const ignoreKeys = new Set([
     'comando', 'valor', 'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'total_diario',
@@ -510,6 +557,33 @@ function formatVehicleResult(
     'codigoTipoCarroceria', 'codigoMunicipio', 'codigoUnidadeSRF', 'tipoDocFaturado',
     'tipoDocProprietario', 'tipoDocImportacao', 'numIdentificacaoImportacao',
     'numDocumentoImportacao', 'dataRegistroDI', 'tipoMontagem', 'nacionalidade',
+    'origem', 'isPesquisado', 'servicoConsultado',
+    'codigoRenavam', 'numeroMotor', 'descricaoCor', 'descricaoCombustivel',
+    'descricaoTipoVeiculo', 'descricaoMarcaModelo', 'descricaoEspecieVeiculo',
+    'descricaoCategoria', 'descricaoRemarcacaoChassi', 'ufJurisdicao',
+    'dataEmissaoCrv', 'nomeProprietario', 'descricaoMunicipioEmplacamento',
+    'lotacao', 'situacao', 'descricaoRestricao1', 'descricaoRestricao2',
+    'descricaoRestricao3', 'descricaoRestricao4', 'codigoRestricao1',
+    'codigoRestricao2', 'codigoRestricao3', 'codigoRestricao4',
+    'indicadorMultaRenainf', 'indicadorComunicacaoVenda', 'indicadorRouboFurto',
+    'indicadorLeilao', 'indicadorRestricaoRenajud', 'indicadorPendenciaEmissao',
+    'indicadorComunicacaoVenda', 'indicadorSiniav', 'indicadorAlarme',
+    'indicadorRecall1', 'indicadorRecall2', 'indicadorRecall3', 'indicadorRecall4',
+    'codigoOrigemPropriedade', 'indicadorRestricaoRfb', 'descricaoRestricaoRfb',
+    'codigoCategoria', 'codigoRemarcacaoChassi', 'codigoMunicipioEmplacamento',
+    'codigoTipoProprietario', 'descricaoTipoProprietario',
+    'numeroIdentificacaoProprietario', 'tipoDocProprietarioIndicado',
+    'descricaoDocProprietarioIndicado', 'numeroDocProprietarioIndicado',
+    'naturezaImportacao', 'descricaoDocImportador', 'numeroIdImportador',
+    'codigoOrgaoRfb', 'descricaoOrgaoRfb', 'registroAduaneiro',
+    'numeroDeclaracaoImportacao', 'dataDistImportacao', 'naturezaFaturamento',
+    'numeroIdFaturamento', 'dataLimite', 'dataUltimaAtualizacaoImportacao',
+    'codigoTipoImportacao', 'descricaoTipoImportacao', 'numeroProcessoImportacao',
+    'dataBaixaImportacao', 'codigoPaisTransferencia', 'descricaoPaisTransferencia',
+    'dataAtualizacaoMre', 'dataCrlv', 'numeroCrlv', 'dataTransferencia',
+    'anoExercicioLicenciamentoPago', 'dataEmissaoCRLV', 'descricaoTipoCarroceria',
+    'cmt', 'pbt', 'cmc', 'qtdEixos', 'numeroEixoTraseiro', 'numeroEixoAuxiliar',
+    'numeroCambio', 'numeroCarroceria',
   ]);
 
   // Label mapping for human-readable display
@@ -518,6 +592,8 @@ function formatVehicleResult(
     chassi: '🔧 Chassi',
     renavam: '📋 RENAVAM',
     motor: '⚙️ Motor',
+    marcaModelo: '🏷️ Marca/Modelo',
+    proprietario: '👤 Proprietário',
     anoFabricacao: '📅 Ano Fabricação',
     anoModelo: '📅 Ano Modelo',
     potencia: '⚡ Potência',
@@ -525,7 +601,10 @@ function formatVehicleResult(
     cor: '🎨 Cor',
     combustivel: '⛽ Combustível',
     tipoVeiculo: '🚘 Tipo Veículo',
+    especieVeiculo: '📦 Espécie',
+    categoria: '🏷️ Categoria',
     estadoEmplacamento: '📍 Estado',
+    municipioEmplacamento: '🏙️ Município',
     dataEmplacamento: '📅 Emplacamento',
     situacaoVeiculo: '📊 Situação',
     situacaoChassi: '🔎 Situação Chassi',
@@ -534,6 +613,11 @@ function formatVehicleResult(
     restricao2: '🚫 Restrição 2',
     restricao3: '🚫 Restrição 3',
     restricao4: '🚫 Restrição 4',
+    multaRenainf: '🚨 Multa RENAINF',
+    rouboFurto: '🚨 Roubo/Furto',
+    leilao: '🔨 Leilão',
+    restricaoRenajud: '⚖️ Restrição RENAJUD',
+    comunicacaoVenda: '📝 Comunicação Venda',
     dataLimiteRestricao: '📅 Limite Restrição',
     procedencia: '📝 Procedência',
     ultimaAtualizacao: '🔄 Última Atualização',
@@ -557,10 +641,10 @@ function formatVehicleResult(
   const restrictions: string[] = [];
   const other: string[] = [];
 
-  const idFields = ['placa', 'chassi', 'renavam', 'motor'];
-  const specFields = ['anoFabricacao', 'anoModelo', 'potencia', 'cilindradas', 'cor', 'combustivel', 'tipoVeiculo', 'lugares', 'carga', 'pesoBrutoTotal', 'capacidadeMaximaTracao'];
-  const sitFields = ['estadoEmplacamento', 'dataEmplacamento', 'situacaoVeiculo', 'situacaoChassi', 'ultimaAtualizacao', 'procedencia'];
-  const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'dataLimiteRestricao'];
+  const idFields = ['placa', 'chassi', 'renavam', 'motor', 'marcaModelo', 'proprietario'];
+  const specFields = ['anoFabricacao', 'anoModelo', 'potencia', 'cilindradas', 'cor', 'combustivel', 'tipoVeiculo', 'especieVeiculo', 'categoria', 'lugares', 'carga', 'pesoBrutoTotal', 'capacidadeMaximaTracao'];
+  const sitFields = ['estadoEmplacamento', 'municipioEmplacamento', 'dataEmplacamento', 'situacaoVeiculo', 'situacaoChassi', 'ultimaAtualizacao', 'procedencia'];
+  const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'multaRenainf', 'rouboFurto', 'leilao', 'restricaoRenajud', 'comunicacaoVenda', 'dataLimiteRestricao'];
 
   const formatField = (key: string, value: unknown): string | null => {
     if (value === null || value === undefined || value === '' || value === '0' || value === 0) return null;
@@ -627,7 +711,10 @@ function formatVehicleResult(
     lines.push('');
   }
   if (restrictions.length > 0) {
-    const hasRestriction = vehicleData.possuiRestricoes && String(vehicleData.possuiRestricoes).toLowerCase() === 'sim';
+    const hasRestriction = (vehicleData.possuiRestricoes && String(vehicleData.possuiRestricoes).toLowerCase() === 'sim') ||
+      vehicleData.rouboFurto === 'Sim' || vehicleData.multaRenainf === 'Sim' ||
+      vehicleData.restricaoRenajud === 'Sim' || vehicleData.leilao === 'Sim' ||
+      (vehicleData.restricao1 && !/sem restri/i.test(String(vehicleData.restricao1)));
     lines.push(`${hasRestriction ? '🚨' : '✅'} <b>RESTRIÇÕES</b>`);
     lines.push(...restrictions);
     lines.push('');
