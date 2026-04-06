@@ -3593,6 +3593,7 @@ class BotHandler {
 
   async confirmPayment(payment: PendingPayment, chatId: number, telegramUserId: number) {
     const { plan_days: planDays, plan_name: planName, value, txid, plan_id, plan_code } = payment;
+    const paymentContext = payment.context || 'group';
 
     await this.supabase
       .from("pending_payments")
@@ -3609,11 +3610,12 @@ class BotHandler {
       plan_days: planDays,
       value,
       txid,
+      context: paymentContext,
       started_at: new Date().toISOString(),
       expires_at: expiresAt,
     });
 
-    console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}`);
+    console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}, Context: ${paymentContext}`);
 
     if (this.settings.group_chat_id) {
       try {
