@@ -30,7 +30,7 @@ export interface BackupData {
     edge_function_health: any[];
     paginated_results: any[];
     processed_updates: any[];
-    query_cache: any[];
+    
     scheduled_broadcasts: any[];
     telegram_user_terms: any[];
     user_roles: any[];
@@ -113,7 +113,7 @@ const TABLE_NAMES: Record<string, string> = {
   edge_function_health: "Saúde das Edge Functions",
   paginated_results: "Resultados Paginados",
   processed_updates: "Updates Processados",
-  query_cache: "Cache de Consultas",
+  
   scheduled_broadcasts: "Broadcasts Agendados",
   telegram_user_terms: "Termos de Usuários",
   user_roles: "Papéis de Usuários",
@@ -174,7 +174,7 @@ export function useBackup() {
         { name: "edge_function_health", query: supabase.from("edge_function_health").select("*"), progress: 56 },
         { name: "paginated_results", query: (supabase.from as any)("paginated_results").select("*").eq("user_id", userId), progress: 59 },
         { name: "processed_updates", query: supabase.from("processed_updates").select("*"), progress: 62 },
-        { name: "query_cache", query: supabase.from("query_cache").select("*"), progress: 65 },
+        
         { name: "scheduled_broadcasts", query: supabase.from("scheduled_broadcasts").select("*"), progress: 68 },
         { name: "telegram_user_terms", query: supabase.from("telegram_user_terms").select("*"), progress: 70 },
       ];
@@ -247,7 +247,7 @@ export function useBackup() {
         edge_function_health: tableData.edge_function_health || [],
         paginated_results: tableData.paginated_results || [],
         processed_updates: tableData.processed_updates || [],
-        query_cache: tableData.query_cache || [],
+        
         scheduled_broadcasts: tableData.scheduled_broadcasts || [],
         telegram_user_terms: tableData.telegram_user_terms || [],
         user_roles: tableData.user_roles || [],
@@ -428,7 +428,7 @@ export function useBackup() {
         "pix_transactions",
         "pending_payments",
         "query_history",
-        "query_cache",
+        
         "bot_analytics",
         "payment_history",
         "telegram_messages",
