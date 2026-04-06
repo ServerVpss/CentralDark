@@ -3617,7 +3617,8 @@ class BotHandler {
 
     console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}, Context: ${paymentContext}`);
 
-    if (this.settings.group_chat_id) {
+    // Only unmute in group if it's a group subscription
+    if (this.settings.group_chat_id && paymentContext === 'group') {
       try {
         await telegramRequest(this.token, "restrictChatMember", {
           chat_id: this.settings.group_chat_id,
@@ -3644,8 +3645,9 @@ class BotHandler {
       }
     }
 
+    const contextLabel = paymentContext === 'private' ? '🔒 Privado' : '👥 Grupo';
     const buttons: InlineButton[][] = [];
-    if (this.settings.group_url) {
+    if (this.settings.group_url && paymentContext === 'group') {
       buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url)]);
     }
     buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
@@ -3656,15 +3658,18 @@ class BotHandler {
 
     // Enviar mensagem de confirmação com efeito visual
     const daysText = planDays === 1 ? "1 dia" : `${planDays} dias`;
+    const accessMsg = paymentContext === 'group' && this.settings.group_chat_id 
+      ? "🚪 <b>Acesso liberado no grupo!</b>" 
+      : "✅ <b>Assinatura ativada!</b>";
     await telegramRequest(this.token, "sendMessage", {
       chat_id: chatId,
       text: `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
-        `┌ 📦 Plano: <b>${planName}</b>\n` +
+        `┌ 📦 Plano: <b>${planName}</b> (${contextLabel})\n` +
         `├ 💰 Valor: <b>R$ ${Number(value).toFixed(2)}</b>\n` +
         `├ ⏰ Duração: <b>${daysText}</b>\n` +
         `├ 📅 Válido até: <b>${formatDate(expiresAt)}</b>\n` +
         `└ 🎫 <code>${txid}</code>\n\n` +
-        `${this.settings.group_chat_id ? "🚪 <b>Acesso liberado no grupo!</b>" : "✅ <b>Assinatura ativada!</b>"}`,
+        accessMsg,
       parse_mode: "HTML",
       ...(effectId && { message_effect_id: effectId }),
       reply_markup: keyboard(...buttons),
