@@ -1534,14 +1534,34 @@ async function deleteMessage(token: string, chatId: number, messageId: number) {
   });
 }
 
-// Função para enviar reação a uma mensagem
+// Emojis garantidos como válidos pela API do Telegram
+const SAFE_REACTION_EMOJIS = ['👍', '❤️', '🔥', '🎉', '👏', '⚡', '😎', '💯'];
+
+// Função para enviar reação a uma mensagem com fallback
 async function setMessageReaction(token: string, chatId: number, messageId: number, emoji: string) {
-  return telegramRequest(token, "setMessageReaction", {
-    chat_id: chatId,
-    message_id: messageId,
-    reaction: [{ type: "emoji", emoji }],
-    is_big: false,
-  });
+  try {
+    return await telegramRequest(token, "setMessageReaction", {
+      chat_id: chatId,
+      message_id: messageId,
+      reaction: [{ type: "emoji", emoji }],
+      is_big: false,
+    });
+  } catch (err) {
+    const errMsg = String(err);
+    if (errMsg.includes('REACTION_INVALID') || errMsg.includes('Bad Request')) {
+      console.log(`[Reaction] Emoji "${emoji}" inválido, usando fallback 👍`);
+      try {
+        return await telegramRequest(token, "setMessageReaction", {
+          chat_id: chatId,
+          message_id: messageId,
+          reaction: [{ type: "emoji", emoji: "👍" }],
+          is_big: false,
+        });
+      } catch (_fallbackErr) {
+        console.log(`[Reaction] Fallback também falhou, ignorando reação`);
+      }
+    }
+  }
 }
 
 // Função para escolher emoji de reação baseado nas configurações
@@ -1694,6 +1714,10 @@ async function executeQueryWithCache(
   
   logCmd('INFO', 'API_CALL', { queryType, input: queryInput.substring(0, 20), estado: estado || null });
   
+  const controller = new AbortController();
+  const timeoutMs = 65_000; // 65s — slightly above api-query's own 60s max
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const response = await fetch(`${supabaseUrl}/functions/v1/api-query`, {
       method: "POST",
@@ -1702,10 +1726,18 @@ async function executeQueryWithCache(
         "Authorization": `Bearer ${serviceRoleKey}`,
       },
       body: JSON.stringify({ queryType, queryInput, estado, channel: "telegram" }),
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       logCmd('ERROR', 'API_HTTP', { queryType, status: response.status });
+      if (response.status === 504) {
+        return { 
+          data: { error: `⏱️ A consulta <b>${queryType}</b> demorou demais para responder.\n\n💡 <i>Isso pode acontecer em horários de pico. Tente novamente em alguns segundos.</i>` }, 
+          fromCache: false 
+        };
+      }
       return { 
         data: { error: `Erro na consulta: ${response.status}` }, 
         fromCache: false 
@@ -1720,8 +1752,15 @@ async function executeQueryWithCache(
     
     return { data, fromCache };
   } catch (err) {
+    clearTimeout(timeoutId);
     const error = err as Error;
     logCmd('ERROR', 'API_EXCEPTION', { queryType, error: error.message });
+    if (error.name === 'AbortError') {
+      return { 
+        data: { error: `⏱️ A consulta <b>${queryType}</b> excedeu o tempo limite.\n\n💡 <i>Tente novamente em alguns segundos.</i>` }, 
+        fromCache: false 
+      };
+    }
     return { 
       data: { error: `⚠️ Erro de conexão. Tente novamente.` }, 
       fromCache: false 

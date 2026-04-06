@@ -61,7 +61,7 @@ const SLOW_MODULES = new Set([
 ]);
 
 function getModuleTimeout(modulo: string): number {
-  return SLOW_MODULES.has(modulo) ? 120_000 : 45_000;
+  return SLOW_MODULES.has(modulo) ? 60_000 : 30_000;
 }
 
 // =============== VALIDAÇÃO DE ENTRADA ===============
