@@ -411,8 +411,10 @@ function extractUfFromResult(data: unknown, depth = 0, seen = new WeakSet<object
 }
 
 // =============== HELPERS ===============
-function btn(text: string, callback_data: string): InlineButton {
-  return { text, callback_data };
+function btn(text: string, callback_data: string, style?: string): InlineButton {
+  const b: any = { text, callback_data };
+  if (style) b.style = style;
+  return b;
 }
 
 function btnUrl(text: string, url: string): InlineButton {
@@ -3125,17 +3127,18 @@ class BotHandler {
     const buttons: InlineButton[][] = [];
     
     if (isActive) {
-      buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
+      buttons.push([btn("🔍 Fazer Consulta", "menu:query", "success")]);
     }
     
     if (isPrivateChat) {
-      buttons.push([btn("💳 Planos Privado", "menu:plans:private")]);
-      buttons.push([btn("👥 Planos Grupo", "menu:plans:group")]);
+      buttons.push([btn("💳 Planos Privado", "menu:plans:private", "primary")]);
+      buttons.push([btn("👥 Planos Grupo", "menu:plans:group", "primary")]);
     } else {
-      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group")]);
+      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group", "primary")]);
     }
     buttons.push([btn("📊 Minha Assinatura", "menu:subscription")]);
     buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending")]);
+    buttons.push([btn("📋 Comandos", "show_commands")]);
 
     if (this.isOwner(telegramUserId)) {
       buttons.push([btn("⚙️ Painel Admin", "admin:menu")]);
