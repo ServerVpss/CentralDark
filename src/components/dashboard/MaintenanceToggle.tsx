@@ -49,14 +49,12 @@ export function MaintenanceToggle({ botId }: MaintenanceToggleProps) {
   if (!botId) return null;
 
   return (
-    <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4">
+    <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500/20 to-red-500/10 border border-orange-500/20">
-            <Wrench className="h-4 w-4 text-orange-500" />
-          </div>
+          <Wrench className="h-4 w-4 text-muted-foreground" />
           <div>
-            <h2 className="font-semibold text-foreground text-sm">Modo Manutenção</h2>
+            <h3 className="text-sm font-semibold text-foreground">Manutenção</h3>
             <Badge
               variant={enabled ? "destructive" : "secondary"}
               className="mt-0.5 text-[10px] px-1.5 py-0"
