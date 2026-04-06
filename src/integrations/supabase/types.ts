@@ -282,6 +282,7 @@ export type Database = {
           announce_payments: boolean | null
           auto_delete_messages: boolean | null
           bot_id: string | null
+          button_emoji_ids: Json | null
           created_at: string
           custom_emojis: string[] | null
           fake_engagement_enabled: boolean | null
@@ -310,6 +311,7 @@ export type Database = {
           announce_payments?: boolean | null
           auto_delete_messages?: boolean | null
           bot_id?: string | null
+          button_emoji_ids?: Json | null
           created_at?: string
           custom_emojis?: string[] | null
           fake_engagement_enabled?: boolean | null
@@ -338,6 +340,7 @@ export type Database = {
           announce_payments?: boolean | null
           auto_delete_messages?: boolean | null
           bot_id?: string | null
+          button_emoji_ids?: Json | null
           created_at?: string
           custom_emojis?: string[] | null
           fake_engagement_enabled?: boolean | null

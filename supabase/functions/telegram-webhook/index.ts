@@ -104,6 +104,8 @@ interface BotSettings {
   // Modo manutenção
   maintenance_mode: boolean;
   maintenance_message: string;
+  // Custom emoji IDs para botões
+  button_emoji_ids: Record<string, string>;
 }
 
 interface Plan {
@@ -430,7 +432,7 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
 
 
 // Premium Custom Emoji IDs (Telegram API 9.4)
-const EMOJI = {
+const DEFAULT_EMOJI: Record<string, string> = {
   SEARCH: "5368324170671202286",    // 🔍
   DIAMOND: "5471952986970267163",   // 💎
   CHART: "5357506110857498821",     // 📊
@@ -452,6 +454,9 @@ const EMOJI = {
   PLUS: "5370547013043468854",      // ➕
   REFRESH: "5253959696498104346",   // 🔄
 };
+
+// EMOJI is mutable — gets merged with bot_settings.button_emoji_ids at runtime
+let EMOJI: Record<string, string> = { ...DEFAULT_EMOJI };
 
 function keyboard(...rows: InlineButton[][]) {
   return { inline_keyboard: rows };
@@ -6068,7 +6073,11 @@ Deno.serve(async (req) => {
       message_effect: (settings as { message_effect?: string } | null)?.message_effect || 'party',
       maintenance_mode: (settings as { maintenance_mode?: boolean } | null)?.maintenance_mode || false,
       maintenance_message: (settings as { maintenance_message?: string } | null)?.maintenance_message || '🔧 Bot em manutenção. Retornaremos em breve.',
+      button_emoji_ids: (settings as { button_emoji_ids?: Record<string, string> } | null)?.button_emoji_ids || {},
     };
+
+    // Merge custom emoji IDs from settings
+    EMOJI = { ...DEFAULT_EMOJI, ...botSettings.button_emoji_ids };
 
     const handler = new BotHandler(supabase, bot as BotData, botSettings, update);
     

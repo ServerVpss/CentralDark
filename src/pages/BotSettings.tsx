@@ -40,6 +40,7 @@ import { BroadcastDialog } from "@/components/bots/BroadcastDialog";
 import { FakeEngagementSettings } from "@/components/bots/FakeEngagementSettings";
 import { EngagementMessagesManager } from "@/components/bots/EngagementMessagesManager";
 import { QueryModulesManager } from "@/components/bots/QueryModulesManager";
+import { ButtonEmojiConfig } from "@/components/bots/ButtonEmojiConfig";
 import { toast } from "sonner";
 import { useTelegramBots, TelegramBot } from "@/hooks/useTelegramBots";
 import { useBotSettings, MessageEffectType } from "@/hooks/useBotSettings";
@@ -699,6 +700,9 @@ export default function BotSettings() {
               </div>
 
             </div>
+
+            {/* Custom Emojis dos Botões */}
+            <ButtonEmojiConfig botId={botId || ""} settingsId={settings?.id || null} />
           </TabsContent>
 
           <TabsContent value="engagement" className="mt-6 space-y-6">
