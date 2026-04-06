@@ -5689,6 +5689,14 @@ setInterval(() => {
   }
 }, 300_000);
 
+// =============== STRUCTURED LOGGER ===============
+function logCmd(level: 'INFO' | 'WARN' | 'ERROR', tag: string, data: Record<string, unknown>) {
+  const entry = { ts: new Date().toISOString(), level, tag, ...data };
+  if (level === 'ERROR') console.error(JSON.stringify(entry));
+  else if (level === 'WARN') console.warn(JSON.stringify(entry));
+  else console.log(JSON.stringify(entry));
+}
+
 // =============== MAIN HANDLER ===============
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -5706,7 +5714,7 @@ Deno.serve(async (req) => {
     const botId = url.searchParams.get("botId");
 
     if (!botId) {
-      console.error("No botId provided");
+      logCmd('ERROR', 'WEBHOOK', { msg: 'No botId provided', url: req.url });
       return new Response("OK", { status: 200 });
     }
 
@@ -5716,11 +5724,23 @@ Deno.serve(async (req) => {
     // Rate limit check
     const senderId = update.message?.from?.id || update.callback_query?.from?.id;
     if (senderId && isRateLimited(senderId)) {
-      console.log(`Rate limited: user ${senderId}, update ${update.update_id}`);
+      logCmd('WARN', 'RATE_LIMIT', { userId: senderId, updateId: update.update_id });
       return new Response("OK", { status: 200 });
     }
 
-    console.log(`[${botId.substring(0, 8)}] Update ${update.update_id} from ${senderId || 'unknown'}`);
+    const chatType = update.message?.chat?.type || update.callback_query?.message?.chat?.type || 'unknown';
+    const msgText = update.message?.text || update.callback_query?.data || '';
+    
+    logCmd('INFO', 'UPDATE_IN', {
+      botId: botId.substring(0, 8),
+      updateId: update.update_id,
+      userId: senderId,
+      chatType,
+      chatId: update.message?.chat?.id || update.callback_query?.message?.chat?.id,
+      text: msgText.substring(0, 80),
+      hasCallback: !!update.callback_query,
+      username: update.message?.from?.username || update.callback_query?.from?.username,
+    });
 
     const { data: bot } = await supabase
       .from("telegram_bots")
@@ -5729,7 +5749,7 @@ Deno.serve(async (req) => {
       .single();
 
     if (!bot) {
-      console.error("Bot not found:", botId);
+      logCmd('ERROR', 'BOT_NOT_FOUND', { botId });
       return new Response("OK", { status: 200 });
     }
 
@@ -5761,12 +5781,22 @@ Deno.serve(async (req) => {
     // Fire-and-forget: process in background, respond immediately to Telegram
     const processingPromise = handler.handleUpdate().then(() => {
       const duration = Date.now() - startTime;
-      if (duration > 5000) {
-        console.warn(`Slow update ${update.update_id}: ${duration}ms`);
-      }
+      logCmd(duration > 5000 ? 'WARN' : 'INFO', 'UPDATE_DONE', {
+        updateId: update.update_id,
+        userId: senderId,
+        durationMs: duration,
+        text: msgText.substring(0, 40),
+      });
     }).catch(err => {
       const duration = Date.now() - startTime;
-      console.error(`Background processing error after ${duration}ms:`, (err as Error).message);
+      logCmd('ERROR', 'UPDATE_FAIL', {
+        updateId: update.update_id,
+        userId: senderId,
+        durationMs: duration,
+        error: (err as Error).message,
+        stack: (err as Error).stack?.substring(0, 300),
+        text: msgText.substring(0, 40),
+      });
     });
 
     // Keep the function alive until processing completes
@@ -5778,7 +5808,11 @@ Deno.serve(async (req) => {
     return new Response("OK", { status: 200 });
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.error(`Webhook error after ${duration}ms:`, (error as Error).message);
+    logCmd('ERROR', 'WEBHOOK_CRASH', {
+      durationMs: duration,
+      error: (error as Error).message,
+      stack: (error as Error).stack?.substring(0, 300),
+    });
     // Always return 200 to Telegram to prevent retries
     return new Response("OK", { status: 200 });
   }
