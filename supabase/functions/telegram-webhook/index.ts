@@ -5002,7 +5002,7 @@ class BotHandler {
       titulo: "titulo", endereco: "endereco", renda: "renda",
       processos: "processos", bnmp: "bnmp-lc", siel: "siel",
       tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
-      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      spc: "cpf-spc", cpf4: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", cpf5: "cpfsus", pis: "pis",
       parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
       rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
       nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
@@ -5010,7 +5010,7 @@ class BotHandler {
     
     const commands: Array<{ command: string; queryType: string; queryInput: string }> = [];
     
-    const commandPattern = /(?:^|\s)(\/(?:cpf(?:full|isk|sus)?|cnpj|placa(?:2|simples|sesp)?|telefone(?:full|3)?|tel|email(?:full|3)?|cep(?:full|3)?|nome(?:full|3)?|score3?|rg3?|cnh|pis3?|pix|foto\w*|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae(?:full)?|credilink|spc|poder|sus|parentes3?|chassi|renavam|motor)(?:@\w+)?)/gi;
+    const commandPattern = /(?:^|\s)(\/(?:cpf(?:full|isk|sus|[2-5])?|cnpj|placa(?:2|3|4|simples|sesp)?|telefone(?:full|[23])?|tel|email(?:full|[23])?|cep(?:full|[23])?|nome(?:full|[23])?|score[23]?|rg[23]?|cnh|pis[23]?|pix|foto\w*|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae(?:full|2)?|credilink|spc|poder|sus|parentes[23]?|chassi|renavam|motor)(?:@\w+)?)/gi;
     const matches = [...text.matchAll(commandPattern)];
     
     if (matches.length === 0) return commands;
@@ -5197,7 +5197,7 @@ class BotHandler {
       titulo: "titulo", endereco: "endereco", renda: "renda",
       processos: "processos", bnmp: "bnmp-lc", siel: "siel",
       tse: "tse-3", credilink: "credilink",
-      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
+      spc: "cpf-spc", cpf4: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", cpf5: "cpfsus",
       chassi: "chassi", renavam: "renavam", motor: "motor",
       // Aliases antigos (compatibilidade)
       rg3: "rg-3", pis3: "pis-3", cep3: "cep-3",
@@ -5246,9 +5246,9 @@ class BotHandler {
         tse: "/tse 12345678900",
         mae: "/mae 12345678900",
         credilink: "/credilink 12345678900",
-        cpf_spc: "/spc 12345678900",
+        cpf_spc: "/cpf4 12345678900",
         poderaquisitivo: "/poder 12345678900",
-        cpfsus: "/sus 12345678900",
+        cpfsus: "/cpf5 12345678900",
         pis: "/pis 12345678900",
         parentes: "/parentes 12345678900",
         chassi: "/chassi CHASSI123",
