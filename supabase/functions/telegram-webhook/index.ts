@@ -2789,22 +2789,40 @@ class BotHandler {
     }
   }
 
-  async showMainMenu(chatId: number, telegramUserId: number, messageId?: number) {
-    const sub = await this.getSubscription(telegramUserId);
+  async showMainMenu(chatId: number, telegramUserId: number, messageId?: number, chatType?: string) {
+    // Determine context based on chat type
+    const isPrivateChat = !chatType || chatType === 'private';
+    const context = isPrivateChat ? 'private' : 'group';
+    
+    const sub = await this.getSubscription(telegramUserId, context);
     const isActive = sub && !isExpired(sub.expires_at);
     
+    // Also check the other context for display
+    const otherContext = isPrivateChat ? 'group' : 'private';
+    const otherSub = await this.getSubscription(telegramUserId, otherContext);
+    const otherActive = otherSub && !isExpired(otherSub.expires_at);
+    
     let statusBlock = "";
+    const contextLabel = isPrivateChat ? "Privado" : "Grupo";
+    
     if (isActive) {
       const days = daysLeft(sub.expires_at);
       const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
       const mins = Math.floor(((new Date(sub.expires_at).getTime() - Date.now()) % (1000 * 60 * 60)) / (1000 * 60));
       const timeLeft = days > 0 ? `${days}d ${hours % 24}h` : `${hours}h ${mins}m`;
-      statusBlock = `\n\n✅ <b>Assinatura Ativa</b>\n` +
+      statusBlock = `\n\n✅ <b>Assinatura ${contextLabel} Ativa</b>\n` +
         `┌ 📦 Plano: <b>${sub.plan_name}</b>\n` +
         `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
         `└ ⏳ Restante: <b>${timeLeft}</b>`;
     } else {
-      statusBlock = `\n\n❌ <b>Sem assinatura ativa</b>\n└ Assine um plano para começar.`;
+      statusBlock = `\n\n❌ <b>Sem assinatura ${contextLabel.toLowerCase()}</b>\n└ Assine um plano para usar no ${contextLabel.toLowerCase()}.`;
+    }
+    
+    // Show other context status if active
+    if (otherActive) {
+      const otherLabel = isPrivateChat ? "Grupo" : "Privado";
+      const otherDays = daysLeft(otherSub.expires_at);
+      statusBlock += `\n\n✅ <i>Assinatura ${otherLabel}: ${otherSub.plan_name} (${otherDays}d restantes)</i>`;
     }
 
     const buttons: InlineButton[][] = [];
@@ -2813,7 +2831,12 @@ class BotHandler {
       buttons.push([btn("🔍 Fazer Consulta", "menu:query")]);
     }
     
-    buttons.push([btn("💳 Assinar / Renovar", "menu:plans")]);
+    if (isPrivateChat) {
+      buttons.push([btn("💳 Planos Privado", "menu:plans:private")]);
+      buttons.push([btn("👥 Planos Grupo", "menu:plans:group")]);
+    } else {
+      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group")]);
+    }
     buttons.push([btn("📊 Minha Assinatura", "menu:subscription")]);
     buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending")]);
 
