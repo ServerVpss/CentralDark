@@ -57,7 +57,8 @@ Deno.serve(async (req) => {
       bot_id, 
       plan_name,
       plan_code,
-      plan_days 
+      plan_days,
+      context: paymentContext
     } = await req.json()
 
     if (!amount || amount <= 0) {
@@ -187,7 +188,8 @@ Deno.serve(async (req) => {
           pix_copy_paste: proxyData.data?.pixCopiaECola,
           pix_qrcode: proxyData.data?.qrcode,
           expires_at: expiresAt.toISOString(),
-          status: 'PENDING'
+          status: 'PENDING',
+          context: paymentContext || 'group'
         })
     }
 
