@@ -3742,6 +3742,13 @@ class BotHandler {
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, usedModule, queryInput, result, fromCache);
 
+      // Footer "Consulta solicitada por"
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const userName = telegramUserName || 'Usuário';
+      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${userName}\n├ 📝 ID: ${telegramUserId}\n└ 🕐 ${dateStr}, ${timeStr}`;
+
       // Verificar se é resultado de CEP ou TELEFONE com múltiplos registros
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
       if ((usedModule === 'cep' || usedModule === 'telefone') && rawDataStr && isMultiPersonResult(rawDataStr)) {
@@ -3768,13 +3775,13 @@ class BotHandler {
             if (error || !paginationData) {
               console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
-              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+              const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
               await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput);
               return;
             }
             
             const paginationId = paginationData.id;
-            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+            const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
             const pageKeyboard = createMultiPersonKeyboard(records, 0, totalPages, paginationId, usedModule, queryInput);
             
             const paginatedPayload: Record<string, unknown> = {
@@ -3801,7 +3808,7 @@ class BotHandler {
             }
           } else {
             // Menos de 10 registros - enviar sem paginação mas com botões de CPF
-            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName, usedModule, queryInput);
+            const pageText = formatMultiPersonPage(records, 0, 1, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
             const pageKeyboard = createMultiPersonKeyboard(records, 0, 1, undefined, usedModule, queryInput);
             
             const payload: Record<string, unknown> = {
@@ -3861,7 +3868,7 @@ class BotHandler {
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
           photo: fotoUrl,
-          caption: formattedResult.substring(0, 1024),
+          caption: (formattedResult + consultaFooter).substring(0, 1024),
           parse_mode: "HTML",
           ...(effectId && { message_effect_id: effectId }),
           reply_markup: { inline_keyboard: actionButtons },
@@ -3878,7 +3885,7 @@ class BotHandler {
         } else if (showFotoNacional) {
           extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`)]);
         }
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -5323,7 +5330,7 @@ class BotHandler {
       const userIdDisplay = userInfo?.id || telegramUserId;
       const userPhone = userInfo?.username ? `@${userInfo.username}` : `ID: ${userIdDisplay}`;
       
-      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 📝 @${userIdDisplay}\n├ 📞 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
+      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${userName}\n├ 📝 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
 
       // VERIFICAR SE É RESULTADO DE CEP OU TELEFONE COM MÚLTIPLOS REGISTROS
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
