@@ -2421,6 +2421,11 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
+  // ============= FORMATAÇÃO ESPECÍFICA PARA TELEFONE (telefone, telefonefull, telefone-3) =============
+  if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
+    return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
   // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
   return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
 }
