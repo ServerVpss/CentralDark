@@ -2916,33 +2916,40 @@ class BotHandler {
 
       // Command mapping (module_key -> telegram command)
       const moduleToCommand: Record<string, string> = {
-        cpf: "/cpf", cnpj: "/cnpj", placa: "/placa", placa_completa: "/placa2",
-        telefone: "/telefone", email: "/email", cep: "/cep", nome: "/nome",
-        score: "/score", rg: "/rg", cnh: "/cnh", pix: "/pix",
-        foto: "/foto", titulo: "/titulo", endereco: "/endereco", renda: "/renda",
+        cpf: "/cpf", cpffull: "/cpffull", cnpj: "/cnpj", placa: "/placa", "placa-serpro": "/placa2", placa_completa: "/placa2",
+        telefone: "/telefone", telefonefull: "/telefonefull", email: "/email", cep: "/cep", cepfull: "/cepfull",
+        nome: "/nome", nomefull: "/nomefull", score: "/score", rg: "/rg", cnh: "/cnh", pix: "/pix",
+        foto: "/foto", nacional: "/foto", titulo: "/titulo", endereco: "/endereco", renda: "/renda",
         processos: "/processos", bnmp: "/bnmp", siel: "/siel", tse: "/tse",
-        mae: "/mae", credilink: "/credilink", cpf_spc: "/spc",
+        mae: "/mae", maefull: "/maefull", credilink: "/credilink", cpf_spc: "/spc", "cpf-spc": "/spc",
         poderaquisitivo: "/poder", cpfsus: "/sus", pis: "/pis",
         parentes: "/parentes", chassi: "/chassi", renavam: "/renavam", motor: "/motor",
         placa_sesp: "/placa (sesp)",
-        // Foto por estado
-        fotosp: "/fotosp", fotorj: "/fotorj", fotomg: "/fotomg", fotoba: "/fotoba",
-        fotoce: "/fotoce", fotogo: "/fotogo", fotopr: "/fotopr", fotors: "/fotors",
-        fotope: "/fotope", fotoma: "/fotoma", fotoes: "/fotoes", fotodf: "/fotodf", fototo: "/fototo",
+        // Foto por estado (apenas estados disponíveis na API)
+        fotosp: "/fotosp", fotorj: "/fotorj", fotomg: "/fotomg",
+        fotoce: "/fotoce", fotopr: "/fotopr", fotoma: "/fotoma",
+        fotoes: "/fotoes", fotodf: "/fotodf", fototo: "/fototo",
+        fotoms: "/fotoms", fotoro: "/fotoro", fotopi: "/fotopi",
       };
 
       const usageExamples: Record<string, string> = {
-        cpf: "12345678900", cnpj: "12345678000100", placa: "ABC1234", placa_completa: "ABC1234",
-        telefone: "11999998888", email: "user@email.com", cep: "01310100", nome: "João Silva",
+        cpf: "12345678900", cpffull: "12345678900", cnpj: "12345678000100",
+        placa: "ABC1234", "placa-serpro": "ABC1234", placa_completa: "ABC1234",
+        telefone: "11999998888", telefonefull: "11999998888",
+        email: "user@email.com", cep: "01310100", cepfull: "01310100",
+        nome: "João Silva", nomefull: "João Silva",
         score: "12345678900", rg: "MG12345678", cnh: "12345678900", pix: "chave@pix.com",
-        foto: "12345678900", titulo: "12345678900", endereco: "12345678900", renda: "12345678900",
+        foto: "12345678900", nacional: "12345678900",
+        titulo: "12345678900", endereco: "12345678900", renda: "12345678900",
         processos: "12345678900", bnmp: "12345678900", siel: "12345678900", tse: "12345678900",
-        mae: "12345678900", credilink: "12345678900", cpf_spc: "12345678900",
+        mae: "12345678900", maefull: "12345678900", credilink: "12345678900",
+        cpf_spc: "12345678900", "cpf-spc": "12345678900",
         poderaquisitivo: "12345678900", cpfsus: "12345678900", pis: "12345678900",
         parentes: "12345678900", chassi: "CHASSI123", renavam: "12345678900", motor: "MOTOR123",
-        fotosp: "12345678900", fotorj: "12345678900", fotomg: "12345678900", fotoba: "12345678900",
-        fotoce: "12345678900", fotogo: "12345678900", fotopr: "12345678900", fotors: "12345678900",
-        fotope: "12345678900", fotoma: "12345678900", fotoes: "12345678900", fotodf: "12345678900", fototo: "12345678900",
+        fotosp: "12345678900", fotorj: "12345678900", fotomg: "12345678900",
+        fotoce: "12345678900", fotopr: "12345678900", fotoma: "12345678900",
+        fotoes: "12345678900", fotodf: "12345678900", fototo: "12345678900",
+        fotoms: "12345678900", fotoro: "12345678900", fotopi: "12345678900",
       };
 
       // Category labels
