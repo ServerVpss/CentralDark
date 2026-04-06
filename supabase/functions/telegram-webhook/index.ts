@@ -3059,8 +3059,13 @@ class BotHandler {
       // Obter o efeito configurado para este bot
       const effectId = getMessageEffectId(this.settings.message_effect);
 
+      // Detectar UF do resultado para botão "Consultar Foto"
+      const isPhotoQuery = queryType.toLowerCase().startsWith('foto') || queryType.toLowerCase() === 'nacional';
+      const detectedUf = !isPhotoQuery ? extractUfFromResult(result) : null;
+      const isCpfBased = /^\d{11}$/.test(queryInput.replace(/\D/g, ''));
+      const showFotoButton = detectedUf && isCpfBased && ufToFotoModule[detectedUf];
+
       if (isValidPhotoUrl) {
-        const isPhotoQuery = queryType.toLowerCase() === 'foto' || queryType.toLowerCase() === 'nacional';
         const actionButtons: InlineButton[][] = [
           [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main")],
           [btn("🗑️ Apagar", "delete_msg")],
@@ -3068,6 +3073,9 @@ class BotHandler {
         ];
         if (!isPhotoQuery) {
           actionButtons.push([btn("📝 Ver TXT", `txt:${queryType}:${queryInput}`)]);
+        }
+        if (showFotoButton) {
+          actionButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
         }
         
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
@@ -3083,7 +3091,12 @@ class BotHandler {
         }
       } else {
         // Usar paginação por botões para resultados longos
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, queryType, queryInput);
+        // Adicionar botão de foto se UF detectado
+        const extraButtons: InlineButton[][] = [];
+        if (showFotoButton) {
+          extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
+        }
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, queryType, queryInput, extraButtons);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
