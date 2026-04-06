@@ -423,7 +423,37 @@ function keyboard(...rows: InlineButton[][]) {
   return { inline_keyboard: rows };
 }
 
-async function telegramRequest(token: string, method: string, body?: Record<string, unknown>): Promise<{ ok: boolean; result?: unknown; description?: string }> {
+// Queue a failed message for later retry
+async function queueForRetry(token: string, method: string, body: Record<string, unknown> | undefined, retryAfterSec: number) {
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    // Try to find bot_id from token
+    const { data: botData } = await supabase
+      .from("telegram_bots")
+      .select("id")
+      .eq("token", token)
+      .maybeSingle();
+    
+    const retryAt = new Date(Date.now() + retryAfterSec * 1000).toISOString();
+    
+    await supabase.from("telegram_message_queue").insert({
+      bot_id: botData?.id || null,
+      method,
+      payload: { token_hash: token.slice(-8), body: body || {} },
+      retry_after: retryAt,
+      status: "pending",
+    });
+    
+    console.log(`[QUEUE] Queued ${method} for retry after ${retryAfterSec}s`);
+  } catch (e) {
+    console.error("[QUEUE] Failed to queue message:", e);
+  }
+}
+
+async function telegramRequest(token: string, method: string, body?: Record<string, unknown>): Promise<{ ok: boolean; result?: unknown; description?: string; queued?: boolean }> {
   const url = `${TELEGRAM_API}${token}/${method}`;
   console.log(`Telegram API: ${method}`);
 
@@ -442,10 +472,46 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
       desc.includes("can't use message effect")
     );
   };
+
+  // Helper to handle 429 rate limit
+  const handle429 = async (response: Response, data: any, currentBody?: Record<string, unknown>): Promise<{ ok: boolean; result?: unknown; description?: string; queued?: boolean } | null> => {
+    if (response.status !== 429) return null;
+    
+    const retryAfterHeader = response.headers.get("retry-after");
+    const retryAfterBody = data?.parameters?.retry_after;
+    const retryAfterSec = parseInt(retryAfterHeader || "") || retryAfterBody || 5;
+    
+    console.warn(`[429] Rate limited on ${method}, retry_after=${retryAfterSec}s`);
+    
+    // If short delay (<=5s), retry locally
+    if (retryAfterSec <= 5) {
+      console.log(`[429] Short delay, retrying locally after ${retryAfterSec}s`);
+      await new Promise(r => setTimeout(r, retryAfterSec * 1000));
+      
+      const retryRes = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentBody),
+      });
+      const retryData = await retryRes.json();
+      
+      if (retryRes.status === 429) {
+        // Still rate limited, queue it
+        const newRetryAfter = retryData?.parameters?.retry_after || 10;
+        await queueForRetry(token, method, currentBody, newRetryAfter);
+        return { ok: true, queued: true, description: "Queued for retry" };
+      }
+      
+      return retryData;
+    }
+    
+    // Long delay, queue for later
+    await queueForRetry(token, method, currentBody, retryAfterSec);
+    return { ok: true, queued: true, description: "Queued for retry" };
+  };
   
   try {
     // Telegram não aceita dataURL (data:image/...base64) em JSON no sendPhoto.
-    // Quando vier base64, fazemos upload multipart/form-data.
     if (method === "sendPhoto" && body && typeof body.photo === "string" && body.photo.startsWith("data:image/")) {
       const dataUrl = body.photo;
       const match = dataUrl.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
@@ -459,19 +525,21 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
       const blob = new Blob([bin], { type: mime });
 
       const form = new FormData();
-      // Required fields
       if (body.chat_id !== undefined) form.set("chat_id", String(body.chat_id));
-      // Optional fields
       if (body.caption !== undefined) form.set("caption", String(body.caption));
       if (body.parse_mode !== undefined) form.set("parse_mode", String(body.parse_mode));
       if (body.reply_markup !== undefined) form.set("reply_markup", JSON.stringify(body.reply_markup));
 
-      // File
       const ext = mime.split("/")[1] || "png";
       form.set("photo", new File([blob], `qrcode.${ext}`, { type: mime }));
 
       const response = await fetch(url, { method: "POST", body: form });
       const data = await response.json();
+      
+      // Handle 429 for photo uploads
+      const queueResult = await handle429(response, data, body);
+      if (queueResult) return queueResult;
+      
       return data;
     }
 
@@ -481,6 +549,10 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
       body: JSON.stringify(body),
     });
     const data = await response.json();
+
+    // Handle 429 rate limit
+    const queueResult = await handle429(response, data, body);
+    if (queueResult) return queueResult;
 
     // Fallback: se o efeito não for suportado/for inválido, reenviar sem message_effect_id
     if (!data.ok && body?.message_effect_id !== undefined && shouldRetryWithoutEffect(data)) {
