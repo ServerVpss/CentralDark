@@ -97,6 +97,11 @@ export default function Index() {
             <DashboardAnalyticsChart />
           </div>
         </section>
+
+        {/* Activity + Sidebar */}
+        <section className="grid gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <ActivityFeed />
           </div>
           <div className="space-y-4">
             <QuickActions />
