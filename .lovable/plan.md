@@ -1,69 +1,64 @@
 
 
-# Sincronização Completa: 58 Módulos da API
+# Sistema de Fila de Retry para Erros 429 do Telegram
 
-## Lista completa dos 58 módulos reais da API
+## Problema
+Quando muitos comandos são executados simultaneamente, o Telegram retorna erro `429 Too Many Requests`. Atualmente essas mensagens são perdidas.
 
-**Pessoa (7):** cpf, cpffull, cpf-isk, nome, nomefull, mae, maefull
-**Documento (6):** rg, rg-3, cnh, pis, pis-3, titulo
-**Contato (10):** telefone, telefonefull, telefone-3, email, emailfull, email-3, cep, cepfull, cep-3, endereco
-**Financeiro (8):** pix, score, score-3, renda, credilink, cpf-spc, poderaquisitivo, parentes, parentes-3
-**Veículo (7):** placa, placa-serpro, placa-sesp, placa-simples, chassi, renavam, motor
-**Empresa (1):** cnpj-cred
-**Justiça (3):** processos, bnmp-lc, siel
-**Governo (2):** cpfsus, tse-3
-**Variantes v3 (8):** rg-3, pis-3, cep-3, email-3, nome-3, score-3, parentes-3, telefone-3
-**Foto (12):** fotomg, fotosp, fotorj, fotopr, fotoce, fotoma, fotoes, fotodf, fototo, fotoms, fotoro, fotopi
+## Solução
+Adicionar retry com backoff na própria função `telegramRequest`, e para casos onde o retry também falha, salvar a mensagem numa tabela de fila no banco para ser processada depois por um cron job.
 
-## Problemas encontrados no banco atual (49 registros)
+## Passo 1 — Criar tabela `telegram_message_queue`
 
-### Remover (3 que NÃO existem na API):
-- `foto` (genérico)
-- `nacional`
-- `placa_completa`
+```sql
+CREATE TABLE telegram_message_queue (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  bot_id uuid,
+  method text NOT NULL,          -- sendMessage, editMessageText, sendPhoto...
+  payload jsonb NOT NULL,        -- body completo da requisição
+  retry_count integer DEFAULT 0,
+  max_retries integer DEFAULT 5,
+  retry_after timestamp with time zone,
+  status text DEFAULT 'pending', -- pending, processing, done, failed
+  error_message text,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now()
+);
 
-### Corrigir module_key (5 erradas):
-| Banco atual | API real |
-|---|---|
-| `cnpj` | `cnpj-cred` |
-| `cpf_spc` | `cpf-spc` |
-| `placa_sesp` | `placa-sesp` |
-| `bnmp` | `bnmp-lc` |
-| `tse` | `tse-3` |
+ALTER TABLE telegram_message_queue ENABLE ROW LEVEL SECURITY;
 
-### Adicionar (11 faltando):
-| module_key | label | categoria |
-|---|---|---|
-| `cpf-isk` | CPF ISK | pessoa |
-| `nome-3` | Nome v3 | pessoa |
-| `rg-3` | RG v3 | documento |
-| `pis-3` | PIS v3 | documento |
-| `emailfull` | Email Completo | contato |
-| `email-3` | Email v3 | contato |
-| `cep-3` | CEP v3 | contato |
-| `telefone-3` | Telefone v3 | contato |
-| `score-3` | Score v3 | financeiro |
-| `parentes-3` | Parentes v3 | pessoa |
-| `placa-simples` | Placa Simples | veiculo |
+CREATE POLICY "Service role full access" ON telegram_message_queue
+  FOR ALL TO public USING (true) WITH CHECK (true);
 
-## Plano de execução
+CREATE INDEX idx_queue_status_retry ON telegram_message_queue (status, retry_after);
+```
 
-### Passo 1 — Limpar banco de dados
-- DELETE dos 3 módulos inexistentes (`foto`, `nacional`, `placa_completa`)
-- UPDATE das 5 module_keys erradas para o formato correto com hífen
-- INSERT dos 11 módulos faltantes
+## Passo 2 — Atualizar `telegramRequest` no `telegram-webhook`
 
-### Passo 2 — Atualizar telegram-webhook
-- Atualizar `queryTypeAliases` para usar as keys corretas (`cnpj-cred`, `bnmp-lc`, `tse-3`, `cpf-spc`, `placa-sesp`)
-- Adicionar os 11 novos módulos nos mapas `moduleToCommand`, `usageExamples` e `queryTypeLabels`
-- Remover referências a `foto`, `nacional`, `placa_completa`
-- Garantir que `/comandos` leia do banco e exiba todos os 58 corretamente
+Adicionar na função `telegramRequest`:
+- Detectar resposta 429 e ler `retry_after` do header/body
+- Fazer 1 retry local com `sleep(retry_after)` (se <= 5 segundos)
+- Se retry local falhar ou `retry_after > 5s`, salvar na tabela `telegram_message_queue` com o `retry_after` calculado
+- Retornar `{ ok: true, queued: true }` para que o fluxo não quebre
 
-### Passo 3 — Atualizar whitelist no api-query
-- Sincronizar a whitelist de módulos permitidos com as 58 keys exatas
+## Passo 3 — Criar Edge Function `telegram-retry-queue`
 
-### Resultado final
-- **58 módulos** no banco, todos com keys idênticas à API
-- Comando `/comandos` completo e correto
-- Painel admin sincronizado
+Nova função que:
+1. Busca mensagens da fila com `status = 'pending'` e `retry_after <= now()`
+2. Para cada mensagem, busca o token do bot e executa a requisição
+3. Se sucesso → marca como `done`
+4. Se 429 novamente → incrementa `retry_count`, calcula novo `retry_after` com backoff exponencial
+5. Se `retry_count >= max_retries` → marca como `failed`
+6. Processa no máximo 20 mensagens por execução
+
+## Passo 4 — Cron job a cada 30 segundos (ou 1 minuto)
+
+Agendar execução periódica da `telegram-retry-queue` via pg_cron.
+
+## Resultado
+- Nenhuma mensagem é perdida por erro 429
+- Retry local imediato para delays curtos (<=5s)
+- Fila persistente para delays longos
+- Backoff exponencial evita loops de rate-limit
+- Máximo de 5 retries antes de desistir
 
