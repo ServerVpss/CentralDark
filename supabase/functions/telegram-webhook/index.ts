@@ -1837,7 +1837,8 @@ function formatMultiPersonPage(
   lines.push(`💡 Clique no CPF para consultar`);
   lines.push(`🤖 ${botTag}`);
   
-  return `<pre>${lines.join('\n')}</pre>`;
+  const escapeLine = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return `<pre>${lines.map(escapeLine).join('\n')}</pre>`;
 }
 
 // Create keyboard for multi-person result with CPF buttons and pagination
@@ -2287,8 +2288,9 @@ function formatCpfResult(
     lines.push(``);
   }
 
-  // Retornar como bloco <pre> monoespaçado
-  return `<pre>${lines.join('\n')}</pre>`;
+  // Retornar como bloco <pre> monoespaçado (escapar HTML nos valores)
+  const escaped = lines.map(l => escapeHtml(l));
+  return `<pre>${escaped.join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS (MONOESPAÇADO) ===============
@@ -2297,7 +2299,7 @@ function formatGenericResult(
   data: Record<string, unknown>, 
   userName: string, 
   botTag: string, 
-  _escapeHtml: (str: string) => string,
+  escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
   // Categorização de campos com emojis únicos
@@ -2448,9 +2450,9 @@ function formatGenericResult(
       const displayKey = formatKey(item.key);
       let displayValue: string;
       if (typeof item.value === 'object' && item.value !== null) {
-        displayValue = JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase();
+        displayValue = escapeHtml(JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase());
       } else {
-        displayValue = String(item.value).toUpperCase();
+        displayValue = escapeHtml(String(item.value).toUpperCase());
       }
       if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
         lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
@@ -2471,9 +2473,9 @@ function formatGenericResult(
       const displayKey = formatKey(item.key);
       let displayValue: string;
       if (typeof item.value === 'object' && item.value !== null) {
-        displayValue = JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase();
+        displayValue = escapeHtml(JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase());
       } else {
-        displayValue = String(item.value).toUpperCase();
+        displayValue = escapeHtml(String(item.value).toUpperCase());
       }
       if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
         lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
@@ -2488,7 +2490,8 @@ function formatGenericResult(
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
 
-  return `<pre>${lines.join('\n')}</pre>`;
+  const escaped = lines.map(l => escapeHtml(l));
+  return `<pre>${escaped.join('\n')}</pre>`;
 }
 
 // =============== BOT HANDLER CLASS ===============
