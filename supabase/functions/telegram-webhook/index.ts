@@ -3457,7 +3457,7 @@ class BotHandler {
   async showPlansMenu(chatId: number, messageId: number, context: string = 'group') {
     const plans = await this.getPlans();
     const isPrivate = context === 'private';
-    const PRIVATE_MARKUP = 1; // R$1 a mais para privado
+    const PRIVATE_MARKUP = 3; // R$3 a mais para privado
 
     if (plans.length === 0) {
       await editMessage(this.token, chatId, messageId,
@@ -3753,7 +3753,7 @@ class BotHandler {
   async generatePixPayment(chatId: number, telegramUserId: number, planCode: string, context: string = 'group') {
     const plans = await this.getPlans();
     const plan = plans.find(p => p.code === planCode);
-    const PRIVATE_MARKUP = 1; // R$1 a mais para privado
+    const PRIVATE_MARKUP = 3; // R$3 a mais para privado
     const isPrivate = context === 'private';
 
     if (!plan) {
