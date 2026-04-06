@@ -5865,8 +5865,15 @@ class BotHandler {
         // Re-execute query to get data for TXT (usa cache - não conta crédito)
         const { data: result } = await executeQueryWithCache(queryType, queryInput);
         
+        // Build requester info from callback user
+        const requesterInfo = {
+          name: callback.from.first_name || "Desconhecido",
+          username: callback.from.username,
+          id: callback.from.id,
+        };
+        
         // Generate TXT content
-        const txtContent = generateTxtContent(queryType, queryInput, result as Record<string, unknown>);
+        const txtContent = generateTxtContent(queryType, queryInput, result as Record<string, unknown>, requesterInfo);
         
         // Convert to blob and send as document
         const txtBytes = new TextEncoder().encode(txtContent);
@@ -5876,7 +5883,8 @@ class BotHandler {
         const form = new FormData();
         form.set("chat_id", String(chatId));
         form.set("document", new File([blob], `consulta_${queryType}_${queryInput}.txt`, { type: 'text/plain' }));
-        form.set("caption", `📝 <b>Relatório Completo (TXT)</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n✅ Todos os dados da consulta estão neste arquivo.`);
+        const requesterDisplay = callback.from.username ? `@${callback.from.username}` : `ID: ${callback.from.id}`;
+        form.set("caption", `📝 <b>Relatório Completo (TXT)</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n📋 <b>Solicitado por:</b> ${callback.from.first_name || "?"} (${requesterDisplay})\n\n✅ Todos os dados da consulta estão neste arquivo.`);
         form.set("parse_mode", "HTML");
         
         const sendDocResult = await fetch(`${TELEGRAM_API}${this.token}/sendDocument`, {
