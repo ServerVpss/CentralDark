@@ -251,16 +251,15 @@ const queryTypeLabels: Record<string, string> = {
 };
 
 const brazilianStates = [
-  "SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "GO", "MA", "ES", "DF", "TO",
+  "SP", "RJ", "MG", "PR", "CE", "MA", "ES", "DF", "TO",
   "MS", "RO", "PI"
 ];
 
-// Mapa de UF para módulo de foto
+// Mapa de UF para módulo de foto (apenas estados disponíveis na API)
 const ufToFotoModule: Record<string, string> = {
-  SP: "fotosp", RJ: "fotorj", MG: "fotomg", BA: "fotoba", PR: "fotopr",
-  RS: "fotors", PE: "fotope", CE: "fotoce", GO: "fotogo", MA: "fotoma",
-  ES: "fotoes", DF: "fotodf", TO: "fototo", MS: "fotoms", RO: "fotoro",
-  PI: "fotopi",
+  SP: "fotosp", RJ: "fotorj", MG: "fotomg", PR: "fotopr",
+  CE: "fotoce", MA: "fotoma", ES: "fotoes", DF: "fotodf",
+  TO: "fototo", MS: "fotoms", RO: "fotoro", PI: "fotopi",
 };
 
 const stateNameToUf: Record<string, string> = {
