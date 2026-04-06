@@ -1,54 +1,40 @@
 
 
-# Adicionar Botão "Lista de Comandos" + Cores nos Botões do Telegram
+# Novidades da API 9.4 e 9.6 no Telegram Webhook
 
-## Problema
-1. O botão "📋 Comandos" (lista de comandos) não aparece no Menu Principal — só aparece nos resultados de consulta
-2. Os botões do Telegram estão todos com a cor padrão (cinza)
+## O que será implementado
 
-## Novidade do Telegram
-A API do Telegram (Bot API 9.4, fevereiro 2026) adicionou o campo `style` nos botões `InlineKeyboardButton`. Valores possíveis:
-- `"primary"` — azul
-- `"success"` — verde  
-- `"danger"` — vermelho
-
-## Passo 1 — Adicionar botão "Comandos" no Menu Principal
-
-No `telegram-webhook/index.ts`, adicionar o botão `📋 Comandos` no menu principal, logo antes do "Painel Admin":
-
-```
-buttons.push([btn("📋 Comandos", "show_commands")]);
-```
-
-## Passo 2 — Adicionar suporte a `style` nos botões
-
-Atualizar a função `btn()` para aceitar um parâmetro `style` opcional:
+### 1. Custom Emoji Icons nos Botões (API 9.4)
+O campo `icon_custom_emoji_id` permite exibir um emoji customizado no botão. Atualizar a função `btn()` para aceitar esse parâmetro opcional.
 
 ```ts
-function btn(text: string, data: string, style?: string): InlineButton {
-  const b: any = { text, callback_data: data };
+function btn(text: string, callback_data: string, style?: string, iconCustomEmojiId?: string): InlineButton {
+  const b: any = { text, callback_data };
   if (style) b.style = style;
+  if (iconCustomEmojiId) b.icon_custom_emoji_id = iconCustomEmojiId;
   return b;
 }
 ```
 
-## Passo 3 — Aplicar cores estratégicas nos botões do menu
+**Nota importante:** Custom emojis em botões só funcionam se o bot tem permissão para usar custom emojis (geralmente bots com Telegram Premium ou em chats onde o bot pode enviar custom emojis). Se o bot não tiver essa permissão, o Telegram ignora o campo silenciosamente.
 
-| Botão | Estilo |
-|-------|--------|
-| 🔍 Fazer Consulta | `success` (verde) |
-| 💳 Planos Privado / Assinar | `primary` (azul) |
-| 👥 Planos Grupo | `primary` (azul) |
-| 📋 Comandos | sem estilo (padrão) |
-| ⚙️ Painel Admin | sem estilo (padrão) |
-| 🚪 Entrar no Grupo | sem estilo (URL button) |
+### 2. Suporte a `sender_tag` (API 9.6)
+Adicionar o campo `sender_tag` na interface `TelegramMessage` e logar/armazenar quando presente. O `sender_tag` é uma tag opcional que identifica o remetente — útil para rastreamento e logs.
 
-Nos resultados de consulta e confirmações de pagamento, aplicar `success` nos botões de ação principal.
+### 3. Suporte a Managed Bots (API 9.6)
+Adicionar campo `managed_bot_created` na interface `TelegramMessage` para detectar quando um bot gerenciado é criado. Adicionar `can_manage_bots` na interface `TelegramUser`.
 
-## Passo 4 — Deploy
+## Alterações no arquivo
 
-Deploy da edge function `telegram-webhook`.
+### `supabase/functions/telegram-webhook/index.ts`
 
-## Arquivo modificado
-- `supabase/functions/telegram-webhook/index.ts`
+1. **Interface `TelegramUser`** — adicionar `can_manage_bots?: boolean`
+2. **Interface `TelegramMessage`** — adicionar `sender_tag?: string` e `managed_bot_created?: unknown`
+3. **Função `btn()`** — adicionar parâmetro `iconCustomEmojiId`
+4. **Função `btnUrl()`** — adicionar parâmetros `style` e `iconCustomEmojiId`
+5. **Logs** — incluir `sender_tag` nos logs de mensagem quando presente
+6. **Aplicar custom emojis** em botões estratégicos do menu (onde fizer sentido visual)
+
+## Deploy
+Deploy automático da edge function `telegram-webhook`.
 
