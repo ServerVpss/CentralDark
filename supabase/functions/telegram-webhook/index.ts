@@ -5330,7 +5330,7 @@ class BotHandler {
       const userIdDisplay = userInfo?.id || telegramUserId;
       const userPhone = userInfo?.username ? `@${userInfo.username}` : `ID: ${userIdDisplay}`;
       
-      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 📝 @${userIdDisplay}\n├ 📞 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
+      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${userName}\n├ 📝 ${userPhone}\n└ 🕐 ${dateStr}, ${timeStr}`;
 
       // VERIFICAR SE É RESULTADO DE CEP OU TELEFONE COM MÚLTIPLOS REGISTROS
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
