@@ -81,9 +81,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const brazilianStates = [
-  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
-  "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
-  "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+  "SP", "RJ", "MG", "PR", "CE", "MA", "ES", "DF", "TO", "MS", "RO", "PI"
 ];
 
 // Fallback modules if DB load fails
