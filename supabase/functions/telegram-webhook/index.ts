@@ -2297,7 +2297,7 @@ function formatGenericResult(
   data: Record<string, unknown>, 
   userName: string, 
   botTag: string, 
-  _escapeHtml: (str: string) => string,
+  escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
   // Categorização de campos com emojis únicos
