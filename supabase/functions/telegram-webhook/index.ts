@@ -5623,6 +5623,50 @@ class BotHandler {
       const cpf = parts[1];
       
       if (!uf || !cpf) return;
+
+      // Busca nacional (todos os estados)
+      if (uf.toLowerCase() === "nacional") {
+        const telegramUserName = callback.from?.first_name || 'usuário';
+        await sendMessage(this.token, chatId, `⏳ <b>Buscando foto nacional...</b>\n\n<code>${cpf}</code>\n\n🔍 Pesquisando em 12 estados...`);
+        
+        try {
+          const { data: result, fromCache } = await executeQueryWithCache("nacional", cpf);
+          await this.logQuery(telegramUserId, "nacional", cpf, result, fromCache);
+          
+          const fotoUrl = deepExtractPhoto(result);
+          const isValidPhoto = fotoUrl && typeof fotoUrl === 'string' && 
+            (fotoUrl.startsWith('http') || fotoUrl.startsWith('data:image'));
+          
+          if (isValidPhoto) {
+            const estadoEncontrado = (result as Record<string, unknown>)?.estado_encontrado || 'BR';
+            const actionButtons: InlineButton[][] = [
+              [btn("🔍 Nova Consulta", "menu:query"), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
+              [btn("🗑️ Apagar", "delete_msg")],
+              [btn("📄 Baixar PDF", `pdf:nacional:${cpf}`)]
+            ];
+            
+            await telegramRequest(this.token, "sendPhoto", {
+              chat_id: chatId,
+              photo: fotoUrl,
+              caption: `📸 <b>Foto encontrada (${estadoEncontrado})</b>\n\n👤 CPF: <code>${cpf}</code>`,
+              parse_mode: "HTML",
+              reply_markup: { inline_keyboard: actionButtons },
+            });
+          } else {
+            await sendMessage(this.token, chatId,
+              `📸 <b>Foto não encontrada</b>\n\n👤 CPF: <code>${cpf}</code>\n\n💡 Foto não localizada nos 12 estados disponíveis.`,
+              keyboard([btn("🔍 Nova Consulta", "menu:query"), btn("🗑️ Apagar", "delete_msg")])
+            );
+          }
+        } catch (error) {
+          logCmd('ERROR', 'FOTO_NACIONAL_QUERY', { cpf: cpf.substring(0, 6) + '...', chatId, error: (error as Error).message });
+          await sendMessage(this.token, chatId,
+            "❌ <b>Erro ao buscar foto</b>\n\nTente novamente.",
+            keyboard([btn("🗑️ Apagar", "delete_msg")])
+          );
+        }
+        return;
+      }
       
       const fotoModule = ufToFotoModule[uf.toUpperCase()];
       if (!fotoModule) {
