@@ -5158,10 +5158,12 @@ class BotHandler {
       return;
     }
 
-    // Plan selection
+    // Plan selection — format: plan:code:context (e.g., plan:diaria:private)
     if (data.startsWith("plan:")) {
-      const planCode = data.replace("plan:", "");
-      await this.generatePixPayment(chatId, telegramUserId, planCode);
+      const parts = data.split(":");
+      const planCode = parts[1];
+      const planContext = parts[2] || 'group';
+      await this.generatePixPayment(chatId, telegramUserId, planCode, planContext);
       return;
     }
 
