@@ -604,6 +604,18 @@ function formatVehicleResult(
     'anoExercicioLicenciamentoPago', 'dataEmissaoCRLV', 'descricaoTipoCarroceria',
     'cmt', 'pbt', 'cmc', 'qtdEixos', 'numeroEixoTraseiro', 'numeroEixoAuxiliar',
     'numeroCambio', 'numeroCarroceria',
+    // SESP source fields (already normalized)
+    'marca', 'tipo', 'especie', 'cpfCnpj', 'endereco', 'municipioEndereco',
+    'responsavel', 'indicativo_DFRV', 'indicativo_ALERTA',
+    'origemDados', 'placaAnterior', 'anoLicenciamento', 'rg', 'dataAquisicao',
+    'situacaoIPVA', 'situacaoLIC', 'situacaoSEG', 'msgErroBin', 'crlv', 'blindagem',
+    'data_DFRV', 'descricao_DFRV', 'local_DFRV', 'numeroBo_DFRV', 'upBo_DFRV', 'origem_DFRV',
+    'anoBOU_ALERTA', 'numeroBOU_ALERTA', 'numRefem_ALERTA', 'armaBranca_ALERTA',
+    'armaFogo_ALERTA', 'dataFim_ALERTA', 'dataInicio_ALERTA', 'descricao_ALERTA',
+    'indChave_ALERTA', 'indDocumento_ALERTA', 'perigoVida_ALERTA',
+    'bairro_ALERTA', 'municipio_ALERTA', 'siglaEstado_ALERTA', 'complemento_ALERTA',
+    'esquinaCom_ALERTA', 'logradouro_ALERTA', 'numeroResid_ALERTA',
+    'proximidades_ALERTA', 'erro_ALERTA', 'caixa',
   ]);
 
   // Label mapping for human-readable display
