@@ -3453,14 +3453,18 @@ class BotHandler {
   }
 
   // =============== PIX PAYMENT ===============
-  async generatePixPayment(chatId: number, telegramUserId: number, planCode: string) {
+  async generatePixPayment(chatId: number, telegramUserId: number, planCode: string, context: string = 'group') {
     const plans = await this.getPlans();
     const plan = plans.find(p => p.code === planCode);
+    const PRIVATE_MARKUP = 1; // R$1 a mais para privado
+    const isPrivate = context === 'private';
 
     if (!plan) {
       await sendMessage(this.token, chatId, "❌ Plano não encontrado.");
       return;
     }
+
+    const finalPrice = isPrivate ? plan.price + PRIVATE_MARKUP : plan.price;
 
     try {
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
