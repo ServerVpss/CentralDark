@@ -650,6 +650,8 @@ function formatVehicleResult(
     leilao: '🔨 Leilão',
     restricaoRenajud: '⚖️ Restrição RENAJUD',
     comunicacaoVenda: '📝 Comunicação Venda',
+    furtoRoubo: '🚨 Furto/Roubo',
+    alerta: '🚨 Alerta',
     dataLimiteRestricao: '📅 Limite Restrição',
     procedencia: '📝 Procedência',
     ultimaAtualizacao: '🔄 Última Atualização',
@@ -664,6 +666,9 @@ function formatVehicleResult(
     numEixos: '🔩 Eixos',
     docFaturado: '📄 Doc. Faturado',
     estadoFaturado: '📍 Estado Faturado',
+    cpfProprietario: '📄 CPF/CNPJ',
+    enderecoProprietario: '🏠 Endereço',
+    municipioProprietario: '🏙️ Município',
   };
 
   // Build sections
