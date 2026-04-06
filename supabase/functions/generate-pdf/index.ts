@@ -306,25 +306,51 @@ function extractAllData(obj: unknown, prefix = ""): Array<{ key: string; value: 
   return items;
 }
 
-// Remove accents and special characters for PDF compatibility
+// WinAnsi (code page 1252) safe character set for pdf-lib StandardFonts.
+// Any character outside this range will crash drawText, so we aggressively
+// transliterate accented chars and strip everything else.
 function sanitizeText(text: string): string {
-  return text
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[ç]/g, 'c')
-    .replace(/[ñ]/g, 'n')
-    .replace(/[ÀÁÂÃÄÅ]/g, 'A')
-    .replace(/[ÈÉÊË]/g, 'E')
-    .replace(/[ÌÍÎÏ]/g, 'I')
-    .replace(/[ÒÓÔÕÖ]/g, 'O')
-    .replace(/[ÙÚÛÜ]/g, 'U')
-    .replace(/[Ç]/g, 'C')
-    .replace(/[Ñ]/g, 'N')
-    .replace(/[—–⎯]/g, '-')
-    .replace(/[📛🆔👤📅🏠📍💰👨‍👩‍👧‍👦📞📧📄🗑️]/g, '');
+  if (!text) return '';
+
+  // Step 1: Normalize Unicode and transliterate common accented characters
+  let result = text
+    // Latin accented → ASCII
+    .replace(/[àáâãäåāăą]/gi, (m) => m === m.toUpperCase() ? 'A' : 'a')
+    .replace(/[èéêëēĕėęě]/gi, (m) => m === m.toUpperCase() ? 'E' : 'e')
+    .replace(/[ìíîïīĭįı]/gi, (m) => m === m.toUpperCase() ? 'I' : 'i')
+    .replace(/[òóôõöōŏő]/gi, (m) => m === m.toUpperCase() ? 'O' : 'o')
+    .replace(/[ùúûüūŭůűų]/gi, (m) => m === m.toUpperCase() ? 'U' : 'u')
+    .replace(/[çćĉċč]/gi, (m) => m === m.toUpperCase() ? 'C' : 'c')
+    .replace(/[ñńņň]/gi, (m) => m === m.toUpperCase() ? 'N' : 'n')
+    .replace(/[ýÿŷ]/gi, (m) => m === m.toUpperCase() ? 'Y' : 'y')
+    .replace(/[šśŝş]/gi, (m) => m === m.toUpperCase() ? 'S' : 's')
+    .replace(/[žźż]/gi, (m) => m === m.toUpperCase() ? 'Z' : 'z')
+    .replace(/[đ]/gi, (m) => m === m.toUpperCase() ? 'D' : 'd')
+    .replace(/[ğ]/gi, (m) => m === m.toUpperCase() ? 'G' : 'g')
+    .replace(/[ř]/gi, (m) => m === m.toUpperCase() ? 'R' : 'r')
+    .replace(/[ť]/gi, (m) => m === m.toUpperCase() ? 'T' : 't')
+    .replace(/[łĺļľ]/gi, (m) => m === m.toUpperCase() ? 'L' : 'l')
+    // Ligatures
+    .replace(/[æ]/gi, 'ae')
+    .replace(/[œ]/gi, 'oe')
+    .replace(/[ß]/g, 'ss')
+    // Dashes and quotes
+    .replace(/[—–⎯―‒]/g, '-')
+    .replace(/[''‚]/g, "'")
+    .replace(/[""„]/g, '"')
+    .replace(/[…]/g, '...')
+    .replace(/[•·]/g, '-')
+    .replace(/[\u00A0]/g, ' '); // non-breaking space
+
+  // Step 2: NFD decomposition to strip remaining combining marks
+  result = result.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  // Step 3: Keep ONLY printable ASCII (0x20-0x7E) plus tab and newline.
+  // This is the safest approach — WinAnsi is a superset of ASCII but
+  // rather than risk edge cases we stick to pure ASCII.
+  result = result.replace(/[^\x20-\x7E\t\n\r]/g, '');
+
+  return result;
 }
 
 // Extract photo from data object
@@ -590,24 +616,51 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
       const neededHeight = valueLines.length * lineHeight + 5;
       checkNewPage(neededHeight);
 
-      // Label
-      page.drawText(sanitizeText(label + ":"), {
-        x: margin + 10,
-        y: y,
-        size: 9,
-        font: fontBold,
-        color: rgb(0.4, 0.4, 0.4),
-      });
-
-      // Value (possibly multi-line)
-      for (let i = 0; i < valueLines.length; i++) {
-        page.drawText(valueLines[i], {
-          x: margin + labelWidth,
-          y: y - (i * lineHeight),
-          size: 10,
-          font: font,
-          color: rgb(0.1, 0.1, 0.1),
+      // Label — wrapped in try/catch for encoding safety
+      try {
+        page.drawText(sanitizeText(label + ":"), {
+          x: margin + 10,
+          y: y,
+          size: 9,
+          font: fontBold,
+          color: rgb(0.4, 0.4, 0.4),
         });
+      } catch {
+        try {
+          const safeLabel = (label + ":").replace(/[^\x20-\x7E]/g, '');
+          page.drawText(safeLabel || 'Campo:', {
+            x: margin + 10,
+            y: y,
+            size: 9,
+            font: fontBold,
+            color: rgb(0.4, 0.4, 0.4),
+          });
+        } catch { /* skip */ }
+      }
+
+      // Value (possibly multi-line) — wrapped in try/catch for encoding safety
+      for (let i = 0; i < valueLines.length; i++) {
+        try {
+          page.drawText(valueLines[i], {
+            x: margin + labelWidth,
+            y: y - (i * lineHeight),
+            size: 10,
+            font: font,
+            color: rgb(0.1, 0.1, 0.1),
+          });
+        } catch (drawErr) {
+          // If drawText still fails, strip to pure ASCII as last resort
+          const safeText = valueLines[i].replace(/[^\x20-\x7E]/g, '');
+          try {
+            page.drawText(safeText || '(dados indisponiveis)', {
+              x: margin + labelWidth,
+              y: y - (i * lineHeight),
+              size: 10,
+              font: font,
+              color: rgb(0.1, 0.1, 0.1),
+            });
+          } catch { /* skip this line entirely */ }
+        }
       }
 
       y -= neededHeight;
