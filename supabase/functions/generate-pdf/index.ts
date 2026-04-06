@@ -254,8 +254,19 @@ function extractAllData(obj: unknown, prefix = ""): Array<{ key: string; value: 
     // Skip ignored values
     if (shouldIgnoreValue(value)) continue;
     
-    // Handle string values (might be formatted text)
+    // Handle string values (might be formatted text or JSON)
     if (typeof value === "string") {
+      // Try to parse JSON strings
+      const trimmed = value.trim();
+      if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (typeof parsed === 'object' && parsed !== null) {
+            items.push(...extractAllData(parsed, prefix));
+            continue;
+          }
+        } catch { /* not valid JSON, continue as string */ }
+      }
       // Check if it's multi-line formatted data
       if (value.includes('\n') && value.includes(':')) {
         const parsedLines = parseStringData(value);
