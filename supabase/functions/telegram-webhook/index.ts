@@ -1116,8 +1116,11 @@ async function sendLongMessagePaginated(
       if (!isPhotoQuery) {
         buttons.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
       }
-    }
-    
+      }
+      // Botões extras (ex: Consultar Foto)
+      if (extraButtons && extraButtons.length > 0) {
+        buttons.push(...extraButtons);
+      }
     return { inline_keyboard: buttons };
   };
   
