@@ -3431,8 +3431,8 @@ class BotHandler {
         rg: "/rg", "rg-3": "/rg2", cnh: "/cnh", pis: "/pis", "pis-3": "/pis2",
         pix: "/pix", titulo: "/titulo", endereco: "/endereco", renda: "/renda",
         processos: "/processos", "bnmp-lc": "/bnmp", siel: "/siel", "tse-3": "/tse",
-        mae: "/mae", maefull: "/mae2", credilink: "/credilink", "cpf-spc": "/spc",
-        poderaquisitivo: "/poder", cpfsus: "/sus",
+        mae: "/mae", maefull: "/mae2", credilink: "/credilink", "cpf-spc": "/cpf4",
+        poderaquisitivo: "/poder", cpfsus: "/cpf5",
         parentes: "/parentes", "parentes-3": "/parentes2",
         chassi: "/chassi", renavam: "/renavam", motor: "/motor",
         // Foto por estado (apenas 12 estados disponíveis na API)
