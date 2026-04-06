@@ -416,6 +416,33 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
       return retryData;
     }
 
+    // Fallback: se parse_mode HTML falhou, reenviar como texto puro
+    if (!data.ok && method === "sendMessage" && body?.parse_mode === "HTML") {
+      const desc = String(data?.description || "");
+      if (desc.includes("can't parse entities")) {
+        console.warn(`HTML parse failed, retrying as plain text`);
+        const plainText = String(body.text || "")
+          .replace(/<pre>/g, "").replace(/<\/pre>/g, "")
+          .replace(/<b>/g, "").replace(/<\/b>/g, "")
+          .replace(/<i>/g, "").replace(/<\/i>/g, "")
+          .replace(/<code>/g, "").replace(/<\/code>/g, "")
+          .replace(/<a[^>]*>/g, "").replace(/<\/a>/g, "")
+          .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+        const retryBody = { ...body, text: plainText };
+        delete retryBody.parse_mode;
+        const retryRes = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(retryBody),
+        });
+        const retryData = await retryRes.json();
+        if (!retryData.ok) {
+          console.error(`Telegram API error for ${method} (plain retry):`, JSON.stringify(retryData));
+        }
+        return retryData;
+      }
+    }
+
     if (!data.ok) {
       console.error(`Telegram API error for ${method}:`, JSON.stringify(data));
     }
