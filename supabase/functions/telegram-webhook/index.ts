@@ -2687,9 +2687,11 @@ function formatCpfResult(
       const tel = t as Record<string, unknown>;
       const ddd = tel.ddd || tel.DDD || '';
       const num = tel.telefone || tel.numero || tel.celular || '';
-      const tipo = tel.tipoTelefone === 3 ? 'Celular' : tel.tipoTelefone === 1 ? 'Fixo' : '';
+      const formatted = formatPhoneNumber(ddd, num);
+      const tipoCode = tel.tipoTelefone;
+      const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
       const inclusao = tel.dataInclusao ? ` (${String(tel.dataInclusao).substring(0, 10)})` : '';
-      return `(${ddd}) ${num}${tipo ? ' - ' + tipo : ''}${inclusao}`.trim().toUpperCase();
+      return `${formatted || String(num)}${tipo ? ' [' + tipo + ']' : ''}${inclusao}`.trim().toUpperCase();
     }).filter(Boolean);
   };
 
