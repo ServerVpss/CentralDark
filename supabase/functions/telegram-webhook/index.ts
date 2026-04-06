@@ -1545,7 +1545,7 @@ async function executeQueryWithCache(
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   
-  console.log(`[Cache] Calling api-query: type=${queryType}, input=${queryInput}, estado=${estado || 'N/A'}`);
+  logCmd('INFO', 'API_CALL', { queryType, input: queryInput.substring(0, 20), estado: estado || null });
   
   try {
     const response = await fetch(`${supabaseUrl}/functions/v1/api-query`, {
@@ -1558,7 +1558,7 @@ async function executeQueryWithCache(
     });
     
     if (!response.ok) {
-      console.error(`[Cache] api-query HTTP error: ${response.status}`);
+      logCmd('ERROR', 'API_HTTP', { queryType, status: response.status });
       return { 
         data: { error: `Erro na consulta: ${response.status}` }, 
         fromCache: false 
@@ -1569,12 +1569,12 @@ async function executeQueryWithCache(
     const fromCache = result.fromCache === true;
     const data = result.data || result;
     
-    console.log(`[Cache] Result received - fromCache: ${fromCache}, duration: ${result.duration_ms || 'N/A'}ms`);
+    logCmd('INFO', 'API_RESULT', { queryType, fromCache, durationMs: result.duration_ms || null, hasError: !!data.error, notFound: !!data.notFound });
     
     return { data, fromCache };
   } catch (err) {
     const error = err as Error;
-    console.error(`[Cache] Error calling api-query:`, error.message);
+    logCmd('ERROR', 'API_EXCEPTION', { queryType, error: error.message });
     return { 
       data: { error: `⚠️ Erro de conexão. Tente novamente.` }, 
       fromCache: false 
@@ -3104,7 +3104,7 @@ class BotHandler {
   async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string, telegramUserName?: string) {
     // Check maintenance mode - silently ignore so other bots can respond
     if (this.settings.maintenance_mode) {
-      console.log(`[MAINTENANCE] Query "${queryType}" ignored - bot in maintenance mode.`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'maintenance', queryType, chatId, userId: telegramUserId });
       return;
     }
 
@@ -3122,10 +3122,11 @@ class BotHandler {
     // This prevents the bot from responding when module is off,
     // avoiding confusion with other bots no grupo
     if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-      console.log(`Query type "${queryType}" is disabled. Ignoring silently.`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'disabled', queryType, chatId, userId: telegramUserId });
       return;
     }
 
+    logCmd('INFO', 'QUERY_START', { queryType, input: queryInput.substring(0, 20), chatId, userId: telegramUserId, estado: estado || null });
     await sendMessage(this.token, chatId, `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>\n\nAguarde um momento.`);
 
     try {
@@ -3283,7 +3284,7 @@ class BotHandler {
         }
       }
     } catch (error) {
-      console.error("Query error:", error);
+      logCmd('ERROR', 'QUERY_FAIL', { queryType, input: queryInput.substring(0, 20), chatId, userId: telegramUserId, error: (error as Error).message, stack: (error as Error).stack?.substring(0, 200) });
       await sendMessage(this.token, chatId,
         "❌ <b>Erro na consulta</b>\n\nOcorreu um erro ao processar sua consulta. Tente novamente.",
         keyboard([btn("🔍 Tentar Novamente", "menu:query"), btn("🏠 Menu", "menu:main")])
@@ -4453,7 +4454,7 @@ class BotHandler {
       reply_to_message_id: replyToId,
     });
     
-    console.log(`[MultiQuery] Processing ${commands.length} queries for user ${telegramUserId}`);
+    logCmd('INFO', 'MULTI_QUERY', { userId: telegramUserId, count: commands.length, cmds: commands.map(c => `${c.queryType}:${c.queryInput.substring(0,15)}`).join(',') });
     
     // Execute all queries in parallel
     const queryPromises = commands.map(async (cmd, index) => {
@@ -4465,7 +4466,7 @@ class BotHandler {
         
         return { index, success: true, result, cmd, fromCache };
       } catch (error) {
-        console.error(`[MultiQuery] Error on query ${index}:`, error);
+        logCmd('ERROR', 'MULTI_QUERY_ITEM', { index, queryType: cmd.queryType, input: cmd.queryInput.substring(0,15), error: (error as Error).message });
         return { index, success: false, error, cmd, fromCache: false };
       }
     });
@@ -4524,7 +4525,7 @@ class BotHandler {
 
     // Check maintenance mode - silently ignore all query commands
     if (this.settings.maintenance_mode) {
-      console.log(`[MAINTENANCE] Group command ignored - bot in maintenance mode.`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'maintenance', chatId, userId: telegramUserId, cmd: text.substring(0, 40) });
       return;
     }
 
@@ -4595,7 +4596,7 @@ class BotHandler {
 
     // Check if module is enabled FIRST - before any response
     if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-      console.log(`Group query: type "${queryType}" is disabled. Ignoring silently (early check).`);
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'disabled', queryType, chatId, userId: telegramUserId });
       return;
     }
 
@@ -4858,7 +4859,7 @@ class BotHandler {
         }
       }
     } catch (error) {
-      console.error("Group query error:", error);
+      logCmd('ERROR', 'GROUP_QUERY', { queryType, input: queryInput?.substring(0, 20), chatId, userId: telegramUserId, error: (error as Error).message, stack: (error as Error).stack?.substring(0, 200) });
       await telegramRequest(this.token, "sendMessage", {
         chat_id: chatId,
         text: "❌ <b>Erro na consulta</b>\n\nTente novamente.",
@@ -4873,6 +4874,8 @@ class BotHandler {
     const messageId = callback.message?.message_id;
     const telegramUserId = callback.from.id;
     const data = callback.data || "";
+
+    logCmd('INFO', 'CALLBACK', { userId: telegramUserId, chatId, data: data.substring(0, 60), username: callback.from.username });
 
     if (!chatId || !messageId) return;
 
@@ -4967,7 +4970,7 @@ class BotHandler {
           await deleteMessage(this.token, chatId, messageId);
         } catch (_e) { /* ignore */ }
       } catch (error) {
-        console.error("Quick CPF query error:", error);
+        logCmd('ERROR', 'QUICK_CPF', { cpf: cpf.substring(0, 6) + '...', chatId, error: (error as Error).message });
         await editMessage(this.token, chatId, messageId,
           "❌ <b>Erro na consulta de CPF</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
@@ -5028,7 +5031,7 @@ class BotHandler {
           );
         }
       } catch (error) {
-        console.error("Foto query error:", error);
+        logCmd('ERROR', 'FOTO_QUERY', { uf, cpf: cpf.substring(0, 6) + '...', chatId, error: (error as Error).message });
         await sendMessage(this.token, chatId,
           "❌ <b>Erro ao buscar foto</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
@@ -5689,6 +5692,14 @@ setInterval(() => {
   }
 }, 300_000);
 
+// =============== STRUCTURED LOGGER ===============
+function logCmd(level: 'INFO' | 'WARN' | 'ERROR', tag: string, data: Record<string, unknown>) {
+  const entry = { ts: new Date().toISOString(), level, tag, ...data };
+  if (level === 'ERROR') console.error(JSON.stringify(entry));
+  else if (level === 'WARN') console.warn(JSON.stringify(entry));
+  else console.log(JSON.stringify(entry));
+}
+
 // =============== MAIN HANDLER ===============
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -5706,7 +5717,7 @@ Deno.serve(async (req) => {
     const botId = url.searchParams.get("botId");
 
     if (!botId) {
-      console.error("No botId provided");
+      logCmd('ERROR', 'WEBHOOK', { msg: 'No botId provided', url: req.url });
       return new Response("OK", { status: 200 });
     }
 
@@ -5716,11 +5727,23 @@ Deno.serve(async (req) => {
     // Rate limit check
     const senderId = update.message?.from?.id || update.callback_query?.from?.id;
     if (senderId && isRateLimited(senderId)) {
-      console.log(`Rate limited: user ${senderId}, update ${update.update_id}`);
+      logCmd('WARN', 'RATE_LIMIT', { userId: senderId, updateId: update.update_id });
       return new Response("OK", { status: 200 });
     }
 
-    console.log(`[${botId.substring(0, 8)}] Update ${update.update_id} from ${senderId || 'unknown'}`);
+    const chatType = update.message?.chat?.type || update.callback_query?.message?.chat?.type || 'unknown';
+    const msgText = update.message?.text || update.callback_query?.data || '';
+    
+    logCmd('INFO', 'UPDATE_IN', {
+      botId: botId.substring(0, 8),
+      updateId: update.update_id,
+      userId: senderId,
+      chatType,
+      chatId: update.message?.chat?.id || update.callback_query?.message?.chat?.id,
+      text: msgText.substring(0, 80),
+      hasCallback: !!update.callback_query,
+      username: update.message?.from?.username || update.callback_query?.from?.username,
+    });
 
     const { data: bot } = await supabase
       .from("telegram_bots")
@@ -5729,7 +5752,7 @@ Deno.serve(async (req) => {
       .single();
 
     if (!bot) {
-      console.error("Bot not found:", botId);
+      logCmd('ERROR', 'BOT_NOT_FOUND', { botId });
       return new Response("OK", { status: 200 });
     }
 
@@ -5761,12 +5784,22 @@ Deno.serve(async (req) => {
     // Fire-and-forget: process in background, respond immediately to Telegram
     const processingPromise = handler.handleUpdate().then(() => {
       const duration = Date.now() - startTime;
-      if (duration > 5000) {
-        console.warn(`Slow update ${update.update_id}: ${duration}ms`);
-      }
+      logCmd(duration > 5000 ? 'WARN' : 'INFO', 'UPDATE_DONE', {
+        updateId: update.update_id,
+        userId: senderId,
+        durationMs: duration,
+        text: msgText.substring(0, 40),
+      });
     }).catch(err => {
       const duration = Date.now() - startTime;
-      console.error(`Background processing error after ${duration}ms:`, (err as Error).message);
+      logCmd('ERROR', 'UPDATE_FAIL', {
+        updateId: update.update_id,
+        userId: senderId,
+        durationMs: duration,
+        error: (err as Error).message,
+        stack: (err as Error).stack?.substring(0, 300),
+        text: msgText.substring(0, 40),
+      });
     });
 
     // Keep the function alive until processing completes
@@ -5778,7 +5811,11 @@ Deno.serve(async (req) => {
     return new Response("OK", { status: 200 });
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.error(`Webhook error after ${duration}ms:`, (error as Error).message);
+    logCmd('ERROR', 'WEBHOOK_CRASH', {
+      durationMs: duration,
+      error: (error as Error).message,
+      stack: (error as Error).stack?.substring(0, 300),
+    });
     // Always return 200 to Telegram to prevent retries
     return new Response("OK", { status: 200 });
   }
