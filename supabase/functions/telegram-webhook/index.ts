@@ -2540,20 +2540,26 @@ class BotHandler {
   }
 
   // =============== SUBSCRIPTION ===============
-  async getSubscription(telegramUserId: number): Promise<Subscription | null> {
-    const { data } = await this.supabase
+  async getSubscription(telegramUserId: number, context?: string): Promise<Subscription | null> {
+    let query = this.supabase
       .from("telegram_subscriptions")
       .select("*")
       .eq("telegram_user_id", telegramUserId)
-      .eq("bot_id", this.bot.id)
+      .eq("bot_id", this.bot.id);
+    
+    if (context) {
+      query = query.eq("context", context);
+    }
+    
+    const { data } = await query
       .order("expires_at", { ascending: false })
       .limit(1)
       .single();
     return data as Subscription | null;
   }
 
-  async isSubscriptionActive(telegramUserId: number): Promise<boolean> {
-    const sub = await this.getSubscription(telegramUserId);
+  async isSubscriptionActive(telegramUserId: number, context?: string): Promise<boolean> {
+    const sub = await this.getSubscription(telegramUserId, context);
     return sub ? !isExpired(sub.expires_at) : false;
   }
 
