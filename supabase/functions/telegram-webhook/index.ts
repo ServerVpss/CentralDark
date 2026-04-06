@@ -1246,6 +1246,9 @@ function createPaginationKeyboard(
       keyboard.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
     }
   }
+
+  // Botão de comandos
+  keyboard.push([{ text: "📋 Comandos", callback_data: "show_commands" }]);
   
   return { inline_keyboard: keyboard };
 }
@@ -1288,6 +1291,8 @@ async function sendLongMessagePaginated(
         buttons.push([{ text: "📝 Ver TXT", callback_data: `txt:${queryType}:${queryInput}` }]);
       }
     }
+    // Botão de comandos
+    buttons.push([{ text: "📋 Comandos", callback_data: "show_commands" }]);
     return { inline_keyboard: buttons };
   };
   
@@ -4972,6 +4977,12 @@ class BotHandler {
       try {
         await deleteMessage(this.token, chatId, messageId);
       } catch (_e) { /* ignore */ }
+      return;
+    }
+
+    // Show commands button handler
+    if (data === "show_commands") {
+      await this.showAvailableCommands(chatId);
       return;
     }
 
