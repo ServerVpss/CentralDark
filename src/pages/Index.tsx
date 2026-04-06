@@ -88,15 +88,15 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Bots */}
-        <section>
-          <BotsSection bots={bots} />
-        </section>
-
-        {/* Activity + Sidebar */}
+        {/* Bots + Chart */}
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <ActivityFeed />
+            <BotsSection bots={bots} />
+          </div>
+          <div>
+            <DashboardAnalyticsChart />
+          </div>
+        </section>
           </div>
           <div className="space-y-4">
             <QuickActions />
