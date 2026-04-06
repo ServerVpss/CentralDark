@@ -625,15 +625,29 @@ async function generatePDF(queryData: QueryData): Promise<Uint8Array> {
         color: rgb(0.4, 0.4, 0.4),
       });
 
-      // Value (possibly multi-line)
+      // Value (possibly multi-line) — wrapped in try/catch for encoding safety
       for (let i = 0; i < valueLines.length; i++) {
-        page.drawText(valueLines[i], {
-          x: margin + labelWidth,
-          y: y - (i * lineHeight),
-          size: 10,
-          font: font,
-          color: rgb(0.1, 0.1, 0.1),
-        });
+        try {
+          page.drawText(valueLines[i], {
+            x: margin + labelWidth,
+            y: y - (i * lineHeight),
+            size: 10,
+            font: font,
+            color: rgb(0.1, 0.1, 0.1),
+          });
+        } catch (drawErr) {
+          // If drawText still fails, strip to pure ASCII as last resort
+          const safeText = valueLines[i].replace(/[^\x20-\x7E]/g, '');
+          try {
+            page.drawText(safeText || '(dados indisponiveis)', {
+              x: margin + labelWidth,
+              y: y - (i * lineHeight),
+              size: 10,
+              font: font,
+              color: rgb(0.1, 0.1, 0.1),
+            });
+          } catch { /* skip this line entirely */ }
+        }
       }
 
       y -= neededHeight;
