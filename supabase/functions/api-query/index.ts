@@ -54,8 +54,8 @@ const VIRTUAL_MODULES = new Set(["foto", "nacional"]);
 const SLOW_MODULES = new Set([
   "placa", "placa-serpro", "placa-simples", "placa-sesp",
   "processos", "bnmp-lc", "siel", "credilink", "cpf-spc",
-  "fotomg", "fotosp", "fotorj", "fotoba", "fotoce", "fotogo",
-  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf",
+  "fotomg", "fotosp", "fotorj", "fotoce",
+  "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
   "score", "score-3", "tse-3", "poderaquisitivo",
 ]);
@@ -75,8 +75,8 @@ const NUMERIC_MODULES = new Set([
   "score", "score-3", "renda", "credilink", "poderaquisitivo",
   "parentes", "parentes-3",
   "renavam", "cnpj-cred",
-  "fotomg", "fotosp", "fotorj", "fotoba", "fotoce", "fotogo",
-  "fotopr", "fotors", "fotope", "fotoma", "fotoes", "fotodf",
+  "fotomg", "fotosp", "fotorj", "fotoce",
+  "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
 ]);
 
