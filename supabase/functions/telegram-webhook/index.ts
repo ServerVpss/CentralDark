@@ -212,10 +212,10 @@ const queryTypeAliases: Record<string, string> = {
   cep2: "cepfull", cep3: "cep-3",
   score2: "score-3",
   rg2: "rg-3", pis2: "pis-3",
-  placa2: "placa-serpro", placa3: "placa-simples", placa4: "placa-sesp",
+  placa2: "placa-serpro", placa3: "placa-sesp",
   // Aliases antigos (compatibilidade)
   cpfisk: "cpf-isk",
-  placasimples: "placa-simples", placasesp: "placa-sesp",
+  placasesp: "placa-sesp",
   rg3: "rg-3", pis3: "pis-3",
   parentes3: "parentes-3",
   // Aliases de nome descritivo
@@ -243,7 +243,7 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
 const queryTypeLabels: Record<string, string> = {
   cpf: "👤 CPF", cpffull: "👤 CPF 2", "cpf-isk": "👤 CPF 3",
   "cnpj-cred": "🏢 CNPJ",
-  placa: "🚗 Placa", "placa-serpro": "🚗 Placa 2", "placa-simples": "🚗 Placa 3", "placa-sesp": "🚗 Placa 4",
+  placa: "🚗 Placa", "placa-serpro": "🚗 Placa 2", "placa-sesp": "🚗 Placa 3",
   telefone: "📞 Telefone", telefonefull: "📞 Telefone 2", "telefone-3": "📞 Telefone 3",
   email: "📧 Email", emailfull: "📧 Email 2", "email-3": "📧 Email 3",
   cep: "📍 CEP", cepfull: "📍 CEP 2", "cep-3": "📍 CEP 3",
@@ -471,7 +471,7 @@ function fixBrokenEncodingDeep(obj: unknown): unknown {
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA VEÍCULOS ===============
-const vehicleModules = ['placa', 'placa2', 'placa3', 'placa4', 'placasimples', 'placasesp', 'chassi', 'renavam', 'motor', 'frota', 'bin'];
+const vehicleModules = ['placa', 'placa2', 'placa3', 'placasesp', 'chassi', 'renavam', 'motor', 'frota', 'bin'];
 
 function formatVehicleResult(
   queryType: string,
@@ -3960,7 +3960,7 @@ class BotHandler {
       const moduleToCommand: Record<string, string> = {
         cpf: "/cpf", cpffull: "/cpf2", "cpf-isk": "/cpf3",
         "cnpj-cred": "/cnpj", placa: "/placa", "placa-serpro": "/placa2",
-        "placa-simples": "/placa3", "placa-sesp": "/placa4",
+        "placa-sesp": "/placa3",
         telefone: "/telefone", telefonefull: "/telefone2", "telefone-3": "/telefone3",
         email: "/email", emailfull: "/email2", "email-3": "/email3",
         cep: "/cep", cepfull: "/cep2", "cep-3": "/cep3",
@@ -3983,7 +3983,7 @@ class BotHandler {
       const usageExamples: Record<string, string> = {
         cpf: "12345678900", cpffull: "12345678900", "cpf-isk": "12345678900",
         "cnpj-cred": "12345678000100",
-        placa: "ABC1234", "placa-serpro": "ABC1234", "placa-simples": "ABC1234", "placa-sesp": "ABC1234",
+        placa: "ABC1234", "placa-serpro": "ABC1234", "placa-sesp": "ABC1234",
         telefone: "11999998888", telefonefull: "11999998888", "telefone-3": "11999998888",
         email: "user@email.com", emailfull: "user@email.com", "email-3": "user@email.com",
         cep: "01310100", cepfull: "01310100", "cep-3": "01310100",
@@ -5538,7 +5538,7 @@ class BotHandler {
     const commandMap: Record<string, string> = {
       cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
       cnpj: "cnpj-cred", placa: "placa", placa2: "placa-serpro",
-      placasimples: "placa-simples", placasesp: "placa-sesp",
+      placasesp: "placa-sesp",
       telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
       email: "email", emailfull: "emailfull",
       cep: "cep", cepfull: "cepfull", nome: "nome", nomefull: "nomefull",
@@ -5724,8 +5724,8 @@ class BotHandler {
       cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
       cpf2: "cpffull", cpf3: "cpf-isk",
       cnpj: "cnpj-cred", placa: "placa",
-      placa2: "placa-serpro", placa3: "placa-simples", placa4: "placa-sesp",
-      placasimples: "placa-simples", placasesp: "placa-sesp",
+      placa2: "placa-serpro", placa3: "placa-sesp",
+      placasesp: "placa-sesp",
       telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
       telefone2: "telefonefull", telefone3: "telefone-3",
       email: "email", emailfull: "emailfull",
