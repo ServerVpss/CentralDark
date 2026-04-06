@@ -186,19 +186,13 @@ export default function QueryLogs() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-6 max-w-[1600px] mx-auto">
-        {/* Header */}
+      <div className="space-y-5 max-w-[1400px] mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/20">
-              <History className="h-6 w-6 text-violet-400" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Logs de Consultas</h1>
-              <p className="text-sm text-muted-foreground">
-                Histórico de todas as consultas realizadas
-              </p>
-            </div>
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">Logs de Consultas</h1>
+            <p className="text-sm text-muted-foreground">
+              Histórico de todas as consultas realizadas
+            </p>
           </div>
           <Button variant="outline" onClick={fetchLogs} className="gap-2">
             <RefreshCw className="h-4 w-4" />

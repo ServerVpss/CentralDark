@@ -82,18 +82,17 @@ export default function Settings() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-6">
-        {/* Header */}
+      <div className="space-y-5 max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Configurações</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-xl font-semibold text-foreground">Configurações</h1>
+            <p className="text-sm text-muted-foreground">
               Gerencie as configurações gerais do sistema
             </p>
           </div>
-          <Button variant="glow" className="gap-2" onClick={handleSave}>
+          <Button className="gap-2" onClick={handleSave}>
             <Save className="h-4 w-4" />
-            Salvar Alterações
+            Salvar
           </Button>
         </div>
 

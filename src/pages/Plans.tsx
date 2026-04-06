@@ -209,16 +209,15 @@ export default function Plans() {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in space-y-6">
-        {/* Header */}
+      <div className="space-y-5 max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Planos</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-xl font-semibold text-foreground">Planos</h1>
+            <p className="text-sm text-muted-foreground">
               Gerencie seus planos de assinatura e preços
             </p>
           </div>
-          <Button variant="glow" className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
+          <Button className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
             <Plus className="h-4 w-4" />
             Criar Plano
           </Button>

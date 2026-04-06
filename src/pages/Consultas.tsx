@@ -309,11 +309,10 @@ export default function Consultas() {
         icon="check"
       />
       
-      <MotionPage className="space-y-6">
-        {/* Header */}
+      <MotionPage className="space-y-5 max-w-[1400px] mx-auto">
         <div>
-          <h1 className="text-2xl font-bold">Consultas</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl font-semibold text-foreground">Consultas</h1>
+          <p className="text-sm text-muted-foreground">
             Sistema integrado de consulta de dados via API
           </p>
         </div>
