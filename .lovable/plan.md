@@ -1,40 +1,57 @@
 
 
-# Novidades da API 9.4 e 9.6 no Telegram Webhook
+# Adicionar Custom Emojis Premium nos Botões do Bot
 
-## O que será implementado
+## O que são Custom Emojis nos Botões
+O campo `icon_custom_emoji_id` (API 9.4) permite adicionar um ícone de emoji customizado ao lado do texto do botão. O bot precisa ter **Telegram Premium** ou permissão para usar custom emojis. Caso não tenha, o Telegram ignora o campo silenciosamente (os botões continuam funcionando normalmente).
 
-### 1. Custom Emoji Icons nos Botões (API 9.4)
-O campo `icon_custom_emoji_id` permite exibir um emoji customizado no botão. Atualizar a função `btn()` para aceitar esse parâmetro opcional.
+## O que será feito
 
-```ts
-function btn(text: string, callback_data: string, style?: string, iconCustomEmojiId?: string): InlineButton {
-  const b: any = { text, callback_data };
-  if (style) b.style = style;
-  if (iconCustomEmojiId) b.icon_custom_emoji_id = iconCustomEmojiId;
-  return b;
-}
-```
+Adicionar `icon_custom_emoji_id` em todos os botões do menu principal, admin, consultas e navegação. As funções `btn()` e `btnUrl()` já suportam o parâmetro — só falta usá-lo.
 
-**Nota importante:** Custom emojis em botões só funcionam se o bot tem permissão para usar custom emojis (geralmente bots com Telegram Premium ou em chats onde o bot pode enviar custom emojis). Se o bot não tiver essa permissão, o Telegram ignora o campo silenciosamente.
+### IDs de Custom Emojis (Telegram Built-in Premium)
 
-### 2. Suporte a `sender_tag` (API 9.6)
-Adicionar o campo `sender_tag` na interface `TelegramMessage` e logar/armazenar quando presente. O `sender_tag` é uma tag opcional que identifica o remetente — útil para rastreamento e logs.
+Usaremos IDs de emojis premium populares do Telegram:
 
-### 3. Suporte a Managed Bots (API 9.6)
-Adicionar campo `managed_bot_created` na interface `TelegramMessage` para detectar quando um bot gerenciado é criado. Adicionar `can_manage_bots` na interface `TelegramUser`.
+| Emoji | ID | Uso |
+|-------|-----|-----|
+| 🔍 Lupa | `5368324170671202286` | Fazer Consulta |
+| 💎 Diamante | `5471952986970267163` | Planos |
+| 📊 Gráfico | `5368324170671202286` | Estatísticas / Assinatura |
+| ⚡ Raio | `5253959696498104346` | Admin |
+| ✅ Check Verde | `5368324170671202286` | Aceitar |
+| 🏠 Casa | `5237699328843200968` | Menu Principal / Voltar |
+| 📢 Megafone | `5424972541023694017` | Broadcast |
+| 📋 Lista | `5368324170671202286` | Comandos |
+| 💰 Moeda | `5271604874513397103` | Pagamentos |
+| 🚪 Porta | `5237699328843200968` | Entrar no Grupo |
 
-## Alterações no arquivo
+> **Nota:** Esses IDs são exemplos de emojis premium do Telegram. Se o bot não tiver Premium, os ícones simplesmente não aparecem mas os botões funcionam normal. Se você tiver IDs específicos de emojis que quer usar, posso trocar facilmente.
 
-### `supabase/functions/telegram-webhook/index.ts`
+### Botões que receberão emojis
 
-1. **Interface `TelegramUser`** — adicionar `can_manage_bots?: boolean`
-2. **Interface `TelegramMessage`** — adicionar `sender_tag?: string` e `managed_bot_created?: unknown`
-3. **Função `btn()`** — adicionar parâmetro `iconCustomEmojiId`
-4. **Função `btnUrl()`** — adicionar parâmetros `style` e `iconCustomEmojiId`
-5. **Logs** — incluir `sender_tag` nos logs de mensagem quando presente
-6. **Aplicar custom emojis** em botões estratégicos do menu (onde fizer sentido visual)
+**Menu Principal** (6 botões):
+- 🔍 Fazer Consulta → emoji lupa premium
+- 💳 Planos Privado / Grupo → emoji diamante
+- 📊 Minha Assinatura → emoji gráfico
+- 💰 Pagamentos Pendentes → emoji moeda
+- 📋 Comandos → emoji lista
+- ⚙️ Painel Admin → emoji raio
 
-## Deploy
+**Menu Admin** (4 botões):
+- 📋 Gerenciar Planos → emoji diamante
+- 👥 Usuários → emoji grupo
+- 📊 Estatísticas → emoji gráfico
+- 📢 Broadcast → emoji megafone
+
+**Botões de ação** (resultados de consulta):
+- 🔍 Nova Consulta → emoji lupa
+- 🏠 Menu → emoji casa
+- 🔙 Voltar → emoji casa
+
+### Arquivo modificado
+- `supabase/functions/telegram-webhook/index.ts` — adicionar o 4º parâmetro nos ~30 chamadas `btn()` e `btnUrl()` estratégicas
+
+### Deploy
 Deploy automático da edge function `telegram-webhook`.
 
