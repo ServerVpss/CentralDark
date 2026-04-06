@@ -28,6 +28,7 @@ interface TelegramUser {
   username?: string;
   first_name?: string;
   is_bot?: boolean;
+  can_manage_bots?: boolean;
 }
 
 interface TelegramChat {
@@ -48,6 +49,8 @@ interface TelegramMessage {
   video?: unknown;
   document?: unknown;
   caption?: string;
+  sender_tag?: string;
+  managed_bot_created?: unknown;
 }
 
 interface TelegramCallbackQuery {
@@ -411,14 +414,18 @@ function extractUfFromResult(data: unknown, depth = 0, seen = new WeakSet<object
 }
 
 // =============== HELPERS ===============
-function btn(text: string, callback_data: string, style?: string): InlineButton {
+function btn(text: string, callback_data: string, style?: string, iconCustomEmojiId?: string): InlineButton {
   const b: any = { text, callback_data };
   if (style) b.style = style;
+  if (iconCustomEmojiId) b.icon_custom_emoji_id = iconCustomEmojiId;
   return b;
 }
 
-function btnUrl(text: string, url: string): InlineButton {
-  return { text, url };
+function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: string): InlineButton {
+  const b: any = { text, url };
+  if (style) b.style = style;
+  if (iconCustomEmojiId) b.icon_custom_emoji_id = iconCustomEmojiId;
+  return b;
 }
 
 function keyboard(...rows: InlineButton[][]) {
@@ -5973,6 +5980,9 @@ Deno.serve(async (req) => {
       text: msgText.substring(0, 80),
       hasCallback: !!update.callback_query,
       username: update.message?.from?.username || update.callback_query?.from?.username,
+      ...(update.message?.sender_tag ? { senderTag: update.message.sender_tag } : {}),
+      ...(update.message?.from?.can_manage_bots ? { canManageBots: true } : {}),
+      ...(update.message?.managed_bot_created ? { managedBotCreated: true } : {}),
     });
 
     const { data: bot } = await supabase
