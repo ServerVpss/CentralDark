@@ -133,6 +133,7 @@ interface PendingPayment {
   value: number;
   created_at: string;
   telegram_message_id?: number;
+  context?: string;
 }
 
 type InlineButton = { text: string; callback_data?: string; url?: string };
