@@ -302,11 +302,23 @@ function extractUfFromResult(data: unknown): string | null {
       if (found) return found;
     } catch { /* ignore */ }
     
-    // Buscar padrão UF: XX na string
-    const ufMatch = (obj.data as string).match(/\bUF[:\s]+([A-Z]{2})\b/i);
+    // Buscar padrão UF: XX ou "uf":"XX" na string
+    const ufMatch = (obj.data as string).match(/\bUF[:\s]+([A-Z]{2})\b/i) 
+      || (obj.data as string).match(/"uf"\s*:\s*"([A-Z]{2})"/i);
     if (ufMatch) {
       const upper = ufMatch[1].toUpperCase();
       if (upper in ufToFotoModule) return upper;
+    }
+  }
+  
+  // Buscar em qualquer valor string que contenha "uf":"XX"  
+  for (const value of Object.values(obj)) {
+    if (typeof value === 'string' && value.length > 10) {
+      const jsonUfMatch = value.match(/"uf"\s*:\s*"([A-Z]{2})"/i);
+      if (jsonUfMatch) {
+        const upper = jsonUfMatch[1].toUpperCase();
+        if (upper in ufToFotoModule) return upper;
+      }
     }
   }
   
