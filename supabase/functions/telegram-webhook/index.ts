@@ -1364,13 +1364,36 @@ async function sendLongMessage(token: string, chatId: number, text: string, repl
 }
 
 async function editMessage(token: string, chatId: number, messageId: number, text: string, replyMarkup?: unknown) {
-  return telegramRequest(token, "editMessageText", {
+  const result = await telegramRequest(token, "editMessageText", {
     chat_id: chatId,
     message_id: messageId,
     text,
     parse_mode: "HTML",
     reply_markup: replyMarkup,
   });
+
+  // Fallback: se HTML falhou, reenviar como texto puro
+  if (!result.ok) {
+    const desc = String(result.description || "");
+    if (desc.includes("can't parse entities") || desc.includes("Unexpected end tag") || desc.includes("Unclosed tag")) {
+      logCmd('WARN', 'EDIT_HTML_FAIL', { chatId, messageId, desc: desc.substring(0, 100) });
+      const plainText = text
+        .replace(/<pre>/g, "").replace(/<\/pre>/g, "")
+        .replace(/<b>/g, "").replace(/<\/b>/g, "")
+        .replace(/<i>/g, "").replace(/<\/i>/g, "")
+        .replace(/<code>/g, "").replace(/<\/code>/g, "")
+        .replace(/<a[^>]*>/g, "").replace(/<\/a>/g, "")
+        .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+      return telegramRequest(token, "editMessageText", {
+        chat_id: chatId,
+        message_id: messageId,
+        text: plainText,
+        reply_markup: replyMarkup,
+      });
+    }
+  }
+
+  return result;
 }
 
 async function answerCallback(token: string, callbackId: string, text?: string) {
