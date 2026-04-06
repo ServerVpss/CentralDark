@@ -1545,7 +1545,7 @@ async function executeQueryWithCache(
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   
-  console.log(`[Cache] Calling api-query: type=${queryType}, input=${queryInput}, estado=${estado || 'N/A'}`);
+  logCmd('INFO', 'API_CALL', { queryType, input: queryInput.substring(0, 20), estado: estado || null });
   
   try {
     const response = await fetch(`${supabaseUrl}/functions/v1/api-query`, {
@@ -1558,7 +1558,7 @@ async function executeQueryWithCache(
     });
     
     if (!response.ok) {
-      console.error(`[Cache] api-query HTTP error: ${response.status}`);
+      logCmd('ERROR', 'API_HTTP', { queryType, status: response.status });
       return { 
         data: { error: `Erro na consulta: ${response.status}` }, 
         fromCache: false 
@@ -1569,12 +1569,12 @@ async function executeQueryWithCache(
     const fromCache = result.fromCache === true;
     const data = result.data || result;
     
-    console.log(`[Cache] Result received - fromCache: ${fromCache}, duration: ${result.duration_ms || 'N/A'}ms`);
+    logCmd('INFO', 'API_RESULT', { queryType, fromCache, durationMs: result.duration_ms || null, hasError: !!data.error, notFound: !!data.notFound });
     
     return { data, fromCache };
   } catch (err) {
     const error = err as Error;
-    console.error(`[Cache] Error calling api-query:`, error.message);
+    logCmd('ERROR', 'API_EXCEPTION', { queryType, error: error.message });
     return { 
       data: { error: `⚠️ Erro de conexão. Tente novamente.` }, 
       fromCache: false 
