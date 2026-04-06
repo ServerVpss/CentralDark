@@ -3852,6 +3852,8 @@ class BotHandler {
         }
         if (showFotoButton) {
           actionButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`, "primary")]);
+        } else if (showFotoNacional) {
+          actionButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`, "primary")]);
         }
         
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
@@ -3871,6 +3873,8 @@ class BotHandler {
         const extraButtons: InlineButton[][] = [];
         if (showFotoButton) {
           extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
+        } else if (showFotoNacional) {
+          extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`)]);
         }
         const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
         if (paginatedResult.ok && paginatedResult.result) {
