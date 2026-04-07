@@ -470,6 +470,197 @@ function fixBrokenEncodingDeep(obj: unknown): unknown {
   return obj;
 }
 
+// =============== FORMATAÇÃO ESPECÍFICA PARA CPF-SPC ===============
+function formatCpfSpcResult(
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (s: string) => string,
+  shouldIgnore: (v: unknown) => boolean
+): string {
+  const lines: string[] = [];
+  
+  // Extrair dados do wrapper da API
+  const apiData = (data.dados || data.data || data) as Record<string, unknown>;
+  const cpfArray = (apiData.cpf || apiData.data?.cpf) as Array<Record<string, unknown>> | undefined;
+  const cpfData = cpfArray?.[0] || apiData;
+  
+  const basics = (cpfData.dadosBasicos || cpfData) as Record<string, unknown>;
+  const enderecos = (cpfData.enderecos || []) as Array<Record<string, unknown>>;
+  const parentes = (cpfData.parentes || []) as Array<Record<string, unknown>>;
+  const telefones = (cpfData.telefones || []) as Array<Record<string, unknown>>;
+  const emails = (cpfData.emails || []) as Array<Record<string, unknown>>;
+  const scoreArr = (cpfData.score || []) as Array<Record<string, unknown>>;
+  const poderAq = (cpfData.poderAquisitivo || []) as Array<Record<string, unknown>>;
+  
+  const getValue = (obj: Record<string, unknown>, keys: string[]): string => {
+    for (const k of keys) {
+      const v = obj[k];
+      if (v !== undefined && v !== null && v !== '' && v !== 'NULL' && v !== '0') {
+        return String(v).trim();
+      }
+    }
+    return '';
+  };
+  
+  const formatCpf = (v: string | number): string => {
+    const s = String(v).replace(/\D/g, '').padStart(11, '0');
+    if (s.length === 11) return `${s.slice(0,3)}.${s.slice(3,6)}.${s.slice(6,9)}-${s.slice(9)}`;
+    return s;
+  };
+  
+  const formatDate = (d: string): string => {
+    if (!d || d === 'NULL') return '';
+    const match = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) return `${match[3]}/${match[2]}/${match[1]}`;
+    return d;
+  };
+  
+  // Header
+  lines.push(`👤 <b>CPF 4 (SPC) RESULTADO</b>`);
+  lines.push('');
+  lines.push('<pre>');
+  
+  // ── DADOS PESSOAIS ──
+  lines.push('┌─────────────────────────────');
+  lines.push('│ 👤 DADOS PESSOAIS');
+  lines.push('├─────────────────────────────');
+  
+  const cpf = getValue(basics, ['cpf']);
+  const nome = getValue(basics, ['nome']);
+  const sexo = getValue(basics, ['sexo']);
+  const nascimento = formatDate(getValue(basics, ['dataNascimento']));
+  const obito = formatDate(getValue(basics, ['dataObito']));
+  const nomeMae = getValue(basics, ['nomeMae']);
+  const nomePai = getValue(basics, ['nomePai']);
+  const rg = getValue(basics, ['rg']);
+  const situacao = getValue(basics, ['codigoSituacaoCadastral']);
+  const dataSituacao = formatDate(getValue(basics, ['dataSituacaoCadastral']));
+  
+  if (cpf) lines.push(`│ 🆔 CPF: ${formatCpf(cpf)}`);
+  if (nome) lines.push(`│ 📝 Nome: ${escapeHtml(nome)}`);
+  if (sexo) lines.push(`│ 👤 Sexo: ${sexo === 'M' ? 'Masculino' : sexo === 'F' ? 'Feminino' : sexo}`);
+  if (nascimento) lines.push(`│ 📅 Nascimento: ${nascimento}`);
+  if (obito) lines.push(`│ ⚫ Óbito: ${obito}`);
+  if (nomeMae) lines.push(`│ 👩 Mãe: ${escapeHtml(nomeMae)}`);
+  if (nomePai) lines.push(`│ 👨 Pai: ${escapeHtml(nomePai)}`);
+  if (rg) lines.push(`│ 🪪 RG: ${rg}`);
+  if (situacao) {
+    const sitLabel = situacao === '10' ? 'Regular' : situacao === '90' ? 'Falecido' : situacao;
+    lines.push(`│ 📋 Situação: ${sitLabel}${dataSituacao ? ` (${dataSituacao})` : ''}`);
+  }
+  
+  // ── ENDEREÇOS ──
+  if (enderecos.length > 0) {
+    lines.push('├─────────────────────────────');
+    lines.push('│ 📍 ENDEREÇOS');
+    lines.push('├─────────────────────────────');
+    enderecos.forEach((end, i) => {
+      const tipo = getValue(end, ['tipoLogradouro']);
+      const logradouro = getValue(end, ['nomeLogradouro']);
+      const numero = getValue(end, ['numeroLogradouro']);
+      const complemento = getValue(end, ['complementoLogradouro']);
+      const bairro = getValue(end, ['bairro']);
+      const cidade = getValue(end, ['cidade']);
+      const uf = getValue(end, ['uf']);
+      const cep = getValue(end, ['cep']);
+      
+      if (enderecos.length > 1) lines.push(`│ 📌 Endereço ${i + 1}:`);
+      const rua = [tipo, logradouro].filter(Boolean).join(' ');
+      if (rua) lines.push(`│   ${escapeHtml(rua)}${numero ? ', ' + numero : ''}${complemento ? ' - ' + escapeHtml(complemento) : ''}`);
+      if (bairro) lines.push(`│   Bairro: ${escapeHtml(bairro)}`);
+      if (cidade || uf) lines.push(`│   ${[escapeHtml(cidade), uf].filter(Boolean).join(' - ')}`);
+      if (cep) lines.push(`│   CEP: ${cep.replace(/(\d{5})(\d{3})/, '$1-$2')}`);
+    });
+  }
+  
+  // ── TELEFONES ──
+  if (telefones.length > 0) {
+    lines.push('├─────────────────────────────');
+    lines.push('│ 📞 TELEFONES');
+    lines.push('├─────────────────────────────');
+    telefones.forEach(tel => {
+      const ddd = getValue(tel, ['ddd']);
+      const num = getValue(tel, ['numero', 'telefone']);
+      if (ddd || num) lines.push(`│ 📱 (${ddd}) ${num}`);
+    });
+  }
+  
+  // ── E-MAILS ──
+  if (emails.length > 0) {
+    lines.push('├─────────────────────────────');
+    lines.push('│ 📧 E-MAILS');
+    lines.push('├─────────────────────────────');
+    emails.forEach(em => {
+      const email = getValue(em, ['email', 'emailEndereco']);
+      if (email) lines.push(`│ 📧 ${escapeHtml(email)}`);
+    });
+  }
+  
+  // ── SCORE ──
+  if (scoreArr.length > 0) {
+    const score = scoreArr[0];
+    lines.push('├─────────────────────────────');
+    lines.push('│ 📊 SCORE');
+    lines.push('├─────────────────────────────');
+    const csb8 = getValue(score, ['csb8']);
+    const csb8Faixa = getValue(score, ['csb8Faixa']);
+    const csba = getValue(score, ['csba']);
+    const csbaFaixa = getValue(score, ['csbaFaixa']);
+    if (csb8) lines.push(`│ 📈 Score CSB8: ${csb8}${csb8Faixa ? ` (${escapeHtml(csb8Faixa)})` : ''}`);
+    if (csba) lines.push(`│ 📉 Score CSBA: ${csba}${csbaFaixa ? ` (${escapeHtml(csbaFaixa)})` : ''}`);
+  }
+  
+  // ── PODER AQUISITIVO ──
+  if (poderAq.length > 0) {
+    lines.push('├─────────────────────────────');
+    lines.push('│ 💎 PODER AQUISITIVO');
+    lines.push('├─────────────────────────────');
+    poderAq.forEach(pa => {
+      const renda = getValue(pa, ['renda', 'faixaRenda']);
+      const classe = getValue(pa, ['classe', 'classeEconomica']);
+      if (renda) lines.push(`│ 💰 Renda: ${escapeHtml(renda)}`);
+      if (classe) lines.push(`│ 🏷️ Classe: ${escapeHtml(classe)}`);
+    });
+  }
+  
+  // ── PARENTES ──
+  if (parentes.length > 0) {
+    lines.push('├─────────────────────────────');
+    lines.push('│ 👨‍👩‍👧‍👦 VÍNCULOS FAMILIARES');
+    lines.push('├─────────────────────────────');
+    
+    // Deduplicate: agrupar por cpfVinculo, manter apenas vínculos únicos
+    const seen = new Set<string>();
+    const uniqueParentes: Array<Record<string, unknown>> = [];
+    for (const p of parentes) {
+      const cpfV = String(p.cpfVinculo || '');
+      const nomeV = String(p.nomeVinculo || '');
+      const key = `${cpfV}-${nomeV}`;
+      // Filtrar auto-referências (onde cpfVinculo = CPF consultado)
+      if (cpfV === cpf) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      uniqueParentes.push(p);
+    }
+    
+    uniqueParentes.forEach((p, i) => {
+      const cpfV = String(p.cpfVinculo || '');
+      const nomeV = String(p.nomeVinculo || '');
+      const vinculo = String(p.vinculo || '');
+      const prefix = i === uniqueParentes.length - 1 ? '└' : '├';
+      lines.push(`│ ${prefix} 👤 ${escapeHtml(nomeV)}`);
+      if (cpfV) lines.push(`│ │  🆔 CPF: ${formatCpf(cpfV)}`);
+      if (vinculo) lines.push(`│ │  🔗 Vínculo: ${escapeHtml(vinculo)}`);
+    });
+  }
+  
+  lines.push('└─────────────────────────────');
+  lines.push('</pre>');
+  
+  return lines.join('\n');
+}
+
 // =============== FORMATAÇÃO ESPECÍFICA PARA VEÍCULOS ===============
 const vehicleModules = ['placa', 'placa2', 'placa3', 'placasesp', 'chassi', 'renavam', 'motor', 'frota', 'bin'];
 
