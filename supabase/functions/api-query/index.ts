@@ -699,7 +699,39 @@ async function handleQuery(
     };
   }
 
-  // ---- MÓDULO PADRÃO ----
+  // ---- MÓDULO DIRETO ISEEK (exclusivos) ----
+  if (ISEEK_DIRECT_MODULES[modulo]) {
+    const iseekModulo = ISEEK_DIRECT_MODULES[modulo];
+    console.log(`[iSeek Direct] modulo=${modulo} → ${iseekModulo}`);
+    const iseekResult = await fetchFromIseek(iseekModulo, cleanInput);
+
+    if (iseekResult.data.error) {
+      return {
+        success: false,
+        data: iseekResult.data,
+        meta: buildMeta("error", iseekResult.provider_duration_ms),
+        errors: [String(iseekResult.data.error)],
+      };
+    }
+
+    if (iseekResult.data.notFound) {
+      return {
+        success: true,
+        data: iseekResult.data,
+        meta: buildMeta("not_found", iseekResult.provider_duration_ms),
+        errors: [],
+      };
+    }
+
+    return {
+      success: true,
+      data: iseekResult.data,
+      meta: { ...buildMeta("success", iseekResult.provider_duration_ms), provider: "iseek" } as any,
+      errors: [],
+    };
+  }
+
+  // ---- MÓDULO PADRÃO (VeiculosAPI + fallback iSeek) ----
   const result = await fetchFromProvider(modulo, cleanInput);
   const primaryFailed = !!(result.data.error || result.data.notFound);
 
