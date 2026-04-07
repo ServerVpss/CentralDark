@@ -264,7 +264,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
     }
   }
 
-  if (["placa", "placa-serpro", "placa-simples", "placa-sesp"].includes(modulo)) {
+  if (["placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-isk"].includes(modulo)) {
     if (!/^[A-Z0-9]{7}$/i.test(clean)) {
       return { valid: false, error: "Placa deve conter 7 caracteres alfanuméricos." };
     }
