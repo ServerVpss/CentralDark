@@ -5957,6 +5957,30 @@ class BotHandler {
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, queryType, inputForQuery, result, fromCache);
 
+      // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
+      const providerErr = isProviderError(result);
+      if (providerErr.isError) {
+        logCmd('WARN', 'PROVIDER_ERROR', { queryType, message: providerErr.message, chatId, userId: telegramUserId });
+        // Delete processing message
+        if (processingMsg.ok && processingMsg.result) {
+          const msgResult = processingMsg.result as { message_id: number };
+          try { await deleteMessage(this.token, chatId, msgResult.message_id); } catch (_e) { /* ignore */ }
+        }
+        const siblingButtons = getSiblingButtons(queryType, inputForQuery);
+        const moduleLabel = queryTypeLabels[queryType] || queryType;
+        let errorMsg = `⚠️ <b>Módulo ${moduleLabel} indisponível</b>\n\n`;
+        errorMsg += `<i>${escapeHtml(providerErr.message)}</i>\n\n`;
+        if (siblingButtons.length > 0) {
+          errorMsg += `💡 <b>Tente consultar por outro módulo:</b>`;
+        }
+        const allButtons = [
+          ...siblingButtons,
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
+        ];
+        await sendMessage(this.token, chatId, errorMsg, { inline_keyboard: allButtons });
+        return;
+      }
+
       // Delete processing message
       if (processingMsg.ok && processingMsg.result) {
         const msgResult = processingMsg.result as { message_id: number };
