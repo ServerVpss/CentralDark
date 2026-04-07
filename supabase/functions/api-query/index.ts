@@ -321,6 +321,26 @@ function validateInput(modulo: string, value: string): ValidationResult {
   return { valid: true };
 }
 
+// =============== LOG HELPER ===============
+function logData(tag: string, obj: Record<string, unknown>) {
+  // Trunca valores longos (base64, fotos) mas preserva estrutura
+  const truncate = (val: unknown, maxLen = 200): unknown => {
+    if (typeof val === "string" && val.length > maxLen) {
+      return val.substring(0, maxLen) + `...[${val.length} chars]`;
+    }
+    if (Array.isArray(val)) return val.slice(0, 5).map(v => truncate(v, maxLen));
+    if (val && typeof val === "object") {
+      const out: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
+        out[k] = truncate(v, maxLen);
+      }
+      return out;
+    }
+    return val;
+  };
+  console.log(JSON.stringify({ tag, ...truncate(obj) as Record<string, unknown> }));
+}
+
 // =============== VEÍCULOS API ===============
 const VEICULOS_API_BASE = "https://veiculosapi.com/api/proxy";
 
@@ -381,10 +401,13 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
     }
 
     const data = await response.json();
+    logData("PROVIDER_RAW", { modulo, provider: "veiculosapi", duration_ms: provider_duration_ms, retried: retry, keys: data ? Object.keys(data) : [], data });
+
     if (data === null || data === undefined) {
       return { data: { notFound: true, message: "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
     if (data.error || data.status === "error") {
+      logData("PROVIDER_ERROR", { modulo, error: data.error || data.message });
       return { data: { notFound: true, message: data.error || data.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
@@ -509,13 +532,17 @@ async function fetchFromIseek(iseekModulo: string, valor: string): Promise<Provi
     }
 
     const raw = await response.json();
+    logData("ISEEK_RAW", { modulo: iseekModulo, provider: "iseek", duration_ms: duration, rawKeys: raw ? Object.keys(raw) : [], raw });
 
     // iSeek retorna { status: 200, data: { ... } }
     const innerData = (raw && typeof raw === "object" && raw.data && typeof raw.data === "object")
       ? raw.data
       : raw;
 
+    logData("ISEEK_PARSED", { modulo: iseekModulo, innerKeys: innerData ? Object.keys(innerData) : [], hasError: !!(innerData?.error), innerData });
+
     if (!innerData || innerData.error || innerData.status === "error") {
+      logData("ISEEK_NOT_FOUND", { modulo: iseekModulo, error: innerData?.error, message: innerData?.message });
       return { data: { notFound: true, message: innerData?.error || innerData?.message || "Dados não encontrados" }, provider_duration_ms: duration, retried: false };
     }
 
@@ -1008,17 +1035,20 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Structured log
-    console.log(JSON.stringify({
+    // Structured log with full response data
+    logData("QUERY_RESULT", {
       request_id: requestId,
       channel: response.meta.channel,
       modulo: response.meta.modulo,
+      input: queryRequest.queryInput,
       status: response.meta.status,
       duration_ms: response.meta.duration_ms,
       provider_duration_ms: response.meta.provider_duration_ms,
       internal_duration_ms: response.meta.internal_duration_ms,
       has_errors: response.errors.length > 0,
-    }));
+      errors: response.errors,
+      response_data: response.data,
+    });
 
     return new Response(JSON.stringify(response), {
       status: 200,
