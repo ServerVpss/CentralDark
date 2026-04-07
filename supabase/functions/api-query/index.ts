@@ -414,7 +414,7 @@ async function fetchFromIseek(iseekModulo: string, valor: string): Promise<Provi
   }
 
   const url = `${apiBase}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(iseekModulo)}&string=${encodeURIComponent(valor)}`;
-  console.log(`[iSeek] modulo=${iseekModulo}, base=${apiBase}, keyLen=${apiKey.length}, url=${url.replace(apiKey, "***")}`);
+  console.log(`[iSeek] modulo=${iseekModulo}`);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 30_000);
