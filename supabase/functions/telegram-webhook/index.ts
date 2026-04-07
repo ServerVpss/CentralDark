@@ -3536,6 +3536,111 @@ function formatTelefoneResult(
   return `<pre>${escaped.join('\n')}</pre>`;
 }
 
+// =============== FORMATAÇÃO ESPECÍFICA PARA CPF SUS ===============
+function formatCpfSusResult(
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const pessoais = dados?.dadosPessoais as Record<string, unknown> | undefined;
+  const docs = dados?.documentos as Record<string, unknown> | undefined;
+  const contatos = dados?.contatos as Record<string, unknown> | undefined;
+  const endereco = dados?.endereco as Record<string, unknown> | undefined;
+
+  const g = (obj: Record<string, unknown> | undefined, key: string): string => {
+    if (!obj) return '';
+    const v = obj[key];
+    if (!v || typeof v !== 'string' || shouldIgnore(v)) return '';
+    return v.trim().toUpperCase();
+  };
+
+  const lines: string[] = [];
+  lines.push(`👤 <b>CONSULTA CPF SUS</b>`);
+  lines.push('');
+
+  // Dados pessoais
+  const nome = g(pessoais, 'nome');
+  if (nome) lines.push(`📋 Nome: ${escapeHtml(nome)}`);
+  
+  const cpf = g(docs, 'cpf');
+  if (cpf) lines.push(`🆔 CPF: ${escapeHtml(cpf)}`);
+  
+  const cns = g(docs, 'cns');
+  if (cns) lines.push(`🏥 CNS: ${escapeHtml(cns)}`);
+
+  const nasc = g(pessoais, 'dataNascimento');
+  if (nasc) lines.push(`📅 Nascimento: ${escapeHtml(nasc)}`);
+
+  const sexo = g(pessoais, 'sexo');
+  if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo)}`);
+
+  const raca = g(pessoais, 'raca');
+  if (raca) lines.push(`🏷️ Raça: ${escapeHtml(raca)}`);
+
+  const nacionalidade = g(pessoais, 'nacionalidade');
+  if (nacionalidade) lines.push(`🌍 Nacionalidade: ${escapeHtml(nacionalidade)}`);
+
+  const munNasc = g(pessoais, 'municipioNascimento');
+  if (munNasc) lines.push(`📍 Município Nasc.: ${escapeHtml(munNasc)}`);
+
+  // Filiação
+  const mae = g(pessoais, 'nomeMae');
+  const pai = g(pessoais, 'nomePai');
+  if (mae || pai) {
+    lines.push('');
+    lines.push('👨‍👩‍👦 <b>FILIAÇÃO</b>');
+    if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
+    if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
+  }
+
+  // Endereço
+  if (endereco) {
+    const logr = g(endereco, 'tipoLogradouro');
+    const rua = g(endereco, 'logradouro');
+    const num = g(endereco, 'numero');
+    const comp = g(endereco, 'complemento');
+    const bairro = g(endereco, 'bairro');
+    const cep = g(endereco, 'cep');
+    const mun = g(endereco, 'municipioResidencia');
+
+    if (rua || bairro || mun) {
+      lines.push('');
+      lines.push('📍 <b>ENDEREÇO</b>');
+      if (rua) {
+        let endLine = logr ? `${logr} ${rua}` : rua;
+        if (num) endLine += `, ${num}`;
+        if (comp && comp !== 'CASA') endLine += ` - ${comp}`;
+        lines.push(`🏠 ${escapeHtml(endLine)}`);
+      }
+      if (bairro) lines.push(`🏘️ Bairro: ${escapeHtml(bairro)}`);
+      if (cep) lines.push(`📮 CEP: ${escapeHtml(cep)}`);
+      if (mun) lines.push(`🏙️ Cidade: ${escapeHtml(mun)}`);
+    }
+  }
+
+  // Telefones
+  const tels = (contatos as Record<string, unknown>)?.telefones as unknown[] | undefined;
+  if (Array.isArray(tels) && tels.length > 0) {
+    lines.push('');
+    lines.push('📱 <b>TELEFONES</b>');
+    for (const t of tels) {
+      const tel = t as Record<string, unknown>;
+      const ddd = tel.ddd || '';
+      const numero = tel.numero || '';
+      const tipo = tel.tipo || '';
+      lines.push(`📞 (${ddd}) ${numero} [${String(tipo).toUpperCase()}]`);
+    }
+  }
+
+  lines.push('');
+  lines.push(`👤 ${escapeHtml(userName)} | ${botTag}`);
+
+  return lines.join('\n');
+}
+
 // =============== FORMATAÇÃO ESPECÍFICA PARA CPF (MONOESPAÇADO) ===============
 function formatCpfResult(
   data: Record<string, unknown>, 
