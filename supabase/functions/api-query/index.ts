@@ -437,7 +437,7 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
       return { data: { notFound: true, message: data.error || data.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
-    return { data: { ...data, modulo }, provider_duration_ms, retried: retry };
+    return { data: { ...stripAdminFields(data), modulo }, provider_duration_ms, retried: retry };
   } catch (err) {
     clearTimeout(timeoutId);
     const error = err as Error;
@@ -1075,6 +1075,9 @@ Deno.serve(async (req) => {
       errors: response.errors,
       response_data: response.data,
     });
+
+    // Strip admin metadata from response data before sending
+    response.data = stripAdminFields(response.data);
 
     return new Response(JSON.stringify(response), {
       status: 200,
