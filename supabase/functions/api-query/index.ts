@@ -58,7 +58,7 @@ const MODULE_WHITELIST = new Set([
   "cnpj-isk", "rg-isk", "mae-isk", "telefone-isk", "titulo-isk",
   "cnh-isk", "processos-isk", "placa-isk", "renavam-isk", "chassi-isk",
   "motor-isk", "email-isk", "pix-isk", "cep-isk", "parentes-isk",
-  "score-isk",
+  "score-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
   // Fotos iSeek -isk
   "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
   "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
