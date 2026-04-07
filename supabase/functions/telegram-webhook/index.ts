@@ -1112,18 +1112,16 @@ function formatCnpjResult(
 
     const enderecos = contatos.enderecos as Array<Record<string, unknown>> | undefined;
     if (enderecos && Array.isArray(enderecos) && enderecos.length > 0) {
-      const maxEnd = Math.min(enderecos.length, 5);
       lines.push(`📍 <b>ENDEREÇOS (${enderecos.length})</b>`);
-      for (let i = 0; i < maxEnd; i++) {
+      for (let i = 0; i < enderecos.length; i++) {
         const end = enderecos[i];
         const logradouro = end.logradouro || '';
         const cep = end.cep || '';
         const cidade = end.cidade || '';
-        const connector = i === maxEnd - 1 ? '└' : '├';
+        const connector = i === enderecos.length - 1 ? '└' : '├';
         lines.push(`${connector} 🏠 <b>${escapeHtml(fixBrokenEncoding(String(logradouro)))}</b>`);
         if (cep || cidade) lines.push(`│  📮 ${escapeHtml(String(cep))} - ${escapeHtml(fixBrokenEncoding(String(cidade)))}`);
       }
-      if (enderecos.length > 5) lines.push(`  <i>... e mais ${enderecos.length - 5} endereços</i>`);
       lines.push('');
     }
 
@@ -3963,7 +3961,7 @@ function formatCpfResult(
   if (enderecos.length > 0) {
     lines.push('');
     lines.push(`📍 <b>ENDEREÇO</b>`);
-    enderecos.slice(0, 10).forEach(endereco => {
+    enderecos.forEach(endereco => {
       const cleanEndereco = endereco
         .replace(/^\[empty\]\s*/gi, '')
         .replace(/^enderecos?\s*:?\s*/gi, '')
@@ -3972,20 +3970,18 @@ function formatCpfResult(
         lines.push(`🏠 ${escapeHtml(cleanEndereco)}`);
       }
     });
-    if (enderecos.length > 10) lines.push(`... e mais ${enderecos.length - 10}`);
   }
 
   // 📱 TELEFONES
   if (telefones.length > 0) {
     lines.push('');
     lines.push(`📱 <b>TELEFONES</b>`);
-    telefones.slice(0, 8).forEach(tel => {
+    telefones.forEach(tel => {
       const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
       const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
       const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
       lines.push(`📞 ${escapeHtml(cleanTel)}${wppIcon}`);
     });
-    if (telefones.length > 8) lines.push(`... e mais ${telefones.length - 8}`);
   }
 
   // 📧 EMAILS
