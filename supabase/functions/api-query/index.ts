@@ -546,7 +546,7 @@ async function fetchFromIseek(iseekModulo: string, valor: string): Promise<Provi
       return { data: { notFound: true, message: innerData?.error || innerData?.message || "Dados não encontrados" }, provider_duration_ms: duration, retried: false };
     }
 
-    return { data: { ...innerData, modulo: iseekModulo, fallback_provider: "iseek" }, provider_duration_ms: duration, retried: false };
+    return { data: { ...stripAdminFields(innerData), modulo: iseekModulo, fallback_provider: "iseek" }, provider_duration_ms: duration, retried: false };
   } catch (err) {
     clearTimeout(timeoutId);
     const duration = Date.now() - start;
