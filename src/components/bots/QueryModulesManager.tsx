@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw } from "lucide-react";
+import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
