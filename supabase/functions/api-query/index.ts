@@ -216,7 +216,7 @@ const NUMERIC_MODULES = new Set([
   // iSeek -isk (CPF-based)
   "rg-isk", "titulo-isk", "cnh-isk", "telefone-isk",
   "cep-isk", "parentes-isk", "score-isk", "processos-isk",
-  "cnpj-isk", "renavam-isk",
+  "cnpj-isk", "renavam-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
   // Fotos -isk
   "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
   "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
