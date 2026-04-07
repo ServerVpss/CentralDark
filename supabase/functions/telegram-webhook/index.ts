@@ -3049,6 +3049,11 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
+  // ============= FORMATAÇÃO ESPECÍFICA PARA CPF-SPC =============
+  if (queryType === 'cpf-spc') {
+    return formatCpfSpcResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
   // ============= FORMATAÇÃO ESPECÍFICA PARA CNPJ =============
   if (queryType === 'cnpj-cred') {
     return formatCnpjResult(data, userName, botTag, escapeHtml, shouldIgnore);
