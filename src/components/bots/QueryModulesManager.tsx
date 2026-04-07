@@ -78,7 +78,10 @@ export function QueryModulesManager() {
 
   useEffect(() => { loadModules(); }, []);
 
-  const enabledCount = modules.filter(m => m.enabled).length;
+  const filteredModules = providerFilter === "all" ? modules : modules.filter(m => m.provider === providerFilter);
+  const enabledCount = filteredModules.filter(m => m.enabled).length;
+  const veiculosCount = modules.filter(m => m.provider === "VeiculosAPI").length;
+  const iseekCount = modules.filter(m => m.provider === "iSeek").length;
 
   const toggleModule = async (key: string) => {
     const mod = modules.find(m => m.module_key === key);
