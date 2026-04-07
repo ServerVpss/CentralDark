@@ -225,8 +225,34 @@ function cleanQueryValue(modulo: string, input: string): string {
   // placa, chassi, motor — alfanumérico
   return input.replace(/[^\w]/g, "").trim();
 }
+// =============== FILTRO DE METADADOS ADMIN ===============
+const ADMIN_FIELD_PATTERNS = new Set([
+  "requests_used", "requests_remaining", "daily_limit", "fallback_provider",
+  "requestsused", "requestsremaining", "dailylimit", "fallbackprovider",
+  "modulo", "modulo_consultado", "tipo_consultado", "api_version",
+  "token_used", "token_status", "credits_used", "credits_remaining",
+  "apikey", "api_key", "key_status",
+]);
 
-interface ValidationResult {
+function isAdminKey(key: string): boolean {
+  const lower = key.toLowerCase();
+  if (ADMIN_FIELD_PATTERNS.has(lower)) return true;
+  if (lower.endsWith("_consultada") || lower.endsWith("_consultado")) return true;
+  return false;
+}
+
+function stripAdminFields(obj: any): any {
+  if (!obj || typeof obj !== "object") return obj;
+  if (Array.isArray(obj)) return obj.map(stripAdminFields);
+  const clean: Record<string, any> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (isAdminKey(k)) continue;
+    clean[k] = (v && typeof v === "object") ? stripAdminFields(v) : v;
+  }
+  return clean;
+}
+
+
   valid: boolean;
   error?: string;
 }
