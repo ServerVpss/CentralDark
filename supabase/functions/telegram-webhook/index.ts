@@ -2138,7 +2138,7 @@ async function sendLongMessagePaginated(
   extraButtons?: InlineButton[][],
   requesterId?: number
 ) {
-  const MAX_LENGTH = 3800;
+  const MAX_LENGTH = 2500;
   
   // Criar teclado com botões de PDF e TXT abaixo do Apagar
   const createKeyboard = (paginationId?: string) => {
