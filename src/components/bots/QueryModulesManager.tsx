@@ -157,7 +157,7 @@ export function QueryModulesManager() {
   };
 
   const grouped = categoryOrder.reduce((acc, cat) => {
-    acc[cat] = modules.filter(m => m.category === cat);
+    acc[cat] = filteredModules.filter(m => m.category === cat);
     return acc;
   }, {} as Record<string, ModuleInfo[]>);
 
