@@ -1,29 +1,41 @@
 
 
-# Remover placa-simples e renumerar placa-sesp
+# Integrar iSeek como Provedor Fallback na api-query
 
 ## Resumo
-Remover o comando `/placa3` (placa-simples) por ser redundante com `/placa`, e renumerar `/placa4` (placa-sesp) para `/placa3`.
+Adicionar o endpoint iSeek (`ISEEK_API_BASE` + `ISEEK_API_KEY`, já configurados como secrets) como fallback automático para módulos CPF. Quando o VeiculosAPI falhar (erro, timeout, notFound), o sistema tenta automaticamente o iSeek antes de retornar erro ao usuário.
 
-## Alterações
+## Detalhes Técnicos
 
-**Arquivo**: `supabase/functions/telegram-webhook/index.ts` — ~10 locais
+**Arquivo**: `supabase/functions/api-query/index.ts`
 
-1. **Aliases de comando (linhas ~215, ~218)**: Remover `placa3: "placa-simples"` e `placasimples: "placa-simples"`. Mudar `placa4: "placa-sesp"` para `placa3: "placa-sesp"`.
+### 1. Nova função `fetchFromIseek`
+- Usa `ISEEK_API_BASE` e `ISEEK_API_KEY` dos secrets
+- URL: `${ISEEK_API_BASE}?apikey=${ISEEK_API_KEY}&modulo=iseek-cpf&string=${valor}`
+- Timeout de 30s, mesma interface `ProviderResult`
+- Parseia resposta aninhada `{ status: 200, data: { ... } }` — extrai `data` interno
 
-2. **Labels amigáveis (linha ~246)**: Remover `"placa-simples": "🚗 Placa 3"`. Mudar `"placa-sesp": "🚗 Placa 4"` para `"placa-sesp": "🚗 Placa 3"`.
+### 2. Mapa de fallback iSeek
+```text
+ISEEK_FALLBACK_MODULES = {
+  "cpf"       → "iseek-cpf",
+  "cpffull"   → "iseek-cpf",
+  "cpf-isk"   → "iseek-cpf",
+  "cpfsus"    → "iseek-cpf",
+  "parentes"  → "iseek-cpf",
+  "parentes-3"→ "iseek-cpf",
+}
+```
+Apenas módulos baseados em CPF, pois o iSeek só suporta `iseek-cpf`.
 
-3. **vehicleModules array (linha ~474)**: Remover `placa3` e `placasimples`. Renumerar `placa4` para `placa3`.
+### 3. Lógica de fallback no fluxo "MÓDULO PADRÃO" (linha ~508)
+Após `fetchFromProvider` retornar erro ou notFound:
+- Verificar se o módulo tem entrada em `ISEEK_FALLBACK_MODULES`
+- Se sim, chamar `fetchFromIseek` com o módulo mapeado
+- Se iSeek retornar dados válidos, usar esses dados (adicionando `fallback_provider: "iseek"` nos metadados)
+- Se iSeek também falhar, retornar o erro original do VeiculosAPI
+- Log estruturado indicando uso de fallback
 
-4. **moduleToCommand (linhas ~3962-3963)**: Remover `"placa-simples": "/placa3"`. Mudar `"placa-sesp": "/placa4"` para `"placa-sesp": "/placa3"`.
-
-5. **Exemplos de uso (linha ~3986)**: Remover `"placa-simples": "ABC1234"`.
-
-6. **Mapa de grupo (linhas ~5540-5541)**: Remover `placasimples: "placa-simples"`.
-
-7. **Mapa de aliases secundário (linhas ~5727-5728)**: Remover `placa3: "placa-simples"` e `placasimples: "placa-simples"`. Mudar `placa4: "placa-sesp"` para `placa3: "placa-sesp"`.
-
-8. **Menu /comandos**: Onde gera os botões de Placa, atualizar para mostrar apenas Placa, Placa 2 (SERPRO), Placa 3 (SESP).
-
-Manter `placasesp` como alias para compatibilidade.
+### 4. Deploy
+Deploy da função `api-query` após as alterações.
 
