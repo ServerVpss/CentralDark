@@ -321,6 +321,26 @@ function validateInput(modulo: string, value: string): ValidationResult {
   return { valid: true };
 }
 
+// =============== LOG HELPER ===============
+function logData(tag: string, obj: Record<string, unknown>) {
+  // Trunca valores longos (base64, fotos) mas preserva estrutura
+  const truncate = (val: unknown, maxLen = 200): unknown => {
+    if (typeof val === "string" && val.length > maxLen) {
+      return val.substring(0, maxLen) + `...[${val.length} chars]`;
+    }
+    if (Array.isArray(val)) return val.slice(0, 5).map(v => truncate(v, maxLen));
+    if (val && typeof val === "object") {
+      const out: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(val as Record<string, unknown>)) {
+        out[k] = truncate(v, maxLen);
+      }
+      return out;
+    }
+    return val;
+  };
+  console.log(JSON.stringify({ tag, ...truncate(obj) as Record<string, unknown> }));
+}
+
 // =============== VEÍCULOS API ===============
 const VEICULOS_API_BASE = "https://veiculosapi.com/api/proxy";
 
