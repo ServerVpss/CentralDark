@@ -6280,6 +6280,18 @@ class BotHandler {
       return;
     }
 
+    // Retry query with alternative module (from provider error suggestions)
+    if (data.startsWith("retry_query:")) {
+      const parts = data.replace("retry_query:", "").split(":");
+      const moduleKey = parts[0];
+      const input = parts.slice(1).join(":");
+      if (moduleKey && input) {
+        const telegramUserName = callback.from?.first_name || 'Usuário';
+        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName);
+      }
+      return;
+    }
+
     // Quick Foto query from result buttons (📸 Consultar Foto)
     if (data.startsWith("foto_query:")) {
       const parts = data.replace("foto_query:", "").split(":");
