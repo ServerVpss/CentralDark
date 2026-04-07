@@ -225,6 +225,33 @@ function cleanQueryValue(modulo: string, input: string): string {
   // placa, chassi, motor — alfanumérico
   return input.replace(/[^\w]/g, "").trim();
 }
+// =============== FILTRO DE METADADOS ADMIN ===============
+const ADMIN_FIELD_PATTERNS = new Set([
+  "requests_used", "requests_remaining", "daily_limit", "fallback_provider",
+  "requestsused", "requestsremaining", "dailylimit", "fallbackprovider",
+  "modulo", "modulo_consultado", "tipo_consultado", "api_version",
+  "token_used", "token_status", "credits_used", "credits_remaining",
+  "apikey", "api_key", "key_status",
+]);
+
+function isAdminKey(key: string): boolean {
+  const lower = key.toLowerCase();
+  if (ADMIN_FIELD_PATTERNS.has(lower)) return true;
+  if (lower.endsWith("_consultada") || lower.endsWith("_consultado")) return true;
+  return false;
+}
+
+function stripAdminFields(obj: any): any {
+  if (!obj || typeof obj !== "object") return obj;
+  if (Array.isArray(obj)) return obj.map(stripAdminFields);
+  const clean: Record<string, any> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (isAdminKey(k)) continue;
+    clean[k] = (v && typeof v === "object") ? stripAdminFields(v) : v;
+  }
+  return clean;
+}
+
 
 interface ValidationResult {
   valid: boolean;
@@ -411,7 +438,7 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
       return { data: { notFound: true, message: data.error || data.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
-    return { data: { ...data, modulo }, provider_duration_ms, retried: retry };
+    return { data: { ...stripAdminFields(data), modulo }, provider_duration_ms, retried: retry };
   } catch (err) {
     clearTimeout(timeoutId);
     const error = err as Error;
@@ -546,7 +573,7 @@ async function fetchFromIseek(iseekModulo: string, valor: string): Promise<Provi
       return { data: { notFound: true, message: innerData?.error || innerData?.message || "Dados não encontrados" }, provider_duration_ms: duration, retried: false };
     }
 
-    return { data: { ...innerData, modulo: iseekModulo, fallback_provider: "iseek" }, provider_duration_ms: duration, retried: false };
+    return { data: { ...stripAdminFields(innerData), modulo: iseekModulo, fallback_provider: "iseek" }, provider_duration_ms: duration, retried: false };
   } catch (err) {
     clearTimeout(timeoutId);
     const duration = Date.now() - start;
@@ -1049,6 +1076,9 @@ Deno.serve(async (req) => {
       errors: response.errors,
       response_data: response.data,
     });
+
+    // Strip admin metadata from response data before sending
+    response.data = stripAdminFields(response.data);
 
     return new Response(JSON.stringify(response), {
       status: 200,
