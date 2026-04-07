@@ -37,22 +37,33 @@ const MODULE_WHITELIST = new Set([
   "fototo", "fotoms", "fotoro", "fotopi",
   // ===== MÓDULOS EXCLUSIVOS ISEEK =====
   // Pessoa/Família
-  "pai", "nasc", "nis", "obito", "registro",
+  "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
   // Documentos
-  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf", "advogadooabuf",
+  "catcpf", "catnumero",
   // Financeiro
   "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
   // Governo/Saúde
   "vacinas", "beneficios", "faculdades", "func", "matricula",
   // Justiça
-  "mandado", "certidoes",
+  "mandado", "certidoes", "processo",
   // Trabalho
   "rais",
   // Veículos por CPF
-  "veiculos",
+  "veiculos", "crlvto", "crlvmt",
   // Fotos extras iSeek
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
+  // ===== MÓDULOS SOBREPOSTOS ISEEK (sufixo -isk) =====
+  "cnpj-isk", "rg-isk", "mae-isk", "telefone-isk", "titulo-isk",
+  "cnh-isk", "processos-isk", "placa-isk", "renavam-isk", "chassi-isk",
+  "motor-isk", "email-isk", "pix-isk", "cep-isk", "parentes-isk",
+  "score-isk",
+  // Fotos iSeek -isk
+  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
+  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
+  "fotodf-isk", "fotogo-isk",
+  "crlvto-foto", "crlvmt-foto",
 ]);
 
 // Módulos que vão DIRETAMENTE ao iSeek (não passam pelo VeiculosAPI)
