@@ -532,13 +532,17 @@ async function fetchFromIseek(iseekModulo: string, valor: string): Promise<Provi
     }
 
     const raw = await response.json();
+    logData("ISEEK_RAW", { modulo: iseekModulo, provider: "iseek", duration_ms: duration, rawKeys: raw ? Object.keys(raw) : [], raw });
 
     // iSeek retorna { status: 200, data: { ... } }
     const innerData = (raw && typeof raw === "object" && raw.data && typeof raw.data === "object")
       ? raw.data
       : raw;
 
+    logData("ISEEK_PARSED", { modulo: iseekModulo, innerKeys: innerData ? Object.keys(innerData) : [], hasError: !!(innerData?.error), innerData });
+
     if (!innerData || innerData.error || innerData.status === "error") {
+      logData("ISEEK_NOT_FOUND", { modulo: iseekModulo, error: innerData?.error, message: innerData?.message });
       return { data: { notFound: true, message: innerData?.error || innerData?.message || "Dados não encontrados" }, provider_duration_ms: duration, retried: false };
     }
 
