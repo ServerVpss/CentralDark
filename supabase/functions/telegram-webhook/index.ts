@@ -2098,7 +2098,8 @@ async function sendLongMessagePaginated(
   messageEffectId?: string,
   queryType?: string,
   queryInput?: string,
-  extraButtons?: InlineButton[][]
+  extraButtons?: InlineButton[][],
+  requesterId?: number
 ) {
   const MAX_LENGTH = 3800;
   
