@@ -3271,14 +3271,20 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfSusResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CPF e variantes (cpf, cpffull, cpf-isk, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo)
-  const cpfLikeModules = ['cpf', 'cpffull', 'cpf-isk', 'mae', 'maefull', 'rg', 'rg-3', 'cnh', 'pis', 'pis-3', 'titulo'];
+  // CPF e variantes (cpf, cpffull, cpf-isk, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo + iSeek equivalents)
+  const cpfLikeModules = [
+    'cpf', 'cpffull', 'cpf-isk', 'mae', 'maefull', 'mae-isk', 
+    'rg', 'rg-3', 'rg-isk', 'cnh', 'cnh-isk', 
+    'pis', 'pis-3', 'titulo', 'titulo-isk',
+    'nomeabreviadofiltros', 'processo', 'advogadooabuf',
+    'catcpf', 'catnumero', 'irpf-isk', 'vacinas-isk', 'obito-isk',
+  ];
   if (cpfLikeModules.includes(queryType)) {
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Telefone (telefone, telefonefull, telefone-3)
-  if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
+  // Telefone (telefone, telefonefull, telefone-3 + iSeek)
+  if (['telefone', 'telefonefull', 'telefone-3', 'telefone-isk'].includes(queryType)) {
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
@@ -3287,13 +3293,14 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfSpcResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CNPJ
-  if (queryType === 'cnpj-cred') {
+  // CNPJ (+ iSeek)
+  if (['cnpj-cred', 'cnpj-isk', 'cnpj-cred-isk'].includes(queryType)) {
     return formatCnpjResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Veículos
-  if (vehicleModules.includes(queryType)) {
+  // Veículos (+ iSeek)
+  const allVehicleModules = [...vehicleModules, 'placa-isk', 'chassi-isk', 'renavam-isk', 'motor-isk', 'crlvto', 'crlvmt', 'crlvto-foto', 'crlvmt-foto'];
+  if (allVehicleModules.includes(queryType)) {
     return formatVehicleResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
@@ -3302,39 +3309,39 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatNomeResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Email (email, emailfull, email-3) — lista de pessoas vinculadas ao email
-  if (queryType === 'email' || queryType === 'emailfull' || queryType === 'email-3') {
+  // Email (email, emailfull, email-3 + iSeek) — lista de pessoas vinculadas ao email
+  if (['email', 'emailfull', 'email-3', 'email-isk'].includes(queryType)) {
     return formatEmailResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CEP (cep, cepfull, cep-3, endereco) — lista de pessoas + endereços
-  if (queryType === 'cep' || queryType === 'cepfull' || queryType === 'cep-3' || queryType === 'endereco') {
+  // CEP (cep, cepfull, cep-3, endereco + iSeek) — lista de pessoas + endereços
+  if (['cep', 'cepfull', 'cep-3', 'endereco', 'cep-isk'].includes(queryType)) {
     return formatCepResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Score (score, score-3)
-  if (queryType === 'score' || queryType === 'score-3') {
+  // Score (score, score-3 + iSeek)
+  if (['score', 'score-3', 'score-isk'].includes(queryType)) {
     return formatScoreResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Renda
-  if (queryType === 'renda') {
+  // Renda / Poder Aquisitivo
+  if (queryType === 'renda' || queryType === 'poderaquisitivo') {
     return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Poder Aquisitivo
-  if (queryType === 'poderaquisitivo') {
-    return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
-  }
-
-  // Parentes (parentes, parentes-3)
-  if (queryType === 'parentes' || queryType === 'parentes-3') {
+  // Parentes (parentes, parentes-3 + iSeek)
+  if (['parentes', 'parentes-3', 'parentes-isk'].includes(queryType)) {
     return formatParentesResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // PIX
-  if (queryType === 'pix') {
+  // PIX (+ iSeek)
+  if (queryType === 'pix' || queryType === 'pix-isk') {
     return formatPixResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Processos (+ iSeek)
+  if (['processos', 'processos-isk'].includes(queryType)) {
+    return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
