@@ -4620,6 +4620,7 @@ function formatGenericResult(
     'conta', 'saldo', 'tempo_segundos', 'temposegundos', 'cache', 'cached_at', 'expiracao', 'limites', 'plano',
     'requests_used', 'requests_remaining', 'daily_limit', 'fallback_provider', 'apikey',
     'fromcache', 'cache_ttl_hours',
+    'prioridade', 'operadora', 'classificacao', 'tipotelefone',
   ]);
 
   const shouldSkipKey = (key: string): boolean => {
@@ -4660,6 +4661,81 @@ function formatGenericResult(
 
     if (Array.isArray(value)) {
       if (value.length === 0) return;
+      
+      // Smart handling for phone arrays
+      const keyBase = (key.split('.').pop() || key).toLowerCase();
+      if ((keyBase === 'telefones' || keyBase === 'telefone' || keyBase === 'dadostelefone' || keyBase === 'phones') && typeof value[0] === 'object' && value[0] !== null) {
+        value.forEach((item) => {
+          if (typeof item !== 'object' || item === null) return;
+          const tel = item as Record<string, unknown>;
+          const ddd = String(tel.ddd || tel.DDD || '').replace(/\D/g, '');
+          const num = String(tel.numero || tel.telefone || tel.completo || tel.phone || '').replace(/\D/g, '');
+          if (!num) return;
+          const formatted = formatPhoneNumber(ddd, num);
+          addItem('telefones', formatted);
+        });
+        return;
+      }
+      
+      // Smart handling for address arrays
+      if ((keyBase === 'enderecos' || keyBase === 'endereco' || keyBase === 'addresses') && typeof value[0] === 'object' && value[0] !== null) {
+        value.forEach((item) => {
+          if (typeof item !== 'object' || item === null) return;
+          const end = item as Record<string, unknown>;
+          const parts: string[] = [];
+          const logradouro = end.logradouro || end.endereco || end.rua || '';
+          const numero = end.numero || end.num || '';
+          const complemento = end.complemento || '';
+          const bairro = end.bairro || '';
+          const cidade = end.cidade || end.municipio || '';
+          const uf = end.uf || end.estado || '';
+          const cep = end.cep || '';
+          if (logradouro) parts.push(String(logradouro).trim());
+          if (numero && String(numero).trim() !== '0') parts.push(`Nº ${String(numero).trim()}`);
+          if (complemento && String(complemento).trim() !== '-') parts.push(String(complemento).trim());
+          if (bairro) parts.push(String(bairro).trim());
+          if (cidade) parts.push(String(cidade).trim());
+          if (uf) parts.push(String(uf).trim().toUpperCase());
+          if (cep) parts.push(`CEP: ${String(cep).trim()}`);
+          if (parts.length > 0) {
+            addItem('enderecos', parts.join(', ').toUpperCase());
+          }
+        });
+        return;
+      }
+      
+      // Smart handling for email arrays
+      if ((keyBase === 'emails' || keyBase === 'email') && typeof value[0] === 'object' && value[0] !== null) {
+        value.forEach((item) => {
+          if (typeof item !== 'object' || item === null) return;
+          const em = item as Record<string, unknown>;
+          const email = String(em.email || em.emailEndereco || em.endereco || '').trim();
+          if (email && email.includes('@')) {
+            addItem('emails', email.toUpperCase());
+          }
+        });
+        return;
+      }
+
+      // Smart handling for parentes/family arrays
+      if ((keyBase === 'parentes' || keyBase === 'familiares') && typeof value[0] === 'object' && value[0] !== null) {
+        value.forEach((item) => {
+          if (typeof item !== 'object' || item === null) return;
+          const par = item as Record<string, unknown>;
+          const nome = par.nome || par.name || '';
+          const parentesco = par.parentesco || par.vinculo || par.tipo || '';
+          const cpf = par.cpf || '';
+          const parts: string[] = [];
+          if (nome) parts.push(String(nome).trim());
+          if (parentesco) parts.push(`(${String(parentesco).trim()})`);
+          if (cpf) parts.push(`CPF: ${String(cpf).trim()}`);
+          if (parts.length > 0) {
+            addItem('parentes', parts.join(' ').toUpperCase());
+          }
+        });
+        return;
+      }
+      
       if (typeof value[0] === 'object' && value[0] !== null) {
         // Array of objects — process each
         value.forEach((item, i) => {
