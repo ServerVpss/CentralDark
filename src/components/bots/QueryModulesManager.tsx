@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw } from "lucide-react";
+import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -49,6 +49,7 @@ export function QueryModulesManager() {
   const [showProviders, setShowProviders] = useState(false);
   const [loading, setLoading] = useState(true);
   const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
+  const [providerFilter, setProviderFilter] = useState<"all" | "VeiculosAPI" | "iSeek">("all");
 
   const loadModules = async () => {
     setLoading(true);
@@ -77,7 +78,10 @@ export function QueryModulesManager() {
 
   useEffect(() => { loadModules(); }, []);
 
-  const enabledCount = modules.filter(m => m.enabled).length;
+  const filteredModules = providerFilter === "all" ? modules : modules.filter(m => m.provider === providerFilter);
+  const enabledCount = filteredModules.filter(m => m.enabled).length;
+  const veiculosCount = modules.filter(m => m.provider === "VeiculosAPI").length;
+  const iseekCount = modules.filter(m => m.provider === "iSeek").length;
 
   const toggleModule = async (key: string) => {
     const mod = modules.find(m => m.module_key === key);
@@ -110,10 +114,12 @@ export function QueryModulesManager() {
   };
 
   const toggleAll = async (enabled: boolean) => {
+    const targetModules = providerFilter === "all" ? modules : modules.filter(m => m.provider === providerFilter);
     const prev = modules.map(m => ({ ...m }));
-    setModules(modules.map(m => ({ ...m, enabled })));
+    const targetKeys = new Set(targetModules.map(m => m.module_key));
+    setModules(modules.map(m => targetKeys.has(m.module_key) ? { ...m, enabled } : m));
 
-    const keys = modules.map(m => m.module_key);
+    const keys = targetModules.map(m => m.module_key);
     const { error } = await supabase
       .from("query_modules")
       .update({ enabled })
@@ -123,7 +129,26 @@ export function QueryModulesManager() {
       setModules(prev);
       toast.error("Erro ao atualizar módulos");
     } else {
-      toast.success(enabled ? "Todos ativados" : "Todos desativados");
+      const label = providerFilter === "all" ? "Todos" : providerFilter;
+      toast.success(`${label}: ${enabled ? "ativados" : "desativados"}`);
+    }
+  };
+
+  const toggleProviderBulk = async (provider: "VeiculosAPI" | "iSeek", enabled: boolean) => {
+    const prev = modules.map(m => ({ ...m }));
+    setModules(modules.map(m => m.provider === provider ? { ...m, enabled } : m));
+
+    const keys = modules.filter(m => m.provider === provider).map(m => m.module_key);
+    const { error } = await supabase
+      .from("query_modules")
+      .update({ enabled })
+      .in("module_key", keys);
+
+    if (error) {
+      setModules(prev);
+      toast.error("Erro ao atualizar módulos");
+    } else {
+      toast.success(`${provider}: ${enabled ? "ativados" : "desativados"}`);
     }
   };
 
@@ -132,7 +157,7 @@ export function QueryModulesManager() {
   };
 
   const grouped = categoryOrder.reduce((acc, cat) => {
-    acc[cat] = modules.filter(m => m.category === cat);
+    acc[cat] = filteredModules.filter(m => m.category === cat);
     return acc;
   }, {} as Record<string, ModuleInfo[]>);
 
@@ -163,11 +188,57 @@ export function QueryModulesManager() {
         </CardContent>
       </Card>
 
+      {/* Provider Filter */}
+      <Card className="bg-card border-border">
+        <CardContent className="p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Filter className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Provedor de Consultas</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              variant={providerFilter === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setProviderFilter("all")}
+              className="text-xs"
+            >
+              Todos ({modules.length})
+            </Button>
+            <Button
+              variant={providerFilter === "VeiculosAPI" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setProviderFilter("VeiculosAPI")}
+              className="text-xs"
+            >
+              🚗 VeiculosAPI ({veiculosCount})
+            </Button>
+            <Button
+              variant={providerFilter === "iSeek" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setProviderFilter("iSeek")}
+              className="text-xs"
+            >
+              🔍 iSeek ({iseekCount})
+            </Button>
+          </div>
+          {providerFilter !== "all" && (
+            <div className="flex gap-2 mt-3 pt-3 border-t border-border">
+              <Button variant="outline" size="sm" onClick={() => toggleProviderBulk(providerFilter as "VeiculosAPI" | "iSeek", true)} className="flex-1 text-xs">
+                ✅ Ativar {providerFilter}
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => toggleProviderBulk(providerFilter as "VeiculosAPI" | "iSeek", false)} className="flex-1 text-xs">
+                ❌ Desativar {providerFilter}
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <Card className="bg-card border-border">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{modules.length}</div>
+            <div className="text-2xl font-bold">{filteredModules.length}</div>
             <div className="text-xs text-muted-foreground">Total</div>
           </CardContent>
         </Card>
@@ -179,7 +250,7 @@ export function QueryModulesManager() {
         </Card>
         <Card className="bg-card border-border">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-destructive">{modules.length - enabledCount}</div>
+            <div className="text-2xl font-bold text-destructive">{filteredModules.length - enabledCount}</div>
             <div className="text-xs text-muted-foreground">Inativos</div>
           </CardContent>
         </Card>
