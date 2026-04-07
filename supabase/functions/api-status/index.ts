@@ -27,7 +27,7 @@ serve(async (req) => {
     const response = await fetch(url, {
       method: "GET",
       headers: { "Accept": "application/json" },
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(20000),
     });
 
     const data = await response.json();
