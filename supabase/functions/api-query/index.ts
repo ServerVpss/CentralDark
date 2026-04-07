@@ -37,31 +37,44 @@ const MODULE_WHITELIST = new Set([
   "fototo", "fotoms", "fotoro", "fotopi",
   // ===== MÓDULOS EXCLUSIVOS ISEEK =====
   // Pessoa/Família
-  "pai", "nasc", "nis", "obito", "registro",
+  "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
   // Documentos
-  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf", "advogadooabuf",
+  "catcpf", "catnumero",
   // Financeiro
   "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
   // Governo/Saúde
   "vacinas", "beneficios", "faculdades", "func", "matricula",
   // Justiça
-  "mandado", "certidoes",
+  "mandado", "certidoes", "processo",
   // Trabalho
   "rais",
   // Veículos por CPF
-  "veiculos",
+  "veiculos", "crlvto", "crlvmt",
   // Fotos extras iSeek
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
+  // ===== MÓDULOS SOBREPOSTOS ISEEK (sufixo -isk) =====
+  "cnpj-isk", "rg-isk", "mae-isk", "telefone-isk", "titulo-isk",
+  "cnh-isk", "processos-isk", "placa-isk", "renavam-isk", "chassi-isk",
+  "motor-isk", "email-isk", "pix-isk", "cep-isk", "parentes-isk",
+  "score-isk",
+  // Fotos iSeek -isk
+  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
+  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
+  "fotodf-isk", "fotogo-isk",
+  "crlvto-foto", "crlvmt-foto",
 ]);
 
 // Módulos que vão DIRETAMENTE ao iSeek (não passam pelo VeiculosAPI)
 const ISEEK_DIRECT_MODULES: Record<string, string> = {
+  // Exclusivos iSeek (sem equivalente VeiculosAPI)
   "pai": "iseek-dados---pai",
   "nasc": "iseek-dados---nasc",
   "nis": "iseek-dados---nis",
   "obito": "iseek-dados---obito",
   "registro": "iseek-dados---registro",
+  "nomeabreviadofiltros": "iseek-dados---nomeabreviadofiltros",
   "cnham": "iseek-dados---cnham",
   "cnhrs": "iseek-dados---cnhrs",
   "cnhrr": "iseek-dados---cnhrr",
@@ -69,6 +82,9 @@ const ISEEK_DIRECT_MODULES: Record<string, string> = {
   "oab": "iseek-dados---oab",
   "advogadooab": "iseek-dados---advogadooab",
   "advogadocpf": "iseek-dados---advogadocpf",
+  "advogadooabuf": "iseek-dados---advogadooabuf",
+  "catcpf": "iseek-dados---catcpf",
+  "catnumero": "iseek-dados---catnumero",
   "dividas": "iseek-dados---dividas",
   "bens": "iseek-dados---bens",
   "irpf": "iseek-dados---irpf",
@@ -83,8 +99,11 @@ const ISEEK_DIRECT_MODULES: Record<string, string> = {
   "matricula": "iseek-dados---matricula",
   "mandado": "iseek-dados---mandado",
   "certidoes": "iseek-dados---certidoes",
+  "processo": "iseek-dados---processo",
   "rais": "iseek-dados---rais",
   "veiculos": "iseek-dados---veiculos",
+  "crlvto": "iseek-dados---crlvto",
+  "crlvmt": "iseek-dados---crlvmt",
   "fotoal": "iseek-fotos---fotoal",
   "fotogo": "iseek-fotos---fotogo",
   "fotopb": "iseek-fotos---fotopb",
@@ -94,6 +113,38 @@ const ISEEK_DIRECT_MODULES: Record<string, string> = {
   "fotocnh": "iseek-fotos---fotocnh",
   "fotodetran": "iseek-dados---fotodetran",
   "fotomapresos": "iseek-fotos---fotomapresos",
+  // Sobrepostos com sufixo -isk (vão direto ao iSeek)
+  "cpf-isk": "iseek-cpf",
+  "cnpj-isk": "iseek-dados---cnpj",
+  "rg-isk": "iseek-dados---rg",
+  "mae-isk": "iseek-dados---mae",
+  "telefone-isk": "iseek-dados---telefone",
+  "titulo-isk": "iseek-dados---titulo",
+  "cnh-isk": "iseek-dados---cnh",
+  "processos-isk": "iseek-dados---processos",
+  "placa-isk": "iseek-dados---placa",
+  "renavam-isk": "iseek-dados---renavam",
+  "chassi-isk": "iseek-dados---chassi",
+  "motor-isk": "iseek-dados---motor",
+  "email-isk": "iseek-dados---email",
+  "pix-isk": "iseek-dados---pix",
+  "cep-isk": "iseek-dados---cep",
+  "parentes-isk": "iseek-dados---parentes",
+  "score-isk": "iseek-dados---score",
+  "fotoma-isk": "iseek-fotos---fotoma",
+  "fotoes-isk": "iseek-fotos---fotoes",
+  "fototo-isk": "iseek-fotos---fototo",
+  "fotorj-isk": "iseek-fotos---fotorj",
+  "fotosp-isk": "iseek-fotos---fotosp",
+  "fotoce-isk": "iseek-fotos---fotoce",
+  "fotoms-isk": "iseek-fotos---fotoms",
+  "fotoro-isk": "iseek-fotos---fotoro",
+  "fotopr-isk": "iseek-fotos---fotopr",
+  "fotopi-isk": "iseek-fotos---fotopi",
+  "fotodf-isk": "iseek-fotos---fotodf",
+  "fotogo-isk": "iseek-fotos---fotogo",
+  "crlvto-foto": "iseek-fotos---crlvto",
+  "crlvmt-foto": "iseek-fotos---crlvmt",
 };
 
 // Foto state modules for national search
@@ -119,6 +170,11 @@ const SLOW_MODULES = new Set([
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
   "score", "score-3", "tse-3", "poderaquisitivo",
   "certidoes", "mandado", "veiculos", "rais",
+  "processo", "crlvto", "crlvmt",
+  // iSeek -isk fotos
+  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
+  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
+  "fotodf-isk", "fotogo-isk", "crlvto-foto", "crlvmt-foto",
 ]);
 
 function getModuleTimeout(modulo: string): number {
@@ -126,7 +182,11 @@ function getModuleTimeout(modulo: string): number {
 }
 
 // =============== VALIDAÇÃO DE ENTRADA ===============
-const TEXT_MODULES = new Set(["nome", "nomefull", "nome-3", "mae", "maefull", "endereco", "email", "emailfull", "email-3", "pix"]);
+const TEXT_MODULES = new Set([
+  "nome", "nomefull", "nome-3", "mae", "maefull", "endereco",
+  "email", "emailfull", "email-3", "pix",
+  "nomeabreviadofiltros", "mae-isk", "email-isk", "pix-isk",
+]);
 
 const NUMERIC_MODULES = new Set([
   "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
@@ -142,11 +202,21 @@ const NUMERIC_MODULES = new Set([
   // iSeek exclusivos (CPF-based)
   "pai", "nasc", "nis", "obito", "registro",
   "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+  "advogadooabuf", "catcpf", "catnumero",
   "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
   "vacinas", "beneficios", "faculdades", "func", "matricula",
-  "mandado", "certidoes", "rais", "veiculos",
+  "mandado", "certidoes", "rais", "veiculos", "processo",
+  "crlvto", "crlvmt",
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
+  // iSeek -isk (CPF-based)
+  "rg-isk", "titulo-isk", "cnh-isk", "telefone-isk",
+  "cep-isk", "parentes-isk", "score-isk", "processos-isk",
+  "cnpj-isk", "renavam-isk",
+  // Fotos -isk
+  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
+  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
+  "fotodf-isk", "fotogo-isk", "crlvto-foto", "crlvmt-foto",
 ]);
 
 function cleanQueryValue(modulo: string, input: string): string {
@@ -172,24 +242,29 @@ function validateInput(modulo: string, value: string): ValidationResult {
        "credilink", "poderaquisitivo", "parentes", "parentes-3", "processos",
        "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull",
        // iSeek exclusivos CPF-based
-       "pai", "nasc", "nis", "obito", "registro",
+       "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
        "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+       "advogadooabuf", "catcpf", "catnumero",
        "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
        "vacinas", "beneficios", "faculdades", "func", "matricula",
-       "mandado", "certidoes", "rais", "veiculos"];
+       "mandado", "certidoes", "rais", "veiculos", "processo",
+       "crlvto", "crlvmt",
+       // iSeek -isk CPF-based
+       "parentes-isk", "score-isk", "processos-isk",
+       "titulo-isk", "cnh-isk", "rg-isk", "telefone-isk", "cep-isk"];
   if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto")) {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "CPF deve conter exatamente 11 dígitos." };
     }
   }
 
-  if (modulo === "cnpj-cred") {
+  if (["cnpj-cred", "cnpj-isk"].includes(modulo)) {
     if (!/^\d{14}$/.test(clean)) {
       return { valid: false, error: "CNPJ deve conter exatamente 14 dígitos." };
     }
   }
 
-  if (["placa", "placa-serpro", "placa-simples", "placa-sesp"].includes(modulo)) {
+  if (["placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-isk"].includes(modulo)) {
     if (!/^[A-Z0-9]{7}$/i.test(clean)) {
       return { valid: false, error: "Placa deve conter 7 caracteres alfanuméricos." };
     }
