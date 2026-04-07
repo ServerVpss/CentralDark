@@ -230,6 +230,29 @@ function normalizeQueryType(queryType: string): string {
   return queryTypeAliases[queryType] || queryType;
 }
 
+// Mapa de fallback: quando o módulo primário está desativado, verificar se o iSeek equivalente está ativo
+const ISEEK_FALLBACK_KEYS: Record<string, string> = {
+  cpf: "cpf-isk", cpffull: "cpf-isk",
+  "cnpj-cred": "cnpj-isk",
+  placa: "placa-isk", "placa-serpro": "placa-isk", "placa-sesp": "placa-isk",
+  telefone: "telefone-isk", telefonefull: "telefone-isk", "telefone-3": "telefone-isk",
+  email: "email-isk", emailfull: "email-isk", "email-3": "email-isk",
+  cep: "cep-isk", cepfull: "cep-isk", "cep-3": "cep-isk",
+  score: "score-isk", "score-3": "score-isk",
+  rg: "rg-isk", "rg-3": "rg-isk",
+  cnh: "cnh-isk",
+  pix: "pix-isk",
+  mae: "mae-isk", maefull: "mae-isk",
+  titulo: "titulo-isk",
+  processos: "processos-isk",
+  "parentes-3": "parentes-isk",
+  fotosp: "fotosp-isk", fotorj: "fotorj-isk", fotopr: "fotopr-isk",
+  fotoce: "fotoce-isk", fotoma: "fotoma-isk", fotoes: "fotoes-isk",
+  fotodf: "fotodf-isk", fototo: "fototo-isk", fotoms: "fotoms-isk",
+  fotoro: "fotoro-isk", fotopi: "fotopi-isk", fotogo: "fotogo-isk",
+  renavam: "renavam-isk", chassi: "chassi-isk", motor: "motor-isk",
+};
+
 async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): Promise<boolean> {
   const normalizedType = normalizeQueryType(queryType);
   const status = await loadModuleStatus(supabase);
@@ -237,7 +260,16 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
   // Se o módulo não existe na tabela, considerar habilitado (fallback seguro)
   if (!(normalizedType in status)) return true;
 
-  return status[normalizedType] === true;
+  // Se o módulo primário está ativo, liberar
+  if (status[normalizedType] === true) return true;
+
+  // Se o módulo primário está desativado, verificar se existe fallback iSeek ativo
+  const fallbackKey = ISEEK_FALLBACK_KEYS[normalizedType];
+  if (fallbackKey && status[fallbackKey] === true) {
+    return true;
+  }
+
+  return false;
 }
 
 const queryTypeLabels: Record<string, string> = {
