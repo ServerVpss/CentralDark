@@ -3230,29 +3230,72 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   const userName = telegramUserName || 'usuário';
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA CPF =============
-  if (queryType === 'cpf') {
+  // ============= FORMATAÇÃO ESPECÍFICA POR MÓDULO =============
+  
+  // CPF e variantes (cpf, cpffull, cpf-isk, cpfsus, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo)
+  const cpfLikeModules = ['cpf', 'cpffull', 'cpf-isk', 'cpfsus', 'mae', 'maefull', 'rg', 'rg-3', 'cnh', 'pis', 'pis-3', 'titulo'];
+  if (cpfLikeModules.includes(queryType)) {
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA TELEFONE (telefone, telefonefull, telefone-3) =============
+  // Telefone (telefone, telefonefull, telefone-3)
   if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA CPF-SPC =============
+  // CPF-SPC
   if (queryType === 'cpf-spc') {
     return formatCpfSpcResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA CNPJ =============
+  // CNPJ
   if (queryType === 'cnpj-cred') {
     return formatCnpjResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA VEÍCULOS =============
+  // Veículos
   if (vehicleModules.includes(queryType)) {
     return formatVehicleResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Nome (nome, nomefull, nome-3) — lista de pessoas
+  if (queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3') {
+    return formatNomeResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Email (email, emailfull, email-3) — lista de pessoas vinculadas ao email
+  if (queryType === 'email' || queryType === 'emailfull' || queryType === 'email-3') {
+    return formatEmailResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // CEP (cep, cepfull, cep-3, endereco) — lista de pessoas + endereços
+  if (queryType === 'cep' || queryType === 'cepfull' || queryType === 'cep-3' || queryType === 'endereco') {
+    return formatCepResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Score (score, score-3)
+  if (queryType === 'score' || queryType === 'score-3') {
+    return formatScoreResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Renda
+  if (queryType === 'renda') {
+    return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Poder Aquisitivo
+  if (queryType === 'poderaquisitivo') {
+    return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Parentes (parentes, parentes-3)
+  if (queryType === 'parentes' || queryType === 'parentes-3') {
+    return formatParentesResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // PIX
+  if (queryType === 'pix') {
+    return formatPixResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
@@ -3820,6 +3863,484 @@ function formatCpfResult(
   // Retornar como bloco <pre> monoespaçado (escapar HTML nos valores)
   const escaped = lines.map(l => escapeHtml(l));
   return `<pre>${escaped.join('\n')}</pre>`;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA NOME (LISTA DE PESSOAS) ===============
+function formatNomeResult(
+  queryType: string,
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const moduleLabel = queryTypeLabels[queryType] || '📝 Nome';
+  const lines: string[] = [];
+  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(``);
+
+  let records: Record<string, unknown>[] = [];
+  if (dados && typeof dados === 'object') {
+    const arr = (dados.nome || dados.nomefull) as unknown[];
+    if (Array.isArray(arr)) records = arr as Record<string, unknown>[];
+  }
+
+  if (records.length === 0) {
+    return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  records.slice(0, 20).forEach((r, i) => {
+    const nome = String(r.nome || '').trim().toUpperCase();
+    const cpf = String(r.cpf || '').trim();
+    const nasc = String(r.dataNascimento || '').trim();
+    const mae = String(r.nomeMae || '').trim().toUpperCase();
+    const sexo = String(r.sexo || '').trim();
+
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 👤 RESULTADO ${i + 1}`);
+    lines.push(`├─────────────────────────────`);
+    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
+    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
+    if (nasc) lines.push(`│ 📅 Nascimento: ${nasc}`);
+    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
+    if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  });
+
+  if (records.length > 20) lines.push(`... e mais ${records.length - 20} resultados\n`);
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA EMAIL (LISTA DE PESSOAS) ===============
+function formatEmailResult(
+  queryType: string,
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const moduleLabel = queryTypeLabels[queryType] || '📧 Email';
+  const lines: string[] = [];
+  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(``);
+
+  let records: Record<string, unknown>[] = [];
+  if (dados && typeof dados === 'object') {
+    const arr = (dados.email || dados.emailfull) as unknown[];
+    if (Array.isArray(arr)) records = arr as Record<string, unknown>[];
+  }
+
+  if (records.length === 0) {
+    return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Buscar o email consultado
+  const emailConsultado = data.email_consultada || data.emailfull_consultada || '';
+  if (emailConsultado) {
+    lines.push(`📧 Email: ${String(emailConsultado).toLowerCase()}`);
+    lines.push(`📊 Resultados: ${records.length}`);
+    lines.push(``);
+  }
+
+  records.slice(0, 20).forEach((r, i) => {
+    const nome = String(r.nome || '').trim().toUpperCase();
+    const cpf = String(r.cpf || '').trim();
+    const nasc = String(r.dataNascimento || '').trim();
+    const mae = String(r.nomeMae || '').trim().toUpperCase();
+    const sexo = String(r.sexo || '').trim();
+
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 👤 PESSOA ${i + 1}`);
+    lines.push(`├─────────────────────────────`);
+    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
+    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
+    if (nasc) lines.push(`│ 📅 Nascimento: ${nasc}`);
+    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
+    if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  });
+
+  if (records.length > 20) lines.push(`... e mais ${records.length - 20} resultados\n`);
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA CEP (PESSOAS + ENDEREÇO) ===============
+function formatCepResult(
+  queryType: string,
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const moduleLabel = queryTypeLabels[queryType] || '📍 CEP';
+  const lines: string[] = [];
+  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(``);
+
+  let records: Record<string, unknown>[] = [];
+  if (dados && typeof dados === 'object') {
+    const arr = (dados.cep || dados.cepfull || dados.endereco) as unknown[];
+    if (Array.isArray(arr)) records = arr as Record<string, unknown>[];
+  }
+
+  if (records.length === 0) {
+    return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Mostrar endereço do primeiro registro como referência
+  const firstEnd = records[0]?.endereco as Record<string, unknown> | undefined;
+  if (firstEnd) {
+    const logradouro = firstEnd.logradouro || firstEnd.nomeLogradouro || '';
+    const bairro = firstEnd.bairro || '';
+    const cidade = firstEnd.cidade || '';
+    const uf = firstEnd.uf || '';
+    const cep = firstEnd.cep || '';
+    lines.push(`📍 ${logradouro}, ${bairro}`);
+    lines.push(`🏙️ ${cidade}/${uf} - CEP ${cep}`);
+    lines.push(`📊 Moradores: ${records.length}`);
+    lines.push(``);
+  }
+
+  records.slice(0, 15).forEach((r, i) => {
+    const basicos = (r.dadosBasicos || r) as Record<string, unknown>;
+    const endereco = r.endereco as Record<string, unknown> | undefined;
+    const nome = String(basicos.nome || '').trim().toUpperCase();
+    const cpf = String(basicos.cpf || '').trim();
+    const nasc = String(basicos.dataNascimento || '').trim();
+    const sexo = String(basicos.sexo || '').trim();
+    const numero = endereco ? String(endereco.numero || endereco.numeroLogradouro || '').trim() : '';
+    const compl = endereco ? String(endereco.complemento || endereco.complementoLogradouro || '').trim() : '';
+
+    lines.push(`┌─────────────────────────────`);
+    lines.push(`│ 👤 MORADOR ${i + 1}`);
+    lines.push(`├─────────────────────────────`);
+    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
+    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
+    if (nasc) lines.push(`│ 📅 Nascimento: ${nasc}`);
+    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
+    if (numero) lines.push(`│ 🏠 Nº: ${numero}${compl ? ' ' + compl : ''}`);
+    lines.push(`└─────────────────────────────`);
+    lines.push(``);
+  });
+
+  if (records.length > 15) lines.push(`... e mais ${records.length - 15} moradores\n`);
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA SCORE ===============
+function formatScoreResult(
+  queryType: string,
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const moduleLabel = queryTypeLabels[queryType] || '📊 Score';
+  const lines: string[] = [];
+  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(``);
+
+  let basicos: Record<string, unknown> = {};
+  let scoreData: Record<string, unknown> = {};
+
+  if (dados && typeof dados === 'object') {
+    const arr = (dados.score || dados['score-3']) as unknown[];
+    if (Array.isArray(arr) && arr.length > 0) {
+      const first = arr[0] as Record<string, unknown>;
+      // dadosBasicos pode ser array ou objeto
+      const db = first.dadosBasicos;
+      if (Array.isArray(db) && db.length > 0) basicos = db[0] as Record<string, unknown>;
+      else if (db && typeof db === 'object') basicos = db as Record<string, unknown>;
+      // dadosScore
+      const ds = first.dadosScore;
+      if (Array.isArray(ds) && ds.length > 0) scoreData = ds[0] as Record<string, unknown>;
+      else if (ds && typeof ds === 'object') scoreData = ds as Record<string, unknown>;
+    }
+  }
+
+  if (!basicos.nome && !scoreData.csb8) {
+    return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Dados pessoais
+  lines.push(`┌─────────────────────────────`);
+  lines.push(`│ 👤 DADOS PESSOAIS`);
+  lines.push(`├─────────────────────────────`);
+  if (basicos.nome) lines.push(`│ 👑 Nome: ${String(basicos.nome).toUpperCase()}`);
+  if (basicos.cpf) lines.push(`│ 🆔 CPF: ${basicos.cpf}`);
+  if (basicos.dataNascimento) lines.push(`│ 📅 Nascimento: ${String(basicos.dataNascimento).substring(0, 10)}`);
+  if (basicos.sexo) lines.push(`│ 👤 Sexo: ${basicos.sexo}`);
+  if (basicos.nomeMae) lines.push(`│ 👩 Mãe: ${String(basicos.nomeMae).toUpperCase()}`);
+  if (basicos.nomePai && String(basicos.nomePai).trim()) lines.push(`│ 👨 Pai: ${String(basicos.nomePai).toUpperCase()}`);
+  lines.push(`└─────────────────────────────`);
+  lines.push(``);
+
+  // Score
+  lines.push(`┌─────────────────────────────`);
+  lines.push(`│ 📊 ANÁLISE DE CRÉDITO`);
+  lines.push(`├─────────────────────────────`);
+  if (scoreData.csb8) {
+    const faixa = scoreData.csb8Faixa ? ` (${String(scoreData.csb8Faixa).toUpperCase()})` : '';
+    lines.push(`│ 📈 Score CSB8: ${scoreData.csb8}${faixa}`);
+  }
+  if (scoreData.csba) {
+    const faixa = scoreData.csbaFaixa ? ` (${String(scoreData.csbaFaixa).toUpperCase()})` : '';
+    lines.push(`│ 📈 Score CSBA: ${scoreData.csba}${faixa}`);
+  }
+  // Interpretar score
+  const csb8Val = Number(scoreData.csb8 || 0);
+  if (csb8Val > 0) {
+    let risco = '🟢 BAIXO RISCO';
+    if (csb8Val >= 700) risco = '🔴 ALTO RISCO';
+    else if (csb8Val >= 400) risco = '🟡 MÉDIO RISCO';
+    lines.push(`│ ⚠️ Avaliação: ${risco}`);
+  }
+  lines.push(`└─────────────────────────────`);
+  lines.push(``);
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA RENDA/PODER AQUISITIVO ===============
+function formatRendaResult(
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const lines: string[] = [];
+  lines.push(`💰 RENDA RESULTADO`);
+  lines.push(``);
+
+  let basicos: Record<string, unknown> = {};
+  let rendaData: Record<string, unknown> = {};
+
+  if (dados && typeof dados === 'object') {
+    const arr = (dados.renda || dados.poderaquisitivo) as unknown[];
+    if (Array.isArray(arr) && arr.length > 0) {
+      const first = arr[0] as Record<string, unknown>;
+      const db = first.dadosBasicos;
+      if (Array.isArray(db) && db.length > 0) basicos = db[0] as Record<string, unknown>;
+      else if (db && typeof db === 'object') basicos = db as Record<string, unknown>;
+      const dr = first.dadosRenda || first.dadosPoderAquisitivo;
+      if (Array.isArray(dr) && dr.length > 0) rendaData = dr[0] as Record<string, unknown>;
+      else if (dr && typeof dr === 'object') rendaData = dr as Record<string, unknown>;
+    }
+  }
+
+  if (!basicos.nome && !rendaData.renda) {
+    return formatGenericResult('renda', data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  lines.push(`┌─────────────────────────────`);
+  lines.push(`│ 👤 DADOS PESSOAIS`);
+  lines.push(`├─────────────────────────────`);
+  if (basicos.nome) lines.push(`│ 👑 Nome: ${String(basicos.nome).toUpperCase()}`);
+  if (basicos.cpf) lines.push(`│ 🆔 CPF: ${basicos.cpf}`);
+  if (basicos.dataNascimento) lines.push(`│ 📅 Nascimento: ${String(basicos.dataNascimento).substring(0, 10)}`);
+  if (basicos.sexo) lines.push(`│ 👤 Sexo: ${basicos.sexo}`);
+  if (basicos.nomeMae) lines.push(`│ 👩 Mãe: ${String(basicos.nomeMae).toUpperCase()}`);
+  lines.push(`└─────────────────────────────`);
+  lines.push(``);
+
+  lines.push(`┌─────────────────────────────`);
+  lines.push(`│ 💰 INFORMAÇÕES FINANCEIRAS`);
+  lines.push(`├─────────────────────────────`);
+  if (rendaData.renda) lines.push(`│ 💵 Renda: R$ ${rendaData.renda}`);
+  if (rendaData.faixaRendaId) {
+    const faixas: Record<string, string> = { '1': 'Até R$ 1.000', '2': 'R$ 1.000 a R$ 2.000', '3': 'R$ 2.000 a R$ 5.000', '4': 'R$ 5.000 a R$ 10.000', '5': 'R$ 10.000 a R$ 20.000', '6': 'Acima de R$ 20.000' };
+    const faixa = faixas[String(rendaData.faixaRendaId)] || `Faixa ${rendaData.faixaRendaId}`;
+    lines.push(`│ 📊 Faixa de Renda: ${faixa}`);
+  }
+  if (rendaData.poderAquisitivo) lines.push(`│ 💎 Poder Aquisitivo: ${String(rendaData.poderAquisitivo).toUpperCase()}`);
+  if (rendaData.faixaPoderAquisitivo) lines.push(`│ 📈 Faixa: ${fixBrokenEncoding(String(rendaData.faixaPoderAquisitivo))}`);
+  if (rendaData.rendaPoderAquisitivo) lines.push(`│ 💵 Renda Estimada: R$ ${String(rendaData.rendaPoderAquisitivo).replace(/(\.\d{2})\d+/, '$1')}`);
+  lines.push(`└─────────────────────────────`);
+  lines.push(``);
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA PARENTES ===============
+function formatParentesResult(
+  queryType: string,
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const moduleLabel = queryTypeLabels[queryType] || '👨‍👩‍👧‍👦 Parentes';
+  const lines: string[] = [];
+  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(``);
+
+  if (dados && typeof dados === 'object') {
+    const parentesData = dados.parentes;
+    
+    // Se for string "Nenhum resultado encontrado"
+    if (typeof parentesData === 'string') {
+      lines.push(`┌─────────────────────────────`);
+      lines.push(`│ ℹ️ ${parentesData.toUpperCase()}`);
+      lines.push(`└─────────────────────────────`);
+      lines.push(``);
+      lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+      lines.push(`🤖 ${botTag}`);
+      return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+    }
+
+    // Se for array de registros
+    if (Array.isArray(parentesData) && parentesData.length > 0) {
+      // Pode ter dadosBasicos + dadosParentes ou ser direto
+      const first = parentesData[0] as Record<string, unknown>;
+      
+      // Se tem dadosBasicos (titular)
+      const basicos = first.dadosBasicos;
+      if (basicos) {
+        const b = (Array.isArray(basicos) ? basicos[0] : basicos) as Record<string, unknown>;
+        lines.push(`┌─────────────────────────────`);
+        lines.push(`│ 👤 TITULAR`);
+        lines.push(`├─────────────────────────────`);
+        if (b.nome) lines.push(`│ 👑 Nome: ${String(b.nome).toUpperCase()}`);
+        if (b.cpf) lines.push(`│ 🆔 CPF: ${b.cpf}`);
+        if (b.dataNascimento) lines.push(`│ 📅 Nascimento: ${String(b.dataNascimento).substring(0, 10)}`);
+        lines.push(`└─────────────────────────────`);
+        lines.push(``);
+
+        const parentes = first.dadosParentes as unknown[] | undefined;
+        if (Array.isArray(parentes) && parentes.length > 0) {
+          lines.push(`┌─────────────────────────────`);
+          lines.push(`│ 👨‍👩‍👧‍👦 PARENTES (${parentes.length})`);
+          lines.push(`├─────────────────────────────`);
+          parentes.slice(0, 20).forEach((p: unknown) => {
+            const par = p as Record<string, unknown>;
+            const vinculo = String(par.vinculo || par.tipo || '').toUpperCase();
+            const nome = String(par.nomeVinculo || par.nome || '').toUpperCase();
+            const cpf = par.cpfVinculo || par.cpf || '';
+            let icon = '👤';
+            if (vinculo.includes('MAE') || vinculo.includes('MÃE')) icon = '👩';
+            else if (vinculo.includes('PAI')) icon = '👨';
+            else if (vinculo.includes('FILHO') || vinculo.includes('FILHA')) icon = '👦';
+            else if (vinculo.includes('IRMA')) icon = '👧';
+            else if (vinculo.includes('CONJUGE') || vinculo.includes('CÔNJUGE')) icon = '💑';
+            lines.push(`│ ${icon} ${vinculo}: ${nome}${cpf ? ' (' + cpf + ')' : ''}`);
+          });
+          if (parentes.length > 20) lines.push(`│ ... e mais ${parentes.length - 20}`);
+          lines.push(`└─────────────────────────────`);
+          lines.push(``);
+        }
+      } else {
+        // Array direto de pessoas (ex: resultado simples)
+        lines.push(`┌─────────────────────────────`);
+        lines.push(`│ 👨‍👩‍👧‍👦 PARENTES (${parentesData.length})`);
+        lines.push(`├─────────────────────────────`);
+        parentesData.slice(0, 20).forEach((p: unknown) => {
+          const par = p as Record<string, unknown>;
+          const nome = String(par.nome || par.nomeVinculo || '').toUpperCase();
+          const cpf = par.cpf || par.cpfVinculo || '';
+          const vinculo = String(par.vinculo || par.tipo || '').toUpperCase();
+          lines.push(`│ 👤 ${vinculo ? vinculo + ': ' : ''}${nome}${cpf ? ' (' + cpf + ')' : ''}`);
+        });
+        lines.push(`└─────────────────────────────`);
+        lines.push(``);
+      }
+    }
+  }
+
+  if (lines.length <= 2) {
+    return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+}
+
+// =============== FORMATAÇÃO ESPECÍFICA PARA PIX ===============
+function formatPixResult(
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string,
+  shouldIgnore: (value: unknown) => boolean
+): string {
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+  const dados = data.dados as Record<string, unknown> | undefined;
+  const lines: string[] = [];
+  lines.push(`💳 PIX RESULTADO`);
+  lines.push(``);
+
+  if (dados && typeof dados === 'object') {
+    const pixData = dados.pix;
+    
+    if (Array.isArray(pixData) && pixData.length > 0) {
+      pixData.slice(0, 15).forEach((p: unknown, i: number) => {
+        const pix = p as Record<string, unknown>;
+        lines.push(`┌─────────────────────────────`);
+        lines.push(`│ 💳 CHAVE PIX ${i + 1}`);
+        lines.push(`├─────────────────────────────`);
+        if (pix.nome) lines.push(`│ 👑 Nome: ${String(pix.nome).toUpperCase()}`);
+        if (pix.cpf) lines.push(`│ 🆔 CPF/CNPJ: ${pix.cpf}`);
+        if (pix.chave) lines.push(`│ 🔑 Chave: ${pix.chave}`);
+        if (pix.tipo) lines.push(`│ 📋 Tipo: ${String(pix.tipo).toUpperCase()}`);
+        if (pix.banco) lines.push(`│ 🏦 Banco: ${String(pix.banco).toUpperCase()}`);
+        if (pix.ispb) lines.push(`│ 🏦 ISPB: ${pix.ispb}`);
+        lines.push(`└─────────────────────────────`);
+        lines.push(``);
+      });
+    } else if (typeof pixData === 'object' && pixData !== null) {
+      const pix = pixData as Record<string, unknown>;
+      lines.push(`┌─────────────────────────────`);
+      lines.push(`│ 💳 DADOS PIX`);
+      lines.push(`├─────────────────────────────`);
+      for (const [k, v] of Object.entries(pix)) {
+        if (v && !shouldIgnore(v)) {
+          lines.push(`│ ▷ ${k.toUpperCase()}: ${String(v).toUpperCase()}`);
+        }
+      }
+      lines.push(`└─────────────────────────────`);
+      lines.push(``);
+    }
+  }
+
+  if (lines.length <= 2) {
+    return formatGenericResult('pix', data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
+  lines.push(`🤖 ${botTag}`);
+  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS (MONOESPAÇADO) ===============
