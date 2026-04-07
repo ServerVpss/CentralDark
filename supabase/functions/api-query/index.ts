@@ -115,7 +115,10 @@ const SLOW_MODULES = new Set([
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
+  "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
+  "fotonc", "fotocnh", "fotodetran", "fotomapresos",
   "score", "score-3", "tse-3", "poderaquisitivo",
+  "certidoes", "mandado", "veiculos", "rais",
 ]);
 
 function getModuleTimeout(modulo: string): number {
