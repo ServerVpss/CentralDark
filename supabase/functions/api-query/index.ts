@@ -263,13 +263,72 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
 }
 
 // =============== ISEEK FALLBACK ===============
+// Mapeamento: módulo VeiculosAPI → módulo equivalente no iSeek
 const ISEEK_FALLBACK_MODULES: Record<string, string> = {
+  // CPF / Pessoa
   "cpf": "iseek-cpf",
   "cpffull": "iseek-cpf",
   "cpf-isk": "iseek-cpf",
   "cpfsus": "iseek-cpf",
-  "parentes": "iseek-cpf",
-  "parentes-3": "iseek-cpf",
+  // Nome
+  "nome": "iseek-dados---nomeabreviadofiltros",
+  "nomefull": "iseek-dados---nomeabreviadofiltros",
+  "nome-3": "iseek-dados---nomeabreviadofiltros",
+  // Família
+  "parentes": "iseek-dados---parentes",
+  "parentes-3": "iseek-dados---parentes",
+  "mae": "iseek-dados---mae",
+  "maefull": "iseek-dados---mae",
+  // Documentos
+  "rg": "iseek-dados---rg",
+  "rg-3": "iseek-dados---rg",
+  "titulo": "iseek-dados---titulo",
+  "cnh": "iseek-dados---cnh",
+  "pis": "iseek-dados---nis",
+  "pis-3": "iseek-dados---nis",
+  // Contato
+  "telefone": "iseek-dados---telefone",
+  "telefonefull": "iseek-dados---telefone",
+  "telefone-3": "iseek-dados---telefone",
+  "email": "iseek-dados---email",
+  "emailfull": "iseek-dados---email",
+  "email-3": "iseek-dados---email",
+  "cep": "iseek-dados---cep",
+  "cepfull": "iseek-dados---cep",
+  "cep-3": "iseek-dados---cep",
+  // Financeiro
+  "pix": "iseek-dados---pix",
+  "score": "iseek-dados---score",
+  "score-3": "iseek-dados---score",
+  "renda": "iseek-dados---score2",
+  "credilink": "iseek-dados---score2",
+  "cpf-spc": "iseek-dados---dividas",
+  "poderaquisitivo": "iseek-dados---score2",
+  // Veículos
+  "placa": "iseek-dados---placa",
+  "placa-serpro": "iseek-dados---placa",
+  "placa-sesp": "iseek-dados---placa",
+  "chassi": "iseek-dados---chassi",
+  "renavam": "iseek-dados---renavam",
+  "motor": "iseek-dados---motor",
+  // Empresa
+  "cnpj-cred": "iseek-dados---cnpj",
+  // Justiça
+  "processos": "iseek-dados---processos",
+  "bnmp-lc": "iseek-dados---mandado",
+  // Foto por estado
+  "fotomg": "iseek-fotos---fotomg",
+  "fotosp": "iseek-fotos---fotosp",
+  "fotorj": "iseek-fotos---fotorj",
+  "fotoce": "iseek-fotos---fotoce",
+  "fotopr": "iseek-fotos---fotopr",
+  "fotoma": "iseek-fotos---fotoma",
+  "fotoes": "iseek-fotos---fotoes",
+  "fotodf": "iseek-fotos---fotodf",
+  "fototo": "iseek-fotos---fototo",
+  "fotoms": "iseek-fotos---fotoms",
+  "fotoro": "iseek-fotos---fotoro",
+  "fotopi": "iseek-fotos---fotopi",
 };
 
 async function fetchFromIseek(iseekModulo: string, valor: string): Promise<ProviderResult> {
