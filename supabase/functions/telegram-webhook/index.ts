@@ -5255,7 +5255,7 @@ class BotHandler {
               console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
               const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput, undefined, telegramUserId);
               return;
             }
             
@@ -5364,7 +5364,7 @@ class BotHandler {
         } else if (showFotoNacional) {
           extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`)]);
         }
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons, telegramUserId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -6601,7 +6601,7 @@ class BotHandler {
             reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
           });
         } else {
-          await sendLongMessagePaginated(this.token, chatId, resultHeader + formattedResult, this.supabase, undefined, undefined, r.cmd.queryType, r.cmd.queryInput);
+          await sendLongMessagePaginated(this.token, chatId, resultHeader + formattedResult, this.supabase, undefined, undefined, r.cmd.queryType, r.cmd.queryInput, undefined, telegramUserId);
         }
       } else {
         await telegramRequest(this.token, "sendMessage", {
