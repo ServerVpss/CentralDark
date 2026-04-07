@@ -258,7 +258,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
     }
   }
 
-  if (modulo === "cnpj-cred") {
+  if (["cnpj-cred", "cnpj-isk"].includes(modulo)) {
     if (!/^\d{14}$/.test(clean)) {
       return { valid: false, error: "CNPJ deve conter exatamente 14 dígitos." };
     }
