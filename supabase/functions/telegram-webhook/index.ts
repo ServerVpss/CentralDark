@@ -7036,6 +7036,60 @@ class BotHandler {
 
     await answerCallback(this.token, callback.id);
 
+    // ── Ownership check for query-result buttons ──
+    // Callbacks that interact with query results must be restricted to the user who initiated the query.
+    const queryResultPrefixes = ["page:", "page_delete:", "pdf:", "txt:", "qcpf:", "retry_query:", "foto_query:", "cep_page:", "tel_page:"];
+    const isQueryResultCallback = data === "delete_msg" || queryResultPrefixes.some(p => data.startsWith(p));
+
+    if (isQueryResultCallback) {
+      // Try to find requester_id from paginated_results metadata
+      let requesterId: number | null = null;
+
+      // Extract paginationId from callback data if present
+      let paginationIdForCheck: string | null = null;
+      if (data.startsWith("page:") || data.startsWith("cep_page:") || data.startsWith("tel_page:")) {
+        const parts = data.split(":");
+        paginationIdForCheck = parts.length >= 3 ? parts[1] : null;
+      } else if (data.startsWith("page_delete:")) {
+        paginationIdForCheck = data.replace("page_delete:", "");
+      }
+
+      if (paginationIdForCheck) {
+        const { data: pagData } = await this.supabase
+          .from("paginated_results")
+          .select("metadata")
+          .eq("id", paginationIdForCheck)
+          .maybeSingle();
+        if (pagData?.metadata) {
+          const meta = pagData.metadata as Record<string, unknown>;
+          if (meta.requester_id) requesterId = Number(meta.requester_id);
+        }
+      }
+
+      // For non-paginated results (delete_msg, pdf, txt, foto_query, etc.), check if the
+      // original message was sent as a reply to someone — that someone is the requester.
+      // We also check callback.message reply info.
+      if (!requesterId && callback.message) {
+        const replyMsg = (callback.message as any).reply_to_message;
+        if (replyMsg?.from?.id) {
+          requesterId = replyMsg.from.id;
+        }
+      }
+
+      // Check if the bot owner can bypass (owner_ids in settings)
+      const isOwner = this.settings.owner_ids?.includes(telegramUserId);
+
+      if (requesterId && requesterId !== telegramUserId && !isOwner) {
+        // Not the requester - block the interaction
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "⚠️ Apenas quem fez a consulta pode interagir com este resultado.",
+          show_alert: true,
+        });
+        return;
+      }
+    }
+
     // Delete message button handler
     if (data === "delete_msg") {
       try {
