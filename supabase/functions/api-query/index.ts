@@ -8,7 +8,6 @@ const corsHeaders = {
 
 // =============== WHITELIST EXATA DOS MÓDULOS ===============
 // Cada nome é enviado EXATAMENTE como está para a API externa.
-// Sem tradução, sem remapeamento, sem fallback entre módulos.
 const MODULE_WHITELIST = new Set([
   // Pessoa
   "cpf", "cpffull", "cpf-isk", "nome", "nomefull", "rg", "titulo",
@@ -32,11 +31,70 @@ const MODULE_WHITELIST = new Set([
   // Variantes -3
   "rg-3", "pis-3", "cep-3", "email-3", "nome-3",
   "score-3", "parentes-3", "telefone-3",
-  // Foto por estado (12 estados disponíveis)
+  // Foto por estado (12 estados VeiculosAPI)
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
+  // ===== MÓDULOS EXCLUSIVOS ISEEK =====
+  // Pessoa/Família
+  "pai", "nasc", "nis", "obito", "registro",
+  // Documentos
+  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+  // Financeiro
+  "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
+  // Governo/Saúde
+  "vacinas", "beneficios", "faculdades", "func", "matricula",
+  // Justiça
+  "mandado", "certidoes",
+  // Trabalho
+  "rais",
+  // Veículos por CPF
+  "veiculos",
+  // Fotos extras iSeek
+  "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
+  "fotonc", "fotocnh", "fotodetran", "fotomapresos",
 ]);
+
+// Módulos que vão DIRETAMENTE ao iSeek (não passam pelo VeiculosAPI)
+const ISEEK_DIRECT_MODULES: Record<string, string> = {
+  "pai": "iseek-dados---pai",
+  "nasc": "iseek-dados---nasc",
+  "nis": "iseek-dados---nis",
+  "obito": "iseek-dados---obito",
+  "registro": "iseek-dados---registro",
+  "cnham": "iseek-dados---cnham",
+  "cnhrs": "iseek-dados---cnhrs",
+  "cnhrr": "iseek-dados---cnhrr",
+  "cnhnc": "iseek-dados---cnhnc",
+  "oab": "iseek-dados---oab",
+  "advogadooab": "iseek-dados---advogadooab",
+  "advogadocpf": "iseek-dados---advogadocpf",
+  "dividas": "iseek-dados---dividas",
+  "bens": "iseek-dados---bens",
+  "irpf": "iseek-dados---irpf",
+  "score2": "iseek-dados---score2",
+  "cheque": "iseek-dados---cheque",
+  "assessoria": "iseek-dados---assessoria",
+  "iptu": "iseek-dados---iptu",
+  "vacinas": "iseek-dados---vacinas",
+  "beneficios": "iseek-dados---beneficios",
+  "faculdades": "iseek-dados---faculdades",
+  "func": "iseek-dados---func",
+  "matricula": "iseek-dados---matricula",
+  "mandado": "iseek-dados---mandado",
+  "certidoes": "iseek-dados---certidoes",
+  "rais": "iseek-dados---rais",
+  "veiculos": "iseek-dados---veiculos",
+  "fotoal": "iseek-fotos---fotoal",
+  "fotogo": "iseek-fotos---fotogo",
+  "fotopb": "iseek-fotos---fotopb",
+  "fotope": "iseek-fotos---fotope",
+  "fotorn": "iseek-fotos---fotorn",
+  "fotonc": "iseek-fotos---fotonc",
+  "fotocnh": "iseek-fotos---fotocnh",
+  "fotodetran": "iseek-dados---fotodetran",
+  "fotomapresos": "iseek-fotos---fotomapresos",
+};
 
 // Foto state modules for national search
 const FOTO_STATE_MODULES: Record<string, string> = {
@@ -57,7 +115,10 @@ const SLOW_MODULES = new Set([
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
+  "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
+  "fotonc", "fotocnh", "fotodetran", "fotomapresos",
   "score", "score-3", "tse-3", "poderaquisitivo",
+  "certidoes", "mandado", "veiculos", "rais",
 ]);
 
 function getModuleTimeout(modulo: string): number {
@@ -78,6 +139,14 @@ const NUMERIC_MODULES = new Set([
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
+  // iSeek exclusivos (CPF-based)
+  "pai", "nasc", "nis", "obito", "registro",
+  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+  "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
+  "vacinas", "beneficios", "faculdades", "func", "matricula",
+  "mandado", "certidoes", "rais", "veiculos",
+  "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
+  "fotonc", "fotocnh", "fotodetran", "fotomapresos",
 ]);
 
 function cleanQueryValue(modulo: string, input: string): string {
@@ -98,11 +167,17 @@ function validateInput(modulo: string, value: string): ValidationResult {
     return { valid: false, error: "Valor não pode ser vazio." };
   }
 
-  // CPF variants
-  if (["cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus", "score", "score-3", "renda",
+  // CPF variants (11 digits)
+  const CPF_MODULES = ["cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus", "score", "score-3", "renda",
        "credilink", "poderaquisitivo", "parentes", "parentes-3", "processos",
-       "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull"].includes(modulo) ||
-      modulo.startsWith("foto")) {
+       "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull",
+       // iSeek exclusivos CPF-based
+       "pai", "nasc", "nis", "obito", "registro",
+       "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+       "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
+       "vacinas", "beneficios", "faculdades", "func", "matricula",
+       "mandado", "certidoes", "rais", "veiculos"];
+  if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto")) {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "CPF deve conter exatamente 11 dígitos." };
     }
@@ -624,7 +699,39 @@ async function handleQuery(
     };
   }
 
-  // ---- MÓDULO PADRÃO ----
+  // ---- MÓDULO DIRETO ISEEK (exclusivos) ----
+  if (ISEEK_DIRECT_MODULES[modulo]) {
+    const iseekModulo = ISEEK_DIRECT_MODULES[modulo];
+    console.log(`[iSeek Direct] modulo=${modulo} → ${iseekModulo}`);
+    const iseekResult = await fetchFromIseek(iseekModulo, cleanInput);
+
+    if (iseekResult.data.error) {
+      return {
+        success: false,
+        data: iseekResult.data,
+        meta: buildMeta("error", iseekResult.provider_duration_ms),
+        errors: [String(iseekResult.data.error)],
+      };
+    }
+
+    if (iseekResult.data.notFound) {
+      return {
+        success: true,
+        data: iseekResult.data,
+        meta: buildMeta("not_found", iseekResult.provider_duration_ms),
+        errors: [],
+      };
+    }
+
+    return {
+      success: true,
+      data: iseekResult.data,
+      meta: { ...buildMeta("success", iseekResult.provider_duration_ms), provider: "iseek" } as any,
+      errors: [],
+    };
+  }
+
+  // ---- MÓDULO PADRÃO (VeiculosAPI + fallback iSeek) ----
   const result = await fetchFromProvider(modulo, cleanInput);
   const primaryFailed = !!(result.data.error || result.data.notFound);
 
