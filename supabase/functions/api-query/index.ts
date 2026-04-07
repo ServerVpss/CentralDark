@@ -841,14 +841,49 @@ async function handleQuery(
   }
 
   // ---- MÓDULO PADRÃO (VeiculosAPI + fallback iSeek) ----
+
+  // Se o módulo VeiculosAPI está DESATIVADO no banco mas o iSeek equivalente está ativo,
+  // pular direto ao iSeek sem perder tempo com VeiculosAPI (evita timeout de 60s+)
+  const primaryDisabledInDb = cachedModuleStatus && modulo in cachedModuleStatus && cachedModuleStatus[modulo] === false;
+  const iseekFallbackModulo = ISEEK_FALLBACK_MODULES[modulo];
+
+  if (primaryDisabledInDb && iseekFallbackModulo) {
+    console.log(`[SmartRoute] ${modulo} desativado no banco, indo direto ao iSeek (${iseekFallbackModulo})`);
+    const iseekResult = await fetchFromIseek(iseekFallbackModulo, cleanInput);
+
+    if (!iseekResult.data.error && !iseekResult.data.notFound) {
+      return {
+        success: true,
+        data: iseekResult.data,
+        meta: { ...buildMeta("success", iseekResult.provider_duration_ms), provider: "iseek" } as any,
+        errors: [],
+      };
+    }
+
+    // iSeek também falhou
+    if (iseekResult.data.error) {
+      return {
+        success: false,
+        data: iseekResult.data,
+        meta: buildMeta("error", iseekResult.provider_duration_ms),
+        errors: [String(iseekResult.data.error)],
+      };
+    }
+    return {
+      success: true,
+      data: iseekResult.data,
+      meta: buildMeta("not_found", iseekResult.provider_duration_ms),
+      errors: [],
+    };
+  }
+
   const result = await fetchFromProvider(modulo, cleanInput);
   const primaryFailed = !!(result.data.error || result.data.notFound);
 
   // Tentar fallback iSeek se o provedor primário falhou
-  if (primaryFailed && ISEEK_FALLBACK_MODULES[modulo]) {
-    const iseekModulo = ISEEK_FALLBACK_MODULES[modulo];
-    console.log(`[Fallback] Primário falhou para ${modulo}, tentando iSeek (${iseekModulo})...`);
-    const fallbackResult = await fetchFromIseek(iseekModulo, cleanInput);
+  if (primaryFailed && iseekFallbackModulo) {
+    console.log(`[Fallback] Primário falhou para ${modulo}, tentando iSeek (${iseekFallbackModulo})...`);
+    const fallbackResult = await fetchFromIseek(iseekFallbackModulo, cleanInput);
 
     if (!fallbackResult.data.error && !fallbackResult.data.notFound) {
       const totalProviderMs = result.provider_duration_ms + fallbackResult.provider_duration_ms;
