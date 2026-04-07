@@ -262,6 +262,66 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
   }
 }
 
+// =============== ISEEK FALLBACK ===============
+const ISEEK_FALLBACK_MODULES: Record<string, string> = {
+  "cpf": "iseek-cpf",
+  "cpffull": "iseek-cpf",
+  "cpf-isk": "iseek-cpf",
+  "cpfsus": "iseek-cpf",
+  "parentes": "iseek-cpf",
+  "parentes-3": "iseek-cpf",
+};
+
+async function fetchFromIseek(iseekModulo: string, valor: string): Promise<ProviderResult> {
+  const apiBase = Deno.env.get("ISEEK_API_BASE");
+  const apiKey = Deno.env.get("ISEEK_API_KEY");
+  if (!apiBase || !apiKey) {
+    return { data: { error: "iSeek não configurado" }, provider_duration_ms: 0, retried: false };
+  }
+
+  const url = `${apiBase}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(iseekModulo)}&string=${encodeURIComponent(valor)}`;
+  console.log(`[iSeek Fallback] modulo=${iseekModulo}`);
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30_000);
+  const start = Date.now();
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Accept": "application/json" },
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    const duration = Date.now() - start;
+
+    if (!response.ok) {
+      return { data: { error: `iSeek erro: ${response.status}` }, provider_duration_ms: duration, retried: false };
+    }
+
+    const raw = await response.json();
+
+    // iSeek retorna { status: 200, data: { ... } }
+    const innerData = (raw && typeof raw === "object" && raw.data && typeof raw.data === "object")
+      ? raw.data
+      : raw;
+
+    if (!innerData || innerData.error || innerData.status === "error") {
+      return { data: { notFound: true, message: innerData?.error || innerData?.message || "Dados não encontrados" }, provider_duration_ms: duration, retried: false };
+    }
+
+    return { data: { ...innerData, modulo: iseekModulo, fallback_provider: "iseek" }, provider_duration_ms: duration, retried: false };
+  } catch (err) {
+    clearTimeout(timeoutId);
+    const duration = Date.now() - start;
+    const error = err as Error;
+    if (error.name === "AbortError") {
+      return { data: { error: "iSeek timeout" }, provider_duration_ms: duration, retried: false };
+    }
+    return { data: { error: "iSeek conexão falhou" }, provider_duration_ms: duration, retried: false };
+  }
+}
+
 // =============== FOTO: BUSCA PROFUNDA ===============
 function findPhotoInResponse(obj: unknown, depth = 0): string | null {
   if (!obj || typeof obj !== "object" || depth > 8) return null;
@@ -507,7 +567,28 @@ async function handleQuery(
 
   // ---- MÓDULO PADRÃO ----
   const result = await fetchFromProvider(modulo, cleanInput);
+  const primaryFailed = !!(result.data.error || result.data.notFound);
 
+  // Tentar fallback iSeek se o provedor primário falhou
+  if (primaryFailed && ISEEK_FALLBACK_MODULES[modulo]) {
+    const iseekModulo = ISEEK_FALLBACK_MODULES[modulo];
+    console.log(`[Fallback] Primário falhou para ${modulo}, tentando iSeek (${iseekModulo})...`);
+    const fallbackResult = await fetchFromIseek(iseekModulo, cleanInput);
+
+    if (!fallbackResult.data.error && !fallbackResult.data.notFound) {
+      const totalProviderMs = result.provider_duration_ms + fallbackResult.provider_duration_ms;
+      console.log(`[Fallback] iSeek retornou dados com sucesso para ${modulo}`);
+      return {
+        success: true,
+        data: fallbackResult.data,
+        meta: { ...buildMeta("success", totalProviderMs), fallback_provider: "iseek" } as any,
+        errors: [],
+      };
+    }
+    console.log(`[Fallback] iSeek também falhou para ${modulo}`);
+  }
+
+  // Retornar resultado original
   if (result.data.error) {
     return {
       success: false,
