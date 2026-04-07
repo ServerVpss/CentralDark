@@ -242,11 +242,16 @@ function validateInput(modulo: string, value: string): ValidationResult {
        "credilink", "poderaquisitivo", "parentes", "parentes-3", "processos",
        "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull",
        // iSeek exclusivos CPF-based
-       "pai", "nasc", "nis", "obito", "registro",
+       "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
        "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+       "advogadooabuf", "catcpf", "catnumero",
        "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
        "vacinas", "beneficios", "faculdades", "func", "matricula",
-       "mandado", "certidoes", "rais", "veiculos"];
+       "mandado", "certidoes", "rais", "veiculos", "processo",
+       "crlvto", "crlvmt",
+       // iSeek -isk CPF-based
+       "parentes-isk", "score-isk", "processos-isk",
+       "titulo-isk", "cnh-isk", "rg-isk", "telefone-isk", "cep-isk"];
   if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto")) {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "CPF deve conter exatamente 11 dígitos." };
