@@ -114,10 +114,12 @@ export function QueryModulesManager() {
   };
 
   const toggleAll = async (enabled: boolean) => {
+    const targetModules = providerFilter === "all" ? modules : modules.filter(m => m.provider === providerFilter);
     const prev = modules.map(m => ({ ...m }));
-    setModules(modules.map(m => ({ ...m, enabled })));
+    const targetKeys = new Set(targetModules.map(m => m.module_key));
+    setModules(modules.map(m => targetKeys.has(m.module_key) ? { ...m, enabled } : m));
 
-    const keys = modules.map(m => m.module_key);
+    const keys = targetModules.map(m => m.module_key);
     const { error } = await supabase
       .from("query_modules")
       .update({ enabled })
@@ -127,7 +129,26 @@ export function QueryModulesManager() {
       setModules(prev);
       toast.error("Erro ao atualizar módulos");
     } else {
-      toast.success(enabled ? "Todos ativados" : "Todos desativados");
+      const label = providerFilter === "all" ? "Todos" : providerFilter;
+      toast.success(`${label}: ${enabled ? "ativados" : "desativados"}`);
+    }
+  };
+
+  const toggleProviderBulk = async (provider: "VeiculosAPI" | "iSeek", enabled: boolean) => {
+    const prev = modules.map(m => ({ ...m }));
+    setModules(modules.map(m => m.provider === provider ? { ...m, enabled } : m));
+
+    const keys = modules.filter(m => m.provider === provider).map(m => m.module_key);
+    const { error } = await supabase
+      .from("query_modules")
+      .update({ enabled })
+      .in("module_key", keys);
+
+    if (error) {
+      setModules(prev);
+      toast.error("Erro ao atualizar módulos");
+    } else {
+      toast.success(`${provider}: ${enabled ? "ativados" : "desativados"}`);
     }
   };
 
