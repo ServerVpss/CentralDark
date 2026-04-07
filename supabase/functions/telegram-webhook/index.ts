@@ -6860,7 +6860,7 @@ class BotHandler {
               console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
               const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName, queryType, queryInput) + consultaFooter;
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId, undefined, queryType, queryInput);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId, undefined, queryType, queryInput, undefined, telegramUserId);
               return;
             }
             
@@ -6960,7 +6960,7 @@ class BotHandler {
             photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
           } else {
             console.error("sendPhoto failed for query result:", sentPhoto);
-            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
+            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons, telegramUserId);
             if (paginatedResult.ok && paginatedResult.result) {
               resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
             }
@@ -6983,14 +6983,14 @@ class BotHandler {
             console.error("sendPhoto failed for query result:", sentPhoto);
           }
           
-          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
+          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons, telegramUserId);
           if (paginatedResult.ok && paginatedResult.result) {
             resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
           }
         }
       } else {
         // Sem foto - Enviar resultado com paginação e botão de foto se UF detectado
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons, telegramUserId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -7123,7 +7123,7 @@ class BotHandler {
         const formattedResult = formatQueryResult("cpf", result, this.bot.bot_username, telegramUserName);
         
         // Send result with pagination
-        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, undefined, "cpf", cpf);
+        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, undefined, "cpf", cpf, undefined, telegramUserId);
         
         // Delete the loading message
         try {
