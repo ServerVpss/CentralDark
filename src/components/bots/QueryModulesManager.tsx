@@ -49,6 +49,7 @@ export function QueryModulesManager() {
   const [showProviders, setShowProviders] = useState(false);
   const [loading, setLoading] = useState(true);
   const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
+  const [providerFilter, setProviderFilter] = useState<"all" | "VeiculosAPI" | "iSeek">("all");
 
   const loadModules = async () => {
     setLoading(true);
