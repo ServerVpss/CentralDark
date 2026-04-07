@@ -2151,10 +2151,11 @@ async function sendLongMessagePaginated(
   const pages = splitIntoPages(text, MAX_LENGTH);
   
   // Criar registro no banco com metadata para preservar botões ao paginar
-  const paginationMetadata: Record<string, unknown> = {};
-  if (queryType) paginationMetadata.queryType = queryType;
-  if (queryInput) paginationMetadata.queryInput = queryInput;
-  if (extraButtons && extraButtons.length > 0) paginationMetadata.extraButtons = extraButtons;
+   const paginationMetadata: Record<string, unknown> = {};
+   if (queryType) paginationMetadata.queryType = queryType;
+   if (queryInput) paginationMetadata.queryInput = queryInput;
+   if (extraButtons && extraButtons.length > 0) paginationMetadata.extraButtons = extraButtons;
+   if (requesterId) paginationMetadata.requester_id = requesterId;
 
   const { data: paginationData, error } = await supabase
     .from("paginated_results")
