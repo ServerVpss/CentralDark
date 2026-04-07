@@ -139,6 +139,14 @@ const NUMERIC_MODULES = new Set([
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
+  // iSeek exclusivos (CPF-based)
+  "pai", "nasc", "nis", "obito", "registro",
+  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+  "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
+  "vacinas", "beneficios", "faculdades", "func", "matricula",
+  "mandado", "certidoes", "rais", "veiculos",
+  "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
+  "fotonc", "fotocnh", "fotodetran", "fotomapresos",
 ]);
 
 function cleanQueryValue(modulo: string, input: string): string {
