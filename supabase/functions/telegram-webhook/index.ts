@@ -2381,6 +2381,93 @@ function isEmptyResult(result: Record<string, unknown>): boolean {
   return false;
 }
 
+// Detecta se o provedor retornou um erro dentro dos dados (ex: limite expirado, erro interno)
+function isProviderError(result: Record<string, unknown>): { isError: boolean; message: string } {
+  // Checar dados.status === "error" ou dados.message com erro
+  const dados = (result.dados || result.data) as Record<string, unknown> | undefined;
+  if (dados && typeof dados === 'object') {
+    const status = String(dados.status || '').toLowerCase();
+    const message = String(dados.message || dados.mensagem || '');
+    if (status === 'error' || status === 'erro') {
+      return { isError: true, message: message || 'Erro retornado pelo provedor' };
+    }
+    // Checar mensagens de limite
+    if (message && (
+      message.toLowerCase().includes('requisições diárias expirou') ||
+      message.toLowerCase().includes('limite') ||
+      message.toLowerCase().includes('bloqueado') ||
+      message.toLowerCase().includes('indisponível')
+    )) {
+      return { isError: true, message };
+    }
+  }
+  return { isError: false, message: '' };
+}
+
+// Mapa de módulos irmãos para sugestão de alternativas
+const MODULE_SIBLINGS: Record<string, string[]> = {
+  'cpf': ['cpffull', 'cpf-isk', 'cpf-spc', 'cpfsus'],
+  'cpffull': ['cpf', 'cpf-isk', 'cpf-spc', 'cpfsus'],
+  'cpf-isk': ['cpf', 'cpffull', 'cpf-spc', 'cpfsus'],
+  'cpf-spc': ['cpf', 'cpffull', 'cpf-isk', 'cpfsus'],
+  'cpfsus': ['cpf', 'cpffull', 'cpf-isk', 'cpf-spc'],
+  'placa': ['placa-serpro', 'placa-sesp'],
+  'placa-serpro': ['placa', 'placa-sesp'],
+  'placa-sesp': ['placa', 'placa-serpro'],
+  'telefone': ['telefonefull', 'telefone-3'],
+  'telefonefull': ['telefone', 'telefone-3'],
+  'telefone-3': ['telefone', 'telefonefull'],
+  'email': ['emailfull', 'email-3'],
+  'emailfull': ['email', 'email-3'],
+  'email-3': ['email', 'emailfull'],
+  'cep': ['cepfull', 'cep-3'],
+  'cepfull': ['cep', 'cep-3'],
+  'cep-3': ['cep', 'cepfull'],
+  'nome': ['nomefull', 'nome-3'],
+  'nomefull': ['nome', 'nome-3'],
+  'nome-3': ['nome', 'nomefull'],
+  'score': ['score-3'],
+  'score-3': ['score'],
+  'rg': ['rg-3'],
+  'rg-3': ['rg'],
+  'mae': ['maefull'],
+  'maefull': ['mae'],
+  'parentes': ['parentes-3'],
+  'parentes-3': ['parentes'],
+  'pis': ['pis-3'],
+  'pis-3': ['pis'],
+};
+
+// Gera botões de sugestão para módulos alternativos
+function getSiblingButtons(moduleKey: string, queryInput: string): InlineButton[][] {
+  const siblings = MODULE_SIBLINGS[moduleKey];
+  if (!siblings || siblings.length === 0) return [];
+  
+  const moduleCmd: Record<string, string> = {
+    cpf: "/cpf", cpffull: "/cpf2", "cpf-isk": "/cpf3", "cpf-spc": "/cpf4", cpfsus: "/cpf5",
+    placa: "/placa", "placa-serpro": "/placa2", "placa-sesp": "/placa3",
+    telefone: "/telefone", telefonefull: "/telefone2", "telefone-3": "/telefone3",
+    email: "/email", emailfull: "/email2", "email-3": "/email3",
+    cep: "/cep", cepfull: "/cep2", "cep-3": "/cep3",
+    nome: "/nome", nomefull: "/nome2", "nome-3": "/nome3",
+    score: "/score", "score-3": "/score2",
+    rg: "/rg", "rg-3": "/rg2",
+    mae: "/mae", maefull: "/mae2",
+    parentes: "/parentes", "parentes-3": "/parentes2",
+    pis: "/pis", "pis-3": "/pis2",
+  };
+  
+  const buttons: InlineButton[][] = [];
+  // Max 3 siblings shown
+  const shown = siblings.slice(0, 3);
+  for (const sib of shown) {
+    const label = queryTypeLabels[sib] || sib;
+    const cmd = moduleCmd[sib] || `/${sib}`;
+    buttons.push([btn(`🔄 Tentar ${label}`, `retry_query:${sib}:${queryInput}`)]);
+  }
+  return buttons;
+}
+
 // Fallback chains: quando o módulo primário não retorna dados, tenta módulos alternativos
 const FALLBACK_CHAINS: Record<string, string[]> = {
   'telefone': ['telefone-3', 'telefonefull'],
