@@ -188,11 +188,57 @@ export function QueryModulesManager() {
         </CardContent>
       </Card>
 
+      {/* Provider Filter */}
+      <Card className="bg-card border-border">
+        <CardContent className="p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Filter className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Provedor de Consultas</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              variant={providerFilter === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setProviderFilter("all")}
+              className="text-xs"
+            >
+              Todos ({modules.length})
+            </Button>
+            <Button
+              variant={providerFilter === "VeiculosAPI" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setProviderFilter("VeiculosAPI")}
+              className="text-xs"
+            >
+              🚗 VeiculosAPI ({veiculosCount})
+            </Button>
+            <Button
+              variant={providerFilter === "iSeek" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setProviderFilter("iSeek")}
+              className="text-xs"
+            >
+              🔍 iSeek ({iseekCount})
+            </Button>
+          </div>
+          {providerFilter !== "all" && (
+            <div className="flex gap-2 mt-3 pt-3 border-t border-border">
+              <Button variant="outline" size="sm" onClick={() => toggleProviderBulk(providerFilter as "VeiculosAPI" | "iSeek", true)} className="flex-1 text-xs">
+                ✅ Ativar {providerFilter}
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => toggleProviderBulk(providerFilter as "VeiculosAPI" | "iSeek", false)} className="flex-1 text-xs">
+                ❌ Desativar {providerFilter}
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <Card className="bg-card border-border">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{modules.length}</div>
+            <div className="text-2xl font-bold">{filteredModules.length}</div>
             <div className="text-xs text-muted-foreground">Total</div>
           </CardContent>
         </Card>
@@ -204,7 +250,7 @@ export function QueryModulesManager() {
         </Card>
         <Card className="bg-card border-border">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-destructive">{modules.length - enabledCount}</div>
+            <div className="text-2xl font-bold text-destructive">{filteredModules.length - enabledCount}</div>
             <div className="text-xs text-muted-foreground">Inativos</div>
           </CardContent>
         </Card>
