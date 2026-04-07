@@ -4620,6 +4620,7 @@ function formatGenericResult(
     'conta', 'saldo', 'tempo_segundos', 'temposegundos', 'cache', 'cached_at', 'expiracao', 'limites', 'plano',
     'requests_used', 'requests_remaining', 'daily_limit', 'fallback_provider', 'apikey',
     'fromcache', 'cache_ttl_hours',
+    'prioridade', 'operadora', 'classificacao', 'tipotelefone',
   ]);
 
   const shouldSkipKey = (key: string): boolean => {
