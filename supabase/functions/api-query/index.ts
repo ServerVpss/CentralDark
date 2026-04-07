@@ -58,7 +58,7 @@ const MODULE_WHITELIST = new Set([
   "cnpj-isk", "rg-isk", "mae-isk", "telefone-isk", "titulo-isk",
   "cnh-isk", "processos-isk", "placa-isk", "renavam-isk", "chassi-isk",
   "motor-isk", "email-isk", "pix-isk", "cep-isk", "parentes-isk",
-  "score-isk",
+  "score-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
   // Fotos iSeek -isk
   "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
   "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
@@ -131,6 +131,10 @@ const ISEEK_DIRECT_MODULES: Record<string, string> = {
   "cep-isk": "iseek-dados---cep",
   "parentes-isk": "iseek-dados---parentes",
   "score-isk": "iseek-dados---score",
+  "cnpj-cred-isk": "iseek-dados---cnpj",
+  "irpf-isk": "iseek-dados---irpf",
+  "vacinas-isk": "iseek-dados---vacinas",
+  "obito-isk": "iseek-dados---obito",
   "fotoma-isk": "iseek-fotos---fotoma",
   "fotoes-isk": "iseek-fotos---fotoes",
   "fototo-isk": "iseek-fotos---fototo",
@@ -212,7 +216,7 @@ const NUMERIC_MODULES = new Set([
   // iSeek -isk (CPF-based)
   "rg-isk", "titulo-isk", "cnh-isk", "telefone-isk",
   "cep-isk", "parentes-isk", "score-isk", "processos-isk",
-  "cnpj-isk", "renavam-isk",
+  "cnpj-isk", "renavam-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
   // Fotos -isk
   "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
   "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
