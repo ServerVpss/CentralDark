@@ -4440,6 +4440,27 @@ function formatPixResult(
   shouldIgnore: (value: unknown) => boolean
 ): string {
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+
+  // Interceptar erro de formato incorreto do iSeek
+  const rawStr = JSON.stringify(data).toUpperCase();
+  if (rawStr.includes("INFORME OS DADOS NO FORMATO") || rawStr.includes("NOME|MEIOCPF")) {
+    const errorLines: string[] = [];
+    errorLines.push(`⚠️ FORMATO INCORRETO`);
+    errorLines.push(``);
+    errorLines.push(`Para consultar PIX, envie assim:`);
+    errorLines.push(`/pix NOME|MEIOCPF`);
+    errorLines.push(``);
+    errorLines.push(`📌 Exemplo: /pix JOAO|345`);
+    errorLines.push(``);
+    errorLines.push(`💡 O que é "meioCPF"?`);
+    errorLines.push(`São os 3 números do meio do CPF`);
+    errorLines.push(`que aparecem no comprovante PIX`);
+    errorLines.push(`(ex: ***.345.***-**)`);
+    errorLines.push(``);
+    errorLines.push(`🤖 ${botTag}`);
+    return `<pre>${errorLines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  }
+
   const dados = data.dados as Record<string, unknown> | undefined;
   const lines: string[] = [];
   lines.push(`💳 PIX RESULTADO`);
@@ -4943,7 +4964,7 @@ class BotHandler {
         nome: "João Silva", nomefull: "João Silva", "nome-3": "João Silva",
         score: "12345678900", "score-3": "12345678900",
         rg: "MG12345678", "rg-3": "MG12345678", cnh: "12345678900",
-        pis: "12345678900", "pis-3": "12345678900", pix: "chave@pix.com",
+        pis: "12345678900", "pis-3": "12345678900", pix: "JOAO|345",
         titulo: "12345678900", endereco: "12345678900", renda: "12345678900",
         processos: "12345678900", "bnmp-lc": "12345678900", siel: "12345678900", "tse-3": "12345678900",
         mae: "12345678900", maefull: "12345678900", credilink: "12345678900",
@@ -5151,7 +5172,7 @@ class BotHandler {
       case "cep": placeholder = "Digite o CEP (8 dígitos):"; break;
       case "nome": placeholder = "Digite o nome completo:"; break;
       case "score": placeholder = "Digite o CPF para consultar score:"; break;
-      case "pix": placeholder = "Digite a chave PIX:"; break;
+      case "pix": placeholder = "Digite no formato: NOME|MEIOCPF\nExemplo: JOAO|345\n(meioCPF = 3 dígitos do meio do CPF do comprovante PIX)"; break;
       case "rg": placeholder = "Digite o RG:"; break;
       case "cnh": placeholder = "Digite o número da CNH:"; break;
       case "foto": case "nacional": placeholder = "Digite o CPF:"; break;
@@ -6753,7 +6774,7 @@ class BotHandler {
         score: "/score 12345678900",
         rg: "/rg MG12345678",
         cnh: "/cnh 12345678900",
-        pix: "/pix chave@pix.com",
+        pix: "/pix JOAO|345",
         foto: "/foto CPF ou /foto SP CPF ou /fotosp CPF",
         titulo: "/titulo 12345678900",
         endereco: "/endereco 12345678900",
