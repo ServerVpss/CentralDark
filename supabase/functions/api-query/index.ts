@@ -401,10 +401,13 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
     }
 
     const data = await response.json();
+    logData("PROVIDER_RAW", { modulo, provider: "veiculosapi", duration_ms: provider_duration_ms, retried: retry, keys: data ? Object.keys(data) : [], data });
+
     if (data === null || data === undefined) {
       return { data: { notFound: true, message: "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
     if (data.error || data.status === "error") {
+      logData("PROVIDER_ERROR", { modulo, error: data.error || data.message });
       return { data: { notFound: true, message: data.error || data.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
