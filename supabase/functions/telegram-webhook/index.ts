@@ -5246,6 +5246,7 @@ class BotHandler {
                 pages: records, // Salvar registros como JSON
                 current_page: 0,
                 total_pages: totalPages,
+                metadata: { requester_id: telegramUserId, queryType: usedModule, queryInput },
               })
               .select("id")
               .single();
