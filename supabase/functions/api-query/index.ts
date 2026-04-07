@@ -253,6 +253,7 @@ function stripAdminFields(obj: any): any {
 }
 
 
+interface ValidationResult {
   valid: boolean;
   error?: string;
 }
