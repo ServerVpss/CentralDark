@@ -182,7 +182,11 @@ function getModuleTimeout(modulo: string): number {
 }
 
 // =============== VALIDAÇÃO DE ENTRADA ===============
-const TEXT_MODULES = new Set(["nome", "nomefull", "nome-3", "mae", "maefull", "endereco", "email", "emailfull", "email-3", "pix"]);
+const TEXT_MODULES = new Set([
+  "nome", "nomefull", "nome-3", "mae", "maefull", "endereco",
+  "email", "emailfull", "email-3", "pix",
+  "nomeabreviadofiltros", "mae-isk", "email-isk", "pix-isk",
+]);
 
 const NUMERIC_MODULES = new Set([
   "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
