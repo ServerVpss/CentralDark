@@ -38,10 +38,12 @@ const categories: Record<string, { label: string; icon: string }> = {
   empresa: { label: "Empresa", icon: "🏢" },
   justica: { label: "Justiça", icon: "⚖️" },
   governo: { label: "Governo", icon: "🏛️" },
+  foto: { label: "Fotos", icon: "📸" },
+  saude: { label: "Saúde", icon: "🏥" },
   outros: { label: "Outros", icon: "📋" },
 };
 
-const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa", "justica", "governo", "outros"];
+const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa", "justica", "governo", "foto", "saude", "outros"];
 
 export function QueryModulesManager() {
   const [modules, setModules] = useState<ModuleInfo[]>([]);
