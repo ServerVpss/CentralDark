@@ -3894,108 +3894,100 @@ function formatCpfResult(
   const pai = getValue(['pai', 'nome_pai', 'nomepai', 'nomePai']);
   const parentes = extractParentes();
 
-  // ============= CONSTRUIR MENSAGEM MONOESPAÇADA =============
+  // ============= CONSTRUIR MENSAGEM HTML LIMPA =============
   let lines: string[] = [];
   
   // Header
-  lines.push(`👤 CONSULTA CPF`);
-  lines.push(`/CPF ${cpf || ''}`);
+  lines.push(`👤 <b>CONSULTA CPF</b>`);
   lines.push(``);
 
   // 👤 DADOS PESSOAIS
-  let hasBasicData = nome || cpf || nascimento || sexo || raca || obito || statusReceita;
-  if (hasBasicData) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 👤 DADOS PESSOAIS`);
-    lines.push(`├─────────────────────────────`);
-    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
-    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
-    if (nascimento) lines.push(`│ 📅 Nascimento: ${nascimento}`);
-    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
-    if (raca) lines.push(`│ 🎨 Raça: ${raca}`);
-    if (obito) lines.push(`│ ⚰️ Óbito: ${obito}`);
-    if (statusReceita) lines.push(`│ 📊 Status Receita: ${statusReceita}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+  if (nome || cpf || nascimento || sexo || raca || obito || statusReceita) {
+    if (nome) lines.push(`📋 Nome: ${escapeHtml(nome)}`);
+    if (cpf) lines.push(`🆔 CPF: ${escapeHtml(cpf)}`);
+    if (nascimento) lines.push(`📅 Nascimento: ${escapeHtml(nascimento)}`);
+    if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo)}`);
+    if (raca) lines.push(`🏷️ Raça: ${escapeHtml(raca)}`);
+    if (obito) lines.push(`⚰️ Óbito: ${escapeHtml(obito)}`);
+    if (statusReceita) lines.push(`📊 Status Receita: ${escapeHtml(statusReceita)}`);
   }
 
   // 📄 DOCUMENTOS
-  let hasDocuments = rg || cns || tituloEleitor;
-  if (hasDocuments) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📄 DOCUMENTOS`);
-    lines.push(`├─────────────────────────────`);
-    if (rg) lines.push(`│ 🪪 RG: ${rg}`);
-    if (cns) lines.push(`│ 🏥 CNS: ${cns}`);
+  if (rg || cns || tituloEleitor) {
+    lines.push('');
+    lines.push(`📄 <b>DOCUMENTOS</b>`);
+    if (rg) lines.push(`🪪 RG: ${escapeHtml(rg)}`);
+    if (cns) lines.push(`🏥 CNS: ${escapeHtml(cns)}`);
     if (tituloEleitor) {
-      let tituloLine = `│ 🗳️ Título: ${tituloEleitor}`;
-      if (zona) tituloLine += ` ZONA: ${zona}`;
-      if (secao) tituloLine += ` SEÇÃO: ${secao}`;
+      let tituloLine = `🗳️ Título: ${escapeHtml(tituloEleitor)}`;
+      if (zona) tituloLine += ` ZONA: ${escapeHtml(zona)}`;
+      if (secao) tituloLine += ` SEÇÃO: ${escapeHtml(secao)}`;
       lines.push(tituloLine);
     }
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
   }
 
-  // 📱 CONTATO
-  if (telefones.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📱 CONTATO`);
-    lines.push(`├─────────────────────────────`);
-    lines.push(`│ 📞 Telefones:`);
-    telefones.slice(0, 8).forEach(tel => {
-      const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
-      const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
-      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
-      lines.push(`│   • ${cleanTel}${wppIcon}`);
-    });
-    if (telefones.length > 8) lines.push(`│   ... e mais ${telefones.length - 8}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+  // 👨‍👩‍👦 FILIAÇÃO
+  if (mae || pai) {
+    lines.push('');
+    lines.push(`👨‍👩‍👦 <b>FILIAÇÃO</b>`);
+    if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
+    if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
   }
 
   // 📍 ENDEREÇOS
   if (enderecos.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📍 ENDEREÇOS`);
-    lines.push(`├─────────────────────────────`);
+    lines.push('');
+    lines.push(`📍 <b>ENDEREÇO</b>`);
     enderecos.slice(0, 10).forEach(endereco => {
       const cleanEndereco = endereco
         .replace(/^\[empty\]\s*/gi, '')
         .replace(/^enderecos?\s*:?\s*/gi, '')
         .trim();
       if (cleanEndereco && cleanEndereco.length > 5) {
-        lines.push(`│ 🏠 ${cleanEndereco}`);
+        lines.push(`🏠 ${escapeHtml(cleanEndereco)}`);
       }
     });
-    if (enderecos.length > 10) lines.push(`│ ... e mais ${enderecos.length - 10}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+    if (enderecos.length > 10) lines.push(`... e mais ${enderecos.length - 10}`);
+  }
+
+  // 📱 TELEFONES
+  if (telefones.length > 0) {
+    lines.push('');
+    lines.push(`📱 <b>TELEFONES</b>`);
+    telefones.slice(0, 8).forEach(tel => {
+      const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
+      const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
+      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
+      lines.push(`📞 ${escapeHtml(cleanTel)}${wppIcon}`);
+    });
+    if (telefones.length > 8) lines.push(`... e mais ${telefones.length - 8}`);
+  }
+
+  // 📧 EMAILS
+  if (emails.length > 0) {
+    lines.push('');
+    lines.push(`📧 <b>E-MAILS</b>`);
+    emails.slice(0, 5).forEach(email => {
+      lines.push(`📧 ${escapeHtml(email.toUpperCase())}`);
+    });
   }
 
   // 💰 FINANCEIRO
-  let hasFinancial = renda || classeSocial || csb8 || csba || csb8Faixa || csbaFaixa;
-  if (hasFinancial) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 💰 FINANCEIRO`);
-    lines.push(`├─────────────────────────────`);
-    if (renda) lines.push(`│ 💵 Renda: R$ ${renda}`);
-    if (classeSocial) lines.push(`│ 📊 Poder Aquisitivo: ${classeSocial}`);
-    if (csb8) lines.push(`│ 📈 CSB8: ${csb8}`);
-    if (csb8Faixa) lines.push(`│ ⚠️ CSB8 Faixa de Risco: ${csb8Faixa}`);
-    if (csba) lines.push(`│ 📈 CSBA: ${csba}`);
-    if (csbaFaixa) lines.push(`│ ⚠️ CSBA Faixa de Risco: ${csbaFaixa}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+  if (renda || classeSocial || csb8 || csba || csb8Faixa || csbaFaixa) {
+    lines.push('');
+    lines.push(`💰 <b>FINANCEIRO</b>`);
+    if (renda) lines.push(`💵 Renda: R$ ${escapeHtml(renda)}`);
+    if (classeSocial) lines.push(`📊 Poder Aquisitivo: ${escapeHtml(classeSocial)}`);
+    if (csb8) lines.push(`📈 CSB8: ${escapeHtml(csb8)}`);
+    if (csb8Faixa) lines.push(`⚠️ CSB8 Faixa de Risco: ${escapeHtml(csb8Faixa)}`);
+    if (csba) lines.push(`📈 CSBA: ${escapeHtml(csba)}`);
+    if (csbaFaixa) lines.push(`⚠️ CSBA Faixa de Risco: ${escapeHtml(csbaFaixa)}`);
   }
 
-  // 👨‍👩‍👧‍👦 FAMÍLIA
-  if (mae || pai || parentes.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 👨‍👩‍👧‍👦 FAMILIARES`);
-    lines.push(`├─────────────────────────────`);
-    if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
-    if (pai) lines.push(`│ 👨 Pai: ${pai}`);
+  // 👥 FAMILIARES
+  if (parentes.length > 0) {
+    lines.push('');
+    lines.push(`👥 <b>FAMILIARES</b>`);
     parentes.slice(0, 10).forEach(parente => {
       const parenteUpper = parente.toUpperCase();
       let icon = '👤';
@@ -4004,16 +3996,16 @@ function formatCpfResult(
       if (parenteUpper.includes('FILHO')) icon = '👦';
       if (parenteUpper.includes('FILHA')) icon = '👧';
       if (parenteUpper.includes('CONJUGE') || parenteUpper.includes('CÔNJUGE')) icon = '💑';
-      lines.push(`│ ${icon} ${parente}`);
+      lines.push(`${icon} ${escapeHtml(parente)}`);
     });
-    if (parentes.length > 10) lines.push(`│ ... e mais ${parentes.length - 10}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+    if (parentes.length > 10) lines.push(`... e mais ${parentes.length - 10}`);
   }
 
-  // Retornar como bloco <pre> monoespaçado (escapar HTML nos valores)
-  const escaped = lines.map(l => escapeHtml(l));
-  return `<pre>${escaped.join('\n')}</pre>`;
+  // Footer
+  lines.push('');
+  lines.push(`👤 ${escapeHtml(userName)} | ${botTag}`);
+
+  return lines.join('\n');
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA NOME (LISTA DE PESSOAS) ===============
