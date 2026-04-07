@@ -2333,6 +2333,11 @@ async function executeQueryWithCache(
   }
 }
 
+// Função global para escapar HTML
+function escapeHtmlGlobal(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 // Campos de metadados da API que não são dados reais da consulta
 const META_FIELDS = new Set(['limites', 'plano', 'protocolo', 'sucesso', 'modulo', 'usuario', 'meta', 'success', 'errors', 'fromCache']);
 // Sufixos de campos que indicam o valor consultado (ex: telefone_consultada, cpf_consultada)
@@ -4374,7 +4379,7 @@ class BotHandler {
         const siblingButtons = getSiblingButtons(usedModule, queryInput);
         const moduleLabel = queryTypeLabels[usedModule] || usedModule;
         let errorMsg = `⚠️ <b>Módulo ${moduleLabel} indisponível</b>\n\n`;
-        errorMsg += `<i>${escapeHtml(providerErr.message)}</i>\n\n`;
+        errorMsg += `<i>${escapeHtmlGlobal(providerErr.message)}</i>\n\n`;
         if (siblingButtons.length > 0) {
           errorMsg += `💡 <b>Tente consultar por outro módulo:</b>`;
         }
@@ -5969,7 +5974,7 @@ class BotHandler {
         const siblingButtons = getSiblingButtons(queryType, inputForQuery);
         const moduleLabel = queryTypeLabels[queryType] || queryType;
         let errorMsg = `⚠️ <b>Módulo ${moduleLabel} indisponível</b>\n\n`;
-        errorMsg += `<i>${escapeHtml(providerErr.message)}</i>\n\n`;
+        errorMsg += `<i>${escapeHtmlGlobal(providerErr.message)}</i>\n\n`;
         if (siblingButtons.length > 0) {
           errorMsg += `💡 <b>Tente consultar por outro módulo:</b>`;
         }
