@@ -2098,7 +2098,8 @@ async function sendLongMessagePaginated(
   messageEffectId?: string,
   queryType?: string,
   queryInput?: string,
-  extraButtons?: InlineButton[][]
+  extraButtons?: InlineButton[][],
+  requesterId?: number
 ) {
   const MAX_LENGTH = 3800;
   
@@ -2150,10 +2151,11 @@ async function sendLongMessagePaginated(
   const pages = splitIntoPages(text, MAX_LENGTH);
   
   // Criar registro no banco com metadata para preservar botões ao paginar
-  const paginationMetadata: Record<string, unknown> = {};
-  if (queryType) paginationMetadata.queryType = queryType;
-  if (queryInput) paginationMetadata.queryInput = queryInput;
-  if (extraButtons && extraButtons.length > 0) paginationMetadata.extraButtons = extraButtons;
+   const paginationMetadata: Record<string, unknown> = {};
+   if (queryType) paginationMetadata.queryType = queryType;
+   if (queryInput) paginationMetadata.queryInput = queryInput;
+   if (extraButtons && extraButtons.length > 0) paginationMetadata.extraButtons = extraButtons;
+   if (requesterId) paginationMetadata.requester_id = requesterId;
 
   const { data: paginationData, error } = await supabase
     .from("paginated_results")
@@ -5244,6 +5246,7 @@ class BotHandler {
                 pages: records, // Salvar registros como JSON
                 current_page: 0,
                 total_pages: totalPages,
+                metadata: { requester_id: telegramUserId, queryType: usedModule, queryInput },
               })
               .select("id")
               .single();
@@ -5252,7 +5255,7 @@ class BotHandler {
               console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
               const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput, undefined, telegramUserId);
               return;
             }
             
@@ -5361,7 +5364,7 @@ class BotHandler {
         } else if (showFotoNacional) {
           extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`)]);
         }
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons, telegramUserId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -6598,7 +6601,7 @@ class BotHandler {
             reply_markup: keyboard([btn("🗑️ Apagar", "delete_msg")]),
           });
         } else {
-          await sendLongMessagePaginated(this.token, chatId, resultHeader + formattedResult, this.supabase, undefined, undefined, r.cmd.queryType, r.cmd.queryInput);
+          await sendLongMessagePaginated(this.token, chatId, resultHeader + formattedResult, this.supabase, undefined, undefined, r.cmd.queryType, r.cmd.queryInput, undefined, telegramUserId);
         }
       } else {
         await telegramRequest(this.token, "sendMessage", {
@@ -6846,9 +6849,10 @@ class BotHandler {
               .from("paginated_results")
               .insert({
                 chat_id: chatId,
-                pages: records, // Salvar registros como JSON
+                pages: records,
                 current_page: 0,
                 total_pages: totalPages,
+                metadata: { requester_id: telegramUserId, queryType, queryInput },
               })
               .select("id")
               .single();
@@ -6857,7 +6861,7 @@ class BotHandler {
               console.error(`Failed to create ${queryType} pagination record:`, error);
               // Fallback: enviar primeira página sem paginação
               const pageText = formatMultiPersonPage(records, 0, totalPages, this.bot.bot_username, userName, queryType, queryInput) + consultaFooter;
-              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId, undefined, queryType, queryInput);
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, replyToId, undefined, queryType, queryInput, undefined, telegramUserId);
               return;
             }
             
@@ -6957,7 +6961,7 @@ class BotHandler {
             photoMessageId = (sentPhoto.result as { message_id?: number }).message_id;
           } else {
             console.error("sendPhoto failed for query result:", sentPhoto);
-            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
+            const paginatedResult = await sendLongMessagePaginated(this.token, chatId, fullCaption, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons, telegramUserId);
             if (paginatedResult.ok && paginatedResult.result) {
               resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
             }
@@ -6980,14 +6984,14 @@ class BotHandler {
             console.error("sendPhoto failed for query result:", sentPhoto);
           }
           
-          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
+          const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons, telegramUserId);
           if (paginatedResult.ok && paginatedResult.result) {
             resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
           }
         }
       } else {
         // Sem foto - Enviar resultado com paginação e botão de foto se UF detectado
-        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons);
+        const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, replyToId, undefined, queryType, queryInput, extraButtons, telegramUserId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
         }
@@ -7032,6 +7036,57 @@ class BotHandler {
 
     await answerCallback(this.token, callback.id);
 
+    // ── Ownership check for query-result buttons ──
+    // Callbacks that interact with query results must be restricted to the user who initiated the query.
+    const queryResultPrefixes = ["page:", "page_delete:", "pdf:", "txt:", "qcpf:", "retry_query:", "foto_query:", "cep_page:", "tel_page:"];
+    const isQueryResultCallback = data === "delete_msg" || queryResultPrefixes.some(p => data.startsWith(p));
+
+    if (isQueryResultCallback) {
+      let requesterId: number | null = null;
+
+      // Extract paginationId from callback data if present
+      let paginationIdForCheck: string | null = null;
+      if (data.startsWith("page:") || data.startsWith("cep_page:") || data.startsWith("tel_page:")) {
+        const parts = data.split(":");
+        paginationIdForCheck = parts.length >= 3 ? parts[1] : null;
+      } else if (data.startsWith("page_delete:")) {
+        paginationIdForCheck = data.replace("page_delete:", "");
+      }
+
+      if (paginationIdForCheck) {
+        const { data: pagData } = await this.supabase
+          .from("paginated_results")
+          .select("metadata")
+          .eq("id", paginationIdForCheck)
+          .maybeSingle();
+        if (pagData?.metadata) {
+          const meta = pagData.metadata as Record<string, unknown>;
+          if (meta.requester_id) requesterId = Number(meta.requester_id);
+        }
+      }
+
+      // For non-paginated results, check if the original message was a reply
+      if (!requesterId && callback.message) {
+        const replyMsg = (callback.message as any).reply_to_message;
+        if (replyMsg?.from?.id) {
+          requesterId = replyMsg.from.id;
+        }
+      }
+
+      const isOwner = this.settings.owner_ids?.includes(telegramUserId);
+
+      if (requesterId && requesterId !== telegramUserId && !isOwner) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "⚠️ Apenas quem fez a consulta pode interagir com este resultado.",
+          show_alert: true,
+        });
+        return;
+      }
+    }
+
+    await answerCallback(this.token, callback.id);
+
     // Delete message button handler
     if (data === "delete_msg") {
       try {
@@ -7059,7 +7114,6 @@ class BotHandler {
 
     if (data.startsWith("page_delete:")) {
       const paginationId = data.replace("page_delete:", "");
-      // Deletar registro de paginação e mensagem
       await this.supabase.from("paginated_results").delete().eq("id", paginationId);
       try {
         await deleteMessage(this.token, chatId, messageId);
@@ -7120,7 +7174,7 @@ class BotHandler {
         const formattedResult = formatQueryResult("cpf", result, this.bot.bot_username, telegramUserName);
         
         // Send result with pagination
-        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, undefined, "cpf", cpf);
+        await sendLongMessagePaginated(this.token, chatId, formattedResult, this.supabase, undefined, undefined, "cpf", cpf, undefined, telegramUserId);
         
         // Delete the loading message
         try {
