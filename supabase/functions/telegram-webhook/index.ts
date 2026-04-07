@@ -2333,6 +2333,11 @@ async function executeQueryWithCache(
   }
 }
 
+// Função global para escapar HTML
+function escapeHtmlGlobal(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 // Campos de metadados da API que não são dados reais da consulta
 const META_FIELDS = new Set(['limites', 'plano', 'protocolo', 'sucesso', 'modulo', 'usuario', 'meta', 'success', 'errors', 'fromCache']);
 // Sufixos de campos que indicam o valor consultado (ex: telefone_consultada, cpf_consultada)
