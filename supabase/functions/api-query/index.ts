@@ -170,6 +170,11 @@ const SLOW_MODULES = new Set([
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
   "score", "score-3", "tse-3", "poderaquisitivo",
   "certidoes", "mandado", "veiculos", "rais",
+  "processo", "crlvto", "crlvmt",
+  // iSeek -isk fotos
+  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
+  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
+  "fotodf-isk", "fotogo-isk", "crlvto-foto", "crlvmt-foto",
 ]);
 
 function getModuleTimeout(modulo: string): number {
