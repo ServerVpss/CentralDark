@@ -1087,9 +1087,6 @@ function formatCnpjResult(
       if (cpf) lines.push(`│  📄 ${escapeHtml(String(cpf))}`);
       if (vinculo) lines.push(`│  🔗 ${escapeHtml(fixBrokenEncoding(String(vinculo)))}`);
     }
-    if (unique.length > 20) {
-      lines.push(`  <i>... e mais ${unique.length - 20} sócios</i>`);
-    }
     lines.push('');
   }
 
@@ -1098,46 +1095,40 @@ function formatCnpjResult(
   if (contatos && typeof contatos === 'object') {
     const telefones = contatos.telefones as Array<Record<string, unknown>> | undefined;
     if (telefones && Array.isArray(telefones) && telefones.length > 0) {
-      const maxTel = Math.min(telefones.length, 15);
       lines.push(`📞 <b>TELEFONES (${telefones.length})</b>`);
-      for (let i = 0; i < maxTel; i++) {
+      for (let i = 0; i < telefones.length; i++) {
         const tel = telefones[i];
         const numero = tel.numero || tel.completo || '';
-        const connector = i === maxTel - 1 ? '└' : '├';
+        const connector = i === telefones.length - 1 ? '└' : '├';
         lines.push(`${connector} 📱 <b>${escapeHtml(String(numero))}</b>`);
       }
-      if (telefones.length > 15) lines.push(`  <i>... e mais ${telefones.length - 15} telefones</i>`);
       lines.push('');
     }
 
     const enderecos = contatos.enderecos as Array<Record<string, unknown>> | undefined;
     if (enderecos && Array.isArray(enderecos) && enderecos.length > 0) {
-      const maxEnd = Math.min(enderecos.length, 5);
       lines.push(`📍 <b>ENDEREÇOS (${enderecos.length})</b>`);
-      for (let i = 0; i < maxEnd; i++) {
+      for (let i = 0; i < enderecos.length; i++) {
         const end = enderecos[i];
         const logradouro = end.logradouro || '';
         const cep = end.cep || '';
         const cidade = end.cidade || '';
-        const connector = i === maxEnd - 1 ? '└' : '├';
+        const connector = i === enderecos.length - 1 ? '└' : '├';
         lines.push(`${connector} 🏠 <b>${escapeHtml(fixBrokenEncoding(String(logradouro)))}</b>`);
         if (cep || cidade) lines.push(`│  📮 ${escapeHtml(String(cep))} - ${escapeHtml(fixBrokenEncoding(String(cidade)))}`);
       }
-      if (enderecos.length > 5) lines.push(`  <i>... e mais ${enderecos.length - 5} endereços</i>`);
       lines.push('');
     }
 
     const emails = contatos.emails as Array<Record<string, unknown>> | undefined;
     if (emails && Array.isArray(emails) && emails.length > 0) {
-      const maxEmail = Math.min(emails.length, 10);
       lines.push(`📧 <b>EMAILS (${emails.length})</b>`);
-      for (let i = 0; i < maxEmail; i++) {
+      for (let i = 0; i < emails.length; i++) {
         const em = emails[i];
         const email = em.email || '';
-        const connector = i === maxEmail - 1 ? '└' : '├';
+        const connector = i === emails.length - 1 ? '└' : '├';
         lines.push(`${connector} ✉️ ${escapeHtml(String(email))}`);
       }
-      if (emails.length > 10) lines.push(`  <i>... e mais ${emails.length - 10} emails</i>`);
       lines.push('');
     }
   }
@@ -1154,17 +1145,15 @@ function formatCnpjResult(
         seen.add(key);
         return true;
       });
-      const maxHist = Math.min(unique.length, 15);
       lines.push(`🏭 <b>EMPRESAS VINCULADAS (${unique.length})</b>`);
-      for (let i = 0; i < maxHist; i++) {
+      for (let i = 0; i < unique.length; i++) {
         const emp = unique[i];
         const empresa = emp.empresa || '';
         const cnpj = emp.cnpj || '';
-        const connector = i === maxHist - 1 ? '└' : '├';
+        const connector = i === unique.length - 1 ? '└' : '├';
         lines.push(`${connector} 🏢 <b>${escapeHtml(fixBrokenEncoding(String(empresa)))}</b>`);
         if (cnpj) lines.push(`│  📄 ${escapeHtml(String(cnpj))}`);
       }
-      if (unique.length > 15) lines.push(`  <i>... e mais ${unique.length - 15} empresas</i>`);
       lines.push('');
     }
   }
@@ -3963,7 +3952,7 @@ function formatCpfResult(
   if (enderecos.length > 0) {
     lines.push('');
     lines.push(`📍 <b>ENDEREÇO</b>`);
-    enderecos.slice(0, 10).forEach(endereco => {
+    enderecos.forEach(endereco => {
       const cleanEndereco = endereco
         .replace(/^\[empty\]\s*/gi, '')
         .replace(/^enderecos?\s*:?\s*/gi, '')
@@ -3972,20 +3961,18 @@ function formatCpfResult(
         lines.push(`🏠 ${escapeHtml(cleanEndereco)}`);
       }
     });
-    if (enderecos.length > 10) lines.push(`... e mais ${enderecos.length - 10}`);
   }
 
   // 📱 TELEFONES
   if (telefones.length > 0) {
     lines.push('');
     lines.push(`📱 <b>TELEFONES</b>`);
-    telefones.slice(0, 8).forEach(tel => {
+    telefones.forEach(tel => {
       const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
       const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
       const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
       lines.push(`📞 ${escapeHtml(cleanTel)}${wppIcon}`);
     });
-    if (telefones.length > 8) lines.push(`... e mais ${telefones.length - 8}`);
   }
 
   // 📧 EMAILS
@@ -4023,7 +4010,7 @@ function formatCpfResult(
       if (parenteUpper.includes('CONJUGE') || parenteUpper.includes('CÔNJUGE')) icon = '💑';
       lines.push(`${icon} ${escapeHtml(parente)}`);
     });
-    if (parentes.length > 10) lines.push(`... e mais ${parentes.length - 10}`);
+    
   }
 
   // Footer
