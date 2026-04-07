@@ -167,11 +167,17 @@ function validateInput(modulo: string, value: string): ValidationResult {
     return { valid: false, error: "Valor não pode ser vazio." };
   }
 
-  // CPF variants
-  if (["cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus", "score", "score-3", "renda",
+  // CPF variants (11 digits)
+  const CPF_MODULES = ["cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus", "score", "score-3", "renda",
        "credilink", "poderaquisitivo", "parentes", "parentes-3", "processos",
-       "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull"].includes(modulo) ||
-      modulo.startsWith("foto")) {
+       "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull",
+       // iSeek exclusivos CPF-based
+       "pai", "nasc", "nis", "obito", "registro",
+       "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+       "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
+       "vacinas", "beneficios", "faculdades", "func", "matricula",
+       "mandado", "certidoes", "rais", "veiculos"];
+  if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto")) {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "CPF deve conter exatamente 11 dígitos." };
     }
