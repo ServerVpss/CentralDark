@@ -3271,14 +3271,20 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfSusResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CPF e variantes (cpf, cpffull, cpf-isk, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo)
-  const cpfLikeModules = ['cpf', 'cpffull', 'cpf-isk', 'mae', 'maefull', 'rg', 'rg-3', 'cnh', 'pis', 'pis-3', 'titulo'];
+  // CPF e variantes (cpf, cpffull, cpf-isk, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo + iSeek equivalents)
+  const cpfLikeModules = [
+    'cpf', 'cpffull', 'cpf-isk', 'mae', 'maefull', 'mae-isk', 
+    'rg', 'rg-3', 'rg-isk', 'cnh', 'cnh-isk', 
+    'pis', 'pis-3', 'titulo', 'titulo-isk',
+    'nomeabreviadofiltros', 'processo', 'advogadooabuf',
+    'catcpf', 'catnumero', 'irpf-isk', 'vacinas-isk', 'obito-isk',
+  ];
   if (cpfLikeModules.includes(queryType)) {
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Telefone (telefone, telefonefull, telefone-3)
-  if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
+  // Telefone (telefone, telefonefull, telefone-3 + iSeek)
+  if (['telefone', 'telefonefull', 'telefone-3', 'telefone-isk'].includes(queryType)) {
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
@@ -3287,13 +3293,14 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfSpcResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CNPJ
-  if (queryType === 'cnpj-cred') {
+  // CNPJ (+ iSeek)
+  if (['cnpj-cred', 'cnpj-isk', 'cnpj-cred-isk'].includes(queryType)) {
     return formatCnpjResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Veículos
-  if (vehicleModules.includes(queryType)) {
+  // Veículos (+ iSeek)
+  const allVehicleModules = [...vehicleModules, 'placa-isk', 'chassi-isk', 'renavam-isk', 'motor-isk', 'crlvto', 'crlvmt', 'crlvto-foto', 'crlvmt-foto'];
+  if (allVehicleModules.includes(queryType)) {
     return formatVehicleResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
@@ -3302,39 +3309,39 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatNomeResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Email (email, emailfull, email-3) — lista de pessoas vinculadas ao email
-  if (queryType === 'email' || queryType === 'emailfull' || queryType === 'email-3') {
+  // Email (email, emailfull, email-3 + iSeek) — lista de pessoas vinculadas ao email
+  if (['email', 'emailfull', 'email-3', 'email-isk'].includes(queryType)) {
     return formatEmailResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CEP (cep, cepfull, cep-3, endereco) — lista de pessoas + endereços
-  if (queryType === 'cep' || queryType === 'cepfull' || queryType === 'cep-3' || queryType === 'endereco') {
+  // CEP (cep, cepfull, cep-3, endereco + iSeek) — lista de pessoas + endereços
+  if (['cep', 'cepfull', 'cep-3', 'endereco', 'cep-isk'].includes(queryType)) {
     return formatCepResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Score (score, score-3)
-  if (queryType === 'score' || queryType === 'score-3') {
+  // Score (score, score-3 + iSeek)
+  if (['score', 'score-3', 'score-isk'].includes(queryType)) {
     return formatScoreResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Renda
-  if (queryType === 'renda') {
+  // Renda / Poder Aquisitivo
+  if (queryType === 'renda' || queryType === 'poderaquisitivo') {
     return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Poder Aquisitivo
-  if (queryType === 'poderaquisitivo') {
-    return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
-  }
-
-  // Parentes (parentes, parentes-3)
-  if (queryType === 'parentes' || queryType === 'parentes-3') {
+  // Parentes (parentes, parentes-3 + iSeek)
+  if (['parentes', 'parentes-3', 'parentes-isk'].includes(queryType)) {
     return formatParentesResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // PIX
-  if (queryType === 'pix') {
+  // PIX (+ iSeek)
+  if (queryType === 'pix' || queryType === 'pix-isk') {
     return formatPixResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Processos (+ iSeek)
+  if (['processos', 'processos-isk'].includes(queryType)) {
+    return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
@@ -3887,108 +3894,100 @@ function formatCpfResult(
   const pai = getValue(['pai', 'nome_pai', 'nomepai', 'nomePai']);
   const parentes = extractParentes();
 
-  // ============= CONSTRUIR MENSAGEM MONOESPAÇADA =============
+  // ============= CONSTRUIR MENSAGEM HTML LIMPA =============
   let lines: string[] = [];
   
   // Header
-  lines.push(`👤 CONSULTA CPF`);
-  lines.push(`/CPF ${cpf || ''}`);
+  lines.push(`👤 <b>CONSULTA CPF</b>`);
   lines.push(``);
 
   // 👤 DADOS PESSOAIS
-  let hasBasicData = nome || cpf || nascimento || sexo || raca || obito || statusReceita;
-  if (hasBasicData) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 👤 DADOS PESSOAIS`);
-    lines.push(`├─────────────────────────────`);
-    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
-    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
-    if (nascimento) lines.push(`│ 📅 Nascimento: ${nascimento}`);
-    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
-    if (raca) lines.push(`│ 🎨 Raça: ${raca}`);
-    if (obito) lines.push(`│ ⚰️ Óbito: ${obito}`);
-    if (statusReceita) lines.push(`│ 📊 Status Receita: ${statusReceita}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+  if (nome || cpf || nascimento || sexo || raca || obito || statusReceita) {
+    if (nome) lines.push(`📋 Nome: ${escapeHtml(nome)}`);
+    if (cpf) lines.push(`🆔 CPF: ${escapeHtml(cpf)}`);
+    if (nascimento) lines.push(`📅 Nascimento: ${escapeHtml(nascimento)}`);
+    if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo)}`);
+    if (raca) lines.push(`🏷️ Raça: ${escapeHtml(raca)}`);
+    if (obito) lines.push(`⚰️ Óbito: ${escapeHtml(obito)}`);
+    if (statusReceita) lines.push(`📊 Status Receita: ${escapeHtml(statusReceita)}`);
   }
 
   // 📄 DOCUMENTOS
-  let hasDocuments = rg || cns || tituloEleitor;
-  if (hasDocuments) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📄 DOCUMENTOS`);
-    lines.push(`├─────────────────────────────`);
-    if (rg) lines.push(`│ 🪪 RG: ${rg}`);
-    if (cns) lines.push(`│ 🏥 CNS: ${cns}`);
+  if (rg || cns || tituloEleitor) {
+    lines.push('');
+    lines.push(`📄 <b>DOCUMENTOS</b>`);
+    if (rg) lines.push(`🪪 RG: ${escapeHtml(rg)}`);
+    if (cns) lines.push(`🏥 CNS: ${escapeHtml(cns)}`);
     if (tituloEleitor) {
-      let tituloLine = `│ 🗳️ Título: ${tituloEleitor}`;
-      if (zona) tituloLine += ` ZONA: ${zona}`;
-      if (secao) tituloLine += ` SEÇÃO: ${secao}`;
+      let tituloLine = `🗳️ Título: ${escapeHtml(tituloEleitor)}`;
+      if (zona) tituloLine += ` ZONA: ${escapeHtml(zona)}`;
+      if (secao) tituloLine += ` SEÇÃO: ${escapeHtml(secao)}`;
       lines.push(tituloLine);
     }
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
   }
 
-  // 📱 CONTATO
-  if (telefones.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📱 CONTATO`);
-    lines.push(`├─────────────────────────────`);
-    lines.push(`│ 📞 Telefones:`);
-    telefones.slice(0, 8).forEach(tel => {
-      const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
-      const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
-      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
-      lines.push(`│   • ${cleanTel}${wppIcon}`);
-    });
-    if (telefones.length > 8) lines.push(`│   ... e mais ${telefones.length - 8}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+  // 👨‍👩‍👦 FILIAÇÃO
+  if (mae || pai) {
+    lines.push('');
+    lines.push(`👨‍👩‍👦 <b>FILIAÇÃO</b>`);
+    if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
+    if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
   }
 
   // 📍 ENDEREÇOS
   if (enderecos.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📍 ENDEREÇOS`);
-    lines.push(`├─────────────────────────────`);
+    lines.push('');
+    lines.push(`📍 <b>ENDEREÇO</b>`);
     enderecos.slice(0, 10).forEach(endereco => {
       const cleanEndereco = endereco
         .replace(/^\[empty\]\s*/gi, '')
         .replace(/^enderecos?\s*:?\s*/gi, '')
         .trim();
       if (cleanEndereco && cleanEndereco.length > 5) {
-        lines.push(`│ 🏠 ${cleanEndereco}`);
+        lines.push(`🏠 ${escapeHtml(cleanEndereco)}`);
       }
     });
-    if (enderecos.length > 10) lines.push(`│ ... e mais ${enderecos.length - 10}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+    if (enderecos.length > 10) lines.push(`... e mais ${enderecos.length - 10}`);
+  }
+
+  // 📱 TELEFONES
+  if (telefones.length > 0) {
+    lines.push('');
+    lines.push(`📱 <b>TELEFONES</b>`);
+    telefones.slice(0, 8).forEach(tel => {
+      const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
+      const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
+      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
+      lines.push(`📞 ${escapeHtml(cleanTel)}${wppIcon}`);
+    });
+    if (telefones.length > 8) lines.push(`... e mais ${telefones.length - 8}`);
+  }
+
+  // 📧 EMAILS
+  if (emails.length > 0) {
+    lines.push('');
+    lines.push(`📧 <b>E-MAILS</b>`);
+    emails.slice(0, 5).forEach(email => {
+      lines.push(`📧 ${escapeHtml(email.toUpperCase())}`);
+    });
   }
 
   // 💰 FINANCEIRO
-  let hasFinancial = renda || classeSocial || csb8 || csba || csb8Faixa || csbaFaixa;
-  if (hasFinancial) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 💰 FINANCEIRO`);
-    lines.push(`├─────────────────────────────`);
-    if (renda) lines.push(`│ 💵 Renda: R$ ${renda}`);
-    if (classeSocial) lines.push(`│ 📊 Poder Aquisitivo: ${classeSocial}`);
-    if (csb8) lines.push(`│ 📈 CSB8: ${csb8}`);
-    if (csb8Faixa) lines.push(`│ ⚠️ CSB8 Faixa de Risco: ${csb8Faixa}`);
-    if (csba) lines.push(`│ 📈 CSBA: ${csba}`);
-    if (csbaFaixa) lines.push(`│ ⚠️ CSBA Faixa de Risco: ${csbaFaixa}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+  if (renda || classeSocial || csb8 || csba || csb8Faixa || csbaFaixa) {
+    lines.push('');
+    lines.push(`💰 <b>FINANCEIRO</b>`);
+    if (renda) lines.push(`💵 Renda: R$ ${escapeHtml(renda)}`);
+    if (classeSocial) lines.push(`📊 Poder Aquisitivo: ${escapeHtml(classeSocial)}`);
+    if (csb8) lines.push(`📈 CSB8: ${escapeHtml(csb8)}`);
+    if (csb8Faixa) lines.push(`⚠️ CSB8 Faixa de Risco: ${escapeHtml(csb8Faixa)}`);
+    if (csba) lines.push(`📈 CSBA: ${escapeHtml(csba)}`);
+    if (csbaFaixa) lines.push(`⚠️ CSBA Faixa de Risco: ${escapeHtml(csbaFaixa)}`);
   }
 
-  // 👨‍👩‍👧‍👦 FAMÍLIA
-  if (mae || pai || parentes.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 👨‍👩‍👧‍👦 FAMILIARES`);
-    lines.push(`├─────────────────────────────`);
-    if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
-    if (pai) lines.push(`│ 👨 Pai: ${pai}`);
+  // 👥 FAMILIARES
+  if (parentes.length > 0) {
+    lines.push('');
+    lines.push(`👥 <b>FAMILIARES</b>`);
     parentes.slice(0, 10).forEach(parente => {
       const parenteUpper = parente.toUpperCase();
       let icon = '👤';
@@ -3997,16 +3996,16 @@ function formatCpfResult(
       if (parenteUpper.includes('FILHO')) icon = '👦';
       if (parenteUpper.includes('FILHA')) icon = '👧';
       if (parenteUpper.includes('CONJUGE') || parenteUpper.includes('CÔNJUGE')) icon = '💑';
-      lines.push(`│ ${icon} ${parente}`);
+      lines.push(`${icon} ${escapeHtml(parente)}`);
     });
-    if (parentes.length > 10) lines.push(`│ ... e mais ${parentes.length - 10}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+    if (parentes.length > 10) lines.push(`... e mais ${parentes.length - 10}`);
   }
 
-  // Retornar como bloco <pre> monoespaçado (escapar HTML nos valores)
-  const escaped = lines.map(l => escapeHtml(l));
-  return `<pre>${escaped.join('\n')}</pre>`;
+  // Footer
+  lines.push('');
+  lines.push(`👤 ${escapeHtml(userName)} | ${botTag}`);
+
+  return lines.join('\n');
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA NOME (LISTA DE PESSOAS) ===============
@@ -4508,7 +4507,7 @@ function formatPixResult(
   return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
-// =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS (MONOESPAÇADO) ===============
+// =============== FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS (HTML LIMPO) ===============
 function formatGenericResult(
   queryType: string,
   data: Record<string, unknown>, 
@@ -4517,195 +4516,264 @@ function formatGenericResult(
   escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
-  // Categorização de campos com emojis únicos
+  data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
+
+  // Emoji map for common field names
+  const fieldEmojis: Record<string, string> = {
+    nome: '📋', cpf: '🆔', cnpj: '🆔', rg: '🪪', cns: '🏥',
+    nascimento: '📅', data_nascimento: '📅', datanascimento: '📅',
+    sexo: '⚧', raca: '🏷️', nacionalidade: '🌍', naturalidade: '🌍',
+    municipio: '📍', cidade: '🏙️', estado: '🏙️', uf: '🏙️',
+    mae: '👩', pai: '👨', nome_mae: '👩', nome_pai: '👨', nomemae: '👩', nomepai: '👨',
+    telefone: '📞', celular: '📞', telefones: '📞',
+    email: '📧', emails: '📧',
+    endereco: '🏠', logradouro: '🏠', bairro: '🏘️', cep: '📮',
+    renda: '💵', score: '📊', classe: '📊', poder_aquisitivo: '📊',
+    placa: '🚗', chassi: '🔧', renavam: '📋', motor: '⚙️',
+    marca: '🏭', modelo: '🚘', ano: '📅', cor: '🎨',
+    combustivel: '⛽', potencia: '🔋', cilindradas: '🔩',
+    empresa: '🏢', cargo: '💼', profissao: '💼', salario: '💰',
+    obito: '⚰️', status: '📊', situacao: '📊',
+    titulo: '🗳️', pis: '📄', cnh: '🪪',
+    chave: '🔑', banco: '🏦', tipo: '📋',
+    parentes: '👥', conjuge: '💑', filhos: '👶',
+    processo: '⚖️', advogado: '⚖️', vara: '🏛️', tribunal: '🏛️',
+  };
+
+  const getFieldEmoji = (key: string): string => {
+    const lower = key.toLowerCase().replace(/[_\s]/g, '');
+    for (const [pattern, emoji] of Object.entries(fieldEmojis)) {
+      if (lower.includes(pattern.replace(/[_\s]/g, ''))) return emoji;
+    }
+    return '▷';
+  };
+
+  // Categorização de campos
   const categories: Record<string, { icon: string; label: string; fields: string[] }> = {
     basic: {
-      icon: '👤',
-      label: 'DADOS PESSOAIS',
-      fields: ['nome', 'cpf', 'data_nascimento', 'dataNascimento', 'nascimento', 'rg', 'sexo', 'nome_mae', 'nome_pai', 
-               'naturalidade', 'nacionalidade', 'idade', 'signo', 'obito', 'status', 'municipio_nascimento', 
-               'raca', 'tipo_sanguineo', 'estado_civil', 'status_receita']
+      icon: '👤', label: 'DADOS PESSOAIS',
+      fields: ['nome', 'cpf', 'data_nascimento', 'datanascimento', 'nascimento', 'rg', 'sexo', 'nome_mae', 'nome_pai',
+               'naturalidade', 'nacionalidade', 'idade', 'signo', 'obito', 'status', 'municipio_nascimento',
+               'raca', 'tipo_sanguineo', 'estado_civil', 'status_receita', 'situacao']
     },
     documents: {
-      icon: '📄',
-      label: 'DOCUMENTOS',
-      fields: ['pis', 'nis', 'cns', 'titulo_eleitor', 'zona', 'secao', 'ctps', 'titulo']
-    },
-    contact: {
-      icon: '📱',
-      label: 'CONTATO',
-      fields: ['telefone', 'telefones', 'celular', 'email', 'emails', 'data_inclusao', 'dataInclusao', 'whatsapp']
-    },
-    address: {
-      icon: '📍',
-      label: 'ENDEREÇO',
-      fields: ['endereco', 'enderecos', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'estado', 'cep', 'municipio', 'pais', 'tipo_logradouro']
-    },
-    financial: {
-      icon: '💰',
-      label: 'FINANCEIRO',
-      fields: ['renda', 'rendaEstimada', 'score', 'classe', 'classe_social', 'poder_aquisitivo', 'credito', 'situacao', 'situacao_cpf', 'situacao_cadastral', 'recebe_inss', 'bancos']
+      icon: '📄', label: 'DOCUMENTOS',
+      fields: ['pis', 'nis', 'cns', 'titulo_eleitor', 'zona', 'secao', 'ctps', 'titulo', 'cnh']
     },
     family: {
-      icon: '👨‍👩‍👧‍👦',
-      label: 'FAMÍLIA',
-      fields: ['parentes', 'mae', 'pai', 'conjuge', 'filhos', 'irmaos']
+      icon: '👨‍👩‍👦', label: 'FILIAÇÃO',
+      fields: ['mae', 'pai', 'nomemae', 'nomepai', 'nome_mae', 'nome_pai', 'parentes', 'conjuge', 'filhos', 'irmaos']
+    },
+    address: {
+      icon: '📍', label: 'ENDEREÇO',
+      fields: ['endereco', 'enderecos', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'uf', 'estado', 'cep', 'municipio', 'pais', 'tipo_logradouro']
+    },
+    contact: {
+      icon: '📱', label: 'TELEFONES',
+      fields: ['telefone', 'telefones', 'celular', 'whatsapp']
+    },
+    email_cat: {
+      icon: '📧', label: 'E-MAILS',
+      fields: ['email', 'emails']
+    },
+    financial: {
+      icon: '💰', label: 'FINANCEIRO',
+      fields: ['renda', 'rendaestimada', 'score', 'classe', 'classe_social', 'poder_aquisitivo', 'credito', 'recebe_inss', 'bancos']
     },
     vehicle: {
-      icon: '🚗',
-      label: 'VEÍCULO',
-      fields: ['placa', 'veiculos', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anoModelo', 'anoFabricacao', 'cor', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'especie', 'categoria', 'proprietario']
+      icon: '🚗', label: 'VEÍCULO',
+      fields: ['placa', 'veiculos', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anomodelo', 'anofabricacao', 'cor', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'especie', 'categoria', 'proprietario']
     },
     work: {
-      icon: '💼',
-      label: 'PROFISSIONAL',
-      fields: ['emprego', 'empregos', 'empresa', 'cargo', 'profissao', 'ocupacao', 'escolaridade', 'cnpj_empresa', 'cnpj_contratante', 'razao_social', 'admissao', 'demissao', 'salario']
-    },
-    interests: {
-      icon: '🎯',
-      label: 'INTERESSES',
-      fields: ['interesses', 'turismo', 'luxo', 'internet', 'celular', 'cartao', 'seguro', 'investidor', 'apostador', 'viagens']
+      icon: '💼', label: 'PROFISSIONAL',
+      fields: ['emprego', 'empregos', 'empresa', 'cargo', 'profissao', 'ocupacao', 'escolaridade', 'cnpj_empresa', 'razao_social', 'admissao', 'demissao', 'salario']
     },
     company: {
-      icon: '🏢',
-      label: 'EMPRESA',
-      fields: ['cnpj', 'razao_social', 'nome_fantasia', 'capital_social', 'atividade', 'porte', 'natureza_juridica', 'data_abertura', 'socios', 'matriz', 'filial']
-    }
+      icon: '🏢', label: 'EMPRESA',
+      fields: ['cnpj', 'nome_fantasia', 'capital_social', 'atividade', 'porte', 'natureza_juridica', 'data_abertura', 'socios', 'matriz', 'filial']
+    },
+    legal: {
+      icon: '⚖️', label: 'PROCESSOS / JURÍDICO',
+      fields: ['processo', 'processos', 'advogado', 'vara', 'tribunal', 'oab', 'acao', 'comarca']
+    },
   };
 
-  // Organizar dados por categoria
-  const categorizedData: Record<string, Array<{ key: string; value: unknown }>> = {};
-  const uncategorized: Array<{ key: string; value: unknown }> = [];
+  // Metadata keys to skip
+  const ignoredKeys = new Set([
+    'comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado',
+    'fotobase64', 'foto', 'image', 'photo', 'base64',
+    'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'consumo', 'total_diario', 'reset_em', 'inicio_uso',
+    'vencimento', 'tempo_restante', 'tempo_restante_detalhado', 'dias_totais_restantes', 'dias_totais',
+    'ddd', 'classificacao', 'modulo', 'success', 'duration_ms', 'module_disabled',
+    'conta', 'saldo', 'tempo_segundos', 'temposegundos', 'cache', 'cached_at', 'expiracao', 'limites', 'plano',
+    'requests_used', 'requests_remaining', 'daily_limit', 'fallback_provider', 'apikey',
+    'fromcache', 'cache_ttl_hours',
+  ]);
 
-  const flattenObject = (obj: unknown, prefix = ''): Array<{ key: string; value: unknown }> => {
-    const items: Array<{ key: string; value: unknown }> = [];
-    if (obj === null || obj === undefined) return items;
-    if (typeof obj !== 'object') return items;
+  const shouldSkipKey = (key: string): boolean => {
+    const lower = key.toLowerCase();
+    if (ignoredKeys.has(lower)) return true;
+    if (lower.endsWith('_consultada') || lower.endsWith('_consultado')) return true;
+    return false;
+  };
 
-    // Campos de metadados a ignorar completamente
-    const ignoredKeys = ['comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado', 'fotobase64', 'foto', 'image', 'photo', 'base64',
-      'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'consumo', 'total_diario', 'reset_em', 'tipo', 'inicio_uso', 'vencimento', 'tempo_restante', 'tempo_restante_detalhado', 'dias_totais_restantes', 'dias_totais', 'ddd', 'classificacao', 'modulo',
-      'conta', 'saldo', 'tempo_segundos', 'temposegundos', 'cache', 'cached_at', 'expiracao', 'duration_ms', 'limites', 'plano'];
-    
-    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
-      const fullKey = prefix ? `${prefix}.${key}` : key;
-      const keyLower = key.toLowerCase();
-      
-      if (ignoredKeys.includes(keyLower) || keyLower.endsWith('_consultada')) continue;
-      if (typeof value === 'string' && value.length > 100 && !value.includes(' ') && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
-      if (typeof value === 'string' && (value.startsWith('http') && (keyLower.includes('foto') || keyLower.includes('image')))) continue;
-      if (shouldIgnore(value)) continue;
-      if (value === null || value === undefined || value === '') continue;
+  // Flatten nested data into categorized items
+  type DataItem = { key: string; value: string; emoji: string };
+  const categorizedData: Record<string, DataItem[]> = {};
+  const uncategorized: DataItem[] = [];
 
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        items.push(...flattenObject(value, fullKey));
-      } else if (Array.isArray(value)) {
-        if (value.length > 0 && typeof value[0] === 'object') {
-          value.forEach((item, i) => {
-            items.push(...flattenObject(item, `${fullKey}[${i}]`));
-          });
-        } else {
-          items.push({ key: fullKey, value: value.filter(v => !shouldIgnore(v)).join(', ') });
-        }
+  const formatDisplayKey = (key: string): string => {
+    const lastPart = key.split('.').pop() || key;
+    return lastPart
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/_/g, ' ')
+      .replace(/\[(\d+)\]/g, '')
+      .trim()
+      .split(' ')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join(' ');
+  };
+
+  const processValue = (key: string, value: unknown, depth = 0): void => {
+    if (value === null || value === undefined || value === '') return;
+    const keyLower = key.toLowerCase().split('.').pop() || key.toLowerCase();
+    if (shouldSkipKey(keyLower)) return;
+    if (shouldIgnore(value)) return;
+
+    // Skip base64 images
+    if (typeof value === 'string') {
+      if (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image')) return;
+      if (value.startsWith('http') && (keyLower.includes('foto') || keyLower.includes('image'))) return;
+    }
+
+    if (Array.isArray(value)) {
+      if (value.length === 0) return;
+      if (typeof value[0] === 'object' && value[0] !== null) {
+        // Array of objects — process each
+        value.forEach((item, i) => {
+          if (typeof item === 'object' && item !== null) {
+            for (const [k, v] of Object.entries(item as Record<string, unknown>)) {
+              processValue(`${key}.${k}`, v, depth + 1);
+            }
+          } else if (item !== null && item !== undefined && String(item).trim()) {
+            addItem(key, String(item).trim().toUpperCase());
+          }
+        });
       } else {
-        items.push({ key: fullKey, value });
+        // Array of primitives
+        const joined = value.filter(v => v && !shouldIgnore(v)).map(v => String(v).trim().toUpperCase()).join(', ');
+        if (joined) addItem(key, joined);
       }
+      return;
     }
-    return items;
+
+    if (typeof value === 'object') {
+      for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+        processValue(`${key}.${k}`, v, depth + 1);
+      }
+      return;
+    }
+
+    const strVal = String(value).trim().toUpperCase();
+    if (!strVal || strVal === '-' || strVal === '--' || strVal === 'NULL' || strVal === 'UNDEFINED') return;
+    addItem(key, strVal);
   };
 
-  const allItems = flattenObject(data);
+  const addItem = (key: string, displayValue: string): void => {
+    const keyLower = (key.split('.').pop() || key).toLowerCase().replace(/[_\s]/g, '');
+    const emoji = getFieldEmoji(key);
+    const item: DataItem = { key, value: displayValue, emoji };
 
-  // Categorizar cada item
-  for (const item of allItems) {
-    const keyLower = item.key.toLowerCase().split('.').pop() || item.key.toLowerCase();
     let found = false;
-
     for (const [catKey, catInfo] of Object.entries(categories)) {
-      if (catInfo.fields.some(f => keyLower.includes(f.toLowerCase()))) {
+      if (catInfo.fields.some(f => keyLower.includes(f.replace(/[_\s]/g, '')))) {
         if (!categorizedData[catKey]) categorizedData[catKey] = [];
         categorizedData[catKey].push(item);
         found = true;
         break;
       }
     }
-
     if (!found) {
       uncategorized.push(item);
     }
-  }
-
-  const formatKey = (key: string): string => {
-    const lastPart = key.split('.').pop() || key;
-    return lastPart
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/_/g, ' ')
-      .replace(/\[(\d+)\]/g, ' $1')
-      .trim()
-      .toUpperCase();
   };
 
-  // ============= CONSTRUIR MENSAGEM MONOESPAÇADA =============
-  const typeLabel = queryTypeLabels[queryType]?.replace(/[^\w\s]/g, '').trim() || queryType.toUpperCase();
-  const lines: string[] = [];
-  
-  lines.push(`${queryTypeLabels[queryType] || '📋'} ${typeLabel} RESULTADO`);
-  lines.push(``);
+  // Process all data
+  for (const [key, value] of Object.entries(data)) {
+    processValue(key, value);
+  }
+  // Also process nested 'dados' if present
+  const dados = data.dados;
+  if (dados && typeof dados === 'object' && !Array.isArray(dados)) {
+    for (const [key, value] of Object.entries(dados as Record<string, unknown>)) {
+      processValue(key, value);
+    }
+  }
 
-  // Adicionar categorias com dados
+  // Build HTML output (clean format like CPF SUS screenshot)
+  const typeLabel = queryTypeLabels[queryType]?.replace(/[^\w\s]/g, '').trim() || queryType.toUpperCase();
+  const typeIcon = queryTypeLabels[queryType]?.match(/^[^\w\s]+/)?.[0] || '📋';
+  const lines: string[] = [];
+
+  lines.push(`${typeIcon} <b>${escapeHtml(typeLabel)}</b>`);
+  lines.push('');
+
+  // Render categorized sections
   for (const [catKey, catInfo] of Object.entries(categories)) {
     const items = categorizedData[catKey];
     if (!items || items.length === 0) continue;
 
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ ${catInfo.icon} ${catInfo.label}`);
-    lines.push(`├─────────────────────────────`);
-    
-    for (const item of items) {
-      const displayKey = formatKey(item.key);
-      let displayValue: string;
-      if (typeof item.value === 'object' && item.value !== null) {
-        displayValue = escapeHtml(JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase());
-      } else {
-        displayValue = escapeHtml(String(item.value).toUpperCase());
-      }
-      if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
-        lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
-      }
+    // Deduplicate by value
+    const seen = new Set<string>();
+    const uniqueItems = items.filter(item => {
+      const sig = `${item.value}`;
+      if (seen.has(sig)) return false;
+      seen.add(sig);
+      return true;
+    });
+
+    lines.push('');
+    lines.push(`${catInfo.icon} <b>${catInfo.label}</b>`);
+
+    for (const item of uniqueItems) {
+      const displayKey = formatDisplayKey(item.key);
+      lines.push(`${item.emoji} ${escapeHtml(displayKey)}: ${escapeHtml(item.value)}`);
     }
-    
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
   }
 
-  // Adicionar itens não categorizados
+  // Render uncategorized items
   if (uncategorized.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📋 OUTROS DADOS`);
-    lines.push(`├─────────────────────────────`);
-    
-    for (const item of uncategorized) {
-      const displayKey = formatKey(item.key);
-      let displayValue: string;
-      if (typeof item.value === 'object' && item.value !== null) {
-        displayValue = escapeHtml(JSON.stringify(item.value, null, 0).replace(/[{}"]/g, '').toUpperCase());
-      } else {
-        displayValue = escapeHtml(String(item.value).toUpperCase());
+    const seen = new Set<string>();
+    const uniqueItems = uncategorized.filter(item => {
+      const sig = `${item.value}`;
+      if (seen.has(sig)) return false;
+      seen.add(sig);
+      return true;
+    });
+
+    if (uniqueItems.length > 0) {
+      lines.push('');
+      lines.push(`📋 <b>OUTROS DADOS</b>`);
+      for (const item of uniqueItems.slice(0, 30)) {
+        const displayKey = formatDisplayKey(item.key);
+        lines.push(`${item.emoji} ${escapeHtml(displayKey)}: ${escapeHtml(item.value)}`);
       }
-      if (!shouldIgnore(displayValue) && !displayValue.includes('[OBJECT OBJECT]')) {
-        lines.push(`│ ▷ ${displayKey}: ${displayValue}`);
+      if (uniqueItems.length > 30) {
+        lines.push(`... e mais ${uniqueItems.length - 30} campos`);
       }
     }
-    
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+  }
+
+  // If no data at all
+  if (lines.length <= 2) {
+    lines.push('⚠️ Nenhum dado encontrado para exibir.');
   }
 
   // Footer
-  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
-  lines.push(`🤖 ${botTag}`);
+  lines.push('');
+  lines.push(`👤 ${escapeHtml(userName)} | ${botTag}`);
 
-  return `<pre>${lines.join('\n')}</pre>`;
+  return lines.join('\n');
 }
 
 // =============== BOT HANDLER CLASS ===============
