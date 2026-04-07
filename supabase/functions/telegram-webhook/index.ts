@@ -6849,9 +6849,10 @@ class BotHandler {
               .from("paginated_results")
               .insert({
                 chat_id: chatId,
-                pages: records, // Salvar registros como JSON
+                pages: records,
                 current_page: 0,
                 total_pages: totalPages,
+                metadata: { requester_id: telegramUserId, queryType, queryInput },
               })
               .select("id")
               .single();
