@@ -7042,7 +7042,6 @@ class BotHandler {
     const isQueryResultCallback = data === "delete_msg" || queryResultPrefixes.some(p => data.startsWith(p));
 
     if (isQueryResultCallback) {
-      // Try to find requester_id from paginated_results metadata
       let requesterId: number | null = null;
 
       // Extract paginationId from callback data if present
@@ -7066,9 +7065,7 @@ class BotHandler {
         }
       }
 
-      // For non-paginated results (delete_msg, pdf, txt, foto_query, etc.), check if the
-      // original message was sent as a reply to someone — that someone is the requester.
-      // We also check callback.message reply info.
+      // For non-paginated results, check if the original message was a reply
       if (!requesterId && callback.message) {
         const replyMsg = (callback.message as any).reply_to_message;
         if (replyMsg?.from?.id) {
@@ -7076,11 +7073,9 @@ class BotHandler {
         }
       }
 
-      // Check if the bot owner can bypass (owner_ids in settings)
       const isOwner = this.settings.owner_ids?.includes(telegramUserId);
 
       if (requesterId && requesterId !== telegramUserId && !isOwner) {
-        // Not the requester - block the interaction
         await telegramRequest(this.token, "answerCallbackQuery", {
           callback_query_id: callback.id,
           text: "⚠️ Apenas quem fez a consulta pode interagir com este resultado.",
@@ -7089,6 +7084,8 @@ class BotHandler {
         return;
       }
     }
+
+    await answerCallback(this.token, callback.id);
 
     // Delete message button handler
     if (data === "delete_msg") {
@@ -7117,7 +7114,6 @@ class BotHandler {
 
     if (data.startsWith("page_delete:")) {
       const paginationId = data.replace("page_delete:", "");
-      // Deletar registro de paginação e mensagem
       await this.supabase.from("paginated_results").delete().eq("id", paginationId);
       try {
         await deleteMessage(this.token, chatId, messageId);
