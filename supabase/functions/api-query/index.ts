@@ -577,6 +577,29 @@ let cachedModuleStatus: Record<string, boolean> | null = null;
 let moduleCacheTime = 0;
 const MODULE_CACHE_TTL = 60_000;
 
+// Mapa reverso: module_key VeiculosAPI → module_key iSeek equivalente no banco
+const ISEEK_ALT_KEYS: Record<string, string> = {
+  cpf: "cpf-isk", cpffull: "cpf-isk",
+  "cnpj-cred": "cnpj-isk",
+  placa: "placa-isk", "placa-serpro": "placa-isk", "placa-sesp": "placa-isk",
+  telefone: "telefone-isk", telefonefull: "telefone-isk", "telefone-3": "telefone-isk",
+  email: "email-isk", emailfull: "email-isk", "email-3": "email-isk",
+  cep: "cep-isk", cepfull: "cep-isk", "cep-3": "cep-isk",
+  score: "score-isk", "score-3": "score-isk",
+  rg: "rg-isk", "rg-3": "rg-isk",
+  cnh: "cnh-isk",
+  pix: "pix-isk",
+  mae: "mae-isk", maefull: "mae-isk",
+  titulo: "titulo-isk",
+  processos: "processos-isk",
+  "parentes-3": "parentes-isk",
+  fotosp: "fotosp-isk", fotorj: "fotorj-isk", fotopr: "fotopr-isk",
+  fotoce: "fotoce-isk", fotoma: "fotoma-isk", fotoes: "fotoes-isk",
+  fotodf: "fotodf-isk", fototo: "fototo-isk", fotoms: "fotoms-isk",
+  fotoro: "fotoro-isk", fotopi: "fotopi-isk", fotogo: "fotogo-isk",
+  renavam: "renavam-isk", chassi: "chassi-isk", motor: "motor-isk",
+};
+
 async function isModuleEnabled(modulo: string, supabase: ReturnType<typeof createClient>): Promise<boolean> {
   const now = Date.now();
   if (!cachedModuleStatus || (now - moduleCacheTime) >= MODULE_CACHE_TTL) {
@@ -595,7 +618,18 @@ async function isModuleEnabled(modulo: string, supabase: ReturnType<typeof creat
   }
   if (!cachedModuleStatus) return true;
   if (!(modulo in cachedModuleStatus)) return true;
-  return cachedModuleStatus[modulo] === true;
+
+  // Se o módulo primário está ativo, liberar
+  if (cachedModuleStatus[modulo] === true) return true;
+
+  // Se desativado, verificar se o fallback iSeek está ativo
+  const altKey = ISEEK_ALT_KEYS[modulo];
+  if (altKey && cachedModuleStatus[altKey] === true) {
+    console.log(`[ModuleCheck] ${modulo} desativado, mas ${altKey} (iSeek) está ativo — liberando`);
+    return true;
+  }
+
+  return false;
 }
 
 // =============== INTERFACE ===============
