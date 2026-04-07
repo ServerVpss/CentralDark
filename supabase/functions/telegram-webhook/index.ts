@@ -3232,8 +3232,13 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
 
   // ============= FORMATAÇÃO ESPECÍFICA POR MÓDULO =============
   
-  // CPF e variantes (cpf, cpffull, cpf-isk, cpfsus, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo)
-  const cpfLikeModules = ['cpf', 'cpffull', 'cpf-isk', 'cpfsus', 'mae', 'maefull', 'rg', 'rg-3', 'cnh', 'pis', 'pis-3', 'titulo'];
+  // CPF SUS (estrutura diferente dos outros CPFs)
+  if (queryType === 'cpfsus') {
+    return formatCpfSusResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // CPF e variantes (cpf, cpffull, cpf-isk, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo)
+  const cpfLikeModules = ['cpf', 'cpffull', 'cpf-isk', 'mae', 'maefull', 'rg', 'rg-3', 'cnh', 'pis', 'pis-3', 'titulo'];
   if (cpfLikeModules.includes(queryType)) {
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
