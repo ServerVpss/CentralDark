@@ -4367,6 +4367,25 @@ class BotHandler {
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, usedModule, queryInput, result, fromCache);
 
+      // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
+      const providerErr = isProviderError(result);
+      if (providerErr.isError) {
+        logCmd('WARN', 'PROVIDER_ERROR', { queryType: usedModule, message: providerErr.message, chatId, userId: telegramUserId });
+        const siblingButtons = getSiblingButtons(usedModule, queryInput);
+        const moduleLabel = queryTypeLabels[usedModule] || usedModule;
+        let errorMsg = `⚠️ <b>Módulo ${moduleLabel} indisponível</b>\n\n`;
+        errorMsg += `<i>${escapeHtml(providerErr.message)}</i>\n\n`;
+        if (siblingButtons.length > 0) {
+          errorMsg += `💡 <b>Tente consultar por outro módulo:</b>`;
+        }
+        const allButtons = [
+          ...siblingButtons,
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
+        ];
+        await sendMessage(this.token, chatId, errorMsg, { inline_keyboard: allButtons });
+        return;
+      }
+
       // Footer "Consulta solicitada por"
       const now = new Date();
       const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
