@@ -3230,29 +3230,72 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   const userName = telegramUserName || 'usuário';
   const botTag = botUsername ? `@${botUsername.replace('@', '')}` : '@SEGREDOPUXADASBOT';
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA CPF =============
-  if (queryType === 'cpf') {
+  // ============= FORMATAÇÃO ESPECÍFICA POR MÓDULO =============
+  
+  // CPF e variantes (cpf, cpffull, cpf-isk, cpfsus, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo)
+  const cpfLikeModules = ['cpf', 'cpffull', 'cpf-isk', 'cpfsus', 'mae', 'maefull', 'rg', 'rg-3', 'cnh', 'pis', 'pis-3', 'titulo'];
+  if (cpfLikeModules.includes(queryType)) {
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA TELEFONE (telefone, telefonefull, telefone-3) =============
+  // Telefone (telefone, telefonefull, telefone-3)
   if (queryType === 'telefone' || queryType === 'telefonefull' || queryType === 'telefone-3') {
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA CPF-SPC =============
+  // CPF-SPC
   if (queryType === 'cpf-spc') {
     return formatCpfSpcResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA CNPJ =============
+  // CNPJ
   if (queryType === 'cnpj-cred') {
     return formatCnpjResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // ============= FORMATAÇÃO ESPECÍFICA PARA VEÍCULOS =============
+  // Veículos
   if (vehicleModules.includes(queryType)) {
     return formatVehicleResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Nome (nome, nomefull, nome-3) — lista de pessoas
+  if (queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3') {
+    return formatNomeResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Email (email, emailfull, email-3) — lista de pessoas vinculadas ao email
+  if (queryType === 'email' || queryType === 'emailfull' || queryType === 'email-3') {
+    return formatEmailResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // CEP (cep, cepfull, cep-3, endereco) — lista de pessoas + endereços
+  if (queryType === 'cep' || queryType === 'cepfull' || queryType === 'cep-3' || queryType === 'endereco') {
+    return formatCepResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Score (score, score-3)
+  if (queryType === 'score' || queryType === 'score-3') {
+    return formatScoreResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Renda
+  if (queryType === 'renda') {
+    return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Poder Aquisitivo
+  if (queryType === 'poderaquisitivo') {
+    return formatRendaResult(data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // Parentes (parentes, parentes-3)
+  if (queryType === 'parentes' || queryType === 'parentes-3') {
+    return formatParentesResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
+  }
+
+  // PIX
+  if (queryType === 'pix') {
+    return formatPixResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   // ============= FORMATAÇÃO GENÉRICA PARA OUTROS TIPOS =============
