@@ -1035,17 +1035,20 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Structured log
-    console.log(JSON.stringify({
+    // Structured log with full response data
+    logData("QUERY_RESULT", {
       request_id: requestId,
       channel: response.meta.channel,
       modulo: response.meta.modulo,
+      input: queryRequest.queryInput,
       status: response.meta.status,
       duration_ms: response.meta.duration_ms,
       provider_duration_ms: response.meta.provider_duration_ms,
       internal_duration_ms: response.meta.internal_duration_ms,
       has_errors: response.errors.length > 0,
-    }));
+      errors: response.errors,
+      response_data: response.data,
+    });
 
     return new Response(JSON.stringify(response), {
       status: 200,
