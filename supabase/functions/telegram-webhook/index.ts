@@ -2615,7 +2615,7 @@ async function executeQueryWithCache(
   queryType: string, 
   queryInput: string, 
   estado?: string
-): Promise<{ data: Record<string, unknown>; fromCache: boolean }> {
+): Promise<{ data: Record<string, unknown>; fromCache: boolean; warnings: string[] }> {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   
@@ -2642,22 +2642,23 @@ async function executeQueryWithCache(
       if (response.status === 504) {
         return { 
           data: { error: `⏱️ A consulta <b>${queryType}</b> demorou demais para responder.\n\n💡 <i>Isso pode acontecer em horários de pico. Tente novamente em alguns segundos.</i>` }, 
-          fromCache: false 
+          fromCache: false, warnings: [] 
         };
       }
       return { 
         data: { error: `Erro na consulta: ${response.status}` }, 
-        fromCache: false 
+        fromCache: false, warnings: [] 
       };
     }
     
     const result = await response.json();
     const fromCache = result.fromCache === true;
     const data = result.data || result;
+    const warnings: string[] = Array.isArray(result.warnings) ? result.warnings : [];
     
-    logCmd('INFO', 'API_RESULT', { queryType, fromCache, durationMs: result.duration_ms || null, hasError: !!data.error, notFound: !!data.notFound });
+    logCmd('INFO', 'API_RESULT', { queryType, fromCache, durationMs: result.duration_ms || null, hasError: !!data.error, notFound: !!data.notFound, warnings: warnings.length });
     
-    return { data, fromCache };
+    return { data, fromCache, warnings };
   } catch (err) {
     clearTimeout(timeoutId);
     const error = err as Error;
@@ -2665,12 +2666,12 @@ async function executeQueryWithCache(
     if (error.name === 'AbortError') {
       return { 
         data: { error: `⏱️ A consulta <b>${queryType}</b> excedeu o tempo limite.\n\n💡 <i>Tente novamente em alguns segundos.</i>` }, 
-        fromCache: false 
+        fromCache: false, warnings: [] 
       };
     }
     return { 
       data: { error: `⚠️ Erro de conexão. Tente novamente.` }, 
-      fromCache: false 
+      fromCache: false, warnings: [] 
     };
   }
 }
@@ -5797,6 +5798,9 @@ class BotHandler {
         const r = await executeQueryWithCache(queryType, queryInput, estado);
         result = r.data;
         fromCache = r.fromCache;
+        if (r.warnings?.length > 0) {
+          result._inputWarnings = r.warnings;
+        }
       }
       
       // Log query - passa fromCache para evitar duplicação de créditos
@@ -5819,6 +5823,14 @@ class BotHandler {
         ];
         await sendMessage(this.token, chatId, errorMsg, { inline_keyboard: allButtons });
         return;
+      }
+
+      // Send warnings (e.g. country code removed)
+      const inputWarnings = result._inputWarnings as string[] | undefined;
+      if (inputWarnings?.length) {
+        delete result._inputWarnings;
+        const warningText = `ℹ️ <i>${inputWarnings.map((w: string) => escapeHtmlGlobal(w)).join('\n')}</i>`;
+        await sendMessage(this.token, chatId, warningText, undefined, undefined, "HTML");
       }
 
       // Footer "Consulta solicitada por"
@@ -7553,10 +7565,16 @@ class BotHandler {
     });
 
     try {
-      const { data: result, fromCache } = await executeQueryWithCache(queryType, inputForQuery, estado);
+      const { data: result, fromCache, warnings: queryWarnings } = await executeQueryWithCache(queryType, inputForQuery, estado);
       
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, queryType, inputForQuery, result, fromCache);
+      
+      // Send warnings (e.g. country code removed)
+      if (queryWarnings?.length > 0) {
+        const warningText = `ℹ️ <i>${queryWarnings.map(w => escapeHtmlGlobal(w)).join('\n')}</i>`;
+        await sendMessage(this.token, chatId, warningText, undefined, undefined, "HTML");
+      }
 
       // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
       const providerErr = isProviderError(result);
