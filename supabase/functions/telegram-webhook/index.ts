@@ -3154,13 +3154,12 @@ function formatMultiPersonPage(
   }
   headerHtml += `\n`;
   
-  lines.push(`👋 Olá, ${userName}!`);
-  lines.push(`👥 <b>${records.length} pessoas encontradas</b>`);
+  headerHtml += `👋 Olá, ${userName}!\n`;
+  headerHtml += `👥 <b>${records.length} pessoas encontradas</b>\n`;
   if (totalPages > 1) {
-    lines.push(`📄 Página ${page + 1}/${totalPages} (${startIdx + 1}-${endIdx})`);
+    headerHtml += `📄 Página ${page + 1}/${totalPages} (${startIdx + 1}-${endIdx})\n`;
   }
-  lines.push(``);
-  
+  headerHtml += `\n`;
   pageRecords.forEach((record, index) => {
     const globalIndex = startIdx + index;
     lines.push(`┌─────────────────────────────`);
@@ -3211,7 +3210,7 @@ function formatMultiPersonPage(
   lines.push(`🤖 ${botTag}`);
   
   const escapeLine = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return `<pre>${lines.map(escapeLine).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(escapeLine).join('\n')}</pre>`;
 }
 
 // Create keyboard for multi-person result with CPF buttons and pagination
