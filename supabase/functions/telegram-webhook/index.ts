@@ -6726,7 +6726,8 @@ class BotHandler {
  
     const isActive = await this.isSubscriptionActive(member.id);
 
-    if (!isActive && this.settings.mute_new_members) {
+    const isBotMember = this.bot.bot_id && member.id === this.bot.bot_id;
+    if (!isActive && this.settings.mute_new_members && !isBotMember) {
       await telegramRequest(this.token, "restrictChatMember", {
         chat_id: chatId,
         user_id: member.id,
