@@ -1597,6 +1597,80 @@ function getTxtLabel(key: string): string {
     .join(" ");
 }
 
+// Extract metadata (nome, nasc, filiacao, cpf) from photo API result
+function extractPhotoMetadata(obj: unknown, depth = 0): { nome?: string; cpf?: string; nasc?: string; sexo?: string; mae?: string; pai?: string } {
+  if (!obj || typeof obj !== 'object' || depth > 5) return {};
+  const r = obj as Record<string, unknown>;
+  const meta: Record<string, string> = {};
+  
+  if (r.nome && typeof r.nome === 'string') meta.nome = String(r.nome).trim();
+  if (r.cpf && typeof r.cpf === 'string') meta.cpf = String(r.cpf).trim();
+  if (r.nasc && typeof r.nasc === 'string') meta.nasc = String(r.nasc).trim();
+  if (r.nascimento && typeof r.nascimento === 'string' && !meta.nasc) meta.nasc = String(r.nascimento).trim();
+  if (r.data_nascimento && typeof r.data_nascimento === 'string' && !meta.nasc) meta.nasc = String(r.data_nascimento).trim();
+  if (r.sexo && typeof r.sexo === 'string') meta.sexo = String(r.sexo).trim();
+  
+  // Filiação
+  if (r.filiacao && typeof r.filiacao === 'object') {
+    const fil = r.filiacao as Record<string, unknown>;
+    if (fil.nomeMae && typeof fil.nomeMae === 'string') meta.mae = String(fil.nomeMae).trim();
+    if (fil.nomePai && typeof fil.nomePai === 'string') meta.pai = String(fil.nomePai).trim();
+    if (fil.mae && typeof fil.mae === 'string' && !meta.mae) meta.mae = String(fil.mae).trim();
+    if (fil.pai && typeof fil.pai === 'string' && !meta.pai) meta.pai = String(fil.pai).trim();
+  }
+  if (r.mae && typeof r.mae === 'string' && !meta.mae) meta.mae = String(r.mae).trim();
+  if (r.pai && typeof r.pai === 'string' && !meta.pai) meta.pai = String(r.pai).trim();
+  if (r.nomeMae && typeof r.nomeMae === 'string' && !meta.mae) meta.mae = String(r.nomeMae).trim();
+  if (r.nomePai && typeof r.nomePai === 'string' && !meta.pai) meta.pai = String(r.nomePai).trim();
+  
+  // If we found something, return it
+  if (Object.keys(meta).length > 0) return meta;
+  
+  // Recurse into nested objects
+  for (const key of ['dados', 'data', 'result', 'resultado', 'resposta', 'response']) {
+    if (r[key] && typeof r[key] === 'object') {
+      const found = extractPhotoMetadata(r[key], depth + 1);
+      if (Object.keys(found).length > 0) return found;
+    }
+  }
+  return {};
+}
+
+// Format photo caption with metadata, respecting 1024 char limit
+function buildPhotoCaption(header: string, cpf: string, result: unknown, botUsername?: string): string {
+  const meta = extractPhotoMetadata(result);
+  
+  // Format CPF
+  const cpfFormatted = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  
+  // Format date
+  let nascFormatted = meta.nasc || '';
+  if (nascFormatted && /^\d{4}-\d{2}-\d{2}/.test(nascFormatted)) {
+    const [y, m, d] = nascFormatted.split(/[-T]/);
+    nascFormatted = `${d}/${m}/${y}`;
+  }
+  
+  // Build lines in priority order
+  const lines: string[] = [header, ''];
+  
+  if (meta.nome) lines.push(`👤 <b>Nome:</b> ${meta.nome}`);
+  lines.push(`📋 <b>CPF:</b> <code>${cpfFormatted}</code>`);
+  if (nascFormatted) lines.push(`📅 <b>Nascimento:</b> ${nascFormatted}`);
+  if (meta.sexo) lines.push(`⚧ <b>Sexo:</b> ${meta.sexo}`);
+  if (meta.mae) lines.push(`👩 <b>Mãe:</b> ${meta.mae}`);
+  if (meta.pai) lines.push(`👨 <b>Pai:</b> ${meta.pai}`);
+  
+  let caption = lines.join('\n');
+  
+  // Trim to 1024 chars, removing lines from the end if needed
+  while (caption.length > 1024 && lines.length > 3) {
+    lines.pop();
+    caption = lines.join('\n');
+  }
+  
+  return caption.substring(0, 1024);
+}
+
 // Deep extract photo from nested API response (handles dados.data.foto.base64, etc.)
 function deepExtractPhoto(obj: unknown, depth = 0): string | null {
   if (!obj || typeof obj !== 'object' || depth > 5) return null;
