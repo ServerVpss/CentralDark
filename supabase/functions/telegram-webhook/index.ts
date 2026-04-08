@@ -4472,6 +4472,7 @@ function formatEmailResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📧 Email';
   const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Consulta por e-mail retorna pessoas que possuem este endereço de e-mail vinculado em seus cadastros.</i>\n`;
+  const lines: string[] = [];
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4530,6 +4531,7 @@ function formatCepResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📍 CEP';
   const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Consulta por CEP retorna moradores registrados nesta região. Os dados são baseados em registros cadastrais e podem incluir residentes atuais e anteriores.</i>\n`;
+  const lines: string[] = [];
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4597,6 +4599,7 @@ function formatScoreResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📊 Score';
   const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Análise de crédito e score financeiro baseada em dados cadastrais e histórico de pagamentos.</i>\n`;
+  const lines: string[] = [];
 
   let basicos: Record<string, unknown> = {};
   let scoreData: Record<string, unknown> = {};
