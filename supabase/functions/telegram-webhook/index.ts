@@ -229,7 +229,31 @@ const queryTypeAliases: Record<string, string> = {
   fotors2: "fotors-isk", fotosc2: "fotosc-isk", fotopa2: "fotopa-isk",
   fotopb2: "fotopb-isk", fotope2: "fotope-isk", fotorn2: "fotorn-isk",
   // iSeek exclusivos (sem sufixo no comando)
-  irpf: "irpf-isk", vacinas: "vacinas-isk", obito: "obito-isk",
+  irpf: "irpf", vacinas: "vacinas", obito: "obito",
+  // Pessoa
+  nasc: "nasc", pai: "pai", registro: "registro", nomeabreviadofiltros: "nomeabreviadofiltros",
+  // Documento
+  nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
+  // Financeiro
+  assessoria: "assessoria", bens: "bens", cheque: "cheque",
+  dividas: "dividas", iptu: "iptu", score4: "score2", rais: "rais",
+  // Empresa
+  catcpf: "catcpf", catnumero: "catnumero",
+  // Justiça
+  advogadocpf: "advogadocpf", advogadooab: "advogadooab",
+  advogadooabuf: "advogadooabuf", certidoes: "certidoes",
+  mandado: "mandado", processo: "processo",
+  // Governo
+  beneficios: "beneficios", faculdades: "faculdades",
+  func: "func", matricula: "matricula",
+  // Veículos
+  veiculos: "veiculos", crlvmt: "crlvmt", crlvto: "crlvto",
+  crlvmtfoto: "crlvmt-foto", crlvtofoto: "crlvto-foto",
+  // Fotos exclusivas iSeek
+  fotoal: "fotoal", fotocnh: "fotocnh", fotodetran: "fotodetran",
+  fotogo3: "fotogo", fotomapresos: "fotomapresos",
+  fotonc: "fotonc", fotopb3: "fotopb", fotope3: "fotope",
+  fotorn: "fotorn",
   // Aliases antigos (compatibilidade)
   cpfisk: "cpf-isk",
   placasesp: "placa-sesp",
