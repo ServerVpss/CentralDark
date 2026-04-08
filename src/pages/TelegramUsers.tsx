@@ -91,6 +91,8 @@ export default function TelegramUsers() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "expired">("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
   
   // Add subscription dialog
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -185,16 +187,27 @@ export default function TelegramUsers() {
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   };
 
-  const filteredSubscriptions = subscriptions.filter((sub) => {
-    // Search filter
-    if (searchTerm && !sub.telegram_user_id.toString().includes(searchTerm)) {
-      return false;
-    }
-    // Status filter
-    if (filterStatus === "active" && isExpired(sub.expires_at)) return false;
-    if (filterStatus === "expired" && !isExpired(sub.expires_at)) return false;
-    return true;
-  });
+  const filteredSubscriptions = useMemo(() => {
+    return subscriptions.filter((sub) => {
+      if (searchTerm && !sub.telegram_user_id.toString().includes(searchTerm)) {
+        return false;
+      }
+      if (filterStatus === "active" && isExpired(sub.expires_at)) return false;
+      if (filterStatus === "expired" && !isExpired(sub.expires_at)) return false;
+      return true;
+    });
+  }, [subscriptions, searchTerm, filterStatus]);
+
+  // Reset page on filter change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterStatus, pageSize]);
+
+  const totalPages = Math.ceil(filteredSubscriptions.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedSubscriptions = filteredSubscriptions.slice(startIndex, startIndex + pageSize);
+
+  const goToPage = (page: number) => setCurrentPage(Math.max(1, Math.min(page, totalPages)));
 
   const stats = {
     total: subscriptions.length,
