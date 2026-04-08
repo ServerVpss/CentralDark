@@ -5464,82 +5464,65 @@ class BotHandler {
 
       // Command mapping (module_key -> telegram command)
       const moduleToCommand: Record<string, string> = {
-        cpf: "/cpf", cpffull: "/cpf2", "cpf-isk": "/cpf3",
-        "cnpj-cred": "/cnpj", "cnpj-isk": "/cnpj2", "cnpj-cred-isk": "/cnpj3",
-        placa: "/placa", "placa-serpro": "/placa2", "placa-sesp": "/placa3", "placa-isk": "/placa4",
-        telefone: "/telefone", telefonefull: "/telefone2", "telefone-3": "/telefone3", "telefone-isk": "/telefone4",
-        email: "/email", emailfull: "/email2", "email-3": "/email3", "email-isk": "/email4",
-        cep: "/cep", cepfull: "/cep2", "cep-3": "/cep3", "cep-isk": "/cep4",
-        nome: "/nome", nomefull: "/nome2", "nome-3": "/nome3",
-        score: "/score", "score-3": "/score2", "score-isk": "/score3",
-        rg: "/rg", "rg-3": "/rg2", "rg-isk": "/rg3",
-        cnh: "/cnh", "cnh-isk": "/cnh2",
-        pis: "/pis", "pis-3": "/pis2",
-        pix: "/pix", "pix-isk": "/pix2",
-        titulo: "/titulo", "titulo-isk": "/titulo2",
-        endereco: "/endereco", renda: "/renda",
-        processos: "/processos", "processos-isk": "/processos2",
-        "bnmp-lc": "/bnmp", siel: "/siel", "tse-3": "/tse",
-        mae: "/mae", maefull: "/mae2", "mae-isk": "/mae3",
-        credilink: "/credilink", "cpf-spc": "/cpf4",
-        poderaquisitivo: "/poder", cpfsus: "/cpf5",
-        parentes: "/parentes", "parentes-3": "/parentes2", "parentes-isk": "/parentes3",
-        chassi: "/chassi", "chassi-isk": "/chassi2",
-        renavam: "/renavam", "renavam-isk": "/renavam2",
-        motor: "/motor", "motor-isk": "/motor2",
-        // iSeek exclusivos (sem sufixo numérico)
-        "irpf-isk": "/irpf", "vacinas-isk": "/vacinas", "obito-isk": "/obito",
-        nomeabreviadofiltros: "/nomeabreviado", processo: "/processo",
-        advogadooabuf: "/advogado", cnham: "/cnham", cnhnc: "/cnhnc",
-        cnhrr: "/cnhrr", cnhrs: "/cnhrs", catcpf: "/catcpf",
-        catnumero: "/catnumero", nis: "/nis", oab: "/oab",
+        // Comandos com menu (agrupados)
+        cpf: "/cpf", cpfbasico: "/cpf", obito: "/cpf", score: "/cpf", score2: "/cpf",
+        advogadocpf: "/cpf", catcpf: "/cpf",
+        nome: "/nome", nomeabreviadofiltros: "/nome",
+        cnh: "/cnh", cnham: "/cnh", cnhrs: "/cnh", cnhrr: "/cnh", cnhnc: "/cnh",
+        placa: "/placa", chassi: "/placa", renavam: "/placa", motor: "/placa", veiculos: "/placa",
+        foto: "/foto", fotocnh: "/foto", fotodetran: "/foto", fotonc: "/foto",
+        fotoal: "/foto", fotopb: "/foto", fotope: "/foto", fotorn: "/foto", fotomapresos: "/foto",
+        parentes: "/parentes", mae: "/parentes", pai: "/parentes",
+        processos: "/processos", mandado: "/processos", processo: "/processos",
+        advogadooab: "/advogado", advogadooabuf: "/advogado",
+        catcpf: "/cat", catnumero: "/cat",
+        crlvmt: "/crlv", crlvto: "/crlv", "crlvmt-foto": "/crlv", "crlvto-foto": "/crlv",
+        cep: "/cep", endereco: "/cep",
+        // Comandos diretos
+        cnpj: "/cnpj",
+        telefone: "/telefone", telefonefull: "/telefone",
+        email: "/email", emailfull: "/email",
+        rg: "/rg", pis: "/pis", pix: "/pix",
+        titulo: "/titulo", renda: "/renda",
+        bnmp: "/bnmp", siel: "/siel", tse: "/tse",
+        credilink: "/credilink", poderaquisitivo: "/poder", cpfsus: "/sus",
+        irpf: "/irpf", vacinas: "/vacinas",
+        nis: "/nis", oab: "/oab",
         assessoria: "/assessoria", bens: "/bens",
         // Foto por estado
         fotosp: "/fotosp", fotorj: "/fotorj", fotomg: "/fotomg",
         fotoce: "/fotoce", fotopr: "/fotopr", fotoma: "/fotoma",
         fotoes: "/fotoes", fotodf: "/fotodf", fototo: "/fototo",
         fotoms: "/fotoms", fotoro: "/fotoro", fotopi: "/fotopi",
-        // Foto iSeek (numeradas)
-        "fotosp-isk": "/fotosp2", "fotorj-isk": "/fotorj2", "fotomg-isk": "/fotomg2",
-        "fotoce-isk": "/fotoce2", "fotopr-isk": "/fotopr2", "fotoma-isk": "/fotoma2",
-        "fotoes-isk": "/fotoes2", "fotodf-isk": "/fotodf2", "fototo-isk": "/fototo2",
-        "fotoms-isk": "/fotoms2", "fotoro-isk": "/fotoro2", "fotopi-isk": "/fotopi2",
-        "fotogo-isk": "/fotogo", "fotomt-isk": "/fotomt", "fotoba-isk": "/fotoba",
-        "fotors-isk": "/fotors", "fotosc-isk": "/fotosc", "fotopa-isk": "/fotopa",
-        "fotopb-isk": "/fotopb", "fotope-isk": "/fotope", "fotorn-isk": "/fotorn",
+        fotogo: "/fotogo", fotomt: "/fotomt", fotoba: "/fotoba",
+        fotors: "/fotors", fotosc: "/fotosc", fotopa: "/fotopa",
       };
 
       const usageExamples: Record<string, string> = {
-        cpf: "12345678900", cpffull: "12345678900", "cpf-isk": "12345678900",
-        "cnpj-cred": "12345678000100", "cnpj-isk": "12345678000100", "cnpj-cred-isk": "12345678000100",
-        placa: "ABC1234", "placa-serpro": "ABC1234", "placa-sesp": "ABC1234", "placa-isk": "ABC1234",
-        telefone: "11999998888", telefonefull: "11999998888", "telefone-3": "11999998888", "telefone-isk": "11999998888",
-        email: "user@email.com", emailfull: "user@email.com", "email-3": "user@email.com", "email-isk": "user@email.com",
-        cep: "01310100", cepfull: "01310100", "cep-3": "01310100", "cep-isk": "01310100",
-        nome: "João Silva", nomefull: "João Silva", "nome-3": "João Silva",
-        score: "12345678900", "score-3": "12345678900", "score-isk": "12345678900",
-        rg: "MG12345678", "rg-3": "MG12345678", "rg-isk": "MG12345678",
-        cnh: "12345678900", "cnh-isk": "12345678900",
-        pis: "12345678900", "pis-3": "12345678900",
-        pix: "JOAO|345", "pix-isk": "JOAO|345",
-        titulo: "12345678900", "titulo-isk": "12345678900",
-        endereco: "12345678900", renda: "12345678900",
-        processos: "12345678900", "processos-isk": "12345678900",
-        "bnmp-lc": "12345678900", siel: "12345678900", "tse-3": "12345678900",
-        mae: "12345678900", maefull: "12345678900", "mae-isk": "12345678900",
-        credilink: "12345678900", "cpf-spc": "12345678900",
-        poderaquisitivo: "12345678900", cpfsus: "12345678900",
-        parentes: "12345678900", "parentes-3": "12345678900", "parentes-isk": "12345678900",
-        chassi: "CHASSI123", "chassi-isk": "CHASSI123",
-        renavam: "12345678900", "renavam-isk": "12345678900",
-        motor: "MOTOR123", "motor-isk": "MOTOR123",
-        "irpf-isk": "12345678900", "vacinas-isk": "12345678900", "obito-isk": "12345678900",
-        nomeabreviadofiltros: "João Silva", processo: "12345678900",
-        advogadooabuf: "12345", cnham: "12345678900", cnhnc: "12345678900",
-        cnhrr: "12345678900", cnhrs: "12345678900", catcpf: "12345678900",
-        catnumero: "12345678900", nis: "12345678900", oab: "12345",
+        cpf: "12345678900", cpfbasico: "12345678900", obito: "12345678900",
+        score: "12345678900", score2: "12345678900", advogadocpf: "12345678900", catcpf: "12345678900",
+        cnpj: "12345678000100",
+        placa: "ABC1234", chassi: "CHASSI123", renavam: "12345678900", motor: "MOTOR123", veiculos: "12345678900",
+        telefone: "11999998888", telefonefull: "11999998888",
+        email: "user@email.com", emailfull: "user@email.com",
+        cep: "01310100", endereco: "12345678900",
+        nome: "João Silva", nomeabreviadofiltros: "João Silva",
+        rg: "MG12345678",
+        cnh: "12345678900", cnham: "12345678900", cnhnc: "12345678900", cnhrr: "12345678900", cnhrs: "12345678900",
+        pis: "12345678900", pix: "JOAO|345",
+        titulo: "12345678900", renda: "12345678900",
+        processos: "12345678900", mandado: "12345678900", processo: "12345678900",
+        bnmp: "12345678900", siel: "12345678900", tse: "12345678900",
+        mae: "12345678900", pai: "12345678900", parentes: "12345678900",
+        credilink: "12345678900", poderaquisitivo: "12345678900", cpfsus: "12345678900",
+        irpf: "12345678900", vacinas: "12345678900",
+        nis: "12345678900", oab: "12345",
         assessoria: "12345678900", bens: "12345678900",
-        // Fotos (todos usam CPF)
+        advogadooab: "12345", advogadooabuf: "12345",
+        catnumero: "12345678900",
+        crlvmt: "ABC1234", crlvto: "ABC1234", "crlvmt-foto": "ABC1234", "crlvto-foto": "ABC1234",
+        foto: "12345678900", fotocnh: "12345678900", fotodetran: "12345678900", fotonc: "12345678900",
+        fotoal: "12345678900", fotopb: "12345678900", fotope: "12345678900", fotorn: "12345678900", fotomapresos: "12345678900",
         fotosp: "12345678900", fotorj: "12345678900", fotomg: "12345678900",
         fotoce: "12345678900", fotopr: "12345678900", fotoma: "12345678900",
         fotoes: "12345678900", fotodf: "12345678900", fototo: "12345678900",
@@ -5663,43 +5646,30 @@ class BotHandler {
   }
 
   async showQueryMenu(chatId: number, messageId: number) {
-    const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado:</i>`;
+    const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado.\nComandos com ▸ abrem submenu com variantes.</i>`;
 
-    // Only show enabled query types - hide disabled ones completely
-    const qBtn = async (label: string, data: string): Promise<InlineButton | null> => {
-      const qType = data.replace("query:", "");
-      const isEnabled = await isQueryTypeEnabled(qType, this.supabase);
-      if (!isEnabled) return null;
-      return btn(label, data);
-    };
+    const qBtn = (label: string, data: string): InlineButton => btn(label, data);
 
-    const allRowsPromises: Promise<InlineButton | null>[][] = [
-      [qBtn("👤 CPF", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
-      [qBtn("🚗 Placa", "query:placa"), qBtn("🚗 Placa+", "query:placa_completa")],
+    const allRows: InlineButton[][] = [
+      [qBtn("👤 CPF ▸", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
+      [qBtn("🚗 Veículos ▸", "query:placa"), qBtn("📸 Fotos ▸", "query:foto")],
       [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
-      [qBtn("📍 CEP", "query:cep"), qBtn("📝 Nome", "query:nome")],
-      [qBtn("📊 Score", "query:score"), qBtn("💳 PIX", "query:pix")],
-      [qBtn("🪪 RG", "query:rg"), qBtn("🪪 CNH", "query:cnh")],
-      [qBtn("📜 Título", "query:titulo"), qBtn("📍 Endereço", "query:endereco")],
-      [qBtn("💰 Renda", "query:renda"), qBtn("👩 Mãe", "query:mae")],
-      [qBtn("⚖️ Processos", "query:processos"), qBtn("🔍 BNMP", "query:bnmp")],
+      [qBtn("📍 Localização ▸", "query:cep"), qBtn("📝 Nome ▸", "query:nome")],
+      [qBtn("🪪 CNH ▸", "query:cnh"), qBtn("🪪 RG", "query:rg")],
+      [qBtn("💳 PIX", "query:pix"), qBtn("📜 Título", "query:titulo")],
+      [qBtn("💰 Renda", "query:renda"), qBtn("📊 Score ▸", "query:score")],
+      [qBtn("👨‍👩‍👧 Parentes ▸", "query:parentes"), qBtn("⚖️ Processos ▸", "query:processos")],
+      [qBtn("⚖️ Advogado ▸", "query:advogado"), qBtn("🏢 CAT ▸", "query:cat")],
+      [qBtn("📄 CRLV ▸", "query:crlv"), qBtn("📋 PIS", "query:pis")],
+      [qBtn("🔍 BNMP", "query:bnmp"), qBtn("🔎 SIEL", "query:siel")],
       [qBtn("🗳️ TSE", "query:tse"), qBtn("📊 Credilink", "query:credilink")],
-      [qBtn("💎 Poder Aquis.", "query:poderaquisitivo"), qBtn("👤 CPF 4 (SPC)", "query:cpf_spc")],
-      [qBtn("👤 CPF 5 (SUS)", "query:cpfsus"), qBtn("📋 PIS", "query:pis")],
-      [qBtn("👨‍👩‍👧‍👦 Parentes", "query:parentes"), qBtn("🔎 SIEL", "query:siel")],
-      [qBtn("🔧 Chassi", "query:chassi"), qBtn("📋 RENAVAM", "query:renavam")],
-      [qBtn("⚙️ Motor", "query:motor")],
-      [qBtn("📸 Foto Nacional", "query:nacional")],
-      [qBtn("📸 Foto por Estado", "query:foto")],
+      [qBtn("💎 Poder Aquis.", "query:poderaquisitivo"), qBtn("🏥 SUS", "query:cpfsus")],
+      [qBtn("📋 IRPF", "query:irpf"), qBtn("💉 Vacinas", "query:vacinas")],
+      [qBtn("📋 NIS", "query:nis"), qBtn("📋 OAB", "query:oab")],
+      [qBtn("📋 Assessoria", "query:assessoria"), qBtn("📋 Bens", "query:bens")],
     ];
 
-    const allRows = await Promise.all(allRowsPromises.map(row => Promise.all(row)));
-
-    // Filter out null buttons and empty rows
-    const buttons: InlineButton[][] = allRows
-      .map(row => row.filter((b): b is InlineButton => b !== null))
-      .filter(row => row.length > 0);
-
+    const buttons: InlineButton[][] = [...allRows];
     buttons.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
 
     const moduleStatus = await loadModuleStatus(this.supabase);
@@ -7070,23 +7040,20 @@ class BotHandler {
       if (cmdMatch) {
         const cmd = cmdMatch[1].toLowerCase().split("@")[0];
         const commandMap: Record<string, string> = {
-          cpf: "cpf", cpffull: "cpffull",
-          cnpj: "cnpj", placa: "placa",
+          cpf: "cpf", cnpj: "cnpj", placa: "placa",
           telefone: "telefone", tel: "telefone",
-          email: "email",
-          cep: "cep", nome: "nome",
-          score: "score", score2: "score2",
-          rg: "rg", cnh: "cnh", pix: "pix",
+          email: "email", cep: "cep", nome: "nome",
+          score: "score", rg: "rg", cnh: "cnh", pix: "pix",
           foto: "foto", nacional: "foto",
-          titulo: "titulo", endereco: "endereco", renda: "renda",
-          processos: "processos", bnmp: "bnmp-lc", siel: "siel",
-          tse: "tse-3", mae: "mae", credilink: "credilink",
-          spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
-          parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
-          irpf: "irpf", vacinas: "vacinas", obito: "obito",
-          nasc: "nasc", pai: "pai", registro: "registro",
-          nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
-          nomeabreviadofiltros: "nomeabreviadofiltros",
+          titulo: "titulo", renda: "renda",
+          processos: "processos", parentes: "parentes",
+          advogado: "advogadocpf", cat: "catcpf", crlv: "crlvmt",
+          bnmp: "bnmp-lc", siel: "siel", tse: "tse-3",
+          credilink: "credilink", poder: "poderaquisitivo",
+          sus: "cpfsus", pis: "pis",
+          irpf: "irpf", vacinas: "vacinas",
+          nis: "nis", oab: "oab",
+          assessoria: "assessoria", bens: "bens",
         };
         if (commandMap[cmd]) {
           await sendMessage(this.token, chatId,
@@ -7111,26 +7078,25 @@ class BotHandler {
   // =============== PARSE MULTIPLE COMMANDS ===============
   private parseMultipleCommands(text: string): Array<{ command: string; queryType: string; queryInput: string }> {
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
-      cnpj: "cnpj-cred", placa: "placa", placa2: "placa-serpro",
-      placasesp: "placa-sesp",
+      cpf: "cpf", cnpj: "cnpj", placa: "placa",
       telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
       email: "email", emailfull: "emailfull",
-      cep: "cep", cepfull: "cepfull", nome: "nome", nomefull: "nomefull",
+      cep: "cep", nome: "nome",
       score: "score", rg: "rg", cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
-      titulo: "titulo", endereco: "endereco", renda: "renda",
-      processos: "processos", bnmp: "bnmp-lc", siel: "siel",
-      tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
-      spc: "cpf-spc", cpf4: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", cpf5: "cpfsus", pis: "pis",
-      parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
-      rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
-      nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
+      titulo: "titulo", renda: "renda",
+      processos: "processos", parentes: "parentes",
+      advogado: "advogadocpf", cat: "catcpf", crlv: "crlvmt",
+      bnmp: "bnmp-lc", siel: "siel", tse: "tse-3",
+      credilink: "credilink", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
+      irpf: "irpf", vacinas: "vacinas",
+      nis: "nis", oab: "oab",
+      assessoria: "assessoria", bens: "bens",
     };
     
     const commands: Array<{ command: string; queryType: string; queryInput: string }> = [];
     
-    const commandPattern = /(?:^|\s)(\/(?:cpf(?:full|isk|sus|[2-5])?|cnpj|placa(?:2|3|4|simples|sesp)?|telefone(?:full|[23])?|tel|email(?:full|[23])?|cep(?:full|[23])?|nome(?:full|[23])?|score[23]?|rg[23]?|cnh|pis[23]?|pix|foto\w*|nacional|titulo|endereco|renda|processos|bnmp|siel|tse|mae(?:full|2)?|credilink|spc|poder|sus|parentes[23]?|chassi|renavam|motor)(?:@\w+)?)/gi;
+    const commandPattern = /(?:^|\s)(\/(?:cpf(?:sus)?|cnpj|placa|telefone(?:full)?|tel|email(?:full)?|cep|nome|score|rg|cnh|pis|pix|foto\w*|nacional|titulo|renda|processos|parentes|advogado|cat|crlv|bnmp|siel|tse|credilink|poder|sus|irpf|vacinas|nis|oab|assessoria|bens)(?:@\w+)?)/gi;
     const matches = [...text.matchAll(commandPattern)];
     
     if (matches.length === 0) return commands;
