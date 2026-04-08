@@ -7259,8 +7259,7 @@ class BotHandler {
     // Comandos que abrem menu de escolha ao invés de executar direto
     const MODULE_MENU: Record<string, { description: string; options: Array<{ key: string; label: string; emoji: string; desc: string }> }> = {
       cpf: {
-        description: "👤 <b>Módulos de CPF disponíveis:</b>\n\n" +
-          "Cada módulo retorna informações diferentes.\nEscolha o mais adequado para sua necessidade:",
+        description: "👤 <b>Módulos de CPF disponíveis:</b>",
         options: [
           { key: "cpf", label: "CPF Completo", emoji: "👤", desc: "Dados completos, endereço, telefone, score" },
           { key: "cpfbasico", label: "CPF Básico", emoji: "📋", desc: "Nome, nascimento, situação cadastral" },
@@ -7329,9 +7328,9 @@ class BotHandler {
       ]);
       buttons.push([btn("🗑️ Apagar", `delete_msg_user:${telegramUserId}`)]);
 
-      // Construir texto descritivo
-      const optionsList = enabledOptions.map(o => `${o.emoji} <b>${o.label}</b> — ${o.desc}`).join('\n');
-      const menuText = `${menuConfig.description}\n\n${optionsList}\n\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção:`;
+      // Construir texto descritivo com separação visual
+      const optionsList = enabledOptions.map(o => `${o.emoji} <b>${o.label}</b>\n     └ ${o.desc}`).join('\n\n');
+      const menuText = `${menuConfig.description}\n━━━━━━━━━━━━━━━━━━━━\n\n${optionsList}\n\n━━━━━━━━━━━━━━━━━━━━\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção:`;
 
       await telegramRequest(this.token, "sendMessage", {
         chat_id: chatId,
