@@ -8261,8 +8261,11 @@ class BotHandler {
         const form = new FormData();
         form.set("chat_id", String(chatId));
         form.set("document", new File([blob], `consulta_${queryType}_${queryInput}.txt`, { type: 'text/plain' }));
-        const requesterDisplay = callback.from.username ? `@${callback.from.username}` : `ID: ${callback.from.id}`;
-        form.set("caption", `📝 <b>Relatório Completo (TXT)</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n📋 <b>Solicitado por:</b> ${callback.from.first_name || "?"} (${requesterDisplay})\n\n✅ Todos os dados da consulta estão neste arquivo.`);
+        const txtUserIdentifier = callback.from.username ? `@${callback.from.username}` : `ID: ${callback.from.id}`;
+        const txtNow = new Date();
+        const txtDateStr = txtNow.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const txtTimeStr = txtNow.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        form.set("caption", `📝 <b>Relatório Completo (TXT)</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${escapeHtmlGlobal(callback.from.first_name || 'Usuário')}\n├ 📝 ${txtUserIdentifier}\n└ 🕐 ${txtDateStr}, ${txtTimeStr}\n\n✅ Todos os dados da consulta estão neste arquivo.`);
         form.set("parse_mode", "HTML");
         
         const sendDocResult = await fetch(`${TELEGRAM_API}${this.token}/sendDocument`, {
