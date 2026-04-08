@@ -1,42 +1,46 @@
 
 
-# Melhorar Mensagem de Uso do Comando /PIX
+# Enriquecer Caption da Foto com Dados Pessoais
 
 ## Problema
-O módulo PIX do iSeek exige input no formato `NOME|meioCPF` (ex: `JOAO|345`), mas:
-1. O placeholder diz apenas "Digite a chave PIX" — sem explicar o formato
-2. Quando o usuário erra, a API retorna "INFORME OS DADOS NO FORMATO NOME|MEIOCPF CORRETAMENTE" — mensagem técnica e confusa
-3. O usuário não sabe o que é "meioCPF"
-
-## O que será feito
-
-### 1. Melhorar o placeholder do comando /pix no Telegram
-Trocar de `"Digite a chave PIX:"` para uma instrução clara com exemplo:
+Quando a foto é encontrada (via botão 📸 ou busca direta), o caption mostra apenas:
 ```
-Digite no formato: NOME|MEIOCPF
-Exemplo: JOAO|345
-(meioCPF = 3 dígitos do meio do CPF que aparecem no comprovante PIX)
+📸 Foto encontrada (ES)
+👤 CPF: 80912311720
 ```
 
-### 2. Interceptar erro do iSeek e retornar mensagem amigável
-No `formatPixResult`, detectar quando a resposta contém "INFORME OS DADOS NO FORMATO" e substituir por uma mensagem educativa:
+Mas a API retorna dados completos: **nome**, **data de nascimento**, **sexo**, **filiação** (mãe/pai). Esses dados são ignorados.
 
+## Solução
+
+### Criar função `extractPhotoMetadata`
+Extrair dados pessoais do resultado da API (mesma estrutura que `deepExtractPhoto` percorre):
+- `nome` → Nome completo
+- `nasc` → Data de nascimento (formatar DD/MM/AAAA)
+- `sexo` → Sexo
+- `filiacao.nomeMae` → Nome da mãe
+- `filiacao.nomePai` → Nome do pai
+- `cpf` → CPF formatado
+
+### Atualizar os 3 locais onde foto é enviada
+
+**1. Foto por estado (botão 📸)** — linha ~7535:
 ```
-⚠️ FORMATO INCORRETO
+📸 Foto encontrada (ES)
 
-Para consultar PIX, envie assim:
-/pix NOME|MEIOCPF
-
-📌 Exemplo: /pix JOAO|345
-
-💡 O que é "meioCPF"?
-São os 3 números do meio do CPF que aparecem
-no comprovante de PIX (ex: ***.345.***)
+👤 Nome: AGENOR CARLOS NUNES
+📋 CPF: 809.123.117-20
+📅 Nascimento: 01/07/1965
+👩 Mãe: ALICE NUNES
 ```
 
-### 3. Atualizar exemplo no menu de ajuda
-Na seção de exemplos do bot, trocar o exemplo de PIX de `chave@pix.com` para `JOAO|345`.
+**2. Foto nacional** — linha ~7482: mesmo formato
 
-## Arquivos alterados
-- `supabase/functions/telegram-webhook/index.ts` — placeholder, formatação de erro, exemplo de ajuda
+**3. Foto inline (resultado de consulta)** — linhas ~7196-7215: já usa `fullCaption` com dados formatados, então esse caso já funciona
+
+### Limite de 1024 caracteres
+O Telegram limita caption de fotos a 1024 chars. A função montará o caption respeitando esse limite, priorizando: Nome > CPF > Nascimento > Mãe > Pai.
+
+## Arquivo alterado
+- `supabase/functions/telegram-webhook/index.ts`
 
