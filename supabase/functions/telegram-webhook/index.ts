@@ -6726,7 +6726,8 @@ class BotHandler {
  
     const isActive = await this.isSubscriptionActive(member.id);
 
-    if (!isActive && this.settings.mute_new_members) {
+    const isBotMember = this.bot.bot_id && member.id === this.bot.bot_id;
+    if (!isActive && this.settings.mute_new_members && !isBotMember) {
       await telegramRequest(this.token, "restrictChatMember", {
         chat_id: chatId,
         user_id: member.id,
@@ -6939,7 +6940,8 @@ class BotHandler {
       // FISCAL DE GRUPO: Check if user can send messages in configured group
       const isConfiguredGroup = this.settings.group_chat_id && chatId === this.settings.group_chat_id;
       
-      if (isConfiguredGroup && this.settings.mute_new_members && !isOwner) {
+      const isBotItself = this.bot.bot_id && telegramUserId === this.bot.bot_id;
+      if (isConfiguredGroup && this.settings.mute_new_members && !isOwner && !isBotItself) {
         const isActive = await this.isSubscriptionActive(telegramUserId, 'group');
         
         if (!isActive) {
