@@ -3416,7 +3416,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   }
 
   // Nome (nome, nomefull, nome-3) — lista de pessoas
-  if (queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3') {
+  if (queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros') {
     return formatNomeResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
@@ -4552,9 +4552,18 @@ function formatNomeResult(
   const lines: string[] = [];
 
   let records: Record<string, unknown>[] = [];
+  // Try dados.nome / dados.nomefull first (standard nome modules)
   if (dados && typeof dados === 'object') {
     const arr = (dados.nome || dados.nomefull) as unknown[];
     if (Array.isArray(arr)) records = arr as Record<string, unknown>[];
+  }
+  // Fallback: try data.data[] (nomeabreviadofiltros format)
+  if (records.length === 0 && Array.isArray(data.data)) {
+    records = data.data as Record<string, unknown>[];
+  }
+  // Fallback: try data.dados directly if it's an array
+  if (records.length === 0 && Array.isArray(data.dados)) {
+    records = data.dados as Record<string, unknown>[];
   }
 
   if (records.length === 0) {
@@ -4564,9 +4573,12 @@ function formatNomeResult(
   records.slice(0, 20).forEach((r, i) => {
     const nome = String(r.nome || '').trim().toUpperCase();
     const cpf = String(r.cpf || '').trim();
-    const nasc = String(r.dataNascimento || '').trim();
+    const nasc = String(r.dataNascimento || r.nasc || '').trim();
     const mae = String(r.nomeMae || '').trim().toUpperCase();
+    const pai = String(r.nomePai || '').trim().toUpperCase();
     const sexo = String(r.sexo || '').trim();
+    const cidade = String(r.cidade || '').trim();
+    const uf = String(r.uf || '').trim();
 
     lines.push(`┌─────────────────────────────`);
     lines.push(`│ 👤 RESULTADO ${i + 1}`);
@@ -4576,6 +4588,8 @@ function formatNomeResult(
     if (nasc) lines.push(`│ 📅 Nascimento: ${nasc}`);
     if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
     if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
+    if (pai) lines.push(`│ 👨 Pai: ${pai}`);
+    if (cidade || uf) lines.push(`│ 📍 Local: ${[cidade, uf].filter(Boolean).join('/')}`);
     lines.push(`└─────────────────────────────`);
     lines.push(``);
   });
