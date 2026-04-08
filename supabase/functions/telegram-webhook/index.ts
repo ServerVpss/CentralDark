@@ -3608,9 +3608,7 @@ function formatTelefoneResult(
   const lines: string[] = [];
 
   const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>`);
-  lines.push(``);
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>\n`;
 
   if (nome || cpf) {
     lines.push(`┌─────────────────────────────`);
@@ -3662,14 +3660,14 @@ function formatTelefoneResult(
     lines.push(``);
   }
 
-  if (lines.length <= 2) {
+  if (lines.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
   const escaped = lines.map(l => escapeHtml(l));
-  return `<pre>${escaped.join('\n')}</pre>`;
+  return `${headerHtml}<pre>${escaped.join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA CPF SUS ===============
