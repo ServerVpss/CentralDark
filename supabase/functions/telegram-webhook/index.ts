@@ -7286,7 +7286,7 @@ class BotHandler {
             }
           }
         } else {
-          const simpleCaption = `📷 <b>FOTO ENCONTRADA</b>\n\n✅ Consulta: ${queryType.toUpperCase()}\n\n<b>OBRIGADO POR UTILIZAR NOSSOS SERVIÇOS</b> ❤️\n@${this.bot.bot_username || 'SEGREDOPUXADASBOT'}${consultaFooter}`;
+          const simpleCaption = buildPhotoCaption(`📷 <b>FOTO ENCONTRADA</b>`, typeof queryInput === 'string' ? queryInput.replace(/\D/g, '') : '', result, this.bot.bot_username);
           
           const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
@@ -7553,7 +7553,7 @@ class BotHandler {
             await telegramRequest(this.token, "sendPhoto", {
               chat_id: chatId,
               photo: fotoUrl,
-              caption: `📸 <b>Foto encontrada (${estadoEncontrado})</b>\n\n👤 CPF: <code>${cpf}</code>`,
+              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username),
               parse_mode: "HTML",
               reply_markup: { inline_keyboard: actionButtons },
             });
@@ -7606,7 +7606,7 @@ class BotHandler {
           await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
             photo: fotoUrl,
-            caption: `📸 <b>Foto encontrada (${uf})</b>\n\n👤 CPF: <code>${cpf}</code>`,
+            caption: buildPhotoCaption(`📸 <b>Foto encontrada (${uf})</b>`, cpf, result, this.bot.bot_username),
             parse_mode: "HTML",
             reply_markup: { inline_keyboard: actionButtons },
           });
