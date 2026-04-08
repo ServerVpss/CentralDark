@@ -2654,10 +2654,11 @@ async function executeQueryWithCache(
     const result = await response.json();
     const fromCache = result.fromCache === true;
     const data = result.data || result;
+    const warnings: string[] = Array.isArray(result.warnings) ? result.warnings : [];
     
-    logCmd('INFO', 'API_RESULT', { queryType, fromCache, durationMs: result.duration_ms || null, hasError: !!data.error, notFound: !!data.notFound });
+    logCmd('INFO', 'API_RESULT', { queryType, fromCache, durationMs: result.duration_ms || null, hasError: !!data.error, notFound: !!data.notFound, warnings: warnings.length });
     
-    return { data, fromCache };
+    return { data, fromCache, warnings };
   } catch (err) {
     clearTimeout(timeoutId);
     const error = err as Error;
