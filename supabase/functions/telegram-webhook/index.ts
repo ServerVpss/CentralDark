@@ -334,6 +334,38 @@ const queryTypeLabels: Record<string, string> = {
   poderaquisitivo: "💎 Poder Aquisitivo", cpfsus: "👤 CPF 5 (SUS)",
   parentes: "👨‍👩‍👧‍👦 Parentes", "parentes-3": "👨‍👩‍👧‍👦 Parentes 2",
   chassi: "🔧 Chassi", renavam: "📋 RENAVAM", motor: "⚙️ Motor",
+  // iSeek aliases
+  "telefone-isk": "📞 Telefone 4", "email-isk": "📧 Email 4", "cep-isk": "📍 CEP 4",
+  "cnpj-isk": "🏢 CNPJ 2", "cnpj-cred-isk": "🏢 CNPJ 3",
+  "placa-isk": "🚗 Placa 4", "cnh-isk": "🪪 CNH 2", "pix-isk": "💳 PIX 2",
+  "rg-isk": "🪪 RG 3", "score-isk": "📊 Score 3", "titulo-isk": "📜 Título 2",
+  "processos-isk": "⚖️ Processos 2", "mae-isk": "👩 Mãe 3", "parentes-isk": "👨‍👩‍👧‍👦 Parentes 3",
+  "chassi-isk": "🔧 Chassi 2", "renavam-isk": "📋 RENAVAM 2", "motor-isk": "⚙️ Motor 2",
+  // iSeek exclusivos
+  irpf: "💰 IRPF", vacinas: "💉 Vacinas", obito: "⚰️ Óbito",
+  nasc: "👶 Nascimento", pai: "👨 Pai", registro: "📋 Registro", nomeabreviadofiltros: "📝 Nome Abreviado",
+  nis: "📋 NIS", oab: "⚖️ OAB", cnham: "🪪 CNH AM", cnhnc: "🪪 CNH NC", cnhrr: "🪪 CNH RR", cnhrs: "🪪 CNH RS",
+  assessoria: "💼 Assessoria", bens: "🏠 Bens", cheque: "📋 Cheque",
+  dividas: "💳 Dívidas", iptu: "🏠 IPTU", score2: "📊 Score 4", rais: "📋 RAIS",
+  catcpf: "🏢 CAT CPF", catnumero: "🏢 CAT Número",
+  advogadocpf: "⚖️ Advogado CPF", advogadooab: "⚖️ Advogado OAB",
+  advogadooabuf: "⚖️ Advogado OAB/UF", certidoes: "📜 Certidões",
+  mandado: "⚖️ Mandado", processo: "⚖️ Processo",
+  beneficios: "🏛️ Benefícios", faculdades: "🎓 Faculdades",
+  func: "👤 Funcionário Público", matricula: "📋 Matrícula",
+  veiculos: "🚗 Veículos", crlvmt: "📋 CRLV MT", crlvto: "📋 CRLV TO",
+  "crlvmt-foto": "📸 CRLV MT Foto", "crlvto-foto": "📸 CRLV TO Foto",
+  fotoal: "📸 Foto AL", fotocnh: "📸 Foto CNH", fotodetran: "📸 Foto Detran",
+  fotogo: "📸 Foto GO", fotomapresos: "📸 Foto MA Presos",
+  fotonc: "📸 Foto NC", fotopb: "📸 Foto PB", fotope: "📸 Foto PE", fotorn: "📸 Foto RN",
+  // Foto iSeek (numeradas)
+  "fotosp-isk": "📸 Foto SP 2", "fotorj-isk": "📸 Foto RJ 2", "fotopr-isk": "📸 Foto PR 2",
+  "fotoce-isk": "📸 Foto CE 2", "fotoma-isk": "📸 Foto MA 2", "fotoes-isk": "📸 Foto ES 2",
+  "fotodf-isk": "📸 Foto DF 2", "fototo-isk": "📸 Foto TO 2", "fotoms-isk": "📸 Foto MS 2",
+  "fotoro-isk": "📸 Foto RO 2", "fotopi-isk": "📸 Foto PI 2", "fotogo-isk": "📸 Foto GO 2",
+  "fotomg-isk": "📸 Foto MG 2", "fotomt-isk": "📸 Foto MT 2", "fotoba-isk": "📸 Foto BA 2",
+  "fotors-isk": "📸 Foto RS 2", "fotosc-isk": "📸 Foto SC 2", "fotopa-isk": "📸 Foto PA 2",
+  "fotopb-isk": "📸 Foto PB 2", "fotope-isk": "📸 Foto PE 2", "fotorn-isk": "📸 Foto RN 2",
 };
 
 const brazilianStates = [
