@@ -243,7 +243,7 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
 }
 
 const queryTypeLabels: Record<string, string> = {
-  cpf: "👤 CPF", cpffull: "👤 CPF Completo",
+  cpf: "👤 CPF", cpfbasico: "👤 CPF Básico", cpffull: "👤 CPF Completo",
   "cnpj": "🏢 CNPJ",
   placa: "🚗 Placa",
   telefone: "📞 Telefone",
@@ -7257,27 +7257,50 @@ class BotHandler {
 
     // ============ MENU DE SELEÇÃO DE MÓDULOS ============
     // Comandos que abrem menu de escolha ao invés de executar direto
-    const MODULE_MENU: Record<string, Array<{ key: string; label: string; emoji: string }>> = {
-      nome: [
-        { key: "nome", label: "Nome Completo", emoji: "📝" },
-        { key: "nomeabreviadofiltros", label: "Nome c/ Filtros", emoji: "🔍" },
-      ],
-      cnh: [
-        { key: "cnh", label: "CNH Básica", emoji: "🪪" },
-        { key: "cnham", label: "CNH AM", emoji: "🪪" },
-        { key: "cnhrs", label: "CNH RS", emoji: "🪪" },
-        { key: "cnhrr", label: "CNH RR", emoji: "🪪" },
-        { key: "cnhnc", label: "CNH NC", emoji: "🪪" },
-      ],
-      score: [
-        { key: "score", label: "Score Básico", emoji: "📊" },
-        { key: "score2", label: "Score Completo", emoji: "📈" },
-      ],
+    const MODULE_MENU: Record<string, { description: string; options: Array<{ key: string; label: string; emoji: string; desc: string }> }> = {
+      cpf: {
+        description: "👤 <b>Módulos de CPF disponíveis:</b>\n\n" +
+          "Cada módulo retorna informações diferentes.\nEscolha o mais adequado para sua necessidade:",
+        options: [
+          { key: "cpf", label: "CPF Completo", emoji: "👤", desc: "Dados completos, endereço, telefone, score" },
+          { key: "cpfbasico", label: "CPF Básico", emoji: "📋", desc: "Nome, nascimento, situação cadastral" },
+          { key: "obito", label: "Óbito", emoji: "⚰️", desc: "Verifica registro de óbito" },
+          { key: "score", label: "Score", emoji: "📊", desc: "Score de crédito básico" },
+          { key: "score2", label: "Score Completo", emoji: "📈", desc: "Score detalhado com faixas e histórico" },
+          { key: "advogadocpf", label: "Advogado", emoji: "⚖️", desc: "Registro OAB vinculado ao CPF" },
+          { key: "catcpf", label: "CAT", emoji: "🏢", desc: "Comunicação de Acidente de Trabalho" },
+        ],
+      },
+      nome: {
+        description: "📝 <b>Módulos de Nome disponíveis:</b>",
+        options: [
+          { key: "nome", label: "Nome Completo", emoji: "📝", desc: "Busca ampla por nome" },
+          { key: "nomeabreviadofiltros", label: "Nome c/ Filtros", emoji: "🔍", desc: "Busca com filtros avançados" },
+        ],
+      },
+      cnh: {
+        description: "🪪 <b>Módulos de CNH disponíveis:</b>",
+        options: [
+          { key: "cnh", label: "CNH Básica", emoji: "🪪", desc: "Dados da CNH padrão" },
+          { key: "cnham", label: "CNH AM", emoji: "🪪", desc: "CNH Amazonas" },
+          { key: "cnhrs", label: "CNH RS", emoji: "🪪", desc: "CNH Rio Grande do Sul" },
+          { key: "cnhrr", label: "CNH RR", emoji: "🪪", desc: "CNH Roraima" },
+          { key: "cnhnc", label: "CNH NC", emoji: "🪪", desc: "CNH Nacional Complementar" },
+        ],
+      },
+      score: {
+        description: "📊 <b>Módulos de Score disponíveis:</b>",
+        options: [
+          { key: "score", label: "Score Básico", emoji: "📊", desc: "Score de crédito resumido" },
+          { key: "score2", label: "Score Completo", emoji: "📈", desc: "Score detalhado com análise" },
+        ],
+      },
     };
 
     // Verifica se este comando tem menu de seleção E tem input
-    const menuOptions = MODULE_MENU[command];
-    if (menuOptions && queryInput) {
+    const menuConfig = MODULE_MENU[command];
+    if (menuConfig && queryInput) {
+      const menuOptions = menuConfig.options;
       // Verificar se pelo menos 1 módulo está ativado
       const enabledChecks = await Promise.all(
         menuOptions.map(async (opt) => ({
@@ -7306,9 +7329,13 @@ class BotHandler {
       ]);
       buttons.push([btn("🗑️ Apagar", `delete_msg_user:${telegramUserId}`)]);
 
+      // Construir texto descritivo
+      const optionsList = enabledOptions.map(o => `${o.emoji} <b>${o.label}</b> — ${o.desc}`).join('\n');
+      const menuText = `${menuConfig.description}\n\n${optionsList}\n\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção:`;
+
       await telegramRequest(this.token, "sendMessage", {
         chat_id: chatId,
-        text: `🔎 <b>Escolha o módulo de consulta:</b>\n\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção abaixo:`,
+        text: menuText,
         parse_mode: "HTML",
         reply_to_message_id: replyToId,
         reply_markup: { inline_keyboard: buttons },
