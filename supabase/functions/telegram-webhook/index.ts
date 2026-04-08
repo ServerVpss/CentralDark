@@ -3362,8 +3362,8 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfSusResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CPF iSeek (estrutura rica com seções dedicadas)
-  if (queryType === 'cpf-isk') {
+  // CPF / CPF Full / CPF iSeek (todos retornam mesma estrutura rica do iSeek)
+  if (['cpf', 'cpffull', 'cpf-isk'].includes(queryType)) {
     return formatCpfIseekResult(data, userName, botTag, escapeHtml);
   }
 
