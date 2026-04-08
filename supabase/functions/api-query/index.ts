@@ -197,9 +197,12 @@ const NUMERIC_MODULES = new Set([
 ]);
 
 function cleanQueryValue(modulo: string, input: string): string {
-  if (TEXT_MODULES.has(modulo)) return input.trim();
+  // Always remove leading/trailing spaces and collapse internal spaces
+  let val = input.replace(/\s+/g, " ").trim();
+  
+  if (TEXT_MODULES.has(modulo)) return val;
   if (NUMERIC_MODULES.has(modulo)) {
-    let clean = input.replace(/\D/g, "").trim();
+    let clean = val.replace(/\D/g, "");
     // Remove country code 55 from phone numbers
     const PHONE_MODULES = ["telefone", "telefonefull", "telefone-3"];
     if (PHONE_MODULES.includes(modulo) && clean.length >= 12 && clean.startsWith("55")) {
@@ -207,7 +210,7 @@ function cleanQueryValue(modulo: string, input: string): string {
     }
     return clean;
   }
-  return input.replace(/[^\w]/g, "").trim();
+  return val.replace(/[^\w]/g, "");
 }
 
 // =============== FILTRO DE METADADOS ADMIN ===============
