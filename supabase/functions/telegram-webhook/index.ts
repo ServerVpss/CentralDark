@@ -3476,50 +3476,80 @@ function formatTelefoneResult(
   // Flatten dados.telefone[] structure from API
   const dados = data.dados as Record<string, unknown> | undefined;
   const allRecords: Record<string, unknown>[] = [];
-  
-  if (dados && typeof dados === 'object') {
-    const arr = dados.telefone as unknown[] | undefined;
-    if (Array.isArray(arr) && arr.length > 0) {
-      // Multiple person records from phone API
-      for (const record of arr) {
-        const r = record as Record<string, unknown>;
-        const person: Record<string, unknown> = {};
-        
-        // Extract flat fields
-        for (const [k, v] of Object.entries(r)) {
-          if (k === 'telefones' || k === 'dadosTelefone' || k === 'dadosBasicos') continue;
-          if (v !== null && v !== undefined && v !== '' && typeof v !== 'object') {
-            person[k] = v;
-          }
-        }
-        
-        // Extract dadosBasicos
-        const basicos = r.dadosBasicos as Record<string, unknown> | undefined;
-        if (basicos && typeof basicos === 'object') {
-          for (const [k, v] of Object.entries(basicos)) {
-            if (v !== null && v !== undefined && v !== '') person[k] = v;
-          }
-        }
-        
-        // Extract phones
-        const phones = (r.telefones || r.dadosTelefone) as unknown[] | undefined;
-        if (Array.isArray(phones) && phones.length > 0) {
-          person.telefones = phones;
-        }
-        
-        if (Object.keys(person).length > 0) allRecords.push(person);
+
+  const pushPhoneRecord = (source: Record<string, unknown>) => {
+    const person: Record<string, unknown> = {};
+
+    for (const [k, v] of Object.entries(source)) {
+      if (k === 'telefones' || k === 'dadosTelefone' || k === 'dadosBasicos' || k === 'endereco') continue;
+      if (v !== null && v !== undefined && v !== '' && typeof v !== 'object') {
+        person[k] = v;
       }
-      
-      // If only 1 record, flatten to data for single-person formatting
-      if (allRecords.length === 1) {
-        for (const [k, v] of Object.entries(allRecords[0])) {
-          data[k] = v;
+    }
+
+    const basicos = source.dadosBasicos as Record<string, unknown> | undefined;
+    if (basicos && typeof basicos === 'object') {
+      for (const [k, v] of Object.entries(basicos)) {
+        if (v !== null && v !== undefined && v !== '') person[k] = v;
+      }
+    }
+
+    const phones = (source.telefones || source.dadosTelefone) as unknown[] | undefined;
+    if (Array.isArray(phones) && phones.length > 0) {
+      person.telefones = phones;
+    }
+
+    const addresses = source.endereco as unknown[] | undefined;
+    if (Array.isArray(addresses) && addresses.length > 0) {
+      person.enderecos = addresses;
+    }
+
+    if (Object.keys(person).length > 0) {
+      allRecords.push(person);
+    }
+  };
+
+  // Formato atual do provedor: { data: [{ nome, cpfCnpj, origem, data }] }
+  const topLevelRecords = data.data as unknown[] | undefined;
+  if (Array.isArray(topLevelRecords) && topLevelRecords.length > 0) {
+    topLevelRecords.forEach((record) => {
+      if (record && typeof record === 'object') {
+        pushPhoneRecord(record as Record<string, unknown>);
+      }
+    });
+  }
+
+  // Formato legado: { dados: { telefone: [...] } }
+  if (allRecords.length === 0 && dados && typeof dados === 'object') {
+    const legacyRecords = dados.telefone as unknown[] | undefined;
+    if (Array.isArray(legacyRecords) && legacyRecords.length > 0) {
+      legacyRecords.forEach((record) => {
+        if (record && typeof record === 'object') {
+          pushPhoneRecord(record as Record<string, unknown>);
         }
+      });
+    }
+  }
+
+  // Se veio apenas 1 registro, achatar para o formatador de seção única
+  if (allRecords.length === 1) {
+    const single = allRecords[0];
+    for (const [k, v] of Object.entries(single)) {
+      if (k === 'cpfCnpj' && !('cpf' in data)) {
+        data.cpf = v;
+        continue;
+      }
+      if (k === 'data') {
+        data.periodo_consulta = v;
+        continue;
+      }
+      if (!(k in data)) {
+        data[k] = v;
       }
     }
   }
 
-  // Also flatten dados directly if telefone[] was not found
+  // Também achatar dados simples quando não houver lista de pessoas
   if (allRecords.length === 0 && dados && typeof dados === 'object') {
     for (const [k, v] of Object.entries(dados)) {
       if (k === 'telefone' || k === 'telefones') continue;
@@ -3539,19 +3569,24 @@ function formatTelefoneResult(
 
     allRecords.forEach((person, i) => {
       const pNome = String(person.nome || person.nome_completo || '').trim().toUpperCase();
-      const pCpf = String(person.cpf || '').trim();
+      const pCpf = String(person.cpf || person.cpfCnpj || '').trim();
       const pNasc = String(person.dataNascimento || person.nascimento || person.data_nascimento || '').trim();
       const pSexo = String(person.sexo || '').trim();
       const pMae = String(person.nomeMae || person.mae || '').trim().toUpperCase();
+      const pOrigem = String(person.origem || '').trim().toUpperCase();
+      const pData = String(person.periodo_consulta || person.data || '').trim().toUpperCase();
+      const pPhone = String(person.telefone || person.celular || '').trim();
 
       const fields: string[] = [];
       if (pNome) fields.push(`NOME => ${pNome}`);
-      if (pCpf) fields.push(`CPF => ${pCpf}`);
+      if (pCpf) fields.push(`CPF/CNPJ => ${pCpf}`);
       if (pNasc) fields.push(`NASCIMENTO => ${pNasc}`);
       if (pSexo) fields.push(`SEXO => ${pSexo}`);
       if (pMae && pMae !== 'UNDEFINED') fields.push(`MÃE => ${pMae}`);
+      if (pOrigem) fields.push(`ORIGEM => ${pOrigem}`);
+      if (pData) fields.push(`DATA => ${pData}`);
+      if (pPhone) fields.push(`TELEFONE => ${formatPhoneNumber('', pPhone.replace(/\D/g, '')) || pPhone}`);
 
-      // Phones from this person
       const pPhones = person.telefones as unknown[] | undefined;
       if (Array.isArray(pPhones)) {
         const seen = new Set<string>();
@@ -3560,19 +3595,19 @@ function formatTelefoneResult(
           const ddd = String(tel.ddd || tel.DDD || '');
           const num = String(tel.telefone || tel.numero || tel.celular || '');
           const formatted = formatPhoneNumber(ddd, num);
-          if (formatted) {
-            const key = formatted.replace(/\D/g, '');
-            if (!seen.has(key)) {
-              seen.add(key);
-              let line = `TELEFONE => ${formatted}`;
-              const tipoRaw = tel.tipo || tel.tipoTelefone;
-              if (typeof tipoRaw === 'string') line += `  [${tipoRaw}]`;
-              if (String(tel.whatsapp || '').toLowerCase().includes('possui')) line += `  💬`;
-              const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
-              if (inclusao) line += `\nDATA DE INCLUSÃO => ${inclusao}`;
-              fields.push(line);
-            }
-          }
+          if (!formatted) return;
+
+          const key = formatted.replace(/\D/g, '');
+          if (seen.has(key)) return;
+          seen.add(key);
+
+          let line = `TELEFONE => ${formatted}`;
+          const tipoRaw = tel.tipo || tel.tipoTelefone;
+          if (typeof tipoRaw === 'string') line += `  [${tipoRaw}]`;
+          if (String(tel.whatsapp || '').toLowerCase().includes('possui')) line += `  💬`;
+          const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
+          if (inclusao) line += `\nDATA DE INCLUSÃO => ${inclusao}`;
+          fields.push(line);
         });
       }
 
@@ -3586,11 +3621,12 @@ function formatTelefoneResult(
     parts.push(`🤖 ${botTag}`);
     return parts.join('\n');
   }
+
   const getValue = (keys: string[]): string => {
     for (const key of keys) {
       const lowerKey = key.toLowerCase();
       for (const [k, v] of Object.entries(data)) {
-        if ((k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) && v !== null && v !== undefined && !shouldIgnore(v)) {
+        if ((k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) && v !== null && v !== undefined && typeof v !== 'object' && !shouldIgnore(v)) {
           return String(v).trim().toUpperCase();
         }
       }
@@ -3610,11 +3646,10 @@ function formatTelefoneResult(
         const num = String(tel.telefone || tel.numero || tel.celular || '');
         const formatted = formatPhoneNumber(ddd, num);
         if (!formatted) return null;
-        // Deduplicate
         const key = formatted.replace(/\D/g, '');
         if (seen.has(key)) return null;
         seen.add(key);
-        
+
         const tipoRaw = tel.tipo || tel.tipoTelefone;
         let tipo = '';
         if (typeof tipoRaw === 'string') {
@@ -3622,7 +3657,7 @@ function formatTelefoneResult(
         } else if (tipoRaw === 3) tipo = 'Celular';
         else if (tipoRaw === 1) tipo = 'Fixo';
         else if (tipoRaw === 2) tipo = 'Comercial';
-        
+
         const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
         const whatsapp = String(tel.whatsapp || '').toLowerCase().includes('possui');
         return { formatted, tipo, data: inclusao, whatsapp };
@@ -3664,10 +3699,12 @@ function formatTelefoneResult(
   };
 
   const nome = getValue(['nome', 'nome_completo']);
-  const cpf = getValue(['cpf']);
+  const cpf = getValue(['cpf', 'cpfcnpj']);
   const nascimento = getValue(['nascimento', 'data_nascimento', 'datanascimento', 'dataNascimento']);
   const sexo = getValue(['sexo']);
   const mae = getValue(['mae', 'mãe', 'nome_mae', 'nomemae', 'nomeMae']);
+  const origem = getValue(['origem']);
+  const periodoConsulta = getValue(['periodo_consulta']);
   const uf = getValue(['uf', 'estado']);
   const endereco = getValue(['endereco', 'logradouro']);
   const bairro = getValue(['bairro']);
@@ -3683,23 +3720,20 @@ function formatTelefoneResult(
   parts.push(`ℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>`);
   parts.push(``);
 
-  // Section builder: bold title outside <pre>, fields inside <pre>
   const addSection = (icon: string, title: string, fields: string[]) => {
     if (fields.length === 0) return;
     parts.push(`${icon} <b>${escapeHtml(title)}</b>`);
     parts.push(`<code>${fields.map(f => escapeHtml(f)).join('\n')}</code>`);
   };
 
-  // DADOS DO TITULAR
   const titularFields: string[] = [];
   if (nome) titularFields.push(`NOME => ${nome}`);
-  if (cpf) titularFields.push(`CPF => ${cpf}`);
+  if (cpf) titularFields.push(`CPF/CNPJ => ${cpf}`);
   if (nascimento) titularFields.push(`NASCIMENTO => ${nascimento}`);
   if (sexo) titularFields.push(`SEXO => ${sexo}`);
   if (mae) titularFields.push(`MÃE => ${mae}`);
-  addSection('👤', 'DADOS DO TITULAR', titularFields);
+  addSection('👤', 'DADOS PESSOAIS', titularFields);
 
-  // TELEFONES VINCULADOS
   const phoneFields: string[] = [];
   if (phones.length > 0) {
     phones.slice(0, 12).forEach((p) => {
@@ -3718,7 +3752,11 @@ function formatTelefoneResult(
   }
   addSection('📞', 'DADOS DE CONTATO', phoneFields);
 
-  // ENDEREÇO
+  const otherFields: string[] = [];
+  if (origem) otherFields.push(`ORIGEM => ${origem}`);
+  if (periodoConsulta) otherFields.push(`DATA => ${periodoConsulta}`);
+  addSection('📋', 'OUTROS DADOS', otherFields);
+
   const endFields: string[] = [];
   if (endereco) endFields.push(`ENDEREÇO => ${endereco}`);
   if (bairro) endFields.push(`BAIRRO => ${bairro}`);
@@ -3727,7 +3765,7 @@ function formatTelefoneResult(
   if (cep) endFields.push(`CEP => ${cep}`);
   addSection('📍', 'ENDEREÇO', endFields);
 
-  if (titularFields.length === 0 && phoneFields.length === 0) {
+  if (titularFields.length === 0 && phoneFields.length === 0 && otherFields.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
