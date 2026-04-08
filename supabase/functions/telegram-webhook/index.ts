@@ -3139,19 +3139,20 @@ function formatMultiPersonPage(
   const titleIcon = queryType === 'telefone' ? '📞' : '📍';
   const titleText = queryType === 'telefone' ? 'CONSULTA DE TELEFONE' : 'CONSULTA DE CEP';
   
-  lines.push(`${titleIcon} <b>${titleText}</b>`);
+  // Header with HTML tags goes outside <pre>
+  let headerHtml = `${titleIcon} <b>${titleText}</b>\n`;
   if (queryInput) {
-    lines.push(`🔍 ${queryInput}`);
+    headerHtml += `🔍 ${queryInput}\n`;
   }
-  lines.push(``);
+  headerHtml += `\n`;
   
   // Informative description about why multiple results appear
   if (queryType === 'telefone') {
-    lines.push(`ℹ️ <i>Um mesmo número de telefone pode estar vinculado a mais de uma pessoa no cadastro. Isso ocorre por transferências de linha, uso compartilhado ou registros históricos.</i>`);
+    headerHtml += `ℹ️ <i>Um mesmo número de telefone pode estar vinculado a mais de uma pessoa no cadastro. Isso ocorre por transferências de linha, uso compartilhado ou registros históricos.</i>\n`;
   } else {
-    lines.push(`ℹ️ <i>Múltiplas pessoas foram encontradas vinculadas a este endereço/CEP nos registros cadastrais.</i>`);
+    headerHtml += `ℹ️ <i>Múltiplas pessoas foram encontradas vinculadas a este endereço/CEP nos registros cadastrais.</i>\n`;
   }
-  lines.push(``);
+  headerHtml += `\n`;
   
   lines.push(`👋 Olá, ${userName}!`);
   lines.push(`👥 <b>${records.length} pessoas encontradas</b>`);
