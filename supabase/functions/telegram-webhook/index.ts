@@ -1718,13 +1718,18 @@ function deepExtractPhoto(obj: unknown, depth = 0): string | null {
 
 const txtIgnoredKeys = [
   "comando", "error", "fotobase64", "foto", "image", "photo", "base64",
-  "raw", "status", "success", "notfound",
+  "raw", "status", "success", "notfound", "module_disabled",
   "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario",
   "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
   "ddd", "classificacao", "modulo",
   "conta", "saldo", "tempo_segundos", "temposegundos", "cache", "cached_at",
-  "expiracao", "duration_ms", "limites", "plano"
+  "expiracao", "duration_ms", "limites", "plano",
+  "requests_used", "requests_remaining", "daily_limit", "fallback_provider", "apikey",
+  "fromcache", "cache_ttl_hours",
+  "prioridade", "operadora", "tipotelefone",
+  "data", "ano", "ranking", "whatsapp",
+  "resultados", "estados_encontrados", "total_fotos", "estado_encontrado", "valor",
 ];
 
 // Bot references to filter out in TXT
