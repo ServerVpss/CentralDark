@@ -7991,6 +7991,51 @@ class BotHandler {
       return;
     }
 
+    // ============ SELECT MODULE (menu de seleção) ============
+    if (data.startsWith("select_mod:")) {
+      const parts = data.replace("select_mod:", "").split(":");
+      const moduleKey = parts[0];
+      const ownerId = parseInt(parts[1], 10);
+      const input = parts.slice(2).join(":");
+
+      // Segurança: apenas o usuário que fez a consulta pode clicar
+      if (ownerId !== telegramUserId) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "❌ Apenas quem fez a consulta pode selecionar o módulo.",
+          show_alert: true,
+        });
+        return;
+      }
+
+      if (moduleKey && input) {
+        // Deletar mensagem do menu
+        if (messageId) {
+          try { await deleteMessage(this.token, chatId, messageId); } catch (_e) { /* ignore */ }
+        }
+        const telegramUserName = callback.from?.first_name || 'Usuário';
+        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName);
+      }
+      return;
+    }
+
+    // Delete message with user check
+    if (data.startsWith("delete_msg_user:")) {
+      const ownerId = parseInt(data.replace("delete_msg_user:", ""), 10);
+      if (ownerId !== telegramUserId) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "❌ Apenas quem fez a consulta pode apagar.",
+          show_alert: true,
+        });
+        return;
+      }
+      if (messageId) {
+        try { await deleteMessage(this.token, chatId, messageId); } catch (_e) { /* ignore */ }
+      }
+      return;
+    }
+
     // Retry query with alternative module (from provider error suggestions)
     if (data.startsWith("retry_query:")) {
       const parts = data.replace("retry_query:", "").split(":");
