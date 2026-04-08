@@ -8173,7 +8173,12 @@ class BotHandler {
           const form = new FormData();
           form.set("chat_id", String(chatId));
           form.set("document", new File([blob], pdfResult.filename || `consulta_${queryType}.pdf`, { type: 'application/pdf' }));
-          form.set("caption", `📄 <b>Relatório de Consulta</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n🤖 @${this.bot.bot_username || 'bot'}`);
+          const pdfUserName = callback.from?.first_name || 'Usuário';
+          const pdfUserIdentifier = callback.from?.username ? `@${callback.from.username}` : `ID: ${telegramUserId}`;
+          const pdfNow = new Date();
+          const pdfDateStr = pdfNow.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          const pdfTimeStr = pdfNow.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          form.set("caption", `📄 <b>Relatório de Consulta</b>\n\n📊 Tipo: ${queryType.toUpperCase()}\n🔍 Consulta: <code>${queryInput}</code>\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${escapeHtmlGlobal(pdfUserName)}\n├ 📝 ${pdfUserIdentifier}\n└ 🕐 ${pdfDateStr}, ${pdfTimeStr}\n\n🤖 @${this.bot.bot_username || 'bot'}`);
           form.set("parse_mode", "HTML");
           
           const sendDocResult = await fetch(`${TELEGRAM_API}${this.token}/sendDocument`, {
