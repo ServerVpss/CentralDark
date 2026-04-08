@@ -28,7 +28,7 @@ const ignoredKeys = new Set([
 ]);
 
 // Also filter keys that end with "_consultada" (e.g. fotorj_consultada)
-const ignoredSuffixes = ["_consultada"];
+const ignoredSuffixes = ["_consultada", "_consultado"];
 
 function shouldIgnoreKey(key: string): boolean {
   const normalized = key.toLowerCase().replace(/[\s-]/g, "_");
