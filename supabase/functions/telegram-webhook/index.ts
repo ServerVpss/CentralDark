@@ -1608,8 +1608,17 @@ function extractPhotoMetadata(obj: unknown, depth = 0): { nome?: string; cpf?: s
 }
 
 // Format photo caption with metadata, respecting 1024 char limit
-function buildPhotoCaption(header: string, cpf: string, result: unknown, botUsername?: string): string {
-  const meta = extractPhotoMetadata(result);
+function buildPhotoCaption(header: string, cpf: string, result: unknown, botUsername?: string, extraMeta?: Record<string, string>): string {
+  const meta = { ...extractPhotoMetadata(result) };
+  
+  // Merge extra metadata (from cpfbasico enrichment) if photo result had empty fields
+  if (extraMeta) {
+    if (!meta.nome && extraMeta.nome) meta.nome = extraMeta.nome;
+    if (!meta.nasc && extraMeta.nasc) meta.nasc = extraMeta.nasc;
+    if (!meta.sexo && extraMeta.sexo) meta.sexo = extraMeta.sexo;
+    if (!meta.mae && extraMeta.mae) meta.mae = extraMeta.mae;
+    if (!meta.pai && extraMeta.pai) meta.pai = extraMeta.pai;
+  }
   
   // Format CPF
   const cpfFormatted = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
@@ -1640,6 +1649,25 @@ function buildPhotoCaption(header: string, cpf: string, result: unknown, botUser
   }
   
   return caption.substring(0, 1024);
+}
+
+// Enrich photo caption by fetching basic CPF data when photo result has no metadata
+async function enrichPhotoCaption(cpf: string): Promise<Record<string, string> | undefined> {
+  try {
+    const { data } = await executeQueryWithCache("cpfbasico", cpf);
+    if (!data) return undefined;
+    const meta = extractPhotoMetadata(data);
+    if (Object.keys(meta).length > 0) {
+      const result: Record<string, string> = {};
+      for (const [k, v] of Object.entries(meta)) {
+        if (v && typeof v === 'string' && v.trim()) result[k] = v.trim();
+      }
+      return Object.keys(result).length > 0 ? result : undefined;
+    }
+  } catch (e) {
+    console.error("enrichPhotoCaption error:", e);
+  }
+  return undefined;
 }
 
 // Deep extract photo from nested API response (handles dados.data.foto.base64, etc.)
@@ -8012,10 +8040,14 @@ class BotHandler {
               [btn("📄 Baixar PDF", `pdf:nacional:${cpf}`)]
             ];
             
+            // Enrich caption with CPF basic data if photo has no metadata
+            const photoMeta = extractPhotoMetadata(result);
+            const extraMeta = (!photoMeta.nome) ? await enrichPhotoCaption(cpf) : undefined;
+            
             await telegramRequest(this.token, "sendPhoto", {
               chat_id: chatId,
               photo: fotoUrl,
-              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username),
+              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username, extraMeta),
               parse_mode: "HTML",
               reply_markup: { inline_keyboard: actionButtons },
             });
@@ -8065,10 +8097,14 @@ class BotHandler {
             [btn("📄 Baixar PDF", `pdf:${fotoModule}:${cpf}`)]
           ];
           
+          // Enrich caption with CPF basic data if photo has no metadata
+          const photoMeta = extractPhotoMetadata(result);
+          const extraMeta = (!photoMeta.nome) ? await enrichPhotoCaption(cpf) : undefined;
+          
           await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
             photo: fotoUrl,
-            caption: buildPhotoCaption(`📸 <b>Foto encontrada (${uf})</b>`, cpf, result, this.bot.bot_username),
+            caption: buildPhotoCaption(`📸 <b>Foto encontrada (${uf})</b>`, cpf, result, this.bot.bot_username, extraMeta),
             parse_mode: "HTML",
             reply_markup: { inline_keyboard: actionButtons },
           });
