@@ -3941,57 +3941,57 @@ function formatCpfIseekResult(
   const descSit = clean(sitCad.descricaoSit);
   const rendaAtual = clean(basicos.rendaAtual);
   const faixaScore = clean(basicos.faixaScore);
-
-  if (nome) lines.push(`📋 Nome: <b>${escapeHtml(nome)}</b>`);
-  if (cpf) lines.push(`🆔 CPF: ${escapeHtml(formatCpfNum(cpf))}`);
-  if (nasc) lines.push(`📅 Nascimento: ${escapeHtml(nasc)}`);
-  if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo === 'F' ? 'Feminino' : sexo === 'M' ? 'Masculino' : sexo)}`);
-  if (nacion) lines.push(`🌍 Nacionalidade: ${escapeHtml(nacion)}`);
-  if (descSit) lines.push(`📊 Situação: ${escapeHtml(descSit)}`);
-  if (rendaAtual) lines.push(`💵 Renda: R$ ${escapeHtml(rendaAtual)}`);
-  if (faixaScore) lines.push(`📈 Score: ${escapeHtml(faixaScore)}`);
-
-  // Filiação inline
   const mae = clean(filiacao.nomeMae);
   const pai = clean(filiacao.nomePai);
-  if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
-  if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
+
+  const personalFields: string[] = [];
+  if (nome) personalFields.push(`NOME => ${nome}`);
+  if (cpf) personalFields.push(`CPF => ${formatCpfNum(cpf)}`);
+  if (nasc) personalFields.push(`NASCIMENTO => ${nasc}`);
+  if (sexo) personalFields.push(`SEXO => ${sexo === 'F' ? 'Feminino' : sexo === 'M' ? 'Masculino' : sexo}`);
+  if (nacion) personalFields.push(`NACIONALIDADE => ${nacion}`);
+  if (descSit) personalFields.push(`SITUAÇÃO => ${descSit}`);
+  if (rendaAtual) personalFields.push(`RENDA => R$ ${rendaAtual}`);
+  if (faixaScore) personalFields.push(`SCORE => ${faixaScore}`);
+  if (mae) personalFields.push(`MÃE => ${mae}`);
+  if (pai) personalFields.push(`PAI => ${pai}`);
+  if (personalFields.length > 0) {
+    lines.push(`<pre>${personalFields.join('\n')}</pre>`);
+  }
 
   // ═══════════════ 📄 DOCUMENTOS ═══════════════
-  const docLines: string[] = [];
+  const docFields: string[] = [];
   const cnhReg = clean(cnh.registro);
   if (cnhReg) {
     const cnhCat = clean(cnh.categoria);
     const cnhVal = clean(cnh.dataValidade);
     const cnhUf = clean(cnh.ufCnh);
-    docLines.push(`🪪 CNH: ${escapeHtml(cnhReg)}${cnhCat ? ' Cat. ' + escapeHtml(cnhCat) : ''}${cnhUf ? ' (' + escapeHtml(cnhUf) + ')' : ''}${cnhVal ? ' Val: ' + escapeHtml(cnhVal) : ''}`);
+    docFields.push(`CNH => ${cnhReg}${cnhCat ? ' Cat. ' + cnhCat : ''}${cnhUf ? ' (' + cnhUf + ')' : ''}${cnhVal ? ' Val: ' + cnhVal : ''}`);
   }
   if (cnsHist.length > 0) {
     const cns = clean((cnsHist[0] as Record<string, unknown>).cns);
-    if (cns) docLines.push(`🏥 CNS: ${escapeHtml(cns)}`);
+    if (cns) docFields.push(`CNS => ${cns}`);
   }
   if (pisHist.length > 0) {
     const pis = clean((pisHist[0] as Record<string, unknown>).pisNis);
-    if (pis) docLines.push(`📋 PIS: ${escapeHtml(pis)}`);
+    if (pis) docFields.push(`PIS => ${pis}`);
   }
   if (tituloHist.length > 0) {
     const titulo = clean((tituloHist[0] as Record<string, unknown>).titulo);
-    if (titulo) docLines.push(`🗳️ Título: ${escapeHtml(titulo)}`);
+    if (titulo) docFields.push(`TÍTULO => ${titulo}`);
   }
   const ctpsNum = clean(ctps.ctpsNumero);
-  if (ctpsNum) docLines.push(`📒 CTPS: ${escapeHtml(ctpsNum)}/${escapeHtml(clean(ctps.ctpsSerie) || '?')}`);
+  if (ctpsNum) docFields.push(`CTPS => ${ctpsNum}/${clean(ctps.ctpsSerie) || '?'}`);
 
-  if (docLines.length > 0) {
-    lines.push('');
-    lines.push(`📄 <b>DOCUMENTOS</b>`);
-    lines.push(...docLines);
+  if (docFields.length > 0) {
+    lines.push(`\n📄 <b>DOCUMENTOS</b>`);
+    lines.push(`<pre>${docFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 📱 TELEFONES ═══════════════
   const validTels = tels.filter(t => !isNI(t.telefone) && !isNI(t.ddd));
   if (validTels.length > 0) {
-    lines.push('');
-    lines.push(`📱 <b>TELEFONES</b> (${validTels.length})`);
+    const telFields: string[] = [];
     const seen = new Set<string>();
     validTels.forEach(t => {
       const ddd = clean(t.ddd);
@@ -4000,26 +4000,27 @@ function formatCpfIseekResult(
       if (seen.has(key)) return;
       seen.add(key);
       const data = clean(t.data);
-      lines.push(`📞 (${escapeHtml(ddd)}) ${escapeHtml(num)}${data ? ' — ' + escapeHtml(data) : ''}`);
+      telFields.push(`TELEFONE => (${ddd}) ${num}${data ? ' — ' + data : ''}`);
     });
+    if (telFields.length > 0) {
+      lines.push(`\n📱 <b>TELEFONES</b> (${validTels.length})`);
+      lines.push(`<pre>${telFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 📧 E-MAILS ═══════════════
   const validEmails = emails.filter(e => clean(e.email).includes('@'));
   const uniqueEmails = [...new Set(validEmails.map(e => clean(e.email).toLowerCase()))];
   if (uniqueEmails.length > 0) {
-    lines.push('');
-    lines.push(`📧 <b>E-MAILS</b> (${uniqueEmails.length})`);
-    uniqueEmails.forEach(email => {
-      lines.push(`✉️ ${escapeHtml(email)}`);
-    });
+    const emailFields = uniqueEmails.map(email => `EMAIL => ${email}`);
+    lines.push(`\n📧 <b>E-MAILS</b> (${uniqueEmails.length})`);
+    lines.push(`<pre>${emailFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 📍 ENDEREÇOS ═══════════════
   const validEnds = enderecos.filter(e => !isNI(e.logradouro) && !isNI(e.cidade));
   if (validEnds.length > 0) {
-    lines.push('');
-    lines.push(`📍 <b>ENDEREÇOS</b> (${validEnds.length})`);
+    const endFields: string[] = [];
     const seenEnds = new Set<string>();
     validEnds.forEach(e => {
       const log = clean(e.logradouro);
@@ -4033,15 +4034,17 @@ function formatCpfIseekResult(
       seenEnds.add(key);
       const addr = [log, num, bairro].filter(Boolean).join(', ');
       const loc = [cidade, uf].filter(Boolean).join('/');
-      lines.push(`🏠 ${escapeHtml(addr)}`);
-      lines.push(`   ${escapeHtml(loc)}${cep ? ' CEP: ' + escapeHtml(cep) : ''}`);
+      endFields.push(`ENDEREÇO => ${addr}, ${loc}${cep ? ' CEP: ' + cep : ''}`);
     });
+    if (endFields.length > 0) {
+      lines.push(`\n📍 <b>ENDEREÇOS</b> (${validEnds.length})`);
+      lines.push(`<pre>${endFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 💼 EMPREGOS ═══════════════
   if (empregos.length > 0) {
-    lines.push('');
-    lines.push(`💼 <b>EMPREGOS</b> (${empregos.length})`);
+    const empFields: string[] = [];
     empregos.forEach(emp => {
       const cargo = clean(emp.descricaoCbo);
       const cnpj = clean(emp.cnpjEmpregador);
@@ -4050,96 +4053,87 @@ function formatCpfIseekResult(
       const deslig = clean(emp.dataDesligamento);
       const razao = clean(emp.razaoSocial);
       const cargoStr = cargo || 'Cargo não informado';
-      lines.push(`🏢 ${escapeHtml(cargoStr)}`);
-      if (razao) lines.push(`   Empresa: ${escapeHtml(razao)}`);
-      if (cnpj) lines.push(`   CNPJ: ${escapeHtml(cnpj)}`);
+      empFields.push(`CARGO => ${cargoStr}`);
+      if (razao) empFields.push(`EMPRESA => ${razao}`);
+      if (cnpj) empFields.push(`CNPJ => ${cnpj}`);
       const periodo = [admissao, deslig].filter(Boolean).join(' → ');
-      if (periodo) lines.push(`   📅 ${escapeHtml(periodo)}${salario ? ' | R$ ' + escapeHtml(salario) : ''}`);
+      if (periodo) empFields.push(`PERÍODO => ${periodo}${salario ? ' | R$ ' + salario : ''}`);
     });
+    lines.push(`\n💼 <b>EMPREGOS</b> (${empregos.length})`);
+    lines.push(`<pre>${empFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 🏭 EMPRESAS ═══════════════
   if (empresas.length > 0) {
-    lines.push('');
-    lines.push(`🏭 <b>EMPRESAS</b> (${empresas.length})`);
+    const empresaFields: string[] = [];
     empresas.forEach(emp => {
       const razao = clean(emp.razaoSocial);
       const cnpj = clean(emp.cnpj);
       const fantasia = clean(emp.nomeFantasia);
-      if (razao) lines.push(`🏢 ${escapeHtml(razao)}${fantasia ? ' (' + escapeHtml(fantasia) + ')' : ''}`);
-      if (cnpj) lines.push(`   CNPJ: ${escapeHtml(cnpj)}`);
+      if (razao) empresaFields.push(`EMPRESA => ${razao}${fantasia ? ' (' + fantasia + ')' : ''}`);
+      if (cnpj) empresaFields.push(`CNPJ => ${cnpj}`);
     });
+    if (empresaFields.length > 0) {
+      lines.push(`\n🏭 <b>EMPRESAS</b> (${empresas.length})`);
+      lines.push(`<pre>${empresaFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 👨‍👩‍👧 PARENTES ═══════════════
   if (parentesNovos.length > 0) {
-    lines.push('');
-    lines.push(`👨‍👩‍👧 <b>PARENTES</b> (${parentesNovos.length})`);
+    const parFields: string[] = [];
     parentesNovos.forEach(p => {
       const nomeP = clean(p.nome);
       const relacao = clean(p.tipoRelacao);
       const cpfP = clean(p.cpf);
       const nascP = clean(p.dataNascimento);
       if (!nomeP) return;
-      let icon = '👤';
-      const rel = relacao.toLowerCase();
-      if (rel.includes('mãe') || rel.includes('mae')) icon = '👩';
-      else if (rel.includes('pai')) icon = '👨';
-      else if (rel.includes('filh')) icon = rel.includes('filha') ? '👧' : '👦';
-      else if (rel.includes('irm')) icon = rel.includes('irmã') || rel.includes('irma') ? '👧' : '👦';
-      else if (rel.includes('avó') || rel.includes('avo')) icon = '👵';
-      else if (rel.includes('avô') || rel.includes('avo')) icon = '👴';
-      lines.push(`${icon} ${escapeHtml(relacao)}: ${escapeHtml(nomeP)}${cpfP ? ' — ' + escapeHtml(formatCpfNum(cpfP)) : ''}${nascP ? ' (' + escapeHtml(nascP) + ')' : ''}`);
+      parFields.push(`${relacao || 'PARENTE'} => ${nomeP}${cpfP ? ' — ' + formatCpfNum(cpfP) : ''}${nascP ? ' (' + nascP + ')' : ''}`);
     });
+    if (parFields.length > 0) {
+      lines.push(`\n👨‍👩‍👧 <b>PARENTES</b> (${parentesNovos.length})`);
+      lines.push(`<pre>${parFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 💳 FINANCEIRO ═══════════════
-  const finLines: string[] = [];
+  const finFields: string[] = [];
   const pAq = clean(poderAq.poderAquisitivo);
   const faixaRenda = clean(poderAq.faixaRenda);
   const codMosaic = clean(mosaic.codMosaic);
   const descMosaic = clean(mosaic.descMosaicSecundario);
-  if (pAq) finLines.push(`💰 Poder Aquisitivo: ${escapeHtml(pAq)}`);
-  if (faixaRenda) finLines.push(`📊 Faixa: ${escapeHtml(faixaRenda)}`);
-  if (codMosaic) finLines.push(`🎯 Serasa Mosaic: ${escapeHtml(codMosaic)}${descMosaic ? ' — ' + escapeHtml(descMosaic) : ''}`);
+  if (pAq) finFields.push(`PODER AQUISITIVO => ${pAq}`);
+  if (faixaRenda) finFields.push(`FAIXA RENDA => ${faixaRenda}`);
+  if (codMosaic) finFields.push(`SERASA MOSAIC => ${codMosaic}${descMosaic ? ' — ' + descMosaic : ''}`);
 
-  // Dívidas
   const bacen = (dividas.bacen || []) as Array<Record<string, unknown>>;
   if (bacen.length > 0) {
     bacen.forEach(d => {
       const valor = clean(d.valorConsolidado);
       const sit = clean(d.situacao);
       const receita = clean(d.receitaPrincipal);
-      finLines.push(`⚠️ Dívida: R$ ${escapeHtml(valor)} — ${escapeHtml(sit)}${receita ? ' (' + escapeHtml(receita) + ')' : ''}`);
+      finFields.push(`DÍVIDA => R$ ${valor} — ${sit}${receita ? ' (' + receita + ')' : ''}`);
     });
   }
-
-  // Cheques sem fundo
   if (cheques.length > 0) {
-    finLines.push(`🚫 Cheques sem fundo: ${cheques.length}`);
+    finFields.push(`CHEQUES SEM FUNDO => ${cheques.length}`);
   }
-
-  // Cartões
   if (cartoes.length > 0) {
     cartoes.forEach(c => {
       const banco = clean(c.banco);
       const bandeira = clean(c.bandeira);
       const tipo = clean(c.tipo);
-      if (banco) finLines.push(`💳 ${escapeHtml(banco)} ${escapeHtml(bandeira)} (${escapeHtml(tipo)})`);
+      if (banco) finFields.push(`CARTÃO => ${banco} ${bandeira} (${tipo})`);
     });
   }
-
-  if (finLines.length > 0) {
-    lines.push('');
-    lines.push(`💳 <b>FINANCEIRO</b>`);
-    lines.push(...finLines);
+  if (finFields.length > 0) {
+    lines.push(`\n💳 <b>FINANCEIRO</b>`);
+    lines.push(`<pre>${finFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ ⚖️ PROCESSOS ═══════════════
   if (processos.length > 0) {
-    lines.push('');
-    lines.push(`⚖️ <b>PROCESSOS</b> (${processos.length})`);
-    // Deduplicar por número de processo
+    const procFields: string[] = [];
     const seenProc = new Set<string>();
     processos.forEach(p => {
       const proc = clean(p.processo);
@@ -4147,45 +4141,51 @@ function formatCpfIseekResult(
       seenProc.add(proc);
       const polo = clean(p.polo);
       const parte = clean(p.tipoParte);
-      lines.push(`📄 ${escapeHtml(proc)} — ${escapeHtml(polo)} (${escapeHtml(parte)})`);
+      procFields.push(`PROCESSO => ${proc} — ${polo} (${parte})`);
     });
+    if (procFields.length > 0) {
+      lines.push(`\n⚖️ <b>PROCESSOS</b> (${processos.length})`);
+      lines.push(`<pre>${procFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 🚗 VEÍCULOS ═══════════════
   if (veiculos.length > 0) {
-    lines.push('');
-    lines.push(`🚗 <b>VEÍCULOS</b> (${veiculos.length})`);
+    const veicFields: string[] = [];
     veiculos.forEach(v => {
       const placa = clean(v.placaAntiga);
       const renavam = clean(v.renavam);
       const ano = clean(v.ano);
-      lines.push(`🚘 ${escapeHtml(placa)}${ano ? ' (' + escapeHtml(ano) + ')' : ''}${renavam ? ' RENAVAM: ' + escapeHtml(renavam) : ''}`);
+      veicFields.push(`VEÍCULO => ${placa}${ano ? ' (' + ano + ')' : ''}${renavam ? ' RENAVAM: ' + renavam : ''}`);
     });
+    lines.push(`\n🚗 <b>VEÍCULOS</b> (${veiculos.length})`);
+    lines.push(`<pre>${veicFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 🌐 INTERNET ═══════════════
   const validNet = internet.filter(i => !isNI(i.websiteUrl));
   if (validNet.length > 0) {
-    lines.push('');
-    lines.push(`🌐 <b>INTERNET</b> (${validNet.length})`);
+    const netFields: string[] = [];
     validNet.forEach(i => {
       const url = clean(i.websiteUrl);
       const status = clean(i.status);
-      lines.push(`🔗 ${escapeHtml(url)}${status ? ' — ' + escapeHtml(status) : ''}`);
+      netFields.push(`URL => ${url}${status ? ' — ' + status : ''}`);
     });
+    lines.push(`\n🌐 <b>INTERNET</b> (${validNet.length})`);
+    lines.push(`<pre>${netFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 📋 IRPF ═══════════════
   if (irpf.length > 0) {
     const validIrpf = irpf.filter(i => !isNI(i.situacaoReceita));
     if (validIrpf.length > 0) {
-      lines.push('');
-      lines.push(`📋 <b>IRPF</b>`);
-      validIrpf.forEach(i => {
+      const irpfFields = validIrpf.map(i => {
         const ano = clean(i.anoReferencia);
         const sit = clean(i.situacaoReceita);
-        lines.push(`📅 ${escapeHtml(ano)}: ${escapeHtml(sit)}`);
+        return `${ano} => ${sit}`;
       });
+      lines.push(`\n📋 <b>IRPF</b>`);
+      lines.push(`<pre>${irpfFields.join('\n')}</pre>`);
     }
   }
 
