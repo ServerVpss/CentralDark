@@ -955,18 +955,15 @@ function formatVehicleResult(
 
   if (identification.length > 0) {
     lines.push(`🔖 <b>IDENTIFICAÇÃO</b>`);
-    lines.push(...identification);
-    lines.push('');
+    lines.push(`<pre>${identification.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (specs.length > 0) {
     lines.push(`⚙️ <b>ESPECIFICAÇÕES</b>`);
-    lines.push(...specs);
-    lines.push('');
+    lines.push(`<pre>${specs.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (situation.length > 0) {
     lines.push(`📊 <b>SITUAÇÃO</b>`);
-    lines.push(...situation);
-    lines.push('');
+    lines.push(`<pre>${situation.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (restrictions.length > 0) {
     const hasRestriction = (vehicleData.possuiRestricoes && String(vehicleData.possuiRestricoes).toLowerCase() === 'sim') ||
@@ -974,13 +971,11 @@ function formatVehicleResult(
       vehicleData.restricaoRenajud === 'Sim' || vehicleData.leilao === 'Sim' ||
       (vehicleData.restricao1 && !/sem restri/i.test(String(vehicleData.restricao1)));
     lines.push(`${hasRestriction ? '🚨' : '✅'} <b>RESTRIÇÕES</b>`);
-    lines.push(...restrictions);
-    lines.push('');
+    lines.push(`<pre>${restrictions.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (other.length > 0) {
     lines.push(`📋 <b>OUTROS DADOS</b>`);
-    lines.push(...other);
-    lines.push('');
+    lines.push(`<pre>${other.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
 
   lines.push(`📡 <i>Resultado via ${botTag}</i>`);
