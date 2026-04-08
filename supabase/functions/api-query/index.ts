@@ -243,7 +243,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
   }
 
   const CPF_MODULES = [
-    "cpf", "cpfsus", "score", "renda",
+    "cpf", "cpffull", "cpfsus", "cpf-spc", "score", "renda",
     "credilink", "poderaquisitivo", "parentes", "processos",
     "siel", "tse-3", "titulo", "mae",
     "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
