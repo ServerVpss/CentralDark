@@ -7333,7 +7333,7 @@ class BotHandler {
       titulo: "titulo", endereco: "endereco", renda: "renda",
       processos: "processos", bnmp: "bnmp-lc", siel: "siel",
       tse: "tse-3", credilink: "credilink",
-      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
+      poder: "poderaquisitivo",
       chassi: "chassi", renavam: "renavam", motor: "motor",
       // Módulos exclusivos
       irpf: "irpf", vacinas: "vacinas", obito: "obito",
