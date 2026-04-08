@@ -8073,6 +8073,31 @@ class BotHandler {
 
     if (!chatId || !messageId) return;
 
+    // ── Mute check: block muted users from interacting with ANY buttons ──
+    // Only allow payment-related and terms callbacks for muted users
+    const muteExemptCallbacks = new Set([
+      "menu:planos", "accept_terms", "reject_terms", "cancel_payment",
+      "plan:", "confirm_plan:", "check_payment:",
+    ]);
+    const isMuteExempt = muteExemptCallbacks.has(data) || 
+      data.startsWith("plan:") || data.startsWith("confirm_plan:") || data.startsWith("check_payment:");
+
+    if (!isMuteExempt) {
+      const isOwner = this.settings.owner_ids?.includes(telegramUserId);
+      if (!isOwner && this.settings.mute_new_members && this.settings.group_chat_id && chatId === this.settings.group_chat_id) {
+        const hasActiveSub = await this.isSubscriptionActive(telegramUserId, 'group');
+        if (!hasActiveSub) {
+          await telegramRequest(this.token, "answerCallbackQuery", {
+            callback_query_id: callback.id,
+            text: "🔒 Você precisa ter uma assinatura ativa para interagir. Use /planos para ver os planos disponíveis.",
+            show_alert: true,
+          });
+          logCmd('INFO', 'CALLBACK_MUTED_BLOCK', { userId: telegramUserId, data: data.substring(0, 40) });
+          return;
+        }
+      }
+    }
+
     // ── Ownership check for ALL query-result buttons ──
     // Any callback on a message that contains a paginated result or was a reply to a user query
     // must be restricted to the user who initiated the query (or admins/owners).
