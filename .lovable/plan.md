@@ -1,38 +1,33 @@
 
 
-# Agrupar Comandos Relacionados em Menus de Botões
+# Limpar Textos Desatualizados e Referências -isk nos Comandos
 
-## O que já existe
-4 comandos com menu: `/cpf` (7 opções), `/nome` (2), `/cnh` (5), `/score` (2)
+## Problema
+Vários mapas de comandos dentro do `telegram-webhook/index.ts` ainda contêm referências `-isk`, comandos numerados antigos (ex: `/cpf2`, `/placa4`), e a Central de Consultas (`showQueryMenu`) lista botões individuais que agora estão agrupados em menus.
 
-## Novos agrupamentos a criar
+## Alterações no arquivo `supabase/functions/telegram-webhook/index.ts`
 
-Comandos que passariam a exibir botões ao invés de executar direto:
+### 1. Limpar `moduleToCommand` (~linha 5466)
+Remover todas as entradas com sufixo `-isk` e manter apenas os 75 módulos reais. Para módulos que agora estão em menus (chassi, renavam, motor, etc), não precisam de comando individual — serão acessados via menu `/placa`, `/foto`, etc.
 
-| Comando | Botões (módulos) | Descrição |
-|---------|-----------------|-----------|
-| `/placa` | placa, chassi, renavam, motor, veiculos | Consulta veicular completa |
-| `/foto` | foto (nacional), fotocnh, fotodetran, fotonc + fotos por estado (AL, PB, PE, RN, MA Presos) | Fotos disponíveis |
-| `/parentes` | parentes, mae, pai | Vínculos familiares |
-| `/processos` | processos, mandado, processo | Justiça e processos |
-| `/advogado` | advogadocpf, advogadooab, advogadooabuf | Consulta OAB |
-| `/cat` | catcpf, catnumero | Acidente de trabalho |
-| `/crlv` | crlvmt, crlvto, crlvmt-foto, crlvto-foto | Documentos de veículo |
-| `/cep` | cep, endereco | Localização |
+### 2. Limpar `usageExamples` (~linha 5512)
+Remover todas as entradas `-isk` e numeradas que não existem mais.
 
-## O que muda
+### 3. Limpar `parseMultipleCommands` commandMap (~linha 7113)
+Remover `cpfisk`, `-isk` referências. Adicionar os novos comandos de menu (advogado, cat, crlv, parentes, processos) para que o parser os reconheça.
 
-### Arquivo: `supabase/functions/telegram-webhook/index.ts`
+### 4. Limpar single-command handler commandMap (~linha 7072)
+Remover entradas individuais que agora estão em menus (chassi, renavam, motor, mae, etc.) e adicionar os novos comandos de menu.
 
-1. **Expandir `MODULE_MENU`** com os 8 novos agrupamentos, cada um com `description`, `options[]` (key, label, emoji, desc)
+### 5. Atualizar `showQueryMenu` (~linha 5665)
+Remover botões individuais que agora estão em menus agrupados. Em vez de listar "Chassi", "Renavam", "Motor" separadamente, o menu deve mostrar apenas os comandos "mãe": CPF, CNPJ, Placa, Foto, Nome, Parentes, Processos, Advogado, etc.
 
-2. **Limpar `commandMap`** — remover entradas individuais que agora são cobertas pelo menu (ex: `chassi`, `renavam`, `motor` ficam apenas dentro do menu `/placa`)
-
-3. **Manter a lógica existente** — se só 1 módulo habilitado, executa direto; se múltiplos, mostra menu com botões
+### 6. Verificar preços
+Os planos são carregados do banco dinamicamente (`getPlans()`), então os preços no menu estão atualizados (Diária R$2, Semanal R$15, Quinzenal R$20, Mensal R$30). Nenhuma alteração necessária nos preços.
 
 ### Resultado
-- Menos comandos para o usuário memorizar
-- Interface consistente com o padrão já usado no `/cpf`
-- Cada botão com descrição clara do que consulta
-- Segurança mantida (ownership por userId)
+- Zero referências `-isk` no código
+- `/comandos` lista apenas os 75 módulos reais com nomes limpos
+- Central de Consultas simplificada com botões agrupados
+- Menus de seleção continuam funcionando normalmente
 
