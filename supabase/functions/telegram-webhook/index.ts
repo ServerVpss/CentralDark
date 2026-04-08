@@ -4573,9 +4573,12 @@ function formatNomeResult(
   records.slice(0, 20).forEach((r, i) => {
     const nome = String(r.nome || '').trim().toUpperCase();
     const cpf = String(r.cpf || '').trim();
-    const nasc = String(r.dataNascimento || '').trim();
+    const nasc = String(r.dataNascimento || r.nasc || '').trim();
     const mae = String(r.nomeMae || '').trim().toUpperCase();
+    const pai = String(r.nomePai || '').trim().toUpperCase();
     const sexo = String(r.sexo || '').trim();
+    const cidade = String(r.cidade || '').trim();
+    const uf = String(r.uf || '').trim();
 
     lines.push(`┌─────────────────────────────`);
     lines.push(`│ 👤 RESULTADO ${i + 1}`);
@@ -4585,6 +4588,8 @@ function formatNomeResult(
     if (nasc) lines.push(`│ 📅 Nascimento: ${nasc}`);
     if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
     if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
+    if (pai) lines.push(`│ 👨 Pai: ${pai}`);
+    if (cidade || uf) lines.push(`│ 📍 Local: ${[cidade, uf].filter(Boolean).join('/')}`);
     lines.push(`└─────────────────────────────`);
     lines.push(``);
   });
