@@ -2642,12 +2642,12 @@ async function executeQueryWithCache(
       if (response.status === 504) {
         return { 
           data: { error: `⏱️ A consulta <b>${queryType}</b> demorou demais para responder.\n\n💡 <i>Isso pode acontecer em horários de pico. Tente novamente em alguns segundos.</i>` }, 
-          fromCache: false 
+          fromCache: false, warnings: [] 
         };
       }
       return { 
         data: { error: `Erro na consulta: ${response.status}` }, 
-        fromCache: false 
+        fromCache: false, warnings: [] 
       };
     }
     
@@ -2666,12 +2666,12 @@ async function executeQueryWithCache(
     if (error.name === 'AbortError') {
       return { 
         data: { error: `⏱️ A consulta <b>${queryType}</b> excedeu o tempo limite.\n\n💡 <i>Tente novamente em alguns segundos.</i>` }, 
-        fromCache: false 
+        fromCache: false, warnings: [] 
       };
     }
     return { 
       data: { error: `⚠️ Erro de conexão. Tente novamente.` }, 
-      fromCache: false 
+      fromCache: false, warnings: [] 
     };
   }
 }
