@@ -496,140 +496,140 @@ export default function TelegramUsers() {
                 <p>Nenhuma assinatura encontrada</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID Telegram</TableHead>
-                      <TableHead>Plano</TableHead>
-                      <TableHead>Valor</TableHead>
-                      <TableHead>Início</TableHead>
-                      <TableHead>Expira</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {paginatedSubscriptions.map((sub) => {
-                      const expired = isExpired(sub.expires_at);
-                      const days = daysLeft(sub.expires_at);
-                      return (
-                        <TableRow key={sub.id}>
-                          <TableCell className="font-mono">
-                            {sub.telegram_user_id}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Crown className="h-4 w-4 text-primary" />
-                              {sub.plan_name}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            R$ {Number(sub.value).toFixed(2)}
-                          </TableCell>
-                          <TableCell className="text-muted-foreground">
-                            {new Date(sub.started_at).toLocaleDateString("pt-BR")}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="h-4 w-4 text-muted-foreground" />
-                              {new Date(sub.expires_at).toLocaleDateString("pt-BR")}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            {expired ? (
-                              <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30">
-                                Expirado
-                              </Badge>
-                            ) : days <= 3 ? (
-                              <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
-                                <AlertTriangle className="h-3 w-3 mr-1" />
-                                {days}d restante
-                              </Badge>
-                            ) : (
-                              <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-                                <CheckCircle className="h-3 w-3 mr-1" />
-                                {days}d restante
-                              </Badge>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  Ações <ChevronDown className="ml-1 h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => {
-                                  setEditingSub(sub);
-                                  setEditDays("");
-                                }}>
-                                  <Clock className="mr-2 h-4 w-4" />
-                                  Estender Dias
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleCancelSubscription(sub)}
-                                  className="text-warning"
-                                >
-                                  <XCircle className="mr-2 h-4 w-4" />
-                                  Cancelar
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleDeleteSubscription(sub)}
-                                  className="text-destructive"
-                                >
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  Excluir
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
-
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-border/50">
-                  <div className="text-sm text-muted-foreground">
-                    Mostrando {startIndex + 1} - {Math.min(startIndex + pageSize, filteredSubscriptions.length)} de {filteredSubscriptions.length}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(1)} disabled={currentPage === 1}>
-                      <ChevronsLeft className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <div className="flex items-center gap-1 mx-2">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        let pageNum: number;
-                        if (totalPages <= 5) pageNum = i + 1;
-                        else if (currentPage <= 3) pageNum = i + 1;
-                        else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
-                        else pageNum = currentPage - 2 + i;
+              <>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID Telegram</TableHead>
+                        <TableHead>Plano</TableHead>
+                        <TableHead>Valor</TableHead>
+                        <TableHead>Início</TableHead>
+                        <TableHead>Expira</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="text-right">Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {paginatedSubscriptions.map((sub) => {
+                        const expired = isExpired(sub.expires_at);
+                        const days = daysLeft(sub.expires_at);
                         return (
-                          <Button key={pageNum} variant={currentPage === pageNum ? "default" : "outline"} size="icon" className="h-8 w-8" onClick={() => goToPage(pageNum)}>
-                            {pageNum}
-                          </Button>
+                          <TableRow key={sub.id}>
+                            <TableCell className="font-mono">
+                              {sub.telegram_user_id}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Crown className="h-4 w-4 text-primary" />
+                                {sub.plan_name}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              R$ {Number(sub.value).toFixed(2)}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                              {new Date(sub.started_at).toLocaleDateString("pt-BR")}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Calendar className="h-4 w-4 text-muted-foreground" />
+                                {new Date(sub.expires_at).toLocaleDateString("pt-BR")}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {expired ? (
+                                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30">
+                                  Expirado
+                                </Badge>
+                              ) : days <= 3 ? (
+                                <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
+                                  <AlertTriangle className="h-3 w-3 mr-1" />
+                                  {days}d restante
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="bg-success/10 text-success border-success/30">
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  {days}d restante
+                                </Badge>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm">
+                                    Ações <ChevronDown className="ml-1 h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => {
+                                    setEditingSub(sub);
+                                    setEditDays("");
+                                  }}>
+                                    <Clock className="mr-2 h-4 w-4" />
+                                    Estender Dias
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => handleCancelSubscription(sub)}
+                                    className="text-warning"
+                                  >
+                                    <XCircle className="mr-2 h-4 w-4" />
+                                    Cancelar
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => handleDeleteSubscription(sub)}
+                                    className="text-destructive"
+                                  >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Excluir
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
                         );
                       })}
-                    </div>
-                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
-                      <ChevronsRight className="h-4 w-4" />
-                    </Button>
-                  </div>
+                    </TableBody>
+                  </Table>
                 </div>
-              )}
-            </>
-            )
+
+                {totalPages > 1 && (
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-border/50">
+                    <div className="text-sm text-muted-foreground">
+                      Mostrando {startIndex + 1} - {Math.min(startIndex + pageSize, filteredSubscriptions.length)} de {filteredSubscriptions.length}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(1)} disabled={currentPage === 1}>
+                        <ChevronsLeft className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <div className="flex items-center gap-1 mx-2">
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                          let pageNum: number;
+                          if (totalPages <= 5) pageNum = i + 1;
+                          else if (currentPage <= 3) pageNum = i + 1;
+                          else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                          else pageNum = currentPage - 2 + i;
+                          return (
+                            <Button key={pageNum} variant={currentPage === pageNum ? "default" : "outline"} size="icon" className="h-8 w-8" onClick={() => goToPage(pageNum)}>
+                              {pageNum}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
+                        <ChevronsRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </CardContent>
         </Card>
 
