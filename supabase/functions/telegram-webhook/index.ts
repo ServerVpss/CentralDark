@@ -2615,7 +2615,7 @@ async function executeQueryWithCache(
   queryType: string, 
   queryInput: string, 
   estado?: string
-): Promise<{ data: Record<string, unknown>; fromCache: boolean }> {
+): Promise<{ data: Record<string, unknown>; fromCache: boolean; warnings: string[] }> {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   
