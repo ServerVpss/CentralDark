@@ -4420,7 +4420,8 @@ function formatNomeResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📝 Nome';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>`);
   lines.push(``);
 
   let records: Record<string, unknown>[] = [];
@@ -4472,7 +4473,8 @@ function formatEmailResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📧 Email';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Consulta por e-mail retorna pessoas que possuem este endereço de e-mail vinculado em seus cadastros.</i>`);
   lines.push(``);
 
   let records: Record<string, unknown>[] = [];
@@ -4532,7 +4534,8 @@ function formatCepResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📍 CEP';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Consulta por CEP retorna moradores registrados nesta região. Os dados são baseados em registros cadastrais e podem incluir residentes atuais e anteriores.</i>`);
   lines.push(``);
 
   let records: Record<string, unknown>[] = [];
@@ -4601,7 +4604,8 @@ function formatScoreResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📊 Score';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Análise de crédito e score financeiro baseada em dados cadastrais e histórico de pagamentos.</i>`);
   lines.push(``);
 
   let basicos: Record<string, unknown> = {};
