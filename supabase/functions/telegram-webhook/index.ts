@@ -6992,7 +6992,8 @@ class BotHandler {
         return;
       }
       const userFirstName = message.from?.first_name || 'usuário';
-      await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName);
+      const userUsername = message.from?.username;
+      await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName, userUsername);
       return;
     }
 
@@ -7338,7 +7339,8 @@ class BotHandler {
       if (enabledOptions.length === 1) {
         const singleModule = enabledOptions[0].key;
         const userFirstName = message.from?.first_name || 'usuário';
-        await this.processQuery(chatId, telegramUserId, singleModule, queryInput, undefined, userFirstName);
+        const userUsername = message.from?.username;
+        await this.processQuery(chatId, telegramUserId, singleModule, queryInput, undefined, userFirstName, userUsername);
         return;
       }
 
@@ -7969,7 +7971,8 @@ class BotHandler {
           try { await deleteMessage(this.token, chatId, messageId); } catch (_e) { /* ignore */ }
         }
         const telegramUserName = callback.from?.first_name || 'Usuário';
-        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName);
+        const telegramUsernameStr = callback.from?.username;
+        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName, telegramUsernameStr);
       }
       return;
     }
@@ -7998,7 +8001,8 @@ class BotHandler {
       const input = parts.slice(1).join(":");
       if (moduleKey && input) {
         const telegramUserName = callback.from?.first_name || 'Usuário';
-        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName);
+        const telegramUsernameStr = callback.from?.username;
+        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName, telegramUsernameStr);
       }
       return;
     }
