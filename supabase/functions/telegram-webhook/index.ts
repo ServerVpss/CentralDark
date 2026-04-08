@@ -3515,6 +3515,15 @@ function formatTelefoneResult(
     }
   }
 
+  // Also flatten dados directly if telefone[] was not found
+  if (dados && typeof dados === 'object') {
+    for (const [k, v] of Object.entries(dados)) {
+      if (k === 'telefone' || k === 'telefones') continue;
+      if (v !== null && v !== undefined && v !== '' && typeof v !== 'object' && !(k in data)) {
+        data[k] = v;
+      }
+    }
+  }
   const getValue = (keys: string[]): string => {
     for (const key of keys) {
       const lowerKey = key.toLowerCase();
