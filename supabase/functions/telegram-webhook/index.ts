@@ -3387,7 +3387,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     'mae', 'maefull', 'mae-isk', 
     'rg', 'rg-3', 'rg-isk', 'cnh', 'cnh-isk', 
     'pis', 'pis-3', 'titulo', 'titulo-isk',
-    'nomeabreviadofiltros', 'processo', 'advogadooabuf',
+    'processo', 'advogadooabuf',
     'catcpf', 'catnumero', 'irpf-isk', 'vacinas-isk', 'obito-isk',
   ];
   if (cpfLikeModules.includes(queryType)) {
@@ -4558,13 +4558,15 @@ function formatNomeResult(
     if (Array.isArray(arr)) records = arr as Record<string, unknown>[];
   }
   // Fallback: try data.data[] (nomeabreviadofiltros format)
-  if (records.length === 0 && Array.isArray(data.data)) {
-    records = data.data as Record<string, unknown>[];
+  if (records.length === 0 && Array.isArray((data as any).data)) {
+    records = (data as any).data as Record<string, unknown>[];
   }
   // Fallback: try data.dados directly if it's an array
   if (records.length === 0 && Array.isArray(data.dados)) {
     records = data.dados as Record<string, unknown>[];
   }
+
+  
 
   if (records.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
