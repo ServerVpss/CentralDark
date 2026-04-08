@@ -202,68 +202,32 @@ async function loadModuleStatus(supabase: SupabaseClient): Promise<Record<string
 const queryTypeAliases: Record<string, string> = {
   tel: "telefone",
   telefone: "telefone",
-  // Aliases numéricos (novos, user-friendly)
-  cpf2: "cpffull", cpf3: "cpf-isk",
-  nome2: "nomefull", nome3: "nome-3",
-  mae2: "maefull", mae3: "mae-isk",
-  parentes2: "parentes-3", parentes3: "parentes-isk",
-  telefone2: "telefonefull", telefone3: "telefone-3", telefone4: "telefone-isk",
-  email2: "emailfull", email3: "email-3", email4: "email-isk",
-  cep2: "cepfull", cep3: "cep-3", cep4: "cep-isk",
-  score2: "score-3", score3: "score-isk",
-  rg2: "rg-3", rg3: "rg-isk",
-  pis2: "pis-3",
-  placa2: "placa-serpro", placa3: "placa-sesp", placa4: "placa-isk",
-  cnh2: "cnh-isk",
-  pix2: "pix-isk",
-  titulo2: "titulo-isk",
-  processos2: "processos-isk",
-  cnpj2: "cnpj-isk", cnpj3: "cnpj-cred-isk",
-  chassi2: "chassi-isk", renavam2: "renavam-isk", motor2: "motor-isk",
-  // Foto iSeek (numeradas)
-  fotosp2: "fotosp-isk", fotorj2: "fotorj-isk", fotopr2: "fotopr-isk",
-  fotoce2: "fotoce-isk", fotoma2: "fotoma-isk", fotoes2: "fotoes-isk",
-  fotodf2: "fotodf-isk", fototo2: "fototo-isk", fotoms2: "fotoms-isk",
-  fotoro2: "fotoro-isk", fotopi2: "fotopi-isk", fotogo2: "fotogo-isk",
-  fotomg2: "fotomg-isk", fotomt2: "fotomt-isk", fotoba2: "fotoba-isk",
-  fotors2: "fotors-isk", fotosc2: "fotosc-isk", fotopa2: "fotopa-isk",
-  fotopb2: "fotopb-isk", fotope2: "fotope-isk", fotorn2: "fotorn-isk",
-  // iSeek exclusivos (sem sufixo no comando)
+  cpf2: "cpffull",
+  cpf4: "cpf-spc", cpf5: "cpfsus",
+  score4: "score2",
+  // Módulos exclusivos
   irpf: "irpf", vacinas: "vacinas", obito: "obito",
-  // Pessoa
   nasc: "nasc", pai: "pai", registro: "registro", nomeabreviadofiltros: "nomeabreviadofiltros",
-  // Documento
   nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
-  // Financeiro
   assessoria: "assessoria", bens: "bens", cheque: "cheque",
-  dividas: "dividas", iptu: "iptu", score4: "score2", rais: "rais",
-  // Empresa
+  dividas: "dividas", iptu: "iptu", rais: "rais",
   catcpf: "catcpf", catnumero: "catnumero",
-  // Justiça
   advogadocpf: "advogadocpf", advogadooab: "advogadooab",
   advogadooabuf: "advogadooabuf", certidoes: "certidoes",
   mandado: "mandado", processo: "processo",
-  // Governo
   beneficios: "beneficios", faculdades: "faculdades",
   func: "func", matricula: "matricula",
-  // Veículos
   veiculos: "veiculos", crlvmt: "crlvmt", crlvto: "crlvto",
   crlvmtfoto: "crlvmt-foto", crlvtofoto: "crlvto-foto",
-  // Fotos exclusivas iSeek
   fotoal: "fotoal", fotocnh: "fotocnh", fotodetran: "fotodetran",
-  fotogo3: "fotogo", fotomapresos: "fotomapresos",
-  fotonc: "fotonc", fotopb3: "fotopb", fotope3: "fotope",
-  fotorn: "fotorn",
-  // Aliases antigos (compatibilidade)
-  cpfisk: "cpf-isk",
-  placasesp: "placa-sesp",
-  pis3: "pis-3",
-  // Aliases de nome descritivo
+  fotomapresos: "fotomapresos", fotonc: "fotonc",
+  fotopb: "fotopb", fotope: "fotope", fotorn: "fotorn",
+  // Aliases descritivos
   titulo: "titulo", endereco: "endereco", renda: "renda",
   processos: "processos", bnmp: "bnmp-lc", siel: "siel",
   tse: "tse-3", mae: "mae", credilink: "credilink",
   spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
-  cnpj: "cnpj-cred",
+  cnpj: "cnpj",
 };
 
 function normalizeQueryType(queryType: string): string {
@@ -281,40 +245,33 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
 }
 
 const queryTypeLabels: Record<string, string> = {
-  cpf: "👤 CPF", cpffull: "👤 CPF 2", "cpf-isk": "👤 CPF 3",
-  "cnpj-cred": "🏢 CNPJ",
-  placa: "🚗 Placa", "placa-serpro": "🚗 Placa 2", "placa-sesp": "🚗 Placa 3",
-  telefone: "📞 Telefone", telefonefull: "📞 Telefone 2", "telefone-3": "📞 Telefone 3",
-  email: "📧 Email", emailfull: "📧 Email 2", "email-3": "📧 Email 3",
-  cep: "📍 CEP", cepfull: "📍 CEP 2", "cep-3": "📍 CEP 3",
-  nome: "📝 Nome", nomefull: "📝 Nome 2", "nome-3": "📝 Nome 3",
-  score: "📊 Score", "score-3": "📊 Score 2",
+  cpf: "👤 CPF", cpffull: "👤 CPF Completo",
+  "cnpj": "🏢 CNPJ",
+  placa: "🚗 Placa",
+  telefone: "📞 Telefone",
+  email: "📧 Email",
+  cep: "📍 CEP",
+  nome: "📝 Nome",
+  score: "📊 Score",
   fotosp: "📸 Foto SP", fotorj: "📸 Foto RJ", fotomg: "📸 Foto MG",
   fotopr: "📸 Foto PR", fotoce: "📸 Foto CE", fotoma: "📸 Foto MA",
   fotoes: "📸 Foto ES", fotodf: "📸 Foto DF", fototo: "📸 Foto TO",
   fotoms: "📸 Foto MS", fotoro: "📸 Foto RO", fotopi: "📸 Foto PI",
-  rg: "🪪 RG", "rg-3": "🪪 RG 2", cnh: "🪪 CNH", pis: "📋 PIS", "pis-3": "📋 PIS 2",
+  rg: "🪪 RG", cnh: "🪪 CNH", pis: "📋 PIS",
   pix: "💳 PIX",
   titulo: "📜 Título Eleitor", endereco: "📍 Endereço", renda: "💰 Renda",
   processos: "⚖️ Processos", "bnmp-lc": "🔍 BNMP", siel: "🔎 SIEL",
-  "tse-3": "🗳️ TSE", mae: "👩 Mãe", maefull: "👩 Mãe 2",
-  credilink: "📊 Credilink", "cpf-spc": "👤 CPF 4 (SPC)",
-  poderaquisitivo: "💎 Poder Aquisitivo", cpfsus: "👤 CPF 5 (SUS)",
-  parentes: "👨‍👩‍👧‍👦 Parentes", "parentes-3": "👨‍👩‍👧‍👦 Parentes 2",
+  "tse-3": "🗳️ TSE", mae: "👩 Mãe",
+  credilink: "📊 Credilink", "cpf-spc": "💳 CPF SPC",
+  poderaquisitivo: "💎 Poder Aquisitivo", cpfsus: "🏥 CPF SUS",
+  parentes: "👨‍👩‍👧‍👦 Parentes",
   chassi: "🔧 Chassi", renavam: "📋 RENAVAM", motor: "⚙️ Motor",
-  // iSeek aliases
-  "telefone-isk": "📞 Telefone 4", "email-isk": "📧 Email 4", "cep-isk": "📍 CEP 4",
-  "cnpj-isk": "🏢 CNPJ 2", "cnpj-cred-isk": "🏢 CNPJ 3",
-  "placa-isk": "🚗 Placa 4", "cnh-isk": "🪪 CNH 2", "pix-isk": "💳 PIX 2",
-  "rg-isk": "🪪 RG 3", "score-isk": "📊 Score 3", "titulo-isk": "📜 Título 2",
-  "processos-isk": "⚖️ Processos 2", "mae-isk": "👩 Mãe 3", "parentes-isk": "👨‍👩‍👧‍👦 Parentes 3",
-  "chassi-isk": "🔧 Chassi 2", "renavam-isk": "📋 RENAVAM 2", "motor-isk": "⚙️ Motor 2",
-  // iSeek exclusivos
+  // Módulos exclusivos
   irpf: "💰 IRPF", vacinas: "💉 Vacinas", obito: "⚰️ Óbito",
   nasc: "👶 Nascimento", pai: "👨 Pai", registro: "📋 Registro", nomeabreviadofiltros: "📝 Nome Abreviado",
   nis: "📋 NIS", oab: "⚖️ OAB", cnham: "🪪 CNH AM", cnhnc: "🪪 CNH NC", cnhrr: "🪪 CNH RR", cnhrs: "🪪 CNH RS",
   assessoria: "💼 Assessoria", bens: "🏠 Bens", cheque: "📋 Cheque",
-  dividas: "💳 Dívidas", iptu: "🏠 IPTU", score2: "📊 Score 4", rais: "📋 RAIS",
+  dividas: "💳 Dívidas", iptu: "🏠 IPTU", score2: "📊 Score 2", rais: "📋 RAIS",
   catcpf: "🏢 CAT CPF", catnumero: "🏢 CAT Número",
   advogadocpf: "⚖️ Advogado CPF", advogadooab: "⚖️ Advogado OAB",
   advogadooabuf: "⚖️ Advogado OAB/UF", certidoes: "📜 Certidões",
@@ -326,14 +283,6 @@ const queryTypeLabels: Record<string, string> = {
   fotoal: "📸 Foto AL", fotocnh: "📸 Foto CNH", fotodetran: "📸 Foto Detran",
   fotogo: "📸 Foto GO", fotomapresos: "📸 Foto MA Presos",
   fotonc: "📸 Foto NC", fotopb: "📸 Foto PB", fotope: "📸 Foto PE", fotorn: "📸 Foto RN",
-  // Foto iSeek (numeradas)
-  "fotosp-isk": "📸 Foto SP 2", "fotorj-isk": "📸 Foto RJ 2", "fotopr-isk": "📸 Foto PR 2",
-  "fotoce-isk": "📸 Foto CE 2", "fotoma-isk": "📸 Foto MA 2", "fotoes-isk": "📸 Foto ES 2",
-  "fotodf-isk": "📸 Foto DF 2", "fototo-isk": "📸 Foto TO 2", "fotoms-isk": "📸 Foto MS 2",
-  "fotoro-isk": "📸 Foto RO 2", "fotopi-isk": "📸 Foto PI 2", "fotogo-isk": "📸 Foto GO 2",
-  "fotomg-isk": "📸 Foto MG 2", "fotomt-isk": "📸 Foto MT 2", "fotoba-isk": "📸 Foto BA 2",
-  "fotors-isk": "📸 Foto RS 2", "fotosc-isk": "📸 Foto SC 2", "fotopa-isk": "📸 Foto PA 2",
-  "fotopb-isk": "📸 Foto PB 2", "fotope-isk": "📸 Foto PE 2", "fotorn-isk": "📸 Foto RN 2",
 };
 
 const brazilianStates = [
@@ -2759,36 +2708,10 @@ function isProviderError(result: Record<string, unknown>): { isError: boolean; m
 
 // Mapa de módulos irmãos para sugestão de alternativas
 const MODULE_SIBLINGS: Record<string, string[]> = {
-  'cpf': ['cpffull', 'cpf-isk', 'cpf-spc', 'cpfsus'],
-  'cpffull': ['cpf', 'cpf-isk', 'cpf-spc', 'cpfsus'],
-  'cpf-isk': ['cpf', 'cpffull', 'cpf-spc', 'cpfsus'],
-  'cpf-spc': ['cpf', 'cpffull', 'cpf-isk', 'cpfsus'],
-  'cpfsus': ['cpf', 'cpffull', 'cpf-isk', 'cpf-spc'],
-  'placa': ['placa-serpro', 'placa-sesp'],
-  'placa-serpro': ['placa', 'placa-sesp'],
-  'placa-sesp': ['placa', 'placa-serpro'],
-  'telefone': ['telefonefull', 'telefone-3'],
-  'telefonefull': ['telefone', 'telefone-3'],
-  'telefone-3': ['telefone', 'telefonefull'],
-  'email': ['emailfull', 'email-3'],
-  'emailfull': ['email', 'email-3'],
-  'email-3': ['email', 'emailfull'],
-  'cep': ['cepfull', 'cep-3'],
-  'cepfull': ['cep', 'cep-3'],
-  'cep-3': ['cep', 'cepfull'],
-  'nome': ['nomefull', 'nome-3'],
-  'nomefull': ['nome', 'nome-3'],
-  'nome-3': ['nome', 'nomefull'],
-  'score': ['score-3'],
-  'score-3': ['score'],
-  'rg': ['rg-3'],
-  'rg-3': ['rg'],
-  'mae': ['maefull'],
-  'maefull': ['mae'],
-  'parentes': ['parentes-3'],
-  'parentes-3': ['parentes'],
-  'pis': ['pis-3'],
-  'pis-3': ['pis'],
+  'cpf': ['cpffull', 'cpf-spc', 'cpfsus'],
+  'cpffull': ['cpf', 'cpf-spc', 'cpfsus'],
+  'cpf-spc': ['cpf', 'cpffull', 'cpfsus'],
+  'cpfsus': ['cpf', 'cpffull', 'cpf-spc'],
 };
 
 // Gera botões de sugestão para módulos alternativos
@@ -2797,30 +2720,10 @@ function getSiblingButtons(moduleKey: string, queryInput: string): InlineButton[
   if (!siblings || siblings.length === 0) return [];
   
   const moduleCmd: Record<string, string> = {
-    cpf: "/cpf", cpffull: "/cpf2", "cpf-isk": "/cpf3", "cpf-spc": "/cpf4", cpfsus: "/cpf5",
-    placa: "/placa", "placa-serpro": "/placa2", "placa-sesp": "/placa3", "placa-isk": "/placa4",
-    telefone: "/telefone", telefonefull: "/telefone2", "telefone-3": "/telefone3", "telefone-isk": "/telefone4",
-    email: "/email", emailfull: "/email2", "email-3": "/email3", "email-isk": "/email4",
-    cep: "/cep", cepfull: "/cep2", "cep-3": "/cep3", "cep-isk": "/cep4",
-    nome: "/nome", nomefull: "/nome2", "nome-3": "/nome3",
-    score: "/score", "score-3": "/score2", "score-isk": "/score3",
-    rg: "/rg", "rg-3": "/rg2", "rg-isk": "/rg3",
-    cnh: "/cnh", "cnh-isk": "/cnh2",
-    mae: "/mae", maefull: "/mae2", "mae-isk": "/mae3",
-    parentes: "/parentes", "parentes-3": "/parentes2", "parentes-isk": "/parentes3",
-    pis: "/pis", "pis-3": "/pis2",
-    pix: "/pix", "pix-isk": "/pix2",
-    titulo: "/titulo", "titulo-isk": "/titulo2",
-    processos: "/processos", "processos-isk": "/processos2",
-    chassi: "/chassi", "chassi-isk": "/chassi2",
-    renavam: "/renavam", "renavam-isk": "/renavam2",
-    motor: "/motor", "motor-isk": "/motor2",
-    "cnpj-cred": "/cnpj", "cnpj-isk": "/cnpj2", "cnpj-cred-isk": "/cnpj3",
-    "irpf-isk": "/irpf", "vacinas-isk": "/vacinas", "obito-isk": "/obito",
+    cpf: "/cpf", cpffull: "/cpf2", "cpf-spc": "/cpf4", cpfsus: "/cpf5",
   };
   
   const buttons: InlineButton[][] = [];
-  // Max 3 siblings shown
   const shown = siblings.slice(0, 3);
   for (const sib of shown) {
     const label = queryTypeLabels[sib] || sib;
@@ -7354,33 +7257,96 @@ class BotHandler {
       fotope: "PE", fotoma: "MA", fotoes: "ES", fotodf: "DF", fototo: "TO",
     };
 
+    // ============ MENU DE SELEÇÃO DE MÓDULOS ============
+    // Comandos que abrem menu de escolha ao invés de executar direto
+    const MODULE_MENU: Record<string, Array<{ key: string; label: string; emoji: string }>> = {
+      cpf: [
+        { key: "cpf", label: "CPF Básico", emoji: "👤" },
+        { key: "cpffull", label: "CPF Completo", emoji: "📋" },
+        { key: "cpf-spc", label: "CPF SPC", emoji: "💳" },
+        { key: "cpfsus", label: "CPF SUS", emoji: "🏥" },
+      ],
+    };
+
+    // Verifica se este comando tem menu de seleção E tem input
+    const menuOptions = MODULE_MENU[command];
+    if (menuOptions && queryInput) {
+      // Verificar se pelo menos 1 módulo está ativado
+      const enabledChecks = await Promise.all(
+        menuOptions.map(async (opt) => ({
+          ...opt,
+          enabled: await isQueryTypeEnabled(opt.key, this.supabase),
+        }))
+      );
+      const enabledOptions = enabledChecks.filter((o) => o.enabled);
+
+      if (enabledOptions.length === 0) {
+        logCmd('INFO', 'CMD_BLOCKED', { reason: 'all_modules_disabled', command, chatId, userId: telegramUserId });
+        return;
+      }
+
+      // Se só tem 1 módulo habilitado, executa direto
+      if (enabledOptions.length === 1) {
+        const singleModule = enabledOptions[0].key;
+        const userFirstName = message.from?.first_name || 'usuário';
+        await this.processQuery(chatId, telegramUserId, singleModule, queryInput, undefined, userFirstName);
+        return;
+      }
+
+      // Mostrar menu com botões — cada botão contém o userId para segurança
+      const buttons: InlineButton[][] = enabledOptions.map((opt) => [
+        btn(`${opt.emoji} ${opt.label}`, `select_mod:${opt.key}:${telegramUserId}:${queryInput}`, "primary"),
+      ]);
+      buttons.push([btn("🗑️ Apagar", `delete_msg_user:${telegramUserId}`)]);
+
+      await telegramRequest(this.token, "sendMessage", {
+        chat_id: chatId,
+        text: `🔎 <b>Escolha o módulo de consulta:</b>\n\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção abaixo:`,
+        parse_mode: "HTML",
+        reply_to_message_id: replyToId,
+        reply_markup: { inline_keyboard: buttons },
+      });
+      return;
+    }
+
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
-      cpf2: "cpffull", cpf3: "cpf-isk",
-      cnpj: "cnpj-cred", placa: "placa",
-      placa2: "placa-serpro", placa3: "placa-sesp",
-      placasesp: "placa-sesp",
-      telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
-      telefone2: "telefonefull", telefone3: "telefone-3",
-      email: "email", emailfull: "emailfull",
-      email2: "emailfull", email3: "email-3",
-      cep: "cep", cepfull: "cepfull", cep2: "cepfull", cep3: "cep-3",
-      nome: "nome", nomefull: "nomefull", nome2: "nomefull", nome3: "nome-3",
-      score: "score", score2: "score-3",
-      rg: "rg", rg2: "rg-3",
-      pis: "pis", pis2: "pis-3",
-      mae: "mae", maefull: "maefull", mae2: "maefull",
-      parentes: "parentes", parentes2: "parentes-3",
+      cpf: "cpf", cpffull: "cpffull",
+      cpf2: "cpffull", cpf4: "cpf-spc", cpf5: "cpfsus",
+      cnpj: "cnpj", placa: "placa",
+      telefone: "telefone", tel: "telefone",
+      email: "email",
+      cep: "cep",
+      nome: "nome",
+      score: "score", score4: "score2",
+      rg: "rg",
+      pis: "pis",
+      mae: "mae",
+      parentes: "parentes",
       cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
       titulo: "titulo", endereco: "endereco", renda: "renda",
       processos: "processos", bnmp: "bnmp-lc", siel: "siel",
       tse: "tse-3", credilink: "credilink",
-      spc: "cpf-spc", cpf4: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", cpf5: "cpfsus",
+      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
       chassi: "chassi", renavam: "renavam", motor: "motor",
-      // Aliases antigos (compatibilidade)
-      rg3: "rg-3", pis3: "pis-3", cep3: "cep-3",
-      nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
+      // Módulos exclusivos
+      irpf: "irpf", vacinas: "vacinas", obito: "obito",
+      nasc: "nasc", pai: "pai", registro: "registro",
+      nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
+      assessoria: "assessoria", bens: "bens", cheque: "cheque",
+      dividas: "dividas", iptu: "iptu", rais: "rais",
+      catcpf: "catcpf", catnumero: "catnumero",
+      advogadocpf: "advogadocpf", advogadooab: "advogadooab",
+      advogadooabuf: "advogadooabuf", certidoes: "certidoes",
+      mandado: "mandado", processo: "processo",
+      beneficios: "beneficios", faculdades: "faculdades",
+      func: "func", matricula: "matricula",
+      veiculos: "veiculos", crlvmt: "crlvmt", crlvto: "crlvto",
+      crlvmtfoto: "crlvmt-foto", crlvtofoto: "crlvto-foto",
+      fotoal: "fotoal", fotocnh: "fotocnh", fotodetran: "fotodetran",
+      fotomapresos: "fotomapresos", fotonc: "fotonc",
+      fotopb: "fotopb", fotope: "fotope", fotorn: "fotorn",
+      nomeabreviadofiltros: "nomeabreviadofiltros",
       // State-specific foto shortcuts
       ...Object.fromEntries(Object.keys(fotoStateCommandMap).map(k => [k, "foto"])),
     };
@@ -7924,6 +7890,51 @@ class BotHandler {
           "❌ <b>Erro na consulta de CPF</b>\n\nTente novamente.",
           keyboard([btn("🗑️ Apagar", "delete_msg")])
         );
+      }
+      return;
+    }
+
+    // ============ SELECT MODULE (menu de seleção) ============
+    if (data.startsWith("select_mod:")) {
+      const parts = data.replace("select_mod:", "").split(":");
+      const moduleKey = parts[0];
+      const ownerId = parseInt(parts[1], 10);
+      const input = parts.slice(2).join(":");
+
+      // Segurança: apenas o usuário que fez a consulta pode clicar
+      if (ownerId !== telegramUserId) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "❌ Apenas quem fez a consulta pode selecionar o módulo.",
+          show_alert: true,
+        });
+        return;
+      }
+
+      if (moduleKey && input) {
+        // Deletar mensagem do menu
+        if (messageId) {
+          try { await deleteMessage(this.token, chatId, messageId); } catch (_e) { /* ignore */ }
+        }
+        const telegramUserName = callback.from?.first_name || 'Usuário';
+        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName);
+      }
+      return;
+    }
+
+    // Delete message with user check
+    if (data.startsWith("delete_msg_user:")) {
+      const ownerId = parseInt(data.replace("delete_msg_user:", ""), 10);
+      if (ownerId !== telegramUserId) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "❌ Apenas quem fez a consulta pode apagar.",
+          show_alert: true,
+        });
+        return;
+      }
+      if (messageId) {
+        try { await deleteMessage(this.token, chatId, messageId); } catch (_e) { /* ignore */ }
       }
       return;
     }

@@ -9,7 +9,7 @@ const corsHeaders = {
 // =============== WHITELIST EXATA DOS 75 MÓDULOS ===============
 const MODULE_WHITELIST = new Set([
   // Pessoa
-  "cpf", "nome", "rg", "titulo", "parentes", "mae", "cnh", "pis",
+  "cpf", "cpffull", "nome", "rg", "titulo", "parentes", "mae", "cnh", "pis",
   "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
   // Documentos
   "cnham", "cnhrs", "cnhrr", "cnhnc", "oab",
@@ -18,7 +18,7 @@ const MODULE_WHITELIST = new Set([
   // Contato
   "telefone", "email", "cep", "endereco",
   // Financeiro
-  "pix", "score", "renda", "credilink", "poderaquisitivo",
+  "pix", "score", "renda", "credilink", "poderaquisitivo", "cpf-spc",
   "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
   // Veículos
   "placa", "chassi", "renavam", "motor",
@@ -179,7 +179,7 @@ const TEXT_MODULES = new Set([
 ]);
 
 const NUMERIC_MODULES = new Set([
-  "cpf", "cpfsus", "rg", "titulo", "cnh", "pis",
+  "cpf", "cpffull", "cpfsus", "cpf-spc", "rg", "titulo", "cnh", "pis",
   "telefone", "cep",
   "score", "renda", "credilink", "poderaquisitivo",
   "parentes", "renavam",
@@ -243,7 +243,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
   }
 
   const CPF_MODULES = [
-    "cpf", "cpfsus", "score", "renda",
+    "cpf", "cpffull", "cpfsus", "cpf-spc", "score", "renda",
     "credilink", "poderaquisitivo", "parentes", "processos",
     "siel", "tse-3", "titulo", "mae",
     "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
