@@ -670,6 +670,7 @@ async function handleQuery(
           data: r,
           meta: buildMeta("success", totalProviderMs),
           errors: [],
+          warnings: inputWarnings,
         };
       }
     }
@@ -704,6 +705,7 @@ async function handleQuery(
           data: { ...result.data, foto: fotoData, cpf: cleanInput, estado_encontrado: stateUpper },
           meta: buildMeta("success", result.provider_duration_ms),
           errors: [],
+          warnings: inputWarnings,
         };
       }
     }
@@ -741,6 +743,7 @@ async function handleQuery(
     data: result.data,
     meta: buildMeta("success", result.provider_duration_ms),
     errors: [],
+    warnings: inputWarnings,
   };
 }
 
