@@ -3279,8 +3279,8 @@ function createMultiPersonKeyboard(
   if (totalPages > 1) {
     const navRow: InlineButton[] = [];
     
-    // Use appropriate page callback based on query type
-    const pagePrefix = queryType === 'telefone' ? 'tel_page' : 'cep_page';
+    const isNome = queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros';
+    const pagePrefix = isNome ? 'nome_page' : queryType === 'telefone' ? 'tel_page' : 'cep_page';
     
     if (page > 0) {
       navRow.push({ text: "◀️ Anterior", callback_data: `${pagePrefix}:${paginationId}:${page - 1}` });
