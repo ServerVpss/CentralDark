@@ -7266,6 +7266,21 @@ class BotHandler {
         { key: "cpf-spc", label: "CPF SPC", emoji: "💳" },
         { key: "cpfsus", label: "CPF SUS", emoji: "🏥" },
       ],
+      nome: [
+        { key: "nome", label: "Nome Completo", emoji: "📝" },
+        { key: "nomeabreviadofiltros", label: "Nome c/ Filtros", emoji: "🔍" },
+      ],
+      cnh: [
+        { key: "cnh", label: "CNH Básica", emoji: "🪪" },
+        { key: "cnham", label: "CNH AM", emoji: "🪪" },
+        { key: "cnhrs", label: "CNH RS", emoji: "🪪" },
+        { key: "cnhrr", label: "CNH RR", emoji: "🪪" },
+        { key: "cnhnc", label: "CNH NC", emoji: "🪪" },
+      ],
+      score: [
+        { key: "score", label: "Score Básico", emoji: "📊" },
+        { key: "score2", label: "Score Completo", emoji: "📈" },
+      ],
     };
 
     // Verifica se este comando tem menu de seleção E tem input
