@@ -7334,6 +7334,77 @@ class BotHandler {
           { key: "score2", label: "Score Completo", emoji: "📈", desc: "Score detalhado com análise" },
         ],
       },
+      placa: {
+        description: "🚗 <b>Módulos Veiculares disponíveis:</b>",
+        options: [
+          { key: "placa", label: "Placa", emoji: "🚗", desc: "Consulta veicular por placa" },
+          { key: "chassi", label: "Chassi", emoji: "🔧", desc: "Consulta por número do chassi" },
+          { key: "renavam", label: "Renavam", emoji: "📄", desc: "Consulta por código Renavam" },
+          { key: "motor", label: "Motor", emoji: "⚙️", desc: "Consulta por número do motor" },
+          { key: "veiculos", label: "Veículos (CPF)", emoji: "🚘", desc: "Lista veículos vinculados ao CPF" },
+        ],
+      },
+      foto: {
+        description: "📸 <b>Módulos de Foto disponíveis:</b>",
+        options: [
+          { key: "foto", label: "Foto Nacional", emoji: "📸", desc: "Busca foto em todos os estados" },
+          { key: "fotocnh", label: "Foto CNH", emoji: "🪪", desc: "Foto da CNH" },
+          { key: "fotodetran", label: "Foto Detran", emoji: "🏛️", desc: "Foto do Detran" },
+          { key: "fotonc", label: "Foto NC", emoji: "📷", desc: "Foto Nacional Complementar" },
+          { key: "fotoal", label: "Foto AL", emoji: "📷", desc: "Foto Alagoas" },
+          { key: "fotopb", label: "Foto PB", emoji: "📷", desc: "Foto Paraíba" },
+          { key: "fotope", label: "Foto PE", emoji: "📷", desc: "Foto Pernambuco" },
+          { key: "fotorn", label: "Foto RN", emoji: "📷", desc: "Foto Rio Grande do Norte" },
+          { key: "fotomapresos", label: "Foto MA Presos", emoji: "📷", desc: "Foto Maranhão (presos)" },
+        ],
+      },
+      parentes: {
+        description: "👨‍👩‍👧 <b>Módulos de Vínculos Familiares:</b>",
+        options: [
+          { key: "parentes", label: "Parentes", emoji: "👨‍👩‍👧", desc: "Todos os vínculos familiares" },
+          { key: "mae", label: "Mãe", emoji: "👩", desc: "Nome da mãe" },
+          { key: "pai", label: "Pai", emoji: "👨", desc: "Nome do pai" },
+        ],
+      },
+      processos: {
+        description: "⚖️ <b>Módulos de Processos disponíveis:</b>",
+        options: [
+          { key: "processos", label: "Processos", emoji: "⚖️", desc: "Processos judiciais vinculados" },
+          { key: "mandado", label: "Mandado", emoji: "🔍", desc: "Mandados de prisão" },
+          { key: "processo", label: "Processo (número)", emoji: "📋", desc: "Consulta por número do processo" },
+        ],
+      },
+      advogado: {
+        description: "⚖️ <b>Módulos de Advogado/OAB:</b>",
+        options: [
+          { key: "advogadocpf", label: "Advogado por CPF", emoji: "👤", desc: "Busca registro OAB pelo CPF" },
+          { key: "advogadooab", label: "Advogado por OAB", emoji: "⚖️", desc: "Busca pelo número OAB" },
+          { key: "advogadooabuf", label: "Advogado OAB+UF", emoji: "📍", desc: "Busca OAB filtrando por estado" },
+        ],
+      },
+      cat: {
+        description: "🏢 <b>Módulos de CAT disponíveis:</b>",
+        options: [
+          { key: "catcpf", label: "CAT por CPF", emoji: "👤", desc: "Acidente de trabalho por CPF" },
+          { key: "catnumero", label: "CAT por Número", emoji: "🔢", desc: "Acidente de trabalho por número" },
+        ],
+      },
+      crlv: {
+        description: "📄 <b>Módulos de CRLV disponíveis:</b>",
+        options: [
+          { key: "crlvmt", label: "CRLV MT", emoji: "📄", desc: "CRLV Mato Grosso" },
+          { key: "crlvto", label: "CRLV TO", emoji: "📄", desc: "CRLV Tocantins" },
+          { key: "crlvmt-foto", label: "CRLV MT (Foto)", emoji: "📸", desc: "CRLV MT com foto" },
+          { key: "crlvto-foto", label: "CRLV TO (Foto)", emoji: "📸", desc: "CRLV TO com foto" },
+        ],
+      },
+      cep: {
+        description: "📍 <b>Módulos de Localização disponíveis:</b>",
+        options: [
+          { key: "cep", label: "CEP", emoji: "📍", desc: "Busca moradores por CEP" },
+          { key: "endereco", label: "Endereço", emoji: "🏠", desc: "Endereço completo por CPF" },
+        ],
+      },
     };
 
     // Verifica se este comando tem menu de seleção E tem input
@@ -7384,42 +7455,29 @@ class BotHandler {
     }
 
     const commandMap: Record<string, string> = {
-      cpf: "cpf",
-      cnpj: "cnpj", placa: "placa",
+      // Comandos com menu próprio (MODULE_MENU) — fallback se sem input
+      cpf: "cpf", nome: "nome", cnh: "cnh", score: "score",
+      placa: "placa", foto: "foto", nacional: "foto",
+      parentes: "parentes", processos: "processos",
+      advogado: "advogadocpf", cat: "catcpf",
+      crlv: "crlvmt", cep: "cep",
+      // Comandos diretos (sem menu)
+      cnpj: "cnpj",
       telefone: "telefone", tel: "telefone",
       email: "email",
-      cep: "cep",
-      nome: "nome",
-      score: "score", score2: "score2",
-      rg: "rg",
-      pis: "pis",
-      mae: "mae",
-      parentes: "parentes",
-      cnh: "cnh", pix: "pix",
-      foto: "foto", nacional: "foto",
-      titulo: "titulo", endereco: "endereco", renda: "renda",
-      processos: "processos", bnmp: "bnmp-lc", siel: "siel",
+      rg: "rg", pis: "pis", pix: "pix",
+      titulo: "titulo", renda: "renda",
+      bnmp: "bnmp-lc", siel: "siel",
       tse: "tse-3", credilink: "credilink",
       poder: "poderaquisitivo",
-      chassi: "chassi", renavam: "renavam", motor: "motor",
-      // Módulos exclusivos
-      irpf: "irpf", vacinas: "vacinas", obito: "obito",
-      nasc: "nasc", pai: "pai", registro: "registro",
-      nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
+      irpf: "irpf", vacinas: "vacinas",
+      nasc: "nasc", registro: "registro",
+      nis: "nis", oab: "oab",
       assessoria: "assessoria", bens: "bens", cheque: "cheque",
       dividas: "dividas", iptu: "iptu", rais: "rais",
-      catcpf: "catcpf", catnumero: "catnumero",
-      advogadocpf: "advogadocpf", advogadooab: "advogadooab",
-      advogadooabuf: "advogadooabuf", certidoes: "certidoes",
-      mandado: "mandado", processo: "processo",
+      certidoes: "certidoes",
       beneficios: "beneficios", faculdades: "faculdades",
       func: "func", matricula: "matricula",
-      veiculos: "veiculos", crlvmt: "crlvmt", crlvto: "crlvto",
-      crlvmtfoto: "crlvmt-foto", crlvtofoto: "crlvto-foto",
-      fotoal: "fotoal", fotocnh: "fotocnh", fotodetran: "fotodetran",
-      fotomapresos: "fotomapresos", fotonc: "fotonc",
-      fotopb: "fotopb", fotope: "fotope", fotorn: "fotorn",
-      nomeabreviadofiltros: "nomeabreviadofiltros",
       // State-specific foto shortcuts
       ...Object.fromEntries(Object.keys(fotoStateCommandMap).map(k => [k, "foto"])),
     };
