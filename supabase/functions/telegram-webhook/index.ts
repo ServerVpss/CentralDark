@@ -8180,6 +8180,7 @@ class BotHandler {
       const isOwner = this.settings.owner_ids?.includes(telegramUserId);
 
       if (requesterId && requesterId !== telegramUserId && !isOwner) {
+        logCmd('INFO', 'CALLBACK_OWNERSHIP_BLOCK', { userId: telegramUserId, requesterId, data: data.substring(0, 40) });
         await telegramRequest(this.token, "answerCallbackQuery", {
           callback_query_id: callback.id,
           text: "⚠️ Apenas quem fez a consulta pode interagir com este resultado.",
