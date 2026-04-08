@@ -3660,14 +3660,14 @@ function formatTelefoneResult(
     lines.push(``);
   }
 
-  if (lines.length <= 2) {
+  if (lines.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
   const escaped = lines.map(l => escapeHtml(l));
-  return `<pre>${escaped.join('\n')}</pre>`;
+  return `${headerHtml}<pre>${escaped.join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA CPF SUS ===============
