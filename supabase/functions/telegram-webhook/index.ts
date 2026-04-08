@@ -950,6 +950,7 @@ function formatVehicleResult(
   const moduleLabel = queryType.toUpperCase().replace(/-/g, ' ');
   const lines: string[] = [];
   lines.push(`🚗 <b>CONSULTA ${moduleLabel}</b>`);
+  lines.push(`ℹ️ <i>Dados do veículo obtidos nos registros do DETRAN/DENATRAN. Inclui identificação, especificações e situação atual.</i>`);
   lines.push(`👋 Olá, <b>${escapeHtml(userName)}</b>!\n`);
 
   if (identification.length > 0) {
@@ -1007,6 +1008,7 @@ function formatCnpjResult(
 
   const lines: string[] = [];
   lines.push(`🏢 <b>CONSULTA CNPJ</b>`);
+  lines.push(`ℹ️ <i>Dados cadastrais da empresa, incluindo sócios, contatos e situação na Receita Federal.</i>`);
   lines.push(`👋 Olá, <b>${escapeHtml(userName)}</b>!\n`);
 
   // 1. DADOS CADASTRAIS
@@ -3819,6 +3821,7 @@ function formatCpfIseekResult(
 
   // ═══════════════ 👤 DADOS PESSOAIS ═══════════════
   lines.push(`👤 <b>DADOS PESSOAIS</b>`);
+  lines.push(`ℹ️ <i>Relatório completo com dados pessoais, documentos, contatos e histórico vinculado ao CPF.</i>`);
   lines.push('');
   const nome = clean(basicos.nome);
   const cpf = clean(basicos.cpf);
@@ -4420,7 +4423,8 @@ function formatNomeResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📝 Nome';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>`);
   lines.push(``);
 
   let records: Record<string, unknown>[] = [];
@@ -4472,7 +4476,8 @@ function formatEmailResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📧 Email';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Consulta por e-mail retorna pessoas que possuem este endereço de e-mail vinculado em seus cadastros.</i>`);
   lines.push(``);
 
   let records: Record<string, unknown>[] = [];
@@ -4532,7 +4537,8 @@ function formatCepResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📍 CEP';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Consulta por CEP retorna moradores registrados nesta região. Os dados são baseados em registros cadastrais e podem incluir residentes atuais e anteriores.</i>`);
   lines.push(``);
 
   let records: Record<string, unknown>[] = [];
@@ -4601,7 +4607,8 @@ function formatScoreResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📊 Score';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ <i>Análise de crédito e score financeiro baseada em dados cadastrais e histórico de pagamentos.</i>`);
   lines.push(``);
 
   let basicos: Record<string, unknown> = {};
@@ -4678,7 +4685,8 @@ function formatRendaResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const lines: string[] = [];
-  lines.push(`💰 RENDA RESULTADO`);
+  lines.push(`💰 RENDA`);
+  lines.push(`ℹ️ Estimativa de renda e poder aquisitivo baseada em dados cadastrais e histórico financeiro.`);
   lines.push(``);
 
   let basicos: Record<string, unknown> = {};
@@ -4745,7 +4753,8 @@ function formatParentesResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '👨‍👩‍👧‍👦 Parentes';
   const lines: string[] = [];
-  lines.push(`${moduleLabel} RESULTADO`);
+  lines.push(`${moduleLabel}`);
+  lines.push(`ℹ️ Vínculos familiares e parentescos identificados nos registros cadastrais do titular.`);
   lines.push(``);
 
   if (dados && typeof dados === 'object') {
@@ -4861,7 +4870,8 @@ function formatPixResult(
 
   const dados = data.dados as Record<string, unknown> | undefined;
   const lines: string[] = [];
-  lines.push(`💳 PIX RESULTADO`);
+  lines.push(`💳 PIX`);
+  lines.push(`ℹ️ Dados vinculados à chave PIX informada. Pode incluir titular e instituição financeira.`);
   lines.push(``);
 
   if (dados && typeof dados === 'object') {
