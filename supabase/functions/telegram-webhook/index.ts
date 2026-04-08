@@ -6060,6 +6060,9 @@ class BotHandler {
         } else if (showFotoNacional) {
           actionButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`, "primary")]);
         }
+        // Botões de módulos alternativos
+        const photoSiblingButtons = getSiblingButtons(usedModule, queryInput);
+        actionButtons.push(...photoSiblingButtons);
         
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
