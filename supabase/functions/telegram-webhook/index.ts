@@ -1673,7 +1673,17 @@ function buildPhotoCaption(header: string, cpf: string, result: unknown, botUser
 
 // Deep extract photo from nested API response (handles dados.data.foto.base64, etc.)
 function deepExtractPhoto(obj: unknown, depth = 0): string | null {
-  if (!obj || typeof obj !== 'object' || depth > 5) return null;
+  if (!obj || typeof obj !== 'object' || depth > 8) return null;
+
+  // Handle arrays (e.g. fotos: [{base64: "..."}])
+  if (Array.isArray(obj)) {
+    for (const item of obj) {
+      const found = deepExtractPhoto(item, depth + 1);
+      if (found) return found;
+    }
+    return null;
+  }
+
   const record = obj as Record<string, unknown>;
   
   // Check direct photo fields
@@ -1681,7 +1691,6 @@ function deepExtractPhoto(obj: unknown, depth = 0): string | null {
   for (const key of photoKeys) {
     const val = record[key];
     if (val && typeof val === 'string' && val.length > 100) {
-      // Likely base64 or URL
       if (val.startsWith('/9j/') || val.startsWith('iVBOR')) {
         return `data:image/jpeg;base64,${val}`;
       }
@@ -1690,7 +1699,7 @@ function deepExtractPhoto(obj: unknown, depth = 0): string | null {
       }
     }
     // foto could be an object like {base64: "..."} 
-    if (val && typeof val === 'object') {
+    if (val && typeof val === 'object' && !Array.isArray(val)) {
       const nested = val as Record<string, unknown>;
       if (nested.base64 && typeof nested.base64 === 'string' && nested.base64.length > 100) {
         const b64 = nested.base64;
@@ -1698,9 +1707,17 @@ function deepExtractPhoto(obj: unknown, depth = 0): string | null {
           return `data:image/jpeg;base64,${b64}`;
         }
         if (b64.startsWith('data:image/')) return b64;
-        // Assume JPEG if raw base64
         return `data:image/jpeg;base64,${b64}`;
       }
+    }
+  }
+
+  // Check arrays like "fotos" that contain photo objects
+  const arrayKeys = ['fotos', 'photos', 'images', 'imagens'];
+  for (const key of arrayKeys) {
+    if (Array.isArray(record[key])) {
+      const found = deepExtractPhoto(record[key], depth + 1);
+      if (found) return found;
     }
   }
   
