@@ -9,7 +9,7 @@ const corsHeaders = {
 // =============== WHITELIST EXATA DOS 75 MÓDULOS ===============
 const MODULE_WHITELIST = new Set([
   // Pessoa
-  "cpf", "cpffull", "nome", "rg", "titulo", "parentes", "mae", "cnh", "pis",
+  "cpf", "nome", "rg", "titulo", "parentes", "mae", "cnh", "pis",
   "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
   // Documentos
   "cnham", "cnhrs", "cnhrr", "cnhnc", "oab",
@@ -18,7 +18,7 @@ const MODULE_WHITELIST = new Set([
   // Contato
   "telefone", "email", "cep", "endereco",
   // Financeiro
-  "pix", "score", "renda", "credilink", "poderaquisitivo", "cpf-spc",
+  "pix", "score", "renda", "credilink", "poderaquisitivo",
   "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
   // Veículos
   "placa", "chassi", "renavam", "motor",
@@ -32,7 +32,6 @@ const MODULE_WHITELIST = new Set([
   // Trabalho
   "rais",
   // SUS
-  "cpfsus",
   // TSE
   "tse-3",
   // Fotos por estado
@@ -116,8 +115,6 @@ const MODULE_API_NAME: Record<string, string> = {
   "matricula": "iseek-dados---matricula",
   // Trabalho
   "rais": "iseek-dados---rais",
-  // SUS
-  "cpfsus": "iseek-dados---cpfsus",
   // TSE
   "tse-3": "iseek-dados---tse-3",
   // Fotos por estado
@@ -179,7 +176,7 @@ const TEXT_MODULES = new Set([
 ]);
 
 const NUMERIC_MODULES = new Set([
-  "cpf", "cpffull", "cpfsus", "cpf-spc", "rg", "titulo", "cnh", "pis",
+  "cpf", "rg", "titulo", "cnh", "pis",
   "telefone", "cep",
   "score", "renda", "credilink", "poderaquisitivo",
   "parentes", "renavam",
@@ -243,7 +240,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
   }
 
   const CPF_MODULES = [
-    "cpf", "cpffull", "cpfsus", "cpf-spc", "score", "renda",
+    "cpf", "score", "renda",
     "credilink", "poderaquisitivo", "parentes", "processos",
     "siel", "tse-3", "titulo", "mae",
     "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",

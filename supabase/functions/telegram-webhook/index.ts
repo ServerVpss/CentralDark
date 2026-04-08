@@ -202,8 +202,6 @@ async function loadModuleStatus(supabase: SupabaseClient): Promise<Record<string
 const queryTypeAliases: Record<string, string> = {
   tel: "telefone",
   telefone: "telefone",
-  cpf2: "cpffull",
-  cpf4: "cpf-spc", cpf5: "cpfsus",
   score2: "score2",
   // Módulos exclusivos
   irpf: "irpf", vacinas: "vacinas", obito: "obito",
@@ -226,7 +224,7 @@ const queryTypeAliases: Record<string, string> = {
   titulo: "titulo", endereco: "endereco", renda: "renda",
   processos: "processos", bnmp: "bnmp-lc", siel: "siel",
   tse: "tse-3", mae: "mae", credilink: "credilink",
-  spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
+  poder: "poderaquisitivo",
   cnpj: "cnpj",
 };
 
@@ -2708,10 +2706,7 @@ function isProviderError(result: Record<string, unknown>): { isError: boolean; m
 
 // Mapa de módulos irmãos para sugestão de alternativas
 const MODULE_SIBLINGS: Record<string, string[]> = {
-  'cpf': ['cpffull', 'cpf-spc', 'cpfsus'],
-  'cpffull': ['cpf', 'cpf-spc', 'cpfsus'],
-  'cpf-spc': ['cpf', 'cpffull', 'cpfsus'],
-  'cpfsus': ['cpf', 'cpffull', 'cpf-spc'],
+  // Após unificação, não há módulos irmãos — menus interativos substituem
 };
 
 // Gera botões de sugestão para módulos alternativos
@@ -7263,12 +7258,6 @@ class BotHandler {
     // ============ MENU DE SELEÇÃO DE MÓDULOS ============
     // Comandos que abrem menu de escolha ao invés de executar direto
     const MODULE_MENU: Record<string, Array<{ key: string; label: string; emoji: string }>> = {
-      cpf: [
-        { key: "cpf", label: "CPF Básico", emoji: "👤" },
-        { key: "cpffull", label: "CPF Completo", emoji: "📋" },
-        { key: "cpf-spc", label: "CPF SPC", emoji: "💳" },
-        { key: "cpfsus", label: "CPF SUS", emoji: "🏥" },
-      ],
       nome: [
         { key: "nome", label: "Nome Completo", emoji: "📝" },
         { key: "nomeabreviadofiltros", label: "Nome c/ Filtros", emoji: "🔍" },
@@ -7328,8 +7317,7 @@ class BotHandler {
     }
 
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cpffull: "cpffull",
-      cpf2: "cpffull", cpf4: "cpf-spc", cpf5: "cpfsus",
+      cpf: "cpf",
       cnpj: "cnpj", placa: "placa",
       telefone: "telefone", tel: "telefone",
       email: "email",
@@ -7345,7 +7333,7 @@ class BotHandler {
       titulo: "titulo", endereco: "endereco", renda: "renda",
       processos: "processos", bnmp: "bnmp-lc", siel: "siel",
       tse: "tse-3", credilink: "credilink",
-      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
+      poder: "poderaquisitivo",
       chassi: "chassi", renavam: "renavam", motor: "motor",
       // Módulos exclusivos
       irpf: "irpf", vacinas: "vacinas", obito: "obito",
