@@ -7,7 +7,6 @@ const corsHeaders = {
 };
 
 // =============== WHITELIST EXATA DOS MÓDULOS ===============
-// Cada nome é enviado EXATAMENTE como está para a API externa.
 const MODULE_WHITELIST = new Set([
   // Pessoa
   "cpf", "cpffull", "cpf-isk", "nome", "nomefull", "rg", "titulo",
@@ -31,44 +30,44 @@ const MODULE_WHITELIST = new Set([
   // Variantes -3
   "rg-3", "pis-3", "cep-3", "email-3", "nome-3",
   "score-3", "parentes-3", "telefone-3",
-  // Foto por estado (12 estados VeiculosAPI)
+  // Foto por estado
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
-  // ===== MÓDULOS EXCLUSIVOS ISEEK =====
-  // Pessoa/Família
+  // Pessoa/Família (ex-iSeek)
   "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
-  // Documentos
+  // Documentos (ex-iSeek)
   "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf", "advogadooabuf",
   "catcpf", "catnumero",
-  // Financeiro
+  // Financeiro (ex-iSeek)
   "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
-  // Governo/Saúde
+  // Governo/Saúde (ex-iSeek)
   "vacinas", "beneficios", "faculdades", "func", "matricula",
-  // Justiça
+  // Justiça (ex-iSeek)
   "mandado", "certidoes", "processo",
-  // Trabalho
+  // Trabalho (ex-iSeek)
   "rais",
-  // Veículos por CPF
+  // Veículos por CPF (ex-iSeek)
   "veiculos", "crlvto", "crlvmt",
-  // Fotos extras iSeek
+  // Fotos extras
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
-  // ===== MÓDULOS SOBREPOSTOS ISEEK (sufixo -isk) =====
+  // Sobrepostos (sufixo -isk)
   "cnpj-isk", "rg-isk", "mae-isk", "telefone-isk", "titulo-isk",
   "cnh-isk", "processos-isk", "placa-isk", "renavam-isk", "chassi-isk",
   "motor-isk", "email-isk", "pix-isk", "cep-isk", "parentes-isk",
   "score-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
-  // Fotos iSeek -isk
+  // Fotos -isk
   "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
   "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
   "fotodf-isk", "fotogo-isk",
   "crlvto-foto", "crlvmt-foto",
 ]);
 
-// Módulos que vão DIRETAMENTE ao iSeek (não passam pelo VeiculosAPI)
-const ISEEK_DIRECT_MODULES: Record<string, string> = {
-  // Exclusivos iSeek (sem equivalente VeiculosAPI)
+// Mapeamento de módulo interno → módulo real na VeiculosAPI
+// Todos os módulos passam pela mesma URL, mas alguns precisam de nomes diferentes na API
+const MODULE_API_NAME: Record<string, string> = {
+  // Ex-iSeek exclusivos
   "pai": "iseek-dados---pai",
   "nasc": "iseek-dados---nasc",
   "nis": "iseek-dados---nis",
@@ -113,7 +112,7 @@ const ISEEK_DIRECT_MODULES: Record<string, string> = {
   "fotocnh": "iseek-fotos---fotocnh",
   "fotodetran": "iseek-dados---fotodetran",
   "fotomapresos": "iseek-fotos---fotomapresos",
-  // Sobrepostos com sufixo -isk (vão direto ao iSeek)
+  // Sobrepostos com sufixo -isk
   "cpf-isk": "iseek-cpf",
   "cnpj-isk": "iseek-dados---cnpj",
   "rg-isk": "iseek-dados---rg",
@@ -175,7 +174,6 @@ const SLOW_MODULES = new Set([
   "score", "score-3", "tse-3", "poderaquisitivo",
   "certidoes", "mandado", "veiculos", "rais",
   "processo", "crlvto", "crlvmt",
-  // iSeek -isk fotos
   "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
   "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
   "fotodf-isk", "fotogo-isk", "crlvto-foto", "crlvmt-foto",
@@ -203,7 +201,6 @@ const NUMERIC_MODULES = new Set([
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
-  // iSeek exclusivos (CPF-based)
   "pai", "nasc", "nis", "obito", "registro",
   "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
   "advogadooabuf", "catcpf", "catnumero",
@@ -213,11 +210,9 @@ const NUMERIC_MODULES = new Set([
   "crlvto", "crlvmt",
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
-  // iSeek -isk (CPF-based)
   "rg-isk", "titulo-isk", "cnh-isk", "telefone-isk",
   "cep-isk", "parentes-isk", "score-isk", "processos-isk",
   "cnpj-isk", "renavam-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
-  // Fotos -isk
   "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
   "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
   "fotodf-isk", "fotogo-isk", "crlvto-foto", "crlvmt-foto",
@@ -226,9 +221,9 @@ const NUMERIC_MODULES = new Set([
 function cleanQueryValue(modulo: string, input: string): string {
   if (TEXT_MODULES.has(modulo)) return input.trim();
   if (NUMERIC_MODULES.has(modulo)) return input.replace(/\D/g, "").trim();
-  // placa, chassi, motor — alfanumérico
   return input.replace(/[^\w]/g, "").trim();
 }
+
 // =============== FILTRO DE METADADOS ADMIN ===============
 const ADMIN_FIELD_PATTERNS = new Set([
   "requests_used", "requests_remaining", "daily_limit", "fallback_provider",
@@ -256,7 +251,6 @@ function stripAdminFields(obj: any): any {
   return clean;
 }
 
-
 interface ValidationResult {
   valid: boolean;
   error?: string;
@@ -268,11 +262,9 @@ function validateInput(modulo: string, value: string): ValidationResult {
     return { valid: false, error: "Valor não pode ser vazio." };
   }
 
-  // CPF variants (11 digits)
   const CPF_MODULES = ["cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus", "score", "score-3", "renda",
        "credilink", "poderaquisitivo", "parentes", "parentes-3", "processos",
        "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull",
-       // iSeek exclusivos CPF-based
        "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
        "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
        "advogadooabuf", "catcpf", "catnumero",
@@ -280,7 +272,6 @@ function validateInput(modulo: string, value: string): ValidationResult {
        "vacinas", "beneficios", "faculdades", "func", "matricula",
        "mandado", "certidoes", "rais", "veiculos", "processo",
        "crlvto", "crlvmt",
-       // iSeek -isk CPF-based
        "parentes-isk", "score-isk", "processos-isk",
        "titulo-isk", "cnh-isk", "rg-isk", "telefone-isk", "cep-isk"];
   if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto")) {
@@ -354,7 +345,6 @@ function validateInput(modulo: string, value: string): ValidationResult {
 
 // =============== LOG HELPER ===============
 function logData(tag: string, obj: Record<string, unknown>) {
-  // Trunca valores longos (base64, fotos) mas preserva estrutura
   const truncate = (val: unknown, maxLen = 200): unknown => {
     if (typeof val === "string" && val.length > maxLen) {
       return val.substring(0, maxLen) + `...[${val.length} chars]`;
@@ -382,7 +372,15 @@ interface ProviderResult {
 }
 
 async function fetchFromProvider(modulo: string, valor: string, retry = false): Promise<ProviderResult> {
-  const apiKey = Deno.env.get("CONSULTAS_API_KEY");
+  // Resolve o nome do módulo na API (alguns módulos usam nomes internos diferentes)
+  const apiModuleName = MODULE_API_NAME[modulo] || modulo;
+  const isIseekModule = modulo in MODULE_API_NAME;
+
+  // Módulos ex-iSeek usam a chave ISEEK_API_KEY, os demais usam CONSULTAS_API_KEY
+  const apiKey = isIseekModule
+    ? Deno.env.get("ISEEK_API_KEY")
+    : Deno.env.get("CONSULTAS_API_KEY");
+
   if (!apiKey) {
     return {
       data: { error: "⚠️ Chave de API não configurada. Contate o administrador." },
@@ -392,8 +390,8 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
   }
 
   const timeoutMs = getModuleTimeout(modulo);
-  const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(modulo)}&string=${encodeURIComponent(valor)}`;
-  console.log(`[Provider] modulo=${modulo}, timeout=${timeoutMs / 1000}s${retry ? " (retry)" : ""}`);
+  const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(apiModuleName)}&string=${encodeURIComponent(valor)}`;
+  console.log(`[Provider] modulo=${modulo} → api=${apiModuleName}, timeout=${timeoutMs / 1000}s${retry ? " (retry)" : ""}`);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -413,7 +411,6 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
     }
 
     if (!response.ok) {
-      // Retry for 5xx
       if (!retry && response.status >= 500) {
         console.log(`[Provider] 5xx (${response.status}), retrying in 2s...`);
         await new Promise(r => setTimeout(r, 2000));
@@ -432,7 +429,7 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
     }
 
     const data = await response.json();
-    logData("PROVIDER_RAW", { modulo, provider: "veiculosapi", duration_ms: provider_duration_ms, retried: retry, keys: data ? Object.keys(data) : [], data });
+    logData("PROVIDER_RAW", { modulo, apiModuleName, duration_ms: provider_duration_ms, retried: retry, keys: data ? Object.keys(data) : [], data });
 
     if (data === null || data === undefined) {
       return { data: { notFound: true, message: "Dados não encontrados" }, provider_duration_ms, retried: retry };
@@ -442,6 +439,15 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
       return { data: { notFound: true, message: data.error || data.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
+    // Para módulos que retornam formato iSeek (com wrapper { status, data }), extrair dados internos
+    if (MODULE_API_NAME[modulo] && data.data && typeof data.data === "object" && !Array.isArray(data.data)) {
+      const innerData = data.data;
+      if (innerData.error || innerData.status === "error") {
+        return { data: { notFound: true, message: innerData.error || innerData.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
+      }
+      return { data: { ...stripAdminFields(innerData), modulo }, provider_duration_ms, retried: retry };
+    }
+
     return { data: { ...stripAdminFields(data), modulo }, provider_duration_ms, retried: retry };
   } catch (err) {
     clearTimeout(timeoutId);
@@ -449,7 +455,6 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
     const provider_duration_ms = Date.now() - providerStart;
 
     if (error.name === "AbortError") {
-      // Retry once for timeout
       if (!retry) {
         console.log(`[Provider] Timeout, retrying in 2s...`);
         await new Promise(r => setTimeout(r, 2000));
@@ -463,129 +468,6 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
     }
 
     return { data: { error: "⚠️ Erro de conexão. Tente novamente." }, provider_duration_ms, retried: retry };
-  }
-}
-
-// =============== ISEEK FALLBACK ===============
-// Mapeamento: módulo VeiculosAPI → módulo equivalente no iSeek
-const ISEEK_FALLBACK_MODULES: Record<string, string> = {
-  // CPF / Pessoa
-  "cpf": "iseek-cpf",
-  "cpffull": "iseek-cpf",
-  "cpf-isk": "iseek-cpf",
-  "cpfsus": "iseek-cpf",
-  // Nome
-  "nome": "iseek-dados---nomeabreviadofiltros",
-  "nomefull": "iseek-dados---nomeabreviadofiltros",
-  "nome-3": "iseek-dados---nomeabreviadofiltros",
-  // Família
-  "parentes": "iseek-dados---parentes",
-  "parentes-3": "iseek-dados---parentes",
-  "mae": "iseek-dados---mae",
-  "maefull": "iseek-dados---mae",
-  // Documentos
-  "rg": "iseek-dados---rg",
-  "rg-3": "iseek-dados---rg",
-  "titulo": "iseek-dados---titulo",
-  "cnh": "iseek-dados---cnh",
-  "pis": "iseek-dados---nis",
-  "pis-3": "iseek-dados---nis",
-  // Contato
-  "telefone": "iseek-dados---telefone",
-  "telefonefull": "iseek-dados---telefone",
-  "telefone-3": "iseek-dados---telefone",
-  "email": "iseek-dados---email",
-  "emailfull": "iseek-dados---email",
-  "email-3": "iseek-dados---email",
-  "cep": "iseek-dados---cep",
-  "cepfull": "iseek-dados---cep",
-  "cep-3": "iseek-dados---cep",
-  // Financeiro
-  "pix": "iseek-dados---pix",
-  "score": "iseek-dados---score",
-  "score-3": "iseek-dados---score",
-  "renda": "iseek-dados---score2",
-  "credilink": "iseek-dados---score2",
-  "cpf-spc": "iseek-dados---dividas",
-  "poderaquisitivo": "iseek-dados---score2",
-  // Veículos
-  "placa": "iseek-dados---placa",
-  "placa-serpro": "iseek-dados---placa",
-  "placa-sesp": "iseek-dados---placa",
-  "chassi": "iseek-dados---chassi",
-  "renavam": "iseek-dados---renavam",
-  "motor": "iseek-dados---motor",
-  // Empresa
-  "cnpj-cred": "iseek-dados---cnpj",
-  // Justiça
-  "processos": "iseek-dados---processos",
-  "bnmp-lc": "iseek-dados---mandado",
-  // Foto por estado
-  "fotomg": "iseek-fotos---fotomg",
-  "fotosp": "iseek-fotos---fotosp",
-  "fotorj": "iseek-fotos---fotorj",
-  "fotoce": "iseek-fotos---fotoce",
-  "fotopr": "iseek-fotos---fotopr",
-  "fotoma": "iseek-fotos---fotoma",
-  "fotoes": "iseek-fotos---fotoes",
-  "fotodf": "iseek-fotos---fotodf",
-  "fototo": "iseek-fotos---fototo",
-  "fotoms": "iseek-fotos---fotoms",
-  "fotoro": "iseek-fotos---fotoro",
-  "fotopi": "iseek-fotos---fotopi",
-};
-
-async function fetchFromIseek(iseekModulo: string, valor: string): Promise<ProviderResult> {
-  const apiBase = Deno.env.get("ISEEK_API_BASE");
-  const apiKey = Deno.env.get("ISEEK_API_KEY");
-  if (!apiBase || !apiKey) {
-    return { data: { error: "iSeek não configurado" }, provider_duration_ms: 0, retried: false };
-  }
-
-  const url = `${apiBase}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(iseekModulo)}&string=${encodeURIComponent(valor)}`;
-  console.log(`[iSeek] modulo=${iseekModulo}`);
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30_000);
-  const start = Date.now();
-
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: { "Accept": "application/json" },
-      signal: controller.signal,
-    });
-    clearTimeout(timeoutId);
-    const duration = Date.now() - start;
-
-    if (!response.ok) {
-      return { data: { error: `iSeek erro: ${response.status}` }, provider_duration_ms: duration, retried: false };
-    }
-
-    const raw = await response.json();
-    logData("ISEEK_RAW", { modulo: iseekModulo, provider: "iseek", duration_ms: duration, rawKeys: raw ? Object.keys(raw) : [], raw });
-
-    // iSeek retorna { status: 200, data: { ... } }
-    const innerData = (raw && typeof raw === "object" && raw.data && typeof raw.data === "object")
-      ? raw.data
-      : raw;
-
-    logData("ISEEK_PARSED", { modulo: iseekModulo, innerKeys: innerData ? Object.keys(innerData) : [], hasError: !!(innerData?.error), innerData });
-
-    if (!innerData || innerData.error || innerData.status === "error") {
-      logData("ISEEK_NOT_FOUND", { modulo: iseekModulo, error: innerData?.error, message: innerData?.message });
-      return { data: { notFound: true, message: innerData?.error || innerData?.message || "Dados não encontrados" }, provider_duration_ms: duration, retried: false };
-    }
-
-    return { data: { ...stripAdminFields(innerData), modulo: iseekModulo, fallback_provider: "iseek" }, provider_duration_ms: duration, retried: false };
-  } catch (err) {
-    clearTimeout(timeoutId);
-    const duration = Date.now() - start;
-    const error = err as Error;
-    if (error.name === "AbortError") {
-      return { data: { error: "iSeek timeout" }, provider_duration_ms: duration, retried: false };
-    }
-    return { data: { error: "iSeek conexão falhou" }, provider_duration_ms: duration, retried: false };
   }
 }
 
@@ -635,29 +517,6 @@ let cachedModuleStatus: Record<string, boolean> | null = null;
 let moduleCacheTime = 0;
 const MODULE_CACHE_TTL = 60_000;
 
-// Mapa reverso: module_key VeiculosAPI → module_key iSeek equivalente no banco
-const ISEEK_ALT_KEYS: Record<string, string> = {
-  cpf: "cpf-isk", cpffull: "cpf-isk",
-  "cnpj-cred": "cnpj-isk",
-  placa: "placa-isk", "placa-serpro": "placa-isk", "placa-sesp": "placa-isk",
-  telefone: "telefone-isk", telefonefull: "telefone-isk", "telefone-3": "telefone-isk",
-  email: "email-isk", emailfull: "email-isk", "email-3": "email-isk",
-  cep: "cep-isk", cepfull: "cep-isk", "cep-3": "cep-isk",
-  score: "score-isk", "score-3": "score-isk",
-  rg: "rg-isk", "rg-3": "rg-isk",
-  cnh: "cnh-isk",
-  pix: "pix-isk",
-  mae: "mae-isk", maefull: "mae-isk",
-  titulo: "titulo-isk",
-  processos: "processos-isk",
-  "parentes-3": "parentes-isk",
-  fotosp: "fotosp-isk", fotorj: "fotorj-isk", fotopr: "fotopr-isk",
-  fotoce: "fotoce-isk", fotoma: "fotoma-isk", fotoes: "fotoes-isk",
-  fotodf: "fotodf-isk", fototo: "fototo-isk", fotoms: "fotoms-isk",
-  fotoro: "fotoro-isk", fotopi: "fotopi-isk", fotogo: "fotogo-isk",
-  renavam: "renavam-isk", chassi: "chassi-isk", motor: "motor-isk",
-};
-
 async function isModuleEnabled(modulo: string, supabase: ReturnType<typeof createClient>): Promise<boolean> {
   const now = Date.now();
   if (!cachedModuleStatus || (now - moduleCacheTime) >= MODULE_CACHE_TTL) {
@@ -676,18 +535,7 @@ async function isModuleEnabled(modulo: string, supabase: ReturnType<typeof creat
   }
   if (!cachedModuleStatus) return true;
   if (!(modulo in cachedModuleStatus)) return true;
-
-  // Se o módulo primário está ativo, liberar
-  if (cachedModuleStatus[modulo] === true) return true;
-
-  // Se desativado, verificar se o fallback iSeek está ativo
-  const altKey = ISEEK_ALT_KEYS[modulo];
-  if (altKey && cachedModuleStatus[altKey] === true) {
-    console.log(`[ModuleCheck] ${modulo} desativado, mas ${altKey} (iSeek) está ativo — liberando`);
-    return true;
-  }
-
-  return false;
+  return cachedModuleStatus[modulo] === true;
 }
 
 // =============== INTERFACE ===============
@@ -695,7 +543,7 @@ interface QueryRequest {
   queryType: string;
   queryInput: string;
   estado?: string;
-  channel?: string; // "telegram" | "admin_panel"
+  channel?: string;
 }
 
 interface StandardResponse {
@@ -723,9 +571,7 @@ async function handleQuery(
   const { queryType, queryInput, estado, channel } = req;
   const modulo = queryType.toLowerCase().trim();
   const channelName = channel || "unknown";
-  const errors: string[] = [];
 
-  // Build standard meta helper
   const buildMeta = (status: string, providerMs = 0) => {
     const now = Date.now();
     return {
@@ -751,7 +597,7 @@ async function handleQuery(
     };
   }
 
-  // 2. DB enable/disable check (for non-virtual modules)
+  // 2. DB enable/disable check
   if (!isVirtual) {
     const enabled = await isModuleEnabled(modulo, supabase);
     if (!enabled) {
@@ -781,7 +627,6 @@ async function handleQuery(
       };
     }
   } else {
-    // Virtual module (foto/nacional) — basic CPF validation
     if (!/^\d{11}$/.test(cleanInput)) {
       return {
         success: false,
@@ -866,97 +711,9 @@ async function handleQuery(
     };
   }
 
-  // ---- MÓDULO DIRETO ISEEK (exclusivos) ----
-  if (ISEEK_DIRECT_MODULES[modulo]) {
-    const iseekModulo = ISEEK_DIRECT_MODULES[modulo];
-    console.log(`[iSeek Direct] modulo=${modulo} → ${iseekModulo}`);
-    const iseekResult = await fetchFromIseek(iseekModulo, cleanInput);
-
-    if (iseekResult.data.error) {
-      return {
-        success: false,
-        data: iseekResult.data,
-        meta: buildMeta("error", iseekResult.provider_duration_ms),
-        errors: [String(iseekResult.data.error)],
-      };
-    }
-
-    if (iseekResult.data.notFound) {
-      return {
-        success: true,
-        data: iseekResult.data,
-        meta: buildMeta("not_found", iseekResult.provider_duration_ms),
-        errors: [],
-      };
-    }
-
-    return {
-      success: true,
-      data: iseekResult.data,
-      meta: { ...buildMeta("success", iseekResult.provider_duration_ms), provider: "iseek" } as any,
-      errors: [],
-    };
-  }
-
-  // ---- MÓDULO PADRÃO (VeiculosAPI + fallback iSeek) ----
-
-  // Se o módulo VeiculosAPI está DESATIVADO no banco mas o iSeek equivalente está ativo,
-  // pular direto ao iSeek sem perder tempo com VeiculosAPI (evita timeout de 60s+)
-  const primaryDisabledInDb = cachedModuleStatus && modulo in cachedModuleStatus && cachedModuleStatus[modulo] === false;
-  const iseekFallbackModulo = ISEEK_FALLBACK_MODULES[modulo];
-
-  if (primaryDisabledInDb && iseekFallbackModulo) {
-    console.log(`[SmartRoute] ${modulo} desativado no banco, indo direto ao iSeek (${iseekFallbackModulo})`);
-    const iseekResult = await fetchFromIseek(iseekFallbackModulo, cleanInput);
-
-    if (!iseekResult.data.error && !iseekResult.data.notFound) {
-      return {
-        success: true,
-        data: iseekResult.data,
-        meta: { ...buildMeta("success", iseekResult.provider_duration_ms), provider: "iseek" } as any,
-        errors: [],
-      };
-    }
-
-    // iSeek também falhou
-    if (iseekResult.data.error) {
-      return {
-        success: false,
-        data: iseekResult.data,
-        meta: buildMeta("error", iseekResult.provider_duration_ms),
-        errors: [String(iseekResult.data.error)],
-      };
-    }
-    return {
-      success: true,
-      data: iseekResult.data,
-      meta: buildMeta("not_found", iseekResult.provider_duration_ms),
-      errors: [],
-    };
-  }
-
+  // ---- MÓDULO PADRÃO (VeiculosAPI único) ----
   const result = await fetchFromProvider(modulo, cleanInput);
-  const primaryFailed = !!(result.data.error || result.data.notFound);
 
-  // Tentar fallback iSeek se o provedor primário falhou
-  if (primaryFailed && iseekFallbackModulo) {
-    console.log(`[Fallback] Primário falhou para ${modulo}, tentando iSeek (${iseekFallbackModulo})...`);
-    const fallbackResult = await fetchFromIseek(iseekFallbackModulo, cleanInput);
-
-    if (!fallbackResult.data.error && !fallbackResult.data.notFound) {
-      const totalProviderMs = result.provider_duration_ms + fallbackResult.provider_duration_ms;
-      console.log(`[Fallback] iSeek retornou dados com sucesso para ${modulo}`);
-      return {
-        success: true,
-        data: fallbackResult.data,
-        meta: { ...buildMeta("success", totalProviderMs), fallback_provider: "iseek" } as any,
-        errors: [],
-      };
-    }
-    console.log(`[Fallback] iSeek também falhou para ${modulo}`);
-  }
-
-  // Retornar resultado original
   if (result.data.error) {
     return {
       success: false,
@@ -1066,7 +823,6 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Structured log with full response data
     logData("QUERY_RESULT", {
       request_id: requestId,
       channel: response.meta.channel,
@@ -1081,7 +837,6 @@ Deno.serve(async (req) => {
       response_data: response.data,
     });
 
-    // Strip admin metadata from response data before sending
     response.data = stripAdminFields(response.data);
 
     return new Response(JSON.stringify(response), {
