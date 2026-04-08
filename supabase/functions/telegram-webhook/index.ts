@@ -4566,7 +4566,7 @@ function formatNomeResult(
     records = data.dados as Record<string, unknown>[];
   }
 
-  console.log(`[formatNomeResult] queryType=${queryType}, dados=${!!dados}, data.data=${Array.isArray((data as any).data)}, records=${records.length}, dataKeys=${Object.keys(data).join(',')}`);
+  
 
   if (records.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
