@@ -7035,20 +7035,23 @@ class BotHandler {
       if (cmdMatch) {
         const cmd = cmdMatch[1].toLowerCase().split("@")[0];
         const commandMap: Record<string, string> = {
-          cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
-          cnpj: "cnpj-cred", placa: "placa", placa2: "placa-serpro",
-          telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
-          email: "email", emailfull: "emailfull",
-          cep: "cep", cepfull: "cepfull", nome: "nome", nomefull: "nomefull",
-          score: "score", rg: "rg", cnh: "cnh", pix: "pix",
+          cpf: "cpf", cpffull: "cpffull",
+          cnpj: "cnpj", placa: "placa",
+          telefone: "telefone", tel: "telefone",
+          email: "email",
+          cep: "cep", nome: "nome",
+          score: "score", score2: "score2",
+          rg: "rg", cnh: "cnh", pix: "pix",
           foto: "foto", nacional: "foto",
           titulo: "titulo", endereco: "endereco", renda: "renda",
           processos: "processos", bnmp: "bnmp-lc", siel: "siel",
-          tse: "tse-3", mae: "mae", maefull: "maefull", credilink: "credilink",
-          spc: "cpf-spc", cpf4: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", cpf5: "cpfsus", pis: "pis",
+          tse: "tse-3", mae: "mae", credilink: "credilink",
+          spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", pis: "pis",
           parentes: "parentes", chassi: "chassi", renavam: "renavam", motor: "motor",
-          rg3: "rg-3", pis3: "pis-3", cep3: "cep-3", email3: "email-3",
-          nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
+          irpf: "irpf", vacinas: "vacinas", obito: "obito",
+          nasc: "nasc", pai: "pai", registro: "registro",
+          nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
+          nomeabreviadofiltros: "nomeabreviadofiltros",
         };
         if (commandMap[cmd]) {
           await sendMessage(this.token, chatId,
