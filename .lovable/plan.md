@@ -1,33 +1,58 @@
 
 
-# Limpar Textos Desatualizados e Referências -isk nos Comandos
+## Corrigir `[object Object]` no Website
 
-## Problema
-Vários mapas de comandos dentro do `telegram-webhook/index.ts` ainda contêm referências `-isk`, comandos numerados antigos (ex: `/cpf2`, `/placa4`), e a Central de Consultas (`showQueryMenu`) lista botões individuais que agora estão agrupados em menus.
+### Problema
+Quando a API retorna dados com objetos aninhados (como `filiacao`, `biometria`, `fotos`), o `QueryResultFormatter` não os achata antes de exibir. O `String(value)` aplicado a objetos produz `[object Object]`.
 
-## Alterações no arquivo `supabase/functions/telegram-webhook/index.ts`
+### Causa Raiz
+No bloco de parsing JSON (linhas 1217-1226), objetos e arrays aninhados são copiados diretamente para `parsedData` sem achatamento. Depois, na renderização (linhas 1322 e 1338), `String(item)` é chamado em objetos.
 
-### 1. Limpar `moduleToCommand` (~linha 5466)
-Remover todas as entradas com sufixo `-isk` e manter apenas os 75 módulos reais. Para módulos que agora estão em menus (chassi, renavam, motor, etc), não precisam de comando individual — serão acessados via menu `/placa`, `/foto`, etc.
+### Solução
 
-### 2. Limpar `usageExamples` (~linha 5512)
-Remover todas as entradas `-isk` e numeradas que não existem mais.
+**Arquivo**: `src/components/consultas/QueryResultFormatter.tsx`
 
-### 3. Limpar `parseMultipleCommands` commandMap (~linha 7113)
-Remover `cpfisk`, `-isk` referências. Adicionar os novos comandos de menu (advogado, cat, crlv, parentes, processos) para que o parser os reconheça.
+1. **Criar função `flattenObject`** que achata recursivamente objetos aninhados em pares `chave => valor` simples (strings):
+   - `{filiacao: {mae: "Ana", pai: "João"}}` → `{filiacao_mae: "Ana", filiacao_pai: "João"}`
+   - Arrays de objetos: `{fotos: [{uf: "SP", base64: "..."}]}` → `{fotos_1_uf: "SP"}` (filtrando base64)
+   - Arrays de primitivos mantidos como `string[]`
 
-### 4. Limpar single-command handler commandMap (~linha 7072)
-Remover entradas individuais que agora estão em menus (chassi, renavam, motor, mae, etc.) e adicionar os novos comandos de menu.
+2. **Aplicar `flattenObject`** no bloco de parsing JSON (linhas 1217-1226) antes de atribuir a `parsedData`
 
-### 5. Atualizar `showQueryMenu` (~linha 5665)
-Remover botões individuais que agora estão em menus agrupados. Em vez de listar "Chassi", "Renavam", "Motor" separadamente, o menu deve mostrar apenas os comandos "mãe": CPF, CNPJ, Placa, Foto, Nome, Parentes, Processos, Advogado, etc.
+3. **Adicionar fallback seguro na renderização** (linhas 1322 e 1338): se o valor ainda for objeto, serializar como JSON legível ao invés de `String()`
 
-### 6. Verificar preços
-Os planos são carregados do banco dinamicamente (`getPlans()`), então os preços no menu estão atualizados (Diária R$2, Semanal R$15, Quinzenal R$20, Mensal R$30). Nenhuma alteração necessária nos preços.
+### Detalhes Técnicos
 
-### Resultado
-- Zero referências `-isk` no código
-- `/comandos` lista apenas os 75 módulos reais com nomes limpos
-- Central de Consultas simplificada com botões agrupados
-- Menus de seleção continuam funcionando normalmente
+```typescript
+function flattenObject(obj: any, prefix = ''): Record<string, string | string[]> {
+  const result: Record<string, string | string[]> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    const newKey = prefix ? `${prefix}_${key}` : key;
+    if (value === null || value === undefined) continue;
+    // Skip base64/photo values
+    if (typeof value === 'string' && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
+    if (Array.isArray(value)) {
+      if (value.every(v => typeof v !== 'object')) {
+        result[newKey] = value.map(String);
+      } else {
+        value.forEach((item, i) => {
+          if (typeof item === 'object' && item !== null) {
+            Object.assign(result, flattenObject(item, `${newKey}_${i + 1}`));
+          } else {
+            result[`${newKey}_${i + 1}`] = String(item);
+          }
+        });
+      }
+    } else if (typeof value === 'object') {
+      Object.assign(result, flattenObject(value, newKey));
+    } else {
+      result[newKey] = String(value);
+    }
+  }
+  return result;
+}
+```
+
+- Aplicar no parsing JSON e como fallback no rendering
+- Sem impacto em resultados de texto (já são strings)
 
