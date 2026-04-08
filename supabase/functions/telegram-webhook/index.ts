@@ -5798,6 +5798,9 @@ class BotHandler {
         const r = await executeQueryWithCache(queryType, queryInput, estado);
         result = r.data;
         fromCache = r.fromCache;
+        if (r.warnings?.length > 0) {
+          result._inputWarnings = r.warnings;
+        }
       }
       
       // Log query - passa fromCache para evitar duplicação de créditos
