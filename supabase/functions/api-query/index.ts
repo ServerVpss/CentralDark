@@ -18,7 +18,7 @@ const MODULE_WHITELIST = new Set([
   // Contato
   "telefone", "email", "cep", "endereco",
   // Financeiro
-  "pix", "score", "renda", "credilink", "poderaquisitivo",
+  "pix", "score", "renda", "credilink", "poderaquisitivo", "cpf-spc",
   "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
   // Veículos
   "placa", "chassi", "renavam", "motor",
