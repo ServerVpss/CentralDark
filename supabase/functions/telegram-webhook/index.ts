@@ -3608,9 +3608,7 @@ function formatTelefoneResult(
   const lines: string[] = [];
 
   const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>`);
-  lines.push(``);
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>\n`;
 
   if (nome || cpf) {
     lines.push(`┌─────────────────────────────`);
