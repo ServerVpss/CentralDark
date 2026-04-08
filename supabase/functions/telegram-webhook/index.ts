@@ -6080,6 +6080,91 @@ class BotHandler {
         }
       }
 
+      // Verificar se é resultado de NOME com múltiplos registros (array em data.data)
+      const isNomeModule = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros'].includes(usedModule);
+      if (isNomeModule) {
+        // Extract records from the API response structure
+        let nomeRecords: PersonRecord[] = [];
+        const dados = result.dados as Record<string, unknown> | undefined;
+        if (dados && typeof dados === 'object') {
+          const arr = ((dados as any).nome || (dados as any).nomefull) as unknown[];
+          if (Array.isArray(arr)) nomeRecords = arr.map((r: any) => ({
+            nome: String(r.nome || '').trim(),
+            cpf: String(r.cpf || '').trim(),
+            nascimento: String(r.dataNascimento || r.nasc || '').trim(),
+            cidade: String(r.cidade || '').trim(),
+            uf: String(r.uf || '').trim(),
+          })).filter((r: PersonRecord) => r.nome || r.cpf);
+        }
+        if (nomeRecords.length === 0 && Array.isArray((result as any).data)) {
+          nomeRecords = ((result as any).data as any[]).map((r: any) => ({
+            nome: String(r.nome || '').trim(),
+            cpf: String(r.cpf || '').trim(),
+            nascimento: String(r.dataNascimento || r.nasc || '').trim(),
+            cidade: String(r.cidade || '').trim(),
+            uf: String(r.uf || '').trim(),
+          })).filter((r: PersonRecord) => r.nome || r.cpf);
+        }
+
+        if (nomeRecords.length > 1) {
+          const effectId = getMessageEffectId(this.settings.message_effect);
+          const totalPages = Math.ceil(nomeRecords.length / RECORDS_PER_PAGE);
+
+          if (nomeRecords.length > RECORDS_PER_PAGE) {
+            const { data: paginationData, error } = await this.supabase
+              .from("paginated_results")
+              .insert({
+                chat_id: chatId,
+                pages: nomeRecords,
+                current_page: 0,
+                total_pages: totalPages,
+                metadata: { requester_id: telegramUserId, queryType: usedModule, queryInput },
+              })
+              .select("id")
+              .single();
+
+            if (error || !paginationData) {
+              console.error(`Failed to create nome pagination record:`, error);
+              const pageText = formatMultiPersonPage(nomeRecords, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput, undefined, telegramUserId);
+              return;
+            }
+
+            const paginationId = paginationData.id;
+            const pageText = formatMultiPersonPage(nomeRecords, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(nomeRecords, 0, totalPages, paginationId, usedModule, queryInput);
+
+            const paginatedPayload: Record<string, unknown> = {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_markup: pageKeyboard,
+            };
+            if (effectId) paginatedPayload.message_effect_id = effectId;
+
+            const msgResult = await telegramRequest(this.token, "sendMessage", paginatedPayload);
+            if (msgResult.ok && msgResult.result) {
+              const resultMessage = msgResult.result as { message_id?: number };
+              if (resultMessage.message_id) {
+                await this.supabase.from("paginated_results").update({ message_id: resultMessage.message_id }).eq("id", paginationId);
+              }
+            }
+          } else {
+            const pageText = formatMultiPersonPage(nomeRecords, 0, 1, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(nomeRecords, 0, 1, undefined, usedModule, queryInput);
+            const payload: Record<string, unknown> = {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_markup: pageKeyboard,
+            };
+            if (effectId) payload.message_effect_id = effectId;
+            await telegramRequest(this.token, "sendMessage", payload);
+          }
+          return;
+        }
+      }
+
       // Format and send result - usar o módulo realmente usado após fallback
       const formattedResult = formatQueryResult(usedModule, result, this.bot.bot_username, telegramUserName);
       
