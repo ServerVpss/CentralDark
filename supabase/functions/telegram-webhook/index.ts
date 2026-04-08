@@ -8227,6 +8227,17 @@ class BotHandler {
       return;
     }
 
+    // Nome multi-person pagination
+    if (data.startsWith("nome_page:")) {
+      const parts = data.split(":");
+      if (parts.length === 3) {
+        const paginationId = parts[1];
+        const targetPage = parseInt(parts[2], 10);
+        await this.handleMultiPersonPagination(chatId, messageId, paginationId, targetPage, "nomeabreviadofiltros");
+      }
+      return;
+    }
+
     // Quick CPF query from CEP results
     if (data.startsWith("qcpf:")) {
       if (!await isQueryTypeEnabled("cpf", this.supabase)) {
