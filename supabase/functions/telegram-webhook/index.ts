@@ -3736,7 +3736,7 @@ function formatTelefoneResult(
   const addSection = (icon: string, title: string, fields: string[]) => {
     if (fields.length === 0) return;
     parts.push(`${icon} <b>${escapeHtml(title)}</b>`);
-    parts.push(`<code>${fields.map(f => escapeHtml(f)).join('\n')}</code>`);
+    parts.push(`<pre>${fields.join('\n')}</pre>`);
   };
 
   const titularFields: string[] = [];
