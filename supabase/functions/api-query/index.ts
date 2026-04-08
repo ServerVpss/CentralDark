@@ -196,21 +196,33 @@ const NUMERIC_MODULES = new Set([
   "crlvto-foto", "crlvmt-foto",
 ]);
 
-function cleanQueryValue(modulo: string, input: string): string {
+interface CleanResult {
+  value: string;
+  warnings: string[];
+}
+
+function cleanQueryValueWithWarnings(modulo: string, input: string): CleanResult {
+  const warnings: string[] = [];
   // Always remove leading/trailing spaces and collapse internal spaces
   let val = input.replace(/\s+/g, " ").trim();
   
-  if (TEXT_MODULES.has(modulo)) return val;
+  if (TEXT_MODULES.has(modulo)) return { value: val, warnings };
   if (NUMERIC_MODULES.has(modulo)) {
     let clean = val.replace(/\D/g, "");
     // Remove country code 55 from phone numbers
     const PHONE_MODULES = ["telefone", "telefonefull", "telefone-3"];
     if (PHONE_MODULES.includes(modulo) && clean.length >= 12 && clean.startsWith("55")) {
+      const original = clean;
       clean = clean.substring(2);
+      warnings.push(`Código de país (+55) removido automaticamente: ${original} → ${clean}`);
     }
-    return clean;
+    return { value: clean, warnings };
   }
-  return val.replace(/[^\w]/g, "");
+  return { value: val.replace(/[^\w]/g, ""), warnings };
+}
+
+function cleanQueryValue(modulo: string, input: string): string {
+  return cleanQueryValueWithWarnings(modulo, input).value;
 }
 
 // =============== FILTRO DE METADADOS ADMIN ===============
