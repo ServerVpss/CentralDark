@@ -7542,11 +7542,15 @@ class BotHandler {
         return;
       }
 
+      // Store queryInput in conversation state to avoid 64-byte callback_data limit
+      const inputRef = crypto.randomUUID().substring(0, 8);
+      await this.setConversationState(telegramUserId, `modsel_${inputRef}`, { input: queryInput });
+
       // Mostrar menu com botões — cada botão contém o userId para segurança
       const buttons: InlineButton[][] = enabledOptions.map((opt) => [
-        btn(`${opt.emoji} ${opt.label}`, `select_mod:${opt.key}:${telegramUserId}:${queryInput}`, "primary"),
+        btn(`${opt.emoji} ${opt.label}`, `sm:${opt.key}:${telegramUserId}:${inputRef}`, "primary"),
       ]);
-      buttons.push([btn("🗑️ Apagar", `delete_msg_user:${telegramUserId}`)]);
+      buttons.push([btn("🗑️ Apagar", `del:${telegramUserId}`)]);
 
       // Construir texto descritivo com separação visual
       const optionsList = enabledOptions.map(o => `${o.emoji} <b>${o.label}</b>\n     └ ${o.desc}`).join('\n\n');
