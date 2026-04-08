@@ -7263,12 +7263,6 @@ class BotHandler {
     // ============ MENU DE SELEÇÃO DE MÓDULOS ============
     // Comandos que abrem menu de escolha ao invés de executar direto
     const MODULE_MENU: Record<string, Array<{ key: string; label: string; emoji: string }>> = {
-      cpf: [
-        { key: "cpf", label: "CPF Básico", emoji: "👤" },
-        { key: "cpffull", label: "CPF Completo", emoji: "📋" },
-        { key: "cpf-spc", label: "CPF SPC", emoji: "💳" },
-        { key: "cpfsus", label: "CPF SUS", emoji: "🏥" },
-      ],
       nome: [
         { key: "nome", label: "Nome Completo", emoji: "📝" },
         { key: "nomeabreviadofiltros", label: "Nome c/ Filtros", emoji: "🔍" },
