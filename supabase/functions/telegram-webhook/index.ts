@@ -7557,10 +7557,16 @@ class BotHandler {
     });
 
     try {
-      const { data: result, fromCache } = await executeQueryWithCache(queryType, inputForQuery, estado);
+      const { data: result, fromCache, warnings: queryWarnings } = await executeQueryWithCache(queryType, inputForQuery, estado);
       
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, queryType, inputForQuery, result, fromCache);
+      
+      // Send warnings (e.g. country code removed)
+      if (queryWarnings?.length > 0) {
+        const warningText = `ℹ️ <i>${queryWarnings.map(w => escapeHtmlGlobal(w)).join('\n')}</i>`;
+        await sendMessage(this.token, chatId, warningText, undefined, undefined, "HTML");
+      }
 
       // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
       const providerErr = isProviderError(result);
