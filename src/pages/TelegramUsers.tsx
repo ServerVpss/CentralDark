@@ -467,10 +467,27 @@ export default function TelegramUsers() {
         {/* Subscriptions Table */}
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle>Assinaturas ({filteredSubscriptions.length})</CardTitle>
-            <CardDescription>
-              Lista de todas as assinaturas do Telegram
-            </CardDescription>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <CardTitle>Assinaturas ({filteredSubscriptions.length})</CardTitle>
+                <CardDescription>
+                  Lista de todas as assinaturas do Telegram
+                </CardDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Exibir:</span>
+                <Select value={pageSize.toString()} onValueChange={(v) => setPageSize(Number(v))}>
+                  <SelectTrigger className="w-[80px] h-8 bg-secondary/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[10, 25, 50, 100].map((size) => (
+                      <SelectItem key={size} value={size.toString()}>{size}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             {filteredSubscriptions.length === 0 ? (
@@ -493,7 +510,7 @@ export default function TelegramUsers() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredSubscriptions.map((sub) => {
+                    {paginatedSubscriptions.map((sub) => {
                       const expired = isExpired(sub.expires_at);
                       const days = daysLeft(sub.expires_at);
                       return (
