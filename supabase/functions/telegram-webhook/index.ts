@@ -4558,13 +4558,15 @@ function formatNomeResult(
     if (Array.isArray(arr)) records = arr as Record<string, unknown>[];
   }
   // Fallback: try data.data[] (nomeabreviadofiltros format)
-  if (records.length === 0 && Array.isArray(data.data)) {
-    records = data.data as Record<string, unknown>[];
+  if (records.length === 0 && Array.isArray((data as any).data)) {
+    records = (data as any).data as Record<string, unknown>[];
   }
   // Fallback: try data.dados directly if it's an array
   if (records.length === 0 && Array.isArray(data.dados)) {
     records = data.dados as Record<string, unknown>[];
   }
+
+  console.log(`[formatNomeResult] queryType=${queryType}, dados=${!!dados}, data.data=${Array.isArray((data as any).data)}, records=${records.length}, dataKeys=${Object.keys(data).join(',')}`);
 
   if (records.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
