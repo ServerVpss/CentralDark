@@ -7704,7 +7704,7 @@ class BotHandler {
             }
           }
         } else {
-          const simpleCaption = buildPhotoCaption(`📷 <b>FOTO ENCONTRADA</b>`, typeof queryInput === 'string' ? queryInput.replace(/\D/g, '') : '', result, this.bot.bot_username);
+          const simpleCaption = buildPhotoCaption(`📷 <b>FOTO ENCONTRADA</b>`, typeof queryInput === 'string' ? queryInput.replace(/\D/g, '') : '', result, this.bot.bot_username, undefined, message?.from ? makeRequesterInfo(message.from) : undefined);
           
           const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
@@ -8062,7 +8062,7 @@ class BotHandler {
             await telegramRequest(this.token, "sendPhoto", {
               chat_id: chatId,
               photo: fotoUrl,
-              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username, extraMeta),
+              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username, extraMeta, makeRequesterInfo(callback.from)),
               parse_mode: "HTML",
               reply_markup: { inline_keyboard: actionButtons },
             });
@@ -8119,7 +8119,7 @@ class BotHandler {
           await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
             photo: fotoUrl,
-            caption: buildPhotoCaption(`📸 <b>Foto encontrada (${uf})</b>`, cpf, result, this.bot.bot_username, extraMeta),
+            caption: buildPhotoCaption(`📸 <b>Foto encontrada (${uf})</b>`, cpf, result, this.bot.bot_username, extraMeta, makeRequesterInfo(callback.from)),
             parse_mode: "HTML",
             reply_markup: { inline_keyboard: actionButtons },
           });
