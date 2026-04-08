@@ -1727,9 +1727,7 @@ const txtIgnoredKeys = [
   "expiracao", "duration_ms", "limites", "plano",
   "requests_used", "requests_remaining", "daily_limit", "fallback_provider", "apikey",
   "fromcache", "cache_ttl_hours",
-  "prioridade", "operadora", "tipotelefone",
-  "data", "ano", "ranking", "whatsapp",
-  "resultados", "estados_encontrados", "total_fotos", "estado_encontrado", "valor",
+  "prioridade",
 ];
 
 // Bot references to filter out in TXT
@@ -4691,7 +4689,7 @@ function formatGenericResult(
 
   // Metadata keys to skip
   const ignoredKeys = new Set([
-    'comando', 'valor', 'notfound', 'error', 'resultados', 'estados_encontrados', 'total_fotos', 'estado_encontrado',
+    'comando', 'notfound', 'error',
     'fotobase64', 'foto', 'image', 'photo', 'base64',
     'sucesso', 'protocolo', 'usuario', 'consumo_hoje', 'consumo', 'total_diario', 'reset_em', 'inicio_uso',
     'vencimento', 'tempo_restante', 'tempo_restante_detalhado', 'dias_totais_restantes', 'dias_totais',
@@ -4699,8 +4697,7 @@ function formatGenericResult(
     'conta', 'saldo', 'tempo_segundos', 'temposegundos', 'cache', 'cached_at', 'expiracao', 'limites', 'plano',
     'requests_used', 'requests_remaining', 'daily_limit', 'fallback_provider', 'apikey',
     'fromcache', 'cache_ttl_hours',
-    'prioridade', 'operadora', 'classificacao', 'tipotelefone',
-    'tipo', 'data', 'ano', 'ranking', 'whatsapp',
+    'prioridade',
   ]);
 
   const shouldSkipKey = (key: string): boolean => {
