@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Filter } from "lucide-react";
+import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,20 +14,8 @@ interface ModuleInfo {
   label: string;
   icon: string;
   enabled: boolean;
-  provider: string;
   category: string;
 }
-
-interface ProviderInfo {
-  name: string;
-  baseUrl: string;
-  port: number;
-  editable: boolean;
-}
-
-const initialProviders: ProviderInfo[] = [
-  { name: "VeiculosAPI", baseUrl: "https://veiculosapi.com/api/proxy", port: 443, editable: false },
-];
 
 const categories: Record<string, { label: string; icon: string }> = {
   pessoa: { label: "Pessoa", icon: "👤" },
@@ -47,11 +35,9 @@ const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo"
 
 export function QueryModulesManager() {
   const [modules, setModules] = useState<ModuleInfo[]>([]);
-  const [providers, setProviders] = useState<ProviderInfo[]>(initialProviders);
   const [showProviders, setShowProviders] = useState(false);
   const [loading, setLoading] = useState(true);
   const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
-  const [searchTerm, setSearchTerm] = useState("");
 
   const loadModules = async () => {
     setLoading(true);
@@ -71,7 +57,6 @@ export function QueryModulesManager() {
         label: m.label,
         icon: m.icon || "📋",
         enabled: m.enabled ?? true,
-        provider: m.provider || "VeiculosAPI",
         category: m.category || "outros",
       })));
     }
@@ -80,10 +65,7 @@ export function QueryModulesManager() {
 
   useEffect(() => { loadModules(); }, []);
 
-  const filteredModules = providerFilter === "all" ? modules : modules.filter(m => m.provider === providerFilter);
-  const enabledCount = filteredModules.filter(m => m.enabled).length;
-  const veiculosCount = modules.filter(m => m.provider === "VeiculosAPI").length;
-  const iseekCount = modules.filter(m => m.provider === "iSeek").length;
+  const enabledCount = modules.filter(m => m.enabled).length;
 
   const toggleModule = async (key: string) => {
     const mod = modules.find(m => m.module_key === key);
@@ -91,8 +73,6 @@ export function QueryModulesManager() {
 
     const newEnabled = !mod.enabled;
     setTogglingKeys(prev => new Set(prev).add(key));
-
-    // Optimistic update
     setModules(prev => prev.map(m => m.module_key === key ? { ...m, enabled: newEnabled } : m));
 
     const { error } = await supabase
@@ -101,7 +81,6 @@ export function QueryModulesManager() {
       .eq("module_key", key);
 
     if (error) {
-      // Revert
       setModules(prev => prev.map(m => m.module_key === key ? { ...m, enabled: !newEnabled } : m));
       toast.error(`Erro ao atualizar ${mod.label}`);
     } else {
@@ -116,12 +95,10 @@ export function QueryModulesManager() {
   };
 
   const toggleAll = async (enabled: boolean) => {
-    const targetModules = providerFilter === "all" ? modules : modules.filter(m => m.provider === providerFilter);
     const prev = modules.map(m => ({ ...m }));
-    const targetKeys = new Set(targetModules.map(m => m.module_key));
-    setModules(modules.map(m => targetKeys.has(m.module_key) ? { ...m, enabled } : m));
+    setModules(modules.map(m => ({ ...m, enabled })));
 
-    const keys = targetModules.map(m => m.module_key);
+    const keys = modules.map(m => m.module_key);
     const { error } = await supabase
       .from("query_modules")
       .update({ enabled })
@@ -131,35 +108,12 @@ export function QueryModulesManager() {
       setModules(prev);
       toast.error("Erro ao atualizar módulos");
     } else {
-      const label = providerFilter === "all" ? "Todos" : providerFilter;
-      toast.success(`${label}: ${enabled ? "ativados" : "desativados"}`);
+      toast.success(`Todos: ${enabled ? "ativados" : "desativados"}`);
     }
-  };
-
-  const toggleProviderBulk = async (provider: "VeiculosAPI" | "iSeek", enabled: boolean) => {
-    const prev = modules.map(m => ({ ...m }));
-    setModules(modules.map(m => m.provider === provider ? { ...m, enabled } : m));
-
-    const keys = modules.filter(m => m.provider === provider).map(m => m.module_key);
-    const { error } = await supabase
-      .from("query_modules")
-      .update({ enabled })
-      .in("module_key", keys);
-
-    if (error) {
-      setModules(prev);
-      toast.error("Erro ao atualizar módulos");
-    } else {
-      toast.success(`${provider}: ${enabled ? "ativados" : "desativados"}`);
-    }
-  };
-
-  const updateProviderUrl = (index: number, field: "baseUrl" | "port", value: string) => {
-    setProviders(prev => prev.map((p, i) => i === index ? { ...p, [field]: field === "port" ? parseInt(value) || 0 : value } : p));
   };
 
   const grouped = categoryOrder.reduce((acc, cat) => {
-    acc[cat] = filteredModules.filter(m => m.category === cat);
+    acc[cat] = modules.filter(m => m.category === cat);
     return acc;
   }, {} as Record<string, ModuleInfo[]>);
 
@@ -190,57 +144,11 @@ export function QueryModulesManager() {
         </CardContent>
       </Card>
 
-      {/* Provider Filter */}
-      <Card className="bg-card border-border">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <Filter className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium">Provedor de Consultas</span>
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            <Button
-              variant={providerFilter === "all" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setProviderFilter("all")}
-              className="text-xs"
-            >
-              Todos ({modules.length})
-            </Button>
-            <Button
-              variant={providerFilter === "VeiculosAPI" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setProviderFilter("VeiculosAPI")}
-              className="text-xs"
-            >
-              🚗 VeiculosAPI ({veiculosCount})
-            </Button>
-            <Button
-              variant={providerFilter === "iSeek" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setProviderFilter("iSeek")}
-              className="text-xs"
-            >
-              🔍 iSeek ({iseekCount})
-            </Button>
-          </div>
-          {providerFilter !== "all" && (
-            <div className="flex gap-2 mt-3 pt-3 border-t border-border">
-              <Button variant="outline" size="sm" onClick={() => toggleProviderBulk(providerFilter as "VeiculosAPI" | "iSeek", true)} className="flex-1 text-xs">
-                ✅ Ativar {providerFilter}
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => toggleProviderBulk(providerFilter as "VeiculosAPI" | "iSeek", false)} className="flex-1 text-xs">
-                ❌ Desativar {providerFilter}
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <Card className="bg-card border-border">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{filteredModules.length}</div>
+            <div className="text-2xl font-bold">{modules.length}</div>
             <div className="text-xs text-muted-foreground">Total</div>
           </CardContent>
         </Card>
@@ -252,7 +160,7 @@ export function QueryModulesManager() {
         </Card>
         <Card className="bg-card border-border">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-destructive">{filteredModules.length - enabledCount}</div>
+            <div className="text-2xl font-bold text-destructive">{modules.length - enabledCount}</div>
             <div className="text-xs text-muted-foreground">Inativos</div>
           </CardContent>
         </Card>
@@ -312,7 +220,7 @@ export function QueryModulesManager() {
                       <span className="text-lg">{mod.icon}</span>
                       <div className="min-w-0">
                         <div className="text-sm font-medium truncate">{mod.label}</div>
-                        <div className="text-[10px] text-muted-foreground">{mod.provider} • {mod.module_key}</div>
+                        <div className="text-[10px] text-muted-foreground">{mod.module_key}</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -340,41 +248,36 @@ export function QueryModulesManager() {
         <CardHeader className="pb-3 cursor-pointer" onClick={() => setShowProviders(!showProviders)}>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-base">
-              <Server className="h-4 w-4 text-primary" /> Provedores (URLs da API)
+              <Server className="h-4 w-4 text-primary" /> Provedor (URL da API)
             </CardTitle>
             {showProviders ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </div>
         </CardHeader>
         {showProviders && (
           <CardContent className="space-y-4">
-            {providers.map((p, idx) => (
-              <div key={p.name} className="space-y-2 p-3 rounded-lg bg-secondary/20 border border-border">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                    <span className="text-sm font-medium">{p.name}</span>
-                  </div>
-                  <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 text-xs">Online</Badge>
+            <div className="space-y-2 p-3 rounded-lg bg-secondary/20 border border-border">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                  <span className="text-sm font-medium">VeiculosAPI</span>
                 </div>
-                <div className="grid grid-cols-[1fr_80px] gap-2">
-                  <Input
-                    value={p.baseUrl}
-                    onChange={(e) => updateProviderUrl(idx, "baseUrl", e.target.value)}
-                    placeholder="URL base"
-                    className="text-xs font-mono h-8"
-                    readOnly
-                  />
-                  <Input
-                    value={String(p.port)}
-                    onChange={(e) => updateProviderUrl(idx, "port", e.target.value)}
-                    placeholder="Porta"
-                    className="text-xs font-mono h-8"
-                    type="number"
-                    readOnly
-                  />
-                </div>
+                <Badge variant="outline" className="text-emerald-500 border-emerald-500/30 text-xs">Online</Badge>
               </div>
-            ))}
+              <div className="grid grid-cols-[1fr_80px] gap-2">
+                <Input
+                  value="https://veiculosapi.com/api/proxy"
+                  placeholder="URL base"
+                  className="text-xs font-mono h-8"
+                  readOnly
+                />
+                <Input
+                  value="443"
+                  placeholder="Porta"
+                  className="text-xs font-mono h-8"
+                  readOnly
+                />
+              </div>
+            </div>
           </CardContent>
         )}
       </Card>
