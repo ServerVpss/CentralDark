@@ -5751,7 +5751,7 @@ class BotHandler {
     );
   }
 
-  async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string, telegramUserName?: string) {
+  async processQuery(chatId: number, telegramUserId: number, queryType: string, queryInput: string, estado?: string, telegramUserName?: string, telegramUsername?: string) {
     // Check maintenance mode - silently ignore so other bots can respond
     if (this.settings.maintenance_mode) {
       logCmd('INFO', 'CMD_BLOCKED', { reason: 'maintenance', queryType, chatId, userId: telegramUserId });
@@ -5827,7 +5827,8 @@ class BotHandler {
       const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
       const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       const userName = telegramUserName || 'Usuário';
-      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${userName}\n├ 📝 ID: ${telegramUserId}\n└ 🕐 ${dateStr}, ${timeStr}`;
+      const userIdentifier = telegramUsername ? `@${telegramUsername}` : `ID: ${telegramUserId}`;
+      const consultaFooter = `\n\n📋 <b>Consulta solicitada por:</b>\n├ 👤 ${escapeHtmlGlobal(userName)}\n├ 📝 ${userIdentifier}\n└ 🕐 ${dateStr}, ${timeStr}`;
 
       // Verificar se é resultado de CEP ou TELEFONE com múltiplos registros
       const rawDataStr = typeof result.data === 'string' ? result.data : '';
