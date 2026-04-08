@@ -243,74 +243,85 @@ export default function BotSettings() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-5 max-w-[1400px] mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/bots")}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <Bot className="h-5 w-5 text-primary" />
+      <div className="space-y-6 max-w-[1400px] mx-auto">
+        {/* Header — Premium glassmorphism */}
+        <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-5">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none" />
+          <div className="relative flex items-center gap-4">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/bots")} className="shrink-0 rounded-xl hover:bg-primary/10">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 shadow-lg shadow-primary/10">
+                <Bot className="h-6 w-6 text-primary" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold">{bot.name}</h1>
-                <p className="text-sm text-muted-foreground">
-                  @{bot.bot_username || "não sincronizado"} • Configurações do Bot
+              <div className="min-w-0">
+                <h1 className="text-xl font-bold truncate">{bot.name}</h1>
+                <p className="text-sm text-muted-foreground truncate">
+                  @{bot.bot_username || "não sincronizado"} • Configurações
                 </p>
               </div>
             </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Button variant="outline" size="sm" onClick={() => setBroadcastOpen(true)} className="rounded-xl border-border/50 hover:bg-primary/10">
+                <Send className="h-4 w-4 mr-2" />
+                Broadcast
+              </Button>
+              <Button variant="glow" size="sm" onClick={handleSave} disabled={saving} className="rounded-xl">
+                {saving ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4 mr-2" />
+                )}
+                Salvar
+              </Button>
+            </div>
           </div>
-          <Button variant="outline" onClick={() => setBroadcastOpen(true)}>
-            <Send className="h-4 w-4 mr-2" />
-            Broadcast
-          </Button>
-          <Button variant="glow" onClick={handleSave} disabled={saving}>
-            {saving ? (
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4 mr-2" />
-            )}
-            Salvar
-          </Button>
         </div>
 
         <Tabs defaultValue="general" className="w-full">
-          <TabsList className="grid w-full max-w-2xl grid-cols-4">
-            <TabsTrigger value="general" className="gap-2">
-              <Settings className="h-4 w-4" />
-              Configurações
-            </TabsTrigger>
-            <TabsTrigger value="modules" className="gap-2">
-              <Zap className="h-4 w-4" />
-              Módulos
-            </TabsTrigger>
-            <TabsTrigger value="engagement" className="gap-2">
-              <Sparkles className="h-4 w-4" />
-              Engajamento
-            </TabsTrigger>
-            <TabsTrigger value="payments" className="gap-2">
-              <CreditCard className="h-4 w-4" />
-              Pagamentos
-            </TabsTrigger>
-          </TabsList>
+          <div className="rounded-xl border border-border/40 bg-card/60 backdrop-blur-sm p-1.5 max-w-2xl">
+            <TabsList className="grid w-full grid-cols-4 bg-transparent h-auto gap-1">
+              <TabsTrigger value="general" className="gap-2 rounded-lg data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-sm py-2.5">
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Configurações</span>
+              </TabsTrigger>
+              <TabsTrigger value="modules" className="gap-2 rounded-lg data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-sm py-2.5">
+                <Zap className="h-4 w-4" />
+                <span className="hidden sm:inline">Módulos</span>
+              </TabsTrigger>
+              <TabsTrigger value="engagement" className="gap-2 rounded-lg data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-sm py-2.5">
+                <Sparkles className="h-4 w-4" />
+                <span className="hidden sm:inline">Engajamento</span>
+              </TabsTrigger>
+              <TabsTrigger value="payments" className="gap-2 rounded-lg data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-sm py-2.5">
+                <CreditCard className="h-4 w-4" />
+                <span className="hidden sm:inline">Pagamentos</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="general" className="mt-6">
             {/* Maintenance Mode Banner */}
-            <Card className={`mb-6 border-2 ${settings?.maintenance_mode ? "border-amber-500 bg-amber-500/5" : "border-border bg-card"}`}>
-              <CardContent className="p-4 space-y-4">
+            <Card className={`mb-6 rounded-xl border-2 transition-all ${settings?.maintenance_mode ? "border-amber-500/60 bg-amber-500/5 shadow-lg shadow-amber-500/5" : "border-border/40 bg-card/80 backdrop-blur-sm"}`}>
+              <CardContent className="p-5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl">{settings?.maintenance_mode ? "🔧" : "✅"}</span>
-                    <div className="space-y-0.5">
+                  <div className="flex items-start gap-4">
+                    <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${settings?.maintenance_mode ? "bg-amber-500/15 border border-amber-500/30" : "bg-emerald-500/15 border border-emerald-500/30"}`}>
+                      {settings?.maintenance_mode ? (
+                        <Settings className="h-5 w-5 text-amber-500 animate-spin" style={{ animationDuration: '3s' }} />
+                      ) : (
+                        <Check className="h-5 w-5 text-emerald-500" />
+                      )}
+                    </div>
+                    <div className="space-y-1">
                       <Label className="text-base font-semibold">
                         Modo Manutenção
                       </Label>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground leading-relaxed">
                         {settings?.maintenance_mode 
-                          ? "Bot em manutenção — consultas desativadas, outros bots do grupo podem responder"
-                          : "Bot operacional — respondendo consultas normalmente"}
+                          ? "Bot em manutenção — consultas desativadas"
+                          : "Bot operacional — respondendo normalmente"}
                       </p>
                     </div>
                   </div>
@@ -322,7 +333,7 @@ export default function BotSettings() {
                   />
                 </div>
                 {settings?.maintenance_mode && (
-                  <div className="space-y-2">
+                  <div className="space-y-2 pl-15">
                     <Label className="text-sm">Mensagem de manutenção</Label>
                     <Textarea
                       value={settings?.maintenance_message ?? "🔧 Bot em manutenção. Retornaremos em breve."}
@@ -332,11 +343,8 @@ export default function BotSettings() {
                         }
                       }}
                       placeholder="Mensagem exibida quando tentam usar consultas"
-                      className="bg-secondary/50 text-sm min-h-[60px]"
+                      className="bg-secondary/30 text-sm min-h-[60px] rounded-xl border-border/40"
                     />
-                    <p className="text-[10px] text-muted-foreground">
-                      Esta mensagem aparece quando alguém clica nos botões de consulta durante a manutenção.
-                    </p>
                   </div>
                 )}
               </CardContent>
@@ -344,25 +352,27 @@ export default function BotSettings() {
 
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Owners Section */}
-              <Card className="bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="h-5 w-5 text-primary" />
-                    Administradores (Owners)
+              <Card className="rounded-xl border-border/40 bg-card/80 backdrop-blur-sm shadow-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-base">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20">
+                      <Users className="h-4 w-4 text-blue-500" />
+                    </div>
+                    Administradores
                   </CardTitle>
-                  <CardDescription>
-                    IDs do Telegram que terão acesso ao painel admin do bot
+                  <CardDescription className="text-xs">
+                    IDs do Telegram com acesso ao painel admin
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3">
                   <div className="flex gap-2">
                     <Input
                       placeholder="ID do Telegram (ex: 123456789)"
                       value={newOwnerId}
                       onChange={(e) => setNewOwnerId(e.target.value)}
-                      className="bg-secondary/50"
+                      className="bg-secondary/30 rounded-xl border-border/40"
                     />
-                    <Button variant="outline" onClick={handleAddOwner}>
+                    <Button variant="outline" onClick={handleAddOwner} className="rounded-xl shrink-0">
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
@@ -372,42 +382,50 @@ export default function BotSettings() {
                       settings.owner_ids.map((ownerId) => (
                         <div
                           key={ownerId}
-                          className="flex items-center justify-between p-3 rounded-lg bg-secondary/50"
+                          className="flex items-center justify-between p-3 rounded-xl bg-secondary/30 border border-border/30"
                         >
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline">{ownerId}</Badge>
+                            <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                              <Users className="h-3.5 w-3.5 text-primary" />
+                            </div>
+                            <Badge variant="outline" className="font-mono text-xs">{ownerId}</Badge>
                           </div>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleRemoveOwner(ownerId)}
-                            className="text-destructive hover:text-destructive"
+                            className="text-destructive hover:text-destructive h-8 w-8 rounded-lg"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3.5 w-3.5" />
                           </Button>
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm text-muted-foreground text-center py-4">
-                        Nenhum owner configurado. Adicione seu ID do Telegram para acessar o painel admin.
-                      </p>
+                      <div className="text-center py-6 rounded-xl bg-secondary/20 border border-dashed border-border/40">
+                        <Users className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+                        <p className="text-xs text-muted-foreground">
+                          Nenhum owner configurado
+                        </p>
+                      </div>
                     )}
                   </div>
 
-                  <p className="text-xs text-muted-foreground">
-                    💡 Para descobrir seu ID, envie /start para @userinfobot no Telegram
+                  <p className="text-[11px] text-muted-foreground bg-primary/5 rounded-lg p-2.5 border border-primary/10">
+                    💡 Envie /start para @userinfobot no Telegram para descobrir seu ID
                   </p>
                 </CardContent>
               </Card>
 
               {/* Group Settings */}
-              <Card className="bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Link className="h-5 w-5 text-primary" />
+              <Card className="rounded-xl border-border/40 bg-card/80 backdrop-blur-sm shadow-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-base">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 border border-violet-500/20">
+                      <Link className="h-4 w-4 text-violet-500" />
+                    </div>
                     Grupo VIP
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-xs">
                     Configure o grupo privado para assinantes
                   </CardDescription>
                 </CardHeader>
@@ -615,18 +633,20 @@ export default function BotSettings() {
               </Card>
 
               {/* Terms Settings */}
-              <Card className="bg-card border-border lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-primary" />
+              <Card className="rounded-xl border-border/40 bg-card/80 backdrop-blur-sm shadow-sm lg:col-span-2">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-base">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                      <FileText className="h-4 w-4 text-emerald-500" />
+                    </div>
                     Termos de Uso
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-xs">
                     Termos que os usuários devem aceitar antes de usar o bot
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/20 border border-border/30">
                     <div className="space-y-0.5">
                       <Label>Ativar termos obrigatórios</Label>
                       <p className="text-xs text-muted-foreground">
@@ -644,24 +664,25 @@ export default function BotSettings() {
 
                   {termsEnabled && (
                     <>
-                      <Separator />
+                      <Separator className="opacity-30" />
                       <div className="space-y-2">
-                        <Label htmlFor="termsText">Texto dos Termos (suporta HTML)</Label>
+                        <Label htmlFor="termsText" className="text-sm">Texto dos Termos (HTML)</Label>
                         <Textarea
                           id="termsText"
                           placeholder="Digite os termos de uso..."
                           value={termsText}
                           onChange={(e) => setTermsText(e.target.value)}
-                          className="bg-secondary/50 min-h-[200px] font-mono text-sm"
+                          className="bg-secondary/30 min-h-[200px] font-mono text-sm rounded-xl border-border/40"
                         />
                         <div className="flex items-center justify-between">
-                          <p className="text-xs text-muted-foreground">
-                            Use tags HTML: &lt;b&gt;negrito&lt;/b&gt;, &lt;i&gt;itálico&lt;/i&gt;, &lt;code&gt;código&lt;/code&gt;
+                          <p className="text-[11px] text-muted-foreground">
+                            Tags: &lt;b&gt;negrito&lt;/b&gt;, &lt;i&gt;itálico&lt;/i&gt;, &lt;code&gt;código&lt;/code&gt;
                           </p>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => setTermsText(defaultTerms)}
+                            className="text-xs rounded-lg"
                           >
                             Restaurar padrão
                           </Button>
