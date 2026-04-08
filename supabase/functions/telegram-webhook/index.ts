@@ -3153,8 +3153,9 @@ function formatMultiPersonPage(
   const lines: string[] = [];
   
   // Dynamic title based on query type
-  const titleIcon = queryType === 'telefone' ? '📞' : '📍';
-  const titleText = queryType === 'telefone' ? 'CONSULTA DE TELEFONE' : 'CONSULTA DE CEP';
+  const isNome = queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros';
+  const titleIcon = isNome ? '👤' : queryType === 'telefone' ? '📞' : '📍';
+  const titleText = isNome ? 'CONSULTA POR NOME' : queryType === 'telefone' ? 'CONSULTA DE TELEFONE' : 'CONSULTA DE CEP';
   
   // Header with HTML tags goes outside <pre>
   let headerHtml = `${titleIcon} <b>${titleText}</b>\n`;
@@ -3164,7 +3165,9 @@ function formatMultiPersonPage(
   headerHtml += `\n`;
   
   // Informative description about why multiple results appear
-  if (queryType === 'telefone') {
+  if (isNome) {
+    headerHtml += `ℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>\n`;
+  } else if (queryType === 'telefone') {
     headerHtml += `ℹ️ <i>Um mesmo número de telefone pode estar vinculado a mais de uma pessoa no cadastro. Isso ocorre por transferências de linha, uso compartilhado ou registros históricos.</i>\n`;
   } else {
     headerHtml += `ℹ️ <i>Múltiplas pessoas foram encontradas vinculadas a este endereço/CEP nos registros cadastrais.</i>\n`;
