@@ -4695,6 +4695,7 @@ function formatGenericResult(
     'requests_used', 'requests_remaining', 'daily_limit', 'fallback_provider', 'apikey',
     'fromcache', 'cache_ttl_hours',
     'prioridade', 'operadora', 'classificacao', 'tipotelefone',
+    'tipo', 'data', 'ano', 'ranking', 'whatsapp',
   ]);
 
   const shouldSkipKey = (key: string): boolean => {
@@ -4738,15 +4739,15 @@ function formatGenericResult(
       
       // Smart handling for phone arrays
       const keyBase = (key.split('.').pop() || key).toLowerCase();
-      if ((keyBase === 'telefones' || keyBase === 'telefone' || keyBase === 'dadostelefone' || keyBase === 'phones') && typeof value[0] === 'object' && value[0] !== null) {
+      if ((keyBase === 'telefones' || keyBase === 'telefone' || keyBase === 'dadostelefone' || keyBase === 'phones' || keyBase === 'celulares' || keyBase.includes('telefon')) && typeof value[0] === 'object' && value[0] !== null) {
         value.forEach((item) => {
           if (typeof item !== 'object' || item === null) return;
           const tel = item as Record<string, unknown>;
           const ddd = String(tel.ddd || tel.DDD || '').replace(/\D/g, '');
-          const num = String(tel.numero || tel.telefone || tel.completo || tel.phone || '').replace(/\D/g, '');
+          const num = String(tel.numero || tel.telefone || tel.completo || tel.phone || tel.celular || '').replace(/\D/g, '');
           if (!num) return;
           const formatted = formatPhoneNumber(ddd, num);
-          addItem('telefones', formatted);
+          if (formatted) addItem('telefones', formatted);
         });
         return;
       }
