@@ -7328,9 +7328,9 @@ class BotHandler {
       ]);
       buttons.push([btn("🗑️ Apagar", `delete_msg_user:${telegramUserId}`)]);
 
-      // Construir texto descritivo
-      const optionsList = enabledOptions.map(o => `${o.emoji} <b>${o.label}</b> — ${o.desc}`).join('\n');
-      const menuText = `${menuConfig.description}\n\n${optionsList}\n\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção:`;
+      // Construir texto descritivo com separação visual
+      const optionsList = enabledOptions.map(o => `${o.emoji} <b>${o.label}</b>\n     └ ${o.desc}`).join('\n\n');
+      const menuText = `${menuConfig.description}\n━━━━━━━━━━━━━━━━━━━━\n\n${optionsList}\n\n━━━━━━━━━━━━━━━━━━━━\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção:`;
 
       await telegramRequest(this.token, "sendMessage", {
         chat_id: chatId,
