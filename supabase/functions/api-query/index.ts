@@ -44,14 +44,24 @@ const MODULE_WHITELIST = new Set([
 ]);
 
 // Mapeamento de módulo interno → nome real na VeiculosAPI
-// Módulos que usam prefixo iseek-dados/iseek-fotos na API
+// Todos os 75 módulos passam pela mesma API com nomes iseek-*
 const MODULE_API_NAME: Record<string, string> = {
+  // Pessoa
+  "cpf": "iseek-cpf",
+  "nome": "iseek-dados---nome",
+  "rg": "iseek-dados---rg",
+  "titulo": "iseek-dados---titulo",
+  "parentes": "iseek-dados---parentes",
+  "mae": "iseek-dados---mae",
+  "cnh": "iseek-dados---cnh",
+  "pis": "iseek-dados---pis",
   "pai": "iseek-dados---pai",
   "nasc": "iseek-dados---nasc",
   "nis": "iseek-dados---nis",
   "obito": "iseek-dados---obito",
   "registro": "iseek-dados---registro",
   "nomeabreviadofiltros": "iseek-dados---nomeabreviadofiltros",
+  // Documentos
   "cnham": "iseek-dados---cnham",
   "cnhrs": "iseek-dados---cnhrs",
   "cnhrr": "iseek-dados---cnhrr",
@@ -62,6 +72,17 @@ const MODULE_API_NAME: Record<string, string> = {
   "advogadooabuf": "iseek-dados---advogadooabuf",
   "catcpf": "iseek-dados---catcpf",
   "catnumero": "iseek-dados---catnumero",
+  // Contato
+  "telefone": "iseek-dados---telefone",
+  "email": "iseek-dados---email",
+  "cep": "iseek-dados---cep",
+  "endereco": "iseek-dados---endereco",
+  // Financeiro
+  "pix": "iseek-dados---pix",
+  "score": "iseek-dados---score",
+  "renda": "iseek-dados---renda",
+  "credilink": "iseek-dados---credilink",
+  "poderaquisitivo": "iseek-dados---poderaquisitivo",
   "dividas": "iseek-dados---dividas",
   "bens": "iseek-dados---bens",
   "irpf": "iseek-dados---irpf",
@@ -69,19 +90,49 @@ const MODULE_API_NAME: Record<string, string> = {
   "cheque": "iseek-dados---cheque",
   "assessoria": "iseek-dados---assessoria",
   "iptu": "iseek-dados---iptu",
+  // Veículos
+  "placa": "iseek-dados---placa",
+  "chassi": "iseek-dados---chassi",
+  "renavam": "iseek-dados---renavam",
+  "motor": "iseek-dados---motor",
+  "veiculos": "iseek-dados---veiculos",
+  "crlvto": "iseek-dados---crlvto",
+  "crlvmt": "iseek-dados---crlvmt",
+  "crlvto-foto": "iseek-fotos---crlvto",
+  "crlvmt-foto": "iseek-fotos---crlvmt",
+  // Empresa
+  "cnpj": "iseek-dados---cnpj",
+  // Justiça
+  "processos": "iseek-dados---processos",
+  "siel": "iseek-dados---siel",
+  "mandado": "iseek-dados---mandado",
+  "certidoes": "iseek-dados---certidoes",
+  "processo": "iseek-dados---processo",
+  // Governo
   "vacinas": "iseek-dados---vacinas",
   "beneficios": "iseek-dados---beneficios",
   "faculdades": "iseek-dados---faculdades",
   "func": "iseek-dados---func",
   "matricula": "iseek-dados---matricula",
-  "mandado": "iseek-dados---mandado",
-  "certidoes": "iseek-dados---certidoes",
-  "processo": "iseek-dados---processo",
+  // Trabalho
   "rais": "iseek-dados---rais",
-  "veiculos": "iseek-dados---veiculos",
-  "crlvto": "iseek-dados---crlvto",
-  "crlvmt": "iseek-dados---crlvmt",
-  "cnpj": "iseek-dados---cnpj",
+  // SUS
+  "cpfsus": "iseek-dados---cpfsus",
+  // TSE
+  "tse-3": "iseek-dados---tse-3",
+  // Fotos por estado
+  "fotomg": "iseek-fotos---fotomg",
+  "fotosp": "iseek-fotos---fotosp",
+  "fotorj": "iseek-fotos---fotorj",
+  "fotoce": "iseek-fotos---fotoce",
+  "fotopr": "iseek-fotos---fotopr",
+  "fotoma": "iseek-fotos---fotoma",
+  "fotoes": "iseek-fotos---fotoes",
+  "fotodf": "iseek-fotos---fotodf",
+  "fototo": "iseek-fotos---fototo",
+  "fotoms": "iseek-fotos---fotoms",
+  "fotoro": "iseek-fotos---fotoro",
+  "fotopi": "iseek-fotos---fotopi",
   "fotoal": "iseek-fotos---fotoal",
   "fotogo": "iseek-fotos---fotogo",
   "fotopb": "iseek-fotos---fotopb",
@@ -91,8 +142,6 @@ const MODULE_API_NAME: Record<string, string> = {
   "fotocnh": "iseek-fotos---fotocnh",
   "fotodetran": "iseek-dados---fotodetran",
   "fotomapresos": "iseek-fotos---fotomapresos",
-  "crlvto-foto": "iseek-fotos---crlvto",
-  "crlvmt-foto": "iseek-fotos---crlvmt",
 };
 
 // Foto state modules for national search
