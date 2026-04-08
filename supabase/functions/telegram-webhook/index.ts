@@ -243,7 +243,7 @@ async function isQueryTypeEnabled(queryType: string, supabase: SupabaseClient): 
 }
 
 const queryTypeLabels: Record<string, string> = {
-  cpf: "👤 CPF", cpffull: "👤 CPF Completo",
+  cpf: "👤 CPF", cpfbasico: "👤 CPF Básico", cpffull: "👤 CPF Completo",
   "cnpj": "🏢 CNPJ",
   placa: "🚗 Placa",
   telefone: "📞 Telefone",

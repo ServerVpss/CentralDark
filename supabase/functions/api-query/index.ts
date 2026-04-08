@@ -47,6 +47,7 @@ const MODULE_WHITELIST = new Set([
 const MODULE_API_NAME: Record<string, string> = {
   // Pessoa
   "cpf": "iseek-cpf",
+  "cpfbasico": "iseek-cpfbasico",
   "nome": "iseek-dados---nome",
   "rg": "iseek-dados---rg",
   "titulo": "iseek-dados---titulo",
