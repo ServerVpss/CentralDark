@@ -32,21 +32,37 @@ serve(async (req) => {
 
     const data = await response.json();
 
-    // Extract structured account info
+    console.log("API raw response keys:", Object.keys(data));
+
+    // New structure: api_info contains usage data
+    const apiInfo = data.api_info || {};
+    // Legacy structure fallback
     const limites = data.limites || {};
     const plano = data.plano || {};
 
+    // Determine if API is active based on available data
+    const hasApiInfo = Object.keys(apiInfo).length > 0;
+    const dailyLimit = apiInfo.daily_limit ?? limites.total_diario ?? 0;
+    const requestsUsed = apiInfo.requests_used ?? limites.consumo_hoje ?? 0;
+    const requestsRemaining = apiInfo.requests_remaining ?? 0;
+
+    // API is active if we got a valid response with api_info or plano status
+    const isActive = hasApiInfo
+      ? dailyLimit > 0
+      : plano.status === "Ativo";
+
     const result = {
-      ativo: plano.status === "Ativo",
-      plano_tipo: plano.tipo || "Desconhecido",
-      plano_status: plano.status || "Desconhecido",
+      ativo: isActive,
+      plano_tipo: plano.tipo || (hasApiInfo ? "VeiculosAPI" : "Desconhecido"),
+      plano_status: plano.status || (isActive ? "Ativo" : "Inativo"),
       vencimento: plano.vencimento || null,
       dias_restantes: plano.dias_totais_restantes ?? null,
       tempo_restante: plano.tempo_restante_detalhado || null,
-      consumo_hoje: limites.consumo_hoje ?? 0,
-      total_diario: limites.total_diario ?? 0,
+      consumo_hoje: requestsUsed,
+      total_diario: dailyLimit,
       reset_em: limites.reset_em || null,
       usuario: data.usuario || null,
+      restante: requestsRemaining,
     };
 
     return new Response(JSON.stringify({ success: true, data: result }), {
