@@ -9,7 +9,7 @@ const corsHeaders = {
 // =============== WHITELIST EXATA DOS 75 MÓDULOS ===============
 const MODULE_WHITELIST = new Set([
   // Pessoa
-  "cpf", "nome", "rg", "titulo", "parentes", "mae", "cnh", "pis",
+  "cpf", "cpffull", "nome", "rg", "titulo", "parentes", "mae", "cnh", "pis",
   "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
   // Documentos
   "cnham", "cnhrs", "cnhrr", "cnhnc", "oab",
