@@ -5825,6 +5825,14 @@ class BotHandler {
         return;
       }
 
+      // Send warnings (e.g. country code removed)
+      const inputWarnings = result._inputWarnings as string[] | undefined;
+      if (inputWarnings?.length) {
+        delete result._inputWarnings;
+        const warningText = `ℹ️ <i>${inputWarnings.map((w: string) => escapeHtmlGlobal(w)).join('\n')}</i>`;
+        await sendMessage(this.token, chatId, warningText, undefined, undefined, "HTML");
+      }
+
       // Footer "Consulta solicitada por"
       const now = new Date();
       const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
