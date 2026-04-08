@@ -3963,7 +3963,7 @@ function formatCpfIseekResult(
   // Dívidas
   const bacen = (dividas.bacen || []) as Array<Record<string, unknown>>;
   if (bacen.length > 0) {
-    bacen.slice(0, 3).forEach(d => {
+    bacen.forEach(d => {
       const valor = clean(d.valorConsolidado);
       const sit = clean(d.situacao);
       const receita = clean(d.receitaPrincipal);
@@ -3978,7 +3978,7 @@ function formatCpfIseekResult(
 
   // Cartões
   if (cartoes.length > 0) {
-    cartoes.slice(0, 3).forEach(c => {
+    cartoes.forEach(c => {
       const banco = clean(c.banco);
       const bandeira = clean(c.bandeira);
       const tipo = clean(c.tipo);
@@ -4004,24 +4004,20 @@ function formatCpfIseekResult(
       seenProc.add(proc);
       const polo = clean(p.polo);
       const parte = clean(p.tipoParte);
-      if (seenProc.size <= 5) {
-        lines.push(`📄 ${escapeHtml(proc)} — ${escapeHtml(polo)} (${escapeHtml(parte)})`);
-      }
+      lines.push(`📄 ${escapeHtml(proc)} — ${escapeHtml(polo)} (${escapeHtml(parte)})`);
     });
-    if (seenProc.size > 5) lines.push(`   <i>... e mais ${seenProc.size - 5}</i>`);
   }
 
   // ═══════════════ 🚗 VEÍCULOS ═══════════════
   if (veiculos.length > 0) {
     lines.push('');
     lines.push(`🚗 <b>VEÍCULOS</b> (${veiculos.length})`);
-    veiculos.slice(0, 5).forEach(v => {
+    veiculos.forEach(v => {
       const placa = clean(v.placaAntiga);
       const renavam = clean(v.renavam);
       const ano = clean(v.ano);
       lines.push(`🚘 ${escapeHtml(placa)}${ano ? ' (' + escapeHtml(ano) + ')' : ''}${renavam ? ' RENAVAM: ' + escapeHtml(renavam) : ''}`);
     });
-    if (veiculos.length > 5) lines.push(`   <i>... e mais ${veiculos.length - 5}</i>`);
   }
 
   // ═══════════════ 🌐 INTERNET ═══════════════
@@ -4029,12 +4025,11 @@ function formatCpfIseekResult(
   if (validNet.length > 0) {
     lines.push('');
     lines.push(`🌐 <b>INTERNET</b> (${validNet.length})`);
-    validNet.slice(0, 5).forEach(i => {
+    validNet.forEach(i => {
       const url = clean(i.websiteUrl);
       const status = clean(i.status);
       lines.push(`🔗 ${escapeHtml(url)}${status ? ' — ' + escapeHtml(status) : ''}`);
     });
-    if (validNet.length > 5) lines.push(`   <i>... e mais ${validNet.length - 5}</i>`);
   }
 
   // ═══════════════ 📋 IRPF ═══════════════
@@ -4043,7 +4038,7 @@ function formatCpfIseekResult(
     if (validIrpf.length > 0) {
       lines.push('');
       lines.push(`📋 <b>IRPF</b>`);
-      validIrpf.slice(0, 3).forEach(i => {
+      validIrpf.forEach(i => {
         const ano = clean(i.anoReferencia);
         const sit = clean(i.situacaoReceita);
         lines.push(`📅 ${escapeHtml(ano)}: ${escapeHtml(sit)}`);
