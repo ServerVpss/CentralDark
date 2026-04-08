@@ -1,0 +1,1 @@
+UPDATE query_modules SET enabled = true WHERE enabled = false;
