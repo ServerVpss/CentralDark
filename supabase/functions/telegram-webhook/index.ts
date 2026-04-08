@@ -4420,10 +4420,7 @@ function formatNomeResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📝 Nome';
-  const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>`);
-  lines.push(``);
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>\n`;
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4458,7 +4455,7 @@ function formatNomeResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA EMAIL (LISTA DE PESSOAS) ===============
@@ -4473,10 +4470,7 @@ function formatEmailResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📧 Email';
-  const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Consulta por e-mail retorna pessoas que possuem este endereço de e-mail vinculado em seus cadastros.</i>`);
-  lines.push(``);
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Consulta por e-mail retorna pessoas que possuem este endereço de e-mail vinculado em seus cadastros.</i>\n`;
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4519,7 +4513,7 @@ function formatEmailResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA CEP (PESSOAS + ENDEREÇO) ===============
@@ -4534,10 +4528,7 @@ function formatCepResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📍 CEP';
-  const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Consulta por CEP retorna moradores registrados nesta região. Os dados são baseados em registros cadastrais e podem incluir residentes atuais e anteriores.</i>`);
-  lines.push(``);
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Consulta por CEP retorna moradores registrados nesta região. Os dados são baseados em registros cadastrais e podem incluir residentes atuais e anteriores.</i>\n`;
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4589,7 +4580,7 @@ function formatCepResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA SCORE ===============
@@ -4604,10 +4595,7 @@ function formatScoreResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📊 Score';
-  const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Análise de crédito e score financeiro baseada em dados cadastrais e histórico de pagamentos.</i>`);
-  lines.push(``);
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Análise de crédito e score financeiro baseada em dados cadastrais e histórico de pagamentos.</i>\n`;
 
   let basicos: Record<string, unknown> = {};
   let scoreData: Record<string, unknown> = {};
@@ -4669,7 +4657,7 @@ function formatScoreResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA RENDA/PODER AQUISITIVO ===============
