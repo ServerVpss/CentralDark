@@ -955,18 +955,15 @@ function formatVehicleResult(
 
   if (identification.length > 0) {
     lines.push(`🔖 <b>IDENTIFICAÇÃO</b>`);
-    lines.push(...identification);
-    lines.push('');
+    lines.push(`<pre>${identification.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (specs.length > 0) {
     lines.push(`⚙️ <b>ESPECIFICAÇÕES</b>`);
-    lines.push(...specs);
-    lines.push('');
+    lines.push(`<pre>${specs.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (situation.length > 0) {
     lines.push(`📊 <b>SITUAÇÃO</b>`);
-    lines.push(...situation);
-    lines.push('');
+    lines.push(`<pre>${situation.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (restrictions.length > 0) {
     const hasRestriction = (vehicleData.possuiRestricoes && String(vehicleData.possuiRestricoes).toLowerCase() === 'sim') ||
@@ -974,13 +971,11 @@ function formatVehicleResult(
       vehicleData.restricaoRenajud === 'Sim' || vehicleData.leilao === 'Sim' ||
       (vehicleData.restricao1 && !/sem restri/i.test(String(vehicleData.restricao1)));
     lines.push(`${hasRestriction ? '🚨' : '✅'} <b>RESTRIÇÕES</b>`);
-    lines.push(...restrictions);
-    lines.push('');
+    lines.push(`<pre>${restrictions.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
   if (other.length > 0) {
     lines.push(`📋 <b>OUTROS DADOS</b>`);
-    lines.push(...other);
-    lines.push('');
+    lines.push(`<pre>${other.map(l => l.replace(/^├\s*/, '').replace(/<\/?b>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')).join('\n')}</pre>`);
   }
 
   lines.push(`📡 <i>Resultado via ${botTag}</i>`);
@@ -3512,17 +3507,14 @@ function formatTelefoneResult(
   // Formato atual do provedor: { data: [{ nome, cpfCnpj, origem, data }] } ou nested { data: { data: [...] } }
   let topLevelRecords: unknown[] | undefined;
   const dataField = data.data;
-  console.log(`[TELEFONE_DEBUG] data keys: ${Object.keys(data).join(',')}, dataField type: ${Array.isArray(dataField) ? 'array' : typeof dataField}, dataField length: ${Array.isArray(dataField) ? dataField.length : 'N/A'}`);
   if (Array.isArray(dataField)) {
     topLevelRecords = dataField;
   } else if (dataField && typeof dataField === 'object' && !Array.isArray(dataField)) {
     const nested = (dataField as Record<string, unknown>).data;
-    console.log(`[TELEFONE_DEBUG] nested type: ${Array.isArray(nested) ? 'array' : typeof nested}, nested length: ${Array.isArray(nested) ? nested.length : 'N/A'}`);
     if (Array.isArray(nested)) {
       topLevelRecords = nested;
     }
   }
-  console.log(`[TELEFONE_DEBUG] topLevelRecords: ${topLevelRecords ? topLevelRecords.length : 'undefined'}`);
   if (Array.isArray(topLevelRecords) && topLevelRecords.length > 0) {
     topLevelRecords.forEach((record) => {
       if (record && typeof record === 'object') {
@@ -3530,7 +3522,6 @@ function formatTelefoneResult(
       }
     });
   }
-  console.log(`[TELEFONE_DEBUG] allRecords after topLevel: ${allRecords.length}`);
 
   // Formato legado: { dados: { telefone: [...] } }
   if (allRecords.length === 0 && dados && typeof dados === 'object') {
@@ -3736,7 +3727,7 @@ function formatTelefoneResult(
   const addSection = (icon: string, title: string, fields: string[]) => {
     if (fields.length === 0) return;
     parts.push(`${icon} <b>${escapeHtml(title)}</b>`);
-    parts.push(`<code>${fields.map(f => escapeHtml(f)).join('\n')}</code>`);
+    parts.push(`<pre>${fields.join('\n')}</pre>`);
   };
 
   const titularFields: string[] = [];
@@ -3946,57 +3937,57 @@ function formatCpfIseekResult(
   const descSit = clean(sitCad.descricaoSit);
   const rendaAtual = clean(basicos.rendaAtual);
   const faixaScore = clean(basicos.faixaScore);
-
-  if (nome) lines.push(`📋 Nome: <b>${escapeHtml(nome)}</b>`);
-  if (cpf) lines.push(`🆔 CPF: ${escapeHtml(formatCpfNum(cpf))}`);
-  if (nasc) lines.push(`📅 Nascimento: ${escapeHtml(nasc)}`);
-  if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo === 'F' ? 'Feminino' : sexo === 'M' ? 'Masculino' : sexo)}`);
-  if (nacion) lines.push(`🌍 Nacionalidade: ${escapeHtml(nacion)}`);
-  if (descSit) lines.push(`📊 Situação: ${escapeHtml(descSit)}`);
-  if (rendaAtual) lines.push(`💵 Renda: R$ ${escapeHtml(rendaAtual)}`);
-  if (faixaScore) lines.push(`📈 Score: ${escapeHtml(faixaScore)}`);
-
-  // Filiação inline
   const mae = clean(filiacao.nomeMae);
   const pai = clean(filiacao.nomePai);
-  if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
-  if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
+
+  const personalFields: string[] = [];
+  if (nome) personalFields.push(`NOME => ${nome}`);
+  if (cpf) personalFields.push(`CPF => ${formatCpfNum(cpf)}`);
+  if (nasc) personalFields.push(`NASCIMENTO => ${nasc}`);
+  if (sexo) personalFields.push(`SEXO => ${sexo === 'F' ? 'Feminino' : sexo === 'M' ? 'Masculino' : sexo}`);
+  if (nacion) personalFields.push(`NACIONALIDADE => ${nacion}`);
+  if (descSit) personalFields.push(`SITUAÇÃO => ${descSit}`);
+  if (rendaAtual) personalFields.push(`RENDA => R$ ${rendaAtual}`);
+  if (faixaScore) personalFields.push(`SCORE => ${faixaScore}`);
+  if (mae) personalFields.push(`MÃE => ${mae}`);
+  if (pai) personalFields.push(`PAI => ${pai}`);
+  if (personalFields.length > 0) {
+    lines.push(`<pre>${personalFields.join('\n')}</pre>`);
+  }
 
   // ═══════════════ 📄 DOCUMENTOS ═══════════════
-  const docLines: string[] = [];
+  const docFields: string[] = [];
   const cnhReg = clean(cnh.registro);
   if (cnhReg) {
     const cnhCat = clean(cnh.categoria);
     const cnhVal = clean(cnh.dataValidade);
     const cnhUf = clean(cnh.ufCnh);
-    docLines.push(`🪪 CNH: ${escapeHtml(cnhReg)}${cnhCat ? ' Cat. ' + escapeHtml(cnhCat) : ''}${cnhUf ? ' (' + escapeHtml(cnhUf) + ')' : ''}${cnhVal ? ' Val: ' + escapeHtml(cnhVal) : ''}`);
+    docFields.push(`CNH => ${cnhReg}${cnhCat ? ' Cat. ' + cnhCat : ''}${cnhUf ? ' (' + cnhUf + ')' : ''}${cnhVal ? ' Val: ' + cnhVal : ''}`);
   }
   if (cnsHist.length > 0) {
     const cns = clean((cnsHist[0] as Record<string, unknown>).cns);
-    if (cns) docLines.push(`🏥 CNS: ${escapeHtml(cns)}`);
+    if (cns) docFields.push(`CNS => ${cns}`);
   }
   if (pisHist.length > 0) {
     const pis = clean((pisHist[0] as Record<string, unknown>).pisNis);
-    if (pis) docLines.push(`📋 PIS: ${escapeHtml(pis)}`);
+    if (pis) docFields.push(`PIS => ${pis}`);
   }
   if (tituloHist.length > 0) {
     const titulo = clean((tituloHist[0] as Record<string, unknown>).titulo);
-    if (titulo) docLines.push(`🗳️ Título: ${escapeHtml(titulo)}`);
+    if (titulo) docFields.push(`TÍTULO => ${titulo}`);
   }
   const ctpsNum = clean(ctps.ctpsNumero);
-  if (ctpsNum) docLines.push(`📒 CTPS: ${escapeHtml(ctpsNum)}/${escapeHtml(clean(ctps.ctpsSerie) || '?')}`);
+  if (ctpsNum) docFields.push(`CTPS => ${ctpsNum}/${clean(ctps.ctpsSerie) || '?'}`);
 
-  if (docLines.length > 0) {
-    lines.push('');
-    lines.push(`📄 <b>DOCUMENTOS</b>`);
-    lines.push(...docLines);
+  if (docFields.length > 0) {
+    lines.push(`\n📄 <b>DOCUMENTOS</b>`);
+    lines.push(`<pre>${docFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 📱 TELEFONES ═══════════════
   const validTels = tels.filter(t => !isNI(t.telefone) && !isNI(t.ddd));
   if (validTels.length > 0) {
-    lines.push('');
-    lines.push(`📱 <b>TELEFONES</b> (${validTels.length})`);
+    const telFields: string[] = [];
     const seen = new Set<string>();
     validTels.forEach(t => {
       const ddd = clean(t.ddd);
@@ -4005,26 +3996,27 @@ function formatCpfIseekResult(
       if (seen.has(key)) return;
       seen.add(key);
       const data = clean(t.data);
-      lines.push(`📞 (${escapeHtml(ddd)}) ${escapeHtml(num)}${data ? ' — ' + escapeHtml(data) : ''}`);
+      telFields.push(`TELEFONE => (${ddd}) ${num}${data ? ' — ' + data : ''}`);
     });
+    if (telFields.length > 0) {
+      lines.push(`\n📱 <b>TELEFONES</b> (${validTels.length})`);
+      lines.push(`<pre>${telFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 📧 E-MAILS ═══════════════
   const validEmails = emails.filter(e => clean(e.email).includes('@'));
   const uniqueEmails = [...new Set(validEmails.map(e => clean(e.email).toLowerCase()))];
   if (uniqueEmails.length > 0) {
-    lines.push('');
-    lines.push(`📧 <b>E-MAILS</b> (${uniqueEmails.length})`);
-    uniqueEmails.forEach(email => {
-      lines.push(`✉️ ${escapeHtml(email)}`);
-    });
+    const emailFields = uniqueEmails.map(email => `EMAIL => ${email}`);
+    lines.push(`\n📧 <b>E-MAILS</b> (${uniqueEmails.length})`);
+    lines.push(`<pre>${emailFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 📍 ENDEREÇOS ═══════════════
   const validEnds = enderecos.filter(e => !isNI(e.logradouro) && !isNI(e.cidade));
   if (validEnds.length > 0) {
-    lines.push('');
-    lines.push(`📍 <b>ENDEREÇOS</b> (${validEnds.length})`);
+    const endFields: string[] = [];
     const seenEnds = new Set<string>();
     validEnds.forEach(e => {
       const log = clean(e.logradouro);
@@ -4038,15 +4030,17 @@ function formatCpfIseekResult(
       seenEnds.add(key);
       const addr = [log, num, bairro].filter(Boolean).join(', ');
       const loc = [cidade, uf].filter(Boolean).join('/');
-      lines.push(`🏠 ${escapeHtml(addr)}`);
-      lines.push(`   ${escapeHtml(loc)}${cep ? ' CEP: ' + escapeHtml(cep) : ''}`);
+      endFields.push(`ENDEREÇO => ${addr}, ${loc}${cep ? ' CEP: ' + cep : ''}`);
     });
+    if (endFields.length > 0) {
+      lines.push(`\n📍 <b>ENDEREÇOS</b> (${validEnds.length})`);
+      lines.push(`<pre>${endFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 💼 EMPREGOS ═══════════════
   if (empregos.length > 0) {
-    lines.push('');
-    lines.push(`💼 <b>EMPREGOS</b> (${empregos.length})`);
+    const empFields: string[] = [];
     empregos.forEach(emp => {
       const cargo = clean(emp.descricaoCbo);
       const cnpj = clean(emp.cnpjEmpregador);
@@ -4055,96 +4049,87 @@ function formatCpfIseekResult(
       const deslig = clean(emp.dataDesligamento);
       const razao = clean(emp.razaoSocial);
       const cargoStr = cargo || 'Cargo não informado';
-      lines.push(`🏢 ${escapeHtml(cargoStr)}`);
-      if (razao) lines.push(`   Empresa: ${escapeHtml(razao)}`);
-      if (cnpj) lines.push(`   CNPJ: ${escapeHtml(cnpj)}`);
+      empFields.push(`CARGO => ${cargoStr}`);
+      if (razao) empFields.push(`EMPRESA => ${razao}`);
+      if (cnpj) empFields.push(`CNPJ => ${cnpj}`);
       const periodo = [admissao, deslig].filter(Boolean).join(' → ');
-      if (periodo) lines.push(`   📅 ${escapeHtml(periodo)}${salario ? ' | R$ ' + escapeHtml(salario) : ''}`);
+      if (periodo) empFields.push(`PERÍODO => ${periodo}${salario ? ' | R$ ' + salario : ''}`);
     });
+    lines.push(`\n💼 <b>EMPREGOS</b> (${empregos.length})`);
+    lines.push(`<pre>${empFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 🏭 EMPRESAS ═══════════════
   if (empresas.length > 0) {
-    lines.push('');
-    lines.push(`🏭 <b>EMPRESAS</b> (${empresas.length})`);
+    const empresaFields: string[] = [];
     empresas.forEach(emp => {
       const razao = clean(emp.razaoSocial);
       const cnpj = clean(emp.cnpj);
       const fantasia = clean(emp.nomeFantasia);
-      if (razao) lines.push(`🏢 ${escapeHtml(razao)}${fantasia ? ' (' + escapeHtml(fantasia) + ')' : ''}`);
-      if (cnpj) lines.push(`   CNPJ: ${escapeHtml(cnpj)}`);
+      if (razao) empresaFields.push(`EMPRESA => ${razao}${fantasia ? ' (' + fantasia + ')' : ''}`);
+      if (cnpj) empresaFields.push(`CNPJ => ${cnpj}`);
     });
+    if (empresaFields.length > 0) {
+      lines.push(`\n🏭 <b>EMPRESAS</b> (${empresas.length})`);
+      lines.push(`<pre>${empresaFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 👨‍👩‍👧 PARENTES ═══════════════
   if (parentesNovos.length > 0) {
-    lines.push('');
-    lines.push(`👨‍👩‍👧 <b>PARENTES</b> (${parentesNovos.length})`);
+    const parFields: string[] = [];
     parentesNovos.forEach(p => {
       const nomeP = clean(p.nome);
       const relacao = clean(p.tipoRelacao);
       const cpfP = clean(p.cpf);
       const nascP = clean(p.dataNascimento);
       if (!nomeP) return;
-      let icon = '👤';
-      const rel = relacao.toLowerCase();
-      if (rel.includes('mãe') || rel.includes('mae')) icon = '👩';
-      else if (rel.includes('pai')) icon = '👨';
-      else if (rel.includes('filh')) icon = rel.includes('filha') ? '👧' : '👦';
-      else if (rel.includes('irm')) icon = rel.includes('irmã') || rel.includes('irma') ? '👧' : '👦';
-      else if (rel.includes('avó') || rel.includes('avo')) icon = '👵';
-      else if (rel.includes('avô') || rel.includes('avo')) icon = '👴';
-      lines.push(`${icon} ${escapeHtml(relacao)}: ${escapeHtml(nomeP)}${cpfP ? ' — ' + escapeHtml(formatCpfNum(cpfP)) : ''}${nascP ? ' (' + escapeHtml(nascP) + ')' : ''}`);
+      parFields.push(`${relacao || 'PARENTE'} => ${nomeP}${cpfP ? ' — ' + formatCpfNum(cpfP) : ''}${nascP ? ' (' + nascP + ')' : ''}`);
     });
+    if (parFields.length > 0) {
+      lines.push(`\n👨‍👩‍👧 <b>PARENTES</b> (${parentesNovos.length})`);
+      lines.push(`<pre>${parFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 💳 FINANCEIRO ═══════════════
-  const finLines: string[] = [];
+  const finFields: string[] = [];
   const pAq = clean(poderAq.poderAquisitivo);
   const faixaRenda = clean(poderAq.faixaRenda);
   const codMosaic = clean(mosaic.codMosaic);
   const descMosaic = clean(mosaic.descMosaicSecundario);
-  if (pAq) finLines.push(`💰 Poder Aquisitivo: ${escapeHtml(pAq)}`);
-  if (faixaRenda) finLines.push(`📊 Faixa: ${escapeHtml(faixaRenda)}`);
-  if (codMosaic) finLines.push(`🎯 Serasa Mosaic: ${escapeHtml(codMosaic)}${descMosaic ? ' — ' + escapeHtml(descMosaic) : ''}`);
+  if (pAq) finFields.push(`PODER AQUISITIVO => ${pAq}`);
+  if (faixaRenda) finFields.push(`FAIXA RENDA => ${faixaRenda}`);
+  if (codMosaic) finFields.push(`SERASA MOSAIC => ${codMosaic}${descMosaic ? ' — ' + descMosaic : ''}`);
 
-  // Dívidas
   const bacen = (dividas.bacen || []) as Array<Record<string, unknown>>;
   if (bacen.length > 0) {
     bacen.forEach(d => {
       const valor = clean(d.valorConsolidado);
       const sit = clean(d.situacao);
       const receita = clean(d.receitaPrincipal);
-      finLines.push(`⚠️ Dívida: R$ ${escapeHtml(valor)} — ${escapeHtml(sit)}${receita ? ' (' + escapeHtml(receita) + ')' : ''}`);
+      finFields.push(`DÍVIDA => R$ ${valor} — ${sit}${receita ? ' (' + receita + ')' : ''}`);
     });
   }
-
-  // Cheques sem fundo
   if (cheques.length > 0) {
-    finLines.push(`🚫 Cheques sem fundo: ${cheques.length}`);
+    finFields.push(`CHEQUES SEM FUNDO => ${cheques.length}`);
   }
-
-  // Cartões
   if (cartoes.length > 0) {
     cartoes.forEach(c => {
       const banco = clean(c.banco);
       const bandeira = clean(c.bandeira);
       const tipo = clean(c.tipo);
-      if (banco) finLines.push(`💳 ${escapeHtml(banco)} ${escapeHtml(bandeira)} (${escapeHtml(tipo)})`);
+      if (banco) finFields.push(`CARTÃO => ${banco} ${bandeira} (${tipo})`);
     });
   }
-
-  if (finLines.length > 0) {
-    lines.push('');
-    lines.push(`💳 <b>FINANCEIRO</b>`);
-    lines.push(...finLines);
+  if (finFields.length > 0) {
+    lines.push(`\n💳 <b>FINANCEIRO</b>`);
+    lines.push(`<pre>${finFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ ⚖️ PROCESSOS ═══════════════
   if (processos.length > 0) {
-    lines.push('');
-    lines.push(`⚖️ <b>PROCESSOS</b> (${processos.length})`);
-    // Deduplicar por número de processo
+    const procFields: string[] = [];
     const seenProc = new Set<string>();
     processos.forEach(p => {
       const proc = clean(p.processo);
@@ -4152,45 +4137,51 @@ function formatCpfIseekResult(
       seenProc.add(proc);
       const polo = clean(p.polo);
       const parte = clean(p.tipoParte);
-      lines.push(`📄 ${escapeHtml(proc)} — ${escapeHtml(polo)} (${escapeHtml(parte)})`);
+      procFields.push(`PROCESSO => ${proc} — ${polo} (${parte})`);
     });
+    if (procFields.length > 0) {
+      lines.push(`\n⚖️ <b>PROCESSOS</b> (${processos.length})`);
+      lines.push(`<pre>${procFields.join('\n')}</pre>`);
+    }
   }
 
   // ═══════════════ 🚗 VEÍCULOS ═══════════════
   if (veiculos.length > 0) {
-    lines.push('');
-    lines.push(`🚗 <b>VEÍCULOS</b> (${veiculos.length})`);
+    const veicFields: string[] = [];
     veiculos.forEach(v => {
       const placa = clean(v.placaAntiga);
       const renavam = clean(v.renavam);
       const ano = clean(v.ano);
-      lines.push(`🚘 ${escapeHtml(placa)}${ano ? ' (' + escapeHtml(ano) + ')' : ''}${renavam ? ' RENAVAM: ' + escapeHtml(renavam) : ''}`);
+      veicFields.push(`VEÍCULO => ${placa}${ano ? ' (' + ano + ')' : ''}${renavam ? ' RENAVAM: ' + renavam : ''}`);
     });
+    lines.push(`\n🚗 <b>VEÍCULOS</b> (${veiculos.length})`);
+    lines.push(`<pre>${veicFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 🌐 INTERNET ═══════════════
   const validNet = internet.filter(i => !isNI(i.websiteUrl));
   if (validNet.length > 0) {
-    lines.push('');
-    lines.push(`🌐 <b>INTERNET</b> (${validNet.length})`);
+    const netFields: string[] = [];
     validNet.forEach(i => {
       const url = clean(i.websiteUrl);
       const status = clean(i.status);
-      lines.push(`🔗 ${escapeHtml(url)}${status ? ' — ' + escapeHtml(status) : ''}`);
+      netFields.push(`URL => ${url}${status ? ' — ' + status : ''}`);
     });
+    lines.push(`\n🌐 <b>INTERNET</b> (${validNet.length})`);
+    lines.push(`<pre>${netFields.join('\n')}</pre>`);
   }
 
   // ═══════════════ 📋 IRPF ═══════════════
   if (irpf.length > 0) {
     const validIrpf = irpf.filter(i => !isNI(i.situacaoReceita));
     if (validIrpf.length > 0) {
-      lines.push('');
-      lines.push(`📋 <b>IRPF</b>`);
-      validIrpf.forEach(i => {
+      const irpfFields = validIrpf.map(i => {
         const ano = clean(i.anoReferencia);
         const sit = clean(i.situacaoReceita);
-        lines.push(`📅 ${escapeHtml(ano)}: ${escapeHtml(sit)}`);
+        return `${ano} => ${sit}`;
       });
+      lines.push(`\n📋 <b>IRPF</b>`);
+      lines.push(`<pre>${irpfFields.join('\n')}</pre>`);
     }
   }
 
@@ -4413,7 +4404,7 @@ function formatCpfResult(
   const pai = getValue(['pai', 'nome_pai', 'nomepai', 'nomePai']);
   const parentes = extractParentes();
 
-  // ============= CONSTRUIR MENSAGEM HTML LIMPA =============
+  // ============= CONSTRUIR MENSAGEM HTML LIMPA COM <pre> =============
   let lines: string[] = [];
   
   // Header
@@ -4421,101 +4412,99 @@ function formatCpfResult(
   lines.push(``);
 
   // 👤 DADOS PESSOAIS
-  if (nome || cpf || nascimento || sexo || raca || obito || statusReceita) {
-    if (nome) lines.push(`📋 Nome: ${escapeHtml(nome)}`);
-    if (cpf) lines.push(`🆔 CPF: ${escapeHtml(cpf)}`);
-    if (nascimento) lines.push(`📅 Nascimento: ${escapeHtml(nascimento)}`);
-    if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo)}`);
-    if (raca) lines.push(`🏷️ Raça: ${escapeHtml(raca)}`);
-    if (obito) lines.push(`⚰️ Óbito: ${escapeHtml(obito)}`);
-    if (statusReceita) lines.push(`📊 Status Receita: ${escapeHtml(statusReceita)}`);
+  const personalFields: string[] = [];
+  if (nome) personalFields.push(`NOME => ${nome}`);
+  if (cpf) personalFields.push(`CPF => ${cpf}`);
+  if (nascimento) personalFields.push(`NASCIMENTO => ${nascimento}`);
+  if (sexo) personalFields.push(`SEXO => ${sexo}`);
+  if (raca) personalFields.push(`RAÇA => ${raca}`);
+  if (obito) personalFields.push(`ÓBITO => ${obito}`);
+  if (statusReceita) personalFields.push(`STATUS RECEITA => ${statusReceita}`);
+  if (personalFields.length > 0) {
+    lines.push(`👤 <b>DADOS PESSOAIS</b>`);
+    lines.push(`<pre>${personalFields.join('\n')}</pre>`);
   }
 
   // 📄 DOCUMENTOS
-  if (rg || cns || tituloEleitor) {
-    lines.push('');
-    lines.push(`📄 <b>DOCUMENTOS</b>`);
-    if (rg) lines.push(`🪪 RG: ${escapeHtml(rg)}`);
-    if (cns) lines.push(`🏥 CNS: ${escapeHtml(cns)}`);
-    if (tituloEleitor) {
-      let tituloLine = `🗳️ Título: ${escapeHtml(tituloEleitor)}`;
-      if (zona) tituloLine += ` ZONA: ${escapeHtml(zona)}`;
-      if (secao) tituloLine += ` SEÇÃO: ${escapeHtml(secao)}`;
-      lines.push(tituloLine);
-    }
+  const docFields: string[] = [];
+  if (rg) docFields.push(`RG => ${rg}`);
+  if (cns) docFields.push(`CNS => ${cns}`);
+  if (tituloEleitor) {
+    let tituloLine = `TÍTULO => ${tituloEleitor}`;
+    if (zona) tituloLine += ` ZONA: ${zona}`;
+    if (secao) tituloLine += ` SEÇÃO: ${secao}`;
+    docFields.push(tituloLine);
+  }
+  if (docFields.length > 0) {
+    lines.push(`\n📄 <b>DOCUMENTOS</b>`);
+    lines.push(`<pre>${docFields.join('\n')}</pre>`);
   }
 
   // 👨‍👩‍👦 FILIAÇÃO
-  if (mae || pai) {
-    lines.push('');
-    lines.push(`👨‍👩‍👦 <b>FILIAÇÃO</b>`);
-    if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
-    if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
+  const familyFields: string[] = [];
+  if (mae) familyFields.push(`MÃE => ${mae}`);
+  if (pai) familyFields.push(`PAI => ${pai}`);
+  if (familyFields.length > 0) {
+    lines.push(`\n👨‍👩‍👦 <b>FILIAÇÃO</b>`);
+    lines.push(`<pre>${familyFields.join('\n')}</pre>`);
   }
 
   // 📍 ENDEREÇOS
   if (enderecos.length > 0) {
-    lines.push('');
-    lines.push(`📍 <b>ENDEREÇO</b>`);
-    enderecos.forEach(endereco => {
+    const endFields: string[] = [];
+    enderecos.forEach((endereco, i) => {
       const cleanEndereco = endereco
         .replace(/^\[empty\]\s*/gi, '')
         .replace(/^enderecos?\s*:?\s*/gi, '')
         .trim();
       if (cleanEndereco && cleanEndereco.length > 5) {
-        lines.push(`🏠 ${escapeHtml(cleanEndereco)}`);
+        endFields.push(`ENDEREÇO ${enderecos.length > 1 ? (i+1) + ' ' : ''}=> ${cleanEndereco}`);
       }
     });
+    if (endFields.length > 0) {
+      lines.push(`\n📍 <b>ENDEREÇO</b>`);
+      lines.push(`<pre>${endFields.join('\n')}</pre>`);
+    }
   }
 
   // 📱 TELEFONES
   if (telefones.length > 0) {
-    lines.push('');
-    lines.push(`📱 <b>TELEFONES</b>`);
+    const telFields: string[] = [];
     telefones.forEach(tel => {
       const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
       const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
-      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
-      lines.push(`📞 ${escapeHtml(cleanTel)}${wppIcon}`);
+      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? '  [WhatsApp]' : '';
+      telFields.push(`TELEFONE => ${cleanTel}${wppIcon}`);
     });
+    lines.push(`\n📱 <b>TELEFONES</b>`);
+    lines.push(`<pre>${telFields.join('\n')}</pre>`);
   }
 
   // 📧 EMAILS
   if (emails.length > 0) {
-    lines.push('');
-    lines.push(`📧 <b>E-MAILS</b>`);
-    emails.slice(0, 5).forEach(email => {
-      lines.push(`📧 ${escapeHtml(email.toUpperCase())}`);
-    });
+    const emailFields = emails.slice(0, 5).map(email => `EMAIL => ${email.toUpperCase()}`);
+    lines.push(`\n📧 <b>E-MAILS</b>`);
+    lines.push(`<pre>${emailFields.join('\n')}</pre>`);
   }
 
   // 💰 FINANCEIRO
-  if (renda || classeSocial || csb8 || csba || csb8Faixa || csbaFaixa) {
-    lines.push('');
-    lines.push(`💰 <b>FINANCEIRO</b>`);
-    if (renda) lines.push(`💵 Renda: R$ ${escapeHtml(renda)}`);
-    if (classeSocial) lines.push(`📊 Poder Aquisitivo: ${escapeHtml(classeSocial)}`);
-    if (csb8) lines.push(`📈 CSB8: ${escapeHtml(csb8)}`);
-    if (csb8Faixa) lines.push(`⚠️ CSB8 Faixa de Risco: ${escapeHtml(csb8Faixa)}`);
-    if (csba) lines.push(`📈 CSBA: ${escapeHtml(csba)}`);
-    if (csbaFaixa) lines.push(`⚠️ CSBA Faixa de Risco: ${escapeHtml(csbaFaixa)}`);
+  const finFields: string[] = [];
+  if (renda) finFields.push(`RENDA => R$ ${renda}`);
+  if (classeSocial) finFields.push(`PODER AQUISITIVO => ${classeSocial}`);
+  if (csb8) finFields.push(`CSB8 => ${csb8}`);
+  if (csb8Faixa) finFields.push(`CSB8 FAIXA DE RISCO => ${csb8Faixa}`);
+  if (csba) finFields.push(`CSBA => ${csba}`);
+  if (csbaFaixa) finFields.push(`CSBA FAIXA DE RISCO => ${csbaFaixa}`);
+  if (finFields.length > 0) {
+    lines.push(`\n💰 <b>FINANCEIRO</b>`);
+    lines.push(`<pre>${finFields.join('\n')}</pre>`);
   }
 
   // 👥 FAMILIARES
   if (parentes.length > 0) {
-    lines.push('');
-    lines.push(`👥 <b>FAMILIARES</b>`);
-    parentes.slice(0, 10).forEach(parente => {
-      const parenteUpper = parente.toUpperCase();
-      let icon = '👤';
-      if (parenteUpper.includes('IRMA') || parenteUpper.includes('IRMÃ')) icon = '👧';
-      if (parenteUpper.includes('IRMAO') || parenteUpper.includes('IRMÃO')) icon = '👦';
-      if (parenteUpper.includes('FILHO')) icon = '👦';
-      if (parenteUpper.includes('FILHA')) icon = '👧';
-      if (parenteUpper.includes('CONJUGE') || parenteUpper.includes('CÔNJUGE')) icon = '💑';
-      lines.push(`${icon} ${escapeHtml(parente)}`);
-    });
-    
+    const parFields = parentes.slice(0, 10).map(p => `PARENTE => ${p.toUpperCase()}`);
+    lines.push(`\n👥 <b>FAMILIARES</b>`);
+    lines.push(`<pre>${parFields.join('\n')}</pre>`);
   }
 
   // Footer
@@ -5327,10 +5316,11 @@ function formatGenericResult(
     lines.push('');
     lines.push(`${catInfo.icon} <b>${catInfo.label}</b>`);
 
-    for (const item of uniqueItems) {
+    const preLines = uniqueItems.map(item => {
       const displayKey = formatDisplayKey(item.key);
-      lines.push(`${item.emoji} ${escapeHtml(displayKey)}: ${escapeHtml(item.value)}`);
-    }
+      return `${displayKey.toUpperCase()} => ${item.value}`;
+    });
+    lines.push(`<pre>${preLines.join('\n')}</pre>`);
   }
 
   // Render uncategorized items
@@ -5346,10 +5336,11 @@ function formatGenericResult(
     if (uniqueItems.length > 0) {
       lines.push('');
       lines.push(`📋 <b>OUTROS DADOS</b>`);
-      for (const item of uniqueItems.slice(0, 30)) {
+      const preLines = uniqueItems.slice(0, 30).map(item => {
         const displayKey = formatDisplayKey(item.key);
-        lines.push(`${item.emoji} ${escapeHtml(displayKey)}: ${escapeHtml(item.value)}`);
-      }
+        return `${displayKey.toUpperCase()} => ${item.value}`;
+      });
+      lines.push(`<pre>${preLines.join('\n')}</pre>`);
       if (uniqueItems.length > 30) {
         lines.push(`... e mais ${uniqueItems.length - 30} campos`);
       }
