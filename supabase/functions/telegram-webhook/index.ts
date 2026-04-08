@@ -4413,7 +4413,7 @@ function formatCpfResult(
   const pai = getValue(['pai', 'nome_pai', 'nomepai', 'nomePai']);
   const parentes = extractParentes();
 
-  // ============= CONSTRUIR MENSAGEM HTML LIMPA =============
+  // ============= CONSTRUIR MENSAGEM HTML LIMPA COM <pre> =============
   let lines: string[] = [];
   
   // Header
@@ -4421,101 +4421,99 @@ function formatCpfResult(
   lines.push(``);
 
   // 👤 DADOS PESSOAIS
-  if (nome || cpf || nascimento || sexo || raca || obito || statusReceita) {
-    if (nome) lines.push(`📋 Nome: ${escapeHtml(nome)}`);
-    if (cpf) lines.push(`🆔 CPF: ${escapeHtml(cpf)}`);
-    if (nascimento) lines.push(`📅 Nascimento: ${escapeHtml(nascimento)}`);
-    if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo)}`);
-    if (raca) lines.push(`🏷️ Raça: ${escapeHtml(raca)}`);
-    if (obito) lines.push(`⚰️ Óbito: ${escapeHtml(obito)}`);
-    if (statusReceita) lines.push(`📊 Status Receita: ${escapeHtml(statusReceita)}`);
+  const personalFields: string[] = [];
+  if (nome) personalFields.push(`NOME => ${nome}`);
+  if (cpf) personalFields.push(`CPF => ${cpf}`);
+  if (nascimento) personalFields.push(`NASCIMENTO => ${nascimento}`);
+  if (sexo) personalFields.push(`SEXO => ${sexo}`);
+  if (raca) personalFields.push(`RAÇA => ${raca}`);
+  if (obito) personalFields.push(`ÓBITO => ${obito}`);
+  if (statusReceita) personalFields.push(`STATUS RECEITA => ${statusReceita}`);
+  if (personalFields.length > 0) {
+    lines.push(`👤 <b>DADOS PESSOAIS</b>`);
+    lines.push(`<pre>${personalFields.join('\n')}</pre>`);
   }
 
   // 📄 DOCUMENTOS
-  if (rg || cns || tituloEleitor) {
-    lines.push('');
-    lines.push(`📄 <b>DOCUMENTOS</b>`);
-    if (rg) lines.push(`🪪 RG: ${escapeHtml(rg)}`);
-    if (cns) lines.push(`🏥 CNS: ${escapeHtml(cns)}`);
-    if (tituloEleitor) {
-      let tituloLine = `🗳️ Título: ${escapeHtml(tituloEleitor)}`;
-      if (zona) tituloLine += ` ZONA: ${escapeHtml(zona)}`;
-      if (secao) tituloLine += ` SEÇÃO: ${escapeHtml(secao)}`;
-      lines.push(tituloLine);
-    }
+  const docFields: string[] = [];
+  if (rg) docFields.push(`RG => ${rg}`);
+  if (cns) docFields.push(`CNS => ${cns}`);
+  if (tituloEleitor) {
+    let tituloLine = `TÍTULO => ${tituloEleitor}`;
+    if (zona) tituloLine += ` ZONA: ${zona}`;
+    if (secao) tituloLine += ` SEÇÃO: ${secao}`;
+    docFields.push(tituloLine);
+  }
+  if (docFields.length > 0) {
+    lines.push(`\n📄 <b>DOCUMENTOS</b>`);
+    lines.push(`<pre>${docFields.join('\n')}</pre>`);
   }
 
   // 👨‍👩‍👦 FILIAÇÃO
-  if (mae || pai) {
-    lines.push('');
-    lines.push(`👨‍👩‍👦 <b>FILIAÇÃO</b>`);
-    if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
-    if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
+  const familyFields: string[] = [];
+  if (mae) familyFields.push(`MÃE => ${mae}`);
+  if (pai) familyFields.push(`PAI => ${pai}`);
+  if (familyFields.length > 0) {
+    lines.push(`\n👨‍👩‍👦 <b>FILIAÇÃO</b>`);
+    lines.push(`<pre>${familyFields.join('\n')}</pre>`);
   }
 
   // 📍 ENDEREÇOS
   if (enderecos.length > 0) {
-    lines.push('');
-    lines.push(`📍 <b>ENDEREÇO</b>`);
-    enderecos.forEach(endereco => {
+    const endFields: string[] = [];
+    enderecos.forEach((endereco, i) => {
       const cleanEndereco = endereco
         .replace(/^\[empty\]\s*/gi, '')
         .replace(/^enderecos?\s*:?\s*/gi, '')
         .trim();
       if (cleanEndereco && cleanEndereco.length > 5) {
-        lines.push(`🏠 ${escapeHtml(cleanEndereco)}`);
+        endFields.push(`ENDEREÇO ${enderecos.length > 1 ? (i+1) + ' ' : ''}=> ${cleanEndereco}`);
       }
     });
+    if (endFields.length > 0) {
+      lines.push(`\n📍 <b>ENDEREÇO</b>`);
+      lines.push(`<pre>${endFields.join('\n')}</pre>`);
+    }
   }
 
   // 📱 TELEFONES
   if (telefones.length > 0) {
-    lines.push('');
-    lines.push(`📱 <b>TELEFONES</b>`);
+    const telFields: string[] = [];
     telefones.forEach(tel => {
       const hasWpp = tel.toLowerCase().includes('whatsapp') || tel.toLowerCase().includes('possui');
       const cleanTel = tel.replace(/\s*-?\s*(possui|não possui)?\s*whatsapp\s*/gi, '').trim();
-      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? ' 💬' : '';
-      lines.push(`📞 ${escapeHtml(cleanTel)}${wppIcon}`);
+      const wppIcon = hasWpp && tel.toLowerCase().includes('possui whatsapp') ? '  [WhatsApp]' : '';
+      telFields.push(`TELEFONE => ${cleanTel}${wppIcon}`);
     });
+    lines.push(`\n📱 <b>TELEFONES</b>`);
+    lines.push(`<pre>${telFields.join('\n')}</pre>`);
   }
 
   // 📧 EMAILS
   if (emails.length > 0) {
-    lines.push('');
-    lines.push(`📧 <b>E-MAILS</b>`);
-    emails.slice(0, 5).forEach(email => {
-      lines.push(`📧 ${escapeHtml(email.toUpperCase())}`);
-    });
+    const emailFields = emails.slice(0, 5).map(email => `EMAIL => ${email.toUpperCase()}`);
+    lines.push(`\n📧 <b>E-MAILS</b>`);
+    lines.push(`<pre>${emailFields.join('\n')}</pre>`);
   }
 
   // 💰 FINANCEIRO
-  if (renda || classeSocial || csb8 || csba || csb8Faixa || csbaFaixa) {
-    lines.push('');
-    lines.push(`💰 <b>FINANCEIRO</b>`);
-    if (renda) lines.push(`💵 Renda: R$ ${escapeHtml(renda)}`);
-    if (classeSocial) lines.push(`📊 Poder Aquisitivo: ${escapeHtml(classeSocial)}`);
-    if (csb8) lines.push(`📈 CSB8: ${escapeHtml(csb8)}`);
-    if (csb8Faixa) lines.push(`⚠️ CSB8 Faixa de Risco: ${escapeHtml(csb8Faixa)}`);
-    if (csba) lines.push(`📈 CSBA: ${escapeHtml(csba)}`);
-    if (csbaFaixa) lines.push(`⚠️ CSBA Faixa de Risco: ${escapeHtml(csbaFaixa)}`);
+  const finFields: string[] = [];
+  if (renda) finFields.push(`RENDA => R$ ${renda}`);
+  if (classeSocial) finFields.push(`PODER AQUISITIVO => ${classeSocial}`);
+  if (csb8) finFields.push(`CSB8 => ${csb8}`);
+  if (csb8Faixa) finFields.push(`CSB8 FAIXA DE RISCO => ${csb8Faixa}`);
+  if (csba) finFields.push(`CSBA => ${csba}`);
+  if (csbaFaixa) finFields.push(`CSBA FAIXA DE RISCO => ${csbaFaixa}`);
+  if (finFields.length > 0) {
+    lines.push(`\n💰 <b>FINANCEIRO</b>`);
+    lines.push(`<pre>${finFields.join('\n')}</pre>`);
   }
 
   // 👥 FAMILIARES
   if (parentes.length > 0) {
-    lines.push('');
-    lines.push(`👥 <b>FAMILIARES</b>`);
-    parentes.slice(0, 10).forEach(parente => {
-      const parenteUpper = parente.toUpperCase();
-      let icon = '👤';
-      if (parenteUpper.includes('IRMA') || parenteUpper.includes('IRMÃ')) icon = '👧';
-      if (parenteUpper.includes('IRMAO') || parenteUpper.includes('IRMÃO')) icon = '👦';
-      if (parenteUpper.includes('FILHO')) icon = '👦';
-      if (parenteUpper.includes('FILHA')) icon = '👧';
-      if (parenteUpper.includes('CONJUGE') || parenteUpper.includes('CÔNJUGE')) icon = '💑';
-      lines.push(`${icon} ${escapeHtml(parente)}`);
-    });
-    
+    const parFields = parentes.slice(0, 10).map(p => `PARENTE => ${p.toUpperCase()}`);
+    lines.push(`\n👥 <b>FAMILIARES</b>`);
+    lines.push(`<pre>${parFields.join('\n')}</pre>`);
   }
 
   // Footer
