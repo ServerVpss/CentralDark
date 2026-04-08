@@ -21,10 +21,14 @@ const ignoredKeys = new Set([
   "foto", "image", "photo", "fotobase64", "base64",
   "conta", "saldo", "tempo_segundos", "temposegundos", "cache", "cached_at",
   "expiracao", "limites", "plano",
+  "requests_used", "requests_remaining", "daily_limit", "fallback_provider", "apikey",
+  "prioridade", "operadora", "tipotelefone",
+  "data", "ano", "ranking", "whatsapp", "comando", "valor", "raw", "status",
+  "resultados", "estados_encontrados", "total_fotos", "estado_encontrado",
 ]);
 
 // Also filter keys that end with "_consultada" (e.g. fotorj_consultada)
-const ignoredSuffixes = ["_consultada"];
+const ignoredSuffixes = ["_consultada", "_consultado"];
 
 function shouldIgnoreKey(key: string): boolean {
   const normalized = key.toLowerCase().replace(/[\s-]/g, "_");
