@@ -3687,7 +3687,7 @@ function formatTelefoneResult(
   const addSection = (icon: string, title: string, fields: string[]) => {
     if (fields.length === 0) return;
     parts.push(`${icon} <b>${escapeHtml(title)}</b>`);
-    parts.push(`<pre>${fields.map(f => escapeHtml(f)).join('\n')}</pre>`);
+    parts.push(`<code>${fields.map(f => escapeHtml(f)).join('\n')}</code>`);
   };
 
   // DADOS DO TITULAR
