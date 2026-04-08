@@ -2650,8 +2650,20 @@ async function executeQueryWithCache(
     
     const result = await response.json();
     const fromCache = result.fromCache === true;
-    const data = result.data || result;
+    const rawData = result.data || result;
+    const data = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
+      ? { ...(rawData as Record<string, unknown>) }
+      : { data: rawData };
     const warnings: string[] = Array.isArray(result.warnings) ? result.warnings : [];
+    const metaStatus = typeof result?.meta?.status === 'string' ? result.meta.status : '';
+    const firstError = Array.isArray(result.errors)
+      ? result.errors.find((err: unknown) => typeof err === 'string' && err.trim().length > 0)
+      : undefined;
+
+    if (result.success === false) {
+      if (firstError && !data.error) data.error = String(firstError);
+      if (metaStatus && !data.status) data.status = metaStatus;
+    }
     
     logCmd('INFO', 'API_RESULT', { queryType, fromCache, durationMs: result.duration_ms || null, hasError: !!data.error, notFound: !!data.notFound, warnings: warnings.length });
     
@@ -2728,7 +2740,18 @@ function isEmptyResult(result: Record<string, unknown>): boolean {
 
 // Detecta se o provedor retornou um erro dentro dos dados (ex: limite expirado, erro interno)
 function isProviderError(result: Record<string, unknown>): { isError: boolean; message: string } {
-  // Checar dados.status === "error" ou dados.message com erro
+  const rootError = typeof result.error === 'string' ? result.error.trim() : '';
+  if (rootError) {
+    return { isError: true, message: rootError };
+  }
+
+  const rootErrors = Array.isArray(result.errors)
+    ? result.errors.find((value): value is string => typeof value === 'string' && value.trim().length > 0)
+    : undefined;
+  if (rootErrors) {
+    return { isError: true, message: rootErrors };
+  }
+
   const dados = (result.dados || result.data) as Record<string, unknown> | undefined;
   if (dados && typeof dados === 'object') {
     const status = String(dados.status || '').toLowerCase();
@@ -2736,7 +2759,6 @@ function isProviderError(result: Record<string, unknown>): { isError: boolean; m
     if (status === 'error' || status === 'erro') {
       return { isError: true, message: message || 'Erro retornado pelo provedor' };
     }
-    // Checar mensagens de limite
     if (message && (
       message.toLowerCase().includes('requisições diárias expirou') ||
       message.toLowerCase().includes('limite') ||
@@ -2775,7 +2797,7 @@ function getSiblingButtons(moduleKey: string, queryInput: string): InlineButton[
 
 // Fallback chains: quando o módulo primário não retorna dados, tenta módulos alternativos
 const FALLBACK_CHAINS: Record<string, string[]> = {
-  // Após unificação, não há mais cadeias de fallback entre provedores
+  nome: ['nomeabreviadofiltros'],
 };
 
 // Executa consulta com fallback automático se o resultado estiver vazio

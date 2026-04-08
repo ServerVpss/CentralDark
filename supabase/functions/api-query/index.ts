@@ -267,7 +267,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
     "cpf", "score", "renda",
     "credilink", "poderaquisitivo", "parentes", "processos",
     "siel", "tse-3", "titulo", "mae",
-    "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
+    "pai", "nasc", "nis", "obito", "registro",
     "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
     "advogadooabuf", "catcpf", "catnumero",
     "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
@@ -311,7 +311,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
     }
   }
 
-  if (modulo === "nome") {
+  if (modulo === "nome" || modulo === "nomeabreviadofiltros") {
     if (clean.length < 3) {
       return { valid: false, error: "Nome deve ter pelo menos 3 caracteres." };
     }
