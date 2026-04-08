@@ -3578,7 +3578,7 @@ function formatTelefoneResult(
 
       if (fields.length > 0) {
         parts.push(`👤 <b>PESSOA ${i + 1}</b>`);
-        parts.push(`<pre>${fields.map(f => escapeHtml(f)).join('\n')}</pre>`);
+        parts.push(`<code>${fields.map(f => escapeHtml(f)).join('\n')}</code>`);
       }
     });
 
