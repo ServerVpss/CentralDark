@@ -372,7 +372,15 @@ interface ProviderResult {
 }
 
 async function fetchFromProvider(modulo: string, valor: string, retry = false): Promise<ProviderResult> {
-  const apiKey = Deno.env.get("CONSULTAS_API_KEY");
+  // Resolve o nome do módulo na API (alguns módulos usam nomes internos diferentes)
+  const apiModuleName = MODULE_API_NAME[modulo] || modulo;
+  const isIseekModule = modulo in MODULE_API_NAME;
+
+  // Módulos ex-iSeek usam a chave ISEEK_API_KEY, os demais usam CONSULTAS_API_KEY
+  const apiKey = isIseekModule
+    ? Deno.env.get("ISEEK_API_KEY")
+    : Deno.env.get("CONSULTAS_API_KEY");
+
   if (!apiKey) {
     return {
       data: { error: "⚠️ Chave de API não configurada. Contate o administrador." },
@@ -381,8 +389,6 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
     };
   }
 
-  // Resolve o nome do módulo na API (alguns módulos usam nomes internos diferentes)
-  const apiModuleName = MODULE_API_NAME[modulo] || modulo;
   const timeoutMs = getModuleTimeout(modulo);
   const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=${encodeURIComponent(apiModuleName)}&string=${encodeURIComponent(valor)}`;
   console.log(`[Provider] modulo=${modulo} → api=${apiModuleName}, timeout=${timeoutMs / 1000}s${retry ? " (retry)" : ""}`);
