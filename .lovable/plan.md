@@ -1,46 +1,36 @@
 
 
-# Enriquecer Caption da Foto com Dados Pessoais
+# Reexibir Campos Úteis Removidos por Engano
 
 ## Problema
-Quando a foto é encontrada (via botão 📸 ou busca direta), o caption mostra apenas:
-```
-📸 Foto encontrada (ES)
-👤 CPF: 80912311720
-```
-
-Mas a API retorna dados completos: **nome**, **data de nascimento**, **sexo**, **filiação** (mãe/pai). Esses dados são ignorados.
+Os seguintes campos foram adicionados à lista de campos ignorados, mas o usuário quer que sejam exibidos pois contêm informações úteis para o resultado:
+- **operadora** — operadora do telefone
+- **tipotelefone** — tipo (celular/fixo)
+- **data** — data associada ao registro
+- **ano** — ano do registro
+- **ranking** — relevância do resultado
+- **whatsapp** — se o número tem WhatsApp
+- **resultados** — quantidade de resultados encontrados
+- **estados_encontrados** — estados onde foram encontrados dados
+- **total_fotos** — total de fotos encontradas
+- **estado_encontrado** — estado onde a foto foi localizada
 
 ## Solução
+Remover esses 10 campos das 3 listas de ignorados:
 
-### Criar função `extractPhotoMetadata`
-Extrair dados pessoais do resultado da API (mesma estrutura que `deepExtractPhoto` percorre):
-- `nome` → Nome completo
-- `nasc` → Data de nascimento (formatar DD/MM/AAAA)
-- `sexo` → Sexo
-- `filiacao.nomeMae` → Nome da mãe
-- `filiacao.nomePai` → Nome do pai
-- `cpf` → CPF formatado
+### 1. `supabase/functions/telegram-webhook/index.ts` — `ignoredKeys` (linha ~4693)
+Remover: `operadora`, `tipotelefone`, `data`, `ano`, `ranking`, `whatsapp`, `resultados`, `estados_encontrados`, `total_fotos`, `estado_encontrado`
 
-### Atualizar os 3 locais onde foto é enviada
+### 2. `supabase/functions/telegram-webhook/index.ts` — `txtIgnoredKeys` (linha ~1719)
+Remover os mesmos campos da lista de exportação TXT
 
-**1. Foto por estado (botão 📸)** — linha ~7535:
-```
-📸 Foto encontrada (ES)
+### 3. `src/components/consultation/MonospaceResultDisplay.tsx` — `ignoredKeys` (linha ~14)
+Remover os mesmos campos do painel web
 
-👤 Nome: AGENOR CARLOS NUNES
-📋 CPF: 809.123.117-20
-📅 Nascimento: 01/07/1965
-👩 Mãe: ALICE NUNES
-```
+## Campos que continuam ocultos (metadados internos)
+`requests_used`, `requests_remaining`, `daily_limit`, `fallback_provider`, `apikey`, `prioridade`, `classificacao`, `ddd`, `saldo`, `conta`, `protocolo`, `usuario`, etc.
 
-**2. Foto nacional** — linha ~7482: mesmo formato
-
-**3. Foto inline (resultado de consulta)** — linhas ~7196-7215: já usa `fullCaption` com dados formatados, então esse caso já funciona
-
-### Limite de 1024 caracteres
-O Telegram limita caption de fotos a 1024 chars. A função montará o caption respeitando esse limite, priorizando: Nome > CPF > Nascimento > Mãe > Pai.
-
-## Arquivo alterado
+## Arquivos alterados
 - `supabase/functions/telegram-webhook/index.ts`
+- `src/components/consultation/MonospaceResultDisplay.tsx`
 
