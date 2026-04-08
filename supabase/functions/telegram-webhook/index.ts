@@ -8084,7 +8084,7 @@ class BotHandler {
 
       // 1. Try to find requester from paginated_results metadata
       let paginationIdForCheck: string | null = null;
-      if (data.startsWith("page:") || data.startsWith("cep_page:") || data.startsWith("tel_page:")) {
+      if (data.startsWith("page:") || data.startsWith("cep_page:") || data.startsWith("tel_page:") || data.startsWith("nome_page:")) {
         const parts = data.split(":");
         paginationIdForCheck = parts.length >= 3 ? parts[1] : null;
       } else if (data.startsWith("page_delete:")) {
