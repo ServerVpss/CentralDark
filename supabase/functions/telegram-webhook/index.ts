@@ -3819,6 +3819,7 @@ function formatCpfIseekResult(
 
   // ═══════════════ 👤 DADOS PESSOAIS ═══════════════
   lines.push(`👤 <b>DADOS PESSOAIS</b>`);
+  lines.push(`ℹ️ <i>Relatório completo com dados pessoais, documentos, contatos e histórico vinculado ao CPF.</i>`);
   lines.push('');
   const nome = clean(basicos.nome);
   const cpf = clean(basicos.cpf);
