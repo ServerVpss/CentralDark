@@ -1608,7 +1608,7 @@ function extractPhotoMetadata(obj: unknown, depth = 0): { nome?: string; cpf?: s
 }
 
 // Format photo caption with metadata, respecting 1024 char limit
-function buildPhotoCaption(header: string, cpf: string, result: unknown, botUsername?: string, extraMeta?: Record<string, string>): string {
+function buildPhotoCaption(header: string, cpf: string, result: unknown, botUsername?: string, extraMeta?: Record<string, string>, requesterInfo?: { name: string; identifier: string; date: string; time: string }): string {
   const meta = { ...extractPhotoMetadata(result) };
   
   // Merge extra metadata (from cpfbasico enrichment) if photo result had empty fields
@@ -1640,6 +1640,15 @@ function buildPhotoCaption(header: string, cpf: string, result: unknown, botUser
   if (meta.mae) lines.push(`👩 <b>Mãe:</b> ${meta.mae}`);
   if (meta.pai) lines.push(`👨 <b>Pai:</b> ${meta.pai}`);
   
+  // Add requester footer
+  if (requesterInfo) {
+    lines.push('');
+    lines.push(`📋 <b>Consulta solicitada por:</b>`);
+    lines.push(`├ 👤 ${requesterInfo.name}`);
+    lines.push(`├ 📝 ${requesterInfo.identifier}`);
+    lines.push(`└ 🕐 ${requesterInfo.date}, ${requesterInfo.time}`);
+  }
+  
   let caption = lines.join('\n');
   
   // Trim to 1024 chars, removing lines from the end if needed
@@ -1652,6 +1661,16 @@ function buildPhotoCaption(header: string, cpf: string, result: unknown, botUser
 }
 
 // Enrich photo caption by fetching basic CPF data when photo result has no metadata
+function makeRequesterInfo(from: { first_name?: string; username?: string; id: number }): { name: string; identifier: string; date: string; time: string } {
+  const now = new Date();
+  return {
+    name: escapeHtmlGlobal(from.first_name || 'Usuário'),
+    identifier: from.username ? `@${from.username}` : `ID: ${from.id}`,
+    date: now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+    time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+  };
+}
+
 async function enrichPhotoCaption(cpf: string): Promise<Record<string, string> | undefined> {
   try {
     const { data } = await executeQueryWithCache("cpfbasico", cpf);
@@ -7685,7 +7704,7 @@ class BotHandler {
             }
           }
         } else {
-          const simpleCaption = buildPhotoCaption(`📷 <b>FOTO ENCONTRADA</b>`, typeof queryInput === 'string' ? queryInput.replace(/\D/g, '') : '', result, this.bot.bot_username);
+          const simpleCaption = buildPhotoCaption(`📷 <b>FOTO ENCONTRADA</b>`, typeof queryInput === 'string' ? queryInput.replace(/\D/g, '') : '', result, this.bot.bot_username, undefined, message?.from ? makeRequesterInfo(message.from) : undefined);
           
           const sentPhoto = await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
@@ -8043,7 +8062,7 @@ class BotHandler {
             await telegramRequest(this.token, "sendPhoto", {
               chat_id: chatId,
               photo: fotoUrl,
-              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username, extraMeta),
+              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username, extraMeta, makeRequesterInfo(callback.from)),
               parse_mode: "HTML",
               reply_markup: { inline_keyboard: actionButtons },
             });
@@ -8100,7 +8119,7 @@ class BotHandler {
           await telegramRequest(this.token, "sendPhoto", {
             chat_id: chatId,
             photo: fotoUrl,
-            caption: buildPhotoCaption(`📸 <b>Foto encontrada (${uf})</b>`, cpf, result, this.bot.bot_username, extraMeta),
+            caption: buildPhotoCaption(`📸 <b>Foto encontrada (${uf})</b>`, cpf, result, this.bot.bot_username, extraMeta, makeRequesterInfo(callback.from)),
             parse_mode: "HTML",
             reply_markup: { inline_keyboard: actionButtons },
           });
