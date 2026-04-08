@@ -3153,8 +3153,9 @@ function formatMultiPersonPage(
   const lines: string[] = [];
   
   // Dynamic title based on query type
-  const titleIcon = queryType === 'telefone' ? '📞' : '📍';
-  const titleText = queryType === 'telefone' ? 'CONSULTA DE TELEFONE' : 'CONSULTA DE CEP';
+  const isNome = queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros';
+  const titleIcon = isNome ? '👤' : queryType === 'telefone' ? '📞' : '📍';
+  const titleText = isNome ? 'CONSULTA POR NOME' : queryType === 'telefone' ? 'CONSULTA DE TELEFONE' : 'CONSULTA DE CEP';
   
   // Header with HTML tags goes outside <pre>
   let headerHtml = `${titleIcon} <b>${titleText}</b>\n`;
@@ -3164,7 +3165,9 @@ function formatMultiPersonPage(
   headerHtml += `\n`;
   
   // Informative description about why multiple results appear
-  if (queryType === 'telefone') {
+  if (isNome) {
+    headerHtml += `ℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>\n`;
+  } else if (queryType === 'telefone') {
     headerHtml += `ℹ️ <i>Um mesmo número de telefone pode estar vinculado a mais de uma pessoa no cadastro. Isso ocorre por transferências de linha, uso compartilhado ou registros históricos.</i>\n`;
   } else {
     headerHtml += `ℹ️ <i>Múltiplas pessoas foram encontradas vinculadas a este endereço/CEP nos registros cadastrais.</i>\n`;
@@ -3276,8 +3279,8 @@ function createMultiPersonKeyboard(
   if (totalPages > 1) {
     const navRow: InlineButton[] = [];
     
-    // Use appropriate page callback based on query type
-    const pagePrefix = queryType === 'telefone' ? 'tel_page' : 'cep_page';
+    const isNome = queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros';
+    const pagePrefix = isNome ? 'nome_page' : queryType === 'telefone' ? 'tel_page' : 'cep_page';
     
     if (page > 0) {
       navRow.push({ text: "◀️ Anterior", callback_data: `${pagePrefix}:${paginationId}:${page - 1}` });
@@ -6077,6 +6080,91 @@ class BotHandler {
         }
       }
 
+      // Verificar se é resultado de NOME com múltiplos registros (array em data.data)
+      const isNomeModule = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros'].includes(usedModule);
+      if (isNomeModule) {
+        // Extract records from the API response structure
+        let nomeRecords: PersonRecord[] = [];
+        const dados = result.dados as Record<string, unknown> | undefined;
+        if (dados && typeof dados === 'object') {
+          const arr = ((dados as any).nome || (dados as any).nomefull) as unknown[];
+          if (Array.isArray(arr)) nomeRecords = arr.map((r: any) => ({
+            nome: String(r.nome || '').trim(),
+            cpf: String(r.cpf || '').trim(),
+            nascimento: String(r.dataNascimento || r.nasc || '').trim(),
+            cidade: String(r.cidade || '').trim(),
+            uf: String(r.uf || '').trim(),
+          })).filter((r: PersonRecord) => r.nome || r.cpf);
+        }
+        if (nomeRecords.length === 0 && Array.isArray((result as any).data)) {
+          nomeRecords = ((result as any).data as any[]).map((r: any) => ({
+            nome: String(r.nome || '').trim(),
+            cpf: String(r.cpf || '').trim(),
+            nascimento: String(r.dataNascimento || r.nasc || '').trim(),
+            cidade: String(r.cidade || '').trim(),
+            uf: String(r.uf || '').trim(),
+          })).filter((r: PersonRecord) => r.nome || r.cpf);
+        }
+
+        if (nomeRecords.length > 1) {
+          const effectId = getMessageEffectId(this.settings.message_effect);
+          const totalPages = Math.ceil(nomeRecords.length / RECORDS_PER_PAGE);
+
+          if (nomeRecords.length > RECORDS_PER_PAGE) {
+            const { data: paginationData, error } = await this.supabase
+              .from("paginated_results")
+              .insert({
+                chat_id: chatId,
+                pages: nomeRecords,
+                current_page: 0,
+                total_pages: totalPages,
+                metadata: { requester_id: telegramUserId, queryType: usedModule, queryInput },
+              })
+              .select("id")
+              .single();
+
+            if (error || !paginationData) {
+              console.error(`Failed to create nome pagination record:`, error);
+              const pageText = formatMultiPersonPage(nomeRecords, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
+              await sendLongMessagePaginated(this.token, chatId, pageText, this.supabase, undefined, effectId, usedModule, queryInput, undefined, telegramUserId);
+              return;
+            }
+
+            const paginationId = paginationData.id;
+            const pageText = formatMultiPersonPage(nomeRecords, 0, totalPages, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(nomeRecords, 0, totalPages, paginationId, usedModule, queryInput);
+
+            const paginatedPayload: Record<string, unknown> = {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_markup: pageKeyboard,
+            };
+            if (effectId) paginatedPayload.message_effect_id = effectId;
+
+            const msgResult = await telegramRequest(this.token, "sendMessage", paginatedPayload);
+            if (msgResult.ok && msgResult.result) {
+              const resultMessage = msgResult.result as { message_id?: number };
+              if (resultMessage.message_id) {
+                await this.supabase.from("paginated_results").update({ message_id: resultMessage.message_id }).eq("id", paginationId);
+              }
+            }
+          } else {
+            const pageText = formatMultiPersonPage(nomeRecords, 0, 1, this.bot.bot_username, telegramUserName, usedModule, queryInput) + consultaFooter;
+            const pageKeyboard = createMultiPersonKeyboard(nomeRecords, 0, 1, undefined, usedModule, queryInput);
+            const payload: Record<string, unknown> = {
+              chat_id: chatId,
+              text: pageText,
+              parse_mode: "HTML",
+              reply_markup: pageKeyboard,
+            };
+            if (effectId) payload.message_effect_id = effectId;
+            await telegramRequest(this.token, "sendMessage", payload);
+          }
+          return;
+        }
+      }
+
       // Format and send result - usar o módulo realmente usado após fallback
       const formattedResult = formatQueryResult(usedModule, result, this.bot.bot_username, telegramUserName);
       
@@ -7996,7 +8084,7 @@ class BotHandler {
 
       // 1. Try to find requester from paginated_results metadata
       let paginationIdForCheck: string | null = null;
-      if (data.startsWith("page:") || data.startsWith("cep_page:") || data.startsWith("tel_page:")) {
+      if (data.startsWith("page:") || data.startsWith("cep_page:") || data.startsWith("tel_page:") || data.startsWith("nome_page:")) {
         const parts = data.split(":");
         paginationIdForCheck = parts.length >= 3 ? parts[1] : null;
       } else if (data.startsWith("page_delete:")) {
@@ -8022,7 +8110,7 @@ class BotHandler {
           for (const row of inlineKb) {
             for (const btn of row) {
               const cbData = btn.callback_data || '';
-              const pageMatch = cbData.match(/^(?:page|cep_page|tel_page):([^:]+):/);
+              const pageMatch = cbData.match(/^(?:page|cep_page|tel_page|nome_page):([^:]+):/);
               if (pageMatch) {
                 const foundPagId = pageMatch[1];
                 const { data: pagData } = await this.supabase
@@ -8135,6 +8223,17 @@ class BotHandler {
         const paginationId = parts[1];
         const targetPage = parseInt(parts[2], 10);
         await this.handleMultiPersonPagination(chatId, messageId, paginationId, targetPage, "telefone");
+      }
+      return;
+    }
+
+    // Nome multi-person pagination
+    if (data.startsWith("nome_page:")) {
+      const parts = data.split(":");
+      if (parts.length === 3) {
+        const paginationId = parts[1];
+        const targetPage = parseInt(parts[2], 10);
+        await this.handleMultiPersonPagination(chatId, messageId, paginationId, targetPage, "nomeabreviadofiltros");
       }
       return;
     }
@@ -8996,7 +9095,8 @@ class BotHandler {
 
     if (error || !paginationData) {
       console.error(`${queryType} pagination data not found:`, error);
-      const label = queryType === 'telefone' ? 'TELEFONE' : 'CEP';
+      const isNomeType = queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros';
+      const label = isNomeType ? 'NOME' : queryType === 'telefone' ? 'TELEFONE' : 'CEP';
       await editMessage(this.token, chatId, messageId,
         `⚠️ <b>Sessão expirada</b>\n\nFaça uma nova consulta de ${label}.`,
         { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] }
