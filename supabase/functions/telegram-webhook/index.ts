@@ -5536,6 +5536,17 @@ class BotHandler {
         justica: "⚖️ JUSTIÇA", governo: "🏛️ GOVERNO", foto: "📸 FOTO POR ESTADO", outros: "📋 OUTROS",
       };
 
+      // Group modules by category
+      const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa", "justica", "governo", "foto", "saude", "outros"];
+      const grouped: Record<string, typeof modules> = {};
+      for (const mod of modules) {
+        const cat = mod.category || "outros";
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push(mod);
+      }
+
+      let text = "📋 <b>Comandos Disponíveis</b>\n━━━━━━━━━━━━━━━━━━━━━\n\n";
+
       // Deduplicate: show each command only once (grouped modules share the same command)
       const seenCommands = new Set<string>();
       
