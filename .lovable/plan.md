@@ -1,36 +1,80 @@
 
 
-# Reexibir Campos Úteis Removidos por Engano
+# Mapear Módulos iSeek Faltantes no Telegram Webhook
 
-## Problema
-Os seguintes campos foram adicionados à lista de campos ignorados, mas o usuário quer que sejam exibidos pois contêm informações úteis para o resultado:
-- **operadora** — operadora do telefone
-- **tipotelefone** — tipo (celular/fixo)
-- **data** — data associada ao registro
-- **ano** — ano do registro
-- **ranking** — relevância do resultado
-- **whatsapp** — se o número tem WhatsApp
-- **resultados** — quantidade de resultados encontrados
-- **estados_encontrados** — estados onde foram encontrados dados
-- **total_fotos** — total de fotos encontradas
-- **estado_encontrado** — estado onde a foto foi localizada
+## Diagnóstico
 
-## Solução
-Remover esses 10 campos das 3 listas de ignorados:
+Dos **75 módulos iSeek** no banco, apenas **~32 estão mapeados** no `queryTypeAliases`. Há **43 módulos sem comando** no Telegram e **3 com mapeamento incorreto**.
 
-### 1. `supabase/functions/telegram-webhook/index.ts` — `ignoredKeys` (linha ~4693)
-Remover: `operadora`, `tipotelefone`, `data`, `ano`, `ranking`, `whatsapp`, `resultados`, `estados_encontrados`, `total_fotos`, `estado_encontrado`
+### Mapeamento incorreto (bug)
+Os aliases apontam para module_keys que **não existem** no banco:
+- `irpf` → `irpf-isk` (DB tem `irpf`)
+- `vacinas` → `vacinas-isk` (DB tem `vacinas`)
+- `obito` → `obito-isk` (DB tem `obito`)
 
-### 2. `supabase/functions/telegram-webhook/index.ts` — `txtIgnoredKeys` (linha ~1719)
-Remover os mesmos campos da lista de exportação TXT
+### Módulos sem comando no Telegram (43)
 
-### 3. `src/components/consultation/MonospaceResultDisplay.tsx` — `ignoredKeys` (linha ~14)
-Remover os mesmos campos do painel web
+| Categoria | Módulos sem comando |
+|-----------|-------------------|
+| **Pessoa** | `nasc`, `pai`, `registro`, `nomeabreviadofiltros` |
+| **Documento** | `nis`, `oab`, `cnham`, `cnhnc`, `cnhrr`, `cnhrs` |
+| **Financeiro** | `assessoria`, `bens`, `cheque`, `dividas`, `iptu`, `irpf`¹, `score2`, `rais` |
+| **Empresa** | `catcpf`, `catnumero` |
+| **Justiça** | `advogadocpf`, `advogadooab`, `advogadooabuf`, `certidoes`, `mandado`, `processo` |
+| **Governo** | `beneficios`, `faculdades`, `func`, `matricula`, `vacinas`¹ |
+| **Saúde** | `obito`¹ |
+| **Veículos** | `veiculos`, `crlvmt`, `crlvto`, `crlvmt-foto`, `crlvto-foto` |
+| **Fotos** | `fotoal`, `fotocnh`, `fotodetran`, `fotogo`, `fotomapresos`, `fotonc`, `fotopb`, `fotope`, `fotorn` |
 
-## Campos que continuam ocultos (metadados internos)
-`requests_used`, `requests_remaining`, `daily_limit`, `fallback_provider`, `apikey`, `prioridade`, `classificacao`, `ddd`, `saldo`, `conta`, `protocolo`, `usuario`, etc.
+¹ Estes têm alias mas apontam para key errada (`-isk` suffix que não existe no DB)
 
-## Arquivos alterados
-- `supabase/functions/telegram-webhook/index.ts`
-- `src/components/consultation/MonospaceResultDisplay.tsx`
+## Plano de Implementação
+
+### 1. Corrigir aliases com mismatch (3 itens)
+No `queryTypeAliases`, corrigir:
+```
+irpf: "irpf"      // era "irpf-isk"
+vacinas: "vacinas" // era "vacinas-isk"
+obito: "obito"     // era "obito-isk"
+```
+
+### 2. Adicionar aliases para os 43 módulos faltantes
+Adicionar ao `queryTypeAliases`:
+```
+// Pessoa
+nasc: "nasc", pai: "pai", registro: "registro",
+// Documento
+nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
+// Financeiro
+assessoria: "assessoria", bens: "bens", cheque: "cheque",
+dividas: "dividas", iptu: "iptu", score4: "score2",
+rais: "rais",
+// Empresa
+catcpf: "catcpf", catnumero: "catnumero",
+// Justiça
+advogadocpf: "advogadocpf", advogadooab: "advogadooab",
+advogadooabuf: "advogadooabuf", certidoes: "certidoes",
+mandado: "mandado", processo: "processo",
+// Governo
+beneficios: "beneficios", faculdades: "faculdades",
+func: "func", matricula: "matricula",
+// Veículos
+veiculos: "veiculos", crlvmt: "crlvmt", crlvto: "crlvto",
+crlvmtfoto: "crlvmt-foto", crlvtofoto: "crlvto-foto",
+// Fotos exclusivas
+fotoal: "fotoal", fotocnh: "fotocnh", fotodetran: "fotodetran",
+fotogo3: "fotogo", fotomapresos: "fotomapresos",
+fotonc: "fotonc", fotopb: "fotopb", fotope2: "fotope",
+fotorn: "fotorn",
+```
+
+### 3. Adicionar labels no `queryTypeLabels`
+Adicionar labels descritivos para cada novo comando.
+
+### 4. Deploy
+Arquivo alterado: `supabase/functions/telegram-webhook/index.ts`
+
+## Nomenclatura dos comandos
+- Módulos exclusivos iSeek → nome direto (`/irpf`, `/vacinas`, `/bens`, `/mandado`)
+- Módulos que colidem com VeiculosAPI → número sequencial (`/score4` para `score2`, `/fotope2` para `fotope`, `/fotogo3` para `fotogo`)
 
