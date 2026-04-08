@@ -115,8 +115,6 @@ const MODULE_API_NAME: Record<string, string> = {
   "matricula": "iseek-dados---matricula",
   // Trabalho
   "rais": "iseek-dados---rais",
-  // SUS
-  "cpfsus": "iseek-dados---cpfsus",
   // TSE
   "tse-3": "iseek-dados---tse-3",
   // Fotos por estado
