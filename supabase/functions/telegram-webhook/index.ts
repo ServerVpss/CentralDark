@@ -202,68 +202,32 @@ async function loadModuleStatus(supabase: SupabaseClient): Promise<Record<string
 const queryTypeAliases: Record<string, string> = {
   tel: "telefone",
   telefone: "telefone",
-  // Aliases numéricos (novos, user-friendly)
-  cpf2: "cpffull", cpf3: "cpf-isk",
-  nome2: "nomefull", nome3: "nome-3",
-  mae2: "maefull", mae3: "mae-isk",
-  parentes2: "parentes-3", parentes3: "parentes-isk",
-  telefone2: "telefonefull", telefone3: "telefone-3", telefone4: "telefone-isk",
-  email2: "emailfull", email3: "email-3", email4: "email-isk",
-  cep2: "cepfull", cep3: "cep-3", cep4: "cep-isk",
-  score2: "score-3", score3: "score-isk",
-  rg2: "rg-3", rg3: "rg-isk",
-  pis2: "pis-3",
-  placa2: "placa-serpro", placa3: "placa-sesp", placa4: "placa-isk",
-  cnh2: "cnh-isk",
-  pix2: "pix-isk",
-  titulo2: "titulo-isk",
-  processos2: "processos-isk",
-  cnpj2: "cnpj-isk", cnpj3: "cnpj-cred-isk",
-  chassi2: "chassi-isk", renavam2: "renavam-isk", motor2: "motor-isk",
-  // Foto iSeek (numeradas)
-  fotosp2: "fotosp-isk", fotorj2: "fotorj-isk", fotopr2: "fotopr-isk",
-  fotoce2: "fotoce-isk", fotoma2: "fotoma-isk", fotoes2: "fotoes-isk",
-  fotodf2: "fotodf-isk", fototo2: "fototo-isk", fotoms2: "fotoms-isk",
-  fotoro2: "fotoro-isk", fotopi2: "fotopi-isk", fotogo2: "fotogo-isk",
-  fotomg2: "fotomg-isk", fotomt2: "fotomt-isk", fotoba2: "fotoba-isk",
-  fotors2: "fotors-isk", fotosc2: "fotosc-isk", fotopa2: "fotopa-isk",
-  fotopb2: "fotopb-isk", fotope2: "fotope-isk", fotorn2: "fotorn-isk",
-  // iSeek exclusivos (sem sufixo no comando)
+  cpf2: "cpffull",
+  cpf4: "cpf-spc", cpf5: "cpfsus",
+  score4: "score2",
+  // Módulos exclusivos
   irpf: "irpf", vacinas: "vacinas", obito: "obito",
-  // Pessoa
   nasc: "nasc", pai: "pai", registro: "registro", nomeabreviadofiltros: "nomeabreviadofiltros",
-  // Documento
   nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
-  // Financeiro
   assessoria: "assessoria", bens: "bens", cheque: "cheque",
-  dividas: "dividas", iptu: "iptu", score4: "score2", rais: "rais",
-  // Empresa
+  dividas: "dividas", iptu: "iptu", rais: "rais",
   catcpf: "catcpf", catnumero: "catnumero",
-  // Justiça
   advogadocpf: "advogadocpf", advogadooab: "advogadooab",
   advogadooabuf: "advogadooabuf", certidoes: "certidoes",
   mandado: "mandado", processo: "processo",
-  // Governo
   beneficios: "beneficios", faculdades: "faculdades",
   func: "func", matricula: "matricula",
-  // Veículos
   veiculos: "veiculos", crlvmt: "crlvmt", crlvto: "crlvto",
   crlvmtfoto: "crlvmt-foto", crlvtofoto: "crlvto-foto",
-  // Fotos exclusivas iSeek
   fotoal: "fotoal", fotocnh: "fotocnh", fotodetran: "fotodetran",
-  fotogo3: "fotogo", fotomapresos: "fotomapresos",
-  fotonc: "fotonc", fotopb3: "fotopb", fotope3: "fotope",
-  fotorn: "fotorn",
-  // Aliases antigos (compatibilidade)
-  cpfisk: "cpf-isk",
-  placasesp: "placa-sesp",
-  pis3: "pis-3",
-  // Aliases de nome descritivo
+  fotomapresos: "fotomapresos", fotonc: "fotonc",
+  fotopb: "fotopb", fotope: "fotope", fotorn: "fotorn",
+  // Aliases descritivos
   titulo: "titulo", endereco: "endereco", renda: "renda",
   processos: "processos", bnmp: "bnmp-lc", siel: "siel",
   tse: "tse-3", mae: "mae", credilink: "credilink",
   spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
-  cnpj: "cnpj-cred",
+  cnpj: "cnpj",
 };
 
 function normalizeQueryType(queryType: string): string {
