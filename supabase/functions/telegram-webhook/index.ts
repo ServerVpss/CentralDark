@@ -1661,6 +1661,16 @@ function buildPhotoCaption(header: string, cpf: string, result: unknown, botUser
 }
 
 // Enrich photo caption by fetching basic CPF data when photo result has no metadata
+function makeRequesterInfo(from: { first_name?: string; username?: string; id: number }): { name: string; identifier: string; date: string; time: string } {
+  const now = new Date();
+  return {
+    name: escapeHtmlGlobal(from.first_name || 'Usuário'),
+    identifier: from.username ? `@${from.username}` : `ID: ${from.id}`,
+    date: now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+    time: now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+  };
+}
+
 async function enrichPhotoCaption(cpf: string): Promise<Record<string, string> | undefined> {
   try {
     const { data } = await executeQueryWithCache("cpfbasico", cpf);
