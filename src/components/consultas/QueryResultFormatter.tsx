@@ -470,6 +470,46 @@ function formatLabel(key: string): string {
 // Campos de foto que devem ser ocultados (já exibimos a imagem real)
 const PHOTO_FIELDS = ['foto', 'fotobase64', 'image', 'photo', 'url', 'base64'];
 
+// Flatten nested objects into simple key-value pairs
+function flattenObject(obj: any, prefix = ''): Record<string, string | string[]> {
+  const result: Record<string, string | string[]> = {};
+  if (!obj || typeof obj !== 'object') return result;
+  
+  for (const [key, value] of Object.entries(obj)) {
+    const newKey = prefix ? `${prefix}_${key}` : key;
+    if (value === null || value === undefined) continue;
+    // Skip base64/photo values
+    if (typeof value === 'string' && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
+    if (Array.isArray(value)) {
+      if (value.every(v => typeof v !== 'object' || v === null)) {
+        result[newKey] = value.map(String);
+      } else {
+        value.forEach((item, i) => {
+          if (typeof item === 'object' && item !== null) {
+            Object.assign(result, flattenObject(item, `${newKey}_${i + 1}`));
+          } else {
+            result[`${newKey}_${i + 1}`] = String(item);
+          }
+        });
+      }
+    } else if (typeof value === 'object') {
+      Object.assign(result, flattenObject(value as Record<string, unknown>, newKey));
+    } else {
+      result[newKey] = String(value);
+    }
+  }
+  return result;
+}
+
+// Safe string conversion that handles objects
+function safeStringify(value: any): string {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'object') {
+    try { return JSON.stringify(value, null, 2); } catch { return String(value); }
+  }
+  return String(value);
+}
+
 // Group fields by category
 function groupFields(data: ParsedData): Record<string, ParsedData> {
   const groups: Record<string, ParsedData> = {
@@ -1215,10 +1255,23 @@ export function QueryResultFormatter({ data, showCopyButton, onQueryCpf, queryTy
       // Merge: texto parsed data takes precedence for rich data
       parsedData = { ...otherFields, ...textoData };
     } else {
-      // Filter out TEXTO field from direct object assignment
+      // Filter out TEXTO field and flatten nested objects
       const filtered: ParsedData = {};
       for (const [key, value] of Object.entries(data)) {
-        if (key !== 'TEXTO') {
+        if (key === 'TEXTO') continue;
+        if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+          // Flatten nested object
+          const flattened = flattenObject(value, key);
+          for (const [fk, fv] of Object.entries(flattened)) {
+            filtered[fk] = fv;
+          }
+        } else if (Array.isArray(value) && value.some(v => typeof v === 'object' && v !== null)) {
+          // Flatten array of objects
+          const flattened = flattenObject({ [key]: value });
+          for (const [fk, fv] of Object.entries(flattened)) {
+            filtered[fk] = fv;
+          }
+        } else {
           filtered[key] = value as string | string[];
         }
       }
@@ -1319,7 +1372,7 @@ export function QueryResultFormatter({ data, showCopyButton, onQueryCpf, queryTy
                       <div className="pl-5 space-y-1">
                         {value.map((item, idx) => (
                           <div key={idx} className="text-sm bg-background/50 px-2 py-1 rounded border border-border/30">
-                            {String(item)}
+                            {safeStringify(item)}
                           </div>
                         ))}
                       </div>
@@ -1335,7 +1388,7 @@ export function QueryResultFormatter({ data, showCopyButton, onQueryCpf, queryTy
                         {formatLabel(key)}
                       </span>
                       <span className="text-sm font-medium break-all">
-                        {String(value)}
+                        {safeStringify(value)}
                       </span>
                     </div>
                   </div>
