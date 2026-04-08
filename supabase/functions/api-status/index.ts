@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const apiKey = Deno.env.get("CONSULTAS_API_KEY");
+    const apiKey = Deno.env.get("ISEEK_API_KEY") || Deno.env.get("CONSULTAS_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ success: false, error: "API key not configured" }), {
         status: 500,
@@ -21,8 +21,8 @@ serve(async (req) => {
       });
     }
 
-    // Use a lightweight CPF query with dummy value to extract account metadata
-    const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=cpffull&string=00000000000`;
+    // Use a lightweight query to extract account metadata
+    const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=iseek-cpf&string=00000000000`;
 
     const response = await fetch(url, {
       method: "GET",
