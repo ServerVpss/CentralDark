@@ -3362,9 +3362,14 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfSusResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CPF e variantes (cpf, cpffull, cpf-isk, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo + iSeek equivalents)
+  // CPF iSeek (estrutura rica com seções dedicadas)
+  if (queryType === 'cpf-isk') {
+    return formatCpfIseekResult(data, userName, botTag, escapeHtml);
+  }
+
+  // CPF e variantes (cpf, cpffull, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo + iSeek equivalents)
   const cpfLikeModules = [
-    'cpf', 'cpffull', 'cpf-isk', 'mae', 'maefull', 'mae-isk', 
+    'cpf', 'cpffull', 'mae', 'maefull', 'mae-isk', 
     'rg', 'rg-3', 'rg-isk', 'cnh', 'cnh-isk', 
     'pis', 'pis-3', 'titulo', 'titulo-isk',
     'nomeabreviadofiltros', 'processo', 'advogadooabuf',
@@ -3767,6 +3772,323 @@ function formatCpfSusResult(
     }
   }
 
+  lines.push('');
+  lines.push(`👤 ${escapeHtml(userName)} | ${botTag}`);
+
+  return lines.join('\n');
+}
+
+// =============== FORMATAÇÃO ESTRUTURADA PARA CPF iSEEK ===============
+function formatCpfIseekResult(
+  data: Record<string, unknown>,
+  userName: string,
+  botTag: string,
+  escapeHtml: (str: string) => string
+): string {
+  const NI = 'Não Informado';
+  const isNI = (v: unknown): boolean => !v || String(v).trim() === '' || String(v).trim() === NI || String(v).trim() === '-' || String(v).trim() === '0';
+  const clean = (v: unknown): string => isNI(v) ? '' : String(v).trim();
+  const formatCpfNum = (v: string): string => {
+    const s = v.replace(/\D/g, '').padStart(11, '0');
+    return s.length === 11 ? `${s.slice(0,3)}.${s.slice(3,6)}.${s.slice(6,9)}-${s.slice(9)}` : v;
+  };
+
+  // iSeek data comes flat at top level
+  const basicos = (data.dadosBasicos || {}) as Record<string, unknown>;
+  const filiacao = (basicos.filiacao || {}) as Record<string, unknown>;
+  const sitCad = (basicos.situacaoCadastral || {}) as Record<string, unknown>;
+  const cnh = (data.carteriaHabilitacao || data.carteiriaHabilitacao || {}) as Record<string, unknown>;
+  const tels = (data.telefonesHistorico || []) as Array<Record<string, unknown>>;
+  const emails = (data.emails || []) as Array<Record<string, unknown>>;
+  const enderecos = (data.enderecos || []) as Array<Record<string, unknown>>;
+  const empregos = (data.empregos || []) as Array<Record<string, unknown>>;
+  const parentesNovos = (data.parentesNovos || data.parentes || []) as Array<Record<string, unknown>>;
+  const processos = (data.processos || []) as Array<Record<string, unknown>>;
+  const veiculos = (data.veiculos || []) as Array<Record<string, unknown>>;
+  const internet = (data.internet || []) as Array<Record<string, unknown>>;
+  const dividas = (data.dividas || {}) as Record<string, unknown>;
+  const poderAq = (data.poderAquisitivo || {}) as Record<string, unknown>;
+  const mosaic = (data.serasaMosaic || {}) as Record<string, unknown>;
+  const empresas = (data.empresas || []) as Array<Record<string, unknown>>;
+  const cartoes = (data.cartoesUsados || []) as Array<Record<string, unknown>>;
+  const cheques = (data.chequeSemFundo || []) as Array<Record<string, unknown>>;
+  const cnsHist = (data.cnsHistorico || []) as Array<Record<string, unknown>>;
+  const pisHist = (data.pisHistorico || []) as Array<Record<string, unknown>>;
+  const tituloHist = (data.tituloHistorico || []) as Array<Record<string, unknown>>;
+  const ctps = (data.codigoCtps || {}) as Record<string, unknown>;
+  const irpf = (data.irpf || []) as Array<Record<string, unknown>>;
+
+  const lines: string[] = [];
+
+  // ═══════════════ 👤 DADOS PESSOAIS ═══════════════
+  lines.push(`👤 <b>DADOS PESSOAIS</b>`);
+  lines.push('');
+  const nome = clean(basicos.nome);
+  const cpf = clean(basicos.cpf);
+  const nasc = clean(basicos.dataNasc);
+  const sexo = clean(basicos.sexo);
+  const nacion = clean(basicos.nacionalidade);
+  const descSit = clean(sitCad.descricaoSit);
+  const rendaAtual = clean(basicos.rendaAtual);
+  const faixaScore = clean(basicos.faixaScore);
+
+  if (nome) lines.push(`📋 Nome: <b>${escapeHtml(nome)}</b>`);
+  if (cpf) lines.push(`🆔 CPF: ${escapeHtml(formatCpfNum(cpf))}`);
+  if (nasc) lines.push(`📅 Nascimento: ${escapeHtml(nasc)}`);
+  if (sexo) lines.push(`⚧ Sexo: ${escapeHtml(sexo === 'F' ? 'Feminino' : sexo === 'M' ? 'Masculino' : sexo)}`);
+  if (nacion) lines.push(`🌍 Nacionalidade: ${escapeHtml(nacion)}`);
+  if (descSit) lines.push(`📊 Situação: ${escapeHtml(descSit)}`);
+  if (rendaAtual) lines.push(`💵 Renda: R$ ${escapeHtml(rendaAtual)}`);
+  if (faixaScore) lines.push(`📈 Score: ${escapeHtml(faixaScore)}`);
+
+  // Filiação inline
+  const mae = clean(filiacao.nomeMae);
+  const pai = clean(filiacao.nomePai);
+  if (mae) lines.push(`👩 Mãe: ${escapeHtml(mae)}`);
+  if (pai) lines.push(`👨 Pai: ${escapeHtml(pai)}`);
+
+  // ═══════════════ 📄 DOCUMENTOS ═══════════════
+  const docLines: string[] = [];
+  const cnhReg = clean(cnh.registro);
+  if (cnhReg) {
+    const cnhCat = clean(cnh.categoria);
+    const cnhVal = clean(cnh.dataValidade);
+    const cnhUf = clean(cnh.ufCnh);
+    docLines.push(`🪪 CNH: ${escapeHtml(cnhReg)}${cnhCat ? ' Cat. ' + escapeHtml(cnhCat) : ''}${cnhUf ? ' (' + escapeHtml(cnhUf) + ')' : ''}${cnhVal ? ' Val: ' + escapeHtml(cnhVal) : ''}`);
+  }
+  if (cnsHist.length > 0) {
+    const cns = clean((cnsHist[0] as Record<string, unknown>).cns);
+    if (cns) docLines.push(`🏥 CNS: ${escapeHtml(cns)}`);
+  }
+  if (pisHist.length > 0) {
+    const pis = clean((pisHist[0] as Record<string, unknown>).pisNis);
+    if (pis) docLines.push(`📋 PIS: ${escapeHtml(pis)}`);
+  }
+  if (tituloHist.length > 0) {
+    const titulo = clean((tituloHist[0] as Record<string, unknown>).titulo);
+    if (titulo) docLines.push(`🗳️ Título: ${escapeHtml(titulo)}`);
+  }
+  const ctpsNum = clean(ctps.ctpsNumero);
+  if (ctpsNum) docLines.push(`📒 CTPS: ${escapeHtml(ctpsNum)}/${escapeHtml(clean(ctps.ctpsSerie) || '?')}`);
+
+  if (docLines.length > 0) {
+    lines.push('');
+    lines.push(`📄 <b>DOCUMENTOS</b>`);
+    lines.push(...docLines);
+  }
+
+  // ═══════════════ 📱 TELEFONES ═══════════════
+  const validTels = tels.filter(t => !isNI(t.telefone) && !isNI(t.ddd));
+  if (validTels.length > 0) {
+    lines.push('');
+    lines.push(`📱 <b>TELEFONES</b> (${validTels.length})`);
+    const seen = new Set<string>();
+    validTels.slice(0, 10).forEach(t => {
+      const ddd = clean(t.ddd);
+      const num = clean(t.telefone);
+      const key = `${ddd}${num}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      const data = clean(t.data);
+      lines.push(`📞 (${escapeHtml(ddd)}) ${escapeHtml(num)}${data ? ' — ' + escapeHtml(data) : ''}`);
+    });
+    if (validTels.length > 10) lines.push(`   <i>... e mais ${validTels.length - 10}</i>`);
+  }
+
+  // ═══════════════ 📧 E-MAILS ═══════════════
+  const validEmails = emails.filter(e => clean(e.email).includes('@'));
+  const uniqueEmails = [...new Set(validEmails.map(e => clean(e.email).toLowerCase()))];
+  if (uniqueEmails.length > 0) {
+    lines.push('');
+    lines.push(`📧 <b>E-MAILS</b> (${uniqueEmails.length})`);
+    uniqueEmails.slice(0, 5).forEach(email => {
+      lines.push(`✉️ ${escapeHtml(email)}`);
+    });
+  }
+
+  // ═══════════════ 📍 ENDEREÇOS ═══════════════
+  const validEnds = enderecos.filter(e => !isNI(e.logradouro) && !isNI(e.cidade));
+  if (validEnds.length > 0) {
+    lines.push('');
+    lines.push(`📍 <b>ENDEREÇOS</b> (${validEnds.length})`);
+    const seenEnds = new Set<string>();
+    validEnds.slice(0, 5).forEach(e => {
+      const log = clean(e.logradouro);
+      const num = clean(e.numero);
+      const bairro = clean(e.bairro);
+      const cidade = clean(e.cidade);
+      const uf = clean(e.siglaUf);
+      const cep = clean(e.cep);
+      const key = `${log}${num}${cep}`;
+      if (seenEnds.has(key)) return;
+      seenEnds.add(key);
+      const addr = [log, num, bairro].filter(Boolean).join(', ');
+      const loc = [cidade, uf].filter(Boolean).join('/');
+      lines.push(`🏠 ${escapeHtml(addr)}`);
+      lines.push(`   ${escapeHtml(loc)}${cep ? ' CEP: ' + escapeHtml(cep) : ''}`);
+    });
+    if (validEnds.length > 5) lines.push(`   <i>... e mais ${validEnds.length - 5}</i>`);
+  }
+
+  // ═══════════════ 💼 EMPREGOS ═══════════════
+  if (empregos.length > 0) {
+    lines.push('');
+    lines.push(`💼 <b>EMPREGOS</b> (${empregos.length})`);
+    empregos.slice(0, 5).forEach(emp => {
+      const cargo = clean(emp.descricaoCbo);
+      const cnpj = clean(emp.cnpjEmpregador);
+      const salario = clean(emp.valorSalarial);
+      const admissao = clean(emp.dataAdmissao);
+      const deslig = clean(emp.dataDesligamento);
+      const razao = clean(emp.razaoSocial);
+      const cargoStr = cargo || 'Cargo não informado';
+      lines.push(`🏢 ${escapeHtml(cargoStr)}`);
+      if (razao) lines.push(`   Empresa: ${escapeHtml(razao)}`);
+      if (cnpj) lines.push(`   CNPJ: ${escapeHtml(cnpj)}`);
+      const periodo = [admissao, deslig].filter(Boolean).join(' → ');
+      if (periodo) lines.push(`   📅 ${escapeHtml(periodo)}${salario ? ' | R$ ' + escapeHtml(salario) : ''}`);
+    });
+    if (empregos.length > 5) lines.push(`   <i>... e mais ${empregos.length - 5}</i>`);
+  }
+
+  // ═══════════════ 🏭 EMPRESAS ═══════════════
+  if (empresas.length > 0) {
+    lines.push('');
+    lines.push(`🏭 <b>EMPRESAS</b> (${empresas.length})`);
+    empresas.slice(0, 5).forEach(emp => {
+      const razao = clean(emp.razaoSocial);
+      const cnpj = clean(emp.cnpj);
+      const fantasia = clean(emp.nomeFantasia);
+      if (razao) lines.push(`🏢 ${escapeHtml(razao)}${fantasia ? ' (' + escapeHtml(fantasia) + ')' : ''}`);
+      if (cnpj) lines.push(`   CNPJ: ${escapeHtml(cnpj)}`);
+    });
+  }
+
+  // ═══════════════ 👨‍👩‍👧 PARENTES ═══════════════
+  if (parentesNovos.length > 0) {
+    lines.push('');
+    lines.push(`👨‍👩‍👧 <b>PARENTES</b> (${parentesNovos.length})`);
+    parentesNovos.slice(0, 10).forEach(p => {
+      const nomeP = clean(p.nome);
+      const relacao = clean(p.tipoRelacao);
+      const cpfP = clean(p.cpf);
+      const nascP = clean(p.dataNascimento);
+      if (!nomeP) return;
+      let icon = '👤';
+      const rel = relacao.toLowerCase();
+      if (rel.includes('mãe') || rel.includes('mae')) icon = '👩';
+      else if (rel.includes('pai')) icon = '👨';
+      else if (rel.includes('filh')) icon = rel.includes('filha') ? '👧' : '👦';
+      else if (rel.includes('irm')) icon = rel.includes('irmã') || rel.includes('irma') ? '👧' : '👦';
+      else if (rel.includes('avó') || rel.includes('avo')) icon = '👵';
+      else if (rel.includes('avô') || rel.includes('avo')) icon = '👴';
+      lines.push(`${icon} ${escapeHtml(relacao)}: ${escapeHtml(nomeP)}${cpfP ? ' — ' + escapeHtml(formatCpfNum(cpfP)) : ''}${nascP ? ' (' + escapeHtml(nascP) + ')' : ''}`);
+    });
+    if (parentesNovos.length > 10) lines.push(`   <i>... e mais ${parentesNovos.length - 10}</i>`);
+  }
+
+  // ═══════════════ 💳 FINANCEIRO ═══════════════
+  const finLines: string[] = [];
+  const pAq = clean(poderAq.poderAquisitivo);
+  const faixaRenda = clean(poderAq.faixaRenda);
+  const codMosaic = clean(mosaic.codMosaic);
+  const descMosaic = clean(mosaic.descMosaicSecundario);
+  if (pAq) finLines.push(`💰 Poder Aquisitivo: ${escapeHtml(pAq)}`);
+  if (faixaRenda) finLines.push(`📊 Faixa: ${escapeHtml(faixaRenda)}`);
+  if (codMosaic) finLines.push(`🎯 Serasa Mosaic: ${escapeHtml(codMosaic)}${descMosaic ? ' — ' + escapeHtml(descMosaic) : ''}`);
+
+  // Dívidas
+  const bacen = (dividas.bacen || []) as Array<Record<string, unknown>>;
+  if (bacen.length > 0) {
+    bacen.slice(0, 3).forEach(d => {
+      const valor = clean(d.valorConsolidado);
+      const sit = clean(d.situacao);
+      const receita = clean(d.receitaPrincipal);
+      finLines.push(`⚠️ Dívida: R$ ${escapeHtml(valor)} — ${escapeHtml(sit)}${receita ? ' (' + escapeHtml(receita) + ')' : ''}`);
+    });
+  }
+
+  // Cheques sem fundo
+  if (cheques.length > 0) {
+    finLines.push(`🚫 Cheques sem fundo: ${cheques.length}`);
+  }
+
+  // Cartões
+  if (cartoes.length > 0) {
+    cartoes.slice(0, 3).forEach(c => {
+      const banco = clean(c.banco);
+      const bandeira = clean(c.bandeira);
+      const tipo = clean(c.tipo);
+      if (banco) finLines.push(`💳 ${escapeHtml(banco)} ${escapeHtml(bandeira)} (${escapeHtml(tipo)})`);
+    });
+  }
+
+  if (finLines.length > 0) {
+    lines.push('');
+    lines.push(`💳 <b>FINANCEIRO</b>`);
+    lines.push(...finLines);
+  }
+
+  // ═══════════════ ⚖️ PROCESSOS ═══════════════
+  if (processos.length > 0) {
+    lines.push('');
+    lines.push(`⚖️ <b>PROCESSOS</b> (${processos.length})`);
+    // Deduplicar por número de processo
+    const seenProc = new Set<string>();
+    processos.forEach(p => {
+      const proc = clean(p.processo);
+      if (!proc || seenProc.has(proc)) return;
+      seenProc.add(proc);
+      const polo = clean(p.polo);
+      const parte = clean(p.tipoParte);
+      if (seenProc.size <= 5) {
+        lines.push(`📄 ${escapeHtml(proc)} — ${escapeHtml(polo)} (${escapeHtml(parte)})`);
+      }
+    });
+    if (seenProc.size > 5) lines.push(`   <i>... e mais ${seenProc.size - 5}</i>`);
+  }
+
+  // ═══════════════ 🚗 VEÍCULOS ═══════════════
+  if (veiculos.length > 0) {
+    lines.push('');
+    lines.push(`🚗 <b>VEÍCULOS</b> (${veiculos.length})`);
+    veiculos.slice(0, 5).forEach(v => {
+      const placa = clean(v.placaAntiga);
+      const renavam = clean(v.renavam);
+      const ano = clean(v.ano);
+      lines.push(`🚘 ${escapeHtml(placa)}${ano ? ' (' + escapeHtml(ano) + ')' : ''}${renavam ? ' RENAVAM: ' + escapeHtml(renavam) : ''}`);
+    });
+    if (veiculos.length > 5) lines.push(`   <i>... e mais ${veiculos.length - 5}</i>`);
+  }
+
+  // ═══════════════ 🌐 INTERNET ═══════════════
+  const validNet = internet.filter(i => !isNI(i.websiteUrl));
+  if (validNet.length > 0) {
+    lines.push('');
+    lines.push(`🌐 <b>INTERNET</b> (${validNet.length})`);
+    validNet.slice(0, 5).forEach(i => {
+      const url = clean(i.websiteUrl);
+      const status = clean(i.status);
+      lines.push(`🔗 ${escapeHtml(url)}${status ? ' — ' + escapeHtml(status) : ''}`);
+    });
+    if (validNet.length > 5) lines.push(`   <i>... e mais ${validNet.length - 5}</i>`);
+  }
+
+  // ═══════════════ 📋 IRPF ═══════════════
+  if (irpf.length > 0) {
+    const validIrpf = irpf.filter(i => !isNI(i.situacaoReceita));
+    if (validIrpf.length > 0) {
+      lines.push('');
+      lines.push(`📋 <b>IRPF</b>`);
+      validIrpf.slice(0, 3).forEach(i => {
+        const ano = clean(i.anoReferencia);
+        const sit = clean(i.situacaoReceita);
+        lines.push(`📅 ${escapeHtml(ano)}: ${escapeHtml(sit)}`);
+      });
+    }
+  }
+
+  // Footer
   lines.push('');
   lines.push(`👤 ${escapeHtml(userName)} | ${botTag}`);
 
