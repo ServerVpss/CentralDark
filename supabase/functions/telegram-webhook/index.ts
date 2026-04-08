@@ -6060,6 +6060,9 @@ class BotHandler {
         } else if (showFotoNacional) {
           actionButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`, "primary")]);
         }
+        // Botões de módulos alternativos
+        const photoSiblingButtons = getSiblingButtons(usedModule, queryInput);
+        actionButtons.push(...photoSiblingButtons);
         
         const photoResult = await telegramRequest(this.token, "sendPhoto", {
           chat_id: chatId,
@@ -6080,6 +6083,11 @@ class BotHandler {
           extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${queryInput.replace(/\D/g, '')}`)]);
         } else if (showFotoNacional) {
           extraButtons.push([btn(`📸 Buscar Foto Nacional`, `foto_query:nacional:${queryInput.replace(/\D/g, '')}`)]);
+        }
+        // Botões de módulos alternativos (irmãos)
+        const successSiblingButtons = getSiblingButtons(usedModule, queryInput);
+        if (successSiblingButtons.length > 0) {
+          extraButtons.push(...successSiblingButtons);
         }
         const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons, telegramUserId);
         if (paginatedResult.ok && paginatedResult.result) {
@@ -7647,6 +7655,11 @@ class BotHandler {
       const extraButtons: InlineButton[][] = [];
       if (showFotoButton && detectedUf) {
         extraButtons.push([btn(`📸 Consultar Foto (${detectedUf})`, `foto_query:${detectedUf}:${inputForQuery.replace(/\D/g, '')}`)]);
+      }
+      // Botões de módulos alternativos (irmãos)
+      const successSiblingBtns = getSiblingButtons(queryType, inputForQuery);
+      if (successSiblingBtns.length > 0) {
+        extraButtons.push(...successSiblingBtns);
       }
 
       let resultMessageId: number | undefined;
