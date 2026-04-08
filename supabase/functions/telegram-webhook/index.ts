@@ -5320,10 +5320,11 @@ function formatGenericResult(
     lines.push('');
     lines.push(`${catInfo.icon} <b>${catInfo.label}</b>`);
 
-    for (const item of uniqueItems) {
+    const preLines = uniqueItems.map(item => {
       const displayKey = formatDisplayKey(item.key);
-      lines.push(`${item.emoji} ${escapeHtml(displayKey)}: ${escapeHtml(item.value)}`);
-    }
+      return `${displayKey.toUpperCase()} => ${item.value}`;
+    });
+    lines.push(`<pre>${preLines.join('\n')}</pre>`);
   }
 
   // Render uncategorized items
@@ -5339,10 +5340,11 @@ function formatGenericResult(
     if (uniqueItems.length > 0) {
       lines.push('');
       lines.push(`📋 <b>OUTROS DADOS</b>`);
-      for (const item of uniqueItems.slice(0, 30)) {
+      const preLines = uniqueItems.slice(0, 30).map(item => {
         const displayKey = formatDisplayKey(item.key);
-        lines.push(`${item.emoji} ${escapeHtml(displayKey)}: ${escapeHtml(item.value)}`);
-      }
+        return `${displayKey.toUpperCase()} => ${item.value}`;
+      });
+      lines.push(`<pre>${preLines.join('\n')}</pre>`);
       if (uniqueItems.length > 30) {
         lines.push(`... e mais ${uniqueItems.length - 30} campos`);
       }
