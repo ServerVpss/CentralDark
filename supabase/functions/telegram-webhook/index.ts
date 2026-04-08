@@ -7354,33 +7354,96 @@ class BotHandler {
       fotope: "PE", fotoma: "MA", fotoes: "ES", fotodf: "DF", fototo: "TO",
     };
 
+    // ============ MENU DE SELEÇÃO DE MÓDULOS ============
+    // Comandos que abrem menu de escolha ao invés de executar direto
+    const MODULE_MENU: Record<string, Array<{ key: string; label: string; emoji: string }>> = {
+      cpf: [
+        { key: "cpf", label: "CPF Básico", emoji: "👤" },
+        { key: "cpffull", label: "CPF Completo", emoji: "📋" },
+        { key: "cpf-spc", label: "CPF SPC", emoji: "💳" },
+        { key: "cpfsus", label: "CPF SUS", emoji: "🏥" },
+      ],
+    };
+
+    // Verifica se este comando tem menu de seleção E tem input
+    const menuOptions = MODULE_MENU[command];
+    if (menuOptions && queryInput) {
+      // Verificar se pelo menos 1 módulo está ativado
+      const enabledChecks = await Promise.all(
+        menuOptions.map(async (opt) => ({
+          ...opt,
+          enabled: await isQueryTypeEnabled(opt.key, this.supabase),
+        }))
+      );
+      const enabledOptions = enabledChecks.filter((o) => o.enabled);
+
+      if (enabledOptions.length === 0) {
+        logCmd('INFO', 'CMD_BLOCKED', { reason: 'all_modules_disabled', command, chatId, userId: telegramUserId });
+        return;
+      }
+
+      // Se só tem 1 módulo habilitado, executa direto
+      if (enabledOptions.length === 1) {
+        const singleModule = enabledOptions[0].key;
+        const userFirstName = message.from?.first_name || 'usuário';
+        await this.processQuery(chatId, telegramUserId, singleModule, queryInput, undefined, userFirstName);
+        return;
+      }
+
+      // Mostrar menu com botões — cada botão contém o userId para segurança
+      const buttons: InlineButton[][] = enabledOptions.map((opt) => [
+        btn(`${opt.emoji} ${opt.label}`, `select_mod:${opt.key}:${telegramUserId}:${queryInput}`, "primary"),
+      ]);
+      buttons.push([btn("🗑️ Apagar", `delete_msg_user:${telegramUserId}`)]);
+
+      await telegramRequest(this.token, "sendMessage", {
+        chat_id: chatId,
+        text: `🔎 <b>Escolha o módulo de consulta:</b>\n\n📄 Dado: <code>${escapeHtmlGlobal(queryInput)}</code>\n\n👇 Selecione uma opção abaixo:`,
+        parse_mode: "HTML",
+        reply_to_message_id: replyToId,
+        reply_markup: { inline_keyboard: buttons },
+      });
+      return;
+    }
+
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cpffull: "cpffull", cpfisk: "cpf-isk",
-      cpf2: "cpffull", cpf3: "cpf-isk",
-      cnpj: "cnpj-cred", placa: "placa",
-      placa2: "placa-serpro", placa3: "placa-sesp",
-      placasesp: "placa-sesp",
-      telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
-      telefone2: "telefonefull", telefone3: "telefone-3",
-      email: "email", emailfull: "emailfull",
-      email2: "emailfull", email3: "email-3",
-      cep: "cep", cepfull: "cepfull", cep2: "cepfull", cep3: "cep-3",
-      nome: "nome", nomefull: "nomefull", nome2: "nomefull", nome3: "nome-3",
-      score: "score", score2: "score-3",
-      rg: "rg", rg2: "rg-3",
-      pis: "pis", pis2: "pis-3",
-      mae: "mae", maefull: "maefull", mae2: "maefull",
-      parentes: "parentes", parentes2: "parentes-3",
+      cpf: "cpf", cpffull: "cpffull",
+      cpf2: "cpffull", cpf4: "cpf-spc", cpf5: "cpfsus",
+      cnpj: "cnpj", placa: "placa",
+      telefone: "telefone", tel: "telefone",
+      email: "email",
+      cep: "cep",
+      nome: "nome",
+      score: "score", score4: "score2",
+      rg: "rg",
+      pis: "pis",
+      mae: "mae",
+      parentes: "parentes",
       cnh: "cnh", pix: "pix",
       foto: "foto", nacional: "foto",
       titulo: "titulo", endereco: "endereco", renda: "renda",
       processos: "processos", bnmp: "bnmp-lc", siel: "siel",
       tse: "tse-3", credilink: "credilink",
-      spc: "cpf-spc", cpf4: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus", cpf5: "cpfsus",
+      spc: "cpf-spc", poder: "poderaquisitivo", sus: "cpfsus",
       chassi: "chassi", renavam: "renavam", motor: "motor",
-      // Aliases antigos (compatibilidade)
-      rg3: "rg-3", pis3: "pis-3", cep3: "cep-3",
-      nome3: "nome-3", score3: "score-3", parentes3: "parentes-3", telefone3: "telefone-3",
+      // Módulos exclusivos
+      irpf: "irpf", vacinas: "vacinas", obito: "obito",
+      nasc: "nasc", pai: "pai", registro: "registro",
+      nis: "nis", oab: "oab", cnham: "cnham", cnhnc: "cnhnc", cnhrr: "cnhrr", cnhrs: "cnhrs",
+      assessoria: "assessoria", bens: "bens", cheque: "cheque",
+      dividas: "dividas", iptu: "iptu", rais: "rais",
+      catcpf: "catcpf", catnumero: "catnumero",
+      advogadocpf: "advogadocpf", advogadooab: "advogadooab",
+      advogadooabuf: "advogadooabuf", certidoes: "certidoes",
+      mandado: "mandado", processo: "processo",
+      beneficios: "beneficios", faculdades: "faculdades",
+      func: "func", matricula: "matricula",
+      veiculos: "veiculos", crlvmt: "crlvmt", crlvto: "crlvto",
+      crlvmtfoto: "crlvmt-foto", crlvtofoto: "crlvto-foto",
+      fotoal: "fotoal", fotocnh: "fotocnh", fotodetran: "fotodetran",
+      fotomapresos: "fotomapresos", fotonc: "fotonc",
+      fotopb: "fotopb", fotope: "fotope", fotorn: "fotorn",
+      nomeabreviadofiltros: "nomeabreviadofiltros",
       // State-specific foto shortcuts
       ...Object.fromEntries(Object.keys(fotoStateCommandMap).map(k => [k, "foto"])),
     };
