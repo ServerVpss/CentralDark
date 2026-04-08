@@ -1,0 +1,1 @@
+UPDATE query_modules SET enabled = true WHERE module_key IN ('nome', 'nomefull', 'nome-3'); UPDATE query_modules SET provider = 'iSeek' WHERE module_key = 'nome-3';
