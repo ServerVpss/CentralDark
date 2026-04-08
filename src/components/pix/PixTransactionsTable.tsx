@@ -1,6 +1,15 @@
+import { useState, useEffect, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -9,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreditCard, User } from "lucide-react";
+import { CreditCard, User, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import type { PixTransaction } from "@/hooks/usePixTransactions";
@@ -20,6 +29,24 @@ interface PixTransactionsTableProps {
 }
 
 export function PixTransactionsTable({ transactions, isLoading }: PixTransactionsTableProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+
+  // Reset page when transactions change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [transactions]);
+
+  const totalItems = transactions?.length || 0;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const paginatedTransactions = useMemo(
+    () => transactions?.slice(startIndex, startIndex + pageSize) || [],
+    [transactions, startIndex, pageSize]
+  );
+
+  const goToPage = (page: number) => setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "paid":
@@ -55,11 +82,24 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
 
   return (
     <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
-      <div className="p-4 border-b border-border">
+      <div className="p-4 border-b border-border flex items-center justify-between">
         <h3 className="font-semibold flex items-center gap-2">
           <CreditCard className="h-5 w-5 text-primary" />
-          Transações PIX
+          Transações PIX ({totalItems})
         </h3>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">Exibir:</span>
+          <Select value={pageSize.toString()} onValueChange={(v) => { setPageSize(Number(v)); setCurrentPage(1); }}>
+            <SelectTrigger className="w-[80px] h-8 bg-muted/50">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {[10, 25, 50, 100].map((size) => (
+                <SelectItem key={size} value={size.toString()}>{size}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <Table>
@@ -74,8 +114,8 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions && transactions.length > 0 ? (
-              transactions.map((transaction) => (
+            {paginatedTransactions.length > 0 ? (
+              paginatedTransactions.map((transaction) => (
                 <TableRow key={transaction.id} className="border-border">
                   <TableCell className="font-medium">
                     <div className="flex flex-col">
@@ -120,6 +160,42 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
           </TableBody>
         </Table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-border/50">
+          <div className="text-sm text-muted-foreground">
+            Mostrando {startIndex + 1} - {Math.min(startIndex + pageSize, totalItems)} de {totalItems}
+          </div>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(1)} disabled={currentPage === 1}>
+              <ChevronsLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div className="flex items-center gap-1 mx-2">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum: number;
+                if (totalPages <= 5) pageNum = i + 1;
+                else if (currentPage <= 3) pageNum = i + 1;
+                else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                else pageNum = currentPage - 2 + i;
+                return (
+                  <Button key={pageNum} variant={currentPage === pageNum ? "default" : "outline"} size="icon" className="h-8 w-8" onClick={() => goToPage(pageNum)}>
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
+              <ChevronsRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </Card>
   );
 }
