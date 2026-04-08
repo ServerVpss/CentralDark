@@ -9095,7 +9095,8 @@ class BotHandler {
 
     if (error || !paginationData) {
       console.error(`${queryType} pagination data not found:`, error);
-      const label = queryType === 'telefone' ? 'TELEFONE' : 'CEP';
+      const isNomeType = queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros';
+      const label = isNomeType ? 'NOME' : queryType === 'telefone' ? 'TELEFONE' : 'CEP';
       await editMessage(this.token, chatId, messageId,
         `⚠️ <b>Sessão expirada</b>\n\nFaça uma nova consulta de ${label}.`,
         { inline_keyboard: [[{ text: "🗑️ Apagar", callback_data: "delete_msg" }]] }
