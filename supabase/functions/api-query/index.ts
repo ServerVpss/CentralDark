@@ -355,8 +355,8 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
   // Resolve o nome do módulo na API (alguns módulos usam nomes internos diferentes)
   const apiModuleName = MODULE_API_NAME[modulo] || modulo;
 
-  // Chave única para todos os módulos
-  const apiKey = Deno.env.get("CONSULTAS_API_KEY");
+  // Chave única para todos os módulos (VeiculosAPI)
+  const apiKey = Deno.env.get("ISEEK_API_KEY") || Deno.env.get("CONSULTAS_API_KEY");
 
   if (!apiKey) {
     return {
