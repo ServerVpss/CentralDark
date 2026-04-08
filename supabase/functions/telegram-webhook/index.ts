@@ -3387,7 +3387,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     'mae', 'maefull', 'mae-isk', 
     'rg', 'rg-3', 'rg-isk', 'cnh', 'cnh-isk', 
     'pis', 'pis-3', 'titulo', 'titulo-isk',
-    'nomeabreviadofiltros', 'processo', 'advogadooabuf',
+    'processo', 'advogadooabuf',
     'catcpf', 'catnumero', 'irpf-isk', 'vacinas-isk', 'obito-isk',
   ];
   if (cpfLikeModules.includes(queryType)) {
