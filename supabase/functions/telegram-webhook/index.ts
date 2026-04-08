@@ -224,7 +224,7 @@ const queryTypeAliases: Record<string, string> = {
   titulo: "titulo", endereco: "endereco", renda: "renda",
   processos: "processos", bnmp: "bnmp-lc", siel: "siel",
   tse: "tse-3", mae: "mae", credilink: "credilink",
-  spc: "cpf-spc", poder: "poderaquisitivo",
+  poder: "poderaquisitivo",
   cnpj: "cnpj",
 };
 
