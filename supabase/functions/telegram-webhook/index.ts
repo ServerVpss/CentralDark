@@ -3614,69 +3614,64 @@ function formatTelefoneResult(
 
   const phones = extractPhonesFormatted();
   const rawPhones = phones.length === 0 ? extractRawPhones() : [];
-  const lines: string[] = [];
+  const parts: string[] = [];
 
   const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
-  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>\n`;
+  parts.push(`${escapeHtml(moduleLabel)}`);
+  parts.push(`ℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>`);
+  parts.push(``);
 
-  if (nome || cpf) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 👤 DADOS DO TITULAR`);
-    lines.push(`├─────────────────────────────`);
-    if (nome) lines.push(`│ 👑 Nome: ${nome}`);
-    if (cpf) lines.push(`│ 🆔 CPF: ${cpf}`);
-    if (nascimento) lines.push(`│ 📅 Nascimento: ${nascimento}`);
-    if (sexo) lines.push(`│ 👤 Sexo: ${sexo}`);
-    if (mae) lines.push(`│ 👩 Mãe: ${mae}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
-  }
+  // Section builder: bold title outside <pre>, fields inside <pre>
+  const addSection = (icon: string, title: string, fields: string[]) => {
+    if (fields.length === 0) return;
+    parts.push(`${icon} <b>${escapeHtml(title)}</b>`);
+    parts.push(`<pre>${fields.map(f => escapeHtml(f)).join('\n')}</pre>`);
+  };
 
+  // DADOS DO TITULAR
+  const titularFields: string[] = [];
+  if (nome) titularFields.push(`NOME => ${nome}`);
+  if (cpf) titularFields.push(`CPF => ${cpf}`);
+  if (nascimento) titularFields.push(`NASCIMENTO => ${nascimento}`);
+  if (sexo) titularFields.push(`SEXO => ${sexo}`);
+  if (mae) titularFields.push(`MÃE => ${mae}`);
+  addSection('👤', 'DADOS DO TITULAR', titularFields);
+
+  // TELEFONES VINCULADOS
+  const phoneFields: string[] = [];
   if (phones.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📞 TELEFONES VINCULADOS`);
-    lines.push(`├─────────────────────────────`);
-    phones.slice(0, 12).forEach((p, i) => {
-      let line = `│ ${i + 1}. ${p.formatted}`;
-      if (p.tipo) line += ` [${p.tipo}]`;
-      if (p.whatsapp) line += ` 💬`;
-      if (p.data) line += ` (${p.data})`;
-      lines.push(line);
+    phones.slice(0, 12).forEach((p) => {
+      let line = `TELEFONE => ${p.formatted}`;
+      if (p.tipo) line += `  [${p.tipo}]`;
+      if (p.whatsapp) line += `  💬 WhatsApp`;
+      if (p.data) line += `\nDATA DE INCLUSÃO => ${p.data}`;
+      phoneFields.push(line);
     });
-    if (phones.length > 12) lines.push(`│ ... e mais ${phones.length - 12}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+    if (phones.length > 12) phoneFields.push(`... e mais ${phones.length - 12}`);
   } else if (rawPhones.length > 0) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📞 TELEFONES ENCONTRADOS`);
-    lines.push(`├─────────────────────────────`);
-    rawPhones.slice(0, 12).forEach((p, i) => lines.push(`│ ${i + 1}. ${p}`));
-    if (rawPhones.length > 12) lines.push(`│ ... e mais ${rawPhones.length - 12}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
+    rawPhones.slice(0, 12).forEach((p) => {
+      phoneFields.push(`TELEFONE => ${p}`);
+    });
+    if (rawPhones.length > 12) phoneFields.push(`... e mais ${rawPhones.length - 12}`);
   }
+  addSection('📞', 'DADOS DE CONTATO', phoneFields);
 
-  if (uf || endereco || cidade) {
-    lines.push(`┌─────────────────────────────`);
-    lines.push(`│ 📍 ENDEREÇO`);
-    lines.push(`├─────────────────────────────`);
-    if (endereco) lines.push(`│ 🏠 ${endereco}`);
-    if (bairro) lines.push(`│ 📌 Bairro: ${bairro}`);
-    if (cidade) lines.push(`│ 🏙️ Cidade: ${cidade}`);
-    if (uf) lines.push(`│ 🗺️ UF: ${uf}`);
-    if (cep) lines.push(`│ 📮 CEP: ${cep}`);
-    lines.push(`└─────────────────────────────`);
-    lines.push(``);
-  }
+  // ENDEREÇO
+  const endFields: string[] = [];
+  if (endereco) endFields.push(`ENDEREÇO => ${endereco}`);
+  if (bairro) endFields.push(`BAIRRO => ${bairro}`);
+  if (cidade) endFields.push(`CIDADE => ${cidade}`);
+  if (uf) endFields.push(`UF => ${uf}`);
+  if (cep) endFields.push(`CEP => ${cep}`);
+  addSection('📍', 'ENDEREÇO', endFields);
 
-  if (lines.length === 0) {
+  if (titularFields.length === 0 && phoneFields.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  lines.push(`❤️ OBRIGADO POR USAR ❤️`);
-  lines.push(`🤖 ${botTag}`);
-  const escaped = lines.map(l => escapeHtml(l));
-  return `${headerHtml}<pre>${escaped.join('\n')}</pre>`;
+  parts.push(`\n❤️ OBRIGADO POR USAR ❤️`);
+  parts.push(`🤖 ${botTag}`);
+  return parts.join('\n');
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA CPF SUS ===============
