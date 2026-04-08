@@ -357,12 +357,7 @@ export default function Consultas() {
                               <IconComp className="h-4 w-4 shrink-0" />
                               <div className="min-w-0 flex-1">
                                 <p className="font-medium text-sm truncate">{mod.label}</p>
-                                <div className="flex items-center gap-1">
-                                  <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${
-                                    mod.provider === 'iSeek' ? 'bg-violet-500' : 'bg-emerald-500'
-                                  }`} />
-                                  <p className="text-[10px] text-muted-foreground truncate">{mod.provider || 'VeiculosAPI'}</p>
-                                </div>
+                                <p className="text-[10px] text-muted-foreground truncate">{mod.module_key}</p>
                               </div>
                             </button>
                           );
