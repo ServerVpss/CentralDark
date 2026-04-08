@@ -7332,7 +7332,7 @@ class BotHandler {
       email: "email",
       cep: "cep",
       nome: "nome",
-      score: "score", score4: "score2",
+      score: "score", score2: "score2",
       rg: "rg",
       pis: "pis",
       mae: "mae",
