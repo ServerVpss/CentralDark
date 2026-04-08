@@ -591,7 +591,45 @@ export default function TelegramUsers() {
                   </TableBody>
                 </Table>
               </div>
-            )}
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-border/50">
+                  <div className="text-sm text-muted-foreground">
+                    Mostrando {startIndex + 1} - {Math.min(startIndex + pageSize, filteredSubscriptions.length)} de {filteredSubscriptions.length}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(1)} disabled={currentPage === 1}>
+                      <ChevronsLeft className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <div className="flex items-center gap-1 mx-2">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum: number;
+                        if (totalPages <= 5) pageNum = i + 1;
+                        else if (currentPage <= 3) pageNum = i + 1;
+                        else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                        else pageNum = currentPage - 2 + i;
+                        return (
+                          <Button key={pageNum} variant={currentPage === pageNum ? "default" : "outline"} size="icon" className="h-8 w-8" onClick={() => goToPage(pageNum)}>
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
+                      <ChevronsRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
+            )
           </CardContent>
         </Card>
 
