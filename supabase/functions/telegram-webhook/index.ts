@@ -4421,6 +4421,7 @@ function formatNomeResult(
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📝 Nome';
   const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>\n`;
+  const lines: string[] = [];
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
