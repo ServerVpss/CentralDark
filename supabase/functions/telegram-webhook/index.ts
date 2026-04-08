@@ -3362,14 +3362,14 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfSusResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // CPF iSeek (estrutura rica com seções dedicadas)
-  if (queryType === 'cpf-isk') {
+  // CPF / CPF Full / CPF iSeek (todos retornam mesma estrutura rica do iSeek)
+  if (['cpf', 'cpffull', 'cpf-isk'].includes(queryType)) {
     return formatCpfIseekResult(data, userName, botTag, escapeHtml);
   }
 
   // CPF e variantes (cpf, cpffull, mae, maefull, rg, rg-3, cnh, pis, pis-3, titulo + iSeek equivalents)
   const cpfLikeModules = [
-    'cpf', 'cpffull', 'mae', 'maefull', 'mae-isk', 
+    'mae', 'maefull', 'mae-isk', 
     'rg', 'rg-3', 'rg-isk', 'cnh', 'cnh-isk', 
     'pis', 'pis-3', 'titulo', 'titulo-isk',
     'nomeabreviadofiltros', 'processo', 'advogadooabuf',
