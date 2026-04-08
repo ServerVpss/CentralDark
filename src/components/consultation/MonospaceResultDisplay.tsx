@@ -14,7 +14,7 @@ interface MonospaceResultDisplayProps {
 // API metadata fields to hide (provider internal data)
 const ignoredKeys = new Set([
   "sucesso", "protocolo", "usuario", "consumo_hoje", "consumo", "total_diario",
-  "reset_em", "tipo", "inicio_uso", "vencimento", "tempo_restante",
+  "reset_em", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
   "ddd", "classificacao", "modulo", "success", "duration_ms", "module_disabled",
   "error", "notfound", "fromcache", "cache_ttl_hours",
@@ -22,9 +22,7 @@ const ignoredKeys = new Set([
   "conta", "saldo", "tempo_segundos", "temposegundos", "cache", "cached_at",
   "expiracao", "limites", "plano",
   "requests_used", "requests_remaining", "daily_limit", "fallback_provider", "apikey",
-  "prioridade", "operadora", "tipotelefone",
-  "data", "ano", "ranking", "whatsapp", "comando", "valor", "raw", "status",
-  "resultados", "estados_encontrados", "total_fotos", "estado_encontrado",
+  "prioridade", "comando", "raw",
 ]);
 
 // Also filter keys that end with "_consultada" (e.g. fotorj_consultada)
