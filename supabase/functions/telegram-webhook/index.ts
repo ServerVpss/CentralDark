@@ -7542,11 +7542,15 @@ class BotHandler {
         return;
       }
 
+      // Store queryInput in conversation state to avoid 64-byte callback_data limit
+      const inputRef = crypto.randomUUID().substring(0, 8);
+      await this.setConversationState(telegramUserId, `modsel_${inputRef}`, { input: queryInput });
+
       // Mostrar menu com botões — cada botão contém o userId para segurança
       const buttons: InlineButton[][] = enabledOptions.map((opt) => [
-        btn(`${opt.emoji} ${opt.label}`, `select_mod:${opt.key}:${telegramUserId}:${queryInput}`, "primary"),
+        btn(`${opt.emoji} ${opt.label}`, `sm:${opt.key}:${telegramUserId}:${inputRef}`, "primary"),
       ]);
-      buttons.push([btn("🗑️ Apagar", `delete_msg_user:${telegramUserId}`)]);
+      buttons.push([btn("🗑️ Apagar", `del:${telegramUserId}`)]);
 
       // Construir texto descritivo com separação visual
       const optionsList = enabledOptions.map(o => `${o.emoji} <b>${o.label}</b>\n     └ ${o.desc}`).join('\n\n');
@@ -8139,12 +8143,12 @@ class BotHandler {
       return;
     }
 
-    // ============ SELECT MODULE (menu de seleção) ============
-    if (data.startsWith("select_mod:")) {
-      const parts = data.replace("select_mod:", "").split(":");
+    // ============ SELECT MODULE (menu de seleção) — new short format ============
+    if (data.startsWith("sm:")) {
+      const parts = data.replace("sm:", "").split(":");
       const moduleKey = parts[0];
       const ownerId = parseInt(parts[1], 10);
-      const input = parts.slice(2).join(":");
+      const inputRef = parts[2];
 
       // Segurança: apenas o usuário que fez a consulta pode clicar
       if (ownerId !== telegramUserId) {
@@ -8156,7 +8160,21 @@ class BotHandler {
         return;
       }
 
-      if (moduleKey && input) {
+      if (moduleKey && inputRef) {
+        // Retrieve stored input from conversation state
+        const state = await this.getConversationState(ownerId, `modsel_${inputRef}`);
+        const input = (state?.state_data as { input?: string })?.input;
+        await this.clearConversationState(ownerId, `modsel_${inputRef}`);
+
+        if (!input) {
+          await telegramRequest(this.token, "answerCallbackQuery", {
+            callback_query_id: callback.id,
+            text: "⚠️ Sessão expirada. Envie o comando novamente.",
+            show_alert: true,
+          });
+          return;
+        }
+
         // Deletar mensagem do menu
         if (messageId) {
           try { await deleteMessage(this.token, chatId, messageId); } catch (_e) { /* ignore */ }
@@ -8168,9 +8186,36 @@ class BotHandler {
       return;
     }
 
-    // Delete message with user check
-    if (data.startsWith("delete_msg_user:")) {
-      const ownerId = parseInt(data.replace("delete_msg_user:", ""), 10);
+    // Legacy select_mod support (backward compatibility)
+    if (data.startsWith("select_mod:")) {
+      const parts = data.replace("select_mod:", "").split(":");
+      const moduleKey = parts[0];
+      const ownerId = parseInt(parts[1], 10);
+      const input = parts.slice(2).join(":");
+
+      if (ownerId !== telegramUserId) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "❌ Apenas quem fez a consulta pode selecionar o módulo.",
+          show_alert: true,
+        });
+        return;
+      }
+
+      if (moduleKey && input) {
+        if (messageId) {
+          try { await deleteMessage(this.token, chatId, messageId); } catch (_e) { /* ignore */ }
+        }
+        const telegramUserName = callback.from?.first_name || 'Usuário';
+        const telegramUsernameStr = callback.from?.username;
+        await this.processQuery(chatId, telegramUserId, moduleKey, input, undefined, telegramUserName, telegramUsernameStr);
+      }
+      return;
+    }
+
+    // Delete message with user check (both new short and legacy format)
+    if (data.startsWith("del:") || data.startsWith("delete_msg_user:")) {
+      const ownerId = parseInt(data.replace(/^(del:|delete_msg_user:)/, ""), 10);
       if (ownerId !== telegramUserId) {
         await telegramRequest(this.token, "answerCallbackQuery", {
           callback_query_id: callback.id,
