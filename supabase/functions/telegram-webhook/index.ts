@@ -5536,37 +5536,36 @@ class BotHandler {
         justica: "⚖️ JUSTIÇA", governo: "🏛️ GOVERNO", foto: "📸 FOTO POR ESTADO", outros: "📋 OUTROS",
       };
 
-      // Group by category
-      const grouped: Record<string, typeof modules> = {};
-      for (const mod of modules) {
-        const cat = mod.category || "outros";
-        if (!grouped[cat]) grouped[cat] = [];
-        grouped[cat].push(mod);
-      }
-
-      const categoryOrder = ["pessoa", "documento", "contato", "financeiro", "veiculo", "empresa", "justica", "governo", "foto", "outros"];
-
-      let text = "📋 <b>COMANDOS DISPONÍVEIS</b>\n";
-      text += "━━━━━━━━━━━━━━━━━━━━━\n\n";
-
+      // Deduplicate: show each command only once (grouped modules share the same command)
+      const seenCommands = new Set<string>();
+      
       for (const cat of categoryOrder) {
         const catModules = grouped[cat];
         if (!catModules || catModules.length === 0) continue;
 
-        text += `${categoryLabels[cat] || cat.toUpperCase()}\n`;
-        
+        const uniqueLines: string[] = [];
         for (const mod of catModules) {
           const cmd = moduleToCommand[mod.module_key] || `/${mod.module_key}`;
+          if (seenCommands.has(cmd)) continue;
+          seenCommands.add(cmd);
           const example = usageExamples[mod.module_key] || "";
-          text += `  ${mod.icon || "📋"} <code>${cmd} ${example}</code>\n`;
+          // Mark commands that have submenus
+          const hasMenu = ["/cpf", "/nome", "/cnh", "/score", "/placa", "/foto", "/parentes", "/processos", "/advogado", "/cat", "/crlv", "/cep"].includes(cmd);
+          const menuIndicator = hasMenu ? " ▸" : "";
+          uniqueLines.push(`  ${mod.icon || "📋"} <code>${cmd} ${example}</code>${menuIndicator}`);
         }
+        
+        if (uniqueLines.length === 0) continue;
+        text += `${categoryLabels[cat] || cat.toUpperCase()}\n`;
+        text += uniqueLines.join("\n") + "\n";
         text += "\n";
       }
 
+      const uniqueCount = seenCommands.size;
       text += "━━━━━━━━━━━━━━━━━━━━━\n";
-      text += `✅ <b>${modules.length} módulos ativos</b>\n`;
+      text += `✅ <b>${uniqueCount} comandos disponíveis</b>\n`;
       text += "💡 Envie até 5 consultas por mensagem!\n";
-      text += "📸 Fotos: <code>/foto CPF</code> (todos) ou <code>/foto SP CPF</code>";
+      text += "▸ = abre menu com variantes";
 
       await sendMessage(this.token, chatId, text);
     } catch (err) {
