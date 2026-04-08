@@ -3509,17 +3509,20 @@ function formatTelefoneResult(
     }
   };
 
-  // Formato atual do provedor: { data: { data: [{ nome, cpfCnpj, origem, data }] } } ou { data: [{ ... }] }
+  // Formato atual do provedor: { data: [{ nome, cpfCnpj, origem, data }] } ou nested { data: { data: [...] } }
   let topLevelRecords: unknown[] | undefined;
   const dataField = data.data;
+  console.log(`[TELEFONE_DEBUG] data keys: ${Object.keys(data).join(',')}, dataField type: ${Array.isArray(dataField) ? 'array' : typeof dataField}, dataField length: ${Array.isArray(dataField) ? dataField.length : 'N/A'}`);
   if (Array.isArray(dataField)) {
     topLevelRecords = dataField;
   } else if (dataField && typeof dataField === 'object' && !Array.isArray(dataField)) {
     const nested = (dataField as Record<string, unknown>).data;
+    console.log(`[TELEFONE_DEBUG] nested type: ${Array.isArray(nested) ? 'array' : typeof nested}, nested length: ${Array.isArray(nested) ? nested.length : 'N/A'}`);
     if (Array.isArray(nested)) {
       topLevelRecords = nested;
     }
   }
+  console.log(`[TELEFONE_DEBUG] topLevelRecords: ${topLevelRecords ? topLevelRecords.length : 'undefined'}`);
   if (Array.isArray(topLevelRecords) && topLevelRecords.length > 0) {
     topLevelRecords.forEach((record) => {
       if (record && typeof record === 'object') {
@@ -3527,6 +3530,7 @@ function formatTelefoneResult(
       }
     });
   }
+  console.log(`[TELEFONE_DEBUG] allRecords after topLevel: ${allRecords.length}`);
 
   // Formato legado: { dados: { telefone: [...] } }
   if (allRecords.length === 0 && dados && typeof dados === 'object') {
