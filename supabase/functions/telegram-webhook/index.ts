@@ -3416,7 +3416,7 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
   }
 
   // Nome (nome, nomefull, nome-3) — lista de pessoas
-  if (queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3') {
+  if (queryType === 'nome' || queryType === 'nomefull' || queryType === 'nome-3' || queryType === 'nomeabreviadofiltros') {
     return formatNomeResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
@@ -4552,9 +4552,18 @@ function formatNomeResult(
   const lines: string[] = [];
 
   let records: Record<string, unknown>[] = [];
+  // Try dados.nome / dados.nomefull first (standard nome modules)
   if (dados && typeof dados === 'object') {
     const arr = (dados.nome || dados.nomefull) as unknown[];
     if (Array.isArray(arr)) records = arr as Record<string, unknown>[];
+  }
+  // Fallback: try data.data[] (nomeabreviadofiltros format)
+  if (records.length === 0 && Array.isArray(data.data)) {
+    records = data.data as Record<string, unknown>[];
+  }
+  // Fallback: try data.dados directly if it's an array
+  if (records.length === 0 && Array.isArray(data.dados)) {
+    records = data.dados as Record<string, unknown>[];
   }
 
   if (records.length === 0) {
