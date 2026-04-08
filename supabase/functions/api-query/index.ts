@@ -6,68 +6,46 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// =============== WHITELIST EXATA DOS MÓDULOS ===============
+// =============== WHITELIST EXATA DOS 75 MÓDULOS ===============
 const MODULE_WHITELIST = new Set([
   // Pessoa
-  "cpf", "cpffull", "cpf-isk", "nome", "nomefull", "rg", "titulo",
-  "parentes", "mae", "maefull", "cnh", "pis",
+  "cpf", "nome", "rg", "titulo", "parentes", "mae", "cnh", "pis",
+  "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
+  // Documentos
+  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab",
+  "advogadooab", "advogadocpf", "advogadooabuf",
+  "catcpf", "catnumero",
   // Contato
-  "telefone", "telefonefull", "email", "emailfull",
-  "cep", "cepfull", "endereco",
+  "telefone", "email", "cep", "endereco",
   // Financeiro
-  "pix", "score", "renda", "credilink", "cpf-spc", "poderaquisitivo",
+  "pix", "score", "renda", "credilink", "poderaquisitivo",
+  "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
   // Veículos
-  "placa", "placa-serpro", "placa-simples", "placa-sesp",
-  "chassi", "renavam", "motor",
+  "placa", "chassi", "renavam", "motor",
+  "veiculos", "crlvto", "crlvmt", "crlvto-foto", "crlvmt-foto",
   // Empresa
-  "cnpj-cred",
+  "cnpj",
   // Justiça
-  "processos", "bnmp-lc", "siel",
-  // TSE
-  "tse-3",
+  "processos", "siel", "mandado", "certidoes", "processo",
+  // Governo
+  "vacinas", "beneficios", "faculdades", "func", "matricula",
+  // Trabalho
+  "rais",
   // SUS
   "cpfsus",
-  // Variantes -3
-  "rg-3", "pis-3", "cep-3", "email-3", "nome-3",
-  "score-3", "parentes-3", "telefone-3",
-  // Foto por estado
+  // TSE
+  "tse-3",
+  // Fotos por estado
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
-  // Pessoa/Família (ex-iSeek)
-  "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
-  // Documentos (ex-iSeek)
-  "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf", "advogadooabuf",
-  "catcpf", "catnumero",
-  // Financeiro (ex-iSeek)
-  "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
-  // Governo/Saúde (ex-iSeek)
-  "vacinas", "beneficios", "faculdades", "func", "matricula",
-  // Justiça (ex-iSeek)
-  "mandado", "certidoes", "processo",
-  // Trabalho (ex-iSeek)
-  "rais",
-  // Veículos por CPF (ex-iSeek)
-  "veiculos", "crlvto", "crlvmt",
-  // Fotos extras
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
-  // Sobrepostos (sufixo -isk)
-  "cnpj-isk", "rg-isk", "mae-isk", "telefone-isk", "titulo-isk",
-  "cnh-isk", "processos-isk", "placa-isk", "renavam-isk", "chassi-isk",
-  "motor-isk", "email-isk", "pix-isk", "cep-isk", "parentes-isk",
-  "score-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
-  // Fotos -isk
-  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
-  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
-  "fotodf-isk", "fotogo-isk",
-  "crlvto-foto", "crlvmt-foto",
 ]);
 
-// Mapeamento de módulo interno → módulo real na VeiculosAPI
-// Todos os módulos passam pela mesma URL, mas alguns precisam de nomes diferentes na API
+// Mapeamento de módulo interno → nome real na VeiculosAPI
+// Módulos que usam prefixo iseek-dados/iseek-fotos na API
 const MODULE_API_NAME: Record<string, string> = {
-  // Ex-iSeek exclusivos
   "pai": "iseek-dados---pai",
   "nasc": "iseek-dados---nasc",
   "nis": "iseek-dados---nis",
@@ -103,6 +81,7 @@ const MODULE_API_NAME: Record<string, string> = {
   "veiculos": "iseek-dados---veiculos",
   "crlvto": "iseek-dados---crlvto",
   "crlvmt": "iseek-dados---crlvmt",
+  "cnpj": "iseek-dados---cnpj",
   "fotoal": "iseek-fotos---fotoal",
   "fotogo": "iseek-fotos---fotogo",
   "fotopb": "iseek-fotos---fotopb",
@@ -112,40 +91,6 @@ const MODULE_API_NAME: Record<string, string> = {
   "fotocnh": "iseek-fotos---fotocnh",
   "fotodetran": "iseek-dados---fotodetran",
   "fotomapresos": "iseek-fotos---fotomapresos",
-  // Sobrepostos com sufixo -isk
-  "cpf-isk": "iseek-cpf",
-  "cnpj-isk": "iseek-dados---cnpj",
-  "rg-isk": "iseek-dados---rg",
-  "mae-isk": "iseek-dados---mae",
-  "telefone-isk": "iseek-dados---telefone",
-  "titulo-isk": "iseek-dados---titulo",
-  "cnh-isk": "iseek-dados---cnh",
-  "processos-isk": "iseek-dados---processos",
-  "placa-isk": "iseek-dados---placa",
-  "renavam-isk": "iseek-dados---renavam",
-  "chassi-isk": "iseek-dados---chassi",
-  "motor-isk": "iseek-dados---motor",
-  "email-isk": "iseek-dados---email",
-  "pix-isk": "iseek-dados---pix",
-  "cep-isk": "iseek-dados---cep",
-  "parentes-isk": "iseek-dados---parentes",
-  "score-isk": "iseek-dados---score",
-  "cnpj-cred-isk": "iseek-dados---cnpj",
-  "irpf-isk": "iseek-dados---irpf",
-  "vacinas-isk": "iseek-dados---vacinas",
-  "obito-isk": "iseek-dados---obito",
-  "fotoma-isk": "iseek-fotos---fotoma",
-  "fotoes-isk": "iseek-fotos---fotoes",
-  "fototo-isk": "iseek-fotos---fototo",
-  "fotorj-isk": "iseek-fotos---fotorj",
-  "fotosp-isk": "iseek-fotos---fotosp",
-  "fotoce-isk": "iseek-fotos---fotoce",
-  "fotoms-isk": "iseek-fotos---fotoms",
-  "fotoro-isk": "iseek-fotos---fotoro",
-  "fotopr-isk": "iseek-fotos---fotopr",
-  "fotopi-isk": "iseek-fotos---fotopi",
-  "fotodf-isk": "iseek-fotos---fotodf",
-  "fotogo-isk": "iseek-fotos---fotogo",
   "crlvto-foto": "iseek-fotos---crlvto",
   "crlvmt-foto": "iseek-fotos---crlvmt",
 };
@@ -164,19 +109,15 @@ const VIRTUAL_MODULES = new Set(["foto", "nacional"]);
 
 // =============== TIMEOUT POR MÓDULO ===============
 const SLOW_MODULES = new Set([
-  "placa", "placa-serpro", "placa-simples", "placa-sesp",
-  "processos", "bnmp-lc", "siel", "credilink", "cpf-spc",
+  "placa", "processos", "siel", "credilink",
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
-  "score", "score-3", "tse-3", "poderaquisitivo",
+  "score", "tse-3", "poderaquisitivo",
   "certidoes", "mandado", "veiculos", "rais",
-  "processo", "crlvto", "crlvmt",
-  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
-  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
-  "fotodf-isk", "fotogo-isk", "crlvto-foto", "crlvmt-foto",
+  "processo", "crlvto", "crlvmt", "crlvto-foto", "crlvmt-foto",
 ]);
 
 function getModuleTimeout(modulo: string): number {
@@ -185,19 +126,14 @@ function getModuleTimeout(modulo: string): number {
 
 // =============== VALIDAÇÃO DE ENTRADA ===============
 const TEXT_MODULES = new Set([
-  "nome", "nomefull", "nome-3", "mae", "maefull", "endereco",
-  "email", "emailfull", "email-3", "pix",
-  "nomeabreviadofiltros", "mae-isk", "email-isk", "pix-isk",
+  "nome", "mae", "endereco", "email", "pix", "nomeabreviadofiltros",
 ]);
 
 const NUMERIC_MODULES = new Set([
-  "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
-  "rg", "rg-3", "titulo", "cnh", "pis", "pis-3",
-  "telefone", "telefonefull", "telefone-3",
-  "cep", "cepfull", "cep-3",
-  "score", "score-3", "renda", "credilink", "poderaquisitivo",
-  "parentes", "parentes-3",
-  "renavam", "cnpj-cred",
+  "cpf", "cpfsus", "rg", "titulo", "cnh", "pis",
+  "telefone", "cep",
+  "score", "renda", "credilink", "poderaquisitivo",
+  "parentes", "renavam",
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
@@ -210,12 +146,7 @@ const NUMERIC_MODULES = new Set([
   "crlvto", "crlvmt",
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
-  "rg-isk", "titulo-isk", "cnh-isk", "telefone-isk",
-  "cep-isk", "parentes-isk", "score-isk", "processos-isk",
-  "cnpj-isk", "renavam-isk", "cnpj-cred-isk", "irpf-isk", "vacinas-isk", "obito-isk",
-  "fotoma-isk", "fotoes-isk", "fototo-isk", "fotorj-isk", "fotosp-isk",
-  "fotoce-isk", "fotoms-isk", "fotoro-isk", "fotopr-isk", "fotopi-isk",
-  "fotodf-isk", "fotogo-isk", "crlvto-foto", "crlvmt-foto",
+  "crlvto-foto", "crlvmt-foto",
 ]);
 
 function cleanQueryValue(modulo: string, input: string): string {
@@ -262,67 +193,67 @@ function validateInput(modulo: string, value: string): ValidationResult {
     return { valid: false, error: "Valor não pode ser vazio." };
   }
 
-  const CPF_MODULES = ["cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus", "score", "score-3", "renda",
-       "credilink", "poderaquisitivo", "parentes", "parentes-3", "processos",
-       "bnmp-lc", "siel", "tse-3", "titulo", "mae", "maefull",
-       "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
-       "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
-       "advogadooabuf", "catcpf", "catnumero",
-       "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
-       "vacinas", "beneficios", "faculdades", "func", "matricula",
-       "mandado", "certidoes", "rais", "veiculos", "processo",
-       "crlvto", "crlvmt",
-       "parentes-isk", "score-isk", "processos-isk",
-       "titulo-isk", "cnh-isk", "rg-isk", "telefone-isk", "cep-isk"];
+  const CPF_MODULES = [
+    "cpf", "cpfsus", "score", "renda",
+    "credilink", "poderaquisitivo", "parentes", "processos",
+    "siel", "tse-3", "titulo", "mae",
+    "pai", "nasc", "nis", "obito", "registro", "nomeabreviadofiltros",
+    "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
+    "advogadooabuf", "catcpf", "catnumero",
+    "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
+    "vacinas", "beneficios", "faculdades", "func", "matricula",
+    "mandado", "certidoes", "rais", "veiculos", "processo",
+    "crlvto", "crlvmt",
+  ];
   if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto")) {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "CPF deve conter exatamente 11 dígitos." };
     }
   }
 
-  if (["cnpj-cred", "cnpj-isk"].includes(modulo)) {
+  if (modulo === "cnpj") {
     if (!/^\d{14}$/.test(clean)) {
       return { valid: false, error: "CNPJ deve conter exatamente 14 dígitos." };
     }
   }
 
-  if (["placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-isk"].includes(modulo)) {
+  if (modulo === "placa") {
     if (!/^[A-Z0-9]{7}$/i.test(clean)) {
       return { valid: false, error: "Placa deve conter 7 caracteres alfanuméricos." };
     }
   }
 
-  if (["cep", "cepfull", "cep-3"].includes(modulo)) {
+  if (modulo === "cep") {
     if (!/^\d{8}$/.test(clean)) {
       return { valid: false, error: "CEP deve conter exatamente 8 dígitos." };
     }
   }
 
-  if (["telefone", "telefonefull", "telefone-3"].includes(modulo)) {
+  if (modulo === "telefone") {
     if (!/^\d{10,11}$/.test(clean)) {
       return { valid: false, error: "Telefone deve conter 10 ou 11 dígitos (DDD + número)." };
     }
   }
 
-  if (["email", "emailfull", "email-3"].includes(modulo)) {
+  if (modulo === "email") {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) {
       return { valid: false, error: "Formato de email inválido." };
     }
   }
 
-  if (["nome", "nomefull", "nome-3"].includes(modulo)) {
+  if (modulo === "nome") {
     if (clean.length < 3) {
       return { valid: false, error: "Nome deve ter pelo menos 3 caracteres." };
     }
   }
 
-  if (["rg", "rg-3"].includes(modulo)) {
+  if (modulo === "rg") {
     if (!/^\d{5,12}$/.test(clean)) {
       return { valid: false, error: "RG deve conter entre 5 e 12 dígitos." };
     }
   }
 
-  if (["pis", "pis-3"].includes(modulo)) {
+  if (modulo === "pis") {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "PIS deve conter 11 dígitos." };
     }
@@ -374,12 +305,9 @@ interface ProviderResult {
 async function fetchFromProvider(modulo: string, valor: string, retry = false): Promise<ProviderResult> {
   // Resolve o nome do módulo na API (alguns módulos usam nomes internos diferentes)
   const apiModuleName = MODULE_API_NAME[modulo] || modulo;
-  const isIseekModule = modulo in MODULE_API_NAME;
 
-  // Módulos ex-iSeek usam a chave ISEEK_API_KEY, os demais usam CONSULTAS_API_KEY
-  const apiKey = isIseekModule
-    ? Deno.env.get("ISEEK_API_KEY")
-    : Deno.env.get("CONSULTAS_API_KEY");
+  // Chave única para todos os módulos
+  const apiKey = Deno.env.get("CONSULTAS_API_KEY");
 
   if (!apiKey) {
     return {
@@ -439,7 +367,7 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
       return { data: { notFound: true, message: data.error || data.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
     }
 
-    // Para módulos que retornam formato iSeek (com wrapper { status, data }), extrair dados internos
+    // Para módulos que retornam formato com wrapper { status, data }, extrair dados internos
     if (MODULE_API_NAME[modulo] && data.data && typeof data.data === "object" && !Array.isArray(data.data)) {
       const innerData = data.data;
       if (innerData.error || innerData.status === "error") {
@@ -711,7 +639,7 @@ async function handleQuery(
     };
   }
 
-  // ---- MÓDULO PADRÃO (VeiculosAPI único) ----
+  // ---- MÓDULO PADRÃO ----
   const result = await fetchFromProvider(modulo, cleanInput);
 
   if (result.data.error) {
