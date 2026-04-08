@@ -3509,8 +3509,17 @@ function formatTelefoneResult(
     }
   };
 
-  // Formato atual do provedor: { data: [{ nome, cpfCnpj, origem, data }] }
-  const topLevelRecords = data.data as unknown[] | undefined;
+  // Formato atual do provedor: { data: { data: [{ nome, cpfCnpj, origem, data }] } } ou { data: [{ ... }] }
+  let topLevelRecords: unknown[] | undefined;
+  const dataField = data.data;
+  if (Array.isArray(dataField)) {
+    topLevelRecords = dataField;
+  } else if (dataField && typeof dataField === 'object' && !Array.isArray(dataField)) {
+    const nested = (dataField as Record<string, unknown>).data;
+    if (Array.isArray(nested)) {
+      topLevelRecords = nested;
+    }
+  }
   if (Array.isArray(topLevelRecords) && topLevelRecords.length > 0) {
     topLevelRecords.forEach((record) => {
       if (record && typeof record === 'object') {
