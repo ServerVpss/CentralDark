@@ -3475,54 +3475,116 @@ function formatTelefoneResult(
 ): string {
   // Flatten dados.telefone[] structure from API
   const dados = data.dados as Record<string, unknown> | undefined;
+  const allRecords: Record<string, unknown>[] = [];
+  
   if (dados && typeof dados === 'object') {
     const arr = dados.telefone as unknown[] | undefined;
     if (Array.isArray(arr) && arr.length > 0) {
-      const firstRecord = arr[0] as Record<string, unknown>;
+      // Multiple person records from phone API
+      for (const record of arr) {
+        const r = record as Record<string, unknown>;
+        const person: Record<string, unknown> = {};
+        
+        // Extract flat fields
+        for (const [k, v] of Object.entries(r)) {
+          if (k === 'telefones' || k === 'dadosTelefone' || k === 'dadosBasicos') continue;
+          if (v !== null && v !== undefined && v !== '' && typeof v !== 'object') {
+            person[k] = v;
+          }
+        }
+        
+        // Extract dadosBasicos
+        const basicos = r.dadosBasicos as Record<string, unknown> | undefined;
+        if (basicos && typeof basicos === 'object') {
+          for (const [k, v] of Object.entries(basicos)) {
+            if (v !== null && v !== undefined && v !== '') person[k] = v;
+          }
+        }
+        
+        // Extract phones
+        const phones = (r.telefones || r.dadosTelefone) as unknown[] | undefined;
+        if (Array.isArray(phones) && phones.length > 0) {
+          person.telefones = phones;
+        }
+        
+        if (Object.keys(person).length > 0) allRecords.push(person);
+      }
       
-      // Extract top-level fields (cpf, nome, sexo, dataNascimento, nomeMae, uf)
-      for (const [k, v] of Object.entries(firstRecord)) {
-        if (k === 'telefones' || k === 'dadosTelefone' || k === 'dadosBasicos') continue;
-        if (v !== null && v !== undefined && v !== '' && typeof v !== 'object') {
+      // If only 1 record, flatten to data for single-person formatting
+      if (allRecords.length === 1) {
+        for (const [k, v] of Object.entries(allRecords[0])) {
           data[k] = v;
         }
-      }
-
-      // Extract dadosBasicos if present
-      const basicos = firstRecord?.dadosBasicos as Record<string, unknown> | undefined;
-      if (basicos && typeof basicos === 'object') {
-        for (const [k, v] of Object.entries(basicos)) {
-          if (v !== null && v !== undefined && v !== '') data[k] = v;
-        }
-      }
-
-      // Extract phones: support both telefones[] and dadosTelefone[]
-      const directPhones = firstRecord?.telefones as unknown[] | undefined;
-      const dadosTelefone = firstRecord?.dadosTelefone as unknown[] | undefined;
-      if (Array.isArray(directPhones) && directPhones.length > 0) {
-        data.telefones = directPhones;
-      } else if (Array.isArray(dadosTelefone) && dadosTelefone.length > 0) {
-        data.telefones = dadosTelefone;
-      } else {
-        // Collect from all records
-        const allPhones = arr.flatMap((record) => {
-          const r = record as Record<string, unknown>;
-          const t = (r?.telefones || r?.dadosTelefone) as unknown[] | undefined;
-          return Array.isArray(t) ? t : [];
-        });
-        if (allPhones.length > 0) data.telefones = allPhones;
       }
     }
   }
 
   // Also flatten dados directly if telefone[] was not found
-  if (dados && typeof dados === 'object') {
+  if (allRecords.length === 0 && dados && typeof dados === 'object') {
     for (const [k, v] of Object.entries(dados)) {
       if (k === 'telefone' || k === 'telefones') continue;
       if (v !== null && v !== undefined && v !== '' && typeof v !== 'object' && !(k in data)) {
         data[k] = v;
       }
     }
+  }
+
+  // ===== MULTI-PERSON FORMAT =====
+  if (allRecords.length > 1) {
+    const parts: string[] = [];
+    const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
+    parts.push(`${escapeHtml(moduleLabel)}`);
+    parts.push(`ℹ️ <i>Um mesmo número pode estar vinculado a mais de uma pessoa. Encontradas ${allRecords.length} pessoas.</i>`);
+    parts.push(``);
+
+    allRecords.forEach((person, i) => {
+      const pNome = String(person.nome || person.nome_completo || '').trim().toUpperCase();
+      const pCpf = String(person.cpf || '').trim();
+      const pNasc = String(person.dataNascimento || person.nascimento || person.data_nascimento || '').trim();
+      const pSexo = String(person.sexo || '').trim();
+      const pMae = String(person.nomeMae || person.mae || '').trim().toUpperCase();
+
+      const fields: string[] = [];
+      if (pNome) fields.push(`NOME => ${pNome}`);
+      if (pCpf) fields.push(`CPF => ${pCpf}`);
+      if (pNasc) fields.push(`NASCIMENTO => ${pNasc}`);
+      if (pSexo) fields.push(`SEXO => ${pSexo}`);
+      if (pMae && pMae !== 'UNDEFINED') fields.push(`MÃE => ${pMae}`);
+
+      // Phones from this person
+      const pPhones = person.telefones as unknown[] | undefined;
+      if (Array.isArray(pPhones)) {
+        const seen = new Set<string>();
+        pPhones.forEach((t: unknown) => {
+          const tel = t as Record<string, unknown>;
+          const ddd = String(tel.ddd || tel.DDD || '');
+          const num = String(tel.telefone || tel.numero || tel.celular || '');
+          const formatted = formatPhoneNumber(ddd, num);
+          if (formatted) {
+            const key = formatted.replace(/\D/g, '');
+            if (!seen.has(key)) {
+              seen.add(key);
+              let line = `TELEFONE => ${formatted}`;
+              const tipoRaw = tel.tipo || tel.tipoTelefone;
+              if (typeof tipoRaw === 'string') line += `  [${tipoRaw}]`;
+              if (String(tel.whatsapp || '').toLowerCase().includes('possui')) line += `  💬`;
+              const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
+              if (inclusao) line += `\nDATA DE INCLUSÃO => ${inclusao}`;
+              fields.push(line);
+            }
+          }
+        });
+      }
+
+      if (fields.length > 0) {
+        parts.push(`👤 <b>PESSOA ${i + 1}</b>`);
+        parts.push(`<pre>${fields.map(f => escapeHtml(f)).join('\n')}</pre>`);
+      }
+    });
+
+    parts.push(`\n❤️ OBRIGADO POR USAR ❤️`);
+    parts.push(`🤖 ${botTag}`);
+    return parts.join('\n');
   }
   const getValue = (keys: string[]): string => {
     for (const key of keys) {
