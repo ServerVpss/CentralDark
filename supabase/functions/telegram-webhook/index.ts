@@ -8040,10 +8040,14 @@ class BotHandler {
               [btn("📄 Baixar PDF", `pdf:nacional:${cpf}`)]
             ];
             
+            // Enrich caption with CPF basic data if photo has no metadata
+            const photoMeta = extractPhotoMetadata(result);
+            const extraMeta = (!photoMeta.nome) ? await enrichPhotoCaption(cpf) : undefined;
+            
             await telegramRequest(this.token, "sendPhoto", {
               chat_id: chatId,
               photo: fotoUrl,
-              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username),
+              caption: buildPhotoCaption(`📸 <b>Foto encontrada (${estadoEncontrado})</b>`, cpf, result, this.bot.bot_username, extraMeta),
               parse_mode: "HTML",
               reply_markup: { inline_keyboard: actionButtons },
             });
