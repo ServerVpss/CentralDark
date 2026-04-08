@@ -179,7 +179,7 @@ const TEXT_MODULES = new Set([
 ]);
 
 const NUMERIC_MODULES = new Set([
-  "cpf", "cpfsus", "rg", "titulo", "cnh", "pis",
+  "cpf", "cpffull", "cpfsus", "cpf-spc", "rg", "titulo", "cnh", "pis",
   "telefone", "cep",
   "score", "renda", "credilink", "poderaquisitivo",
   "parentes", "renavam",
