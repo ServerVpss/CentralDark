@@ -3625,8 +3625,8 @@ function formatTelefoneResult(
       }
 
       if (fields.length > 0) {
-        parts.push(`👤 <b>PESSOA ${i + 1}</b>`);
-        parts.push(`<code>${fields.map(f => escapeHtml(f)).join('\n')}</code>`);
+        parts.push(`\n👤 <b>PESSOA ${i + 1}</b>`);
+        parts.push(`<pre>${fields.join('\n')}</pre>`);
       }
     });
 
