@@ -3850,7 +3850,7 @@ function formatCpfIseekResult(
     lines.push('');
     lines.push(`📱 <b>TELEFONES</b> (${validTels.length})`);
     const seen = new Set<string>();
-    validTels.slice(0, 10).forEach(t => {
+    validTels.forEach(t => {
       const ddd = clean(t.ddd);
       const num = clean(t.telefone);
       const key = `${ddd}${num}`;
@@ -3859,7 +3859,6 @@ function formatCpfIseekResult(
       const data = clean(t.data);
       lines.push(`📞 (${escapeHtml(ddd)}) ${escapeHtml(num)}${data ? ' — ' + escapeHtml(data) : ''}`);
     });
-    if (validTels.length > 10) lines.push(`   <i>... e mais ${validTels.length - 10}</i>`);
   }
 
   // ═══════════════ 📧 E-MAILS ═══════════════
@@ -3868,7 +3867,7 @@ function formatCpfIseekResult(
   if (uniqueEmails.length > 0) {
     lines.push('');
     lines.push(`📧 <b>E-MAILS</b> (${uniqueEmails.length})`);
-    uniqueEmails.slice(0, 5).forEach(email => {
+    uniqueEmails.forEach(email => {
       lines.push(`✉️ ${escapeHtml(email)}`);
     });
   }
@@ -3879,7 +3878,7 @@ function formatCpfIseekResult(
     lines.push('');
     lines.push(`📍 <b>ENDEREÇOS</b> (${validEnds.length})`);
     const seenEnds = new Set<string>();
-    validEnds.slice(0, 5).forEach(e => {
+    validEnds.forEach(e => {
       const log = clean(e.logradouro);
       const num = clean(e.numero);
       const bairro = clean(e.bairro);
@@ -3894,14 +3893,13 @@ function formatCpfIseekResult(
       lines.push(`🏠 ${escapeHtml(addr)}`);
       lines.push(`   ${escapeHtml(loc)}${cep ? ' CEP: ' + escapeHtml(cep) : ''}`);
     });
-    if (validEnds.length > 5) lines.push(`   <i>... e mais ${validEnds.length - 5}</i>`);
   }
 
   // ═══════════════ 💼 EMPREGOS ═══════════════
   if (empregos.length > 0) {
     lines.push('');
     lines.push(`💼 <b>EMPREGOS</b> (${empregos.length})`);
-    empregos.slice(0, 5).forEach(emp => {
+    empregos.forEach(emp => {
       const cargo = clean(emp.descricaoCbo);
       const cnpj = clean(emp.cnpjEmpregador);
       const salario = clean(emp.valorSalarial);
@@ -3915,14 +3913,13 @@ function formatCpfIseekResult(
       const periodo = [admissao, deslig].filter(Boolean).join(' → ');
       if (periodo) lines.push(`   📅 ${escapeHtml(periodo)}${salario ? ' | R$ ' + escapeHtml(salario) : ''}`);
     });
-    if (empregos.length > 5) lines.push(`   <i>... e mais ${empregos.length - 5}</i>`);
   }
 
   // ═══════════════ 🏭 EMPRESAS ═══════════════
   if (empresas.length > 0) {
     lines.push('');
     lines.push(`🏭 <b>EMPRESAS</b> (${empresas.length})`);
-    empresas.slice(0, 5).forEach(emp => {
+    empresas.forEach(emp => {
       const razao = clean(emp.razaoSocial);
       const cnpj = clean(emp.cnpj);
       const fantasia = clean(emp.nomeFantasia);
@@ -3935,7 +3932,7 @@ function formatCpfIseekResult(
   if (parentesNovos.length > 0) {
     lines.push('');
     lines.push(`👨‍👩‍👧 <b>PARENTES</b> (${parentesNovos.length})`);
-    parentesNovos.slice(0, 10).forEach(p => {
+    parentesNovos.forEach(p => {
       const nomeP = clean(p.nome);
       const relacao = clean(p.tipoRelacao);
       const cpfP = clean(p.cpf);
@@ -3951,7 +3948,6 @@ function formatCpfIseekResult(
       else if (rel.includes('avô') || rel.includes('avo')) icon = '👴';
       lines.push(`${icon} ${escapeHtml(relacao)}: ${escapeHtml(nomeP)}${cpfP ? ' — ' + escapeHtml(formatCpfNum(cpfP)) : ''}${nascP ? ' (' + escapeHtml(nascP) + ')' : ''}`);
     });
-    if (parentesNovos.length > 10) lines.push(`   <i>... e mais ${parentesNovos.length - 10}</i>`);
   }
 
   // ═══════════════ 💳 FINANCEIRO ═══════════════
