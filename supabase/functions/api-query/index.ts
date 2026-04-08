@@ -609,9 +609,15 @@ async function handleQuery(
   }
 
   // 3. Clean input
-  const cleanInput = isVirtual
-    ? queryInput.replace(/\D/g, "").trim()
-    : cleanQueryValue(modulo, queryInput);
+  const inputWarnings: string[] = [];
+  let cleanInput: string;
+  if (isVirtual) {
+    cleanInput = queryInput.replace(/\D/g, "").trim();
+  } else {
+    const cleaned = cleanQueryValueWithWarnings(modulo, queryInput);
+    cleanInput = cleaned.value;
+    inputWarnings.push(...cleaned.warnings);
+  }
 
   // 4. Validate input
   if (!isVirtual) {
