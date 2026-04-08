@@ -204,7 +204,7 @@ const queryTypeAliases: Record<string, string> = {
   telefone: "telefone",
   cpf2: "cpffull",
   cpf4: "cpf-spc", cpf5: "cpfsus",
-  score4: "score2",
+  score2: "score2",
   // Módulos exclusivos
   irpf: "irpf", vacinas: "vacinas", obito: "obito",
   nasc: "nasc", pai: "pai", registro: "registro", nomeabreviadofiltros: "nomeabreviadofiltros",
@@ -2735,7 +2735,7 @@ function getSiblingButtons(moduleKey: string, queryInput: string): InlineButton[
 
 // Fallback chains: quando o módulo primário não retorna dados, tenta módulos alternativos
 const FALLBACK_CHAINS: Record<string, string[]> = {
-  'telefone': ['telefone-3', 'telefonefull'],
+  // Após unificação, não há mais cadeias de fallback entre provedores
 };
 
 // Executa consulta com fallback automático se o resultado estiver vazio
