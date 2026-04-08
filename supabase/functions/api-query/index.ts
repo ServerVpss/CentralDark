@@ -198,7 +198,15 @@ const NUMERIC_MODULES = new Set([
 
 function cleanQueryValue(modulo: string, input: string): string {
   if (TEXT_MODULES.has(modulo)) return input.trim();
-  if (NUMERIC_MODULES.has(modulo)) return input.replace(/\D/g, "").trim();
+  if (NUMERIC_MODULES.has(modulo)) {
+    let clean = input.replace(/\D/g, "").trim();
+    // Remove country code 55 from phone numbers
+    const PHONE_MODULES = ["telefone", "telefonefull", "telefone-3"];
+    if (PHONE_MODULES.includes(modulo) && clean.length >= 12 && clean.startsWith("55")) {
+      clean = clean.substring(2);
+    }
+    return clean;
+  }
   return input.replace(/[^\w]/g, "").trim();
 }
 
