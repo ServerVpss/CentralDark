@@ -8110,7 +8110,7 @@ class BotHandler {
           for (const row of inlineKb) {
             for (const btn of row) {
               const cbData = btn.callback_data || '';
-              const pageMatch = cbData.match(/^(?:page|cep_page|tel_page):([^:]+):/);
+              const pageMatch = cbData.match(/^(?:page|cep_page|tel_page|nome_page):([^:]+):/);
               if (pageMatch) {
                 const foundPagId = pageMatch[1];
                 const { data: pagData } = await this.supabase
