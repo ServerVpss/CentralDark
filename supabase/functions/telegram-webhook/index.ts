@@ -2708,36 +2708,10 @@ function isProviderError(result: Record<string, unknown>): { isError: boolean; m
 
 // Mapa de módulos irmãos para sugestão de alternativas
 const MODULE_SIBLINGS: Record<string, string[]> = {
-  'cpf': ['cpffull', 'cpf-isk', 'cpf-spc', 'cpfsus'],
-  'cpffull': ['cpf', 'cpf-isk', 'cpf-spc', 'cpfsus'],
-  'cpf-isk': ['cpf', 'cpffull', 'cpf-spc', 'cpfsus'],
-  'cpf-spc': ['cpf', 'cpffull', 'cpf-isk', 'cpfsus'],
-  'cpfsus': ['cpf', 'cpffull', 'cpf-isk', 'cpf-spc'],
-  'placa': ['placa-serpro', 'placa-sesp'],
-  'placa-serpro': ['placa', 'placa-sesp'],
-  'placa-sesp': ['placa', 'placa-serpro'],
-  'telefone': ['telefonefull', 'telefone-3'],
-  'telefonefull': ['telefone', 'telefone-3'],
-  'telefone-3': ['telefone', 'telefonefull'],
-  'email': ['emailfull', 'email-3'],
-  'emailfull': ['email', 'email-3'],
-  'email-3': ['email', 'emailfull'],
-  'cep': ['cepfull', 'cep-3'],
-  'cepfull': ['cep', 'cep-3'],
-  'cep-3': ['cep', 'cepfull'],
-  'nome': ['nomefull', 'nome-3'],
-  'nomefull': ['nome', 'nome-3'],
-  'nome-3': ['nome', 'nomefull'],
-  'score': ['score-3'],
-  'score-3': ['score'],
-  'rg': ['rg-3'],
-  'rg-3': ['rg'],
-  'mae': ['maefull'],
-  'maefull': ['mae'],
-  'parentes': ['parentes-3'],
-  'parentes-3': ['parentes'],
-  'pis': ['pis-3'],
-  'pis-3': ['pis'],
+  'cpf': ['cpffull', 'cpf-spc', 'cpfsus'],
+  'cpffull': ['cpf', 'cpf-spc', 'cpfsus'],
+  'cpf-spc': ['cpf', 'cpffull', 'cpfsus'],
+  'cpfsus': ['cpf', 'cpffull', 'cpf-spc'],
 };
 
 // Gera botões de sugestão para módulos alternativos
@@ -2746,30 +2720,10 @@ function getSiblingButtons(moduleKey: string, queryInput: string): InlineButton[
   if (!siblings || siblings.length === 0) return [];
   
   const moduleCmd: Record<string, string> = {
-    cpf: "/cpf", cpffull: "/cpf2", "cpf-isk": "/cpf3", "cpf-spc": "/cpf4", cpfsus: "/cpf5",
-    placa: "/placa", "placa-serpro": "/placa2", "placa-sesp": "/placa3", "placa-isk": "/placa4",
-    telefone: "/telefone", telefonefull: "/telefone2", "telefone-3": "/telefone3", "telefone-isk": "/telefone4",
-    email: "/email", emailfull: "/email2", "email-3": "/email3", "email-isk": "/email4",
-    cep: "/cep", cepfull: "/cep2", "cep-3": "/cep3", "cep-isk": "/cep4",
-    nome: "/nome", nomefull: "/nome2", "nome-3": "/nome3",
-    score: "/score", "score-3": "/score2", "score-isk": "/score3",
-    rg: "/rg", "rg-3": "/rg2", "rg-isk": "/rg3",
-    cnh: "/cnh", "cnh-isk": "/cnh2",
-    mae: "/mae", maefull: "/mae2", "mae-isk": "/mae3",
-    parentes: "/parentes", "parentes-3": "/parentes2", "parentes-isk": "/parentes3",
-    pis: "/pis", "pis-3": "/pis2",
-    pix: "/pix", "pix-isk": "/pix2",
-    titulo: "/titulo", "titulo-isk": "/titulo2",
-    processos: "/processos", "processos-isk": "/processos2",
-    chassi: "/chassi", "chassi-isk": "/chassi2",
-    renavam: "/renavam", "renavam-isk": "/renavam2",
-    motor: "/motor", "motor-isk": "/motor2",
-    "cnpj-cred": "/cnpj", "cnpj-isk": "/cnpj2", "cnpj-cred-isk": "/cnpj3",
-    "irpf-isk": "/irpf", "vacinas-isk": "/vacinas", "obito-isk": "/obito",
+    cpf: "/cpf", cpffull: "/cpf2", "cpf-spc": "/cpf4", cpfsus: "/cpf5",
   };
   
   const buttons: InlineButton[][] = [];
-  // Max 3 siblings shown
   const shown = siblings.slice(0, 3);
   for (const sib of shown) {
     const label = queryTypeLabels[sib] || sib;
