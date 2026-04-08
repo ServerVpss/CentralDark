@@ -3139,27 +3139,27 @@ function formatMultiPersonPage(
   const titleIcon = queryType === 'telefone' ? '📞' : '📍';
   const titleText = queryType === 'telefone' ? 'CONSULTA DE TELEFONE' : 'CONSULTA DE CEP';
   
-  lines.push(`${titleIcon} <b>${titleText}</b>`);
+  // Header with HTML tags goes outside <pre>
+  let headerHtml = `${titleIcon} <b>${titleText}</b>\n`;
   if (queryInput) {
-    lines.push(`🔍 ${queryInput}`);
+    headerHtml += `🔍 ${queryInput}\n`;
   }
-  lines.push(``);
+  headerHtml += `\n`;
   
   // Informative description about why multiple results appear
   if (queryType === 'telefone') {
-    lines.push(`ℹ️ <i>Um mesmo número de telefone pode estar vinculado a mais de uma pessoa no cadastro. Isso ocorre por transferências de linha, uso compartilhado ou registros históricos.</i>`);
+    headerHtml += `ℹ️ <i>Um mesmo número de telefone pode estar vinculado a mais de uma pessoa no cadastro. Isso ocorre por transferências de linha, uso compartilhado ou registros históricos.</i>\n`;
   } else {
-    lines.push(`ℹ️ <i>Múltiplas pessoas foram encontradas vinculadas a este endereço/CEP nos registros cadastrais.</i>`);
+    headerHtml += `ℹ️ <i>Múltiplas pessoas foram encontradas vinculadas a este endereço/CEP nos registros cadastrais.</i>\n`;
   }
-  lines.push(``);
+  headerHtml += `\n`;
   
-  lines.push(`👋 Olá, ${userName}!`);
-  lines.push(`👥 <b>${records.length} pessoas encontradas</b>`);
+  headerHtml += `👋 Olá, ${userName}!\n`;
+  headerHtml += `👥 <b>${records.length} pessoas encontradas</b>\n`;
   if (totalPages > 1) {
-    lines.push(`📄 Página ${page + 1}/${totalPages} (${startIdx + 1}-${endIdx})`);
+    headerHtml += `📄 Página ${page + 1}/${totalPages} (${startIdx + 1}-${endIdx})\n`;
   }
-  lines.push(``);
-  
+  headerHtml += `\n`;
   pageRecords.forEach((record, index) => {
     const globalIndex = startIdx + index;
     lines.push(`┌─────────────────────────────`);
@@ -3210,7 +3210,7 @@ function formatMultiPersonPage(
   lines.push(`🤖 ${botTag}`);
   
   const escapeLine = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return `<pre>${lines.map(escapeLine).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(escapeLine).join('\n')}</pre>`;
 }
 
 // Create keyboard for multi-person result with CPF buttons and pagination
@@ -4420,10 +4420,8 @@ function formatNomeResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📝 Nome';
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>\n`;
   const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Busca por nome retorna pessoas com nome igual ou semelhante nos registros cadastrais. Podem aparecer homônimos.</i>`);
-  lines.push(``);
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4458,7 +4456,7 @@ function formatNomeResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA EMAIL (LISTA DE PESSOAS) ===============
@@ -4473,10 +4471,8 @@ function formatEmailResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📧 Email';
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Consulta por e-mail retorna pessoas que possuem este endereço de e-mail vinculado em seus cadastros.</i>\n`;
   const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Consulta por e-mail retorna pessoas que possuem este endereço de e-mail vinculado em seus cadastros.</i>`);
-  lines.push(``);
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4519,7 +4515,7 @@ function formatEmailResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA CEP (PESSOAS + ENDEREÇO) ===============
@@ -4534,10 +4530,8 @@ function formatCepResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📍 CEP';
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Consulta por CEP retorna moradores registrados nesta região. Os dados são baseados em registros cadastrais e podem incluir residentes atuais e anteriores.</i>\n`;
   const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Consulta por CEP retorna moradores registrados nesta região. Os dados são baseados em registros cadastrais e podem incluir residentes atuais e anteriores.</i>`);
-  lines.push(``);
 
   let records: Record<string, unknown>[] = [];
   if (dados && typeof dados === 'object') {
@@ -4589,7 +4583,7 @@ function formatCepResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA SCORE ===============
@@ -4604,10 +4598,8 @@ function formatScoreResult(
   data = fixBrokenEncodingDeep(data) as Record<string, unknown>;
   const dados = data.dados as Record<string, unknown> | undefined;
   const moduleLabel = queryTypeLabels[queryType] || '📊 Score';
+  const headerHtml = `${escapeHtml(moduleLabel)}\nℹ️ <i>Análise de crédito e score financeiro baseada em dados cadastrais e histórico de pagamentos.</i>\n`;
   const lines: string[] = [];
-  lines.push(`${moduleLabel}`);
-  lines.push(`ℹ️ <i>Análise de crédito e score financeiro baseada em dados cadastrais e histórico de pagamentos.</i>`);
-  lines.push(``);
 
   let basicos: Record<string, unknown> = {};
   let scoreData: Record<string, unknown> = {};
@@ -4669,7 +4661,7 @@ function formatScoreResult(
 
   lines.push(`❤️ OBRIGADO POR USAR ❤️`);
   lines.push(`🤖 ${botTag}`);
-  return `<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  return `${headerHtml}<pre>${lines.map(l => escapeHtml(l)).join('\n')}</pre>`;
 }
 
 // =============== FORMATAÇÃO ESPECÍFICA PARA RENDA/PODER AQUISITIVO ===============
