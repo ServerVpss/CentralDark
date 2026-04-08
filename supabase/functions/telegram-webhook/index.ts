@@ -7322,8 +7322,7 @@ class BotHandler {
     }
 
     const commandMap: Record<string, string> = {
-      cpf: "cpf", cpffull: "cpffull",
-      cpf2: "cpffull", cpf4: "cpf-spc", cpf5: "cpfsus",
+      cpf: "cpf",
       cnpj: "cnpj", placa: "placa",
       telefone: "telefone", tel: "telefone",
       email: "email",
