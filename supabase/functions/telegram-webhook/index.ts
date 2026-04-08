@@ -1608,7 +1608,7 @@ function extractPhotoMetadata(obj: unknown, depth = 0): { nome?: string; cpf?: s
 }
 
 // Format photo caption with metadata, respecting 1024 char limit
-function buildPhotoCaption(header: string, cpf: string, result: unknown, botUsername?: string, extraMeta?: Record<string, string>): string {
+function buildPhotoCaption(header: string, cpf: string, result: unknown, botUsername?: string, extraMeta?: Record<string, string>, requesterInfo?: { name: string; identifier: string; date: string; time: string }): string {
   const meta = { ...extractPhotoMetadata(result) };
   
   // Merge extra metadata (from cpfbasico enrichment) if photo result had empty fields
@@ -1639,6 +1639,15 @@ function buildPhotoCaption(header: string, cpf: string, result: unknown, botUser
   if (meta.sexo) lines.push(`⚧ <b>Sexo:</b> ${meta.sexo}`);
   if (meta.mae) lines.push(`👩 <b>Mãe:</b> ${meta.mae}`);
   if (meta.pai) lines.push(`👨 <b>Pai:</b> ${meta.pai}`);
+  
+  // Add requester footer
+  if (requesterInfo) {
+    lines.push('');
+    lines.push(`📋 <b>Consulta solicitada por:</b>`);
+    lines.push(`├ 👤 ${requesterInfo.name}`);
+    lines.push(`├ 📝 ${requesterInfo.identifier}`);
+    lines.push(`└ 🕐 ${requesterInfo.date}, ${requesterInfo.time}`);
+  }
   
   let caption = lines.join('\n');
   
