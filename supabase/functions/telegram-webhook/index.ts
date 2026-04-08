@@ -7353,17 +7353,16 @@ class BotHandler {
 
     if (!chatId || !messageId) return;
 
-    await answerCallback(this.token, callback.id);
+    // ── Ownership check for ALL query-result buttons ──
+    // Any callback on a message that contains a paginated result or was a reply to a user query
+    // must be restricted to the user who initiated the query (or admins/owners).
+    const ownershipExemptCallbacks = new Set(["menu:main", "menu:planos", "accept_terms", "reject_terms", "cancel_payment"]);
+    const isExempt = ownershipExemptCallbacks.has(data);
 
-    // ── Ownership check for query-result buttons ──
-    // Callbacks that interact with query results must be restricted to the user who initiated the query.
-    const queryResultPrefixes = ["page:", "page_delete:", "pdf:", "txt:", "qcpf:", "retry_query:", "foto_query:", "cep_page:", "tel_page:"];
-    const isQueryResultCallback = data === "delete_msg" || queryResultPrefixes.some(p => data.startsWith(p));
-
-    if (isQueryResultCallback) {
+    if (!isExempt) {
       let requesterId: number | null = null;
 
-      // Extract paginationId from callback data if present
+      // 1. Try to find requester from paginated_results metadata
       let paginationIdForCheck: string | null = null;
       if (data.startsWith("page:") || data.startsWith("cep_page:") || data.startsWith("tel_page:")) {
         const parts = data.split(":");
@@ -7384,10 +7383,51 @@ class BotHandler {
         }
       }
 
-      // For non-paginated results, check if the original message was a reply
+      // 2. If no pagination ID, check the message's inline keyboard for a page: button to extract the pagination ID
+      if (!requesterId && callback.message) {
+        const inlineKb = (callback.message as any).reply_markup?.inline_keyboard;
+        if (inlineKb && Array.isArray(inlineKb)) {
+          for (const row of inlineKb) {
+            for (const btn of row) {
+              const cbData = btn.callback_data || '';
+              const pageMatch = cbData.match(/^(?:page|cep_page|tel_page):([^:]+):/);
+              if (pageMatch) {
+                const foundPagId = pageMatch[1];
+                const { data: pagData } = await this.supabase
+                  .from("paginated_results")
+                  .select("metadata")
+                  .eq("id", foundPagId)
+                  .maybeSingle();
+                if (pagData?.metadata) {
+                  const meta = pagData.metadata as Record<string, unknown>;
+                  if (meta.requester_id) requesterId = Number(meta.requester_id);
+                }
+                break;
+              }
+              const delMatch = cbData.match(/^page_delete:(.+)$/);
+              if (delMatch) {
+                const foundPagId = delMatch[1];
+                const { data: pagData } = await this.supabase
+                  .from("paginated_results")
+                  .select("metadata")
+                  .eq("id", foundPagId)
+                  .maybeSingle();
+                if (pagData?.metadata) {
+                  const meta = pagData.metadata as Record<string, unknown>;
+                  if (meta.requester_id) requesterId = Number(meta.requester_id);
+                }
+                break;
+              }
+            }
+            if (requesterId) break;
+          }
+        }
+      }
+
+      // 3. Fallback: check reply_to_message sender
       if (!requesterId && callback.message) {
         const replyMsg = (callback.message as any).reply_to_message;
-        if (replyMsg?.from?.id) {
+        if (replyMsg?.from?.id && !replyMsg?.from?.is_bot) {
           requesterId = replyMsg.from.id;
         }
       }
