@@ -62,6 +62,82 @@ interface QueryResult {
   duration_ms?: number;
 }
 
+// =============== SUGESTÃO DE CORREÇÃO ORTOGRÁFICA ===============
+const NAME_CORRECTIONS: Record<string, string[]> = {
+  gertudes: ['gertrudes'], gertrude: ['gertrudes'],
+  goncalves: ['gonçalves'], gonsalves: ['gonçalves'],
+  conceicao: ['conceição'], conseicao: ['conceição'],
+  aparesida: ['aparecida'], aparessida: ['aparecida'],
+  tereza: ['tereza', 'theresa', 'teresa'],
+  rodriges: ['rodrigues'], ferrera: ['ferreira'], fereira: ['ferreira'],
+  olivera: ['oliveira'], oliviera: ['oliveira'],
+  fransisco: ['francisco'], sebastiao: ['sebastião'], sabastiao: ['sebastião'],
+  joaqim: ['joaquim'], lusio: ['lúcio'],
+  anthonio: ['antônio'], joze: ['josé'],
+  teixera: ['teixeira'], perera: ['pereira'],
+  riberio: ['ribeiro'], riveiro: ['ribeiro'],
+  mashado: ['machado'], carvalhu: ['carvalho'],
+  mendonca: ['mendonça'], araujo: ['araújo'], arauho: ['araújo'],
+  alvez: ['alves'], nunez: ['nunes'], lopez: ['lopes'], ramoz: ['ramos'],
+  soussa: ['souza', 'sousa'], almeyda: ['almeida'],
+};
+
+function normalizeForComparison(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function suggestNameCorrections(input: string): string[] {
+  const words = input.trim().split(/\s+/);
+  if (words.length === 0) return [];
+  const suggestions = new Set<string>();
+  const inputNormalized = normalizeForComparison(input);
+
+  for (let i = 0; i < words.length; i++) {
+    const wordNorm = normalizeForComparison(words[i]);
+    const corrections = NAME_CORRECTIONS[wordNorm];
+    if (corrections) {
+      for (const correction of corrections) {
+        const corrected = correction.charAt(0).toUpperCase() + correction.slice(1);
+        const newWords = [...words];
+        newWords[i] = corrected;
+        const suggestion = newWords.join(' ');
+        if (normalizeForComparison(suggestion) !== inputNormalized) {
+          suggestions.add(suggestion);
+        }
+      }
+    }
+  }
+
+  // Insert common missing letters
+  for (let i = 0; i < words.length; i++) {
+    const wordNorm = normalizeForComparison(words[i]);
+    if (wordNorm.length < 4) continue;
+    const inserts: [string, string][] = [['rt', 'rtr'], ['gu', 'gue'], ['ei', 'eir']];
+    for (const [pattern, replacement] of inserts) {
+      if (wordNorm.includes(pattern) && !wordNorm.includes(replacement)) {
+        const variant = words[i].replace(new RegExp(pattern, 'i'), replacement);
+        const cap = variant.charAt(0).toUpperCase() + variant.slice(1).toLowerCase();
+        if (normalizeForComparison(cap) !== wordNorm) {
+          const newWords = [...words];
+          newWords[i] = cap;
+          suggestions.add(newWords.join(' '));
+        }
+      }
+    }
+  }
+
+  const seen = new Set<string>();
+  const unique: string[] = [];
+  for (const s of suggestions) {
+    const norm = normalizeForComparison(s);
+    if (norm === inputNormalized || seen.has(norm)) continue;
+    seen.add(norm);
+    unique.push(s);
+    if (unique.length >= 3) break;
+  }
+  return unique;
+}
+
 interface QueryModule {
   module_key: string;
   label: string;
