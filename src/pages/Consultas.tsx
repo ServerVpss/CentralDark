@@ -567,7 +567,7 @@ export default function Consultas() {
                                 setIsInputValid(true);
                                 setNameSuggestions([]);
                                 setResult(null);
-                                setTimeout(() => handleQuery(), 100);
+                                setPendingSuggestion(suggestion);
                               }}
                             >
                               🔄 {suggestion}
