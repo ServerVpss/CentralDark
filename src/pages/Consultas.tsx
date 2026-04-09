@@ -128,7 +128,8 @@ function suggestNameCorrections(input: string): string[] {
 
   const seen = new Set<string>();
   const unique: string[] = [];
-  for (const s of suggestions) {
+  const sugArr = Array.from(suggestions);
+  for (const s of sugArr) {
     const norm = normalizeForComparison(s);
     if (norm === inputNormalized || seen.has(norm)) continue;
     seen.add(norm);
