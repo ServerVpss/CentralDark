@@ -903,39 +903,96 @@ function formatVehicleResult(
   const sitFields = ['estadoEmplacamento', 'municipioEmplacamento', 'dataEmplacamento', 'situacaoVeiculo', 'situacaoChassi', 'ultimaAtualizacao', 'procedencia'];
   const restrictFields = ['possuiRestricoes', 'restricao1', 'restricao2', 'restricao3', 'restricao4', 'multaRenainf', 'rouboFurto', 'furtoRoubo', 'alerta', 'leilao', 'restricaoRenajud', 'comunicacaoVenda', 'dataLimiteRestricao'];
 
-  const formatField = (key: string, value: unknown): string | null => {
+  const humanizeFieldKey = (value: string): string => fixBrokenEncoding(
+    value
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .replace(/[._]+/g, ' ')
+      .replace(/\[(\d+)\]/g, ' $1')
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
+
+  const isBinaryBlob = (value: string): boolean => {
+    const normalized = value.trim();
+    return normalized.length > 100 && !normalized.includes(' ') && (
+      normalized.startsWith('/9j/') ||
+      normalized.startsWith('iVBOR') ||
+      normalized.startsWith('data:image')
+    );
+  };
+
+  const normalizePrimitiveValue = (key: string, value: unknown): string | null => {
     if (value === null || value === undefined || value === '' || value === '0' || value === 0) return null;
-    let strVal = String(value).trim();
-    if (!strVal || strVal === ',00' || strVal === '01/01/00' || strVal === '0 cv') return null;
     if (shouldIgnore(value)) return null;
-    // Add units
-    if (key === 'cilindradas' && !strVal.includes('cc')) strVal += ' cc';
-    const label = labelMap[key] || `📌 ${key}`;
-    return `├ ${label}: <b>${escapeHtml(fixBrokenEncoding(strVal))}</b>`;
+
+    let strVal = String(value).trim();
+    if (!strVal || strVal === ',00' || strVal === '01/01/00' || strVal === '0 cv' || isBinaryBlob(strVal)) {
+      return null;
+    }
+
+    if (key === 'cilindradas' && !strVal.toLowerCase().includes('cc')) {
+      strVal += ' cc';
+    }
+
+    return fixBrokenEncoding(strVal);
+  };
+
+  const buildFieldLine = (key: string, value: string, nestedPath: string[] = []): string => {
+    const label = labelMap[key] || `📌 ${humanizeFieldKey(key)}`;
+    const nestedLabel = nestedPath.length > 0
+      ? ` (${nestedPath.map(part => humanizeFieldKey(part)).join(' › ')})`
+      : '';
+
+    return `├ ${label}${nestedLabel}: <b>${escapeHtml(value)}</b>`;
+  };
+
+  const formatField = (key: string, value: unknown, nestedPath: string[] = []): string[] => {
+    if (value === null || value === undefined) return [];
+
+    if (Array.isArray(value)) {
+      if (value.length === 0) return [];
+
+      const hasNestedItems = value.some(item => item && typeof item === 'object');
+      if (!hasNestedItems) {
+        const joined = value
+          .map(item => normalizePrimitiveValue(key, item))
+          .filter((item): item is string => Boolean(item))
+          .join(', ');
+
+        return joined ? [buildFieldLine(key, joined, nestedPath)] : [];
+      }
+
+      return value.flatMap((item, index) => formatField(key, item, [...nestedPath, `${index + 1}`]));
+    }
+
+    if (typeof value === 'object') {
+      return Object.entries(value as Record<string, unknown>).flatMap(([nestedKey, nestedValue]) =>
+        formatField(key, nestedValue, [...nestedPath, nestedKey])
+      );
+    }
+
+    const normalizedValue = normalizePrimitiveValue(key, value);
+    return normalizedValue ? [buildFieldLine(key, normalizedValue, nestedPath)] : [];
   };
 
   for (const key of idFields) {
     if (vehicleData[key] !== undefined) {
-      const line = formatField(key, vehicleData[key]);
-      if (line) identification.push(line);
+      identification.push(...formatField(key, vehicleData[key]));
     }
   }
   for (const key of specFields) {
     if (vehicleData[key] !== undefined) {
-      const line = formatField(key, vehicleData[key]);
-      if (line) specs.push(line);
+      specs.push(...formatField(key, vehicleData[key]));
     }
   }
   for (const key of sitFields) {
     if (vehicleData[key] !== undefined) {
-      const line = formatField(key, vehicleData[key]);
-      if (line) situation.push(line);
+      situation.push(...formatField(key, vehicleData[key]));
     }
   }
   for (const key of restrictFields) {
     if (vehicleData[key] !== undefined) {
-      const line = formatField(key, vehicleData[key]);
-      if (line) restrictions.push(line);
+      restrictions.push(...formatField(key, vehicleData[key]));
     }
   }
 
@@ -943,8 +1000,7 @@ function formatVehicleResult(
   const allCategorized = new Set([...idFields, ...specFields, ...sitFields, ...restrictFields]);
   for (const [key, value] of Object.entries(vehicleData)) {
     if (allCategorized.has(key) || ignoreKeys.has(key)) continue;
-    const line = formatField(key, value);
-    if (line) other.push(line);
+    other.push(...formatField(key, value));
   }
 
   const moduleLabel = queryType.toUpperCase().replace(/-/g, ' ');
