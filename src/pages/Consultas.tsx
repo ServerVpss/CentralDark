@@ -551,6 +551,31 @@ export default function Consultas() {
                         </AlertDescription>
                       </Alert>
                     )}
+                    {!result.success && nameSuggestions.length > 0 && (
+                      <div className="mb-4 p-3 rounded-lg bg-secondary/30 border border-border">
+                        <p className="text-sm font-medium text-foreground mb-2">🔍 Você quis dizer?</p>
+                        <div className="flex flex-wrap gap-2">
+                          {nameSuggestions.map((suggestion) => (
+                            <Badge
+                              key={suggestion}
+                              variant="outline"
+                              className="cursor-pointer hover:bg-primary/10 hover:border-primary transition-colors px-3 py-1.5 text-sm"
+                              onClick={() => {
+                                setQueryInput(suggestion);
+                                setCleanQueryInput(suggestion);
+                                setIsInputValid(true);
+                                setNameSuggestions([]);
+                                setResult(null);
+                                setTimeout(() => handleQuery(), 100);
+                              }}
+                            >
+                              🔄 {suggestion}
+                            </Badge>
+                          ))}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">Clique em uma sugestão para tentar novamente</p>
+                      </div>
+                    )}
                     <ResultDisplay result={result.data} showCopyButton={true} />
                   </CardContent>
                 </Card>
