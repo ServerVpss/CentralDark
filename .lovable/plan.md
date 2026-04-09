@@ -1,58 +1,58 @@
 
 
-## Corrigir `[object Object]` no Website
+## Adicionar Sugestão de Correção Ortográfica para Consultas por Nome Sem Resultado
 
 ### Problema
-Quando a API retorna dados com objetos aninhados (como `filiacao`, `biometria`, `fotos`), o `QueryResultFormatter` não os achata antes de exibir. O `String(value)` aplicado a objetos produz `[object Object]`.
-
-### Causa Raiz
-No bloco de parsing JSON (linhas 1217-1226), objetos e arrays aninhados são copiados diretamente para `parsedData` sem achatamento. Depois, na renderização (linhas 1322 e 1338), `String(item)` é chamado em objetos.
+Quando o usuário consulta um nome e não encontra resultados (ex: "Maria gertudes coronel"), o sistema retorna apenas "Nome não encontrado" sem sugerir possíveis correções de digitação.
 
 ### Solução
+Adicionar detecção de erros ortográficos comuns em nomes brasileiros e sugerir correções quando a consulta não retornar resultados.
 
-**Arquivo**: `src/components/consultas/QueryResultFormatter.tsx`
+### Implementação
 
-1. **Criar função `flattenObject`** que achata recursivamente objetos aninhados em pares `chave => valor` simples (strings):
-   - `{filiacao: {mae: "Ana", pai: "João"}}` → `{filiacao_mae: "Ana", filiacao_pai: "João"}`
-   - Arrays de objetos: `{fotos: [{uf: "SP", base64: "..."}]}` → `{fotos_1_uf: "SP"}` (filtrando base64)
-   - Arrays de primitivos mantidos como `string[]`
+**1. Criar dicionário de correções comuns** (dentro do `telegram-webhook/index.ts`)
 
-2. **Aplicar `flattenObject`** no bloco de parsing JSON (linhas 1217-1226) antes de atribuir a `parsedData`
+Mapa de substituições frequentes em nomes brasileiros:
+- "gertudes" → "gertrudes"
+- "goncalves" → "gonçalves"  
+- "conceicao" → "conceição"
+- "lucio" → "lúcio"
+- "tereza" → "theresa/tereza" (variação)
+- Padrões genéricos: letras trocadas, acentos faltando, consoantes duplicadas/faltando
 
-3. **Adicionar fallback seguro na renderização** (linhas 1322 e 1338): se o valor ainda for objeto, serializar como JSON legível ao invés de `String()`
+Usar uma abordagem de **similaridade por distância de Levenshtein simplificada** + dicionário de substituições comuns para gerar 1-3 sugestões.
+
+**2. Modificar resposta de "não encontrado" no Telegram** (`telegram-webhook/index.ts`)
+
+Quando `isEmptyResult` retornar true para módulos de nome (`nome`, `nomefull`, `nomeabreviadofiltros`):
+- Gerar sugestões ortográficas baseadas no input
+- Adicionar botões inline para cada sugestão (ex: `retry_query:nome:Maria Gertrudes Coronel`)
+- Manter botões existentes de "Nova Consulta" e "Menu"
+
+Exemplo de mensagem:
+```
+❌ Nome não encontrado
+
+🔍 Você quis dizer?
+├ Maria Gertrudes Coronel
+└ Maria Gertrudes Coronell
+
+💡 Verifique a ortografia e tente novamente.
+```
+
+**3. Modificar resposta no Website** (`src/pages/Consultas.tsx`)
+
+Quando consulta por nome retorna erro/vazio:
+- Mostrar sugestões clicáveis abaixo da mensagem de erro
+- Ao clicar, preencher automaticamente o campo e executar nova consulta
 
 ### Detalhes Técnicos
 
-```typescript
-function flattenObject(obj: any, prefix = ''): Record<string, string | string[]> {
-  const result: Record<string, string | string[]> = {};
-  for (const [key, value] of Object.entries(obj)) {
-    const newKey = prefix ? `${prefix}_${key}` : key;
-    if (value === null || value === undefined) continue;
-    // Skip base64/photo values
-    if (typeof value === 'string' && (value.startsWith('/9j/') || value.startsWith('iVBOR') || value.startsWith('data:image'))) continue;
-    if (Array.isArray(value)) {
-      if (value.every(v => typeof v !== 'object')) {
-        result[newKey] = value.map(String);
-      } else {
-        value.forEach((item, i) => {
-          if (typeof item === 'object' && item !== null) {
-            Object.assign(result, flattenObject(item, `${newKey}_${i + 1}`));
-          } else {
-            result[`${newKey}_${i + 1}`] = String(item);
-          }
-        });
-      }
-    } else if (typeof value === 'object') {
-      Object.assign(result, flattenObject(value, newKey));
-    } else {
-      result[newKey] = String(value);
-    }
-  }
-  return result;
-}
-```
+- Dicionário com ~50 substituições comuns em nomes brasileiros (consoantes mudas, acentos, letras trocadas)
+- Função `suggestCorrections(input: string): string[]` que retorna até 3 sugestões
+- Botões inline no Telegram usam callback `retry_query:nome:{sugestão}` (já suportado)
+- No website, sugestões aparecem como chips/badges clicáveis
 
-- Aplicar no parsing JSON e como fallback no rendering
-- Sem impacto em resultados de texto (já são strings)
-
+### Arquivos Modificados
+1. `supabase/functions/telegram-webhook/index.ts` — dicionário + lógica de sugestão + botões inline
+2. `src/pages/Consultas.tsx` — sugestões clicáveis na interface web
