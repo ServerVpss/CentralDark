@@ -183,6 +183,7 @@ export default function Consultas() {
   const [selectedState, setSelectedState] = useState("SP");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<QueryResult | null>(null);
+  const [nameSuggestions, setNameSuggestions] = useState<string[]>([]);
   const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
