@@ -62,6 +62,83 @@ interface QueryResult {
   duration_ms?: number;
 }
 
+// =============== SUGESTÃO DE CORREÇÃO ORTOGRÁFICA ===============
+const NAME_CORRECTIONS: Record<string, string[]> = {
+  gertudes: ['gertrudes'], gertrude: ['gertrudes'],
+  goncalves: ['gonçalves'], gonsalves: ['gonçalves'],
+  conceicao: ['conceição'], conseicao: ['conceição'],
+  aparesida: ['aparecida'], aparessida: ['aparecida'],
+  tereza: ['tereza', 'theresa', 'teresa'],
+  rodriges: ['rodrigues'], ferrera: ['ferreira'], fereira: ['ferreira'],
+  olivera: ['oliveira'], oliviera: ['oliveira'],
+  fransisco: ['francisco'], sebastiao: ['sebastião'], sabastiao: ['sebastião'],
+  joaqim: ['joaquim'], lusio: ['lúcio'],
+  anthonio: ['antônio'], joze: ['josé'],
+  teixera: ['teixeira'], perera: ['pereira'],
+  riberio: ['ribeiro'], riveiro: ['ribeiro'],
+  mashado: ['machado'], carvalhu: ['carvalho'],
+  mendonca: ['mendonça'], araujo: ['araújo'], arauho: ['araújo'],
+  alvez: ['alves'], nunez: ['nunes'], lopez: ['lopes'], ramoz: ['ramos'],
+  soussa: ['souza', 'sousa'], almeyda: ['almeida'],
+};
+
+function normalizeForComparison(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function suggestNameCorrections(input: string): string[] {
+  const words = input.trim().split(/\s+/);
+  if (words.length === 0) return [];
+  const suggestions = new Set<string>();
+  const inputNormalized = normalizeForComparison(input);
+
+  for (let i = 0; i < words.length; i++) {
+    const wordNorm = normalizeForComparison(words[i]);
+    const corrections = NAME_CORRECTIONS[wordNorm];
+    if (corrections) {
+      for (const correction of corrections) {
+        const corrected = correction.charAt(0).toUpperCase() + correction.slice(1);
+        const newWords = [...words];
+        newWords[i] = corrected;
+        const suggestion = newWords.join(' ');
+        if (normalizeForComparison(suggestion) !== inputNormalized) {
+          suggestions.add(suggestion);
+        }
+      }
+    }
+  }
+
+  // Insert common missing letters
+  for (let i = 0; i < words.length; i++) {
+    const wordNorm = normalizeForComparison(words[i]);
+    if (wordNorm.length < 4) continue;
+    const inserts: [string, string][] = [['rt', 'rtr'], ['gu', 'gue'], ['ei', 'eir']];
+    for (const [pattern, replacement] of inserts) {
+      if (wordNorm.includes(pattern) && !wordNorm.includes(replacement)) {
+        const variant = words[i].replace(new RegExp(pattern, 'i'), replacement);
+        const cap = variant.charAt(0).toUpperCase() + variant.slice(1).toLowerCase();
+        if (normalizeForComparison(cap) !== wordNorm) {
+          const newWords = [...words];
+          newWords[i] = cap;
+          suggestions.add(newWords.join(' '));
+        }
+      }
+    }
+  }
+
+  const seen = new Set<string>();
+  const unique: string[] = [];
+  const sugArr = Array.from(suggestions);
+  for (const s of sugArr) {
+    const norm = normalizeForComparison(s);
+    if (norm === inputNormalized || seen.has(norm)) continue;
+    seen.add(norm);
+    unique.push(s);
+    if (unique.length >= 3) break;
+  }
+  return unique;
+}
+
 interface QueryModule {
   module_key: string;
   label: string;
@@ -107,8 +184,10 @@ export default function Consultas() {
   const [selectedState, setSelectedState] = useState("SP");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<QueryResult | null>(null);
+  const [nameSuggestions, setNameSuggestions] = useState<string[]>([]);
   const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [pendingSuggestion, setPendingSuggestion] = useState<string | null>(null);
 
   // Load modules from DB
   useEffect(() => {
@@ -180,6 +259,7 @@ export default function Consultas() {
     setResult(null);
     setNetworkBlockedHint(null);
     setShowConfetti(false);
+    setNameSuggestions([]);
 
     const inputToQuery = cleanQueryInput || queryInput.trim();
     const requestBody = {
@@ -220,7 +300,9 @@ export default function Consultas() {
           const durationMs = d.meta?.duration_ms || d.duration_ms || 0;
           const providerMs = d.meta?.provider_duration_ms;
 
-          if (d.success) {
+          const isNotFound = d.data?.notFound || d.data?.message?.includes('não encontrado') || d.data?.message?.includes('Dados não encontrados');
+          
+          if (d.success && !isNotFound) {
             setShowConfetti(true);
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             const timeInfo = providerMs !== undefined
@@ -228,8 +310,18 @@ export default function Consultas() {
               : `${durationMs}ms`;
             toast.success(`Consulta realizada em ${timeInfo}`);
           } else {
-            const errMsg = d.errors?.[0] || "Consulta retornou erro";
-            toast.error(errMsg);
+            // Para módulos de nome sem resultado, gerar sugestões
+            const nameModules = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros', 'mae', 'maefull'];
+            if (nameModules.includes(selectedType)) {
+              const suggestions = suggestNameCorrections(inputToQuery);
+              setNameSuggestions(suggestions);
+            }
+            if (isNotFound) {
+              toast.error("Dados não encontrados");
+            } else {
+              const errMsg = d.errors?.[0] || "Consulta retornou erro";
+              toast.error(errMsg);
+            }
           }
           return;
         }
@@ -292,6 +384,14 @@ export default function Consultas() {
       setIsLoading(false);
     }
   };
+
+  // Auto-trigger query when a suggestion is clicked
+  useEffect(() => {
+    if (pendingSuggestion) {
+      setPendingSuggestion(null);
+      handleQuery();
+    }
+  }, [pendingSuggestion]);
 
   const selectedModule = modules.find(m => m.module_key === selectedType);
   const durationMs = result?.meta?.duration_ms || result?.duration_ms || 0;
@@ -466,6 +566,31 @@ export default function Consultas() {
                           {result.errors.join(". ")}
                         </AlertDescription>
                       </Alert>
+                    )}
+                    {nameSuggestions.length > 0 && (
+                      <div className="mb-4 p-3 rounded-lg bg-secondary/30 border border-border">
+                        <p className="text-sm font-medium text-foreground mb-2">🔍 Você quis dizer?</p>
+                        <div className="flex flex-wrap gap-2">
+                          {nameSuggestions.map((suggestion) => (
+                            <Badge
+                              key={suggestion}
+                              variant="outline"
+                              className="cursor-pointer hover:bg-primary/10 hover:border-primary transition-colors px-3 py-1.5 text-sm"
+                              onClick={() => {
+                                setQueryInput(suggestion);
+                                setCleanQueryInput(suggestion);
+                                setIsInputValid(true);
+                                setNameSuggestions([]);
+                                setResult(null);
+                                setPendingSuggestion(suggestion);
+                              }}
+                            >
+                              🔄 {suggestion}
+                            </Badge>
+                          ))}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">Clique em uma sugestão para tentar novamente</p>
+                      </div>
                     )}
                     <ResultDisplay result={result.data} showCopyButton={true} />
                   </CardContent>

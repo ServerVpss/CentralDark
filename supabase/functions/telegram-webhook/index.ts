@@ -4625,7 +4625,148 @@ function formatNomeResult(
     records = data.dados as Record<string, unknown>[];
   }
 
-  
+// =============== SUGESTÃO DE CORREÇÃO ORTOGRÁFICA PARA NOMES ===============
+const NAME_CORRECTIONS: Record<string, string[]> = {
+  // Consoantes mudas / trocas comuns
+  gertudes: ['gertrudes'], gertrude: ['gertrudes'], gertruds: ['gertrudes'],
+  goncalves: ['gonçalves'], gonsalves: ['gonçalves'], gonzalves: ['gonçalves'],
+  conceicao: ['conceição'], conseicao: ['conceição'], conceiçao: ['conceição'],
+  aparecida: ['aparecida'], aparesida: ['aparecida'], aparessida: ['aparecida'],
+  tereza: ['tereza', 'theresa', 'teresa'], thereza: ['tereza', 'theresa'],
+  rodriges: ['rodrigues'], rodrigs: ['rodrigues'],
+  marques: ['marques', 'marquez'], markez: ['marques'],
+  ferrera: ['ferreira'], fereira: ['ferreira'], ferreyra: ['ferreira'],
+  olivera: ['oliveira'], oliviera: ['oliveira'],
+  batista: ['batista', 'baptista'], bautista: ['batista'],
+  fransisco: ['francisco'], francisquo: ['francisco'],
+  sebastiao: ['sebastião'], sabastiao: ['sebastião'],
+  joaquim: ['joaquim', 'joaquin'], joaqim: ['joaquim'],
+  luiz: ['luiz', 'luis'], luís: ['luiz', 'luis'],
+  lucio: ['lúcio'], lusio: ['lúcio'],
+  antonio: ['antônio', 'antonio'], anthonio: ['antônio'],
+  jose: ['josé'], joze: ['josé'],
+  joao: ['joão'], jão: ['joão'],
+  maria: ['maria'], mária: ['maria'],
+  getulio: ['getúlio'], jetulio: ['getúlio'],
+  ines: ['inês'], inez: ['inês'],
+  moraes: ['moraes', 'morais'], morais: ['moraes', 'morais'],
+  souza: ['souza', 'sousa'], soussa: ['souza', 'sousa'],
+  teixera: ['teixeira'], teixiera: ['teixeira'],
+  silveira: ['silveira'], silvera: ['silveira'],
+  perera: ['pereira'], perera: ['pereira'],
+  almeida: ['almeida'], almeyda: ['almeida'],
+  riberio: ['ribeiro'], riveiro: ['ribeiro'],
+  machado: ['machado'], mashado: ['machado'],
+  carvalho: ['carvalho'], carvalhu: ['carvalho'],
+  mendonca: ['mendonça'], mendoça: ['mendonça'],
+  araujo: ['araújo'], arauho: ['araújo'],
+  coronel: ['coronel', 'coronell'],
+  // Acentos comuns
+  felicio: ['felício'], mauricio: ['maurício'],
+  marcio: ['márcio'], fabricio: ['fabrício'],
+  eugenio: ['eugênio'], rogerio: ['rogério'],
+  valeria: ['valéria'], patricia: ['patrícia'],
+  monica: ['mônica'], veronica: ['verônica'],
+  angelica: ['angélica'], debora: ['débora'],
+  // Troca S/Z/SS/Ç
+  alves: ['alves'], alvez: ['alves'],
+  nunes: ['nunes'], nunez: ['nunes'],
+  lopes: ['lopes'], lopez: ['lopes'],
+  ramos: ['ramos'], ramoz: ['ramos'],
+};
+
+// Substituições fonéticas genéricas para gerar variações
+const PHONETIC_SUBS: [RegExp, string[]][] = [
+  [/ss/g, ['s', 'ç']],
+  [/s(?=[aeiou])/gi, ['z', 'ss', 'ç']],
+  [/z/g, ['s']],
+  [/ch/g, ['x']],
+  [/x/g, ['ch', 'sh']],
+  [/lh/g, ['li']],
+  [/nh/g, ['ni']],
+  [/ph/g, ['f']],
+  [/th/g, ['t']],
+  [/([aeiou])([aeiou])/gi, ['$1$2']], // placeholder
+];
+
+function normalizeForComparison(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function suggestNameCorrections(input: string): string[] {
+  const words = input.trim().split(/\s+/);
+  if (words.length === 0) return [];
+
+  const suggestions = new Set<string>();
+  const inputNormalized = normalizeForComparison(input);
+
+  // Strategy 1: Dictionary lookup per word
+  for (let i = 0; i < words.length; i++) {
+    const wordNorm = normalizeForComparison(words[i]);
+    const corrections = NAME_CORRECTIONS[wordNorm];
+    if (corrections) {
+      for (const correction of corrections) {
+        // Capitalize first letter to match name convention
+        const corrected = correction.charAt(0).toUpperCase() + correction.slice(1);
+        const newWords = [...words];
+        newWords[i] = corrected;
+        const suggestion = newWords.join(' ');
+        if (normalizeForComparison(suggestion) !== inputNormalized) {
+          suggestions.add(suggestion);
+        }
+      }
+    }
+  }
+
+  // Strategy 2: Simple Levenshtein-like edits for words not in dictionary
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    if (word.length < 4) continue;
+    const wordNorm = normalizeForComparison(word);
+
+    // Check if removing a doubled letter helps
+    for (let j = 0; j < wordNorm.length - 1; j++) {
+      if (wordNorm[j] === wordNorm[j + 1]) {
+        const variant = word.slice(0, j) + word.slice(j + 1);
+        const variantCapitalized = variant.charAt(0).toUpperCase() + variant.slice(1).toLowerCase();
+        const newWords = [...words];
+        newWords[i] = variantCapitalized;
+        suggestions.add(newWords.join(' '));
+      }
+    }
+
+    // Check if inserting a common missing letter helps (e.g. "gertudes" → "gertrudes")
+    const commonInserts: [string, string][] = [
+      ['rt', 'rtr'], ['gu', 'gue'], ['ei', 'eir'], ['lv', 'lve'],
+    ];
+    for (const [pattern, replacement] of commonInserts) {
+      if (wordNorm.includes(pattern) && !wordNorm.includes(replacement)) {
+        const variant = word.replace(new RegExp(pattern, 'i'), replacement);
+        const variantCapitalized = variant.charAt(0).toUpperCase() + variant.slice(1).toLowerCase();
+        if (normalizeForComparison(variantCapitalized) !== wordNorm) {
+          const newWords = [...words];
+          newWords[i] = variantCapitalized;
+          suggestions.add(newWords.join(' '));
+        }
+      }
+    }
+  }
+
+  // Deduplicate by normalized form and limit to 3
+  const seen = new Set<string>();
+  const unique: string[] = [];
+  for (const s of suggestions) {
+    const norm = normalizeForComparison(s);
+    if (norm === inputNormalized || seen.has(norm)) continue;
+    seen.add(norm);
+    unique.push(s);
+    if (unique.length >= 3) break;
+  }
+
+  return unique;
+}
+
+
 
   if (records.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
@@ -6219,6 +6360,34 @@ class BotHandler {
           }
           return;
         }
+      }
+
+      // Para módulos de nome com resultado vazio: sugerir correções ortográficas
+      const NAME_MODULES = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros', 'mae', 'maefull'];
+      if (NAME_MODULES.includes(usedModule) && isEmptyResult(result)) {
+        const suggestions = suggestNameCorrections(queryInput);
+        let emptyMsg = `❌ <b>Nome não encontrado</b>\n\n<i>Nenhum resultado para:</i> <code>${escapeHtmlGlobal(queryInput)}</code>\n`;
+        
+        if (suggestions.length > 0) {
+          emptyMsg += `\n🔍 <b>Você quis dizer?</b>\n`;
+          for (let si = 0; si < suggestions.length; si++) {
+            const prefix = si === suggestions.length - 1 ? '└' : '├';
+            emptyMsg += `${prefix} <code>${escapeHtmlGlobal(suggestions[si])}</code>\n`;
+          }
+          emptyMsg += `\n💡 Clique em uma sugestão abaixo para tentar novamente.`;
+        } else {
+          emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
+        }
+
+        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+          [btn(`🔄 ${s}`, `retry_query:${usedModule}:${s}`)]
+        );
+        suggestionButtons.push(
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)]
+        );
+
+        await sendMessage(this.token, chatId, emptyMsg, { inline_keyboard: suggestionButtons });
+        return;
       }
 
       // Format and send result - usar o módulo realmente usado após fallback
@@ -7993,6 +8162,34 @@ class BotHandler {
           
           return;
         }
+      }
+
+      // Para módulos de nome com resultado vazio no grupo: sugerir correções
+      const NAME_MODULES_GROUP = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros', 'mae', 'maefull'];
+      if (NAME_MODULES_GROUP.includes(queryType) && isEmptyResult(result)) {
+        const suggestions = suggestNameCorrections(inputForQuery);
+        let emptyMsg = `❌ <b>Nome não encontrado</b>\n\n<i>Nenhum resultado para:</i> <code>${escapeHtmlGlobal(inputForQuery)}</code>\n`;
+        
+        if (suggestions.length > 0) {
+          emptyMsg += `\n🔍 <b>Você quis dizer?</b>\n`;
+          for (let si = 0; si < suggestions.length; si++) {
+            const prefix = si === suggestions.length - 1 ? '└' : '├';
+            emptyMsg += `${prefix} <code>${escapeHtmlGlobal(suggestions[si])}</code>\n`;
+          }
+          emptyMsg += `\n💡 Clique em uma sugestão abaixo para tentar novamente.`;
+        } else {
+          emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
+        }
+
+        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+          [btn(`🔄 ${s}`, `retry_query:${queryType}:${s}`)]
+        );
+        suggestionButtons.push(
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)]
+        );
+
+        await sendMessage(this.token, chatId, emptyMsg, { inline_keyboard: suggestionButtons });
+        return;
       }
 
       // Format and send result - usar nome do perfil do Telegram do usuário
