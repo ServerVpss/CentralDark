@@ -378,6 +378,14 @@ export default function Consultas() {
     }
   };
 
+  // Auto-trigger query when a suggestion is clicked
+  useEffect(() => {
+    if (pendingSuggestion) {
+      setPendingSuggestion(null);
+      handleQuery();
+    }
+  }, [pendingSuggestion]);
+
   const selectedModule = modules.find(m => m.module_key === selectedType);
   const durationMs = result?.meta?.duration_ms || result?.duration_ms || 0;
   const providerMs = result?.meta?.provider_duration_ms;
