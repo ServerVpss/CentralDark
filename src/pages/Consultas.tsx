@@ -186,6 +186,7 @@ export default function Consultas() {
   const [nameSuggestions, setNameSuggestions] = useState<string[]>([]);
   const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [pendingSuggestion, setPendingSuggestion] = useState<string | null>(null);
 
   // Load modules from DB
   useEffect(() => {
