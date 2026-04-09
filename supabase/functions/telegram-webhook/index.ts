@@ -8164,6 +8164,34 @@ class BotHandler {
         }
       }
 
+      // Para módulos de nome com resultado vazio no grupo: sugerir correções
+      const NAME_MODULES_GROUP = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros', 'mae', 'maefull'];
+      if (NAME_MODULES_GROUP.includes(queryType) && isEmptyResult(result)) {
+        const suggestions = suggestNameCorrections(inputForQuery);
+        let emptyMsg = `❌ <b>Nome não encontrado</b>\n\n<i>Nenhum resultado para:</i> <code>${escapeHtmlGlobal(inputForQuery)}</code>\n`;
+        
+        if (suggestions.length > 0) {
+          emptyMsg += `\n🔍 <b>Você quis dizer?</b>\n`;
+          for (let si = 0; si < suggestions.length; si++) {
+            const prefix = si === suggestions.length - 1 ? '└' : '├';
+            emptyMsg += `${prefix} <code>${escapeHtmlGlobal(suggestions[si])}</code>\n`;
+          }
+          emptyMsg += `\n💡 Clique em uma sugestão abaixo para tentar novamente.`;
+        } else {
+          emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
+        }
+
+        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+          [btn(`🔄 ${s}`, `retry_query:${queryType}:${s}`)]
+        );
+        suggestionButtons.push(
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)]
+        );
+
+        await sendMessage(this.token, chatId, emptyMsg, { inline_keyboard: suggestionButtons });
+        return;
+      }
+
       // Format and send result - usar nome do perfil do Telegram do usuário
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, userName);
 
