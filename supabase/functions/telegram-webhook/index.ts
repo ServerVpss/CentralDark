@@ -6362,6 +6362,34 @@ class BotHandler {
         }
       }
 
+      // Para módulos de nome com resultado vazio: sugerir correções ortográficas
+      const NAME_MODULES = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros', 'mae', 'maefull'];
+      if (NAME_MODULES.includes(usedModule) && isEmptyResult(result)) {
+        const suggestions = suggestNameCorrections(queryInput);
+        let emptyMsg = `❌ <b>Nome não encontrado</b>\n\n<i>Nenhum resultado para:</i> <code>${escapeHtmlGlobal(queryInput)}</code>\n`;
+        
+        if (suggestions.length > 0) {
+          emptyMsg += `\n🔍 <b>Você quis dizer?</b>\n`;
+          for (let si = 0; si < suggestions.length; si++) {
+            const prefix = si === suggestions.length - 1 ? '└' : '├';
+            emptyMsg += `${prefix} <code>${escapeHtmlGlobal(suggestions[si])}</code>\n`;
+          }
+          emptyMsg += `\n💡 Clique em uma sugestão abaixo para tentar novamente.`;
+        } else {
+          emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
+        }
+
+        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+          [btn(`🔄 ${s}`, `retry_query:${usedModule}:${s}`)]
+        );
+        suggestionButtons.push(
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)]
+        );
+
+        await sendMessage(this.token, chatId, emptyMsg, { inline_keyboard: suggestionButtons });
+        return;
+      }
+
       // Format and send result - usar o módulo realmente usado após fallback
       const formattedResult = formatQueryResult(usedModule, result, this.bot.bot_username, telegramUserName);
       
