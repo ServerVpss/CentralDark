@@ -567,7 +567,7 @@ export default function Consultas() {
                         </AlertDescription>
                       </Alert>
                     )}
-                    {!result.success && nameSuggestions.length > 0 && (
+                    {nameSuggestions.length > 0 && (
                       <div className="mb-4 p-3 rounded-lg bg-secondary/30 border border-border">
                         <p className="text-sm font-medium text-foreground mb-2">🔍 Você quis dizer?</p>
                         <div className="flex flex-wrap gap-2">
