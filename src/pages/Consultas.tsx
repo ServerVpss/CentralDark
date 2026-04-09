@@ -257,6 +257,7 @@ export default function Consultas() {
     setResult(null);
     setNetworkBlockedHint(null);
     setShowConfetti(false);
+    setNameSuggestions([]);
 
     const inputToQuery = cleanQueryInput || queryInput.trim();
     const requestBody = {
@@ -305,6 +306,12 @@ export default function Consultas() {
               : `${durationMs}ms`;
             toast.success(`Consulta realizada em ${timeInfo}`);
           } else {
+            // Para módulos de nome sem resultado, gerar sugestões
+            const nameModules = ['nome', 'nomefull', 'nome-3', 'nomeabreviadofiltros', 'mae', 'maefull'];
+            if (nameModules.includes(selectedType)) {
+              const suggestions = suggestNameCorrections(inputToQuery);
+              setNameSuggestions(suggestions);
+            }
             const errMsg = d.errors?.[0] || "Consulta retornou erro";
             toast.error(errMsg);
           }
