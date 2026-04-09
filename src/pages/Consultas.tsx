@@ -300,7 +300,9 @@ export default function Consultas() {
           const durationMs = d.meta?.duration_ms || d.duration_ms || 0;
           const providerMs = d.meta?.provider_duration_ms;
 
-          if (d.success) {
+          const isNotFound = d.data?.notFound || d.data?.message?.includes('não encontrado') || d.data?.message?.includes('Dados não encontrados');
+          
+          if (d.success && !isNotFound) {
             setShowConfetti(true);
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             const timeInfo = providerMs !== undefined
@@ -314,8 +316,12 @@ export default function Consultas() {
               const suggestions = suggestNameCorrections(inputToQuery);
               setNameSuggestions(suggestions);
             }
-            const errMsg = d.errors?.[0] || "Consulta retornou erro";
-            toast.error(errMsg);
+            if (isNotFound) {
+              toast.error("Dados não encontrados");
+            } else {
+              const errMsg = d.errors?.[0] || "Consulta retornou erro";
+              toast.error(errMsg);
+            }
           }
           return;
         }
