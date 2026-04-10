@@ -293,7 +293,7 @@ export function useBackup() {
       URL.revokeObjectURL(url);
 
       updateProgress(100, 100, "Backup concluído!");
-      console.log(`[backup] Export complete: ${totalRecords} records from ${tablesCount} tables`);
+      
       
       const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
       
