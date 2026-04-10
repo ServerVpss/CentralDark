@@ -150,7 +150,7 @@ export function useBackup() {
       }
       const userId = user.id;
 
-      console.log("[backup] Exporting data for user:", userId);
+      
 
       // Fetch all user data with individual tracking
       const tableQueries = [
@@ -293,7 +293,7 @@ export function useBackup() {
       URL.revokeObjectURL(url);
 
       updateProgress(100, 100, "Backup concluído!");
-      console.log(`[backup] Export complete: ${totalRecords} records from ${tablesCount} tables`);
+      
       
       const totalErrors = results.reduce((sum, r) => sum + r.errors.length, 0);
       
@@ -406,7 +406,7 @@ export function useBackup() {
         throw new Error("Checksum inválido");
       }
 
-      console.log(`[backup] Restoring data for user ${userId} in ${mode} mode`);
+      
 
       const results: TableResult[] = [];
 
@@ -527,7 +527,7 @@ export function useBackup() {
         total_errors: totalErrors,
       };
 
-      console.log(`[backup] Restore complete: ${totalInserted} inserted, ${totalErrors} errors`);
+      
 
       if (result.success) {
         toast.success(result.message);

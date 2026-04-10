@@ -43,7 +43,6 @@ export function useTelegramBots() {
         "postgres_changes",
         { event: "*", schema: "public", table: "telegram_bots" },
         (payload) => {
-          console.log("Bot update:", payload);
           if (payload.eventType === "INSERT") {
             setBots((prev) => [payload.new as TelegramBot, ...prev]);
           } else if (payload.eventType === "UPDATE") {
@@ -71,7 +70,7 @@ export function useTelegramBots() {
       return null;
     }
 
-    console.log("Creating bot with userId:", user.id, "token:", token.substring(0, 10) + "...");
+    
 
     try {
       // 1. Verificar se o bot já existe no banco
@@ -93,7 +92,7 @@ export function useTelegramBots() {
         userId: user.id,
       });
 
-      console.log("createBot response:", data, error);
+      
 
       if (error) {
         console.error("Edge function error after retries:", error);

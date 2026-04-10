@@ -37,7 +37,7 @@ export async function invokeWithRetry(
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      console.log(`Attempt ${attempt}/${maxRetries} - Invoking telegram-bot function`);
+      
       
       const { data, error } = await supabase.functions.invoke("telegram-bot", {
         body,
@@ -51,7 +51,7 @@ export async function invokeWithRetry(
           error.message?.includes("fetch");
 
         if (isNetworkError && attempt < maxRetries) {
-          console.log(`Network error on attempt ${attempt}, retrying in 1s...`);
+          
           lastError = error;
           await delay(1000);
           continue;

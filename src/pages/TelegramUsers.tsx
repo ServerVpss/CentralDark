@@ -152,8 +152,6 @@ export default function TelegramUsers() {
         "postgres_changes",
         { event: "*", schema: "public", table: "telegram_subscriptions" },
         (payload) => {
-          console.log("Subscription update:", payload);
-          
           if (payload.eventType === "INSERT") {
             const newSub = payload.new as TelegramSubscription;
             // Check if matches current filter
