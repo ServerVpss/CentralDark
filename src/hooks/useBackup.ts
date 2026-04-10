@@ -150,7 +150,7 @@ export function useBackup() {
       }
       const userId = user.id;
 
-      console.log("[backup] Exporting data for user:", userId);
+      
 
       // Fetch all user data with individual tracking
       const tableQueries = [
