@@ -3300,37 +3300,6 @@ function createMultiPersonKeyboard(
 ): { inline_keyboard: InlineButton[][] } {
   const keyboard: InlineButton[][] = [];
   
-  const startIdx = page * RECORDS_PER_PAGE;
-  const endIdx = Math.min(startIdx + RECORDS_PER_PAGE, records.length);
-  const pageRecords = records.slice(startIdx, endIdx);
-  
-  // Botões de consulta CPF em linhas de 2
-  for (let i = 0; i < pageRecords.length; i += 2) {
-    const row: InlineButton[] = [];
-    
-    // Primeiro botão
-    const record1 = pageRecords[i];
-    if (record1.cpf) {
-      const cleanCpf = record1.cpf.replace(/[^\d]/g, '');
-      const shortName = record1.nome ? record1.nome.split(' ')[0].substring(0, 10) : `Pessoa ${startIdx + i + 1}`;
-      row.push({ text: `🔍 ${shortName}`, callback_data: `qcpf:${cleanCpf}` });
-    }
-    
-    // Segundo botão (se existir)
-    if (i + 1 < pageRecords.length) {
-      const record2 = pageRecords[i + 1];
-      if (record2.cpf) {
-        const cleanCpf = record2.cpf.replace(/[^\d]/g, '');
-        const shortName = record2.nome ? record2.nome.split(' ')[0].substring(0, 10) : `Pessoa ${startIdx + i + 2}`;
-        row.push({ text: `🔍 ${shortName}`, callback_data: `qcpf:${cleanCpf}` });
-      }
-    }
-    
-    if (row.length > 0) {
-      keyboard.push(row);
-    }
-  }
-  
   // Botões de navegação se houver mais de uma página
   if (totalPages > 1) {
     const navRow: InlineButton[] = [];
