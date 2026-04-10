@@ -406,7 +406,7 @@ export function useBackup() {
         throw new Error("Checksum inválido");
       }
 
-      console.log(`[backup] Restoring data for user ${userId} in ${mode} mode`);
+      
 
       const results: TableResult[] = [];
 
