@@ -527,7 +527,7 @@ export function useBackup() {
         total_errors: totalErrors,
       };
 
-      console.log(`[backup] Restore complete: ${totalInserted} inserted, ${totalErrors} errors`);
+      
 
       if (result.success) {
         toast.success(result.message);
