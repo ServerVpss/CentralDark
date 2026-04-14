@@ -3422,8 +3422,8 @@ function formatQueryResult(queryType: string, data: Record<string, unknown>, bot
     return formatCpfResult(data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
-  // Telefone (telefone, telefonefull, telefone-3 + iSeek)
-  if (['telefone', 'telefonefull', 'telefone-3', 'telefone-isk'].includes(queryType)) {
+  // Telefone
+  if (['telefone', 'telefone-isk'].includes(queryType)) {
     return formatTelefoneResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
@@ -4252,7 +4252,6 @@ function formatCpfResult(
 ): string {
   // PRÉ-PROCESSAMENTO: achatar estrutura aninhada dados.cpf[0] ou dados.telefone[0]
   // A API retorna: { dados: { cpf: [{ dadosBasicos: {...}, ... }] } }
-  // ou para telefonefull: { dados: { telefone: [{ dadosBasicos: {...}, dadosTelefone: {...} }] } }
   const dados = data.dados as Record<string, unknown> | undefined;
   if (dados && typeof dados === 'object') {
     // Tentar achatar qualquer chave que contenha array de objetos com dadosBasicos
@@ -4273,7 +4272,7 @@ function formatCpfResult(
         }
       }
       
-      // Flatten dadosTelefone (telefonefull) — extrair como array de telefones
+      // Flatten dadosTelefone — extrair como array de telefones
       const dadosTel = firstRecord.dadosTelefone as Record<string, unknown> | undefined;
       if (dadosTel && typeof dadosTel === 'object') {
         // Converter o objeto único em array para extractTelefones processar
@@ -5806,7 +5805,7 @@ class BotHandler {
         cep: "/cep", endereco: "/cep",
         // Comandos diretos
         cnpj: "/cnpj",
-        telefone: "/telefone", telefonefull: "/telefone",
+        telefone: "/telefone",
         email: "/email", emailfull: "/email",
         rg: "/rg", pis: "/pis", pix: "/pix",
         titulo: "/titulo", renda: "/renda",
@@ -5829,7 +5828,7 @@ class BotHandler {
         score: "12345678900", score2: "12345678900", advogadocpf: "12345678900", catcpf: "12345678900",
         cnpj: "12345678000100",
         placa: "ABC1234", chassi: "CHASSI123", renavam: "12345678900", motor: "MOTOR123", veiculos: "12345678900",
-        telefone: "11999998888", telefonefull: "11999998888",
+        telefone: "11999998888",
         email: "user@email.com", emailfull: "user@email.com",
         cep: "01310100", endereco: "12345678900",
         nome: "João Silva", nomeabreviadofiltros: "João Silva",
@@ -6105,7 +6104,7 @@ class BotHandler {
     await sendMessage(this.token, chatId, `⏳ <b>Consultando ${queryTypeLabels[queryType] || queryType}...</b>\n\nAguarde um momento.`);
 
     try {
-      // Usar fallback automático para módulos com cadeia de fallback (ex: telefone → telefone-3 → telefonefull)
+      // Usar fallback automático para módulos com cadeia de fallback (ex: nome → nomeabreviadofiltros)
       const hasFallback = FALLBACK_CHAINS[queryType];
       let result: Record<string, unknown>;
       let fromCache: boolean;
@@ -7541,7 +7540,7 @@ class BotHandler {
   private parseMultipleCommands(text: string): Array<{ command: string; queryType: string; queryInput: string }> {
     const commandMap: Record<string, string> = {
       cpf: "cpf", cnpj: "cnpj", placa: "placa",
-      telefone: "telefone", telefonefull: "telefonefull", tel: "telefone",
+      telefone: "telefone", tel: "telefone",
       email: "email", emailfull: "emailfull",
       cep: "cep", nome: "nome",
       score: "score", rg: "rg", cnh: "cnh", pix: "pix",
