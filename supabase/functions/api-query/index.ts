@@ -210,7 +210,7 @@ function cleanQueryValueWithWarnings(modulo: string, input: string): CleanResult
   if (NUMERIC_MODULES.has(modulo)) {
     let clean = val.replace(/\D/g, "");
     // Remove country code 55 from phone numbers
-    const PHONE_MODULES = ["telefone", "telefonefull", "telefone-3"];
+    const PHONE_MODULES = ["telefone", "telefone-isk"];
     if (PHONE_MODULES.includes(modulo) && clean.length >= 12 && clean.startsWith("55")) {
       const original = clean;
       clean = clean.substring(2);
