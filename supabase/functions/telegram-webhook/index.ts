@@ -3518,310 +3518,132 @@ function formatTelefoneResult(
   escapeHtml: (str: string) => string,
   shouldIgnore: (value: unknown) => boolean
 ): string {
-  // Flatten dados.telefone[] structure from API
-  const dados = data.dados as Record<string, unknown> | undefined;
-  const allRecords: Record<string, unknown>[] = [];
-
-  const pushPhoneRecord = (source: Record<string, unknown>) => {
-    const person: Record<string, unknown> = {};
-
-    for (const [k, v] of Object.entries(source)) {
-      if (k === 'telefones' || k === 'dadosTelefone' || k === 'dadosBasicos' || k === 'endereco') continue;
-      if (v !== null && v !== undefined && v !== '' && typeof v !== 'object') {
-        person[k] = v;
-      }
-    }
-
-    const basicos = source.dadosBasicos as Record<string, unknown> | undefined;
-    if (basicos && typeof basicos === 'object') {
-      for (const [k, v] of Object.entries(basicos)) {
-        if (v !== null && v !== undefined && v !== '') person[k] = v;
-      }
-    }
-
-    const phones = (source.telefones || source.dadosTelefone) as unknown[] | undefined;
-    if (Array.isArray(phones) && phones.length > 0) {
-      person.telefones = phones;
-    }
-
-    const addresses = source.endereco as unknown[] | undefined;
-    if (Array.isArray(addresses) && addresses.length > 0) {
-      person.enderecos = addresses;
-    }
-
-    if (Object.keys(person).length > 0) {
-      allRecords.push(person);
-    }
+  // Máscara de CPF: 123.456.789-00
+  const maskCpf = (raw: string): string => {
+    const digits = raw.replace(/\D/g, '');
+    // Normalizar CPFs com zeros à esquerda (ex: "00048863256888" → "48863256888")
+    const clean = digits.replace(/^0+/, '');
+    if (clean.length === 11) return clean.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    if (clean.length === 14) return clean.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    return clean;
   };
 
-  // Formato atual do provedor: { data: [{ nome, cpfCnpj, origem, data }] } ou nested { data: { data: [...] } }
-  let topLevelRecords: unknown[] | undefined;
+  // Extrair registros da estrutura da API: { data: { data: [...] } } ou { data: [...] }
+  let records: Record<string, unknown>[] = [];
   const dataField = data.data;
   if (Array.isArray(dataField)) {
-    topLevelRecords = dataField;
-  } else if (dataField && typeof dataField === 'object' && !Array.isArray(dataField)) {
+    records = dataField.filter(r => r && typeof r === 'object') as Record<string, unknown>[];
+  } else if (dataField && typeof dataField === 'object') {
     const nested = (dataField as Record<string, unknown>).data;
     if (Array.isArray(nested)) {
-      topLevelRecords = nested;
-    }
-  }
-  if (Array.isArray(topLevelRecords) && topLevelRecords.length > 0) {
-    topLevelRecords.forEach((record) => {
-      if (record && typeof record === 'object') {
-        pushPhoneRecord(record as Record<string, unknown>);
-      }
-    });
-  }
-
-  // Formato legado: { dados: { telefone: [...] } }
-  if (allRecords.length === 0 && dados && typeof dados === 'object') {
-    const legacyRecords = dados.telefone as unknown[] | undefined;
-    if (Array.isArray(legacyRecords) && legacyRecords.length > 0) {
-      legacyRecords.forEach((record) => {
-        if (record && typeof record === 'object') {
-          pushPhoneRecord(record as Record<string, unknown>);
-        }
-      });
+      records = nested.filter(r => r && typeof r === 'object') as Record<string, unknown>[];
     }
   }
 
-  // Se veio apenas 1 registro, achatar para o formatador de seção única
-  if (allRecords.length === 1) {
-    const single = allRecords[0];
-    for (const [k, v] of Object.entries(single)) {
-      if (k === 'cpfCnpj' && !('cpf' in data)) {
-        data.cpf = v;
-        continue;
-      }
-      if (k === 'data') {
-        data.periodo_consulta = v;
-        continue;
-      }
-      if (!(k in data)) {
-        data[k] = v;
-      }
+  // Fallback: dados.telefone[] (legado)
+  if (records.length === 0) {
+    const dados = data.dados as Record<string, unknown> | undefined;
+    if (dados && Array.isArray(dados.telefone)) {
+      records = (dados.telefone as unknown[]).filter(r => r && typeof r === 'object') as Record<string, unknown>[];
     }
   }
 
-  // Também achatar dados simples quando não houver lista de pessoas
-  if (allRecords.length === 0 && dados && typeof dados === 'object') {
-    for (const [k, v] of Object.entries(dados)) {
-      if (k === 'telefone' || k === 'telefones') continue;
-      if (v !== null && v !== undefined && v !== '' && typeof v !== 'object' && !(k in data)) {
-        data[k] = v;
-      }
-    }
-  }
-
-  // ===== MULTI-PERSON FORMAT =====
-  if (allRecords.length > 1) {
-    const parts: string[] = [];
-    const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
-    parts.push(`${escapeHtml(moduleLabel)}`);
-    parts.push(`ℹ️ <i>Um mesmo número pode estar vinculado a mais de uma pessoa. Encontradas ${allRecords.length} pessoas.</i>`);
-    parts.push(``);
-
-    allRecords.forEach((person, i) => {
-      const pNome = String(person.nome || person.nome_completo || '').trim().toUpperCase();
-      const pCpf = String(person.cpf || person.cpfCnpj || '').trim();
-      const pNasc = String(person.dataNascimento || person.nascimento || person.data_nascimento || '').trim();
-      const pSexo = String(person.sexo || '').trim();
-      const pMae = String(person.nomeMae || person.mae || '').trim().toUpperCase();
-      const pOrigem = String(person.origem || '').trim().toUpperCase();
-      const pData = String(person.periodo_consulta || person.data || '').trim().toUpperCase();
-      const pPhone = String(person.telefone || person.celular || '').trim();
-
-      const fields: string[] = [];
-      if (pNome) fields.push(`NOME => ${pNome}`);
-      if (pCpf) fields.push(`CPF/CNPJ => ${pCpf}`);
-      if (pNasc) fields.push(`NASCIMENTO => ${pNasc}`);
-      if (pSexo) fields.push(`SEXO => ${pSexo}`);
-      if (pMae && pMae !== 'UNDEFINED') fields.push(`MÃE => ${pMae}`);
-      if (pOrigem) fields.push(`ORIGEM => ${pOrigem}`);
-      if (pData) fields.push(`DATA => ${pData}`);
-      if (pPhone) fields.push(`TELEFONE => ${formatPhoneNumber('', pPhone.replace(/\D/g, '')) || pPhone}`);
-
-      const pPhones = person.telefones as unknown[] | undefined;
-      if (Array.isArray(pPhones)) {
-        const seen = new Set<string>();
-        pPhones.forEach((t: unknown) => {
-          const tel = t as Record<string, unknown>;
-          const ddd = String(tel.ddd || tel.DDD || '');
-          const num = String(tel.telefone || tel.numero || tel.celular || '');
-          const formatted = formatPhoneNumber(ddd, num);
-          if (!formatted) return;
-
-          const key = formatted.replace(/\D/g, '');
-          if (seen.has(key)) return;
-          seen.add(key);
-
-          let line = `TELEFONE => ${formatted}`;
-          const tipoRaw = tel.tipo || tel.tipoTelefone;
-          if (typeof tipoRaw === 'string') line += `  [${tipoRaw}]`;
-          if (String(tel.whatsapp || '').toLowerCase().includes('possui')) line += `  💬`;
-          const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
-          if (inclusao) line += `\nDATA DE INCLUSÃO => ${inclusao}`;
-          fields.push(line);
-        });
-      }
-
-      if (fields.length > 0) {
-        parts.push(`\n👤 <b>PESSOA ${i + 1}</b>`);
-        parts.push(`<pre>${fields.join('\n')}</pre>`);
-      }
-    });
-
-    parts.push(`\n❤️ OBRIGADO POR USAR ❤️`);
-    parts.push(`🤖 ${botTag}`);
-    return parts.join('\n');
-  }
-
-  const getValue = (keys: string[]): string => {
-    for (const key of keys) {
-      const lowerKey = key.toLowerCase();
-      for (const [k, v] of Object.entries(data)) {
-        if ((k.toLowerCase() === lowerKey || k.toLowerCase().includes(lowerKey)) && v !== null && v !== undefined && typeof v !== 'object' && !shouldIgnore(v)) {
-          return String(v).trim().toUpperCase();
-        }
-      }
-    }
-    return '';
-  };
-
-  const extractPhonesFormatted = (): Array<{ formatted: string; tipo: string; data: string; whatsapp: boolean }> => {
-    const tels = data.telefones as unknown[] | undefined;
-    if (!Array.isArray(tels)) return [];
-
-    const seen = new Set<string>();
-    return tels
-      .map((t: unknown) => {
-        const tel = t as Record<string, unknown>;
-        const ddd = String(tel.ddd || tel.DDD || '');
-        const num = String(tel.telefone || tel.numero || tel.celular || '');
-        const formatted = formatPhoneNumber(ddd, num);
-        if (!formatted) return null;
-        const key = formatted.replace(/\D/g, '');
-        if (seen.has(key)) return null;
-        seen.add(key);
-
-        const tipoRaw = tel.tipo || tel.tipoTelefone;
-        let tipo = '';
-        if (typeof tipoRaw === 'string') {
-          tipo = tipoRaw.charAt(0).toUpperCase() + tipoRaw.slice(1);
-        } else if (tipoRaw === 3) tipo = 'Celular';
-        else if (tipoRaw === 1) tipo = 'Fixo';
-        else if (tipoRaw === 2) tipo = 'Comercial';
-
-        const inclusao = tel.dataInclusao ? String(tel.dataInclusao).substring(0, 10) : '';
-        const whatsapp = String(tel.whatsapp || '').toLowerCase().includes('possui');
-        return { formatted, tipo, data: inclusao, whatsapp };
-      })
-      .filter((item): item is NonNullable<typeof item> => !!item);
-  };
-
-  const extractRawPhones = (): string[] => {
-    const rawPhones: string[] = [];
-
-    const visit = (value: unknown, keyHint = '') => {
-      if (Array.isArray(value)) {
-        value.forEach((item) => visit(item, keyHint));
-        return;
-      }
-
-      if (value && typeof value === 'object') {
-        for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
-          visit(nested, key);
-        }
-        return;
-      }
-
-      if (typeof value !== 'string') return;
-      if (shouldIgnore(value)) return;
-
-      const normalizedKey = keyHint.toLowerCase();
-      const isPhoneField = normalizedKey.includes('numero') || normalizedKey.includes('completo') || normalizedKey === 'telefone' || normalizedKey === 'celular';
-      if (!isPhoneField) return;
-
-      const digits = value.replace(/\D/g, '');
-      if (digits.length >= 8 && digits.length <= 13) {
-        rawPhones.push(formatPhoneNumber('', digits) || digits);
-      }
-    };
-
-    visit(data);
-    return [...new Set(rawPhones)];
-  };
-
-  const nome = getValue(['nome', 'nome_completo']);
-  const cpf = getValue(['cpf', 'cpfcnpj']);
-  const nascimento = getValue(['nascimento', 'data_nascimento', 'datanascimento', 'dataNascimento']);
-  const sexo = getValue(['sexo']);
-  const mae = getValue(['mae', 'mãe', 'nome_mae', 'nomemae', 'nomeMae']);
-  const origem = getValue(['origem']);
-  const periodoConsulta = getValue(['periodo_consulta']);
-  const uf = getValue(['uf', 'estado']);
-  const endereco = getValue(['endereco', 'logradouro']);
-  const bairro = getValue(['bairro']);
-  const cidade = getValue(['cidade', 'municipio']);
-  const cep = getValue(['cep']);
-
-  const phones = extractPhonesFormatted();
-  const rawPhones = phones.length === 0 ? extractRawPhones() : [];
-  const parts: string[] = [];
-
-  const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
-  parts.push(`${escapeHtml(moduleLabel)}`);
-  parts.push(`ℹ️ <i>Dados do titular vinculado a este número nos registros cadastrais.</i>`);
-  parts.push(``);
-
-  const addSection = (icon: string, title: string, fields: string[]) => {
-    if (fields.length === 0) return;
-    parts.push(`${icon} <b>${escapeHtml(title)}</b>`);
-    parts.push(`<pre>${fields.join('\n')}</pre>`);
-  };
-
-  const titularFields: string[] = [];
-  if (nome) titularFields.push(`NOME => ${nome}`);
-  if (cpf) titularFields.push(`CPF/CNPJ => ${cpf}`);
-  if (nascimento) titularFields.push(`NASCIMENTO => ${nascimento}`);
-  if (sexo) titularFields.push(`SEXO => ${sexo}`);
-  if (mae) titularFields.push(`MÃE => ${mae}`);
-  addSection('👤', 'DADOS PESSOAIS', titularFields);
-
-  const phoneFields: string[] = [];
-  if (phones.length > 0) {
-    phones.slice(0, 12).forEach((p) => {
-      let line = `TELEFONE => ${p.formatted}`;
-      if (p.tipo) line += `  [${p.tipo}]`;
-      if (p.whatsapp) line += `  💬 WhatsApp`;
-      if (p.data) line += `\nDATA DE INCLUSÃO => ${p.data}`;
-      phoneFields.push(line);
-    });
-    if (phones.length > 12) phoneFields.push(`... e mais ${phones.length - 12}`);
-  } else if (rawPhones.length > 0) {
-    rawPhones.slice(0, 12).forEach((p) => {
-      phoneFields.push(`TELEFONE => ${p}`);
-    });
-    if (rawPhones.length > 12) phoneFields.push(`... e mais ${rawPhones.length - 12}`);
-  }
-  addSection('📞', 'DADOS DE CONTATO', phoneFields);
-
-  const otherFields: string[] = [];
-  if (origem) otherFields.push(`ORIGEM => ${origem}`);
-  if (periodoConsulta) otherFields.push(`DATA => ${periodoConsulta}`);
-  addSection('📋', 'OUTROS DADOS', otherFields);
-
-  const endFields: string[] = [];
-  if (endereco) endFields.push(`ENDEREÇO => ${endereco}`);
-  if (bairro) endFields.push(`BAIRRO => ${bairro}`);
-  if (cidade) endFields.push(`CIDADE => ${cidade}`);
-  if (uf) endFields.push(`UF => ${uf}`);
-  if (cep) endFields.push(`CEP => ${cep}`);
-  addSection('📍', 'ENDEREÇO', endFields);
-
-  if (titularFields.length === 0 && phoneFields.length === 0 && otherFields.length === 0) {
+  if (records.length === 0) {
     return formatGenericResult(queryType, data, userName, botTag, escapeHtml, shouldIgnore);
   }
+
+  // Deduplicar por CPF normalizado — manter o registro com mais dados (endereço)
+  const deduped = new Map<string, Record<string, unknown>>();
+  for (const rec of records) {
+    const cpfRaw = String(rec.cpfCnpj || '').replace(/\D/g, '').replace(/^0+/, '');
+    const nome = String(rec.nome || '').trim().toUpperCase();
+    const key = `${cpfRaw}|${nome}`;
+
+    const existing = deduped.get(key);
+    if (!existing) {
+      // Armazenar origens como array
+      deduped.set(key, { ...rec, _origens: [String(rec.origem || '').trim()].filter(Boolean), _datas: [String(rec.data || '').trim()].filter(Boolean) });
+    } else {
+      // Merge: acumular origens e datas, preferir registro com endereço
+      const origens = (existing._origens as string[]) || [];
+      const datas = (existing._datas as string[]) || [];
+      const novaOrigem = String(rec.origem || '').trim();
+      const novaData = String(rec.data || '').trim();
+      if (novaOrigem && !origens.includes(novaOrigem)) origens.push(novaOrigem);
+      if (novaData && !datas.includes(novaData)) datas.push(novaData);
+      existing._origens = origens;
+      existing._datas = datas;
+
+      // Se o existente não tem endereço mas este tem, usar este
+      const existEnd = existing.endereco;
+      const newEnd = rec.endereco;
+      const hasEnd = (e: unknown) => e && typeof e === 'object' && !Array.isArray(e) ? true : Array.isArray(e) && e.length > 0;
+      if (!hasEnd(existEnd) && hasEnd(newEnd)) {
+        existing.endereco = newEnd;
+      }
+    }
+  }
+
+  const uniqueRecords = Array.from(deduped.values());
+  const parts: string[] = [];
+  const moduleLabel = queryTypeLabels[queryType] || '📞 Telefone';
+  parts.push(`${escapeHtml(moduleLabel)}`);
+
+  if (uniqueRecords.length > 1) {
+    parts.push(`ℹ️ <i>Número vinculado a ${uniqueRecords.length} pessoas nos registros cadastrais.</i>`);
+  } else {
+    parts.push(`ℹ️ <i>Dados do titular vinculado a este número.</i>`);
+  }
+  parts.push('');
+
+  uniqueRecords.forEach((rec, i) => {
+    const nome = String(rec.nome || '').trim().toUpperCase();
+    const cpfRaw = String(rec.cpfCnpj || '').replace(/\D/g, '');
+    const cpfMasked = cpfRaw ? maskCpf(cpfRaw) : '';
+    const origens = (rec._origens as string[] || []).filter(Boolean);
+    const datas = (rec._datas as string[] || []).filter(Boolean);
+
+    if (uniqueRecords.length > 1) {
+      parts.push(`👤 <b>PESSOA ${i + 1}</b>`);
+    }
+
+    const fields: string[] = [];
+    if (nome) fields.push(`NOME     => ${nome}`);
+    if (cpfMasked) fields.push(`CPF/CNPJ => ${cpfMasked}`);
+    if (origens.length > 0) fields.push(`ORIGEM   => ${origens.join(', ').toUpperCase()}`);
+    if (datas.length > 0) {
+      // Deduplicar e unir períodos
+      const uniqueDatas = [...new Set(datas)];
+      fields.push(`PERÍODO  => ${uniqueDatas.join(', ')}`);
+    }
+
+    // Endereço (pode ser objeto ou array)
+    const endereco = rec.endereco;
+    if (endereco && typeof endereco === 'object' && !Array.isArray(endereco)) {
+      const end = endereco as Record<string, unknown>;
+      const logradouro = String(end.logradouro || '').trim();
+      const numero = String(end.numero || '').trim();
+      const bairro = String(end.bairro || '').trim();
+      const cidade = String(end.cidade || '').trim();
+      const uf = String(end.siglaUf || end.uf || '').trim();
+      const cepVal = String(end.cep || '').trim();
+
+      const endParts: string[] = [];
+      if (logradouro) endParts.push(numero ? `${logradouro}, ${numero}` : logradouro);
+      if (bairro) endParts.push(bairro);
+      if (cidade && uf) endParts.push(`${cidade}/${uf}`);
+      else if (cidade) endParts.push(cidade);
+      if (cepVal) endParts.push(`CEP: ${cepVal}`);
+
+      if (endParts.length > 0) {
+        fields.push(`ENDEREÇO => ${endParts.join(' - ').toUpperCase()}`);
+      }
+    }
+
+    if (fields.length > 0) {
+      parts.push(`<pre>${fields.join('\n')}</pre>`);
+    }
+  });
 
   parts.push(`\n❤️ OBRIGADO POR USAR ❤️`);
   parts.push(`🤖 ${botTag}`);
