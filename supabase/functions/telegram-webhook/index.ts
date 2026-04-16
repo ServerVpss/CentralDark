@@ -4992,16 +4992,34 @@ function formatPixResult(
     return `<pre>${errorLines.map(l => escapeHtml(l)).join('\n')}</pre>`;
   }
 
+  // Verificar erro antes de formatar
+  const errMsg = data.err || data.error || data.erro;
+  if (errMsg && typeof errMsg === 'string') {
+    const errLines: string[] = [];
+    errLines.push(`💳 PIX`);
+    errLines.push(``);
+    errLines.push(`⚠️ ${errMsg}`);
+    errLines.push(``);
+    errLines.push(`💡 Dica: envie /pix NOME|MEIOCPF`);
+    errLines.push(`📌 Ex: /pix JOAO|345`);
+    errLines.push(``);
+    errLines.push(`🤖 ${botTag}`);
+    return `<pre>${errLines.map(l => escapeHtml(l)).join('\n')}</pre>`;
+  }
+
   const dados = data.dados as Record<string, unknown> | undefined;
   const lines: string[] = [];
+  let hasData = false;
+
   lines.push(`💳 PIX`);
-  lines.push(`ℹ️ Dados vinculados à chave PIX informada. Pode incluir titular e instituição financeira.`);
+  lines.push(`ℹ️ Dados vinculados à chave PIX informada.`);
   lines.push(``);
 
   if (dados && typeof dados === 'object') {
     const pixData = dados.pix;
     
     if (Array.isArray(pixData) && pixData.length > 0) {
+      hasData = true;
       pixData.slice(0, 15).forEach((p: unknown, i: number) => {
         const pix = p as Record<string, unknown>;
         lines.push(`┌─────────────────────────────`);
@@ -5017,6 +5035,7 @@ function formatPixResult(
         lines.push(``);
       });
     } else if (typeof pixData === 'object' && pixData !== null) {
+      hasData = true;
       const pix = pixData as Record<string, unknown>;
       lines.push(`┌─────────────────────────────`);
       lines.push(`│ 💳 DADOS PIX`);
@@ -5031,7 +5050,7 @@ function formatPixResult(
     }
   }
 
-  if (lines.length <= 2) {
+  if (!hasData) {
     return formatGenericResult('pix', data, userName, botTag, escapeHtml, shouldIgnore);
   }
 
