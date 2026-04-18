@@ -284,15 +284,14 @@ Deno.serve(async (req) => {
         const hasActiveCustomMessages = !!(customMessages && customMessages.length > 0)
 
         if (hasActiveCustomMessages) {
-          for (const msg of customMessages) {
+          for (const msg of customMessages!) {
             const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
             const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
             const timeSinceMsgSent = now.getTime() - msgLastSent.getTime()
-            
+
             console.log(`[Mensagem ${msg.id}] intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
-            
+
             if (timeSinceMsgSent >= msgInterval) {
-              // Enviar esta mensagem personalizada
               const customMessage = msg.message_template
                 .replace(/\{nome\}/g, randomName)
                 .replace(/\{plano\}/g, randomPlan.title || randomPlan.name)
@@ -318,43 +317,29 @@ Deno.serve(async (req) => {
               const customResult = await customResponse.json()
 
               if (customResult.ok) {
-                // Atualizar APENAS o last_sent_at desta mensagem específica
                 await supabase
                   .from('engagement_messages')
                   .update({ last_sent_at: now.toISOString() })
                   .eq('id', msg.id)
-                
+
                 console.log(`[Mensagem Personalizada ${msg.id}] enviada com sucesso`)
-                results.push({ 
-                  bot_id: setting.bot_id, 
-                  type: 'custom_message',
-                  message_id: msg.id,
-                  status: 'sent'
-                })
+                results.push({ bot_id: setting.bot_id, type: 'custom_message', message_id: msg.id, status: 'sent' })
               } else {
                 console.error(`[Mensagem Personalizada ${msg.id}] erro:`, customResult)
-                results.push({ 
-                  bot_id: setting.bot_id, 
-                  type: 'custom_message',
-                  message_id: msg.id,
-                  status: 'error', 
-                  error: customResult.description 
-                })
+                results.push({ bot_id: setting.bot_id, type: 'custom_message', message_id: msg.id, status: 'error', error: customResult.description })
               }
             }
           }
-        }
 
-        // Pula a simulação padrão neste ciclo para evitar disparos duplicados.
-        console.log(`[Bot ${setting.bot_id}] Mensagens personalizadas ativas → simulação padrão IGNORADA neste ciclo`)
-        continue
+          // Pula a simulação padrão neste ciclo para evitar disparos duplicados.
+          console.log(`[Bot ${setting.bot_id}] Mensagens personalizadas ativas → simulação padrão IGNORADA neste ciclo`)
+          continue
+        }
 
         // =====================================================
         // SISTEMA 2: Simulação de Assinatura (mensagem padrão)
         // Só executa quando NÃO há mensagens personalizadas ativas.
         // =====================================================
-        }
-
         const timeSinceLastSent = now.getTime() - lastSent.getTime()
 
         console.log(`[Simulação Assinatura] Bot ${setting.bot_id}: intervalo=${setting.fake_engagement_interval_minutes}min, último envio=${setting.fake_engagement_last_sent || 'nunca'}, tempo desde=${Math.round(timeSinceLastSent/60000)}min`)
