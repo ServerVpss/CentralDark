@@ -1,12 +1,23 @@
+import { useState } from "react";
 import { Shield, RefreshCw } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useApiStatus } from "@/hooks/useApiStatus";
+import { useApiUsageHistory, type ApiUsagePeriod } from "@/hooks/useApiUsageHistory";
 import { cn } from "@/lib/utils";
+
+const PERIODS: { key: ApiUsagePeriod; label: string }[] = [
+  { key: "today", label: "Hoje" },
+  { key: "7d", label: "7d" },
+  { key: "15d", label: "15d" },
+  { key: "30d", label: "30d" },
+];
 
 export function ApiStatusCard() {
   const { data, loading, error, refresh } = useApiStatus();
+  const [period, setPeriod] = useState<ApiUsagePeriod>("today");
+  const { data: history, isLoading: historyLoading } = useApiUsageHistory(period);
 
   if (loading) {
     return (
@@ -39,6 +50,14 @@ export function ApiStatusCard() {
   const isCritical = usagePercent >= 95;
   const isHigh = usagePercent >= 80;
 
+  // Valor exibido conforme filtro
+  const displayValue = period === "today"
+    ? data.consumo_hoje
+    : history?.total ?? 0;
+  const displayLabel = period === "today"
+    ? `${data.consumo_hoje}/${data.total_diario}`
+    : `${displayValue.toLocaleString("pt-BR")} consultas`;
+
   return (
     <div className={cn(
       "rounded-xl border bg-card p-4 space-y-2",
@@ -53,23 +72,48 @@ export function ApiStatusCard() {
           {data.ativo ? "Online" : "Offline"}
         </span>
       </div>
+
+      {/* Filtros de período */}
+      <div className="flex gap-1">
+        {PERIODS.map((p) => (
+          <button
+            key={p.key}
+            onClick={() => setPeriod(p.key)}
+            className={cn(
+              "flex-1 text-[10px] font-medium px-1.5 py-1 rounded-md transition-colors",
+              period === p.key
+                ? "bg-primary/15 text-primary"
+                : "bg-muted/30 text-muted-foreground hover:bg-muted/50"
+            )}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
-          <span className="text-muted-foreground">{data.consumo_hoje}/{data.total_diario}</span>
-          <span className={cn(
-            "font-medium tabular-nums",
-            isCritical ? "text-destructive" : isHigh ? "text-amber-500" : "text-foreground"
-          )}>
-            {usagePercent}%
+          <span className="text-muted-foreground truncate">
+            {historyLoading && period !== "today" ? "..." : displayLabel}
           </span>
-        </div>
-        <Progress
-          value={usagePercent}
-          className={cn(
-            "h-1.5",
-            isCritical ? "[&>div]:bg-destructive" : isHigh ? "[&>div]:bg-amber-500" : "[&>div]:bg-emerald-500"
+          {period === "today" && (
+            <span className={cn(
+              "font-medium tabular-nums",
+              isCritical ? "text-destructive" : isHigh ? "text-amber-500" : "text-foreground"
+            )}>
+              {usagePercent}%
+            </span>
           )}
-        />
+        </div>
+        {period === "today" && (
+          <Progress
+            value={usagePercent}
+            className={cn(
+              "h-1.5",
+              isCritical ? "[&>div]:bg-destructive" : isHigh ? "[&>div]:bg-amber-500" : "[&>div]:bg-emerald-500"
+            )}
+          />
+        )}
       </div>
     </div>
   );
