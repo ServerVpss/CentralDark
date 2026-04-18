@@ -64,12 +64,12 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
             </div>
             <div>
               <h3 className="text-lg font-bold text-foreground">
-                {reached ? "🎉 Parabéns! Você já está ganhando dinheiro" : "🎯 Quanto falta pra você começar a ganhar"}
+                {reached ? "🎉 Parabéns! Você já está no lucro" : "🎯 Quanto falta pra você começar a ganhar"}
               </h3>
               <p className="text-sm text-muted-foreground">
                 {reached
-                  ? `Você já pagou as contas do mês e ainda sobrou R$ ${surplus.toFixed(2)} no seu bolso 💰`
-                  : `Faltam R$ ${remaining.toFixed(2)} pra pagar as contas do mês. Depois disso, tudo vira lucro pra você`}
+                  ? `Pagou as contas do mês e o resto é tudo seu`
+                  : `Faltam R$ ${remaining.toFixed(2)} pra pagar as contas do mês`}
               </p>
             </div>
           </div>
@@ -83,6 +83,24 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
             </p>
           </div>
         </div>
+
+        {/* DESTAQUE GIGANTE DO LUCRO */}
+        {reached && (
+          <div className="relative rounded-xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-transparent p-6 text-center overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,hsl(142_76%_45%/0.15),transparent_70%)]" />
+            <div className="relative">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400/80 mb-2">
+                💰 Seu lucro até agora
+              </p>
+              <p className="text-5xl md:text-6xl font-black tabular-nums bg-gradient-to-br from-emerald-300 via-emerald-400 to-green-500 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(16,185,129,0.5)]">
+                R$ {surplus.toFixed(2)}
+              </p>
+              <p className="text-sm text-emerald-300/70 mt-2">
+                já está no seu bolso 🚀
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Barra de progresso */}
         <div className="space-y-2">
