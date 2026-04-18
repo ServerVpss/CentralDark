@@ -78,9 +78,19 @@ export function PixCharts({ chartData, isLoading }: PixChartsProps) {
 
       {/* Transactions Count Chart */}
       <Card className="p-4 border-border/50 bg-card/50 backdrop-blur">
-        <div className="mb-4">
-          <h3 className="font-semibold">Transações por Dia</h3>
-          <p className="text-sm text-muted-foreground">Volume de transações no período</p>
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">Transações por Dia</h3>
+            <p className="text-sm text-muted-foreground">Pagas vs. Pendentes/Expiradas</p>
+          </div>
+          <div className="flex gap-3 text-xs">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" /> Pagas
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-sm bg-rose-500" /> Não pagas
+            </span>
+          </div>
         </div>
         <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -102,13 +112,9 @@ export function PixCharts({ chartData, isLoading }: PixChartsProps) {
                   borderRadius: "8px",
                 }}
                 labelStyle={{ color: "hsl(var(--foreground))" }}
-                formatter={(value: number) => [value, "Transações"]}
               />
-              <Bar
-                dataKey="count"
-                fill="hsl(var(--primary))"
-                radius={[4, 4, 0, 0]}
-              />
+              <Bar dataKey="paidCount" name="Pagas" stackId="a" fill="hsl(142 76% 45%)" radius={[0, 0, 0, 0]} />
+              <Bar dataKey="pendingCount" name="Não pagas" stackId="a" fill="hsl(0 72% 55%)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

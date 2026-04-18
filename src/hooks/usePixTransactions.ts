@@ -33,6 +33,8 @@ export interface ChartDataPoint {
   date: string;
   revenue: number;
   count: number;
+  paidCount: number;
+  pendingCount: number;
 }
 
 export function usePixTransactions(period: "today" | "week" | "month") {
@@ -135,13 +137,18 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       // Generate chart data
       const days = eachDayOfInterval({ start: startDate, end: new Date() });
       const chartData: ChartDataPoint[] = days.map((day) => {
-        const dayTransactions = paidTransactions.filter(
-          (t) => format(new Date(t.created_at), "yyyy-MM-dd") === format(day, "yyyy-MM-dd")
+        const dayKey = format(day, "yyyy-MM-dd");
+        const dayAll = (transactions || []).filter(
+          (t) => format(new Date(t.created_at), "yyyy-MM-dd") === dayKey
         );
+        const dayPaid = dayAll.filter((t) => t.status === "paid");
+        const dayPending = dayAll.filter((t) => t.status !== "paid");
         return {
           date: format(day, period === "today" ? "HH:mm" : "EEE", { locale: ptBR }),
-          revenue: dayTransactions.reduce((sum, t) => sum + Number(t.amount), 0),
-          count: dayTransactions.length,
+          revenue: dayPaid.reduce((sum, t) => sum + Number(t.amount), 0),
+          count: dayPaid.length,
+          paidCount: dayPaid.length,
+          pendingCount: dayPending.length,
         };
       });
 
