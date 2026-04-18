@@ -2815,8 +2815,49 @@ function isEmptyResult(result: Record<string, unknown>): boolean {
   return false;
 }
 
+// Detecta se a mensagem indica erro de validação de input (não de provedor)
+function looksLikeValidationError(msg: string): boolean {
+  const m = (msg || '').toLowerCase();
+  return (
+    m.includes('valor não pode ser vazio') ||
+    m.includes('valor nao pode ser vazio') ||
+    m.includes('valor inválido') ||
+    m.includes('valor invalido') ||
+    m.includes('formato inválido') ||
+    m.includes('formato invalido') ||
+    m.includes('obrigatório') ||
+    m.includes('obrigatorio') ||
+    m.includes('campo vazio')
+  );
+}
+
+// Detecta erros de validação de input (CPF curto, valor vazio, etc.)
+function isValidationError(result: Record<string, unknown>): { isError: boolean; message: string } {
+  const meta = result.meta as Record<string, unknown> | undefined;
+  const metaStatus = String(meta?.status || '').toLowerCase();
+  if (metaStatus === 'validation_error' || metaStatus === 'invalid_input') {
+    const msg = typeof result.error === 'string' ? result.error : String((result.dados as any)?.message || 'Valor inválido');
+    return { isError: true, message: msg };
+  }
+  const rootError = typeof result.error === 'string' ? result.error.trim() : '';
+  if (rootError && looksLikeValidationError(rootError)) {
+    return { isError: true, message: rootError };
+  }
+  const dados = (result.dados || result.data) as Record<string, unknown> | undefined;
+  const dMsg = String(dados?.message || dados?.mensagem || '');
+  if (dMsg && looksLikeValidationError(dMsg)) {
+    return { isError: true, message: dMsg };
+  }
+  return { isError: false, message: '' };
+}
+
 // Detecta se o provedor retornou um erro dentro dos dados (ex: limite expirado, erro interno)
 function isProviderError(result: Record<string, unknown>): { isError: boolean; message: string } {
+  // Não classificar erros de validação como erro de provedor
+  if (isValidationError(result).isError) {
+    return { isError: false, message: '' };
+  }
+
   const rootError = typeof result.error === 'string' ? result.error.trim() : '';
   if (rootError) {
     return { isError: true, message: rootError };
