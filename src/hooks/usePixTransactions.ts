@@ -33,6 +33,8 @@ export interface ChartDataPoint {
   date: string;
   revenue: number;
   count: number;
+  paidCount: number;
+  pendingCount: number;
 }
 
 export function usePixTransactions(period: "today" | "week" | "month") {
