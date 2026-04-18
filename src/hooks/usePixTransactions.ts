@@ -154,10 +154,13 @@ export function usePixTransactions(period: "today" | "week" | "month") {
         };
       });
 
+      const totalGenerated = (transactions || []).length;
+      const conversionRate = totalGenerated > 0 ? (paidTransactions.length / totalGenerated) * 100 : 0;
+
       const summary: PixSummary = {
         totalRevenue,
         totalProfit,
-        transactionCount: (transactions || []).length,
+        transactionCount: totalGenerated,
         paidCount: paidTransactions.length,
         pendingCount: pendingTransactions.length,
         averageValue: paidTransactions.length > 0 ? totalRevenue / paidTransactions.length : 0,
@@ -166,6 +169,7 @@ export function usePixTransactions(period: "today" | "week" | "month") {
         monthlyFixedCost,
         proratedCost,
         periodDays,
+        conversionRate,
       };
 
       return {
