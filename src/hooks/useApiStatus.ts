@@ -20,19 +20,28 @@ export function useApiStatus() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchStatus = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
+    const tryOnce = async () => {
       const { data: result, error: fnError } = await supabase.functions.invoke("api-status");
-
       if (fnError) throw fnError;
-
-      if (result?.success && result?.data) {
-        setData(result.data);
-      } else {
-        setError(result?.error || "Erro ao obter status da API");
+      if (!result?.success || !result?.data) {
+        throw new Error(result?.error || "Erro ao obter status da API");
       }
+      return result.data as ApiStatusData;
+    };
+
+    try {
+      let result: ApiStatusData;
+      try {
+        result = await tryOnce();
+      } catch {
+        // Retry once after small delay (transient network/cold start)
+        await new Promise((r) => setTimeout(r, 800));
+        result = await tryOnce();
+      }
+      setData(result);
     } catch (err) {
       console.error("API status fetch error:", err);
       setError(err instanceof Error ? err.message : "Erro desconhecido");
@@ -43,7 +52,6 @@ export function useApiStatus() {
 
   useEffect(() => {
     fetchStatus();
-    // Refresh every 5 minutes
     const interval = setInterval(fetchStatus, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, [fetchStatus]);
