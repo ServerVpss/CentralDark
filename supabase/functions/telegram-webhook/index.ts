@@ -7963,6 +7963,29 @@ class BotHandler {
         await sendMessage(this.token, chatId, warningText, undefined, undefined, "HTML");
       }
 
+      // Detectar erro de validação de input (não de provedor)
+      const validationErr = isValidationError(result);
+      if (validationErr.isError) {
+        if (processingMsg.ok && processingMsg.result) {
+          const msgResult = processingMsg.result as { message_id: number };
+          try { await deleteMessage(this.token, chatId, msgResult.message_id); } catch (_e) { /* ignore */ }
+        }
+        const moduleLabel = queryTypeLabels[queryType] || queryType;
+        const exMap: Record<string, string> = {
+          cpf: '12345678900', cnpj: '12345678000190', placa: 'ABC1234', telefone: '11987654321',
+          nome: 'João Silva', pis: '12345678900', rg: '123456789',
+        };
+        const example = exMap[queryType] || 'valor válido';
+        const msg = `⚠️ <b>Valor inválido para ${escapeHtmlGlobal(moduleLabel)}</b>\n\n` +
+          `<i>${escapeHtmlGlobal(validationErr.message)}</i>\n\n` +
+          `💡 Exemplo: <code>${escapeHtmlGlobal(example)}</code>`;
+        await sendMessage(this.token, chatId, msg, keyboard([
+          btn("🔍 Tentar Novamente", `query:${queryType}`, "success", EMOJI.SEARCH),
+          btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME),
+        ]));
+        return;
+      }
+
       // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
       const providerErr = isProviderError(result);
       if (providerErr.isError) {
