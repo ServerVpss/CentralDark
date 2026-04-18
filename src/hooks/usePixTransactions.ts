@@ -107,9 +107,9 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       const totalRevenue = paidTransactions.reduce((sum, t) => sum + Number(t.amount), 0);
       const previousRevenue = (previousTransactions || []).reduce((sum, t) => sum + Number(t.amount), 0);
 
-      // Assuming a 3% markup for profit calculation (you can adjust this)
-      const markupPercentage = 0.03;
-      const totalProfit = totalRevenue * (1 - markupPercentage);
+      // Custo operacional estimado de 3% sobre a receita
+      const operationalCostRate = 0.03;
+      const totalProfit = totalRevenue * (1 - operationalCostRate);
       const profitMargin = totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100) : 0;
 
       const previousPeriodComparison = previousRevenue > 0
