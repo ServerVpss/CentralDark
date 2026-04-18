@@ -121,9 +121,9 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       const totalRevenue = paidTransactions.reduce((sum, t) => sum + Number(t.amount), 0);
       const previousRevenue = (previousTransactions || []).reduce((sum, t) => sum + Number(t.amount), 0);
 
-      // Rateio do custo fixo mensal proporcional ao período filtrado
+      // Custo fixo mensal cheio (independente do período selecionado)
       const periodDays = Math.max(1, differenceInCalendarDays(new Date(), startDate) + 1);
-      const proratedCost = monthlyFixedCost * (periodDays / 30);
+      const proratedCost = monthlyFixedCost;
 
       const totalProfit = totalRevenue - proratedCost;
       const profitMargin = totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100) : 0;
