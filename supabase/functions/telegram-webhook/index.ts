@@ -2815,8 +2815,49 @@ function isEmptyResult(result: Record<string, unknown>): boolean {
   return false;
 }
 
+// Detecta se a mensagem indica erro de validação de input (não de provedor)
+function looksLikeValidationError(msg: string): boolean {
+  const m = (msg || '').toLowerCase();
+  return (
+    m.includes('valor não pode ser vazio') ||
+    m.includes('valor nao pode ser vazio') ||
+    m.includes('valor inválido') ||
+    m.includes('valor invalido') ||
+    m.includes('formato inválido') ||
+    m.includes('formato invalido') ||
+    m.includes('obrigatório') ||
+    m.includes('obrigatorio') ||
+    m.includes('campo vazio')
+  );
+}
+
+// Detecta erros de validação de input (CPF curto, valor vazio, etc.)
+function isValidationError(result: Record<string, unknown>): { isError: boolean; message: string } {
+  const meta = result.meta as Record<string, unknown> | undefined;
+  const metaStatus = String(meta?.status || '').toLowerCase();
+  if (metaStatus === 'validation_error' || metaStatus === 'invalid_input') {
+    const msg = typeof result.error === 'string' ? result.error : String((result.dados as any)?.message || 'Valor inválido');
+    return { isError: true, message: msg };
+  }
+  const rootError = typeof result.error === 'string' ? result.error.trim() : '';
+  if (rootError && looksLikeValidationError(rootError)) {
+    return { isError: true, message: rootError };
+  }
+  const dados = (result.dados || result.data) as Record<string, unknown> | undefined;
+  const dMsg = String(dados?.message || dados?.mensagem || '');
+  if (dMsg && looksLikeValidationError(dMsg)) {
+    return { isError: true, message: dMsg };
+  }
+  return { isError: false, message: '' };
+}
+
 // Detecta se o provedor retornou um erro dentro dos dados (ex: limite expirado, erro interno)
 function isProviderError(result: Record<string, unknown>): { isError: boolean; message: string } {
+  // Não classificar erros de validação como erro de provedor
+  if (isValidationError(result).isError) {
+    return { isError: false, message: '' };
+  }
+
   const rootError = typeof result.error === 'string' ? result.error.trim() : '';
   if (rootError) {
     return { isError: true, message: rootError };
@@ -5992,6 +6033,25 @@ class BotHandler {
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, usedModule, queryInput, result, fromCache);
 
+      // Detectar erro de validação de input (não de provedor)
+      const validationErr = isValidationError(result);
+      if (validationErr.isError) {
+        const moduleLabel = queryTypeLabels[usedModule] || usedModule;
+        const exMap: Record<string, string> = {
+          cpf: '12345678900', cnpj: '12345678000190', placa: 'ABC1234', telefone: '11987654321',
+          nome: 'João Silva', pis: '12345678900', rg: '123456789',
+        };
+        const example = exMap[usedModule] || 'valor válido';
+        const msg = `⚠️ <b>Valor inválido para ${escapeHtmlGlobal(moduleLabel)}</b>\n\n` +
+          `<i>${escapeHtmlGlobal(validationErr.message)}</i>\n\n` +
+          `💡 Exemplo: <code>${escapeHtmlGlobal(example)}</code>`;
+        await sendMessage(this.token, chatId, msg, keyboard([
+          btn("🔍 Tentar Novamente", `query:${usedModule}`, "success", EMOJI.SEARCH),
+          btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME),
+        ]));
+        return;
+      }
+
       // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
       const providerErr = isProviderError(result);
       if (providerErr.isError) {
@@ -7297,16 +7357,38 @@ class BotHandler {
     // Check for query state
     const queryState = await this.getConversationState(telegramUserId, "query");
     if (queryState) {
-      const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
-      await this.clearConversationState(telegramUserId, "query");
-      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-        console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
+      const trimmed = (text || "").trim();
+
+      // [TTL] Descartar estado órfão com mais de 5 minutos
+      const createdAt = (queryState as any).created_at ? new Date((queryState as any).created_at).getTime() : 0;
+      const ageMs = createdAt ? Date.now() - createdAt : 0;
+      if (createdAt && ageMs > 5 * 60 * 1000) {
+        await this.clearConversationState(telegramUserId, "query");
+        // segue fluxo normal
+      } else if (trimmed.startsWith("/")) {
+        // [Cmd cancela estado] qualquer comando cancela o estado pendente
+        await this.clearConversationState(telegramUserId, "query");
+        // segue para o roteador de comandos
+      } else if (!trimmed || /^[\s\W_]+$/.test(trimmed)) {
+        // [Input vazio/símbolos] mantém o estado e pede valor de novo
+        const { queryType } = queryState.state_data as { queryType: string };
+        const label = queryTypeLabels[queryType] || queryType;
+        await sendMessage(this.token, chatId,
+          `⚠️ Você precisa digitar um valor para <b>${escapeHtmlGlobal(label)}</b>.\n\nEnvie /cancelar para sair.`,
+          keyboard([btn("❌ Cancelar", "menu:main", undefined, EMOJI.HOME)]));
+        return;
+      } else {
+        const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
+        await this.clearConversationState(telegramUserId, "query");
+        if (!await isQueryTypeEnabled(queryType, this.supabase)) {
+          console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
+          return;
+        }
+        const userFirstName = message.from?.first_name || 'usuário';
+        const userUsername = message.from?.username;
+        await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName, userUsername);
         return;
       }
-      const userFirstName = message.from?.first_name || 'usuário';
-      const userUsername = message.from?.username;
-      await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName, userUsername);
-      return;
     }
 
     // Check for admin conversation states
@@ -7879,6 +7961,29 @@ class BotHandler {
       if (queryWarnings?.length > 0) {
         const warningText = `ℹ️ <i>${queryWarnings.map(w => escapeHtmlGlobal(w)).join('\n')}</i>`;
         await sendMessage(this.token, chatId, warningText, undefined, undefined, "HTML");
+      }
+
+      // Detectar erro de validação de input (não de provedor)
+      const validationErr = isValidationError(result);
+      if (validationErr.isError) {
+        if (processingMsg.ok && processingMsg.result) {
+          const msgResult = processingMsg.result as { message_id: number };
+          try { await deleteMessage(this.token, chatId, msgResult.message_id); } catch (_e) { /* ignore */ }
+        }
+        const moduleLabel = queryTypeLabels[queryType] || queryType;
+        const exMap: Record<string, string> = {
+          cpf: '12345678900', cnpj: '12345678000190', placa: 'ABC1234', telefone: '11987654321',
+          nome: 'João Silva', pis: '12345678900', rg: '123456789',
+        };
+        const example = exMap[queryType] || 'valor válido';
+        const msg = `⚠️ <b>Valor inválido para ${escapeHtmlGlobal(moduleLabel)}</b>\n\n` +
+          `<i>${escapeHtmlGlobal(validationErr.message)}</i>\n\n` +
+          `💡 Exemplo: <code>${escapeHtmlGlobal(example)}</code>`;
+        await sendMessage(this.token, chatId, msg, keyboard([
+          btn("🔍 Tentar Novamente", `query:${queryType}`, "success", EMOJI.SEARCH),
+          btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME),
+        ]));
+        return;
       }
 
       // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
