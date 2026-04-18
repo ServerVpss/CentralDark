@@ -345,25 +345,31 @@ Deno.serve(async (req) => {
           }
         }
 
+        // Pula a simulação padrão neste ciclo para evitar disparos duplicados.
+        console.log(`[Bot ${setting.bot_id}] Mensagens personalizadas ativas → simulação padrão IGNORADA neste ciclo`)
+        continue
+
         // =====================================================
         // SISTEMA 2: Simulação de Assinatura (mensagem padrão)
-        // Usa fake_engagement_interval_minutes e fake_engagement_last_sent
+        // Só executa quando NÃO há mensagens personalizadas ativas.
         // =====================================================
+        }
+
         const timeSinceLastSent = now.getTime() - lastSent.getTime()
-        
+
         console.log(`[Simulação Assinatura] Bot ${setting.bot_id}: intervalo=${setting.fake_engagement_interval_minutes}min, último envio=${setting.fake_engagement_last_sent || 'nunca'}, tempo desde=${Math.round(timeSinceLastSent/60000)}min`)
-        
+
         if (timeSinceLastSent < globalIntervalMs) {
           console.log(`[Simulação Assinatura] Bot ${setting.bot_id}: aguardando intervalo (faltam ${Math.round((globalIntervalMs - timeSinceLastSent) / 60000)} min)`)
-          results.push({ 
-            bot_id: setting.bot_id, 
+          results.push({
+            bot_id: setting.bot_id,
             type: 'subscription_simulation',
-            status: 'waiting', 
-            minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000) 
+            status: 'waiting',
+            minutes_left: Math.round((globalIntervalMs - timeSinceLastSent) / 60000)
           })
           continue
         }
-        
+
         console.log(`[Simulação Assinatura] Bot ${setting.bot_id}: enviando mensagem de simulação`)
         // messageTemplate já é DEFAULT_MESSAGE_TEMPLATE - continua o fluxo normal abaixo
       }
