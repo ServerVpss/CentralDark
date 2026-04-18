@@ -499,6 +499,7 @@ export type Database = {
           id: string
           is_sandbox: boolean | null
           notification_enabled: boolean | null
+          operational_cost_rate: number
           pix_key: string | null
           updated_at: string
           user_id: string
@@ -511,6 +512,7 @@ export type Database = {
           id?: string
           is_sandbox?: boolean | null
           notification_enabled?: boolean | null
+          operational_cost_rate?: number
           pix_key?: string | null
           updated_at?: string
           user_id: string
@@ -523,6 +525,7 @@ export type Database = {
           id?: string
           is_sandbox?: boolean | null
           notification_enabled?: boolean | null
+          operational_cost_rate?: number
           pix_key?: string | null
           updated_at?: string
           user_id?: string

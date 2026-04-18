@@ -66,7 +66,7 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
     {
       title: "Receita Bruta",
       value: `R$ ${(summary?.totalRevenue || 0).toFixed(2)}`,
-      change: `Custo: R$ ${((summary?.totalRevenue || 0) * 0.03).toFixed(2)}`,
+      change: `Custo: R$ ${((summary?.totalRevenue || 0) * (summary?.operationalCostRate ?? 0.03)).toFixed(2)}`,
       changeType: "neutral" as const,
       icon: DollarSign,
       gradient: "gold" as const,
@@ -82,7 +82,7 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
     {
       title: "Margem de Lucro",
       value: `${(summary?.profitMargin || 0).toFixed(1)}%`,
-      change: "Custo operacional: 3%",
+      change: `Custo operacional: ${((summary?.operationalCostRate ?? 0.03) * 100).toFixed(1)}%`,
       changeType: "neutral" as const,
       icon: Percent,
       gradient: "purple" as const,

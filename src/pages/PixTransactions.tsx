@@ -3,6 +3,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PixTransactionsTable } from "@/components/pix/PixTransactionsTable";
 import { PixFinancialSummary } from "@/components/pix/PixFinancialSummary";
 import { PixCharts } from "@/components/pix/PixCharts";
+import { OperationalCostConfig } from "@/components/pix/OperationalCostConfig";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePixTransactions } from "@/hooks/usePixTransactions";
 import { TrendingUp } from "lucide-react";
@@ -49,6 +50,9 @@ export default function PixTransactions() {
 
         {/* Summary Cards */}
         <PixFinancialSummary summary={summary} isLoading={isLoading} />
+
+        {/* Operational Cost Config */}
+        <OperationalCostConfig />
 
         {/* Charts */}
         <PixCharts chartData={chartData} isLoading={isLoading} />
