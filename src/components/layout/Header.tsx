@@ -70,18 +70,18 @@ export function Header({ className }: HeaderProps) {
 
   return (
     <header className={cn(
-      "sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6",
+      "sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border/40 glass px-6",
       className
     )}>
       {/* Breadcrumb */}
-      <div className="flex items-center gap-1.5 text-sm">
+      <div className="flex items-center gap-2 text-sm">
         {route.section && (
           <>
-            <span className="text-muted-foreground">{route.section}</span>
-            <span className="text-muted-foreground/40">/</span>
+            <span className="text-muted-foreground/70 font-medium">{route.section}</span>
+            <span className="text-muted-foreground/30">/</span>
           </>
         )}
-        <span className="font-medium text-foreground">{route.title}</span>
+        <span className="font-semibold text-foreground tracking-tight">{route.title}</span>
       </div>
 
       {/* Right side */}
@@ -106,7 +106,7 @@ export function Header({ className }: HeaderProps) {
             <Button variant="ghost" size="icon" className="relative h-9 w-9">
               <Bell className="h-4 w-4 text-muted-foreground" />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 h-3.5 w-3.5 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">
+                <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center shadow-[0_0_10px_hsl(var(--primary)/0.6)] animate-pulse-glow">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
@@ -166,8 +166,8 @@ export function Header({ className }: HeaderProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-9 px-2 gap-2 rounded-lg">
-              <div className="h-7 w-7 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-                <User className="h-3.5 w-3.5 text-primary" />
+              <div className="relative h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-lg shadow-primary/30">
+                <User className="h-4 w-4 text-primary-foreground" />
               </div>
               <div className="hidden lg:flex flex-col items-start">
                 <span className="text-xs font-medium text-foreground leading-tight">
