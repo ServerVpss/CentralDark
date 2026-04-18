@@ -24,6 +24,7 @@ export interface PixSummary {
   averageValue: number;
   profitMargin: number;
   previousPeriodComparison: number;
+  operationalCostRate: number;
 }
 
 export interface ChartDataPoint {
