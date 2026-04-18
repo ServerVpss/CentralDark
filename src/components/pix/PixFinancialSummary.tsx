@@ -54,19 +54,19 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
 
   const cards = [
     {
-      title: "Lucro Total",
+      title: `Lucro Líquido (${summary?.periodDays ?? 0}d)`,
       value: `R$ ${(summary?.totalProfit || 0).toFixed(2)}`,
-      change: summary?.previousPeriodComparison !== undefined
-        ? `${summary.previousPeriodComparison >= 0 ? "+" : ""}${summary.previousPeriodComparison.toFixed(1)}% vs período anterior`
-        : null,
-      changeType: (summary?.previousPeriodComparison || 0) >= 0 ? "positive" : "negative",
+      change: `Receita R$ ${(summary?.totalRevenue || 0).toFixed(2)} − Custo R$ ${(summary?.proratedCost ?? 0).toFixed(2)}`,
+      changeType: (summary?.totalProfit || 0) >= 0 ? "positive" : "negative",
       icon: TrendingUp,
       gradient: "green" as const,
     },
     {
       title: "Receita Bruta",
       value: `R$ ${(summary?.totalRevenue || 0).toFixed(2)}`,
-      change: `Custo (${summary?.periodDays ?? 0}d): R$ ${(summary?.proratedCost ?? 0).toFixed(2)}`,
+      change: summary?.previousPeriodComparison !== undefined
+        ? `${summary.previousPeriodComparison >= 0 ? "+" : ""}${summary.previousPeriodComparison.toFixed(1)}% vs período anterior`
+        : null,
       changeType: "neutral" as const,
       icon: DollarSign,
       gradient: "gold" as const,
