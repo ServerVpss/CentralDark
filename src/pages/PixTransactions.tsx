@@ -4,6 +4,7 @@ import { PixTransactionsTable } from "@/components/pix/PixTransactionsTable";
 import { PixFinancialSummary } from "@/components/pix/PixFinancialSummary";
 import { PixCharts } from "@/components/pix/PixCharts";
 import { OperationalCostConfig } from "@/components/pix/OperationalCostConfig";
+import { BreakEvenGoal } from "@/components/pix/BreakEvenGoal";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePixTransactions } from "@/hooks/usePixTransactions";
 import { TrendingUp } from "lucide-react";
@@ -47,6 +48,9 @@ export default function PixTransactions() {
             </TabsList>
           </Tabs>
         </div>
+
+        {/* Break-even Goal */}
+        <BreakEvenGoal summary={summary} isLoading={isLoading} />
 
         {/* Summary Cards */}
         <PixFinancialSummary summary={summary} isLoading={isLoading} />
