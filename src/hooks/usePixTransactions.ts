@@ -82,6 +82,7 @@ export function usePixTransactions(period: "today" | "week" | "month") {
             monthlyFixedCost: 500,
             proratedCost: 0,
             periodDays: 0,
+            conversionRate: 0,
           } as PixSummary,
           chartData: [] as ChartDataPoint[],
         };
