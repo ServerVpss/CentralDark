@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, DollarSign, Receipt, Percent } from "lucide-react";
+import { TrendingUp, DollarSign, Receipt, Percent, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PixSummary } from "@/hooks/usePixTransactions";
 
@@ -38,8 +38,8 @@ const gradientStyles = {
 export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[...Array(4)].map((_, i) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {[...Array(5)].map((_, i) => (
           <div key={i} className="rounded-2xl border border-border/50 p-5" style={{
             background: "linear-gradient(145deg, hsl(220 20% 8%), hsl(220 20% 5%))",
           }}>
@@ -80,6 +80,14 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
       gradient: "cyan" as const,
     },
     {
+      title: "Taxa de Conversão",
+      value: `${(summary?.conversionRate || 0).toFixed(1)}%`,
+      change: `${summary?.paidCount ?? 0} pagos de ${summary?.transactionCount ?? 0} gerados`,
+      changeType: "neutral" as const,
+      icon: Target,
+      gradient: "cyan" as const,
+    },
+    {
       title: "Margem de Lucro",
       value: `${(summary?.profitMargin || 0).toFixed(1)}%`,
       change: `Custo fixo: R$ ${(summary?.monthlyFixedCost ?? 500).toFixed(2)}/mês`,
@@ -90,7 +98,7 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
       {cards.map((card, index) => {
         const style = gradientStyles[card.gradient];
         const Icon = card.icon;
