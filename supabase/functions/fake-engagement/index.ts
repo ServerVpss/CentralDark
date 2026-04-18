@@ -267,7 +267,9 @@ Deno.serve(async (req) => {
           messageTemplate = specificMsg.message_template
         }
       }
-      // Comportamento padrão do cron: processar AMBOS os sistemas independentemente
+      // Comportamento padrão do cron: priorizar mensagens personalizadas.
+      // Se houver QUALQUER mensagem personalizada ativa, NÃO envia a simulação padrão
+      // (evita disparos duplicados no mesmo intervalo).
       else {
         // =====================================================
         // SISTEMA 1: Mensagens de Engajamento Personalizadas
@@ -279,7 +281,9 @@ Deno.serve(async (req) => {
           .eq('bot_id', setting.bot_id)
           .eq('is_active', true)
 
-        if (customMessages && customMessages.length > 0) {
+        const hasActiveCustomMessages = !!(customMessages && customMessages.length > 0)
+
+        if (hasActiveCustomMessages) {
           for (const msg of customMessages) {
             const msgInterval = (msg.interval_minutes || 30) * 60 * 1000
             const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
