@@ -74,10 +74,19 @@ export function usePixTransactions(period: "today" | "week" | "month") {
             averageValue: 0,
             profitMargin: 0,
             previousPeriodComparison: 0,
-          },
-          chartData: [],
+            operationalCostRate: 0.03,
+          } as PixSummary,
+          chartData: [] as ChartDataPoint[],
         };
       }
+
+      // Buscar taxa de custo operacional configurada (fallback 3%)
+      const { data: settingsRow } = await supabase
+        .from("payment_gateway_settings")
+        .select("operational_cost_rate" as any)
+        .eq("user_id", user.id)
+        .maybeSingle();
+      const operationalCostRate = Number((settingsRow as any)?.operational_cost_rate ?? 0.03);
 
       const startDate = getStartDate();
       const { previousStart, previousEnd } = getPreviousPeriodDates();
@@ -108,8 +117,6 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       const totalRevenue = paidTransactions.reduce((sum, t) => sum + Number(t.amount), 0);
       const previousRevenue = (previousTransactions || []).reduce((sum, t) => sum + Number(t.amount), 0);
 
-      // Custo operacional estimado de 3% sobre a receita
-      const operationalCostRate = 0.03;
       const totalProfit = totalRevenue * (1 - operationalCostRate);
       const profitMargin = totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100) : 0;
 
@@ -139,6 +146,7 @@ export function usePixTransactions(period: "today" | "week" | "month") {
         averageValue: paidTransactions.length > 0 ? totalRevenue / paidTransactions.length : 0,
         profitMargin,
         previousPeriodComparison,
+        operationalCostRate,
       };
 
       return {
