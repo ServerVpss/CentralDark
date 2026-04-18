@@ -64,22 +64,22 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
             </div>
             <div>
               <h3 className="text-lg font-bold text-foreground">
-                {reached ? "🎉 Meta batida! Já está no lucro" : "🎯 Meta para começar a lucrar"}
+                {reached ? "🎉 Parabéns! Você já está ganhando dinheiro" : "🎯 Quanto falta pra você começar a ganhar"}
               </h3>
               <p className="text-sm text-muted-foreground">
                 {reached
-                  ? `Você superou o custo fixo em R$ ${surplus.toFixed(2)}`
-                  : `Faltam R$ ${remaining.toFixed(2)} para cobrir o custo fixo mensal`}
+                  ? `Você já pagou as contas do mês e ainda sobrou R$ ${surplus.toFixed(2)} no seu bolso 💰`
+                  : `Faltam R$ ${remaining.toFixed(2)} pra pagar as contas do mês. Depois disso, tudo vira lucro pra você`}
               </p>
             </div>
           </div>
           <div className="text-right shrink-0">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider">Progresso</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Você já fez</p>
             <p className={cn(
               "text-2xl font-bold tabular-nums",
               reached ? "text-emerald-400" : "text-amber-400"
             )}>
-              {progress.toFixed(1)}%
+              {progress.toFixed(0)}%
             </p>
           </div>
         </div>
@@ -107,16 +107,16 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
 
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">
-              R$ 0,00
+              Começou em R$ 0
             </span>
             <span className={cn(
               "font-bold tabular-nums",
               reached ? "text-emerald-400" : "text-foreground"
             )}>
-              R$ {revenue.toFixed(2)} arrecadado
+              Você recebeu R$ {revenue.toFixed(2)}
             </span>
             <span className="text-muted-foreground">
-              Meta: R$ {goal.toFixed(2)}
+              Precisa: R$ {goal.toFixed(2)}
             </span>
           </div>
         </div>
@@ -135,8 +135,8 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
           )}
           <p>
             {reached
-              ? `Cada real arrecadado a partir de agora é lucro líquido. Continue assim!`
-              : `Você precisa arrecadar mais R$ ${remaining.toFixed(2)} este mês para cobrir o custo operacional fixo de R$ ${goal.toFixed(2)}.`}
+              ? `Tudo que você receber agora é lucro puro no seu bolso. Bora vender mais! 🚀`
+              : `Você precisa receber mais R$ ${remaining.toFixed(2)} esse mês pra pagar o que gasta com o sistema (R$ ${goal.toFixed(2)}/mês). Depois disso, o resto é tudo seu.`}
           </p>
         </div>
       </div>
