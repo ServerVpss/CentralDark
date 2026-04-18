@@ -32,22 +32,30 @@ export function useApiStatus() {
       return result.data as ApiStatusData;
     };
 
-    try {
-      let result: ApiStatusData;
+    // Up to 3 attempts with backoff (800ms, 2000ms) to avoid false "offline"
+    const delays = [0, 800, 2000];
+    let lastErr: unknown = null;
+    for (const delay of delays) {
+      if (delay) await new Promise((r) => setTimeout(r, delay));
       try {
-        result = await tryOnce();
-      } catch {
-        // Retry once after small delay (transient network/cold start)
-        await new Promise((r) => setTimeout(r, 800));
-        result = await tryOnce();
+        const result = await tryOnce();
+        setData(result);
+        setError(null);
+        setLoading(false);
+        return;
+      } catch (err) {
+        lastErr = err;
       }
-      setData(result);
-    } catch (err) {
-      console.error("API status fetch error:", err);
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setLoading(false);
     }
+    console.error("API status fetch error:", lastErr);
+    // Keep previous data visible; only set error if we never had data
+    setData((prev) => {
+      if (!prev) {
+        setError(lastErr instanceof Error ? lastErr.message : "Erro desconhecido");
+      }
+      return prev;
+    });
+    setLoading(false);
   }, []);
 
   useEffect(() => {
