@@ -54,9 +54,9 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
 
   const cards = [
     {
-      title: `Lucro Líquido (${summary?.periodDays ?? 0}d)`,
+      title: "Lucro Líquido",
       value: `R$ ${(summary?.totalProfit || 0).toFixed(2)}`,
-      change: `Receita R$ ${(summary?.totalRevenue || 0).toFixed(2)} − Custo R$ ${(summary?.proratedCost ?? 0).toFixed(2)}`,
+      change: `Receita R$ ${(summary?.totalRevenue || 0).toFixed(2)} − Custo fixo R$ ${(summary?.proratedCost ?? 0).toFixed(2)}`,
       changeType: (summary?.totalProfit || 0) >= 0 ? "positive" : "negative",
       icon: TrendingUp,
       gradient: "green" as const,
