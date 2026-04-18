@@ -7338,16 +7338,38 @@ class BotHandler {
     // Check for query state
     const queryState = await this.getConversationState(telegramUserId, "query");
     if (queryState) {
-      const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
-      await this.clearConversationState(telegramUserId, "query");
-      if (!await isQueryTypeEnabled(queryType, this.supabase)) {
-        console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
+      const trimmed = (text || "").trim();
+
+      // [TTL] Descartar estado órfão com mais de 5 minutos
+      const createdAt = (queryState as any).created_at ? new Date((queryState as any).created_at).getTime() : 0;
+      const ageMs = createdAt ? Date.now() - createdAt : 0;
+      if (createdAt && ageMs > 5 * 60 * 1000) {
+        await this.clearConversationState(telegramUserId, "query");
+        // segue fluxo normal
+      } else if (trimmed.startsWith("/")) {
+        // [Cmd cancela estado] qualquer comando cancela o estado pendente
+        await this.clearConversationState(telegramUserId, "query");
+        // segue para o roteador de comandos
+      } else if (!trimmed || /^[\s\W_]+$/.test(trimmed)) {
+        // [Input vazio/símbolos] mantém o estado e pede valor de novo
+        const { queryType } = queryState.state_data as { queryType: string };
+        const label = queryTypeLabels[queryType] || queryType;
+        await sendMessage(this.token, chatId,
+          `⚠️ Você precisa digitar um valor para <b>${escapeHtmlGlobal(label)}</b>.\n\nEnvie /cancelar para sair.`,
+          keyboard([btn("❌ Cancelar", "menu:main", undefined, EMOJI.HOME)]));
+        return;
+      } else {
+        const { queryType, estado } = queryState.state_data as { queryType: string; estado?: string };
+        await this.clearConversationState(telegramUserId, "query");
+        if (!await isQueryTypeEnabled(queryType, this.supabase)) {
+          console.log(`Stored query state blocked for disabled type "${queryType}". Ignoring silently.`);
+          return;
+        }
+        const userFirstName = message.from?.first_name || 'usuário';
+        const userUsername = message.from?.username;
+        await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName, userUsername);
         return;
       }
-      const userFirstName = message.from?.first_name || 'usuário';
-      const userUsername = message.from?.username;
-      await this.processQuery(chatId, telegramUserId, queryType, text, estado, userFirstName, userUsername);
-      return;
     }
 
     // Check for admin conversation states
