@@ -80,6 +80,14 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
       gradient: "cyan" as const,
     },
     {
+      title: "Taxa de Conversão",
+      value: `${(summary?.conversionRate || 0).toFixed(1)}%`,
+      change: `${summary?.paidCount ?? 0} pagos de ${summary?.transactionCount ?? 0} gerados`,
+      changeType: "neutral" as const,
+      icon: Target,
+      gradient: "cyan" as const,
+    },
+    {
       title: "Margem de Lucro",
       value: `${(summary?.profitMargin || 0).toFixed(1)}%`,
       change: `Custo fixo: R$ ${(summary?.monthlyFixedCost ?? 500).toFixed(2)}/mês`,
