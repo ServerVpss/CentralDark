@@ -23,13 +23,38 @@ export function useApiStatus() {
     setLoading(true);
     setError(null);
 
+    const SUPABASE_URL = "https://kagejpghnwdfymddwxuf.supabase.co";
+    const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE";
+
     const tryOnce = async () => {
-      const { data: result, error: fnError } = await supabase.functions.invoke("api-status");
-      if (fnError) throw fnError;
-      if (!result?.success || !result?.data) {
-        throw new Error(result?.error || "Erro ao obter status da API");
+      // Try SDK first
+      try {
+        const { data: result, error: fnError } = await supabase.functions.invoke("api-status");
+        if (fnError) throw fnError;
+        if (!result?.success || !result?.data) {
+          throw new Error(result?.error || "Erro ao obter status da API");
+        }
+        return result.data as ApiStatusData;
+      } catch (sdkErr) {
+        // Fallback: direct fetch (bypasses adblockers/CORS quirks on supabase-js)
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token || ANON_KEY;
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/api-status`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "apikey": ANON_KEY,
+          },
+          body: "{}",
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const result = await res.json();
+        if (!result?.success || !result?.data) {
+          throw new Error(result?.error || "Erro ao obter status da API");
+        }
+        return result.data as ApiStatusData;
       }
-      return result.data as ApiStatusData;
     };
 
     // Up to 3 attempts with backoff (800ms, 2000ms) to avoid false "offline"
