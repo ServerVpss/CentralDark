@@ -6033,6 +6033,25 @@ class BotHandler {
       // Log query - passa fromCache para evitar duplicação de créditos
       await this.logQuery(telegramUserId, usedModule, queryInput, result, fromCache);
 
+      // Detectar erro de validação de input (não de provedor)
+      const validationErr = isValidationError(result);
+      if (validationErr.isError) {
+        const moduleLabel = queryTypeLabels[usedModule] || usedModule;
+        const exMap: Record<string, string> = {
+          cpf: '12345678900', cnpj: '12345678000190', placa: 'ABC1234', telefone: '11987654321',
+          nome: 'João Silva', pis: '12345678900', rg: '123456789',
+        };
+        const example = exMap[usedModule] || 'valor válido';
+        const msg = `⚠️ <b>Valor inválido para ${escapeHtmlGlobal(moduleLabel)}</b>\n\n` +
+          `<i>${escapeHtmlGlobal(validationErr.message)}</i>\n\n` +
+          `💡 Exemplo: <code>${escapeHtmlGlobal(example)}</code>`;
+        await sendMessage(this.token, chatId, msg, keyboard([
+          btn("🔍 Tentar Novamente", `query:${usedModule}`, "success", EMOJI.SEARCH),
+          btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME),
+        ]));
+        return;
+      }
+
       // Detectar erro do provedor (ex: limite expirado, módulo indisponível)
       const providerErr = isProviderError(result);
       if (providerErr.isError) {
