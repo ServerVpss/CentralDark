@@ -27,6 +27,7 @@ export interface PixSummary {
   monthlyFixedCost: number;
   proratedCost: number;
   periodDays: number;
+  conversionRate: number;
 }
 
 export interface ChartDataPoint {
