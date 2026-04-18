@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, DollarSign, Receipt, Percent } from "lucide-react";
+import { TrendingUp, DollarSign, Receipt, Percent, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PixSummary } from "@/hooks/usePixTransactions";
 
