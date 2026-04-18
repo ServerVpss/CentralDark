@@ -38,8 +38,8 @@ const gradientStyles = {
 export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[...Array(4)].map((_, i) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {[...Array(5)].map((_, i) => (
           <div key={i} className="rounded-2xl border border-border/50 p-5" style={{
             background: "linear-gradient(145deg, hsl(220 20% 8%), hsl(220 20% 5%))",
           }}>
