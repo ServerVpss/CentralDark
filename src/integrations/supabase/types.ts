@@ -498,6 +498,7 @@ export type Database = {
           gateway_type: string | null
           id: string
           is_sandbox: boolean | null
+          monthly_fixed_cost: number
           notification_enabled: boolean | null
           operational_cost_rate: number
           pix_key: string | null
@@ -511,6 +512,7 @@ export type Database = {
           gateway_type?: string | null
           id?: string
           is_sandbox?: boolean | null
+          monthly_fixed_cost?: number
           notification_enabled?: boolean | null
           operational_cost_rate?: number
           pix_key?: string | null
@@ -524,6 +526,7 @@ export type Database = {
           gateway_type?: string | null
           id?: string
           is_sandbox?: boolean | null
+          monthly_fixed_cost?: number
           notification_enabled?: boolean | null
           operational_cost_rate?: number
           pix_key?: string | null
