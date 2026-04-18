@@ -82,7 +82,7 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
     {
       title: "Margem de Lucro",
       value: `${(summary?.profitMargin || 0).toFixed(1)}%`,
-      change: "Markup configurado: 3%",
+      change: "Custo operacional: 3%",
       changeType: "neutral" as const,
       icon: Percent,
       gradient: "purple" as const,
