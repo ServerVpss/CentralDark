@@ -1431,43 +1431,64 @@ async function sendMessage(token: string, chatId: number, text: string, replyMar
 
 // Função para dividir texto em páginas
 function splitIntoPages(text: string, maxLength: number = 3800): string[] {
-  // Strip outer <pre> tags before splitting, then re-add per page
+  // Detectar bloco <pre> (pode estar no início OU no meio do texto, após header HTML)
+  // Caso 1: texto inteiro envolto em <pre>...</pre>
+  // Caso 2: header HTML + <pre>...</pre> (ex: "👤 <b>...</b>\n<pre>NOME => ...</pre>")
+  let header = '';
   let content = text;
   let wrapPre = false;
-  if (content.startsWith('<pre>') && content.endsWith('</pre>')) {
-    content = content.slice(5, -6);
+
+  const preStart = content.indexOf('<pre>');
+  const preEnd = content.lastIndexOf('</pre>');
+
+  if (preStart !== -1 && preEnd !== -1 && preEnd > preStart) {
+    // Tem bloco <pre>. Tudo antes do <pre> vira header (só na 1ª página);
+    // tudo dentro do <pre> é dividido e cada página é re-envolta em <pre>.
+    // Tudo depois do </pre> é descartado (geralmente vazio em consultas).
+    header = content.slice(0, preStart);
+    content = content.slice(preStart + 5, preEnd);
     wrapPre = true;
-    // Adjust maxLength to account for <pre></pre> tags (11 chars)
-    maxLength = maxLength - 11;
   }
+
+  // Reservar espaço para tags <pre></pre> (11 chars) e header (apenas 1ª página)
+  const overheadFirst = (wrapPre ? 11 : 0) + header.length;
+  const overheadRest = wrapPre ? 11 : 0;
 
   const pages: string[] = [];
   let remaining = content;
-  
+  let isFirst = true;
+
   while (remaining.length > 0) {
-    if (remaining.length <= maxLength) {
-      pages.push(wrapPre ? `<pre>${remaining}</pre>` : remaining);
+    const budget = maxLength - (isFirst ? overheadFirst : overheadRest);
+
+    if (remaining.length <= budget) {
+      const body = wrapPre ? `<pre>${remaining}</pre>` : remaining;
+      pages.push(isFirst ? header + body : body);
       break;
     }
-    
-    // Tentar quebrar em uma linha
-    let breakPoint = remaining.lastIndexOf('\n', maxLength);
-    if (breakPoint === -1 || breakPoint < maxLength / 2) {
-      breakPoint = remaining.lastIndexOf(' ', maxLength);
+
+    // Quebrar em linha (preferencial) ou espaço
+    let breakPoint = remaining.lastIndexOf('\n', budget);
+    if (breakPoint === -1 || breakPoint < budget / 2) {
+      breakPoint = remaining.lastIndexOf(' ', budget);
     }
-    if (breakPoint === -1 || breakPoint < maxLength / 2) {
-      breakPoint = maxLength;
+    if (breakPoint === -1 || breakPoint < budget / 2) {
+      breakPoint = budget;
     }
-    
+
     let pageContent = remaining.substring(0, breakPoint);
-    
-    // Sanitizar HTML: fechar tags abertas e remover tags de fechamento órfãs
-    pageContent = sanitizeHtmlPage(pageContent);
-    
-    pages.push(wrapPre ? `<pre>${pageContent}</pre>` : pageContent);
-    remaining = remaining.substring(breakPoint).trim();
+
+    // Se NÃO está envolto em <pre>, sanitizar tags HTML quebradas no corte
+    if (!wrapPre) {
+      pageContent = sanitizeHtmlPage(pageContent);
+    }
+
+    const body = wrapPre ? `<pre>${pageContent}</pre>` : pageContent;
+    pages.push(isFirst ? header + body : body);
+    remaining = remaining.substring(breakPoint).replace(/^\n+/, '');
+    isFirst = false;
   }
-  
+
   return pages;
 }
 
