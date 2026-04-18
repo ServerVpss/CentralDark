@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Percent, Save } from "lucide-react";
+import { DollarSign, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ import { toast } from "@/hooks/use-toast";
 export function OperationalCostConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const [rate, setRate] = useState<string>("3");
+  const [cost, setCost] = useState<string>("500");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -23,12 +23,12 @@ export function OperationalCostConfig() {
       setLoading(true);
       const { data } = await supabase
         .from("payment_gateway_settings")
-        .select("operational_cost_rate" as any)
+        .select("monthly_fixed_cost" as any)
         .eq("user_id", user.id)
         .maybeSingle();
       if (!cancelled) {
-        const v = Number((data as any)?.operational_cost_rate ?? 0.03);
-        setRate((v * 100).toFixed(2).replace(/\.?0+$/, ""));
+        const v = Number((data as any)?.monthly_fixed_cost ?? 500);
+        setCost(v.toFixed(2).replace(/\.?0+$/, ""));
         setLoading(false);
       }
     })();
@@ -39,17 +39,16 @@ export function OperationalCostConfig() {
 
   const handleSave = async () => {
     if (!user?.id) return;
-    const pct = parseFloat(rate.replace(",", "."));
-    if (isNaN(pct) || pct < 0 || pct > 100) {
+    const value = parseFloat(cost.replace(",", "."));
+    if (isNaN(value) || value < 0) {
       toast({
         title: "Valor inválido",
-        description: "Informe um percentual entre 0 e 100.",
+        description: "Informe um custo mensal igual ou maior que zero.",
         variant: "destructive",
       });
       return;
     }
     setSaving(true);
-    const decimal = pct / 100;
 
     const { data: existing } = await supabase
       .from("payment_gateway_settings")
@@ -60,11 +59,11 @@ export function OperationalCostConfig() {
     const { error } = existing
       ? await supabase
           .from("payment_gateway_settings")
-          .update({ operational_cost_rate: decimal } as any)
+          .update({ monthly_fixed_cost: value } as any)
           .eq("user_id", user.id)
       : await supabase
           .from("payment_gateway_settings")
-          .insert({ user_id: user.id, operational_cost_rate: decimal } as any);
+          .insert({ user_id: user.id, monthly_fixed_cost: value } as any);
 
     setSaving(false);
     if (error) {
@@ -77,7 +76,7 @@ export function OperationalCostConfig() {
     }
     toast({
       title: "Custo atualizado",
-      description: `Custo operacional definido em ${pct}%.`,
+      description: `Custo fixo mensal definido em R$ ${value.toFixed(2)}.`,
     });
     queryClient.invalidateQueries({ queryKey: ["pix-transactions"] });
   };
@@ -87,12 +86,12 @@ export function OperationalCostConfig() {
       <CardHeader>
         <div className="flex items-center gap-3">
           <div className="rounded-lg bg-primary/10 p-2">
-            <Percent className="h-5 w-5 text-primary" />
+            <DollarSign className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <CardTitle>Custo Operacional</CardTitle>
+            <CardTitle>Custo Operacional Mensal</CardTitle>
             <CardDescription>
-              Percentual descontado da receita para calcular o lucro
+              Valor fixo pago por mês ao fornecedor da API (rateado proporcionalmente no período filtrado)
             </CardDescription>
           </div>
         </div>
@@ -100,21 +99,20 @@ export function OperationalCostConfig() {
       <CardContent>
         <div className="flex flex-col sm:flex-row sm:items-end gap-3 max-w-md">
           <div className="flex-1">
-            <Label htmlFor="op-cost-rate">Custo (%)</Label>
+            <Label htmlFor="op-cost-monthly">Custo mensal (R$)</Label>
             <div className="relative mt-1.5">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">R$</span>
               <Input
-                id="op-cost-rate"
+                id="op-cost-monthly"
                 type="number"
                 inputMode="decimal"
                 min={0}
-                max={100}
                 step="0.01"
-                value={rate}
-                onChange={(e) => setRate(e.target.value)}
+                value={cost}
+                onChange={(e) => setCost(e.target.value)}
                 disabled={loading || saving}
-                className="pr-9"
+                className="pl-10"
               />
-              <Percent className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
           </div>
           <Button onClick={handleSave} disabled={loading || saving} className="gap-2">
@@ -123,7 +121,7 @@ export function OperationalCostConfig() {
           </Button>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Exemplo: 3% significa que para cada R$ 100 recebidos, R$ 3,00 são considerados custo e R$ 97,00 lucro.
+          Exemplo: R$ 500/mês. Em filtros de 7 dias, o custo aplicado será R$ {(500 * 7 / 30).toFixed(2)} (rateio proporcional ao período).
         </p>
       </CardContent>
     </Card>

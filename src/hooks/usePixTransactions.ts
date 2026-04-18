@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { startOfDay, startOfWeek, startOfMonth, format, subDays, eachDayOfInterval } from "date-fns";
+import { startOfDay, startOfWeek, startOfMonth, format, subDays, eachDayOfInterval, differenceInCalendarDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export interface PixTransaction {
@@ -24,7 +24,9 @@ export interface PixSummary {
   averageValue: number;
   profitMargin: number;
   previousPeriodComparison: number;
-  operationalCostRate: number;
+  monthlyFixedCost: number;
+  proratedCost: number;
+  periodDays: number;
 }
 
 export interface ChartDataPoint {
@@ -74,19 +76,21 @@ export function usePixTransactions(period: "today" | "week" | "month") {
             averageValue: 0,
             profitMargin: 0,
             previousPeriodComparison: 0,
-            operationalCostRate: 0.03,
+            monthlyFixedCost: 500,
+            proratedCost: 0,
+            periodDays: 0,
           } as PixSummary,
           chartData: [] as ChartDataPoint[],
         };
       }
 
-      // Buscar taxa de custo operacional configurada (fallback 3%)
+      // Buscar custo fixo mensal configurado (fallback R$ 500)
       const { data: settingsRow } = await supabase
         .from("payment_gateway_settings")
-        .select("operational_cost_rate" as any)
+        .select("monthly_fixed_cost" as any)
         .eq("user_id", user.id)
         .maybeSingle();
-      const operationalCostRate = Number((settingsRow as any)?.operational_cost_rate ?? 0.03);
+      const monthlyFixedCost = Number((settingsRow as any)?.monthly_fixed_cost ?? 500);
 
       const startDate = getStartDate();
       const { previousStart, previousEnd } = getPreviousPeriodDates();
@@ -117,7 +121,11 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       const totalRevenue = paidTransactions.reduce((sum, t) => sum + Number(t.amount), 0);
       const previousRevenue = (previousTransactions || []).reduce((sum, t) => sum + Number(t.amount), 0);
 
-      const totalProfit = totalRevenue * (1 - operationalCostRate);
+      // Rateio do custo fixo mensal proporcional ao período filtrado
+      const periodDays = Math.max(1, differenceInCalendarDays(new Date(), startDate) + 1);
+      const proratedCost = monthlyFixedCost * (periodDays / 30);
+
+      const totalProfit = totalRevenue - proratedCost;
       const profitMargin = totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100) : 0;
 
       const previousPeriodComparison = previousRevenue > 0
@@ -146,7 +154,9 @@ export function usePixTransactions(period: "today" | "week" | "month") {
         averageValue: paidTransactions.length > 0 ? totalRevenue / paidTransactions.length : 0,
         profitMargin,
         previousPeriodComparison,
-        operationalCostRate,
+        monthlyFixedCost,
+        proratedCost,
+        periodDays,
       };
 
       return {
