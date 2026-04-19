@@ -85,15 +85,15 @@ export function Header({ className }: HeaderProps) {
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-2">
         {/* Search */}
         <button
           onClick={openSearch}
-          className="hidden sm:flex items-center gap-2 pl-3 pr-2 h-8 bg-muted/50 border border-border/50 rounded-lg text-xs text-muted-foreground hover:bg-muted/70 transition-colors"
+          className="hidden sm:flex items-center gap-2 pl-3 pr-2 h-9 bg-muted/40 border border-border/60 rounded-xl text-xs text-muted-foreground hover:bg-muted/60 hover:border-primary/30 transition-all group"
         >
-          <Search className="h-3.5 w-3.5" />
-          <span>Buscar...</span>
-          <kbd className="h-4 items-center gap-0.5 rounded border border-border bg-muted px-1 font-mono text-[9px] hidden md:inline-flex">
+          <Search className="h-3.5 w-3.5 group-hover:text-primary transition-colors" strokeWidth={2.25} />
+          <span className="font-medium">Buscar...</span>
+          <kbd className="h-5 items-center gap-0.5 rounded-md border border-border bg-background/80 px-1.5 font-mono text-[9px] hidden md:inline-flex">
             <Command className="h-2.5 w-2.5" />K
           </kbd>
         </button>
@@ -103,8 +103,8 @@ export function Header({ className }: HeaderProps) {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative h-9 w-9">
-              <Bell className="h-4 w-4 text-muted-foreground" />
+            <Button variant="ghost" size="icon" className="relative h-9 w-9 hover:bg-muted/60">
+              <Bell className="h-[18px] w-[18px] text-muted-foreground" strokeWidth={2.25} />
               {unreadCount > 0 && (
                 <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center shadow-[0_0_10px_hsl(var(--primary)/0.6)] animate-pulse-glow">
                   {unreadCount > 9 ? "9+" : unreadCount}

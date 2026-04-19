@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
+import { Logo } from "./Logo";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -37,15 +38,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         sidebarCollapsed ? "lg:ml-[72px]" : "lg:ml-72"
       )}>
         {/* Mobile Header with Menu Button */}
-        <div className="lg:hidden sticky top-0 z-20 flex items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 py-3">
+        <div className="lg:hidden sticky top-0 z-20 flex items-center gap-3 border-b border-border/40 glass px-4 py-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setSidebarOpen(true)}
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-5 w-5" strokeWidth={2.25} />
           </Button>
-          <span className="text-lg font-bold gradient-text">TelePanel</span>
+          <Logo size={28} />
+          <span className="text-lg font-bold text-foreground tracking-tight">TelePanel</span>
         </div>
 
         <Header className="hidden lg:block" />
