@@ -37,10 +37,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         "transition-all duration-300",
         sidebarCollapsed ? "lg:ml-[72px]" : "lg:ml-72"
       )}>
-      <div className={cn(
-        "transition-all duration-300",
-        sidebarCollapsed ? "lg:ml-[72px]" : "lg:ml-72"
-      )}>
         {/* Mobile Header with Menu Button */}
         <div className="lg:hidden sticky top-0 z-20 flex items-center gap-3 border-b border-border/40 glass px-4 py-3">
           <Button
