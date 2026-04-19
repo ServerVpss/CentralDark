@@ -13,6 +13,8 @@ export interface PixTransaction {
   gateway: string;
   external_id: string | null;
   e2e_id: string | null;
+  telegram_username?: string | null;
+  telegram_first_name?: string | null;
 }
 
 export interface PixSummary {
