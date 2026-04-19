@@ -31,18 +31,18 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
       className={cn(
         "card-premium relative overflow-hidden p-6 md:p-8 text-secondary-foreground",
         reached
-          ? "border-primary/40 shadow-[0_0_60px_hsl(var(--primary)/0.15)]"
-          : "border-amber-500/30 shadow-[0_0_40px_hsl(38_95%_55%/0.08)]"
+          ? "border-primary/20"
+          : "border-amber-500/20"
       )}
     >
-      {/* Background glow */}
+      {/* Background glow - subtle */}
       <div className={cn(
-        "absolute -top-32 -right-32 h-64 w-64 rounded-full blur-3xl opacity-20",
+        "absolute -top-32 -right-32 h-64 w-64 rounded-full blur-3xl opacity-[0.04]",
         reached ? "bg-primary" : "bg-amber-500"
       )} />
       <div className={cn(
-        "absolute -bottom-32 -left-32 h-64 w-64 rounded-full blur-3xl opacity-10",
-        reached ? "bg-destructive" : "bg-orange-500"
+        "absolute -bottom-32 -left-32 h-64 w-64 rounded-full blur-3xl opacity-[0.03]",
+        reached ? "bg-primary" : "bg-orange-500"
       )} />
 
       <div className="relative space-y-6">
