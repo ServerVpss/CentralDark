@@ -102,7 +102,7 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       const { previousStart, previousEnd } = getPreviousPeriodDates();
 
       // Fetch current period transactions
-      const { data: transactions, error } = await supabase
+      const { data: transactionsRaw, error } = await supabase
         .from("pix_transactions")
         .select("*")
         .eq("user_id", user.id)
@@ -110,6 +110,33 @@ export function usePixTransactions(period: "today" | "week" | "month") {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
+
+      // Enrich with telegram username/first name
+      const tgIds = Array.from(
+        new Set((transactionsRaw || []).map((t) => t.telegram_user_id).filter((v): v is number => v != null))
+      );
+      const userMap = new Map<number, { username: string | null; first_name: string | null }>();
+      if (tgIds.length > 0) {
+        const { data: msgs } = await supabase
+          .from("telegram_messages")
+          .select("from_user_id, from_username, from_first_name")
+          .in("from_user_id", tgIds)
+          .order("created_at", { ascending: false });
+        for (const m of msgs || []) {
+          if (m.from_user_id == null) continue;
+          if (!userMap.has(m.from_user_id)) {
+            userMap.set(m.from_user_id, {
+              username: m.from_username ?? null,
+              first_name: m.from_first_name ?? null,
+            });
+          }
+        }
+      }
+      const transactions = (transactionsRaw || []).map((t) => ({
+        ...t,
+        telegram_username: t.telegram_user_id ? userMap.get(t.telegram_user_id)?.username ?? null : null,
+        telegram_first_name: t.telegram_user_id ? userMap.get(t.telegram_user_id)?.first_name ?? null : null,
+      }));
 
       // Fetch previous period for comparison
       const { data: previousTransactions } = await supabase
