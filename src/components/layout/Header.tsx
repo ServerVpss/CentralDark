@@ -89,7 +89,7 @@ export function Header({ className }: HeaderProps) {
         {/* Search */}
         <button
           onClick={openSearch}
-          className="hidden gap-2 h-9 bg-muted/40 border border-border/60 rounded-xl text-xs text-muted-foreground hover:bg-muted/60 hover:border-primary/30 transition-all group flex-row sm:flex items-start justify-start px-0 pr-0 pl-0"
+          className="hidden sm:flex items-center gap-2 h-9 pl-3 pr-2 bg-muted/40 border border-border/60 rounded-xl text-xs text-muted-foreground hover:bg-muted/60 hover:border-primary/30 transition-all group"
         >
           <Search className="h-3.5 w-3.5 group-hover:text-primary transition-colors" strokeWidth={2.25} />
           <span className="font-medium">Buscar...</span>
