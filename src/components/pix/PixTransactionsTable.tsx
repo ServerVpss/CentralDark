@@ -32,18 +32,37 @@ interface PixTransactionsTableProps {
 export function PixTransactionsTable({ transactions, isLoading }: PixTransactionsTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
 
-  // Reset page when transactions change
+  const filteredTransactions = useMemo(() => {
+    if (!transactions) return [];
+    const term = search.trim().toLowerCase();
+    return transactions.filter((t) => {
+      if (statusFilter !== "all" && t.status !== statusFilter) return false;
+      if (!term) return true;
+      const haystack = [
+        t.telegram_user_id?.toString() || "",
+        t.external_id || "",
+        t.e2e_id || "",
+        t.id,
+        t.gateway,
+        Number(t.amount).toFixed(2),
+      ].join(" ").toLowerCase();
+      return haystack.includes(term);
+    });
+  }, [transactions, statusFilter, search]);
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [transactions]);
+  }, [transactions, statusFilter, search, pageSize]);
 
-  const totalItems = transactions?.length || 0;
-  const totalPages = Math.ceil(totalItems / pageSize);
+  const totalItems = filteredTransactions.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   const startIndex = (currentPage - 1) * pageSize;
   const paginatedTransactions = useMemo(
-    () => transactions?.slice(startIndex, startIndex + pageSize) || [],
-    [transactions, startIndex, pageSize]
+    () => filteredTransactions.slice(startIndex, startIndex + pageSize),
+    [filteredTransactions, startIndex, pageSize]
   );
 
   const goToPage = (page: number) => setCurrentPage(Math.max(1, Math.min(page, totalPages)));
@@ -81,25 +100,67 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
     );
   }
 
+  const totalUnfiltered = transactions?.length || 0;
+  const isFiltered = statusFilter !== "all" || search.trim() !== "";
+
   return (
     <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
-      <div className="p-4 border-b border-border flex items-center justify-between">
-        <h3 className="font-semibold flex items-center gap-2">
-          <CreditCard className="h-5 w-5 text-primary" />
-          Transações PIX ({totalItems})
-        </h3>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Exibir:</span>
-          <Select value={pageSize.toString()} onValueChange={(v) => { setPageSize(Number(v)); setCurrentPage(1); }}>
-            <SelectTrigger className="w-[80px] h-8 bg-muted/50">
-              <SelectValue />
+      <div className="p-4 border-b border-border flex flex-col gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="font-semibold flex items-center gap-2">
+            <CreditCard className="h-5 w-5 text-primary" />
+            Transações PIX ({totalItems}{isFiltered ? ` de ${totalUnfiltered}` : ""})
+          </h3>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Exibir:</span>
+            <Select value={pageSize.toString()} onValueChange={(v) => { setPageSize(Number(v)); setCurrentPage(1); }}>
+              <SelectTrigger className="w-[80px] h-8 bg-muted/50">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[10, 25, 50, 100].map((size) => (
+                  <SelectItem key={size} value={size.toString()}>{size}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative flex-1 min-w-[220px]">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar por usuário, ID, valor..."
+              className="pl-8 h-9 bg-muted/40"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Limpar busca"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[160px] h-9 bg-muted/40">
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              {[10, 25, 50, 100].map((size) => (
-                <SelectItem key={size} value={size.toString()}>{size}</SelectItem>
-              ))}
+              <SelectItem value="all">Todos status</SelectItem>
+              <SelectItem value="paid">✓ Pago</SelectItem>
+              <SelectItem value="pending">Pendente</SelectItem>
+              <SelectItem value="expired">Expirado</SelectItem>
+              <SelectItem value="cancelled">Cancelado</SelectItem>
             </SelectContent>
           </Select>
+          {isFiltered && (
+            <Button variant="ghost" size="sm" onClick={() => { setSearch(""); setStatusFilter("all"); }} className="h-9">
+              Limpar
+            </Button>
+          )}
         </div>
       </div>
       <div className="overflow-x-auto">
