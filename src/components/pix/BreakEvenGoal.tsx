@@ -87,21 +87,19 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
           </div>
         </div>
 
-        {/* DESTAQUE GIGANTE DO LUCRO */}
+        {/* DESTAQUE DO LUCRO */}
         {reached && (
-          <div className="relative rounded-2xl border-2 border-primary/40 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-8 text-center overflow-hidden animate-scale-in">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,hsl(var(--primary)/0.2),transparent_70%)]" />
-            <Sparkles className="absolute top-4 right-4 h-5 w-5 text-primary/40 animate-pulse" />
-            <Sparkles className="absolute bottom-4 left-4 h-4 w-4 text-primary/30 animate-pulse" style={{ animationDelay: "1s" }} />
+          <div className="relative rounded-xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-4 text-center overflow-hidden">
+            <Sparkles className="absolute top-2 right-2 h-3.5 w-3.5 text-primary/30" />
 
             <div className="relative">
-              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-primary/80 mb-3">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 mb-1">
                 💰 Seu lucro até agora
               </p>
-              <p className="text-6xl md:text-7xl font-black tabular-nums tracking-tighter text-gradient-money drop-shadow-[0_0_30px_hsl(var(--primary)/0.5)]">
+              <p className="text-3xl md:text-4xl font-bold tabular-nums tracking-tight text-gradient-money">
                 R$ {surplus.toFixed(2)}
               </p>
-              <p className="text-sm text-primary/70 mt-3 font-medium">
+              <p className="text-xs text-primary/70 mt-1 font-medium">
                 já está no seu bolso 🚀
               </p>
             </div>
