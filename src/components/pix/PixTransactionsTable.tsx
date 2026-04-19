@@ -43,6 +43,8 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
       if (!term) return true;
       const haystack = [
         t.telegram_user_id?.toString() || "",
+        t.telegram_username || "",
+        t.telegram_first_name || "",
         t.external_id || "",
         t.e2e_id || "",
         t.id,
