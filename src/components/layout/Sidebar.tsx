@@ -12,12 +12,12 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Logo } from "./Logo";
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -81,20 +81,20 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
         "flex h-16 items-center border-b border-sidebar-border px-4",
         collapsed ? "lg:justify-center" : "justify-between"
       )}>
-        <div className={cn("flex items-center gap-3", collapsed && "lg:justify-center")}>
-          <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-glow shadow-lg shadow-primary/30">
-            <Zap className="h-4 w-4 text-primary-foreground" strokeWidth={2.5} />
-            <div className="absolute inset-0 rounded-xl bg-primary/20 blur-md -z-10" />
-          </div>
-          <div className={cn("flex flex-col", collapsed && "lg:hidden")}>
+        <button
+          onClick={() => navigate("/")}
+          className={cn("flex items-center gap-3 group", collapsed && "lg:justify-center")}
+        >
+          <Logo size={36} className="transition-transform group-hover:scale-105" />
+          <div className={cn("flex flex-col items-start", collapsed && "lg:hidden")}>
             <span className="text-base font-bold text-sidebar-foreground tracking-tight leading-none">
               TelePanel
             </span>
-            <span className="text-[10px] font-medium uppercase tracking-widest text-primary mt-0.5">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mt-1">
               Premium
             </span>
           </div>
-        </div>
+        </button>
 
         <Button
           variant="ghost"
@@ -137,12 +137,15 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                       )}
                     >
                       {active && (
-                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.6)]" />
+                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-7 w-1 rounded-r-full bg-gradient-to-b from-primary to-primary-glow shadow-[0_0_12px_hsl(var(--primary)/0.6)]" />
                       )}
-                      <item.icon className={cn(
-                        "h-[18px] w-[18px] shrink-0 transition-colors",
-                        active ? "text-primary" : "text-sidebar-foreground/60 group-hover:text-sidebar-foreground"
-                      )} />
+                      <item.icon
+                        className={cn(
+                          "h-[18px] w-[18px] shrink-0 transition-all",
+                          active ? "text-primary" : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground"
+                        )}
+                        strokeWidth={active ? 2.5 : 2}
+                      />
                       <span className={cn(collapsed && "lg:hidden")}>{item.title}</span>
                     </button>
                   </li>
