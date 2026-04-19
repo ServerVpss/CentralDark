@@ -191,8 +191,17 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-muted-foreground" />
-                      <span>Telegram {transaction.telegram_user_id || "N/A"}</span>
+                      <User className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <div className="flex flex-col leading-tight min-w-0">
+                        <span className="truncate">
+                          {transaction.telegram_first_name || (transaction.telegram_user_id ? `Telegram ${transaction.telegram_user_id}` : "N/A")}
+                        </span>
+                        <span className="text-xs text-muted-foreground truncate">
+                          {transaction.telegram_username ? `@${transaction.telegram_username}` : ""}
+                          {transaction.telegram_username && transaction.telegram_user_id ? " · " : ""}
+                          {transaction.telegram_user_id ? `ID ${transaction.telegram_user_id}` : ""}
+                        </span>
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
