@@ -198,20 +198,10 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .card-premium::before {
-    content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none;
-    background: var(--gradient-gold-soft);
-  }
-
-  .card-premium:hover::before {
-    @apply opacity-100;
-  }
-
   .card-premium:hover {
-    @apply border-primary/30;
-    box-shadow: 0 20px 40px -15px hsl(var(--primary) / 0.2);
+    @apply border-border/70;
   }
+
 
   /* Gradient text — emerald signature */
   .text-gradient-gold {
@@ -358,13 +348,13 @@
   }
 
   .hover-lift {
-    @apply transition-all duration-300;
+    @apply transition-colors duration-200;
   }
 
   .hover-lift:hover {
-    @apply -translate-y-1;
-    box-shadow: 0 12px 32px -10px hsl(var(--primary) / 0.25);
+    @apply border-border/70;
   }
+
 
   /* Premium grid background pattern */
   .bg-grid {
