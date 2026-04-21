@@ -1,44 +1,74 @@
 
-## Bug: `/start` está disparando consulta de PIS inválida
 
-### Nova causa raiz (correção do diagnóstico anterior)
+# Sistema de Monitoramento de Saúde dos Módulos (Sem Auto-Toggle)
 
-O usuário enviou apenas `/start` — não clicou em PIS. Mas o bot respondeu "⚠️ Módulo 📋 PIS indisponível - Valor não pode ser vazio".
+Cria um painel visual que mostra a saúde real de cada módulo, mas **deixa a decisão de ativar/desativar nas suas mãos**. Nada é mexido automaticamente.
 
-Isso significa que existe um **estado de conversa pendente** (`bot_conversation_states`) deixado de uma sessão anterior — provavelmente o usuário clicou em PIS antes, não respondeu, e o estado ficou ativo. Quando ele agora envia `/start`, o handler de estado (linha ~7298-7310 do `telegram-webhook/index.ts`) intercepta o texto **antes** do roteador de comandos e passa `"/start"` como valor da consulta PIS.
+## O que será construído
 
-Como `/start` começa com `/`, a sanitização derruba para vazio → `api-query` retorna "Valor não pode ser vazio" → `isProviderError` classifica errado → mostra "Módulo PIS indisponível".
+### 1. Tabela `module_health_status`
+Uma linha por módulo, atualizada em tempo real:
+- `module_key`, `total_attempts_24h`, `success_count_24h`, `notfound_count_24h`, `error_count_24h`
+- `success_rate` (calculado)
+- `last_success_at`, `last_failure_at`, `last_check_at`
+- `health_label` ("healthy" / "degraded" / "no_data" / "failing")
 
-### Correções (1 arquivo: `supabase/functions/telegram-webhook/index.ts`)
+Sem campo de auto-disable — o sistema **só observa, nunca decide**.
 
-**1. Comandos sempre cancelam estado pendente (handler de estado, ~linha 7290)**
-Antes de consumir o estado `query`, verificar se `text.trim()` começa com `/`. Se sim:
-- Limpar o estado (`bot_conversation_states`)
-- Deixar o fluxo seguir para o roteador de comandos normal
-- Não chamar `processQuery` com o comando
+### 2. Instrumentação no `api-query`
+A cada consulta real, registra o resultado (success / notFound / error) via RPC atômico `record_module_attempt(module_key, outcome)`. Zero impacto na latência.
 
-Isso resolve `/start`, `/cancelar`, `/cpf ...`, `/menu` etc. enquanto há estado de PIS/CPF/etc. esperando input.
+### 3. Job de cálculo (cron a cada 15 min)
+Nova Edge Function `module-health-calc` que recalcula as métricas de 24h e atualiza o `health_label` de cada módulo:
+- 🟢 **Saudável** — sucesso ≥ 50%
+- 🟡 **Degradado** — sucesso entre 10-50%
+- 🔴 **Sem retorno** — 100% notFound ou erro com ≥ 3 amostras
+- ⚪ **Sem dados** — < 3 amostras nas últimas 24h
 
-**2. Validar input vazio antes de `processQuery` (mesmo bloco)**
-Se após o passo 1 o `text` ainda chegar vazio/whitespace/só símbolos, responder:
-> ⚠️ Você precisa digitar um valor. Exemplo: `12345678900`
-> Envie /cancelar para sair.
-E **manter** o estado para nova tentativa (não cancelar).
+### 4. UI no `QueryModulesManager.tsx`
+Cada card de módulo ganha:
+- **Badge de saúde** colorido ao lado do nome
+- **Mini-stats abaixo**: "98% sucesso · 1.234 consultas · última 2min atrás"
+- **Tooltip com detalhes**: contagem por outcome (✅ 145 / ❌ 0 / ⚠️ 12)
 
-**3. Distinguir validation_error de provider_error em `isProviderError` (linha ~2819)**
-Se `result.meta?.status === 'validation_error'` ou mensagem contém "Valor não pode ser vazio" / "inválido" / "obrigatório", retornar `{ isError: false }` para **não** mostrar banner de "módulo indisponível". Em vez disso, exibir mensagem dedicada de input inválido com exemplo do módulo.
+O **switch ON/OFF que já existe permanece igual** — você decide quando desativar com base no que vê.
 
-**4. TTL automático no estado (defesa extra)**
-Ao consumir o estado `query`, ignorar (e apagar) se `created_at` for mais antigo que **5 minutos**. Evita que um estado órfão de horas atrás capture comandos legítimos.
+### 5. Filtros e resumo no topo
+Cards adicionais no painel:
+- Saudáveis (verde) | Degradados (amarelo) | Sem retorno (vermelho) | Sem dados (cinza)
 
-### Resultado esperado
+Filtro de busca: "Todos / Saudáveis / Problemáticos / Sem dados" para isolar rapidamente módulos que merecem atenção.
 
-- `/start` (e qualquer comando) sempre funciona, mesmo com estado pendente.
-- Estado expirado em 5min é descartado silenciosamente.
-- Erros de validação ganham mensagem própria, separada de erros de provedor.
+### 6. Botão "Recalcular agora"
+Dispara o `module-health-calc` manualmente, sem esperar os 15 min do cron. Útil pra validar depois de uma rodada de testes.
 
-<lov-actions>
-<lov-suggestion message="Aprovado. Implemente as 4 correções no telegram-webhook e teste enviando /start após clicar em PIS sem responder, para validar que /start funciona normalmente.">Implementar correções</lov-suggestion>
-<lov-suggestion message="Implemente apenas as correções #1 (comandos cancelam estado) e #4 (TTL de 5min) — quero o fix mínimo de UX agora e deixar o ajuste do isProviderError para depois.">Só fix de estado pendente</lov-suggestion>
-<lov-suggestion message="Antes de implementar, rode uma query no banco para listar todos os estados ativos em bot_conversation_states (e há quanto tempo) — quero ver se há muitos órfãos acumulados.">Auditar estados órfãos primeiro</lov-suggestion>
-</lov-actions>
+## Fluxo do usuário
+
+```text
+Módulo /credilink começa retornando 100% notFound
+   ↓ (próximo recálculo, até 15 min)
+Painel mostra 🔴 "Sem retorno: 0/45 últimas 24h"
+   ↓
+Você vê, avalia, decide:
+   ├─ Desliga manualmente o switch → módulo OFF
+   └─ Ou deixa ligado pra continuar coletando dados
+   ↓
+Quando o provider voltar → badge muda pra 🟢 sozinho
+   ↓ Você reativa quando quiser
+```
+
+## Detalhes técnicos
+
+- **RPC atômico**: `record_module_attempt` usa `INSERT ... ON CONFLICT DO UPDATE` para evitar race conditions
+- **Janela móvel**: métricas sempre em 24h, recalculadas a partir de `query_history` no cron
+- **Realtime**: tabela `module_health_status` publicada no Supabase Realtime — badges atualizam sem refresh
+- **Sem efeito colateral**: o cron NUNCA toca em `query_modules.enabled` — só atualiza o status visual
+
+## Arquivos afetados
+
+- `supabase/migrations/` — nova tabela `module_health_status` + RPC `record_module_attempt`
+- `supabase/functions/module-health-calc/index.ts` — nova função (cron 15 min)
+- `supabase/functions/api-query/index.ts` — instrumentação leve
+- `src/components/bots/QueryModulesManager.tsx` — badges, mini-stats, filtros, botão recalcular
+- `src/hooks/useModuleHealth.ts` — hook para subscrever ao Realtime
+
