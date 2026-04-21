@@ -455,6 +455,54 @@ export type Database = {
           },
         ]
       }
+      module_health_status: {
+        Row: {
+          created_at: string
+          error_count_24h: number
+          health_label: string
+          id: string
+          last_check_at: string
+          last_failure_at: string | null
+          last_success_at: string | null
+          module_key: string
+          notfound_count_24h: number
+          success_count_24h: number
+          success_rate: number
+          total_attempts_24h: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error_count_24h?: number
+          health_label?: string
+          id?: string
+          last_check_at?: string
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          module_key: string
+          notfound_count_24h?: number
+          success_count_24h?: number
+          success_rate?: number
+          total_attempts_24h?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error_count_24h?: number
+          health_label?: string
+          id?: string
+          last_check_at?: string
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          module_key?: string
+          notfound_count_24h?: number
+          success_count_24h?: number
+          success_rate?: number
+          total_attempts_24h?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       paginated_results: {
         Row: {
           chat_id: number
@@ -1327,6 +1375,11 @@ export type Database = {
           p_new_users?: number
           p_spam_detected?: number
         }
+        Returns: undefined
+      }
+      recalc_module_health: { Args: never; Returns: undefined }
+      record_module_attempt: {
+        Args: { p_module_key: string; p_outcome: string }
         Returns: undefined
       }
     }
