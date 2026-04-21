@@ -810,6 +810,21 @@ Deno.serve(async (req) => {
 
     const response = await handleQuery(queryRequest, supabase, requestId);
 
+    // Record module health attempt (atomic, fire-and-forget)
+    try {
+      const status = response.meta.status;
+      const outcome =
+        status === "success" ? "success" :
+        status === "not_found" ? "notfound" :
+        "error";
+      supabase.rpc("record_module_attempt", {
+        p_module_key: queryRequest.queryType,
+        p_outcome: outcome,
+      }).then(() => {});
+    } catch {
+      // never block the response on health logging
+    }
+
     // Log query for audit
     const authHeader = req.headers.get("Authorization");
     if (authHeader) {
