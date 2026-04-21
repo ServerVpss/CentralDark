@@ -6886,9 +6886,9 @@ class BotHandler {
       reply_markup: keyboard(...buttons),
     });
 
-    // Anúncio no grupo APENAS para assinaturas de contexto 'group'.
-    // Pagamentos privados permanecem 100% silenciosos no grupo.
-    if (this.settings.group_chat_id && this.settings.announce_payments && paymentContext === 'group') {
+    // Anúncio no grupo: se announce_payments estiver ativo, notifica QUALQUER assinatura
+    // (privada ou de grupo). É a opção do admin decidir divulgar ou não.
+    if (this.settings.group_chat_id && this.settings.announce_payments) {
       try {
         let display = `ID: ${telegramUserId}`;
         try {
