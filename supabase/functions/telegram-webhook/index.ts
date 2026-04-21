@@ -6886,9 +6886,13 @@ class BotHandler {
       reply_markup: keyboard(...buttons),
     });
 
-    // Anúncio no grupo: se announce_payments estiver ativo, notifica QUALQUER assinatura
-    // (privada ou de grupo). É a opção do admin decidir divulgar ou não.
-    if (this.settings.group_chat_id && this.settings.announce_payments) {
+    // Anúncio no grupo: se announce_payments estiver ativo, notifica QUALQUER assinatura.
+    const announceEnabled = !!this.settings.announce_payments;
+    const hasGroup = !!this.settings.group_chat_id;
+    let announceStatus: 'sent' | 'suppressed' | 'failed' = 'suppressed';
+    let announceReason: string | null = null;
+
+    if (hasGroup && announceEnabled) {
       try {
         let display = `ID: ${telegramUserId}`;
         try {
@@ -6900,7 +6904,7 @@ class BotHandler {
           }
         } catch (_e) { /* ignore */ }
 
-        await sendMessage(this.token, this.settings.group_chat_id,
+        await sendMessage(this.token, this.settings.group_chat_id!,
           `🔥 <b>NOVA ASSINATURA!</b>\n\n` +
           `┌ 👤 ${display}\n` +
           `├ 📦 ${planName} • ${planDays}d\n` +
@@ -6909,9 +6913,36 @@ class BotHandler {
           `🎊 <b>Bem-vindo(a)!</b>`,
           keyboard([btnUrl("🛒 ASSINAR", `https://t.me/${this.bot.bot_username}?start=assinar`)])
         );
+        announceStatus = 'sent';
       } catch (e) {
         console.error("Failed to announce in group:", e);
+        announceStatus = 'failed';
+        announceReason = (e as Error).message;
       }
+    } else {
+      announceReason = !hasGroup ? 'no_group_chat_id' : 'announce_payments_disabled';
+    }
+
+    // Log de auditoria do anúncio (sent / suppressed / failed)
+    try {
+      await this.supabase.from('audit_logs').insert({
+        action: `payment_announcement_${announceStatus}`,
+        entity_type: 'telegram_subscription',
+        entity_id: txid,
+        details: {
+          bot_id: this.bot.id,
+          telegram_user_id: telegramUserId,
+          payment_context: paymentContext,
+          plan_code: planCode,
+          plan_name: planName,
+          value: Number(value),
+          announce_payments_enabled: announceEnabled,
+          group_chat_id: this.settings.group_chat_id,
+          reason: announceReason,
+        },
+      });
+    } catch (logErr) {
+      console.error('Failed to write audit log for announcement:', logErr);
     }
   }
 
