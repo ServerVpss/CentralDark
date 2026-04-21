@@ -8960,10 +8960,40 @@ class BotHandler {
         });
         return;
       }
-      if (queryType === "foto") {
-        await this.showStateSelection(chatId, messageId);
-      } else {
-        await this.requestQueryInput(chatId, telegramUserId, queryType);
+      // If callback came from a group, redirect prompt to user's private chat
+      // to avoid polluting the group with "Digite o CPF / Cancelar" messages.
+      const chatType = callback.message?.chat?.type;
+      const isGroupCtx = chatType === "group" || chatType === "supergroup";
+      const promptChatId = isGroupCtx ? telegramUserId : chatId;
+
+      try {
+        if (queryType === "foto") {
+          if (isGroupCtx) {
+            // Send a fresh state selection in DM instead of editing group message
+            await this.requestQueryInput(promptChatId, telegramUserId, "foto");
+          } else {
+            await this.showStateSelection(chatId, messageId);
+          }
+        } else {
+          await this.requestQueryInput(promptChatId, telegramUserId, queryType);
+        }
+
+        if (isGroupCtx) {
+          await telegramRequest(this.token, "answerCallbackQuery", {
+            callback_query_id: callback.id,
+            text: "📩 Verifique no privado para continuar a consulta.",
+            show_alert: false,
+          });
+        }
+      } catch (err) {
+        // Likely the user has not started a private chat with the bot
+        const botUser = this.bot.bot_username ? `@${this.bot.bot_username}` : "o bot";
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: `⚠️ Inicie uma conversa privada com ${botUser} primeiro e tente novamente.`,
+          show_alert: true,
+        });
+        logCmd('WARN', 'PRIVATE_PROMPT_FAILED', { userId: telegramUserId, queryType, error: (err as Error).message });
       }
       return;
     }
@@ -8975,7 +9005,28 @@ class BotHandler {
         return;
       }
       const estado = data.replace("state:", "");
-      await this.requestQueryInput(chatId, telegramUserId, "foto", estado);
+      const chatType = callback.message?.chat?.type;
+      const isGroupCtx = chatType === "group" || chatType === "supergroup";
+      const promptChatId = isGroupCtx ? telegramUserId : chatId;
+
+      try {
+        await this.requestQueryInput(promptChatId, telegramUserId, "foto", estado);
+        if (isGroupCtx) {
+          await telegramRequest(this.token, "answerCallbackQuery", {
+            callback_query_id: callback.id,
+            text: "📩 Verifique no privado para continuar a consulta.",
+            show_alert: false,
+          });
+        }
+      } catch (err) {
+        const botUser = this.bot.bot_username ? `@${this.bot.bot_username}` : "o bot";
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: `⚠️ Inicie uma conversa privada com ${botUser} primeiro e tente novamente.`,
+          show_alert: true,
+        });
+        logCmd('WARN', 'PRIVATE_PROMPT_FAILED', { userId: telegramUserId, queryType: 'foto', estado, error: (err as Error).message });
+      }
       return;
     }
 
