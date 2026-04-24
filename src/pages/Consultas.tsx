@@ -222,11 +222,20 @@ export default function Consultas() {
   }, []);
 
   const textModules = ["nome", "nomefull", "nome-3", "mae", "maefull", "endereco", "email", "emailfull", "email-3", "pix"];
-  
+  // Módulos alfanuméricos de veículos (mantêm letras + dígitos)
+  const vehicleAlphanumModules = ["placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-completa", "chassi", "motor"];
+
   const handleHistorySelect = useCallback((type: string, input: string) => {
     setSelectedType(type);
     setQueryInput(input);
-    const clean = textModules.includes(type) ? input.trim() : (input.replace(/\D/g, '') || input);
+    let clean: string;
+    if (textModules.includes(type)) {
+      clean = input.trim();
+    } else if (vehicleAlphanumModules.includes(type)) {
+      clean = input.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    } else {
+      clean = input.replace(/\D/g, '') || input;
+    }
     setCleanQueryInput(clean);
     setIsInputValid(true);
   }, []);
