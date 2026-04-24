@@ -193,35 +193,40 @@ export function useAdminData(): AdminData {
     fetchData();
   }, [fetchData]);
 
-  // Realtime subscriptions
+  // Realtime subscriptions (debounced para evitar refetch a cada consulta no Telegram)
   useEffect(() => {
     if (!user) return;
+
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    const scheduleRefetch = () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => fetchData(), 1500);
+    };
 
     const channel = supabase
       .channel("admin-realtime")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "telegram_subscriptions" },
-        () => fetchData()
+        scheduleRefetch
       )
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "telegram_bots" },
-        () => fetchData()
+        scheduleRefetch
       )
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "subscription_plans" },
-        () => fetchData()
+        scheduleRefetch
       )
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "query_history" },
-        () => fetchData()
-      )
+      // Removido listener em `query_history`: cada consulta no Telegram disparava
+      // um INSERT que recarregava toda a dashboard. O contador "Consultas hoje"
+      // é atualizado no próximo refetch agendado por outras mudanças ou polling.
       .subscribe();
 
     return () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
       supabase.removeChannel(channel);
     };
   }, [user, fetchData]);
