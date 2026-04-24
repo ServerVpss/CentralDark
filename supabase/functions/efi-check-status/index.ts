@@ -92,7 +92,13 @@ Deno.serve(async (req) => {
     console.log('Proxy response:', responseText.substring(0, 500))
 
     // Verificar se a resposta é JSON válido
-    let proxyData: { success?: boolean; data?: { status?: string; pix?: Array<{ endToEndId?: string }> }; status?: string; error?: string }
+    let proxyData: {
+      success?: boolean;
+      data?: { status?: string; pix?: Array<{ endToEndId?: string }> };
+      status?: string;
+      pix?: Array<{ endToEndId?: string }>;
+      error?: string;
+    }
     try {
       proxyData = JSON.parse(responseText)
     } catch (_parseError) {

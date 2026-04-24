@@ -141,7 +141,7 @@ interface PendingPayment {
   context?: string;
 }
 
-type InlineButton = { text: string; callback_data?: string; url?: string };
+type InlineButton = { text: string; callback_data?: string; url?: string; style?: string };
 
 // =============== API PROVIDERS ===============
 interface ApiProvider {
@@ -501,7 +501,8 @@ function formatCpfSpcResult(
   
   // Extrair dados do wrapper da API
   const apiData = (data.dados || data.data || data) as Record<string, unknown>;
-  const cpfArray = (apiData.cpf || apiData.data?.cpf) as Array<Record<string, unknown>> | undefined;
+  const apiNestedData = apiData.data as Record<string, unknown> | undefined;
+  const cpfArray = ((apiData.cpf as Array<Record<string, unknown>> | undefined) || (apiNestedData?.cpf as Array<Record<string, unknown>> | undefined));
   const cpfData = cpfArray?.[0] || apiData;
   
   const basics = (cpfData.dadosBasicos || cpfData) as Record<string, unknown>;
@@ -1395,7 +1396,7 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
           .replace(/<code>/g, "").replace(/<\/code>/g, "")
           .replace(/<a[^>]*>/g, "").replace(/<\/a>/g, "")
           .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-        const retryBody = { ...body, text: plainText };
+        const retryBody: Record<string, unknown> = { ...(body as Record<string, unknown>), text: plainText };
         delete retryBody.parse_mode;
         const retryRes = await fetch(url, {
           method: "POST",
@@ -2728,7 +2729,7 @@ async function executeQueryWithCache(
     const result = await response.json();
     const fromCache = result.fromCache === true;
     const rawData = result.data || result;
-    const data = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
+    const data: Record<string, unknown> = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
       ? { ...(rawData as Record<string, unknown>) }
       : { data: rawData };
     const warnings: string[] = Array.isArray(result.warnings) ? result.warnings : [];
@@ -4233,7 +4234,7 @@ function formatCpfResult(
       const tel = t as Record<string, unknown>;
       const ddd = tel.ddd || tel.DDD || '';
       const num = tel.telefone || tel.numero || tel.celular || '';
-      const formatted = formatPhoneNumber(ddd, num);
+      const formatted = formatPhoneNumber(String(ddd), String(num));
       const tipoCode = tel.tipoTelefone;
       const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
       const inclusao = tel.dataInclusao ? ` (${String(tel.dataInclusao).substring(0, 10)})` : '';
@@ -4505,7 +4506,7 @@ const NAME_CORRECTIONS: Record<string, string[]> = {
   souza: ['souza', 'sousa'], soussa: ['souza', 'sousa'],
   teixera: ['teixeira'], teixiera: ['teixeira'],
   silveira: ['silveira'], silvera: ['silveira'],
-  perera: ['pereira'], perera: ['pereira'],
+  perera: ['pereira'],
   almeida: ['almeida'], almeyda: ['almeida'],
   riberio: ['ribeiro'], riveiro: ['ribeiro'],
   machado: ['machado'], mashado: ['machado'],
