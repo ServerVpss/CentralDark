@@ -7834,14 +7834,35 @@ class BotHandler {
       const CPF_REQUIRED_MODULES = new Set(["veiculos", "cpf", "score", "renda", "credilink", "poderaquisitivo", "parentes", "processos", "siel", "tse-3", "titulo", "mae", "pai", "nasc", "nis", "obito", "registro", "advogadocpf", "catcpf", "irpf", "vacinas", "beneficios", "faculdades", "func", "matricula", "mandado", "certidoes", "rais", "processo", "crlvto", "crlvmt", "cnham", "cnhrs", "cnhrr", "cnhnc", "dividas", "bens", "score2", "cheque", "assessoria", "iptu"]);
       // Módulos veiculares (placa/chassi/renavam/motor) — não devem aparecer quando input é claramente CPF
       const VEHICLE_MODULES = new Set(["placa", "chassi", "renavam", "motor"]);
+      const beforeFilter = enabledOptions.map((o) => o.key);
       if (looksLikePlate && !looksLikeCpf) {
         enabledOptions = enabledOptions.filter((o) => !CPF_REQUIRED_MODULES.has(o.key));
       } else if (looksLikeCpf && !looksLikePlate) {
         enabledOptions = enabledOptions.filter((o) => !VEHICLE_MODULES.has(o.key));
       }
 
+      // Log estruturado: tipo detectado do input + módulos antes/depois do filtro
+      const detectedType = looksLikeCpf && !looksLikePlate
+        ? "cpf"
+        : looksLikePlate && !looksLikeCpf
+          ? "plate"
+          : looksLikeCpf && looksLikePlate
+            ? "ambiguous"
+            : "other";
+      logCmd('INFO', 'MENU_INPUT_DETECT', {
+        command,
+        chatId,
+        userId: telegramUserId,
+        inputLen: trimmedInput.length,
+        digitsLen: digitsOnly.length,
+        detectedType,
+        modulesBefore: beforeFilter,
+        modulesAfter: enabledOptions.map((o) => o.key),
+        filtered: beforeFilter.filter((k) => !enabledOptions.some((o) => o.key === k)),
+      });
+
       if (enabledOptions.length === 0) {
-        logCmd('INFO', 'CMD_BLOCKED', { reason: 'all_modules_disabled', command, chatId, userId: telegramUserId });
+        logCmd('INFO', 'CMD_BLOCKED', { reason: 'all_modules_disabled_after_input_filter', command, chatId, userId: telegramUserId, detectedType });
         return;
       }
 
