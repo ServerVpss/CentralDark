@@ -1444,6 +1444,44 @@ async function sendMessage(
   });
 }
 
+function suggestNameCorrections(input: string): string[] {
+  const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const dictionary: Record<string, string[]> = {
+    gertudes: ['Gertrudes'], gertrude: ['Gertrudes'], gertruds: ['Gertrudes'],
+    goncalves: ['Gonçalves'], gonsalves: ['Gonçalves'], gonzalves: ['Gonçalves'],
+    conceicao: ['Conceição'], conseicao: ['Conceição'], conceiçao: ['Conceição'],
+    tereza: ['Tereza', 'Theresa', 'Teresa'], thereza: ['Tereza', 'Theresa'],
+    rodriges: ['Rodrigues'], rodrigs: ['Rodrigues'], ferrera: ['Ferreira'], fereira: ['Ferreira'],
+    olivera: ['Oliveira'], oliviera: ['Oliveira'], fransisco: ['Francisco'],
+    sebastiao: ['Sebastião'], sabastiao: ['Sebastião'], joaqim: ['Joaquim'],
+    jose: ['José'], joze: ['José'], joao: ['João'], maria: ['Maria'],
+    getulio: ['Getúlio'], jetulio: ['Getúlio'], ines: ['Inês'], inez: ['Inês'],
+    teixera: ['Teixeira'], teixiera: ['Teixeira'], silvera: ['Silveira'],
+    perera: ['Pereira'], almeyda: ['Almeida'], riberio: ['Ribeiro'], riveiro: ['Ribeiro'],
+    mashado: ['Machado'], carvalhu: ['Carvalho'], mendoça: ['Mendonça'], arauho: ['Araújo'],
+  };
+
+  const words = input.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+
+  const inputNorm = normalize(input);
+  const suggestions = new Set<string>();
+
+  for (let i = 0; i < words.length; i++) {
+    const key = normalize(words[i]);
+    const replacements = dictionary[key];
+    if (!replacements) continue;
+    for (const replacement of replacements) {
+      const next = [...words];
+      next[i] = replacement;
+      const suggestion = next.join(' ');
+      if (normalize(suggestion) !== inputNorm) suggestions.add(suggestion);
+    }
+  }
+
+  return Array.from(suggestions).slice(0, 3);
+}
+
 // Função para dividir texto em páginas
 function splitIntoPages(text: string, maxLength: number = 3800): string[] {
   // Detectar bloco <pre> (pode estar no início OU no meio do texto, após header HTML)
