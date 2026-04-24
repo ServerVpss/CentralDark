@@ -660,13 +660,45 @@ async function handleQuery(
   } else {
     const cleaned = cleanQueryValueWithWarnings(modulo, queryInput);
     cleanInput = cleaned.value;
-    inputWarnings.push(...cleaned.warnings);
+    inputWarnings.push(...cleanInput ? cleaned.warnings : cleaned.warnings);
   }
+
+  // Detecção do tipo de input para auditoria (independente do módulo)
+  const _digits = (queryInput || "").replace(/\D/g, "");
+  const _alnum = (queryInput || "").replace(/[^A-Za-z0-9]/g, "");
+  const detectedInputType =
+    /^\d{11}$/.test(_digits) ? "cpf_like_11d" :
+    /^\d{14}$/.test(_digits) ? "cnpj_like_14d" :
+    /^\d{8}$/.test(_digits) ? "cep_like_8d" :
+    /^\d{10,11}$/.test(_digits) ? "phone_like" :
+    (/^[A-Z]{3}\d{4}$/i.test(_alnum) || /^[A-Z]{3}\d[A-Z]\d{2}$/i.test(_alnum)) ? "plate_like" :
+    /@/.test(queryInput || "") ? "email_like" :
+    "text_or_unknown";
+
+  console.log(JSON.stringify({
+    tag: "INPUT_DETECT",
+    request_id: requestId,
+    channel,
+    modulo,
+    detectedInputType,
+    inputLen: (queryInput || "").length,
+    digitsLen: _digits.length,
+    cleanLen: cleanInput.length,
+    isVirtual,
+  }));
 
   // 4. Validate input
   if (!isVirtual) {
     const validation = validateInput(modulo, cleanInput);
     if (!validation.valid) {
+      console.log(JSON.stringify({
+        tag: "VALIDATION_FAIL",
+        request_id: requestId,
+        channel,
+        modulo,
+        detectedInputType,
+        error: validation.error,
+      }));
       return {
         success: false,
         data: {},
@@ -676,6 +708,14 @@ async function handleQuery(
     }
   } else {
     if (!/^\d{11}$/.test(cleanInput)) {
+      console.log(JSON.stringify({
+        tag: "VALIDATION_FAIL",
+        request_id: requestId,
+        channel,
+        modulo,
+        detectedInputType,
+        error: "virtual_module_requires_cpf",
+      }));
       return {
         success: false,
         data: {},
