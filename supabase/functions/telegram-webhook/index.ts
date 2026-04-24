@@ -48,6 +48,11 @@ interface TelegramMessage {
   photo?: unknown[];
   video?: unknown;
   document?: unknown;
+  audio?: unknown;
+  voice?: unknown;
+  animation?: unknown;
+  sticker?: unknown;
+  video_note?: unknown;
   caption?: string;
   sender_tag?: string;
   managed_bot_created?: unknown;
@@ -74,6 +79,7 @@ interface BotData {
   token: string;
   bot_username: string;
   user_id: string;
+  bot_id?: number | null;
   bot_security_settings?: Array<{
     anti_link_enabled: boolean;
     anti_link_action: string;
@@ -1421,12 +1427,20 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
   }
 }
 
-async function sendMessage(token: string, chatId: number, text: string, replyMarkup?: unknown) {
+async function sendMessage(
+  token: string,
+  chatId: number,
+  text: string,
+  replyMarkup?: unknown,
+  options?: Record<string, unknown>,
+  parseMode = "HTML",
+) {
   return telegramRequest(token, "sendMessage", {
     chat_id: chatId,
     text,
-    parse_mode: "HTML",
+    parse_mode: parseMode,
     reply_markup: replyMarkup,
+    ...(options || {}),
   });
 }
 
@@ -5695,7 +5709,7 @@ class BotHandler {
       const moduleToCommand: Record<string, string> = {
         // Comandos com menu (agrupados)
         cpf: "/cpf", cpfbasico: "/cpf", obito: "/cpf", score: "/cpf", score2: "/cpf",
-        advogadocpf: "/cpf", catcpf: "/cpf",
+        advogadocpf: "/cpf",
         nome: "/nome", nomeabreviadofiltros: "/nome",
         cnh: "/cnh", cnham: "/cnh", cnhrs: "/cnh", cnhrr: "/cnh", cnhnc: "/cnh",
         placa: "/placa", chassi: "/placa", renavam: "/placa", motor: "/placa", veiculos: "/placa",
@@ -6270,7 +6284,7 @@ class BotHandler {
           emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
         }
 
-        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+        const suggestionButtons: InlineButton[][] = suggestions.map((s: string) => 
           [btn(`🔄 ${s}`, `retry_query:${usedModule}:${s}`)]
         );
         suggestionButtons.push(
@@ -6934,7 +6948,7 @@ class BotHandler {
           bot_id: this.bot.id,
           telegram_user_id: telegramUserId,
           payment_context: paymentContext,
-          plan_code: planCode,
+          plan_code,
           plan_name: planName,
           value: Number(value),
           announce_payments_enabled: announceEnabled,
@@ -7002,7 +7016,7 @@ class BotHandler {
       parse_mode: "HTML",
     });
 
-    const statusMessageId = statusMsg?.result?.message_id;
+    const statusMessageId = (statusMsg?.result as { message_id?: number } | undefined)?.message_id;
 
     let sent = 0;
     let failed = 0;
@@ -8187,7 +8201,7 @@ class BotHandler {
           emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
         }
 
-        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+        const suggestionButtons: InlineButton[][] = suggestions.map((s: string) => 
           [btn(`🔄 ${s}`, `retry_query:${queryType}:${s}`)]
         );
         suggestionButtons.push(
