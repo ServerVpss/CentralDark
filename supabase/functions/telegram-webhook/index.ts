@@ -48,6 +48,11 @@ interface TelegramMessage {
   photo?: unknown[];
   video?: unknown;
   document?: unknown;
+  audio?: unknown;
+  voice?: unknown;
+  animation?: unknown;
+  sticker?: unknown;
+  video_note?: unknown;
   caption?: string;
   sender_tag?: string;
   managed_bot_created?: unknown;
@@ -74,6 +79,7 @@ interface BotData {
   token: string;
   bot_username: string;
   user_id: string;
+  bot_id?: number | null;
   bot_security_settings?: Array<{
     anti_link_enabled: boolean;
     anti_link_action: string;
@@ -141,7 +147,7 @@ interface PendingPayment {
   context?: string;
 }
 
-type InlineButton = { text: string; callback_data?: string; url?: string };
+type InlineButton = { text: string; callback_data?: string; url?: string; style?: string };
 
 // =============== API PROVIDERS ===============
 interface ApiProvider {
@@ -501,7 +507,8 @@ function formatCpfSpcResult(
   
   // Extrair dados do wrapper da API
   const apiData = (data.dados || data.data || data) as Record<string, unknown>;
-  const cpfArray = (apiData.cpf || apiData.data?.cpf) as Array<Record<string, unknown>> | undefined;
+  const apiNestedData = apiData.data as Record<string, unknown> | undefined;
+  const cpfArray = ((apiData.cpf as Array<Record<string, unknown>> | undefined) || (apiNestedData?.cpf as Array<Record<string, unknown>> | undefined));
   const cpfData = cpfArray?.[0] || apiData;
   
   const basics = (cpfData.dadosBasicos || cpfData) as Record<string, unknown>;
@@ -1395,7 +1402,7 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
           .replace(/<code>/g, "").replace(/<\/code>/g, "")
           .replace(/<a[^>]*>/g, "").replace(/<\/a>/g, "")
           .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-        const retryBody = { ...body, text: plainText };
+        const retryBody: Record<string, unknown> = { ...(body as Record<string, unknown>), text: plainText };
         delete retryBody.parse_mode;
         const retryRes = await fetch(url, {
           method: "POST",
@@ -1420,13 +1427,59 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
   }
 }
 
-async function sendMessage(token: string, chatId: number, text: string, replyMarkup?: unknown) {
+async function sendMessage(
+  token: string,
+  chatId: number,
+  text: string,
+  replyMarkup?: unknown,
+  options?: Record<string, unknown>,
+  parseMode = "HTML",
+) {
   return telegramRequest(token, "sendMessage", {
     chat_id: chatId,
     text,
-    parse_mode: "HTML",
+    parse_mode: parseMode,
     reply_markup: replyMarkup,
+    ...(options || {}),
   });
+}
+
+function suggestNameCorrections(input: string): string[] {
+  const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const dictionary: Record<string, string[]> = {
+    gertudes: ['Gertrudes'], gertrude: ['Gertrudes'], gertruds: ['Gertrudes'],
+    goncalves: ['Gonçalves'], gonsalves: ['Gonçalves'], gonzalves: ['Gonçalves'],
+    conceicao: ['Conceição'], conseicao: ['Conceição'], conceiçao: ['Conceição'],
+    tereza: ['Tereza', 'Theresa', 'Teresa'], thereza: ['Tereza', 'Theresa'],
+    rodriges: ['Rodrigues'], rodrigs: ['Rodrigues'], ferrera: ['Ferreira'], fereira: ['Ferreira'],
+    olivera: ['Oliveira'], oliviera: ['Oliveira'], fransisco: ['Francisco'],
+    sebastiao: ['Sebastião'], sabastiao: ['Sebastião'], joaqim: ['Joaquim'],
+    jose: ['José'], joze: ['José'], joao: ['João'], maria: ['Maria'],
+    getulio: ['Getúlio'], jetulio: ['Getúlio'], ines: ['Inês'], inez: ['Inês'],
+    teixera: ['Teixeira'], teixiera: ['Teixeira'], silvera: ['Silveira'],
+    perera: ['Pereira'], almeyda: ['Almeida'], riberio: ['Ribeiro'], riveiro: ['Ribeiro'],
+    mashado: ['Machado'], carvalhu: ['Carvalho'], mendoça: ['Mendonça'], arauho: ['Araújo'],
+  };
+
+  const words = input.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+
+  const inputNorm = normalize(input);
+  const suggestions = new Set<string>();
+
+  for (let i = 0; i < words.length; i++) {
+    const key = normalize(words[i]);
+    const replacements = dictionary[key];
+    if (!replacements) continue;
+    for (const replacement of replacements) {
+      const next = [...words];
+      next[i] = replacement;
+      const suggestion = next.join(' ');
+      if (normalize(suggestion) !== inputNorm) suggestions.add(suggestion);
+    }
+  }
+
+  return Array.from(suggestions).slice(0, 3);
 }
 
 // Função para dividir texto em páginas
@@ -2728,7 +2781,7 @@ async function executeQueryWithCache(
     const result = await response.json();
     const fromCache = result.fromCache === true;
     const rawData = result.data || result;
-    const data = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
+    const data: Record<string, unknown> = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
       ? { ...(rawData as Record<string, unknown>) }
       : { data: rawData };
     const warnings: string[] = Array.isArray(result.warnings) ? result.warnings : [];
@@ -4233,7 +4286,7 @@ function formatCpfResult(
       const tel = t as Record<string, unknown>;
       const ddd = tel.ddd || tel.DDD || '';
       const num = tel.telefone || tel.numero || tel.celular || '';
-      const formatted = formatPhoneNumber(ddd, num);
+      const formatted = formatPhoneNumber(String(ddd), String(num));
       const tipoCode = tel.tipoTelefone;
       const tipo = tipoCode === 3 ? 'Celular' : tipoCode === 1 ? 'Fixo' : tipoCode === 2 ? 'Comercial' : '';
       const inclusao = tel.dataInclusao ? ` (${String(tel.dataInclusao).substring(0, 10)})` : '';
@@ -4505,7 +4558,7 @@ const NAME_CORRECTIONS: Record<string, string[]> = {
   souza: ['souza', 'sousa'], soussa: ['souza', 'sousa'],
   teixera: ['teixeira'], teixiera: ['teixeira'],
   silveira: ['silveira'], silvera: ['silveira'],
-  perera: ['pereira'], perera: ['pereira'],
+  perera: ['pereira'],
   almeida: ['almeida'], almeyda: ['almeida'],
   riberio: ['ribeiro'], riveiro: ['ribeiro'],
   machado: ['machado'], mashado: ['machado'],
@@ -5694,7 +5747,7 @@ class BotHandler {
       const moduleToCommand: Record<string, string> = {
         // Comandos com menu (agrupados)
         cpf: "/cpf", cpfbasico: "/cpf", obito: "/cpf", score: "/cpf", score2: "/cpf",
-        advogadocpf: "/cpf", catcpf: "/cpf",
+        advogadocpf: "/cpf",
         nome: "/nome", nomeabreviadofiltros: "/nome",
         cnh: "/cnh", cnham: "/cnh", cnhrs: "/cnh", cnhrr: "/cnh", cnhnc: "/cnh",
         placa: "/placa", chassi: "/placa", renavam: "/placa", motor: "/placa", veiculos: "/placa",
@@ -6269,7 +6322,7 @@ class BotHandler {
           emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
         }
 
-        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+        const suggestionButtons: InlineButton[][] = suggestions.map((s: string) => 
           [btn(`🔄 ${s}`, `retry_query:${usedModule}:${s}`)]
         );
         suggestionButtons.push(
@@ -6933,7 +6986,7 @@ class BotHandler {
           bot_id: this.bot.id,
           telegram_user_id: telegramUserId,
           payment_context: paymentContext,
-          plan_code: planCode,
+          plan_code,
           plan_name: planName,
           value: Number(value),
           announce_payments_enabled: announceEnabled,
@@ -7001,7 +7054,7 @@ class BotHandler {
       parse_mode: "HTML",
     });
 
-    const statusMessageId = statusMsg?.result?.message_id;
+    const statusMessageId = (statusMsg?.result as { message_id?: number } | undefined)?.message_id;
 
     let sent = 0;
     let failed = 0;
@@ -8186,7 +8239,7 @@ class BotHandler {
           emptyMsg += `\n💡 Verifique a ortografia e tente novamente.`;
         }
 
-        const suggestionButtons: InlineButton[][] = suggestions.map(s => 
+        const suggestionButtons: InlineButton[][] = suggestions.map((s: string) => 
           [btn(`🔄 ${s}`, `retry_query:${queryType}:${s}`)]
         );
         suggestionButtons.push(

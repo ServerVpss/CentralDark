@@ -184,7 +184,7 @@ Deno.serve(async (req) => {
 });
 
 async function notifyOfflineFunctions(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   offlineFunctions: FunctionHealth[]
 ) {
   try {
@@ -197,8 +197,8 @@ async function notifyOfflineFunctions(
     
     if (!bots || bots.length === 0) return;
     
-    const bot = bots[0];
-    const ownerIds = (bot.bot_settings as any)?.owner_ids || [];
+    const bot = bots[0] as any;
+    const ownerIds = (bot?.bot_settings as any)?.owner_ids || [];
     
     if (ownerIds.length === 0) return;
     

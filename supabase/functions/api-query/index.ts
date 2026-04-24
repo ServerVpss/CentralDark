@@ -559,14 +559,14 @@ let cachedModuleStatus: Record<string, boolean> | null = null;
 let moduleCacheTime = 0;
 const MODULE_CACHE_TTL = 60_000;
 
-async function isModuleEnabled(modulo: string, supabase: ReturnType<typeof createClient>): Promise<boolean> {
+async function isModuleEnabled(modulo: string, supabase: any): Promise<boolean> {
   const now = Date.now();
   if (!cachedModuleStatus || (now - moduleCacheTime) >= MODULE_CACHE_TTL) {
     try {
       const { data } = await supabase.from("query_modules").select("module_key, enabled");
       if (data) {
         cachedModuleStatus = {};
-        for (const row of data) {
+        for (const row of (data as Array<{ module_key: string; enabled: boolean | null }>)) {
           cachedModuleStatus[row.module_key] = row.enabled ?? true;
         }
         moduleCacheTime = now;
@@ -601,12 +601,13 @@ interface StandardResponse {
     status: string;
   };
   errors: string[];
+  warnings?: string[];
 }
 
 // =============== HANDLE QUERY ===============
 async function handleQuery(
   req: QueryRequest,
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   requestId: string,
 ): Promise<StandardResponse> {
   const startTime = Date.now();

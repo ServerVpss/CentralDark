@@ -6,7 +6,7 @@ const corsHeaders = {
 };
 
 interface PixRequest {
-  action: 'create' | 'check' | 'confirm' | 'cancel' | 'webhook';
+  action: 'create' | 'check' | 'confirm' | 'cancel' | 'webhook' | 'unmute';
   planCode?: string;
   txid?: string;
   amount?: number;
