@@ -223,10 +223,16 @@ function cleanQueryValueWithWarnings(modulo: string, input: string): CleanResult
   let val = input.replace(/\s+/g, " ").trim();
   
   if (TEXT_MODULES.has(modulo)) return { value: val, warnings };
+
+  // Vehicle alphanumeric modules: keep letters+digits, uppercase, strip everything else
+  if (VEHICLE_ALPHANUM_MODULES.has(modulo)) {
+    return { value: val.replace(/[^A-Za-z0-9]/g, "").toUpperCase(), warnings };
+  }
+
   if (NUMERIC_MODULES.has(modulo)) {
     let clean = val.replace(/\D/g, "");
     // Remove country code 55 from phone numbers
-    const PHONE_MODULES = ["telefone", "telefone-isk"];
+    const PHONE_MODULES = ["telefone", "telefonefull", "telefone-3", "telefone-isk"];
     if (PHONE_MODULES.includes(modulo) && clean.length >= 12 && clean.startsWith("55")) {
       const original = clean;
       clean = clean.substring(2);
