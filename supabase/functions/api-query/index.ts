@@ -173,14 +173,29 @@ function getModuleTimeout(modulo: string): number {
 
 // =============== VALIDAÇÃO DE ENTRADA ===============
 const TEXT_MODULES = new Set([
-  "nome", "mae", "endereco", "email", "pix", "nomeabreviadofiltros",
+  "nome", "nomefull", "nome-3",
+  "mae", "maefull",
+  "endereco",
+  "email", "emailfull", "email-3",
+  "pix",
+  "nomeabreviadofiltros",
+]);
+
+// Modules that accept alphanumeric vehicle identifiers (plates, chassis, motors)
+const VEHICLE_ALPHANUM_MODULES = new Set([
+  "placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-completa",
+  "chassi", "motor",
 ]);
 
 const NUMERIC_MODULES = new Set([
-  "cpf", "rg", "titulo", "cnh", "pis",
-  "telefone", "cep",
-  "score", "renda", "credilink", "poderaquisitivo",
-  "parentes", "renavam",
+  "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
+  "rg", "rg-3", "titulo", "cnh", "pis", "pis-3",
+  "telefone", "telefonefull", "telefone-3", "telefone-isk",
+  "cep", "cepfull", "cep-3",
+  "score", "score-3", "renda", "credilink", "poderaquisitivo",
+  "parentes", "parentes-3", "renavam",
+  "cnpj", "cnpj-cred",
+  "bnmp", "bnmp-lc", "siel", "tse-3",
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
@@ -194,6 +209,7 @@ const NUMERIC_MODULES = new Set([
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
   "crlvto-foto", "crlvmt-foto",
+  "foto", "nacional",
 ]);
 
 interface CleanResult {
@@ -207,10 +223,16 @@ function cleanQueryValueWithWarnings(modulo: string, input: string): CleanResult
   let val = input.replace(/\s+/g, " ").trim();
   
   if (TEXT_MODULES.has(modulo)) return { value: val, warnings };
+
+  // Vehicle alphanumeric modules: keep letters+digits, uppercase, strip everything else
+  if (VEHICLE_ALPHANUM_MODULES.has(modulo)) {
+    return { value: val.replace(/[^A-Za-z0-9]/g, "").toUpperCase(), warnings };
+  }
+
   if (NUMERIC_MODULES.has(modulo)) {
     let clean = val.replace(/\D/g, "");
     // Remove country code 55 from phone numbers
-    const PHONE_MODULES = ["telefone", "telefone-isk"];
+    const PHONE_MODULES = ["telefone", "telefonefull", "telefone-3", "telefone-isk"];
     if (PHONE_MODULES.includes(modulo) && clean.length >= 12 && clean.startsWith("55")) {
       const original = clean;
       clean = clean.substring(2);
@@ -264,66 +286,82 @@ function validateInput(modulo: string, value: string): ValidationResult {
   }
 
   const CPF_MODULES = [
-    "cpf", "score", "renda",
-    "credilink", "poderaquisitivo", "parentes", "processos",
-    "siel", "tse-3", "titulo", "mae",
+    "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
+    "score", "score-3", "renda",
+    "credilink", "poderaquisitivo",
+    "parentes", "parentes-3", "processos",
+    "siel", "tse-3", "titulo",
+    "mae", "maefull",
     "pai", "nasc", "nis", "obito", "registro",
-    "cnham", "cnhrs", "cnhrr", "cnhnc", "oab", "advogadooab", "advogadocpf",
-    "advogadooabuf", "catcpf", "catnumero",
+    "bnmp", "bnmp-lc",
+    "cnham", "cnhrs", "cnhrr", "cnhnc",
+    "advogadocpf", "catcpf",
     "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
     "vacinas", "beneficios", "faculdades", "func", "matricula",
     "mandado", "certidoes", "rais", "veiculos", "processo",
     "crlvto", "crlvmt",
   ];
-  if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto")) {
+  if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto") || modulo === "nacional") {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "CPF deve conter exatamente 11 dígitos." };
     }
   }
 
-  if (modulo === "cnpj") {
+  if (modulo === "cnpj" || modulo === "cnpj-cred") {
     if (!/^\d{14}$/.test(clean)) {
       return { valid: false, error: "CNPJ deve conter exatamente 14 dígitos." };
     }
   }
 
-  if (modulo === "placa") {
-    if (!/^[A-Z0-9]{7}$/i.test(clean)) {
+  if (modulo === "placa" || modulo === "placa-serpro" || modulo === "placa-simples" || modulo === "placa-sesp" || modulo === "placa-completa") {
+    if (!/^[A-Z0-9]{7}$/.test(clean)) {
       return { valid: false, error: "Placa deve conter 7 caracteres alfanuméricos." };
     }
   }
 
-  if (modulo === "cep") {
+  if (modulo === "chassi") {
+    if (!/^[A-Z0-9]{5,20}$/.test(clean)) {
+      return { valid: false, error: "Chassi deve conter entre 5 e 20 caracteres alfanuméricos." };
+    }
+  }
+
+  if (modulo === "motor") {
+    if (!/^[A-Z0-9]{3,25}$/.test(clean)) {
+      return { valid: false, error: "Motor deve conter entre 3 e 25 caracteres alfanuméricos." };
+    }
+  }
+
+  if (modulo === "cep" || modulo === "cepfull" || modulo === "cep-3") {
     if (!/^\d{8}$/.test(clean)) {
       return { valid: false, error: "CEP deve conter exatamente 8 dígitos." };
     }
   }
 
-  if (modulo === "telefone") {
+  if (modulo === "telefone" || modulo === "telefonefull" || modulo === "telefone-3" || modulo === "telefone-isk") {
     if (!/^\d{10,11}$/.test(clean)) {
       return { valid: false, error: "Telefone deve conter 10 ou 11 dígitos (DDD + número)." };
     }
   }
 
-  if (modulo === "email") {
+  if (modulo === "email" || modulo === "emailfull" || modulo === "email-3") {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) {
       return { valid: false, error: "Formato de email inválido." };
     }
   }
 
-  if (modulo === "nome" || modulo === "nomeabreviadofiltros") {
+  if (modulo === "nome" || modulo === "nomefull" || modulo === "nome-3" || modulo === "nomeabreviadofiltros") {
     if (clean.length < 3) {
       return { valid: false, error: "Nome deve ter pelo menos 3 caracteres." };
     }
   }
 
-  if (modulo === "rg") {
+  if (modulo === "rg" || modulo === "rg-3") {
     if (!/^\d{5,12}$/.test(clean)) {
       return { valid: false, error: "RG deve conter entre 5 e 12 dígitos." };
     }
   }
 
-  if (modulo === "pis") {
+  if (modulo === "pis" || modulo === "pis-3") {
     if (!/^\d{11}$/.test(clean)) {
       return { valid: false, error: "PIS deve conter 11 dígitos." };
     }
@@ -338,6 +376,12 @@ function validateInput(modulo: string, value: string): ValidationResult {
   if (modulo === "renavam") {
     if (!/^\d{9,11}$/.test(clean)) {
       return { valid: false, error: "RENAVAM deve conter entre 9 e 11 dígitos." };
+    }
+  }
+
+  if (modulo === "pix") {
+    if (clean.length < 3 || clean.length > 100) {
+      return { valid: false, error: "Chave PIX inválida (3 a 100 caracteres)." };
     }
   }
 
