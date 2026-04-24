@@ -7822,7 +7822,23 @@ class BotHandler {
           enabled: await isQueryTypeEnabled(opt.key, this.supabase),
         }))
       );
-      const enabledOptions = enabledChecks.filter((o) => o.enabled);
+      let enabledOptions = enabledChecks.filter((o) => o.enabled);
+
+      // Filtra opções incompatíveis com o input (evita oferecer módulos que vão falhar)
+      // Ex: /placa ABC1234 não deve oferecer "Veículos (CPF)" pois exige 11 dígitos
+      const trimmedInput = queryInput.trim();
+      const digitsOnly = trimmedInput.replace(/\D/g, "");
+      const looksLikeCpf = /^\d{11}$/.test(digitsOnly) && digitsOnly.length === trimmedInput.replace(/[\s.\-]/g, "").length;
+      const looksLikePlate = /^[A-Z0-9]{7}$/i.test(trimmedInput.replace(/[\s\-]/g, ""));
+      // Módulos que exigem CPF (11 dígitos) — não devem aparecer quando input é claramente uma placa
+      const CPF_REQUIRED_MODULES = new Set(["veiculos", "cpf", "score", "renda", "credilink", "poderaquisitivo", "parentes", "processos", "siel", "tse-3", "titulo", "mae", "pai", "nasc", "nis", "obito", "registro", "advogadocpf", "catcpf", "irpf", "vacinas", "beneficios", "faculdades", "func", "matricula", "mandado", "certidoes", "rais", "processo", "crlvto", "crlvmt", "cnham", "cnhrs", "cnhrr", "cnhnc", "dividas", "bens", "score2", "cheque", "assessoria", "iptu"]);
+      // Módulos veiculares (placa/chassi/renavam/motor) — não devem aparecer quando input é claramente CPF
+      const VEHICLE_MODULES = new Set(["placa", "chassi", "renavam", "motor"]);
+      if (looksLikePlate && !looksLikeCpf) {
+        enabledOptions = enabledOptions.filter((o) => !CPF_REQUIRED_MODULES.has(o.key));
+      } else if (looksLikeCpf && !looksLikePlate) {
+        enabledOptions = enabledOptions.filter((o) => !VEHICLE_MODULES.has(o.key));
+      }
 
       if (enabledOptions.length === 0) {
         logCmd('INFO', 'CMD_BLOCKED', { reason: 'all_modules_disabled', command, chatId, userId: telegramUserId });
