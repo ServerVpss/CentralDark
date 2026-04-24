@@ -173,14 +173,29 @@ function getModuleTimeout(modulo: string): number {
 
 // =============== VALIDAÇÃO DE ENTRADA ===============
 const TEXT_MODULES = new Set([
-  "nome", "mae", "endereco", "email", "pix", "nomeabreviadofiltros",
+  "nome", "nomefull", "nome-3",
+  "mae", "maefull",
+  "endereco",
+  "email", "emailfull", "email-3",
+  "pix",
+  "nomeabreviadofiltros",
+]);
+
+// Modules that accept alphanumeric vehicle identifiers (plates, chassis, motors)
+const VEHICLE_ALPHANUM_MODULES = new Set([
+  "placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-completa",
+  "chassi", "motor",
 ]);
 
 const NUMERIC_MODULES = new Set([
-  "cpf", "rg", "titulo", "cnh", "pis",
-  "telefone", "cep",
-  "score", "renda", "credilink", "poderaquisitivo",
-  "parentes", "renavam",
+  "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
+  "rg", "rg-3", "titulo", "cnh", "pis", "pis-3",
+  "telefone", "telefonefull", "telefone-3", "telefone-isk",
+  "cep", "cepfull", "cep-3",
+  "score", "score-3", "renda", "credilink", "poderaquisitivo",
+  "parentes", "parentes-3", "renavam",
+  "cnpj", "cnpj-cred",
+  "bnmp", "bnmp-lc", "siel", "tse-3",
   "fotomg", "fotosp", "fotorj", "fotoce",
   "fotopr", "fotoma", "fotoes", "fotodf",
   "fototo", "fotoms", "fotoro", "fotopi",
@@ -194,6 +209,7 @@ const NUMERIC_MODULES = new Set([
   "fotoal", "fotogo", "fotopb", "fotope", "fotorn",
   "fotonc", "fotocnh", "fotodetran", "fotomapresos",
   "crlvto-foto", "crlvmt-foto",
+  "foto", "nacional",
 ]);
 
 interface CleanResult {
