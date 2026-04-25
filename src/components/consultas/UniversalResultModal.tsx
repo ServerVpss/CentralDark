@@ -292,24 +292,26 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
 
         // Array
         if (Array.isArray(value)) {
-          if (value.length === 0) return null;
-          const allPrimitive = value.every((v) => typeof v !== "object" || v === null);
+          const cleaned = value.filter((v) => !isPlaceholder(v));
+          if (cleaned.length === 0) return null;
+          const deduped = dedupeArray(cleaned);
+          const allPrimitive = deduped.every((v) => typeof v !== "object" || v === null);
           return (
             <div key={key} className="space-y-1">
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-                {label} <span className="text-muted-foreground/60">({value.length})</span>
+                {label} <span className="text-muted-foreground/60">({deduped.length})</span>
               </p>
               {allPrimitive ? (
                 <ul className="space-y-0.5 pl-3">
-                  {value.map((v, i) => (
-                    <li key={i} className="text-sm text-foreground">• {valueToString(v)}</li>
+                  {deduped.map((v, i) => (
+                    <li key={i} className="text-sm text-foreground">• {valueToString(v, key)}</li>
                   ))}
                 </ul>
               ) : (
                 <div className="space-y-2">
-                  {value.map((item, i) => (
+                  {deduped.map((item, i) => (
                     <div key={i} className="rounded-md bg-secondary/30 border border-border/40 p-2">
-                      <p className="text-[10px] text-muted-foreground mb-1">[{i}]</p>
+                      <p className="text-[10px] text-muted-foreground mb-1">[{i + 1}/{deduped.length}]</p>
                       <RawDataTree data={item} depth={depth + 1} />
                     </div>
                   ))}
@@ -329,13 +331,15 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
           );
         }
 
-        // Primitive
+        // Primitive — use smart per-key formatting (date, money, doc, phone, cep, title-case)
+        const formatted = valueToString(value, key);
+        if (isPlaceholder(formatted)) return null;
         return (
           <div key={key} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 py-1 border-b border-border/20 last:border-0">
             <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium min-w-[140px]">
               {label}
             </span>
-            <span className="text-sm text-foreground break-words flex-1">{valueToString(value)}</span>
+            <span className="text-sm text-foreground break-words flex-1">{formatted}</span>
           </div>
         );
       })}
