@@ -81,6 +81,149 @@ function formatDate(s?: string): string | undefined {
   return s;
 }
 
+// Format a snake_case / camelCase key into Title Case label
+function formatLabel(key: string): string {
+  return key
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+// Detect if a string is a base64 image / huge blob we should hide
+function isBase64Image(v: any): boolean {
+  if (typeof v !== "string") return false;
+  if (v.startsWith("data:image/")) return true;
+  if (v.startsWith("/9j/") || v.startsWith("iVBOR")) return true;
+  if (v.length > 500 && /^[A-Za-z0-9+/=]+$/.test(v.substring(0, 200))) return true;
+  return false;
+}
+
+// Keys that are technical metadata and should NEVER be shown
+const HIDDEN_KEYS = new Set([
+  "sucesso", "success", "protocolo", "usuario", "consumo_hoje", "consumo",
+  "total_diario", "reset_em", "inicio_uso", "vencimento", "tempo_restante",
+  "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
+  "modulo", "duration_ms", "module_disabled", "error", "notfound",
+  "fromcache", "cache_ttl_hours", "foto", "image", "photo", "fotobase64",
+  "base64", "conta", "saldo", "tempo_segundos", "temposegundos", "cache",
+  "cached_at", "expiracao", "limites", "plano", "requests_used",
+  "requests_remaining", "daily_limit", "fallback_provider", "apikey",
+  "prioridade", "comando", "raw", "request_id", "channel", "status",
+]);
+
+function shouldHideKey(key: string): boolean {
+  const k = key.toLowerCase();
+  if (HIDDEN_KEYS.has(k)) return true;
+  if (k.endsWith("_consultada") || k.endsWith("_consultado")) return true;
+  return false;
+}
+
+// Render any value safely as string for display
+function valueToString(v: any): string {
+  if (v === null || v === undefined) return "—";
+  if (typeof v === "boolean") return v ? "Sim" : "Não";
+  if (typeof v === "number") return String(v);
+  if (typeof v === "string") return v;
+  return JSON.stringify(v);
+}
+
+// Recursively render ALL data — used as a "catch-all" so nothing is lost.
+// Arrays of objects become subsections; primitive arrays become bullet lists.
+function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
+  if (data === null || data === undefined) return null;
+  if (typeof data !== "object") {
+    return <span className="text-sm">{valueToString(data)}</span>;
+  }
+
+  const entries = Object.entries(data).filter(([k, v]) => {
+    if (shouldHideKey(k)) return false;
+    if (v === null || v === undefined || v === "") return false;
+    if (isBase64Image(v)) return false;
+    return true;
+  });
+
+  if (entries.length === 0) return null;
+
+  return (
+    <div className={cn("space-y-2", depth > 0 && "pl-3 border-l border-border/40")}>
+      {entries.map(([key, value]) => {
+        const label = formatLabel(key);
+
+        // Array
+        if (Array.isArray(value)) {
+          if (value.length === 0) return null;
+          const allPrimitive = value.every((v) => typeof v !== "object" || v === null);
+          return (
+            <div key={key} className="space-y-1">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+                {label} <span className="text-muted-foreground/60">({value.length})</span>
+              </p>
+              {allPrimitive ? (
+                <ul className="space-y-0.5 pl-3">
+                  {value.map((v, i) => (
+                    <li key={i} className="text-sm text-foreground">• {valueToString(v)}</li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="space-y-2">
+                  {value.map((item, i) => (
+                    <div key={i} className="rounded-md bg-secondary/30 border border-border/40 p-2">
+                      <p className="text-[10px] text-muted-foreground mb-1">[{i}]</p>
+                      <RawDataTree data={item} depth={depth + 1} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        // Nested object
+        if (typeof value === "object") {
+          return (
+            <div key={key} className="space-y-1">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">{label}</p>
+              <RawDataTree data={value} depth={depth + 1} />
+            </div>
+          );
+        }
+
+        // Primitive
+        return (
+          <div key={key} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 py-1 border-b border-border/20 last:border-0">
+            <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium min-w-[140px]">
+              {label}
+            </span>
+            <span className="text-sm text-foreground break-words flex-1">{valueToString(value)}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// "Complete data" section — shows the entire structured payload so nothing is lost
+function CompleteDataSection({ data }: { data: any }) {
+  if (!data || typeof data !== "object") return null;
+  return (
+    <div className="rounded-xl border border-border/50 bg-card p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <FileText className="h-4 w-4" />
+        </div>
+        <h3 className="text-sm font-semibold uppercase tracking-wide flex-1">Dados Completos</h3>
+        <Badge variant="outline" className="text-xs">Completo</Badge>
+      </div>
+      <div className="max-h-[60vh] overflow-y-auto pr-2">
+        <RawDataTree data={data} />
+      </div>
+    </div>
+  );
+}
+
 // ============= CATEGORIZATION =============
 type ResultCategory = "vehicle" | "person" | "company" | "phone" | "address" | "score" | "photo" | "generic";
 
