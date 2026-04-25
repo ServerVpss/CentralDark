@@ -37,7 +37,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { ResultDisplay } from "@/components/consultation/ResultDisplay";
+
 import { QueryInput } from "@/components/consultation/QueryInput";
 import { QueryHistoryList } from "@/components/consultation/QueryHistoryList";
 import { ProviderStatusList } from "@/components/consultation/ProviderStatusList";
@@ -613,17 +613,22 @@ export default function Consultas() {
                         <p className="text-xs text-muted-foreground mt-2">Clique em uma sugestão para tentar novamente</p>
                       </div>
                     )}
-                    {result.success && result.data && !result.data?.notFound && (
+                    {result.success && result.data && !result.data?.notFound ? (
                       <Button
                         variant="outline"
-                        className="w-full mb-3 gap-2 border-primary/30 hover:bg-primary/10"
+                        className="w-full gap-2 border-primary/30 hover:bg-primary/10"
                         onClick={() => setResultModalOpen(true)}
                       >
                         <Search className="h-4 w-4" />
                         Ver detalhes em formato profissional
                       </Button>
+                    ) : (
+                      result.data?.notFound && (
+                        <div className="text-center py-6 text-muted-foreground text-sm">
+                          🔍 Nenhum dado encontrado para esta consulta
+                        </div>
+                      )
                     )}
-                    <ResultDisplay result={result.data} showCopyButton={true} />
                   </CardContent>
                 </Card>
               </MotionFadeIn>
