@@ -662,6 +662,13 @@ export default function Consultas() {
           </div>
         </div>
       </MotionPage>
+
+      <VehicleResultModal
+        open={vehicleModalOpen}
+        onOpenChange={setVehicleModalOpen}
+        data={result}
+        queryInput={queryInput}
+      />
     </DashboardLayout>
   );
 }
