@@ -782,6 +782,7 @@ async function handleQuery(
     }
 
     const result = await fetchFromProvider(fotoModulo, cleanInput);
+    let totalProviderMs = result.provider_duration_ms;
     if (result.data && !result.data.error && !result.data.notFound) {
       const fotoData = findPhotoInResponse(result.data);
       if (fotoData) {
@@ -794,11 +795,42 @@ async function handleQuery(
         };
       }
     }
+
+    // Fallback automático: tenta os demais estados em paralelo
+    console.log(`[Foto Fallback] ${stateUpper} não encontrou — tentando demais estados em paralelo...`);
+    const otherStates = FOTO_STATE_PRIORITY.filter((s) => s !== stateUpper);
+    const fallbackPromises = otherStates.map(async (state) => {
+      const fm = FOTO_STATE_MODULES[state];
+      if (!fm) return null;
+      const r = await fetchFromProvider(fm, cleanInput);
+      totalProviderMs = Math.max(totalProviderMs, r.provider_duration_ms);
+      if (r.data && !r.data.error && !r.data.notFound) {
+        const fd = findPhotoInResponse(r.data);
+        if (fd) return { ...r.data, foto: fd, cpf: cleanInput, estado_encontrado: state };
+      }
+      return null;
+    });
+    const fallbackResults = await Promise.all(fallbackPromises);
+    for (const r of fallbackResults) {
+      if (r) {
+        return {
+          success: true,
+          data: r,
+          meta: buildMeta("success", totalProviderMs),
+          errors: [],
+          warnings: [
+            ...inputWarnings,
+            `Foto não encontrada em ${stateUpper} — localizada em ${r.estado_encontrado} via fallback automático.`,
+          ],
+        };
+      }
+    }
+
     return {
       success: true,
       data: { cpf: cleanInput, foto: null, estado: stateUpper, notFound: true },
-      meta: buildMeta("not_found", result.provider_duration_ms),
-      errors: [`Foto não encontrada no estado ${stateUpper}`],
+      meta: buildMeta("not_found", totalProviderMs),
+      errors: [`Foto não encontrada em ${stateUpper} nem nos demais estados pesquisados.`],
     };
   }
 
