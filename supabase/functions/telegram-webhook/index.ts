@@ -5502,14 +5502,11 @@ function formatGenericResult(
     if (uniqueItems.length > 0) {
       lines.push('');
       lines.push(`📋 <b>OUTROS DADOS</b>`);
-      const preLines = uniqueItems.slice(0, 30).map(item => {
+      const preLines = uniqueItems.map(item => {
         const displayKey = formatDisplayKey(item.key);
         return `${displayKey.toUpperCase()} => ${item.value}`;
       });
       lines.push(`<pre>${preLines.join('\n')}</pre>`);
-      if (uniqueItems.length > 30) {
-        lines.push(`... e mais ${uniqueItems.length - 30} campos`);
-      }
     }
   }
 
