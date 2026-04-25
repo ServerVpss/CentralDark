@@ -220,6 +220,11 @@ export function MonospaceResultDisplay({
 
   const photoUrl = extractPhoto(rawData);
   const filtered = filterData(rawData);
+  const estadoEncontrado: string | undefined =
+    rawData?.estado_encontrado || rawData?.data?.estado_encontrado;
+  const fallbackWarning: string | undefined = Array.isArray(result?.warnings)
+    ? result.warnings.find((w: string) => typeof w === "string" && w.toLowerCase().includes("foto"))
+    : undefined;
 
   if (!filtered && !photoUrl) {
     return (
@@ -269,21 +274,34 @@ export function MonospaceResultDisplay({
           transition={{ delay: 0.1 }}
           className="rounded-lg border border-cyan-900/60 bg-[#0d1117] overflow-hidden"
         >
-          <div className="px-3 py-2 border-b border-cyan-900/40 bg-[#161b22] flex items-center justify-between">
+          <div className="px-3 py-2 border-b border-cyan-900/40 bg-[#161b22] flex items-center justify-between gap-2 flex-wrap">
             <span className="font-mono text-sm text-cyan-300 font-medium flex items-center gap-2">
               <User className="h-4 w-4" />
               📷 FOTO
             </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDownloadPhoto}
-              className="h-6 px-2 text-xs text-cyan-400 hover:text-cyan-300 hover:bg-cyan-950/30"
-            >
-              <Download className="h-3 w-3 mr-1" />
-              Baixar
-            </Button>
+            <div className="flex items-center gap-2">
+              {estadoEncontrado && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                  <MapPin className="h-3 w-3" />
+                  Foto encontrada em: <strong className="font-semibold">{String(estadoEncontrado).toUpperCase()}</strong>
+                </span>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleDownloadPhoto}
+                className="h-6 px-2 text-xs text-cyan-400 hover:text-cyan-300 hover:bg-cyan-950/30"
+              >
+                <Download className="h-3 w-3 mr-1" />
+                Baixar
+              </Button>
+            </div>
           </div>
+          {fallbackWarning && (
+            <div className="px-3 py-1.5 text-[11px] text-amber-300/90 bg-amber-500/5 border-b border-amber-500/20 font-mono">
+              ⚠️ {fallbackWarning}
+            </div>
+          )}
           <div className="p-4 flex justify-center">
             <img
               src={photoUrl}
