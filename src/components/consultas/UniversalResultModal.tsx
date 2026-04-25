@@ -331,6 +331,14 @@ function ListItem({ children }: { children: React.ReactNode }) {
 }
 
 // ============= RENDERERS =============
+function formatCpfCnpj(v?: string): string | undefined {
+  if (!v) return undefined;
+  const digits = v.replace(/\D/g, "");
+  if (digits.length === 11) return digits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  if (digits.length === 14) return digits.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+  return v;
+}
+
 function VehicleView({ data }: { data: any }) {
   const flat = useMemo(() => flattenAll(data), [data]);
   const restricoesRaw = data?.restricoes ?? flat["restricoes"];
@@ -339,6 +347,13 @@ function VehicleView({ data }: { data: any }) {
     : typeof restricoesRaw === "string"
       ? restricoesRaw.split(/[,;\n]/).map((s) => s.trim()).filter(Boolean)
       : [];
+
+  const proprietarioNome = pick(flat, "proprietarionome", "nome", "proprietario");
+  const proprietarioDoc = formatCpfCnpj(pick(flat, "proprietariocpfcnpj", "cpfcnpj", "cpf", "cnpj"));
+  const faturadoDoc = formatCpfCnpj(pick(flat, "faturadodocfaturado", "docfaturado"));
+  const faturadoTipo = pick(flat, "faturadotipodocfaturado", "tipodocfaturado");
+  const numeroDi = pick(flat, "numerodi", "di");
+  const historico = pickArray(data, "proprietariosHistorico", "data.proprietariosHistorico", "historicoProprietarios", "data.historicoProprietarios");
 
   return (
     <>
