@@ -220,6 +220,11 @@ export function MonospaceResultDisplay({
 
   const photoUrl = extractPhoto(rawData);
   const filtered = filterData(rawData);
+  const estadoEncontrado: string | undefined =
+    rawData?.estado_encontrado || rawData?.data?.estado_encontrado;
+  const fallbackWarning: string | undefined = Array.isArray(result?.warnings)
+    ? result.warnings.find((w: string) => typeof w === "string" && w.toLowerCase().includes("foto"))
+    : undefined;
 
   if (!filtered && !photoUrl) {
     return (
