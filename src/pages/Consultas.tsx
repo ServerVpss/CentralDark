@@ -41,7 +41,7 @@ import { ResultDisplay } from "@/components/consultation/ResultDisplay";
 import { QueryInput } from "@/components/consultation/QueryInput";
 import { QueryHistoryList } from "@/components/consultation/QueryHistoryList";
 import { ProviderStatusList } from "@/components/consultation/ProviderStatusList";
-import { VehicleResultModal } from "@/components/consultas/VehicleResultModal";
+import { UniversalResultModal } from "@/components/consultas/UniversalResultModal";
 
 import { ConfettiCelebration } from "@/components/gamification/ConfettiCelebration";
 import { MotionPage, MotionFadeIn } from "@/components/ui/motion";
@@ -189,7 +189,7 @@ export default function Consultas() {
   const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [pendingSuggestion, setPendingSuggestion] = useState<string | null>(null);
-  const [vehicleModalOpen, setVehicleModalOpen] = useState(false);
+  const [resultModalOpen, setResultModalOpen] = useState(false);
 
   const vehicleModules = ["placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-completa", "chassi", "motor", "renavam"];
   const isVehicleQuery = vehicleModules.includes(selectedType);
@@ -407,12 +407,12 @@ export default function Consultas() {
     }
   }, [pendingSuggestion]);
 
-  // Auto-open vehicle modal when result is a successful vehicle query
+  // Auto-open universal modal when result is successful
   useEffect(() => {
-    if (result?.success && isVehicleQuery && result.data && !result.data?.notFound) {
-      setVehicleModalOpen(true);
+    if (result?.success && result.data && !result.data?.notFound) {
+      setResultModalOpen(true);
     }
-  }, [result, isVehicleQuery]);
+  }, [result]);
 
   const selectedModule = modules.find(m => m.module_key === selectedType);
   const durationMs = result?.meta?.duration_ms || result?.duration_ms || 0;
@@ -613,13 +613,13 @@ export default function Consultas() {
                         <p className="text-xs text-muted-foreground mt-2">Clique em uma sugestão para tentar novamente</p>
                       </div>
                     )}
-                    {isVehicleQuery && result.success && result.data && !result.data?.notFound && (
+                    {result.success && result.data && !result.data?.notFound && (
                       <Button
                         variant="outline"
                         className="w-full mb-3 gap-2 border-primary/30 hover:bg-primary/10"
-                        onClick={() => setVehicleModalOpen(true)}
+                        onClick={() => setResultModalOpen(true)}
                       >
-                        <Car className="h-4 w-4" />
+                        <Search className="h-4 w-4" />
                         Ver detalhes em formato profissional
                       </Button>
                     )}
@@ -663,10 +663,11 @@ export default function Consultas() {
         </div>
       </MotionPage>
 
-      <VehicleResultModal
-        open={vehicleModalOpen}
-        onOpenChange={setVehicleModalOpen}
+      <UniversalResultModal
+        open={resultModalOpen}
+        onOpenChange={setResultModalOpen}
         data={result}
+        queryType={selectedType}
         queryInput={queryInput}
       />
     </DashboardLayout>
