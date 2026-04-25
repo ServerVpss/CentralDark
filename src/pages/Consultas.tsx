@@ -407,6 +407,13 @@ export default function Consultas() {
     }
   }, [pendingSuggestion]);
 
+  // Auto-open vehicle modal when result is a successful vehicle query
+  useEffect(() => {
+    if (result?.success && isVehicleQuery && result.data && !result.data?.notFound) {
+      setVehicleModalOpen(true);
+    }
+  }, [result, isVehicleQuery]);
+
   const selectedModule = modules.find(m => m.module_key === selectedType);
   const durationMs = result?.meta?.duration_ms || result?.duration_ms || 0;
   const providerMs = result?.meta?.provider_duration_ms;
