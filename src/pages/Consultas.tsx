@@ -37,7 +37,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { ResultDisplay } from "@/components/consultation/ResultDisplay";
+
 import { QueryInput } from "@/components/consultation/QueryInput";
 import { QueryHistoryList } from "@/components/consultation/QueryHistoryList";
 import { ProviderStatusList } from "@/components/consultation/ProviderStatusList";
