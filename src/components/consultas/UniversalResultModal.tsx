@@ -72,13 +72,124 @@ function pickArray(data: any, ...paths: string[]): any[] {
   return [];
 }
 
-// Format date BR
-function formatDate(s?: string): string | undefined {
-  if (!s) return undefined;
-  // Try ISO date
-  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (m) return `${m[3]}/${m[2]}/${m[1]}`;
-  return s;
+// Format date BR — handles ISO, DDMMYYYY, YYYYMMDD, BR, and timestamps
+function formatDate(s?: string | number): string | undefined {
+  if (s === undefined || s === null || s === "") return undefined;
+  const str = String(s).trim();
+  if (!str || str === "0" || str === "00000000") return undefined;
+  // ISO with time
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2}))?/);
+  if (iso) {
+    const date = `${iso[3]}/${iso[2]}/${iso[1]}`;
+    return iso[4] ? `${date} ${iso[4]}:${iso[5]}` : date;
+  }
+  // YYYYMMDD
+  const ymd = str.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (ymd) {
+    const y = +ymd[1], m = +ymd[2], d = +ymd[3];
+    if (m >= 1 && m <= 12 && d >= 1 && d <= 31 && y >= 1900 && y <= 2100) {
+      return `${ymd[3]}/${ymd[2]}/${ymd[1]}`;
+    }
+  }
+  // DDMMYYYY
+  const dmy = str.match(/^(\d{2})(\d{2})(\d{4})$/);
+  if (dmy) {
+    const d = +dmy[1], m = +dmy[2], y = +dmy[3];
+    if (m >= 1 && m <= 12 && d >= 1 && d <= 31 && y >= 1900 && y <= 2100) {
+      return `${dmy[1]}/${dmy[2]}/${dmy[3]}`;
+    }
+  }
+  // Already BR
+  if (/^\d{2}\/\d{2}\/\d{4}/.test(str)) return str;
+  return str;
+}
+
+// Detect a key that looks like a date field
+function isDateKey(key: string): boolean {
+  return /^(data|dt|nasc|nascimento|abertura|emissao|admissao|desligamento|inclusao|validade|vencimento|inicio|fim|expir|criado|atualizado|grafica|lavrat)/i.test(key);
+}
+
+// Detect monetary key
+function isMoneyKey(key: string): boolean {
+  return /(valor|preco|salar|renda|capital|consolidado|saldo|debito|credito|montante|amount)/i.test(key);
+}
+
+// Format money BRL
+function formatMoney(v: any): string {
+  const n = typeof v === "number" ? v : parseFloat(String(v).replace(/\./g, "").replace(",", "."));
+  if (!isFinite(n)) return String(v);
+  // Heuristic: if value has 9 leading zeros it's like "000180000" => 1800.00
+  if (typeof v === "string" && /^0{2,}\d+$/.test(v)) {
+    const cents = parseInt(v, 10);
+    return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  }
+  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+// Mask CPF/CNPJ
+function formatDoc(v: any): string {
+  const s = String(v ?? "").replace(/\D/g, "");
+  if (s.length === 11) return s.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  if (s.length === 14) return s.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+  return String(v);
+}
+
+// Mask phone BR
+function formatPhone(v: any): string {
+  const s = String(v ?? "").replace(/\D/g, "");
+  if (s.length === 11) return s.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+  if (s.length === 10) return s.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+  if (s.length === 13 && s.startsWith("55")) return formatPhone(s.slice(2));
+  return String(v);
+}
+
+// Mask CEP
+function formatCep(v: any): string {
+  const s = String(v ?? "").replace(/\D/g, "");
+  if (s.length === 8) return s.replace(/(\d{5})(\d{3})/, "$1-$2");
+  return String(v);
+}
+
+// Title-case a string in screaming caps
+function titleCase(s: string): string {
+  if (!s || s !== s.toUpperCase()) return s;
+  return s.toLowerCase().replace(/\b([a-záéíóúâêôãõç])/g, (c) => c.toUpperCase());
+}
+
+// Smart per-key value formatter
+function smartFormat(key: string, value: any): string {
+  if (value === null || value === undefined) return "—";
+  if (typeof value === "boolean") return value ? "Sim" : "Não";
+  const k = key.toLowerCase().replace(/[\s_-]/g, "");
+  const sv = String(value).trim();
+  if (!sv) return "—";
+
+  // Doc / numeric IDs
+  if (/^(cpf|cnpj|documento|cpfcnpj|cpfcnpjsocio)$/i.test(k)) return formatDoc(sv);
+  // Phone
+  if (/^(telefone|fone|celular|whatsapp|phone|tel)$/i.test(k) || /telefone/i.test(k)) {
+    const masked = formatPhone(sv);
+    if (masked !== sv) return masked;
+  }
+  // CEP
+  if (/^cep$/i.test(k)) return formatCep(sv);
+  // Date
+  if (isDateKey(k)) {
+    const d = formatDate(sv);
+    if (d) return d;
+  }
+  // Money
+  if (isMoneyKey(k)) {
+    const m = formatMoney(sv);
+    if (m && m !== sv) return m;
+  }
+  // Numeric placeholders
+  if (sv === "0" || sv === "00") return "—";
+  // Title-case for ALL CAPS person/company names
+  if (/^(nome|razaosocial|nomefantasia|nomepai|nomemae|nomesocio|cidade|municipio|bairro|logradouro|endereco|descricao|operadora|cargo|profissao)$/i.test(k)) {
+    return titleCase(sv);
+  }
+  return sv;
 }
 
 // Format a snake_case / camelCase key into Title Case label
