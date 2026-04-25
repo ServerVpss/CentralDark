@@ -818,6 +818,9 @@ export function UniversalResultModal({ open, onOpenChange, data, queryType, quer
         <div className="space-y-4 pt-2">
           {renderView()}
 
+          {/* Catch-all: full structured data so nothing is lost */}
+          <CompleteDataSection data={payload} />
+
           {queryInput && (
             <>
               <Separator />
