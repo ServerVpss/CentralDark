@@ -232,13 +232,39 @@ function shouldHideKey(key: string): boolean {
   return false;
 }
 
-// Render any value safely as string for display
-function valueToString(v: any): string {
+// Detect placeholder/empty values that should be filtered out
+function isPlaceholder(v: any): boolean {
+  if (v === null || v === undefined) return true;
+  if (typeof v === "string") {
+    const t = v.trim().toLowerCase();
+    if (!t) return true;
+    if (["null", "undefined", "-", "—", "n/a", "na", "nao informado", "não informado", "sem informação", "sem informacao", "nao disponivel", "não disponível"].includes(t)) return true;
+  }
+  return false;
+}
+
+// Render any value safely as string for display (uses smart per-key formatting)
+function valueToString(v: any, key?: string): string {
   if (v === null || v === undefined) return "—";
   if (typeof v === "boolean") return v ? "Sim" : "Não";
+  if (key) return smartFormat(key, v);
   if (typeof v === "number") return String(v);
   if (typeof v === "string") return v;
   return JSON.stringify(v);
+}
+
+// Deduplicate identical/very-similar objects in an array (compares JSON shape)
+function dedupeArray(arr: any[]): any[] {
+  const seen = new Set<string>();
+  const out: any[] = [];
+  for (const item of arr) {
+    const key = typeof item === "object" ? JSON.stringify(item) : String(item);
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(item);
+    }
+  }
+  return out;
 }
 
 // Recursively render ALL data — used as a "catch-all" so nothing is lost.
@@ -251,12 +277,13 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
 
   const entries = Object.entries(data).filter(([k, v]) => {
     if (shouldHideKey(k)) return false;
-    if (v === null || v === undefined || v === "") return false;
+    if (isPlaceholder(v)) return false;
     if (isBase64Image(v)) return false;
     return true;
   });
 
   if (entries.length === 0) return null;
+
 
   return (
     <div className={cn("space-y-2", depth > 0 && "pl-3 border-l border-border/40")}>
