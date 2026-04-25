@@ -72,13 +72,124 @@ function pickArray(data: any, ...paths: string[]): any[] {
   return [];
 }
 
-// Format date BR
-function formatDate(s?: string): string | undefined {
-  if (!s) return undefined;
-  // Try ISO date
-  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (m) return `${m[3]}/${m[2]}/${m[1]}`;
-  return s;
+// Format date BR — handles ISO, DDMMYYYY, YYYYMMDD, BR, and timestamps
+function formatDate(s?: string | number): string | undefined {
+  if (s === undefined || s === null || s === "") return undefined;
+  const str = String(s).trim();
+  if (!str || str === "0" || str === "00000000") return undefined;
+  // ISO with time
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2}))?/);
+  if (iso) {
+    const date = `${iso[3]}/${iso[2]}/${iso[1]}`;
+    return iso[4] ? `${date} ${iso[4]}:${iso[5]}` : date;
+  }
+  // YYYYMMDD
+  const ymd = str.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (ymd) {
+    const y = +ymd[1], m = +ymd[2], d = +ymd[3];
+    if (m >= 1 && m <= 12 && d >= 1 && d <= 31 && y >= 1900 && y <= 2100) {
+      return `${ymd[3]}/${ymd[2]}/${ymd[1]}`;
+    }
+  }
+  // DDMMYYYY
+  const dmy = str.match(/^(\d{2})(\d{2})(\d{4})$/);
+  if (dmy) {
+    const d = +dmy[1], m = +dmy[2], y = +dmy[3];
+    if (m >= 1 && m <= 12 && d >= 1 && d <= 31 && y >= 1900 && y <= 2100) {
+      return `${dmy[1]}/${dmy[2]}/${dmy[3]}`;
+    }
+  }
+  // Already BR
+  if (/^\d{2}\/\d{2}\/\d{4}/.test(str)) return str;
+  return str;
+}
+
+// Detect a key that looks like a date field
+function isDateKey(key: string): boolean {
+  return /^(data|dt|nasc|nascimento|abertura|emissao|admissao|desligamento|inclusao|validade|vencimento|inicio|fim|expir|criado|atualizado|grafica|lavrat)/i.test(key);
+}
+
+// Detect monetary key
+function isMoneyKey(key: string): boolean {
+  return /(valor|preco|salar|renda|capital|consolidado|saldo|debito|credito|montante|amount)/i.test(key);
+}
+
+// Format money BRL
+function formatMoney(v: any): string {
+  const n = typeof v === "number" ? v : parseFloat(String(v).replace(/\./g, "").replace(",", "."));
+  if (!isFinite(n)) return String(v);
+  // Heuristic: if value has 9 leading zeros it's like "000180000" => 1800.00
+  if (typeof v === "string" && /^0{2,}\d+$/.test(v)) {
+    const cents = parseInt(v, 10);
+    return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  }
+  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+// Mask CPF/CNPJ
+function formatDoc(v: any): string {
+  const s = String(v ?? "").replace(/\D/g, "");
+  if (s.length === 11) return s.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  if (s.length === 14) return s.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+  return String(v);
+}
+
+// Mask phone BR
+function formatPhone(v: any): string {
+  const s = String(v ?? "").replace(/\D/g, "");
+  if (s.length === 11) return s.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+  if (s.length === 10) return s.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+  if (s.length === 13 && s.startsWith("55")) return formatPhone(s.slice(2));
+  return String(v);
+}
+
+// Mask CEP
+function formatCep(v: any): string {
+  const s = String(v ?? "").replace(/\D/g, "");
+  if (s.length === 8) return s.replace(/(\d{5})(\d{3})/, "$1-$2");
+  return String(v);
+}
+
+// Title-case a string in screaming caps
+function titleCase(s: string): string {
+  if (!s || s !== s.toUpperCase()) return s;
+  return s.toLowerCase().replace(/\b([a-záéíóúâêôãõç])/g, (c) => c.toUpperCase());
+}
+
+// Smart per-key value formatter
+function smartFormat(key: string, value: any): string {
+  if (value === null || value === undefined) return "—";
+  if (typeof value === "boolean") return value ? "Sim" : "Não";
+  const k = key.toLowerCase().replace(/[\s_-]/g, "");
+  const sv = String(value).trim();
+  if (!sv) return "—";
+
+  // Doc / numeric IDs
+  if (/^(cpf|cnpj|documento|cpfcnpj|cpfcnpjsocio)$/i.test(k)) return formatDoc(sv);
+  // Phone
+  if (/^(telefone|fone|celular|whatsapp|phone|tel)$/i.test(k) || /telefone/i.test(k)) {
+    const masked = formatPhone(sv);
+    if (masked !== sv) return masked;
+  }
+  // CEP
+  if (/^cep$/i.test(k)) return formatCep(sv);
+  // Date
+  if (isDateKey(k)) {
+    const d = formatDate(sv);
+    if (d) return d;
+  }
+  // Money
+  if (isMoneyKey(k)) {
+    const m = formatMoney(sv);
+    if (m && m !== sv) return m;
+  }
+  // Numeric placeholders
+  if (sv === "0" || sv === "00") return "—";
+  // Title-case for ALL CAPS person/company names
+  if (/^(nome|razaosocial|nomefantasia|nomepai|nomemae|nomesocio|cidade|municipio|bairro|logradouro|endereco|descricao|operadora|cargo|profissao)$/i.test(k)) {
+    return titleCase(sv);
+  }
+  return sv;
 }
 
 // Format a snake_case / camelCase key into Title Case label
@@ -121,13 +232,39 @@ function shouldHideKey(key: string): boolean {
   return false;
 }
 
-// Render any value safely as string for display
-function valueToString(v: any): string {
+// Detect placeholder/empty values that should be filtered out
+function isPlaceholder(v: any): boolean {
+  if (v === null || v === undefined) return true;
+  if (typeof v === "string") {
+    const t = v.trim().toLowerCase();
+    if (!t) return true;
+    if (["null", "undefined", "-", "—", "n/a", "na", "nao informado", "não informado", "sem informação", "sem informacao", "nao disponivel", "não disponível"].includes(t)) return true;
+  }
+  return false;
+}
+
+// Render any value safely as string for display (uses smart per-key formatting)
+function valueToString(v: any, key?: string): string {
   if (v === null || v === undefined) return "—";
   if (typeof v === "boolean") return v ? "Sim" : "Não";
+  if (key) return smartFormat(key, v);
   if (typeof v === "number") return String(v);
   if (typeof v === "string") return v;
   return JSON.stringify(v);
+}
+
+// Deduplicate identical/very-similar objects in an array (compares JSON shape)
+function dedupeArray(arr: any[]): any[] {
+  const seen = new Set<string>();
+  const out: any[] = [];
+  for (const item of arr) {
+    const key = typeof item === "object" ? JSON.stringify(item) : String(item);
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(item);
+    }
+  }
+  return out;
 }
 
 // Recursively render ALL data — used as a "catch-all" so nothing is lost.
@@ -140,12 +277,13 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
 
   const entries = Object.entries(data).filter(([k, v]) => {
     if (shouldHideKey(k)) return false;
-    if (v === null || v === undefined || v === "") return false;
+    if (isPlaceholder(v)) return false;
     if (isBase64Image(v)) return false;
     return true;
   });
 
   if (entries.length === 0) return null;
+
 
   return (
     <div className={cn("space-y-2", depth > 0 && "pl-3 border-l border-border/40")}>
@@ -154,24 +292,26 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
 
         // Array
         if (Array.isArray(value)) {
-          if (value.length === 0) return null;
-          const allPrimitive = value.every((v) => typeof v !== "object" || v === null);
+          const cleaned = value.filter((v) => !isPlaceholder(v));
+          if (cleaned.length === 0) return null;
+          const deduped = dedupeArray(cleaned);
+          const allPrimitive = deduped.every((v) => typeof v !== "object" || v === null);
           return (
             <div key={key} className="space-y-1">
               <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-                {label} <span className="text-muted-foreground/60">({value.length})</span>
+                {label} <span className="text-muted-foreground/60">({deduped.length})</span>
               </p>
               {allPrimitive ? (
                 <ul className="space-y-0.5 pl-3">
-                  {value.map((v, i) => (
-                    <li key={i} className="text-sm text-foreground">• {valueToString(v)}</li>
+                  {deduped.map((v, i) => (
+                    <li key={i} className="text-sm text-foreground">• {valueToString(v, key)}</li>
                   ))}
                 </ul>
               ) : (
                 <div className="space-y-2">
-                  {value.map((item, i) => (
+                  {deduped.map((item, i) => (
                     <div key={i} className="rounded-md bg-secondary/30 border border-border/40 p-2">
-                      <p className="text-[10px] text-muted-foreground mb-1">[{i}]</p>
+                      <p className="text-[10px] text-muted-foreground mb-1">[{i + 1}/{deduped.length}]</p>
                       <RawDataTree data={item} depth={depth + 1} />
                     </div>
                   ))}
@@ -191,13 +331,15 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
           );
         }
 
-        // Primitive
+        // Primitive — use smart per-key formatting (date, money, doc, phone, cep, title-case)
+        const formatted = valueToString(value, key);
+        if (isPlaceholder(formatted)) return null;
         return (
           <div key={key} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 py-1 border-b border-border/20 last:border-0">
             <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium min-w-[140px]">
               {label}
             </span>
-            <span className="text-sm text-foreground break-words flex-1">{valueToString(value)}</span>
+            <span className="text-sm text-foreground break-words flex-1">{formatted}</span>
           </div>
         );
       })}
