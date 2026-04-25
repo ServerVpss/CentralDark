@@ -95,17 +95,39 @@ Deno.serve(async (req) => {
       })
     );
 
+    // Auto-disable offline providers in DB so they don't show as options in the panel
+    const offlineIds = results
+      .filter((r) => r.status === "offline")
+      .map((r) => r.id);
+
+    if (offlineIds.length > 0 && dbProviders && dbProviders.length > 0) {
+      const { error: updateError } = await supabase
+        .from("api_providers")
+        .update({ is_active: false, updated_at: new Date().toISOString() })
+        .in("id", offlineIds);
+
+      if (updateError) {
+        console.error("Failed to auto-disable offline providers:", updateError);
+      } else {
+        console.log(`Auto-disabled ${offlineIds.length} offline provider(s):`, offlineIds);
+      }
+    }
+
+    // Filter offline providers from the response so the panel only shows active ones
+    const visibleResults = results.filter((r) => r.status === "online");
+
     const summary = {
-      total: results.length,
-      online: results.filter((r) => r.status === "online").length,
-      offline: results.filter((r) => r.status === "offline").length,
+      total: visibleResults.length,
+      online: visibleResults.length,
+      offline: 0,
+      auto_disabled: offlineIds.length,
       checked_at: new Date().toISOString(),
     };
 
-    console.log(`Provider ping: ${summary.online}/${summary.total} online`);
+    console.log(`Provider ping: ${summary.online}/${results.length} online (${offlineIds.length} auto-disabled)`);
 
     return new Response(
-      JSON.stringify({ providers: results, summary }),
+      JSON.stringify({ providers: visibleResults, summary }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
