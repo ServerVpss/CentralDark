@@ -772,8 +772,18 @@ function PhotoView({ data }: { data: any }) {
   );
 }
 
+function isEmptyValue(v: any): boolean {
+  if (v === null || v === undefined || v === "") return true;
+  if (Array.isArray(v) && v.length === 0) return true;
+  if (typeof v === "object" && Object.keys(v).length === 0) return true;
+  return false;
+}
+
+function formatLabel(key: string): string {
+  return key.replace(/_/g, " ").toUpperCase();
+}
+
 function GenericView({ data }: { data: any }) {
-  // Render top-level object as fields, recursing one level
   if (!data || typeof data !== "object") {
     return (
       <Section title="Resultado" icon={FileText}>
@@ -783,21 +793,73 @@ function GenericView({ data }: { data: any }) {
       </Section>
     );
   }
-  const entries = Object.entries(data).filter(([_, v]) => v !== null && v !== undefined && v !== "");
+
+  const entries = Object.entries(data).filter(([_, v]) => !isEmptyValue(v));
+  const scalars = entries.filter(([_, v]) => typeof v !== "object");
+  const objects = entries.filter(([_, v]) => typeof v === "object" && !Array.isArray(v));
+  const arrays = entries.filter(([_, v]) => Array.isArray(v));
+
   return (
-    <Section title="Dados" icon={FileText}>
-      {entries.map(([k, v]) => {
-        if (typeof v === "object") return null;
-        return <Field key={k} label={k} value={String(v)} />;
-      })}
-      {entries.some(([_, v]) => typeof v === "object") && (
-        <div className="sm:col-span-2 mt-2">
-          <pre className="text-xs whitespace-pre-wrap font-mono p-3 rounded-lg bg-secondary/30 border border-border/40 max-h-96 overflow-y-auto">
-            {JSON.stringify(data, null, 2)}
-          </pre>
-        </div>
+    <>
+      {scalars.length > 0 && (
+        <Section title="Dados" icon={FileText}>
+          {scalars.map(([k, v]) => (
+            <Field key={k} label={formatLabel(k)} value={String(v)} />
+          ))}
+        </Section>
       )}
-    </Section>
+
+      {objects.map(([k, v]) => {
+        const subEntries = Object.entries(v as Record<string, any>).filter(([_, vv]) => !isEmptyValue(vv));
+        if (subEntries.length === 0) return null;
+        return (
+          <Section key={k} title={formatLabel(k)} icon={FileText}>
+            {subEntries.map(([sk, sv]) => (
+              <Field
+                key={sk}
+                label={formatLabel(sk)}
+                value={typeof sv === "object" ? JSON.stringify(sv) : String(sv)}
+              />
+            ))}
+          </Section>
+        );
+      })}
+
+      {arrays.map(([k, v]) => {
+        const arr = v as any[];
+        if (arr.length === 0) return null;
+        return (
+          <Section key={k} title={formatLabel(k)} icon={FileText}>
+            <div className="sm:col-span-2 space-y-2">
+              {arr.map((item, idx) => {
+                if (typeof item !== "object" || item === null) {
+                  return (
+                    <div key={idx} className="text-sm font-mono">
+                      • {String(item)}
+                    </div>
+                  );
+                }
+                const itemEntries = Object.entries(item).filter(([_, vv]) => !isEmptyValue(vv));
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-lg border border-border/40 bg-secondary/20 p-3 grid grid-cols-1 sm:grid-cols-2 gap-2"
+                  >
+                    {itemEntries.map(([sk, sv]) => (
+                      <Field
+                        key={sk}
+                        label={formatLabel(sk)}
+                        value={typeof sv === "object" ? JSON.stringify(sv) : String(sv)}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </Section>
+        );
+      })}
+    </>
   );
 }
 
