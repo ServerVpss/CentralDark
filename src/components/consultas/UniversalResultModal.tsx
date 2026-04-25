@@ -779,10 +779,6 @@ function isEmptyValue(v: any): boolean {
   return false;
 }
 
-function formatLabel(key: string): string {
-  return key.replace(/_/g, " ").toUpperCase();
-}
-
 function GenericView({ data }: { data: any }) {
   if (!data || typeof data !== "object") {
     return (
