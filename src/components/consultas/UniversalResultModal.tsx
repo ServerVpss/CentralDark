@@ -331,6 +331,14 @@ function ListItem({ children }: { children: React.ReactNode }) {
 }
 
 // ============= RENDERERS =============
+function formatCpfCnpj(v?: string): string | undefined {
+  if (!v) return undefined;
+  const digits = v.replace(/\D/g, "");
+  if (digits.length === 11) return digits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+  if (digits.length === 14) return digits.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+  return v;
+}
+
 function VehicleView({ data }: { data: any }) {
   const flat = useMemo(() => flattenAll(data), [data]);
   const restricoesRaw = data?.restricoes ?? flat["restricoes"];
@@ -339,6 +347,13 @@ function VehicleView({ data }: { data: any }) {
     : typeof restricoesRaw === "string"
       ? restricoesRaw.split(/[,;\n]/).map((s) => s.trim()).filter(Boolean)
       : [];
+
+  const proprietarioNome = pick(flat, "proprietarionome", "nome", "proprietario");
+  const proprietarioDoc = formatCpfCnpj(pick(flat, "proprietariocpfcnpj", "cpfcnpj", "cpf", "cnpj"));
+  const faturadoDoc = formatCpfCnpj(pick(flat, "faturadodocfaturado", "docfaturado"));
+  const faturadoTipo = pick(flat, "faturadotipodocfaturado", "tipodocfaturado");
+  const numeroDi = pick(flat, "numerodi", "di");
+  const historico = pickArray(data, "proprietariosHistorico", "data.proprietariosHistorico", "historicoProprietarios", "data.historicoProprietarios");
 
   return (
     <>
@@ -379,8 +394,49 @@ function VehicleView({ data }: { data: any }) {
         <Field icon={MapPin} label="UF" value={pick(flat, "uf", "estado")} />
         <Field icon={Building2} label="Município" value={pick(flat, "municipio", "cidade")} />
         <Field icon={CheckCircle2} label="Situação Veículo" value={pick(flat, "situacaoveiculo", "situacao")} />
-        <Field icon={CheckCircle2} label="Situação Chassi" value={pick(flat, "situacaochassi")} />
+        <Field
+          icon={CheckCircle2}
+          label="Situação Chassi"
+          value={pick(flat, "situacaochassi")}
+          highlight={pick(flat, "situacaochassi")?.toUpperCase().includes("BAIXAD")}
+        />
       </Section>
+
+      {(proprietarioNome || proprietarioDoc) && (
+        <Section title="Proprietário Atual" icon={User} variant="info">
+          <Field icon={User} label="Nome" value={proprietarioNome} />
+          <Field icon={Fingerprint} label="CPF / CNPJ" value={proprietarioDoc} mono />
+        </Section>
+      )}
+
+      {(faturadoDoc || numeroDi) && (
+        <Section title="Importação / Faturamento" icon={Briefcase}>
+          <Field icon={Briefcase} label={faturadoTipo || "Documento Faturado"} value={faturadoDoc} mono />
+          <Field icon={FileText} label="Número DI" value={numeroDi} mono />
+        </Section>
+      )}
+
+      {historico.length > 0 && (
+        <Section title="Histórico de Proprietários" icon={Users} count={historico.length}>
+          <div className="sm:col-span-2 space-y-1.5">
+            {historico.map((h: any, i: number) => {
+              const nome = h?.nome || h?.proprietario || "—";
+              const doc = formatCpfCnpj(h?.cpfCnpj || h?.cpf || h?.cnpj);
+              const ano = h?.ano || h?.data || h?.year;
+              return (
+                <ListItem key={i}>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{nome}</p>
+                    <p className="text-xs text-muted-foreground font-mono">
+                      {doc || "—"}{ano ? ` • ${ano}` : ""}
+                    </p>
+                  </div>
+                </ListItem>
+              );
+            })}
+          </div>
+        </Section>
+      )}
     </>
   );
 }
