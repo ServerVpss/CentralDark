@@ -5249,7 +5249,7 @@ function formatGenericResult(
     },
     vehicle: {
       icon: '🚗', label: 'VEÍCULO',
-      fields: ['placa', 'veiculos', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anomodelo', 'anofabricacao', 'cor', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'especie', 'categoria', 'proprietario']
+      fields: ['placa', 'placanacional', 'placamercosul', 'veiculos', 'chassi', 'renavam', 'motor', 'marca', 'modelo', 'ano', 'anomodelo', 'anofabricacao', 'cor', 'corveiculo', 'combustivel', 'potencia', 'cilindradas', 'tipo_veiculo', 'tipoveiculo', 'especie', 'especieveiculo', 'categoria', 'proprietario', 'linha', 'pesobruto', 'capacidpassageiros', 'situacaoveiculo', 'situacaochassi', 'numerodi', 'docfaturado', 'tipocarroceria', 'caixacambio']
     },
     work: {
       icon: '💼', label: 'PROFISSIONAL',
@@ -5262,6 +5262,10 @@ function formatGenericResult(
     legal: {
       icon: '⚖️', label: 'PROCESSOS / JURÍDICO',
       fields: ['processo', 'processos', 'advogado', 'vara', 'tribunal', 'oab', 'acao', 'comarca']
+    },
+    restrictions: {
+      icon: '⚠️', label: 'RESTRIÇÕES / OCORRÊNCIAS',
+      fields: ['restricoes', 'restricao', 'ocorrencias', 'ocorrencia', 'alienacao', 'roubo', 'furto', 'bloqueio']
     },
   };
 
