@@ -189,6 +189,10 @@ export default function Consultas() {
   const [networkBlockedHint, setNetworkBlockedHint] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [pendingSuggestion, setPendingSuggestion] = useState<string | null>(null);
+  const [vehicleModalOpen, setVehicleModalOpen] = useState(false);
+
+  const vehicleModules = ["placa", "placa-serpro", "placa-simples", "placa-sesp", "placa-completa", "chassi", "motor", "renavam"];
+  const isVehicleQuery = vehicleModules.includes(selectedType);
 
   // Load modules from DB
   useEffect(() => {
