@@ -627,7 +627,7 @@ async function handleQuery(
 ): Promise<StandardResponse> {
   const startTime = Date.now();
   const { queryType, queryInput, estado, channel } = req;
-  const modulo = queryType.toLowerCase().trim();
+  let modulo = queryType.toLowerCase().trim();
   const channelName = channel || "unknown";
 
   const buildMeta = (status: string, providerMs = 0) => {
