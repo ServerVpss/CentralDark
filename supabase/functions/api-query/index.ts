@@ -279,17 +279,32 @@ interface ValidationResult {
   error?: string;
 }
 
+// Modules that accept either CPF (11d) or NPU (20d - Número de Processo Unificado)
+const NPU_OR_CPF_MODULES = new Set(["processos", "processo", "mandado"]);
+
+function isNPU(value: string): boolean {
+  return /^\d{20}$/.test(value);
+}
+
 function validateInput(modulo: string, value: string): ValidationResult {
   const clean = cleanQueryValue(modulo, value);
   if (!clean || clean.length === 0) {
     return { valid: false, error: "Valor não pode ser vazio." };
   }
 
+  // Modules that accept BOTH CPF (11 digits) and NPU (20 digits)
+  if (NPU_OR_CPF_MODULES.has(modulo)) {
+    if (!/^\d{11}$/.test(clean) && !/^\d{20}$/.test(clean)) {
+      return { valid: false, error: "Informe um CPF (11 dígitos) ou número de processo (20 dígitos)." };
+    }
+    return { valid: true };
+  }
+
   const CPF_MODULES = [
     "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
     "score", "score-3", "renda",
     "credilink", "poderaquisitivo",
-    "parentes", "parentes-3", "processos",
+    "parentes", "parentes-3",
     "siel", "tse-3", "titulo",
     "mae", "maefull",
     "pai", "nasc", "nis", "obito", "registro",
@@ -298,7 +313,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
     "advogadocpf", "catcpf",
     "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
     "vacinas", "beneficios", "faculdades", "func", "matricula",
-    "mandado", "certidoes", "rais", "veiculos", "processo",
+    "certidoes", "rais", "veiculos",
     "crlvto", "crlvmt",
   ];
   if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto") || modulo === "nacional") {
