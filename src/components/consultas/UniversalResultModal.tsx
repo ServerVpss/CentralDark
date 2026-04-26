@@ -279,6 +279,9 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
     if (shouldHideKey(k)) return false;
     if (isPlaceholder(v)) return false;
     if (isBase64Image(v)) return false;
+    // Hide empty arrays and empty objects entirely
+    if (Array.isArray(v) && v.filter((x) => !isPlaceholder(x)).length === 0) return false;
+    if (v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === 0) return false;
     return true;
   });
 
