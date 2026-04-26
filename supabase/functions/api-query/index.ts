@@ -279,17 +279,32 @@ interface ValidationResult {
   error?: string;
 }
 
+// Modules that accept either CPF (11d) or NPU (20d - Número de Processo Unificado)
+const NPU_OR_CPF_MODULES = new Set(["processos", "processo", "mandado"]);
+
+function isNPU(value: string): boolean {
+  return /^\d{20}$/.test(value);
+}
+
 function validateInput(modulo: string, value: string): ValidationResult {
   const clean = cleanQueryValue(modulo, value);
   if (!clean || clean.length === 0) {
     return { valid: false, error: "Valor não pode ser vazio." };
   }
 
+  // Modules that accept BOTH CPF (11 digits) and NPU (20 digits)
+  if (NPU_OR_CPF_MODULES.has(modulo)) {
+    if (!/^\d{11}$/.test(clean) && !/^\d{20}$/.test(clean)) {
+      return { valid: false, error: "Informe um CPF (11 dígitos) ou número de processo (20 dígitos)." };
+    }
+    return { valid: true };
+  }
+
   const CPF_MODULES = [
     "cpf", "cpffull", "cpf-isk", "cpf-spc", "cpfsus",
     "score", "score-3", "renda",
     "credilink", "poderaquisitivo",
-    "parentes", "parentes-3", "processos",
+    "parentes", "parentes-3",
     "siel", "tse-3", "titulo",
     "mae", "maefull",
     "pai", "nasc", "nis", "obito", "registro",
@@ -298,7 +313,7 @@ function validateInput(modulo: string, value: string): ValidationResult {
     "advogadocpf", "catcpf",
     "dividas", "bens", "irpf", "score2", "cheque", "assessoria", "iptu",
     "vacinas", "beneficios", "faculdades", "func", "matricula",
-    "mandado", "certidoes", "rais", "veiculos", "processo",
+    "certidoes", "rais", "veiculos",
     "crlvto", "crlvmt",
   ];
   if (CPF_MODULES.includes(modulo) || modulo.startsWith("foto") || modulo === "nacional") {
@@ -612,7 +627,7 @@ async function handleQuery(
 ): Promise<StandardResponse> {
   const startTime = Date.now();
   const { queryType, queryInput, estado, channel } = req;
-  const modulo = queryType.toLowerCase().trim();
+  let modulo = queryType.toLowerCase().trim();
   const channelName = channel || "unknown";
 
   const buildMeta = (status: string, providerMs = 0) => {
@@ -724,6 +739,19 @@ async function handleQuery(
         errors: ["CPF deve conter exatamente 11 dígitos."],
       };
     }
+  }
+
+  // 4b. Auto-route NPU (20 digits) to 'processo' module (singular handles NPU lookups)
+  // when user typed /processos or /mandado with a process number instead of CPF
+  if (NPU_OR_CPF_MODULES.has(modulo) && isNPU(cleanInput) && modulo !== "processo") {
+    console.log(JSON.stringify({
+      tag: "AUTO_ROUTE_NPU",
+      request_id: requestId,
+      from: modulo,
+      to: "processo",
+      input_len: cleanInput.length,
+    }));
+    modulo = "processo";
   }
 
   // 5. Execute query
