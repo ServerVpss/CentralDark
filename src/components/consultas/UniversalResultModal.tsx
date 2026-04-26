@@ -279,6 +279,9 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
     if (shouldHideKey(k)) return false;
     if (isPlaceholder(v)) return false;
     if (isBase64Image(v)) return false;
+    // Hide empty arrays and empty objects entirely
+    if (Array.isArray(v) && v.filter((x) => !isPlaceholder(x)).length === 0) return false;
+    if (v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === 0) return false;
     return true;
   });
 
@@ -347,9 +350,55 @@ function RawDataTree({ data, depth = 0 }: { data: any; depth?: number }) {
   );
 }
 
+// Unwrap common API envelope: returns the meaningful payload (e.g. `dados`)
+// while ignoring metadata wrappers (plano, limites, protocolo, etc).
+function unwrapPayload(data: any): any {
+  if (!data || typeof data !== "object") return data;
+  // If the object has a "dados" key, prefer it
+  if ("dados" in data && data.dados !== null && data.dados !== undefined) {
+    return data.dados;
+  }
+  // Common alternate wrappers
+  for (const k of ["data", "result", "resultado", "response"]) {
+    if (k in data && data[k] && typeof data[k] === "object") return data[k];
+  }
+  return data;
+}
+
+// Detect if payload is essentially "no result"
+function detectEmptyResult(payload: any): string | null {
+  if (payload === null || payload === undefined) return "Nenhum dado retornado.";
+  if (typeof payload === "string" && payload.trim()) return payload;
+  if (typeof payload !== "object") return null;
+  if (Array.isArray(payload)) {
+    if (payload.length === 0) return "Nenhum registro encontrado.";
+    return null;
+  }
+  // Common error shapes
+  const errMsg = payload.erro || payload.error || payload.err || payload.message || payload.msg;
+  if (typeof errMsg === "string" && errMsg.trim()) return errMsg;
+  // {cpf: "Nenhum resultado encontrado"} pattern
+  const values = Object.values(payload);
+  if (values.length === 1 && typeof values[0] === "string" && /nenhum|não.*encontrad|not.*found/i.test(values[0] as string)) {
+    return values[0] as string;
+  }
+  // All values empty/placeholder?
+  const meaningful = values.some((v) => {
+    if (isPlaceholder(v)) return false;
+    if (Array.isArray(v)) return v.length > 0;
+    if (v && typeof v === "object") return Object.keys(v).length > 0;
+    return true;
+  });
+  if (!meaningful) return "Nenhuma informação disponível.";
+  return null;
+}
+
 // "Complete data" section — shows the entire structured payload so nothing is lost
 function CompleteDataSection({ data }: { data: any }) {
   if (!data || typeof data !== "object") return null;
+  const payload = unwrapPayload(data);
+  const emptyMsg = detectEmptyResult(payload);
+
   return (
     <div className="rounded-xl border border-border/50 bg-card p-4">
       <div className="flex items-center gap-2 mb-3">
@@ -357,10 +406,16 @@ function CompleteDataSection({ data }: { data: any }) {
           <FileText className="h-4 w-4" />
         </div>
         <h3 className="text-sm font-semibold uppercase tracking-wide flex-1">Dados Completos</h3>
-        <Badge variant="outline" className="text-xs">Completo</Badge>
+        <Badge variant="outline" className="text-xs">{emptyMsg ? "Vazio" : "Completo"}</Badge>
       </div>
       <div className="max-h-[60vh] overflow-y-auto pr-2">
-        <RawDataTree data={data} />
+        {emptyMsg ? (
+          <div className="rounded-lg bg-muted/30 border border-dashed border-border/50 p-6 text-center">
+            <p className="text-sm text-muted-foreground">{emptyMsg}</p>
+          </div>
+        ) : (
+          <RawDataTree data={payload} />
+        )}
       </div>
     </div>
   );
