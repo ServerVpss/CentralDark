@@ -741,6 +741,19 @@ async function handleQuery(
     }
   }
 
+  // 4b. Auto-route NPU (20 digits) to 'processo' module (singular handles NPU lookups)
+  // when user typed /processos or /mandado with a process number instead of CPF
+  if (NPU_OR_CPF_MODULES.has(modulo) && isNPU(cleanInput) && modulo !== "processo") {
+    console.log(JSON.stringify({
+      tag: "AUTO_ROUTE_NPU",
+      request_id: requestId,
+      from: modulo,
+      to: "processo",
+      input_len: cleanInput.length,
+    }));
+    modulo = "processo";
+  }
+
   // 5. Execute query
 
   // ---- FOTO NACIONAL (paralelo) ----
