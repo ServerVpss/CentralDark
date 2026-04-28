@@ -123,12 +123,6 @@ export default function SubscriptionAudit() {
           const diffFromCurrent = Math.abs(startedAt.getTime() - currentPaidAt.getTime());
           const diffFromPrev = Math.abs(startedAt.getTime() - prevPaidAt.getTime());
 
-          // Se started_at está perto do pagamento ATUAL (dentro de 5 min) e
-          // o pagamento anterior ainda estava válido (< plan_days desde prev),
-          // significa que sobrescreveu
-          const prevWouldStillBeValid =
-            currentPaidAt.getTime() - prevPaidAt.getTime() < prevPaid && false; // placeholder
-          
           if (diffFromCurrent < 5 * 60 * 1000 && diffFromPrev > 60 * 60 * 1000) {
             suspectedOverwrites++;
             timeline.push({
