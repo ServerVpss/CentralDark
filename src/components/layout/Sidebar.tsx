@@ -8,6 +8,7 @@ import {
   CreditCard,
   DollarSign,
   Shield,
+  ShieldAlert,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -52,6 +53,7 @@ const menuGroups = [
   {
     label: "SISTEMA",
     items: [
+      { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
       { title: "Segurança", icon: Shield, path: "/security" },
       { title: "Configurações", icon: Settings, path: "/settings" },
     ],
