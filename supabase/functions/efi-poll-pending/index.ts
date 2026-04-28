@@ -162,34 +162,58 @@ Deno.serve(async (req) => {
           // Buscar dados do pending_payment para pegar plan_days correto
           const { data: pendingPayment } = await supabase
             .from('pending_payments')
-            .select('plan_days, plan_name, plan_code, plan_id, telegram_chat_id, telegram_message_id')
+            .select('plan_days, plan_name, plan_code, plan_id, context, telegram_chat_id, telegram_message_id')
             .eq('txid', tx.external_id)
             .maybeSingle()
 
           const planDays = pendingPayment?.plan_days || 30
           const planName = pendingPayment?.plan_name || tx.description || 'Assinatura'
           const planCode = pendingPayment?.plan_code || 'custom'
+          const context = (pendingPayment as any)?.context || 'group'
           const chatId = pendingPayment?.telegram_chat_id || tx.telegram_user_id
 
           // Criar assinatura se telegram_user_id existir
+          let expiresAt: Date = new Date()
           if (tx.telegram_user_id && tx.bot_id) {
-            const expiresAt = new Date()
+            const now = new Date()
+
+            // STACK LOGIC: empilha dias se já existe assinatura ativa
+            const { data: existingSub } = await supabase
+              .from('telegram_subscriptions')
+              .select('id, expires_at, status')
+              .eq('telegram_user_id', tx.telegram_user_id)
+              .eq('bot_id', tx.bot_id)
+              .eq('context', context)
+              .maybeSingle()
+
+            const baseDate = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+              ? new Date(existingSub.expires_at)
+              : now
+            expiresAt = new Date(baseDate)
             expiresAt.setDate(expiresAt.getDate() + planDays)
+
+            const startedAt = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+              ? undefined
+              : now.toISOString()
+
+            const subPayload: any = {
+              telegram_user_id: tx.telegram_user_id,
+              bot_id: tx.bot_id,
+              context,
+              plan_code: planCode,
+              plan_name: planName,
+              plan_days: planDays,
+              value: tx.amount,
+              txid: tx.external_id,
+              status: 'active',
+              expires_at: expiresAt.toISOString()
+            }
+            if (startedAt) subPayload.started_at = startedAt
 
             await supabase
               .from('telegram_subscriptions')
-              .upsert({
-                telegram_user_id: tx.telegram_user_id,
-                bot_id: tx.bot_id,
-                plan_code: planCode,
-                plan_name: planName,
-                plan_days: planDays,
-                value: tx.amount,
-                txid: tx.external_id,
-                status: 'active',
-                expires_at: expiresAt.toISOString()
-              }, {
-                onConflict: 'telegram_user_id,bot_id'
+              .upsert(subPayload, {
+                onConflict: 'telegram_user_id,bot_id,context'
               })
 
             console.log(`Assinatura criada para usuário ${tx.telegram_user_id}`)
