@@ -185,27 +185,48 @@ Deno.serve(async (req) => {
         const planName = (pending as any)?.plan_name || transaction.description || 'Assinatura PIX'
         const planCode = (pending as any)?.plan_code || 'custom'
         const planId = (pending as any)?.plan_id || null
+        const context = (pending as any)?.context || 'group'
 
         const now = new Date()
-        const expiresAt = new Date(now)
+
+        // STACK LOGIC: se já existe assinatura ativa para esse contexto, soma os dias
+        const { data: existingSub } = await supabase
+          .from('telegram_subscriptions')
+          .select('id, expires_at, status')
+          .eq('telegram_user_id', transaction.telegram_user_id)
+          .eq('bot_id', transaction.bot_id)
+          .eq('context', context)
+          .maybeSingle()
+
+        const baseDate = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+          ? new Date(existingSub.expires_at)
+          : now
+        const expiresAt = new Date(baseDate)
         expiresAt.setDate(expiresAt.getDate() + planDays)
+
+        const startedAt = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+          ? undefined // preserva started_at original
+          : now.toISOString()
+
+        const subPayload: any = {
+          telegram_user_id: transaction.telegram_user_id,
+          bot_id: transaction.bot_id,
+          context,
+          plan_id: planId,
+          plan_code: planCode,
+          plan_name: planName,
+          plan_days: planDays,
+          value: transaction.amount,
+          txid,
+          status: 'active',
+          expires_at: expiresAt.toISOString()
+        }
+        if (startedAt) subPayload.started_at = startedAt
 
         const { error: subError } = await supabase
           .from('telegram_subscriptions')
-          .upsert({
-            telegram_user_id: transaction.telegram_user_id,
-            bot_id: transaction.bot_id,
-            plan_id: planId,
-            plan_code: planCode,
-            plan_name: planName,
-            plan_days: planDays,
-            value: transaction.amount,
-            txid,
-            status: 'active',
-            started_at: now.toISOString(),
-            expires_at: expiresAt.toISOString()
-          }, {
-            onConflict: 'telegram_user_id,bot_id'
+          .upsert(subPayload, {
+            onConflict: 'telegram_user_id,bot_id,context'
           })
 
         if (subError) {
