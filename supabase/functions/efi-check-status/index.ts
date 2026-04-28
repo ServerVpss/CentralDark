@@ -145,24 +145,56 @@ Deno.serve(async (req) => {
 
       // Criar/atualizar assinatura do Telegram se aplicável
       if (transaction.telegram_user_id && transaction.bot_id) {
-        const expiresAt = new Date()
-        expiresAt.setDate(expiresAt.getDate() + 30) // Default 30 dias
+        // Buscar pending para obter plan_days e context corretos
+        const { data: pending } = await supabase
+          .from('pending_payments')
+          .select('plan_days, plan_name, plan_code, context')
+          .eq('txid', txid)
+          .maybeSingle()
+
+        const planDays = (pending as any)?.plan_days ?? 30
+        const planName = (pending as any)?.plan_name || transaction.description || 'Assinatura'
+        const planCode = (pending as any)?.plan_code || 'custom'
+        const context = (pending as any)?.context || 'group'
+
+        const now = new Date()
+
+        // STACK LOGIC: empilha dias se já existe assinatura ativa
+        const { data: existingSub } = await supabase
+          .from('telegram_subscriptions')
+          .select('id, expires_at, status')
+          .eq('telegram_user_id', transaction.telegram_user_id)
+          .eq('bot_id', transaction.bot_id)
+          .eq('context', context)
+          .maybeSingle()
+
+        const baseDate = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+          ? new Date(existingSub.expires_at)
+          : now
+        const expiresAt = new Date(baseDate)
+        expiresAt.setDate(expiresAt.getDate() + planDays)
+
+        const startedAt = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+          ? undefined
+          : now.toISOString()
+
+        const subPayload: any = {
+          telegram_user_id: transaction.telegram_user_id,
+          bot_id: transaction.bot_id,
+          context,
+          plan_code: planCode,
+          plan_name: planName,
+          plan_days: planDays,
+          value: transaction.amount,
+          txid,
+          status: 'active',
+          expires_at: expiresAt.toISOString()
+        }
+        if (startedAt) subPayload.started_at = startedAt
 
         await supabase
           .from('telegram_subscriptions')
-          .upsert({
-            telegram_user_id: transaction.telegram_user_id,
-            bot_id: transaction.bot_id,
-            plan_code: 'custom',
-            plan_name: transaction.description || 'Assinatura',
-            plan_days: 30,
-            value: transaction.amount,
-            txid,
-            status: 'active',
-            expires_at: expiresAt.toISOString()
-          }, {
-            onConflict: 'telegram_user_id,bot_id'
-          })
+          .upsert(subPayload, { onConflict: 'telegram_user_id,bot_id,context' })
       }
     }
 

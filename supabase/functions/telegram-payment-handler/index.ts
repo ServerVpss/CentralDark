@@ -100,12 +100,38 @@ Deno.serve(async (req) => {
 
         if (payment) {
           await supabase.from("pending_payments").update({ status: "CONCLUIDA" }).eq("txid", txid);
-          const expiresAt = new Date(Date.now() + payment.plan_days * 24 * 60 * 60 * 1000).toISOString();
 
-          await supabase.from("telegram_subscriptions").insert({
-            telegram_user_id: telegramUserId, bot_id: botId, plan_id: payment.plan_id,
+          const context = (payment as any).context || 'group';
+          const now = new Date();
+
+          // STACK LOGIC: empilha dias se já existe assinatura ativa
+          const { data: existingSub } = await supabase
+            .from('telegram_subscriptions')
+            .select('id, expires_at, status')
+            .eq('telegram_user_id', telegramUserId)
+            .eq('bot_id', botId)
+            .eq('context', context)
+            .maybeSingle();
+
+          const baseDate = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+            ? new Date(existingSub.expires_at)
+            : now;
+          const expiresAtDate = new Date(baseDate.getTime() + payment.plan_days * 24 * 60 * 60 * 1000);
+          const expiresAt = expiresAtDate.toISOString();
+
+          const startedAt = (existingSub && existingSub.status === 'active' && new Date(existingSub.expires_at) > now)
+            ? undefined
+            : now.toISOString();
+
+          const subPayload: any = {
+            telegram_user_id: telegramUserId, bot_id: botId, context, plan_id: payment.plan_id,
             plan_code: payment.plan_code, plan_name: payment.plan_name, plan_days: payment.plan_days,
-            value: payment.value, txid, started_at: new Date().toISOString(), expires_at: expiresAt,
+            value: payment.value, txid, status: 'active', expires_at: expiresAt,
+          };
+          if (startedAt) subPayload.started_at = startedAt;
+
+          await supabase.from("telegram_subscriptions").upsert(subPayload, {
+            onConflict: 'telegram_user_id,bot_id,context'
           });
 
           const { data: settings } = await supabase.from('bot_settings').select('group_chat_id').eq('bot_id', botId).single();
