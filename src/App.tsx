@@ -21,6 +21,7 @@ import QueryLogs from "./pages/QueryLogs";
 import PixTransactions from "./pages/PixTransactions";
 import NotFound from "./pages/NotFound";
 import Security from "./pages/Security";
+import SubscriptionAudit from "./pages/SubscriptionAudit";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="/pix" element={<ProtectedRoute><PixTransactions /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
+              <Route path="/audit" element={<ProtectedRoute><SubscriptionAudit /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>
