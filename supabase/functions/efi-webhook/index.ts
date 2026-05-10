@@ -359,8 +359,8 @@ Deno.serve(async (req) => {
               console.log(`Confirmação enviada com sucesso para chat ${targetChatId}`)
             }
 
-            // Se tiver grupo configurado, libera o usuário no grupo
-            if (settings?.group_chat_id) {
+            // Se tiver grupo configurado E NÃO for plano privado, libera o usuário no grupo
+            if (!isPrivate && settings?.group_chat_id) {
               await fetch(`https://api.telegram.org/bot${bot.token}/restrictChatMember`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
