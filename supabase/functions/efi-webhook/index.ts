@@ -269,28 +269,43 @@ Deno.serve(async (req) => {
 
             const planName = (pending as any)?.plan_name || transaction.description || 'Assinatura'
             const planDaysMsg = Number((pending as any)?.plan_days ?? 30)
-            
-            // Mensagem de confirmação com emojis de celebração
+            const isPrivate = context === 'private'
+
+            // Mensagem de confirmação contextual (privado vs grupo)
+            const contextLabel = isPrivate ? '🔒 PRIVADO (chat com o bot)' : '👥 GRUPO VIP'
+            const accessLine = isPrivate
+              ? `🤖 *Acesso liberado AQUI no privado com o bot!*\n\n` +
+                `📍 Você comprou o plano *PRIVADO* — faça suas consultas direto nesta conversa.\n` +
+                `❌ *Este plano NÃO dá acesso ao grupo.* Se quiser usar no grupo, é necessário adquirir o plano de grupo separadamente.`
+              : `🚪 *Acesso liberado no GRUPO VIP!*\n\n` +
+                `📍 Você comprou o plano de *GRUPO* — entre no grupo pelo botão abaixo e faça suas consultas por lá.`
+
             const message = `🎉🎊 *PAGAMENTO CONFIRMADO!* 🎊🎉\n\n` +
               `✅ Seu pagamento foi aprovado com sucesso!\n\n` +
               `💰 *Valor:* R$ ${Number(transaction.amount).toFixed(2)}\n` +
               `📋 *Plano:* ${planName}\n` +
+              `🎯 *Tipo:* ${contextLabel}\n` +
               `📅 *Dias:* ${planDaysMsg}\n` +
               `🔑 *TXID:* \`${txid.slice(0, 12)}...\`\n\n` +
-              `🚀 *Seu acesso foi liberado!*\n\n` +
-              `Clique no botão abaixo para fazer suas consultas! 👇`
+              `${accessLine}`
 
-            // Montar botão inline para ir ao grupo
+            // Botões contextuais — privado NÃO mostra link do grupo
             const inlineKeyboard: any = { inline_keyboard: [] }
-            
-            if (settings?.group_url) {
+
+            if (isPrivate) {
               inlineKeyboard.inline_keyboard.push([
-                { text: '🔍 Fazer Consulta', url: settings.group_url }
+                { text: '🔍 Fazer Consulta Aqui', callback_data: 'menu:query' }
+              ])
+              inlineKeyboard.inline_keyboard.push([
+                { text: '🏠 Menu Principal', callback_data: 'menu:main' }
+              ])
+            } else if (settings?.group_url) {
+              inlineKeyboard.inline_keyboard.push([
+                { text: '🚪 Entrar no Grupo VIP', url: settings.group_url }
               ])
             } else if (settings?.group_chat_id) {
-              // Se não tiver URL mas tiver chat_id, tentar criar link
               inlineKeyboard.inline_keyboard.push([
-                { text: '🔍 Fazer Consulta', callback_data: 'go_to_group' }
+                { text: '🚪 Entrar no Grupo VIP', callback_data: 'go_to_group' }
               ])
             }
 
