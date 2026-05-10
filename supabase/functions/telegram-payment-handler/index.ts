@@ -136,7 +136,8 @@ Deno.serve(async (req) => {
 
           const { data: settings } = await supabase.from('bot_settings').select('group_chat_id').eq('bot_id', botId).single();
 
-          if (settings?.group_chat_id) {
+          // Só libera no grupo se NÃO for plano privado
+          if (context !== 'private' && settings?.group_chat_id) {
             await telegramRequest(bot.token, "restrictChatMember", {
               chat_id: settings.group_chat_id, user_id: telegramUserId,
               permissions: { can_send_messages: true, can_send_media_messages: true, can_send_other_messages: true, can_add_web_page_previews: true },
