@@ -244,29 +244,47 @@ Deno.serve(async (req) => {
               }
 
               const expiresAtFormatted = formatDate(expiresAt.toISOString())
+              const isPrivate = context === 'private'
               const buttons: { text: string; callback_data?: string; url?: string }[][] = []
-              
+
               const settings = bot.bot_settings as { group_url?: string; group_chat_id?: number } | null
-              if (settings?.group_url) {
-                buttons.push([{ text: "🚪 Entrar no Grupo", url: settings.group_url }])
+
+              // Botões contextuais — privado NÃO mostra link do grupo
+              if (isPrivate) {
+                buttons.push([{ text: "🔍 Fazer Consulta Aqui", callback_data: "menu:query" }])
+                buttons.push([{ text: "🏠 Menu Principal", callback_data: "menu:main" }])
+              } else {
+                if (settings?.group_url) {
+                  buttons.push([{ text: "🚪 Entrar no Grupo VIP", url: settings.group_url }])
+                }
+                buttons.push([{ text: "🔍 Fazer Consulta", callback_data: "menu:query" }])
+                buttons.push([{ text: "🏠 Menu Principal", callback_data: "menu:main" }])
               }
-              buttons.push([{ text: "🔍 Fazer Consulta", callback_data: "menu:query" }])
-              buttons.push([{ text: "🏠 Menu Principal", callback_data: "menu:main" }])
+
+              const contextLabel = isPrivate ? '🔒 PRIVADO (chat com o bot)' : '👥 GRUPO VIP'
+              const accessLine = isPrivate
+                ? `🤖 <b>Acesso liberado AQUI no privado com o bot!</b>\n\n` +
+                  `📍 Você comprou o plano <b>PRIVADO</b> — faça suas consultas direto nesta conversa.\n` +
+                  `❌ <b>Este plano NÃO dá acesso ao grupo.</b> Para usar no grupo, adquira o plano de grupo separadamente.`
+                : (settings?.group_chat_id
+                    ? `🚪 <b>Seu acesso foi liberado no GRUPO VIP!</b>\n📍 Entre pelo botão abaixo e faça suas consultas no grupo.`
+                    : `✅ <b>Assinatura ativada com sucesso!</b>`)
 
               await sendTelegramMessage(
                 bot.token,
                 chatId,
                 `🎉 <b>PAGAMENTO CONFIRMADO!</b>\n\n` +
                 `📦 Plano: <b>${planName}</b>\n` +
+                `🎯 Tipo: <b>${contextLabel}</b>\n` +
                 `💰 Valor: <b>R$ ${Number(tx.amount).toFixed(2)}</b>\n` +
                 `📅 Válido até: <b>${expiresAtFormatted}</b>\n\n` +
                 `🎫 TXID: <code>${tx.external_id}</code>\n\n` +
-                `${settings?.group_chat_id ? "🚪 <b>Seu acesso foi liberado no grupo!</b>" : "✅ <b>Assinatura ativada com sucesso!</b>"}`,
+                `${accessLine}`,
                 { inline_keyboard: buttons }
               )
 
-              // Liberar usuário no grupo se configurado
-              if (settings?.group_chat_id) {
+              // Liberar usuário no grupo APENAS se não for plano privado
+              if (!isPrivate && settings?.group_chat_id) {
                 try {
                   await fetch(`${TELEGRAM_API}${bot.token}/restrictChatMember`, {
                     method: "POST",
