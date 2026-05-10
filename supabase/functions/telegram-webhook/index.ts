@@ -5882,7 +5882,21 @@ class BotHandler {
     
     let statusBlock = "";
     const contextLabel = isPrivateChat ? "Privado" : "Grupo";
-    
+
+    // Header útil: contagem de módulos disponíveis e dica
+    let infoHeader = "";
+    try {
+      const moduleStatus = await loadModuleStatus(this.supabase);
+      const totalCount = Object.keys(moduleStatus).length;
+      const enabledCount = Object.values(moduleStatus).filter(v => v).length;
+      const nowStr = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      infoHeader = `\n\n📅 <b>${nowStr}</b>` +
+        `\n🔎 <b>${enabledCount}</b> de <b>${totalCount}</b> módulos de consulta ativos` +
+        `\n💡 <i>Envie até 5 consultas por mensagem</i>`;
+    } catch (_e) {
+      infoHeader = `\n\n💡 <i>Envie até 5 consultas por mensagem</i>`;
+    }
+
     if (isActive) {
       const days = daysLeft(sub.expires_at);
       const hours = Math.floor((new Date(sub.expires_at).getTime() - Date.now()) / (1000 * 60 * 60));
@@ -5893,15 +5907,19 @@ class BotHandler {
         `├ ⏰ Expira: <b>${formatDate(sub.expires_at)}</b>\n` +
         `└ ⏳ Restante: <b>${timeLeft}</b>`;
     } else {
-      statusBlock = `\n\n❌ <b>Sem assinatura ${contextLabel.toLowerCase()}</b>\n└ Assine um plano para usar no ${contextLabel.toLowerCase()}.`;
+      const ctaLabel = isPrivateChat ? "👇 Toque em <b>Planos Privado</b> abaixo para liberar" : "👇 Toque em <b>Assinar / Renovar</b> abaixo";
+      statusBlock = `\n\n❌ <b>Sem assinatura ${contextLabel.toLowerCase()}</b>` +
+        `\n├ Você ainda não tem acesso ${isPrivateChat ? 'no chat privado' : 'no grupo'}.` +
+        `\n└ ${ctaLabel}`;
     }
-    
+
     // Show other context status if active
     if (otherActive) {
       const otherLabel = isPrivateChat ? "Grupo" : "Privado";
       const otherDays = daysLeft(otherSub.expires_at);
       statusBlock += `\n\n✅ <i>Assinatura ${otherLabel}: ${otherSub.plan_name} (${otherDays}d restantes)</i>`;
     }
+    statusBlock = infoHeader + statusBlock;
 
     const buttons: InlineButton[][] = [];
     
