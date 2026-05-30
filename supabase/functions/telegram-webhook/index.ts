@@ -9186,7 +9186,7 @@ class BotHandler {
     }
 
     if (data === "menu:subscription") {
-      await this.showSubscriptionMenu(chatId, telegramUserId, messageId);
+      await this.showSubscriptionMenu(chatId, telegramUserId, messageId, callback.from.first_name);
       return;
     }
 
