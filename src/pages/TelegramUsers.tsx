@@ -189,15 +189,20 @@ export default function TelegramUsers() {
   };
 
   const filteredSubscriptions = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase().replace(/^@/, "");
     return subscriptions.filter((sub) => {
-      if (searchTerm && !sub.telegram_user_id.toString().includes(searchTerm)) {
-        return false;
+      if (term) {
+        const idMatch = sub.telegram_user_id.toString().includes(term);
+        const userMatch = (sub.username || "").toLowerCase().includes(term);
+        const nameMatch = (sub.first_name || "").toLowerCase().includes(term);
+        if (!idMatch && !userMatch && !nameMatch) return false;
       }
       if (filterStatus === "active" && isExpired(sub.expires_at)) return false;
       if (filterStatus === "expired" && !isExpired(sub.expires_at)) return false;
       return true;
     });
   }, [subscriptions, searchTerm, filterStatus]);
+
 
   // Reset page on filter change
   useEffect(() => {
