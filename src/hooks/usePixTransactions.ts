@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -139,6 +139,9 @@ export function usePixTransactions(period: "today" | "week" | "month") {
     queryKey: ["pix-transactions", period, user?.id],
     refetchInterval: 30_000,
     refetchOnWindowFocus: true,
+    // Mantém os dados anteriores enquanto recarrega em segundo plano,
+    // evitando flicker/skeleton ao receber updates em tempo real.
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       if (!user?.id) {
         return {
