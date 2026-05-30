@@ -9269,7 +9269,7 @@ class BotHandler {
           keyboard([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]));
         return;
       }
-      await this.showAdminMenu(chatId, messageId);
+      await this.showAdminMenu(chatId, messageId, telegramUserId, callback.from.first_name);
       return;
     }
 
