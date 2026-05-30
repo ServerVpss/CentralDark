@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 import type { TelegramBot } from "@/hooks/telegram/types";
 
 // Re-export for backwards compatibility
@@ -63,7 +63,7 @@ export interface AdminData {
 }
 
 export function useAdminData(): AdminData {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [bots, setBots] = useState<TelegramBot[]>([]);
   const [subscriptions, setSubscriptions] = useState<TelegramSubscription[]>([]);
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
