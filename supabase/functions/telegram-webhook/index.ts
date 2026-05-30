@@ -9303,7 +9303,7 @@ class BotHandler {
       const filter = data.replace("broadcast:", "");
       if (filter === "cancel") {
         await this.clearConversationState(telegramUserId, "broadcast");
-        await this.showAdminMenu(chatId, messageId);
+        await this.showAdminMenu(chatId, messageId, telegramUserId, callback.from.first_name);
         return;
       }
       await this.setConversationState(telegramUserId, "broadcast", { filter });
