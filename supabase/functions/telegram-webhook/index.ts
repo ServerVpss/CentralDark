@@ -8405,6 +8405,31 @@ class BotHandler {
         return;
       }
 
+      // Telefone vazio no grupo: mensagem amigável + caminhos alternativos
+      if (queryType === 'telefone' && isEmptyResult(result)) {
+        const cleanPhone = inputForQuery.replace(/\D/g, '');
+        const ddd = cleanPhone.length >= 10 ? cleanPhone.substring(0, 2) : '';
+        let emptyMsg = `📞 <b>Telefone não localizado</b>\n\n`;
+        emptyMsg += `<i>Sem registro para:</i> <code>${escapeHtmlGlobal(inputForQuery)}</code>\n`;
+        if (ddd) emptyMsg += `<i>DDD informado:</i> <code>${ddd}</code>\n`;
+        emptyMsg += `\n💡 <b>Por que isso acontece?</b>\n`;
+        emptyMsg += `├ Número novo ou portado recentemente\n`;
+        emptyMsg += `├ Linha pré-paga sem cadastro completo\n`;
+        emptyMsg += `├ Registrado em CNPJ (não em CPF)\n`;
+        emptyMsg += `└ Operadora fora da base consultada\n\n`;
+        emptyMsg += `🔎 <b>Tente o caminho reverso:</b>\n`;
+        emptyMsg += `└ Consulte por CPF/Nome — o resultado traz os telefones cadastrados.\n`;
+
+        const altButtons: InlineButton[][] = [
+          [btn("🔁 Tentar novamente", `retry_query:telefone:${inputForQuery}`)],
+          [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
+        ];
+
+        await sendMessage(this.token, chatId, emptyMsg, { inline_keyboard: altButtons });
+        return;
+      }
+
+
       // Format and send result - usar nome do perfil do Telegram do usuário
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, userName);
 
