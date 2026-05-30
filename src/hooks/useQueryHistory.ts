@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthContext } from "@/components/auth/AuthProvider";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface QueryHistoryItem {
   id: string;
   query_type: string;
   query_input: string;
-  query_result: any;
+  query_result: Json;
   status: string | null;
   created_at: string;
 }
