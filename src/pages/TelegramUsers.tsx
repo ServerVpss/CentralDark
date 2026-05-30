@@ -523,8 +523,17 @@ export default function TelegramUsers() {
                         return (
                           <TableRow key={sub.id}>
                             <TableCell className="font-mono">
-                              {sub.telegram_user_id}
+                              <div className="flex flex-col">
+                                <span>{sub.telegram_user_id}</span>
+                                {sub.username && (
+                                  <span className="text-xs text-primary">@{sub.username}</span>
+                                )}
+                                {sub.first_name && (
+                                  <span className="text-xs text-muted-foreground truncate max-w-[160px]">{sub.first_name}</span>
+                                )}
+                              </div>
                             </TableCell>
+
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <Crown className="h-4 w-4 text-primary" />
