@@ -524,10 +524,12 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
       if (innerData.error || innerData.status === "error") {
         return { data: { notFound: true, message: innerData.error || innerData.message || "Dados não encontrados" }, provider_duration_ms, retried: retry };
       }
-      return { data: { ...stripAdminFields(innerData), modulo }, provider_duration_ms, retried: retry };
+      const unwrapped = unwrapProviderPayload(innerData);
+      return { data: { ...stripAdminFields(unwrapped), modulo }, provider_duration_ms, retried: retry };
     }
 
-    return { data: { ...stripAdminFields(data), modulo }, provider_duration_ms, retried: retry };
+    const unwrapped = unwrapProviderPayload(data);
+    return { data: { ...stripAdminFields(unwrapped), modulo }, provider_duration_ms, retried: retry };
   } catch (err) {
     clearTimeout(timeoutId);
     const error = err as Error;
