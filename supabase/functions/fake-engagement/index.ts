@@ -22,13 +22,28 @@ interface EngagementMessage {
 }
 
 // Mensagem padrão caso não tenha nenhuma cadastrada
-const DEFAULT_MESSAGE_TEMPLATE = `🎉 *NOVA ASSINATURA!*
+const PREMIUM_DIAMOND = '<tg-emoji emoji-id="5471952986970267163">💎</tg-emoji>'
 
-👤 *{nome}* acabou de assinar!
-📋 Plano: *{plano}*
-💰 Valor: *R$ {valor}*
+const DEFAULT_MESSAGE_TEMPLATE = `🎉 <b>NOVA ASSINATURA!</b>
+
+👤 <b>{nome}</b> acabou de assinar!
+📋 Plano: <b>{plano}</b>
+💰 Valor: <b>R$ {valor}</b>
 
 🚀 Bem-vindo(a) à família! 🎊`
+
+// Escapa caracteres especiais de HTML para evitar quebra de tags
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
+// Converte template Markdown legado (*texto*) para HTML (<b>texto</b>)
+function markdownToHtml(str: string): string {
+  return str.replace(/\*([^*\n]+)\*/g, '<b>$1</b>')
+}
 
 // Nicks/apelidos para variar
 const NICKS = [
