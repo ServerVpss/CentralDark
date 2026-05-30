@@ -6760,11 +6760,27 @@ class BotHandler {
   }
 
   async showBroadcastMenu(chatId: number, messageId: number) {
+    const nowIso = new Date().toISOString();
+    const [{ count: totalUsers }, { count: activeCount }, { count: expiredCount }] = await Promise.all([
+      this.supabase.from("telegram_users").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id),
+      this.supabase.from("telegram_subscriptions").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).gte("expires_at", nowIso),
+      this.supabase.from("telegram_subscriptions").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).lt("expires_at", nowIso),
+    ]);
+
     await editMessage(this.token, chatId, messageId,
-      "📢 <b>Broadcast</b>\n\n<i>Selecione o público-alvo da mensagem:</i>",
+      `📢 <b>Broadcast</b>\n` +
+      `🕒 <i>${nowSPFull()}</i>\n\n` +
+      `<b>👥 Públicos disponíveis</b>\n` +
+      `┌ 📢 Todos: <b>${totalUsers || 0}</b> usuários\n` +
+      `├ ✅ Ativos: <b>${activeCount || 0}</b> assinantes\n` +
+      `└ ❌ Expirados: <b>${expiredCount || 0}</b> ex-assinantes\n\n` +
+      `<i>Selecione o público-alvo da mensagem:</i>`,
       keyboard(
-        [btn("📢 Todos", "broadcast:all", "primary", EMOJI.MEGAPHONE), btn("✅ Ativos", "broadcast:active", "success", EMOJI.CHECK)],
-        [btn("❌ Expirados", "broadcast:expired", "danger")],
+        [btn(`📢 Todos (${totalUsers || 0})`, "broadcast:all", "primary", EMOJI.MEGAPHONE), btn(`✅ Ativos (${activeCount || 0})`, "broadcast:active", "success", EMOJI.CHECK)],
+        [btn(`❌ Expirados (${expiredCount || 0})`, "broadcast:expired", "danger")],
         [btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)]
       )
     );
