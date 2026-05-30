@@ -626,7 +626,7 @@ export default function QueryLogs() {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
+      </motion.div>
     </DashboardLayout>
   );
 }
