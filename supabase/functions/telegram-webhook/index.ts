@@ -6686,17 +6686,33 @@ class BotHandler {
       .gte("expires_at", new Date().toISOString())
       .order("expires_at", { ascending: true });
 
-    const subscriptions = (subs || []) as Array<{ telegram_user_id: number; plan_name: string; expires_at: string }>;
+    const subscriptions = (subs || []) as Array<{ telegram_user_id: number; plan_name: string; expires_at: string; first_name?: string | null; username?: string | null }>;
 
-    let text = "👥 <b>Usuários Ativos</b>\n\n";
+    let text = `👥 <b>Usuários Ativos</b>\n🕒 <i>${nowSPFull()}</i>\n\n`;
 
     if (subscriptions.length === 0) {
       text += "<i>Nenhum usuário com assinatura ativa.</i>";
     } else {
-      text += `📊 Total: <b>${subscriptions.length}</b>\n\n`;
+      // Busca nomes da agenda central pra enriquecer o display
+      const ids = subscriptions.slice(0, 20).map(s => s.telegram_user_id);
+      const { data: users } = await this.supabase
+        .from("telegram_users")
+        .select("telegram_user_id, first_name, username")
+        .in("telegram_user_id", ids);
+      const usersMap = new Map<number, { first_name?: string | null; username?: string | null }>();
+      (users || []).forEach((u: { telegram_user_id: number; first_name?: string | null; username?: string | null }) => {
+        usersMap.set(u.telegram_user_id, { first_name: u.first_name, username: u.username });
+      });
+
+      text += `📊 Total: <b>${subscriptions.length}</b> assinantes\n\n`;
       subscriptions.slice(0, 20).forEach((s, i) => {
         const days = daysLeft(s.expires_at);
-        text += `${i + 1}. <code>${s.telegram_user_id}</code> • ${s.plan_name} • ${days}d\n`;
+        const u = usersMap.get(s.telegram_user_id);
+        const name = (s.first_name || u?.first_name || "—").substring(0, 18);
+        const handle = (s.username || u?.username) ? ` @${escapeHtmlGlobal(s.username || u?.username || "")}` : "";
+        const urgency = days <= 3 ? "🔴" : days <= 7 ? "🟡" : "🟢";
+        text += `${i + 1}. ${urgency} <b>${escapeHtmlGlobal(name)}</b>${handle}\n` +
+          `   <code>${s.telegram_user_id}</code> • ${s.plan_name} • <b>${days}d</b>\n`;
       });
       if (subscriptions.length > 20) {
         text += `\n<i>... e mais ${subscriptions.length - 20} usuários</i>`;
@@ -6704,7 +6720,9 @@ class BotHandler {
     }
 
     await editMessage(this.token, chatId, messageId, text,
-      keyboard([btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)])
+      keyboard(
+        [btn("🔄 Atualizar", "admin:users", "success", EMOJI.REFRESH), btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)]
+      )
     );
   }
 
