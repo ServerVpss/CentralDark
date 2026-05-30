@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { fromZonedTime, toZonedTime, formatInTimeZone } from "date-fns-tz";
@@ -108,7 +108,7 @@ function spHour(iso: string): string {
 }
 
 export function usePixTransactions(period: "today" | "week" | "month") {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const queryClient = useQueryClient();
 
   // Realtime: invalida a query a cada mudança em pix_transactions do usuário
