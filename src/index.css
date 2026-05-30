@@ -218,11 +218,11 @@
     background-clip: text;
   }
 
-  /* Icon container with glow */
+  /* Icon container com brilho suave */
   .icon-glow {
     @apply relative flex items-center justify-center rounded-xl;
     background: var(--gradient-gold-soft);
-    box-shadow: 0 0 24px hsl(var(--primary) / 0.25);
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.1);
   }
 
   /* ========== Stat Cards Gradients ========== */
@@ -262,7 +262,7 @@
   .nav-item.active::before {
     content: '';
     @apply absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-primary;
-    box-shadow: 0 0 16px hsl(var(--primary) / 0.6);
+    box-shadow: 0 0 4px hsl(var(--primary) / 0.3);
   }
 
   /* ========== Premium Buttons ========== */
@@ -294,23 +294,21 @@
     backdrop-filter: blur(8px);
   }
 
-  /* Glow utilities — kept old names for backwards compat */
+  /* Glow utilities — bem mais suaves */
   .glow-gold {
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.3),
-                0 0 80px hsl(var(--primary) / 0.12);
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.12);
   }
 
   .glow-gold-sm {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.25);
+    box-shadow: 0 0 6px hsl(var(--primary) / 0.1);
   }
 
   .glow-text-gold {
-    text-shadow: 0 0 32px hsl(var(--primary) / 0.6);
+    text-shadow: 0 0 8px hsl(var(--primary) / 0.2);
   }
 
   .glow-emerald {
-    box-shadow: 0 0 40px hsl(152 80% 50% / 0.35),
-                0 0 80px hsl(152 80% 50% / 0.15);
+    box-shadow: 0 0 12px hsl(152 80% 50% / 0.12);
   }
 
   /* Animations */
@@ -372,8 +370,8 @@
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.25); }
-  50% { box-shadow: 0 0 40px hsl(var(--primary) / 0.45); }
+  0%, 100% { box-shadow: 0 0 6px hsl(var(--primary) / 0.1); }
+  50% { box-shadow: 0 0 12px hsl(var(--primary) / 0.18); }
 }
 
 @keyframes slideUp {
