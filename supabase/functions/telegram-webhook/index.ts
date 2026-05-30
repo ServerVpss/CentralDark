@@ -6586,10 +6586,32 @@ class BotHandler {
   }
 
   // =============== ADMIN MENUS ===============
-  async showAdminMenu(chatId: number, messageId: number) {
+  async showAdminMenu(chatId: number, messageId: number, telegramUserId?: number, adminName?: string) {
+    // Stats rápidos pro cabeçalho
+    const today = new Date().toISOString().split("T")[0];
+    const [{ count: activeSubs }, { count: pendingPayments }, { data: todaySubs }] = await Promise.all([
+      this.supabase.from("telegram_subscriptions").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).gte("expires_at", new Date().toISOString()),
+      this.supabase.from("pending_payments").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).eq("status", "PENDING"),
+      this.supabase.from("telegram_subscriptions").select("value")
+        .eq("bot_id", this.bot.id).gte("created_at", today),
+    ]);
+    const todayRevenue = ((todaySubs as Array<{ value: number }> | null) || [])
+      .reduce((acc, s) => acc + Number(s.value), 0);
+    const whoLine = adminName
+      ? `\n👤 <b>${escapeHtmlGlobal(adminName)}</b>${telegramUserId ? ` • <code>${telegramUserId}</code>` : ""}`
+      : "";
+
     await editMessage(this.token, chatId, messageId,
-      "⚙️ <b>Painel Administrativo</b>\n\n" +
-      "<i>Gerencie seu bot a partir deste painel:</i>",
+      `⚙️ <b>Painel Administrativo</b>` +
+      whoLine +
+      `\n🕒 <i>${nowSPFull()}</i>\n` +
+      `\n<b>📌 Resumo de hoje</b>\n` +
+      `┌ ✅ Ativas: <b>${activeSubs || 0}</b>\n` +
+      `├ ⏳ Pendentes: <b>${pendingPayments || 0}</b>\n` +
+      `└ 💵 Receita: <b>R$ ${todayRevenue.toFixed(2)}</b>\n\n` +
+      `<i>Selecione uma opção abaixo:</i>`,
       keyboard(
         [btn("📋 Gerenciar Planos", "admin:plans", "primary", EMOJI.DIAMOND), btn("👥 Usuários", "admin:users", "primary", EMOJI.USERS)],
         [btn("📊 Estatísticas", "admin:stats", "success", EMOJI.CHART), btn("📢 Broadcast", "admin:broadcast", "danger", EMOJI.MEGAPHONE)],
