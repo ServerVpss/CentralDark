@@ -305,7 +305,12 @@ export default function QueryLogs() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-5 max-w-[1400px] mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="space-y-5 max-w-[1400px] mx-auto"
+      >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-semibold text-foreground">Logs de Consultas</h1>
