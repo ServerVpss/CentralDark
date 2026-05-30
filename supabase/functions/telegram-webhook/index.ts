@@ -6763,7 +6763,8 @@ class BotHandler {
     const rate = (totalSubs && totalSubs > 0) ? Math.round(((activeSubs || 0) / totalSubs) * 100) : 0;
 
     await editMessage(this.token, chatId, messageId,
-      `📊 <b>Estatísticas do Bot</b>\n\n` +
+      `📊 <b>Estatísticas do Bot</b>\n` +
+      `🕒 <i>Atualizado: ${nowSPFull()}</i>\n\n` +
       `<b>👥 ASSINATURAS</b>\n` +
       `┌ 📋 Total: <b>${totalSubs || 0}</b>\n` +
       `├ ✅ Ativas: <b>${activeSubs || 0}</b>\n` +
