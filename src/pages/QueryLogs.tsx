@@ -89,6 +89,11 @@ export default function QueryLogs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
 
+  // Progresso de carregamento
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [loadStage, setLoadStage] = useState("Conectando ao banco de dados...");
+  const [loadedCount, setLoadedCount] = useState(0);
+
   useEffect(() => {
     fetchLogs();
   }, []);
@@ -100,12 +105,18 @@ export default function QueryLogs() {
 
   const fetchLogs = async () => {
     setLoading(true);
+    setLoadProgress(8);
+    setLoadStage("Conectando ao banco de dados...");
+    setLoadedCount(0);
     try {
-      // Fetch all logs using pagination to bypass 1000 row limit
       let allLogs: QueryLog[] = [];
       let from = 0;
       const batchSize = 1000;
       let hasMore = true;
+      let batch = 0;
+
+      setLoadStage("Buscando registros...");
+      setLoadProgress(20);
 
       while (hasMore) {
         const { data, error } = await supabase
@@ -115,24 +126,31 @@ export default function QueryLogs() {
           .range(from, from + batchSize - 1);
 
         if (error) throw error;
-        
+
         if (data && data.length > 0) {
           allLogs = allLogs.concat(data as QueryLog[]);
           from += batchSize;
+          batch += 1;
+          setLoadedCount(allLogs.length);
+          setLoadProgress((prev) => Math.min(85, 20 + batch * 18));
           hasMore = data.length === batchSize;
         } else {
           hasMore = false;
         }
       }
 
+      setLoadStage("Processando resultados...");
+      setLoadProgress(95);
       setLogs(allLogs);
+      setLoadProgress(100);
     } catch (error) {
       console.error("Error fetching logs:", error);
       toast.error("Erro ao carregar logs");
     } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 250);
     }
   };
+
 
   const filteredLogs = useMemo(() => {
     return logs.filter((log) => {
