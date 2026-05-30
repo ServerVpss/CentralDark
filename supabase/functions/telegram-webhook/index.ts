@@ -2623,6 +2623,15 @@ function formatDate(date: string): string {
   return new Date(date).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 }
 
+// Data/hora atual de São Paulo formatada bonita: "sáb, 30/05/2026 — 14:32"
+function nowSPFull(): string {
+  const d = new Date();
+  const weekday = d.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "short" }).replace(".", "");
+  const date = d.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", year: "numeric" });
+  const time = d.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo", hour: "2-digit", minute: "2-digit" });
+  return `${weekday}, ${date} — ${time}`;
+}
+
 function daysLeft(expiresAt: string): number {
   const diff = new Date(expiresAt).getTime() - Date.now();
   return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
