@@ -259,16 +259,23 @@ const ADMIN_FIELD_PATTERNS = new Set([
 ]);
 
 // Desempacota wrappers típicos da API nova (veiculosapi): { dados: { data: {...} } }
+// Estratégia: desce em `dados`, depois em `data` enquanto for um wrapper puro
+// (objeto cujo único campo é `data`, ou contendo subwrappers conhecidos).
 function unwrapProviderPayload(payload: any): any {
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) return payload;
   let cur = payload;
-  for (let i = 0; i < 3; i++) {
-    if (cur && typeof cur === "object" && !Array.isArray(cur)) {
-      if (cur.dados && typeof cur.dados === "object" && !Array.isArray(cur.dados)) {
-        cur = cur.dados;
-        continue;
-      }
-      if (cur.data && typeof cur.data === "object" && !Array.isArray(cur.data) && (cur.data.dadosBasicos || cur.data.data)) {
+  for (let i = 0; i < 4; i++) {
+    if (!cur || typeof cur !== "object" || Array.isArray(cur)) break;
+    if (cur.dados !== undefined && cur.dados !== null) {
+      cur = cur.dados;
+      continue;
+    }
+    if (cur.data !== undefined && cur.data !== null) {
+      const keys = Object.keys(cur);
+      const onlyData = keys.length === 1 && keys[0] === "data";
+      const hasNestedWrapper = typeof cur.data === "object" && !Array.isArray(cur.data) &&
+        (cur.data.dadosBasicos || cur.data.data || cur.data.dados);
+      if (onlyData || hasNestedWrapper) {
         cur = cur.data;
         continue;
       }
