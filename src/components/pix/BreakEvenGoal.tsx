@@ -19,7 +19,7 @@ export function BreakEvenGoal({ summary, isLoading }: BreakEvenGoalProps) {
     );
   }
 
-  const goal = summary?.monthlyFixedCost ?? 500;
+  const goal = summary?.proratedCost ?? summary?.monthlyFixedCost ?? 500;
   const revenue = summary?.totalRevenue ?? 0;
   const progress = goal > 0 ? Math.min((revenue / goal) * 100, 100) : 0;
   const reached = revenue >= goal;
