@@ -73,7 +73,10 @@ interface TelegramSubscription {
   expires_at: string;
   status: string;
   created_at: string;
+  username: string | null;
+  first_name: string | null;
 }
+
 
 interface SubscriptionPlan {
   id: string;
