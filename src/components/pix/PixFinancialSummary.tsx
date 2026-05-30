@@ -108,7 +108,7 @@ export function PixFinancialSummary({ summary, isLoading }: PixFinancialSummaryP
     {
       title: "Margem",
       value: `${(summary?.profitMargin || 0).toFixed(1)}%`,
-      change: `Custo: R$ ${(summary?.monthlyFixedCost ?? 500).toFixed(2)}/mês`,
+      change: `Custo aplicado: R$ ${(summary?.proratedCost ?? 0).toFixed(2)} (${summary?.periodDays ?? 0}d × R$ ${((summary?.monthlyFixedCost ?? 500) / (summary?.daysInMonth ?? 30)).toFixed(2)}/dia)`,
       changeType: "neutral",
       icon: Percent,
       variant: "amber",
