@@ -254,7 +254,29 @@ const ADMIN_FIELD_PATTERNS = new Set([
   "modulo", "modulo_consultado", "tipo_consultado", "api_version",
   "token_used", "token_status", "credits_used", "credits_remaining",
   "apikey", "api_key", "key_status",
+  // Veiculos API (nova) — metadados de plano/protocolo
+  "sucesso", "protocolo", "usuario", "limites", "plano", "saldo",
 ]);
+
+// Desempacota wrappers típicos da API nova (veiculosapi): { dados: { data: {...} } }
+function unwrapProviderPayload(payload: any): any {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return payload;
+  let cur = payload;
+  for (let i = 0; i < 3; i++) {
+    if (cur && typeof cur === "object" && !Array.isArray(cur)) {
+      if (cur.dados && typeof cur.dados === "object" && !Array.isArray(cur.dados)) {
+        cur = cur.dados;
+        continue;
+      }
+      if (cur.data && typeof cur.data === "object" && !Array.isArray(cur.data) && (cur.data.dadosBasicos || cur.data.data)) {
+        cur = cur.data;
+        continue;
+      }
+    }
+    break;
+  }
+  return cur;
+}
 
 function isAdminKey(key: string): boolean {
   const lower = key.toLowerCase();
