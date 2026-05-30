@@ -173,6 +173,14 @@ Deno.serve(async (req) => {
 
     // Também salvar em pending_payments para compatibilidade com o sistema existente
     if (telegram_user_id && bot_id && user_id) {
+      // Busca @ e nome na agenda pra deixar o pagamento pesquisável
+      const { data: tgUser } = await supabase
+        .from('telegram_users')
+        .select('username, first_name')
+        .eq('telegram_user_id', telegram_user_id)
+        .eq('bot_id', bot_id)
+        .maybeSingle();
+
       await supabase
         .from('pending_payments')
         .insert({
@@ -189,9 +197,12 @@ Deno.serve(async (req) => {
           pix_qrcode: proxyData.data?.qrcode,
           expires_at: expiresAt.toISOString(),
           status: 'PENDING',
-          context: paymentContext || 'group'
+          context: paymentContext || 'group',
+          username: tgUser?.username ?? null,
+          first_name: tgUser?.first_name ?? null,
         })
     }
+
 
     return new Response(
       JSON.stringify({

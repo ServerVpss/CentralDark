@@ -73,7 +73,10 @@ interface TelegramSubscription {
   expires_at: string;
   status: string;
   created_at: string;
+  username: string | null;
+  first_name: string | null;
 }
+
 
 interface SubscriptionPlan {
   id: string;
@@ -186,15 +189,20 @@ export default function TelegramUsers() {
   };
 
   const filteredSubscriptions = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase().replace(/^@/, "");
     return subscriptions.filter((sub) => {
-      if (searchTerm && !sub.telegram_user_id.toString().includes(searchTerm)) {
-        return false;
+      if (term) {
+        const idMatch = sub.telegram_user_id.toString().includes(term);
+        const userMatch = (sub.username || "").toLowerCase().includes(term);
+        const nameMatch = (sub.first_name || "").toLowerCase().includes(term);
+        if (!idMatch && !userMatch && !nameMatch) return false;
       }
       if (filterStatus === "active" && isExpired(sub.expires_at)) return false;
       if (filterStatus === "expired" && !isExpired(sub.expires_at)) return false;
       return true;
     });
   }, [subscriptions, searchTerm, filterStatus]);
+
 
   // Reset page on filter change
   useEffect(() => {
@@ -428,7 +436,7 @@ export default function TelegramUsers() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Buscar por ID do Telegram..."
+                    placeholder="Buscar por ID, @username ou nome..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 bg-secondary/50"
@@ -515,8 +523,17 @@ export default function TelegramUsers() {
                         return (
                           <TableRow key={sub.id}>
                             <TableCell className="font-mono">
-                              {sub.telegram_user_id}
+                              <div className="flex flex-col">
+                                <span>{sub.telegram_user_id}</span>
+                                {sub.username && (
+                                  <span className="text-xs text-primary">@{sub.username}</span>
+                                )}
+                                {sub.first_name && (
+                                  <span className="text-xs text-muted-foreground truncate max-w-[160px]">{sub.first_name}</span>
+                                )}
+                              </div>
                             </TableCell>
+
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <Crown className="h-4 w-4 text-primary" />

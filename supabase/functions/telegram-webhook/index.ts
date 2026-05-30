@@ -6884,6 +6884,15 @@ class BotHandler {
       .eq("txid", txid);
 
     const expiresAt = new Date(Date.now() + planDays * 24 * 60 * 60 * 1000).toISOString();
+
+    // Busca @ e nome na agenda pra deixar a assinatura pesquisável
+    const { data: tgUser } = await this.supabase
+      .from("telegram_users")
+      .select("username, first_name")
+      .eq("telegram_user_id", telegramUserId)
+      .eq("bot_id", this.bot.id)
+      .maybeSingle();
+
     await this.supabase.from("telegram_subscriptions").insert({
       telegram_user_id: telegramUserId,
       bot_id: this.bot.id,
@@ -6894,9 +6903,12 @@ class BotHandler {
       value,
       txid,
       context: paymentContext,
+      username: tgUser?.username ?? null,
+      first_name: tgUser?.first_name ?? null,
       started_at: new Date().toISOString(),
       expires_at: expiresAt,
     });
+
 
     console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}, Context: ${paymentContext}`);
 
@@ -7307,11 +7319,35 @@ class BotHandler {
       .eq("id", this.bot.id);
   }
 
+  // Atualiza a "agenda" de usuários do Telegram (ID ↔ @ ↔ nome)
+  async upsertTelegramUser(from: any) {
+    if (!from?.id) return;
+    try {
+      await this.supabase.from("telegram_users").upsert({
+        telegram_user_id: from.id,
+        bot_id: this.bot.id,
+        username: from.username ?? null,
+        first_name: from.first_name ?? null,
+        last_name: from.last_name ?? null,
+        language_code: from.language_code ?? null,
+        is_premium: from.is_premium ?? false,
+        last_seen_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "telegram_user_id,bot_id" });
+    } catch (e) {
+      console.error("Erro ao registrar telegram_user:", e);
+    }
+  }
+
   async handleMessage(message: TelegramMessage) {
     const chatId = message.chat.id;
     const telegramUserId = message.from?.id;
 
     if (!telegramUserId) return;
+
+    // Registra/atualiza usuário na agenda central
+    await this.upsertTelegramUser(message.from);
+
 
     // ===== ANALYTICS: Track ALL incoming messages =====
     try {
@@ -8401,7 +8437,11 @@ class BotHandler {
 
     logCmd('INFO', 'CALLBACK', { userId: telegramUserId, chatId, data: data.substring(0, 60), username: callback.from.username });
 
+    // Registra/atualiza usuário na agenda central
+    await this.upsertTelegramUser(callback.from);
+
     if (!chatId || !messageId) return;
+
 
     // ── Mute check: block muted users from interacting with ANY buttons ──
     // Only allow payment-related and terms callbacks for muted users
