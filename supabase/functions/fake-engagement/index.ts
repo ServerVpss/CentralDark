@@ -22,13 +22,28 @@ interface EngagementMessage {
 }
 
 // Mensagem padrão caso não tenha nenhuma cadastrada
-const DEFAULT_MESSAGE_TEMPLATE = `🎉 *NOVA ASSINATURA!*
+const PREMIUM_DIAMOND = '<tg-emoji emoji-id="5471952986970267163">💎</tg-emoji>'
 
-👤 *{nome}* acabou de assinar!
-📋 Plano: *{plano}*
-💰 Valor: *R$ {valor}*
+const DEFAULT_MESSAGE_TEMPLATE = `🎉 <b>NOVA ASSINATURA!</b>
+
+👤 <b>{nome}</b> acabou de assinar!
+📋 Plano: <b>{plano}</b>
+💰 Valor: <b>R$ {valor}</b>
 
 🚀 Bem-vindo(a) à família! 🎊`
+
+// Escapa caracteres especiais de HTML para evitar quebra de tags
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
+// Converte template Markdown legado (*texto*) para HTML (<b>texto</b>)
+function markdownToHtml(str: string): string {
+  return str.replace(/\*([^*\n]+)\*/g, '<b>$1</b>')
+}
 
 // Nicks/apelidos para variar
 const NICKS = [
@@ -292,10 +307,10 @@ Deno.serve(async (req) => {
             console.log(`[Mensagem ${msg.id}] intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
 
             if (timeSinceMsgSent >= msgInterval) {
-              const customMessage = msg.message_template
-                .replace(/\{nome\}/g, randomName)
-                .replace(/\{plano\}/g, randomPlan.title || randomPlan.name)
-                .replace(/\{valor\}/g, Number(randomPlan.price).toFixed(2))
+              const customMessage = PREMIUM_DIAMOND + ' ' + markdownToHtml(msg.message_template)
+                .replace(/\{nome\}/g, escapeHtml(randomName))
+                .replace(/\{plano\}/g, escapeHtml(randomPlan.title || randomPlan.name))
+                .replace(/\{valor\}/g, escapeHtml(Number(randomPlan.price).toFixed(2)))
 
               const customButton = bot.bot_username ? {
                 inline_keyboard: [[
@@ -309,7 +324,7 @@ Deno.serve(async (req) => {
                 body: JSON.stringify({
                   chat_id: setting.group_chat_id,
                   text: customMessage,
-                  parse_mode: 'Markdown',
+                  parse_mode: 'HTML',
                   reply_markup: customButton
                 })
               })
@@ -359,11 +374,11 @@ Deno.serve(async (req) => {
         // messageTemplate já é DEFAULT_MESSAGE_TEMPLATE - continua o fluxo normal abaixo
       }
 
-      // Substituir variáveis na mensagem
-      const message = messageTemplate
-        .replace(/\{nome\}/g, randomName)
-        .replace(/\{plano\}/g, randomPlan.title || randomPlan.name)
-        .replace(/\{valor\}/g, Number(randomPlan.price).toFixed(2))
+      // Substituir variáveis na mensagem (template padrão já está em HTML; templates vindos do banco em Markdown são convertidos)
+      const message = PREMIUM_DIAMOND + ' ' + markdownToHtml(messageTemplate)
+        .replace(/\{nome\}/g, escapeHtml(randomName))
+        .replace(/\{plano\}/g, escapeHtml(randomPlan.title || randomPlan.name))
+        .replace(/\{valor\}/g, escapeHtml(Number(randomPlan.price).toFixed(2)))
 
       // Botão para adquirir VIP
       const acquireButton = bot.bot_username ? {
@@ -379,7 +394,7 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           chat_id: setting.group_chat_id,
           text: message,
-          parse_mode: 'Markdown',
+          parse_mode: 'HTML',
           reply_markup: acquireButton
         })
       })
