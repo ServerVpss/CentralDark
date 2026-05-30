@@ -6884,6 +6884,15 @@ class BotHandler {
       .eq("txid", txid);
 
     const expiresAt = new Date(Date.now() + planDays * 24 * 60 * 60 * 1000).toISOString();
+
+    // Busca @ e nome na agenda pra deixar a assinatura pesquisável
+    const { data: tgUser } = await this.supabase
+      .from("telegram_users")
+      .select("username, first_name")
+      .eq("telegram_user_id", telegramUserId)
+      .eq("bot_id", this.bot.id)
+      .maybeSingle();
+
     await this.supabase.from("telegram_subscriptions").insert({
       telegram_user_id: telegramUserId,
       bot_id: this.bot.id,
@@ -6894,9 +6903,12 @@ class BotHandler {
       value,
       txid,
       context: paymentContext,
+      username: tgUser?.username ?? null,
+      first_name: tgUser?.first_name ?? null,
       started_at: new Date().toISOString(),
       expires_at: expiresAt,
     });
+
 
     console.log(`Payment confirmed: User ${telegramUserId}, TXID ${txid}, Context: ${paymentContext}`);
 
