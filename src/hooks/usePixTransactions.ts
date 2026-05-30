@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { fromZonedTime, toZonedTime, formatInTimeZone } from "date-fns-tz";
@@ -42,6 +42,10 @@ export interface ChartDataPoint {
   paidCount: number;
   pendingCount: number;
 }
+
+type PaymentGatewaySettingsCost = {
+  monthly_fixed_cost?: number | string | null;
+};
 
 /**
  * ============================================================
@@ -108,7 +112,7 @@ function spHour(iso: string): string {
 }
 
 export function usePixTransactions(period: "today" | "week" | "month") {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const queryClient = useQueryClient();
 
   // Realtime: invalida a query a cada mudança em pix_transactions do usuário
@@ -168,10 +172,10 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       // Custo fixo mensal configurado (fallback R$ 500)
       const { data: settingsRow } = await supabase
         .from("payment_gateway_settings")
-        .select("monthly_fixed_cost" as any)
+        .select("*")
         .eq("user_id", user.id)
         .maybeSingle();
-      const monthlyFixedCost = Number((settingsRow as any)?.monthly_fixed_cost ?? 500);
+      const monthlyFixedCost = Number((settingsRow as unknown as PaymentGatewaySettingsCost | null)?.monthly_fixed_cost ?? 500);
 
       const { startUtc, endUtc, previousStartUtc, previousEndUtc, startSP, nowSP } =
         getPeriodRange(period);

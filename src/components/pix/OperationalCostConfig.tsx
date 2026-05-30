@@ -5,12 +5,17 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { DollarSign, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 
+type PaymentGatewaySettingsCost = {
+  id?: string;
+  monthly_fixed_cost?: number | string | null;
+};
+
 export function OperationalCostConfig() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const queryClient = useQueryClient();
   const [cost, setCost] = useState<string>("500");
   const [loading, setLoading] = useState(false);
@@ -23,11 +28,11 @@ export function OperationalCostConfig() {
       setLoading(true);
       const { data } = await supabase
         .from("payment_gateway_settings")
-        .select("monthly_fixed_cost" as any)
+        .select("*")
         .eq("user_id", user.id)
         .maybeSingle();
       if (!cancelled) {
-        const v = Number((data as any)?.monthly_fixed_cost ?? 500);
+        const v = Number((data as unknown as PaymentGatewaySettingsCost | null)?.monthly_fixed_cost ?? 500);
         setCost(v.toFixed(2).replace(/\.?0+$/, ""));
         setLoading(false);
       }
@@ -59,11 +64,11 @@ export function OperationalCostConfig() {
     const { error } = existing
       ? await supabase
           .from("payment_gateway_settings")
-          .update({ monthly_fixed_cost: value } as any)
+          .update({ monthly_fixed_cost: value } as unknown as never)
           .eq("user_id", user.id)
       : await supabase
           .from("payment_gateway_settings")
-          .insert({ user_id: user.id, monthly_fixed_cost: value } as any);
+          .insert({ user_id: user.id, monthly_fixed_cost: value } as unknown as never);
 
     setSaving(false);
     if (error) {

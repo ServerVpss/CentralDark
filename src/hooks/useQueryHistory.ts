@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "./useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface QueryHistoryItem {
   id: string;
   query_type: string;
   query_input: string;
-  query_result: any;
+  query_result: Json;
   status: string | null;
   created_at: string;
 }
@@ -20,7 +21,7 @@ interface UseQueryHistoryReturn {
 }
 
 export function useQueryHistory(limit: number = 50): UseQueryHistoryReturn {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [history, setHistory] = useState<QueryHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

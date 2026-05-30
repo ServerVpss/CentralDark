@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 
 export interface SubscriptionPlan {
   id: string;
@@ -86,7 +86,7 @@ export interface EfiGatewayConfig {
 }
 
 export function usePayments() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const queryClient = useQueryClient();
   const [isProcessing, setIsProcessing] = useState(false);
 
