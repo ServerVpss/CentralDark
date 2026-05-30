@@ -112,7 +112,7 @@ export function AuditLogsViewer() {
   const virtualizer = useVirtualizer({
     count: logs.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 72,
+    estimateSize: () => 86,
     overscan: 10,
   });
 
