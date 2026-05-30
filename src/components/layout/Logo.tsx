@@ -12,20 +12,20 @@ interface LogoProps {
 export function Logo({ className, size = 36 }: LogoProps) {
   return (
     <div className={cn("relative inline-flex items-center justify-center", className)} style={{ width: size, height: size }}>
-      {/* Glow halo */}
+      {/* Glow halo - reduzido */}
       <div
-        className="absolute inset-0 rounded-2xl blur-md opacity-60"
+        className="absolute inset-0 rounded-2xl blur-sm opacity-20"
         style={{ background: "var(--gradient-gold)" }}
       />
 
       {/* Logo container */}
       <div
-        className="relative flex items-center justify-center rounded-2xl shadow-lg"
+        className="relative flex items-center justify-center rounded-2xl shadow-sm"
         style={{
           width: size,
           height: size,
           background: "var(--gradient-gold)",
-          boxShadow: "0 4px 16px hsl(var(--primary) / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.25)",
+          boxShadow: "0 2px 8px hsl(var(--primary) / 0.15), inset 0 1px 0 hsl(0 0% 100% / 0.15)",
         }}
       >
         <svg
