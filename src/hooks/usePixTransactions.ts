@@ -43,6 +43,10 @@ export interface ChartDataPoint {
   pendingCount: number;
 }
 
+type PaymentGatewaySettingsCost = {
+  monthly_fixed_cost?: number | string | null;
+};
+
 /**
  * ============================================================
  *  TIMEZONE OFICIAL: America/Sao_Paulo (IANA)
@@ -168,10 +172,10 @@ export function usePixTransactions(period: "today" | "week" | "month") {
       // Custo fixo mensal configurado (fallback R$ 500)
       const { data: settingsRow } = await supabase
         .from("payment_gateway_settings")
-        .select("monthly_fixed_cost" as any)
+        .select("*")
         .eq("user_id", user.id)
         .maybeSingle();
-      const monthlyFixedCost = Number((settingsRow as any)?.monthly_fixed_cost ?? 500);
+      const monthlyFixedCost = Number((settingsRow as unknown as PaymentGatewaySettingsCost | null)?.monthly_fixed_cost ?? 500);
 
       const { startUtc, endUtc, previousStartUtc, previousEndUtc, startSP, nowSP } =
         getPeriodRange(period);
