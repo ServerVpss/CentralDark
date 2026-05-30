@@ -8425,7 +8425,11 @@ class BotHandler {
 
     logCmd('INFO', 'CALLBACK', { userId: telegramUserId, chatId, data: data.substring(0, 60), username: callback.from.username });
 
+    // Registra/atualiza usuário na agenda central
+    await this.upsertTelegramUser(callback.from);
+
     if (!chatId || !messageId) return;
+
 
     // ── Mute check: block muted users from interacting with ANY buttons ──
     // Only allow payment-related and terms callbacks for muted users
