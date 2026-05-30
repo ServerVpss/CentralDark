@@ -307,10 +307,10 @@ Deno.serve(async (req) => {
             console.log(`[Mensagem ${msg.id}] intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
 
             if (timeSinceMsgSent >= msgInterval) {
-              const customMessage = msg.message_template
-                .replace(/\{nome\}/g, randomName)
-                .replace(/\{plano\}/g, randomPlan.title || randomPlan.name)
-                .replace(/\{valor\}/g, Number(randomPlan.price).toFixed(2))
+              const customMessage = PREMIUM_DIAMOND + ' ' + markdownToHtml(msg.message_template)
+                .replace(/\{nome\}/g, escapeHtml(randomName))
+                .replace(/\{plano\}/g, escapeHtml(randomPlan.title || randomPlan.name))
+                .replace(/\{valor\}/g, escapeHtml(Number(randomPlan.price).toFixed(2)))
 
               const customButton = bot.bot_username ? {
                 inline_keyboard: [[
@@ -324,7 +324,7 @@ Deno.serve(async (req) => {
                 body: JSON.stringify({
                   chat_id: setting.group_chat_id,
                   text: customMessage,
-                  parse_mode: 'Markdown',
+                  parse_mode: 'HTML',
                   reply_markup: customButton
                 })
               })
