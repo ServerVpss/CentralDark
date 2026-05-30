@@ -7307,11 +7307,35 @@ class BotHandler {
       .eq("id", this.bot.id);
   }
 
+  // Atualiza a "agenda" de usuários do Telegram (ID ↔ @ ↔ nome)
+  async upsertTelegramUser(from: any) {
+    if (!from?.id) return;
+    try {
+      await this.supabase.from("telegram_users").upsert({
+        telegram_user_id: from.id,
+        bot_id: this.bot.id,
+        username: from.username ?? null,
+        first_name: from.first_name ?? null,
+        last_name: from.last_name ?? null,
+        language_code: from.language_code ?? null,
+        is_premium: from.is_premium ?? false,
+        last_seen_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "telegram_user_id,bot_id" });
+    } catch (e) {
+      console.error("Erro ao registrar telegram_user:", e);
+    }
+  }
+
   async handleMessage(message: TelegramMessage) {
     const chatId = message.chat.id;
     const telegramUserId = message.from?.id;
 
     if (!telegramUserId) return;
+
+    // Registra/atualiza usuário na agenda central
+    await this.upsertTelegramUser(message.from);
+
 
     // ===== ANALYTICS: Track ALL incoming messages =====
     try {
