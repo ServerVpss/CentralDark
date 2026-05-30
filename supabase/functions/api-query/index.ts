@@ -48,7 +48,7 @@ const MODULE_API_NAME: Record<string, string> = {
   // Pessoa
   "cpf": "iseek-cpf",
   "cpfbasico": "iseek-cpfbasico",
-  "nome": "iseek-dados---nome",
+  "nome": "iseek-dados---nomeabreviadofiltros",
   "rg": "iseek-dados---rg",
   "titulo": "iseek-dados---titulo",
   "parentes": "iseek-dados---parentes",
