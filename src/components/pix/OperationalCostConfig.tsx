@@ -5,12 +5,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { DollarSign, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 
 export function OperationalCostConfig() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const queryClient = useQueryClient();
   const [cost, setCost] = useState<string>("500");
   const [loading, setLoading] = useState(false);
