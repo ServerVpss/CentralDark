@@ -50,34 +50,49 @@ interface LogItemProps {
 const LogItem = memo(function LogItem({ log, style }: LogItemProps) {
   const Icon = actionIcons[log.entity_type] || History;
   const colorClass = actionColors[log.action] || "text-muted-foreground bg-muted";
+  const d = new Date(log.created_at);
+  const time = format(d, "HH:mm:ss", { locale: ptBR });
+  const date = format(d, "dd/MM/yyyy", { locale: ptBR });
+  const weekday = format(d, "EEE", { locale: ptBR }).replace(".", "");
 
   return (
     <div
       style={style}
-      className="flex items-start gap-3 p-3 border-b border-border/50 hover:bg-muted/30 transition-colors"
+      className="flex items-start gap-3 px-3 py-3 border-b border-border/50 hover:bg-muted/40 transition-colors"
     >
-      <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", colorClass)}>
+      <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ring-1 ring-border/50", colorClass)}>
         <Icon className="h-4 w-4" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <Badge variant="outline" className="text-[10px]">
+          <Badge variant="outline" className="text-[10px] font-semibold uppercase tracking-wide">
             {log.action}
           </Badge>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs font-medium text-foreground/80">
             {log.entity_type}
-            {log.entity_id && ` #${log.entity_id.slice(0, 8)}`}
           </span>
+          {log.entity_id && (
+            <code className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+              #{log.entity_id.slice(0, 8)}
+            </code>
+          )}
+          {log.user_id && (
+            <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">
+              <User className="h-2.5 w-2.5" />
+              <span className="font-mono">{log.user_id.slice(0, 8)}</span>
+            </span>
+          )}
         </div>
         {log.details && (
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
+          <p className="text-xs text-muted-foreground mt-1 line-clamp-1 font-mono">
             {JSON.stringify(log.details)}
           </p>
         )}
       </div>
-      <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-        {format(new Date(log.created_at), "dd/MM HH:mm", { locale: ptBR })}
-      </span>
+      <div className="flex flex-col items-end gap-0.5 shrink-0">
+        <span className="text-sm font-bold tabular-nums text-foreground">{time}</span>
+        <span className="text-[10px] text-muted-foreground capitalize">{weekday}, {date}</span>
+      </div>
     </div>
   );
 });
@@ -97,7 +112,7 @@ export function AuditLogsViewer() {
   const virtualizer = useVirtualizer({
     count: logs.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 72,
+    estimateSize: () => 86,
     overscan: 10,
   });
 

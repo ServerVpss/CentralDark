@@ -2623,6 +2623,15 @@ function formatDate(date: string): string {
   return new Date(date).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 }
 
+// Data/hora atual de São Paulo formatada bonita: "sáb, 30/05/2026 — 14:32"
+function nowSPFull(): string {
+  const d = new Date();
+  const weekday = d.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "short" }).replace(".", "");
+  const date = d.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", year: "numeric" });
+  const time = d.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo", hour: "2-digit", minute: "2-digit" });
+  return `${weekday}, ${date} — ${time}`;
+}
+
 function daysLeft(expiresAt: string): number {
   const diff = new Date(expiresAt).getTime() - Date.now();
   return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
@@ -6480,17 +6489,22 @@ class BotHandler {
     await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
   }
 
-  async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number) {
+  async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number, userName?: string) {
     // Show both subscriptions
     const groupSub = await this.getSubscription(telegramUserId, 'group');
     const privateSub = await this.getSubscription(telegramUserId, 'private');
     
     const groupActive = groupSub && !isExpired(groupSub.expires_at);
     const privateActive = privateSub && !isExpired(privateSub.expires_at);
-    
+
+    // Cabeçalho com identificação do usuário e hora
+    const header = `📊 <b>Minhas Assinaturas</b>\n` +
+      (userName ? `👤 <b>${escapeHtmlGlobal(userName)}</b> • <code>${telegramUserId}</code>\n` : `🆔 <code>${telegramUserId}</code>\n`) +
+      `🕒 <i>${nowSPFull()}</i>\n\n`;
+
     if (!groupActive && !privateActive) {
       await editMessage(this.token, chatId, messageId,
-        "📊 <b>Minhas Assinaturas</b>\n\n" +
+        header +
         "❌ Nenhuma assinatura ativa encontrada.\n\n" +
         "<i>Adquira um plano para começar a consultar.</i>",
         keyboard(
@@ -6501,7 +6515,7 @@ class BotHandler {
       return;
     }
 
-    let text = `📊 <b>Minhas Assinaturas</b>\n\n`;
+    let text = header;
     
     const formatSub = (sub: Subscription, label: string) => {
       const days = daysLeft(sub.expires_at);
@@ -6577,10 +6591,32 @@ class BotHandler {
   }
 
   // =============== ADMIN MENUS ===============
-  async showAdminMenu(chatId: number, messageId: number) {
+  async showAdminMenu(chatId: number, messageId: number, telegramUserId?: number, adminName?: string) {
+    // Stats rápidos pro cabeçalho
+    const today = new Date().toISOString().split("T")[0];
+    const [{ count: activeSubs }, { count: pendingPayments }, { data: todaySubs }] = await Promise.all([
+      this.supabase.from("telegram_subscriptions").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).gte("expires_at", new Date().toISOString()),
+      this.supabase.from("pending_payments").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).eq("status", "PENDING"),
+      this.supabase.from("telegram_subscriptions").select("value")
+        .eq("bot_id", this.bot.id).gte("created_at", today),
+    ]);
+    const todayRevenue = ((todaySubs as Array<{ value: number }> | null) || [])
+      .reduce((acc, s) => acc + Number(s.value), 0);
+    const whoLine = adminName
+      ? `\n👤 <b>${escapeHtmlGlobal(adminName)}</b>${telegramUserId ? ` • <code>${telegramUserId}</code>` : ""}`
+      : "";
+
     await editMessage(this.token, chatId, messageId,
-      "⚙️ <b>Painel Administrativo</b>\n\n" +
-      "<i>Gerencie seu bot a partir deste painel:</i>",
+      `⚙️ <b>Painel Administrativo</b>` +
+      whoLine +
+      `\n🕒 <i>${nowSPFull()}</i>\n` +
+      `\n<b>📌 Resumo de hoje</b>\n` +
+      `┌ ✅ Ativas: <b>${activeSubs || 0}</b>\n` +
+      `├ ⏳ Pendentes: <b>${pendingPayments || 0}</b>\n` +
+      `└ 💵 Receita: <b>R$ ${todayRevenue.toFixed(2)}</b>\n\n` +
+      `<i>Selecione uma opção abaixo:</i>`,
       keyboard(
         [btn("📋 Gerenciar Planos", "admin:plans", "primary", EMOJI.DIAMOND), btn("👥 Usuários", "admin:users", "primary", EMOJI.USERS)],
         [btn("📊 Estatísticas", "admin:stats", "success", EMOJI.CHART), btn("📢 Broadcast", "admin:broadcast", "danger", EMOJI.MEGAPHONE)],
@@ -6655,17 +6691,33 @@ class BotHandler {
       .gte("expires_at", new Date().toISOString())
       .order("expires_at", { ascending: true });
 
-    const subscriptions = (subs || []) as Array<{ telegram_user_id: number; plan_name: string; expires_at: string }>;
+    const subscriptions = (subs || []) as Array<{ telegram_user_id: number; plan_name: string; expires_at: string; first_name?: string | null; username?: string | null }>;
 
-    let text = "👥 <b>Usuários Ativos</b>\n\n";
+    let text = `👥 <b>Usuários Ativos</b>\n🕒 <i>${nowSPFull()}</i>\n\n`;
 
     if (subscriptions.length === 0) {
       text += "<i>Nenhum usuário com assinatura ativa.</i>";
     } else {
-      text += `📊 Total: <b>${subscriptions.length}</b>\n\n`;
+      // Busca nomes da agenda central pra enriquecer o display
+      const ids = subscriptions.slice(0, 20).map(s => s.telegram_user_id);
+      const { data: users } = await this.supabase
+        .from("telegram_users")
+        .select("telegram_user_id, first_name, username")
+        .in("telegram_user_id", ids);
+      const usersMap = new Map<number, { first_name?: string | null; username?: string | null }>();
+      (users || []).forEach((u: { telegram_user_id: number; first_name?: string | null; username?: string | null }) => {
+        usersMap.set(u.telegram_user_id, { first_name: u.first_name, username: u.username });
+      });
+
+      text += `📊 Total: <b>${subscriptions.length}</b> assinantes\n\n`;
       subscriptions.slice(0, 20).forEach((s, i) => {
         const days = daysLeft(s.expires_at);
-        text += `${i + 1}. <code>${s.telegram_user_id}</code> • ${s.plan_name} • ${days}d\n`;
+        const u = usersMap.get(s.telegram_user_id);
+        const name = (s.first_name || u?.first_name || "—").substring(0, 18);
+        const handle = (s.username || u?.username) ? ` @${escapeHtmlGlobal(s.username || u?.username || "")}` : "";
+        const urgency = days <= 3 ? "🔴" : days <= 7 ? "🟡" : "🟢";
+        text += `${i + 1}. ${urgency} <b>${escapeHtmlGlobal(name)}</b>${handle}\n` +
+          `   <code>${s.telegram_user_id}</code> • ${s.plan_name} • <b>${days}d</b>\n`;
       });
       if (subscriptions.length > 20) {
         text += `\n<i>... e mais ${subscriptions.length - 20} usuários</i>`;
@@ -6673,7 +6725,9 @@ class BotHandler {
     }
 
     await editMessage(this.token, chatId, messageId, text,
-      keyboard([btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)])
+      keyboard(
+        [btn("🔄 Atualizar", "admin:users", "success", EMOJI.REFRESH), btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)]
+      )
     );
   }
 
@@ -6714,7 +6768,8 @@ class BotHandler {
     const rate = (totalSubs && totalSubs > 0) ? Math.round(((activeSubs || 0) / totalSubs) * 100) : 0;
 
     await editMessage(this.token, chatId, messageId,
-      `📊 <b>Estatísticas do Bot</b>\n\n` +
+      `📊 <b>Estatísticas do Bot</b>\n` +
+      `🕒 <i>Atualizado: ${nowSPFull()}</i>\n\n` +
       `<b>👥 ASSINATURAS</b>\n` +
       `┌ 📋 Total: <b>${totalSubs || 0}</b>\n` +
       `├ ✅ Ativas: <b>${activeSubs || 0}</b>\n` +
@@ -6729,11 +6784,27 @@ class BotHandler {
   }
 
   async showBroadcastMenu(chatId: number, messageId: number) {
+    const nowIso = new Date().toISOString();
+    const [{ count: totalUsers }, { count: activeCount }, { count: expiredCount }] = await Promise.all([
+      this.supabase.from("telegram_users").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id),
+      this.supabase.from("telegram_subscriptions").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).gte("expires_at", nowIso),
+      this.supabase.from("telegram_subscriptions").select("*", { count: "exact", head: true })
+        .eq("bot_id", this.bot.id).lt("expires_at", nowIso),
+    ]);
+
     await editMessage(this.token, chatId, messageId,
-      "📢 <b>Broadcast</b>\n\n<i>Selecione o público-alvo da mensagem:</i>",
+      `📢 <b>Broadcast</b>\n` +
+      `🕒 <i>${nowSPFull()}</i>\n\n` +
+      `<b>👥 Públicos disponíveis</b>\n` +
+      `┌ 📢 Todos: <b>${totalUsers || 0}</b> usuários\n` +
+      `├ ✅ Ativos: <b>${activeCount || 0}</b> assinantes\n` +
+      `└ ❌ Expirados: <b>${expiredCount || 0}</b> ex-assinantes\n\n` +
+      `<i>Selecione o público-alvo da mensagem:</i>`,
       keyboard(
-        [btn("📢 Todos", "broadcast:all", "primary", EMOJI.MEGAPHONE), btn("✅ Ativos", "broadcast:active", "success", EMOJI.CHECK)],
-        [btn("❌ Expirados", "broadcast:expired", "danger")],
+        [btn(`📢 Todos (${totalUsers || 0})`, "broadcast:all", "primary", EMOJI.MEGAPHONE), btn(`✅ Ativos (${activeCount || 0})`, "broadcast:active", "success", EMOJI.CHECK)],
+        [btn(`❌ Expirados (${expiredCount || 0})`, "broadcast:expired", "danger")],
         [btn("🔙 Voltar", "admin:menu", undefined, EMOJI.BACK)]
       )
     );
@@ -9115,7 +9186,7 @@ class BotHandler {
     }
 
     if (data === "menu:subscription") {
-      await this.showSubscriptionMenu(chatId, telegramUserId, messageId);
+      await this.showSubscriptionMenu(chatId, telegramUserId, messageId, callback.from.first_name);
       return;
     }
 
@@ -9238,7 +9309,7 @@ class BotHandler {
           keyboard([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]));
         return;
       }
-      await this.showAdminMenu(chatId, messageId);
+      await this.showAdminMenu(chatId, messageId, telegramUserId, callback.from.first_name);
       return;
     }
 
@@ -9272,7 +9343,7 @@ class BotHandler {
       const filter = data.replace("broadcast:", "");
       if (filter === "cancel") {
         await this.clearConversationState(telegramUserId, "broadcast");
-        await this.showAdminMenu(chatId, messageId);
+        await this.showAdminMenu(chatId, messageId, telegramUserId, callback.from.first_name);
         return;
       }
       await this.setConversationState(telegramUserId, "broadcast", { filter });
