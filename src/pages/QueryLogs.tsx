@@ -1,4 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
 import {
   History,
   Search,
@@ -86,6 +89,11 @@ export default function QueryLogs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
 
+  // Progresso de carregamento
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [loadStage, setLoadStage] = useState("Conectando ao banco de dados...");
+  const [loadedCount, setLoadedCount] = useState(0);
+
   useEffect(() => {
     fetchLogs();
   }, []);
@@ -97,12 +105,18 @@ export default function QueryLogs() {
 
   const fetchLogs = async () => {
     setLoading(true);
+    setLoadProgress(8);
+    setLoadStage("Conectando ao banco de dados...");
+    setLoadedCount(0);
     try {
-      // Fetch all logs using pagination to bypass 1000 row limit
       let allLogs: QueryLog[] = [];
       let from = 0;
       const batchSize = 1000;
       let hasMore = true;
+      let batch = 0;
+
+      setLoadStage("Buscando registros...");
+      setLoadProgress(20);
 
       while (hasMore) {
         const { data, error } = await supabase
@@ -112,24 +126,31 @@ export default function QueryLogs() {
           .range(from, from + batchSize - 1);
 
         if (error) throw error;
-        
+
         if (data && data.length > 0) {
           allLogs = allLogs.concat(data as QueryLog[]);
           from += batchSize;
+          batch += 1;
+          setLoadedCount(allLogs.length);
+          setLoadProgress((prev) => Math.min(85, 20 + batch * 18));
           hasMore = data.length === batchSize;
         } else {
           hasMore = false;
         }
       }
 
+      setLoadStage("Processando resultados...");
+      setLoadProgress(95);
       setLogs(allLogs);
+      setLoadProgress(100);
     } catch (error) {
       console.error("Error fetching logs:", error);
       toast.error("Erro ao carregar logs");
     } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 250);
     }
   };
+
 
   const filteredLogs = useMemo(() => {
     return logs.filter((log) => {
@@ -177,16 +198,119 @@ export default function QueryLogs() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="space-y-5 max-w-[1400px] mx-auto"
+        >
+          {/* Painel de progresso */}
+          <Card className="bg-card border-border/50 overflow-hidden">
+            <CardContent className="pt-6 pb-6">
+              <div className="flex items-center gap-4 mb-4">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/80 to-primary/40"
+                >
+                  <RefreshCw className="h-5 w-5 text-white" />
+                </motion.div>
+                <div className="flex-1">
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={loadStage}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.25 }}
+                      className="text-sm font-medium text-foreground"
+                    >
+                      {loadStage}
+                    </motion.p>
+                  </AnimatePresence>
+                  <p className="text-xs text-muted-foreground">
+                    {loadedCount > 0
+                      ? `${loadedCount.toLocaleString("pt-BR")} registros carregados`
+                      : "Preparando consulta..."}
+                  </p>
+                </div>
+                <motion.span
+                  key={loadProgress}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-sm font-semibold text-primary tabular-nums"
+                >
+                  {loadProgress}%
+                </motion.span>
+              </div>
+              <Progress value={loadProgress} className="h-2" />
+            </CardContent>
+          </Card>
+
+          {/* Skeleton dos cards de stats */}
+          <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+            {[0, 1, 2, 3].map((i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08, duration: 0.35 }}
+              >
+                <Card className="bg-card border-border/50">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-4">
+                      <Skeleton className="h-11 w-11 rounded-xl" />
+                      <div className="space-y-2 flex-1">
+                        <Skeleton className="h-6 w-16" />
+                        <Skeleton className="h-3 w-20" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Skeleton das linhas da tabela */}
+          <Card className="bg-card border-border/50">
+            <CardHeader className="pb-4">
+              <Skeleton className="h-5 w-32" />
+              <Skeleton className="h-3 w-48 mt-2" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
+                    className="flex items-center gap-4 p-3 rounded-lg border border-border/30"
+                  >
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                    <Skeleton className="h-4 flex-1 max-w-[200px]" />
+                    <Skeleton className="h-5 w-20 rounded-full" />
+                    <Skeleton className="h-8 w-16 ml-auto" />
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </DashboardLayout>
     );
   }
 
+
   return (
     <DashboardLayout>
-      <div className="space-y-5 max-w-[1400px] mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="space-y-5 max-w-[1400px] mx-auto"
+      >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-semibold text-foreground">Logs de Consultas</h1>
@@ -502,7 +626,7 @@ export default function QueryLogs() {
             </div>
           </DialogContent>
         </Dialog>
-      </div>
+      </motion.div>
     </DashboardLayout>
   );
 }
