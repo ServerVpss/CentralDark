@@ -27,11 +27,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 import { BackupManager } from "@/components/backup/BackupManager";
 
 export default function Settings() {
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, updateProfile } = useAuthContext();
   
   const [settings, setSettings] = useState({
     // Profile
