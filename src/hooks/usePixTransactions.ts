@@ -139,6 +139,9 @@ export function usePixTransactions(period: "today" | "week" | "month") {
     queryKey: ["pix-transactions", period, user?.id],
     refetchInterval: 30_000,
     refetchOnWindowFocus: true,
+    // Mantém os dados anteriores enquanto recarrega em segundo plano,
+    // evitando flicker/skeleton ao receber updates em tempo real.
+    placeholderData: keepPreviousData,
     queryFn: async () => {
       if (!user?.id) {
         return {
