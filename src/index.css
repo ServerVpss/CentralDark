@@ -370,8 +370,8 @@
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.25); }
-  50% { box-shadow: 0 0 40px hsl(var(--primary) / 0.45); }
+  0%, 100% { box-shadow: 0 0 6px hsl(var(--primary) / 0.1); }
+  50% { box-shadow: 0 0 12px hsl(var(--primary) / 0.18); }
 }
 
 @keyframes slideUp {
