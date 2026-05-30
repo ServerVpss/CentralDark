@@ -1,4 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
@@ -108,9 +109,36 @@ function spHour(iso: string): string {
 
 export function usePixTransactions(period: "today" | "week" | "month") {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  // Realtime: invalida a query a cada mudança em pix_transactions do usuário
+  // e atualiza também a cada 30s como fallback (timezone/cron seguro).
+  useEffect(() => {
+    if (!user?.id) return;
+    const channel = supabase
+      .channel(`pix-tx-${user.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "pix_transactions",
+          filter: `user_id=eq.${user.id}`,
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["pix-transactions"] });
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id, queryClient]);
 
   return useQuery({
     queryKey: ["pix-transactions", period, user?.id],
+    refetchInterval: 30_000,
+    refetchOnWindowFocus: true,
     queryFn: async () => {
       if (!user?.id) {
         return {
