@@ -8,7 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 import {
   Dialog,
   DialogContent,
@@ -48,7 +48,7 @@ const PLACEHOLDERS_INFO = [
 ];
 
 export function EngagementMessagesManager({ botId }: EngagementMessagesManagerProps) {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [messages, setMessages] = useState<EngagementMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState("");
