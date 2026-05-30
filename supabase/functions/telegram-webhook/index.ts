@@ -6489,17 +6489,22 @@ class BotHandler {
     await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
   }
 
-  async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number) {
+  async showSubscriptionMenu(chatId: number, telegramUserId: number, messageId: number, userName?: string) {
     // Show both subscriptions
     const groupSub = await this.getSubscription(telegramUserId, 'group');
     const privateSub = await this.getSubscription(telegramUserId, 'private');
     
     const groupActive = groupSub && !isExpired(groupSub.expires_at);
     const privateActive = privateSub && !isExpired(privateSub.expires_at);
-    
+
+    // Cabeçalho com identificação do usuário e hora
+    const header = `📊 <b>Minhas Assinaturas</b>\n` +
+      (userName ? `👤 <b>${escapeHtmlGlobal(userName)}</b> • <code>${telegramUserId}</code>\n` : `🆔 <code>${telegramUserId}</code>\n`) +
+      `🕒 <i>${nowSPFull()}</i>\n\n`;
+
     if (!groupActive && !privateActive) {
       await editMessage(this.token, chatId, messageId,
-        "📊 <b>Minhas Assinaturas</b>\n\n" +
+        header +
         "❌ Nenhuma assinatura ativa encontrada.\n\n" +
         "<i>Adquira um plano para começar a consultar.</i>",
         keyboard(
@@ -6510,7 +6515,7 @@ class BotHandler {
       return;
     }
 
-    let text = `📊 <b>Minhas Assinaturas</b>\n\n`;
+    let text = header;
     
     const formatSub = (sub: Subscription, label: string) => {
       const days = daysLeft(sub.expires_at);
