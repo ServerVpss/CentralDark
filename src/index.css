@@ -294,23 +294,21 @@
     backdrop-filter: blur(8px);
   }
 
-  /* Glow utilities — kept old names for backwards compat */
+  /* Glow utilities — bem mais suaves */
   .glow-gold {
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.3),
-                0 0 80px hsl(var(--primary) / 0.12);
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.12);
   }
 
   .glow-gold-sm {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.25);
+    box-shadow: 0 0 6px hsl(var(--primary) / 0.1);
   }
 
   .glow-text-gold {
-    text-shadow: 0 0 32px hsl(var(--primary) / 0.6);
+    text-shadow: 0 0 8px hsl(var(--primary) / 0.2);
   }
 
   .glow-emerald {
-    box-shadow: 0 0 40px hsl(152 80% 50% / 0.35),
-                0 0 80px hsl(152 80% 50% / 0.15);
+    box-shadow: 0 0 12px hsl(152 80% 50% / 0.12);
   }
 
   /* Animations */
