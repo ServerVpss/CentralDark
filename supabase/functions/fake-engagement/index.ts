@@ -374,11 +374,11 @@ Deno.serve(async (req) => {
         // messageTemplate já é DEFAULT_MESSAGE_TEMPLATE - continua o fluxo normal abaixo
       }
 
-      // Substituir variáveis na mensagem
-      const message = messageTemplate
-        .replace(/\{nome\}/g, randomName)
-        .replace(/\{plano\}/g, randomPlan.title || randomPlan.name)
-        .replace(/\{valor\}/g, Number(randomPlan.price).toFixed(2))
+      // Substituir variáveis na mensagem (template padrão já está em HTML; templates vindos do banco em Markdown são convertidos)
+      const message = PREMIUM_DIAMOND + ' ' + markdownToHtml(messageTemplate)
+        .replace(/\{nome\}/g, escapeHtml(randomName))
+        .replace(/\{plano\}/g, escapeHtml(randomPlan.title || randomPlan.name))
+        .replace(/\{valor\}/g, escapeHtml(Number(randomPlan.price).toFixed(2)))
 
       // Botão para adquirir VIP
       const acquireButton = bot.bot_username ? {
@@ -394,7 +394,7 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           chat_id: setting.group_chat_id,
           text: message,
-          parse_mode: 'Markdown',
+          parse_mode: 'HTML',
           reply_markup: acquireButton
         })
       })
