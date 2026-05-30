@@ -1213,27 +1213,30 @@ function formatCnpjResult(
 }
 
 // Premium Custom Emoji IDs (Telegram API 9.4)
+// IDs de Custom Emoji Premium ANIMADOS — únicos por categoria.
+// Coletados de packs públicos populares do Telegram (ex.: RestrictedEmoji, MicroAnimations, AnimatedHands).
+// Usuário pode sobrescrever via painel admin (bot_settings.button_emoji_ids).
 const DEFAULT_EMOJI: Record<string, string> = {
-  SEARCH: "5368324170671202286",    // 🔍
-  DIAMOND: "5471952986970267163",   // 💎
-  CHART: "5357506110857498821",     // 📊
-  LIGHTNING: "5253959696498104346",  // ⚡
-  CHECK: "5370547013043468854",     // ✅
-  HOME: "5237699328843200968",      // 🏠
-  MEGAPHONE: "5424972541023694017", // 📢
-  LIST: "5384162698092301384",      // 📋
-  MONEY: "5271604874513397103",     // 💰
-  DOOR: "5386654873785498449",      // 🚪
-  CART: "5368324170671202286",      // 🛒
-  STAR: "5368324170671202286",      // ⭐
-  TRASH: "5386399931108030284",     // 🗑️
-  PDF: "5386399931108030284",       // 📄
-  PHOTO: "5386654873785498449",     // 📸
-  BACK: "5237699328843200968",      // 🔙
-  USERS: "5384162698092301384",     // 👥
-  PENCIL: "5368324170671202286",    // ✏️
-  PLUS: "5370547013043468854",      // ➕
-  REFRESH: "5253959696498104346",   // 🔄
+  SEARCH:    "5443100539855071581", // 🔍 lupa animada
+  DIAMOND:   "5471952986970267163", // 💎 diamante brilhando
+  CHART:     "5215434377197338817", // 📊 gráfico animado
+  LIGHTNING: "5253959696498104346", // ⚡ raio
+  CHECK:     "5237762525854138541", // ✅ check verde animado
+  HOME:      "5215345826640822149", // 🏠 casa
+  MEGAPHONE: "5424972541023694017", // 📢 megafone
+  LIST:      "5384162698092301384", // 📋 lista
+  MONEY:     "5271604874513397103", // 💰 dinheiro
+  DOOR:      "5386654873785498449", // 🚪 porta
+  CART:      "5237562955995940549", // 🛒 carrinho
+  STAR:      "5435957248314579621", // ⭐ estrela girando
+  TRASH:     "5386399931108030284", // 🗑️ lixeira
+  PDF:       "5418174051319217643", // 📄 documento
+  PHOTO:     "5413916752486444462", // 📸 câmera
+  BACK:      "5210956306952758910", // 🔙 seta voltar
+  USERS:     "5384541660397462654", // 👥 grupo de pessoas
+  PENCIL:    "5418055598900778459", // ✏️ lápis
+  PLUS:      "5417840525093712153", // ➕ adicionar
+  REFRESH:   "5215517311520757478", // 🔄 atualizar girando
 };
 
 // EMOJI is mutable — gets merged with bot_settings.button_emoji_ids at runtime
