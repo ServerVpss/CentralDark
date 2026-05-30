@@ -676,6 +676,7 @@ export type Database = {
           context: string
           created_at: string
           expires_at: string
+          first_name: string | null
           id: string
           loc_id: string | null
           pix_copy_paste: string | null
@@ -690,6 +691,7 @@ export type Database = {
           telegram_user_id: number | null
           txid: string
           user_id: string
+          username: string | null
           value: number
         }
         Insert: {
@@ -697,6 +699,7 @@ export type Database = {
           context?: string
           created_at?: string
           expires_at: string
+          first_name?: string | null
           id?: string
           loc_id?: string | null
           pix_copy_paste?: string | null
@@ -711,6 +714,7 @@ export type Database = {
           telegram_user_id?: number | null
           txid: string
           user_id: string
+          username?: string | null
           value: number
         }
         Update: {
@@ -718,6 +722,7 @@ export type Database = {
           context?: string
           created_at?: string
           expires_at?: string
+          first_name?: string | null
           id?: string
           loc_id?: string | null
           pix_copy_paste?: string | null
@@ -732,6 +737,7 @@ export type Database = {
           telegram_user_id?: number | null
           txid?: string
           user_id?: string
+          username?: string | null
           value?: number
         }
         Relationships: [
@@ -1228,6 +1234,7 @@ export type Database = {
           context: string
           created_at: string
           expires_at: string
+          first_name: string | null
           id: string
           plan_code: string
           plan_days: number
@@ -1237,6 +1244,7 @@ export type Database = {
           status: string | null
           telegram_user_id: number
           txid: string | null
+          username: string | null
           value: number
         }
         Insert: {
@@ -1244,6 +1252,7 @@ export type Database = {
           context?: string
           created_at?: string
           expires_at: string
+          first_name?: string | null
           id?: string
           plan_code: string
           plan_days: number
@@ -1253,6 +1262,7 @@ export type Database = {
           status?: string | null
           telegram_user_id: number
           txid?: string | null
+          username?: string | null
           value: number
         }
         Update: {
@@ -1260,6 +1270,7 @@ export type Database = {
           context?: string
           created_at?: string
           expires_at?: string
+          first_name?: string | null
           id?: string
           plan_code?: string
           plan_days?: number
@@ -1269,6 +1280,7 @@ export type Database = {
           status?: string | null
           telegram_user_id?: number
           txid?: string | null
+          username?: string | null
           value?: number
         }
         Relationships: [
@@ -1325,6 +1337,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      telegram_users: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          first_name: string | null
+          id: string
+          is_premium: boolean | null
+          language_code: string | null
+          last_name: string | null
+          last_seen_at: string
+          telegram_user_id: number
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          is_premium?: boolean | null
+          language_code?: string | null
+          last_name?: string | null
+          last_seen_at?: string
+          telegram_user_id: number
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          is_premium?: boolean | null
+          language_code?: string | null
+          last_name?: string | null
+          last_seen_at?: string
+          telegram_user_id?: number
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

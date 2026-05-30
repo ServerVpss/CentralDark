@@ -1,74 +1,36 @@
 
+# Salvar usuários do Telegram também pelo @
 
-# Sistema de Monitoramento de Saúde dos Módulos (Sem Auto-Toggle)
+## Problema
+Hoje a base só guarda o `telegram_user_id` (número) nas tabelas de assinatura e pagamento. Quando você procura por `@aledrack12`, não acha nada — o username nunca foi salvo.
 
-Cria um painel visual que mostra a saúde real de cada módulo, mas **deixa a decisão de ativar/desativar nas suas mãos**. Nada é mexido automaticamente.
+## Solução em 3 partes
 
-## O que será construído
+### 1. Criar uma "agenda" de usuários do Telegram
+Nova tabela `telegram_users` que funciona como um cadastro central, ligando ID ↔ @ ↔ nome:
 
-### 1. Tabela `module_health_status`
-Uma linha por módulo, atualizada em tempo real:
-- `module_key`, `total_attempts_24h`, `success_count_24h`, `notfound_count_24h`, `error_count_24h`
-- `success_rate` (calculado)
-- `last_success_at`, `last_failure_at`, `last_check_at`
-- `health_label` ("healthy" / "degraded" / "no_data" / "failing")
+- `telegram_user_id` (chave única)
+- `username` (o @ sem o arroba)
+- `first_name` / `last_name`
+- `last_seen_at` (última vez que apareceu)
+- `bot_id` (de qual bot ele veio)
 
-Sem campo de auto-disable — o sistema **só observa, nunca decide**.
+Assim, mesmo que o usuário troque o @ depois, a gente mantém o histórico ligado pelo ID.
 
-### 2. Instrumentação no `api-query`
-A cada consulta real, registra o resultado (success / notFound / error) via RPC atômico `record_module_attempt(module_key, outcome)`. Zero impacto na latência.
+### 2. Preencher automaticamente
+Sempre que o bot receber qualquer mensagem ou callback do usuário, ele faz um "upsert" nessa tabela (cria se não existe, atualiza se mudou o @ ou nome). Isso acontece dentro da função `telegram-bot` que já processa tudo.
 
-### 3. Job de cálculo (cron a cada 15 min)
-Nova Edge Function `module-health-calc` que recalcula as métricas de 24h e atualiza o `health_label` de cada módulo:
-- 🟢 **Saudável** — sucesso ≥ 50%
-- 🟡 **Degradado** — sucesso entre 10-50%
-- 🔴 **Sem retorno** — 100% notFound ou erro com ≥ 3 amostras
-- ⚪ **Sem dados** — < 3 amostras nas últimas 24h
+Resultado: em pouquíssimo tempo, todo mundo que interage com o bot fica catalogado.
 
-### 4. UI no `QueryModulesManager.tsx`
-Cada card de módulo ganha:
-- **Badge de saúde** colorido ao lado do nome
-- **Mini-stats abaixo**: "98% sucesso · 1.234 consultas · última 2min atrás"
-- **Tooltip com detalhes**: contagem por outcome (✅ 145 / ❌ 0 / ⚠️ 12)
+### 3. Adicionar busca por @ no painel
+- Adicionar campo `username` também em `telegram_subscriptions` e `pending_payments` (preenchido no momento do pagamento, vindo da `telegram_users`).
+- Na página de **Telegram Users** / **Subscription Audit**, permitir buscar por `@usuario` além do ID.
+- Quando você me pedir de novo "procura o @fulano", consigo cruzar direto: pego o ID na `telegram_users` e checo plano/mute na `telegram_subscriptions`.
 
-O **switch ON/OFF que já existe permanece igual** — você decide quando desativar com base no que vê.
+## O que muda na prática pra você
+- Da próxima vez que o @aledrack12 mandar qualquer coisa pro bot, ele entra na agenda.
+- Você consegue buscar por @ no painel web.
+- Eu consigo te responder rápido se um @ está com plano ativo ou mutado.
 
-### 5. Filtros e resumo no topo
-Cards adicionais no painel:
-- Saudáveis (verde) | Degradados (amarelo) | Sem retorno (vermelho) | Sem dados (cinza)
-
-Filtro de busca: "Todos / Saudáveis / Problemáticos / Sem dados" para isolar rapidamente módulos que merecem atenção.
-
-### 6. Botão "Recalcular agora"
-Dispara o `module-health-calc` manualmente, sem esperar os 15 min do cron. Útil pra validar depois de uma rodada de testes.
-
-## Fluxo do usuário
-
-```text
-Módulo /credilink começa retornando 100% notFound
-   ↓ (próximo recálculo, até 15 min)
-Painel mostra 🔴 "Sem retorno: 0/45 últimas 24h"
-   ↓
-Você vê, avalia, decide:
-   ├─ Desliga manualmente o switch → módulo OFF
-   └─ Ou deixa ligado pra continuar coletando dados
-   ↓
-Quando o provider voltar → badge muda pra 🟢 sozinho
-   ↓ Você reativa quando quiser
-```
-
-## Detalhes técnicos
-
-- **RPC atômico**: `record_module_attempt` usa `INSERT ... ON CONFLICT DO UPDATE` para evitar race conditions
-- **Janela móvel**: métricas sempre em 24h, recalculadas a partir de `query_history` no cron
-- **Realtime**: tabela `module_health_status` publicada no Supabase Realtime — badges atualizam sem refresh
-- **Sem efeito colateral**: o cron NUNCA toca em `query_modules.enabled` — só atualiza o status visual
-
-## Arquivos afetados
-
-- `supabase/migrations/` — nova tabela `module_health_status` + RPC `record_module_attempt`
-- `supabase/functions/module-health-calc/index.ts` — nova função (cron 15 min)
-- `supabase/functions/api-query/index.ts` — instrumentação leve
-- `src/components/bots/QueryModulesManager.tsx` — badges, mini-stats, filtros, botão recalcular
-- `src/hooks/useModuleHealth.ts` — hook para subscrever ao Realtime
-
+## Observação importante
+Os usuários **antigos** que nunca mais interagiram não vão aparecer automaticamente — só vão ser cadastrados quando mandarem a próxima mensagem. Pra eles, ainda vai precisar do ID numérico. Se quiser, posso adicionar também um botão "importar membros do grupo" depois.
