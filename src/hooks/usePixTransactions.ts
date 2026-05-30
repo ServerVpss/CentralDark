@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { fromZonedTime, toZonedTime, formatInTimeZone } from "date-fns-tz";
 
 export interface PixTransaction {
   id: string;
@@ -43,65 +44,70 @@ export interface ChartDataPoint {
 
 /**
  * ============================================================
- *  TIMEZONE FIXO: America/Sao_Paulo (UTC-3, sem horário de verão)
+ *  TIMEZONE OFICIAL: America/Sao_Paulo (IANA)
  * ============================================================
- *  Independente do timezone do navegador, todos os filtros
- *  (Hoje / Semana / Mês) são calculados no horário de Brasília
- *  e convertidos para UTC antes da consulta ao banco.
- *  Intervalo seguro: created_at >= startUtc AND created_at < endUtc
+ *  Usamos `date-fns-tz` para respeitar a regra real do fuso,
+ *  incluindo qualquer mudança futura (horário de verão, etc).
+ *  Nada de offset fixo hardcoded.
+ *
+ *  Fluxo:
+ *   1. Pegamos "agora" em SP via toZonedTime.
+ *   2. Calculamos o início do período no relógio de SP
+ *      manipulando os campos da Date "zonada".
+ *   3. Convertemos de volta para UTC com fromZonedTime
+ *      antes de consultar o banco.
+ *
+ *  Query usa intervalo seguro:
+ *    created_at >= startUtc AND created_at < endUtc
+ * ============================================================
  */
-const BR_OFFSET_MS = -3 * 60 * 60 * 1000;
+const TZ = "America/Sao_Paulo";
 
-/** Retorna um Date cujos campos UTC representam o relógio em São Paulo. */
-function nowInBR(): Date {
-  return new Date(Date.now() + BR_OFFSET_MS);
+/**
+ * Calcula [startUtc, endUtc) para o filtro escolhido,
+ * sempre baseado no horário oficial de São Paulo.
+ */
+function getPeriodRange(period: "today" | "week" | "month") {
+  const nowUtc = new Date();
+  const nowSP = toZonedTime(nowUtc, TZ);
+
+  // Início do período em "horário local de SP"
+  const startSP = new Date(nowSP);
+  startSP.setHours(0, 0, 0, 0);
+
+  if (period === "week") {
+    // Segunda-feira como início da semana
+    const dow = startSP.getDay(); // 0=dom, 1=seg, ...
+    const diff = (dow + 6) % 7;
+    startSP.setDate(startSP.getDate() - diff);
+  } else if (period === "month") {
+    startSP.setDate(1);
+  }
+
+  // Converte início SP -> UTC (respeitando regras IANA)
+  const startUtc = fromZonedTime(startSP, TZ);
+  const endUtc = nowUtc;
+
+  // Período anterior, mesmo tamanho, terminando em startUtc (exclusivo)
+  const periodLengthMs = endUtc.getTime() - startUtc.getTime();
+  const previousEndUtc = new Date(startUtc.getTime());
+  const previousStartUtc = new Date(startUtc.getTime() - periodLengthMs);
+
+  return { startUtc, endUtc, previousStartUtc, previousEndUtc, startSP, nowSP };
 }
 
-/** Converte um Date (com campos UTC representando horário BR) para o instante UTC real. */
-function brWallToUtc(d: Date): Date {
-  return new Date(d.getTime() - BR_OFFSET_MS);
+/** Chave YYYY-MM-DD do timestamp ISO, no fuso de São Paulo. */
+function spDateKey(iso: string): string {
+  return formatInTimeZone(new Date(iso), TZ, "yyyy-MM-dd");
 }
 
-/** Retorna a chave YYYY-MM-DD do timestamp ISO no fuso de São Paulo. */
-function brDateKey(iso: string): string {
-  const d = new Date(new Date(iso).getTime() + BR_OFFSET_MS);
-  return d.toISOString().slice(0, 10);
+/** Hora (00-23) do timestamp ISO, no fuso de São Paulo. */
+function spHour(iso: string): string {
+  return formatInTimeZone(new Date(iso), TZ, "HH");
 }
 
 export function usePixTransactions(period: "today" | "week" | "month") {
   const { user } = useAuth();
-
-  /**
-   * Calcula [startUtc, endUtc) para o período selecionado,
-   * sempre baseado no horário de São Paulo.
-   */
-  const getPeriodRange = () => {
-    const nowBR = nowInBR();
-
-    // início do período em "horário BR"
-    const startBR = new Date(nowBR);
-    startBR.setUTCHours(0, 0, 0, 0);
-
-    if (period === "week") {
-      // segunda-feira como início
-      const dow = startBR.getUTCDay(); // 0=dom, 1=seg ...
-      const diff = (dow + 6) % 7; // dias desde a última segunda
-      startBR.setUTCDate(startBR.getUTCDate() - diff);
-    } else if (period === "month") {
-      startBR.setUTCDate(1);
-    }
-
-    // fim do período = agora (exclusivo, mas usamos "agora" como upper bound)
-    const startUtc = brWallToUtc(startBR);
-    const endUtc = new Date(); // instante atual real
-
-    // período anterior do mesmo tamanho, terminando em startUtc (exclusivo)
-    const periodLengthMs = endUtc.getTime() - startUtc.getTime();
-    const previousEndUtc = new Date(startUtc.getTime()); // < startUtc
-    const previousStartUtc = new Date(startUtc.getTime() - periodLengthMs);
-
-    return { startUtc, endUtc, previousStartUtc, previousEndUtc, startBR };
-  };
 
   return useQuery({
     queryKey: ["pix-transactions", period, user?.id],
@@ -136,7 +142,8 @@ export function usePixTransactions(period: "today" | "week" | "month") {
         .maybeSingle();
       const monthlyFixedCost = Number((settingsRow as any)?.monthly_fixed_cost ?? 500);
 
-      const { startUtc, endUtc, previousStartUtc, previousEndUtc, startBR } = getPeriodRange();
+      const { startUtc, endUtc, previousStartUtc, previousEndUtc, startSP, nowSP } =
+        getPeriodRange(period);
 
       // Período atual: created_at >= startUtc AND created_at < endUtc
       const { data: transactionsRaw, error } = await supabase
@@ -195,27 +202,33 @@ export function usePixTransactions(period: "today" | "week" | "month") {
        * ============================================================
        *  RATEIO DO CUSTO FIXO MENSAL
        * ============================================================
-       *  Regra: usa a QUANTIDADE REAL DE DIAS do mês atual (BR),
-       *  não 30 dias fixos. Mais justo:
-       *    - Maio (31 dias): R$ 500 / 31 ≈ R$ 16,13/dia
-       *    - Junho (30 dias): R$ 500 / 30 ≈ R$ 16,67/dia
-       *    - Fevereiro (28/29): R$ 500 / 28 ≈ R$ 17,86/dia
+       *  Regra explícita: cobramos o custo por DIAS INTEIROS do
+       *  período selecionado (não por horas decorridas).
        *
-       *  - Hoje: 1 dia × custo/dia
-       *  - Semana: nº de dias decorridos da semana × custo/dia
-       *  - Mês: custo cheio (R$ 500), independente do dia atual
+       *  - Hoje: 1 dia inteiro do mês atual.
+       *    Ex.: dia 30 às 10h já cobra o dia 30 todo.
+       *  - Semana: nº de dias decorridos da semana (seg→hoje).
+       *    Ex.: sábado cobra 6 dias inteiros.
+       *  - Mês: custo cheio do mês (R$ monthlyFixedCost).
+       *
+       *  Custo/dia = monthlyFixedCost ÷ DIAS REAIS DO MÊS ATUAL:
+       *   - Maio (31 dias): R$ 500 / 31 ≈ R$ 16,13/dia
+       *   - Junho (30 dias): R$ 500 / 30 ≈ R$ 16,67/dia
+       *   - Fevereiro (28/29): R$ 500 / 28 ≈ R$ 17,86/dia
+       * ============================================================
        */
-      const nowBR = nowInBR();
       const daysInMonth = new Date(
-        Date.UTC(nowBR.getUTCFullYear(), nowBR.getUTCMonth() + 1, 0)
-      ).getUTCDate();
+        nowSP.getFullYear(),
+        nowSP.getMonth() + 1,
+        0
+      ).getDate();
       const dailyCost = monthlyFixedCost / daysInMonth;
 
-      // dias decorridos no período (mínimo 1)
+      // Dias decorridos do período (inteiros, mínimo 1)
       const msPerDay = 24 * 60 * 60 * 1000;
       const periodDays = Math.max(
         1,
-        Math.ceil((nowBR.getTime() - startBR.getTime()) / msPerDay)
+        Math.ceil((nowSP.getTime() - startSP.getTime()) / msPerDay)
       );
 
       const proratedCost = period === "month" ? monthlyFixedCost : dailyCost * periodDays;
@@ -227,17 +240,16 @@ export function usePixTransactions(period: "today" | "week" | "month") {
         ? ((totalRevenue - previousRevenue) / previousRevenue) * 100
         : totalRevenue > 0 ? 100 : 0;
 
-      // Gráfico: agrupa por dia em horário BR
+      // Gráfico: agrupa por dia/hora no fuso de SP
       const chartData: ChartDataPoint[] = [];
       if (period === "today") {
-        // Para "hoje", agrupa por hora cheia em BR
         const buckets = new Map<string, { revenue: number; paid: number; pending: number }>();
-        for (let h = 0; h <= nowBR.getUTCHours(); h++) {
+        const currentHour = nowSP.getHours();
+        for (let h = 0; h <= currentHour; h++) {
           buckets.set(String(h).padStart(2, "0"), { revenue: 0, paid: 0, pending: 0 });
         }
         for (const t of transactions) {
-          const d = new Date(new Date(t.created_at).getTime() + BR_OFFSET_MS);
-          const key = String(d.getUTCHours()).padStart(2, "0");
+          const key = spHour(t.created_at);
           const b = buckets.get(key) ?? { revenue: 0, paid: 0, pending: 0 };
           if (t.status === "paid") {
             b.paid += 1;
@@ -257,20 +269,21 @@ export function usePixTransactions(period: "today" | "week" | "month") {
           });
         }
       } else {
-        // Itera por dia em horário BR de startBR até hoje (BR)
         const dayKeys: string[] = [];
-        const cursor = new Date(startBR);
-        const todayKey = nowBR.toISOString().slice(0, 10);
-        while (cursor.toISOString().slice(0, 10) <= todayKey) {
-          dayKeys.push(cursor.toISOString().slice(0, 10));
-          cursor.setUTCDate(cursor.getUTCDate() + 1);
+        const cursor = new Date(startSP);
+        const todayKey = formatInTimeZone(new Date(), TZ, "yyyy-MM-dd");
+        while (true) {
+          const key = format(cursor, "yyyy-MM-dd");
+          dayKeys.push(key);
+          if (key >= todayKey) break;
+          cursor.setDate(cursor.getDate() + 1);
         }
         for (const dayKey of dayKeys) {
-          const dayAll = transactions.filter((t) => brDateKey(t.created_at) === dayKey);
+          const dayAll = transactions.filter((t) => spDateKey(t.created_at) === dayKey);
           const dayPaid = dayAll.filter((t) => t.status === "paid");
           const dayPending = dayAll.filter((t) => t.status !== "paid");
           chartData.push({
-            date: format(new Date(`${dayKey}T12:00:00Z`), "EEE dd/MM", { locale: ptBR }),
+            date: format(new Date(`${dayKey}T12:00:00`), "EEE dd/MM", { locale: ptBR }),
             revenue: dayPaid.reduce((sum, t) => sum + Number(t.amount), 0),
             count: dayPaid.length,
             paidCount: dayPaid.length,
