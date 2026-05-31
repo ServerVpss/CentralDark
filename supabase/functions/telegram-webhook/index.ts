@@ -458,6 +458,31 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
   return b;
 }
 
+// =============== UNICODE BOLD SANS (𝗘𝗫𝗘𝗠𝗣𝗟𝗢) ===============
+// Converte texto ASCII para a variante sans-serif bold matemática do Unicode,
+// usada em rótulos de botões/menus do bot para destaque visual consistente.
+function toBoldSans(text: string): string {
+  let out = "";
+  for (const ch of text) {
+    const cp = ch.codePointAt(0)!;
+    if (cp >= 0x41 && cp <= 0x5A) {
+      out += String.fromCodePoint(0x1D5D4 + (cp - 0x41));
+    } else if (cp >= 0x61 && cp <= 0x7A) {
+      out += String.fromCodePoint(0x1D5EE + (cp - 0x61));
+    } else if (cp >= 0x30 && cp <= 0x39) {
+      out += String.fromCodePoint(0x1D7EC + (cp - 0x30));
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+}
+
+// Aplica MAIÚSCULAS + fonte bold sans para rótulos de menus do bot.
+function bs(text: string): string {
+  return toBoldSans(text.toUpperCase());
+}
+
 // =============== FIX BROKEN UTF-8 ENCODING ===============
 function fixBrokenEncoding(text: string): string {
   // Common mojibake patterns from Latin-1 misinterpretation of UTF-8
@@ -5934,27 +5959,33 @@ class BotHandler {
     statusBlock = infoHeader + statusBlock;
 
     const buttons: InlineButton[][] = [];
-    
-    if (isActive) {
-      buttons.push([btn("🔍 Fazer Consulta", "menu:query", "success", EMOJI.SEARCH)]);
-    }
-    
-    if (isPrivateChat) {
-      buttons.push([btn("💳 Planos Privado", "menu:plans:private", "primary", EMOJI.DIAMOND)]);
-      buttons.push([btn("👥 Planos Grupo", "menu:plans:group", "primary", EMOJI.DIAMOND)]);
-    } else {
-      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group", "primary", EMOJI.DIAMOND)]);
-    }
-    buttons.push([btn("📊 Minha Assinatura", "menu:subscription", undefined, EMOJI.CHART)]);
-    buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending", undefined, EMOJI.MONEY)]);
-    buttons.push([btn("📋 Comandos", "show_commands", undefined, EMOJI.LIST)]);
 
-    if (this.isOwner(telegramUserId)) {
-      buttons.push([btn("⚙️ Painel Admin", "admin:menu", undefined, EMOJI.LIGHTNING)]);
+    if (isActive) {
+      buttons.push([btn(`🔍 ${bs("Fazer Consulta")}`, "menu:query", "success", EMOJI.SEARCH)]);
     }
+
+    if (isPrivateChat) {
+      buttons.push([
+        btn(`💳 ${bs("Planos Privado")}`, "menu:plans:private", "primary", EMOJI.DIAMOND),
+        btn(`👥 ${bs("Planos Grupo")}`, "menu:plans:group", "primary", EMOJI.DIAMOND),
+      ]);
+    } else {
+      buttons.push([btn(`💳 ${bs("Assinar / Renovar")}`, "menu:plans:group", "primary", EMOJI.DIAMOND)]);
+    }
+
+    buttons.push([
+      btn(`📊 ${bs("Minha Assinatura")}`, "menu:subscription", undefined, EMOJI.CHART),
+      btn(`💰 ${bs("Pendentes")}`, "menu:pending", undefined, EMOJI.MONEY),
+    ]);
+
+    const lastRow: InlineButton[] = [btn(`📋 ${bs("Comandos")}`, "show_commands", undefined, EMOJI.LIST)];
+    if (this.isOwner(telegramUserId)) {
+      lastRow.push(btn(`⚙️ ${bs("Painel Admin")}`, "admin:menu", undefined, EMOJI.LIGHTNING));
+    }
+    buttons.push(lastRow);
 
     if (this.settings.group_url) {
-      buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url, undefined, EMOJI.DOOR)]);
+      buttons.push([btnUrl(`🚪 ${bs("Entrar no Grupo")}`, this.settings.group_url, undefined, EMOJI.DOOR)]);
     }
 
     const botTag = this.bot.bot_username ? `@${this.bot.bot_username}` : '';
@@ -5970,7 +6001,7 @@ class BotHandler {
   async showQueryMenu(chatId: number, messageId: number) {
     const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado.\nComandos com ▸ abrem submenu com variantes.</i>`;
 
-    const qBtn = (label: string, data: string): InlineButton => btn(label, data);
+    const qBtn = (label: string, data: string): InlineButton => btn(`${label.split(' ')[0]} ${bs(label.split(' ').slice(1).join(' '))}`, data);
 
     const allRows: InlineButton[][] = [
       [qBtn("👤 CPF ▸", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
@@ -5992,7 +6023,7 @@ class BotHandler {
     ];
 
     const buttons: InlineButton[][] = [...allRows];
-    buttons.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
+    buttons.push([btn(`🔙 ${bs("Voltar")}`, "menu:main", undefined, EMOJI.BACK)]);
 
     const moduleStatus = await loadModuleStatus(this.supabase);
     const totalCount = Object.keys(moduleStatus).length;
