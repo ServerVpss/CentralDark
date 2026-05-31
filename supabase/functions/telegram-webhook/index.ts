@@ -5966,15 +5966,15 @@ class BotHandler {
 
     if (isPrivateChat) {
       buttons.push([
-        btn(`💳 ${bs("Planos Privado")}`, "menu:plans:private", "primary", EMOJI.DIAMOND),
-        btn(`👥 ${bs("Planos Grupo")}`, "menu:plans:group", "primary", EMOJI.DIAMOND),
+        btn(`🔒 ${bs("Privado")}`, "menu:plans:private", "primary", EMOJI.DIAMOND),
+        btn(`👥 ${bs("Grupo")}`, "menu:plans:group", "primary", EMOJI.DIAMOND),
       ]);
     } else {
-      buttons.push([btn(`💳 ${bs("Assinar / Renovar")}`, "menu:plans:group", "primary", EMOJI.DIAMOND)]);
+      buttons.push([btn(`💳 ${bs("Assinar")}`, "menu:plans:group", "primary", EMOJI.DIAMOND)]);
     }
 
     buttons.push([
-      btn(`📊 ${bs("Minha Assinatura")}`, "menu:subscription", undefined, EMOJI.CHART),
+      btn(`👤 ${bs("Perfil")}`, "menu:subscription", undefined, EMOJI.CHART),
       btn(`💰 ${bs("Pendentes")}`, "menu:pending", undefined, EMOJI.MONEY),
     ]);
 
