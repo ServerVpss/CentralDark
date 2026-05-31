@@ -6554,18 +6554,62 @@ class BotHandler {
     const groupActive = groupSub && !isExpired(groupSub.expires_at);
     const privateActive = privateSub && !isExpired(privateSub.expires_at);
 
+    // Estatísticas extras do usuário pra enriquecer o perfil
+    let totalQueries = 0;
+    let queriesLast7d = 0;
+    let firstSeenAt: string | null = null;
+    try {
+      const { count: totalCount } = await this.supabase
+        .from("query_history")
+        .select("id", { count: "exact", head: true })
+        .eq("telegram_user_id", telegramUserId)
+        .eq("bot_id", this.bot.id);
+      totalQueries = totalCount || 0;
+
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const { count: weekCount } = await this.supabase
+        .from("query_history")
+        .select("id", { count: "exact", head: true })
+        .eq("telegram_user_id", telegramUserId)
+        .eq("bot_id", this.bot.id)
+        .gte("created_at", sevenDaysAgo);
+      queriesLast7d = weekCount || 0;
+
+      const earliest = groupSub?.started_at && privateSub?.started_at
+        ? (new Date(groupSub.started_at) < new Date(privateSub.started_at) ? groupSub.started_at : privateSub.started_at)
+        : (groupSub?.started_at || privateSub?.started_at || null);
+      firstSeenAt = earliest;
+    } catch (_) { /* ignore */ }
+
+    const clientDays = firstSeenAt
+      ? Math.max(1, Math.floor((Date.now() - new Date(firstSeenAt).getTime()) / (1000 * 60 * 60 * 24)))
+      : 0;
+
     // Cabeçalho com identificação do usuário e hora
-    const header = `📊 <b>Minhas Assinaturas</b>\n` +
-      (userName ? `👤 <b>${escapeHtmlGlobal(userName)}</b> • <code>${telegramUserId}</code>\n` : `🆔 <code>${telegramUserId}</code>\n`) +
-      `🕒 <i>${nowSPFull()}</i>\n\n`;
+    const header = `👤 <b>Meu Perfil</b>\n` +
+      (userName ? `┌ <b>${escapeHtmlGlobal(userName)}</b>\n` : `┌ <b>Usuário Telegram</b>\n`) +
+      `├ 🆔 <code>${telegramUserId}</code>\n` +
+      `├ 🔎 Consultas: <b>${totalQueries}</b> (7d: <b>${queriesLast7d}</b>)\n` +
+      (clientDays > 0 ? `├ 📆 Cliente há: <b>${clientDays} dia${clientDays > 1 ? 's' : ''}</b>\n` : '') +
+      `└ 🕒 <i>${nowSPFull()}</i>\n\n`;
+
+    const howItWorks =
+      `\n💡 <b>Como funciona</b>\n` +
+      `• <b>Grupo</b>: consulta dentro do grupo oficial.\n` +
+      `• <b>Privado</b>: consulta direto aqui no chat com o robô.\n` +
+      `• Use <code>/comandos</code> pra ver tudo que dá pra consultar.\n` +
+      `• Use o botão <b>Fazer Consulta</b> no menu pra ser guiado.\n` +
+      `• Sua assinatura renova quando o tempo zerar — você é avisado antes.`;
 
     if (!groupActive && !privateActive) {
       await editMessage(this.token, chatId, messageId,
         header +
-        "❌ Nenhuma assinatura ativa encontrada.\n\n" +
-        "<i>Adquira um plano para começar a consultar.</i>",
+        "❌ <b>Sem assinatura ativa.</b>\n" +
+        "<i>Escolha um plano abaixo pra liberar as consultas.</i>" +
+        howItWorks,
         keyboard(
-          [btn("💎 Planos Grupo", "menu:plans:group", undefined, EMOJI.DIAMOND), btn("🔒 Planos Privado", "menu:plans:private", undefined, EMOJI.DIAMOND)],
+          [btn("🔒 Planos Privado", "menu:plans:private", undefined, EMOJI.DIAMOND), btn("👥 Planos Grupo", "menu:plans:group", undefined, EMOJI.DIAMOND)],
+          [btn("📋 Ver Comandos", "show_commands", undefined, EMOJI.LIST)],
           [btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]
         )
       );
@@ -6596,21 +6640,24 @@ class BotHandler {
     };
 
     if (groupActive) {
-      text += formatSub(groupSub, "👥 Assinatura Grupo") + "\n\n";
+      text += formatSub(groupSub, "👥 Plano Grupo") + "\n\n";
     }
     if (privateActive) {
-      text += formatSub(privateSub, "🔒 Assinatura Privado") + "\n\n";
+      text += formatSub(privateSub, "🔒 Plano Privado") + "\n\n";
     }
     if (!groupActive) {
-      text += "👥 <i>Sem assinatura de grupo ativa</i>\n\n";
+      text += "👥 <i>Sem plano de grupo ativo</i>\n\n";
     }
     if (!privateActive) {
-      text += "🔒 <i>Sem assinatura de privado ativa</i>\n\n";
+      text += "🔒 <i>Sem plano de privado ativo</i>\n\n";
     }
+
+    text += howItWorks;
 
     await editMessage(this.token, chatId, messageId, text,
       keyboard(
         [btn("🔄 Renovar Grupo", "menu:plans:group", undefined, EMOJI.REFRESH), btn("🔄 Renovar Privado", "menu:plans:private", undefined, EMOJI.REFRESH)],
+        [btn("📋 Ver Comandos", "show_commands", undefined, EMOJI.LIST)],
         [btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]
       )
     );
