@@ -458,6 +458,31 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
   return b;
 }
 
+// =============== UNICODE BOLD SANS (𝗘𝗫𝗘𝗠𝗣𝗟𝗢) ===============
+// Converte texto ASCII para a variante sans-serif bold matemática do Unicode,
+// usada em rótulos de botões/menus do bot para destaque visual consistente.
+function toBoldSans(text: string): string {
+  let out = "";
+  for (const ch of text) {
+    const cp = ch.codePointAt(0)!;
+    if (cp >= 0x41 && cp <= 0x5A) {
+      out += String.fromCodePoint(0x1D5D4 + (cp - 0x41));
+    } else if (cp >= 0x61 && cp <= 0x7A) {
+      out += String.fromCodePoint(0x1D5EE + (cp - 0x61));
+    } else if (cp >= 0x30 && cp <= 0x39) {
+      out += String.fromCodePoint(0x1D7EC + (cp - 0x30));
+    } else {
+      out += ch;
+    }
+  }
+  return out;
+}
+
+// Aplica MAIÚSCULAS + fonte bold sans para rótulos de menus do bot.
+function bs(text: string): string {
+  return toBoldSans(text.toUpperCase());
+}
+
 // =============== FIX BROKEN UTF-8 ENCODING ===============
 function fixBrokenEncoding(text: string): string {
   // Common mojibake patterns from Latin-1 misinterpretation of UTF-8
