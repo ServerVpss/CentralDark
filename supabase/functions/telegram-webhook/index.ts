@@ -5959,27 +5959,33 @@ class BotHandler {
     statusBlock = infoHeader + statusBlock;
 
     const buttons: InlineButton[][] = [];
-    
-    if (isActive) {
-      buttons.push([btn("🔍 Fazer Consulta", "menu:query", "success", EMOJI.SEARCH)]);
-    }
-    
-    if (isPrivateChat) {
-      buttons.push([btn("💳 Planos Privado", "menu:plans:private", "primary", EMOJI.DIAMOND)]);
-      buttons.push([btn("👥 Planos Grupo", "menu:plans:group", "primary", EMOJI.DIAMOND)]);
-    } else {
-      buttons.push([btn("💳 Assinar / Renovar", "menu:plans:group", "primary", EMOJI.DIAMOND)]);
-    }
-    buttons.push([btn("📊 Minha Assinatura", "menu:subscription", undefined, EMOJI.CHART)]);
-    buttons.push([btn("💰 Pagamentos Pendentes", "menu:pending", undefined, EMOJI.MONEY)]);
-    buttons.push([btn("📋 Comandos", "show_commands", undefined, EMOJI.LIST)]);
 
-    if (this.isOwner(telegramUserId)) {
-      buttons.push([btn("⚙️ Painel Admin", "admin:menu", undefined, EMOJI.LIGHTNING)]);
+    if (isActive) {
+      buttons.push([btn(`🔍 ${bs("Fazer Consulta")}`, "menu:query", "success", EMOJI.SEARCH)]);
     }
+
+    if (isPrivateChat) {
+      buttons.push([
+        btn(`💳 ${bs("Planos Privado")}`, "menu:plans:private", "primary", EMOJI.DIAMOND),
+        btn(`👥 ${bs("Planos Grupo")}`, "menu:plans:group", "primary", EMOJI.DIAMOND),
+      ]);
+    } else {
+      buttons.push([btn(`💳 ${bs("Assinar / Renovar")}`, "menu:plans:group", "primary", EMOJI.DIAMOND)]);
+    }
+
+    buttons.push([
+      btn(`📊 ${bs("Minha Assinatura")}`, "menu:subscription", undefined, EMOJI.CHART),
+      btn(`💰 ${bs("Pendentes")}`, "menu:pending", undefined, EMOJI.MONEY),
+    ]);
+
+    const lastRow: InlineButton[] = [btn(`📋 ${bs("Comandos")}`, "show_commands", undefined, EMOJI.LIST)];
+    if (this.isOwner(telegramUserId)) {
+      lastRow.push(btn(`⚙️ ${bs("Painel Admin")}`, "admin:menu", undefined, EMOJI.LIGHTNING));
+    }
+    buttons.push(lastRow);
 
     if (this.settings.group_url) {
-      buttons.push([btnUrl("🚪 Entrar no Grupo", this.settings.group_url, undefined, EMOJI.DOOR)]);
+      buttons.push([btnUrl(`🚪 ${bs("Entrar no Grupo")}`, this.settings.group_url, undefined, EMOJI.DOOR)]);
     }
 
     const botTag = this.bot.bot_username ? `@${this.bot.bot_username}` : '';
