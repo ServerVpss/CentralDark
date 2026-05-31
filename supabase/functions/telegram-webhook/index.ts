@@ -6001,7 +6001,7 @@ class BotHandler {
   async showQueryMenu(chatId: number, messageId: number) {
     const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado.\nComandos com ▸ abrem submenu com variantes.</i>`;
 
-    const qBtn = (label: string, data: string): InlineButton => btn(label, data);
+    const qBtn = (label: string, data: string): InlineButton => btn(`${label.split(' ')[0]} ${bs(label.split(' ').slice(1).join(' '))}`, data);
 
     const allRows: InlineButton[][] = [
       [qBtn("👤 CPF ▸", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
@@ -6023,7 +6023,7 @@ class BotHandler {
     ];
 
     const buttons: InlineButton[][] = [...allRows];
-    buttons.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
+    buttons.push([btn(`🔙 ${bs("Voltar")}`, "menu:main", undefined, EMOJI.BACK)]);
 
     const moduleStatus = await loadModuleStatus(this.supabase);
     const totalCount = Object.keys(moduleStatus).length;
