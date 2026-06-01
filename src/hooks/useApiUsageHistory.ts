@@ -4,6 +4,10 @@ import { subDays, startOfDay } from "date-fns";
 
 export type ApiUsagePeriod = "today" | "7d" | "15d" | "30d";
 
+/**
+ * Conta APENAS consultas reais bem-sucedidas no provedor.
+ * Não inclui cliques de botão, callbacks, /start ou outras interações do bot.
+ */
 export function useApiUsageHistory(period: ApiUsagePeriod) {
   return useQuery({
     queryKey: ["api-usage-history", period],
@@ -16,8 +20,9 @@ export function useApiUsageHistory(period: ApiUsagePeriod) {
       else since = subDays(now, 30);
 
       const { count, error } = await supabase
-        .from("api_usage_logs")
+        .from("query_history")
         .select("*", { count: "exact", head: true })
+        .eq("status", "success")
         .gte("created_at", since.toISOString());
 
       if (error) throw error;
