@@ -34,22 +34,34 @@ serve(async (req) => {
 
     console.log("API raw response keys:", Object.keys(data));
 
-    // New structure: api_info contains usage data
+    // Estrutura nova: api_info contém dados de uso
     const apiInfo = data.api_info || {};
-    // Legacy structure fallback
+    // Estrutura legada / por módulo
     const limites = data.limites || {};
     const plano = data.plano || {};
+    // Limite GLOBAL da conta também aparece em "dados" (especialmente quando estoura)
+    const dadosGlobal = (data.dados && typeof data.dados === "object") ? data.dados : {};
 
-    // Determine if API is active based on available data
     const hasApiInfo = Object.keys(apiInfo).length > 0;
-    const dailyLimit = apiInfo.daily_limit ?? limites.total_diario ?? 0;
-    const requestsUsed = apiInfo.requests_used ?? limites.consumo_hoje ?? 0;
-    const requestsRemaining = apiInfo.requests_remaining ?? 0;
 
-    // API is active if we got a valid response with api_info or plano status
-    const isActive = hasApiInfo
-      ? dailyLimit > 0
-      : plano.status === "Ativo";
+    // Prioridade: api_info (oficial) > dados (global da conta) > limites (por módulo)
+    const dailyLimit =
+      apiInfo.daily_limit ??
+      dadosGlobal.daily_limit ??
+      limites.total_diario ??
+      0;
+
+    const requestsUsed =
+      apiInfo.requests_used ??
+      dadosGlobal.requests_used ??
+      limites.consumo_hoje ??
+      0;
+
+    const requestsRemaining =
+      apiInfo.requests_remaining ??
+      (dailyLimit > 0 ? Math.max(0, dailyLimit - requestsUsed) : 0);
+
+    const isActive = (dailyLimit > 0) || plano.status === "Ativo";
 
     const result = {
       ativo: isActive,
