@@ -177,6 +177,8 @@ Deno.serve(async (req) => {
         result_data: record.result_data,
         created_at: record.created_at,
         user: validation.user,
+        bot_username: botRow?.bot_username,
+        bot_name: botRow?.bot_name,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
