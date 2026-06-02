@@ -96,12 +96,33 @@ function formatValue(v: any): string {
   return String(v);
 }
 
-// Pega o payload real dentro de wrappers comuns (data / dados / result)
+// Pega o payload real dentro de wrappers comuns usados por TODAS as APIs
+// (data / dados / result / resultado / response / retorno / pessoas / registros / records / topLevelRecords)
 function unwrap(d: any): any {
   if (!d || typeof d !== "object") return d;
-  if (d.data && typeof d.data === "object" && !Array.isArray(d.data)) return unwrap(d.data);
-  if (d.dados && typeof d.dados === "object" && !Array.isArray(d.dados)) return unwrap(d.dados);
-  if (d.result && typeof d.result === "object" && !Array.isArray(d.result)) return unwrap(d.result);
+  const wrappers = [
+    "data", "dados", "result", "resultado", "response", "retorno", "payload", "body",
+  ];
+  for (const w of wrappers) {
+    const inner = d[w];
+    if (inner && typeof inner === "object") {
+      // Não descer se houver outras chaves úteis no nível atual (evita perder contexto)
+      const otherKeys = Object.keys(d).filter(
+        (k) => k !== w && !shouldHide(k) && !isEmptyValue(d[k]),
+      );
+      if (otherKeys.length === 0) return unwrap(inner);
+    }
+  }
+  // Quando o payload é só um array dentro de pessoas/registros/records, devolve o array
+  const listKeys = ["pessoas", "registros", "records", "topLevelRecords", "items", "lista"];
+  for (const w of listKeys) {
+    if (Array.isArray(d[w])) {
+      const otherKeys = Object.keys(d).filter(
+        (k) => k !== w && !shouldHide(k) && !isEmptyValue(d[k]),
+      );
+      if (otherKeys.length === 0) return d[w];
+    }
+  }
   return d;
 }
 
