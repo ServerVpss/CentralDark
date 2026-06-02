@@ -178,27 +178,34 @@ export function QueryMonitor() {
               {byUser.length === 0 && (
                 <p className="text-xs text-muted-foreground">Sem dados</p>
               )}
-              {byUser.map((u) => (
-                <div
-                  key={u.key}
-                  className="flex items-center justify-between text-xs px-2.5 py-2 rounded-lg bg-muted/50 border border-border/40"
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <User className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-foreground font-medium">{u.name}</div>
-                      {u.username && (
-                        <div className="truncate text-[10px] text-muted-foreground/70">@{u.username}</div>
-                      )}
+              {byUser.map((u) => {
+                const displayName = (u.name && u.name.trim()) || (u.username ? `@${u.username}` : `ID ${u.key}`);
+                const handle = u.username ? `@${u.username}` : `ID ${u.key}`;
+                return (
+                  <div
+                    key={u.key}
+                    className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2.5 rounded-lg bg-muted/50 border border-border/40 min-h-[58px]"
+                  >
+                    <div className="flex items-center justify-center h-7 w-7 rounded-full bg-muted/70 shrink-0">
+                      <User className="h-3.5 w-3.5 text-muted-foreground" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="truncate text-xs font-medium text-foreground leading-tight">{displayName}</div>
+                      <div className="truncate text-[10px] text-muted-foreground/70 leading-tight mt-0.5">{handle}</div>
+                    </div>
+                    <div className="flex items-baseline gap-3 shrink-0 tabular-nums">
+                      <div className="flex flex-col items-end leading-tight">
+                        <span className="font-mono text-sm font-semibold text-foreground">{u.today}</span>
+                        <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60">hoje</span>
+                      </div>
+                      <div className="flex flex-col items-end leading-tight">
+                        <span className="font-mono text-xs text-muted-foreground">{u.count}</span>
+                        <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60">24h</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end ml-2 shrink-0">
-                    <span className="font-mono text-foreground text-xs leading-tight">{u.today}</span>
-                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60 leading-tight">hoje</span>
-                    <span className="font-mono text-muted-foreground/80 text-[10px] leading-tight mt-0.5">{u.count} <span className="text-[8px] uppercase">24h</span></span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
