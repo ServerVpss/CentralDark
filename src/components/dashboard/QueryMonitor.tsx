@@ -41,16 +41,15 @@ export function QueryMonitor() {
     const list = rows || [];
     setTotal24h(list.length);
     setTotalLastHour(list.filter((r) => r.created_at >= since1h).length);
-    setRecent(list.slice(0, 8));
+    setRecent(list.slice(0, 30));
 
-    // Por tipo
+    // Por tipo (todos os módulos)
     const typeMap = new Map<string, number>();
     list.forEach((r) => typeMap.set(r.query_type, (typeMap.get(r.query_type) || 0) + 1));
     setByType(
       Array.from(typeMap.entries())
         .map(([type, count]) => ({ type, count }))
         .sort((a, b) => b.count - a.count)
-        .slice(0, 5)
     );
 
     // Top usuários REAIS do bot Telegram (telegram_messages com comando /)
@@ -138,7 +137,8 @@ export function QueryMonitor() {
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
               Por módulo
             </p>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 max-h-[360px] overflow-y-auto pr-1">
+
               {byType.length === 0 && (
                 <p className="text-xs text-muted-foreground">Sem dados</p>
               )}
@@ -167,7 +167,7 @@ export function QueryMonitor() {
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
               Top usuários
             </p>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 max-h-[360px] overflow-y-auto pr-1">
               {byUser.length === 0 && (
                 <p className="text-xs text-muted-foreground">Sem dados</p>
               )}
@@ -196,7 +196,7 @@ export function QueryMonitor() {
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
               Stream ao vivo
             </p>
-            <div className="space-y-1 max-h-[200px] overflow-y-auto">
+            <div className="space-y-1 max-h-[360px] overflow-y-auto pr-1">
               {recent.length === 0 && (
                 <p className="text-xs text-muted-foreground">Sem consultas</p>
               )}
