@@ -9,6 +9,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import Index from "./pages/Index";
+import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Bots from "./pages/Bots";
 import BotSettingsPage from "./pages/BotSettings";
@@ -40,7 +41,9 @@ const App = () => (
               {/* Rota pública do Mini App do Telegram (resultado) */}
               <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              {/* Landing pública na raiz */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/consultas" element={<ProtectedRoute><Consultas /></ProtectedRoute>} />
               <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
               <Route path="/bots/:botId/settings" element={<ProtectedRoute><BotSettingsPage /></ProtectedRoute>} />

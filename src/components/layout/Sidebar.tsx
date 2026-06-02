@@ -84,7 +84,7 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
         collapsed ? "lg:justify-center" : "justify-between"
       )}>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
           className={cn("flex items-center gap-3 group", collapsed && "lg:justify-center")}
         >
           <Logo size={36} className="transition-transform group-hover:scale-105" />
