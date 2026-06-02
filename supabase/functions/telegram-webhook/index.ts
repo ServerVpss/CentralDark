@@ -6051,11 +6051,6 @@ class BotHandler {
   }
 
   async showQueryMenu(chatId: number, messageId: number) {
-    // Verifica se está no modo legado (menu antigo, todos os módulos numa lista só)
-    const useLegacy = (this.settings as any)?.use_legacy_menu === true;
-    if (useLegacy) {
-      return this.showQueryMenuLegacy(chatId, messageId);
-    }
 
     const text = `🔍 <b>Central de Consultas</b>\n\n<i>Escolha uma categoria abaixo:</i>`;
 
@@ -6602,6 +6597,26 @@ class BotHandler {
 
       // Format and send result - usar o módulo realmente usado após fallback
       const formattedResult = formatQueryResult(usedModule, result, this.bot.bot_username, telegramUserName);
+
+      // ============ MODO MINI APP (Novo) — envia só o botão, sem texto inline ============
+      if ((this.settings as any)?.use_legacy_menu === true) {
+        const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        if (webappOnlyUrl) {
+          const effectIdNovo = getMessageEffectId(this.settings.message_effect);
+          await sendMessage(
+            this.token, chatId,
+            `✅ <b>Consulta concluída!</b>\n\n📱 Toque no botão abaixo para abrir o resultado no Mini App.`,
+            { inline_keyboard: [
+              [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrl, chatId, "primary")],
+              [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
+            ]},
+            effectIdNovo ? { message_effect_id: effectIdNovo } : undefined
+          );
+          return;
+        }
+        // Se falhar ao gerar link, cai pro modo texto normalmente
+      }
+
       
       // Check for photo - deep extraction from nested API response
       const fotoUrl = deepExtractPhoto(result);
@@ -8760,6 +8775,23 @@ class BotHandler {
 
       // Format and send result - usar nome do perfil do Telegram do usuário
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, userName);
+
+      // ============ MODO MINI APP (Novo) — envia só o botão no grupo ============
+      if ((this.settings as any)?.use_legacy_menu === true) {
+        const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+        if (webappOnlyUrlGrp) {
+          await sendMessage(
+            this.token, chatId,
+            `✅ <b>Consulta concluída!</b>\n\n📱 Toque no botão abaixo para abrir o resultado no Mini App.`,
+            { inline_keyboard: [
+              [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrlGrp, chatId, "primary")],
+            ]},
+            replyToId ? { reply_to_message_id: replyToId } : undefined
+          );
+          return;
+        }
+      }
+
 
       // Check for photo - deep extraction from nested API response
       const fotoUrl = deepExtractPhoto(result);

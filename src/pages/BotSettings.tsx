@@ -360,12 +360,12 @@ export default function BotSettings() {
                     </div>
                     <div className="space-y-1">
                       <Label className="text-base font-semibold">
-                        {(settings as any)?.use_legacy_menu ? "Robô Antigo (menu legado)" : "Robô Novo (menu por categorias)"}
+                        {(settings as any)?.use_legacy_menu ? "🆕 Robô Novo (Mini App)" : "📜 Robô Antigo (Texto Completo)"}
                       </Label>
                       <p className="text-xs text-muted-foreground leading-relaxed">
                         {(settings as any)?.use_legacy_menu
-                          ? "Mostra todos os módulos numa lista só — como era antes."
-                          : "Mostra categorias PESSOAS, VEICULAR e FOTOS com paginação."}
+                          ? "Entrega o resultado como um único botão que abre o Mini App — visual limpo e moderno."
+                          : "Entrega o resultado completo no chat (texto + paginação + PDF/TXT) — comportamento clássico."}
                       </p>
                     </div>
                   </div>
