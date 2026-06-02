@@ -80,7 +80,25 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
   const [mediaInputMode, setMediaInputMode] = useState<"file" | "url">("file");
   const [preview, setPreview] = useState<string | null>(null);
   const [progress, setProgress] = useState<{ sent: number; failed: number; total: number } | null>(null);
+  const [audienceCounts, setAudienceCounts] = useState<{ all: number; active: number; expired: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!open || !botId) return;
+    let cancelled = false;
+    (async () => {
+      setAudienceCounts(null);
+      const { data, error } = await supabase
+        .from("telegram_subscriptions")
+        .select("status, expires_at")
+        .eq("bot_id", botId);
+      if (cancelled || error || !data) return;
+      const now = new Date();
+      const active = data.filter((s) => s.status === "active" && new Date(s.expires_at) > now).length;
+      setAudienceCounts({ all: data.length, active, expired: data.length - active });
+    })();
+    return () => { cancelled = true; };
+  }, [open, botId]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
