@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap } from "lucide-react";
+import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuthContext } from "@/components/auth/AuthProvider";
@@ -27,6 +27,9 @@ interface EngagementMessage {
   message_template: string;
   is_active: boolean;
   interval_minutes: number;
+  max_per_day?: number | null;
+  sent_today?: number | null;
+  count_date?: string | null;
 }
 
 interface EngagementMessagesManagerProps {
@@ -53,9 +56,11 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState("");
   const [newInterval, setNewInterval] = useState(30);
+  const [newMaxPerDay, setNewMaxPerDay] = useState(12);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
   const [editingInterval, setEditingInterval] = useState(30);
+  const [editingMaxPerDay, setEditingMaxPerDay] = useState(12);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [testingId, setTestingId] = useState<string | null>(null);
 
@@ -91,14 +96,16 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
           user_id: user.id,
           message_template: newMessage.trim(),
           is_active: true,
-          interval_minutes: newInterval
-        });
+          interval_minutes: newInterval,
+          max_per_day: newMaxPerDay,
+        } as never);
 
       if (error) throw error;
 
       toast.success('Mensagem adicionada!');
       setNewMessage("");
       setNewInterval(30);
+      setNewMaxPerDay(12);
       setDialogOpen(false);
       fetchMessages();
     } catch (error) {
@@ -144,6 +151,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     setEditingId(msg.id);
     setEditingText(msg.message_template);
     setEditingInterval(msg.interval_minutes || 30);
+    setEditingMaxPerDay(msg.max_per_day ?? 12);
   };
 
   const handleSaveEdit = async () => {
@@ -154,8 +162,9 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
         .from('engagement_messages')
         .update({ 
           message_template: editingText.trim(),
-          interval_minutes: editingInterval
-        })
+          interval_minutes: editingInterval,
+          max_per_day: editingMaxPerDay,
+        } as never)
         .eq('id', editingId);
 
       if (error) throw error;
@@ -164,6 +173,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
       setEditingId(null);
       setEditingText("");
       setEditingInterval(30);
+      setEditingMaxPerDay(12);
       fetchMessages();
     } catch (error) {
       console.error('Erro ao salvar:', error);
@@ -175,6 +185,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     setEditingId(null);
     setEditingText("");
     setEditingInterval(30);
+    setEditingMaxPerDay(12);
   };
 
   const handleUpdateInterval = async (id: string, interval: number) => {
@@ -189,6 +200,21 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     } catch (error) {
       console.error('Erro ao atualizar intervalo:', error);
       toast.error('Erro ao atualizar intervalo');
+    }
+  };
+
+  const handleUpdateMaxPerDay = async (id: string, maxPerDay: number) => {
+    try {
+      const { error } = await supabase
+        .from('engagement_messages')
+        .update({ max_per_day: maxPerDay } as never)
+        .eq('id', id);
+
+      if (error) throw error;
+      fetchMessages();
+    } catch (error) {
+      console.error('Erro ao atualizar limite diário:', error);
+      toast.error('Erro ao atualizar limite diário');
     }
   };
 
@@ -336,6 +362,26 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                       <span>2 horas</span>
                     </div>
                   </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Hash className="h-4 w-4 text-muted-foreground" />
+                      <Label className="text-sm">Máximo por dia: {newMaxPerDay} envios</Label>
+                    </div>
+                    <Slider
+                      value={[newMaxPerDay]}
+                      onValueChange={(v) => setNewMaxPerDay(v[0])}
+                      min={1}
+                      max={100}
+                      step={1}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>1</span>
+                      <span>25</span>
+                      <span>50</span>
+                      <span>100</span>
+                    </div>
+                  </div>
                   <Button onClick={handleAdd} className="w-full bg-gradient-to-r from-emerald-500 to-teal-600">
                     Adicionar Mensagem
                   </Button>
@@ -370,6 +416,20 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                         onValueChange={(v) => setEditingInterval(v[0])}
                         min={1}
                         max={120}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Hash className="h-4 w-4 text-muted-foreground" />
+                        <Label className="text-sm">Máximo por dia: {editingMaxPerDay} envios</Label>
+                      </div>
+                      <Slider
+                        value={[editingMaxPerDay]}
+                        onValueChange={(v) => setEditingMaxPerDay(v[0])}
+                        min={1}
+                        max={100}
                         step={1}
                         className="w-full"
                       />
@@ -418,6 +478,35 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                         <span>30 min</span>
                         <span>1h</span>
                         <span>2h</span>
+                      </div>
+                    </div>
+
+                    {/* Máximo por dia individual */}
+                    <div className="p-3 rounded-lg bg-muted/20 border border-border/30 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Hash className="h-4 w-4 text-emerald-400" />
+                        <Label className="text-xs">
+                          Máximo por dia: {msg.max_per_day ?? 12} envios
+                          {typeof msg.sent_today === 'number' && (
+                            <span className="ml-2 text-muted-foreground">
+                              (hoje: {msg.count_date === new Date().toISOString().slice(0,10) ? msg.sent_today : 0}/{msg.max_per_day ?? 12})
+                            </span>
+                          )}
+                        </Label>
+                      </div>
+                      <Slider
+                        value={[msg.max_per_day ?? 12]}
+                        onValueChange={(v) => handleUpdateMaxPerDay(msg.id, v[0])}
+                        min={1}
+                        max={100}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>1</span>
+                        <span>25</span>
+                        <span>50</span>
+                        <span>100</span>
                       </div>
                     </div>
 
@@ -516,6 +605,26 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                     <span>5 min</span>
                     <span>1 hora</span>
                     <span>2 horas</span>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Hash className="h-4 w-4 text-muted-foreground" />
+                    <Label className="text-sm">Máximo por dia: {newMaxPerDay} envios</Label>
+                  </div>
+                  <Slider
+                    value={[newMaxPerDay]}
+                    onValueChange={(v) => setNewMaxPerDay(v[0])}
+                    min={1}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>1</span>
+                    <span>25</span>
+                    <span>50</span>
+                    <span>100</span>
                   </div>
                 </div>
                 <Button onClick={handleAdd} className="w-full bg-gradient-to-r from-emerald-500 to-teal-600">

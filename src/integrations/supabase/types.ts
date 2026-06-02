@@ -477,34 +477,43 @@ export type Database = {
       engagement_messages: {
         Row: {
           bot_id: string | null
+          count_date: string | null
           created_at: string
           id: string
           interval_minutes: number | null
           is_active: boolean | null
           last_sent_at: string | null
+          max_per_day: number
           message_template: string
+          sent_today: number
           updated_at: string
           user_id: string
         }
         Insert: {
           bot_id?: string | null
+          count_date?: string | null
           created_at?: string
           id?: string
           interval_minutes?: number | null
           is_active?: boolean | null
           last_sent_at?: string | null
+          max_per_day?: number
           message_template: string
+          sent_today?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           bot_id?: string | null
+          count_date?: string | null
           created_at?: string
           id?: string
           interval_minutes?: number | null
           is_active?: boolean | null
           last_sent_at?: string | null
+          max_per_day?: number
           message_template?: string
+          sent_today?: number
           updated_at?: string
           user_id?: string
         }

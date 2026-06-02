@@ -19,6 +19,9 @@ interface EngagementMessage {
   is_active: boolean;
   interval_minutes: number | null;
   last_sent_at: string | null;
+  max_per_day?: number | null;
+  sent_today?: number | null;
+  count_date?: string | null;
 }
 
 // Mensagem padrão caso não tenha nenhuma cadastrada
@@ -309,7 +312,7 @@ Deno.serve(async (req) => {
         // =====================================================
         const { data: customMessages } = await supabase
           .from('engagement_messages')
-          .select('id, message_template, is_active, interval_minutes, last_sent_at')
+          .select('id, message_template, is_active, interval_minutes, last_sent_at, max_per_day, sent_today, count_date')
           .eq('bot_id', setting.bot_id)
           .eq('is_active', true)
 
@@ -321,7 +324,18 @@ Deno.serve(async (req) => {
             const msgLastSent = msg.last_sent_at ? new Date(msg.last_sent_at) : new Date(0)
             const timeSinceMsgSent = now.getTime() - msgLastSent.getTime()
 
-            console.log(`[Mensagem ${msg.id}] intervalo=${msg.interval_minutes}min, último envio=${msg.last_sent_at || 'nunca'}, tempo desde=${Math.round(timeSinceMsgSent/60000)}min`)
+            // Limite diário INDIVIDUAL por mensagem
+            const msgMaxPerDay = (msg as any).max_per_day ?? 12
+            const msgCountDate = (msg as any).count_date as string | null
+            const msgSentToday = msgCountDate === todayStr ? ((msg as any).sent_today ?? 0) : 0
+
+            console.log(`[Mensagem ${msg.id}] intervalo=${msg.interval_minutes}min, último=${msg.last_sent_at || 'nunca'}, hoje=${msgSentToday}/${msgMaxPerDay}`)
+
+            if (msgMaxPerDay > 0 && msgSentToday >= msgMaxPerDay) {
+              console.log(`[Mensagem ${msg.id}] limite diário atingido (${msgSentToday}/${msgMaxPerDay})`)
+              results.push({ bot_id: setting.bot_id, type: 'custom_message', message_id: msg.id, status: 'daily_limit_reached', sent_today: msgSentToday, max_per_day: msgMaxPerDay })
+              continue
+            }
 
             if (timeSinceMsgSent >= msgInterval) {
               const customMessage = PREMIUM_DIAMOND + ' ' + markdownToHtml(msg.message_template)
@@ -351,11 +365,15 @@ Deno.serve(async (req) => {
               if (customResult.ok) {
                 await supabase
                   .from('engagement_messages')
-                  .update({ last_sent_at: now.toISOString() })
+                  .update({
+                    last_sent_at: now.toISOString(),
+                    sent_today: msgSentToday + 1,
+                    count_date: todayStr,
+                  } as any)
                   .eq('id', msg.id)
 
-                console.log(`[Mensagem Personalizada ${msg.id}] enviada com sucesso`)
-                results.push({ bot_id: setting.bot_id, type: 'custom_message', message_id: msg.id, status: 'sent' })
+                console.log(`[Mensagem Personalizada ${msg.id}] enviada (${msgSentToday + 1}/${msgMaxPerDay} hoje)`)
+                results.push({ bot_id: setting.bot_id, type: 'custom_message', message_id: msg.id, status: 'sent', sent_today: msgSentToday + 1, max_per_day: msgMaxPerDay })
               } else {
                 console.error(`[Mensagem Personalizada ${msg.id}] erro:`, customResult)
                 results.push({ bot_id: setting.bot_id, type: 'custom_message', message_id: msg.id, status: 'error', error: customResult.description })
