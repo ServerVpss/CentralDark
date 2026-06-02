@@ -127,6 +127,65 @@ function unwrap(d: any): any {
   return d;
 }
 
+// Constrói um texto plano organizado por seção (CHAVE => VALOR), pronto pra copiar
+function buildPlainText(payload: any, header?: string): string {
+  const lines: string[] = [];
+  if (header) {
+    lines.push(`╔══════════════════════════════════════`);
+    lines.push(`║ ${header}`);
+    lines.push(`╚══════════════════════════════════════`);
+    lines.push("");
+  }
+
+  const writeKV = (label: string, value: any, indent = "") => {
+    const v = value === null || value === undefined ? "Não informado" : String(value);
+    lines.push(`${indent}${formatLabel(label)} => ${v}`);
+  };
+
+  const writeNode = (key: string, value: any, indent = "") => {
+    if (shouldHide(key) || isEmptyValue(value)) return;
+
+    if (Array.isArray(value)) {
+      lines.push("");
+      lines.push(`${indent}━━━ ${formatLabel(key)} (${value.length}) ━━━`);
+      value.forEach((item, i) => {
+        if (item && typeof item === "object") {
+          lines.push(`${indent}• ${formatLabel(key)} #${i + 1}`);
+          Object.entries(item).forEach(([k, v]) => writeNode(k, v, indent + "  "));
+        } else {
+          writeKV(String(i + 1), item, indent + "  ");
+        }
+      });
+      return;
+    }
+
+    if (value && typeof value === "object") {
+      const entries = Object.entries(value).filter(
+        ([k, v]) => !shouldHide(k) && !isEmptyValue(v),
+      );
+      if (entries.length === 0) return;
+      lines.push("");
+      lines.push(`${indent}━━━ ${formatLabel(key)} ━━━`);
+      entries.forEach(([k, v]) => writeNode(k, v, indent + "  "));
+      return;
+    }
+
+    writeKV(key, value, indent);
+  };
+
+  if (Array.isArray(payload)) {
+    payload.forEach((item, i) => writeNode(`Registro ${i + 1}`, item));
+  } else if (payload && typeof payload === "object") {
+    Object.entries(payload).forEach(([k, v]) => writeNode(k, v));
+  } else if (payload != null) {
+    lines.push(String(payload));
+  }
+
+  return lines.join("\n").trim();
+}
+
+
+
 // ---- Render de seções no estilo X Buscas ----
 
 function Section({
