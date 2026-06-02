@@ -40,6 +40,37 @@ export default function WebAppResult() {
   const [data, setData] = useState<ResultData | null>(null);
   const [themeReady, setThemeReady] = useState(false);
 
+  // 🔒 Proteção anti-inspeção: bloqueia botão direito, F12, Ctrl+U, Ctrl+S,
+  // Ctrl+Shift+I/J/C e seleção/arrasto. Não é 100% à prova (nada no navegador é),
+  // mas afasta usuários comuns.
+  useEffect(() => {
+    const blockContext = (e: MouseEvent) => e.preventDefault();
+    const blockKeys = (e: KeyboardEvent) => {
+      const k = e.key?.toLowerCase();
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && (k === "u" || k === "s" || k === "p")) ||
+        (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(k))
+      ) {
+        e.preventDefault();
+      }
+    };
+    const blockDrag = (e: DragEvent) => e.preventDefault();
+    document.addEventListener("contextmenu", blockContext);
+    document.addEventListener("keydown", blockKeys);
+    document.addEventListener("dragstart", blockDrag);
+    const prev = document.body.style.userSelect;
+    document.body.style.userSelect = "none";
+    (document.body.style as any).webkitUserSelect = "none";
+    (document.body.style as any).webkitTouchCallout = "none";
+    return () => {
+      document.removeEventListener("contextmenu", blockContext);
+      document.removeEventListener("keydown", blockKeys);
+      document.removeEventListener("dragstart", blockDrag);
+      document.body.style.userSelect = prev;
+    };
+  }, []);
+
   // Inicializa Telegram WebApp e tema
   useEffect(() => {
     const script = document.createElement("script");
