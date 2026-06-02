@@ -235,6 +235,59 @@ Deno.serve(async (req) => {
           console.log(`Assinatura criada para telegram_user_id: ${transaction.telegram_user_id}`)
         }
 
+        // ===== Crédito de indicação (5%) =====
+        try {
+          const { data: tgUser } = await supabase
+            .from('telegram_users')
+            .select('referred_by')
+            .eq('telegram_user_id', transaction.telegram_user_id)
+            .eq('bot_id', transaction.bot_id)
+            .maybeSingle()
+
+          const referrerId = tgUser?.referred_by ? Number(tgUser.referred_by) : null
+          if (referrerId && referrerId !== Number(transaction.telegram_user_id)) {
+            const commission = Math.round(Number(transaction.amount) * 0.05 * 100) / 100
+
+            const { data: existingRef } = await supabase
+              .from('telegram_referrals')
+              .select('id')
+              .eq('source_payment_id', transaction.id)
+              .maybeSingle()
+
+            if (!existingRef && commission > 0) {
+              await supabase.from('telegram_referrals').insert({
+                referrer_telegram_id: referrerId,
+                referred_telegram_id: transaction.telegram_user_id,
+                bot_id: transaction.bot_id,
+                source_payment_id: transaction.id,
+                commission_amount: commission,
+                commission_rate: 5.00,
+                paid_status: 'pending'
+              })
+
+              const { data: refUser } = await supabase
+                .from('telegram_users')
+                .select('referral_balance, referral_total_earned')
+                .eq('telegram_user_id', referrerId)
+                .eq('bot_id', transaction.bot_id)
+                .maybeSingle()
+
+              const newBalance = Number(refUser?.referral_balance || 0) + commission
+              const newTotal = Number(refUser?.referral_total_earned || 0) + commission
+
+              await supabase
+                .from('telegram_users')
+                .update({ referral_balance: newBalance, referral_total_earned: newTotal })
+                .eq('telegram_user_id', referrerId)
+                .eq('bot_id', transaction.bot_id)
+
+              console.log(`💰 Comissão 5% (R$ ${commission}) creditada para indicador ${referrerId}`)
+            }
+          }
+        } catch (refErr) {
+          console.error('Erro ao processar indicação:', refErr)
+        }
+
         // Tentar enviar notificação via Telegram + liberar no grupo automaticamente
         try {
           const { data: bot } = await supabase
