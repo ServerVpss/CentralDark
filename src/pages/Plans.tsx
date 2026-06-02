@@ -51,6 +51,11 @@ export default function Plans() {
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
   const [totalSubscribers, setTotalSubscribers] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
+  const [monthRevenue, setMonthRevenue] = useState(0);
+  const [monthCount, setMonthCount] = useState(0);
+  const [allTimeCount, setAllTimeCount] = useState(0);
+  const [avgTicket, setAvgTicket] = useState(0);
+  
   
   const [editForm, setEditForm] = useState({
     name: '',
