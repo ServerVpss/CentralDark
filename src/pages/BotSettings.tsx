@@ -150,7 +150,7 @@ export default function BotSettings() {
         await supabase.functions.invoke("telegram-update-group-photo", {
           body: { bot_id: botId },
         });
-        await refetch?.();
+        await refetchSettings?.();
       } catch (e) {
         console.error("Auto-fetch da foto do grupo falhou:", e);
       }
