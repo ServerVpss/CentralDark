@@ -6047,37 +6047,126 @@ class BotHandler {
   }
 
   async showQueryMenu(chatId: number, messageId: number) {
-    const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de pesquisa desejado.\nComandos com ▸ abrem submenu com variantes.</i>`;
+    const text = `🔍 <b>Central de Consultas</b>\n\n<i>Escolha uma categoria abaixo:</i>`;
 
-    const qBtn = (label: string, data: string): InlineButton => btn(`${label.split(' ')[0]} ${bs(label.split(' ').slice(1).join(' '))}`, data);
-
-    const allRows: InlineButton[][] = [
-      [qBtn("👤 CPF ▸", "query:cpf"), qBtn("🏢 CNPJ", "query:cnpj")],
-      [qBtn("🚗 Veículos ▸", "query:placa"), qBtn("📸 Fotos ▸", "query:foto")],
-      [qBtn("📞 Telefone", "query:telefone"), qBtn("📧 Email", "query:email")],
-      [qBtn("📍 Localização ▸", "query:cep"), qBtn("📝 Nome ▸", "query:nome")],
-      [qBtn("🪪 CNH ▸", "query:cnh"), qBtn("🪪 RG", "query:rg")],
-      [qBtn("💳 PIX", "query:pix"), qBtn("📜 Título", "query:titulo")],
-      [qBtn("💰 Renda", "query:renda"), qBtn("📊 Score ▸", "query:score")],
-      [qBtn("👨‍👩‍👧 Parentes ▸", "query:parentes"), qBtn("⚖️ Processos ▸", "query:processos")],
-      [qBtn("⚖️ Advogado ▸", "query:advogado"), qBtn("🏢 CAT ▸", "query:cat")],
-      [qBtn("📄 CRLV ▸", "query:crlv"), qBtn("📋 PIS", "query:pis")],
-      [qBtn("🔍 BNMP", "query:bnmp"), qBtn("🔎 SIEL", "query:siel")],
-      [qBtn("🗳️ TSE", "query:tse"), qBtn("📊 Credilink", "query:credilink")],
-      [qBtn("💎 Poder Aquis.", "query:poderaquisitivo"), qBtn("🏥 SUS", "query:cpfsus")],
-      [qBtn("📋 IRPF", "query:irpf"), qBtn("💉 Vacinas", "query:vacinas")],
-      [qBtn("📋 NIS", "query:nis"), qBtn("📋 OAB", "query:oab")],
-      [qBtn("📋 Assessoria", "query:assessoria"), qBtn("📋 Bens", "query:bens")],
+    const buttons: InlineButton[][] = [
+      [btn(`👤 ${bs("PESSOAS")}`, "menu:pessoas:1", "primary", EMOJI.SEARCH)],
+      [btn(`🚗 ${bs("VEICULAR")}`, "menu:veicular", "primary", EMOJI.SEARCH)],
+      [btn(`📸 ${bs("FOTOS")}`, "menu:fotos:1", "primary", EMOJI.SEARCH)],
+      [btn(`🔙 ${bs("Voltar")}`, "menu:main", undefined, EMOJI.BACK)],
     ];
-
-    const buttons: InlineButton[][] = [...allRows];
-    buttons.push([btn(`🔙 ${bs("Voltar")}`, "menu:main", undefined, EMOJI.BACK)]);
 
     const moduleStatus = await loadModuleStatus(this.supabase);
     const totalCount = Object.keys(moduleStatus).length;
     const enabledCount = Object.values(moduleStatus).filter(v => v).length;
     const note = enabledCount < totalCount ? `\n\n⚠️ <i>${totalCount - enabledCount} módulo(s) em manutenção</i>` : "";
     await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
+  }
+
+  // ============== SUBMENU PESSOAS (paginado) ==============
+  async showPessoasMenu(chatId: number, messageId: number, page: number = 1) {
+    const qBtn = (label: string, data: string): InlineButton => {
+      const parts = label.split(' ');
+      return btn(`${parts[0]} ${bs(parts.slice(1).join(' '))}`, data);
+    };
+
+    const pages: InlineButton[][][] = [
+      // Página 1
+      [
+        [qBtn("👤 CPF", "query:cpf"), qBtn("📝 NOME", "query:nome")],
+        [qBtn("🪪 CNH REGISTRO", "query:cnh"), qBtn("👨 PAI", "query:pai")],
+        [qBtn("👩 MÃE", "query:mae"), qBtn("📞 TELEFONE", "query:telefone")],
+        [qBtn("📧 EMAIL", "query:email"), qBtn("🪪 CNH NAC", "query:cnhnc")],
+      ],
+      // Página 2
+      [
+        [qBtn("📊 HIST. SCORE", "query:score"), qBtn("🏢 CNPJ", "query:cnpj")],
+        [qBtn("👥 FUNCIONÁRIOS", "query:assessoria"), qBtn("📜 TÍTULO", "query:titulo")],
+        [qBtn("🪪 RG", "query:rg"), qBtn("🎂 NASCIMENTO", "query:cpfbasico")],
+        [qBtn("📍 CEP", "query:cep"), qBtn("⚰️ ÓBITO", "query:obito")],
+      ],
+      // Página 3
+      [
+        [qBtn("💎 BENS", "query:bens"), qBtn("📋 CERTIDÕES", "query:processos")],
+        [qBtn("💉 VACINAS", "query:vacinas"), qBtn("📋 CHEQUE", "query:credilink")],
+        [qBtn("📋 IRPF", "query:irpf"), qBtn("📊 SCORE", "query:score2")],
+        [qBtn("👨‍👩‍👧 RELACIONADOS", "query:parentes"), qBtn("🏥 SUS", "query:cpfsus")],
+      ],
+    ];
+
+    const totalPages = pages.length;
+    const currentPage = Math.max(1, Math.min(page, totalPages));
+    const buttons: InlineButton[][] = [...pages[currentPage - 1]];
+
+    // Navegação de páginas
+    const navRow: InlineButton[] = [];
+    if (currentPage > 1) navRow.push(btn("◀️ Anterior", `menu:pessoas:${currentPage - 1}`));
+    navRow.push(btn(`📄 ${currentPage}/${totalPages}`, "noop"));
+    if (currentPage < totalPages) navRow.push(btn("Próximo ▶️", `menu:pessoas:${currentPage + 1}`));
+    buttons.push(navRow);
+
+    buttons.push([btn(`🔙 ${bs("Voltar")}`, "menu:query", undefined, EMOJI.BACK)]);
+
+    const text = `👤 <b>Consultas — PESSOAS</b>\n<i>Página ${currentPage} de ${totalPages}</i>`;
+    await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
+  }
+
+  // ============== SUBMENU VEICULAR ==============
+  async showVeicularMenu(chatId: number, messageId: number) {
+    const qBtn = (label: string, data: string): InlineButton => {
+      const parts = label.split(' ');
+      return btn(`${parts[0]} ${bs(parts.slice(1).join(' '))}`, data);
+    };
+
+    const buttons: InlineButton[][] = [
+      [qBtn("🪪 CNH REGISTRO", "query:cnh"), qBtn("🪪 CNH NAC", "query:cnhnc")],
+      [qBtn("🚗 PLACA", "query:placa"), qBtn("📋 RENAVAM", "query:renavam")],
+      [qBtn("🔧 CHASSI", "query:chassi"), qBtn("⚙️ MOTOR", "query:motor")],
+      [btn(`🔙 ${bs("Voltar")}`, "menu:query", undefined, EMOJI.BACK)],
+    ];
+
+    const text = `🚗 <b>Consultas — VEICULAR</b>`;
+    await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
+  }
+
+  // ============== SUBMENU FOTOS (paginado) ==============
+  async showFotosMenu(chatId: number, messageId: number, page: number = 1) {
+    const qBtn = (label: string, data: string): InlineButton => {
+      const parts = label.split(' ');
+      return btn(`${parts[0]} ${bs(parts.slice(1).join(' '))}`, data);
+    };
+
+    const pages: InlineButton[][][] = [
+      // Página 1
+      [
+        [qBtn("📸 FOTO NAC", "query:foto")],
+        [qBtn("📍 SP", "query:fotosp"), qBtn("📍 RJ", "query:fotorj"), qBtn("📍 MG", "query:fotomg")],
+        [qBtn("📍 CE", "query:fotoce"), qBtn("📍 PR", "query:fotopr"), qBtn("📍 MA", "query:fotoma")],
+        [qBtn("📍 ES", "query:fotoes"), qBtn("📍 DF", "query:fotodf"), qBtn("📍 TO", "query:fototo")],
+      ],
+      // Página 2
+      [
+        [qBtn("📍 MS", "query:fotoms"), qBtn("📍 RO", "query:fotoro"), qBtn("📍 PI", "query:fotopi")],
+        [qBtn("📍 GO", "query:fotogo"), qBtn("📍 MT", "query:fotomt"), qBtn("📍 BA", "query:fotoba")],
+        [qBtn("📍 RS", "query:fotors"), qBtn("📍 SC", "query:fotosc"), qBtn("📍 PA", "query:fotopa")],
+        [qBtn("📍 AL", "query:fotoal"), qBtn("📍 PB", "query:fotopb"), qBtn("📍 PE", "query:fotope")],
+      ],
+    ];
+
+    const totalPages = pages.length;
+    const currentPage = Math.max(1, Math.min(page, totalPages));
+    const buttons: InlineButton[][] = [...pages[currentPage - 1]];
+
+    const navRow: InlineButton[] = [];
+    if (currentPage > 1) navRow.push(btn("◀️ Anterior", `menu:fotos:${currentPage - 1}`));
+    navRow.push(btn(`📄 ${currentPage}/${totalPages}`, "noop"));
+    if (currentPage < totalPages) navRow.push(btn("Próximo ▶️", `menu:fotos:${currentPage + 1}`));
+    buttons.push(navRow);
+
+    buttons.push([btn(`🔙 ${bs("Voltar")}`, "menu:query", undefined, EMOJI.BACK)]);
+
+    const text = `📸 <b>Consultas — FOTOS</b>\n<i>Página ${currentPage} de ${totalPages}</i>`;
+    await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
   }
 
   async showStateSelection(chatId: number, messageId: number) {
@@ -9430,6 +9519,30 @@ class BotHandler {
         return;
       }
       await this.showQueryMenu(chatId, messageId);
+      return;
+    }
+
+    // Submenus de categoria (PESSOAS / VEICULAR / FOTOS)
+    if (data.startsWith("menu:pessoas")) {
+      const parts = data.split(":");
+      const page = parts[2] ? parseInt(parts[2], 10) : 1;
+      await this.showPessoasMenu(chatId, messageId, isNaN(page) ? 1 : page);
+      return;
+    }
+
+    if (data === "menu:veicular") {
+      await this.showVeicularMenu(chatId, messageId);
+      return;
+    }
+
+    if (data.startsWith("menu:fotos")) {
+      const parts = data.split(":");
+      const page = parts[2] ? parseInt(parts[2], 10) : 1;
+      await this.showFotosMenu(chatId, messageId, isNaN(page) ? 1 : page);
+      return;
+    }
+
+    if (data === "noop") {
       return;
     }
 
