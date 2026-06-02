@@ -389,6 +389,12 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
               ))}
             </RadioGroup>
           </div>
+
+          {/* Media Type Tabs */}
+          <div className="space-y-2">
+            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Tipo de Conteúdo
+            </Label>
             <Tabs value={mediaType} onValueChange={(v) => { setMediaType(v as MediaType); removeMedia(); }}>
               <TabsList className="w-full bg-secondary/50 h-10">
                 {MEDIA_TYPES.map((mt) => (
