@@ -458,6 +458,54 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
   return b;
 }
 
+// =============== WEBAPP (Mini App) ===============
+const WEBAPP_PUBLIC_URL = Deno.env.get("WEBAPP_PUBLIC_URL") || "https://telegram-zen-panel-6518f4e2-5d802052.lovable.app";
+
+function btnWebApp(text: string, url: string, style?: string): InlineButton {
+  const b: any = { text, web_app: { url } };
+  if (style) b.style = style;
+  return b;
+}
+
+// Gera tokens aleatórios pra URL do resultado (path + secret)
+function randomHex(bytes: number): string {
+  const arr = new Uint8Array(bytes);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+// Salva resultado no banco e devolve URL do Mini App. Retorna null em caso de erro.
+async function createWebappResultLink(
+  supabase: SupabaseClient,
+  botId: string,
+  telegramUserId: number,
+  queryType: string,
+  queryInput: string,
+  resultData: unknown,
+): Promise<string | null> {
+  try {
+    const pathToken = randomHex(16);   // 32 chars
+    const secretToken = randomHex(20); // 40 chars
+    const { error } = await supabase.from("webapp_results").insert({
+      path_token: pathToken,
+      secret_token: secretToken,
+      telegram_user_id: telegramUserId,
+      bot_id: botId,
+      query_type: queryType,
+      query_input: queryInput,
+      result_data: resultData ?? {},
+    });
+    if (error) {
+      console.error("createWebappResultLink insert error:", error);
+      return null;
+    }
+    return `${WEBAPP_PUBLIC_URL}/result/${pathToken}/${secretToken}/`;
+  } catch (e) {
+    console.error("createWebappResultLink exception:", e);
+    return null;
+  }
+}
+
 // =============== UNICODE BOLD SANS (𝗘𝗫𝗘𝗠𝗣𝗟𝗢) ===============
 // Converte texto ASCII para a variante sans-serif bold matemática do Unicode,
 // usada em rótulos de botões/menus do bot para destaque visual consistente.
