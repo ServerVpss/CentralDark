@@ -642,7 +642,24 @@ export default function WebAppResult() {
           title={`CONSULTA ${data.query_type.toUpperCase()} ${brandUpper}`}
         />
 
+        {/* Botão copiar tudo */}
+        <button
+          onClick={handleCopy}
+          className="mb-3 w-full flex items-center justify-center gap-2 border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 active:bg-amber-500/30 transition rounded-sm px-3 py-2.5 font-mono text-[12px] text-amber-300"
+        >
+          {copied ? (
+            <>
+              <Check className="h-4 w-4" /> COPIADO!
+            </>
+          ) : (
+            <>
+              <Copy className="h-4 w-4" /> COPIAR TUDO FORMATADO
+            </>
+          )}
+        </button>
+
         {body}
+
 
 
         {/* Rodapé estilo X Buscas */}
