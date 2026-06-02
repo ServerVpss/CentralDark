@@ -350,6 +350,35 @@ export default function BotSettings() {
               </CardContent>
             </Card>
 
+            {/* Toggle Menu Antigo x Menu Novo */}
+            <Card className={`mb-6 rounded-xl border-2 transition-all ${(settings as any)?.use_legacy_menu ? "border-purple-500/60 bg-purple-500/5 shadow-lg shadow-purple-500/5" : "border-border/40 bg-card/80 backdrop-blur-sm"}`}>
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-start gap-4">
+                    <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${(settings as any)?.use_legacy_menu ? "bg-purple-500/15 border border-purple-500/30" : "bg-blue-500/15 border border-blue-500/30"}`}>
+                      <Sparkles className={`h-5 w-5 ${(settings as any)?.use_legacy_menu ? "text-purple-500" : "text-blue-500"}`} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-base font-semibold">
+                        {(settings as any)?.use_legacy_menu ? "Robô Antigo (menu legado)" : "Robô Novo (menu por categorias)"}
+                      </Label>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {(settings as any)?.use_legacy_menu
+                          ? "Mostra todos os módulos numa lista só — como era antes."
+                          : "Mostra categorias PESSOAS, VEICULAR e FOTOS com paginação."}
+                      </p>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={(settings as any)?.use_legacy_menu ?? false}
+                    onCheckedChange={(checked) => {
+                      autoSaveToggle("use_legacy_menu" as any, checked);
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid gap-6 lg:grid-cols-2">
               {/* Owners Section */}
               <Card className="rounded-xl border-border/40 bg-card/80 backdrop-blur-sm shadow-sm">

@@ -1,0 +1,1 @@
+ALTER TABLE public.bot_settings ADD COLUMN IF NOT EXISTS use_legacy_menu boolean DEFAULT false;
