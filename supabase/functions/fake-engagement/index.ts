@@ -208,6 +208,28 @@ Deno.serve(async (req) => {
         ? new Date(setting.fake_engagement_last_sent) 
         : new Date(0)
 
+      // Limite anti-spam: máximo de envios por dia (ignora se for teste manual)
+      const maxPerDay = (setting as any).fake_engagement_max_per_day ?? 12
+      if (!forceSend && maxPerDay > 0) {
+        const startOfDay = new Date(now)
+        startOfDay.setHours(0, 0, 0, 0)
+        const { count: sentToday } = await supabase
+          .from('engagement_send_log')
+          .select('id', { count: 'exact', head: true })
+          .eq('bot_id', setting.bot_id)
+          .gte('sent_at', startOfDay.toISOString())
+        if ((sentToday ?? 0) >= maxPerDay) {
+          console.log(`[Limite Diário] Bot ${setting.bot_id}: ${sentToday}/${maxPerDay} já enviados hoje`)
+          results.push({
+            bot_id: setting.bot_id,
+            status: 'daily_limit_reached',
+            sent_today: sentToday,
+            max_per_day: maxPerDay,
+          })
+          continue
+        }
+      }
+
       // Buscar token do bot
       const { data: bot } = await supabase
         .from('telegram_bots')
