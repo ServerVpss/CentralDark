@@ -6778,16 +6778,20 @@ class BotHandler {
       if ((this.settings as any)?.use_legacy_menu === true) {
         const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrl) {
-          const effectIdNovo = getMessageEffectId(this.settings.message_effect);
+          // Força efeito de curtida (👍 animado grande perto da hora) na confirmação
+          const effectIdNovo = MESSAGE_EFFECTS.like;
           const brandNovo = (this.bot.bot_username || 'BOT').toUpperCase();
+          // Mention do dono da consulta (clicável) + nome visível
+          const ownerDisplay = escapeHtmlGlobal(telegramUserName || telegramUsername || 'usuário');
+          const ownerMention = `<a href="tg://user?id=${telegramUserId}">${ownerDisplay}</a>`;
           await sendMessage(
             this.token, chatId,
-            `🩸<b>${escapeHtmlGlobal(brandNovo)}</b>\n<code>/${usedModule} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n\nClique no botão abaixo para ver o resultado.`,
+            `🩸<b>${escapeHtmlGlobal(brandNovo)}</b>\n<code>/${usedModule} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n👤 <b>Solicitado por:</b> ${ownerMention}\n\nClique no botão abaixo para ver o resultado. 👍`,
             { inline_keyboard: [
               [btnWebApp("📋 Ver resultado", webappOnlyUrl, chatId, "primary")],
               [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
             ]},
-            effectIdNovo ? { message_effect_id: effectIdNovo } : undefined
+            { message_effect_id: effectIdNovo }
           );
           return;
         }
