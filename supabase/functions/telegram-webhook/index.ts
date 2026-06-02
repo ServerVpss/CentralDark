@@ -5666,7 +5666,7 @@ class BotHandler {
 
   // =============== ANTI-RAJADA DE CONSULTAS ===============
   // Retorna null se liberado; ou uma string com motivo amigável se bloqueado.
-  async checkQueryRateLimit(telegramUserId: number): Promise<string | null> {
+  async checkQueryRateLimit(telegramUserId: number, telegramFirstName?: string, telegramUsername?: string): Promise<string | null> {
     try {
       // Dono sempre liberado
       if (this.isOwner(telegramUserId)) return null;
