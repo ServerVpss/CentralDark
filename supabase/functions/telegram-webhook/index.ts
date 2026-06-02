@@ -8971,11 +8971,18 @@ class BotHandler {
         if (webappOnlyUrlGrp) {
           const brandGrp = (this.bot.bot_username || 'BOT').toUpperCase();
           const effectIdGrp = getMessageEffectId(this.settings.message_effect) ?? MESSAGE_EFFECTS.like;
+          // Extrai pathToken da URL gerada para criar deep link p/ privado
+          const tokenMatchGrp = webappOnlyUrlGrp.match(/\/result\/([a-f0-9]+)\//i);
+          const pathTokenGrp = tokenMatchGrp ? tokenMatchGrp[1] : "";
+          const botUserGrp = this.bot.bot_username || "";
+          const deepLinkGrp = (botUserGrp && pathTokenGrp)
+            ? `https://t.me/${botUserGrp}?start=res_${pathTokenGrp}`
+            : webappOnlyUrlGrp;
           const sentGrp = await sendMessage(
             this.token, chatId,
-            `🩸<b>${escapeHtmlGlobal(brandGrp)}</b>\n<code>/${queryType} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n\nClique no botão abaixo para ver o resultado.`,
+            `🩸<b>${escapeHtmlGlobal(brandGrp)}</b>\n<code>/${queryType} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n\nClique no botão abaixo para abrir o resultado no privado.`,
             { inline_keyboard: [
-              [btnWebApp("📋 Ver resultado", webappOnlyUrlGrp, chatId, "primary")],
+              [btnUrl("📋 Ver resultado", deepLinkGrp)],
             ]},
             {
               ...(replyToId ? { reply_to_message_id: replyToId } : {}),
