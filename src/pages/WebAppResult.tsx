@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader2, AlertCircle, ExternalLink, MoreVertical, X, Copy, Check, Sparkles } from "lucide-react";
+import { NewsTicker } from "@/components/webapp/NewsTicker";
 
 
 
