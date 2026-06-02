@@ -9335,13 +9335,49 @@ class BotHandler {
       }
 
       const webappUrl = `${resolveWebappBaseUrl(this.settings)}/result/${pathToken}/${record.secret_token}/`;
+
+      // Monta cabeçalho com módulo + atribuição do usuário
+      const moduleLabel = queryTypeLabels[record.query_type] || (record.query_type || '').toUpperCase();
+      const userInfo = callback.from;
+      const userName = escapeHtmlGlobal(userInfo?.first_name || 'Usuário');
+      const userIdent = userInfo?.username ? `@${escapeHtmlGlobal(userInfo.username)}` : `ID: ${userInfo?.id || telegramUserId}`;
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const queryInputDisplay = escapeHtmlGlobal(String(record.query_input || ''));
+
+      const messageText =
+        `📱 <b>Resultado pronto</b>\n\n` +
+        `📂 <b>Módulo:</b> ${escapeHtmlGlobal(moduleLabel)}\n` +
+        `🔎 <b>Consulta:</b> <code>${queryInputDisplay}</code>\n\n` +
+        `Toque no botão abaixo para abrir no Mini App.\n\n` +
+        `📋 <b>Consulta solicitada por:</b>\n` +
+        `├ 👤 ${userName}\n` +
+        `├ 📝 ${userIdent}\n` +
+        `└ 🕐 ${dateStr}, ${timeStr}`;
+
+      const effectId = getMessageEffectId(this.settings.message_effect);
+
       try {
-        await sendMessage(
-          this.token,
-          telegramUserId,
-          `📱 <b>Resultado pronto</b>\n\nToque no botão abaixo para abrir no Mini App.`,
-          { inline_keyboard: [[btnWebApp("📱 Abrir Mini App", webappUrl, telegramUserId, "primary")]] },
-        );
+        await telegramRequest(this.token, "sendMessage", {
+          chat_id: telegramUserId,
+          text: messageText,
+          parse_mode: "HTML",
+          reply_markup: { inline_keyboard: [[btnWebApp("📱 Abrir Mini App", webappUrl, telegramUserId, "primary")]] },
+          ...(effectId && { message_effect_id: effectId }),
+        });
+
+        // Reação positiva (curtida) na mensagem original, se configurado
+        if (this.settings.react_to_messages && callback.message) {
+          try {
+            const emoji = chooseReactionEmoji(this.settings);
+            const msgId = (callback.message as { message_id?: number }).message_id;
+            if (msgId) {
+              await setMessageReaction(this.token, (callback.message as { chat?: { id?: number } }).chat?.id || telegramUserId, msgId, emoji);
+            }
+          } catch (_r) { /* ignore */ }
+        }
+
         await telegramRequest(this.token, "answerCallbackQuery", {
           callback_query_id: callback.id,
           text: "📩 Enviei o Mini App no seu privado.",
