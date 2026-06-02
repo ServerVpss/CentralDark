@@ -104,20 +104,35 @@ export function PageSplash() {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center animate-fade-in"
-      style={{
-        background:
-          "radial-gradient(1200px circle at 20% 10%, hsl(var(--primary) / 0.18), transparent 50%), radial-gradient(900px circle at 80% 90%, hsl(265 80% 60% / 0.18), transparent 55%), linear-gradient(135deg, hsl(var(--background)) 0%, hsl(222 47% 6%) 100%)",
-      }}
+      className="fixed inset-0 z-[100] overflow-hidden animate-fade-in"
       onClick={() => setVisible(false)}
     >
-      {/* Grid pattern */}
-      <div className="absolute inset-0 bg-grid opacity-[0.06]" />
+      {/* Vídeo em tela cheia como fundo */}
+      <video
+        src={handVideo.url}
+        autoPlay
+        muted
+        playsInline
+        loop
+        className="absolute inset-0 w-full h-full object-cover"
+      />
 
-      {/* Orbs flutuantes (motion graphics) */}
-      <div className="absolute top-1/4 left-1/4 h-72 w-72 rounded-full bg-primary/20 blur-3xl animate-pulse-glow" />
+      {/* Overlay escuro com gradiente elegante por cima do vídeo */}
       <div
-        className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full blur-3xl animate-pulse-glow"
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(1200px circle at 20% 10%, hsl(var(--primary) / 0.25), transparent 55%), radial-gradient(900px circle at 80% 90%, hsl(265 80% 60% / 0.25), transparent 60%), linear-gradient(135deg, hsl(222 47% 6% / 0.85) 0%, hsl(222 47% 4% / 0.7) 50%, hsl(222 47% 6% / 0.9) 100%)",
+        }}
+      />
+
+      {/* Grid pattern sutil */}
+      <div className="absolute inset-0 bg-grid opacity-[0.05]" />
+
+      {/* Orbs flutuantes */}
+      <div className="absolute top-1/4 left-1/4 h-72 w-72 rounded-full bg-primary/20 blur-3xl animate-pulse-glow pointer-events-none" />
+      <div
+        className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full blur-3xl animate-pulse-glow pointer-events-none"
         style={{ background: "hsl(265 80% 60% / 0.18)", animationDelay: "0.8s" }}
       />
 
@@ -125,7 +140,7 @@ export function PageSplash() {
       {Array.from({ length: 18 }).map((_, i) => (
         <span
           key={i}
-          className="absolute h-1 w-1 rounded-full bg-primary/70"
+          className="absolute h-1 w-1 rounded-full bg-primary/70 pointer-events-none"
           style={{
             top: `${(i * 53) % 100}%`,
             left: `${(i * 37) % 100}%`,
@@ -142,65 +157,53 @@ export function PageSplash() {
           e.stopPropagation();
           setVisible(false);
         }}
-        className="absolute top-6 right-6 h-9 w-9 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white transition-all backdrop-blur-sm z-10"
+        className="absolute top-6 right-6 h-9 w-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white/80 hover:text-white transition-all backdrop-blur-md z-10"
         aria-label="Pular"
       >
         <X className="h-4 w-4" />
       </button>
 
-      <div className="relative flex flex-col items-center gap-6 px-6 max-w-xl text-center animate-scale-in">
-        {/* Vídeo da mãozinha transparente */}
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-primary/30 blur-2xl scale-90" />
-          <video
-            src={handVideo.url}
-            autoPlay
-            muted
-            playsInline
-            loop
-            className="relative w-44 h-44 md:w-56 md:h-56 object-contain drop-shadow-[0_0_40px_hsl(var(--primary)/0.5)]"
-          />
-        </div>
-
-        {/* Dica */}
-        {tip ? (
-          <div className="space-y-3">
-            <div className="text-5xl animate-fade-in" style={{ animationDelay: "0.15s" }}>
-              {tip.icon}
+      {/* Conteúdo centralizado por cima do vídeo */}
+      <div className="relative z-[2] h-full w-full flex items-center justify-center px-6">
+        <div className="flex flex-col items-center gap-6 max-w-xl text-center animate-scale-in">
+          {tip ? (
+            <div className="space-y-3">
+              <div className="text-6xl animate-fade-in drop-shadow-[0_0_30px_hsl(var(--primary)/0.6)]" style={{ animationDelay: "0.15s" }}>
+                {tip.icon}
+              </div>
+              <h2
+                className="text-2xl md:text-4xl font-bold text-white tracking-tight animate-fade-in drop-shadow-lg"
+                style={{ animationDelay: "0.25s" }}
+              >
+                {tip.title}
+              </h2>
+              <p
+                className="text-sm md:text-base text-white/85 leading-relaxed max-w-md mx-auto animate-fade-in drop-shadow"
+                style={{ animationDelay: "0.35s" }}
+              >
+                {tip.content}
+              </p>
             </div>
-            <h2
-              className="text-2xl md:text-3xl font-bold text-foreground tracking-tight animate-fade-in"
-              style={{ animationDelay: "0.25s" }}
-            >
-              {tip.title}
-            </h2>
-            <p
-              className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-md mx-auto animate-fade-in"
-              style={{ animationDelay: "0.35s" }}
-            >
-              {tip.content}
-            </p>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="text-sm">Carregando...</span>
-          </div>
-        )}
+          ) : (
+            <div className="flex items-center gap-2 text-white/80">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span className="text-sm">Carregando...</span>
+            </div>
+          )}
 
-        {/* Barra de progresso */}
-        <div className="w-48 h-0.5 bg-white/10 rounded-full overflow-hidden mt-2">
-          <div
-            className="h-full bg-gradient-to-r from-primary to-primary-glow rounded-full"
-            style={{
-              animation: `splashProgress ${SPLASH_DURATION}ms linear forwards`,
-            }}
-          />
+          <div className="w-48 h-0.5 bg-white/15 rounded-full overflow-hidden mt-2">
+            <div
+              className="h-full bg-gradient-to-r from-primary to-primary-glow rounded-full"
+              style={{
+                animation: `splashProgress ${SPLASH_DURATION}ms linear forwards`,
+              }}
+            />
+          </div>
+
+          <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">
+            Toque em qualquer lugar para pular
+          </p>
         </div>
-
-        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60">
-          Toque em qualquer lugar para pular
-        </p>
       </div>
 
       <style>{`
