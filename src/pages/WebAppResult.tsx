@@ -624,15 +624,84 @@ export default function WebAppResult() {
     body = <Section title="RESULTADO" empty />;
   }
 
+  // Se a IA formatou, usa a versão dela (mais bonita)
+  if (aiFormatted && Array.isArray(aiFormatted.sections) && !errorMessage) {
+    body = (
+      <>
+        {aiFormatted.sections.map((sec: any, i: number) => {
+          const title = String(sec?.title || `SEÇÃO ${i + 1}`).toUpperCase();
+          if (sec?.kind === "empty" || (!sec?.rows?.length && !sec?.data?.length && !sec?.text)) {
+            return <Section key={i} title={title} empty />;
+          }
+          if (sec?.kind === "table" && Array.isArray(sec?.headers) && Array.isArray(sec?.data)) {
+            return (
+              <Section key={i} title={title}>
+                <div className="overflow-x-auto">
+                  <table className="w-full font-mono text-[11px]">
+                    <thead>
+                      <tr className="text-zinc-500 border-b border-zinc-800/60">
+                        <th className="text-left px-3 py-2 font-normal tracking-wider">#</th>
+                        {sec.headers.map((h: string, j: number) => (
+                          <th key={j} className="text-left px-3 py-2 font-normal tracking-wider whitespace-nowrap">
+                            {String(h).toUpperCase()}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sec.data.map((row: any[], r: number) => (
+                        <tr key={r} className="border-b border-zinc-800/40 last:border-0">
+                          <td className="px-3 py-2 text-zinc-500">{r + 1}</td>
+                          {sec.headers.map((_: any, c: number) => (
+                            <td key={c} className="px-3 py-2 text-zinc-100 whitespace-nowrap">
+                              {String(row?.[c] ?? "—")}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Section>
+            );
+          }
+          if (sec?.kind === "text" && typeof sec?.text === "string") {
+            return (
+              <Section key={i} title={title}>
+                <div className="px-3 py-2">
+                  <pre className="font-mono text-[12px] text-zinc-100 whitespace-pre-wrap break-words m-0">
+                    {sec.text}
+                  </pre>
+                </div>
+              </Section>
+            );
+          }
+          // rows (default)
+          const rows = Array.isArray(sec?.rows) ? sec.rows : [];
+          return (
+            <Section key={i} title={title}>
+              {rows.map((r: any, j: number) => (
+                <Row key={j} label={String(r?.label ?? "")} value={r?.value} />
+              ))}
+            </Section>
+          );
+        })}
+      </>
+    );
+  }
+
   // Texto plano completo pra botão "copiar tudo"
   const copyText = useMemo(() => {
     const headerLine = `CONSULTA ${data.query_type.toUpperCase()} — ${brandUpper}\n${data.query_type.toUpperCase()}: ${data.query_input}\nData: ${dtStr}`;
     const corpo = errorMessage
       ? `Sem resultado: ${errorMessage}`
-      : buildPlainText(payload, "");
+      : (aiFormatted?.plain_text && typeof aiFormatted.plain_text === "string"
+          ? aiFormatted.plain_text
+          : buildPlainText(payload, ""));
     const rodape = `\n\nConsulta solicitada por: ${userLabel}\nBot: ${username || brand}`;
     return `${headerLine}\n${corpo}${rodape}`;
-  }, [payload, errorMessage, brand, brandUpper, username, userLabel, dtStr, data]);
+  }, [payload, errorMessage, brand, brandUpper, username, userLabel, dtStr, data, aiFormatted]);
+
 
   const handleCopy = async () => {
     try {
