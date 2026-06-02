@@ -29,6 +29,8 @@ import {
 import { toast } from "sonner";
 import { useAuthContext } from "@/components/auth/AuthProvider";
 import { BackupManager } from "@/components/backup/BackupManager";
+import { CleanupSettings } from "@/components/settings/CleanupSettings";
+import { Trash2 } from "lucide-react";
 
 export default function Settings() {
   const { user, profile, updateProfile } = useAuthContext();
@@ -117,6 +119,10 @@ export default function Settings() {
             <TabsTrigger value="backup" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Database className="h-4 w-4" />
               Backup
+            </TabsTrigger>
+            <TabsTrigger value="cleanup" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Trash2 className="h-4 w-4" />
+              Limpeza
             </TabsTrigger>
           </TabsList>
 
@@ -363,6 +369,11 @@ export default function Settings() {
           {/* Backup Tab */}
           <TabsContent value="backup">
             <BackupManager />
+          </TabsContent>
+
+          {/* Cleanup Tab */}
+          <TabsContent value="cleanup">
+            <CleanupSettings />
           </TabsContent>
         </Tabs>
       </div>
