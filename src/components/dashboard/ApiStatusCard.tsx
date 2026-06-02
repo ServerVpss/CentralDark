@@ -83,7 +83,7 @@ export function ApiStatusCard() {
               "flex-1 text-[10px] font-medium px-1.5 py-1 rounded-md transition-colors",
               period === p.key
                 ? "bg-primary/15 text-primary"
-                : "bg-muted/30 text-muted-foreground hover:bg-muted/50"
+                : "bg-muted/45 text-muted-foreground hover:bg-muted/65"
             )}
           >
             {p.label}

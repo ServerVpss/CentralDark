@@ -116,7 +116,7 @@ export function QueryMonitor() {
   };
 
   return (
-    <Card className="p-5 bg-card/60 backdrop-blur-xl border-border/50 rounded-xl">
+    <Card className="p-5 bg-card/80 backdrop-blur-xl border-border/70 rounded-xl">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-lg bg-primary/10">
@@ -181,12 +181,12 @@ export function QueryMonitor() {
               {byUser.map((u) => (
                 <div
                   key={u.key}
-                  className="flex items-center justify-between text-xs px-2 py-1.5 rounded-md bg-muted/30"
+                  className="flex items-center justify-between text-xs px-2.5 py-2 rounded-lg bg-muted/50 border border-border/40"
                 >
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <User className="h-3 w-3 text-muted-foreground shrink-0" />
+                  <div className="flex items-center gap-2 min-w-0">
+                    <User className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-foreground">{u.name}</div>
+                      <div className="truncate text-foreground font-medium">{u.name}</div>
                       {u.username && (
                         <div className="truncate text-[10px] text-muted-foreground/70">@{u.username}</div>
                       )}
