@@ -32,4 +32,10 @@ export interface BotSecuritySettings {
   welcome_message_enabled: boolean;
   welcome_message: string | null;
   user_id: string | null;
+  // Anti-rajada de consultas
+  query_rate_limit_enabled?: boolean;
+  query_cooldown_seconds?: number;
+  query_max_per_minute?: number;
+  query_mute_minutes?: number;
 }
+
