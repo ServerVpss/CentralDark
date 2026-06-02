@@ -32,7 +32,7 @@ export default function Auth() {
 
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
-      navigate("/", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   }, [isAuthenticated, authLoading, navigate]);
 
@@ -96,7 +96,7 @@ export default function Auth() {
     setIsLoading(false);
     
     if (!error) {
-      navigate("/", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   };
 
@@ -110,7 +110,7 @@ export default function Auth() {
     setIsLoading(false);
     
     if (!error) {
-      navigate("/", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   };
 
