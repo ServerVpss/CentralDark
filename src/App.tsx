@@ -22,6 +22,7 @@ import PixTransactions from "./pages/PixTransactions";
 import NotFound from "./pages/NotFound";
 import Security from "./pages/Security";
 import SubscriptionAudit from "./pages/SubscriptionAudit";
+import WebAppResult from "./pages/WebAppResult";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,8 @@ const App = () => (
             <GlobalSearch />
             <InstallPrompt />
             <Routes>
+              {/* Rota pública do Mini App do Telegram (resultado) */}
+              <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/consultas" element={<ProtectedRoute><Consultas /></ProtectedRoute>} />

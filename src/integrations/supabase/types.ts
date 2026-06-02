@@ -1228,6 +1228,42 @@ export type Database = {
           },
         ]
       }
+      telegram_referrals: {
+        Row: {
+          bot_id: string | null
+          commission_amount: number
+          commission_rate: number
+          created_at: string
+          id: string
+          paid_status: string
+          referred_telegram_id: number
+          referrer_telegram_id: number
+          source_payment_id: string | null
+        }
+        Insert: {
+          bot_id?: string | null
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string
+          id?: string
+          paid_status?: string
+          referred_telegram_id: number
+          referrer_telegram_id: number
+          source_payment_id?: string | null
+        }
+        Update: {
+          bot_id?: string | null
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string
+          id?: string
+          paid_status?: string
+          referred_telegram_id?: number
+          referrer_telegram_id?: number
+          source_payment_id?: string | null
+        }
+        Relationships: []
+      }
       telegram_subscriptions: {
         Row: {
           bot_id: string | null
@@ -1348,6 +1384,10 @@ export type Database = {
           language_code: string | null
           last_name: string | null
           last_seen_at: string
+          referral_balance: number
+          referral_count: number
+          referral_total_earned: number
+          referred_by: number | null
           telegram_user_id: number
           updated_at: string
           username: string | null
@@ -1361,6 +1401,10 @@ export type Database = {
           language_code?: string | null
           last_name?: string | null
           last_seen_at?: string
+          referral_balance?: number
+          referral_count?: number
+          referral_total_earned?: number
+          referred_by?: number | null
           telegram_user_id: number
           updated_at?: string
           username?: string | null
@@ -1374,6 +1418,10 @@ export type Database = {
           language_code?: string | null
           last_name?: string | null
           last_seen_at?: string
+          referral_balance?: number
+          referral_count?: number
+          referral_total_earned?: number
+          referred_by?: number | null
           telegram_user_id?: number
           updated_at?: string
           username?: string | null
@@ -1398,6 +1446,48 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      webapp_results: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          path_token: string
+          query_input: string | null
+          query_type: string
+          result_data: Json
+          secret_token: string
+          telegram_user_id: number
+          view_count: number
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          path_token: string
+          query_input?: string | null
+          query_type: string
+          result_data: Json
+          secret_token: string
+          telegram_user_id: number
+          view_count?: number
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          path_token?: string
+          query_input?: string | null
+          query_type?: string
+          result_data?: Json
+          secret_token?: string
+          telegram_user_id?: number
+          view_count?: number
         }
         Relationships: []
       }
