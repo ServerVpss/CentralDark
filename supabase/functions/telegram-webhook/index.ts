@@ -6702,13 +6702,39 @@ class BotHandler {
 
     text += howItWorks;
 
-    await editMessage(this.token, chatId, messageId, text,
-      keyboard(
-        [btn("🔄 Renovar Grupo", "menu:plans:group", undefined, EMOJI.REFRESH), btn("🔄 Renovar Privado", "menu:plans:private", undefined, EMOJI.REFRESH)],
-        [btn("📋 Ver Comandos", "show_commands", undefined, EMOJI.LIST)],
-        [btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]
-      )
-    );
+    // ===== BLOCO INDICAÇÃO (5% de comissão) =====
+    let referralBlock = "";
+    let referralLink = "";
+    try {
+      const { data: tgUser } = await this.supabase
+        .from("telegram_users")
+        .select("referral_balance, referral_total_earned, referral_count")
+        .eq("telegram_user_id", telegramUserId)
+        .eq("bot_id", this.bot.id)
+        .maybeSingle();
+      const balance = Number(tgUser?.referral_balance || 0);
+      const totalEarned = Number(tgUser?.referral_total_earned || 0);
+      const count = Number(tgUser?.referral_count || 0);
+      const botUser = this.bot.bot_username || "";
+      referralLink = botUser ? `https://t.me/${botUser}?start=ref_${telegramUserId}` : "";
+      referralBlock = `\n\n🤝 <b>Programa de Indicação (5%)</b>\n` +
+        `┌ 👥 Indicados: <b>${count}</b>\n` +
+        `├ 💰 Saldo: <b>R$ ${balance.toFixed(2)}</b>\n` +
+        `├ 📊 Total ganho: <b>R$ ${totalEarned.toFixed(2)}</b>\n` +
+        (referralLink ? `└ 🔗 <code>${referralLink}</code>` : `└ <i>Link indisponível</i>`);
+    } catch (_) { /* ignore */ }
+    text += referralBlock;
+
+    const actionRows: InlineButton[][] = [
+      [btn("🔄 Renovar Grupo", "menu:plans:group", undefined, EMOJI.REFRESH), btn("🔄 Renovar Privado", "menu:plans:private", undefined, EMOJI.REFRESH)],
+    ];
+    if (referralLink) {
+      actionRows.push([btnUrl("🔗 Compartilhar Indicação", `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent("Use meu link e ganhe acesso ao bot:")}`)]);
+    }
+    actionRows.push([btn("📋 Ver Comandos", "show_commands", undefined, EMOJI.LIST)]);
+    actionRows.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
+
+    await editMessage(this.token, chatId, messageId, text, keyboard(...actionRows));
   }
 
   async showPendingMenu(chatId: number, telegramUserId: number, messageId: number) {
