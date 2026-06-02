@@ -6627,11 +6627,12 @@ class BotHandler {
         const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrl) {
           const effectIdNovo = getMessageEffectId(this.settings.message_effect);
+          const brandNovo = (this.bot.bot_username || 'BOT').toUpperCase();
           await sendMessage(
             this.token, chatId,
-            `✅ <b>Consulta concluída!</b>\n\n📱 Toque no botão abaixo para abrir o resultado no Mini App.`,
+            `🩸<b>${escapeHtmlGlobal(brandNovo)}</b>\n<code>/${usedModule} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n\nClique no botão abaixo para ver o resultado.`,
             { inline_keyboard: [
-              [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrl, chatId, "primary")],
+              [btnWebApp("📋 Ver resultado", webappOnlyUrl, chatId, "primary")],
               [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
             ]},
             effectIdNovo ? { message_effect_id: effectIdNovo } : undefined
@@ -8804,11 +8805,12 @@ class BotHandler {
       if ((this.settings as any)?.use_legacy_menu === true) {
         const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrlGrp) {
+          const brandGrp = (this.bot.bot_username || 'BOT').toUpperCase();
           await sendMessage(
             this.token, chatId,
-            `✅ <b>Consulta concluída!</b>\n\n📱 Toque no botão abaixo para abrir o resultado no Mini App.`,
+            `🩸<b>${escapeHtmlGlobal(brandGrp)}</b>\n<code>/${queryType} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n\nClique no botão abaixo para ver o resultado.`,
             { inline_keyboard: [
-              [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrlGrp, chatId, "primary")],
+              [btnWebApp("📋 Ver resultado", webappOnlyUrlGrp, chatId, "primary")],
             ]},
             replyToId ? { reply_to_message_id: replyToId } : undefined
           );
