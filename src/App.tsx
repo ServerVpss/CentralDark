@@ -39,6 +39,7 @@ const App = () => (
           <AuthProvider>
             <GlobalSearch />
             <InstallPrompt />
+            <PageSplash />
             <Routes>
               {/* Rota pública do Mini App do Telegram (resultado) */}
               <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
