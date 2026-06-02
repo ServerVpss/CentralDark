@@ -6627,11 +6627,12 @@ class BotHandler {
         const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrl) {
           const effectIdNovo = getMessageEffectId(this.settings.message_effect);
+          const brandNovo = (this.bot.bot_username || 'BOT').toUpperCase();
           await sendMessage(
             this.token, chatId,
-            `✅ <b>Consulta concluída!</b>\n\n📱 Toque no botão abaixo para abrir o resultado no Mini App.`,
+            `🩸<b>${escapeHtmlGlobal(brandNovo)}</b>\n<code>/${usedModule} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n\nClique no botão abaixo para ver o resultado.`,
             { inline_keyboard: [
-              [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrl, chatId, "primary")],
+              [btnWebApp("📋 Ver resultado", webappOnlyUrl, chatId, "primary")],
               [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
             ]},
             effectIdNovo ? { message_effect_id: effectIdNovo } : undefined
