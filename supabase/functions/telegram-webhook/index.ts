@@ -6616,7 +6616,7 @@ class BotHandler {
 
       // ============ MODO MINI APP (Novo) — envia só o botão, sem texto inline ============
       if ((this.settings as any)?.use_legacy_menu === true) {
-        const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrl) {
           const effectIdNovo = getMessageEffectId(this.settings.message_effect);
           await sendMessage(
@@ -6697,7 +6697,7 @@ class BotHandler {
           extraButtons.push(...successSiblingButtons);
         }
         // 📱 Botão Mini App (resultado em página web criptografada)
-        const webappUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        const webappUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappUrl) {
           extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrl, chatId)]);
         }
@@ -8794,7 +8794,7 @@ class BotHandler {
 
       // ============ MODO MINI APP (Novo) — envia só o botão no grupo ============
       if ((this.settings as any)?.use_legacy_menu === true) {
-        const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+        const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrlGrp) {
           await sendMessage(
             this.token, chatId,
@@ -8838,7 +8838,7 @@ class BotHandler {
         extraButtons.push(...successSiblingBtns);
       }
       // 📱 Botão Mini App (resultado em página web criptografada)
-      const webappUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+      const webappUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result, resolveWebappBaseUrl(this.settings));
       if (webappUrlGrp) {
         extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrlGrp, chatId)]);
       }
