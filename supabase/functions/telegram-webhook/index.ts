@@ -8752,7 +8752,7 @@ class BotHandler {
       // 📱 Botão Mini App (resultado em página web criptografada)
       const webappUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
       if (webappUrlGrp) {
-        extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrlGrp)]);
+        extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrlGrp, chatId)]);
       }
 
 
