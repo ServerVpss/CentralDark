@@ -333,10 +333,13 @@ export type Database = {
           button_emoji_ids: Json | null
           created_at: string
           custom_emojis: string[] | null
+          fake_engagement_count_date: string | null
           fake_engagement_enabled: boolean | null
           fake_engagement_interval_minutes: number | null
           fake_engagement_last_sent: string | null
+          fake_engagement_max_per_day: number
           fake_engagement_names: string[] | null
+          fake_engagement_sent_today: number
           fixed_emoji: string | null
           group_chat_id: number | null
           group_photo_url: string | null
@@ -364,10 +367,13 @@ export type Database = {
           button_emoji_ids?: Json | null
           created_at?: string
           custom_emojis?: string[] | null
+          fake_engagement_count_date?: string | null
           fake_engagement_enabled?: boolean | null
           fake_engagement_interval_minutes?: number | null
           fake_engagement_last_sent?: string | null
+          fake_engagement_max_per_day?: number
           fake_engagement_names?: string[] | null
+          fake_engagement_sent_today?: number
           fixed_emoji?: string | null
           group_chat_id?: number | null
           group_photo_url?: string | null
@@ -395,10 +401,13 @@ export type Database = {
           button_emoji_ids?: Json | null
           created_at?: string
           custom_emojis?: string[] | null
+          fake_engagement_count_date?: string | null
           fake_engagement_enabled?: boolean | null
           fake_engagement_interval_minutes?: number | null
           fake_engagement_last_sent?: string | null
+          fake_engagement_max_per_day?: number
           fake_engagement_names?: string[] | null
+          fake_engagement_sent_today?: number
           fixed_emoji?: string | null
           group_chat_id?: number | null
           group_photo_url?: string | null

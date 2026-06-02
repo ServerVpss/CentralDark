@@ -15,6 +15,7 @@ interface FakeEngagementSettingsProps {
   settings: {
     fake_engagement_enabled?: boolean;
     fake_engagement_interval_minutes?: number;
+    fake_engagement_max_per_day?: number;
     fake_engagement_names?: string[];
   } | null;
   onUpdate: () => void;
@@ -88,6 +89,7 @@ const DEFAULT_NAMES = [
 export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }: FakeEngagementSettingsProps) {
   const [enabled, setEnabled] = useState(settings?.fake_engagement_enabled ?? false);
   const [interval, setInterval] = useState(settings?.fake_engagement_interval_minutes ?? 30);
+  const [maxPerDay, setMaxPerDay] = useState(settings?.fake_engagement_max_per_day ?? 12);
   const [names, setNames] = useState(
     (settings?.fake_engagement_names ?? DEFAULT_NAMES).join('\n')
   );
@@ -97,6 +99,7 @@ export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }
   useEffect(() => {
     setEnabled(settings?.fake_engagement_enabled ?? false);
     setInterval(settings?.fake_engagement_interval_minutes ?? 30);
+    setMaxPerDay(settings?.fake_engagement_max_per_day ?? 12);
     setNames((settings?.fake_engagement_names ?? DEFAULT_NAMES).join('\n'));
   }, [settings]);
 
@@ -113,6 +116,7 @@ export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }
         .update({
           fake_engagement_enabled: enabled,
           fake_engagement_interval_minutes: interval,
+          fake_engagement_max_per_day: maxPerDay,
           fake_engagement_names: namesArray
         })
         .eq('bot_id', botId);
@@ -228,6 +232,31 @@ export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }
             <span>1 hora</span>
             <span>2 horas</span>
           </div>
+        </div>
+
+        {/* Máximo por dia (anti-spam) */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-muted-foreground" />
+            <Label>Máximo de mensagens por dia: {maxPerDay}</Label>
+          </div>
+          <Slider
+            value={[maxPerDay]}
+            onValueChange={(v) => setMaxPerDay(v[0])}
+            min={1}
+            max={100}
+            step={1}
+            className="w-full"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>1/dia</span>
+            <span>20/dia</span>
+            <span>50/dia</span>
+            <span>100/dia</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Quando atingir esse limite no dia, o sistema para de enviar até o próximo dia. Evita parecer spam.
+          </p>
         </div>
 
         {/* Lista de Nomes */}

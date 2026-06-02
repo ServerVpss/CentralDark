@@ -172,6 +172,7 @@ Deno.serve(async (req) => {
         group_chat_id,
         fake_engagement_enabled,
         fake_engagement_interval_minutes,
+        fake_engagement_max_per_day,
         fake_engagement_names,
         fake_engagement_last_sent
       `)
@@ -206,6 +207,22 @@ Deno.serve(async (req) => {
       const lastSent = setting.fake_engagement_last_sent 
         ? new Date(setting.fake_engagement_last_sent) 
         : new Date(0)
+
+      // Limite anti-spam: máximo de envios por dia (ignora se for teste manual)
+      const maxPerDay = (setting as any).fake_engagement_max_per_day ?? 12
+      const todayStr = now.toISOString().slice(0, 10)
+      const countDate = (setting as any).fake_engagement_count_date as string | null
+      const sentToday = countDate === todayStr ? ((setting as any).fake_engagement_sent_today ?? 0) : 0
+      if (!forceSend && maxPerDay > 0 && sentToday >= maxPerDay) {
+        console.log(`[Limite Diário] Bot ${setting.bot_id}: ${sentToday}/${maxPerDay} já enviados hoje`)
+        results.push({
+          bot_id: setting.bot_id,
+          status: 'daily_limit_reached',
+          sent_today: sentToday,
+          max_per_day: maxPerDay,
+        })
+        continue
+      }
 
       // Buscar token do bot
       const { data: bot } = await supabase
@@ -402,10 +419,15 @@ Deno.serve(async (req) => {
       const result = await response.json()
 
       if (result.ok) {
-        // Atualizar timestamp do último envio GLOBAL
+        // Atualizar timestamp do último envio GLOBAL + contador diário
+        const newCount = sentToday + 1
         await supabase
           .from('bot_settings')
-          .update({ fake_engagement_last_sent: now.toISOString() })
+          .update({
+            fake_engagement_last_sent: now.toISOString(),
+            fake_engagement_sent_today: newCount,
+            fake_engagement_count_date: todayStr,
+          })
           .eq('id', setting.id)
 
         // Se foi uma mensagem personalizada, atualizar o last_sent_at INDIVIDUAL dela
