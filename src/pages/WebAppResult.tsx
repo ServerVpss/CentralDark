@@ -514,12 +514,19 @@ export default function WebAppResult() {
           <AlertCircle className="h-10 w-10 text-amber-400" />
           <h2 className="text-base font-semibold">Não foi possível abrir</h2>
           <p className="text-sm opacity-80 max-w-sm font-mono">{error}</p>
-          <a
-            href="https://t.me"
+          <button
+            onClick={() => {
+              try {
+                window.Telegram?.WebApp?.close();
+              } catch {
+                // se não estiver dentro do Telegram, só fecha a aba
+                window.close();
+              }
+            }}
             className="inline-flex items-center gap-1 text-xs text-amber-400 mt-2"
           >
             <ExternalLink className="h-3 w-3" /> Voltar ao Telegram
-          </a>
+          </button>
         </div>
       </div>
     );
