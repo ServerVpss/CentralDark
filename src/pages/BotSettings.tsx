@@ -51,6 +51,25 @@ export default function BotSettings() {
   const { bots, loading: botsLoading } = useTelegramBots();
   const { settings, loading: settingsLoading, updateSettings, addOwner, removeOwner, defaultTerms, refetch: refetchSettings } = useBotSettings(botId || null);
 
+  // 🌐 Auto-detecção de domínio do Mini App:
+  // Sempre que o painel for aberto, salva o window.location.origin atual
+  // em bot_settings.webapp_url. Assim o bot envia o botão do Mini App
+  // apontando pro domínio que você está usando agora — funciona em
+  // qualquer ambiente (lovable.app, domínio próprio, etc) sem configurar nada.
+  useEffect(() => {
+    if (!botId || typeof window === "undefined") return;
+    const currentOrigin = window.location.origin;
+    const savedOrigin = (settings as { webapp_url?: string | null } | null)?.webapp_url;
+    if (savedOrigin === currentOrigin) return; // já está sincronizado
+    supabase
+      .from("bot_settings")
+      .update({ webapp_url: currentOrigin })
+      .eq("bot_id", botId)
+      .then(({ error }) => {
+        if (error) console.warn("[Mini App] não foi possível salvar domínio:", error.message);
+      });
+  }, [botId, settings]);
+
   const [bot, setBot] = useState<TelegramBot | null>(null);
   const [saving, setSaving] = useState(false);
 
