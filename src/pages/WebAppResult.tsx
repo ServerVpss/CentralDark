@@ -534,7 +534,7 @@ export default function WebAppResult() {
 
   if (!data) return null;
 
-  const brand = (data.bot_name || data.bot_username || "BOT").toString();
+  const brand = "BRASIL BUSCAS";
   const brandUpper = brand.toUpperCase();
   const username = data.bot_username ? `@${data.bot_username.toLowerCase()}` : "";
   const userLabel = data.user?.first_name
