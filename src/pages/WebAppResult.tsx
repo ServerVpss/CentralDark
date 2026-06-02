@@ -350,6 +350,9 @@ export default function WebAppResult() {
   const [data, setData] = useState<ResultData | null>(null);
   const [themeReady, setThemeReady] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [aiFormatted, setAiFormatted] = useState<any | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+
 
 
   // Proteção anti-inspeção
