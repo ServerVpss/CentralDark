@@ -16,7 +16,8 @@ interface QueryRow {
 }
 
 interface TypeStat { type: string; count: number }
-interface UserStat { user_id: string; name: string; count: number }
+interface UserStat { key: string; name: string; username: string | null; count: number }
+
 
 export function QueryMonitor() {
   const [recent, setRecent] = useState<QueryRow[]>([]);
@@ -52,34 +53,35 @@ export function QueryMonitor() {
         .slice(0, 5)
     );
 
-    // Por usuário
-    const userMap = new Map<string, number>();
-    list.forEach((r) => {
-      const k = r.user_id || "anon";
-      userMap.set(k, (userMap.get(k) || 0) + 1);
-    });
-    const topUsers = Array.from(userMap.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
+    // Top usuários REAIS do bot Telegram (telegram_messages com comando /)
+    const { data: msgs } = await supabase
+      .from("telegram_messages")
+      .select("from_user_id, from_username, from_first_name, message_text")
+      .gte("created_at", since24h)
+      .like("message_text", "/%")
+      .limit(2000);
 
-    const userIds = topUsers.map(([id]) => id).filter((id) => id !== "anon");
-    let names: Record<string, string> = {};
-    if (userIds.length) {
-      const { data: profs } = await supabase
-        .from("profiles")
-        .select("user_id, full_name")
-        .in("user_id", userIds);
-      profs?.forEach((p) => {
-        names[p.user_id] = p.full_name || p.user_id.slice(0, 8);
-      });
-    }
-    setByUser(
-      topUsers.map(([user_id, count]) => ({
-        user_id,
-        name: user_id === "anon" ? "Bot/Telegram" : names[user_id] || user_id.slice(0, 8),
-        count,
-      }))
-    );
+    const userMap = new Map<string, { name: string; username: string | null; count: number }>();
+    (msgs || []).forEach((m) => {
+      if (!m.from_user_id) return;
+      const k = String(m.from_user_id);
+      const cur = userMap.get(k);
+      if (cur) {
+        cur.count += 1;
+      } else {
+        userMap.set(k, {
+          name: m.from_first_name || m.from_username || k,
+          username: m.from_username,
+          count: 1,
+        });
+      }
+    });
+    const topUsers: UserStat[] = Array.from(userMap.entries())
+      .map(([key, v]) => ({ key, ...v }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 8);
+    setByUser(topUsers);
+
 
     setLoading(false);
   };
@@ -171,16 +173,17 @@ export function QueryMonitor() {
               )}
               {byUser.map((u) => (
                 <div
-                  key={u.user_id}
+                  key={u.key}
                   className="flex items-center justify-between text-xs px-2 py-1.5 rounded-md bg-muted/30"
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    {u.user_id === "anon" ? (
-                      <BotIcon className="h-3 w-3 text-muted-foreground shrink-0" />
-                    ) : (
-                      <User className="h-3 w-3 text-muted-foreground shrink-0" />
-                    )}
-                    <span className="truncate text-foreground">{u.name}</span>
+                    <User className="h-3 w-3 text-muted-foreground shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-foreground">{u.name}</div>
+                      {u.username && (
+                        <div className="truncate text-[10px] text-muted-foreground/70">@{u.username}</div>
+                      )}
+                    </div>
                   </div>
                   <span className="font-mono text-muted-foreground ml-2">{u.count}</span>
                 </div>
