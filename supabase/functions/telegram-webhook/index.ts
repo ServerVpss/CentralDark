@@ -6597,6 +6597,26 @@ class BotHandler {
 
       // Format and send result - usar o módulo realmente usado após fallback
       const formattedResult = formatQueryResult(usedModule, result, this.bot.bot_username, telegramUserName);
+
+      // ============ MODO MINI APP (Novo) — envia só o botão, sem texto inline ============
+      if ((this.settings as any)?.use_legacy_menu === true) {
+        const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        if (webappOnlyUrl) {
+          const effectIdNovo = getMessageEffectId(this.settings.message_effect);
+          await sendMessage(
+            this.token, chatId,
+            `✅ <b>Consulta concluída!</b>\n\n📱 Toque no botão abaixo para abrir o resultado no Mini App.`,
+            { inline_keyboard: [
+              [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrl, chatId, "primary")],
+              [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
+            ]},
+            effectIdNovo
+          );
+          return;
+        }
+        // Se falhar ao gerar link, cai pro modo texto normalmente
+      }
+
       
       // Check for photo - deep extraction from nested API response
       const fotoUrl = deepExtractPhoto(result);
