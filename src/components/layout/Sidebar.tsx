@@ -131,22 +131,22 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                         onClose?.();
                       }}
                       className={cn(
-                        "relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                        "relative flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-medium transition-colors duration-150",
                         active
-                          ? "bg-gradient-to-r from-primary/15 via-primary/8 to-transparent text-primary"
-                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                          ? "bg-sidebar-accent text-foreground"
+                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-foreground",
                         collapsed && "lg:justify-center lg:px-0"
                       )}
                     >
                       {active && (
-                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-7 w-1 rounded-r-full bg-gradient-to-b from-primary to-primary-glow shadow-[0_0_12px_hsl(var(--primary)/0.6)]" />
+                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-r-full bg-primary" />
                       )}
                       <item.icon
                         className={cn(
-                          "h-[18px] w-[18px] shrink-0 transition-all",
-                          active ? "text-primary" : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground"
+                          "h-4 w-4 shrink-0",
+                          active ? "text-primary" : "text-sidebar-foreground/50"
                         )}
-                        strokeWidth={active ? 2.5 : 2}
+                        strokeWidth={2}
                       />
                       <span className={cn(collapsed && "lg:hidden")}>{item.title}</span>
                     </button>
