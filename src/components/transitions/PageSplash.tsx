@@ -107,8 +107,13 @@ export function PageSplash() {
       className="fixed inset-0 z-[100] overflow-hidden animate-fade-in"
       onClick={() => setVisible(false)}
     >
-      {/* Vídeo em tela cheia como fundo */}
+      {/* Vídeo em tela cheia como fundo - acelerado pra mostrar a parte boa */}
       <video
+        ref={(el) => {
+          if (el) {
+            el.playbackRate = 2.0; // 2x mais rápido
+          }
+        }}
         src={handVideo.url}
         autoPlay
         muted
