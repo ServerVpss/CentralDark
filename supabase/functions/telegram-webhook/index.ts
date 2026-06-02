@@ -10181,6 +10181,7 @@ Deno.serve(async (req) => {
       maintenance_mode: (settings as { maintenance_mode?: boolean } | null)?.maintenance_mode || false,
       maintenance_message: (settings as { maintenance_message?: string } | null)?.maintenance_message || '🔧 Bot em manutenção. Retornaremos em breve.',
       button_emoji_ids: (settings as { button_emoji_ids?: Record<string, string> } | null)?.button_emoji_ids || {},
+      use_legacy_menu: (settings as { use_legacy_menu?: boolean } | null)?.use_legacy_menu || false,
     };
 
     // Merge custom emoji IDs from settings
