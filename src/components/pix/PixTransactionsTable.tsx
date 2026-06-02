@@ -165,7 +165,8 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
           )}
         </div>
       </div>
-      <div className="overflow-x-auto">
+      {/* Tabela completa - apenas desktop */}
+      <div className="hidden md:block overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="border-border hover:bg-transparent">
@@ -232,6 +233,50 @@ export function PixTransactionsTable({ transactions, isLoading }: PixTransaction
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Cards compactos - apenas mobile */}
+      <div className="md:hidden divide-y divide-border/50">
+        {paginatedTransactions.length > 0 ? (
+          paginatedTransactions.map((transaction) => (
+            <div key={transaction.id} className="p-4 active:bg-muted/30 transition-colors">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                  <div className="p-1.5 rounded-lg bg-primary/10 shrink-0">
+                    <User className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-sm leading-tight truncate">
+                      {transaction.telegram_first_name || (transaction.telegram_user_id ? `Telegram ${transaction.telegram_user_id}` : "N/A")}
+                    </p>
+                    <p className="text-[11px] text-muted-foreground truncate mt-0.5">
+                      {transaction.telegram_username ? `@${transaction.telegram_username}` : ""}
+                      {transaction.telegram_username && transaction.telegram_user_id ? " · " : ""}
+                      {transaction.telegram_user_id ? `ID ${transaction.telegram_user_id}` : ""}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className={`text-lg font-bold leading-none ${transaction.status === "paid" ? "text-success" : "text-foreground"}`}>
+                    R$ {Number(transaction.amount).toFixed(2)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-2 mt-3 pt-2.5 border-t border-border/40">
+                <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                  <span>{format(new Date(transaction.created_at), "dd/MM HH:mm", { locale: ptBR })}</span>
+                  <span>·</span>
+                  <span className="uppercase font-medium">{transaction.gateway}</span>
+                </div>
+                {getStatusBadge(transaction.status)}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center py-12 text-muted-foreground text-sm">
+            Nenhuma transação encontrada neste período
+          </div>
+        )}
       </div>
 
       {totalPages > 1 && (
