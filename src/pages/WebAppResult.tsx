@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Loader2, AlertCircle, ExternalLink, MoreVertical, X } from "lucide-react";
+import { Loader2, AlertCircle, ExternalLink, MoreVertical, X, Copy, Check } from "lucide-react";
+
 
 // Tipagem mínima do Telegram WebApp
 declare global {
