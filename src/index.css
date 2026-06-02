@@ -326,19 +326,23 @@
 
 /* ========== Scrollbar fino ========== */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 14px;
+  height: 14px;
 }
 ::-webkit-scrollbar-track {
   background: hsl(var(--background));
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.35);
-  border-radius: 4px;
-  border: 2px solid hsl(var(--background));
+  background: hsl(var(--muted-foreground) / 0.5);
+  border-radius: 7px;
+  border: 3px solid hsl(var(--background));
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.55);
+  background: hsl(var(--primary) / 0.7);
+}
+* {
+  scrollbar-width: auto;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.5) hsl(var(--background));
 }
 
 ::selection {
