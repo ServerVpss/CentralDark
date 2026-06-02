@@ -238,15 +238,31 @@ export default function Plans() {
         </div>
 
 
-        {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-3">
+        {/* Estatísticas */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card className="bg-card border-border">
             <CardContent className="pt-6">
               <div className="text-center">
                 <p className="text-3xl font-bold gradient-text">
+                  R$ {monthRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                </p>
+                <p className="text-sm text-muted-foreground">Receita do mês atual</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">
+                  {monthCount} venda{monthCount === 1 ? "" : "s"} desde dia 1
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="bg-card border-border">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold">
                   R$ {totalRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                 </p>
-                <p className="text-sm text-muted-foreground">Receita Mensal Estimada</p>
+                <p className="text-sm text-muted-foreground">Receita total (histórico)</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">
+                  Tudo que já foi vendido
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -254,7 +270,10 @@ export default function Plans() {
             <CardContent className="pt-6">
               <div className="text-center">
                 <p className="text-3xl font-bold">{totalSubscribers}</p>
-                <p className="text-sm text-muted-foreground">Total de Assinantes</p>
+                <p className="text-sm text-muted-foreground">Assinantes ativos</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">
+                  Ainda dentro do prazo
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -262,11 +281,58 @@ export default function Plans() {
             <CardContent className="pt-6">
               <div className="text-center">
                 <p className="text-3xl font-bold">{plans.length}</p>
-                <p className="text-sm text-muted-foreground">Planos Ativos</p>
+                <p className="text-sm text-muted-foreground">Planos cadastrados</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">
+                  Disponíveis pra venda
+                </p>
               </div>
             </CardContent>
           </Card>
         </div>
+
+        {/* Explicação simples dos números */}
+        <Card className="bg-card/50 border-border/50">
+          <CardContent className="pt-6 space-y-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold">Como esses números são calculados</h3>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 text-sm text-muted-foreground">
+              <div className="rounded-lg bg-secondary/30 p-3">
+                <p className="font-medium text-foreground mb-1">💰 Receita do mês atual</p>
+                <p className="text-xs leading-relaxed">
+                  Soma de tudo que foi vendido entre o dia 1 deste mês e hoje.
+                  Foram <span className="text-foreground font-medium">{monthCount}</span> venda(s),
+                  totalizando <span className="text-foreground font-medium">R$ {monthRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span>.
+                </p>
+              </div>
+              <div className="rounded-lg bg-secondary/30 p-3">
+                <p className="font-medium text-foreground mb-1">📊 Receita total</p>
+                <p className="text-xs leading-relaxed">
+                  Soma de <span className="text-foreground font-medium">todas</span> as {allTimeCount} vendas
+                  já feitas desde o começo (ativas + expiradas).
+                  Ticket médio: <span className="text-foreground font-medium">R$ {avgTicket.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span> por venda.
+                </p>
+              </div>
+              <div className="rounded-lg bg-secondary/30 p-3">
+                <p className="font-medium text-foreground mb-1">👥 Assinantes ativos</p>
+                <p className="text-xs leading-relaxed">
+                  Pessoas cuja assinatura <span className="text-foreground font-medium">ainda não venceu</span>.
+                  Quando o prazo (ex: 7 dias, 30 dias) expira, saem dessa conta.
+                </p>
+              </div>
+              <div className="rounded-lg bg-secondary/30 p-3">
+                <p className="font-medium text-foreground mb-1">📦 Planos cadastrados</p>
+                <p className="text-xs leading-relaxed">
+                  Quantos planos diferentes você criou pra oferecer aos clientes
+                  (diária, semanal, mensal etc.).
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+
 
         {/* Plans Grid */}
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
