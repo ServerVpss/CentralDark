@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader2, AlertCircle, ExternalLink, MoreVertical, X, Copy, Check, Sparkles } from "lucide-react";
+import { NewsTicker } from "@/components/webapp/NewsTicker";
 
 
 
@@ -39,13 +40,34 @@ const HIDDEN_KEYS = new Set([
   "total_diario", "reset_em", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
   "modulo", "comando", "duration_ms", "module_disabled", "error", "notfound",
-  "fromcache", "cache_ttl_hours", "foto", "image", "photo", "fotobase64",
-  "base64", "conta", "saldo", "tempo_segundos", "temposegundos", "cache",
+  "fromcache", "cache_ttl_hours",
+  "conta", "saldo", "tempo_segundos", "temposegundos", "cache",
   "cached_at", "expiracao", "limites", "plano", "requests_used",
   "requests_remaining", "daily_limit", "fallback_provider", "apikey",
   "prioridade", "raw", "meta", "request_id", "erro", "err", "status",
   "status_code", "statuscode", "code",
 ]);
+
+// Chaves que sinalizam que o valor é uma imagem (renderizar como <img>)
+const PHOTO_KEY_HINTS = ["foto", "fotos", "image", "imagem", "photo", "picture", "img", "avatar", "fotobase64", "base64"];
+function isPhotoKey(k: string): boolean {
+  const n = k.toLowerCase();
+  return PHOTO_KEY_HINTS.some((h) => n === h || n.includes(h));
+}
+function isPhotoValue(v: any): string | null {
+  if (typeof v !== "string") return null;
+  const s = v.trim();
+  if (!s) return null;
+  // Data URL completa
+  if (/^data:image\/(png|jpe?g|webp|gif|bmp);base64,/i.test(s)) return s;
+  // URL direta de imagem
+  if (/^https?:\/\/.+\.(png|jpe?g|webp|gif|bmp)(\?.*)?$/i.test(s)) return s;
+  // Base64 puro grande (>200 chars, só caracteres base64) — assume JPEG
+  if (s.length > 200 && /^[A-Za-z0-9+/=\s]+$/.test(s)) {
+    return `data:image/jpeg;base64,${s.replace(/\s+/g, "")}`;
+  }
+  return null;
+}
 
 // Chaves que indicam mensagem de erro vinda da API
 const ERROR_KEYS = ["erro", "err", "error", "mensagem", "message", "msg", "detail", "detalhe"];
@@ -222,6 +244,23 @@ function Section({
 }
 
 function Row({ label, value }: { label: string; value: any }) {
+  const photoSrc = isPhotoKey(label) ? isPhotoValue(value) : isPhotoValue(value);
+  if (photoSrc) {
+    return (
+      <div className="px-3 py-3 flex flex-col items-center gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 self-start">
+          {formatLabel(label)}
+        </span>
+        <img
+          src={photoSrc}
+          alt={formatLabel(label)}
+          loading="lazy"
+          className="max-w-full w-auto max-h-[420px] rounded-sm border border-zinc-700/60 object-contain bg-zinc-900"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+        />
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-[140px_1fr] gap-2 px-3 py-2">
       <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 self-center">
@@ -746,12 +785,9 @@ export default function WebAppResult() {
       </div>
 
       <div className="w-full px-2 sm:px-4 md:px-6 py-3 max-w-3xl mx-auto text-[clamp(12px,2.8vw,14px)]">
-        {/* Faixa com logo/identidade */}
-        <div className="bg-white rounded-sm px-3 py-3 mb-3 inline-block">
-          <span className="font-mono text-[clamp(12px,3vw,14px)] font-bold text-black tracking-tight">
-            {brand}
-          </span>
-        </div>
+        {/* News ticker — manchetes deslizando na diagonal (direita → esquerda) */}
+        <NewsTicker />
+
 
 
         {/* Título principal da consulta */}
