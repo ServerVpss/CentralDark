@@ -419,10 +419,15 @@ Deno.serve(async (req) => {
       const result = await response.json()
 
       if (result.ok) {
-        // Atualizar timestamp do último envio GLOBAL
+        // Atualizar timestamp do último envio GLOBAL + contador diário
+        const newCount = sentToday + 1
         await supabase
           .from('bot_settings')
-          .update({ fake_engagement_last_sent: now.toISOString() })
+          .update({
+            fake_engagement_last_sent: now.toISOString(),
+            fake_engagement_sent_today: newCount,
+            fake_engagement_count_date: todayStr,
+          })
           .eq('id', setting.id)
 
         // Se foi uma mensagem personalizada, atualizar o last_sent_at INDIVIDUAL dela
