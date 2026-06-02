@@ -147,7 +147,7 @@ interface PendingPayment {
   context?: string;
 }
 
-type InlineButton = { text: string; callback_data?: string; url?: string; style?: string };
+type InlineButton = { text: string; callback_data?: string; url?: string; style?: string; web_app?: { url: string } };
 
 // =============== API PROVIDERS ===============
 interface ApiProvider {
@@ -456,6 +456,54 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
   if (style) b.style = style;
   if (iconCustomEmojiId) b.icon_custom_emoji_id = iconCustomEmojiId;
   return b;
+}
+
+// =============== WEBAPP (Mini App) ===============
+const WEBAPP_PUBLIC_URL = Deno.env.get("WEBAPP_PUBLIC_URL") || "https://telegram-zen-panel-6518f4e2-5d802052.lovable.app";
+
+function btnWebApp(text: string, url: string, style?: string): InlineButton {
+  const b: any = { text, web_app: { url } };
+  if (style) b.style = style;
+  return b;
+}
+
+// Gera tokens aleatórios pra URL do resultado (path + secret)
+function randomHex(bytes: number): string {
+  const arr = new Uint8Array(bytes);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+// Salva resultado no banco e devolve URL do Mini App. Retorna null em caso de erro.
+async function createWebappResultLink(
+  supabase: SupabaseClient,
+  botId: string,
+  telegramUserId: number,
+  queryType: string,
+  queryInput: string,
+  resultData: unknown,
+): Promise<string | null> {
+  try {
+    const pathToken = randomHex(16);   // 32 chars
+    const secretToken = randomHex(20); // 40 chars
+    const { error } = await supabase.from("webapp_results").insert({
+      path_token: pathToken,
+      secret_token: secretToken,
+      telegram_user_id: telegramUserId,
+      bot_id: botId,
+      query_type: queryType,
+      query_input: queryInput,
+      result_data: resultData ?? {},
+    });
+    if (error) {
+      console.error("createWebappResultLink insert error:", error);
+      return null;
+    }
+    return `${WEBAPP_PUBLIC_URL}/result/${pathToken}/${secretToken}/`;
+  } catch (e) {
+    console.error("createWebappResultLink exception:", e);
+    return null;
+  }
 }
 
 // =============== UNICODE BOLD SANS (𝗘𝗫𝗘𝗠𝗣𝗟𝗢) ===============
@@ -6486,6 +6534,11 @@ class BotHandler {
         if (successSiblingButtons.length > 0) {
           extraButtons.push(...successSiblingButtons);
         }
+        // 📱 Botão Mini App (resultado em página web criptografada)
+        const webappUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        if (webappUrl) {
+          extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrl)]);
+        }
         const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons, telegramUserId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
@@ -6654,13 +6707,39 @@ class BotHandler {
 
     text += howItWorks;
 
-    await editMessage(this.token, chatId, messageId, text,
-      keyboard(
-        [btn("🔄 Renovar Grupo", "menu:plans:group", undefined, EMOJI.REFRESH), btn("🔄 Renovar Privado", "menu:plans:private", undefined, EMOJI.REFRESH)],
-        [btn("📋 Ver Comandos", "show_commands", undefined, EMOJI.LIST)],
-        [btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]
-      )
-    );
+    // ===== BLOCO INDICAÇÃO (5% de comissão) =====
+    let referralBlock = "";
+    let referralLink = "";
+    try {
+      const { data: tgUser } = await this.supabase
+        .from("telegram_users")
+        .select("referral_balance, referral_total_earned, referral_count")
+        .eq("telegram_user_id", telegramUserId)
+        .eq("bot_id", this.bot.id)
+        .maybeSingle();
+      const balance = Number(tgUser?.referral_balance || 0);
+      const totalEarned = Number(tgUser?.referral_total_earned || 0);
+      const count = Number(tgUser?.referral_count || 0);
+      const botUser = this.bot.bot_username || "";
+      referralLink = botUser ? `https://t.me/${botUser}?start=ref_${telegramUserId}` : "";
+      referralBlock = `\n\n🤝 <b>Programa de Indicação (5%)</b>\n` +
+        `┌ 👥 Indicados: <b>${count}</b>\n` +
+        `├ 💰 Saldo: <b>R$ ${balance.toFixed(2)}</b>\n` +
+        `├ 📊 Total ganho: <b>R$ ${totalEarned.toFixed(2)}</b>\n` +
+        (referralLink ? `└ 🔗 <code>${referralLink}</code>` : `└ <i>Link indisponível</i>`);
+    } catch (_) { /* ignore */ }
+    text += referralBlock;
+
+    const actionRows: InlineButton[][] = [
+      [btn("🔄 Renovar Grupo", "menu:plans:group", undefined, EMOJI.REFRESH), btn("🔄 Renovar Privado", "menu:plans:private", undefined, EMOJI.REFRESH)],
+    ];
+    if (referralLink) {
+      actionRows.push([btnUrl("🔗 Compartilhar Indicação", `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent("Use meu link e ganhe acesso ao bot:")}`)]);
+    }
+    actionRows.push([btn("📋 Ver Comandos", "show_commands", undefined, EMOJI.LIST)]);
+    actionRows.push([btn("🔙 Voltar", "menu:main", undefined, EMOJI.BACK)]);
+
+    await editMessage(this.token, chatId, messageId, text, keyboard(...actionRows));
   }
 
   async showPendingMenu(chatId: number, telegramUserId: number, messageId: number) {
@@ -7719,6 +7798,46 @@ class BotHandler {
 
     // Handle commands
     if (text.startsWith("/start")) {
+      // Captura código de indicação: /start ref_<telegram_id>
+      const refMatch = text.match(/^\/start\s+ref_(\d+)/i);
+      if (refMatch) {
+        const referrerId = Number(refMatch[1]);
+        if (referrerId && referrerId !== telegramUserId) {
+          try {
+            // Só grava se ainda não tem indicador
+            const { data: existing } = await this.supabase
+              .from("telegram_users")
+              .select("referred_by")
+              .eq("telegram_user_id", telegramUserId)
+              .eq("bot_id", this.bot.id)
+              .maybeSingle();
+            if (!existing?.referred_by) {
+              await this.supabase
+                .from("telegram_users")
+                .update({ referred_by: referrerId })
+                .eq("telegram_user_id", telegramUserId)
+                .eq("bot_id", this.bot.id);
+              // Atualiza contador do indicador (best-effort)
+              const { data: refUser } = await this.supabase
+                .from("telegram_users")
+                .select("referral_count")
+                .eq("telegram_user_id", referrerId)
+                .eq("bot_id", this.bot.id)
+                .maybeSingle();
+              if (refUser) {
+                await this.supabase
+                  .from("telegram_users")
+                  .update({ referral_count: (refUser.referral_count || 0) + 1 })
+                  .eq("telegram_user_id", referrerId)
+                  .eq("bot_id", this.bot.id);
+              }
+            }
+          } catch (e) {
+            console.error("Erro ao registrar indicação:", e);
+          }
+        }
+      }
+
       if (this.settings.terms_enabled) {
         const accepted = await this.getTermsStatus(telegramUserId);
         if (!accepted) {
@@ -8539,6 +8658,12 @@ class BotHandler {
       if (successSiblingBtns.length > 0) {
         extraButtons.push(...successSiblingBtns);
       }
+      // 📱 Botão Mini App (resultado em página web criptografada)
+      const webappUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+      if (webappUrlGrp) {
+        extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrlGrp)]);
+      }
+
 
       let resultMessageId: number | undefined;
       let photoMessageId: number | undefined;
