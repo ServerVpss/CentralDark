@@ -172,6 +172,7 @@ Deno.serve(async (req) => {
         group_chat_id,
         fake_engagement_enabled,
         fake_engagement_interval_minutes,
+        fake_engagement_max_per_day,
         fake_engagement_names,
         fake_engagement_last_sent
       `)
