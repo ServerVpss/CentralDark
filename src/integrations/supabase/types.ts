@@ -557,6 +557,42 @@ export type Database = {
           },
         ]
       }
+      menu_tips: {
+        Row: {
+          content: string
+          created_at: string
+          enabled: boolean
+          icon: string
+          id: string
+          route: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          enabled?: boolean
+          icon?: string
+          id?: string
+          route: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          enabled?: boolean
+          icon?: string
+          id?: string
+          route?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       module_health_status: {
         Row: {
           created_at: string
