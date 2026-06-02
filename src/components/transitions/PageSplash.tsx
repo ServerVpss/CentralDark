@@ -178,17 +178,9 @@ export function PageSplash() {
         <X className="h-4 w-4" />
       </button>
 
-      {/* MÃO — vídeo webm já com transparência, sem chroma key em JS */}
+      {/* MÃO — chroma key em canvas, tela cheia */}
       <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-        <video
-          src={handVideo.url}
-          autoPlay
-          muted
-          playsInline
-          loop
-          preload="auto"
-          className="splash-hand-video"
-        />
+        <ChromaHand />
       </div>
 
       {/* Dica */}
