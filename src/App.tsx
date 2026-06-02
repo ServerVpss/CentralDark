@@ -38,7 +38,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <GlobalSearch />
-            <InstallPrompt />
+            {/* <InstallPrompt /> */}
             <PageSplash />
             <Routes>
               {/* Rota pública do Mini App do Telegram (resultado) */}
