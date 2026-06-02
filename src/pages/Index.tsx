@@ -16,9 +16,9 @@ import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
 
 function getGreeting() {
   const h = new Date().getHours();
-  if (h < 12) return "Bom dia";
-  if (h < 18) return "Boa tarde";
-  return "Boa noite";
+  if (h < 12) return { text: "Bom dia", emoji: "☀️" };
+  if (h < 18) return { text: "Boa tarde", emoji: "🌅" };
+  return { text: "Boa noite", emoji: "🌙" };
 }
 
 export default function Index() {
