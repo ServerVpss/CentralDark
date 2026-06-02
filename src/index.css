@@ -247,7 +247,7 @@
   }
 
   .glass-subtle {
-    background: hsl(0 0% 6% / 0.5);
+    background: hsl(var(--card) / 0.6);
     backdrop-filter: blur(8px);
   }
 
