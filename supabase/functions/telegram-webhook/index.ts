@@ -112,6 +112,8 @@ interface BotSettings {
   maintenance_message: string;
   // Custom emoji IDs para botões
   button_emoji_ids: Record<string, string>;
+  // Menu legado (antigo) — quando true, mostra todos os módulos numa lista só
+  use_legacy_menu: boolean;
 }
 
 interface Plan {
