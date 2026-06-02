@@ -461,8 +461,10 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
 // =============== WEBAPP (Mini App) ===============
 const WEBAPP_PUBLIC_URL = Deno.env.get("WEBAPP_PUBLIC_URL") || "https://telegram-zen-panel-6518f4e2-5d802052.lovable.app";
 
-function btnWebApp(text: string, url: string, style?: string): InlineButton {
-  const b: any = { text, web_app: { url } };
+// web_app buttons só funcionam em chats privados. Em grupos cai pra url normal.
+function btnWebApp(text: string, url: string, chatId?: number, style?: string): InlineButton {
+  const isGroup = typeof chatId === "number" && chatId < 0;
+  const b: any = isGroup ? { text, url } : { text, web_app: { url } };
   if (style) b.style = style;
   return b;
 }
