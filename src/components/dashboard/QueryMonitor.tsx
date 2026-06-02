@@ -173,16 +173,17 @@ export function QueryMonitor() {
               )}
               {byUser.map((u) => (
                 <div
-                  key={u.user_id}
+                  key={u.key}
                   className="flex items-center justify-between text-xs px-2 py-1.5 rounded-md bg-muted/30"
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    {u.user_id === "anon" ? (
-                      <BotIcon className="h-3 w-3 text-muted-foreground shrink-0" />
-                    ) : (
-                      <User className="h-3 w-3 text-muted-foreground shrink-0" />
-                    )}
-                    <span className="truncate text-foreground">{u.name}</span>
+                    <User className="h-3 w-3 text-muted-foreground shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-foreground">{u.name}</div>
+                      {u.username && (
+                        <div className="truncate text-[10px] text-muted-foreground/70">@{u.username}</div>
+                      )}
+                    </div>
                   </div>
                   <span className="font-mono text-muted-foreground ml-2">{u.count}</span>
                 </div>
