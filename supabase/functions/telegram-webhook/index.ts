@@ -3756,7 +3756,22 @@ function formatTelefoneResult(
     return clean;
   };
 
-  // Extrair registros da estrutura da API: { data: { data: [...] } } ou { data: [...] }
+  // Extrair registros — a API pode devolver em vários formatos:
+  // 1) { data: [...] }
+  // 2) { data: { data: [...] } }
+  // 3) { data: { "0": {...}, "1": {...}, "modulo": "telefone" } }  (objeto com chaves numéricas)
+  // 4) { "0": {...}, "1": {...}, "modulo": "telefone" }            (raiz com chaves numéricas)
+  // 5) { dados: { telefone: [...] } }                              (legado)
+  const collectNumericRecords = (obj: Record<string, unknown>): Record<string, unknown>[] => {
+    const out: Record<string, unknown>[] = [];
+    for (const [k, v] of Object.entries(obj)) {
+      if (/^\d+$/.test(k) && v && typeof v === 'object' && !Array.isArray(v)) {
+        out.push(v as Record<string, unknown>);
+      }
+    }
+    return out;
+  };
+
   let records: Record<string, unknown>[] = [];
   const dataField = data.data;
   if (Array.isArray(dataField)) {
@@ -3765,10 +3780,18 @@ function formatTelefoneResult(
     const nested = (dataField as Record<string, unknown>).data;
     if (Array.isArray(nested)) {
       records = nested.filter(r => r && typeof r === 'object') as Record<string, unknown>[];
+    } else {
+      // Tentar extrair chaves numéricas dentro de data.data
+      records = collectNumericRecords(dataField as Record<string, unknown>);
     }
   }
 
-  // Fallback: dados.telefone[] (legado)
+  // Fallback: chaves numéricas direto na raiz do objeto
+  if (records.length === 0) {
+    records = collectNumericRecords(data);
+  }
+
+  // Fallback legado: dados.telefone[]
   if (records.length === 0) {
     const dados = data.dados as Record<string, unknown> | undefined;
     if (dados && Array.isArray(dados.telefone)) {
