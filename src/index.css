@@ -350,3 +350,8 @@
   outline: 1px solid hsl(var(--primary));
   outline-offset: 2px;
 }
+
+/* Aumento global do tamanho da fonte para melhor legibilidade */
+html {
+  font-size: 17.5px;
+}
