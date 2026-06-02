@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Loader2, AlertCircle, ExternalLink, MoreVertical, X, Copy, Check } from "lucide-react";
+import { Loader2, AlertCircle, ExternalLink, MoreVertical, X, Copy, Check, Sparkles } from "lucide-react";
+
 
 
 // Tipagem mínima do Telegram WebApp
@@ -349,6 +350,9 @@ export default function WebAppResult() {
   const [data, setData] = useState<ResultData | null>(null);
   const [themeReady, setThemeReady] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [aiFormatted, setAiFormatted] = useState<any | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+
 
 
   // Proteção anti-inspeção
@@ -456,6 +460,43 @@ export default function WebAppResult() {
     fetchResult();
   }, [themeReady, pathToken, secretToken]);
 
+  // Dispara formatação por IA depois que o resultado carrega
+  useEffect(() => {
+    if (!data || aiFormatted || aiLoading) return;
+    const errMsg = extractErrorMessage(unwrap(data.result_data));
+    if (errMsg) return; // não chama IA em erro
+    setAiLoading(true);
+    const run = async () => {
+      try {
+        const initData = window.Telegram?.WebApp?.initData || "";
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const res = await fetch(`${supabaseUrl}/functions/v1/webapp-format-ai`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${anonKey}`,
+            apikey: anonKey,
+          },
+          body: JSON.stringify({
+            path_token: pathToken,
+            secret_token: secretToken,
+            init_data: initData,
+          }),
+        });
+        const json = await res.json();
+        if (res.ok && json?.ok && json.formatted) {
+          setAiFormatted(json.formatted);
+        }
+      } catch (err) {
+        console.warn("[WebAppResult] IA falhou, usando fallback:", err);
+      } finally {
+        setAiLoading(false);
+      }
+    };
+    run();
+  }, [data, pathToken, secretToken, aiFormatted, aiLoading]);
+
   if (loading || !themeReady) {
     return (
       <div className="min-h-screen bg-black text-zinc-200 flex flex-col items-center justify-center gap-3 p-6">
@@ -464,6 +505,7 @@ export default function WebAppResult() {
       </div>
     );
   }
+
 
   if (error) {
     return (
@@ -582,15 +624,84 @@ export default function WebAppResult() {
     body = <Section title="RESULTADO" empty />;
   }
 
+  // Se a IA formatou, usa a versão dela (mais bonita)
+  if (aiFormatted && Array.isArray(aiFormatted.sections) && !errorMessage) {
+    body = (
+      <>
+        {aiFormatted.sections.map((sec: any, i: number) => {
+          const title = String(sec?.title || `SEÇÃO ${i + 1}`).toUpperCase();
+          if (sec?.kind === "empty" || (!sec?.rows?.length && !sec?.data?.length && !sec?.text)) {
+            return <Section key={i} title={title} empty />;
+          }
+          if (sec?.kind === "table" && Array.isArray(sec?.headers) && Array.isArray(sec?.data)) {
+            return (
+              <Section key={i} title={title}>
+                <div className="overflow-x-auto">
+                  <table className="w-full font-mono text-[11px]">
+                    <thead>
+                      <tr className="text-zinc-500 border-b border-zinc-800/60">
+                        <th className="text-left px-3 py-2 font-normal tracking-wider">#</th>
+                        {sec.headers.map((h: string, j: number) => (
+                          <th key={j} className="text-left px-3 py-2 font-normal tracking-wider whitespace-nowrap">
+                            {String(h).toUpperCase()}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sec.data.map((row: any[], r: number) => (
+                        <tr key={r} className="border-b border-zinc-800/40 last:border-0">
+                          <td className="px-3 py-2 text-zinc-500">{r + 1}</td>
+                          {sec.headers.map((_: any, c: number) => (
+                            <td key={c} className="px-3 py-2 text-zinc-100 whitespace-nowrap">
+                              {String(row?.[c] ?? "—")}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Section>
+            );
+          }
+          if (sec?.kind === "text" && typeof sec?.text === "string") {
+            return (
+              <Section key={i} title={title}>
+                <div className="px-3 py-2">
+                  <pre className="font-mono text-[12px] text-zinc-100 whitespace-pre-wrap break-words m-0">
+                    {sec.text}
+                  </pre>
+                </div>
+              </Section>
+            );
+          }
+          // rows (default)
+          const rows = Array.isArray(sec?.rows) ? sec.rows : [];
+          return (
+            <Section key={i} title={title}>
+              {rows.map((r: any, j: number) => (
+                <Row key={j} label={String(r?.label ?? "")} value={r?.value} />
+              ))}
+            </Section>
+          );
+        })}
+      </>
+    );
+  }
+
   // Texto plano completo pra botão "copiar tudo"
   const copyText = useMemo(() => {
     const headerLine = `CONSULTA ${data.query_type.toUpperCase()} — ${brandUpper}\n${data.query_type.toUpperCase()}: ${data.query_input}\nData: ${dtStr}`;
     const corpo = errorMessage
       ? `Sem resultado: ${errorMessage}`
-      : buildPlainText(payload, "");
+      : (aiFormatted?.plain_text && typeof aiFormatted.plain_text === "string"
+          ? aiFormatted.plain_text
+          : buildPlainText(payload, ""));
     const rodape = `\n\nConsulta solicitada por: ${userLabel}\nBot: ${username || brand}`;
     return `${headerLine}\n${corpo}${rodape}`;
-  }, [payload, errorMessage, brand, brandUpper, username, userLabel, dtStr, data]);
+  }, [payload, errorMessage, brand, brandUpper, username, userLabel, dtStr, data, aiFormatted]);
+
 
   const handleCopy = async () => {
     try {
@@ -658,7 +769,25 @@ export default function WebAppResult() {
           )}
         </button>
 
+        {aiLoading && !aiFormatted && !errorMessage && (
+          <div className="mb-3 flex items-center gap-2 border border-violet-500/30 bg-violet-500/5 rounded-sm px-3 py-2">
+            <Sparkles className="h-3.5 w-3.5 text-violet-300 animate-pulse" />
+            <span className="font-mono text-[11px] text-violet-200">
+              IA organizando os dados…
+            </span>
+          </div>
+        )}
+        {aiFormatted && !errorMessage && (
+          <div className="mb-3 flex items-center gap-2 border border-violet-500/30 bg-violet-500/5 rounded-sm px-3 py-2">
+            <Sparkles className="h-3.5 w-3.5 text-violet-300" />
+            <span className="font-mono text-[11px] text-violet-200">
+              Formatado com IA
+            </span>
+          </div>
+        )}
+
         {body}
+
 
 
 
