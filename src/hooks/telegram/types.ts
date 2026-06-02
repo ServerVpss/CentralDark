@@ -14,6 +14,7 @@ export interface TelegramBot {
   created_at: string;
   updated_at: string;
   user_id: string | null;
+  bot_photo_url?: string | null;
 }
 
 export interface BotSecuritySettings {

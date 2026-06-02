@@ -405,8 +405,17 @@ export default function Bots() {
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                           <div className="relative">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                              <Bot className="h-6 w-6 text-primary" />
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 overflow-hidden">
+                              {bot.bot_photo_url ? (
+                                <img
+                                  src={bot.bot_photo_url}
+                                  alt={bot.name}
+                                  className="h-full w-full object-cover"
+                                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                                />
+                              ) : (
+                                <Bot className="h-6 w-6 text-primary" />
+                              )}
                             </div>
                             {bot.is_active && bot.health_status === "online" && (
                               <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-success animate-pulse-glow" />
