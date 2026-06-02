@@ -479,10 +479,16 @@ function resolveWebappBaseUrl(settings: { webapp_url?: string | null } | null | 
   return WEBAPP_PUBLIC_URL_FALLBACK.replace(/\/+$/, "");
 }
 
-// web_app buttons só funcionam em chats privados. Em grupos cai pra url normal.
+// web_app buttons só funcionam em chats privados. Em grupos usamos callback
+// para mandar o botão real do Mini App no privado, evitando abrir URL crua.
 function btnWebApp(text: string, url: string, chatId?: number, style?: string): InlineButton {
   const isGroup = typeof chatId === "number" && chatId < 0;
-  const b: any = isGroup ? { text, url } : { text, web_app: { url } };
+  const pathToken = url.match(/\/result\/([^/]+)/)?.[1];
+  const b: any = isGroup && pathToken
+    ? { text, callback_data: `open_app:${pathToken}` }
+    : isGroup
+      ? { text, url }
+      : { text, web_app: { url } };
   if (style) b.style = style;
   return b;
 }
