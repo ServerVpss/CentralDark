@@ -289,6 +289,8 @@ export default function WebAppResult() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ResultData | null>(null);
   const [themeReady, setThemeReady] = useState(false);
+  const [copied, setCopied] = useState(false);
+
 
   // Proteção anti-inspeção
   useEffect(() => {
