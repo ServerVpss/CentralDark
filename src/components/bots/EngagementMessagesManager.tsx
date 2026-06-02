@@ -607,6 +607,26 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                     <span>2 horas</span>
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Hash className="h-4 w-4 text-muted-foreground" />
+                    <Label className="text-sm">Máximo por dia: {newMaxPerDay} envios</Label>
+                  </div>
+                  <Slider
+                    value={[newMaxPerDay]}
+                    onValueChange={(v) => setNewMaxPerDay(v[0])}
+                    min={1}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>1</span>
+                    <span>25</span>
+                    <span>50</span>
+                    <span>100</span>
+                  </div>
+                </div>
                 <Button onClick={handleAdd} className="w-full bg-gradient-to-r from-emerald-500 to-teal-600">
                   Adicionar Mensagem
                 </Button>
