@@ -217,19 +217,14 @@ export function PageSplash() {
         .splash-root { animation: splashFadeIn 220ms ease-out; }
         @keyframes splashFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .splash-hand-video {
-          width: 100vw;
-          max-width: 100vw;
-          height: auto;
-          object-fit: contain;
+        .splash-hand-canvas {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
           filter: drop-shadow(0 10px 40px hsl(var(--primary) / 0.45));
           animation: handEntrance 600ms cubic-bezier(.2,.9,.25,1.1) both;
-        }
-        @media (min-width: 768px) {
-          .splash-hand-video {
-            width: min(70vw, 600px);
-            max-width: 600px;
-          }
         }
         @keyframes handEntrance {
           from { transform: scale(.85); opacity: 0; }
