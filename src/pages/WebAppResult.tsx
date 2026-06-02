@@ -690,17 +690,15 @@ export default function WebAppResult() {
     );
   }
 
-  // Texto plano completo pra botão "copiar tudo"
-  const copyText = useMemo(() => {
-    const headerLine = `CONSULTA ${data.query_type.toUpperCase()} — ${brandUpper}\n${data.query_type.toUpperCase()}: ${data.query_input}\nData: ${dtStr}`;
-    const corpo = errorMessage
-      ? `Sem resultado: ${errorMessage}`
-      : (aiFormatted?.plain_text && typeof aiFormatted.plain_text === "string"
-          ? aiFormatted.plain_text
-          : buildPlainText(payload, ""));
-    const rodape = `\n\nConsulta solicitada por: ${userLabel}\nBot: ${username || brand}`;
-    return `${headerLine}\n${corpo}${rodape}`;
-  }, [payload, errorMessage, brand, brandUpper, username, userLabel, dtStr, data, aiFormatted]);
+  // Texto plano completo pra botão "copiar tudo" (sem useMemo — está após early returns)
+  const headerLine = `CONSULTA ${data.query_type.toUpperCase()} — ${brandUpper}\n${data.query_type.toUpperCase()}: ${data.query_input}\nData: ${dtStr}`;
+  const corpoTxt = errorMessage
+    ? `Sem resultado: ${errorMessage}`
+    : (aiFormatted?.plain_text && typeof aiFormatted.plain_text === "string"
+        ? aiFormatted.plain_text
+        : buildPlainText(payload, ""));
+  const rodapeTxt = `\n\nConsulta solicitada por: ${userLabel}\nBot: ${username || brand}`;
+  const copyText = `${headerLine}\n${corpoTxt}${rodapeTxt}`;
 
 
   const handleCopy = async () => {
