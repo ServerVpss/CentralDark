@@ -8776,6 +8776,23 @@ class BotHandler {
       // Format and send result - usar nome do perfil do Telegram do usuário
       const formattedResult = formatQueryResult(queryType, result, this.bot.bot_username, userName);
 
+      // ============ MODO MINI APP (Novo) — envia só o botão no grupo ============
+      if ((this.settings as any)?.use_legacy_menu === true) {
+        const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+        if (webappOnlyUrlGrp) {
+          await sendMessage(
+            this.token, chatId,
+            `✅ <b>Consulta concluída!</b>\n\n📱 Toque no botão abaixo para abrir o resultado no Mini App.`,
+            { inline_keyboard: [
+              [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrlGrp, chatId, "primary")],
+            ]},
+            replyToId ? { reply_to_message_id: replyToId } : undefined
+          );
+          return;
+        }
+      }
+
+
       // Check for photo - deep extraction from nested API response
       const fotoUrl = deepExtractPhoto(result);
       
