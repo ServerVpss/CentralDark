@@ -336,6 +336,7 @@ export type Database = {
           fake_engagement_enabled: boolean | null
           fake_engagement_interval_minutes: number | null
           fake_engagement_last_sent: string | null
+          fake_engagement_max_per_day: number
           fake_engagement_names: string[] | null
           fixed_emoji: string | null
           group_chat_id: number | null
@@ -367,6 +368,7 @@ export type Database = {
           fake_engagement_enabled?: boolean | null
           fake_engagement_interval_minutes?: number | null
           fake_engagement_last_sent?: string | null
+          fake_engagement_max_per_day?: number
           fake_engagement_names?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
@@ -398,6 +400,7 @@ export type Database = {
           fake_engagement_enabled?: boolean | null
           fake_engagement_interval_minutes?: number | null
           fake_engagement_last_sent?: string | null
+          fake_engagement_max_per_day?: number
           fake_engagement_names?: string[] | null
           fixed_emoji?: string | null
           group_chat_id?: number | null
