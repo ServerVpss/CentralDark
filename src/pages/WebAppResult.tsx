@@ -582,6 +582,34 @@ export default function WebAppResult() {
     body = <Section title="RESULTADO" empty />;
   }
 
+  // Texto plano completo pra botão "copiar tudo"
+  const copyText = useMemo(() => {
+    const headerLine = `CONSULTA ${data.query_type.toUpperCase()} — ${brandUpper}\n${data.query_type.toUpperCase()}: ${data.query_input}\nData: ${dtStr}`;
+    const corpo = errorMessage
+      ? `Sem resultado: ${errorMessage}`
+      : buildPlainText(payload, "");
+    const rodape = `\n\nConsulta solicitada por: ${userLabel}\nBot: ${username || brand}`;
+    return `${headerLine}\n${corpo}${rodape}`;
+  }, [payload, errorMessage, brand, brandUpper, username, userLabel, dtStr, data]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(copyText);
+      setCopied(true);
+      try { window.Telegram?.WebApp && (window.Telegram.WebApp as any).HapticFeedback?.notificationOccurred?.("success"); } catch {}
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback antigo
+      const ta = document.createElement("textarea");
+      ta.value = copyText;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {}
+      ta.remove();
+    }
+  };
+
+
   return (
     <div className="min-h-screen bg-black text-zinc-100">
       {/* Barra de título estilo Mini App */}
