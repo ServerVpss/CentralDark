@@ -201,7 +201,7 @@ function Section({
   return (
     <div className="mb-2">
       <div className="flex items-stretch rounded-t-sm overflow-hidden border border-zinc-800/80 border-b-0">
-        <div className="w-1 bg-amber-500/80" />
+        <div className="w-2 bg-amber-500/80" />
         <div className="flex-1 bg-zinc-900/60 px-3 py-2">
           <span className="font-mono text-[12px] tracking-wider text-zinc-300 font-semibold">
             {title}
