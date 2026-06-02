@@ -298,20 +298,27 @@ export function PageSplash() {
           to { opacity: 1; }
         }
 
-        /* Mão (canvas) em primeiro plano com entrada dramática */
+        /* Mão (canvas) em primeiro plano — ocupa 100% da largura no mobile */
         .splash-hand-wrap {
           position: relative;
-          width: min(78vw, 520px);
+          width: 100vw;
+          max-width: 100vw;
           aspect-ratio: 1 / 1;
           display: flex;
           align-items: center;
           justify-content: center;
           animation: handEntrance 700ms cubic-bezier(.2,.9,.25,1.2) both;
         }
+        @media (min-width: 768px) {
+          .splash-hand-wrap {
+            width: min(72vw, 620px);
+            max-width: 620px;
+          }
+        }
         .splash-hand-canvas {
           width: 100%;
           height: 100%;
-          object-fit: contain;
+          object-fit: cover;
           animation: handFloat 3s ease-in-out infinite;
         }
         @keyframes handEntrance {
