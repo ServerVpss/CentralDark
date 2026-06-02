@@ -11,6 +11,7 @@ interface BotData {
   bot_username: string | null;
   health_status: string | null;
   is_active: boolean | null;
+  bot_photo_url?: string | null;
 }
 
 interface BotsSectionProps {
@@ -104,6 +105,7 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
               messages={messageCounts[bot.id] || 0}
               users={userCounts[bot.id] || 0}
               isActive={bot.is_active ?? false}
+              photoUrl={bot.bot_photo_url}
               onToggleActive={onToggleActive}
             />
           ))}
