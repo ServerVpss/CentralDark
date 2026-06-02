@@ -6610,7 +6610,7 @@ class BotHandler {
               [btnWebApp("📱 Abrir Resultado no Mini App", webappOnlyUrl, chatId, "primary")],
               [btn("🔍 Nova Consulta", "menu:query", "success", EMOJI.SEARCH), btn("🏠 Menu", "menu:main", undefined, EMOJI.HOME)],
             ]},
-            effectIdNovo
+            effectIdNovo ? { message_effect_id: effectIdNovo } : undefined
           );
           return;
         }
