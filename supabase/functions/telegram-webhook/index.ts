@@ -479,10 +479,16 @@ function resolveWebappBaseUrl(settings: { webapp_url?: string | null } | null | 
   return WEBAPP_PUBLIC_URL_FALLBACK.replace(/\/+$/, "");
 }
 
-// web_app buttons só funcionam em chats privados. Em grupos cai pra url normal.
+// web_app buttons só funcionam em chats privados. Em grupos usamos callback
+// para mandar o botão real do Mini App no privado, evitando abrir URL crua.
 function btnWebApp(text: string, url: string, chatId?: number, style?: string): InlineButton {
   const isGroup = typeof chatId === "number" && chatId < 0;
-  const b: any = isGroup ? { text, url } : { text, web_app: { url } };
+  const pathToken = url.match(/\/result\/([^/]+)/)?.[1];
+  const b: any = isGroup && pathToken
+    ? { text, callback_data: `open_app:${pathToken}` }
+    : isGroup
+      ? { text, url }
+      : { text, web_app: { url } };
   if (style) b.style = style;
   return b;
 }
@@ -9067,6 +9073,48 @@ class BotHandler {
         });
         return;
       }
+    }
+
+    if (data.startsWith("open_app:")) {
+      const pathToken = data.replace("open_app:", "");
+      const { data: record } = await this.supabase
+        .from("webapp_results")
+        .select("secret_token, telegram_user_id, query_type, query_input")
+        .eq("path_token", pathToken)
+        .maybeSingle();
+
+      const isOwner = this.settings.owner_ids?.includes(telegramUserId);
+      if (!record || (Number(record.telegram_user_id) !== telegramUserId && !isOwner)) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "⚠️ Apenas quem fez a consulta pode abrir este resultado.",
+          show_alert: true,
+        });
+        return;
+      }
+
+      const webappUrl = `${resolveWebappBaseUrl(this.settings)}/result/${pathToken}/${record.secret_token}/`;
+      try {
+        await sendMessage(
+          this.token,
+          telegramUserId,
+          `📱 <b>Resultado pronto</b>\n\nToque no botão abaixo para abrir no Mini App.`,
+          { inline_keyboard: [[btnWebApp("📱 Abrir Mini App", webappUrl, telegramUserId, "primary")]] },
+        );
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "📩 Enviei o Mini App no seu privado.",
+          show_alert: false,
+        });
+      } catch (_e) {
+        const botUser = this.bot.bot_username ? `@${this.bot.bot_username}` : "o bot";
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: `⚠️ Inicie uma conversa privada com ${botUser} e toque novamente.`,
+          show_alert: true,
+        });
+      }
+      return;
     }
 
     await answerCallback(this.token, callback.id);
