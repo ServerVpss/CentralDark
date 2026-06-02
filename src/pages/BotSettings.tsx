@@ -137,6 +137,26 @@ export default function BotSettings() {
     }
   }, [settings, defaultTerms]);
 
+  // Busca automaticamente a foto do grupo quando o chat está configurado mas a foto ainda não foi carregada
+  const autoFetchedRef = useRef<string | null>(null);
+  useEffect(() => {
+    const chatId = settings?.group_chat_id?.toString();
+    if (!botId || !chatId) return;
+    if (settings?.group_photo_url) return;
+    if (autoFetchedRef.current === chatId) return;
+    autoFetchedRef.current = chatId;
+    (async () => {
+      try {
+        await supabase.functions.invoke("telegram-update-group-photo", {
+          body: { bot_id: botId },
+        });
+        await refetch?.();
+      } catch (e) {
+        console.error("Auto-fetch da foto do grupo falhou:", e);
+      }
+    })();
+  }, [botId, settings?.group_chat_id, settings?.group_photo_url]);
+
   // Auto-save function for toggles
   const autoSaveToggle = async (key: string, value: boolean) => {
     await updateSettings({ [key]: value });
