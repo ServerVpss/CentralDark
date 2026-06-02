@@ -6452,7 +6452,7 @@ class BotHandler {
     }
 
     // Anti-rajada: cooldown + limite por minuto + mute automático
-    const rateBlock = await this.checkQueryRateLimit(telegramUserId);
+    const rateBlock = await this.checkQueryRateLimit(telegramUserId, telegramUserName, telegramUsername);
     if (rateBlock) {
       logCmd('INFO', 'CMD_BLOCKED', { reason: 'rate_limit', queryType, chatId, userId: telegramUserId });
       await sendMessage(this.token, chatId, rateBlock);
