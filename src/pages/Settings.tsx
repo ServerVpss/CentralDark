@@ -29,6 +29,8 @@ import {
 import { toast } from "sonner";
 import { useAuthContext } from "@/components/auth/AuthProvider";
 import { BackupManager } from "@/components/backup/BackupManager";
+import { CleanupSettings } from "@/components/settings/CleanupSettings";
+import { Trash2 } from "lucide-react";
 
 export default function Settings() {
   const { user, profile, updateProfile } = useAuthContext();
