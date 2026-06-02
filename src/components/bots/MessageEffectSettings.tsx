@@ -59,8 +59,7 @@ export function MessageEffectSettings({
         
         <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 mt-4">
           <p className="text-xs text-muted-foreground">
-            💡 <b>Dica:</b> O efeito visual aparece quando o resultado de uma consulta ou confirmação de pagamento é enviado no chat privado do bot.
-            Em grupos, efeitos não são suportados pelo Telegram.
+            💡 <b>Dica:</b> Clique em um efeito para salvar automaticamente. Ele aparece na mensagem de confirmação da consulta (✅ Consulta concluída) e em confirmações de pagamento.
           </p>
         </div>
       </CardContent>
