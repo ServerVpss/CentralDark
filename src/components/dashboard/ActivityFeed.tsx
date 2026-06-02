@@ -41,7 +41,7 @@ const ActivityItem = memo(({ activity }: ActivityItemProps) => {
   const color = colorMap[activity.type] || "text-primary bg-primary/10";
 
   return (
-    <div className="flex items-start gap-3 rounded-lg p-2.5 hover:bg-muted/30 transition-colors">
+    <div className="flex items-start gap-3 rounded-lg p-2.5 hover:bg-muted/50 transition-colors">
       <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", color)}>
         <Icon className="h-3.5 w-3.5" />
       </div>

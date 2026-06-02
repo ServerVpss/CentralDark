@@ -22,7 +22,7 @@ const iconStyles = {
 const changeColors = {
   positive: "text-primary bg-primary/10 border-primary/20",
   negative: "text-destructive bg-destructive/10 border-destructive/20",
-  neutral: "text-muted-foreground bg-muted/30 border-border/50",
+  neutral: "text-muted-foreground bg-muted/45 border-border/60",
 };
 
 export function StatsCard({ title, value, change, changeType = "neutral", icon: Icon, gradient = "green" }: StatsCardProps) {
