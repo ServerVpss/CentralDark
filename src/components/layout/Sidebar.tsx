@@ -10,6 +10,7 @@ import {
   Shield,
   ShieldAlert,
   Settings,
+  Lightbulb,
   ChevronLeft,
   ChevronRight,
   X,
