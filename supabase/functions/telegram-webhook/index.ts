@@ -8485,6 +8485,15 @@ class BotHandler {
         console.log(`Group multi-query: all ${multipleCommands.length} modules disabled. Ignoring silently.`);
         return;
       }
+      // Anti-rajada também em grupo (multi-comando)
+      const groupFirstName = message.from?.first_name;
+      const groupUsername = message.from?.username;
+      const groupRateBlock = await this.checkQueryRateLimit(telegramUserId, groupFirstName, groupUsername);
+      if (groupRateBlock) {
+        logCmd('INFO', 'CMD_BLOCKED', { reason: 'rate_limit', chatId, userId: telegramUserId, source: 'group_multi' });
+        await sendMessage(this.token, chatId, groupRateBlock);
+        return;
+      }
       await this.handleMultipleQueries(message, enabledCommands.slice(0, this.MAX_CONCURRENT_QUERIES));
       return;
     }
