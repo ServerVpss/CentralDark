@@ -178,10 +178,10 @@
     @apply border-border;
   }
 
-  /* Gradient text — emerald assinatura */
+  /* Gradient text — escala com o tema (escuro→claro no dark, escuro denso no light) */
   .text-gradient-gold,
   .text-gradient-money {
-    background: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 60%));
+    background: linear-gradient(180deg, hsl(var(--foreground)), hsl(var(--foreground) / 0.55));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
