@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 
 const navigationItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/", keywords: ["home", "início", "painel"] },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard", keywords: ["home", "início", "painel"] },
   { icon: Bot, label: "Meu Bot", path: "/bots", keywords: ["telegram", "configurar", "webhook"] },
   { icon: Users, label: "Usuários", path: "/telegram-users", keywords: ["assinantes", "clientes", "membros"] },
   { icon: CreditCard, label: "Planos", path: "/plans", keywords: ["preços", "assinatura", "valores"] },
