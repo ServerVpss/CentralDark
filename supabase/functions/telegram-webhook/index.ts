@@ -463,7 +463,19 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
 }
 
 // =============== WEBAPP (Mini App) ===============
-const WEBAPP_PUBLIC_URL = Deno.env.get("WEBAPP_PUBLIC_URL") || "https://telegram-zen-panel-6518f4e2-5d802052.lovable.app";
+// Domínio padrão usado quando o painel ainda não salvou nenhum. O painel salva
+// automaticamente o window.location.origin atual, então isso é só fallback.
+const WEBAPP_PUBLIC_URL_FALLBACK = Deno.env.get("WEBAPP_PUBLIC_URL") || "https://telegram-zen-panel-6518f4e2-5d802052.lovable.app";
+
+// Retorna a URL base do Mini App. Prioriza o que está salvo em bot_settings.webapp_url
+// (preenchido automaticamente pelo painel). Se não houver, usa o fallback.
+function resolveWebappBaseUrl(settings: { webapp_url?: string | null } | null | undefined): string {
+  const fromSettings = settings?.webapp_url?.trim();
+  if (fromSettings && /^https?:\/\//i.test(fromSettings)) {
+    return fromSettings.replace(/\/+$/, "");
+  }
+  return WEBAPP_PUBLIC_URL_FALLBACK.replace(/\/+$/, "");
+}
 
 // web_app buttons só funcionam em chats privados. Em grupos cai pra url normal.
 function btnWebApp(text: string, url: string, chatId?: number, style?: string): InlineButton {
@@ -488,6 +500,7 @@ async function createWebappResultLink(
   queryType: string,
   queryInput: string,
   resultData: unknown,
+  baseUrl: string,
 ): Promise<string | null> {
   try {
     const pathToken = randomHex(16);   // 32 chars
@@ -505,12 +518,13 @@ async function createWebappResultLink(
       console.error("createWebappResultLink insert error:", error);
       return null;
     }
-    return `${WEBAPP_PUBLIC_URL}/result/${pathToken}/${secretToken}/`;
+    return `${baseUrl}/result/${pathToken}/${secretToken}/`;
   } catch (e) {
     console.error("createWebappResultLink exception:", e);
     return null;
   }
 }
+
 
 // =============== UNICODE BOLD SANS (𝗘𝗫𝗘𝗠𝗣𝗟𝗢) ===============
 // Converte texto ASCII para a variante sans-serif bold matemática do Unicode,
