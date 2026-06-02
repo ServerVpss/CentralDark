@@ -306,6 +306,7 @@ export type Database = {
           terms_enabled: boolean | null
           terms_text: string | null
           updated_at: string
+          use_legacy_menu: boolean | null
         }
         Insert: {
           announce_payments?: boolean | null
@@ -335,6 +336,7 @@ export type Database = {
           terms_enabled?: boolean | null
           terms_text?: string | null
           updated_at?: string
+          use_legacy_menu?: boolean | null
         }
         Update: {
           announce_payments?: boolean | null
@@ -364,6 +366,7 @@ export type Database = {
           terms_enabled?: boolean | null
           terms_text?: string | null
           updated_at?: string
+          use_legacy_menu?: boolean | null
         }
         Relationships: [
           {
