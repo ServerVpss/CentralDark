@@ -41,6 +41,7 @@ export default function Index() {
     );
   }
 
+  const greeting = getGreeting();
   const today = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
     day: "2-digit",
@@ -56,12 +57,15 @@ export default function Index() {
             <p className="text-xs font-bold uppercase tracking-[0.15em] text-primary mb-1">
               {today}
             </p>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-              {getGreeting()}
-              {firstName && (
-                <span className="text-gradient-money">, {firstName}</span>
-              )}
-              <span className="ml-2">👋</span>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight flex items-center flex-wrap gap-x-2">
+              <span className="inline-block animate-greet-bounce">{greeting.emoji}</span>
+              <span>
+                {greeting.text}
+                {firstName && (
+                  <span className="text-gradient-money">, {firstName}</span>
+                )}
+              </span>
+              <span className="inline-block origin-[70%_70%] animate-wave">👋</span>
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               Aqui está o resumo do seu negócio
