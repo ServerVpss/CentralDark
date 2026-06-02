@@ -137,7 +137,8 @@ export function QueryMonitor() {
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
               Por módulo
             </p>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 max-h-[360px] overflow-y-auto pr-1">
+
               {byType.length === 0 && (
                 <p className="text-xs text-muted-foreground">Sem dados</p>
               )}
