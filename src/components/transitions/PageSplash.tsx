@@ -5,6 +5,68 @@ import { supabase } from "@/integrations/supabase/client";
 import handVideo from "@/assets/maozinha-clean.webm.asset.json";
 import { Loader2, X } from "lucide-react";
 
+// Chroma key (remoção de fundo verde) feito em canvas em tempo real
+function ChromaHand() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return;
+
+    const render = () => {
+      if (video.readyState >= 2 && video.videoWidth > 0) {
+        if (canvas.width !== video.videoWidth) canvas.width = video.videoWidth;
+        if (canvas.height !== video.videoHeight) canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const d = frame.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const r = d[i], g = d[i + 1], b = d[i + 2];
+          // remove verde dominante
+          if (g > 90 && g > r * 1.15 && g > b * 1.15) {
+            d[i + 3] = 0;
+          } else if (g > r && g > b) {
+            // suaviza borda esverdeada
+            const excess = g - Math.max(r, b);
+            if (excess > 20) {
+              d[i + 1] = Math.max(r, b);
+              d[i + 3] = Math.max(0, 255 - excess * 4);
+            }
+          }
+        }
+        ctx.putImageData(frame, 0, 0);
+      }
+      rafRef.current = requestAnimationFrame(render);
+    };
+    rafRef.current = requestAnimationFrame(render);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  return (
+    <>
+      <video
+        ref={videoRef}
+        src={handVideo.url}
+        autoPlay
+        muted
+        playsInline
+        loop
+        preload="auto"
+        crossOrigin="anonymous"
+        style={{ display: "none" }}
+      />
+      <canvas ref={canvasRef} className="splash-hand-canvas" />
+    </>
+  );
+}
+
 interface MenuTip {
   id: string;
   route: string;
@@ -116,17 +178,9 @@ export function PageSplash() {
         <X className="h-4 w-4" />
       </button>
 
-      {/* MÃO — vídeo webm já com transparência, sem chroma key em JS */}
+      {/* MÃO — chroma key em canvas, tela cheia */}
       <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-        <video
-          src={handVideo.url}
-          autoPlay
-          muted
-          playsInline
-          loop
-          preload="auto"
-          className="splash-hand-video"
-        />
+        <ChromaHand />
       </div>
 
       {/* Dica */}
@@ -163,19 +217,14 @@ export function PageSplash() {
         .splash-root { animation: splashFadeIn 220ms ease-out; }
         @keyframes splashFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .splash-hand-video {
-          width: 100vw;
-          max-width: 100vw;
-          height: auto;
-          object-fit: contain;
+        .splash-hand-canvas {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
           filter: drop-shadow(0 10px 40px hsl(var(--primary) / 0.45));
           animation: handEntrance 600ms cubic-bezier(.2,.9,.25,1.1) both;
-        }
-        @media (min-width: 768px) {
-          .splash-hand-video {
-            width: min(70vw, 600px);
-            max-width: 600px;
-          }
         }
         @keyframes handEntrance {
           from { transform: scale(.85); opacity: 0; }
