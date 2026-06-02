@@ -400,6 +400,20 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                         className="w-full"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Hash className="h-4 w-4 text-muted-foreground" />
+                        <Label className="text-sm">Máximo por dia: {editingMaxPerDay} envios</Label>
+                      </div>
+                      <Slider
+                        value={[editingMaxPerDay]}
+                        onValueChange={(v) => setEditingMaxPerDay(v[0])}
+                        min={1}
+                        max={100}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
                     <div className="flex gap-2 justify-end">
                       <Button
                         onClick={handleCancelEdit}
@@ -444,6 +458,35 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                         <span>30 min</span>
                         <span>1h</span>
                         <span>2h</span>
+                      </div>
+                    </div>
+
+                    {/* Máximo por dia individual */}
+                    <div className="p-3 rounded-lg bg-muted/20 border border-border/30 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Hash className="h-4 w-4 text-emerald-400" />
+                        <Label className="text-xs">
+                          Máximo por dia: {msg.max_per_day ?? 12} envios
+                          {typeof msg.sent_today === 'number' && (
+                            <span className="ml-2 text-muted-foreground">
+                              (hoje: {msg.count_date === new Date().toISOString().slice(0,10) ? msg.sent_today : 0}/{msg.max_per_day ?? 12})
+                            </span>
+                          )}
+                        </Label>
+                      </div>
+                      <Slider
+                        value={[msg.max_per_day ?? 12]}
+                        onValueChange={(v) => handleUpdateMaxPerDay(msg.id, v[0])}
+                        min={1}
+                        max={100}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>1</span>
+                        <span>25</span>
+                        <span>50</span>
+                        <span>100</span>
                       </div>
                     </div>
 
