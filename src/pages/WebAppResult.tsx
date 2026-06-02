@@ -41,8 +41,25 @@ const HIDDEN_KEYS = new Set([
   "base64", "conta", "saldo", "tempo_segundos", "temposegundos", "cache",
   "cached_at", "expiracao", "limites", "plano", "requests_used",
   "requests_remaining", "daily_limit", "fallback_provider", "apikey",
-  "prioridade", "raw", "meta", "request_id",
+  "prioridade", "raw", "meta", "request_id", "erro", "err", "status",
+  "status_code", "statuscode", "code",
 ]);
+
+// Chaves que indicam mensagem de erro vinda da API
+const ERROR_KEYS = ["erro", "err", "error", "mensagem", "message", "msg", "detail", "detalhe"];
+
+function extractErrorMessage(payload: any): string | null {
+  if (!payload || typeof payload !== "object") return null;
+  // sucesso/success === false sinaliza erro
+  const sucesso = payload.sucesso ?? payload.success;
+  const hasErrorFlag = sucesso === false || payload.error === true || payload.notFound === true || payload.notfound === true;
+  for (const k of ERROR_KEYS) {
+    const v = payload[k];
+    if (typeof v === "string" && v.trim().length > 0) return v.trim();
+  }
+  if (hasErrorFlag) return "Consulta sem resultados.";
+  return null;
+}
 
 const HIDDEN_SUFFIXES = ["_consultada", "_consultado"];
 
