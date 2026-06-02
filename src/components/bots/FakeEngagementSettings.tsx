@@ -234,6 +234,31 @@ export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }
           </div>
         </div>
 
+        {/* Máximo por dia (anti-spam) */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-muted-foreground" />
+            <Label>Máximo de mensagens por dia: {maxPerDay}</Label>
+          </div>
+          <Slider
+            value={[maxPerDay]}
+            onValueChange={(v) => setMaxPerDay(v[0])}
+            min={1}
+            max={100}
+            step={1}
+            className="w-full"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>1/dia</span>
+            <span>20/dia</span>
+            <span>50/dia</span>
+            <span>100/dia</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Quando atingir esse limite no dia, o sistema para de enviar até o próximo dia. Evita parecer spam.
+          </p>
+        </div>
+
         {/* Lista de Nomes */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
