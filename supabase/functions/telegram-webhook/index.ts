@@ -7767,6 +7767,46 @@ class BotHandler {
 
     // Handle commands
     if (text.startsWith("/start")) {
+      // Captura código de indicação: /start ref_<telegram_id>
+      const refMatch = text.match(/^\/start\s+ref_(\d+)/i);
+      if (refMatch) {
+        const referrerId = Number(refMatch[1]);
+        if (referrerId && referrerId !== telegramUserId) {
+          try {
+            // Só grava se ainda não tem indicador
+            const { data: existing } = await this.supabase
+              .from("telegram_users")
+              .select("referred_by")
+              .eq("telegram_user_id", telegramUserId)
+              .eq("bot_id", this.bot.id)
+              .maybeSingle();
+            if (!existing?.referred_by) {
+              await this.supabase
+                .from("telegram_users")
+                .update({ referred_by: referrerId })
+                .eq("telegram_user_id", telegramUserId)
+                .eq("bot_id", this.bot.id);
+              // Atualiza contador do indicador (best-effort)
+              const { data: refUser } = await this.supabase
+                .from("telegram_users")
+                .select("referral_count")
+                .eq("telegram_user_id", referrerId)
+                .eq("bot_id", this.bot.id)
+                .maybeSingle();
+              if (refUser) {
+                await this.supabase
+                  .from("telegram_users")
+                  .update({ referral_count: (refUser.referral_count || 0) + 1 })
+                  .eq("telegram_user_id", referrerId)
+                  .eq("bot_id", this.bot.id);
+              }
+            }
+          } catch (e) {
+            console.error("Erro ao registrar indicação:", e);
+          }
+        }
+      }
+
       if (this.settings.terms_enabled) {
         const accepted = await this.getTermsStatus(telegramUserId);
         if (!accepted) {
