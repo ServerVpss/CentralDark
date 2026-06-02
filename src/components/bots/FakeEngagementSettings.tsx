@@ -89,6 +89,7 @@ const DEFAULT_NAMES = [
 export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }: FakeEngagementSettingsProps) {
   const [enabled, setEnabled] = useState(settings?.fake_engagement_enabled ?? false);
   const [interval, setInterval] = useState(settings?.fake_engagement_interval_minutes ?? 30);
+  const [maxPerDay, setMaxPerDay] = useState(settings?.fake_engagement_max_per_day ?? 12);
   const [names, setNames] = useState(
     (settings?.fake_engagement_names ?? DEFAULT_NAMES).join('\n')
   );
@@ -98,6 +99,7 @@ export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }
   useEffect(() => {
     setEnabled(settings?.fake_engagement_enabled ?? false);
     setInterval(settings?.fake_engagement_interval_minutes ?? 30);
+    setMaxPerDay(settings?.fake_engagement_max_per_day ?? 12);
     setNames((settings?.fake_engagement_names ?? DEFAULT_NAMES).join('\n'));
   }, [settings]);
 
@@ -114,6 +116,7 @@ export function FakeEngagementSettings({ botId, settings, onUpdate, onAutoSave }
         .update({
           fake_engagement_enabled: enabled,
           fake_engagement_interval_minutes: interval,
+          fake_engagement_max_per_day: maxPerDay,
           fake_engagement_names: namesArray
         })
         .eq('bot_id', botId);
