@@ -9075,6 +9075,48 @@ class BotHandler {
       }
     }
 
+    if (data.startsWith("open_app:")) {
+      const pathToken = data.replace("open_app:", "");
+      const { data: record } = await this.supabase
+        .from("webapp_results")
+        .select("secret_token, telegram_user_id, query_type, query_input")
+        .eq("path_token", pathToken)
+        .maybeSingle();
+
+      const isOwner = this.settings.owner_ids?.includes(telegramUserId);
+      if (!record || (Number(record.telegram_user_id) !== telegramUserId && !isOwner)) {
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "⚠️ Apenas quem fez a consulta pode abrir este resultado.",
+          show_alert: true,
+        });
+        return;
+      }
+
+      const webappUrl = `${resolveWebappBaseUrl(this.settings)}/result/${pathToken}/${record.secret_token}/`;
+      try {
+        await sendMessage(
+          this.token,
+          telegramUserId,
+          `📱 <b>Resultado pronto</b>\n\nToque no botão abaixo para abrir no Mini App.`,
+          { inline_keyboard: [[btnWebApp("📱 Abrir Mini App", webappUrl, telegramUserId, "primary")]] },
+        );
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: "📩 Enviei o Mini App no seu privado.",
+          show_alert: false,
+        });
+      } catch (_e) {
+        const botUser = this.bot.bot_username ? `@${this.bot.bot_username}` : "o bot";
+        await telegramRequest(this.token, "answerCallbackQuery", {
+          callback_query_id: callback.id,
+          text: `⚠️ Inicie uma conversa privada com ${botUser} e toque novamente.`,
+          show_alert: true,
+        });
+      }
+      return;
+    }
+
     await answerCallback(this.token, callback.id);
 
     // Delete message button handler
