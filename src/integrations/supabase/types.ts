@@ -209,6 +209,42 @@ export type Database = {
           },
         ]
       }
+      bot_query_rate_tracking: {
+        Row: {
+          bot_id: string
+          count_in_window: number
+          id: string
+          last_query_at: string
+          muted_until: string | null
+          telegram_user_id: number
+          total_violations: number
+          updated_at: string
+          window_start: string
+        }
+        Insert: {
+          bot_id: string
+          count_in_window?: number
+          id?: string
+          last_query_at?: string
+          muted_until?: string | null
+          telegram_user_id: number
+          total_violations?: number
+          updated_at?: string
+          window_start?: string
+        }
+        Update: {
+          bot_id?: string
+          count_in_window?: number
+          id?: string
+          last_query_at?: string
+          muted_until?: string | null
+          telegram_user_id?: number
+          total_violations?: number
+          updated_at?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       bot_security_settings: {
         Row: {
           anti_flood_action: string | null
@@ -224,6 +260,10 @@ export type Database = {
           bot_id: string | null
           created_at: string
           id: string
+          query_cooldown_seconds: number
+          query_max_per_minute: number
+          query_mute_minutes: number
+          query_rate_limit_enabled: boolean
           updated_at: string
           user_id: string | null
           welcome_message: string | null
@@ -243,6 +283,10 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           id?: string
+          query_cooldown_seconds?: number
+          query_max_per_minute?: number
+          query_mute_minutes?: number
+          query_rate_limit_enabled?: boolean
           updated_at?: string
           user_id?: string | null
           welcome_message?: string | null
@@ -262,6 +306,10 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           id?: string
+          query_cooldown_seconds?: number
+          query_max_per_minute?: number
+          query_mute_minutes?: number
+          query_rate_limit_enabled?: boolean
           updated_at?: string
           user_id?: string | null
           welcome_message?: string | null
