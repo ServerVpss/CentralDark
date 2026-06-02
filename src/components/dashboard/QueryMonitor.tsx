@@ -16,7 +16,8 @@ interface QueryRow {
 }
 
 interface TypeStat { type: string; count: number }
-interface UserStat { user_id: string; name: string; count: number }
+interface UserStat { key: string; name: string; username: string | null; count: number }
+
 
 export function QueryMonitor() {
   const [recent, setRecent] = useState<QueryRow[]>([]);
