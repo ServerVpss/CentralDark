@@ -738,13 +738,14 @@ export default function WebAppResult() {
         </div>
       </div>
 
-      <div className="px-3 py-3 max-w-3xl mx-auto">
+      <div className="w-full px-2 sm:px-4 md:px-6 py-3 max-w-3xl mx-auto text-[clamp(12px,2.8vw,14px)]">
         {/* Faixa com logo/identidade */}
         <div className="bg-white rounded-sm px-3 py-3 mb-3 inline-block">
-          <span className="font-mono text-sm font-bold text-black tracking-tight">
+          <span className="font-mono text-[clamp(12px,3vw,14px)] font-bold text-black tracking-tight">
             {brand}
           </span>
         </div>
+
 
         {/* Título principal da consulta */}
         <Section
@@ -775,14 +776,8 @@ export default function WebAppResult() {
             </span>
           </div>
         )}
-        {aiFormatted && !errorMessage && (
-          <div className="mb-3 flex items-center gap-2 border border-violet-500/30 bg-violet-500/5 rounded-sm px-3 py-2">
-            <Sparkles className="h-3.5 w-3.5 text-violet-300" />
-            <span className="font-mono text-[11px] text-violet-200">
-              Formatado com IA
-            </span>
-          </div>
-        )}
+
+
 
         {body}
 
