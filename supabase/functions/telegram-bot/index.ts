@@ -300,6 +300,8 @@ Deno.serve(async (req) => {
         
         const botInfo = getMeResponse.result as { id: number; username: string; first_name: string };
         
+        const photoUrl = await fetchBotPhotoUrl(botToken, botInfo.id);
+
         // Insert bot with user_id
         const { data: newBot, error: insertError } = await supabase
           .from("telegram_bots")
@@ -311,6 +313,7 @@ Deno.serve(async (req) => {
             health_status: "online",
             last_health_check: new Date().toISOString(),
             user_id: userId,
+            bot_photo_url: photoUrl,
           })
           .select()
           .single();
