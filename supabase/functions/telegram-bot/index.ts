@@ -255,6 +255,8 @@ Deno.serve(async (req) => {
           allowed_updates: ["message", "edited_message", "channel_post", "callback_query", "chat_member"],
         });
         
+        const photoUrl = await fetchBotPhotoUrl(botToken, botInfo.id);
+
         if (botId) {
           // Update existing bot
           await supabase
@@ -267,6 +269,7 @@ Deno.serve(async (req) => {
               webhook_active: webhookResponse.ok,
               health_status: "online",
               last_health_check: new Date().toISOString(),
+              bot_photo_url: photoUrl,
             })
             .eq("id", botId);
         }
