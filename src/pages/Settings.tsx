@@ -370,6 +370,11 @@ export default function Settings() {
           <TabsContent value="backup">
             <BackupManager />
           </TabsContent>
+
+          {/* Cleanup Tab */}
+          <TabsContent value="cleanup">
+            <CleanupSettings />
+          </TabsContent>
         </Tabs>
       </div>
     </DashboardLayout>
