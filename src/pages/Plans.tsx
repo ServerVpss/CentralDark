@@ -91,28 +91,37 @@ export default function Plans() {
       
       setTotalSubscribers(subsCount || 0);
 
-      // Sum revenue from subscriptions using pagination
-      let allSubs: { value: number }[] = [];
+      // Soma receita das assinaturas usando paginação (traz value + created_at)
+      let allSubs: { value: number; created_at: string }[] = [];
       let from = 0;
       const batchSize = 1000;
       let hasMore = true;
       while (hasMore) {
         const { data, error } = await supabase
           .from("telegram_subscriptions")
-          .select("value")
+          .select("value, created_at")
           .range(from, from + batchSize - 1);
         if (error) break;
         if (data && data.length > 0) {
-          allSubs = allSubs.concat(data);
+          allSubs = allSubs.concat(data as any);
           from += batchSize;
           hasMore = data.length === batchSize;
         } else {
           hasMore = false;
         }
       }
-      
+
       const revenue = allSubs.reduce((acc, s) => acc + Number(s.value), 0);
       setTotalRevenue(revenue);
+      setAllTimeCount(allSubs.length);
+      setAvgTicket(allSubs.length > 0 ? revenue / allSubs.length : 0);
+
+      // Receita do mês atual (vendas feitas neste mês)
+      const now = new Date();
+      const inicioMes = new Date(now.getFullYear(), now.getMonth(), 1);
+      const doMes = allSubs.filter((s) => new Date(s.created_at) >= inicioMes);
+      setMonthRevenue(doMes.reduce((acc, s) => acc + Number(s.value), 0));
+      setMonthCount(doMes.length);
     };
 
     fetchStats();
