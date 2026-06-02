@@ -41,16 +41,15 @@ export function QueryMonitor() {
     const list = rows || [];
     setTotal24h(list.length);
     setTotalLastHour(list.filter((r) => r.created_at >= since1h).length);
-    setRecent(list.slice(0, 8));
+    setRecent(list.slice(0, 30));
 
-    // Por tipo
+    // Por tipo (todos os módulos)
     const typeMap = new Map<string, number>();
     list.forEach((r) => typeMap.set(r.query_type, (typeMap.get(r.query_type) || 0) + 1));
     setByType(
       Array.from(typeMap.entries())
         .map(([type, count]) => ({ type, count }))
         .sort((a, b) => b.count - a.count)
-        .slice(0, 5)
     );
 
     // Top usuários REAIS do bot Telegram (telegram_messages com comando /)
