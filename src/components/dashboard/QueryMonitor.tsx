@@ -116,7 +116,7 @@ export function QueryMonitor() {
   };
 
   return (
-    <Card className="p-5 bg-card/60 backdrop-blur-xl border-border/50 rounded-xl">
+    <Card className="p-5 bg-card/80 backdrop-blur-xl border-border/70 rounded-xl">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-lg bg-primary/10">
