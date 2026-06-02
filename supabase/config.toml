@@ -60,3 +60,7 @@ verify_jwt = false
 [functions.provider-ping]
 verify_jwt = false
 
+[functions.webapp-format-ai]
+verify_jwt = false
+
+
