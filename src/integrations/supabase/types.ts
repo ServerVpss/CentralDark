@@ -438,6 +438,36 @@ export type Database = {
           },
         ]
       }
+      cleanup_settings: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          last_deleted_count: number
+          last_run_at: string | null
+          retention_days: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_deleted_count?: number
+          last_run_at?: string | null
+          retention_days?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_deleted_count?: number
+          last_run_at?: string | null
+          retention_days?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       edge_function_health: {
         Row: {
           all_healthy: boolean
@@ -1604,6 +1634,7 @@ export type Database = {
         Args: { p_module_key: string; p_outcome: string }
         Returns: undefined
       }
+      run_data_cleanup: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
