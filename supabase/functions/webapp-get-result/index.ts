@@ -126,14 +126,20 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Busca token e identidade do bot (sem FK declarada, query separada)
-    const { data: botRow } = await supabase
+    // Busca token e identidade do bot (coluna correta é "name", não "bot_name")
+    const { data: botRow, error: botErr } = await supabase
       .from("telegram_bots")
-      .select("token, bot_username, bot_name")
+      .select("token, bot_username, name")
       .eq("id", record.bot_id)
       .maybeSingle();
     const botToken = botRow?.token;
     if (!botToken) {
+      console.error("[webapp-get-result] bot não encontrado", {
+        bot_id: record.bot_id,
+        path_token,
+        botErr: botErr?.message,
+        botRow_keys: botRow ? Object.keys(botRow) : null,
+      });
       return new Response(
         JSON.stringify({ error: "bot_nao_encontrado" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -178,7 +184,7 @@ Deno.serve(async (req) => {
         created_at: record.created_at,
         user: validation.user,
         bot_username: botRow?.bot_username,
-        bot_name: botRow?.bot_name,
+        bot_name: botRow?.name,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
