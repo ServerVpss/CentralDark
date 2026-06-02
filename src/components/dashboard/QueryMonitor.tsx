@@ -16,7 +16,7 @@ interface QueryRow {
 }
 
 interface TypeStat { type: string; count: number }
-interface UserStat { key: string; name: string; username: string | null; count: number }
+interface UserStat { key: string; name: string; username: string | null; count: number; today: number }
 
 
 export function QueryMonitor() {
