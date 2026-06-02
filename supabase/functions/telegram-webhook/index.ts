@@ -471,7 +471,9 @@ const WEBAPP_PUBLIC_URL_FALLBACK = Deno.env.get("WEBAPP_PUBLIC_URL") || "https:/
 // (preenchido automaticamente pelo painel). Se não houver, usa o fallback.
 function resolveWebappBaseUrl(settings: { webapp_url?: string | null } | null | undefined): string {
   const fromSettings = settings?.webapp_url?.trim();
-  if (fromSettings && /^https?:\/\//i.test(fromSettings)) {
+  // Ignora URLs de sandbox/preview salvas por engano — só funcionam com domínio estável.
+  const isSandbox = fromSettings && /(lovableproject\.com|id-preview--)/i.test(fromSettings);
+  if (fromSettings && !isSandbox && /^https?:\/\//i.test(fromSettings)) {
     return fromSettings.replace(/\/+$/, "");
   }
   return WEBAPP_PUBLIC_URL_FALLBACK.replace(/\/+$/, "");
