@@ -8658,6 +8658,12 @@ class BotHandler {
       if (successSiblingBtns.length > 0) {
         extraButtons.push(...successSiblingBtns);
       }
+      // 📱 Botão Mini App (resultado em página web criptografada)
+      const webappUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+      if (webappUrlGrp) {
+        extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrlGrp)]);
+      }
+
 
       let resultMessageId: number | undefined;
       let photoMessageId: number | undefined;
