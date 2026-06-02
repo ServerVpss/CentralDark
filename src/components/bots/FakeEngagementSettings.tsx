@@ -15,6 +15,7 @@ interface FakeEngagementSettingsProps {
   settings: {
     fake_engagement_enabled?: boolean;
     fake_engagement_interval_minutes?: number;
+    fake_engagement_max_per_day?: number;
     fake_engagement_names?: string[];
   } | null;
   onUpdate: () => void;
