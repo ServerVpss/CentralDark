@@ -446,10 +446,79 @@ export default function WebAppResult() {
   // Desempacota o payload e remove metadados antes de iterar
   const payload = unwrap(data.result_data);
   const errorMessage = extractErrorMessage(payload);
-  const topEntries =
-    !errorMessage && payload && typeof payload === "object" && !Array.isArray(payload)
-      ? Object.entries(payload).filter(([k, v]) => !shouldHide(k) && !isEmptyValue(v))
-      : [];
+
+  // Decide o que renderizar com base no formato real devolvido pela API.
+  // Vale para QUALQUER módulo (CPF, CNPJ, Placa, Telefone, etc.).
+  let body: React.ReactNode = null;
+
+  if (errorMessage) {
+    body = (
+      <div className="mb-2 border border-amber-500/40 bg-amber-500/5 rounded-sm px-3 py-3 flex items-start gap-2">
+        <AlertCircle className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
+        <div className="flex-1">
+          <div className="font-mono text-[10px] uppercase tracking-wider text-amber-400 mb-1">
+            Sem resultado
+          </div>
+          <div className="font-mono text-[12px] text-zinc-100 break-words whitespace-pre-wrap">
+            {errorMessage}
+          </div>
+        </div>
+      </div>
+    );
+  } else if (Array.isArray(payload)) {
+    // API devolveu uma lista direto no topo (ex.: várias pessoas, vários veículos)
+    if (payload.length === 0) {
+      body = <Section title="RESULTADO" empty />;
+    } else if (typeof payload[0] === "object" && payload[0] !== null) {
+      // Renderiza cada registro como uma seção independente — bem mais legível que tabela no celular
+      body = payload.map((item, i) => (
+        <Section key={i} title={`REGISTRO ${i + 1}`}>
+          {Object.entries(item as Record<string, any>)
+            .filter(([k, v]) => !shouldHide(k) && !isEmptyValue(v))
+            .map(([k, v]) =>
+              typeof v === "object" && v !== null ? (
+                <div key={k} className="px-3 py-2">
+                  {renderEntry(k, v)}
+                </div>
+              ) : (
+                <Row key={k} label={k} value={v} />
+              ),
+            )}
+        </Section>
+      ));
+    } else {
+      body = (
+        <Section title="RESULTADO">
+          {payload.map((v, i) => (
+            <Row key={i} label={String(i + 1)} value={v} />
+          ))}
+        </Section>
+      );
+    }
+  } else if (payload && typeof payload === "object") {
+    const topEntries = Object.entries(payload).filter(
+      ([k, v]) => !shouldHide(k) && !isEmptyValue(v),
+    );
+    body =
+      topEntries.length === 0 ? (
+        <Section title="RESULTADO" empty />
+      ) : (
+        topEntries.map(([k, v]) => renderEntry(k, v))
+      );
+  } else if (typeof payload === "string" && payload.trim().length > 0) {
+    // API devolveu texto cru — exibe em bloco monoespaçado preservando quebras
+    body = (
+      <Section title="RESULTADO">
+        <div className="px-3 py-2">
+          <pre className="font-mono text-[12px] text-zinc-100 whitespace-pre-wrap break-words m-0">
+            {payload}
+          </pre>
+        </div>
+      </Section>
+    );
+  } else {
+    body = <Section title="RESULTADO" empty />;
+  }
 
   return (
     <div className="min-h-screen bg-black text-zinc-100">
@@ -483,24 +552,8 @@ export default function WebAppResult() {
           title={`CONSULTA ${data.query_type.toUpperCase()} ${brandUpper}`}
         />
 
-        {/* Banner de erro amigável quando a API retornou mensagem de erro */}
-        {errorMessage ? (
-          <div className="mb-2 border border-amber-500/40 bg-amber-500/5 rounded-sm px-3 py-3 flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
-            <div className="flex-1">
-              <div className="font-mono text-[10px] uppercase tracking-wider text-amber-400 mb-1">
-                Sem resultado
-              </div>
-              <div className="font-mono text-[12px] text-zinc-100 break-words">
-                {errorMessage}
-              </div>
-            </div>
-          </div>
-        ) : topEntries.length === 0 ? (
-          <Section title="RESULTADO" empty />
-        ) : (
-          topEntries.map(([k, v]) => renderEntry(k, v))
-        )}
+        {body}
+
 
         {/* Rodapé estilo X Buscas */}
         <div className="mt-3 space-y-2">
