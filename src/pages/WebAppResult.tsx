@@ -243,6 +243,23 @@ function Section({
 }
 
 function Row({ label, value }: { label: string; value: any }) {
+  const photoSrc = isPhotoKey(label) ? isPhotoValue(value) : isPhotoValue(value);
+  if (photoSrc) {
+    return (
+      <div className="px-3 py-3 flex flex-col items-center gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 self-start">
+          {formatLabel(label)}
+        </span>
+        <img
+          src={photoSrc}
+          alt={formatLabel(label)}
+          loading="lazy"
+          className="max-w-full w-auto max-h-[420px] rounded-sm border border-zinc-700/60 object-contain bg-zinc-900"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+        />
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-[140px_1fr] gap-2 px-3 py-2">
       <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 self-center">
