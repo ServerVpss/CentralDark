@@ -147,7 +147,7 @@ interface PendingPayment {
   context?: string;
 }
 
-type InlineButton = { text: string; callback_data?: string; url?: string; style?: string };
+type InlineButton = { text: string; callback_data?: string; url?: string; style?: string; web_app?: { url: string } };
 
 // =============== API PROVIDERS ===============
 interface ApiProvider {
