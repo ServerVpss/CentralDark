@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
     // Busca o registro pelo path_token
     const { data: record, error } = await supabase
       .from("webapp_results")
-      .select("*, telegram_bots(token)")
+      .select("*")
       .eq("path_token", path_token)
       .maybeSingle();
 
@@ -110,7 +110,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Confere secret_token (comparação constant-time simples)
+    // Confere secret_token
     if (record.secret_token !== secret_token) {
       return new Response(
         JSON.stringify({ error: "token_invalido" }),
@@ -126,8 +126,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Valida initData do Telegram
-    const botToken = (record as any).telegram_bots?.token;
+    // Busca token do bot (sem FK declarada, query separada)
+    const { data: botRow } = await supabase
+      .from("telegram_bots")
+      .select("token")
+      .eq("id", record.bot_id)
+      .maybeSingle();
+    const botToken = botRow?.token;
     if (!botToken) {
       return new Response(
         JSON.stringify({ error: "bot_nao_encontrado" }),
