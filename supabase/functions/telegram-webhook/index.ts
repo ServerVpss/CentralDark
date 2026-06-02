@@ -8264,6 +8264,15 @@ class BotHandler {
             undefined, { parse_mode: "HTML" });
           return;
         }
+        // Anti-rajada: também vale para consultas em mensagem privada (single/multi-comando)
+        const userFirstName = message.from?.first_name;
+        const userUsername = message.from?.username;
+        const rateBlock = await this.checkQueryRateLimit(telegramUserId, userFirstName, userUsername);
+        if (rateBlock) {
+          logCmd('INFO', 'CMD_BLOCKED', { reason: 'rate_limit', chatId, userId: telegramUserId, source: 'private_multi' });
+          await sendMessage(this.token, chatId, rateBlock);
+          return;
+        }
         await this.handleMultipleQueries(message, parsed);
         return;
       }
