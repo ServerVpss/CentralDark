@@ -359,3 +359,10 @@
 html {
   font-size: 17.5px;
 }
+
+/* Trava scroll lateral no Mini App do Telegram (mobile) */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}

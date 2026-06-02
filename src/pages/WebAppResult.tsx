@@ -727,7 +727,7 @@ export default function WebAppResult() {
 
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-black text-zinc-100 overscroll-x-none touch-pan-y">
       {/* Barra de título estilo Mini App */}
       <div className="sticky top-0 z-10 flex items-center justify-between bg-zinc-950/90 backdrop-blur px-3 py-2.5 border-b border-zinc-800/80">
         <span className="font-mono text-sm font-semibold text-zinc-100">
