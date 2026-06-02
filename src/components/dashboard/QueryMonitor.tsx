@@ -196,7 +196,7 @@ export function QueryMonitor() {
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
               Stream ao vivo
             </p>
-            <div className="space-y-1 max-h-[200px] overflow-y-auto">
+            <div className="space-y-1 max-h-[360px] overflow-y-auto pr-1">
               {recent.length === 0 && (
                 <p className="text-xs text-muted-foreground">Sem consultas</p>
               )}
