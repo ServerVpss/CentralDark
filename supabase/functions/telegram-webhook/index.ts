@@ -5715,7 +5715,7 @@ class BotHandler {
         if (mutedUntil > now) {
           const restSec = Math.ceil((mutedUntil - now) / 1000);
           const minutos = Math.ceil(restSec / 60);
-          return `🚫 <b>Você está temporariamente bloqueado por excesso de consultas.</b>\n\n⏱ Tente novamente em <b>${minutos} min</b>.\n\n<i>Evite disparar várias consultas em sequência.</i>`;
+          return `⚠️ <b>⛔ AVISO OFICIAL DO SISTEMA ⛔</b>\n\n━━━━━━━━━━━━━━━━━━━\n🚨 <b>USO ABUSIVO DETECTADO</b>\n━━━━━━━━━━━━━━━━━━━\n\nDetectamos <b>consultas em rajada</b> vindas da sua conta.\n\n⏱ <b>Bloqueio ativo:</b> ${minutos} min restantes.\n\n⚠️ <b>ATENÇÃO — RISCO REAL:</b>\nO próprio <b>Telegram</b> monitora contas que disparam mensagens em sequência. A continuidade desse comportamento pode resultar em:\n\n• 🚫 Suspensão temporária da sua conta\n• 🚫 <b>BANIMENTO PERMANENTE</b> do Telegram\n• 🚫 Perda de acesso aos seus grupos e contatos\n\n<i>Este é um aviso automático do sistema de proteção. Respeite o intervalo entre consultas para manter sua conta segura.</i>`;
         }
       }
 
@@ -5725,7 +5725,7 @@ class BotHandler {
         const diffSec = (now - lastMs) / 1000;
         if (diffSec < cooldownSec) {
           const restSec = Math.max(1, Math.ceil(cooldownSec - diffSec));
-          return `⏳ <b>Aguarde ${restSec}s antes da próxima consulta.</b>\n\n<i>Limite para evitar rajadas.</i>`;
+          return `⏳ <b>Aguarde ${restSec}s antes da próxima consulta.</b>\n\n<i>Evite disparar várias consultas seguidas para não acionar o bloqueio anti-rajada.</i>`;
         }
       }
 
@@ -5743,7 +5743,7 @@ class BotHandler {
         countInWindow += 1;
       }
 
-      // 4) Estourou o limite por minuto → mute
+      // 4) Estourou o limite por minuto → mute + notifica painel
       if (countInWindow > maxPerMin) {
         totalViolations += 1;
         mutedUntilIso = new Date(now + muteMin * 60_000).toISOString();
@@ -5761,7 +5761,27 @@ class BotHandler {
             updated_at: new Date(now).toISOString(),
           }, { onConflict: "bot_id,telegram_user_id" });
 
-        return `🚫 <b>Limite de consultas excedido</b>\n\nVocê fez mais de <b>${maxPerMin} consultas em 1 minuto</b>.\n\n⏱ Você está bloqueado por <b>${muteMin} min</b>.\n\n<i>Evite disparar várias consultas em sequência.</i>`;
+        // Registra a violação como mensagem bloqueada → aparece nas notificações do painel em tempo real
+        try {
+          await this.supabase.from("telegram_messages").insert({
+            bot_id: this.bot.id,
+            user_id: this.bot.user_id,
+            chat_id: telegramUserId,
+            chat_type: "private",
+            from_user_id: telegramUserId,
+            from_username: telegramUsername || null,
+            from_first_name: telegramFirstName || null,
+            message_text: `Rajada de consultas detectada (${countInWindow}/${maxPerMin} em 1min). Violação nº ${totalViolations}.`,
+            message_type: "rate_limit",
+            is_blocked: true,
+            blocked_reason: "anti_rajada",
+            raw_data: { count_in_window: countInWindow, max_per_minute: maxPerMin, muted_minutes: muteMin, total_violations: totalViolations },
+          });
+        } catch (e) {
+          console.error("[checkQueryRateLimit] falha ao registrar violação:", e);
+        }
+
+        return `⚠️ <b>⛔ AVISO OFICIAL DO SISTEMA ⛔</b>\n\n━━━━━━━━━━━━━━━━━━━\n🚨 <b>RAJADA DE CONSULTAS DETECTADA</b>\n━━━━━━━━━━━━━━━━━━━\n\nVocê fez <b>mais de ${maxPerMin} consultas em 1 minuto</b>.\n\n⏱ Sua conta foi <b>bloqueada por ${muteMin} min</b> neste bot.\n\n⚠️ <b>ATENÇÃO — RISCO REAL DE BANIMENTO:</b>\nO próprio <b>Telegram</b> identifica contas que disparam mensagens em rajada como <b>SPAM / BOT MALICIOSO</b>. Isso pode causar:\n\n• 🚫 Suspensão da sua conta Telegram\n• 🚫 <b>BANIMENTO DEFINITIVO</b> do seu número\n• 🚫 Perda de todos os seus contatos, grupos e canais\n\n📛 <b>Esta é a sua advertência oficial.</b>\nPróximas violações podem ser comunicadas automaticamente ao suporte do Telegram.\n\n<i>Sistema Automático de Proteção Antifraude — respeite o intervalo entre consultas.</i>`;
       }
 
       // 5) Tudo liberado — registra a consulta
