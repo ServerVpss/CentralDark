@@ -2,7 +2,7 @@ import { Bot, Plus } from "lucide-react";
 import { BotStatusCard } from "./BotStatusCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface BotData {
@@ -23,6 +23,23 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
   const navigate = useNavigate();
   const [messageCounts, setMessageCounts] = useState<Record<string, number>>({});
   const [userCounts, setUserCounts] = useState<Record<string, number>>({});
+  const autoSyncedRef = useRef<Set<string>>(new Set());
+
+  // Auto-sincroniza a foto de cada bot que ainda não tem foto salva
+  useEffect(() => {
+    bots.forEach((bot) => {
+      if (!bot.bot_photo_url && !autoSyncedRef.current.has(bot.id)) {
+        autoSyncedRef.current.add(bot.id);
+        supabase.functions
+          .invoke("telegram-bot", {
+            body: { action: "syncBot", botId: bot.id },
+          })
+          .catch((e) => console.error("Auto-sync foto do bot falhou:", bot.id, e));
+      }
+    });
+  }, [bots]);
+
+
 
   useEffect(() => {
     if (bots.length === 0) return;
