@@ -39,13 +39,34 @@ const HIDDEN_KEYS = new Set([
   "total_diario", "reset_em", "inicio_uso", "vencimento", "tempo_restante",
   "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
   "modulo", "comando", "duration_ms", "module_disabled", "error", "notfound",
-  "fromcache", "cache_ttl_hours", "foto", "image", "photo", "fotobase64",
-  "base64", "conta", "saldo", "tempo_segundos", "temposegundos", "cache",
+  "fromcache", "cache_ttl_hours",
+  "conta", "saldo", "tempo_segundos", "temposegundos", "cache",
   "cached_at", "expiracao", "limites", "plano", "requests_used",
   "requests_remaining", "daily_limit", "fallback_provider", "apikey",
   "prioridade", "raw", "meta", "request_id", "erro", "err", "status",
   "status_code", "statuscode", "code",
 ]);
+
+// Chaves que sinalizam que o valor é uma imagem (renderizar como <img>)
+const PHOTO_KEY_HINTS = ["foto", "fotos", "image", "imagem", "photo", "picture", "img", "avatar", "fotobase64", "base64"];
+function isPhotoKey(k: string): boolean {
+  const n = k.toLowerCase();
+  return PHOTO_KEY_HINTS.some((h) => n === h || n.includes(h));
+}
+function isPhotoValue(v: any): string | null {
+  if (typeof v !== "string") return null;
+  const s = v.trim();
+  if (!s) return null;
+  // Data URL completa
+  if (/^data:image\/(png|jpe?g|webp|gif|bmp);base64,/i.test(s)) return s;
+  // URL direta de imagem
+  if (/^https?:\/\/.+\.(png|jpe?g|webp|gif|bmp)(\?.*)?$/i.test(s)) return s;
+  // Base64 puro grande (>200 chars, só caracteres base64) — assume JPEG
+  if (s.length > 200 && /^[A-Za-z0-9+/=\s]+$/.test(s)) {
+    return `data:image/jpeg;base64,${s.replace(/\s+/g, "")}`;
+  }
+  return null;
+}
 
 // Chaves que indicam mensagem de erro vinda da API
 const ERROR_KEYS = ["erro", "err", "error", "mensagem", "message", "msg", "detail", "detalhe"];
