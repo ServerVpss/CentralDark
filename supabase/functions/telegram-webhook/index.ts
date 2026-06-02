@@ -8173,6 +8173,38 @@ class BotHandler {
         }
       }
 
+      // Deep link de resultado: /start res_<pathToken> — abre o resultado no privado
+      const resMatch = text.match(/^\/start\s+res_([a-f0-9]+)/i);
+      if (resMatch) {
+        const pathToken = resMatch[1];
+        try {
+          const { data: rec } = await this.supabase
+            .from("webapp_results")
+            .select("secret_token, telegram_user_id, bot_id")
+            .eq("path_token", pathToken)
+            .maybeSingle();
+          if (!rec || rec.bot_id !== this.bot.id) {
+            await sendMessage(this.token, chatId, "⚠️ Resultado não encontrado ou expirado.");
+            return;
+          }
+          if (Number(rec.telegram_user_id) !== telegramUserId) {
+            await sendMessage(this.token, chatId, "🔒 Este resultado pertence a outro usuário.");
+            return;
+          }
+          const base = resolveWebappBaseUrl(this.settings);
+          const url = `${base}/result/${pathToken}/${rec.secret_token}/`;
+          await sendMessage(
+            this.token, chatId,
+            `📋 <b>Seu resultado está pronto.</b>\n\nToque no botão abaixo para abrir.`,
+            { inline_keyboard: [[btnWebApp("📱 Abrir Resultado", url, chatId, "primary")]] },
+          );
+        } catch (e) {
+          console.error("start res_ error:", e);
+          await sendMessage(this.token, chatId, "⚠️ Erro ao abrir o resultado. Tente novamente.");
+        }
+        return;
+      }
+
       if (this.settings.terms_enabled) {
         const accepted = await this.getTermsStatus(telegramUserId);
         if (!accepted) {
