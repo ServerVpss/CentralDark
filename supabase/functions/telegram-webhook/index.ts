@@ -8970,14 +8970,27 @@ class BotHandler {
         const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrlGrp) {
           const brandGrp = (this.bot.bot_username || 'BOT').toUpperCase();
-          await sendMessage(
+          const effectIdGrp = getMessageEffectId(this.settings.message_effect) ?? MESSAGE_EFFECTS.like;
+          const sentGrp = await sendMessage(
             this.token, chatId,
             `🩸<b>${escapeHtmlGlobal(brandGrp)}</b>\n<code>/${queryType} ${escapeHtmlGlobal(queryInput)}</code>\n\n✅ <b>Consulta concluída</b>\n\nClique no botão abaixo para ver o resultado.`,
             { inline_keyboard: [
               [btnWebApp("📋 Ver resultado", webappOnlyUrlGrp, chatId, "primary")],
             ]},
-            replyToId ? { reply_to_message_id: replyToId } : undefined
+            {
+              ...(replyToId ? { reply_to_message_id: replyToId } : {}),
+              message_effect_id: effectIdGrp,
+            }
           );
+          // Curtida configurada no painel (na mensagem do usuário e na confirmação)
+          if (this.settings.react_to_messages) {
+            try {
+              const emoji = chooseReactionEmoji(this.settings);
+              if (replyToId) await setMessageReaction(this.token, chatId, replyToId, emoji);
+              const confMsgId = (sentGrp?.result as { message_id?: number } | undefined)?.message_id;
+              if (confMsgId) await setMessageReaction(this.token, chatId, confMsgId, emoji);
+            } catch (e) { console.log("group legacy reaction failed:", e); }
+          }
           return;
         }
       }
