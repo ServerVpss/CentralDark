@@ -104,7 +104,7 @@ export function HeroStatsCard({
                 "inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold tabular-nums border",
                 changeType === "positive" && "text-primary bg-primary/10 border-primary/20",
                 changeType === "negative" && "text-destructive bg-destructive/10 border-destructive/20",
-                changeType === "neutral" && "text-muted-foreground bg-muted/30 border-border/50"
+                changeType === "neutral" && "text-muted-foreground bg-muted/45 border-border/60"
               )}
             >
               <TrendIcon className="h-3 w-3" />
