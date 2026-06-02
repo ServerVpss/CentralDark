@@ -56,6 +56,7 @@ const menuGroups = [
     items: [
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
       { title: "Segurança", icon: Shield, path: "/security" },
+      { title: "Dicas Splash", icon: Lightbulb, path: "/menu-tips" },
       { title: "Configurações", icon: Settings, path: "/settings" },
     ],
   },
