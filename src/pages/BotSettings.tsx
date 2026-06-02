@@ -798,7 +798,10 @@ export default function BotSettings() {
               <div className="lg:col-span-2">
                 <MessageEffectSettings
                   messageEffect={messageEffect}
-                  setMessageEffect={setMessageEffect}
+                  setMessageEffect={async (value) => {
+                    setMessageEffect(value);
+                    await updateSettings({ message_effect: value });
+                  }}
                 />
               </div>
 
