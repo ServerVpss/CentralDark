@@ -6049,6 +6049,12 @@ class BotHandler {
   }
 
   async showQueryMenu(chatId: number, messageId: number) {
+    // Verifica se está no modo legado (menu antigo, todos os módulos numa lista só)
+    const useLegacy = (this.settings as any)?.use_legacy_menu === true;
+    if (useLegacy) {
+      return this.showQueryMenuLegacy(chatId, messageId);
+    }
+
     const text = `🔍 <b>Central de Consultas</b>\n\n<i>Escolha uma categoria abaixo:</i>`;
 
     const buttons: InlineButton[][] = [
@@ -6063,6 +6069,38 @@ class BotHandler {
     const enabledCount = Object.values(moduleStatus).filter(v => v).length;
     const note = enabledCount < totalCount ? `\n\n⚠️ <i>${totalCount - enabledCount} módulo(s) em manutenção</i>` : "";
     await editMessage(this.token, chatId, messageId, text + note, keyboard(...buttons));
+  }
+
+  // ============== MENU ANTIGO (LEGADO) — todos os módulos numa lista só ==============
+  async showQueryMenuLegacy(chatId: number, messageId: number) {
+    const text = `🔍 <b>Central de Consultas</b>\n\n<i>Selecione o tipo de consulta:</i>`;
+
+    // Carrega todos os módulos ativos direto do banco pra refletir a config atual
+    const { data: modules } = await this.supabase
+      .from("query_modules")
+      .select("module_key, label, icon, category, enabled")
+      .eq("enabled", true)
+      .order("category", { ascending: true })
+      .order("label", { ascending: true });
+
+    const buttons: InlineButton[][] = [];
+    if (modules && modules.length > 0) {
+      // Distribui em grid de 2 colunas
+      for (let i = 0; i < modules.length; i += 2) {
+        const row: InlineButton[] = [];
+        const m1 = modules[i];
+        row.push(btn(`${m1.icon || "📋"} ${bs(m1.label)}`, `query:${m1.module_key}`));
+        if (modules[i + 1]) {
+          const m2 = modules[i + 1];
+          row.push(btn(`${m2.icon || "📋"} ${bs(m2.label)}`, `query:${m2.module_key}`));
+        }
+        buttons.push(row);
+      }
+    }
+
+    buttons.push([btn(`🔙 ${bs("Voltar")}`, "menu:main", undefined, EMOJI.BACK)]);
+
+    await editMessage(this.token, chatId, messageId, text, keyboard(...buttons));
   }
 
   // ============== SUBMENU PESSOAS (paginado) ==============
