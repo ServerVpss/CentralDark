@@ -353,8 +353,13 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
         <div className="space-y-5 py-2">
           {/* Audience Selection */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Audiência
+            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+              <span>Audiência</span>
+              {audienceCounts && (
+                <span className="text-primary normal-case tracking-normal font-semibold">
+                  {audienceCounts[audience]} {audienceCounts[audience] === 1 ? "destinatário" : "destinatários"}
+                </span>
+              )}
             </Label>
             <RadioGroup
               value={audience}
@@ -362,29 +367,28 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
               className="grid grid-cols-3 gap-2"
             >
               {[
-                { value: "all", label: "Todos", icon: Users, color: "" },
-                { value: "active", label: "Ativos", icon: UserCheck, color: "text-green-500" },
-                { value: "expired", label: "Expirados", icon: UserX, color: "text-red-500" },
+                { value: "all" as const, label: "Todos", icon: Users, color: "" },
+                { value: "active" as const, label: "Ativos", icon: UserCheck, color: "text-green-500" },
+                { value: "expired" as const, label: "Expirados", icon: UserX, color: "text-red-500" },
               ].map((opt) => (
                 <div key={opt.value}>
                   <RadioGroupItem value={opt.value} id={`aud-${opt.value}`} className="peer sr-only" />
                   <Label
                     htmlFor={`aud-${opt.value}`}
-                    className="flex items-center justify-center gap-1.5 rounded-lg border-2 border-border bg-secondary/30 p-2.5 text-sm font-medium cursor-pointer transition-all hover:bg-secondary/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary"
+                    className="flex flex-col items-center justify-center gap-0.5 rounded-lg border-2 border-border bg-secondary/30 p-2.5 text-sm font-medium cursor-pointer transition-all hover:bg-secondary/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary"
                   >
-                    <opt.icon className={`h-4 w-4 ${opt.color}`} />
-                    {opt.label}
+                    <div className="flex items-center gap-1.5">
+                      <opt.icon className={`h-4 w-4 ${opt.color}`} />
+                      {opt.label}
+                    </div>
+                    <span className="text-[10px] text-muted-foreground tabular-nums">
+                      {audienceCounts ? audienceCounts[opt.value] : "…"}
+                    </span>
                   </Label>
                 </div>
               ))}
             </RadioGroup>
           </div>
-
-          {/* Media Type Tabs */}
-          <div className="space-y-2">
-            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Tipo de Conteúdo
-            </Label>
             <Tabs value={mediaType} onValueChange={(v) => { setMediaType(v as MediaType); removeMedia(); }}>
               <TabsList className="w-full bg-secondary/50 h-10">
                 {MEDIA_TYPES.map((mt) => (
