@@ -192,7 +192,11 @@ export function QueryMonitor() {
                       )}
                     </div>
                   </div>
-                  <span className="font-mono text-muted-foreground ml-2">{u.count}</span>
+                  <div className="flex flex-col items-end ml-2 shrink-0">
+                    <span className="font-mono text-foreground text-xs leading-tight">{u.today}</span>
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60 leading-tight">hoje</span>
+                    <span className="font-mono text-muted-foreground/80 text-[10px] leading-tight mt-0.5">{u.count} <span className="text-[8px] uppercase">24h</span></span>
+                  </div>
                 </div>
               ))}
             </div>
