@@ -543,8 +543,14 @@ export default function Bots() {
                           ) : (
                             <>
                               <Input
-                                type={showToken === bot.id ? "text" : "password"}
-                                value={bot.token}
+                                type="text"
+                                value={
+                                  showToken === bot.id
+                                    ? bot.token
+                                    : bot.token && bot.token.includes(":")
+                                      ? `${bot.token.split(":")[0]}:••••••••••••${bot.token.slice(-4)}`
+                                      : "••••••••••••"
+                                }
                                 readOnly
                                 className="flex-1 bg-secondary/50 font-mono text-xs h-9"
                                 onClick={(e) => e.stopPropagation()}
