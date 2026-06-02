@@ -31,7 +31,7 @@ const menuGroups = [
   {
     label: "PRINCIPAL",
     items: [
-      { title: "Dashboard", icon: LayoutDashboard, path: "/" },
+      { title: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     ],
   },
   {
