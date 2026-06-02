@@ -424,8 +424,9 @@ export default function WebAppResult() {
 
   // Desempacota o payload e remove metadados antes de iterar
   const payload = unwrap(data.result_data);
+  const errorMessage = extractErrorMessage(payload);
   const topEntries =
-    payload && typeof payload === "object" && !Array.isArray(payload)
+    !errorMessage && payload && typeof payload === "object" && !Array.isArray(payload)
       ? Object.entries(payload).filter(([k, v]) => !shouldHide(k) && !isEmptyValue(v))
       : [];
 
@@ -461,8 +462,20 @@ export default function WebAppResult() {
           title={`CONSULTA ${data.query_type.toUpperCase()} ${brandUpper}`}
         />
 
-        {/* Seções dinâmicas */}
-        {topEntries.length === 0 ? (
+        {/* Banner de erro amigável quando a API retornou mensagem de erro */}
+        {errorMessage ? (
+          <div className="mb-2 border border-amber-500/40 bg-amber-500/5 rounded-sm px-3 py-3 flex items-start gap-2">
+            <AlertCircle className="h-4 w-4 text-amber-400 mt-0.5 shrink-0" />
+            <div className="flex-1">
+              <div className="font-mono text-[10px] uppercase tracking-wider text-amber-400 mb-1">
+                Sem resultado
+              </div>
+              <div className="font-mono text-[12px] text-zinc-100 break-words">
+                {errorMessage}
+              </div>
+            </div>
+          </div>
+        ) : topEntries.length === 0 ? (
           <Section title="RESULTADO" empty />
         ) : (
           topEntries.map(([k, v]) => renderEntry(k, v))
@@ -472,7 +485,7 @@ export default function WebAppResult() {
         <div className="mt-3 space-y-2">
           <div className="border border-zinc-800/80 bg-zinc-950/40 rounded-sm px-3 py-2">
             <span className="font-mono text-[11px] text-zinc-300">
-              - {data.query_type.toUpperCase()} {data.query_type.toUpperCase()} FULL: {data.query_input}
+              {data.query_type.toUpperCase()} FULL: {data.query_input}
             </span>
           </div>
           <div className="border border-zinc-800/80 bg-zinc-950/40 rounded-sm px-3 py-2">
@@ -486,6 +499,7 @@ export default function WebAppResult() {
             </span>
           </div>
         </div>
+
 
         <div className="mt-2 px-1 border-t border-zinc-800/60 pt-2">
           <span className="font-mono text-[10px] text-zinc-500">
