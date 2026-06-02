@@ -5664,6 +5664,129 @@ class BotHandler {
     return this.settings.owner_ids?.includes(userId) || false;
   }
 
+  // =============== ANTI-RAJADA DE CONSULTAS ===============
+  // Retorna null se liberado; ou uma string com motivo amigável se bloqueado.
+  async checkQueryRateLimit(telegramUserId: number): Promise<string | null> {
+    try {
+      // Dono sempre liberado
+      if (this.isOwner(telegramUserId)) return null;
+
+      // Busca configurações do bot
+      const { data: secRow } = await this.supabase
+        .from("bot_security_settings")
+        .select("query_rate_limit_enabled, query_cooldown_seconds, query_max_per_minute, query_mute_minutes")
+        .eq("bot_id", this.bot.id)
+        .maybeSingle();
+
+      const cfg = (secRow as {
+        query_rate_limit_enabled?: boolean;
+        query_cooldown_seconds?: number;
+        query_max_per_minute?: number;
+        query_mute_minutes?: number;
+      } | null) || {};
+
+      if (cfg.query_rate_limit_enabled === false) return null;
+
+      const cooldownSec = Math.max(0, Number(cfg.query_cooldown_seconds ?? 3));
+      const maxPerMin = Math.max(1, Number(cfg.query_max_per_minute ?? 20));
+      const muteMin = Math.max(1, Number(cfg.query_mute_minutes ?? 5));
+
+      const now = Date.now();
+
+      // Busca rastreio atual
+      const { data: trackRow } = await this.supabase
+        .from("bot_query_rate_tracking")
+        .select("*")
+        .eq("bot_id", this.bot.id)
+        .eq("telegram_user_id", telegramUserId)
+        .maybeSingle();
+
+      const track = trackRow as {
+        last_query_at?: string;
+        window_start?: string;
+        count_in_window?: number;
+        muted_until?: string | null;
+        total_violations?: number;
+      } | null;
+
+      // 1) Já está silenciado?
+      if (track?.muted_until) {
+        const mutedUntil = new Date(track.muted_until).getTime();
+        if (mutedUntil > now) {
+          const restSec = Math.ceil((mutedUntil - now) / 1000);
+          const minutos = Math.ceil(restSec / 60);
+          return `🚫 <b>Você está temporariamente bloqueado por excesso de consultas.</b>\n\n⏱ Tente novamente em <b>${minutos} min</b>.\n\n<i>Evite disparar várias consultas em sequência.</i>`;
+        }
+      }
+
+      // 2) Cooldown entre consultas
+      if (cooldownSec > 0 && track?.last_query_at) {
+        const lastMs = new Date(track.last_query_at).getTime();
+        const diffSec = (now - lastMs) / 1000;
+        if (diffSec < cooldownSec) {
+          const restSec = Math.max(1, Math.ceil(cooldownSec - diffSec));
+          return `⏳ <b>Aguarde ${restSec}s antes da próxima consulta.</b>\n\n<i>Limite para evitar rajadas.</i>`;
+        }
+      }
+
+      // 3) Atualiza janela de 60s e contagem
+      let windowStart = track?.window_start ? new Date(track.window_start).getTime() : now;
+      let countInWindow = track?.count_in_window ?? 0;
+      let totalViolations = track?.total_violations ?? 0;
+      let mutedUntilIso: string | null = null;
+
+      if (now - windowStart >= 60_000) {
+        // Janela expirou: reinicia
+        windowStart = now;
+        countInWindow = 1;
+      } else {
+        countInWindow += 1;
+      }
+
+      // 4) Estourou o limite por minuto → mute
+      if (countInWindow > maxPerMin) {
+        totalViolations += 1;
+        mutedUntilIso = new Date(now + muteMin * 60_000).toISOString();
+
+        await this.supabase
+          .from("bot_query_rate_tracking")
+          .upsert({
+            bot_id: this.bot.id,
+            telegram_user_id: telegramUserId,
+            last_query_at: new Date(now).toISOString(),
+            window_start: new Date(windowStart).toISOString(),
+            count_in_window: countInWindow,
+            muted_until: mutedUntilIso,
+            total_violations: totalViolations,
+            updated_at: new Date(now).toISOString(),
+          }, { onConflict: "bot_id,telegram_user_id" });
+
+        return `🚫 <b>Limite de consultas excedido</b>\n\nVocê fez mais de <b>${maxPerMin} consultas em 1 minuto</b>.\n\n⏱ Você está bloqueado por <b>${muteMin} min</b>.\n\n<i>Evite disparar várias consultas em sequência.</i>`;
+      }
+
+      // 5) Tudo liberado — registra a consulta
+      await this.supabase
+        .from("bot_query_rate_tracking")
+        .upsert({
+          bot_id: this.bot.id,
+          telegram_user_id: telegramUserId,
+          last_query_at: new Date(now).toISOString(),
+          window_start: new Date(windowStart).toISOString(),
+          count_in_window: countInWindow,
+          muted_until: null,
+          total_violations: totalViolations,
+          updated_at: new Date(now).toISOString(),
+        }, { onConflict: "bot_id,telegram_user_id" });
+
+      return null;
+    } catch (err) {
+      // Em caso de erro, não bloqueia o usuário — apenas loga
+      console.error("[checkQueryRateLimit] erro:", err);
+      return null;
+    }
+  }
+
+
   // =============== TERMS ===============
   async getTermsStatus(telegramUserId: number): Promise<boolean> {
     const { data } = await this.supabase
@@ -6307,6 +6430,15 @@ class BotHandler {
       );
       return;
     }
+
+    // Anti-rajada: cooldown + limite por minuto + mute automático
+    const rateBlock = await this.checkQueryRateLimit(telegramUserId);
+    if (rateBlock) {
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'rate_limit', queryType, chatId, userId: telegramUserId });
+      await sendMessage(this.token, chatId, rateBlock);
+      return;
+    }
+
 
     // Check if query type is enabled - SILENTLY ignore if disabled
     // This prevents the bot from responding when module is off,

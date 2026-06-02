@@ -1,8 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
+
 import {
   Select,
   SelectContent,
@@ -46,8 +48,88 @@ export function SecurityAdvanced({ settings, loading, onUpdate }: SecurityAdvanc
 
   return (
     <div className="space-y-6">
+      {/* Anti-Rajada de Consultas */}
+      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+        <CardHeader>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-lg">Anti-Rajada de Consultas 🛡️</CardTitle>
+              <CardDescription>
+                Protege contra usuários que disparam muitas consultas em sequência
+              </CardDescription>
+            </div>
+            <Switch
+              checked={settings?.query_rate_limit_enabled ?? true}
+              onCheckedChange={(value) => onUpdate("query_rate_limit_enabled", value)}
+            />
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Tempo mínimo entre consultas (cooldown)</Label>
+              <span className="text-sm font-mono text-primary">
+                {settings?.query_cooldown_seconds ?? 3}s
+              </span>
+            </div>
+            <Slider
+              min={0}
+              max={30}
+              step={1}
+              value={[settings?.query_cooldown_seconds ?? 3]}
+              onValueChange={([value]) => onUpdate("query_cooldown_seconds", value)}
+              disabled={!(settings?.query_rate_limit_enabled ?? true)}
+            />
+            <p className="text-xs text-muted-foreground">
+              O usuário precisa esperar esse tempo entre uma consulta e outra. 0 desativa o cooldown.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Máximo de consultas por minuto</Label>
+              <span className="text-sm font-mono text-primary">
+                {settings?.query_max_per_minute ?? 20}
+              </span>
+            </div>
+            <Slider
+              min={5}
+              max={100}
+              step={1}
+              value={[settings?.query_max_per_minute ?? 20]}
+              onValueChange={([value]) => onUpdate("query_max_per_minute", value)}
+              disabled={!(settings?.query_rate_limit_enabled ?? true)}
+            />
+            <p className="text-xs text-muted-foreground">
+              Se o usuário estourar esse limite numa janela de 60s, será silenciado automaticamente.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Tempo de bloqueio ao estourar o limite</Label>
+              <span className="text-sm font-mono text-primary">
+                {settings?.query_mute_minutes ?? 5} min
+              </span>
+            </div>
+            <Slider
+              min={1}
+              max={60}
+              step={1}
+              value={[settings?.query_mute_minutes ?? 5]}
+              onValueChange={([value]) => onUpdate("query_mute_minutes", value)}
+              disabled={!(settings?.query_rate_limit_enabled ?? true)}
+            />
+            <p className="text-xs text-muted-foreground">
+              Quanto tempo o usuário fica impedido de consultar após estourar o limite. Admins ficam isentos.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Anti-Spam Config */}
       <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+
         <CardHeader>
           <CardTitle className="text-lg">Configurações Anti-Spam</CardTitle>
           <CardDescription>
