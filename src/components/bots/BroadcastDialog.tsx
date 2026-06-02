@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -80,7 +80,25 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
   const [mediaInputMode, setMediaInputMode] = useState<"file" | "url">("file");
   const [preview, setPreview] = useState<string | null>(null);
   const [progress, setProgress] = useState<{ sent: number; failed: number; total: number } | null>(null);
+  const [audienceCounts, setAudienceCounts] = useState<{ all: number; active: number; expired: number } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!open || !botId) return;
+    let cancelled = false;
+    (async () => {
+      setAudienceCounts(null);
+      const { data, error } = await supabase
+        .from("telegram_subscriptions")
+        .select("status, expires_at")
+        .eq("bot_id", botId);
+      if (cancelled || error || !data) return;
+      const now = new Date();
+      const active = data.filter((s) => s.status === "active" && new Date(s.expires_at) > now).length;
+      setAudienceCounts({ all: data.length, active, expired: data.length - active });
+    })();
+    return () => { cancelled = true; };
+  }, [open, botId]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -335,8 +353,13 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
         <div className="space-y-5 py-2">
           {/* Audience Selection */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Audiência
+            <Label className="text-xs font-medium uppercase tracking-wider text-muted-foreground flex items-center justify-between">
+              <span>Audiência</span>
+              {audienceCounts && (
+                <span className="text-primary normal-case tracking-normal font-semibold">
+                  {audienceCounts[audience]} {audienceCounts[audience] === 1 ? "destinatário" : "destinatários"}
+                </span>
+              )}
             </Label>
             <RadioGroup
               value={audience}
@@ -344,18 +367,23 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
               className="grid grid-cols-3 gap-2"
             >
               {[
-                { value: "all", label: "Todos", icon: Users, color: "" },
-                { value: "active", label: "Ativos", icon: UserCheck, color: "text-green-500" },
-                { value: "expired", label: "Expirados", icon: UserX, color: "text-red-500" },
+                { value: "all" as const, label: "Todos", icon: Users, color: "" },
+                { value: "active" as const, label: "Ativos", icon: UserCheck, color: "text-green-500" },
+                { value: "expired" as const, label: "Expirados", icon: UserX, color: "text-red-500" },
               ].map((opt) => (
                 <div key={opt.value}>
                   <RadioGroupItem value={opt.value} id={`aud-${opt.value}`} className="peer sr-only" />
                   <Label
                     htmlFor={`aud-${opt.value}`}
-                    className="flex items-center justify-center gap-1.5 rounded-lg border-2 border-border bg-secondary/30 p-2.5 text-sm font-medium cursor-pointer transition-all hover:bg-secondary/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary"
+                    className="flex flex-col items-center justify-center gap-0.5 rounded-lg border-2 border-border bg-secondary/30 p-2.5 text-sm font-medium cursor-pointer transition-all hover:bg-secondary/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary"
                   >
-                    <opt.icon className={`h-4 w-4 ${opt.color}`} />
-                    {opt.label}
+                    <div className="flex items-center gap-1.5">
+                      <opt.icon className={`h-4 w-4 ${opt.color}`} />
+                      {opt.label}
+                    </div>
+                    <span className="text-[10px] text-muted-foreground tabular-nums">
+                      {audienceCounts ? audienceCounts[opt.value] : "…"}
+                    </span>
                   </Label>
                 </div>
               ))}
