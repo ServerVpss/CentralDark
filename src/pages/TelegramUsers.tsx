@@ -503,7 +503,7 @@ export default function TelegramUsers() {
               </div>
             ) : (
               <>
-                <div className="overflow-x-auto">
+                <div className="hidden md:block overflow-x-auto">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -606,6 +606,77 @@ export default function TelegramUsers() {
                       })}
                     </TableBody>
                   </Table>
+                </div>
+
+                {/* Cards mobile */}
+                <div className="md:hidden space-y-2">
+                  {paginatedSubscriptions.map((sub) => {
+                    const expired = isExpired(sub.expires_at);
+                    const days = daysLeft(sub.expires_at);
+                    return (
+                      <div key={sub.id} className="rounded-xl border border-border/50 bg-card/40 p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5">
+                              <Crown className="h-4 w-4 text-primary shrink-0" />
+                              <p className="font-semibold text-sm truncate">{sub.plan_name}</p>
+                            </div>
+                            <p className="text-[11px] text-muted-foreground mt-1 truncate">
+                              {sub.username && <span className="text-primary">@{sub.username} · </span>}
+                              ID {sub.telegram_user_id}
+                            </p>
+                            {sub.first_name && (
+                              <p className="text-[11px] text-muted-foreground truncate">{sub.first_name}</p>
+                            )}
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-lg font-bold text-success leading-none">
+                              R$ {Number(sub.value).toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between gap-2 mt-3 pt-2.5 border-t border-border/40">
+                          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            <span>{new Date(sub.expires_at).toLocaleDateString("pt-BR")}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {expired ? (
+                              <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30 text-[10px] h-5">
+                                Expirado
+                              </Badge>
+                            ) : days <= 3 ? (
+                              <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30 text-[10px] h-5">
+                                {days}d
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="bg-success/10 text-success border-success/30 text-[10px] h-5">
+                                {days}d
+                              </Badge>
+                            )}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm" className="h-8 px-2">
+                                  <ChevronDown className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => { setEditingSub(sub); setEditDays(""); }}>
+                                  <Clock className="mr-2 h-4 w-4" /> Estender Dias
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleCancelSubscription(sub)} className="text-warning">
+                                  <XCircle className="mr-2 h-4 w-4" /> Cancelar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleDeleteSubscription(sub)} className="text-destructive">
+                                  <Trash2 className="mr-2 h-4 w-4" /> Excluir
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {totalPages > 1 && (
