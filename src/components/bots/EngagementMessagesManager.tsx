@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap } from "lucide-react";
+import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuthContext } from "@/components/auth/AuthProvider";
@@ -27,6 +27,9 @@ interface EngagementMessage {
   message_template: string;
   is_active: boolean;
   interval_minutes: number;
+  max_per_day?: number | null;
+  sent_today?: number | null;
+  count_date?: string | null;
 }
 
 interface EngagementMessagesManagerProps {
@@ -53,9 +56,11 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const [loading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState("");
   const [newInterval, setNewInterval] = useState(30);
+  const [newMaxPerDay, setNewMaxPerDay] = useState(12);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
   const [editingInterval, setEditingInterval] = useState(30);
+  const [editingMaxPerDay, setEditingMaxPerDay] = useState(12);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [testingId, setTestingId] = useState<string | null>(null);
 
@@ -91,14 +96,16 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
           user_id: user.id,
           message_template: newMessage.trim(),
           is_active: true,
-          interval_minutes: newInterval
-        });
+          interval_minutes: newInterval,
+          max_per_day: newMaxPerDay,
+        } as never);
 
       if (error) throw error;
 
       toast.success('Mensagem adicionada!');
       setNewMessage("");
       setNewInterval(30);
+      setNewMaxPerDay(12);
       setDialogOpen(false);
       fetchMessages();
     } catch (error) {
@@ -144,6 +151,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     setEditingId(msg.id);
     setEditingText(msg.message_template);
     setEditingInterval(msg.interval_minutes || 30);
+    setEditingMaxPerDay(msg.max_per_day ?? 12);
   };
 
   const handleSaveEdit = async () => {
@@ -154,8 +162,9 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
         .from('engagement_messages')
         .update({ 
           message_template: editingText.trim(),
-          interval_minutes: editingInterval
-        })
+          interval_minutes: editingInterval,
+          max_per_day: editingMaxPerDay,
+        } as never)
         .eq('id', editingId);
 
       if (error) throw error;
@@ -164,6 +173,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
       setEditingId(null);
       setEditingText("");
       setEditingInterval(30);
+      setEditingMaxPerDay(12);
       fetchMessages();
     } catch (error) {
       console.error('Erro ao salvar:', error);
@@ -175,6 +185,7 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     setEditingId(null);
     setEditingText("");
     setEditingInterval(30);
+    setEditingMaxPerDay(12);
   };
 
   const handleUpdateInterval = async (id: string, interval: number) => {
@@ -189,6 +200,21 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
     } catch (error) {
       console.error('Erro ao atualizar intervalo:', error);
       toast.error('Erro ao atualizar intervalo');
+    }
+  };
+
+  const handleUpdateMaxPerDay = async (id: string, maxPerDay: number) => {
+    try {
+      const { error } = await supabase
+        .from('engagement_messages')
+        .update({ max_per_day: maxPerDay } as never)
+        .eq('id', id);
+
+      if (error) throw error;
+      fetchMessages();
+    } catch (error) {
+      console.error('Erro ao atualizar limite diário:', error);
+      toast.error('Erro ao atualizar limite diário');
     }
   };
 
