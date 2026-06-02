@@ -196,18 +196,18 @@
   /* ========== Stat tints sutis ========== */
   .stat-gradient-gold,
   .stat-gradient-green {
-    background: hsl(152 76% 50% / 0.06);
-    border-color: hsl(152 76% 50% / 0.18);
+    background: hsl(var(--primary) / 0.08);
+    border-color: hsl(var(--primary) / 0.22);
   }
 
   .stat-gradient-cyan {
-    background: hsl(192 70% 50% / 0.06);
-    border-color: hsl(192 70% 50% / 0.18);
+    background: hsl(192 70% 45% / 0.08);
+    border-color: hsl(192 70% 45% / 0.22);
   }
 
   .stat-gradient-purple {
-    background: hsl(160 70% 50% / 0.06);
-    border-color: hsl(160 70% 50% / 0.18);
+    background: hsl(160 70% 40% / 0.08);
+    border-color: hsl(160 70% 40% / 0.22);
   }
 
   /* ========== Sidebar Nav ========== */
