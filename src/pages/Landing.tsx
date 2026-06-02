@@ -291,7 +291,7 @@ export default function Landing() {
               className="group bg-[hsl(0_0%_4%)] p-7 transition hover:bg-white/[0.015]"
             >
               <div className="inline-grid h-10 w-10 place-items-center rounded-lg border border-white/10 bg-white/[0.04] text-emerald-400 transition group-hover:border-emerald-500/30 group-hover:bg-emerald-500/10">
-                <f.icon className="h-4.5 w-4.5" />
+                <f.icon className="h-4 w-4" />
               </div>
               <h3 className="mt-5 text-base font-semibold text-white">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/55">{f.desc}</p>
