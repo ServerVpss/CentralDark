@@ -497,6 +497,7 @@ export default function WebAppResult() {
     run();
   }, [data, pathToken, secretToken, aiFormatted, aiLoading]);
 
+  if (loading || !themeReady) {
     return (
       <div className="min-h-screen bg-black text-zinc-200 flex flex-col items-center justify-center gap-3 p-6">
         <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
@@ -504,6 +505,7 @@ export default function WebAppResult() {
       </div>
     );
   }
+
 
   if (error) {
     return (
