@@ -201,7 +201,7 @@ export function useAdminData(): AdminData {
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     const scheduleRefetch = () => {
       if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => fetchData(), 1500);
+      debounceTimer = setTimeout(() => fetchData({ silent: true }), 1500);
     };
 
     const channel = supabase
