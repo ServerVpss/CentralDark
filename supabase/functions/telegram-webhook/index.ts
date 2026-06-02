@@ -114,6 +114,8 @@ interface BotSettings {
   button_emoji_ids: Record<string, string>;
   // Menu legado (antigo) — quando true, mostra todos os módulos numa lista só
   use_legacy_menu: boolean;
+  // URL pública do Mini App (preenchida automaticamente pelo painel com window.location.origin)
+  webapp_url: string | null;
 }
 
 interface Plan {
