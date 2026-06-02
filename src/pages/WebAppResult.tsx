@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Loader2, AlertCircle, ExternalLink } from "lucide-react";
-import { MonospaceResultDisplay } from "@/components/consultation/MonospaceResultDisplay";
+import { Loader2, AlertCircle, ExternalLink, MoreVertical, X } from "lucide-react";
 
 // Tipagem mínima do Telegram WebApp
 declare global {
@@ -28,6 +27,218 @@ interface ResultData {
   result_data: any;
   created_at: string;
   user?: { first_name?: string; username?: string; id?: number };
+  bot_username?: string;
+  bot_name?: string;
+}
+
+// Campos internos da API que não devem ser exibidos ao usuário final
+const HIDDEN_KEYS = new Set([
+  "sucesso", "success", "protocolo", "usuario", "consumo_hoje", "consumo",
+  "total_diario", "reset_em", "inicio_uso", "vencimento", "tempo_restante",
+  "tempo_restante_detalhado", "dias_totais_restantes", "dias_totais",
+  "modulo", "comando", "duration_ms", "module_disabled", "error", "notfound",
+  "fromcache", "cache_ttl_hours", "foto", "image", "photo", "fotobase64",
+  "base64", "conta", "saldo", "tempo_segundos", "temposegundos", "cache",
+  "cached_at", "expiracao", "limites", "plano", "requests_used",
+  "requests_remaining", "daily_limit", "fallback_provider", "apikey",
+  "prioridade", "raw", "meta", "request_id",
+]);
+
+const HIDDEN_SUFFIXES = ["_consultada", "_consultado"];
+
+function shouldHide(key: string): boolean {
+  const n = key.toLowerCase().replace(/[\s-]/g, "_");
+  if (HIDDEN_KEYS.has(n)) return true;
+  return HIDDEN_SUFFIXES.some((s) => n.endsWith(s));
+}
+
+function isEmptyValue(v: any): boolean {
+  if (v === null || v === undefined) return true;
+  if (typeof v === "string") {
+    const s = v.trim().toLowerCase();
+    return s === "" || s === "-" || s === "null" || s === "undefined";
+  }
+  if (Array.isArray(v)) return v.length === 0;
+  if (typeof v === "object") return Object.keys(v).length === 0;
+  return false;
+}
+
+function formatLabel(key: string): string {
+  // Converte snake_case / camelCase em "PALAVRAS MAIÚSCULAS"
+  const spaced = key
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .trim();
+  return spaced.toUpperCase();
+}
+
+function formatValue(v: any): string {
+  if (v === null || v === undefined) return "NÃO INFORMADO";
+  if (typeof v === "boolean") return v ? "SIM" : "NÃO";
+  if (typeof v === "number") return String(v);
+  return String(v);
+}
+
+// Pega o payload real dentro de wrappers comuns (data / dados / result)
+function unwrap(d: any): any {
+  if (!d || typeof d !== "object") return d;
+  if (d.data && typeof d.data === "object" && !Array.isArray(d.data)) return unwrap(d.data);
+  if (d.dados && typeof d.dados === "object" && !Array.isArray(d.dados)) return unwrap(d.dados);
+  if (d.result && typeof d.result === "object" && !Array.isArray(d.result)) return unwrap(d.result);
+  return d;
+}
+
+// ---- Render de seções no estilo X Buscas ----
+
+function Section({
+  title,
+  children,
+  empty,
+}: {
+  title: string;
+  children?: React.ReactNode;
+  empty?: boolean;
+}) {
+  return (
+    <div className="mb-2">
+      <div className="flex items-stretch rounded-t-sm overflow-hidden border border-zinc-800/80 border-b-0">
+        <div className="w-1 bg-amber-500/80" />
+        <div className="flex-1 bg-zinc-900/60 px-3 py-2">
+          <span className="font-mono text-[12px] tracking-wider text-zinc-300 font-semibold">
+            {title}
+          </span>
+        </div>
+      </div>
+      {empty ? (
+        <div className="border border-zinc-800/80 bg-zinc-950/40 rounded-b-sm px-3 py-2">
+          <span className="font-mono text-[11px] text-zinc-500">• SEM INFORMAÇÕES</span>
+        </div>
+      ) : (
+        <div className="border border-zinc-800/80 bg-zinc-950/40 rounded-b-sm divide-y divide-zinc-800/60">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Row({ label, value }: { label: string; value: any }) {
+  return (
+    <div className="grid grid-cols-[140px_1fr] gap-2 px-3 py-2">
+      <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500 self-center">
+        {formatLabel(label)}
+      </span>
+      <span className="font-mono text-[12px] text-zinc-100 break-all">
+        {formatValue(value)}
+      </span>
+    </div>
+  );
+}
+
+function ArrayTable({ rows }: { rows: any[] }) {
+  // Coleta todas as chaves visíveis
+  const keys = useMemo(() => {
+    const set = new Set<string>();
+    rows.forEach((r) => {
+      if (r && typeof r === "object" && !Array.isArray(r)) {
+        Object.keys(r).forEach((k) => {
+          if (!shouldHide(k)) set.add(k);
+        });
+      }
+    });
+    return Array.from(set);
+  }, [rows]);
+
+  if (keys.length === 0) {
+    return (
+      <div className="px-3 py-2">
+        <span className="font-mono text-[11px] text-zinc-500">• SEM INFORMAÇÕES</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full font-mono text-[11px]">
+        <thead>
+          <tr className="text-zinc-500 border-b border-zinc-800/60">
+            <th className="text-left px-3 py-2 font-normal tracking-wider">#</th>
+            {keys.map((k) => (
+              <th key={k} className="text-left px-3 py-2 font-normal tracking-wider whitespace-nowrap">
+                {formatLabel(k)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i} className="border-b border-zinc-800/40 last:border-0">
+              <td className="px-3 py-2 text-zinc-500">{i + 1}</td>
+              {keys.map((k) => (
+                <td key={k} className="px-3 py-2 text-zinc-100 whitespace-nowrap">
+                  {formatValue(r?.[k] ?? "Não Informado")}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// Renderiza uma chave→valor decidindo se é seção, tabela, sub-seção ou linha
+function renderEntry(key: string, value: any): React.ReactNode {
+  if (shouldHide(key)) return null;
+
+  // Array de objetos → tabela dentro de uma seção
+  if (Array.isArray(value)) {
+    if (value.length === 0) return <Section key={key} title={formatLabel(key)} empty />;
+    if (typeof value[0] === "object" && value[0] !== null) {
+      return (
+        <Section key={key} title={formatLabel(key)}>
+          <ArrayTable rows={value} />
+        </Section>
+      );
+    }
+    // Array de primitivos → lista
+    return (
+      <Section key={key} title={formatLabel(key)}>
+        {value.map((v, i) => (
+          <Row key={i} label={String(i + 1)} value={v} />
+        ))}
+      </Section>
+    );
+  }
+
+  // Objeto → seção com linhas (e sub-seções quando aninhado)
+  if (value && typeof value === "object") {
+    const entries = Object.entries(value).filter(([k, v]) => !shouldHide(k) && !isEmptyValue(v));
+    if (entries.length === 0) return <Section key={key} title={formatLabel(key)} empty />;
+
+    const simpleRows = entries.filter(([, v]) => typeof v !== "object" || v === null);
+    const nestedEntries = entries.filter(([, v]) => typeof v === "object" && v !== null);
+
+    return (
+      <div key={key}>
+        {(simpleRows.length > 0 || nestedEntries.length === 0) && (
+          <Section title={formatLabel(key)}>
+            {simpleRows.length > 0
+              ? simpleRows.map(([k, v]) => <Row key={k} label={k} value={v} />)
+              : <div className="px-3 py-2"><span className="font-mono text-[11px] text-zinc-500">• SEM INFORMAÇÕES</span></div>}
+          </Section>
+        )}
+        {nestedEntries.map(([k, v]) => renderEntry(k, v))}
+      </div>
+    );
+  }
+
+  // Valor escalar solto no topo → mostra como seção de uma linha
+  return (
+    <Section key={key} title={formatLabel(key)}>
+      <Row label="VALOR" value={value} />
+    </Section>
+  );
 }
 
 export default function WebAppResult() {
@@ -40,9 +251,7 @@ export default function WebAppResult() {
   const [data, setData] = useState<ResultData | null>(null);
   const [themeReady, setThemeReady] = useState(false);
 
-  // 🔒 Proteção anti-inspeção: bloqueia botão direito, F12, Ctrl+U, Ctrl+S,
-  // Ctrl+Shift+I/J/C e seleção/arrasto. Não é 100% à prova (nada no navegador é),
-  // mas afasta usuários comuns.
+  // Proteção anti-inspeção
   useEffect(() => {
     const blockContext = (e: MouseEvent) => e.preventDefault();
     const blockKeys = (e: KeyboardEvent) => {
@@ -71,7 +280,7 @@ export default function WebAppResult() {
     };
   }, []);
 
-  // Inicializa Telegram WebApp e tema
+  // Inicializa Telegram WebApp
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-web-app.js";
@@ -81,15 +290,6 @@ export default function WebAppResult() {
       if (tg) {
         tg.ready();
         tg.expand();
-        // Aplica cores do tema do Telegram
-        const tp = tg.themeParams || {};
-        const root = document.documentElement;
-        if (tp.bg_color) root.style.setProperty("--tg-bg", tp.bg_color);
-        if (tp.text_color) root.style.setProperty("--tg-text", tp.text_color);
-        if (tp.hint_color) root.style.setProperty("--tg-hint", tp.hint_color);
-        if (tp.button_color) root.style.setProperty("--tg-btn", tp.button_color);
-        if (tp.section_bg_color)
-          root.style.setProperty("--tg-section-bg", tp.section_bg_color);
       }
       setThemeReady(true);
     };
@@ -107,7 +307,6 @@ export default function WebAppResult() {
     const fetchResult = async () => {
       try {
         const initData = window.Telegram?.WebApp?.initData || "";
-
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -135,12 +334,9 @@ export default function WebAppResult() {
             nao_encontrado: "Resultado não encontrado.",
             token_invalido: "Link inválido ou adulterado.",
             expirado: "Este resultado expirou. Faça a consulta novamente.",
-            abra_pelo_telegram:
-              "Abra esta página pelo botão dentro do Telegram.",
-            assinatura_invalida:
-              "Assinatura do Telegram inválida. Reabra pelo bot.",
-            consulta_de_outro_usuario:
-              "Este resultado pertence a outro usuário.",
+            abra_pelo_telegram: "Abra esta página pelo botão dentro do Telegram.",
+            assinatura_invalida: "Assinatura do Telegram inválida. Reabra pelo bot.",
+            consulta_de_outro_usuario: "Este resultado pertence a outro usuário.",
             bot_nao_encontrado: "Configuração do bot ausente.",
             erro_interno: "Erro interno. Tente novamente.",
           };
@@ -160,41 +356,25 @@ export default function WebAppResult() {
     fetchResult();
   }, [themeReady, pathToken, secretToken]);
 
-  const bgStyle: React.CSSProperties = {
-    background: "var(--tg-bg, hsl(var(--background)))",
-    color: "var(--tg-text, hsl(var(--foreground)))",
-    minHeight: "100vh",
-  };
-
-  const headerStyle: React.CSSProperties = {
-    background: "var(--tg-section-bg, hsl(var(--card)))",
-  };
-
   if (loading || !themeReady) {
     return (
-      <div
-        style={bgStyle}
-        className="flex flex-col items-center justify-center gap-3 p-6"
-      >
-        <Loader2 className="h-8 w-8 animate-spin text-cyan-400" />
-        <p className="text-sm opacity-70">Carregando resultado…</p>
+      <div className="min-h-screen bg-black text-zinc-200 flex flex-col items-center justify-center gap-3 p-6">
+        <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
+        <p className="text-sm opacity-70 font-mono">Carregando resultado…</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={bgStyle} className="p-4">
-        <div
-          style={headerStyle}
-          className="rounded-xl p-5 flex flex-col items-center gap-3 text-center border border-border/40"
-        >
+      <div className="min-h-screen bg-black text-zinc-200 p-4">
+        <div className="rounded-xl p-5 flex flex-col items-center gap-3 text-center border border-zinc-800 bg-zinc-900/60">
           <AlertCircle className="h-10 w-10 text-amber-400" />
           <h2 className="text-base font-semibold">Não foi possível abrir</h2>
-          <p className="text-sm opacity-80 max-w-sm">{error}</p>
+          <p className="text-sm opacity-80 max-w-sm font-mono">{error}</p>
           <a
             href="https://t.me"
-            className="inline-flex items-center gap-1 text-xs text-cyan-400 mt-2"
+            className="inline-flex items-center gap-1 text-xs text-amber-400 mt-2"
           >
             <ExternalLink className="h-3 w-3" /> Voltar ao Telegram
           </a>
@@ -205,43 +385,104 @@ export default function WebAppResult() {
 
   if (!data) return null;
 
-  const dt = new Date(data.created_at).toLocaleString("pt-BR", {
+  const brand = (data.bot_name || data.bot_username || "BOT").toString();
+  const brandUpper = brand.toUpperCase();
+  const username = data.bot_username ? `@${data.bot_username.toLowerCase()}` : "";
+  const userLabel = data.user?.first_name
+    ? `${data.user.first_name}${data.user.username ? ` (@${data.user.username})` : ""}`
+    : data.user?.username
+    ? `@${data.user.username}`
+    : `ID ${data.user?.id ?? "—"}`;
+
+  const dt = new Date(data.created_at);
+  const dtStr = dt.toLocaleString("pt-BR", {
     timeZone: "America/Sao_Paulo",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
   });
 
+  // Desempacota o payload e remove metadados antes de iterar
+  const payload = unwrap(data.result_data);
+  const topEntries =
+    payload && typeof payload === "object" && !Array.isArray(payload)
+      ? Object.entries(payload).filter(([k, v]) => !shouldHide(k) && !isEmptyValue(v))
+      : [];
+
   return (
-    <div style={bgStyle} className="p-3 sm:p-4">
-      {/* Cabeçalho compacto */}
-      <div
-        style={headerStyle}
-        className="rounded-xl px-4 py-3 mb-3 border border-border/40"
-      >
-        <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div>
-            <p className="text-[11px] uppercase tracking-wider opacity-60">
-              Consulta
-            </p>
-            <p className="font-mono text-sm font-semibold">
-              /{data.query_type}{" "}
-              <span className="opacity-70">{data.query_input}</span>
-            </p>
-          </div>
-          <p className="text-[11px] opacity-60">{dt}</p>
+    <div className="min-h-screen bg-black text-zinc-100">
+      {/* Barra de título estilo Mini App */}
+      <div className="sticky top-0 z-10 flex items-center justify-between bg-zinc-950/90 backdrop-blur px-3 py-2.5 border-b border-zinc-800/80">
+        <span className="font-mono text-sm font-semibold text-zinc-100">
+          {brand}
+        </span>
+        <div className="flex items-center gap-2 text-zinc-400">
+          <MoreVertical className="h-4 w-4" />
+          <button
+            onClick={() => window.Telegram?.WebApp?.close()}
+            className="hover:text-zinc-200"
+            aria-label="Fechar"
+          >
+            <X className="h-4 w-4" />
+          </button>
         </div>
-        {data.user?.first_name && (
-          <p className="text-[11px] opacity-60 mt-1">
-            Solicitado por: {data.user.first_name}
-            {data.user.username ? ` (@${data.user.username})` : ""}
-          </p>
-        )}
       </div>
 
-      {/* Resultado no mesmo formato do app */}
-      <MonospaceResultDisplay result={data.result_data} showCopyButton />
+      <div className="px-3 py-3 max-w-3xl mx-auto">
+        {/* Faixa com logo/identidade */}
+        <div className="bg-white rounded-sm px-3 py-3 mb-3 inline-block">
+          <span className="font-mono text-sm font-bold text-black tracking-tight">
+            {brand}
+          </span>
+        </div>
 
-      <p className="text-[10px] opacity-40 text-center mt-4">
-        Resultado seguro · validado pelo Telegram · expira em 24h
-      </p>
+        {/* Título principal da consulta */}
+        <Section
+          title={`CONSULTA ${data.query_type.toUpperCase()} ${brandUpper}`}
+        />
+
+        {/* Seções dinâmicas */}
+        {topEntries.length === 0 ? (
+          <Section title="RESULTADO" empty />
+        ) : (
+          topEntries.map(([k, v]) => renderEntry(k, v))
+        )}
+
+        {/* Rodapé estilo X Buscas */}
+        <div className="mt-3 space-y-2">
+          <div className="border border-zinc-800/80 bg-zinc-950/40 rounded-sm px-3 py-2">
+            <span className="font-mono text-[11px] text-zinc-300">
+              - {data.query_type.toUpperCase()} {data.query_type.toUpperCase()} FULL: {data.query_input}
+            </span>
+          </div>
+          <div className="border border-zinc-800/80 bg-zinc-950/40 rounded-sm px-3 py-2">
+            <span className="font-mono text-[11px] text-zinc-300">
+              BY: {username || brand}
+            </span>
+          </div>
+          <div className="border border-zinc-800/80 bg-zinc-950/40 rounded-sm px-3 py-2">
+            <span className="font-mono text-[11px] text-zinc-300">
+              USER: {userLabel}
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-2 px-1 border-t border-zinc-800/60 pt-2">
+          <span className="font-mono text-[10px] text-zinc-500">
+            {data.query_type.toLowerCase()} • {dtStr}
+          </span>
+        </div>
+      </div>
+
+      {/* Rodapé fixo com username do bot */}
+      <div className="sticky bottom-0 bg-zinc-950/95 backdrop-blur border-t border-zinc-800/80 px-3 py-2 text-center">
+        <span className="font-mono text-[11px] text-zinc-400">
+          {username || brand}
+        </span>
+      </div>
     </div>
   );
 }
