@@ -80,12 +80,13 @@ export function useAdminData(): AdminData {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (opts?: { silent?: boolean }) => {
     if (!user) return;
 
     try {
-      setLoading(true);
+      if (!opts?.silent) setLoading(true);
       setError(null);
+
 
       // Fetch all data in parallel - use count for queries, paginate large tables
       const [
@@ -200,7 +201,7 @@ export function useAdminData(): AdminData {
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     const scheduleRefetch = () => {
       if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => fetchData(), 1500);
+      debounceTimer = setTimeout(() => fetchData({ silent: true }), 1500);
     };
 
     const channel = supabase
