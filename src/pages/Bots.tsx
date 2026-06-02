@@ -544,13 +544,7 @@ export default function Bots() {
                             <>
                               <Input
                                 type="text"
-                                value={
-                                  showToken === bot.id
-                                    ? bot.token
-                                    : bot.token && bot.token.includes(":")
-                                      ? `${bot.token.split(":")[0]}:••••••••••••${bot.token.slice(-4)}`
-                                      : "••••••••••••"
-                                }
+                                value="🔒 Token protegido • armazenado com segurança"
                                 readOnly
                                 className="flex-1 bg-secondary/50 font-mono text-xs h-9"
                                 onClick={(e) => e.stopPropagation()}
@@ -562,33 +556,11 @@ export default function Bots() {
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setEditingTokenBotId(bot.id);
-                                  setEditTokenValue(bot.token);
+                                  setEditTokenValue("");
                                 }}
-                                title="Editar token"
+                                title="Substituir token (cole um novo)"
                               >
                                 <Pencil className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-9 w-9 shrink-0"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setShowToken(showToken === bot.id ? null : bot.id);
-                                }}
-                              >
-                                {showToken === bot.id ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-9 w-9 shrink-0"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  copyToClipboard(bot.token);
-                                }}
-                              >
-                                <Copy className="h-4 w-4" />
                               </Button>
                             </>
                           )}
