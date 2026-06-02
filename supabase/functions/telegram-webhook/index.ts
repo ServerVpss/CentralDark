@@ -6534,6 +6534,11 @@ class BotHandler {
         if (successSiblingButtons.length > 0) {
           extraButtons.push(...successSiblingButtons);
         }
+        // 📱 Botão Mini App (resultado em página web criptografada)
+        const webappUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        if (webappUrl) {
+          extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrl)]);
+        }
         const paginatedResult = await sendLongMessagePaginated(this.token, chatId, formattedResult + consultaFooter, this.supabase, undefined, effectId, usedModule, queryInput, extraButtons, telegramUserId);
         if (paginatedResult.ok && paginatedResult.result) {
           resultMessageId = (paginatedResult.result as { message_id?: number }).message_id;
