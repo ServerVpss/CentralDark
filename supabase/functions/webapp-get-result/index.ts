@@ -126,10 +126,10 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Busca token do bot (sem FK declarada, query separada)
+    // Busca token e identidade do bot (sem FK declarada, query separada)
     const { data: botRow } = await supabase
       .from("telegram_bots")
-      .select("token")
+      .select("token, bot_username, bot_name")
       .eq("id", record.bot_id)
       .maybeSingle();
     const botToken = botRow?.token;
