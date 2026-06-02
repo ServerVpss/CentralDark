@@ -114,6 +114,8 @@ interface BotSettings {
   button_emoji_ids: Record<string, string>;
   // Menu legado (antigo) — quando true, mostra todos os módulos numa lista só
   use_legacy_menu: boolean;
+  // URL pública do Mini App (preenchida automaticamente pelo painel com window.location.origin)
+  webapp_url: string | null;
 }
 
 interface Plan {
@@ -461,7 +463,19 @@ function btnUrl(text: string, url: string, style?: string, iconCustomEmojiId?: s
 }
 
 // =============== WEBAPP (Mini App) ===============
-const WEBAPP_PUBLIC_URL = Deno.env.get("WEBAPP_PUBLIC_URL") || "https://telegram-zen-panel-6518f4e2-5d802052.lovable.app";
+// Domínio padrão usado quando o painel ainda não salvou nenhum. O painel salva
+// automaticamente o window.location.origin atual, então isso é só fallback.
+const WEBAPP_PUBLIC_URL_FALLBACK = Deno.env.get("WEBAPP_PUBLIC_URL") || "https://telegram-zen-panel-6518f4e2-5d802052.lovable.app";
+
+// Retorna a URL base do Mini App. Prioriza o que está salvo em bot_settings.webapp_url
+// (preenchido automaticamente pelo painel). Se não houver, usa o fallback.
+function resolveWebappBaseUrl(settings: { webapp_url?: string | null } | null | undefined): string {
+  const fromSettings = settings?.webapp_url?.trim();
+  if (fromSettings && /^https?:\/\//i.test(fromSettings)) {
+    return fromSettings.replace(/\/+$/, "");
+  }
+  return WEBAPP_PUBLIC_URL_FALLBACK.replace(/\/+$/, "");
+}
 
 // web_app buttons só funcionam em chats privados. Em grupos cai pra url normal.
 function btnWebApp(text: string, url: string, chatId?: number, style?: string): InlineButton {
@@ -486,6 +500,7 @@ async function createWebappResultLink(
   queryType: string,
   queryInput: string,
   resultData: unknown,
+  baseUrl: string,
 ): Promise<string | null> {
   try {
     const pathToken = randomHex(16);   // 32 chars
@@ -503,12 +518,13 @@ async function createWebappResultLink(
       console.error("createWebappResultLink insert error:", error);
       return null;
     }
-    return `${WEBAPP_PUBLIC_URL}/result/${pathToken}/${secretToken}/`;
+    return `${baseUrl}/result/${pathToken}/${secretToken}/`;
   } catch (e) {
     console.error("createWebappResultLink exception:", e);
     return null;
   }
 }
+
 
 // =============== UNICODE BOLD SANS (𝗘𝗫𝗘𝗠𝗣𝗟𝗢) ===============
 // Converte texto ASCII para a variante sans-serif bold matemática do Unicode,
@@ -6600,7 +6616,7 @@ class BotHandler {
 
       // ============ MODO MINI APP (Novo) — envia só o botão, sem texto inline ============
       if ((this.settings as any)?.use_legacy_menu === true) {
-        const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        const webappOnlyUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrl) {
           const effectIdNovo = getMessageEffectId(this.settings.message_effect);
           await sendMessage(
@@ -6681,7 +6697,7 @@ class BotHandler {
           extraButtons.push(...successSiblingButtons);
         }
         // 📱 Botão Mini App (resultado em página web criptografada)
-        const webappUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result);
+        const webappUrl = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, usedModule, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappUrl) {
           extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrl, chatId)]);
         }
@@ -8778,7 +8794,7 @@ class BotHandler {
 
       // ============ MODO MINI APP (Novo) — envia só o botão no grupo ============
       if ((this.settings as any)?.use_legacy_menu === true) {
-        const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+        const webappOnlyUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result, resolveWebappBaseUrl(this.settings));
         if (webappOnlyUrlGrp) {
           await sendMessage(
             this.token, chatId,
@@ -8822,7 +8838,7 @@ class BotHandler {
         extraButtons.push(...successSiblingBtns);
       }
       // 📱 Botão Mini App (resultado em página web criptografada)
-      const webappUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result);
+      const webappUrlGrp = await createWebappResultLink(this.supabase, this.bot.id, telegramUserId, queryType, queryInput, result, resolveWebappBaseUrl(this.settings));
       if (webappUrlGrp) {
         extraButtons.unshift([btnWebApp("📱 Abrir Resultado no App", webappUrlGrp, chatId)]);
       }
@@ -10214,6 +10230,7 @@ Deno.serve(async (req) => {
       maintenance_message: (settings as { maintenance_message?: string } | null)?.maintenance_message || '🔧 Bot em manutenção. Retornaremos em breve.',
       button_emoji_ids: (settings as { button_emoji_ids?: Record<string, string> } | null)?.button_emoji_ids || {},
       use_legacy_menu: (settings as { use_legacy_menu?: boolean } | null)?.use_legacy_menu || false,
+      webapp_url: (settings as { webapp_url?: string | null } | null)?.webapp_url || null,
     };
 
     // Merge custom emoji IDs from settings
