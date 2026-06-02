@@ -6051,11 +6051,6 @@ class BotHandler {
   }
 
   async showQueryMenu(chatId: number, messageId: number) {
-    // Verifica se está no modo legado (menu antigo, todos os módulos numa lista só)
-    const useLegacy = (this.settings as any)?.use_legacy_menu === true;
-    if (useLegacy) {
-      return this.showQueryMenuLegacy(chatId, messageId);
-    }
 
     const text = `🔍 <b>Central de Consultas</b>\n\n<i>Escolha uma categoria abaixo:</i>`;
 
