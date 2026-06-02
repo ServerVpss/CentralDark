@@ -59,8 +59,13 @@ export default function BotSettings() {
   useEffect(() => {
     if (!botId || typeof window === "undefined") return;
     const currentOrigin = window.location.origin;
+    // Ignora domínios de preview/sandbox (lovableproject.com / id-preview--*).
+    // Esses não são estáveis e não funcionam bem como Mini App do Telegram.
+    const host = window.location.hostname;
+    const isSandbox = /lovableproject\.com$/i.test(host) || /^id-preview--/i.test(host);
+    if (isSandbox) return;
     const savedOrigin = (settings as { webapp_url?: string | null } | null)?.webapp_url;
-    if (savedOrigin === currentOrigin) return; // já está sincronizado
+    if (savedOrigin === currentOrigin) return;
     supabase
       .from("bot_settings")
       .update({ webapp_url: currentOrigin })
