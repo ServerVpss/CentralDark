@@ -37,6 +37,22 @@ async function telegramRequest(token: string, method: string, body?: Record<stri
   }
 }
 
+async function fetchBotPhotoUrl(token: string, botId: number): Promise<string | null> {
+  try {
+    const photos = await telegramRequest(token, "getUserProfilePhotos", { user_id: botId, limit: 1 });
+    const result = photos.result as { photos?: Array<Array<{ file_id: string }>> } | undefined;
+    const fileId = result?.photos?.[0]?.[result.photos[0].length - 1]?.file_id;
+    if (!fileId) return null;
+    const fileRes = await telegramRequest(token, "getFile", { file_id: fileId });
+    const filePath = (fileRes.result as { file_path?: string } | undefined)?.file_path;
+    if (!filePath) return null;
+    return `https://api.telegram.org/file/bot${token}/${filePath}`;
+  } catch (e) {
+    console.error("fetchBotPhotoUrl error:", e);
+    return null;
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
