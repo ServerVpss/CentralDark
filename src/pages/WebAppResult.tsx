@@ -769,7 +769,25 @@ export default function WebAppResult() {
           )}
         </button>
 
+        {aiLoading && !aiFormatted && !errorMessage && (
+          <div className="mb-3 flex items-center gap-2 border border-violet-500/30 bg-violet-500/5 rounded-sm px-3 py-2">
+            <Sparkles className="h-3.5 w-3.5 text-violet-300 animate-pulse" />
+            <span className="font-mono text-[11px] text-violet-200">
+              IA organizando os dados…
+            </span>
+          </div>
+        )}
+        {aiFormatted && !errorMessage && (
+          <div className="mb-3 flex items-center gap-2 border border-violet-500/30 bg-violet-500/5 rounded-sm px-3 py-2">
+            <Sparkles className="h-3.5 w-3.5 text-violet-300" />
+            <span className="font-mono text-[11px] text-violet-200">
+              Formatado com IA
+            </span>
+          </div>
+        )}
+
         {body}
+
 
 
 
