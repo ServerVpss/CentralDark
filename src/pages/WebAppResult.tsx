@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Loader2, AlertCircle, ExternalLink, MoreVertical, X } from "lucide-react";
+import { Loader2, AlertCircle, ExternalLink, MoreVertical, X, Copy, Check } from "lucide-react";
+
 
 // Tipagem mínima do Telegram WebApp
 declare global {
@@ -125,6 +126,65 @@ function unwrap(d: any): any {
   }
   return d;
 }
+
+// Constrói um texto plano organizado por seção (CHAVE => VALOR), pronto pra copiar
+function buildPlainText(payload: any, header?: string): string {
+  const lines: string[] = [];
+  if (header) {
+    lines.push(`╔══════════════════════════════════════`);
+    lines.push(`║ ${header}`);
+    lines.push(`╚══════════════════════════════════════`);
+    lines.push("");
+  }
+
+  const writeKV = (label: string, value: any, indent = "") => {
+    const v = value === null || value === undefined ? "Não informado" : String(value);
+    lines.push(`${indent}${formatLabel(label)} => ${v}`);
+  };
+
+  const writeNode = (key: string, value: any, indent = "") => {
+    if (shouldHide(key) || isEmptyValue(value)) return;
+
+    if (Array.isArray(value)) {
+      lines.push("");
+      lines.push(`${indent}━━━ ${formatLabel(key)} (${value.length}) ━━━`);
+      value.forEach((item, i) => {
+        if (item && typeof item === "object") {
+          lines.push(`${indent}• ${formatLabel(key)} #${i + 1}`);
+          Object.entries(item).forEach(([k, v]) => writeNode(k, v, indent + "  "));
+        } else {
+          writeKV(String(i + 1), item, indent + "  ");
+        }
+      });
+      return;
+    }
+
+    if (value && typeof value === "object") {
+      const entries = Object.entries(value).filter(
+        ([k, v]) => !shouldHide(k) && !isEmptyValue(v),
+      );
+      if (entries.length === 0) return;
+      lines.push("");
+      lines.push(`${indent}━━━ ${formatLabel(key)} ━━━`);
+      entries.forEach(([k, v]) => writeNode(k, v, indent + "  "));
+      return;
+    }
+
+    writeKV(key, value, indent);
+  };
+
+  if (Array.isArray(payload)) {
+    payload.forEach((item, i) => writeNode(`Registro ${i + 1}`, item));
+  } else if (payload && typeof payload === "object") {
+    Object.entries(payload).forEach(([k, v]) => writeNode(k, v));
+  } else if (payload != null) {
+    lines.push(String(payload));
+  }
+
+  return lines.join("\n").trim();
+}
+
+
 
 // ---- Render de seções no estilo X Buscas ----
 
@@ -288,6 +348,8 @@ export default function WebAppResult() {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<ResultData | null>(null);
   const [themeReady, setThemeReady] = useState(false);
+  const [copied, setCopied] = useState(false);
+
 
   // Proteção anti-inspeção
   useEffect(() => {
@@ -520,6 +582,34 @@ export default function WebAppResult() {
     body = <Section title="RESULTADO" empty />;
   }
 
+  // Texto plano completo pra botão "copiar tudo"
+  const copyText = useMemo(() => {
+    const headerLine = `CONSULTA ${data.query_type.toUpperCase()} — ${brandUpper}\n${data.query_type.toUpperCase()}: ${data.query_input}\nData: ${dtStr}`;
+    const corpo = errorMessage
+      ? `Sem resultado: ${errorMessage}`
+      : buildPlainText(payload, "");
+    const rodape = `\n\nConsulta solicitada por: ${userLabel}\nBot: ${username || brand}`;
+    return `${headerLine}\n${corpo}${rodape}`;
+  }, [payload, errorMessage, brand, brandUpper, username, userLabel, dtStr, data]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(copyText);
+      setCopied(true);
+      try { window.Telegram?.WebApp && (window.Telegram.WebApp as any).HapticFeedback?.notificationOccurred?.("success"); } catch {}
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback antigo
+      const ta = document.createElement("textarea");
+      ta.value = copyText;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {}
+      ta.remove();
+    }
+  };
+
+
   return (
     <div className="min-h-screen bg-black text-zinc-100">
       {/* Barra de título estilo Mini App */}
@@ -552,7 +642,24 @@ export default function WebAppResult() {
           title={`CONSULTA ${data.query_type.toUpperCase()} ${brandUpper}`}
         />
 
+        {/* Botão copiar tudo */}
+        <button
+          onClick={handleCopy}
+          className="mb-3 w-full flex items-center justify-center gap-2 border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 active:bg-amber-500/30 transition rounded-sm px-3 py-2.5 font-mono text-[12px] text-amber-300"
+        >
+          {copied ? (
+            <>
+              <Check className="h-4 w-4" /> COPIADO!
+            </>
+          ) : (
+            <>
+              <Copy className="h-4 w-4" /> COPIAR TUDO FORMATADO
+            </>
+          )}
+        </button>
+
         {body}
+
 
 
         {/* Rodapé estilo X Buscas */}
