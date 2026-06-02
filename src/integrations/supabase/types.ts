@@ -1508,6 +1508,7 @@ export type Database = {
           bot_id: string | null
           created_at: string
           expires_at: string
+          formatted_data: Json | null
           id: string
           path_token: string
           query_input: string | null
@@ -1521,6 +1522,7 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           expires_at?: string
+          formatted_data?: Json | null
           id?: string
           path_token: string
           query_input?: string | null
@@ -1534,6 +1536,7 @@ export type Database = {
           bot_id?: string | null
           created_at?: string
           expires_at?: string
+          formatted_data?: Json | null
           id?: string
           path_token?: string
           query_input?: string | null
