@@ -784,12 +784,9 @@ export default function WebAppResult() {
       </div>
 
       <div className="w-full px-2 sm:px-4 md:px-6 py-3 max-w-3xl mx-auto text-[clamp(12px,2.8vw,14px)]">
-        {/* Faixa com logo/identidade */}
-        <div className="bg-white rounded-sm px-3 py-3 mb-3 inline-block">
-          <span className="font-mono text-[clamp(12px,3vw,14px)] font-bold text-black tracking-tight">
-            {brand}
-          </span>
-        </div>
+        {/* News ticker — manchetes deslizando na diagonal (direita → esquerda) */}
+        <NewsTicker />
+
 
 
         {/* Título principal da consulta */}
