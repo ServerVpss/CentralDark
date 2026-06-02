@@ -9522,6 +9522,30 @@ class BotHandler {
       return;
     }
 
+    // Submenus de categoria (PESSOAS / VEICULAR / FOTOS)
+    if (data.startsWith("menu:pessoas")) {
+      const parts = data.split(":");
+      const page = parts[2] ? parseInt(parts[2], 10) : 1;
+      await this.showPessoasMenu(chatId, messageId, isNaN(page) ? 1 : page);
+      return;
+    }
+
+    if (data === "menu:veicular") {
+      await this.showVeicularMenu(chatId, messageId);
+      return;
+    }
+
+    if (data.startsWith("menu:fotos")) {
+      const parts = data.split(":");
+      const page = parts[2] ? parseInt(parts[2], 10) : 1;
+      await this.showFotosMenu(chatId, messageId, isNaN(page) ? 1 : page);
+      return;
+    }
+
+    if (data === "noop") {
+      return;
+    }
+
     if (data === "menu:plans" || data.startsWith("menu:plans:")) {
       const planContext = data.includes(":") && data.split(":").length === 3 ? data.split(":")[2] : 'group';
       await this.showPlansMenu(chatId, messageId, planContext);
