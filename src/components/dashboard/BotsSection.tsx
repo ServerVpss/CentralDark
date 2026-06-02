@@ -11,6 +11,7 @@ interface BotData {
   bot_username: string | null;
   health_status: string | null;
   is_active: boolean | null;
+  bot_photo_url?: string | null;
 }
 
 interface BotsSectionProps {
