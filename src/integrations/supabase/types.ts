@@ -1125,6 +1125,7 @@ export type Database = {
       telegram_bots: {
         Row: {
           bot_id: number | null
+          bot_photo_url: string | null
           bot_username: string | null
           created_at: string
           health_status: string | null
@@ -1140,6 +1141,7 @@ export type Database = {
         }
         Insert: {
           bot_id?: number | null
+          bot_photo_url?: string | null
           bot_username?: string | null
           created_at?: string
           health_status?: string | null
@@ -1155,6 +1157,7 @@ export type Database = {
         }
         Update: {
           bot_id?: number | null
+          bot_photo_url?: string | null
           bot_username?: string | null
           created_at?: string
           health_status?: string | null
