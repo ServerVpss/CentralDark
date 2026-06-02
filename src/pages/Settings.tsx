@@ -120,6 +120,10 @@ export default function Settings() {
               <Database className="h-4 w-4" />
               Backup
             </TabsTrigger>
+            <TabsTrigger value="cleanup" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Trash2 className="h-4 w-4" />
+              Limpeza
+            </TabsTrigger>
           </TabsList>
 
           {/* Profile Tab */}
