@@ -460,7 +460,43 @@ export default function WebAppResult() {
     fetchResult();
   }, [themeReady, pathToken, secretToken]);
 
-  if (loading || !themeReady) {
+  // Dispara formatação por IA depois que o resultado carrega
+  useEffect(() => {
+    if (!data || aiFormatted || aiLoading) return;
+    const errMsg = extractErrorMessage(unwrap(data.result_data));
+    if (errMsg) return; // não chama IA em erro
+    setAiLoading(true);
+    const run = async () => {
+      try {
+        const initData = window.Telegram?.WebApp?.initData || "";
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const res = await fetch(`${supabaseUrl}/functions/v1/webapp-format-ai`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${anonKey}`,
+            apikey: anonKey,
+          },
+          body: JSON.stringify({
+            path_token: pathToken,
+            secret_token: secretToken,
+            init_data: initData,
+          }),
+        });
+        const json = await res.json();
+        if (res.ok && json?.ok && json.formatted) {
+          setAiFormatted(json.formatted);
+        }
+      } catch (err) {
+        console.warn("[WebAppResult] IA falhou, usando fallback:", err);
+      } finally {
+        setAiLoading(false);
+      }
+    };
+    run();
+  }, [data, pathToken, secretToken, aiFormatted, aiLoading]);
+
     return (
       <div className="min-h-screen bg-black text-zinc-200 flex flex-col items-center justify-center gap-3 p-6">
         <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
