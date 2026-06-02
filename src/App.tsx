@@ -24,6 +24,8 @@ import NotFound from "./pages/NotFound";
 import Security from "./pages/Security";
 import SubscriptionAudit from "./pages/SubscriptionAudit";
 import WebAppResult from "./pages/WebAppResult";
+import MenuTips from "./pages/MenuTips";
+import { PageSplash } from "@/components/transitions/PageSplash";
 
 const queryClient = new QueryClient();
 
