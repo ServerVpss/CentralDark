@@ -6431,6 +6431,15 @@ class BotHandler {
       return;
     }
 
+    // Anti-rajada: cooldown + limite por minuto + mute automático
+    const rateBlock = await this.checkQueryRateLimit(telegramUserId);
+    if (rateBlock) {
+      logCmd('INFO', 'CMD_BLOCKED', { reason: 'rate_limit', queryType, chatId, userId: telegramUserId });
+      await sendMessage(this.token, chatId, rateBlock);
+      return;
+    }
+
+
     // Check if query type is enabled - SILENTLY ignore if disabled
     // This prevents the bot from responding when module is off,
     // avoiding confusion with other bots no grupo
