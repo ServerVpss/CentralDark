@@ -133,7 +133,7 @@ export default function Auth() {
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-3d-primary">
             <Zap className="h-7 w-7 text-primary-foreground" strokeWidth={2.5} />
           </div>
-          <span className="text-2xl font-bold tracking-tight text-foreground">TelePanel</span>
+          <span className="text-2xl font-bold tracking-tight text-foreground">CentralDark</span>
         </div>
 
         <Card className="rounded-2xl border-border/60 shadow-3d">
