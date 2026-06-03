@@ -189,15 +189,37 @@ export function BottomNav() {
             />
           </svg>
 
-          {/* Itens da esquerda — centralizados verticalmente, abaixo do notch */}
-          <div className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16">
+          {/* Filtro gooey (técnica do Supah — feGaussianBlur + feColorMatrix) */}
+          <svg className="absolute w-0 h-0" aria-hidden>
+            <defs>
+              <filter id="bnav-goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+                <feColorMatrix
+                  in="blur"
+                  mode="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"
+                  result="goo"
+                />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+              </filter>
+            </defs>
+          </svg>
+
+          {/* Itens da esquerda — filtro goo aplicado no container */}
+          <div
+            className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16"
+            style={{ filter: "url(#bnav-goo)" }}
+          >
             {TABS_LEFT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
           </div>
 
           {/* Itens da direita */}
-          <div className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16">
+          <div
+            className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16"
+            style={{ filter: "url(#bnav-goo)" }}
+          >
             {TABS_RIGHT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
@@ -248,19 +270,33 @@ function TabButton({
       aria-label={tab.label}
       className="relative flex items-center justify-center h-12 w-12 group"
     >
+      {/* Halo líquido principal — funde com a gota via filtro goo */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-0 m-auto rounded-full bg-primary transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)]",
+          active ? "h-11 w-11 opacity-100 scale-100" : "h-2 w-2 opacity-0 scale-50"
+        )}
+      />
+      {/* Gota que "pinga" pra baixo e funde com o halo (efeito líquido) */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute left-1/2 -translate-x-1/2 rounded-full bg-primary transition-all duration-700",
+          active
+            ? "h-3 w-3 opacity-100 animate-bnav-drip"
+            : "h-0 w-0 opacity-0 bottom-1"
+        )}
+      />
       <Icon
         className={cn(
-          "h-[26px] w-[26px] transition-all duration-200",
+          "relative h-[26px] w-[26px] transition-all duration-300",
           active
-            ? "text-primary scale-[1.08]"
+            ? "text-primary-foreground scale-[1.05]"
             : "text-muted-foreground group-active:text-foreground"
         )}
-        strokeWidth={active ? 2.25 : 1.9}
+        strokeWidth={active ? 2.4 : 1.9}
       />
-      {active && (
-        <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary" />
-      )}
-
     </button>
   );
 }
