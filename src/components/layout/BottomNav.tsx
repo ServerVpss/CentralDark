@@ -13,8 +13,10 @@ import {
   Database,
   Shield,
   Activity,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 
 /**
  * Barra inferior fixa estilo "notch + FAB central".
