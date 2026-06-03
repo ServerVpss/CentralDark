@@ -36,9 +36,6 @@ interface SidebarProps {
 
 const menuGroups = [
   {
-    label: "PRINCIPAL",
-const menuGroups = [
-  {
     label: "Principal",
     icon: LayoutGrid,
     items: [
