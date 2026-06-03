@@ -72,7 +72,7 @@ export default function Portal() {
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
       <Helmet>
-        <title>CentralDeck — Portal de módulos</title>
+        <title>CentralDark — Portal de módulos</title>
         <meta name="description" content="Sua central de módulos. Acesse TelePainel, CRM, WhatsApp e Financeiro num só lugar." />
       </Helmet>
 
@@ -91,7 +91,7 @@ export default function Portal() {
             <span className="grid h-7 w-7 place-items-center rounded-lg icon-glow">
               <Sparkles className="h-3.5 w-3.5" />
             </span>
-            CentralDeck
+            CentralDark
           </Link>
 
           <div className="flex items-center gap-2">
@@ -210,7 +210,7 @@ export default function Portal() {
 
       <footer className="border-t border-border/60 bg-muted/20">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 font-mono text-[11px] text-muted-foreground md:flex-row">
-          <span>CentralDeck © {new Date().getFullYear()}</span>
+          <span>CentralDark © {new Date().getFullYear()}</span>
           <Link to="/" className="hover:text-foreground">voltar à página inicial</Link>
         </div>
       </footer>

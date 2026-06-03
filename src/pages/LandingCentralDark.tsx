@@ -26,13 +26,13 @@ const benefits = [
   { icon: ShieldCheck, title: "Segurança em primeiro lugar", desc: "Autenticação, controles de acesso e auditoria já vêm embutidos no portal." },
 ];
 
-export default function LandingCentralDeck() {
+export default function LandingCentralDark() {
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
       <Helmet>
-        <title>CentralDeck — Sua central de módulos</title>
-        <meta name="description" content="CentralDeck é a sua central de módulos: TelePainel, CRM, WhatsApp, Financeiro e mais. Um login, vários produtos." />
-        <meta property="og:title" content="CentralDeck — Sua central de módulos" />
+        <title>CentralDark — Sua central de módulos</title>
+        <meta name="description" content="CentralDark é a sua central de módulos: TelePainel, CRM, WhatsApp, Financeiro e mais. Um login, vários produtos." />
+        <meta property="og:title" content="CentralDark — Sua central de módulos" />
         <meta property="og:description" content="Um portal, vários módulos. Comece pelo TelePainel e expanda quando quiser." />
       </Helmet>
 
@@ -51,7 +51,7 @@ export default function LandingCentralDeck() {
             <span className="grid h-7 w-7 place-items-center rounded-lg icon-glow">
               <Sparkles className="h-3.5 w-3.5" />
             </span>
-            CentralDeck
+            CentralDark
           </Link>
 
           <nav className="hidden gap-7 font-mono text-[12px] text-muted-foreground md:flex">
@@ -93,7 +93,7 @@ export default function LandingCentralDeck() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-balance text-base text-muted-foreground md:text-lg">
-            CentralDeck reúne TelePainel, CRM, WhatsApp, Financeiro e o que vier depois.
+            CentralDark reúne TelePainel, CRM, WhatsApp, Financeiro e o que vier depois.
             Entre uma vez e abra o produto que precisar.
           </p>
 
@@ -210,7 +210,7 @@ export default function LandingCentralDeck() {
             className="mt-10 h-12 rounded-lg bg-primary px-6 font-mono text-sm font-medium text-primary-foreground shadow-3d-primary active:translate-y-[1px] hover:bg-primary-glow"
           >
             <Link to="/auth">
-              acessar CentralDeck
+              acessar CentralDark
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -223,7 +223,7 @@ export default function LandingCentralDeck() {
             <span className="grid h-5 w-5 place-items-center rounded-md icon-glow">
               <Sparkles className="h-3 w-3" />
             </span>
-            CentralDeck © {new Date().getFullYear()}
+            CentralDark © {new Date().getFullYear()}
           </div>
           <div className="flex gap-6 font-mono text-[11px] text-muted-foreground">
             <Link to="/auth" className="hover:text-foreground">entrar</Link>

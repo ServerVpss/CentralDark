@@ -10,8 +10,8 @@ export default function LandingWhatsapp() {
       status="em breve"
       accent="142 70% 45%"
       icon={MessageCircle}
-      pageTitle="Bot WhatsApp — CentralDeck"
-      pageDescription="Bot WhatsApp da CentralDeck. Em breve disponível."
+      pageTitle="Bot WhatsApp — CentralDark"
+      pageDescription="Bot WhatsApp da CentralDark. Em breve disponível."
       features={[
         { title: "Atendimento 24/7", desc: "Respostas automáticas, filas e transferência humana quando preciso." },
         { title: "Consultas integradas", desc: "Mesmas fontes de dados do TelePainel, agora direto no WhatsApp." },

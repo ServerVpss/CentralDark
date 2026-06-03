@@ -9,7 +9,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import Index from "./pages/Index";
-import LandingCentralDeck from "./pages/LandingCentralDeck";
+import LandingCentralDark from "./pages/LandingCentralDark";
 import LandingTelePainel from "./pages/LandingTelePainel";
 import LandingWhatsapp from "./pages/LandingWhatsapp";
 import LandingCRM from "./pages/LandingCRM";
@@ -35,7 +35,7 @@ import { PageSplash } from "@/components/transitions/PageSplash";
 const queryClient = new QueryClient();
 
 // Rotas internas do módulo TelePainel — usadas tanto na raiz (legado)
-// quanto prefixadas em /telepainel/* (novo padrão sob o portal CentralDeck).
+// quanto prefixadas em /telepainel/* (novo padrão sob o portal CentralDark).
 const telepainelRoutes = [
   { path: "dashboard", element: <Index /> },
   { path: "consultas", element: <Consultas /> },
@@ -65,7 +65,7 @@ const App = () => (
             <PageSplash />
             <Routes>
               {/* Públicas */}
-              <Route path="/" element={<LandingCentralDeck />} />
+              <Route path="/" element={<LandingCentralDark />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
 
@@ -75,7 +75,7 @@ const App = () => (
               <Route path="/crm" element={<LandingCRM />} />
               <Route path="/financeiro" element={<LandingFinanceiro />} />
 
-              {/* Portal CentralDeck (área logada principal) */}
+              {/* Portal CentralDark (área logada principal) */}
               <Route
                 path="/portal"
                 element={<ProtectedRoute><Portal /></ProtectedRoute>}
