@@ -79,7 +79,7 @@ interface MenuTip {
 }
 
 const SKIP_ROUTES = ["/auth", "/result"];
-const SPLASH_DURATION = 2800;
+const SPLASH_DURATION = 3500;
 
 let tipsCache: MenuTip[] | null = null;
 
