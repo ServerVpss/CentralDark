@@ -10,7 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/components/auth/AuthProvider";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 
 type Module = {
   id: string;
@@ -67,7 +67,7 @@ const modules: Module[] = [
 ];
 
 export default function Portal() {
-  const { signOut, user } = useAuth();
+  const { signOut, user } = useAuthContext();
 
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
