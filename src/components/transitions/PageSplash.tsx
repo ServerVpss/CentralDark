@@ -226,12 +226,14 @@ export function PageSplash() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          filter: drop-shadow(0 10px 40px hsl(var(--primary) / 0.45));
-          animation: handEntrance 600ms cubic-bezier(.2,.9,.25,1.1) both;
+          filter: drop-shadow(0 20px 60px hsl(var(--primary) / 0.65)) drop-shadow(0 0 30px hsl(var(--primary) / 0.4));
+          animation: handEntrance 900ms cubic-bezier(.15,.85,.2,1.15) both;
+          transform-origin: center bottom;
         }
         @keyframes handEntrance {
-          from { transform: scale(.85); opacity: 0; }
-          to   { transform: scale(1); opacity: 1; }
+          0%   { transform: scale(0.6) translateY(80px); opacity: 0; filter: drop-shadow(0 0 0 transparent); }
+          60%  { transform: scale(1.08) translateY(-4px); opacity: 1; }
+          100% { transform: scale(1.0) translateY(0); opacity: 1; }
         }
 
         .splash-tip { animation: tipRise 500ms ease-out 150ms both; }
