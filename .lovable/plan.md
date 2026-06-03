@@ -1,33 +1,24 @@
-## Problema
+## Tema Esmeralda na Landing
 
-No tema claro o dashboard fica ilegível: os números grandes (R$ 56,00, 46, 162) usam um gradiente branco→cinza que some no fundo branco, o nome "Segredo" no header também fica fantasma, e várias áreas (sidebar, scrollbar, glass) foram pensadas só pro dark.
+Apelido curto pro design system que já existe no painel e no login. Nada novo — só alinhar a Landing pra usar os mesmos tokens.
 
-## O que vou ajustar (só CSS — `src/index.css`)
+## O que muda
 
-1. **Gradiente de texto (`.text-gradient-gold` / `.text-gradient-money`)**
-   - Dark: mantém o gradiente branco→cinza claro (fica bonito).
-   - Light: vira gradiente escuro (preto suave → cinza médio) pra os números grandes ficarem nítidos.
+**`src/pages/Landing.tsx`** (só visual, texto fica igual):
+- Remover `forceDark` — respeita o tema do sistema
+- Trocar cores cruas (`bg-black`, `text-emerald-400`, `text-white`) por tokens semânticos (`bg-background`, `text-primary`, `text-foreground`, `border-border/60`)
+- Geist como fonte base, Geist Mono só em detalhes (badges, números, tabular-nums)
+- Cards com `card-premium` + `shadow-3d` + `rounded-xl` + hover lift
+- CTA com `shadow-3d-primary` + `active:translate-y-[1px]`
+- Navbar com `glass-subtle`
+- Hero com gradient radial sutil e número grande em gradiente verde/dourado (igual aos KPIs do painel)
 
-2. **Tokens do tema claro mais contrastados**
-   - `--foreground` mais escuro (`0 0% 7%`).
-   - `--muted-foreground` de 40% pra `0 0% 35%` (texto secundário mais lido).
-   - `--border` levemente mais escura (`0 0% 88%`) pra cards se destacarem.
-   - `--card` com leve off-white pra separar do background.
-   - `--primary` no claro um pouco mais escuro (`152 65% 32%`) pra contrastar com fundo branco e funcionar em botões/badges.
-
-3. **Sidebar no claro**
-   - `--sidebar-foreground` mais escuro (`0 0% 25%`).
-   - Item ativo com fundo `--sidebar-accent` mais visível.
-
-4. **Glass / scrollbar / selection adaptados ao tema**
-   - Scrollbar `::-webkit-scrollbar-*` passa a usar `hsl(var(--muted))` em vez de cor fixa escura.
-   - `.glass-subtle` usa `hsl(var(--card) / 0.6)` em vez de preto fixo.
-   - `::selection` usa `--foreground` em vez de branco fixo.
-
-5. **Cards stat tints (`.stat-gradient-*`)**
-   - No claro, aumentar opacidade do tint (de 0.06 pra 0.10) e da borda (de 0.18 pra 0.25) pra não sumir.
+**Memória:**
+- Criar `mem://design/tema-esmeralda` com o apelido apontando pro sistema 3D Tátil que já existe
+- Atualizar `mem://index.md` adicionando a referência
 
 ## Fora do escopo
 
-- Não vou mudar componente nenhum (Dashboard, Sidebar, cards) — só os tokens e utilitários do design system. Como tudo usa semantic tokens, a melhora propaga sozinha.
-- Tema escuro fica igual.
+- Nenhuma mudança de texto/conteúdo
+- Auth, Dashboard e outras páginas ficam como estão
+- Nenhuma biblioteca nova
