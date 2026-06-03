@@ -6,7 +6,7 @@ export function invalidateTipsCache() {
 
 const SESSION_KEY = "__splash_shown_v8__";
 const EVENT = "lovable:splash:play";
-const DURATION = 1150; // duração total em ms
+const DURATION = 1850; // duração total em ms
 const ROOT_SCALE_CLASS = "splash-app-scaling";
 
 // Path do raio (mesmo do <Logo />)
