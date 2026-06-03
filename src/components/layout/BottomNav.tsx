@@ -29,7 +29,7 @@ type Tab = {
 };
 
 const TABS_LEFT: Tab[] = [
-  { label: "Início", icon: Home, path: "/" },
+  { label: "Início", icon: Home, path: "/dashboard" },
   { label: "Bots", icon: Bot, path: "/bots" },
 ];
 
