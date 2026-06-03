@@ -123,39 +123,37 @@ export function BottomNav() {
         </div>
       </div>
 
-      {/* Barra inferior com notch (SVG) */}
+      {/* Barra inferior com notch (SVG) — cor sólida combinando com o FAB */}
       <nav className="lg:hidden fixed inset-x-0 bottom-0 z-40 pointer-events-none">
-        <div className="relative h-[78px] pointer-events-auto">
-          {/* Fundo com notch desenhado em SVG pra ficar smooth */}
+        <div className="relative h-[82px] pointer-events-auto">
+          {/* Fundo com notch arredondado */}
           <svg
-            className="absolute inset-0 w-full h-full drop-shadow-[0_-8px_24px_rgba(0,0,0,0.45)]"
-            viewBox="0 0 400 78"
+            className="absolute inset-0 w-full h-full drop-shadow-[0_-10px_28px_rgba(0,0,0,0.55)]"
+            viewBox="0 0 400 82"
             preserveAspectRatio="none"
             aria-hidden
           >
             <defs>
               <linearGradient id="bnav-bg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--card))" />
-                <stop offset="100%" stopColor="hsl(var(--background))" />
+                <stop offset="0%" stopColor="hsl(var(--primary))" />
+                <stop offset="100%" stopColor="hsl(var(--primary) / 0.92)" />
               </linearGradient>
             </defs>
             <path
-              d="M0,14 L160,14 C168,14 172,18 175,24 C182,40 192,48 200,48 C208,48 218,40 225,24 C228,18 232,14 240,14 L400,14 L400,78 L0,78 Z"
+              d="M0,18 L155,18 C164,18 168,22 172,30 C180,46 190,52 200,52 C210,52 220,46 228,30 C232,22 236,18 245,18 L400,18 L400,82 L0,82 Z"
               fill="url(#bnav-bg)"
-              stroke="hsl(var(--border))"
-              strokeWidth="0.5"
             />
           </svg>
 
-          {/* Itens da esquerda */}
-          <div className="absolute inset-y-0 left-0 right-1/2 flex items-end justify-around pb-3 pr-12">
+          {/* Itens da esquerda — centralizados verticalmente, abaixo do notch */}
+          <div className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-14">
             {TABS_LEFT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
           </div>
 
           {/* Itens da direita */}
-          <div className="absolute inset-y-0 left-1/2 right-0 flex items-end justify-around pb-3 pl-12">
+          <div className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-14">
             {TABS_RIGHT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
@@ -184,7 +182,7 @@ export function BottomNav() {
           </button>
         </div>
         {/* Safe-area no iPhone */}
-        <div className="h-[env(safe-area-inset-bottom)] bg-card pointer-events-auto" />
+        <div className="h-[env(safe-area-inset-bottom)] bg-primary pointer-events-auto" />
       </nav>
     </>
   );
@@ -203,24 +201,22 @@ function TabButton({
   return (
     <button
       onClick={() => onClick(tab.path)}
-      className="flex flex-col items-center gap-0.5 group"
+      aria-label={tab.label}
+      className="relative flex items-center justify-center h-12 w-12 group"
     >
       <Icon
         className={cn(
-          "h-[22px] w-[22px] transition-colors",
-          active ? "text-primary" : "text-muted-foreground group-active:text-foreground"
+          "h-[26px] w-[26px] transition-all duration-200",
+          active
+            ? "text-primary-foreground scale-110 drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+            : "text-primary-foreground/70 group-active:text-primary-foreground"
         )}
         strokeWidth={active ? 2.4 : 2}
+        fill={active ? "currentColor" : "none"}
       />
-      <span
-        className={cn(
-          "text-[10px] font-medium transition-colors",
-          active ? "text-primary" : "text-muted-foreground"
-        )}
-      >
-        {tab.label}
-      </span>
-      {active && <span className="h-1 w-1 rounded-full bg-primary mt-0.5" />}
+      {active && (
+        <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary-foreground" />
+      )}
     </button>
   );
 }
