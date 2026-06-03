@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 
 /**
- * Splash estilo Twitter: o logo aparece, dá uma "respirada" e depois escala
- * gigantesco funcionando como máscara que "rasga" a tela e revela o app.
- * Roda só uma vez por sessão da aba.
+ * Splash estilo Twitter: o logo respira e depois escala como máscara,
+ * revelando o app por baixo. Roda uma vez por sessão no boot e também
+ * sempre que `playSplash()` é chamado (login / logout).
  */
 
-// Mantido pra compatibilidade com MenuTips (no-op).
 export function invalidateTipsCache() {
   /* legado — splash novo não usa dicas */
 }
 
-// SVG inline do raio (mesmo do Logo) usado como máscara — não depende de arquivo externo.
 const LOGO_SVG = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <path d="M13.5 2L4 14h7l-1.5 8L19 10h-7l1.5-8z" fill="black"/>
@@ -19,6 +17,13 @@ const LOGO_SVG = `
 const LOGO_MASK = `url("data:image/svg+xml;utf8,${encodeURIComponent(LOGO_SVG)}")`;
 
 const SESSION_KEY = "__splash_shown_v2__";
+const EVENT = "lovable:splash:play";
+
+/** Dispara o splash de qualquer lugar do app. */
+export function playSplash() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(EVENT));
+}
 
 export function PageSplash() {
   const [visible, setVisible] = useState(() => {
@@ -26,12 +31,23 @@ export function PageSplash() {
     return !sessionStorage.getItem(SESSION_KEY);
   });
   const [phase, setPhase] = useState<"idle" | "reveal" | "done">("idle");
+  const [runId, setRunId] = useState(0);
+
+  // Listener pra disparos imperativos (login/logout).
+  useEffect(() => {
+    const handler = () => {
+      setPhase("idle");
+      setVisible(true);
+      setRunId((n) => n + 1);
+    };
+    window.addEventListener(EVENT, handler);
+    return () => window.removeEventListener(EVENT, handler);
+  }, []);
 
   useEffect(() => {
     if (!visible) return;
     sessionStorage.setItem(SESSION_KEY, "1");
 
-    // Sequência: idle (respira) → reveal (zoom massivo) → done (some)
     const t1 = window.setTimeout(() => setPhase("reveal"), 850);
     const t2 = window.setTimeout(() => setPhase("done"), 1750);
     const t3 = window.setTimeout(() => setVisible(false), 2150);
@@ -41,7 +57,7 @@ export function PageSplash() {
       clearTimeout(t2);
       clearTimeout(t3);
     };
-  }, [visible]);
+  }, [visible, runId]);
 
   if (!visible) return null;
 
@@ -52,6 +68,7 @@ export function PageSplash() {
       style={{ opacity: phase === "done" ? 0 : 1 }}
     >
       <div
+        key={runId}
         className="splash-mask"
         style={{
           WebkitMaskImage: LOGO_MASK,
