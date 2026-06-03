@@ -1,42 +1,41 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Splash estilo Twitter (técnica oficial do post do RN 2018):
- * uma camada cobre a tela inteira com a cor da marca; o logo é
- * um BURACO nessa camada (feito com SVG <mask>). O buraco encolhe
- * de leve (antecipação) e depois explode em escala, revelando o
- * app por baixo.
+ * Splash 2026 — Mask Reveal moderno com "breathing":
+ * 1. entrada suave com leve respiração (escala oscila entre 0.95 e 1.05)
+ * 2. antecipação profunda (encolhe bem mais — quase some)
+ * 3. explosão fluida com easing tipo spring revelando o app
  *
- * Dispara automaticamente no boot da sessão e a cada `playSplash()`
- * (login / logout).
+ * Camada cobre a tela inteira na cor da marca; o logo é um BURACO
+ * (SVG <mask>) que cresce até engolir a tela.
  */
 
 export function invalidateTipsCache() {
-  /* legado — splash novo não usa dicas */
+  /* legado */
 }
 
-const SESSION_KEY = "__splash_shown_v3__";
+const SESSION_KEY = "__splash_shown_v4__";
 const EVENT = "lovable:splash:play";
 
-/** Dispara o splash de qualquer lugar do app. */
 export function playSplash() {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new CustomEvent(EVENT));
 }
 
-// Path do raio (mesmo ícone Zap do header). ViewBox 24x24, centro em (12,12).
+// Path do raio (Zap). ViewBox 24x24, centro em (12,12).
 const LOGO_PATH = "M13.5 2L4 14h7l-1.5 8L19 10h-7l1.5-8z";
+
+type Phase = "in" | "breathe" | "anticipate" | "explode" | "done";
 
 export function PageSplash() {
   const [visible, setVisible] = useState(() => {
     if (typeof window === "undefined") return false;
     return !sessionStorage.getItem(SESSION_KEY);
   });
-  const [phase, setPhase] = useState<"in" | "anticipate" | "explode" | "done">("in");
+  const [phase, setPhase] = useState<Phase>("in");
   const [runId, setRunId] = useState(0);
   const maskId = useRef(`splash-mask-${Math.random().toString(36).slice(2, 8)}`).current;
 
-  // Listener pra disparos imperativos (login/logout).
   useEffect(() => {
     const handler = () => {
       setPhase("in");
@@ -51,40 +50,35 @@ export function PageSplash() {
     if (!visible) return;
     sessionStorage.setItem(SESSION_KEY, "1");
 
-    // Sequência: respira pequeno (antecipação) → explode → fade
-    const t1 = window.setTimeout(() => setPhase("anticipate"), 450);
-    const t2 = window.setTimeout(() => setPhase("explode"), 850);
-    const t3 = window.setTimeout(() => setPhase("done"), 1550);
-    const t4 = window.setTimeout(() => setVisible(false), 1900);
+    // Timeline mais fluida com respiração e antecipação profunda
+    const t1 = window.setTimeout(() => setPhase("breathe"), 380);     // expande de leve
+    const t2 = window.setTimeout(() => setPhase("anticipate"), 880);  // encolhe quase pra zero
+    const t3 = window.setTimeout(() => setPhase("explode"), 1380);    // BOOM
+    const t4 = window.setTimeout(() => setPhase("done"), 2080);       // fade
+    const t5 = window.setTimeout(() => setVisible(false), 2480);
 
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
-    };
+    return () => [t1, t2, t3, t4, t5].forEach(clearTimeout);
   }, [visible, runId]);
 
   if (!visible) return null;
 
-  // Escala aplicada ao path do logo (o "buraco" da máscara).
-  // Tamanho base do path no SVG: ocupa ~20 unidades dentro de viewBox 24.
-  // Quando escala pra 80, o buraco engole a tela inteira.
-  const scaleByPhase = {
+  // Escala do "buraco" no logo
+  const scaleByPhase: Record<Phase, number> = {
     in: 1,
-    anticipate: 0.7,
-    explode: 80,
-    done: 80,
-  } as const;
-  const currentScale = scaleByPhase[phase];
+    breathe: 1.08,       // respira pra fora
+    anticipate: 0.28,    // encolhe profundo (quase some)
+    explode: 95,         // explode revelando tudo
+    done: 95,
+  };
 
-  // Duração diferente por fase pra dar o "snap" característico
-  const transitionByPhase = {
-    in: "transform 400ms cubic-bezier(.2,.8,.2,1)",
-    anticipate: "transform 380ms cubic-bezier(.5,0,.75,0)",
-    explode: "transform 650ms cubic-bezier(.7,0,.3,1)",
+  // Easings modernos (spring-like)
+  const transitionByPhase: Record<Phase, string> = {
+    in: "transform 380ms cubic-bezier(.22,1,.36,1)",
+    breathe: "transform 500ms cubic-bezier(.45,.05,.55,.95)",        // ease in-out suave
+    anticipate: "transform 500ms cubic-bezier(.65,0,.35,1)",         // recolhe rápido e firme
+    explode: "transform 700ms cubic-bezier(.16,1,.3,1)",             // expo-out — explosão fluida
     done: "transform 0ms linear",
-  } as const;
+  };
 
   return (
     <div
@@ -101,23 +95,20 @@ export function PageSplash() {
       >
         <defs>
           <mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-            {/* branco = visível (cobre tudo) */}
             <rect x="-50" y="-50" width="124" height="124" fill="white" />
-            {/* preto = buraco no formato do logo (cresce e revela) */}
             <path
               d={LOGO_PATH}
               fill="black"
               style={{
                 transformBox: "fill-box",
                 transformOrigin: "center",
-                transform: `scale(${currentScale})`,
+                transform: `scale(${scaleByPhase[phase]})`,
                 transition: transitionByPhase[phase],
               }}
             />
           </mask>
         </defs>
 
-        {/* Camada que tampa a tela (cor da marca) com o logo recortado */}
         <rect
           x="-50"
           y="-50"
@@ -134,9 +125,8 @@ export function PageSplash() {
           inset: 0;
           z-index: 9999;
           pointer-events: none;
-          transition: opacity 320ms ease-out;
-          /* sombra suave nas bordas pra dar profundidade */
-          filter: drop-shadow(0 0 40px hsl(var(--primary) / 0.35));
+          transition: opacity 400ms cubic-bezier(.4,0,.2,1);
+          filter: drop-shadow(0 0 60px hsl(var(--primary) / 0.45));
         }
         .splash-svg {
           position: absolute;
