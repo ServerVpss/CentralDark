@@ -53,13 +53,13 @@ export function PageSplash() {
     if (!visible) return;
     sessionStorage.setItem(SESSION_KEY, "1");
 
-    // Timeline fluida e contemplativa (~5.2s total)
-    const t1 = window.setTimeout(() => setPhase("breathe"), 500);      // 0.5s  — apareceu, começa a respirar
-    const t2 = window.setTimeout(() => setPhase("hold"), 2000);        // 2.0s  — congela no ápice da respiração
-    const t3 = window.setTimeout(() => setPhase("anticipate"), 3200);   // 3.2s  — pausa dramática, depois encolhe
-    const t4 = window.setTimeout(() => setPhase("explode"), 4200);     // 4.2s  — queda profunda, depois BOOM
-    const t5 = window.setTimeout(() => setPhase("done"), 5200);        // 5.2s  — começa a sumir
-    const t6 = window.setTimeout(() => setVisible(false), 5800);        // 5.8s  — removido do DOM
+    // Timeline enxuta tipo Twitter (~1.4s total) — fluido sem travar
+    const t1 = window.setTimeout(() => setPhase("breathe"), 120);    // 0.12s
+    const t2 = window.setTimeout(() => setPhase("hold"), 380);       // 0.38s
+    const t3 = window.setTimeout(() => setPhase("anticipate"), 620); // 0.62s
+    const t4 = window.setTimeout(() => setPhase("explode"), 880);    // 0.88s
+    const t5 = window.setTimeout(() => setPhase("done"), 1180);      // 1.18s
+    const t6 = window.setTimeout(() => setVisible(false), 1450);     // 1.45s
 
     return () => [t1, t2, t3, t4, t5, t6].forEach(clearTimeout);
   }, [visible, runId]);
@@ -78,11 +78,11 @@ export function PageSplash() {
 
   // Easings teatrais e orgânicos
   const transitionByPhase: Record<Phase, string> = {
-    in: "transform 500ms cubic-bezier(.22,1,.36,1)",                    // suave entrada
-    breathe: "transform 1500ms cubic-bezier(.45,.05,.55,.95)",             // respiração lenta, ondulante
-    hold: "transform 1200ms cubic-bezier(.45,.05,.55,.95)",              // congelado (mesmo easing, não muda)
-    anticipate: "transform 1000ms cubic-bezier(.68,-0.3,.32,1)",         // recolhe com "overshoot" invertido (rápido no início, lento no fim)
-    explode: "transform 1000ms cubic-bezier(.16,1,.3,1)",                // expo-out — explosão grandiosa
+    in: "transform 220ms cubic-bezier(.22,1,.36,1)",
+    breathe: "transform 280ms cubic-bezier(.45,.05,.55,.95)",
+    hold: "transform 240ms cubic-bezier(.45,.05,.55,.95)",
+    anticipate: "transform 260ms cubic-bezier(.68,-0.3,.32,1)",
+    explode: "transform 380ms cubic-bezier(.16,1,.3,1)",
     done: "transform 0ms linear",
   };
 
