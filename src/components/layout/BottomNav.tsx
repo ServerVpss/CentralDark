@@ -270,19 +270,33 @@ function TabButton({
       aria-label={tab.label}
       className="relative flex items-center justify-center h-12 w-12 group"
     >
+      {/* Halo líquido principal — funde com a gota via filtro goo */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-0 m-auto rounded-full bg-primary transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)]",
+          active ? "h-11 w-11 opacity-100 scale-100" : "h-2 w-2 opacity-0 scale-50"
+        )}
+      />
+      {/* Gota que "pinga" pra baixo e funde com o halo (efeito líquido) */}
+      <span
+        aria-hidden
+        className={cn(
+          "absolute left-1/2 -translate-x-1/2 rounded-full bg-primary transition-all duration-700",
+          active
+            ? "h-3 w-3 opacity-100 animate-bnav-drip"
+            : "h-0 w-0 opacity-0 bottom-1"
+        )}
+      />
       <Icon
         className={cn(
-          "h-[26px] w-[26px] transition-all duration-200",
+          "relative h-[26px] w-[26px] transition-all duration-300",
           active
-            ? "text-primary scale-[1.08]"
+            ? "text-primary-foreground scale-[1.05]"
             : "text-muted-foreground group-active:text-foreground"
         )}
-        strokeWidth={active ? 2.25 : 1.9}
+        strokeWidth={active ? 2.4 : 1.9}
       />
-      {active && (
-        <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary" />
-      )}
-
     </button>
   );
 }
