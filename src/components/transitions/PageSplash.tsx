@@ -198,25 +198,28 @@ export function PageSplash() {
             100% { opacity: 0; }
           }
 
-          /* Logo branco: aparece, pulsa, encolhe e some antes da explosão */
+          /* Logo branco: aparece, pulsa, encolhe BEM pequeno (tamanho de ícone)
+             e some logo antes da explosão */
           @keyframes splash-logo-fill {
             0%   { transform: scale(0.86); opacity: 0; }
             14%  { transform: scale(1);    opacity: 1; }
-            44%  { transform: scale(1);    opacity: 1; }
-            58%  { transform: scale(0.78); opacity: 1; }
-            68%  { transform: scale(0.78); opacity: 0; }
-            100% { transform: scale(0.78); opacity: 0; }
+            42%  { transform: scale(1);    opacity: 1; }
+            64%  { transform: scale(0.32); opacity: 1; }
+            72%  { transform: scale(0.32); opacity: 0; }
+            100% { transform: scale(0.32); opacity: 0; }
           }
 
-          /* Máscara: mesmo movimento do logo, e depois EXPLODE pra revelar o app */
+          /* Máscara: mesmo movimento do logo, encolhe pro tamanho de ícone
+             e depois EXPLODE pra revelar o app */
           @keyframes splash-logo-mask {
             0%   { transform: scale(0.86); }
             14%  { transform: scale(1); }
-            44%  { transform: scale(1); }
-            58%  { transform: scale(0.78); }
-            86%  { transform: scale(48); }
+            42%  { transform: scale(1); }
+            64%  { transform: scale(0.32); }
+            88%  { transform: scale(48); }
             100% { transform: scale(140); }
           }
+
 
           @media (prefers-reduced-motion: reduce) {
             .splash-root,
