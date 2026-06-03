@@ -115,11 +115,13 @@ export function BottomNav() {
                 >
                   <div
                     className={cn(
-                      "h-14 w-14 rounded-2xl bg-gradient-to-br shadow-lg flex items-center justify-center",
+                      "h-14 w-14 rounded-2xl bg-gradient-to-br flex items-center justify-center",
+                      "shadow-[0_10px_20px_-6px_rgba(0,0,0,0.45),inset_0_1px_0_hsl(0_0%_100%/0.35),inset_0_-2px_4px_rgba(0,0,0,0.25)]",
+                      "ring-1 ring-white/15 active:translate-y-[1px] active:shadow-[0_4px_10px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_hsl(0_0%_100%/0.25)] transition-all",
                       s.color
                     )}
                   >
-                    <Icon className="h-6 w-6 text-white" strokeWidth={2.25} />
+                    <Icon className="h-6 w-6 text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)]" strokeWidth={2.25} />
                   </div>
                   <span className="text-[11px] font-medium text-foreground">{s.label}</span>
                 </button>
