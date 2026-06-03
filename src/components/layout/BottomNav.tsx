@@ -209,11 +209,11 @@ export function BottomNav() {
             aria-label="Abrir atalhos"
             className={cn(
               "absolute left-1/2 -translate-x-1/2 -top-6 h-[68px] w-[68px] rounded-full",
-              "bg-primary",
-              "shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.65),inset_0_1px_0_hsl(0_0%_100%/0.22)]",
+              "bg-gradient-to-b from-primary to-[hsl(var(--primary)/0.85)]",
+              "shadow-[0_14px_30px_-8px_hsl(var(--primary)/0.7),0_4px_10px_rgba(0,0,0,0.35),inset_0_2px_0_hsl(0_0%_100%/0.35),inset_0_-3px_6px_hsl(var(--primary)/0.45)]",
               "ring-4 ring-background",
               "flex items-center justify-center text-primary-foreground",
-              "transition-transform duration-300 active:scale-95",
+              "transition-all duration-300 active:translate-y-[2px] active:shadow-[0_6px_14px_-6px_hsl(var(--primary)/0.6),inset_0_2px_0_hsl(0_0%_100%/0.25)]",
               open && "rotate-45"
             )}
           >
