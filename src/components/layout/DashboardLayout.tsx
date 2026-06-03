@@ -6,6 +6,7 @@ import { BottomNav } from "./BottomNav";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { MenuRevealTransition } from "@/components/transitions/MenuRevealTransition";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -53,7 +54,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
         <Header className="hidden xl:block" />
         <main className="p-4 xl:p-6 pb-28 xl:pb-6">
-          {children}
+          <MenuRevealTransition>{children}</MenuRevealTransition>
         </main>
       </div>
 
