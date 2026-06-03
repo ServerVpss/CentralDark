@@ -1,219 +1,107 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import {
-  Terminal,
-  MessageCircle,
-  Users,
-  Wallet,
-  LogOut,
-  ArrowUpRight,
-  Sparkles,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 import { useAuthContext } from "@/components/auth/AuthProvider";
+import iconWhatsapp from "@/assets/icon-whatsapp.png";
+import iconCrm from "@/assets/icon-crm.png";
+import iconTelegram from "@/assets/icon-telegram.png";
+import iconFinanceiro from "@/assets/icon-financeiro.png";
 
 type Module = {
   id: string;
   name: string;
-  tagline: string;
+  icon: string;
   href: string;
-  landing: string;
-  icon: React.ComponentType<{ className?: string }>;
   status: "ativo" | "em breve";
-  accent: string; // hsl tone
 };
 
 const modules: Module[] = [
-  {
-    id: "telepainel",
-    name: "TelePainel",
-    tagline: "Bot Telegram de consultas",
-    href: "/dashboard",
-    landing: "/telepainel",
-    icon: Terminal,
-    status: "ativo",
-    accent: "152 76% 50%",
-  },
-  {
-    id: "whatsapp",
-    name: "Bot WhatsApp",
-    tagline: "Atendimento e consultas no WhatsApp",
-    href: "/whatsapp",
-    landing: "/whatsapp",
-    icon: MessageCircle,
-    status: "em breve",
-    accent: "142 70% 45%",
-  },
-  {
-    id: "crm",
-    name: "CRM",
-    tagline: "Gestão de clientes e funis",
-    href: "/crm",
-    landing: "/crm",
-    icon: Users,
-    status: "em breve",
-    accent: "262 70% 60%",
-  },
-  {
-    id: "financeiro",
-    name: "Financeiro",
-    tagline: "Cobranças, PIX e relatórios",
-    href: "/financeiro",
-    landing: "/financeiro",
-    icon: Wallet,
-    status: "em breve",
-    accent: "38 95% 55%",
-  },
+  { id: "whatsapp", name: "Bot WhatsApp", icon: iconWhatsapp, href: "/whatsapp", status: "em breve" },
+  { id: "crm", name: "CRM", icon: iconCrm, href: "/crm", status: "em breve" },
+  { id: "telegram", name: "TelePainel", icon: iconTelegram, href: "/dashboard", status: "ativo" },
+  { id: "financeiro", name: "Financeiro", icon: iconFinanceiro, href: "/financeiro", status: "em breve" },
 ];
 
 export default function Portal() {
   const { signOut, user } = useAuthContext();
 
   return (
-    <div className="min-h-screen bg-background text-foreground antialiased">
+    <div className="min-h-screen bg-black text-white antialiased">
       <Helmet>
-        <title>CentralDark — Portal de módulos</title>
-        <meta name="description" content="Sua central de módulos. Acesse TelePainel, CRM, WhatsApp e Financeiro num só lugar." />
+        <title>CentralDark — Portal</title>
+        <meta name="description" content="Portal CentralDark — escolha o módulo." />
       </Helmet>
 
-      {/* Brilho radial */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-x-0 top-0 h-[640px]"
-        style={{ background: "var(--gradient-radial-gold)" }}
-      />
-      <div aria-hidden className="pointer-events-none fixed inset-0 bg-grid opacity-[0.18]" />
-
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-border/60 glass-subtle">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-          <Link to="/portal" className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight">
-            <span className="grid h-7 w-7 place-items-center rounded-lg icon-glow">
-              <Sparkles className="h-3.5 w-3.5" />
-            </span>
-            CentralDark
-          </Link>
-
-          <div className="flex items-center gap-2">
-            {user?.email && (
-              <span className="hidden font-mono text-[11px] text-muted-foreground sm:block">
-                {user.email}
-              </span>
-            )}
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={signOut}
-              className="h-8 gap-1.5 rounded-lg border border-border bg-card/60 px-3 font-mono text-[12px] text-foreground shadow-3d-soft active:translate-y-[1px]"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              sair
-            </Button>
-          </div>
-        </div>
+      {/* Header minimalista */}
+      <header className="flex items-center justify-between px-5 pt-6 pb-2">
+        <div className="w-9" />
+        <h1 className="font-mono text-[15px] font-semibold tracking-[0.2em] text-white">
+          PORTAL
+        </h1>
+        <button
+          onClick={signOut}
+          aria-label="Sair"
+          className="grid h-9 w-9 place-items-center rounded-lg border border-emerald-500/40 bg-emerald-500/[0.05] text-emerald-400 active:translate-y-[1px]"
+        >
+          <LogOut className="h-4 w-4" />
+        </button>
       </header>
 
-      {/* HERO leve */}
-      <section className="relative mx-auto max-w-6xl px-6 pb-6 pt-12 md:pt-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/[0.08] px-3 py-1 font-mono text-[11px] text-primary">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-            portal central · escolha um módulo
-          </span>
-          <h1 className="mt-6 text-balance text-3xl font-semibold tracking-tight md:text-4xl">
-            Sua central de <span className="text-gradient-gold">módulos</span>.
-          </h1>
-          <p className="mt-3 text-muted-foreground">
-            Cada card abre um produto independente. Comece pelo que estiver ativo.
-          </p>
-        </div>
-      </section>
+      {user?.email && (
+        <p className="px-5 pb-4 text-center font-mono text-[10px] text-white/40">
+          {user.email}
+        </p>
+      )}
 
-      {/* GRID DE MÓDULOS */}
-      <section className="relative mx-auto max-w-6xl px-6 pb-24 pt-10">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
+      {/* Grid 2 colunas */}
+      <main className="mx-auto max-w-md px-5 pb-10 pt-2">
+        <div className="grid grid-cols-2 gap-4">
           {modules.map((m) => {
-            const Icon = m.icon;
             const ativo = m.status === "ativo";
-            return (
+            const Card = (
               <div
-                key={m.id}
-                className="card-premium group relative overflow-hidden p-6 hover-lift"
+                className={
+                  "relative aspect-square rounded-2xl border-2 bg-black/60 p-3 transition-all active:translate-y-[1px] " +
+                  (ativo
+                    ? "border-emerald-500 shadow-[0_0_18px_-2px_rgba(34,197,94,0.55),inset_0_0_18px_-8px_rgba(34,197,94,0.4)] hover:shadow-[0_0_28px_-2px_rgba(34,197,94,0.75)]"
+                    : "border-emerald-500/40 opacity-80")
+                }
               >
-                {/* halo de cor por módulo */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full blur-3xl"
-                  style={{ background: `hsl(${m.accent} / 0.18)` }}
-                />
-
-                <div className="relative flex items-start justify-between gap-4">
-                  <div
-                    className="grid h-14 w-14 place-items-center rounded-xl shadow-3d-soft"
-                    style={{
-                      background: `hsl(${m.accent} / 0.12)`,
-                      color: `hsl(${m.accent})`,
-                    }}
-                  >
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <span
-                    className={
-                      "rounded-full px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider " +
-                      (ativo
-                        ? "bg-primary/15 text-primary border border-primary/30"
-                        : "bg-muted text-muted-foreground border border-border")
-                    }
-                  >
-                    {m.status}
+                {!ativo && (
+                  <span className="absolute right-2 top-2 rounded-full border border-emerald-500/40 bg-black/70 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-emerald-400/80">
+                    em breve
                   </span>
-                </div>
-
-                <h2 className="relative mt-5 text-xl font-semibold tracking-tight text-foreground">
-                  {m.name}
-                </h2>
-                <p className="relative mt-1 text-sm text-muted-foreground">{m.tagline}</p>
-
-                <div className="relative mt-6 flex items-center gap-2">
-                  <Button
-                    asChild
-                    disabled={!ativo}
-                    className={
-                      "h-10 flex-1 rounded-lg font-mono text-[12px] active:translate-y-[1px] " +
-                      (ativo
-                        ? "bg-primary text-primary-foreground shadow-3d-primary hover:bg-primary-glow"
-                        : "bg-muted text-muted-foreground cursor-not-allowed")
-                    }
-                  >
-                    {ativo ? (
-                      <Link to={m.href}>
-                        abrir módulo
-                        <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
-                      </Link>
-                    ) : (
-                      <span>indisponível</span>
-                    )}
-                  </Button>
-                  <Button
-                    asChild
-                    variant="ghost"
-                    className="h-10 rounded-lg border border-border bg-card/60 px-3 font-mono text-[12px] text-foreground shadow-3d-soft active:translate-y-[1px]"
-                  >
-                    <Link to={m.landing}>saiba mais</Link>
-                  </Button>
+                )}
+                <div className="flex h-full flex-col items-center justify-center gap-2">
+                  <img
+                    src={m.icon}
+                    alt={m.name}
+                    loading="lazy"
+                    width={512}
+                    height={512}
+                    className="h-[58%] w-[58%] object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]"
+                  />
+                  <span className="text-center text-[13px] font-medium leading-tight text-white">
+                    {m.name}
+                  </span>
                 </div>
               </div>
             );
+
+            return ativo ? (
+              <Link key={m.id} to={m.href} className="block">
+                {Card}
+              </Link>
+            ) : (
+              <div key={m.id}>{Card}</div>
+            );
           })}
         </div>
-      </section>
 
-      <footer className="border-t border-border/60 bg-muted/20">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 font-mono text-[11px] text-muted-foreground md:flex-row">
-          <span>CentralDark © {new Date().getFullYear()}</span>
-          <Link to="/" className="hover:text-foreground">voltar à página inicial</Link>
-        </div>
-      </footer>
+        <p className="mt-8 text-center font-mono text-[10px] text-white/30">
+          CentralDark · {new Date().getFullYear()}
+        </p>
+      </main>
     </div>
   );
 }
