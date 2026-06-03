@@ -100,7 +100,7 @@ export function PageSplash() {
           background: hsl(var(--background));
           overflow: hidden;
           contain: layout paint style;
-          animation: splash-root-fade 1600ms cubic-bezier(.4,0,.2,1) forwards;
+          animation: splash-root-fade 1150ms cubic-bezier(.4,0,.2,1) forwards;
           will-change: opacity;
         }
 
@@ -117,7 +117,7 @@ export function PageSplash() {
           transform-box: fill-box;
           transform-origin: center;
           will-change: transform, opacity;
-          animation: splash-logo-pulse 1600ms cubic-bezier(.4,0,.2,1) forwards;
+          animation: splash-logo-pulse 1150ms cubic-bezier(.4,0,.2,1) forwards;
         }
 
         .splash-logo--mask {
@@ -129,27 +129,27 @@ export function PageSplash() {
         }
 
         @keyframes splash-root-fade {
-          0%, 78% { opacity: 1; }
+          0%, 80% { opacity: 1; }
           100% { opacity: 0; }
         }
 
         /* Logo "fill" — escala leve, encolhe e some antes do reveal */
         @keyframes splash-logo-fill {
-          0%   { transform: scale(0.82); opacity: 0; }
-          12%  { transform: scale(1);    opacity: 1; }
-          42%  { transform: scale(1);    opacity: 1; }
-          55%  { transform: scale(0.74); opacity: 1; }
-          70%  { transform: scale(0.74); opacity: 0; }
-          100% { transform: scale(0.74); opacity: 0; }
+          0%   { transform: scale(0.85); opacity: 0; }
+          14%  { transform: scale(1);    opacity: 1; }
+          46%  { transform: scale(1);    opacity: 1; }
+          58%  { transform: scale(0.76); opacity: 1; }
+          72%  { transform: scale(0.76); opacity: 0; }
+          100% { transform: scale(0.76); opacity: 0; }
         }
 
         /* Máscara — sincronizada com fill, depois explode pra revelar */
         @keyframes splash-logo-mask {
-          0%   { transform: scale(0.82); }
-          12%  { transform: scale(1); }
-          42%  { transform: scale(1); }
-          55%  { transform: scale(0.74); }
-          85%  { transform: scale(60); }
+          0%   { transform: scale(0.85); }
+          14%  { transform: scale(1); }
+          46%  { transform: scale(1); }
+          58%  { transform: scale(0.76); }
+          88%  { transform: scale(60); }
           100% { transform: scale(120); }
         }
 
