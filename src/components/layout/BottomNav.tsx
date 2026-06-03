@@ -166,13 +166,15 @@ export function BottomNav() {
           >
             <defs>
               <linearGradient id="bnav-bg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--primary))" />
-                <stop offset="100%" stopColor="hsl(var(--primary) / 0.92)" />
+                <stop offset="0%" stopColor="hsl(var(--card))" />
+                <stop offset="100%" stopColor="hsl(var(--background))" />
               </linearGradient>
             </defs>
             <path
               d="M0,18 L155,18 C164,18 168,22 172,30 C180,46 190,52 200,52 C210,52 220,46 228,30 C232,22 236,18 245,18 L400,18 L400,82 L0,82 Z"
               fill="url(#bnav-bg)"
+              stroke="hsl(var(--border) / 0.6)"
+              strokeWidth="0.5"
             />
           </svg>
 
