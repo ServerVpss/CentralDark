@@ -144,11 +144,13 @@ export function BottomNav() {
             >
               <div
                 className={cn(
-                  "h-14 w-14 rounded-2xl bg-gradient-to-br shadow-lg flex items-center justify-center ring-1 ring-destructive/40",
+                  "h-14 w-14 rounded-2xl bg-gradient-to-br flex items-center justify-center ring-1 ring-destructive/40",
+                  "shadow-[0_10px_20px_-6px_rgba(0,0,0,0.55),inset_0_1px_0_hsl(0_0%_100%/0.18),inset_0_-2px_4px_rgba(0,0,0,0.3)]",
+                  "active:translate-y-[1px] transition-all",
                   LOGOUT_COLOR
                 )}
               >
-                <LogOut className="h-6 w-6 text-destructive" strokeWidth={2.25} />
+                <LogOut className="h-6 w-6 text-destructive drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]" strokeWidth={2.25} />
               </div>
               <span className="text-[11px] font-medium text-destructive">Sair</span>
             </button>
