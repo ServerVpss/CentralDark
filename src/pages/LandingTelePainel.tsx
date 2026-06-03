@@ -89,15 +89,15 @@ export default function LandingTelePainel() {
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
       <Helmet>
-        <title>TelePainel — Módulo de consultas via Telegram · CentralDeck</title>
+        <title>TelePainel — Módulo de consultas via Telegram · CentralDark</title>
         <meta
           name="description"
-          content="TelePainel é o módulo de consultas via Telegram da CentralDeck. Resposta instantânea, segurança bancária e 75+ fontes integradas."
+          content="TelePainel é o módulo de consultas via Telegram da CentralDark. Resposta instantânea, segurança bancária e 75+ fontes integradas."
         />
-        <meta property="og:title" content="TelePainel — Módulo de consultas via Telegram · CentralDeck" />
+        <meta property="og:title" content="TelePainel — Módulo de consultas via Telegram · CentralDark" />
         <meta
           property="og:description"
-          content="TelePainel é o módulo de consultas via Telegram da CentralDeck. Resposta instantânea, segurança bancária e 75+ fontes integradas."
+          content="TelePainel é o módulo de consultas via Telegram da CentralDark. Resposta instantânea, segurança bancária e 75+ fontes integradas."
         />
       </Helmet>
 
@@ -121,7 +121,7 @@ export default function LandingTelePainel() {
               <Terminal className="h-3 w-3" />
             </span>
             <span className="font-semibold text-foreground">TelePainel</span>
-            <span className="hidden sm:inline">· módulo da CentralDeck</span>
+            <span className="hidden sm:inline">· módulo da CentralDark</span>
           </Link>
 
           <nav className="hidden gap-7 font-mono text-[12px] text-muted-foreground md:flex">

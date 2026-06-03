@@ -10,8 +10,8 @@ export default function LandingFinanceiro() {
       status="em breve"
       accent="38 95% 55%"
       icon={Wallet}
-      pageTitle="Financeiro — CentralDeck"
-      pageDescription="Módulo financeiro da CentralDeck. Em breve disponível."
+      pageTitle="Financeiro — CentralDark"
+      pageDescription="Módulo financeiro da CentralDark. Em breve disponível."
       features={[
         { title: "PIX nativo", desc: "Cobranças geradas e confirmadas automaticamente via webhook." },
         { title: "Recorrências", desc: "Assinaturas, mensalidades e renovações sem dor de cabeça." },

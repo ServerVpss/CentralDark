@@ -63,7 +63,7 @@ export default function ModuleLanding({
             <span className="grid h-7 w-7 place-items-center rounded-lg icon-glow">
               <Sparkles className="h-3.5 w-3.5" />
             </span>
-            CentralDeck
+            CentralDark
           </Link>
         </div>
       </header>
@@ -171,7 +171,7 @@ export default function ModuleLanding({
 
       <footer className="border-t border-border/60 bg-muted/20">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 font-mono text-[11px] text-muted-foreground md:flex-row">
-          <span>CentralDeck © {new Date().getFullYear()}</span>
+          <span>CentralDark © {new Date().getFullYear()}</span>
           <div className="flex gap-5">
             <Link to="/portal" className="hover:text-foreground">portal</Link>
             <Link to="/" className="hover:text-foreground">home</Link>

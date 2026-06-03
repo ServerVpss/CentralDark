@@ -6,12 +6,12 @@ export default function LandingCRM() {
     <ModuleLanding
       brand="CRM"
       tagline="clientes, funis e relacionamento"
-      description="Gerencie contatos, oportunidades e funis num CRM leve, rápido e que conversa com os outros módulos da CentralDeck."
+      description="Gerencie contatos, oportunidades e funis num CRM leve, rápido e que conversa com os outros módulos da CentralDark."
       status="em breve"
       accent="262 70% 60%"
       icon={Users}
-      pageTitle="CRM — CentralDeck"
-      pageDescription="CRM da CentralDeck. Em breve disponível."
+      pageTitle="CRM — CentralDark"
+      pageDescription="CRM da CentralDark. Em breve disponível."
       features={[
         { title: "Funil visual", desc: "Arraste oportunidades entre etapas e acompanhe a evolução em tempo real." },
         { title: "Ficha completa", desc: "Histórico, notas, tarefas e integrações no perfil de cada cliente." },
