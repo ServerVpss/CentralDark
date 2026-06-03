@@ -24,6 +24,12 @@ const modules: Module[] = [
 
 export default function Portal() {
   const { signOut, user } = useAuthContext();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/", { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
