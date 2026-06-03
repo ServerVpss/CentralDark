@@ -180,6 +180,13 @@ export function BottomNav() {
               stroke="hsl(var(--border) / 0.6)"
               strokeWidth="0.5"
             />
+            {/* brilho superior pra dar efeito 3D */}
+            <path
+              d="M0,22.5 L140,22.5 C152,22.5 156,28.5 162,38.5 C172,58.5 186,66.5 200,66.5 C214,66.5 228,58.5 238,38.5 C244,28.5 248,22.5 260,22.5 L400,22.5"
+              fill="none"
+              stroke="hsl(0 0% 100% / 0.12)"
+              strokeWidth="1"
+            />
           </svg>
 
           {/* Itens da esquerda — centralizados verticalmente, abaixo do notch */}
