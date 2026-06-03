@@ -133,7 +133,7 @@ export default function LandingTelePainel() {
 
           <div className="flex items-center gap-2">
             <Link
-              to="/auth"
+              to="/auth?next=/dashboard"
               className="hidden font-mono text-[12px] text-muted-foreground transition hover:text-foreground sm:block"
             >
               entrar
@@ -143,7 +143,7 @@ export default function LandingTelePainel() {
               size="sm"
               className="h-8 rounded-lg bg-primary px-3 font-mono text-[12px] font-medium text-primary-foreground shadow-3d-primary active:translate-y-[1px] hover:bg-primary-glow"
             >
-              <Link to="/auth">acessar</Link>
+              <Link to="/auth?next=/dashboard">acessar</Link>
             </Button>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default function LandingTelePainel() {
               size="lg"
               className="h-11 rounded-lg bg-primary px-5 font-mono text-[13px] font-medium text-primary-foreground shadow-3d-primary active:translate-y-[1px] hover:bg-primary-glow"
             >
-              <Link to="/auth">
+              <Link to="/auth?next=/dashboard">
                 criar conta grátis
                 <ArrowRight className="ml-1.5 h-4 w-4" />
               </Link>
@@ -357,7 +357,7 @@ export default function LandingTelePainel() {
                   }
                   variant={p.highlight ? "default" : "ghost"}
                 >
-                  <Link to="/auth">criar conta para ver preço</Link>
+                  <Link to="/auth?next=/dashboard">criar conta para ver preço</Link>
                 </Button>
               </div>
             ))}
@@ -382,7 +382,7 @@ export default function LandingTelePainel() {
             size="lg"
             className="mt-10 h-12 rounded-lg bg-primary px-6 font-mono text-sm font-medium text-primary-foreground shadow-3d-primary active:translate-y-[1px] hover:bg-primary-glow"
           >
-            <Link to="/auth">
+            <Link to="/auth?next=/dashboard">
               criar conta gratuita
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -400,7 +400,7 @@ export default function LandingTelePainel() {
             TelePanel © {new Date().getFullYear()}
           </div>
           <div className="flex gap-6 font-mono text-[11px] text-muted-foreground">
-            <Link to="/auth" className="hover:text-foreground">entrar</Link>
+            <Link to="/auth?next=/dashboard" className="hover:text-foreground">entrar</Link>
             <a href="#recursos" className="hover:text-foreground">recursos</a>
             <a href="#planos" className="hover:text-foreground">planos</a>
           </div>
