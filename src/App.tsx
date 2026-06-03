@@ -9,7 +9,12 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import Index from "./pages/Index";
-import Landing from "./pages/Landing";
+import LandingCentralDeck from "./pages/LandingCentralDeck";
+import LandingTelePainel from "./pages/LandingTelePainel";
+import LandingWhatsapp from "./pages/LandingWhatsapp";
+import LandingCRM from "./pages/LandingCRM";
+import LandingFinanceiro from "./pages/LandingFinanceiro";
+import Portal from "./pages/Portal";
 import Auth from "./pages/Auth";
 import Bots from "./pages/Bots";
 import BotSettingsPage from "./pages/BotSettings";
@@ -29,6 +34,24 @@ import { PageSplash } from "@/components/transitions/PageSplash";
 
 const queryClient = new QueryClient();
 
+// Rotas internas do módulo TelePainel — usadas tanto na raiz (legado)
+// quanto prefixadas em /telepainel/* (novo padrão sob o portal CentralDeck).
+const telepainelRoutes = [
+  { path: "dashboard", element: <Index /> },
+  { path: "consultas", element: <Consultas /> },
+  { path: "bots", element: <Bots /> },
+  { path: "bots/:botId/settings", element: <BotSettingsPage /> },
+  { path: "bots/:botId/migrate", element: <MigrateSubscriptions /> },
+  { path: "telegram-users", element: <TelegramUsers /> },
+  { path: "logs", element: <QueryLogs /> },
+  { path: "plans", element: <Plans /> },
+  { path: "pix", element: <PixTransactions /> },
+  { path: "settings", element: <Settings /> },
+  { path: "security", element: <Security /> },
+  { path: "audit", element: <SubscriptionAudit /> },
+  { path: "menu-tips", element: <MenuTips /> },
+];
+
 const App = () => (
   <ThemeProvider defaultTheme="light" storageKey="telepanel-theme">
     <QueryClientProvider client={queryClient}>
@@ -41,24 +64,41 @@ const App = () => (
             {/* <InstallPrompt /> */}
             <PageSplash />
             <Routes>
-              {/* Rota pública do Mini App do Telegram (resultado) */}
-              <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
+              {/* Públicas */}
+              <Route path="/" element={<LandingCentralDeck />} />
               <Route path="/auth" element={<Auth />} />
-              {/* Landing pública na raiz */}
-              <Route path="/" element={<Landing />} />
-              <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-              <Route path="/consultas" element={<ProtectedRoute><Consultas /></ProtectedRoute>} />
-              <Route path="/bots" element={<ProtectedRoute><Bots /></ProtectedRoute>} />
-              <Route path="/bots/:botId/settings" element={<ProtectedRoute><BotSettingsPage /></ProtectedRoute>} />
-              <Route path="/bots/:botId/migrate" element={<ProtectedRoute><MigrateSubscriptions /></ProtectedRoute>} />
-              <Route path="/telegram-users" element={<ProtectedRoute><TelegramUsers /></ProtectedRoute>} />
-              <Route path="/logs" element={<ProtectedRoute><QueryLogs /></ProtectedRoute>} />
-              <Route path="/plans" element={<ProtectedRoute><Plans /></ProtectedRoute>} />
-              <Route path="/pix" element={<ProtectedRoute><PixTransactions /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-              <Route path="/security" element={<ProtectedRoute><Security /></ProtectedRoute>} />
-              <Route path="/audit" element={<ProtectedRoute><SubscriptionAudit /></ProtectedRoute>} />
-              <Route path="/menu-tips" element={<ProtectedRoute><MenuTips /></ProtectedRoute>} />
+              <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
+
+              {/* Landings individuais dos módulos */}
+              <Route path="/telepainel" element={<LandingTelePainel />} />
+              <Route path="/whatsapp" element={<LandingWhatsapp />} />
+              <Route path="/crm" element={<LandingCRM />} />
+              <Route path="/financeiro" element={<LandingFinanceiro />} />
+
+              {/* Portal CentralDeck (área logada principal) */}
+              <Route
+                path="/portal"
+                element={<ProtectedRoute><Portal /></ProtectedRoute>}
+              />
+
+              {/* Rotas internas do TelePainel — legado (sem prefixo) */}
+              {telepainelRoutes.map((r) => (
+                <Route
+                  key={`legacy-${r.path}`}
+                  path={`/${r.path}`}
+                  element={<ProtectedRoute>{r.element}</ProtectedRoute>}
+                />
+              ))}
+
+              {/* Rotas internas do TelePainel — novas (prefixadas) */}
+              {telepainelRoutes.map((r) => (
+                <Route
+                  key={`tp-${r.path}`}
+                  path={`/telepainel/${r.path}`}
+                  element={<ProtectedRoute>{r.element}</ProtectedRoute>}
+                />
+              ))}
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>
