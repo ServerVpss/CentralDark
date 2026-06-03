@@ -56,7 +56,7 @@ export default function Portal() {
             CentralDark
           </Link>
           <button
-            onClick={signOut}
+            onClick={handleSignOut}
             aria-label="Sair"
             className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-card text-foreground shadow-3d-soft active:translate-y-[1px]"
           >
