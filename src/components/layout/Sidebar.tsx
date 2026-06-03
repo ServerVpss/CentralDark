@@ -186,9 +186,9 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
               <button
                 onClick={() => setOpenGroup(isExpanded ? null : group.label)}
                 className={cn(
-                  "group relative flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-semibold transition-colors duration-150",
+                  "group relative flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition-all duration-150 active:translate-y-[1px]",
                   isExpanded || groupHasActive
-                    ? "bg-sidebar-accent/70 text-foreground"
+                    ? "bg-sidebar-accent/80 text-foreground shadow-3d-soft"
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-foreground"
                 )}
               >
