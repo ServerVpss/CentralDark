@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/components/auth/AuthProvider";
+import { setRevealOrigin } from "@/lib/menuReveal";
 
 /**
  * Barra inferior fixa estilo "notch + FAB central".
