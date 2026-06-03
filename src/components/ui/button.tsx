@@ -9,20 +9,25 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25 hover:shadow-primary/40",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg shadow-destructive/25",
-        outline: "border border-border bg-transparent hover:bg-secondary hover:text-secondary-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        default:
+          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-3d-primary active:translate-y-[1px] active:shadow-3d-pressed",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-3d-destructive active:translate-y-[1px] active:shadow-3d-pressed",
+        outline:
+          "border border-border bg-card hover:bg-secondary hover:text-secondary-foreground shadow-3d-soft active:translate-y-[1px] active:shadow-3d-pressed",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-3d-soft active:translate-y-[1px] active:shadow-3d-pressed",
         ghost: "hover:bg-secondary hover:text-secondary-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         glow: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] transition-shadow",
-        glass: "glass text-foreground hover:bg-secondary/50",
-        success: "bg-success text-success-foreground hover:bg-success/90 shadow-lg shadow-success/25",
+        glass: "glass text-foreground hover:bg-secondary/50 shadow-3d-soft",
+        success:
+          "bg-success text-success-foreground hover:bg-success/90 shadow-3d-primary active:translate-y-[1px] active:shadow-3d-pressed",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-lg px-8 text-base",
+        lg: "h-11 rounded-xl px-8 text-base",
         xl: "h-12 rounded-xl px-10 text-base font-semibold",
         icon: "h-10 w-10",
       },
