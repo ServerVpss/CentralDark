@@ -54,6 +54,9 @@ const SHORTCUTS: Shortcut[] = [
   { label: "Alertas", icon: Bell, path: "/", color: "from-fuchsia-400 to-pink-500" },
 ];
 
+// Item separado pro logout (ação especial, não navegação)
+const LOGOUT_COLOR = "from-zinc-600 to-zinc-800";
+
 export function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
