@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import handVideo from "@/assets/maozinha-clean.webm.asset.json";
 import { Loader2, X } from "lucide-react";
 
-// Chroma key (remoção de fundo verde) feito em canvas em tempo real
+// Chroma key agressivo — remove quase todo verde com threshold baixo
 function ChromaHand() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -27,15 +27,18 @@ function ChromaHand() {
         const d = frame.data;
         for (let i = 0; i < d.length; i += 4) {
           const r = d[i], g = d[i + 1], b = d[i + 2];
-          // remove verde dominante
-          if (g > 90 && g > r * 1.15 && g > b * 1.15) {
-            d[i + 3] = 0;
-          } else if (g > r && g > b) {
-            // suaviza borda esverdeada
-            const excess = g - Math.max(r, b);
-            if (excess > 20) {
-              d[i + 1] = Math.max(r, b);
-              d[i + 3] = Math.max(0, 255 - excess * 4);
+          const maxRB = Math.max(r, b);
+          const diff = g - maxRB;
+
+          // Threshold agressivo: remove qualquer verde dominante
+          if (g > 60 && diff > 8) {
+            const alpha = Math.max(0, 255 - diff * 5);
+            d[i + 3] = alpha;
+            // Desatura bordas esverdeadas
+            if (diff > 15) {
+              d[i] = Math.max(0, r - diff * 0.6);
+              d[i + 1] = Math.max(0, g - diff * 1.2);
+              d[i + 2] = Math.max(0, b - diff * 0.6);
             }
           }
         }
