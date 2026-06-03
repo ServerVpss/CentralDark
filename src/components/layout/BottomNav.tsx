@@ -189,15 +189,37 @@ export function BottomNav() {
             />
           </svg>
 
-          {/* Itens da esquerda — centralizados verticalmente, abaixo do notch */}
-          <div className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16">
+          {/* Filtro gooey (técnica do Supah — feGaussianBlur + feColorMatrix) */}
+          <svg className="absolute w-0 h-0" aria-hidden>
+            <defs>
+              <filter id="bnav-goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+                <feColorMatrix
+                  in="blur"
+                  mode="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"
+                  result="goo"
+                />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+              </filter>
+            </defs>
+          </svg>
+
+          {/* Itens da esquerda — filtro goo aplicado no container */}
+          <div
+            className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16"
+            style={{ filter: "url(#bnav-goo)" }}
+          >
             {TABS_LEFT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
           </div>
 
           {/* Itens da direita */}
-          <div className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16">
+          <div
+            className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16"
+            style={{ filter: "url(#bnav-goo)" }}
+          >
             {TABS_RIGHT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
