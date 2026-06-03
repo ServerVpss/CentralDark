@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -118,14 +119,17 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
           </div>
         </button>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden h-8 w-8"
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
+        <div className={cn("flex items-center gap-1", collapsed && "lg:hidden")}>
+          <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden h-8 w-8"
+            onClick={onClose}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Navigation */}
