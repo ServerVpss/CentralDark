@@ -85,23 +85,19 @@ const plans = [
   },
 ];
 
-export default function Landing() {
+export default function LandingTelePainel() {
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
       <Helmet>
-        <title>TelePanel — Consultas inteligentes via Telegram</title>
+        <title>TelePainel — Módulo de consultas via Telegram · CentralDeck</title>
         <meta
           name="description"
-          content="Plataforma profissional de consultas via Telegram. Resposta instantânea, segurança bancária e 75+ fontes integradas."
+          content="TelePainel é o módulo de consultas via Telegram da CentralDeck. Resposta instantânea, segurança bancária e 75+ fontes integradas."
         />
-        <meta property="og:title" content="TelePanel — Consultas inteligentes via Telegram" />
+        <meta property="og:title" content="TelePainel — Módulo de consultas via Telegram · CentralDeck" />
         <meta
           property="og:description"
-          content="Plataforma profissional de consultas via Telegram. Resposta instantânea, segurança bancária e 75+ fontes integradas."
-        />
-        <link
-          rel="canonical"
-          href="https://telegram-zen-panel-6518f4e2-5d802052.lovable.app/"
+          content="TelePainel é o módulo de consultas via Telegram da CentralDeck. Resposta instantânea, segurança bancária e 75+ fontes integradas."
         />
       </Helmet>
 
@@ -120,17 +116,19 @@ export default function Landing() {
       {/* HEADER */}
       <header className="sticky top-0 z-50 border-b border-border/60 glass-subtle">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-          <Link to="/" className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight">
-            <span className="grid h-7 w-7 place-items-center rounded-lg icon-glow">
-              <Terminal className="h-3.5 w-3.5" />
+          <Link to="/portal" className="flex items-center gap-2 font-mono text-[12px] text-muted-foreground hover:text-foreground">
+            <span className="grid h-6 w-6 place-items-center rounded-md icon-glow">
+              <Terminal className="h-3 w-3" />
             </span>
-            TelePanel
+            <span className="font-semibold text-foreground">TelePainel</span>
+            <span className="hidden sm:inline">· módulo da CentralDeck</span>
           </Link>
 
           <nav className="hidden gap-7 font-mono text-[12px] text-muted-foreground md:flex">
             <a href="#recursos" className="transition hover:text-foreground">recursos</a>
             <a href="#numeros" className="transition hover:text-foreground">números</a>
             <a href="#planos" className="transition hover:text-foreground">planos</a>
+            <Link to="/portal" className="transition hover:text-foreground">portal</Link>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -145,11 +143,12 @@ export default function Landing() {
               size="sm"
               className="h-8 rounded-lg bg-primary px-3 font-mono text-[12px] font-medium text-primary-foreground shadow-3d-primary active:translate-y-[1px] hover:bg-primary-glow"
             >
-              <Link to="/auth">criar conta</Link>
+              <Link to="/auth">acessar</Link>
             </Button>
           </div>
         </div>
       </header>
+
 
       {/* HERO */}
       <section className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
