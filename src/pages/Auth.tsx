@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthContext } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,9 @@ const passwordSchema = z.string().min(6, "A senha deve ter pelo menos 6 caracter
 
 export default function Auth() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const nextParam = searchParams.get("next");
+  const destino = nextParam && nextParam.startsWith("/") ? nextParam : "/portal";
   const { signIn, signUp, isAuthenticated, loading: authLoading } = useAuthContext();
   
   const [isLoading, setIsLoading] = useState(false);
