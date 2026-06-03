@@ -169,7 +169,7 @@ export function Header({ className }: HeaderProps) {
               <div className="relative h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-lg shadow-primary/30">
                 <User className="h-4 w-4 text-primary-foreground" />
               </div>
-              <div className="hidden lg:flex flex-col items-start">
+              <div className="hidden xl:flex flex-col items-start">
                 <span className="text-xs font-medium text-foreground leading-tight">
                   {profile?.full_name || user?.email?.split("@")[0] || "Usuário"}
                 </span>

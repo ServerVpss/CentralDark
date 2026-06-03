@@ -20,7 +20,7 @@ import { useAuthContext } from "@/components/auth/AuthProvider";
 
 /**
  * Barra inferior fixa estilo "notch + FAB central".
- * Só aparece no mobile (lg:hidden).
+ * Só aparece no mobile (xl:hidden).
  */
 type Tab = {
   label: string;
@@ -87,7 +87,7 @@ export function BottomNav() {
       {/* Overlay de atalhos do botão "+" */}
       <div
         className={cn(
-          "lg:hidden fixed inset-0 z-40 transition-all duration-300",
+          "xl:hidden fixed inset-0 z-40 transition-all duration-300",
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         )}
         onClick={() => setOpen(false)}
@@ -159,7 +159,7 @@ export function BottomNav() {
       </div>
 
       {/* Barra inferior com notch (SVG) — fundo escuro premium */}
-      <nav className="lg:hidden fixed inset-x-0 bottom-0 z-40 pointer-events-none">
+      <nav className="xl:hidden fixed inset-x-0 bottom-0 z-40 pointer-events-none">
         <div className="relative h-[88px] pointer-events-auto">
           {/* Fundo com notch arredondado — curva mais larga e profunda pra abraçar o FAB */}
           <svg

@@ -20,7 +20,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm xl:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -36,10 +36,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Main Content */}
       <div className={cn(
         "transition-all duration-300",
-        sidebarCollapsed ? "lg:ml-[72px]" : "lg:ml-72"
+        sidebarCollapsed ? "xl:ml-[72px]" : "xl:ml-72"
       )}>
         {/* Mobile Header with Menu Button */}
-        <div className="lg:hidden sticky top-0 z-20 flex items-center gap-3 border-b border-border/40 glass px-4 py-3">
+        <div className="xl:hidden sticky top-0 z-20 flex items-center gap-3 border-b border-border/40 glass px-4 py-3">
           <Button
             variant="ghost"
             size="icon"
@@ -51,8 +51,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <span className="text-lg font-bold text-foreground tracking-tight">TelePanel</span>
         </div>
 
-        <Header className="hidden lg:block" />
-        <main className="p-4 lg:p-6 pb-28 lg:pb-6">
+        <Header className="hidden xl:block" />
+        <main className="p-4 xl:p-6 pb-28 xl:pb-6">
           {children}
         </main>
       </div>
