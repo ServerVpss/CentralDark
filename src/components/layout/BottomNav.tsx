@@ -241,15 +241,15 @@ function TabButton({
         className={cn(
           "h-[26px] w-[26px] transition-all duration-200",
           active
-            ? "text-primary scale-110"
+            ? "text-primary scale-[1.08]"
             : "text-muted-foreground group-active:text-foreground"
         )}
-        strokeWidth={active ? 2.4 : 2}
-        fill={active ? "currentColor" : "none"}
+        strokeWidth={active ? 2.25 : 1.9}
       />
       {active && (
         <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary" />
       )}
+
     </button>
   );
 }
