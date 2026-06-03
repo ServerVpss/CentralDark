@@ -129,7 +129,7 @@ export function PageSplash() {
             overflow: hidden;
             contain: layout paint style;
             will-change: opacity;
-            animation: splash-root-exit 1150ms cubic-bezier(.4,0,.2,1) forwards;
+            animation: splash-root-exit 1850ms cubic-bezier(.4,0,.2,1) forwards;
           }
 
           /* Flash branco curto, sumindo antes da explosão terminar */
@@ -139,7 +139,7 @@ export function PageSplash() {
             background: #fff;
             opacity: 0;
             mix-blend-mode: screen;
-            animation: splash-flash 1150ms cubic-bezier(.4,0,.2,1) forwards;
+            animation: splash-flash 1850ms cubic-bezier(.4,0,.2,1) forwards;
           }
 
           .splash-stage {
@@ -156,7 +156,7 @@ export function PageSplash() {
             transform-box: fill-box;
             transform-origin: center;
             will-change: transform, opacity;
-            animation-duration: 1150ms;
+            animation-duration: 1850ms;
             animation-timing-function: cubic-bezier(.4,0,.2,1);
             animation-fill-mode: forwards;
           }
@@ -172,7 +172,7 @@ export function PageSplash() {
           /* App por baixo escala suave de 1.06 → 1 (estilo Twitter) */
           :root.${ROOT_SCALE_CLASS} body {
             transform-origin: center center;
-            animation: splash-app-zoom 1150ms cubic-bezier(.22,1,.36,1) forwards;
+            animation: splash-app-zoom 1850ms cubic-bezier(.22,1,.36,1) forwards;
             will-change: transform, opacity;
           }
 
