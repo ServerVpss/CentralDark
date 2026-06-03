@@ -35,7 +35,7 @@ export default function Auth() {
 
   useEffect(() => {
     if (isAuthenticated && !authLoading) {
-      navigate("/portal", { replace: true });
+      navigate(destino, { replace: true });
     }
   }, [isAuthenticated, authLoading, navigate]);
 
@@ -99,7 +99,7 @@ export default function Auth() {
     setIsLoading(false);
     
     if (!error) {
-      navigate("/portal", { replace: true });
+      navigate(destino, { replace: true });
     }
   };
 
@@ -113,7 +113,7 @@ export default function Auth() {
     setIsLoading(false);
     
     if (!error) {
-      navigate("/portal", { replace: true });
+      navigate(destino, { replace: true });
     }
   };
 
