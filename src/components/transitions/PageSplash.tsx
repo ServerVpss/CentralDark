@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import handVideo from "@/assets/maozinha-clean.webm.asset.json";
 import { Loader2, X } from "lucide-react";
 
-// Chroma key (remoção de fundo verde) feito em canvas em tempo real
+// Chroma key agressivo — remove quase todo verde com threshold baixo
 function ChromaHand() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -27,15 +27,18 @@ function ChromaHand() {
         const d = frame.data;
         for (let i = 0; i < d.length; i += 4) {
           const r = d[i], g = d[i + 1], b = d[i + 2];
-          // remove verde dominante
-          if (g > 90 && g > r * 1.15 && g > b * 1.15) {
-            d[i + 3] = 0;
-          } else if (g > r && g > b) {
-            // suaviza borda esverdeada
-            const excess = g - Math.max(r, b);
-            if (excess > 20) {
-              d[i + 1] = Math.max(r, b);
-              d[i + 3] = Math.max(0, 255 - excess * 4);
+          const maxRB = Math.max(r, b);
+          const diff = g - maxRB;
+
+          // Threshold agressivo: remove qualquer verde dominante
+          if (g > 60 && diff > 8) {
+            const alpha = Math.max(0, 255 - diff * 5);
+            d[i + 3] = alpha;
+            // Desatura bordas esverdeadas
+            if (diff > 15) {
+              d[i] = Math.max(0, r - diff * 0.6);
+              d[i + 1] = Math.max(0, g - diff * 1.2);
+              d[i + 2] = Math.max(0, b - diff * 0.6);
             }
           }
         }
@@ -76,7 +79,7 @@ interface MenuTip {
 }
 
 const SKIP_ROUTES = ["/auth", "/result"];
-const SPLASH_DURATION = 2800;
+const SPLASH_DURATION = 3500;
 
 let tipsCache: MenuTip[] | null = null;
 
@@ -157,12 +160,12 @@ export function PageSplash() {
       className="fixed inset-0 z-[100] overflow-hidden splash-root"
       onClick={() => setVisible(false)}
     >
-      {/* Fundo cinematográfico estático (sem animação pesada) */}
+      {/* Fundo cinematográfico com mais intensidade */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(1000px circle at 20% 10%, hsl(var(--primary) / 0.28), transparent 55%), radial-gradient(800px circle at 80% 90%, hsl(265 80% 60% / 0.28), transparent 60%), linear-gradient(135deg, hsl(222 47% 5%) 0%, hsl(222 47% 3%) 50%, hsl(222 47% 6%) 100%)",
+            "radial-gradient(1200px circle at 20% 10%, hsl(var(--primary) / 0.45), transparent 50%), radial-gradient(1000px circle at 80% 90%, hsl(265 85% 55% / 0.45), transparent 55%), linear-gradient(135deg, hsl(222 47% 4%) 0%, hsl(222 47% 2%) 50%, hsl(222 47% 5%) 100%)",
         }}
       />
 
@@ -223,12 +226,14 @@ export function PageSplash() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          filter: drop-shadow(0 10px 40px hsl(var(--primary) / 0.45));
-          animation: handEntrance 600ms cubic-bezier(.2,.9,.25,1.1) both;
+          filter: drop-shadow(0 20px 60px hsl(var(--primary) / 0.65)) drop-shadow(0 0 30px hsl(var(--primary) / 0.4));
+          animation: handEntrance 900ms cubic-bezier(.15,.85,.2,1.15) both;
+          transform-origin: center bottom;
         }
         @keyframes handEntrance {
-          from { transform: scale(.85); opacity: 0; }
-          to   { transform: scale(1); opacity: 1; }
+          0%   { transform: scale(0.6) translateY(80px); opacity: 0; filter: drop-shadow(0 0 0 transparent); }
+          60%  { transform: scale(1.08) translateY(-4px); opacity: 1; }
+          100% { transform: scale(1.0) translateY(0); opacity: 1; }
         }
 
         .splash-tip { animation: tipRise 500ms ease-out 150ms both; }
