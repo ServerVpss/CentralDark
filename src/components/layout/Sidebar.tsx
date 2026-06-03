@@ -93,7 +93,7 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300",
+        "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-sidebar-border bg-sidebar shadow-side-right transition-all duration-300",
         collapsed ? "lg:w-[72px]" : "lg:w-72",
         "w-72",
         isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
@@ -156,9 +156,9 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                                 onClose?.();
                               }}
                               className={cn(
-                                "relative flex w-full items-center justify-center rounded-md py-2 text-[13px] font-medium transition-colors duration-150",
+                                "relative flex w-full items-center justify-center rounded-xl py-2 text-[13px] font-medium transition-all duration-150 active:translate-y-[1px]",
                                 active
-                                  ? "bg-sidebar-accent text-foreground"
+                                  ? "bg-sidebar-accent text-foreground shadow-3d-soft"
                                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-foreground"
                               )}
                             >
@@ -186,9 +186,9 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
               <button
                 onClick={() => setOpenGroup(isExpanded ? null : group.label)}
                 className={cn(
-                  "group relative flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-[13px] font-semibold transition-colors duration-150",
+                  "group relative flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-semibold transition-all duration-150 active:translate-y-[1px]",
                   isExpanded || groupHasActive
-                    ? "bg-sidebar-accent/70 text-foreground"
+                    ? "bg-sidebar-accent/80 text-foreground shadow-3d-soft"
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-foreground"
                 )}
               >
@@ -230,9 +230,9 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                             onClose?.();
                           }}
                           className={cn(
-                            "relative flex w-full items-center gap-2.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors duration-150",
+                            "relative flex w-full items-center gap-2.5 rounded-lg px-3 py-1.5 text-[13px] font-medium transition-all duration-150 active:translate-y-[1px]",
                             active
-                              ? "bg-sidebar-accent text-foreground"
+                              ? "bg-sidebar-accent text-foreground shadow-3d-soft"
                               : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-foreground"
                           )}
                         >
