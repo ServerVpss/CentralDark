@@ -110,10 +110,12 @@ export function useAuth() {
     }
 
     toast.success("Login realizado com sucesso!");
+    playSplash();
     return { data, error: null };
   };
 
   const signOut = async () => {
+    playSplash();
     const { error } = await supabase.auth.signOut();
     
     if (error) {
