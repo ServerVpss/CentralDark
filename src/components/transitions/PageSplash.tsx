@@ -6,7 +6,7 @@ export function invalidateTipsCache() {
 
 const SESSION_KEY = "__splash_shown_v7__";
 const EVENT = "lovable:splash:play";
-const DURATION = 1600; // duração total em ms
+const DURATION = 1150; // duração total em ms
 
 export function playSplash() {
   if (typeof window === "undefined") return;
