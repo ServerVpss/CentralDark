@@ -30,7 +30,7 @@ import { PageSplash } from "@/components/transitions/PageSplash";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider defaultTheme="dark" storageKey="telepanel-theme">
+  <ThemeProvider defaultTheme="light" storageKey="telepanel-theme">
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
