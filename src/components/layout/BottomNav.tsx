@@ -210,12 +210,10 @@ export function BottomNav() {
             ) : (
               <Plus className="h-7 w-7" strokeWidth={2.5} />
             )}
-            {/* Halo pulsante */}
-            <span className="absolute inset-0 rounded-full ring-2 ring-primary/30 animate-ping" />
           </button>
         </div>
         {/* Safe-area no iPhone */}
-        <div className="h-[env(safe-area-inset-bottom)] bg-primary pointer-events-auto" />
+        <div className="h-[env(safe-area-inset-bottom)] bg-background pointer-events-auto" />
       </nav>
     </>
   );
