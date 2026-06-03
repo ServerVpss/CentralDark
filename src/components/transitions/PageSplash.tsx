@@ -78,11 +78,11 @@ export function PageSplash() {
 
   // Easings teatrais e orgânicos
   const transitionByPhase: Record<Phase, string> = {
-    in: "transform 500ms cubic-bezier(.22,1,.36,1)",                    // suave entrada
-    breathe: "transform 1500ms cubic-bezier(.45,.05,.55,.95)",             // respiração lenta, ondulante
-    hold: "transform 1200ms cubic-bezier(.45,.05,.55,.95)",              // congelado (mesmo easing, não muda)
-    anticipate: "transform 1000ms cubic-bezier(.68,-0.3,.32,1)",         // recolhe com "overshoot" invertido (rápido no início, lento no fim)
-    explode: "transform 1000ms cubic-bezier(.16,1,.3,1)",                // expo-out — explosão grandiosa
+    in: "transform 220ms cubic-bezier(.22,1,.36,1)",
+    breathe: "transform 280ms cubic-bezier(.45,.05,.55,.95)",
+    hold: "transform 240ms cubic-bezier(.45,.05,.55,.95)",
+    anticipate: "transform 260ms cubic-bezier(.68,-0.3,.32,1)",
+    explode: "transform 380ms cubic-bezier(.16,1,.3,1)",
     done: "transform 0ms linear",
   };
 
