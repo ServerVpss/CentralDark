@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { LogOut, Sparkles } from "lucide-react";
 import { useAuthContext } from "@/components/auth/AuthProvider";
