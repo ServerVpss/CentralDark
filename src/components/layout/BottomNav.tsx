@@ -125,11 +125,36 @@ export function BottomNav() {
                 </button>
               );
             })}
+
+            {/* Sair da conta */}
+            <button
+              onClick={async (e) => {
+                e.stopPropagation();
+                setOpen(false);
+                await signOut();
+                navigate("/auth");
+              }}
+              className={cn(
+                "flex flex-col items-center gap-2 transition-all duration-300",
+                open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+              )}
+              style={{ transitionDelay: open ? `${SHORTCUTS.length * 40}ms` : "0ms" }}
+            >
+              <div
+                className={cn(
+                  "h-14 w-14 rounded-2xl bg-gradient-to-br shadow-lg flex items-center justify-center ring-1 ring-destructive/40",
+                  LOGOUT_COLOR
+                )}
+              >
+                <LogOut className="h-6 w-6 text-destructive" strokeWidth={2.25} />
+              </div>
+              <span className="text-[11px] font-medium text-destructive">Sair</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Barra inferior com notch (SVG) — cor sólida combinando com o FAB */}
+      {/* Barra inferior com notch (SVG) — fundo escuro premium */}
       <nav className="lg:hidden fixed inset-x-0 bottom-0 z-40 pointer-events-none">
         <div className="relative h-[82px] pointer-events-auto">
           {/* Fundo com notch arredondado */}
