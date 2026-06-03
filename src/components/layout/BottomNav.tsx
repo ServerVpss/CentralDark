@@ -156,11 +156,11 @@ export function BottomNav() {
 
       {/* Barra inferior com notch (SVG) — fundo escuro premium */}
       <nav className="lg:hidden fixed inset-x-0 bottom-0 z-40 pointer-events-none">
-        <div className="relative h-[82px] pointer-events-auto">
-          {/* Fundo com notch arredondado */}
+        <div className="relative h-[88px] pointer-events-auto">
+          {/* Fundo com notch arredondado — curva mais larga e profunda pra abraçar o FAB */}
           <svg
             className="absolute inset-0 w-full h-full drop-shadow-[0_-10px_28px_rgba(0,0,0,0.55)]"
-            viewBox="0 0 400 82"
+            viewBox="0 0 400 88"
             preserveAspectRatio="none"
             aria-hidden
           >
@@ -171,7 +171,7 @@ export function BottomNav() {
               </linearGradient>
             </defs>
             <path
-              d="M0,18 L155,18 C164,18 168,22 172,30 C180,46 190,52 200,52 C210,52 220,46 228,30 C232,22 236,18 245,18 L400,18 L400,82 L0,82 Z"
+              d="M0,22 L140,22 C152,22 156,28 162,38 C172,58 186,66 200,66 C214,66 228,58 238,38 C244,28 248,22 260,22 L400,22 L400,88 L0,88 Z"
               fill="url(#bnav-bg)"
               stroke="hsl(var(--border) / 0.6)"
               strokeWidth="0.5"
@@ -179,27 +179,28 @@ export function BottomNav() {
           </svg>
 
           {/* Itens da esquerda — centralizados verticalmente, abaixo do notch */}
-          <div className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-14">
+          <div className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16">
             {TABS_LEFT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
           </div>
 
           {/* Itens da direita */}
-          <div className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-14">
+          <div className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16">
             {TABS_RIGHT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
           </div>
 
-          {/* FAB central */}
+          {/* FAB central — sólido, padrão único primary */}
           <button
             onClick={() => setOpen((v) => !v)}
             aria-label="Abrir atalhos"
             className={cn(
-              "absolute left-1/2 -translate-x-1/2 -top-4 h-16 w-16 rounded-full",
-              "bg-gradient-to-br from-primary via-primary to-amber-500",
-              "shadow-[0_10px_30px_-6px_hsl(var(--primary)/0.6),inset_0_1px_0_hsl(0_0%_100%/0.25)]",
+              "absolute left-1/2 -translate-x-1/2 -top-6 h-[68px] w-[68px] rounded-full",
+              "bg-primary",
+              "shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.65),inset_0_1px_0_hsl(0_0%_100%/0.22)]",
+              "ring-4 ring-background",
               "flex items-center justify-center text-primary-foreground",
               "transition-transform duration-300 active:scale-95",
               open && "rotate-45"
@@ -211,6 +212,7 @@ export function BottomNav() {
               <Plus className="h-7 w-7" strokeWidth={2.5} />
             )}
           </button>
+
         </div>
         {/* Safe-area no iPhone */}
         <div className="h-[env(safe-area-inset-bottom)] bg-background pointer-events-auto" />
@@ -239,15 +241,15 @@ function TabButton({
         className={cn(
           "h-[26px] w-[26px] transition-all duration-200",
           active
-            ? "text-primary scale-110"
+            ? "text-primary scale-[1.08]"
             : "text-muted-foreground group-active:text-foreground"
         )}
-        strokeWidth={active ? 2.4 : 2}
-        fill={active ? "currentColor" : "none"}
+        strokeWidth={active ? 2.25 : 1.9}
       />
       {active && (
         <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary" />
       )}
+
     </button>
   );
 }
