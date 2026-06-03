@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -13,6 +14,11 @@ import {
   Lightbulb,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  LayoutGrid,
+  Wrench,
+  Briefcase,
+  Cpu,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
