@@ -205,47 +205,79 @@ export default function QueryLogs() {
           className="space-y-5 max-w-[1400px] mx-auto"
         >
           {/* Painel de progresso */}
-          <Card className="bg-card border-border/50 overflow-hidden">
-            <CardContent className="pt-6 pb-6">
-              <div className="flex items-center gap-4 mb-4">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/80 to-primary/40"
-                >
-                  <RefreshCw className="h-5 w-5 text-white" />
-                </motion.div>
-                <div className="flex-1">
-                  <AnimatePresence mode="wait">
-                    <motion.p
-                      key={loadStage}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.25 }}
-                      className="text-sm font-medium text-foreground"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key="loader-card"
+              initial={{ opacity: 0, y: 14, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 280, damping: 26 }}
+            >
+              <Card className="bg-card border-border/50 overflow-hidden">
+                <CardContent className="pt-6 pb-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    {/* Quadrado fixo, com leve "respirada"; só as setas giram */}
+                    <motion.div
+                      initial={{ scale: 0.6, opacity: 0, rotate: -8 }}
+                      animate={{
+                        scale: [1, 1.04, 1],
+                        opacity: 1,
+                        rotate: 0,
+                        boxShadow: [
+                          "0 0 0 0 hsl(var(--primary) / 0.45)",
+                          "0 0 0 10px hsl(var(--primary) / 0)",
+                          "0 0 0 0 hsl(var(--primary) / 0)",
+                        ],
+                      }}
+                      transition={{
+                        scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
+                        boxShadow: { duration: 2.2, repeat: Infinity, ease: "easeOut" },
+                        opacity: { duration: 0.4 },
+                        rotate: { type: "spring", stiffness: 220, damping: 18 },
+                      }}
+                      className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/80 to-primary/40"
                     >
-                      {loadStage}
-                    </motion.p>
-                  </AnimatePresence>
-                  <p className="text-xs text-muted-foreground">
-                    {loadedCount > 0
-                      ? `${loadedCount.toLocaleString("pt-BR")} registros carregados`
-                      : "Preparando consulta..."}
-                  </p>
-                </div>
-                <motion.span
-                  key={loadProgress}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-sm font-semibold text-primary tabular-nums"
-                >
-                  {loadProgress}%
-                </motion.span>
-              </div>
-              <Progress value={loadProgress} className="h-2" />
-            </CardContent>
-          </Card>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
+                        className="flex items-center justify-center"
+                      >
+                        <RefreshCw className="h-5 w-5 text-white" />
+                      </motion.div>
+                    </motion.div>
+                    <div className="flex-1">
+                      <AnimatePresence mode="wait">
+                        <motion.p
+                          key={loadStage}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.25 }}
+                          className="text-sm font-medium text-foreground"
+                        >
+                          {loadStage}
+                        </motion.p>
+                      </AnimatePresence>
+                      <p className="text-xs text-muted-foreground">
+                        {loadedCount > 0
+                          ? `${loadedCount.toLocaleString("pt-BR")} registros carregados`
+                          : "Preparando consulta..."}
+                      </p>
+                    </div>
+                    <motion.span
+                      key={loadProgress}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="text-sm font-semibold text-primary tabular-nums"
+                    >
+                      {loadProgress}%
+                    </motion.span>
+                  </div>
+                  <Progress value={loadProgress} className="h-2" />
+                </CardContent>
+              </Card>
+            </motion.div>
+          </AnimatePresence>
 
           {/* Skeleton dos cards de stats */}
           <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
