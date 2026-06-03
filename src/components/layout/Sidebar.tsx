@@ -37,12 +37,17 @@ interface SidebarProps {
 const menuGroups = [
   {
     label: "PRINCIPAL",
+const menuGroups = [
+  {
+    label: "Principal",
+    icon: LayoutGrid,
     items: [
       { title: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     ],
   },
   {
-    label: "OPERAÇÕES",
+    label: "Operações",
+    icon: Wrench,
     items: [
       { title: "Meu Bot", icon: Bot, path: "/bots" },
       { title: "Consultas", icon: Search, path: "/consultas" },
@@ -50,7 +55,8 @@ const menuGroups = [
     ],
   },
   {
-    label: "GESTÃO",
+    label: "Gestão",
+    icon: Briefcase,
     items: [
       { title: "Usuários", icon: Users, path: "/telegram-users" },
       { title: "Planos", icon: CreditCard, path: "/plans" },
@@ -58,7 +64,8 @@ const menuGroups = [
     ],
   },
   {
-    label: "SISTEMA",
+    label: "Sistema",
+    icon: Cpu,
     items: [
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
       { title: "Segurança", icon: Shield, path: "/security" },
@@ -76,6 +83,14 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
+
+  // Categoria aberta — só uma por vez. Abre automaticamente a do item ativo.
+  const activeGroup = menuGroups.find((g) => g.items.some((i) => isActive(i.path)))?.label ?? null;
+  const [openGroup, setOpenGroup] = useState<string | null>(activeGroup);
+
+  useEffect(() => {
+    if (activeGroup) setOpenGroup(activeGroup);
+  }, [activeGroup]);
 
   return (
     <aside
