@@ -205,21 +205,15 @@ export function BottomNav() {
             </defs>
           </svg>
 
-          {/* Itens da esquerda — filtro goo aplicado no container */}
-          <div
-            className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16"
-            style={{ filter: "url(#bnav-goo)" }}
-          >
+          {/* Itens da esquerda */}
+          <div className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16">
             {TABS_LEFT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
           </div>
 
           {/* Itens da direita */}
-          <div
-            className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16"
-            style={{ filter: "url(#bnav-goo)" }}
-          >
+          <div className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16">
             {TABS_RIGHT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
@@ -270,24 +264,27 @@ function TabButton({
       aria-label={tab.label}
       className="relative flex items-center justify-center h-12 w-12 group"
     >
-      {/* Halo líquido principal — funde com a gota via filtro goo */}
+      {/* Camada líquida (halo + gota) com filtro goo isolado — não afeta o ícone */}
       <span
         aria-hidden
-        className={cn(
-          "absolute inset-0 m-auto rounded-full bg-primary transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)]",
-          active ? "h-11 w-11 opacity-100 scale-100" : "h-2 w-2 opacity-0 scale-50"
-        )}
-      />
-      {/* Gota que "pinga" pra baixo e funde com o halo (efeito líquido) */}
-      <span
-        aria-hidden
-        className={cn(
-          "absolute left-1/2 -translate-x-1/2 rounded-full bg-primary transition-all duration-700",
-          active
-            ? "h-3 w-3 opacity-100 animate-bnav-drip"
-            : "h-0 w-0 opacity-0 bottom-1"
-        )}
-      />
+        className="absolute inset-0 pointer-events-none"
+        style={{ filter: "url(#bnav-goo)" }}
+      >
+        <span
+          className={cn(
+            "absolute inset-0 m-auto rounded-full bg-primary transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)]",
+            active ? "h-11 w-11 opacity-100 scale-100" : "h-2 w-2 opacity-0 scale-50"
+          )}
+        />
+        <span
+          className={cn(
+            "absolute left-1/2 -translate-x-1/2 rounded-full bg-primary transition-all duration-700",
+            active
+              ? "h-3 w-3 opacity-100 animate-bnav-drip"
+              : "h-0 w-0 opacity-0 bottom-1"
+          )}
+        />
+      </span>
       <Icon
         className={cn(
           "relative h-[26px] w-[26px] transition-all duration-300",
