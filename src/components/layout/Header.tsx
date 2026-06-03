@@ -60,7 +60,7 @@ export function Header({ className }: HeaderProps) {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/auth", { replace: true });
+    navigate("/", { replace: true });
   };
 
   const openSearch = () => {

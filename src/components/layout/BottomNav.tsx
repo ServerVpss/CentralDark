@@ -134,7 +134,7 @@ export function BottomNav() {
                 e.stopPropagation();
                 setOpen(false);
                 await signOut();
-                navigate("/auth");
+                navigate("/", { replace: true });
               }}
               className={cn(
                 "flex flex-col items-center gap-2 transition-all duration-300",

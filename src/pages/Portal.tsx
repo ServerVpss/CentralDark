@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { LogOut, Sparkles } from "lucide-react";
 import { useAuthContext } from "@/components/auth/AuthProvider";
@@ -24,6 +24,12 @@ const modules: Module[] = [
 
 export default function Portal() {
   const { signOut, user } = useAuthContext();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/", { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground antialiased">
@@ -50,7 +56,7 @@ export default function Portal() {
             CentralDark
           </Link>
           <button
-            onClick={signOut}
+            onClick={handleSignOut}
             aria-label="Sair"
             className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-card text-foreground shadow-3d-soft active:translate-y-[1px]"
           >
