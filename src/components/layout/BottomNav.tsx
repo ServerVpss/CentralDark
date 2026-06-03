@@ -13,8 +13,10 @@ import {
   Database,
   Shield,
   Activity,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 
 /**
  * Barra inferior fixa estilo "notch + FAB central".
@@ -52,9 +54,13 @@ const SHORTCUTS: Shortcut[] = [
   { label: "Alertas", icon: Bell, path: "/", color: "from-fuchsia-400 to-pink-500" },
 ];
 
+// Item separado pro logout (ação especial, não navegação)
+const LOGOUT_COLOR = "from-zinc-600 to-zinc-800";
+
 export function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { signOut } = useAuthContext();
   const [open, setOpen] = useState(false);
 
   // Trava scroll quando o menu de atalhos está aberto
@@ -119,11 +125,36 @@ export function BottomNav() {
                 </button>
               );
             })}
+
+            {/* Sair da conta */}
+            <button
+              onClick={async (e) => {
+                e.stopPropagation();
+                setOpen(false);
+                await signOut();
+                navigate("/auth");
+              }}
+              className={cn(
+                "flex flex-col items-center gap-2 transition-all duration-300",
+                open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+              )}
+              style={{ transitionDelay: open ? `${SHORTCUTS.length * 40}ms` : "0ms" }}
+            >
+              <div
+                className={cn(
+                  "h-14 w-14 rounded-2xl bg-gradient-to-br shadow-lg flex items-center justify-center ring-1 ring-destructive/40",
+                  LOGOUT_COLOR
+                )}
+              >
+                <LogOut className="h-6 w-6 text-destructive" strokeWidth={2.25} />
+              </div>
+              <span className="text-[11px] font-medium text-destructive">Sair</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Barra inferior com notch (SVG) — cor sólida combinando com o FAB */}
+      {/* Barra inferior com notch (SVG) — fundo escuro premium */}
       <nav className="lg:hidden fixed inset-x-0 bottom-0 z-40 pointer-events-none">
         <div className="relative h-[82px] pointer-events-auto">
           {/* Fundo com notch arredondado */}
@@ -135,13 +166,15 @@ export function BottomNav() {
           >
             <defs>
               <linearGradient id="bnav-bg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--primary))" />
-                <stop offset="100%" stopColor="hsl(var(--primary) / 0.92)" />
+                <stop offset="0%" stopColor="hsl(var(--card))" />
+                <stop offset="100%" stopColor="hsl(var(--background))" />
               </linearGradient>
             </defs>
             <path
               d="M0,18 L155,18 C164,18 168,22 172,30 C180,46 190,52 200,52 C210,52 220,46 228,30 C232,22 236,18 245,18 L400,18 L400,82 L0,82 Z"
               fill="url(#bnav-bg)"
+              stroke="hsl(var(--border) / 0.6)"
+              strokeWidth="0.5"
             />
           </svg>
 
@@ -177,12 +210,10 @@ export function BottomNav() {
             ) : (
               <Plus className="h-7 w-7" strokeWidth={2.5} />
             )}
-            {/* Halo pulsante */}
-            <span className="absolute inset-0 rounded-full ring-2 ring-primary/30 animate-ping" />
           </button>
         </div>
         {/* Safe-area no iPhone */}
-        <div className="h-[env(safe-area-inset-bottom)] bg-primary pointer-events-auto" />
+        <div className="h-[env(safe-area-inset-bottom)] bg-background pointer-events-auto" />
       </nav>
     </>
   );
@@ -208,14 +239,14 @@ function TabButton({
         className={cn(
           "h-[26px] w-[26px] transition-all duration-200",
           active
-            ? "text-primary-foreground scale-110 drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
-            : "text-primary-foreground/70 group-active:text-primary-foreground"
+            ? "text-primary scale-110"
+            : "text-muted-foreground group-active:text-foreground"
         )}
         strokeWidth={active ? 2.4 : 2}
         fill={active ? "currentColor" : "none"}
       />
       {active && (
-        <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary-foreground" />
+        <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary" />
       )}
     </button>
   );
