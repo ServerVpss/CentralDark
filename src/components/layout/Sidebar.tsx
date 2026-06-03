@@ -94,22 +94,22 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
     <aside
       className={cn(
         "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-sidebar-border bg-sidebar shadow-side-right transition-all duration-300",
-        collapsed ? "lg:w-[72px]" : "lg:w-72",
+        collapsed ? "xl:w-[72px]" : "xl:w-72",
         "w-72",
-        isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        isOpen ? "translate-x-0" : "-translate-x-full xl:translate-x-0"
       )}
     >
       {/* Logo */}
       <div className={cn(
         "flex h-16 items-center border-b border-sidebar-border px-4",
-        collapsed ? "lg:justify-center" : "justify-between"
+        collapsed ? "xl:justify-center" : "justify-between"
       )}>
         <button
           onClick={() => navigate("/dashboard")}
-          className={cn("flex items-center gap-3 group", collapsed && "lg:justify-center")}
+          className={cn("flex items-center gap-3 group", collapsed && "xl:justify-center")}
         >
           <Logo size={36} className="transition-transform group-hover:scale-105" />
-          <div className={cn("flex flex-col items-start", collapsed && "lg:hidden")}>
+          <div className={cn("flex flex-col items-start", collapsed && "xl:hidden")}>
             <span className="text-base font-bold text-sidebar-foreground tracking-tight leading-none">
               TelePanel
             </span>
@@ -119,12 +119,12 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
           </div>
         </button>
 
-        <div className={cn("flex items-center gap-1", collapsed && "lg:hidden")}>
+        <div className={cn("flex items-center gap-1", collapsed && "xl:hidden")}>
           <ThemeToggle />
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden h-8 w-8"
+            className="xl:hidden h-8 w-8"
             onClick={onClose}
           >
             <X className="h-4 w-4" />
@@ -257,7 +257,7 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
 
 
       {/* Collapse toggle */}
-      <div className="hidden lg:flex items-center justify-center border-t border-sidebar-border py-2.5">
+      <div className="hidden xl:flex items-center justify-center border-t border-sidebar-border py-2.5">
         <Button
           variant="ghost"
           size="icon"
