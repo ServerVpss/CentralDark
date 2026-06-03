@@ -405,6 +405,87 @@
   animation: bnav-drip 900ms cubic-bezier(.55,.05,.35,1) forwards;
 }
 
+/* ========== Menu Reveal — ink/mask reveal vindo do clique ========== */
+:root {
+  --reveal-x: 50vw;
+  --reveal-y: 50vh;
+  --reveal-duration: 620ms;
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes menu-reveal-in {
+  0% {
+    clip-path: circle(0px at var(--reveal-x) var(--reveal-y));
+    opacity: 0;
+    transform: scale(1.012);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0.6px);
+  }
+  100% {
+    clip-path: circle(160% at var(--reveal-x) var(--reveal-y));
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes menu-reveal-glow {
+  0% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  70% {
+    opacity: 0.18;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.menu-reveal-play {
+  position: relative;
+  will-change: clip-path, transform, opacity, filter;
+  animation: menu-reveal-in var(--reveal-duration) var(--reveal-ease) both;
+}
+
+.menu-reveal-play::before {
+  content: "";
+  position: absolute;
+  left: var(--reveal-x);
+  top: var(--reveal-y);
+  width: 180vmax;
+  height: 180vmax;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    hsl(var(--primary) / 0.18) 0%,
+    hsl(var(--primary) / 0.08) 30%,
+    transparent 60%
+  );
+  mix-blend-mode: screen;
+  transform: translate(-50%, -50%) scale(0);
+  animation: menu-reveal-glow var(--reveal-duration) var(--reveal-ease) both;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-reveal-play {
+    animation: none;
+    opacity: 1;
+  }
+  .menu-reveal-play::before {
+    display: none;
+  }
+}
+
+
+
+
 
 
 /* ========== Scrollbar fino ========== */
