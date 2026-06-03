@@ -160,12 +160,12 @@ export function PageSplash() {
       className="fixed inset-0 z-[100] overflow-hidden splash-root"
       onClick={() => setVisible(false)}
     >
-      {/* Fundo cinematográfico estático (sem animação pesada) */}
+      {/* Fundo cinematográfico com mais intensidade */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(1000px circle at 20% 10%, hsl(var(--primary) / 0.28), transparent 55%), radial-gradient(800px circle at 80% 90%, hsl(265 80% 60% / 0.28), transparent 60%), linear-gradient(135deg, hsl(222 47% 5%) 0%, hsl(222 47% 3%) 50%, hsl(222 47% 6%) 100%)",
+            "radial-gradient(1200px circle at 20% 10%, hsl(var(--primary) / 0.45), transparent 50%), radial-gradient(1000px circle at 80% 90%, hsl(265 85% 55% / 0.45), transparent 55%), linear-gradient(135deg, hsl(222 47% 4%) 0%, hsl(222 47% 2%) 50%, hsl(222 47% 5%) 100%)",
         }}
       />
 
