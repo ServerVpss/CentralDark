@@ -130,11 +130,11 @@ export function BottomNav() {
 
             {/* Sair da conta */}
             <button
-              onClick={async (e) => {
+              onClick={(e) => {
                 e.stopPropagation();
                 setOpen(false);
-                await signOut();
-                navigate("/", { replace: true });
+                // Sai apenas do TelePainel — volta pros módulos sem encerrar a sessão central
+                navigate("/portal", { replace: true });
               }}
               className={cn(
                 "flex flex-col items-center gap-2 transition-all duration-300",
