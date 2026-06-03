@@ -52,10 +52,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
 
         <Header className="hidden lg:block" />
-        <main className="p-4 lg:p-6">
+        <main className="p-4 lg:p-6 pb-28 lg:pb-6">
           {children}
         </main>
       </div>
+
+      {/* Bottom nav mobile com FAB central */}
+      <BottomNav />
     </div>
   );
 }
