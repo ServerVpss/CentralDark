@@ -205,21 +205,15 @@ export function BottomNav() {
             </defs>
           </svg>
 
-          {/* Itens da esquerda — filtro goo aplicado no container */}
-          <div
-            className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16"
-            style={{ filter: "url(#bnav-goo)" }}
-          >
+          {/* Itens da esquerda */}
+          <div className="absolute left-0 right-1/2 bottom-3 flex items-center justify-around pr-16">
             {TABS_LEFT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
           </div>
 
           {/* Itens da direita */}
-          <div
-            className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16"
-            style={{ filter: "url(#bnav-goo)" }}
-          >
+          <div className="absolute left-1/2 right-0 bottom-3 flex items-center justify-around pl-16">
             {TABS_RIGHT.map((tab) => (
               <TabButton key={tab.path} tab={tab} active={isActive(tab.path)} onClick={go} />
             ))}
