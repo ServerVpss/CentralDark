@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-3d-soft active:translate-y-[1px] active:shadow-3d-pressed",
         ghost: "hover:bg-secondary hover:text-secondary-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        glow: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] transition-shadow",
+        glow: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-3d-primary active:translate-y-[1px] active:shadow-3d-pressed",
         glass: "glass text-foreground hover:bg-secondary/50 shadow-3d-soft",
         success:
           "bg-success text-success-foreground hover:bg-success/90 shadow-3d-primary active:translate-y-[1px] active:shadow-3d-pressed",
