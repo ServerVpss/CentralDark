@@ -156,9 +156,9 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                                 onClose?.();
                               }}
                               className={cn(
-                                "relative flex w-full items-center justify-center rounded-md py-2 text-[13px] font-medium transition-colors duration-150",
+                                "relative flex w-full items-center justify-center rounded-xl py-2 text-[13px] font-medium transition-all duration-150 active:translate-y-[1px]",
                                 active
-                                  ? "bg-sidebar-accent text-foreground"
+                                  ? "bg-sidebar-accent text-foreground shadow-3d-soft"
                                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-foreground"
                               )}
                             >
