@@ -182,7 +182,7 @@ export function BottomNav() {
           </button>
         </div>
         {/* Safe-area no iPhone */}
-        <div className="h-[env(safe-area-inset-bottom)] bg-card pointer-events-auto" />
+        <div className="h-[env(safe-area-inset-bottom)] bg-primary pointer-events-auto" />
       </nav>
     </>
   );
