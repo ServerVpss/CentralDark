@@ -123,17 +123,20 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Brilho de fundo sutil */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.12),transparent_60%)]" />
+
+      <div className="w-full max-w-md relative">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 glow-primary">
-            <Zap className="h-6 w-6 text-primary" />
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-3d-primary">
+            <Zap className="h-7 w-7 text-primary-foreground" strokeWidth={2.5} />
           </div>
-          <span className="text-2xl font-bold gradient-text">TelePanel</span>
+          <span className="text-2xl font-bold tracking-tight text-foreground">TelePanel</span>
         </div>
 
-        <Card className="glass border-border/50">
+        <Card className="rounded-2xl border-border/60 shadow-3d">
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Bem-vindo</CardTitle>
             <CardDescription>
