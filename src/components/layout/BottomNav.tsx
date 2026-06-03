@@ -60,6 +60,7 @@ const LOGOUT_COLOR = "from-zinc-600 to-zinc-800";
 export function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { signOut } = useAuthContext();
   const [open, setOpen] = useState(false);
 
   // Trava scroll quando o menu de atalhos está aberto
