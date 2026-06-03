@@ -203,24 +203,22 @@ function TabButton({
   return (
     <button
       onClick={() => onClick(tab.path)}
-      className="flex flex-col items-center gap-0.5 group"
+      aria-label={tab.label}
+      className="relative flex items-center justify-center h-12 w-12 group"
     >
       <Icon
         className={cn(
-          "h-[22px] w-[22px] transition-colors",
-          active ? "text-primary" : "text-muted-foreground group-active:text-foreground"
+          "h-[26px] w-[26px] transition-all duration-200",
+          active
+            ? "text-primary-foreground scale-110 drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+            : "text-primary-foreground/70 group-active:text-primary-foreground"
         )}
         strokeWidth={active ? 2.4 : 2}
+        fill={active ? "currentColor" : "none"}
       />
-      <span
-        className={cn(
-          "text-[10px] font-medium transition-colors",
-          active ? "text-primary" : "text-muted-foreground"
-        )}
-      >
-        {tab.label}
-      </span>
-      {active && <span className="h-1 w-1 rounded-full bg-primary mt-0.5" />}
+      {active && (
+        <span className="absolute -bottom-0.5 h-1 w-1 rounded-full bg-primary-foreground" />
+      )}
     </button>
   );
 }
