@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 interface SidebarProps {
   isOpen?: boolean;
