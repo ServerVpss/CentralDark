@@ -27,7 +27,6 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { setRevealOrigin } from "@/lib/menuReveal";
 
 interface SidebarProps {
   isOpen?: boolean;
