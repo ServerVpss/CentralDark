@@ -324,22 +324,31 @@ Deno.serve(async (req) => {
             const planDaysMsg = Number((pending as any)?.plan_days ?? 30)
             const isPrivate = context === 'private'
 
-            // Mensagem de confirmação contextual (privado vs grupo)
+            // Mensagem de confirmação contextual (privado vs grupo) — HTML + monoespaçado
             const contextLabel = isPrivate ? '🔒 PRIVADO (chat com o bot)' : '👥 GRUPO VIP'
             const accessLine = isPrivate
-              ? `🤖 *Acesso liberado AQUI no privado com o bot!*\n\n` +
-                `📍 Você comprou o plano *PRIVADO* — faça suas consultas direto nesta conversa.\n` +
-                `❌ *Este plano NÃO dá acesso ao grupo.* Se quiser usar no grupo, é necessário adquirir o plano de grupo separadamente.`
-              : `🚪 *Acesso liberado no GRUPO VIP!*\n\n` +
-                `📍 Você comprou o plano de *GRUPO* — entre no grupo pelo botão abaixo e faça suas consultas por lá.`
+              ? `🤖 <b>Acesso liberado AQUI no privado com o bot!</b>\n\n` +
+                `📍 Você comprou o plano <b>PRIVADO</b> — faça suas consultas direto nesta conversa.\n` +
+                `❌ <b>Este plano NÃO dá acesso ao grupo.</b> Se quiser usar no grupo, é necessário adquirir o plano de grupo separadamente.`
+              : `🚪 <b>Acesso liberado no GRUPO VIP!</b>\n\n` +
+                `📍 Você comprou o plano de <b>GRUPO</b> — entre no grupo pelo botão abaixo e faça suas consultas por lá.`
 
-            const message = `🎉🎊 *PAGAMENTO CONFIRMADO!* 🎊🎉\n\n` +
+            // Escape para HTML
+            const esc = (s: string) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+            // Bloco monoespaçado alinhado (CHAVE => VALOR)
+            const dataBlock =
+              `VALOR  => R$ ${Number(transaction.amount).toFixed(2)}\n` +
+              `PLANO  => ${esc(planName)}\n` +
+              `TIPO   => ${isPrivate ? 'PRIVADO' : 'GRUPO VIP'}\n` +
+              `DIAS   => ${planDaysMsg}\n` +
+              `TXID   => ${esc(txid.slice(0, 12))}...`
+
+            const message =
+              `🎉🎊 <b>PAGAMENTO CONFIRMADO!</b> 🎊🎉\n\n` +
               `✅ Seu pagamento foi aprovado com sucesso!\n\n` +
-              `💰 *Valor:* R$ ${Number(transaction.amount).toFixed(2)}\n` +
-              `📋 *Plano:* ${planName}\n` +
-              `🎯 *Tipo:* ${contextLabel}\n` +
-              `📅 *Dias:* ${planDaysMsg}\n` +
-              `🔑 *TXID:* \`${txid.slice(0, 12)}...\`\n\n` +
+              `<pre>${dataBlock}</pre>\n` +
+              `🎯 ${esc(contextLabel)}\n\n` +
               `${accessLine}`
 
             // Botões contextuais — privado NÃO mostra link do grupo
@@ -364,52 +373,74 @@ Deno.serve(async (req) => {
 
             // SEMPRE enviar confirmação no PRIVADO do usuário (telegram_user_id)
             const targetChatId = transaction.telegram_user_id
-            
-            // Mapear efeito configurado para ID do Telegram
+
+            // Mapear efeito configurado para ID do Telegram (default = party)
             const effectMap: Record<string, string> = {
               'fire': '5104841245755180586',
-              'like': '5107584321108051014', 
+              'like': '5107584321108051014',
               'heart': '5159385139981059251',
-              'party': '5046509860385561286'
+              'party': '5046509860385561286',
+              'thumbs_up': '5107584321108051014',
             }
-            const messageEffectId = settings?.message_effect ? effectMap[settings.message_effect] : undefined
-            
-            // Enviar mensagem com efeito se configurado
+            const effectKey = (settings?.message_effect && settings.message_effect !== 'none')
+              ? settings.message_effect
+              : 'party'
+            const messageEffectId = effectMap[effectKey]
+
+            // Reação que o próprio bot dá na mensagem
+            const reactionMap: Record<string, string> = {
+              'fire': '🔥', 'like': '👍', 'heart': '❤️', 'party': '🎉', 'thumbs_up': '👍', 'none': '👍'
+            }
+            const reactionEmoji = reactionMap[effectKey] || '👍'
+
             const messageBody: any = {
               chat_id: targetChatId,
               text: message,
-              parse_mode: 'Markdown',
+              parse_mode: 'HTML',
               reply_markup: inlineKeyboard.inline_keyboard.length > 0 ? inlineKeyboard : undefined
             }
-            
-            if (messageEffectId) {
-              messageBody.message_effect_id = messageEffectId
-            }
-            
+            if (messageEffectId) messageBody.message_effect_id = messageEffectId
+
             let sendMsgRes = await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(messageBody)
             })
-            
-            const sendMsgData = await sendMsgRes.json()
-            if (!sendMsgData.ok) {
-              console.error(`Erro ao enviar confirmação para ${targetChatId}:`, sendMsgData)
-              // Tentar novamente sem efeito se falhou
-              if (messageEffectId) {
-                delete messageBody.message_effect_id
-                sendMsgRes = await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(messageBody)
-                })
-                const retryData = await sendMsgRes.json()
-                if (retryData.ok) {
-                  console.log(`Confirmação enviada sem efeito para chat ${targetChatId}`)
+            let sendMsgData = await sendMsgRes.json()
+
+            // Retry sem efeito (alguns chats não suportam)
+            if (!sendMsgData.ok && messageEffectId) {
+              delete messageBody.message_effect_id
+              sendMsgRes = await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(messageBody)
+              })
+              sendMsgData = await sendMsgRes.json()
+            }
+
+            if (sendMsgData.ok) {
+              console.log(`Confirmação enviada para chat ${targetChatId}`)
+              const confMsgId = sendMsgData.result?.message_id
+              if (confMsgId) {
+                // Bot curte a própria mensagem de confirmação
+                try {
+                  await fetch(`https://api.telegram.org/bot${bot.token}/setMessageReaction`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      chat_id: targetChatId,
+                      message_id: confMsgId,
+                      reaction: [{ type: 'emoji', emoji: reactionEmoji }],
+                      is_big: true,
+                    })
+                  })
+                } catch (reactErr) {
+                  console.log('Não foi possível reagir:', reactErr)
                 }
               }
             } else {
-              console.log(`Confirmação enviada com sucesso para chat ${targetChatId}`)
+              console.error(`Erro ao enviar confirmação para ${targetChatId}:`, sendMsgData)
             }
 
             // Se tiver grupo configurado E NÃO for plano privado, libera o usuário no grupo
