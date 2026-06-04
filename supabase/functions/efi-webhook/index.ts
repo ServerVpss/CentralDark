@@ -375,12 +375,13 @@ Deno.serve(async (req) => {
             const targetChatId = transaction.telegram_user_id
 
             // Mapear efeito configurado para ID do Telegram (default = party)
+            // IDs oficiais válidos (mesmos usados no telegram-webhook)
             const effectMap: Record<string, string> = {
-              'fire': '5104841245755180586',
-              'like': '5107584321108051014',
-              'heart': '5159385139981059251',
-              'party': '5046509860385561286',
-              'thumbs_up': '5107584321108051014',
+              'fire': '5104841245755180586',      // 🔥
+              'like': '5107584321108051014',      // 👍
+              'heart': '5159385139981059251',     // ❤️
+              'party': '5046509860389126442',     // 🎉  (corrigido — o ID antigo era inválido)
+              'thumbs_up': '5107584321108051014', // 👍
             }
             const effectKey = (settings?.message_effect && settings.message_effect !== 'none')
               ? settings.message_effect
