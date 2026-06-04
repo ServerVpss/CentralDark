@@ -63,4 +63,8 @@ verify_jwt = false
 [functions.webapp-format-ai]
 verify_jwt = false
 
+[functions.test-message-effect]
+verify_jwt = false
+
+
 
