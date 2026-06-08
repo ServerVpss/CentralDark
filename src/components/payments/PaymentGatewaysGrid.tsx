@@ -130,24 +130,29 @@ const PAYMENT_GATEWAYS: PaymentGateway[] = [
 
 export function PaymentGatewaysGrid() {
   const { efiGateway } = usePayments();
+  const { gateway: misticGateway, toggleActive: toggleMistic } = useMisticPayGateway();
   const [activeGateways, setActiveGateways] = useState<Record<string, boolean>>({});
   const [configGateway, setConfigGateway] = useState<string | null>(null);
 
-  // Sync EFI gateway status
   useEffect(() => {
     if (efiGateway) {
-      setActiveGateways((prev) => ({
-        ...prev,
-        efi: efiGateway.is_active || false,
-      }));
+      setActiveGateways((prev) => ({ ...prev, efi: efiGateway.is_active || false }));
     }
   }, [efiGateway]);
 
+  useEffect(() => {
+    setActiveGateways((prev) => ({ ...prev, misticpay: !!misticGateway?.is_active }));
+  }, [misticGateway]);
+
   const handleToggleGateway = (gatewayId: string, checked: boolean) => {
-    setActiveGateways((prev) => ({
-      ...prev,
-      [gatewayId]: checked,
-    }));
+    if (gatewayId === "misticpay") {
+      if (!misticGateway) {
+        setConfigGateway("misticpay");
+        return;
+      }
+      toggleMistic.mutate(checked);
+    }
+    setActiveGateways((prev) => ({ ...prev, [gatewayId]: checked }));
   };
 
   const handleConfigClick = (gatewayId: string) => {
