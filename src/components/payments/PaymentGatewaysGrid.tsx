@@ -213,10 +213,12 @@ export function PaymentGatewaysGrid() {
                     className={
                       isActive
                         ? "bg-success/20 text-success border-success/30 text-xs"
-                        : "bg-secondary text-muted-foreground text-xs"
+                        : anyActive
+                          ? "bg-amber-500/10 text-amber-600 border-amber-500/30 text-xs"
+                          : "bg-secondary text-muted-foreground text-xs"
                     }
                   >
-                    {isActive ? "Ativo" : "Inativo"}
+                    {isActive ? "Ativo" : anyActive ? "Standby (fallback)" : "Inativo"}
                   </Badge>
                 </div>
 
