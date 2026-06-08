@@ -66,12 +66,13 @@ const PAYMENT_GATEWAYS: PaymentGateway[] = [
     isConfigurable: true,
   },
   {
-    id: "mistcpay",
-    name: "MistCPay",
-    slug: "mistcpay",
+    id: "misticpay",
+    name: "MisticPay",
+    slug: "misticpay",
     icon: <Zap className="h-6 w-6" />,
     iconColor: "text-yellow-400",
     minDeposit: 5.0,
+    tags: [{ label: "PIX", icon: <Lock className="h-3 w-3" /> }],
     isConfigurable: true,
   },
   {
