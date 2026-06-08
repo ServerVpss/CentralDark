@@ -127,6 +127,16 @@ Deno.serve(async (req) => {
         status: 'pending',
         description: plan_name ? `${plan_name} - ${plan_days} dias` : 'Recarga',
         expires_at: expiresAt.toISOString(),
+        payer_name: String(mpData.data?.payer?.name || payerNm),
+        payer_document: String(mpData.data?.payer?.document || payerDoc).replace(/\D/g, ''),
+        payer_info: {
+          origem: 'criacao_pix',
+          nome_informado: payerNm,
+          documento_informado: payerDoc,
+          pagador_retorno: mpData.data?.payer || null,
+        },
+        gateway_fee: mpData.data?.transactionFee ?? null,
+        raw_create_response: mpData,
       })
       .select()
       .single();

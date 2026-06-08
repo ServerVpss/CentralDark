@@ -20,17 +20,44 @@ Deno.serve(async (req) => {
     const body = await req.json();
     console.log('[misticpay-webhook] recebido:', JSON.stringify(body).slice(0, 500));
 
-    // Ignorar eventos de MED
-    if (body?.event === 'INFRACTION') {
-      console.log('[misticpay-webhook] evento INFRACTION ignorado');
-      return new Response(JSON.stringify({ success: true, ignored: 'infraction' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-
     const remoteTxid = body?.transactionId != null ? String(body.transactionId) : null;
     const statusRaw = String(body?.status || '').toUpperCase();
     const value = body?.value != null ? Number(body.value) : null;
     const e2e = body?.e2e || null;
+    const payerName = body?.clientName ? String(body.clientName) : null;
+    const payerDocument = body?.clientDocument ? String(body.clientDocument).replace(/\D/g, '') : null;
+
+    const webhookEvent = { received_at: new Date().toISOString(), event: body };
+
+    // Registrar MED/infração/chargeback sem perder histórico do pagamento aprovado
+    if (body?.event === 'INFRACTION' || statusRaw.includes('INFRA') || statusRaw.includes('MED') || statusRaw.includes('CHARGEBACK')) {
+      console.log('[misticpay-webhook] evento de disputa recebido');
+      if (remoteTxid) {
+        const { data: existingDisputeTx } = await supabase
+          .from('pix_transactions')
+          .select('id, raw_webhook_events')
+          .eq('external_id', remoteTxid)
+          .eq('gateway', 'misticpay')
+          .maybeSingle();
+
+        await supabase
+          .from('pix_transactions')
+          .update({
+            dispute_status: String(body?.event || statusRaw || 'INFRACTION'),
+            dispute_details: body,
+            raw_webhook: body,
+            raw_webhook_events: [
+              ...(Array.isArray(existingDisputeTx?.raw_webhook_events) ? existingDisputeTx.raw_webhook_events : []),
+              webhookEvent,
+            ],
+            updated_at: new Date().toISOString(),
+          })
+          .eq('external_id', remoteTxid)
+          .eq('gateway', 'misticpay');
+      }
+      return new Response(JSON.stringify({ success: true, recorded: 'dispute_event' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
     if (!remoteTxid) {
       return new Response(JSON.stringify({ success: false, error: 'transactionId ausente' }),
@@ -82,7 +109,25 @@ Deno.serve(async (req) => {
     // Marcar como paga
     await supabase
       .from('pix_transactions')
-      .update({ status: 'paid', paid_at: new Date().toISOString(), e2e_id: e2e })
+      .update({
+        status: 'paid',
+        paid_at: new Date().toISOString(),
+        e2e_id: e2e,
+        payer_name: payerName,
+        payer_document: payerDocument,
+        payer_info: {
+          nome_confirmado: payerName,
+          documento_confirmado: payerDocument,
+          metodo: body?.transactionMethod || null,
+          tipo: body?.transactionType || null,
+        },
+        gateway_fee: body?.fee != null ? Number(body.fee) : null,
+        raw_webhook: body,
+        raw_webhook_events: [
+          ...(Array.isArray(transaction.raw_webhook_events) ? transaction.raw_webhook_events : []),
+          webhookEvent,
+        ],
+      })
       .eq('id', transaction.id);
 
     // pending_payments
