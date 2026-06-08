@@ -14,8 +14,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { usePayments } from "@/hooks/usePayments";
+import { usePayments, useMisticPayGateway } from "@/hooks/usePayments";
 import { EfiGatewayConfigDialog } from "./EfiGatewayConfigDialog";
+import { MisticPayGatewayConfigDialog } from "./MisticPayGatewayConfigDialog";
 
 interface PaymentGateway {
   id: string;
