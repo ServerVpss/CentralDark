@@ -901,6 +901,8 @@ export type Database = {
           bot_id: string | null
           created_at: string | null
           description: string | null
+          dispute_details: Json | null
+          dispute_status: string | null
           e2e_id: string | null
           expires_at: string | null
           external_id: string | null
@@ -916,6 +918,7 @@ export type Database = {
           qr_code_url: string | null
           raw_create_response: Json | null
           raw_webhook: Json | null
+          raw_webhook_events: Json
           status: string | null
           telegram_user_id: number | null
           updated_at: string | null
@@ -926,6 +929,8 @@ export type Database = {
           bot_id?: string | null
           created_at?: string | null
           description?: string | null
+          dispute_details?: Json | null
+          dispute_status?: string | null
           e2e_id?: string | null
           expires_at?: string | null
           external_id?: string | null
@@ -941,6 +946,7 @@ export type Database = {
           qr_code_url?: string | null
           raw_create_response?: Json | null
           raw_webhook?: Json | null
+          raw_webhook_events?: Json
           status?: string | null
           telegram_user_id?: number | null
           updated_at?: string | null
@@ -951,6 +957,8 @@ export type Database = {
           bot_id?: string | null
           created_at?: string | null
           description?: string | null
+          dispute_details?: Json | null
+          dispute_status?: string | null
           e2e_id?: string | null
           expires_at?: string | null
           external_id?: string | null
@@ -966,6 +974,7 @@ export type Database = {
           qr_code_url?: string | null
           raw_create_response?: Json | null
           raw_webhook?: Json | null
+          raw_webhook_events?: Json
           status?: string | null
           telegram_user_id?: number | null
           updated_at?: string | null
