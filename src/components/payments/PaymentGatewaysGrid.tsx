@@ -253,9 +253,12 @@ export function PaymentGatewaysGrid() {
         })}
       </div>
 
-      {/* EFI Config Dialog */}
       <EfiGatewayConfigDialog
         open={configGateway === "efi"}
+        onOpenChange={(open) => !open && setConfigGateway(null)}
+      />
+      <MisticPayGatewayConfigDialog
+        open={configGateway === "misticpay"}
         onOpenChange={(open) => !open && setConfigGateway(null)}
       />
     </div>
