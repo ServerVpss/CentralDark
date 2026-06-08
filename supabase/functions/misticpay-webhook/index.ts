@@ -27,24 +27,33 @@ Deno.serve(async (req) => {
     const payerName = body?.clientName ? String(body.clientName) : null;
     const payerDocument = body?.clientDocument ? String(body.clientDocument).replace(/\D/g, '') : null;
 
-    const appendEventSql = `coalesce(raw_webhook_events, '[]'::jsonb) || $${JSON.stringify([{ received_at: new Date().toISOString(), event: body }])}$$::jsonb`;
+    const webhookEvent = { received_at: new Date().toISOString(), event: body };
 
     // Registrar MED/infração/chargeback sem perder histórico do pagamento aprovado
     if (body?.event === 'INFRACTION' || statusRaw.includes('INFRA') || statusRaw.includes('MED') || statusRaw.includes('CHARGEBACK')) {
       console.log('[misticpay-webhook] evento de disputa recebido');
       if (remoteTxid) {
+        const { data: existingDisputeTx } = await supabase
+          .from('pix_transactions')
+          .select('id, raw_webhook_events')
+          .eq('external_id', remoteTxid)
+          .eq('gateway', 'misticpay')
+          .maybeSingle();
+
         await supabase
           .from('pix_transactions')
           .update({
             dispute_status: String(body?.event || statusRaw || 'INFRACTION'),
             dispute_details: body,
             raw_webhook: body,
+            raw_webhook_events: [
+              ...(Array.isArray(existingDisputeTx?.raw_webhook_events) ? existingDisputeTx.raw_webhook_events : []),
+              webhookEvent,
+            ],
             updated_at: new Date().toISOString(),
           })
           .eq('external_id', remoteTxid)
           .eq('gateway', 'misticpay');
-
-        await supabase.rpc('exec_sql', { sql: `update public.pix_transactions set raw_webhook_events = ${appendEventSql} where external_id = '${remoteTxid.replace(/'/g, "''")}' and gateway = 'misticpay'` }).catch(() => null);
       }
       return new Response(JSON.stringify({ success: true, recorded: 'dispute_event' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -114,6 +123,10 @@ Deno.serve(async (req) => {
         },
         gateway_fee: body?.fee != null ? Number(body.fee) : null,
         raw_webhook: body,
+        raw_webhook_events: [
+          ...(Array.isArray(transaction.raw_webhook_events) ? transaction.raw_webhook_events : []),
+          webhookEvent,
+        ],
       })
       .eq('id', transaction.id);
 
