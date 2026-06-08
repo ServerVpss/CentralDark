@@ -20,6 +20,21 @@ interface ScheduledBroadcast {
   failed_count: number
 }
 
+// IDs de efeitos visuais do Telegram (fogos, curtida, coração, festa)
+const MESSAGE_EFFECTS = [
+  '5104841245755180586', // 🔥 fogo
+  '5107584321108051014', // 👍 curtida
+  '5159385139981059251', // ❤️ coração
+  '5046509860389126442', // 🎉 festa/confete
+  '5046463652866995212', // 👎 (descartado se quiser)
+]
+
+function pickEffectId(): string {
+  // só os 4 positivos
+  const positives = MESSAGE_EFFECTS.slice(0, 4)
+  return positives[Math.floor(Math.random() * positives.length)]
+}
+
 async function sendTelegramMessage(
   token: string,
   chatId: number,
@@ -27,17 +42,33 @@ async function sendTelegramMessage(
   replyMarkup?: object
 ): Promise<boolean> {
   try {
+    // Efeito visual só funciona em DMs (chat_id positivo). Grupos (negativo) ignoram.
+    const isDM = Number(chatId) > 0
+    const body: Record<string, unknown> = {
+      chat_id: chatId,
+      text,
+      parse_mode: 'HTML',
+    }
+    if (isDM) body.message_effect_id = pickEffectId()
+    if (replyMarkup) body.reply_markup = replyMarkup
+
     const response = await fetch(`${TELEGRAM_API}${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        parse_mode: 'HTML',
-        ...(replyMarkup && { reply_markup: replyMarkup }),
-      }),
+      body: JSON.stringify(body),
     })
     const result = await response.json()
+    if (!result.ok && isDM) {
+      // fallback sem efeito caso o Telegram rejeite
+      delete body.message_effect_id
+      const retry = await fetch(`${TELEGRAM_API}${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      const r2 = await retry.json()
+      return r2.ok === true
+    }
     return result.ok === true
   } catch (error) {
     console.error(`Erro ao enviar para ${chatId}:`, error)
