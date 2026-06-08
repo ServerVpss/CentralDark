@@ -446,7 +446,7 @@ export function useMisticPayGateway() {
         .eq("gateway_type", "misticpay")
         .maybeSingle();
       if (error && error.code !== "PGRST116") throw error;
-      return data as MisticPayGatewayConfig | null;
+      return data as unknown as MisticPayGatewayConfig | null;
     },
     enabled: !!user,
   });
