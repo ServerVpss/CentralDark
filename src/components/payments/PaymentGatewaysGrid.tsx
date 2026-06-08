@@ -144,6 +144,8 @@ export function PaymentGatewaysGrid() {
     setActiveGateways((prev) => ({ ...prev, misticpay: !!misticGateway?.is_active }));
   }, [misticGateway]);
 
+  const anyActive = Object.values(activeGateways).some(Boolean);
+
   const handleToggleGateway = (gatewayId: string, checked: boolean) => {
     if (gatewayId === "misticpay") {
       if (!misticGateway) {
@@ -151,6 +153,16 @@ export function PaymentGatewaysGrid() {
         return;
       }
       toggleMistic.mutate(checked);
+      if (checked) {
+        // espelha exclusividade no estado local pra UI responder na hora
+        setActiveGateways((prev) => {
+          const next: Record<string, boolean> = {};
+          for (const k of Object.keys(prev)) next[k] = false;
+          next.misticpay = true;
+          return next;
+        });
+        return;
+      }
     }
     setActiveGateways((prev) => ({ ...prev, [gatewayId]: checked }));
   };
