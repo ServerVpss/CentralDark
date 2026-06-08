@@ -7367,30 +7367,82 @@ class BotHandler {
 
     try {
       const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const response = await fetch(`${supabaseUrl}/functions/v1/efi-generate-pix`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-        },
-        body: JSON.stringify({
-          amount: finalPrice,
-          user_id: this.bot.user_id,
-          telegram_user_id: telegramUserId,
-          telegram_chat_id: chatId,
-          bot_id: this.bot.id,
-          plan_name: plan.name,
-          plan_code: plan.code,
-          plan_days: plan.days,
-          context: context,
-        }),
-      });
+      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-      const result = await response.json();
+      // Seleciona gateway ATIVO do dono do bot. Se nenhum ativo, fallback pra qualquer configurado.
+      const { data: activeGw } = await supabaseAdmin
+        .from('payment_gateways')
+        .select('gateway_type, min_deposit, is_active')
+        .eq('user_id', this.bot.user_id)
+        .eq('is_active', true)
+        .in('gateway_type', ['misticpay', 'efi'])
+        .order('gateway_type', { ascending: true }) // misticpay vem antes de efi alfabeticamente
+        .limit(1)
+        .maybeSingle();
 
-      if (!result.success) {
-        console.error("PIX creation failed:", result);
-        await sendMessage(this.token, chatId, "❌ Erro ao gerar PIX. Tente novamente em instantes.");
+      const { data: allGw } = await supabaseAdmin
+        .from('payment_gateways')
+        .select('gateway_type, min_deposit')
+        .eq('user_id', this.bot.user_id)
+        .in('gateway_type', ['misticpay', 'efi']);
+
+      // Ordem de tentativa: primeiro o ativo, depois os outros como fallback
+      const primary = activeGw?.gateway_type ?? (allGw?.[0]?.gateway_type ?? 'efi');
+      const order: string[] = [primary, ...(allGw || []).map(g => g.gateway_type).filter(g => g !== primary)];
+      const tried = new Set<string>();
+
+      const endpointFor = (gw: string) => gw === 'misticpay' ? 'misticpay-generate-pix' : 'efi-generate-pix';
+
+      let result: any = null;
+      let lastError: any = null;
+      for (const gw of order) {
+        if (tried.has(gw)) continue;
+        tried.add(gw);
+
+        const gwInfo = (allGw || []).find(g => g.gateway_type === gw);
+        if (gwInfo && finalPrice < Number(gwInfo.min_deposit || 0)) {
+          lastError = `Gateway ${gw} exige depósito mínimo de R$ ${Number(gwInfo.min_deposit).toFixed(2)}`;
+          console.log(`[pix] pulando ${gw}: valor ${finalPrice} < mínimo ${gwInfo.min_deposit}`);
+          continue;
+        }
+
+        console.log(`[pix] tentando gateway: ${gw}`);
+        const resp = await fetch(`${supabaseUrl}/functions/v1/${endpointFor(gw)}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${serviceKey}`,
+          },
+          body: JSON.stringify({
+            amount: finalPrice,
+            user_id: this.bot.user_id,
+            telegram_user_id: telegramUserId,
+            telegram_chat_id: chatId,
+            bot_id: this.bot.id,
+            plan_name: plan.name,
+            plan_code: plan.code,
+            plan_days: plan.days,
+            context: context,
+          }),
+        }).catch(e => { lastError = e; return null; });
+
+        if (!resp) continue;
+        const r = await resp.json().catch(() => null);
+        if (r?.success) {
+          result = r;
+          console.log(`[pix] sucesso via ${gw}`);
+          break;
+        }
+        lastError = r;
+        console.warn(`[pix] falha em ${gw}, tentando próximo...`, r);
+      }
+
+      if (!result?.success) {
+        console.error("PIX creation failed (todos os gateways):", lastError);
+        const msg = typeof lastError === 'string'
+          ? `❌ ${lastError}\n\nEscolha outro plano ou tente novamente em instantes.`
+          : "❌ Erro ao gerar PIX. Tente novamente em instantes.";
+        await sendMessage(this.token, chatId, msg);
         return;
       }
 
