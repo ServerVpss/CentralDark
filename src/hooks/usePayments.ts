@@ -417,3 +417,97 @@ export function usePayments() {
     deletePlan,
   };
 }
+
+// ===== MisticPay gateway (hook isolado, mesma tabela payment_gateways) =====
+export interface MisticPayGatewayConfig {
+  id: string;
+  user_id: string;
+  name: string;
+  gateway_type: string;
+  config: { client_id: string; client_secret: string };
+  min_deposit: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export function useMisticPayGateway() {
+  const { user } = useAuthContext();
+  const queryClient = useQueryClient();
+
+  const { data: gateway, isLoading } = useQuery({
+    queryKey: ["misticpay-gateway", user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      const { data, error } = await supabase
+        .from("payment_gateways")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("gateway_type", "misticpay")
+        .maybeSingle();
+      if (error && error.code !== "PGRST116") throw error;
+      return data as unknown as MisticPayGatewayConfig | null;
+    },
+    enabled: !!user,
+  });
+
+  const updateGateway = useMutation({
+    mutationFn: async (cfg: {
+      client_id: string;
+      client_secret: string;
+      min_deposit?: number;
+      is_active?: boolean;
+    }) => {
+      if (!user) throw new Error("Não autenticado");
+      const { data: existing } = await supabase
+        .from("payment_gateways")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("gateway_type", "misticpay")
+        .maybeSingle();
+
+      const payload = {
+        name: "MisticPay",
+        gateway_type: "misticpay",
+        config: { client_id: cfg.client_id, client_secret: cfg.client_secret },
+        min_deposit: cfg.min_deposit ?? 5,
+        is_active: cfg.is_active ?? true,
+        user_id: user.id,
+      };
+
+      if (existing) {
+        const { error } = await supabase
+          .from("payment_gateways")
+          .update(payload)
+          .eq("id", existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("payment_gateways").insert(payload);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["misticpay-gateway"] });
+      toast.success("Gateway MisticPay salvo e ativado!");
+    },
+    onError: (e: Error) => toast.error(`Erro ao salvar MisticPay: ${e.message}`),
+  });
+
+  const toggleActive = useMutation({
+    mutationFn: async (active: boolean) => {
+      if (!user || !gateway) throw new Error("Configure a MisticPay antes de ativar");
+      const { error } = await supabase
+        .from("payment_gateways")
+        .update({ is_active: active })
+        .eq("id", gateway.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["misticpay-gateway"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  return { gateway, isLoading, updateGateway, toggleActive };
+}
+

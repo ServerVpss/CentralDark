@@ -66,5 +66,14 @@ verify_jwt = false
 [functions.test-message-effect]
 verify_jwt = false
 
+[functions.misticpay-generate-pix]
+verify_jwt = false
+
+[functions.misticpay-webhook]
+verify_jwt = false
+
+[functions.misticpay-verify]
+verify_jwt = false
+
 
 
