@@ -1,0 +1,1 @@
+UPDATE public.payment_gateways SET is_active = false WHERE gateway_type = 'efi' AND is_active = true AND EXISTS (SELECT 1 FROM public.payment_gateways pg2 WHERE pg2.user_id = payment_gateways.user_id AND pg2.gateway_type = 'misticpay' AND pg2.is_active = true);
