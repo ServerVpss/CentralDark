@@ -7370,7 +7370,7 @@ class BotHandler {
       const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
       // Seleciona gateway ATIVO do dono do bot. Se nenhum ativo, fallback pra qualquer configurado.
-      const { data: activeGw } = await supabaseAdmin
+      const { data: activeGw } = await this.supabase
         .from('payment_gateways')
         .select('gateway_type, min_deposit, is_active')
         .eq('user_id', this.bot.user_id)
@@ -7380,7 +7380,7 @@ class BotHandler {
         .limit(1)
         .maybeSingle();
 
-      const { data: allGw } = await supabaseAdmin
+      const { data: allGw } = await this.supabase
         .from('payment_gateways')
         .select('gateway_type, min_deposit')
         .eq('user_id', this.bot.user_id)
