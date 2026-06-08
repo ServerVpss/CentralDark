@@ -905,11 +905,17 @@ export type Database = {
           expires_at: string | null
           external_id: string | null
           gateway: string
+          gateway_fee: number | null
           id: string
           loc_id: string | null
           paid_at: string | null
+          payer_document: string | null
+          payer_info: Json | null
+          payer_name: string | null
           qr_code_text: string | null
           qr_code_url: string | null
+          raw_create_response: Json | null
+          raw_webhook: Json | null
           status: string | null
           telegram_user_id: number | null
           updated_at: string | null
@@ -924,11 +930,17 @@ export type Database = {
           expires_at?: string | null
           external_id?: string | null
           gateway?: string
+          gateway_fee?: number | null
           id?: string
           loc_id?: string | null
           paid_at?: string | null
+          payer_document?: string | null
+          payer_info?: Json | null
+          payer_name?: string | null
           qr_code_text?: string | null
           qr_code_url?: string | null
+          raw_create_response?: Json | null
+          raw_webhook?: Json | null
           status?: string | null
           telegram_user_id?: number | null
           updated_at?: string | null
@@ -943,11 +955,17 @@ export type Database = {
           expires_at?: string | null
           external_id?: string | null
           gateway?: string
+          gateway_fee?: number | null
           id?: string
           loc_id?: string | null
           paid_at?: string | null
+          payer_document?: string | null
+          payer_info?: Json | null
+          payer_name?: string | null
           qr_code_text?: string | null
           qr_code_url?: string | null
+          raw_create_response?: Json | null
+          raw_webhook?: Json | null
           status?: string | null
           telegram_user_id?: number | null
           updated_at?: string | null
