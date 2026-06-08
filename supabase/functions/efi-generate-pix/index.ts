@@ -158,7 +158,15 @@ Deno.serve(async (req) => {
         qr_code_url: proxyData.data?.qrcode,
         status: 'pending',
         description: plan_name ? `${plan_name} - ${plan_days} dias` : 'Recarga',
-        expires_at: expiresAt.toISOString()
+        expires_at: expiresAt.toISOString(),
+        payer_name: 'Cliente',
+        payer_document: cpf,
+        payer_info: {
+          origem: 'criacao_pix',
+          nome_informado: 'Cliente',
+          documento_informado: cpf,
+        },
+        raw_create_response: proxyData,
       })
       .select()
       .single()
