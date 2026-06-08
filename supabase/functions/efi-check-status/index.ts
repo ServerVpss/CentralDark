@@ -133,7 +133,12 @@ Deno.serve(async (req) => {
         .update({ 
           status: 'paid', 
           paid_at: new Date().toISOString(),
-          e2e_id: e2eId
+          e2e_id: e2eId,
+          raw_webhook: proxyData,
+          raw_webhook_events: [
+            ...(Array.isArray((transaction as any).raw_webhook_events) ? (transaction as any).raw_webhook_events : []),
+            { received_at: new Date().toISOString(), event: proxyData, origem: 'efi-check-status' },
+          ],
         })
         .eq('id', transaction.id)
 
