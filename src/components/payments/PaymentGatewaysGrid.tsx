@@ -71,7 +71,7 @@ const PAYMENT_GATEWAYS: PaymentGateway[] = [
     slug: "misticpay",
     icon: <Zap className="h-6 w-6" />,
     iconColor: "text-yellow-400",
-    minDeposit: 5.0,
+    minDeposit: 1.0,
     tags: [{ label: "PIX", icon: <Lock className="h-3 w-3" /> }],
     isConfigurable: true,
   },
