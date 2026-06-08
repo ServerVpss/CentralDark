@@ -278,6 +278,8 @@ export function usePayments() {
         .eq('gateway_type', 'efi')
         .maybeSingle();
 
+      const willActivate = config.is_active ?? true;
+
       const gatewayData = {
         name: 'EFI (Gerencianet) PIX',
         gateway_type: 'efi',
@@ -287,7 +289,7 @@ export function usePayments() {
           pix_key: config.pix_key,
         },
         min_deposit: config.min_deposit ?? 2,
-        is_active: config.is_active ?? true,
+        is_active: willActivate,
         proxy_url: config.proxy_url ?? 'https://api.segredounlock.com/efi-generate-pix.php',
         user_id: user.id,
       };
@@ -304,9 +306,19 @@ export function usePayments() {
           .insert(gatewayData);
         if (error) throw error;
       }
+
+      // Exclusividade: ao ativar EFI, desativa os outros gateways do mesmo usuário
+      if (willActivate) {
+        await supabase
+          .from('payment_gateways')
+          .update({ is_active: false })
+          .eq('user_id', user.id)
+          .neq('gateway_type', 'efi');
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['efi-gateway'] });
+      queryClient.invalidateQueries({ queryKey: ['misticpay-gateway'] });
       toast.success('Gateway EFI configurado com sucesso!');
     },
     onError: (error: Error) => {
