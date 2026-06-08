@@ -278,6 +278,8 @@ export function usePayments() {
         .eq('gateway_type', 'efi')
         .maybeSingle();
 
+      const willActivate = config.is_active ?? true;
+
       const gatewayData = {
         name: 'EFI (Gerencianet) PIX',
         gateway_type: 'efi',
@@ -287,7 +289,7 @@ export function usePayments() {
           pix_key: config.pix_key,
         },
         min_deposit: config.min_deposit ?? 2,
-        is_active: config.is_active ?? true,
+        is_active: willActivate,
         proxy_url: config.proxy_url ?? 'https://api.segredounlock.com/efi-generate-pix.php',
         user_id: user.id,
       };
@@ -304,9 +306,19 @@ export function usePayments() {
           .insert(gatewayData);
         if (error) throw error;
       }
+
+      // Exclusividade: ao ativar EFI, desativa os outros gateways do mesmo usuário
+      if (willActivate) {
+        await supabase
+          .from('payment_gateways')
+          .update({ is_active: false })
+          .eq('user_id', user.id)
+          .neq('gateway_type', 'efi');
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['efi-gateway'] });
+      queryClient.invalidateQueries({ queryKey: ['misticpay-gateway'] });
       toast.success('Gateway EFI configurado com sucesso!');
     },
     onError: (error: Error) => {
@@ -466,12 +478,14 @@ export function useMisticPayGateway() {
         .eq("gateway_type", "misticpay")
         .maybeSingle();
 
+      const willActivate = cfg.is_active ?? true;
+
       const payload = {
         name: "MisticPay",
         gateway_type: "misticpay",
         config: { client_id: cfg.client_id, client_secret: cfg.client_secret },
         min_deposit: cfg.min_deposit ?? 5,
-        is_active: cfg.is_active ?? true,
+        is_active: willActivate,
         user_id: user.id,
       };
 
@@ -485,9 +499,19 @@ export function useMisticPayGateway() {
         const { error } = await supabase.from("payment_gateways").insert(payload);
         if (error) throw error;
       }
+
+      // Exclusividade: ao ativar a MisticPay, desativa os demais gateways do usuário
+      if (willActivate) {
+        await supabase
+          .from("payment_gateways")
+          .update({ is_active: false })
+          .eq("user_id", user.id)
+          .neq("gateway_type", "misticpay");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["misticpay-gateway"] });
+      queryClient.invalidateQueries({ queryKey: ["efi-gateway"] });
       toast.success("Gateway MisticPay salvo e ativado!");
     },
     onError: (e: Error) => toast.error(`Erro ao salvar MisticPay: ${e.message}`),
@@ -501,9 +525,19 @@ export function useMisticPayGateway() {
         .update({ is_active: active })
         .eq("id", gateway.id);
       if (error) throw error;
+
+      // Exclusividade: ao ligar a MisticPay, desativa os demais gateways do usuário
+      if (active) {
+        await supabase
+          .from("payment_gateways")
+          .update({ is_active: false })
+          .eq("user_id", user.id)
+          .neq("gateway_type", "misticpay");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["misticpay-gateway"] });
+      queryClient.invalidateQueries({ queryKey: ["efi-gateway"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });

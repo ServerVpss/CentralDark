@@ -46,14 +46,45 @@ Deno.serve(async (req) => {
         });
       }
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/efi-generate-pix`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${supabaseServiceKey}` },
-        body: JSON.stringify({ amount, user_id: userId, telegram_user_id: telegramUserId, bot_id: botId, plan_name: planName, plan_code: planCode, plan_days: planDays }),
-      });
+      // Seleciona gateway ATIVO do dono do bot, com fallback automático
+      const { data: activeGw } = await supabase
+        .from('payment_gateways')
+        .select('gateway_type, min_deposit')
+        .eq('user_id', bot.user_id)
+        .eq('is_active', true)
+        .in('gateway_type', ['misticpay', 'efi'])
+        .limit(1)
+        .maybeSingle();
+      const { data: allGw } = await supabase
+        .from('payment_gateways')
+        .select('gateway_type, min_deposit')
+        .eq('user_id', bot.user_id)
+        .in('gateway_type', ['misticpay', 'efi']);
 
-      const result = await response.json();
-      if (!result.success) {
+      const primary = activeGw?.gateway_type ?? (allGw?.[0]?.gateway_type ?? 'efi');
+      const order: string[] = [primary, ...(allGw || []).map(g => g.gateway_type).filter(g => g !== primary)];
+      const endpointFor = (gw: string) => gw === 'misticpay' ? 'misticpay-generate-pix' : 'efi-generate-pix';
+
+      let result: any = null;
+      const tried = new Set<string>();
+      for (const gw of order) {
+        if (tried.has(gw)) continue;
+        tried.add(gw);
+        const gwInfo = (allGw || []).find(g => g.gateway_type === gw);
+        if (gwInfo && Number(amount) < Number(gwInfo.min_deposit || 0)) continue;
+        console.log(`[payment-handler] tentando gateway ${gw}`);
+        const resp = await fetch(`${supabaseUrl}/functions/v1/${endpointFor(gw)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${supabaseServiceKey}` },
+          body: JSON.stringify({ amount, user_id: userId, telegram_user_id: telegramUserId, bot_id: botId, plan_name: planName, plan_code: planCode, plan_days: planDays }),
+        }).catch(() => null);
+        if (!resp) continue;
+        const r = await resp.json().catch(() => null);
+        if (r?.success) { result = r; break; }
+        console.warn(`[payment-handler] falha em ${gw}`, r);
+      }
+
+      if (!result?.success) {
         return new Response(JSON.stringify({ error: 'PIX creation failed' }), {
           status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });

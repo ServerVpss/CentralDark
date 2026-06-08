@@ -144,6 +144,8 @@ export function PaymentGatewaysGrid() {
     setActiveGateways((prev) => ({ ...prev, misticpay: !!misticGateway?.is_active }));
   }, [misticGateway]);
 
+  const anyActive = Object.values(activeGateways).some(Boolean);
+
   const handleToggleGateway = (gatewayId: string, checked: boolean) => {
     if (gatewayId === "misticpay") {
       if (!misticGateway) {
@@ -151,6 +153,16 @@ export function PaymentGatewaysGrid() {
         return;
       }
       toggleMistic.mutate(checked);
+      if (checked) {
+        // espelha exclusividade no estado local pra UI responder na hora
+        setActiveGateways((prev) => {
+          const next: Record<string, boolean> = {};
+          for (const k of Object.keys(prev)) next[k] = false;
+          next.misticpay = true;
+          return next;
+        });
+        return;
+      }
     }
     setActiveGateways((prev) => ({ ...prev, [gatewayId]: checked }));
   };
@@ -201,10 +213,12 @@ export function PaymentGatewaysGrid() {
                     className={
                       isActive
                         ? "bg-success/20 text-success border-success/30 text-xs"
-                        : "bg-secondary text-muted-foreground text-xs"
+                        : anyActive
+                          ? "bg-amber-500/10 text-amber-600 border-amber-500/30 text-xs"
+                          : "bg-secondary text-muted-foreground text-xs"
                     }
                   >
-                    {isActive ? "Ativo" : "Inativo"}
+                    {isActive ? "Ativo" : anyActive ? "Standby (fallback)" : "Inativo"}
                   </Badge>
                 </div>
 
