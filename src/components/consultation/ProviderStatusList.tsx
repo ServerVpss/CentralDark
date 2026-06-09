@@ -67,9 +67,16 @@ export function ProviderStatusList() {
         ))}
         
         {providers.length === 0 && (
-          <p className="text-sm text-muted-foreground text-center py-4">
-            Nenhum provedor configurado
-          </p>
+          <div className="flex items-center justify-between p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
+            <div>
+              <p className="font-medium text-sm">VeiculosAPI / iSeek</p>
+              <p className="text-xs text-muted-foreground">Provedor unificado (consulta direta)</p>
+            </div>
+            <Badge variant="outline" className="bg-success/10 text-success border-success/30 gap-1">
+              <Wifi className="h-3 w-3" />
+              Ativo
+            </Badge>
+          </div>
         )}
       </CardContent>
     </Card>

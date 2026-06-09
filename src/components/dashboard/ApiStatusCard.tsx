@@ -50,26 +50,32 @@ export function ApiStatusCard() {
   const isCritical = usagePercent >= 95;
   const isHigh = usagePercent >= 80;
 
+  // Estado "sem dados ainda" — quando a API responde mas não há plano/uso
+  const semDados = data.total_diario === 0 && data.consumo_hoje === 0;
+
   // Valor exibido conforme filtro
   const displayValue = period === "today"
     ? data.consumo_hoje
     : history?.total ?? 0;
   const displayLabel = period === "today"
-    ? `${data.consumo_hoje}/${data.total_diario}`
+    ? (semDados ? "Aguardando primeira consulta" : `${data.consumo_hoje}/${data.total_diario}`)
     : `${displayValue.toLocaleString("pt-BR")} consultas`;
+
+  // Quando está sem dados, tratamos como online se a API respondeu (data existe)
+  const statusOnline = data.ativo || semDados;
 
   return (
     <div className={cn(
       "rounded-xl border bg-card p-4 space-y-2",
-      data.ativo ? "border-border/40" : "border-destructive/30"
+      statusOnline ? "border-border/40" : "border-destructive/30"
     )}>
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted-foreground">Status API</span>
         <span className={cn(
           "text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded",
-          data.ativo ? "bg-emerald-500/15 text-emerald-500" : "bg-destructive/15 text-destructive"
+          statusOnline ? "bg-emerald-500/15 text-emerald-500" : "bg-destructive/15 text-destructive"
         )}>
-          {data.ativo ? "Online" : "Offline"}
+          {statusOnline ? "Online" : "Offline"}
         </span>
       </div>
 
@@ -96,7 +102,7 @@ export function ApiStatusCard() {
           <span className="text-muted-foreground truncate">
             {historyLoading && period !== "today" ? "..." : displayLabel}
           </span>
-          {period === "today" && (
+          {period === "today" && !semDados && (
             <span className={cn(
               "font-medium tabular-nums",
               isCritical ? "text-destructive" : isHigh ? "text-amber-500" : "text-foreground"
@@ -105,7 +111,7 @@ export function ApiStatusCard() {
             </span>
           )}
         </div>
-        {period === "today" && (
+        {period === "today" && !semDados && (
           <Progress
             value={usagePercent}
             className={cn(
