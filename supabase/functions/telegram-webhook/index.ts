@@ -2837,6 +2837,15 @@ async function fetchFromProviderWithTimeout(
       if (response.status === 404) {
         return { error: "Dados não encontrados", status: 404, notFound: true };
       }
+      if (response.status === 401 || response.status === 403) {
+        return { error: "🔒 Módulo temporariamente indisponível no provedor. Tente outro módulo ou aguarde alguns minutos.", status: response.status, notFound: true };
+      }
+      if (response.status === 429) {
+        return { error: "⏳ Muitas consultas no momento. Aguarde alguns segundos e tente novamente.", status: 429, notFound: true };
+      }
+      if (response.status >= 500) {
+        return { error: "⚠️ Provedor instável no momento. Tente novamente em alguns minutos.", status: response.status, notFound: true };
+      }
       return { error: `Erro na API: ${response.status}`, status: response.status };
     }
 
