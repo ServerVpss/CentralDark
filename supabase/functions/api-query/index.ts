@@ -502,6 +502,15 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
         await new Promise(r => setTimeout(r, 2000));
         return fetchFromProvider(modulo, valor, true);
       }
+      if (response.status === 401 || response.status === 403) {
+        return { data: { notFound: true, message: "🔒 Módulo temporariamente indisponível no provedor. Tente outro módulo ou aguarde alguns minutos." }, provider_duration_ms, retried: retry };
+      }
+      if (response.status === 429) {
+        return { data: { notFound: true, message: "⏳ Muitas consultas no momento. Aguarde alguns segundos e tente novamente." }, provider_duration_ms, retried: retry };
+      }
+      if (response.status >= 500) {
+        return { data: { notFound: true, message: "⚠️ Provedor instável no momento. Tente novamente em alguns minutos." }, provider_duration_ms, retried: retry };
+      }
       return { data: { error: `Erro na API: ${response.status}` }, provider_duration_ms, retried: retry };
     }
 
