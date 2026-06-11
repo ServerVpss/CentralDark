@@ -1,33 +1,34 @@
-## Entendi
+## Problema confirmado
 
-Só **um** gateway ativo por vez. Quando você liga a MisticPay, a EFI desliga sozinha (e vice-versa). O outro só entra em ação se o ativo falhar/estiver fora do ar.
+Acabei de testar a chave do provedor agora e ela está **funcionando**. Nas últimas 6 horas há 26+ consultas bem-sucedidas (cpf, telefone, nome, placa). A mensagem "Token expirado" que o provedor devolve em alguns 403 **não significa** que a chave venceu — é uma resposta genérica do lado deles pra várias situações (CPF inexistente, módulo indisponível pontual, IP bloqueado momentaneamente, etc).
 
-Hoje os dois estão `is_active = true` no banco — por isso a confusão.
+O alerta que coloquei na última rodada (`api-query/index.ts` linhas 499–515) estava amplificando esse falso positivo e dizendo "renovar assinatura" quando na verdade a key tá ativa.
 
 ## O que vou fazer
 
-### 1. Exclusividade no painel (frontend)
-- No `usePayments.ts` (hooks `useEfiGateway` e `useMisticPayGateway`): quando salvar `is_active = true` em um, **desativar automaticamente todos os outros** gateways de PIX.
-- No `PaymentGatewaysGrid.tsx`: o toggle de ativação de cada card também aplica a mesma regra (liga um, desliga os outros).
-- Visual: o card ativo ganha destaque ("Ativo") e os demais aparecem como "Standby (fallback)".
+1. **Reverter a detecção agressiva** em `supabase/functions/api-query/index.ts`:
+   - Tirar a regra que transforma qualquer "token expirado" do provedor em mensagem de "renovar assinatura".
+   - Manter só a mensagem amigável genérica de 403 ("Módulo temporariamente indisponível, tente outro ou aguarde").
 
-### 2. Roteamento do bot
-- Em `telegram-webhook/index.ts` (linha ~7370) e `telegram-payment-handler/index.ts` (linha ~49):
-  - Buscar **o gateway ativo** (`is_active = true`) → chama o endpoint dele (`misticpay-generate-pix` ou `efi-generate-pix`).
-  - Se a chamada falhar (erro de credenciais, timeout, etc.) → **fallback automático** para qualquer outro gateway configurado (mesmo inativo), só pra não deixar o cliente na mão.
-  - Log claro de qual gateway foi usado.
+2. **Mesma coisa no bot** (`supabase/functions/telegram-webhook/index.ts`) — manter o texto amigável padrão pra 401/403 sem afirmar que a chave venceu.
 
-### 3. Limpeza imediata do estado atual
-- Como você já escolheu a MisticPay, desativar a EFI agora no banco pra parar o erro `invalid_client` na hora.
+3. **Criar painel de diagnóstico real** (rápido): uma query que mostra, dos últimos 60 minutos:
+   - Quantos 403 reais aconteceram, em quais módulos
+   - Taxa de sucesso atual por módulo
+   - Assim você consegue ver de relance se é problema de UM módulo específico ou da chave inteira, sem chute.
+   
+   Isso já existe parcialmente em `module_health_status` — vou só garantir que a página de saúde dos módulos no painel web esteja puxando essa informação corretamente.
 
-## Não muda
-- Dialogs de configuração da EFI e MisticPay continuam iguais.
-- Edge functions `misticpay-*` e `efi-*` continuam iguais.
-- Mínimos por gateway (MisticPay R$5, EFI R$2) continuam respeitados.
+4. **Deploy** das duas edge functions ajustadas e validação rodando uma consulta real.
 
-## Como vai ficar pra você
-- Liga MisticPay → EFI desativa sozinha. Bot manda PIX pela MisticPay.
-- Se a MisticPay cair → bot tenta EFI sozinho como salva-vidas (você nem precisa mexer).
-- Quer voltar pra EFI? Liga ela no painel, a MisticPay desativa sozinha.
+## Detalhes técnicos (pra referência)
 
-Depois de aplicar, faço o teste real clicando no plano "diária privado" e te mostro nos logs que saiu pela MisticPay.
+- Arquivos tocados: `api-query/index.ts`, `telegram-webhook/index.ts`, e talvez `src/pages/...` da página de saúde de módulos (só se a visualização não estiver clara).
+- Nenhuma mudança em banco / RLS / secrets.
+- A `ISEEK_API_KEY` continua a mesma, intocada.
+
+## Resultado esperado
+
+- Bot e painel param de gritar "chave vencida" quando não está.
+- Quando uma consulta falhar, o usuário vê "tenta outro módulo / aguarda um pouco" em vez de mensagem assustadora.
+- Você ganha uma forma confiável de checar a saúde real quando suspeitar.
