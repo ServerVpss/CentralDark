@@ -18,7 +18,11 @@
 #    1. Atualiza o repo Lovable local (git pull)
 #    2. rsync do código pras duas pastas
 #    3. npm ci + npm run build em cada uma (com VITE_APP_MODE diferente)
-#    4. Aponta symlinks públicos pros dist/
+#
+#  O Caddy já serve direto de:
+#    /root/CentralDark/apps/web/dist
+#    /root/CentralDark/apps/portal/dist
+#  Não criamos symlink em /var/www nem mexemos em nginx.
 #
 #  Uso:
 #    bash scripts/sync-para-centraldark-monorepo.sh
@@ -30,8 +34,6 @@ set -euo pipefail
 LOVABLE_REPO_DIR="${LOVABLE_REPO_DIR:-/root/Multizap/apps/clone-deck}"
 WEB_TARGET="${WEB_TARGET:-/root/CentralDark/apps/web}"
 PORTAL_TARGET="${PORTAL_TARGET:-/root/CentralDark/apps/portal}"
-PUBLIC_WEB="${PUBLIC_WEB:-/var/www/centraldark-web}"
-PUBLIC_PORTAL="${PUBLIC_PORTAL:-/var/www/centraldark-portal}"
 LOG_PREFIX="[sync-centraldark]"
 
 log() { echo "$LOG_PREFIX $*"; }
@@ -66,7 +68,6 @@ log "Commit atual do Lovable: $LOVABLE_HASH"
 sync_and_build() {
   local target="$1"
   local mode="$2"
-  local public_link="$3"
   local last_built_file="$target/.last-built-hash"
 
   log "==== $mode → $target ===="
@@ -105,21 +106,14 @@ sync_and_build() {
   else
     log "[$mode] Build já está em $LOVABLE_HASH — pulando"
   fi
-
-  # symlink público
-  mkdir -p "$(dirname "$public_link")"
-  if [ -L "$public_link" ] || [ ! -e "$public_link" ]; then
-    ln -sfn "$target/dist" "$public_link"
-    log "[$mode] Symlink $public_link → $target/dist"
-  else
-    log "[$mode] AVISO: $public_link existe e não é symlink — não vou sobrescrever"
-  fi
 }
 
 # ---------- 3. Roda pras duas pastas ---------------------------------------
-sync_and_build "$WEB_TARGET"    "web"    "$PUBLIC_WEB"
-sync_and_build "$PORTAL_TARGET" "portal" "$PUBLIC_PORTAL"
+sync_and_build "$WEB_TARGET"    "web"
+sync_and_build "$PORTAL_TARGET" "portal"
 
 log "OK — sync completo (commit $LOVABLE_HASH)"
-log "    web    → $WEB_TARGET     (público: $PUBLIC_WEB)"
-log "    portal → $PORTAL_TARGET  (público: $PUBLIC_PORTAL)"
+log "    web    → $WEB_TARGET/dist     (servido pelo Caddy)"
+log "    portal → $PORTAL_TARGET/dist  (servido pelo Caddy)"
+log ""
+log "Caddy já cuida do resto. Nada de nginx, nada de symlink em /var/www."
