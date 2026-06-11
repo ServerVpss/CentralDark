@@ -3,35 +3,30 @@ on:
   workflow_dispatch:
     inputs:
       commands:
-        description: 'Comandos SSH para executar no VPS (separados por |||)'
+        description: 'Comandos pra rodar no VPS'
         required: true
         type: string
-      timeout_minutes:
-        description: 'Timeout em minutos'
-        required: false
-        type: string
-        default: '5'
 
 jobs:
   exec:
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJson(inputs.timeout_minutes) }}
+    timeout-minutes: 5
     steps:
-      - name: Executar comandos no VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            #!/bin/bash
-            set -e
-            echo "========== INÍCIO =========="
-            IFS='|||' read -ra CMDS <<< "${{ inputs.commands }}"
-            for cmd in "${CMDS[@]}"; do
-              cmd=$(echo "$cmd" | xargs)
-              [[ -z "$cmd" ]] && continue
-              echo "\n\$ $cmd"
-              eval "$cmd" || echo "⚠️ Comando retornou erro: $?"
-            done
-            echo "========== FIM =========="
+      - name: Configurar chave SSH
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Executar no VPS
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          CMDS: ${{ inputs.commands }}
+        run: |
+          echo "========== INÍCIO =========="
+          ssh -o StrictHostKeyChecking=no "$USER@$HOST" "$CMDS"
+          echo "========== FIM =========="
