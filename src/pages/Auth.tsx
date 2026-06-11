@@ -223,7 +223,7 @@ export default function Auth() {
                 </form>
               </TabsContent>
               
-              <TabsContent value="signup">
+              {signupEnabled && <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Nome completo</Label>
@@ -290,7 +290,7 @@ export default function Auth() {
                     )}
                   </Button>
                 </form>
-              </TabsContent>
+              </TabsContent>}
             </Tabs>
           </CardContent>
         </Card>
