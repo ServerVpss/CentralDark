@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/components/auth/AuthProvider";
+import { AuthProvider, useAuthContext } from "@/components/auth/AuthProvider";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
@@ -34,6 +34,15 @@ import MenuTips from "./pages/MenuTips";
 import { PageSplash } from "@/components/transitions/PageSplash";
 
 const queryClient = new QueryClient();
+
+// Se o usuário já estiver logado e acessar /telepainel direto, manda pro dashboard.
+// Caso contrário, mostra a landing pública do módulo.
+function TelepainelEntry() {
+  const { user, loading } = useAuthContext();
+  if (loading) return null;
+  if (user) return <Navigate to="/telepainel/dashboard" replace />;
+  return <LandingTelePainel />;
+}
 
 // Rotas internas do módulo TelePainel — usadas tanto na raiz (legado)
 // quanto prefixadas em /telepainel/* (novo padrão sob o portal CentralDark).
@@ -85,7 +94,7 @@ const App = () => (
                         })()}
                       />
                       <Route path="/auth" element={<Auth />} />
-                      <Route path="/telepainel" element={<LandingTelePainel />} />
+                      <Route path="/telepainel" element={<TelepainelEntry />} />
                       <Route path="/whatsapp" element={<LandingWhatsapp />} />
                       <Route path="/crm" element={<LandingCRM />} />
                       <Route path="/financeiro" element={<LandingFinanceiro />} />
