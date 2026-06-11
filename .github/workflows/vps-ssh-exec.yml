@@ -14,17 +14,18 @@ jobs:
     steps:
       - name: Configurar chave SSH
         env:
-          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+          HOST: ${{ secrets.VPS_HOST_LOVABLE }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
       - name: Executar no VPS
         env:
-          HOST: ${{ secrets.VPS_HOST }}
-          USER: ${{ secrets.VPS_USER }}
+          HOST: ${{ secrets.VPS_HOST_LOVABLE }}
+          USER: ${{ secrets.VPS_USER_LOVABLE }}
           CMDS: ${{ inputs.commands }}
         run: |
           echo "========== INÍCIO =========="
