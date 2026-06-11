@@ -19,6 +19,7 @@ import {
   Wrench,
   Briefcase,
   Cpu,
+  Database,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -67,6 +68,7 @@ const menuGroups = [
     items: [
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
       { title: "Segurança", icon: Shield, path: "/security" },
+      { title: "Banco de Dados", icon: Database, path: "/database" },
       { title: "Dicas Splash", icon: Lightbulb, path: "/menu-tips" },
       { title: "Configurações", icon: Settings, path: "/settings" },
     ],
