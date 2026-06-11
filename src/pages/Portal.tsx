@@ -16,8 +16,8 @@ type Module = {
 };
 
 const modules: Module[] = [
-  { id: "whatsapp", name: "Bot WhatsApp", icon: iconWhatsapp, href: "/whatsapp", status: "em breve" },
-  { id: "crm", name: "CRM", icon: iconCrm, href: "/crm", status: "em breve" },
+  { id: "whatsapp", name: "Bot WhatsApp", icon: iconWhatsapp, href: "/whatsapp", status: "ativo" },
+  { id: "crm", name: "CRM", icon: iconCrm, href: "/crm", status: "ativo" },
   { id: "telegram", name: "TelePainel", icon: iconTelegram, href: "/telepainel/dashboard", status: "ativo" },
   { id: "financeiro", name: "Financeiro", icon: iconFinanceiro, href: "/financeiro", status: "em breve" },
 ];
