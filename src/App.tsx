@@ -64,50 +64,73 @@ const App = () => (
             <GlobalSearch />
             {/* <InstallPrompt /> */}
             <PageSplash />
-            <Routes>
-              {/* Públicas — em telepainel.centralldark.com a raiz vai direto pro dashboard */}
-              <Route
-                path="/"
-                element={(() => {
-                  const redirect = getRootRedirectFor(detectHostKind());
-                  return redirect ? <Navigate to={redirect} replace /> : <LandingCentralDark />;
-                })()}
-              />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
+            {(() => {
+              // Modo de build: "web" = só landing+auth, "portal" = só área logada,
+              // qualquer outro valor (ou ausente) = app completo (modo Lovable/dev).
+              const APP_MODE = (import.meta.env.VITE_APP_MODE as string | undefined) ?? "full";
+              const isWeb = APP_MODE === "web";
+              const isPortal = APP_MODE === "portal";
+              const isFull = !isWeb && !isPortal;
 
-              {/* Landings individuais dos módulos */}
-              <Route path="/telepainel" element={<LandingTelePainel />} />
-              <Route path="/whatsapp" element={<LandingWhatsapp />} />
-              <Route path="/crm" element={<LandingCRM />} />
-              <Route path="/financeiro" element={<LandingFinanceiro />} />
+              return (
+                <Routes>
+                  {/* ===== Rotas públicas (landing + auth) — web e full ===== */}
+                  {(isWeb || isFull) && (
+                    <>
+                      <Route
+                        path="/"
+                        element={(() => {
+                          const redirect = getRootRedirectFor(detectHostKind());
+                          return redirect ? <Navigate to={redirect} replace /> : <LandingCentralDark />;
+                        })()}
+                      />
+                      <Route path="/auth" element={<Auth />} />
+                      <Route path="/telepainel" element={<LandingTelePainel />} />
+                      <Route path="/whatsapp" element={<LandingWhatsapp />} />
+                      <Route path="/crm" element={<LandingCRM />} />
+                      <Route path="/financeiro" element={<LandingFinanceiro />} />
+                    </>
+                  )}
 
-              {/* Portal CentralDark (área logada principal) */}
-              <Route
-                path="/portal"
-                element={<ProtectedRoute><Portal /></ProtectedRoute>}
-              />
+                  {/* Em modo portal: raiz manda direto pro /portal */}
+                  {isPortal && (
+                    <>
+                      <Route path="/" element={<Navigate to="/portal" replace />} />
+                      <Route path="/auth" element={<Auth />} />
+                    </>
+                  )}
 
-              {/* Rotas internas do TelePainel — legado (sem prefixo) */}
-              {telepainelRoutes.map((r) => (
-                <Route
-                  key={`legacy-${r.path}`}
-                  path={`/${r.path}`}
-                  element={<ProtectedRoute>{r.element}</ProtectedRoute>}
-                />
-              ))}
+                  {/* ===== Resultado de WebApp (compartilhado) ===== */}
+                  <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
 
-              {/* Rotas internas do TelePainel — novas (prefixadas) */}
-              {telepainelRoutes.map((r) => (
-                <Route
-                  key={`tp-${r.path}`}
-                  path={`/telepainel/${r.path}`}
-                  element={<ProtectedRoute>{r.element}</ProtectedRoute>}
-                />
-              ))}
+                  {/* ===== Rotas logadas (portal + telepainel) — portal e full ===== */}
+                  {(isPortal || isFull) && (
+                    <>
+                      <Route
+                        path="/portal"
+                        element={<ProtectedRoute><Portal /></ProtectedRoute>}
+                      />
+                      {telepainelRoutes.map((r) => (
+                        <Route
+                          key={`legacy-${r.path}`}
+                          path={`/${r.path}`}
+                          element={<ProtectedRoute>{r.element}</ProtectedRoute>}
+                        />
+                      ))}
+                      {telepainelRoutes.map((r) => (
+                        <Route
+                          key={`tp-${r.path}`}
+                          path={`/telepainel/${r.path}`}
+                          element={<ProtectedRoute>{r.element}</ProtectedRoute>}
+                        />
+                      ))}
+                    </>
+                  )}
 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              );
+            })()}
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
