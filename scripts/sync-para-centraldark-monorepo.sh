@@ -2,20 +2,23 @@
 # ============================================================================
 #  sync-para-centraldark-monorepo.sh
 #
-#  Espelha o código deste projeto (editado no Lovable) para dentro do
-#  monorepo ServerVpss/CentralDark, na pasta apps/web/.
+#  Espelha o código deste projeto (editado no Lovable) para duas pastas
+#  locais no VPS:
+#
+#    /root/CentralDark/apps/web     → landing page + /auth
+#    /root/CentralDark/apps/portal  → portal pós-login (todas as outras rotas)
+#
+#  O código-fonte é o MESMO nos dois lugares. O que muda é a variável
+#  VITE_APP_MODE injetada no build:
+#
+#    VITE_APP_MODE=web      → só mostra landing + auth (resto vira NotFound)
+#    VITE_APP_MODE=portal   → só mostra portal + rotas internas
 #
 #  Fluxo:
-#    1. Atualiza o repo Lovable local  (git pull)
-#    2. Clona/atualiza o monorepo CentralDark
-#    3. rsync do código-fonte pra CentralDark/apps/web/
-#    4. Commita + push se houve mudança
-#    5. npm ci + npm run build dentro de apps/web/
-#    6. Aponta /var/www/centralldark pro dist/
-#
-#  Pré-requisitos na VPS:
-#    - SSH key autorizada no GitHub (git@github.com:ServerVpss/CentralDark.git)
-#    - rsync, git, node/npm
+#    1. Atualiza o repo Lovable local (git pull)
+#    2. rsync do código pras duas pastas
+#    3. npm ci + npm run build em cada uma (com VITE_APP_MODE diferente)
+#    4. Aponta symlinks públicos pros dist/
 #
 #  Uso:
 #    bash scripts/sync-para-centraldark-monorepo.sh
@@ -25,12 +28,10 @@ set -euo pipefail
 
 # ---------- Config ----------------------------------------------------------
 LOVABLE_REPO_DIR="${LOVABLE_REPO_DIR:-/root/Multizap/apps/clone-deck}"
-MONOREPO_DIR="${MONOREPO_DIR:-/root/CentralDark-monorepo}"
-MONOREPO_GIT="${MONOREPO_GIT:-git@github.com:ServerVpss/CentralDark.git}"
-MONOREPO_BRANCH="${MONOREPO_BRANCH:-main}"
-WEB_SUBPATH="${WEB_SUBPATH:-CentralDark/apps/web}"
-WEB_TARGET="$MONOREPO_DIR/$WEB_SUBPATH"
-PUBLIC_LINK="${PUBLIC_LINK:-/var/www/centralldark}"
+WEB_TARGET="${WEB_TARGET:-/root/CentralDark/apps/web}"
+PORTAL_TARGET="${PORTAL_TARGET:-/root/CentralDark/apps/portal}"
+PUBLIC_WEB="${PUBLIC_WEB:-/var/www/centraldark-web}"
+PUBLIC_PORTAL="${PUBLIC_PORTAL:-/var/www/centraldark-portal}"
 LOG_PREFIX="[sync-centraldark]"
 
 log() { echo "$LOG_PREFIX $*"; }
@@ -53,78 +54,72 @@ fi
 log "Repo Lovable: $LOVABLE_REPO_DIR"
 
 log "Atualizando repo Lovable (git pull)…"
-(cd "$LOVABLE_REPO_DIR" && git pull --ff-only || log "AVISO: git pull falhou — seguindo com o que tem em disco")
+(cd "$LOVABLE_REPO_DIR" \
+  && git fetch origin main \
+  && git reset --hard origin/main) \
+  || log "AVISO: git pull/reset falhou — seguindo com o que tem em disco"
 
 LOVABLE_HASH="$(cd "$LOVABLE_REPO_DIR" && git rev-parse --short HEAD)"
 log "Commit atual do Lovable: $LOVABLE_HASH"
 
-# ---------- 2. Clonar/atualizar monorepo -----------------------------------
-if [ ! -d "$MONOREPO_DIR/.git" ]; then
-  log "Clonando monorepo CentralDark em $MONOREPO_DIR"
-  git clone --branch "$MONOREPO_BRANCH" "$MONOREPO_GIT" "$MONOREPO_DIR"
-else
-  log "Atualizando monorepo ($MONOREPO_BRANCH)"
-  (cd "$MONOREPO_DIR" && git fetch origin "$MONOREPO_BRANCH" && git checkout "$MONOREPO_BRANCH" && git pull --ff-only)
-fi
+# ---------- 2. Função de sync + build pra uma pasta -------------------------
+sync_and_build() {
+  local target="$1"
+  local mode="$2"
+  local public_link="$3"
+  local last_built_file="$target/.last-built-hash"
 
-mkdir -p "$WEB_TARGET"
+  log "==== $mode → $target ===="
+  mkdir -p "$target"
 
-# ---------- 3. Sync via rsync ----------------------------------------------
-log "Sincronizando arquivos → $WEB_TARGET"
-rsync -a --delete \
-  --exclude='.git/' \
-  --exclude='node_modules/' \
-  --exclude='dist/' \
-  --exclude='.env' \
-  --exclude='.env.local' \
-  --exclude='.lovable/' \
-  --exclude='*.log' \
-  "$LOVABLE_REPO_DIR/" "$WEB_TARGET/"
+  log "[$mode] Sincronizando arquivos via rsync…"
+  rsync -a --delete \
+    --exclude='.git/' \
+    --exclude='node_modules/' \
+    --exclude='dist/' \
+    --exclude='.env' \
+    --exclude='.env.local' \
+    --exclude='.lovable/' \
+    --exclude='.last-built-hash' \
+    --exclude='.synced-from-lovable' \
+    --exclude='*.log' \
+    "$LOVABLE_REPO_DIR/" "$target/"
 
-# Marcador pra rastrear de qual commit veio
-echo "$LOVABLE_HASH" > "$WEB_TARGET/.synced-from-lovable"
+  echo "$LOVABLE_HASH" > "$target/.synced-from-lovable"
 
-# ---------- 4. Commit + push se mudou --------------------------------------
-cd "$MONOREPO_DIR"
-if [ -z "$(git status --porcelain "$WEB_SUBPATH")" ]; then
-  log "Nada mudou em $WEB_SUBPATH — pulando commit/push"
-  NEED_BUILD=0
-else
-  log "Detectadas mudanças — commitando…"
-  git add "$WEB_SUBPATH"
-  git -c user.email="sync@centraldark.local" \
-      -c user.name="CentralDark Sync Bot" \
-      commit -m "sync(web): $LOVABLE_HASH do Lovable"
-  log "Push para origin/$MONOREPO_BRANCH"
-  git push origin "$MONOREPO_BRANCH"
-  NEED_BUILD=1
-fi
+  local last_built
+  last_built="$(cat "$last_built_file" 2>/dev/null || echo '')"
 
-# ---------- 5. Build -------------------------------------------------------
-LAST_BUILT_FILE="$WEB_TARGET/.last-built-hash"
-LAST_BUILT="$(cat "$LAST_BUILT_FILE" 2>/dev/null || echo '')"
-
-if [ "$NEED_BUILD" = "1" ] || [ "$LAST_BUILT" != "$LOVABLE_HASH" ] || [ ! -d "$WEB_TARGET/dist" ]; then
-  log "Buildando $WEB_TARGET"
-  cd "$WEB_TARGET"
-  if [ -f package-lock.json ]; then
-    npm ci --silent
+  if [ "$last_built" != "$LOVABLE_HASH" ] || [ ! -d "$target/dist" ]; then
+    log "[$mode] Buildando com VITE_APP_MODE=$mode…"
+    (
+      cd "$target"
+      if [ -f package-lock.json ]; then
+        npm ci --silent
+      else
+        npm install --silent
+      fi
+      VITE_APP_MODE="$mode" npm run build
+    )
+    echo "$LOVABLE_HASH" > "$last_built_file"
   else
-    npm install --silent
+    log "[$mode] Build já está em $LOVABLE_HASH — pulando"
   fi
-  npm run build
-  echo "$LOVABLE_HASH" > "$LAST_BUILT_FILE"
-else
-  log "Build já está em $LOVABLE_HASH — pulando"
-fi
 
-# ---------- 6. Symlink público --------------------------------------------
-mkdir -p "$(dirname "$PUBLIC_LINK")"
-if [ -L "$PUBLIC_LINK" ] || [ ! -e "$PUBLIC_LINK" ]; then
-  ln -sfn "$WEB_TARGET/dist" "$PUBLIC_LINK"
-  log "Symlink $PUBLIC_LINK → $WEB_TARGET/dist"
-else
-  log "AVISO: $PUBLIC_LINK existe e não é symlink — não vou sobrescrever"
-fi
+  # symlink público
+  mkdir -p "$(dirname "$public_link")"
+  if [ -L "$public_link" ] || [ ! -e "$public_link" ]; then
+    ln -sfn "$target/dist" "$public_link"
+    log "[$mode] Symlink $public_link → $target/dist"
+  else
+    log "[$mode] AVISO: $public_link existe e não é symlink — não vou sobrescrever"
+  fi
+}
+
+# ---------- 3. Roda pras duas pastas ---------------------------------------
+sync_and_build "$WEB_TARGET"    "web"    "$PUBLIC_WEB"
+sync_and_build "$PORTAL_TARGET" "portal" "$PUBLIC_PORTAL"
 
 log "OK — sync completo (commit $LOVABLE_HASH)"
+log "    web    → $WEB_TARGET     (público: $PUBLIC_WEB)"
+log "    portal → $PORTAL_TARGET  (público: $PUBLIC_PORTAL)"
