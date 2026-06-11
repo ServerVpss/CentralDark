@@ -159,11 +159,18 @@ export default function Auth() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2 mb-6">
+            <Tabs value={signupEnabled ? activeTab : "login"} onValueChange={setActiveTab}>
+              <TabsList className={`grid w-full mb-6 ${signupEnabled ? "grid-cols-2" : "grid-cols-1"}`}>
                 <TabsTrigger value="login">Entrar</TabsTrigger>
-                <TabsTrigger value="signup">Cadastrar</TabsTrigger>
+                {signupEnabled && <TabsTrigger value="signup">Cadastrar</TabsTrigger>}
               </TabsList>
+
+              {!signupEnabled && (
+                <div className="mb-4 flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-600 dark:text-amber-400">
+                  <LockIcon className="h-4 w-4 shrink-0" />
+                  <span>Cadastros de novas contas estão temporariamente desligados.</span>
+                </div>
+              )}
               
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
