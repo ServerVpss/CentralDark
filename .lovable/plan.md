@@ -1,69 +1,68 @@
-## Plano — Migração pra CentralDark
+## O que vai acontecer
 
-### O que vai acontecer (em linguagem simples)
+Você continua editando aqui no Lovable (preview rápido, do jeito que você gosta). Em paralelo, a VPS roda um **robô de sincronização** que pega o código deste projeto, joga dentro de `ServerVpss/CentralDark/apps/web/`, comita, dá push, builda e serve no Caddy. O site que o mundo acessa passa a vir do monorepo CentralDark — não mais do repo antigo.
 
-Hoje o site inteiro roda em `/root/Multizap/apps/clone-deck` e responde só pela URL preview do Lovable. A gente vai:
+Resumo visual:
 
-1. **Criar duas pastas novas na VPS**, cada uma com o site buildado:
-   - `/root/CentralDark/apps/portal/` → responde por `centralldark.com` e `www.centralldark.com` (mostra a landing + login + /portal de módulos).
-   - `/root/CentralDark/apps/Telepanel/` → responde por `telepainel.centralldark.com` (mostra dashboard, bots, consultas, etc.).
-2. **Caddy** passa a rotear cada domínio pra pasta certa, com SSL automático.
-3. O **mesmo código** (este repo) alimenta as duas pastas — é o mesmo build copiado em dois lugares. Cada domínio enxerga o SPA inteiro, mas a porta de entrada (`/`) é diferente: o portal cai na landing, o telepainel cai direto no `/dashboard`.
-4. O **cron `gh-pull` + webhook** já existente passa a atualizar as duas pastas automaticamente a cada push na main.
-5. O diretório antigo `/root/Multizap/apps/clone-deck` fica intocado como backup até a gente validar tudo — depois vira legado.
+```text
+   Lovable (você edita)
+        |
+        v
+   repo Lovable deste projeto  ──(sync a cada 2min)──>  ServerVpss/CentralDark/apps/web
+                                                                    |
+                                                                    v
+                                                              build + Caddy
+                                                                    |
+                                                                    v
+                                                          centralldark.com
+```
 
-### Passos detalhados
+## Entregáveis (vou criar 3 arquivos no projeto)
 
-**1. Repo (commit único, este projeto Lovable)**
-- Pequeno ajuste no `src/App.tsx`: detectar o hostname e, se for `telepainel.centralldark.com` e a rota for `/`, redirecionar pra `/dashboard` (ou `/auth` se não logado). Se for `centralldark.com`, mantém a landing atual.
-- `docs/INSTALADOR/` ganha novo arquivo `13-centraldark-portal.md` com receita do deploy duplo + bloco Caddy.
-- `install.sh` ganha função `setup_centraldark_portal()` que cria as duas pastas, clona o repo, builda e injeta o snippet Caddy.
-- `docs/PENDENCIAS.md`: fecha item correspondente, abre acompanhamento de DNS.
+**1. `scripts/sync-para-centraldark-monorepo.sh`** — o robô. Faz:
+- Clona/atualiza `git@github.com:ServerVpss/CentralDark.git` em `/root/CentralDark-monorepo`
+- Faz `git pull` no repo Lovable deste projeto (em `/root/Multizap/apps/clone-deck` ou onde estiver)
+- `rsync` do código-fonte pra dentro de `CentralDark/apps/web/`, **excluindo**: `.git`, `node_modules`, `dist`, `.env`
+- Se tiver mudança: `git add . && git commit -m "sync: <hash-curto> from Lovable" && git push`
+- Roda `npm ci && npm run build` dentro de `CentralDark/apps/web/`
+- Aponta link simbólico `/var/www/centralldark` → `CentralDark/apps/web/dist` pro Caddy servir
 
-**2. VPS (executado via `ssh-vps`)**
-- `mkdir -p /root/CentralDark/apps/{portal,Telepanel}`
-- Clonar `segredounlock/clone-deck` em cada uma (ou usar git worktree pra economizar).
-- `npm ci && npm run build` em cada → serve a pasta `dist/`.
-- Criar `/root/CentralDark/infra/caddy/portal.Caddyfile` com:
-  ```text
-  centralldark.com, www.centralldark.com {
-      root * /root/CentralDark/apps/portal/dist
-      try_files {path} /index.html
-      file_server
-      encode gzip
-  }
-  telepainel.centralldark.com {
-      root * /root/CentralDark/apps/Telepanel/dist
-      try_files {path} /index.html
-      file_server
-      encode gzip
-  }
-  ```
-- Importar esse snippet no Caddyfile principal e recarregar (passo sensível → **vou pedir confirmação antes de mexer no Caddy**, conforme regra do workspace).
+**2. `scripts/cron-sync-centraldark.sh`** — wrapper minúsculo pro cron, com lock pra não rodar em paralelo e log em `/var/log/centraldark-sync.log`.
 
-**3. Cron / sync automático**
-- Estender `gh-pull` pra fazer `git pull && npm ci && npm run build` nas duas pastas novas além da antiga.
+**3. `docs/INSTALADOR/14-sync-monorepo.md`** — instruções pra você ativar na VPS:
+- 1 comando pra primeira execução manual
+- 1 linha de cron (`*/2 * * * *`)
+- Como ajustar o Caddyfile pra ler `/var/www/centralldark`
+- Como acompanhar o log
 
-**4. DNS (você precisa confirmar)**
-- `centralldark.com` → A record pro IP da VPS (`89.117.78.124`).
-- `www.centralldark.com` → A record ou CNAME pro mesmo IP.
-- `telepainel.centralldark.com` → A record pro mesmo IP.
-- Se já estiver apontado, só esperar Caddy emitir SSL (alguns segundos).
+## Detalhes técnicos
 
-**5. Validação**
-- `curl -I https://centralldark.com` → 200 servindo a landing.
-- `curl -I https://telepainel.centralldark.com/dashboard` → 200 servindo SPA.
-- Logs sanitizados do Caddy sem erro.
-- Relatório em `/root/CentralDark/revisoes/migracao-portal-AAAA-MM-DD.md`.
+- **Sem token**: usa sua SSH key já configurada (`git@github.com:...`).
+- **Lock**: `flock` em `/tmp/centraldark-sync.lock` evita corrida.
+- **Idempotência**: se nada mudou no Lovable, o script sai cedo sem commit.
+- **Build só quando precisa**: detecta hash do último commit sincronizado e pula build se for igual.
+- **Estrutura no monorepo**: tudo deste projeto vai pra raiz de `apps/web/` (mesmo `package.json`, `vite.config.ts`, `src/`, `public/`, `supabase/`, etc).
+- **Pasta `supabase/`**: vai junto. Se o monorepo já tiver outra estrutura pra edge functions, ajusto depois (deixo TODO).
+- **Repo antigo (`telegram-zen-panel-...`)**: continua existindo como remote do Lovable — não mexo. Só não é mais usado em produção.
 
-### Pontos que preciso confirmar antes de executar
+## O que NÃO faço neste plano
 
-- **Caddy**: regra do workspace diz pra pedir OK antes de editar Caddyfile/reload. Confirmar?
-- **DNS**: você cuida do apontamento dos 3 hostnames ou quer que eu te passe o passo-a-passo no registrador?
-- **Diretório antigo**: depois que validar, posso renomear `/root/Multizap/apps/clone-deck` pra `clone-deck.legacy` ou prefere deixar do jeito que tá?
+- Não toco no `install.sh` principal.
+- Não desconecto o Lovable do GitHub.
+- Não mexo no Caddyfile automaticamente (você confirma a linha).
+- Não apago o repo antigo.
 
-### O que NÃO muda
+## Depois que rodar 1x na VPS
 
-- Banco, Edge Functions, bot do Telegram, gateways de pagamento — nada disso é tocado.
-- O preview do Lovable continua funcionando igual.
-- Código-fonte permanece único neste repo; só o destino na VPS é duplicado.
+```bash
+# 1. Primeira sync manual
+bash scripts/sync-para-centraldark-monorepo.sh
+
+# 2. Ativar cron (sync a cada 2min)
+(crontab -l 2>/dev/null; echo "*/2 * * * * /root/Multizap/apps/clone-deck/scripts/cron-sync-centraldark.sh") | crontab -
+
+# 3. Conferir
+tail -f /var/log/centraldark-sync.log
+```
+
+A partir daí: você edita no Lovable → 2min depois aparece no `ServerVpss/CentralDark` e o site rebuilda sozinho.
