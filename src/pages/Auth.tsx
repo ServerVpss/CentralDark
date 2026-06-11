@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Zap, Mail, Lock, User, Loader2 } from "lucide-react";
+import { Zap, Mail, Lock, User, Loader2, Lock as LockIcon } from "lucide-react";
 import { z } from "zod";
+import { useSystemSetting } from "@/hooks/useSystemSetting";
+import { toast } from "sonner";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "A senha deve ter pelo menos 6 caracteres");
@@ -18,7 +20,12 @@ export default function Auth() {
   const nextParam = searchParams.get("next");
   const destino = nextParam && nextParam.startsWith("/") ? nextParam : "/portal";
   const { signIn, signUp, isAuthenticated, loading: authLoading } = useAuthContext();
-  
+  const { value: signupSetting } = useSystemSetting<{ enabled: boolean }>(
+    "signup_enabled",
+    { enabled: false }
+  );
+  const signupEnabled = !!signupSetting?.enabled;
+
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
   
@@ -105,13 +112,18 @@ export default function Auth() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!signupEnabled) {
+      toast.error("Cadastros estão temporariamente desligados pelo administrador.");
+      return;
+    }
+
     if (!validateSignup()) return;
-    
+
     setIsLoading(true);
     const { error } = await signUp(signupEmail, signupPassword, signupName);
     setIsLoading(false);
-    
+
     if (!error) {
       navigate(destino, { replace: true });
     }
