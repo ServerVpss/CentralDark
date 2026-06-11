@@ -659,6 +659,33 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
           </Dialog>
         </div>
       )}
+
+      <Dialog open={!!previewText} onOpenChange={(o) => !o && setPreviewText(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Eye className="h-4 w-4 text-sky-400" />
+              Pré-visualização da mensagem
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Variáveis substituídas com valores de exemplo ({Object.entries(PREVIEW_SAMPLE).map(([k, v]) => `${k}=${v}`).join(", ")}).
+            </p>
+            <div className="rounded-xl border border-border/50 bg-muted/30 p-4 max-h-[400px] overflow-y-auto">
+              <pre className="text-sm whitespace-pre-wrap font-mono text-foreground">
+                {previewText ? renderPreview(previewText) : ""}
+              </pre>
+            </div>
+            <details className="rounded-lg border border-border/40 bg-muted/20 p-3 text-xs">
+              <summary className="cursor-pointer text-muted-foreground">Ver template original</summary>
+              <pre className="mt-2 whitespace-pre-wrap font-mono text-muted-foreground">
+                {previewText}
+              </pre>
+            </details>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
