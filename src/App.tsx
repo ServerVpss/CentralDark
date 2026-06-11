@@ -65,8 +65,14 @@ const App = () => (
             {/* <InstallPrompt /> */}
             <PageSplash />
             <Routes>
-              {/* Públicas */}
-              <Route path="/" element={<LandingCentralDark />} />
+              {/* Públicas — em telepainel.centralldark.com a raiz vai direto pro dashboard */}
+              <Route
+                path="/"
+                element={(() => {
+                  const redirect = getRootRedirectFor(detectHostKind());
+                  return redirect ? <Navigate to={redirect} replace /> : <LandingCentralDark />;
+                })()}
+              />
               <Route path="/auth" element={<Auth />} />
               <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
 
