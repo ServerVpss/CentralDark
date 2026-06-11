@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash } from "lucide-react";
+import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuthContext } from "@/components/auth/AuthProvider";
@@ -63,6 +63,21 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const [editingMaxPerDay, setEditingMaxPerDay] = useState(12);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [testingId, setTestingId] = useState<string | null>(null);
+  const [previewText, setPreviewText] = useState<string | null>(null);
+
+  const PREVIEW_SAMPLE: Record<string, string> = {
+    nome: "João Silva",
+    plano: "Premium 30 dias",
+    valor: "29.90",
+    user: "João Silva",
+    bot: "FISCAL",
+  };
+
+  const renderPreview = (template: string) => {
+    return template.replace(/\{(\w+)\}/g, (_m, key) =>
+      PREVIEW_SAMPLE[key] !== undefined ? PREVIEW_SAMPLE[key] : `{${key}}`
+    );
+  };
 
   const fetchMessages = async () => {
     try {
