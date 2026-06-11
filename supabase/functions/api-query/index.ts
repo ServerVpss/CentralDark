@@ -502,22 +502,18 @@ async function fetchFromProvider(modulo: string, valor: string, retry = false): 
         await new Promise(r => setTimeout(r, 2000));
         return fetchFromProvider(modulo, valor, true);
       }
-      // Tenta ler o corpo pra detectar mensagens específicas (ex: "Token expirado")
+      // Lê o corpo só pra log de diagnóstico (sem interpretar "Token expirado" como key vencida —
+      // o provedor retorna essa mesma string pra várias falhas pontuais)
       let bodyText = "";
       try { bodyText = await response.text(); } catch { /* ignora */ }
-      const bodyLower = bodyText.toLowerCase();
+      if (bodyText) {
+        console.warn(`[Provider] ${response.status} em ${modulo}. Trecho: ${bodyText.slice(0, 200)}`);
+      }
 
       if (response.status === 401 || response.status === 403) {
-        if (bodyLower.includes("token expirado") || bodyLower.includes("token expired") || bodyLower.includes("expirad")) {
-          console.error(`[Provider] 🚨 TOKEN DA API EXPIRADO no provedor. Renove a ISEEK_API_KEY. Resposta: ${bodyText}`);
-          return { data: { notFound: true, message: "🔑 Chave da API expirada no provedor. O administrador precisa renovar a assinatura." }, provider_duration_ms, retried: retry };
-        }
-        if (bodyLower.includes("saldo") || bodyLower.includes("credito") || bodyLower.includes("crédito")) {
-          console.error(`[Provider] 🚨 SEM SALDO/CRÉDITO no provedor. Resposta: ${bodyText}`);
-          return { data: { notFound: true, message: "💳 Sem saldo no provedor. O administrador precisa recarregar a conta." }, provider_duration_ms, retried: retry };
-        }
-        return { data: { notFound: true, message: "🔒 Módulo temporariamente indisponível no provedor. Tente outro módulo ou aguarde alguns minutos." }, provider_duration_ms, retried: retry };
+        return { data: { notFound: true, message: "🔒 Módulo temporariamente indisponível. Tente outro módulo ou aguarde alguns minutos." }, provider_duration_ms, retried: retry };
       }
+
       if (response.status === 429) {
         return { data: { notFound: true, message: "⏳ Muitas consultas no momento. Aguarde alguns segundos e tente novamente." }, provider_duration_ms, retried: retry };
       }
