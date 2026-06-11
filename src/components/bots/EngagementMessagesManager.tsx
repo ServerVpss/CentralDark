@@ -538,6 +538,15 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                       </div>
                       <div className="flex gap-1">
                         <Button
+                          onClick={() => setPreviewText(msg.message_template)}
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 px-2 text-sky-400 hover:text-sky-300 hover:bg-sky-500/10"
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          Preview
+                        </Button>
+                        <Button
                           onClick={() => handleTestMessage(msg.id)}
                           disabled={testingId === msg.id}
                           variant="ghost"
