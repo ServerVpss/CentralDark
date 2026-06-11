@@ -72,8 +72,6 @@ verify_jwt = false
 [functions.misticpay-webhook]
 verify_jwt = false
 
-[functions.misticpay-verify]
+[functions.vps-exec]
 verify_jwt = false
-
-
 
