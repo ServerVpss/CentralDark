@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash } from "lucide-react";
+import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuthContext } from "@/components/auth/AuthProvider";
@@ -63,6 +63,21 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
   const [editingMaxPerDay, setEditingMaxPerDay] = useState(12);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [testingId, setTestingId] = useState<string | null>(null);
+  const [previewText, setPreviewText] = useState<string | null>(null);
+
+  const PREVIEW_SAMPLE: Record<string, string> = {
+    nome: "João Silva",
+    plano: "Premium 30 dias",
+    valor: "29.90",
+    user: "João Silva",
+    bot: "FISCAL",
+  };
+
+  const renderPreview = (template: string) => {
+    return template.replace(/\{(\w+)\}/g, (_m, key) =>
+      PREVIEW_SAMPLE[key] !== undefined ? PREVIEW_SAMPLE[key] : `{${key}}`
+    );
+  };
 
   const fetchMessages = async () => {
     try {
@@ -523,6 +538,15 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
                       </div>
                       <div className="flex gap-1">
                         <Button
+                          onClick={() => setPreviewText(msg.message_template)}
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 px-2 text-sky-400 hover:text-sky-300 hover:bg-sky-500/10"
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          Preview
+                        </Button>
+                        <Button
                           onClick={() => handleTestMessage(msg.id)}
                           disabled={testingId === msg.id}
                           variant="ghost"
@@ -635,6 +659,33 @@ export function EngagementMessagesManager({ botId }: EngagementMessagesManagerPr
           </Dialog>
         </div>
       )}
+
+      <Dialog open={!!previewText} onOpenChange={(o) => !o && setPreviewText(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Eye className="h-4 w-4 text-sky-400" />
+              Pré-visualização da mensagem
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Variáveis substituídas com valores de exemplo ({Object.entries(PREVIEW_SAMPLE).map(([k, v]) => `${k}=${v}`).join(", ")}).
+            </p>
+            <div className="rounded-xl border border-border/50 bg-muted/30 p-4 max-h-[400px] overflow-y-auto">
+              <pre className="text-sm whitespace-pre-wrap font-mono text-foreground">
+                {previewText ? renderPreview(previewText) : ""}
+              </pre>
+            </div>
+            <details className="rounded-lg border border-border/40 bg-muted/20 p-3 text-xs">
+              <summary className="cursor-pointer text-muted-foreground">Ver template original</summary>
+              <pre className="mt-2 whitespace-pre-wrap font-mono text-muted-foreground">
+                {previewText}
+              </pre>
+            </details>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

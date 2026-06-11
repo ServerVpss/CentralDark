@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Zap, Mail, Lock, User, Loader2 } from "lucide-react";
+import { Zap, Mail, Lock, User, Loader2, Lock as LockIcon } from "lucide-react";
 import { z } from "zod";
+import { useSystemSetting } from "@/hooks/useSystemSetting";
+import { toast } from "sonner";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "A senha deve ter pelo menos 6 caracteres");
@@ -18,7 +20,12 @@ export default function Auth() {
   const nextParam = searchParams.get("next");
   const destino = nextParam && nextParam.startsWith("/") ? nextParam : "/portal";
   const { signIn, signUp, isAuthenticated, loading: authLoading } = useAuthContext();
-  
+  const { value: signupSetting } = useSystemSetting<{ enabled: boolean }>(
+    "signup_enabled",
+    { enabled: false }
+  );
+  const signupEnabled = !!signupSetting?.enabled;
+
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
   
@@ -105,13 +112,18 @@ export default function Auth() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!signupEnabled) {
+      toast.error("Cadastros estão temporariamente desligados pelo administrador.");
+      return;
+    }
+
     if (!validateSignup()) return;
-    
+
     setIsLoading(true);
     const { error } = await signUp(signupEmail, signupPassword, signupName);
     setIsLoading(false);
-    
+
     if (!error) {
       navigate(destino, { replace: true });
     }
@@ -147,11 +159,18 @@ export default function Auth() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2 mb-6">
+            <Tabs value={signupEnabled ? activeTab : "login"} onValueChange={setActiveTab}>
+              <TabsList className={`grid w-full mb-6 ${signupEnabled ? "grid-cols-2" : "grid-cols-1"}`}>
                 <TabsTrigger value="login">Entrar</TabsTrigger>
-                <TabsTrigger value="signup">Cadastrar</TabsTrigger>
+                {signupEnabled && <TabsTrigger value="signup">Cadastrar</TabsTrigger>}
               </TabsList>
+
+              {!signupEnabled && (
+                <div className="mb-4 flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-600 dark:text-amber-400">
+                  <LockIcon className="h-4 w-4 shrink-0" />
+                  <span>Cadastros de novas contas estão temporariamente desligados.</span>
+                </div>
+              )}
               
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
@@ -204,7 +223,7 @@ export default function Auth() {
                 </form>
               </TabsContent>
               
-              <TabsContent value="signup">
+              {signupEnabled && <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Nome completo</Label>
@@ -271,7 +290,7 @@ export default function Auth() {
                     )}
                   </Button>
                 </form>
-              </TabsContent>
+              </TabsContent>}
             </Tabs>
           </CardContent>
         </Card>

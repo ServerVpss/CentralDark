@@ -30,6 +30,7 @@ import { toast } from "sonner";
 import { useAuthContext } from "@/components/auth/AuthProvider";
 import { BackupManager } from "@/components/backup/BackupManager";
 import { CleanupSettings } from "@/components/settings/CleanupSettings";
+import { SignupToggle } from "@/components/settings/SignupToggle";
 import { Trash2 } from "lucide-react";
 
 export default function Settings() {
@@ -256,6 +257,7 @@ export default function Settings() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                <SignupToggle />
                 <div className="flex items-center justify-between rounded-lg border border-border bg-secondary/20 p-4">
                   <div className="flex items-center gap-4">
                     <div className="rounded-lg bg-success/10 p-3">
