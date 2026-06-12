@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { setRevealOrigin } from "@/lib/menuReveal";
+import { playSplash } from "@/components/transitions/PageSplash";
 
 interface Props {
   children: ReactNode;
