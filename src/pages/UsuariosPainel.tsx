@@ -49,6 +49,15 @@ export default function UsuariosPainel() {
 
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<"all" | "admin" | "user">("all");
+  const navigate = useNavigate();
+
+  const handleViewAs = (u: AdminUser) => {
+    startViewAs({ userId: u.id, email: u.email, name: u.full_name });
+    clearAdminCache();
+    toast.success("Modo espelho ativado — recarregando…");
+    setTimeout(() => { window.location.href = "/portal"; }, 400);
+  };
+
 
   // Diálogos
   const [createOpen, setCreateOpen] = useState(false);
