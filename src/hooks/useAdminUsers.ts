@@ -1,4 +1,5 @@
 // Hook que conversa com a edge function `admin-users`
+// Usa fetch direto como fallback (adblocker costuma bloquear functions.invoke).
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -15,13 +16,43 @@ export interface AdminUser {
   avatar_url: string | null;
 }
 
+const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users`;
+const ANON = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+
 async function call(action: string, payload: Record<string, unknown> = {}) {
-  const { data, error } = await supabase.functions.invoke("admin-users", {
-    body: { action, ...payload },
-  });
-  if (error) throw new Error(error.message);
-  if (data?.error) throw new Error(data.error);
-  return data;
+  const { data: sess } = await supabase.auth.getSession();
+  const token = sess.session?.access_token;
+  if (!token) throw new Error("Sessão expirada — faça login novamente.");
+
+  // 1) Tenta invoke padrão
+  try {
+    const { data, error } = await supabase.functions.invoke("admin-users", {
+      body: { action, ...payload },
+    });
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+    return data;
+  } catch (primaryErr) {
+    // 2) Fallback: fetch direto (bypass adblocker/CORS quirks)
+    try {
+      const res = await fetch(FN_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          apikey: ANON,
+        },
+        body: JSON.stringify({ action, ...payload }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data?.error) {
+        throw new Error(data?.error || `HTTP ${res.status}`);
+      }
+      return data;
+    } catch (fallbackErr) {
+      throw new Error((fallbackErr as Error).message || (primaryErr as Error).message);
+    }
+  }
 }
 
 export function useAdminUsers() {
