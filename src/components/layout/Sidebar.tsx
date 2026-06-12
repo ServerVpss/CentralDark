@@ -17,6 +17,7 @@ import {
   ChevronDown,
   LayoutGrid,
   Wrench,
+  FlaskConical,
   Briefcase,
   Cpu,
   Database,
@@ -71,6 +72,7 @@ const menuGroups = [
     icon: Cpu,
     items: [
       { title: "Status", icon: Activity, path: "/status" },
+      { title: "Teste de Módulos", icon: FlaskConical, path: "/teste-modulos" },
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
       { title: "Segurança", icon: Shield, path: "/security" },
       { title: "Banco de Dados", icon: Database, path: "/database" },
