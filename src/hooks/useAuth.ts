@@ -117,8 +117,11 @@ export function useAuth() {
 
   const signOut = async () => {
     playSplash();
+    // limpa cache global de admin pra próximo login revalidar
+    const { clearAdminCache } = await import("@/hooks/useIsAdmin");
+    clearAdminCache();
     const { error } = await supabase.auth.signOut();
-    
+
     if (error) {
       toast.error("Erro ao sair: " + error.message);
       return { error };
