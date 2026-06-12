@@ -76,7 +76,7 @@ export function PageSplash() {
   if (!visible) return null;
 
   return (
-    <div aria-hidden className="splash-root" key={runId}>
+    <div aria-hidden className={`splash-root ${quick ? "splash-quick" : ""}`} key={runId}>
       {/* Fundo verde da marca cobrindo a tela toda */}
       <div className="splash-bg" />
 
@@ -85,6 +85,7 @@ export function PageSplash() {
 
       {/* Reveal: círculo branco que cresce do centro pra revelar o app */}
       <div className="splash-reveal" />
+
 
       <style>{`
         .splash-root {
