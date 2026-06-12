@@ -197,6 +197,41 @@ Deno.serve(async (req) => {
         return json({ ok: true });
       }
 
+      case "get_detail": {
+        const target = String(body.user_id ?? "");
+        if (!target) return json({ error: "invalid_input" }, 400);
+        const { data: u, error: uErr } = await admin.auth.admin.getUserById(target);
+        if (uErr || !u?.user) return json({ error: uErr?.message ?? "not_found" }, 404);
+
+        const [{ data: profile }, { data: roles }, { data: audit }] = await Promise.all([
+          admin.from("profiles").select("*").eq("user_id", target).maybeSingle(),
+          admin.from("user_roles").select("role").eq("user_id", target),
+          admin.from("audit_logs").select("id, action, entity_type, entity_id, details, created_at")
+            .or(`user_id.eq.${target},entity_id.eq.${target}`)
+            .order("created_at", { ascending: false }).limit(50),
+        ]);
+
+        const role = (roles ?? []).some((r: any) => r.role === "admin") ? "admin" : "user";
+
+        return json({
+          user: {
+            id: u.user.id,
+            email: u.user.email,
+            phone: u.user.phone,
+            created_at: u.user.created_at,
+            last_sign_in_at: u.user.last_sign_in_at,
+            email_confirmed_at: u.user.email_confirmed_at,
+            banned_until: (u.user as any).banned_until ?? null,
+            app_metadata: u.user.app_metadata,
+            user_metadata: u.user.user_metadata,
+            identities: u.user.identities,
+            role,
+          },
+          profile: profile ?? null,
+          audit: audit ?? [],
+        });
+      }
+
       default:
         return json({ error: "unknown_action" }, 400);
     }
