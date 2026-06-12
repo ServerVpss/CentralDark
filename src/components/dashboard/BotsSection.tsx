@@ -111,7 +111,7 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
           </Button>
         </div>
       ) : (
-        <div className="p-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="p-3 md:p-4 grid gap-3 md:gap-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
           {bots.slice(0, 3).map((bot) => (
             <BotStatusCard
               key={bot.id}
