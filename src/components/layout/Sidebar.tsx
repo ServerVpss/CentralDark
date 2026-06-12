@@ -25,6 +25,7 @@ import {
   X,
   LogOut,
   User,
+  UserCog,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -62,7 +63,8 @@ const menuGroups = [
     label: "Gestão",
     icon: Briefcase,
     items: [
-      { title: "Usuários", icon: Users, path: "/telegram-users" },
+      { title: "Usuários do Bot", icon: Users, path: "/telegram-users" },
+      { title: "Usuários do Painel", icon: UserCog, path: "/usuarios-painel" },
       { title: "Planos", icon: CreditCard, path: "/plans" },
       { title: "Lucros PIX", icon: DollarSign, path: "/pix" },
     ],
