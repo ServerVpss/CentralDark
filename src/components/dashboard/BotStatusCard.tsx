@@ -21,36 +21,36 @@ export function BotStatusCard({ botId, name, username, status, messages, users, 
   const initial = (name?.[0] || "B").toUpperCase();
 
   return (
-    <div className="rounded-lg border border-border/40 bg-muted/20 p-3.5 space-y-3">
+    <div className="rounded-xl border border-border/40 bg-muted/20 p-4 md:p-5 space-y-4">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <Avatar className="h-9 w-9 border border-border/40">
+        <div className="flex items-center gap-3 min-w-0">
+          <Avatar className="h-11 w-11 md:h-12 md:w-12 border border-border/40">
             {photoUrl ? <AvatarImage src={photoUrl} alt={name} /> : null}
-            <AvatarFallback className="bg-primary/10 text-primary text-xs">
-              {photoUrl ? initial : <BotIcon className="h-4 w-4" />}
+            <AvatarFallback className="bg-primary/10 text-primary text-sm">
+              {photoUrl ? initial : <BotIcon className="h-5 w-5" />}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">{name}</p>
-            <p className="text-xs text-muted-foreground truncate">@{username}</p>
+            <p className="text-base md:text-lg font-semibold text-foreground truncate uppercase tracking-wide">{name}</p>
+            <p className="text-sm md:text-base text-muted-foreground truncate">@{username}</p>
           </div>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <div className={cn(
-            "h-2 w-2 rounded-full",
+            "h-2.5 w-2.5 rounded-full",
             status === "online" ? "bg-emerald-500" : "bg-muted-foreground/40"
           )} />
-          <span className="text-[10px] text-muted-foreground capitalize">{status}</span>
+          <span className="text-xs text-muted-foreground capitalize">{status}</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <MessageSquare className="h-3 w-3" />
+      <div className="flex items-center gap-5 text-sm md:text-base text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <MessageSquare className="h-4 w-4" />
           {messages.toLocaleString()}
         </span>
-        <span className="flex items-center gap-1">
-          <Users className="h-3 w-3" />
+        <span className="flex items-center gap-1.5">
+          <Users className="h-4 w-4" />
           {users}
         </span>
       </div>
@@ -58,10 +58,10 @@ export function BotStatusCard({ botId, name, username, status, messages, users, 
       <Button
         variant="ghost"
         size="sm"
-        className="w-full h-7 text-xs text-muted-foreground hover:text-foreground"
+        className="w-full h-9 text-sm text-muted-foreground hover:text-foreground"
         onClick={() => navigate(botId ? `/bots/${botId}/settings` : "/bots")}
       >
-        <Settings className="h-3 w-3 mr-1" />
+        <Settings className="h-4 w-4 mr-1.5" />
         Configurar
       </Button>
     </div>
