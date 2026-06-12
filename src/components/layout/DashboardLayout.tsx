@@ -3,6 +3,7 @@ import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { Logo } from "./Logo";
 import { BottomNav } from "./BottomNav";
+import { MobileAvatarMenu } from "./MobileAvatarMenu";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
