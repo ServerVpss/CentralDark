@@ -40,6 +40,7 @@ export function useIsAdmin() {
 
   useEffect(() => {
     const ac = new AbortController();
+    if (mirror) { setIsAdmin(false); setLoading(false); return; }
     if (authLoading) return;
     if (!user) {
       setIsAdmin(false);
