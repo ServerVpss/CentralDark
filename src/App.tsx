@@ -36,6 +36,7 @@ import DatabaseInfo from "./pages/DatabaseInfo";
 import Status from "./pages/Status";
 import DevTransitions from "./pages/DevTransitions";
 import TesteModulos from "./pages/TesteModulos";
+import UsuariosPainel from "./pages/UsuariosPainel";
 import { PageSplash } from "@/components/transitions/PageSplash";
 import { SplashController } from "@/components/transitions/SplashController";
 
@@ -70,6 +71,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "database", element: <DatabaseInfo />, adminOnly: true },
   { path: "status", element: <Status />, adminOnly: true },
   { path: "teste-modulos", element: <TesteModulos />, adminOnly: true },
+  { path: "usuarios-painel", element: <UsuariosPainel />, adminOnly: true },
 ];
 
 // Aplica o guard correto: AdminRoute (envolve ProtectedRoute) ou só ProtectedRoute.
