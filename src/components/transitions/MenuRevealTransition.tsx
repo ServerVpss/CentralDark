@@ -41,8 +41,7 @@ export function MenuRevealTransition({ children }: Props) {
     if (location.pathname === lastPath.current) return;
     lastPath.current = location.pathname;
     setRunId((n) => n + 1);
-    // Dispara a splash do raio (versão rápida) a cada navegação entre menus
-    playSplash({ quick: true });
+    // O splash do raio é disparado pelo SplashController (global).
   }, [location.pathname]);
 
   return (
