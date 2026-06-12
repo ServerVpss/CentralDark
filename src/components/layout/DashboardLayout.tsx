@@ -18,7 +18,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" style={{ backgroundColor: "hsl(var(--background))" }}>
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
