@@ -39,6 +39,23 @@ function generateTxid(): string {
   return result
 }
 
+// 🛡️ Auth guard: aceita SERVICE_ROLE_KEY (chamadas internas do bot) ou JWT de usuário web.
+async function authorize(req: Request, supabase: ReturnType<typeof createClient>) {
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) {
+    return new Response(JSON.stringify({ success: false, error: 'Não autenticado' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+  const token = authHeader.replace('Bearer ', '');
+  if (token === Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')) return null;
+  const { data, error } = await supabase.auth.getClaims(token);
+  if (error || !data?.claims?.sub) {
+    return new Response(JSON.stringify({ success: false, error: 'Sessão inválida' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+  return null;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -48,6 +65,10 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    const blocked = await authorize(req, supabase);
+    if (blocked) return blocked;
+
 
     const { 
       amount, 
