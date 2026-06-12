@@ -1,62 +1,18 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { setRevealOrigin } from "@/lib/menuReveal";
-
-interface Props {
-  children: ReactNode;
-}
+import { ReactNode } from "react";
 
 /**
- * Wrapper que aplica uma transição "ink/mask reveal" sempre que a rota muda.
- * - A animação SÓ é aplicada em troca de rota — nunca no primeiro render.
- *   (evita tela branca caso o navegador pause animações).
- * - A classe é removida logo após o término, garantindo que o conteúdo
- *   nunca fique preso em `opacity:0` ou `clip-path: circle(0)`.
+ * NO-OP intencional.
+ *
+ * Antes esse wrapper aplicava uma animação "ink reveal" (clip-path + blur +
+ * opacity) a cada troca de rota. Como o `SplashController` já dispara o
+ * `PageSplash` no mesmo evento de navegação, as duas animações rodavam
+ * sobrepostas — o usuário via o splash terminar e logo em seguida o conteúdo
+ * "piscar" (opacity 0 → 1 + blur) por mais ~600ms.
+ *
+ * Mantido como passthrough pra não quebrar imports existentes
+ * (DashboardLayout etc.). Se quiser reintroduzir, fazer com `prefers-reduced-
+ * motion` e SEM começar em opacity:0.
  */
-const REVEAL_MS = 700; // bate com --reveal-duration no index.css + folga
-
-export function MenuRevealTransition({ children }: Props) {
-  const location = useLocation();
-  const [runId, setRunId] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const firstRender = useRef(true);
-  const lastPath = useRef(location.pathname);
-  const timeoutRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const handler = (e: PointerEvent) => {
-      setRevealOrigin({ clientX: e.clientX, clientY: e.clientY });
-    };
-    window.addEventListener("pointerdown", handler, { capture: true, passive: true });
-    return () => window.removeEventListener("pointerdown", handler, { capture: true } as any);
-  }, []);
-
-  useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
-    if (location.pathname === lastPath.current) return;
-    lastPath.current = location.pathname;
-    setRunId((n) => n + 1);
-    setPlaying(true);
-    if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-    // Safety: remove a classe depois da anim — conteúdo nunca fica invisível.
-    timeoutRef.current = window.setTimeout(() => setPlaying(false), REVEAL_MS);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
-  return (
-    <div
-      key={runId}
-      className={playing ? "menu-reveal-play" : undefined}
-    >
-      {children}
-    </div>
-  );
+export function MenuRevealTransition({ children }: { children: ReactNode }) {
+  return <>{children}</>;
 }
