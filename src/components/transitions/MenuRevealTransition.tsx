@@ -1,7 +1,9 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { setRevealOrigin } from "@/lib/menuReveal";
-import { playSplash } from "@/components/transitions/PageSplash";
+// Obs.: o splash do raio agora é disparado pelo SplashController global
+// (escuta troca de rota + cliques em menus). Esse wrapper cuida só do
+// efeito "ink reveal" do conteúdo da página.
 
 interface Props {
   children: ReactNode;
@@ -39,8 +41,7 @@ export function MenuRevealTransition({ children }: Props) {
     if (location.pathname === lastPath.current) return;
     lastPath.current = location.pathname;
     setRunId((n) => n + 1);
-    // Dispara a splash do raio (versão rápida) a cada navegação entre menus
-    playSplash({ quick: true });
+    // O splash do raio é disparado pelo SplashController (global).
   }, [location.pathname]);
 
   return (

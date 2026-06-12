@@ -34,7 +34,9 @@ import WebAppResult from "./pages/WebAppResult";
 import MenuTips from "./pages/MenuTips";
 import DatabaseInfo from "./pages/DatabaseInfo";
 import Status from "./pages/Status";
+import DevTransitions from "./pages/DevTransitions";
 import { PageSplash } from "@/components/transitions/PageSplash";
+import { SplashController } from "@/components/transitions/SplashController";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +85,7 @@ const App = () => (
             <GlobalSearch />
             {/* <InstallPrompt /> */}
             <PageSplash />
+            <SplashController />
             {(() => {
               // Modo de build: "web" = só landing+auth, "portal" = só área logada,
               // qualquer outro valor (ou ausente) = app completo (modo Lovable/dev).
@@ -145,6 +148,9 @@ const App = () => (
                       ))}
                     </>
                   )}
+
+                  {/* ===== Rota oculta de QA das transições ===== */}
+                  <Route path="/dev/transitions" element={<DevTransitions />} />
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>
