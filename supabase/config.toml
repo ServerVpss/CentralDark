@@ -75,3 +75,7 @@ verify_jwt = false
 [functions.vps-exec]
 verify_jwt = false
 
+[functions.mcp-status-proxy]
+verify_jwt = false
+
+

@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Server, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
-const STATUS_URL = "https://mcp.centralldark.com/status.json";
 
 interface Connector {
   name: string;
@@ -47,15 +47,17 @@ export function McpStatusCard({ className }: { className?: string }) {
     setLoading(true);
     setErr(null);
     try {
-      const r = await fetch(STATUS_URL, { cache: "no-store" });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      setData(await r.json());
+      // Usa edge function como proxy (CORS bloqueia chamada direta do browser)
+      const { data: json, error } = await supabase.functions.invoke("mcp-status-proxy");
+      if (error) throw error;
+      setData(json as McpStatus);
     } catch (e: any) {
       setErr(e?.message ?? String(e));
     } finally {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     load();
