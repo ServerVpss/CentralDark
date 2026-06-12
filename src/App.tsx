@@ -32,6 +32,7 @@ import SubscriptionAudit from "./pages/SubscriptionAudit";
 import WebAppResult from "./pages/WebAppResult";
 import MenuTips from "./pages/MenuTips";
 import DatabaseInfo from "./pages/DatabaseInfo";
+import Status from "./pages/Status";
 import { PageSplash } from "@/components/transitions/PageSplash";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const telepainelRoutes = [
   { path: "audit", element: <SubscriptionAudit /> },
   { path: "menu-tips", element: <MenuTips /> },
   { path: "database", element: <DatabaseInfo /> },
+  { path: "status", element: <Status /> },
 ];
 
 const App = () => (
