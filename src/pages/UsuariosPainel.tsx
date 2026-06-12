@@ -238,6 +238,30 @@ export default function UsuariosPainel() {
                             {fmtDate(u.last_sign_in_at)}
                           </TableCell>
                           <TableCell className="text-right">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-lg"
+                                title="Perfil 360"
+                                onClick={() => navigate(`/usuarios-painel/${u.id}`)}
+                              >
+                                <IdCard className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-lg text-amber-600"
+                                title="Ver como este usuário (modo espelho)"
+                                disabled={isSelf}
+                                onClick={() => handleViewAs(u)}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right hidden">
+
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
