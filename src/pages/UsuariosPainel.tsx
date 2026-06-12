@@ -1,5 +1,6 @@
 // Gestão completa de usuários do painel (admin only)
 import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAdminUsers, AdminUser } from "@/hooks/useAdminUsers";
 import { useAuthContext } from "@/components/auth/AuthProvider";
