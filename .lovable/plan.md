@@ -1,34 +1,49 @@
-## Problema
+## Objetivo
 
-Na splash atual (`src/components/transitions/PageSplash.tsx`), o SVG usa `viewBox="0 0 24 24"` com `preserveAspectRatio="xMidYMid slice"` cobrindo a tela inteira. Resultado: o `<path>` do raio (que ocupa quase todo o viewBox 24×24) renderiza **gigante**, preenchendo a tela toda — é o que aparece no print depois do "Login realizado com sucesso".
+Bater nos 76 módulos da `api-query`, um de cada vez com pausa de 10s, e te entregar um relatório claro de quais respondem OK, quais retornam "sem dados", quais quebram, e quais APIs estão de fato mortas — pra você saber o que realmente está saudável (não só os 4 que aparecem hoje).
 
-A intenção era: fundo verde cobrindo a tela + logo pequeno (tamanho de ícone) no centro, com buraco no formato do logo que "explode" pra revelar o app. Tá errado porque o logo está na mesma escala do fundo.
+## Importante (esclarecimento sobre os "4 ativos")
 
-## Solução — refazer do zero
+Os 76 módulos estão **todos ligados** (enabled=true). O "4 saudáveis" da tela é só o histórico de saúde nas últimas 24h — 72 estão como "sem dados" porque ninguém testou ainda. Esse teste vai justamente popular essa tela.
 
-Separar as duas camadas em escalas independentes:
+## Como vou montar os inputs
 
-1. **Camada de fundo (`.splash-bg`)**: um `<div>` puro com `background: hsl(var(--primary))`, cobre 100% da tela. Sem SVG, sem viewBox — não tem como esticar errado em telas grandes/pequenas/notch.
+1. **Reutilizar o histórico real**: pra cada `query_type` com pelo menos 1 sucesso no `query_history`, pego o último `query_input` que deu certo. Cobre ~30 módulos com dado válido garantido.
+2. **Fallback por tipo de input** pros 46 módulos sem histórico — usando exemplos extraídos do próprio histórico de sucesso:
+   - CPF / módulos pessoa, financeiro, foto-UF → o último CPF que deu success em `/cpf`
+   - Placa → última placa de sucesso em `/placa`
+   - CNPJ → último CNPJ de `/cnpj`
+   - Telefone → último de `/telefone`
+   - Nome → último de `/nome`
+   - CEP → último de `/cep`
+   - Email → último de `/email`
+3. Mapeamento `módulo → tipo de input` é deduzido pela categoria em `query_modules` + nome do módulo (fotoXX → CPF, advogadoOAB → OAB, etc).
 
-2. **Camada do logo + buraco**: um SVG **pequeno e centralizado** (ex.: 96px × 96px com `viewBox="0 0 24 24"`), posicionado absoluto no centro. Dentro dele:
-   - Logo branco visível (pulsa, encolhe levemente).
-   - No final, esse SVG **cresce via `transform: scale(...)`** até cobrir a tela e o logo vira um buraco (mask) que explode revelando o app.
+## Como vou rodar
 
-3. **Reveal**: em vez de escalar a máscara dentro de um SVG que já cobre tudo, escalo o **container** do logo via CSS transform. Uso `clip-path` ou um `<div>` overlay com `mask-image: url(data:svg)` do raio — mais simples, funciona em qualquer tamanho de tela porque o tamanho inicial é fixo em pixels.
+Script Node em `/tmp/test-modulos.mjs` chamando a edge `api-query` via HTTPS direto (mesma URL do projeto, com anon key). Loop sequencial, **`await sleep(10_000)` entre cada chamada**, timeout individual de 35s. Sem paralelismo, sem retries (queremos ver o estado real).
 
-4. **Implementação concreta** (substitui o arquivo inteiro):
-   - `.splash-bg` div verde fullscreen.
-   - `.splash-logo` div absoluto 96px centralizado, com `mask-image` SVG do raio recortando o fundo branco/transparente — assim a área do logo "vaza" pro verde de baixo, criando o efeito de logo branco em fundo verde.
-   - Animação: logo pulsa (scale 0.86 → 1 → 1 → encolhe levemente) por ~1.2s.
-   - Reveal final: `.splash-bg` ganha um `clip-path` que parte do logo e explode (ou um overlay com `mask` que cresce), 400ms, revelando o app.
-   - Mantém `app-zoom` (escala 1.06 → 1 do `body`) e `prefers-reduced-motion`.
+Pra cada módulo registro:
+- `module_key`, `input_usado`, `tipo_input` (real ou exemplo)
+- `http_status`, `tempo_ms`
+- `outcome`: `success` | `notfound` | `module_disabled` | `provider_error` | `timeout` | `http_error`
+- `erro_curto` (se houver)
+- `tem_dados` (boolean — se o payload veio com algo útil)
 
-5. **Bibliotecas / refs preservadas**: mantém o `playSplash()`, `invalidateTipsCache()`, `SESSION_KEY`, evento `lovable:splash:play` — assim quem chama hoje (login, etc.) continua funcionando sem mudança.
+## Entregáveis
 
-## Arquivos
+1. `/mnt/documents/teste-modulos-76.csv` — planilha pra você abrir
+2. `/mnt/documents/teste-modulos-76.json` — payload completo (pra debugar caso a caso)
+3. Resumo final no chat: contagem por outcome + lista dos módulos que estão de fato mortos (provider_error/timeout em todos), com sugestão de desativar.
 
-- `src/components/transitions/PageSplash.tsx` — reescrita completa.
+## Tempo estimado
 
-## Validação
+76 × 10s + tempo de resposta médio ≈ **15 a 20 min** rodando aqui no sandbox. Eu disparo em background e te aviso quando terminar.
 
-- Abrir `/auth`, logar, conferir no preview (mobile 430×777 e desktop) que o logo aparece em tamanho de ícone centralizado, anima, e o app revela por trás sem o logo ocupar tela toda.
+## O que NÃO vai acontecer
+
+- Nada de mudar config de módulo / desativar automaticamente. Só leitura + relatório.
+- Não vou tocar em `module_health_status` — o cron já cuida disso quando vir as chamadas chegando.
+- Nada de UI nova — você pediu rodar agora.
+
+Se aprovar, na fase de build eu já começo a rodar e mando o relatório.
