@@ -144,6 +144,37 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders })
   }
 
+  // 🔒 Só service_role (cron) ou admin podem disparar
+  const authHeader = req.headers.get('Authorization') || ''
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim()
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+  if (!token) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  }
+  if (token !== serviceRoleKey) {
+    try {
+      const sbAuth = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_ANON_KEY')!,
+        { global: { headers: { Authorization: `Bearer ${token}` } } }
+      )
+      const { data: claimsData, error: claimsErr } = await sbAuth.auth.getClaims(token)
+      if (claimsErr || !claimsData?.claims?.sub) throw new Error('invalid')
+      const { data: isAdmin } = await sbAuth.rpc('has_role', {
+        _user_id: claimsData.claims.sub, _role: 'admin',
+      })
+      if (!isAdmin) throw new Error('not_admin')
+    } catch {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+  }
+
+
+
   try {
     // Parâmetros opcionais para controlar o comportamento
     let useDefaultMessage = false // Forçar uso da mensagem padrão de assinatura
