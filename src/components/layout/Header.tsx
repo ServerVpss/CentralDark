@@ -59,8 +59,8 @@ export function Header({ className }: HeaderProps) {
   const route = getRouteInfo();
 
   const handleSignOut = async () => {
-    // Sai apenas do contexto TelePainel — volta pros módulos sem encerrar a sessão central
-    navigate("/portal", { replace: true });
+    await signOut();
+    navigate("/auth", { replace: true });
   };
 
   const openSearch = () => {
