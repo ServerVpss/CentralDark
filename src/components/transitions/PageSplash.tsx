@@ -17,9 +17,9 @@ const LOGO_MASK_SVG = encodeURIComponent(
 );
 const LOGO_MASK_URL = `url("data:image/svg+xml;utf8,${LOGO_MASK_SVG}")`;
 
-export function playSplash() {
+export function playSplash(opts?: { quick?: boolean }) {
   if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent(EVENT));
+  window.dispatchEvent(new CustomEvent(EVENT, { detail: { quick: !!opts?.quick } }));
 }
 
 /**
@@ -35,12 +35,15 @@ export function PageSplash() {
     return !sessionStorage.getItem(SESSION_KEY);
   });
   const [runId, setRunId] = useState(0);
+  const [quick, setQuick] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
   // Disparo manual via playSplash()
   useEffect(() => {
-    const start = () => {
+    const start = (e: Event) => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+      const ce = e as CustomEvent<{ quick?: boolean }>;
+      setQuick(!!ce.detail?.quick);
       setVisible(true);
       setRunId((c) => c + 1);
     };
@@ -58,7 +61,8 @@ export function PageSplash() {
     if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dur = reduceMotion ? 260 : DURATION;
+    const base = quick ? 750 : DURATION;
+    const dur = reduceMotion ? 260 : base;
 
     timeoutRef.current = window.setTimeout(() => {
       setVisible(false);
@@ -67,12 +71,12 @@ export function PageSplash() {
     return () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
     };
-  }, [visible, runId]);
+  }, [visible, runId, quick]);
 
   if (!visible) return null;
 
   return (
-    <div aria-hidden className="splash-root" key={runId}>
+    <div aria-hidden className={`splash-root ${quick ? "splash-quick" : ""}`} key={runId}>
       {/* Fundo verde da marca cobrindo a tela toda */}
       <div className="splash-bg" />
 
@@ -81,6 +85,7 @@ export function PageSplash() {
 
       {/* Reveal: círculo branco que cresce do centro pra revelar o app */}
       <div className="splash-reveal" />
+
 
       <style>{`
         .splash-root {
@@ -157,6 +162,13 @@ export function PageSplash() {
           0%, 70%  { transform: scale(0);  opacity: 0; }
           75%      { transform: scale(0.5); opacity: 1; }
           100%     { transform: scale(30); opacity: 0; }
+        }
+
+        /* Versão rápida — usada na navegação entre menus */
+        .splash-quick .splash-bg,
+        .splash-quick .splash-logo,
+        .splash-quick .splash-reveal {
+          animation-duration: 750ms !important;
         }
 
         @media (prefers-reduced-motion: reduce) {

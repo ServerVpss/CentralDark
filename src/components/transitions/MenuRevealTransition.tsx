@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { setRevealOrigin } from "@/lib/menuReveal";
+import { playSplash } from "@/components/transitions/PageSplash";
 
 interface Props {
   children: ReactNode;
@@ -38,6 +39,8 @@ export function MenuRevealTransition({ children }: Props) {
     if (location.pathname === lastPath.current) return;
     lastPath.current = location.pathname;
     setRunId((n) => n + 1);
+    // Dispara a splash do raio (versão rápida) a cada navegação entre menus
+    playSplash({ quick: true });
   }, [location.pathname]);
 
   return (
