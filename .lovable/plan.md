@@ -1,88 +1,34 @@
-## O que vou fazer (modo pragmático, sem publicar)
+## Problema
 
-Tudo fica pronto pra você testar o botão antes de qualquer publish.
+Na splash atual (`src/components/transitions/PageSplash.tsx`), o SVG usa `viewBox="0 0 24 24"` com `preserveAspectRatio="xMidYMid slice"` cobrindo a tela inteira. Resultado: o `<path>` do raio (que ocupa quase todo o viewBox 24×24) renderiza **gigante**, preenchendo a tela toda — é o que aparece no print depois do "Login realizado com sucesso".
 
-### 1. Plugin "Deploy VPS" (componente plugável)
-Novo: `src/components/devops/VpsDeployPlugin.tsx`
-- Card autocontido — pode ser dropado em qualquer página (Settings, Dashboard, Status…).
-- Botão **"Rodar sync agora"** → chama edge `vps-exec` com o comando do script `sync-para-centraldark-monorepo.sh`.
-- Mostra: último commit sincronizado, horário, status (✅/❌), log resumido.
-- Segurança:
-  - Só renderiza se `has_role(uid, 'admin')` (RPC já existe).
-  - Edge `vps-exec` já valida `GITHUB_TOKEN`. Vou adicionar checagem extra de JWT + role admin no início da função.
-  - Rate limit simples: 1 execução por minuto (estado local + timestamp em `system_settings`).
+A intenção era: fundo verde cobrindo a tela + logo pequeno (tamanho de ícone) no centro, com buraco no formato do logo que "explode" pra revelar o app. Tá errado porque o logo está na mesma escala do fundo.
 
-### 2. Tabela de histórico de deploys
-Migration nova: `vps_deploy_history`
-```
-id, commit_hash, started_at, finished_at, status (running|success|error),
-triggered_by (uid), workflow_run_id, log_summary, environment (web|portal)
-```
-- RLS: SELECT pra `authenticated` (admins veem tudo via has_role), INSERT/UPDATE só `service_role`.
-- GRANTs corretos.
-- Edge `vps-exec` insere `running` no início; um novo edge `vps-deploy-status` (chamado pelo workflow no fim via curl) atualiza pra `success/error`.
+## Solução — refazer do zero
 
-### 3. Página Status refinada (`/status` → mapeada pra `status.centralldark.com`)
-- Verifico se existe rota. Se sim, refino layout (Esmeralda + 3D tátil). Se não, crio `src/pages/Status.tsx` + rota em `App.tsx`.
-- Seções:
-  - **Saúde geral** (reaproveita `useApiStatus` / `useModuleHealth`)
-  - **Últimos deploys** (lista de `vps_deploy_history`, 10 últimos, com commit/horário/status)
-  - **Plugin VpsDeployPlugin** (mesmo componente — prova que é plugável)
-  - **Roadmap auto-construído** (próximo item)
+Separar as duas camadas em escalas independentes:
 
-### 4. Roadmap auto-construído
-Nova tabela `project_roadmap`:
-```
-id, title, description, status (pendente|em_andamento|concluido),
-priority, created_at, completed_at, auto_generated (bool)
-```
-- Lista visível na `/status`.
-- Admin pode adicionar/marcar via UI simples (input + lista).
-- Por enquanto, geração automática = manual via botão "+". Hook pra geração automática fica como TO-DO no código.
+1. **Camada de fundo (`.splash-bg`)**: um `<div>` puro com `background: hsl(var(--primary))`, cobre 100% da tela. Sem SVG, sem viewBox — não tem como esticar errado em telas grandes/pequenas/notch.
 
-### 5. Preview iPhone Modal
-Novo: `src/components/devops/IPhonePreviewModal.tsx`
-- Botão "Preview VPS" na página Status.
-- Abre modal estilizado como iPhone (notch, bordas arredondadas, status bar).
-- Iframe apontando pra URL temporária da VPS (ex: `https://preview.centralldark.com` ou subdomínio configurável em `system_settings`).
-- Refresh manual + auto-refresh opcional (5s).
+2. **Camada do logo + buraco**: um SVG **pequeno e centralizado** (ex.: 96px × 96px com `viewBox="0 0 24 24"`), posicionado absoluto no centro. Dentro dele:
+   - Logo branco visível (pulsa, encolhe levemente).
+   - No final, esse SVG **cresce via `transform: scale(...)`** até cobrir a tela e o logo vira um buraco (mask) que explode revelando o app.
 
-### 6. Verificação do sync automático
-- Adiciono na `vps-exec` um modo `?check=true` que só lê o log: `tail -50 /var/log/centraldark-sync.log` e retorna o conteúdo.
-- Botão "Verificar cron" no plugin mostra isso num drawer.
-- TO-DO no código: integrar com endpoint do MCP CentralDark se ele já expõe.
+3. **Reveal**: em vez de escalar a máscara dentro de um SVG que já cobre tudo, escalo o **container** do logo via CSS transform. Uso `clip-path` ou um `<div>` overlay com `mask-image: url(data:svg)` do raio — mais simples, funciona em qualquer tamanho de tela porque o tamanho inicial é fixo em pixels.
 
-### 7. Memória
-Salvo:
-- `mem://features/devops/status-page-auto-roadmap` — explicando que `/status` é auto-construída com roadmap dinâmico, plugin de deploy e preview iPhone.
-- Atualizo index.
+4. **Implementação concreta** (substitui o arquivo inteiro):
+   - `.splash-bg` div verde fullscreen.
+   - `.splash-logo` div absoluto 96px centralizado, com `mask-image` SVG do raio recortando o fundo branco/transparente — assim a área do logo "vaza" pro verde de baixo, criando o efeito de logo branco em fundo verde.
+   - Animação: logo pulsa (scale 0.86 → 1 → 1 → encolhe levemente) por ~1.2s.
+   - Reveal final: `.splash-bg` ganha um `clip-path` que parte do logo e explode (ou um overlay com `mask` que cresce), 400ms, revelando o app.
+   - Mantém `app-zoom` (escala 1.06 → 1 do `body`) e `prefers-reduced-motion`.
 
-### Arquivos novos
-```
-src/components/devops/VpsDeployPlugin.tsx
-src/components/devops/IPhonePreviewModal.tsx
-src/components/devops/DeployHistoryList.tsx
-src/components/devops/RoadmapList.tsx
-src/pages/Status.tsx                    (se não existir)
-src/hooks/useVpsDeploy.ts
-src/hooks/useRoadmap.ts
-supabase/migrations/<timestamp>_vps_deploy_history_and_roadmap.sql
-supabase/functions/vps-deploy-status/index.ts
-```
+5. **Bibliotecas / refs preservadas**: mantém o `playSplash()`, `invalidateTipsCache()`, `SESSION_KEY`, evento `lovable:splash:play` — assim quem chama hoje (login, etc.) continua funcionando sem mudança.
 
-### Arquivos editados
-```
-src/App.tsx                              (rota /status se faltar)
-supabase/functions/vps-exec/index.ts     (auth + insert deploy_history + modo check)
-.lovable/memory/index.md
-```
+## Arquivos
 
-### NÃO vou
-- Publicar nada (espero seu OK depois de testar).
-- Mexer no Caddyfile da VPS (regra: só com seu OK).
-- Tocar em business logic não-relacionada.
+- `src/components/transitions/PageSplash.tsx` — reescrita completa.
 
-### Onde fica o botão pra você testar
-Depois de pronto: vai aparecer em **`/status`** (link no menu lateral) e também posso dropar o `<VpsDeployPlugin />` no Dashboard se você quiser ver lá também — me fala depois.
+## Validação
 
-Posso seguir?
+- Abrir `/auth`, logar, conferir no preview (mobile 430×777 e desktop) que o logo aparece em tamanho de ícone centralizado, anima, e o app revela por trás sem o logo ocupar tela toda.
