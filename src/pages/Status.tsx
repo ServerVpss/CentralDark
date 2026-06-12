@@ -7,6 +7,7 @@ import { VpsDeployPlugin } from "@/components/devops/VpsDeployPlugin";
 import { DeployHistoryList } from "@/components/devops/DeployHistoryList";
 import { RoadmapList } from "@/components/devops/RoadmapList";
 import { IPhonePreviewModal } from "@/components/devops/IPhonePreviewModal";
+import { McpStatusCard } from "@/components/devops/McpStatusCard";
 import { useVpsDeploy } from "@/hooks/useVpsDeploy";
 
 export default function Status() {
@@ -38,8 +39,11 @@ export default function Status() {
           {/* Plugin de deploy — plugável em qualquer tela */}
           <VpsDeployPlugin showHistory={false} />
 
+          {/* Status ao vivo do MCP */}
+          <McpStatusCard />
+
           {/* Roadmap */}
-          <RoadmapList />
+          <RoadmapList className="lg:col-span-2" />
         </div>
 
         {/* Histórico completo */}
