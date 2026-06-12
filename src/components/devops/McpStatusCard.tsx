@@ -90,9 +90,10 @@ export function McpStatusCard({ className }: { className?: string }) {
               Status ao vivo de <code className="text-[10px]">mcp.centralldark.com</code>
             </CardDescription>
           </div>
-          <Button size="icon" variant="ghost" onClick={load} title="Atualizar">
-            <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+          <Button size="icon" variant="ghost" onClick={load} title="Atualizar" disabled={loading}>
+            <RefreshCw className={cn("h-4 w-4 transition-transform", loading ? "animate-spin" : "animate-[spin_4s_linear_infinite]")} />
           </Button>
+
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
