@@ -32,9 +32,11 @@ export function clearAdminCache() {
 
 export function useIsAdmin() {
   const { user, loading: authLoading } = useAuthContext();
+  // Modo espelho: força não-admin pra simular visão de usuário comum.
+  const mirror = isViewAsActive();
   const cached = user ? adminCache.get(user.id) : undefined;
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached ?? false);
-  const [loading, setLoading] = useState<boolean>(cached === undefined);
+  const [isAdmin, setIsAdmin] = useState<boolean>(mirror ? false : (cached ?? false));
+  const [loading, setLoading] = useState<boolean>(mirror ? false : (cached === undefined));
 
   useEffect(() => {
     const ac = new AbortController();
