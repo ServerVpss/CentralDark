@@ -37,6 +37,8 @@ import Status from "./pages/Status";
 import DevTransitions from "./pages/DevTransitions";
 import TesteModulos from "./pages/TesteModulos";
 import UsuariosPainel from "./pages/UsuariosPainel";
+import UsuarioPerfil from "./pages/UsuarioPerfil";
+import { ViewAsBanner } from "@/components/auth/ViewAsBanner";
 import { PageSplash } from "@/components/transitions/PageSplash";
 import { SplashController } from "@/components/transitions/SplashController";
 
