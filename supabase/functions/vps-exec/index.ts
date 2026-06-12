@@ -64,7 +64,6 @@ Deno.serve(async (req) => {
         ref: 'main',
         inputs: {
           commands: commandsString,
-          timeout_minutes: String(timeout),
         },
       }),
     });
