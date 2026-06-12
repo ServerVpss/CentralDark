@@ -60,7 +60,7 @@ export function useIsAdmin() {
       setLoading(false);
     });
     return () => ac.abort();
-  }, [user, authLoading]);
+  }, [user, authLoading, mirror]);
 
   return { isAdmin, loading };
 }
