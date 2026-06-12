@@ -39,6 +39,8 @@ export function MenuRevealTransition({ children }: Props) {
     if (location.pathname === lastPath.current) return;
     lastPath.current = location.pathname;
     setRunId((n) => n + 1);
+    // Dispara a splash do raio a cada navegação entre menus
+    playSplash();
   }, [location.pathname]);
 
   return (
