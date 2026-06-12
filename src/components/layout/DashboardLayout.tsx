@@ -3,6 +3,7 @@ import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { Logo } from "./Logo";
 import { BottomNav } from "./BottomNav";
+import { MobileAvatarMenu } from "./MobileAvatarMenu";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -50,6 +51,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </Button>
           <Logo size={28} />
           <span className="text-lg font-bold text-foreground tracking-tight">TelePanel</span>
+          <div className="ml-auto">
+            <MobileAvatarMenu />
+          </div>
         </div>
 
         <Header className="hidden xl:block" />

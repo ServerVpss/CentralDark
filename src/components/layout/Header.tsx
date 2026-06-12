@@ -166,8 +166,12 @@ export function Header({ className }: HeaderProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-9 px-2 gap-2 rounded-lg">
-              <div className="relative h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-lg shadow-primary/30">
-                <User className="h-4 w-4 text-primary-foreground" />
+              <div className="relative h-8 w-8 rounded-full overflow-hidden bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-lg shadow-primary/30">
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
+                ) : (
+                  <User className="h-4 w-4 text-primary-foreground" />
+                )}
               </div>
               <div className="hidden xl:flex flex-col items-start">
                 <span className="text-xs font-medium text-foreground leading-tight">
