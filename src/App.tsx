@@ -34,7 +34,9 @@ import WebAppResult from "./pages/WebAppResult";
 import MenuTips from "./pages/MenuTips";
 import DatabaseInfo from "./pages/DatabaseInfo";
 import Status from "./pages/Status";
+import DevTransitions from "./pages/DevTransitions";
 import { PageSplash } from "@/components/transitions/PageSplash";
+import { SplashController } from "@/components/transitions/SplashController";
 
 const queryClient = new QueryClient();
 
