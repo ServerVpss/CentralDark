@@ -69,6 +69,7 @@ const menuGroups = [
     label: "Sistema",
     icon: Cpu,
     items: [
+      { title: "Status", icon: Activity, path: "/status" },
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
       { title: "Segurança", icon: Shield, path: "/security" },
       { title: "Banco de Dados", icon: Database, path: "/database" },
