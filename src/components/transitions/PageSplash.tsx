@@ -4,9 +4,10 @@ export function invalidateTipsCache() {
   /* legado — mantido pra compatibilidade */
 }
 
-const SESSION_KEY = "__splash_shown_v9__";
+const SESSION_KEY = "__splash_shown_v10__";
 const EVENT = "lovable:splash:play";
-const DURATION = 1600; // ms
+const DURATION = 900; // ms — splash padrão (era 1600, longo demais)
+const MAX_DURATION = 2200; // ms — safety: nunca fica preso mais que isso
 
 // Path do raio (mesmo do <Logo />)
 const LOGO_PATH = "M13.5 2L4 14h7l-1.5 8L19 10h-7l1.5-8z";
@@ -72,6 +73,7 @@ export function PageSplash() {
     setRunId((c) => c + 1);
 
     if (endTimeoutRef.current) window.clearTimeout(endTimeoutRef.current);
+    // Encerramento normal pela duração informada…
     endTimeoutRef.current = window.setTimeout(() => {
       runningRef.current = false;
       setVisible(false);
@@ -80,10 +82,17 @@ export function PageSplash() {
       const next = pendingRef.current;
       pendingRef.current = null;
       if (next) {
-        // próximo tick — deixa React limpar antes
         window.setTimeout(() => start(next), 16);
       }
     }, dur);
+
+    // …e safety: força encerrar caso algo trave a animação.
+    window.setTimeout(() => {
+      if (runningRef.current) {
+        runningRef.current = false;
+        setVisible(false);
+      }
+    }, Math.max(dur + 200, MAX_DURATION));
   };
 
   useEffect(() => {
@@ -217,8 +226,8 @@ export function PageSplash() {
         }
 
         @keyframes splash-bg-out {
-          0%, 70% { opacity: 1; }
-          90%, 100% { opacity: 0; }
+          0%, 40% { opacity: 1; }
+          70%, 100% { opacity: 0; }
         }
         @keyframes splash-fade {
           0% { opacity: 1; }
