@@ -38,7 +38,6 @@ interface BroadcastDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   botId: string;
-  botToken: string;
 }
 
 type AudienceType = "all" | "active" | "expired";
@@ -66,7 +65,7 @@ const MEDIA_TYPES = [
   { value: "animation" as MediaType, label: "GIF", icon: FileVideo, description: "GIF animado" },
 ];
 
-export function BroadcastDialog({ open, onOpenChange, botId, botToken }: BroadcastDialogProps) {
+export function BroadcastDialog({ open, onOpenChange, botId }: BroadcastDialogProps) {
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
   const [caption, setCaption] = useState("");
