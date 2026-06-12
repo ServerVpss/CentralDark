@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Rocket, Terminal, ShieldAlert } from "lucide-react";
+import { Rocket, Terminal, ShieldAlert } from "lucide-react";
 import { useVpsDeploy } from "@/hooks/useVpsDeploy";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { DeployHistoryList } from "./DeployHistoryList";
 import { cn } from "@/lib/utils";
+import { SyncStatusIcon } from "@/components/ui/sync-status-icon";
 
 interface Props {
   className?: string;
@@ -58,8 +59,18 @@ export function VpsDeployPlugin({ className, historyLimit = 5, showHistory = tru
               Dispara o sync do Lovable → monorepo → build → Caddy.
             </CardDescription>
           </div>
-          <Button size="icon" variant="ghost" onClick={reload} title="Atualizar histórico">
-            <RefreshCw className="h-4 w-4" />
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={reload}
+            aria-label="Atualizar histórico de deploys"
+            disabled={loading}
+          >
+            <SyncStatusIcon
+              status={loading ? "syncing" : running ? "loading" : "idle"}
+              size={16}
+              tooltipLabel={loading ? "Atualizando histórico…" : running ? "Disparando deploy…" : "Atualizar histórico"}
+            />
           </Button>
         </div>
       </CardHeader>
