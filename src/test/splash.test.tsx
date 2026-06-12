@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { render, act, screen, waitFor } from "@testing-library/react";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { render, act } from "@testing-library/react";
 import React from "react";
 import { PageSplash, playSplash } from "@/components/transitions/PageSplash";
 
@@ -14,31 +14,28 @@ describe("PageSplash — disparo via playSplash", () => {
   });
 
   it("não renderiza nada quando ninguém disparou", () => {
-    render(<PageSplash />);
-    expect(screen.queryByTestId("page-splash")).toBeNull();
+    const { container } = render(<PageSplash />);
+    expect(container.querySelector('[data-testid="page-splash"]')).toBeNull();
   });
 
-  it("dispara o splash quando playSplash() é chamado (simula troca de menu)", async () => {
-    render(<PageSplash />);
+  it("dispara o splash quando playSplash() é chamado (simula troca de menu)", () => {
+    const { container } = render(<PageSplash />);
 
     act(() => {
       playSplash({ style: "fade", duration: 500, key: "test:menu-click" });
     });
-
-    // Debounce 40ms antes de mostrar
     act(() => {
-      vi.advanceTimersByTime(60);
+      vi.advanceTimersByTime(60); // passa o debounce de 40ms
     });
 
-    const el = screen.getByTestId("page-splash");
+    const el = container.querySelector('[data-testid="page-splash"]');
     expect(el).toBeTruthy();
-    expect(el.getAttribute("data-splash-style")).toBe("fade");
+    expect(el?.getAttribute("data-splash-style")).toBe("fade");
   });
 
-  it("coalesce: múltiplos cliques rápidos não cortam a animação pela metade", async () => {
-    render(<PageSplash />);
+  it("coalesce: cliques rápidos não acumulam splashes nem cortam pela metade", () => {
+    const { container } = render(<PageSplash />);
 
-    // 5 cliques em sequência
     act(() => {
       playSplash({ style: "flash", duration: 600 });
       playSplash({ style: "fade", duration: 600 });
@@ -46,14 +43,13 @@ describe("PageSplash — disparo via playSplash", () => {
       playSplash({ style: "wipe", duration: 600 });
       playSplash({ style: "flash", duration: 600 });
     });
-
     act(() => {
       vi.advanceTimersByTime(60);
     });
 
-    // Só uma instância visível (o último estilo, por coalesce do debounce)
-    const splashes = screen.getAllByTestId("page-splash");
+    const splashes = container.querySelectorAll('[data-testid="page-splash"]');
     expect(splashes).toHaveLength(1);
+    // Por coalesce, vence o último dispatch dentro do debounce.
     expect(splashes[0].getAttribute("data-splash-style")).toBe("flash");
   });
 });
