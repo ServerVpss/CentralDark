@@ -20,6 +20,7 @@ import {
   Briefcase,
   Cpu,
   Database,
+  Activity,
   X,
   LogOut,
   User,
