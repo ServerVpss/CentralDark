@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuthContext } from "@/components/auth/AuthProvider";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { AdminRoute } from "@/components/auth/AdminRoute";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { detectHostKind, getRootRedirectFor } from "@/lib/hostRouting";
@@ -48,23 +49,28 @@ function TelepainelEntry() {
 
 // Rotas internas do módulo TelePainel — usadas tanto na raiz (legado)
 // quanto prefixadas em /telepainel/* (novo padrão sob o portal CentralDark).
-const telepainelRoutes = [
+// `adminOnly: true` exige role=admin no banco (user_roles).
+const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: boolean }> = [
   { path: "dashboard", element: <Index /> },
   { path: "consultas", element: <Consultas /> },
-  { path: "bots", element: <Bots /> },
-  { path: "bots/:botId/settings", element: <BotSettingsPage /> },
-  { path: "bots/:botId/migrate", element: <MigrateSubscriptions /> },
-  { path: "telegram-users", element: <TelegramUsers /> },
-  { path: "logs", element: <QueryLogs /> },
-  { path: "plans", element: <Plans /> },
-  { path: "pix", element: <PixTransactions /> },
-  { path: "settings", element: <Settings /> },
-  { path: "security", element: <Security /> },
-  { path: "audit", element: <SubscriptionAudit /> },
-  { path: "menu-tips", element: <MenuTips /> },
-  { path: "database", element: <DatabaseInfo /> },
-  { path: "status", element: <Status /> },
+  { path: "bots", element: <Bots />, adminOnly: true },
+  { path: "bots/:botId/settings", element: <BotSettingsPage />, adminOnly: true },
+  { path: "bots/:botId/migrate", element: <MigrateSubscriptions />, adminOnly: true },
+  { path: "telegram-users", element: <TelegramUsers />, adminOnly: true },
+  { path: "logs", element: <QueryLogs />, adminOnly: true },
+  { path: "plans", element: <Plans />, adminOnly: true },
+  { path: "pix", element: <PixTransactions />, adminOnly: true },
+  { path: "settings", element: <Settings />, adminOnly: true },
+  { path: "security", element: <Security />, adminOnly: true },
+  { path: "audit", element: <SubscriptionAudit />, adminOnly: true },
+  { path: "menu-tips", element: <MenuTips />, adminOnly: true },
+  { path: "database", element: <DatabaseInfo />, adminOnly: true },
+  { path: "status", element: <Status />, adminOnly: true },
 ];
+
+// Aplica o guard correto: AdminRoute (envolve ProtectedRoute) ou só ProtectedRoute.
+const wrapGuard = (el: JSX.Element, adminOnly?: boolean) =>
+  adminOnly ? <AdminRoute>{el}</AdminRoute> : <ProtectedRoute>{el}</ProtectedRoute>;
 
 const App = () => (
   <ThemeProvider defaultTheme="light" storageKey="telepanel-theme">
@@ -127,14 +133,14 @@ const App = () => (
                         <Route
                           key={`legacy-${r.path}`}
                           path={`/${r.path}`}
-                          element={<ProtectedRoute>{r.element}</ProtectedRoute>}
+                          element={wrapGuard(r.element, r.adminOnly)}
                         />
                       ))}
                       {telepainelRoutes.map((r) => (
                         <Route
                           key={`tp-${r.path}`}
                           path={`/telepainel/${r.path}`}
-                          element={<ProtectedRoute>{r.element}</ProtectedRoute>}
+                          element={wrapGuard(r.element, r.adminOnly)}
                         />
                       ))}
                     </>
