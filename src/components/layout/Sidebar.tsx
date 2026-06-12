@@ -268,6 +268,38 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
       </nav>
 
 
+      {/* Perfil + Sair */}
+      <div className={cn("border-t border-sidebar-border p-3 space-y-2", collapsed && "xl:px-2")}>
+        {!collapsed && (
+          <div className="flex items-center gap-2.5 px-2 py-1.5">
+            <div className="relative h-9 w-9 rounded-full overflow-hidden bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shadow-3d-primary shrink-0">
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
+              ) : (
+                <User className="h-4 w-4 text-primary-foreground" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-sidebar-foreground truncate">
+                {profile?.full_name || user?.email?.split("@")[0] || "Usuário"}
+              </p>
+              <p className="text-[10px] text-sidebar-foreground/60 truncate">{user?.email}</p>
+            </div>
+          </div>
+        )}
+        <Button
+          variant="ghost"
+          onClick={handleSignOut}
+          className={cn(
+            "w-full justify-start gap-2.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-xl text-[13px] font-medium active:translate-y-[1px]",
+            collapsed && "xl:justify-center xl:px-0"
+          )}
+        >
+          <LogOut className="h-4 w-4 shrink-0" strokeWidth={2.25} />
+          <span className={cn(collapsed && "xl:hidden")}>Sair</span>
+        </Button>
+      </div>
+
       {/* Collapse toggle */}
       <div className="hidden xl:flex items-center justify-center border-t border-sidebar-border py-2.5">
         <Button
