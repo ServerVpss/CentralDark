@@ -164,6 +164,13 @@ export function PageSplash() {
           100%     { transform: scale(30); opacity: 0; }
         }
 
+        /* Versão rápida — usada na navegação entre menus */
+        .splash-quick .splash-bg,
+        .splash-quick .splash-logo,
+        .splash-quick .splash-reveal {
+          animation-duration: 750ms !important;
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .splash-bg, .splash-logo, .splash-reveal {
             animation-duration: 260ms !important;
