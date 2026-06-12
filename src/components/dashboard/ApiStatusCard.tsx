@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Shield, RefreshCw } from "lucide-react";
+import { Shield } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useApiStatus } from "@/hooks/useApiStatus";
 import { useApiUsageHistory, type ApiUsagePeriod } from "@/hooks/useApiUsageHistory";
 import { cn } from "@/lib/utils";
+import { SyncStatusIcon } from "@/components/ui/sync-status-icon";
 
 const PERIODS: { key: ApiUsagePeriod; label: string }[] = [
   { key: "today", label: "Hoje" },
@@ -36,9 +37,15 @@ export function ApiStatusCard() {
           <Shield className="h-3.5 w-3.5 text-destructive" />
           <span className="text-muted-foreground text-xs">API Offline</span>
         </div>
-        <Button variant="ghost" size="sm" className="mt-2 h-7 text-xs" onClick={refresh}>
-          <RefreshCw className="h-3 w-3 mr-1" />
-          Retry
+        <Button
+          variant="ghost"
+          size="sm"
+          className="mt-2 h-7 text-xs gap-1"
+          onClick={refresh}
+          aria-label="Tentar reconectar com a API"
+        >
+          <SyncStatusIcon status="error" size={12} withTooltip={false} />
+          Tentar de novo
         </Button>
       </div>
     );

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, AlertTriangle, XCircle, RefreshCw, Server, Wrench } from "lucide-react";
+import { CheckCircle2, AlertTriangle, XCircle, Server, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import { SyncStatusIcon, type SyncStatus } from "@/components/ui/sync-status-icon";
 
 
 interface Connector {
@@ -40,28 +41,35 @@ function LevelIcon({ level }: { level: string }) {
 
 export function McpStatusCard({ className }: { className?: string }) {
   const [data, setData] = useState<McpStatus | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState<SyncStatus>("loading");
   const [err, setErr] = useState<string | null>(null);
 
-  const load = async () => {
-    setLoading(true);
+  const load = async (isRefresh = false) => {
+    setStatus(isRefresh ? "syncing" : data ? "syncing" : "loading");
     setErr(null);
+    // Timeout de 20s — se estourar, vira estado "timeout"
+    const timeoutId = setTimeout(() => {
+      setStatus((s) => (s === "ready" ? s : "timeout"));
+    }, 20_000);
     try {
       // Usa edge function como proxy (CORS bloqueia chamada direta do browser)
       const { data: json, error } = await supabase.functions.invoke("mcp-status-proxy");
       if (error) throw error;
       setData(json as McpStatus);
+      setStatus("ready");
     } catch (e: any) {
       setErr(e?.message ?? String(e));
+      setStatus("error");
     } finally {
-      setLoading(false);
+      clearTimeout(timeoutId);
     }
   };
 
+  const loading = status === "loading" || status === "syncing";
 
   useEffect(() => {
     load();
-    const t = setInterval(load, 60_000); // atualiza a cada 1min
+    const t = setInterval(() => load(true), 60_000); // atualiza a cada 1min
     return () => clearInterval(t);
   }, []);
 
@@ -90,8 +98,14 @@ export function McpStatusCard({ className }: { className?: string }) {
               Status ao vivo de <code className="text-[10px]">mcp.centralldark.com</code>
             </CardDescription>
           </div>
-          <Button size="icon" variant="ghost" onClick={load} title="Atualizar" disabled={loading}>
-            <RefreshCw className={cn("h-4 w-4 transition-transform", loading ? "animate-spin" : "animate-[spin_4s_linear_infinite]")} />
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => load(true)}
+            aria-label="Atualizar status do MCP"
+            disabled={loading}
+          >
+            <SyncStatusIcon status={status} size={16} />
           </Button>
 
         </div>
