@@ -7,6 +7,8 @@ const corsHeaders = {
 interface VPSExecRequest {
   commands: string[];
   timeout_minutes?: number;
+  deploy_id?: string;
+  mode?: 'exec' | 'check';
 }
 
 Deno.serve(async (req) => {
