@@ -1,7 +1,9 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { setRevealOrigin } from "@/lib/menuReveal";
-import { playSplash } from "@/components/transitions/PageSplash";
+// Obs.: o splash do raio agora é disparado pelo SplashController global
+// (escuta troca de rota + cliques em menus). Esse wrapper cuida só do
+// efeito "ink reveal" do conteúdo da página.
 
 interface Props {
   children: ReactNode;
