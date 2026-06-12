@@ -21,6 +21,8 @@ import {
   Cpu,
   Database,
   X,
+  LogOut,
+  User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { useAuthContext } from "@/components/auth/AuthProvider";
 
 interface SidebarProps {
   isOpen?: boolean;
