@@ -81,6 +81,13 @@ const menuGroups = [
 export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsedChange }: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, profile, signOut } = useAuthContext();
+
+  const handleSignOut = async () => {
+    await signOut();
+    onClose?.();
+    navigate("/auth", { replace: true });
+  };
 
   const isActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
