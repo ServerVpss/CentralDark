@@ -17,9 +17,9 @@ const LOGO_MASK_SVG = encodeURIComponent(
 );
 const LOGO_MASK_URL = `url("data:image/svg+xml;utf8,${LOGO_MASK_SVG}")`;
 
-export function playSplash() {
+export function playSplash(opts?: { quick?: boolean }) {
   if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent(EVENT));
+  window.dispatchEvent(new CustomEvent(EVENT, { detail: { quick: !!opts?.quick } }));
 }
 
 /**
