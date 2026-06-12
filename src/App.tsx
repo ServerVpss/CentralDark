@@ -37,6 +37,8 @@ import Status from "./pages/Status";
 import DevTransitions from "./pages/DevTransitions";
 import TesteModulos from "./pages/TesteModulos";
 import UsuariosPainel from "./pages/UsuariosPainel";
+import UsuarioPerfil from "./pages/UsuarioPerfil";
+import { ViewAsBanner } from "@/components/auth/ViewAsBanner";
 import { PageSplash } from "@/components/transitions/PageSplash";
 import { SplashController } from "@/components/transitions/SplashController";
 
@@ -72,6 +74,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "status", element: <Status />, adminOnly: true },
   { path: "teste-modulos", element: <TesteModulos />, adminOnly: true },
   { path: "usuarios-painel", element: <UsuariosPainel />, adminOnly: true },
+  { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
 ];
 
 // Aplica o guard correto: AdminRoute (envolve ProtectedRoute) ou só ProtectedRoute.
@@ -87,6 +90,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <GlobalSearch />
+            <ViewAsBanner />
             {/* <InstallPrompt /> */}
             <PageSplash />
             <SplashController />

@@ -1,5 +1,6 @@
 // Gestão completa de usuários do painel (admin only)
 import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAdminUsers, AdminUser } from "@/hooks/useAdminUsers";
 import { useAuthContext } from "@/components/auth/AuthProvider";
@@ -28,8 +29,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Loader2, MoreVertical, UserCog, UserPlus, RefreshCw, Search, ShieldCheck,
-  KeyRound, Mail, Ban, CheckCircle2, Trash2, ShieldOff, Lock,
+  KeyRound, Mail, Ban, CheckCircle2, Trash2, ShieldOff, Lock, Eye, IdCard,
 } from "lucide-react";
+import { startViewAs } from "@/lib/viewAsMode";
+import { clearAdminCache } from "@/hooks/useIsAdmin";
+import { toast } from "sonner";
 
 function fmtDate(iso: string | null) {
   if (!iso) return "—";
@@ -45,6 +49,15 @@ export default function UsuariosPainel() {
 
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<"all" | "admin" | "user">("all");
+  const navigate = useNavigate();
+
+  const handleViewAs = (u: AdminUser) => {
+    startViewAs({ userId: u.id, email: u.email, name: u.full_name });
+    clearAdminCache();
+    toast.success("Modo espelho ativado — recarregando…");
+    setTimeout(() => { window.location.href = "/portal"; }, 400);
+  };
+
 
   // Diálogos
   const [createOpen, setCreateOpen] = useState(false);
@@ -225,17 +238,38 @@ export default function UsuariosPainel() {
                             {fmtDate(u.last_sign_in_at)}
                           </TableCell>
                           <TableCell className="text-right">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-lg"
+                                title="Perfil 360"
+                                onClick={() => navigate(`/usuarios-painel/${u.id}`)}
+                              >
+                                <IdCard className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-lg text-amber-600"
+                                title="Ver como este usuário (modo espelho)"
+                                disabled={isSelf}
+                                onClick={() => handleViewAs(u)}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
                               <DropdownMenuContent align="end" className="w-56">
                                 <DropdownMenuLabel className="text-xs">
                                   {u.email}
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
+
 
                                 {u.role === "admin" ? (
                                   <DropdownMenuItem
@@ -295,8 +329,10 @@ export default function UsuariosPainel() {
                                   Excluir usuário
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
-                            </DropdownMenu>
+                              </DropdownMenu>
+                            </div>
                           </TableCell>
+
                         </TableRow>
                       );
                     })}

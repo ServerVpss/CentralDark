@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthContext } from "@/components/auth/AuthProvider";
+import { isViewAsActive } from "@/lib/viewAsMode";
 
 // Cache global por user.id — evita re-validar admin a cada navegação
 // (era a causa principal do flash "Validando permissão…" entre menus).
@@ -31,12 +32,15 @@ export function clearAdminCache() {
 
 export function useIsAdmin() {
   const { user, loading: authLoading } = useAuthContext();
+  // Modo espelho: força não-admin pra simular visão de usuário comum.
+  const mirror = isViewAsActive();
   const cached = user ? adminCache.get(user.id) : undefined;
-  const [isAdmin, setIsAdmin] = useState<boolean>(cached ?? false);
-  const [loading, setLoading] = useState<boolean>(cached === undefined);
+  const [isAdmin, setIsAdmin] = useState<boolean>(mirror ? false : (cached ?? false));
+  const [loading, setLoading] = useState<boolean>(mirror ? false : (cached === undefined));
 
   useEffect(() => {
     const ac = new AbortController();
+    if (mirror) { setIsAdmin(false); setLoading(false); return; }
     if (authLoading) return;
     if (!user) {
       setIsAdmin(false);
@@ -56,7 +60,7 @@ export function useIsAdmin() {
       setLoading(false);
     });
     return () => ac.abort();
-  }, [user, authLoading]);
+  }, [user, authLoading, mirror]);
 
   return { isAdmin, loading };
 }
