@@ -29,8 +29,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Loader2, MoreVertical, UserCog, UserPlus, RefreshCw, Search, ShieldCheck,
-  KeyRound, Mail, Ban, CheckCircle2, Trash2, ShieldOff, Lock,
+  KeyRound, Mail, Ban, CheckCircle2, Trash2, ShieldOff, Lock, Eye, IdCard,
 } from "lucide-react";
+import { startViewAs } from "@/lib/viewAsMode";
+import { clearAdminCache } from "@/hooks/useIsAdmin";
+import { toast } from "sonner";
 
 function fmtDate(iso: string | null) {
   if (!iso) return "—";
