@@ -1046,6 +1046,45 @@ export type Database = {
         }
         Relationships: []
       }
+      project_roadmap: {
+        Row: {
+          auto_generated: boolean
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          priority: number
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          auto_generated?: boolean
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          priority?: number
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          auto_generated?: boolean
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          priority?: number
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       query_history: {
         Row: {
           created_at: string
@@ -1635,6 +1674,48 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vps_deploy_history: {
+        Row: {
+          commit_hash: string | null
+          created_at: string
+          environment: string
+          finished_at: string | null
+          id: string
+          log_summary: string | null
+          started_at: string
+          status: string
+          triggered_by: string | null
+          updated_at: string
+          workflow_run_id: string | null
+        }
+        Insert: {
+          commit_hash?: string | null
+          created_at?: string
+          environment?: string
+          finished_at?: string | null
+          id?: string
+          log_summary?: string | null
+          started_at?: string
+          status?: string
+          triggered_by?: string | null
+          updated_at?: string
+          workflow_run_id?: string | null
+        }
+        Update: {
+          commit_hash?: string | null
+          created_at?: string
+          environment?: string
+          finished_at?: string | null
+          id?: string
+          log_summary?: string | null
+          started_at?: string
+          status?: string
+          triggered_by?: string | null
+          updated_at?: string
+          workflow_run_id?: string | null
         }
         Relationships: []
       }
