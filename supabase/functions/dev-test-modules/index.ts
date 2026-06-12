@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
             apikey: SERVICE,
             authorization: `Bearer ${SERVICE}`,
           },
-          body: JSON.stringify({ module: mod, query: input }),
+          body: JSON.stringify({ queryType: mod, queryInput: input }),
           signal: ac.signal,
         });
         httpStatus = res.status;
