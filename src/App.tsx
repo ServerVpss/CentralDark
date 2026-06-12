@@ -68,6 +68,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "menu-tips", element: <MenuTips />, adminOnly: true },
   { path: "database", element: <DatabaseInfo />, adminOnly: true },
   { path: "status", element: <Status />, adminOnly: true },
+  { path: "teste-modulos", element: <TesteModulos />, adminOnly: true },
 ];
 
 // Aplica o guard correto: AdminRoute (envolve ProtectedRoute) ou só ProtectedRoute.
