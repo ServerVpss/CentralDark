@@ -33,8 +33,8 @@ export function BotConfigCard({ bot, onSync, onUpdate }: BotConfigCardProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  // Generate webhook URL automatically
-  const webhookUrl = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID || 'kagejpghnwdfymddwxuf'}.supabase.co/functions/v1/telegram-webhook?botId=${bot.id}`;
+  // Webhook URL gerada via env vars (sem hardcode do project ID)
+  const webhookUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-webhook?botId=${bot.id}`;
 
   useEffect(() => {
     setIsActive(bot.is_active);

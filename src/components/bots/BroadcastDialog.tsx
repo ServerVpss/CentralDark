@@ -38,7 +38,6 @@ interface BroadcastDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   botId: string;
-  botToken: string;
 }
 
 type AudienceType = "all" | "active" | "expired";
@@ -66,7 +65,7 @@ const MEDIA_TYPES = [
   { value: "animation" as MediaType, label: "GIF", icon: FileVideo, description: "GIF animado" },
 ];
 
-export function BroadcastDialog({ open, onOpenChange, botId, botToken }: BroadcastDialogProps) {
+export function BroadcastDialog({ open, onOpenChange, botId }: BroadcastDialogProps) {
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
   const [caption, setCaption] = useState("");
@@ -244,56 +243,34 @@ export function BroadcastDialog({ open, onOpenChange, botId, botToken }: Broadca
 
               if (replyMarkup) body.reply_markup = replyMarkup;
 
-              let response: Response;
+              // Todas as chamadas passam pelo proxy seguro — token nunca sai do backend.
+              const proxyPayload: Record<string, unknown> = {
+                botId,
+                action: endpoint,
+                body,
+              };
 
-              if (mediaType !== "text" && mediaFile) {
-                // Send via multipart/form-data for file uploads
-                const formData = new FormData();
-                Object.entries(body).forEach(([key, value]) => {
-                  if (key === "reply_markup") {
-                    formData.append(key, JSON.stringify(value));
-                  } else {
-                    formData.append(key, String(value));
-                  }
-                });
-
-                const fieldName = mediaType === "photo" ? "photo" : mediaType === "audio" ? "audio" : "animation";
-                formData.append(fieldName, mediaFile, mediaFile.name);
-
-                response = await fetch(
-                  `https://api.telegram.org/bot${botToken}/${endpoint}`,
-                  { method: "POST", body: formData }
-                );
+              if (mediaType !== "text" && mediaFile && mediaBase64) {
+                proxyPayload.mediaBase64 = mediaBase64;
+                proxyPayload.mediaName = mediaFile.name;
+                proxyPayload.mediaField = mediaType === "photo" ? "photo" : mediaType === "audio" ? "audio" : "animation";
               } else if (mediaType !== "text" && mediaUrl) {
-                // Send via URL
                 const fieldName = mediaType === "photo" ? "photo" : mediaType === "audio" ? "audio" : "animation";
-                body[fieldName] = mediaUrl;
-
-                response = await fetch(
-                  `https://api.telegram.org/bot${botToken}/${endpoint}`,
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body),
-                  }
-                );
-              } else {
-                response = await fetch(
-                  `https://api.telegram.org/bot${botToken}/${endpoint}`,
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body),
-                  }
-                );
+                (body as any)[fieldName] = mediaUrl;
               }
 
-              const result = await response.json();
-              if (result.ok) {
+              const { data: result, error: invokeErr } = await supabase.functions.invoke("bot-telegram-proxy", {
+                body: proxyPayload,
+              });
+
+              if (invokeErr) {
+                failedCount++;
+                console.error("Erro proxy para", user.telegram_user_id, invokeErr);
+              } else if (result?.ok) {
                 sentCount++;
               } else {
                 failedCount++;
-                console.error("Erro ao enviar para", user.telegram_user_id, result);
+                console.error("Erro Telegram para", user.telegram_user_id, result);
               }
             } catch (err) {
               failedCount++;

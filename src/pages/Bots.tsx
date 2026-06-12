@@ -202,16 +202,17 @@ export default function Bots() {
         .eq("id", bot.id);
       if (error) throw error;
 
-      // Remove or restore webhook
-      if (!newState && bot.token) {
-        // Desligar: remove webhook para o bot parar completamente
-        await fetch(`https://api.telegram.org/bot${bot.token}/deleteWebhook`);
+      // Remove ou restaura webhook (token nunca trafega no client — via edge function)
+      if (!newState) {
+        await supabase.functions.invoke("bot-telegram-proxy", {
+          body: { botId: bot.id, action: "deleteWebhook", body: {} },
+        });
         await supabase
           .from("telegram_bots")
           .update({ webhook_active: false })
           .eq("id", bot.id);
         toast.success("Bot desligado! Webhook removido.");
-      } else if (newState && bot.token) {
+      } else {
         // Ligar: restaura webhook
         await syncBot(bot.id);
         toast.success("Bot ligado! Webhook restaurado.");

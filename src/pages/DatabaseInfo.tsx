@@ -21,10 +21,10 @@ const TABLES = [
 ] as const;
 
 const PROJECT = {
-  id: "kagejpghnwdfymddwxuf",
-  url: "https://kagejpghnwdfymddwxuf.supabase.co",
-  region: "Lovable Cloud (Supabase)",
-  anon: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...AYdE",
+  id: import.meta.env.VITE_SUPABASE_PROJECT_ID ?? "—",
+  url: import.meta.env.VITE_SUPABASE_URL ?? "—",
+  region: "Lovable Cloud",
+  anon: "(oculta — gerenciada pelo runtime)",
 };
 
 interface TableInfo {

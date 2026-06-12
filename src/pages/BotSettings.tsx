@@ -837,7 +837,6 @@ export default function BotSettings() {
           open={broadcastOpen}
           onOpenChange={setBroadcastOpen}
           botId={botId || ""}
-          botToken={bot.token}
         />
       </div>
     </DashboardLayout>

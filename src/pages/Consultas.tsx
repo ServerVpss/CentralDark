@@ -284,7 +284,7 @@ export default function Consultas() {
     };
 
     const directFetch = async (): Promise<QueryResult | null> => {
-      const EDGE_URL = `https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/api-query`;
+      const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/api-query`;
       try {
         const response = await fetch(EDGE_URL, {
           method: "POST",
