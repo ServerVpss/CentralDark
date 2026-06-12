@@ -50,16 +50,16 @@ Deno.serve(async (req) => {
     const action = String(body?.action ?? "");
 
     // Log de auditoria
-    const logAudit = async (event: string, target: string | null, meta: Record<string, unknown>) => {
+    const logAudit = async (action: string, target: string | null, meta: Record<string, unknown>) => {
       try {
         await admin.from("audit_logs").insert({
-          actor_id: callerId,
-          actor_email: userData.user.email ?? null,
-          event,
-          target_id: target,
-          metadata: meta,
+          user_id: callerId,
+          action,
+          entity_type: "auth_user",
+          entity_id: target,
+          details: { ...meta, actor_email: userData.user.email ?? null },
         });
-      } catch (_) { /* tabela pode ter colunas diferentes — log opcional */ }
+      } catch (_) { /* log opcional */ }
     };
 
     switch (action) {
