@@ -1,3 +1,5 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
@@ -9,6 +11,54 @@ interface VPSExecRequest {
   timeout_minutes?: number;
   deploy_id?: string;
   mode?: 'exec' | 'check';
+}
+
+// ───── Auth helper: só admins podem disparar deploy ─────
+async function requireAdmin(req: Request): Promise<{ ok: true; userId: string } | { ok: false; response: Response }> {
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({ error: 'Não autenticado' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }),
+    };
+  }
+
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_ANON_KEY')!,
+    { global: { headers: { Authorization: authHeader } } },
+  );
+
+  const token = authHeader.replace('Bearer ', '');
+  const { data: claimsData, error: claimsErr } = await supabase.auth.getClaims(token);
+  if (claimsErr || !claimsData?.claims?.sub) {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({ error: 'Sessão inválida' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }),
+    };
+  }
+
+  const userId = claimsData.claims.sub as string;
+  const { data: isAdmin, error: roleErr } = await supabase.rpc('has_role', {
+    _user_id: userId,
+    _role: 'admin',
+  });
+  if (roleErr || !isAdmin) {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({ error: 'Acesso restrito a administradores' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }),
+    };
+  }
+  return { ok: true, userId };
 }
 
 Deno.serve(async (req) => {
@@ -23,10 +73,13 @@ Deno.serve(async (req) => {
     });
   }
 
+  // 🛡️ Bloqueio: apenas admins
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body: VPSExecRequest = await req.json();
     const commands = body.commands || [];
-    const timeout = body.timeout_minutes || 5;
 
     if (!commands.length) {
       return new Response(JSON.stringify({ error: 'Nenhum comando fornecido' }), {
@@ -46,13 +99,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Junta comandos com separador |||
     const commandsString = commands.join('|||');
-
     const dispatchUrl = `https://api.github.com/repos/${githubOwner}/${githubRepo}/actions/workflows/vps-ssh-exec.yml/dispatches`;
-    
-    console.log('Disparando workflow:', dispatchUrl);
-    console.log('Comandos:', commandsString);
+
+    console.log(`[vps-exec] admin=${auth.userId} comandos=${commands.length}`);
 
     const response = await fetch(dispatchUrl, {
       method: 'POST',
@@ -64,9 +114,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         ref: 'main',
-        inputs: {
-          commands: commandsString,
-        },
+        inputs: { commands: commandsString },
       }),
     });
 

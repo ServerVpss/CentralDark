@@ -941,6 +941,39 @@ async function handleQuery(
   };
 }
 
+// =============== AUTH GUARD ===============
+// Aceita: (a) chamadas internas via SERVICE_ROLE_KEY (telegram-webhook),
+//         (b) usuário web autenticado via JWT.
+// Bloqueia: requisições anônimas — protege contra abuso da API paga.
+async function authorize(req: Request, supabase: ReturnType<typeof createClient>): Promise<{ ok: true } | { ok: false; response: Response }> {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return {
+      ok: false,
+      response: new Response(
+        JSON.stringify({ success: false, errors: ["Não autenticado"] }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      ),
+    };
+  }
+  const token = authHeader.replace("Bearer ", "");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  // Chamada interna (bot/edge function)
+  if (token === serviceKey) return { ok: true };
+  // Usuário web autenticado
+  const { data, error } = await supabase.auth.getClaims(token);
+  if (error || !data?.claims?.sub) {
+    return {
+      ok: false,
+      response: new Response(
+        JSON.stringify({ success: false, errors: ["Sessão inválida"] }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      ),
+    };
+  }
+  return { ok: true };
+}
+
 // =============== MAIN HANDLER ===============
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -954,6 +987,11 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    // 🛡️ Bloqueia anônimos antes de consumir a API paga
+    const auth = await authorize(req, supabase);
+    if (!auth.ok) return auth.response;
+
 
     let queryRequest: QueryRequest;
 
