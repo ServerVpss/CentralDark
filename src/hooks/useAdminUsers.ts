@@ -112,3 +112,31 @@ export function useAdminUsers() {
       wrap("Usuário excluído", () => call("delete", { user_id })),
   };
 }
+
+// Busca o perfil 360 de um usuário específico (não usa o estado da lista).
+export async function fetchUserDetail(user_id: string) {
+  const { data: sess } = await supabase.auth.getSession();
+  const token = sess.session?.access_token;
+  if (!token) throw new Error("Sessão expirada.");
+  try {
+    const { data, error } = await supabase.functions.invoke("admin-users", {
+      body: { action: "get_detail", user_id },
+    });
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+    return data;
+  } catch (e1) {
+    const res = await fetch(FN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        apikey: ANON,
+      },
+      body: JSON.stringify({ action: "get_detail", user_id }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data?.error) throw new Error(data?.error || `HTTP ${res.status}`);
+    return data;
+  }
+}
