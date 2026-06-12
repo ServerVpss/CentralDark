@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthContext } from "@/components/auth/AuthProvider";
+import { isViewAsActive } from "@/lib/viewAsMode";
 
 // Cache global por user.id — evita re-validar admin a cada navegação
 // (era a causa principal do flash "Validando permissão…" entre menus).
