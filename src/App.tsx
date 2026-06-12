@@ -85,6 +85,7 @@ const App = () => (
             <GlobalSearch />
             {/* <InstallPrompt /> */}
             <PageSplash />
+            <SplashController />
             {(() => {
               // Modo de build: "web" = só landing+auth, "portal" = só área logada,
               // qualquer outro valor (ou ausente) = app completo (modo Lovable/dev).
