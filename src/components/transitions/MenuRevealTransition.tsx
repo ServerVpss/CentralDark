@@ -1,9 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { setRevealOrigin } from "@/lib/menuReveal";
-// Obs.: o splash do raio agora é disparado pelo SplashController global
-// (escuta troca de rota + cliques em menus). Esse wrapper cuida só do
-// efeito "ink reveal" do conteúdo da página.
 
 interface Props {
   children: ReactNode;
@@ -11,20 +8,21 @@ interface Props {
 
 /**
  * Wrapper que aplica uma transição "ink/mask reveal" sempre que a rota muda.
- * - Estado é atualizado UMA vez por troca (runId).
- * - Animação é 100% CSS via classe `.menu-reveal-play`.
- * - Respeita prefers-reduced-motion (cai pra fade curto).
- * - Origem do efeito vem de --reveal-x / --reveal-y, capturadas via
- *   um único listener global de pointerdown (sem instrumentar botões).
+ * - A animação SÓ é aplicada em troca de rota — nunca no primeiro render.
+ *   (evita tela branca caso o navegador pause animações).
+ * - A classe é removida logo após o término, garantindo que o conteúdo
+ *   nunca fique preso em `opacity:0` ou `clip-path: circle(0)`.
  */
+const REVEAL_MS = 700; // bate com --reveal-duration no index.css + folga
+
 export function MenuRevealTransition({ children }: Props) {
   const location = useLocation();
   const [runId, setRunId] = useState(0);
+  const [playing, setPlaying] = useState(false);
   const firstRender = useRef(true);
   const lastPath = useRef(location.pathname);
+  const timeoutRef = useRef<number | null>(null);
 
-  // Captura a posição do último clique/toque em qualquer lugar.
-  // É barato (apenas escreve CSS vars no <html>, sem re-render).
   useEffect(() => {
     const handler = (e: PointerEvent) => {
       setRevealOrigin({ clientX: e.clientX, clientY: e.clientY });
@@ -41,17 +39,24 @@ export function MenuRevealTransition({ children }: Props) {
     if (location.pathname === lastPath.current) return;
     lastPath.current = location.pathname;
     setRunId((n) => n + 1);
-    // O splash do raio é disparado pelo SplashController (global).
+    setPlaying(true);
+    if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    // Safety: remove a classe depois da anim — conteúdo nunca fica invisível.
+    timeoutRef.current = window.setTimeout(() => setPlaying(false), REVEAL_MS);
   }, [location.pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   return (
     <div
       key={runId}
-      className="menu-reveal-play"
-      style={{ contain: "paint" } as React.CSSProperties}
+      className={playing ? "menu-reveal-play" : undefined}
     >
       {children}
     </div>
   );
 }
-

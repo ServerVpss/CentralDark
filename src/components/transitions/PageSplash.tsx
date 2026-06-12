@@ -4,9 +4,10 @@ export function invalidateTipsCache() {
   /* legado — mantido pra compatibilidade */
 }
 
-const SESSION_KEY = "__splash_shown_v9__";
+const SESSION_KEY = "__splash_shown_v10__";
 const EVENT = "lovable:splash:play";
-const DURATION = 1600; // ms
+const DURATION = 900; // ms — splash padrão (era 1600, longo demais)
+const MAX_DURATION = 2200; // ms — safety: nunca fica preso mais que isso
 
 // Path do raio (mesmo do <Logo />)
 const LOGO_PATH = "M13.5 2L4 14h7l-1.5 8L19 10h-7l1.5-8z";
