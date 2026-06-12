@@ -149,6 +149,9 @@ const App = () => (
                     </>
                   )}
 
+                  {/* ===== Rota oculta de QA das transições ===== */}
+                  <Route path="/dev/transitions" element={<DevTransitions />} />
+
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               );
