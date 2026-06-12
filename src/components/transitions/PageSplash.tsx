@@ -35,12 +35,15 @@ export function PageSplash() {
     return !sessionStorage.getItem(SESSION_KEY);
   });
   const [runId, setRunId] = useState(0);
+  const [quick, setQuick] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
   // Disparo manual via playSplash()
   useEffect(() => {
-    const start = () => {
+    const start = (e: Event) => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+      const ce = e as CustomEvent<{ quick?: boolean }>;
+      setQuick(!!ce.detail?.quick);
       setVisible(true);
       setRunId((c) => c + 1);
     };
@@ -58,7 +61,8 @@ export function PageSplash() {
     if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dur = reduceMotion ? 260 : DURATION;
+    const base = quick ? 750 : DURATION;
+    const dur = reduceMotion ? 260 : base;
 
     timeoutRef.current = window.setTimeout(() => {
       setVisible(false);
@@ -67,7 +71,7 @@ export function PageSplash() {
     return () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
     };
-  }, [visible, runId]);
+  }, [visible, runId, quick]);
 
   if (!visible) return null;
 
