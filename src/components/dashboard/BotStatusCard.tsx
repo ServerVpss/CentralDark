@@ -61,7 +61,7 @@ export function BotStatusCard({ botId, name, username, status, messages, users, 
         className="w-full h-9 text-sm text-muted-foreground hover:text-foreground"
         onClick={() => navigate(botId ? `/bots/${botId}/settings` : "/bots")}
       >
-        <Settings className="h-3 w-3 mr-1" />
+        <Settings className="h-4 w-4 mr-1.5" />
         Configurar
       </Button>
     </div>
