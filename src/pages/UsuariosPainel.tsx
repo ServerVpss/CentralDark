@@ -258,21 +258,18 @@ export default function UsuariosPainel() {
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right hidden">
-
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
-                                  <MoreVertical className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
                               <DropdownMenuContent align="end" className="w-56">
                                 <DropdownMenuLabel className="text-xs">
                                   {u.email}
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
+
 
                                 {u.role === "admin" ? (
                                   <DropdownMenuItem
