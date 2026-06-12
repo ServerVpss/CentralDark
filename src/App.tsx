@@ -90,6 +90,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <GlobalSearch />
+            <ViewAsBanner />
             {/* <InstallPrompt /> */}
             <PageSplash />
             <SplashController />
