@@ -329,8 +329,10 @@ export default function UsuariosPainel() {
                                   Excluir usuário
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
-                            </DropdownMenu>
+                              </DropdownMenu>
+                            </div>
                           </TableCell>
+
                         </TableRow>
                       );
                     })}
