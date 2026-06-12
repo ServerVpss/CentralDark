@@ -1,9 +1,9 @@
-// Guard de rota: além de logado, exige role=admin no banco (user_roles).
-// TODO: cache de role no AuthContext pra evitar RPC por navegação.
-import { ReactNode, useEffect, useState } from "react";
+// Guard: exige logado + admin. Usa cache global (useIsAdmin) pra não piscar
+// "Validando permissão…" a cada navegação entre menus admin.
+import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "@/components/auth/AuthProvider";
-import { supabase } from "@/integrations/supabase/client";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Loader2, ShieldAlert } from "lucide-react";
 
 interface AdminRouteProps {
@@ -11,34 +11,16 @@ interface AdminRouteProps {
 }
 
 export function AdminRoute({ children }: AdminRouteProps) {
-  const { user, isAuthenticated, loading } = useAuthContext();
+  const { isAuthenticated, loading: authLoading } = useAuthContext();
+  const { isAdmin, loading: roleLoading } = useIsAdmin();
   const location = useLocation();
-  const [checking, setChecking] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    if (loading || !user) return;
-    (async () => {
-      setChecking(true);
-      const { data, error } = await supabase.rpc("has_role", {
-        _user_id: user.id,
-        _role: "admin",
-      });
-      if (cancelled) return;
-      setIsAdmin(!error && data === true);
-      setChecking(false);
-    })();
-    return () => { cancelled = true; };
-  }, [user, loading]);
-
-  if (loading || (isAuthenticated && checking)) {
+  // Bloqueia render dos filhos enquanto qualquer validação roda.
+  // Fundo sólido = sem flash branco entre páginas.
+  if (authLoading || (isAuthenticated && roleLoading)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Validando permissão…</p>
-        </div>
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -54,7 +36,7 @@ export function AdminRoute({ children }: AdminRouteProps) {
           <ShieldAlert className="h-12 w-12 text-destructive mx-auto" />
           <h1 className="text-2xl font-semibold">Acesso restrito</h1>
           <p className="text-muted-foreground">
-            Esta página é só para administradores. Se você acha que isso é um engano, fale com o dono do painel.
+            Esta página é só para administradores.
           </p>
         </div>
       </div>
