@@ -184,7 +184,7 @@ export default function TesteModulos() {
   }, [results]);
 
   return (
-    <Layout>
+    <DashboardLayout>
       <div className="space-y-4 p-4 md:p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
@@ -267,6 +267,6 @@ export default function TesteModulos() {
           </CardContent>
         </Card>
       </div>
-    </Layout>
+    </DashboardLayout>
   );
 }
