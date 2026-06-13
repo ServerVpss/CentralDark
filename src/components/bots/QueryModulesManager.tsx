@@ -1,16 +1,33 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Activity } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Activity, ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useModuleHealth, type HealthLabel } from "@/hooks/useModuleHealth";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+// Hash SHA-256 da senha de acesso ao Provedor (senha real nunca aparece no código)
+const PROVIDER_PASS_HASH = "e21d83b51f49f9c389e16cdd9b7ab1e3b39da00429a4d57c0b6dc56b08400a05";
+const SESSION_UNLOCK_KEY = "providers_unlocked_v1";
+const SESSION_LOCKOUT_KEY = "providers_lockout_until_v1";
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS = 60_000;
+
+async function sha256Hex(text: string): Promise<string> {
+  const buf = new TextEncoder().encode(text);
+  const hashBuf = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hashBuf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 interface ModuleInfo {
   id: string;
