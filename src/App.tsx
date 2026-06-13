@@ -41,6 +41,7 @@ import UsuarioPerfil from "./pages/UsuarioPerfil";
 import { ViewAsBanner } from "@/components/auth/ViewAsBanner";
 import { PageSplash } from "@/components/transitions/PageSplash";
 import { SplashController } from "@/components/transitions/SplashController";
+import Docs from "./pages/Docs";
 
 const queryClient = new QueryClient();
 
