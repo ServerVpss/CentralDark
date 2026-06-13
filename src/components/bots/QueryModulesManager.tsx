@@ -525,6 +525,102 @@ export function QueryModulesManager() {
           </CardContent>
         )}
       </Card>
+
+      {/* Modal de senha do Provedor — fundido ao painel, estilo Esmeralda 3D */}
+      <Dialog open={passDialogOpen} onOpenChange={(o) => !passChecking && setPassDialogOpen(o)}>
+        <DialogContent className="sm:max-w-md rounded-2xl border-border/60 bg-card/95 backdrop-blur-xl shadow-3d p-0 overflow-hidden">
+          <div className="relative px-6 pt-6 pb-4 bg-gradient-to-b from-primary/10 to-transparent border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center shadow-3d-primary">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <DialogHeader className="space-y-1 text-left">
+                  <DialogTitle className="text-base font-semibold">Acesso restrito</DialogTitle>
+                  <DialogDescription className="text-xs">
+                    Área do Provedor protegida. Digite a senha para continuar.
+                  </DialogDescription>
+                </DialogHeader>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-6 py-5 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="provider-pass" className="text-xs font-medium text-muted-foreground">
+                Senha de acesso
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="provider-pass"
+                  ref={passInputRef}
+                  type={passVisible ? "text" : "password"}
+                  value={passInput}
+                  onChange={(e) => setPassInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleSubmitPassword();
+                    }
+                  }}
+                  disabled={isLocked || passChecking}
+                  placeholder="••••••"
+                  autoComplete="off"
+                  inputMode="numeric"
+                  maxLength={32}
+                  className="pl-9 pr-10 h-11 rounded-xl tracking-widest font-mono text-base"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPassVisible((v) => !v)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+                  aria-label={passVisible ? "Ocultar senha" : "Mostrar senha"}
+                >
+                  {passVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+
+              {isLocked ? (
+                <div className="flex items-center gap-2 text-xs text-destructive">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                  Bloqueado por {Math.ceil(lockRemaining / 1000)}s após muitas tentativas.
+                </div>
+              ) : passAttempts > 0 ? (
+                <div className="text-xs text-amber-600 dark:text-amber-500">
+                  Tentativas: {passAttempts}/{MAX_ATTEMPTS}
+                </div>
+              ) : (
+                <div className="text-[11px] text-muted-foreground/80">
+                  A senha é validada localmente com hash SHA-256.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter className="px-6 pb-6 pt-2 gap-2 sm:gap-2">
+            <Button
+              variant="outline"
+              className="rounded-xl shadow-3d-soft active:translate-y-[1px]"
+              onClick={() => setPassDialogOpen(false)}
+              disabled={passChecking}
+            >
+              Cancelar
+            </Button>
+            <Button
+              className="rounded-xl shadow-3d-primary active:translate-y-[1px]"
+              onClick={handleSubmitPassword}
+              disabled={isLocked || passChecking || !passInput}
+            >
+              {passChecking ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Verificando</>
+              ) : (
+                <><ShieldCheck className="h-4 w-4 mr-2" /> Desbloquear</>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
     </TooltipProvider>
   );
