@@ -49,6 +49,27 @@ const healthMeta: Record<HealthLabel, { label: string; emoji: string; dot: strin
 export function QueryModulesManager() {
   const [modules, setModules] = useState<ModuleInfo[]>([]);
   const [showProviders, setShowProviders] = useState(false);
+  const [providersUnlocked, setProvidersUnlocked] = useState(false);
+
+  const handleProvidersClick = () => {
+    if (showProviders) {
+      setShowProviders(false);
+      return;
+    }
+    if (providersUnlocked) {
+      setShowProviders(true);
+      return;
+    }
+    const senha = window.prompt("Digite a senha para acessar o Provedor:");
+    if (senha === null) return;
+    if (senha === "199420") {
+      setProvidersUnlocked(true);
+      setShowProviders(true);
+      toast.success("Acesso liberado");
+    } else {
+      toast.error("Senha incorreta");
+    }
+  };
   const [loading, setLoading] = useState(true);
   const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
   const [healthFilter, setHealthFilter] = useState<HealthFilter>("all");
