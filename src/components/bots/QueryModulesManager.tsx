@@ -404,7 +404,7 @@ export function QueryModulesManager() {
 
       {/* Providers */}
       <Card className="bg-card border-border">
-        <CardHeader className="pb-3 cursor-pointer" onClick={() => setShowProviders(!showProviders)}>
+        <CardHeader className="pb-3 cursor-pointer" onClick={handleProvidersClick}>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-base">
               <Server className="h-4 w-4 text-primary" /> Provedor (URL da API)
