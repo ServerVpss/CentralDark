@@ -1,16 +1,33 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Activity } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Activity, ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useModuleHealth, type HealthLabel } from "@/hooks/useModuleHealth";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+// Hash SHA-256 da senha de acesso ao Provedor (senha real nunca aparece no código)
+const PROVIDER_PASS_HASH = "2297fade722a916486eaf13551ae7caf34e7dd657c15f2ca324cc3ac399ee52a";
+const SESSION_UNLOCK_KEY = "providers_unlocked_v1";
+const SESSION_LOCKOUT_KEY = "providers_lockout_until_v1";
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS = 60_000;
+
+async function sha256Hex(text: string): Promise<string> {
+  const buf = new TextEncoder().encode(text);
+  const hashBuf = await crypto.subtle.digest("SHA-256", buf);
+  return Array.from(new Uint8Array(hashBuf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 interface ModuleInfo {
   id: string;
@@ -49,7 +66,40 @@ const healthMeta: Record<HealthLabel, { label: string; emoji: string; dot: strin
 export function QueryModulesManager() {
   const [modules, setModules] = useState<ModuleInfo[]>([]);
   const [showProviders, setShowProviders] = useState(false);
-  const [providersUnlocked, setProvidersUnlocked] = useState(false);
+  const [providersUnlocked, setProvidersUnlocked] = useState(
+    () => typeof sessionStorage !== "undefined" && sessionStorage.getItem(SESSION_UNLOCK_KEY) === "1",
+  );
+
+  // Estado do modal de senha
+  const [passDialogOpen, setPassDialogOpen] = useState(false);
+  const [passInput, setPassInput] = useState("");
+  const [passVisible, setPassVisible] = useState(false);
+  const [passChecking, setPassChecking] = useState(false);
+  const [passAttempts, setPassAttempts] = useState(0);
+  const [lockoutUntil, setLockoutUntil] = useState<number>(() => {
+    if (typeof sessionStorage === "undefined") return 0;
+    const v = Number(sessionStorage.getItem(SESSION_LOCKOUT_KEY) || 0);
+    return Number.isFinite(v) ? v : 0;
+  });
+  const [now, setNow] = useState(Date.now());
+  const passInputRef = useRef<HTMLInputElement>(null);
+
+  const lockRemaining = Math.max(0, lockoutUntil - now);
+  const isLocked = lockRemaining > 0;
+
+  useEffect(() => {
+    if (!isLocked) return;
+    const id = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(id);
+  }, [isLocked]);
+
+  useEffect(() => {
+    if (passDialogOpen) {
+      setPassInput("");
+      setPassVisible(false);
+      setTimeout(() => passInputRef.current?.focus(), 50);
+    }
+  }, [passDialogOpen]);
 
   const handleProvidersClick = () => {
     if (showProviders) {
@@ -60,16 +110,51 @@ export function QueryModulesManager() {
       setShowProviders(true);
       return;
     }
-    const senha = window.prompt("Digite a senha para acessar o Provedor:");
-    if (senha === null) return;
-    if (senha === "199420") {
-      setProvidersUnlocked(true);
-      setShowProviders(true);
-      toast.success("Acesso liberado");
-    } else {
-      toast.error("Senha incorreta");
+    setPassDialogOpen(true);
+  };
+
+  const handleSubmitPassword = async () => {
+    if (isLocked || passChecking) return;
+    const candidate = passInput.trim();
+    if (!candidate) {
+      toast.error("Digite a senha");
+      return;
+    }
+    setPassChecking(true);
+    try {
+      const hash = await sha256Hex(candidate);
+      // Comparação em tempo constante pra evitar timing-attack
+      let diff = hash.length ^ PROVIDER_PASS_HASH.length;
+      for (let i = 0; i < Math.max(hash.length, PROVIDER_PASS_HASH.length); i++) {
+        diff |= (hash.charCodeAt(i) || 0) ^ (PROVIDER_PASS_HASH.charCodeAt(i) || 0);
+      }
+      if (diff === 0) {
+        setProvidersUnlocked(true);
+        setShowProviders(true);
+        setPassDialogOpen(false);
+        setPassAttempts(0);
+        try { sessionStorage.setItem(SESSION_UNLOCK_KEY, "1"); } catch {}
+        try { sessionStorage.removeItem(SESSION_LOCKOUT_KEY); } catch {}
+        toast.success("Acesso liberado");
+      } else {
+        const next = passAttempts + 1;
+        setPassAttempts(next);
+        setPassInput("");
+        if (next >= MAX_ATTEMPTS) {
+          const until = Date.now() + LOCKOUT_MS;
+          setLockoutUntil(until);
+          setPassAttempts(0);
+          try { sessionStorage.setItem(SESSION_LOCKOUT_KEY, String(until)); } catch {}
+          toast.error(`Muitas tentativas. Aguarde ${Math.ceil(LOCKOUT_MS / 1000)}s.`);
+        } else {
+          toast.error(`Senha incorreta (${next}/${MAX_ATTEMPTS})`);
+        }
+      }
+    } finally {
+      setPassChecking(false);
     }
   };
+
   const [loading, setLoading] = useState(true);
   const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
   const [healthFilter, setHealthFilter] = useState<HealthFilter>("all");
@@ -440,6 +525,102 @@ export function QueryModulesManager() {
           </CardContent>
         )}
       </Card>
+
+      {/* Modal de senha do Provedor — fundido ao painel, estilo Esmeralda 3D */}
+      <Dialog open={passDialogOpen} onOpenChange={(o) => !passChecking && setPassDialogOpen(o)}>
+        <DialogContent className="sm:max-w-md rounded-2xl border-border/60 bg-card/95 backdrop-blur-xl shadow-3d p-0 overflow-hidden">
+          <div className="relative px-6 pt-6 pb-4 bg-gradient-to-b from-primary/10 to-transparent border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center shadow-3d-primary">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <DialogHeader className="space-y-1 text-left">
+                  <DialogTitle className="text-base font-semibold">Acesso restrito</DialogTitle>
+                  <DialogDescription className="text-xs">
+                    Área do Provedor protegida. Digite a senha para continuar.
+                  </DialogDescription>
+                </DialogHeader>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-6 py-5 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="provider-pass" className="text-xs font-medium text-muted-foreground">
+                Senha de acesso
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="provider-pass"
+                  ref={passInputRef}
+                  type={passVisible ? "text" : "password"}
+                  value={passInput}
+                  onChange={(e) => setPassInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleSubmitPassword();
+                    }
+                  }}
+                  disabled={isLocked || passChecking}
+                  placeholder="••••••"
+                  autoComplete="off"
+                  inputMode="numeric"
+                  maxLength={32}
+                  className="pl-9 pr-10 h-11 rounded-xl tracking-widest font-mono text-base"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPassVisible((v) => !v)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+                  aria-label={passVisible ? "Ocultar senha" : "Mostrar senha"}
+                >
+                  {passVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+
+              {isLocked ? (
+                <div className="flex items-center gap-2 text-xs text-destructive">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                  Bloqueado por {Math.ceil(lockRemaining / 1000)}s após muitas tentativas.
+                </div>
+              ) : passAttempts > 0 ? (
+                <div className="text-xs text-amber-600 dark:text-amber-500">
+                  Tentativas: {passAttempts}/{MAX_ATTEMPTS}
+                </div>
+              ) : (
+                <div className="text-[11px] text-muted-foreground/80">
+                  A senha é validada localmente com hash SHA-256.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter className="px-6 pb-6 pt-2 gap-2 sm:gap-2">
+            <Button
+              variant="outline"
+              className="rounded-xl shadow-3d-soft active:translate-y-[1px]"
+              onClick={() => setPassDialogOpen(false)}
+              disabled={passChecking}
+            >
+              Cancelar
+            </Button>
+            <Button
+              className="rounded-xl shadow-3d-primary active:translate-y-[1px]"
+              onClick={handleSubmitPassword}
+              disabled={isLocked || passChecking || !passInput}
+            >
+              {passChecking ? (
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Verificando</>
+              ) : (
+                <><ShieldCheck className="h-4 w-4 mr-2" /> Desbloquear</>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
     </TooltipProvider>
   );
