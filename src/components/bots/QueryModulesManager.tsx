@@ -15,7 +15,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 // Hash SHA-256 da senha de acesso ao Provedor (senha real nunca aparece no código)
-const PROVIDER_PASS_HASH = "e21d83b51f49f9c389e16cdd9b7ab1e3b39da00429a4d57c0b6dc56b08400a05";
+const PROVIDER_PASS_HASH = "2297fade722a916486eaf13551ae7caf34e7dd657c15f2ca324cc3ac399ee52a";
 const SESSION_UNLOCK_KEY = "providers_unlocked_v1";
 const SESSION_LOCKOUT_KEY = "providers_lockout_until_v1";
 const MAX_ATTEMPTS = 5;
