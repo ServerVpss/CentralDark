@@ -131,6 +131,9 @@ const App = () => (
                     </>
                   )}
 
+                  {/* ===== Documentação do Design System (pública) ===== */}
+                  <Route path="/docs" element={<Docs />} />
+
                   {/* ===== Resultado de WebApp (compartilhado) ===== */}
                   <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
 
