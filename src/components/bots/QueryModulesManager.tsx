@@ -49,6 +49,27 @@ const healthMeta: Record<HealthLabel, { label: string; emoji: string; dot: strin
 export function QueryModulesManager() {
   const [modules, setModules] = useState<ModuleInfo[]>([]);
   const [showProviders, setShowProviders] = useState(false);
+  const [providersUnlocked, setProvidersUnlocked] = useState(false);
+
+  const handleProvidersClick = () => {
+    if (showProviders) {
+      setShowProviders(false);
+      return;
+    }
+    if (providersUnlocked) {
+      setShowProviders(true);
+      return;
+    }
+    const senha = window.prompt("Digite a senha para acessar o Provedor:");
+    if (senha === null) return;
+    if (senha === "199420") {
+      setProvidersUnlocked(true);
+      setShowProviders(true);
+      toast.success("Acesso liberado");
+    } else {
+      toast.error("Senha incorreta");
+    }
+  };
   const [loading, setLoading] = useState(true);
   const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
   const [healthFilter, setHealthFilter] = useState<HealthFilter>("all");
@@ -383,7 +404,7 @@ export function QueryModulesManager() {
 
       {/* Providers */}
       <Card className="bg-card border-border">
-        <CardHeader className="pb-3 cursor-pointer" onClick={() => setShowProviders(!showProviders)}>
+        <CardHeader className="pb-3 cursor-pointer" onClick={handleProvidersClick}>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-base">
               <Server className="h-4 w-4 text-primary" /> Provedor (URL da API)
