@@ -41,6 +41,7 @@ import UsuarioPerfil from "./pages/UsuarioPerfil";
 import { ViewAsBanner } from "@/components/auth/ViewAsBanner";
 import { PageSplash } from "@/components/transitions/PageSplash";
 import { SplashController } from "@/components/transitions/SplashController";
+import Docs from "./pages/Docs";
 
 const queryClient = new QueryClient();
 
@@ -129,6 +130,9 @@ const App = () => (
                       <Route path="/auth" element={<Auth />} />
                     </>
                   )}
+
+                  {/* ===== Documentação do Design System (pública) ===== */}
+                  <Route path="/docs" element={<Docs />} />
 
                   {/* ===== Resultado de WebApp (compartilhado) ===== */}
                   <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
