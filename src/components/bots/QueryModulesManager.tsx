@@ -66,7 +66,40 @@ const healthMeta: Record<HealthLabel, { label: string; emoji: string; dot: strin
 export function QueryModulesManager() {
   const [modules, setModules] = useState<ModuleInfo[]>([]);
   const [showProviders, setShowProviders] = useState(false);
-  const [providersUnlocked, setProvidersUnlocked] = useState(false);
+  const [providersUnlocked, setProvidersUnlocked] = useState(
+    () => typeof sessionStorage !== "undefined" && sessionStorage.getItem(SESSION_UNLOCK_KEY) === "1",
+  );
+
+  // Estado do modal de senha
+  const [passDialogOpen, setPassDialogOpen] = useState(false);
+  const [passInput, setPassInput] = useState("");
+  const [passVisible, setPassVisible] = useState(false);
+  const [passChecking, setPassChecking] = useState(false);
+  const [passAttempts, setPassAttempts] = useState(0);
+  const [lockoutUntil, setLockoutUntil] = useState<number>(() => {
+    if (typeof sessionStorage === "undefined") return 0;
+    const v = Number(sessionStorage.getItem(SESSION_LOCKOUT_KEY) || 0);
+    return Number.isFinite(v) ? v : 0;
+  });
+  const [now, setNow] = useState(Date.now());
+  const passInputRef = useRef<HTMLInputElement>(null);
+
+  const lockRemaining = Math.max(0, lockoutUntil - now);
+  const isLocked = lockRemaining > 0;
+
+  useEffect(() => {
+    if (!isLocked) return;
+    const id = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(id);
+  }, [isLocked]);
+
+  useEffect(() => {
+    if (passDialogOpen) {
+      setPassInput("");
+      setPassVisible(false);
+      setTimeout(() => passInputRef.current?.focus(), 50);
+    }
+  }, [passDialogOpen]);
 
   const handleProvidersClick = () => {
     if (showProviders) {
@@ -77,16 +110,51 @@ export function QueryModulesManager() {
       setShowProviders(true);
       return;
     }
-    const senha = window.prompt("Digite a senha para acessar o Provedor:");
-    if (senha === null) return;
-    if (senha === "199420") {
-      setProvidersUnlocked(true);
-      setShowProviders(true);
-      toast.success("Acesso liberado");
-    } else {
-      toast.error("Senha incorreta");
+    setPassDialogOpen(true);
+  };
+
+  const handleSubmitPassword = async () => {
+    if (isLocked || passChecking) return;
+    const candidate = passInput.trim();
+    if (!candidate) {
+      toast.error("Digite a senha");
+      return;
+    }
+    setPassChecking(true);
+    try {
+      const hash = await sha256Hex(candidate);
+      // Comparação em tempo constante pra evitar timing-attack
+      let diff = hash.length ^ PROVIDER_PASS_HASH.length;
+      for (let i = 0; i < Math.max(hash.length, PROVIDER_PASS_HASH.length); i++) {
+        diff |= (hash.charCodeAt(i) || 0) ^ (PROVIDER_PASS_HASH.charCodeAt(i) || 0);
+      }
+      if (diff === 0) {
+        setProvidersUnlocked(true);
+        setShowProviders(true);
+        setPassDialogOpen(false);
+        setPassAttempts(0);
+        try { sessionStorage.setItem(SESSION_UNLOCK_KEY, "1"); } catch {}
+        try { sessionStorage.removeItem(SESSION_LOCKOUT_KEY); } catch {}
+        toast.success("Acesso liberado");
+      } else {
+        const next = passAttempts + 1;
+        setPassAttempts(next);
+        setPassInput("");
+        if (next >= MAX_ATTEMPTS) {
+          const until = Date.now() + LOCKOUT_MS;
+          setLockoutUntil(until);
+          setPassAttempts(0);
+          try { sessionStorage.setItem(SESSION_LOCKOUT_KEY, String(until)); } catch {}
+          toast.error(`Muitas tentativas. Aguarde ${Math.ceil(LOCKOUT_MS / 1000)}s.`);
+        } else {
+          toast.error(`Senha incorreta (${next}/${MAX_ATTEMPTS})`);
+        }
+      }
+    } finally {
+      setPassChecking(false);
     }
   };
+
   const [loading, setLoading] = useState(true);
   const [togglingKeys, setTogglingKeys] = useState<Set<string>>(new Set());
   const [healthFilter, setHealthFilter] = useState<HealthFilter>("all");
