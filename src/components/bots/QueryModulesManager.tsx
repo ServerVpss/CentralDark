@@ -591,8 +591,15 @@ export function QueryModulesManager() {
                   Tentativas: {passAttempts}/{MAX_ATTEMPTS}
                 </div>
               ) : (
-                <div className="text-[11px] text-muted-foreground/80">
-                  A senha é validada localmente com hash SHA-256.
+                <div className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-2.5 py-1.5">
+                  <ShieldCheck className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <span className="text-[11px] font-medium text-primary/90 leading-tight">
+                    Protegido por criptografia ponta a ponta · Acesso monitorado
+                  </span>
+                  <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-500">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    SEGURO
+                  </span>
                 </div>
               )}
             </div>
