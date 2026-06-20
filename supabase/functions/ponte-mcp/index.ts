@@ -1,7 +1,7 @@
 // Ponte MCP CentralDark — proxy autenticado para agentes externos.
 // Recebe JSON-RPC do agente externo, valida a chave x-ponte-chave,
 // e repassa pro servidor MCP real usando o token mestre guardado nos secrets.
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
