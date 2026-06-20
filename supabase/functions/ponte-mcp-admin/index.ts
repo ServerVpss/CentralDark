@@ -1,5 +1,5 @@
 // Admin da Ponte MCP — só admins logados podem listar, criar e revogar chaves.
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,30 +31,35 @@ function jsonResp(body: unknown, status = 200) {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
-  const auth = req.headers.get("Authorization");
-  if (!auth?.startsWith("Bearer ")) return jsonResp({ error: "Não autenticado." }, 401);
+  try {
+    const auth = req.headers.get("Authorization");
+    if (!auth?.startsWith("Bearer ")) return jsonResp({ error: "Não autenticado." }, 401);
 
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_ANON_KEY")!,
-    { global: { headers: { Authorization: auth } } },
-  );
+    const admin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
 
-  const { data: claimsData, error: errClaims } = await supabase.auth.getClaims(auth.replace("Bearer ", ""));
-  if (errClaims || !claimsData?.claims) return jsonResp({ error: "Sessão inválida." }, 401);
-  const userId = claimsData.claims.sub as string;
+    // Valida o usuário via getUser (mais resiliente que getClaims)
+    const { data: userData, error: errUser } = await admin.auth.getUser(auth.replace("Bearer ", ""));
+    if (errUser || !userData?.user) {
+      console.error("Auth falhou:", errUser?.message);
+      return jsonResp({ error: "Sessão inválida ou expirada." }, 401);
+    }
+    const userId = userData.user.id;
 
-  const admin = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  );
+    const { data: ehAdmin, error: errRole } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
+    if (errRole) {
+      console.error("Erro has_role:", errRole.message);
+      return jsonResp({ error: "Erro ao verificar permissão." }, 500);
+    }
+    if (!ehAdmin) return jsonResp({ error: "Apenas administradores." }, 403);
 
-  const { data: ehAdmin } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
-  if (!ehAdmin) return jsonResp({ error: "Apenas administradores." }, 403);
+    let payload: { acao?: string; nome_agente?: string; observacao?: string; id?: string } = {};
+    try { payload = await req.json(); } catch { /* listar default */ }
+    const acao = payload.acao ?? "listar";
+    console.log("ponte-mcp-admin acao:", acao, "user:", userId);
 
-  let payload: { acao?: string; nome_agente?: string; observacao?: string; id?: string } = {};
-  try { payload = await req.json(); } catch { /* GET-ish: acao=listar default */ }
-  const acao = payload.acao ?? "listar";
 
   if (acao === "listar") {
     const { data, error } = await admin
@@ -116,5 +121,9 @@ Deno.serve(async (req) => {
     return jsonResp({ ok: true });
   }
 
-  return jsonResp({ error: `Ação desconhecida: ${acao}` }, 400);
+    return jsonResp({ error: `Ação desconhecida: ${acao}` }, 400);
+  } catch (e) {
+    console.error("Erro inesperado ponte-mcp-admin:", e);
+    return jsonResp({ error: "Erro interno: " + (e as Error).message }, 500);
+  }
 });
