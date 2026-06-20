@@ -43,21 +43,40 @@ export default function PonteMCP() {
 
   async function chamar(payload: Record<string, unknown>, tentativasMax = 3): Promise<any> {
     let ultimoErro: Error | null = null;
+    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ponte-mcp-admin`;
+    const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+
     for (let tentativa = 1; tentativa <= tentativasMax; tentativa++) {
       try {
-        const { data, error } = await supabase.functions.invoke("ponte-mcp-admin", { body: payload });
-        if (error) throw new Error(error.message || "Falha de rede");
-        if (data?.error) throw new Error(data.error);
-        return data;
+        // 1ª tentativa: SDK invoke. Se falhar, próximas usam fetch direto (driblando adblocker).
+        if (tentativa === 1) {
+          const { data, error } = await supabase.functions.invoke("ponte-mcp-admin", { body: payload });
+          if (error) throw new Error(error.message || "Falha de rede");
+          if (data?.error) throw new Error(data.error);
+          return data;
+        } else {
+          const { data: { session } } = await supabase.auth.getSession();
+          const resp = await fetch(url, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "apikey": anonKey,
+              "authorization": `Bearer ${session?.access_token ?? anonKey}`,
+            },
+            body: JSON.stringify(payload),
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (!resp.ok) throw new Error(data?.error || `HTTP ${resp.status}`);
+          if (data?.error) throw new Error(data.error);
+          return data;
+        }
       } catch (e) {
         ultimoErro = e as Error;
         const msg = ultimoErro.message.toLowerCase();
-        // Só faz retry em falha de rede / "failed to send" / 5xx
-        const recuperavel = msg.includes("failed to send") || msg.includes("network") || msg.includes("fetch") || msg.includes("503") || msg.includes("502") || msg.includes("timeout");
+        const recuperavel = msg.includes("failed to send") || msg.includes("failed to fetch") || msg.includes("network") || msg.includes("503") || msg.includes("502") || msg.includes("timeout") || msg.includes("load failed");
         if (!recuperavel || tentativa === tentativasMax) throw ultimoErro;
-        if (tentativa === 1) toast.loading(`Tentando reconectar... (${tentativa}/${tentativasMax - 1})`, { id: "retry-ponte" });
-        else toast.loading(`Tentando reconectar... (${tentativa}/${tentativasMax - 1})`, { id: "retry-ponte" });
-        await new Promise(r => setTimeout(r, 800 * tentativa));
+        toast.loading(`Tentando reconectar... (${tentativa}/${tentativasMax - 1})`, { id: "retry-ponte" });
+        await new Promise(r => setTimeout(r, 600 * tentativa));
       }
     }
     throw ultimoErro ?? new Error("Erro desconhecido");
@@ -65,8 +84,8 @@ export default function PonteMCP() {
 
   function mensagemAmigavel(e: Error, acao: string): string {
     const msg = e.message.toLowerCase();
-    if (msg.includes("failed to send") || msg.includes("network") || msg.includes("fetch")) {
-      return `Não consegui ${acao}. Verifica sua conexão e tenta de novo em alguns segundos.`;
+    if (msg.includes("failed to fetch") || msg.includes("failed to send") || msg.includes("load failed") || msg.includes("networkerror")) {
+      return `Não consegui ${acao}. Provavelmente um adblocker ou extensão de privacidade (uBlock, Brave Shields, AdGuard, Privacy Badger) está bloqueando "supabase.co/functions". Desativa pra esse site e tenta de novo.`;
     }
     if (msg.includes("unauthor") || msg.includes("forbidden") || msg.includes("admin")) {
       return "Você precisa estar logado como admin pra usar essa página.";
@@ -87,7 +106,7 @@ export default function PonteMCP() {
       toast.dismiss("retry-ponte");
       toast.error(mensagemAmigavel(e as Error, "listar as chaves"), {
         action: { label: "Tentar de novo", onClick: () => carregar() },
-        duration: 8000,
+        duration: 12000,
       });
     } finally {
       setCarregando(false);
