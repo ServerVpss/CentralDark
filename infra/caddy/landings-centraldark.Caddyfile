@@ -1,0 +1,59 @@
+# ─────────────────────────────────────────────────────────────
+# Landings CentralDark — mesmo build do TelePainel, vários domínios
+# ─────────────────────────────────────────────────────────────
+# Estratégia: o build em /root/CentralDark/apps/modulos/telepainel/dist
+# já contém TODAS as rotas (/, /whatsapp, /crm, /financeiro).
+# Cada subdomínio faz "rewrite" pra rota interna correspondente,
+# preservando assets estáticos (js/css/imagens/etc).
+#
+# DNS necessário (A record pra IP da VPS, igual ao telepainel.centralldark.com):
+#   centralldark.com            → IP_DA_VPS
+#   www.centralldark.com        → IP_DA_VPS
+#   whatsapp.centralldark.com   → IP_DA_VPS
+#   crm.centralldark.com        → IP_DA_VPS
+#   financeiro.centralldark.com → IP_DA_VPS
+#
+# Caddy emite SSL automaticamente via Let's Encrypt.
+# ─────────────────────────────────────────────────────────────
+
+(landing_common) {
+	root * /root/CentralDark/apps/modulos/telepainel/dist
+	encode gzip zstd
+	@asset {
+		path /assets/* *.js *.css *.svg *.png *.jpg *.jpeg *.ico *.webp *.woff *.woff2 /manifest.json /robots.txt /favicon.ico
+	}
+	@notAsset {
+		not path /assets/* *.js *.css *.svg *.png *.jpg *.jpeg *.ico *.webp *.woff *.woff2 /manifest.json /robots.txt /favicon.ico
+	}
+}
+
+# Home pública CentralDark — rota "/"
+centralldark.com, www.centralldark.com {
+	import landing_common
+	try_files {path} /index.html
+	file_server
+}
+
+# Landing WhatsApp — rota interna "/whatsapp"
+whatsapp.centralldark.com {
+	import landing_common
+	rewrite @notAsset /whatsapp
+	try_files {path} /index.html
+	file_server
+}
+
+# Landing CRM — rota interna "/crm"
+crm.centralldark.com {
+	import landing_common
+	rewrite @notAsset /crm
+	try_files {path} /index.html
+	file_server
+}
+
+# Landing Financeiro — rota interna "/financeiro"
+financeiro.centralldark.com {
+	import landing_common
+	rewrite @notAsset /financeiro
+	try_files {path} /index.html
+	file_server
+}
