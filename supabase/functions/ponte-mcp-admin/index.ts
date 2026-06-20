@@ -60,9 +60,6 @@ Deno.serve(async (req) => {
     const acao = payload.acao ?? "listar";
     console.log("ponte-mcp-admin acao:", acao, "user:", userId);
 
-  let payload: { acao?: string; nome_agente?: string; observacao?: string; id?: string } = {};
-  try { payload = await req.json(); } catch { /* GET-ish: acao=listar default */ }
-  const acao = payload.acao ?? "listar";
 
   if (acao === "listar") {
     const { data, error } = await admin
