@@ -41,11 +41,40 @@ export default function PonteMCP() {
   const [confirmDeletar, setConfirmDeletar] = useState<ChaveMCP | null>(null);
   const [copiou, setCopiou] = useState<string | null>(null);
 
-  async function chamar(payload: Record<string, unknown>) {
-    const { data, error } = await supabase.functions.invoke("ponte-mcp-admin", { body: payload });
-    if (error) throw new Error(error.message);
-    if (data?.error) throw new Error(data.error);
-    return data;
+  async function chamar(payload: Record<string, unknown>, tentativasMax = 3): Promise<any> {
+    let ultimoErro: Error | null = null;
+    for (let tentativa = 1; tentativa <= tentativasMax; tentativa++) {
+      try {
+        const { data, error } = await supabase.functions.invoke("ponte-mcp-admin", { body: payload });
+        if (error) throw new Error(error.message || "Falha de rede");
+        if (data?.error) throw new Error(data.error);
+        return data;
+      } catch (e) {
+        ultimoErro = e as Error;
+        const msg = ultimoErro.message.toLowerCase();
+        // Só faz retry em falha de rede / "failed to send" / 5xx
+        const recuperavel = msg.includes("failed to send") || msg.includes("network") || msg.includes("fetch") || msg.includes("503") || msg.includes("502") || msg.includes("timeout");
+        if (!recuperavel || tentativa === tentativasMax) throw ultimoErro;
+        if (tentativa === 1) toast.loading(`Tentando reconectar... (${tentativa}/${tentativasMax - 1})`, { id: "retry-ponte" });
+        else toast.loading(`Tentando reconectar... (${tentativa}/${tentativasMax - 1})`, { id: "retry-ponte" });
+        await new Promise(r => setTimeout(r, 800 * tentativa));
+      }
+    }
+    throw ultimoErro ?? new Error("Erro desconhecido");
+  }
+
+  function mensagemAmigavel(e: Error, acao: string): string {
+    const msg = e.message.toLowerCase();
+    if (msg.includes("failed to send") || msg.includes("network") || msg.includes("fetch")) {
+      return `Não consegui ${acao}. Verifica sua conexão e tenta de novo em alguns segundos.`;
+    }
+    if (msg.includes("unauthor") || msg.includes("forbidden") || msg.includes("admin")) {
+      return "Você precisa estar logado como admin pra usar essa página.";
+    }
+    if (msg.includes("timeout")) {
+      return `O servidor demorou demais pra ${acao}. Tenta de novo.`;
+    }
+    return `Erro ao ${acao}: ${e.message}`;
   }
 
   async function carregar() {
@@ -53,8 +82,13 @@ export default function PonteMCP() {
     try {
       const r = await chamar({ acao: "listar" });
       setChaves(r.chaves ?? []);
+      toast.dismiss("retry-ponte");
     } catch (e) {
-      toast.error("Erro ao listar chaves: " + (e as Error).message);
+      toast.dismiss("retry-ponte");
+      toast.error(mensagemAmigavel(e as Error, "listar as chaves"), {
+        action: { label: "Tentar de novo", onClick: () => carregar() },
+        duration: 8000,
+      });
     } finally {
       setCarregando(false);
     }
