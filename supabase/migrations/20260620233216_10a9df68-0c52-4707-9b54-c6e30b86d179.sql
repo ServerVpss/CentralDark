@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS public.ponte_mcp_chaves CASCADE;

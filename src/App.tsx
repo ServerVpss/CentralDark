@@ -44,7 +44,7 @@ import TesteModulos from "@/apps/modulos/telepainel/pages/TesteModulos";
 import UsuariosPainel from "@/apps/modulos/telepainel/pages/UsuariosPainel";
 import UsuarioPerfil from "@/apps/modulos/telepainel/pages/UsuarioPerfil";
 import Docs from "@/apps/modulos/telepainel/pages/Docs";
-import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
+
 
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
 import { PageSplash } from "@/shared/transitions/PageSplash";
@@ -83,7 +83,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "teste-modulos", element: <TesteModulos />, adminOnly: true },
   { path: "usuarios-painel", element: <UsuariosPainel />, adminOnly: true },
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
-  { path: "ponte-mcp", element: <PonteMCP />, adminOnly: true },
+  
 ];
 
 // Aplica o guard correto: AdminRoute (envolve ProtectedRoute) ou só ProtectedRoute.
