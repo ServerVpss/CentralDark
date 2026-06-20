@@ -117,10 +117,17 @@ const App = () => (
                       <Route
                         path="/"
                         element={(() => {
-                          const redirect = getRootRedirectFor(detectHostKind());
-                          return redirect ? <Navigate to={redirect} replace /> : <LandingCentralDark />;
+                          const kind = detectHostKind();
+                          const redirect = getRootRedirectFor(kind);
+                          if (redirect) return <Navigate to={redirect} replace />;
+                          // Cada subdomínio mostra a landing correspondente direto na raiz
+                          if (kind === "whatsapp") return <LandingWhatsapp />;
+                          if (kind === "crm") return <LandingCRM />;
+                          if (kind === "financeiro") return <LandingFinanceiro />;
+                          return <LandingCentralDark />;
                         })()}
                       />
+
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/telepainel" element={<TelepainelEntry />} />
                       <Route path="/whatsapp" element={<LandingWhatsapp />} />
