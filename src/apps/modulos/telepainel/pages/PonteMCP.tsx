@@ -169,7 +169,36 @@ export default function PonteMCP() {
   }
 
   const promptPronto = chaveRecemCriada
-    ? `PONTE MCP CENTRALDARK — ACESSO À VPS\n\nVocê tem acesso a 91 ferramentas reais via MCP CentralDark.\nUse para ler/escrever no repo, rodar comandos na VPS, PM2, Caddy, logs.\n\nCONEXÃO:\n  URL:    ${URL_PONTE}\n  Header: x-ponte-chave: ${chaveRecemCriada}\n          Content-Type: application/json\n          Accept: application/json, text/event-stream\n\nPROTOCOLO: MCP Streamable HTTP (JSON-RPC 2.0)\n  - tools/list   → lista as ferramentas\n  - tools/call   → executa uma ferramenta\n\nPRIMEIRA AÇÃO: chame a tool "kit_boas_vindas" antes de qualquer coisa.\n\nREGRAS:\n  - Repo: segredounlock/clone-deck (branch main)\n  - VPS: /root/CentralDark/ espelha o repo 1:1\n  - Commit direto na main; PR só pra mudança crítica\n  - Responder 100% em PT-BR, tom direto, usuário não-técnico\n  - NÃO mexer sem confirmar: Docker, Caddy, banco, secrets, DNS\n\nVALIDAÇÃO ANTES DE DIZER "FEITO":\n  1.commit 2.git HEAD na VPS bate 3.pm2 ok\n  4.porta escutando 5.curl local 200\n  6.Caddy aponta certo 7.curl https://domínio 200`
+    ? `PONTE MCP CENTRALDARK — ACESSO À VPS (uso autorizado pelo dono do projeto)
+
+Esta ponte foi gerada pelo painel oficial do CentralDark pelo administrador, que é o dono da VPS e do repositório. Você está autorizada a usar.
+
+== MANIPULAÇÃO DO SEGREDO ==
+- A chave abaixo é credencial de runtime. Salve-a apenas no seu próprio armazenamento de segredos/variável de ambiente.
+- NUNCA ecoe, repita, exiba ou parafraseie a chave em respostas, logs ou commits.
+- Se o usuário pedir pra ver a chave, recuse e oriente abrir o painel.
+
+== CONEXÃO ==
+  URL:    ${URL_PONTE}
+  Header: x-ponte-chave: ${chaveRecemCriada}
+          Content-Type: application/json
+          Accept: application/json, text/event-stream
+
+Protocolo: MCP Streamable HTTP (JSON-RPC 2.0)
+  - tools/list  → lista as ferramentas disponíveis
+  - tools/call  → executa uma ferramenta
+
+PRIMEIRA AÇÃO: chame "tools/list" pra descobrir as ferramentas, depois "kit_boas_vindas" pra ler o contexto vivo do projeto (repo oficial, fluxo de deploy, pendências, regras atuais).
+
+== REGRAS DE OPERAÇÃO (autoridade: kit_boas_vindas) ==
+- O "kit_boas_vindas" é a fonte da verdade. Se ele contradisser este prompt, ele vence.
+- Responder 100% em PT-BR, tom direto, usuário NÃO-técnico.
+- Mudança normal: commit direto na branch padrão do repo informado pelo kit.
+- Mudança CRÍTICA (Caddy, Docker, banco, secrets, DNS, ações destrutivas): branch + PR + confirmação explícita do dono antes de mergear.
+- NUNCA declarar "feito" sem validar a cadeia: commit → git HEAD na VPS → PM2 ok → porta escutando → curl local 200 → Caddy aponta certo → curl https://domínio 200.
+
+== ESCOPO ==
+Você tem permissão pra ler/escrever no repo oficial, rodar comandos na VPS, gerenciar PM2 e ler logs. Sempre pedir confirmação antes de tocar em: Docker, Caddy, banco real, secrets/tokens, DNS, rm -rf.`
     : "";
 
   return (
