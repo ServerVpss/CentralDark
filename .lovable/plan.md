@@ -1,80 +1,70 @@
-# Plano: Consolidação Vigia Self-Hosted + PR #82
+# Plano: Finalizar PR #84 e preparar handoff
 
 ## Objetivo
-Fechar o PR #82 (`fix/vigia-self-hosted-minimal`) e deixar os robôs do GitHub (Vigia, Codex, Dependabot, dispatcher, farm, linear-sync) rodando no runner self-hosted da VPS, sem bater no billing dos GitHub-hosted runners. Atualizar pendência #132 só com evidência real.
+Mergear o PR #84 (`ServerVpss/CentralDark`) com segurança — apenas docs + workflows seguros — confirmar commit final na main, e deixar handoff registrado para próximas IAs. Sem mexer em SQL/policies, sem fechar issues vermelhas, sem `--admin`.
 
-## Fases
+## Etapas
 
-### 1. Confirmar PR #82
-- `gh pr view 82 --repo ServerVpss/CentralDark --json number,state,mergeable,baseRefName,headRefName,changedFiles,url`
-- `gh pr diff 82 --repo ServerVpss/CentralDark --name-only`
-- Validar: base `main`, estado `OPEN`, `MERGEABLE`, sem CRM/secrets/Docker/Caddy/PM2/WuzAPI/banco.
+### 1. Acompanhar checks do PR #84
+- `gh pr view 84 --repo ServerVpss/CentralDark --json number,state,mergeable,mergeStateStatus,baseRefName,headRefName,url`
+- `gh pr diff 84 --repo ServerVpss/CentralDark --name-only`
+- `gh pr checks 84 --repo ServerVpss/CentralDark`
+- Se algum check ficar pending/failing > razoável: `gh run list --branch <head> --repo ServerVpss/CentralDark` + `gh run view <id> --log-failed` para diagnosticar.
 
-### 2. Identificar workflows que ainda batem em billing
-Buscar em `.github/workflows/` os arquivos correspondentes a:
-- "PR auto-review (Codex + checklist)"
-- "codex-validate / Validate Codex operational kit"
+### 2. Validar escopo do PR (gate de segurança)
+Antes do merge, confirmar que `gh pr diff 84 --name-only` retorna SOMENTE arquivos dentro de:
+- `docs/RELATORIOS/...`
+- `docs/CHECKLIST-SEGURANCA-BOTS.md`
+- `docs/PENDENCIAS.md`
+- `.github/workflows/*` (apenas blocos `concurrency:` adicionados, sem mexer em secrets/runner sensível)
 
-Listar todos `runs-on: ubuntu-latest` restantes e classificar como **seguro** (apenas check/lint/review/automação de PR) ou **sensível** (deploy/Docker/Caddy/PM2/secrets — NÃO migrar).
+Bloquear merge se aparecer qualquer um destes padrões: `apps/crm/`, `.env`, `secrets`, `tokens`, `sessions`, `.ssh`, `*.pem`, `*.key`, `docker`, `caddy`, `pm2`, `wuzapi`, `whatsapp`, `database`, `banco`, `supabase`, migrations SQL.
 
-### 3. Migrar apenas workflows seguros para `self-hosted`
-Na branch `fix/vigia-self-hosted-minimal`:
-- `git checkout fix/vigia-self-hosted-minimal && git pull --ff-only`
-- Trocar `runs-on: ubuntu-latest` → `runs-on: self-hosted` apenas nos workflows seguros identificados.
-
-### 4. Validar antes do commit
-- `git diff --name-only` — bloquear se aparecer: `apps/crm/`, `.env`, `secrets`, `tokens`, `sessions`, `.ssh`, `*.pem`, `*.key`, `docker`, `caddy`, `pm2`, `wuzapi`, `whatsapp`, `database`, `banco`, `supabase`.
-- Validar YAML: `ruby -e 'require "yaml"; ARGV.each{|f| YAML.load_file(f); puts "ok #{f}"}' <arquivos>`
-- `git diff --check`
-
-### 5. Commit seletivo (sem `git add .`)
+### 3. Merge normal do PR #84
+Apenas se: escopo limpo + base `main` + `MERGEABLE` + checks verdes (ou skips comprovadamente não-obrigatórios):
 ```
-git add .github/workflows/<arquivos-alterados>
-git commit -m "fix(ci): run PR automation checks on self-hosted" -m "Migra workflows seguros de PR/Codex/checklist para self-hosted para evitar bloqueio por billing."
-git push origin fix/vigia-self-hosted-minimal
-```
-
-### 6. Validar checks do PR #82
-- `gh pr checks 82 --repo ServerVpss/CentralDark`
-- Se falhar: `gh run list ... --branch fix/vigia-self-hosted-minimal` + `gh run view <id> --log-failed`
-- Billing residual → identificar workflow e migrar se seguro.
-- Erro de código → commit pequeno na mesma branch.
-- Codex/OpenAI deslogado em workflow já self-hosted → registrar como bloqueio externo, sem declarar verde.
-
-### 7. Merge normal do PR #82
-Somente com base main, mergeable, escopo seguro, checks obrigatórios verdes (ou comprovadamente skipped/não obrigatórios), e sem billing em workflow seguro restante:
-```
-gh pr merge 82 --repo ServerVpss/CentralDark --squash --delete-branch
+gh pr merge 84 --repo ServerVpss/CentralDark --squash --delete-branch
 ```
 Sem `--admin`, sem `--force`, sem push direto na main.
 
-### 8. Testar Vigia na main
+Se algum check obrigatório travar por bloqueio externo (ex.: OpenAI/Codex deslogado): NÃO mergear — registrar bloqueio no relatório e devolver controle.
+
+### 4. Confirmar commit final na main
+- `gh api repos/ServerVpss/CentralDark/commits/main --jq '{sha, message: .commit.message, date: .commit.author.date}'`
+- Guardar SHA curto + completo para o relatório.
+
+### 5. Atualizar handoff/continuidade
+Confirmar que `docs/PENDENCIAS.md` na main reflete:
+- Item #57 (= "Pendência #132") marcado ✅ CONCLUÍDO com SHA do PR #84.
+- Auditoria de policies públicas (3 tabelas) registrada como item NOVO 🔴, **sem patch aplicado**, sintoma + como fechar.
+- Issues #77/#78/#74 listadas como pendências abertas, NÃO fechadas.
+
+Se algum desses itens não estiver na main após merge, abrir PR pequeno separado depois (fora deste plano).
+
+### 6. Relatório final no chat
+Formato exato pedido:
 ```
-gh workflow run vigia-actions-vermelhos.yml --repo ServerVpss/CentralDark --ref main
-sleep 8
-gh run list --workflow vigia-actions-vermelhos.yml --limit 1 --repo ServerVpss/CentralDark
-gh run watch <RUN_ID> --repo ServerVpss/CentralDark --exit-status
-gh run view <RUN_ID> --repo ServerVpss/CentralDark --log
+STATUS:
+PR #84:
+MERGE:
+COMMIT FINAL NA MAIN:
+ARQUIVOS ALTERADOS:
+CHECKS:
+HANDOFF/RELOAD:
+PENDÊNCIA #57:
+ISSUE #132:
+POLICIES PÚBLICAS:
+ISSUES NÃO FECHADAS:
+PRÓXIMO PASSO:
 ```
-Confirmar nos logs: runner self-hosted `vmi3256920`, `GITHUB_REPOSITORY=ServerVpss/CentralDark`, Octokit OK, sem erro de label `red-action`, sem billing, conclusão `success`.
-
-### 9. Validar os demais robôs
-Para cada um — `vigia-actions-vermelhos`, `linear-pendencias-sync`, `dependabot-auto-merge`, `dispatcher-bots`, `farm-co-author`, `PR auto-review/Codex checklist`, `codex-validate` — confirmar: self-hosted quando seguro, sem billing, sem dependência obrigatória de `gh` CLI, Octokit/API quando aplicável.
-
-### 10. Atualizar pendência #132
-Editar `docs/PENDENCIAS.md` (e/ou a issue #132) com evidência real (links de run, PR, commit). Marcar concluído **apenas** se todos os critérios baterem. Caso contrário, registrar exatamente o que ficou, por quê, qual run/PR comprova, e próximo passo.
-
-### 11. Relatório final
-Entregar no formato pedido (STATUS, REPOSITÓRIO, PR #82, MERGE, COMMIT FINAL, CHECKS, WORKFLOWS MIGRADOS, RUNNER, cada robô, GH CLI, OCTOKIT, BILLING, LABEL, PENDÊNCIA #132, SERVIÇOS REINICIADOS, RISCOS, BLOQUEIOS, PRÓXIMO PASSO).
 
 ## Restrições (invioláveis)
-- Sem `git add .`, `--force`, `--admin`, push direto na main.
-- Sem tocar em CRM, `.env`, secrets, tokens, sessions, Docker, Caddy, PM2, WuzAPI, WhatsApp, banco, Supabase real.
-- Sem apagar arquivo/pasta nem reiniciar serviço da VPS sem necessidade comprovada.
-- Sem usar a branch contaminada `fix/vigia-self-hosted-final`.
-- Sem declarar verde sem run real.
+- Sem `--admin`, sem `--force`, sem push direto na main.
+- Sem aplicar patch SQL / mexer em policies públicas — apenas deixar auditoria registrada.
+- Sem fechar issues #77, #78, #74 nem outras issues vermelhas.
+- Sem mexer em CRM, secrets, Docker, Caddy, PM2, WuzAPI, WhatsApp, banco real.
+- Sem reiniciar serviço da VPS.
+- Sem declarar verde sem run real comprovando.
 
-## Detalhes técnicos
-- Acesso à VPS (se necessário p/ runner): `source scripts/lovable-agent/setup-vps-ssh.sh && ssh-vps "..."`. Não vou reiniciar o runner sem motivo.
-- Toda alteração de workflow vai na branch `fix/vigia-self-hosted-minimal`, em commits pequenos e seletivos.
-- Se algum check obrigatório não puder virar verde por bloqueio externo (ex.: OpenAI/Codex), NÃO faço merge — registro na #132 e devolvo o relatório.
+## Critério de sucesso
+PR #84 mergeado por squash, branch deletada, SHA final da main capturado, `docs/PENDENCIAS.md` atualizado com #57 ✅ e auditoria de policies como item novo aberto, issues vermelhas intactas, relatório entregue.
