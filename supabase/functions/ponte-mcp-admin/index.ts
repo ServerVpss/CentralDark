@@ -124,5 +124,9 @@ Deno.serve(async (req) => {
     return jsonResp({ ok: true });
   }
 
-  return jsonResp({ error: `Ação desconhecida: ${acao}` }, 400);
+    return jsonResp({ error: `Ação desconhecida: ${acao}` }, 400);
+  } catch (e) {
+    console.error("Erro inesperado ponte-mcp-admin:", e);
+    return jsonResp({ error: "Erro interno: " + (e as Error).message }, 500);
+  }
 });
