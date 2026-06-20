@@ -101,12 +101,17 @@ export default function PonteMCP() {
     setCriando(true);
     try {
       const r = await chamar({ acao: "criar", nome_agente: novoNome.trim(), observacao: novaObs.trim() || undefined });
+      toast.dismiss("retry-ponte");
       setChaveRecemCriada(r.chave_plana);
       setNovoNome(""); setNovaObs("");
       setDialogCriarAberto(false);
       await carregar();
     } catch (e) {
-      toast.error("Erro ao criar: " + (e as Error).message);
+      toast.dismiss("retry-ponte");
+      toast.error(mensagemAmigavel(e as Error, "criar a chave"), {
+        action: { label: "Tentar de novo", onClick: () => criar() },
+        duration: 8000,
+      });
     } finally {
       setCriando(false);
     }
@@ -115,21 +120,25 @@ export default function PonteMCP() {
   async function alternar(c: ChaveMCP) {
     try {
       await chamar({ acao: c.ativa ? "revogar" : "reativar", id: c.id });
+      toast.dismiss("retry-ponte");
       toast.success(c.ativa ? "Chave revogada" : "Chave reativada");
       await carregar();
     } catch (e) {
-      toast.error((e as Error).message);
+      toast.dismiss("retry-ponte");
+      toast.error(mensagemAmigavel(e as Error, c.ativa ? "revogar a chave" : "reativar a chave"));
     }
   }
 
   async function deletar(c: ChaveMCP) {
     try {
       await chamar({ acao: "deletar", id: c.id });
+      toast.dismiss("retry-ponte");
       toast.success("Chave deletada");
       setConfirmDeletar(null);
       await carregar();
     } catch (e) {
-      toast.error((e as Error).message);
+      toast.dismiss("retry-ponte");
+      toast.error(mensagemAmigavel(e as Error, "deletar a chave"));
     }
   }
 
