@@ -1,5 +1,5 @@
 // Admin da Ponte MCP — só admins logados podem listar, criar e revogar chaves.
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
