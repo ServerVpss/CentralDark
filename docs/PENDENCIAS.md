@@ -19,3 +19,20 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 5. Atualizar este item pra ✅ com a data.
 
 Detalhes técnicos: `docs/INSTALADOR/13-centraldark-portal.md`.
+
+---
+
+## ✅ #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20)
+**O que foi feito:** `src/` reorganizado pra espelhar `/root/CentralDark/apps/`.
+Páginas e componentes do TelePainel movidos pra `src/apps/modulos/telepainel/`,
+landings dos outros módulos pra `src/apps/modulos/{bot-whatsapp,crm,financeiro}/`,
+portal público pra `src/apps/web/`, código compartilhado pra `src/shared/`.
+READMEs criados em cada módulo + `INSTALACAO.md` na raiz com mapa de migração.
+**Exceção mantida:** `src/integrations/` ficou no lugar (regra Lovable: auto-gerado).
+
+---
+
+## 🟡 #3 — bot-whatsapp, crm, financeiro são só landing
+**Sintoma:** os três módulos têm página pública bonita, mas zero produto por trás.
+**Como fechar:** definir escopo de cada um, modelar tabelas, implementar.
+Cada módulo tem seu README com a lista do que falta.
