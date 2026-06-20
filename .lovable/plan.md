@@ -1,30 +1,51 @@
-# Plano — Zerar gatilho automático nos 4 workflows sensíveis (PR #86)
+## O que vai acontecer
 
-Trabalho 100% no repo externo `ServerVpss/CentralDark`, branch `chore/bots-guard-billing-antipublic-reload` (PR #86), via GitHub API. Sem merge, sem mexer em código sensível além do bloco `on:`.
+Esse repo Lovable hoje é "tudo num lugar só": tem as 5 landings (CentralDark, TelePainel, WhatsApp, CRM, Financeiro), o portal de login, a home e o app real do TelePainel. Eu vou desembolar isso na VPS, na estrutura que você pediu, sem quebrar nada que já tá no ar.
 
-## Objetivo
-Manter os 4 em `ubuntu-latest` (motivos técnicos já discutidos), mas remover qualquer gatilho automático — só rodam quando humano clicar "Run workflow". Resultado: zero billing automático + zero risco de execução silenciosa.
+## Estrutura final na VPS
 
-## Arquivos afetados (só o bloco `on:`)
-1. **`.github/workflows/deploy.yml`** — remover `push`/`pull_request` automáticos, deixar só `workflow_dispatch:`.
-2. **`.github/workflows/supabase-bot.yml`** — remover `push`/`schedule`, deixar só `workflow_dispatch:`.
-3. **`.github/workflows/vps-healthcheck.yml`** — remover `schedule` (cron). Deixar só `workflow_dispatch:`. ⚠️ Perde healthcheck contínuo — registrar pendência alta pra mover monitoramento pro MCP/Vigia interno depois.
-4. **`.github/workflows/wuzapi-sessions-monitor.yml`** — remover `schedule`, deixar só `workflow_dispatch:`. Mesma observação: monitoramento contínuo some, vira manual.
+```text
+/root/CentralDark/apps/
+├── web/                        ← portal + homepage pública (CentralDark)
+│   ├── (Portal.tsx, LandingCentralDark, Auth, Status público)
+│   └── README.md
+└── modulos/
+    ├── README.md               ← índice geral: o que é cada módulo, como instalar, status
+    ├── telepainel/             ← landing + app admin completo (o que já existe hoje)
+    │   └── README.md           ← tutorial de instalação e o que foi feito
+    ├── bot-whatsapp/           ← só landing por enquanto (sem produto)
+    │   └── README.md           ← marca como "landing-only, instalação pendente"
+    ├── crm/                    ← só landing
+    │   └── README.md
+    └── financeiro/             ← só landing
+        └── README.md
+```
 
-## Execução
-1. Ler os 4 arquivos atuais via GitHub API.
-2. Editar SÓ o bloco `on:` de cada um (jobs, steps, secrets, runs-on — intocados).
-3. Commit único na branch do PR #86, mensagem: `chore(ci): remove automatic triggers from 4 sensitive workflows (zero billing)`.
+## Passo a passo
 
-## Documentação no mesmo commit
-- **`docs/RELATORIOS/2026-06-20-zero-github-hosted-runners.md`** — atualizar a seção dos 4 sensíveis: "Mantidos hospedados por necessidade técnica, gatilhos automáticos REMOVIDOS, execução agora 100% manual."
-- **`docs/PENDENCIAS.md`** — adicionar 2 itens 🟡 médios:
-  - "Substituir healthcheck VPS por monitoramento interno (MCP/Vigia)" — porque cron do `vps-healthcheck` foi desativado.
-  - "Substituir cron do wuzapi-sessions-monitor por watcher local na VPS" — mesmo motivo.
-- **`docs/CHECKLIST-SEGURANCA-BOTS.md`** — registrar regra: workflow sensível em hospedado = obrigatoriamente `workflow_dispatch` only.
+1. **Auditar a pasta `apps/web` atual na VPS** — você falou que tá embolada, com coisa repetida. Eu entro via SSH, listo tudo, identifico o que é lixo / duplicado / desconhecido, e te mando um relatório curto **antes** de mover qualquer coisa. Nada é apagado sem você confirmar.
 
-## Restrições
-Sem mexer em jobs/steps/secrets/runs-on dos 4. Sem aplicar SQL. Sem tocar em produção, Caddy, Docker, WuzAPI, CRM. Sem merge — só push e aguarda OK humano.
+2. **Auditar os "planos" que já estão na pasta `modulos`** — abrir o que tem lá hoje, comparar com o que esse repo Lovable entrega, listar o que tá desatualizado e corrigir.
 
-## Entrega
-Relatório curto no chat com: arquivos alterados, commit hash, antes/depois dos blocos `on:`, pendências criadas, status do PR #86.
+3. **Migrar conteúdo pra estrutura nova:**
+   - `LandingCentralDark` + `Portal` + `Auth` + `Status` público → `apps/web/`
+   - `LandingTelePainel` + todo o app admin (dashboard, consultas, bots, plans, etc.) → `apps/modulos/telepainel/`
+   - `LandingWhatsapp` → `apps/modulos/bot-whatsapp/`
+   - `LandingCRM` → `apps/modulos/crm/`
+   - `LandingFinanceiro` → `apps/modulos/financeiro/`
+
+4. **Criar os READMEs** (1 índice em `modulos/` + 1 por módulo) com: o que é, status atual (produto real vs só landing), como instalar, portas, env, serviço PM2, rota Caddy. Mesmo padrão do `docs/INSTALADOR/`.
+
+5. **Atualizar `docs/PENDENCIAS.md`** marcando essa reorganização como fechada e abrindo as pendências novas que aparecerem (ex.: "bot-whatsapp ainda é só landing, falta produto real").
+
+6. **Validar:** confirmar que o que já tá em produção (TelePainel admin, portal de login) continua respondendo igual, e que Caddy / PM2 não precisaram ser mexidos (se precisarem, peço sua confirmação antes — regra da workspace).
+
+## O que NÃO vou fazer sem você liberar
+
+- Apagar arquivos da `apps/web` que parecerem "lixo" — primeiro te mostro a lista.
+- Mexer em Caddy, Docker, CRM antigo, WuzAPI, banco de produção.
+- Mover pastas antigas do `/root/Multizap/` (a regra é migração gradual, não derrubar).
+
+## Próximo passo depois que você aprovar
+
+Começo pelo item 1 (auditoria da `apps/web` + `modulos` na VPS) e te mando o relatório do que achei antes de mover qualquer coisa.
