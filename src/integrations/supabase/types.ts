@@ -990,6 +990,45 @@ export type Database = {
           },
         ]
       }
+      ponte_mcp_chaves: {
+        Row: {
+          ativa: boolean
+          chave_hash: string
+          criada_em: string
+          criada_por: string | null
+          id: string
+          nome_agente: string
+          observacao: string | null
+          prefixo: string
+          total_chamadas: number
+          ultimo_uso_em: string | null
+        }
+        Insert: {
+          ativa?: boolean
+          chave_hash: string
+          criada_em?: string
+          criada_por?: string | null
+          id?: string
+          nome_agente: string
+          observacao?: string | null
+          prefixo: string
+          total_chamadas?: number
+          ultimo_uso_em?: string | null
+        }
+        Update: {
+          ativa?: boolean
+          chave_hash?: string
+          criada_em?: string
+          criada_por?: string | null
+          id?: string
+          nome_agente?: string
+          observacao?: string | null
+          prefixo?: string
+          total_chamadas?: number
+          ultimo_uso_em?: string | null
+        }
+        Relationships: []
+      }
       processed_updates: {
         Row: {
           bot_id: string
