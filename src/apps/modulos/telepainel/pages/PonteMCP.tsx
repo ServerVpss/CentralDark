@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/shared/auth/useAuth";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
@@ -47,7 +47,7 @@ function mensagemAmigavel(erro: string): string {
 }
 
 export default function PonteMCP() {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const navigate = useNavigate();
   const [chaves, setChaves] = useState<Chave[]>([]);
   const [carregando, setCarregando] = useState(false);
@@ -59,17 +59,17 @@ export default function PonteMCP() {
   const chamar = useCallback(async (acao: string, payload: any = {}, tentativasMax = 3) => {
     const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ponte-mcp-admin`;
     const token = session?.access_token;
-    const tentativa = 1;
 
     for (let t = 1; t <= tentativasMax; t++) {
       try {
-        let res: Response;
         if (t === 1) {
-          res = await supabase.functions.invoke("ponte-mcp-admin", {
+          const { data, error } = await supabase.functions.invoke("ponte-mcp-admin", {
             body: { acao, ...payload },
           });
+          if (error) throw new Error(error.message || `Erro na função`);
+          return data;
         } else {
-          res = await fetch(url, {
+          const res = await fetch(url, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -78,11 +78,11 @@ export default function PonteMCP() {
             },
             body: JSON.stringify({ acao, ...payload }),
           });
-        }
 
-        const data = await res.json().catch(() => ({ erro: "Resposta inválida do servidor" }));
-        if (!res.ok) throw new Error(data.erro || data.error || `Erro ${res.status}`);
-        return data;
+          const data = await res.json().catch(() => ({ erro: "Resposta inválida do servidor" }));
+          if (!res.ok) throw new Error(data.erro || data.error || `Erro ${res.status}`);
+          return data;
+        }
       } catch (err: any) {
         const msg = err.message || String(err);
         if (t < tentativasMax && (
