@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, act } from "@testing-library/react";
 import React from "react";
-import { PageSplash, playSplash } from "@/components/transitions/PageSplash";
+import { PageSplash, playSplash } from "@/shared/transitions/PageSplash";
 
 describe("PageSplash — disparo via playSplash", () => {
   beforeEach(() => {

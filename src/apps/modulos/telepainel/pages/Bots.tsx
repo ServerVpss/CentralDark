@@ -19,13 +19,13 @@ import {
   X,
   Power,
 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
+import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Switch } from "@/shared/ui/switch";
+import { Badge } from "@/shared/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -34,23 +34,23 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/shared/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Textarea } from "@/shared/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/hooks/useTelegramBots";
-import { BotHealthMonitor } from "@/components/bots/BotHealthMonitor";
-import { BotConfigCard } from "@/components/bots/BotConfigCard";
-import { EdgeFunctionsStatus } from "@/components/bots/EdgeFunctionsStatus";
-import { AnalyticsChart } from "@/components/dashboard/AnalyticsChart";
+import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/shared/hooks/useTelegramBots";
+import { BotHealthMonitor } from "@/apps/modulos/telepainel/components/bots/BotHealthMonitor";
+import { BotConfigCard } from "@/apps/modulos/telepainel/components/bots/BotConfigCard";
+import { EdgeFunctionsStatus } from "@/apps/modulos/telepainel/components/bots/EdgeFunctionsStatus";
+import { AnalyticsChart } from "@/apps/modulos/telepainel/components/dashboard/AnalyticsChart";
 
 // Regex para validar formato do token do Telegram: ID:HASH
 const TELEGRAM_TOKEN_REGEX = /^\d{8,10}:[A-Za-z0-9_-]{35}$/;

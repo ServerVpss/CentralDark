@@ -1,6 +1,6 @@
 import { Bot, Plus } from "lucide-react";
 import { BotStatusCard } from "./BotStatusCard";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";

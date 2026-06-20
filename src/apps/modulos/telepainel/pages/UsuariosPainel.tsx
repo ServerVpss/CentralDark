@@ -1,38 +1,38 @@
 // Gestão completa de usuários do painel (admin only)
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { useAdminUsers, AdminUser } from "@/hooks/useAdminUsers";
-import { useAuthContext } from "@/components/auth/AuthProvider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { useAdminUsers, AdminUser } from "@/shared/hooks/useAdminUsers";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Badge } from "@/shared/ui/badge";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+} from "@/shared/ui/table";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
+} from "@/shared/ui/select";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter,
   DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/shared/ui/alert-dialog";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
+} from "@/shared/ui/dropdown-menu";
 import {
   Loader2, MoreVertical, UserCog, UserPlus, RefreshCw, Search, ShieldCheck,
   KeyRound, Mail, Ban, CheckCircle2, Trash2, ShieldOff, Lock, Eye, IdCard,
 } from "lucide-react";
-import { startViewAs } from "@/lib/viewAsMode";
-import { clearAdminCache } from "@/hooks/useIsAdmin";
+import { startViewAs } from "@/shared/lib/viewAsMode";
+import { clearAdminCache } from "@/shared/hooks/useIsAdmin";
 import { toast } from "sonner";
 
 function fmtDate(iso: string | null) {

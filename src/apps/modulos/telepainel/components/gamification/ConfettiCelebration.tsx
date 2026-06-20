@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CONFETTI_COLORS } from "@/lib/animations";
+import { CONFETTI_COLORS } from "@/shared/lib/animations";
 import { CheckCircle2, PartyPopper } from "lucide-react";
 
 interface ConfettiPiece {

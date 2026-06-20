@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { validateQueryInput, formatForDisplay, getPlaceholder } from "@/lib/queryValidation";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Badge } from "@/shared/ui/badge";
+import { validateQueryInput, formatForDisplay, getPlaceholder } from "@/shared/lib/queryValidation";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 interface QueryInputProps {

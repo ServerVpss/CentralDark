@@ -27,13 +27,13 @@ import {
   User,
   UserCog,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "@/shared/lib/utils";
+import { Button } from "@/shared/ui/button";
+import { Separator } from "@/shared/ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { Logo } from "./Logo";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { useAuthContext } from "@/components/auth/AuthProvider";
+import { ThemeToggle } from "@/shared/theme/ThemeToggle";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 
 interface SidebarProps {
   isOpen?: boolean;

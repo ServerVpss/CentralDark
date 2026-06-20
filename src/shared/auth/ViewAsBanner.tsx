@@ -1,8 +1,8 @@
 // Banner global que aparece no topo quando o admin está em modo espelho.
 import { useEffect, useState } from "react";
-import { getViewAs, stopViewAs, ViewAsState } from "@/lib/viewAsMode";
+import { getViewAs, stopViewAs, ViewAsState } from "@/shared/lib/viewAsMode";
 import { Eye, X } from "lucide-react";
-import { clearAdminCache } from "@/hooks/useIsAdmin";
+import { clearAdminCache } from "@/shared/hooks/useIsAdmin";
 
 export function ViewAsBanner() {
   const [state, setState] = useState<ViewAsState | null>(getViewAs());

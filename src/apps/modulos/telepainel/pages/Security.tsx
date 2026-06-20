@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSecurity } from "@/hooks/useSecurity";
+import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { useSecurity } from "@/shared/hooks/useSecurity";
 import {
   SecurityHeader,
   SecurityStats,
   SecurityToggles,
   SecurityAdvanced,
   SecurityHistory,
-} from "@/components/security";
-import type { BotSecuritySettings } from "@/hooks/telegram/types";
+} from "@/apps/modulos/telepainel/components/security";
+import type { BotSecuritySettings } from "@/shared/hooks/telegram/types";
 
 export default function Security() {
   const {

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Download, X, Smartphone } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { usePWA } from "@/hooks/usePWA";
-import { cn } from "@/lib/utils";
+import { Button } from "@/shared/ui/button";
+import { usePWA } from "@/shared/hooks/usePWA";
+import { cn } from "@/shared/lib/utils";
 
 export function InstallPrompt() {
   const { canInstall, isIOS, install, isInstalled } = usePWA();

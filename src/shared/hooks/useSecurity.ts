@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useTelegramBots } from "@/hooks/telegram";
-import { useBotSecuritySettings } from "@/hooks/telegram/useBotSecuritySettings";
+import { useTelegramBots } from "@/shared/hooks/telegram";
+import { useBotSecuritySettings } from "@/shared/hooks/telegram/useBotSecuritySettings";
 
 export interface SecurityStats {
   linksBlocked: number;

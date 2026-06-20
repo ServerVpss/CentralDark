@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card } from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
 import { Activity, TrendingUp, User, Bot as BotIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";

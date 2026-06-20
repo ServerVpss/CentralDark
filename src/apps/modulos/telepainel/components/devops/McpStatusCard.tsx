@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 import { CheckCircle2, AlertTriangle, XCircle, Server, Wrench } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { SyncStatusIcon, type SyncStatus } from "@/components/ui/sync-status-icon";
+import { SyncStatusIcon, type SyncStatus } from "@/shared/ui/sync-status-icon";
 
 
 interface Connector {

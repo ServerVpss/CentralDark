@@ -22,29 +22,29 @@ import {
   Wallet,
   Cog,
 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { Button } from "@/shared/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+} from "@/shared/ui/select";
+import { Label } from "@/shared/ui/label";
+import { Badge } from "@/shared/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
-import { QueryInput } from "@/components/consultation/QueryInput";
-import { QueryHistoryList } from "@/components/consultation/QueryHistoryList";
-import { ProviderStatusList } from "@/components/consultation/ProviderStatusList";
-import { UniversalResultModal } from "@/components/consultas/UniversalResultModal";
+import { QueryInput } from "@/apps/modulos/telepainel/components/consultation/QueryInput";
+import { QueryHistoryList } from "@/apps/modulos/telepainel/components/consultation/QueryHistoryList";
+import { ProviderStatusList } from "@/apps/modulos/telepainel/components/consultation/ProviderStatusList";
+import { UniversalResultModal } from "@/apps/modulos/telepainel/components/consultas/UniversalResultModal";
 
-import { ConfettiCelebration } from "@/components/gamification/ConfettiCelebration";
-import { MotionPage, MotionFadeIn } from "@/components/ui/motion";
+import { ConfettiCelebration } from "@/apps/modulos/telepainel/components/gamification/ConfettiCelebration";
+import { MotionPage, MotionFadeIn } from "@/shared/ui/motion";
 
 interface QueryResult {
   success: boolean;

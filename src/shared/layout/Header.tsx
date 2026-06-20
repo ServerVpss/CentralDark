@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Bell, User, LogOut, Settings, Crown, Search, Command, CreditCard, Shield, MessageSquare, CheckCircle, Clock, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,12 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
-import { useAuthContext } from "@/components/auth/AuthProvider";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { useNotifications } from "@/hooks/useNotifications";
+} from "@/shared/ui/dropdown-menu";
+import { ScrollArea } from "@/shared/ui/scroll-area";
+import { cn } from "@/shared/lib/utils";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { ThemeToggle } from "@/shared/theme/ThemeToggle";
+import { useNotifications } from "@/shared/hooks/useNotifications";
 
 const routeNames: Record<string, { title: string; section?: string }> = {
   "/": { title: "Dashboard" },

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { User, LogOut, Settings, Crown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +8,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAuthContext } from "@/components/auth/AuthProvider";
+} from "@/shared/ui/dropdown-menu";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 
 export function MobileAvatarMenu() {
   const { user, profile, signOut } = useAuthContext();

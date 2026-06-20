@@ -1,8 +1,8 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 import { History, RefreshCw, Clock, Loader2 } from "lucide-react";
-import { useQueryHistory, QueryHistoryItem } from "@/hooks/useQueryHistory";
+import { useQueryHistory, QueryHistoryItem } from "@/shared/hooks/useQueryHistory";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuthContext } from "@/components/auth/AuthProvider";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 
 export interface SubscriptionPlan {
   id: string;

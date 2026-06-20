@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuthContext } from "@/components/auth/AuthProvider";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { fromZonedTime, toZonedTime, formatInTimeZone } from "date-fns-tz";

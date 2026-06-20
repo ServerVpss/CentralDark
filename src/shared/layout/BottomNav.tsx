@@ -15,8 +15,8 @@ import {
   Activity,
   LogOut,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useAuthContext } from "@/components/auth/AuthProvider";
+import { cn } from "@/shared/lib/utils";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 
 /**
  * Barra inferior fixa estilo "notch + FAB central".

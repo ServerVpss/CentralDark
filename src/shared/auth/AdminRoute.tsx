@@ -2,8 +2,8 @@
 // "Validando permissão…" a cada navegação entre menus admin.
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuthContext } from "@/components/auth/AuthProvider";
-import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { useIsAdmin } from "@/shared/hooks/useIsAdmin";
 import { Loader2, ShieldAlert } from "lucide-react";
 
 interface AdminRouteProps {

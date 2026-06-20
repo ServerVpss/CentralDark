@@ -1,7 +1,7 @@
 import { Plus, Shield, FileText, DollarSign, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 const actions = [
   { icon: Plus, label: "Novo Bot", path: "/bots" },

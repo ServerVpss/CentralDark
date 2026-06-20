@@ -1,6 +1,6 @@
 import { CheckCircle2, XCircle, Loader2, GitCommit } from "lucide-react";
-import { DeployRow } from "@/hooks/useVpsDeploy";
-import { cn } from "@/lib/utils";
+import { DeployRow } from "@/shared/hooks/useVpsDeploy";
+import { cn } from "@/shared/lib/utils";
 
 interface Props {
   history: DeployRow[];

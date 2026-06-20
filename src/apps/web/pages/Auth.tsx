@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAuthContext } from "@/components/auth/AuthProvider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Zap, Mail, Lock, User, Loader2, Lock as LockIcon } from "lucide-react";
 import { z } from "zod";
-import { useSystemSetting } from "@/hooks/useSystemSetting";
+import { useSystemSetting } from "@/shared/hooks/useSystemSetting";
 import { toast } from "sonner";
 
 const emailSchema = z.string().email("Email inválido");

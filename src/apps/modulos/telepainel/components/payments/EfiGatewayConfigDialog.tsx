@@ -11,9 +11,9 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -21,8 +21,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { usePayments } from "@/hooks/usePayments";
+} from "@/shared/ui/dialog";
+import { usePayments } from "@/shared/hooks/usePayments";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 

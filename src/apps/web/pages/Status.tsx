@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 import { Activity, Smartphone, Rocket, ListChecks } from "lucide-react";
-import { VpsDeployPlugin } from "@/components/devops/VpsDeployPlugin";
-import { DeployHistoryList } from "@/components/devops/DeployHistoryList";
-import { RoadmapList } from "@/components/devops/RoadmapList";
-import { IPhonePreviewModal } from "@/components/devops/IPhonePreviewModal";
-import { McpStatusCard } from "@/components/devops/McpStatusCard";
-import { useVpsDeploy } from "@/hooks/useVpsDeploy";
+import { VpsDeployPlugin } from "@/apps/modulos/telepainel/components/devops/VpsDeployPlugin";
+import { DeployHistoryList } from "@/apps/modulos/telepainel/components/devops/DeployHistoryList";
+import { RoadmapList } from "@/apps/modulos/telepainel/components/devops/RoadmapList";
+import { IPhonePreviewModal } from "@/apps/modulos/telepainel/components/devops/IPhonePreviewModal";
+import { McpStatusCard } from "@/apps/modulos/telepainel/components/devops/McpStatusCard";
+import { useVpsDeploy } from "@/shared/hooks/useVpsDeploy";
 
 export default function Status() {
   const [previewOpen, setPreviewOpen] = useState(false);

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import { CheckCircle2, Circle, Loader2, Plus, Trash2, ListChecks } from "lucide-react";
-import { useRoadmap, RoadmapItem } from "@/hooks/useRoadmap";
-import { cn } from "@/lib/utils";
+import { useRoadmap, RoadmapItem } from "@/shared/hooks/useRoadmap";
+import { cn } from "@/shared/lib/utils";
 
 function priorityLabel(p: number) {
   if (p === 1) return { label: "Alta", cls: "text-rose-600 bg-rose-50 border-rose-200" };

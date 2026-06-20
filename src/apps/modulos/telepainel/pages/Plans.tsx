@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Check, Crown, Edit2, Plus, Sparkles, Star, Trash2, Zap, Loader2 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Switch } from "@/shared/ui/switch";
+import { Textarea } from "@/shared/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +14,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import { usePayments, SubscriptionPlan } from "@/hooks/usePayments";
-import { PixPaymentDialog } from "@/components/payments/PixPaymentDialog";
+} from "@/shared/ui/dialog";
+import { cn } from "@/shared/lib/utils";
+import { usePayments, SubscriptionPlan } from "@/shared/hooks/usePayments";
+import { PixPaymentDialog } from "@/apps/modulos/telepainel/components/payments/PixPaymentDialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const planIcons: Record<string, React.ElementType> = {

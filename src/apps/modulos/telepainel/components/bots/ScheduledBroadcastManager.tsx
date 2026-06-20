@@ -11,10 +11,10 @@ import {
   XCircle,
   Loader2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
+import { Label } from "@/shared/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -23,16 +23,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/shared/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { useScheduledBroadcasts, ScheduledBroadcast } from "@/hooks/useScheduledBroadcasts";
+} from "@/shared/ui/select";
+import { Badge } from "@/shared/ui/badge";
+import { useScheduledBroadcasts, ScheduledBroadcast } from "@/shared/hooks/useScheduledBroadcasts";
 
 interface ScheduledBroadcastManagerProps {
   botId: string;

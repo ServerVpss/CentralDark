@@ -1,17 +1,17 @@
 import { Loader2 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { HeroStatsCard } from "@/components/dashboard/HeroStatsCard";
-import { StatsCard } from "@/components/dashboard/StatsCard";
-import { BotsSection } from "@/components/dashboard/BotsSection";
-import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
-import { QuickActions } from "@/components/dashboard/QuickActions";
-import { MaintenanceToggle } from "@/components/dashboard/MaintenanceToggle";
-import { SystemStatus } from "@/components/dashboard/SystemStatus";
-import { ApiStatusCard } from "@/components/dashboard/ApiStatusCard";
-import { DashboardAnalyticsChart } from "@/components/dashboard/DashboardAnalyticsChart";
-import { QueryMonitor } from "@/components/dashboard/QueryMonitor";
-import { useAdminData } from "@/hooks/useAdminData";
-import { useAuthContext } from "@/components/auth/AuthProvider";
+import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { HeroStatsCard } from "@/apps/modulos/telepainel/components/dashboard/HeroStatsCard";
+import { StatsCard } from "@/apps/modulos/telepainel/components/dashboard/StatsCard";
+import { BotsSection } from "@/apps/modulos/telepainel/components/dashboard/BotsSection";
+import { ActivityFeed } from "@/apps/modulos/telepainel/components/dashboard/ActivityFeed";
+import { QuickActions } from "@/apps/modulos/telepainel/components/dashboard/QuickActions";
+import { MaintenanceToggle } from "@/apps/modulos/telepainel/components/dashboard/MaintenanceToggle";
+import { SystemStatus } from "@/apps/modulos/telepainel/components/dashboard/SystemStatus";
+import { ApiStatusCard } from "@/apps/modulos/telepainel/components/dashboard/ApiStatusCard";
+import { DashboardAnalyticsChart } from "@/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart";
+import { QueryMonitor } from "@/apps/modulos/telepainel/components/dashboard/QueryMonitor";
+import { useAdminData } from "@/shared/hooks/useAdminData";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
 
 function getGreeting() {

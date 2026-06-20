@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import ModuleLanding from "@/components/landing/ModuleLanding";
+import ModuleLanding from "@/apps/modulos/telepainel/components/landing/ModuleLanding";
 
 export default function LandingWhatsapp() {
   return (

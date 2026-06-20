@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/shared/hooks/useAuth";
 import type { User, Session } from "@supabase/supabase-js";
-import type { Profile } from "@/hooks/useAuth";
+import type { Profile } from "@/shared/hooks/useAuth";
 
 interface AuthContextType {
   user: User | null;

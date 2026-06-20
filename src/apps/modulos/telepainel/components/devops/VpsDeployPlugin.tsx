@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 import { Rocket, Terminal, ShieldAlert } from "lucide-react";
-import { useVpsDeploy } from "@/hooks/useVpsDeploy";
-import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { useVpsDeploy } from "@/shared/hooks/useVpsDeploy";
+import { useIsAdmin } from "@/shared/hooks/useIsAdmin";
 import { DeployHistoryList } from "./DeployHistoryList";
-import { cn } from "@/lib/utils";
-import { SyncStatusIcon } from "@/components/ui/sync-status-icon";
+import { cn } from "@/shared/lib/utils";
+import { SyncStatusIcon } from "@/shared/ui/sync-status-icon";
 
 interface Props {
   className?: string;

@@ -1,10 +1,10 @@
 import { motion, HTMLMotionProps, Variants } from "framer-motion";
 import { forwardRef, ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import {
   SPRING_SNAPPY,
   CONFETTI_COLORS,
-} from "@/lib/animations";
+} from "@/shared/lib/animations";
 
 // Page transition variants
 const pageVariants: Variants = {

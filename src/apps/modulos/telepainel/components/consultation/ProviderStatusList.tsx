@@ -1,8 +1,8 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
 import { RefreshCw, Loader2, Wifi, WifiOff } from "lucide-react";
-import { useProviderStatus, ProviderStatus } from "@/hooks/useProviderStatus";
+import { useProviderStatus, ProviderStatus } from "@/shared/hooks/useProviderStatus";
 
 function StatusBadge({ status, latency }: { status: ProviderStatus['status']; latency?: number }) {
   if (status === 'checking') {

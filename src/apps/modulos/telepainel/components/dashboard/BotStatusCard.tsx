@@ -1,8 +1,8 @@
 import { MessageSquare, Users, Settings, Bot as BotIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/shared/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 interface BotStatusCardProps {
   botId?: string;

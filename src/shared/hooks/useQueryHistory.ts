@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuthContext } from "@/components/auth/AuthProvider";
+import { useAuthContext } from "@/shared/auth/AuthProvider";
 import type { Json } from "@/integrations/supabase/types";
 
 export interface QueryHistoryItem {

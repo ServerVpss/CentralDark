@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { playSplash, SplashStyle } from "@/components/transitions/PageSplash";
+import { playSplash, SplashStyle } from "@/shared/transitions/PageSplash";
 
 /**
  * Configuração por rota/menu. Salva em system_settings.key = 'splash_config'.
