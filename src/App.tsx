@@ -43,6 +43,7 @@ import DevTransitions from "@/apps/modulos/telepainel/pages/DevTransitions";
 import TesteModulos from "@/apps/modulos/telepainel/pages/TesteModulos";
 import UsuariosPainel from "@/apps/modulos/telepainel/pages/UsuariosPainel";
 import UsuarioPerfil from "@/apps/modulos/telepainel/pages/UsuarioPerfil";
+import Docs from "@/apps/modulos/telepainel/pages/Docs";
 import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
 
 
