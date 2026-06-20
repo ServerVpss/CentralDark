@@ -10,38 +10,44 @@ import { AdminRoute } from "@/shared/auth/AdminRoute";
 import { GlobalSearch } from "@/apps/modulos/telepainel/components/search/GlobalSearch";
 import { InstallPrompt } from "@/shared/pwa/InstallPrompt";
 import { detectHostKind, getRootRedirectFor } from "@/shared/lib/hostRouting";
-import Index from "./pages/Index";
-import LandingCentralDark from "./pages/LandingCentralDark";
-import LandingTelePainel from "./pages/LandingTelePainel";
-import LandingWhatsapp from "./pages/LandingWhatsapp";
-import LandingCRM from "./pages/LandingCRM";
-import LandingFinanceiro from "./pages/LandingFinanceiro";
-import Portal from "./pages/Portal";
-import Auth from "./pages/Auth";
-import Bots from "./pages/Bots";
-import BotSettingsPage from "./pages/BotSettings";
-import MigrateSubscriptions from "./pages/MigrateSubscriptions";
-import Plans from "./pages/Plans";
-import Settings from "./pages/Settings";
-import Consultas from "./pages/Consultas";
-import TelegramUsers from "./pages/TelegramUsers";
-import QueryLogs from "./pages/QueryLogs";
-import PixTransactions from "./pages/PixTransactions";
-import NotFound from "./pages/NotFound";
-import Security from "./pages/Security";
-import SubscriptionAudit from "./pages/SubscriptionAudit";
-import WebAppResult from "./pages/WebAppResult";
-import MenuTips from "./pages/MenuTips";
-import DatabaseInfo from "./pages/DatabaseInfo";
-import Status from "./pages/Status";
-import DevTransitions from "./pages/DevTransitions";
-import TesteModulos from "./pages/TesteModulos";
-import UsuariosPainel from "./pages/UsuariosPainel";
-import UsuarioPerfil from "./pages/UsuarioPerfil";
+// === Páginas do app "web" (portal público) ===
+import LandingCentralDark from "@/apps/web/pages/LandingCentralDark";
+import Portal from "@/apps/web/pages/Portal";
+import Auth from "@/apps/web/pages/Auth";
+import Status from "@/apps/web/pages/Status";
+
+// === Páginas dos módulos só-landing ===
+import LandingWhatsapp from "@/apps/modulos/bot-whatsapp/pages/LandingWhatsapp";
+import LandingCRM from "@/apps/modulos/crm/pages/LandingCRM";
+import LandingFinanceiro from "@/apps/modulos/financeiro/pages/LandingFinanceiro";
+
+// === Páginas do módulo TelePainel (produto real) ===
+import LandingTelePainel from "@/apps/modulos/telepainel/pages/LandingTelePainel";
+import Index from "@/apps/modulos/telepainel/pages/Index";
+import Bots from "@/apps/modulos/telepainel/pages/Bots";
+import BotSettingsPage from "@/apps/modulos/telepainel/pages/BotSettings";
+import MigrateSubscriptions from "@/apps/modulos/telepainel/pages/MigrateSubscriptions";
+import Plans from "@/apps/modulos/telepainel/pages/Plans";
+import Settings from "@/apps/modulos/telepainel/pages/Settings";
+import Consultas from "@/apps/modulos/telepainel/pages/Consultas";
+import TelegramUsers from "@/apps/modulos/telepainel/pages/TelegramUsers";
+import QueryLogs from "@/apps/modulos/telepainel/pages/QueryLogs";
+import PixTransactions from "@/apps/modulos/telepainel/pages/PixTransactions";
+import NotFound from "@/apps/modulos/telepainel/pages/NotFound";
+import Security from "@/apps/modulos/telepainel/pages/Security";
+import SubscriptionAudit from "@/apps/modulos/telepainel/pages/SubscriptionAudit";
+import WebAppResult from "@/apps/modulos/telepainel/pages/WebAppResult";
+import MenuTips from "@/apps/modulos/telepainel/pages/MenuTips";
+import DatabaseInfo from "@/apps/modulos/telepainel/pages/DatabaseInfo";
+import DevTransitions from "@/apps/modulos/telepainel/pages/DevTransitions";
+import TesteModulos from "@/apps/modulos/telepainel/pages/TesteModulos";
+import UsuariosPainel from "@/apps/modulos/telepainel/pages/UsuariosPainel";
+import UsuarioPerfil from "@/apps/modulos/telepainel/pages/UsuarioPerfil";
+import Docs from "@/apps/modulos/telepainel/pages/Docs";
+
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
 import { PageSplash } from "@/shared/transitions/PageSplash";
 import { SplashController } from "@/shared/transitions/SplashController";
-import Docs from "./pages/Docs";
 
 const queryClient = new QueryClient();
 
