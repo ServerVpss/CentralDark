@@ -243,14 +243,21 @@ Respeite essas regras. O dono tem poder de revogar esta chave em 1 clique.`;
         </Button>
       </div>
 
-      {/* Card informativo */}
+      {/* Boas-vindas */}
+      <CardBoasVindas />
+
+      {/* Bloco de conexão OAuth (1 clique) */}
+      <CardConectarIA onChaveCriada={carregar} />
+
+      {/* Card informativo (modo avançado) */}
       <div className="rounded-xl border bg-card p-5 shadow-3d-soft space-y-3">
         <h2 className="font-semibold flex items-center gap-2">
           <Terminal className="w-4 h-4 text-emerald-600" />
-          Como funciona
+          Modo manual (avançado)
         </h2>
         <p className="text-sm text-muted-foreground">
-          Cada chave é dedicada a um agente. Você pode revogar a qualquer momento. A chave plena só aparece uma vez no momento da criação.
+          Se preferir criar a chave na mão (sem login OAuth), use o botão "Nova chave" no topo.
+          A chave plena só aparece uma vez no momento da criação.
         </p>
         <div className="bg-muted/50 rounded-lg p-3 text-sm font-mono space-y-1">
           <div className="text-muted-foreground">Endpoint da ponte:</div>
