@@ -49,9 +49,9 @@ serve(async (req) => {
       .update({ usos: registro.usos + 1, ultimo_uso_at: new Date().toISOString() })
       .eq("id", registro.id);
 
-    // Pega o token mestre do MCP CentralDark
-    const tokenMestre = Deno.env.get("CENTRALDARK_MCP_TOKEN") || Deno.env.get("MCP_CENTRALDARK_TOKEN");
-    if (!tokenMestre) return res(500, { erro: "Token mestre não configurado no servidor" });
+    // Pega a sessão mestre do MCP CentralDark (OAuth session de 12h)
+    const sessionMestre = Deno.env.get("CENTRALDARK_MCP_SESSION") || Deno.env.get("CENTRALDARK_MCP_TOKEN") || Deno.env.get("MCP_CENTRALDARK_TOKEN");
+    if (!sessionMestre) return res(500, { erro: "Sessão mestre não configurada no servidor (CENTRALDARK_MCP_SESSION)" });
 
     // Lê o corpo original
     let body;
@@ -61,13 +61,15 @@ serve(async (req) => {
       body = "";
     }
 
-    // Encaminha para o MCP CentralDark
-    const mcpUrl = Deno.env.get("MCP_CENTRALDARK_URL") || "https://mcp.centralldark.com/v1/mcp";
+    // Encaminha para o MCP CentralDark usando os DOIS esquemas de auth (cobre Bearer e x-mcp-session)
+    const mcpUrl = Deno.env.get("MCP_CENTRALDARK_URL") || "https://mcp.centralldark.com/mcp";
     const mcpRes = await fetch(mcpUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${tokenMestre}`,
+        "Accept": "application/json, text/event-stream",
+        "Authorization": `Bearer ${sessionMestre}`,
+        "x-mcp-session": sessionMestre,
         "X-Ponte-Agente": registro.nome_agente,
         "X-Ponte-Origem": "supabase-edge",
       },
