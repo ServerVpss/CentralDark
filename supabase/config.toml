@@ -78,4 +78,8 @@ verify_jwt = false
 [functions.mcp-status-proxy]
 verify_jwt = false
 
+[functions.ponte-mcp]
+verify_jwt = false
+
+
 
