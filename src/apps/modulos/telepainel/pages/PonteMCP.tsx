@@ -9,6 +9,8 @@ import { Copy, Key, Trash2, Power, RefreshCw, Shield, Server, Terminal, AlertTri
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { CardBoasVindas } from "./ponte-mcp/CardBoasVindas";
+import { CardConectarIA } from "./ponte-mcp/CardConectarIA";
 
 interface Chave {
   id: string;
