@@ -1,104 +1,109 @@
-## Ideia geral
 
-Reorganizar 100% do `src/` desse repo pra espelhar a árvore final da VPS. O app continua rodando idêntico (mesmo Vite, mesma Lovable, mesmas rotas, mesmo backend), só que olhar pra pasta vai ser igual olhar pra VPS — fica óbvio onde fica cada módulo, e migrar pra VPS vira "copia essa pasta pra lá".
+## O que vou fazer
 
-## Restrição técnica que define o desenho
+Adicionar na rota `/ponte-mcp` um bloco **"Conectar via OAuth"** com dois botões. Cada botão abre uma janela popup, o usuário loga uma vez no provedor (GitHub ou OpenAI), e ao terminar:
 
-Lovable e Vite precisam de `src/`, `index.html`, `vite.config.ts` e `package.json` na raiz — se eu mover isso, o preview da Lovable quebra. Então a árvore "VPS-like" mora **dentro do `src/`**, não na raiz do repo. Funciona igual, e fica 1-pra-1 com a VPS.
+1. Uma chave `pk_...` é gerada automaticamente no banco (vinculada ao provider + conta logada).
+2. O MCP CentralDark na VPS (porta 9100) recebe a sessão injetada — IA externa (Cline, Cursor, Claude Desktop) passa a conectar sem copy-paste.
+3. O painel mostra "✅ Conectado como @usuario" + botão "Copiar URL do MCP" pronta pra colar.
 
-## Árvore nova do repo
+A infra do **GitHub OAuth já existe e tá funcionando** (README do instalador confirma: *"ChatGPT conectado via OAuth GitHub (provisório)"*). Vou só plugar o botão do painel nesse fluxo. O **OpenAI Codex** é caminho novo e mais chato (exige registrar app no painel da OpenAI), por isso entra em fase separada.
+
+## Fases
 
 ```text
-/  (raiz — fica igual, exigência do Vite/Lovable)
-├── index.html
-├── vite.config.ts
-├── package.json
-├── tailwind.config.ts
-├── INSTALACAO.md           ← guia mestre: o que é cada pasta, como migrar pra VPS
-├── docs/
-│   ├── INSTALADOR/         ← já existe, fica
-│   └── PENDENCIAS.md       ← já existe, fica
-└── src/
-    ├── App.tsx             ← só roteador, importa de apps/
-    ├── main.tsx
-    ├── index.css
-    ├── apps/
-    │   ├── web/                          ← vira /root/CentralDark/apps/web
-    │   │   ├── README.md
-    │   │   ├── pages/
-    │   │   │   ├── LandingCentralDark.tsx
-    │   │   │   ├── Portal.tsx
-    │   │   │   ├── Auth.tsx
-    │   │   │   └── Status.tsx
-    │   │   └── components/               ← só o que é exclusivo do portal/home
-    │   └── modulos/                      ← vira /root/CentralDark/apps/modulos
-    │       ├── README.md                 ← índice dos módulos
-    │       ├── telepainel/               ← módulo completo, com produto real
-    │       │   ├── README.md             ← instalação + status + portas + PM2
-    │       │   ├── pages/                ← Index, Consultas, Bots, Plans, Pix, Security, ...
-    │       │   └── components/           ← admin, bots, consultas, dashboard, pix, payments, security, settings, backup, gamification, devops, webapp, search
-    │       ├── bot-whatsapp/
-    │       │   ├── README.md             ← "só landing, produto pendente"
-    │       │   └── pages/LandingWhatsapp.tsx
-    │       ├── crm/
-    │       │   ├── README.md
-    │       │   └── pages/LandingCRM.tsx
-    │       └── financeiro/
-    │           ├── README.md
-    │           └── pages/LandingFinanceiro.tsx
-    └── shared/                           ← o que é usado por mais de um app/módulo
-        ├── ui/                           ← shadcn (era src/components/ui)
-        ├── layout/
-        ├── auth/                         ← AuthProvider, ProtectedRoute, AdminRoute
-        ├── theme/
-        ├── transitions/
-        ├── pwa/
-        ├── hooks/
-        ├── lib/
-        ├── integrations/                 ← cliente Lovable Cloud (NÃO editar)
-        ├── assets/
-        └── test/
+┌─────────────────────────────────────────────────────────┐
+│ FASE 1 — GitHub OAuth (entrega imediata)                │
+├─────────────────────────────────────────────────────────┤
+│ • Botão "Entrar com GitHub" no /ponte-mcp               │
+│ • Edge function ponte-mcp-oauth-github inicia OAuth     │
+│ • Callback registra pk_ no banco + injeta no MCP VPS    │
+│ • Card "✅ Conectado" com URL pronta pra Cline          │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│ FASE 2 — OpenAI Codex (depois que GitHub tá no ar)      │
+├─────────────────────────────────────────────────────────┤
+│ • Cadastro de OAuth App no painel da OpenAI             │
+│ • Secrets OPENAI_CLIENT_ID + OPENAI_CLIENT_SECRET       │
+│ • Botão "Entrar com OpenAI" + edge function espelho     │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│ MEMÓRIA + BOAS-VINDAS (do mesmo commit da Fase 1)       │
+├─────────────────────────────────────────────────────────┤
+│ • mem://features/auth/painel-oauth-conectar (novo)      │
+│ • Atualizar mem://index.md                              │
+│ • Card "👋 Boas-vindas" no topo do /ponte-mcp           │
+│ • docs/INSTALADOR/14-conectar-ia-externa.md atualizado  │
+└─────────────────────────────────────────────────────────┘
 ```
 
-## Mapeamento (o que vai pra onde)
+## Fluxo visual do botão (Fase 1)
 
-- `pages/LandingCentralDark.tsx` + `Portal.tsx` + `Auth.tsx` + `Status.tsx` → `src/apps/web/pages/`
-- `pages/Index, Consultas, Bots, BotSettings, MigrateSubscriptions, Plans, Settings, TelegramUsers, QueryLogs, PixTransactions, Security, SubscriptionAudit, MenuTips, DatabaseInfo, WebAppResult, DevTransitions, TesteModulos, UsuariosPainel, UsuarioPerfil, Docs, NotFound, LandingTelePainel` → `src/apps/modulos/telepainel/pages/`
-- `pages/LandingWhatsapp.tsx` → `src/apps/modulos/bot-whatsapp/pages/`
-- `pages/LandingCRM.tsx` → `src/apps/modulos/crm/pages/`
-- `pages/LandingFinanceiro.tsx` → `src/apps/modulos/financeiro/pages/`
-- `components/{admin, bots, consultas, consultation, dashboard, pix, payments, security, settings, backup, gamification, devops, webapp, search, landing}` → `src/apps/modulos/telepainel/components/` (são todos do TelePainel)
-- `components/{ui, layout, auth, theme, transitions, pwa}` + `hooks/`, `lib/`, `integrations/`, `assets/`, `test/` → `src/shared/`
+```text
+[/ponte-mcp]                                    [popup]
+┌──────────────────────────┐       click       ┌──────────────────────┐
+│ 👋 Boas-vindas           │  ───────────►     │ github.com/login     │
+│                          │                   │ Autorizar CentralDark│
+│ 🔌 Conectar IA externa   │                   │      [Authorize]     │
+│ ┌──────────────────────┐ │                   └──────┬───────────────┘
+│ │ [GitHub]  [OpenAI]   │ │                          │
+│ └──────────────────────┘ │                          ↓ callback
+│                          │                ┌──────────────────────┐
+│ Conexões ativas:         │  ◄──────────── │ edge function:       │
+│ ✅ @segredounlock         │   postMessage  │ 1. troca code→token  │
+│   pk_aB12…XyZ9 📋        │                │ 2. cria pk_ no banco │
+│   [Revogar]              │                │ 3. POST set-token na │
+└──────────────────────────┘                │    VPS (porta 9100)  │
+                                            └──────────────────────┘
+```
 
-## Como nada quebra
+## Arquivos que vou criar/mudar (Fase 1)
 
-- Path alias `@/` (no `tsconfig` e `vite.config`) atualizado pra continuar resolvendo: `@/components/ui/*` vira `@/shared/ui/*`, etc. Eu rodo um find-replace global nos imports antes de salvar pra garantir que tudo continua compilando.
-- `App.tsx` reescrito só pra importar dos caminhos novos — rotas permanecem idênticas (`/`, `/telepainel/*`, `/whatsapp`, `/crm`, `/financeiro`, `/portal`, `/auth`).
-- Lovable Cloud (`src/shared/integrations/supabase/client.ts`) **não é tocado** — é arquivo auto-gerado.
-- Tema, PWA, auth, splash, banner de "view as" — tudo continua funcionando.
+| Arquivo | Tipo | O que faz |
+|---|---|---|
+| `supabase/functions/ponte-mcp-oauth-github/index.ts` | novo | Inicia OAuth (`?action=start`) e processa callback (`?action=callback&code=…`) |
+| `src/pages/PonteMCP.tsx` (ou componente da rota) | edita | Adiciona seção "Conectar IA externa" com 2 botões + lista de conexões ativas |
+| `src/components/ponte-mcp/BotaoOAuth.tsx` | novo | Componente que abre popup, escuta `postMessage`, mostra estado (logando/conectado/erro) |
+| `src/components/ponte-mcp/CardBoasVindas.tsx` | novo | Card explicando em linguagem leiga o que o painel faz + link pro tutorial |
+| `supabase/migrations/<timestamp>_ponte_mcp_oauth_provider.sql` | novo | Adiciona coluna `provider` ('github'/'openai') + `external_user_id` + `external_username` em `ponte_mcp_chaves` |
+| `docs/INSTALADOR/14-conectar-ia-externa.md` | edita | Documenta o botão novo + URL do MCP pra Cline |
+| `mem://features/auth/painel-oauth-conectar` | novo | Memória do fluxo OAuth → MCP VPS |
+| `mem://index.md` | edita | Adiciona referência da memória nova |
 
-## Documentação que entra junto
+## Detalhes técnicos
 
-1. **`INSTALACAO.md` na raiz** — explicação pra leigo: o que é cada módulo, como buildar (`bun install && bun run build`), como copiar pra VPS, onde cada pasta vai parar em `/root/CentralDark/apps/`, quais portas / PM2 / Caddy, e o que ainda é só landing.
-2. **`src/apps/web/README.md`** — portal + homepage, como roda.
-3. **`src/apps/modulos/README.md`** — índice: lista os 4 módulos, status (produto real vs só landing), comando de build, link pra cada README interno.
-4. **README por módulo** (`telepainel`, `bot-whatsapp`, `crm`, `financeiro`) — o que é, status, rotas, dependências, variáveis de ambiente, como instalar/atualizar.
-5. **`docs/PENDENCIAS.md`** — adiciono o item "reestruturação do repo pra layout VPS-like" como concluído, e abro pendências novas (ex.: "bot-whatsapp, crm, financeiro são só landing, falta produto").
+**Edge function `ponte-mcp-oauth-github`:**
+- `?action=start` → redireciona pra `https://github.com/login/oauth/authorize` usando `GITHUB_CLIENT_ID` (secret já existe). Scope: `read:user` (o suficiente pra identificar quem é).
+- `?action=callback&code=…` → troca code por access_token via `GITHUB_CLIENT_SECRET`, busca `/user`, gera `pk_<random32>`, INSERT em `ponte_mcp_chaves` com `provider='github'` + `external_username='@login'`, e dispara `POST https://mcp.centralldark.com/set-token` com a `pk_` (endpoint admin protegido por `MCP_TOKEN`). Retorna HTML que faz `window.opener.postMessage({ok, pk_prefix, username}, origin)` e fecha.
+- `verify_jwt = false` (callback público é exigência do OAuth).
 
-## Validação antes de fechar
+**Migração:**
+```sql
+ALTER TABLE public.ponte_mcp_chaves
+  ADD COLUMN IF NOT EXISTS provider text NOT NULL DEFAULT 'manual',
+  ADD COLUMN IF NOT EXISTS external_user_id text,
+  ADD COLUMN IF NOT EXISTS external_username text;
+```
+(Sem novos GRANTs — tabela já existe e já tem políticas.)
 
-- `bun run build` passa sem erro.
-- Preview da Lovable abre `/` (CentralDark), `/telepainel` (landing) e `/telepainel/dashboard` (logado) iguais ao que tá hoje.
-- Nenhum import órfão, nenhum arquivo "solto" fora da nova árvore.
-- Confirmo no chat com print do antes/depois e te peço pra dar uma olhada em 2-3 rotas chave antes de marcar como pronto.
+**Segurança:**
+- `state` aleatório no OAuth pra prevenir CSRF (guardado em cookie httpOnly de 5min).
+- Callback valida `state` antes de gravar.
+- A `pk_` só aparece pro usuário 1 vez (no card pós-login); depois fica só o prefixo no banco.
+- Endpoint `/set-token` da VPS exige header `Authorization: Bearer $MCP_TOKEN` (já existe).
 
-## O que NÃO faço
+**Por que NÃO faço OpenAI agora:**
+A OpenAI exige cadastrar a aplicação no painel deles (`platform.openai.com/apps`), aprovar redirect URIs e gerar `OPENAI_CLIENT_ID`/`OPENAI_CLIENT_SECRET`. Esse cadastro precisa de ação tua no navegador da OpenAI — não dá pra fazer 100% pelo Lovable. Por isso entrego GitHub primeiro (que já tá todo configurado), e na Fase 2 te guio passo a passo no cadastro OpenAI e plugo o segundo botão.
 
-- Não mexo em Caddy, PM2, Docker, banco de produção.
-- Não apago nada do `docs/INSTALADOR/` que já existe — só somo o novo.
-- Não toco em `src/integrations/supabase/*` (auto-gerado).
-- Não mudo nenhuma lógica de negócio, nenhuma query, nenhuma migration — é puro rearranjo de pastas + imports + README.
+## Validação ao terminar (Fase 1)
 
-## Próximo passo se aprovar
+1. Build do front passa sem erro.
+2. Clico no botão "Entrar com GitHub" no preview → popup abre no github.com.
+3. Autorizo → popup fecha sozinho.
+4. Card "✅ Conectado como @segredounlock" aparece com a `pk_`.
+5. `curl -H "x-mcp-session: pk_..." https://mcp.centralldark.com/health` → 200.
+6. Cline configurado com essa URL conecta sem precisar editar `cline_mcp_settings.json` manualmente.
 
-Já começo: 1) crio a estrutura nova, 2) movo arquivos em lote, 3) atualizo todos os imports e o `App.tsx`, 4) rodo build, 5) escrevo os READMEs, 6) atualizo `PENDENCIAS.md`, 7) te chamo pra validar.
+Quando aprovar, executo a Fase 1 inteira num commit só (front + edge function + migração + doc + memória), valido os 6 passos, e te aviso pra testarmos juntos o popup. Depois disso a gente decide se parte pra Fase 2 (OpenAI) ou se outras pendências têm prioridade.

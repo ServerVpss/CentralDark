@@ -994,10 +994,14 @@ export type Database = {
         Row: {
           ativa: boolean
           criada_em: string
+          external_avatar_url: string | null
+          external_user_id: string | null
+          external_username: string | null
           hash_chave: string
           id: string
           nome_agente: string
           prefixo: string
+          provider: string
           revogada_em: string | null
           ultimo_uso_at: string | null
           usos: number
@@ -1005,10 +1009,14 @@ export type Database = {
         Insert: {
           ativa?: boolean
           criada_em?: string
+          external_avatar_url?: string | null
+          external_user_id?: string | null
+          external_username?: string | null
           hash_chave: string
           id?: string
           nome_agente: string
           prefixo: string
+          provider?: string
           revogada_em?: string | null
           ultimo_uso_at?: string | null
           usos?: number
@@ -1016,10 +1024,14 @@ export type Database = {
         Update: {
           ativa?: boolean
           criada_em?: string
+          external_avatar_url?: string | null
+          external_user_id?: string | null
+          external_username?: string | null
           hash_chave?: string
           id?: string
           nome_agente?: string
           prefixo?: string
+          provider?: string
           revogada_em?: string | null
           ultimo_uso_at?: string | null
           usos?: number
