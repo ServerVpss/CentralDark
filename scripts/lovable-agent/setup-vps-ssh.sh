@@ -13,7 +13,9 @@ fi
 TMP_KEY=$(mktemp)
 chmod 600 "$TMP_KEY"
 trap 'rm -f "$TMP_KEY"' EXIT
-printf '%s\n' "$SSH_KEY" > "$TMP_KEY"
+# A chave pode vir com espaços no lugar das quebras de linha; restaura o formato PEM.
+printf '%s\n' "$SSH_KEY" | tr ' ' '\n' > "$TMP_KEY"
+
 
 ssh-vps() {
   local SSH_BIN="ssh"
