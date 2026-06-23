@@ -16,7 +16,12 @@ trap 'rm -f "$TMP_KEY"' EXIT
 printf '%s\n' "$SSH_KEY" > "$TMP_KEY"
 
 ssh-vps() {
-  ssh -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=10 -i "$TMP_KEY" "${VPS_USER}@${VPS_HOST}" "$@"
+  local SSH_BIN="ssh"
+  if ! command -v ssh >/dev/null 2>&1; then
+    SSH_BIN="nix run nixpkgs#openssh --"
+  fi
+  $SSH_BIN -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=10 -i "$TMP_KEY" "${VPS_USER}@${VPS_HOST}" "$@"
 }
 
 export -f ssh-vps
+
