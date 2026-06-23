@@ -1,28 +1,62 @@
-## Plano — Caddy com Origin CA (Cloudflare Full Strict)
+## O que vai ser montado
 
-Recebi o certificado e a chave privada. Não vou repetir o conteúdo no chat (segurança). Eis o que vou executar quando você liberar:
+Um serviço novo na VPS chamado **`contas-admin`** (porta interna 9400), exposto de forma secreta em **`https://status.centralldark.com/ai-review.html`** (a mesma URL camuflada que você já usa).
 
-### 1. Subir os arquivos na VPS
-Criar a pasta `/etc/ssl/cloudflare/` (permissão `700`, dono `root`) e gravar:
-- `centralldark.com.pem` — certificado (permissão `644`)
-- `centralldark.com.key` — chave privada (permissão `600`)
+Quando você abrir esse link, vê o painel com a lista das contas salvas e, do lado de cada provedor, **dois botões de login**:
 
-### 2. Backup e atualização do Caddyfile
-- Backup do `/etc/caddy/Caddyfile` atual em `/etc/caddy/Caddyfile.bak-origin-ca-<data>`
-- Adicionar um snippet `(cloudflare_origin)` que aponta pros dois arquivos acima
-- Aplicar o snippet em **todos os hosts `*.centralldark.com` e `centralldark.com`** que já estão no Caddyfile, mantendo os `reverse_proxy` exatamente como estão hoje (não mexo em porta, rota, nem ordem)
+```text
+┌─ ChatGPT / Claude / Gemini ─────────────────────┐
+│  [ Logar pelo Navegador Remoto ]  ← noVNC      │
+│     abre um Chrome rodando na VPS, você loga    │
+│     normal, fecha — o profile fica salvo        │
+└─────────────────────────────────────────────────┘
 
-### 3. Validar e recarregar
-- `caddy validate --config /etc/caddy/Caddyfile` (se der erro, restauro o backup na hora)
-- `systemctl reload caddy`
-- `curl -vI https://install.centralldark.com` pra confirmar que o cert agora é "CloudFlare Origin CA" e não Let's Encrypt
+┌─ Google / GitHub ───────────────────────────────┐
+│  [ Logar com OAuth ]  ← um clique               │
+│     vai pro provedor, autoriza, volta, token    │
+│     salvo automático em /root/CentralDark/contas │
+└─────────────────────────────────────────────────┘
+```
 
-### 4. Te avisar pra trocar na Cloudflare
-Só depois de validado: você vai em **SSL/TLS → Visão geral** e troca **Completo** → **Completo (Estrito)**. Aí a cadeia fica 100% criptografada e validada ponta a ponta.
+## Como cada botão funciona
 
-### Observações
-- **Caddy está na lista de "precisa confirmação"** das nossas regras — por isso to pedindo seu OK antes de mexer.
-- Depois que aplicar, recomendo trocar essa chave privada futuramente (já que passou pelo chat). Mas pra subir agora tá tranquilo, fica só entre a Cloudflare e seu servidor.
-- Se algum host no Caddyfile não for `centralldark.com` (ex: domínio antigo do Multizap), eu **não** mexo nele — fica como está.
+**Navegador Remoto (noVNC)** — pra ChatGPT, Claude, Gemini, qualquer site sem OAuth público:
+- Você clica → backend sobe um `Xvfb + Chrome + x11vnc + websockify` numa porta temporária (6080–6099)
+- Abre uma aba nova com o noVNC do Chrome rodando na VPS
+- Você loga normal (e-mail/senha, Google, código no celular, etc.)
+- Sessão dura até 15 min e desliga sozinha; o profile do Chrome (cookies/tokens) fica salvo em `/root/CentralDark/contas/<provedor>/profile/` pra reuso pelas IAs
 
-Posso seguir?
+**OAuth real** — pra Google e GitHub:
+- Você clica → redireciona pro provedor → autoriza → callback no `contas-admin` salva o `access_token` + `refresh_token` em `/root/CentralDark/contas/<provedor>.json`
+- GitHub usa as credenciais que **já estão nos secrets** (`GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`)
+- Google precisa de credencial nova (te peço depois, num passo separado)
+
+## Segurança
+
+- Painel inteiro protegido por **Bearer token** (`CONTAS_ADMIN_TOKEN`, gerado automático)
+- Caddy só libera o caminho secreto `/ai-review.html` e `/api/*` sob esse host
+- Sessões noVNC com senha aleatória por sessão + timeout
+
+## Arquivos / componentes
+
+- **VPS** `/root/CentralDark/scripts/contas-admin/`
+  - `main.py` (FastAPI)
+  - `novnc_session.py` (gerenciador de sessões temporárias)
+  - `oauth.py` (fluxo GitHub agora, Google quando você passar a credencial)
+  - `ecosystem.config.cjs` (PM2)
+  - `index.html` (painel com os botões)
+- **Caddy** novo bloco em `status-centraldark.Caddyfile` roteando `/ai-review.html` e `/api/contas/*` pro `127.0.0.1:9400`
+- **PM2** processo `contas-admin` registrado e salvo no dump
+
+## O que NÃO vai mudar
+
+- Nada no projeto TelePanel (frontend do Lovable) — tudo é VPS
+- Nenhum bot, nenhuma edge function, nenhuma tabela do banco
+- Caddyfile principal fica intacto, só o arquivo do host status recebe append
+
+## Depois de subir
+
+Te entrego: a URL secreta + o Bearer token + o caminho da pasta `contas/`. Você abre, clica nos botões, valida o fluxo. Se quiser Google OAuth também, me passa o Client ID/Secret depois e eu ligo num turno só.
+
+---
+**Posso ir?** Se sim, eu já subo o serviço, o Caddy e registro no PM2 nesse mesmo passo.
