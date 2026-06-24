@@ -139,6 +139,21 @@ Deno.serve(async (req) => {
     
     console.log('Health check summary:', JSON.stringify(summary));
     
+    // Busca estado anterior pra detectar transições (caiu/voltou)
+    const { data: previous } = await supabase
+      .from('edge_function_health')
+      .select('details')
+      .order('checked_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const prevMap = new Map<string, string>();
+    if (previous?.details && Array.isArray(previous.details)) {
+      for (const f of previous.details as FunctionHealth[]) {
+        prevMap.set(f.name, f.status);
+      }
+    }
+
     // Salvar resultado no banco de dados
     const { error: insertError } = await supabase
       .from('edge_function_health')
@@ -151,29 +166,40 @@ Deno.serve(async (req) => {
         all_healthy: summary.allHealthy,
         details: healthChecks,
       });
-    
+
     if (insertError) {
       console.error('Erro ao salvar health check:', insertError);
     }
-    
-    // Se houver funções offline, logar alerta
-    if (offlineFunctions.length > 0) {
-      console.error('⚠️ ALERTA: Funções offline detectadas:', 
-        offlineFunctions.map(f => f.name).join(', '));
-      
-      // Notificar via Telegram se configurado
-      await notifyOfflineFunctions(supabase, offlineFunctions);
+
+    // Detecta transições e notifica APENAS na mudança de estado
+    const caiu: FunctionHealth[] = [];
+    const voltou: FunctionHealth[] = [];
+    for (const f of healthChecks) {
+      const prev = prevMap.get(f.name);
+      if (!prev) continue; // primeira vez vista, não notifica
+      if (prev === 'online' && f.status !== 'online') caiu.push(f);
+      if (prev !== 'online' && f.status === 'online') voltou.push(f);
     }
-    
+
+    if (caiu.length > 0) {
+      console.error('⚠️ Funções que caíram:', caiu.map(f => f.name).join(', '));
+      await notifyViaCentral(supabase, 'erro', '🔴 Edge Function caiu', caiu);
+    }
+    if (voltou.length > 0) {
+      console.log('✅ Funções que voltaram:', voltou.map(f => f.name).join(', '));
+      await notifyViaCentral(supabase, 'sucesso', '🟢 Edge Function recuperada', voltou);
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
         summary,
+        transicoes: { caiu: caiu.map(f => f.name), voltou: voltou.map(f => f.name) },
         functions: healthChecks,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
-    
+
   } catch (error) {
     console.error('Erro no health check:', error);
     return new Response(
@@ -183,43 +209,48 @@ Deno.serve(async (req) => {
   }
 });
 
-async function notifyOfflineFunctions(
+// Dispara via notify-telegram (canal oficial). Não bate no Telegram direto.
+async function notifyViaCentral(
   supabase: any,
-  offlineFunctions: FunctionHealth[]
+  tipo: 'erro' | 'sucesso' | 'aviso' | 'critico' | 'info',
+  titulo: string,
+  funcs: FunctionHealth[]
 ) {
   try {
-    // Buscar bots ativos para enviar alerta aos donos
-    const { data: bots } = await supabase
-      .from('telegram_bots')
-      .select('token, user_id, bot_settings(owner_ids)')
-      .eq('is_active', true)
-      .limit(1);
-    
-    if (!bots || bots.length === 0) return;
-    
-    const bot = bots[0] as any;
-    const ownerIds = (bot?.bot_settings as any)?.owner_ids || [];
-    
-    if (ownerIds.length === 0) return;
-    
-    const message = `⚠️ *ALERTA: Edge Functions Offline*\n\n` +
-      `As seguintes funções estão indisponíveis:\n\n` +
-      offlineFunctions.map(f => `❌ \`${f.name}\`\n   └ ${f.error || 'Não deployada'}`).join('\n\n') +
-      `\n\n🔧 Acesse o painel para fazer o redeploy.`;
-    
-    // Notificar primeiro owner
-    await fetch(`https://api.telegram.org/bot${bot.token}/sendMessage`, {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const notifyKey = Deno.env.get('NOTIFY_API_KEY');
+    if (!notifyKey) {
+      console.error('[health-check] NOTIFY_API_KEY ausente — alerta perdido');
+      return;
+    }
+
+    const lista = funcs
+      .map(f => `• ${f.name}${f.error ? ` — ${f.error}` : ''}`)
+      .join('\n');
+    const mensagem = `${funcs.length} função(ões) afetada(s):\n\n${lista}`;
+
+    const resp = await fetch(`${supabaseUrl}/functions/v1/notify-telegram`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-notify-key': notifyKey,
+      },
       body: JSON.stringify({
-        chat_id: ownerIds[0],
-        text: message,
-        parse_mode: 'Markdown',
+        origem: 'health-check',
+        tipo,
+        titulo,
+        mensagem,
+        metadata: {
+          funcoes: funcs.map(f => ({ name: f.name, status: f.status, error: f.error })),
+        },
       }),
     });
-    
-    console.log('Alerta enviado para owner:', ownerIds[0]);
-  } catch (error) {
-    console.error('Erro ao enviar notificação:', error);
+
+    if (!resp.ok) {
+      console.error('[health-check] notify-telegram falhou:', resp.status, await resp.text());
+    }
+  } catch (e) {
+    console.error('[health-check] erro ao notificar:', e);
   }
 }
+
