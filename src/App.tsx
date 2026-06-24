@@ -46,6 +46,7 @@ import UsuarioPerfil from "@/apps/modulos/telepainel/pages/UsuarioPerfil";
 import Docs from "@/apps/modulos/telepainel/pages/Docs";
 import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
 import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
+import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 
 
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
