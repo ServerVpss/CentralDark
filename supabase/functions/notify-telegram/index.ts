@@ -257,19 +257,32 @@ Deno.serve(async (req) => {
   const text = formatTelegramMessage({ origem, tipo, titulo, mensagem, metadata });
   const overrideChat = Number(body.chat_id) || null;
 
-  type Destino = { bot_id: string; token: string; chat_id: number; bot_username: string | null };
+  type Destino = {
+    bot_id: string | null;
+    token: string | null; // null = enviar via connector gateway
+    chat_id: number;
+    bot_username: string | null;
+    via: "raw" | "connector";
+  };
   const destinos: Destino[] = [];
 
+  // Bots cadastrados que NÃO podem receber notificação de sistema
+  // (são bots de módulos de usuário, ex.: SEGREDOPUXADASBOT do módulo Fiscal)
+  const BLOCKED_BOT_USERNAMES = new Set(["SEGREDOPUXADASBOT"]);
+
   if (overrideChat) {
-    // Override explícito do chamador → usa bot preferido
-    const { data: bot } = await supabase
+    // Override explícito do chamador → tenta bot preferido; se não houver, connector
+    const { data: bots } = await supabase
       .from("telegram_bots")
       .select("id, token, bot_username")
       .eq("is_active", true)
       .order("created_at", { ascending: true });
-    const preferred = bot?.find((b) => b.bot_username === PREFERRED_BOT_USERNAME) ?? bot?.[0];
+    const allowed = (bots ?? []).filter((b) => !BLOCKED_BOT_USERNAMES.has(b.bot_username ?? ""));
+    const preferred = allowed.find((b) => b.bot_username === PREFERRED_BOT_USERNAME) ?? allowed[0];
     if (preferred?.token) {
-      destinos.push({ bot_id: preferred.id, token: preferred.token, chat_id: overrideChat, bot_username: preferred.bot_username });
+      destinos.push({ bot_id: preferred.id, token: preferred.token, chat_id: overrideChat, bot_username: preferred.bot_username, via: "raw" });
+    } else {
+      destinos.push({ bot_id: null, token: null, chat_id: overrideChat, bot_username: PREFERRED_BOT_USERNAME, via: "connector" });
     }
   } else {
     // Busca rotas cadastradas pro tipo
@@ -290,28 +303,28 @@ Deno.serve(async (req) => {
       const botMap = new Map(bots?.map((b) => [b.id, b]) ?? []);
       for (const r of routes) {
         const b = botMap.get(r.bot_id);
-        if (b?.token) destinos.push({ bot_id: b.id, token: b.token, chat_id: Number(r.chat_id), bot_username: b.bot_username });
+        if (b?.token && !BLOCKED_BOT_USERNAMES.has(b.bot_username ?? "")) {
+          destinos.push({ bot_id: b.id, token: b.token, chat_id: Number(r.chat_id), bot_username: b.bot_username, via: "raw" });
+        }
       }
     }
 
-    // Fallback: nenhuma rota → usa srver1bot pro admin
+    // Fallback: nenhuma rota válida → usa connector (@srver1bot) pro admin
     if (destinos.length === 0) {
-      const { data: bots } = await supabase
-        .from("telegram_bots")
-        .select("id, token, bot_username")
-        .eq("is_active", true)
-        .order("created_at", { ascending: true });
-      const preferred = bots?.find((b) => b.bot_username === PREFERRED_BOT_USERNAME) ?? bots?.[0];
-      if (preferred?.token) {
-        destinos.push({ bot_id: preferred.id, token: preferred.token, chat_id: DEFAULT_ADMIN_CHAT_ID, bot_username: preferred.bot_username });
-      }
+      destinos.push({ bot_id: null, token: null, chat_id: DEFAULT_ADMIN_CHAT_ID, bot_username: PREFERRED_BOT_USERNAME, via: "connector" });
     }
   }
 
-  // Envia em paralelo
+  // Envia em paralelo (raw via token, connector via gateway)
   const resultados = await Promise.all(
-    destinos.map((d) => sendToTelegram(d.token, d.chat_id, text).then((r) => ({ ...d, ...r }))),
+    destinos.map((d) =>
+      (d.via === "connector" || !d.token
+        ? sendViaConnector(d.chat_id, text)
+        : sendToTelegram(d.token, d.chat_id, text)
+      ).then((r) => ({ ...d, ...r })),
+    ),
   );
+
 
   const okCount = resultados.filter((r) => r.ok).length;
   const firstOk = resultados.find((r) => r.ok);
