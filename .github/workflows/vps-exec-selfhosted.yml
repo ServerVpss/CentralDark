@@ -1,0 +1,26 @@
+name: VPS Exec (self-hosted)
+on:
+  workflow_dispatch:
+    inputs:
+      commands:
+        description: 'Comandos pra rodar direto na VPS'
+        required: true
+        type: string
+
+jobs:
+  exec:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    steps:
+      - name: Executar na VPS
+        shell: bash
+        env:
+          CMDS: ${{ inputs.commands }}
+        run: |
+          set -o pipefail
+          echo "========== INÍCIO =========="
+          echo "host=$(hostname)  user=$(whoami)  data=$(date '+%F %T')"
+          bash -lc "$CMDS"
+          rc=$?
+          echo "========== FIM (exit=$rc) =========="
+          exit $rc
