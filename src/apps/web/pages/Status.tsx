@@ -8,6 +8,7 @@ import { DeployHistoryList } from "@/apps/modulos/telepainel/components/devops/D
 import { RoadmapList } from "@/apps/modulos/telepainel/components/devops/RoadmapList";
 import { IPhonePreviewModal } from "@/apps/modulos/telepainel/components/devops/IPhonePreviewModal";
 import { McpStatusCard } from "@/apps/modulos/telepainel/components/devops/McpStatusCard";
+import { NotificationsFeedCard } from "@/apps/modulos/telepainel/components/devops/NotificationsFeedCard";
 import { useVpsDeploy } from "@/shared/hooks/useVpsDeploy";
 
 export default function Status() {
@@ -41,6 +42,9 @@ export default function Status() {
 
           {/* Status ao vivo do MCP */}
           <McpStatusCard />
+
+          {/* Feed de notificações ao vivo (espelha o canal CentralDark — Status) */}
+          <NotificationsFeedCard className="lg:col-span-2" />
 
           {/* Roadmap */}
           <RoadmapList className="lg:col-span-2" />
