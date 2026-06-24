@@ -1,195 +1,202 @@
+// Helper compartilhado entre edge functions para notificações com catálogo,
+// agrupamento (debounce) e fallback. Runtime: Deno.
+//
+// Uso:
+//   import { notify, registerEvent } from "../_shared/notifications-events.ts";
+//
+//   await registerEvent({ event_key: "vps.deploy.ok", category: "deploy", severity_default: "sucesso" });
+//   await notify({ event_key: "vps.deploy.ok", title: "Deploy concluído", body: "main -> VPS" });
+
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
-// Tipagem para o payload de notificação
-export interface NotificationPayload {
-  ia?: string;
-  recurso?: string;
-  acao?: string;
-  status?: string;
-  [key: string]: any;
-}
+type Severity = "info" | "sucesso" | "aviso" | "erro" | "critico";
 
-// Tipagem para os parâmetros de notificação
-export interface NotifyParams {
-  event_key: string;
-  severity?: 'info' | 'warning' | 'error' | 'success';
-  title?: string;
-  body?: string;
-  link?: string;
-  payload?: NotificationPayload;
-  group_key?: string;
-  debounce_seconds?: number;
-}
-
-// Tipagem para registro de eventos
-export interface RegisterEventParams {
+export interface EventDefinition {
   event_key: string;
   category: string;
-  severity_default: string;
+  severity_default: Severity;
   title_template?: string;
   body_template?: string;
 }
 
-// Cache em memória para eventos (60 segundos)
-const eventCache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_TTL = 60000;
+export interface NotifyInput {
+  event_key: string;
+  severity?: Severity;
+  title?: string;
+  body?: string;
+  link?: string;
+  payload?: Record<string, unknown> & {
+    ia?: string;
+    recurso?: string;
+    acao?: string;
+    status?: string;
+  };
+  group_key?: string;
+  debounce_seconds?: number;
+}
 
-/**
- * Registra ou atualiza um evento no catálogo.
- */
-export async function registerEvent(params: RegisterEventParams) {
-  try {
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+// Canal CentralDark — Status (também replica para Monitoramento via Telegram nativo)
+const STATUS_CHAT_ID = -1003669176367;
+
+// Cache em memória do catálogo (60s)
+const eventCache = new Map<string, { row: EventDefinition; expires: number }>();
+const CACHE_TTL_MS = 60_000;
+
+function getEnv(name: string): string {
+  const v = Deno.env.get(name);
+  if (!v) throw new Error(`${name} não configurado`);
+  return v;
+}
+
+function getServiceClient() {
+  return createClient(getEnv("SUPABASE_URL"), getEnv("SUPABASE_SERVICE_ROLE_KEY"));
+}
+
+function nowSP(): string {
+  return new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+}
+
+function buildBody(input: NotifyInput): string {
+  const p = input.payload ?? {};
+  return [
+    `🤖 IA: ${p.ia ?? "-"}`,
+    `📁 Recurso: ${p.recurso ?? "-"}`,
+    `⚙️ Ação: ${p.acao ?? "-"}`,
+    `✅ Status: ${p.status ?? "-"}`,
+    `🕒 Quando: ${nowSP()}`,
+    `📝 Detalhe: ${input.body ?? "-"}`,
+  ].join("\n");
+}
+
+export async function registerEvent(def: EventDefinition): Promise<void> {
+  const sb = getServiceClient();
+  const { error } = await sb
+    .from("notification_events")
+    .upsert(
+      {
+        event_key: def.event_key,
+        category: def.category,
+        severity_default: def.severity_default,
+        title_template: def.title_template ?? null,
+        body_template: def.body_template ?? null,
+      },
+      { onConflict: "event_key" },
     );
+  if (error) console.error("[notifications-events] registerEvent erro:", error.message);
+  eventCache.delete(def.event_key);
+}
 
-    const { error } = await supabase
-      .from("notification_events")
-      .upsert(params, { onConflict: "event_key" });
+async function loadEvent(event_key: string): Promise<EventDefinition | null> {
+  const cached = eventCache.get(event_key);
+  if (cached && cached.expires > Date.now()) return cached.row;
 
-    if (error) console.error("[registerEvent] Erro ao registrar evento:", error);
-  } catch (err) {
-    console.error("[registerEvent] Falha crítica:", err);
+  const sb = getServiceClient();
+  const { data, error } = await sb
+    .from("notification_events")
+    .select("event_key, category, severity_default, title_template, body_template, enabled")
+    .eq("event_key", event_key)
+    .maybeSingle();
+
+  if (error || !data || data.enabled === false) return null;
+  const row = data as EventDefinition;
+  eventCache.set(event_key, { row, expires: Date.now() + CACHE_TTL_MS });
+  return row;
+}
+
+async function telegramFallback(titulo: string, mensagem: string): Promise<void> {
+  try {
+    const LOVABLE = Deno.env.get("LOVABLE_API_KEY");
+    const TG = Deno.env.get("TELEGRAM_API_KEY");
+    if (!LOVABLE || !TG) return;
+    await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE}`,
+        "X-Connection-Api-Key": TG,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: STATUS_CHAT_ID,
+        text: `<b>${titulo}</b>\n${mensagem}`,
+        parse_mode: "HTML",
+      }),
+    });
+  } catch (e) {
+    console.error("[notifications-events] telegramFallback erro:", e);
   }
 }
 
-/**
- * Envia uma notificação centralizada com lógica de debounce e fallback.
- */
-export async function notify(params: NotifyParams) {
+export async function notify(input: NotifyInput): Promise<void> {
   try {
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-    );
+    const evt = await loadEvent(input.event_key);
+    const severity: Severity = input.severity ?? evt?.severity_default ?? "info";
+    const titulo = (input.title ?? evt?.title_template ?? input.event_key).slice(0, 200);
+    const mensagem = buildBody(input);
+    const sb = getServiceClient();
 
-    const { event_key, severity, title, body, link, payload = {}, group_key, debounce_seconds } = params;
-
-    // 1. Busca evento no catálogo (com cache)
-    let eventData = null;
-    const cached = eventCache.get(event_key);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-      eventData = cached.data;
-    } else {
-      const { data } = await supabase
-        .from("notification_events")
-        .select("*")
-        .eq("event_key", event_key)
-        .single();
-      
-      if (data) {
-        eventCache.set(event_key, { data, timestamp: Date.now() });
-        eventData = data;
-      }
-    }
-
-    const finalSeverity = severity || eventData?.severity_default || 'info';
-    const finalTitle = title || eventData?.title_template || `Notificação: ${event_key}`;
-
-    // 2. Monta o body no formato fixo
-    const agora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    const formattedBody = `🤖 IA: ${payload.ia ?? '-'}
-📁 Recurso: ${payload.recurso ?? '-'}
-⚙️ Ação: ${payload.acao ?? '-'}
-✅ Status: ${payload.status ?? '-'}
-🕒 Quando: ${agora}
-📝 Detalhe: ${body ?? '-'}`;
-
-    // 3. Lógica de Debounce
-    if (group_key && debounce_seconds) {
-      const timeLimit = new Date(Date.now() - (debounce_seconds * 1000)).toISOString();
-      
-      const { data: recentLog, error: logError } = await supabase
+    // Agrupamento por debounce: se já houve evento com mesmo group_key
+    // dentro da janela, só incrementa o contador e sai.
+    if (input.group_key && input.debounce_seconds && input.debounce_seconds > 0) {
+      const since = new Date(Date.now() - input.debounce_seconds * 1000).toISOString();
+      const { data: recent } = await sb
         .from("notifications_log")
         .select("id, group_count")
-        .eq("group_key", group_key)
-        .gt("created_at", timeLimit)
+        .eq("group_key", input.group_key)
+        .gte("created_at", since)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-
-      if (recentLog && !logError) {
-        // Se existe log recente, apenas incrementa contador e sai
-        await supabase
+      if (recent?.id) {
+        await sb
           .from("notifications_log")
-          .update({ group_count: (recentLog.group_count || 1) + 1 })
-          .eq("id", recentLog.id);
-        
+          .update({ group_count: (recent.group_count ?? 1) + 1 })
+          .eq("id", recent.id);
         return;
       }
     }
 
-    // 4. Insere no log de notificações
-    const { data: insertedLog } = await supabase
-      .from("notifications_log")
-      .insert({
-        origem: 'central',
-        tipo: finalSeverity,
-        titulo: finalTitle,
-        mensagem: formattedBody,
-        metadata: payload,
-        link,
-        event_key,
-        group_key,
-        group_count: 1
-      })
-      .select()
-      .single();
+    // Insere log centralizado
+    await sb.from("notifications_log").insert({
+      origem: "central",
+      tipo: severity,
+      titulo,
+      mensagem,
+      metadata: input.payload ?? {},
+      event_key: input.event_key,
+      link: input.link ?? null,
+      group_key: input.group_key ?? null,
+    });
 
-    // 5. Dispara notify-telegram (fire-and-forget)
-    const triggerTelegram = async () => {
-      try {
-        const response = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/notify-telegram`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            log_id: insertedLog?.id,
-            title: finalTitle,
-            message: formattedBody,
-            link,
-            severity: finalSeverity
-          })
-        });
+    // Dispara notify-telegram fire-and-forget
+    const url = `${getEnv("SUPABASE_URL")}/functions/v1/notify-telegram`;
+    const notifyKey = Deno.env.get("NOTIFY_API_KEY") ?? "";
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Notify-Key": notifyKey,
+        Authorization: `Bearer ${getEnv("SUPABASE_ANON_KEY")}`,
+      },
+      body: JSON.stringify({
+        origem: "central",
+        tipo: severity,
+        titulo,
+        mensagem,
+        metadata: { ...(input.payload ?? {}), link: input.link, event_key: input.event_key },
+      }),
+    });
 
-        // 6. Fallback se falhar
-        if (!response.ok) {
-          console.warn(`[notify] notify-telegram falhou (${response.status}). Iniciando fallback.`);
-          
-          // Grava em audit_logs
-          await supabase.from("audit_logs").insert({
-            action: 'notify_fallback',
-            payload: { error: await response.text(), params }
-          });
-
-          // Tentativa direta via Gateway Telegram
-          const telegramToken = Deno.env.get("TELEGRAM_API_KEY");
-          const chatId = "-1003669176367";
-          
-          if (telegramToken) {
-            const text = `*${finalTitle}*\n\n${formattedBody}${link ? `\n\n🔗 [Link](${link})` : ''}`;
-            await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: chatId,
-                text: text,
-                parse_mode: 'Markdown'
-              })
-            });
-          }
-        }
-      } catch (e) {
-        console.error("[notify] Falha no disparo/fallback do Telegram:", e);
-      }
-    };
-
-    triggerTelegram(); // Fire-and-forget
-
-  } catch (err) {
-    console.error("[notify] Erro geral na função notify:", err);
+    if (!resp.ok) {
+      // Fallback: registra em audit_logs e tenta gateway direto
+      await sb.from("audit_logs").insert({
+        action: "notify_fallback",
+        entity_type: "notification",
+        entity_id: input.event_key,
+        metadata: { status: resp.status, titulo, severity },
+      });
+      await telegramFallback(titulo, mensagem);
+    }
+  } catch (e) {
+    console.error("[notifications-events] notify erro:", e);
   }
 }

@@ -1,71 +1,45 @@
+// Cliente browser do sistema de notificações.
+// Chama a edge function `notify-event`, que internamente usa notify-telegram
+// e grava em notifications_log. Não bate em Telegram direto do navegador.
+
 import { supabase } from "@/integrations/supabase/client";
 
-// Tipagem para o payload de notificação
-export interface NotificationPayload {
-  ia?: string;
-  recurso?: string;
-  acao?: string;
-  status?: string;
-  [key: string]: any;
-}
+export type Severity = "info" | "sucesso" | "aviso" | "erro" | "critico";
 
-// Tipagem para os parâmetros de notificação
-export interface NotifyParams {
-  event_key: string;
-  severity?: 'info' | 'warning' | 'error' | 'success';
-  title?: string;
-  body?: string;
-  link?: string;
-  payload?: NotificationPayload;
-  group_key?: string;
-  debounce_seconds?: number;
-}
-
-// Tipagem para registro de eventos
-export interface RegisterEventParams {
+export interface EventDefinition {
   event_key: string;
   category: string;
-  severity_default: string;
+  severity_default: Severity;
   title_template?: string;
   body_template?: string;
 }
 
-/**
- * Registra um evento no catálogo chamando a edge function.
- */
-export async function registerEvent(params: RegisterEventParams) {
-  try {
-    const { data, error } = await supabase.functions.invoke('notify-event', {
-      body: { action: 'register', params }
-    });
-
-    if (error) {
-      console.error("[registerEvent] Erro ao registrar evento:", error);
-      return { error };
-    }
-    return { data };
-  } catch (err) {
-    console.error("[registerEvent] Falha crítica:", err);
-    return { error: err };
-  }
+export interface NotifyInput {
+  event_key: string;
+  severity?: Severity;
+  title?: string;
+  body?: string;
+  link?: string;
+  payload?: Record<string, unknown> & {
+    ia?: string;
+    recurso?: string;
+    acao?: string;
+    status?: string;
+  };
+  group_key?: string;
+  debounce_seconds?: number;
 }
 
-/**
- * Dispara uma notificação via edge function 'notify-event'.
- */
-export async function notify(params: NotifyParams) {
-  try {
-    const { data, error } = await supabase.functions.invoke('notify-event', {
-      body: { action: 'notify', params }
-    });
+export async function registerEvent(def: EventDefinition): Promise<void> {
+  const { error } = await supabase.functions.invoke("notify-event", {
+    body: { register: def },
+  });
+  if (error) console.error("[notifications-events] registerEvent:", error.message);
+}
 
-    if (error) {
-      console.error("[notify] Erro ao processar notificação:", error);
-      return { error };
-    }
-    return { data };
-  } catch (err) {
-    console.error("[notify] Falha crítica:", err);
-    return { error: err };
-  }
+export async function notify(input: NotifyInput): Promise<void> {
+  const { error } = await supabase.functions.invoke("notify-event", {
+    body: input,
+  });
+  if (error) console.error("[notifications-events] notify:", error.message);
 }
