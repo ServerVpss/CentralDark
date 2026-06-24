@@ -1,0 +1,75 @@
+# Auto-merge dos PRs do Dependabot — só patches (semver-patch).
+# Minor fica aberto pra revisão humana. Major nem chega (bloqueado no dependabot.yml).
+name: Dependabot Auto-Merge (só patches)
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependabot-auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  auto-merge-patch:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Sair limpo se não for Dependabot
+        if: github.actor != 'dependabot[bot]' || github.repository != 'ServerVpss/CentralDark'
+        run: |
+          echo "::notice::Disparo fora do escopo (autor=${{ github.actor }}). Saindo sem erro."
+          echo "SKIP=1" >> "$GITHUB_ENV"
+
+      - name: Coletar metadados do PR do Dependabot
+        if: env.SKIP != '1'
+        id: meta
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Aprovar PR (sempre que for Dependabot)
+        if: env.SKIP != '1'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE',
+              body: 'Aprovação automática — atualização do Dependabot dentro da política (sem majors).',
+            });
+
+      - name: Habilitar auto-merge somente para PATCH
+        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-patch'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.graphql(`
+              mutation($pullRequestId: ID!) {
+                enablePullRequestAutoMerge(input: {pullRequestId: $pullRequestId, mergeMethod: SQUASH}) {
+                  pullRequest { number autoMergeRequest { enabledAt mergeMethod } }
+                }
+              }
+            `, {
+              pullRequestId: context.payload.pull_request.node_id,
+            });
+
+      - name: Comentar quando for MINOR (fica pra revisão humana)
+        if: env.SKIP != '1' && steps.meta.outputs.update-type == 'version-update:semver-minor'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: '🟡 Atualização **minor** detectada — aprovei, mas o merge fica pra revisão humana (política: auto-merge só pra patch).',
+            });
