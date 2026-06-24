@@ -116,6 +116,47 @@ async function sendToTelegram(
   }
 }
 
+// Envia via Connector Gateway (Lovable) — usado quando não há bot cadastrado
+// na tabela telegram_bots. O bot é o vinculado ao TELEGRAM_API_KEY (@srver1bot).
+async function sendViaConnector(
+  chatId: number,
+  text: string,
+): Promise<{ ok: boolean; message_id: number | null; error: string | null }> {
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+  const telegramKey = Deno.env.get("TELEGRAM_API_KEY");
+  if (!lovableKey || !telegramKey) {
+    return { ok: false, message_id: null, error: "connector_keys_missing" };
+  }
+  try {
+    const resp = await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": telegramKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+    });
+    const json = (await resp.json()) as {
+      ok: boolean;
+      result?: { message_id: number };
+      description?: string;
+    };
+    if (!resp.ok || !json.ok) {
+      return { ok: false, message_id: null, error: json.description ?? `http_${resp.status}` };
+    }
+    return { ok: true, message_id: json.result?.message_id ?? null, error: null };
+  } catch (e) {
+    return { ok: false, message_id: null, error: (e as Error).message };
+  }
+}
+
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
