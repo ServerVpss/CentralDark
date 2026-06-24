@@ -75,6 +75,7 @@ const menuGroups = [
     icon: Cpu,
     items: [
       { title: "Mega Painel", icon: Radio, path: "/mega-painel" },
+      { title: "Cofre (ADM)", icon: ShieldAlert, path: "/cofre" },
       { title: "Status", icon: Activity, path: "/status" },
       { title: "Teste de Módulos", icon: FlaskConical, path: "/teste-modulos" },
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
