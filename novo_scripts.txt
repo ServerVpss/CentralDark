@@ -1,0 +1,7 @@
+scripts/apply-caddy-landings.sh 2552
+scripts/audit-rls.sql 1690
+scripts/cron-sync-centraldark.sh 1056
+scripts/lovable-agent 0
+scripts/lovable-agent/setup-vps-ssh.sh 1737
+scripts/setup-centraldark-portal.sh 2680
+scripts/sync-para-centraldark-monorepo.sh 3968
