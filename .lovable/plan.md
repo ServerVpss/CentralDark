@@ -1,84 +1,35 @@
-## Objetivo
+## Resposta rápida
 
-Tornar a **VPS** a casa oficial do TelePanel (rodando em `https://telepainel.centralldark.com`), e deixar o **Lovable só pra desenhar/visualizar**. Toda alteração que você fizer no Lovable cai automaticamente na VPS, sem você precisar mexer em nada.
+**Sim, está aplicado — mas só no `telepainel.centralldark.com`.** Ontem, quando configurei o subdomínio, usei o mesmo snippet `cloudflare_origin` que você já tinha pronto (o cert + chave em `/etc/ssl/cloudflare/`). Então o TelePanel já está servido com o cert Cloudflare Origin CA válido até 2041, igual o `install.centralldark.com`.
 
-Banco continua o mesmo (`kagejpghnwdfymddwxuf` no Supabase) — não muda nada lá. Bot de consultas continua respondendo via edge functions, como já é hoje.
+**O que falta protegido pelo mesmo cert:** o `deploy.centralldark.com` (o endpoint que recebe o webhook do GitHub). Esse eu não tinha colocado o snippet, então ainda usa cert "self-signed" e o GitHub está enviando com `insecure_ssl: 1` (funciona, mas é gambiarra).
 
----
+## Plano
 
-## Etapas
+### 1) Adicionar `import cloudflare_origin` no `deploy.centralldark.com`
+Editar `/etc/caddy/deploy-centraldark.Caddyfile` e incluir `import cloudflare_origin` dentro do bloco, igualzinho ao install. Recarregar o Caddy.
 
-### 1) Atualizar a pasta da VPS com o código de hoje
-A pasta `/root/CentralDark/apps/modulos/telepainel/` está congelada em 20/jun. Vou fazer ela puxar o estado atual do GitHub do projeto (`telegram-zen-panel`):
+### 2) Desativar o `insecure_ssl` do webhook GitHub
+Atualizar via API o webhook id `645867939` para `insecure_ssl: "0"` — assim o GitHub passa a validar o cert de verdade.
 
-```
-cd /root/CentralDark/apps/modulos/telepainel
-git fetch origin && git reset --hard origin/main
-bun install
-bun run build
-```
+### 3) (Manual, 1 clique seu) Cloudflare → nuvem laranja
+No painel Cloudflare, em DNS → `centralldark.com`, ligar o proxy (nuvem laranja) em:
+- `telepainel`
+- `deploy`
 
-Resultado: `dist/` atualizado com o código de hoje.
+Sem isso, o cert Origin CA não vale (precisa do CF na frente). Os outros subdomínios que já estão protegidos (`install`, etc.) já estão com laranja ligada.
 
-### 2) Caddy passar a servir o `dist/`
-Criar `/etc/caddy/conf.d/telepainel.centralldark.com.Caddyfile`:
-
-```
-telepainel.centralldark.com {
-    root * /root/CentralDark/apps/modulos/telepainel/dist
-    encode zstd gzip
-    try_files {path} /index.html
-    file_server
-}
-```
-
-Importar no `/etc/caddy/Caddyfile` principal e dar `caddy validate && systemctl reload caddy`. SSL Let's Encrypt sai automático.
-
-Teste: `curl -I https://telepainel.centralldark.com` tem que devolver 200 com conteúdo (não vazio).
-
-### 3) Apontar o bot pra esse domínio
-No banco:
-```sql
-update bot_settings set webapp_url = 'https://telepainel.centralldark.com';
-```
-Pronto: o Mini App passa a abrir pelo seu domínio próprio em vez do `*.lovable.app`.
-
-### 4) Sincronização automática Lovable → VPS
-Aqui está o pulo do gato — o que vai te deixar editar no Lovable e a VPS atualizar sozinha:
-
-**Como funciona:**
-- Lovable já tem sync bidirecional com o GitHub `telegram-zen-panel`. Toda alteração que você faz vira commit automático.
-- Vou criar na VPS um pequeno processo PM2 chamado `telepainel-deploy-listener` (porta interna), que recebe webhook do GitHub.
-- A cada `push` no `main`, GitHub avisa o listener, que roda: `git pull && bun install && bun run build && systemctl reload caddy`.
-- Tempo total: ~30-60 segundos entre você salvar no Lovable e a VPS estar atualizada.
-
-**Vantagem:** você continua editando no Lovable do jeitinho que gosta (chat com a IA, preview ao vivo), mas o site real que seus clientes usam roda na sua VPS, sem custo extra de hospedagem, no seu domínio.
-
-### 5) Lovable vira só preview
-- O domínio público `*.lovable.app` continua existindo (não dá pra desligar), mas só você usa pra preview/design.
-- O bot e o público acessam só `telepainel.centralldark.com`.
-
----
+### 4) Confirmar SSL/TLS = Completo (Estrito) na Cloudflare
+Você já tinha avisado ontem que dava pra virar pra "Completo (Estrito)". Se ainda não virou, virar agora — fica ponta a ponta criptografado com validação.
 
 ## O que **não** muda
-- Banco Supabase (`kagejpghnwdfymddwxuf`) — continua igual.
-- Bot de consultas (edge functions) — continuam serverless, sem virar processo VPS.
-- Bot DevOps `CentralDark-TelegramBot` (PM2 id 11) — intocado.
-- Pasta `/root/CentralDark/apps/bot-telegram/` — intocada.
-
-## O que muda
-- Pasta `telepainel/` na VPS deixa de ser placeholder e vira a cópia viva do código.
-- Caddy passa a servir o subdomínio (hoje devolve 200 vazio).
-- Novo processo PM2 `telepainel-deploy-listener` (~50 linhas Node, sem deps).
-- Sem migrations de banco. Sem código novo no projeto Lovable.
+- Cert do `telepainel.centralldark.com` — já está usando o Origin CA correto.
+- Pipeline de auto-deploy GitHub → VPS — continua igual.
+- Banco, bot, PM2 — intocados.
 
 ## Detalhes técnicos
-- Listener: Node nativo (`http` + `child_process`), valida assinatura HMAC do GitHub usando secret.
-- Build via `bun` (já instalado na VPS).
-- Caddy reload é gracioso (zero downtime).
-- Se o build falhar, a versão anterior continua servindo (só atualiza `dist/` se `bun run build` der exit 0).
-- Logs em `/var/log/telepainel-deploy-*.log`.
+- O snippet `cloudflare_origin` em `/etc/caddy/centralldark-origin.Caddyfile` aponta pra `/etc/ssl/cloudflare/centralldark.com.pem` e `.key` (SAN `*.centralldark.com`, validade 2041).
+- Caddy faz hot-reload, zero downtime.
+- A mudança no webhook é uma chamada PATCH na API do GitHub usando o token que já temos.
 
----
-
-Confirma que pode mandar bala?
+Confirma que pode aplicar?
