@@ -1,0 +1,59 @@
+name: setup-telepainel-caddy
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  caddy:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Diagnostico
+        shell: bash
+        run: |
+          set -e
+          CF=/etc/caddy/Caddyfile
+          [ -f "$CF" ] || { echo "Caddyfile nao encontrado em $CF"; exit 1; }
+          echo "=== Bloco telepainel existente? ==="
+          grep -n "telepainel" "$CF" || echo "ausente"
+      - name: Adiciona bloco
+        shell: bash
+        run: |
+          set -e
+          CF=/etc/caddy/Caddyfile
+          cp "$CF" "$CF.bak.$(date +%s)"
+          if ! grep -q "telepainel.centralldark.com" "$CF"; then
+            {
+              echo ''
+              echo 'telepainel.centralldark.com {'
+              echo '    encode gzip'
+              echo '    reverse_proxy https://telegram-zen-panel-6518f4e2-5d802052.lovable.app {'
+              echo '        header_up Host telegram-zen-panel-6518f4e2-5d802052.lovable.app'
+              echo '        header_up X-Forwarded-Host telepainel.centralldark.com'
+              echo '        transport http {'
+              echo '            tls'
+              echo '            tls_server_name telegram-zen-panel-6518f4e2-5d802052.lovable.app'
+              echo '        }'
+              echo '    }'
+              echo '}'
+            } >> "$CF"
+            echo "Bloco adicionado."
+          else
+            echo "Bloco ja existe."
+          fi
+      - name: Validar e recarregar
+        shell: bash
+        run: |
+          set -e
+          caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+          systemctl reload caddy
+      - name: Testar
+        shell: bash
+        run: |
+          sleep 8
+          echo "=== HEAD ==="
+          curl -sI -L --max-time 25 https://telepainel.centralldark.com/ | head -20
+          echo "=== Body 300c ==="
+          curl -s -L --max-time 25 https://telepainel.centralldark.com/ | head -c 300
