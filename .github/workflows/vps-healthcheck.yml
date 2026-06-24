@@ -1,0 +1,74 @@
+name: VPS HealthCheck
+# Bot de monitoramento — roda direto na VPS via self-hosted runner.
+# Sem SSH (runner já é local). Envia relatório pelo canal oficial notify-telegram.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'   # a cada 6h
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vps-healthcheck
+  cancel-in-progress: false
+
+jobs:
+  healthcheck:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    env:
+      NOTIFY_API_KEY: ${{ secrets.NOTIFY_API_KEY }}
+    steps:
+      - name: Coletar e notificar
+        shell: bash
+        run: |
+          set +e
+          HOST=$(hostname)
+          UPTIME=$(uptime | sed 's/^ *//')
+          LOAD=$(cut -d' ' -f1-3 /proc/loadavg)
+          DISK=$(df -h / | awk 'NR==2{print $3"/"$2" ("$5")"}')
+          DISK_PCT=$(df / | awk 'NR==2{gsub("%","",$5);print $5}')
+          MEM=$(free -h | awk '/Mem:/{print $3"/"$2}')
+          PM2_ON=$(pm2 jlist 2>/dev/null | python3 -c 'import json,sys;d=json.load(sys.stdin);print(sum(1 for p in d if p.get("pm2_env",{}).get("status")=="online"))' 2>/dev/null || echo "?")
+          PM2_OFF=$(pm2 jlist 2>/dev/null | python3 -c 'import json,sys;d=json.load(sys.stdin);print(sum(1 for p in d if p.get("pm2_env",{}).get("status")=="stopped"))' 2>/dev/null || echo "?")
+          PM2_ERR=$(pm2 jlist 2>/dev/null | python3 -c 'import json,sys;d=json.load(sys.stdin);print(sum(1 for p in d if p.get("pm2_env",{}).get("status")=="errored"))' 2>/dev/null || echo "0")
+
+          TIPO="sucesso"; EMOJI="✅"; ALERTAS=""
+          if [ "${PM2_ERR:-0}" -gt 0 ] 2>/dev/null; then
+            TIPO="erro"; EMOJI="❌"
+            ALERTAS="${ALERTAS}\n• PM2 com ${PM2_ERR} processo(s) em erro"
+          fi
+          if [ "${DISK_PCT:-0}" -ge 90 ] 2>/dev/null; then
+            TIPO="critico"; EMOJI="🚨"
+            ALERTAS="${ALERTAS}\n• Disco / em ${DISK_PCT}%"
+          elif [ "${DISK_PCT:-0}" -ge 80 ] 2>/dev/null && [ "$TIPO" = "sucesso" ]; then
+            TIPO="aviso"; EMOJI="⚠️"
+            ALERTAS="${ALERTAS}\n• Disco / em ${DISK_PCT}%"
+          fi
+
+          TITULO="${EMOJI} HealthCheck VPS"
+          MSG="<b>Host:</b> ${HOST}\n<b>Uptime:</b> ${UPTIME}\n<b>Load:</b> ${LOAD}\n<b>Disco /:</b> ${DISK}\n<b>Memória:</b> ${MEM}\n<b>PM2:</b> ${PM2_ON} online · ${PM2_OFF} parados · ${PM2_ERR} erro${ALERTAS}"
+
+          if [ -z "${NOTIFY_API_KEY:-}" ]; then
+            echo "::warning::NOTIFY_API_KEY ausente — pulando envio"
+            echo "Relatório que seria enviado:"
+            echo -e "$MSG"
+            exit 0
+          fi
+
+          PAYLOAD=$(TIPO="$TIPO" TITULO="$TITULO" MSG="$MSG" python3 -c '
+import json, os
+print(json.dumps({
+  "origem": "vps-healthcheck",
+  "tipo":   os.environ["TIPO"],
+  "titulo": os.environ["TITULO"],
+  "mensagem": os.environ["MSG"].replace("\\n", "\n"),
+}))')
+
+          curl -sS -X POST "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/notify-telegram" \
+            -H "x-notify-key: ${NOTIFY_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD"
+          echo
