@@ -1,0 +1,49 @@
+name: Migrate Atalho Secrets
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    steps:
+      - name: Injetar secrets do mapa
+        env:
+          GH_PAT: ${{ secrets.MIGRATION_GH_PAT }}
+          TARGET_REPO: ServerVpss/CentralDark
+        shell: bash
+        run: |
+          set -e
+          MAP=/tmp/atalho_secrets.env
+          if [ ! -f "$MAP" ]; then echo "mapa nao encontrado"; exit 1; fi
+          python3 -m pip install --quiet --user pynacl requests
+          python3 - <<'PY'
+          import os, re, base64, requests
+          from nacl import public, encoding
+          TOKEN=os.environ["GH_PAT"]; REPO=os.environ["TARGET_REPO"]
+          H={"Authorization":f"Bearer {TOKEN}","Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"}
+          pk=requests.get(f"https://api.github.com/repos/{REPO}/actions/secrets/public-key",headers=H).json()
+          pub=public.PublicKey(pk["key"].encode(),encoding.Base64Encoder()); sb=public.SealedBox(pub)
+          data={}
+          # parse .env permitindo aspas e multiline com \n literal
+          raw=open("/tmp/atalho_secrets.env","r",encoding="utf-8",errors="replace").read()
+          for m in re.finditer(r'^([A-Za-z_][A-Za-z0-9_]*)=(.*)$', raw, re.M):
+              k=m.group(1); v=m.group(2).strip()
+              if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
+                  v=v[1:-1]
+              v=v.replace("\\n","\n")
+              if v=="": continue
+              data[k]=v  # ultimo vence
+          ok=0; fail=0
+          for name,val in data.items():
+              enc=base64.b64encode(sb.encrypt(val.encode())).decode()
+              r=requests.put(f"https://api.github.com/repos/{REPO}/actions/secrets/{name}",
+                  headers=H,json={"encrypted_value":enc,"key_id":pk["key_id"]})
+              if r.status_code in (201,204):
+                  print(f"OK {name} HTTP {r.status_code}"); ok+=1
+              else:
+                  print(f"FAIL {name} HTTP {r.status_code}"); fail+=1
+          print(f"TOTAL OK={ok} FAIL={fail}")
+          PY
+          rm -f /tmp/atalho_secrets.env /tmp/rastreador_ninho.sh
+          echo "incinerados: /tmp/atalho_secrets.env /tmp/rastreador_ninho.sh"
