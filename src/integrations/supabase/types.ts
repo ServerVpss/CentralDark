@@ -641,6 +641,42 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_events: {
+        Row: {
+          body_template: string | null
+          category: string
+          created_at: string
+          enabled: boolean
+          event_key: string
+          id: string
+          severity_default: string
+          title_template: string | null
+          updated_at: string
+        }
+        Insert: {
+          body_template?: string | null
+          category: string
+          created_at?: string
+          enabled?: boolean
+          event_key: string
+          id?: string
+          severity_default: string
+          title_template?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body_template?: string | null
+          category?: string
+          created_at?: string
+          enabled?: boolean
+          event_key?: string
+          id?: string
+          severity_default?: string
+          title_template?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notification_routes: {
         Row: {
           ativo: boolean
@@ -692,7 +728,11 @@ export type Database = {
         Row: {
           created_at: string
           dedupe_hash: string | null
+          event_key: string | null
+          group_count: number
+          group_key: string | null
           id: string
+          link: string | null
           mensagem: string
           metadata: Json
           origem: string
@@ -706,7 +746,11 @@ export type Database = {
         Insert: {
           created_at?: string
           dedupe_hash?: string | null
+          event_key?: string | null
+          group_count?: number
+          group_key?: string | null
           id?: string
+          link?: string | null
           mensagem: string
           metadata?: Json
           origem: string
@@ -720,7 +764,11 @@ export type Database = {
         Update: {
           created_at?: string
           dedupe_hash?: string | null
+          event_key?: string | null
+          group_count?: number
+          group_key?: string | null
           id?: string
+          link?: string | null
           mensagem?: string
           metadata?: Json
           origem?: string
