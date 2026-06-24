@@ -1,0 +1,120 @@
+name: Vigia Actions Vermelhos
+# Bot 24/7 que vigia workflows do CentralDark.
+# Dispara em qualquer workflow_run concluído + cron 6h + on-demand.
+# Reporta falhas no canal oficial (notify-telegram).
+# Auto-suficiente: sem scripts externos, só bash + jq + curl.
+
+on:
+  workflow_run:
+    workflows: ["*"]
+    types: [completed]
+  schedule:
+    - cron: '7 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: vigia-actions-vermelhos
+  cancel-in-progress: false
+
+jobs:
+  vigia:
+    # Não auto-disparar (evita loop) e só agir em falha quando triggered por workflow_run
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.name != 'Vigia Actions Vermelhos' &&
+       github.event.workflow_run.conclusion == 'failure')
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    env:
+      NOTIFY_API_KEY: ${{ secrets.NOTIFY_API_KEY }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      EVENT: ${{ github.event_name }}
+      WF_NAME: ${{ github.event.workflow_run.name }}
+      WF_CONCL: ${{ github.event.workflow_run.conclusion }}
+      WF_URL: ${{ github.event.workflow_run.html_url }}
+      WF_ID: ${{ github.event.workflow_run.id }}
+      WF_ACTOR: ${{ github.event.workflow_run.actor.login }}
+      WF_BRANCH: ${{ github.event.workflow_run.head_branch }}
+      WF_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - name: Vigiar e notificar
+        shell: bash
+        run: |
+          set +e
+          STATE_DIR="/var/lib/centraldark/vigia"
+          STATE_FILE="$STATE_DIR/reported.txt"
+          sudo mkdir -p "$STATE_DIR" 2>/dev/null || mkdir -p "$STATE_DIR" 2>/dev/null
+          touch "$STATE_FILE" 2>/dev/null
+
+          notificar() {
+            local TIPO="$1" TITULO="$2" MSG="$3"
+            echo "[vigia] $TIPO :: $TITULO"
+            echo -e "$MSG"
+            [ -z "${NOTIFY_API_KEY:-}" ] && { echo "::warning::NOTIFY_API_KEY ausente"; return 0; }
+            local PAYLOAD
+            PAYLOAD=$(jq -nc \
+              --arg origem "vigia-actions" \
+              --arg tipo "$TIPO" \
+              --arg titulo "$TITULO" \
+              --arg mensagem "$(echo -e "$MSG")" \
+              '{origem:$origem, tipo:$tipo, titulo:$titulo, mensagem:$mensagem}')
+            curl -sS -X POST "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/notify-telegram" \
+              -H "x-notify-key: ${NOTIFY_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "$PAYLOAD" >/dev/null
+          }
+
+          ja_reportado() { grep -qx "$1" "$STATE_FILE" 2>/dev/null; }
+          marcar() { echo "$1" >> "$STATE_FILE"; tail -n 500 "$STATE_FILE" > "$STATE_FILE.tmp" && mv "$STATE_FILE.tmp" "$STATE_FILE"; }
+
+          if [ "$EVENT" = "workflow_run" ]; then
+            KEY="run:${WF_ID}"
+            if ja_reportado "$KEY"; then
+              echo "[vigia] já reportado — ignorando"; exit 0
+            fi
+            MSG="<b>Workflow:</b> ${WF_NAME}\n<b>Branch:</b> ${WF_BRANCH}\n<b>Autor:</b> ${WF_ACTOR}\n<b>Commit:</b> ${WF_SHA:0:10}\n<b>Run:</b> ${WF_URL}"
+            notificar "erro" "🚨 Workflow falhou: ${WF_NAME}" "$MSG"
+            marcar "$KEY"
+            exit 0
+          fi
+
+          # Varredura periódica (schedule/dispatch): últimos 30 runs, reporta failures novas
+          echo "[vigia] varredura periódica em $REPO"
+          RUNS=$(curl -sS -H "Authorization: token ${GH_TOKEN}" \
+            "https://api.github.com/repos/${REPO}/actions/runs?per_page=30&status=completed")
+
+          FAILS=$(echo "$RUNS" | jq -r '.workflow_runs[]? | select(.conclusion=="failure") | "\(.id)|\(.name)|\(.html_url)|\(.head_branch)|\(.actor.login)|\(.head_sha)"')
+
+          if [ -z "$FAILS" ]; then
+            echo "[vigia] nenhuma falha recente"
+            # Heartbeat só uma vez por dia (hora 7)
+            HOUR=$(date +%H)
+            if [ "$HOUR" = "07" ] && ! ja_reportado "heartbeat:$(date +%F)"; then
+              notificar "info" "🟢 Vigia operacional" "Varredura limpa — sem workflows em falha nas últimas execuções."
+              marcar "heartbeat:$(date +%F)"
+            fi
+            exit 0
+          fi
+
+          NOVOS=0
+          while IFS='|' read -r ID NAME URL BRANCH ACTOR SHA; do
+            KEY="run:$ID"
+            ja_reportado "$KEY" && continue
+            MSG="<b>Workflow:</b> ${NAME}\n<b>Branch:</b> ${BRANCH}\n<b>Autor:</b> ${ACTOR}\n<b>Commit:</b> ${SHA:0:10}\n<b>Run:</b> ${URL}"
+            notificar "erro" "🚨 Workflow falhou: ${NAME}" "$MSG"
+            marcar "$KEY"
+            NOVOS=$((NOVOS+1))
+          done <<< "$FAILS"
+          echo "[vigia] reportou $NOVOS falha(s) nova(s)"
+
+      - name: Resumo
+        if: always()
+        shell: bash
+        run: |
+          echo "## 🔍 Vigia Actions — $(date '+%d/%m/%Y %H:%M')" >> $GITHUB_STEP_SUMMARY
+          echo "Evento: \`${{ github.event_name }}\`" >> $GITHUB_STEP_SUMMARY
