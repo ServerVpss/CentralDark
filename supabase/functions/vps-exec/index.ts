@@ -88,9 +88,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    const githubToken = Deno.env.get('GITHUB_TOKEN');
-    const githubOwner = Deno.env.get('GITHUB_OWNER');
-    const githubRepo = Deno.env.get('GITHUB_REPO');
+    // Padrão GH_APP_* (refatorado a partir de GITHUB_*)
+    const githubToken = Deno.env.get('GH_APP_TOKEN');
+    const githubOwner = Deno.env.get('GH_APP_OWNER');
+    const githubRepo = Deno.env.get('GH_APP_REPO');
 
     if (!githubToken || !githubOwner || !githubRepo) {
       return new Response(JSON.stringify({ error: 'Configuração GitHub incompleta' }), {
