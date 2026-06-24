@@ -16,8 +16,9 @@ const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-// Chat do admin (fallback final)
-const DEFAULT_ADMIN_CHAT_ID = 1901426549;
+// Destino padrão das notificações de sistema: canal CentralDark — Status
+// (regra do dono: tudo vai pro canal, não pro DM do admin)
+const DEFAULT_ADMIN_CHAT_ID = -1003669176367;
 // Bot preferido pro fallback (regra do projeto)
 const PREFERRED_BOT_USERNAME = "srver1bot";
 
