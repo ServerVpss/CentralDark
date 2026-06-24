@@ -1,0 +1,69 @@
+name: sentinela-divergencias
+
+# Sentinela 24/7 — varre divergências no repo, workflows, endpoints públicos
+# e PM2/MCP, e abre Issue automática (com dedupe por hash) pra cada uma.
+# Roda a cada 6h e sob demanda.
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Só relata, não abre Issue'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: sentinela-divergencias
+  cancel-in-progress: false
+
+jobs:
+  varredura:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Rodar sentinela
+        id: run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT_PERFIL: ${{ secrets.GITHUB_PAT_PERFIL }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+          REPO_ALVO: ${{ github.repository }}
+        run: node scripts/sentinela/run.mjs
+
+      - name: Commit snapshot
+        run: |
+          git config user.name 'CentralDark Sentinela'
+          git config user.email 'actions@github.com'
+          git add -- docs/sentinela/last-snapshot.json docs/sentinela/last-report.md 2>/dev/null || true
+          git commit -m "chore(sentinela): snapshot ${{ github.run_id }}
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
+          git push || true
+
+      - name: Atualizar Mega Painel
+        if: always()
+        env:
+          PAINEL_EVENTO: 'Sentinela rodou'
+          PAINEL_EVENTO_AREA: 'Bots'
+          PAINEL_EVENTO_STATUS: 'feito'
+          PAINEL_EVENTO_DETALHE: 'Varredura automática de divergências (workflow run ${{ github.run_id }}).'
+        run: |
+          node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs || true
+          git add -- CentralDark/apps/projeto-dashboard/painel-data.json 2>/dev/null || true
+          git commit -m "chore(painel): sentinela ${{ github.run_id }}
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
+          git push || true

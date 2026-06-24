@@ -1,0 +1,28 @@
+name: sentinela-stale
+
+# Varre Issues abertas com label `sentinela` que passaram do TTL (7 dias)
+# sem PR linkado. Marca como `stale` e escala severidade.
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  stale:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      - name: Marcar stale e escalar
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_ALVO: ${{ github.repository }}
+          TTL_DIAS: '7'
+        run: node scripts/sentinela/stale.mjs

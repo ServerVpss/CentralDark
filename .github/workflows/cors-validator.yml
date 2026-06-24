@@ -1,0 +1,26 @@
+name: CORS Validator
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * *" # 1x/dia (era a cada 6h — reduzido pra economizar Actions)
+  push:
+    paths:
+      - "CentralDark/infra/caddy/**"
+      - "CentralDark/apps/bot-server/**"
+      - "scripts/checker/cors-validator.mjs"
+      - ".github/workflows/cors-validator.yml"
+
+jobs:
+  validate:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Rodar validador de CORS
+        env:
+          API_BASE: https://api.centralldark.com
+          ORIGIN: https://bot.centralldark.com
+        run: node scripts/checker/cors-validator.mjs

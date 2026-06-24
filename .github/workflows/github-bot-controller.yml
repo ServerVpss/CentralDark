@@ -1,0 +1,58 @@
+name: GitHub Bot Controller
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Rodar em dry-run?"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      merged_pr:
+        description: "PR consolidada mergeada que substituiu outras PRs"
+        required: false
+        default: ""
+      supersedes:
+        description: "Lista de PRs substituídas. Exemplo: #14 #16 #11"
+        required: false
+        default: ""
+  pull_request:
+    types:
+      - closed
+  schedule:
+    - cron: "17 9 * * *"
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: github-bot-controller-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  controller:
+    name: Auditar PRs e fechar substituídas com segurança
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validar runtime Node
+        run: node --version
+
+      - name: Executar GitHub Bot Controller
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'auto' }}
+          BOT_MERGED_PR: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr || '' }}
+          BOT_SUPERSEDES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.supersedes || '' }}
+        run: node CentralDark/scripts/github-bot-controller.mjs

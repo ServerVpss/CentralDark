@@ -1,0 +1,75 @@
+name: wuzapi-sessions-monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    # A cada 15 minutos
+    - cron: '*/15 * * * *'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: wuzapi-sessions-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitorar:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: Baixar repo
+        uses: actions/checkout@v4
+
+      - name: Preparar chave SSH
+        id: ssh
+        env:
+          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+        run: |
+          if [ -z "$VPS_SSH_KEY_LOVABLE" ]; then
+            echo "⚠️ Secret VPS_SSH_KEY_LOVABLE ausente — pulando sem falhar."
+            echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          KEY=/tmp/vps_lovable_key
+          printf '%s\n' "$VPS_SSH_KEY_LOVABLE" > "$KEY"
+          chmod 600 "$KEY"
+          ssh-keygen -y -f "$KEY" >/dev/null 2>&1 || { echo "❌ chave inválida"; echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0; }
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "key=$KEY" >> "$GITHUB_OUTPUT"
+
+      - name: Rodar monitor
+        if: steps.ssh.outputs.skip != 'true'
+        env:
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+          SSH_KEY_PATH: ${{ steps.ssh.outputs.key }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node scripts/bots/wuzapi-sessions-monitor.mjs
+
+
+      - name: Commitar JSON se mudou
+        if: steps.ssh.outputs.skip != 'true'
+        run: |
+          FILE=CentralDark/apps/projeto-dashboard/wuzapi-sessions.json
+          if git diff --quiet -- "$FILE"; then
+            echo "sem mudanças"; exit 0
+          fi
+          git config user.name "wuzapi-sessions-bot"
+          git config user.email "bot@centralldark.local"
+          git add "$FILE"
+          git commit -m "chore(painel): snapshot wuzapi-sessions [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep 3
+          done
+          echo "⚠️ push falhou (não bloqueia o monitor)"
+
+      - name: Limpar chave
+        if: always()
+        run: rm -f /tmp/vps_lovable_key
