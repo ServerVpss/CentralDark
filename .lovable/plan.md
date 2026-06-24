@@ -1,35 +1,39 @@
-## Resposta rápida
+## O plano
 
-**Sim, está aplicado — mas só no `telepainel.centralldark.com`.** Ontem, quando configurei o subdomínio, usei o mesmo snippet `cloudflare_origin` que você já tinha pronto (o cert + chave em `/etc/ssl/cloudflare/`). Então o TelePanel já está servido com o cert Cloudflare Origin CA válido até 2041, igual o `install.centralldark.com`.
+Agora que tenho a Global API Key + e-mail da Cloudflare, consigo fazer tudo que faltava sem você precisar clicar em nada no painel. Vou agir em duas fases: primeiro **auditar** (só leitura, mostro o estado atual), depois **aplicar** os ajustes com tua confirmação.
 
-**O que falta protegido pelo mesmo cert:** o `deploy.centralldark.com` (o endpoint que recebe o webhook do GitHub). Esse eu não tinha colocado o snippet, então ainda usa cert "self-signed" e o GitHub está enviando com `insecure_ssl: 1` (funciona, mas é gambiarra).
+### Fase 1 — Auditoria (só leitura)
 
-## Plano
+1. Listar as zonas da conta e confirmar o `centralldark.com` (pegar o Zone ID sozinho).
+2. Listar todos os registros DNS e identificar quais estão com proxy (nuvem laranja) ligado/desligado — foco no `telepainel` e `deploy`.
+3. Conferir as configurações atuais de SSL/TLS, Always Use HTTPS, Min TLS Version, HSTS, Bot Fight Mode, e regras de cache.
+4. Te mando um relatório curto: "isso aqui está ok, isso precisa mudar".
 
-### 1) Adicionar `import cloudflare_origin` no `deploy.centralldark.com`
-Editar `/etc/caddy/deploy-centraldark.Caddyfile` e incluir `import cloudflare_origin` dentro do bloco, igualzinho ao install. Recarregar o Caddy.
+### Fase 2 — Aplicação (com tua confirmação)
 
-### 2) Desativar o `insecure_ssl` do webhook GitHub
-Atualizar via API o webhook id `645867939` para `insecure_ssl: "0"` — assim o GitHub passa a validar o cert de verdade.
+Depois do relatório, aplico via API:
 
-### 3) (Manual, 1 clique seu) Cloudflare → nuvem laranja
-No painel Cloudflare, em DNS → `centralldark.com`, ligar o proxy (nuvem laranja) em:
-- `telepainel`
-- `deploy`
+- **Proxy ligado** (nuvem laranja) nos subdomínios que faltam: `telepainel.centralldark.com` e `deploy.centralldark.com` — isso resolve o último item pendente do plano de ontem (cert Origin CA passa a validar de verdade).
+- **SSL/TLS = Full (Strict)** — ponta a ponta criptografado com validação do cert do servidor.
+- **Always Use HTTPS = ON** — qualquer acesso http vira https.
+- **Automatic HTTPS Rewrites = ON** — corrige links http dentro das páginas.
+- **Min TLS Version = 1.2** — corta versões velhas e inseguras.
+- **HSTS** ligado com 6 meses (sem preload por enquanto, pra não travar nada).
+- **Bot Fight Mode = ON** (gratuito, filtra bots óbvios).
+- **Brotli + Early Hints = ON** (performance).
+- **Browser Cache TTL** ajustado pra estático.
 
-Sem isso, o cert Origin CA não vale (precisa do CF na frente). Os outros subdomínios que já estão protegidos (`install`, etc.) já estão com laranja ligada.
+### O que NÃO vou fazer sem tua ordem expressa
 
-### 4) Confirmar SSL/TLS = Completo (Estrito) na Cloudflare
-Você já tinha avisado ontem que dava pra virar pra "Completo (Estrito)". Se ainda não virou, virar agora — fica ponta a ponta criptografado com validação.
+- Mexer em zonas que não sejam `centralldark.com`.
+- Apagar nenhum registro DNS existente.
+- Ativar WAF pago, Rate Limiting pago ou qualquer coisa que cobre na fatura.
+- Mexer em Workers, R2, Pages, e-mail, ou qualquer outro produto.
 
-## O que **não** muda
-- Cert do `telepainel.centralldark.com` — já está usando o Origin CA correto.
-- Pipeline de auto-deploy GitHub → VPS — continua igual.
-- Banco, bot, PM2 — intocados.
+### Detalhes técnicos
 
-## Detalhes técnicos
-- O snippet `cloudflare_origin` em `/etc/caddy/centralldark-origin.Caddyfile` aponta pra `/etc/ssl/cloudflare/centralldark.com.pem` e `.key` (SAN `*.centralldark.com`, validade 2041).
-- Caddy faz hot-reload, zero downtime.
-- A mudança no webhook é uma chamada PATCH na API do GitHub usando o token que já temos.
+Vou usar `curl` contra `https://api.cloudflare.com/client/v4/` com os headers `X-Auth-Email` + `X-Auth-Key` (Global Key). Toda chamada de escrita é logada e mostrada antes de ser feita. A chave nunca aparece em log, só nos headers.
 
-Confirma que pode aplicar?
+---
+
+Posso seguir com a **Fase 1 (auditoria, zero risco)** assim que você aprovar esse plano?
