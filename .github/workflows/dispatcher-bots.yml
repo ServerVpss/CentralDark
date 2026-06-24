@@ -1,0 +1,49 @@
+name: dispatcher-bots
+
+# Ao adicionar uma label `assign:<bot>` em uma Issue, posta o briefing
+# operacional pro bot correspondente e registra evento no painel.
+# Anti-loop: cada bot só age se a label dele estiver presente.
+
+on:
+  issues:
+    types: [labeled, opened]
+
+permissions:
+  issues: write
+  contents: read
+
+concurrency:
+  group: dispatcher-bots-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  rotear:
+    if: contains(github.event.issue.labels.*.name, 'assign:codex') || contains(github.event.issue.labels.*.name, 'assign:supabase-bot') || contains(github.event.issue.labels.*.name, 'assign:lovable') || contains(github.event.issue.labels.*.name, 'assign:grok') || contains(github.event.issue.labels.*.name, 'assign:chatgpt')
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Postar briefing
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = context.payload.issue.labels.map((label) => label.name);
+            const issue_number = context.payload.issue.number;
+            const briefings = [
+              ['assign:codex', 'Codex: ler AGENTS.md + CODEX.md, fazer patch mínimo, rodar build/test, abrir PR explicando diff. Bloqueado: arquivos sensíveis.'],
+              ['assign:supabase-bot', 'Supabase Bot: rodar checks read-only (schema/RLS/migrations) e anexar relatório. Escrita só com label adicional `confirm:write`.'],
+              ['assign:lovable', 'Lovable: tarefa de frontend/UI/painel. Sem mexer em backend, secrets, Docker ou VPS.'],
+              ['assign:grok', 'Grok: auditoria VPS/PM2 read-only. Sem rm -rf, sem reset --hard sem OK explícito do usuário.'],
+              ['assign:chatgpt', 'ChatGPT: orquestrar, validar cadeia 7 passos e fechar issue quando o critério for cumprido.'],
+            ];
+
+            const briefing = (text) => `🤖 **Dispatcher CentralDark** — esta Issue foi delegada via label.\n\n**TTL:** 7 dias pra abrir PR linkado ou comentar progresso, senão escala via \`sentinela-stale\`.\n**Regra anti-loop:** só o bot com a label \`assign:<self>\` deve agir. Outros bots ignoram.\n\n---\n${text}`;
+
+            for (const [label, text] of briefings) {
+              if (!labels.includes(label)) continue;
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+                body: briefing(text),
+              });
+            }
