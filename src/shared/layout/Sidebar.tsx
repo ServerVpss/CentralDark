@@ -22,6 +22,7 @@ import {
   Cpu,
   Database,
   Activity,
+  Radio,
   X,
   LogOut,
   User,
@@ -73,6 +74,7 @@ const menuGroups = [
     label: "Sistema",
     icon: Cpu,
     items: [
+      { title: "Mega Painel", icon: Radio, path: "/mega-painel" },
       { title: "Status", icon: Activity, path: "/status" },
       { title: "Teste de Módulos", icon: FlaskConical, path: "/teste-modulos" },
       { title: "Auditoria", icon: ShieldAlert, path: "/audit" },
