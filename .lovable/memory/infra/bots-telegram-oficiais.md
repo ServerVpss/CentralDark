@@ -9,10 +9,11 @@ type: reference
 - ID: `8057486730`
 - Foto de perfil: igual à do canal `CentralDark — Status` (precisa ser definida manualmente via BotFather → Edit Bot → Edit Botpic, porque o gateway do Telegram aqui não suporta upload multipart de `setMyProfilePhoto`).
 
-**Canal oficial de status:**
+**Canal oficial de status (destino padrão de TODAS as notificações de sistema):**
 - Nome: `CentralDark — Status`
-- ID: `-1003669176367`
+- ID: `-1003669176367` ← travado no `notify-telegram` como `DEFAULT_ADMIN_CHAT_ID`
 - Linked group: `-1002783376580` (`CentralDark — Monitoramento`)
+- Bot `@srver1bot` já é admin do canal e posta direto via connector gateway.
 
 **Bot do módulo Fiscal do TelePainel (NÃO usar para notificações de sistema):**
 - Username: `@SEGREDOPUXADASBOT`
