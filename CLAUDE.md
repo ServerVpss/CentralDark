@@ -76,3 +76,16 @@ Se você é uma IA abrindo este repositório pela primeira vez:
 3. Assuma que a **Sincronia 4-Point** está ativa.
 4. Não execute mudanças destrutivas sem confirmar com o usuário.
 5. Responda sempre em **PT-BR**, tom direto e conversacional.
+
+---
+
+## 8. Política de Migração: CentralDark (transição gradual e segura)
+
+**Regra operacional vigente a partir de agora.**
+
+1. **Hierarquia:** O repositório `ServerVpss/CentralDark` é a única **Fonte da Verdade** para novos desenvolvimentos e para a estrutura do Cérebro Vivo.
+2. **Respeito ao Legado:** O repositório `ServerVpss/CentralDark1VPS` é mantido como **Servidor de Operação Ativa**. Não alterar, não sobrescrever e não remover nada de lá sem instrução explícita de **"Migração de Automação"**.
+3. **Fluxo de Trabalho:** Todo novo desenvolvimento ocorre no `CentralDark`. Quando uma funcionalidade for concluída e testada, faremos a migração (deploy) dela para substituir a versão antiga no `CentralDark1VPS` de forma controlada.
+4. **Zero-Downtime:** Nenhuma automação atual pode ser interrompida. A migração deve ser gradual e segura.
+
+> Esta política é a regra de operação daqui para frente. Qualquer IA que abrir este repositório deve respeitá-la.
