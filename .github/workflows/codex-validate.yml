@@ -1,0 +1,137 @@
+name: codex-validate
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codex-validate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate Codex operational kit
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate required Codex files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required=(
+            "AGENTS.md"
+            "CODEX.md"
+            ".github/codex/prompts/centraldark-system.md"
+            ".github/pull_request_template.md"
+          )
+
+          for file in "${required[@]}"; do
+            test -f "$file" || {
+              echo "Missing required file: $file"
+              exit 1
+            }
+          done
+
+      - name: Check official repository references
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          grep -q "ServerVpss/CentralDark" AGENTS.md
+          grep -q "ServerVpss/CentralDark" CODEX.md
+          grep -q "ServerVpss/CentralDark" .github/codex/prompts/centraldark-system.md
+          grep -q "ServerVpss/CentralDark" .github/pull_request_template.md
+
+      - name: Check sensitive-file guardrails are explicit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docs=(
+            "AGENTS.md"
+            "CODEX.md"
+            ".github/codex/prompts/centraldark-system.md"
+            ".github/pull_request_template.md"
+          )
+
+          for file in "${docs[@]}"; do
+            grep -q "arquivos sensíveis\|Arquivos sensíveis" "$file" || {
+              echo "Missing sensitive-file guardrail wording in $file"
+              exit 1
+            }
+          done
+
+          grep -q "Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis" .github/pull_request_template.md
+          grep -q "Verifiquei comentários de agentes no PR antes do merge" .github/pull_request_template.md
+          grep -q "\.env" AGENTS.md
+          grep -q "secrets/" AGENTS.md
+          grep -q "sessions/" CODEX.md
+          grep -q "\.ssh/" .github/codex/prompts/centraldark-system.md
+
+      - name: Check docs do not contain real secret values
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          files = [
+              Path("AGENTS.md"),
+              Path("CODEX.md"),
+              Path(".github/codex/prompts/centraldark-system.md"),
+              Path(".github/pull_request_template.md"),
+          ]
+
+          patterns = [
+              re.compile(r"-----BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----", re.I),
+              re.compile(r"(?i)\b(?:token|password|passwd|secret|cookie|session|connection_string|database_url|api_key|apikey)\b\s*[:=]\s*['\"]?([^'\"\s<>`]{12,})"),
+          ]
+
+          allowed_placeholders = {
+              "***OCULTO***",
+              "REDACTED",
+              "CHANGEME",
+              "EXAMPLE",
+              "PLACEHOLDER",
+          }
+
+          findings = []
+
+          for file in files:
+              text = file.read_text(encoding="utf-8")
+              for pattern in patterns:
+                  for match in pattern.finditer(text):
+                      value = match.group(1) if match.groups() else match.group(0)
+                      normalized = value.strip().strip('"\'')
+                      if normalized in allowed_placeholders:
+                          continue
+                      findings.append(f"{file}: possible real secret value near: {match.group(0)[:40]}")
+
+          if findings:
+              print("Potential real secret-like values found in Codex docs:")
+              for item in findings:
+                  print("-", item)
+              sys.exit(1)
+
+          print("OK: no real secret-like values found in Codex docs")
+          PY
+
+      - name: Validate Markdown presence
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q "Repositório oficial" AGENTS.md
+          grep -q "Alvo obrigatório" CODEX.md
+          grep -q "Autoajuste consciente" .github/codex/prompts/centraldark-system.md
+          grep -q "Ações sensíveis" .github/pull_request_template.md
