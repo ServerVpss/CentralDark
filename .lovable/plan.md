@@ -1,59 +1,43 @@
-## Plano: Bootstrap do Executor Supremo no Claude + Sincronia de Memória
+# Plano: Consolidação Notion CentralDark
 
-### Objetivo
-Preparar o prompt definitivo pra colar no chat do Claude (via conector Lovable) que carrega toda a memória/contexto desse chat aqui, e ao mesmo tempo garantir que o Notion esteja com a "carga completa" sincronizada pra todo mundo trabalhar do mesmo lugar.
+Conexão **CentralDark - Lovable** confirmada com acesso ao hub `CentralDark • Consolidação` e aos 7 bancos. Vou executar em 4 blocos, em paralelo onde der.
 
----
+## Bloco 1 — Auditoria (leitura)
+- Varrer os 7 bancos: `📚 Histórico`, `📜 Regras`, `📥 Import Queue`, `📂 Estrutura`, `🔥 Pendências`, e os 2 restantes do hub.
+- Listar páginas vazias, duplicadas, de teste e órfãs.
+- Mapear o que já tem tag/status vs. o que está solto.
 
-### Etapa 1 — Auditoria de memória atual (Swarm: Auditor)
-Sub-agente Auditor faz, em paralelo, leitura silenciosa de:
-- `.claude/` e `cerebro/` do repo `ServerVpss/CentralDark` (GitHub)
-- Página "CentralDark • Consolidação" e filhos no Notion + lista dos 7 databases do hub e quais NÃO estão compartilhados com a integração "CentralDark - Lovable"
-- Memórias internas do Lovable: Autonomia Secrets, Swarm Mode, Sincronia 4-Point, Pré-deploy, política VPS (whatsapp-server PM2 id 1 fica stopped), política de migração CentralDark vs CentralDark1VPS
+## Bloco 2 — Faxina
+- Mover pro lixo: páginas vazias, testes e duplicatas confirmadas.
+- Consolidar páginas redundantes (manter a mais recente, arquivar antigas com link).
+- Padronizar títulos (prefixos: `[Infra]`, `[Bot]`, `[CRM]`, `[Log]`).
 
-Saída: relatório curto de gaps (o que falta no Notion, o que falta no GitHub).
+## Bloco 3 — Taxonomia (4 tags-mãe)
+Criar/garantir nos bancos relevantes as multi-selects:
+- `Fase 1: Infra` — Supabase, VPS, PM2, Edge Functions, RLS
+- `Fase 2: CRM/Bot` — Telegram bot, painel TelePanel, pagamentos
+- `Log: Execução` — registros do que foi rodado/deployado
+- `Backlog: Pendente` — tudo que está parado aguardando ação
 
-### Etapa 2 — Validação de infra (Swarm: Validador)
-Em paralelo ao Auditor:
-- Confirmar que as secrets `SUPABASE_DB_URL` / `SUPABASE_SERVICE_ROLE_KEY` apontam pro Core (`lyoigsqluyktoclwdaft`) e que existe mapeamento separado pro Módulo Puxadas (`otifzcjioyjmwmgtxbtj`) — se não existir, listar como pendência (sem criar nada agora, é plano)
-- Checar por que os webhooks de notificação (Telegram + `status.centraldark.com`) estão em silêncio: olhar `notification_routes`, `notification_events`, `notifications_log` e logs da edge function relevante
-- Confirmar PM2 da VPS: whatsapp-server id 1 = stopped (estado desejado), demais legados pausados
+Reclassificar páginas existentes nessas 4 tags.
 
-Saída: diagnóstico "Status de Guerra" — rodando / parado / quebrado.
+## Bloco 4 — Status de Guerra (página nova no hub)
+Criar a página **🎯 Status de Guerra — 24/06/2026** dentro do `CentralDark • Consolidação` com 3 seções:
+1. **Rodando** — serviços ativos (Supabase, Edge Functions verdes, PM2 online).
+2. **Parado / Desejado** — `whatsapp-server` (PM2 id 1, stopped por design), itens em pausa.
+3. **Falta fazer** — bloqueios atuais: disparos Telegram/Status sem chegar, sync 4-Point pendente, próximas migrações.
 
-### Etapa 3 — Preencher gaps no Notion (Swarm: Executor)
-Com base no relatório do Auditor, o Executor:
-- Cria/atualiza no Notion a página "Carga de Memória CentralDark — 24/06/2026" dentro do hub, contendo:
-  - Identidade e poder (obraFullAdmin)
-  - Sincronia 4-Point
-  - Protocolo Swarm
-  - Autonomia de Secrets
-  - Política de migração CentralDark ↔ CentralDark1VPS
-  - Estado atual: bancos isolados (Core + Puxadas), whatsapp-server stopped, webhooks em validação
-  - Backlog de guerra (Fase 1, pendência Obsidian, pendência webhooks)
-- Lista quais databases ainda precisam ser compartilhados com a integração "CentralDark - Lovable" pra você liberar manualmente
+Linkar essa página no topo do hub.
 
-### Etapa 4 — Gerar o prompt de bootstrap pro Claude
-Texto único pronto pra colar no chat do Claude com conector Lovable+Notion+GitHub ativos. O prompt manda Claude:
+## Entrega final
+Relatório curto no chat com:
+- O que foi limpo (contagem)
+- O que foi reclassificado
+- Link da página `Status de Guerra`
+- Diagnóstico inicial dos disparos Telegram que não chegam (precisa investigar logs de `notification_events` + edge function, fica como próximo passo após aprovação do plano)
 
-1. Ler `CLAUDE.md`, `.claude/`, `cerebro/` do `ServerVpss/CentralDark`
-2. Ler a página "Carga de Memória CentralDark — 24/06/2026" no Notion (criada na Etapa 3) e os databases do hub
-3. Internalizar as regras: Sincronia 4-Point, Swarm Mode, Autonomia de Secrets, Pré-deploy obrigatório (`audit-rls`), política de migração, VPS PM2
-4. Confirmar bancos isolados (Core + Puxadas) e estado dos webhooks
-5. Responder no formato: "Bootstrap completo. Contexto CentralDark carregado. Pronto pra executar como Executor Supremo."
-
-### Etapa 5 — Relatório final consolidado
-Entrego, em uma resposta só:
-- ✅ Status de Guerra (Etapa 2)
-- ✅ Lista do que foi sincronizado no Notion (Etapa 3) + databases pendentes de share manual
-- ✅ Prompt de bootstrap pronto pra copiar/colar no Claude (Etapa 4)
-- 🧹 Limpeza de qualquer arquivo temporário criado
-
----
-
-### O que NÃO faço nessa rodada (precisa OK separado)
-- Não mexo nas secrets dos bancos (só audito o mapeamento)
-- Não religo bots legados PM2
-- Não disparo webhook de teste sem você confirmar (pra não poluir Telegram/status)
-
-Quer que eu siga assim ou ajusta alguma coisa?
+## Detalhes técnicos
+- Uso `notion-query-data-sources` (SQL) pra auditar e `notion-update-page` / `notion-move-pages` pra mover lixo.
+- Adiciono colunas multi-select via `notion-update-data-source` se as tags não existirem.
+- Nada é deletado permanentemente — só vai pro lixo do Notion, reversível.
+- Não toco em código do app nesta rodada (só Notion).
