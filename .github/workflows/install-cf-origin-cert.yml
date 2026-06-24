@@ -1,0 +1,33 @@
+name: Instalar Cloudflare Origin Certificate
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Digite CONFIRMO para instalar o cert"
+        required: true
+
+jobs:
+  install-cert:
+    name: Instalar Origin CA no Caddy
+    runs-on: [self-hosted, Linux]
+    if: github.event.inputs.confirm == 'CONFIRMO'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar certificado e recarregar Caddy
+        env:
+          CF_ORIGIN_CERT: ${{ secrets.CF_ORIGIN_CERT }}
+          CF_ORIGIN_KEY: ${{ secrets.CF_ORIGIN_KEY }}
+        run: bash infra/scripts/setup-cf-origin-cert.sh
+
+      - name: Notificar Telegram
+        if: always()
+        env:
+          TOKEN: ${{ secrets.SRVER1_BOT_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          STATUS: ${{ job.status }}
+        run: |
+          MSG="🔐 Origin CA install: $STATUS"
+          curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+            -d "chat_id=${CHAT}&text=${MSG}" > /dev/null || true

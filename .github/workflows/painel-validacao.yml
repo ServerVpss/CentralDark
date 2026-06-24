@@ -1,0 +1,37 @@
+name: painel-validacao
+
+# Valida painel-data.json e cada endpoint declarado em liveStatus.
+# Gera relatório verde/amarelo/vermelho. Roda daily e sob demanda.
+
+on:
+  schedule:
+    - cron: '15 8 * * *'  # 05:15 BRT
+  workflow_dispatch:
+  push:
+    paths:
+      - 'CentralDark/apps/projeto-dashboard/painel-data.json'
+      - 'scripts/validar-painel-vivo.mjs'
+
+permissions:
+  contents: write
+
+jobs:
+  validar:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      - name: Validar
+        run: node scripts/validar-painel-vivo.mjs
+      - name: Commit relatório
+        run: |
+          git config user.name 'CentralDark Painel'
+          git config user.email 'actions@github.com'
+          git add -- docs/RELATORIOS/painel-vivo-validacao 2>/dev/null || true
+          git commit -m "chore(painel): validação ${{ github.run_id }}
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
+          git push || true

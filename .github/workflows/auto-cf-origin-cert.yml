@@ -1,0 +1,48 @@
+name: Auto Origin Certificate — Cloudflare SSL Fix
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Digite CONFIRMO para gerar e instalar o cert"
+        required: true
+
+jobs:
+  gerar-cert:
+    name: Gerar Origin CA + Recarregar Caddy
+    runs-on: [self-hosted, Linux]
+    if: github.event.inputs.confirm == 'CONFIRMO'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verificar dependências
+        run: |
+          which openssl || (apt-get install -y openssl && echo "openssl instalado")
+          which jq     || (apt-get install -y jq     && echo "jq instalado")
+          which curl   || (apt-get install -y curl   && echo "curl instalado")
+
+      - name: Gerar cert e instalar no Caddy
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: bash infra/scripts/auto-cf-origin-cert.sh
+
+      - name: Notificar Telegram — sucesso
+        if: success()
+        env:
+          TOKEN: ${{ secrets.SRVER1_BOT_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+            -d "chat_id=${CHAT}&parse_mode=HTML&text=🔐 <b>Origin CA instalado</b>%0A✅ SSL centralldark.com corrigido — todos os subdomínios ativos" \
+            > /dev/null || true
+
+      - name: Notificar Telegram — falha
+        if: failure()
+        env:
+          TOKEN: ${{ secrets.SRVER1_BOT_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+            -d "chat_id=${CHAT}&text=❌ Origin CA: falha na instalação — verificar logs do workflow" \
+            > /dev/null || true

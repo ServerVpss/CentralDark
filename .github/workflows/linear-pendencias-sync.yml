@@ -1,0 +1,103 @@
+name: linear-pendencias-sync
+
+# Sync bidirecional Linear ↔ docs/PENDENCIAS.md
+#
+# - Roda a cada 30 min e em push que toque PENDENCIAS.md.
+# - DRY-RUN no PR (comenta diferenças sem aplicar).
+# - APPLY na main (commit + fecha issues sincronizadas no Linear).
+# - Requer secret `LINEAR_API_KEY` (Personal API Key com escopo write).
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - "docs/PENDENCIAS.md"
+      - "scripts/sync/linear-pendencias.mjs"
+      - ".github/workflows/linear-pendencias-sync.yml"
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Aplicar mudanças (true) ou só relatar (false)"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: linear-pendencias-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validar secret
+        id: gate
+        run: |
+          if [ -z "${{ secrets.LINEAR_API_KEY }}" ]; then
+            echo "::warning::Secret LINEAR_API_KEY ausente — pulando sync (não é erro)."
+            {
+              echo "# Linear sync"
+              echo ""
+              echo "Mode: SKIP"
+              echo "Reason: LINEAR_API_KEY ausente."
+              echo ""
+              echo "Nenhum token foi exposto."
+            } > /tmp/linear-sync-report.md
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Rodar sync (apply em main/dispatch, dry-run no resto)
+        if: steps.gate.outputs.skip != 'true'
+        id: run
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          MODE=""
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "push" ]; then
+            MODE="--apply"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.apply }}" = "true" ]; then
+            MODE="--apply"
+          fi
+          if [ -n "$MODE" ]; then
+            node scripts/sync/linear-pendencias.mjs "$MODE" | tee /tmp/sync.out
+          else
+            node scripts/sync/linear-pendencias.mjs | tee /tmp/sync.out
+          fi
+
+      - name: Commit + push se PENDENCIAS.md mudou
+        if: github.ref == 'refs/heads/main' && steps.gate.outputs.skip != 'true'
+        run: |
+          if git diff --quiet docs/PENDENCIAS.md; then
+            echo "Sem diff — nada a commitar."
+            exit 0
+          fi
+          git config user.name  "centraldark-bot"
+          git config user.email "bot@centralldark.com"
+          git add docs/PENDENCIAS.md
+          git commit \
+            -m "chore(pendencias): sync Linear → MD [skip ci]" \
+            -m "Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+          git push
+
+      - name: Upload relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linear-sync-report
+          path: /tmp/linear-sync-report.md
+          retention-days: 14

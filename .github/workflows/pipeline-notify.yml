@@ -1,0 +1,162 @@
+name: Pipeline — Telegram + Painel
+
+# Notifica Telegram e atualiza o Mega Painel em cada estágio do ciclo de vida.
+# Estágios cobertos:
+#   🔁 PR ABERTO     → pull_request opened/ready_for_review
+#   🧪 CHECKS        → pull_request synchronize (novo commit → checks rodando)
+#   ✅ APROVADO      → pull_request_review approved
+#   🔄 REVISÃO       → pull_request_review changes_requested
+#   🟢 MERGEADO      → pull_request closed + merged=true
+#   ❌ FECHADO       → pull_request closed + merged=false
+#   🚀 VPS           → workflow_run deploy concluído com sucesso
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, synchronize, closed]
+    branches: [main]
+  pull_request_review:
+    types: [submitted]
+  workflow_run:
+    workflows: ["Deploy VPS", "deploy", "Deploy"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: pipeline-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    name: Notificar + Atualizar Painel
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determinar estágio
+        id: stage
+        env:
+          EVENT:        ${{ github.event_name }}
+          ACTION:       ${{ github.event.action }}
+          MERGED:       ${{ github.event.pull_request.merged }}
+          REVIEW_STATE: ${{ github.event.review.state }}
+          WF_CONCL:     ${{ github.event.workflow_run.conclusion }}
+        run: |
+          case "$EVENT" in
+            pull_request)
+              case "$ACTION" in
+                opened|ready_for_review)
+                  echo "emoji=🔁"  >> $GITHUB_OUTPUT
+                  echo "stage=PR_ABERTO" >> $GITHUB_OUTPUT
+                  echo "label=PR ABERTO" >> $GITHUB_OUTPUT
+                  echo "desc=Em revisão — aguardando checks e aprovação" >> $GITHUB_OUTPUT
+                  ;;
+                synchronize)
+                  echo "emoji=🧪"  >> $GITHUB_OUTPUT
+                  echo "stage=CHECKS" >> $GITHUB_OUTPUT
+                  echo "label=CHECKS" >> $GITHUB_OUTPUT
+                  echo "desc=Novo commit adicionado — checks rodando" >> $GITHUB_OUTPUT
+                  ;;
+                closed)
+                  if [[ "$MERGED" == "true" ]]; then
+                    echo "emoji=🟢"  >> $GITHUB_OUTPUT
+                    echo "stage=MERGEADO" >> $GITHUB_OUTPUT
+                    echo "label=MERGEADO" >> $GITHUB_OUTPUT
+                    echo "desc=Entrou na main — deploy iniciando" >> $GITHUB_OUTPUT
+                  else
+                    echo "emoji=❌"  >> $GITHUB_OUTPUT
+                    echo "stage=FECHADO" >> $GITHUB_OUTPUT
+                    echo "label=FECHADO" >> $GITHUB_OUTPUT
+                    echo "desc=PR fechado sem merge" >> $GITHUB_OUTPUT
+                  fi
+                  ;;
+              esac
+              ;;
+            pull_request_review)
+              case "$REVIEW_STATE" in
+                approved)
+                  echo "emoji=✅"  >> $GITHUB_OUTPUT
+                  echo "stage=APROVADO" >> $GITHUB_OUTPUT
+                  echo "label=APROVADO" >> $GITHUB_OUTPUT
+                  echo "desc=Aprovado — pronto para merge" >> $GITHUB_OUTPUT
+                  ;;
+                changes_requested)
+                  echo "emoji=🔄"  >> $GITHUB_OUTPUT
+                  echo "stage=REVISAO_PEDIDA" >> $GITHUB_OUTPUT
+                  echo "label=REVISÃO PEDIDA" >> $GITHUB_OUTPUT
+                  echo "desc=Revisor pediu alterações antes do merge" >> $GITHUB_OUTPUT
+                  ;;
+                commented)
+                  echo "emoji=💬"  >> $GITHUB_OUTPUT
+                  echo "stage=COMENTADO" >> $GITHUB_OUTPUT
+                  echo "label=COMENTÁRIO" >> $GITHUB_OUTPUT
+                  echo "desc=Comentário de revisão adicionado" >> $GITHUB_OUTPUT
+                  ;;
+              esac
+              ;;
+            workflow_run)
+              if [[ "$WF_CONCL" == "success" ]]; then
+                echo "emoji=🚀"  >> $GITHUB_OUTPUT
+                echo "stage=VPS" >> $GITHUB_OUTPUT
+                echo "label=VPS ATUALIZADA" >> $GITHUB_OUTPUT
+                echo "desc=Deploy concluído — VPS sincronizada" >> $GITHUB_OUTPUT
+              else
+                echo "emoji=⚠️"  >> $GITHUB_OUTPUT
+                echo "stage=VPS_ERRO" >> $GITHUB_OUTPUT
+                echo "label=VPS ERRO" >> $GITHUB_OUTPUT
+                echo "desc=Deploy falhou — verificar logs" >> $GITHUB_OUTPUT
+              fi
+              ;;
+          esac
+
+      - name: Notificar Telegram
+        env:
+          BOT:     ${{ secrets.SRVER1_BOT_TOKEN }}
+          CHAT:    ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          EMOJI:   ${{ steps.stage.outputs.emoji }}
+          LABEL:   ${{ steps.stage.outputs.label }}
+          DESC:    ${{ steps.stage.outputs.desc }}
+          TITLE:   ${{ github.event.pull_request.title || github.event.workflow_run.name || 'Deploy' }}
+          NUMBER:  ${{ github.event.pull_request.number || '' }}
+          AUTHOR:  ${{ github.event.pull_request.user.login || github.event.sender.login }}
+          URL:     ${{ github.event.pull_request.html_url || github.event.workflow_run.html_url }}
+        run: |
+          if [ -z "$BOT" ]; then echo "⚠️ SRVER1_BOT_TOKEN não configurado"; exit 0; fi
+          [ -n "$NUMBER" ] && PR_LINE="PR #${NUMBER} · @${AUTHOR}" || PR_LINE="@${AUTHOR}"
+          TEXT="${EMOJI} <b>${LABEL}</b> — CentralDark\n<b>${TITLE}</b>\n${PR_LINE}\n<i>${DESC}</i>\n🔗 ${URL}"
+          curl -s -X POST "https://api.telegram.org/bot${BOT}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{\"chat_id\":\"${CHAT}\",\"parse_mode\":\"HTML\",\"text\":\"${TEXT}\",\"disable_web_page_preview\":true}" > /dev/null || true
+          echo "✅ Telegram notificado: ${LABEL}"
+
+      - name: Atualizar painel-data.json
+        env:
+          STAGE:   ${{ steps.stage.outputs.stage }}
+          EMOJI:   ${{ steps.stage.outputs.emoji }}
+          LABEL:   ${{ steps.stage.outputs.label }}
+          DESC:    ${{ steps.stage.outputs.desc }}
+          TITLE:   ${{ github.event.pull_request.title || github.event.workflow_run.name || 'Deploy' }}
+          NUMBER:  ${{ github.event.pull_request.number || '0' }}
+          AUTHOR:  ${{ github.event.pull_request.user.login || github.event.sender.login }}
+          URL:     ${{ github.event.pull_request.html_url || github.event.workflow_run.html_url || '' }}
+        run: python3 scripts/update-pipeline.py
+
+      - name: Git commit + push
+        run: |
+          git config user.email "pipeline@centraldark.com"
+          git config user.name "CentralDark Pipeline"
+          git pull --rebase origin main || true
+          git add apps/projeto-dashboard/painel-data.json
+          if git diff --cached --quiet; then
+            echo "Sem mudanças para commitar"
+          else
+            git commit -m "chore(pipeline): ${{ steps.stage.outputs.emoji }} ${{ steps.stage.outputs.label }} — PR #${{ github.event.pull_request.number || 'deploy' }}"
+            git push origin main
+            echo "✅ Painel atualizado no GitHub"
+          fi
