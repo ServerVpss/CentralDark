@@ -641,6 +641,51 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications_log: {
+        Row: {
+          created_at: string
+          dedupe_hash: string | null
+          id: string
+          mensagem: string
+          metadata: Json
+          origem: string
+          send_error: string | null
+          sent_ok: boolean
+          telegram_chat_id: number | null
+          telegram_message_id: number | null
+          tipo: string
+          titulo: string
+        }
+        Insert: {
+          created_at?: string
+          dedupe_hash?: string | null
+          id?: string
+          mensagem: string
+          metadata?: Json
+          origem: string
+          send_error?: string | null
+          sent_ok?: boolean
+          telegram_chat_id?: number | null
+          telegram_message_id?: number | null
+          tipo: string
+          titulo: string
+        }
+        Update: {
+          created_at?: string
+          dedupe_hash?: string | null
+          id?: string
+          mensagem?: string
+          metadata?: Json
+          origem?: string
+          send_error?: string | null
+          sent_ok?: boolean
+          telegram_chat_id?: number | null
+          telegram_message_id?: number | null
+          tipo?: string
+          titulo?: string
+        }
+        Relationships: []
+      }
       paginated_results: {
         Row: {
           chat_id: number
