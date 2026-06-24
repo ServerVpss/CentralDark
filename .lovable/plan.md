@@ -1,126 +1,132 @@
 
-# Sistema universal de notificação + limpeza segura
+# Plano — Painel Mestre do Admin + Roteamento de Notificações
 
-Objetivo: qualquer coisa que rode no seu ecossistema (VPS, bots, IAs, crons, Lovable, Elite Mapper) notifica do mesmo jeito, fica registrado no banco e no Telegram, e a limpeza de logs roda sozinha sem risco de apagar nada sensível. **Zero dependência de Lovable** — se um dia você sair, continua funcionando igual.
-
----
-
-## Peça 1 — Edge function central `notify-telegram`
-
-Endpoint único e público, autenticado por uma chave própria sua (`NOTIFY_API_KEY`), que qualquer sistema chama com um POST simples.
-
-**Como qualquer coisa chama:**
-```bash
-curl -X POST https://<seu-backend>/functions/v1/notify-telegram \
-  -H "X-Notify-Key: SUA_CHAVE" \
-  -d '{"origem":"elite-mapper","tipo":"sucesso","titulo":"Varredura concluída","mensagem":"21.3GB em 8.3s"}'
-```
-
-**O que ela faz:**
-- Valida a chave (sua, não da Lovable)
-- Salva tudo na tabela `notifications_log` (histórico permanente, pesquisável)
-- Envia formatado pro canal Telegram CentralDark — Status (que já replica pro grupo automaticamente)
-- Suporta níveis: `info`, `sucesso`, `aviso`, `erro`, `critico` (cada um com emoji e tratamento diferente)
-- Anti-spam: agrupa notificações idênticas em janela de 60s
+Tudo dentro deste mesmo projeto Lovable, reaproveitando o design Esmeralda. Sem mexer na sua conta pessoal do Telegram agora (userbot/QR fica como fase futura). Foco: você ter um lugar só pra mandar em tudo.
 
 ---
 
-## Peça 2 — Wrapper na VPS `/usr/local/bin/notify`
+## 1. Painel Mestre (admin only, rota disfarçada)
 
-Um script bash de 20 linhas que vira comando global na VPS. Aí qualquer bot, cron, ou script seu chama com 1 linha:
-
-```bash
-notify elite-mapper sucesso "Varredura concluída" "21.3GB em 8.3s"
-notify backup erro "Falha no rsync" "destino sem espaço"
-```
-
-A chave fica em `/etc/centraldark/notify.env` (permissão 600, só root lê). Funciona offline-tolerante: se a edge function tiver fora, ele tenta 3 vezes e guarda em `/var/log/centraldark/notify-pending.log` pra reenviar depois.
-
-**Bônus:** módulo Python equivalente `notify.py` pra integrar direto no Elite Mapper (substitui ou complementa o `telegram_notifier.py` atual, mantendo o mesmo padrão central).
-
----
-
-## Peça 3 — Limpador automático `clean-logs`
-
-Seguindo o mesmo padrão arquitetural do Elite Mapper (Python, modular, com classifier e reporter), mas focado em logs e temporários — não em código.
-
-**Whitelist de pastas seguras** (só essas são tocadas):
-- `/var/log/centraldark/*.log` (logs do gateway e notify)
-- `/var/log/pm2/*.log`
-- `/tmp/centraldark-*`
-- `/root/CentralDark/revisoes/` (>15 dias, alinhado com o que o Elite Mapper já identificou)
-- `/root/CentralDark/apps/*/dist/` (builds antigos)
-
-**Blacklist invioláveis** (NUNCA toca):
-- `.env`, `.ssh/`, `secrets/`, `sessions/`, `*.pem`, `*.key`
-- Qualquer coisa fora da whitelist
-- Arquivos modificados nas últimas 24h
-
-**Modos de execução:**
-- `--dry-run` (padrão): só lista o que apagaria, gera relatório, notifica resumo
-- `--apply`: executa de verdade, exige confirmação ou flag `--yes`
-- `--auto`: modo cron, só apaga o que tem mais de X dias (configurável)
-
-**Cron:** roda toda madrugada às 03:00 em modo `--auto`, notifica resumo no Telegram via `notify`.
-
-**Relatório:** salva em `/var/log/centraldark/clean-logs/YYYY-MM-DD.md` no mesmo formato dos relatórios do Elite Mapper.
+- Nova rota: **`/cofre`** dentro do projeto (nome neutro pra não entregar que é admin). Subdomínio `admin.centralldark.com` aponta pra essa rota via Cloudflare (orange cloud já ligado).
+- Protegida 3x:
+  1. Login obrigatório
+  2. `AdminRoute` (só seu user_id)
+  3. Camada extra de confirmação por código no Telegram pra ações sensíveis (rotacionar token, restaurar backup, etc.)
+- Layout: sidebar interna com 6 abas
+  - **Visão Geral** — status VPS, Mega Painel resumido, alertas críticos
+  - **Bots Telegram** — lista, qual é o principal, qual recebe o quê
+  - **Notificações** — regras de roteamento por tipo de evento
+  - **Cofre de Contas** — central de login OAuth (GitHub, Google, futuramente Telegram userbot)
+  - **Módulos & Vendas** — controle de planos, preços, on/off de módulos
+  - **Instalador** — gera/atualiza pacote de instalação da VPS
 
 ---
 
-## Peça 4 — Tabela `notifications_log` no banco
+## 2. Roteamento de notificações POR TIPO DE EVENTO
 
-Histórico unificado, pesquisável pelo painel:
+Hoje a edge function `notify-telegram` pega o primeiro bot ativo. Vou trocar isso por uma tabela de regras que VOCÊ controla no painel.
 
-| campo | descrição |
-|---|---|
-| `id`, `created_at` | identificação |
-| `origem` | quem mandou (elite-mapper, backup, gateway, lovable, etc) |
-| `tipo` | info / sucesso / aviso / erro / critico |
-| `titulo`, `mensagem` | conteúdo |
-| `metadata` | JSON livre (stats, links, contexto) |
-| `telegram_message_id` | ID da mensagem enviada (pra editar/responder depois) |
-| `sent_ok` | se chegou no Telegram |
+Nova tabela `notification_routes`:
+- `tipo` (info / sucesso / aviso / erro / critico / venda / pagamento / sistema)
+- `bot_id` (qual bot do `telegram_bots` envia)
+- `chat_id` (pode ser você, um grupo, ou um canal)
+- `ativo` (on/off)
 
-Com RLS: só admin lê pelo painel. Edge function escreve com service role.
+Permite múltiplas linhas pro mesmo tipo (redundância). Exemplo da sua cabeça:
+- `critico` → @srver1bot pro seu DM
+- `venda` → @bot-vendas pro grupo de vendas
+- `info` → @bot-logs pro canal de logs
 
----
+Aba **Notificações** mostra uma matriz visual: linhas = tipos, colunas = bots, com toggles. Botão "Testar rota" dispara mensagem de exemplo.
 
-## Peça 5 — Integração com o que já existe
-
-- **Elite Mapper:** trocar o `telegram_notifier.py` interno por chamada ao `notify` central (1 linha). Continua funcionando igual, mas agora aparece no histórico unificado.
-- **Gateway GPT-4o:** logs críticos do `RotatingFileHandler` disparam `notify gateway erro ...` automaticamente quando o nível for ERROR.
-- **PM2:** hook de restart/crash chama `notify pm2 aviso "<processo> reiniciou"`.
-- **Lovable (eu):** quando eu fizer edit/deploy/migration daqui pra frente, eu chamo o mesmo endpoint. Você vê tudo no mesmo lugar — e o dia que parar de usar Lovable, o resto continua intacto.
+A `notify-telegram` passa a ler essa tabela. Se nenhuma regra casar, cai no fallback `@srver1bot` (configurável).
 
 ---
 
-## Detalhes técnicos
+## 3. Cofre de Bots Telegram (gerencia tokens)
 
-**Stack:**
-- Edge function: Deno + Supabase JS, autenticação por header `X-Notify-Key` (segredo gerado, não exposto)
-- Wrapper VPS: bash puro + `curl` (zero dependência)
-- Módulo Python: stdlib `urllib.request` (zero pip install)
-- Limpador: Python 3 stdlib (igual Elite Mapper), com `pathlib` + `os.scandir`
+Aba **Bots Telegram** vira o centro de tudo:
+- Lista todos os bots (já tem `telegram_bots`)
+- Botão "Adicionar bot" → cola token do @BotFather
+- Botão "Trocar token" → você cola o novo, o sistema valida via `getMe`, atualiza no banco. Se trocar o token de um bot, tudo continua funcionando porque o roteamento referencia `bot_id` (interno), não o token.
+- Marca 1 como **Principal** (default das notificações sem regra)
+- Health check ao vivo (já existe)
+- Foto, username, status — tudo visível
 
-**Segurança:**
-- `NOTIFY_API_KEY` gerada via `generate_secret` (32 chars), nunca em código
-- Chave da VPS em `/etc/centraldark/notify.env` com chmod 600
-- Edge function rejeita tudo sem header válido (401)
-- Limpador tem dupla validação: whitelist + idade mínima
+Tokens ficam no banco com RLS service-role only — nunca expostos pro frontend (frontend só vê os 4 últimos dígitos mascarados).
 
-**Arquivos novos:**
-- `supabase/functions/notify-telegram/index.ts`
-- Migration: tabela `notifications_log` + RLS + GRANT
-- Pra VPS (entrego o código, você ou eu via MCP coloca lá): `/usr/local/bin/notify`, `/etc/centraldark/notify.env.example`, `clean-logs/` (estrutura tipo Elite Mapper)
+---
+
+## 4. Central de Login OAuth (Cofre de Contas)
+
+Aba **Cofre de Contas** — um lugar só pra plugar todas as suas contas:
+- GitHub (já tem OAuth no projeto, só puxar pra cá)
+- Google
+- Espaço reservado pra **Telegram userbot (MTProto)** — vem na fase futura com QR Code na VPS, captura sessão da sua conta pessoal (lib GramJS rodando na VPS, link temporário pra você escanear). Hoje fica como card "Em breve" com aviso de risco bem claro.
+
+Tudo OAuth, nada de senha digitada. Tokens cifrados no banco.
+
+---
+
+## 5. Módulos & Vendas
+
+Aba **Módulos & Vendas** consolida o que hoje tá espalhado:
+- Liga/desliga módulo (`query_modules`)
+- Preços e planos (`subscription_plans`)
+- Lista de vendas recentes
+- Botão "Forçar refresh do cache de módulos"
+
+Sem reinventar — só reúne na mesma tela o que já existe.
+
+---
+
+## 6. Instalador (atualizar o que já existe)
+
+Você já tem `install.sh` na raiz e `scripts/setup-centraldark-portal.sh`. Plano:
+- **Auditar** os scripts atuais e a `docs/INSTALADOR/`
+- **Atualizar** pra refletir tudo que foi construído até agora (Mega Painel, notify, novo cofre, roteamento)
+- Aba **Instalador** no painel mostra:
+  - Versão atual do instalador
+  - Diff do que mudou desde a última geração
+  - Botão "Gerar pacote atualizado" → produz `install.sh` + `.env.example` + lista de secrets necessárias
+  - Botão "Baixar ZIP" pra você guardar
+- Toda vez que adicionarmos uma feature nova, o instalador é atualizado no mesmo PR (regra fixa)
+
+Sem backup automático agora — você pediu pra focar só no instalador. Backup fica num próximo plano.
 
 ---
 
 ## Ordem de execução
 
-1. Gera `NOTIFY_API_KEY` e cria migration da `notifications_log`
-2. Cria a edge function `notify-telegram` e testa com curl
-3. Entrega o wrapper bash + módulo Python + instruções de instalação na VPS
-4. Cria o `clean-logs` (modular, Elite Mapper-style) com whitelist segura
-5. Documenta tudo em `docs/NOTIFY/README.md` no repo CentralDark
+1. Migration: tabela `notification_routes` + RLS + GRANTs
+2. Edge function `notify-telegram` lê regras e roteia
+3. Rota `/cofre` com layout base e proteção tripla
+4. Aba **Bots Telegram** (gerenciar tokens, marcar principal)
+5. Aba **Notificações** (matriz visual de roteamento + teste)
+6. Aba **Cofre de Contas** (GitHub/Google já, Telegram userbot como placeholder)
+7. Aba **Módulos & Vendas** (consolidação)
+8. Aba **Instalador** (auditoria + UI de geração)
+9. Cloudflare: apontar `admin.centralldark.com` → rota `/cofre`
+10. Notificar via Telegram cada passo concluído (Mega Painel vai mostrando ao vivo)
 
-Tudo isso fica no GitHub (`ServerVpss/CentralDark`), então qualquer outra IA que ler o repo entende o sistema sem precisar de mim.
+---
+
+## Detalhes técnicos (pode pular se quiser)
+
+- Tabela: `notification_routes(id, tipo, bot_id, chat_id, ativo, prioridade, created_at)`
+- RLS: admin-only via `has_role(auth.uid(), 'admin')`
+- Edge function: query `WHERE tipo = $1 AND ativo = true ORDER BY prioridade`, dispara em paralelo, registra cada envio no `notifications_log`
+- Frontend usa hook novo `useNotificationRoutes` (não duplica `useTelegramBots`)
+- Subdomínio: regra Cloudflare Worker ou DNS CNAME → mesmo origin, com path rewrite `/` → `/cofre`
+- Telegram userbot futuro: GramJS rodando em PM2 na VPS, endpoint `/login-telegram` temporário com QR, sessão cifrada em `vault`
+
+---
+
+## O que NÃO faço sem te avisar
+
+- Mexer na sua conta pessoal do Telegram (userbot fica pra depois)
+- Apagar/sobrescrever `install.sh` atual sem te mostrar o diff
+- Mudar design — segue Esmeralda
+- Tocar em DNS sem confirmação explícita
+
+Confirma que tá de acordo e eu começo pela migration + roteamento?

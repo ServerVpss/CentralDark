@@ -641,6 +641,53 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_routes: {
+        Row: {
+          ativo: boolean
+          bot_id: string
+          chat_id: number
+          created_at: string
+          id: string
+          is_fallback: boolean
+          label: string | null
+          prioridade: number
+          tipo: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          bot_id: string
+          chat_id: number
+          created_at?: string
+          id?: string
+          is_fallback?: boolean
+          label?: string | null
+          prioridade?: number
+          tipo: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          bot_id?: string
+          chat_id?: number
+          created_at?: string
+          id?: string
+          is_fallback?: boolean
+          label?: string | null
+          prioridade?: number
+          tipo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_routes_bot_id_fkey"
+            columns: ["bot_id"]
+            isOneToOne: false
+            referencedRelation: "telegram_bots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications_log: {
         Row: {
           created_at: string
