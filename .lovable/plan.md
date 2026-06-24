@@ -1,62 +1,41 @@
-## O que vai ser montado
+## O que vou fazer
 
-Um serviço novo na VPS chamado **`contas-admin`** (porta interna 9400), exposto de forma secreta em **`https://status.centralldark.com/ai-review.html`** (a mesma URL camuflada que você já usa).
+Documentar o **Elite Gateway** em dois lugares ao mesmo tempo: no repo GitHub `ServerVpss/CentralDark` e direto na pasta `/root/CentralDark/docs/` da VPS.
 
-Quando você abrir esse link, vê o painel com a lista das contas salvas e, do lado de cada provedor, **dois botões de login**:
+## Arquivo
 
-```text
-┌─ ChatGPT / Claude / Gemini ─────────────────────┐
-│  [ Logar pelo Navegador Remoto ]  ← noVNC      │
-│     abre um Chrome rodando na VPS, você loga    │
-│     normal, fecha — o profile fica salvo        │
-└─────────────────────────────────────────────────┘
+**`docs/ELITE_GATEWAY.md`** com:
 
-┌─ Google / GitHub ───────────────────────────────┐
-│  [ Logar com OAuth ]  ← um clique               │
-│     vai pro provedor, autoriza, volta, token    │
-│     salvo automático em /root/CentralDark/contas │
-└─────────────────────────────────────────────────┘
-```
+- **O que é** — proxy compatível com OpenAI que usa as contas-admin (ChatGPT/Claude/Gemini logadas via navegador) no lugar de API key paga
+- **URL pública**: `https://elite.centralldark.com`
+- **Token Bearer**: referência ao `.env` da VPS (valor real nunca entra no markdown)
+- **Endpoints**: `GET /v1/models` e `POST /v1/chat/completions`
+- **Como plugar no Cline, Bolt, Cursor, Continue** — passo a passo (Base URL + token + model `gpt-4o`)
+- **Onde mora na VPS**:
+  - Serviço na porta interna `8080`
+  - Caddyfile: `/etc/caddy/centraldark-managed/root-imports/elite.centralldark.com.Caddyfile`
+  - `.env` com token: `/root/CentralDark/config/.env`
+  - Symlink contas-admin → Elite
+- **Dependência do contas-admin**: profile ChatGPT precisa estar logado pelo noVNC (`status.centralldark.com/ai-review.html`) — senão dá timeout
+- **Troubleshooting**: 403, resposta vazia, timeout
+- **Comando `curl` de validação** pronto pra copiar
 
-## Como cada botão funciona
+## Como vou publicar (dois caminhos, em paralelo)
 
-**Navegador Remoto (noVNC)** — pra ChatGPT, Claude, Gemini, qualquer site sem OAuth público:
-- Você clica → backend sobe um `Xvfb + Chrome + x11vnc + websockify` numa porta temporária (6080–6099)
-- Abre uma aba nova com o noVNC do Chrome rodando na VPS
-- Você loga normal (e-mail/senha, Google, código no celular, etc.)
-- Sessão dura até 15 min e desliga sozinha; o profile do Chrome (cookies/tokens) fica salvo em `/root/CentralDark/contas/<provedor>/profile/` pra reuso pelas IAs
+1. **GitHub** — commit no repo `ServerVpss/CentralDark` branch `main` via API com `GH_TOKEN`
+   Mensagem: `docs: adiciona documentação do Elite Gateway`
+2. **VPS direto** — gravar o mesmo arquivo via MCP em `/root/CentralDark/docs/ELITE_GATEWAY.md` pra já aparecer lá imediatamente, sem depender do sync
 
-**OAuth real** — pra Google e GitHub:
-- Você clica → redireciona pro provedor → autoriza → callback no `contas-admin` salva o `access_token` + `refresh_token` em `/root/CentralDark/contas/<provedor>.json`
-- GitHub usa as credenciais que **já estão nos secrets** (`GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`)
-- Google precisa de credencial nova (te peço depois, num passo separado)
+## Também atualizo
 
-## Segurança
+- **`docs/README.md`** no repo — adicionar link pro novo doc na lista
+- **Memória do projeto** (`mem://`) — registrar que o Elite Gateway tá documentado, URL, e que o token vivo só existe no `.env` da VPS
 
-- Painel inteiro protegido por **Bearer token** (`CONTAS_ADMIN_TOKEN`, gerado automático)
-- Caddy só libera o caminho secreto `/ai-review.html` e `/api/*` sob esse host
-- Sessões noVNC com senha aleatória por sessão + timeout
+## O que NÃO vou fazer
 
-## Arquivos / componentes
-
-- **VPS** `/root/CentralDark/scripts/contas-admin/`
-  - `main.py` (FastAPI)
-  - `novnc_session.py` (gerenciador de sessões temporárias)
-  - `oauth.py` (fluxo GitHub agora, Google quando você passar a credencial)
-  - `ecosystem.config.cjs` (PM2)
-  - `index.html` (painel com os botões)
-- **Caddy** novo bloco em `status-centraldark.Caddyfile` roteando `/ai-review.html` e `/api/contas/*` pro `127.0.0.1:9400`
-- **PM2** processo `contas-admin` registrado e salvo no dump
-
-## O que NÃO vai mudar
-
-- Nada no projeto TelePanel (frontend do Lovable) — tudo é VPS
-- Nenhum bot, nenhuma edge function, nenhuma tabela do banco
-- Caddyfile principal fica intacto, só o arquivo do host status recebe append
-
-## Depois de subir
-
-Te entrego: a URL secreta + o Bearer token + o caminho da pasta `contas/`. Você abre, clica nos botões, valida o fluxo. Se quiser Google OAuth também, me passa o Client ID/Secret depois e eu ligo num turno só.
+- Não exponho o token real no markdown
+- Não mexo em código do TelePanel (este sandbox)
+- Não toco em Caddy, PM2 ou nada vivo na VPS
 
 ---
-**Posso ir?** Se sim, eu já subo o serviço, o Caddy e registro no PM2 nesse mesmo passo.
+**Pode mandar?** Se sim, eu commito no GitHub e gravo na VPS no mesmo passo, e te mando o link do commit + confirmação da gravação.
