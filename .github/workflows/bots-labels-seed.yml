@@ -1,0 +1,95 @@
+name: Bots — seed de labels oficiais
+
+# Cria/atualiza as labels padrão do Time de Bots de forma idempotente.
+# Roda manual (workflow_dispatch) e 1x por mês. Não apaga label existente.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 1 * *' # dia 1 de cada mês, 06:00 UTC
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  seed:
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark'
+    steps:
+      - name: Criar/atualizar labels padrão
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+
+            // Catálogo oficial — alinhado a docs/BOTS/README.md e TIME-DE-BOTS.md
+            const labels = [
+              // Governança humana
+              { name: 'revisao-humana',     color: 'd93f0b', description: 'Humano precisa olhar antes de mergear/aplicar' },
+              { name: 'vigia',              color: 'ededed', description: 'Monitoramento de workflows e divergências' },
+              { name: 'auto',               color: 'ededed', description: 'Issue/PR criada por bot, não por humano' },
+              { name: 'stale',              color: '999999', description: 'Sem ação em 7 dias — escalada pela sentinela-stale' },
+              { name: 'needs-codex-review', color: '5319e7', description: 'Codex precisa revisar (gatilho do conector)' },
+              { name: 'dependencies',        color: '0366d6', description: 'Atualizações de dependências' },
+              { name: 'mcp',                 color: '5319e7', description: 'MCP CentralDark e conectores' },
+              { name: 'linear',              color: '0e8a16', description: 'Integração Linear / pendências' },
+              { name: 'sentry',              color: '5319e7', description: 'Integração Sentry / observabilidade' },
+              { name: 'notion',              color: 'c5def5', description: 'Integração Notion / documentação' },
+              { name: 'security',            color: 'b60205', description: 'Segurança, hardening e auditoria' },
+              { name: 'github-actions',      color: '2088ff', description: 'GitHub Actions e workflows' },
+              { name: 'bot-server',          color: '0e8a16', description: 'Bot-server e rotas WhatsApp read-only' },
+              { name: 'install-callback',    color: 'fbca04', description: 'Install callback e porta de entrada oficial' },
+              { name: 'frontend',            color: 'c5def5', description: 'Frontend, UI e painel' },
+
+              // Severidade
+              { name: 'p0', color: 'b60205', description: 'Crítico — segredo exposto / produção caiu / dado em risco' },
+              { name: 'p1', color: 'd93f0b', description: 'Alto — workflow/rota pública quebrada, divergência GitHub/VPS' },
+              { name: 'p2', color: 'fbca04', description: 'Médio — docs/teste/pendência sem dono' },
+              { name: 'p3', color: '0e8a16', description: 'Baixo — melhoria, organização, refator' },
+
+              // Assign por bot/IA dona
+              { name: 'assign:chatgpt',      color: '1d76db', description: 'ChatGPT (pente fino final, validação cadeia 7 passos)' },
+              { name: 'assign:codex',        color: '5319e7', description: 'Codex (revisão de código + PRs pequenos)' },
+              { name: 'assign:lovable',      color: 'c5def5', description: 'Lovable (frontend / painel / UI)' },
+              { name: 'assign:grok',         color: 'bfd4f2', description: 'Grok (VPS/PM2/SSH read-only)' },
+              { name: 'assign:supabase-bot', color: '3ecf8e', description: 'Bot de schema/RLS Supabase' },
+              { name: 'assign:dependabot',   color: '0366d6', description: 'Dependabot (atualizações de dep)' },
+              { name: 'assign:codeql',       color: '0e8a16', description: 'CodeQL (SAST nativo)' },
+              { name: 'assign:doc-guardiao', color: 'fef2c0', description: 'Doc-guardião (cobra README/PLANO por pasta)' },
+              { name: 'assign:faxineiro-repo', color: 'fef2c0', description: 'Faxineiro-repo (órfãos/ZIPs em modo relatório)' },
+              { name: 'assign:auditor-divergencia', color: 'fef2c0', description: 'Auditor de divergência repo↔VPS' },
+              { name: 'assign:guarda-seguranca', color: 'b60205', description: 'Guarda-segurança (Gitleaks/Semgrep/OSV/Trivy)' },
+              { name: 'assign:vps-healthcheck', color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
+              { name: 'assign:faxineiro',    color: 'fef2c0', description: 'Faxineiro-repo (órfãos/ZIPs em modo relatório)' },
+              { name: 'assign:auditor',      color: 'fef2c0', description: 'Auditor de divergência repo↔VPS' },
+              { name: 'assign:seguranca',    color: 'b60205', description: 'Guarda-segurança (Gitleaks/Semgrep/OSV/Trivy)' },
+              { name: 'assign:vps-health',   color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
+              { name: 'assign:painel-vivo',  color: 'c5def5', description: 'Painel-vivo (status.centralldark.com)' },
+              { name: 'assign:sentinela',    color: 'ededed', description: 'Sentinela (detecta divergência geral)' },
+              { name: 'assign:vigia',        color: 'ededed', description: 'Vigia (workflows vermelhos)' },
+            ];
+
+            let created = 0, updated = 0, kept = 0, failed = 0;
+
+            for (const lbl of labels) {
+              try {
+                const existing = await github.rest.issues.getLabel({ owner, repo, name: lbl.name }).catch(() => null);
+                if (!existing) {
+                  await github.rest.issues.createLabel({ owner, repo, ...lbl });
+                  created++;
+                  core.info(`+ criado: ${lbl.name}`);
+                } else if (existing.data.color !== lbl.color || (existing.data.description || '') !== lbl.description) {
+                  await github.rest.issues.updateLabel({ owner, repo, name: lbl.name, new_name: lbl.name, color: lbl.color, description: lbl.description });
+                  updated++;
+                  core.info(`~ atualizado: ${lbl.name}`);
+                } else {
+                  kept++;
+                }
+              } catch (e) {
+                failed++;
+                core.warning(`falha em ${lbl.name}: ${e.message}`);
+              }
+            }
+
+            core.notice(`labels — criadas: ${created} · atualizadas: ${updated} · iguais: ${kept} · falhas: ${failed}`);
