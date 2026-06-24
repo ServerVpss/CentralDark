@@ -1,0 +1,70 @@
+name: Farm — trailer Co-authored-by
+
+# Em todo push na main, valida que pelo menos um dos commits novos
+# carrega o trailer Co-authored-by: SegredoiDev. Não bloqueia o push.
+# Só registra warning no Summary pro farm de Pair Extraordinaire.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: farm-co-author-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Validar trailer
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark'
+    timeout-minutes: 3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verificar trailer
+        shell: bash
+        run: |
+          set -uo pipefail
+          before='${{ github.event.before }}'
+          after='${{ github.sha }}'
+
+          if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            range="$after~1..$after"
+          else
+            range="$before..$after"
+          fi
+
+          echo "Range: $range"
+
+          total=0
+          com=0
+          while IFS= read -r sha; do
+            [ -z "$sha" ] && continue
+            total=$((total+1))
+            msg="$(git log -1 --format=%B "$sha")"
+            if echo "$msg" | grep -qi 'Co-authored-by:.*SegredoiDev'; then
+              com=$((com+1))
+            fi
+          done < <(git rev-list "$range" 2>/dev/null || echo "$after")
+
+          {
+            echo "## Farm Pair Extraordinaire"
+            echo ""
+            echo "- Commits no push: $total"
+            echo "- Com trailer SegredoiDev: $com"
+            if [ "$total" -gt 0 ] && [ "$com" -eq 0 ]; then
+              echo ""
+              echo "::warning::Nenhum commit do push tem trailer \`Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>\`."
+              echo "Adicionar trailer mantém o farm da medalha Pair Extraordinaire."
+            else
+              echo "- Status: OK ✅"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
