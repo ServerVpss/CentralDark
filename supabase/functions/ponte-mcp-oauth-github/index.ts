@@ -117,10 +117,10 @@ Deno.serve(async (req) => {
   const url = new URL(req.url);
   const action = url.searchParams.get("action");
 
-  const CLIENT_ID = Deno.env.get("GITHUB_CLIENT_ID");
-  const CLIENT_SECRET = Deno.env.get("GITHUB_CLIENT_SECRET");
+  const CLIENT_ID = Deno.env.get("GH_APP_CLIENT_ID");
+  const CLIENT_SECRET = Deno.env.get("GH_APP_CLIENT_SECRET");
   if (!CLIENT_ID || !CLIENT_SECRET) {
-    return htmlErro("GITHUB_CLIENT_ID/SECRET não configurados nos secrets.");
+    return htmlErro("GH_APP_CLIENT_ID/SECRET não configurados nos secrets.");
   }
 
   // URL de callback = a própria edge function com ?action=callback
