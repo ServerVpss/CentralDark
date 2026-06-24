@@ -1,0 +1,73 @@
+name: painel auto-update
+
+# Em todo push na main, registra um evento "push <sha>" no Mega Painel
+# (apps/projeto-dashboard/painel-data.json) e commita de volta.
+# Mantém status.centralldark.com sempre vivo sem ação manual.
+#
+# ⚠️ EXCEÇÃO à regra "bots só via PR" (#116):
+# painel-data.json é DADO GERADO (snapshot operacional), não código.
+# Faz push direto pra status.centralldark.com nunca ficar estagnado.
+# Workflows que tocam CÓDIGO continuam obrigados a abrir PR.
+# Ignora push do próprio bot pra evitar loop.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "apps/projeto-dashboard/painel-data.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: painel-auto-update
+  cancel-in-progress: false
+
+jobs:
+  registrar:
+    name: Registrar push no painel
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark' && github.actor != 'github-actions[bot]'
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Registrar evento no painel
+        env:
+          PAINEL_EVENTO: "Push na main · ${{ github.sha }}"
+          PAINEL_EVENTO_DETALHE: "${{ github.event.head_commit.message }}"
+          PAINEL_EVENTO_AREA: "Repositório"
+          SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+          MSG: ${{ github.event.head_commit.message }}
+        run: |
+          node apps/projeto-dashboard/atualizar-painel-vivo.mjs
+
+      - name: Commit + push
+        run: |
+          git config user.name 'CentralDark Bot'
+          git config user.email 'actions@github.com'
+          git add -- apps/projeto-dashboard/painel-data.json
+          if git diff --cached --quiet; then
+            echo "Nada pra commitar."
+            exit 0
+          fi
+          git commit -m "chore(painel): registrar push ${GITHUB_SHA:0:7}
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+          git pull --rebase origin main
+          git push
+      - name: Notificar Telegram — painel atualizado
+        if: success()
+        env:
+          BOT: ${{ secrets.SRVER1_BOT_TOKEN }}
+          CHAT: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+        run: |
+          MSG="📊 <b>Painel atualizado</b> — CentralDark\n▸ Commit: <code>${GITHUB_SHA:0:7}</code>\n▸ <a href=\"https://status.centralldark.com\">Ver painel ao vivo</a>\n<i>#CentralDark #painel #atualizado</i>"
+          curl -s -X POST "https://api.telegram.org/bot${BOT}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{\"chat_id\":\"${CHAT}\",\"parse_mode\":\"HTML\",\"text\":\"${MSG}\",\"disable_web_page_preview\":true}" > /dev/null || true
