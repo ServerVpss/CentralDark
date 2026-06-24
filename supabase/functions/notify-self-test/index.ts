@@ -48,36 +48,30 @@ Deno.serve(async (req) => {
   const notifyKey = Deno.env.get("NOTIFY_API_KEY")!;
   const notifyUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/notify-telegram`;
 
-  const exemplos = [
-    {
-      origem: "lovable",
-      tipo: "sucesso",
-      titulo: "Sistema de notificação online",
-      mensagem:
-        "Edge function 'notify-telegram' deployada com anti-spam de 60s e Mega Painel em tempo real.",
-      metadata: { fase: 1, etapa: "validacao" },
-    },
-    {
-      origem: "vps",
-      tipo: "info",
-      titulo: "Wrapper pronto para instalar",
-      mensagem:
-        "Arquivos em infra/notify/ aguardando deploy na VPS via MCP.",
-    },
-    {
-      origem: "gateway",
-      tipo: "aviso",
-      titulo: "Teste de tipo 'aviso'",
-      mensagem: "Validando que o badge amarelo aparece no painel.",
-    },
-    {
-      origem: "monitor",
-      tipo: "critico",
-      titulo: "Teste de alerta crítico",
-      mensagem:
-        "Apenas teste — validando destaque vermelho pulsante no Mega Painel.",
-    },
+  // Opcional: { tipos: ["critico", ...] } pra filtrar quais disparar
+  let body: { tipos?: string[] } = {};
+  try {
+    body = (await req.json()) as { tipos?: string[] };
+  } catch {
+    body = {};
+  }
+  const filtroTipos = Array.isArray(body.tipos) ? body.tipos : null;
+
+  const tsNow = Date.now();
+  const TODOS = [
+    { tipo: "info", origem: "cofre", titulo: "Teste info", mensagem: "Validando rota tipo info." },
+    { tipo: "sucesso", origem: "cofre", titulo: "Teste sucesso", mensagem: "Rota de sucesso ok." },
+    { tipo: "aviso", origem: "cofre", titulo: "Teste aviso", mensagem: "Rota de aviso ok." },
+    { tipo: "erro", origem: "cofre", titulo: "Teste erro", mensagem: "Rota de erro ok." },
+    { tipo: "critico", origem: "cofre", titulo: "Teste crítico", mensagem: "Rota crítica ok." },
+    { tipo: "venda", origem: "cofre", titulo: "Teste venda", mensagem: "Rota de venda ok." },
+    { tipo: "pagamento", origem: "cofre", titulo: "Teste pagamento", mensagem: "Rota de pagamento ok." },
+    { tipo: "sistema", origem: "cofre", titulo: "Teste sistema", mensagem: "Rota de sistema ok." },
   ];
+  const exemplos = (filtroTipos
+    ? TODOS.filter((e) => filtroTipos.includes(e.tipo))
+    : TODOS
+  ).map((e) => ({ ...e, metadata: { test_ts: tsNow } }));
 
   const resultados: unknown[] = [];
   for (const ex of exemplos) {
