@@ -1,0 +1,242 @@
+[
+  {
+    "path": "AGENTS.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "cadf3181c3cf122334a66e5e60a0efa2100db0d2",
+    "size": 13404,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/cadf3181c3cf122334a66e5e60a0efa2100db0d2"
+  },
+  {
+    "path": "CLAUDE.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "76680cec429f06c56e397778a6444e1e23b8c7b2",
+    "size": 4656,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/76680cec429f06c56e397778a6444e1e23b8c7b2"
+  },
+  {
+    "path": "CODEX.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "f4c8ae8675da79750c9b241d7e3753436382a8aa",
+    "size": 4488,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/f4c8ae8675da79750c9b241d7e3753436382a8aa"
+  },
+  {
+    "path": "LEIA-ME-IA.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "f57f022da0f32e08ed033f901f54d0bf5aa8d0b0",
+    "size": 2016,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/f57f022da0f32e08ed033f901f54d0bf5aa8d0b0"
+  },
+  {
+    "path": "README.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "7423e47e89710178a03ce3df47b17fc069bfc44d",
+    "size": 13641,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/7423e47e89710178a03ce3df47b17fc069bfc44d"
+  },
+  {
+    "path": "docs/CONSCIENCIA/03-FLUXO-DEPLOY.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "828df8ddcc75ae5d53147ffccd3a7b2aa5f915e9",
+    "size": 1385,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/828df8ddcc75ae5d53147ffccd3a7b2aa5f915e9"
+  },
+  {
+    "path": "docs/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "b062619cba3a5a35e98d4d639843ce41978c77f8",
+    "size": 4170,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/b062619cba3a5a35e98d4d639843ce41978c77f8"
+  },
+  {
+    "path": "docs/CONSCIENCIA/11-MULTI-IA-FLUXO.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "af1cb88bccb11f59ef1129554df25522db13c67a",
+    "size": 1681,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/af1cb88bccb11f59ef1129554df25522db13c67a"
+  },
+  {
+    "path": "docs/CONSCIENCIA/22-METODO-DEPLOY-VPS.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "b4216b92e3416970c13fb90b0479a68ea20babe1",
+    "size": 3913,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/b4216b92e3416970c13fb90b0479a68ea20babe1"
+  },
+  {
+    "path": "docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "ebf2d8df7df97ed42c51c66cac142e580339e13e",
+    "size": 2482,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/ebf2d8df7df97ed42c51c66cac142e580339e13e"
+  },
+  {
+    "path": "docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "e742df22f58b02a348e363525468a8d2f3122d5f",
+    "size": 2107,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/e742df22f58b02a348e363525468a8d2f3122d5f"
+  },
+  {
+    "path": "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "286070b03098b39a3f7ea2c57fef0d01c90d671a",
+    "size": 3716,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/286070b03098b39a3f7ea2c57fef0d01c90d671a"
+  },
+  {
+    "path": "docs/CONSCIENCIA/01-IDENTIDADE.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "fdd64ba1baec90ac34b623f638f00d802bd6b167",
+    "size": 1170,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/fdd64ba1baec90ac34b623f638f00d802bd6b167"
+  },
+  {
+    "path": "docs/CONSCIENCIA/02-PERMISSOES.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "fceb5ce1b1912e1410925a9d544a156a8d0b5998",
+    "size": 2014,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/fceb5ce1b1912e1410925a9d544a156a8d0b5998"
+  },
+  {
+    "path": "docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "4645c67ca14351f19baa3e7d8ac35887881f6663",
+    "size": 795,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/4645c67ca14351f19baa3e7d8ac35887881f6663"
+  },
+  {
+    "path": "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "415a4d4b4a645eb85279ca268a99bd1c4ba6490e",
+    "size": 2238,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/415a4d4b4a645eb85279ca268a99bd1c4ba6490e"
+  },
+  {
+    "path": "docs/CONSCIENCIA/05-SSH-VPS.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "64fb7958dd7e7680ad1b2fbae02aa03fdb10c668",
+    "size": 2496,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/64fb7958dd7e7680ad1b2fbae02aa03fdb10c668"
+  },
+  {
+    "path": "docs/CONSCIENCIA/06-MCP-CENTRALDARK.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "0a60da2ec5f0e75c0900c32de984c4e16443290f",
+    "size": 2135,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/0a60da2ec5f0e75c0900c32de984c4e16443290f"
+  },
+  {
+    "path": "docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "492c364c4eabdfd192d0206a98de30e5c5c8e43c",
+    "size": 1326,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/492c364c4eabdfd192d0206a98de30e5c5c8e43c"
+  },
+  {
+    "path": "docs/CONSCIENCIA/08-HISTORICO-DECISOES.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "f6eeee426882a6452be748d75b31dbf93a9925a2",
+    "size": 2358,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/f6eeee426882a6452be748d75b31dbf93a9925a2"
+  },
+  {
+    "path": "docs/CONSCIENCIA/09-ESTADO-ATUAL.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "c22d77026931d8267d793e6a9aeb0ef0dd6aded8",
+    "size": 1687,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/c22d77026931d8267d793e6a9aeb0ef0dd6aded8"
+  },
+  {
+    "path": "docs/CONSCIENCIA/10-FALLBACK-LOVABLE.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "84730048087d025038b04e37b422dff3e511efbf",
+    "size": 4790,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/84730048087d025038b04e37b422dff3e511efbf"
+  },
+  {
+    "path": "docs/CONSCIENCIA/11-SKIL-SH.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "37e0810e93d8b8d9e97692570fde56a1a7f8a210",
+    "size": 2336,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/37e0810e93d8b8d9e97692570fde56a1a7f8a210"
+  },
+  {
+    "path": "docs/CONSCIENCIA/12-COFRE-LOVABLE.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "eb225a0613e5bd07d694735ea9c2770c300d3e30",
+    "size": 2209,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/eb225a0613e5bd07d694735ea9c2770c300d3e30"
+  },
+  {
+    "path": "docs/CONSCIENCIA/12-PASTA-OFICIAL-BOT.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "997b1aaf489e5b95c6d6c34345f85f76377a64f7",
+    "size": 2301,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/997b1aaf489e5b95c6d6c34345f85f76377a64f7"
+  },
+  {
+    "path": "docs/CONSCIENCIA/13-COMANDO-UNICO-VPS.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "4139b12be9ce9048ccee98221b352250b6a59ac9",
+    "size": 4489,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/4139b12be9ce9048ccee98221b352250b6a59ac9"
+  },
+  {
+    "path": "docs/CONSCIENCIA/14-COFRE-SECRETS-CENTRALIZADO.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "4accd5ce4fa2ca4ff9f178627420fa6a595d966c",
+    "size": 1895,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/4accd5ce4fa2ca4ff9f178627420fa6a595d966c"
+  },
+  {
+    "path": "docs/CONSCIENCIA/20-COLABORACAO-MULTI-IA.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "a7627badbff0b782225eceb290de7c97394d7a81",
+    "size": 3000,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/a7627badbff0b782225eceb290de7c97394d7a81"
+  },
+  {
+    "path": "docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md",
+    "mode": "100644",
+    "type": "blob",
+    "sha": "e91b03b40b279755ecf234b7ffb42088333ce273",
+    "size": 9142,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/e91b03b40b279755ecf234b7ffb42088333ce273"
+  },
+  {
+    "path": "docs/CONSCIENCIA/21-METODO-DIAGNOSTICO-FUNIL.md",
+    "mode": "100755",
+    "type": "blob",
+    "sha": "74e8a6b588018e2dc79e2e03d6eb8f0ab76f6f26",
+    "size": 3169,
+    "url": "https://api.github.com/repos/ServerVpss/CentralDark1VPS/git/blobs/74e8a6b588018e2dc79e2e03d6eb8f0ab76f6f26"
+  }
+]
