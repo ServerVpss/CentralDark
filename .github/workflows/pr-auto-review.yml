@@ -1,0 +1,260 @@
+name: PR auto-review (Codex + checklist)
+
+# Em todo PR pra main:
+#  - aplica label `needs-codex-review` (o conector Codex reage a label)
+#  - roda checagens automáticas (segredo, trailer Co-authored-by, validadores offline do bot-server)
+#  - posta/atualiza checklist em PT-BR com itens já marcados quando o código prova que passou
+# Nada destrutivo. Não bloqueia merge — só sinaliza.
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-auto-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  triage:
+    name: Triage + checklist auto-marcado
+    runs-on: [self-hosted, Linux]
+    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
+    steps:
+      - name: Checkout do PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ---------- Checagens automáticas ----------
+
+      - name: Detectar arquivos alterados
+        id: diff
+        run: |
+          BASE='${{ github.event.pull_request.base.sha }}'
+          HEAD='${{ github.event.pull_request.head.sha }}'
+          git fetch origin "$BASE" --depth=1 || true
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD" || true)
+          echo "$CHANGED" > /tmp/changed.txt
+          echo "lista alterada:"; cat /tmp/changed.txt
+          if grep -E '^CentralDark/apps/bot-server/' /tmp/changed.txt >/dev/null; then
+            echo "touched_bot=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "touched_bot=false" >> "$GITHUB_OUTPUT"
+          fi
+          # Padrões "cara de segredo" adicionados no diff
+          if git diff "$BASE" "$HEAD" -- . \
+              ':(exclude)**/*.md' ':(exclude)**/package-lock.json' \
+              | grep -E '^\+' \
+              | grep -E '(\.env(\s|$)|secrets/|tokens/|sessions/|\.ssh/|-----BEGIN [A-Z ]*PRIVATE KEY-----|\.pem"|\.key")' \
+              >/dev/null; then
+            echo "secret_suspect=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "secret_suspect=false" >> "$GITHUB_OUTPUT"
+          fi
+          # Paths sensíveis (Docker / WuzAPI / Caddy / WhatsApp / CRM / banco)
+          if grep -E '(^|/)(Dockerfile|docker-compose|Caddyfile|wuzapi|whatsapp|crm/|migrations/|prisma/migrations)' /tmp/changed.txt -i >/dev/null; then
+            echo "touched_sensitive=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "touched_sensitive=false" >> "$GITHUB_OUTPUT"
+          fi
+          # Pastas novas (precisam README + PLANO)
+          MISSING_DOCS=""
+          for d in $(git diff --diff-filter=A --name-only "$BASE" "$HEAD" | awk -F/ 'NF>1{ for(i=1;i<NF;i++){p=(i==1?$1:p"/"$i); print p} }' | sort -u); do
+            [ -d "$d" ] || continue
+            case "$d" in node_modules*|.git*|dist*|build*|.github*|.lovable*) continue;; esac
+            if [ ! -f "$d/README.md" ] || [ ! -f "$d/PLANO.md" ]; then
+              MISSING_DOCS="$MISSING_DOCS $d"
+            fi
+          done
+          if [ -z "$MISSING_DOCS" ]; then
+            echo "docs_ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "docs_ok=false" >> "$GITHUB_OUTPUT"
+            echo "Pastas sem README/PLANO:$MISSING_DOCS"
+          fi
+          # Instalador atualizado se mexeu em install.sh ou afins?
+          if grep -E '(^install\.sh$|^scripts/(deploy|install)/|^CentralDark/apps/install-callback/)' /tmp/changed.txt >/dev/null; then
+            if grep -E '^docs/INSTALADOR/' /tmp/changed.txt >/dev/null; then
+              echo "installer_docs=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "installer_docs=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "installer_docs=na" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Conferir trailer Co-authored-by
+        id: trailer
+        run: |
+          BASE='${{ github.event.pull_request.base.sha }}'
+          HEAD='${{ github.event.pull_request.head.sha }}'
+          MISS=0; TOTAL=0
+          for c in $(git rev-list "$BASE..$HEAD"); do
+            TOTAL=$((TOTAL+1))
+            if ! git log -1 --format=%B "$c" | grep -qi 'Co-authored-by: SegredoiDev'; then
+              MISS=$((MISS+1))
+            fi
+          done
+          echo "total=$TOTAL" >> "$GITHUB_OUTPUT"
+          echo "missing=$MISS" >> "$GITHUB_OUTPUT"
+          if [ "$TOTAL" -gt 0 ] && [ "$MISS" -eq 0 ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validadores offline do bot-server
+        id: validators
+        if: steps.diff.outputs.touched_bot == 'true'
+        continue-on-error: true
+        working-directory: CentralDark/apps/bot-server
+        run: |
+          npm ci --no-audit --no-fund
+          set +e
+          FAIL=0
+          for s in $(node -e "const p=require('./package.json');for(const k of Object.keys(p.scripts)){if(k.startsWith('validate:'))console.log(k)}"); do
+            echo "::group::npm run $s"
+            npm run "$s" --silent
+            rc=$?
+            echo "::endgroup::"
+            [ $rc -ne 0 ] && FAIL=$((FAIL+1))
+          done
+          echo "fail=$FAIL" >> "$GITHUB_OUTPUT"
+          [ $FAIL -eq 0 ] && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      # ---------- Label + checklist atualizado ----------
+
+      - name: Aplicar label Codex
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request.number;
+            await github.rest.issues.addLabels({
+              owner, repo, issue_number: pr, labels: ['needs-codex-review']
+            });
+
+      - name: Postar/atualizar checklist auto-marcado
+        uses: actions/github-script@v7
+        env:
+          TOUCHED_BOT: ${{ steps.diff.outputs.touched_bot }}
+          TOUCHED_SENS: ${{ steps.diff.outputs.touched_sensitive }}
+          SECRET_SUSPECT: ${{ steps.diff.outputs.secret_suspect }}
+          DOCS_OK: ${{ steps.diff.outputs.docs_ok }}
+          INSTALLER_DOCS: ${{ steps.diff.outputs.installer_docs }}
+          TRAILER_OK: ${{ steps.trailer.outputs.ok }}
+          TRAILER_MISS: ${{ steps.trailer.outputs.missing }}
+          TRAILER_TOTAL: ${{ steps.trailer.outputs.total }}
+          VALIDATORS_OK: ${{ steps.validators.outputs.ok }}
+          VALIDATORS_FAIL: ${{ steps.validators.outputs.fail }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request.number;
+            const env = process.env;
+
+            const mark = (cond) => cond === true ? 'x' : ' ';
+            const tag = (cond, txt) => cond === null ? `_(n/a)_ ${txt}` : (cond ? `✅ ${txt}` : `⚠️ ${txt}`);
+
+            const secretsOk    = env.SECRET_SUSPECT === 'false';
+            const sensitiveOk  = env.TOUCHED_SENS === 'false'; // se não tocou, considera ok automaticamente
+            const installerOk  = env.INSTALLER_DOCS === 'true' ? true
+                                : env.INSTALLER_DOCS === 'na' ? null
+                                : false;
+            const docsOk       = env.DOCS_OK === 'true';
+            const trailerOk    = env.TRAILER_OK === 'true';
+            const validatorsOk = env.TOUCHED_BOT === 'true'
+                                ? env.VALIDATORS_OK === 'true'
+                                : null;
+
+            const checkbox = (cond, txt, detail) => {
+              if (cond === null) return `- [ ] ${txt} _(n/a — não aplicável neste PR)_`;
+              return `- [${mark(cond)}] ${txt}${detail ? ` — ${detail}` : ''}`;
+            };
+
+            const marker = '<!-- pr-auto-review-checklist -->';
+            const body = [
+              marker,
+              '## 🤖 Revisão automática — checklist',
+              '',
+              'Itens marcados com **[x]** foram verificados automaticamente pelo workflow. Os demais ficam pro Codex / humano.',
+              '',
+              '- [ ] Codex revisou (comentário/review visível) _(humano)_',
+              checkbox(secretsOk, 'Sem segredo real exposto no diff (`.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, `*.pem`, `*.key`)'),
+              checkbox(sensitiveOk, 'Não toca Docker / WuzAPI / WhatsApp / Caddy / CRM / banco real sem confirmação',
+                env.TOUCHED_SENS === 'true' ? '⚠️ paths sensíveis alterados, confirmar com humano' : null),
+              checkbox(installerOk, 'Mudança em instalador atualiza `docs/INSTALADOR/`',
+                env.INSTALLER_DOCS === 'false' ? 'instalador mexido sem atualizar docs' : null),
+              checkbox(docsOk, 'Toda pasta nova tem `README.md` + `PLANO.md`'),
+              checkbox(trailerOk, 'Commits têm trailer `Co-authored-by: SegredoiDev`',
+                `${env.TRAILER_TOTAL || 0} commits, ${env.TRAILER_MISS || 0} sem trailer`),
+              checkbox(validatorsOk, 'Validadores offline do bot-server passam',
+                env.TOUCHED_BOT === 'true' ? `falhas: ${env.VALIDATORS_FAIL || 0}` : 'bot-server não foi tocado'),
+              '',
+              `_Atualizado em ${new Date().toISOString()} · workflow: pr-auto-review.yml · repo: ServerVpss/CentralDark_`
+            ].join('\n');
+
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number: pr, per_page: 100 });
+            const existing = comments.data.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              core.info('Checklist atualizado.');
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr, body });
+              core.info('Checklist criado.');
+            }
+
+      - name: Resumo automático do diff (análise de segurança estendida)
+        uses: actions/github-script@v7
+        continue-on-error: true
+        env:
+          SECRET_SUSPECT: ${{ steps.diff.outputs.secret_suspect }}
+          TOUCHED_SENS: ${{ steps.diff.outputs.touched_sensitive }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request.number;
+            const secretSuspect = process.env.SECRET_SUSPECT === 'true';
+            const touchedSens   = process.env.TOUCHED_SENS === 'true';
+            if (!secretSuspect && !touchedSens) {
+              core.info('Sem alertas críticos — pulando comentário de segurança.');
+              return;
+            }
+            const marker = '<!-- pr-security-alert -->';
+            const lines = [marker, '## 🚨 Alerta de segurança automático', ''];
+            if (secretSuspect) lines.push('⛔ **Padrão de segredo detectado no diff** — revisar antes do merge. Verificar: `.env`, `secrets/`, `tokens/`, `sessions/`, `*.pem`, `*.key`, `-----BEGIN PRIVATE KEY`.');
+            if (touchedSens)   lines.push('⚠️ **Paths sensíveis alterados** — Docker / WuzAPI / WhatsApp / Caddy / CRM / banco real. Confirmar com humano antes de merge.');
+            lines.push('', '_Gerado por pr-auto-review.yml · CentralDark_');
+            const body = lines.join('\n');
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number: pr, per_page: 100 });
+            const existing = comments.data.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr, body });
+            }
+
+      - name: React heart no PR (Heart On Your Sleeve)
+        uses: actions/github-script@v7
+        continue-on-error: true
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request.number;
+            await github.rest.reactions.createForIssue({
+              owner, repo, issue_number: pr, content: 'heart'
+            });
