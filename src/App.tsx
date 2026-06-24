@@ -46,6 +46,7 @@ import UsuarioPerfil from "@/apps/modulos/telepainel/pages/UsuarioPerfil";
 import Docs from "@/apps/modulos/telepainel/pages/Docs";
 import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
 import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
+import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 
 
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
@@ -83,6 +84,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "database", element: <DatabaseInfo />, adminOnly: true },
   { path: "status", element: <Status />, adminOnly: true },
   { path: "mega-painel", element: <MegaPainel />, adminOnly: true },
+  { path: "cofre", element: <Cofre />, adminOnly: true },
   { path: "teste-modulos", element: <TesteModulos />, adminOnly: true },
   { path: "usuarios-painel", element: <UsuariosPainel />, adminOnly: true },
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },

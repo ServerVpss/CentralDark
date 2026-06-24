@@ -1,15 +1,14 @@
 // Edge function central de notificação universal
-// Recebe POST de qualquer sistema (VPS, scripts, Lovable, bots) e:
-//   1. valida a chave própria (X-Notify-Key) — não depende da Lovable
-//   2. grava na tabela notifications_log
-//   3. envia formatado para o Telegram do admin
-//   4. faz anti-spam via dedupe_hash com janela de 60s
+// Fluxo:
+//   1. valida X-Notify-Key
+//   2. grava em notifications_log com dedupe (60s)
+//   3. roteia para um ou mais bots/chats com base em notification_routes (por tipo)
+//   4. se não houver rota cadastrada pro tipo, cai no fallback: bot principal (srver1bot) → admin
 //
-// Padrão usado: Deno.serve + jsr:@supabase/supabase-js@2 (regra do projeto)
+// Padrão: Deno.serve + jsr:@supabase/supabase-js@2
 
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
-// CORS expandido (regra do projeto)
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -17,19 +16,22 @@ const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-// Chat ID padrão do admin (do memory do projeto: contacobra3467 / @segredounlocker)
+// Chat do admin (fallback final)
 const DEFAULT_ADMIN_CHAT_ID = 1901426549;
+// Bot preferido pro fallback (regra do projeto)
+const PREFERRED_BOT_USERNAME = "srver1bot";
 
-// Janela de anti-spam: notificação idêntica nos últimos N segundos é agrupada
 const DEDUPE_WINDOW_SECONDS = 60;
 
-// Tipos aceitos e seus emojis
 const TIPO_EMOJI: Record<string, string> = {
   info: "ℹ️",
   sucesso: "✅",
   aviso: "⚠️",
   erro: "❌",
   critico: "🚨",
+  venda: "💰",
+  pagamento: "💳",
+  sistema: "⚙️",
 };
 
 type NotifyTipo = keyof typeof TIPO_EMOJI;
@@ -40,7 +42,13 @@ interface NotifyPayload {
   titulo: string;
   mensagem: string;
   metadata?: Record<string, unknown>;
-  chat_id?: number; // override opcional
+  chat_id?: number;
+}
+
+interface RouteRow {
+  bot_id: string;
+  chat_id: number;
+  prioridade: number;
 }
 
 function sanitizeStr(s: unknown, max = 2000): string {
@@ -56,12 +64,8 @@ async function sha256(input: string): Promise<string> {
     .join("");
 }
 
-// Escapa HTML do Telegram (parse_mode=HTML)
 function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function formatTelegramMessage(p: NotifyPayload): string {
@@ -72,7 +76,6 @@ function formatTelegramMessage(p: NotifyPayload): string {
   const ts = new Date().toLocaleString("pt-BR", {
     timeZone: "America/Sao_Paulo",
   });
-
   return [
     `${emoji} <b>${titulo}</b>`,
     `<i>origem:</i> <code>${origem}</code>`,
@@ -83,12 +86,40 @@ function formatTelegramMessage(p: NotifyPayload): string {
   ].join("\n");
 }
 
+async function sendToTelegram(
+  token: string,
+  chatId: number,
+  text: string,
+): Promise<{ ok: boolean; message_id: number | null; error: string | null }> {
+  try {
+    const resp = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }),
+    });
+    const json = (await resp.json()) as {
+      ok: boolean;
+      result?: { message_id: number };
+      description?: string;
+    };
+    if (!resp.ok || !json.ok) {
+      return { ok: false, message_id: null, error: json.description ?? `http_${resp.status}` };
+    }
+    return { ok: true, message_id: json.result?.message_id ?? null, error: null };
+  } catch (e) {
+    return { ok: false, message_id: null, error: (e as Error).message };
+  }
+}
+
 Deno.serve(async (req) => {
-  // Preflight CORS
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
-
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ ok: false, error: "method_not_allowed" }), {
       status: 405,
@@ -96,7 +127,6 @@ Deno.serve(async (req) => {
     });
   }
 
-  // 1) Autenticação por chave própria
   const expectedKey = Deno.env.get("NOTIFY_API_KEY");
   const providedKey = req.headers.get("x-notify-key");
   if (!expectedKey || !providedKey || providedKey !== expectedKey) {
@@ -106,7 +136,6 @@ Deno.serve(async (req) => {
     });
   }
 
-  // 2) Parse e validação do body
   let raw: unknown;
   try {
     raw = await req.json();
@@ -125,168 +154,144 @@ Deno.serve(async (req) => {
 
   if (!origem || !titulo || !mensagem) {
     return new Response(
-      JSON.stringify({
-        ok: false,
-        error: "invalid_input",
-        detail: "origem, titulo e mensagem são obrigatórios",
-      }),
-      {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      },
+      JSON.stringify({ ok: false, error: "invalid_input", detail: "origem, titulo e mensagem são obrigatórios" }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 
   if (!Object.keys(TIPO_EMOJI).includes(tipo)) {
     return new Response(
-      JSON.stringify({
-        ok: false,
-        error: "invalid_tipo",
-        detail: `tipo deve ser um de: ${Object.keys(TIPO_EMOJI).join(", ")}`,
-      }),
-      {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      },
+      JSON.stringify({ ok: false, error: "invalid_tipo", detail: `tipo deve ser um de: ${Object.keys(TIPO_EMOJI).join(", ")}` }),
+      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 
-  const metadata =
-    body.metadata && typeof body.metadata === "object" ? body.metadata : {};
+  const metadata = body.metadata && typeof body.metadata === "object" ? body.metadata : {};
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, serviceKey);
 
-  // 3) Anti-spam: hash da notificação + checa janela de 60s
+  // Anti-spam
   const dedupeHash = await sha256(`${origem}|${tipo}|${titulo}|${mensagem}`);
   const sinceIso = new Date(Date.now() - DEDUPE_WINDOW_SECONDS * 1000).toISOString();
-
-  const { data: recent, error: lookupError } = await supabase
+  const { data: recent } = await supabase
     .from("notifications_log")
-    .select("id, metadata, telegram_message_id, telegram_chat_id")
+    .select("id, metadata")
     .eq("dedupe_hash", dedupeHash)
     .gte("created_at", sinceIso)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
 
-  if (lookupError) {
-    console.error("[notify-telegram] lookup error", lookupError);
-  }
-
-  // Se já tem uma notificação idêntica recente, incrementa contador e sai (não reenvia)
   if (recent) {
     const prevMeta = (recent.metadata as Record<string, unknown>) || {};
     const repeated = ((prevMeta.repeated as number) || 1) + 1;
     await supabase
       .from("notifications_log")
-      .update({
-        metadata: { ...prevMeta, repeated, last_repeat_at: new Date().toISOString() },
-      })
+      .update({ metadata: { ...prevMeta, repeated, last_repeat_at: new Date().toISOString() } })
       .eq("id", recent.id);
-
     return new Response(
-      JSON.stringify({
-        ok: true,
-        deduped: true,
-        id: recent.id,
-        repeated,
-      }),
+      JSON.stringify({ ok: true, deduped: true, id: recent.id, repeated }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 
-  // 4) Insere o log antes de tentar enviar (rastreabilidade)
+  // Insere log
   const { data: inserted, error: insertError } = await supabase
     .from("notifications_log")
-    .insert({
-      origem,
-      tipo,
-      titulo,
-      mensagem,
-      metadata,
-      dedupe_hash: dedupeHash,
-      sent_ok: false,
-    })
+    .insert({ origem, tipo, titulo, mensagem, metadata, dedupe_hash: dedupeHash, sent_ok: false })
     .select("id")
     .single();
 
   if (insertError || !inserted) {
     console.error("[notify-telegram] insert error", insertError);
-    return new Response(
-      JSON.stringify({ ok: false, error: "db_insert_failed" }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      },
-    );
+    return new Response(JSON.stringify({ ok: false, error: "db_insert_failed" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 
-  // 5) Envia para o Telegram via bot token do telegram_bots ativo
-  let telegramMessageId: number | null = null;
-  let telegramChatId: number | null = null;
-  let sendError: string | null = null;
+  // Resolve destinos: prioriza notification_routes; senão usa fallback
+  const text = formatTelegramMessage({ origem, tipo, titulo, mensagem, metadata });
+  const overrideChat = Number(body.chat_id) || null;
 
-  try {
-    const { data: bot, error: botError } = await supabase
+  type Destino = { bot_id: string; token: string; chat_id: number; bot_username: string | null };
+  const destinos: Destino[] = [];
+
+  if (overrideChat) {
+    // Override explícito do chamador → usa bot preferido
+    const { data: bot } = await supabase
       .from("telegram_bots")
-      .select("token")
+      .select("id, token, bot_username")
       .eq("is_active", true)
-      .order("created_at", { ascending: true })
-      .limit(1)
-      .maybeSingle();
+      .order("created_at", { ascending: true });
+    const preferred = bot?.find((b) => b.bot_username === PREFERRED_BOT_USERNAME) ?? bot?.[0];
+    if (preferred?.token) {
+      destinos.push({ bot_id: preferred.id, token: preferred.token, chat_id: overrideChat, bot_username: preferred.bot_username });
+    }
+  } else {
+    // Busca rotas cadastradas pro tipo
+    const { data: routes } = await supabase
+      .from("notification_routes")
+      .select("bot_id, chat_id, prioridade")
+      .eq("tipo", tipo)
+      .eq("ativo", true)
+      .order("prioridade", { ascending: true })
+      .returns<RouteRow[]>();
 
-    if (botError || !bot?.token) {
-      throw new Error("nenhum bot ativo encontrado em telegram_bots");
+    if (routes && routes.length > 0) {
+      const botIds = [...new Set(routes.map((r) => r.bot_id))];
+      const { data: bots } = await supabase
+        .from("telegram_bots")
+        .select("id, token, bot_username")
+        .in("id", botIds);
+      const botMap = new Map(bots?.map((b) => [b.id, b]) ?? []);
+      for (const r of routes) {
+        const b = botMap.get(r.bot_id);
+        if (b?.token) destinos.push({ bot_id: b.id, token: b.token, chat_id: Number(r.chat_id), bot_username: b.bot_username });
+      }
     }
 
-    const chatId = Number(body.chat_id) || DEFAULT_ADMIN_CHAT_ID;
-    telegramChatId = chatId;
-    const text = formatTelegramMessage({
-      origem,
-      tipo,
-      titulo,
-      mensagem,
-      metadata,
-    });
-
-    const tgUrl = `https://api.telegram.org/bot${bot.token}/sendMessage`;
-    const resp = await fetch(tgUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      }),
-    });
-    const json = (await resp.json()) as {
-      ok: boolean;
-      result?: { message_id: number };
-      description?: string;
-    };
-
-    if (!resp.ok || !json.ok) {
-      throw new Error(
-        json.description ?? `telegram_http_${resp.status}`,
-      );
+    // Fallback: nenhuma rota → usa srver1bot pro admin
+    if (destinos.length === 0) {
+      const { data: bots } = await supabase
+        .from("telegram_bots")
+        .select("id, token, bot_username")
+        .eq("is_active", true)
+        .order("created_at", { ascending: true });
+      const preferred = bots?.find((b) => b.bot_username === PREFERRED_BOT_USERNAME) ?? bots?.[0];
+      if (preferred?.token) {
+        destinos.push({ bot_id: preferred.id, token: preferred.token, chat_id: DEFAULT_ADMIN_CHAT_ID, bot_username: preferred.bot_username });
+      }
     }
-    telegramMessageId = json.result?.message_id ?? null;
-  } catch (e) {
-    sendError = (e as Error).message;
-    console.error("[notify-telegram] telegram send failed", sendError);
   }
 
-  // 6) Atualiza o log com resultado do envio
+  // Envia em paralelo
+  const resultados = await Promise.all(
+    destinos.map((d) => sendToTelegram(d.token, d.chat_id, text).then((r) => ({ ...d, ...r }))),
+  );
+
+  const okCount = resultados.filter((r) => r.ok).length;
+  const firstOk = resultados.find((r) => r.ok);
+  const firstErr = resultados.find((r) => !r.ok);
+
   await supabase
     .from("notifications_log")
     .update({
-      telegram_message_id: telegramMessageId,
-      telegram_chat_id: telegramChatId,
-      sent_ok: telegramMessageId !== null,
-      send_error: sendError,
+      telegram_message_id: firstOk?.message_id ?? null,
+      telegram_chat_id: firstOk?.chat_id ?? null,
+      sent_ok: okCount > 0,
+      send_error: okCount === 0 ? (firstErr?.error ?? "sem_destinos") : null,
+      metadata: {
+        ...metadata,
+        destinos: resultados.map((r) => ({
+          bot: r.bot_username,
+          chat_id: r.chat_id,
+          ok: r.ok,
+          error: r.error,
+        })),
+      },
     })
     .eq("id", inserted.id);
 
@@ -294,9 +299,9 @@ Deno.serve(async (req) => {
     JSON.stringify({
       ok: true,
       id: inserted.id,
-      telegram_message_id: telegramMessageId,
-      sent_ok: telegramMessageId !== null,
-      send_error: sendError,
+      enviados: okCount,
+      total_destinos: destinos.length,
+      resultados: resultados.map((r) => ({ bot: r.bot_username, chat_id: r.chat_id, ok: r.ok, error: r.error })),
     }),
     { headers: { ...corsHeaders, "Content-Type": "application/json" } },
   );
