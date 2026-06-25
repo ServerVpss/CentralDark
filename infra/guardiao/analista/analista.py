@@ -22,7 +22,10 @@ from threading import Thread
 BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE))
 
+import yaml  # noqa: E402
+
 from analista.dedup import Dedup  # noqa: E402
+from analista.decisor import decidir  # noqa: E402
 from analista.formatter import formatar  # noqa: E402
 from analista.priority_queue import FilaPrioridade  # noqa: E402
 from analista.rate_limiter import RateLimiter  # noqa: E402
@@ -63,6 +66,15 @@ pq = FilaPrioridade()
 dedup = Dedup()
 limiter = RateLimiter()
 
+# ─── Camada de decisão ────────────────────────────────────────────
+# Flag de reversão: DECISOR_ENABLED=false volta ao comportamento antigo.
+DECISOR_ENABLED = os.environ.get("DECISOR_ENABLED", "true").lower() != "false"
+try:
+    with open(BASE / "guardiao_rules.yaml", encoding="utf-8") as _f:
+        REGRAS_DECISOR = (yaml.safe_load(_f) or {}).get("decisor", {})
+except OSError:
+    REGRAS_DECISOR = {}
+
 
 def consumir_da_fila():
     """Lê eventos publicados pelo Guardião e empilha (após dedup)."""
@@ -98,9 +110,23 @@ def despachar():
             time.sleep(0.5)
             continue
         try:
+            chave = evento.get("key", "")
             critico = evento.get("severity") == "critico"
+
+            # Camada de decisão: filtra proposta de baixa qualidade antes do envio.
+            # Crítico nunca passa pelo filtro (bypass de segurança).
+            if DECISOR_ENABLED and not critico:
+                d = decidir(evento, {"repeticoes_10min": 0}, REGRAS_DECISOR)
+                if d.acao in ("ignorar", "agrupar"):
+                    log.info("Decisor descartou envio: %s score=%d key=%s [%s]",
+                             d.acao, d.score, chave, d.motivo)
+                    continue
+                # propor / elevar -> envia, anotando o score no título
+                evento["title"] = f"[D:{d.score}] {evento.get('title', 'Guardião')}"
+                log.info("Decisor liberou: %s score=%d key=%s", d.acao, d.score, chave)
+
             log.info("Despachando: [%s/%s] %s",
-                     evento.get("source"), evento.get("severity"), evento.get("key"))
+                     evento.get("source"), evento.get("severity"), chave)
             dormiu = limiter.aguardar(critico=critico)
             if dormiu > 0:
                 log.info("Rate-limit: aguardou %.1fs antes do envio", dormiu)

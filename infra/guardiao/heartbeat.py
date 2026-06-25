@@ -9,7 +9,10 @@ from pathlib import Path
 
 log = logging.getLogger("guardiao.heartbeat")
 
-MCP_URL = "https://mcp.centralldark.com/mcp"
+# O Guardião roda na MESMA VPS do MCP, então fala direto com o backend local
+# (127.0.0.1:9100), contornando o edge/WAF Cloudflare — que bloqueia o
+# User-Agent "Python-urllib" com HTTP 403. Override por env se precisar.
+MCP_URL = os.environ.get("GUARDIAO_MCP_URL", "http://127.0.0.1:9100/mcp")
 FILA_FILE = Path(__file__).parent / "fila" / "events.jsonl"
 
 
@@ -33,6 +36,10 @@ def _call_mcp(tool: str, args: dict) -> bool:
         headers={
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
+            # O transporte MCP (Streamable HTTP) exige este Accept, senão 406.
+            "Accept": "application/json, text/event-stream",
+            # UA explícito: o default "Python-urllib" é barrado pelo WAF Cloudflare.
+            "User-Agent": "Guardiao-CentralDark/2.0",
         },
     )
     try:

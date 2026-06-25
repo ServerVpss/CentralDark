@@ -5,8 +5,10 @@ Modo inicial: 'propor' (NUNCA move arquivos automaticamente).
 Trava de segurança: modo 'auto' fisicamente bloqueado até 08/07/2026.
 """
 import hashlib
+import json
 import logging
 import os
+import subprocess
 import time
 from datetime import datetime, timezone
 from logging.handlers import RotatingFileHandler
@@ -88,6 +90,58 @@ MODO = resolver_modo()
 with open(REGRAS, encoding="utf-8") as f:
     RULES = yaml.safe_load(f)
 
+EXCLUIR = RULES.get("excluir", {}) or {}
+
+# ─── Cache persistente de propostas (anti-repetição) ──────────────
+# inotify + reconciliação (5min) reavaliam tudo; sem cache, a MESMA proposta
+# repete a cada ciclo e a cada restart. O cache só deixa re-propor se o
+# CONTEÚDO (hash) ou o destino mudar. É o que corta o grosso do spam.
+CACHE_FILE = Path(__file__).parent / "fila" / "propostas_cache.json"
+
+
+def _cache_carregar() -> dict:
+    try:
+        with open(CACHE_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def _cache_salvar(cache: dict) -> None:
+    try:
+        tmp = CACHE_FILE.with_suffix(".json.tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(cache, f, ensure_ascii=False, indent=2)
+        tmp.replace(CACHE_FILE)  # escrita atômica
+    except OSError:
+        log.exception("Falha ao salvar cache de propostas")
+
+
+CACHE_PROPOSTAS = _cache_carregar()
+
+
+def _excluido(rel: Path) -> str | None:
+    """Motivo da exclusão (não deve ser proposto), ou None se pode propor.
+
+    - Padrões sensíveis: denylist em guardiao_rules.yaml → excluir.padroes.
+    - Gitignored: arquivo não versionado DE PROPÓSITO (vive só em disco).
+      (Arquivo só ainda-não-commitado NÃO é excluído — é candidato legítimo.)
+    """
+    rel_str = str(rel)
+    for padrao in EXCLUIR.get("padroes", []) or []:
+        if padrao in rel_str:
+            return f"padrão sensível '{padrao}'"
+    try:
+        r = subprocess.run(
+            ["git", "-C", str(RAIZ), "check-ignore", "-q", rel_str],
+            timeout=5, capture_output=True,
+        )
+        if r.returncode == 0:
+            return "gitignored (não versionado de propósito)"
+    except (subprocess.SubprocessError, OSError):
+        pass
+    return None
+
 # ─── Estado (fila de debounce + hashes) ───────────────────────────
 fila: dict[str, float] = {}
 hashes: dict[str, str] = {}
@@ -116,12 +170,30 @@ def avaliar(path: Path) -> None:
         return
     log.debug("Avaliando: %s", rel)
 
+    motivo_excl = _excluido(rel)
+    if motivo_excl:
+        log.debug("Ignorado (%s): %s", motivo_excl, rel)
+        return
+
     veredito = classificar(str(rel), RULES)
     if veredito is None:
         return
 
     destino_rel = f"{veredito['pasta_correta']}/{path.name}"
     confianca = veredito["confianca"]
+
+    # Cache anti-repetição: só propõe se for novo ou se conteúdo/destino mudou.
+    h = sha1(path)
+    prev = CACHE_PROPOSTAS.get(str(rel))
+    if prev and prev.get("hash") == h and prev.get("destino") == destino_rel:
+        log.debug("Já proposto e inalterado — pulando: %s", rel)
+        return
+    CACHE_PROPOSTAS[str(rel)] = {
+        "hash": h,
+        "destino": destino_rel,
+        "ts": datetime.now(timezone.utc).isoformat(),
+    }
+    _cache_salvar(CACHE_PROPOSTAS)
 
     # MODO == 'propor' (único modo permitido nesta versão)
     log.info(
