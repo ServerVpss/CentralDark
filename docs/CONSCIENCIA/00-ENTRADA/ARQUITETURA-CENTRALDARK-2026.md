@@ -1,4 +1,4 @@
-# 🧠 ARQUITETURA CENTRALDARK 2026 — Versão Oficial
+# 🧠 ARQUITETURA CENTRALDARK 2026 - Versão Oficial
 
 > Documento oficial da arquitetura do CentralDark.
 > Fonte da verdade: este arquivo, dentro do repositório `ServerVpss/CentralDark`.
