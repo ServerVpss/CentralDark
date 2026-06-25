@@ -20,23 +20,23 @@
 
 ## ⚡ Comandos Gatilhos
 
-Quando eu falar qualquer uma destas frases, entenda como comando oficial:
+Quando eu usar qualquer um destes comandos, você deve executar da seguinte forma:
 
-- **"Registra como oficial"** ou **"Isso é oficial agora"** → Transforme o que eu disse em regra oficial do projeto.
+- **"Registra como oficial"** ou **"Isso é oficial agora"** → Transforme o que eu disse em regra oficial do projeto (crie ou atualize o arquivo correto em `docs/CONSCIENCIA/` e mostre antes de salvar).
 
-- **"Mostra pendências"** → Liste todas as pendências atuais.
+- **"Mostra pendências"** → Liste todas as pendências atuais de forma clara e organizada.
 
-- **"Atualiza status"** → Atualize o Mega Painel.
+- **"Atualiza status"** → Atualize o Mega Painel com o status atual do projeto.
 
-- **"Busca no projeto"** → Use `repo_semantic_search`.
+- **"Busca no projeto"** → Use `repo_semantic_search` para buscar no repositório.
 
-- **"Resumo da sessão"** → Faça um resumo do que foi feito.
+- **"Resumo da sessão"** → Faça um resumo objetivo do que foi feito nesta conversa.
 
-- **"O que falta fazer?"** → Mostre as próximas tarefas pendentes.
+- **"O que falta fazer?"** → Mostre as próximas tarefas ou etapas pendentes.
 
 ---
 
-## 📚 Documentos Importantes Nesta Pasta
+## 📚 Documentos Importantes
 
 - [`ARQUITETURA-CENTRALDARK-2026.md`](./ARQUITETURA-CENTRALDARK-2026.md) — Arquitetura oficial do projeto.
 
@@ -44,7 +44,7 @@ Quando eu falar qualquer uma destas frases, entenda como comando oficial:
 
 ## 🧭 Interfaces (apenas visualização)
 
-- **Notion** — Acompanhamento visual
+- **Notion** — Acompanhamento visual do projeto
 
 - **Mega Painel** — Status ao vivo
 
