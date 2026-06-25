@@ -20,6 +20,7 @@ import {
   Power,
 } from "lucide-react";
 import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { useAprovacao } from "@/shared/aprovacao/ApprovalProvider";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
@@ -72,6 +73,7 @@ const getTokenErrorMessage = (error: string): string => {
 export default function Bots() {
   const navigate = useNavigate();
   const { bots, loading, createBot, syncBot, deleteBot, updateBot } = useTelegramBots();
+  const { pedirAprovacao } = useAprovacao();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newBotName, setNewBotName] = useState("");
   const [newBotToken, setNewBotToken] = useState("");
@@ -180,7 +182,14 @@ export default function Bots() {
   };
 
   const handleDeleteBot = async (botId: string) => {
-    if (confirm("Tem certeza que deseja remover este bot?")) {
+    const bot = bots.find((b) => b.id === botId);
+    const r = await pedirAprovacao({
+      acao: "Remover bot do Telegram",
+      alvo: bot ? `@${bot.bot_username ?? botId}` : botId,
+      risco: "alto",
+      detalhes: "Essa ação remove o bot do painel e desliga o webhook. Não pode ser desfeita.",
+    });
+    if (r === "sim") {
       await deleteBot(botId);
       if (selectedBot?.id === botId) {
         setSelectedBot(null);
