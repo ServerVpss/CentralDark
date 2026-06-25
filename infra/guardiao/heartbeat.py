@@ -5,10 +5,12 @@ import os
 import time
 import urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
 
 log = logging.getLogger("guardiao.heartbeat")
 
 MCP_URL = "https://mcp.centralldark.com/mcp"
+FILA_FILE = Path(__file__).parent / "fila" / "events.jsonl"
 
 
 def _call_mcp(tool: str, args: dict) -> bool:
@@ -41,6 +43,17 @@ def _call_mcp(tool: str, args: dict) -> bool:
         return False
 
 
+def _contar_fila() -> int:
+    try:
+        if not FILA_FILE.exists():
+            return 0
+        # contagem aproximada de linhas
+        with open(FILA_FILE, "rb") as f:
+            return sum(1 for _ in f)
+    except OSError:
+        return 0
+
+
 def enviar_heartbeat(modo: str, arquivos: int) -> None:
     """Pulso do Guardião no Mega Painel — chamado a cada 60s."""
     agora = datetime.now(timezone.utc).isoformat()
@@ -48,11 +61,12 @@ def enviar_heartbeat(modo: str, arquivos: int) -> None:
         "agent": {
             "name": "Guardião da Consciência",
             "emoji": "🛡️",
-            "role": "Vigia da estrutura de CONSCIENCIA",
+            "role": "Vigia da estrutura + Docker + PM2",
             "power": 100,
             "status": "Online",
             "modo": modo,
             "arquivos_vigiados": arquivos,
+            "eventos_na_fila": _contar_fila(),
             "ultimo_scan": agora,
         }
     })
