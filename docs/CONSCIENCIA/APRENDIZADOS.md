@@ -1812,3 +1812,9 @@ Isso evita que o card de Tools públicas fique zerado se o navegador bloquear ch
 - **Data:** 2026-06-25
 - **Contexto:** O usuário aprovou a adição da seção '⚡ Comandos Gatilhos' no arquivo docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, estabelecendo frases-chave como 'Registra como oficial', 'Mostra pendências', 'Atualiza status', 'Busca no projeto', 'Resumo da sessão' e 'O que falta fazer?' como comandos oficiais para IAs do projeto.
 - **Aprendizado:** Sempre que o usuário usar uma das frases da seção 'Comandos Gatilhos' no 00-LEIA-PRIMEIRO.md, a IA deve interpretar como comando oficial e executar a ação correspondente. Para 'Registra como oficial' ou 'Isso é oficial agora', a informação deve virar regra em docs/CONSCIENCIA/ e só salvar após aprovação explícita.
+
+### 246. Seção Comandos Gatilhos refinada no 00-LEIA-PRIMEIRO.md
+- **Categoria:** outro
+- **Data:** 2026-06-25
+- **Contexto:** O usuário aprovou a nova versão da seção '⚡ Comandos Gatilhos' no arquivo docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, com frases-chave e descrições claras de execução: 'Registra como oficial', 'Mostra pendências', 'Atualiza status', 'Busca no projeto', 'Resumo da sessão' e 'O que falta fazer?'.
+- **Aprendizado:** A seção de Comandos Gatilhos da Porta de Entrada deve ser consultada sempre que o usuário usar uma das frases listadas. Para 'Registra como oficial' ou 'Isso é oficial agora', a IA deve criar/atualizar a regra em docs/CONSCIENCIA/ e mostrar o conteúdo antes de salvar. As demais frases acionam listagem de pendências, atualização do Mega Painel, busca semântica no repositório, resumo da sessão ou próximas tarefas pendentes.
