@@ -1,8 +1,8 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-25T21:15:33.507Z
-- **Commit:** `854e1444cf1ac3d0e7b1b7e09d950e1307d397a9`
-- **Disparado por:** segredounlock
+- **Gerado:** 2026-06-25T23:00:20.525Z
+- **Commit:** `e2b86a0971368ef4da30c361b206c5666348c4ba`
+- **Disparado por:** lovable-dev[bot]
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
 
@@ -10,9 +10,9 @@
 
 | Database | Git | Notion | 🟩 OK | 🟥 Falta Notion | 🟧 Órfão |
 |---|---:|---:|---:|---:|---:|
-| regras | 4 | 14 | 4 | 0 | 10 |
-| pendencias | 1 | 14 | 1 | 0 | 13 |
-| decisoes | 11 | 24 | 11 | 0 | 13 |
+| regras | 4 | 4 | 4 | 0 | 0 |
+| pendencias | 1 | 1 | 1 | 0 | 0 |
+| decisoes | 11 | 11 | 11 | 0 | 0 |
 | aprendizados | 262 | 0 | 0 | 262 | 0 |
 
 ## Detalhes
@@ -21,67 +21,19 @@
 
 - 🟩 OK: **4**
 - 🟥 Faltando no Notion: **0**
-- 🟧 Órfãos no Notion (não existem no Git): **10**
-
-<details><summary>🟧 Itens órfãos</summary>
-
-- Protocolo Multi-Agente Semântico (regra-mãe) — Ler→Agir→Registrar, rigor máximo no MCP
-- Memória só conta se está no Git — mem:// não é fonte oficial
-- Cérebro Vivo Central — protocolo obrigatório multi-IA
-- VPS é intocável sem permissão explícita
-- Atualizar Mega Painel + Telegram a cada ação relevante
-- Antes de escrever arquivos importantes, mostrar resumo pro usuário
-- Repo privado ou grande → usar GH_TOKEN desde o primeiro acesso
-- Notion é o cérebro organizacional do projeto
-- Tarefas grandes → 3 a 4 sub-agentes em paralelo
-- Sempre responder em PT-BR (100% do conteúdo)
-</details>
+- 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### pendencias
 
 - 🟩 OK: **1**
 - 🟥 Faltando no Notion: **0**
-- 🟧 Órfãos no Notion (não existem no Git): **13**
-
-<details><summary>🟧 Itens órfãos</summary>
-
-- #3 — bot-whatsapp, crm, financeiro são só landing
-- #5 — Revisão de migração docs/ do legado (CentralDark1VPS → CentralDark)
-- #4 — Arquitetura CentralDark 2026 (Cloud + API pra IAs externas)
-- #1 — Migração centralldark.com + telepainel.centralldark.com
-- P6 — Guardião da Consciência: ativar Decisor (matar spam de propostas)
-- P5 — Registrar/sincronizar bots no Supabase + healthcheck
-- P2 — Sincronização realtime do Mega Painel (status.centralldark.com)
-- P1 — Resolver conexão do MCP CentralDark (Grok não conecta)
-- P3 — Telegram automático em início/fim de toda ação relevante + registro no Notion
-- P4 — Preparar integração futura com Obsidian como camada do Cérebro Vivo
-- Ativação do Segundo Cérebro (Obsidian)
-- Apagar manualmente 2 databases legados (Visualizações da página inicial + Minhas Tarefas)
-- Iniciar Fase 1 da Consolidação CentralDark (import de docs do CentralDark1)
-</details>
+- 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### decisoes
 
 - 🟩 OK: **11**
 - 🟥 Faltando no Notion: **0**
-- 🟧 Órfãos no Notion (não existem no Git): **13**
-
-<details><summary>🟧 Itens órfãos</summary>
-
-- Estrutura oficial da VPS: /root/CentralDark/APP/
-- GitHub Achievements — perfil segredounlock
-- Memória eterna do agente em docs/CONSCIENCIA/
-- Docs por pasta (README.md + PLANO.md)
-- Permissões do agente (execução direta vs confirmação)
-- Setor único de pendências (docs/PENDENCIAS.md)
-- Gerenciador de pacotes oficial: npm
-- Fluxo de deploy: commit direto na main
-- Central de horário única (America/Sao_Paulo)
-- MCP CentralDark próprio em mcp.centralldark.com
-- Instalador + doc viva (install.sh + docs/INSTALADOR/)
-- P1 MCP CentralDark — Cloudflare descartado como causa
-- Contrato operacional do Cérebro Vivo — 7 regras
-</details>
+- 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### aprendizados
 
