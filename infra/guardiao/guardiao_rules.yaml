@@ -1,0 +1,44 @@
+# Regras de classificação do Guardião da Consciência.
+# Edite livremente — o daemon recarrega a cada restart.
+#
+# Pontuação:
+#   - nome_regex: peso 2 por padrão que casa com o nome do arquivo
+#   - palavras_chave: peso 1 por palavra encontrada no nome
+#   - Confiança = min(pontos / 5.0, 1.0), threshold mínimo = 0.4
+
+pastas:
+  docs/CONSCIENCIA/00-ENTRADA:
+    nome_regex:
+      - "^00-"
+      - "leia-primeiro"
+      - "porta-de-entrada"
+      - "arquitetura"
+    palavras_chave: ["entrada", "leia", "primeiro"]
+
+  docs/CONSCIENCIA/01-IDENTIDADE:
+    nome_regex: ["identidade", "regras-da-equipe"]
+    palavras_chave: ["identidade", "regras"]
+
+  docs/CONSCIENCIA/02-PERMISSOES:
+    nome_regex: ["permiss", "handoff"]
+    palavras_chave: ["permissao", "handoff"]
+
+  docs/CONSCIENCIA/03-DEPLOY:
+    nome_regex: ["deploy", "fluxo-deploy"]
+    palavras_chave: ["deploy", "publish"]
+
+  docs/CONSCIENCIA/04-INFRA-VPS:
+    nome_regex: ["vps", "ssh", "estrutura-vps", "pm2"]
+    palavras_chave: ["vps", "ssh", "pm2", "caddy"]
+
+  docs/CONSCIENCIA/05-APRENDIZADOS:
+    nome_regex: ["aprendizado", "metodo", "diagnostico"]
+    palavras_chave: ["aprendizado", "aprendi", "metodo"]
+
+  docs/CONSCIENCIA/06-MCP:
+    nome_regex: ["mcp", "conector"]
+    palavras_chave: ["mcp", "conector"]
+
+  docs/CONSCIENCIA/07-PENDENCIAS:
+    nome_regex: ["pendencia", "horario"]
+    palavras_chave: ["pendencia", "horario"]
