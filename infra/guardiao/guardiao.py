@@ -18,6 +18,9 @@ from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 from classificador import classificar
+from detectores.docker_watcher import loop_docker
+from detectores.pm2_watcher import loop_pm2
+from fila.event_queue import publicar
 from heartbeat import enviar_heartbeat, registrar_evento_painel
 from notifier import notificar_telegram
 
