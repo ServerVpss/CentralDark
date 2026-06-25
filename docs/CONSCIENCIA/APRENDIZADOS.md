@@ -1818,3 +1818,9 @@ Isso evita que o card de Tools públicas fique zerado se o navegador bloquear ch
 - **Data:** 2026-06-25
 - **Contexto:** O usuário aprovou a nova versão da seção '⚡ Comandos Gatilhos' no arquivo docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, com frases-chave e descrições claras de execução: 'Registra como oficial', 'Mostra pendências', 'Atualiza status', 'Busca no projeto', 'Resumo da sessão' e 'O que falta fazer?'.
 - **Aprendizado:** A seção de Comandos Gatilhos da Porta de Entrada deve ser consultada sempre que o usuário usar uma das frases listadas. Para 'Registra como oficial' ou 'Isso é oficial agora', a IA deve criar/atualizar a regra em docs/CONSCIENCIA/ e mostrar o conteúdo antes de salvar. As demais frases acionam listagem de pendências, atualização do Mega Painel, busca semântica no repositório, resumo da sessão ou próximas tarefas pendentes.
+
+### 247. Comandos Gatilhos organizados por categoria no 00-LEIA-PRIMEIRO.md
+- **Categoria:** outro
+- **Data:** 2026-06-25
+- **Contexto:** O usuário aprovou a versão final da seção '⚡ Comandos Gatilhos' em docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, agora dividida em subseções: Registro Oficial, Consultas de Estado e Buscas e Resumos.
+- **Aprendizado:** A seção Comandos Gatilhos está organizada em três grupos: Registro Oficial (com fluxo de aprovação antes de salvar), Consultas de Estado (pendências, status atual, próximas tarefas) e Buscas e Resumos (repo_semantic_search, resumo da sessão). Cada comando tem uma instrução clara de execução.
