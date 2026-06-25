@@ -78,11 +78,20 @@ async function expectedDecisoes() {
 async function expectedAprendizados() {
   const md = await read("docs/CONSCIENCIA/APRENDIZADOS.md");
   const set = new Set();
-  if (!md) return set;
+  const ids = new Set();
+  if (!md) return { set, ids };
   for (const h of md.matchAll(/^###\s+(-?\d+)\.\s+(.+?)$/gm)) {
-    set.add(`#${parseInt(h[1], 10)} — ${h[2].trim()}`.slice(0, 200));
+    const id = parseInt(h[1], 10);
+    ids.add(id);
+    set.add(`#${id} — ${h[2].trim()}`.slice(0, 200));
   }
-  return set;
+  return { set, ids };
+}
+
+// Extrai o #N do início do título (formato novo `#N — ...` ou antigo `#N ...`)
+function extractAprendizadoId(title) {
+  const m = (title || "").match(/^#(-?\d+)\b/);
+  return m ? parseInt(m[1], 10) : null;
 }
 
 /* ─────────── Lista páginas no Notion ─────────── */
@@ -115,8 +124,41 @@ async function processBase(name, getExpected) {
   log(`\n🔍 Base: ${name}`);
   const expected = await getExpected();
   const pages = await listAll(meta.id, meta.titleProp);
-  const orphans = pages.filter((p) => !p.archived && !expected.has(p.title));
-  log(`  Notion: ${pages.length} · Git: ${expected.size} · Órfãos: ${orphans.length}`);
+
+  let orphans;
+  if (name === "aprendizados") {
+    // Dedup por ID #N: agrupa páginas por número do aprendizado.
+    // Quando existem N páginas com o mesmo #N, mantém só a que bate exato
+    // com o título do Git (formato `#N — Título`). As outras são duplicatas órfãs.
+    // Páginas sem #N no título → órfãs. Páginas com #N que não existe no Git → órfãs.
+    const { set: expectedTitles, ids: expectedIds } = expected;
+    const byId = new Map();
+    const noId = [];
+    for (const p of pages) {
+      if (p.archived) continue;
+      const id = extractAprendizadoId(p.title);
+      if (id == null) { noId.push(p); continue; }
+      if (!byId.has(id)) byId.set(id, []);
+      byId.get(id).push(p);
+    }
+    orphans = [...noId];
+    for (const [id, group] of byId) {
+      if (!expectedIds.has(id)) {
+        // ID não existe mais no Git → todas viram órfãs
+        orphans.push(...group);
+        continue;
+      }
+      if (group.length === 1) continue; // única página, mantém
+      // Múltiplas com mesmo #N → mantém a que bate exato com o título canônico do Git
+      const canon = group.find((p) => expectedTitles.has(p.title));
+      const keeper = canon || group[0];
+      for (const p of group) if (p.id !== keeper.id) orphans.push(p);
+    }
+    log(`  Notion: ${pages.length} · Git IDs: ${expectedIds.size} · Órfãos (incl. duplicatas por ID): ${orphans.length}`);
+  } else {
+    orphans = pages.filter((p) => !p.archived && !expected.has(p.title));
+    log(`  Notion: ${pages.length} · Git: ${expected.size} · Órfãos: ${orphans.length}`);
+  }
 
   for (const o of orphans) {
     if (CONFIRM) {
@@ -133,7 +175,8 @@ async function processBase(name, getExpected) {
       report.push({ base: name, action: "arquivaria", title: o.title, id: o.id });
     }
   }
-  return { base: name, notion: pages.length, git: expected.size, orphans: orphans.length };
+  const gitCount = (name === "aprendizados") ? expected.ids.size : expected.size;
+  return { base: name, notion: pages.length, git: gitCount, orphans: orphans.length };
 }
 
 async function writeReport(resumo) {
@@ -169,6 +212,10 @@ async function writeReport(resumo) {
 
 async function main() {
   log(`🚀 Cleanup órfãos · target=${TARGET} · confirm=${CONFIRM}`);
+  // TARGET aceita "all" ou CSV ex: "regras,pendencias,decisoes"
+  const wanted = TARGET === "all"
+    ? ["regras","pendencias","decisoes","aprendizados"]
+    : TARGET.split(",").map((s) => s.trim()).filter(Boolean);
   const resumo = [];
   const map = {
     regras: expectedRegras,
@@ -176,10 +223,8 @@ async function main() {
     decisoes: expectedDecisoes,
     aprendizados: expectedAprendizados,
   };
-  for (const [name, fn] of Object.entries(map)) {
-    if (TARGET === "all" || TARGET === name) {
-      resumo.push(await processBase(name, fn));
-    }
+  for (const name of wanted) {
+    if (map[name]) resumo.push(await processBase(name, map[name]));
   }
   await writeReport(resumo);
   if (!CONFIRM) {
