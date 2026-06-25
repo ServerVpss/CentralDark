@@ -1830,3 +1830,23 @@ Isso evita que o card de Tools públicas fique zerado se o navegador bloquear ch
 - **Data:** 2026-06-25
 - **Contexto:** O usuário aprovou a adição da subseção '🔍 Verificação de Registro' em docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, completando os comandos gatilhos com instruções para verificar onde informações foram registradas no Notion e GitHub.
 - **Aprendizado:** A seção Comandos Gatilhos agora inclui uma subseção de Verificação de Registro: quando o usuário perguntar 'Mostra onde registrou no Notion' ou 'Onde você salvou isso?', a IA deve mostrar o database e título da página/linha no Notion; quando disser 'Confirma registro', a IA deve provar que registrou tanto no GitHub quanto no Notion, mostrando as localizações exatas de ambos.
+
+### 249. Guardião da Consciência — modo "propor" obrigatório por 10 dias (Regra Oficial)
+- **Categoria:** regra
+- **Data:** 2026-06-25
+- **Contexto:** Criação e implantação do agente "Guardião da Consciência" (infra/guardiao/) — daemon que vigia a integridade da pasta docs/CONSCIENCIA/ e propõe correções via Telegram + Mega Painel. Decisão tomada por Pivete (dono do projeto) em 25/06/2026 após múltiplas rodadas de revisão exigindo controle máximo sobre o agente antes de qualquer automação.
+- **Aprendizado:** REGRA OFICIAL — Guardião da Consciência: Modo "propor" obrigatório (mínimo 10 dias).
+
+1. O Guardião inicia EXCLUSIVAMENTE em modo "propor" — nunca move arquivos automaticamente nesta versão.
+2. O modo "auto" está fisicamente bloqueado por código em guardiao.py: DATA_LIBERACAO_AUTO = 2026-07-08. Mesmo com GUARDIAO_MODO=auto no ambiente, o código força "propor" e loga WARNING.
+3. A data 08/07/2026 é apenas o piso. Liberação real do modo "auto" exige TODOS os pré-requisitos cumulativos:
+   - Mínimo 7~10 dias úteis de propostas reais geradas pelo Guardião.
+   - Maioria das propostas validadas como corretas pelo admin.
+   - Lógica de mover arquivos implementada e revisada (hoje não existe).
+   - Aprovação explícita do dono (Pivete).
+4. Sistema de logs estruturado obrigatório (RotatingFileHandler 10MB x 5) e bateria pytest rodando dentro do run.sh antes de subir no PM2.
+5. Auto-registra no Mega Painel como serviço vivo via heartbeat de 60s.
+
+Status em 25/06/2026: deploy autorizado, mas pausado em validação de secret NOTIFY_API_KEY ausente na VPS — aguardando dono.
+
+Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de mudar modo, remover trava de data, pular testes ou desativar logs sem aprovação explícita do dono são proibidas.
