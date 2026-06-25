@@ -123,8 +123,11 @@ Deno.serve(async (req) => {
     return htmlErro("GH_APP_CLIENT_ID/SECRET (ou GITHUB_CLIENT_ID/SECRET) não configurados nos secrets.");
   }
 
-  // URL de callback = a própria edge function com ?action=callback
-  const callbackUrl = `${url.origin}${url.pathname}?action=callback`;
+  // URL de callback pública fixa — req.url vem sem /functions/v1 e em http interno
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+  const callbackUrl = SUPABASE_URL
+    ? `${SUPABASE_URL.replace(/\/$/, "")}/functions/v1/ponte-mcp-oauth-github?action=callback`
+    : `${url.origin}/functions/v1${url.pathname}?action=callback`;
 
   // ===== START =====
   if (action === "start" || !action) {
