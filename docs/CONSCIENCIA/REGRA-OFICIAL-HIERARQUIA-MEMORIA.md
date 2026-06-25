@@ -42,40 +42,75 @@ Informação importante registrada **apenas** em `mem://` (sem espelho em `docs/
 ## 5. Por que essa regra existe
 
 - `mem://` é volátil entre workspaces e tem limite de tamanho — não serve como arquivo histórico.
-- `docs/CONSCIENCIA/` é versionado no Git, espelhado na VPS (`/root/CentralDark/docs/CONSCIENCIA/`) e legível por qualquer IA/humano que abra o repo.
+- `docs/CONSCIENCIA/` é versionado no Git, espelhado na VPS (`<caminho-vps>`) e legível por qualquer IA/humano que abra o repo.
 - Garante que decisões sobrevivam à troca de IA, reset de sessão e migração de workspace.
 
-## 5.1. Por que `mem://` NÃO funciona fora do Lovable
+## 5.1. `mem://` NÃO é fonte oficial de memória
 
-`mem://` é um namespace **interno e proprietário do Lovable**. Ele existe apenas dentro do runtime do agente Lovable e funciona como cache de sessão / memória curta entre turnos de conversa no editor Lovable.
+> **Regra dura:** nenhuma regra, decisão, aprendizado, correção validada ou pendência pode existir **somente** em `mem://`. Se só existe em `mem://`, então **não existe** para o CentralDark.
 
-Limitações duras que tornam `mem://` impróprio como fonte oficial:
+`mem://` é memória interna do runtime Lovable. Serve como cache operacional dentro do próprio ambiente — nada além disso. **Não é registro do projeto.**
 
-1. **Invisível para outras IAs/Hubs.** Claude (Claude Code, Claude Desktop), ChatGPT, Custom GPT, Grok, Codex, Copilot, Cursor, Windsurf e qualquer outro agente conectado ao repo **não enxergam** `mem://`. Para essas IAs, `mem://` simplesmente não existe.
-2. **Volátil entre workspaces.** Trocar de workspace Lovable, recriar o projeto, ou abrir o repo em outro Hub apaga/ignora o conteúdo de `mem://`.
-3. **Não versionado.** `mem://` não vive no Git, não tem histórico, não tem diff, não tem PR, não tem revisão.
-4. **Não espelhado na VPS.** A VPS (`/root/CentralDark/`) só vê o que está no Git. `mem://` nunca chega lá.
-5. **Limite de tamanho.** Cresce, é truncado, e não serve como arquivo histórico de aprendizados.
+A fonte permanente de memória do CentralDark é o Git, na pasta:
+
+```txt
+docs/CONSCIENCIA/
+```
+
+Versionada, revisável, espelhada na VPS em `/root/CentralDark/docs/CONSCIENCIA/`, legível por qualquer IA ou humano com acesso ao repo. É isso que faz uma decisão sobreviver a troca de IA, reset de sessão, mudança de workspace e migração de ferramenta.
+
+### Por que `mem://` não conta como salvo
+
+1. **Não é universal.** Claude, ChatGPT, Grok, Codex, Copilot, Cursor, Windsurf e outros não conseguem ler `mem://` de forma confiável.
+2. **É preso ao Lovable.** Vive no contexto do runtime, não como arquivo real do projeto.
+3. **Não é versionado.** Sem Git, sem histórico, sem diff, sem commit, sem PR, sem revisão, sem rastreabilidade.
+4. **Não é espelhado na VPS.** A VPS só enxerga o repo e o filesystem real. `mem://` nunca aparece sozinho em `/root/CentralDark/`.
+5. **Some sem aviso.** Troca de workspace, reset de sessão ou recriação do projeto apagam o conteúdo — sem erro, sem alerta.
+
+### O teste obrigatório — toda IA faz, sempre
+
+Antes de gravar qualquer coisa em `mem://`, pergunte:
+
+```txt
+Essa informação precisa sobreviver à troca de IA, reset de sessão,
+migração de workspace ou leitura por outro agente?
+```
+
+- **Sim** → o destino é o Git. `mem://` só pode receber um resumo apontando para o caminho oficial **depois** de salvo no repo.
+- **Não** → `mem://` está liberado.
+
+Na dúvida, a resposta é **sim**.
 
 ### Onde registrar de forma permanente
 
-Toda regra, decisão ou aprendizado importante vai para o repositório, dentro de `docs/CONSCIENCIA/`:
-
-| Tipo de conteúdo | Local oficial no repo |
-|---|---|
-| Regra/decisão oficial | `docs/CONSCIENCIA/REGRA-OFICIAL-*.md` (criar novo arquivo se for tema novo) |
-| Aprendizado/lição/erro+correção/atalho validado | `docs/CONSCIENCIA/APRENDIZADOS.md` (via tool `registrar_aprendizado` do MCP, que sanitiza secrets) |
-| Pendência aberta | `docs/PENDENCIAS.md` (via tool `pendencias_add`) |
+| Tipo de conteúdo | Local oficial |
+| --- | --- |
+| Regra ou decisão oficial | `docs/CONSCIENCIA/REGRA-OFICIAL-*.md` |
+| Aprendizado, erro corrigido, técnica validada, padrão operacional | `docs/CONSCIENCIA/APRENDIZADOS.md` |
+| Pendência aberta | `docs/PENDENCIAS.md` |
 | Relatório de tarefa concluída | `docs/RELATORIOS/YYYY-MM-DD-nome.md` |
-| Identidade/permissões/estrutura | arquivos numerados em `docs/CONSCIENCIA/` (`01-IDENTIDADE.md`, `02-PERMISSOES.md`, etc.) |
+| Identidade, permissões, arquitetura, fluxo operacional | Arquivos numerados em `docs/CONSCIENCIA/` |
+| Log completo de execução na VPS | `/root/Multizap/revisoes/...` |
+| Resumo visível de status | Mega Painel (reflete o estado salvo no repo/VPS) |
 
-### Uso permitido de `mem://`
+Havendo MCP, registre por tool oficial (`registrar_aprendizado` ou equivalente). Sem MCP, edite o arquivo no repo + commit + PR/merge conforme a política ativa.
 
-Apenas como **espelho/cache opcional**, depois que o conteúdo já existir em `docs/CONSCIENCIA/`. Nunca como origem. O espelho em `mem://` deve apontar para o caminho do arquivo oficial no repo.
+### Proibição e prova
 
-### Regra prática para qualquer IA
+**É proibido** declarar uma tarefa concluída dizendo que foi "salva na memória" quando só existe em `mem://`. Isso conta como **tarefa não concluída** — a IA que fizer isso entregou um trabalho que vai evaporar no próximo reset.
 
-Antes de salvar algo em `mem://`, pergunte: *"Isso precisa sobreviver à troca de IA, ao reset de sessão ou à leitura por Claude/ChatGPT/Grok?"* Se sim → vai para `docs/CONSCIENCIA/` primeiro. `mem://` depois, se quiser.
+Para contar como salvo de verdade, exige-se **pelo menos uma** destas provas:
+
+```txt
+- arquivo no repo
+- commit
+- PR
+- relatório em docs/RELATORIOS/
+- aprendizado em docs/CONSCIENCIA/APRENDIZADOS.md
+- pendência em docs/PENDENCIAS.md
+```
+
+Sem prova, não houve registro.
 
 ## 6. Referências cruzadas
 
