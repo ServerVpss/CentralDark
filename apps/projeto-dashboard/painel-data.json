@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-06-25T18:26:52.983Z",
-  "updatedAtBR": "25/06/2026, 15:26:52 BRT",
+  "updatedAt": "2026-06-25T18:27:54.234Z",
+  "updatedAtBR": "25/06/2026, 15:27:54 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
-    "currentTask": "Webhooks de deploy seguros contra perda de trabalho local (stash + backup branch)",
+    "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "fix(webhook): reset --hard seguro contra perda de trabalho local",
+    "lastCommit": "feat(guardiao): camada de decisão — anti-spam de propostas",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
-    "summary": "Webhooks github-webhook-deploy.mjs e telepainel-deploy.mjs agora usam helper safe-git-deploy.mjs: antes do reset --hard, commits locais nao enviados vao para branch de backup e alteracoes nao-commitadas vao para stash (reaplicado apos o reset). Conflito no stash mantem o stash e nao quebra o build. Validado em 4 cenarios. Corrige a causa raiz que orfanou o Elite Mapper.",
+    "summary": "Guardião ganhou camada de decisão: cache persistente de propostas (corta repetição do inotify), decisor ativado com scoring calibrado pelos dados reais (impacto=confiança, wF=0), threshold 0.4→0.6, exclusão de gitignored/sensíveis. Spam no Telegram cai de ~925 para ~18 (1x por arquivo). 403 do Mega Painel resolvido (era Cloudflare WAF barrando User-Agent Python-urllib + 406 por Accept) — heartbeat agora bate em localhost:9100. Modo propor travado até 08/07/2026 intacto. 22/22 testes. Commit e6124592b.",
     "overallProgress": 99,
     "liveFallback": {
       "mcpStatus": "online",
@@ -75,6 +75,14 @@
     "multizap-gateway-postgres": "healthy"
   },
   "pendencias": [
+    {
+      "id": "GUARDIAO-DECISOR",
+      "titulo": "Guardião: camada de decisão anti-spam + heartbeat do painel",
+      "status": "concluido",
+      "prioridade": "alta",
+      "commit": "e6124592b",
+      "detalhe": "925→18 propostas; cache+decisor calibrado; 403/406 do painel resolvidos"
+    },
     {
       "id": "ELITE-MAPPER",
       "titulo": "Elite Mapper v1.0 — agente Python de mapeamento e limpeza cirúrgica",
@@ -1225,14 +1233,14 @@
     }
   ],
   "telemetry": {
-    "cpu": "4.0%",
+    "cpu": "5.0%",
     "ram": "5.8GB / 23.5GB",
-    "ramPercent": "24.5",
+    "ramPercent": "24.6",
     "disco": "44%",
-    "load": "0.53 / 0.56 / 0.56",
-    "timestamp": "2026-06-25T18:26:48.537Z",
-    "brtTimestamp": "25/06/2026, 15:26:48",
-    "receivedAt": "2026-06-25T18:26:48.541Z"
+    "load": "0.49 / 0.54 / 0.55",
+    "timestamp": "2026-06-25T18:27:53.539Z",
+    "brtTimestamp": "25/06/2026, 15:27:53",
+    "receivedAt": "2026-06-25T18:27:53.542Z"
   },
   "safeRules": [
     "Nenhuma IA mexe no que já foi corrigido sem confirmação explícita",
