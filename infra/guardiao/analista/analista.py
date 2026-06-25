@@ -58,7 +58,7 @@ configurar_logs(os.environ.get("LOG_LEVEL", "INFO"))
 log = logging.getLogger("analista.core")
 
 
-fila = FilaPrioridade()
+pq = FilaPrioridade()
 dedup = Dedup()
 limiter = RateLimiter()
 
@@ -67,11 +67,11 @@ def consumir_da_fila():
     """Lê eventos publicados pelo Guardião e empilha (após dedup)."""
     for evento in tail(intervalo_s=1.0):
         if dedup.deve_passar(evento):
-            fila.push(evento)
+            pq.push(evento)
             log.info(
                 "Aceito: [%s/%s] %s (fila=%d)",
                 evento.get("source"), evento.get("severity"),
-                evento.get("key"), len(fila),
+                evento.get("key"), len(pq),
             )
         else:
             log.debug("Absorvido (dedup): %s", evento.get("key"))
@@ -83,7 +83,7 @@ def coletar_resumos():
         time.sleep(30)
         try:
             for resumo in dedup.coletar_resumos():
-                fila.push(resumo)
+                pq.push(resumo)
                 log.info("Resumo agregado empilhado: %s", resumo.get("key"))
         except Exception:
             log.exception("Erro coletando resumos")
@@ -92,7 +92,7 @@ def coletar_resumos():
 def despachar():
     """Tira da fila de prioridade respeitando rate-limit."""
     while True:
-        evento = fila.pop()
+        evento = pq.pop()
         if evento is None:
             time.sleep(0.5)
             continue
