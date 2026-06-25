@@ -227,6 +227,15 @@ def main() -> None:
     Thread(target=loop_heartbeat, daemon=True, name="heartbeat").start()
     log.info("3 threads de background iniciadas: debounce, reconciliacao, heartbeat")
 
+    # whitelists pra detectores
+    ignorar = RULES.get("ignorar", {}) or {}
+    wl_pm2 = ignorar.get("pm2", []) or []
+    wl_docker = ignorar.get("docker", []) or []
+    Thread(target=loop_pm2, args=(wl_pm2,), daemon=True, name="pm2-watcher").start()
+    Thread(target=loop_docker, args=(wl_docker,), daemon=True, name="docker-watcher").start()
+    log.info("Detectores PM2/Docker iniciados (whitelist pm2=%s, docker=%s)", wl_pm2, wl_docker)
+
+    # notificação de boot — direto, pra confirmar que o caminho funciona
     notificar_telegram(
         tipo="sistema",
         titulo="🛡️ Guardião da Consciência online",
