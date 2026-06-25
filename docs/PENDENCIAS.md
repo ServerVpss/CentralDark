@@ -71,7 +71,40 @@ Cada módulo tem seu README com a lista do que falta.
 
 **Status:** mapeamento em andamento. Apenas pendências de revisão — nada migrado ainda.
 **Data de registro:** 25/06/2026
-**Contexto:** o repositório antigo `ServerVpss/CentralDark1VPS` continua de pé como servidor de operação ativa, mas tem 234 arquivos em `docs/` que nunca vieram pro principal. Esta pendência guarda o resultado da varredura por pasta de alta prioridade, pra eu revisar com calma e só depois decidir o que entra.
+**Contexto:** o repositório antigo `ServerVpss/CentralDark1VPS` continua de pé como servidor de operação ativa, mas tem 234 arquivos em `docs/` que nunca vieram pro principal. Esta pendência guarda o mapeamento completo, pasta por pasta, pra eu revisar com calma e só depois decidir o que entra.
+
+**Legenda de status (por sub-pendência):**
+- 🔴 **Não iniciado** — migração ainda nem começou, falta decisão
+- 🟡 **Em progresso** — em revisão / parcialmente migrado
+- ✅ **Concluído** — decisão tomada e aplicada (migrado, descartado ou arquivado)
+
+**Resumo visual:**
+
+| # | Pasta no legado | Arquivos | Status |
+|---|---|---|---|
+| 5.1 | `INSTALADOR/` | 23 | 🔴 Não iniciado |
+| 5.2 | `tarefas/` | 33 | 🔴 Não iniciado |
+| 5.3 | `WHATSAPP-API/` | 16 | 🔴 Não iniciado |
+| 5.4 | `CONSCIENCIA/` | 45 (+3 ARQUIVO-MORTO) | 🟡 Em progresso (já sincronizada antes, reconciliar) |
+| 5.5 | `RELATORIOS/` | 51 (33 + 12 + 1 + 5) | 🔴 Não iniciado |
+| 5.6 | `INSTALADOR/backup/` | (binário/install.sh) | 🔴 Não iniciado |
+| 5.7 | `AUDITORIAS/` | 4 | 🔴 Não iniciado |
+| 5.8 | `BOTS/` | 3 | 🔴 Não iniciado |
+| 5.9 | `SEGURANCA/` | 2 | 🔴 Não iniciado |
+| 5.10 | `ARQUITETURA/` | 2 | 🔴 Não iniciado (atenção: principal tem `DESIGN-SISTEMA.md`, legado não) |
+| 5.11 | `CODEX/` | 1 | 🔴 Não iniciado |
+| 5.12 | `CONTINUIDADE/` | 4 | 🔴 Não iniciado |
+| 5.13 | `DOMINIOS/` | 1 | 🔴 Não iniciado |
+| 5.14 | `GATEWAY/` | 2 | 🔴 Não iniciado |
+| 5.15 | `IA-TAREFAS/` | 2 | 🔴 Não iniciado |
+| 5.16 | `agente/infra-recovery/` | 8 (3 + core/5) | 🔴 Não iniciado |
+| 5.17 | `infra/vigia/` + `infra/webhook-deploy/` | 2 | 🔴 Não iniciado |
+| 5.18 | `pendencias/` | 1 | 🔴 Não iniciado |
+| 5.19 | `relatorios/` (minúsculo) | 1 | 🔴 Não iniciado |
+| 5.20 | `sentinela/` | 2 | 🟡 Em progresso (principal já tem os mesmos 2 nomes) |
+| 5.21 | `docs/` raiz (27 .md soltos) | 27 | 🔴 Não iniciado |
+
+
 
 ### 5.1 — Pasta `INSTALADOR/` (23 arquivos no legado · 2 no principal)
 
