@@ -1,39 +1,24 @@
-## Plano: consertar TLS do mcp.centralldark.com (Opção B)
+## Plano: Documentar por que `mem://` não é fonte oficial de memória
 
-**Contexto:** você manteve o `mcp` em DNS-only no Cloudflare (pra matar o bot block da OpenAI). Como a infra estava em Cloudflare Full (Strict) com cert CF-Origin, ao tirar o proxy o TLS caiu (HTTP 000 no browser, Painel/Claude/ChatGPT quebrados via domínio). Já existe um cert Let's Encrypt válido pra `mcp.centralldark.com` no servidor — só não está sendo servido. Vou editar **só o bloco do mcp no Caddy** pra apontar pra esse cert, validar e recarregar.
+### O que vou fazer
 
-## Passos
+1. **Abrir e ler** `docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md` para garantir que vou preservar o conteúdo existente.
+2. **Inserir uma nova seção técnica** nesse arquivo, explicando:
+   - o que é `mem://` (memória/cache interna de sessão do Lovable);
+   - por que ele não serve como fonte oficial (volátil entre workspaces, invisível para outras IAs/Hubs, com limite de tamanho);
+   - que regras e aprendizados importantes devem ser gravados primeiro em `docs/CONSCIENCIA/`;
+   - que `mem://` só pode ser usado como espelho/cache opcional, nunca como origem.
+3. **Abrir e ler** `docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md`.
+4. **Adicionar uma referência curta** nesse arquivo de entrada, apontando para a nova seção do `REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`.
+5. **Validar** os dois arquivos após a edição, lendo-os novamente para confirmar que a seção nova e a referência estão no lugar certo.
 
-1. **Inspecionar Caddy atual** (read-only)
-   - Ler `/etc/caddy/Caddyfile` e `/etc/caddy/conf.d/*.Caddyfile` pra achar o bloco do `mcp.centralldark.com`.
-   - Confirmar caminho exato do cert LE em `/var/lib/caddy/.../mcp.centralldark.com/`.
+### O que NÃO vou fazer
 
-2. **Editar só o bloco do mcp** (escopo cirúrgico)
-   - Trocar a diretiva de TLS daquele host pra usar o cert/key LE existente (`tls <cert.crt> <key.key>`), removendo qualquer referência ao cert CF-Origin **apenas naquele bloco**.
-   - Zero mudança nos outros hosts (`whatsapp`, `crm`, `financeiro`, `bot.multizap.dev`, etc).
+- Não vou mexer em código, Caddy, DNS, secrets, banco, PM2, Docker ou qualquer coisa sensível.
+- Não vou incluir exemplo prático do Caddy/MCP (você pediu só explicação geral).
+- Não vou criar arquivo novo separado: a explicação fica na regra oficial já existente.
 
-3. **Validar antes de aplicar**
-   - `caddy validate --config /etc/caddy/Caddyfile` — se falhar, aborta sem reload.
+### Arquivos alterados
 
-4. **Reload do Caddy**
-   - `systemctl reload caddy` (reload, não restart — zero downtime nos outros hosts).
-
-5. **Smoke test**
-   - `curl -I https://mcp.centralldark.com/health` deve responder 200.
-   - `openssl s_client -connect mcp.centralldark.com:443 -servername mcp.centralldark.com </dev/null | openssl x509 -noout -issuer` deve mostrar `Let's Encrypt`.
-   - Confirmar que `whatsapp.centralldark.com` e os outros continuam 200 (não regredi nada).
-
-6. **Rollback automático**
-   - Antes de editar, salvo backup do snippet em `/etc/caddy/conf.d/.backup-<timestamp>/`.
-   - Se smoke test falhar, restauro backup + reload e reporto.
-
-7. **Registrar na consciência**
-   - Anotar em `docs/CONSCIENCIA/APRENDIZADOS.md` via MCP: "mcp em DNS-only usa cert LE direto, não CF-Origin" — pra próxima IA não tentar reativar proxy.
-
-## Risco
-
-Baixo e reversível. Mudança escopada num único bloco, backup automático, reload (não restart). Se algo der errado, rollback em 1 comando.
-
-## Autorização
-
-Preciso do seu **ok** pra rodar — vou mexer no Caddy da VPS via `vps_run_once_script` com `CONFIRMO RUN ONCE`.
+- `docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`
+- `docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md`
