@@ -54,6 +54,8 @@ Adicionalmente, preparar (no plano, **sem executar**) a atualização do documen
 
 ## NOVA SEÇÃO A INCLUIR NO DOC: "Ferramentas Cognitivas"
 
+> Referência viva já existe em `cerebro/ferramentas-cognitivas-e-comandos.md` — consultar antes de duplicar conteúdo.
+
 Explicar em linguagem leiga, com tabela curta: **o que faz** / **como usar no CentralDark** / **quando NÃO usar**.
 
 ### 1. `browse_page`
