@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-25T18:39:09.831Z",
-  "updatedAtBR": "25/06/2026, 15:39:09 BRT",
+  "updatedAt": "2026-06-25T22:15:32.941Z",
+  "updatedAtBR": "25/06/2026, 19:15:32 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "feat(guardiao): camada de decisão — anti-spam de propostas",
+    "lastCommit": "Restaurou script painel vivo",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-25T22:15:32.941Z",
+      "titulo": "Push na main · 05e6d5c32cf05c379e8366aece1ec47f0027903d",
+      "detalhe": "Restaurou script painel vivo",
+      "area": "Repositório",
+      "sha": "05e6d5c",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-06-23T12:57:13.951Z",
       "title": "Push na main · 72cbc3253732e18cf545a2afb1f03dda7d6449d6",
@@ -1119,6 +1127,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-25T22:15:32.941Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 05e6d5c32cf05c379e8366aece1ec47f0027903d (05e6d5c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-23T00:06:14Z",
       "ia": "@segredounlock",
