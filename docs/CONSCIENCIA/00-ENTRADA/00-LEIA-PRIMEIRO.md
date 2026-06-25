@@ -57,6 +57,7 @@ Quando eu usar qualquer um destes comandos, execute da seguinte forma:
 ## 📚 Documentos Importantes
 
 - [`ARQUITETURA-CENTRALDARK-2026.md`](./ARQUITETURA-CENTRALDARK-2026.md) — Arquitetura oficial do projeto.
+- [`REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`](../REGRA-OFICIAL-HIERARQUIA-MEMORIA.md) — Hierarquia de memória. **Leia a seção 5.1** para entender por que `mem://` é cache interno do Lovable, invisível para outras IAs/Hubs, e por que todo aprendizado/regra deve ser registrado em `docs/CONSCIENCIA/` (não em `mem://`).
 
 ---
 
