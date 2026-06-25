@@ -1,0 +1,95 @@
+name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
+
+# Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
+# usando UPSERT (cria se não existe, atualiza se existe).
+#
+# Lei vigente: Git é fonte da verdade. Notion é painel humano.
+# Ver docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
+# Mapa dos databases: docs/CONSCIENCIA/NOTION-MAPA.md
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/CONSCIENCIA/REGRA-OFICIAL-*.md'
+      - 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-*.md'
+      - 'docs/CONSCIENCIA/08-HISTORICO-DECISOES.md'
+      - 'docs/CONSCIENCIA/APRENDIZADOS.md'
+      - 'docs/PENDENCIAS.md'
+      - 'scripts/notion-sync/**'
+      - '.github/workflows/notion-sync.yml'
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Modo validação (não escreve no Notion, só mostra o que faria)'
+        type: boolean
+        default: true
+      target:
+        description: 'O que sincronizar'
+        type: choice
+        default: all
+        options: [all, regras, decisoes, aprendizados, pendencias]
+
+permissions:
+  contents: write  # precisa pra commitar o log em docs/RELATORIOS/
+
+concurrency:
+  group: notion-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Espelhar para o Notion
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # pra detectar arquivos mudados no push
+
+      - name: 🟢 Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Instalar @notionhq/client
+        working-directory: scripts/notion-sync
+        run: npm install --omit=dev
+
+      - name: 🔍 Listar arquivos alterados (apenas em push)
+        id: changed
+        if: github.event_name == 'push'
+        run: |
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          git diff --name-only ${{ github.event.before }}..${{ github.sha }} -- \
+            'docs/CONSCIENCIA/**' 'docs/PENDENCIAS.md' || true >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: 🧠 Executar sync (UPSERT)
+        id: sync
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          TARGET: ${{ github.event.inputs.target || 'all' }}
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+          GITHUB_COMMIT: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/notion-sync/sync.mjs
+
+      - name: 📝 Commitar log da sincronização
+        if: always() && github.event.inputs.dry_run != 'true'
+        run: |
+          if [ -f "docs/RELATORIOS/notion-sync/latest.md" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs/RELATORIOS/notion-sync/
+            if ! git diff --cached --quiet; then
+              git commit -m "chore(notion-sync): log de sincronização [skip ci]" \
+                -m "Commit-fonte: ${{ github.sha }}" \
+                -m "Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+              git push
+            fi
+          fi
