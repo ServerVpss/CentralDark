@@ -1,41 +1,35 @@
-# Plano — Prompt Final "RELOAD CENTRALDARK" pronto pro Claude
+# Plano — Página "🛠️ Ferramentas Cognitivas e Comandos"
 
-## O que vai ser criado (3 arquivos, nenhuma edição em produção)
+## Objetivo
+Criar uma página de referência rápida no Cérebro Vivo do projeto, consolidando as 3 Ferramentas Cognitivas (browse_page, code_execution, conversation_search), os comandos principais e um espaço aberto para Melhoria Contínua. Também atualizar o prompt consolidado e a memória pra refletir esse novo contexto oficial.
 
-### 1. `.claude/prompts/reload-centraldark-v3.md`
-O prompt completo, consolidado, pronto pra você colar no Claude. Inclui:
-- Modo **AUDITORIA E PLANO SOMENTE** (não executa, não apaga, não faz merge, não deploya)
-- Regras da Sincronia 4-Point (Lovable / GitHub / VPS / Cérebro Vivo)
-- Instrução pra criar/atualizar `docs/ARQUITETURA/FONTE-DA-VERDADE.md` com:
-  - Identidade do projeto
-  - Sincronia 4-Point
-  - Hierarquia de repos (CentralDark = fonte da verdade, CentralDark1VPS = legado intocável)
-  - **Nova seção "Ferramentas Cognitivas"** com as 3 ferramentas em linguagem leiga:
-    - `browse_page` — IA lê Notion/GitHub/Mega Painel direto, sem você copiar
-    - `code_execution` — roda Python pra analisar `.md` em massa, achar duplicata, organizar
-    - `conversation_search` — busca em conversas antigas por significado, não por palavra exata
-  - Cada ferramenta com 3 linhas: **o que faz** / **como usar no CentralDark** / **quando NÃO usar**
-- Template de saída obrigatório (DUPLICADOS, DESATUALIZADOS, CONFLITOS, RISCO, PLANO CONSOLIDAÇÃO, PLANO NOTION, PLANO MEGA PAINEL, PRÓXIMO PASSO SEGURO, etc.)
-- Fecho obrigatório: `APROVADO PARA EXECUTAR: NÃO — ESTA FASE É SOMENTE AUDITORIA E PLANO`
+## O que vai ser feito
 
-### 2. `mem://architecture/ferramentas-cognitivas-ia.md`
-Memória ativa do projeto (vira regra automática pra qualquer IA Lovable nesse projeto):
-- Antes de pedir pro usuário copiar texto → tentar `browse_page`
-- Antes de dizer "não lembro" → tentar `conversation_search`
-- Pra análise/comparação de `.md` em massa → usar `code_execution`
+### 1. Criar `cerebro/ferramentas-cognitivas-e-comandos.md`
+Página principal de referência, em PT-BR, linguagem simples, dividida em:
+
+- **O que são Ferramentas Cognitivas** — explicação curta, tipo "superpoderes que a IA usa pra agir, não só conversar".
+- **As 3 Ferramentas Ativas** — cada uma com:
+  - O que faz (em linguagem leiga)
+  - Quando usar
+  - Exemplo prático no contexto CentralDark (Notion, GitHub, Mega Painel, Obsidian)
+- **Integração com o Ecossistema** — como elas conversam com Notion (painel), Obsidian (segundo cérebro), GitHub (versionado), Mega Painel (status).
+- **Comandos Principais** — lista dos gatilhos que o usuário usa hoje (RELOAD CENTRALDARK, AUDITORIA DE MEMÓRIAS, Sincronia 4-Point, audit-rls, swarm mode, etc.).
+- **Melhoria Contínua** — seção aberta, com template em branco pra anotar novas ferramentas no futuro (Nome / O que faz / Quando usar / Data de adição).
+
+### 2. Atualizar `.claude/prompts/reload-centraldark-v3.md`
+Adicionar referência à nova página do Cérebro Vivo como fonte oficial das Ferramentas Cognitivas, pra qualquer IA externa (Claude) saber onde consultar.
 
 ### 3. Atualizar `mem://index.md`
-Adicionar 1 linha na seção Memories apontando pro arquivo acima e 1 linha na Core resumindo a regra.
+Adicionar 1 linha em Memories apontando pra nova página do Cérebro Vivo:
+`- [Ferramentas Cognitivas e Comandos](cerebro/ferramentas-cognitivas-e-comandos.md) — Referência rápida + comandos + melhoria contínua`
 
-## O que NÃO vai ser feito agora
-- Não cria `docs/ARQUITETURA/FONTE-DA-VERDADE.md` aqui no Lovable — isso é tarefa do Claude executar quando você mandar o prompt
-- Não mexe em `CLAUDE.md`, Notion, VPS, GitHub
-- Não roda audit-rls, não publica, não migra
+## O que NÃO vai ser feito
+- Nenhuma mudança em código de app, Edge Functions, migrations, deploy ou Notion remoto.
+- Não toca em `CLAUDE.md` (a Sincronia 4-Point já cobre o cérebro vivo).
+- Não cria página no Notion agora — só no Cérebro Vivo local (`cerebro/`). Se quiser espelhar no Notion depois, é outro passo.
 
-## Fluxo de uso (depois que aprovar)
-1. Eu salvo os 3 arquivos
-2. Você abre o Claude, cola o conteúdo de `.claude/prompts/reload-centraldark-v3.md`
-3. Claude faz auditoria + plano e devolve o relatório no template
-4. Você revisa e só então autoriza execução numa próxima rodada
+## Resultado final
+Você abre `cerebro/ferramentas-cognitivas-e-comandos.md` (ou pede pra qualquer IA ler) e tem o mapa completo: o que cada ferramenta faz, quando usar, seus comandos e um espaço pronto pra crescer.
 
-Aprova pra eu salvar?
+**APROVADO PARA EXECUTAR: aguardando seu OK.**
