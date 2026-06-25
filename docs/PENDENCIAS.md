@@ -454,5 +454,5 @@ Cada módulo tem seu README com a lista do que falta.
 
 Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "executa 5.X" — aí eu migro/descarto/arquivo conforme sua decisão e mudo o status do item pra ✅ aqui.
 ### 1. MCP Server Local com STDIO (FastMCP) — IA privada rápida dentro da VPS — 🔴 ABERTO (25/06/2026, 10:02 BRT)
-### 2. VPS — finalizar resolução da divergência main (4 passos manuais) — 🔴 ABERTO (25/06/2026, 19:39 BRT)
+### 2. VPS — ✅ CONCLUÍDO em 2026-06-25
 ### 3. MCP-CentralDark — criar .env real e fazer o servidor lê-lo (não usa dotenv) — 🟡 ABERTO (25/06/2026, 19:46 BRT)
