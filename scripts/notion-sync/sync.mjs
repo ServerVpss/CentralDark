@@ -225,15 +225,77 @@ async function syncRegras() {
   }
 }
 
+// Cache de IDs de páginas do DB de Regras (pra relation)
+let _regrasIndex = null;
+async function loadRegrasIndex() {
+  if (_regrasIndex) return _regrasIndex;
+  _regrasIndex = [];
+  let cursor;
+  do {
+    const r = await notion.databases.query({
+      database_id: DB.regras,
+      start_cursor: cursor,
+      page_size: 100,
+    });
+    for (const p of r.results) {
+      const t = (p.properties?.Regra?.title || [])
+        .map((x) => x.plain_text)
+        .join("");
+      if (t) _regrasIndex.push({ id: p.id, title: t });
+    }
+    cursor = r.has_more ? r.next_cursor : undefined;
+  } while (cursor);
+  return _regrasIndex;
+}
+
+// Heurística: para cada decisão, encontrar regras relacionadas por palavra-chave
+function matchRegras(decisaoTexto, regras) {
+  const lower = decisaoTexto.toLowerCase();
+  const tokens = [
+    { kw: ["guardião", "guardiao", "modo propor"], match: (t) => /guardi[ãa]o/i.test(t) },
+    { kw: ["hierarquia", "memória", "memoria", "git é a"], match: (t) => /hierarquia|mem[óo]ria/i.test(t) },
+    { kw: ["multi-agente", "semântico", "semantico"], match: (t) => /multi[- ]agente|sem[âa]ntico/i.test(t) },
+  ];
+  const out = new Set();
+  for (const tk of tokens) {
+    if (tk.kw.some((k) => lower.includes(k))) {
+      for (const r of regras) if (tk.match(r.title)) out.add(r.id);
+    }
+  }
+  return [...out];
+}
+
 async function syncDecisoes() {
-  log("⚖️  Sincronizando decisões (modo informativo)...");
-  // O parser de decisões depende do formato livre do .md.
-  // Por enquanto, alertamos que existem entradas e listamos pra revisão manual.
+  log("⚖️  Sincronizando decisões com relação a regras...");
   const md = await read("docs/CONSCIENCIA/08-HISTORICO-DECISOES.md");
   if (!md) return;
-  const heads = [...md.matchAll(/^##\s+(.+?)$/gm)].map((m) => m[1].trim());
-  log(`  ℹ️  ${heads.length} decisões detectadas. Já populadas via setup inicial. Nada a fazer.`);
-  opLog.push({ action: "info", title: `${heads.length} decisões detectadas` });
+  const regras = await loadRegrasIndex();
+
+  // Formato esperado: ## <Título> ... blocos até próximo ##
+  const heads = [...md.matchAll(/^##\s+(.+?)$/gm)];
+  for (let i = 0; i < heads.length; i++) {
+    const h = heads[i];
+    const titulo = h[1].trim();
+    const start = h.index + h[0].length;
+    const end = heads[i + 1]?.index ?? md.length;
+    const corpo = md.slice(start, end).trim();
+    const relIds = matchRegras(`${titulo}\n${corpo}`, regras);
+
+    const props = {
+      "Decisão": title(titulo),
+      "Motivo": text(corpo.split("\n").slice(0, 6).join(" ").replace(/\s+/g, " ")),
+    };
+    if (relIds.length) {
+      props["Regras Relacionadas"] = { relation: relIds.map((id) => ({ id })) };
+    }
+    await upsert({
+      dataSourceId: DB.decisoes,
+      titleProp: "Decisão",
+      title: titulo,
+      properties: props,
+    });
+  }
+  log(`  ✅ ${heads.length} decisões processadas (com relação ↔ Regras quando aplicável).`);
 }
 
 async function syncAprendizados() {

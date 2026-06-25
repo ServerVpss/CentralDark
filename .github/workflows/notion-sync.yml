@@ -79,15 +79,23 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
         run: node scripts/notion-sync/sync.mjs
 
-      - name: 📝 Commitar log da sincronização
+      - name: 📊 Relatório de consistência (Git ↔ Notion)
+        if: always()
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          GITHUB_COMMIT: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/notion-sync/report-consistency.mjs
+
+      - name: 📝 Commitar logs e relatório
         if: always() && github.event.inputs.dry_run != 'true'
         run: |
-          if [ -f "docs/RELATORIOS/notion-sync/latest.md" ]; then
+          if [ -d "docs/RELATORIOS/notion-sync" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add docs/RELATORIOS/notion-sync/
             if ! git diff --cached --quiet; then
-              git commit -m "chore(notion-sync): log de sincronização [skip ci]" \
+              git commit -m "chore(notion-sync): log + consistência [skip ci]" \
                 -m "Commit-fonte: ${{ github.sha }}" \
                 -m "Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
               git push
