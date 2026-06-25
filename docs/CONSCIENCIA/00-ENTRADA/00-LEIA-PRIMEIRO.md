@@ -4,44 +4,51 @@
 
 ---
 
-## 🎯 Resumo das Regras Principais
+## 🎯 Regras Principais
 
-1. **Fonte da verdade = GitHub** (`ServerVpss/CentralDark`, pasta `docs/`).
+1. **Fonte da Verdade** = GitHub (`ServerVpss/CentralDark`, pasta `docs/`). Nada é oficial se não estiver aqui.
 
-   Nada é oficial se não estiver aqui. `mem://` é só cache temporário.
+2. **Busca semântica primeiro.** Sempre inicie com `repo_semantic_search` quando for trabalhar no projeto.
 
-2. **Busca semântica primeiro (comportamento padrão).**  
-
-   Toda vez que precisar responder algo sobre o projeto, buscar informação, analisar ou tomar decisão, **inicie obrigatoriamente com busca semântica no repositório** usando `repo_semantic_search`.  
-
-   Use as outras ferramentas apenas quando necessário:
-
-   - `conversation_search` → para histórico de conversas
-   - `browse_page` → para ler páginas externas
-   - `code_execution` → para processar grandes volumes de dados
-   - `web_search` → para informações atualizadas da internet
-
-3. **Aprovação explícita** antes de qualquer ação sensível (deploy, migração, exclusão, alteração de regra de ouro).
+3. **Aprovação explícita** antes de qualquer ação sensível.
 
 4. **Registrar no GitHub** toda ação importante.
 
 5. **Notificar** no Telegram + atualizar o Mega Painel após tarefas relevantes.
 
-6. **Regras de ouro** só podem ser alteradas com aprovação direta do dono.
+---
+
+## ⚡ Comandos Gatilhos
+
+Quando eu falar qualquer uma destas frases, entenda como comando oficial:
+
+- **"Registra como oficial"** ou **"Isso é oficial agora"** → Transforme o que eu disse em regra oficial do projeto.
+
+- **"Mostra pendências"** → Liste todas as pendências atuais.
+
+- **"Atualiza status"** → Atualize o Mega Painel.
+
+- **"Busca no projeto"** → Use `repo_semantic_search`.
+
+- **"Resumo da sessão"** → Faça um resumo do que foi feito.
+
+- **"O que falta fazer?"** → Mostre as próximas tarefas pendentes.
 
 ---
 
-## 📚 Documentos-Chave Desta Pasta
+## 📚 Documentos Importantes Nesta Pasta
 
-- [`ARQUITETURA-CENTRALDARK-2026.md`](./ARQUITETURA-CENTRALDARK-2026.md) — Arquitetura oficial completa (versão vigente).
+- [`ARQUITETURA-CENTRALDARK-2026.md`](./ARQUITETURA-CENTRALDARK-2026.md) — Arquitetura oficial do projeto.
 
 ---
 
-## 🧭 Interfaces (não são fonte, só visualização)
+## 🧭 Interfaces (apenas visualização)
 
-- **Notion** — acompanhamento visual
-- **Mega Painel** — status ao vivo
-- **Obsidian** — navegação local em grafo
+- **Notion** — Acompanhamento visual
+
+- **Mega Painel** — Status ao vivo
+
+- **Obsidian** — Navegação local com grafos
 
 ---
 
