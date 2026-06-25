@@ -52,6 +52,7 @@ import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
 import { PageSplash } from "@/shared/transitions/PageSplash";
 import { SplashController } from "@/shared/transitions/SplashController";
+import { ApprovalProvider } from "@/shared/aprovacao/ApprovalProvider";
 
 const queryClient = new QueryClient();
 
