@@ -128,15 +128,20 @@ def avaliar(path: Path) -> None:
         "PROPOSTA: %s → %s (confiança=%.0f%%, motivo=%s)",
         rel, destino_rel, confianca * 100, veredito["motivo"],
     )
-    notificar_telegram(
-        tipo="aviso",
-        titulo="🛡️ Guardião propõe mover arquivo",
-        mensagem=(
+    # publica na fila — Analista decide quando/como notificar
+    publicar(
+        source="consciencia",
+        severity="aviso",
+        key=f"consciencia.proposta.{path.name}",
+        title="Guardião propõe mover arquivo",
+        body=(
             f"📄 `{rel}`\n"
             f"➡️ Sugestão: `{destino_rel}`\n"
             f"🎯 Confiança: {confianca:.0%}\n"
             f"💡 Motivo: {veredito['motivo']}"
         ),
+        dedup_window_s=600,
+        payload={"arquivo": str(rel), "destino": destino_rel, "confianca": confianca},
     )
     registrar_evento_painel("proposta", str(rel), destino_rel)
 
