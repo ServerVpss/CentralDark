@@ -102,6 +102,12 @@ jobs:
               git commit -m "chore(notion-sync): relatório + changelog [skip ci]" \
                 -m "Commit-fonte: ${{ github.sha }}" \
                 -m "Disparado por: ${{ github.actor }}"
-              git push
+              # Cinto de segurança: outros workflows escrevem em main em paralelo.
+              # Rebase + retry resolve o "! [rejected] main -> main (fetch first)".
+              for i in 1 2 3 4 5; do
+                git pull --rebase -X ours origin main && git push && break
+                echo "push tentativa $i falhou, aguardando e retentando..."
+                sleep $((RANDOM % 5 + 2))
+              done
             fi
           fi
