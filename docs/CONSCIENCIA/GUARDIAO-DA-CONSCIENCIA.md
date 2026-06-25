@@ -132,8 +132,12 @@ Aparece como agente vivo:
 
 ## Próximos passos
 
-- **08/07/2026** — revisar comportamento em modo `propor` e decidir se
-  liberamos modo `auto` (que precisa ser implementado antes).
+- **08/07/2026** — data **mínima** para considerar liberar o modo `auto`.
+  ⚠️ **Regra de observação real**: a data no calendário sozinha não basta.
+  Só liberar `auto` após acompanhar 7~10 dias úteis de propostas reais do
+  Guardião, validando se a maioria faz sentido. Se as propostas estiverem
+  ruins, estender o período de `propor` até calibrar as regras do YAML.
+- Modo `auto` precisa ser **implementado** antes (não existe no código hoje).
 - Adicionar análise de conteúdo (não só nome) se as regras de nome
   começarem a errar muito.
 - Estender vigilância para outras pastas além de `CONSCIENCIA/`.
