@@ -453,5 +453,4 @@ Cada módulo tem seu README com a lista do que falta.
 ### Próximos passos desta pendência #5
 
 Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "executa 5.X" — aí eu migro/descarto/arquivo conforme sua decisão e mudo o status do item pra ✅ aqui.
-
-
+### 1. MCP Server Local com STDIO (FastMCP) — IA privada rápida dentro da VPS — 🔴 ABERTO (25/06/2026, 10:02 BRT)
