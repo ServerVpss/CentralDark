@@ -64,6 +64,8 @@ Gatilhos que o usuário usa pra invocar fluxos prontos. Sempre em PT-BR, tom dir
 
 | Comando                          | O que dispara                                                                                       |
 | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **RELOAD V3** *(atalho oficial)* | Carrega o prompt consolidado de `.claude/prompts/reload-centraldark-v3.md` + `cerebro/`. Equivalente curto de `RELOAD CENTRALDARK V3`. |
+| **RELOAD CENTRALDARK V3**        | Forma completa do atalho acima. Mesmo efeito.                                                       |
 | **RELOAD CENTRALDARK**           | Recarrega contexto completo do projeto (lê `CLAUDE.md` + `.claude/` + `cerebro/`).                  |
 | **AUDITORIA DE MEMÓRIAS**        | Roda auditoria do `cerebro/` e memórias do Lovable. Saída no template do `reload-centraldark-v3`.   |
 | **Sincronia 4-Point**            | Verifica se Lovable + GitHub + VPS + Cérebro Vivo estão espelhados.                                 |
