@@ -29,11 +29,13 @@ if (!TOKEN) {
 }
 const notion = new Client({ auth: TOKEN });
 
+// IDs oficiais dos databases para a API pública do Notion.
+// Não usar os Data Source IDs (collection://) aqui: o SDK v2 consulta databases.query({ database_id }).
 const DB = {
-  regras: { id: "867966ce-c6bb-4767-af25-e6da4b8eb9f9", title: "Regra" },
-  pendencias: { id: "52dcbdf3-f1f2-49dc-8ee7-f26c34bece3e", title: "Pendência" },
-  decisoes: { id: "66731d2b-4f3d-4a6d-82e3-323d81259b95", title: "Decisão" },
-  aprendizados: { id: "d2dc1197-f0e2-4cea-9f8f-c3a5499a0303", title: "Aprendizado" },
+  regras: { id: "fd0a063c-eb21-46fc-9f52-72027a7befdc", title: "Regra" },
+  pendencias: { id: "b37757f1-41a8-4d78-b738-b29068423419", title: "Pendência" },
+  decisoes: { id: "3bffaefc-c606-4ed6-957a-c2bfb6fb6c7f", title: "Decisão" },
+  aprendizados: { id: "f53285e1-891f-4645-bae8-160b44d6cb6c", title: "Aprendizado" },
 };
 
 async function read(file) {
