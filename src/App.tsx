@@ -105,6 +105,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
+            <ApprovalProvider>
             <GlobalSearch />
             <ViewAsBanner />
             {/* <InstallPrompt /> */}
