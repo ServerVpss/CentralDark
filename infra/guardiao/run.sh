@@ -38,7 +38,7 @@ pytest tests/ -v
 # 4. PM2
 echo "→ Subindo no PM2..."
 pm2 delete guardiao-consciencia 2>/dev/null || true
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 pm2 save
 
 echo ""
