@@ -38,12 +38,15 @@ if (!NOTION_TOKEN) {
 
 const notion = new Client({ auth: NOTION_TOKEN });
 
-// Data source IDs oficiais — fonte: docs/CONSCIENCIA/NOTION-MAPA.md
+// IDs oficiais dos databases para a API pública do Notion.
+// Atenção: não usar aqui os Data Source IDs (collection://) do MCP,
+// porque @notionhq/client v2 consulta via databases.query({ database_id }).
+// Fonte: docs/CONSCIENCIA/NOTION-MAPA.md
 const DB = {
-  regras: "867966ce-c6bb-4767-af25-e6da4b8eb9f9",
-  pendencias: "52dcbdf3-f1f2-49dc-8ee7-f26c34bece3e",
-  decisoes: "66731d2b-4f3d-4a6d-82e3-323d81259b95",
-  aprendizados: "d2dc1197-f0e2-4cea-9f8f-c3a5499a0303",
+  regras: "fd0a063c-eb21-46fc-9f52-72027a7befdc",
+  pendencias: "b37757f1-41a8-4d78-b738-b29068423419",
+  decisoes: "3bffaefc-c606-4ed6-957a-c2bfb6fb6c7f",
+  aprendizados: "f53285e1-891f-4645-bae8-160b44d6cb6c",
 };
 
 const REPO_BASE = "https://github.com/ServerVpss/CentralDark/blob/main";
