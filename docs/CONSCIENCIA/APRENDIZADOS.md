@@ -1862,3 +1862,9 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
 - **Data:** 2026-06-25
 - **Contexto:** 25/06/2026, Pivete definiu regra de prioridade máxima sobre onde registrar regras/decisões/aprendizados.
 - **Aprendizado:** docs/CONSCIENCIA/ é a ÚNICA fonte oficial. mem:// é só cache de sessão. Ordem obrigatória: 1) salvar primeiro em docs/CONSCIENCIA/ com título+data+responsável+caminho+motivo+refs; 2) só depois espelhar em mem://. Nunca registrar algo importante apenas em mem://. Memórias antigas que vivem só em mem:// (autonomia-secrets, gestao-secrets, swarm-mode, auto-pendencia) devem migrar para docs/CONSCIENCIA/ na próxima vez que forem tocadas. Detalhes: docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
+
+### 252. notify-telegram exige header x-notify-key, não Authorization Bearer
+- **Categoria:** erro-correcao
+- **Data:** 2026-06-25
+- **Contexto:** Guardião da Consciência (PM2 id 22) recebia 401 ao tentar notificar via notify-telegram. Causa: notifier.py usava Authorization: Bearer enquanto a edge lê req.headers.get('x-notify-key').
+- **Aprendizado:** Edge function notify-telegram exige header `x-notify-key: <token>`, NÃO aceita `Authorization: Bearer <token>` (retorna 401). Conferir o header esperado lendo o código da edge antes de implementar cliente. Fix aplicado em infra/guardiao/notifier.py — commit a877d8e. Validado com mensagem real chegando no @srver1bot.
