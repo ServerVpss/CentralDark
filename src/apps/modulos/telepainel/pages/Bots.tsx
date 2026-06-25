@@ -73,6 +73,7 @@ const getTokenErrorMessage = (error: string): string => {
 export default function Bots() {
   const navigate = useNavigate();
   const { bots, loading, createBot, syncBot, deleteBot, updateBot } = useTelegramBots();
+  const { pedirAprovacao } = useAprovacao();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newBotName, setNewBotName] = useState("");
   const [newBotToken, setNewBotToken] = useState("");
