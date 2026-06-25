@@ -191,6 +191,7 @@ const App = () => (
                 </Routes>
               );
             })()}
+            </ApprovalProvider>
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
