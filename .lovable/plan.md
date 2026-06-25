@@ -1,57 +1,51 @@
-# Atualizar `cerebro/ferramentas-cognitivas-e-comandos.md` com a realidade
+## Objetivo
 
-Editar a página existente pra refletir o que **realmente** existe no Lovable hoje, sem abstração.
+Redesenhar `src/apps/web/pages/Auth.tsx` pra herdar o mesmo visual do Mega Painel (`status.centralldark.com`) — fundo claro com névoa verde, blocos arredondados com "halo" esmeralda no canto, tipografia grande e bold, chip "CENTRALDARK INTELLIGENCE", cartão "Sistema respirando" com bolinha verde pulsando.
 
 ## O que muda
 
-### 1. Nova seção: "Tabela de Equivalência (Realidade Atual)"
+**Só `src/apps/web/pages/Auth.tsx`.** Nenhuma lógica de autenticação é tocada — formulário, validação, signIn/signUp, tabs e tudo mais continuam exatamente iguais.
 
-Inserida logo após "As 3 Ferramentas Ativas". Formato:
+## Como vai ficar
 
-| Nome Conceitual | Nome Real no Lovable | Status | Uso prático no dia a dia |
-|---|---|---|---|
-| `browse_page` | `fetch_website` (web pública) + `mcp_notion_ODQJf--notion-fetch` (Notion privado) | ✅ Ativa | Ler link público, página de GitHub, doc do Notion conectado |
-| `code_execution` | `code--exec` (Python/bash no sandbox) | ✅ Ativa | Rodar script, contar/comparar arquivos em massa, processar CSV, gerar relatório |
-| `conversation_search` | `chat_search--search_chat_history` + `chat_search--recall_chat_history` + `chat_search--read_chat_messages` | ⚠️ Parcial | Busca só no histórico **deste projeto** no Lovable. Não vê chats de outros Hubs (Claude Desktop, ChatGPT) |
+```text
+┌────────────────────────────────────────────┐
+│  ░░ fundo branco-esverdeado, grid sutil ░░ │
+│                                            │
+│   CENTRALDARK INTELLIGENCE  (chip verde)   │
+│                                            │
+│   🚀  Bem-vindo de volta                   │
+│        (título grande, bold, preto)        │
+│                                            │
+│   Acesse o painel pra gerenciar seus bots. │
+│                                            │
+│   ┌─────────────────────┐ ┌──────────────┐ │
+│   │  [ Entrar | Cadastr]│ │ ● Sistema    │ │
+│   │  email ____________ │ │   respirando │ │
+│   │  senha ____________ │ │  v0.4.0 · 95 │ │
+│   │  [   Entrar    ]    │ │  tools       │ │
+│   └─────────────────────┘ └──────────────┘ │
+│                                            │
+│   Termos · Privacidade                     │
+└────────────────────────────────────────────┘
+```
 
-Logo abaixo da tabela, nota curta explicando:
-- Mega Painel privado (área logada) → ❌ não acessível por enquanto, precisaria conector dedicado
-- Em outros Hubs (Claude Desktop/Code, ChatGPT) os nomes reais mudam — a coluna "Nome Real" vale só pro Lovable
+No mobile, os dois cards empilham (formulário em cima, "Sistema respirando" embaixo).
 
-### 2. Nova seção: "Como usar no dia a dia"
+## Detalhes visuais (espelhando o painel)
 
-Lista de frases em PT-BR natural que disparam cada ferramenta, sem precisar do nome técnico:
+- Fundo: branco com leve tint verde + radial-gradient esmeralda no topo + grid de pontinhos sutil
+- Chip "CENTRALDARK INTELLIGENCE": verde escuro, letterspacing largo, fonte pequena bold
+- Título "Bem-vindo de volta": tipografia display grande (text-4xl/5xl), peso 700, cor `foreground`
+- Cards: `rounded-2xl`, borda fininha, `shadow-3d`, com um "halo" radial verde no canto inferior direito (igual aos blocos "94%" do painel)
+- Bolinha pulsante verde no card lateral (`animate-pulse`)
+- Botão "Entrar": verde esmeralda sólido com `shadow-3d-primary`
+- Inputs mantêm o estilo atual (ícone à esquerda)
 
-**Pra ler conteúdo externo (browse):**
-- "Lê essa página aqui: <link>"
-- "Dá uma olhada nesse repositório do GitHub"
-- "Abre a página X do Notion e me resume"
+Tudo via tokens semânticos (`--primary` já é emerald no projeto), zero cor hardcoded.
 
-**Pra rodar análise/script (code exec):**
-- "Roda um script pra contar quantos arquivos têm X"
-- "Compara esses dois arquivos pra mim"
-- "Processa esse CSV e me dá um resumo"
-- "Faz uma auditoria em massa nos arquivos da pasta Y"
+## Fora de escopo
 
-**Pra buscar no histórico (conversation search):**
-- "O que a gente tinha decidido sobre Z?"
-- "Procura no nosso histórico quando falamos de W"
-- "Lembra daquela conversa sobre…"
-
-### 3. Atualizar a seção "Regra de Ouro"
-
-Trocar os nomes conceituais pelos reais entre parênteses, mantendo a regra:
-- Antes de pedir cópia de texto → `fetch_website` / Notion fetch
-- Antes de dizer "não lembro" → `chat_search`
-- Antes de abrir 20+ arquivos → `code--exec` com script
-
-## O que NÃO muda
-
-- Estrutura geral da página (seções existentes preservadas)
-- Seção "Comandos Principais" (gatilhos RELOAD V3 etc. — já atualizada)
-- Seção "Melhoria Contínua" (fica aberta pra futuras adições)
-- Nenhum outro arquivo é tocado (sem mexer em `.claude/`, `mem://`, código, edge functions)
-
-## Resultado
-
-Página vira referência honesta: o usuário e qualquer IA externa abrindo o repo veem na hora **o nome real**, **o status real** e **como acionar em português** — sem precisar adivinhar.
+- Não mexer no Mega Painel da VPS
+- Não mexer em `index.css` / tokens globais (já são esmeralda)
+- Não mexer em `AuthProvider`, rotas, ou qualquer lógica
