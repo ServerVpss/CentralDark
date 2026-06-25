@@ -1,4 +1,4 @@
-# Sentinela — 2026-06-25T14:37:54.356Z
+# Sentinela — 2026-06-25T20:04:31.502Z
 
 | Métrica | Valor |
 |---|---|
@@ -6,18 +6,18 @@
 | Endpoints fora | 2 |
 | Workflows vermelhos 24h | 20 |
 | Divergências detectadas | 22 |
-| Issues novas | 1 |
-| Issues já abertas (dedupe) | 21 |
+| Issues novas | 0 |
+| Issues já abertas (dedupe) | 22 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 255ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 273ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 112ms · CORS=`*`
-- 🟢 **Install status** — `200` em 143ms · CORS=`*`
-- 🔴 **Painel** — `404` em 105ms · CORS=`*`
-- 🔴 **API** — `404` em 137ms
+- 🟢 **MCP health** — `200` em 261ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 252ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 102ms · CORS=`*`
+- 🟢 **Install status** — `200` em 118ms · CORS=`*`
+- 🔴 **Painel** — `404` em 150ms · CORS=`*`
+- 🔴 **API** — `404` em 159ms
 
 ## Divergências
 
@@ -26,16 +26,13 @@
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: wuzapi-sessions-monitor (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: wuzapi-sessions-monitor (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
@@ -43,3 +40,6 @@
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: wuzapi-sessions-monitor (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
