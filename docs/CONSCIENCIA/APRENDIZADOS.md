@@ -1850,3 +1850,9 @@ Isso evita que o card de Tools públicas fique zerado se o navegador bloquear ch
 Status em 25/06/2026: deploy autorizado, mas pausado em validação de secret NOTIFY_API_KEY ausente na VPS — aguardando dono.
 
 Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de mudar modo, remover trava de data, pular testes ou desativar logs sem aprovação explícita do dono são proibidas.
+
+### 250. Regra Oficial — Gestão de Secrets com Autorização Prévia
+- **Categoria:** outro
+- **Data:** 2026-06-25
+- **Contexto:** 25/06/2026, Pivete definiu como regra permanente o protocolo para vasculhar/mapear secrets (VPS, Supabase, GitHub Actions, sandbox).
+- **Aprendizado:** Antes de qualquer mapeamento de secrets, perguntar explicitamente ("Posso vasculhar e mapear os secrets?"). Nunca salvar valor completo — só metadados (nome, local, status, data). Salvar em docs/CONSCIENCIA/04-MCP-E-CONECTORES/secrets-mapeamento/mapeamento-YYYY-MM-DD.md. Cache de 7 dias antes de revasculhar. Registrar aprendizado + atualizar Mega Painel após cada mapeamento. Regra registrada em mem://preferences/gestao-secrets-autorizacao-previa.
