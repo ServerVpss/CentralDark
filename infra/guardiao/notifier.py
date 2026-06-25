@@ -41,7 +41,7 @@ def notificar_telegram(tipo: str, titulo: str, mensagem: str) -> None:
 
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {token}",
+        "x-notify-key": token,
     }
     payload = {
         "tipo": tipo,
