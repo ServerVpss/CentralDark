@@ -22,17 +22,45 @@
 
 Quando eu usar qualquer um destes comandos, você deve executar da seguinte forma:
 
-- **"Registra como oficial"** ou **"Isso é oficial agora"** → Transforme o que eu disse em regra oficial do projeto (crie ou atualize o arquivo correto em `docs/CONSCIENCIA/` e mostre antes de salvar).
+### 📝 Registro Oficial
 
-- **"Mostra pendências"** → Liste todas as pendências atuais de forma clara e organizada.
+- **"Registra como oficial"** ou **"Isso é oficial agora"**  
 
-- **"Atualiza status"** → Atualize o Mega Painel com o status atual do projeto.
+  Transforme o que eu acabei de falar em **regra oficial** do projeto.  
 
-- **"Busca no projeto"** → Use `repo_semantic_search` para buscar no repositório.
+  Para isso você deve:
 
-- **"Resumo da sessão"** → Faça um resumo objetivo do que foi feito nesta conversa.
+  1. Identificar o arquivo correto dentro de `docs/CONSCIENCIA/`
 
-- **"O que falta fazer?"** → Mostre as próximas tarefas ou etapas pendentes.
+  2. Escrever a regra de forma clara e organizada
+
+  3. Mostrar o conteúdo completo antes de salvar
+
+  4. Só salvar depois da minha aprovação explícita
+
+### 📋 Consultas de Estado
+
+- **"Mostra pendências"**  
+
+  Liste todas as pendências atuais do projeto de forma organizada e priorizada.
+
+- **"Atualiza status"**  
+
+  Atualize o Mega Painel com as informações mais recentes e me mostre o status atual.
+
+- **"O que falta fazer?"**  
+
+  Mostre as próximas tarefas ou etapas que ainda estão pendentes.
+
+### 🔍 Buscas e Resumos
+
+- **"Busca no projeto"**  
+
+  Use `repo_semantic_search` para buscar informações dentro do repositório de forma inteligente.
+
+- **"Resumo da sessão"**  
+
+  Faça um resumo claro e objetivo do que foi discutido e decidido nesta conversa.
 
 ---
 
