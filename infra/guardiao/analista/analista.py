@@ -47,11 +47,12 @@ def configurar_logs(nivel: str = "INFO") -> None:
     fh.setFormatter(fmt)
     sh = logging.StreamHandler()
     sh.setFormatter(fmt)
-    root = logging.getLogger("analista")
-    root.setLevel(getattr(logging, nivel.upper(), logging.INFO))
-    root.addHandler(fh)
-    root.addHandler(sh)
-    root.propagate = False
+    for nome in ("analista", "guardiao.notifier"):
+        lg = logging.getLogger(nome)
+        lg.setLevel(getattr(logging, nivel.upper(), logging.INFO))
+        lg.addHandler(fh)
+        lg.addHandler(sh)
+        lg.propagate = False
 
 
 configurar_logs(os.environ.get("LOG_LEVEL", "INFO"))
