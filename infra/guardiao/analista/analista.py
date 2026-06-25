@@ -47,11 +47,12 @@ def configurar_logs(nivel: str = "INFO") -> None:
     fh.setFormatter(fmt)
     sh = logging.StreamHandler()
     sh.setFormatter(fmt)
-    root = logging.getLogger("analista")
-    root.setLevel(getattr(logging, nivel.upper(), logging.INFO))
-    root.addHandler(fh)
-    root.addHandler(sh)
-    root.propagate = False
+    for nome in ("analista", "guardiao.notifier"):
+        lg = logging.getLogger(nome)
+        lg.setLevel(getattr(logging, nivel.upper(), logging.INFO))
+        lg.addHandler(fh)
+        lg.addHandler(sh)
+        lg.propagate = False
 
 
 configurar_logs(os.environ.get("LOG_LEVEL", "INFO"))
@@ -98,13 +99,16 @@ def despachar():
             continue
         try:
             critico = evento.get("severity") == "critico"
+            log.info("Despachando: [%s/%s] %s",
+                     evento.get("source"), evento.get("severity"), evento.get("key"))
             dormiu = limiter.aguardar(critico=critico)
             if dormiu > 0:
-                log.debug("Rate-limit: dormiu %.1fs", dormiu)
+                log.info("Rate-limit: aguardou %.1fs antes do envio", dormiu)
             tipo, mensagem = formatar(evento)
             titulo = evento.get("title", "Guardião")
             notificar_telegram(tipo=tipo, titulo=titulo, mensagem=mensagem)
             limiter.registrar_envio()
+            log.info("Enviado: %s", evento.get("key"))
         except Exception:
             log.exception("Erro despachando evento %s", evento.get("key"))
 
