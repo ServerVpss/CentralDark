@@ -5,13 +5,16 @@ Função pura: recebe um evento + contexto e devolve (acao, score, motivo).
 Sem I/O, sem efeito colateral. Quem executa a ação é o analista.py.
 
 Score 0–100 = 100 * (wC*C + wI*I + wF*F)
-Pesos default: wC=0.4, wI=0.4, wF=0.2 (editáveis em guardiao_rules.yaml → decisor:)
+Pesos default: wC=0.3, wI=0.7, wF=0.0 (editáveis em guardiao_rules.yaml → decisor:)
+O sub-score de impacto (I) usa a confiança do classificador (payload.confianca),
+que é o melhor sinal de qualidade da proposta. wF=0 porque, para propostas da
+Consciência, repetição é ruído (já tratado pelo cache do guardiao.py), não sinal.
 
-Faixas:
-  >=70  -> "propor"   (manda pro Telegram, prefixo [D:NN])
-  40-69 -> "agrupar"  (buffer interno, resumo a cada 5min)
-  20-39 -> "ignorar"  (só log)
-  <20   -> "elevar"   (append em docs/PENDENCIAS.md)
+Faixas (calibradas com os dados reais da fila):
+  >=55  -> "propor"   (manda pro Telegram, prefixo [D:NN])
+  40-54 -> "agrupar"  (não envia agora; aparece em resumo)
+  25-39 -> "ignorar"  (só log)
+  <25   -> "elevar"   (caso raro de baixíssimo score — trata como atenção humana)
 
 Bypass: severity == "critico" sempre vira "propor".
 Flag DECISOR_ENABLED=false no analista.py reverte pro comportamento antigo.
@@ -30,14 +33,14 @@ PESO_SEVERIDADE = {
 
 # Defaults dos pesos da fórmula. YAML pode sobrescrever.
 DEFAULTS = {
-    "wC": 0.4,
-    "wI": 0.4,
-    "wF": 0.2,
+    "wC": 0.3,
+    "wI": 0.7,
+    "wF": 0.0,
     "impacto_default": 0.5,
     "freq_janela_max": 10,   # repetições/10min que saturam F em 1.0
-    "faixa_propor":  70,
+    "faixa_propor":  55,
     "faixa_agrupar": 40,
-    "faixa_ignorar": 20,
+    "faixa_ignorar": 25,
 }
 
 
@@ -57,7 +60,11 @@ def _sub_score_confianca(severity: str) -> float:
 
 
 def _sub_score_impacto(event: dict, tabela_impacto: dict) -> float:
-    """Procura por 'source.key' na tabela; default 0.5."""
+    """Impacto = confiança do classificador (payload.confianca), quando houver;
+    senão procura 'source.key' na tabela; senão default 0.5."""
+    conf = (event.get("payload") or {}).get("confianca")
+    if isinstance(conf, (int, float)):
+        return _clamp(float(conf))
     src = event.get("source", "")
     key = event.get("key", "")
     chave = f"{src}.{key}" if src else key

@@ -25,6 +25,7 @@ module.exports = {
       cwd: "/root/CentralDark/infra/guardiao",
       env: {
         LOG_LEVEL: "INFO",
+        DECISOR_ENABLED: "true", // false reverte ao comportamento antigo (sem filtro)
         // NOTIFY_API_KEY vem de /etc/centraldark/notify.env via run.sh
       },
       max_memory_restart: "120M",

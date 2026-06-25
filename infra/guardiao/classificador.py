@@ -5,8 +5,10 @@ from pathlib import Path
 
 log = logging.getLogger("guardiao.classificador")
 
-# Confiança mínima para gerar uma proposta (abaixo disso, descarta em silêncio)
-THRESHOLD_CONFIANCA = 0.4
+# Confiança mínima para gerar uma proposta (abaixo disso, descarta em silêncio).
+# 0.6 = exige mais que um único regex fraco (reduz falso-positivo). Calibrado
+# com os dados reais da fila: corta as propostas de baixa confiança na geração.
+THRESHOLD_CONFIANCA = 0.6
 # Pontuação máxima considerada para normalização da confiança
 PONTOS_MAX = 5.0
 
