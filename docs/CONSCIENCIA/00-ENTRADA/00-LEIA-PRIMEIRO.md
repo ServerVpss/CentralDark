@@ -7,14 +7,19 @@
 ## 🎯 Resumo das Regras Principais
 
 1. **Fonte da verdade = GitHub** (`ServerVpss/CentralDark`, pasta `docs/`).
+
    Nada é oficial se não estiver aqui. `mem://` é só cache temporário.
 
-2. **Busca semântica primeiro.** Toda resposta ou análise deve começar usando:
-   - `repo_semantic_search` para buscar no projeto
-   - `conversation_search` para buscar histórico
-   - `browse_page` para ler páginas externas
-   - `code_execution` para processar em massa
-   - `web_search` para info atualizada da internet
+2. **Busca semântica primeiro (comportamento padrão).**  
+
+   Toda vez que precisar responder algo sobre o projeto, buscar informação, analisar ou tomar decisão, **inicie obrigatoriamente com busca semântica no repositório** usando `repo_semantic_search`.  
+
+   Use as outras ferramentas apenas quando necessário:
+
+   - `conversation_search` → para histórico de conversas
+   - `browse_page` → para ler páginas externas
+   - `code_execution` → para processar grandes volumes de dados
+   - `web_search` → para informações atualizadas da internet
 
 3. **Aprovação explícita** antes de qualquer ação sensível (deploy, migração, exclusão, alteração de regra de ouro).
 
