@@ -11,7 +11,7 @@ import subprocess
 import time
 
 from detectores.anomaly_engine import JanelaDeslizante
-from queue.event_queue import publicar
+from fila.event_queue import publicar
 
 log = logging.getLogger("guardiao.docker")
 
