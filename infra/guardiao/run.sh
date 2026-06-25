@@ -16,12 +16,20 @@ echo "→ Instalando dependências..."
 pip install -q --upgrade pip
 pip install -q -r requirements.txt
 
-# 2. valida secrets obrigatórios
+# 2. carrega secrets (cofre oficial em /etc/centraldark/notify.env, modo 600)
+if [ -f /etc/centraldark/notify.env ]; then
+  echo "→ Carregando /etc/centraldark/notify.env ..."
+  set -a; source /etc/centraldark/notify.env; set +a
+fi
+
+# valida secrets obrigatórios
 echo "→ Validando secrets..."
 : "${CENTRALDARK_MCP_TOKEN:?ERRO: exporte CENTRALDARK_MCP_TOKEN no /root/.env}"
-: "${NOTIFY_API_KEY:?ERRO: exporte NOTIFY_API_KEY no /root/.env}"
+: "${NOTIFY_API_KEY:?ERRO: NOTIFY_API_KEY ausente — confira /etc/centraldark/notify.env ou /root/.env}"
+: "${NOTIFY_URL:?ERRO: NOTIFY_URL ausente — confira /etc/centraldark/notify.env}"
 echo "  ✓ CENTRALDARK_MCP_TOKEN presente"
 echo "  ✓ NOTIFY_API_KEY presente"
+echo "  ✓ NOTIFY_URL presente"
 
 # 3. roda testes ANTES de subir (aborta se falhar — set -e ativo)
 echo "→ Rodando testes unitários do classificador..."
