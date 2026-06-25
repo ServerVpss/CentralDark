@@ -53,17 +53,8 @@ jobs:
           Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
           git push || true
 
-      - name: Atualizar Mega Painel
-        if: always()
-        env:
-          PAINEL_EVENTO: 'Sentinela rodou'
-          PAINEL_EVENTO_AREA: 'Bots'
-          PAINEL_EVENTO_STATUS: 'feito'
-          PAINEL_EVENTO_DETALHE: 'Varredura automática de divergências (workflow run ${{ github.run_id }}).'
-        run: |
-          node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs || true
-          git add -- CentralDark/apps/projeto-dashboard/painel-data.json 2>/dev/null || true
-          git commit -m "chore(painel): sentinela ${{ github.run_id }}
-
-          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
-          git push || true
+      # NOTA: o step "Atualizar Mega Painel" foi removido em 25/06/2026.
+      # Motivo: race condition com painel-auto-update.yml e com o auto-commit
+      # da VPS — três escritores no mesmo arquivo (painel-data.json) causavam
+      # rejeição de push (non-fast-forward) na main. Agora só o
+      # painel-auto-update.yml mantém o painel-data.json.
