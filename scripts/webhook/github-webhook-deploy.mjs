@@ -1,8 +1,12 @@
 import http from 'http';
-import { exec } from 'child_process';
+import { safeResetToOrigin } from './lib/safe-git-deploy.mjs';
 
 const port = process.env.WEBHOOK_DEPLOY_PORT || 9300;
 const REPO_PATH = process.env.REPO_PATH || '/root/CentralDark';
+
+function log(msg) {
+  console.log(`[${new Date().toISOString()}] ${msg}`);
+}
 
 // CORS global pro painel status.centralldark.com (e qualquer painel público).
 function applyCors(res) {
@@ -24,19 +28,20 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.method === 'POST' && req.url === '/webhook') {
-    console.log('[deploy] gatilho do GitHub recebido — iniciando git fetch/reset…');
-    exec(
-      `cd ${REPO_PATH} && git fetch origin main && git reset --hard origin/main`,
-      (err, stdout, stderr) => {
-        if (err) {
-          console.error(`[deploy] erro: ${err}`);
-          return;
-        }
-        console.log(`[deploy] OK: ${stdout}`);
-      },
-    );
+    log('[deploy] gatilho do GitHub recebido — iniciando atualização segura…');
+    // Responde já e roda o deploy em background (igual ao comportamento anterior).
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ status: 'Deploy iniciado na VPS' }));
+
+    safeResetToOrigin({ repoPath: REPO_PATH, branch: 'main', log })
+      .then((r) => {
+        if (r.ok) {
+          log(`[deploy] OK (stash=${r.stashed} conflito=${r.stashConflict} backup=${r.backupRef || 'nenhum'})`);
+        } else {
+          log('[deploy] FALHOU — ver mensagens [safe-deploy] acima');
+        }
+      })
+      .catch((e) => log(`[deploy] erro inesperado: ${e.message}`));
     return;
   }
 
