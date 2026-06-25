@@ -1,35 +1,57 @@
-# Plano — Página "🛠️ Ferramentas Cognitivas e Comandos"
+# Atualizar `cerebro/ferramentas-cognitivas-e-comandos.md` com a realidade
 
-## Objetivo
-Criar uma página de referência rápida no Cérebro Vivo do projeto, consolidando as 3 Ferramentas Cognitivas (browse_page, code_execution, conversation_search), os comandos principais e um espaço aberto para Melhoria Contínua. Também atualizar o prompt consolidado e a memória pra refletir esse novo contexto oficial.
+Editar a página existente pra refletir o que **realmente** existe no Lovable hoje, sem abstração.
 
-## O que vai ser feito
+## O que muda
 
-### 1. Criar `cerebro/ferramentas-cognitivas-e-comandos.md`
-Página principal de referência, em PT-BR, linguagem simples, dividida em:
+### 1. Nova seção: "Tabela de Equivalência (Realidade Atual)"
 
-- **O que são Ferramentas Cognitivas** — explicação curta, tipo "superpoderes que a IA usa pra agir, não só conversar".
-- **As 3 Ferramentas Ativas** — cada uma com:
-  - O que faz (em linguagem leiga)
-  - Quando usar
-  - Exemplo prático no contexto CentralDark (Notion, GitHub, Mega Painel, Obsidian)
-- **Integração com o Ecossistema** — como elas conversam com Notion (painel), Obsidian (segundo cérebro), GitHub (versionado), Mega Painel (status).
-- **Comandos Principais** — lista dos gatilhos que o usuário usa hoje (RELOAD CENTRALDARK, AUDITORIA DE MEMÓRIAS, Sincronia 4-Point, audit-rls, swarm mode, etc.).
-- **Melhoria Contínua** — seção aberta, com template em branco pra anotar novas ferramentas no futuro (Nome / O que faz / Quando usar / Data de adição).
+Inserida logo após "As 3 Ferramentas Ativas". Formato:
 
-### 2. Atualizar `.claude/prompts/reload-centraldark-v3.md`
-Adicionar referência à nova página do Cérebro Vivo como fonte oficial das Ferramentas Cognitivas, pra qualquer IA externa (Claude) saber onde consultar.
+| Nome Conceitual | Nome Real no Lovable | Status | Uso prático no dia a dia |
+|---|---|---|---|
+| `browse_page` | `fetch_website` (web pública) + `mcp_notion_ODQJf--notion-fetch` (Notion privado) | ✅ Ativa | Ler link público, página de GitHub, doc do Notion conectado |
+| `code_execution` | `code--exec` (Python/bash no sandbox) | ✅ Ativa | Rodar script, contar/comparar arquivos em massa, processar CSV, gerar relatório |
+| `conversation_search` | `chat_search--search_chat_history` + `chat_search--recall_chat_history` + `chat_search--read_chat_messages` | ⚠️ Parcial | Busca só no histórico **deste projeto** no Lovable. Não vê chats de outros Hubs (Claude Desktop, ChatGPT) |
 
-### 3. Atualizar `mem://index.md`
-Adicionar 1 linha em Memories apontando pra nova página do Cérebro Vivo:
-`- [Ferramentas Cognitivas e Comandos](cerebro/ferramentas-cognitivas-e-comandos.md) — Referência rápida + comandos + melhoria contínua`
+Logo abaixo da tabela, nota curta explicando:
+- Mega Painel privado (área logada) → ❌ não acessível por enquanto, precisaria conector dedicado
+- Em outros Hubs (Claude Desktop/Code, ChatGPT) os nomes reais mudam — a coluna "Nome Real" vale só pro Lovable
 
-## O que NÃO vai ser feito
-- Nenhuma mudança em código de app, Edge Functions, migrations, deploy ou Notion remoto.
-- Não toca em `CLAUDE.md` (a Sincronia 4-Point já cobre o cérebro vivo).
-- Não cria página no Notion agora — só no Cérebro Vivo local (`cerebro/`). Se quiser espelhar no Notion depois, é outro passo.
+### 2. Nova seção: "Como usar no dia a dia"
 
-## Resultado final
-Você abre `cerebro/ferramentas-cognitivas-e-comandos.md` (ou pede pra qualquer IA ler) e tem o mapa completo: o que cada ferramenta faz, quando usar, seus comandos e um espaço pronto pra crescer.
+Lista de frases em PT-BR natural que disparam cada ferramenta, sem precisar do nome técnico:
 
-**APROVADO PARA EXECUTAR: aguardando seu OK.**
+**Pra ler conteúdo externo (browse):**
+- "Lê essa página aqui: <link>"
+- "Dá uma olhada nesse repositório do GitHub"
+- "Abre a página X do Notion e me resume"
+
+**Pra rodar análise/script (code exec):**
+- "Roda um script pra contar quantos arquivos têm X"
+- "Compara esses dois arquivos pra mim"
+- "Processa esse CSV e me dá um resumo"
+- "Faz uma auditoria em massa nos arquivos da pasta Y"
+
+**Pra buscar no histórico (conversation search):**
+- "O que a gente tinha decidido sobre Z?"
+- "Procura no nosso histórico quando falamos de W"
+- "Lembra daquela conversa sobre…"
+
+### 3. Atualizar a seção "Regra de Ouro"
+
+Trocar os nomes conceituais pelos reais entre parênteses, mantendo a regra:
+- Antes de pedir cópia de texto → `fetch_website` / Notion fetch
+- Antes de dizer "não lembro" → `chat_search`
+- Antes de abrir 20+ arquivos → `code--exec` com script
+
+## O que NÃO muda
+
+- Estrutura geral da página (seções existentes preservadas)
+- Seção "Comandos Principais" (gatilhos RELOAD V3 etc. — já atualizada)
+- Seção "Melhoria Contínua" (fica aberta pra futuras adições)
+- Nenhum outro arquivo é tocado (sem mexer em `.claude/`, `mem://`, código, edge functions)
+
+## Resultado
+
+Página vira referência honesta: o usuário e qualquer IA externa abrindo o repo veem na hora **o nome real**, **o status real** e **como acionar em português** — sem precisar adivinhar.

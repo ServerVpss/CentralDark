@@ -50,11 +50,55 @@ Pensa assim: antes a IA era um consultor de telefone. Agora ela é um consultor 
 
 ---
 
+## Tabela de Equivalência (Realidade Atual no Lovable)
+
+Os nomes conceituais (browse_page, code_execution, conversation_search) são **rótulos da documentação**. Aqui em baixo está o nome **real** que eu uso dentro do Lovable hoje.
+
+| Nome Conceitual       | Nome Real no Lovable                                                                                                          | Status     | Uso prático no dia a dia                                                                 |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------- |
+| `browse_page`         | `fetch_website` (web pública) + `mcp_notion_ODQJf--notion-fetch` / `notion-search` (Notion conectado)                          | ✅ Ativa   | Ler link público, página de GitHub, doc do Notion já conectado ao projeto                |
+| `code_execution`      | `code--exec` (Python/bash no sandbox, com numpy, pandas, requests, playwright, ffmpeg etc.)                                    | ✅ Ativa   | Rodar script, contar/comparar arquivos em massa, processar CSV, gerar relatório, scrape |
+| `conversation_search` | `chat_search--search_chat_history` + `chat_search--recall_chat_history` + `chat_search--read_chat_messages`                    | ⚠️ Parcial | Busca **só no histórico deste projeto no Lovable**. Não vê chats do Claude Desktop, ChatGPT ou outros Hubs |
+
+**Notas honestas:**
+- **Mega Painel privado** (área logada com senha) → ❌ não acessível sem conector dedicado. Páginas públicas dele entram via `fetch_website`.
+- Em **outros Hubs** (Claude Desktop/Code, ChatGPT, Cursor) os nomes reais mudam — a coluna "Nome Real" vale só pro Lovable. A coluna "Nome Conceitual" é a linguagem comum entre todos.
+- Pra leitura via Playwright (sites com JS pesado, login simulado) eu uso `code--exec` rodando script Python — também conta como `browse_page` no plano conceitual.
+
+---
+
 ## Regra de Ouro
 
-- Antes de **pedir pro usuário copiar texto** → usar `browse_page`.
-- Antes de dizer **"não me lembro / não tenho contexto"** → usar `conversation_search`.
-- Antes de **abrir 30 arquivos manualmente** → usar `code_execution`.
+- Antes de **pedir pro usuário copiar texto** → usar `fetch_website` ou `notion-fetch` (conceito: `browse_page`).
+- Antes de dizer **"não me lembro / não tenho contexto"** → usar `chat_search--*` (conceito: `conversation_search`).
+- Antes de **abrir 20+ arquivos manualmente** → usar `code--exec` com script (conceito: `code_execution`).
+
+---
+
+## Como usar no dia a dia
+
+Você **nunca precisa falar o nome técnico**. Fala em português normal que eu reconheço e disparo a ferramenta certa.
+
+**Pra ler conteúdo externo (browse):**
+- "Lê essa página aqui: <link>"
+- "Dá uma olhada nesse repositório do GitHub"
+- "Abre a página X do Notion e me resume"
+- "Vê o que tá nesse README e compara com o nosso"
+
+**Pra rodar análise / script (code exec):**
+- "Roda um script pra contar quantos arquivos têm X"
+- "Compara esses dois arquivos pra mim"
+- "Processa esse CSV e me dá um resumo"
+- "Faz uma auditoria em massa nos arquivos da pasta `cerebro/`"
+- "Acha duplicata entre essas memórias"
+
+**Pra buscar no histórico (conversation search):**
+- "O que a gente tinha decidido sobre Z?"
+- "Procura no nosso histórico quando falamos de W"
+- "Lembra daquela conversa sobre o bot?"
+- "Resgata o que ficou combinado semana passada"
+
+
 
 ---
 
