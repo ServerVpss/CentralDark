@@ -27,7 +27,7 @@ from analista.formatter import formatar  # noqa: E402
 from analista.priority_queue import FilaPrioridade  # noqa: E402
 from analista.rate_limiter import RateLimiter  # noqa: E402
 from notifier import notificar_telegram  # noqa: E402
-from queue.event_queue import tail  # noqa: E402
+from fila.event_queue import tail  # noqa: E402
 
 LOG_DIR = BASE / "logs"
 LOG_DIR.mkdir(exist_ok=True)
