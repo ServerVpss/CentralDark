@@ -185,7 +185,7 @@ export default function Bots() {
     const bot = bots.find((b) => b.id === botId);
     const r = await pedirAprovacao({
       acao: "Remover bot do Telegram",
-      alvo: bot ? `@${bot.bot_username ?? bot.bot_name ?? botId}` : botId,
+      alvo: bot ? `@${bot.bot_username ?? botId}` : botId,
       risco: "alto",
       detalhes: "Essa ação remove o bot do painel e desliga o webhook. Não pode ser desfeita.",
     });
