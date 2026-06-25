@@ -20,47 +20,37 @@
 
 ## ⚡ Comandos Gatilhos
 
-Quando eu usar qualquer um destes comandos, você deve executar da seguinte forma:
+Quando eu usar qualquer um destes comandos, execute da seguinte forma:
 
 ### 📝 Registro Oficial
 
 - **"Registra como oficial"** ou **"Isso é oficial agora"**  
 
-  Transforme o que eu acabei de falar em **regra oficial** do projeto.  
-
-  Para isso você deve:
-
-  1. Identificar o arquivo correto dentro de `docs/CONSCIENCIA/`
-
-  2. Escrever a regra de forma clara e organizada
-
-  3. Mostrar o conteúdo completo antes de salvar
-
-  4. Só salvar depois da minha aprovação explícita
+  Transforme o que eu acabei de falar em **regra oficial** do projeto. Identifique o arquivo correto em `docs/CONSCIENCIA/`, escreva a regra de forma clara, mostre o conteúdo completo antes de salvar e só salve após minha aprovação.
 
 ### 📋 Consultas de Estado
 
-- **"Mostra pendências"**  
+- **"Mostra pendências"** → Liste todas as pendências atuais de forma organizada.
 
-  Liste todas as pendências atuais do projeto de forma organizada e priorizada.
+- **"Atualiza status"** → Atualize o Mega Painel e mostre o status atual.
 
-- **"Atualiza status"**  
-
-  Atualize o Mega Painel com as informações mais recentes e me mostre o status atual.
-
-- **"O que falta fazer?"**  
-
-  Mostre as próximas tarefas ou etapas que ainda estão pendentes.
+- **"O que falta fazer?"** → Mostre as próximas tarefas pendentes.
 
 ### 🔍 Buscas e Resumos
 
-- **"Busca no projeto"**  
+- **"Busca no projeto"** → Use `repo_semantic_search` para buscar no repositório.
 
-  Use `repo_semantic_search` para buscar informações dentro do repositório de forma inteligente.
+- **"Resumo da sessão"** → Faça um resumo claro e objetivo desta conversa.
 
-- **"Resumo da sessão"**  
+### 🔍 Verificação de Registro
 
-  Faça um resumo claro e objetivo do que foi discutido e decidido nesta conversa.
+- **"Mostra onde registrou no Notion"** ou **"Onde você salvou isso?"**  
+
+  Mostre exatamente onde você registrou a informação no Notion (database + título da página/linha).
+
+- **"Confirma registro"**  
+
+  Prove que registrou tanto no GitHub quanto no Notion, mostrando as localizações exatas de ambos.
 
 ---
 
