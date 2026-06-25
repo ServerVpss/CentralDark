@@ -1,51 +1,51 @@
-## Objetivo
+Quero simplificar o plano de migração da pasta `docs/` do repositório antigo `CentralDark1VPS`) para o repositório principal `ServerVpss/CentralDark`).
 
-Redesenhar `src/apps/web/pages/Auth.tsx` pra herdar o mesmo visual do Mega Painel (`status.centralldark.com`) — fundo claro com névoa verde, blocos arredondados com "halo" esmeralda no canto, tipografia grande e bold, chip "CENTRALDARK INTELLIGENCE", cartão "Sistema respirando" com bolinha verde pulsando.
+Crie um novo plano mais simples e direto, seguindo estas regras:
 
-## O que muda
+**Objetivo:**
 
-**Só `src/apps/web/pages/Auth.tsx`.** Nenhuma lógica de autenticação é tocada — formulário, validação, signIn/signUp, tabs e tudo mais continuam exatamente iguais.
+Migrar apenas o que for útil da pasta `docs/` do repositório antigo para o repositório principal, sem bagunçar a estrutura que já existe em `docs/CONSCIENCIA/`.
 
-## Como vai ficar
+**Regras do novo plano:**
 
-```text
-┌────────────────────────────────────────────┐
-│  ░░ fundo branco-esverdeado, grid sutil ░░ │
-│                                            │
-│   CENTRALDARK INTELLIGENCE  (chip verde)   │
-│                                            │
-│   🚀  Bem-vindo de volta                   │
-│        (título grande, bold, preto)        │
-│                                            │
-│   Acesse o painel pra gerenciar seus bots. │
-│                                            │
-│   ┌─────────────────────┐ ┌──────────────┐ │
-│   │  [ Entrar | Cadastr]│ │ ● Sistema    │ │
-│   │  email ____________ │ │   respirando │ │
-│   │  senha ____________ │ │  v0.4.0 · 95 │ │
-│   │  [   Entrar    ]    │ │  tools       │ │
-│   └─────────────────────┘ └──────────────┘ │
-│                                            │
-│   Termos · Privacidade                     │
-└────────────────────────────────────────────┘
-```
+- Não clone o repositório antigo inteiro.
 
-No mobile, os dois cards empilham (formulário em cima, "Sistema respirando" embaixo).
+- Não use comparação por SHA-1.
 
-## Detalhes visuais (espelhando o painel)
+- Não execute nada sem minha aprovação explícita em cada etapa.
 
-- Fundo: branco com leve tint verde + radial-gradient esmeralda no topo + grid de pontinhos sutil
-- Chip "CENTRALDARK INTELLIGENCE": verde escuro, letterspacing largo, fonte pequena bold
-- Título "Bem-vindo de volta": tipografia display grande (text-4xl/5xl), peso 700, cor `foreground`
-- Cards: `rounded-2xl`, borda fininha, `shadow-3d`, com um "halo" radial verde no canto inferior direito (igual aos blocos "94%" do painel)
-- Bolinha pulsante verde no card lateral (`animate-pulse`)
-- Botão "Entrar": verde esmeralda sólido com `shadow-3d-primary`
-- Inputs mantêm o estilo atual (ícone à esquerda)
+- Seja mais direto e objetivo.
 
-Tudo via tokens semânticos (`--primary` já é emerald no projeto), zero cor hardcoded.
+Reorganize o plano nas seguintes etapas mais simples:
 
-## Fora de escopo
+**Etapa 1 – Listagem**
 
-- Não mexer no Mega Painel da VPS
-- Não mexer em `index.css` / tokens globais (já são esmeralda)
-- Não mexer em `AuthProvider`, rotas, ou qualquer lógica
+Liste de forma organizada todo o conteúdo da pasta `docs/` do repositório `CentralDark1VPS`. Mostre a estrutura de pastas e arquivos.
+
+**Etapa 2 – Comparação e Análise**
+
+Compare o que existe no repositório antigo com o que já temos no repositório principal (especialmente dentro de `docs/CONSCIENCIA/`).
+
+Depois, classifique cada arquivo/pasta do legado em uma das três categorias:
+
+- **Migrar**: Conteúdo útil que ainda não existe no principal.
+
+- **Duplicado**: Já existe no principal (mesmo conteúdo ou versão mais atualizada).
+
+- **Descartar**: Está obsoleto, é backup antigo, rascunho ou não tem mais valor.
+
+Para os arquivos que forem "Migrar", justifique brevemente por quê.
+
+**Etapa 3 – Plano de Execução**
+
+Depois de apresentar as 3 listas acima, monte um plano simples de como vamos migrar apenas o que for necessário, de forma segura.
+
+**Importante:**
+
+- Não execute nenhuma migração ainda.
+
+- Não delete nada.
+
+- Apenas faça o mapeamento e me entregue o relatório das 3 etapas.
+
+Pode começar.
