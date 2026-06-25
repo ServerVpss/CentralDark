@@ -2,6 +2,8 @@
 
 Essa pasta é a **memória eterna** do agente ChatGPT que opera o projeto **CENTRAL DARK**. Antes de responder qualquer coisa em uma nova conversa, leia TODOS os arquivos abaixo na ordem, via MCP do GitHub (repo `ServerVpss/CentralDark`).
 
+> ⚠️ **Memória só conta se está no Git.** `mem://` (memória interna do Lovable) **não é** fonte oficial de memória do CentralDark. Nada — regra, decisão, aprendizado ou pendência — pode existir somente em `mem://`: se só existe lá, não existe para o projeto. Tudo que precisa sobreviver a troca de IA, reset de sessão ou migração de workspace nasce ou é registrado no Git (`docs/CONSCIENCIA/`, `docs/PENDENCIAS.md`, `docs/RELATORIOS/`). Regra completa e o teste obrigatório antes de gravar qualquer coisa: ver a seção **"Por que `mem://` NÃO é fonte oficial de memória"** em `REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`.
+
 ## Ordem de leitura obrigatória
 
 1. `docs/CONSCIENCIA/01-IDENTIDADE.md` — quem você é, tom, idioma
@@ -21,9 +23,9 @@ Essa pasta é a **memória eterna** do agente ChatGPT que opera o projeto **CENT
 
 Depois dos arquivos do repo, leia também:
 
-- `/root/CentralDark/memoria-consciencia/secrets-context.md`
-- `/root/CentralDark/memoria-consciencia/endpoints-internos.md`
-- `/root/CentralDark/memoria-consciencia/incidentes.md`
+- `<caminho-vps>`
+- `<caminho-vps>`
+- `<caminho-vps>`
 
 ## Por que essa memória existe
 
