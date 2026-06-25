@@ -1807,3 +1807,8 @@ Isso evita que o card de Tools públicas fique zerado se o navegador bloquear ch
   3. Secrets SSH faltando no repo origem — quando origem muda, configurar secrets no novo repo também.
 - **Como aplicar:** Ao fazer deploy de `apps/install-callback/`, rodar o checklist de 7 passos. Nunca declarar "concluído" sem validar `/connect/<sid>`.
 
+### 245. Comandos Gatilhos oficiais adicionados à Porta de Entrada
+- **Categoria:** outro
+- **Data:** 2026-06-25
+- **Contexto:** O usuário aprovou a adição da seção '⚡ Comandos Gatilhos' no arquivo docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, estabelecendo frases-chave como 'Registra como oficial', 'Mostra pendências', 'Atualiza status', 'Busca no projeto', 'Resumo da sessão' e 'O que falta fazer?' como comandos oficiais para IAs do projeto.
+- **Aprendizado:** Sempre que o usuário usar uma das frases da seção 'Comandos Gatilhos' no 00-LEIA-PRIMEIRO.md, a IA deve interpretar como comando oficial e executar a ação correspondente. Para 'Registra como oficial' ou 'Isso é oficial agora', a informação deve virar regra em docs/CONSCIENCIA/ e só salvar após aprovação explícita.
