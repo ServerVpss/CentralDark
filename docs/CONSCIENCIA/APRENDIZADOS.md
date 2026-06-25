@@ -1824,3 +1824,9 @@ Isso evita que o card de Tools públicas fique zerado se o navegador bloquear ch
 - **Data:** 2026-06-25
 - **Contexto:** O usuário aprovou a versão final da seção '⚡ Comandos Gatilhos' em docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, agora dividida em subseções: Registro Oficial, Consultas de Estado e Buscas e Resumos.
 - **Aprendizado:** A seção Comandos Gatilhos está organizada em três grupos: Registro Oficial (com fluxo de aprovação antes de salvar), Consultas de Estado (pendências, status atual, próximas tarefas) e Buscas e Resumos (repo_semantic_search, resumo da sessão). Cada comando tem uma instrução clara de execução.
+
+### 248. Comandos Gatilhos incluem Verificação de Registro no Notion e GitHub
+- **Categoria:** outro
+- **Data:** 2026-06-25
+- **Contexto:** O usuário aprovou a adição da subseção '🔍 Verificação de Registro' em docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md, completando os comandos gatilhos com instruções para verificar onde informações foram registradas no Notion e GitHub.
+- **Aprendizado:** A seção Comandos Gatilhos agora inclui uma subseção de Verificação de Registro: quando o usuário perguntar 'Mostra onde registrou no Notion' ou 'Onde você salvou isso?', a IA deve mostrar o database e título da página/linha no Notion; quando disser 'Confirma registro', a IA deve provar que registrou tanto no GitHub quanto no Notion, mostrando as localizações exatas de ambos.
