@@ -32,6 +32,10 @@ on:
         type: choice
         default: 'no'
         options: ['no', 'dry-run', 'confirm-delete']
+      cleanup_target:
+        description: 'Bases pra limpar (CSV). Ex: regras,pendencias,decisoes ou all'
+        type: string
+        default: 'all'
 
 permissions:
   contents: write  # precisa pra commitar relatório + changelog
@@ -73,7 +77,7 @@ jobs:
         if: github.event.inputs.cleanup_orphans != 'no' && github.event.inputs.cleanup_orphans != ''
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          TARGET: ${{ github.event.inputs.target || 'all' }}
+          TARGET: ${{ github.event.inputs.cleanup_target || github.event.inputs.target || 'all' }}
           CONFIRM: ${{ github.event.inputs.cleanup_orphans == 'confirm-delete' && 'YES_DELETE_ORPHANS' || '' }}
           GITHUB_COMMIT: ${{ github.sha }}
           GITHUB_ACTOR: ${{ github.actor }}
