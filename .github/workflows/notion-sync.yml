@@ -1,7 +1,9 @@
 name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
+
 # Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
 # usando UPSERT (cria se não existe, atualiza se existe).
-## Lei vigente: Git é fonte da verdade. Notion é painel humano.
+#
+# Lei vigente: Git é fonte da verdade. Notion é painel humano.
 # Ver docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
 # Mapa dos databases: docs/CONSCIENCIA/NOTION-MAPA.md
 
@@ -16,6 +18,7 @@ on:
       - 'docs/PENDENCIAS.md'
       - 'scripts/notion-sync/**'
       - '.github/workflows/notion-sync.yml'
+
   workflow_dispatch:
     inputs:
       dry_run:
@@ -38,8 +41,9 @@ concurrency:
 jobs:
   sync:
     name: Espelhar para o Notion
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 10
+
     steps:
       - name: 📥 Checkout do repositório
         uses: actions/checkout@v4
