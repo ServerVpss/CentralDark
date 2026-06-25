@@ -1856,3 +1856,9 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
 - **Data:** 2026-06-25
 - **Contexto:** 25/06/2026, Pivete definiu como regra permanente o protocolo para vasculhar/mapear secrets (VPS, Supabase, GitHub Actions, sandbox).
 - **Aprendizado:** Antes de qualquer mapeamento de secrets, perguntar explicitamente ("Posso vasculhar e mapear os secrets?"). Nunca salvar valor completo — só metadados (nome, local, status, data). Salvar em docs/CONSCIENCIA/04-MCP-E-CONECTORES/secrets-mapeamento/mapeamento-YYYY-MM-DD.md. Cache de 7 dias antes de revasculhar. Registrar aprendizado + atualizar Mega Painel após cada mapeamento. Regra registrada em mem://preferences/gestao-secrets-autorizacao-previa.
+
+### 251. Regra Oficial — Hierarquia de Memória (docs/CONSCIENCIA/ é a fonte da verdade)
+- **Categoria:** outro
+- **Data:** 2026-06-25
+- **Contexto:** 25/06/2026, Pivete definiu regra de prioridade máxima sobre onde registrar regras/decisões/aprendizados.
+- **Aprendizado:** docs/CONSCIENCIA/ é a ÚNICA fonte oficial. mem:// é só cache de sessão. Ordem obrigatória: 1) salvar primeiro em docs/CONSCIENCIA/ com título+data+responsável+caminho+motivo+refs; 2) só depois espelhar em mem://. Nunca registrar algo importante apenas em mem://. Memórias antigas que vivem só em mem:// (autonomia-secrets, gestao-secrets, swarm-mode, auto-pendencia) devem migrar para docs/CONSCIENCIA/ na próxima vez que forem tocadas. Detalhes: docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
