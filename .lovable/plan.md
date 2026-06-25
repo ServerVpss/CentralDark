@@ -1,24 +1,33 @@
-## Plano: Documentar por que `mem://` não é fonte oficial de memória
+# Plano — Alinhar a regra-mãe ao texto oficial completo
 
-### O que vou fazer
+## Comparação rápida (o que eu criei × o que você mandou agora)
 
-1. **Abrir e ler** `docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md` para garantir que vou preservar o conteúdo existente.
-2. **Inserir uma nova seção técnica** nesse arquivo, explicando:
-   - o que é `mem://` (memória/cache interna de sessão do Lovable);
-   - por que ele não serve como fonte oficial (volátil entre workspaces, invisível para outras IAs/Hubs, com limite de tamanho);
-   - que regras e aprendizados importantes devem ser gravados primeiro em `docs/CONSCIENCIA/`;
-   - que `mem://` só pode ser usado como espelho/cache opcional, nunca como origem.
-3. **Abrir e ler** `docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md`.
-4. **Adicionar uma referência curta** nesse arquivo de entrada, apontando para a nova seção do `REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`.
-5. **Validar** os dois arquivos após a edição, lendo-os novamente para confirmar que a seção nova e a referência estão no lugar certo.
+O arquivo que já está no repo (`docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md`) é uma **versão resumida** que puxei do espelho no Notion. Bate no espírito, mas perde detalhe e formato. As diferenças que importam:
 
-### O que NÃO vou fazer
+- **Cabeçalho de status** (Status/Escopo/Ativa explícitos) — faltando no meu.
+- **Tabela Git × Notion** com papéis nomeados — eu colapsei em bullets.
+- **Seção 2 expandida** (Antes/Durante/Depois com sub-bullets e o **checklist em caixinhas `[ ]`**) — eu encurtei.
+- **Seção 3 (MCP)** com os 5 pontos completos e explicação de cada um — eu resumi em frases curtas.
+- **Seção 4** com a lista de áreas sensíveis em formato narrativo e a frase "Autorização é por ação e por sessão. Não se generaliza…" — eu cortei.
+- **Seção 5** com descrição de cada papel — eu virei lista seca.
+- **Seção 7 (Referências cruzadas)** — não existia no meu arquivo.
+- Meu arquivo tinha um bloco extra "Sincronia 4-Point" no fim que **não está** no texto oficial que você mandou.
 
-- Não vou mexer em código, Caddy, DNS, secrets, banco, PM2, Docker ou qualquer coisa sensível.
-- Não vou incluir exemplo prático do Caddy/MCP (você pediu só explicação geral).
-- Não vou criar arquivo novo separado: a explicação fica na regra oficial já existente.
+Resumo: o conteúdo é o mesmo, mas o texto oficial é mais completo, mais formal e mais útil pra outra IA ler. Vale substituir.
 
-### Arquivos alterados
+## O que fazer
 
-- `docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`
-- `docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md`
+1. **Sobrescrever** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md` com o texto exato que você colou (íntegro, sem editar palavra).
+2. **Não mexer em mais nada.** A referência no `00-LEIA-PRIMEIRO.md` já aponta pra esse mesmo arquivo — continua válida.
+3. **Sem commit/push automático** — o repo está sincronizado pelo Lovable GitHub App; o commit sai pelo fluxo padrão do editor quando você aprovar.
+
+## Validações que já estão feitas
+
+- Subpasta `01-IDENTIDADE-E-REGRAS/` **existe** (criei no passo anterior).
+- Busca por regras equivalentes: os arquivos parecidos (`11-MULTI-IA-FLUXO.md`, `20-COLABORACAO-MULTI-IA.md`, `PROMPT-MESTRE-MULTI-IA.md`, `01-REGRAS-DA-EQUIPE-IA.md`) tratam de fluxo operacional e papéis de equipe, **não** da regra-mãe Ler→Agir→Registrar. Não há duplicata — é substituição do arquivo recém-criado, não criação de novo.
+
+## Fora de escopo
+
+- Não vou editar `00-LEIA-PRIMEIRO.md`, `REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`, nem outros arquivos da CONSCIENCIA.
+- Não vou tocar Notion (o espelho lá já está e foi a origem desse texto).
+- Sem deploy, sem migration, sem mexer em VPS/PM2/Caddy.
