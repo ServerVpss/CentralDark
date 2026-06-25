@@ -18,7 +18,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from threading import Thread
 
-# permite imports `queue.*`, `detectores.*`, `analista.*` etc.
+# permite imports `fila.*`, `detectores.*`, `analista.*` etc.
 BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE))
 
@@ -114,7 +114,7 @@ def main() -> None:
     log.info("🧠 ANALISTA DO GUARDIÃO — iniciando")
     log.info("=" * 70)
     log.info("Rate-limit: 5 msgs/60s, cooldown 90s, jitter 5–15s")
-    log.info("Fila: %s", BASE / "queue" / "events.jsonl")
+    log.info("Fila: %s", BASE / "fila" / "events.jsonl")
     log.info("=" * 70)
 
     Thread(target=consumir_da_fila, daemon=True, name="consumidor").start()
