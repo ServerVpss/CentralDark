@@ -20,6 +20,7 @@ import {
   Power,
 } from "lucide-react";
 import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { useAprovacao } from "@/shared/aprovacao/ApprovalProvider";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
