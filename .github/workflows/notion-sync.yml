@@ -1,9 +1,7 @@
 name: 🧠 Notion Sync (docs/CONSCIENCIA → Notion)
-
 # Espelha automaticamente o conteúdo de docs/CONSCIENCIA/ para o Notion
 # usando UPSERT (cria se não existe, atualiza se existe).
-#
-# Lei vigente: Git é fonte da verdade. Notion é painel humano.
+## Lei vigente: Git é fonte da verdade. Notion é painel humano.
 # Ver docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md
 # Mapa dos databases: docs/CONSCIENCIA/NOTION-MAPA.md
 
@@ -18,7 +16,6 @@ on:
       - 'docs/PENDENCIAS.md'
       - 'scripts/notion-sync/**'
       - '.github/workflows/notion-sync.yml'
-
   workflow_dispatch:
     inputs:
       dry_run:
@@ -30,9 +27,14 @@ on:
         type: choice
         default: all
         options: [all, regras, decisoes, aprendizados, pendencias]
+      cleanup_orphans:
+        description: 'Limpar (arquivar) órfãos no Notion que não existem no Git'
+        type: choice
+        default: 'no'
+        options: ['no', 'dry-run', 'confirm-delete']
 
 permissions:
-  contents: write  # precisa pra commitar o log em docs/RELATORIOS/
+  contents: write  # precisa pra commitar relatório + changelog
 
 concurrency:
   group: notion-sync
@@ -41,14 +43,13 @@ concurrency:
 jobs:
   sync:
     name: Espelhar para o Notion
-    runs-on: [self-hosted, Linux]
-    timeout-minutes: 10
-
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
     steps:
       - name: 📥 Checkout do repositório
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2  # pra detectar arquivos mudados no push
+          fetch-depth: 2
 
       - name: 🟢 Node 20
         uses: actions/setup-node@v4
@@ -59,25 +60,24 @@ jobs:
         working-directory: scripts/notion-sync
         run: npm install --omit=dev
 
-      - name: 🔍 Listar arquivos alterados (apenas em push)
-        id: changed
-        if: github.event_name == 'push'
-        run: |
-          echo "files<<EOF" >> "$GITHUB_OUTPUT"
-          git diff --name-only ${{ github.event.before }}..${{ github.sha }} -- \
-            'docs/CONSCIENCIA/**' 'docs/PENDENCIAS.md' || true >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
       - name: 🧠 Executar sync (UPSERT)
-        id: sync
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           TARGET: ${{ github.event.inputs.target || 'all' }}
-          CHANGED_FILES: ${{ steps.changed.outputs.files }}
           GITHUB_COMMIT: ${{ github.sha }}
           GITHUB_ACTOR: ${{ github.actor }}
         run: node scripts/notion-sync/sync.mjs
+
+      - name: 🧹 Cleanup de órfãos (opcional)
+        if: github.event.inputs.cleanup_orphans != 'no' && github.event.inputs.cleanup_orphans != ''
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          TARGET: ${{ github.event.inputs.target || 'all' }}
+          CONFIRM: ${{ github.event.inputs.cleanup_orphans == 'confirm-delete' && 'YES_DELETE_ORPHANS' || '' }}
+          GITHUB_COMMIT: ${{ github.sha }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/notion-sync/cleanup-orphans.mjs
 
       - name: 📊 Relatório de consistência (Git ↔ Notion)
         if: always()
@@ -87,7 +87,7 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
         run: node scripts/notion-sync/report-consistency.mjs
 
-      - name: 📝 Commitar logs e relatório
+      - name: 📝 Commitar relatórios + changelog
         if: always() && github.event.inputs.dry_run != 'true'
         run: |
           if [ -d "docs/RELATORIOS/notion-sync" ]; then
@@ -95,9 +95,9 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add docs/RELATORIOS/notion-sync/
             if ! git diff --cached --quiet; then
-              git commit -m "chore(notion-sync): log + consistência [skip ci]" \
+              git commit -m "chore(notion-sync): relatório + changelog [skip ci]" \
                 -m "Commit-fonte: ${{ github.sha }}" \
-                -m "Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+                -m "Disparado por: ${{ github.actor }}"
               git push
             fi
           fi
