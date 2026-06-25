@@ -1,22 +1,20 @@
-# Plano: adendo "Ativação do Segundo Cérebro (Obsidian)"
 
-Ainda não fiz esse adendo. Status de Guerra e logs já foram criados, mas falta registrar formalmente o projeto Obsidian. Vou fazer 2 coisas:
+# Registro no Notion + diagnóstico read-only
 
-## 1. Criar pendência no banco 🔥 Pendências Ativas
-Nova linha:
-- **Pendência:** Ativação do Segundo Cérebro (Obsidian)
-- **Área:** Docs
-- **Prioridade:** Alta
-- **Status:** Não iniciada
+**Passo 1 — Notion** (trigger: `Registrar decisão no Cérebro Vivo`)
+- `notion-fetch` no DB 🔥 Pendências Ativas pra ler o schema.
+- ✅ Decisões Tomadas → página "Contrato operacional do Cérebro Vivo — 7 regras".
+- 📜 Regras do Projeto → página "Cérebro Vivo Central — protocolo obrigatório multi-IA".
+- 🔥 Pendências Ativas → 4 cards: P1 MCP CentralDark, P2 Mega Painel realtime, P3 Telegram start/end, P4 Obsidian futuro.
+- 🤖 Agent Logs → 1 linha de registro.
 
-> Obs: o banco não tem tag literal "Backlog: Pendente" — a semântica equivalente já existe nativamente via **Status = Não iniciada**. Vou usar essa, que é a convenção do próprio Notion. Se quiser literalmente a tag `Backlog: Pendente`, adiciono uma multi-select nova (me avise).
+**Passo 2 — Diagnóstico read-only**
+- `curl` em `mcp.centralldark.com/status.json` e `/health`.
+- `supabase--read_query` em `notifications_log` últimas 24h.
+- Análise honesta: hoje não existe hook automático de start/end no Telegram.
+- `query-data-sources` listando todas as pendências abertas.
 
-## 2. Atualizar a página 🎯 Status de Guerra
-Adicionar na seção **🔴 Bloqueios / Falta fazer** o item:
-- **Ativação do Segundo Cérebro (Obsidian)** — `[Backlog: Pendente]` — projeto estrutural de espelhamento Notion → Obsidian, ainda sem execução iniciada. Link da pendência registrada.
+**Passo 3 — Confirmação única**
+O que foi feito, 7 links/IDs, trigger usado, status MCP, estado do Mega Painel, verdade sobre Telegram, lista de pendências.
 
-## Entrega
-Confirmação curta com:
-- Link da pendência criada
-- Confirmação da atualização do Status de Guerra
-- Liberação para iniciar a investigação dos logs do Telegram
+**Travas:** não toco em edge function, health-check, notify-telegram, WhatsApp, PM2, Docker, Caddy, VPS ou workflows. Paro depois do Passo 3 e espero *"Pode seguir pra prioridade 1"*.
