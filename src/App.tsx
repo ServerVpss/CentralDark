@@ -48,7 +48,7 @@ import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
 import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
-import HubPage from "@/apps/hub/src/HubPage";
+import HubPage from "@/apps/hub/HubPage";
 
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
 import { PageSplash } from "@/shared/transitions/PageSplash";
