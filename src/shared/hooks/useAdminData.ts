@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
 import type { TelegramBot } from "@/shared/hooks/telegram/types";
@@ -79,16 +79,25 @@ export function useAdminData(): AdminData {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const safetyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
 
-  const fetchData = useCallback(async (opts?: { silent?: boolean }) => {
+  const clearSafetyTimer = useCallback(() => {
+    if (safetyTimerRef.current) {
+      clearTimeout(safetyTimerRef.current);
+      safetyTimerRef.current = null;
+    }
+  }, []);
+
+  // Carrega dados essenciais rapidamente e libera a UI
+  const fetchFastData = useCallback(async (opts?: { silent?: boolean }) => {
     if (!user) return;
 
     try {
       if (!opts?.silent) setLoading(true);
       setError(null);
 
-
-      // Fetch all data in parallel - use count for queries, paginate large tables
+      // Dados essenciais em paralelo
       const [
         botsResult,
         plansResult,
@@ -99,12 +108,14 @@ export function useAdminData(): AdminData {
         supabase
           .from("telegram_bots")
           .select("*")
-          .order("created_at", { ascending: false }),
+          .order("created_at", { ascending: false })
+          .limit(50),
         supabase
           .from("subscription_plans")
           .select("*")
           .eq("is_active", true)
-          .order("price", { ascending: true }),
+          .order("price", { ascending: true })
+          .limit(50),
         supabase
           .from("query_history")
           .select("*", { count: "exact", head: true }),
@@ -115,15 +126,56 @@ export function useAdminData(): AdminData {
         supabase
           .from("bot_analytics")
           .select("messages_received, date")
-          .gte("date", new Date().toISOString().split("T")[0]),
+          .gte("date", new Date().toISOString().split("T")[0])
+          .limit(100),
       ]);
 
-      // Fetch all subscriptions with pagination to bypass 1000 limit
+      if (!mountedRef.current) return;
+
+      const botsData = (botsResult.data || []) as TelegramBot[];
+      setBots(botsData);
+
+      const plansData = (plansResult.data || []) as SubscriptionPlan[];
+      setPlans(plansData);
+
+      const messagesReceived = (analyticsResult.data || []).reduce(
+        (acc, a) => acc + (a.messages_received || 0),
+        0
+      );
+
+      const botsOnline = botsData.filter((b) => b.health_status === "online").length;
+
+      setStats((prev) => ({
+        ...prev,
+        botsOnline,
+        queriesTotal: queryCountResult.count || 0,
+        queriesToday: queryTodayCountResult.count || 0,
+        messagesReceived,
+      }));
+    } catch (err) {
+      console.error("Error fetching admin data:", err);
+      setError(err instanceof Error ? err.message : "Erro ao carregar dados");
+    } finally {
+      if (!mountedRef.current) return;
+      setLoading(false);
+      clearSafetyTimer();
+    }
+  }, [user, clearSafetyTimer]);
+
+  // Carrega assinaturas em segundo plano (pode ser pesado)
+  const fetchSubscriptions = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      // Resumo rápido via RPC se existir; senão pagina com limite razoável
       let allSubs: TelegramSubscription[] = [];
       let from = 0;
       const batchSize = 1000;
       let hasMore = true;
-      while (hasMore) {
+      const maxBatches = 50; // limite de segurança: 50k registros
+      let batches = 0;
+
+      while (hasMore && batches < maxBatches) {
         const { data, error } = await supabase
           .from("telegram_subscriptions")
           .select("*")
@@ -134,23 +186,17 @@ export function useAdminData(): AdminData {
           allSubs = allSubs.concat(data as TelegramSubscription[]);
           from += batchSize;
           hasMore = data.length === batchSize;
+          batches++;
         } else {
           hasMore = false;
         }
+        if (!mountedRef.current) return;
       }
 
-      // Set bots
-      const botsData = (botsResult.data || []) as TelegramBot[];
-      setBots(botsData);
+      if (!mountedRef.current) return;
 
-      // Set subscriptions (already fetched with pagination above)
       setSubscriptions(allSubs);
 
-      // Set plans
-      const plansData = (plansResult.data || []) as SubscriptionPlan[];
-      setPlans(plansData);
-
-      // Calculate stats
       const now = new Date();
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
@@ -164,35 +210,41 @@ export function useAdminData(): AdminData {
 
       const totalRevenue = allSubs.reduce((acc, s) => acc + Number(s.value || 0), 0);
 
-      const messagesReceived = (analyticsResult.data || []).reduce(
-        (acc, a) => acc + (a.messages_received || 0),
-        0
-      );
-
-      const botsOnline = botsData.filter((b) => b.health_status === "online").length;
-
-      setStats({
+      setStats((prev) => ({
+        ...prev,
         totalSubscribers: allSubs.length,
         activeSubscribers,
         monthlyRevenue,
         totalRevenue,
-        queriesTotal: queryCountResult.count || 0,
-        queriesToday: queryTodayCountResult.count || 0,
-        messagesReceived,
-        botsOnline,
-      });
+      }));
     } catch (err) {
-      console.error("Error fetching admin data:", err);
-      setError(err instanceof Error ? err.message : "Erro ao carregar dados");
-    } finally {
-      setLoading(false);
+      console.error("Error fetching subscriptions:", err);
     }
   }, [user]);
 
+  const fetchData = useCallback(async (opts?: { silent?: boolean }) => {
+    if (!user) return;
+
+    // Timer de segurança: mesmo que algo trave, a UI não fica presa no loading
+    clearSafetyTimer();
+    safetyTimerRef.current = setTimeout(() => {
+      if (mountedRef.current) setLoading(false);
+    }, 8000);
+
+    await fetchFastData(opts);
+    // Subscriptions rodam em background sem travar o loading
+    fetchSubscriptions();
+  }, [user, fetchFastData, fetchSubscriptions, clearSafetyTimer]);
+
   // Initial fetch
   useEffect(() => {
+    mountedRef.current = true;
     fetchData();
-  }, [fetchData]);
+    return () => {
+      mountedRef.current = false;
+      clearSafetyTimer();
+    };
+  }, [fetchData, clearSafetyTimer]);
 
   // Realtime subscriptions (debounced para evitar refetch a cada consulta no Telegram)
   useEffect(() => {
@@ -221,9 +273,6 @@ export function useAdminData(): AdminData {
         { event: "*", schema: "public", table: "subscription_plans" },
         scheduleRefetch
       )
-      // Removido listener em `query_history`: cada consulta no Telegram disparava
-      // um INSERT que recarregava toda a dashboard. O contador "Consultas hoje"
-      // é atualizado no próximo refetch agendado por outras mudanças ou polling.
       .subscribe();
 
     return () => {
@@ -243,3 +292,4 @@ export function useAdminData(): AdminData {
     refresh: fetchData,
   };
 }
+
