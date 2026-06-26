@@ -1,44 +1,45 @@
-# Sentinela — 2026-06-26T09:32:38.866Z
+# Sentinela — 2026-06-26T14:31:00.191Z
 
 | Métrica | Valor |
 |---|---|
 | Endpoints checados | 6 |
-| Endpoints fora | 1 |
+| Endpoints fora | 2 |
 | Workflows vermelhos 24h | 20 |
-| Divergências detectadas | 21 |
-| Issues novas | 0 |
-| Issues já abertas (dedupe) | 21 |
+| Divergências detectadas | 22 |
+| Issues novas | 2 |
+| Issues já abertas (dedupe) | 20 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 226ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 191ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 77ms · CORS=`*`
-- 🟢 **Install status** — `200` em 87ms · CORS=`*`
-- 🟢 **Painel** — `200` em 98ms · CORS=`*`
-- 🔴 **API** — `404` em 132ms
+- 🟢 **MCP health** — `200` em 1304ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 429ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 232ms · CORS=`*`
+- 🟢 **Install status** — `200` em 294ms · CORS=`*`
+- 🔴 **Painel** — `404` em 119ms · CORS=`*`
+- 🔴 **API** — `404` em 126ms
 
 ## Divergências
 
+- **[p2]** Endpoints → Endpoint Painel fora do ar (HTTP 404) (bot: `lovable`)
 - **[p2]** Endpoints → Endpoint API fora do ar (HTTP 404) (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel-validacao (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: CORS Validator (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: wuzapi-sessions-monitor (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: 🧠 Notion Sync (docs/CONSCIENCIA → Notion) (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: 🧠 Notion Sync (docs/CONSCIENCIA → Notion) (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: wuzapi-sessions-monitor (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: 🧠 Notion Sync (docs/CONSCIENCIA → Notion) (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: 🧠 Notion Sync (docs/CONSCIENCIA → Notion) (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: wuzapi-sessions-monitor (bot: `codex`)
