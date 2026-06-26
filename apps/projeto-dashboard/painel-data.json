@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-06-26T05:30:53.239Z",
-  "updatedAtBR": "26/06/2026, 02:30:53 BRT",
+  "updatedAt": "2026-06-26T06:35:37.109032+00:00",
+  "updatedAtBR": "26/06/2026, 03:35:37 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -497,6 +497,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T06:35:37.109032+00:00",
+      "title": "Card 'Bloqueios MCP (últimas 24h)' adicionado ao painel",
+      "area": "MCP / Observabilidade",
+      "status": "feito",
+      "detail": "BLOQUEADO_CONFIG agora vai pro arquivo dedicado logs/mcp-blocked-YYYY-MM-DD.jsonl. Card mostra total das últimas 24h (2) + últimos 10 com motivo, tool e flag."
+    },
     {
       "time": "2026-06-26T05:30:53.239Z",
       "titulo": "Push na main · 65a2b744af80c000859d878c88102d9184720aa5",
@@ -1495,5 +1502,41 @@
       "intervalo": "45s",
       "logOut": "/root/.pm2/logs/zentinel-health-out.log"
     }
-  }
+  },
+  "mcpBloqueios24h": {
+    "titulo": "Bloqueios MCP (últimas 24h)",
+    "descricao": "Comandos barrados pelo MCP por falta de configuração. Fonte: logs/mcp-blocked-YYYY-MM-DD.jsonl (event=mcp_command_bloqueado_config).",
+    "total": 2,
+    "atualizadoEm": "2026-06-26T06:35:37.109032+00:00",
+    "ultimos": [
+      {
+        "timestamp": "2026-06-26T06:31:04.283Z",
+        "tool": "execute_command",
+        "flag": "MCP_ALLOW_VPS_COMMANDS",
+        "motivo": "MCP_ALLOW_VPS_COMMANDS precisa ser true para executar comandos.",
+        "valorAtual": "(undefined)"
+      },
+      {
+        "timestamp": "2026-06-26T06:30:09.200Z",
+        "tool": "execute_command",
+        "flag": "MCP_ALLOW_VPS_COMMANDS",
+        "motivo": "MCP_ALLOW_VPS_COMMANDS precisa ser true para executar comandos.",
+        "valorAtual": "(undefined)"
+      }
+    ],
+    "porFlag": {
+      "MCP_ALLOW_VPS_COMMANDS": 2
+    },
+    "porTool": {
+      "execute_command": 2
+    }
+  },
+  "aiSuggestions": [
+    {
+      "id": "mcp-bloqueios-card-2026-06-26",
+      "title": "Auditoria de bloqueios do MCP no painel",
+      "origin": "Tarefa do admin",
+      "suggestion": "Bloqueios por flag desativada agora ficam em logs/mcp-blocked-YYYY-MM-DD.jsonl. Painel mostra total + últimos 10."
+    }
+  ]
 }
