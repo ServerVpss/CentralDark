@@ -332,6 +332,13 @@ async function renderLive(data) {
 async function refresh() {
   try {
     const data = await fetchJson(DATA_URL);
+    const check = validateSchema(data);
+    if (!check.ok) {
+      showSchemaBanner(check.issues);
+      // Continua renderizando o que der — UI defensiva já trata campos ausentes.
+    } else {
+      hideSchemaBanner();
+    }
     renderData(data);
     renderEvents(data);
     renderAiSuggestions(data);
