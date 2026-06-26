@@ -101,15 +101,15 @@ export default function HubPage() {
     setLoading(true);
     try {
       const [c, p, a, au] = await Promise.all([
-        hubClient.from('connectors').select('*').order('sort_order'),
-        hubClient.from('policies').select('*').order('tier'),
-        hubClient.from('approvals').select('*').order('requested_at', { ascending: false }).limit(20),
-        hubClient.from('audit_log').select('*').order('id', { ascending: false }).limit(50),
+        hubClient.from('hub_connectors').select('*').order('sort_order'),
+        hubClient.from('hub_policies').select('*').order('tier'),
+        hubClient.from('hub_approvals').select('*').order('requested_at', { ascending: false }).limit(20),
+        hubClient.from('hub_audit_log').select('*').order('id', { ascending: false }).limit(50),
       ]);
-      if (c.data) setConnectors(c.data as Connector[]);
-      if (p.data) setPolicies(p.data as Policy[]);
-      if (a.data) setApprovals(a.data as Approval[]);
-      if (au.data) setAuditLog(au.data as AuditEntry[]);
+      if (c.data) setConnectors(c.data as unknown as Connector[]);
+      if (p.data) setPolicies(p.data as unknown as Policy[]);
+      if (a.data) setApprovals(a.data as unknown as Approval[]);
+      if (au.data) setAuditLog(au.data as unknown as AuditEntry[]);
     } catch (e) {
       toast({ title: 'Erro ao carregar Hub', description: String(e), variant: 'destructive' });
     } finally {
@@ -119,14 +119,15 @@ export default function HubPage() {
 
   useEffect(() => { loadAll(); }, [loadAll]);
 
-  // Realtime: aprovações pendentes
+  // Realtime: aprovações pendentes (views no public refletem hub.approvals)
   useEffect(() => {
     const ch = hubClient
       .channel('hub-approvals')
-      .on('postgres_changes', { event: '*', schema: 'hub', table: 'approvals' }, loadAll)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'hub_approvals' }, loadAll)
       .subscribe();
     return () => { hubClient.removeChannel(ch); };
   }, [loadAll]);
+
 
   const decide = async (id: string, verdict: 'approved' | 'rejected') => {
     const { error } = await (hubClient.rpc as any)('approval_decide', {
