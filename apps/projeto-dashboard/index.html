@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#29A664" />
+    <title>CentralDark · Mega Painel</title>
+    <link rel="stylesheet" href="./styles.css?v=20260622f" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="hero">
+      <div class="hero__top">
+        <div>
+          <p class="eyebrow">CentralDark Intelligence</p>
+          <h1>
+            <span class="foguete-wrap" aria-hidden="true">
+              <span class="foguete">
+                <svg viewBox="0 0 64 64" width="72" height="72" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Chamas (camadas: brilho externo, laranja, amarelo, núcleo branco) -->
+                  <g class="foguete-chamas">
+                    <path class="chama-glow" d="M22 50 Q32 78 42 50 Q37 64 32 64 Q27 64 22 50Z" fill="#ff4500" opacity=".55"/>
+                    <path class="chama-out"  d="M25 50 Q32 72 39 50 Q35 60 32 60 Q29 60 25 50Z" fill="#ff7a18"/>
+                    <path class="chama-mid"  d="M27 50 Q32 66 37 50 Q34 56 32 56 Q30 56 27 50Z" fill="#ffd23f"/>
+                    <path class="chama-core" d="M29 50 Q32 60 35 50 Q33 54 32 54 Q31 54 29 50Z" fill="#ffffff"/>
+                  </g>
+                  <!-- Aletas azuis -->
+                  <path d="M18 38 Q12 44 14 52 L24 46 Z" fill="#1f7ad1"/>
+                  <path d="M46 38 Q52 44 50 52 L40 46 Z" fill="#1f7ad1"/>
+                  <!-- Corpo -->
+                  <path d="M32 4 Q44 16 44 36 L44 48 Q38 52 32 52 Q26 52 20 48 L20 36 Q20 16 32 4 Z" fill="#e6e9ef"/>
+                  <!-- Ponta vermelha -->
+                  <path d="M32 4 Q40 14 43 26 Q38 22 32 22 Q26 22 21 26 Q24 14 32 4 Z" fill="#e63946"/>
+                  <!-- Faixa cinza -->
+                  <rect x="20" y="44" width="24" height="4" fill="#2b2d33"/>
+                  <!-- Janela -->
+                  <circle cx="32" cy="32" r="6.5" fill="#e63946"/>
+                  <circle cx="32" cy="32" r="5" fill="#3ab7e0"/>
+                  <circle cx="30" cy="30" r="1.6" fill="#ffffff" opacity=".85"/>
+                </svg>
+              </span>
+              <span class="foguete-sombra"></span>
+            </span>
+            Mega Painel do Projeto
+          </h1>
+          <p class="subtitle" id="projectSummary">Carregando visão geral...</p>
+        </div>
+        <div class="status-card" id="globalStatus">
+          <span class="pulse"></span>
+          <div>
+            <strong>Sincronizando</strong>
+            <small>Atualização em tempo quase real</small>
+          </div>
+        </div>
+      </div>
+
+      <section class="hero__grid">
+        <article class="score-card">
+          <span>Progresso geral</span>
+          <strong id="overallProgress">--%</strong>
+          <div class="bar"><i id="overallBar"></i></div>
+        </article>
+        <article class="score-card">
+          <span>MCP público</span>
+          <strong id="mcpHealth">...</strong>
+          <small id="mcpDetail">Aguardando health</small>
+        </article>
+        <article class="score-card">
+          <span>Tools públicas</span>
+          <strong id="toolCount">--</strong>
+          <small>Conector CentralDark</small>
+        </article>
+        <article class="score-card">
+          <span>Última atualização</span>
+          <strong id="lastUpdated">--:--</strong>
+          <small id="lastUpdatedDate">--</small>
+        </article>
+        <article class="score-card">
+          <span>CPU VPS</span>
+          <strong id="vpsCpu">--%</strong>
+          <small id="vpsLoad">carregando</small>
+        </article>
+        <article class="score-card">
+          <span>RAM VPS</span>
+          <strong id="vpsRam">--%</strong>
+          <small id="vpsRamDetail">carregando</small>
+        </article>
+        <article class="score-card">
+          <span>Disco VPS</span>
+          <strong id="vpsDisco">--%</strong>
+          <small id="vpsTelemetryAt">sem dados</small>
+        </article>
+      </section>
+    </header>
+
+    <main class="layout">
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Mapa de evolução</p>
+            <h2>📊 Onde estamos agora</h2>
+          </div>
+          <span class="tag">Modo leigo</span>
+        </div>
+        <div class="maturity" id="maturityList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Multi-IA</p>
+            <h2>🤖 Quem faz o quê</h2>
+          </div>
+        </div>
+        <div class="agents" id="agentsList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Operação</p>
+            <h2>🛰️ Status ao vivo</h2>
+          </div>
+          <span class="tag" id="refreshTag">30s</span>
+        </div>
+        <div class="live" id="liveStatus"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Caminho até o fim</p>
+            <h2>🏁 Fases e marcos</h2>
+          </div>
+        </div>
+        <div class="timeline" id="milestones"></div>
+      </section>
+
+
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Codex / IA</p>
+            <h2>💡 Sugestões inteligentes</h2>
+          </div>
+          <span class="tag">Copiar e usar</span>
+        </div>
+        <div class="events" id="aiSuggestionsList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Mapa vivo</p>
+            <h2>📌 Últimos acontecimentos</h2>
+          </div>
+          <span class="tag">Atualizado pelo chat</span>
+        </div>
+        <div class="events" id="eventsList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Próximas ações</p>
+            <h2>✅ O que falta</h2>
+          </div>
+        </div>
+        <ol class="todo" id="nextSteps"></ol>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Proteção</p>
+            <h2>🛡️ Regras de segurança</h2>
+          </div>
+        </div>
+        <ul class="rules" id="safeRules"></ul>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Diagnóstico vivo</p>
+            <h2>🔌 MCP Teste (somente leitura)</h2>
+          </div>
+          <span class="tag">sem token · cliente</span>
+        </div>
+        <div class="mcp-test-buttons" id="mcpTestButtons"></div>
+        <pre class="mcp-test-output" id="mcpTestOutput">Clique num botão acima pra consultar o MCP ou ler docs públicas. Nada é gravado.</pre>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Time multi-IA</p><h2>🧠 Cards por IA</h2></div>
+        </div>
+        <div class="card-grid" id="iaCardsList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Time de bots</p><h2>🤖 Bots especialistas</h2></div>
+        </div>
+        <div class="card-grid" id="botCardsList"></div>
+      </section>
+
+      <section class="panel wide" id="healthcheckPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">VPS read-only · últimos 30 dias</p>
+            <h2>🩺 Histórico do vps-healthcheck</h2>
+          </div>
+          <div class="hc-summary" id="hcSummary"><span class="hc-loading">carregando…</span></div>
+        </div>
+        <div class="hc-legend">
+          <span class="hc-dot p0"></span> P0 crítico
+          <span class="hc-dot p1"></span> P1 alto
+          <span class="hc-dot p2"></span> P2 médio
+          <span class="hc-dot p3"></span> P3 ok
+        </div>
+        <div class="hc-bars" id="hcBars"></div>
+        <p class="hc-foot" id="hcFoot"></p>
+      </section>
+
+      <section class="panel wide" id="wuzapiPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">MultiZap · WhatsApp read-only</p>
+            <h2>📡 Sessões do bot</h2>
+          </div>
+          <div class="wz-summary" id="wzSummary"><span class="hc-loading">carregando…</span></div>
+        </div>
+        <div class="wz-list" id="wzList"></div>
+        <p class="hc-foot" id="wzFoot"></p>
+      </section>
+
+
+
+
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Mapa por setor</p><h2>🧩 Cards por setor</h2></div>
+        </div>
+        <div class="card-grid" id="sectorCardsList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Pipeline CentralDark</p><h2>🏁 Tarefas por estágio</h2></div>
+          <span class="tag">Atualiza em cada PR</span>
+        </div>
+        <div class="pipeline-legend">
+          <span>📝 Local</span><span>☁️ GitHub</span><span>🔁 PR</span><span>🧪 Checks</span>
+          <span>✅ Aprovado</span><span>🟢 Mergeado</span><span>🚀 VPS</span><span>🌐 Produção</span><span>🏁 Consolidado</span>
+        </div>
+        <div id="tarefasAtivasList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Aprovação humana</p><h2>🚦 Central de revisão humana</h2></div>
+          <span class="tag">ação sensível</span>
+        </div>
+        <div class="card-grid" id="humanReviewList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Histórico vivo</p><h2>⏱️ Linha do tempo das IAs</h2></div>
+          <div class="filters">
+            <select id="timelineFilterIa"><option value="">Todas IAs</option></select>
+            <select id="timelineFilterStatus">
+              <option value="">Qualquer status</option>
+              <option value="sucesso">sucesso</option>
+              <option value="alerta">alerta</option>
+              <option value="erro">erro</option>
+              <option value="pendente">pendente</option>
+            </select>
+          </div>
+        </div>
+        <div class="timeline-ia" id="iaTimelineList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Integração Linear</p><h2>📋 Linear Sync</h2></div>
+          <span class="tag" id="linearSyncStatusTag">desconectado</span>
+        </div>
+        <div id="linearSyncCard"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Sessão atual</p><h2>🤝 Handoff Atual</h2></div>
+        </div>
+        <div id="handoffAtualCard"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Proteção de produção</p><h2>🛡️ Áreas Protegidas</h2></div>
+          <span class="tag tag--alert">nunca sem confirmação</span>
+        </div>
+        <div id="segurancaAreaCard"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Caminho até o fim</p><h2>🏁 Fases do projeto</h2></div>
+        </div>
+        <div class="phases" id="phasesList"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>CentralDark / MultiZap · Painel estático com atualização automática</span>
+      <span id="footerClock">--</span>
+      <button id="adminBtn" onclick="adminOpen()" title="" style="background:none;border:none;cursor:pointer;opacity:0.15;font-size:0.75rem;color:inherit;padding:0 4px;margin-left:8px;transition:opacity 0.2s" onmouseenter="this.style.opacity=0.5" onmouseleave="this.style.opacity=0.15">⚙</button>
+    </footer>
+
+    <!-- Admin login modal -->
+    <div id="adminLoginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:14px;padding:32px 28px;width:100%;max-width:360px;margin:16px">
+        <div style="font-size:1.5rem;margin-bottom:4px">🔐</div>
+        <h2 style="font-size:1rem;font-weight:700;color:#e6edf3;margin-bottom:20px">Acesso restrito</h2>
+        <div style="margin-bottom:12px">
+          <input id="adminUser" type="text" placeholder="Usuário" autocomplete="off"
+            style="width:100%;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px 12px;color:#e6edf3;font-size:0.9rem;outline:none"
+            onkeydown="if(event.key==='Enter')document.getElementById('adminPass').focus()">
+        </div>
+        <div style="margin-bottom:20px">
+          <input id="adminPass" type="password" placeholder="Senha"
+            style="width:100%;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px 12px;color:#e6edf3;font-size:0.9rem;outline:none"
+            onkeydown="if(event.key==='Enter')adminLogin()">
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="adminLoginClose()" style="flex:1;background:none;border:1px solid #30363d;border-radius:8px;padding:9px;color:#7d8590;cursor:pointer;font-size:0.85rem">Cancelar</button>
+          <button onclick="adminLogin()" style="flex:2;background:#238636;border:1px solid #2ea043;border-radius:8px;padding:9px;color:#fff;cursor:pointer;font-weight:600;font-size:0.85rem">Entrar</button>
+        </div>
+        <div id="adminLoginErr" style="color:#f85149;font-size:0.78rem;margin-top:12px;display:none;text-align:center">Usuário ou senha incorretos</div>
+      </div>
+    </div>
+
+    <!-- Admin panel (drawer direito) -->
+    <div id="adminPanel" style="display:none;position:fixed;top:0;right:0;width:100%;max-width:420px;height:100vh;background:#0d1117;border-left:1px solid #30363d;z-index:999;overflow-y:auto;box-shadow:-4px 0 24px rgba(0,0,0,0.6)">
+      <div style="padding:20px 24px;border-bottom:1px solid #30363d;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em">CentralDark</div>
+          <div style="font-size:1rem;font-weight:700;color:#e6edf3">🔐 Painel Admin</div>
+        </div>
+        <button onclick="adminClose()" style="background:none;border:1px solid #30363d;border-radius:8px;padding:6px 10px;color:#7d8590;cursor:pointer;font-size:0.85rem">✕ Fechar</button>
+      </div>
+
+      <div style="padding:20px 24px">
+
+        <!-- PR Review IA -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">🤖 PR Review — IA</div>
+          <a href="./ai-review.html" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px 16px;color:#e6edf3;text-decoration:none;margin-bottom:8px;transition:border-color 0.15s" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+            <span style="font-size:1.2rem">✨</span>
+            <div><div style="font-weight:600;font-size:0.88rem">Trocar provedor de IA</div><div style="font-size:0.75rem;color:#7d8590">Gemini · Groq · Claude · OpenAI · Ollama</div></div>
+            <span style="margin-left:auto;color:#7d8590;font-size:0.8rem">→</span>
+          </a>
+        </div>
+
+        <!-- GitHub -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">⚙️ GitHub</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="https://github.com/ServerVpss/CentralDark/settings/secrets/actions" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔑</span><span style="font-size:0.85rem">Secrets do repo</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://github.com/ServerVpss/CentralDark/settings/variables/actions" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>📦</span><span style="font-size:0.85rem">Variáveis (PR_REVIEW_PROVIDER)</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://github.com/ServerVpss/CentralDark/actions" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔄</span><span style="font-size:0.85rem">GitHub Actions</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://github.com/ServerVpss/CentralDark/pulls" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔀</span><span style="font-size:0.85rem">Pull Requests</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- MCP -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">🔌 MCP & Serviços</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="https://mcp.centralldark.com/status" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🤖</span><span style="font-size:0.85rem">MCP Status</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://mcp.centralldark.com/tools.json" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🛠</span><span style="font-size:0.85rem">MCP Tools JSON</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://linear.app/segredo/team/SEG" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>📋</span><span style="font-size:0.85rem">Linear — Board SEG</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Logout -->
+        <button onclick="adminLogout()" style="width:100%;background:none;border:1px solid #30363d;border-radius:10px;padding:12px;color:#7d8590;cursor:pointer;font-size:0.85rem;margin-top:8px">
+          🔓 Sair do admin
+        </button>
+
+      </div>
+    </div>
+
+    <script src="./app.js?v=20260622f"></script>
+    <script>
+    // Admin — auth via SHA-256 (sem texto puro no código)
+    const _AU = '0b428a60be553dd36d8fd6ad6ad67653c7747e8e87ad8fe7272b427e881e51c6';
+    const _AP = '072d786e030352270756cf88e35fccd8e1439feb376c5295fec54ab8d005af83';
+
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function adminOpen() {
+      if (sessionStorage.getItem('_aok') === '1') { showAdminPanel(); return; }
+      const m = document.getElementById('adminLoginModal');
+      m.style.display = 'flex';
+      setTimeout(() => document.getElementById('adminUser').focus(), 50);
+    }
+
+    function adminLoginClose() {
+      document.getElementById('adminLoginModal').style.display = 'none';
+      document.getElementById('adminLoginErr').style.display = 'none';
+      document.getElementById('adminUser').value = '';
+      document.getElementById('adminPass').value = '';
+    }
+
+    async function adminLogin() {
+      const u = document.getElementById('adminUser').value.trim();
+      const p = document.getElementById('adminPass').value;
+      const [hu, hp] = await Promise.all([sha256(u), sha256(p)]);
+      if (hu === _AU && hp === _AP) {
+        sessionStorage.setItem('_aok', '1');
+        adminLoginClose();
+        showAdminPanel();
+      } else {
+        document.getElementById('adminLoginErr').style.display = 'block';
+        document.getElementById('adminPass').value = '';
+        document.getElementById('adminPass').focus();
+      }
+    }
+
+    function showAdminPanel() {
+      document.getElementById('adminPanel').style.display = 'block';
+    }
+
+    function adminClose() {
+      document.getElementById('adminPanel').style.display = 'none';
+    }
+
+    function adminLogout() {
+      sessionStorage.removeItem('_aok');
+      adminClose();
+    }
+
+    // Fechar com ESC
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        adminLoginClose();
+        adminClose();
+      }
+    });
+    </script>
+  </body>
+</html>
