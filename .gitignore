@@ -22,3 +22,34 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python (venv + cache) — milhares de arquivos que inflam o git
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Lockfiles de outros gerenciadores — npm é o oficial (ver CONSCIENCIA)
+bun.lock
+bun.lockb
+yarn.lock
+pnpm-lock.yaml
+
+# Runtime do Guardião (estado vivo, não versionar)
+infra/guardiao/fila/*.jsonl
+infra/guardiao/fila/.offset
+infra/guardiao/fila/propostas_cache*.json
+infra/guardiao/logs/
+
+# GitHub Actions runner — não versionar (pesado)
+actions-runner/
+
+# Sessões de revisão antigas + quarentena (lixo acumulado)
+revisoes/
+quarantine/
+
+# Backups e temporários
+*.bak
+*.tmp
+*.save
+*.orig
