@@ -12,6 +12,7 @@ import { DashboardAnalyticsChart } from "@/apps/modulos/telepainel/components/da
 import { QueryMonitor } from "@/apps/modulos/telepainel/components/dashboard/QueryMonitor";
 import { useAdminData } from "@/shared/hooks/useAdminData";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { Skeleton } from "@/shared/ui/skeleton";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
 
 function getGreeting() {
@@ -21,25 +22,44 @@ function getGreeting() {
   return { text: "Boa noite", emoji: "🌙" };
 }
 
+function HeroSkeleton() {
+  return (
+    <div className="card-premium hover-lift group relative overflow-hidden p-6 md:col-span-2 ring-1 ring-primary/30">
+      <div className="relative space-y-5">
+        <div className="flex items-start justify-between gap-3">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-12 w-12 rounded-2xl" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-14 w-48" />
+          <Skeleton className="h-5 w-24" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CardSkeleton() {
+  return (
+    <div className="card-premium hover-lift group p-5 space-y-4">
+      <div className="flex items-start justify-between gap-3">
+        <Skeleton className="h-3 w-24" />
+        <Skeleton className="h-10 w-10 rounded-xl" />
+      </div>
+      <div className="space-y-2">
+        <Skeleton className="h-9 w-20" />
+        <Skeleton className="h-5 w-28" />
+      </div>
+    </div>
+  );
+}
+
 export default function Index() {
   const { bots, stats, loading } = useAdminData();
   const { profile, user } = useAuthContext();
 
   const firstName =
     profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "";
-
-  if (loading) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center h-[60vh]">
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <span className="text-sm text-muted-foreground">Carregando...</span>
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
 
   const greeting = getGreeting();
   const today = new Date().toLocaleDateString("pt-BR", {
@@ -73,47 +93,70 @@ export default function Index() {
           </div>
         </div>
 
-        {/* HERO row — Receita destacada (Nubank-style) */}
+        {/* HERO row — Receita destacada */}
         <section className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-          <HeroStatsCard
-            title="Receita Mensal"
-            subtitle="Faturamento dos últimos 30 dias"
-            value={stats.monthlyRevenue.toFixed(2).replace(".", ",")}
-            prefix="R$"
-            change={stats.monthlyRevenue > 0 ? "Este mês" : "Sem receita"}
-            changeType={stats.monthlyRevenue > 0 ? "positive" : "neutral"}
-            icon={CreditCard}
-            variant="primary"
-          />
-          <HeroStatsCard
-            title="Assinantes"
-            value={stats.activeSubscribers.toLocaleString("pt-BR")}
-            change={stats.activeSubscribers > 0 ? "Ativos" : "—"}
-            changeType={stats.activeSubscribers > 0 ? "positive" : "neutral"}
-            icon={Users}
-          />
-          <HeroStatsCard
-            title="Consultas Hoje"
-            value={stats.queriesToday.toLocaleString("pt-BR")}
-            change={stats.queriesToday > 0 ? "Em tempo real" : "—"}
-            changeType={stats.queriesToday > 0 ? "positive" : "neutral"}
-            icon={MessageSquare}
-          />
+          {loading ? (
+            <>
+              <HeroSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </>
+          ) : (
+            <>
+              <HeroStatsCard
+                title="Receita Mensal"
+                subtitle="Faturamento dos últimos 30 dias"
+                value={stats.monthlyRevenue.toFixed(2).replace(".", ",")}
+                prefix="R$"
+                change={stats.monthlyRevenue > 0 ? "Este mês" : "Sem receita"}
+                changeType={stats.monthlyRevenue > 0 ? "positive" : "neutral"}
+                icon={CreditCard}
+                variant="primary"
+              />
+              <HeroStatsCard
+                title="Assinantes"
+                value={stats.activeSubscribers.toLocaleString("pt-BR")}
+                change={stats.activeSubscribers > 0 ? "Ativos" : "—"}
+                changeType={stats.activeSubscribers > 0 ? "positive" : "neutral"}
+                icon={Users}
+              />
+              <HeroStatsCard
+                title="Consultas Hoje"
+                value={stats.queriesToday.toLocaleString("pt-BR")}
+                change={stats.queriesToday > 0 ? "Em tempo real" : "—"}
+                changeType={stats.queriesToday > 0 ? "positive" : "neutral"}
+                icon={MessageSquare}
+              />
+            </>
+          )}
         </section>
 
         {/* Secondary stats row */}
         <section className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-          <StatsCard
-            title="Bots Ativos"
-            value={bots.length}
-            change={bots.length > 0 ? `${stats.botsOnline} online` : "Nenhum"}
-            changeType={bots.length > 0 ? "positive" : "neutral"}
-            icon={Bot}
-            gradient="green"
-          />
-          <div className="col-span-2 lg:col-span-3">
-            <ApiStatusCard />
-          </div>
+          {loading ? (
+            <>
+              <CardSkeleton />
+              <div className="col-span-2 lg:col-span-3">
+                <div className="card-premium p-5 h-full flex items-center justify-center">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <StatsCard
+                title="Bots Ativos"
+                value={bots.length}
+                change={bots.length > 0 ? `${stats.botsOnline} online` : "Nenhum"}
+                changeType={bots.length > 0 ? "positive" : "neutral"}
+                icon={Bot}
+                gradient="green"
+              />
+              <div className="col-span-2 lg:col-span-3">
+                <ApiStatusCard />
+              </div>
+            </>
+          )}
         </section>
 
         {/* Bots + Chart */}
@@ -144,3 +187,4 @@ export default function Index() {
     </DashboardLayout>
   );
 }
+
