@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T08:26:26.976Z",
-  "updatedAtBR": "26/06/2026, 05:26:26 BRT",
+  "updatedAt": "2026-06-26T08:27:27.530Z",
+  "updatedAtBR": "26/06/2026, 05:27:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "Removeu commit de ruído",
+    "lastCommit": "fix: hub-client aponta para lyoigsqluyktoclwdaft com anon key embutida como fallback",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T08:27:10.500Z",
+      "titulo": "Push na main · 0ade4aadec8522a4f4354d4b76a5a890816e2a22",
+      "detalhe": "fix: hub-client aponta para lyoigsqluyktoclwdaft com anon key embutida como fallback",
+      "area": "Repositório",
+      "sha": "0ade4aa",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-26T08:13:12.953Z",
       "titulo": "Push na main · ccdca2cc6d120488cac5a65b323a45178c3eb1e7",
@@ -1255,6 +1263,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-26T08:27:10.500Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0ade4aadec8522a4f4354d4b76a5a890816e2a22 (0ade4aa)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-26T08:13:12.953Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · ccdca2cc6d120488cac5a65b323a45178c3eb1e7 (ccdca2c)",
@@ -1481,13 +1496,13 @@
   ],
   "telemetry": {
     "cpu": "7.0%",
-    "ram": "5.5GB / 23.5GB",
+    "ram": "5.4GB / 23.5GB",
     "ramPercent": "23.2",
     "disco": "44%",
-    "load": "0.71 / 0.54 / 0.58",
-    "timestamp": "2026-06-26T08:26:24.407Z",
-    "brtTimestamp": "26/06/2026, 05:26:24",
-    "receivedAt": "2026-06-26T08:26:24.411Z"
+    "load": "0.56 / 0.52 / 0.57",
+    "timestamp": "2026-06-26T08:27:24.409Z",
+    "brtTimestamp": "26/06/2026, 05:27:24",
+    "receivedAt": "2026-06-26T08:27:24.412Z"
   },
   "safeRules": [
     "Nenhuma IA mexe no que já foi corrigido sem confirmação explícita",
