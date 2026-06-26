@@ -1,0 +1,60 @@
+name: painel-rebuild-restart
+
+# Comando único: pull do repo na VPS, cache-bust dos assets (styles.css/app.js),
+# reload do Caddy e validação HTTP 200 dos arquivos públicos do Mega Painel.
+# Use sempre que mexer em apps/projeto-dashboard/{index.html,app.js,styles.css,painel-data.json}.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'apps/projeto-dashboard/**'
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild-restart-validar:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: Rebuild + restart + validação HTTP 200
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PAINEL_DIR="/root/CentralDark/apps/projeto-dashboard"
+          BASE_URL="https://status.centralldark.com"
+          ASSETS=( "index.html" "app.js" "styles.css" "painel-data.json" )
+
+          echo "==> 1/4  git pull no repo da VPS"
+          git -C /root/CentralDark pull --ff-only || git -C /root/CentralDark pull --rebase --autostash
+
+          echo "==> 2/4  cache-bust em index.html (timestamp UTC nos assets)"
+          STAMP="$(date -u +%Y%m%d%H%M%S)"
+          if [ -f "$PAINEL_DIR/index.html" ]; then
+            sed -i -E "s#(styles\.css\?v=)[^\"']+#\1${STAMP}#g; s#(app\.js\?v=)[^\"']+#\1${STAMP}#g" "$PAINEL_DIR/index.html"
+            echo "    novo stamp: $STAMP"
+          fi
+
+          echo "==> 3/4  reload Caddy"
+          systemctl reload caddy || systemctl restart caddy
+
+          echo "==> 4/4  validação HTTP 200 dos assets públicos"
+          sleep 2
+          falhas=0
+          for f in "${ASSETS[@]}"; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "${BASE_URL}/${f}?t=${STAMP}") || code="000"
+            if [ "$code" = "200" ]; then
+              echo "    OK  $f  → HTTP $code"
+            else
+              echo "    ERR $f  → HTTP $code"
+              falhas=$((falhas+1))
+            fi
+          done
+
+          if [ "$falhas" -gt 0 ]; then
+            echo "::error::$falhas asset(s) não retornaram 200"
+            exit 1
+          fi
+          echo "==> tudo verde · stamp=$STAMP"
