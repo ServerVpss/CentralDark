@@ -53,3 +53,5 @@ quarantine/
 *.tmp
 *.save
 *.orig
+# WebUI — arquivos grandes, ignorados do repo
+apps/modulos/WebUI/
