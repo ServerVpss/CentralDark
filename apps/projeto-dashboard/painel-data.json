@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T03:15:55.848Z",
-  "updatedAtBR": "26/06/2026, 00:15:55 BRT",
+  "updatedAt": "2026-06-26T03:16:33.113Z",
+  "updatedAtBR": "26/06/2026, 00:16:33 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "chore: gitignore exclui venv/cache/runtime/lockfiles + remove bun.lock",
+    "lastCommit": "feat(hub): 002 — PDP engine, PEP capabilities, audit hash-chain trigger",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T03:16:33.113Z",
+      "titulo": "Push na main · d7433556c6f1f256aea75eceb4c138d121f879e6",
+      "detalhe": "feat(hub): 002 — PDP engine, PEP capabilities, audit hash-chain trigger",
+      "area": "Repositório",
+      "sha": "d743355",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-26T00:24:57.903Z",
       "titulo": "Push na main · 7632e19e8b1c9a9c5e6a4aaa45d9305b8b35de39",
@@ -1159,6 +1167,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-26T03:16:33.113Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d7433556c6f1f256aea75eceb4c138d121f879e6 (d743355)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-26T00:24:57.903Z",
       "ia": "@segredounlock",
