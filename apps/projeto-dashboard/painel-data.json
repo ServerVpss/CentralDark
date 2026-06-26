@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T03:45:53.432Z",
-  "updatedAtBR": "26/06/2026, 00:45:53 BRT",
+  "updatedAt": "2026-06-26T04:02:49.855Z",
+  "updatedAtBR": "26/06/2026, 01:02:49 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "Changes",
+    "lastCommit": "Criou views e atualizou Hub",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T04:02:49.855Z",
+      "titulo": "Push na main · 0d5ff810005d0bda1d7749235eed87a22020dd1a",
+      "detalhe": "Criou views e atualizou Hub",
+      "area": "Repositório",
+      "sha": "0d5ff81",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-06-26T03:45:53.432Z",
       "titulo": "Push na main · d8b15e266b4e563a5bd3c68ced59156068e68063",
@@ -1207,6 +1215,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-26T04:02:49.855Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 0d5ff810005d0bda1d7749235eed87a22020dd1a (0d5ff81)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-26T03:45:53.432Z",
       "ia": "@lovable-dev[bot]",
