@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Card } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { Activity, TrendingUp, User, Bot as BotIcon } from "lucide-react";
@@ -26,6 +26,9 @@ export function QueryMonitor() {
   const [total24h, setTotal24h] = useState(0);
   const [totalLastHour, setTotalLastHour] = useState(0);
   const [loading, setLoading] = useState(true);
+  const mountedRef = useRef(true);
+  const safetyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const load = async () => {
     const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -36,7 +39,7 @@ export function QueryMonitor() {
       .select("id, query_type, query_input, status, created_at, user_id")
       .gte("created_at", since24h)
       .order("created_at", { ascending: false })
-      .limit(500);
+      .limit(100);
 
     const list = rows || [];
     setTotal24h(list.length);
@@ -62,7 +65,7 @@ export function QueryMonitor() {
       .select("from_user_id, from_username, from_first_name, message_text, created_at")
       .gte("created_at", since24h)
       .like("message_text", "/%")
-      .limit(2000);
+      .limit(500);
 
     const userMap = new Map<string, { name: string; username: string | null; count: number; today: number }>();
     (msgs || []).forEach((m) => {
@@ -84,28 +87,49 @@ export function QueryMonitor() {
     });
     const topUsers: UserStat[] = Array.from(userMap.entries())
       .map(([key, v]) => ({ key, ...v }))
-      .sort((a, b) => b.count - a.count)
+      .sort((a, b) => b.count - b.count)
       .slice(0, 8);
     setByUser(topUsers);
 
-
-    setLoading(false);
+    if (mountedRef.current) {
+      setLoading(false);
+      if (safetyTimerRef.current) {
+        clearTimeout(safetyTimerRef.current);
+        safetyTimerRef.current = null;
+      }
+    }
   };
 
   useEffect(() => {
+    mountedRef.current = true;
+    safetyTimerRef.current = setTimeout(() => {
+      if (mountedRef.current) setLoading(false);
+    }, 10000);
+
     load();
+
+    const scheduleLoad = () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        if (mountedRef.current) load();
+      }, 2000);
+    };
+
     const channel = supabase
       .channel("query_monitor")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "query_history" },
-        () => load()
+        scheduleLoad
       )
       .subscribe();
     const interval = setInterval(load, 30000);
     return () => {
+      mountedRef.current = false;
       supabase.removeChannel(channel);
       clearInterval(interval);
+      if (safetyTimerRef.current) clearTimeout(safetyTimerRef.current);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
 
