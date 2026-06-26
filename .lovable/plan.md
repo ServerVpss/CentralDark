@@ -1,31 +1,40 @@
-## O que eu achei
+## O que vamos fazer (em linguagem simples)
 
-**No repositório (GitHub Actions):**
-- `.github/workflows/wuzapi-sessions-monitor.yml` — roda a cada 15min, é esse que tá gritando erro. **Vou desativar.**
-- Outros workflows mencionam WhatsApp mas só de leitura/validação opcional (`bot-server-validate.yml`, `pr-auto-review.yml`) — **não mexo**, não estão quebrando nada sozinhos.
+Hoje o seu menu lateral só mostra **algumas** páginas do site. Existem várias páginas que foram criadas mas ficaram "soltas" — o site sabe que o arquivo existe, mas ninguém aponta uma porta de entrada (rota) pra elas. Resultado: você não consegue clicar e abrir.
 
-**Na VPS (PM2):**
-- Não consigo listar PM2 ao vivo agora (MCP de execução tá bloqueado nesta sessão).
-- Pelo que está documentado no `CLAUDE.md`, o único processo PM2 com nome de WhatsApp é:
-  - `whatsapp-server` (pm_id 1) — **já está `stopped`** por padrão, salvo no `dump.pm2`. Ou seja, não tem nada rodando hoje com nome de WhatsApp.
-- Pode existir algum `wuzapi`/container Docker rodando, mas isso é serviço separado (não PM2) e você não pediu pra mexer em Docker — então **não toco**.
+A ideia é:
 
-## Plano
+1. **Mapear tudo automaticamente** — um pequeno script vai varrer a pasta de páginas e listar todas que existem.
+2. **Comparar com o que está registrado** no `App.tsx` (o "índice" do site).
+3. **Cadastrar as que faltam**, pra cada página ter uma URL e aparecer no menu.
+4. **Criar uma tela `/mapa`** dentro do seu painel que mostra esse relatório — páginas registradas, páginas órfãs (sem rota), e total. Assim você vê tudo de uma vez.
 
-1. **Desativar o workflow `wuzapi-sessions-monitor.yml`**
-   - Comentar/remover os gatilhos `schedule` e `workflow_dispatch` (deixo só `workflow_dispatch` desabilitado via `if: false`), assim ele para de rodar sozinho mas o arquivo fica preservado pra reativar depois.
-   - Adicionar comentário no topo: `# DESATIVADO — reativar quando voltar a mexer com WhatsApp`.
+## Como vou organizar o trabalho
 
-2. **Registrar pendência** em `docs/PENDENCIAS.md` via MCP:
-   - "Reativar workflow `wuzapi-sessions-monitor.yml` e subir processos PM2 de WhatsApp quando começar a mexer com WhatsApp de novo."
+Uso 3 sub-agentes trabalhando em paralelo pra ser rápido:
 
-3. **PM2 na VPS** — antes de qualquer `pm2 stop`, eu te aponto exatamente o que aparece. Como o MCP de execução está bloqueado nesta sessão, na hora de executar vou rodar `pm2 jlist` e te listar **todos os processos com nome contendo `whats|wuz|wpp|zap`** com status atual. Você confirma quais parar.
-   - Pelo que já sei: provavelmente só `whatsapp-server` aparece, e já está parado — então nada a fazer. Mas confirmo na hora.
+- **Auditor** — varre `src/apps/**/pages` e gera a lista bruta.
+- **Executor** — adiciona as rotas que faltam no `App.tsx` e cria a página `/mapa`.
+- **Validador** — roda checagem de tipos no final pra garantir que nada quebrou.
 
-## Detalhes técnicos
+## Garantias de segurança
 
-- Arquivo único alterado: `.github/workflows/wuzapi-sessions-monitor.yml`.
-- Sem mudança em código de app, sem migration, sem deploy.
-- Pendência fica em `docs/PENDENCIAS.md` (prioridade média).
+- Só **adiciono** rotas, nunca removo nem altero as existentes.
+- Nenhuma página atual muda de comportamento.
+- 3 componentes que estão mal-colocados (estão na pasta `pages/` mas não são páginas) vão pra pasta correta — ajusto o único import afetado.
+- Build é validado antes de entregar.
+- **Não toca na VPS** — fica só no site, como você pediu.
 
-Aprova que eu sigo?
+## O que você vai ver depois
+
+- Menu lateral com **todas** as páginas do site listadas.
+- Nova rota `/mapa` com um painel mostrando: "X páginas no total, Y registradas, Z órfãs" + lista clicável.
+- Um arquivo `public/data/paginas.json` com o relatório bruto (caso queira inspecionar).
+
+## Detalhes técnicos (pra referência)
+
+- Script novo: `scripts/audit-pages.mjs` (Node, roda local, gera JSON).
+- Página nova: `src/apps/painel/pages/MapaSite.tsx`.
+- Edição: `src/App.tsx` recebe os `<Route>` faltantes.
+- Movimentação: 3 componentes não-página saem de `pages/` pra `components/` (com ajuste do import).
+- Validação final: `tsgo` no projeto inteiro.
