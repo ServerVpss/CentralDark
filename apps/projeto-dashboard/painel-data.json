@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T03:22:35.148Z",
-  "updatedAtBR": "26/06/2026, 00:22:35 BRT",
+  "updatedAt": "2026-06-26T03:23:45.763Z",
+  "updatedAtBR": "26/06/2026, 00:23:45 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "feat(hub): rota /hub + /telepainel/hub registradas no App.tsx",
+    "lastCommit": "feat(hub): Hub Segurança no menu Sistema da Sidebar",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T03:23:45.763Z",
+      "titulo": "Push na main · b7fb880da19fa93b3b045c38b6a806bfb550081b",
+      "detalhe": "feat(hub): Hub Segurança no menu Sistema da Sidebar",
+      "area": "Repositório",
+      "sha": "b7fb880",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-26T03:22:35.148Z",
       "titulo": "Push na main · ea5266366adebe95182bca66c9594c429a552907",
@@ -1183,6 +1191,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-26T03:23:45.763Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b7fb880da19fa93b3b045c38b6a806bfb550081b (b7fb880)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-26T03:22:35.148Z",
       "ia": "@segredounlock",
