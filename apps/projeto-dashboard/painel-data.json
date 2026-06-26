@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T06:37:14.256Z",
-  "updatedAtBR": "26/06/2026, 03:37:14 BRT",
+  "updatedAt": "2026-06-26T06:38:15.131Z",
+  "updatedAtBR": "26/06/2026, 03:38:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "Adicionou vault de criptografia",
+    "lastCommit": "fix(painel): restaurar index.html removido por engano (status.centralldark.com 404)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T06:38:15.131Z",
+      "titulo": "Push na main · 6c2e7817aca1dbc0b7512b8c02cccf4a427414b0",
+      "detalhe": "fix(painel): restaurar index.html removido por engano (status.centralldark.com 404)",
+      "area": "Repositório",
+      "sha": "6c2e781",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-26T06:35:37.109032+00:00",
       "title": "Card 'Bloqueios MCP (últimas 24h)' adicionado ao painel",
@@ -1238,6 +1246,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-26T06:38:15.131Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6c2e7817aca1dbc0b7512b8c02cccf4a427414b0 (6c2e781)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-26T05:30:53.239Z",
       "ia": "@lovable-dev[bot]",
