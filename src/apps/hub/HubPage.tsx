@@ -15,7 +15,7 @@ import {
   History, Network, Cpu, Activity, Check, X,
   Clock, Database, Lock, Shield, Route
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { hubClient } from "@/integrations/supabase/hubClient";
 import { useToast } from "@/shared/hooks/use-toast";
 import { cn } from "@/shared/lib/utils";
 
@@ -101,10 +101,10 @@ export default function HubPage() {
     setLoading(true);
     try {
       const [c, p, a, au] = await Promise.all([
-        supabase.from('connectors').select('*').order('sort_order').schema('hub'),
-        supabase.from('policies').select('*').order('tier').schema('hub'),
-        supabase.from('approvals').select('*').order('requested_at', { ascending: false }).limit(20).schema('hub'),
-        supabase.from('audit_log').select('*').order('id', { ascending: false }).limit(50).schema('hub'),
+        hubClient.from('connectors').select('*').order('sort_order'),
+        hubClient.from('policies').select('*').order('tier'),
+        hubClient.from('approvals').select('*').order('requested_at', { ascending: false }).limit(20),
+        hubClient.from('audit_log').select('*').order('id', { ascending: false }).limit(50),
       ]);
       if (c.data) setConnectors(c.data as Connector[]);
       if (p.data) setPolicies(p.data as Policy[]);
@@ -121,18 +121,18 @@ export default function HubPage() {
 
   // Realtime: aprovações pendentes
   useEffect(() => {
-    const ch = supabase
+    const ch = hubClient
       .channel('hub-approvals')
       .on('postgres_changes', { event: '*', schema: 'hub', table: 'approvals' }, loadAll)
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => { hubClient.removeChannel(ch); };
   }, [loadAll]);
 
   const decide = async (id: string, verdict: 'approved' | 'rejected') => {
-    const { error } = await supabase.rpc('approval_decide', {
+    const { error } = await (hubClient.rpc as any)('approval_decide', {
       p_approval_id: id,
       p_verdict: verdict,
-    }, { schema: 'hub' } as any);
+    });
     if (error) {
       toast({ title: 'Erro', description: error.message, variant: 'destructive' });
     } else {
