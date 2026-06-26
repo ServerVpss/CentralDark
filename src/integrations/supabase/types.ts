@@ -1954,7 +1954,222 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      hub_approvals: {
+        Row: {
+          agent_identity: string | null
+          args_hash: string | null
+          decided_at: string | null
+          decided_by: string | null
+          environment: string | null
+          expires_at: string | null
+          id: string | null
+          nonce: string | null
+          request_hash: string | null
+          requested_at: string | null
+          resource: string | null
+          status: string | null
+          tool: string | null
+        }
+        Insert: {
+          agent_identity?: string | null
+          args_hash?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          environment?: string | null
+          expires_at?: string | null
+          id?: string | null
+          nonce?: string | null
+          request_hash?: string | null
+          requested_at?: string | null
+          resource?: string | null
+          status?: string | null
+          tool?: string | null
+        }
+        Update: {
+          agent_identity?: string | null
+          args_hash?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          environment?: string | null
+          expires_at?: string | null
+          id?: string | null
+          nonce?: string | null
+          request_hash?: string | null
+          requested_at?: string | null
+          resource?: string | null
+          status?: string | null
+          tool?: string | null
+        }
+        Relationships: []
+      }
+      hub_audit_log: {
+        Row: {
+          agent_identity: string | null
+          approval_id: string | null
+          args_hash: string | null
+          decision: string | null
+          id: number | null
+          prev_hash: string | null
+          row_hash: string | null
+          tier: number | null
+          tool: string | null
+          ts: string | null
+        }
+        Insert: {
+          agent_identity?: string | null
+          approval_id?: string | null
+          args_hash?: string | null
+          decision?: string | null
+          id?: number | null
+          prev_hash?: string | null
+          row_hash?: string | null
+          tier?: number | null
+          tool?: string | null
+          ts?: string | null
+        }
+        Update: {
+          agent_identity?: string | null
+          approval_id?: string | null
+          args_hash?: string | null
+          decision?: string | null
+          id?: number | null
+          prev_hash?: string | null
+          row_hash?: string | null
+          tier?: number | null
+          tool?: string | null
+          ts?: string | null
+        }
+        Relationships: []
+      }
+      hub_capabilities: {
+        Row: {
+          approval_id: string | null
+          consumed_at: string | null
+          environment: string | null
+          expires_at: string | null
+          id: string | null
+          issued_at: string | null
+          nonce: string | null
+          request_hash: string | null
+          tier: number | null
+          tool: string | null
+        }
+        Insert: {
+          approval_id?: string | null
+          consumed_at?: string | null
+          environment?: string | null
+          expires_at?: string | null
+          id?: string | null
+          issued_at?: string | null
+          nonce?: string | null
+          request_hash?: string | null
+          tier?: number | null
+          tool?: string | null
+        }
+        Update: {
+          approval_id?: string | null
+          consumed_at?: string | null
+          environment?: string | null
+          expires_at?: string | null
+          id?: string | null
+          issued_at?: string | null
+          nonce?: string | null
+          request_hash?: string | null
+          tier?: number | null
+          tool?: string | null
+        }
+        Relationships: []
+      }
+      hub_connectors: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          icon_url: string | null
+          id: string | null
+          kind: string | null
+          name: string | null
+          slug: string | null
+          sort_order: number | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string | null
+          kind?: string | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string | null
+          kind?: string | null
+          name?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      hub_policies: {
+        Row: {
+          created_at: string | null
+          enabled: boolean | null
+          environment: string | null
+          id: string | null
+          needs_approval: boolean | null
+          tier: number | null
+          tool: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          enabled?: boolean | null
+          environment?: string | null
+          id?: string | null
+          needs_approval?: boolean | null
+          tier?: number | null
+          tool?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          enabled?: boolean | null
+          environment?: string | null
+          id?: string | null
+          needs_approval?: boolean | null
+          tier?: number | null
+          tool?: string | null
+        }
+        Relationships: []
+      }
+      hub_theme_tokens: {
+        Row: {
+          key: string | null
+          updated_at: string | null
+          value: string | null
+        }
+        Insert: {
+          key?: string | null
+          updated_at?: string | null
+          value?: string | null
+        }
+        Update: {
+          key?: string | null
+          updated_at?: string | null
+          value?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_old_pending_payments: { Args: never; Returns: undefined }
@@ -1968,6 +2183,25 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      hub_approval_decide: {
+        Args: { p_approval_id: string; p_verdict: string }
+        Returns: Json
+      }
+      hub_approval_request: {
+        Args: {
+          p_agent_identity: string
+          p_args_hash: string
+          p_environment?: string
+          p_resource?: string
+          p_tool: string
+          p_ttl_minutes?: number
+        }
+        Returns: Json
+      }
+      hub_pdp_evaluate: {
+        Args: { p_environment?: string; p_identity?: string; p_tool: string }
+        Returns: Json
       }
       increment_bot_analytics: {
         Args: {
