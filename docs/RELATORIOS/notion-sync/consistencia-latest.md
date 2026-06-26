@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-26T10:21:01.558Z
-- **Commit:** `ae7bf94061e19408e969c0a4df4a76fb1220ff05`
+- **Gerado:** 2026-06-26T10:35:41.438Z
+- **Commit:** `349c306e5d5288838f75bd720de1ebc21dee2708`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 4 | 4 | 0 | 0 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 11 | 11 | 11 | 0 | 0 |
-| aprendizados | 263 | 0 | 0 | 263 | 0 |
+| aprendizados | 264 | 0 | 0 | 264 | 0 |
 
 ## Detalhes
 
@@ -38,7 +38,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **263**
+- 🟥 Faltando no Notion: **264**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -306,4 +306,5 @@
 - 253. MCP OAuth: aceitar client_id CIMD com query string (conector ChatGPT)
 - 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin
 - 255. Reorganização apps/ VPS — estrutura consolidada
+- 256. GitHub push bloqueado — arquivos WebUI >100MB no histórico git
 </details>
