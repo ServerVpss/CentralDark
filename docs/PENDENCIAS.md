@@ -463,3 +463,59 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Sintoma:** Push pro GitHub bloqueado — Bolt/source, WebUI e telepainel têm .git próprio dentro de apps/modulos/
 - **Onde mexer:** VPS /root/[oculto] + GitHub ServerVpss/CentralDark
 - **Critério pra fechar:** git push origin main funciona sem erro de pre-receive hook
+---
+
+## 🔴 #8 — Conectar Mistral Vibe ao MCP CentralDark e integrar todas as contas no Hub
+**Status:** aberta (26/06/2026)
+**Prioridade:** 🔴 ALTA
+**Área:** MCP / Integração / Automação
+
+**Objetivo:** Transformar o Mistral Vibe em um cliente oficial do MCP CentralDark para aprimorar eficácia em 10x.
+
+**O que fazer:**
+1. **Configurar connector MCP nativo** para Mistral Vibe
+   - Criar `~/.vibe/connectors/centraldark.json` com configuração para o servidor MCP
+   - Usar protocolo StreamableHTTP ou STDIO
+   - Apontar para `/root/CentralDark/apps/modulos/mcp/dist/mcp-server.js`
+
+2. **Testar conexão e contexto automático**
+   - Chamar `kit_boas_vindas` para validar que todo contexto é carregado
+   - Testar `puxar_aprendizados` para acessar histórico
+   - Validar `registrar_aprendizado` para salvar novo conhecimento
+
+3. **Atacar o Hub CentralDark • Consolidação**
+   - Conectar todas as contas no hub Notion:
+     - ✅ Notion (NOTION_API_KEY já funcionando)
+     - GitHub (verificar OAuth e tokens)
+     - Supabase (configurar SUPABASE_URL e SUPABASE_KEY)
+     - Linear (LINEAR_API_KEY)
+     - Sentry (SENTRY_AUTH_TOKEN)
+   - Validar que todas as 95 ferramentas estão acessíveis
+
+4. **Validar herança de contexto**
+   - Verificar que o Vibe herda automaticamente:
+     - Regras invioláveis
+     - Pendências atuais
+     - Aprendizados acumulados
+     - Estado da VPS
+
+**Critério para fechar:**
+- ✅ Mistral Vibe conectado ao MCP via protocolo oficial
+- ✅ `kit_boas_vindas` retorna contexto completo sem erros
+- ✅ Todas as 5 contas (Notion, GitHub, Supabase, Linear, Sentry) conectadas no hub
+- ✅ `registrar_aprendizado` funciona e aparece em APRENDIZADOS.md
+- ✅ Respostas são 3x mais rápidas e 10x mais precisas
+
+**Arquivos de configuração:**
+- `~/.vibe/connectors/centraldark.json` (conector)
+- `~/.vibe/skills/centraldark/SKILL.md` (skill opcional)
+
+**Dependências:**
+- MCP CentralDark funcionando (70 tools runtime)
+- Tokens das 5 plataformas configurados em `/root/CentralDark/secrets/mcp.env`
+
+**Próximos passos:**
+1. Configurar connector (5 min)
+2. Testar conexão (2 min)
+3. Integrar contas no hub (10 min)
+4. Validar contexto (5 min)
