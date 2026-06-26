@@ -48,7 +48,7 @@ import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
 import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
-
+import HubPage from "@/apps/hub/src/HubPage";
 
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
 import { PageSplash } from "@/shared/transitions/PageSplash";
@@ -57,8 +57,6 @@ import { ApprovalProvider } from "@/shared/aprovacao/ApprovalProvider";
 
 const queryClient = new QueryClient();
 
-// Se o usuário já estiver logado e acessar /telepainel direto, manda pro dashboard.
-// Caso contrário, mostra a landing pública do módulo.
 function TelepainelEntry() {
   const { user, loading } = useAuthContext();
   if (loading) return null;
@@ -66,9 +64,6 @@ function TelepainelEntry() {
   return <LandingTelePainel />;
 }
 
-// Rotas internas do módulo TelePainel — usadas tanto na raiz (legado)
-// quanto prefixadas em /telepainel/* (novo padrão sob o portal CentralDark).
-// `adminOnly: true` exige role=admin no banco (user_roles).
 const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: boolean }> = [
   { path: "dashboard", element: <Index /> },
   { path: "consultas", element: <Consultas /> },
@@ -92,10 +87,9 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
   { path: "ponte-mcp", element: <PonteMCP />, adminOnly: true },
   { path: "mapa", element: <MapaSite />, adminOnly: true },
-  
+  { path: "hub", element: <HubPage />, adminOnly: true },
 ];
 
-// Aplica o guard correto: AdminRoute (envolve ProtectedRoute) ou só ProtectedRoute.
 const wrapGuard = (el: JSX.Element, adminOnly?: boolean) =>
   adminOnly ? <AdminRoute>{el}</AdminRoute> : <ProtectedRoute>{el}</ProtectedRoute>;
 
@@ -114,8 +108,6 @@ const App = () => (
             <PageSplash />
             <SplashController />
             {(() => {
-              // Modo de build: "web" = só landing+auth, "portal" = só área logada,
-              // qualquer outro valor (ou ausente) = app completo (modo Lovable/dev).
               const APP_MODE = (import.meta.env.VITE_APP_MODE as string | undefined) ?? "full";
               const isWeb = APP_MODE === "web";
               const isPortal = APP_MODE === "portal";
@@ -123,7 +115,6 @@ const App = () => (
 
               return (
                 <Routes>
-                  {/* ===== Rotas públicas (landing + auth) — web e full ===== */}
                   {(isWeb || isFull) && (
                     <>
                       <Route
@@ -132,14 +123,12 @@ const App = () => (
                           const kind = detectHostKind();
                           const redirect = getRootRedirectFor(kind);
                           if (redirect) return <Navigate to={redirect} replace />;
-                          // Cada subdomínio mostra a landing correspondente direto na raiz
                           if (kind === "whatsapp") return <LandingWhatsapp />;
                           if (kind === "crm") return <LandingCRM />;
                           if (kind === "financeiro") return <LandingFinanceiro />;
                           return <LandingCentralDark />;
                         })()}
                       />
-
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/telepainel" element={<TelepainelEntry />} />
                       <Route path="/whatsapp" element={<LandingWhatsapp />} />
@@ -148,7 +137,6 @@ const App = () => (
                     </>
                   )}
 
-                  {/* Em modo portal: raiz manda direto pro /portal */}
                   {isPortal && (
                     <>
                       <Route path="/" element={<Navigate to="/portal" replace />} />
@@ -156,13 +144,9 @@ const App = () => (
                     </>
                   )}
 
-                  {/* ===== Documentação do Design System (pública) ===== */}
                   <Route path="/docs" element={<Docs />} />
-
-                  {/* ===== Resultado de WebApp (compartilhado) ===== */}
                   <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
 
-                  {/* ===== Rotas logadas (portal + telepainel) — portal e full ===== */}
                   {(isPortal || isFull) && (
                     <>
                       <Route
@@ -186,9 +170,7 @@ const App = () => (
                     </>
                   )}
 
-                  {/* ===== Rota oculta de QA das transições ===== */}
                   <Route path="/dev/transitions" element={<DevTransitions />} />
-
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               );
