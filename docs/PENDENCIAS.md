@@ -519,3 +519,29 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 2. Testar conexão (2 min)
 3. Integrar contas no hub (10 min)
 4. Validar contexto (5 min)
+
+---
+
+## 🟡 #9 — Status portas e subdomínios multizap.dev (diagnóstico 2026-06-26)
+**Status:** pendente (anotado pra analisar depois)
+**Sintoma:** Subdomínios .multizap.dev retornando 000 TIMEOUT
+**Diagnóstico executado:**
+- centralldark.com, www.centralldark.com, bot.centralldark.com → ✅ 200
+- status.centralldark.com, mcp.centralldark.com → ⚠️ 404
+- multizap.dev, www.multizap.dev, bot.multizap.dev, crm.multizap.dev, hook.multizap.dev, proxy.multizap.dev → ❌ 000 TIMEOUT
+
+**Causa raiz identificada:**
+1. Caddyfile atual `/etc/caddy/Caddyfile` NÃO TEM configurações para domínios .multizap.dev
+2. Backup `/etc/caddy/Caddyfile.bak.20260620-103550` tem as configurações corretas
+3. hook.multizap.dev → espera porta 9003, mas webhook-deploy roda na porta 9300
+
+**Portas ativas verificadas:**
+- 80/443 (Caddy), 22 (SSH), 3000 (Open WebUI), 5174 (Builder Bolt), 8080 (API), 9000 (webhook), 9200 (MCP), 9210 (Bot), 9300 (Webhook Deploy), 9310 (Telepainel Deploy), 9400 (uvicorn), 9443 (docker)
+- Porta 9003 → NÃO ESTÁ OUVINDO (causa do 502 no hook.multizap.dev)
+
+**Como fechar:**
+1. Restaurar configurações .multizap.dev do backup para Caddyfile principal
+2. Corrigir porta do hook.multizap.dev: ou 9003→9300 no Caddyfile, ou levantar serviço na 9003
+3. Verificar se /var/www/multizap/dist e /root/CentralDark/apps/bot/dist existen
+4. `curl -I https://hook.multizap.dev/health` deve retornar 200
+5. Testar todos os subdomínios .multizap.dev
