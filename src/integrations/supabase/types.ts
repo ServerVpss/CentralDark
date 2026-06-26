@@ -1865,6 +1865,45 @@ export type Database = {
         }
         Relationships: []
       }
+      vault_secrets: {
+        Row: {
+          auth_tag: string
+          ciphertext: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          iv: string
+          kind: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          auth_tag: string
+          ciphertext: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          iv: string
+          kind?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          auth_tag?: string
+          ciphertext?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          iv?: string
+          kind?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       vps_deploy_history: {
         Row: {
           commit_hash: string | null
