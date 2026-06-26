@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-06-26T07:17:04.767Z",
-  "updatedAtBR": "26/06/2026, 04:17:04 BRT",
+  "updatedAt": "2026-06-26T07:18:14.013Z",
+  "updatedAtBR": "26/06/2026, 04:18:14 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -1450,14 +1450,14 @@
     }
   ],
   "telemetry": {
-    "cpu": "23.0%",
+    "cpu": "8.0%",
     "ram": "5.4GB / 23.5GB",
-    "ramPercent": "23.2",
+    "ramPercent": "23.1",
     "disco": "44%",
-    "load": "1.62 / 0.96 / 0.99",
-    "timestamp": "2026-06-26T07:17:03.966Z",
-    "brtTimestamp": "26/06/2026, 04:17:03",
-    "receivedAt": "2026-06-26T07:17:03.975Z"
+    "load": "1.39 / 1.04 / 1.01",
+    "timestamp": "2026-06-26T07:18:13.963Z",
+    "brtTimestamp": "26/06/2026, 04:18:13",
+    "receivedAt": "2026-06-26T07:18:13.968Z"
   },
   "safeRules": [
     "Nenhuma IA mexe no que já foi corrigido sem confirmação explícita",
