@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T06:38:15.131Z",
-  "updatedAtBR": "26/06/2026, 03:38:15 BRT",
+  "updatedAt": "2026-06-26T06:48:47.558Z",
+  "updatedAtBR": "26/06/2026, 03:48:47 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "fix(painel): restaurar index.html removido por engano (status.centralldark.com 404)",
+    "lastCommit": "docs(pendencias): nova #6 Investigação: index.html do painel some sozinho",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T06:48:47.558Z",
+      "titulo": "Push na main · 237defe10962533156578955f308eff46377338c",
+      "detalhe": "docs(pendencias): nova #6 Investigação: index.html do painel some sozinho",
+      "area": "Repositório",
+      "sha": "237defe",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-26T06:38:15.131Z",
       "titulo": "Push na main · 6c2e7817aca1dbc0b7512b8c02cccf4a427414b0",
@@ -1246,6 +1254,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-26T06:48:47.558Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 237defe10962533156578955f308eff46377338c (237defe)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-26T06:38:15.131Z",
       "ia": "@segredounlock",
