@@ -2172,6 +2172,7 @@ export type Database = {
       }
     }
     Functions: {
+      cleanup_edge_function_health: { Args: never; Returns: number }
       cleanup_old_pending_payments: { Args: never; Returns: undefined }
       get_user_role: {
         Args: { _user_id: string }
