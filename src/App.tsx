@@ -91,6 +91,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "usuarios-painel", element: <UsuariosPainel />, adminOnly: true },
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
   { path: "ponte-mcp", element: <PonteMCP />, adminOnly: true },
+  { path: "mapa", element: <MapaSite />, adminOnly: true },
   
 ];
 
