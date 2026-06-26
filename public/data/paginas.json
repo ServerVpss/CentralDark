@@ -1,7 +1,7 @@
 {
-  "geradoEm": "2026-06-26T02:36:09.058Z",
-  "total": 32,
-  "cadastradas": 32,
+  "geradoEm": "2026-06-26T02:36:37.798Z",
+  "total": 33,
+  "cadastradas": 33,
   "orfas": 0,
   "itens": [
     {
@@ -62,6 +62,11 @@
     {
       "arquivo": "src/apps/modulos/telepainel/pages/LandingTelePainel.tsx",
       "nome": "LandingTelePainel",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/MapaSite.tsx",
+      "nome": "MapaSite",
       "registrado": true
     },
     {
