@@ -1,10 +1,10 @@
+# DESATIVADO — reativar quando voltar a mexer com WhatsApp/WuzAPI.
+# Schedule e dispatch removidos pra parar de gritar erro no repositório.
+# Ver pendência em docs/PENDENCIAS.md.
 name: wuzapi-sessions-monitor
 
 on:
   workflow_dispatch:
-  schedule:
-    # A cada 15 minutos
-    - cron: '*/15 * * * *'
 
 permissions:
   contents: write
@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   monitorar:
+    if: false  # DESATIVADO — não roda até reativar manualmente
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
