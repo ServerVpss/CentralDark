@@ -459,3 +459,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 ### 4. Reativar workflow wuzapi-sessions-monitor e processos PM2 de WhatsApp — ✅ CONCLUÍDO em 2026-06-25
 ### 5. Reativar stack WhatsApp/WuzAPI completa — 🟡 ABERTO (25/06/2026, 21:14 BRT)
 ### 6. Investigação: index.html do painel some sozinho — 🟡 ABERTO (26/06/2026, 03:45 BRT)
+### 7. Resolver submodules embutidos e sincronizar repo com VPS — 🟡 ABERTO (26/06/2026, 07:18 BRT)
+- **Sintoma:** Push pro GitHub bloqueado — Bolt/source, WebUI e telepainel têm .git próprio dentro de apps/modulos/
+- **Onde mexer:** VPS /root/[oculto] + GitHub ServerVpss/CentralDark
+- **Critério pra fechar:** git push origin main funciona sem erro de pre-receive hook
