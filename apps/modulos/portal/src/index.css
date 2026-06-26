@@ -1,0 +1,532 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap');
+
+/* ============================================
+   TELEPANEL — DESIGN SYSTEM
+   Inspirado em Linear · Vercel · CLI tools
+   Dark-first, neutral, accent emerald
+   ============================================ */
+
+@layer base {
+  :root {
+    /* ============================================
+       LIGHT — neutro, alto contraste, emerald accent
+       ============================================ */
+    --background: 0 0% 99%;
+    --foreground: 0 0% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 152 65% 32%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 152 70% 40%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 12%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 35%;
+    --accent: 152 65% 32%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 65% 32%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 95% 45%;
+    --warning-foreground: 0 0% 9%;
+    --border: 0 0% 88%;
+    --input: 0 0% 90%;
+    --ring: 152 65% 32%;
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 97%;
+    --sidebar-foreground: 0 0% 25%;
+    --sidebar-primary: 152 65% 32%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 92%;
+    --sidebar-accent-foreground: 0 0% 7%;
+    --sidebar-border: 0 0% 88%;
+    --sidebar-ring: 152 65% 32%;
+
+    --gradient-gold: linear-gradient(135deg, hsl(152 65% 32%), hsl(160 65% 38%));
+    --gradient-gold-soft: linear-gradient(135deg, hsl(152 65% 32% / 0.10), hsl(160 65% 38% / 0.05));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 99%));
+    --gradient-card-hover: linear-gradient(180deg, hsl(0 0% 99%), hsl(0 0% 97%));
+    --gradient-radial-gold: radial-gradient(ellipse at top, hsl(152 65% 32% / 0.08), transparent 60%);
+    --gradient-mesh: none;
+
+    --glass-bg: hsl(0 0% 100% / 0.85);
+    --glass-border: hsl(0 0% 85%);
+    --glass-highlight: hsl(152 65% 32% / 0.06);
+
+    --chart-1: 152 65% 38%;
+    --chart-2: 160 60% 42%;
+    --chart-3: 192 65% 42%;
+    --chart-4: 38 90% 48%;
+    --chart-5: 0 70% 50%;
+  }
+
+  .dark {
+    /* ============================================
+       DARK — CLI / Linear / Vercel
+       Near-black neutral, emerald accent
+       ============================================ */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 92%;
+
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 92%;
+
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 92%;
+
+    /* Emerald — assinatura */
+    --primary: 152 76% 50%;
+    --primary-foreground: 0 0% 4%;
+    --primary-glow: 152 82% 58%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 92%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 55%;
+
+    --accent: 152 76% 50%;
+    --accent-foreground: 0 0% 4%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 152 76% 50%;
+    --success-foreground: 0 0% 4%;
+
+    --warning: 38 95% 55%;
+    --warning-foreground: 0 0% 4%;
+
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 152 76% 50%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 65%;
+    --sidebar-primary: 152 76% 50%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 9%;
+    --sidebar-accent-foreground: 0 0% 92%;
+    --sidebar-border: 0 0% 10%;
+    --sidebar-ring: 152 76% 50%;
+
+    --gradient-gold: linear-gradient(135deg, hsl(152 76% 50%), hsl(160 76% 45%));
+    --gradient-gold-soft: linear-gradient(135deg, hsl(152 76% 50% / 0.12), hsl(160 76% 45% / 0.05));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 6%), hsl(0 0% 5%));
+    --gradient-card-hover: linear-gradient(180deg, hsl(0 0% 7%), hsl(0 0% 6%));
+    --gradient-radial-gold: radial-gradient(ellipse at top, hsl(152 76% 50% / 0.08), transparent 60%);
+    --gradient-mesh: none;
+
+    --glass-bg: hsl(0 0% 4% / 0.8);
+    --glass-border: hsl(0 0% 100% / 0.06);
+    --glass-highlight: hsl(152 76% 50% / 0.06);
+
+    --chart-1: 152 76% 55%;
+    --chart-2: 160 70% 55%;
+    --chart-3: 192 70% 55%;
+    --chart-4: 38 95% 60%;
+    --chart-5: 0 75% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Geist', 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Geist', 'Inter', sans-serif;
+    @apply font-semibold tracking-tight;
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, kbd, .font-mono {
+    font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+}
+
+@layer components {
+  /* ========== Cards — agora com pegada 3D suave ========== */
+  .card-premium {
+    @apply relative overflow-hidden rounded-xl border border-border/60 bg-card shadow-3d-soft;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-premium:hover {
+    @apply border-border;
+    transform: translateY(-1px);
+  }
+
+  /* Gradient text — escala com o tema */
+  .text-gradient-gold,
+  .text-gradient-money {
+    background: linear-gradient(180deg, hsl(var(--foreground)), hsl(var(--foreground) / 0.55));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .icon-glow {
+    @apply relative flex items-center justify-center rounded-lg shadow-3d-soft;
+    background: hsl(var(--primary) / 0.12);
+    color: hsl(var(--primary));
+  }
+
+  /* ========== Stat tints sutis ========== */
+  .stat-gradient-gold,
+  .stat-gradient-green {
+    background: hsl(var(--primary) / 0.08);
+    border-color: hsl(var(--primary) / 0.22);
+  }
+
+  .stat-gradient-cyan {
+    background: hsl(192 70% 45% / 0.08);
+    border-color: hsl(192 70% 45% / 0.22);
+  }
+
+  .stat-gradient-purple {
+    background: hsl(160 70% 40% / 0.08);
+    border-color: hsl(160 70% 40% / 0.22);
+  }
+
+  /* ========== Sidebar Nav — botões com pegada 3D quando ativos ========== */
+  .nav-item {
+    @apply relative flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-sidebar-foreground transition-all duration-150;
+  }
+
+  .nav-item:hover {
+    @apply bg-sidebar-accent text-sidebar-accent-foreground;
+  }
+
+  .nav-item.active {
+    @apply bg-sidebar-accent text-foreground shadow-3d-soft;
+  }
+
+  .nav-item.active::before {
+    content: '';
+    @apply absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-primary;
+  }
+
+  /* ========== Buttons ========== */
+  .btn-money {
+    @apply relative overflow-hidden rounded-lg px-4 py-2 font-medium text-primary-foreground transition-all duration-200 shadow-3d-primary active:translate-y-[1px];
+    background: hsl(var(--primary));
+  }
+
+  .btn-money:hover {
+    background: hsl(var(--primary-glow));
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px) saturate(180%);
+    border-color: var(--glass-border);
+  }
+
+  .glass-subtle {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(8px);
+  }
+
+  .glow-gold,
+  .glow-emerald {
+    box-shadow: 0 0 16px hsl(var(--primary) / 0.18);
+  }
+
+  .glow-gold-sm {
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.12);
+  }
+
+  .glow-text-gold {
+    text-shadow: 0 0 8px hsl(var(--primary) / 0.25);
+  }
+
+  /* ========== 3D / Tátil — padrão do app ==========
+     Mesma pegada do BottomNav: sombra externa suave +
+     brilho interno no topo + sombra interna embaixo.
+     Ao pressionar, "afunda" levemente. */
+  .shadow-3d {
+    box-shadow:
+      0 10px 20px -8px rgba(0, 0, 0, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 hsl(0 0% 100% / 0.18),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.12);
+  }
+  .dark .shadow-3d {
+    box-shadow:
+      0 10px 24px -8px rgba(0, 0, 0, 0.55),
+      0 2px 6px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 hsl(0 0% 100% / 0.08),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.45);
+  }
+
+  .shadow-3d-soft {
+    box-shadow:
+      0 6px 14px -6px rgba(0, 0, 0, 0.2),
+      0 1px 2px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 hsl(0 0% 100% / 0.15);
+  }
+  .dark .shadow-3d-soft {
+    box-shadow:
+      0 6px 16px -6px rgba(0, 0, 0, 0.5),
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 hsl(0 0% 100% / 0.06);
+  }
+
+  .shadow-3d-primary {
+    box-shadow:
+      0 10px 22px -8px hsl(var(--primary) / 0.55),
+      0 2px 6px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 hsl(0 0% 100% / 0.3),
+      inset 0 -2px 4px hsl(var(--primary) / 0.35);
+  }
+
+  .shadow-3d-destructive {
+    box-shadow:
+      0 10px 22px -8px hsl(var(--destructive) / 0.5),
+      0 2px 6px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 hsl(0 0% 100% / 0.25),
+      inset 0 -2px 4px hsl(var(--destructive) / 0.35);
+  }
+
+  .shadow-3d-pressed {
+    box-shadow:
+      0 3px 8px -4px rgba(0, 0, 0, 0.3),
+      inset 0 2px 4px rgba(0, 0, 0, 0.18) !important;
+    transform: translateY(1px);
+  }
+
+  /* Sombra lateral (pra Sidebar e painéis "laterais") */
+  .shadow-side-right {
+    box-shadow:
+      6px 0 18px -10px rgba(0, 0, 0, 0.35),
+      1px 0 0 hsl(var(--border) / 0.6);
+  }
+  .dark .shadow-side-right {
+    box-shadow:
+      8px 0 24px -12px rgba(0, 0, 0, 0.75),
+      1px 0 0 hsl(var(--border) / 0.5);
+  }
+
+  .hover-lift {
+    @apply transition-all duration-150;
+  }
+  .hover-lift:hover {
+    @apply border-border;
+    transform: translateY(-1px);
+  }
+
+  /* Grid CLI sutil */
+  .bg-grid {
+    background-image:
+      linear-gradient(hsl(var(--border)) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: -1px -1px;
+  }
+
+  /* Animations — preservadas */
+  .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
+  .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .animate-slide-in-right { animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+  .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+  .animate-scale-in { animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  .animate-shimmer { animation: shimmer 2s linear infinite; background-size: 200% 100%; }
+  .animate-count-up { animation: countUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 6px hsl(var(--primary) / 0.15); }
+  50% { box-shadow: 0 0 14px hsl(var(--primary) / 0.3); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Bottom Nav — gota líquida (gooey, técnica Supah) ========== */
+@keyframes bnav-drip {
+  0%   { transform: translate(-50%, -18px) scale(0.4); opacity: 0; }
+  35%  { transform: translate(-50%, -2px)  scale(1);   opacity: 1; }
+  70%  { transform: translate(-50%, 6px)   scale(0.9); opacity: 0.9; }
+  100% { transform: translate(-50%, 14px)  scale(0);   opacity: 0; }
+}
+.animate-bnav-drip {
+  bottom: -2px;
+  animation: bnav-drip 900ms cubic-bezier(.55,.05,.35,1) forwards;
+}
+
+/* ========== Menu Reveal — ink/mask reveal vindo do clique ========== */
+:root {
+  --reveal-x: 50vw;
+  --reveal-y: 50vh;
+  --reveal-duration: 620ms;
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes menu-reveal-in {
+  0% {
+    clip-path: circle(0px at var(--reveal-x) var(--reveal-y));
+    opacity: 0;
+    transform: scale(1.012);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0.6px);
+  }
+  100% {
+    clip-path: circle(160% at var(--reveal-x) var(--reveal-y));
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes menu-reveal-glow {
+  0% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  70% {
+    opacity: 0.18;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.menu-reveal-play {
+  position: relative;
+  will-change: clip-path, transform, opacity, filter;
+  animation: menu-reveal-in var(--reveal-duration) var(--reveal-ease) both;
+}
+
+.menu-reveal-play::before {
+  content: "";
+  position: absolute;
+  left: var(--reveal-x);
+  top: var(--reveal-y);
+  width: 180vmax;
+  height: 180vmax;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    hsl(var(--primary) / 0.18) 0%,
+    hsl(var(--primary) / 0.08) 30%,
+    transparent 60%
+  );
+  mix-blend-mode: screen;
+  transform: translate(-50%, -50%) scale(0);
+  animation: menu-reveal-glow var(--reveal-duration) var(--reveal-ease) both;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-reveal-play {
+    animation: none;
+    opacity: 1;
+  }
+  .menu-reveal-play::before {
+    display: none;
+  }
+}
+
+
+
+
+
+
+/* ========== Scrollbar fino ========== */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.5);
+  border-radius: 7px;
+  border: 3px solid hsl(var(--background));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.7);
+}
+* {
+  scrollbar-width: auto;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.5) hsl(var(--background));
+}
+
+::selection {
+  background: hsl(var(--primary) / 0.25);
+  color: hsl(var(--foreground));
+}
+
+:focus-visible {
+  outline: 1px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Aumento global do tamanho da fonte para melhor legibilidade */
+html {
+  font-size: 17.5px;
+}
+
+/* Trava scroll lateral no Mini App do Telegram (mobile) */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
