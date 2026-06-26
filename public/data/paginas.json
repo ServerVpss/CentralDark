@@ -1,0 +1,168 @@
+{
+  "geradoEm": "2026-06-26T02:36:09.058Z",
+  "total": 32,
+  "cadastradas": 32,
+  "orfas": 0,
+  "itens": [
+    {
+      "arquivo": "src/apps/modulos/bot-whatsapp/pages/LandingWhatsapp.tsx",
+      "nome": "LandingWhatsapp",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/crm/pages/LandingCRM.tsx",
+      "nome": "LandingCRM",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/financeiro/pages/LandingFinanceiro.tsx",
+      "nome": "LandingFinanceiro",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/BotSettings.tsx",
+      "nome": "BotSettings",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Bots.tsx",
+      "nome": "Bots",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Cofre.tsx",
+      "nome": "Cofre",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Consultas.tsx",
+      "nome": "Consultas",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/DatabaseInfo.tsx",
+      "nome": "DatabaseInfo",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/DevTransitions.tsx",
+      "nome": "DevTransitions",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Docs.tsx",
+      "nome": "Docs",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Index.tsx",
+      "nome": "Index",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/LandingTelePainel.tsx",
+      "nome": "LandingTelePainel",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/MegaPainel.tsx",
+      "nome": "MegaPainel",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/MenuTips.tsx",
+      "nome": "MenuTips",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/MigrateSubscriptions.tsx",
+      "nome": "MigrateSubscriptions",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/NotFound.tsx",
+      "nome": "NotFound",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/PixTransactions.tsx",
+      "nome": "PixTransactions",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Plans.tsx",
+      "nome": "Plans",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/PonteMCP.tsx",
+      "nome": "PonteMCP",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/QueryLogs.tsx",
+      "nome": "QueryLogs",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Security.tsx",
+      "nome": "Security",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/Settings.tsx",
+      "nome": "Settings",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/SubscriptionAudit.tsx",
+      "nome": "SubscriptionAudit",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/TelegramUsers.tsx",
+      "nome": "TelegramUsers",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/TesteModulos.tsx",
+      "nome": "TesteModulos",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/UsuarioPerfil.tsx",
+      "nome": "UsuarioPerfil",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/UsuariosPainel.tsx",
+      "nome": "UsuariosPainel",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/modulos/telepainel/pages/WebAppResult.tsx",
+      "nome": "WebAppResult",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/web/pages/Auth.tsx",
+      "nome": "Auth",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/web/pages/LandingCentralDark.tsx",
+      "nome": "LandingCentralDark",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/web/pages/Portal.tsx",
+      "nome": "Portal",
+      "registrado": true
+    },
+    {
+      "arquivo": "src/apps/web/pages/Status.tsx",
+      "nome": "Status",
+      "registrado": true
+    }
+  ]
+}
