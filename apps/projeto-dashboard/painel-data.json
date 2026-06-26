@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T08:02:12.781Z",
-  "updatedAtBR": "26/06/2026, 05:02:12 BRT",
+  "updatedAt": "2026-06-26T08:11:10.513Z",
+  "updatedAtBR": "26/06/2026, 05:11:10 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
     "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
     "branch": "main",
-    "lastCommit": "Changes",
+    "lastCommit": "feat(hub): hub-client separado + HubPage apontando para lyoigsqluyktoclwdaft",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-26T08:11:10.513Z",
+      "titulo": "Push na main · 791bc56caaf47d31b2332a294fe8c4c4dca523e9",
+      "detalhe": "feat(hub): hub-client separado + HubPage apontando para lyoigsqluyktoclwdaft",
+      "area": "Repositório",
+      "sha": "791bc56",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-26T08:02:12.781Z",
       "titulo": "Push na main · 8fc7409b7fb4fbb79091ef8b865c76d58ea6ba17",
@@ -1254,6 +1262,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-26T08:11:10.513Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 791bc56caaf47d31b2332a294fe8c4c4dca523e9 (791bc56)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-26T08:02:12.781Z",
       "ia": "@lovable-dev[bot]",
