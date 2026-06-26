@@ -10,6 +10,7 @@ import {
   DollarSign,
   Shield,
   ShieldAlert,
+  ShieldCheck,
   Settings,
   Lightbulb,
   ChevronLeft,
@@ -75,6 +76,7 @@ const menuGroups = [
     icon: Cpu,
     items: [
       { title: "Mega Painel", icon: Radio, path: "/mega-painel" },
+      { title: "Hub Segurança", icon: ShieldCheck, path: "/hub" },
       { title: "Cofre (ADM)", icon: ShieldAlert, path: "/cofre" },
       { title: "Status", icon: Activity, path: "/status" },
       { title: "Teste de Módulos", icon: FlaskConical, path: "/teste-modulos" },
@@ -103,7 +105,6 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
     return location.pathname.startsWith(path);
   };
 
-  // Categoria aberta — só uma por vez. Abre automaticamente a do item ativo.
   const activeGroup = menuGroups.find((g) => g.items.some((i) => isActive(i.path)))?.label ?? null;
   const [openGroup, setOpenGroup] = useState<string | null>(activeGroup);
 
@@ -159,7 +160,6 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
           const groupHasActive = group.items.some((i) => isActive(i.path));
           const isExpanded = !collapsed && openGroup === group.label;
 
-          // Modo recolhido (desktop): mostra só os ícones dos itens, sem cabeçalho de categoria.
           if (collapsed) {
             return (
               <div key={group.label}>
@@ -201,7 +201,6 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
             );
           }
 
-          // Modo expandido: só botão da categoria; clica e abre os subitens ao lado/abaixo.
           return (
             <div key={group.label}>
               <button
@@ -233,7 +232,6 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                 />
               </button>
 
-              {/* Subitens — slide pra dentro, recuados pra parecer "embutidos" no botão */}
               <div
                 className={cn(
                   "grid transition-[grid-template-rows] duration-200 ease-out",
@@ -275,7 +273,6 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
           );
         })}
       </nav>
-
 
       {/* Perfil + Sair */}
       <div className={cn("border-t border-sidebar-border p-3 space-y-2", collapsed && "xl:px-2")}>
