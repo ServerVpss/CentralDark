@@ -130,10 +130,11 @@ export default function HubPage() {
 
 
   const decide = async (id: string, verdict: 'approved' | 'rejected') => {
-    const { error } = await (hubClient.rpc as any)('approval_decide', {
+    const { error } = await (hubClient.rpc as any)('hub_approval_decide', {
       p_approval_id: id,
       p_verdict: verdict,
     });
+
     if (error) {
       toast({ title: 'Erro', description: error.message, variant: 'destructive' });
     } else {
