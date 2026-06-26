@@ -45,9 +45,11 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
     if (bots.length === 0) return;
 
     const fetchCounts = async () => {
+      // Mensagens: tabela pequena, carrega tudo
       const { data: analyticsData } = await supabase
         .from("bot_analytics")
-        .select("bot_id, messages_received");
+        .select("bot_id, messages_received")
+        .limit(5000);
 
       if (analyticsData) {
         const msgMap: Record<string, number> = {};
@@ -59,10 +61,17 @@ export function BotsSection({ bots, onToggleActive }: BotsSectionProps) {
         setMessageCounts(msgMap);
       }
 
+      // Só conta usuários para os bots visíveis na dashboard (máx 3)
+      // evita carregar dezenas de milhares de assinaturas de uma vez
+      const visibleBotIds = bots.slice(0, 3).map((b) => b.id).filter(Boolean);
+      if (visibleBotIds.length === 0) return;
+
       const { data: subsData } = await supabase
         .from("telegram_subscriptions")
         .select("bot_id, telegram_user_id")
-        .eq("status", "active");
+        .eq("status", "active")
+        .in("bot_id", visibleBotIds)
+        .limit(5000);
 
       if (subsData) {
         const userMap: Record<string, Set<number>> = {};
