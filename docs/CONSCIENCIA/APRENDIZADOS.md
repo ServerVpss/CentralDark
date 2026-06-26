@@ -1886,3 +1886,9 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
 - **Data:** 2026-06-26
 - **Contexto:** Pivete queria consolidar todos os módulos/sites numa estrutura limpa dentro do CentralDark
 - **Aprendizado:** Estrutura final: /root/[oculto] tem só 2 pastas: modulos/ (com telepainel, hub, mcp, status, Bolt, bot, builder-bolt, clone-deck, WebUI) e web/ (front principal com dist/ buildado). install-callback foi pra raiz. centralldark.com aponta pra apps/web/dist via Caddyfile centralldark-root.Caddyfile. portal.centralldark.com também aponta pro mesmo dist. hostRouting.ts detecta domínio automaticamente. PENDENTE: push pro GitHub bloqueado por submodules embutidos (Bolt/source, WebUI, telepainel).
+
+### 256. GitHub push bloqueado — arquivos WebUI >100MB no histórico git
+- **Categoria:** armadilha
+- **Data:** 2026-06-26
+- **Contexto:** Tentando sincronizar VPS com repo GitHub após reorganização de pastas
+- **Aprendizado:** Push pro GitHub bloqueado por arquivos grandes do WebUI (101MB e 121MB de snapshots do containerd dentro de apps/modulos/WebUI/). Solução: git filter-branch ou git rebase pra remover esses commits do histórico. WebUI foi adicionado ao .gitignore. Commits problemáticos: df05b2e50, 9c99f4038, bd03153c1. Próxima sessão: rodar git filter-repo ou force push limpo.
