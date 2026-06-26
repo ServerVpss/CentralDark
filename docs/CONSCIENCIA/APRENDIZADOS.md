@@ -1912,3 +1912,16 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
   - Para acessar externamente via curl/ChatGPT: refazer login GitHub em https://mcp.centralldark.com
 - **Status verificado:** ✅ NOTION_API_KEY carregada, ✅ notion_buscar funcionando, ✅ notion_ler_pagina funcionando, ✅ 70 tools runtime no dispatcher
 - **Próximo passo:** Manter esta documentação atualizada sempre que novas ferramentas forem adicionadas ao catálogo
+
+### 257. Notion API - NOTION_API_KEY já existia em secrets/mcp.env, faltava restart MCP
+- **Categoria:** solucao-problema
+- **Data:** 2026-06-26
+- **Contexto:** Usuário relatou que NOTION_API_KEY não estava sendo carregada corretamente. Investigação revelou que a key JÁ existia em /root/CentralDark/secrets/mcp.env (linha 22), mas o MCP não havia sido restartado para carregar as novas variáveis. O restart do MCP resolveu instantaneamente - todos os endpoints Notion passaram a funcionar 100% via dispatcher admin.
+- **Aprendizado:** 
+  - NOTION_API_KEY já estava configurada em secrets/mcp.env desde antes
+  - Problema era apenas falta de restart no MCP para carregar as variáveis de ambiente
+  - Após restart: notion_buscar devolveu 3 páginas do CentralDark, notion_ler_pagina leu hub completo (1724 linhas)
+  - Erros de 401 em curl externo eram independentes - OAuth GitHub expirado, não Notion
+  - Dispatcher MCP mostrou 70 tools runtime e status OK
+- **Status verificado:** ✅ NOTION_API_KEY carregada, ✅ notion_buscar funcionando, ✅ notion_ler_pagina funcionando
+- **Próximo passo:** Para acessar externamente via curl/ChatGPT: refazer login GitHub em https://mcp.centralldark.com
