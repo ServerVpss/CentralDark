@@ -87,7 +87,7 @@ export function QueryMonitor() {
     });
     const topUsers: UserStat[] = Array.from(userMap.entries())
       .map(([key, v]) => ({ key, ...v }))
-      .sort((a, b) => b.count - b.count)
+      .sort((a, b) => b.count - a.count)
       .slice(0, 8);
     setByUser(topUsers);
 
