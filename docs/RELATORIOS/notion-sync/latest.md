@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-26T10:20:59.247Z
+# 🧠 Notion Sync — 2026-06-26T10:35:39.279Z
 
-- **Commit fonte:** `ae7bf94061e19408e969c0a4df4a76fb1220ff05`
+- **Commit fonte:** `349c306e5d5288838f75bd720de1ebc21dee2708`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 272 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 273 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 257 | 1 | 256 | 0 | 0 |
+| aprendizados | 258 | 1 | 257 | 0 | 0 |
 
 ## Operações
 
@@ -293,6 +293,7 @@
 | aprendizados | atualizado | #252 — notify-telegram exige header x-notify-key, não Authorization Bearer |
 | aprendizados | atualizado | #253 — MCP OAuth: aceitar client_id CIMD com query string (conector ChatGPT) |
 | aprendizados | atualizado | #254 — mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin |
-| aprendizados | criado | #255 — Reorganização apps/ VPS — estrutura consolidada |
+| aprendizados | atualizado | #255 — Reorganização apps/ VPS — estrutura consolidada |
+| aprendizados | criado | #256 — GitHub push bloqueado — arquivos WebUI >100MB no histórico git |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
