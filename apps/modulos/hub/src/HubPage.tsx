@@ -125,7 +125,7 @@ export default function HubPage() {
   useEffect(() => {
     const ch = hubClient
       .channel('hub-approvals')
-      .on('postgres_changes', { event: '*', schema: 'hub', table: 'approvals' }, loadAll)
+      .on('postgres_changes', { event: '*', schema: 'api', table: 'approvals' }, loadAll)
       .subscribe();
     return () => { hubClient.removeChannel(ch); };
   }, [loadAll]);

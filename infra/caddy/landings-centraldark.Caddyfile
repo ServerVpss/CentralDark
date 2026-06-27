@@ -57,3 +57,11 @@ financeiro.centralldark.com {
 	try_files {path} /index.html
 	file_server
 }
+
+# Hub CentralDark — app standalone independente
+hub.centralldark.com {
+	root * /root/CentralDark/apps/modulos/hub/dist
+	encode gzip zstd
+	try_files {path} /index.html
+	file_server
+}

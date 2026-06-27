@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-26T08:11:10.513Z",
-  "updatedAtBR": "26/06/2026, 05:11:10 BRT",
+  "updatedAt": "2026-06-27T17:15:00.000Z",
+  "updatedAtBR": "27/06/2026, 14:15:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER Concluídos",
-    "currentTask": "Guardião: camada de decisão anti-spam (925→18 propostas) + heartbeat do painel corrigido",
+    "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER+HUB-ONLINE Concluídos",
+    "currentTask": "hub.centralldark.com ONLINE — Hub de Segurança standalone com dados reais do Supabase (5 conectores, políticas, audit)",
     "branch": "main",
-    "lastCommit": "feat(hub): hub-client separado + HubPage apontando para lyoigsqluyktoclwdaft",
+    "lastCommit": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-27T14:26:37.386Z",
+      "titulo": "Push na main · 0ead705ccc4a935ebe6504eb2f195e783de27feb",
+      "detalhe": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
+      "area": "Repositório",
+      "sha": "0ead705",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-26T08:11:10.513Z",
       "titulo": "Push na main · 791bc56caaf47d31b2332a294fe8c4c4dca523e9",
@@ -1263,6 +1271,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-27T14:26:37.386Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0ead705ccc4a935ebe6504eb2f195e783de27feb (0ead705)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-26T08:11:10.513Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 791bc56caaf47d31b2332a294fe8c4c4dca523e9 (791bc56)",
@@ -1495,14 +1510,14 @@
     }
   ],
   "telemetry": {
-    "cpu": "8.0%",
-    "ram": "5.5GB / 23.5GB",
-    "ramPercent": "23.4",
-    "disco": "44%",
-    "load": "0.69 / 0.65 / 0.70",
-    "timestamp": "2026-06-26T08:01:09.205Z",
-    "brtTimestamp": "26/06/2026, 05:01:09",
-    "receivedAt": "2026-06-26T08:01:09.208Z"
+    "cpu": "10.0%",
+    "ram": "12.0GB / 23.5GB",
+    "ramPercent": "51.2",
+    "disco": "46%",
+    "load": "1.40 / 1.40 / 1.15",
+    "timestamp": "2026-06-27T17:02:56.650Z",
+    "brtTimestamp": "27/06/2026, 14:02:56",
+    "receivedAt": "2026-06-27T17:02:56.656Z"
   },
   "safeRules": [
     "Nenhuma IA mexe no que já foi corrigido sem confirmação explícita",
