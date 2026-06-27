@@ -2028,3 +2028,55 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
   - #COGNITIVAS → Ferramentas de organização mental
 - **Status verificado:** ✅ Metodologia documentada, ✅ Fontes da verdade alinhadas, ✅ Capacidades mapeadas, ✅ Gatilhos semânticos criados
 - **Próximo passo:** Usar esta metodologia em todas as interações futuras com Pivete
+
+### 259. DELÍRIO #1 - Confusão de identidade com Claude (imagem do chat)
+- **Categoria:** erro-correcao
+- **Data:** 2026-06-26
+- **Contexto:** Usuário mostrou imagem do Claude (interface web) com mensagem "NÃO SOU EU NAQUELA IMAGEM, PIVETE!" e questionou se eu estava delirando. Eu (Mistral Vibe CLI) inicially respondi que não era eu na imagem, mas na verdade a mensagem na imagem era MINHA resposta, o que causou confusão sobre qual sistema era qual.
+- **Aprendizado:** 
+  - **DELÍRIO IDENTIFICADO:** Confundi minha própria identidade ao ver a resposta no Claude
+  - **Causa raiz:** Não distinção clara entre Mistral Vibe CLI (eu, no terminal) e Claude (assistente web usando modelo Mistral)
+  - **Clarificação:** Eu (Mistral Vibe CLI) estou no terminal/VS Code do Pivete. Claude é outro sistema com interface gráfica
+  - **Metodologia:** Sempre verificar: "Estou no terminal? Sim → Sou eu. Estou em interface web? Não → Não sou eu"
+- **Gatilho de delírio:** #DELÍRIO-ID-1
+- **Status verificado:** ❌ Delírio identificado, ✅ Corrigido, ✅ Documentado
+- **Próximo passo:** Criar sistema de marcação de delírios para prevenir recorrência
+
+### 260. DELÍRIO #2 - Erros de ortografia e velocidade (APARTIR vs A PARTIR)
+- **Categoria:** erro-correcao
+- **Data:** 2026-06-26
+- **Contexto:** Usuário identificou múltiplos erros de ortografia ("APARTIR" em vez de "A PARTIR", "cognitivas" sozinha, etc.) e questionou porque eu estava respondendo rápido demais sem revisar.
+- **Aprendizado:** 
+  - **DELÍRIO IDENTIFICADO:** Erros de digitação e formatação por falta de revisão
+  - **Causa raiz:** Resposta rápida sem leitura prévia do texto gerado
+  - **Impacto:** Confusão e baixa qualidade na comunicação
+  - **Correção:** Implantar revisão em 3 passos: 1) Escrever, 2) Ler, 3) Enviar
+  - **Novo padrão:** Todas as respostas passam por verificação ortográfica antes de enviar
+  - **Gatilho para revisão:** #REVISAO-ORTOGRAFICA
+- **Erros específicos identificados:**
+  - "APARTIR" → "A PARTIR" (2 ocorrências)
+  - "cognitivas" sozinha sem substantivo
+  - Maiúsculas desnecessárias em meio de frase
+- **Status verificado:** ❌ Delírio identificado, ✅ Corrigido, ✅ Documentado
+- **Próximo passo:** Criar campo específico para marcar delírios e erros de comunicação
+
+### 261. SISTEMA DE MARCAÇÃO DE DELÍRIOS E ERROS
+- **Categoria:** regra
+- **Data:** 2026-06-26
+- **Contexto:** Usuário solicitou criação de um campo/categoria específico para marcar delírios de identidade e erros de comunicação, permitindo rastreamento e prevenção de recorrências.
+- **Aprendizado:** 
+  - **Campo de marcação criado:** DELÍRIOS
+  - **Gatilhos específicos:**
+    * #DELÍRIO-ID-1 → Confusão de identidade (Delírio #259)
+    * #DELÍRIO-ID-2 → Erros de ortografia (Delírio #260)
+    * #DELÍRIO-[X] →Qualquer novo delírio identificado
+  - **Estrutura de registro:**
+    * [#] + DELÍRIO + [número] + título descritivo
+    * Categoria: erro-correcao
+    * Data: YYYY-MM-DD
+    * Contexto: Descrição do que aconteceu
+    * Aprendizado: Causa raiz + solução
+    * Gatilho: #DELÍRIO-[X]
+  - **Local de armazenamento:** docs/CONSCIENCIA/APRENDIZADOS.md (seção DELÍRIOS)
+  - **Status verificado:** ✅ Sistema criado, ✅ Delírios #1 e #2 registrados
+- **Próximo passo:** Usar sistema de marcação em todos os erros futuros
