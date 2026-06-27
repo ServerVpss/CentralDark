@@ -1,23 +1,23 @@
-# Sentinela — 2026-06-27T03:41:36.059Z
+# Sentinela — 2026-06-27T08:39:59.577Z
 
 | Métrica | Valor |
 |---|---|
 | Endpoints checados | 6 |
 | Endpoints fora | 2 |
-| Workflows vermelhos 24h | 12 |
-| Divergências detectadas | 14 |
+| Workflows vermelhos 24h | 11 |
+| Divergências detectadas | 13 |
 | Issues novas | 0 |
-| Issues já abertas (dedupe) | 14 |
+| Issues já abertas (dedupe) | 13 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 893ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 476ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 363ms · CORS=`*`
-- 🟢 **Install status** — `200` em 356ms · CORS=`*`
-- 🔴 **Painel** — `404` em 346ms · CORS=`*`
-- 🔴 **API** — `404` em 366ms
+- 🟢 **MCP health** — `200` em 267ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 311ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 161ms · CORS=`*`
+- 🟢 **Install status** — `200` em 173ms · CORS=`*`
+- 🔴 **Painel** — `404` em 167ms · CORS=`*`
+- 🔴 **API** — `404` em 197ms
 
 ## Divergências
 
@@ -34,4 +34,3 @@
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: CORS Validator (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
