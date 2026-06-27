@@ -1,40 +1,25 @@
-## O que vamos fazer (em linguagem simples)
+# Investigar a conexão com `run.gptengineer.app`
 
-Hoje o seu menu lateral só mostra **algumas** páginas do site. Existem várias páginas que foram criadas mas ficaram "soltas" — o site sabe que o arquivo existe, mas ninguém aponta uma porta de entrada (rota) pra elas. Resultado: você não consegue clicar e abrir.
+## Contexto rápido (em PT-BR, sem enrolar)
 
-A ideia é:
+Esse domínio `run.gptengineer.app` é o **runtime oficial do Lovable** (a Lovable nasceu como "GPT Engineer" e manteve o domínio). Toda preview Lovable carrega um script desse host pra ligar o editor ao app em execução. O `?token=...` é uma sessão temporária de quem abriu o link — não dá pra eu abrir nem reaproveitar.
 
-1. **Mapear tudo automaticamente** — um pequeno script vai varrer a pasta de páginas e listar todas que existem.
-2. **Comparar com o que está registrado** no `App.tsx` (o "índice" do site).
-3. **Cadastrar as que faltam**, pra cada página ter uma URL e aparecer no menu.
-4. **Criar uma tela `/mapa`** dentro do seu painel que mostra esse relatório — páginas registradas, páginas órfãs (sem rota), e total. Assim você vê tudo de uma vez.
+Ou seja: **sim, tem conexão direta**. Esse é o cordão umbilical entre o seu projeto e a Lovable.
 
-## Como vou organizar o trabalho
+## O que eu quero confirmar no código
 
-Uso 3 sub-agentes trabalhando em paralelo pra ser rápido:
+1. Procurar no `index.html` a tag `<script src="https://cdn.gptengineer.app/gptengineer.js">` (ou similar) — é ela que conversa com `run.gptengineer.app`.
+2. Procurar qualquer outra referência a `gptengineer` / `gpteng` no repositório (workflows, scripts, docs).
+3. Confirmar no GitHub quem é o bot que commita (`gpt-engineer-app[bot]`) — mesmo nome, mesma origem do domínio.
 
-- **Auditor** — varre `src/apps/**/pages` e gera a lista bruta.
-- **Executor** — adiciona as rotas que faltam no `App.tsx` e cria a página `/mapa`.
-- **Validador** — roda checagem de tipos no final pra garantir que nada quebrou.
+## O que vou entregar
 
-## Garantias de segurança
+Um resumo curto, em uma mensagem só:
+- Onde o script aparece no projeto.
+- Quais arquivos/commits vêm dessa origem.
+- Confirmação de que `run.gptengineer.app` = infraestrutura Lovable, não terceiro estranho.
 
-- Só **adiciono** rotas, nunca removo nem altero as existentes.
-- Nenhuma página atual muda de comportamento.
-- 3 componentes que estão mal-colocados (estão na pasta `pages/` mas não são páginas) vão pra pasta correta — ajusto o único import afetado.
-- Build é validado antes de entregar.
-- **Não toca na VPS** — fica só no site, como você pediu.
+## O que **não** vou fazer
 
-## O que você vai ver depois
-
-- Menu lateral com **todas** as páginas do site listadas.
-- Nova rota `/mapa` com um painel mostrando: "X páginas no total, Y registradas, Z órfãs" + lista clicável.
-- Um arquivo `public/data/paginas.json` com o relatório bruto (caso queira inspecionar).
-
-## Detalhes técnicos (pra referência)
-
-- Script novo: `scripts/audit-pages.mjs` (Node, roda local, gera JSON).
-- Página nova: `src/apps/painel/pages/MapaSite.tsx`.
-- Edição: `src/App.tsx` recebe os `<Route>` faltantes.
-- Movimentação: 3 componentes não-página saem de `pages/` pra `components/` (com ajuste do import).
-- Validação final: `tsgo` no projeto inteiro.
+- Não abrir/usar o token da URL (é sessão privada de quem gerou).
+- Não mexer em nenhum arquivo. Investigação puramente de leitura.
