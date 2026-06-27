@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-06-27T17:15:00.000Z",
-  "updatedAtBR": "27/06/2026, 14:15:00 BRT",
+  "updatedAt": "2026-06-27T17:55:55.807Z",
+  "updatedAtBR": "27/06/2026, 14:55:55 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "P1+P2+P3+P5+P6+P7+GATEWAY+ELITE-MAPPER+HUB-ONLINE Concluídos",
-    "currentTask": "hub.centralldark.com ONLINE — Hub de Segurança standalone com dados reais do Supabase (5 conectores, políticas, audit)",
+    "phase": "MCP CentralDark",
+    "currentTask": "Tentativa de reload do MCP solicitada via chat; comando direto bloqueado por MCP_ALLOW_VPS_COMMANDS=false e leitura do workflow bloqueada pela camada de segurança",
     "branch": "main",
     "lastCommit": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
     "summary": "Guardião ganhou camada de decisão: cache persistente de propostas (corta repetição do inotify), decisor ativado com scoring calibrado pelos dados reais (impacto=confiança, wF=0), threshold 0.4→0.6, exclusão de gitignored/sensíveis. Spam no Telegram cai de ~925 para ~18 (1x por arquivo). 403 do Mega Painel resolvido (era Cloudflare WAF barrando User-Agent Python-urllib + 406 por Accept) — heartbeat agora bate em localhost:9100. Modo propor travado até 08/07/2026 intacto. 22/22 testes. Commit e6124592b.",
-    "overallProgress": 99,
+    "overallProgress": 40,
     "liveFallback": {
       "mcpStatus": "online",
       "mcpToolCount": 95,
@@ -422,7 +422,7 @@
     "ANTHROPIC_API_KEY ausente — Claude Sonnet inativo no PR Review",
     "MultiZap-BOT errored — não crítico"
   ],
-  "nextIA": "P1+P2+P3+P5+P6+P7+P8+P9 concluídos. SEMPRE chamar atualizar_painel() via MCP ao concluir tarefas. PR Review Multi-IA ativo (padrão Groq/Llama3-70B). Pendência aberta: P4 (MultiZap-BOT errored, baixa prioridade). NÃO mexer em apps/bot/ sem pedido (módulo separado bot.multizap.dev).",
+  "nextIA": "Liberar caminho seguro de workflow ou habilitar tool específica de reload para MCP-CentralDark sem expor comandos genéricos.",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -497,6 +497,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-27T17:55:55.846Z",
+      "title": "Reload não executado; MCP-CentralDark segue online no deploy_status",
+      "area": "MCP / VPS",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-06-27T14:26:37.386Z",
       "titulo": "Push na main · 0ead705ccc4a935ebe6504eb2f195e783de27feb",
@@ -717,146 +724,6 @@
       "area": "Repositório",
       "status": "feito",
       "detail": "fix(pendencias): remover marcadores de conflito de merge — #56 detalhado, #57 CONCLUÍDO"
-    },
-    {
-      "time": "2026-06-23T00:14:00.695Z",
-      "title": "Bolt modo dev HMR ativo — edição em tempo real sem rebuild. Cerebras qwen3-coder-480b configurado. PLANO.md documentação completa criada.",
-      "area": "Bolt",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-06-22T19:59:48.395Z",
-      "title": "Push na main · af980c64ca3b1b708732f6fc7c6e146b0f7041c5",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "docs(pendencias): #133 — limpar clone aninhado CentralDark/CentralDark/ (~2050 arquivos)"
-    },
-    {
-      "time": "2026-06-22T19:57:51.589Z",
-      "title": "Push na main · 8fb72d60cd8799868a66310585357309632d18f7",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "docs(consolidacao): integrar conexao-ia em docs/ existente — eliminar pastas duplicadas e obsoletas\n\n- docs/AGENTS.md: atualizado para CentralDark, removidas referências a conexao-ia/, adicionadas regras run-once, Caddy, PM2, WuzAPI\n- docs/CONSCIENCIA/APRENDIZADOS.md: aprendizado Install-Callback (2026-06-05) com checklist 7 passos e 3 bugs corrigidos\n- docs/CONSCIENCIA/05-SSH-VPS.md: aliases SSH clone-deck, arquivos VPS e protocolo de quarentena\n- agentes/ e conexao-ia/ eliminadas: obsoletas (paths Multizap/ antigos) ou já cobertas por docs/CONSCIENCIA/\n- CentralDark/agentes/ e CentralDark/apps/clone-deck/conexao-ia/ eliminadas: duplicatas do clone histórico aninhado"
-    },
-    {
-      "time": "2026-06-22T19:53:03.685Z",
-      "title": "Push na main · fc01755cd21b240c8c9fa20b33f17018d0eced55",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "fix(mcp/telegram): ícone ❌ para push falhou, era 📋\n\nCo-Authored-By: SegredoiDev <segredounlock@users.noreply.github.com>"
-    },
-    {
-      "time": "2026-06-22T19:39:37.487Z",
-      "title": "Push na main · b2585bd664d9b7c0e96c34e24702aa0e8af7b218",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "docs(handoff): sessão 20260622 — Telegram+Linear+formato-commit consolidados"
-    },
-    {
-      "time": "2026-06-22T19:35:30.495Z",
-      "title": "Telegram integrado ao atualizar_painel — notificação automática ativa",
-      "area": "MCP",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-06-22T19:26:53.304Z",
-      "title": "Telegram integrado ao atualizar_painel — notificação automática ativa a partir de agora",
-      "area": "MCP",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-06-22T18:44:00.877Z",
-      "title": "Push na main · 4e642c74619277128070f15fc2aa03631e6a1df5",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "chore(merge): resolver conflito timestamp — manter versão local mais recente"
-    },
-    {
-      "time": "2026-06-22T18:11:02.076Z",
-      "title": "Push na main · fa761aba11700707b13d996a58dc8909d7e0b508",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(linear+painel): CLAUDE.md, novos cards Linear/Handoff/Segurança, autoria multi-IA"
-    },
-    {
-      "time": "2026-06-22T15:35:45.506Z",
-      "title": "Push na main · 67c457a13e1c48af2be05aedc17bbee2c61d227d",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "fix(pipeline): YAML syntax error — mover Python para scripts/update-pipeline.py\n\nHeredoc inline no run: | com conteúdo na coluna 1 quebrava o parser YAML.\nSolução: Python extraído para scripts/update-pipeline.py chamado via python3.\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
-    },
-    {
-      "time": "2026-06-22T15:26:16.726Z",
-      "title": "Push na main · ffe3befdd8947ad0d9b148f4465bf218b7d38885",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(pipeline): 9 estágios no Telegram + Mega Painel\n\nGitHub Actions — pipeline-notify.yml:\n  🔁 PR ABERTO     → Telegram + painel\n  🧪 CHECKS        → Telegram + painel (novo commit no PR)\n  ✅ APROVADO      → Telegram + painel\n  🔄 REVISÃO       → Telegram + painel\n  🟢 MERGEADO      → Telegram + painel\n  ❌ FECHADO       → Telegram + painel\n  🚀 VPS           → Telegram + painel (workflow_run deploy)\n\nMega Painel — nova seção \"Tarefas por estágio\":\n  - Cada PR/tarefa mostra badge de estágio atual\n  - Barra visual: 📝☁️🔁🧪✅🟢🚀🌐🏁 com dots ativos/cinzas\n  - tarefasAtivas[] em painel-data.json (atualizado automaticamente)\n  - iaTimeline[] ganha entrada a cada mudança de estágio\n  - Tarefas mergeadas/fechadas somem após 3 dias\n\napp.js: renderTarefasAtivas() + PIPELINE_META/ORDER\nstyles.css: .pipe-card, .pipe-badge, .pipe-steps, .pipe-step\nindex.html: nova seção com pipeline-legend + cache-bust ?v=20260622e\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
-    },
-    {
-      "time": "2026-06-22T15:18:52.227Z",
-      "title": "Push na main · f6954ed8bd11f9f5e3627089d4e950cb79562525",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "chore(painel): cache-bust v20260622d"
-    },
-    {
-      "time": "2026-06-22T15:15:10.284Z",
-      "title": "Push na main · 637b0ccce207f2dde43039278dff083a922d6942",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "fix(painel): cache-bust app.js+styles.css ?v=20260622c — força browser a recarregar\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
-    },
-    {
-      "time": "2026-06-22T15:11:43.277Z",
-      "title": "Push na main · bfc7d1328f6273126178bccc44457dd4e71b80ec",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(painel): status ao vivo — dots pulsantes + PM2 + Docker\n\nstyles.css:\n- live-dot agora pulsa (animation: pulse 1.8s infinite, igual ao .pulse do header)\n- .live-dot.ok → pulso verde, .live-dot.bad → pulso vermelho\n- .live-group-label: separadores visuais por categoria\n- .live-extra.ok/.bad: texto colorido por status\n\napp.js:\n- liveCard(): helper que gera card com dot pulsante\n- renderLive() estendido: Endpoints públicos + PM2 + Docker\n- Fix ok check: type=data + HTTP 200 = verde (painel-data.json estava vermelho)\n- Agrupa: 🌐 Endpoints públicos / ⚡ PM2 / 🐳 Docker\n- Texto do CORS simplificado (não expõe detalhes de rede)\n\npainel-data.json:\n- pm2: adicionado CloneDeck-CRM (estava faltando)\n- docker: novo campo — 5 containers (Bolt, Portainer, OpenWebUI, WuzAPI, Postgres)\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
-    },
-    {
-      "time": "2026-06-22T14:47:28.000Z",
-      "title": "Push na main · 5d8b62c1af9bb802deb0ede04975237403ada012",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(ai-review): redesign — mesmo visual do status.centralldark.com\n\n- Usa styles.css compartilhado (Geist font, light theme, sombras 3D)\n- Hero com eyebrow verde, badges pill, status card pulsante\n- Cards com mesmo estilo maturity-card do painel principal\n- Instruções inline: secret name + copiar + links diretos\n- Steps 1-4 responsivos no padrão do painel\n- Sem dark theme próprio — herda 100% do design system\n\nCo-Authored-By: SegredoiDev <segredounlock@users.noreply.github.com>"
-    },
-    {
-      "time": "2026-06-22T14:44:35.375Z",
-      "title": "Push na main · 4d83504d0c5354988f4c3e2dc0885bf3b400256a",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(ai-review): instruções claras embutidas em cada card\n\nCards ativos: mostram \"Secret X configurado — IA inclusa no review\"\nCards inativos: mostram nome exato do secret + botão copiar +\n  link direto pra gerar key + botão \"Adicionar secret\" que abre\n  o GitHub Secrets já na página certa\nSem precisar abrir modal pra saber o que fazer\n\nCo-Authored-By: SegredoiDev <segredounlock@users.noreply.github.com>"
-    },
-    {
-      "time": "2026-06-22T14:41:32.524Z",
-      "title": "Push na main · d7c005cc3abf9689ab6005f8c6e5c28689f2ac29",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(ai-review): modo paralelo — múltiplos provedores ativos simultâneos\n\n- ai-review.html: activeProviders[] substitui provider string\n  - Header mostra \"N IAs simultâneas\" + badges de todos os ativos\n  - Cards com verde em TODOS os provedores do array (não só 1)\n  - Modal simplificado: remove passo PR_REVIEW_PROVIDER (não precisa mais)\n  - How-to atualizado pro conceito paralelo\n- painel-data.json: aiReview.activeProviders = [groq, gemini, anthropic]\n\nCo-Authored-By: SegredoiDev <segredounlock@users.noreply.github.com>"
-    },
-    {
-      "time": "2026-06-22T14:27:36.244Z",
-      "title": "Push na main · 9d038f1cfe98559c3bfcb0247c45a8ecd6e3580b",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(pr-agent): 3 IAs em paralelo — Groq + Gemini + Claude Sonnet\n\nCada PR recebe 3 reviews simultâneos e independentes:\n- ⚡ Groq Llama3-70B (grátis, ultrarrápido)\n- ✨ Gemini Flash 1.5 (grátis, Google)\n- 🧠 Claude Sonnet 4.6 (Anthropic, $0.01/PR)\n\nJob pula graciosamente se o secret não estiver configurado.\ncontinue-on-error: true — falha isolada não bloqueia os outros.\n\nCo-Authored-By: SegredoiDev <segredounlock@users.noreply.github.com>"
-    },
-    {
-      "time": "2026-06-22T14:21:29.724Z",
-      "title": "Push na main · cba674c6303b6cb6a8cdf3e0f69eb7d6732f10e4",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "chore(painel): P8 concluído no painel + Groq como provedor padrão\n\n- milestones P8: \"CodeRabbit next 0%\" → \"Multi-IA PR Review done 100%\"\n- phases Fase 4: 0% → 50% (P8 feito, P4 pendente)\n- aiReview: provider gemini → groq (Llama3-70B, grátis, testado)\n- pr-agent.yml: comentário alinhado com padrão real (groq)\n- nextIA atualizado: P8 incluído nos concluídos\n- overallProgress: 98% → 99%\n\nCo-Authored-By: SegredoiDev <segredounlock@users.noreply.github.com>"
-    },
-    {
-      "time": "2026-06-22T13:06:01.159Z",
-      "title": "Push na main · ff11d19a570eda7464636831df0427a5018ebd7d",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(painel): botão admin discreto + login SHA-256 + drawer com atalhos\n\n- botão ⚙ no footer (opacity 0.15, quase invisível)\n- modal de login com auth SHA-256 via Web Crypto API (sem texto puro no código)\n- painel admin (drawer direito): trocar IA, GitHub secrets/vars/actions/PRs, MCP status, Linear\n- sessão via sessionStorage (fecha ao fechar aba)\n- fecha com ESC\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
     }
   ],
   "agents": [
@@ -1510,14 +1377,14 @@
     }
   ],
   "telemetry": {
-    "cpu": "10.0%",
-    "ram": "12.0GB / 23.5GB",
-    "ramPercent": "51.2",
+    "cpu": "15.0%",
+    "ram": "12.4GB / 23.5GB",
+    "ramPercent": "52.9",
     "disco": "46%",
-    "load": "1.40 / 1.40 / 1.15",
-    "timestamp": "2026-06-27T17:02:56.650Z",
-    "brtTimestamp": "27/06/2026, 14:02:56",
-    "receivedAt": "2026-06-27T17:02:56.656Z"
+    "load": "1.58 / 1.44 / 1.35",
+    "timestamp": "2026-06-27T17:55:52.030Z",
+    "brtTimestamp": "27/06/2026, 14:55:52",
+    "receivedAt": "2026-06-27T17:55:52.034Z"
   },
   "safeRules": [
     "Nenhuma IA mexe no que já foi corrigido sem confirmação explícita",
