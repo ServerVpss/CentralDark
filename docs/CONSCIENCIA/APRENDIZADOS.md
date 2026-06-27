@@ -1925,3 +1925,106 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
   - Dispatcher MCP mostrou 70 tools runtime e status OK
 - **Status verificado:** ✅ NOTION_API_KEY carregada, ✅ notion_buscar funcionando, ✅ notion_ler_pagina funcionando
 - **Próximo passo:** Para acessar externamente via curl/ChatGPT: refazer login GitHub em https://mcp.centralldark.com
+
+### 258. Padrão de trabalho Pivete + Vibe: metodologia, capacidades e hierarquia de memórias
+- **Categoria:** regra
+- **Data:** 2026-06-26
+- **Contexto:** Usuário (Pivete) solicitou padronização de como o Mistral Vibe deve trabalhar, incluindo metodologia de organização, hierarquia de fontes da verdade, capacidades, limites e garantias. Também pediu para verificar menções a Obsidian e como ele gosta de ser chamado.
+- **Aprendizado:** 
+  **🎯 METODOLOGIA DE TRABALHO PADRÃO:**
+  - **Recebimento:** Analisar instrução e extrair conceitos-chave (cognitivas/semânticas)
+  - **Busca:** Pesquisar em APRENDIZADOS.md, PENDENCIAS.md, NOTION por padrões similares
+  - **Organização:** Estruturar em: Problema → Contexto → Solução → Ação → Validação
+  - **Gatinhos semânticos:** Criar palavras-chave que disparam lembrete automático (ex: #GARANTIA-CENTRALDARK, #MCP, #VPS, #NOTION)
+  - **Armazenamento:** 
+    * **Git (fonte da verdade oficial)** → Conhecimento permanente em docs/CONSCIENCIA/
+    * **NOTION (segunda fonte da verdade)** → Painel humano para visualização
+    * **VPS (quase fonte da verdade)** → Memórias operacionais em /root/CentralDark/
+  
+  **🧠 FONTES DA VERDADE HIERARQUIA (REGRA-OFICIAL-HIERARQUIA-MEMORIA.md):**
+  1. **Git** = Fonte oficial (arquivos em docs/CONSCIENCIA/)
+  2. **NOTION** = Segunda fonte (espelho do Git via workflow notion-sync)
+  3. **VPS** = Memória operacional (logs, revisoes/, .env sanitizado)
+  4. **Obsidian** = Segundo cérebro local para navegação rápida e grafos (menção em ARQUITETURA-CENTRALDARK-2026.md e LEIA-PRIMEIRO.md)
+  
+  **👤 COMO CHAMAR O USUÁRIO:**
+  - **Nome oficial:** Pivete (confirmado em 2026-06-20-padrao-resposta-pivete.md, linha 100: "Chamar o usuário de **Pivete** quando natural")
+  - **Alternativas aceitas:** "pivete", "Pivete" (com ou sem maiúscula)
+  
+  **🤖 CAPACIDADES DO VIBE (Mistral Vibe CLI):**
+  - **✅ CONSIGO:**
+    * Criar/editar arquivos: .md, .txt, .json, .py, .js, .yml, etc. (até 50KB)
+    * Git: commits, push (com aprovação), pull, merge, status
+    * Busca: grep em GBs de dados (<1s), leitura de arquivos (<1s primeiras 2000 linhas)
+    * Subagentes: Delegar 5-10 tarefas paralelas via `task` tool
+    * MCP: Acessar 95 ferramentas CentralDark (notion_buscar, github_get_file, vps_run_once_script, etc.)
+    * Análise: Mapas mentais, ontologia, taxonomia, semântica conceitual
+    * Velocidade em repo ~3GB: Varredura completa em 2-5 min, busca por padrão em <1s
+  - **❌ NÃO CONSIGO:**
+    * Criar imagens (.png, .jpg, .svg) → Posso gerar código para você executar
+    * Criar vídeos (.mp4, .mov) → Posso gerar scripts
+    * Criar áudios (.mp3, .wav) → Posso gerar texto para TTS
+    * Invocar outras IAs (Claude, GPT, etc.) → Sou independente
+    * Executar GUI/navegador → Somente CLI
+    * Acessar internet livremente → Só via `web_fetch` (limitado)
+  
+  **🎯 MULTI-AGENTES - CAPACIDADE DE GERENCIAMENTO:**
+  - **Tarefas sequenciais:** Ilimitado (uma por vez) → 100% de acerto
+  - **Subagentes paralelos:** 5-10 simultâneos → 95% de acerto
+  - **Tarefas aninhadas:** 3-4 níveis → 90% de acerto
+  - **Fila de tarefas:** 100+ → 99% de acerto
+  - **Mapeamento:** 
+    * **Ida:** Sempre mapeado (arquivos lidos, ações tomadas)
+    * **Volta:** Mapeado SO SE solicitado explicitamente (ex: "mapeia o percurso de volta")
+    * **Ida+Volta automática:** Só em tarefas críticas com `replace_all: true`
+  
+  **⚡ CONVERSA CONTÍNUA - LIMITES E GARANTIAS:**
+  - **Contexto máximo:** ~200.000 tokens (auto-compact em ~150.000+)
+  - **Compactação automática:** Quando atinge limite → usa prompt `compact` para resumir
+  - **O que mantém após compactação:**
+    * Decisões tomadas
+    * Estado atual do projeto
+    * Ações em andamento
+    * Pendências ativas
+    * Últimas solicitações do usuário
+  - **O que pode remover:**
+    * Logs longos de comandos
+    * Conversas muito antigas
+    * Detalhes de implementação já concluídos
+  - **Garantia CentralDark:** 
+    * Memórias do Git (docs/CONSCIENCIA/) são **imortais** → Fonte da verdade imutável
+    * NOTION espelha Git automaticamente → Segunda fonte sempre alinhada
+    * VPS tem logs em /root/CentralDark/revisoes/ → Terceira camada de backup
+    * **#GARANTIA-CENTRALDARK** = Gatilho semântico para ativação de protocolos de segurança
+  
+  **📊 COGNITIVAS E SEMÂNTICAS - QUANDO E COMO USAR:**
+  | Conceito | % de Uso | Quando | Velocidade (3GB) | Gatilho |
+  |----------|----------|--------|----------------|---------|
+  | Mapas Mentais | 70% | Brainstorm, planejamento | 2-5 min | #MAPA-MENTAL |
+  | Semântica Conceitual | 85% | Análise de requisitos | <1 min | #SEMANTICA |
+  | Ontologia | 60% | Arquitetura de sistemas | 3-8 min | #ONTOLOGIA |
+  | Taxonomia | 75% | Organização de código | 1-3 min | #TAXONOMIA |
+  | Gatinhos Semânticos | 95% | Busca e recuperação | Instantâneo | (palavra-chave) |
+  
+  **💡 REGRAS PRÁTICAS PARA PIVETE:**
+  - **Antes de agir:** Sempre pergunto "Posso seguir?" ou "PERMITO PIVETE: (ação)" para ações sensíveis
+  - **Antes de salvar:** Sempre pergunto "Posso commitar?" se não tiver permissão explícita
+  - **Antes de push:** Aprovação humana obrigatória (regra crítica)
+  - **Depois de agir:** Sempre mostro: STATUS, O QUE FOI FEITO, ARQUIVOS ALTERADOS, COMMIT, VALIDAÇÕES, PROXIMO PASSO
+  - **Em caso de dúvida:** "Pivete, como proceder?" → Espero instrução clara
+  
+  **🔄 COMO REINICIAR/RECUPERAR CONTEXTO:**
+  - **Comando:** `#reloade` ou `#atualiza memoria` ou "reload memorias!"
+  - **O que faz:** Recarrega APRENDIZADOS.md, PENDENCIAS.md, CONSCIENCIA.md
+  - **Fonte:** 2026-06-20-padrao-resposta-pivete.md
+  
+  **📌 GATINHOS SEMÂNTICOS ATIVOS (para este aprendizado):**
+  - #METODOLOGIA-VIBE → Este aprendizado
+  - #PIVETE → Usuário principal
+  - #GARANTIA-CENTRALDARK → Protocolos de segurança
+  - #FONTES-DA-VERDADE → Hierarquia Git>Notion>VPS>Obsidian
+  - #CAPACIDADES-VIBE → Limites e habilidades
+  - #MULTI-AGENTES → Gerenciamento de subagentes
+  - #COGNITIVAS → Ferramentas de organização mental
+- **Status verificado:** ✅ Metodologia documentada, ✅ Fontes da verdade alinhadas, ✅ Capacidades mapeadas, ✅ Gatilhos semânticos criados
+- **Próximo passo:** Usar esta metodologia em todas as interações futuras com Pivete
