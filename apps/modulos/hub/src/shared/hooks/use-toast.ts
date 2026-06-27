@@ -1,7 +1,11 @@
+import { useCallback } from "react";
+
 export function useToast() {
-  return {
-    toast: ({ title, description }: { title?: string; description?: string; variant?: string }) => {
+  const toast = useCallback(
+    ({ title, description }: { title?: string; description?: string; variant?: string }) => {
       console.log("[toast]", title, description);
     },
-  };
+    [],
+  );
+  return { toast };
 }

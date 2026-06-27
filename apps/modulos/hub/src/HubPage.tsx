@@ -96,9 +96,11 @@ export default function HubPage() {
   const [approvals,  setApprovals]  = useState<Approval[]>([]);
   const [auditLog,   setAuditLog]   = useState<AuditEntry[]>([]);
   const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState<string | null>(null);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const [c, p, a, au] = await Promise.all([
         hubClient.from('connectors').select('*').order('sort_order'),
@@ -113,7 +115,9 @@ export default function HubPage() {
       if (a.data) setApprovals(a.data as Approval[]);
       if (au.data) setAuditLog(au.data as AuditEntry[]);
     } catch (e) {
-      toast({ title: 'Erro ao carregar Hub', description: String(e), variant: 'destructive' });
+      const errMsg = String(e);
+      setError(errMsg);
+      toast({ title: 'Erro ao carregar Hub', description: errMsg, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -121,14 +125,14 @@ export default function HubPage() {
 
   useEffect(() => { loadAll(); }, [loadAll]);
 
-  // Realtime — aprovações
-  useEffect(() => {
-    const ch = hubClient
-      .channel('hub-approvals')
-      .on('postgres_changes', { event: '*', schema: 'api', table: 'approvals' }, loadAll)
-      .subscribe();
-    return () => { hubClient.removeChannel(ch); };
-  }, [loadAll]);
+  // Realtime — aprovações (DESATIVADO: estava travando o carregamento inicial)
+  // useEffect(() => {
+  //   const ch = hubClient
+  //     .channel('hub-approvals')
+  //     .on('postgres_changes', { event: '*', schema: 'api', table: 'approvals' }, loadAll)
+  //     .subscribe();
+  //   return () => { hubClient.removeChannel(ch); };
+  // }, [loadAll]);
 
   const decide = async (id: string, verdict: 'approved' | 'rejected') => {
     const { error } = await hubClient.rpc('approval_decide', {
@@ -274,30 +278,36 @@ export default function HubPage() {
         <CardTitle className="text-sm flex items-center gap-2"><Database className="h-4 w-4 text-primary" />hub.policies</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <table className="w-full text-xs">
-          <thead><tr className="border-b border-border">
-            {['Tool','Ambiente','Tier','Aprovação','Ativo'].map(h => (
-              <th key={h} className="text-left font-semibold text-muted-foreground uppercase tracking-wider text-[10px] px-4 pb-2">{h}</th>
-            ))}
-          </tr></thead>
-          <tbody>
-            {policies.map(p => (
-              <tr key={p.id} className="border-b border-border/50">
-                <td className="px-4 py-2 font-mono">{p.tool}</td>
-                <td className="px-4 py-2 font-mono text-muted-foreground">{p.environment}</td>
-                <td className="px-4 py-2"><Badge className={cn('text-[10px] border rounded-full px-2', tierCls(p.tier))}>Tier {p.tier}</Badge></td>
-                <td className="px-4 py-2">{p.needs_approval
-                  ? <Badge className="text-[10px] border rounded-full px-2 bg-warning/10 text-warning border-warning/25">sim</Badge>
-                  : <Badge className="text-[10px] border rounded-full px-2 bg-primary/10 text-primary border-primary/25">não</Badge>}
-                </td>
-                <td className="px-4 py-2">{p.enabled
-                  ? <Badge className="text-[10px] border rounded-full px-2 bg-primary/10 text-primary border-primary/25">ativo</Badge>
-                  : <Badge className="text-[10px] border rounded-full px-2 bg-destructive/10 text-destructive border-destructive/25">desativado</Badge>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {policies.length === 0 ? (
+          <div className="py-8 text-center text-muted-foreground text-sm">
+            Nenhuma política cadastrada
+          </div>
+        ) : (
+          <table className="w-full text-xs">
+            <thead><tr className="border-b border-border">
+              {['Tool','Ambiente','Tier','Aprovação','Ativo'].map(h => (
+                <th key={h} className="text-left font-semibold text-muted-foreground uppercase tracking-wider text-[10px] px-4 pb-2">{h}</th>
+              ))}
+            </tr></thead>
+            <tbody>
+              {policies.map(p => (
+                <tr key={p.id} className="border-b border-border/50">
+                  <td className="px-4 py-2 font-mono">{p.tool}</td>
+                  <td className="px-4 py-2 font-mono text-muted-foreground">{p.environment}</td>
+                  <td className="px-4 py-2"><Badge className={cn('text-[10px] border rounded-full px-2', tierCls(p.tier))}>Tier {p.tier}</Badge></td>
+                  <td className="px-4 py-2">{p.needs_approval
+                    ? <Badge className="text-[10px] border rounded-full px-2 bg-warning/10 text-warning border-warning/25">sim</Badge>
+                    : <Badge className="text-[10px] border rounded-full px-2 bg-primary/10 text-primary border-primary/25">não</Badge>}
+                  </td>
+                  <td className="px-4 py-2">{p.enabled
+                    ? <Badge className="text-[10px] border rounded-full px-2 bg-primary/10 text-primary border-primary/25">ativo</Badge>
+                    : <Badge className="text-[10px] border rounded-full px-2 bg-destructive/10 text-destructive border-destructive/25">desativado</Badge>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </CardContent>
     </Card>
   );
@@ -506,6 +516,21 @@ export default function HubPage() {
           <div className="flex items-center justify-center py-20 text-muted-foreground">
             <Activity className="h-5 w-5 animate-spin mr-2" /> Carregando...
           </div>
+        ) : error ? (
+          <Card className="card-premium border-destructive/30 bg-destructive/5">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-3 mb-4">
+                <Shield className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-sm mb-1">Erro ao carregar Hub de Segurança</p>
+                  <p className="text-xs text-muted-foreground">{error}</p>
+                </div>
+              </div>
+              <Button onClick={loadAll} size="sm" className="gap-2">
+                <Activity className="h-4 w-4" /> Tentar Novamente
+              </Button>
+            </CardContent>
+          </Card>
         ) : <Section />}
       </div>
     </DashboardLayout>
