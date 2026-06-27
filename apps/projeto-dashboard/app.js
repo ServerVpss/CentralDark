@@ -1,67 +1,6 @@
 const DATA_URL = './painel-data.json';
 const REFRESH_MS = 30000;
 
-// Versão de schema que este front sabe renderizar.
-// Bump quando o painel-data.json mudar de forma incompatível.
-const SCHEMA_VERSION = 1;
-
-// Campos mínimos esperados no painel-data.json (com tipos básicos).
-// Se algum sumir ou mudar de tipo, mostramos banner em vez de quebrar.
-const SCHEMA_REQUIRED = [
-  { path: 'project', type: 'object' },
-  { path: 'updatedAt', type: 'string' },
-];
-
-function _typeOf(v) {
-  if (Array.isArray(v)) return 'array';
-  if (v === null) return 'null';
-  return typeof v;
-}
-
-function validateSchema(data) {
-  const issues = [];
-  if (!data || typeof data !== 'object') {
-    return { ok: false, issues: ['painel-data.json não é um objeto JSON válido'] };
-  }
-  if (data.schemaVersion != null && Number(data.schemaVersion) !== SCHEMA_VERSION) {
-    issues.push('schemaVersion ' + data.schemaVersion + ' ≠ esperado ' + SCHEMA_VERSION);
-  }
-  for (const f of SCHEMA_REQUIRED) {
-    const v = data[f.path];
-    const t = _typeOf(v);
-    if (v == null) issues.push('campo "' + f.path + '" ausente');
-    else if (t !== f.type) issues.push('campo "' + f.path + '" tem tipo ' + t + ', esperado ' + f.type);
-  }
-  return { ok: issues.length === 0, issues };
-}
-
-function showSchemaBanner(issues) {
-  let el = document.getElementById('schemaBanner');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'schemaBanner';
-    el.style.cssText = [
-      'position:sticky','top:0','z-index:9999',
-      'background:linear-gradient(90deg,#7a1f1f,#a83232)',
-      'color:#fff','padding:12px 18px','font:14px/1.4 system-ui,sans-serif',
-      'border-bottom:2px solid #ffb4b4','box-shadow:0 4px 12px rgba(0,0,0,.4)'
-    ].join(';');
-    document.body.prepend(el);
-  }
-  el.innerHTML =
-    '<strong>⚠️ painel-data.json incompatível com esta versão do painel</strong><br>' +
-    '<span style="opacity:.9">' + issues.map(safe).join(' · ') + '</span><br>' +
-    '<span style="opacity:.85;font-size:12px">' +
-    'Atualize o front (hard refresh: Ctrl+Shift+R) ou rode o workflow ' +
-    '<code>painel-rebuild-restart</code> no GitHub Actions para regenerar e validar os assets.' +
-    '</span>';
-}
-
-function hideSchemaBanner() {
-  const el = document.getElementById('schemaBanner');
-  if (el) el.remove();
-}
-
 const $ = (id) => document.getElementById(id);
 
 function pct(value) {
@@ -332,13 +271,6 @@ async function renderLive(data) {
 async function refresh() {
   try {
     const data = await fetchJson(DATA_URL);
-    const check = validateSchema(data);
-    if (!check.ok) {
-      showSchemaBanner(check.issues);
-      // Continua renderizando o que der — UI defensiva já trata campos ausentes.
-    } else {
-      hideSchemaBanner();
-    }
     renderData(data);
     renderEvents(data);
     renderAiSuggestions(data);

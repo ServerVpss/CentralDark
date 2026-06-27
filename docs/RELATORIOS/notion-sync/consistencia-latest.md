@@ -1,8 +1,8 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-26T10:35:41.438Z
-- **Commit:** `349c306e5d5288838f75bd720de1ebc21dee2708`
-- **Disparado por:** segredounlock
+- **Gerado:** 2026-06-27T16:58:17.704Z
+- **Commit:** `e3867e7b9e648e49264c8d5f744f9855ff568cb4`
+- **Disparado por:** lovable-dev[bot]
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
 
@@ -10,10 +10,10 @@
 
 | Database | Git | Notion | 🟩 OK | 🟥 Falta Notion | 🟧 Órfão |
 |---|---:|---:|---:|---:|---:|
-| regras | 4 | 4 | 4 | 0 | 0 |
+| regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 11 | 11 | 11 | 0 | 0 |
-| aprendizados | 264 | 0 | 0 | 264 | 0 |
+| aprendizados | 262 | 0 | 0 | 262 | 0 |
 
 ## Detalhes
 
@@ -21,7 +21,12 @@
 
 - 🟩 OK: **4**
 - 🟥 Faltando no Notion: **0**
-- 🟧 Órfãos no Notion (não existem no Git): **0**
+- 🟧 Órfãos no Notion (não existem no Git): **1**
+
+<details><summary>🟧 Itens órfãos</summary>
+
+- Processos legados de WhatsApp/Automação ficam STOPPED por design — não subir, não reportar como erro
+</details>
 
 ### pendencias
 
@@ -38,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **264**
+- 🟥 Faltando no Notion: **262**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -305,6 +310,4 @@
 - 252. notify-telegram exige header x-notify-key, não Authorization Bearer
 - 253. MCP OAuth: aceitar client_id CIMD com query string (conector ChatGPT)
 - 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin
-- 255. Reorganização apps/ VPS — estrutura consolidada
-- 256. GitHub push bloqueado — arquivos WebUI >100MB no histórico git
 </details>

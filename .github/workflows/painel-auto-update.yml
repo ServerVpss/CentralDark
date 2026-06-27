@@ -1,22 +1,24 @@
 name: painel auto-update
 
 # Em todo push na main, registra um evento "push <sha>" no Mega Painel
-# (painel-data.json LOCAL da VPS em /root/CentralDark/apps/projeto-dashboard/).
-# NÃO faz git commit/push de volta — Caddy serve direto do disco da VPS,
-# então o painel atualiza ao vivo sem poluir o chat com cards `chore(painel)`.
+# (apps/projeto-dashboard/painel-data.json) e commita de volta.
+# Mantém status.centralldark.com sempre vivo sem ação manual.
 #
-# ⚠️ Mudança 26/06/2026: removido o commit automático que estava gerando
-# spam de cards "chore(painel): registrar push <sha>" no chat do Lovable.
-# Painel continua vivo em tempo real, só que via escrita direta no disco
-# do runner self-hosted (que é a própria VPS).
+# ⚠️ EXCEÇÃO à regra "bots só via PR" (#116):
+# painel-data.json é DADO GERADO (snapshot operacional), não código.
+# Faz push direto pra status.centralldark.com nunca ficar estagnado.
+# Workflows que tocam CÓDIGO continuam obrigados a abrir PR.
+# Ignora push do próprio bot pra evitar loop.
 
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "apps/projeto-dashboard/painel-data.json"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: painel-auto-update
@@ -24,12 +26,17 @@ concurrency:
 
 jobs:
   registrar:
-    name: Registrar push no painel (sem commit)
+    name: Registrar push no painel
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark' && github.actor != 'github-actions[bot]'
     timeout-minutes: 5
     steps:
-      - name: Registrar evento direto no painel da VPS
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Registrar evento no painel
         env:
           PAINEL_EVENTO: "Push na main · ${{ github.sha }}"
           PAINEL_EVENTO_DETALHE: "${{ github.event.head_commit.message }}"
@@ -38,13 +45,22 @@ jobs:
           ACTOR: ${{ github.actor }}
           MSG: ${{ github.event.head_commit.message }}
         run: |
-          set -euo pipefail
-          # Roda o atualizador apontando pro painel-data.json LOCAL da VPS.
-          # Sem checkout, sem git add, sem commit, sem push.
-          cd /root/CentralDark
           node apps/projeto-dashboard/atualizar-painel-vivo.mjs
-          echo "✅ painel-data.json atualizado em disco — Caddy serve na hora"
 
+      - name: Commit + push
+        run: |
+          git config user.name 'CentralDark Bot'
+          git config user.email 'actions@github.com'
+          git add -- apps/projeto-dashboard/painel-data.json
+          if git diff --cached --quiet; then
+            echo "Nada pra commitar."
+            exit 0
+          fi
+          git commit -m "chore(painel): registrar push ${GITHUB_SHA:0:7}
+
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+          git pull --rebase origin main
+          git push
       - name: Notificar Telegram — painel atualizado
         if: success()
         env:
