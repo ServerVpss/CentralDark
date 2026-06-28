@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-28T10:33:01.908Z
-- **Commit:** `67b3372da3e2c089d6776db3072050cbde5df7cc`
+- **Gerado:** 2026-06-28T10:39:40.841Z
+- **Commit:** `6057088b4da629c7ac6e8efc6e5ebed5abaf7dcc`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 11 | 11 | 11 | 0 | 0 |
-| aprendizados | 263 | 0 | 0 | 263 | 0 |
+| aprendizados | 265 | 0 | 0 | 265 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **263**
+- 🟥 Faltando no Notion: **265**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -311,4 +311,6 @@
 - 253. MCP OAuth: aceitar client_id CIMD com query string (conector ChatGPT)
 - 254. mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin
 - 255. Fonte da verdade Supabase CentralDark consolidada
+- 256. Sessao MCP presa no env antigo apos restart PM2
+- 257. Modelo de administração: fonte da verdade como cérebro externo multi-IA
 </details>

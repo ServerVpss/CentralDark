@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-28T10:32:59.021Z
+# 🧠 Notion Sync — 2026-06-28T10:39:38.755Z
 
-- **Commit fonte:** `67b3372da3e2c089d6776db3072050cbde5df7cc`
+- **Commit fonte:** `6057088b4da629c7ac6e8efc6e5ebed5abaf7dcc`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 272 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 274 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 257 | 1 | 256 | 0 | 0 |
+| aprendizados | 259 | 1 | 258 | 0 | 0 |
 
 ## Operações
 
@@ -293,6 +293,8 @@
 | aprendizados | atualizado | #252 — notify-telegram exige header x-notify-key, não Authorization Bearer |
 | aprendizados | atualizado | #253 — MCP OAuth: aceitar client_id CIMD com query string (conector ChatGPT) |
 | aprendizados | atualizado | #254 — mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin |
-| aprendizados | criado | #255 — Fonte da verdade Supabase CentralDark consolidada |
+| aprendizados | atualizado | #255 — Fonte da verdade Supabase CentralDark consolidada |
+| aprendizados | atualizado | #256 — Sessao MCP presa no env antigo apos restart PM2 |
+| aprendizados | criado | #257 — Modelo de administração: fonte da verdade como cérebro externo multi-IA |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
