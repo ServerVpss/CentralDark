@@ -1886,3 +1886,9 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
 - **Data:** 2026-06-28
 - **Contexto:** Sessao 28/06: consolidacao do CentralDark, eliminando nomes legados Multizap/WhatsApp do Supabase em todos os niveis.
 - **Aprendizado:** project_ref Supabase FIXO=lyoigsqluyktoclwdaft (NUNCA muda). Nomes oficiais pos-limpeza: Org=CentralDark, Projeto=CentralDark, GitHub integration=ServerVpss/CentralDark (branch main). Legados MORTOS que ninguem deve mais referenciar: 'Multizap', 'multizap', 'clone-deck', 'segredounlock/clone-deck'. Renomear nome no dashboard Supabase e so manual (sem API). Tabelas internas editaveis via MCP Supabase SQL.
+
+### 256. Sessao MCP presa no env antigo apos restart PM2
+- **Categoria:** armadilha
+- **Data:** 2026-06-28
+- **Contexto:** Sessao 28/06: apos ligar MCP_ALLOW_VPS_COMMANDS=true e restart do PM2 id 25, a conversa atual continuou bloqueada. Reconectar o conector na mesma conversa nao destravou execute_command, mas renovou o GitHub.
+- **Aprendizado:** Quando MCP_ALLOW_VPS_COMMANDS e alterado e o PM2 reiniciado, as sessoes/conversas MCP JA ABERTAS continuam presas no env antigo — execute_command segue retornando BLOQUEADO_CONFIG mesmo com a flag=true no processo. Solucao: abrir uma CONVERSA NOVA no cliente (nao basta reconectar o conector na mesma conversa). A reconexao do conector tambem renova o token OAuth do GitHub (resolve 401).
