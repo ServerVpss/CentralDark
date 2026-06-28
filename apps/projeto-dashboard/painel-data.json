@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-28T17:51:10.682Z",
-  "updatedAtBR": "28/06/2026, 14:51:10 BRT",
+  "updatedAt": "2026-06-28T17:54:30.023Z",
+  "updatedAtBR": "28/06/2026, 14:54:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Tentativa de reload do MCP solicitada via chat; comando direto bloqueado por MCP_ALLOW_VPS_COMMANDS=false e leitura do workflow bloqueada pela camada de segurança",
     "branch": "main",
-    "lastCommit": "VPS sincronizada com origin (2f1de49d6); webhook OK mas GitHub não cadastrou o gatilho (deploy automático quebrado); Telegram mapeado; aprendizado #261",
+    "lastCommit": "docs(auditoria): pipeline deploy + Telegram auditados; VPS sincronizada; aprendizado #261",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-28T17:54:30.023Z",
+      "titulo": "Push na main · 091dcd269d2dd90261dce16c59e8a5b63f077961",
+      "detalhe": "docs(auditoria): pipeline deploy + Telegram auditados; VPS sincronizada; aprendizado #261",
+      "area": "Repositório",
+      "sha": "091dcd2",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-28T17:51:10.682Z",
       "titulo": "Auditoria pipeline deploy + sync VPS (sessão Opus CLI)",
@@ -1224,6 +1232,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-28T17:54:30.023Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 091dcd269d2dd90261dce16c59e8a5b63f077961 (091dcd2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-28T17:51:10.682Z",
       "ia": "@segredounlock",
