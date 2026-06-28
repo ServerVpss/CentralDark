@@ -1,25 +1,18 @@
-name: VPS SSH Exec
+name: VPS SSH Exec [DESATIVADO — duplicata de vps-exec-selfhosted.yml]
+# TRAVA: Este workflow é duplicata exata de vps-exec-selfhosted.yml (ambos rodam bash -lc local).
+# Use vps-exec-selfhosted.yml. Este não será executado (on: com trigger impossível).
+# Para reativar: altere o trigger de volta para workflow_dispatch.
 on:
   workflow_dispatch:
     inputs:
-      commands:
-        description: 'Comandos pra rodar no VPS'
+      _disabled:
+        description: 'DESATIVADO. Use vps-exec-selfhosted.yml'
         required: true
         type: string
 
 jobs:
-  exec:
-    runs-on: [self-hosted, Linux]
-    timeout-minutes: 30
+  noop:
+    runs-on: ubuntu-latest
+    if: false
     steps:
-      - name: Executar localmente na VPS
-        env:
-          CMDS: ${{ inputs.commands }}
-        run: |
-          set -o pipefail
-          echo "========== INÍCIO =========="
-          echo "host=$(hostname)  user=$(whoami)  data=$(date '+%F %T')"
-          bash -lc "$CMDS"
-          rc=$?
-          echo "========== FIM (exit=$rc) =========="
-          exit $rc
+      - run: echo "desativado"
