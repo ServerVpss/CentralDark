@@ -1,0 +1,105 @@
+{
+  "version": "2.0.0",
+  "lastUpdated": "2026-06-22",
+  "note": "Skills .md (metodologia) coexistem com .js (executáveis). NÃO remover .md existentes.",
+  "methodology": {
+    "description": "Skills de metodologia (leitura obrigatória para IAs)",
+    "skills": [
+      {
+        "slug": "code-review",
+        "path": "code-review/SKILL.md",
+        "type": "methodology",
+        "active": true
+      },
+      {
+        "slug": "documentation-memory",
+        "path": "documentation-memory/SKILL.md",
+        "type": "methodology",
+        "active": true
+      },
+      {
+        "slug": "runtime-error-prevention",
+        "path": "runtime-error-prevention/SKILL.md",
+        "type": "methodology",
+        "active": true
+      },
+      {
+        "slug": "systematic-debugging",
+        "path": "systematic-debugging/SKILL.md",
+        "type": "methodology",
+        "active": true
+      },
+      {
+        "slug": "using-superpowers",
+        "path": "using-superpowers/SKILL.md",
+        "type": "methodology",
+        "active": true
+      },
+      {
+        "slug": "verification-before-completion",
+        "path": "verification-before-completion/SKILL.md",
+        "type": "methodology",
+        "active": true
+      },
+      {
+        "slug": "writing-plans",
+        "path": "writing-plans/SKILL.md",
+        "type": "methodology",
+        "active": true
+      }
+    ]
+  },
+  "executable": {
+    "description": "Skills executáveis (.js) — nova camada funcional",
+    "skills": [
+      {
+        "slug": "find-skills",
+        "path": "externas/find-skills.cjs",
+        "type": "executable",
+        "category": "discovery",
+        "active": true,
+        "description": "Buscar skills externas no marketplace skills.sh"
+      },
+      {
+        "slug": "brainstorming",
+        "path": "externas/brainstorming.cjs",
+        "type": "executable",
+        "category": "ai",
+        "active": true,
+        "description": "Geração de ideias e soluções criativas"
+      }
+    ]
+  },
+  "categories": [
+    {
+      "key": "methodology",
+      "label": "Metodologia",
+      "icon": "📖"
+    },
+    {
+      "key": "discovery",
+      "label": "Descoberta",
+      "icon": "🔍"
+    },
+    {
+      "key": "ai",
+      "label": "Inteligência Artificial",
+      "icon": "🤖"
+    },
+    {
+      "key": "automation",
+      "label": "Automação",
+      "icon": "⚡"
+    },
+    {
+      "key": "communication",
+      "label": "Comunicação",
+      "icon": "💬"
+    },
+    {
+      "key": "external",
+      "label": "Externas (skills.sh)",
+      "icon": "🌐"
+    }
+  ]
+}
