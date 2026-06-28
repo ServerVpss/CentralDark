@@ -3,7 +3,22 @@
 > Lar canônico do handoff (regra do `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md`).
 > Toda IA lê ISTO + `kit_boas_vindas` + `ler_consciencia` + `ler_pendencias` + `APRENDIZADOS.md` antes de agir.
 > Substitui o "bloco de continuidade colado". A partir daqui, o fluxo vive aqui.
-> Última atualização: **2026-06-28** (sessão Claude).
+> Última atualização: **2026-06-28** (sessão Claude Opus — CLI/VPS).
+
+---
+
+## 🆕 SESSÃO 28/06 (Opus, CLI direto na VPS) — pipeline de deploy auditado
+
+**Contexto desta sessão:** shell direto na VPS (Claude Code CLI, não o `execute_command` do MCP). GitHub via `git` local OK. Notion OK.
+
+**Feito (com prova):**
+- 🟢 **Git VPS sincronizado** com `origin/main` (`2f1de49d6`). Tinha um rebase travado + commit duplicado de pendências (`c03246ca3`); desfiz o duplicado (remoto já tinha #7/#8/#9 no formato canônico `### N.`) e resolvi o conflito do `painel-data.json` (timestamp 16:33 + todos eventos do origin + evento Supabase preservado e normalizado pro schema PT). ✅ Resolve as 2 "tarefas mecânicas" antigas (conflito painel + sync VPS).
+- 🟢 **Webhook de deploy auditado** (`scripts/webhook/github-webhook-deploy.mjs` + `lib/safe-git-deploy.mjs`). Handler funciona 100% (testado: POST `:9300/webhook` → reset --hard origin/main OK).
+- 🔴 **DEPLOY AUTOMÁTICO QUEBRADO no lado GitHub:** push real NÃO aciona o webhook (Caddy access log só tem scanners, zero `GitHub-Hookshot`). **Falta cadastrar o webhook no GitHub** (Settings→Webhooks → `https://deploy.centralldark.com/webhook`, evento push). Bloqueado via MCP: **token GitHub voltou a 401** nesta sessão (`gho_` oauth-app morto) → reconectar conector OU cadastrar no painel do GitHub. Detalhe completo no **aprendizado #261**.
+
+**Telegram (estado real):** notifica push-main + ciclo-PR + workflow-falho + healthcheck-6h (se secrets `SRVER1_BOT_TOKEN`/`TELEGRAM_CHANNEL_ID`/`NOTIFY_API_KEY` ok). GAPS: deploy-concluído nunca notifica (workflow fantasma "Deploy VPS"); PM2 crash só pega em 6h; cron legado `guarda-*` morto desde 13/06 (arquivo some + token ausente). Duplicata de workflow: `vps-exec-selfhosted.yml` ≡ `vps-ssh-exec.yml`.
+
+**Pendente p/ Pivete decidir (toca área sensível / token / secrets):** cadastrar webhook no GitHub; renovar token GitHub do MCP; desativar 1 workflow duplicado; criar alerta de PM2 crash em tempo real; limpar/aposentar cron legado Multizap.
 
 ---
 
@@ -47,8 +62,9 @@
 - Refatorar `CONSCIENCIA.md` + `00-PORTA-DE-ENTRADA-IA.md`: universalizar agentes, remover legado Multizap/clone-deck, corrigir nomes PM2, regra "ferramenta-ausente" (o "fluxo Obsidian, seção por seção").
 
 **Tarefas mecânicas pendentes:**
-- Resolver conflito de merge em `painel-data.json`.
-- Sincronizar git da VPS (atrás do remoto) — **PRECISA `MCP_ALLOW_VPS_COMMANDS=true`**.
+- ✅ ~~Resolver conflito de merge em `painel-data.json`~~ — feito 28/06 (sessão Opus CLI).
+- ✅ ~~Sincronizar git da VPS (atrás do remoto)~~ — feito 28/06 via CLI direto (VPS em `2f1de49d6` = origin/main).
+- 🔴 NOVO: cadastrar webhook no GitHub p/ deploy automático voltar (ver seção "SESSÃO 28/06" + aprendizado #261).
 
 ---
 
