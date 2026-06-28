@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-27T19:21:51.369Z",
-  "updatedAtBR": "27/06/2026, 16:21:51 BRT",
+  "updatedAt": "2026-06-28T10:29:30.070Z",
+  "updatedAtBR": "28/06/2026, 07:29:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Tentativa de reload do MCP solicitada via chat; comando direto bloqueado por MCP_ALLOW_VPS_COMMANDS=false e leitura do workflow bloqueada pela camada de segurança",
     "branch": "main",
-    "lastCommit": "merge: resolver conflitos após consolidação hub fix",
+    "lastCommit": "aprendizado(#255): Fonte da verdade Supabase CentralDark consolidada",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-28T10:29:30.070Z",
+      "titulo": "Push na main · 67b3372da3e2c089d6776db3072050cbde5df7cc",
+      "detalhe": "aprendizado(#255): Fonte da verdade Supabase CentralDark consolidada",
+      "area": "Repositório",
+      "sha": "67b3372",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-27T19:21:51.369Z",
       "titulo": "Push na main · 93fc172a222b68273c2c024255d82c2d354c230a",
@@ -1145,6 +1153,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-28T10:29:30.070Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 67b3372da3e2c089d6776db3072050cbde5df7cc (67b3372)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-27T19:21:51.369Z",
       "ia": "@segredounlock",
