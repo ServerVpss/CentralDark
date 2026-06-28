@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-28T17:54:19.877Z
+# 🧠 Notion Sync — 2026-06-28T22:38:10.172Z
 
-- **Commit fonte:** `091dcd269d2dd90261dce16c59e8a5b63f077961`
+- **Commit fonte:** `2999ccd04c22aeaa0fa0b987c318daf9a8b77b41`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 278 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 279 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 263 | 1 | 262 | 0 | 0 |
+| aprendizados | 264 | 1 | 263 | 0 | 0 |
 
 ## Operações
 
@@ -299,6 +299,7 @@
 | aprendizados | atualizado | #258 — Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente |
 | aprendizados | atualizado | #259 — Regra universal: toda IA sugere modelo/esforco otimo para economizar creditos e tempo |
 | aprendizados | atualizado | #260 — Padrão de Apresentação — toda IA via MCP |
-| aprendizados | criado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
+| aprendizados | atualizado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
+| aprendizados | criado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
