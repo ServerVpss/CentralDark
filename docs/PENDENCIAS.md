@@ -463,3 +463,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Sintoma:** Secrets hoje vivem em arquivos .env (modo 0600) na VPS. Pivete cogitou centralizar no Supabase. Risco: tabela public exporia tudo via service_key.
 - **Onde mexer:** secrets/ na VPS + extensão supabase_vault no projeto lyoigsqluyktoclwdaft
 - **Critério pra fechar:** Se migrar, usar EXTENSÃO supabase_vault (criptografado em repouso), NUNCA tabela public. Projeto separado, sem pressa. Hoje o modelo 0600 já é seguro.
+### 8. Revisar exposição de vps_write_file_safe no /mcp-public sem auth — 🟡 ABERTO (28/06/2026, 07:29 BRT)
+- **Sintoma:** vps_write_file_safe está exposta no endpoint /mcp-public SEM Bearer token (desde 27/06). Qualquer um com a URL pode escrever arquivos na VPS (exceto paths bloqueados).
+- **Onde mexer:** tools-catalog.js / PUBLIC_CALLABLE_TOOL_NAMES no MCP (apps/modulos/mcp)
+- **Critério pra fechar:** Revisar PUBLIC_CALLABLE_TOOL_NAMES. Avaliar remover vps_write_file_safe do público (manter só leitura) e remover teste_temporario_pivete (temporária). Paths sensíveis seguem bloqueados, mas escrita sem auth é superfície de risco.
