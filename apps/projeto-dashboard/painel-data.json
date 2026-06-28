@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-28T20:23:12.239Z",
-  "updatedAtBR": "28/06/2026, 17:23:12 BRT",
+  "updatedAt": "2026-06-28T20:23:20.056Z",
+  "updatedAtBR": "28/06/2026, 17:23:20 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Sessão 28/06 — deploy automático restaurado (webhook id=647381247), MCP GH_TOKEN corrigido no PM2, workflow duplicado desativado, guardião batendo heartbeat com sucesso",
     "branch": "main",
-    "lastCommit": "fix(infra): desativar workflow duplicado + scripts mcp-restart e register-webhook",
+    "lastCommit": "chore(painel): IA atualiza painel — atualização",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -494,6 +494,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-28T20:23:20.056Z",
+      "titulo": "Push na main · 56286eb7524cf406d2e24092bf784998ee5ee228",
+      "detalhe": "chore(painel): IA atualiza painel — atualização",
+      "area": "Repositório",
+      "sha": "56286eb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-28T19:30:00.000Z",
       "titulo": "Sessão 28/06 concluída — 4 tarefas entregues",
@@ -1237,6 +1245,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-28T20:23:20.056Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 56286eb7524cf406d2e24092bf784998ee5ee228 (56286eb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-28T18:42:10.585Z",
       "ia": "@segredounlock",
