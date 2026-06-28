@@ -570,6 +570,12 @@
       "actor": "segredounlock"
     },
     {
+      "time": "2026-06-28T10:10:04.581Z",
+      "titulo": "Supabase renomeado Multizap→CentralDark",
+      "detalhe": "org, projeto, GitHub integration ServerVpss/CentralDark, tabelas internas. project_ref FIXO=lyoigsqluyktoclwdaft. Pendência crítica: token GitHub do MCP morto (401) bloqueia gravação na fonte da verdade.",
+      "area": "infra"
+    },
+    {
       "time": "2026-06-27T19:21:51.369Z",
       "titulo": "Push na main · 93fc172a222b68273c2c024255d82c2d354c230a",
       "detalhe": "merge: resolver conflitos após consolidação hub fix",
@@ -797,13 +803,6 @@
       "area": "Repositório",
       "status": "feito",
       "detail": "fix(vigia+actions): Telegram em falhas recorrentes, rebase antes de push, checkout@v4 no Farm"
-    },
-    {
-      "time": "2026-06-23T00:15:11.360Z",
-      "title": "Push na main · 09906861d5eb2aa9d23b749ac46006993216b916",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "fix(pendencias): remover marcadores de conflito de merge — #56 detalhado, #57 CONCLUÍDO"
     }
   ],
   "agents": [
