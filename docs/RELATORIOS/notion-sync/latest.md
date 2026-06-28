@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-27T16:58:15.753Z
+# 🧠 Notion Sync — 2026-06-28T10:32:59.021Z
 
-- **Commit fonte:** `e3867e7b9e648e49264c8d5f744f9855ff568cb4`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `67b3372da3e2c089d6776db3072050cbde5df7cc`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 272 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 272 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 256 | 0 | 256 | 0 | 0 |
+| aprendizados | 257 | 1 | 256 | 0 | 0 |
 
 ## Operações
 
@@ -293,5 +293,6 @@
 | aprendizados | atualizado | #252 — notify-telegram exige header x-notify-key, não Authorization Bearer |
 | aprendizados | atualizado | #253 — MCP OAuth: aceitar client_id CIMD com query string (conector ChatGPT) |
 | aprendizados | atualizado | #254 — mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin |
+| aprendizados | criado | #255 — Fonte da verdade Supabase CentralDark consolidada |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
