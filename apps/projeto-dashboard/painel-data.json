@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-06-28T22:31:31.444Z",
-  "updatedAtBR": "28/06/2026, 19:31:31 BRT",
+  "updatedAt": "2026-06-28T22:32:31.966Z",
+  "updatedAtBR": "28/06/2026, 19:32:31 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -348,13 +348,14 @@
     "note": "Modo paralelo: 3 IAs revisam cada PR simultaneamente. Groq (Llama3-70B) + Gemini Flash + Claude Sonnet."
   },
   "nextSteps": [
-    "🤖 CRÍTICO: Recriar apps/bot-telegram/bot.cjs — CentralDark-TelegramBot stopped (script ausente)",
-    "🔧 pipeline-notify.yml: corrigir trigger workflow_run (nomes 'Deploy VPS'/'Deploy' não existem → VPS ATUALIZADA nunca dispara)",
-    "🔑 Ativar Claude no PR Review: adicionar ANTHROPIC_API_KEY em github.com/ServerVpss/CentralDark/settings/secrets/actions",
-    "⚠️ contas-admin (PM2 id 20): Python ASGI errored — investigar causa raiz",
+    "✅ TelegramBot recuperado (@srver1bot online) — restaurado do git + bootstrap Multizap removido",
+    "✅ pipeline-notify.yml corrigido — trigger workflow_run fantasma removido; webhook agora notifica 'VPS ATUALIZADA'",
+    "✅ contas-admin recuperado — main.py restaurado + load_dotenv (não depende mais do env_file instável do PM2)",
+    "🔑 Ativar Claude no PR Review: adicionar ANTHROPIC_API_KEY em github.com/ServerVpss/CentralDark/settings/secrets/actions (ação do Pivete — eu não tenho a key)",
     "⚠️ P4: MultiZap-BOT errored — investigar causa raiz (baixa prioridade, quando Pivete pedir)",
     "📝 Issue #75: Consolidar Protocolo Reload Universal Multi-IA (documentação)",
-    "📋 REGRA: toda IA chama atualizar_painel() ao concluir qualquer tarefa"
+    "📋 REGRA: toda IA chama atualizar_painel() ao concluir qualquer tarefa",
+    "🛡️ Padrão seguro na VPS: parar webhook → editar/commitar → push → religar (evita git reset --hard apagar trabalho)"
   ],
   "githubIssuesOpen": [
     {
@@ -969,13 +970,13 @@
       "title": "CentralDark TelegramBot",
       "sector": "Telegram",
       "owner": "PM2",
-      "status": "parado",
-      "severity": "p1",
-      "evidence": "PM2 stopped · apps/bot-telegram/bot.cjs ausente · script precisa ser recriado",
-      "progress": 0,
-      "criteriaDone": 0,
-      "criteriaTotal": 1,
-      "nextAction": "Recriar apps/bot-telegram/bot.cjs e reiniciar PM2",
+      "status": "rodando",
+      "severity": "p3",
+      "evidence": "@srver1bot online · polling · script restaurado do git + bootstrap Multizap removido (28/06)",
+      "progress": 98,
+      "criteriaDone": 98,
+      "criteriaTotal": 100,
+      "nextAction": "Monitorar uptime via PM2",
       "source": "PM2: CentralDark-TelegramBot"
     },
     {
