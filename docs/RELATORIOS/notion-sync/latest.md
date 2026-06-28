@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-28T10:53:23.721Z
+# 🧠 Notion Sync — 2026-06-28T12:05:23.459Z
 
-- **Commit fonte:** `05e6c02404c88987c8c3e30ec74ab8156600636f`
+- **Commit fonte:** `26a750cf181b4038f19d492ae1166645684fca96`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 275 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 277 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 260 | 1 | 259 | 0 | 0 |
+| aprendizados | 262 | 1 | 261 | 0 | 0 |
 
 ## Operações
 
@@ -296,6 +296,8 @@
 | aprendizados | atualizado | #255 — Fonte da verdade Supabase CentralDark consolidada |
 | aprendizados | atualizado | #256 — Sessao MCP presa no env antigo apos restart PM2 |
 | aprendizados | atualizado | #257 — Modelo de administração: fonte da verdade como cérebro externo multi-IA |
-| aprendizados | criado | #258 — Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente |
+| aprendizados | atualizado | #258 — Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente |
+| aprendizados | atualizado | #259 — Regra universal: toda IA sugere modelo/esforco otimo para economizar creditos e tempo |
+| aprendizados | criado | #260 — Padrão de Apresentação — toda IA via MCP |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
