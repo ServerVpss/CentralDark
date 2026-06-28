@@ -53,3 +53,9 @@ quarantine/
 *.tmp
 *.save
 *.orig
+
+# Segredos — NUNCA versionar tokens/keys/.env (proteção defensiva 28/06/2026)
+secrets/
+*.env
+!*.env.example
+.backups/

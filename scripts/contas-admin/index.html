@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Painel de Contas</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--text:#e2e8f0;--mut:#94a3b8;--ok:#10b981;--pri:#3b82f6;--warn:#f59e0b}
+  *{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);padding:24px;max-width:980px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}.sub{color:var(--mut);font-size:13px;margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .card h3{margin:0 0 4px;font-size:15px}.card .desc{color:var(--mut);font-size:12px;margin-bottom:12px}
+  .btn{display:block;width:100%;padding:10px 12px;border-radius:8px;border:0;font-weight:600;cursor:pointer;margin-top:6px;font-size:13px}
+  .btn-pri{background:var(--pri);color:#fff}.btn-ok{background:var(--ok);color:#fff}.btn-gh{background:#24292e;color:#fff}.btn-g{background:#fff;color:#333}
+  .btn:hover{opacity:.9}.section{margin-top:28px}.row{display:flex;gap:8px;align-items:center;padding:8px;border-radius:6px;background:#0b1220;margin-top:6px;font-size:13px}
+  .badge{padding:2px 8px;border-radius:99px;background:var(--border);font-size:11px}
+  .ok{color:var(--ok)}.warn{color:var(--warn)}.empty{color:var(--mut);font-size:13px;text-align:center;padding:20px}
+  iframe{width:100%;height:600px;border:1px solid var(--border);border-radius:8px;margin-top:12px;background:#000}
+</style></head><body>
+<h1>🔐 Painel de Contas</h1><div class="sub">Logue uma vez aqui, as IAs reusam o token salvo na VPS.</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>🤖 ChatGPT</h3><div class="desc">Login via navegador remoto (sem OAuth público)</div>
+    <button class="btn btn-pri" onclick="abrirNavegador('chatgpt','https://chatgpt.com/auth/login')">Logar pelo Navegador</button>
+  </div>
+  <div class="card">
+    <h3>🧠 Claude</h3><div class="desc">Login via navegador remoto</div>
+    <button class="btn btn-pri" onclick="abrirNavegador('claude','https://claude.ai/login')">Logar pelo Navegador</button>
+  </div>
+  <div class="card">
+    <h3>✨ Gemini</h3><div class="desc">Login via navegador remoto</div>
+    <button class="btn btn-pri" onclick="abrirNavegador('gemini','https://gemini.google.com')">Logar pelo Navegador</button>
+  </div>
+  <div class="card">
+    <h3>🐙 GitHub</h3><div class="desc">OAuth direto — 1 clique</div>
+    <button class="btn btn-gh" onclick="oauth('github')">Conectar com GitHub</button>
+  </div>
+  <div class="card">
+    <h3>🔵 Google</h3><div class="desc">OAuth direto (precisa Client ID)</div>
+    <button class="btn btn-g" onclick="oauth('google')">Conectar com Google</button>
+  </div>
+  <div class="card">
+    <h3>➕ Outro site</h3><div class="desc">Navegador remoto genérico</div>
+    <button class="btn btn-pri" onclick="abrirCustom()">Abrir navegador</button>
+  </div>
+</div>
+
+<div class="section"><h3 style="margin-bottom:6px">📂 Contas salvas</h3><div id="contas" class="empty">carregando…</div></div>
+<div class="section"><h3 style="margin-bottom:6px">🖥️ Sessões ativas</h3><div id="sessoes" class="empty">nenhuma</div></div>
+<div id="player"></div>
+
+<script>
+async function api(p,opt={}){const r=await fetch(p,{...opt,headers:{'Content-Type':'application/json',...(opt.headers||{})}});if(!r.ok)throw new Error(await r.text());return r.json()}
+async function recarregar(){
+  try{const c=await api('/api/contas/listar');const el=document.getElementById('contas');
+    el.className=c.items.length?'':'empty';
+    el.innerHTML=c.items.length?c.items.map(i=>`<div class="row"><span class="badge">${i.tipo}</span><b>${i.provedor}</b><span style="color:var(--mut);margin-left:auto">${i.user||''}</span></div>`).join(''):'nenhuma conta salva ainda';
+  }catch(e){console.error(e)}
+  try{const s=await api('/api/sessao/listar');const el=document.getElementById('sessoes');
+    el.className=s.items.length?'':'empty';
+    el.innerHTML=s.items.length?s.items.map(x=>`<div class="row"><span class="badge ok">ativa</span><b>${x.provedor}</b><span style="color:var(--mut)">expira em ${Math.max(0,x.expira_em)}s</span><button class="btn" style="width:auto;padding:4px 10px;margin:0;background:#dc2626;color:#fff" onclick="fechar('${x.id}')">Fechar</button></div>`).join(''):'nenhuma sessão ativa';
+  }catch(e){console.error(e)}
+}
+async function abrirNavegador(prov,url){
+  const btn=event.target;btn.disabled=true;btn.textContent='Subindo navegador…';
+  try{const s=await api('/api/sessao/abrir',{method:'POST',body:JSON.stringify({provedor:prov,url})});
+    document.getElementById('player').innerHTML=`<h3 style="margin-top:24px">🖥️ ${prov} — sessão ${s.id}</h3><p style="color:var(--mut);font-size:12px">Senha auto-inserida. Faça login normal. Quando fechar, o profile fica salvo.</p><iframe src="${s.url}"></iframe>`;
+    recarregar();
+  }catch(e){alert('Erro: '+e.message)}
+  finally{btn.disabled=false;btn.textContent=btn.textContent.replace('Subindo navegador…','Logar pelo Navegador')}
+}
+async function abrirCustom(){const url=prompt('URL para abrir:','https://');if(!url)return;const prov=prompt('Nome do provedor (sem espaços):','custom');if(!prov)return;abrirNavegador(prov,url)}
+async function oauth(prov){try{const r=await api(`/api/oauth/${prov}/iniciar`);window.location.href=r.url}catch(e){alert('Erro: '+e.message)}}
+async function fechar(id){await api('/api/sessao/fechar',{method:'POST',body:JSON.stringify({id})});document.getElementById('player').innerHTML='';recarregar()}
+recarregar();setInterval(recarregar,8000);
+</script></body></html>

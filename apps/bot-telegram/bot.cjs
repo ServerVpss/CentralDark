@@ -6,7 +6,6 @@
 
 const _path = require('path');
 const _envFs = require('fs');
-const { spawn: _spawn } = require('child_process');
 
 function loadEnvFile(filePath) {
   try {
@@ -25,23 +24,10 @@ function loadEnvFile(filePath) {
 loadEnvFile('/root/CentralDark/secrets/telegram-alerts.env');
 loadEnvFile(_path.join(__dirname, '.env'));
 
-// ═══ BOOTSTRAP: executar post-deploy em background sem travar o bot ═══
-try {
-  const _pd = '/root/Multizap/apps/clone-deck/scripts/post-deploy.sh';
-  const _mk = '/tmp/.clone-deck-bootstrap-done';
-  if (_envFs.existsSync(_pd) && !_envFs.existsSync(_mk) && process.env.CLONE_DECK_SKIP_BOOTSTRAP !== '1') {
-    console.log('[Bootstrap] Agendando post-deploy em background...');
-    const child = _spawn('bash', [_pd], {
-      detached: true,
-      stdio: 'ignore',
-      env: { ...process.env, CLONE_DECK_SKIP_BOOTSTRAP: '1' },
-    });
-    child.unref();
-    _envFs.writeFileSync(_mk, new Date().toISOString());
-    console.log('[Bootstrap] Post-deploy agendado.');
-  }
-} catch(e) { console.log('[Bootstrap] ' + (e.message || 'erro').slice(0, 200)); }
-// ═══ FIM BOOTSTRAP ═══
+// ═══ BOOTSTRAP REMOVIDO (28/06/2026) ═══
+// O bloco antigo executava /root/Multizap/apps/clone-deck/scripts/post-deploy.sh.
+// Multizap é legado fora do escopo do CentralDark — removido para isolar o bot.
+// ═══ FIM ═══
 
 
 // === Requires tolerantes a caminho (reorganização de pastas) ===

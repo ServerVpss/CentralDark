@@ -8,7 +8,13 @@ name: Pipeline — Telegram + Painel
 #   🔄 REVISÃO       → pull_request_review changes_requested
 #   🟢 MERGEADO      → pull_request closed + merged=true
 #   ❌ FECHADO       → pull_request closed + merged=false
-#   🚀 VPS           → workflow_run deploy concluído com sucesso
+#
+# NOTA (28/06/2026): o estágio "🚀 VPS ATUALIZADA" NÃO vem mais daqui.
+# O deploy real é feito pelo webhook (PM2 CentralDark-WebhookDeploy), fora do
+# GitHub Actions. A notificação "VPS ATUALIZADA" é emitida pelo próprio handler
+# (scripts/webhook/github-webhook-deploy.mjs) quando o git reset conclui com
+# mudança real. O trigger workflow_run antigo apontava para workflows
+# inexistentes ("Deploy VPS"/"Deploy") e nunca disparava — removido.
 
 on:
   pull_request:
@@ -16,9 +22,6 @@ on:
     branches: [main]
   pull_request_review:
     types: [submitted]
-  workflow_run:
-    workflows: ["Deploy VPS", "deploy", "Deploy"]
-    types: [completed]
 
 permissions:
   contents: write
@@ -46,7 +49,6 @@ jobs:
           ACTION:       ${{ github.event.action }}
           MERGED:       ${{ github.event.pull_request.merged }}
           REVIEW_STATE: ${{ github.event.review.state }}
-          WF_CONCL:     ${{ github.event.workflow_run.conclusion }}
         run: |
           case "$EVENT" in
             pull_request)
@@ -100,19 +102,6 @@ jobs:
                   ;;
               esac
               ;;
-            workflow_run)
-              if [[ "$WF_CONCL" == "success" ]]; then
-                echo "emoji=🚀"  >> $GITHUB_OUTPUT
-                echo "stage=VPS" >> $GITHUB_OUTPUT
-                echo "label=VPS ATUALIZADA" >> $GITHUB_OUTPUT
-                echo "desc=Deploy concluído — VPS sincronizada" >> $GITHUB_OUTPUT
-              else
-                echo "emoji=⚠️"  >> $GITHUB_OUTPUT
-                echo "stage=VPS_ERRO" >> $GITHUB_OUTPUT
-                echo "label=VPS ERRO" >> $GITHUB_OUTPUT
-                echo "desc=Deploy falhou — verificar logs" >> $GITHUB_OUTPUT
-              fi
-              ;;
           esac
 
       - name: Notificar Telegram
@@ -122,10 +111,10 @@ jobs:
           EMOJI:   ${{ steps.stage.outputs.emoji }}
           LABEL:   ${{ steps.stage.outputs.label }}
           DESC:    ${{ steps.stage.outputs.desc }}
-          TITLE:   ${{ github.event.pull_request.title || github.event.workflow_run.name || 'Deploy' }}
+          TITLE:   ${{ github.event.pull_request.title || 'PR' }}
           NUMBER:  ${{ github.event.pull_request.number || '' }}
           AUTHOR:  ${{ github.event.pull_request.user.login || github.event.sender.login }}
-          URL:     ${{ github.event.pull_request.html_url || github.event.workflow_run.html_url }}
+          URL:     ${{ github.event.pull_request.html_url || '' }}
         run: |
           if [ -z "$BOT" ]; then echo "⚠️ SRVER1_BOT_TOKEN não configurado"; exit 0; fi
           [ -n "$NUMBER" ] && PR_LINE="PR #${NUMBER} · @${AUTHOR}" || PR_LINE="@${AUTHOR}"
@@ -141,10 +130,10 @@ jobs:
           EMOJI:   ${{ steps.stage.outputs.emoji }}
           LABEL:   ${{ steps.stage.outputs.label }}
           DESC:    ${{ steps.stage.outputs.desc }}
-          TITLE:   ${{ github.event.pull_request.title || github.event.workflow_run.name || 'Deploy' }}
+          TITLE:   ${{ github.event.pull_request.title || 'PR' }}
           NUMBER:  ${{ github.event.pull_request.number || '0' }}
           AUTHOR:  ${{ github.event.pull_request.user.login || github.event.sender.login }}
-          URL:     ${{ github.event.pull_request.html_url || github.event.workflow_run.html_url || '' }}
+          URL:     ${{ github.event.pull_request.html_url || '' }}
         run: python3 scripts/update-pipeline.py
 
       - name: Git commit + push
