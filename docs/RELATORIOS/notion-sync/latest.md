@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-28T10:39:38.755Z
+# 🧠 Notion Sync — 2026-06-28T10:53:23.721Z
 
-- **Commit fonte:** `6057088b4da629c7ac6e8efc6e5ebed5abaf7dcc`
+- **Commit fonte:** `05e6c02404c88987c8c3e30ec74ab8156600636f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 274 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 275 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 259 | 1 | 258 | 0 | 0 |
+| aprendizados | 260 | 1 | 259 | 0 | 0 |
 
 ## Operações
 
@@ -295,6 +295,7 @@
 | aprendizados | atualizado | #254 — mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin |
 | aprendizados | atualizado | #255 — Fonte da verdade Supabase CentralDark consolidada |
 | aprendizados | atualizado | #256 — Sessao MCP presa no env antigo apos restart PM2 |
-| aprendizados | criado | #257 — Modelo de administração: fonte da verdade como cérebro externo multi-IA |
+| aprendizados | atualizado | #257 — Modelo de administração: fonte da verdade como cérebro externo multi-IA |
+| aprendizados | criado | #258 — Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
