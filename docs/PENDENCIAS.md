@@ -467,3 +467,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Sintoma:** vps_write_file_safe está exposta no endpoint /mcp-public SEM Bearer token (desde 27/06). Qualquer um com a URL pode escrever arquivos na VPS (exceto paths bloqueados).
 - **Onde mexer:** tools-catalog.js / PUBLIC_CALLABLE_TOOL_NAMES no MCP (apps/modulos/mcp)
 - **Critério pra fechar:** Revisar PUBLIC_CALLABLE_TOOL_NAMES. Avaliar remover vps_write_file_safe do público (manter só leitura) e remover teste_temporario_pivete (temporária). Paths sensíveis seguem bloqueados, mas escrita sem auth é superfície de risco.
+### 9. Refatorar fonte da verdade: universalizar + remover legados + regra ferramenta-ausente — 🟡 ABERTO (28/06/2026, 07:50 BRT)
+- **Sintoma:** CONSCIENCIA.md e 00-PORTA-DE-ENTRADA-IA.md com legado Multizap/clone-deck, nomes PM2 errados, agentes listados por nome (sem Claude/sem universal), snapshot de pendências velho. LEIA-ME-IA.md referenciado no fluxo mas foi pra ARQUIVO-MORTO (404).
+- **Onde mexer:** docs/CONSCIENCIA/CONSCIENCIA.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
+- **Critério pra fechar:** Seção por seção, com confirmação do dono. Trocar MultiZap/clone-deck→CentralDark; universalizar agentes (qualquer IA via conector, sem citar nomes); corrigir nomes PM2 reais; adicionar regra ferramenta-ausente (IA avisa se não tem a tool); sincronizar snapshot de pendências com PENDENCIAS.md real. Fazer no fluxo do Obsidian.
