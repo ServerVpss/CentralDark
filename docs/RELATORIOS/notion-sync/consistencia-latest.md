@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-28T12:05:25.603Z
-- **Commit:** `26a750cf181b4038f19d492ae1166645684fca96`
+- **Gerado:** 2026-06-28T17:54:22.435Z
+- **Commit:** `091dcd269d2dd90261dce16c59e8a5b63f077961`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 11 | 11 | 11 | 0 | 0 |
-| aprendizados | 268 | 0 | 0 | 268 | 0 |
+| aprendizados | 269 | 0 | 0 | 269 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **268**
+- 🟥 Faltando no Notion: **269**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -316,4 +316,5 @@
 - 258. Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente
 - 259. Regra universal: toda IA sugere modelo/esforco otimo para economizar creditos e tempo
 - 260. Padrão de Apresentação — toda IA via MCP
+- 261. Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado)
 </details>

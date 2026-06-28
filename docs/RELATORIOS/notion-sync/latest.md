@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-28T12:05:23.459Z
+# 🧠 Notion Sync — 2026-06-28T17:54:19.877Z
 
-- **Commit fonte:** `26a750cf181b4038f19d492ae1166645684fca96`
+- **Commit fonte:** `091dcd269d2dd90261dce16c59e8a5b63f077961`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 277 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 278 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 262 | 1 | 261 | 0 | 0 |
+| aprendizados | 263 | 1 | 262 | 0 | 0 |
 
 ## Operações
 
@@ -298,6 +298,7 @@
 | aprendizados | atualizado | #257 — Modelo de administração: fonte da verdade como cérebro externo multi-IA |
 | aprendizados | atualizado | #258 — Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente |
 | aprendizados | atualizado | #259 — Regra universal: toda IA sugere modelo/esforco otimo para economizar creditos e tempo |
-| aprendizados | criado | #260 — Padrão de Apresentação — toda IA via MCP |
+| aprendizados | atualizado | #260 — Padrão de Apresentação — toda IA via MCP |
+| aprendizados | criado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
