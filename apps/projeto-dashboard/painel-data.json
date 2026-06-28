@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-28T18:46:11.003Z",
-  "updatedAtBR": "28/06/2026, 15:46:11 BRT",
+  "updatedAt": "2026-06-28T18:46:27.951Z",
+  "updatedAtBR": "28/06/2026, 15:46:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Tentativa de reload do MCP solicitada via chat; comando direto bloqueado por MCP_ALLOW_VPS_COMMANDS=false e leitura do workflow bloqueada pela camada de segurança",
     "branch": "main",
-    "lastCommit": "fix(infra): desativar workflow duplicado + scripts mcp-restart e register-webhook",
+    "lastCommit": "chore(infra): webhook GitHub→VPS cadastrado (id=647381247) — deploy automático restaurado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,14 +497,6 @@
     }
   ],
   "events": [
-    {
-      "time": "2026-06-28T18:46:11.003Z",
-      "titulo": "Push na main · c7dfc3edf807e24ce802a175559c86a48b414196",
-      "detalhe": "fix(infra): desativar workflow duplicado + scripts mcp-restart e register-webhook",
-      "area": "Repositório",
-      "sha": "c7dfc3e",
-      "actor": "segredounlock"
-    },
     {
       "time": "2026-06-28T18:42:10.585Z",
       "titulo": "Webhook cadastrado e validado — deploy automático GitHub→VPS ativo",
@@ -1240,13 +1232,6 @@
     }
   ],
   "iaTimeline": [
-    {
-      "time": "2026-06-28T18:46:11.003Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c7dfc3edf807e24ce802a175559c86a48b414196 (c7dfc3e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
     {
       "time": "2026-06-28T18:42:10.585Z",
       "ia": "@segredounlock",
