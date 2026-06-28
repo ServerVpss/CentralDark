@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-28T18:41:25.605Z",
-  "updatedAtBR": "28/06/2026, 15:41:25 BRT",
+  "updatedAt": "2026-06-28T18:42:10.585Z",
+  "updatedAtBR": "28/06/2026, 15:42:10 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Tentativa de reload do MCP solicitada via chat; comando direto bloqueado por MCP_ALLOW_VPS_COMMANDS=false e leitura do workflow bloqueada pela camada de segurança",
     "branch": "main",
-    "lastCommit": "docs(auditoria): pipeline deploy + Telegram auditados; VPS sincronizada; aprendizado #261",
+    "lastCommit": "chore(infra): webhook GitHub→VPS cadastrado (id=647381247) — deploy automático restaurado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -498,11 +498,11 @@
   ],
   "events": [
     {
-      "time": "2026-06-28T17:54:30.023Z",
-      "titulo": "Push na main · 091dcd269d2dd90261dce16c59e8a5b63f077961",
-      "detalhe": "docs(auditoria): pipeline deploy + Telegram auditados; VPS sincronizada; aprendizado #261",
-      "area": "Repositório",
-      "sha": "091dcd2",
+      "time": "2026-06-28T18:42:10.585Z",
+      "titulo": "Webhook cadastrado e validado — deploy automático GitHub→VPS ativo",
+      "detalhe": "id=647381247 url=deploy.centralldark.com/webhook eventos=push",
+      "area": "infra",
+      "sha": "",
       "actor": "segredounlock"
     },
     {
@@ -1233,10 +1233,10 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-06-28T17:54:30.023Z",
+      "time": "2026-06-28T18:42:10.585Z",
       "ia": "@segredounlock",
-      "action": "📌 Push na main · 091dcd269d2dd90261dce16c59e8a5b63f077961 (091dcd2)",
-      "area": "Repositório",
+      "action": "📌 Webhook cadastrado e validado — deploy automático GitHub→VPS ativo",
+      "area": "infra",
       "status": "sucesso"
     },
     {
