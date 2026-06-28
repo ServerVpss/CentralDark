@@ -348,15 +348,12 @@
     "note": "Modo paralelo: 3 IAs revisam cada PR simultaneamente. Groq (Llama3-70B) + Gemini Flash + Claude Sonnet."
   },
   "nextSteps": [
+    "🤖 CRÍTICO: Recriar apps/bot-telegram/bot.cjs — CentralDark-TelegramBot stopped (script ausente)",
+    "🔧 pipeline-notify.yml: corrigir trigger workflow_run (nomes 'Deploy VPS'/'Deploy' não existem → VPS ATUALIZADA nunca dispara)",
     "🔑 Ativar Claude no PR Review: adicionar ANTHROPIC_API_KEY em github.com/ServerVpss/CentralDark/settings/secrets/actions",
-    "🔴 Issue #124: PR Review Multi-IA falhou — investigar log do workflow",
+    "⚠️ contas-admin (PM2 id 20): Python ASGI errored — investigar causa raiz",
     "⚠️ P4: MultiZap-BOT errored — investigar causa raiz (baixa prioridade, quando Pivete pedir)",
     "📝 Issue #75: Consolidar Protocolo Reload Universal Multi-IA (documentação)",
-    "🤖 Issue #74: supabase-bot workflow vermelho — verificar",
-    "🔄 Issue #73: painel-validacao workflow vermelho — verificar",
-    "🔌 Issue #72: GitHub Bot Controller workflow vermelho — verificar",
-    "🩺 Issue #71: vps-healthcheck workflow vermelho — verificar",
-    "🔗 Linear: adicionar LINEAR_API_KEY em /root/CentralDark/secrets/mcp.env para listar issues Linear no painel",
     "📋 REGRA: toda IA chama atualizar_painel() ao concluir qualquer tarefa"
   ],
   "githubIssuesOpen": [
@@ -498,9 +495,17 @@
   ],
   "events": [
     {
+      "time": "2026-06-28T19:30:00.000Z",
+      "titulo": "Sessão 28/06 concluída — 4 tarefas entregues",
+      "detalhe": "1) MCP GH_TOKEN corrigido (guardião OK) 2) Webhook registrado e validando push 3) Workflow duplicado desativado 4) Telegram mapeado — TelegramBot PARADO (pendência)",
+      "area": "infra",
+      "sha": "dbf2b092e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-28T18:42:10.585Z",
       "titulo": "Webhook cadastrado e validado — deploy automático GitHub→VPS ativo",
-      "detalhe": "id=647381247 url=deploy.centralldark.com/webhook eventos=push",
+      "detalhe": "id=647381247 url=deploy.centralldark.com/webhook eventos=push · 3 pushes e 1 ping recebidos com status=200",
       "area": "infra",
       "sha": "",
       "actor": "segredounlock"
