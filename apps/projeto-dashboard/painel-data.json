@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-28T10:33:15.257Z",
-  "updatedAtBR": "28/06/2026, 07:33:15 BRT",
+  "updatedAt": "2026-06-28T10:40:28.120Z",
+  "updatedAtBR": "28/06/2026, 07:40:28 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Tentativa de reload do MCP solicitada via chat; comando direto bloqueado por MCP_ALLOW_VPS_COMMANDS=false e leitura do workflow bloqueada pela camada de segurança",
     "branch": "main",
-    "lastCommit": "aprendizado(#256): Sessao MCP presa no env antigo apos restart PM2",
+    "lastCommit": "aprendizado(#257): Modelo de administração: fonte da verdade como cérebro externo multi-IA",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -497,6 +497,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-28T10:40:28.120Z",
+      "titulo": "Push na main · 6057088b4da629c7ac6e8efc6e5ebed5abaf7dcc",
+      "detalhe": "aprendizado(#257): Modelo de administração: fonte da verdade como cérebro externo multi-IA",
+      "area": "Repositório",
+      "sha": "6057088",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-28T10:33:15.257Z",
       "titulo": "Push na main · 56883b6d47325bb7fb568f79246c7fbfbfec3915",
@@ -1161,6 +1169,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-28T10:40:28.120Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6057088b4da629c7ac6e8efc6e5ebed5abaf7dcc (6057088)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-28T10:33:15.257Z",
       "ia": "@segredounlock",
