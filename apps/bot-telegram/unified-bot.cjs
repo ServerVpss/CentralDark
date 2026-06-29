@@ -342,6 +342,10 @@ function buildPanel(chatId) {
     ? `  COG      ${cog.emoji} ${cog.nome.padEnd(21)}\n`
     : '';
 
+  const termLine = sess.terminalMode
+    ? `  TERMINAL 🖥️  ATIVO — Claude CLI   \n`
+    : '';
+
   const text =
 `<pre>┌──────────────────────────────────┐
 │   🔮  HUB CENTRAL · CentralDark  │
@@ -350,12 +354,16 @@ function buildPanel(chatId) {
   STATUS   SISTEMA OPERACIONAL  ✅
   MODO     ${modeTag}
   AGENTE   ${ag.emoji} ${ag.nome.padEnd(23)}
-${cogLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs no contexto
+${cogLine}${termLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs no contexto
   SKILLS   ${skillsOk ? '✅ disponíveis       ' : '⚠️  indisponível     '}
 
   ─── Selecione agente ou ferramenta ──
 
   ⏰ ${ts}</pre>`;
+
+  const termBtn = sess.terminalMode
+    ? { text: '🖥️ Terminal ON  ✅', callback_data: 'hub:terminal:off' }
+    : { text: '🖥️ Terminal Claude', callback_data: 'hub:terminal:on' };
 
   return {
     text,
@@ -372,6 +380,9 @@ ${cogLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs no contexto
       [
         { text: '📊 Relatório',    callback_data: 'hub:relatorio' },
         { text: '⚙️ Config',       callback_data: 'hub:config' },
+      ],
+      [
+        termBtn,
       ],
       [
         { text: '🧹 Limpar Hist.', callback_data: 'hub:clear' },
@@ -887,6 +898,31 @@ async function handleCallback(cq) {
       return send(chatId, '🧹 Histórico limpo!');
     }
 
+    // ── Terminal Claude — ativar / desativar
+    if (data === 'hub:terminal:on') {
+      const sess = getSession(chatId);
+      sess.terminalMode = true;
+      sess.history = [];
+      const p = buildPanel(chatId);
+      await edit(chatId, msgId, p.text, p.buttons);
+      return send(chatId,
+        '🖥️ <b>TERMINAL CLAUDE ATIVO</b>\n\n' +
+        'Modo terminal ligado. Agora você está conversando diretamente comigo com contexto completo do CentralDark.\n\n' +
+        '• Posso analisar, planejar e responder sobre qualquer coisa do sistema\n' +
+        '• Para comandos na VPS, eu listo o que executar\n' +
+        '• Para desativar: pressione o botão ou /terminal off\n\n' +
+        '<i>Pode mandar. Estou aqui.</i>',
+        [[{ text: '🔙 Painel', callback_data: 'hub:main' }]],
+      );
+    }
+    if (data === 'hub:terminal:off') {
+      const sess = getSession(chatId);
+      sess.terminalMode = false;
+      const p = buildPanel(chatId);
+      await edit(chatId, msgId, p.text, p.buttons);
+      return send(chatId, '🖥️ Terminal Claude desativado. Voltando ao modo agente normal.');
+    }
+
     // ── Config
     if (data === 'hub:config') {
       const sess = getSession(chatId);
@@ -1062,12 +1098,51 @@ async function handleMessage(msg) {
 
   if (isAdmin) {
     if (text.startsWith('/')) {
+      // Atalho /terminal on|off direto pelo texto
+      if (text === '/terminal on' || text === '/terminal') {
+        const sess = getSession(chatId);
+        sess.terminalMode = true;
+        sess.history = [];
+        return send(chatId, '🖥️ <b>Terminal Claude ATIVO.</b> Pode mandar.',
+          [[{ text: '🔙 Painel', callback_data: 'hub:main' }, { text: '⬜ Desativar', callback_data: 'hub:terminal:off' }]]);
+      }
+      if (text === '/terminal off') {
+        const sess = getSession(chatId);
+        sess.terminalMode = false;
+        return send(chatId, '🖥️ Terminal desativado. Modo agente normal.');
+      }
       const h = await handleAdminCommand(chatId, text);
       if (h === null) return runSkill(chatId, text, null);
       return;
     }
     const sess = getSession(chatId);
     const ag   = AGENTS[sess.agent];
+
+    // ── Modo Terminal Claude — usa system prompt especializado do CentralDark ──
+    if (sess.terminalMode) {
+      let terminalSkill;
+      try { terminalSkill = require('./skills/externas/claude-terminal.cjs'); } catch (_) {}
+      const terminalPrompt = terminalSkill ? terminalSkill.buildSystemPrompt() : ag.prompt;
+      sess.history.push({ role: 'user', content: text });
+      await typing(chatId);
+      const response = await callLLM(sess.history, terminalPrompt);
+      sess.history.push({ role: 'assistant', content: response });
+      resetInactivityTimer(chatId);
+      const htmlResp = mdToHtml(response);
+      const chunks = [];
+      for (let i = 0; i < htmlResp.length; i += 3800) chunks.push(htmlResp.slice(i, i + 3800));
+      for (let i = 0; i < chunks.length; i++) {
+        const isLast = i === chunks.length - 1;
+        await send(chatId, chunks[i],
+          isLast ? [[
+            { text: '🏠 Painel', callback_data: 'hub:main' },
+            { text: '🧹 Limpar', callback_data: 'hub:clear' },
+            { text: '⬜ Sair do Terminal', callback_data: 'hub:terminal:off' },
+          ]] : null,
+        );
+      }
+      return;
+    }
 
     // Injeta modo cognitivo quando ativo
     const cog          = sess.cogOverride ? COG_MODES[sess.cogOverride] : null;
