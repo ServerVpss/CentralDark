@@ -36,3 +36,11 @@ CONFIRMAÇÃO:
 ```
 
 > 🔗 Par oficial: **regras = `2026-06-20-padrao-resposta-pivete.md`** · **visual = este arquivo**. Aprendizado #260 aponta pra cá.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

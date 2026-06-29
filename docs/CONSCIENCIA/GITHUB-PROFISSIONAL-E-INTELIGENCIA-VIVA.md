@@ -103,3 +103,11 @@ Isso não significa agir sem controle. Ações sensíveis continuam exigindo con
 - Avaliar branch protection/rulesets e checks obrigatórios.
 - Automatizar atualização segura do Mega Painel após merges importantes.
 - Criar matriz de workflows profissionais do projeto.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

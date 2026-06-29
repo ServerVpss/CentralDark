@@ -126,3 +126,11 @@ Sem prova, não houve registro.
 - [Regra Oficial — Gestão de Secrets](./REGRA-OFICIAL-GESTAO-SECRETS.md) (a criar/migrar — atualmente vive como espelho em `mem://preferences/gestao-secrets-autorizacao-previa`, **precisa ser oficializada aqui também** conforme esta nova regra).
 - [Regra Oficial — Guardião Modo Propor](./REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md) — já segue este padrão.
 - [APRENDIZADOS.md](./APRENDIZADOS.md) — registrar aprendizado #251 com referência a este arquivo.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -53,3 +53,11 @@ Quando o `bot.multizap.dev` rodar estável servindo de `CentralDark/apps/bot/dis
 ## Aprendizado complementar
 
 Ver `docs/CONSCIENCIA/APRENDIZADOS.md` — entrada de 2026-06-10 sobre "pasta paralela na VPS".
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

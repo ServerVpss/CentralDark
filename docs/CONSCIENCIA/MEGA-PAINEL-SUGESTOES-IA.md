@@ -42,3 +42,11 @@ O usuário deve conseguir ver sugestões no Mega Painel e copiar um texto pronto
 ## Segurança
 
 Não colocar segredo real, tokens, sessões, chaves, valores privados ou caminhos sensíveis nas sugestões.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -120,3 +120,11 @@ Nenhum agente toma ação destrutiva ou abre frente paralela sem autorização. 
 - `docs/PENDENCIAS.md` — pendências abertas.
 - Notion `CentralDark • Consolidação` — Cérebro Vivo (Regras, Decisões, Pendências, Agent Logs).
 - Protocolo "Cérebro Vivo Central — 7 regras" (Notion, database Regras do Projeto).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

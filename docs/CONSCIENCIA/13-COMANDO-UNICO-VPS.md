@@ -118,3 +118,11 @@ O `curl` no final cobre 5 dos 7 passos da "Validação da cadeia completa":
 - HTTP 5xx outros → ler logs do serviço.
 
 Quando precisar de prova mais forte (rota com marcador da versão nova), trocar `/status` por essa rota específica no curl final.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

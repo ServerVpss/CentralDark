@@ -67,3 +67,11 @@ No caso do `MultiZap-BOT`, a sequência correta foi:
 - `docs/CONSCIENCIA/APRENDIZADOS.md` — aprendizados #203 a #207.
 - `docs/CONSCIENCIA/CONSCIENCIA.md` — seção 14, ciclo de trabalho.
 - Este arquivo — referência prática dedicada para qualquer IA nova.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

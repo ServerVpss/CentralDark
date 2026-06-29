@@ -30,3 +30,11 @@ O teste será considerado útil se for possível observar uma destas situações
 ## Segurança
 
 Não altera comportamento de produção, não toca segredo real, não toca Docker, Caddy, WuzAPI, WhatsApp, CRM ou banco real.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -148,3 +148,11 @@ Aparece como agente vivo:
 - Adicionar análise de conteúdo (não só nome) se as regras de nome
   começarem a errar muito.
 - Estender vigilância para outras pastas além de `CONSCIENCIA/`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

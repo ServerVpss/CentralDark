@@ -116,3 +116,11 @@ Se o usuário trouxer um resumo de outra conversa, print, log ou resultado final
 ```txt
 Resultado recebido → interpretação objetiva → próxima ação pronta → validação → relatório.
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

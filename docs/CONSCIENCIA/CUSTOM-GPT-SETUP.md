@@ -118,3 +118,11 @@ Se ele responder com dados reais do arquivo, tá funcionando.
 - **Atualizou regra?** Edita o arquivo em `docs/CONSCIENCIA/` e commita. Próxima conversa do GPT já lê a versão nova.
 - **Estado do PM2 mudou?** O workflow atualiza `09-ESTADO-ATUAL.md` a cada 6h automaticamente.
 - **Decisão nova?** Adiciona em `08-HISTORICO-DECISOES.md`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

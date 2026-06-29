@@ -1953,3 +1953,11 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
 - **Solução aplicada:** `Discard all tracked files` → Pull. Escolher "tracked" (não "all files") preserva notas novas não commitadas.
 - **Proteção permanente configurada:** Configurações → Git → Pull → "Merge strategy on conflicts" → **"Their changes"**. Conflitos resolvidos automaticamente favorecendo o GitHub (fonte da verdade).
 - **Como aplicar:** Nunca clicar em "Discard all X files" (apaga arquivos novos). Sempre "Discard X tracked files".
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

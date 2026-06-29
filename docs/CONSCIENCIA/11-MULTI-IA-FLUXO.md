@@ -64,3 +64,11 @@ Exigem confirmação explícita:
 - secrets.
 - PM2 sensível.
 - apagar, mover ou resetar arquivos.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

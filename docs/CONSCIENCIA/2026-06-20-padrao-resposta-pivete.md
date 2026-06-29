@@ -181,3 +181,11 @@ Nunca declarar "entregue" sem passar pelo critério correto da etapa.
 ## Objetivo
 
 Facilitar copiar/colar, reduzir confusão visual, evitar confusão entre projetos, padronizar PT-BR e manter o atendimento leve para o usuário.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

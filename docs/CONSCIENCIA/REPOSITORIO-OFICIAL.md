@@ -39,3 +39,11 @@ Em 2026-06-08/09, durante o início do kit Codex, foi criada uma branch no repo 
 ```txt
 Mestre, Segredo, preciso confirmar o repositório alvo antes de criar branch ou gravar arquivos.
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

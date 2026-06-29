@@ -116,3 +116,11 @@ Sempre pedir confirmação explícita antes de:
 Antes de começar uma nova conversa ou continuar tarefa com qualquer agente, recarregar memória primeiro.
 
 O objetivo é manter ChatGPT, Grok e Lovable respondendo a mesma coisa, seguindo o mesmo padrão e sabendo onde o último agente parou.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

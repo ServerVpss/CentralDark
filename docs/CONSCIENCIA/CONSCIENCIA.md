@@ -751,3 +751,11 @@ SYNC_PAUSED_INSTANCES=Recargas Brasil
 ---
 
 > **Fim.** Leu isto, **está pronto**. 🧠⚡ Sem perguntar, sem hesitar, sem pedir SSH. Aja.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

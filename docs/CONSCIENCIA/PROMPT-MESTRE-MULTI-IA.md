@@ -494,3 +494,11 @@ O CentralDark deve operar assim:
 - O humano aprova ações sensíveis e merges.
 
 Nenhuma IA deve trabalhar sem ler o estado real, validar e registrar o que fez.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

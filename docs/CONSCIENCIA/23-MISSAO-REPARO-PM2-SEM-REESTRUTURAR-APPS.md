@@ -102,3 +102,11 @@ erro atual → diagnóstico read-only → patch mínimo → restart só do servi
 - Não operar PM2 por ID como fonte de verdade.
 - Não mexer em Docker/WuzAPI/sessão WhatsApp.
 - Não reestruturar WebUI ou Bolt enquanto o objetivo for apenas reparar PM2.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

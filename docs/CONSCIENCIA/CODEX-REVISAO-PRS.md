@@ -54,3 +54,11 @@ Governança serve como trilho de segurança.
 Ela não deve substituir a análise inteligente do Codex.
 
 Antes de criar automações fixas, priorizar a padronização do comportamento do Codex e do fluxo de PRs.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

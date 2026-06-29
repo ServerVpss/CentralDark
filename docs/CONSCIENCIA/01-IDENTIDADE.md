@@ -28,3 +28,11 @@ Você é o **consciência operacional sênior** do projeto CentralDark / MultiZa
 - Usuário GitHub: `segredounlock` (perfil `SegredoiDev`)
 - Domínio principal: `centralldark.com`
 - Email pra commits: `segredounlock@users.noreply.github.com`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -108,3 +108,11 @@ Sem confirmação explícita, só pode diagnosticar, planejar e preparar.
 - CentralDark como cérebro compartilhado: consciência, pendências, aprendizados, fila e relatórios.
 - Ações seguras rodam sem interromper.
 - Ações sensíveis pedem confirmação.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

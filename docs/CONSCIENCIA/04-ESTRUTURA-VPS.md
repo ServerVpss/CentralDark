@@ -81,3 +81,11 @@ TODA pasta (no repo e na VPS) precisa ter:
 - `PLANO.md` — o que falta
 
 Criar junto com a pasta. Ler antes de mexer. Atualizar ao terminar.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

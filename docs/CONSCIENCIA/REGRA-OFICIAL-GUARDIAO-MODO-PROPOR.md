@@ -56,3 +56,11 @@ aprovação explícita do dono:
 - Documentação técnica: `docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md`
 - Memória de constraint: `.lovable/memory/constraints/guardiao-liberacao-auto.md`
 - Aprendizado nº 249: `docs/CONSCIENCIA/APRENDIZADOS.md`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

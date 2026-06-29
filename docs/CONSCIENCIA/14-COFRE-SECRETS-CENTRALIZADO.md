@@ -59,3 +59,11 @@ Exemplos (nomes ilustrativos):
 - conforme relatório operacional do Lote 1, o MCP foi validado com resultado sanitizado e sem erro;
 - o script de quarentena foi restaurado e ficou sem diff;
 - o Lote 2 permanece fora de escopo por enquanto.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

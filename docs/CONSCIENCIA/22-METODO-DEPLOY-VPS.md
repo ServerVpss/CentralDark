@@ -150,3 +150,11 @@ A diferença é que, no deploy, o patch não pode ficar perdido só na VPS. Ele 
 - Não versionar QR Code, sessão WhatsApp, token ou `.env`.
 - Não usar pasta legada como fonte oficial.
 - Não reiniciar todos os serviços por impulso.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

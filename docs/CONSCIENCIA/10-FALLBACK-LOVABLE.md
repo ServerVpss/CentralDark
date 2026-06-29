@@ -106,3 +106,11 @@ Explica em PT-BR simples:
 > "Pra esse fallback funcionar nessa conta, preciso de um token pessoal do GitHub guardado nos secrets do Lovable Cloud com o nome `GITHUB_PAT_PERFIL`. Gera em github.com → Settings → Developer settings → Personal access tokens (escopo `repo`). Eu cadastro pra você quando confirmar."
 
 Aí usa `secrets--add_secret(["GITHUB_PAT_PERFIL"])` pra abrir o formulário seguro.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

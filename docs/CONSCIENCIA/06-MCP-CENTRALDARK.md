@@ -57,3 +57,11 @@ Perguntas que devem responder com dados reais:
 
 Se o ChatGPT diz que `deploy_status` não existe mas `/tools.json` mostra ele, é cache do cliente:
 desconectar, reconectar e abrir conversa NOVA.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

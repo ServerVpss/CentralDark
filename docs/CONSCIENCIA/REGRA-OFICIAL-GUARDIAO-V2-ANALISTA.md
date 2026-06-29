@@ -95,3 +95,11 @@ O modo `auto` do Guardião continua **bloqueado até 08/07/2026** (ver `REGRA-OF
 - [Guardião — modo propor](./REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md)
 - [GUARDIAO-DA-CONSCIENCIA.md](./GUARDIAO-DA-CONSCIENCIA.md)
 - [APRENDIZADOS.md](./APRENDIZADOS.md) — aprendizado #253
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

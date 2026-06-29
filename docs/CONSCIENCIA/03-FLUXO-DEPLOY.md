@@ -59,3 +59,11 @@ Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>
 ```
 
 Isso conta pra medalha "Pair Extraordinaire".
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

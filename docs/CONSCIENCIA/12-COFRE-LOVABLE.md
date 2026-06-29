@@ -74,3 +74,11 @@ com o `sed` acima.
 - Nunca commitar `lovable.env` no repo.
 - Nunca imprimir o conteúdo do cofre em log/output não-mascarado.
 - Se rotacionar a chave SSH da conta `lovable_bot`, atualizar VPS + cofre + secret do Lovable juntos.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

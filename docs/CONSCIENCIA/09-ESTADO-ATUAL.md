@@ -48,3 +48,11 @@ O projeto CentralDark / MultiZap opera com múltiplas IAs e ferramentas, usando 
 3. Resolver webhook-bot com decisão documentada.
 4. Integrar frontend/chat ao vivo consumindo rotas read-only.
 5. Só discutir envio de mensagem depois de confirmação explícita.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -103,3 +103,11 @@ cd /root/CentralDark/apps/clone-deck
 git status --short --branch
 tail -n 80 /var/log/clone-deck-cleanup.log
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

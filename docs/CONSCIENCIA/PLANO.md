@@ -27,3 +27,11 @@ updated: 2026-06-29
 
 - Adicionar seção "Glossário de termos do projeto" pro GPT explicar siglas
 - Workflow extra que valida links quebrados nos arquivos `docs/CONSCIENCIA/`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

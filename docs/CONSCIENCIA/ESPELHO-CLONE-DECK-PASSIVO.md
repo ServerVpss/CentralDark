@@ -61,3 +61,11 @@ Até correção definitiva da ferramenta, sempre verificar o destino antes e dep
 ## Regra de segurança
 
 Se qualquer ferramenta tentar gravar memória, pendência, workflow, PR ou documentação operacional no espelho, parar e corrigir o destino para o repo oficial.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

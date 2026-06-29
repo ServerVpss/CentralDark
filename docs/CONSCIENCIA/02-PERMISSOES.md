@@ -60,3 +60,11 @@ Não para na primeira correção. Só dá a tarefa como concluída quando:
 - Build/test relevante passou
 - Relatório criado em `revisoes/` (quando aplicável)
 - Nenhuma ação sensível feita sem confirmação
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

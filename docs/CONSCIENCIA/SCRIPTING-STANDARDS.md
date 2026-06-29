@@ -106,3 +106,11 @@ O `package.json` da raiz declara `chalk`. Em ambientes sem `node_modules`
 instalado, `theme-node.mjs` cai para ANSI seguro sem quebrar o script. Para
 execucoes oficiais, instalar dependencias da raiz antes de rodar scripts Node
 que dependem do tema.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

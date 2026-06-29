@@ -49,3 +49,11 @@ WuzAPI (`asternic/wuzapi:latest`) NÃO tem endpoint nativo `listChats`. Auditori
 - Adaptador: `CentralDark/apps/bot-server/src/gateways/whatsapp/wuzapi-readonly-*.ts`
 - Run-once: `CentralDark/apps/bot-server/scripts/run-once/audit-list-chats-endpoint.mjs`
 - Memória: `mem://aprendizados/lote-2-bot-server-consolidacao`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

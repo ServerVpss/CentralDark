@@ -70,3 +70,11 @@ Modo emergência ou setup em massa. Se a IA já tem SSH na VPS, roda direto o `i
 ## Detalhes técnicos
 
 Documentação completa: `docs/INSTALADOR/30-skill-consciencia.md`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

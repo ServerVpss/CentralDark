@@ -80,3 +80,11 @@ Quando eu usar qualquer um destes comandos, execute da seguinte forma:
 ---
 
 *Atualizado em 25/06/2026.*
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

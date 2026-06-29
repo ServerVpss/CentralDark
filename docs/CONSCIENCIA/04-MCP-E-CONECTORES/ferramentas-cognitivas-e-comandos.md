@@ -155,3 +155,11 @@ Espaço aberto pra anotar **novas ferramentas** que forem chegando. Copia o temp
 1. Esta página é **referência rápida**, não fonte de verdade técnica — pra detalhes de arquitetura, ver `CLAUDE.md` + `.claude/`.
 2. Sempre que aparecer uma ferramenta nova, atualizar a seção **Melhoria Contínua** aqui antes de tudo.
 3. Respeitar Sincronia 4-Point: mudança aqui → refletir no GitHub e (quando fizer sentido) no Notion.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -103,3 +103,11 @@ Depois de aplicar a correção do MCP em produção, avançar para uma matriz pr
 - auditoria do espelho;
 - automação segura de atualização do Mega Painel;
 - validação bot/QR/chat ao vivo.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -113,3 +113,11 @@ pm2 save
 - Fazer Caddy reload sem aprovacao.
 - Mexer em Docker, WuzAPI, WhatsApp, banco real, CRM ou PM2 sensivel sem aprovacao.
 - Cadastrar webhook real sem veredito.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

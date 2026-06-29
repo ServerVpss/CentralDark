@@ -56,3 +56,11 @@ Não deve:
 ## Uso no fluxo
 
 Antes de mergear PR relevante, consultar esta ferramenta para saber se houve ação do Codex.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

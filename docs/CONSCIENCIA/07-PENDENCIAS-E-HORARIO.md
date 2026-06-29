@@ -44,3 +44,11 @@ Toda formatação de data/hora do projeto sai dali.
 ### Por que
 
 Garantir que toda data exibida (CRM, bot, painel, log) saia no mesmo fuso e formato, sem componente individual fazendo `new Date().toLocaleString()` com configuração diferente.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

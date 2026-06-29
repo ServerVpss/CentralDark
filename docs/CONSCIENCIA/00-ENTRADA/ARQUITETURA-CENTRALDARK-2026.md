@@ -92,3 +92,11 @@ Todas as IAs (Lovable, Claude, Grok, etc.) devem:
 ---
 
 *Este documento é a referência oficial. Qualquer alteração precisa de aprovação direta do dono do projeto.*
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

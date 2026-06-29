@@ -98,3 +98,11 @@ Git (docs/)  ──── espelha ────►  Notion (databases)
 3. Se existir → usar o data source ID e adicionar entrada.
 4. Se não existir → propor ao usuário antes de criar.
 5. Ao criar algo novo no Notion, **atualizar este arquivo** no mesmo commit.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
