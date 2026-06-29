@@ -1,6 +1,6 @@
-# 🧠 Notion Sync — 2026-06-29T13:21:53.869Z
+# 🧠 Notion Sync — 2026-06-29T14:14:50.966Z
 
-- **Commit fonte:** `95b51f37a4696e54bc1c31dc9998cb62f0cd4e51`
+- **Commit fonte:** `e2d9a33fd8cc67826c376e4084f2c27fd89d271b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
