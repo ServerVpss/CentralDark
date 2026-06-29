@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-06-29T09:00:00.000Z",
+  "updatedAt": "2026-06-29T09:34:53.000Z",
   "updatedAtBR": "29/06/2026, 06:00:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Sistema de Skills linkado: brainstorming Claude API + consciousness.think() no bot + memória persistente + skills memoria-longa/painel-status criadas. Base para novo MCP/Hub.",
+    "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
     "lastCommit": "c3c919626",
     "lastPR": "#103 mergeado · #106 mergeado",
@@ -182,6 +182,14 @@
       "data": "2026-06-29",
       "descricao": "Renomear: monitor_tarefas, Install-Callback, telepainel-deploy, guardiao-consciencia, guardiao-analista, MCP-CentralDark (invertido), CentralDark - Respiracao (espaco), contas-admin. Padrao: CentralDark-NomeDoServico",
       "commit": "c3c919626"
+    },
+    {
+      "id": "OBSIDIAN-MCP-BRIDGE",
+      "titulo": "Obsidian tool no novo MCP/Hub — obsidian_write nativo",
+      "status": "pendente",
+      "prioridade": "alta",
+      "data": "2026-06-29",
+      "descricao": "Quando o novo MCP/Hub for construído: adicionar tool obsidian_write(folder, title, content) que chama obsidian-writer.cjs via executor. Cada skill executável vira ferramenta MCP. O Hub passa a escrever notas Zettelkasten no vault do Pivete diretamente via MCP tool."
     }
   ],
   "fases": [
@@ -1624,6 +1632,12 @@
     }
   ],
   "eventos": [
+    {
+      "time": "2026-06-29T09:34:53.000Z",
+      "titulo": "Segundo Cérebro conectado — BRAIN.md + obsidian-writer + INDEX automático",
+      "detalhe": "BRAIN.md reescrito com mapa completo da infra. Skill obsidian-writer.cjs criada (write/link/index/list). Workflow obsidian-index.yml ativo. INDEX.md gerado com 7 notas. Pendência OBSIDIAN-MCP-BRIDGE registrada para o novo Hub.",
+      "area": "ia"
+    },
     {
       "time": "2026-06-29T09:00:00.000Z",
       "titulo": "Sistema de Skills — motor de consciência + Claude + memória persistente",

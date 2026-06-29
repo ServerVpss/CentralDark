@@ -1,0 +1,78 @@
+name: Obsidian — Regenerar INDEX
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/BRAIN/**'
+
+jobs:
+  regenerar-index:
+    runs-on: self-hosted
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Gerar INDEX.md
+        run: |
+          node - <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
+
+          const BRAIN = path.join(process.cwd(), 'docs', 'BRAIN');
+          const INDEX = path.join(BRAIN, 'INDEX.md');
+
+          function listNotes() {
+            const result = [];
+            for (const entry of fs.readdirSync(BRAIN, { withFileTypes: true })) {
+              if (entry.isDirectory()) {
+                const dir = path.join(BRAIN, entry.name);
+                for (const f of fs.readdirSync(dir)) {
+                  if (f.endsWith('.md')) result.push({ folder: entry.name, file: f });
+                }
+              } else if (entry.name.endsWith('.md') && entry.name !== 'INDEX.md') {
+                result.push({ folder: '', file: entry.name });
+              }
+            }
+            return result;
+          }
+
+          const notes = listNotes();
+          const byFolder = {};
+          for (const n of notes) {
+            const key = n.folder || '(raiz)';
+            if (!byFolder[key]) byFolder[key] = [];
+            byFolder[key].push(n);
+          }
+
+          const ts = new Date().toISOString().replace('T', ' ').slice(0, 16);
+          let md = `# 📚 INDEX — Segundo Cérebro CentralDark\n\n> Gerado automaticamente em ${ts} UTC. Não editar manualmente.\n\n`;
+
+          for (const [folder, items] of Object.entries(byFolder).sort()) {
+            md += `## ${folder}\n\n`;
+            for (const item of items.sort((a, b) => a.file.localeCompare(b.file))) {
+              md += `- [[${item.file.replace('.md', '')}]]\n`;
+            }
+            md += '\n';
+          }
+
+          fs.writeFileSync(INDEX, md);
+          console.log(`INDEX.md gerado: ${notes.length} notas em ${Object.keys(byFolder).length} pastas`);
+          EOF
+
+      - name: Commit INDEX.md
+        run: |
+          git config user.name  "CentralDark Bot"
+          git config user.email "bot@centralldark.com"
+          git add docs/BRAIN/INDEX.md
+          if git diff --cached --quiet; then
+            echo "INDEX.md sem mudanças — nada a commitar"
+          else
+            git commit -m "chore(brain): regenerar INDEX.md automaticamente"
+            git push
+          fi

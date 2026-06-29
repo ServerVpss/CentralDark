@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "lastUpdated": "2026-06-22",
+  "lastUpdated": "2026-06-29",
   "note": "Skills .md (metodologia) coexistem com .js (executáveis). NÃO remover .md existentes.",
   "methodology": {
     "description": "Skills de metodologia (leitura obrigatória para IAs)",
@@ -67,6 +67,30 @@
         "category": "ai",
         "active": true,
         "description": "Geração de ideias e soluções criativas"
+      },
+      {
+        "slug": "memoria-longa",
+        "path": "externas/memoria-longa.cjs",
+        "type": "executable",
+        "category": "memory",
+        "active": true,
+        "description": "Lê e escreve no Cérebro Vivo (docs/CONSCIENCIA/)"
+      },
+      {
+        "slug": "painel-status",
+        "path": "externas/painel-status.cjs",
+        "type": "executable",
+        "category": "automation",
+        "active": true,
+        "description": "Consulta status do painel-data.json sem chamadas externas"
+      },
+      {
+        "slug": "obsidian-writer",
+        "path": "externas/obsidian-writer.cjs",
+        "type": "executable",
+        "category": "memory",
+        "active": true,
+        "description": "Cria notas Zettelkasten em docs/BRAIN/ com [[links]] do Obsidian"
       }
     ]
   },
@@ -85,6 +109,11 @@
       "key": "ai",
       "label": "Inteligência Artificial",
       "icon": "🤖"
+    },
+    {
+      "key": "memory",
+      "label": "Memória",
+      "icon": "🧠"
     },
     {
       "key": "automation",

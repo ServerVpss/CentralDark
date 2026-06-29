@@ -1,104 +1,165 @@
 # 🧠 BRAIN — CentralDark
 
-**Versão:** 1.0  
-**Data:** 2026-06-28  
-**Status:** base navegável do segundo cérebro
+> Arquivo mestre do segundo cérebro. Toda IA que escrever aqui deve usar `[[links]]` do Obsidian.
+> Atualizado automaticamente. Não editar manualmente — use a skill `obsidian-writer`.
 
 ---
 
 ## Identidade
 
-O **CENTRAL DARK** é o projeto principal. O repo oficial é:
-
-```txt
-ServerVpss/CentralDark
-```
-
-Quando uma IA receber termos como `projeto`, `repo`, `VPS`, `MCP`, `workflow`, `webhook`, `bot`, `produção`, `site` ou `CentralDark`, deve assumir este projeto como alvo, salvo se outro nome for citado explicitamente.
+**Projeto:** CentralDark (TelePanel + microsserviços + Cérebro Vivo)
+**Repo oficial:** `ServerVpss/CentralDark`
+**VPS:** `/root/CentralDark/`
+**Pivete (dono):** SegredoiDev
 
 ---
 
-## Fonte da verdade
+## Hierarquia de Fontes
 
-| Ordem | Fonte | Papel |
+| Prioridade | Fonte | Papel |
 |---|---|---|
-| 1 | GitHub `ServerVpss/CentralDark` | Código, docs, commits, workflows |
-| 2 | Mega Painel `status.centralldark.com` | Estado vivo operacional |
-| 3 | `docs/CONSCIENCIA/` | Regras, memória e decisões |
+| 1 | GitHub `ServerVpss/CentralDark` | Código, docs, commits — única verdade |
+| 2 | `docs/CONSCIENCIA/` | Regras, memória e decisões das IAs |
+| 3 | Mega Painel `status.centralldark.com` | Estado vivo operacional |
 | 4 | `docs/PENDENCIAS.md` | Pendências oficiais |
-| 5 | `docs/BRAIN/` | Camada navegável para Obsidian |
+| 5 | `docs/BRAIN/` | Este vault — camada navegável para o Pivete |
+| 6 | Notion | Espelho humano — sync automático via workflow |
+| 7 | Obsidian local | Leitura no PC — Obsidian Git faz pull a cada 10 min |
 
 ---
 
-## Modo de trabalho do Pivete
+## Mapa do Vault
 
-| Regra | Como aplicar |
-|---|---|
-| PT-BR sempre | Respostas, relatórios, reviews e comentários em português |
-| Direto e organizado | Veredito primeiro, sem parede de texto |
-| Visual Vibe | emojis de status, tabelas e blocos copiáveis |
-| Não inventar sucesso | Validar com commit, PR, status, workflow, logs sanitizados ou HTTP |
-| Conteúdo copiável | Comandos, prompts e diagnósticos em bloco de código |
-| Segurança | Nunca expor token, secret, `.env`, sessão, cookie ou connection string |
+- [[00-MAPA]] — Visão geral e entrada rápida de todas as áreas
+- [[01-PENDENCIAS]] — Espelho navegável das pendências ativas
+- [[02-ARQUITETURA]] — Stack, serviços, portas, domínios
+- [[06-DECISOES]] — Decisões consolidadas com motivo e data
+- [[PLANO]] — Plano de evolução do vault e segundo cérebro
 
 ---
 
-## Proibições sem confirmação
+## Infraestrutura Viva (estado atual)
 
-```txt
-Docker
-WuzAPI
-WhatsApp reset/logout/sessão/QR real
-Caddy
-Banco real destrutivo
-CRM
-Domínio público / DNS
-Secrets / credenciais / tokens
-rm -rf / remoção definitiva
-Gateway de produção
+### Stack Principal
+```
+Frontend:  React 18 + Vite 5 + Tailwind v3 + TypeScript 5
+Backend:   Lovable Cloud (Supabase gerenciado)
+VPS:       /root/CentralDark/ — PM2 + Caddy
+Bot:       @srver1bot — unified-bot.cjs — webhook ativo
+MCP:       mcp.centralldark.com — 95 ferramentas
+```
+
+### Processos PM2 (todos CentralDark-*)
+```
+CentralDark-HubBot              ← bot Telegram principal
+CentralDark-MCP                 ← servidor MCP
+CentralDark-WebhookDeploy       ← webhook de deploy
+CentralDark-Respiracao          ← VPS reporter (heartbeat)
+CentralDark-GuardiaoConsciencia ← vigia de arquivos (17% CPU normal)
+CentralDark-GuardiaoAnalista    ← fila de propostas do guardião
+CentralDark-TelePainelDeploy    ← deploy do TelePanel
+CentralDark-ContasAdmin         ← painel OAuth admin
+CentralDark-BotServer           ← servidor auxiliar do bot
+```
+
+### Domínios Ativos
+```
+status.centralldark.com   ← painel público + bot webhook
+mcp.centralldark.com      ← servidor MCP (OAuth + tools)
+hub.centralldark.com      ← hub operacional
 ```
 
 ---
 
-## Fluxo preferido
+## Sistema de Skills (Bot Telegram)
 
-```txt
-GitHub
-  → workflow / webhook / run-once
-  → VPS valida
-  → logs sanitizados
-  → relatório
-  → Mega Painel
-  → memória atualizada
-```
+Localização: `apps/bot-telegram/skills/`
 
-Evitar comando manual direto na VPS quando houver caminho por GitHub + workflow.
+### Skills de Metodologia (protocolos para IAs)
+- `code-review` — áreas sensíveis: DB, RLS, autenticação, VPS, secrets
+- `documentation-memory` — atualizar docs ao final de cada alteração
+- `runtime-error-prevention` — evitar tela branca e erros fatais
+- `systematic-debugging` — debugar com hipótese → isolamento → evidência
+- `using-superpowers` — mentalidade arquiteto sênior
+- `verification-before-completion` — provar que funciona antes de declarar pronto
+- `writing-plans` — planejar antes de alterar múltiplos arquivos
 
----
+### Skills Executáveis (conectadas à API)
+- `brainstorming` — ideias criativas via Claude API (aiReady: true)
+- `find-skills` — busca no marketplace skills.sh
+- `memoria-longa` — lê/escreve em `docs/CONSCIENCIA/`
+- `painel-status` — consulta `painel-data.json` local
+- `obsidian-writer` — cria notas Zettelkasten neste vault com `[[links]]`
 
-## Prioridade atual
-
-```txt
-Organizar a VPS sem quebrar produção.
-Não mexer no CRM agora.
-Priorizar apps/bot e módulos vivos.
-Consolidar QR temporário em /root/Multizap/api/whatsapp/qrcode/ quando essa fase voltar.
-Depois validar chat ao vivo, contatos, fotos e grupos.
-```
+### Motor de Consciência
+`consciousness.cjs` detecta intenção da mensagem e roteia para a skill certa automaticamente.
+Sessões persistem 30 min e restauram `agent` e `cogMode` no restart do PM2.
 
 ---
 
-## Obsidian
+## Agentes Cognitivos (COG_MODES)
 
-O Obsidian roda no PC local do Pivete. A IA não acessa diretamente a pasta `E:\`. O caminho correto é a IA escrever no GitHub e o Obsidian Git puxar.
+No bot, o Pivete pode ativar modos cognitivos especiais:
 
-Configuração local recomendada:
+| Modo | Emoji | Uso |
+|------|-------|-----|
+| `sistema2` | 🔬 | Análise profunda, passo a passo |
+| `cot` | 🔗 | Chain of Thought — raciocínio encadeado |
+| `react` | ⚛️ | Raciocínio + Ação iterativa |
+| `reflexao` | 🪞 | Auto-crítica — questiona as próprias respostas |
 
-```txt
-Vault: E:\CentralDark\Obsidian\Brain
-Repo: https://github.com/ServerVpss/CentralDark.git
-Auto pull: 10 min
-Auto push: desligado
+---
+
+## Pendências Grandes (aguardam Pivete)
+
+1. **Reconstrução MCP + Hub** — novo plano a ser apresentado
+2. **Sistema de Skills no novo MCP** — `manager.cjs` vira `forMCPTools()`, cada skill é uma ferramenta MCP nativa
+3. **`obsidian-writer` no Hub** — quando Hub for construído, adicionar tool `obsidian_write(folder, title, content)`
+4. **Renomeação `docs/` → `.consciencia`** — aguardar comando explícito
+
+---
+
+## Regras de Escrita Neste Vault
+
+```
+1. Notas curtas — um tema por nota
+2. Sempre usar [[links]] para conectar notas relacionadas
+3. Frontmatter YAML em toda nota nova (tags, date)
+4. IA nunca edita nota existente — sempre ANEXA ao final
+5. INDEX.md é gerado automaticamente — não editar manualmente
+6. Obsidian Git: auto-pull 10 min, auto-push DESLIGADO
+```
+
+---
+
+## Configuração Obsidian Git (Windows)
+
+```
+Vault:       E:\CentralDark\ObsidianRepo\docs\BRAIN\
+Remote URL:  https://github.com/ServerVpss/CentralDark.git
+Branch:      main
+Auto Pull:   ON — 10 minutos
+Auto Push:   OFF
+Pull on startup: ON
 Author name: SegredoiDev
-Author email: segredounlock@users.noreply.github.com
+```
+
+---
+
+## Fluxo de Atualização
+
+```
+IA escreve nota via obsidian-writer skill
+    ↓
+docs/BRAIN/<pasta>/<nota>.md criada no VPS
+    ↓
+git push → GitHub (ServerVpss/CentralDark)
+    ↓
+workflow obsidian-index.yml regenera INDEX.md
+    ↓
+Notion sync atualiza (se arquivo toca docs/CONSCIENCIA/)
+    ↓
+Obsidian Git no PC do Pivete faz pull (≤10 min)
+    ↓
+Pivete abre Obsidian → vê nota nova no Graph View
 ```
