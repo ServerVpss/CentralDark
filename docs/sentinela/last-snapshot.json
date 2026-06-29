@@ -1,12 +1,12 @@
 {
-  "at": "2026-06-29T11:05:54.675Z",
+  "at": "2026-06-29T15:52:10.100Z",
   "endpoints": [
     {
       "name": "MCP health",
       "url": "https://mcp.centralldark.com/health",
       "bot": "grok",
       "status": 200,
-      "latencyMs": 222,
+      "latencyMs": 276,
       "cors": "*"
     },
     {
@@ -14,7 +14,7 @@
       "url": "https://mcp.centralldark.com/status.json",
       "bot": "grok",
       "status": 200,
-      "latencyMs": 245,
+      "latencyMs": 379,
       "cors": "*"
     },
     {
@@ -22,7 +22,7 @@
       "url": "https://mcp.centralldark.com/tools.json",
       "bot": "codex",
       "status": 200,
-      "latencyMs": 78,
+      "latencyMs": 131,
       "cors": "*"
     },
     {
@@ -30,7 +30,7 @@
       "url": "https://install.centralldark.com/status.json",
       "bot": "lovable",
       "status": 502,
-      "latencyMs": 119,
+      "latencyMs": 293,
       "cors": null
     },
     {
@@ -38,7 +38,7 @@
       "url": "https://status.centralldark.com/",
       "bot": "lovable",
       "status": 200,
-      "latencyMs": 134,
+      "latencyMs": 293,
       "cors": "*"
     },
     {
@@ -46,10 +46,10 @@
       "url": "https://api.centralldark.com/health",
       "bot": "codex",
       "status": 404,
-      "latencyMs": 136,
+      "latencyMs": 294,
       "cors": null
     }
   ],
-  "workflowsFailures24h": 9,
-  "divergencias": 11
+  "workflowsFailures24h": 12,
+  "divergencias": 14
 }
