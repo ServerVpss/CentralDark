@@ -1163,7 +1163,7 @@
       "kind": "Config",
       "number": 0,
       "title": "LINEAR_API_KEY não configurada",
-      "summary": "Para listar issues do Linear no painel, precisa de uma API key. Gerar em linear.app/settings/api e adicionar em /root/CentralDark/secrets/mcp.env como LINEAR_API_KEY=...",
+      "summary": "Para listar issues do Linear no painel, precisa de uma API key. Gerar em linear.app/settings/api e adicionar nas variáveis de ambiente do MCP como LINEAR_API_KEY.",
       "status": "aguardando_revisao_humana",
       "severity": "p3",
       "bot": "MCP",
