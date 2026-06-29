@@ -130,24 +130,33 @@ function getSession(chatId) {
 }
 
 // ── Agentes LLM ───────────────────────────────────────────────────────────
+const FORMATO_HTML = `
+REGRAS DE FORMATAÇÃO — OBRIGATÓRIO:
+• Use HTML do Telegram: <b>negrito</b>, <i>itálico</i>, <code>código</code>, <pre>bloco</pre>
+• NÃO use Markdown (**, __, ##, ---, | tabelas |)
+• Seja conciso — máximo 250 palavras por resposta
+• Para listas use bullet points com • ou números
+• Para código/comandos sempre use <code>comando</code> ou <pre>bloco</pre>
+• Responda sempre em PT-BR`.trim();
+
 const AGENTS = {
   guardiao: {
     emoji: '🛡️', nome: 'Guardião',
     prompt: 'Você é o Guardião do CentralDark — monitor e protetor do ecossistema. ' +
-            'Responda sempre em PT-BR, direto e profissional. ' +
-            'Foque em segurança, monitoramento, alertas e saúde da infraestrutura.',
+            'Responda em PT-BR, direto e objetivo. ' +
+            'Foque em segurança, monitoramento e saúde da infraestrutura.\n\n' + FORMATO_HTML,
   },
   orquestrador: {
     emoji: '🧠', nome: 'Orquestrador',
     prompt: 'Você é o Orquestrador do CentralDark — coordenador de agentes e fluxos. ' +
-            'Responda sempre em PT-BR. ' +
-            'Foque em planejamento, Issues GitHub e coordenação de IAs. Seja estratégico.',
+            'Responda em PT-BR, seja estratégico e direto ao ponto. ' +
+            'Foque em planejamento, Issues GitHub e coordenação.\n\n' + FORMATO_HTML,
   },
   analista: {
     emoji: '🔍', nome: 'Analista',
     prompt: 'Você é o Analista do CentralDark — especialista em diagnóstico técnico. ' +
-            'Responda sempre em PT-BR. ' +
-            'Foque em análise de problemas, debugging e revisão de código. Seja preciso.',
+            'Responda em PT-BR, seja preciso e use exemplos de código quando relevante. ' +
+            'Foque em análise de problemas e debugging.\n\n' + FORMATO_HTML,
   },
 };
 
@@ -204,6 +213,51 @@ async function tg(method, body) {
 
 function esc(s) {
   return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/**
+ * Converte Markdown do LLM para HTML do Telegram.
+ * O Telegram aceita apenas: <b> <i> <code> <pre> <a href> <s> <u>
+ */
+function mdToHtml(text) {
+  if (!text) return '';
+  let s = text;
+
+  // 1. Blocos de código: ```lang\n...\n``` → <pre>...</pre>
+  s = s.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) =>
+    `<pre>${esc(code.trim())}</pre>`
+  );
+
+  // 2. Tabelas Markdown → texto simples (remove | e ---|)
+  s = s.replace(/^\|.+\|$/gm, (row) =>
+    row.replace(/\|/g, '').trim()
+  );
+  s = s.replace(/^[\s\-|]+$/gm, ''); // remove linhas separadoras de tabela
+
+  // 3. Inline code: `code` → <code>code</code>
+  s = s.replace(/`([^`]+)`/g, (_, c) => `<code>${esc(c)}</code>`);
+
+  // 4. Bold: **text** ou __text__ → <b>text</b>
+  s = s.replace(/\*\*(.+?)\*\*/gs, '<b>$1</b>');
+  s = s.replace(/__(.+?)__/gs, '<b>$1</b>');
+
+  // 5. Italic: *text* ou _text_ → <i>text</i>
+  s = s.replace(/\*([^*\n]+?)\*/g, '<i>$1</i>');
+  s = s.replace(/_([^_\n]+?)_/g, '<i>$1</i>');
+
+  // 6. Links: [text](url) → <a href="url">text</a>
+  s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2">$1</a>');
+
+  // 7. Headers ## → negrito sem # visível
+  s = s.replace(/^#{1,3}\s+(.+)$/gm, '<b>$1</b>');
+
+  // 8. Linhas horizontais --- → vazio
+  s = s.replace(/^---+$/gm, '');
+
+  // 9. Limpar linhas extras consecutivas
+  s = s.replace(/\n{3,}/g, '\n\n');
+
+  return s.trim();
 }
 
 async function send(chatId, text, buttons) {
@@ -965,7 +1019,7 @@ async function handleMessage(msg) {
     sess.history.push({ role: 'assistant', content: response });
     const label = cog ? `📷 Vision · ${cog.emoji} ${cog.nome} · ${ag.emoji} ${ag.nome}` : `📷 Vision · ${ag.emoji} ${ag.nome}`;
     return anim.done(
-      esc(response.slice(0, 4000)) + `\n\n<i>${label}</i>`,
+      mdToHtml(response).slice(0, 3800) + `\n\n<i>${label}</i>`,
       [[{ text: '🏠 Painel', callback_data: 'hub:main' }, { text: '🧹 Limpar', callback_data: 'hub:clear' }]],
     );
   }
@@ -1039,8 +1093,9 @@ async function handleMessage(msg) {
     sess.history.push({ role: 'assistant', content: response });
     resetInactivityTimer(chatId);
 
+    const htmlResponse = mdToHtml(response);
     const chunks = [];
-    for (let i = 0; i < response.length; i += 4000) chunks.push(response.slice(i, i + 4000));
+    for (let i = 0; i < htmlResponse.length; i += 3800) chunks.push(htmlResponse.slice(i, i + 3800));
     for (let i = 0; i < chunks.length; i++) {
       const isLast = i === chunks.length - 1;
       const label  = cog
@@ -1048,17 +1103,28 @@ async function handleMessage(msg) {
         : `${ag.emoji} ${ag.nome}`;
       await send(
         chatId,
-        esc(chunks[i]) + (isLast ? `\n\n<i>${label}</i>` : ''),
-        isLast ? [[{ text: '🏠 Painel', callback_data: 'hub:main' }, { text: '🧹 Limpar', callback_data: 'hub:clear' }]] : null,
+        chunks[i] + (isLast ? `\n\n<i>${label}</i>` : ''),
+        isLast ? [[
+          { text: '🏠 Painel', callback_data: 'hub:main' },
+          { text: '🧹 Limpar', callback_data: 'hub:clear' },
+          { text: '📋 Pendências', callback_data: 'c:pendencias' },
+        ]] : null,
       );
     }
   } else {
-    if (text.startsWith('/')) {
-      const h = await handleUserCommand(chatId, text);
-      if (h === null) return runSkill(chatId, text, null);
-      return;
-    }
-    return runSkill(chatId, text, null);
+    // ── Não-admin: BLOQUEIO TOTAL com escracho ─────────────────────────────
+    const RESPOSTAS_INTRUSO = [
+      '🖕 Oi não, tchau.\n\n<i>Área restrita. Só o dono tem acesso aqui.</i>',
+      '😂 Que coragem, hein? Acha que vai ter acesso aqui?\n\n<b>Spoiler:</b> não vai.',
+      '🤣 Minha nossa, olha quem tentou... Filho, vai embora.\n\n<i>Esse bot é particular.</i>',
+      '👁️ Registrei sua tentativa. Boa sorte.\n\n<code>403 Forbidden — Intruso detectado.</code>',
+      '😏 Ahh que fofo, achou que ia funcionar? Não.\n\n<i>Só o administrador tem acesso.</i>',
+      '🚫 Acesso negado. E não adianta insistir.\n\n<i>Quanto mais você tenta, mais eu rio.</i>',
+      '😂 Tentou. Não deu. Nunca vai dar.\n\n<b>Aqui só entra quem o dono deixa entrar.</b>',
+    ];
+    const msg = RESPOSTAS_INTRUSO[Math.floor(Math.random() * RESPOSTAS_INTRUSO.length)];
+    console.log(`[Bot] 🚫 Acesso negado para chatId=${chatId} (${fromId}) — "${text.slice(0, 40)}"`);
+    return send(chatId, msg, null);
   }
 }
 
