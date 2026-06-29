@@ -91,8 +91,31 @@ Decisões arquiteturais e operacionais já tomadas. Não reabrir sem motivo fort
 
 ---
 
+## Cérebro de Aço — Unificação arquitetural (29/06/2026)
+
+**Decisão:** os quatro pilares do sistema operacional CentralDark foram formalizados sob a categoria **"CÉREBRO DE AÇO (Núcleo de Operação)"** no `docs/BRAIN/00-MAPA.md`.
+
+**Os quatro pilares:**
+
+| Pilar | Nome | Local | URL |
+|-------|------|-------|-----|
+| 🧠 NEXUS COGNITIVO | Open WebUI | `apps/modulos/WebUI/` | `ui.centralldark.com` |
+| 🛠️ FÁBRICA DE ARTEFATOS | Builder Bolt | `apps/modulos/Bolt/` | `builder.centralldark.com` |
+| 🌐 ELITE GATEWAY | Proxy Anthropic | `apps/modulos/elite-anthropic-proxy/` *(a criar)* | `api.centralldark.com/v1` |
+| 🚀 INTERFACE | TelePainel | `apps/TelePainel/` | `telepainel.centralldark.com` |
+
+**Regra derivada:** alteração estrutural em qualquer pilar exige:
+1. Reflexo nos outros três (config, env, compose)
+2. Registro neste arquivo
+3. Commit com prefixo `feat(cerebro-de-aco)` ou `fix(cerebro-de-aco)`
+
+**Próximo passo autorizado:** construir `elite-anthropic-proxy` — serviço HTTP puro que recebe requisição OpenAI-compatible, rotaciona keys Anthropic e repassa via `claude.ap7.site`.
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+- [[00-MAPA]] — Cérebro de Aço e Motores Gêmeos

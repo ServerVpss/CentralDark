@@ -1,7 +1,7 @@
 ---
 title: "Mapa do Segundo Cérebro CentralDark"
 date: 2026-06-29
-tags: ["navegacao", "mapa", "centraldark", "obsidian"]
+tags: ["navegacao", "mapa", "centraldark", "obsidian", "cerebro-de-aco"]
 updated: 2026-06-29
 ---
 
@@ -21,6 +21,64 @@ updated: 2026-06-29
 | Design system | `docs/ARQUITETURA/DESIGN-SISTEMA.md` |
 | Padrão de resposta | `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` |
 | Camada visual Vibe | `docs/CONSCIENCIA/21-PADRAO-APRESENTACAO.md` |
+
+---
+
+## CÉREBRO DE AÇO (Núcleo de Operação)
+
+> Quatro pilares interdependentes. Alteração em um reflete nos outros.
+
+### 🧠 NEXUS COGNITIVO — Open WebUI
+- **Função:** QG de pensamento, chat e exploração com IA
+- **URL:** `ui.centralldark.com`
+- **Container:** `CentralDark-WebUI` (porta 3000)
+- **Local:** `/root/CentralDark/apps/modulos/WebUI/`
+- **Compose:** `apps/modulos/WebUI/docker-compose.yml`
+- **Providers ativos:** Elite Gateway (`api.centralldark.com/v1`) + Anthropic key (`sk-lab-`)
+
+### 🛠️ FÁBRICA DE ARTEFATOS — Builder Bolt
+- **Função:** Execução rápida, codificação e geração de frontend com IA
+- **URL:** `builder.centralldark.com`
+- **Container:** `CentralDark-Builder` (porta 5174 → 5173)
+- **Local:** `/root/CentralDark/apps/modulos/Bolt/`
+- **Compose:** `apps/modulos/Bolt/docker-compose.yml`
+- **Providers ativos:** Anthropic via `claude.ap7.site` + Elite Gateway + Cerebras + OpenRouter
+
+### 🌐 ELITE GATEWAY — Proxy Anthropic
+- **Função:** Gerenciamento de chaves, rotação inteligente e proxy puro para Anthropic
+- **URL:** `api.centralldark.com/v1` (porta 8080 HTTP atual + 8081 proxy Anthropic planejado)
+- **PM2:** `elite-http-gateway` (porta 8080, browser automation → ChatGPT)
+- **Local:** `/root/CentralDark/apps/modulos/elite-anthropic-proxy/` *(a criar)*
+- **Plano:** novo serviço HTTP puro — recebe requisição, rotaciona keys, repassa via `claude.ap7.site` → Anthropic API
+
+### 🚀 INTERFACE — TelePainel
+- **Função:** Painel de controle visual, centralizador e cockpit do sistema
+- **URL:** `telepainel.centralldark.com` (ou subdomínio definido)
+- **Local:** `/root/CentralDark/apps/TelePainel/`
+- **Status:** ativo
+
+---
+
+### Fluxo unificado do Cérebro de Aço
+
+```
+Pivete
+  ├─ pensa / explora  →  🧠 NEXUS COGNITIVO   (ui.centralldark.com)
+  ├─ cria / codifica  →  🛠️ FÁBRICA DE ARTEFATOS (builder.centralldark.com)
+  ├─ controla / vê    →  🚀 INTERFACE           (TelePainel)
+  └─ tudo passa por   →  🌐 ELITE GATEWAY       (api.centralldark.com/v1)
+                                ↓
+                        claude.ap7.site
+                                ↓
+                        Anthropic API (key rotacionada)
+```
+
+### Regra de Ouro — Cérebro de Aço
+
+> Qualquer alteração estrutural em um dos quatro pilares deve:
+> 1. Ser refletida nos outros três (config, env, compose)
+> 2. Ser registrada em `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`
+> 3. Receber commit com prefixo `feat(cerebro-de-aco)` ou `fix(cerebro-de-aco)`
 
 ---
 
@@ -61,27 +119,6 @@ Se é decisão operacional, precisa virar doc, pendência, relatório ou memóri
 
 ---
 
-## Os Motores Gêmeos do Sistema
-
-Dois containers Docker que formam a interface de criação do CentralDark:
-
-| Motor | Nome oficial | Container Docker | URL | Caminho oficial |
-|-------|-------------|-----------------|-----|-----------------|
-| **FÁBRICA DE ARTEFATOS** | Bolt.diy (customizado) | `CentralDark-Builder` | `builder.centralldark.com` | `/root/CentralDark/apps/modulos/Bolt/` |
-| **INTERFACE VISUAL** | Open WebUI (customizado) | `CentralDark-WebUI` | `ui.centralldark.com` | `/root/CentralDark/apps/modulos/WebUI/` |
-
-### Configuração ativa (29/06/2026)
-
-**CentralDark-Builder** (`apps/modulos/Bolt/docker-compose.yml`):
-- Proxy Anthropic: `https://claude.ap7.site` (via `ANTHROPIC_API_BASE_URL`)
-- Elite Gateway: `https://api.centralldark.com/v1` (OpenAI-like)
-- Dev server HMR na porta 5174 → Caddy → `builder.centralldark.com`
-
-**CentralDark-WebUI** (`apps/modulos/WebUI/docker-compose.yml`):
-- `WEBUI_NAME=CentralDark AI`
-- Elite Gateway: `https://api.centralldark.com/v1`
-- Porta 3000 → Caddy → `ui.centralldark.com`
-
 > Portainer (visualização de containers): `portainer.centralldark.com`
 
 ---
@@ -92,3 +129,5 @@ Dois containers Docker que formam a interface de criação do CentralDark:
 - [[01-PENDENCIAS]] — o que está em aberto
 - [[02-ARQUITETURA]] — como o sistema funciona
 - [[06-DECISOES]] — decisões tomadas
+- [[08-HISTORICO-DECISOES]] — log de decisões do Cérebro de Aço
+- [[MAPA-DO-CEREBRO]] — visão da camada CONSCIENCIA
