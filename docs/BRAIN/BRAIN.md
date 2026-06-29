@@ -141,6 +141,15 @@ Author:        SegredoiDev
 
 ---
 
+---
+
+## 🔗 Conexão com a Memória das IAs
+
+> A memória técnica e operacional das IAs fica em `docs/CONSCIENCIA/`.
+> Portão de entrada: leia `docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md` para entender o contexto que as IAs usam ao operar o CentralDark.
+
+---
+
 *Este arquivo é atualizado automaticamente pelas IAs do CentralDark.*  
 *Skill responsável: [[Obsidian-Writer]] — `/root/CentralDark/apps/bot-telegram/skills/externas/obsidian-writer.cjs`*
 

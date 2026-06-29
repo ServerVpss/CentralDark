@@ -1,8 +1,42 @@
-# 00 — Leia primeiro (índice da memória do agente)
+# 00 — Leia primeiro (portão de entrada para IAs)
 
-Essa pasta é a **memória eterna** do agente ChatGPT que opera o projeto **CENTRAL DARK**. Antes de responder qualquer coisa em uma nova conversa, leia TODOS os arquivos abaixo na ordem, via MCP do GitHub (repo `ServerVpss/CentralDark`).
+---
+title: "Portão de Entrada — Memória das IAs"
+date: 2026-06-29
+tags: ["navegacao", "obrigatorio", "ia"]
+updated: 2026-06-29
+---
 
-> ⚠️ **Memória só conta se está no Git.** `mem://` (memória interna do Lovable) **não é** fonte oficial de memória do CentralDark. Nada — regra, decisão, aprendizado ou pendência — pode existir somente em `mem://`: se só existe lá, não existe para o projeto. Tudo que precisa sobreviver a troca de IA, reset de sessão ou migração de workspace nasce ou é registrado no Git (`docs/CONSCIENCIA/`, `docs/PENDENCIAS.md`, `docs/RELATORIOS/`). Regra completa e o teste obrigatório antes de gravar qualquer coisa: ver a seção **"Por que `mem://` NÃO é fonte oficial de memória"** em `REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`.
+Esta pasta é a **memória operacional** de qualquer IA/agente que trabalha com o projeto **CENTRAL DARK**. Antes de propor ou executar qualquer mudança, leia os arquivos abaixo na ordem indicada.
+
+> **Memória só conta se está no Git.** Nada — regra, decisão, aprendizado ou pendência — existe se está apenas em memória volátil de sessão. Tudo que precisa sobreviver entre sessões fica aqui em `docs/CONSCIENCIA/` ou em `docs/BRAIN/`. Git é a fonte da verdade.
+
+---
+
+## 🔗 Conexão com o Vault do Pivete
+
+> O vault visual do Pivete (Obsidian) fica em `docs/BRAIN/`.
+> Mapa de entrada: leia `docs/BRAIN/BRAIN.md` para entender o estado atual dos projetos, pendências e serviços.
+
+---
+
+## 📋 Tabela de roteamento — onde cada tipo de nota vai
+
+| Se for sobre... | Vai para |
+|----------------|---------|
+| Ideia pessoal, pensamento, reunião | `docs/BRAIN/07 - Reuniões & Notas/` |
+| Devedor, contato, financeiro | `docs/BRAIN/06 - Devedores & Contatos/` |
+| Decisão técnica tomada | `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` |
+| Aprendizado sobre o bot Telegram | `docs/CONSCIENCIA/APRENDIZADOS.md` (seção Bot) |
+| Aprendizado sobre infra/VPS/PM2 | `docs/CONSCIENCIA/APRENDIZADOS.md` (seção Infra) |
+| Regra operacional nova | `docs/CONSCIENCIA/02-PERMISSOES.md` ou novo arquivo numerado |
+| Retomada de sessão IA | `docs/CONSCIENCIA/RETOMADA-*.md` |
+| Tutorial para o Pivete | `docs/BRAIN/05 - Documentacao/` |
+| Estado atual dos serviços | `docs/BRAIN/01-PENDENCIAS.md` (consultivo) |
+
+> **Regra de ouro:** se não souber onde gravar, grave em `docs/CONSCIENCIA/APRENDIZADOS.md` com tag `#pendente-classificar`.
+
+---
 
 ## Ordem de leitura obrigatória
 

@@ -1,3 +1,10 @@
+---
+title: "Plano de Implementação do BRAIN"
+date: 2026-06-29
+tags: ["plano", "obsidian", "setup"]
+updated: 2026-06-29
+---
+
 # PLANO — BRAIN CentralDark
 
 ## Status
