@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T04:35:12.699Z",
-  "updatedAtBR": "29/06/2026, 01:35:12 BRT",
+  "updatedAt": "2026-06-29T04:35:29.094Z",
+  "updatedAtBR": "29/06/2026, 01:35:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Sessão 28/06 — TUDO VERDE: proxy Anthropic ap7 configurado (4 modelos HTTP 200), pr-agent Claude ativo via ANTHROPIC_BASE_URL, TelegramBot @srver1bot online, contas-admin corrigido, webhook notifica VPS ATUALIZADA",
+    "currentTask": "Sessão 29/06 — Governança: Seção 9 Áreas Protegidas no CLAUDE.md, agent-notify.mjs Padrão CentralDark (pre monospace), agente issues-scanner, workspace multi-root sem WebUI. Pendentes: cerebro/ remoção, root/ aninhado, NOTA-RENOMEACAO.md, move bot-telegram→modulos/",
     "branch": "main",
-    "lastCommit": "feat(governance): proteções áreas consolidadas, agent-notify padrão CentralDark e issues-scanner",
+    "lastCommit": "feat(governance): áreas protegidas + agent-notify padrão CentralDark + issues-scanner — f6375ab",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -75,6 +75,14 @@
     "multizap-gateway-postgres": "healthy"
   },
   "pendencias": [
+    {
+      "id": "GOVERNANCE-29JUN",
+      "titulo": "Governança: Áreas Protegidas + agent-notify Padrão CentralDark + issues-scanner",
+      "status": "concluido",
+      "prioridade": "alta",
+      "commit": "f6375ab",
+      "detalhe": "CLAUDE.md Seção 9 travas. agent-notify.mjs: Telegram tudo em pre monospace (padrão Pivete). issues-scanner.md. workspace multi-root."
+    },
     {
       "id": "GUARDIAO-DECISOR",
       "titulo": "Guardião: camada de decisão anti-spam + heartbeat do painel",
@@ -495,6 +503,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T04:35:29.094Z",
+      "titulo": "Sessão 29/06 — Governança CentralDark",
+      "detalhe": "CLAUDE.md Seção 9 Áreas Protegidas · agent-notify Padrão CentralDark monospace · issues-scanner · workspace multi-root",
+      "area": "governance",
+      "sha": "f6375ab",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T04:14:44.872Z",
       "titulo": "Push na main · f6375ab5a5fb296d22ceb0e91c89e90d54d40371",
@@ -1270,6 +1286,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-29T04:35:29.094Z",
+      "ia": "@segredounlock",
+      "action": "feat(governance): áreas protegidas + agent-notify padrão CentralDark monospace + issues-scanner — f6375ab",
+      "area": "Governance",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-29T04:14:44.872Z",
       "ia": "@segredounlock",
