@@ -9,9 +9,11 @@ services:
       - SCARF_NO_ANALYTICS=true
       - DO_NOT_TRACK=true
       - ANONYMIZED_TELEMETRY=false
-      # Elite Gateway CentralDark
+      # Elite Gateway CentralDark (OpenAI-compatible)
       - OPENAI_API_BASE_URL=https://api.centralldark.com/v1
       - OPENAI_API_KEY=SEGREDO_ELITE_123
+      # Anthropic direto via proxy ap7
+      - ANTHROPIC_API_KEY=sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8
       - WEBUI_SECRET_KEY=
     volumes:
       - open-webui:/app/backend/data
