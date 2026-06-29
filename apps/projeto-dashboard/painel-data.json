@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T06:31:37.390Z",
-  "updatedAtBR": "29/06/2026, 03:31:37 BRT",
+  "updatedAt": "2026-06-29T06:31:42.352Z",
+  "updatedAtBR": "29/06/2026, 03:31:42 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Hub @srver1bot criado (hub-adm.cjs + PM2 CentralDark-HubBot). Pendente: ADMIN_CHAT_ID + padronizacao nomes PM2.",
     "branch": "main",
-    "lastCommit": "feat(hub-bot): Hub Central @srver1bot painel ADM + agentes + LLM — 67ad8b0",
+    "lastCommit": "93e164de2",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -518,6 +518,13 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T06:31:42.353Z",
+      "title": "Fix Mega Painel: cards de eventos agora exibem título e detalhe reais (titulo/detalhe PT-BR) em vez do placeholder 'Evento do projeto'. SHA do commit e actor visíveis. Cache bust v20260629a.",
+      "area": "Dashboard",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-06-29T06:03:01.051Z",
       "titulo": "Push na main · d4e2ca7f0974d415103c78f81d88c78ee9862e2d",
       "detalhe": "chore(painel): IA atualiza painel — atualização",
@@ -744,157 +751,6 @@
       "area": "Repositório",
       "sha": "0d5ff81",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-26T03:45:53.432Z",
-      "titulo": "Push na main · d8b15e266b4e563a5bd3c68ced59156068e68063",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "d8b15e2",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-26T03:44:21.603Z",
-      "titulo": "Push na main · 90c8a840d1ec698dce34646049dcd2978949a89c",
-      "detalhe": "Made the requested updates",
-      "area": "Repositório",
-      "sha": "90c8a84",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-26T03:23:45.763Z",
-      "titulo": "Push na main · b7fb880da19fa93b3b045c38b6a806bfb550081b",
-      "detalhe": "feat(hub): Hub Segurança no menu Sistema da Sidebar",
-      "area": "Repositório",
-      "sha": "b7fb880",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-26T03:22:35.148Z",
-      "titulo": "Push na main · ea5266366adebe95182bca66c9594c429a552907",
-      "detalhe": "feat(hub): rota /hub + /telepainel/hub registradas no App.tsx",
-      "area": "Repositório",
-      "sha": "ea52663",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-26T03:18:33.339Z",
-      "titulo": "Push na main · a75d36f6e164656c1a36724260d6a78b9da7d7bb",
-      "detalhe": "feat(hub): HubPage.tsx — página real integrada ao TelePanel",
-      "area": "Repositório",
-      "sha": "a75d36f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-26T03:16:33.113Z",
-      "titulo": "Push na main · d7433556c6f1f256aea75eceb4c138d121f879e6",
-      "detalhe": "feat(hub): 002 — PDP engine, PEP capabilities, audit hash-chain trigger",
-      "area": "Repositório",
-      "sha": "d743355",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-26T00:24:57.903Z",
-      "titulo": "Push na main · 7632e19e8b1c9a9c5e6a4aaa45d9305b8b35de39",
-      "detalhe": "chore: gitignore exclui venv/cache/runtime/lockfiles + remove bun.lock",
-      "area": "Repositório",
-      "sha": "7632e19",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-26T00:15:36.947Z",
-      "titulo": "Push na main · bcce73505df9396ebeab19b626c66905f0790792",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "bcce735",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-26T00:12:24.536Z",
-      "titulo": "Push na main · 87e05bf38f3da2e03a46a88ae0ea200afdd45246",
-      "detalhe": "docs(pendencias): nova #4 Reativar workflow wuzapi-sessions-monitor e processos PM2 de WhatsApp",
-      "area": "Repositório",
-      "sha": "87e05bf",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-25T22:57:17.611Z",
-      "titulo": "Push na main · e2b86a0971368ef4da30c361b206c5666348c4ba",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "e2b86a0",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-25T22:15:32.941Z",
-      "titulo": "Push na main · 05e6d5c32cf05c379e8366aece1ec47f0027903d",
-      "detalhe": "Restaurou script painel vivo",
-      "area": "Repositório",
-      "sha": "05e6d5c",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-23T12:57:13.951Z",
-      "title": "Push na main · 72cbc3253732e18cf545a2afb1f03dda7d6449d6",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "feat(infra): agente Python de diagnóstico e recuperação de infraestrutura\n\n- caddy_checker: verifica portas, certs e logs de erro\n- runner_manager: cancela workflows perigosos antes de reiniciar runner\n- pm2_manager: restart seletivo de errored com lista de exclusão\n- reporter: relatório Markdown + notificação Telegram\n- infra_recovery.py: CLI com dry-run por padrão (--execute para agir)\n- Segurança: runner nunca reinicia com VPS Exec/deploy na fila"
-    },
-    {
-      "time": "2026-06-23T10:30:00.000Z",
-      "title": "Elite Gateway v2.3 — multi-contas + Bolt builder integrado ao gateway",
-      "area": "infra",
-      "status": "feito",
-      "detail": "accounts.json criado, lock por perfil, /v1/accounts endpoint, Bolt .env configurado"
-    },
-    {
-      "time": "2026-06-23T06:06:43.262Z",
-      "title": "Bot Telegram corrigido — fork mode + deps diagnosticadas + handoff registrado",
-      "area": "Projeto",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-06-23T05:45:51.544Z",
-      "title": "Mapeamento consolidado de issues — 2026-06-23",
-      "area": "Projeto",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-06-23T04:56:51.976Z",
-      "title": "Limpeza autônoma de logs ativada — cron 30min + relatório Telegram. journald 2.1G→544MB, /var/log 1009MB→879MB. Script limpeza-autonoma.sh commitado e pushado.",
-      "area": "infra",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-06-23T01:01:53.675Z",
-      "title": "Push na main · 2760f53ea78108388e3bc1683a627a2f813f4051",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "sync .lovable: .lovable/plan.md"
-    },
-    {
-      "time": "2026-06-23T00:54:18.522Z",
-      "title": "Push na main · 44ff11a8a3321f5a0b2862e4575a92e35ccd60ce",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "docs(memory): sincronizar memória OAuth Ponte MCP do sandbox\n\nCo-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
-    },
-    {
-      "time": "2026-06-23T00:30:27.376Z",
-      "title": "Push na main · ed57af2980c9abd00042101b0c0b365f60f932e5",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "docs(consciencia): expandir padrão Pivete — fonte da verdade, handoff, Mega Painel, ciclo de conclusão"
-    },
-    {
-      "time": "2026-06-23T00:21:20.341Z",
-      "title": "Push na main · 9428d78c5aae7411b53a4b768dd6d58f48b88d0b",
-      "area": "Repositório",
-      "status": "feito",
-      "detail": "fix(vigia+actions): Telegram em falhas recorrentes, rebase antes de push, checkout@v4 no Farm"
     }
   ],
   "agents": [
