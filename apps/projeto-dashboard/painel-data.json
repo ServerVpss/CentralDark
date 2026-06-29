@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-06-29T07:24:22.893Z",
-  "updatedAtBR": "29/06/2026, 04:24:22 BRT",
+  "updatedAt": "2026-06-29T07:24:30.694Z",
+  "updatedAtBR": "29/06/2026, 04:24:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Hub @srver1bot criado (hub-adm.cjs + PM2 CentralDark-HubBot). Pendente: ADMIN_CHAT_ID + padronizacao nomes PM2.",
     "branch": "main",
-    "lastCommit": "chore(painel): IA atualiza painel — atualização",
+    "lastCommit": "1daae67a6",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
     "summary": "Guardião ganhou camada de decisão: cache persistente de propostas (corta repetição do inotify), decisor ativado com scoring calibrado pelos dados reais (impacto=confiança, wF=0), threshold 0.4→0.6, exclusão de gitignored/sensíveis. Spam no Telegram cai de ~925 para ~18 (1x por arquivo). 403 do Mega Painel resolvido (era Cloudflare WAF barrando User-Agent Python-urllib + 406 por Accept) — heartbeat agora bate em localhost:9100. Modo propor travado até 08/07/2026 intacto. 22/22 testes. Commit e6124592b.",
-    "overallProgress": 40,
+    "overallProgress": 82,
     "liveFallback": {
       "mcpStatus": "online",
       "mcpToolCount": 95,
@@ -442,7 +442,7 @@
     "ANTHROPIC_API_KEY ausente — Claude Sonnet inativo no PR Review",
     "MultiZap-BOT errored — não crítico"
   ],
-  "nextIA": "Liberar caminho seguro de workflow ou habilitar tool específica de reload para MCP-CentralDark sem expor comandos genéricos.",
+  "nextIA": "Hub v2 em produção — webhook ativo. Próximos: investigar guardiao.py (17% CPU), renomear processos PM2 para padrão CentralDark-*, auditar root/ aninhado.",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -517,6 +517,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T07:24:30.694Z",
+      "title": "Hub Telegram evoluído para Cockpit Operacional v2: Ferramentas (PM2/Diag/Logs/Webhook), Cognição (4 modos), Relatório Geral animado. fail2ban instalado — 3 IPs banidos. Legados bot.cjs/bot.js/config.js/ecosystem.config.cjs removidos. /root/apps/ (duplicata sem referências) deletado.",
+      "area": "Bot / Infra",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-06-29T07:23:32.030Z",
       "titulo": "Push na main · 75e20173f9085d311842f71b1a44dada74daa748",
@@ -743,37 +750,6 @@
       "detalhe": "Changes",
       "area": "Repositório",
       "sha": "9984f13",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-26T06:35:37.109032+00:00",
-      "title": "Card 'Bloqueios MCP (últimas 24h)' adicionado ao painel",
-      "area": "MCP / Observabilidade",
-      "status": "feito",
-      "detail": "BLOQUEADO_CONFIG agora vai pro arquivo dedicado logs/mcp-blocked-YYYY-MM-DD.jsonl. Card mostra total das últimas 24h (2) + últimos 10 com motivo, tool e flag."
-    },
-    {
-      "time": "2026-06-26T05:30:53.239Z",
-      "titulo": "Push na main · 65a2b744af80c000859d878c88102d9184720aa5",
-      "detalhe": "Adicionou vault de criptografia",
-      "area": "Repositório",
-      "sha": "65a2b74",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-26T05:22:24.047Z",
-      "titulo": "Push na main · 21026ae74b0ed0cc5dcbc1a749ec186972a2d652",
-      "detalhe": "Reduziu crons e adicionou índices",
-      "area": "Repositório",
-      "sha": "21026ae",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-26T04:02:49.855Z",
-      "titulo": "Push na main · 0d5ff810005d0bda1d7749235eed87a22020dd1a",
-      "detalhe": "Criou views e atualizou Hub",
-      "area": "Repositório",
-      "sha": "0d5ff81",
       "actor": "lovable-dev[bot]"
     }
   ],
