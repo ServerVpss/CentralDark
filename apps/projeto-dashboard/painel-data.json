@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T11:10:32.085Z",
-  "updatedAtBR": "29/06/2026, 08:10:32 BRT",
+  "updatedAt": "2026-06-29T11:12:51.665Z",
+  "updatedAtBR": "29/06/2026, 08:12:51 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "feat(consciousness): deteccao de copia + comandos de gravacao naturais + guia Pivete na memoria",
+    "lastCommit": "chore(brain): registrar jornada e objetivos do Pivete na postura",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T11:12:51.665Z",
+      "titulo": "Push na main · 89ea86cee85ebda940e70039e4b698fde4dc0f06",
+      "detalhe": "chore(brain): registrar jornada e objetivos do Pivete na postura",
+      "area": "Repositório",
+      "sha": "89ea86c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T11:10:32.085Z",
       "titulo": "Push na main · 55f1e36962925d0e3239fbb2dc822166dc2d4e81",
@@ -1262,6 +1270,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T11:12:51.665Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 89ea86cee85ebda940e70039e4b698fde4dc0f06 (89ea86c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T11:10:32.085Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 55f1e36962925d0e3239fbb2dc822166dc2d4e81 (55f1e36)",
@@ -1602,13 +1617,6 @@
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 05e6d5c32cf05c379e8366aece1ec47f0027903d (05e6d5c)",
       "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-23T00:06:14Z",
-      "ia": "@segredounlock",
-      "action": "🟢 MERGEADO — PR #90: docs: registrar padrão de resposta do Pivete",
-      "area": "GitHub",
       "status": "sucesso"
     }
   ],
