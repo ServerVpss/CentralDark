@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T07:35:41.989Z",
-  "updatedAtBR": "29/06/2026, 04:35:41 BRT",
+  "updatedAt": "2026-06-29T07:36:25.885Z",
+  "updatedAtBR": "29/06/2026, 04:36:25 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Hub @srver1bot criado (hub-adm.cjs + PM2 CentralDark-HubBot). Pendente: ADMIN_CHAT_ID + padronizacao nomes PM2.",
     "branch": "main",
-    "lastCommit": "1daae67a6",
+    "lastCommit": "feat(hub): suporte a Vision — bot analisa fotos enviadas pelo admin",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -517,6 +517,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T07:36:25.885Z",
+      "titulo": "Push na main · b251bea3d5deddffcdbd25ff27ae1dac86c985a7",
+      "detalhe": "feat(hub): suporte a Vision — bot analisa fotos enviadas pelo admin",
+      "area": "Repositório",
+      "sha": "b251bea",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T07:24:30.694Z",
       "title": "Hub Telegram evoluído para Cockpit Operacional v2: Ferramentas (PM2/Diag/Logs/Webhook), Cognição (4 modos), Relatório Geral animado. fail2ban instalado — 3 IPs banidos. Legados bot.cjs/bot.js/config.js/ecosystem.config.cjs removidos. /root/apps/ (duplicata sem referências) deletado.",
@@ -1165,6 +1173,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T07:36:25.885Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b251bea3d5deddffcdbd25ff27ae1dac86c985a7 (b251bea)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T07:23:32.030Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 75e20173f9085d311842f71b1a44dada74daa748 (75e2017)",
@@ -1505,13 +1520,6 @@
       "ia": "Claude Code",
       "action": "feat(mcp): P7 — tool atualizar_painel com git commit+push automático",
       "area": "MCP",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T10:28:00Z",
-      "ia": "Claude Code",
-      "action": "docs: P5+P6 concluídos, README com árvore de pastas completa",
-      "area": "Docs",
       "status": "sucesso"
     }
   ],
