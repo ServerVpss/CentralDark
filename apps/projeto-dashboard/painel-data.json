@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T10:58:32.560Z",
-  "updatedAtBR": "29/06/2026, 07:58:32 BRT",
+  "updatedAt": "2026-06-29T10:59:26.565Z",
+  "updatedAtBR": "29/06/2026, 07:59:26 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "feat(obsidian-writer): notificação Telegram ao gravar nota no cérebro",
+    "lastCommit": "fix(workflow): adicionar permissions: contents: write para push do INDEX.md",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T10:59:26.565Z",
+      "titulo": "Push na main · 473052f015e01fc87c3e0f9f10c3bd81754d7ea9",
+      "detalhe": "fix(workflow): adicionar permissions: contents: write para push do INDEX.md",
+      "area": "Repositório",
+      "sha": "473052f",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T10:58:32.560Z",
       "titulo": "Push na main · 382de6f9f5430d6ef878669efee64636e1d931a5",
@@ -1230,6 +1238,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T10:59:26.565Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 473052f015e01fc87c3e0f9f10c3bd81754d7ea9 (473052f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T10:58:32.560Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 382de6f9f5430d6ef878669efee64636e1d931a5 (382de6f)",
@@ -1570,13 +1585,6 @@
       "ia": "Claude Code",
       "action": "feat(pr-agent): 3 IAs em paralelo — Groq + Gemini + Claude Sonnet",
       "area": "CI/CD",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T14:21:00Z",
-      "ia": "Claude Code",
-      "action": "chore(painel): P8 concluído — Multi-IA PR Review ativo",
-      "area": "Painel",
       "status": "sucesso"
     }
   ],
