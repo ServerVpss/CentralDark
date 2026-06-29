@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T15:16:40.494Z",
-  "updatedAtBR": "29/06/2026, 12:16:40 BRT",
+  "updatedAt": "2026-06-29T17:01:16.685Z",
+  "updatedAtBR": "29/06/2026, 14:01:16 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "feat(brain): 5 notas MOC + frontmatter 3 arquivos + pasta Decisoes populada",
+    "lastCommit": "Salvou regra escopo frontend",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -535,6 +535,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T17:01:16.685Z",
+      "titulo": "Push na main · 3b3d3539714215c29444fa7c8120892c3522852d",
+      "detalhe": "Salvou regra escopo frontend",
+      "area": "Repositório",
+      "sha": "3b3d353",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-06-29T15:16:40.494Z",
       "titulo": "Push na main · 708ba6b9e5584bb79bc4bb4cf9f3e2f735d530f6",
       "detalhe": "feat(brain): 5 notas MOC + frontmatter 3 arquivos + pasta Decisoes populada",
@@ -921,14 +929,6 @@
       "titulo": "Sessão 29/06 — Governança CentralDark",
       "detalhe": "CLAUDE.md Seção 9 Áreas Protegidas · agent-notify Padrão CentralDark monospace · issues-scanner · workspace multi-root",
       "area": "governance",
-      "sha": "f6375ab",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T04:14:44.872Z",
-      "titulo": "Push na main · f6375ab5a5fb296d22ceb0e91c89e90d54d40371",
-      "detalhe": "feat(governance): proteções áreas consolidadas, agent-notify padrão CentralDark e issues-scanner",
-      "area": "Repositório",
       "sha": "f6375ab",
       "actor": "segredounlock"
     }
@@ -1345,6 +1345,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T17:01:16.685Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 3b3d3539714215c29444fa7c8120892c3522852d (3b3d353)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T15:16:40.494Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 708ba6b9e5584bb79bc4bb4cf9f3e2f735d530f6 (708ba6b)",
@@ -1684,13 +1691,6 @@
       "time": "2026-06-29T01:42:44.864Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 95f4f6c421f856c7a065f40f46c91d2bb3540881 (95f4f6c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-28T22:28:44.345Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1290a0d07cd331d05b4e2b41baabf746f3cabc1c (1290a0d)",
       "area": "Repositório",
       "status": "sucesso"
     }
