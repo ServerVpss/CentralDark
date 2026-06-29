@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T09:38:35.497Z",
-  "updatedAtBR": "29/06/2026, 06:38:35 BRT",
+  "updatedAt": "2026-06-29T10:56:54.334Z",
+  "updatedAtBR": "29/06/2026, 07:56:54 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "feat(brain): segundo cérebro conectado — Obsidian + skills + consciência",
+    "lastCommit": "feat(brain): tutorial Obsidian para leigo + nota postura Pivete",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T10:56:54.334Z",
+      "titulo": "Push na main · e3c5b83e5f19d901998146ca2d156e8ad0f304bb",
+      "detalhe": "feat(brain): tutorial Obsidian para leigo + nota postura Pivete",
+      "area": "Repositório",
+      "sha": "e3c5b83",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T09:38:35.497Z",
       "titulo": "Push na main · 3e8abe3ff7b57e0728527ee4cf39d75d8ea7984f",
@@ -1214,6 +1222,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T10:56:54.334Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e3c5b83e5f19d901998146ca2d156e8ad0f304bb (e3c5b83)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T09:38:35.497Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3e8abe3ff7b57e0728527ee4cf39d75d8ea7984f (3e8abe3)",
@@ -1554,13 +1569,6 @@
       "ia": "Claude Code",
       "action": "feat(painel): botão admin discreto + login SHA-256 + drawer atalhos",
       "area": "Frontend",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T12:52:00Z",
-      "ia": "Claude Code",
-      "action": "feat(p8): pr-agent self-hosted — review automático via Claude Sonnet",
-      "area": "PR Review",
       "status": "sucesso"
     }
   ],
