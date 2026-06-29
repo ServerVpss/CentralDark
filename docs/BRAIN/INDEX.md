@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-06-29 13:44 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-06-29 14:34 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -19,6 +19,7 @@
 
 ## 05 - Documentacao
 
+- [[DIAGRAMAS-CENTRALDARK]]
 - [[GUIA-PROMPTS]]
 - [[PLUGINS-OBSIDIAN-RECOMENDADOS]]
 - [[TUTORIAL-OBSIDIAN]]
