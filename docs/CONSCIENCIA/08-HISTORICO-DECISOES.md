@@ -1,5 +1,27 @@
 # 08 — Histórico de decisões grandes
 
+## Regra: sempre registrar desencontros entre plano e execução (2026-06-29)
+
+**Decisão:** qualquer desvio entre o plano escrito e o que foi executado deve ser registrado aqui E atualizado no arquivo onde o erro pode causar impacto real.
+
+**Por quê:** durante a Fase 1 da reorganização do Cérebro Vivo, a tabela de roteamento referenciou a pasta `07 - Reuniões & Notas` que não existia — o bot tentaria gravar lá e falharia silenciosamente. O Pivete cobrou que esses desencontros fossem identificados, registrados e corrigidos.
+
+**Regra derivada:** quando salvar em um lugar, verificar se os outros pontos da Sincronia 4-Point também foram atualizados (BRAIN ↔ CONSCIENCIA ↔ GitHub ↔ Painel).
+
+---
+
+## Reorganização Cérebro Vivo — Fase 1 (2026-06-29)
+
+**Executado:** remoção BRAIN.md.bak, tabela de roteamento em 00-LEIA-PRIMEIRO.md, ponte BRAIN↔CONSCIENCIA, frontmatter no PLANO.md.
+
+**Desencontros encontrados:**
+1. Pasta `07 - Reuniões & Notas` não existia — criada em seguida
+2. `06-DECISOES.md` ainda não renomeado para `03-DECISOES.md` — segurado para Fase 2 (risco de quebrar wikilinks)
+3. Tabela usa nomes atuais, não os da Fase 2 — será atualizada após Fase 2 dividir APRENDIZADOS.md
+
+---
+
+
 Decisões arquiteturais e operacionais já tomadas. Não reabrir sem motivo forte.
 
 ## Migração CentralDark (em andamento)
