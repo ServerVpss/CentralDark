@@ -223,7 +223,7 @@ def avaliar(path: Path) -> None:
 # ─── Loops em thread ──────────────────────────────────────────────
 def loop_debounce() -> None:
     while True:
-        time.sleep(0.1)
+        time.sleep(1.0)
         agora = time.time()
         with lock:
             prontos = [p for p, t in fila.items() if agora - t >= DEBOUNCE_S]
