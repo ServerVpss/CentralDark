@@ -6,6 +6,9 @@ on:
     paths:
       - 'docs/BRAIN/**'
 
+permissions:
+  contents: write
+
 jobs:
   regenerar-index:
     runs-on: self-hosted
