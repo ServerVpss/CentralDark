@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T11:17:33.569Z",
-  "updatedAtBR": "29/06/2026, 08:17:33 BRT",
+  "updatedAt": "2026-06-29T11:19:46.668Z",
+  "updatedAtBR": "29/06/2026, 08:19:46 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "chore(brain): pendencias atualizadas com grandes tarefas, aprendizados e regra anti-duplicata",
+    "lastCommit": "feat(brain): arquitetura atualizada com federacao de memoria entre IAs e MCP universal",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T11:19:46.668Z",
+      "titulo": "Push na main · 3418b067111c09b43139846f505b2cf652b41d6c",
+      "detalhe": "feat(brain): arquitetura atualizada com federacao de memoria entre IAs e MCP universal",
+      "area": "Repositório",
+      "sha": "3418b06",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T11:17:33.569Z",
       "titulo": "Push na main · 04700a699ccad9063d9ceb23b09fd0aa567504eb",
@@ -1286,6 +1294,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T11:19:46.668Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3418b067111c09b43139846f505b2cf652b41d6c (3418b06)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T11:17:33.569Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 04700a699ccad9063d9ceb23b09fd0aa567504eb (04700a6)",
@@ -1625,13 +1640,6 @@
       "time": "2026-06-26T00:15:36.947Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · bcce73505df9396ebeab19b626c66905f0790792 (bcce735)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-26T00:12:24.536Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 87e05bf38f3da2e03a46a88ae0ea200afdd45246 (87e05bf)",
       "area": "Repositório",
       "status": "sucesso"
     }
