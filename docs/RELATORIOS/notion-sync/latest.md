@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-28T22:38:10.172Z
+# 🧠 Notion Sync — 2026-06-29T12:59:33.687Z
 
-- **Commit fonte:** `2999ccd04c22aeaa0fa0b987c318daf9a8b77b41`
+- **Commit fonte:** `9980c87506ca79a6df03a1db19bd21ba40064747`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 279 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 2 criadas · ♻️ 280 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,8 +14,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 11 | 0 | 11 | 0 | 0 |
-| aprendizados | 264 | 1 | 263 | 0 | 0 |
+| decisoes | 13 | 2 | 11 | 0 | 0 |
+| aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
 
@@ -26,6 +26,8 @@
 | regras | atualizado | Guardião da Consciência — Modo Propor Obrigatório (até 08/07/2026) |
 | regras | atualizado | Guardião v2 — Arquitetura de 2 camadas (Olho + Cérebro/Fila) |
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
+| decisoes | criado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
+| decisoes | criado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
 | decisoes | atualizado | Migração CentralDark (em andamento) |
 | decisoes | atualizado | Fluxo de deploy |
 | decisoes | atualizado | Instalador + doc viva |
@@ -300,6 +302,6 @@
 | aprendizados | atualizado | #259 — Regra universal: toda IA sugere modelo/esforco otimo para economizar creditos e tempo |
 | aprendizados | atualizado | #260 — Padrão de Apresentação — toda IA via MCP |
 | aprendizados | atualizado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
-| aprendizados | criado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
+| aprendizados | atualizado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
