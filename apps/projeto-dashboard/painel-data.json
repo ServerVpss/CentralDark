@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T14:46:35.880Z",
-  "updatedAtBR": "29/06/2026, 11:46:35 BRT",
+  "updatedAt": "2026-06-29T14:57:28.006Z",
+  "updatedAtBR": "29/06/2026, 11:57:28 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "fix(guardiao): reduz polling debounce de 0.1s para 1.0s — elimina 22% CPU desnecessário",
+    "lastCommit": "feat(brain): catalogo de ideias visuais com referencia aos diagramas prontos",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -535,6 +535,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T14:57:28.006Z",
+      "titulo": "Push na main · ecc1d7f597f10120e1b9afd5a1fe078f8063ab62",
+      "detalhe": "feat(brain): catalogo de ideias visuais com referencia aos diagramas prontos",
+      "area": "Repositório",
+      "sha": "ecc1d7f",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-29T14:46:35.880Z",
       "titulo": "Push na main · f3830670ea6e77225f702e34e4f7e554b5577679",
       "detalhe": "fix(guardiao): reduz polling debounce de 0.1s para 1.0s — elimina 22% CPU desnecessário",
@@ -920,14 +928,6 @@
       "time": "2026-06-28T18:42:10.585Z",
       "titulo": "Webhook cadastrado e validado — deploy automático GitHub→VPS ativo",
       "detalhe": "Webhook de deploy cadastrado e validado — eventos=push · 3 pushes e 1 ping recebidos com status=200",
-      "area": "infra",
-      "sha": "",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-28T17:51:10.682Z",
-      "titulo": "Auditoria pipeline deploy + sync VPS (sessão Opus CLI)",
-      "detalhe": "VPS sincronizada com origin (2f1de49d6); webhook OK mas GitHub não cadastrou o gatilho (deploy automático quebrado); Telegram mapeado; aprendizado #261",
       "area": "infra",
       "sha": "",
       "actor": "segredounlock"
@@ -1345,6 +1345,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T14:57:28.006Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ecc1d7f597f10120e1b9afd5a1fe078f8063ab62 (ecc1d7f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T14:46:35.880Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f3830670ea6e77225f702e34e4f7e554b5577679 (f383067)",
@@ -1684,13 +1691,6 @@
       "time": "2026-06-28T12:27:34.140Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6d74d6e8d0214cf6a8673ff701d1ef4fc6c3e5c2 (6d74d6e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-28T12:13:16.947Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4f2a0d69c6ead1c71d7d9cd90d44e484b2da6b2c (4f2a0d6)",
       "area": "Repositório",
       "status": "sucesso"
     }
