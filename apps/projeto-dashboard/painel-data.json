@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T12:43:34.771Z",
-  "updatedAtBR": "29/06/2026, 09:43:34 BRT",
+  "updatedAt": "2026-06-29T12:59:44.523Z",
+  "updatedAtBR": "29/06/2026, 09:59:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "docs(cerebro): Fase 1 — reorganização do Cérebro Vivo",
+    "lastCommit": "docs(cerebro): corrige desencontros Fase 1 + registra regra de sincronia",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -535,6 +535,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T12:59:44.523Z",
+      "titulo": "Push na main · 9980c87506ca79a6df03a1db19bd21ba40064747",
+      "detalhe": "docs(cerebro): corrige desencontros Fase 1 + registra regra de sincronia",
+      "area": "Repositório",
+      "sha": "9980c87",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-29T12:43:34.771Z",
       "titulo": "Push na main · 44d7f34e40e50d8df13afbd980f948fad3fe0cfa",
       "detalhe": "docs(cerebro): Fase 1 — reorganização do Cérebro Vivo",
@@ -921,13 +929,6 @@
       "area": "Repositório",
       "sha": "93fc172",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-27T17:55:55.846Z",
-      "title": "Reload não executado; MCP-CentralDark segue online no deploy_status",
-      "area": "MCP / VPS",
-      "status": "feito",
-      "detail": ""
     }
   ],
   "agents": [
@@ -1342,6 +1343,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T12:59:44.523Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9980c87506ca79a6df03a1db19bd21ba40064747 (9980c87)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T12:43:34.771Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 44d7f34e40e50d8df13afbd980f948fad3fe0cfa (44d7f34)",
@@ -1681,13 +1689,6 @@
       "time": "2026-06-26T07:51:13.693Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 9984f13d4f192c797890e4e5fd21fd9f145a4d09 (9984f13)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-26T05:30:53.239Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 65a2b744af80c000859d878c88102d9184720aa5 (65a2b74)",
       "area": "Repositório",
       "status": "sucesso"
     }
