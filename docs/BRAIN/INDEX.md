@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-06-29 09:34 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-06-29 11:00 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -11,4 +11,13 @@
 - [[BRAIN]]
 - [[PLANO]]
 - [[README]]
+
+## 00 - Mapa do Sistema
+
+- [[00-POSTURA-PIVETE]]
+- [[INDEX]]
+
+## 05 - Documentacao
+
+- [[TUTORIAL-OBSIDIAN]]
 
