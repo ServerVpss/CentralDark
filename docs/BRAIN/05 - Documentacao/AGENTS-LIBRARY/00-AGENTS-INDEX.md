@@ -7,36 +7,34 @@ updated: 2026-06-29
 
 # 🤖 Arsenal de Skills — CentralDark
 
-> Para disparar qualquer skill: **"Claude, executa a skill [NOME]"**
-> Para criar skill nova: copie o [[00-TEMPLATE-SKILL]] e preencha.
+> **Como chamar:** fale o apelido simples no Telegram ou no chat.
+> Exemplo: _"Grava aí que preciso ajustar o cron"_ ou _"Investiga o grafo"_
 
 ---
 
-## Skills Ativas
+## Skills Ativas — chame pelo apelido!
 
-| # | Skill | Função | Prioridade | Tipo |
-|---|-------|---------|------------|------|
-| 1 | [[MEMORY-REGISTRAR]] | Gravar ideias, decisões e pensamentos no BRAIN/CONSCIENCIA | Alta | Memória |
-| 2 | [[GRAPH-INVESTIGATOR]] | Auditar nós cinzas, identificar órfãs e sugerir conexões | Alta | Investigação |
-| 3 | [[SEMANTIC-LINKER]] | Criar links semânticos de qualidade entre notas | Alta | Organização |
-| 4 | [[SWARM-INVESTIGADOR-GRAFO]] | Auditoria profunda do grafo (modo swarm) | Alta | Investigação |
-| — | Code Investigator | Analisar código, encontrar bugs, sugerir refatorações | Alta | Código |
-| — | Decision Recorder | Registrar decisões com contexto, motivo e consequência | Alta | Memória |
-| — | Federation Analyzer | Avaliar ideias de outras IAs antes de registrar | Média-Alta | Memória |
-| — | Prompt Engineer | Melhorar prompts ruins, criar prompts fortes | Média-Alta | Criação |
-| — | Daily Reviewer | Revisão diária: o que foi feito + pendências + próximos passos | Média | Organização |
-| — | Issue Analyzer | Analisar issues GitHub e sugerir soluções | Média | Código |
-| — | Architecture Reviewer | Revisar decisões de arquitetura e sugerir melhorias | Média | Arquitetura |
-
-> Skills com `—` ainda não têm arquivo próprio. Para criar: use [[00-TEMPLATE-SKILL]].
+| Apelido (fale assim) | O que faz | Arquivo técnico |
+|----------------------|-----------|-----------------|
+| 🧠 **"Grava aí"** / **"Anota"** | Registra ideia, decisão ou pensamento no lugar certo | [[MEMORY-REGISTRAR]] |
+| 🔍 **"Investiga o grafo"** / **"Detetive"** | Acha notas cinzas, isoladas e sem conexão | [[GRAPH-INVESTIGATOR]] |
+| 🔗 **"Conecta as notas"** / **"Liga tudo"** | Cria links inteligentes entre notas relacionadas | [[SEMANTIC-LINKER]] |
+| 🕵️ **"Varredura geral"** / **"Audita tudo"** | Auditoria profunda do vault inteiro + relatório | [[SWARM-INVESTIGADOR-GRAFO]] |
+| 🐛 **"Investiga o código"** / **"Acha o bug"** | Analisa código, acha problemas e sugere correções | *(em breve)* |
+| 📌 **"Registra a decisão"** | Grava decisão importante com contexto e motivo | *(em breve)* |
+| ✨ **"Melhora esse prompt"** / **"Forja"** | Transforma texto solto em prompt de qualidade | *(em breve)* |
+| 📋 **"Revisão do dia"** | O que foi feito hoje, pendências, próximos passos | *(em breve)* |
+| 🐙 **"Analisa as issues"** | Verifica issues abertas no GitHub e sugere ação | *(em breve)* |
+| 🏗️ **"Revisa a arquitetura"** | Revisa decisões técnicas e aponta melhorias | *(em breve)* |
 
 ---
 
-## Prompt Master (para criar skills novas)
+## Como criar uma skill nova
 
-Arquivo: [[00-PROMPT-MASTER-SKILLS]]
-
-Use esse prompt no Claude/Opus quando quiser criar uma skill nova do zero com qualidade.
+1. Abra [[00-TEMPLATE-SKILL]] e copie o modelo
+2. Preencha com o foco que você quer
+3. **Ou:** use o [[00-PROMPT-MASTER-SKILLS]] no Claude/Opus para gerar automático
+4. Adicione o apelido simples aqui na tabela acima
 
 ---
 
@@ -44,4 +42,4 @@ Use esse prompt no Claude/Opus quando quiser criar uma skill nova do zero com qu
 
 - [[TUTORIAL-OBSIDIAN]] — como usar o vault
 - [[BRAIN]] — raiz do sistema
-- [[00-LEIA-PRIMEIRO]] — regras operacionais para IAs
+- [[00-LEIA-PRIMEIRO]] — regras para IAs

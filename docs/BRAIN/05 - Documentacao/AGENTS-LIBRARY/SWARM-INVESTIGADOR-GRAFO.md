@@ -7,9 +7,10 @@ updated: 2026-06-29
 
 # 🤖 SKILL: SWARM-INVESTIGADOR-GRAFO
 
+> 🗣️ **Chame assim:** _"Varredura geral"_, _"Audita tudo"_, _"Me traz um relatório completo"_
 > **Objetivo:** Auditoria profunda do vault — varre todos os arquivos, classifica problemas por severidade e gera relatório completo.
 > **Tipo:** Investigação | **Prioridade:** Alta
-> **Diferença do GRAPH-INVESTIGATOR:** este é mais detalhado, gera JSON completo e notifica com análise semântica.
+> **Diferença do Detetive:** este é mais demorado, gera JSON completo e analisa BRAIN + CONSCIENCIA juntos.
 
 ---
 

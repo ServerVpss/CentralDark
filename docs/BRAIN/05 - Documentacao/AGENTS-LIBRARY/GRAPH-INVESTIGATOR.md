@@ -7,6 +7,7 @@ updated: 2026-06-29
 
 # 🤖 SKILL: GRAPH-INVESTIGATOR
 
+> 🗣️ **Chame assim:** _"Investiga o grafo"_, _"Detetive"_, _"Por que tem nó cinza?"_
 > **Objetivo:** Auditar o Graph View do Obsidian — identificar nós cinzas (arquivos sem tags/links), gargalos de conexão e sugerir melhorias de linkagem.
 > **Tipo:** Investigação | **Prioridade:** Alta
 

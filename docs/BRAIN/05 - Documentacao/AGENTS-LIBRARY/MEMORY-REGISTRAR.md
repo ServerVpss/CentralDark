@@ -7,6 +7,7 @@ updated: 2026-06-29
 
 # 🤖 SKILL: MEMORY-REGISTRAR
 
+> 🗣️ **Chame assim:** _"Grava aí"_, _"Anota isso"_, _"Não me deixa esquecer"_
 > **Objetivo:** Gravar ideias, decisões e pensamentos de forma inteligente — sem duplicatas, com contexto e no lugar certo.
 > **Tipo:** Memória | **Prioridade:** Alta
 

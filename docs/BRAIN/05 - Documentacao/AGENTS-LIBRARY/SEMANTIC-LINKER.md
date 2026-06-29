@@ -7,6 +7,7 @@ updated: 2026-06-29
 
 # 🤖 SKILL: SEMANTIC-LINKER
 
+> 🗣️ **Chame assim:** _"Conecta as notas"_, _"Liga tudo"_, _"Meu grafo tá solto"_
 > **Objetivo:** Criar conexões intencionais e com significado entre notas — não links aleatórios, mas relações semânticas que fortalecem o grafo e a memória.
 > **Tipo:** Organização | **Prioridade:** Alta
 
