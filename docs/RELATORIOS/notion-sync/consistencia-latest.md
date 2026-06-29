@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-29T18:53:42.649Z
-- **Commit:** `e8adedfb7554747b5e8d6e8e3967538c1be0d7e4`
+- **Gerado:** 2026-06-29T19:07:02.956Z
+- **Commit:** `5813311a4d98714ebba9d841171b19e08b08e85f`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 14 | 14 | 14 | 0 | 0 |
-| aprendizados | 270 | 0 | 0 | 270 | 0 |
+| aprendizados | 271 | 0 | 0 | 271 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **270**
+- 🟥 Faltando no Notion: **271**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -318,4 +318,5 @@
 - 260. Padrão de Apresentação — toda IA via MCP
 - 261. Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado)
 - 262. Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition)
+- [ATUALIZAÇÃO #243 — 29/06/2026]. Builder Bolt: caminho e container oficiais corrigidos
 </details>
