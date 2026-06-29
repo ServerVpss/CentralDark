@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-06-29 15:14 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-06-29 15:16 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -10,6 +10,11 @@
 - [[06-DECISOES]]
 - [[09-IDEIAS-VISUAIS]]
 - [[BRAIN]]
+- [[MOC-CentralDark-HubBot]]
+- [[MOC-GitHub]]
+- [[MOC-MCP]]
+- [[MOC-PM2]]
+- [[MOC-Skills]]
 - [[PLANO]]
 - [[README]]
 
@@ -24,6 +29,10 @@
 - [[GUIA-PROMPTS]]
 - [[PLUGINS-OBSIDIAN-RECOMENDADOS]]
 - [[TUTORIAL-OBSIDIAN]]
+
+## 06 - Decisoes
+
+- [[README]]
 
 ## 06 - Devedores & Contatos
 
