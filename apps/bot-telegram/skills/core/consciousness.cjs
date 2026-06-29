@@ -56,6 +56,21 @@ async function think(input) {
     };
   }
 
+  // 🧠 Aprendizados pessoais e memórias boas
+  const ehAprendizado = /\b(aprendi (que|como|a |hoje|isso)|que coisa boa|nunca (vou )?esquecer|gostei (muito )?de|lembrança boa|momento bom|descobri (que|como)|foi incrível|funcionou (pela primeira vez|perfeitamente)|consegui (fazer|resolver)|isso me ensinou)\b/i.test(txt);
+  if (ehAprendizado) {
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    const content = `## ${hoje}\n\n${txt}\n\n---\n*Registrado via bot — ${hoje}*`;
+    const result = await executor.run("obsidian-writer", {
+      op: "write",
+      folder: "08 - Aprendizados & Memórias",
+      title: txt.slice(0, 55).replace(/[^\w\s\-áéíóúâêîôûãõçàèìòù]/gi, "").trim() || "Aprendizado",
+      content,
+    });
+    memory.save({ input: txt.slice(0, 200), skill: "obsidian-writer", folder: "aprendizados", result: result.ok ? "success" : "error", timestamp: Date.now() });
+    return { type: "automatic", skill: "obsidian-writer", response: { ...result, _folder: "Aprendizados & Memórias" } };
+  }
+
   // 💰 Devedores, contatos e pendências financeiras pessoais
   const ehDevedor = /\b(deve|devo|devendo|devedora?|me deve|ainda (não )?pagou|falta pagar|não pagou|cobrar|cobrança|pendência financeira|contato d[ao]|salva o contato|número d[ao]|telefone d[ao]|whats(app)? d[ao])\b/i.test(txt);
   if (ehDevedor) {

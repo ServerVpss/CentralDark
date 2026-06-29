@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 /**
- * memory-linker-agent.mjs
+ * STAGE 1 — memory-linker-agent.mjs (Scout)
  *
- * Varre docs/BRAIN/ e docs/CONSCIENCIA/ procurando gaps de memória:
- *   1. Notas sem nenhum [[wikilink]] apontando pra elas (órfãs)
- *   2. [[wikilinks]] que apontam para arquivos que não existem (links quebrados)
- *   3. Arquivos em CONSCIENCIA sem seção "Conexões Rápidas"
+ * Varre docs/BRAIN/ e docs/CONSCIENCIA/ e detecta gaps de memória:
+ *   1. Notas órfãs (nenhum [[wikilink]] aponta pra elas)
+ *   2. Links quebrados ([[wikilink]] aponta para arquivo inexistente)
+ *   3. Arquivos CONSCIENCIA sem seção "Conexões Rápidas"
+ *   4. Arquivos CONSCIENCIA sem frontmatter YAML
  *
- * Roda via cron a cada 30min, mas usa timer interno aleatório (60-120 min)
- * para não encher o Telegram. Só notifica quando encontra problemas.
+ * Grava resultado em last-report.json para o Stage 2 consumir.
+ * Notifica Telegram só se encontrar problemas.
+ * Timer interno aleatório 60–120 min (cron roda a cada 30 min).
  */
 
 import fs   from 'fs';
@@ -16,92 +18,70 @@ import path from 'path';
 import https from 'https';
 
 const RAIZ       = '/root/CentralDark';
-const STATE_FILE = path.join(RAIZ, 'scripts/memory-linker/.next_run');
+const DIR        = path.join(RAIZ, 'scripts/memory-linker');
+const STATE_FILE = path.join(DIR, '.next_run');
+const REPORT     = path.join(DIR, 'last-report.json');
 const ENV_FILE   = path.join(RAIZ, 'secrets/mcp.env');
 
-// --- Credenciais ---
-const envVars = Object.fromEntries(
-  fs.readFileSync(ENV_FILE, 'utf8')
-    .split('\n')
+// Credenciais
+const env = Object.fromEntries(
+  fs.readFileSync(ENV_FILE, 'utf8').split('\n')
     .filter(l => l.includes('=') && !l.startsWith('#'))
-    .map(l => {
-      const idx = l.indexOf('=');
-      return [l.slice(0, idx).trim(), l.slice(idx + 1).trim().replace(/^['"]|['"]$/g, '')];
-    })
+    .map(l => { const i = l.indexOf('='); return [l.slice(0,i).trim(), l.slice(i+1).trim().replace(/^['"]|['"]$/g,'')]; })
 );
-const TOKEN    = envVars.TELEGRAM_BOT_TOKEN;
-const ADMIN_ID = envVars.TELEGRAM_ADMIN_ID;
+const TOKEN    = env.TELEGRAM_BOT_TOKEN;
+const ADMIN_ID = env.TELEGRAM_ADMIN_ID;
 
-// --- Timer aleatório (60–120 min) ---
+// Timer aleatório 60–120 min
 const now = Date.now();
 let nextRun = 0;
-try { nextRun = parseInt(fs.readFileSync(STATE_FILE, 'utf8').trim(), 10); } catch {}
+try { nextRun = parseInt(fs.readFileSync(STATE_FILE,'utf8').trim(),10); } catch {}
 if (now < nextRun) process.exit(0);
 
 const delayMin = 60 + Math.floor(Math.random() * 60);
 fs.writeFileSync(STATE_FILE, String(now + delayMin * 60 * 1000));
 
-// --- Scanner ---
+// Scanner
 function scanDir(dir) {
-  const result = [];
-  if (!fs.existsSync(dir)) return result;
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
   function walk(d) {
-    for (const entry of fs.readdirSync(d, { withFileTypes: true })) {
-      const full = path.join(d, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else if (entry.name.endsWith('.md')) result.push(full);
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const f = path.join(d, e.name);
+      if (e.isDirectory()) walk(f);
+      else if (e.name.endsWith('.md')) out.push(f);
     }
   }
   walk(dir);
-  return result;
+  return out;
 }
 
-function extractWikilinks(content) {
+function wikilinks(content) {
   return [...content.matchAll(/\[\[([^\]|#\n]+?)(?:[|#][^\]]*)?]]/g)]
     .map(m => m[1].trim().toUpperCase());
 }
 
-function hasConexoesRapidas(content) {
-  return /##\s*(conex[oõ]es?\s*r[aá]pidas?)/i.test(content);
-}
+const SKIP_PASTA   = ['ARQUIVO-MORTO'];
+const SKIP_PREFIXO = ['INDEX', 'README'];
 
-function hasFrontmatter(content) {
-  return content.trimStart().startsWith('---');
-}
-
-// --- Coleta todos os arquivos ---
-const conscienciaDir = path.join(RAIZ, 'docs/CONSCIENCIA');
-const brainDir       = path.join(RAIZ, 'docs/BRAIN');
-
-const allFiles = [...scanDir(conscienciaDir), ...scanDir(brainDir)];
-
-// Índice: NOME_SEM_EXT_MAIUSCULO → caminho
+const allFiles = [...scanDir(path.join(RAIZ,'docs/CONSCIENCIA')), ...scanDir(path.join(RAIZ,'docs/BRAIN'))];
 const fileIndex = {};
-for (const f of allFiles) {
-  fileIndex[path.basename(f, '.md').toUpperCase()] = f;
-}
+for (const f of allFiles) fileIndex[path.basename(f,'.md').toUpperCase()] = f;
 
-// --- Análise ---
-const allMentioned  = new Set();
-const brokenLinks   = new Map(); // link → [arquivo que o menciona]
-const noConexoes    = [];
-const semFrontmatter = [];
-
-// Pastas/arquivos para ignorar (auto-gerados ou arquivos auxiliares)
-const IGNORAR_PREFIXO = ['INDEX', 'README'];
-const IGNORAR_PASTA   = ['ARQUIVO-MORTO'];
+const allMentioned = new Set();
+const brokenLinks  = new Map(); // link → [arquivos que mencionam]
+const noConexoes   = [];
+const semFront     = [];
 
 for (const f of allFiles) {
-  const rel = path.relative(RAIZ, f);
-  const name = path.basename(f, '.md');
-  const isArquivoMorto = IGNORAR_PASTA.some(p => rel.includes(p));
-  if (isArquivoMorto) continue;
+  const rel  = path.relative(RAIZ, f);
+  const name = path.basename(f,'.md');
+  if (SKIP_PASTA.some(p => rel.includes(p))) continue;
 
   let content;
-  try { content = fs.readFileSync(f, 'utf8'); } catch { continue; }
+  try { content = fs.readFileSync(f,'utf8'); } catch { continue; }
 
-  const links = extractWikilinks(content);
-  for (const link of links) {
+  for (const link of wikilinks(content)) {
     allMentioned.add(link);
     if (!fileIndex[link]) {
       if (!brokenLinks.has(link)) brokenLinks.set(link, []);
@@ -109,88 +89,55 @@ for (const f of allFiles) {
     }
   }
 
-  // Verifica Conexões Rápidas apenas em CONSCIENCIA (exceto ARTEFATOS e arquivos de retomada)
-  const isConsciencia = rel.startsWith('docs/CONSCIENCIA');
-  const isArtefato    = rel.includes('ARTEFATOS');
-  const isRetomada    = name.startsWith('RETOMADA');
-  const isIgnorado    = IGNORAR_PREFIXO.some(p => name.toUpperCase().startsWith(p));
-
-  if (isConsciencia && !isArtefato && !isRetomada && !isIgnorado) {
-    if (!hasConexoesRapidas(content)) {
-      noConexoes.push(name);
-    }
-    if (!hasFrontmatter(content)) {
-      semFrontmatter.push(name);
-    }
+  const isC = rel.startsWith('docs/CONSCIENCIA');
+  const skip = rel.includes('ARTEFATOS') || name.startsWith('RETOMADA') || SKIP_PREFIXO.some(p => name.toUpperCase().startsWith(p));
+  if (isC && !skip) {
+    if (!/##\s*(conex[oõ]es?\s*r[aá]pidas?)/i.test(content)) noConexoes.push(name);
+    if (!content.trimStart().startsWith('---')) semFront.push(name);
   }
 }
 
-// Órfãs: arquivos CONSCIENCIA não mencionados por ninguém
 const orfas = [];
-for (const f of scanDir(conscienciaDir)) {
+for (const f of scanDir(path.join(RAIZ,'docs/CONSCIENCIA'))) {
   const rel  = path.relative(RAIZ, f);
-  const name = path.basename(f, '.md');
-  if (IGNORAR_PASTA.some(p => rel.includes(p))) continue;
-  if (IGNORAR_PREFIXO.some(p => name.toUpperCase().startsWith(p))) continue;
+  const name = path.basename(f,'.md');
+  if (SKIP_PASTA.some(p => rel.includes(p))) continue;
+  if (SKIP_PREFIXO.some(p => name.toUpperCase().startsWith(p))) continue;
   if (name.startsWith('RETOMADA')) continue;
-  if (!allMentioned.has(name.toUpperCase())) {
-    orfas.push(name);
-  }
+  if (!allMentioned.has(name.toUpperCase())) orfas.push(name);
 }
 
-// --- Monta relatório ---
-const totalProblemas = orfas.length + brokenLinks.size + noConexoes.length + semFrontmatter.length;
+// Grava relatório JSON para Stage 2
+const report = {
+  timestamp: new Date().toISOString(),
+  nextRunMin: delayMin,
+  orfas,
+  brokenLinks: Object.fromEntries(brokenLinks),
+  noConexoes,
+  semFrontmatter: semFront,
+  total: orfas.length + brokenLinks.size + noConexoes.length + semFront.length
+};
+fs.writeFileSync(REPORT, JSON.stringify(report, null, 2));
 
-if (totalProblemas === 0) process.exit(0); // silêncio quando tudo está ok
+// Notifica só se há problemas
+if (report.total === 0) process.exit(0);
 
-let report = `🧠 <b>Memory Linker — Gaps Encontrados</b>\n\n`;
-
-if (orfas.length > 0) {
-  report += `📍 <b>Notas sem nenhum link apontando (${orfas.length}):</b>\n`;
-  orfas.slice(0, 6).forEach(o => { report += `  • <code>${o}</code>\n`; });
-  if (orfas.length > 6) report += `  ... +${orfas.length - 6} mais\n`;
-  report += '\n';
-}
-
-if (brokenLinks.size > 0) {
-  report += `❓ <b>Links quebrados — arquivo não existe (${brokenLinks.size}):</b>\n`;
-  [...brokenLinks.entries()].slice(0, 6).forEach(([link, origens]) => {
-    report += `  • <code>[[${link}]]</code> ← mencionado em ${origens.slice(0,2).join(', ')}\n`;
-  });
-  if (brokenLinks.size > 6) report += `  ... +${brokenLinks.size - 6} mais\n`;
-  report += '\n';
-}
-
-if (noConexoes.length > 0) {
-  report += `🔗 <b>Sem seção "Conexões Rápidas" (${noConexoes.length}):</b>\n`;
-  noConexoes.slice(0, 6).forEach(n => { report += `  • <code>${n}</code>\n`; });
-  if (noConexoes.length > 6) report += `  ... +${noConexoes.length - 6} mais\n`;
-  report += '\n';
-}
-
-if (semFrontmatter.length > 0) {
-  report += `📄 <b>Sem frontmatter YAML (${semFrontmatter.length}):</b>\n`;
-  semFrontmatter.slice(0, 5).forEach(n => { report += `  • <code>${n}</code>\n`; });
-  if (semFrontmatter.length > 5) report += `  ... +${semFrontmatter.length - 5} mais\n`;
-  report += '\n';
-}
-
-report += `💡 Próxima varredura em ~${delayMin} min`;
-
-// --- Envia no Telegram ---
-function sendTelegram(text) {
+function send(text) {
   return new Promise(resolve => {
     const body = JSON.stringify({ chat_id: ADMIN_ID, text, parse_mode: 'HTML', disable_notification: true });
     const req  = https.request({
-      hostname: 'api.telegram.org',
-      path:     `/bot${TOKEN}/sendMessage`,
-      method:   'POST',
-      headers:  { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
+      hostname: 'api.telegram.org', path: `/bot${TOKEN}/sendMessage`, method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }
     }, res => { res.resume(); resolve(); });
-    req.on('error', resolve);
-    req.write(body);
-    req.end();
+    req.on('error', resolve); req.write(body); req.end();
   });
 }
 
-await sendTelegram(report);
+let msg = `🔍 <b>Stage 1 — Scout encontrou gaps (${report.total})</b>\n\n`;
+if (orfas.length)          msg += `📍 Órfãs: ${orfas.length} | `;
+if (brokenLinks.size)      msg += `❓ Links quebrados: ${brokenLinks.size} | `;
+if (noConexoes.length)     msg += `🔗 Sem conexões: ${noConexoes.length} | `;
+if (semFront.length)       msg += `📄 Sem frontmatter: ${semFront.length}`;
+msg += `\n\n⚙️ Stage 2 (Analyst) vai classificar e decidir o que corrigir automaticamente.`;
+
+await send(msg);
