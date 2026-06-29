@@ -3,7 +3,7 @@
 module.exports = {
   apps: [
     {
-      name: "guardiao-consciencia",
+      name: "CentralDark-GuardiaoConsciencia",
       script: "guardiao.py",
       interpreter: "/root/CentralDark/infra/guardiao/.venv/bin/python",
       cwd: "/root/CentralDark/infra/guardiao",
@@ -19,7 +19,7 @@ module.exports = {
       error_file: "/root/CentralDark/infra/guardiao/logs/pm2-error.log",
     },
     {
-      name: "guardiao-analista",
+      name: "CentralDark-GuardiaoAnalista",
       script: "analista/analista.py",
       interpreter: "/root/CentralDark/infra/guardiao/.venv/bin/python",
       cwd: "/root/CentralDark/infra/guardiao",

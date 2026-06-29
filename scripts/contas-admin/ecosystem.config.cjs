@@ -1,5 +1,5 @@
 module.exports = { apps: [{
-  name: 'contas-admin',
+  name: 'CentralDark-ContasAdmin',
   cwd: '/root/CentralDark/scripts/contas-admin',
   script: 'venv/bin/uvicorn',
   args: 'main:app --host 127.0.0.1 --port 9400',
