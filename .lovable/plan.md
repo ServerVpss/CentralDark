@@ -1,26 +1,52 @@
-# O que descobri agora (com o conector já funcionando)
+# Auditoria Geral CentralDark — 100% Só Leitura
 
-Consegui entrar na VPS pelo conector novo. Confirmei o seguinte:
+Combinado: **não escrevo nada em lugar nenhum**. Nem arquivo no repo, nem commit, nem migration, nem restart, nem comando que mude estado. Só leio e te entrego o relatório aqui no chat.
 
-- A pasta `/root/CentralDark/apps/modulos/mcp/` existe, mas só tem **`package.json` + `tsconfig.json` + `logs/`**. **Não tem `src/` nem `dist/`** ali.
-- O `package.json` diz que é o pacote `@centraldark/mcp v0.3.0` ("Servidor MCP da CentralDark — conecta IAs à infraestrutura"), com `main: dist/index.js`, deps `@modelcontextprotocol/sdk`, `express`, `zod`.
-- A pasta `/root/CentralDark/apps/mcp/` também só tem logs.
-- O servidor MCP está vivo agora (`runtimeTools: 70`, `dispatcher: mcp_admin_call`), então o código **está rodando em outro caminho da VPS**, fora do repositório Git `/root/CentralDark/`.
-- O conector me prende dentro de `/root/CentralDark/` e bloqueou meu `pm2 jlist` (precisa de `MCP_ALLOW_VPS_COMMANDS=true`), então eu não consigo descobrir sozinho onde está o `dist/index.js` que o PM2 está executando.
+## O que vou ler
 
-# Como resolver — escolha 1 dos 3 caminhos
+**1. Lovable (este repo)**
+- Estrutura, build status, console e network do preview.
+- Auth: logs do Cloud mostram `bad_jwt` recorrente — investigar de onde vem (só leitura do código).
 
-**Caminho A — Liberar comando 1x na VPS (mais rápido, 30s)**
-Você libera `MCP_ALLOW_VPS_COMMANDS=true` no `.env` do MCP e reinicia. Aí eu rodo `pm2 jlist`, descubro o `pm_exec_path` real do processo `MCP-CentralDark`, leio o `src/index.ts` e te explico em PT-BR como o servidor monta as 70 tools, autenticação, OAuth GitHub, etc.
+**2. GitHub**
+- `gh run list` workflows recentes (verde/vermelho).
+- PRs abertos parados.
+- HEAD da `main`.
 
-**Caminho B — Ler pelo GitHub (`ServerVpss/CentralDark`)**
-Se o código fonte estiver versionado no repo `ServerVpss/CentralDark` (mesmo que num path tipo `packages/mcp/src/`), eu uso `github_read` com o `GH_TOKEN` que já está nos secrets, baixo `src/index.ts` e te explico. Risco: pode estar fora do repo (ex.: só na VPS).
+**3. VPS (`/root/CentralDark`) via SSH — só comandos de leitura**
+- `pm2 list` (sem restart, sem save).
+- `git status` / `git log -1` no repo da VPS.
+- `ss -tulpn`, `free -h`, `df -h`.
+- `systemctl status caddy` (sem reload).
+- `curl` nos subdomínios públicos (multizap.dev, bot/crm/hook, status/mcp/api.centralldark.com) só pra ver HTTP code.
+- Listar último backup em `/root/Multizap/backups/` (sem tocar).
 
-**Caminho C — Você me diz o path**
-Se você já souber onde está (`/opt/mcp`, `/srv/centraldark-mcp`, um clone separado, etc.), me passa o caminho absoluto e eu leio direto via `vps_read_file_safe` desde que esteja dentro de uma raiz permitida.
+**4. Lovable Cloud**
+- `cloud_status`, `db_health`, `linter`.
+- Listar edge functions e ler logs recentes com erro.
+- `read_query` em tabelas de saúde (`module_health_status`, `edge_function_health`) — SELECT puro.
+- Lista de secrets cadastrados (só nomes, nunca valores).
 
-# Recomendação
+**5. Cérebro Vivo**
+- Ler `docs/PENDENCIAS.md`, `09-ESTADO-ATUAL.md`, último `last-report.json` do memory linker.
 
-Vai de **A**: é o mais limpo. Em 1 minuto eu mapeio tudo e te explico em linguagem simples como o MCP funciona por dentro (boot, registro de tools, auth, ciclo ChatGPT → VPS → resposta).
+## Entregável
 
-Me confirma qual caminho seguir e parto pra cima.
+**Só no chat.** Relatório consolidado em uma mensagem, com:
+- Semáforo por área (🟢🟡🔴)
+- O que tá quebrado de fato
+- O que tá pendente
+- Fila sugerida do que atacar primeiro (pra tu decidir depois, em outra conversa)
+
+**Nada é gravado em `docs/CONSCIENCIA/`, nada vira commit, nada vira PR.** Se quiser que vire arquivo depois, tu pede explicitamente.
+
+## Garantias (cumprindo `02-PERMISSOES.md` + CLAUDE.md §9)
+
+- Zero escrita: nenhum arquivo do repo é tocado.
+- Zero `git add/commit/push`.
+- Zero restart de PM2 (nem os 3 permitidos).
+- Zero mexida em Docker, WuzAPI, WhatsApp, Caddy, CRM, DNS, secrets, banco.
+- Zero toque em áreas protegidas.
+- Logs sanitizados antes de qualquer trecho aparecer aqui.
+
+Aprova que eu rode a leitura?
