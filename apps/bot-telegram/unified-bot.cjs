@@ -1,28 +1,35 @@
 /**
  * CentralDark — Bot Unificado @srver1bot
  *
- * Substitui bot.cjs + hub-adm.cjs em um ÚNICO processo.
- * Elimina conflito de polling (dois scripts, mesmo token).
+ * Arquitetura dual-mode (Webhook-first, Polling-fallback):
+ *   1. Se TELEGRAM_WEBHOOK_URL estiver definido → tenta registrar webhook
+ *      e sobe servidor HTTP interno na porta BOT_WEBHOOK_PORT (padrão 9500).
+ *   2. Se o registro falhar ou a variável não estiver definida → polling clássico.
+ *   Modo é logado no startup e pode ser alternado apenas alterando a env var.
  *
- * Fluxo:
- *   Admin (ADMIN_CHAT_ID) → Hub ADM + Agentes LLM + Skills
- *   Outros usuários        → Skills system (consciousness)
+ * Admin (ADMIN_CHAT_ID) → Hub ADM + Agentes LLM + Skills
+ * Outros                → Skills system (consciousness)
  *
- * Token:   SRVER1_BOT_TOKEN || TELEGRAM_BOT_TOKEN || GUARDA_TELEGRAM_BOT_TOKEN
- * PM2:     CentralDark-HubBot  (hub.ecosystem.config.cjs)
+ * Token:         SRVER1_BOT_TOKEN || TELEGRAM_BOT_TOKEN || GUARDA_TELEGRAM_BOT_TOKEN
+ * Webhook URL:   TELEGRAM_WEBHOOK_URL   (ex: https://status.centralldark.com/bot/webhook)
+ * Webhook Port:  BOT_WEBHOOK_PORT       (padrão: 9500)
+ * PM2:           CentralDark-HubBot  (hub.ecosystem.config.cjs)
  */
 
 'use strict';
 
-const fs   = require('fs');
-const path = require('path');
+const http   = require('http');
+const crypto = require('crypto');
+const fs     = require('fs');
+const path   = require('path');
 
 // ── Carrega arquivos .env ──────────────────────────────────────────────────
 function loadEnv(p) {
   try {
     fs.readFileSync(p, 'utf-8').split('\n').forEach(line => {
       const m = line.trim().match(/^([A-Z0-9_]+)\s*=\s*(.*)$/);
-      if (m && process.env[m[1]] === undefined)
+      // Sobrescreve undefined E string vazia (env herdada do PM2 com valor antigo)
+      if (m && (process.env[m[1]] === undefined || process.env[m[1]] === ''))
         process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
     });
   } catch { /* arquivo ausente — ok */ }
@@ -35,19 +42,25 @@ loadEnv('/root/CentralDark/secrets/.env');
 loadEnv(path.join(__dirname, '.env'));
 
 // ── Configuração ──────────────────────────────────────────────────────────
-const TOKEN     = process.env.SRVER1_BOT_TOKEN
-               || process.env.TELEGRAM_BOT_TOKEN
-               || process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
-const ADMIN_ID  = Number(process.env.ADMIN_CHAT_ID || '0');
-const LLM_BASE  = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/$/, '');
-const LLM_KEY   = process.env.ANTHROPIC_AUTH_TOKEN || '';
-const LLM_MODEL = process.env.LLM_MODEL || 'claude-sonnet-4-6';
-const GH_TOKEN  = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
-const MCP_PORT  = process.env.MCP_PORT || '9200';
-const TG_API    = 'https://api.telegram.org';
+const TOKEN        = process.env.SRVER1_BOT_TOKEN
+                  || process.env.TELEGRAM_BOT_TOKEN
+                  || process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
+const ADMIN_ID     = Number(process.env.ADMIN_CHAT_ID || '0');
+const LLM_BASE     = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/$/, '');
+const LLM_KEY      = process.env.ANTHROPIC_AUTH_TOKEN || '';
+const LLM_MODEL    = process.env.LLM_MODEL || 'claude-sonnet-4-6';
+const GH_TOKEN     = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
+const MCP_PORT     = process.env.MCP_PORT || '9200';
+const TG_API       = 'https://api.telegram.org';
+const WEBHOOK_URL  = (process.env.TELEGRAM_WEBHOOK_URL || '').trim();
+const WEBHOOK_PORT = Number(process.env.BOT_WEBHOOK_PORT || '9500');
+
+// Secret derivado do token — estável entre restarts, sem env extra necessária
+const WEBHOOK_SECRET = process.env.BOT_WEBHOOK_SECRET
+  || crypto.createHash('sha256').update(TOKEN + 'centraldark').digest('hex').slice(0, 32);
 
 if (!TOKEN) {
-  console.error('[Bot] TOKEN ausente. Configure SRVER1_BOT_TOKEN em secrets/telegram-alerts.env');
+  console.error('[Bot] ❌ TOKEN ausente. Configure SRVER1_BOT_TOKEN em secrets/telegram-alerts.env');
   process.exit(1);
 }
 
@@ -76,9 +89,9 @@ try {
   manager.enable('find-skills');
   manager.enable('brainstorming');
   skillsOk = true;
-  console.log('[Bot] Skills system carregado.');
+  console.log('[Bot] ✅ Skills system carregado.');
 } catch (e) {
-  console.warn('[Bot] Skills system indisponível:', e.message);
+  console.warn('[Bot] ⚠️  Skills system indisponível:', e.message);
 }
 
 // ── Sessões (agente + histórico LLM por chat) ─────────────────────────────
@@ -93,7 +106,7 @@ const AGENTS = {
   guardiao: {
     emoji: '🛡️', nome: 'Guardião',
     prompt: 'Você é o Guardião do CentralDark — monitor e protetor do ecossistema. ' +
-            'Responda sempre em PT-BR, de forma direta e profissional. ' +
+            'Responda sempre em PT-BR, direto e profissional. ' +
             'Foque em segurança, monitoramento, alertas e saúde da infraestrutura.',
   },
   orquestrador: {
@@ -160,10 +173,16 @@ function shouldIgnore(msg) {
 }
 
 // ── Painel ADM ────────────────────────────────────────────────────────────
+let _botMode = 'iniciando'; // atualizado no main()
+
 function buildPanel(chatId) {
   const sess = getSession(chatId);
   const ag   = AGENTS[sess.agent];
   const ts   = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+  const modeTag = _botMode === 'webhook'
+    ? '🔗 WEBHOOK ativo          '
+    : '🔄 POLLING ativo          ';
 
   const text =
 `<pre>┌──────────────────────────────────┐
@@ -171,6 +190,7 @@ function buildPanel(chatId) {
 └──────────────────────────────────┘
 
   STATUS   SISTEMA OPERACIONAL  ✅
+  MODO     ${modeTag}
   AGENTE   ${ag.emoji} ${ag.nome.padEnd(23)}
   HIST.    ${String(sess.history.length).padStart(2)} msgs no contexto
   SKILLS   ${skillsOk ? '✅ disponíveis' : '⚠️  indisponível   '}
@@ -220,6 +240,8 @@ async function getVPSStatus() {
 └────────────────────────────────┘
 
 ${results.join('\n')}
+  ──────────────────────────────
+  MODO     ${_botMode.toUpperCase().padEnd(24)}
 
   ⏰ ${ts}</pre>`;
 }
@@ -278,7 +300,7 @@ async function callLLM(history, systemPrompt) {
   }
 }
 
-// ── Skills helpers (de bot.cjs) ───────────────────────────────────────────
+// ── Skills helpers ────────────────────────────────────────────────────────
 function formatSkillResult(r) {
   if (!r) return '⚠️ Sem resposta.';
   if (r.error) return `❌ ${esc(r.error)}`;
@@ -314,17 +336,14 @@ async function runSkill(chatId, input, skillName) {
   }
 }
 
-// ── Comandos do Admin ─────────────────────────────────────────────────────
+// ── Comandos Admin ────────────────────────────────────────────────────────
 async function handleAdminCommand(chatId, text) {
   const cmd  = text.split(' ')[0].toLowerCase();
   const args = text.slice(cmd.length).trim();
   const sess = getSession(chatId);
 
   switch (cmd) {
-    case '/start':
-    case '/menu':
-    case '/painel':
-    case '/hub': {
+    case '/start': case '/menu': case '/painel': case '/hub': {
       const p = buildPanel(chatId);
       return send(chatId, p.text, p.buttons);
     }
@@ -366,27 +385,22 @@ async function handleAdminCommand(chatId, text) {
     }
     case '/help':
       return send(chatId,
-        '❓ <b>Comandos Hub ADM</b>\n' +
-        '/hub /status /issues /limpar /agente\n\n' +
-        '<b>Skills</b>\n' +
-        '/skills /mode /use /memory\n\n' +
+        '❓ <b>Hub ADM:</b> /hub /status /issues /limpar /agente\n' +
+        '<b>Skills:</b> /skills /mode /use /memory\n\n' +
         '💬 Texto livre → agente LLM ativo'
       );
-    default:
-      return null; // não reconhecido — tenta skill
+    default: return null;
   }
 }
 
-// ── Comandos de usuário comum (skills) ────────────────────────────────────
+// ── Comandos usuário comum (skills) ───────────────────────────────────────
 async function handleUserCommand(chatId, text) {
   if (!skillsOk) return send(chatId, '⚠️ Serviço indisponível.');
   const cmd  = text.split(' ')[0].toLowerCase();
   const args = text.slice(cmd.length).trim();
 
   switch (cmd) {
-    case '/start':
-    case '/painel':
-    case '/p': {
+    case '/start': case '/painel': case '/p': {
       const p = panel.buildMainPanel();
       return send(chatId, p.text, p.buttons);
     }
@@ -413,12 +427,11 @@ async function handleUserCommand(chatId, text) {
     }
     case '/help':
       return send(chatId, '❓ /start /status /skills /mode /use /memory /help\n\n💡 Ou digite qualquer coisa!');
-    default:
-      return null;
+    default: return null;
   }
 }
 
-// ── Handler de callbacks (botões) ─────────────────────────────────────────
+// ── Handler de callbacks ──────────────────────────────────────────────────
 async function handleCallback(cq) {
   const chatId = cq.message?.chat?.id;
   const msgId  = cq.message?.message_id;
@@ -441,9 +454,9 @@ async function handleCallback(cq) {
       const sess   = getSession(chatId);
       sess.agent   = key;
       sess.history = [];
-      const p = buildPanel(chatId);
-      await edit(chatId, msgId, p.text, p.buttons);
+      const p  = buildPanel(chatId);
       const ag = AGENTS[key];
+      await edit(chatId, msgId, p.text, p.buttons);
       return send(chatId, `${ag.emoji} <b>${ag.nome}</b> selecionado. Histórico limpo — pode falar!`);
     }
     if (data === 'hub:status') {
@@ -469,17 +482,19 @@ async function handleCallback(cq) {
 │  ⚙️   CONFIGURAÇÕES             │
 └────────────────────────────────┘
 
+  MODO       ${_botMode.toUpperCase()}
   LLM API    ${LLM_KEY  ? '✅ Configurado' : '❌ ausente'}
   GitHub     ${GH_TOKEN ? '✅ Configurado' : '⚠️  ausente'}
-  Admin ID   ${ADMIN_ID ? `✅ ${ADMIN_ID}` : '⚠️  não definido'}
+  Admin ID   ${ADMIN_ID ? '✅ Configurado' : '⚠️  não definido'}
   Token      ✅ Configurado
   Modelo     ${LLM_MODEL}
   Agente     ${ag.emoji} ${ag.nome}
   Histórico  ${sess.history.length} msgs
-  Skills     ${skillsOk ? '✅ online' : '⚠️  offline'}</pre>`,
+  Skills     ${skillsOk ? '✅ online' : '⚠️  offline'}
+  Webhook    ${WEBHOOK_URL || '— (polling ativo)'}
+</pre>`,
         [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
     }
-    // Callbacks legacy do panel.cjs
     if (data.startsWith('panel:') && panel) {
       const result = await panel.handlePanelCallback(data.slice(6), tg, chatId, msgId);
       if (result) return edit(chatId, msgId, result.text, result.buttons);
@@ -490,7 +505,7 @@ async function handleCallback(cq) {
     return;
   }
 
-  // Usuário comum — callbacks do panel.cjs
+  // Usuário comum
   if (!skillsOk) return;
   if (data.startsWith('panel:') && panel) {
     const result = await panel.handlePanelCallback(data.slice(6), tg, chatId, msgId);
@@ -510,9 +525,8 @@ async function handleMessage(msg) {
   const text    = msg.text || '';
   const isAdmin = ADMIN_ID && fromId === ADMIN_ID;
 
-  // Bootstrap: ADMIN_CHAT_ID não configurado
   if (!ADMIN_ID) {
-    console.log(`[Bot] mensagem de chatId=${chatId} — configure ADMIN_CHAT_ID=${chatId} em secrets/telegram-alerts.env`);
+    console.log(`[Bot] mensagem de chatId=${chatId} — configure ADMIN_CHAT_ID=${chatId}`);
     if (text.startsWith('/start')) {
       return send(chatId,
         '👋 Olá! Sou o Hub CentralDark.\n\n' +
@@ -531,7 +545,6 @@ async function handleMessage(msg) {
       if (h === null) return runSkill(chatId, text, null);
       return;
     }
-    // Texto livre → agente LLM
     const sess = getSession(chatId);
     const ag   = AGENTS[sess.agent];
     sess.history.push({ role: 'user', content: text });
@@ -549,7 +562,6 @@ async function handleMessage(msg) {
       );
     }
   } else {
-    // Usuário comum → skills
     if (text.startsWith('/')) {
       const h = await handleUserCommand(chatId, text);
       if (h === null) return runSkill(chatId, text, null);
@@ -559,50 +571,139 @@ async function handleMessage(msg) {
   }
 }
 
-// ── Poll loop ─────────────────────────────────────────────────────────────
-let offset  = 0;
-let running = true;
+// ── Processador central de update (compartilhado por webhook e polling) ───
+async function processUpdate(u) {
+  if (u.callback_query) await handleCallback(u.callback_query);
+  else if (u.message?.text) await handleMessage(u.message);
+}
 
-async function poll() {
-  try {
-    const updates = await tg('getUpdates', {
-      offset,
-      timeout: 30,
-      allowed_updates: ['message', 'callback_query'],
-    });
-    if (!updates?.length) return;
-    for (const u of updates) {
-      offset = u.update_id + 1;
-      try {
-        if (u.callback_query) await handleCallback(u.callback_query);
-        else if (u.message?.text) await handleMessage(u.message);
-      } catch (e) {
-        console.error('[Bot] update error:', e.message);
+// ── MODO WEBHOOK ─────────────────────────────────────────────────────────
+function startWebhookServer() {
+  return new Promise((resolve, reject) => {
+    const server = http.createServer((req, res) => {
+      // Health check
+      if (req.method === 'GET' && req.url === '/bot/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true, mode: 'webhook', bot: '@srver1bot' }));
+        return;
       }
+
+      // Endpoint do webhook
+      if (req.method === 'POST' && req.url === '/bot/webhook') {
+        // Validar secret token enviado pelo Telegram
+        const secret = req.headers['x-telegram-bot-api-secret-token'];
+        if (secret !== WEBHOOK_SECRET) {
+          console.warn(`[Webhook] Token inválido recebido — possível requisição não-Telegram`);
+          res.writeHead(403).end('Forbidden');
+          return;
+        }
+
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', async () => {
+          // Responde 200 imediatamente (Telegram exige resposta rápida)
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end('{"ok":true}');
+          try {
+            const update = JSON.parse(body);
+            await processUpdate(update);
+          } catch (e) {
+            console.error('[Webhook] Erro ao processar update:', e.message);
+          }
+        });
+        return;
+      }
+
+      res.writeHead(404).end('Not found');
+    });
+
+    server.on('error', reject);
+    server.listen(WEBHOOK_PORT, '127.0.0.1', () => resolve(server));
+  });
+}
+
+// ── MODO POLLING ─────────────────────────────────────────────────────────
+let _running = true;
+let _offset  = 0;
+
+async function pollingLoop() {
+  while (_running) {
+    try {
+      const updates = await tg('getUpdates', {
+        offset: _offset,
+        timeout: 30,
+        allowed_updates: ['message', 'callback_query'],
+      });
+      if (updates?.length) {
+        for (const u of updates) {
+          _offset = u.update_id + 1;
+          try { await processUpdate(u); }
+          catch (e) { console.error('[Poll] update error:', e.message); }
+        }
+      }
+    } catch (e) {
+      console.error('[Poll] error:', e.message);
+      await new Promise(r => setTimeout(r, 5000));
     }
-  } catch (e) {
-    console.error('[Bot] poll error:', e.message);
-    await new Promise(r => setTimeout(r, 5000));
   }
 }
 
+// ── MAIN — Webhook-first, Polling-fallback ─────────────────────────────────
 async function main() {
-  await tg('deleteWebhook');
+  // Limpa webhooks antigos antes de decidir o modo
+  await tg('deleteWebhook', { drop_pending_updates: false });
+
   const me = await tg('getMe');
   if (!me) {
-    console.error('[Bot] Falha ao conectar. Verifique o token.');
+    console.error('[Bot] ❌ Falha ao conectar. Verifique o token.');
     process.exit(1);
   }
-  console.log(`🔮 @${me.username} online — CentralDark Hub Unificado`);
-  if (!ADMIN_ID) {
-    console.warn('[Bot] ⚠️  ADMIN_CHAT_ID não definido. Envie /start para descobrir seu chat_id.');
-  } else {
-    console.log(`[Bot] Admin reconhecido: ${ADMIN_ID}`);
-  }
-  while (running) await poll();
-}
 
-process.on('SIGTERM', () => { running = false; });
-process.on('SIGINT',  () => { running = false; });
+  console.log(`🔮 @${me.username} online — CentralDark Hub Unificado`);
+  if (ADMIN_ID) console.log(`[Bot] ✅ Admin reconhecido: ${ADMIN_ID}`);
+  else          console.warn('[Bot] ⚠️  ADMIN_CHAT_ID não definido. Envie /start para descobrir seu chat_id.');
+
+  // ── Tentativa de Webhook ──
+  if (WEBHOOK_URL) {
+    console.log(`[Bot] 🔗 Tentando registrar webhook: ${WEBHOOK_URL}`);
+    try {
+      const ok = await tg('setWebhook', {
+        url:              WEBHOOK_URL,
+        secret_token:     WEBHOOK_SECRET,
+        allowed_updates:  ['message', 'callback_query'],
+        drop_pending_updates: false,
+        max_connections:  40,
+      });
+
+      if (ok) {
+        const server = await startWebhookServer();
+        _botMode = 'webhook';
+        console.log(`[Bot] ✅ MODO WEBHOOK ativo — porta ${WEBHOOK_PORT} · URL: ${WEBHOOK_URL}`);
+
+        // Graceful shutdown
+        const shutdown = () => { _running = false; server.close(); process.exit(0); };
+        process.on('SIGTERM', shutdown);
+        process.on('SIGINT',  shutdown);
+        return; // sem polling loop
+      }
+
+      console.warn('[Bot] ⚠️  setWebhook retornou falha — ativando fallback polling');
+    } catch (e) {
+      console.warn(`[Bot] ⚠️  Webhook falhou (${e.message}) — ativando fallback polling`);
+    }
+
+    // Garante que nenhum webhook fica registrado antes do polling
+    await tg('deleteWebhook', { drop_pending_updates: false });
+  } else {
+    console.log('[Bot] ℹ️  TELEGRAM_WEBHOOK_URL não definida — modo polling direto');
+  }
+
+  // ── Fallback / modo padrão: Polling ──
+  _botMode = 'polling';
+  console.log('[Bot] 🔄 MODO POLLING ativo');
+  process.on('SIGTERM', () => { _running = false; });
+  process.on('SIGINT',  () => { _running = false; });
+  await pollingLoop();
+}
 
 main();
