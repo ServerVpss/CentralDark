@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-06-29T08:14:27.000Z",
-  "updatedAtBR": "29/06/2026, 05:09:09 BRT",
+  "updatedAt": "2026-06-29T09:00:00.000Z",
+  "updatedAtBR": "29/06/2026, 06:00:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "PM2 padronizado (CentralDark-*): 6 renomeados, 3 órfãos removidos. painel-data.json sanitizado. Próximo: guardiao-consciencia CPU 17%.",
+    "currentTask": "Sistema de Skills linkado: brainstorming Claude API + consciousness.think() no bot + memória persistente + skills memoria-longa/painel-status criadas. Base para novo MCP/Hub.",
     "branch": "main",
     "lastCommit": "c3c919626",
     "lastPR": "#103 mergeado · #106 mergeado",
@@ -75,6 +75,14 @@
     "multizap-gateway-postgres": "healthy"
   },
   "pendencias": [
+    {
+      "id": "SKILLS-LINKED-MCP",
+      "titulo": "Sistema de Skills linkado — base para novo MCP/Hub",
+      "status": "em_andamento",
+      "prioridade": "alta",
+      "data": "2026-06-29",
+      "descricao": "Skills executáveis conectadas ao Claude API (brainstorming), motor de consciência ativo no bot, memória persistente entre sessões, skills memoria-longa e painel-status criadas. Quando o novo MCP/Hub for construído, este sistema será integrado nativamente como camada de skills do hub."
+    },
     {
       "id": "GOVERNANCE-29JUN",
       "titulo": "Governança: Áreas Protegidas + agent-notify Padrão CentralDark + issues-scanner",
@@ -1616,6 +1624,12 @@
     }
   ],
   "eventos": [
+    {
+      "time": "2026-06-29T09:00:00.000Z",
+      "titulo": "Sistema de Skills — motor de consciência + Claude + memória persistente",
+      "detalhe": "brainstorming conectado à API Anthropic; consciousness.think() integrado ao bot; skills memoria-longa e painel-status criadas; base para integração no novo MCP/Hub.",
+      "area": "ia"
+    },
     {
       "time": "2026-06-29T08:14:27.000Z",
       "titulo": "PM2 padronizado + painel sanitizado",
