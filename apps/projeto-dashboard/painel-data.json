@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-06-29T07:37:43.565Z",
-  "updatedAtBR": "29/06/2026, 04:37:43 BRT",
+  "updatedAt": "2026-06-29T07:38:44.093Z",
+  "updatedAtBR": "29/06/2026, 04:38:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Hub @srver1bot criado (hub-adm.cjs + PM2 CentralDark-HubBot). Pendente: ADMIN_CHAT_ID + padronizacao nomes PM2.",
+    "currentTask": "Cockpit Operacional v2 ativo — webhook + Vision + Ferramentas/Cognição/Relatório. Pendente: padronizacao nomes PM2.",
     "branch": "main",
     "lastCommit": "feat(hub): suporte a Vision — bot analisa fotos enviadas pelo admin",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
-    "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
-    "summary": "Guardião ganhou camada de decisão: cache persistente de propostas (corta repetição do inotify), decisor ativado com scoring calibrado pelos dados reais (impacto=confiança, wF=0), threshold 0.4→0.6, exclusão de gitignored/sensíveis. Spam no Telegram cai de ~925 para ~18 (1x por arquivo). 403 do Mega Painel resolvido (era Cloudflare WAF barrando User-Agent Python-urllib + 406 por Accept) — heartbeat agora bate em localhost:9100. Modo propor travado até 08/07/2026 intacto. 22/22 testes. Commit e6124592b.",
+    "lastReport": "docs/agente/elite-mapper/relatorios/",
+    "summary": "Guardião ganhou camada de decisão: cache persistente de propostas, decisor ativado com scoring calibrado (threshold 0.4→0.6), exclusão de gitignored/sensíveis. Spam no Telegram cai de ~925 para ~18 (1x por arquivo). Mega Painel estabilizado — heartbeat interno ativo. Modo propor travado. 22/22 testes.",
     "overallProgress": 82,
     "liveFallback": {
       "mcpStatus": "online",
