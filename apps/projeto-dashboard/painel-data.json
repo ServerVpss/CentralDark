@@ -5,7 +5,7 @@
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Sessão 28/06 — TUDO VERDE: TelegramBot recuperado (@srver1bot online), contas-admin corrigido (load_dotenv), webhook notifica VPS ATUALIZADA, deploy automático ativo, secrets blindados no .gitignore",
+    "currentTask": "Sessão 28/06 — TUDO VERDE: proxy Anthropic ap7 configurado (4 modelos HTTP 200), pr-agent Claude ativo via ANTHROPIC_BASE_URL, TelegramBot @srver1bot online, contas-admin corrigido, webhook notifica VPS ATUALIZADA",
     "branch": "main",
     "lastCommit": "feat(infra): proxy Anthropic ap7 + teste de modelos — pr-agent usa claude.ap7.site",
     "lastPR": "#103 mergeado · #106 mergeado",
@@ -120,10 +120,10 @@
     },
     {
       "id": "ANTHROPIC-KEY",
-      "titulo": "ANTHROPIC_API_KEY ausente — Claude Sonnet inativo no PR Review Multi-IA",
-      "status": "pendente",
+      "titulo": "Proxy Anthropic ap7 configurado — Claude Sonnet ativo no PR Review Multi-IA",
+      "status": "concluido",
       "prioridade": "media",
-      "detalhe": "Adicionar em github.com/ServerVpss/CentralDark/settings/secrets/actions"
+      "detalhe": "ANTHROPIC_API_KEY no GitHub Secrets + ANTHROPIC_BASE_URL=https://claude.ap7.site no pr-agent.yml. Testado: sonnet-4-6, opus-4-8, haiku-4-5, sonnet-4-5 → todos HTTP 200 (28/06/2026)"
     },
     {
       "id": "LINEAR-KEY",
