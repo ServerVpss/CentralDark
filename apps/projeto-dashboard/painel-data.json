@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-06-29T17:01:16.685Z",
-  "updatedAtBR": "29/06/2026, 14:01:16 BRT",
+  "updatedAt": "2026-06-29T16:28:41.008Z",
+  "updatedAtBR": "29/06/2026, 13:28:41",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
+    "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "Salvou regra escopo frontend",
+    "lastCommit": "fa4d130 — feat(retomada): contexto completo para tela Arsenal de Skills no TelePainel (A9)",
     "lastPR": "#103 mergeado · #106 mergeado",
-    "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
+    "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
-    "summary": "Guardião ganhou camada de decisão: cache persistente de propostas, decisor ativado com scoring calibrado (threshold 0.4→0.6), exclusão de gitignored/sensíveis. Spam no Telegram cai de ~925 para ~18 (1x por arquivo). Mega Painel estabilizado — heartbeat interno ativo. Modo propor travado. 22/22 testes.",
-    "overallProgress": 84,
+    "summary": "Cérebro Vivo Fase 1 concluída: 10 skills documentadas em AGENTS-LIBRARY, bot /arsenal exibindo tabela completa, apelidos PT-BR no roteador de intenção, 4 diagramas Mermaid do sistema. Obsidian-writer criado com INDEX automático. Pendência A9: tela Arsenal de Skills no TelePainel (Lovable) documentada e aguardando execução. Guardião com polling reduzido (1.0s) eliminou 22% CPU. 10 issues sentinela abertas (automáticas, sem falha real).",
+    "overallProgress": 85,
     "liveFallback": {
       "mcpStatus": "online",
       "mcpToolCount": 95,
@@ -51,21 +51,21 @@
     }
   },
   "pm2": {
-    "MCP-CentralDark": "online",
-    "CentralDark-TelegramBot": "online",
     "CentralDark-BotServer": "online",
+    "CentralDark-ContasAdmin": "online",
+    "CentralDark-GuardiaoAnalista": "online",
+    "CentralDark-GuardiaoConsciencia": "online",
+    "CentralDark-HubBot": "online",
+    "CentralDark-MCP": "online",
+    "CentralDark-Respiracao": "online",
+    "CentralDark-TelePainelDeploy": "online",
     "CentralDark-WebhookDeploy": "online",
-    "Install-Callback": "online",
-    "monitor_tarefas": "online",
-    "CentralDark - Respiracao": "online",
-    "guardiao-consciencia": "online",
-    "guardiao-analista": "online",
-    "telepainel-deploy": "online",
-    "contas-admin": "online",
-    "whatsapp-server": "stopped",
+    "CloneDeck-CRM": "online",
+    "MultiZap-Gateway": "online",
     "elite-http-gateway": "online",
     "elite-ws-gateway": "online",
-    "zentinel-health": "online"
+    "zentinel-health": "online",
+    "whatsapp-server": "stopped"
   },
   "docker": {
     "CentralDark-Bolt": "healthy",
@@ -190,6 +190,14 @@
       "prioridade": "alta",
       "data": "2026-06-29",
       "descricao": "Quando o novo MCP/Hub for construído: adicionar tool obsidian_write(folder, title, content) que chama obsidian-writer.cjs via executor. Cada skill executável vira ferramenta MCP. O Hub passa a escrever notas Zettelkasten no vault do Pivete diretamente via MCP tool."
+    },
+    {
+      "id": "A9",
+      "titulo": "Tela Arsenal de Skills no TelePainel (Lovable)",
+      "status": "pendente",
+      "prioridade": "media",
+      "data": "2026-06-29",
+      "descricao": "Criar página no TelePainel (React/Lovable) exibindo as 10 skills em cards com emoji, apelido, nome técnico, categoria colorida e descrição. Contexto completo documentado em docs/BRAIN/RETOMADA-Tela-Arsenal-Skills-TelePainel.md"
     }
   ],
   "fases": [
@@ -251,6 +259,13 @@
       "titulo": "P8: Multi-IA PR Review — switcher panel + 5 provedores (gemini/groq/anthropic/openai/ollama)",
       "status": "concluido",
       "commit": "4c09a7e02"
+    },
+    {
+      "id": "F11",
+      "titulo": "Cérebro Vivo Fase 1 — 10 skills + bot /arsenal + Obsidian-writer + diagramas",
+      "status": "concluido",
+      "commit": "fa4d130",
+      "pr": "#snapshot"
     }
   ],
   "lastConsolidation": {
@@ -321,6 +336,11 @@
       "title": "P4: MultiZap-BOT errored — investigar causa raiz",
       "status": "later",
       "percent": 0
+    },
+    {
+      "title": "Cérebro Vivo Fase 1 — 10 skills, /arsenal, Obsidian-writer, diagramas",
+      "status": "done",
+      "percent": 100
     }
   ],
   "phases": [
@@ -371,6 +391,20 @@
         "⏳ LINEAR_API_KEY — conectar Linear ao painel",
         "⏳ P4: MultiZap-BOT errored (baixa prioridade)"
       ]
+    },
+    {
+      "name": "Fase 5 — Cérebro Vivo + Arsenal de Skills",
+      "percent": 50,
+      "status": "doing",
+      "items": [
+        "✅ 10 skills documentadas em AGENTS-LIBRARY",
+        "✅ Bot /arsenal com tabela completa",
+        "✅ Apelidos PT-BR no roteador de intenção",
+        "✅ 4 diagramas Mermaid do sistema",
+        "✅ Obsidian-writer + INDEX automático",
+        "⏳ A9: Tela Arsenal de Skills no TelePainel (Lovable)",
+        "⏳ Fechar 10 issues sentinela automáticas"
+      ]
     }
   ],
   "aiReview": {
@@ -387,79 +421,93 @@
     "note": "Modo paralelo: 3 IAs revisam cada PR simultaneamente. Groq (Llama3-70B) + Gemini Flash + Claude Sonnet."
   },
   "nextSteps": [
-    "✅ TelegramBot recuperado (@srver1bot online) — restaurado do git + bootstrap Multizap removido",
-    "✅ pipeline-notify.yml corrigido — trigger workflow_run fantasma removido; webhook agora notifica 'VPS ATUALIZADA'",
-    "✅ contas-admin recuperado — main.py restaurado + load_dotenv (não depende mais do env_file instável do PM2)",
-    "🔑 Ativar Claude no PR Review: adicionar ANTHROPIC_API_KEY em github.com/ServerVpss/CentralDark/settings/secrets/actions (ação do Pivete — eu não tenho a key)",
-    "⚠️ P4: MultiZap-BOT errored — investigar causa raiz (baixa prioridade, quando Pivete pedir)",
-    "📝 Issue #75: Consolidar Protocolo Reload Universal Multi-IA (documentação)",
-    "📋 REGRA: toda IA chama atualizar_painel() ao concluir qualquer tarefa",
-    "🛡️ Padrão seguro na VPS: parar webhook → editar/commitar → push → religar (evita git reset --hard apagar trabalho)"
+    "✅ Cérebro Vivo Fase 1 concluída — 10 skills, bot /arsenal, apelidos, diagramas",
+    "✅ Obsidian-writer + INDEX automático — segundo cérebro conectado",
+    "✅ Guardião com polling reduzido (1.0s) — 22% CPU recuperado",
+    "🔑 Pendência A9: criar tela Arsenal de Skills no TelePainel (Lovable) — contexto pronto",
+    "🔑 Fechar 10 issues sentinela abertas (automáticas, sem falha real)",
+    "⚠️ P4: MultiZap-BOT errored — investigar causa raiz (baixa prioridade)",
+    "📋 REGRA: toda IA chama atualizar_painel() ao concluir qualquer tarefa"
   ],
   "githubIssuesOpen": [
     {
-      "number": 124,
-      "title": "PR Review Multi-IA (pr-agent) — workflow falhou",
+      "number": 23,
+      "title": "Endpoint Install status fora do ar (HTTP 502)",
       "severity": "p2",
       "type": "vigia",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/124"
+      "url": "https://github.com/ServerVpss/CentralDark/issues/23"
     },
     {
-      "number": 75,
-      "title": "Consolidar Protocolo Reload Universal Multi-IA",
-      "severity": "p3",
-      "type": "documentacao",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/75"
-    },
-    {
-      "number": 74,
-      "title": "supabase-bot workflow vermelho",
+      "number": 22,
+      "title": "Workflow vermelho: supabase-bot",
       "severity": "p2",
       "type": "vigia",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/74"
+      "url": "https://github.com/ServerVpss/CentralDark/issues/22"
     },
     {
-      "number": 73,
-      "title": "painel-validacao workflow vermelho",
+      "number": 21,
+      "title": "Workflow vermelho: GitHub Bot Controller",
       "severity": "p2",
       "type": "vigia",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/73"
+      "url": "https://github.com/ServerVpss/CentralDark/issues/21"
     },
     {
-      "number": 72,
-      "title": "GitHub Bot Controller workflow vermelho",
+      "number": 17,
+      "title": "Endpoint Painel fora do ar (HTTP 404)",
       "severity": "p2",
       "type": "vigia",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/72"
+      "url": "https://github.com/ServerVpss/CentralDark/issues/17"
     },
     {
-      "number": 71,
-      "title": "vps-healthcheck workflow vermelho",
+      "number": 16,
+      "title": "Workflow vermelho: VPS SSH Exec",
       "severity": "p2",
       "type": "vigia",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/71"
+      "url": "https://github.com/ServerVpss/CentralDark/issues/16"
     },
     {
-      "number": 81,
-      "title": "CodeQL Setup workflow vermelho",
+      "number": 13,
+      "title": "Workflow vermelho: painel-validacao",
       "severity": "p2",
       "type": "vigia",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/81"
+      "url": "https://github.com/ServerVpss/CentralDark/issues/13"
     },
     {
-      "number": 128,
-      "title": "Lote 11 — aplicar atualização BotServer na VPS",
+      "number": 4,
+      "title": "CORS: MCP sem CORS no painel: MCP tools",
       "severity": "p2",
-      "type": "infra",
-      "url": "https://github.com/ServerVpss/CentralDark/issues/128"
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/4"
+    },
+    {
+      "number": 3,
+      "title": "CORS: MCP sem CORS no painel: MCP status",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/3"
+    },
+    {
+      "number": 2,
+      "title": "CORS: MCP sem CORS no painel: MCP health",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/2"
+    },
+    {
+      "number": 1,
+      "title": "Endpoint API fora do ar (HTTP 404)",
+      "severity": "p2",
+      "type": "vigia",
+      "url": "https://github.com/ServerVpss/CentralDark/issues/1"
     }
   ],
   "blockers": [
-    "6 workflows vermelhos — #71 vps-healthcheck · #72 GitHubBotController · #73 painel-validacao · #74 supabase-bot · #81 CodeQL · #124 PR Review Multi-IA",
+    "10 issues sentinela abertas (automáticas — sem falha real, mas precisam ser fechadas)",
     "ANTHROPIC_API_KEY ausente — Claude Sonnet inativo no PR Review",
-    "MultiZap-BOT errored — não crítico"
+    "MultiZap-BOT errored — não crítico",
+    "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Hub v2 em produção — webhook ativo. Próximos: investigar guardiao.py (17% CPU), renomear processos PM2 para padrão CentralDark-*, auditar root/ aninhado.",
+  "nextIA": "Cérebro Vivo Fase 1 concluída. Próximo: executar pendência A9 no Lovable (tela Arsenal de Skills). Depois: fechar issues sentinela, investigar MultiZap-BOT se solicitado.",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -500,56 +548,40 @@
       "name": "🧠 Memória e consciência",
       "value": 97,
       "status": "forte",
-      "detail": "LEIA-ME-IA.md, RANDOLPH.md, APRENDIZADOS, MCP fallback local ativo."
+      "detail": "Cérebro Vivo Fase 1. 10 skills documentadas. Obsidian-writer + INDEX automático. Bot /arsenal ativo."
     },
     {
       "name": "🔌 MCP / conector",
       "value": 92,
       "status": "ativo",
-      "detail": "MCP v0.4.0, 92 tools (incl. atualizar_painel), online, token workflow OK."
+      "detail": "MCP v0.4.0, 95 tools, online, produção."
     },
     {
       "name": "📢 Telegram / Notificações",
       "value": 98,
       "status": "forte",
-      "detail": "@srver1bot online. Vigia + deploy + painel + VPS healthcheck notificam canal. Fotos robô no grupo+canal. PM2 OK."
+      "detail": "@srver1bot online. /arsenal exibe skills. HubBot PM2 online."
     },
     {
       "name": "🔄 GitHub Actions",
-      "value": 95,
+      "value": 90,
       "status": "forte",
-      "detail": "Todos ~38 workflows migrados para self-hosted. Vigia+deploy+painel com Telegram."
+      "detail": "10 issues sentinela abertas (automáticas). Workflows self-hosted operacionais."
     },
     {
       "name": "🖥️ VPS / PM2",
-      "value": 85,
+      "value": 88,
       "status": "rodando",
-      "detail": "MCP online. TelegramBot PM2 criado. MultiZap-BOT errored (não crítico)."
+      "detail": "13/15 serviços online. MultiZap-BOT errored. whatsapp-server stopped."
     },
     {
       "name": "🎨 Frontend / Painel",
       "value": 90,
       "status": "forte",
-      "detail": "status.centralldark.com OK. painel-auto-update funcional. Auditoria segurança OK."
+      "detail": "status.centralldark.com OK. Pendência A9: Arsenal de Skills no TelePainel."
     }
   ],
   "events": [
-    {
-      "time": "2026-06-29T17:01:16.685Z",
-      "titulo": "Push na main · 3b3d3539714215c29444fa7c8120892c3522852d",
-      "detalhe": "Salvou regra escopo frontend",
-      "area": "Repositório",
-      "sha": "3b3d353",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-29T15:16:40.494Z",
-      "titulo": "Push na main · 708ba6b9e5584bb79bc4bb4cf9f3e2f735d530f6",
-      "detalhe": "feat(brain): 5 notas MOC + frontmatter 3 arquivos + pasta Decisoes populada",
-      "area": "Repositório",
-      "sha": "708ba6b",
-      "actor": "segredounlock"
-    },
     {
       "time": "2026-06-29T15:14:13.396Z",
       "titulo": "Push na main · d5ecb88410d0085fb1c7a8845481717d47628b14",
@@ -930,6 +962,22 @@
       "detalhe": "CLAUDE.md Seção 9 Áreas Protegidas · agent-notify Padrão CentralDark monospace · issues-scanner · workspace multi-root",
       "area": "governance",
       "sha": "f6375ab",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-06-29T04:14:44.872Z",
+      "titulo": "Push na main · f6375ab5a5fb296d22ceb0e91c89e90d54d40371",
+      "detalhe": "feat(governance): proteções áreas consolidadas, agent-notify padrão CentralDark e issues-scanner",
+      "area": "Repositório",
+      "sha": "f6375ab",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-06-29T01:42:44.864Z",
+      "titulo": "Push na main · 95f4f6c421f856c7a065f40f46c91d2bb3540881",
+      "detalhe": "feat(infra): proxy Anthropic configurado + teste de modelos — pr-agent operacional",
+      "area": "Repositório",
+      "sha": "95f4f6c",
       "actor": "segredounlock"
     }
   ],
@@ -1345,20 +1393,6 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-06-29T17:01:16.685Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 3b3d3539714215c29444fa7c8120892c3522852d (3b3d353)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T15:16:40.494Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 708ba6b9e5584bb79bc4bb4cf9f3e2f735d530f6 (708ba6b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
       "time": "2026-06-29T15:14:13.396Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d5ecb88410d0085fb1c7a8845481717d47628b14 (d5ecb88)",
@@ -1693,6 +1727,20 @@
       "action": "📌 Push na main · 95f4f6c421f856c7a065f40f46c91d2bb3540881 (95f4f6c)",
       "area": "Repositório",
       "status": "sucesso"
+    },
+    {
+      "time": "2026-06-28T22:28:44.345Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1290a0d07cd331d05b4e2b41baabf746f3cabc1c (1290a0d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-06-28T20:23:20.056Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 56286eb7524cf406d2e24092bf784998ee5ee228 (56286eb)",
+      "area": "Repositório",
+      "status": "sucesso"
     }
   ],
   "telemetry": {
@@ -1796,11 +1844,17 @@
       "titulo": "PM2 padronizado + painel sanitizado",
       "detalhe": "PM2: 6 processos → CentralDark-*; 3 órfãos deletados. painel-data.json: IDs Telegram, project_ref Supabase, paths secrets removidos do JSON público.",
       "area": "infra"
+    },
+    {
+      "time": "2026-06-29T16:28:41.008Z",
+      "titulo": "Snapshot 29/06 — Cérebro Vivo + Skills + Painel atualizado",
+      "detalhe": "Snapshot completo do sistema. Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal. Pendência A9 documentada para Lovable. 10 issues sentinela identificadas.",
+      "area": "snapshot"
     }
   ],
-  "ultimo_commit": "44d7f34e4",
-  "ultimo_evento": "Fase 1 do Cérebro Vivo concluída: tabela de roteamento, ponte BRAIN↔CONSCIENCIA, BRAIN.md.bak removido",
-  "evento_area": "docs",
+  "ultimo_commit": "fa4d130",
+  "ultimo_evento": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. Pendência A9: Arsenal de Skills no TelePainel.",
+  "evento_area": "snapshot",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-06-29T12:43:40.348Z"
+  "updated_at": "2026-06-29T16:28:41.008Z"
 }
