@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T06:22:23.750Z",
-  "updatedAtBR": "29/06/2026, 03:22:23 BRT",
+  "updatedAt": "2026-06-29T06:22:44.401Z",
+  "updatedAtBR": "29/06/2026, 03:22:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Sessão 29/06 — Base Cognitiva: CAPACIDADES-COGNITIVAS.md, ARTEFATOS/, BOAS-PRATICAS-MCP.md, unificação 04-MCP-E-CONNECTORS→CONECTORES. Commit 428c692.",
+    "currentTask": "Hub @srver1bot criado (hub-adm.cjs + PM2 CentralDark-HubBot). Pendente: ADMIN_CHAT_ID + padronizacao nomes PM2.",
     "branch": "main",
-    "lastCommit": "feat(consciencia): base cognitiva CentralDark fases 2-5 — 428c692",
+    "lastCommit": "feat(hub-bot): Hub Central @srver1bot painel ADM + agentes + LLM — 67ad8b0",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -166,6 +166,13 @@
       "status": "concluido",
       "data": "2026-06-29",
       "descricao": "CAPACIDADES-COGNITIVAS.md (System2/CoT/Meta/ReAct), ARTEFATOS/, BOAS-PRATICAS-MCP universal, unificação pasta EN→PT"
+    },
+    {
+      "id": "PM2-NAMING-PADRAO",
+      "titulo": "Padronizar nomes PM2 para CentralDark-*",
+      "status": "pendente",
+      "data": "2026-06-29",
+      "descricao": "Renomear: monitor_tarefas, Install-Callback, telepainel-deploy, guardiao-consciencia, guardiao-analista, MCP-CentralDark (invertido), CentralDark - Respiracao (espaco), contas-admin. Padrao: CentralDark-NomeDoServico"
     }
   ],
   "fases": [
