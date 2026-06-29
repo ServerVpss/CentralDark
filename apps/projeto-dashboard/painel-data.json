@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T06:02:47.425Z",
-  "updatedAtBR": "29/06/2026, 03:02:47 BRT",
+  "updatedAt": "2026-06-29T06:03:01.051Z",
+  "updatedAtBR": "29/06/2026, 03:03:01 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Sessão 29/06 — Governança: Seção 9 Áreas Protegidas no CLAUDE.md, agent-notify.mjs Padrão CentralDark (pre monospace), agente issues-scanner, workspace multi-root sem WebUI. Pendentes: cerebro/ remoção, root/ aninhado, NOTA-RENOMEACAO.md, move bot-telegram→modulos/",
     "branch": "main",
-    "lastCommit": "feat(governance): áreas protegidas + agent-notify padrão CentralDark + issues-scanner — f6375ab",
+    "lastCommit": "chore(painel): IA atualiza painel — atualização",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -503,6 +503,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T06:03:01.051Z",
+      "titulo": "Push na main · d4e2ca7f0974d415103c78f81d88c78ee9862e2d",
+      "detalhe": "chore(painel): IA atualiza painel — atualização",
+      "area": "Repositório",
+      "sha": "d4e2ca7",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T04:35:29.094Z",
       "titulo": "Sessão 29/06 — Governança CentralDark",
@@ -1287,6 +1295,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T06:03:01.051Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d4e2ca7f0974d415103c78f81d88c78ee9862e2d (d4e2ca7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T04:35:29.094Z",
       "ia": "@segredounlock",
       "action": "feat(governance): áreas protegidas + agent-notify padrão CentralDark monospace + issues-scanner — f6375ab",
@@ -1627,20 +1642,6 @@
       "ia": "Claude Code",
       "action": "fix(bot-telegram): require panel.cjs + branding + foto robô P5",
       "area": "Telegram",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T08:48:00Z",
-      "ia": "Claude Code",
-      "action": "feat: P1+P2+P3 — workflows self-hosted + Telegram + PM2 + RANDOLPH",
-      "area": "Infra",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T07:22:00Z",
-      "ia": "Claude Code",
-      "action": "MCP reiniciado com GITHUB_PAT_PERFIL — workflow scope OK",
-      "area": "MCP",
       "status": "sucesso"
     }
   ],
