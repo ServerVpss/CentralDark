@@ -1,0 +1,29 @@
+services:
+  webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: CentralDark-WebUI
+    environment:
+      - WEBUI_NAME=CentralDark AI
+      - DEFAULT_LOCALE=pt-BR
+      - ENABLE_SIGNUP=false
+      - SCARF_NO_ANALYTICS=true
+      - DO_NOT_TRACK=true
+      - ANONYMIZED_TELEMETRY=false
+      # Elite Gateway CentralDark
+      - OPENAI_API_BASE_URL=https://api.centralldark.com/v1
+      - OPENAI_API_KEY=SEGREDO_ELITE_123
+      - WEBUI_SECRET_KEY=
+    volumes:
+      - open-webui:/app/backend/data
+    ports:
+      - 0.0.0.0:3000:8080
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    labels:
+      centraldark.app: webui
+      centraldark.domain: ui.centralldark.com
+    restart: unless-stopped
+
+volumes:
+  open-webui:
+    external: true

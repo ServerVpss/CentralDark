@@ -1954,6 +1954,12 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
 - **Proteção permanente configurada:** Configurações → Git → Pull → "Merge strategy on conflicts" → **"Their changes"**. Conflitos resolvidos automaticamente favorecendo o GitHub (fonte da verdade).
 - **Como aplicar:** Nunca clicar em "Discard all X files" (apaga arquivos novos). Sempre "Discard X tracked files".
 
+### [ATUALIZAÇÃO #243 — 29/06/2026]. Builder Bolt: caminho e container oficiais corrigidos
+- **Categoria:** corracao-infraestrutura
+- **Data:** 2026-06-29
+- **Contexto:** O aprendizado #243 registrou o container como CentralDark-Bolt e compose em apps/Bolt. Em 29/06/2026 o container foi renomeado para CentralDark-Builder e o compose oficial foi criado em apps/modulos/Bolt/docker-compose.yml, com a fonte em apps/modulos/Bolt/source/.
+- **Aprendizado:** O caminho oficial e EXCLUSIVO da Fábrica de Artefatos (Builder Bolt) é /root/CentralDark/apps/modulos/Bolt/. Container Docker: CentralDark-Builder. docker-compose: apps/modulos/Bolt/docker-compose.yml. Proxy Anthropic via ANTHROPIC_API_BASE_URL=https://claude.ap7.site. Gateway Elite via OPENAI_LIKE_API_BASE_URL=https://api.centralldark.com/v1. Porta host 5174 -> container 5173. O Open WebUI foi renomeado para CentralDark-WebUI com compose em apps/modulos/WebUI/docker-compose.yml. Nunca usar paths apps/Bolt ou apps/WebUI — estes não existem mais.
+
 ---
 
 ## Conexões Rápidas

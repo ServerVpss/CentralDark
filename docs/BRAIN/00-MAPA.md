@@ -61,6 +61,31 @@ Se é decisão operacional, precisa virar doc, pendência, relatório ou memóri
 
 ---
 
+## Os Motores Gêmeos do Sistema
+
+Dois containers Docker que formam a interface de criação do CentralDark:
+
+| Motor | Nome oficial | Container Docker | URL | Caminho oficial |
+|-------|-------------|-----------------|-----|-----------------|
+| **FÁBRICA DE ARTEFATOS** | Bolt.diy (customizado) | `CentralDark-Builder` | `builder.centralldark.com` | `/root/CentralDark/apps/modulos/Bolt/` |
+| **INTERFACE VISUAL** | Open WebUI (customizado) | `CentralDark-WebUI` | `ui.centralldark.com` | `/root/CentralDark/apps/modulos/WebUI/` |
+
+### Configuração ativa (29/06/2026)
+
+**CentralDark-Builder** (`apps/modulos/Bolt/docker-compose.yml`):
+- Proxy Anthropic: `https://claude.ap7.site` (via `ANTHROPIC_API_BASE_URL`)
+- Elite Gateway: `https://api.centralldark.com/v1` (OpenAI-like)
+- Dev server HMR na porta 5174 → Caddy → `builder.centralldark.com`
+
+**CentralDark-WebUI** (`apps/modulos/WebUI/docker-compose.yml`):
+- `WEBUI_NAME=CentralDark AI`
+- Elite Gateway: `https://api.centralldark.com/v1`
+- Porta 3000 → Caddy → `ui.centralldark.com`
+
+> Portainer (visualização de containers): `portainer.centralldark.com`
+
+---
+
 ## Conexões Rápidas
 
 - [[BRAIN]] — documento raiz

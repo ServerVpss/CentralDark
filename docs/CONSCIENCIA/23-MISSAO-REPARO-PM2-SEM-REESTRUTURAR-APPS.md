@@ -30,9 +30,9 @@ Apps oficiais vivem em:
 Pontos já definidos:
 
 ```txt
-/root/CentralDark/apps/Bolt         -> Builder Bolt
-/root/CentralDark/apps/WebUI        -> Open WebUI
-/root/CentralDark/apps/bot-telegram -> Bot Telegram
+/root/CentralDark/apps/modulos/Bolt   -> Builder Bolt (container: CentralDark-Builder)
+/root/CentralDark/apps/modulos/WebUI  -> Open WebUI   (container: CentralDark-WebUI)
+/root/CentralDark/apps/bot-telegram   -> Bot Telegram  (container: PM2)
 ```
 
 O que já está dentro de `/root/CentralDark/apps` **não deve ser movido** durante uma missão emergencial, salvo correção mínima e explícita do próprio app quebrado.
