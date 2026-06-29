@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T14:57:28.006Z",
-  "updatedAtBR": "29/06/2026, 11:57:28 BRT",
+  "updatedAt": "2026-06-29T15:02:11.639Z",
+  "updatedAtBR": "29/06/2026, 12:02:11 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "feat(brain): catalogo de ideias visuais com referencia aos diagramas prontos",
+    "lastCommit": "feat(pendencias): adiciona A9 — tela Arsenal de Skills no TelePainel (Lovable)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -535,6 +535,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T15:02:11.639Z",
+      "titulo": "Push na main · aad7df5b1cbe96590d159ee7a249bb9a9d3d7e9f",
+      "detalhe": "feat(pendencias): adiciona A9 — tela Arsenal de Skills no TelePainel (Lovable)",
+      "area": "Repositório",
+      "sha": "aad7df5",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-29T14:57:28.006Z",
       "titulo": "Push na main · ecc1d7f597f10120e1b9afd5a1fe078f8063ab62",
       "detalhe": "feat(brain): catalogo de ideias visuais com referencia aos diagramas prontos",
@@ -922,14 +930,6 @@
       "detalhe": "1) MCP GH_TOKEN corrigido (guardião OK) 2) Webhook registrado e validando push 3) Workflow duplicado desativado 4) Telegram mapeado — TelegramBot PARADO (pendência)",
       "area": "infra",
       "sha": "dbf2b092e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-28T18:42:10.585Z",
-      "titulo": "Webhook cadastrado e validado — deploy automático GitHub→VPS ativo",
-      "detalhe": "Webhook de deploy cadastrado e validado — eventos=push · 3 pushes e 1 ping recebidos com status=200",
-      "area": "infra",
-      "sha": "",
       "actor": "segredounlock"
     }
   ],
@@ -1345,6 +1345,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T15:02:11.639Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · aad7df5b1cbe96590d159ee7a249bb9a9d3d7e9f (aad7df5)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T14:57:28.006Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ecc1d7f597f10120e1b9afd5a1fe078f8063ab62 (ecc1d7f)",
@@ -1684,13 +1691,6 @@
       "time": "2026-06-28T16:33:11.857Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · e1b63605db8a47fefcdbfc8ee5afb44a75655045 (e1b6360)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-28T12:27:34.140Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6d74d6e8d0214cf6a8673ff701d1ef4fc6c3e5c2 (6d74d6e)",
       "area": "Repositório",
       "status": "sucesso"
     }
