@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T06:03:01.051Z",
-  "updatedAtBR": "29/06/2026, 03:03:01 BRT",
+  "updatedAt": "2026-06-29T06:03:05.139Z",
+  "updatedAtBR": "29/06/2026, 03:03:05 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Sessão 29/06 — Governança: Seção 9 Áreas Protegidas no CLAUDE.md, agent-notify.mjs Padrão CentralDark (pre monospace), agente issues-scanner, workspace multi-root sem WebUI. Pendentes: cerebro/ remoção, root/ aninhado, NOTA-RENOMEACAO.md, move bot-telegram→modulos/",
+    "currentTask": "Sessão 29/06 — Base Cognitiva: CAPACIDADES-COGNITIVAS.md, ARTEFATOS/, BOAS-PRATICAS-MCP.md, unificação 04-MCP-E-CONNECTORS→CONECTORES. Commit 428c692.",
     "branch": "main",
-    "lastCommit": "chore(painel): IA atualiza painel — atualização",
+    "lastCommit": "feat(consciencia): base cognitiva CentralDark fases 2-5 — 428c692",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -159,6 +159,13 @@
       "status": "concluido",
       "prioridade": "media",
       "commit": "a1cce1ebd"
+    },
+    {
+      "id": "COGNITIVO-29JUN",
+      "titulo": "Base cognitiva CentralDark",
+      "status": "concluido",
+      "data": "2026-06-29",
+      "descricao": "CAPACIDADES-COGNITIVAS.md (System2/CoT/Meta/ReAct), ARTEFATOS/, BOAS-PRATICAS-MCP universal, unificação pasta EN→PT"
     }
   ],
   "fases": [
