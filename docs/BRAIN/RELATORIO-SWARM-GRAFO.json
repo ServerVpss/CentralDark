@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "gerado_em": "2026-06-29",
+    "total_arquivos": 17,
+    "saude_geral": "59%"
+  },
+  "explicacao_grafo": {
+    "nos_verdes": "Nós de TAG — cada #tag vira um nó verde no Graph View. Arquivos com tags aparecem conectados a eles.",
+    "nos_cinzas": "Nós de ARQUIVO sem tags e/ou sem wikilinks — ficam isolados e pequenos.",
+    "tamanho_no": "Proporcional ao número de referências recebidas — arquivos mais linkados ficam maiores."
+  },
+  "resumo": {
+    "total": 17,
+    "com_frontmatter": 10,
+    "sem_frontmatter": 7,
+    "com_tags": 10,
+    "sem_tags": 7,
+    "com_links": 7,
+    "sem_links": 10,
+    "orfas_sem_referencia": 0
+  },
+  "problemas": [
+    { "arquivo": "00-MAPA.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter + tags + links para BRAIN e CONSCIENCIA" },
+    { "arquivo": "01-PENDENCIAS.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter + tags + link para BRAIN" },
+    { "arquivo": "06-DECISOES.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter + tags + link para BRAIN" },
+    { "arquivo": "BRAIN.md", "problemas": ["sem frontmatter", "sem tags"], "fix": "adicionar frontmatter — já tem 38 wikilinks, só precisa de tags para aparecer colorido" },
+    { "arquivo": "README.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter básico" },
+    { "arquivo": "02-ARQUITETURA.md", "problemas": ["sem wikilinks"], "fix": "adicionar link para BRAIN e CONSCIENCIA" }
+  ],
+  "ignorados": ["INDEX.md (auto-gerado pelo workflow — não editar)"]
+}

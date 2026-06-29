@@ -1,3 +1,10 @@
+---
+title: "BRAIN — CentralDark"
+date: 2026-06-29
+tags: ["brain", "centraldark", "navegacao", "raiz", "obsidian"]
+updated: 2026-06-29
+---
+
 # 🧠 BRAIN — CentralDark
 > **Se o Segredo esquecer onde parou, comece lendo aqui.**
 

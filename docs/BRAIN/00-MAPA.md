@@ -1,3 +1,10 @@
+---
+title: "Mapa do Segundo Cérebro CentralDark"
+date: 2026-06-29
+tags: ["navegacao", "mapa", "centraldark", "obsidian"]
+updated: 2026-06-29
+---
+
 # 🗺️ MAPA — Segundo Cérebro CentralDark
 
 ## Entrada rápida
@@ -51,3 +58,12 @@ Mega Painel / Relatórios / Obsidian Git
 Se não está no GitHub, não é fonte oficial.
 Se é decisão operacional, precisa virar doc, pendência, relatório ou memória.
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[BRAIN]] — documento raiz
+- [[01-PENDENCIAS]] — o que está em aberto
+- [[02-ARQUITETURA]] — como o sistema funciona
+- [[06-DECISOES]] — decisões tomadas

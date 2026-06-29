@@ -1,3 +1,10 @@
+---
+title: "BRAIN — Segundo Cérebro CentralDark"
+date: 2026-06-29
+tags: ["brain", "obsidian", "setup", "centraldark"]
+updated: 2026-06-29
+---
+
 # 🧠 BRAIN — Segundo Cérebro CentralDark
 
 **Status:** ativo  

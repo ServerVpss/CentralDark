@@ -1,3 +1,10 @@
+---
+title: "Pendências CentralDark"
+date: 2026-06-29
+tags: ["pendencias", "tarefas", "centraldark", "operacional"]
+updated: 2026-06-29
+---
+
 # 📋 PENDÊNCIAS — CentralDark
 
 > Última atualização: 2026-06-29

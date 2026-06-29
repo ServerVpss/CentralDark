@@ -1,3 +1,10 @@
+---
+title: "Decisões CentralDark"
+date: 2026-06-29
+tags: ["decisoes", "arquitetura", "operacional", "historico"]
+updated: 2026-06-29
+---
+
 # 📌 DECISÕES — CentralDark
 
 ## Decisões consolidadas
