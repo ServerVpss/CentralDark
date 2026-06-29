@@ -7,14 +7,48 @@
       "result": "success",
       "mode": "auto",
       "context": "{}"
+    },
+    {
+      "input": "Oi",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782733506321
+    },
+    {
+      "input": "Oi",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782733644084
+    },
+    {
+      "input": "Oi você é capaz de fazer alguma coisa",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782733649552
+    },
+    {
+      "input": "Você funciona aqui comigo",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782733653998
+    },
+    {
+      "input": "Oie",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782734013513
+    },
+    {
+      "input": "Vou te mandar uma foto aqui você consegue me mandar de volta pra mim ver como é que ela fica mais bonita",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782734089373
+    },
+    {
+      "input": "Quais ferramentas está faltando ainda pra você ter total eficiência com fotos criação de imagem só ferramentas são permitidas faz um pensamento profundo e traz as informações pra mim ou se ainda está ",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782734533354
     }
-  ],
-  "stats": {
-    "brainstorming": {
-      "uses": 1,
-      "successes": 1,
-      "errors": 0,
-      "lastUsed": "2026-05-30T08:48:38.646Z"
-    }
-  }
+  ]
 }

@@ -56,6 +56,21 @@ async function think(input) {
     };
   }
 
+  // 💰 Devedores, contatos e pendências financeiras pessoais
+  const ehDevedor = /\b(deve|devo|devendo|devedora?|me deve|ainda (não )?pagou|falta pagar|não pagou|cobrar|cobrança|pendência financeira|contato d[ao]|salva o contato|número d[ao]|telefone d[ao]|whats(app)? d[ao])\b/i.test(txt);
+  if (ehDevedor) {
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    const content = `## ${hoje}\n\n${txt}\n\n---\n*Registrado via bot — ${hoje}*`;
+    const result = await executor.run("obsidian-writer", {
+      op: "write",
+      folder: "06 - Devedores & Contatos",
+      title: txt.slice(0, 55).replace(/[^\w\s\-áéíóúâêîôûãõçàèìòù]/gi, "").trim() || "Contato rápido",
+      content,
+    });
+    memory.save({ input: txt.slice(0, 200), skill: "obsidian-writer", folder: "devedores", result: result.ok ? "success" : "error", timestamp: Date.now() });
+    return { type: "automatic", skill: "obsidian-writer", response: { ...result, _folder: "Devedores & Contatos" } };
+  }
+
   // 🧠 Comandos de gravação no Obsidian (obsidian-writer)
   if (/\b(grava|anota|registra|salva|bota no cérebro|não (me )?deixa esquecer|pode registrar|quero lembrar)\b/i.test(txt)) {
     const match = txt.match(/(?:grava|anota|registra|salva|bota no cérebro|não (?:me )?deixa esquecer|pode registrar|quero lembrar)[\s:]+(.+)/is);
