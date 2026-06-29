@@ -12,7 +12,8 @@ services:
       # Elite Gateway CentralDark (OpenAI-compatible)
       - OPENAI_API_BASE_URL=https://api.centralldark.com/v1
       - OPENAI_API_KEY=SEGREDO_ELITE_123
-      # Anthropic direto via proxy ap7
+      # Anthropic via Elite Gateway local (rotaciona keys → ap7 → Anthropic)
+      - ANTHROPIC_API_BASE_URL=http://host.docker.internal:8082
       - ANTHROPIC_API_KEY=sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8
       - WEBUI_SECRET_KEY=
     volumes:

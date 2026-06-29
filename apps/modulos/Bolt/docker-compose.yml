@@ -17,8 +17,8 @@ services:
       - PUBLIC_ORIGIN=https://builder.centralldark.com
       - VITE_PUBLIC_APP_URL=https://builder.centralldark.com
       - VITE_LOG_LEVEL=debug
-      # Anthropic via proxy ap7 (rotaciona internamente)
-      - ANTHROPIC_API_BASE_URL=https://claude.ap7.site
+      # Anthropic via Elite Gateway local (rotaciona keys → ap7 → Anthropic)
+      - ANTHROPIC_API_BASE_URL=http://host.docker.internal:8082
       # Elite Gateway CentralDark (OpenAI-compatible, rotaciona key interna)
       - OPENAI_LIKE_API_BASE_URL=https://api.centralldark.com/v1
       - OPENAI_LIKE_API_KEY=SEGREDO_ELITE_123
