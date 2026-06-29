@@ -205,12 +205,14 @@ def avaliar(path: Path) -> None:
         source="consciencia",
         severity="aviso",
         key=f"consciencia.proposta.{path.name}",
-        title="Guardião propõe mover arquivo",
+        title=f"🗂️ Sugestão de organização — {path.name}",
         body=(
-            f"📄 `{rel}`\n"
-            f"➡️ Sugestão: `{destino_rel}`\n"
-            f"🎯 Confiança: {confianca:.0%}\n"
-            f"💡 Motivo: {veredito['motivo']}"
+            f"O Guardião encontrou um arquivo que pode estar na pasta errada.\n\n"
+            f"📄 Arquivo atual:\n{rel}\n\n"
+            f"📁 Pasta sugerida:\n{destino_rel}\n\n"
+            f"🎯 Certeza: {confianca:.0%}\n"
+            f"💡 Motivo: {veredito['motivo']}\n\n"
+            f"Nenhuma ação automática foi tomada — só uma sugestão."
         ),
         dedup_window_s=600,
         payload={"arquivo": str(rel), "destino": destino_rel, "confianca": confianca},
