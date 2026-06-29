@@ -77,5 +77,6 @@ jobs:
             echo "INDEX.md sem mudanças — nada a commitar"
           else
             git commit -m "chore(brain): regenerar INDEX.md automaticamente"
+            git pull --rebase origin main || true
             git push
           fi

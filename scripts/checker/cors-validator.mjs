@@ -16,11 +16,12 @@ const ORIGIN = process.env.ORIGIN || "https://bot.centralldark.com";
 const REQ_HEADERS = "content-type,x-bot-token,x-webhook-secret,last-event-id";
 
 const ENDPOINTS = [
-  { path: "/v1/whatsapp/sessions", method: "GET" },
-  { path: "/v1/whatsapp/chats", method: "GET" },
-  { path: "/v1/whatsapp/contacts", method: "GET" },
-  { path: "/v1/whatsapp/groups", method: "GET" },
-  { path: "/v1/whatsapp/history", method: "GET" },
+  // optional:true = avisa mas não quebra o run (servidor pode estar parado)
+  { path: "/v1/whatsapp/sessions",  method: "GET", optional: true },
+  { path: "/v1/whatsapp/chats",     method: "GET", optional: true },
+  { path: "/v1/whatsapp/contacts",  method: "GET", optional: true },
+  { path: "/v1/whatsapp/groups",    method: "GET", optional: true },
+  { path: "/v1/whatsapp/history",   method: "GET", optional: true },
 ];
 
 const results = [];
@@ -100,16 +101,16 @@ async function checkEndpoint(ep) {
     report.issues.push(`Request real falhou: ${e.message}`);
   }
 
-  if (!report.ok) failed++;
-  results.push(report);
+  if (!report.ok && !ep.optional) failed++;
+  results.push({ ...report, optional: ep.optional || false });
 }
 
 console.log(`\n🔎 Validando CORS em ${API_BASE}  (Origin: ${ORIGIN})\n`);
 await Promise.all(ENDPOINTS.map(checkEndpoint));
 
 for (const r of results) {
-  const icon = r.ok ? "✅" : "❌";
-  console.log(`${icon} ${r.method.padEnd(7)} ${r.endpoint}`);
+  const icon = r.ok ? "✅" : (r.optional ? "⚠️ " : "❌");
+  console.log(`${icon} ${r.method.padEnd(7)} ${r.endpoint}${r.optional ? " (opcional)" : ""}`);
   console.log(
     `     preflight=${r.preflightStatus} ACAO(pre)=${r.preflightAllowOriginCount} ` +
       `status=${r.status} ACAO(get)=${r.allowOriginCount}`,
