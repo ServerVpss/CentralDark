@@ -79,10 +79,11 @@ jobs:
       - name: Review
         env:
           ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_BASE_URL:   https://claude.ap7.site
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then echo "⚠️ ANTHROPIC_API_KEY não configurado — pulando"; exit 0; fi
           export CONFIG__AI_PROVIDER=anthropic
           export CONFIG__MODEL=claude-sonnet-4-6
-          echo "🤖 Claude Sonnet 4.6 iniciando review..."
+          echo "🤖 Claude Sonnet 4.6 iniciando review (via proxy ap7)..."
           python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
