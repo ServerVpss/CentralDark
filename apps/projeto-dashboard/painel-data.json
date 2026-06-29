@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T06:43:58.527Z",
-  "updatedAtBR": "29/06/2026, 03:43:58 BRT",
+  "updatedAt": "2026-06-29T06:44:35.437Z",
+  "updatedAtBR": "29/06/2026, 03:44:35 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Hub @srver1bot criado (hub-adm.cjs + PM2 CentralDark-HubBot). Pendente: ADMIN_CHAT_ID + padronizacao nomes PM2.",
     "branch": "main",
-    "lastCommit": "93e164de2",
+    "lastCommit": "feat(bot): unificar bot.cjs + hub-adm.cjs em processo único (unified-bot.cjs)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -517,6 +517,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T06:44:35.437Z",
+      "titulo": "Push na main · 984b2833bb9f96c5e875c8855e49875946427a01",
+      "detalhe": "feat(bot): unificar bot.cjs + hub-adm.cjs em processo único (unified-bot.cjs)",
+      "area": "Repositório",
+      "sha": "984b283",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T06:31:42.353Z",
       "title": "Fix Mega Painel: cards de eventos agora exibem título e detalhe reais (titulo/detalhe PT-BR) em vez do placeholder 'Evento do projeto'. SHA do commit e actor visíveis. Cache bust v20260629a.",
@@ -1165,6 +1173,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T06:44:35.437Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 984b2833bb9f96c5e875c8855e49875946427a01 (984b283)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T06:03:01.051Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d4e2ca7f0974d415103c78f81d88c78ee9862e2d (d4e2ca7)",
@@ -1504,13 +1519,6 @@
       "time": "2026-06-22T09:55:00Z",
       "ia": "Claude Code",
       "action": "refactor(bot-telegram): consolidar skills em apps/bot-telegram/",
-      "area": "Telegram",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T09:43:00Z",
-      "ia": "Claude Code",
-      "action": "fix(bot-telegram): require panel.cjs + branding + foto robô P5",
       "area": "Telegram",
       "status": "sucesso"
     }
