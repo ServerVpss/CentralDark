@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T09:34:53.000Z",
-  "updatedAtBR": "29/06/2026, 06:00:00 BRT",
+  "updatedAt": "2026-06-29T09:35:20.045Z",
+  "updatedAtBR": "29/06/2026, 06:35:20 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "c3c919626",
+    "lastCommit": "feat(brain): segundo cérebro conectado — obsidian-writer + INDEX automático",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T09:35:20.045Z",
+      "titulo": "Push na main · 426ea5a4480fb589ca500563d6034fa14f4962d9",
+      "detalhe": "feat(brain): segundo cérebro conectado — obsidian-writer + INDEX automático",
+      "area": "Repositório",
+      "sha": "426ea5a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T08:14:10.972Z",
       "titulo": "Push na main · c3c919626f4e6c20da0fba357e3b356eb10f0ddf",
@@ -1198,6 +1206,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T09:35:20.045Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 426ea5a4480fb589ca500563d6034fa14f4962d9 (426ea5a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T08:14:10.972Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c3c919626f4e6c20da0fba357e3b356eb10f0ddf (c3c9196)",
@@ -1538,13 +1553,6 @@
       "ia": "Claude Code",
       "action": "feat(p8): CodeRabbit config + pr-auto-review + APRENDIZADOS",
       "area": "CI/CD",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T10:48:00Z",
-      "ia": "Claude Code",
-      "action": "docs: P9 — regra obrigatória atualizar_painel nos docs",
-      "area": "Docs",
       "status": "sucesso"
     }
   ],
