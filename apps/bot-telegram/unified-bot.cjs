@@ -1012,10 +1012,24 @@ async function handleMessage(msg) {
     if (skillsOk) {
       try {
         const intent = await consciousness.think(text);
+
+        // Mensagem copiada — perguntar ao usuário o que fazer
+        if (intent?.type === 'clarify') {
+          await send(chatId, intent.message, null);
+          return;
+        }
+
+        // Skill executada com sucesso — responder direto e adicionar contexto
         if (intent?.type === 'automatic' && intent.skill && intent.response?.ok) {
-          const r = intent.response.result || {};
+          const r = intent.response.result || intent.response || {};
           const snippet = r.note || r.topic || r.message || '';
           if (snippet) skillContext = `\n\n[Contexto de skill "${intent.skill}": ${String(snippet).slice(0, 300)}]`;
+
+          // Se foi obsidian-writer, confirmar pro usuário antes de chamar o LLM
+          if (intent.skill === 'obsidian-writer' && r.message) {
+            await send(chatId, `✅ <b>Gravado no cérebro!</b>\n\n<pre>${r.message}</pre>\n\n📲 Aparece no Obsidian em ≤10 min.`, null);
+            return;
+          }
         }
       } catch (_) {}
     }

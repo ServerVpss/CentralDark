@@ -39,54 +39,76 @@ async function think(input) {
     return { type: "manual", message: "Consciência desativada" };
   }
 
-  const skills = manager.listAll();
+  const txt = (input || "").trim();
   let chosenSkill = null;
 
-  // Heurística (depois evolui com IA)
-  if (/ideia|criar|brainstorm|criativ|melhorar|sugest/i.test(input)) {
+  // ⚠️ Detectar mensagem copiada / citada de outra IA
+  // Se o usuário copiou texto de instrução em vez de digitar um comando direto
+  const ehCopia = /você (disse|falou|citou|me pediu|me mandou|recomendou|sugeriu|escreveu)|aqui você (falou|disse|escreveu)|copiando|você indicou|você aconselhou/i.test(txt);
+  if (ehCopia) {
+    return {
+      type: "clarify",
+      message: "Percebi que você pode ter copiado um texto. Quer que eu:\n\n" +
+               "1️⃣ <b>Execute</b> o que está escrito\n" +
+               "2️⃣ <b>Grave como nota</b> no cérebro\n" +
+               "3️⃣ <b>Ignore</b> — só estava me mostrando\n\n" +
+               "Me diz qual das 3 opções ou fala com suas palavras o que quer fazer."
+    };
+  }
+
+  // 🧠 Comandos de gravação no Obsidian (obsidian-writer)
+  if (/\b(grava|anota|registra|salva|bota no cérebro|não (me )?deixa esquecer|pode registrar|quero lembrar)\b/i.test(txt)) {
+    const match = txt.match(/(?:grava|anota|registra|salva|bota no cérebro|não (?:me )?deixa esquecer|pode registrar|quero lembrar)[\s:]+(.+)/is);
+    const content = match ? match[1].trim() : txt;
+    const result = await executor.run("obsidian-writer", {
+      op: "write",
+      folder: "07 - Reuniões & Notas",
+      title: content.slice(0, 60).replace(/[^\w\s\-áéíóúâêîôûãõçàèìòù]/gi, "").trim() || "Nota rápida",
+      content,
+    });
+    memory.save({ input: txt.slice(0, 200), skill: "obsidian-writer", result: result.ok ? "success" : "error", timestamp: Date.now() });
+    return { type: "automatic", skill: "obsidian-writer", response: result };
+  }
+
+  // 📋 Status / saúde do sistema (painel-status)
+  if (/\b(status|saúde|painel|como está|tá tudo|serviços|processos|relatório|resumo do sistema)\b/i.test(txt)) {
+    chosenSkill = "painel-status";
+
+  // 📚 Memória longa (memoria-longa)
+  } else if (/\b(consciência|consciencia|memória|memoria|lembra|o que você sabe|o que temos|aprendizado|decisão|decisao)\b/i.test(txt)) {
+    chosenSkill = "memoria-longa";
+
+  // 💡 Brainstorming / ideias
+  } else if (/\b(ideia|brainstorm|criativ|melhorar|sugest|pensar|desenvolv)\b/i.test(txt)) {
     chosenSkill = "brainstorming";
-  } else if (/buscar|procurar|skills?\b|encontr/i.test(input)) {
+
+  // 🔍 Buscar skills
+  } else if (/\b(skills?|ferramentas?|buscar|procurar|encontr|o que você (tem|sabe|pode))\b/i.test(txt)) {
     chosenSkill = "find-skills";
-  } else if (/erro|bug|debug|falh|quebr|problema/i.test(input)) {
+
+  // 🐛 Debug / erros
+  } else if (/\b(erro|bug|debug|falh|quebr|problema|não (está|tá) funcionando)\b/i.test(txt)) {
     chosenSkill = "systematic-debugging";
-  } else if (/plan|estratégia|roteiro|organiz/i.test(input)) {
-    chosenSkill = "writing-plans";
-  } else if (/revis|code.?review|qualidade/i.test(input)) {
-    chosenSkill = "code-review";
-  } else if (/document|memória|registr/i.test(input)) {
-    chosenSkill = "documentation-memory";
-  } else if (/test|validar|verific|confirm/i.test(input)) {
-    chosenSkill = "verification-before-completion";
-  } else if (/status|monitor|saúde|health/i.test(input)) {
-    chosenSkill = "monitor-heartbeat";
-  } else if (/telegram|alert|notific/i.test(input)) {
-    chosenSkill = "telegram-alerts";
-  } else if (/whatsapp|conex|qr|instância/i.test(input)) {
-    chosenSkill = "whatsapp-wuzapi";
+
   } else {
-    // fallback: primeira skill executável ativa
     const active = manager.listActive().filter(s => s.type === "executable");
     chosenSkill = active.length > 0 ? active[0].slug : null;
   }
 
   if (!chosenSkill) {
-    return { type: "automatic", error: "Nenhuma skill encontrada" };
+    return { type: "automatic", error: "Nenhuma skill encontrada para essa mensagem" };
   }
 
-  const result = await executor.run(chosenSkill, { input, topic: input, query: input });
+  const result = await executor.run(chosenSkill, { input: txt, topic: txt, query: txt });
 
   memory.save({
-    input: (input || "").slice(0, 200),
+    input: txt.slice(0, 200),
     skill: chosenSkill,
     result: result.ok ? "success" : "error",
     timestamp: Date.now()
   });
 
-  return {
-    type: "automatic",
-    skill: chosenSkill,
-    response: result
-  };
+  return { type: "automatic", skill: chosenSkill, response: result };
 }
 
 // 🚀 EXECUÇÃO PRINCIPAL
