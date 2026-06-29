@@ -1,0 +1,47 @@
+{
+  "folders": [
+    { "name": "CentralDark (raiz)", "path": "." },
+    { "name": "Scripts", "path": "./scripts" },
+    { "name": "Apps", "path": "./apps" },
+    { "name": "Docs / Consciência", "path": "./docs" },
+    { "name": "Infra", "path": "./infra" }
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/actions-runner/**": true,
+      "**/revisoes/**": true,
+      "**/.git/**": true,
+      "**/apps/modulos/WebUI/**": true,
+      "**/dist/**": true,
+      "**/.backups/**": true,
+      "**/quarantine/**": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/actions-runner": true,
+      "**/revisoes": true,
+      "**/apps/modulos/WebUI": true,
+      "**/dist": true,
+      "**/.backups": true,
+      "**/quarantine": true
+    },
+    "files.exclude": {
+      "**/node_modules": true
+    },
+    "editor.formatOnSave": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "remote.autoForwardPorts": false,
+    "remote.restoreForwardedPorts": false
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "ms-python.python"
+    ]
+  }
+}
