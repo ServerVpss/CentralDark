@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-06-29T07:49:49.883Z",
-  "updatedAtBR": "29/06/2026, 04:49:49 BRT",
+  "updatedAt": "2026-06-29T07:50:50.425Z",
+  "updatedAtBR": "29/06/2026, 04:50:50 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -710,7 +710,7 @@
     {
       "time": "2026-06-28T10:10:04.581Z",
       "titulo": "Supabase renomeado Multizap→CentralDark",
-      "detalhe": "org, projeto, GitHub integration ServerVpss/CentralDark, tabelas internas. project_ref FIXO=lyoigsqluyktoclwdaft. Pendência crítica: token GitHub do MCP morto (401) bloqueia gravação na fonte da verdade.",
+      "detalhe": "org, projeto, GitHub integration ServerVpss/CentralDark, tabelas internas renomeadas. Pendência crítica: token GitHub do MCP morto (401) bloqueia gravação na fonte da verdade.",
       "area": "infra"
     },
     {
@@ -739,7 +739,7 @@
     {
       "time": "2026-06-26T08:11:10.513Z",
       "titulo": "Push na main · 791bc56caaf47d31b2332a294fe8c4c4dca523e9",
-      "detalhe": "feat(hub): hub-client separado + HubPage apontando para lyoigsqluyktoclwdaft",
+      "detalhe": "feat(hub): hub-client separado + HubPage apontando para projeto Supabase configurado",
       "area": "Repositório",
       "sha": "791bc56",
       "actor": "segredounlock"
