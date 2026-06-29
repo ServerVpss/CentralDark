@@ -1939,3 +1939,10 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
   - Restauração de arquivos apagados do repo: muitas pastas (`apps/bot-telegram/`, `scripts/contas-admin/`) sumiram do DISCO mas seguem no git (`git checkout <commit> -- <path>`) ou em checkpoints do cloud agent (commit `cebb28424` tinha `.env`/main.py).
   - Serviço Python no PM2: NÃO confiar no `env_file` do ecosystem (instável entre versões — deu "CONTAS_ADMIN_TOKEN ausente"); carregar o `.env` no próprio código com `load_dotenv(BASE_DIR/'.env')`.
   - `secrets/` e `*.env` estavam versionáveis (não no `.gitignore`) — blindados nesta sessão. Conferir sempre antes de `git add`.
+
+## Obsidian Git — Conflito de merge no PC local (29/06/2026)
+
+- **Contexto:** Obsidian Git tentou puxar do GitHub mas havia mudança local não commitada no `BRAIN.md` (o Obsidian às vezes modifica arquivos automaticamente ao abrir). O pull travou com erro "would be overwritten by merge".
+- **Solução aplicada:** `Discard all tracked files` → Pull. Escolher "tracked" (não "all files") preserva notas novas não commitadas.
+- **Proteção permanente configurada:** Configurações → Git → Pull → "Merge strategy on conflicts" → **"Their changes"**. Conflitos resolvidos automaticamente favorecendo o GitHub (fonte da verdade).
+- **Como aplicar:** Nunca clicar em "Discard all X files" (apaga arquivos novos). Sempre "Discard X tracked files".

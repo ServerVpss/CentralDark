@@ -184,5 +184,24 @@ Em inglês (os melhores do mundo):
 
 ---
 
+---
+
+## ⚠️ Erro "Pull failed (merge)" — como resolver e evitar
+
+**O que é:** o Obsidian tentou puxar do GitHub mas você tinha mudanças locais não commitadas no mesmo arquivo. O Git se recusou a sobrescrever.
+
+**Solução rápida (quando acontecer):**
+1. `Ctrl+P` → `Git: CAUTION: Discard all changes`
+2. Na confirmação: clique **"Discard all X tracked files"** (nunca o "all 56 files" — esse apaga arquivos novos não commitados)
+3. `Ctrl+P` → `Git: Pull`
+
+**Proteção permanente (configurar uma vez):**
+- Configurações → Git → seção **Pull** → **"Merge strategy on conflicts"** → selecionar **"Their changes"**
+- Com isso, qualquer conflito é resolvido automaticamente favorecendo o GitHub (fonte da verdade)
+
+> Aprendido em 29/06/2026 — configurado com sucesso.
+
+---
+
 *Tutorial criado pelo [[CentralDark]] para o Pivete — atualizado sempre que você aprender algo novo.*
 *Skill: [[Obsidian-Writer]] | Vault: [[BRAIN]]*
