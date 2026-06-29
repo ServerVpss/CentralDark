@@ -127,15 +127,20 @@ function renderEvents(data) {
     return;
   }
 
-  box.innerHTML = events.map((event) =>
-    '<article class="event-card">' +
+  box.innerHTML = events.map((event) => {
+    const title  = event.title  || event.titulo  || 'Evento do projeto';
+    const detail = event.detail || event.detalhe || '';
+    const sha    = event.sha    ? ' · <code>' + safe(String(event.sha).slice(0, 7)) + '</code>' : '';
+    const actor  = event.actor  ? ' · @' + safe(event.actor) : '';
+    const stStr  = event.status ? ' · ' + safe(statusLabel(event.status)) : '';
+    return '<article class="event-card">' +
       '<div>' +
-        '<strong>' + safe(event.title || 'Evento do projeto') + '</strong>' +
-        '<p>' + safe(event.detail || '') + '</p>' +
+        '<strong>' + safe(title) + '</strong>' +
+        '<p>' + safe(detail) + '</p>' +
       '</div>' +
-      '<span>' + safe(event.area || 'Projeto') + ' · ' + safe(statusLabel(event.status)) + ' · ' + safe(formatDate(event.time || new Date())) + '</span>' +
-    '</article>'
-  ).join('');
+      '<span>' + safe(event.area || 'Projeto') + sha + actor + stStr + ' · ' + safe(formatDate(event.time || new Date())) + '</span>' +
+    '</article>';
+  }).join('');
 }
 
 function renderAiSuggestions(data) {
