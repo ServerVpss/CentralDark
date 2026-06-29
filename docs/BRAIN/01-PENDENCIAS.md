@@ -1,48 +1,68 @@
-# 📋 PENDÊNCIAS — Espelho navegável
+# 📋 PENDÊNCIAS — CentralDark
 
-**Fonte oficial:** `docs/PENDENCIAS.md`  
-**Este arquivo:** resumo para navegação no Obsidian
-
----
-
-## Pendências vivas principais
-
-| Status | Item | Resumo | Como fechar |
-|---|---|---|---|
-| 🟡 | #1 Migração `centralldark.com` + `telepainel.centralldark.com` | Código pronto, falta executar na VPS e alinhar DNS/Caddy com autorização | DNS apontado, setup executado, Caddy aprovado, HTTP 200 validado |
-| 🟡 | #3 Módulos bot-whatsapp, CRM e financeiro ainda são landing | Existem páginas bonitas, mas sem produto completo por trás | Definir escopo, modelar tabelas e implementar produto real |
-| 🟢 | #4 Arquitetura CentralDark 2026 com Cloud/API pública | Expansão futura complexa; por enquanto GitHub + memória atendem | Reabrir só se a complexidade valer |
-| 🟡 | #5 Revisão de migração de docs do legado | Há muitos docs do legado ainda em triagem | Revisar, migrar ou arquivar por categoria |
+> Última atualização: 2026-06-29
+> Toda IA que abrir este arquivo deve ler ANTES de propor qualquer tarefa nova.
 
 ---
 
-## Regras de pendência
+## 🔴 Grandes Tarefas (aguardam "PERMITO PIVETE")
 
-```txt
-Pendência global → docs/PENDENCIAS.md
-Pendência local → PLANO.md da pasta
-Problema novo → registrar com prioridade, sintoma e critério de fechamento
-Tarefa concluída → marcar com data e evidência
-```
-
----
-
-## Atenções permanentes
-
-| Alerta | Regra |
-|---|---|
-| 🔴 CRM | Não mexer agora sem confirmação |
-| 🔴 Caddy / DNS | Sempre pedir confirmação antes |
-| 🔴 Docker / WuzAPI / WhatsApp | Não tocar sem confirmação explícita |
-| 🔐 Secrets | Nunca abrir, expor, copiar ou versionar |
-| ✅ Logs | Sanitizar antes de mostrar ou salvar |
+| # | Tarefa | O que é | Por onde começa |
+|---|--------|---------|----------------|
+| G1 | **Novo MCP + Hub** | Reconstrução completa do servidor MCP e Hub de controle. É o maior projeto pendente. | Pivete diz "PERMITO PIVETE — iniciar MCP+Hub" |
+| G2 | **WhatsApp para gravar ideias** | Conectar o WhatsApp ao sistema para o Pivete poder gravar pensamentos de qualquer lugar, não só pelo Telegram | Verificar WuzAPI e MultiZap-Gateway |
+| G3 | **MCP universal — conectar ao Lovable** | O MCP do CentralDark pode ser conectado a qualquer IA (Lovable, Cursor, Claude.ai). Expor via HTTPS pelo Caddy e registrar como conector | Configurar endpoint público do MCP |
 
 ---
 
-## Próxima consulta obrigatória
+## 🟡 Em andamento / semi-prontos
 
-Antes de executar tarefa nova, consultar o arquivo oficial:
+| # | Tarefa | Status |
+|---|--------|--------|
+| A1 | Bot `@srver1bot` skills + consciência | ✅ Funcionando — pode evoluir |
+| A2 | Obsidian vault sincronizado | ✅ Funcionando — Pivete configurou hoje |
+| A3 | Notificações Telegram melhoradas | ✅ Feito — Vigia + Pipeline + Guardião + obsidian-writer |
+| A4 | Tutorial Obsidian no vault | ✅ Criado — aparece em ≤10 min |
+| A5 | Aprendizado de horário online do Pivete | 🟡 Pendente — bot precisa logar horários de interação e sugerir janelas |
+| A6 | Sugestões proativas periódicas | 🟡 Pendente — bot precisa de um cron que manda sugestão ou lembrete |
+| A7 | Detecção de ideia duplicada | 🟡 Pendente — quando Pivete gravar uma ideia, verificar se já existe algo parecido |
+| A8 | Migração `centralldark.com` + DNS | 🟡 Código pronto, falta executar com autorização |
 
-```txt
-docs/PENDENCIAS.md
-```
+---
+
+## 🧠 Objetivos de aprendizado do Pivete (sugerir recursos)
+
+| Tema | Sugestão |
+|------|---------|
+| Inteligência Artificial | Curso gratuito: "Elements of AI" (traduzido PT-BR) |
+| Governança de sistemas | Aprender sobre PM2, logs, backup automático |
+| Full-stack | Começar pelo JavaScript/Node.js (já usa no bot) |
+| MCP Protocol | Ler `docs/CONSCIENCIA/06-MCP-CENTRALDARK.md` |
+| Obsidian | Tutorial no vault: `05 - Documentacao/TUTORIAL-OBSIDIAN.md` |
+
+---
+
+## 🔒 Áreas protegidas — não mexer sem autorização
+
+| Área | Senha necessária |
+|------|----------------|
+| `apps/bot-telegram/` estrutural | PERMITO PIVETE |
+| `scripts/webhook/` | PERMITO PIVETE |
+| `infra/caddy/` | PERMITO PIVETE |
+| `secrets/` | NUNCA |
+| Novo MCP + Hub | PERMITO PIVETE + plano aprovado |
+
+---
+
+## 🔄 Regra anti-duplicata
+
+Antes de registrar qualquer ideia nova, verificar:
+1. Este arquivo
+2. `docs/BRAIN/00 - Mapa do Sistema/BRAIN.md`
+3. `docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md`
+
+Se já existir algo parecido → atualizar a entrada existente, não criar nova.
+
+---
+
+*Arquivo atualizado pela IA do CentralDark. Sincroniza com Obsidian em ≤10 min.*
