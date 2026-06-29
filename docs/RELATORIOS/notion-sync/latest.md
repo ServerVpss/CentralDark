@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-29T19:07:00.622Z
+# 🧠 Notion Sync — 2026-06-29T19:18:18.857Z
 
-- **Commit fonte:** `5813311a4d98714ebba9d841171b19e08b08e85f`
+- **Commit fonte:** `5acd9542077fa90b575fd0a4546fba0f26ef1320`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 283 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 283 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 14 | 0 | 14 | 0 | 0 |
+| decisoes | 15 | 1 | 14 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
@@ -39,6 +39,7 @@
 | decisoes | atualizado | GitHub Achievements |
 | decisoes | atualizado | Permissões do agente |
 | decisoes | atualizado | Gerenciador de pacotes — npm (raiz) |
+| decisoes | criado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
