@@ -1,3 +1,10 @@
+---
+title: "2026 06 20 Padrao Resposta Pivete"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Padrão de resposta do Pivete
 
 - **Categoria:** regra de comunicação / preferência operacional

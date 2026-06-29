@@ -1,3 +1,10 @@
+---
+title: "MODO SEGREDO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Modo Segredo — padrão operacional oficial
 
 ## Identidade do fluxo

@@ -1,3 +1,10 @@
+---
+title: "BOAS PRATICAS MCP"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Boas Práticas do MCP — CentralDark
 
 > **Status:** Obrigatório · **Escopo:** Universal — vale para TODA IA que se conectar ao MCP CentralDark, independente de onde opera (Claude, Lovable, GPT, Cursor, Grok, Gemini, Codex, Copilot e futuras).

@@ -1,3 +1,10 @@
+---
+title: "11 MULTI IA FLUXO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 11 — Fluxo Multi-IA CentralDark
 
 ## Princípio

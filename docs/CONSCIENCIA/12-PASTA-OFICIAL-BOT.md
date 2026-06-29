@@ -1,3 +1,10 @@
+---
+title: "12 PASTA OFICIAL BOT"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 12 — Pasta oficial do Bot WhatsApp (REGRA INQUEBRÁVEL)
 
 **Decisão registrada:** 2026-06-10

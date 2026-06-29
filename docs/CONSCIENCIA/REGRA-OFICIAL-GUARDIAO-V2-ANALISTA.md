@@ -1,3 +1,10 @@
+---
+title: "REGRA OFICIAL GUARDIAO V2 ANALISTA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Regra Oficial — Guardião v2 + Analista (Sub-agente)
 
 - **Título:** Arquitetura de 2 camadas: Guardião (olho) + Analista (cérebro/fila)

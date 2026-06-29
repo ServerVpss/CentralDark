@@ -1,3 +1,10 @@
+---
+title: "10 FALLBACK LOVABLE"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 10 — Fallback Lovable ↔ GitHub (LER SEMPRE EM CONTA NOVA)
 
 > **Por que esse arquivo existe:** se o usuário plugar este projeto em uma **conta Lovable diferente** (clone, conta nova, fork, outro workspace), o sync nativo Lovable↔GitHub pode falhar, demorar, ou nem estar conectado ainda. Este fallback **funciona em qualquer conta** porque depende só do PAT do usuário no GitHub — não da integração da Lovable.

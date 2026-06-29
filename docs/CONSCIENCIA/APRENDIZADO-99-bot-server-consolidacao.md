@@ -1,3 +1,10 @@
+---
+title: "APRENDIZADO 99 Bot Server Consolidacao"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Aprendizado #99 — Consolidação bot-server + Lote 2 WhatsApp
 
 **Data:** 2026-06-09 BRT  

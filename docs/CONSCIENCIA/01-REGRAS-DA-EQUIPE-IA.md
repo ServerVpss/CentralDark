@@ -1,3 +1,10 @@
+---
+title: "01 REGRAS DA EQUIPE IA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # REGRAS DA EQUIPE
 
 **Última atualização:** 07 de Junho de 2026

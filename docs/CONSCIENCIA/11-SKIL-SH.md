@@ -1,3 +1,10 @@
+---
+title: "11 SKIL SH"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 11 — Skill via `skil.sh` (protocolo de propagação da Consciência)
 
 ## O problema

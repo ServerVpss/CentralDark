@@ -1,3 +1,10 @@
+---
+title: "CONSCIENCIA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 🧠 CONSCIÊNCIA — CentralDark / MultiZap / clone-deck
 
 > **Documento mestre. Regras inquebráveis. Fonte única da verdade.**

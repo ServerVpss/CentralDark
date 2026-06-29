@@ -1,3 +1,10 @@
+---
+title: "Ferramentas Cognitivas E Comandos"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 🛠️ Ferramentas Cognitivas e Comandos
 
 > Página de referência rápida do Cérebro Vivo do CentralDark.

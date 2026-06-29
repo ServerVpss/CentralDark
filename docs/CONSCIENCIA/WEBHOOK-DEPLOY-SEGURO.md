@@ -1,3 +1,10 @@
+---
+title: "WEBHOOK DEPLOY SEGURO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Webhook Deploy Seguro
 
 Este documento registra o desenho oficial para deploy rapido sem GitHub Actions.

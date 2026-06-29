@@ -1,3 +1,10 @@
+---
+title: "21 PADRAO APRESENTACAO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 🎨 PADRÃO DE APRESENTAÇÃO — Camada Visual (Vibe)
 
 > **COMPLEMENTA** `docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md` — que é a BASE (comportamento, PT-BR, bloco de código copiável, handoff, fonte-da-verdade, "não inventar sucesso").

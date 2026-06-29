@@ -1,3 +1,10 @@
+---
+title: "CAPACIDADES COGNITIVAS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Capacidades Cognitivas — CentralDark
 
 > **Status:** Obrigatório · **Escopo:** Todos os agentes (Claude, Lovable, GPT, Cursor, Grok, Gemini, Codex, Copilot e qualquer IA futura)

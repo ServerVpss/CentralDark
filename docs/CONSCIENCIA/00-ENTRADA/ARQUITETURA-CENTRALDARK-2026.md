@@ -1,3 +1,10 @@
+---
+title: "ARQUITETURA CENTRALDARK 2026"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 🧠 ARQUITETURA CENTRALDARK 2026 - Versão Oficial
 
 > Documento oficial da arquitetura do CentralDark.

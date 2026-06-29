@@ -1,3 +1,10 @@
+---
+title: "09 ESTADO ATUAL"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 09 — Estado atual do CentralDark
 
 Atualizado em: 2026-06-09T17:03:28-03:00

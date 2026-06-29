@@ -1,3 +1,10 @@
+---
+title: "12 COFRE LOVABLE"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 12 — Cofre de secrets do Lovable na VPS
 
 > Espelho dos 4 secrets do Lovable guardado na VPS pra rehidratar conta nova

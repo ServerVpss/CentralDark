@@ -143,3 +143,11 @@ Claude Code / MCP modifica arquivos
 - Atualize este mapa sempre que a estrutura principal mudar
 - Nunca registre informação sensível (tokens, senhas, IDs internos)
 - Áreas protegidas exigem "PERMITO PIVETE" antes de mexer
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

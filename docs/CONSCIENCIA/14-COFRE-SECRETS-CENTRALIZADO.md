@@ -1,3 +1,10 @@
+---
+title: "14 COFRE SECRETS CENTRALIZADO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Cofre Secrets Centralizado
 
 Este documento registra o cofre oficial de secrets do CentralDark.

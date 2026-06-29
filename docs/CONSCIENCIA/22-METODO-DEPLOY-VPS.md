@@ -1,3 +1,10 @@
+---
+title: "22 METODO DEPLOY VPS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 22 — Método CentralDark de deploy via VPS
 
 > Playbook oficial para publicar mudanças no CentralDark usando a VPS como ambiente de deploy, diagnóstico e validação controlada.

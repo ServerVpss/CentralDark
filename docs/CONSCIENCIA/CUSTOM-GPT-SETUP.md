@@ -1,3 +1,10 @@
+---
+title: "CUSTOM GPT SETUP"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Custom GPT — passo a passo
 
 Como criar o "CentralDark Consciência" no ChatGPT em 5 cliques.

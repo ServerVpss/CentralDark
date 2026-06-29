@@ -1,3 +1,10 @@
+---
+title: "ESPELHO CLONE DECK PASSIVO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Espelho `segredounlock/clone-deck` passivo
 
 ## Estado validado

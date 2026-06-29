@@ -1,3 +1,10 @@
+---
+title: "00 PORTA DE ENTRADA IA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # CHECKPOINT-IA — Estado vivo para ChatGPT, Grok e Lovable
 
 Este arquivo é a primeira camada de sincronização entre agentes de IA no projeto CentralDark/MultiZap.

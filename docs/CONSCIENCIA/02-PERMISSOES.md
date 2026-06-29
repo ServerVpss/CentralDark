@@ -1,3 +1,10 @@
+---
+title: "02 PERMISSOES"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 02 — Permissões
 
 ## ✅ PODE fazer sem perguntar

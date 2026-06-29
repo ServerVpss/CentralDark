@@ -1,3 +1,10 @@
+---
+title: "06 MCP CENTRALDARK"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 06 — MCP CentralDark
 
 O MCP (Model Context Protocol) é o que te dá acesso ao GitHub e à VPS direto do ChatGPT.

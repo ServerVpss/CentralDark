@@ -1,3 +1,10 @@
+---
+title: "04 ESTRUTURA VPS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 04 — Estrutura da VPS
 
 VPS: `root@vmi3256920` (IP `89.117.78.124`).

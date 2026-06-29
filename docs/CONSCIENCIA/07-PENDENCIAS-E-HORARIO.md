@@ -1,3 +1,10 @@
+---
+title: "07 PENDENCIAS E HORARIO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 07 — Pendências e horário
 
 ## Pendências — fonte ÚNICA

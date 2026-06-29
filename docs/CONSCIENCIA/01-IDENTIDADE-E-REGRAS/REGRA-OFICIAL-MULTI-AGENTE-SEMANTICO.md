@@ -1,3 +1,10 @@
+---
+title: "REGRA OFICIAL MULTI AGENTE SEMANTICO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # REGRA OFICIAL — Protocolo Multi-Agente Semântico
 
 > **Status:** Obrigação · **Escopo:** Todos os agentes (Lovable, Claude, GPT/ChatGPT, Grok, Gemini, Codex, Cursor, Copilot, Windsurf e qualquer IA futura) · **Ativa:** Sim

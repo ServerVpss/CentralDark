@@ -1,3 +1,10 @@
+---
+title: "MEGA PAINEL SUGESTOES IA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Mega Painel · Sugestões IA/Codex
 
 ## Objetivo

@@ -1,3 +1,10 @@
+---
+title: "02 PROTOCOLO HANDOFF IA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Protocolo de handoff IA
 
 Após cada ação concluída, a IA deve deixar um bloco final chamado:

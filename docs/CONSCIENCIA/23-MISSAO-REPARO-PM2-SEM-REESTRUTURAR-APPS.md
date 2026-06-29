@@ -1,3 +1,10 @@
+---
+title: "23 MISSAO REPARO PM2 SEM REESTRUTURAR APPS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 23 — Missão de Reparo PM2 sem Reestruturação Global de Apps
 
 ## Decisão operacional

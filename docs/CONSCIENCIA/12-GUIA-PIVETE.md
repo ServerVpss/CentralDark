@@ -1,3 +1,10 @@
+---
+title: "12 GUIA PIVETE"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Guia de Comunicação — Pivete
 
 > Toda IA que interagir com o Pivete deve ler isso antes de responder.

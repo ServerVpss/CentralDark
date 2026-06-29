@@ -1,3 +1,10 @@
+---
+title: "03 FLUXO DEPLOY"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 03 — Fluxo de deploy
 
 ## Regra principal

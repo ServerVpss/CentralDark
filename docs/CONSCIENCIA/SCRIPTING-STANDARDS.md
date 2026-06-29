@@ -1,3 +1,10 @@
+---
+title: "SCRIPTING STANDARDS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Scripting Standards - Tema Netflix Centralizado
 
 Este documento consolida o padrao oficial para scripts do CentralDark / MultiZap.

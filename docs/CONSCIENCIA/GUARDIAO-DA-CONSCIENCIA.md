@@ -1,3 +1,10 @@
+---
+title: "GUARDIAO DA CONSCIENCIA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 🛡️ Guardião da Consciência
 
 > Agente de integridade e vigilância da pasta `docs/CONSCIENCIA/`.

@@ -1,3 +1,10 @@
+---
+title: "CONECTOR LIBERDADE SEGURA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Conector MCP · Liberdade segura
 
 ## Objetivo

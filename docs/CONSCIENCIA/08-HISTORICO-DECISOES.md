@@ -1,3 +1,10 @@
+---
+title: "08 HISTORICO DECISOES"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 08 — Histórico de decisões grandes
 
 ## Regra: sempre registrar desencontros entre plano e execução (2026-06-29)

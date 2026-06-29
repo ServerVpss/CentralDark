@@ -1,3 +1,10 @@
+---
+title: "20 COLABORACAO MULTI IA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 20 — Colaboração Multi-IA: ChatGPT + Grok + CentralDark
 
 ## Objetivo

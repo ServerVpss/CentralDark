@@ -1,3 +1,10 @@
+---
+title: "13 COMANDO UNICO VPS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 13 — COMANDO ÚNICO NA VPS (REGRA INQUEBRÁVEL)
 
 > Toda vez que a IA editar algo que vive **direto na VPS** (código de serviço PM2, script em `/root/...`), a entrega final pro usuário é **UM ÚNICO comando copia-e-cola** que faz: `git pull` + `install` (se precisar) + `build` + `pm2 restart` + `pm2 save` + `curl` de validação no domínio público.

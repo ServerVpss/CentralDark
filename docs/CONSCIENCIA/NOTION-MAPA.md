@@ -1,3 +1,10 @@
+---
+title: "NOTION MAPA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 🗺️ Mapa do Notion — CentralDark
 
 > **Status:** Ativo · **Data:** 25/06/2026 · **Responsável:** Pivete

@@ -1,3 +1,10 @@
+---
+title: "REPOSITORIO OFICIAL"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Repositório oficial do projeto
 
 ## Regra ativa

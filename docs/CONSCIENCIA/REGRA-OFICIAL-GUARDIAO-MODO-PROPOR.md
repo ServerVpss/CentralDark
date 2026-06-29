@@ -1,3 +1,10 @@
+---
+title: "REGRA OFICIAL GUARDIAO MODO PROPOR"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 📜 Regra Oficial — Guardião da Consciência: Modo "Propor" Obrigatório
 
 > **Status:** Ativo e em observação

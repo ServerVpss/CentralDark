@@ -1,3 +1,10 @@
+---
+title: "00 LEIA PRIMEIRO"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 👋 LEIA PRIMEIRO — Porta de Entrada do CentralDark
 
 > Se você é uma IA (Lovable, Claude, Grok, Codex, etc.) abrindo este repositório, **leia este arquivo antes de qualquer ação**.

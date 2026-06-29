@@ -1,3 +1,10 @@
+---
+title: "GITHUB PROFISSIONAL AUTOMACAO CONTINUA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # GitHub profissional e automação contínua
 
 ## Diretriz ativa

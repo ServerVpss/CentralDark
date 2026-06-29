@@ -1,3 +1,10 @@
+---
+title: "PROMPT MESTRE MULTI IA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Prompt Mestre Multi-IA — CentralDark / MultiZap
 
 Use este prompt quando for chamar qualquer IA externa ou interna para trabalhar no projeto CentralDark / MultiZap: ChatGPT, Lovable, Codex, Grok, Copilot, CodeGPT, bots GitHub Actions ou outro agente.

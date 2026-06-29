@@ -1,3 +1,10 @@
+---
+title: "21 METODO DIAGNOSTICO FUNIL"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 21 — Método CentralDark de diagnóstico em funil
 
 > Método oficial para recuperar serviços quebrados sem bagunçar produção, sem expor segredos e sem depender de pastas legadas.

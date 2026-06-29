@@ -1,3 +1,10 @@
+---
+title: "CODEX REVISAO PRS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Codex como agente principal em Pull Requests
 
 ## Decisão

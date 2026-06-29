@@ -1,3 +1,10 @@
+---
+title: "05 SSH VPS"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # 05 — SSH na VPS
 
 ## Regra inviolável

@@ -1,3 +1,10 @@
+---
+title: "REGRA OFICIAL HIERARQUIA MEMORIA"
+date: 2026-06-29
+tags: ["consciencia"]
+updated: 2026-06-29
+---
+
 # Regra Oficial — Hierarquia de Memória (Fonte da Verdade)
 
 - **Título:** Hierarquia de Memória — `docs/CONSCIENCIA/` é a única fonte da verdade
