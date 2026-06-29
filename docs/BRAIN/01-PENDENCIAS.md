@@ -69,6 +69,16 @@ Se já existir algo parecido → atualizar a entrada existente, não criar nova.
 
 ---
 
+## ✅ Implementado em 29/06/2026
+
+| Item | O que foi feito |
+|------|----------------|
+| Issues Agent | `scripts/issues-agent/issues-agent.mjs` — cron */30, timer interno 45-110min, fecha duplicatas/resolvidos/parados, notifica Telegram |
+| Vigia recuperação | `vigia-actions-vermelhos.yml` agora notifica 🟢 quando workflow volta ao verde após falha |
+| Hooks Claude Code | `~/.claude/settings.json` — hook Stop + Notification disparam Telegram quando Claude termina tarefa ou aguarda input |
+
+---
+
 ## 🆕 Melhorias de UX solicitadas em 29/06/2026
 
 | # | Melhoria | Descrição |
@@ -78,4 +88,14 @@ Se já existir algo parecido → atualizar a entrada existente, não criar nova.
 | U3 | **Lista completa ao perguntar pendências** | Sempre mostrar a lista completa (com paginação se necessário) ao perguntar "o que falta?" |
 | U4 | **Refinador de fala para prompt** | Quando Pivete falar de forma informal, a IA deve: (1) entender a intenção, (2) mostrar o prompt refinado que foi gerado, (3) executar, (4) registrar o par fala→prompt para aprender |
 | U5 | **Explicar o prompt gerado** | Quando Pivete quiser aprender, mostrar "aqui está o prompt que criei a partir do que você disse" |
+
+---
+
+## 🔐 Aguardando "PERMITO PIVETE" (29/06/2026)
+
+| # | Feature | O que é |
+|---|---------|---------|
+| P2 | **Modo Terminal via Telegram** | Botão no bot para Pivete comandar o Claude Code diretamente pelo Telegram. Skill nova + webhook Anthropic API. Toca em `apps/bot-telegram/` |
+| P4 | **Email para eventos importantes** | Além do Telegram, receber email em eventos críticos. Precisa configurar Resend ou sendmail na VPS |
+| P5 | **Botão "Realizar Testes"** | Botão no menu do bot para verificar MCP, workflows e endpoints. Toca em `apps/bot-telegram/` |
 
