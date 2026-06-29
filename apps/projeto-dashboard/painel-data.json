@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T12:16:52.133Z",
-  "updatedAtBR": "29/06/2026, 09:16:52 BRT",
+  "updatedAt": "2026-06-29T12:21:19.223Z",
+  "updatedAtBR": "29/06/2026, 09:21:19 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "feat(bot+brain): personalidade Pivete, trigger devedores/contatos, pasta 06 no Obsidian",
+    "lastCommit": "feat(P2): Terminal Claude no Telegram — botão no menu, modo especial com contexto CentralDark, escracho não-admin",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -535,6 +535,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T12:21:19.223Z",
+      "titulo": "Push na main · 587de4d9efbd612a69db2dfad45a4fd11d212d5b",
+      "detalhe": "feat(P2): Terminal Claude no Telegram — botão no menu, modo especial com contexto CentralDark, escracho não-admin",
+      "area": "Repositório",
+      "sha": "587de4d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-29T12:16:52.133Z",
       "titulo": "Push na main · 360a2a603fcd7ff5dd6a8fb4771bac2bc14d93ea",
       "detalhe": "feat(bot+brain): personalidade Pivete, trigger devedores/contatos, pasta 06 no Obsidian",
@@ -919,14 +927,6 @@
       "detalhe": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
       "area": "Repositório",
       "sha": "0ead705",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-26T08:11:10.513Z",
-      "titulo": "Push na main · 791bc56caaf47d31b2332a294fe8c4c4dca523e9",
-      "detalhe": "feat(hub): hub-client separado + HubPage apontando para projeto Supabase configurado",
-      "area": "Repositório",
-      "sha": "791bc56",
       "actor": "segredounlock"
     }
   ],
@@ -1342,6 +1342,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T12:21:19.223Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 587de4d9efbd612a69db2dfad45a4fd11d212d5b (587de4d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T12:16:52.133Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 360a2a603fcd7ff5dd6a8fb4771bac2bc14d93ea (360a2a6)",
@@ -1681,13 +1688,6 @@
       "time": "2026-06-26T05:22:24.047Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 21026ae74b0ed0cc5dcbc1a749ec186972a2d652 (21026ae)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-26T04:02:49.855Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 0d5ff810005d0bda1d7749235eed87a22020dd1a (0d5ff81)",
       "area": "Repositório",
       "status": "sucesso"
     }
