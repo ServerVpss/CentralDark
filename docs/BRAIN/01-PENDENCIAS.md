@@ -34,6 +34,7 @@ updated: 2026-06-29
 | A6 | Sugestões proativas periódicas | 🟡 Pendente — bot precisa de um cron que manda sugestão ou lembrete |
 | A7 | Detecção de ideia duplicada | 🟡 Pendente — quando Pivete gravar uma ideia, verificar se já existe algo parecido |
 | A8 | Migração `centralldark.com` + DNS | 🟡 Código pronto, falta executar com autorização |
+| A9 | **Tela Arsenal de Skills no TelePainel** | 🟡 Pendente — criar página no Lovable com 10 cards (nome amigável, apelido, descrição). Base: [[00-AGENTS-INDEX]]. Prompt pronto: *"Cria tela Arsenal de Skills com 10 cards, tema dark, estilo do painel atual"* |
 
 ---
 
