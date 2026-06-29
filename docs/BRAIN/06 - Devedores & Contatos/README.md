@@ -36,3 +36,11 @@ SORT file.ctime DESC
 ---
 
 *Atualizado pela IA do CentralDark. Sincroniza com o bot em ≤10 min.*
+
+---
+
+## Conexões Rápidas
+
+- [[01-PENDENCIAS]] — pendências financeiras que viram tarefas
+- [[BRAIN]] — raiz do vault
+- [[00-LEIA-PRIMEIRO]] — regras de roteamento

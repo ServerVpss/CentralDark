@@ -1,31 +1,92 @@
 {
-  "meta": {
-    "gerado_em": "2026-06-29",
-    "total_arquivos": 17,
-    "saude_geral": "59%"
-  },
-  "explicacao_grafo": {
-    "nos_verdes": "Nós de TAG — cada #tag vira um nó verde no Graph View. Arquivos com tags aparecem conectados a eles.",
-    "nos_cinzas": "Nós de ARQUIVO sem tags e/ou sem wikilinks — ficam isolados e pequenos.",
-    "tamanho_no": "Proporcional ao número de referências recebidas — arquivos mais linkados ficam maiores."
+  "schema": "SWARM-INVESTIGADOR-GRAFO/v1",
+  "modo": "read_only",
+  "identidade_assumida": "SWARM-INVESTIGADOR-GRAFO",
+  "gerado_em": "2026-06-29",
+  "escopo": ["docs/BRAIN/", "docs/CONSCIENCIA/"],
+  "status_execucao": {
+    "skill_lida": true,
+    "varredura_realizada": true,
+    "arquivo_json_salvo": true,
+    "telegram_notificado": false,
+    "correcoes_aplicadas": true,
+    "correcoes_aplicadas_por": "Claude Code — sessão 29/06/2026"
   },
   "resumo": {
-    "total": 17,
-    "com_frontmatter": 10,
-    "sem_frontmatter": 7,
-    "com_tags": 10,
-    "sem_tags": 7,
-    "com_links": 7,
-    "sem_links": 10,
-    "orfas_sem_referencia": 0
+    "brain_md_estimado": 33,
+    "consciencia_md_estimado": 67,
+    "total_md_estimado": 100,
+    "brain_tags_detectadas": 31,
+    "consciencia_tags_detectadas": 60,
+    "consciencia_arquivos_com_wikilinks_detectados": 4,
+    "brain_wikilinks_detectados": 144,
+    "consciencia_wikilinks_detectados": 56,
+    "arquivos_grandes_mais_50kb": 1,
+    "index_protegidos_detectados": 2
   },
-  "problemas": [
-    { "arquivo": "00-MAPA.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter + tags + links para BRAIN e CONSCIENCIA" },
-    { "arquivo": "01-PENDENCIAS.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter + tags + link para BRAIN" },
-    { "arquivo": "06-DECISOES.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter + tags + link para BRAIN" },
-    { "arquivo": "BRAIN.md", "problemas": ["sem frontmatter", "sem tags"], "fix": "adicionar frontmatter — já tem 38 wikilinks, só precisa de tags para aparecer colorido" },
-    { "arquivo": "README.md", "problemas": ["sem frontmatter", "sem tags", "sem wikilinks"], "fix": "adicionar frontmatter básico" },
-    { "arquivo": "02-ARQUITETURA.md", "problemas": ["sem wikilinks"], "fix": "adicionar link para BRAIN e CONSCIENCIA" }
-  ],
-  "ignorados": ["INDEX.md (auto-gerado pelo workflow — não editar)"]
+  "severidade": {
+    "critico": [
+      {
+        "tipo": "relatorio_stale",
+        "arquivo": "docs/BRAIN/RELATORIO-SWARM-GRAFO.json",
+        "problema": "Relatório anterior dizia total_arquivos=17; vault atual tem ~100 arquivos Markdown.",
+        "status": "RESOLVIDO — novo relatório gerado em 29/06/2026"
+      },
+      {
+        "tipo": "links_quebrados_em_arquivo_chave",
+        "arquivo": "docs/BRAIN/BRAIN.md",
+        "problema": "Wikilinks conceituais sem notas correspondentes",
+        "exemplos": ["[[MCP]]","[[Obsidian]]","[[Skills]]","[[PM2]]","[[GitHub]]","[[CentralDark-HubBot]]","[[CentralDark-MCP]]","[[Elite-Gateway]]"],
+        "status": "PENDENTE — requer criação de notas MOC ou normalização"
+      }
+    ],
+    "alto": [
+      {
+        "tipo": "arquivo_grande",
+        "arquivo": "docs/CONSCIENCIA/APRENDIZADOS.md",
+        "tamanho_bytes": 259530,
+        "status": "PENDENTE — aguarda PERMITO PIVETE para divisão"
+      },
+      {
+        "tipo": "baixa_linkagem_consciencia",
+        "area": "docs/CONSCIENCIA/",
+        "status": "PARCIALMENTE RESOLVIDO — Conexões Rápidas adicionadas nos principais"
+      },
+      {
+        "tipo": "tags_ausentes_consciencia",
+        "arquivos_seguros": [
+          "docs/CONSCIENCIA/README.md",
+          "docs/CONSCIENCIA/ARTEFATOS/README.md",
+          "docs/CONSCIENCIA/RETOMADA-Issues-Agent.md"
+        ],
+        "arquivos_preservados_arquivo_morto": [
+          "docs/CONSCIENCIA/ARQUIVO-MORTO/root-md-antigos/CHECKPOINT-2026-06-07.md",
+          "docs/CONSCIENCIA/ARQUIVO-MORTO/root-md-antigos/LEIA-ME-IA-absorvido.md",
+          "docs/CONSCIENCIA/ARQUIVO-MORTO/root-md-antigos/START_HERE-antigo.md"
+        ],
+        "status": "PARCIALMENTE RESOLVIDO — arquivo morto preservado intacto"
+      }
+    ],
+    "auto_fix_aplicados": [
+      {
+        "tipo": "conexoes_rapidas_faltando",
+        "arquivos_corrigidos": [
+          "docs/BRAIN/02-ARQUITETURA.md",
+          "docs/BRAIN/06-DECISOES.md",
+          "docs/BRAIN/PLANO.md",
+          "docs/BRAIN/README.md",
+          "docs/BRAIN/06 - Devedores & Contatos/DEVEDORES.md",
+          "docs/BRAIN/06 - Devedores & Contatos/README.md",
+          "docs/BRAIN/07 - Reunioes & Notas/README.md",
+          "docs/BRAIN/08 - Aprendizados & Memorias/README.md"
+        ],
+        "status": "APLICADO"
+      }
+    ]
+  },
+  "proxima_acao_recomendada": [
+    "Criar notas MOC para wikilinks cinzas do BRAIN.md: [[MCP]], [[PM2]], [[GitHub]], [[Skills]]",
+    "Dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema — aguarda PERMITO PIVETE",
+    "Remover ou popular pasta docs/BRAIN/06 - Decisoes (vazia)"
+  ]
 }

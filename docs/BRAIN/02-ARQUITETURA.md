@@ -108,3 +108,12 @@ Pendência: expor o MCP via HTTPS no Caddy para acesso externo.
 ---
 
 *Atualizado em 2026-06-29 — skill Obsidian-Writer*
+
+---
+
+## Conexões Rápidas
+
+- [[BRAIN]] — raiz do vault
+- [[MAPA-DO-CEREBRO]] — visão geral do sistema
+- [[00-LEIA-PRIMEIRO]] — regras operacionais para IAs
+- [[DIAGRAMAS-CENTRALDARK]] — diagramas Mermaid do sistema

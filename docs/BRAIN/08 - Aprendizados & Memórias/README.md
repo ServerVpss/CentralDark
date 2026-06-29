@@ -34,3 +34,11 @@ SORT file.ctime DESC
 ---
 
 *Atualizado automaticamente via bot @srver1bot.*
+
+---
+
+## Conexões Rápidas
+
+- [[07 - Reuniões & Notas]] — notas que geraram esses aprendizados
+- [[APRENDIZADOS]] — aprendizados técnicos (CONSCIENCIA)
+- [[BRAIN]] — raiz do vault

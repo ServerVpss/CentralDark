@@ -33,3 +33,11 @@ SORT file.ctime DESC
 ---
 
 *Atualizado automaticamente via bot @srver1bot.*
+
+---
+
+## Conexões Rápidas
+
+- [[01-PENDENCIAS]] — tarefas que surgem das reuniões
+- [[08 - Aprendizados & Memórias]] — aprendizados que surgem das notas
+- [[BRAIN]] — raiz do vault
