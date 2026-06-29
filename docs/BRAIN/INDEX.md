@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-06-29 11:59 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-06-29 12:16 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -21,4 +21,9 @@
 
 - [[GUIA-PROMPTS]]
 - [[TUTORIAL-OBSIDIAN]]
+
+## 06 - Devedores & Contatos
+
+- [[DEVEDORES]]
+- [[README]]
 
