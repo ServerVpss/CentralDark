@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-06-29T07:23:21.064Z",
-  "updatedAtBR": "29/06/2026, 04:23:21 BRT",
+  "updatedAt": "2026-06-29T07:23:32.030Z",
+  "updatedAtBR": "29/06/2026, 04:23:32 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -517,6 +517,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T07:23:32.030Z",
+      "titulo": "Push na main · 75e20173f9085d311842f71b1a44dada74daa748",
+      "detalhe": "chore(painel): IA atualiza painel — atualização",
+      "area": "Repositório",
+      "sha": "75e2017",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T07:01:20.904Z",
       "titulo": "Push na main · 830689c9ae1d962259b3a6a0ba2bb59dc8ebb66e",
@@ -1181,6 +1189,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T07:23:32.030Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 75e20173f9085d311842f71b1a44dada74daa748 (75e2017)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T07:01:20.904Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 830689c9ae1d962259b3a6a0ba2bb59dc8ebb66e (830689c)",
@@ -1521,13 +1536,6 @@
       "ia": "Claude Code",
       "action": "docs: P5+P6 concluídos, README com árvore de pastas completa",
       "area": "Docs",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T10:15:00Z",
-      "ia": "Claude Code",
-      "action": "feat(healthcheck): P6 — notificação Telegram ao detectar problema ou recuperação",
-      "area": "Telegram",
       "status": "sucesso"
     }
   ],
