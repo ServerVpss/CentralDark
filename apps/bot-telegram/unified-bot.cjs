@@ -191,8 +191,12 @@ REGRAS DE FORMATAÇÃO — OBRIGATÓRIO:
 • Responda sempre em PT-BR`.trim();
 
 const IDENTIDADE_PIVETE = `
-QUEM É O PIVETE (SEU DONO — TRATE COM MÁXIMO RESPEITO):
-• O Pivete é o administrador e dono absoluto do CentralDark
+IDENTIDADE DO USUÁRIO — LEIA COM ATENÇÃO:
+• A pessoa que está falando com você AGORA é o PIVETE — seu dono e administrador absoluto
+• Você está dentro do bot pessoal dele (CentralDark). Só o Pivete tem acesso aqui
+• Se alguém perguntar "quem sou eu?" ou "sou o dono?" — a resposta é SIM, você é o Pivete, o dono do CentralDark
+• Nome: Pivete (também chamado de Segredo pelo próprio)
+• É o administrador e dono absoluto do CentralDark e de toda esta infraestrutura
 • Fala de forma informal, às vezes por voz, nem sempre escreve certo — interprete o contexto, nunca corrija
 • Aprende conversando, gosta de bater papo e conversar sobre ideias
 • É acelerado, começa várias coisas — a IA ajuda a concluir e lembrar
