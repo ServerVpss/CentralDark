@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-29T12:59:33.687Z
+# 🧠 Notion Sync — 2026-06-29T13:21:53.869Z
 
-- **Commit fonte:** `9980c87506ca79a6df03a1db19bd21ba40064747`
+- **Commit fonte:** `95b51f37a4696e54bc1c31dc9998cb62f0cd4e51`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 280 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 282 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 13 | 2 | 11 | 0 | 0 |
+| decisoes | 13 | 0 | 13 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
@@ -26,8 +26,8 @@
 | regras | atualizado | Guardião da Consciência — Modo Propor Obrigatório (até 08/07/2026) |
 | regras | atualizado | Guardião v2 — Arquitetura de 2 camadas (Olho + Cérebro/Fila) |
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
-| decisoes | criado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
-| decisoes | criado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
+| decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
+| decisoes | atualizado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
 | decisoes | atualizado | Migração CentralDark (em andamento) |
 | decisoes | atualizado | Fluxo de deploy |
 | decisoes | atualizado | Instalador + doc viva |
