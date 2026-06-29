@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-29T14:14:50.966Z
+# 🧠 Notion Sync — 2026-06-29T18:53:39.604Z
 
-- **Commit fonte:** `e2d9a33fd8cc67826c376e4084f2c27fd89d271b`
+- **Commit fonte:** `e8adedfb7554747b5e8d6e8e3967538c1be0d7e4`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 282 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 282 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 13 | 0 | 13 | 0 | 0 |
+| decisoes | 14 | 1 | 13 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
@@ -39,6 +39,7 @@
 | decisoes | atualizado | GitHub Achievements |
 | decisoes | atualizado | Permissões do agente |
 | decisoes | atualizado | Gerenciador de pacotes — npm (raiz) |
+| decisoes | criado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
