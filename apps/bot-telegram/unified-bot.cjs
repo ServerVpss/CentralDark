@@ -1,27 +1,26 @@
 /**
- * CentralDark — Bot Unificado @srver1bot
+ * CentralDark — Bot Unificado @srver1bot  v2 — Cockpit Operacional
  *
  * Arquitetura dual-mode (Webhook-first, Polling-fallback):
- *   1. Se TELEGRAM_WEBHOOK_URL estiver definido → tenta registrar webhook
- *      e sobe servidor HTTP interno na porta BOT_WEBHOOK_PORT (padrão 9500).
- *   2. Se o registro falhar ou a variável não estiver definida → polling clássico.
- *   Modo é logado no startup e pode ser alternado apenas alterando a env var.
+ *   1. Se TELEGRAM_WEBHOOK_URL estiver definido → webhook via HTTPS/Caddy.
+ *   2. Fallback → polling clássico.
  *
- * Admin (ADMIN_CHAT_ID) → Hub ADM + Agentes LLM + Skills
+ * Admin (ADMIN_CHAT_ID) → Hub ADM + Agentes LLM + Ferramentas + Cognição + Relatório
  * Outros                → Skills system (consciousness)
  *
- * Token:         SRVER1_BOT_TOKEN || TELEGRAM_BOT_TOKEN || GUARDA_TELEGRAM_BOT_TOKEN
- * Webhook URL:   TELEGRAM_WEBHOOK_URL   (ex: https://status.centralldark.com/bot/webhook)
- * Webhook Port:  BOT_WEBHOOK_PORT       (padrão: 9500)
- * PM2:           CentralDark-HubBot  (hub.ecosystem.config.cjs)
+ * Token:        SRVER1_BOT_TOKEN || TELEGRAM_BOT_TOKEN || GUARDA_TELEGRAM_BOT_TOKEN
+ * Webhook URL:  TELEGRAM_WEBHOOK_URL   (ex: https://status.centralldark.com/bot/webhook)
+ * Webhook Port: BOT_WEBHOOK_PORT       (padrão: 9500)
+ * PM2:          CentralDark-HubBot  (hub.ecosystem.config.cjs)
  */
 
 'use strict';
 
-const http   = require('http');
-const crypto = require('crypto');
-const fs     = require('fs');
-const path   = require('path');
+const http             = require('http');
+const crypto           = require('crypto');
+const fs               = require('fs');
+const path             = require('path');
+const { execSync }     = require('child_process');
 
 // ── Carrega arquivos .env ──────────────────────────────────────────────────
 function loadEnv(p) {
@@ -41,7 +40,7 @@ loadEnv('/root/CentralDark/secrets/agent.env');
 loadEnv('/root/CentralDark/secrets/.env');
 loadEnv(path.join(__dirname, '.env'));
 
-// ── Configuração ──────────────────────────────────────────────────────────
+// ── Configuração ───────────────────────────────────────────────────────────
 const TOKEN        = process.env.SRVER1_BOT_TOKEN
                   || process.env.TELEGRAM_BOT_TOKEN
                   || process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
@@ -55,7 +54,7 @@ const TG_API       = 'https://api.telegram.org';
 const WEBHOOK_URL  = (process.env.TELEGRAM_WEBHOOK_URL || '').trim();
 const WEBHOOK_PORT = Number(process.env.BOT_WEBHOOK_PORT || '9500');
 
-// Secret derivado do token — estável entre restarts, sem env extra necessária
+// Secret derivado do token — estável entre restarts
 const WEBHOOK_SECRET = process.env.BOT_WEBHOOK_SECRET
   || crypto.createHash('sha256').update(TOKEN + 'centraldark').digest('hex').slice(0, 32);
 
@@ -64,7 +63,7 @@ if (!TOKEN) {
   process.exit(1);
 }
 
-// ── Skills system (de bot.cjs) ────────────────────────────────────────────
+// ── Skills system ──────────────────────────────────────────────────────────
 let consciousness = null, manager = null, memory = null, panel = null;
 let skillsOk = false;
 
@@ -94,10 +93,11 @@ try {
   console.warn('[Bot] ⚠️  Skills system indisponível:', e.message);
 }
 
-// ── Sessões (agente + histórico LLM por chat) ─────────────────────────────
+// ── Sessões ────────────────────────────────────────────────────────────────
 const sessions = new Map();
 function getSession(chatId) {
-  if (!sessions.has(chatId)) sessions.set(chatId, { agent: 'guardiao', history: [] });
+  if (!sessions.has(chatId))
+    sessions.set(chatId, { agent: 'guardiao', history: [], cogOverride: null });
   return sessions.get(chatId);
 }
 
@@ -123,7 +123,41 @@ const AGENTS = {
   },
 };
 
-// ── Telegram helpers ──────────────────────────────────────────────────────
+// ── Modos Cognitivos ───────────────────────────────────────────────────────
+const COG_MODES = {
+  sistema2: {
+    emoji: '🔬', nome: 'Sistema 2',
+    desc: 'Raciocínio lento e deliberado — cada etapa explícita.',
+    prompt: 'Você opera no modo Sistema 2: raciocínio lento e explícito. ' +
+            'Antes de responder, escreva cada etapa numerada do seu pensamento. ' +
+            'Nunca pule para conclusão sem mostrar o caminho. Responda em PT-BR.',
+  },
+  cot: {
+    emoji: '🔗', nome: 'Chain of Thought',
+    desc: 'Pensa passo a passo antes de responder.',
+    prompt: 'Você usa Chain of Thought. Formato obrigatório: ' +
+            'Passo 1: ... Passo 2: ... Conclusão: ... ' +
+            'Cada passo deve ser explícito e verificável. Responda em PT-BR.',
+  },
+  react: {
+    emoji: '⚛️',  nome: 'ReAct',
+    desc: 'Age → observa → raciocina → age de novo.',
+    prompt: 'Você usa ReAct. Formato: ' +
+            'Pensamento: ... Ação: ... Observação: ... (repita) Resposta Final: ... ' +
+            'Explicite cada ciclo antes de concluir. Responda em PT-BR.',
+  },
+  reflexao: {
+    emoji: '🪞', nome: 'Auto-Crítica',
+    desc: 'Gera → critica → refina. Dupla checagem interna.',
+    prompt: 'Você usa auto-crítica reflexiva. Formato obrigatório: ' +
+            '🔷 RASCUNHO: (resposta inicial) ' +
+            '🔶 CRÍTICA: (aponte falhas e lacunas) ' +
+            '✅ RESPOSTA FINAL: (versão refinada) ' +
+            'Responda em PT-BR.',
+  },
+};
+
+// ── Telegram helpers ───────────────────────────────────────────────────────
 async function tg(method, body) {
   try {
     const r = await fetch(`${TG_API}/bot${TOKEN}/${method}`, {
@@ -160,7 +194,7 @@ async function typing(chatId) {
   return tg('sendChatAction', { chat_id: chatId, action: 'typing' });
 }
 
-// ── Filtro: ignora bots, canais, grupos sem /comando ─────────────────────
+// ── Filtro ─────────────────────────────────────────────────────────────────
 function shouldIgnore(msg) {
   if (!msg) return true;
   if (msg.from?.is_bot) return true;
@@ -172,17 +206,42 @@ function shouldIgnore(msg) {
   return false;
 }
 
-// ── Painel ADM ────────────────────────────────────────────────────────────
-let _botMode = 'iniciando'; // atualizado no main()
+// ── Animate progress (edits sequenciais em checkpoints reais) ─────────────
+async function animateProgress(chatId, label) {
+  const msg = await send(chatId, `<code>⏳ ${esc(label)}...</code>`);
+  if (!msg) return { step: async () => {}, done: async (t, b) => send(chatId, t, b) };
+  return {
+    step: (s) => tg('editMessageText', {
+      chat_id: chatId, message_id: msg.message_id,
+      text: `<code>${esc(s)}</code>`, parse_mode: 'HTML',
+      disable_web_page_preview: true,
+    }),
+    done: (text, buttons) => edit(chatId, msg.message_id, text, buttons),
+  };
+}
+
+// ── execSafe ───────────────────────────────────────────────────────────────
+function execSafe(cmd) {
+  try { return execSync(cmd, { timeout: 5000, encoding: 'utf-8' }).trim(); }
+  catch { return ''; }
+}
+
+// ── Painel ADM ─────────────────────────────────────────────────────────────
+let _botMode = 'iniciando';
 
 function buildPanel(chatId) {
   const sess = getSession(chatId);
   const ag   = AGENTS[sess.agent];
+  const cog  = sess.cogOverride ? COG_MODES[sess.cogOverride] : null;
   const ts   = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
   const modeTag = _botMode === 'webhook'
     ? '🔗 WEBHOOK ativo          '
     : '🔄 POLLING ativo          ';
+
+  const cogLine = cog
+    ? `  COG      ${cog.emoji} ${cog.nome.padEnd(21)}\n`
+    : '';
 
   const text =
 `<pre>┌──────────────────────────────────┐
@@ -192,10 +251,10 @@ function buildPanel(chatId) {
   STATUS   SISTEMA OPERACIONAL  ✅
   MODO     ${modeTag}
   AGENTE   ${ag.emoji} ${ag.nome.padEnd(23)}
-  HIST.    ${String(sess.history.length).padStart(2)} msgs no contexto
-  SKILLS   ${skillsOk ? '✅ disponíveis' : '⚠️  indisponível   '}
+${cogLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs no contexto
+  SKILLS   ${skillsOk ? '✅ disponíveis       ' : '⚠️  indisponível     '}
 
-  ────── Selecione agente ou ação ───
+  ─── Selecione agente ou ferramenta ──
 
   ⏰ ${ts}</pre>`;
 
@@ -208,18 +267,21 @@ function buildPanel(chatId) {
         { text: '🔍 Analista',     callback_data: 'hub:ag:analista' },
       ],
       [
-        { text: '📊 Status VPS',     callback_data: 'hub:status' },
-        { text: '📋 Issues Abertas', callback_data: 'hub:issues' },
+        { text: '🛠️ Ferramentas',  callback_data: 'hub:tools' },
+        { text: '🧬 Cognição',     callback_data: 'hub:cog' },
       ],
       [
-        { text: '🧹 Limpar Histórico', callback_data: 'hub:clear' },
-        { text: '⚙️ Configurações',   callback_data: 'hub:config' },
+        { text: '📊 Relatório',    callback_data: 'hub:relatorio' },
+        { text: '⚙️ Config',       callback_data: 'hub:config' },
+      ],
+      [
+        { text: '🧹 Limpar Hist.', callback_data: 'hub:clear' },
       ],
     ],
   };
 }
 
-// ── Status VPS ────────────────────────────────────────────────────────────
+// ── Status VPS (endpoints internos) ───────────────────────────────────────
 async function getVPSStatus() {
   const checks = [
     { name: 'Webhook Deploy  ', url: 'http://localhost:9300/health' },
@@ -246,7 +308,148 @@ ${results.join('\n')}
   ⏰ ${ts}</pre>`;
 }
 
-// ── Issues GitHub ─────────────────────────────────────────────────────────
+// ── Diagnóstico VPS (CPU / RAM / OOM) ─────────────────────────────────────
+async function getDiagVPS() {
+  const cpuRaw = execSafe("ps aux --sort=-%cpu --no-header | awk 'NR<=4{printf \"  %-22s %s%%\\n\",$11,$3}'");
+  const memRaw = execSafe("free -h --si 2>/dev/null | awk '/^Mem:/{print $2\" total | \"$3\" usado | \"$7\" livre\"}'");
+  const oom    = execSafe("grep -c 'oom-kill' /var/log/kern.log 2>/dev/null || echo '0'") || '0';
+  const upRaw  = execSafe('uptime -p');
+  const ts     = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+  return `<pre>┌────────────────────────────────┐
+│  🩺  DIAGNÓSTICO VPS           │
+└────────────────────────────────┘
+
+  🖥️  CPU — Top 4 processos:
+${cpuRaw || '  (não disponível)'}
+
+  💾  RAM: ${memRaw || '(não disponível)'}
+  💀  OOM (kern.log): ${oom.trim()} eventos
+  ⏱️  Uptime: ${upRaw || '(não disponível)'}
+
+  ⏰ ${ts}</pre>`;
+}
+
+// ── PM2 Status ─────────────────────────────────────────────────────────────
+async function getPM2Status() {
+  const raw = execSafe('pm2 jlist 2>/dev/null');
+  let lines = [];
+  try {
+    const procs = JSON.parse(raw || '[]');
+    lines = procs.map(p => {
+      const s    = p.pm2_env?.status || '?';
+      const icon = s === 'online' ? '✅' : (s === 'stopped' ? '⬜' : '❌');
+      return `  ${icon} ${(p.name || '?').slice(0, 26).padEnd(26)} ${s}`;
+    });
+  } catch {
+    lines = ['  ⚠️  pm2 jlist indisponível'];
+  }
+  const ts    = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const count = lines.length;
+  return `<pre>┌────────────────────────────────┐
+│  ⚡  PM2 STATUS (${String(count).padStart(2)} processos)  │
+└────────────────────────────────┘
+
+${lines.join('\n') || '  (nenhum processo)'}
+
+  ⏰ ${ts}</pre>`;
+}
+
+// ── Logs de Erro ───────────────────────────────────────────────────────────
+async function getLogsErro() {
+  const raw     = execSafe('tail -20 /var/log/centraldark-hub-error.log 2>/dev/null');
+  const content = raw ? esc(raw.slice(0, 1500)) : '(sem entradas no log de erro)';
+  const ts      = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  return `<pre>┌────────────────────────────────┐
+│  📜  LOGS DE ERRO (últimas 20) │
+└────────────────────────────────┘
+
+${content}
+
+  ⏰ ${ts}</pre>`;
+}
+
+// ── Webhook Info ───────────────────────────────────────────────────────────
+async function getWebhookInfo() {
+  const info = await tg('getWebhookInfo', {});
+  const ts   = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  if (!info) return `<pre>❌ getWebhookInfo falhou\n\n  ⏰ ${ts}</pre>`;
+  const errMsg = info.last_error_message
+    ? esc(info.last_error_message.slice(0, 44))
+    : '✅ sem erros';
+  return `<pre>┌────────────────────────────────┐
+│  🔗  WEBHOOK INFO              │
+└────────────────────────────────┘
+
+  URL      ${esc((info.url || '(nenhuma)').slice(0, 40))}
+  Pendente ${info.pending_update_count || 0} updates
+  Último   ${errMsg}
+  Conexões ${info.max_connections || '-'}
+
+  ⏰ ${ts}</pre>`;
+}
+
+// ── Pendências ─────────────────────────────────────────────────────────────
+async function getPendencias() {
+  const candidates = [
+    '/root/CentralDark/docs/CONSCIENCIA/06-PENDENCIAS-E-HORARIO.md',
+    '/root/CentralDark/docs/CONSCIENCIA/PENDENCIAS-E-HORARIO.md',
+    '/root/CentralDark/docs/CONSCIENCIA/PENDENCIAS.md',
+  ];
+  let content = '  ⚠️  Arquivo de pendências não encontrado';
+  for (const p of candidates) {
+    try {
+      const raw   = fs.readFileSync(p, 'utf-8');
+      const lines = raw.split('\n')
+        .filter(l => /\[\s\]/.test(l))
+        .slice(0, 12)
+        .map(l => '  ' + l.replace(/^\s*[-*]\s*/, '').trim().slice(0, 46));
+      content = lines.length ? lines.join('\n') : '  ✅ Nenhuma pendência aberta encontrada';
+      break;
+    } catch { continue; }
+  }
+  const ts = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  return `<pre>┌────────────────────────────────┐
+│  📝  PENDÊNCIAS ABERTAS [ ]    │
+└────────────────────────────────┘
+
+${content}
+
+  ⏰ ${ts}</pre>`;
+}
+
+// ── Textos de menu ─────────────────────────────────────────────────────────
+function buildFerramentasText() {
+  return `<pre>┌────────────────────────────────┐
+│  🛠️  FERRAMENTAS               │
+└────────────────────────────────┘
+
+  ⚡ PM2 Status      — processos ativos
+  🩺 Diagnóstico     — CPU, RAM, OOM
+  📋 Issues          — GitHub abertos
+  📝 Pendências      — itens em aberto
+  📜 Logs de Erro    — últimas 20 linhas
+  🔗 Webhook Info    — registro Telegram
+
+  Selecione uma ferramenta abaixo.</pre>`;
+}
+
+function buildCognicaoText(currentKey) {
+  const lines = Object.entries(COG_MODES).map(([k, m]) => {
+    const active = currentKey === k ? ' ← ATIVO' : '';
+    return `  ${m.emoji} ${m.nome.padEnd(17)}${m.desc.slice(0, 28)}${active}`;
+  });
+  return `<pre>┌────────────────────────────────┐
+│  🧬  MODO COGNITIVO            │
+└────────────────────────────────┘
+
+${lines.join('\n')}
+
+  Selecione para aplicar na sessão.
+  Persiste até resetar ou trocar.</pre>`;
+}
+
+// ── Issues GitHub ──────────────────────────────────────────────────────────
 async function getOpenIssues() {
   if (!GH_TOKEN) return '<pre>⚠️  GITHUB_TOKEN não configurado</pre>';
   try {
@@ -273,7 +476,25 @@ ${lines}
   }
 }
 
-// ── LLM (Anthropic) ───────────────────────────────────────────────────────
+// ── Relatório Geral (3 blocos animados) ───────────────────────────────────
+async function getRelatorioGeral(chatId) {
+  const anim = await animateProgress(chatId, '📊 Coletando dados VPS');
+  await anim.step('⚙️  Verificando processos PM2...');
+  const pm2Block  = await getPM2Status();
+  await anim.step('💾  Checando memória e CPU...');
+  const diagBlock = await getDiagVPS();
+  await anim.step('📝  Lendo pendências...');
+  const pendBlock = await getPendencias();
+  await anim.done(
+    '<code>✅ Relatório completo — 3 blocos abaixo</code>',
+    [[{ text: '🔙 Painel', callback_data: 'hub:main' }]],
+  );
+  await send(chatId, pendBlock);
+  await send(chatId, diagBlock);
+  return send(chatId, pm2Block);
+}
+
+// ── LLM (Anthropic) ────────────────────────────────────────────────────────
 async function callLLM(history, systemPrompt) {
   if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado em secrets/anthropic.env.';
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
@@ -300,7 +521,7 @@ async function callLLM(history, systemPrompt) {
   }
 }
 
-// ── Skills helpers ────────────────────────────────────────────────────────
+// ── Skills helpers ─────────────────────────────────────────────────────────
 function formatSkillResult(r) {
   if (!r) return '⚠️ Sem resposta.';
   if (r.error) return `❌ ${esc(r.error)}`;
@@ -311,7 +532,7 @@ function formatSkillResult(r) {
   if (r.skill) p.push(`🎯 <code>${r.skill}</code>`);
   if (r.response?.ok && r.response?.result) {
     const res = r.response.result;
-    if (res.topic)    p.push(`\n📝 ${esc(res.topic)}`);
+    if (res.topic)     p.push(`\n📝 ${esc(res.topic)}`);
     if (res.framework) p.push(`📦 ${res.framework}`);
     if (res.prompts)   res.prompts.forEach(x => p.push(`${x.step}. ${esc(x.appliedTo || x.question)}`));
     if (res.note)      p.push(`\n💡 ${esc(res.note)}`);
@@ -336,7 +557,7 @@ async function runSkill(chatId, input, skillName) {
   }
 }
 
-// ── Comandos Admin ────────────────────────────────────────────────────────
+// ── Comandos Admin ─────────────────────────────────────────────────────────
 async function handleAdminCommand(chatId, text) {
   const cmd  = text.split(' ')[0].toLowerCase();
   const args = text.slice(cmd.length).trim();
@@ -354,6 +575,26 @@ async function handleAdminCommand(chatId, text) {
     case '/issues': {
       await typing(chatId);
       return send(chatId, await getOpenIssues(), [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
+    }
+    case '/ferramentas': case '/tools': {
+      return send(chatId, buildFerramentasText(), [
+        [{ text: '⚡ PM2', callback_data: 'hub:t:pm2' }, { text: '🩺 Diagnóstico', callback_data: 'hub:t:diag' }],
+        [{ text: '📋 Issues', callback_data: 'hub:t:issues' }, { text: '📝 Pendências', callback_data: 'hub:t:pendencias' }],
+        [{ text: '📜 Logs', callback_data: 'hub:t:logs' }, { text: '🔗 Webhook', callback_data: 'hub:t:webhook' }],
+        [{ text: '🔙 Painel', callback_data: 'hub:main' }],
+      ]);
+    }
+    case '/cognicao': case '/cog': {
+      return send(chatId, buildCognicaoText(sess.cogOverride), [
+        ...Object.keys(COG_MODES).map(k => [{
+          text: (sess.cogOverride === k ? '✅ ' : '') + COG_MODES[k].emoji + ' ' + COG_MODES[k].nome,
+          callback_data: 'hub:cog:' + k,
+        }]),
+        [{ text: '⬜ Modo Padrão', callback_data: 'hub:cog:reset' }, { text: '🔙 Painel', callback_data: 'hub:main' }],
+      ]);
+    }
+    case '/relatorio': {
+      return getRelatorioGeral(chatId);
     }
     case '/limpar': {
       sess.history = [];
@@ -385,7 +626,9 @@ async function handleAdminCommand(chatId, text) {
     }
     case '/help':
       return send(chatId,
-        '❓ <b>Hub ADM:</b> /hub /status /issues /limpar /agente\n' +
+        '❓ <b>Hub ADM:</b>\n' +
+        '/hub /status /issues /limpar /agente\n' +
+        '/ferramentas /cognicao /relatorio\n\n' +
         '<b>Skills:</b> /skills /mode /use /memory\n\n' +
         '💬 Texto livre → agente LLM ativo'
       );
@@ -393,7 +636,7 @@ async function handleAdminCommand(chatId, text) {
   }
 }
 
-// ── Comandos usuário comum (skills) ───────────────────────────────────────
+// ── Comandos usuário comum ─────────────────────────────────────────────────
 async function handleUserCommand(chatId, text) {
   if (!skillsOk) return send(chatId, '⚠️ Serviço indisponível.');
   const cmd  = text.split(' ')[0].toLowerCase();
@@ -431,7 +674,7 @@ async function handleUserCommand(chatId, text) {
   }
 }
 
-// ── Handler de callbacks ──────────────────────────────────────────────────
+// ── Handler de callbacks ───────────────────────────────────────────────────
 async function handleCallback(cq) {
   const chatId = cq.message?.chat?.id;
   const msgId  = cq.message?.message_id;
@@ -444,10 +687,13 @@ async function handleCallback(cq) {
   const isAdmin = ADMIN_ID && fromId === ADMIN_ID;
 
   if (isAdmin) {
+    // ── Painel principal
     if (data === 'hub:main') {
       const p = buildPanel(chatId);
       return edit(chatId, msgId, p.text, p.buttons);
     }
+
+    // ── Seleção de agente
     if (data.startsWith('hub:ag:')) {
       const key = data.slice(7);
       if (!AGENTS[key]) return;
@@ -457,16 +703,24 @@ async function handleCallback(cq) {
       const p  = buildPanel(chatId);
       const ag = AGENTS[key];
       await edit(chatId, msgId, p.text, p.buttons);
-      return send(chatId, `${ag.emoji} <b>${ag.nome}</b> selecionado. Histórico limpo — pode falar!`);
+      return send(chatId, `${ag.emoji} <b>${ag.nome}</b> selecionado. Histórico limpo!`);
     }
+
+    // ── Status (legado — mantido para retrocompat.)
     if (data === 'hub:status') {
-      await tg('answerCallbackQuery', { callback_query_id: qId, text: 'Verificando...' });
       return edit(chatId, msgId, await getVPSStatus(), [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
     }
-    if (data === 'hub:issues') {
-      await tg('answerCallbackQuery', { callback_query_id: qId, text: 'Buscando...' });
-      return edit(chatId, msgId, await getOpenIssues(), [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
+
+    // ── Issues (legado + via ferramentas)
+    if (data === 'hub:issues' || data === 'hub:t:issues') {
+      const res  = await getOpenIssues();
+      const back = data === 'hub:t:issues'
+        ? [[{ text: '🔙 Ferramentas', callback_data: 'hub:tools' }]]
+        : [[{ text: '🔙 Painel',      callback_data: 'hub:main' }]];
+      return edit(chatId, msgId, res, back);
     }
+
+    // ── Limpar histórico
     if (data === 'hub:clear') {
       const sess = getSession(chatId);
       sess.history = [];
@@ -474,9 +728,12 @@ async function handleCallback(cq) {
       await edit(chatId, msgId, p.text, p.buttons);
       return send(chatId, '🧹 Histórico limpo!');
     }
+
+    // ── Config
     if (data === 'hub:config') {
       const sess = getSession(chatId);
       const ag   = AGENTS[sess.agent];
+      const cog  = sess.cogOverride ? COG_MODES[sess.cogOverride] : null;
       return edit(chatId, msgId,
 `<pre>┌────────────────────────────────┐
 │  ⚙️   CONFIGURAÇÕES             │
@@ -489,12 +746,90 @@ async function handleCallback(cq) {
   Token      ✅ Configurado
   Modelo     ${LLM_MODEL}
   Agente     ${ag.emoji} ${ag.nome}
+  Cognição   ${cog ? cog.emoji + ' ' + cog.nome : '⬜ Padrão'}
   Histórico  ${sess.history.length} msgs
   Skills     ${skillsOk ? '✅ online' : '⚠️  offline'}
   Webhook    ${WEBHOOK_URL || '— (polling ativo)'}
 </pre>`,
         [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
     }
+
+    // ── Ferramentas: menu
+    if (data === 'hub:tools') {
+      return edit(chatId, msgId, buildFerramentasText(), [
+        [{ text: '⚡ PM2',      callback_data: 'hub:t:pm2' }, { text: '🩺 Diagnóstico', callback_data: 'hub:t:diag' }],
+        [{ text: '📋 Issues',   callback_data: 'hub:t:issues' }, { text: '📝 Pendências', callback_data: 'hub:t:pendencias' }],
+        [{ text: '📜 Logs',     callback_data: 'hub:t:logs' }, { text: '🔗 Webhook', callback_data: 'hub:t:webhook' }],
+        [{ text: '🔙 Painel',   callback_data: 'hub:main' }],
+      ]);
+    }
+
+    // ── Ferramentas: itens individuais com animação
+    if (data === 'hub:t:pm2') {
+      const anim = await animateProgress(chatId, '⚡ Coletando status PM2');
+      const res  = await getPM2Status();
+      return anim.done(res, [[{ text: '🔙 Ferramentas', callback_data: 'hub:tools' }]]);
+    }
+    if (data === 'hub:t:diag') {
+      const anim = await animateProgress(chatId, '🩺 Diagnóstico VPS');
+      await anim.step('💾 Lendo CPU e memória...');
+      const res  = await getDiagVPS();
+      return anim.done(res, [[{ text: '🔙 Ferramentas', callback_data: 'hub:tools' }]]);
+    }
+    if (data === 'hub:t:pendencias') {
+      const anim = await animateProgress(chatId, '📝 Lendo pendências');
+      const res  = await getPendencias();
+      return anim.done(res, [[{ text: '🔙 Ferramentas', callback_data: 'hub:tools' }]]);
+    }
+    if (data === 'hub:t:logs') {
+      const anim = await animateProgress(chatId, '📜 Lendo logs de erro');
+      const res  = await getLogsErro();
+      return anim.done(res, [[{ text: '🔙 Ferramentas', callback_data: 'hub:tools' }]]);
+    }
+    if (data === 'hub:t:webhook') {
+      const anim = await animateProgress(chatId, '🔗 Consultando Telegram');
+      const res  = await getWebhookInfo();
+      return anim.done(res, [[{ text: '🔙 Ferramentas', callback_data: 'hub:tools' }]]);
+    }
+
+    // ── Cognição: menu
+    if (data === 'hub:cog') {
+      const sess = getSession(chatId);
+      return edit(chatId, msgId, buildCognicaoText(sess.cogOverride), [
+        ...Object.keys(COG_MODES).map(k => [{
+          text: (sess.cogOverride === k ? '✅ ' : '') + COG_MODES[k].emoji + ' ' + COG_MODES[k].nome,
+          callback_data: 'hub:cog:' + k,
+        }]),
+        [{ text: '⬜ Modo Padrão', callback_data: 'hub:cog:reset' }, { text: '🔙 Painel', callback_data: 'hub:main' }],
+      ]);
+    }
+
+    // ── Cognição: seleção de modo
+    if (data.startsWith('hub:cog:')) {
+      const key  = data.slice(8);
+      const sess = getSession(chatId);
+      if (key === 'reset') {
+        sess.cogOverride = null;
+        const p = buildPanel(chatId);
+        await edit(chatId, msgId, p.text, p.buttons);
+        return send(chatId, '⬜ Modo cognitivo resetado para padrão do agente.');
+      }
+      if (!COG_MODES[key]) return;
+      sess.cogOverride = key;
+      const mode = COG_MODES[key];
+      const p = buildPanel(chatId);
+      await edit(chatId, msgId, p.text, p.buttons);
+      return send(chatId,
+        `${mode.emoji} <b>${mode.nome}</b> ativado.\n\n<i>${mode.desc}</i>\n\nPróximas respostas usarão este modo cognitivo.`,
+      );
+    }
+
+    // ── Relatório Geral
+    if (data === 'hub:relatorio') {
+      return getRelatorioGeral(chatId);
+    }
+
+    // ── Panel skills / mode callbacks
     if (data.startsWith('panel:') && panel) {
       const result = await panel.handlePanelCallback(data.slice(6), tg, chatId, msgId);
       if (result) return edit(chatId, msgId, result.text, result.buttons);
@@ -505,7 +840,7 @@ async function handleCallback(cq) {
     return;
   }
 
-  // Usuário comum
+  // ── Usuário comum
   if (!skillsOk) return;
   if (data.startsWith('panel:') && panel) {
     const result = await panel.handlePanelCallback(data.slice(6), tg, chatId, msgId);
@@ -516,7 +851,7 @@ async function handleCallback(cq) {
   if (data === 'm:manual') { consciousness.disable(); return edit(chatId, msgId, '🎯 MANUAL',  [[{ text: '🔙', callback_data: 'c:start' }]]); }
 }
 
-// ── Handler de mensagens ──────────────────────────────────────────────────
+// ── Handler de mensagens ───────────────────────────────────────────────────
 async function handleMessage(msg) {
   if (shouldIgnore(msg)) return;
 
@@ -533,7 +868,7 @@ async function handleMessage(msg) {
         'Para ativar o painel ADM, adicione em\n' +
         '<code>/root/CentralDark/secrets/telegram-alerts.env</code>:\n\n' +
         `<code>ADMIN_CHAT_ID=${chatId}</code>\n\n` +
-        'Depois: <code>pm2 restart CentralDark-HubBot</code>'
+        'Depois: <code>pm2 restart CentralDark-HubBot</code>',
       );
     }
     return;
@@ -547,17 +882,28 @@ async function handleMessage(msg) {
     }
     const sess = getSession(chatId);
     const ag   = AGENTS[sess.agent];
+
+    // Injeta modo cognitivo quando ativo
+    const cog          = sess.cogOverride ? COG_MODES[sess.cogOverride] : null;
+    const systemPrompt = cog
+      ? `${ag.prompt}\n\n---\n[MODO COGNITIVO ATIVO: ${cog.nome}]\n${cog.prompt}`
+      : ag.prompt;
+
     sess.history.push({ role: 'user', content: text });
     await typing(chatId);
-    const response = await callLLM(sess.history, ag.prompt);
+    const response = await callLLM(sess.history, systemPrompt);
     sess.history.push({ role: 'assistant', content: response });
+
     const chunks = [];
     for (let i = 0; i < response.length; i += 4000) chunks.push(response.slice(i, i + 4000));
     for (let i = 0; i < chunks.length; i++) {
       const isLast = i === chunks.length - 1;
+      const label  = cog
+        ? `${cog.emoji} ${cog.nome} · ${ag.emoji} ${ag.nome}`
+        : `${ag.emoji} ${ag.nome}`;
       await send(
         chatId,
-        esc(chunks[i]) + (isLast ? `\n\n<i>${ag.emoji} ${ag.nome}</i>` : ''),
+        esc(chunks[i]) + (isLast ? `\n\n<i>${label}</i>` : ''),
         isLast ? [[{ text: '🏠 Painel', callback_data: 'hub:main' }, { text: '🧹 Limpar', callback_data: 'hub:clear' }]] : null,
       );
     }
@@ -571,37 +917,31 @@ async function handleMessage(msg) {
   }
 }
 
-// ── Processador central de update (compartilhado por webhook e polling) ───
+// ── Processador central de update ──────────────────────────────────────────
 async function processUpdate(u) {
   if (u.callback_query) await handleCallback(u.callback_query);
   else if (u.message?.text) await handleMessage(u.message);
 }
 
-// ── MODO WEBHOOK ─────────────────────────────────────────────────────────
+// ── MODO WEBHOOK ───────────────────────────────────────────────────────────
 function startWebhookServer() {
   return new Promise((resolve, reject) => {
     const server = http.createServer((req, res) => {
-      // Health check
       if (req.method === 'GET' && req.url === '/bot/health') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ ok: true, mode: 'webhook', bot: '@srver1bot' }));
         return;
       }
-
-      // Endpoint do webhook
       if (req.method === 'POST' && req.url === '/bot/webhook') {
-        // Validar secret token enviado pelo Telegram
         const secret = req.headers['x-telegram-bot-api-secret-token'];
         if (secret !== WEBHOOK_SECRET) {
-          console.warn(`[Webhook] Token inválido recebido — possível requisição não-Telegram`);
+          console.warn('[Webhook] Token inválido — possível requisição não-Telegram');
           res.writeHead(403).end('Forbidden');
           return;
         }
-
         let body = '';
         req.on('data', chunk => { body += chunk; });
         req.on('end', async () => {
-          // Responde 200 imediatamente (Telegram exige resposta rápida)
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end('{"ok":true}');
           try {
@@ -613,16 +953,14 @@ function startWebhookServer() {
         });
         return;
       }
-
       res.writeHead(404).end('Not found');
     });
-
     server.on('error', reject);
     server.listen(WEBHOOK_PORT, '127.0.0.1', () => resolve(server));
   });
 }
 
-// ── MODO POLLING ─────────────────────────────────────────────────────────
+// ── MODO POLLING ───────────────────────────────────────────────────────────
 let _running = true;
 let _offset  = 0;
 
@@ -630,8 +968,7 @@ async function pollingLoop() {
   while (_running) {
     try {
       const updates = await tg('getUpdates', {
-        offset: _offset,
-        timeout: 30,
+        offset: _offset, timeout: 30,
         allowed_updates: ['message', 'callback_query'],
       });
       if (updates?.length) {
@@ -648,9 +985,8 @@ async function pollingLoop() {
   }
 }
 
-// ── MAIN — Webhook-first, Polling-fallback ─────────────────────────────────
+// ── MAIN ───────────────────────────────────────────────────────────────────
 async function main() {
-  // Limpa webhooks antigos antes de decidir o modo
   await tg('deleteWebhook', { drop_pending_updates: false });
 
   const me = await tg('getMe');
@@ -659,46 +995,36 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`🔮 @${me.username} online — CentralDark Hub Unificado`);
+  console.log(`🔮 @${me.username} online — CentralDark Hub Unificado v2 (Cockpit)`);
   if (ADMIN_ID) console.log(`[Bot] ✅ Admin reconhecido: ${ADMIN_ID}`);
   else          console.warn('[Bot] ⚠️  ADMIN_CHAT_ID não definido. Envie /start para descobrir seu chat_id.');
 
-  // ── Tentativa de Webhook ──
   if (WEBHOOK_URL) {
     console.log(`[Bot] 🔗 Tentando registrar webhook: ${WEBHOOK_URL}`);
     try {
       const ok = await tg('setWebhook', {
-        url:              WEBHOOK_URL,
-        secret_token:     WEBHOOK_SECRET,
-        allowed_updates:  ['message', 'callback_query'],
-        drop_pending_updates: false,
-        max_connections:  40,
+        url: WEBHOOK_URL, secret_token: WEBHOOK_SECRET,
+        allowed_updates: ['message', 'callback_query'],
+        drop_pending_updates: false, max_connections: 40,
       });
-
       if (ok) {
         const server = await startWebhookServer();
         _botMode = 'webhook';
         console.log(`[Bot] ✅ MODO WEBHOOK ativo — porta ${WEBHOOK_PORT} · URL: ${WEBHOOK_URL}`);
-
-        // Graceful shutdown
         const shutdown = () => { _running = false; server.close(); process.exit(0); };
         process.on('SIGTERM', shutdown);
         process.on('SIGINT',  shutdown);
-        return; // sem polling loop
+        return;
       }
-
       console.warn('[Bot] ⚠️  setWebhook retornou falha — ativando fallback polling');
     } catch (e) {
       console.warn(`[Bot] ⚠️  Webhook falhou (${e.message}) — ativando fallback polling`);
     }
-
-    // Garante que nenhum webhook fica registrado antes do polling
     await tg('deleteWebhook', { drop_pending_updates: false });
   } else {
     console.log('[Bot] ℹ️  TELEGRAM_WEBHOOK_URL não definida — modo polling direto');
   }
 
-  // ── Fallback / modo padrão: Polling ──
   _botMode = 'polling';
   console.log('[Bot] 🔄 MODO POLLING ativo');
   process.on('SIGTERM', () => { _running = false; });
