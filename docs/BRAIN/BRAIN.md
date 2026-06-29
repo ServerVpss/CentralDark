@@ -143,3 +143,4 @@ Author:        SegredoiDev
 
 *Este arquivo é atualizado automaticamente pelas IAs do CentralDark.*  
 *Skill responsável: [[Obsidian-Writer]] — `/root/CentralDark/apps/bot-telegram/skills/externas/obsidian-writer.cjs`*
+
