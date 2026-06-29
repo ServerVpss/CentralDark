@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T01:40:46.545Z",
-  "updatedAtBR": "28/06/2026, 22:40:46 BRT",
+  "updatedAt": "2026-06-29T01:42:44.864Z",
+  "updatedAtBR": "28/06/2026, 22:42:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Sessão 28/06 — TUDO VERDE: TelegramBot recuperado (@srver1bot online), contas-admin corrigido (load_dotenv), webhook notifica VPS ATUALIZADA, deploy automático ativo, secrets blindados no .gitignore",
     "branch": "main",
-    "lastCommit": "docs(brain): criar segundo cérebro para Obsidian",
+    "lastCommit": "feat(infra): proxy Anthropic ap7 + teste de modelos — pr-agent usa claude.ap7.site",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/00_RESUMO_EXECUTIVO.md",
@@ -495,6 +495,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T01:42:44.864Z",
+      "titulo": "Push na main · 95f4f6c421f856c7a065f40f46c91d2bb3540881",
+      "detalhe": "feat(infra): proxy Anthropic ap7 + teste de modelos — pr-agent usa claude.ap7.site",
+      "area": "Repositório",
+      "sha": "95f4f6c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-28T22:28:44.345Z",
       "titulo": "Push na main · 1290a0d07cd331d05b4e2b41baabf746f3cabc1c",
@@ -1254,6 +1262,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-06-29T01:42:44.864Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 95f4f6c421f856c7a065f40f46c91d2bb3540881 (95f4f6c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-06-28T22:28:44.345Z",
       "ia": "@segredounlock",
