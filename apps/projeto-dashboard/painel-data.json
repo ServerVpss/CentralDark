@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-06-29T08:14:10.972Z",
-  "updatedAtBR": "29/06/2026, 05:14:10 BRT",
+  "updatedAt": "2026-06-29T08:14:27.000Z",
+  "updatedAtBR": "29/06/2026, 05:09:09 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Cockpit Operacional v2 ativo — webhook + Vision + Ferramentas/Cognição/Relatório. Pendente: padronizacao nomes PM2.",
+    "currentTask": "PM2 padronizado (CentralDark-*): 6 renomeados, 3 órfãos removidos. painel-data.json sanitizado. Próximo: guardiao-consciencia CPU 17%.",
     "branch": "main",
-    "lastCommit": "chore(pm2): padronizar nomes de processos para CentralDark-*",
+    "lastCommit": "c3c919626",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
     "summary": "Guardião ganhou camada de decisão: cache persistente de propostas, decisor ativado com scoring calibrado (threshold 0.4→0.6), exclusão de gitignored/sensíveis. Spam no Telegram cai de ~925 para ~18 (1x por arquivo). Mega Painel estabilizado — heartbeat interno ativo. Modo propor travado. 22/22 testes.",
-    "overallProgress": 82,
+    "overallProgress": 84,
     "liveFallback": {
       "mcpStatus": "online",
       "mcpToolCount": 95,
@@ -170,9 +170,10 @@
     {
       "id": "PM2-NAMING-PADRAO",
       "titulo": "Padronizar nomes PM2 para CentralDark-*",
-      "status": "pendente",
+      "status": "concluido",
       "data": "2026-06-29",
-      "descricao": "Renomear: monitor_tarefas, Install-Callback, telepainel-deploy, guardiao-consciencia, guardiao-analista, MCP-CentralDark (invertido), CentralDark - Respiracao (espaco), contas-admin. Padrao: CentralDark-NomeDoServico"
+      "descricao": "Renomear: monitor_tarefas, Install-Callback, telepainel-deploy, guardiao-consciencia, guardiao-analista, MCP-CentralDark (invertido), CentralDark - Respiracao (espaco), contas-admin. Padrao: CentralDark-NomeDoServico",
+      "commit": "c3c919626"
     }
   ],
   "fases": [
@@ -1612,6 +1613,14 @@
       "title": "Auditoria de bloqueios do MCP no painel",
       "origin": "Tarefa do admin",
       "suggestion": "Bloqueios por flag desativada agora ficam em logs/mcp-blocked-YYYY-MM-DD.jsonl. Painel mostra total + últimos 10."
+    }
+  ],
+  "eventos": [
+    {
+      "time": "2026-06-29T08:14:27.000Z",
+      "titulo": "PM2 padronizado + painel sanitizado",
+      "detalhe": "PM2: 6 processos → CentralDark-*; 3 órfãos deletados. painel-data.json: IDs Telegram, project_ref Supabase, paths secrets removidos do JSON público.",
+      "area": "infra"
     }
   ]
 }
