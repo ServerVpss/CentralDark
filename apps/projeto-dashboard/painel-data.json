@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T11:58:53.298Z",
-  "updatedAtBR": "29/06/2026, 08:58:53 BRT",
+  "updatedAt": "2026-06-29T11:59:30.288Z",
+  "updatedAtBR": "29/06/2026, 08:59:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "feat(vigia+hooks): notificar recuperação de workflows + hooks Claude Code → Telegram",
+    "lastCommit": "docs(brain): atualizar pendências — implementados + aguardando PERMITO PIVETE",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T11:59:30.288Z",
+      "titulo": "Push na main · f576195c4bb1a9cf68ee31bc8734d9d263ed7e74",
+      "detalhe": "docs(brain): atualizar pendências — implementados + aguardando PERMITO PIVETE",
+      "area": "Repositório",
+      "sha": "f576195",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T11:58:53.298Z",
       "titulo": "Push na main · b1a1d115ad43dcebb719ea79f42deeb8382efc4a",
@@ -1334,6 +1342,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T11:59:30.288Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f576195c4bb1a9cf68ee31bc8734d9d263ed7e74 (f576195)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T11:58:53.298Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b1a1d115ad43dcebb719ea79f42deeb8382efc4a (b1a1d11)",
@@ -1673,13 +1688,6 @@
       "time": "2026-06-26T03:44:21.603Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 90c8a840d1ec698dce34646049dcd2978949a89c (90c8a84)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-26T03:23:45.763Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b7fb880da19fa93b3b045c38b6a806bfb550081b (b7fb880)",
       "area": "Repositório",
       "status": "sucesso"
     }
