@@ -11,6 +11,21 @@ const path = require('path');
 
 const BRAIN_DIR = path.resolve(__dirname, '../../../../docs/BRAIN');
 
+const TG_TOKEN   = process.env.SRVER1_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
+const ADMIN_ID   = process.env.ADMIN_CHAT_ID || '';
+const TG_API     = 'https://api.telegram.org';
+
+async function notifyAdmin(text) {
+  if (!TG_TOKEN || !ADMIN_ID) return;
+  try {
+    await fetch(`${TG_API}/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: ADMIN_ID, text, parse_mode: 'HTML', disable_web_page_preview: true }),
+    });
+  } catch (_) { /* silencioso — notificação é melhor-esforço */ }
+}
+
 // Dicionário de termos que viram [[links]] automaticamente
 const LINK_TERMS = [
   'CentralDark', 'Telegram', 'WhatsApp', 'GitHub', 'Obsidian', 'Notion',
@@ -101,11 +116,20 @@ module.exports = {
       const filename = title.replace(/[^\w\s\-]/g, '').replace(/\s+/g, '-') + '.md';
       const filepath = path.join(dir, filename);
       fs.writeFileSync(filepath, fullContent, 'utf-8');
+      const linksCount = (fullContent.match(/\[\[/g) || []).length;
+      const relPath = filepath.replace(/.*docs\/BRAIN\//, 'docs/BRAIN/');
+      const ts = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', hour12: false });
+      notifyAdmin(
+        `<b>🧠 NOTA GRAVADA NO CÉREBRO</b>\n\n` +
+        `<pre>📝 ${title}\n📁 ${folderName}\n🔗 ${linksCount} links injetados\n⏰ ${ts}</pre>\n\n` +
+        `✅ Aparece no Obsidian em ≤10 min\n` +
+        `<i>Caminho: ${relPath}</i>`
+      );
       return {
         ok: true,
         op: 'write',
-        file: filepath.replace(/.*docs\/BRAIN\//, 'docs/BRAIN/'),
-        links_injected: (fullContent.match(/\[\[/g) || []).length,
+        file: relPath,
+        links_injected: linksCount,
         message: `Nota criada: [[${title}]] em ${folderName}`,
       };
     }
