@@ -94,6 +94,57 @@ try {
   console.warn('[Bot] ⚠️  Skills system indisponível:', e.message);
 }
 
+// ── Arsenal de skills ──────────────────────────────────────────────────────
+const ARSENAL_TEXT =
+`🤖 <b>ARSENAL DE SKILLS — CentralDark</b>
+
+<pre>
+╔═══════════════════════════════════════════╗
+║  MEMÓRIA & REGISTRO                       ║
+╠═══════════════════════════════════════════╣
+║ 🧠 "Grava aí" / "Anota"                  ║
+║    → salva ideia no lugar certo           ║
+║                                           ║
+║ 📌 "Registra a decisão"                   ║
+║    → grava escolha + motivo + data        ║
+╠═══════════════════════════════════════════╣
+║  GRAFO & ORGANIZAÇÃO                      ║
+╠═══════════════════════════════════════════╣
+║ 🔍 "Investiga o grafo" / "Detetive"       ║
+║    → acha notas cinzas e isoladas         ║
+║                                           ║
+║ 🔗 "Conecta as notas" / "Liga tudo"       ║
+║    → cria links inteligentes entre notas  ║
+║                                           ║
+║ 🕵️ "Varredura geral" / "Audita tudo"      ║
+║    → auditoria profunda do vault inteiro  ║
+╠═══════════════════════════════════════════╣
+║  CÓDIGO & ARQUITETURA                     ║
+╠═══════════════════════════════════════════╣
+║ 🐛 "Investiga o código" / "Acha o bug"    ║
+║    → encontra o problema e propõe fix     ║
+║                                           ║
+║ 🏗️ "Revisa a arquitetura" / "Tá certo?"   ║
+║    → analisa estrutura e aponta riscos    ║
+╠═══════════════════════════════════════════╣
+║  REVISÃO & GESTÃO                         ║
+╠═══════════════════════════════════════════╣
+║ 📋 "Revisão do dia" / "Status do dia"     ║
+║    → o que foi feito + pendências + foco  ║
+║                                           ║
+║ 🐙 "Analisa as issues" / "Tem aberto?"    ║
+║    → triagem das issues do GitHub         ║
+╠═══════════════════════════════════════════╣
+║  CRIAÇÃO                                  ║
+╠═══════════════════════════════════════════╣
+║ ✨ "Melhora esse prompt" / "Forja"         ║
+║    → transforma texto solto em prompt     ║
+╚═══════════════════════════════════════════╝
+</pre>
+
+📖 <b>Documentação completa:</b>
+<code>docs/BRAIN/05 - Documentacao/AGENTS-LIBRARY/</code>`;
+
 // ── Sessões ────────────────────────────────────────────────────────────────
 const sessions      = new Map();
 const inactivityMap = new Map();
@@ -791,12 +842,14 @@ async function handleAdminCommand(chatId, text) {
       if (!r.length) return send(chatId, '🧠 Vazia.');
       return send(chatId, `🧠 <b>Últimas:</b>\n\n${r.map(x => `• <code>${x.skill || x.skillUsed || '-'}</code> → ${x.result}`).join('\n')}`);
     }
+    case '/arsenal':
+      return send(chatId, ARSENAL_TEXT);
     case '/help':
       return send(chatId,
         '❓ <b>Hub ADM:</b>\n' +
         '/hub /status /issues /limpar /agente\n' +
         '/ferramentas /cognicao /relatorio\n\n' +
-        '<b>Skills:</b> /skills /mode /use /memory\n\n' +
+        '<b>Skills:</b> /skills /arsenal /mode /use /memory\n\n' +
         '💬 Texto livre → agente LLM ativo'
       );
     default: return null;
@@ -835,8 +888,10 @@ async function handleUserCommand(chatId, text) {
       if (!r.length) return send(chatId, '🧠 Vazia.');
       return send(chatId, `🧠 <b>Últimas:</b>\n\n${r.map(x => `• <code>${x.skill || x.skillUsed || '-'}</code> → ${x.result}`).join('\n')}`);
     }
+    case '/arsenal':
+      return send(chatId, ARSENAL_TEXT);
     case '/help':
-      return send(chatId, '❓ /start /status /skills /mode /use /memory /help\n\n💡 Ou digite qualquer coisa!');
+      return send(chatId, '❓ /start /status /skills /arsenal /mode /use /memory /help\n\n💡 Ou digite qualquer coisa!');
     default: return null;
   }
 }
