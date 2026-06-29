@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-29T19:18:21.324Z
-- **Commit:** `5acd9542077fa90b575fd0a4546fba0f26ef1320`
+- **Gerado:** 2026-06-29T22:58:38.712Z
+- **Commit:** `977139cdb97ac51db77e823ead5bcd681102c2ef`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -12,8 +12,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
-| decisoes | 15 | 15 | 15 | 0 | 0 |
-| aprendizados | 271 | 0 | 0 | 271 | 0 |
+| decisoes | 16 | 16 | 16 | 0 | 0 |
+| aprendizados | 277 | 0 | 0 | 277 | 0 |
 
 ## Detalhes
 
@@ -36,14 +36,14 @@
 
 ### decisoes
 
-- 🟩 OK: **15**
+- 🟩 OK: **16**
 - 🟥 Faltando no Notion: **0**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **271**
+- 🟥 Faltando no Notion: **277**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -319,4 +319,10 @@
 - 261. Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado)
 - 262. Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition)
 - [ATUALIZAÇÃO #243 — 29/06/2026]. Builder Bolt: caminho e container oficiais corrigidos
+- [APRENDIZADO — 29/06/2026]. Elite Anthropic Proxy: operacional na porta 8082
+- PM2 — Gerenciador de Processos
+- Docker — Containers dos Pilares (Builder Bolt + WebUI)
+- Git — Fluxo de Trabalho Seguro na VPS
+- uvicorn / FastAPI — Elite Anthropic Proxy
+- Diagnóstico Rápido da VPS
 </details>

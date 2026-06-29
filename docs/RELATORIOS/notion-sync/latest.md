@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-29T19:18:18.857Z
+# 🧠 Notion Sync — 2026-06-29T22:58:36.404Z
 
-- **Commit fonte:** `5acd9542077fa90b575fd0a4546fba0f26ef1320`
+- **Commit fonte:** `977139cdb97ac51db77e823ead5bcd681102c2ef`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 283 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 284 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 15 | 1 | 14 | 0 | 0 |
+| decisoes | 16 | 1 | 15 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
@@ -39,7 +39,8 @@
 | decisoes | atualizado | GitHub Achievements |
 | decisoes | atualizado | Permissões do agente |
 | decisoes | atualizado | Gerenciador de pacotes — npm (raiz) |
-| decisoes | criado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
+| decisoes | criado | Elite Anthropic Proxy — Operacional (29/06/2026) |
+| decisoes | atualizado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
