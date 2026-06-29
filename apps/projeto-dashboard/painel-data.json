@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T18:53:56.981Z",
-  "updatedAtBR": "29/06/2026, 15:53:56 BRT",
+  "updatedAt": "2026-06-29T19:07:28.909Z",
+  "updatedAtBR": "29/06/2026, 16:07:28 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "chore(painel): snapshot 29/06 — Cérebro Vivo Fase 1, 10 skills, bot /arsenal, pendência A9",
+    "lastCommit": "fix(memoria): corrigindo caminho da Fabrica de Artefatos para /apps/modulos/Bolt/",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -583,6 +583,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T19:07:28.909Z",
+      "titulo": "Push na main · 5813311a4d98714ebba9d841171b19e08b08e85f",
+      "detalhe": "fix(memoria): corrigindo caminho da Fabrica de Artefatos para /apps/modulos/Bolt/",
+      "area": "Repositório",
+      "sha": "5813311",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-29T18:53:56.981Z",
       "titulo": "Push na main · e8adedfb7554747b5e8d6e8e3967538c1be0d7e4",
       "detalhe": "chore(painel): snapshot 29/06 — Cérebro Vivo Fase 1, 10 skills, bot /arsenal, pendência A9",
@@ -969,14 +977,6 @@
       "titulo": "Sessão 29/06 — Governança CentralDark",
       "detalhe": "CLAUDE.md Seção 9 Áreas Protegidas · agent-notify Padrão CentralDark monospace · issues-scanner · workspace multi-root",
       "area": "governance",
-      "sha": "f6375ab",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T04:14:44.872Z",
-      "titulo": "Push na main · f6375ab5a5fb296d22ceb0e91c89e90d54d40371",
-      "detalhe": "feat(governance): proteções áreas consolidadas, agent-notify padrão CentralDark e issues-scanner",
-      "area": "Repositório",
       "sha": "f6375ab",
       "actor": "segredounlock"
     }
@@ -1393,6 +1393,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T19:07:28.909Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5813311a4d98714ebba9d841171b19e08b08e85f (5813311)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T18:53:56.981Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e8adedfb7554747b5e8d6e8e3967538c1be0d7e4 (e8adedf)",
@@ -1732,13 +1739,6 @@
       "time": "2026-06-29T01:42:44.864Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 95f4f6c421f856c7a065f40f46c91d2bb3540881 (95f4f6c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-28T22:28:44.345Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1290a0d07cd331d05b4e2b41baabf746f3cabc1c (1290a0d)",
       "area": "Repositório",
       "status": "sucesso"
     }
