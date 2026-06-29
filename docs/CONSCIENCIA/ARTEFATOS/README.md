@@ -1,3 +1,10 @@
+---
+title: "Artefatos — CentralDark"
+date: 2026-06-29
+tags: ["artefatos", "consciencia", "mapas", "decisoes", "fragmentos"]
+updated: 2026-06-29
+---
+
 # Artefatos — CentralDark
 
 > **Propósito:** Repositório de fragmentos de conhecimento, mapas, decisões visuais e artefatos de construção do ecossistema CentralDark.

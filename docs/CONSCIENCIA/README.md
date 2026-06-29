@@ -1,3 +1,10 @@
+---
+title: "CONSCIENCIA — Memória Operacional das IAs"
+date: 2026-06-29
+tags: ["consciencia", "memoria", "ia", "operacional", "regras"]
+updated: 2026-06-29
+---
+
 # docs/CONSCIENCIA/
 
 Memória eterna do agente ChatGPT (Custom GPT "CentralDark Consciência").

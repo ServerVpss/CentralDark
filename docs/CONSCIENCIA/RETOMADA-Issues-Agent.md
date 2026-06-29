@@ -1,3 +1,10 @@
+---
+title: "RETOMADA — Issues Agent + Pendências"
+date: 2026-06-29
+tags: ["retomada", "issues", "pendencias", "agente"]
+updated: 2026-06-29
+---
+
 # RETOMADA — Issues Agent + Pendências 29/06/2026
 
 > Arquivo de retomada urgente — contexto em 99%. Atualizado automaticamente.
