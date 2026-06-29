@@ -117,8 +117,8 @@ jobs:
           URL:     ${{ github.event.pull_request.html_url || '' }}
         run: |
           if [ -z "$BOT" ]; then echo "⚠️ SRVER1_BOT_TOKEN não configurado"; exit 0; fi
-          [ -n "$NUMBER" ] && PR_LINE="PR #${NUMBER} · @${AUTHOR}" || PR_LINE="@${AUTHOR}"
-          TEXT="${EMOJI} <b>${LABEL}</b> — CentralDark\n<b>${TITLE}</b>\n${PR_LINE}\n<i>${DESC}</i>\n🔗 ${URL}"
+          [ -n "$NUMBER" ] && PR_LINE="PR <b>#${NUMBER}</b> · @${AUTHOR}" || PR_LINE="@${AUTHOR}"
+          TEXT="${EMOJI} <b>ATUALIZAÇÃO DO SISTEMA</b>\n\n<b>${LABEL}</b>\n📝 ${TITLE}\n👤 ${PR_LINE}\n\n💬 <i>${DESC}</i>\n\n🔗 <a href=\"${URL}\">Ver no GitHub</a>"
           curl -s -X POST "https://api.telegram.org/bot${BOT}/sendMessage" \
             -H "Content-Type: application/json" \
             -d "{\"chat_id\":\"${CHAT}\",\"parse_mode\":\"HTML\",\"text\":\"${TEXT}\",\"disable_web_page_preview\":true}" > /dev/null || true

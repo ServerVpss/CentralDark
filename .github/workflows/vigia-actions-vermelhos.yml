@@ -77,8 +77,8 @@ jobs:
             if ja_reportado "$KEY"; then
               echo "[vigia] já reportado — ignorando"; exit 0
             fi
-            MSG="<b>Workflow:</b> ${WF_NAME}\n<b>Branch:</b> ${WF_BRANCH}\n<b>Autor:</b> ${WF_ACTOR}\n<b>Commit:</b> ${WF_SHA:0:10}\n<b>Run:</b> ${WF_URL}"
-            notificar "erro" "🚨 Workflow falhou: ${WF_NAME}" "$MSG"
+            MSG="🚨 <b>ALERTA — TAREFA DO SISTEMA FALHOU</b>\n\nUma tarefa automática encontrou um erro e precisou parar.\n\n📋 <b>Tarefa:</b> ${WF_NAME}\n🌿 <b>Ramo:</b> ${WF_BRANCH}\n👤 <b>Quem disparou:</b> ${WF_ACTOR}\n🔢 <b>Commit:</b> <code>${WF_SHA:0:10}</code>\n\n🔗 <a href=\"${WF_URL}\">Ver detalhes no GitHub</a>\n\n💡 <i>Pode ser temporário. Se continuar falhando, me acione.</i>"
+            notificar "erro" "🚨 Alerta CentralDark — ${WF_NAME}" "$MSG"
             marcar "$KEY"
             exit 0
           fi
@@ -95,7 +95,7 @@ jobs:
             # Heartbeat só uma vez por dia (hora 7)
             HOUR=$(date +%H)
             if [ "$HOUR" = "07" ] && ! ja_reportado "heartbeat:$(date +%F)"; then
-              notificar "info" "🟢 Vigia operacional" "Varredura limpa — sem workflows em falha nas últimas execuções."
+              notificar "info" "✅ CentralDark — Tudo certo!" "✅ <b>SISTEMA SAUDÁVEL</b>\n\nVerificação periódica concluída. Nenhum problema encontrado.\n\n🟢 Todas as tarefas automáticas estão funcionando normalmente.\n⏰ Próxima verificação em 6 horas."
               marcar "heartbeat:$(date +%F)"
             fi
             exit 0
@@ -105,8 +105,8 @@ jobs:
           while IFS='|' read -r ID NAME URL BRANCH ACTOR SHA; do
             KEY="run:$ID"
             ja_reportado "$KEY" && continue
-            MSG="<b>Workflow:</b> ${NAME}\n<b>Branch:</b> ${BRANCH}\n<b>Autor:</b> ${ACTOR}\n<b>Commit:</b> ${SHA:0:10}\n<b>Run:</b> ${URL}"
-            notificar "erro" "🚨 Workflow falhou: ${NAME}" "$MSG"
+            MSG="🚨 <b>ALERTA — TAREFA DO SISTEMA FALHOU</b>\n\nUma tarefa automática encontrou um erro e precisou parar.\n\n📋 <b>Tarefa:</b> ${NAME}\n🌿 <b>Ramo:</b> ${BRANCH}\n👤 <b>Quem disparou:</b> ${ACTOR}\n🔢 <b>Commit:</b> <code>${SHA:0:10}</code>\n\n🔗 <a href=\"${URL}\">Ver detalhes no GitHub</a>\n\n💡 <i>Pode ser temporário. Se continuar falhando, me acione.</i>"
+            notificar "erro" "🚨 Alerta CentralDark — ${NAME}" "$MSG"
             marcar "$KEY"
             NOVOS=$((NOVOS+1))
           done <<< "$FAILS"
