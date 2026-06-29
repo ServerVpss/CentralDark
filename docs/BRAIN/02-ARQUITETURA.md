@@ -1,107 +1,110 @@
-# 🏗️ ARQUITETURA — CentralDark
+---
+title: "Arquitetura do Sistema CentralDark"
+date: 2026-06-29
+tags: ["arquitetura", "mcp", "hub", "federacao", "memoria"]
+---
 
-## Visão geral
+# Arquitetura do Sistema — CentralDark
 
-```txt
-Pivete
-  ↓
-IA conectada / MCP
-  ↓
+---
+
+## Visão Geral
+
+```
+Seu PC (Windows)
+  └── Obsidian vault ← puxa do GitHub (10min)
+
+VPS /root/CentralDark/
+  ├── Bot @srver1bot   ← cockpit principal (Telegram)
+  ├── MCP Server       ← 95 ferramentas, acesso universal
+  ├── Guardião         ← vigia arquivos e memória
+  └── docs/BRAIN/      ← fonte da verdade do vault
+
 GitHub ServerVpss/CentralDark
-  ↓
-GitHub Actions / Webhook / run-once seguro
-  ↓
-VPS CentralDark
-  ↓
-PM2 / apps / módulos / logs
-  ↓
-Mega Painel + Obsidian Git + relatórios
+  └── Fonte da verdade (git é autoritativo)
+
+Outras IAs (ChatGPT, Gemini, Lovable, Cursor...)
+  └── Conectam via MCP → acesso às ferramentas e memória
 ```
 
 ---
 
-## Camadas
+## Federação de Memória entre IAs
 
-| Camada | Papel | Observação |
-|---|---|---|
-| GitHub | Fonte da verdade | Código, docs, workflows, commits |
-| MCP CentralDark | Ponte operacional | IA externa lê/escreve com regras e bloqueios |
-| VPS | Execução e validação | Não é fonte permanente de código |
-| Mega Painel | Estado vivo | Deve refletir andamento real |
-| Obsidian | Consulta local | Puxa do GitHub via Obsidian Git |
-| `docs/CONSCIENCIA/` | Memória oficial | Regras, aprendizados e decisões |
+> Conceito aprovado pelo Pivete em 29/06/2026
+
+**O problema:** Pivete fala com várias IAs diferentes. Cada uma tem memória isolada. Uma ideia gerada no ChatGPT não chega automaticamente ao CentralDark.
+
+**A solução (design do novo MCP+Hub):**
+
+```
+Pivete tem ideia conversando com ChatGPT
+         ↓
+Mais tarde, abre CentralDark (bot, Claude, Lovable...)
+         ↓
+MCP pergunta: "Tem algo de outra sessão para registrar?"
+         ↓
+Pivete conta a ideia
+         ↓
+MCP verifica se já existe algo parecido
+  ├── SIM → "Já temos isso aqui. Quer atualizar?"
+  └── NÃO → Notifica Telegram: "Nova ideia: X. Registro?"
+         ↓
+Pivete aprova → grava em Obsidian + CONSCIENCIA
+```
+
+**Regras da Federação:**
+1. Nunca registrar sem perguntar — toda memória externa precisa de aprovação
+2. Sempre verificar duplicata antes de criar nota nova
+3. Marcar a fonte — "ideia de sessão ChatGPT", "insight do Lovable", etc.
+4. A IA avalia relevância antes de propor o registro
+
+**O que já funciona HOJE:**
+- Qualquer IA conecta ao MCP e lê a memória — funciona agora
+- Qualquer IA conecta ao MCP e escreve notas — funciona agora
+- Bot reconhece comandos de gravação naturais ("grava aí que...")
+- Detecção de mensagem copiada de outra IA
+
+**O que precisa ser construído (novo MCP+Hub):**
+- Ferramenta `importar_sessao(ideias, fonte_ia)`
+- Verificação automática de duplicata
+- Notificação Telegram pedindo aprovação do Pivete
+- Painel mostrando de onde cada memória veio
 
 ---
 
-## Design system
+## MCP é Universal — Conectar outras IAs
 
-O visual oficial é o sistema **Esmeralda**:
+| IA / Ferramenta | Como conectar |
+|----------------|--------------|
+| Claude.ai | Settings → MCP → URL do servidor |
+| Lovable | Connectors → MCP → URL do servidor |
+| Cursor | `.cursor/mcp.json` → URL |
+| Qualquer cliente MCP | URL + autenticação |
 
-| Item | Padrão |
-|---|---|
-| Cor | Emerald elegante |
-| Fontes | Geist + Geist Mono |
-| UI | 3D tátil, cards arredondados, sombras controladas |
-| Modo | Light como padrão, dark polido |
-| Proibição | Não criar paleta, fonte ou sombra nova sem combinar |
+Quando uma IA se conecta ao MCP, ela passa a:
+- LER suas memórias (docs/CONSCIENCIA/)
+- ESCREVER notas no Obsidian (docs/BRAIN/)
+- VER suas pendências e projetos
+- EXECUTAR ferramentas do sistema
 
----
-
-## Fluxo de deploy seguro
-
-```txt
-Alteração no repo oficial
-      ↓
-commit na main ou PR se crítico
-      ↓
-VPS puxa por webhook/cron/pull controlado
-      ↓
-build/test/validação
-      ↓
-restart apenas do serviço afetado, se autorizado
-      ↓
-logs sanitizados
-      ↓
-relatório + painel
-```
+Pendência: expor o MCP via HTTPS no Caddy para acesso externo.
 
 ---
 
-## Áreas sensíveis
+## Serviços ativos na VPS
 
-```txt
-apps/crm
-Docker
-WuzAPI
-WhatsApp real
-Caddy
-Banco real
-Domínio público / DNS
-Gateway
-Secrets / .env / sessões
-```
-
-Essas áreas exigem confirmação explícita antes de qualquer mudança operacional.
+| Serviço | Função |
+|---------|--------|
+| CentralDark-HubBot | Bot Telegram — cockpit principal |
+| CentralDark-MCP | Servidor MCP — 95 ferramentas |
+| CentralDark-GuardiaoConsciencia | Vigia arquivos e organização |
+| CentralDark-WebhookDeploy | Deploy automático via GitHub |
+| CentralDark-ContasAdmin | Painel OAuth admin |
+| CentralDark-Respiracao | Reporter de saúde da VPS |
+| Elite-Gateway | Gateway HTTP/WS |
+| Zentinel | Monitor externo de saúde |
 
 ---
 
-## Obsidian no desenho
-
-O Obsidian não é destino direto da IA. Ele funciona como espelho local do repo:
-
-```txt
-IA commita Markdown no GitHub
-      ↓
-Obsidian Git puxa
-      ↓
-Pivete consulta localmente
-```
-
-Configuração segura:
-
-```txt
-Auto pull: 10 min
-Auto push: 0 / desligado
-Author name: SegredoiDev
-Author email: segredounlock@users.noreply.github.com
-```
+*Atualizado em 2026-06-29 — skill Obsidian-Writer*
