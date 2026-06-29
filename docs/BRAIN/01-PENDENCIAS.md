@@ -66,3 +66,16 @@ Se já existir algo parecido → atualizar a entrada existente, não criar nova.
 ---
 
 *Arquivo atualizado pela IA do CentralDark. Sincroniza com Obsidian em ≤10 min.*
+
+---
+
+## 🆕 Melhorias de UX solicitadas em 29/06/2026
+
+| # | Melhoria | Descrição |
+|---|----------|-----------|
+| U1 | **Bot: editar mensagem no lugar** | Botões inline devem editar a mensagem existente (`editMessageText`), não criar mensagens novas. Menus ficam no mesmo lugar. |
+| U2 | **Paginação de listas longas** | Quando há muitas pendências/itens, usar botões ◀️ ▶️ para paginar sem criar novas mensagens |
+| U3 | **Lista completa ao perguntar pendências** | Sempre mostrar a lista completa (com paginação se necessário) ao perguntar "o que falta?" |
+| U4 | **Refinador de fala para prompt** | Quando Pivete falar de forma informal, a IA deve: (1) entender a intenção, (2) mostrar o prompt refinado que foi gerado, (3) executar, (4) registrar o par fala→prompt para aprender |
+| U5 | **Explicar o prompt gerado** | Quando Pivete quiser aprender, mostrar "aqui está o prompt que criei a partir do que você disse" |
+
