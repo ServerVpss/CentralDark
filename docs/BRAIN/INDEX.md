@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-06-29 14:34 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-06-29 14:57 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -8,6 +8,7 @@
 - [[01-PENDENCIAS]]
 - [[02-ARQUITETURA]]
 - [[06-DECISOES]]
+- [[09-IDEIAS-VISUAIS]]
 - [[BRAIN]]
 - [[PLANO]]
 - [[README]]
