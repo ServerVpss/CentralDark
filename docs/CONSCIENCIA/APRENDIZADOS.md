@@ -1962,6 +1962,117 @@ Esta regra deve ser respeitada por QUALQUER IA ou agente futuro. Tentativas de m
 
 ---
 
+### [APRENDIZADO — 29/06/2026]. Elite Anthropic Proxy: operacional na porta 8082
+
+- **Categoria:** infraestrutura
+- **Data:** 2026-06-29
+- **Contexto:** O pilar "ELITE GATEWAY" do Cérebro de Aço foi construído e está online.
+- **Stack:** Python 3 + FastAPI + uvicorn. PM2 id 37 (`CentralDark-EliteAnthropicProxy`). Script: `apps/modulos/elite-anthropic-proxy/start.sh`. Porta: **8082**. Upstream: `claude.ap7.site`.
+- **Rotação de keys:** `asyncio.Lock` + `itertools.cycle` sobre `keys.json` (nunca commitar o arquivo de keys). Adicionar key nova → editar `keys.json` → `pm2 restart 37`.
+- **Log:** `/var/log/centralldark/elite-anthropic.log` (rotating 5MB × 3).
+- **Health check:** `GET http://localhost:8082/health` retorna JSON com `status`, `keys_count`, `version`, `upstream`.
+- **Integração ativa:**
+  - Builder Bolt: variável `VITE_ANTHROPIC_API_BASE=http://localhost:8082` no container.
+  - Open WebUI: Admin → Settings → Connections → OpenAI API → Base URL → `http://host-gateway:8082`.
+- **Aprendizado:** Qualquer alteração estrutural neste serviço (nova feature, troca de upstream, porta) deve seguir a Regra de Ouro do Cérebro de Aço: refletir nos outros três pilares + commit `feat(cerebro-de-aco)` + registrar em `08-HISTORICO-DECISOES.md`.
+
+---
+
+## 📚 Biblioteca de Comandos — CentralDark
+
+> Esta seção é o manual operacional do Pivete. Cada comando listado aqui foi usado em produção.
+> Consulte antes de operar. A IA atualiza esta lista sempre que usar um comando novo importante.
+
+### PM2 — Gerenciador de Processos
+
+| Comando | O que faz | Quando usar |
+|---------|-----------|-------------|
+| `pm2 list` | Lista todos os serviços com status, id, CPU e memória | Para ver o estado geral da VPS |
+| `pm2 show <id ou nome>` | Detalhes de um serviço: script, cwd, porta, env | Para inspecionar configuração de um serviço específico |
+| `pm2 start <script> --name <nome>` | Sobe um novo serviço no PM2 | Para registrar serviço novo |
+| `pm2 restart <id ou nome>` | Reinicia o serviço (recarrega código) | Após mudança de arquivo JS/Python que o serviço usa |
+| `pm2 restart <id> --update-env` | Reinicia E recarrega variáveis de ambiente | Após alterar `.env` ou `ecosystem.config.js` |
+| `pm2 stop <id ou nome>` | Para o serviço sem remover do PM2 | Para manutenção sem perder configuração |
+| `pm2 delete <id ou nome>` | Remove o serviço do PM2 definitivamente | Para aposentar serviço que não será mais usado |
+| `pm2 save` | Salva o estado atual (lista + configs) no `dump.pm2` | **Obrigatório** após qualquer start/stop/delete |
+| `pm2 resurrect` | Restaura o último estado salvo pelo `pm2 save` | Após reboot da VPS para voltar todos os serviços |
+| `pm2 logs <id ou nome>` | Mostra logs em tempo real do serviço | Para debugar serviço com problema |
+| `pm2 logs <id> --lines 50` | Últimas 50 linhas de log | Para checar o que aconteceu recentemente |
+| `pm2 env <id>` | Exibe todas as variáveis de ambiente do processo | Para verificar se o `.env` foi carregado corretamente |
+| `pm2 reload <id>` | Reinicia com zero-downtime (para serviços HTTP em cluster) | Para atualizar serviço sem derrubar conexões ativas |
+
+**Exemplo prático — reiniciar o Elite Proxy:**
+```bash
+pm2 restart 37          # reinicia pelo id
+pm2 restart CentralDark-EliteAnthropicProxy  # pelo nome
+pm2 save                # sempre salvar depois
+```
+
+---
+
+### Docker — Containers dos Pilares (Builder Bolt + WebUI)
+
+| Comando | O que faz | Quando usar |
+|---------|-----------|-------------|
+| `docker ps` | Lista containers rodando com id, nome, porta e status | Para ver o que está em pé |
+| `docker ps -a` | Lista TODOS os containers, inclusive parados | Para ver containers parados ou com erro |
+| `docker compose up -d` | Sobe os containers em background (detached) | Para iniciar/atualizar stack via docker-compose.yml |
+| `docker compose down` | Para e remove os containers da stack | Para reiniciar tudo do zero |
+| `docker compose restart <serviço>` | Reinicia um container específico da stack | Para aplicar mudança sem derrubar os outros |
+| `docker logs <nome> --tail 50` | Últimas 50 linhas de log do container | Para debugar container com problema |
+| `docker exec -it <nome> bash` | Abre terminal dentro do container | Para inspecionar arquivos ou rodar comandos dentro |
+| `docker pull <imagem>` | Baixa versão mais recente da imagem | Antes de atualizar a versão do serviço |
+
+**Exemplo prático — atualizar o Builder Bolt:**
+```bash
+cd /root/CentralDark/apps/modulos/Bolt
+docker compose pull          # baixa imagem nova
+docker compose up -d         # sobe com a nova imagem
+```
+
+---
+
+### Git — Fluxo de Trabalho Seguro na VPS
+
+| Comando | O que faz | Quando usar |
+|---------|-----------|-------------|
+| `git -C /root status -sb -- CentralDark/` | Status apenas da pasta CentralDark (seguro) | **Sempre** antes de commitar — nunca `git status` na raiz `/root` |
+| `git -C /root add -- CentralDark/<caminho>` | Adiciona arquivo específico ao stage | Para commitar apenas o que mudou |
+| `git -C /root commit -m "tipo(escopo): mensagem"` | Cria commit com mensagem padronizada | Após testar a mudança |
+| `git -C /root push origin main` | Envia commits para o GitHub | **Obrigatório** antes de qualquer operação que sincronize VPS ↔ GitHub |
+| `git -C /root pull --rebase` | Puxa mudanças do GitHub e reaplica commits locais | Para sincronizar sem criar merge commit |
+| `git reflog` | Lista todos os commits, mesmo os órfãos | Para recuperar trabalho perdido após reset acidental |
+| `git cherry-pick <sha>` | Aplica um commit específico no branch atual | Para recuperar commit perdido encontrado via reflog |
+| `git log --oneline -10` | Últimos 10 commits em formato curto | Para ver histórico recente |
+| `git diff HEAD` | Mostra o que mudou mas ainda não foi commitado | Para revisar antes de commitar |
+
+> ⚠️ **Regra de ouro VPS:** O webhook (`CentralDark-WebhookDeploy`) faz `git reset --hard origin/main` a cada push. Commit local sem push = trabalho em risco. Fluxo seguro: **editar → commitar → push → salvo**.
+
+---
+
+### uvicorn / FastAPI — Elite Anthropic Proxy
+
+| Comando | O que faz | Quando usar |
+|---------|-----------|-------------|
+| `curl http://localhost:8082/health` | Testa se o proxy está vivo | Para verificar saúde do proxy a qualquer momento |
+| `curl -s http://localhost:8082/health \| python3 -m json.tool` | Mesma coisa com JSON formatado | Para ler a resposta com mais clareza |
+| `tail -f /var/log/centralldark/elite-anthropic.log` | Acompanha logs do proxy em tempo real | Para monitorar requests durante testes |
+| `cat /root/CentralDark/apps/modulos/elite-anthropic-proxy/keys.json` | Lê as keys cadastradas | Para verificar quantas keys estão ativas (nunca commitar este arquivo) |
+
+---
+
+### Diagnóstico Rápido da VPS
+
+```bash
+# Estado geral em 4 comandos
+pm2 list                          # serviços PM2
+docker ps                         # containers Docker
+curl -s http://localhost:8082/health  # Elite Proxy OK?
+curl -s http://localhost:9100/health  # MCP OK?
+```
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada

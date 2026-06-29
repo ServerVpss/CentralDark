@@ -46,10 +46,15 @@ updated: 2026-06-29
 
 ### 🌐 ELITE GATEWAY — Proxy Anthropic
 - **Função:** Gerenciamento de chaves, rotação inteligente e proxy puro para Anthropic
-- **URL:** `api.centralldark.com/v1` (porta 8080 HTTP atual + 8081 proxy Anthropic planejado)
-- **PM2:** `elite-http-gateway` (porta 8080, browser automation → ChatGPT)
-- **Local:** `/root/CentralDark/apps/modulos/elite-anthropic-proxy/` *(a criar)*
-- **Plano:** novo serviço HTTP puro — recebe requisição, rotaciona keys, repassa via `claude.ap7.site` → Anthropic API
+- **URL:** `api.centralldark.com/v1`
+- **PM2:** `CentralDark-EliteAnthropicProxy` (id 37, **porta 8082**, online) + `elite-http-gateway` (porta 8080)
+- **Local:** `/root/CentralDark/apps/modulos/elite-anthropic-proxy/`
+- **Upstream:** `claude.ap7.site` → Anthropic API
+- **Rotação de keys:** round-robin via `keys.json` (asyncio.Lock, cycle seguro)
+- **Log:** `/var/log/centralldark/elite-anthropic.log` (rotating, max 5MB × 3)
+- **Health check:** `GET /health` → JSON com `status`, `keys_count`, `version`, `upstream`
+- **Status:** ✅ **OPERACIONAL desde 29/06/2026**
+- **Integrado em:** Builder Bolt (`VITE_ANTHROPIC_API_BASE`) + Open WebUI (provider custom)
 
 ### 🚀 INTERFACE — TelePainel
 - **Função:** Painel de controle visual, centralizador e cockpit do sistema

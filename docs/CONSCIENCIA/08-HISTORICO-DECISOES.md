@@ -91,6 +91,28 @@ Decisões arquiteturais e operacionais já tomadas. Não reabrir sem motivo fort
 
 ---
 
+## Elite Anthropic Proxy — Operacional (29/06/2026)
+
+**Decisão:** O pilar "ELITE GATEWAY" do Cérebro de Aço saiu de "a criar" para **produção**.
+
+**Stack técnico:**
+- Python 3 + FastAPI + uvicorn, rodando na **porta 8082**
+- PM2 id 37: `CentralDark-EliteAnthropicProxy` (script: `apps/modulos/elite-anthropic-proxy/start.sh`)
+- Rotação de keys: `asyncio.Lock` + `itertools.cycle` → `keys.json` (nunca versionado)
+- Upstream: `claude.ap7.site` → Anthropic API (camouflage)
+- Log rotativo: `/var/log/centralldark/elite-anthropic.log` (5MB × 3)
+- Streaming nativo: detecta `"stream": true` no body e retorna `text/event-stream`
+
+**Integrações ativadas:**
+- **Builder Bolt** (`apps/modulos/Bolt/`): variável `VITE_ANTHROPIC_API_BASE` apontando para proxy
+- **Open WebUI** (`apps/modulos/WebUI/`): provider custom configurado via Admin → Connections
+
+**Regra derivada:** qualquer adição de key nova vai em `keys.json` (não commitar). Para rodar sem reiniciar o serviço, fazer reload com `pm2 restart 37`.
+
+**Próximo passo:** expor via Caddy em `api.centralldark.com/v1` (hoje está interno).
+
+---
+
 ## Cérebro de Aço — Unificação arquitetural (29/06/2026)
 
 **Decisão:** os quatro pilares do sistema operacional CentralDark foram formalizados sob a categoria **"CÉREBRO DE AÇO (Núcleo de Operação)"** no `docs/BRAIN/00-MAPA.md`.

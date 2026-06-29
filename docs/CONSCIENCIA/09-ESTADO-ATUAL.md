@@ -7,7 +7,7 @@ updated: 2026-06-29
 
 # 09 — Estado atual do CentralDark
 
-Atualizado em: 2026-06-09T17:03:28-03:00
+Atualizado em: 2026-06-29T00:00:00-03:00
 
 ## Resumo
 
@@ -24,10 +24,21 @@ O projeto CentralDark / MultiZap opera com múltiplas IAs e ferramentas, usando 
 | API pública | https://api.centralldark.com |
 | Status público | https://status.centralldark.com |
 | MCP público | https://mcp.centralldark.com |
-| HEAD auditado na VPS | b1e6fd1fa4c1 |
-| origin/main auditado | 5e7099eafe02 |
-| Working tree VPS | 63 entradas pendentes |
-| webhook-bot PM2 | ausente |
+
+## Cérebro de Aço — Status dos Pilares
+
+| Pilar | Serviço PM2 | Porta | Status |
+|---|---|---|---|
+| 🧠 NEXUS COGNITIVO | CentralDark-WebUI | 3000 | online |
+| 🛠️ FÁBRICA DE ARTEFATOS | CentralDark-Builder | 5174→5173 | online |
+| 🌐 ELITE GATEWAY | CentralDark-EliteAnthropicProxy (id 37) | **8082** | ✅ online |
+| 🌐 ELITE HTTP | elite-http-gateway (id 17) | 8080 | online |
+| 🚀 INTERFACE | TelePainel | — | ativo |
+
+**Integrações do Elite Gateway:**
+- Builder Bolt: `VITE_ANTHROPIC_API_BASE` → proxy porta 8082
+- Open WebUI: provider custom → proxy porta 8082
+- Rotação de keys: round-robin `keys.json`
 
 ## Sistema multi-IA
 
