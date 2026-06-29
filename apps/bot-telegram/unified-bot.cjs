@@ -201,8 +201,9 @@ function shouldIgnore(msg) {
   if (msg.sender_chat?.type === 'channel') return true;
   if (msg.forward_from_chat?.type === 'channel') return true;
   if (msg.is_automatic_forward) return true;
-  const t = msg.chat?.type;
-  if ((t === 'group' || t === 'supergroup') && !(msg.text || '').startsWith('/')) return true;
+  const t    = msg.chat?.type;
+  const text = msg.text || msg.caption || '';
+  if ((t === 'group' || t === 'supergroup') && !text.startsWith('/') && !msg.photo) return true;
   return false;
 }
 
@@ -492,6 +493,61 @@ async function getRelatorioGeral(chatId) {
   await send(chatId, pendBlock);
   await send(chatId, diagBlock);
   return send(chatId, pm2Block);
+}
+
+// ── Download de foto do Telegram ───────────────────────────────────────────
+async function downloadTelegramPhoto(msg) {
+  try {
+    const photos  = msg.photo;
+    if (!photos?.length) return null;
+    const largest  = photos[photos.length - 1];
+    const fileInfo = await tg('getFile', { file_id: largest.file_id });
+    if (!fileInfo?.file_path) return null;
+    const fileUrl  = `https://api.telegram.org/file/bot${TOKEN}/${fileInfo.file_path}`;
+    const res      = await fetch(fileUrl);
+    const buf      = await res.arrayBuffer();
+    const base64   = Buffer.from(buf).toString('base64');
+    const ext      = fileInfo.file_path.split('.').pop().toLowerCase();
+    const mediaType = ext === 'png' ? 'image/png'
+                    : ext === 'gif' ? 'image/gif'
+                    : ext === 'webp' ? 'image/webp'
+                    : 'image/jpeg';
+    return { base64, mediaType };
+  } catch (e) {
+    console.error('[Vision] download erro:', e.message);
+    return null;
+  }
+}
+
+// ── LLM com visão (Anthropic Vision) ──────────────────────────────────────
+async function callLLMWithVision(history, systemPrompt, imageData, caption) {
+  if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado.';
+  const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
+  const userContent = [
+    { type: 'image', source: { type: 'base64', media_type: imageData.mediaType, data: imageData.base64 } },
+    { type: 'text', text: caption || 'O que você vê nessa imagem? Descreva e analise em PT-BR.' },
+  ];
+  try {
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'x-api-key': LLM_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: LLM_MODEL,
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: [...history.slice(-18), { role: 'user', content: userContent }],
+      }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (d.error) return `❌ API Vision: ${d.error.message || JSON.stringify(d.error)}`;
+    return d.content?.[0]?.text || '❌ Resposta vazia';
+  } catch (e) {
+    return `❌ LLM Vision: ${e.message}`;
+  }
 }
 
 // ── LLM (Anthropic) ────────────────────────────────────────────────────────
@@ -857,8 +913,36 @@ async function handleMessage(msg) {
 
   const chatId  = msg.chat.id;
   const fromId  = msg.from?.id;
-  const text    = msg.text || '';
+  const text    = msg.text || msg.caption || '';
   const isAdmin = ADMIN_ID && fromId === ADMIN_ID;
+
+  // ── Foto recebida (vision) ──
+  if (msg.photo) {
+    if (!isAdmin) return; // non-admin: ignora foto silenciosamente
+    const sess   = getSession(chatId);
+    const ag     = AGENTS[sess.agent];
+    const cog    = sess.cogOverride ? COG_MODES[sess.cogOverride] : null;
+    const prompt = cog ? `${ag.prompt}\n\n---\n[MODO: ${cog.nome}]\n${cog.prompt}` : ag.prompt;
+    await typing(chatId);
+    const anim = await animateProgress(chatId, '📷 Analisando imagem via Vision');
+    const imgData = await downloadTelegramPhoto(msg);
+    if (!imgData) return anim.done('<code>❌ Não consegui baixar a imagem do Telegram.</code>', [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
+    const histEntry = { role: 'user', content: text ? `[IMAGEM + legenda: "${text}"]` : '[IMAGEM sem legenda]' };
+    const response  = await callLLMWithVision(sess.history, prompt, imgData, text);
+    sess.history.push(histEntry);
+    sess.history.push({ role: 'assistant', content: response });
+    const label = cog ? `📷 Vision · ${cog.emoji} ${cog.nome} · ${ag.emoji} ${ag.nome}` : `📷 Vision · ${ag.emoji} ${ag.nome}`;
+    return anim.done(
+      esc(response.slice(0, 4000)) + `\n\n<i>${label}</i>`,
+      [[{ text: '🏠 Painel', callback_data: 'hub:main' }, { text: '🧹 Limpar', callback_data: 'hub:clear' }]],
+    );
+  }
+
+  // ── Tipo não suportado (áudio, vídeo, documento, figurinha...) ──
+  if (!text) {
+    if (isAdmin) return send(chatId, '⚠️ Tipo de mensagem não suportado.\n\n✅ Suportados: texto e fotos (com ou sem legenda).\n📝 Descreva em texto o que precisa.');
+    return;
+  }
 
   if (!ADMIN_ID) {
     console.log(`[Bot] mensagem de chatId=${chatId} — configure ADMIN_CHAT_ID=${chatId}`);
@@ -920,7 +1004,7 @@ async function handleMessage(msg) {
 // ── Processador central de update ──────────────────────────────────────────
 async function processUpdate(u) {
   if (u.callback_query) await handleCallback(u.callback_query);
-  else if (u.message?.text) await handleMessage(u.message);
+  else if (u.message) await handleMessage(u.message);
 }
 
 // ── MODO WEBHOOK ───────────────────────────────────────────────────────────
