@@ -20,12 +20,12 @@ updated: 2026-06-29
 | 🔍 **"Investiga o grafo"** / **"Detetive"** | Acha notas cinzas, isoladas e sem conexão | [[GRAPH-INVESTIGATOR]] |
 | 🔗 **"Conecta as notas"** / **"Liga tudo"** | Cria links inteligentes entre notas relacionadas | [[SEMANTIC-LINKER]] |
 | 🕵️ **"Varredura geral"** / **"Audita tudo"** | Auditoria profunda do vault inteiro + relatório | [[SWARM-INVESTIGADOR-GRAFO]] |
-| 🐛 **"Investiga o código"** / **"Acha o bug"** | Analisa código, acha problemas e sugere correções | *(em breve)* |
-| 📌 **"Registra a decisão"** | Grava decisão importante com contexto e motivo | *(em breve)* |
-| ✨ **"Melhora esse prompt"** / **"Forja"** | Transforma texto solto em prompt de qualidade | *(em breve)* |
-| 📋 **"Revisão do dia"** | O que foi feito hoje, pendências, próximos passos | *(em breve)* |
-| 🐙 **"Analisa as issues"** | Verifica issues abertas no GitHub e sugere ação | *(em breve)* |
-| 🏗️ **"Revisa a arquitetura"** | Revisa decisões técnicas e aponta melhorias | *(em breve)* |
+| 🐛 **"Investiga o código"** / **"Acha o bug"** | Analisa código, acha problemas e sugere correções | [[CODE-INVESTIGATOR]] |
+| 📌 **"Registra a decisão"** / **"Grava essa escolha"** | Grava decisão importante com contexto e motivo | [[DECISION-RECORDER]] |
+| ✨ **"Melhora esse prompt"** / **"Forja"** | Transforma texto solto em prompt de qualidade | [[PROMPT-ENGINEER]] |
+| 📋 **"Revisão do dia"** / **"Status do dia"** | O que foi feito hoje, pendências, próximos passos | [[DAILY-REVIEWER]] |
+| 🐙 **"Analisa as issues"** / **"O que tem aberto?"** | Verifica issues abertas no GitHub e sugere ação | [[ISSUE-ANALYZER]] |
+| 🏗️ **"Revisa a arquitetura"** / **"Tá certo assim?"** | Revisa decisões técnicas e aponta melhorias | [[ARCHITECTURE-REVIEWER]] |
 
 ---
 
@@ -35,6 +35,13 @@ updated: 2026-06-29
 2. Preencha com o foco que você quer
 3. **Ou:** use o [[00-PROMPT-MASTER-SKILLS]] no Claude/Opus para gerar automático
 4. Adicione o apelido simples aqui na tabela acima
+
+---
+
+## Prompt Mestre
+
+Para orientar qualquer IA nova a operar o CentralDark corretamente:
+→ [[PROMPT-MASTER-CENTRALDARK]] — o prompt definitivo do sistema
 
 ---
 
