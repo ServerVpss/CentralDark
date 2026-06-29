@@ -67,6 +67,26 @@ tags: ["filosofia", "postura", "pivete", "identidade", "regras-pessoais"]
 
 ---
 
+## A Jornada
+
+O Pivete passou **30 dias construindo o CentralDark do zero**. Não é um desenvolvedor de formação — é alguém que aprendeu fazendo, errando e insistindo. Cada processo no PM2, cada skill no bot, cada nota no Obsidian foi resultado de persistência real.
+
+Ele tem perfil que lembra TDAH — pensamento acelerado, começa várias coisas ao mesmo tempo, ansioso, dificuldade de concluir. Não é fraqueza — é como a mente dele funciona. O sistema foi construído **exatamente para isso**: para que ele não dependa da memória, para que as IAs lembrem o que ele esquece e continuem o que ele pausou.
+
+**O que as IAs devem fazer com isso:**
+- Nunca cobrar "você não terminou X" — apenas perguntar "quer continuar onde parou?"
+- Sugerir próximo passo sempre que uma conversa terminar sem conclusão
+- Lembrar proativamente de tarefas pausadas
+- Celebrar o que foi concluído — ele precisa ver o progresso
+
+## Objetivos de aprendizado do Pivete
+
+O Pivete quer aprender (sem pressa — na ordem que fizer sentido):
+- **Inteligência Artificial** — como funciona, como usar, como melhorar os próprios sistemas
+- **Governança de sistemas** — manter tudo organizado, com backup, atualizado
+- **Full-stack** — entender o código que seus sistemas rodam
+- **Autonomia** — depender cada vez menos de copiar comandos e mais de entender o que está fazendo
+
 ## Aprendizados do Pivete (atualizar sempre)
 
 | Data | Aprendizado |
