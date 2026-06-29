@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T11:00:22.991Z",
-  "updatedAtBR": "29/06/2026, 08:00:22 BRT",
+  "updatedAt": "2026-06-29T11:04:54.260Z",
+  "updatedAtBR": "29/06/2026, 08:04:54 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "test(brain): verificar correção do workflow INDEX",
+    "lastCommit": "feat(notificacoes): formato amigavel com emojis para leigo — vigia + pipeline",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T11:04:54.260Z",
+      "titulo": "Push na main · 1a00e81818f6e80cd4043dbb48b0595ab0c28824",
+      "detalhe": "feat(notificacoes): formato amigavel com emojis para leigo — vigia + pipeline",
+      "area": "Repositório",
+      "sha": "1a00e81",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T11:00:22.991Z",
       "titulo": "Push na main · a7a71948dbcb81b4bf26f0fa34f002f38b389f0f",
@@ -1246,6 +1254,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T11:04:54.260Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1a00e81818f6e80cd4043dbb48b0595ab0c28824 (1a00e81)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T11:00:22.991Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · a7a71948dbcb81b4bf26f0fa34f002f38b389f0f (a7a7194)",
@@ -1586,13 +1601,6 @@
       "ia": "Claude Code",
       "action": "feat(ai-review): redesign — mesmo visual do status.centralldark.com",
       "area": "Frontend",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-22T14:41:00Z",
-      "ia": "Claude Code",
-      "action": "feat(ai-review): modo paralelo — múltiplos provedores ativos simultâneos",
-      "area": "PR Review",
       "status": "sucesso"
     }
   ],
