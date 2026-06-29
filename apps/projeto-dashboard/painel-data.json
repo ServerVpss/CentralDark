@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T13:34:51.252Z",
-  "updatedAtBR": "29/06/2026, 10:34:51 BRT",
+  "updatedAt": "2026-06-29T13:44:29.490Z",
+  "updatedAtBR": "29/06/2026, 10:44:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "docs(agents): apelidos simples em PT-BR para todas as skills",
+    "lastCommit": "feat(agents-library): arsenal completo de 10 skills + prompt master CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -535,6 +535,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T13:44:29.490Z",
+      "titulo": "Push na main · bb2be2a0e2e405b2ac7725069b880988f0afc6d3",
+      "detalhe": "feat(agents-library): arsenal completo de 10 skills + prompt master CentralDark",
+      "area": "Repositório",
+      "sha": "bb2be2a",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-29T13:34:51.252Z",
       "titulo": "Push na main · 658ad344ee8b937e19bb6a3958d2cbf63ad5051c",
       "detalhe": "docs(agents): apelidos simples em PT-BR para todas as skills",
@@ -922,14 +930,6 @@
       "detalhe": "docs(pendencias): nova #9 Refatorar fonte da verdade: universalizar + remover legados + regra ferramenta-ausente",
       "area": "Repositório",
       "sha": "b1105f2",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-28T10:50:31.028Z",
-      "titulo": "Push na main · 05e6c02404c88987c8c3e30ec74ab8156600636f",
-      "detalhe": "aprendizado(#258): Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente",
-      "area": "Repositório",
-      "sha": "05e6c02",
       "actor": "segredounlock"
     }
   ],
@@ -1345,6 +1345,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T13:44:29.490Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bb2be2a0e2e405b2ac7725069b880988f0afc6d3 (bb2be2a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T13:34:51.252Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 658ad344ee8b937e19bb6a3958d2cbf63ad5051c (658ad34)",
@@ -1684,13 +1691,6 @@
       "time": "2026-06-28T10:33:15.257Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 56883b6d47325bb7fb568f79246c7fbfbfec3915 (56883b6)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-28T10:29:30.070Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 67b3372da3e2c089d6776db3072050cbde5df7cc (67b3372)",
       "area": "Repositório",
       "status": "sucesso"
     }
