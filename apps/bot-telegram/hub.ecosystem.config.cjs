@@ -1,10 +1,10 @@
-// PM2 — Hub Central @srver1bot
+// PM2 — Bot Unificado @srver1bot  (substitui bot.cjs + hub-adm.cjs)
 // Iniciar: pm2 start apps/bot-telegram/hub.ecosystem.config.cjs
 // Salvar:  pm2 save
 module.exports = {
   apps: [{
     name:           'CentralDark-HubBot',
-    script:         './hub-adm.cjs',
+    script:         './unified-bot.cjs',
     cwd:            __dirname,
     instances:      1,
     autorestart:    true,
