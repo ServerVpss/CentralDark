@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T13:06:35.644Z",
-  "updatedAtBR": "29/06/2026, 10:06:35 BRT",
+  "updatedAt": "2026-06-29T13:22:19.978Z",
+  "updatedAtBR": "29/06/2026, 10:22:19 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "docs(cerebro): índice consistente + mapa + agente de varredura de memória",
+    "lastCommit": "docs(cerebro): aprendizados Obsidian + plugins recomendados",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -535,6 +535,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-29T13:22:19.978Z",
+      "titulo": "Push na main · 95b51f37a4696e54bc1c31dc9998cb62f0cd4e51",
+      "detalhe": "docs(cerebro): aprendizados Obsidian + plugins recomendados",
+      "area": "Repositório",
+      "sha": "95b51f3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-29T13:06:35.644Z",
       "titulo": "Push na main · b8acaef2629e2446c4e8734a40ef5f3cd459811c",
       "detalhe": "docs(cerebro): índice consistente + mapa + agente de varredura de memória",
@@ -923,12 +931,6 @@
       "area": "Repositório",
       "sha": "67b3372",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-28T10:10:04.581Z",
-      "titulo": "Supabase renomeado Multizap→CentralDark",
-      "detalhe": "org, projeto, GitHub integration ServerVpss/CentralDark, tabelas internas renomeadas. Pendência crítica: token GitHub do MCP morto (401) bloqueia gravação na fonte da verdade.",
-      "area": "infra"
     }
   ],
   "agents": [
@@ -1343,6 +1345,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T13:22:19.978Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 95b51f37a4696e54bc1c31dc9998cb62f0cd4e51 (95b51f3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T13:06:35.644Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b8acaef2629e2446c4e8734a40ef5f3cd459811c (b8acaef)",
@@ -1682,13 +1691,6 @@
       "time": "2026-06-26T08:11:10.513Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 791bc56caaf47d31b2332a294fe8c4c4dca523e9 (791bc56)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-26T08:02:12.781Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 8fc7409b7fb4fbb79091ef8b865c76d58ea6ba17 (8fc7409)",
       "area": "Repositório",
       "status": "sucesso"
     }
