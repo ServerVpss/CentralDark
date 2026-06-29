@@ -1,136 +1,163 @@
 /**
  * Skill: obsidian-writer
  *
- * Cria e conecta notas Zettelkasten no vault docs/BRAIN/.
- * Toda nota nova tem frontmatter YAML + [[links]] do Obsidian.
- * IA nunca sobrescreve — apenas cria ou anexa.
- *
- * Operações: write | link | index | list
+ * Cria e edita notas Zettelkasten em docs/BRAIN/ com [[links]] automáticos.
+ * Toda nota criada recebe frontmatter YAML e links injetados com base em
+ * um dicionário de termos do projeto CentralDark.
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const BRAIN_PATH = path.resolve(__dirname, '../../../../docs/BRAIN');
-const INDEX_FILE = path.join(BRAIN_PATH, 'INDEX.md');
+const BRAIN_DIR = path.resolve(__dirname, '../../../../docs/BRAIN');
 
-function slugify(title) {
-  return title
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-zA-Z0-9\s-]/g, '')
-    .trim().replace(/\s+/g, '-');
+// Dicionário de termos que viram [[links]] automaticamente
+const LINK_TERMS = [
+  'CentralDark', 'Telegram', 'WhatsApp', 'GitHub', 'Obsidian', 'Notion',
+  'Linear', 'Supabase', 'Caddy', 'MCP', 'Hub', 'VPS', 'PM2', 'Guardião',
+  'Guardiao', 'Claude', 'Anthropic', 'Bot', 'Bots', 'Skills', 'Skill',
+  'Gateway', 'Elite-Gateway', 'Webhook', 'Deploy', 'Painel', 'Dashboard',
+  'Consciencia', 'Consciência', 'BRAIN', 'Vault', 'Brainstorming',
+  'Memoria-Longa', 'Painel-Status', 'Obsidian-Writer',
+  'CentralDark-HubBot', 'CentralDark-MCP', 'CentralDark-GuardiaoConsciencia',
+  'CentralDark-WebhookDeploy', 'CentralDark-ContasAdmin', 'CentralDark-Respiracao',
+  'Zentinel', 'Lovable', 'Zettelkasten',
+];
+
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function folderPath(folder) {
-  const safe = folder.replace(/[/\\]/g, '');
-  return path.join(BRAIN_PATH, safe);
-}
-
-function noteExists(folder, title) {
-  const p = path.join(folderPath(folder), `${slugify(title)}.md`);
-  return fs.existsSync(p);
-}
-
-function buildFrontmatter(title, tags = []) {
-  const date = new Date().toISOString().split('T')[0];
-  const tagLine = tags.length ? `\ntags: [${tags.map(t => `"${t}"`).join(', ')}]` : '';
-  return `---\ntitle: "${title}"\ndate: ${date}${tagLine}\n---\n\n`;
-}
-
-function listAllNotes() {
-  const result = [];
-  if (!fs.existsSync(BRAIN_PATH)) return result;
-  for (const entry of fs.readdirSync(BRAIN_PATH, { withFileTypes: true })) {
-    if (entry.isDirectory()) {
-      const dir = path.join(BRAIN_PATH, entry.name);
-      for (const file of fs.readdirSync(dir)) {
-        if (file.endsWith('.md')) {
-          result.push({ folder: entry.name, file, slug: file.replace('.md', '') });
-        }
-      }
-    } else if (entry.name.endsWith('.md') && entry.name !== 'INDEX.md') {
-      result.push({ folder: '', file: entry.name, slug: entry.name.replace('.md', '') });
-    }
+// Injeta [[links]] na primeira ocorrência de cada termo não linkado
+function injectLinks(content) {
+  let result = content;
+  for (const term of LINK_TERMS) {
+    if (result.includes(`[[${term}]]`)) continue;
+    const bare = new RegExp(`(?<!\\[\\[)\\b${escapeRegex(term)}\\b(?!\\]\\])`, '');
+    result = result.replace(bare, `[[${term}]]`);
   }
   return result;
 }
 
+function buildFrontmatter(title, folderName, tags = []) {
+  const date = new Date().toISOString().split('T')[0];
+  const autoTags = [folderName.replace(/^\d+ - /, '').toLowerCase().replace(/ /g, '-'), ...tags];
+  return `---\ntitle: "${title}"\ndate: ${date}\ntags: [${autoTags.map(t => `"${t}"`).join(', ')}]\n---\n\n`;
+}
+
+function resolveFolder(folder) {
+  if (!folder) return BRAIN_DIR;
+  const entries = fs.readdirSync(BRAIN_DIR, { withFileTypes: true })
+    .filter(e => e.isDirectory());
+  const match = entries.find(e =>
+    e.name.startsWith(folder) || e.name.toLowerCase().includes(folder.toLowerCase())
+  );
+  if (match) return path.join(BRAIN_DIR, match.name);
+  const newDir = path.join(BRAIN_DIR, folder);
+  fs.mkdirSync(newDir, { recursive: true });
+  return newDir;
+}
+
+function generateIndex() {
+  const lines = ['# 🗺️ ÍNDICE — docs/BRAIN/', '', `*Gerado automaticamente em ${new Date().toISOString().split('T')[0]}*`, ''];
+  function walk(dir, depth = 0) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+      .sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      if (entry.name === 'INDEX.md' || entry.name.startsWith('.')) continue;
+      const indent = '  '.repeat(depth);
+      if (entry.isDirectory()) {
+        lines.push(`${indent}## 📁 ${entry.name}`);
+        walk(path.join(dir, entry.name), depth + 1);
+      } else if (entry.name.endsWith('.md')) {
+        const stem = entry.name.replace('.md', '');
+        lines.push(`${indent}- [[${stem}]]`);
+      }
+    }
+  }
+  walk(BRAIN_DIR);
+  const mapDir = path.join(BRAIN_DIR, '00 - Mapa do Sistema');
+  fs.mkdirSync(mapDir, { recursive: true });
+  const indexPath = path.join(mapDir, 'INDEX.md');
+  fs.writeFileSync(indexPath, lines.join('\n'), 'utf-8');
+  return { ok: true, op: 'index', file: 'docs/BRAIN/00 - Mapa do Sistema/INDEX.md', notes: lines.filter(l => l.includes('[[')).length };
+}
+
 module.exports = {
   name: 'obsidian-writer',
-  description: 'Cria notas Zettelkasten no vault docs/BRAIN/ com [[links]] do Obsidian',
+  description: 'Cria notas Zettelkasten em docs/BRAIN/ com [[links]] automáticos',
   category: 'memory',
 
   async execute(params = {}) {
-    const { op = 'write', folder = '07 - Reuniões & Notas', title, content, from, to, tags = [] } = params;
+    const { op = 'write', folder, title, content, from, to, query } = params;
 
-    // ── WRITE ─────────────────────────────────────────────────────────
     if (op === 'write') {
       if (!title || !content) return { error: 'Informe title e content' };
-
-      const dir = folderPath(folder);
-      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-
-      const filename = `${slugify(title)}.md`;
+      const dir = resolveFolder(folder || '07 - Reuniões & Notas');
+      const folderName = path.basename(dir);
+      const enriched = injectLinks(content);
+      const frontmatter = buildFrontmatter(title, folderName);
+      const fullContent = frontmatter + enriched;
+      const filename = title.replace(/[^\w\s\-]/g, '').replace(/\s+/g, '-') + '.md';
       const filepath = path.join(dir, filename);
-
-      if (fs.existsSync(filepath)) {
-        const ts = new Date().toISOString();
-        const append = `\n\n<!-- appended: ${ts} -->\n\n${content}`;
-        fs.appendFileSync(filepath, append);
-        return { ok: true, action: 'appended', path: `docs/BRAIN/${folder}/${filename}` };
-      }
-
-      const frontmatter = buildFrontmatter(title, tags);
-      fs.writeFileSync(filepath, frontmatter + content);
-      return { ok: true, action: 'created', path: `docs/BRAIN/${folder}/${filename}` };
+      fs.writeFileSync(filepath, fullContent, 'utf-8');
+      return {
+        ok: true,
+        op: 'write',
+        file: filepath.replace(/.*docs\/BRAIN\//, 'docs/BRAIN/'),
+        links_injected: (fullContent.match(/\[\[/g) || []).length,
+        message: `Nota criada: [[${title}]] em ${folderName}`,
+      };
     }
 
-    // ── LINK ──────────────────────────────────────────────────────────
     if (op === 'link') {
-      if (!from || !to) return { error: 'Informe from e to (slugs ou títulos)' };
-      const fromSlug = slugify(from);
-      const notes = listAllNotes();
-      const found = notes.find(n => n.slug === fromSlug || n.slug === from);
-      if (!found) return { error: `Nota '${from}' não encontrada` };
-
-      const filepath = path.join(BRAIN_PATH, found.folder, found.file);
-      const link = `\n\n**Ver também:** [[${slugify(to)}]]`;
-      fs.appendFileSync(filepath, link);
-      return { ok: true, action: 'linked', from: found.file, to: slugify(to) };
+      if (!from || !to) return { error: 'Informe from e to' };
+      const fromPath = path.join(BRAIN_DIR, from.endsWith('.md') ? from : from + '.md');
+      if (!fs.existsSync(fromPath)) return { error: `Arquivo não encontrado: ${from}` };
+      fs.appendFileSync(fromPath, `\n**Relacionado:** [[${to}]]\n`);
+      return { ok: true, op: 'link', added: `[[${to}]] adicionado em ${from}` };
     }
 
-    // ── INDEX ─────────────────────────────────────────────────────────
     if (op === 'index') {
-      const notes = listAllNotes();
-      const byFolder = {};
-      for (const n of notes) {
-        const key = n.folder || '(raiz)';
-        if (!byFolder[key]) byFolder[key] = [];
-        byFolder[key].push(n);
-      }
-
-      const ts = new Date().toISOString().replace('T', ' ').slice(0, 16);
-      let md = `# 📚 INDEX — Segundo Cérebro CentralDark\n\n> Gerado automaticamente em ${ts} UTC. Não editar.\n\n`;
-
-      for (const [folder, items] of Object.entries(byFolder).sort()) {
-        md += `## ${folder}\n\n`;
-        for (const item of items.sort((a, b) => a.file.localeCompare(b.file))) {
-          md += `- [[${item.slug}]]\n`;
-        }
-        md += '\n';
-      }
-
-      fs.writeFileSync(INDEX_FILE, md);
-      return { ok: true, action: 'index_generated', total: notes.length, path: 'docs/BRAIN/INDEX.md' };
+      return generateIndex();
     }
 
-    // ── LIST ──────────────────────────────────────────────────────────
     if (op === 'list') {
-      const notes = listAllNotes();
-      const lines = notes.map(n => `${n.folder ? n.folder + '/' : ''}${n.file}`);
-      return { ok: true, total: notes.length, notes: lines };
+      const items = [];
+      function walk(dir, prefix = '') {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+          if (entry.isDirectory()) {
+            items.push(`📁 ${prefix}${entry.name}/`);
+            walk(path.join(dir, entry.name), prefix + '  ');
+          } else if (entry.name.endsWith('.md')) {
+            items.push(`📄 ${prefix}${entry.name}`);
+          }
+        }
+      }
+      walk(BRAIN_DIR);
+      return { ok: true, op: 'list', items, total: items.filter(i => i.includes('📄')).length };
     }
 
-    return { error: `Operação desconhecida: ${op}. Use: write | link | index | list` };
+    if (op === 'search') {
+      if (!query) return { error: 'Informe query' };
+      const results = [];
+      function searchDir(dir) {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+          const full = path.join(dir, entry.name);
+          if (entry.isDirectory()) { searchDir(full); continue; }
+          if (!entry.name.endsWith('.md')) continue;
+          const text = fs.readFileSync(full, 'utf-8');
+          text.split('\n').forEach((line, i) => {
+            if (line.toLowerCase().includes(query.toLowerCase())) {
+              results.push({ file: full.replace(/.*docs\/BRAIN\//, 'docs/BRAIN/'), line: i + 1, text: line.trim().slice(0, 120) });
+            }
+          });
+        }
+      }
+      searchDir(BRAIN_DIR);
+      return { ok: true, op: 'search', query, results: results.slice(0, 20), total: results.length };
+    }
+
+    return { error: `Op inválida: ${op}. Use: write, link, index, list, search` };
   },
 };

@@ -87,6 +87,7 @@ try {
   panel         = require('./panel.cjs');
   manager.enable('find-skills');
   manager.enable('brainstorming');
+  consciousness.enable();
   skillsOk = true;
   console.log('[Bot] ✅ Skills system carregado.');
 } catch (e) {
@@ -94,7 +95,34 @@ try {
 }
 
 // ── Sessões ────────────────────────────────────────────────────────────────
-const sessions = new Map();
+const sessions      = new Map();
+const inactivityMap = new Map();
+const INACTIVITY_MS = 30 * 60 * 1000;
+
+function saveSessionSnapshot(chatId) {
+  if (!skillsOk || !memory) return;
+  const sess = sessions.get(chatId);
+  if (!sess || sess.history.length === 0) return;
+  memory.save({
+    type:      'session',
+    chatId,
+    agent:     sess.agent,
+    cogMode:   sess.cogOverride || null,
+    msgCount:  sess.history.length,
+    lastMsg:   (sess.history[sess.history.length - 1]?.content || '').slice(0, 120),
+    timestamp: Date.now(),
+  });
+}
+
+function resetInactivityTimer(chatId) {
+  if (inactivityMap.has(chatId)) clearTimeout(inactivityMap.get(chatId));
+  const t = setTimeout(() => {
+    saveSessionSnapshot(chatId);
+    inactivityMap.delete(chatId);
+  }, INACTIVITY_MS);
+  inactivityMap.set(chatId, t);
+}
+
 function getSession(chatId) {
   if (!sessions.has(chatId))
     sessions.set(chatId, { agent: 'guardiao', history: [], cogOverride: null });
@@ -653,6 +681,8 @@ async function handleAdminCommand(chatId, text) {
       return getRelatorioGeral(chatId);
     }
     case '/limpar': {
+      saveSessionSnapshot(chatId);
+      if (inactivityMap.has(chatId)) { clearTimeout(inactivityMap.get(chatId)); inactivityMap.delete(chatId); }
       sess.history = [];
       return send(chatId, '🧹 Histórico limpo.', [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
     }
@@ -779,6 +809,8 @@ async function handleCallback(cq) {
     // ── Limpar histórico
     if (data === 'hub:clear') {
       const sess = getSession(chatId);
+      saveSessionSnapshot(chatId);
+      if (inactivityMap.has(chatId)) { clearTimeout(inactivityMap.get(chatId)); inactivityMap.delete(chatId); }
       sess.history = [];
       const p = buildPanel(chatId);
       await edit(chatId, msgId, p.text, p.buttons);
@@ -975,8 +1007,23 @@ async function handleMessage(msg) {
 
     sess.history.push({ role: 'user', content: text });
     await typing(chatId);
-    const response = await callLLM(sess.history, systemPrompt);
+
+    let skillContext = '';
+    if (skillsOk) {
+      try {
+        const intent = await consciousness.think(text);
+        if (intent?.type === 'automatic' && intent.skill && intent.response?.ok) {
+          const r = intent.response.result || {};
+          const snippet = r.note || r.topic || r.message || '';
+          if (snippet) skillContext = `\n\n[Contexto de skill "${intent.skill}": ${String(snippet).slice(0, 300)}]`;
+        }
+      } catch (_) {}
+    }
+
+    const finalPrompt = skillContext ? systemPrompt + skillContext : systemPrompt;
+    const response = await callLLM(sess.history, finalPrompt);
     sess.history.push({ role: 'assistant', content: response });
+    resetInactivityTimer(chatId);
 
     const chunks = [];
     for (let i = 0; i < response.length; i += 4000) chunks.push(response.slice(i, i + 4000));
@@ -1082,6 +1129,30 @@ async function main() {
   console.log(`🔮 @${me.username} online — CentralDark Hub Unificado v2 (Cockpit)`);
   if (ADMIN_ID) console.log(`[Bot] ✅ Admin reconhecido: ${ADMIN_ID}`);
   else          console.warn('[Bot] ⚠️  ADMIN_CHAT_ID não definido. Envie /start para descobrir seu chat_id.');
+
+  if (skillsOk && memory) {
+    try {
+      const saved = memory.getAll().filter(r => r.type === 'session');
+      if (saved.length) {
+        const latest = {};
+        for (const r of saved) {
+          if (!latest[r.chatId] || r.timestamp > latest[r.chatId].timestamp) latest[r.chatId] = r;
+        }
+        let restored = 0;
+        for (const [cid, snap] of Object.entries(latest)) {
+          const numId = Number(cid);
+          if (!numId) continue;
+          const sess = getSession(numId);
+          if (snap.agent && AGENTS[snap.agent]) sess.agent = snap.agent;
+          if (snap.cogMode && COG_MODES[snap.cogMode]) sess.cogOverride = snap.cogMode;
+          restored++;
+        }
+        if (restored) console.log(`[Bot] 🧠 ${restored} sessão(ões) restaurada(s) da memória persistente.`);
+      }
+    } catch (e) {
+      console.warn('[Bot] ⚠️  Falha ao restaurar sessões:', e.message);
+    }
+  }
 
   if (WEBHOOK_URL) {
     console.log(`[Bot] 🔗 Tentando registrar webhook: ${WEBHOOK_URL}`);
