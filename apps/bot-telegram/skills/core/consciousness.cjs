@@ -71,6 +71,82 @@ async function think(input) {
     return { type: "automatic", skill: "obsidian-writer", response: { ...result, _folder: "Aprendizados & Memórias" } };
   }
 
+  // 📌 DECISION-RECORDER — "Registra a decisão" / "Grava essa escolha"
+  const ehDecisao = /\b(registra a decisão|grava (essa |a )?escolha|anota o que decidimos|decisão tomada|ficou decidido que|a partir de agora|regra nova|nova regra)\b/i.test(txt);
+  if (ehDecisao) {
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    const content = `## ${hoje}\n\n**Decisão:** ${txt}\n\n**Motivo:** (registrado via bot)\n\n---\n*Registrado via bot — ${hoje}*`;
+    const result = await executor.run("obsidian-writer", {
+      op: "append",
+      folder: "CONSCIENCIA",
+      title: "08-HISTORICO-DECISOES",
+      content,
+    });
+    memory.save({ input: txt.slice(0, 200), skill: "decision-recorder", result: result.ok ? "success" : "error", timestamp: Date.now() });
+    return { type: "automatic", skill: "decision-recorder", response: { ...result, _folder: "08-HISTORICO-DECISOES" } };
+  }
+
+  // 📋 DAILY-REVIEWER — "Revisão do dia" / "Status do dia"
+  const ehRevisaoDia = /\b(revisão do dia|revisao do dia|status do dia|o que foi feito hoje|o que aconteceu hoje|resumo do dia|como foi o dia|o que temos hoje|pendências de hoje|foco de amanhã)\b/i.test(txt);
+  if (ehRevisaoDia) {
+    chosenSkill = "painel-status";
+    const result = await executor.run(chosenSkill, { input: txt, topic: "revisão do dia", query: txt });
+    memory.save({ input: txt.slice(0, 200), skill: "daily-reviewer", result: result.ok ? "success" : "error", timestamp: Date.now() });
+    return { type: "automatic", skill: "daily-reviewer", response: result };
+  }
+
+  // 🐛 CODE-INVESTIGATOR — "Acha o bug" / "Investiga o código"
+  const ehBug = /\b(acha o bug|investiga o código|investiga o codigo|o que tá quebrando|o que ta quebrando|por que (isso )?não funciona|por que (isso )?nao funciona|o que deu errado|acha o problema|investiga o erro)\b/i.test(txt);
+  if (ehBug) {
+    chosenSkill = "systematic-debugging";
+  }
+
+  // ✨ PROMPT-ENGINEER — "Forja" / "Melhora esse prompt"
+  const ehPrompt = /\b(forja (isso|esse|o prompt)|melhora (esse |o )?prompt|transforma em prompt|faz (um )?prompt (forte|bom|melhor)|melhora esse texto pra ia)\b/i.test(txt);
+  if (ehPrompt) {
+    chosenSkill = "brainstorming";
+  }
+
+  // 🔍 GRAPH-INVESTIGATOR — "Detetive" / "Investiga o grafo"
+  const ehGrafo = /\b(detetive|investiga o grafo|notas cinzas|notas isoladas|sem (links?|conexões)|grafo solto|auditoria do (vault|grafo)|acha (notas?|arquivos?) (sem|isolad))\b/i.test(txt);
+  if (ehGrafo) {
+    return {
+      type: "clarify",
+      message: "🔍 <b>GRAPH-INVESTIGATOR ativado</b>\n\n" +
+               "Vou investigar o grafo do vault. O que você quer que eu faça?\n\n" +
+               "1️⃣ <b>Listar notas sem frontmatter</b> (aparecem cinzas no grafo)\n" +
+               "2️⃣ <b>Listar notas sem nenhum link</b> (isoladas)\n" +
+               "3️⃣ <b>Auditoria completa</b> (roda o SWARM de 10 agentes)\n\n" +
+               "Me diz o número ou descreve o que precisa."
+    };
+  }
+
+  // 🔗 SEMANTIC-LINKER — "Liga tudo" / "Conecta as notas"
+  const ehLinker = /\b(liga tudo|conecta as notas|conecta (essas )?notas?|cria links?|linkagem semântica|semantic link|meu grafo (tá|ta) solto|melhora as conexões)\b/i.test(txt);
+  if (ehLinker) {
+    return {
+      type: "clarify",
+      message: "🔗 <b>SEMANTIC-LINKER ativado</b>\n\n" +
+               "Vou criar conexões inteligentes entre notas. O que você quer?\n\n" +
+               "1️⃣ <b>Linkar automaticamente</b> notas sem conexão\n" +
+               "2️⃣ <b>Adicionar seção 'Conexões Rápidas'</b> nas notas sem ela\n" +
+               "3️⃣ <b>Ver quais notas deveriam ser linkadas</b> (relatório sem alterar)\n\n" +
+               "Me diz o número."
+    };
+  }
+
+  // 🐙 ISSUE-ANALYZER — "Analisa as issues" / "O que tem aberto?"
+  const ehIssues = /\b(analisa as issues?|o que tem aberto|issues? do github|issues? abertas?|triagem das issues?|o que (tá|ta|está) aberto no github)\b/i.test(txt);
+  if (ehIssues) {
+    chosenSkill = "painel-status";
+  }
+
+  // 🏗️ ARCHITECTURE-REVIEWER — "Revisa a arquitetura" / "Tá certo assim?"
+  const ehArquitetura = /\b(revisa a arquitetura|tá certo assim|ta certo assim|tem jeito melhor|olha essa estrutura|faz sentido (assim|colocar|fazer)|revisão técnica|revisao tecnica)\b/i.test(txt);
+  if (ehArquitetura) {
+    chosenSkill = "brainstorming";
+  }
+
   // 💰 Devedores, contatos e pendências financeiras pessoais
   const ehDevedor = /\b(deve|devo|devendo|devedora?|me deve|ainda (não )?pagou|falta pagar|não pagou|cobrar|cobrança|pendência financeira|contato d[ao]|salva o contato|número d[ao]|telefone d[ao]|whats(app)? d[ao])\b/i.test(txt);
   if (ehDevedor) {
@@ -100,29 +176,32 @@ async function think(input) {
     return { type: "automatic", skill: "obsidian-writer", response: result };
   }
 
-  // 📋 Status / saúde do sistema (painel-status)
-  if (/\b(status|saúde|painel|como está|tá tudo|serviços|processos|relatório|resumo do sistema)\b/i.test(txt)) {
-    chosenSkill = "painel-status";
+  // Roteamento geral — só roda se nenhum bloco acima já definiu chosenSkill
+  if (!chosenSkill) {
+    // 📋 Status / saúde do sistema (painel-status)
+    if (/\b(status|saúde|painel|como está|tá tudo|serviços|processos|relatório|resumo do sistema)\b/i.test(txt)) {
+      chosenSkill = "painel-status";
 
-  // 📚 Memória longa (memoria-longa)
-  } else if (/\b(consciência|consciencia|memória|memoria|lembra|o que você sabe|o que temos|aprendizado|decisão|decisao)\b/i.test(txt)) {
-    chosenSkill = "memoria-longa";
+    // 📚 Memória longa (memoria-longa)
+    } else if (/\b(consciência|consciencia|memória|memoria|lembra|o que você sabe|o que temos|aprendizado|decisão|decisao)\b/i.test(txt)) {
+      chosenSkill = "memoria-longa";
 
-  // 💡 Brainstorming / ideias
-  } else if (/\b(ideia|brainstorm|criativ|melhorar|sugest|pensar|desenvolv)\b/i.test(txt)) {
-    chosenSkill = "brainstorming";
+    // 💡 Brainstorming / ideias
+    } else if (/\b(ideia|brainstorm|criativ|melhorar|sugest|pensar|desenvolv)\b/i.test(txt)) {
+      chosenSkill = "brainstorming";
 
-  // 🔍 Buscar skills
-  } else if (/\b(skills?|ferramentas?|buscar|procurar|encontr|o que você (tem|sabe|pode))\b/i.test(txt)) {
-    chosenSkill = "find-skills";
+    // 🔍 Buscar skills
+    } else if (/\b(skills?|ferramentas?|buscar|procurar|encontr|o que você (tem|sabe|pode))\b/i.test(txt)) {
+      chosenSkill = "find-skills";
 
-  // 🐛 Debug / erros
-  } else if (/\b(erro|bug|debug|falh|quebr|problema|não (está|tá) funcionando)\b/i.test(txt)) {
-    chosenSkill = "systematic-debugging";
+    // 🐛 Debug / erros
+    } else if (/\b(erro|bug|debug|falh|quebr|problema|não (está|tá) funcionando)\b/i.test(txt)) {
+      chosenSkill = "systematic-debugging";
 
-  } else {
-    const active = manager.listActive().filter(s => s.type === "executable");
-    chosenSkill = active.length > 0 ? active[0].slug : null;
+    } else {
+      const active = manager.listActive().filter(s => s.type === "executable");
+      chosenSkill = active.length > 0 ? active[0].slug : null;
+    }
   }
 
   if (!chosenSkill) {
