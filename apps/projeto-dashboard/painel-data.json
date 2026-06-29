@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-29T11:12:51.665Z",
-  "updatedAtBR": "29/06/2026, 08:12:51 BRT",
+  "updatedAt": "2026-06-29T11:16:17.138Z",
+  "updatedAtBR": "29/06/2026, 08:16:17 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Segundo Cérebro conectado. Obsidian Git: configurar no Windows (vault → docs/BRAIN/, auto-pull 10min). Próximo: novo MCP/Hub.",
     "branch": "main",
-    "lastCommit": "chore(brain): registrar jornada e objetivos do Pivete na postura",
+    "lastCommit": "feat(guardiao): notificacao amigavel para leigo — sugestao de arquivo em linguagem simples",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-24T00:00:00Z — elite-mapper + gateway logging + docs",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -534,6 +534,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-06-29T11:16:17.138Z",
+      "titulo": "Push na main · 63b10da83905eb1e13f0b00598fd6599e03ad32d",
+      "detalhe": "feat(guardiao): notificacao amigavel para leigo — sugestao de arquivo em linguagem simples",
+      "area": "Repositório",
+      "sha": "63b10da",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-06-29T11:12:51.665Z",
       "titulo": "Push na main · 89ea86cee85ebda940e70039e4b698fde4dc0f06",
@@ -1270,6 +1278,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-29T11:16:17.138Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 63b10da83905eb1e13f0b00598fd6599e03ad32d (63b10da)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-29T11:12:51.665Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 89ea86cee85ebda940e70039e4b698fde4dc0f06 (89ea86c)",
@@ -1609,13 +1624,6 @@
       "time": "2026-06-25T22:57:17.611Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · e2b86a0971368ef4da30c361b206c5666348c4ba (e2b86a0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-25T22:15:32.941Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 05e6d5c32cf05c379e8366aece1ec47f0027903d (05e6d5c)",
       "area": "Repositório",
       "status": "sucesso"
     }
