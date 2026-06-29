@@ -26,7 +26,8 @@ jobs:
     if: >-
       github.event_name != 'workflow_run' ||
       (github.event.workflow_run.name != 'Vigia Actions Vermelhos' &&
-       github.event.workflow_run.conclusion == 'failure')
+       (github.event.workflow_run.conclusion == 'failure' ||
+        github.event.workflow_run.conclusion == 'success'))
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     env:
@@ -72,14 +73,34 @@ jobs:
           ja_reportado() { grep -qx "$1" "$STATE_FILE" 2>/dev/null; }
           marcar() { echo "$1" >> "$STATE_FILE"; tail -n 500 "$STATE_FILE" > "$STATE_FILE.tmp" && mv "$STATE_FILE.tmp" "$STATE_FILE"; }
 
+          FAIL_TRACK="$STATE_DIR/failing_workflows.txt"
+          touch "$FAIL_TRACK" 2>/dev/null
+
+          wf_esta_na_lista_de_falhas() { grep -qxF "$1" "$FAIL_TRACK" 2>/dev/null; }
+          marcar_falha() { echo "$1" >> "$FAIL_TRACK"; sort -u "$FAIL_TRACK" -o "$FAIL_TRACK"; }
+          remover_falha() { grep -vxF "$1" "$FAIL_TRACK" > "$FAIL_TRACK.tmp" && mv "$FAIL_TRACK.tmp" "$FAIL_TRACK" || true; }
+
           if [ "$EVENT" = "workflow_run" ]; then
             KEY="run:${WF_ID}"
+
+            if [ "$WF_CONCL" = "success" ]; then
+              # Notificar recuperação APENAS se o workflow estava marcado como falho
+              if wf_esta_na_lista_de_falhas "$WF_NAME"; then
+                MSG="🟢 <b>SISTEMA RECUPERADO</b>\n\nUma tarefa que estava com problema voltou a funcionar normalmente.\n\n📋 <b>Tarefa:</b> ${WF_NAME}\n🌿 <b>Ramo:</b> ${WF_BRANCH}\n\n🔗 <a href=\"${WF_URL}\">Ver execução no GitHub</a>\n\n✅ <i>Tudo certo por aqui.</i>"
+                notificar "info" "🟢 Recuperado — ${WF_NAME}" "$MSG"
+                remover_falha "$WF_NAME"
+              fi
+              exit 0
+            fi
+
+            # Conclusão: failure
             if ja_reportado "$KEY"; then
               echo "[vigia] já reportado — ignorando"; exit 0
             fi
             MSG="🚨 <b>ALERTA — TAREFA DO SISTEMA FALHOU</b>\n\nUma tarefa automática encontrou um erro e precisou parar.\n\n📋 <b>Tarefa:</b> ${WF_NAME}\n🌿 <b>Ramo:</b> ${WF_BRANCH}\n👤 <b>Quem disparou:</b> ${WF_ACTOR}\n🔢 <b>Commit:</b> <code>${WF_SHA:0:10}</code>\n\n🔗 <a href=\"${WF_URL}\">Ver detalhes no GitHub</a>\n\n💡 <i>Pode ser temporário. Se continuar falhando, me acione.</i>"
             notificar "erro" "🚨 Alerta CentralDark — ${WF_NAME}" "$MSG"
             marcar "$KEY"
+            marcar_falha "$WF_NAME"
             exit 0
           fi
 
