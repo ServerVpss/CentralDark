@@ -13,7 +13,7 @@ autorização **"PERMITO PIVETE"** (ver `CLAUDE.md` Seção 9).
 
 - **Onde roda:** na VPS, processo PM2 `CentralDark-MCP`, porta interna `9100`.
 - **Endereço público:** `https://mcp.centralldark.com` (precisa de login OAuth).
-- **Quantas ferramentas:** **100** (96 originais + 4 cognitivas novas).
+- **Quantas ferramentas:** **102** (96 originais + 4 cognitivas + 2 Gemini).
 - **Versão:** 0.4.0.
 
 Pra ligar/reiniciar/ver:
@@ -25,7 +25,7 @@ pm2 logs CentralDark-MCP         # vê os logs
 
 ---
 
-## 🗂️ As 100 ferramentas, por categoria
+## 🗂️ As 102 ferramentas, por categoria
 
 | Categoria | Qtd | Pra que serve |
 |-----------|----:|---------------|
@@ -41,7 +41,8 @@ pm2 logs CentralDark-MCP         # vê os logs
 | 🌐 Elite Gateway | 3 | Falar com os modelos via proxy próprio (claude.ap7.site) |
 | 📊 Painel/Admin | ~9 | Atualizar painel, admin e diagnóstico do próprio MCP |
 | 🧩 Outras | 2 | Code reviewer, ferramenta de teste do Pivete |
-| **🧠 Cognitivas (NOVAS)** | **4** | **Lembranças + governança cognitiva — ver abaixo** |
+| **🧠 Cognitivas** | **4** | **Lembranças + governança cognitiva — ver abaixo** |
+| **🤖 Gemini** | **2** | **leitura rápida via API do Google Gemini (cérebro auxiliar)** |
 
 ### 🧠 As 4 ferramentas cognitivas (governança + memória cruzada)
 
@@ -74,10 +75,11 @@ apps/modulos/mcp/
     ├── sessions.js        sessões e tokens
     ├── config.js          configuração via .env
     ├── audit-logger.js    log auditado de cada chamada
-    └── tools/             as 100 ferramentas, por domínio
+    └── tools/             as 102 ferramentas, por domínio
         ├── github/  vps/  consciencia/  pendencias/  aprendizado/
         ├── skills/  supabase/  deploy/  elite/  painel/  core/
-        └── cognitivo/     ← NOVO: as 4 tools cognitivas
+        ├── cognitivo/     ← as 4 tools cognitivas (Lembranças)
+        └── gemini/        ← as 2 tools do Gemini (cérebro auxiliar)
 ```
 
 > **Nota técnica importante:** hoje o código vive no `dist/` (JavaScript compilado), que é a
