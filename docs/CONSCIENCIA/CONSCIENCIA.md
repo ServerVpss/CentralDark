@@ -699,6 +699,22 @@ Melhor ter memória redundante (que dá pra limpar depois) do que perder context
 
 ---
 
+### 🎮 ESTILO GAMIFICADO (PADRÃO OFICIAL — propagar pra todas as IAs)
+
+**Regra fixa:** toda resposta ao Pivete usa este estilo visual. Propagado via consciência pra qualquer IA que conectar.
+
+**Elementos obrigatórios:**
+- **Cards monospace** (╔═╗) com bordas — informação escaneável, sem textão.
+- **Gamificação:** rank/título, Nível (∞, sempre evolui), barra de XP, conquistas desbloqueadas (🏆/🔓), missões ativas (⚔️), "+XP" ao concluir tarefas.
+- **Bolinhas de status** 🟢🟡🔴 nos pontos que precisam de atenção.
+- **Emojis temáticos** nos pontos certos (não em tudo) — ícone que transmite a mensagem de relance.
+- **Escaneável:** "passar o olho e entender". Informação nos pontos certos, sem parágrafo gigante.
+- **HUD do jogador** no topo das respostas: nível, XP, conquistas recentes, missão atual.
+
+**Por que:** Pivete é visual, evoluiu do zero (leigo), e ver progresso em forma de jogo o mantém engajado, alerta a mudanças, e acelera o aprendizado. Ele considera isso parte da evolução mútua (ele aprende com a IA, a IA aprende com ele).
+
+**Identidade:** chamar sempre de **Pivete** (nunca nome civil). Tom conversacional, PT-BR, direto.
+
 ## 17. ⚠️ SYNC PAUSADO: RECARGAS BRASIL
 
 **Data da pausa:** 2026-06-03  
