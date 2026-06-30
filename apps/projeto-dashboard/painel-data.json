@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-30T09:17:15.460Z",
-  "updatedAtBR": "30/06/2026, 06:17:15 BRT",
+  "updatedAt": "2026-06-30T09:38:19.464Z",
+  "updatedAtBR": "30/06/2026, 06:38:19 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "docs(pendencias): registra #13 — faxina de numeracao em docs/CONSCIENCIA",
+    "lastCommit": "feat(notify): Claude notifica no privado + canal do Telegram",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -583,6 +583,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-30T09:38:19.464Z",
+      "titulo": "Push na main · 64511f250958571128dff600200fe72ea66357be",
+      "detalhe": "feat(notify): Claude notifica no privado + canal do Telegram",
+      "area": "Repositório",
+      "sha": "64511f2",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-30T09:17:15.460Z",
       "titulo": "Push na main · bfd83be07f5716e201070499636a35918d63a13d",
       "detalhe": "docs(pendencias): registra #13 — faxina de numeracao em docs/CONSCIENCIA",
@@ -972,14 +980,6 @@
       "detalhe": "fix(bot): mdToHtml() converte Markdown do LLM para HTML Telegram + bloqueio não-admin com escracho + prompts HTML",
       "area": "Repositório",
       "sha": "0efd80e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T11:59:30.288Z",
-      "titulo": "Push na main · f576195c4bb1a9cf68ee31bc8734d9d263ed7e74",
-      "detalhe": "docs(brain): atualizar pendências — implementados + aguardando PERMITO PIVETE",
-      "area": "Repositório",
-      "sha": "f576195",
       "actor": "segredounlock"
     }
   ],
@@ -1395,6 +1395,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-30T09:38:19.464Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 64511f250958571128dff600200fe72ea66357be (64511f2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-30T09:17:15.460Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · bfd83be07f5716e201070499636a35918d63a13d (bfd83be)",
@@ -1734,13 +1741,6 @@
       "time": "2026-06-29T12:09:34.809Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 0efd80e987acd71ac9b562be66fcdffae2833ecd (0efd80e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T11:59:30.288Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f576195c4bb1a9cf68ee31bc8734d9d263ed7e74 (f576195)",
       "area": "Repositório",
       "status": "sucesso"
     }
