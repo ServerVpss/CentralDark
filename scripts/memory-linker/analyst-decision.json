@@ -1,0 +1,413 @@
+{
+  "timestamp": "2026-06-29T23:45:01.603Z",
+  "baseReport": "2026-06-29T23:30:01.509Z",
+  "criticos": [
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "MCP",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "OBSIDIAN-WRITER",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TUTORIAL-OBSIDIAN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "OBSIDIAN",
+      "origens": [
+        "00-POSTURA-PIVETE",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "GITHUB",
+      "origens": [
+        "00-POSTURA-PIVETE",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "SKILLS",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "PM2",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "HUB",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-HUBBOT",
+      "origens": [
+        "BRAIN",
+        "MOC-PM2"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "TELEGRAM",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-MCP",
+      "origens": [
+        "BRAIN",
+        "MOC-MCP"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-GUARDIAOCONSCIENCIA",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-WEBHOOKDEPLOY",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "VPS",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-CONTASADMIN",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-RESPIRACAO",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "ZENTINEL",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "ELITE-GATEWAY",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CLAUDE",
+      "origens": [
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "BRAINSTORMING",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "MEMORIA-LONGA",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "PAINEL-STATUS",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    }
+  ],
+  "altos": [
+    {
+      "tipo": "link-quebrado",
+      "link": "LINK",
+      "origens": [
+        "12-GUIA-PIVETE",
+        "SEMANTIC-LINKER"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "FERRAMENTAS-DO-MCP",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "METACOGNICAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ORQUESTRADOR",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "GUIA-DO-PIVETE",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ARQUITETURA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "FEDERACAO-DE-MEMORIA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "EXEMPLO-MOC-MCP",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "MCP-ANTIGO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "NOVO-MCP-HUB",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONSCIENCIA-V1",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONSCIENCIA-V2",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONVERSA-29-06-2026",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "IDEA-FEDERACAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ARQUITETURA-DO-SISTEMA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "GUARDIAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "FLUXO-DE-INFORMACAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "COMO-REGISTRAR-IDEIAS",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONSCIOUSNESS",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ISSUES-AGENT",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "COMO-ESCOLHER-FERRAMENTA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "WHATSAPP-INTEGRACAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "AUTO-APRIMORAMENTO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "NOTIFICACOES-AMIGAVEIS",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "IA",
+      "origens": [
+        "00-POSTURA-PIVETE"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CENTRALDARK",
+      "origens": [
+        "00-POSTURA-PIVETE"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "LINKS",
+      "origens": [
+        "GUIA-PROMPTS",
+        "TUTORIAL-OBSIDIAN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "`",
+      "origens": [
+        "TUTORIAL-OBSIDIAN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "08 - APRENDIZADOS & MEMÓRIAS",
+      "origens": [
+        "README"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "07 - REUNIÕES & NOTAS",
+      "origens": [
+        "README"
+      ]
+    },
+    {
+      "tipo": "orfas-excessivas",
+      "count": 49,
+      "lista": [
+        "ARQUITETURA-CENTRALDARK-2026",
+        "00-PORTA-DE-ENTRADA-IA",
+        "REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO",
+        "01-IDENTIDADE",
+        "01-REGRAS-DA-EQUIPE-IA"
+      ]
+    }
+  ],
+  "autoFix": [
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "00-LEIA-PRIMEIRO"
+    }
+  ],
+  "totalCritico": 21,
+  "totalAlto": 31,
+  "totalAutoFix": 1
+}

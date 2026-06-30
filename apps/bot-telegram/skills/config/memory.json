@@ -49,6 +49,117 @@
       "skill": "find-skills",
       "result": "success",
       "timestamp": 1782734533354
+    },
+    {
+      "input": "OIE",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782743212831
+    },
+    {
+      "input": "QUEM E SOU DONO ?",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782743223946
+    },
+    {
+      "input": "E aí",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782746818770
+    },
+    {
+      "input": "Eu sou administrador aqui você sabe disso",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782746828815
+    },
+    {
+      "input": "Você sabe a forma que você tem que me tratar?",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782746840869
+    },
+    {
+      "type": "session",
+      "chatId": 1901426549,
+      "agent": "orquestrador",
+      "cogMode": null,
+      "msgCount": 2,
+      "lastMsg": "Não tenho acesso à hora atual. Para saber o horário, consulte o relógio do seu dispositivo ou uma fonte confiável como u",
+      "timestamp": 1782749480070
+    },
+    {
+      "type": "session",
+      "chatId": 1901426549,
+      "agent": "orquestrador",
+      "cogMode": null,
+      "msgCount": 34,
+      "lastMsg": "Não tenho acesso ao sistema de arquivos do seu computador, servidor ou ambiente de desenvolvimento. Não consigo listar, ",
+      "timestamp": 1782754169049
+    },
+    {
+      "input": "Gera uma imagem pra mim me manda uma foto aí qualquer de gente correndo",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782754299555
+    },
+    {
+      "input": "Se você não conseguir troque de modelo",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782754312369
+    },
+    {
+      "input": "Me mostre os meus comandos atualmente",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782754341418
+    },
+    {
+      "type": "session",
+      "chatId": 1901426549,
+      "agent": "orquestrador",
+      "cogMode": null,
+      "msgCount": 42,
+      "lastMsg": "Não tenho acesso ao histórico de comandos do seu terminal, shell, editor de código ou sistema operacional. Não consigo v",
+      "timestamp": 1782756144345
+    },
+    {
+      "input": "quais modelos disponiveis no tatalago",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782765767002
+    },
+    {
+      "input": "list models",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782765781845
+    },
+    {
+      "input": "qual moedlos estamos falando agora",
+      "skill": "find-skills",
+      "result": "success",
+      "timestamp": 1782765820567
+    },
+    {
+      "type": "session",
+      "chatId": 1901426549,
+      "agent": "orquestrador",
+      "cogMode": null,
+      "msgCount": 4,
+      "lastMsg": "Os modelos disponíveis são:\n\n- Claude Sonnet 4.6 (modelo atual)\n- Claude Opus\n- Claude Haiku\n\nEstes são os modelos da fa",
+      "timestamp": 1782767658947
+    },
+    {
+      "type": "session",
+      "chatId": 1901426549,
+      "agent": "orquestrador",
+      "cogMode": null,
+      "msgCount": 6,
+      "lastMsg": "Não reconheço \"elite-anthropic-proxy\" como um modelo ou serviço oficial da Anthropic. O modelo que estou executando é Cl",
+      "timestamp": 1782772585240
     }
   ]
 }

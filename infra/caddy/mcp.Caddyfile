@@ -1,0 +1,78 @@
+# CentralDark — Caddy snippet para o MCP
+#
+# Destino na VPS: /root/CentralDark/infra/caddy/mcp.Caddyfile
+# Incluir no Caddyfile principal com:
+#   import /root/CentralDark/infra/caddy/mcp.Caddyfile
+#
+# Domínio:       mcp.centralldark.com
+# Backend local: 127.0.0.1:9100  (PM2: MCP-CentralDark)
+#
+# OAuth 2.1: o app expõe /.well-known/oauth-authorization-server,
+# /.well-known/oauth-protected-resource, /register, /authorize, /token,
+# /oauth/github/callback, /health, /mcp. Todas precisam chegar no backend.
+# Solução: proxy total pro 9100 e deixar o app decidir o que é 404.
+
+mcp.centralldark.com {
+	tls /var/lib/caddy/.local/share/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mcp.centralldark.com/mcp.centralldark.com.crt /var/lib/caddy/.local/share/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mcp.centralldark.com/mcp.centralldark.com.key
+	encode zstd gzip
+
+	# --- CORS pros painéis e builders do CentralDark ---
+	@cors_origin header Origin "https://status.centralldark.com"
+	@cors_origin_install header Origin "https://install.centralldark.com"
+	@cors_origin_ui header Origin "https://ui.centralldark.com"
+	@cors_origin_builder header Origin "https://builder.centralldark.com"
+
+	header @cors_origin {
+		Access-Control-Allow-Origin "https://status.centralldark.com"
+		Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		Access-Control-Allow-Headers "Content-Type, Authorization, mcp-protocol-version, mcp-session-id"
+		Access-Control-Expose-Headers "mcp-session-id"
+		Access-Control-Max-Age "86400"
+		Vary "Origin"
+	}
+	header @cors_origin_install {
+		Access-Control-Allow-Origin "https://install.centralldark.com"
+		Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		Access-Control-Allow-Headers "Content-Type, Authorization, mcp-protocol-version, mcp-session-id"
+		Access-Control-Expose-Headers "mcp-session-id"
+		Access-Control-Max-Age "86400"
+		Vary "Origin"
+	}
+	header @cors_origin_ui {
+		Access-Control-Allow-Origin "https://ui.centralldark.com"
+		Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		Access-Control-Allow-Headers "Content-Type, Authorization, mcp-protocol-version, mcp-session-id"
+		Access-Control-Expose-Headers "mcp-session-id"
+		Access-Control-Max-Age "86400"
+		Vary "Origin"
+	}
+	header @cors_origin_builder {
+		Access-Control-Allow-Origin "https://builder.centralldark.com"
+		Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		Access-Control-Allow-Headers "Content-Type, Authorization, mcp-protocol-version, mcp-session-id"
+		Access-Control-Expose-Headers "mcp-session-id"
+		Access-Control-Max-Age "86400"
+		Vary "Origin"
+	}
+
+	# Preflight OPTIONS responde 204 direto, sem chamar o backend.
+	@preflight method OPTIONS
+	respond @preflight 204
+
+	reverse_proxy 127.0.0.1:9100 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+
+	# Logs do Caddy para este vhost.
+	log {
+		output file /var/log/caddy/mcp-access.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+		format json
+	}
+}
+
