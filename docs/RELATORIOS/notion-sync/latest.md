@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T00:26:57.375Z
+# 🧠 Notion Sync — 2026-06-30T02:17:14.743Z
 
-- **Commit fonte:** `3cec5be6ca0cafdd04f59638b38f258490f55cd7`
+- **Commit fonte:** `5ac95596429a684a031f71be47cee185076fb23a`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 285 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 286 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 17 | 1 | 16 | 0 | 0 |
+| decisoes | 17 | 0 | 17 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
@@ -28,7 +28,7 @@
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
 | decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
 | decisoes | atualizado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
-| decisoes | criado | Decisões da sessão 29/06/2026 — tarde (CLI) |
+| decisoes | atualizado | Decisões da sessão 29/06/2026 — tarde (CLI) |
 | decisoes | atualizado | Migração CentralDark (em andamento) |
 | decisoes | atualizado | Fluxo de deploy |
 | decisoes | atualizado | Instalador + doc viva |
