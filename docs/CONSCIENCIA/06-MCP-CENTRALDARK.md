@@ -22,7 +22,7 @@ O MCP (Model Context Protocol) é o que te dá acesso ao GitHub e à VPS direto 
 
 ## Servidor
 
-- **PM2:** `CentralDark-MCP` (porta 9100) — 100 ferramentas
+- **PM2:** `CentralDark-MCP` (porta 9100) — 102 ferramentas
 - **Domínio:** `https://mcp.centralldark.com`
 - **Health:** `https://mcp.centralldark.com/health` (HTTP 200 = ok)
 - **Endpoint MCP:** `https://mcp.centralldark.com/mcp`

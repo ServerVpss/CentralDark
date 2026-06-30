@@ -51,3 +51,11 @@ caixas monospace. É leigo em código — quer nomes claros e organização limp
 - **Promovida:** nao
 
 Conteúdo: Pivete aprovou comunicação gamificada: cards monospace, HUD do jogador (nível/XP/conquistas), bolinhas 🟢🟡🔴, emojis temáticos, escaneável. Propagado na CONSCIENCIA.md seção 16 como regra permanente para todas as IAs do sistema. Chamar sempre de Pivete, nunca nome civil.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -70,7 +70,7 @@ docs/
 |-----------|--------|------------|--------|
 | **CONSCIENCIA** | Fonte oficial de regras e arquitetura | `docs/CONSCIENCIA/` | ✅ Ativo |
 | **BRAIN** | Vault pessoal do Pivete (Obsidian) | `docs/BRAIN/` | ✅ Ativo |
-| **MCP** | Hub de ferramentas (100 ferramentas) | Porta 9100 | ✅ Ativo |
+| **MCP** | Hub de ferramentas (102 ferramentas) | Porta 9100 | ✅ Ativo |
 | **Bot Telegram** | Cockpit principal de interação | `apps/bot-telegram/` | ✅ Ativo |
 | **Guardião** | Vigia arquivos e atualiza painel | `infra/guardiao/` | ✅ Ativo |
 | **Issues Agent** | Triagem automática de issues GitHub | `scripts/issues-agent/` | ✅ Ativo |
