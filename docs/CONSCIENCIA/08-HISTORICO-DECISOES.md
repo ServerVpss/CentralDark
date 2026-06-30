@@ -59,6 +59,18 @@ updated: 2026-06-29
 
 **Arquivos:** `apps/modulos/mcp/.env`, `apps/modulos/Bolt/source/.env`, `apps/modulos/WebUI/docker-compose.yml`, banco `webui.db` (via script Python pontual, não versionado). Containers `CentralDark-WebUI` e `CentralDark-Builder` recriados/reiniciados e confirmados healthy.
 
+### Notion sync ampliado manualmente — gap identificado no trigger automático
+
+**Decisão:** identificado que `.github/workflows/notion-sync.yml` só dispara pra uma lista fixa de arquivos (`REGRA-OFICIAL-*.md`, `08-HISTORICO-DECISOES.md`, `APRENDIZADOS.md`, `PENDENCIAS.md`) — documentos novos como `MAPA-DOS-BOTS.md` e `11-MULTI-IA-FLUXO.md` nunca disparavam o sync. Como fix imediato, criadas manualmente 10 entradas no banco Notion `📂 Estrutura de Pastas & Agentes` (data source `dc233802-1636-4717-a6ed-060b5c5d4505`) cobrindo o `MAPA-DOS-BOTS.md` e os 9 bots/automações documentados nele.
+
+**Por quê:** Pivete pediu confirmação dos 4 pontos de sincronia (Sincronia 4-Point) e notou que o Notion não estava no fluxo — "Dê providência agora". A automação completa (ampliar o trigger do workflow + o script `sync.mjs` pra aceitar docs genéricos) fica como próximo passo, porque `.github/workflows/` é área protegida (Seção 9 do CLAUDE.md) e precisa de decisão própria sobre estrutura antes de mexer no trigger.
+
+**Achado:** `sync.mjs` não é um espelho genérico — ele faz parsing estruturado de 4 arquivos específicos pra databases específicos do Notion. Documentos novos soltos não têm caminho automático até alguém estender o script.
+
+**Onde ver no Obsidian:** nome do arquivo é `MAPA-DOS-BOTS` (busca pelo Quick Switcher).
+
+**Arquivos:** Notion (10 páginas novas), nenhuma mudança em `.github/workflows/` ainda (pendente decisão).
+
 ### Backup de leitura docs/CONSCIENCIA/ → Google Drive agendado
 
 **Decisão:** `scripts/sync-memoria.sh` trocado de `rclone sync` para `rclone copy` (nunca apaga no Drive) e agendado no crontab a cada 6 horas. Autorizado explicitamente pelo Pivete ("PERMITO PIVETE") após bloqueio do classificador de segurança do Claude Code, que exigiu confirmação explícita por ser mudança persistente de infraestrutura.
