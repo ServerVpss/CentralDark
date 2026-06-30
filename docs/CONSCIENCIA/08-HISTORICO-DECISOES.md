@@ -227,6 +227,23 @@ Decisões arquiteturais e operacionais já tomadas. Não reabrir sem motivo fort
 
 ---
 
+## Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026)
+
+**O que aconteceu:** criei `docs/CONSCIENCIA/MAPA-DOS-BOTS.md` e, antes dele na mesma sessão, `docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md` — os dois pensados como notas visuais para o Pivete abrir no Obsidian ("bolinha grande"). Só que o vault Obsidian real do Pivete é `docs/BRAIN/`, não `docs/CONSCIENCIA/`. Resultado: os dois arquivos ficaram **invisíveis na busca do Obsidian dele** — ele mandou print mostrando "0 resultado" e reclamou: *"NAO TA MOSTRANDO TEMOS QUE MELHORAR ESSE RECONHECIMENTO!"*
+
+**Causa raiz:** `docs/CONSCIENCIA/` é a memória técnica das IAs (fonte da verdade, git-first). `docs/BRAIN/` é o vault visual que o Pivete realmente abre no app Obsidian. São duas árvores de pastas distintas e eu tratei como se fossem a mesma coisa.
+
+**Investigação (a pedido do Pivete — "procure mais falhas como essa"):** rodei `git log --diff-filter=A --name-only -- "docs/CONSCIENCIA/*.md"` desde o início da sessão para achar outras instâncias do mesmo padrão. Resultado: só esses 2 arquivos têm o bug. Os arquivos em `docs/CONSCIENCIA/relatorios/*.md` (elite-mapper) **não** são instância do mesmo problema — são relatórios de auditoria gerados pelo Memory-Linker, corretamente posicionados em CONSCIENCIA (não são notas de navegação visual para o Pivete).
+
+**Correção aplicada:**
+- Criada cópia de `MAPA-DOS-BOTS.md` em `docs/BRAIN/00 - Mapa do Sistema/MAPA-DOS-BOTS.md`, com wikilinks adaptados pro vault local.
+- Criada cópia de `PROTOCOLO-INICIALIZACAO.md` em `docs/BRAIN/00 - Mapa do Sistema/PROTOCOLO-INICIALIZACAO.md`, mesma adaptação.
+- Ambas as cópias citam a fonte oficial em `docs/CONSCIENCIA/` e instruem atualizar os dois juntos.
+
+**Regra derivada (preventiva):** qualquer documento novo cujo propósito explícito é ser **lido visualmente pelo Pivete no Obsidian** precisa, desde a criação, ter uma cópia (ou ser criado diretamente) em `docs/BRAIN/`, nunca só em `docs/CONSCIENCIA/`. Documentos técnicos puros (regras, histórico de decisões, aprendizados, relatórios de auditoria) continuam só em `docs/CONSCIENCIA/`, que é a fonte da verdade git-first — a distinção é "isso é pra IA usar como memória" vs "isso é pra o Pivete abrir e ler".
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
