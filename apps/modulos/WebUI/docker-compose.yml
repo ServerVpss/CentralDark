@@ -16,6 +16,11 @@ services:
       - ANTHROPIC_API_BASE_URL=http://host.docker.internal:8082
       - ANTHROPIC_API_KEY=sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8
       - WEBUI_SECRET_KEY=
+      # Fix database is locked: timeout 30s + pool serializado (1 writer por vez)
+      # SQLite + async não tolera concorrência; pool=1 evita disputa de lock no UPDATE user.last_active_at
+      - DATABASE_URL=sqlite:////app/backend/data/webui.db?timeout=30
+      - DATABASE_POOL_SIZE=1
+      - DATABASE_POOL_MAX_OVERFLOW=0
     volumes:
       - open-webui:/app/backend/data
     ports:
