@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-30T11:22:39.063Z",
-  "updatedAtBR": "30/06/2026, 08:22:39 BRT",
+  "updatedAt": "2026-06-30T11:28:05.763Z",
+  "updatedAtBR": "30/06/2026, 08:28:05 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "consciencia(secao 16): Adiciona seção de estilo gamificado como padrão oficial de comunicação com o Pivete",
+    "lastCommit": "aprendizado(#263): Estilo gamificado é padrão oficial de comunicação",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -583,6 +583,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-30T11:28:05.763Z",
+      "titulo": "Push na main · 71d4eafc6a80cdf1166793d8d319622a099cf832",
+      "detalhe": "aprendizado(#263): Estilo gamificado é padrão oficial de comunicação",
+      "area": "Repositório",
+      "sha": "71d4eaf",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-30T11:22:39.063Z",
       "titulo": "Push na main · 56188fef12f8398c3a134d6dfba25789f7f425ac",
       "detalhe": "consciencia(secao 16): Adiciona seção de estilo gamificado como padrão oficial de comunicação com o Pivete",
@@ -972,14 +980,6 @@
       "detalhe": "docs(cerebro): Fase 1 — reorganização do Cérebro Vivo",
       "area": "Repositório",
       "sha": "44d7f34",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T12:21:19.223Z",
-      "titulo": "Push na main · 587de4d9efbd612a69db2dfad45a4fd11d212d5b",
-      "detalhe": "feat(P2): Terminal Claude no Telegram — botão no menu, modo especial com contexto CentralDark, escracho não-admin",
-      "area": "Repositório",
-      "sha": "587de4d",
       "actor": "segredounlock"
     }
   ],
@@ -1395,6 +1395,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-30T11:28:05.763Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 71d4eafc6a80cdf1166793d8d319622a099cf832 (71d4eaf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-30T11:22:39.063Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 56188fef12f8398c3a134d6dfba25789f7f425ac (56188fe)",
@@ -1734,13 +1741,6 @@
       "time": "2026-06-29T12:43:34.771Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 44d7f34e40e50d8df13afbd980f948fad3fe0cfa (44d7f34)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T12:21:19.223Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 587de4d9efbd612a69db2dfad45a4fd11d212d5b (587de4d)",
       "area": "Repositório",
       "status": "sucesso"
     }
