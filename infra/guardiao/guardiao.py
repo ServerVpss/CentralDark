@@ -22,6 +22,7 @@ from watchdog.observers import Observer
 from classificador import classificar
 from detectores.docker_watcher import loop_docker
 from detectores.pm2_watcher import loop_pm2
+from detectores.git_watcher import loop_git
 from fila.event_queue import publicar
 from heartbeat import enviar_heartbeat, registrar_evento_painel
 from notifier import notificar_telegram
@@ -307,7 +308,8 @@ def main() -> None:
     wl_docker = ignorar.get("docker", []) or []
     Thread(target=loop_pm2, args=(wl_pm2,), daemon=True, name="pm2-watcher").start()
     Thread(target=loop_docker, args=(wl_docker,), daemon=True, name="docker-watcher").start()
-    log.info("Detectores PM2/Docker iniciados (whitelist pm2=%s, docker=%s)", wl_pm2, wl_docker)
+    Thread(target=loop_git, daemon=True, name="git-watcher").start()
+    log.info("Detectores PM2/Docker/Git iniciados (whitelist pm2=%s, docker=%s)", wl_pm2, wl_docker)
 
     # notificação de boot — direto, pra confirmar que o caminho funciona
     notificar_telegram(
