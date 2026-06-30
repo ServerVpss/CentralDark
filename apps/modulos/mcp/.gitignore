@@ -1,0 +1,20 @@
+# MCP CentralDark — regras locais de versionamento
+#
+# O .gitignore raiz ignora qualquer pasta "dist". Aqui re-incluímos o dist/
+# deste módulo porque ele é a ÚNICA cópia viva do código (ainda não há src/).
+# Ver apps/modulos/mcp/docs/ para o contexto da reconstrução.
+
+# Versionar o código compilado vivo:
+!dist/
+!dist/**
+
+# ...mas manter fora derivados e lixo (não são fonte):
+dist/**/*.map
+dist/**/*.bak*
+dist/**/*.d.ts
+
+# Segredos e dependências continuam SEMPRE ignorados:
+.env
+.env.*
+node_modules/
+logs/
