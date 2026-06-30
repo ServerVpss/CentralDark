@@ -467,10 +467,21 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Sintoma:** vps_write_file_safe está exposta no endpoint /mcp-public SEM Bearer token (desde 27/06). Qualquer um com a URL pode escrever arquivos na VPS (exceto paths bloqueados).
 - **Onde mexer:** tools-catalog.js / PUBLIC_CALLABLE_TOOL_NAMES no MCP (apps/modulos/mcp)
 - **Critério pra fechar:** Revisar PUBLIC_CALLABLE_TOOL_NAMES. Avaliar remover vps_write_file_safe do público (manter só leitura) e remover teste_temporario_pivete (temporária). Paths sensíveis seguem bloqueados, mas escrita sem auth é superfície de risco.
-### 9. Refatorar fonte da verdade: universalizar + remover legados + regra ferramenta-ausente — 🟡 ABERTO (28/06/2026, 07:50 BRT)
+### 9. Refatorar fonte da verdade: universalizar + remover legados + regra ferramenta-ausente — 🟡 ABERTO (28/06/2026, 07:50 BRT — atualizado 30/06/2026 com mapeamento completo)
 - **Sintoma:** CONSCIENCIA.md e 00-PORTA-DE-ENTRADA-IA.md com legado Multizap/clone-deck, nomes PM2 errados, agentes listados por nome (sem Claude/sem universal), snapshot de pendências velho. LEIA-ME-IA.md referenciado no fluxo mas foi pra ARQUIVO-MORTO (404).
 - **Onde mexer:** docs/CONSCIENCIA/CONSCIENCIA.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
 - **Critério pra fechar:** Seção por seção, com confirmação do dono. Trocar MultiZap/clone-deck→CentralDark; universalizar agentes (qualquer IA via conector, sem citar nomes); corrigir nomes PM2 reais; adicionar regra ferramenta-ausente (IA avisa se não tem a tool); sincronizar snapshot de pendências com PENDENCIAS.md real. Fazer no fluxo do Obsidian.
+
+**Mapeamento completo feito em 30/06/2026 (60 arquivos lidos: 45 em docs/CONSCIENCIA/ + 7 em relatorios/ + diretrizes) — 6 achados específicos a revisar, um por um, com o Pivete:**
+
+1. **`CONSCIENCIA.md` duplica quase todo o conteúdo dos arquivos numerados (00 a 14)** — risco de desincronia: atualiza um lado, esquece o outro. Decidir: vira só um índice que linka pros numerados, ou mantém duplicado com checagem periódica.
+2. **`06-MCP-CENTRALDARK.md` cita pasta `/APP/`** (`/root/CentralDark/APP/infra/mcp/`, `/root/CentralDark/APP/secrets/mcp.env`) que `04-ESTRUTURA-VPS.md` e `CONSCIENCIA.md` (seção 7) dizem explicitamente que **nunca existiu** — arquivo desatualizado, precisa correção.
+3. **Dado divergente do MCP entre docs:** `MAPA-DO-CEREBRO.md` diz "95 ferramentas, porta 9200"; `09-ESTADO-ATUAL.md` (correto, confirmado ao vivo) diz "96 tools, porta 9100". Corrigir o `MAPA-DO-CEREBRO.md`.
+4. **2 arquivos quase idênticos sobre GitHub:** `GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md` e `GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md` dizem a mesma coisa com texto diferente — candidatos a fundir em um só.
+5. **Vários arquivos antigos citam `segredounlock/clone-deck` como repo principal** (`00-PORTA-DE-ENTRADA-IA.md`, `CUSTOM-GPT-SETUP.md`, `CODEX-INTEGRADO.md`, `REPOSITORIO-OFICIAL.md`, `MODO-SEGREDO.md`) — desatualizado, hoje é `ServerVpss/CentralDark` (Seção 8 do CLAUDE.md).
+6. **`CONSCIENCIA.md` (doc de regras) tem seção 17 sobre sync pausado do legado Recargas Brasil/Multizap** misturada no meio das regras vigentes — separar estado pontual de regra fixa.
+
+- **Critério pra fechar (mapeamento):** revisar item por item com o Pivete antes de qualquer edição em `docs/CONSCIENCIA/` (área protegida — Seção 9 do CLAUDE.md). Registrar cada decisão em `08-HISTORICO-DECISOES.md` conforme for fechando.
 ### 10. Processos fantasma no PM2 — id 3, 4, 6 com pid N/A — 🟡 ABERTO (30/06/2026, 22:15 BRT)
 - **Sintoma:** `pm2 list` mostra 3 processos como "online" mas sem PID real (não estão de fato rodando): `CentralDark-BotServer` (id 4), `MultiZap-Gateway` (id 3), `CloneDeck-CRM` (id 6).
 - **Causa identificada:** `CentralDark-BotServer` aponta pro script `apps/bot-server/start.sh`, que não existe mais — sumiu na reestruturação pra `apps/bot-telegram/` (o bot real que roda é `CentralDark-HubBot`, id 27, via `unified-bot.cjs`). `MultiZap-Gateway` e `CloneDeck-CRM` apontam pra `/root/Multizap/` — sistema legado (CentralDark1VPS).
