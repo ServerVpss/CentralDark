@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T03:42:39.510Z
+# 🧠 Notion Sync — 2026-06-30T03:56:52.122Z
 
-- **Commit fonte:** `71821d0f8faec8136a96e1a02ad9903c23e3d3a7`
+- **Commit fonte:** `9c43deba614dbf84022e04bbd346302b638f9718`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 286 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 286 atualizadas · ❌ 1 erros
 
 ## Por base
 
@@ -14,8 +14,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 18 | 1 | 17 | 0 | 0 |
-| aprendizados | 264 | 0 | 264 | 0 | 0 |
+| decisoes | 18 | 0 | 18 | 0 | 0 |
+| aprendizados | 264 | 0 | 263 | 0 | 1 |
 
 ## Operações
 
@@ -28,7 +28,7 @@
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
 | decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
 | decisoes | atualizado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
-| decisoes | criado | Decisões da sessão 30/06/2026 — multi-provider LLM + remoção do /mcp-public |
+| decisoes | atualizado | Decisões da sessão 30/06/2026 — multi-provider LLM + remoção do /mcp-public |
 | decisoes | atualizado | Decisões da sessão 29/06/2026 — tarde (CLI) |
 | decisoes | atualizado | Migração CentralDark (em andamento) |
 | decisoes | atualizado | Fluxo de deploy |
@@ -263,7 +263,7 @@
 | aprendizados | atualizado | #215 — Billing do GitHub-hosted deve acionar análise de self-hosted |
 | aprendizados | atualizado | #216 — Nome oficial da função Vigia Billing Guard |
 | aprendizados | atualizado | #217 — Billing Guard deve ser módulo do Vigia atual, não novo bot |
-| aprendizados | atualizado | #218 — Protocolo V3 Auto-Repair deve evoluir sem descartar o Vigia atual |
+| aprendizados | erro | #218 — Protocolo V3 Auto-Repair deve evoluir sem descartar o Vigia atual |
 | aprendizados | atualizado | #219 — Auto-Repair nao deve virar auto-merge amplo |
 | aprendizados | atualizado | #220 — Nao usar limpeza bruta de PM2 para corrigir tools VPS |
 | aprendizados | atualizado | #221 — Reparo PM2 agora sem reestruturação completa de apps |
