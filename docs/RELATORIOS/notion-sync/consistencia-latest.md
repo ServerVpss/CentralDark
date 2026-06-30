@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-06-29T22:58:38.712Z
-- **Commit:** `977139cdb97ac51db77e823ead5bcd681102c2ef`
+- **Gerado:** 2026-06-30T00:26:59.710Z
+- **Commit:** `3cec5be6ca0cafdd04f59638b38f258490f55cd7`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -12,8 +12,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
-| decisoes | 16 | 16 | 16 | 0 | 0 |
-| aprendizados | 277 | 0 | 0 | 277 | 0 |
+| decisoes | 17 | 17 | 17 | 0 | 0 |
+| aprendizados | 278 | 0 | 0 | 278 | 0 |
 
 ## Detalhes
 
@@ -36,14 +36,14 @@
 
 ### decisoes
 
-- 🟩 OK: **16**
+- 🟩 OK: **17**
 - 🟥 Faltando no Notion: **0**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **277**
+- 🟥 Faltando no Notion: **278**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -320,6 +320,7 @@
 - 262. Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition)
 - [ATUALIZAÇÃO #243 — 29/06/2026]. Builder Bolt: caminho e container oficiais corrigidos
 - [APRENDIZADO — 29/06/2026]. Elite Anthropic Proxy: operacional na porta 8082
+- [APRENDIZADOS — 29/06/2026 — Sessão CLI]. Elite Proxy v1.6, MCP /openapi.json, WebUI e Notion
 - PM2 — Gerenciador de Processos
 - Docker — Containers dos Pilares (Builder Bolt + WebUI)
 - Git — Fluxo de Trabalho Seguro na VPS

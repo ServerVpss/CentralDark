@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-29T22:58:36.404Z
+# 🧠 Notion Sync — 2026-06-30T00:26:57.375Z
 
-- **Commit fonte:** `977139cdb97ac51db77e823ead5bcd681102c2ef`
+- **Commit fonte:** `3cec5be6ca0cafdd04f59638b38f258490f55cd7`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 284 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 285 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 16 | 1 | 15 | 0 | 0 |
+| decisoes | 17 | 1 | 16 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
@@ -28,6 +28,7 @@
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
 | decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
 | decisoes | atualizado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
+| decisoes | criado | Decisões da sessão 29/06/2026 — tarde (CLI) |
 | decisoes | atualizado | Migração CentralDark (em andamento) |
 | decisoes | atualizado | Fluxo de deploy |
 | decisoes | atualizado | Instalador + doc viva |
@@ -39,7 +40,7 @@
 | decisoes | atualizado | GitHub Achievements |
 | decisoes | atualizado | Permissões do agente |
 | decisoes | atualizado | Gerenciador de pacotes — npm (raiz) |
-| decisoes | criado | Elite Anthropic Proxy — Operacional (29/06/2026) |
+| decisoes | atualizado | Elite Anthropic Proxy — Operacional (29/06/2026) |
 | decisoes | atualizado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
