@@ -2118,3 +2118,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+### 263. Estilo gamificado é padrão oficial de comunicação
+- **Categoria:** regra
+- **Data:** 2026-06-30
+- **Contexto:** Pivete aprovou o estilo visual com cards, XP, nível, conquistas e bolinhas de status como forma padrão de comunicação. Ele quer "passar o olho e entender" sem textão.
+- **Aprendizado:** Toda resposta ao Pivete deve usar: cards monospace (╔═╗), HUD do jogador no topo (nível/XP/conquistas), bolinhas 🟢🟡🔴, emojis temáticos nos pontos certos, e "+XP" ao concluir missões. Propagado via CONSCIENCIA.md seção 16 para todas as IAs do sistema.
