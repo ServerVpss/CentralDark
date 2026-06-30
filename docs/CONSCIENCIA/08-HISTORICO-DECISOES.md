@@ -29,6 +29,46 @@ updated: 2026-06-29
 ---
 
 
+## Decisões da sessão 29/06/2026 — tarde (CLI)
+
+### Elite Proxy: adotar conversão bidirecional OpenAI↔Anthropic (v1.6.0)
+
+**Decisão:** O proxy agora converte em AMBOS os lados: request (OpenAI→Anthropic) e response (Anthropic→OpenAI). Inclui streaming SSE com conversão chunk a chunk.
+
+**Por quê:** Sem a conversão da response, clientes que esperavam formato OpenAI recebiam o formato Anthropic raw (campo `content` em vez de `choices`). O bug impedia Open WebUI, Builder e qualquer cliente OpenAI-compat de funcionar com o alias `bear`.
+
+**Arquivos:** `apps/modulos/elite-anthropic-proxy/proxy.py` — commit `dea30823b`
+
+---
+
+### MCP: adicionar /openapi.json para compatibilidade com Open WebUI Tool Servers
+
+**Decisão:** Adicionado endpoint `/openapi.json` que gera spec OpenAPI 3.1 dinamicamente a partir do catálogo de 96 ferramentas.
+
+**Por quê:** Open WebUI Tool Server não lê `/tools.json` (formato interno). Precisa de spec OpenAPI 3.1 com `paths`.
+
+**Estado atual:** Fix está apenas em `dist/index.js` (gitignored). **Pendência: portar para TypeScript source** antes do próximo `npm run build`.
+
+---
+
+### Caddy mcp.Caddyfile: adicionar CORS para ui e builder
+
+**Decisão:** Adicionados blocos CORS para `ui.centralldark.com` e `builder.centralldark.com` no `mcp.Caddyfile`.
+
+**Por quê:** Browser bloqueava chamadas do WebUI e Builder ao MCP por ausência do header `Access-Control-Allow-Origin`.
+
+**Arquivo:** `infra/caddy/mcp.Caddyfile` — sincronizado para repo no mesmo commit.
+
+---
+
+### Settings: liberar ferramentas Notion no permissions.allow global
+
+**Decisão:** Ferramentas Notion (`notion-search`, `notion-fetch`, `notion-update-page`, `notion-create-pages`) e CentralDark Notion (`notion_buscar`, `notion_anexar_paragrafo`, `notion_criar_pagina`, `notion_ler_pagina`) adicionadas à lista `allow` de `~/.claude/settings.json`.
+
+**Por quê:** Sem estar na lista allow, Claude Code pede aprovação interativa a cada chamada — que em sessão CLI sem janela resulta em "Permission denied by hook".
+
+---
+
 Decisões arquiteturais e operacionais já tomadas. Não reabrir sem motivo forte.
 
 ## Migração CentralDark (em andamento)
