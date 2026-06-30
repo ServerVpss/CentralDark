@@ -457,7 +457,7 @@ const BOT_TOOLS = [
   },
 ];
 
-function executeTool(toolName, toolInput) {
+async function executeTool(toolName, toolInput) {
   try {
     if (toolName === 'read_file') {
       const p = path.resolve(toolInput.path || '');
@@ -538,9 +538,14 @@ async function callLLMWithTools(history, systemPrompt) {
     }
 
     messages.push({ role: 'assistant', content: d.content });
-    const results = d.content
-      .filter(b => b.type === 'tool_use')
-      .map(b => ({ type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(executeTool(b.name, b.input)) }));
+    const toolCalls = d.content.filter(b => b.type === 'tool_use');
+    const results = await Promise.all(
+      toolCalls.map(async b => ({
+        type: 'tool_result',
+        tool_use_id: b.id,
+        content: JSON.stringify(await executeTool(b.name, b.input)),
+      }))
+    );
     messages.push({ role: 'user', content: results });
   }
   return '❌ Limite de iterações de ferramentas atingido.';
