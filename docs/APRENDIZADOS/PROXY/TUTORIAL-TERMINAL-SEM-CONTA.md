@@ -79,6 +79,32 @@ Depois disso, é só: **`claude-proxy`** (liga e abre), **`proxy-off`** (desliga
 
 ---
 
+## 🌟 Deixar SEMPRE no proxy (terminal + extensão do VSCode juntos)
+
+Ideal quando a conta principal está acabando (ex.: 92% do limite). Faz **tudo** —
+o terminal E esta barra de chat da extensão — usar o proxy sozinho. Cole este bloco
+**uma vez** no terminal da VPS:
+
+```bash
+cat >> ~/.bashrc <<'EOF'
+
+# CentralDark — Claude Code sempre via proxy (terminal + extensão)
+set -a; [ -f /root/CentralDark/secrets/anthropic.env ] && . /root/CentralDark/secrets/anthropic.env; set +a
+EOF
+```
+
+Depois de colar:
+- **Terminal:** abra um terminal novo → já está no proxy.
+- **Extensão (esta barra):** `Ctrl+Shift+P` → **Reload Window** → passa a usar o proxy.
+
+**Pra VOLTAR pra sua conta** (quando o limite resetar): abra `~/.bashrc`, apague essas
+2 linhas do CentralDark, e recarregue a janela.
+
+> 🔒 Seguro: o comando só faz `source` do cofre `anthropic.env` (gitignored). A key
+> nunca é escrita no `.bashrc` — só carregada de lá na hora.
+
+---
+
 ## 🔒 Segurança
 
 - A key fica **só** no cofre `secrets/anthropic.env` (gitignored — nunca vai pro GitHub).
