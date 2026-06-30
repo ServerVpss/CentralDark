@@ -7,6 +7,17 @@ updated: 2026-06-30
 
 # 🔌 O que é o MCP (Model Context Protocol)
 
+```
+╔══════════════════════════════════════════════════╗
+║   🔌 MCP — MODEL CONTEXT PROTOCOL                  ║
+╠══════════════════════════════════════════════════╣
+║   O que é:   a "porta USB-C" das IAs               ║
+║   Serve pra: IA usar ferramentas + ter memória     ║
+║   No nosso:  CentralDark-MCP · 100 tools · :9100   ║
+║   Link:      modelcontextprotocol.io               ║
+╚══════════════════════════════════════════════════╝
+```
+
 > Aprendizado salvo em 30/06/2026 — base de tudo que a gente montou no `CentralDark-MCP`.
 
 ## Link oficial
