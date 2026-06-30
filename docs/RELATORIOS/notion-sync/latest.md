@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T03:56:52.122Z
+# 🧠 Notion Sync — 2026-06-30T04:06:20.356Z
 
-- **Commit fonte:** `9c43deba614dbf84022e04bbd346302b638f9718`
+- **Commit fonte:** `b2a4e93cab718479d761a3668d4c37e725f66d45`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 286 atualizadas · ❌ 1 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 287 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,8 +14,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 18 | 0 | 18 | 0 | 0 |
-| aprendizados | 264 | 0 | 263 | 0 | 1 |
+| decisoes | 19 | 1 | 18 | 0 | 0 |
+| aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
 
@@ -43,6 +43,7 @@
 | decisoes | atualizado | Gerenciador de pacotes — npm (raiz) |
 | decisoes | atualizado | Elite Anthropic Proxy — Operacional (29/06/2026) |
 | decisoes | atualizado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
+| decisoes | criado | Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
@@ -263,7 +264,7 @@
 | aprendizados | atualizado | #215 — Billing do GitHub-hosted deve acionar análise de self-hosted |
 | aprendizados | atualizado | #216 — Nome oficial da função Vigia Billing Guard |
 | aprendizados | atualizado | #217 — Billing Guard deve ser módulo do Vigia atual, não novo bot |
-| aprendizados | erro | #218 — Protocolo V3 Auto-Repair deve evoluir sem descartar o Vigia atual |
+| aprendizados | atualizado | #218 — Protocolo V3 Auto-Repair deve evoluir sem descartar o Vigia atual |
 | aprendizados | atualizado | #219 — Auto-Repair nao deve virar auto-merge amplo |
 | aprendizados | atualizado | #220 — Nao usar limpeza bruta de PM2 para corrigir tools VPS |
 | aprendizados | atualizado | #221 — Reparo PM2 agora sem reestruturação completa de apps |
