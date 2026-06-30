@@ -376,8 +376,102 @@ async function animateProgress(chatId, label) {
 
 // ── execSafe ───────────────────────────────────────────────────────────────
 function execSafe(cmd) {
-  try { return execSync(cmd, { timeout: 5000, encoding: 'utf-8' }).trim(); }
-  catch { return ''; }
+  try { return execSync(cmd, { timeout: 10000, encoding: 'utf-8' }).trim(); }
+  catch (e) { return e.message || ''; }
+}
+
+// ── Ferramentas do bot (tool use para o Pivete) ────────────────────────────
+const BOT_TOOLS = [
+  {
+    name: 'read_file',
+    description: 'Lê o conteúdo de um arquivo no servidor VPS.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Caminho absoluto do arquivo (ex: /root/CentralDark/docs/CLAUDE.md)' },
+      },
+      required: ['path'],
+    },
+  },
+  {
+    name: 'list_dir',
+    description: 'Lista arquivos e pastas de um diretório no servidor VPS.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Caminho absoluto do diretório' },
+      },
+      required: ['path'],
+    },
+  },
+  {
+    name: 'run_command',
+    description: 'Executa um comando shell no servidor VPS (admin only). Use para pm2, git, curl, cat, ls, etc.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        command: { type: 'string', description: 'Comando shell a executar' },
+      },
+      required: ['command'],
+    },
+  },
+];
+
+function executeTool(toolName, toolInput) {
+  try {
+    if (toolName === 'read_file') {
+      const p = path.resolve(toolInput.path || '');
+      if (p.includes('/secrets/') || p.includes('/.env'))
+        return { error: 'Acesso a secrets bloqueado por política de segurança.' };
+      const content = fs.readFileSync(p, 'utf-8');
+      return { content: content.slice(0, 10000) };
+    }
+    if (toolName === 'list_dir') {
+      const p = path.resolve(toolInput.path || '');
+      const entries = fs.readdirSync(p, { withFileTypes: true });
+      return { entries: entries.map(e => (e.isDirectory() ? `${e.name}/` : e.name)) };
+    }
+    if (toolName === 'run_command') {
+      const output = execSafe(toolInput.command || '');
+      return { output: output.slice(0, 6000) || '(sem saída)' };
+    }
+    return { error: `Ferramenta desconhecida: ${toolName}` };
+  } catch (e) {
+    return { error: e.message };
+  }
+}
+
+async function callLLMWithTools(history, systemPrompt) {
+  if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado em secrets/anthropic.env.';
+  const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
+  let messages = history.slice(-20);
+
+  for (let round = 0; round < 6; round++) {
+    let r, d;
+    try {
+      r = await fetch(url, {
+        method: 'POST',
+        headers: { 'x-api-key': LLM_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+        body: JSON.stringify({ model: LLM_MODEL, max_tokens: 4096, system: systemPrompt, tools: BOT_TOOLS, messages }),
+      });
+      d = await r.json().catch(() => ({}));
+    } catch (e) { return `❌ LLM: ${e.message}`; }
+
+    if (d.error) return `❌ API: ${d.error.message || JSON.stringify(d.error)}`;
+    if (!d.content) return '❌ Resposta vazia da API.';
+
+    if (d.stop_reason !== 'tool_use') {
+      const text = d.content.find(b => b.type === 'text');
+      return text?.text || '❌ Sem texto na resposta.';
+    }
+
+    messages.push({ role: 'assistant', content: d.content });
+    const results = d.content
+      .filter(b => b.type === 'tool_use')
+      .map(b => ({ type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(executeTool(b.name, b.input)) }));
+    messages.push({ role: 'user', content: results });
+  }
+  return '❌ Limite de iterações de ferramentas atingido.';
 }
 
 // ── Painel ADM ─────────────────────────────────────────────────────────────
@@ -1184,7 +1278,7 @@ async function handleMessage(msg) {
       const terminalPrompt = terminalSkill ? terminalSkill.buildSystemPrompt() : ag.prompt;
       sess.history.push({ role: 'user', content: text });
       await typing(chatId);
-      const response = await callLLM(sess.history, terminalPrompt);
+      const response = await callLLMWithTools(sess.history, terminalPrompt);
       sess.history.push({ role: 'assistant', content: response });
       resetInactivityTimer(chatId);
       const htmlResp = mdToHtml(response);
@@ -1239,7 +1333,7 @@ async function handleMessage(msg) {
     }
 
     const finalPrompt = skillContext ? systemPrompt + skillContext : systemPrompt;
-    const response = await callLLM(sess.history, finalPrompt);
+    const response = await callLLMWithTools(sess.history, finalPrompt);
     sess.history.push({ role: 'assistant', content: response });
     resetInactivityTimer(chatId);
 

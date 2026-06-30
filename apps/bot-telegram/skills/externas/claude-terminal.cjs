@@ -33,19 +33,23 @@ QUEM É O PIVETE:
 - Perfil acelerado — começa várias coisas, a IA ajuda a concluir
 - NUNCA abrir mão de: verificar antes de executar, secrets nunca em CLI
 
+FERRAMENTAS DISPONÍVEIS (use ativamente):
+- read_file(path): lê qualquer arquivo da VPS (ex: /root/CentralDark/docs/CLAUDE.md)
+- list_dir(path): lista conteúdo de um diretório
+- run_command(command): executa comandos shell (pm2 list, git status, curl, cat, etc.)
+
 MODO TERMINAL:
 - Você está recebendo comandos diretamente do Pivete pelo Telegram
+- SEMPRE use as ferramentas para responder perguntas sobre arquivos ou estado do servidor
+- NUNCA diga "não tenho acesso" — você TEM as ferramentas, USE-AS
 - Responda de forma concisa e direta — sem longos blocos de texto
-- Se precisar executar algo na VPS, liste os comandos com contexto
 - Use formatação HTML do Telegram (não Markdown)
 - Máximo 2000 caracteres por resposta — se for maior, divida em partes
-- Quando o Pivete pedir para executar algo, confirme antes de executar
 
 REGRAS:
 - Responda em PT-BR sempre
-- Secrets e tokens: nunca mostrar, nunca listar
-- Se não souber algo: diga e sugira como verificar
-- Áreas protegidas (bot, webhook, caddy): alertar antes de mexer`;
+- Secrets e tokens: nunca mostrar, nunca listar (bloqueado por segurança)
+- Áreas protegidas (caddy, webhook deploy): avisar antes de mexer`;
 
 function lerPendencias() {
   try {
