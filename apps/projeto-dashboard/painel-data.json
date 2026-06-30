@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-30T14:18:07.965Z",
-  "updatedAtBR": "30/06/2026, 11:18:07 BRT",
+  "updatedAt": "2026-06-30T14:27:53.321Z",
+  "updatedAtBR": "30/06/2026, 11:27:53 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "security: remove API key exposta dos arquivos versionados",
+    "lastCommit": "docs(proxy): tutorial detalhado — Claude Code no terminal via proxy (sem conta)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -583,6 +583,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-30T14:27:53.321Z",
+      "titulo": "Push na main · 595fe795a3fbfe6b6cedb5837af5e145a274450b",
+      "detalhe": "docs(proxy): tutorial detalhado — Claude Code no terminal via proxy (sem conta)",
+      "area": "Repositório",
+      "sha": "595fe79",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-30T14:18:07.965Z",
       "titulo": "Push na main · ad88277d53ffceef0567a94ef6da524c1241de19",
       "detalhe": "security: remove API key exposta dos arquivos versionados",
@@ -972,14 +980,6 @@
       "detalhe": "feat(agents): AGENTS-LIBRARY completa — arsenal de 4 skills + template + prompt master",
       "area": "Repositório",
       "sha": "283b425",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T13:24:47.551Z",
-      "titulo": "Push na main · 05ae5672e48b1e4b7fdb094d530fa9930f05382b",
-      "detalhe": "fix(brain): auditoria grafo — frontmatter e tags nos nós cinzas",
-      "area": "Repositório",
-      "sha": "05ae567",
       "actor": "segredounlock"
     }
   ],
@@ -1395,6 +1395,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-30T14:27:53.321Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 595fe795a3fbfe6b6cedb5837af5e145a274450b (595fe79)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-30T14:18:07.965Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ad88277d53ffceef0567a94ef6da524c1241de19 (ad88277)",
@@ -1734,13 +1741,6 @@
       "time": "2026-06-29T13:31:39.324Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 283b425d9bb13e087b3ce2c088985e2248734485 (283b425)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T13:24:47.551Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 05ae5672e48b1e4b7fdb094d530fa9930f05382b (05ae567)",
       "area": "Repositório",
       "status": "sucesso"
     }
