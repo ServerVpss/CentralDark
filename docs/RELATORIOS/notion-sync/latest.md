@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T04:33:12.407Z
+# 🧠 Notion Sync — 2026-06-30T08:40:13.942Z
 
-- **Commit fonte:** `a811b164ac6c2083541f89b0b0dbbd4b96c71efb`
+- **Commit fonte:** `ea70c3a5df7be6af5a7d27d570bef6103cdc97ea`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 356 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 3 criadas · ♻️ 356 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 19 | 0 | 19 | 0 | 0 |
+| decisoes | 20 | 1 | 19 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
-| estrutura | 68 | 0 | 68 | 0 | 0 |
+| estrutura | 70 | 2 | 68 | 0 | 0 |
 
 ## Operações
 
@@ -45,6 +45,7 @@
 | decisoes | atualizado | Elite Anthropic Proxy — Operacional (29/06/2026) |
 | decisoes | atualizado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
 | decisoes | atualizado | Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026) |
+| decisoes | criado | MCP — versionado, equipado com tools cognitivas e trancado (30/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
@@ -353,6 +354,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
+| estrutura | criado | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
+| estrutura | criado | docs/CONSCIENCIA/LEMBRANCAS/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
