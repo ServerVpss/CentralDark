@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T04:18:07.072Z
+# 🧠 Notion Sync — 2026-06-30T04:33:12.407Z
 
-- **Commit fonte:** `f2193480d272a38cd6545852340ac5deb4319698`
+- **Commit fonte:** `a811b164ac6c2083541f89b0b0dbbd4b96c71efb`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 68 criadas · ♻️ 288 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 356 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 19 | 0 | 19 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
-| estrutura | 68 | 68 | 0 | 0 | 0 |
+| estrutura | 68 | 0 | 68 | 0 | 0 |
 
 ## Operações
 
@@ -310,73 +310,73 @@
 | aprendizados | atualizado | #260 — Padrão de Apresentação — toda IA via MCP |
 | aprendizados | atualizado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
 | aprendizados | atualizado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
-| estrutura | criado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
-| estrutura | criado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
-| estrutura | criado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
-| estrutura | criado | docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
-| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
-| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
-| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE.md |
-| estrutura | criado | docs/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md |
-| estrutura | criado | docs/CONSCIENCIA/02-PERMISSOES.md |
-| estrutura | criado | docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md |
-| estrutura | criado | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
-| estrutura | criado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
-| estrutura | criado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
-| estrutura | criado | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
-| estrutura | criado | docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md |
-| estrutura | criado | docs/CONSCIENCIA/08-HISTORICO-DECISOES.md |
-| estrutura | criado | docs/CONSCIENCIA/09-ESTADO-ATUAL.md |
-| estrutura | criado | docs/CONSCIENCIA/10-FALLBACK-LOVABLE.md |
-| estrutura | criado | docs/CONSCIENCIA/11-MULTI-IA-FLUXO.md |
-| estrutura | criado | docs/CONSCIENCIA/11-SKIL-SH.md |
-| estrutura | criado | docs/CONSCIENCIA/12-GUIA-PIVETE.md |
-| estrutura | criado | docs/CONSCIENCIA/12-PASTA-OFICIAL-BOT.md |
-| estrutura | criado | docs/CONSCIENCIA/13-COMANDO-UNICO-VPS.md |
-| estrutura | criado | docs/CONSCIENCIA/20-COLABORACAO-MULTI-IA.md |
-| estrutura | criado | docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md |
-| estrutura | criado | docs/CONSCIENCIA/21-METODO-DIAGNOSTICO-FUNIL.md |
-| estrutura | criado | docs/CONSCIENCIA/21-PADRAO-APRESENTACAO.md |
-| estrutura | criado | docs/CONSCIENCIA/22-METODO-DEPLOY-VPS.md |
-| estrutura | criado | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
-| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS.md |
-| estrutura | criado | docs/CONSCIENCIA/ARTEFATOS/README.md |
-| estrutura | criado | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
-| estrutura | criado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
-| estrutura | criado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
-| estrutura | criado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
-| estrutura | criado | docs/CONSCIENCIA/CONSCIENCIA.md |
-| estrutura | criado | docs/CONSCIENCIA/CUSTOM-GPT-SETUP.md |
-| estrutura | criado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
-| estrutura | criado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
-| estrutura | criado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
-| estrutura | criado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
-| estrutura | criado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
-| estrutura | criado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
-| estrutura | criado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
-| estrutura | criado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
-| estrutura | criado | docs/CONSCIENCIA/MODO-SEGREDO.md |
-| estrutura | criado | docs/CONSCIENCIA/NOTION-MAPA.md |
-| estrutura | criado | docs/CONSCIENCIA/PLANO.md |
-| estrutura | criado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
-| estrutura | criado | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
-| estrutura | criado | docs/CONSCIENCIA/README.md |
-| estrutura | criado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
-| estrutura | criado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
-| estrutura | criado | docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
-| estrutura | criado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
-| estrutura | criado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
-| estrutura | criado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |
-| estrutura | criado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
-| estrutura | criado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
-| estrutura | criado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
-| estrutura | criado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
-| estrutura | criado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
-| estrutura | criado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |
-| estrutura | criado | docs/CONSCIENCIA/relatorios/03_LIXO_PARA_ARQUIVAR.md |
-| estrutura | criado | docs/CONSCIENCIA/relatorios/04_DUPLICATAS_ENCONTRADAS.md |
-| estrutura | criado | docs/CONSCIENCIA/relatorios/05_PROPOSTA_ESTRUTURA_NOVA.md |
-| estrutura | criado | docs/CONSCIENCIA/relatorios/06_ESTATISTICAS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
+| estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/01-IDENTIDADE.md |
+| estrutura | atualizado | docs/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/02-PERMISSOES.md |
+| estrutura | atualizado | docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
+| estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
+| estrutura | atualizado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
+| estrutura | atualizado | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
+| estrutura | atualizado | docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/08-HISTORICO-DECISOES.md |
+| estrutura | atualizado | docs/CONSCIENCIA/09-ESTADO-ATUAL.md |
+| estrutura | atualizado | docs/CONSCIENCIA/10-FALLBACK-LOVABLE.md |
+| estrutura | atualizado | docs/CONSCIENCIA/11-MULTI-IA-FLUXO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/11-SKIL-SH.md |
+| estrutura | atualizado | docs/CONSCIENCIA/12-GUIA-PIVETE.md |
+| estrutura | atualizado | docs/CONSCIENCIA/12-PASTA-OFICIAL-BOT.md |
+| estrutura | atualizado | docs/CONSCIENCIA/13-COMANDO-UNICO-VPS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/20-COLABORACAO-MULTI-IA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md |
+| estrutura | atualizado | docs/CONSCIENCIA/21-METODO-DIAGNOSTICO-FUNIL.md |
+| estrutura | atualizado | docs/CONSCIENCIA/21-PADRAO-APRESENTACAO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/22-METODO-DEPLOY-VPS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
+| estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/CONSCIENCIA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/CUSTOM-GPT-SETUP.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
+| estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PLANO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
+| estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
+| estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
+| estrutura | atualizado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |
+| estrutura | atualizado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |
+| estrutura | atualizado | docs/CONSCIENCIA/relatorios/03_LIXO_PARA_ARQUIVAR.md |
+| estrutura | atualizado | docs/CONSCIENCIA/relatorios/04_DUPLICATAS_ENCONTRADAS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/relatorios/05_PROPOSTA_ESTRUTURA_NOVA.md |
+| estrutura | atualizado | docs/CONSCIENCIA/relatorios/06_ESTATISTICAS.md |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
