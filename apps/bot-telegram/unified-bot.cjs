@@ -185,10 +185,25 @@ const FORMATO_HTML = `
 REGRAS DE FORMATAÇÃO — OBRIGATÓRIO:
 • Use HTML do Telegram: <b>negrito</b>, <i>itálico</i>, <code>código</code>, <pre>bloco</pre>
 • NÃO use Markdown (**, __, ##, ---, | tabelas |)
-• Seja conciso — máximo 250 palavras por resposta
+• Seja conciso — máximo 250 palavras por resposta conversacional
 • Para listas use bullet points com • ou números
 • Para código/comandos sempre use <code>comando</code> ou <pre>bloco</pre>
-• Responda sempre em PT-BR`.trim();
+• Responda sempre em PT-BR
+
+PADRÃO MONOESPAÇADO (OBRIGATÓRIO para relatórios técnicos):
+• Qualquer resposta sobre: ferramentas disponíveis, modelos, status do servidor, o que foi
+  feito na sessão, pendências, PM2, logs ou qualquer informação técnica estruturada DEVE
+  ser entregue dentro de blocos <pre>...</pre> com caixas ASCII (╔═╗║╚╝) e emojis alinhados
+• Estrutura obrigatória:
+    <pre>
+    ╔══════════════════════════════════╗
+    ║  EMOJI  TÍTULO DA SEÇÃO         ║
+    ╚══════════════════════════════════╝
+    linha 1
+    linha 2
+    </pre>
+• Múltiplas seções = múltiplos blocos <pre> separados
+• Nunca misture texto solto com conteúdo técnico — ou é <pre> ou é conversa`.trim();
 
 const IDENTIDADE_PIVETE = `
 IDENTIDADE DO USUÁRIO — LEIA COM ATENÇÃO:
@@ -406,13 +421,25 @@ const BOT_TOOLS = [
   },
   {
     name: 'run_command',
-    description: 'Executa um comando shell no servidor VPS (admin only). Use para pm2, git, curl, cat, ls, etc.',
+    description: 'Executa um comando shell no servidor VPS (admin only). Use para pm2, git, curl, cat, ls, df, etc.',
     input_schema: {
       type: 'object',
       properties: {
         command: { type: 'string', description: 'Comando shell a executar' },
       },
       required: ['command'],
+    },
+  },
+  {
+    name: 'write_file',
+    description: 'Escreve ou sobrescreve um arquivo no servidor VPS. Use para editar código, configs, docs.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        path:    { type: 'string', description: 'Caminho absoluto do arquivo a escrever' },
+        content: { type: 'string', description: 'Conteúdo completo do arquivo' },
+      },
+      required: ['path', 'content'],
     },
   },
 ];
@@ -434,6 +461,14 @@ function executeTool(toolName, toolInput) {
     if (toolName === 'run_command') {
       const output = execSafe(toolInput.command || '');
       return { output: output.slice(0, 6000) || '(sem saída)' };
+    }
+    if (toolName === 'write_file') {
+      const p = path.resolve(toolInput.path || '');
+      if (p.includes('/secrets/') || p.includes('/.env'))
+        return { error: 'Escrita em secrets bloqueada por política de segurança.' };
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.writeFileSync(p, toolInput.content || '', 'utf-8');
+      return { ok: true, path: p, bytes: Buffer.byteLength(toolInput.content || '') };
     }
     return { error: `Ferramenta desconhecida: ${toolName}` };
   } catch (e) {
