@@ -229,3 +229,11 @@ updated: 2026-06-30
 | `quarantine/envs-20260610-164551/whatsapp-server/.env.example` | 1 KB | Em quarentena |
 | `quarantine/envs-20260610-164551/whatsapp-server/whatsapp-server/.env` | 1 KB | Em quarentena |
 | `quarantine/envs-20260610-164551/CentralDark/apps/mcp/.env.runtime.bak.20260610-002836` | 1 KB | Em quarentena |
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

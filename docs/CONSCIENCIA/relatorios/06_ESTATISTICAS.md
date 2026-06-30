@@ -56,3 +56,11 @@ updated: 2026-06-30
 - **Tempo de varredura:** 8.3s
 - **Diretórios ignorados (node_modules/etc):** 1717
 - **Duplicatas detectadas:** 28832 pares
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

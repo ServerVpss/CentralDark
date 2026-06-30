@@ -57,3 +57,11 @@ updated: 2026-06-30
 3. Arquivar `/root/CentralDark/quarantine/` para storage externo
 4. Configurar rotação de logs em `/root/CentralDark/logs/`
 5. Revisar `apps/*/node_modules/` — instalar só o necessário
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -115,3 +115,11 @@ updated: 2026-06-30
 | `09-caddy.sh` | `scripts/checker/09-caddy.sh` | `CentralDark/apps/clone-deck/scripts/checker/09-caddy.sh` | 1 KB |
 
 _... e mais 28732 pares (omitidos)_
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

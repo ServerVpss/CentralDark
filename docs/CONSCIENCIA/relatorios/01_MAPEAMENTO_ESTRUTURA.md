@@ -211,3 +211,11 @@ updated: 2026-06-30
 | Sub-diretório | Tamanho | Dias desde modificação |
 |---------------|---------|------------------------|
 | `legacy-fixes/` | 97 KB | 2d |
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

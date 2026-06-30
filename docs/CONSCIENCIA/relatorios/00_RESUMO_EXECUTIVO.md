@@ -58,3 +58,11 @@ updated: 2026-06-30
 2. Mover `03_LIXO_PARA_ARQUIVAR.md` para storage externo ou deletar
 3. Investigar `04_DUPLICATAS_ENCONTRADAS.md`
 4. Aplicar `05_PROPOSTA_ESTRUTURA_NOVA.md` gradualmente
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

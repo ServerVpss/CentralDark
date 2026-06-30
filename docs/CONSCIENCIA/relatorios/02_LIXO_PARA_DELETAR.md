@@ -3351,3 +3351,11 @@ find /root/CentralDark/revisoes -mindepth 1 -maxdepth 1 -mtime +7 -exec rm -rf {
 # Deletar logs antigos:
 find /root/CentralDark/logs -name '*.log' -mtime +30 -delete
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
