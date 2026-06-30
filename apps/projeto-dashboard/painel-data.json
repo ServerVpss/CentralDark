@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-30T02:17:39.272Z",
-  "updatedAtBR": "29/06/2026, 23:17:39 BRT",
+  "updatedAt": "2026-06-30T02:26:59.581Z",
+  "updatedAtBR": "29/06/2026, 23:26:59 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "docs(pendencias): registrar processos fantasma PM2 (id 3, 4, 6) como item #10",
+    "lastCommit": "docs(pendencias): anexar mapeamento completo da CONSCIENCIA à pendência #9 — 6 achados específicos",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -583,6 +583,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-30T02:26:59.581Z",
+      "titulo": "Push na main · 6a4aa18549836752a3039ab8309dbc13c10637fb",
+      "detalhe": "docs(pendencias): anexar mapeamento completo da CONSCIENCIA à pendência #9 — 6 achados específicos",
+      "area": "Repositório",
+      "sha": "6a4aa18",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-30T02:17:39.272Z",
       "titulo": "Push na main · 5ac95596429a684a031f71be47cee185076fb23a",
       "detalhe": "docs(pendencias): registrar processos fantasma PM2 (id 3, 4, 6) como item #10",
@@ -972,14 +980,6 @@
       "detalhe": "feat(obsidian-writer): notificação Telegram ao gravar nota no cérebro",
       "area": "Repositório",
       "sha": "382de6f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T10:56:54.334Z",
-      "titulo": "Push na main · e3c5b83e5f19d901998146ca2d156e8ad0f304bb",
-      "detalhe": "feat(brain): tutorial Obsidian para leigo + nota postura Pivete",
-      "area": "Repositório",
-      "sha": "e3c5b83",
       "actor": "segredounlock"
     }
   ],
@@ -1395,6 +1395,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-30T02:26:59.581Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6a4aa18549836752a3039ab8309dbc13c10637fb (6a4aa18)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-30T02:17:39.272Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5ac95596429a684a031f71be47cee185076fb23a (5ac9559)",
@@ -1734,13 +1741,6 @@
       "time": "2026-06-29T10:58:32.560Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 382de6f9f5430d6ef878669efee64636e1d931a5 (382de6f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T10:56:54.334Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e3c5b83e5f19d901998146ca2d156e8ad0f304bb (e3c5b83)",
       "area": "Repositório",
       "status": "sucesso"
     }
