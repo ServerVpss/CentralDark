@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-30T00:45:28.362Z",
-  "updatedAtBR": "29/06/2026, 21:45:28 BRT",
+  "updatedAt": "2026-06-30T00:57:30.843Z",
+  "updatedAtBR": "29/06/2026, 21:57:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "feat(sessao): protocolo inicializacao + hook telegram + divergencias resolvidas",
+    "lastCommit": "feat(bot): tool use no HubBot — read_file, list_dir, run_command via Anthropic tools API",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -583,6 +583,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-30T00:57:30.843Z",
+      "titulo": "Push na main · e038387d9101ac7faa68950c8e9bd2b1d9b5c9ac",
+      "detalhe": "feat(bot): tool use no HubBot — read_file, list_dir, run_command via Anthropic tools API",
+      "area": "Repositório",
+      "sha": "e038387",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-06-30T00:45:28.362Z",
       "titulo": "Push na main · 1497f6bb5585cbf47fe050257a593c87f62ccc8c",
       "detalhe": "feat(sessao): protocolo inicializacao + hook telegram + divergencias resolvidas",
@@ -973,13 +981,6 @@
       "area": "Repositório",
       "sha": "b251bea",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T07:24:30.694Z",
-      "title": "Hub Telegram evoluído para Cockpit Operacional v2: Ferramentas (PM2/Diag/Logs/Webhook), Cognição (4 modos), Relatório Geral animado. fail2ban instalado — 3 IPs banidos. Legados bot.cjs/bot.js/config.js/ecosystem.config.cjs removidos. /root/apps/ (duplicata sem referências) deletado.",
-      "area": "Bot / Infra",
-      "status": "feito",
-      "detail": ""
     }
   ],
   "agents": [
@@ -1394,6 +1395,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-30T00:57:30.843Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e038387d9101ac7faa68950c8e9bd2b1d9b5c9ac (e038387)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-30T00:45:28.362Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1497f6bb5585cbf47fe050257a593c87f62ccc8c (1497f6b)",
@@ -1733,13 +1741,6 @@
       "time": "2026-06-29T07:36:25.885Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b251bea3d5deddffcdbd25ff27ae1dac86c985a7 (b251bea)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T07:23:32.030Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 75e20173f9085d311842f71b1a44dada74daa748 (75e2017)",
       "area": "Repositório",
       "status": "sucesso"
     }
