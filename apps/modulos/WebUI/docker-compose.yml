@@ -14,7 +14,7 @@ services:
       - OPENAI_API_KEYS=SEGREDO_ELITE_123;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;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;AQ.Ab8RN6LOW8_DIJ7vBdDIfQ-V9p6McU9O4IOxKt-ll9SYnvoYSA
       # Anthropic via Elite Gateway local (rotaciona keys → ap7 → Anthropic)
       - ANTHROPIC_API_BASE_URL=http://host.docker.internal:8082
-      - ANTHROPIC_API_KEY=sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8
+      - ANTHROPIC_API_KEY=sk-lab-ROTACIONAR-key-foi-exposta
       - WEBUI_SECRET_KEY=
       # Fix database is locked: timeout 30s + pool serializado (1 writer por vez)
       # SQLite + async não tolera concorrência; pool=1 evita disputa de lock no UPDATE user.last_active_at

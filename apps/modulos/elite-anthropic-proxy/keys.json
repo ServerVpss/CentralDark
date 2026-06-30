@@ -1,7 +1,0 @@
-{
-  "keys": [
-    "sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8"
-  ],
-  "upstream": "https://claude.ap7.site",
-  "note": "Adicionar mais keys abaixo para rotação round-robin"
-}

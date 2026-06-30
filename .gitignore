@@ -67,3 +67,7 @@ root/
 
 # Arquivo com nome inválido (espaço)
 apps/modulos/elite-anthropic-proxy/leep*
+
+# Seguranca (30/06): nunca versionar keys e backups com segredo
+apps/modulos/elite-anthropic-proxy/keys.json
+apps/modulos/WebUI/*.bak*

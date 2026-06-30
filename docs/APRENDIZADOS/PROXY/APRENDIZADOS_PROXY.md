@@ -9,11 +9,11 @@ Resolver o erro de autenticação (401 Unauthorized) e configurar o Cline com o 
 * **Validação**: Criamos um script de stress test que provou que o servidor aceita a chave sk-lab-xl... quando os cabeçalhos corretos (x-api-key + anthropic-version) são aplicados.
 
 ### 🚀 A Solução Final
-1. **Chave Válida**: A chave sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8 foi validada.
+1. **Chave Válida**: A chave sk-lab-***[KEY-EXPOSTA-PRECISA-ROTACIONAR]*** foi validada.
 2. **Configuração no Cline**:
     * **API Provider**: Anthropic
     * **Base URL**: https://claude.ap7.site
-    * **API Key**: sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8
+    * **API Key**: sk-lab-***[KEY-EXPOSTA-PRECISA-ROTACIONAR]***
     * **Model ID**: sonnet-4.6 (ou opus-4.8)
 3. **Fluxo de Debug**: Estabelecemos o uso de scripts de auditoria que:
     * Não poluem a tela (Silent Mode).
