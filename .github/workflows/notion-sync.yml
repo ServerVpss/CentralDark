@@ -9,10 +9,9 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docs/CONSCIENCIA/REGRA-OFICIAL-*.md'
-      - 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-*.md'
-      - 'docs/CONSCIENCIA/08-HISTORICO-DECISOES.md'
-      - 'docs/CONSCIENCIA/APRENDIZADOS.md'
+      # Cobertura total: qualquer .md da CONSCIENCIA dispara o sync.
+      # Arquivos sensíveis (NUNCA_ESPELHAR) disparam mas são pulados no código.
+      - 'docs/CONSCIENCIA/**/*.md'
       - 'docs/PENDENCIAS.md'
       - 'scripts/notion-sync/**'
       - '.github/workflows/notion-sync.yml'
@@ -26,7 +25,7 @@ on:
         description: 'O que sincronizar'
         type: choice
         default: all
-        options: [all, regras, decisoes, aprendizados, pendencias]
+        options: [all, regras, decisoes, aprendizados, pendencias, estrutura]
       cleanup_orphans:
         description: 'Limpar (arquivar) órfãos no Notion que não existem no Git'
         type: choice

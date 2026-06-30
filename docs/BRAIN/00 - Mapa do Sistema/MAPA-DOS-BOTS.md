@@ -90,16 +90,16 @@ Você fala com uma IA (eu, Gemini, ChatGPT). Ela mexe na VPS. Vários **robôs p
 ╔══════════════════════════════════════════════╗
 ║  6. NOTION SYNC (GitHub Action)               ║
 ╚══════════════════════════════════════════════╝
-  ✅ Status: ativo (cobertura parcial — ver nota)
+  ✅ Status: ativo (cobertura TOTAL desde 30/06)
   👁️  O que faz: toda vez que docs/CONSCIENCIA
       ou docs/PENDENCIAS.md mudam, ele copia
       pro seu Notion
-  ⚠️  Só cobre 4 arquivos fixos hoje
-      (REGRA-OFICIAL-*, 08-HISTORICO-DECISOES,
-      APRENDIZADOS, PENDENCIAS). Documentos
-      novos (como este) precisam ser
-      cadastrados manualmente até a automação
-      ser ampliada.
+  📂 Agora cobre TODO documento novo da
+      Consciência — inventário automático no
+      database "Estrutura de Pastas & Agentes".
+      Documentos novos aparecem sozinhos, sem
+      cadastro manual (arquivos sensíveis ficam
+      de fora por segurança).
 ```
 
 ```

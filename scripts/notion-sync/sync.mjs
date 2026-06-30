@@ -47,7 +47,21 @@ const DB = {
   pendencias: "b37757f1-41a8-4d78-b738-b29068423419",
   decisoes: "3bffaefc-c606-4ed6-957a-c2bfb6fb6c7f",
   aprendizados: "f53285e1-891f-4645-bae8-160b44d6cb6c",
+  estrutura: "e9c95779-7a72-4bcc-872f-9903e7c1cf7e",
 };
+
+// NUNCA espelhar — mesma lista de docs/CONSCIENCIA/NOTION-MAPA.md
+// (IP público, paths de SSH, mapa de secrets). Editar os dois juntos.
+const NUNCA_ESPELHAR = new Set([
+  "04-ESTRUTURA-VPS.md",
+  "05-SSH-VPS.md",
+  "12-COFRE-LOVABLE.md",
+  "14-COFRE-SECRETS-CENTRALIZADO.md",
+]);
+
+// Caminhos (substring) que nunca entram no inventário — legado e mapa de secrets.
+// Mesma decisão de segurança de docs/CONSCIENCIA/NOTION-MAPA.md.
+const PATH_BLOQUEADO = ["/ARQUIVO-MORTO/", "/secrets-mapeamento/"];
 
 const REPO_BASE = "https://github.com/ServerVpss/CentralDark/blob/main";
 
@@ -62,6 +76,7 @@ const stats = {
   pendencias:   { criadas: 0, atualizadas: 0, ignoradas: 0, erros: 0, total_git: 0 },
   decisoes:     { criadas: 0, atualizadas: 0, ignoradas: 0, erros: 0, total_git: 0 },
   aprendizados: { criadas: 0, atualizadas: 0, ignoradas: 0, erros: 0, total_git: 0 },
+  estrutura:    { criadas: 0, atualizadas: 0, ignoradas: 0, erros: 0, total_git: 0 },
 };
 let _currentBase = null;
 const setBase = (b) => { _currentBase = b; };
@@ -412,6 +427,89 @@ async function syncAprendizados() {
   log(`  ✅ ${items.length} aprendizados processados.`);
 }
 
+/* ─────────── Documentos gerais (inventário no DB Estrutura) ─────────── */
+
+// Extrai título do doc: frontmatter `title:` → primeiro heading `#` → fallback.
+function tituloDoDoc(md, fallback) {
+  const fm = md.match(/^---\n([\s\S]*?)\n---/);
+  if (fm) {
+    const t = fm[1].match(/^title:\s*["']?(.+?)["']?\s*$/m);
+    if (t) return t[1].trim();
+  }
+  const h = md.match(/^#\s+(.+?)\s*$/m);
+  if (h) return h[1].trim();
+  return fallback;
+}
+
+// Resumo curto: 1ª linha de blockquote (boa descrição) ou 1ª linha de texto.
+function resumoDoDoc(md) {
+  const semFm = md.replace(/^---\n[\s\S]*?\n---\n?/, "");
+  const linhas = semFm.split("\n");
+  for (const l of linhas) {
+    const s = l.trim();
+    if (s.startsWith(">")) return s.replace(/^>\s*/, "").trim();
+  }
+  for (const l of linhas) {
+    const s = l.trim();
+    if (!s || s.startsWith("#") || s.startsWith("---") ||
+        s.startsWith("|") || s.startsWith("```")) continue;
+    return s;
+  }
+  return "";
+}
+
+// Inventaria TODOS os .md de docs/CONSCIENCIA/ no DB "Estrutura de Pastas &
+// Agentes" (Caminho = chave de UPSERT). Mapa, não conteúdo — por isso convive
+// com os syncs dedicados (regras/decisoes/aprendizados) sem duplicar de verdade.
+async function syncDocumentosGerais() {
+  setBase("estrutura");
+  log("📂 Inventariando documentos da CONSCIENCIA...");
+  const baseDir = "docs/CONSCIENCIA";
+  let entries = [];
+  try {
+    entries = await fs.readdir(path.join(ROOT, baseDir), { recursive: true });
+  } catch (e) {
+    log(`⚠️  não consegui listar ${baseDir}: ${e.message}`);
+    return;
+  }
+  const docs = entries
+    .map((rel) => `${baseDir}/${rel}`.replace(/\\/g, "/"))
+    .filter((p) => p.endsWith(".md"))
+    .filter((p) => !NUNCA_ESPELHAR.has(path.basename(p)))
+    .filter((p) => !PATH_BLOQUEADO.some((b) => p.includes(b)))
+    .sort();
+
+  stats.estrutura.total_git = docs.length;
+  log(`  ℹ️  ${docs.length} documentos a inventariar.`);
+
+  let i = 0;
+  for (const relPath of docs) {
+    i++;
+    if (i % 25 === 0) log(`  ⏳ progresso: ${i}/${docs.length}`);
+    const md = await read(relPath);
+    if (md === null) { stats.estrutura.ignoradas++; continue; }
+    const base = path.basename(relPath);
+    const tipo = /^REGRA-OFICIAL/i.test(base) ? "Arquivo de regra" : "Doc";
+    const funcao = tituloDoDoc(md, base);
+    const resumo = resumoDoDoc(md);
+    const notas = `${resumo}${resumo ? " · " : ""}${REPO_BASE}/${relPath}`;
+
+    await upsert({
+      dataSourceId: DB.estrutura,
+      titleProp: "Caminho",
+      title: relPath,
+      properties: {
+        "Caminho": title(relPath),
+        "Tipo": select(tipo),
+        "Função": text(funcao),
+        "Notas": text(notas),
+        "Repo": select("CentralDark2"),
+      },
+    });
+  }
+  log(`  ✅ ${docs.length} documentos processados.`);
+}
+
 /* ─────────── Relatório + Changelog ─────────── */
 
 async function writeReport() {
@@ -424,9 +522,9 @@ async function writeReport() {
   const erros   = opLog.filter((o) => o.action === "erro").length;
 
   const targetsRodados = TARGET === "all"
-    ? ["regras","pendencias","decisoes","aprendizados"]
+    ? ["regras","pendencias","decisoes","aprendizados","estrutura"]
     : [TARGET];
-  const targetsIgnorados = ["regras","pendencias","decisoes","aprendizados"]
+  const targetsIgnorados = ["regras","pendencias","decisoes","aprendizados","estrutura"]
     .filter((t) => !targetsRodados.includes(t));
 
   const tabela = [
@@ -497,6 +595,7 @@ async function main() {
     if (TARGET === "all" || TARGET === "pendencias") await syncPendencias();
     if (TARGET === "all" || TARGET === "decisoes") await syncDecisoes();
     if (TARGET === "all" || TARGET === "aprendizados") await syncAprendizados();
+    if (TARGET === "all" || TARGET === "estrutura") await syncDocumentosGerais();
     await writeReport();
     log("✅ Concluído.");
   } catch (err) {

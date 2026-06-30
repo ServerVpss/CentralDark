@@ -94,11 +94,15 @@ Você fala com uma IA (eu, Gemini, ChatGPT). Ela mexe na VPS. Vários **robôs p
 ╔══════════════════════════════════════════════╗
 ║  6. NOTION SYNC (GitHub Action)               ║
 ╚══════════════════════════════════════════════╝
-  ✅ Status: ativo
+  ✅ Status: ativo (cobertura TOTAL desde 30/06)
   👁️  O que faz: toda vez que docs/CONSCIENCIA
       ou docs/PENDENCIAS.md mudam, ele copia
       pro seu Notion — espelho pra você ler
       bonito, sem precisar abrir código
+  📂 Agora cobre TODO documento novo da
+      Consciência (inventário automático no
+      database "Estrutura de Pastas & Agentes")
+      — não precisa mais cadastrar à mão
   📨 Direção: GitHub → Notion (só nesse
       sentido — editar no Notion direto NÃO
       volta pro GitHub sozinho ainda)
