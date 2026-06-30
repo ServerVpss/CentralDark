@@ -41,6 +41,23 @@ Com MCP:  todas plugam na MESMA tomada → mesmas ferramentas + mesma memória
 no mesmo conector e ganha acesso às mesmas ferramentas e à mesma memória (as Lembranças).
 Por isso o seu contexto não se perde quando você troca de IA.
 
+## 💬 Em palavras simples (do jeito que te falei)
+
+> Boa! O que tá mais na minha cabeça é justamente o **coração** do que a gente acabou de
+> construir: o MCP (Model Context Protocol). Entender ele te dá a base de tudo.
+>
+> É o **padrão oficial** (criado pela Anthropic) que faz uma IA conseguir **usar
+> ferramentas** de verdade — ler arquivo, mexer no GitHub, lembrar das coisas — em vez de só
+> conversar.
+>
+> A analogia que fixa: o MCP é tipo uma **"porta USB-C" pras IAs**. Qualquer IA (Claude,
+> Grok, ChatGPT, Gemini) "pluga" no mesmo conector e ganha as mesmas ferramentas e a mesma
+> memória. **Foi por isso que suas Lembranças funcionam entre IAs diferentes** — você troca
+> de IA e não perde o contexto.
+>
+> Sem MCP, cada IA é uma ilha: não acessa nada e esquece tudo quando você troca. Com MCP,
+> todas plugam na mesma tomada.
+
 ## Como isso vive no CentralDark
 
 - Nosso servidor: `CentralDark-MCP` (PM2, porta 9100, `https://mcp.centralldark.com`).
