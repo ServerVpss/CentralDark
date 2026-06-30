@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T02:26:50.416Z
+# 🧠 Notion Sync — 2026-06-30T03:42:39.510Z
 
-- **Commit fonte:** `6a4aa18549836752a3039ab8309dbc13c10637fb`
+- **Commit fonte:** `71821d0f8faec8136a96e1a02ad9903c23e3d3a7`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 286 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 286 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 17 | 0 | 17 | 0 | 0 |
+| decisoes | 18 | 1 | 17 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
 
 ## Operações
@@ -28,6 +28,7 @@
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
 | decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
 | decisoes | atualizado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
+| decisoes | criado | Decisões da sessão 30/06/2026 — multi-provider LLM + remoção do /mcp-public |
 | decisoes | atualizado | Decisões da sessão 29/06/2026 — tarde (CLI) |
 | decisoes | atualizado | Migração CentralDark (em andamento) |
 | decisoes | atualizado | Fluxo de deploy |
