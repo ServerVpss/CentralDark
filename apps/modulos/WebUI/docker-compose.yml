@@ -9,9 +9,9 @@ services:
       - SCARF_NO_ANALYTICS=true
       - DO_NOT_TRACK=true
       - ANONYMIZED_TELEMETRY=false
-      # Elite Gateway CentralDark (OpenAI-compatible)
-      - OPENAI_API_BASE_URL=https://api.centralldark.com/v1
-      - OPENAI_API_KEY=SEGREDO_ELITE_123
+      # Multi-provider OpenAI-compatible: Elite Gateway, Groq, OpenRouter, Gemini
+      - OPENAI_API_BASE_URLS=https://api.centralldark.com/v1;https://api.groq.com/openai/v1;https://openrouter.ai/api/v1;https://generativelanguage.googleapis.com/v1beta/openai/
+      - OPENAI_API_KEYS=SEGREDO_ELITE_123;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;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;AQ.Ab8RN6LOW8_DIJ7vBdDIfQ-V9p6McU9O4IOxKt-ll9SYnvoYSA
       # Anthropic via Elite Gateway local (rotaciona keys → ap7 → Anthropic)
       - ANTHROPIC_API_BASE_URL=http://host.docker.internal:8082
       - ANTHROPIC_API_KEY=sk-lab-xlZDWhRKdmE8YQd1boW2xNxcZhEzJ0_QXzA0oNX7zl8

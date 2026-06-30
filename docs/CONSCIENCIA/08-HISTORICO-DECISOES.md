@@ -29,6 +29,46 @@ updated: 2026-06-29
 ---
 
 
+## Decisões da sessão 30/06/2026 — multi-provider LLM + remoção do /mcp-public
+
+### Remoção do endpoint /mcp-public
+
+**Decisão:** removido por completo o endpoint `/mcp-public` do MCP CentralDark (rotas GET/POST em `dist/index.js` + whitelist `PUBLIC_CALLABLE_TOOL_NAMES` em `dist/mcp-server.js`).
+
+**Por quê:** expunha `vps_write_file_safe` (escrita em arquivo) sem Bearer token — qualquer um com a URL podia escrever na VPS. Decisão direta do Pivete durante investigação de como conectar IAs externas (Gemini) à memória — ao descobrir o risco, ele pediu remoção total em vez de apenas restringir a whitelist. Fecha a pendência #8.
+
+**Achado lateral:** o módulo MCP não tem `src/` versionado no Git — só `dist/` (gitignored). A edição foi feita direto no `dist/`, única cópia existente, e não sobrevive a um rebuild do zero. Vira parte da pendência crítica já registrada em `09-ESTADO-ATUAL.md`.
+
+**Arquivos:** `apps/modulos/mcp/dist/index.js`, `apps/modulos/mcp/dist/mcp-server.js`. Verificado `/mcp-public` → 404 após restart do `CentralDark-MCP`.
+
+### Gemini não tem caminho de integração direta com o Cérebro Vivo (por enquanto)
+
+**Decisão:** não construir integração nova (webhook, Service Account Google Drive, inotify) para conectar o Gemini à memória — investigação confirmou que Gemini Gems não suporta Actions/tool-calling externo, e as alternativas (Gemini Enterprise, cliente custom da API) custam dinheiro ou reintroduzem terminal pela porta de trás. Adotado fluxo pragmático: repasse de texto formatado entre chats (Gemini → Claude Code/ChatGPT) em vez de automação completa.
+
+**Por quê:** o Pivete pediu pra qualquer IA (Claude, Gemini, ChatGPT, Grok) compartilhar "o mesmo cérebro" sem ele copiar/colar ou mexer em terminal. A investigação (3 agentes Explore + 1 Plan) mostrou que a maior parte da automação necessária já existe (GuardiãoConsciência, Memory-Linker, Notion sync) — o gargalo real é uma limitação de plataforma do Gemini, não falta de infraestrutura no CentralDark.
+
+**Arquivos:** `docs/CONSCIENCIA/11-MULTI-IA-FLUXO.md` (nova seção documentando a limitação).
+
+### Ativação de Groq, OpenRouter e Gemini como provedores LLM (Open WebUI + Bolt)
+
+**Decisão:** as 3 keys (Groq, OpenRouter, Gemini) que o Pivete tinha apenas nos painéis dos provedores foram organizadas em `apps/modulos/mcp/.env` e ativadas em dois lugares: `apps/modulos/Bolt/source/.env` (variáveis nativas do bolt.diy) e no banco do Open WebUI (`openai.api_base_urls`/`api_keys`/`api_configs` na tabela `config` do `webui.db`).
+
+**Por quê:** o modelo `gpt-4o` no Open WebUI estava quebrado (`'JSONResponse' object has no attribute 'body_iterator'`) porque apontava para uma conexão `https://api.mistral.ai/v1` salva no banco (não nos env vars do docker-compose, que têm prioridade menor que o banco depois do primeiro boot) sem key válida. A correção substituiu essa conexão quebrada por 4 conexões funcionais: Elite Gateway, Groq, OpenRouter (que serve gpt-4o de verdade) e Gemini.
+
+**Achado:** havia uma segunda key OpenRouter colada junto com a principal — mantida como `OPENROUTER_API_KEY_ALT` (não removida, por pedido do Pivete: "mesmo que fique repetido, só bota título diferente pra saber").
+
+**Arquivos:** `apps/modulos/mcp/.env`, `apps/modulos/Bolt/source/.env`, `apps/modulos/WebUI/docker-compose.yml`, banco `webui.db` (via script Python pontual, não versionado). Containers `CentralDark-WebUI` e `CentralDark-Builder` recriados/reiniciados e confirmados healthy.
+
+### Backup de leitura docs/CONSCIENCIA/ → Google Drive agendado
+
+**Decisão:** `scripts/sync-memoria.sh` trocado de `rclone sync` para `rclone copy` (nunca apaga no Drive) e agendado no crontab a cada 6 horas. Autorizado explicitamente pelo Pivete ("PERMITO PIVETE") após bloqueio do classificador de segurança do Claude Code, que exigiu confirmação explícita por ser mudança persistente de infraestrutura.
+
+**Por quê:** infraestrutura já existia (remote `gdrive:` configurado, script pronto) mas nunca tinha sido agendada — vira só um backup de leitura, não canal de escrita Drive→Git.
+
+**Arquivos:** `scripts/sync-memoria.sh`, crontab.
+
+---
+
 ## Decisões da sessão 29/06/2026 — tarde (CLI)
 
 ### Elite Proxy: adotar conversão bidirecional OpenAI↔Anthropic (v1.6.0)

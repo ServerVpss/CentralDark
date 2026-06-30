@@ -52,6 +52,17 @@ RELOAD MEMORIA
 → resumo + próxima IA
 ```
 
+## Limitação confirmada: Gemini (e IAs sem terminal) não escrevem direto na memória
+
+**Investigado em 30/06/2026** — antes de qualquer IA prometer "conectar o Gemini direto" ao Cérebro Vivo, checar se isso mudou:
+
+- Gemini Gems (app consumidor, gemini.google.com) **não suporta Actions/tool-calling externo** hoje, diferente do ChatGPT (Custom GPT Actions, ver [[CUSTOM-GPT-SETUP]]).
+- Gemini Enterprise tem "Custom Connectors", mas é arquitetura de ingestão pra busca (fetch→transform→index), não escrita em tempo real — e é produto pago separado.
+- A API Gemini crua suporta function calling, mas só funciona se alguém rodar um cliente/script que recebe a chamada e executa contra o MCP — reintroduz "terminal" pela porta de trás, o que anula o ganho.
+- `/mcp-public` (endpoint sem auth) foi **removido** em 30/06/2026 por motivo de segurança (expunha `vps_write_file_safe` sem Bearer) — não é mais opção de "atalho" pra IA externa de qualquer forma.
+
+**Fluxo pragmático adotado:** quando o Pivete conversa com Gemini (ou outra IA sem terminal) sobre algo que deve virar memória permanente, ele pede pra essa IA gerar o texto já formatado e cola numa mensagem pra uma IA com MCP/terminal (Claude Code, ChatGPT com Custom GPT), que grava via `registrar_aprendizado` / `adicionar_pendencia` / `atualizar_consciencia`. Reduz fricção (copia uma mensagem, não roda script) sem inventar integração que a plataforma não suporta.
+
 ## Ações sensíveis
 
 Exigem confirmação explícita:

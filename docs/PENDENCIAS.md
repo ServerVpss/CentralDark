@@ -463,10 +463,10 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Sintoma:** Secrets hoje vivem em arquivos .env (modo 0600) na VPS. Pivete cogitou centralizar no Supabase. Risco: tabela public exporia tudo via service_key.
 - **Onde mexer:** secrets/ na VPS + extensão supabase_vault no projeto lyoigsqluyktoclwdaft
 - **Critério pra fechar:** Se migrar, usar EXTENSÃO supabase_vault (criptografado em repouso), NUNCA tabela public. Projeto separado, sem pressa. Hoje o modelo 0600 já é seguro.
-### 8. Revisar exposição de vps_write_file_safe no /mcp-public sem auth — 🟡 ABERTO (28/06/2026, 07:29 BRT)
-- **Sintoma:** vps_write_file_safe está exposta no endpoint /mcp-public SEM Bearer token (desde 27/06). Qualquer um com a URL pode escrever arquivos na VPS (exceto paths bloqueados).
-- **Onde mexer:** tools-catalog.js / PUBLIC_CALLABLE_TOOL_NAMES no MCP (apps/modulos/mcp)
-- **Critério pra fechar:** Revisar PUBLIC_CALLABLE_TOOL_NAMES. Avaliar remover vps_write_file_safe do público (manter só leitura) e remover teste_temporario_pivete (temporária). Paths sensíveis seguem bloqueados, mas escrita sem auth é superfície de risco.
+### 8. Revisar exposição de vps_write_file_safe no /mcp-public sem auth — ✅ CONCLUÍDO em 30/06/2026
+- **Sintoma:** vps_write_file_safe estava exposta no endpoint /mcp-public SEM Bearer token (desde 27/06). Qualquer um com a URL podia escrever arquivos na VPS (exceto paths bloqueados).
+- **O que foi feito:** endpoint `/mcp-public` removido por completo (rotas GET/POST em `dist/index.js` + whitelist `PUBLIC_CALLABLE_TOOL_NAMES` em `dist/mcp-server.js`, esvaziada). Decisão do Pivete: nenhuma IA externa sem terminal vai usar esse caminho — toda chamada ao MCP agora exige OAuth via `/mcp`. Confirmado `curl /mcp-public` → 404 após restart do `CentralDark-MCP`.
+- **O que ficou no ar:** a edição foi feita direto em `dist/` porque não existe `src/` versionado no módulo MCP (ver achado paralelo na pendência #9) — não sobrevive a um rebuild do zero. Precisa portar pro source assim que o `src/` for reconstruído.
 ### 9. Refatorar fonte da verdade: universalizar + remover legados + regra ferramenta-ausente — 🟡 ABERTO (28/06/2026, 07:50 BRT — atualizado 30/06/2026 com mapeamento completo)
 - **Sintoma:** CONSCIENCIA.md e 00-PORTA-DE-ENTRADA-IA.md com legado Multizap/clone-deck, nomes PM2 errados, agentes listados por nome (sem Claude/sem universal), snapshot de pendências velho. LEIA-ME-IA.md referenciado no fluxo mas foi pra ARQUIVO-MORTO (404).
 - **Onde mexer:** docs/CONSCIENCIA/CONSCIENCIA.md + docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md
@@ -481,9 +481,23 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 5. **Vários arquivos antigos citam `segredounlock/clone-deck` como repo principal** (`00-PORTA-DE-ENTRADA-IA.md`, `CUSTOM-GPT-SETUP.md`, `CODEX-INTEGRADO.md`, `REPOSITORIO-OFICIAL.md`, `MODO-SEGREDO.md`) — desatualizado, hoje é `ServerVpss/CentralDark` (Seção 8 do CLAUDE.md).
 6. **`CONSCIENCIA.md` (doc de regras) tem seção 17 sobre sync pausado do legado Recargas Brasil/Multizap** misturada no meio das regras vigentes — separar estado pontual de regra fixa.
 
+**Achado 7 (30/06/2026, durante investigação de remoção do /mcp-public):** `06-MCP-CENTRALDARK.md` também precisa de correção sobre o que `/mcp-public` expunha — confirmado por leitura do código real que ele NUNCA expôs as tools de memória (`ler_consciencia`, `adicionar_pendencia`, `atualizar_consciencia` sempre exigiram OAuth Bearer via `/mcp`); só expunha tools de infra/diagnóstico (`mcp_status`, `vps_read_file_safe`, `vps_write_file_safe` etc). O endpoint foi removido por completo (ver pendência #8 ✅), então essa correção agora é só histórica/documental.
+
+**Achado 8 (30/06/2026):** módulo MCP (`apps/modulos/mcp/`) não tem pasta `src/` versionada no Git — só `dist/` (compilado, gitignored) + `package.json` + `tsconfig.json`. Toda edição em `dist/` (como a remoção do `/mcp-public`) é a única cópia existente e não sobrevive a um rebuild do zero. Isso é a raiz do problema já citado em `09-ESTADO-ATUAL.md` ("fix do /openapi.json só existe no dist"). Precisa decidir: reconstruir o `src/` a partir do `dist/` atual, ou aceitar editar `dist/` como prática permanente (arriscado).
+
 - **Critério pra fechar (mapeamento):** revisar item por item com o Pivete antes de qualquer edição em `docs/CONSCIENCIA/` (área protegida — Seção 9 do CLAUDE.md). Registrar cada decisão em `08-HISTORICO-DECISOES.md` conforme for fechando.
 ### 10. Processos fantasma no PM2 — id 3, 4, 6 com pid N/A — 🟡 ABERTO (30/06/2026, 22:15 BRT)
 - **Sintoma:** `pm2 list` mostra 3 processos como "online" mas sem PID real (não estão de fato rodando): `CentralDark-BotServer` (id 4), `MultiZap-Gateway` (id 3), `CloneDeck-CRM` (id 6).
 - **Causa identificada:** `CentralDark-BotServer` aponta pro script `apps/bot-server/start.sh`, que não existe mais — sumiu na reestruturação pra `apps/bot-telegram/` (o bot real que roda é `CentralDark-HubBot`, id 27, via `unified-bot.cjs`). `MultiZap-Gateway` e `CloneDeck-CRM` apontam pra `/root/Multizap/` — sistema legado (CentralDark1VPS).
 - **Onde mexer:** PM2 (`pm2 delete`/`pm2 restart` conforme decisão) + `dump.pm2` (rodar `pm2 save` depois)
 - **Critério pra fechar:** Decidir com o Pivete: (a) apagar os 3 do PM2 por serem ghost/legado, ou (b) para o id 4 especificamente, corrigir o script path pra apontar pro lugar certo se ele tiver uso real separado do HubBot. Os ids 3 e 6 são do sistema legado `CentralDark1VPS` — não mexer sem "Migração de Automação" (regra da Seção 8 do CLAUDE.md).
+
+### 11. Avaliar destravar modo `auto` do Guardião da Consciência — 🟢 ABERTO (30/06/2026, 23:40 BRT)
+- **Sintoma:** `CentralDark-GuardiaoConsciencia` (PM2 28, `infra/guardiao/guardiao.py`) está travado em modo "propor" (nunca move arquivo sozinho) até `08/07/2026`, por `REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md`. Essa data está perto de vencer.
+- **Por que não decidir agora:** a regra oficial exige cumulativamente — 7-10 dias úteis de propostas reais validadas pelo admin, E lógica de movimentação de arquivo implementada e revisada. Hoje `guardiao.py` só tem o branch `propor`, a lógica de mover de fato **não existe ainda**. Destravar a data sozinha não muda comportamento nenhum até essa lógica ser escrita.
+- **Onde mexer:** `infra/guardiao/guardiao.py` (implementar branch `auto`) + `REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md` (atualizar critério/data)
+- **Critério pra fechar:** Decisão explícita do Pivete — não é automática só porque a data passou. Avaliar histórico de propostas em `fila/events.jsonl` antes de decidir.
+
+### 12. Provedores LLM extras ativados (Groq, OpenRouter, Gemini) — ✅ CONCLUÍDO em 30/06/2026
+- **O que foi feito:** chaves organizadas em `apps/modulos/mcp/.env` (estava uma bagunça de texto colado de 3 painéis diferentes). Groq e Gemini preenchidas em `apps/modulos/Bolt/source/.env` (OpenRouter já estava certa lá). Open WebUI (`apps/modulos/WebUI/docker-compose.yml`) ganhou `OPENAI_API_BASE_URLS`/`OPENAI_API_KEYS` com 4 conexões: Elite Gateway, Groq, OpenRouter, Gemini. Os 2 containers (`CentralDark-WebUI`, `CentralDark-Builder`) foram recriados e confirmados healthy/200.
+- **O que ficou no ar:** o modelo `gpt-4o 🔗` antigo (cadastrado direto no admin do Open WebUI, sem key válida, causava o erro `'JSONResponse' object has no attribute 'body_iterator'`) continua na lista — não foi removido, só ficaram disponíveis alternativas funcionais (OpenRouter serve gpt-4o de verdade). Há também uma key OpenRouter alternativa não confirmada, comentada em `mcp/.env`, e um UUID + webhook secret de origem incerta também comentados lá — confirmar com o Pivete se algum desses tem uso.
