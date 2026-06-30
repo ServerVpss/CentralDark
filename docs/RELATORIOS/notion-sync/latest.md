@@ -1,6 +1,6 @@
-# 🧠 Notion Sync — 2026-06-30T11:37:08.920Z
+# 🧠 Notion Sync — 2026-06-30T14:11:27.512Z
 
-- **Commit fonte:** `9aed2257e5aed8c671aba6fd8b7d4b0d9151f5b6`
+- **Commit fonte:** `bbc430708af25dc78fec269a904f077e4c413575`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
@@ -311,7 +311,7 @@
 | aprendizados | atualizado | #260 — Padrão de Apresentação — toda IA via MCP |
 | aprendizados | atualizado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
 | aprendizados | atualizado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
-| aprendizados | criado | #263 — Estilo gamificado é padrão oficial de comunicação |
+| aprendizados | atualizado | #263 — Estilo gamificado é padrão oficial de comunicação |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
