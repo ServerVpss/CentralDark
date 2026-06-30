@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T09:16:51.490Z
+# 🧠 Notion Sync — 2026-06-30T11:27:45.166Z
 
-- **Commit fonte:** `bfd83be07f5716e201070499636a35918d63a13d`
+- **Commit fonte:** `56188fef12f8398c3a134d6dfba25789f7f425ac`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 358 atualizadas · ❌ 1 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 359 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 20 | 0 | 20 | 0 | 0 |
-| aprendizados | 264 | 0 | 263 | 0 | 1 |
+| aprendizados | 264 | 0 | 264 | 0 | 0 |
 | estrutura | 70 | 0 | 70 | 0 | 0 |
 
 ## Operações
@@ -212,7 +212,7 @@
 | aprendizados | atualizado | #161 — Diferenciar instalador geral e instalador isolado |
 | aprendizados | atualizado | #162 — Builder Bolt precisa root real da VPS |
 | aprendizados | atualizado | #163 — Comandos Bash de diagnostico tambem devem usar tema |
-| aprendizados | erro | #164 — Uso obrigatório do Tema Bash V4 em comandos operacionais |
+| aprendizados | atualizado | #164 — Uso obrigatório do Tema Bash V4 em comandos operacionais |
 | aprendizados | atualizado | #165 — Builder Bolt wrangler runtime corrigido copiando node_modules do stage build |
 | aprendizados | atualizado | #166 — Builder Bolt validado localmente com health healthy e HTTP 200 |
 | aprendizados | atualizado | #167 — Builder Bolt validado localmente healthy HTTP 200 |
