@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 20 | 20 | 20 | 0 | 0 |
-| aprendizados | 278 | 0 | 0 | 278 | 0 |
+| aprendizados | 279 | 0 | 0 | 279 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **278**
+- 🟥 Faltando no Notion: **279**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -326,4 +326,5 @@
 - Git — Fluxo de Trabalho Seguro na VPS
 - uvicorn / FastAPI — Elite Anthropic Proxy
 - Diagnóstico Rápido da VPS
+- 263. Estilo gamificado é padrão oficial de comunicação
 </details>
