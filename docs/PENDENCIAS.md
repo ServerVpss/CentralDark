@@ -507,3 +507,15 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Onde:** `docs/CONSCIENCIA/*.md`.
 - **Cuidado (por isso não foi feito de imediato):** é ÁREA PROTEGIDA (CLAUDE.md Seção 9) e renomear arquivo quebra os wikilinks `[[...]]` do Obsidian. Tem que **renumerar E corrigir todos os links** que apontam pra cada arquivo no mesmo passo, senão o grafo do Pivete fica com bolinhas quebradas.
 - **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO PIVETE).
+
+### 14. Claude Code via proxy nos 2 modos (terminal + extensão VSCode) — 🟡 ABERTO (30/06/2026)
+- **Objetivo:** quando a conta principal cair, o Pivete continua trabalhando via proxy `claude.ap7.site` — tanto no terminal quanto na extensão do VSCode.
+- **Terminal:** ✅ PRONTO e testado (HTTP 200). Script `secrets/claude-proxy.sh` (liga/desliga, lê key do cofre). Tutorial em `docs/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md`.
+- **Extensão VSCode (barra lateral):** 🟡 pendente — apontar a extensão pro proxy (vars no ambiente do VSCode Server) + recarregar janela; documentar liga/desliga no tutorial. O Pivete escolheu "os dois".
+- **Continuidade:** garantida pela memória (Lembranças + Consciência) — qualquer conta nova retoma com `/contexto`.
+- **Preferência do Pivete (30/06):** usar a própria EXTENSÃO dele (abre bonito, com o nome da conversa). Se a extensão via proxy não rolar limpo, fallback é o terminal (já pronto) ou um chat local. "Faz o seu melhor."
+
+### 15. Notificação automática de uso do MCP no Telegram (formato monospace) — 🟡 ABERTO (30/06/2026)
+- **Pedido do Pivete:** toda vez que QUALQUER IA trabalha usando o MCP dele, notificar no Telegram (igual o hook Stop), bem organizado, em **formato MONOESPAÇADO** (`<pre>`, fundo preto, bonito).
+- **Padrão mono:** já é regra (ver memória do padrão visual). **Falta:** o gatilho de notificação no MCP por uso/sessão.
+- **Cuidado:** definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam). Implementação no MCP (`dist/audit-logger.js` é a base) + reusar `scripts/notify-claude/notify-telegram.sh` (já manda pro privado + canal).
