@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-06-30T09:38:19.464Z",
-  "updatedAtBR": "30/06/2026, 06:38:19 BRT",
+  "updatedAt": "2026-06-30T10:56:41.223Z",
+  "updatedAtBR": "30/06/2026, 07:56:41 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
     "branch": "main",
-    "lastCommit": "feat(notify): Claude notifica no privado + canal do Telegram",
+    "lastCommit": "Adicionou MCP customizado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -583,6 +583,14 @@
   ],
   "events": [
     {
+      "time": "2026-06-30T10:56:41.223Z",
+      "titulo": "Push na main · 86744689d38095f73d62978da125043811c28ebc",
+      "detalhe": "Adicionou MCP customizado",
+      "area": "Repositório",
+      "sha": "8674468",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-06-30T09:38:19.464Z",
       "titulo": "Push na main · 64511f250958571128dff600200fe72ea66357be",
       "detalhe": "feat(notify): Claude notifica no privado + canal do Telegram",
@@ -972,14 +980,6 @@
       "detalhe": "feat(bot+brain): personalidade Pivete, trigger devedores/contatos, pasta 06 no Obsidian",
       "area": "Repositório",
       "sha": "360a2a6",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T12:09:34.809Z",
-      "titulo": "Push na main · 0efd80e987acd71ac9b562be66fcdffae2833ecd",
-      "detalhe": "fix(bot): mdToHtml() converte Markdown do LLM para HTML Telegram + bloqueio não-admin com escracho + prompts HTML",
-      "area": "Repositório",
-      "sha": "0efd80e",
       "actor": "segredounlock"
     }
   ],
@@ -1395,6 +1395,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-06-30T10:56:41.223Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 86744689d38095f73d62978da125043811c28ebc (8674468)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-30T09:38:19.464Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 64511f250958571128dff600200fe72ea66357be (64511f2)",
@@ -1734,13 +1741,6 @@
       "time": "2026-06-29T12:16:52.133Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 360a2a603fcd7ff5dd6a8fb4771bac2bc14d93ea (360a2a6)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T12:09:34.809Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0efd80e987acd71ac9b562be66fcdffae2833ecd (0efd80e)",
       "area": "Repositório",
       "status": "sucesso"
     }
