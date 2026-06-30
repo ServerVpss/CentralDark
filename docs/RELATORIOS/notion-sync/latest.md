@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T08:40:13.942Z
+# 🧠 Notion Sync — 2026-06-30T09:16:51.490Z
 
-- **Commit fonte:** `ea70c3a5df7be6af5a7d27d570bef6103cdc97ea`
+- **Commit fonte:** `bfd83be07f5716e201070499636a35918d63a13d`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 3 criadas · ♻️ 356 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 358 atualizadas · ❌ 1 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 20 | 1 | 19 | 0 | 0 |
-| aprendizados | 264 | 0 | 264 | 0 | 0 |
-| estrutura | 70 | 2 | 68 | 0 | 0 |
+| decisoes | 20 | 0 | 20 | 0 | 0 |
+| aprendizados | 264 | 0 | 263 | 0 | 1 |
+| estrutura | 70 | 0 | 70 | 0 | 0 |
 
 ## Operações
 
@@ -45,7 +45,7 @@
 | decisoes | atualizado | Elite Anthropic Proxy — Operacional (29/06/2026) |
 | decisoes | atualizado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
 | decisoes | atualizado | Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026) |
-| decisoes | criado | MCP — versionado, equipado com tools cognitivas e trancado (30/06/2026) |
+| decisoes | atualizado | MCP — versionado, equipado com tools cognitivas e trancado (30/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
@@ -212,7 +212,7 @@
 | aprendizados | atualizado | #161 — Diferenciar instalador geral e instalador isolado |
 | aprendizados | atualizado | #162 — Builder Bolt precisa root real da VPS |
 | aprendizados | atualizado | #163 — Comandos Bash de diagnostico tambem devem usar tema |
-| aprendizados | atualizado | #164 — Uso obrigatório do Tema Bash V4 em comandos operacionais |
+| aprendizados | erro | #164 — Uso obrigatório do Tema Bash V4 em comandos operacionais |
 | aprendizados | atualizado | #165 — Builder Bolt wrangler runtime corrigido copiando node_modules do stage build |
 | aprendizados | atualizado | #166 — Builder Bolt validado localmente com health healthy e HTTP 200 |
 | aprendizados | atualizado | #167 — Builder Bolt validado localmente healthy HTTP 200 |
@@ -354,8 +354,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
-| estrutura | criado | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
-| estrutura | criado | docs/CONSCIENCIA/LEMBRANCAS/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
+| estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
