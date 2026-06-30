@@ -41,3 +41,13 @@ Conteúdo: Pivete fala PT-BR sempre, tom direto e informal, zero enrolação. Pr
 execução de verdade (não ficar mandando JSON pra colar). Gosta de respostas visuais em
 caixas monospace. É leigo em código — quer nomes claros e organização limpa, com foco em
 "funcional e seguro". Esta entrada é a primeira semente das Lembranças (30/06/2026).
+
+### [2026-06-30T08:31] Pivete adotou estilo gamificado como padrão visual
+- **Data:** 2026-06-30
+- **Tags:** estilo, gamificacao, comunicacao, padrao-visual
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-07-30
+- **Promovida:** nao
+
+Conteúdo: Pivete aprovou comunicação gamificada: cards monospace, HUD do jogador (nível/XP/conquistas), bolinhas 🟢🟡🔴, emojis temáticos, escaneável. Propagado na CONSCIENCIA.md seção 16 como regra permanente para todas as IAs do sistema. Chamar sempre de Pivete, nunca nome civil.
