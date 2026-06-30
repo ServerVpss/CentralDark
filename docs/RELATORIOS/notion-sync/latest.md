@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T04:06:20.356Z
+# 🧠 Notion Sync — 2026-06-30T04:18:07.072Z
 
-- **Commit fonte:** `b2a4e93cab718479d761a3668d4c37e725f66d45`
+- **Commit fonte:** `f2193480d272a38cd6545852340ac5deb4319698`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
-- **Bases rodadas:** regras, pendencias, decisoes, aprendizados
+- **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 287 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 68 criadas · ♻️ 288 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,8 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 19 | 1 | 18 | 0 | 0 |
+| decisoes | 19 | 0 | 19 | 0 | 0 |
 | aprendizados | 264 | 0 | 264 | 0 | 0 |
+| estrutura | 68 | 68 | 0 | 0 | 0 |
 
 ## Operações
 
@@ -43,7 +44,7 @@
 | decisoes | atualizado | Gerenciador de pacotes — npm (raiz) |
 | decisoes | atualizado | Elite Anthropic Proxy — Operacional (29/06/2026) |
 | decisoes | atualizado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
-| decisoes | criado | Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026) |
+| decisoes | atualizado | Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
@@ -309,5 +310,73 @@
 | aprendizados | atualizado | #260 — Padrão de Apresentação — toda IA via MCP |
 | aprendizados | atualizado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
 | aprendizados | atualizado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
+| estrutura | criado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
+| estrutura | criado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
+| estrutura | criado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
+| estrutura | criado | docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
+| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
+| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
+| estrutura | criado | docs/CONSCIENCIA/01-IDENTIDADE.md |
+| estrutura | criado | docs/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md |
+| estrutura | criado | docs/CONSCIENCIA/02-PERMISSOES.md |
+| estrutura | criado | docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md |
+| estrutura | criado | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
+| estrutura | criado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
+| estrutura | criado | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
+| estrutura | criado | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
+| estrutura | criado | docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md |
+| estrutura | criado | docs/CONSCIENCIA/08-HISTORICO-DECISOES.md |
+| estrutura | criado | docs/CONSCIENCIA/09-ESTADO-ATUAL.md |
+| estrutura | criado | docs/CONSCIENCIA/10-FALLBACK-LOVABLE.md |
+| estrutura | criado | docs/CONSCIENCIA/11-MULTI-IA-FLUXO.md |
+| estrutura | criado | docs/CONSCIENCIA/11-SKIL-SH.md |
+| estrutura | criado | docs/CONSCIENCIA/12-GUIA-PIVETE.md |
+| estrutura | criado | docs/CONSCIENCIA/12-PASTA-OFICIAL-BOT.md |
+| estrutura | criado | docs/CONSCIENCIA/13-COMANDO-UNICO-VPS.md |
+| estrutura | criado | docs/CONSCIENCIA/20-COLABORACAO-MULTI-IA.md |
+| estrutura | criado | docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md |
+| estrutura | criado | docs/CONSCIENCIA/21-METODO-DIAGNOSTICO-FUNIL.md |
+| estrutura | criado | docs/CONSCIENCIA/21-PADRAO-APRESENTACAO.md |
+| estrutura | criado | docs/CONSCIENCIA/22-METODO-DEPLOY-VPS.md |
+| estrutura | criado | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
+| estrutura | criado | docs/CONSCIENCIA/APRENDIZADOS.md |
+| estrutura | criado | docs/CONSCIENCIA/ARTEFATOS/README.md |
+| estrutura | criado | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
+| estrutura | criado | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
+| estrutura | criado | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
+| estrutura | criado | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
+| estrutura | criado | docs/CONSCIENCIA/CONSCIENCIA.md |
+| estrutura | criado | docs/CONSCIENCIA/CUSTOM-GPT-SETUP.md |
+| estrutura | criado | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
+| estrutura | criado | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
+| estrutura | criado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
+| estrutura | criado | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
+| estrutura | criado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
+| estrutura | criado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
+| estrutura | criado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
+| estrutura | criado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
+| estrutura | criado | docs/CONSCIENCIA/MODO-SEGREDO.md |
+| estrutura | criado | docs/CONSCIENCIA/NOTION-MAPA.md |
+| estrutura | criado | docs/CONSCIENCIA/PLANO.md |
+| estrutura | criado | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
+| estrutura | criado | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
+| estrutura | criado | docs/CONSCIENCIA/README.md |
+| estrutura | criado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
+| estrutura | criado | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
+| estrutura | criado | docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
+| estrutura | criado | docs/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
+| estrutura | criado | docs/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
+| estrutura | criado | docs/CONSCIENCIA/RETOMADA-Issues-Agent.md |
+| estrutura | criado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
+| estrutura | criado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
+| estrutura | criado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
+| estrutura | criado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
+| estrutura | criado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
+| estrutura | criado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |
+| estrutura | criado | docs/CONSCIENCIA/relatorios/03_LIXO_PARA_ARQUIVAR.md |
+| estrutura | criado | docs/CONSCIENCIA/relatorios/04_DUPLICATAS_ENCONTRADAS.md |
+| estrutura | criado | docs/CONSCIENCIA/relatorios/05_PROPOSTA_ESTRUTURA_NOVA.md |
+| estrutura | criado | docs/CONSCIENCIA/relatorios/06_ESTATISTICAS.md |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
