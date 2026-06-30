@@ -11,13 +11,18 @@ O MCP (Model Context Protocol) é o que te dá acesso ao GitHub e à VPS direto 
 
 ## Onde tá o código
 
-- **No repo:** `CentralDark/apps/mcp/` (também referenciado em `apps/mcp/`)
-- **Na VPS:** `/root/CentralDark/APP/infra/mcp/`
-- **Secrets:** `/root/CentralDark/APP/secrets/mcp.env`
+- **No repo:** `apps/modulos/mcp/`
+- **Na VPS:** `/root/CentralDark/apps/modulos/mcp/`
+- **Secrets:** `/root/CentralDark/apps/modulos/mcp/.env`
+- **Código vivo:** `apps/modulos/mcp/dist/` (versionado desde 30/06/2026; `src/` a reconstruir)
+- **Docs técnica:** `apps/modulos/mcp/docs/` (arquitetura + tools cognitivas)
+
+> Correção 30/06/2026: a pasta `/APP/` citada antes **nunca existiu** na VPS (ver
+> `04-ESTRUTURA-VPS.md`). O caminho real é `apps/modulos/mcp/`.
 
 ## Servidor
 
-- **PM2:** `MCP-CentralDark` (porta 9100)
+- **PM2:** `CentralDark-MCP` (porta 9100) — 100 ferramentas
 - **Domínio:** `https://mcp.centralldark.com`
 - **Health:** `https://mcp.centralldark.com/health` (HTTP 200 = ok)
 - **Endpoint MCP:** `https://mcp.centralldark.com/mcp`

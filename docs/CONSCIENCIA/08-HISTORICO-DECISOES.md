@@ -244,6 +244,36 @@ Decisões arquiteturais e operacionais já tomadas. Não reabrir sem motivo fort
 
 ---
 
+## MCP — versionado, equipado com tools cognitivas e trancado (30/06/2026)
+
+**Contexto:** o módulo `apps/modulos/mcp/` rodava em produção (porta 9100, OAuth GitHub) mas
+**não tinha código-fonte versionado** — só o `dist/` compilado (gitignored), única cópia
+viva. Risco crítico de perda. O Pivete trouxe uma proposta do Grok (árvore conceitual de 10
+itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governança cognitiva.
+
+**Decisões tomadas:**
+1. **Versionar o `dist/`** via `apps/modulos/mcp/.gitignore` (re-inclui `dist/`, mantém fora
+   `.env`, `node_modules`, `logs`, `*.map`, `*.bak*`, `*.d.ts`). Fim do risco de perda. A
+   reescrita do `src/` TypeScript fica como etapa futura (não urgente — risco já zerado).
+2. **A árvore de 10 itens do Grok NÃO virou pastas físicas** (duplicaria memória/skills/
+   agentes/integrações que já existem — anti-inflação). Virou documentação/mapa.
+3. **4 tools cognitivas** criadas em `dist/tools/cognitivo/cognitivo.js` (catálogo: 96→100):
+   `consultar_memoria_reserva`, `consolidar_pensamento`, `injetar_consciencia_centraldark`,
+   `analise_de_estado_cognitivo`.
+4. **"Lembranças"** (renomeado de "Memória Reserva" a pedido do Pivete): memória de curto
+   prazo em `docs/CONSCIENCIA/LEMBRANCAS/`, TTL 30 dias, auto-limpeza, fluxo de promoção pra
+   consciência oficial. É por onde toda IA passa primeiro ao conectar.
+5. **Documentação** em `apps/modulos/mcp/README.md` (leigo) + `apps/modulos/mcp/docs/`
+   (ARQUITETURA + TOOLS-COGNITIVAS).
+6. **Docs corrigidos:** `06-MCP-CENTRALDARK.md` (paths `/APP/` que nunca existiram →
+   `apps/modulos/mcp/`); `MAPA-DO-CEREBRO.md` (95/9200 → 100/9100).
+7. **Trancado** na Seção 9 do CLAUDE.md (`apps/modulos/mcp/` + `LEMBRANCAS/`).
+
+**Validação:** `curl localhost:9100/health` → `toolCount:100`, `version 0.4.0`; as 4 tools no
+`/tools.json`; handlers de leitura testados (parsing + fallback local OK).
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada

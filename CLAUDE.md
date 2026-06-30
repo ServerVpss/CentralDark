@@ -114,7 +114,9 @@ Se você é uma IA abrindo este repositório pela primeira vez:
 | `secrets/` | Nunca commitar, nunca sobrescrever sem backup explícito | — |
 | `docs/CONSCIENCIA/` | Fonte de verdade do Cérebro Vivo — git é autoritativo | — |
 | `.github/workflows/` em geral | Qualquer mudança em workflow pode derrubar CI/CD inteiro | — |
+| `apps/modulos/mcp/` | MCP consolidado, versionado e equipado (100 tools + 4 cognitivas). Código vivo (`dist/`) é a única fonte até o `src/` ser reconstruído — não rodar build do zero nem mexer sem autorização | 30/06/2026 |
+| `docs/CONSCIENCIA/LEMBRANCAS/` | Memória de curto prazo (gerida pelas tools cognitivas do MCP) — não editar à mão sem necessidade | 30/06/2026 |
 
 > **Palavras-chave de autorização:** O Pivete pode liberar com "PERMITO PIVETE" (padrão existente) ou com instrução explícita descrevendo o escopo exato da mudança.
 
-> **Planos pendentes que ainda NÃO foram autorizados a executar:** reconstrução do MCP + hub (aguardar plano do Pivete); renomeação `docs/` → `.consciencia` (aguardar comando).
+> **Planos pendentes que ainda NÃO foram autorizados a executar:** reconstrução do `src/` TypeScript do MCP (etapa futura — o `dist/` já está versionado e protegido); reconstrução do **hub** (aguardar plano do Pivete); renomeação `docs/` → `.consciencia` (aguardar comando).

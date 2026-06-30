@@ -28,6 +28,7 @@ import { integrationsTools } from "../integrations.js";
 import { painelTools } from "../painel/painel.js";
 import { eliteGatewayTools } from "../elite/elite-gateway.js";
 import { piveteTools } from "../pivete/pivete-tools.js";
+import { cognitivoTools } from "../cognitivo/cognitivo.js";
 const TOOL_NAME_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const RAW_TOOLS = [
     ...aprendizadoTools,
@@ -50,6 +51,7 @@ const RAW_TOOLS = [
     ...painelTools,
     ...eliteGatewayTools,
     ...piveteTools,
+    ...cognitivoTools,
 ];
 function isToolDefinition(tool) {
     return (typeof tool === "object" &&
