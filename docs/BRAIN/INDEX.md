@@ -1,6 +1,6 @@
 # 📚 INDEX — Segundo Cérebro CentralDark
 
-> Gerado automaticamente em 2026-06-29 22:55 UTC. Não editar manualmente.
+> Gerado automaticamente em 2026-06-30 04:02 UTC. Não editar manualmente.
 
 ## (raiz)
 
@@ -22,6 +22,8 @@
 
 - [[00-POSTURA-PIVETE]]
 - [[INDEX]]
+- [[MAPA-DOS-BOTS]]
+- [[PROTOCOLO-INICIALIZACAO]]
 
 ## 05 - Documentacao
 
