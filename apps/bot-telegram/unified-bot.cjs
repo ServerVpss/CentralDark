@@ -49,7 +49,8 @@ const LLM_BASE     = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.c
 const LLM_KEY      = process.env.ANTHROPIC_AUTH_TOKEN || '';
 const LLM_MODEL    = process.env.LLM_MODEL || 'claude-sonnet-4-6';
 const GH_TOKEN     = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
-const MCP_PORT     = process.env.MCP_PORT || '9200';
+const MCP_PORT     = process.env.MCP_PORT || '9100';
+const MCP_TOKEN    = process.env.MCP_CENTRALDARK_TOKEN || process.env.MCP_TOKEN || '';
 const TG_API       = 'https://api.telegram.org';
 const WEBHOOK_URL  = (process.env.TELEGRAM_WEBHOOK_URL || '').trim();
 const WEBHOOK_PORT = Number(process.env.BOT_WEBHOOK_PORT || '9500');
@@ -442,6 +443,18 @@ const BOT_TOOLS = [
       required: ['path', 'content'],
     },
   },
+  {
+    name: 'call_mcp_tool',
+    description: 'Chama qualquer uma das 96 ferramentas do MCP CentralDark — github, supabase, notion, linear, pendencias, consciencia, deploy, VPS e mais.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        tool:   { type: 'string', description: 'Nome da ferramenta MCP (ex: github_list_issues, atualizar_consciencia, adicionar_pendencia)' },
+        params: { type: 'object', description: 'Parâmetros da ferramenta (objeto JSON)' },
+      },
+      required: ['tool'],
+    },
+  },
 ];
 
 function executeTool(toolName, toolInput) {
@@ -469,6 +482,30 @@ function executeTool(toolName, toolInput) {
       fs.mkdirSync(path.dirname(p), { recursive: true });
       fs.writeFileSync(p, toolInput.content || '', 'utf-8');
       return { ok: true, path: p, bytes: Buffer.byteLength(toolInput.content || '') };
+    }
+    if (toolName === 'call_mcp_tool') {
+      const mcpUrl = `http://localhost:${MCP_PORT}/mcp-public`;
+      try {
+        const r = await fetch(mcpUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(MCP_TOKEN ? { 'Authorization': `Bearer ${MCP_TOKEN}` } : {}),
+          },
+          body: JSON.stringify({
+            jsonrpc: '2.0', id: 1, method: 'tools/call',
+            params: { name: toolInput.tool, arguments: toolInput.params || {} },
+          }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (d.error) return { error: d.error.message || JSON.stringify(d.error) };
+        const content = d.result?.content;
+        if (Array.isArray(content)) {
+          const text = content.filter(c => c.type === 'text').map(c => c.text).join('\n');
+          return { result: text.slice(0, 8000) };
+        }
+        return { result: JSON.stringify(d.result).slice(0, 8000) };
+      } catch (e) { return { error: e.message }; }
     }
     return { error: `Ferramenta desconhecida: ${toolName}` };
   } catch (e) {
