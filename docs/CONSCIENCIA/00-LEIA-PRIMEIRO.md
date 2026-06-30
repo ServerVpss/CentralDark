@@ -70,6 +70,10 @@ Após ler os arquivos do repo, consulte também:
 
 ---
 
+## Mapa dos Bots
+
+Pra entender quem faz o quê na automação (Guardião, Analista, Memory-Linker, Webhook Deploy, etc) sem jargão técnico, leia [[MAPA-DOS-BOTS]].
+
 ## Protocolo de Inicialização de Sessão
 
 Toda IA deve executar o [[PROTOCOLO-INICIALIZACAO]] ao começar uma sessão nova. Ele inclui leituras, verificações de PM2 e health checks — e entrega um Relatório de Alinhamento em 4 seções ao Pivete antes de perguntar o que fazer.
