@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)"
+    ],
+    "additionalDirectories": [
+      "/root/.vscode-server/data/Machine"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /root/CentralDark/scripts/notify-claude/notify-telegram.sh '🤖' 'Claude Code — CentralDark' 'Resposta concluída. Aguardando próxima instrução do Pivete.'"
+          }
+        ]
+      }
+    ]
+  }
+}

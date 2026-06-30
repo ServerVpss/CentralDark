@@ -59,3 +59,11 @@ secrets/
 *.env
 !*.env.example
 .backups/
+
+# Dados de sistema / runtime que vazaram pra estrutura do repo (30/06/2026)
+apps/modulos/WebUI/var/
+apps/modulos/hub/*.tsbuildinfo
+root/
+
+# Arquivo com nome inválido (espaço)
+apps/modulos/elite-anthropic-proxy/leep*

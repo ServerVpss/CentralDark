@@ -70,6 +70,12 @@ Após ler os arquivos do repo, consulte também:
 
 ---
 
+## Protocolo de Inicialização de Sessão
+
+Toda IA deve executar o [[PROTOCOLO-INICIALIZACAO]] ao começar uma sessão nova. Ele inclui leituras, verificações de PM2 e health checks — e entrega um Relatório de Alinhamento em 4 seções ao Pivete antes de perguntar o que fazer.
+
+---
+
 ## Por que essa memória existe
 
 Qualquer IA esquece contexto entre sessões. Com o MCP CentralDark conectado, é possível reler esses arquivos no início de cada conversa nova — garantindo contexto completo, alinhado ao repo oficial `ServerVpss/CentralDark`, independente de qual IA ou hub está sendo usado.

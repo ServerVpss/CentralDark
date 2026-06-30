@@ -34,7 +34,7 @@ O projeto CentralDark / MultiZap opera com múltiplas IAs e ferramentas, usando 
 | 🌐 ELITE GATEWAY | CentralDark-EliteAnthropicProxy (id 37) | **8082** | ✅ online — **v1.6.0** |
 | 🌐 ELITE HTTP | elite-http-gateway (id 17) | 8080 | online |
 | 🚀 INTERFACE | TelePainel | — | ativo |
-| 🔌 MCP CentralDark | MCP-CentralDark (id 25) | 9100 | online — 96 tools |
+| 🔌 MCP CentralDark | CentralDark-MCP (id 33) | 9100 | online — 96 tools |
 
 **Integrações do Elite Gateway (v1.6.0):**
 - Builder Bolt: `VITE_ANTHROPIC_API_BASE` → proxy porta 8082
@@ -90,3 +90,4 @@ O projeto CentralDark / MultiZap opera com múltiplas IAs e ferramentas, usando 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+- [[PROTOCOLO-INICIALIZACAO]] — boot sequence de sessão IA
