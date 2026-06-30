@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-06-29T23:30:01.509Z",
-  "nextRunMin": 82,
+  "timestamp": "2026-06-30T07:30:01.421Z",
+  "nextRunMin": 107,
   "orfas": [
     "ARQUITETURA-CENTRALDARK-2026",
     "00-PORTA-DE-ENTRADA-IA",
@@ -14,10 +14,7 @@
     "ferramentas-cognitivas-e-comandos",
     "05-SSH-VPS",
     "06-MCP-CENTRALDARK",
-    "07-PENDENCIAS-E-HORARIO",
-    "09-ESTADO-ATUAL",
     "10-FALLBACK-LOVABLE",
-    "11-MULTI-IA-FLUXO",
     "11-SKIL-SH",
     "12-COFRE-LOVABLE",
     "12-GUIA-PIVETE",
@@ -34,7 +31,6 @@
     "CODEX-INTEGRADO",
     "CODEX-REVISAO-PRS",
     "CONECTOR-LIBERDADE-SEGURA",
-    "CUSTOM-GPT-SETUP",
     "ESPELHO-CLONE-DECK-PASSIVO",
     "GITHUB-PR-OBSERVAR-CODEX",
     "GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA",
@@ -50,7 +46,14 @@
     "REPOSITORIO-OFICIAL",
     "SCRIPTING-STANDARDS",
     "TESTE-CODEX-TRIGGER-HANDLERS",
-    "WEBHOOK-DEPLOY-SEGURO"
+    "WEBHOOK-DEPLOY-SEGURO",
+    "00_RESUMO_EXECUTIVO",
+    "01_MAPEAMENTO_ESTRUTURA",
+    "02_LIXO_PARA_DELETAR",
+    "03_LIXO_PARA_ARQUIVAR",
+    "04_DUPLICATAS_ENCONTRADAS",
+    "05_PROPOSTA_ESTRUTURA_NOVA",
+    "06_ESTATISTICAS"
   ],
   "brokenLinks": {
     "LINK": [
@@ -144,21 +147,63 @@
     "NOTIFICACOES-AMIGAVEIS": [
       "TECNICAS-DE-LINKAGEM-SEMANTICA"
     ],
-    "IA": [
-      "00-POSTURA-PIVETE"
+    "CLAUDE": [
+      "PROTOCOLO-INICIALIZACAO",
+      "BRAIN"
     ],
-    "CENTRALDARK": [
-      "00-POSTURA-PIVETE"
+    "PENDENCIAS": [
+      "PROTOCOLO-INICIALIZACAO"
     ],
-    "OBSIDIAN": [
-      "00-POSTURA-PIVETE",
+    "ELITE-GATEWAY": [
+      "PROTOCOLO-INICIALIZACAO",
+      "BRAIN"
+    ],
+    "VPS": [
+      "PROTOCOLO-INICIALIZACAO",
+      "BRAIN",
+      "BRAIN",
       "BRAIN"
     ],
     "GITHUB": [
+      "PROTOCOLO-INICIALIZACAO",
       "00-POSTURA-PIVETE",
       "BRAIN",
       "BRAIN",
       "BRAIN"
+    ],
+    "HUB": [
+      "PROTOCOLO-INICIALIZACAO",
+      "BRAIN",
+      "BRAIN"
+    ],
+    "TELEGRAM": [
+      "PROTOCOLO-INICIALIZACAO",
+      "BRAIN",
+      "BRAIN"
+    ],
+    "SKILLS": [
+      "PROTOCOLO-INICIALIZACAO",
+      "BRAIN"
+    ],
+    "PM2": [
+      "PROTOCOLO-INICIALIZACAO",
+      "BRAIN"
+    ],
+    "OBSIDIAN": [
+      "PROTOCOLO-INICIALIZACAO",
+      "00-POSTURA-PIVETE",
+      "BRAIN"
+    ],
+    "SINCRONIA-4-POINT": [
+      "PROTOCOLO-INICIALIZACAO"
+    ],
+    "IA": [
+      "00-POSTURA-PIVETE",
+      "MAPA-DOS-BOTS"
+    ],
+    "CENTRALDARK": [
+      "00-POSTURA-PIVETE",
+      "MAPA-DOS-BOTS"
     ],
     "LINKS": [
       "GUIA-PROMPTS",
@@ -173,23 +218,9 @@
     "07 - REUNIÕES & NOTAS": [
       "README"
     ],
-    "SKILLS": [
-      "BRAIN"
-    ],
-    "PM2": [
-      "BRAIN"
-    ],
-    "HUB": [
-      "BRAIN",
-      "BRAIN"
-    ],
     "CENTRALDARK-HUBBOT": [
       "BRAIN",
       "MOC-PM2"
-    ],
-    "TELEGRAM": [
-      "BRAIN",
-      "BRAIN"
     ],
     "CENTRALDARK-MCP": [
       "BRAIN",
@@ -202,11 +233,6 @@
     "CENTRALDARK-WEBHOOKDEPLOY": [
       "BRAIN"
     ],
-    "VPS": [
-      "BRAIN",
-      "BRAIN",
-      "BRAIN"
-    ],
     "CENTRALDARK-CONTASADMIN": [
       "BRAIN"
     ],
@@ -214,12 +240,6 @@
       "BRAIN"
     ],
     "ZENTINEL": [
-      "BRAIN"
-    ],
-    "ELITE-GATEWAY": [
-      "BRAIN"
-    ],
-    "CLAUDE": [
       "BRAIN"
     ],
     "BRAINSTORMING": [
@@ -239,5 +259,5 @@
     "00-LEIA-PRIMEIRO"
   ],
   "semFrontmatter": [],
-  "total": 101
+  "total": 106
 }

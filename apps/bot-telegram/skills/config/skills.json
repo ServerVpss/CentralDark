@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "lastUpdated": "2026-06-29",
+  "lastUpdated": "2026-06-30",
   "note": "Skills .md (metodologia) coexistem com .js (executáveis). NÃO remover .md existentes.",
   "methodology": {
     "description": "Skills de metodologia (leitura obrigatória para IAs)",

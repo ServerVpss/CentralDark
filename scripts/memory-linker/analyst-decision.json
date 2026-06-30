@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-06-30T00:45:01.934Z",
-  "baseReport": "2026-06-29T23:30:01.509Z",
+  "timestamp": "2026-06-30T08:15:01.145Z",
+  "baseReport": "2026-06-30T07:30:01.421Z",
   "criticos": [
     {
       "tipo": "link-quebrado-critico",
@@ -25,9 +25,27 @@
     },
     {
       "tipo": "link-quebrado-critico",
-      "link": "OBSIDIAN",
+      "link": "CLAUDE",
       "origens": [
-        "00-POSTURA-PIVETE",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "ELITE-GATEWAY",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "VPS",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
+        "BRAIN",
         "BRAIN"
       ]
     },
@@ -35,8 +53,27 @@
       "tipo": "link-quebrado-critico",
       "link": "GITHUB",
       "origens": [
+        "PROTOCOLO-INICIALIZACAO",
         "00-POSTURA-PIVETE",
         "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "HUB",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "TELEGRAM",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO",
         "BRAIN",
         "BRAIN"
       ]
@@ -45,6 +82,7 @@
       "tipo": "link-quebrado-critico",
       "link": "SKILLS",
       "origens": [
+        "PROTOCOLO-INICIALIZACAO",
         "BRAIN"
       ]
     },
@@ -52,14 +90,16 @@
       "tipo": "link-quebrado-critico",
       "link": "PM2",
       "origens": [
+        "PROTOCOLO-INICIALIZACAO",
         "BRAIN"
       ]
     },
     {
       "tipo": "link-quebrado-critico",
-      "link": "HUB",
+      "link": "OBSIDIAN",
       "origens": [
-        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "00-POSTURA-PIVETE",
         "BRAIN"
       ]
     },
@@ -69,14 +109,6 @@
       "origens": [
         "BRAIN",
         "MOC-PM2"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "TELEGRAM",
-      "origens": [
-        "BRAIN",
-        "BRAIN"
       ]
     },
     {
@@ -104,15 +136,6 @@
     },
     {
       "tipo": "link-quebrado-critico",
-      "link": "VPS",
-      "origens": [
-        "BRAIN",
-        "BRAIN",
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
       "link": "CENTRALDARK-CONTASADMIN",
       "origens": [
         "BRAIN"
@@ -128,20 +151,6 @@
     {
       "tipo": "link-quebrado-critico",
       "link": "ZENTINEL",
-      "origens": [
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "ELITE-GATEWAY",
-      "origens": [
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "CLAUDE",
       "origens": [
         "BRAIN"
       ]
@@ -348,16 +357,32 @@
     },
     {
       "tipo": "link-quebrado",
+      "link": "PENDENCIAS",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "SINCRONIA-4-POINT",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
       "link": "IA",
       "origens": [
-        "00-POSTURA-PIVETE"
+        "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS"
       ]
     },
     {
       "tipo": "link-quebrado",
       "link": "CENTRALDARK",
       "origens": [
-        "00-POSTURA-PIVETE"
+        "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS"
       ]
     },
     {
@@ -391,7 +416,7 @@
     },
     {
       "tipo": "orfas-excessivas",
-      "count": 49,
+      "count": 52,
       "lista": [
         "ARQUITETURA-CENTRALDARK-2026",
         "00-PORTA-DE-ENTRADA-IA",
@@ -408,6 +433,6 @@
     }
   ],
   "totalCritico": 21,
-  "totalAlto": 31,
+  "totalAlto": 33,
   "totalAutoFix": 1
 }
