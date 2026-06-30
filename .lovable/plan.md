@@ -1,18 +1,60 @@
-# Ativar MCP CentralDark no Lovable
 
-## Objetivo
-Conectar o servidor MCP `https://mcp.centralldark.com/mcp` (OAuth via GitHub em `/oauth/start`) como conector ativo deste projeto, sem mexer em nada que já existe na VPS, no Cérebro Vivo nem nos conectores Notion/Linear já ligados.
+# Foco no builder.centralldark.com — 4 agentes em paralelo
 
-## O que vou fazer
-1. Chamar `mcp_knowledge--connect` apontando pro MCP CentralDark. Isso abre o popup OAuth que cai automaticamente em `https://mcp.centralldark.com/oauth/start` (GitHub login → callback → token salvo do lado do Lovable).
-2. Você aprova o login no popup com a conta `segredounlocker` (que já tem o OAuth App registrado no MCP).
-3. Lovable persiste o token e o conector passa a aparecer na lista de MCPs ativos junto com Notion e Linear — sem tocar em `apps/modulos/mcp/` (área protegida), sem reiniciar PM2, sem alterar `secrets/`.
+## Antes de começar
+Salvo a pendência aberta (fluxo guiado de reautorização OAuth do MCP) em `docs/PENDENCIAS.md` via `pendencias_add`, pra não perder. Depois mergulho 100% no builder.
 
-## Áreas protegidas — confirmação
-Nada em `apps/modulos/mcp/`, `infra/caddy/`, `secrets/`, `.github/workflows/`, `docs/CONSCIENCIA/` será tocado. A ativação é 100% do lado do Lovable (registro de conector + token OAuth), o servidor MCP na VPS continua exatamente como está.
+## O alvo
+- **Domínio:** `builder.centralldark.com`
+- **Stack:** container `CentralDark-Builder` (Bolt fork) em `apps/modulos/Bolt/docker-compose.yml`
+- **Roteia IA via:** Elite Gateway local (`host.docker.internal:8082` Anthropic, `api.centralldark.com/v1` OpenAI-like)
+- **Exposto por:** Caddy → porta `127.0.0.1:5174`
 
-## Observação técnica
-O catálogo de conectores featured do Lovable não lista "CentralDark" como entrada pronta. Se o `mcp_knowledge--connect` não aceitar uma URL custom, a alternativa é você ativar manualmente em **Connectors** (barra lateral) → Add custom MCP → colar `https://mcp.centralldark.com/mcp` → autorizar via GitHub. Te aviso no momento se cair nesse caminho.
+## Os 4 sub-agentes (rodam em paralelo, read-only)
+
+1. **Agente Saúde Operacional**
+   - Bate `https://builder.centralldark.com` + `/health` se existir, mede latência e TTFB
+   - Checa PM2/Docker do builder via MCP (`execute_command`, `vps_list_dir_safe`)
+   - Confere Caddy: cert válido, redirect HTTPS, headers
+   - Olha `pm2 logs` e `docker logs CentralDark-Builder` recentes (erros, restart loops)
+
+2. **Agente IA/Gateway**
+   - Testa Elite Gateway `http://VPS:8082/v1/messages` (Anthropic-compat) com requisição mínima
+   - Testa `https://api.centralldark.com/v1/chat/completions` com a key `SEGREDO_ELITE_123`
+   - Valida rotação de chaves (ap7 → Anthropic) e fallback
+   - Olha logs do `elite-anthropic-proxy` e `Elite-Gateway` no PM2
+
+3. **Agente Performance**
+   - Mede bundle size do Bolt, tempo de boot do container, RAM/CPU em uso (`docker stats`)
+   - Avalia se `CHOKIDAR_USEPOLLING=true` + `WATCHPACK_POLLING=true` tão custando CPU à toa
+   - Verifica volume `CentralDark-Builder-node_modules` (tamanho, cache pnpm)
+   - Sugere ajustes de Vite/HMR
+
+4. **Agente UX/Frontend**
+   - Abre o builder via Playwright headless, screenshot da home + 1 fluxo (criar projeto, abrir chat IA)
+   - Captura erros de console e network 4xx/5xx
+   - Confere se o chat IA do Bolt está chamando o gateway certo e voltando resposta
+
+Cada agente devolve um mini-relatório (estado + achados + sugestões priorizadas).
+
+## Depois dos 4 retornos
+Eu consolido tudo no formato Placar Visual (Método Gamificado) com:
+- Fase atual de cada frente
+- ▓░ + ✅⚠️❌ por item
+- O que falta
+- Próximos passos (Leigo / Técnico)
+
+## Aplicação de correções
+Modo **auditar + aplicar fixes seguros** (default que assumi):
+- Mudanças de config (env, cache, polling, headers Caddy) → aplico direto
+- Mudança em `apps/modulos/mcp/`, `infra/caddy/`, `secrets/`, workflows → **paro e pergunto** (áreas protegidas do CLAUDE.md)
+- Restart de container → peço OK antes
+- Nada destrutivo sem confirmação
+
+Se você quiser só relatório (sem aplicar nada) ou mão totalmente livre, me fala antes de eu rodar — caso contrário sigo nesse meio-termo.
+
+## Áreas protegidas que NÃO toco sem "PERMITO PIVETE"
+`apps/modulos/mcp/`, `infra/caddy/`, `secrets/`, `.github/workflows/`, `docs/CONSCIENCIA/`, `apps/bot-telegram/`, `scripts/webhook/`, `scripts/contas-admin/`.
 
 ## Risco
-Zero pro que já roda. Pior caso: o conector não ativa e a gente tenta o fluxo manual — nada quebra.
+Baixo. Tudo de leitura primeiro; só aplico fix depois do retrato completo. Builder fica no ar o tempo todo da auditoria.
