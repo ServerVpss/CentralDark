@@ -1,4 +1,4 @@
-# Pendências — CentralDark / MultiZap
+# Pendências — CentralDark
 
 Fonte ÚNICA de pendências do projeto. Qualquer item novo entra aqui.
 Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
@@ -515,31 +515,47 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Continuidade:** garantida pela memória (Lembranças + Consciência) — qualquer conta nova retoma com `/contexto`.
 - **Preferência do Pivete (30/06):** usar a própria EXTENSÃO dele (abre bonito, com o nome da conversa). Se a extensão via proxy não rolar limpo, fallback é o terminal (já pronto) ou um chat local. "Faz o seu melhor."
 
-### 15. Notificação automática de uso do MCP no Telegram (formato monospace) — 🟡 ABERTO (30/06/2026)
-- **Pedido do Pivete:** toda vez que QUALQUER IA trabalha usando o MCP dele, notificar no Telegram (igual o hook Stop), bem organizado, em **formato MONOESPAÇADO** (`<pre>`, fundo preto, bonito).
-- **Padrão mono:** já é regra (ver memória do padrão visual). **Falta:** o gatilho de notificação no MCP por uso/sessão.
-- **Cuidado:** definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam). Implementação no MCP (`dist/audit-logger.js` é a base) + reusar `scripts/notify-claude/notify-telegram.sh` (já manda pro privado + canal).
+🟡 #15 — Notificação automática de uso do MCP no Telegram (formato monospace) — 🟡 ABERTO (30/06/2026)
+Pedido do Pivete: toda vez que QUALQUER IA trabalha usando o MCP dele, notificar no Telegram (igual o hook Stop), bem organizado, em formato MONOESPAÇADO (<pre>, fundo preto, bonito).
 
----
+Padrão mono: já é regra (ver memória do padrão visual). Falta: o gatilho de notificação no MCP por uso/sessão.
 
-## 🟡 #16 — Radar Visual de Atividade IA (Obsidian Graph)
+Cuidado: definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam). Implementação no MCP (dist/audit-logger.js é a base) + reusar scripts/notify-claude/notify-telegram.sh (já manda pro privado + canal).
 
-#### 🎯 Objetivo
+🟡 #16 — Sync-loop do Google Drive — temporário até o Hub ficar pronto — 🟡 ABERTO (01/07/2026)
+O que é: /root/CentralDark/scripts/sync-loop.sh — loop infinito que sincroniza docs/ pro Google Drive via rclone a cada 2 minutos.
+
+Ajustes feitos (01/07): removido --verbose (estava enchendo log), nome do processo PM2 corrigido de CentralDark-SycDrive para CentralDark-SyncDrive.
+
+Regra: fica rodando só até o Hub ficar pronto. Depois desliga e remove.
+
+Onde mexer quando remover: pm2 delete CentralDark-SyncDrive, pm2 save, apagar o script sync-loop.sh.
+
+🟡 #17 — Radar Visual de Atividade IA (Obsidian Graph) — 🟡 ABERTO (01/07/2026)
+🎯 Objetivo
 Habilitar a visualização em tempo real da "locomoção" das IAs dentro da sua estrutura de pensamento (Graph View), utilizando o motor visual do Obsidian.
 
-#### ⚙️ Stack Tecnológica (2026 High-Level)
-*   **Plugin:** *Local REST API* (Permite controle externo do vault via requisições HTTP).
-*   **Middleware:** Servidor de monitoramento em Node.js (utilizando `chokidar`) ou Python (`watchdog`).
-*   **Protocolo:** Tagging dinâmico via API → `addTag('#processando')` → Espera (N)ms → `removeTag('#processando')`.
-*   **Visual:** Configuração de "Groups" no Graph View filtrando `tag:#processando` com cor: **#00FF00 (Verde Neon)**.
+⚙️ Stack Tecnológica (2026 High-Level)
+Plugin: Local REST API (Permite controle externo do vault via requisições HTTP).
 
-#### 📋 Roadmap de Implementação
-1. [ ] **Setup API:** Instalar e configurar token de acesso do *Local REST API* no Obsidian.
-2. [ ] **Watcher:** Criar script no seu `NUCLEO` que monitora o acesso a arquivos pelo Claude Code/Gemini.
-3. [ ] **Pipeline de Tags:** Implementar a lógica de injeção e remoção de tags no arquivo lido.
-4. [ ] **UI:** Configurar o filtro visual no Graph View para refletir a tag instantaneamente.
+Middleware: Servidor de monitoramento em Node.js (utilizando chokidar) ou Python (watchdog).
 
-#### ⚠️ Riscos e Manutenção
-*   **Performance:** A injeção constante de tags pode disparar a reindexação do Obsidian em Vaults massivos.
-*   **Cuidado:** definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam e flickering frenético).
-*   **Estabilidade:** Plugin externo exige re-instalação manual pós-update. **Ação:** Manter o `.zip` do plugin dentro da pasta `[[INFRA/DEPENDENCIAS]]`.
+Protocolo: Tagging dinâmico via API → addTag('#processando') → Espera (N)ms → removeTag('#processando').
+
+Visual: Configuração de "Groups" no Graph View filtrando tag:#processando com cor: #00FF00 (Verde Neon).
+
+📋 Roadmap de Implementação
+[ ] Setup API: Instalar e configurar token de acesso do Local REST API no Obsidian.
+
+[ ] Watcher: Criar script no seu NUCLEO que monitora o acesso a arquivos pelo Claude Code/Gemini.
+
+[ ] Pipeline de Tags: Implementar a lógica de injeção e remoção de tags no arquivo lido.
+
+[ ] UI: Configurar o filtro visual no Graph View para refletir a tag instantaneamente.
+
+⚠️ Riscos e Manutenção
+Performance: A injeção constante de tags pode disparar a reindexação do Obsidian em Vaults massivos.
+
+Cuidado: definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam e flickering frenético).
+
+Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: Manter o .zip do plugin dentro da pasta [[INFRA/DEPENDENCIAS]].
