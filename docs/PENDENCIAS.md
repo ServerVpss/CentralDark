@@ -519,3 +519,27 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Pedido do Pivete:** toda vez que QUALQUER IA trabalha usando o MCP dele, notificar no Telegram (igual o hook Stop), bem organizado, em **formato MONOESPAÇADO** (`<pre>`, fundo preto, bonito).
 - **Padrão mono:** já é regra (ver memória do padrão visual). **Falta:** o gatilho de notificação no MCP por uso/sessão.
 - **Cuidado:** definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam). Implementação no MCP (`dist/audit-logger.js` é a base) + reusar `scripts/notify-claude/notify-telegram.sh` (já manda pro privado + canal).
+
+---
+
+## 🟡 #16 — Radar Visual de Atividade IA (Obsidian Graph)
+
+#### 🎯 Objetivo
+Habilitar a visualização em tempo real da "locomoção" das IAs dentro da sua estrutura de pensamento (Graph View), utilizando o motor visual do Obsidian.
+
+#### ⚙️ Stack Tecnológica (2026 High-Level)
+*   **Plugin:** *Local REST API* (Permite controle externo do vault via requisições HTTP).
+*   **Middleware:** Servidor de monitoramento em Node.js (utilizando `chokidar`) ou Python (`watchdog`).
+*   **Protocolo:** Tagging dinâmico via API → `addTag('#processando')` → Espera (N)ms → `removeTag('#processando')`.
+*   **Visual:** Configuração de "Groups" no Graph View filtrando `tag:#processando` com cor: **#00FF00 (Verde Neon)**.
+
+#### 📋 Roadmap de Implementação
+1. [ ] **Setup API:** Instalar e configurar token de acesso do *Local REST API* no Obsidian.
+2. [ ] **Watcher:** Criar script no seu `NUCLEO` que monitora o acesso a arquivos pelo Claude Code/Gemini.
+3. [ ] **Pipeline de Tags:** Implementar a lógica de injeção e remoção de tags no arquivo lido.
+4. [ ] **UI:** Configurar o filtro visual no Graph View para refletir a tag instantaneamente.
+
+#### ⚠️ Riscos e Manutenção
+*   **Performance:** A injeção constante de tags pode disparar a reindexação do Obsidian em Vaults massivos.
+*   **Cuidado:** definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam e flickering frenético).
+*   **Estabilidade:** Plugin externo exige re-instalação manual pós-update. **Ação:** Manter o `.zip` do plugin dentro da pasta `[[INFRA/DEPENDENCIAS]]`.
