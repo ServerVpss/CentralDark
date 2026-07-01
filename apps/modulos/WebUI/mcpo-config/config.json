@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "centraldark": {
+      "type": "streamable_http",
+      "url": "https://mcp.centralldark.com/mcp",
+      "headers": {
+        "Authorization": "Bearer 1eb4912da7a27677f77c9be44395ea78032edbd763057ca22d418e0eaa727ffc"
+      }
+    }
+  }
+}

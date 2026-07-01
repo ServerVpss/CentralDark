@@ -16,6 +16,26 @@ updated: 2026-06-30
 
 ---
 
+## 01/07/2026 — Switch de modelos embutido no claude-proxy.sh
+
+**Conteúdo:** Script `claude-proxy.sh` agora tem switch de modelos embutido. 6 modelos disponíveis: opus-4.8, opus-4.8[1m], sonnet-4.6, sonnet-4.6[1m], haiku-4.6, haiku-4.6[1m]. Comandos: `switch <ID>` (direto), `switch` (menu interativo), `models` (lista). Tutorial e método salvos em `docs/APRENDIZADOS/PROXY/`. Funciona universal — só precisa de bash, curl e python3.
+
+**Tags:** #proxy #switch-model #claude-code #terminal #tutorial
+**Relevância:** alta
+**Expira:** 31/07/2026
+
+---
+
+## 01/07/2026 — Instalador automático do proxy (INSTALADOR.sh)
+
+**Conteúdo:** Criado `docs/APRENDIZADOS/PROXY/INSTALADOR.sh` — script único que verifica dependências (bash, curl, python3), instala o que falta, adiciona atalhos no .bashrc, e abre painel interativo com 6 opções (ligar, desligar, status, modelos, switch, abrir Claude). Tutorial atualizado com este como método principal recomendado.
+
+**Tags:** #proxy #instalador #automacao #tutorial #painel-interativo
+**Relevância:** alta
+**Expira:** 31/07/2026
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada

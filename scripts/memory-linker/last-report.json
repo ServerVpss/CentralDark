@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-06-30T07:30:01.421Z",
-  "nextRunMin": 107,
+  "timestamp": "2026-07-01T13:30:02.123Z",
+  "nextRunMin": 118,
   "orfas": [
     "ARQUITETURA-CENTRALDARK-2026",
     "00-PORTA-DE-ENTRADA-IA",
@@ -36,6 +36,8 @@
     "GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA",
     "GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA",
     "GUARDIAO-DA-CONSCIENCIA",
+    "LEMBRANCAS",
+    "lembrancas-202606",
     "MEGA-PAINEL-SUGESTOES-IA",
     "MODO-SEGREDO",
     "NOTION-MAPA",
@@ -259,5 +261,5 @@
     "00-LEIA-PRIMEIRO"
   ],
   "semFrontmatter": [],
-  "total": 106
+  "total": 108
 }

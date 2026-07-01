@@ -1,0 +1,17 @@
+# Override automático — fixa o MCP CentralDark no Open-WebUI via mcpo sidecar
+services:
+  webui:
+    environment:
+      - 'TOOL_SERVER_CONNECTIONS=[{"url":"http://mcpo:8000/centraldark","path":"openapi.json","auth_type":"none","key":""}]'
+      - ENABLE_OPENAPI_SERVERS=true
+    depends_on:
+      - mcpo
+  mcpo:
+    image: ghcr.io/open-webui/mcpo:main
+    container_name: CentralDark-MCPO
+    command: ["--host","0.0.0.0","--port","8000","--config","/config/config.json"]
+    volumes:
+      - ./mcpo-config:/config:ro
+    restart: unless-stopped
+    labels:
+      centraldark.app: mcpo

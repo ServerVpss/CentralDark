@@ -24,7 +24,10 @@ if [ -z "$TOKEN" ] || [ -z "$ADMIN_ID" ]; then
 fi
 
 DATA=$(date '+%d/%m/%Y %H:%M')
-TEXTO="${EMOJI} <b>${TITULO}</b>\n\n${MSG}\n\n🕐 ${DATA}"
+# escapa HTML pra não quebrar o bloco <pre>
+esc() { printf '%s' "$1" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'; }
+# <pre> = bloco MONOESPAÇADO (fonte mono + fundo escuro) no Telegram
+TEXTO="<pre>$(esc "$EMOJI") $(esc "$TITULO")\n\n$(esc "$MSG")\n\n🕐 ${DATA}</pre>"
 
 # Destinos: privado (ADMIN) sempre; canal só se configurado. Cada envio é
 # independente — se um falhar (ex.: bot não é admin do canal), o outro segue.

@@ -42,6 +42,10 @@
     <h3>➕ Outro site</h3><div class="desc">Navegador remoto genérico</div>
     <button class="btn btn-pri" onclick="abrirCustom()">Abrir navegador</button>
   </div>
+  <div class="card" style="border-color:var(--pri)">
+    <h3>⚡ Elite Proxy</h3><div class="desc">Anthropic Proxy — porta 8082</div>
+    <button class="btn btn-pri" onclick="abrirProxyStatus()">📊 Abrir Status</button>
+  </div>
 </div>
 
 <div class="section"><h3 style="margin-bottom:6px">📂 Contas salvas</h3><div id="contas" class="empty">carregando…</div></div>
@@ -71,5 +75,9 @@ async function abrirNavegador(prov,url){
 async function abrirCustom(){const url=prompt('URL para abrir:','https://');if(!url)return;const prov=prompt('Nome do provedor (sem espaços):','custom');if(!prov)return;abrirNavegador(prov,url)}
 async function oauth(prov){try{const r=await api(`/api/oauth/${prov}/iniciar`);window.location.href=r.url}catch(e){alert('Erro: '+e.message)}}
 async function fechar(id){await api('/api/sessao/fechar',{method:'POST',body:JSON.stringify({id})});document.getElementById('player').innerHTML='';recarregar()}
+function abrirProxyStatus(){
+  const p=document.getElementById('player');
+  p.innerHTML=`<h3 style="margin-top:24px">⚡ Elite Proxy — Status</h3><iframe src="http://localhost:8082/status" style="width:100%;height:700px;border:1px solid var(--border);border-radius:8px;margin-top:8px;background:#0b1120"></iframe>`;
+}
 recarregar();setInterval(recarregar,8000);
 </script></body></html>

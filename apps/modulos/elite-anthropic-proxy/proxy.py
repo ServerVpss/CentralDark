@@ -6,19 +6,22 @@ OpenAI Compatible + Anthropic nativo + Aliases + streaming fix + response conver
 import asyncio
 import json
 import time
+import re
 import logging
 import logging.handlers
+import subprocess
+import os
 from itertools import cycle
 from pathlib import Path
 from datetime import datetime
 
 import httpx
 from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse, Response, JSONResponse
+from fastapi.responses import StreamingResponse, Response, JSONResponse, HTMLResponse, FileResponse
 
 UPSTREAM = "https://claude.ap7.site"
 KEYS_FILE = Path(__file__).parent / "keys.json"
-LOG_FILE = Path("/var/log/centralldark/elite-anthropic.log")
+LOG_FILE = Path(__file__).parent / "logs" / "elite-anthropic.log"
 VERSION = "1.6.0"
 PORT = 8082
 
@@ -164,9 +167,11 @@ app = FastAPI(title="CentralDark Elite Anthropic Proxy", version=VERSION)
 
 _HOP_BY_HOP = {"host", "x-api-key", "authorization", "content-length", "transfer-encoding", "connection", "keep-alive", "upgrade"}
 
+STATUS_HTML = Path(__file__).parent / "status.html"
+
 @app.get("/health")
 async def health():
-    return {"status": "ok", "version": VERSION, "aliases": list(MODEL_ALIASES.keys())}
+    return {"status": "ok", "version": VERSION, "aliases": list(MODEL_ALIASES.keys()), "keys": len(KEYS)}
 
 @app.get("/v1/models")
 @app.get("/models")
@@ -175,8 +180,53 @@ async def list_models():
     data = [{"id": m, "object": "model", "created": created, "owned_by": "anthropic"} for m in SUPPORTED_MODELS]
     return JSONResponse({"object": "list", "data": data})
 
+@app.get("/status")
+async def status_page():
+    if STATUS_HTML.exists():
+        return HTMLResponse(STATUS_HTML.read_text())
+    return HTMLResponse("<h1>Status page not found</h1>", status_code=404)
+
+@app.get("/logs/elite-anthropic.log")
+async def serve_log():
+    if LOG_FILE.exists():
+        return FileResponse(str(LOG_FILE), media_type="text/plain")
+    return Response("", media_type="text/plain")
+
+@app.get("/proxy-action")
+async def proxy_action(request: Request):
+    action = request.query_params.get("action", "")
+    if action not in ("start", "stop", "restart"):
+        return JSONResponse({"success": False, "error": "Ação inválida. Use: start, stop, restart"})
+    try:
+        cmd = ["pm2", action, "CentralDark-EliteAnthropicProxy"]
+        if action in ("start", "restart"):
+            cmd.append("--update-env")
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=15
+        )
+        clean = re.sub(r'\x1b\[[0-9;]*[a-zA-Z]', '', result.stdout + result.stderr)
+        success = result.returncode == 0 or "✓" in clean or "online" in clean.lower()
+        # PM2 retorna exit code 1 mesmo no sucesso quando usa --update-env
+        # então confiamos no "✓" ou "online" no output limpo
+        if not success and result.returncode != 0:
+            success = "Applying action" in clean and "CentralDark-EliteAnthropicProxy" in clean
+        return JSONResponse({
+            "success": success,
+            "output": result.stdout.strip() or result.stderr.strip(),
+            "error": None if success else (result.stderr.strip() or result.stdout.strip())
+        })
+    except subprocess.TimeoutExpired:
+        return JSONResponse({"success": False, "error": "Comando PM2 excedeu timeout"})
+    except Exception as e:
+        return JSONResponse({"success": False, "error": str(e)})
+
+_LOCAL_PATHS = {"status", "health", "proxy-action", "logs"}
+_LOCAL_PREFIXES = ("logs/",)
+
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"])
 async def proxy(request: Request, path: str):
+    if path in _LOCAL_PATHS or any(path.startswith(p) for p in _LOCAL_PREFIXES):
+        return JSONResponse({"error": "Not found"}, status_code=404)
     idx, key = await next_key()
     body_bytes = await request.body()
 

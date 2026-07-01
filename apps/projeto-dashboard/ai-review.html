@@ -373,6 +373,264 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- ════════════════════════════════════════════════════════════════
+     🧠 Grupo de Evolução das IAs
+     ════════════════════════════════════════════════════════════════ -->
+
+<section class="panel wide" id="painel-evolucao" style="margin-top: 32px;">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">🧠 Grupo de IAs</p>
+      <h2>🧠 Grupo de Evolução das IAs</h2>
+    </div>
+    <span class="tag" id="evolucao-lock-tag">🔒 Bloqueado</span>
+  </div>
+
+  <!-- campo de senha -->
+  <div id="evolucao-senha-box" style="margin-bottom: 18px;">
+    <label style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));display:block;margin-bottom:6px;">
+      🔑 Senha de acesso
+    </label>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input type="password" id="evolucao-senha-input"
+        style="background:hsl(var(--surface));border:1px solid hsl(var(--line));border-radius:8px;padding:8px 12px;font-size:14px;color:hsl(var(--text));font-family:'Geist Mono',monospace;outline:none;width:200px;"
+        placeholder="Digite a senha" />
+      <button class="btn-cta primary" onclick="desbloquearEvolucao()">🔓 Desbloquear</button>
+      <span id="evolucao-senha-msg" style="font-size:12px;color:hsl(var(--muted-c));"></span>
+    </div>
+  </div>
+
+  <!-- conteúdo bloqueado -->
+  <div id="evolucao-content" style="display:none;">
+
+    <!-- 3 sliders de interação -->
+    <div style="margin-bottom: 20px;">
+      <p style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));margin-bottom:10px;">🎛️ Controle de Interação</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;" id="evolucao-sliders"></div>
+    </div>
+
+    <!-- métricas / progresso -->
+    <div style="margin-bottom: 20px;">
+      <p style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));margin-bottom:10px;">📊 Progresso do Grupo</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;" id="evolucao-metrics"></div>
+    </div>
+
+    <!-- status das IAs -->
+    <div>
+      <p style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));margin-bottom:10px;">🟢 Status das IAs</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;" id="evolucao-status"></div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── extras do painel de evolução ── */
+  .evol-card {
+    background: hsl(var(--surface-2));
+    border: 1px solid hsl(var(--line));
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-3d-soft);
+  }
+
+  .evol-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: hsl(var(--soft-c));
+    margin: 0 0 6px;
+  }
+
+  .evol-card .evol-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: hsl(var(--primary));
+    line-height: 1.2;
+  }
+
+  .evol-card .evol-label {
+    font-size: 11px;
+    color: hsl(var(--muted-c));
+    margin-top: 2px;
+  }
+
+  .evol-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: hsl(var(--line) / 0.5);
+    border-radius: 999px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .evol-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.6));
+    transition: width 0.4s ease;
+  }
+
+  .evol-bar-fill.xp {
+    background: linear-gradient(90deg, hsl(var(--yellow)), hsl(var(--orange)));
+  }
+
+  .evol-slider-wrap {
+    background: hsl(var(--surface-2));
+    border: 1px solid hsl(var(--line));
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    box-shadow: var(--shadow-3d-soft);
+  }
+
+  .evol-slider-wrap label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: hsl(var(--soft-c));
+    margin-bottom: 8px;
+  }
+
+  .evol-slider-wrap select {
+    width: 100%;
+    background: hsl(var(--surface));
+    border: 1px solid hsl(var(--line));
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: hsl(var(--text));
+    font-family: 'Geist Mono', monospace;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .evol-status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: hsl(var(--surface-2));
+    border: 1px solid hsl(var(--line));
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    box-shadow: var(--shadow-3d-soft);
+    font-size: 13px;
+    font-weight: 600;
+    color: hsl(var(--soft-c));
+  }
+
+  .evol-status-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .evol-status-item .dot.on  { background: hsl(var(--green));  box-shadow: 0 0 6px hsl(var(--green) / 0.5); }
+  .evol-status-item .dot.off { background: hsl(var(--red));    box-shadow: 0 0 6px hsl(var(--red) / 0.4); }
+</style>
+
+<script>
+// ── 🧠 Grupo de Evolução das IAs ──
+const EVOL_SENHA = 'Segredo1994';
+
+const EVOL_IAS = [
+  { id: 'gemini',   nome: 'Gemini',  icone: '✨' },
+  { id: 'groq',     nome: 'Groq',    icone: '⚡' },
+  { id: 'claude',   nome: 'Claude',  icone: '🧠' },
+];
+
+const EVOL_NIVEIS = ['Baixa', 'Média', 'Alta'];
+
+// estado interno
+let evolState = {
+  interacao: { gemini: 'Média', groq: 'Média', claude: 'Média' },
+  mensagensHoje: 142,
+  aprendizados: 38,
+  topicos: 12,
+  nivel: 4,
+  xpAtual: 320,
+  xpMax: 500,
+  status: { gemini: true, groq: true, claude: true },
+};
+
+function desbloquearEvolucao() {
+  const input = document.getElementById('evolucao-senha-input');
+  const msg   = document.getElementById('evolucao-senha-msg');
+  if (input.value === EVOL_SENHA) {
+    document.getElementById('evolucao-content').style.display = 'block';
+    document.getElementById('evolucao-senha-box').style.display = 'none';
+    document.getElementById('evolucao-lock-tag').textContent = '🔓 Desbloqueado';
+    document.getElementById('evolucao-lock-tag').style.background = 'hsl(var(--green) / 0.12)';
+    document.getElementById('evolucao-lock-tag').style.color = 'hsl(var(--green))';
+    document.getElementById('evolucao-lock-tag').style.border = '1px solid hsl(var(--green) / 0.3)';
+    renderEvolucao();
+  } else {
+    msg.textContent = '❌ Senha incorreta';
+    msg.style.color = 'hsl(var(--red))';
+    setTimeout(() => { msg.textContent = ''; }, 2000);
+  }
+}
+
+function renderEvolucao() {
+  // sliders
+  document.getElementById('evolucao-sliders').innerHTML = EVOL_IAS.map(ia => `
+    <div class="evol-slider-wrap">
+      <label>${ia.icone} ${ia.nome}</label>
+      <select onchange="evolState.interacao['${ia.id}']=this.value">
+        ${EVOL_NIVEIS.map(n => `<option value="${n}" ${evolState.interacao[ia.id] === n ? 'selected' : ''}>${n}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+
+  // métricas
+  const pctMsg  = Math.min(100, Math.round((evolState.mensagensHoje / 200) * 100));
+  const pctApre = Math.min(100, Math.round((evolState.aprendizados / 50) * 100));
+  const pctTop  = Math.min(100, Math.round((evolState.topicos / 20) * 100));
+  const pctXp   = Math.min(100, Math.round((evolState.xpAtual / evolState.xpMax) * 100));
+
+  document.getElementById('evolucao-metrics').innerHTML = `
+    <div class="evol-card">
+      <h4>💬 Mensagens hoje</h4>
+      <div class="evol-value">${evolState.mensagensHoje}</div>
+      <div class="evol-label">de 200 estimadas</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill" style="width:${pctMsg}%"></div></div>
+    </div>
+    <div class="evol-card">
+      <h4>📝 Aprendizados registrados</h4>
+      <div class="evol-value">${evolState.aprendizados}</div>
+      <div class="evol-label">de 50 meta</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill" style="width:${pctApre}%"></div></div>
+    </div>
+    <div class="evol-card">
+      <h4>🗣️ Tópicos discutidos</h4>
+      <div class="evol-value">${evolState.topicos}</div>
+      <div class="evol-label">de 20 planejados</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill" style="width:${pctTop}%"></div></div>
+    </div>
+    <div class="evol-card">
+      <h4>⬆️ Nível do grupo</h4>
+      <div class="evol-value" style="color:hsl(var(--yellow))">${evolState.nivel}</div>
+      <div class="evol-label">${evolState.xpAtual} / ${evolState.xpMax} XP</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill xp" style="width:${pctXp}%"></div></div>
+    </div>
+  `;
+
+  // status das IAs
+  document.getElementById('evolucao-status').innerHTML = EVOL_IAS.map(ia => {
+    const ativa = evolState.status[ia.id];
+    return `
+      <div class="evol-status-item">
+        <span class="dot ${ativa ? 'on' : 'off'}"></span>
+        ${ia.icone} ${ia.nome}
+        <span style="margin-left:auto;font-size:11px;color:${ativa ? 'hsl(var(--green))' : 'hsl(var(--red))'}">
+          ${ativa ? '🟢 Ativa' : '🔴 Inativa'}
+        </span>
+      </div>
+    `;
+  }).join('');
+}
+</script>
+
 <script>
 const SECRETS_URL = 'https://github.com/ServerVpss/CentralDark/settings/secrets/actions/new';
 

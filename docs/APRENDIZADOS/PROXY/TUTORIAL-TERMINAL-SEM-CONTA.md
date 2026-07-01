@@ -1,8 +1,8 @@
 ---
 title: "TUTORIAL — Claude Code no terminal sem conta (via proxy)"
-date: 2026-06-30
-tags: ["tutorial", "proxy", "terminal", "claude-code", "contingencia"]
-updated: 2026-06-30
+date: 2026-07-01
+tags: ["tutorial", "proxy", "terminal", "claude-code", "contingencia", "switch-model"]
+updated: 2026-07-01
 ---
 
 # 🖥️ Usar o Claude Code no terminal SEM conta (modo proxy)
@@ -16,6 +16,7 @@ updated: 2026-06-30
 ║   Script:   secrets/claude-proxy.sh  (testado 🟢 HTTP 200) ║
 ║   Key:      mora no cofre secrets/anthropic.env 🔒         ║
 ║   Liga/desliga: por terminal — fechou, voltou ao normal   ║
+║   Switch modelo: embutido no script — sem instalar nada   ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
@@ -24,7 +25,34 @@ updated: 2026-06-30
 
 ---
 
-## 🟢 Jeito 1 — LIGAR e abrir o Claude (1 comando)
+## 🚀 Jeito 1 — INSTALADOR automático (recomendado)
+
+**Único comando — faz tudo sozinho:**
+
+```bash
+bash /root/CentralDark/docs/APRENDIZADOS/PROXY/INSTALADOR.sh
+```
+
+O que ele faz automaticamente:
+1. ✅ **Verifica dependências** (bash, curl, python3) — instala o que faltar
+2. ✅ **Localiza o script** `claude-proxy.sh` e o cofre de credenciais
+3. ✅ **Instala atalhos** no `~/.bashrc` (proxy-on, proxy-off, proxy-status, proxy-models, proxy-switch, claude-proxy)
+4. ✅ **Abre painel interativo** — escolhe ligar, desligar, ver status, listar modelos, trocar modelo, ou abrir o Claude
+
+Depois da instalação, é só digitar no terminal:
+
+| Comando | O que faz |
+|---------|-----------|
+| `claude-proxy` | Liga proxy + abre Claude Code |
+| `proxy-on` | Só liga o proxy |
+| `proxy-off` | Desliga o proxy |
+| `proxy-status` | Mostra status + modelo ativo |
+| `proxy-models` | Lista modelos disponíveis |
+| `proxy-switch` | Menu pra trocar modelo |
+
+---
+
+## 🟢 Jeito 2 — LIGAR e abrir o Claude (1 comando direto)
 
 No terminal da VPS:
 
@@ -35,16 +63,22 @@ bash /root/CentralDark/secrets/claude-proxy.sh run
 Isso liga o proxy **e** já abre o Claude Code usando ele. Pronto pra trabalhar.
 Suas Lembranças e a Consciência continuam funcionando (a memória é a mesma).
 
+**Com modelo específico:**
+
+```bash
+bash /root/CentralDark/secrets/claude-proxy.sh run sonnet-4.6
+```
+
 ---
 
-## 🔧 Jeito 2 — Ligar/desligar manual (controle total)
+## 🔧 Jeito 3 — Ligar/desligar manual (controle total)
 
 ```bash
 # LIGAR (vale só neste terminal):
 source /root/CentralDark/secrets/claude-proxy.sh on
 claude                       # agora roda via proxy
 
-# VER se está ligado:
+# VER se está ligado e qual modelo está ativo:
 source /root/CentralDark/secrets/claude-proxy.sh status
 
 # DESLIGAR (volta pra sua conta normal):
@@ -57,6 +91,55 @@ source /root/CentralDark/secrets/claude-proxy.sh off
 
 ---
 
+## 🔄 Trocar de modelo no proxy
+
+O proxy tem **6 modelos disponíveis**. Você pode escolher qualquer um:
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║   🤖 MODELOS DISPONÍVEIS NO PROXY                           ║
+╠══════════════════════════════════════════════════════════════╣
+║   1. Claude Opus 4.8                      (opus-4.8)        ║
+║   2. Claude Opus 4.8 [1m]                 (opus-4.8[1m])    ║
+║   3. Claude Sonnet 4.6                    (sonnet-4.6)      ║
+║   4. Claude Sonnet 4.6 [1m]               (sonnet-4.6[1m]) ║
+║   5. Claude Haiku 4.6                     (haiku-4.6)       ║
+║   6. Claude Haiku 4.6 [1m]                (haiku-4.6[1m])  ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+### 🔹 Direto (sabe o ID do modelo)
+
+```bash
+source /root/CentralDark/secrets/claude-proxy.sh switch sonnet-4.6
+source /root/CentralDark/secrets/claude-proxy.sh switch opus-4.8[1m]
+source /root/CentralDark/secrets/claude-proxy.sh switch haiku-4.6
+```
+
+### 🔹 Menu interativo (não sabe o ID)
+
+```bash
+source /root/CentralDark/secrets/claude-proxy.sh switch
+```
+
+Vai aparecer um menu numerado. É só digitar o número do modelo desejado.
+
+### 🔹 Listar modelos disponíveis
+
+```bash
+source /root/CentralDark/secrets/claude-proxy.sh models
+```
+
+### 🔹 Ver modelo ativo
+
+```bash
+source /root/CentralDark/secrets/claude-proxy.sh status
+```
+
+Mostra se o proxy está ligado, a URL e qual modelo está ativo.
+
+---
+
 ## ⚡ (Opcional) Criar atalho curto `claude-proxy`
 
 Se quiser digitar só `claude-proxy` em vez do caminho todo, **cole este bloco uma vez**
@@ -66,16 +149,27 @@ no terminal (você autoriza a mudança no seu `.bashrc`):
 cat >> ~/.bashrc <<'EOF'
 
 # === CentralDark proxy aliases ===
-alias proxy-on='set -a; source /root/CentralDark/secrets/anthropic.env; set +a; echo "🟢 proxy LIGADO ($ANTHROPIC_BASE_URL)"'
-alias proxy-off='unset ANTHROPIC_BASE_URL ANTHROPIC_AUTH_TOKEN ANTHROPIC_API_KEY; echo "🔴 proxy DESLIGADO"'
-alias proxy-status='[ -n "$ANTHROPIC_BASE_URL" ] && echo "🟢 LIGADO ($ANTHROPIC_BASE_URL)" || echo "🔴 DESLIGADO"'
-alias claude-proxy='set -a; source /root/CentralDark/secrets/anthropic.env; set +a; echo "🟢 Claude via proxy"; claude'
+alias proxy-on='source /root/CentralDark/secrets/claude-proxy.sh on'
+alias proxy-off='source /root/CentralDark/secrets/claude-proxy.sh off'
+alias proxy-status='source /root/CentralDark/secrets/claude-proxy.sh status'
+alias proxy-models='source /root/CentralDark/secrets/claude-proxy.sh models'
+alias proxy-switch='source /root/CentralDark/secrets/claude-proxy.sh switch'
+alias claude-proxy='bash /root/CentralDark/secrets/claude-proxy.sh run'
 EOF
 source ~/.bashrc
 ```
 
-Depois disso, é só: **`claude-proxy`** (liga e abre), **`proxy-off`** (desliga),
-**`proxy-status`** (ver estado).
+Depois disso, é só:
+
+| Comando | O que faz |
+|---------|-----------|
+| `claude-proxy` | Liga proxy + abre Claude Code |
+| `proxy-on` | Só liga o proxy |
+| `proxy-off` | Desliga o proxy |
+| `proxy-status` | Mostra status + modelo ativo |
+| `proxy-models` | Lista modelos disponíveis |
+| `proxy-switch` | Menu pra trocar modelo |
+| `proxy-switch sonnet-4.6` | Troca direto pro modelo |
 
 ---
 
@@ -120,7 +214,38 @@ Trocou de conta/IA? Qualquer terminal novo continua de onde parou:
 2. roda `/contexto` (calibra com seu jeito — lê Lembranças + Consciência)
 3. segue o trabalho, sem re-explicar nada.
 
+---
+
+## 📂 Para usar em QUALQUER VPS (universal)
+
+Se quiser levar este script pra outra máquina:
+
+1. **Copie o script:**
+   ```bash
+   scp /root/CentralDark/secrets/claude-proxy.sh usuario@outravps:/caminho/
+   ```
+
+2. **Crie o cofre de credenciais** em qualquer lugar:
+   ```bash
+   nano /caminho/secrets/anthropic.env
+   ```
+   Conteúdo:
+   ```env
+   ANTHROPIC_AUTH_TOKEN=sua-key-aqui
+   ANTHROPIC_BASE_URL=https://claude.ap7.site
+   ```
+
+3. **Edite a linha 18 do script** apontando pro novo cofre:
+   ```bash
+   COFRE="/caminho/secrets/anthropic.env"
+   ```
+
+4. **Pronto.** Todos os comandos funcionam igual.
+
+---
+
 ## Conexões Rápidas
 
 - [[APRENDIZADOS_PROXY]] — diagnóstico de autenticação do proxy
+- [[METODO-SWITCH-MODEL]] — método técnico de como o switch foi implementado
 - [[MCP-EXPLICADO]] — o que é o MCP
