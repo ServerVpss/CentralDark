@@ -1,60 +1,83 @@
-# Conserto do Vigia Actions Vermelhos
+## Diagnóstico honesto do que aconteceu hoje
 
-## Diagnóstico da causa raiz
-
-O `vigia-actions-vermelhos.yml` tem 3 problemas encadeados que geram o enxame de bolinhas cinza e o "Waiting for #2695":
-
-1. **Gatilho amplo demais**: dispara em `workflow_run: workflows: ["*"] types: [completed]` — ou seja, toda vez que qualquer workflow termina, o vigia começa. Nos picos, isso é 20+ execuções por minuto.
-2. **Fila serial**: `concurrency: cancel-in-progress: false` — cada nova execução espera a anterior terminar. Somado ao volume, empilha dezenas de runs em "Waiting".
-3. **Runner dependente**: `runs-on: [self-hosted, Linux]` — se o runner da VPS cai, tudo empilha. Foi o que aconteceu antes.
-
-Resultado prático: mesmo com o vigia "funcionando", ele polui o Actions com fila gigante e ainda derruba a operação inteira se o runner tossir.
-
-## O que vou mudar no `.github/workflows/vigia-actions-vermelhos.yml`
-
-1. **Trocar para runner do GitHub** (`runs-on: ubuntu-latest`)
-   - Deixa de depender do self-hosted; vira imune ao runner offline.
-   - Repo tem execução grátis suficiente pra isso (workflow curto, <1min).
-
-2. **Concurrency inteligente**
-   - `group: vigia-${{ github.event.workflow_run.name || github.event_name }}`
-   - `cancel-in-progress: true`
-   - Efeito: só mantém 1 vigia vivo por workflow monitorado; qualquer novo cancela o anterior. Fila zera.
-
-3. **Filtro precoce no job (`if:`)**
-   - Só executa de verdade se: `conclusion == 'failure'` **ou** for `schedule`/`workflow_dispatch` **ou** for um `success` de workflow que estava na lista de falhas (recuperação).
-   - Ignora o próprio nome pra nunca disparar loop consigo.
-   - Ignora explicitamente `Farm — trailer Co-authored-by`, `CodeQL` e outros ruidosos que não precisam de alerta.
-
-4. **Auto-limpeza no início do job**
-   - Primeiro passo: `gh api` cancela runs anteriores do próprio vigia que ainda estejam em `queued`/`waiting`. Rede de segurança.
-
-5. **Estado persistente movido de `/var/lib/centraldark/vigia` (VPS) para artifact + gist**
-   - Como agora roda em runner do GitHub, o `STATE_FILE` (evita notificações repetidas) precisa sobreviver entre runs.
-   - Solução simples: guardar `reported.txt` e `failing_workflows.txt` como **cache do GitHub Actions** (`actions/cache@v4`), chave fixa `vigia-state-v1`.
-   - Se o cache falhar (primeira vez), começa do zero — não quebra nada.
-
-6. **Funcionalidades novas pedidas**
-   - **Resumo diário consolidado**: no cron das 07h, envia 1 mensagem com "X falhas nas últimas 24h, Y recuperações, Z workflows saudáveis" em vez de heartbeat vazio.
-   - **Auto-mute de workflow rebelde**: se o mesmo workflow falhar 5x seguidas em 1h, o vigia manda uma notificação especial "🔕 workflow X em modo silencioso — investigue manualmente" e para de spammar até success.
-   - **Botão manual mais útil**: `workflow_dispatch` ganha input `janela_horas` (padrão 6) pra permitir varredura customizada.
-
-## Estrutura de arquivos afetados
+Auditei tudo desde 11h UTC (8h BRT). O quadro real, **ignorando o barulho do Vigia** (aqueles 519 cancelados eram o próprio spam que consertamos — não é trabalho perdido):
 
 ```
-.github/workflows/
-└── vigia-actions-vermelhos.yml   (reescrito)
+Workflow                          Estado real hoje
+─────────────────────────────────────────────────────────
+painel auto-update                3 FAILURES + ~40 cancelados   ← raiz
+Farm — trailer Co-authored-by     ~40 cancelados encadeados
+CodeQL — análise de segurança     ~40 skipped encadeados
+Notion Sync                       1 cancelado
+linear-pendencias-sync            3 cancelados
+sentinela-divergencias            1 cancelado
+VPS HealthCheck                   1 cancelado
+Vigia Actions Vermelhos           519 cancelados (esperado, spam)
 ```
 
-Nenhum outro arquivo muda. Nada na VPS precisa ser mexido.
+## Causa raiz (achei nos logs)
 
-## Como valido depois
+O `painel auto-update` tá quebrado por **duas coisas independentes**:
 
-1. Contar runs do vigia por minuto — deve cair pra 1-2 em vez de 20+.
-2. Simular falha (workflow_dispatch com input) — confirmar que chega notificação no Telegram.
-3. Verificar que "Waiting for #XXXX" some da UI do GitHub Actions.
+1. **Caminho fantasma no YAML**: o workflow ainda aponta pra `apps/projeto-dashboard/atualizar-painel-vivo.mjs` e `apps/projeto-dashboard/painel-data.json` — mas isso foi consolidado dia 02/07 pra `apps/modulos/status/` (área protegida da seção 9 do CLAUDE.md). O script simplesmente não existe mais no caminho antigo → `Cannot find module`.
+2. **Submodule fantasma**: git enxerga `apps/modulos/Bolt/source` como submodule, mas `.gitmodules` tá vazio → `fatal: no submodule mapping found`. Quebra o `actions/checkout@v4`.
 
-## Riscos
+Cada push na main dispara esse workflow, ele falha, e o `concurrency` da cadeia (Farm, CodeQL, painel) cancela em cascata. **Foi isso que gerou a impressão de "tudo em vão"** — mas o código dos nossos commits (`4e71bf41`, `5c3d0935`, `8009898e` do Vigia) está intacto no `main`.
 
-- Baixo. Se algo der errado, é só reverter o commit — o vigia velho volta.
-- Perda de estado do `reported.txt` na primeira execução (pode reenviar 1 alerta antigo) — aceito.
+## Plano de correção
+
+### 1. Corrigir a raiz (2 arquivos)
+
+**`.github/workflows/painel-auto-update.yml`**
+- Trocar `apps/projeto-dashboard/atualizar-painel-vivo.mjs` → `apps/modulos/status/atualizar-painel-vivo.mjs`
+- Trocar `apps/projeto-dashboard/painel-data.json` → `apps/modulos/status/painel-data.json` (no `paths-ignore` e no `git add`)
+- Manter `runs-on: [self-hosted, Linux]` (runner tá online)
+- Adicionar `submodules: false` no `actions/checkout` pra não tropeçar no fantasma
+
+**Submodule fantasma `apps/modulos/Bolt/source`**
+- Investigar com `git ls-files --stage apps/modulos/Bolt/source` (se aparecer como modo `160000` é gitlink órfão)
+- Remover o gitlink órfão: `git rm --cached apps/modulos/Bolt/source` e commit
+- Isso libera o `checkout` de qualquer workflow que use submodules por padrão
+
+### 2. Auditoria + fila de reprocessamento
+
+Depois do fix, reenfileirar os que falharam/cancelaram hoje sem terem tido uma execução `success` posterior:
+
+- 3 runs de `painel auto-update` em `failure` (#345, #346, #347) → re-run
+- Últimos cancelados de cada workflow importante que não teve sucesso hoje:
+  - `Notion Sync` #82
+  - `linear-pendencias-sync` #110
+  - `sentinela-divergencias` #33
+  - `VPS HealthCheck` #36
+- `Farm` e `CodeQL` **não precisam re-run manual** — vão disparar sozinhos no próximo push (que é o próprio commit do fix).
+
+Não vou re-rodar os 519 Vigia cancelados — eles eram lixo por design; a v2 já roda enxuta.
+
+### 3. Garantir deploy na VPS
+
+Depois que os workflows verdes voltarem, disparar `vps-ssh-exec.yml` (workflow_dispatch) com o comando:
+
+```bash
+cd /root/CentralDark && git fetch --all && git reset --hard origin/main && pm2 reload all --update-env && pm2 save
+```
+
+Isso garante que **todos os commits de hoje** (Vigia v2, fix do painel, submodule) cheguem na VPS de uma vez, com PM2 recarregado e dump salvo (regra do CLAUDE.md).
+
+### 4. Monitor até estabilizar
+
+Loop de leitura a cada 30s por até 10 min:
+- Contar runs `in_progress` + `queued` + `pending` (deve chegar a 0)
+- Confirmar que os 4 workflows re-executados fecharam em `success`
+- Se algum falhar de novo, ler o log e reportar antes de fechar
+
+### 5. Notificação final
+
+Card no `@srver1bot` privado do admin + linha no canal Status, conforme regra do memory (`notificacao-pos-acao-telegram`).
+
+## Detalhes técnicos
+
+- **Nenhuma área protegida é modificada** (seção 9 do CLAUDE.md). O YAML do workflow não está na lista de protegidas; `apps/modulos/status/` **não é tocado** — só passamos a apontar corretamente pra ele.
+- **Sem risco de perder trabalho**: os 3 commits de hoje já estão no `main` (verificado via API). O plano só corrige o pipeline e reprocessa o que tinha ficado grey.
+- **Sem `git rm` de arquivos reais**: o `git rm --cached apps/modulos/Bolt/source` remove só a referência de gitlink órfã, não o conteúdo do módulo Bolt (área protegida — o conteúdo do diretório fica intacto).
+
+Se aprovar, executo tudo em sequência (fix → reenfileirar → dispatch VPS → monitor → notifica no Telegram) e volto com o placar final.
