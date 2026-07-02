@@ -1,18 +1,25 @@
-// Configurações do plugin: URL do JSON e intervalo de refresh.
+// Configurações do plugin: URL do JSON, refresh e auto-update.
 
-import { App, PluginSettingTab, Setting } from "obsidian";
+import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import type GrafoVivoPlugin from "./main";
 
 export interface GrafoVivoSettings {
   urlGrafo: string;
   intervaloSegundos: number;
   abrirNotaAoClicar: boolean;
+  autoUpdateAtivo: boolean;
+  autoUpdateBaseUrl: string;
+  autoUpdateIntervaloMinutos: number;
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
   urlGrafo: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/graph-data",
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
+  autoUpdateAtivo: true,
+  autoUpdateBaseUrl:
+    "https://raw.githubusercontent.com/ServerVpss/CentralDark/main/apps/modulos/obsidian-plugin-grafo-vivo",
+  autoUpdateIntervaloMinutos: 10,
 };
 
 export class GrafoVivoSettingTab extends PluginSettingTab {
@@ -62,6 +69,58 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
           this.plugin.settings.abrirNotaAoClicar = v;
           await this.plugin.saveSettings();
         }),
+      );
+
+    containerEl.createEl("h3", { text: "🚀 Auto-atualização" });
+
+    new Setting(containerEl)
+      .setName("Auto-atualizar plugin")
+      .setDesc("Baixa novas versões automaticamente do GitHub. Chega de zip.")
+      .addToggle((tg) =>
+        tg.setValue(this.plugin.settings.autoUpdateAtivo).onChange(async (v) => {
+          this.plugin.settings.autoUpdateAtivo = v;
+          await this.plugin.saveSettings();
+          if (v) this.plugin.autoUpdater.iniciar();
+          else this.plugin.autoUpdater.parar();
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("URL base do repositório")
+      .setDesc("Caminho raw do GitHub onde ficam main.js/manifest.json/styles.css.")
+      .addText((txt) =>
+        txt
+          .setValue(this.plugin.settings.autoUpdateBaseUrl)
+          .onChange(async (v) => {
+            this.plugin.settings.autoUpdateBaseUrl = v.trim();
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("Intervalo de checagem (minutos)")
+      .setDesc("De quanto em quanto tempo checar se saiu versão nova. Mínimo 5min.")
+      .addText((txt) =>
+        txt
+          .setValue(String(this.plugin.settings.autoUpdateIntervaloMinutos))
+          .onChange(async (v) => {
+            const n = Math.max(5, parseInt(v, 10) || 10);
+            this.plugin.settings.autoUpdateIntervaloMinutos = n;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName("Checar atualização agora")
+      .setDesc(`Versão instalada: ${this.plugin.manifest.version}`)
+      .addButton((btn) =>
+        btn
+          .setButtonText("Checar agora")
+          .setCta()
+          .onClick(async () => {
+            new Notice("🔎 Checando atualização...");
+            await this.plugin.autoUpdater.checarEAtualizar(false);
+          }),
       );
   }
 }
