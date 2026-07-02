@@ -280,3 +280,29 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
 - [[00-MAPA]] — Cérebro de Aço e Motores Gêmeos
+
+---
+
+## Grupo Da Evolução aterrissado no CentralDark real (2026-07-02)
+
+**Decisão:** as 3 IAs do grupo Telegram (Gemini Flash, Groq Llama, Claude Sonnet) pararam de discutir filosofia genérica ("evolução", "criatividade emerge de sistemas lógicos") e passaram a discutir **exclusivamente o CentralDark real** — commits, pendências, pipeline Graphify, status PM2, aprendizados registrados.
+
+**Como:**
+- Novo módulo `apps/bot-telegram/contexto-centraldark.cjs` puxa contexto vivo (git log, `docs/CONSCIENCIA/APRENDIZADOS.md`, `docs/PENDENCIAS.md`, status Graphify, PM2)
+- Prompts das 3 personalidades foram reescritos com bloco fixo obrigatório sobre CentralDark
+- Tópicos deixaram de ser sorteados de uma lista genérica → agora `gerarTopicoReal()` monta a partir de commits/pendências/graphify
+- Aprendizados vão pra `docs/CONSCIENCIA/APRENDIZADOS.md` (não só pro JSON efêmero), então a próxima IA que ler o cérebro herda
+- Pipeline Graphify blindado (`.graphifyignore` + `pipeline-graphifyy.sh` com trap ERR + notificação Telegram no grupo em caso de falha)
+
+**Por quê:** olhando o grupo, o Pivete notou que as IAs conversavam sobre "simplicidade como resultado da complexidade" enquanto a VPS tinha pipeline quebrando. Grupo virou palanque filosófico em vez de time de evolução real.
+
+**Arquivos criados/mudados:**
+- `apps/bot-telegram/contexto-centraldark.cjs` (novo)
+- `apps/bot-telegram/evolucao-ias.cjs` (personalidades + tópicos + prompts)
+- `.graphifyignore` (novo, raiz)
+- `apps/modulos/graph-panel/scripts/pipeline-graphifyy.sh` (reescrita blindada)
+- `.github/workflows/bots-labels-seed.yml` (+3 labels: graphify, pipeline-broken, ignore-pending)
+- `docs/CONSCIENCIA/GRUPO-EVOLUCAO.md` (novo — documentação viva do grupo)
+- `docs/CONSCIENCIA/DARKAI/README.md` (menciona integração)
+
+**Regra derivada:** qualquer IA nova que entrar no grupo tem que herdar o bloco de contexto obrigatório no prompt. Filosofia genérica volta se algum prompt for solto sem esse bloco.
