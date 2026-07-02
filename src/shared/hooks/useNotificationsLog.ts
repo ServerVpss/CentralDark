@@ -2,7 +2,7 @@
 // Lê só da tabela `notifications_log`. NÃO duplica o `useNotifications`
 // (esse outro lê de telegram_subscriptions / query_history / telegram_messages).
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 export type NotifyTipo = "info" | "sucesso" | "aviso" | "erro" | "critico";
 

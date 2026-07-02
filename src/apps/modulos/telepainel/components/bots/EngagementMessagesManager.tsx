@@ -6,7 +6,7 @@ import { Switch } from "@/shared/ui/switch";
 import { Label } from "@/shared/ui/label";
 import { Slider } from "@/shared/ui/slider";
 import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash, Eye } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
 import {

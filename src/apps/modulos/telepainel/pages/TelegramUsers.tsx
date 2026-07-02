@@ -55,7 +55,7 @@ import {
   TableRow,
 } from "@/shared/ui/table";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { useTelegramBots } from "@/shared/hooks/useTelegramBots";
 import { Loader2 } from "lucide-react";
 

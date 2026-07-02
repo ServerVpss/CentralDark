@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "@/shared/hooks/use-toast";
 
 export interface DeployRow {

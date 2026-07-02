@@ -1,7 +1,7 @@
 // Hook das regras de roteamento de notificações (admin-only).
 // Define qual bot/chat recebe cada tipo de evento.
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 
 export type TipoEvento =

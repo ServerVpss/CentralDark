@@ -36,7 +36,7 @@ import {
 import { Label } from "@/shared/ui/label";
 import { Badge } from "@/shared/ui/badge";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 import { QueryInput } from "@/apps/modulos/telepainel/components/consultation/QueryInput";
 import { QueryHistoryList } from "@/apps/modulos/telepainel/components/consultation/QueryHistoryList";

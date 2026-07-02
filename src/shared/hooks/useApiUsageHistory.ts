@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { subDays, startOfDay } from "date-fns";
 
 export type ApiUsagePeriod = "today" | "7d" | "15d" | "30d";

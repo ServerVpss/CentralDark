@@ -7,7 +7,7 @@ import { Textarea } from "@/shared/ui/textarea";
 import { Button } from "@/shared/ui/button";
 import { Sparkles, Clock, Users, Zap } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 
 interface FakeEngagementSettingsProps {

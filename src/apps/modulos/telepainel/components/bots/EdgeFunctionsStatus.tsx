@@ -3,7 +3,7 @@ import { Server, CheckCircle, XCircle, AlertCircle, RefreshCw, Clock } from "luc
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 import { cn } from "@/shared/lib/utils";
 

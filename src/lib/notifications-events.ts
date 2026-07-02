@@ -2,7 +2,7 @@
 // Chama a edge function `notify-event`, que internamente usa notify-telegram
 // e grava em notifications_log. Não bate em Telegram direto do navegador.
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 export type Severity = "info" | "sucesso" | "aviso" | "erro" | "critico";
 

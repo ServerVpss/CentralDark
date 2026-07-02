@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
 import { isViewAsActive } from "@/shared/lib/viewAsMode";
 

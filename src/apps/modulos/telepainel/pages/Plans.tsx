@@ -18,7 +18,7 @@ import {
 import { cn } from "@/shared/lib/utils";
 import { usePayments, SubscriptionPlan } from "@/shared/hooks/usePayments";
 import { PixPaymentDialog } from "@/apps/modulos/telepainel/components/payments/PixPaymentDialog";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 const planIcons: Record<string, React.ElementType> = {
   diaria: Star,

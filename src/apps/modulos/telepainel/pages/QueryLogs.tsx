@@ -43,9 +43,9 @@ import {
   TableRow,
 } from "@/shared/ui/table";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { Loader2 } from "lucide-react";
-import { Json } from "@/integrations/supabase/types";
+import { Json } from "@/integrations/supabase/hub-types";
 import { QueryResultFormatter } from "@/apps/modulos/telepainel/components/consultas/QueryResultFormatter";
 
 interface QueryLog {

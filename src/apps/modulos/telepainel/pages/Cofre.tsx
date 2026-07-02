@@ -38,7 +38,7 @@ import {
   type TipoEvento,
 } from "@/shared/hooks/useNotificationRoutes";
 import { useNotificationsLog } from "@/shared/hooks/useNotificationsLog";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 
 const ADMIN_CHAT_ID_DEFAULT = "1901426549";

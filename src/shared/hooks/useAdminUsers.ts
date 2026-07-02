@@ -1,7 +1,7 @@
 // Hook que conversa com a edge function `admin-users`
 // Usa fetch direto como fallback (adblocker costuma bloquear functions.invoke).
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 
 export interface AdminUser {
