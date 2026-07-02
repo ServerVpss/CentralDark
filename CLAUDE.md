@@ -139,7 +139,7 @@ apps/
 |------|--------------------|----------------|
 | `apps/bot-telegram/` | Bot @srver1bot — restaurado e testado | 28/06/2026 |
 | `apps/modulos/mcp/` | MCP consolidado (100+ tools) — `dist/` é a única fonte até `src/` ser reconstruído | 30/06/2026 |
-| `apps/modulos/status/` | Página oficial (`status.centralldark.com`) — consumida por monitoramento | 02/07/2026 |
+| `apps/modulos/status/` | Página oficial (`status.centralldark.com`) — consolidada com o painel vivo (index.html + app.js + painel-data.json + atualizar-painel-vivo.mjs) — consumida por monitoramento | 02/07/2026 |
 | `apps/modulos/Bolt/` | Construtor de site próprio do Pivete — não mexer sem ordem | 02/07/2026 |
 | `apps/modulos/WebUI/` | Web UI próprio do Pivete — não mexer sem ordem | 02/07/2026 |
 | `apps/modulos/graph-panel/` | Graph panel (indexação por grafo) — economiza tokens e latência | 02/07/2026 |
