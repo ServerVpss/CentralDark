@@ -32,8 +32,8 @@ Deno.serve(async (req) => {
     }
 
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get("HUB_SUPABASE_URL")!,
+      Deno.env.get("HUB_SUPABASE_ANON_KEY")!,
       { global: { headers: { Authorization: authHeader } } }
     );
 
@@ -51,8 +51,8 @@ Deno.serve(async (req) => {
 
     // Use service role for database operations
     const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      Deno.env.get("HUB_SUPABASE_URL")!,
+      Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!
     );
 
     // Bot token

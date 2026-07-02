@@ -9,9 +9,9 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+const SUPABASE_URL = Deno.env.get("HUB_SUPABASE_URL")!;
+const SERVICE_ROLE = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
+const ANON_KEY = Deno.env.get("HUB_SUPABASE_ANON_KEY")!;
 
 // Ações permitidas (whitelist) — bloqueia qualquer outra coisa do API Telegram.
 const ALLOWED_ACTIONS = new Set([

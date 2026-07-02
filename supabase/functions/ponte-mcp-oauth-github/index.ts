@@ -124,7 +124,7 @@ Deno.serve(async (req) => {
   }
 
   // URL de callback pública fixa — req.url vem sem /functions/v1 e em http interno
-  const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+  const SUPABASE_URL = Deno.env.get("HUB_SUPABASE_URL");
   const callbackUrl = SUPABASE_URL
     ? `${SUPABASE_URL.replace(/\/$/, "")}/functions/v1/ponte-mcp-oauth-github?action=callback`
     : `${url.origin}/functions/v1${url.pathname}?action=callback`;
@@ -197,8 +197,8 @@ Deno.serve(async (req) => {
 
       // 3) Gera chave + grava no banco (com service role)
       const supabase = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+        Deno.env.get("HUB_SUPABASE_URL")!,
+        Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!,
       );
 
       const chavePlena = gerarChave();

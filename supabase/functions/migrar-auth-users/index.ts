@@ -13,8 +13,8 @@ Deno.serve(async (req) => {
 
   try {
     const origem = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      Deno.env.get("HUB_SUPABASE_URL")!,
+      Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!,
     );
     const destinoUrl = Deno.env.get("HUB_SUPABASE_URL")!;
     const destinoKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
@@ -25,11 +25,11 @@ Deno.serve(async (req) => {
     const users = lista.users;
 
     // 2) Pega senha bcrypt via SQL (a API não retorna)
-    const resp = await fetch(`${Deno.env.get("SUPABASE_URL")}/rest/v1/rpc/exec_sql_admin`, {
+    const resp = await fetch(`${Deno.env.get("HUB_SUPABASE_URL")}/rest/v1/rpc/exec_sql_admin`, {
       method: "POST",
       headers: {
-        apikey: Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-        Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        apikey: Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!,
+        Authorization: `Bearer ${Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")}`,
         "Content-Type": "application/json",
       },
     }).catch(() => null);
@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
     const { Client } = await import("https://deno.land/x/postgres@v0.19.3/mod.ts");
 
     // Conecta na origem usando SUPABASE_DB_URL (Lovable Cloud injeta)
-    const origemDbUrl = Deno.env.get("SUPABASE_DB_URL");
+    const origemDbUrl = Deno.env.get("HUB_SUPABASE_DB_URL");
     if (!origemDbUrl) throw new Error("SUPABASE_DB_URL não disponível na origem");
 
     const clientOrigem = new Client(origemDbUrl);

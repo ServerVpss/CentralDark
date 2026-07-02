@@ -67,8 +67,8 @@ Deno.serve(async (req) => {
   }
 
   const supa = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    Deno.env.get("HUB_SUPABASE_URL")!,
+    Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
   const { data, error } = await supa

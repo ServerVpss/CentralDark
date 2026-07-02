@@ -22,8 +22,8 @@ Deno.serve(async (req) => {
       });
     }
 
-    const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const SUPA_URL = Deno.env.get("SUPABASE_URL")!;
+    const SERVICE = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
+    const SUPA_URL = Deno.env.get("HUB_SUPABASE_URL")!;
     const URL_API = `${SUPA_URL}/functions/v1/api-query`;
 
     const results: any[] = [];

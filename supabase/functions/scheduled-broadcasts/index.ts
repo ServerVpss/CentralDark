@@ -84,7 +84,7 @@ Deno.serve(async (req) => {
   // 🔒 Só aceita chamadas com a service_role key (cron interno)
   const authHeader = req.headers.get('Authorization') || ''
   const token = authHeader.replace(/^Bearer\s+/i, '').trim()
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+  const serviceRoleKey = Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY') || ''
   if (!token || token !== serviceRoleKey) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -94,8 +94,8 @@ Deno.serve(async (req) => {
 
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabaseUrl = Deno.env.get('HUB_SUPABASE_URL')!
+    const supabaseServiceKey = Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
     const now = new Date().toISOString()
