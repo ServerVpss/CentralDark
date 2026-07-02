@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_events: {
+        Row: {
+          acao: string
+          agent: string
+          alvo: string | null
+          area: string
+          id: number
+          metadata: Json
+          status: string
+          ts: string
+        }
+        Insert: {
+          acao: string
+          agent: string
+          alvo?: string | null
+          area: string
+          id?: number
+          metadata?: Json
+          status?: string
+          ts?: string
+        }
+        Update: {
+          acao?: string
+          agent?: string
+          alvo?: string | null
+          area?: string
+          id?: number
+          metadata?: Json
+          status?: string
+          ts?: string
+        }
+        Relationships: []
+      }
       api_providers: {
         Row: {
           base_url: string
