@@ -12,39 +12,73 @@ serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  const startedAt = Date.now();
+
   try {
     const apiKey = Deno.env.get("ISEEK_API_KEY") || Deno.env.get("CONSULTAS_API_KEY");
     if (!apiKey) {
+      console.error("[api-status] chave da API não configurada (ISEEK_API_KEY/CONSULTAS_API_KEY)");
       return new Response(JSON.stringify({ success: false, error: "API key not configured" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Use a lightweight query to extract account metadata
+    // Consulta leve pra extrair metadados da conta
     const url = `${VEICULOS_API_BASE}?apikey=${encodeURIComponent(apiKey)}&modulo=iseek-cpf&string=00000000000`;
 
-    const response = await fetch(url, {
-      method: "GET",
-      headers: { "Accept": "application/json" },
-      signal: AbortSignal.timeout(20000),
-    });
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        method: "GET",
+        headers: { "Accept": "application/json" },
+        signal: AbortSignal.timeout(20000),
+      });
+    } catch (netErr) {
+      const latency = Date.now() - startedAt;
+      console.error(`[api-status] upstream=veiculosapi network_error=${(netErr as Error).message} latencyMs=${latency}`);
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "upstream indisponível (falha de rede)",
+          upstream: "veiculosapi",
+          detail: (netErr as Error).message,
+        }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const latency = Date.now() - startedAt;
+    const contentType = response.headers.get("content-type") || "";
+    console.log(`[api-status] upstream=veiculosapi status=${response.status} contentType=${contentType} latencyMs=${latency}`);
+
+    // Se upstream não OK ou não devolveu JSON, tratamos de forma amigável (sem estourar 500)
+    if (!response.ok || !contentType.toLowerCase().includes("application/json")) {
+      const bodyPreview = (await response.text().catch(() => "")).slice(0, 200);
+      console.warn(`[api-status] upstream fora do padrão. preview="${bodyPreview.replace(/\s+/g, " ")}"`);
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "upstream indisponível ou fora do formato esperado",
+          upstream: "veiculosapi",
+          upstream_status: response.status,
+          upstream_content_type: contentType || null,
+        }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     const data = await response.json();
 
-    console.log("API raw response keys:", Object.keys(data));
+    console.log("[api-status] resposta ok, keys:", Object.keys(data));
 
-    // Estrutura nova: api_info contém dados de uso
     const apiInfo = data.api_info || {};
-    // Estrutura legada / por módulo
     const limites = data.limites || {};
     const plano = data.plano || {};
-    // Limite GLOBAL da conta também aparece em "dados" (especialmente quando estoura)
     const dadosGlobal = (data.dados && typeof data.dados === "object") ? data.dados : {};
 
     const hasApiInfo = Object.keys(apiInfo).length > 0;
 
-    // Prioridade: api_info (oficial) > dados (global da conta) > limites (por módulo)
     const dailyLimit =
       apiInfo.daily_limit ??
       dadosGlobal.daily_limit ??
@@ -81,8 +115,8 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("API status error:", err);
-    return new Response(JSON.stringify({ success: false, error: err.message }), {
+    console.error("[api-status] erro inesperado:", (err as Error).message);
+    return new Response(JSON.stringify({ success: false, error: (err as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
