@@ -374,13 +374,25 @@ export class AutoUpdater {
     // @ts-ignore API interna do Obsidian
     const plugins = this.plugin.app.plugins;
     const id = this.plugin.manifest.id;
-    try {
-      await plugins.disablePlugin(id);
-      await plugins.enablePlugin(id);
-    } catch (e) {
-      console.error("[GrafoVivo] falha ao recarregar plugin", e);
-      new Notice("Reinicie o Obsidian pra concluir a atualização");
-    }
+
+    // Defer pra sair do callstack atual (senão o plugin se desabilita no meio
+    // do próprio callback e o Obsidian trava no "Recarregando plugin...").
+    setTimeout(async () => {
+      try {
+        await plugins.disablePlugin(id);
+        // Força o Obsidian a reler o manifest.json do disco — sem isso ele
+        // reabilita com a versão em cache e continua achando que tem update.
+        if (typeof plugins.loadManifests === "function") {
+          try { await plugins.loadManifests(); } catch { /* best-effort */ }
+        }
+        await new Promise((r) => setTimeout(r, 300));
+        await plugins.enablePlugin(id);
+        new Notice("✅ Grafo Vivo recarregado com a nova versão", 4000);
+      } catch (e) {
+        console.error("[GrafoVivo] falha ao recarregar plugin", e);
+        new Notice("⚠️ Reinicie o Obsidian pra concluir a atualização", 8000);
+      }
+    }, 200);
   }
 }
 
