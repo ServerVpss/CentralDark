@@ -10564,9 +10564,27 @@ function logCmd(level: 'INFO' | 'WARN' | 'ERROR', tag: string, data: Record<stri
 
 // =============== MAIN HANDLER ===============
 Deno.serve(async (req) => {
+  const reqUrl = new URL(req.url);
+  logCmd('INFO', 'REQ_IN', {
+    method: req.method,
+    path: reqUrl.pathname,
+    hasBotId: reqUrl.searchParams.has('botId'),
+    ua: req.headers.get('user-agent')?.substring(0, 60) || null,
+  });
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  if (req.method !== "POST") {
+    logCmd('WARN', 'METHOD_NOT_ALLOWED', { method: req.method, path: reqUrl.pathname });
+    return new Response(JSON.stringify({ error: "method not allowed", method: req.method }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json", "Allow": "POST, OPTIONS" },
+    });
+  }
+
+
 
   const startTime = Date.now();
 
