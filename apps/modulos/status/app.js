@@ -127,7 +127,7 @@ function renderEvents(data) {
   if (!box) return;
 
   const eventsAll = Array.isArray(data.events) ? data.events : [];
-  const events = eventsAll.slice(0, 10);
+  const events = eventsAll.slice(0, 5);
   if (!events.length) {
     box.innerHTML = '<article class="event-card"><div><strong>Nenhum evento ainda</strong><p>Quando avançarmos no chat, os acontecimentos aparecem aqui.</p></div><span>aguardando</span></article>';
     return;
@@ -521,7 +521,7 @@ async function renderHealthcheck(){
     return;
   }
   const eventsAll = Array.isArray(data.events) ? data.events : [];
-  const events = eventsAll.slice(0, 10);
+  const events = eventsAll.slice(0, 5);
   // Bucketiza por dia (últimos 30) — pior severidade do dia define a cor.
   const days = [];
   const today = new Date(); today.setUTCHours(0,0,0,0);
