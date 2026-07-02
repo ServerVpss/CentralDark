@@ -1,9 +1,5 @@
 {
-  "versao": "0.3.0",
-  "geradoEm": "2026-07-02T17:32:18.515Z",
-  "arquivos": {
-    "main.js": "20b1f420252d6aae9fe79be1a5d502163d1039f9b5403f4062e5b0a8120b8234",
-    "manifest.json": "8204f5b173d034ae1f693d86c5f28724c7eb83520dde03ced598a3b0df5f76cb",
-    "styles.css": "e982bb8a835c016ceb574b1df1efe7d68c64c71e60ae43b918d5357c060cf570"
-  }
+  "main.js": "97c3aa97a9fa3d3f90b5f281547bb1c55a449234959a1ec10863445093109bfc",
+  "manifest.json": "23d24cfc16cdb110201fa994e32ba3799d1f1edf5200fdd32375551935b3c962",
+  "styles.css": "02f65908f31e32ed83fdf11762d88f3c6a33f1fbcce136c0922f53444ff48bbb"
 }

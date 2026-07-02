@@ -1,1 +1,0 @@
-FILE:/dev-server/apps/modulos/obsidian-plugin-grafo-vivo/gerar-release-assets.mjs

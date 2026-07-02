@@ -20,4 +20,3 @@
 - **Prompt RELOAD CENTRALDARK**: versão consolidada pronta pra reuso no Claude em `.claude/prompts/reload-centraldark-v3.md`.
 - **Gatilho RELOAD V3**: ao detectar `RELOAD V3` ou `RELOAD CENTRALDARK V3` (case-insensitive) na mensagem do usuário, carregar imediatamente `.claude/prompts/reload-centraldark-v3.md` + `cerebro/ferramentas-cognitivas-e-comandos.md` e operar sob esse contexto consolidado, sem pedir confirmação.
 - **Auto-pendência ao cortar assunto**: se o usuário mudar de assunto ou a conversa cortar no meio de algo em aberto, salvar IMEDIATAMENTE o tópico anterior em `docs/PENDENCIAS.md` via `pendencias_add` antes de responder o novo. Detalhes: [Auto-salvar Pendência](mem://preferences/auto-salvar-pendencia-ao-cortar).
-- **Instalação manual do plugin Obsidian**: sempre instruir a fechar e reabrir o Obsidian — disable/enable no painel não recarrega bytes novos. Detalhes: [Obsidian Reload](mem://preferences/obsidian-plugin-reload).
