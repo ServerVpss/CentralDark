@@ -717,30 +717,31 @@ async function renderMcpHealth() {
   }
 }
 
-/* ============= GRAFO VIVO (Cytoscape via CDN) ============= */
-let __cy = null;
+/* ============= GRAFO VIVO (force-graph via CDN) ============= */
+let __fg = null;
 async function renderGrafoVivo() {
   const container = document.getElementById('grafoVivoContainer');
   const loading = document.getElementById('grafoVivoLoading');
   const tag = document.getElementById('grafoTag');
   if (!container) return;
 
-  // Carrega Cytoscape sob demanda (CDN)
-  if (typeof cytoscape === 'undefined') {
+  // Carrega force-graph sob demanda (canvas, partículas nativas)
+  if (typeof ForceGraph === 'undefined') {
     await new Promise((resolve, reject) => {
       const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js';
+      s.src = 'https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js';
       s.onload = resolve; s.onerror = reject;
       document.head.appendChild(s);
-    }).catch(() => { tag.textContent = 'lib offline'; return; });
+    }).catch(() => { tag.textContent = 'lib offline'; });
+    if (typeof ForceGraph === 'undefined') { tag.textContent = 'lib offline'; return; }
   }
 
   // Puxa dados
-  let data;
+  let raw;
   try {
     const res = await fetch('./graph-data.json?t=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    data = await res.json();
+    raw = await res.json();
   } catch (e) {
     if (loading) loading.textContent = '⚠️ graph-data.json ainda não gerado';
     tag.textContent = 'sem dados';
@@ -748,7 +749,7 @@ async function renderGrafoVivo() {
   }
 
   if (loading) loading.style.display = 'none';
-  tag.textContent = `${data.nodes?.length ?? 0} nós · ${data.edges?.length ?? 0} arestas`;
+  tag.textContent = `${raw.nodes?.length ?? 0} nós · ${raw.edges?.length ?? 0} arestas`;
 
   const colorByType = {
     orquestrador: '#10b981', bot: '#f59e0b', gateway: '#8b5cf6',
@@ -756,36 +757,69 @@ async function renderGrafoVivo() {
     ia: '#10b981', default: '#94a3b8'
   };
 
-  const elements = [
-    ...(data.nodes || []).map(n => ({
-      data: { id: n.id, label: n.label || n.id, type: n.type || 'default' }
+  // Formato force-graph: { nodes: [{id,...}], links: [{source, target, value}] }
+  const gdata = {
+    nodes: (raw.nodes || []).map(n => ({
+      id: n.id,
+      label: n.label || n.id,
+      type: n.type || 'default',
+      color: colorByType[n.type] || colorByType.default
     })),
-    ...(data.edges || []).map((e, i) => ({
-      data: { id: 'e' + i, source: e.from, target: e.to, label: e.label || '', weight: e.weight || 1 }
+    links: (raw.edges || []).map(e => ({
+      source: e.from, target: e.to, label: e.label || '', value: e.weight || 1
     }))
-  ];
+  };
 
-  if (__cy) { __cy.destroy(); __cy = null; }
-  __cy = cytoscape({
-    container, elements,
-    style: [
-      { selector: 'node', style: {
-        'background-color': ele => colorByType[ele.data('type')] || colorByType.default,
-        'label': 'data(label)', 'color': '#e6e9ef', 'font-size': 10,
-        'text-valign': 'bottom', 'text-margin-y': 6, 'text-outline-color': '#0a0d12',
-        'text-outline-width': 2, 'width': 20, 'height': 20, 'border-width': 1,
-        'border-color': '#1f2937'
-      }},
-      { selector: 'edge', style: {
-        'width': 'mapData(weight, 1, 10, 1, 4)', 'line-color': '#374151',
-        'curve-style': 'bezier', 'target-arrow-shape': 'triangle',
-        'target-arrow-color': '#374151', 'opacity': 0.55
-      }},
-      { selector: 'node:selected', style: { 'border-color': '#10b981', 'border-width': 3 }}
-    ],
-    layout: { name: 'cose', animate: true, idealEdgeLength: 90, nodeRepulsion: 8000, padding: 30 },
-    wheelSensitivity: 0.2
+  // Atualização incremental (não recria — evita "pular")
+  if (__fg) {
+    __fg.graphData(gdata);
+    return;
+  }
+
+  const width = container.clientWidth;
+  const height = container.clientHeight || 520;
+
+  __fg = ForceGraph()(container)
+    .width(width)
+    .height(height)
+    .backgroundColor('#0a0d12')
+    .graphData(gdata)
+    .nodeId('id')
+    .nodeLabel(n => `${n.label} · ${n.type}`)
+    .nodeVal(n => Math.max(4, (n.type === 'orquestrador' ? 12 : 6)))
+    .nodeColor(n => n.color)
+    .nodeCanvasObjectMode(() => 'after')
+    .nodeCanvasObject((node, ctx, globalScale) => {
+      const label = node.label;
+      const fontSize = Math.max(10 / globalScale, 3);
+      ctx.font = `${fontSize}px Inter, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = 'rgba(230,233,239,.9)';
+      ctx.fillText(label, node.x, node.y + 9);
+    })
+    .linkColor(() => 'rgba(148,163,184,.25)')
+    .linkWidth(l => Math.min(3, 0.5 + l.value * 0.3))
+    .linkDirectionalParticles(l => Math.min(4, Math.ceil(l.value / 2)))
+    .linkDirectionalParticleSpeed(l => 0.003 + l.value * 0.0008)
+    .linkDirectionalParticleColor(() => '#10b981')
+    .linkDirectionalParticleWidth(2)
+    .cooldownTicks(120)
+    .d3AlphaDecay(0.03)
+    .d3VelocityDecay(0.35);
+
+  // Ajuste de repulsão pra evitar bola-de-fios
+  if (__fg.d3Force && __fg.d3Force('charge')) {
+    __fg.d3Force('charge').strength(-140);
+  }
+
+  // Redimensiona junto com container
+  window.addEventListener('resize', () => {
+    if (__fg && container) {
+      __fg.width(container.clientWidth).height(container.clientHeight || 520);
+    }
   });
 }
+
 
 refresh();
