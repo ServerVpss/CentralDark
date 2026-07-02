@@ -1,72 +1,62 @@
-## O que vai ser feito
 
-Manter tudo que já existe funcionando (nenhuma IA da VPS perde nada) e adicionar em cima uma "central de cérebro compartilhada" chamada **darkai**, com documentação completa numa pasta só, pra você levar no pendrive e ensinar qualquer outra IA depois.
+# Plano — Pacote DARKAI Completo (Tutorial + Imagens + Terminal)
 
----
+Vou transformar `docs/CONSCIENCIA/DARKAI/` num **kit completo de aprendizado** (tipo mini-curso), gerar imagens ilustrativas com IA, adicionar suporte pro seu terminal local (não só VPS), re-zipar tudo e deixar cópia na VPS.
 
-## 1. Edge function nova: `ai-proxy`
+## 1. Novos documentos (tutorial estilo curso, linguagem leiga)
 
-Criar em `supabase/functions/ai-proxy/index.ts` — genérica, aceita qualquer prompt.
+Dentro de `docs/CONSCIENCIA/DARKAI/`:
 
-- Recebe: `{ prompt, system?, model? }`
-- Usa `LOVABLE_API_KEY` (já está nas secrets, seguro no Lovable Cloud)
-- Chama Lovable AI Gateway (`google/gemini-3-flash-preview` como padrão)
-- Devolve: `{ text }`
-- CORS liberado + validação Zod + tratamento de 429/402
+- `00-COMECE-AQUI.md` — índice do curso, ordem de leitura, o que é cada arquivo
+- `01-O-QUE-E-DARKAI.md` — explicação leiga com analogia (telefone central inteligente), o que resolve
+- `02-COMO-FUNCIONA-POR-DENTRO.md` — fluxo: você → darkai → edge `ai-proxy` → Lovable AI → modelo → resposta (com diagrama)
+- `03-CATALOGO-DE-MODELOS.md` — lista completa dos modelos disponíveis (Gemini 3 Flash, Gemini 2.5 Pro, GPT-5, GPT-5.4, GPT-5.5, etc.), quando usar cada um, custo relativo, velocidade
+- `04-USANDO-NO-TERMINAL-LOCAL.md` — como instalar `darkai` no seu Mac/Linux/Windows local (não só VPS)
+- `05-USANDO-NA-VPS.md` — versão atualizada do install VPS
+- `06-ENSINANDO-OUTRAS-IAS.md` — prompt pronto pra colar em Claude Code, Cursor, ChatGPT, etc. ensinando eles a usar `darkai`
+- `07-EXEMPLOS-PRATICOS.md` — 15+ exemplos reais (resumir log, gerar script, classificar erro, traduzir, revisar código, gerar commit message, etc.)
+- `08-TECNICAS-QUE-USO.md` — minhas técnicas: sub-agentes/swarm, ferramentas cognitivas, orquestração paralela, método gamificado, fallback de secrets, execução defensiva
+- `09-ARQUITETURA-E-ORQUESTRACAO.md` — como organizo trabalho (Sincronia 4-Point, Cérebro Vivo, áreas protegidas, plan mode vs build mode)
+- `10-TROUBLESHOOTING.md` — erros comuns (429, 402, 401, timeout) e como resolver
 
-A `graph-mapper` **continua existindo do lado**, intocada. `ai-proxy` é adicional, não substitui.
+## 2. Imagens geradas com IA (usando `imagegen--generate_image`)
 
-## 2. CLI `darkai` na VPS (script, não instala agora — só documentado)
+Vou gerar 6 imagens ilustrativas e salvar em `docs/CONSCIENCIA/DARKAI/imagens/`:
 
-Arquivo `docs/CONSCIENCIA/DARKAI/darkai.sh` pronto pra copiar pra `/usr/local/bin/darkai` na VPS depois. Uso:
+1. `01-visao-geral.png` — diagrama do fluxo VPS → Edge → Modelos IA
+2. `02-arquitetura-tecnica.png` — versão técnica com componentes
+3. `03-darkai-terminal.png` — mockup do CLI rodando no terminal
+4. `04-catalogo-modelos.png` — visualização dos modelos disponíveis
+5. `05-uma-chave-infinitas-possibilidades.png` — imagem conceitual do benefício
+6. `06-orquestracao-sub-agentes.png` — como sub-agentes trabalham em paralelo
 
-```bash
-darkai "resume esse log"
-darkai --system "você é auditor" "analisa esse arquivo"
-cat erro.log | darkai "classifica esse erro"
-```
+Estilo inspirado na imagem que você mandou (fundo escuro, neon roxo/ciano/verde).
 
-Por baixo faz `curl` na edge `ai-proxy`. Qualquer IA da VPS (Claude Code, Sonnet, scripts Python) chama `darkai` — vira o "telefone único".
+## 3. Suporte pro terminal local
 
-## 3. Pasta de documentação completa
+- Atualizar `darkai.sh` pra funcionar em Mac/Linux/Windows(WSL)
+- Adicionar flag `--list-models` pra listar modelos disponíveis
+- Adicionar flag `--help` completo em PT-BR
+- Criar `instalar-local.sh` (Mac/Linux) e `instalar-windows.ps1` (PowerShell)
+- Instruções pra colocar em `~/.local/bin/darkai` (local) OU `/usr/local/bin/darkai` (VPS)
 
-Criar `docs/CONSCIENCIA/DARKAI/` com:
+## 4. Empacotamento e entrega
 
-- `README.md` — o que é, pra que serve, arquitetura (fluxo VPS → darkai → ai-proxy → Lovable AI)
-- `COMO-USAR.md` — exemplos práticos pra humano e pra IA
-- `COMO-ENSINAR-OUTRA-IA.md` — prompt pronto pra colar em Claude/GPT/Gemini novo explicando o sistema
-- `INSTALAR-NA-VPS.md` — passo a passo do `darkai.sh` + onde colocar
-- `darkai.sh` — script do CLI
-- `exemplos/` — casos reais (resumir log, classificar erro, gerar código)
+- Gerar novo `/mnt/documents/DARKAI-COMPLETO.zip` com tudo (docs + imagens + scripts)
+- Copiar zip pra VPS via `mcp_custom_FNKF0--execute_command` em `/root/CentralDark/DARKAI-COMPLETO.zip` pra você pegar direto de lá também
+- Manter `CREDENCIAIS-TEMP.env` no zip até você confirmar "peguei"
 
-## 4. Arquivo temporário com as chaves (o que você pediu)
+## 5. Detalhes técnicos
 
-Criar `docs/CONSCIENCIA/DARKAI/CREDENCIAIS-TEMP.env` com:
+- Imagens: modelo `premium` (tem texto legível nos diagramas)
+- Scripts terminal: bash puro + fallback Python pra parse JSON (sem depender de `jq`)
+- Docs em Markdown puro, sem HTML, pra funcionar em qualquer editor/leitor
+- Cada doc começa com "📖 Pra quem é este arquivo" e "⏱️ Tempo de leitura"
 
-- `LOVABLE_API_KEY` (valor real, pra você copiar)
-- `SUPABASE_URL`, `SUPABASE_ANON_KEY`
-- URL da edge `ai-proxy`
-- Exemplo de `curl` já com tudo preenchido
+## O que NÃO vou mexer
 
-**Importante que você já sabe:** esse arquivo fica commitado no repo enquanto você não avisar. Assim que confirmar "peguei, pode apagar", eu removo e adiciono no `.gitignore`. Enquanto tá lá, qualquer pessoa com acesso ao repo vê. Você confirmou que tá ok pelo tempo curto.
+- `supabase/functions/ai-proxy/index.ts` já tá funcionando — não toco
+- Edge functions do `graph-mapper` — intocadas
+- Áreas protegidas do CLAUDE.md — intocadas
 
-Sobre zip com senha: dá pra fazer, mas como você mesmo vai apagar em seguida e o repo é seu, o `.env` puro já resolve e é mais rápido de copiar. Se preferir zip mesmo, me fala a senha que você quer que eu use (ou eu gero uma e te falo no chat).
-
----
-
-## Detalhes técnicos
-
-- Edge `ai-proxy` segue padrão `Deno.serve` + `corsHeaders` do `npm:@supabase/supabase-js@2/cors`
-- Modelo padrão: `google/gemini-3-flash-preview` (rápido/barato); override via param
-- Rate limit 429 e créditos 402 retornam JSON claro pro CLI printar
-- `graph-mapper` fica intacta — nada muda lá
-- Nenhuma chave vaza pra VPS: `darkai` só conhece a URL pública da edge + a anon key (que é pública mesmo)
-- `LOVABLE_API_KEY` só existe no Lovable Cloud, ninguém na VPS vê
-
-## Áreas protegidas
-
-Nada da Seção 9 do CLAUDE.md é tocado. Só adiciono arquivos novos em `supabase/functions/ai-proxy/` e `docs/CONSCIENCIA/DARKAI/`.
-
----
-
-Confirma que posso seguir? Se quiser zip com senha em vez de `.env` puro, me diz a senha (ou peço pra eu gerar).
+Posso começar?
