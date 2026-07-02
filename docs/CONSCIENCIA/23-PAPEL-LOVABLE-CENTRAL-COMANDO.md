@@ -1,3 +1,10 @@
+---
+title: "23 PAPEL LOVABLE CENTRAL COMANDO"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🎯 Papel do Lovable — Central de Comando (não é ambiente de trabalho)
 
 > Regra operacional oficial. Vigente a partir de 02/07/2026.
