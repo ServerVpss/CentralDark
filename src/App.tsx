@@ -87,7 +87,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
   { path: "ponte-mcp", element: <PonteMCP />, adminOnly: true },
   { path: "mapa", element: <MapaSite />, adminOnly: true },
-  { path: "hub", element: <HubPage />, adminOnly: true },
+  // Rota /hub removida — Hub agora vive em apps/modulos/hub/ como app independente
 ];
 
 const wrapGuard = (el: JSX.Element, adminOnly?: boolean) =>
