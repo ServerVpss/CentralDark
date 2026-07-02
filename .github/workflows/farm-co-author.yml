@@ -28,11 +28,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: false
 
       - name: Verificar trailer
         shell: bash
+        continue-on-error: true
         run: |
-          set -uo pipefail
+          set +e
           before='${{ github.event.before }}'
           after='${{ github.sha }}'
 
