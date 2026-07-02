@@ -113,6 +113,17 @@
           </div>
         </div>
         <div class="agents" id="agentsList"></div>
+      <section class="panel wide" id="iasVivasPanel">
+        <div class="panel__head">
+          <div>
+            <h2>🧠 IAs Vivas — status agora</h2>
+            <p>Bolinha verde = online · vermelha = caiu · cinza = parado. Atualiza junto com o painel.</p>
+          </div>
+          <span class="tag" id="iasVivasTag">tempo real</span>
+        </div>
+        <div class="card-grid" id="iasVivasList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px"></div>
+      </section>
+
       </section>
 
       <section class="panel">
@@ -121,7 +132,7 @@
             <p class="eyebrow">Operação</p>
             <h2>🛰️ Status ao vivo</h2>
           </div>
-          <span class="tag" id="refreshTag">30s</span>
+          <span class="tag" id="refreshTag">5s</span>
         </div>
         <div class="live" id="liveStatus"></div>
       </section>

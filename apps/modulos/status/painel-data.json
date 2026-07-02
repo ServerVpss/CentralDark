@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02T21:58:20.726788+00:00",
+  "updatedAt": "2026-07-02T22:02:01.816Z",
   "updatedAtBR": "02/07/2026, 13:44:00 BRT",
   "project": {
     "name": "CentralDark",
@@ -62,6 +62,7 @@
     "CentralDark-GuardiaoConsciencia": "online",
     "CentralDark-HubBot": "online",
     "CentralDark-MCP": "online",
+    "CentralDark-RefreshIAs": "online",
     "CentralDark-Respiracao": "online",
     "CentralDark-SyncDrive": "online",
     "CentralDark-TelePainelDeploy": "online",
@@ -1713,7 +1714,7 @@
   "ultimo_evento": "IAs vivas registradas no painel (16 processos, 3 gateways Elite)",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-02T21:58:20.726788+00:00",
+  "updated_at": "2026-07-02T22:02:01.816Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",
@@ -1753,6 +1754,14 @@
       "pmId": 53,
       "papel": "Indexação por grafo",
       "endpoint": "http://localhost:8090",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-RefreshIAs",
+      "apelido": "Refresh IAs",
+      "pmId": 54,
+      "papel": "Atualiza status das IAs no painel (10s)",
+      "endpoint": "interno",
       "status": "online"
     },
     {

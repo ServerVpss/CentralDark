@@ -1,5 +1,5 @@
 const DATA_URL = './painel-data.json';
-const REFRESH_MS = 30000;
+const REFRESH_MS = 5000;
 
 const $ = (id) => document.getElementById(id);
 
@@ -121,7 +121,8 @@ function renderEvents(data) {
   const box = $('eventsList');
   if (!box) return;
 
-  const events = Array.isArray(data.events) ? data.events : [];
+  const eventsAll = Array.isArray(data.events) ? data.events : [];
+  const events = eventsAll.slice(0, 10);
   if (!events.length) {
     box.innerHTML = '<article class="event-card"><div><strong>Nenhum evento ainda</strong><p>Quando avançarmos no chat, os acontecimentos aparecem aqui.</p></div><span>aguardando</span></article>';
     return;
@@ -273,11 +274,44 @@ async function renderLive(data) {
   $('liveStatus').innerHTML = html || '<p style="color:#888;font-size:12px">Nenhum serviço configurado.</p>';
 }
 
+
+function renderIasVivas(data) {
+  const box = $('iasVivasList');
+  if (!box) return;
+  const ias = Array.isArray(data.iasVivas) ? data.iasVivas : [];
+  if (!ias.length) {
+    box.innerHTML = '<p style="color:#888;font-size:12px">Nenhuma IA registrada.</p>';
+    return;
+  }
+  const html = ias.map((ia) => {
+    const online = String(ia.status || '').toLowerCase() === 'online';
+    const dotColor = online ? '#22c55e' : (String(ia.status).toLowerCase() === 'stopped' ? '#6b7280' : '#ef4444');
+    const dotShadow = online ? '0 0 8px #22c55e' : 'none';
+    const nome = safe(ia.apelido || ia.nome || 'IA');
+    const nomeCompleto = safe(ia.nome || '');
+    const papel = safe(ia.papel || '');
+    const endpoint = safe(ia.endpoint || '');
+    const pmId = ia.pmId != null ? '#' + safe(ia.pmId) : '';
+    const st = safe(ia.status || 'desconhecido');
+    return '<article class="card" style="display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid #1f2937;border-radius:10px;background:#0b0f14">' +
+      '<span aria-hidden="true" style="width:12px;height:12px;border-radius:50%;background:' + dotColor + ';box-shadow:' + dotShadow + ';margin-top:4px;flex-shrink:0"></span>' +
+      '<div style="flex:1;min-width:0">' +
+        '<strong style="color:#e6edf3;font-size:14px">' + nome + ' <span style="color:#6b7280;font-weight:400;font-size:11px">' + pmId + '</span></strong>' +
+        '<p style="margin:2px 0 4px;color:#9ca3af;font-size:11px">' + papel + '</p>' +
+        '<code style="color:#7dd3fc;font-size:10.5px;word-break:break-all">' + endpoint + '</code>' +
+        '<p style="margin:4px 0 0;font-size:10px;color:#6b7280">' + nomeCompleto + ' · ' + st + '</p>' +
+      '</div>' +
+    '</article>';
+  }).join('');
+  box.innerHTML = html;
+}
+
 async function refresh() {
   try {
     const data = await fetchJson(DATA_URL);
     renderData(data);
     renderEvents(data);
+    renderIasVivas(data);
     renderAiSuggestions(data);
     await renderLive(data);
     renderMcpHealth().catch(e => console.warn('[mcpHealth]', e));
@@ -454,7 +488,8 @@ async function renderHealthcheck(){
     bars.innerHTML = '<p style="color:#888;font-size:12px">O bot ainda não rodou nenhuma vez. O primeiro run agenda em até 6h.</p>';
     return;
   }
-  const events = Array.isArray(data.events) ? data.events : [];
+  const eventsAll = Array.isArray(data.events) ? data.events : [];
+  const events = eventsAll.slice(0, 10);
   // Bucketiza por dia (últimos 30) — pior severidade do dia define a cor.
   const days = [];
   const today = new Date(); today.setUTCHours(0,0,0,0);
