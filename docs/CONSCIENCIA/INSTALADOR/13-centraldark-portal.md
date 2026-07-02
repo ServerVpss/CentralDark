@@ -69,3 +69,11 @@ curl -I https://centralldark.com                          # 200
 curl -I https://www.centralldark.com                      # 200
 curl -I https://telepainel.centralldark.com/dashboard     # 200
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

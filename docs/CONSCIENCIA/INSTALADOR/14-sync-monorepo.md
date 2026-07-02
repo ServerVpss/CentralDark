@@ -118,3 +118,11 @@ MONOREPO_BRANCH=staging bash scripts/sync-para-centraldark-monorepo.sh
 - Se o monorepo já tem estrutura própria pra edge functions Supabase, mover
   `apps/web/supabase/` pra `apps/api/` ou onde for o padrão.
 - Webhook do GitHub no repo Lovable disparando o sync em vez de cron de 2min.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

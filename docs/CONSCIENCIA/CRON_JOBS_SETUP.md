@@ -158,3 +158,11 @@ UPDATE cron.job SET active = true;
 | `health-check-cron` | 5 min | `health-check` | Monitora edge functions |
 | `efi-poll-pending-cron` | 2 min | `efi-poll-pending` | Verifica pagamentos PIX |
 | `provider-ping-cron` | 10 min | `provider-ping` | Ping nos provedores de API |
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

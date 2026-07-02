@@ -37,3 +37,11 @@ Ponto de Comando: "Analisem o estado atual do MCP. Quais melhorias reais trariam
 **DECISÃO FINAL:**
 - O que foi decidido: Criar agente de monitoramento PM2 com notificação Telegram
 - Concordância: Gemini [X] Groq [X] Claude [V]
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

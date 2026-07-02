@@ -30,3 +30,11 @@ Resolver o erro de autenticação (401 Unauthorized) e configurar o Cline com o 
 ---
 ### 📜 Manual de Operação Rápida
 > 💡 Regra de Ouro: Se der erro de autenticação, rode o ./varredura_prod.sh antes de qualquer coisa para verificar a integridade da chave.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

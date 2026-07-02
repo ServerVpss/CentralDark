@@ -140,3 +140,11 @@ Comandos mapeiam diretamente para módulos exatos da API:
 - Validação de entrada por tipo de módulo
 - Rate limiting via Telegram (anti-spam/anti-flood)
 - Logs estruturados sem dados sensíveis
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

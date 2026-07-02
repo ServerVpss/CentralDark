@@ -52,3 +52,11 @@ updated: 2026-07-02
 6. Gemini mantém a coerência arquitetural
 7. Nunca inventar ferramentas ou caminhos que não existam
 8. Usar raciocínio passo a passo antes de propor mudanças grandes
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

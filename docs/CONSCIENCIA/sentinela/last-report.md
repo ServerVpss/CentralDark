@@ -37,3 +37,11 @@ updated: 2026-07-02
 - **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel-validacao (bot: `codex`)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

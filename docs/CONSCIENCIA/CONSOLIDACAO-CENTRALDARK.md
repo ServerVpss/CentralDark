@@ -295,3 +295,11 @@ ServerVpss/CentralDark/
 ---
 
 *Relatório gerado automaticamente pelo agente Lovable — análise read-only. Nenhum arquivo foi modificado além deste.*
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

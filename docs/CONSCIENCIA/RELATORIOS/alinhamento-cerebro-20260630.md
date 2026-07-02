@@ -194,3 +194,11 @@ updated: 2026-07-02
 ║  FIM DO RELATÓRIO                                           ║
 ║  Gerado por Claude Opus 4.8 · 30/06/2026 14:12 BRT         ║
 ╚══════════════════════════════════════════════════════════════╝
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

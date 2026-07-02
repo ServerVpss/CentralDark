@@ -92,3 +92,11 @@ Ciclo: Ler -> Perguntar -> Agir -> Registrar. Nao inventar sucesso, validar com 
 Se faltar tool, avise ("nao tenho a tool X"). Nao finja nem contorne.
 Ao fim de cada resposta, sugira o modelo/esforco mais economico que resolve 100%.
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

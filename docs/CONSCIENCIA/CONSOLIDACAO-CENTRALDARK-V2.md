@@ -476,3 +476,10 @@ verify_jwt = false' >> supabase/config.toml
 - **VPS puxa de:** `ServerVpss/CentralDark` ← confirmar com `git -C /root/CentralDark remote -v`
 - **bootstrap.sh usa** (BUG): `segredounlock/clone-deck` ← precisa corrigir para `ServerVpss/CentralDark`
 
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

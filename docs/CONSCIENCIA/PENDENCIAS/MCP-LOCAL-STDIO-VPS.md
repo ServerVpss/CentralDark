@@ -98,3 +98,11 @@ docs/CONSCIENCIA/04-MCP-E-CONECTORES/
 ---
 
 *Pendência criada conforme solicitação do dono do projeto em 25/06/2026.*
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -73,3 +73,11 @@ Público-alvo:
 - **Apenas Expirados**: Apenas com plano expirado
 
 Formatos suportados: texto, foto, vídeo, documento.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

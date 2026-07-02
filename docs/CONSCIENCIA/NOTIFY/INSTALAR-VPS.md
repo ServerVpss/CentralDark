@@ -113,3 +113,11 @@ o alerta automaticamente (dead-man's switch — roadmap).
 | `400 invalid_input` | faltou origem/titulo/mensagem | revise o comando |
 | Telegram não chega | bot inativo no `telegram_bots` ou chat errado | confira `is_active=true` e `chat_id` |
 | Painel não atualiza | Realtime caiu | F5 na página; conferir aba network |
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

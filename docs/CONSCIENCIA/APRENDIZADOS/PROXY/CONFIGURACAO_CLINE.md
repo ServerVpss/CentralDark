@@ -19,3 +19,11 @@ Para automação bem-sucedida, o Cline exige uma conexão direta com provedores 
 * **Provider**: OpenAI Compatible
 * **Base URL**: Use apenas URLs que terminam em /v1 (ex: https://api.openrouter.ai/v1)
 * **Headers**: Se o provedor exigir, adicione `x-api-key` no campo Custom Headers.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

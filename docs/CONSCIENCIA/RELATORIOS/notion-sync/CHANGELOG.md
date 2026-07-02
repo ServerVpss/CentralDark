@@ -337,3 +337,10 @@ updated: 2026-07-02
   - **decisoes**: 0 criadas · 11 atualizadas · 0 ignoradas · 0 erros (Git: 11)
   - **aprendizados**: 0 criadas · 256 atualizadas · 0 ignoradas · 0 erros (Git: 256)
 
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

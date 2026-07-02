@@ -14,3 +14,11 @@ O erro "Only HTML requests are supported here" (Status 500) ocorre quando tentam
 1. O claude.ap7.site NÃO é um endpoint de API, é uma interface web.
 2. Não perca tempo tentando ajustar headers de proxy que não servem para API.
 3. Se o curl retornar HTML em vez de JSON, o Cline não vai conectar.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

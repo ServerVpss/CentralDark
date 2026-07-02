@@ -566,3 +566,11 @@ Performance: A injeção constante de tags pode disparar a reindexação do Obsi
 Cuidado: definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam e flickering frenético).
 
 Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: Manter o .zip do plugin dentro da pasta [[INFRA/DEPENDENCIAS]].
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

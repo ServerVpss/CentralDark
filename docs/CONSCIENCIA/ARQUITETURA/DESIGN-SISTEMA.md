@@ -106,3 +106,11 @@ Já existentes em `src/index.css`:
 3. Adicionar utilitário em `src/index.css` se for reutilizável
 4. Atualizar este doc
 5. Atualizar memory `mem://design/sistema-3d-tatil` se mudou regra
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

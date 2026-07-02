@@ -45,3 +45,11 @@ Toda decisão validada (com concordância de 2+ IAs) deve ser registrada aqui.
 ## Registro de Decisões
 
 <!-- Novas decisões devem ser adicionadas abaixo, sempre no topo -->
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

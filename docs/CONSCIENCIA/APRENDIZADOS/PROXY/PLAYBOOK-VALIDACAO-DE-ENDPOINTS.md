@@ -92,3 +92,11 @@ Todo erro deve virar um registro na pasta `~/CentralDark/docs/APRENDIZADOS/[TEMA
 > **⚠️ NOTA DE EXECUÇÃO**
 >
 > Nunca configure o Cline (bot) antes de validar o protocolo via terminal. O **terminal** é a "verdade absoluta" da comunicação com a VPS.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

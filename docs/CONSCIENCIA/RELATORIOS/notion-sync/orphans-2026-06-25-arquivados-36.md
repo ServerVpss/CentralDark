@@ -73,3 +73,11 @@ updated: 2026-07-02
 - "Arquivado" no Notion = não aparece nas views, mas pode ser restaurado da lixeira em até 30 dias.
 - Nada foi tocado em `aprendizados` nesta execução (decisão segura porque eram duplicatas por ID que precisavam do parser novo de dedup).
 - O `cleanup-orphans.mjs` agora tem dedup automática por `#N` em aprendizados — basta rodar o workflow com `cleanup_target=aprendizados` `cleanup_orphans=confirm-delete` quando quiser apagar os 20 duplicados.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

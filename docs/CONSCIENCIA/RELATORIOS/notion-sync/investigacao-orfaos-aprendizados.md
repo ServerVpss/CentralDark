@@ -59,3 +59,11 @@ Assim, mesmo que alguém renomeie um aprendizado no Git, o próximo `confirm-del
 ## Próximo passo
 
 Rodar o cleanup `confirm-delete` apenas para `regras,pendencias,decisoes` (36 itens) e numa segunda execução também `aprendizados` (mais 20).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

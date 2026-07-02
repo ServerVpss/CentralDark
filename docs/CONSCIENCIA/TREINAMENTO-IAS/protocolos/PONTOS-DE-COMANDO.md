@@ -30,3 +30,11 @@ updated: 2026-07-02
 
 ## Ponto de Comando H — Evolução das IAs
 "Como podemos evoluir nossa própria capacidade de raciocínio e colaboração? O que cada uma pode fazer melhor para o grupo?"
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

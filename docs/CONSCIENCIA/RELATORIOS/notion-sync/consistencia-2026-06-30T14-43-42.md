@@ -335,3 +335,11 @@ updated: 2026-07-02
 - Diagnóstico Rápido da VPS
 - 263. Estilo gamificado é padrão oficial de comunicação
 </details>
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

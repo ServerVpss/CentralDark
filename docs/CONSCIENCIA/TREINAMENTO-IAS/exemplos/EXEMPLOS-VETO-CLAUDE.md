@@ -24,3 +24,11 @@ updated: 2026-07-02
 
 ## Exemplo 6 — Veto por escopo
 "Veto. Isso foge do escopo do que estamos discutindo agora. Vamos fechar o tópico atual primeiro antes de abrir outro."
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

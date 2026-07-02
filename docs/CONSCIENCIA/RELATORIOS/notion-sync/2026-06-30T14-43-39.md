@@ -391,3 +391,11 @@ updated: 2026-07-02
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/06_ESTATISTICAS.md |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
