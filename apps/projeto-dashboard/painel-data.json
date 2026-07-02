@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-07-02T15:12:21.848Z",
-  "updatedAtBR": "02/07/2026, 12:12:21 BRT",
+  "updatedAt": "2026-07-02T15:34:58.807Z",
+  "updatedAtBR": "02/07/2026, 12:34:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Hub · Aba Serviços implementada (Telegram/Notion/Drive/GitHub/VPS + logs)",
+    "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
     "lastCommit": "docs(pendencias): #14 proxy 2 modos (terminal+extensao) + #15 notificacao MCP mono",
     "lastPR": "#103 mergeado · #106 mergeado",
@@ -507,7 +507,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Cérebro Vivo Fase 1 concluída. Próximo: executar pendência A9 no Lovable (tela Arsenal de Skills). Depois: fechar issues sentinela, investigar MultiZap-BOT se solicitado.",
+  "nextIA": "Deploy webhook do Hub na VPS + conectar Google Drive pra ponte Obsidian",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -582,6 +582,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-02T15:34:58.809Z",
+      "title": "Painel \"Consciência Viva\" criado — feed ao vivo dos agentes em /telepainel/consciencia",
+      "area": "TelePanel",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-07-02T15:12:21.850Z",
       "title": "Hub ganhou painel unificado de serviços com healthcheck via edge function hub-services-check. 5/5 serviços online no teste inicial.",
@@ -811,14 +818,6 @@
       "detalhe": "feat(bot): MCP integrado ao Telegram — 96 tools + call_mcp_tool",
       "area": "Repositório",
       "sha": "6d94339",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T01:05:30.369Z",
-      "titulo": "Push na main · 368bbb54b49bc50a5948d97796d4f33cc68faa0c",
-      "detalhe": "feat(bot): terminal Telegram = Claude Code — write_file + padrão mono + system prompt completo",
-      "area": "Repositório",
-      "sha": "368bbb5",
       "actor": "segredounlock"
     }
   ],
