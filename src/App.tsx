@@ -48,7 +48,7 @@ import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
 import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
-import HubPage from "@/apps/hub/HubPage";
+// Hub agora é módulo separado — vive em apps/modulos/hub/ e é publicado como app próprio
 
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
 import { PageSplash } from "@/shared/transitions/PageSplash";
@@ -87,7 +87,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
   { path: "ponte-mcp", element: <PonteMCP />, adminOnly: true },
   { path: "mapa", element: <MapaSite />, adminOnly: true },
-  { path: "hub", element: <HubPage />, adminOnly: true },
+  // rota "hub" removida — Hub virou app independente em apps/modulos/hub/
 ];
 
 const wrapGuard = (el: JSX.Element, adminOnly?: boolean) =>
