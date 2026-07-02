@@ -1,1 +1,9 @@
-FILE:/dev-server/apps/modulos/obsidian-plugin-grafo-vivo/checksums.json
+{
+  "versao": "0.3.0",
+  "geradoEm": "2026-07-02T17:32:18.515Z",
+  "arquivos": {
+    "main.js": "20b1f420252d6aae9fe79be1a5d502163d1039f9b5403f4062e5b0a8120b8234",
+    "manifest.json": "8204f5b173d034ae1f693d86c5f28724c7eb83520dde03ced598a3b0df5f76cb",
+    "styles.css": "e982bb8a835c016ceb574b1df1efe7d68c64c71e60ae43b918d5357c060cf570"
+  }
+}
