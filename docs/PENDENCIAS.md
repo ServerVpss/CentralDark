@@ -559,3 +559,32 @@ Performance: A injeção constante de tags pode disparar a reindexação do Obsi
 Cuidado: definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam e flickering frenético).
 
 Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: Manter o .zip do plugin dentro da pasta [[INFRA/DEPENDENCIAS]].
+
+---
+
+## 🟡 #14 — Núcleo Vivo de Ensinamentos (pós-Hub)
+**Status:** planejamento — executar DEPOIS do Hub
+**Data de registro:** 02/07/2026
+**Visão do Pivete:** sistema vivo que capture ensinamentos em qualquer canto (Gemini Live via voz, Lovable, VPS) e dispare em tempo real no grupo Telegram "Evolução IAs", sincronizando também Notion + GitHub + VPS automaticamente. Complemento vivo da CentralDark — nada perdido em chat, tudo com local rastreável.
+
+**Peças a integrar:**
+1. **Entrada:** Gemini Live (voz + abas), Lovable, ordens do Pivete via qualquer canal
+2. **Núcleo:** pasta/arquivo único em `docs/CONSCIENCIA/NUCLEO-VIVO/` (ou tabela Supabase `nucleo_ensinamentos`)
+3. **Distribuição em tempo real:**
+   - Webhook → grupo Telegram "Evolução IAs" (dispara pras IAs de lá)
+   - Mirror Notion (via connector já ativo)
+   - Mirror Drive (via bisync já ativo — passo 1 concluído)
+   - Mirror GitHub (via commit automático)
+4. **Rastreabilidade:** cada ensinamento com timestamp, origem (quem falou), tags, e link permanente
+
+**Pré-requisitos:**
+- Hub concluído (central de conexões — Telegram, Drive, Gemini, GitHub, VPS num painel só)
+- Bisync Drive ↔ VPS estável (✅ passo 1 done)
+
+**Como fechar:**
+1. Definir formato do ensinamento (markdown estruturado? JSON? tabela?)
+2. Edge function `capturar-ensinamento` (recebe de qualquer origem)
+3. Webhook Telegram → grupo Evolução IAs
+4. Mirrors automáticos (Notion + GitHub + Drive)
+5. Painel de leitura no Hub
+
