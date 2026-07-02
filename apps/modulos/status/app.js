@@ -277,34 +277,61 @@ async function renderLive(data) {
 
 function renderIasVivas(data) {
   const box = $('iasVivasList');
+  const tag = document.getElementById('iasVivasTag');
   if (!box) return;
   const ias = Array.isArray(data.iasVivas) ? data.iasVivas : [];
-  if (!ias.length) {
-    box.innerHTML = '<p style="color:#888;font-size:12px">Nenhuma IA registrada.</p>';
-    return;
-  }
-  const html = ias.map((ia) => {
-    const online = String(ia.status || '').toLowerCase() === 'online';
-    const dotColor = online ? '#22c55e' : (String(ia.status).toLowerCase() === 'stopped' ? '#6b7280' : '#ef4444');
-    const dotShadow = online ? '0 0 8px #22c55e' : 'none';
-    const nome = safe(ia.apelido || ia.nome || 'IA');
-    const nomeCompleto = safe(ia.nome || '');
-    const papel = safe(ia.papel || '');
-    const endpoint = safe(ia.endpoint || '');
-    const pmId = ia.pmId != null ? '#' + safe(ia.pmId) : '';
-    const st = safe(ia.status || 'desconhecido');
-    return '<article class="card" style="display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid #1f2937;border-radius:10px;background:#0b0f14">' +
-      '<span aria-hidden="true" style="width:12px;height:12px;border-radius:50%;background:' + dotColor + ';box-shadow:' + dotShadow + ';margin-top:4px;flex-shrink:0"></span>' +
+  if (!ias.length) { box.innerHTML = '<p style="color:#888;font-size:12px">Nenhuma IA registrada.</p>'; return; }
+
+  const CATS = {
+    'Gateways de IA': ['CentralDark-EliteAnthropic','CentralDark-EliteHTTP','CentralDark-EliteWS'],
+    'Infra Cognitiva': ['CentralDark-MCP','CentralDark-GraphPanel','CentralDark-RefreshIAs','CentralDark-Respiracao'],
+    'Guardiões': ['CentralDark-GuardiaoConsciencia','CentralDark-GuardiaoAnalista','CentralDark-Zentinel','CentralDark-EvolucaoIAs'],
+    'Bots & Deploy': ['CentralDark-HubBot','CentralDark-BotServer','CentralDark-WebhookDeploy','CentralDark-TelePainelDeploy','CentralDark-ContasAdmin','CentralDark-SyncDrive'],
+  };
+  const catDe = (nome) => { for (const c in CATS) if (CATS[c].includes(nome)) return c; return 'Outros'; };
+
+  const online = ias.filter(i => String(i.status).toLowerCase()==='online').length;
+  const offline = ias.length - online;
+  if (tag) tag.textContent = ias.length + ' IAs · ' + online + ' on · ' + offline + ' off';
+
+  const grupos = {};
+  for (const ia of ias) { const c = catDe(ia.nome); (grupos[c] = grupos[c] || []).push(ia); }
+  const ordem = ['Gateways de IA','Infra Cognitiva','Guardiões','Bots & Deploy','Outros'];
+
+  const card = (ia) => {
+    const st = String(ia.status||'').toLowerCase();
+    const on = st==='online';
+    const cor = on ? '#22c55e' : (st==='stopped' ? '#6b7280' : '#ef4444');
+    const glow = on ? '0 0 10px '+cor : (st==='stopped' ? 'none' : '0 0 12px '+cor);
+    const borda = on ? '#1f2937' : (st==='stopped' ? '#1f2937' : '#7f1d1d');
+    return '<article style="display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid '+borda+';border-radius:10px;background:#0b0f14">' +
+      '<span aria-hidden="true" style="width:11px;height:11px;border-radius:50%;background:'+cor+';box-shadow:'+glow+';margin-top:5px;flex-shrink:0"></span>' +
       '<div style="flex:1;min-width:0">' +
-        '<strong style="color:#e6edf3;font-size:14px">' + nome + ' <span style="color:#6b7280;font-weight:400;font-size:11px">' + pmId + '</span></strong>' +
-        '<p style="margin:2px 0 4px;color:#9ca3af;font-size:11px">' + papel + '</p>' +
-        '<code style="color:#7dd3fc;font-size:10.5px;word-break:break-all">' + endpoint + '</code>' +
-        '<p style="margin:4px 0 0;font-size:10px;color:#6b7280">' + nomeCompleto + ' · ' + st + '</p>' +
+        '<strong style="color:#e6edf3;font-size:14px;display:flex;justify-content:space-between;gap:8px">' +
+          '<span>'+safe(ia.apelido||ia.nome)+'</span>' +
+          '<span style="color:#6b7280;font-weight:400;font-size:11px">#'+safe(ia.pmId||'?')+'</span>' +
+        '</strong>' +
+        '<p style="margin:2px 0 4px;color:#9ca3af;font-size:11px">'+safe(ia.papel||'')+'</p>' +
+        '<code style="color:#7dd3fc;font-size:10.5px;word-break:break-all">'+safe(ia.endpoint||'')+'</code>' +
       '</div>' +
     '</article>';
-  }).join('');
+  };
+
+  let html = '';
+  // Bloco de alerta se houver algo caído (não conta stopped como caído)
+  const caidos = ias.filter(i => { const s=String(i.status).toLowerCase(); return s && s!=='online' && s!=='stopped'; });
+  if (caidos.length) {
+    html += '<div style="grid-column:1/-1;padding:10px 12px;border:1px solid #7f1d1d;background:#1a0a0a;border-radius:8px;color:#fca5a5;font-size:13px">🔴 '+caidos.length+' IA(s) caída(s): '+caidos.map(i=>safe(i.apelido||i.nome)).join(', ')+'</div>';
+  }
+  for (const cat of ordem) {
+    const arr = grupos[cat]; if (!arr || !arr.length) continue;
+    arr.sort((a,b) => (String(a.status).toLowerCase()==='online') - (String(b.status).toLowerCase()==='online'));
+    html += '<h3 style="grid-column:1/-1;margin:14px 0 4px;color:#9ca3af;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600">'+safe(cat)+' · '+arr.length+'</h3>';
+    html += arr.map(card).join('');
+  }
   box.innerHTML = html;
 }
+
 
 async function refresh() {
   try {
