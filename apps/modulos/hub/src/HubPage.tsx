@@ -18,6 +18,8 @@ import {
 import { hubClient } from "@/integrations/supabase/hub-client";
 import { useToast } from "@/shared/hooks/use-toast";
 import { cn } from "@/shared/lib/utils";
+import { McpCard } from "./components/McpCard";
+
 
 // ── Tipos ──────────────────────────────────────────────────────────
 interface Connector {
