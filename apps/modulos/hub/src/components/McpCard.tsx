@@ -1,7 +1,7 @@
 // Card de status do MCP CentralDark — aba Serviços do Hub
 // Faz polling em https://mcp.centralldark.com/health e oferece snippet Bearer pronto pra copiar.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { Button } from "@/shared/ui/button";
@@ -25,6 +25,29 @@ export function McpCard() {
   const [health, setHealth] = useState<McpHealth | null>(null);
   const [state, setState] = useState<"idle" | "ok" | "fail">("idle");
   const [loading, setLoading] = useState(false);
+  const prevStateRef = useRef<"idle" | "ok" | "fail">("idle");
+
+  async function notifyRecovery(data: McpHealth) {
+    try {
+      await fetch(
+        `https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/mcp-status-notify`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            previousState: "fail",
+            currentState: "ok",
+            version: data.version,
+            tools: data.tools,
+            latency_ms: data.latency_ms,
+          }),
+        },
+      );
+      toast({ title: "MCP voltou ao ar", description: "Notificação enviada no Telegram." });
+    } catch {
+      // silencioso — recuperação já foi detectada visualmente
+    }
+  }
 
   async function ping() {
     setLoading(true);
@@ -34,15 +57,22 @@ export function McpCard() {
       const latency = Math.round(performance.now() - started);
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const data = await r.json().catch(() => ({}));
-      setHealth({ ...data, latency_ms: latency });
+      const merged = { ...data, latency_ms: latency };
+      setHealth(merged);
       setState("ok");
+      if (prevStateRef.current === "fail") {
+        notifyRecovery(merged);
+      }
+      prevStateRef.current = "ok";
     } catch {
       setState("fail");
       setHealth(null);
+      prevStateRef.current = "fail";
     } finally {
       setLoading(false);
     }
   }
+
 
   useEffect(() => {
     ping();
