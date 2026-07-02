@@ -81,5 +81,9 @@ verify_jwt = false
 [functions.ponte-mcp]
 verify_jwt = false
 
+[functions.plugin-release]
+verify_jwt = false
+
+
 
 
