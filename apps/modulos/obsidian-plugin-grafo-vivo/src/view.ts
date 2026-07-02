@@ -1,6 +1,6 @@
 // View lateral que renderiza o grafo vivo com force-graph.
 
-import { ItemView, WorkspaceLeaf, Notice } from "obsidian";
+import { ItemView, WorkspaceLeaf, Notice, requestUrl } from "obsidian";
 import ForceGraph from "force-graph";
 import type GrafoVivoPlugin from "./main";
 
@@ -98,9 +98,10 @@ export class GrafoVivoView extends ItemView {
   private async carregar() {
     if (!this.container) return;
     try {
-      const resp = await fetch(this.plugin.settings.urlGrafo, { cache: "no-store" });
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const dados: DadosGrafo = await resp.json();
+      // Usa requestUrl do Obsidian pra ignorar CORS (funciona desktop e mobile).
+      const resp = await requestUrl({ url: this.plugin.settings.urlGrafo, method: "GET" });
+      if (resp.status < 200 || resp.status >= 300) throw new Error(`HTTP ${resp.status}`);
+      const dados: DadosGrafo = resp.json;
       this.render(dados);
       const hora = new Date().toLocaleTimeString("pt-BR");
       if (this.statusEl) this.statusEl.setText(`🟢 ${dados.nodes.length} nós • ${hora}`);
