@@ -96,7 +96,7 @@ export const eliteGatewayTools = [
                 httpStatus = `erro: ${e.message}`;
             }
             return ok({
-                gateway: "elite-http-gateway",
+                gateway: "CentralDark-EliteHTTP",
                 pm2: pm2Status,
                 http: httpStatus,
                 latencyMs,
