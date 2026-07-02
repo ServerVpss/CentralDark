@@ -588,3 +588,23 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 4. Mirrors automáticos (Notion + GitHub + Drive)
 5. Painel de leitura no Hub
 
+
+---
+
+## 🟡 #15 — Consolidar módulos soltos em /root → /root/CentralDark
+**Status:** aguardar (fazer DEPOIS de fechar o trabalho atual dentro de CentralDark)
+**Data de registro:** 02/07/2026
+**Contexto:** o Pivete mostrou o FileZilla da VPS — dentro de `/root` existem várias pastas fora do CentralDark que ainda precisam ser comparadas/migradas/arquivadas.
+
+**Pastas a varrer:**
+`Multizap`, `Multizap1`, `multizap-webhook`, `clone-deck-webhook`, `wabot-bridge`, `whatsapp-server`, `conexao-ia`, `central-horario`, `dark`, `dist`, `guarda`, `infra`, `scripts`, `security`, `tools`, `snap`, `backups`, `revisoes`, `Cline`, `node_modules`.
+
+**Como fechar:**
+1. Terminar primeiro tudo que está em andamento dentro de `/root/CentralDark`.
+2. Para cada pasta: listar conteúdo, comparar com o equivalente já dentro de `CentralDark/apps/modulos/`.
+3. Migrar o que for útil pro lugar canônico.
+4. Arquivar em `/root/backups/legado-YYYYMMDD/` o que não for mais usado.
+5. Remover só depois de confirmação do Pivete.
+
+**Regra:** NÃO mexer agora. Só registro pra não esquecer.
+
