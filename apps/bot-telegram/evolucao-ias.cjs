@@ -568,16 +568,28 @@ function gerarAprendizado(iaId, topico) {
  */
 async function postarMensagemInicial(iaId, estado) {
   const personalidade = PERSONALIDADES[iaId];
-  const topico = escolherTopico(estado);
 
-  console.log(`[evolucao-ias] ${personalidade.nome} vai postar sobre: "${topico}"`);
+  // Tenta tópico REAL do sistema primeiro; se não tiver, cai no genérico
+  const topicoReal = contextoCentralDark.gerarTopicoReal && contextoCentralDark.gerarTopicoReal();
+  const topico = topicoReal ? topicoReal.texto : escolherTopico(estado);
+  const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
 
-  // Monta o prompt para a IA gerar o conteúdo
-  const promptMensagem = `Compartilhe um insight sobre o seguinte tópico: "${topico}"
+  console.log(`[evolucao-ias] ${personalidade.nome} vai postar: "${topico.slice(0, 80)}..."`);
 
-Seu aprendizado mais recente foi: ${estado.aprendizados[iaId].slice(-1)[0] || 'nada ainda, estou começando agora'}
+  // Prompt com CONTEXTO REAL do CentralDark injetado
+  const promptMensagem = `═══ CONTEXTO REAL DO CENTRALDARK AGORA ═══
+${contextoReal || '(sem contexto disponível)'}
+═══════════════════════════════════════════
 
-Seja autêntica e compartilhe algo que realmente faça pensar.`;
+TÓPICO PRA DISCUTIR: "${topico}"
+
+Seu último aprendizado registrado: ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
+
+Instruções:
+- Use o contexto real acima pra ancorar sua resposta
+- NÃO filosofe genericamente — fale de algo concreto do sistema
+- Se citar algo (commit, pendência), seja específico
+- Termine com uma pergunta ou próximo passo pras outras IAs`;
 
   let texto;
   try {
@@ -594,24 +606,28 @@ Seja autêntica e compartilhe algo que realmente faça pensar.`;
     }
   } catch (err) {
     console.error(`[evolucao-ias] Erro ao chamar ${personalidade.nome}:`, err.message);
-    // Fallback: mensagem pré-escrita caso a API falhe
     texto = fallbackMensagem(iaId, topico);
   }
 
-  // Limpa o texto de possíveis artefatos
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  // Gera aprendizado
   const aprendizado = gerarAprendizado(iaId, topico);
   estado.aprendizados[iaId].push(aprendizado);
-  // Mantém só os últimos 5 aprendizados
   if (estado.aprendizados[iaId].length > 5) {
     estado.aprendizados[iaId].shift();
   }
 
+  // Registra aprendizado PERMANENTE no cérebro (APRENDIZADOS.md)
+  if (contextoCentralDark.registrarAprendizadoPermanente) {
+    contextoCentralDark.registrarAprendizadoPermanente(
+      personalidade.nome,
+      aprendizado,
+      topico.slice(0, 120)
+    );
+  }
+
   const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
 
-  // Envia para o Telegram
   const result = await enviarMensagem(mensagemFormatada, iaId);
   if (result) {
     estado.ultimasMensagens[iaId] = {
