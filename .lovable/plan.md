@@ -1,71 +1,145 @@
-# Plano: Grafo Vivo no Obsidian + Padronização VPS
+## Migração Total — Lovable Cloud → Supabase próprio (`lyoigsqluyktoclwdaft`)
 
-Três frentes, executadas em paralelo por sub-agentes.
+Execução em paralelo com sub-agentes. Zero downtime no bot. Dual-write durante transição.
 
-## 🧠 Frente 1 — Plugin Obsidian "CentralDark Live Graph"
+---
 
-Criar plugin próprio (não mexer no Juggl/Graph nativo, eles quebram a cada update do Obsidian). O plugin abre uma view lateral e renderiza o mesmo grafo que roda em `status.centralldark.com`, mas **dentro do Obsidian**, consumindo o mesmo `graph-data.json` da VPS.
+### Fase 0 — Captura de chaves (5 min, paralelo)
 
-**Local no repo:** `apps/modulos/obsidian-plugin-grafo-vivo/`
+Sub-agente na VPS lê `/root/CentralDark/secrets/` via `mcp_custom_X4tUu--execute_command` com escalonamento (sudo se preciso). Extrai:
+- `SUPABASE_ANON_KEY` do lyoig
+- `SUPABASE_SERVICE_ROLE_KEY` do lyoig
+- `SUPABASE_DB_URL` do lyoig (postgres://…)
 
-Arquivos:
-- `manifest.json` — id `centraldark-grafo-vivo`, versão 0.1.0
-- `main.ts` — registra comando "Abrir Grafo Vivo", cria `ItemView` custom
-- `view.ts` — canvas com `force-graph` (mesma lib do site), fetch em `https://status.centralldark.com/graph-data.json` a cada 30s, WebSocket futuro
-- `styles.css` — segue tema do Obsidian (usa vars `--background-primary`, `--text-normal`)
-- `esbuild.config.mjs` + `package.json` — build padrão de plugin Obsidian
-- `README.md` — instalação manual: copiar pasta pra `.obsidian/plugins/centraldark-grafo-vivo/`
+Grava no Lovable via `set_secret` como `HUB_SUPABASE_URL`, `HUB_SUPABASE_ANON_KEY`, `HUB_SUPABASE_SERVICE_ROLE_KEY`, `HUB_SUPABASE_DB_URL`.
 
-**Funcionalidades v1:**
-- Nós clicáveis abrem a nota correspondente no Obsidian (se o node tiver `obsidian_path`)
-- Cores por categoria (bots verde, MCP azul, edge functions roxo, etc)
-- Partículas animadas nas arestas ativas (chamadas em tempo real)
-- Filtro por módulo no topo da view
-- Botão "Sincronizar com Graph nativo" — exporta os nodes como notas vazias em `docs/CONSCIENCIA/00-MAPA/nodes/` pra aparecer no graph global do Obsidian também
+Fallback se MCP não conseguir ler: rodar script na VPS que exporta as chaves via túnel curl pra edge function temporária.
 
-**v2 (depois):** WebSocket direto no MCP pra ver as IAs se movimentando em tempo real (cada tool call vira uma partícula viajando pela aresta).
+---
 
-## 🛠️ Frente 2 — Auditoria PM2 + Padronização
+### Fase 1 — Dump completo do schema atual (10 min, paralelo)
 
-Sub-agente audita `pm2 status` da VPS e produz relatório:
+Sub-agente 1: dump do schema (DDL) das 44 tabelas + policies + functions + triggers do Lovable via `pg_dump --schema-only` (só estrutura, sem dados) usando `PGHOST` já setado.
 
-**Padrão de nome obrigatório:** `CentralDark-<Modulo>` (PascalCase, sem hífens dentro do módulo).
+Sub-agente 2: dump dos dados (`pg_dump --data-only --column-inserts`) das 44 tabelas. 1,5 GB, streaming direto pro destino via pipe.
 
-Renomeações prováveis (aplicar via `pm2 delete <id> && pm2 start ... --name`):
-- `elite-http-gateway` → `CentralDark-EliteHttpGateway`
-- `elite-ws-gateway` → `CentralDark-EliteWsGateway`
-- `elite-anthropic-proxy` → `CentralDark-EliteAnthropicProxy`
-- `graph-panel` → `CentralDark-GraphPanel`
-- `zentinel-health` → `CentralDark-Zentinel`
-- `MultiZap-Gateway` → `CentralDark-MultiZap`
-- `CloneDeck-CRM` → `CentralDark-CloneDeck`
+Sub-agente 3: dump do `auth.users` (14 users) + `auth.identities` — precisa via SQL direto porque pg_dump não pega auth schema em Supabase gerenciado.
 
-**Regra do WhatsApp/MultiZap:** Se CPU < 5% e restarts < 10 nas últimas 24h → deixa online (usuário confirmou). Se estiver flappando → `pm2 stop` + registrar em `docs/PENDENCIAS.md` pra consolidar depois.
+---
 
-**IDs PM2:** Não dá pra fixar ID (PM2 atribui sequencial), mas dá pra garantir ordem consistente via `ecosystem.config.js` único. Criar `/root/CentralDark/ecosystem.config.js` que declara todos os processos na ordem canônica → `pm2 delete all && pm2 start ecosystem.config.js && pm2 save`.
+### Fase 2 — Restore no destino (15 min)
 
-## 🗺️ Frente 3 — Graph-Panel como indexador global (as "ruas")
+Roda o schema dump no `lyoigsqluyktoclwdaft` via `psql "$HUB_SUPABASE_DB_URL"`. Ajusta:
+- Remove qualquer `CREATE ROLE` (roles já existem)
+- Preserva tabelas que já existem no hub (`contatos`, `hub_*`, `system_logs`) — usa `CREATE TABLE IF NOT EXISTS`
+- Reaplica GRANTs pro `anon`/`authenticated`/`service_role`
 
-Analogia certeira: o `graph-panel` é o mapa de ruas. Toda IA (MCP tools, bots, edge functions) deve consultar ele antes de "sair pra rua" — economiza tokens porque não precisa varrer o repo inteiro.
+Restore dos dados em ordem topológica (FKs) via `psql -f`.
 
-Executar:
-1. Auditar quais serviços JÁ consomem `graph-panel/output.json` (sub-agente faz `rg` no repo)
-2. Adicionar hook nos que não usam: MCP tools de leitura de arquivo, bots que buscam skills, edge functions que roteiam
-3. Cron na VPS: `graph-panel` reindexa a cada 10min (ou por webhook do GitHub em push)
-4. "Ruas novas" = arquivos novos → indexer detecta diff e atualiza `output.json` incremental
-5. Expor endpoint `https://graph.centralldark.com/query?node=xxx` pra IAs consultarem sem baixar o JSON inteiro
+Restore dos users via `INSERT INTO auth.users` com SQL raw (mantém `id`, `email`, `encrypted_password`).
 
-## 📊 Ordem de execução
+---
 
-1. Frente 2 (auditoria PM2) — sub-agente, roda em paralelo, output = relatório
-2. Frente 3 (auditoria graph-panel) — sub-agente, roda em paralelo, output = lista de integrações faltando
-3. Frente 1 (plugin Obsidian) — eu construo enquanto os sub-agentes rodam
-4. Consolidação: aplicar renomeações PM2 via `vps_run_once_script`, commitar plugin, atualizar `painel-data.json` e `CLAUDE.md` §9
+### Fase 3 — Migração das 50 edge functions (30 min, paralelo)
 
-## ⚠️ Riscos
+Sub-agentes paralelos, 10 funções cada:
 
-- Renomear processos PM2 quebra qualquer script hardcoded com nome antigo → sub-agente faz `rg` antes pra listar refs
-- Plugin Obsidian precisa de CORS liberado em `status.centralldark.com/graph-data.json` — verificar Caddy
-- `graph-panel` reindex pesado pode travar VPS → rodar com `nice -n 19`
+**44 funções fáceis:** duplicar cada uma trocando `SUPABASE_URL` → `HUB_SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` → `HUB_SUPABASE_SERVICE_ROLE_KEY`. Publicar como `<nome>-hub` inicialmente, testar, depois substituir.
 
-Aprova executar as 3 frentes?
+**6 funções com deps duras Lovable** (ai-proxy, graph-mapper, hub-services-check, mcp-status-notify, notify-telegram, webapp-format-ai):
+- Mantém `LOVABLE_API_KEY` (é grátis, roda de qualquer lugar)
+- Só troca as chaves Supabase
+- Ficam idênticas em funcionamento
+
+---
+
+### Fase 4 — Dual-write transitório (validação, 24-48h)
+
+Bot Telegram (produção) escreve nos DOIS bancos simultaneamente por 24h:
+- Wrapper no `bot-telegram-proxy` que faz `insert` no Lovable **e** no hub Supabase
+- Se hub falhar, log warning; se Lovable falhar, alerta crítico
+- Reads continuam do Lovable
+
+Objetivo: garantir que estrutura, RLS e volumes batem antes do corte.
+
+---
+
+### Fase 5 — Corte (5 min)
+
+1. Atualizar `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` no `.env` do frontend pra apontar pro `lyoig`
+2. Regenerar `src/integrations/supabase/client.ts` (mesmo path, novo backend)
+3. Reads passam a vir do hub
+4. Manter Lovable Cloud rodando como backup **por 7 dias** (custo zero se não escrever)
+
+---
+
+### Fase 6 — Realtime nativo do MCP (bônus, 15 min)
+
+Tabela `mcp_heartbeat` já no hub. VPS manda POST direto. Hub e Obsidian plugin fazem subscribe via Realtime. Sem polling.
+
+---
+
+### Detalhes técnicos
+
+**Ordem de restore FK-safe:**
+```text
+profiles → user_roles → query_modules → telegram_bots
+→ telegram_users → telegram_subscriptions → telegram_messages
+→ (demais em qualquer ordem)
+```
+
+**Comandos-chave da Fase 1/2:**
+```bash
+pg_dump "$PG_LOVABLE" --schema=public --schema-only -f /tmp/schema.sql
+pg_dump "$PG_LOVABLE" --schema=public --data-only --column-inserts \
+  -f /tmp/data.sql
+psql "$HUB_SUPABASE_DB_URL" -f /tmp/schema.sql
+psql "$HUB_SUPABASE_DB_URL" -f /tmp/data.sql
+```
+
+**Migração de auth.users** (SQL manual, porque Supabase não expõe auth schema no pg_dump gerenciado):
+```sql
+-- roda no source, exporta CSV
+COPY (SELECT id, email, encrypted_password, email_confirmed_at, 
+      raw_user_meta_data FROM auth.users) TO STDOUT WITH CSV;
+-- roda no destino
+INSERT INTO auth.users (id, email, encrypted_password, ...) 
+SELECT ... FROM stdin;
+```
+
+**Rollback:** se qualquer coisa quebrar, `git revert` no `.env` do frontend + `client.ts` volta tudo em 30s. Dados no Lovable ficam intactos até corte final.
+
+---
+
+### Riscos e mitigações
+
+| Risco | Mitigação |
+|---|---|
+| `lyoig` no plano free/starter e 1,5GB estoura limite | Sub-agente Fase 0 checa plano via Management API antes de dumpar. Se estourar, aviso pra upgrade antes de continuar |
+| Auth users perdem senha | Copiamos `encrypted_password` bruto (mesmo algoritmo bcrypt do Supabase) — funciona |
+| Realtime publications não vêm no pg_dump | Reaplicar manualmente: `ALTER PUBLICATION supabase_realtime ADD TABLE …` |
+| RLS policies com `auth.uid()` — dependem do JWT do destino | Já funciona nativo porque ambos são Supabase (mesmo esquema auth) |
+| Bot cai durante corte | Dual-write da Fase 4 elimina esse risco — corte é só flip de env var |
+| Tabelas do hub (`contatos`, `hub_*`) conflitam com nomes do Lovable | Sub-agente Fase 1 checa colisões antes; se houver, renomeia com prefixo `lovable_` |
+
+---
+
+### Placar estimado
+
+```text
+Fase 0  ▓░░░░░░░░░  5 min   captura chaves
+Fase 1  ▓▓░░░░░░░░  15 min  dump
+Fase 2  ▓▓▓░░░░░░░  30 min  restore
+Fase 3  ▓▓▓▓▓░░░░░  60 min  50 edge functions em paralelo
+Fase 4  (24-48h)    dual-write validação
+Fase 5  ▓░░░░░░░░░  5 min   corte
+Fase 6  ▓▓░░░░░░░░  15 min  realtime MCP
+```
+
+Tempo real ativo de trabalho (excluindo espera dual-write): ~2h corridas.
+
+---
+
+### Confirma pra eu executar?
+
+Se der GO, entro em build mode e disparo Fase 0 + 1 em paralelo imediatamente. Se `lyoig` estiver em plano free e não couber 1,5GB, paro e te aviso antes de continuar.
