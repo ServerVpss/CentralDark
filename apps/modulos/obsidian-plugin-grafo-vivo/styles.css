@@ -1,1 +1,92 @@
-FILE:/dev-server/apps/modulos/obsidian-plugin-grafo-vivo/styles.css
+/* Estilos do plugin CentralDark Grafo Vivo */
+
+.cd-grafo-vivo-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px;
+  gap: 8px;
+}
+.cd-grafo-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cd-grafo-filtro, .cd-grafo-btn {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  cursor: pointer;
+}
+.cd-grafo-status { font-size: 12px; opacity: 0.85; margin-left: auto; }
+.cd-grafo-canvas { flex: 1; min-height: 200px; border-radius: 8px; overflow: hidden; }
+
+/* Modal changelog */
+.cd-modal-versoes { font-size: 13px; opacity: 0.9; margin: 4px 0 12px; }
+.cd-modal-changelog {
+  max-height: 300px;
+  overflow-y: auto;
+  background: var(--background-secondary);
+  padding: 10px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  font-family: var(--font-monospace);
+  font-size: 12px;
+}
+.cd-modal-botoes { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.cd-modal-botoes button { padding: 6px 14px; }
+.cd-modal-erro-detalhes {
+  max-height: 260px; overflow: auto;
+  background: var(--background-secondary);
+  padding: 8px; border-radius: 6px; font-size: 11px;
+}
+
+/* Notice com botões */
+.cd-notice-botoes { display: flex; gap: 6px; margin-top: 6px; }
+.cd-notice-botoes button, .cd-notice-btn-erro {
+  padding: 3px 8px; font-size: 12px; border-radius: 4px; cursor: pointer;
+  background: var(--interactive-accent); color: var(--text-on-accent); border: none;
+}
+.cd-notice-btn-erro { background: var(--background-modifier-error); margin-top: 6px; }
+.cd-notice-msg { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+
+/* Status box em configs */
+.cd-status-box {
+  background: var(--background-secondary);
+  padding: 10px 12px; border-radius: 8px; margin-bottom: 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.cd-status-row { display: flex; justify-content: space-between; font-size: 13px; }
+.cd-status-k { opacity: 0.75; }
+.cd-status-v { font-weight: 500; }
+.cd-status-v.cd-ok { color: var(--color-green); }
+.cd-status-v.cd-erro { color: var(--color-red); }
+.cd-status-v.cd-aviso { color: var(--color-orange); }
+
+/* Logs */
+.cd-log-acoes { display: flex; gap: 8px; margin-bottom: 8px; }
+.cd-log-acoes button {
+  padding: 4px 10px; font-size: 12px; border-radius: 4px; cursor: pointer;
+  background: var(--background-secondary); color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+}
+.cd-log-box {
+  background: var(--background-secondary);
+  border-radius: 8px; padding: 8px;
+  max-height: 340px; overflow-y: auto;
+  font-family: var(--font-monospace); font-size: 11px;
+}
+.cd-log-linha { padding: 4px 6px; border-bottom: 1px solid var(--background-modifier-border); display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+.cd-log-linha:last-child { border-bottom: none; }
+.cd-log-ts { opacity: 0.55; }
+.cd-log-etapa { color: var(--text-accent); font-weight: 600; }
+.cd-log-msg { flex: 1; }
+.cd-log-info .cd-log-msg { color: var(--text-normal); }
+.cd-log-sucesso .cd-log-msg { color: var(--color-green); }
+.cd-log-aviso .cd-log-msg { color: var(--color-orange); }
+.cd-log-erro .cd-log-msg { color: var(--color-red); }
+.cd-log-linha pre { max-height: 160px; overflow: auto; margin: 4px 0 0; padding: 6px; background: var(--background-primary); border-radius: 4px; }
+.cd-log-vazio { opacity: 0.6; font-style: italic; text-align: center; padding: 12px; }
