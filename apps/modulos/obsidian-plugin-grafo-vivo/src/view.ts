@@ -26,6 +26,11 @@ interface DadosGrafo {
   edges: ArestaGrafo[];
 }
 
+interface DadosForceGraph {
+  nodes: NoGrafo[];
+  links: ArestaGrafo[];
+}
+
 // Paleta por categoria — segue vibe do tema Esmeralda + Obsidian dark.
 const CORES: Record<string, string> = {
   bot: "#10b981",
@@ -132,7 +137,11 @@ export class GrafoVivoView extends ItemView {
       return { nodes: [], edges: [] };
     }
     const nodesBrutos = Array.isArray(bruto.nodes) ? bruto.nodes : [];
-    const edgesBrutas = Array.isArray(bruto.edges) ? bruto.edges : [];
+    const edgesBrutas = Array.isArray(bruto.edges)
+      ? bruto.edges
+      : Array.isArray(bruto.links)
+        ? bruto.links
+        : [];
 
     const nodes: NoGrafo[] = nodesBrutos.map((n: any) => ({
       id: String(n.id),
@@ -146,8 +155,11 @@ export class GrafoVivoView extends ItemView {
       const target = e.target ?? e.to;
       const peso = typeof e.weight === "number" ? e.weight : undefined;
       const ativa = e.ativa ?? (peso !== undefined ? peso >= 3 : true);
+      if (source === undefined || target === undefined || source === null || target === null) {
+        return null;
+      }
       return { source: String(source), target: String(target), ativa };
-    }).filter((e) => e.source && e.target);
+    }).filter((e): e is ArestaGrafo => Boolean(e?.source && e?.target));
 
     return { nodes, edges };
   }
@@ -219,8 +231,15 @@ export class GrafoVivoView extends ItemView {
       requestAnimationFrame(animar);
     }
 
-    this.grafo.graphData(filtrados);
+    this.grafo.graphData(this.paraForceGraph(filtrados));
     this.ajustarTamanho();
+  }
+
+  private paraForceGraph(dados: DadosGrafo): DadosForceGraph {
+    return {
+      nodes: dados.nodes.map((n) => ({ ...n })),
+      links: dados.edges.map((e) => ({ ...e })),
+    };
   }
 
   private aplicarFiltro() {
@@ -233,8 +252,12 @@ export class GrafoVivoView extends ItemView {
     if (this.filtroAtual === "todos") return { nodes: todosNodes, edges: todasEdges };
     const nodes = todosNodes.filter((n) => n.category === this.filtroAtual);
     const ids = new Set(nodes.map((n) => n.id));
-    const edges = todasEdges.filter((e) => ids.has(e.source) && ids.has(e.target));
+    const edges = todasEdges.filter((e) => ids.has(this.idEndpoint(e.source)) && ids.has(this.idEndpoint(e.target)));
     return { nodes, edges };
+  }
+
+  private idEndpoint(valor: any): string {
+    return typeof valor === "object" && valor !== null ? String(valor.id ?? "") : String(valor ?? "");
   }
 
   private ajustarTamanho() {
