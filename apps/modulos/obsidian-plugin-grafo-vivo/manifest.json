@@ -1,7 +1,7 @@
 {
   "id": "centraldark-grafo-vivo",
   "name": "CentralDark Grafo Vivo",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "minAppVersion": "1.4.0",
   "description": "Renderiza o grafo vivo do ecossistema CentralDark dentro do Obsidian, com auto-update e diagnóstico.",
   "author": "Pivete",
