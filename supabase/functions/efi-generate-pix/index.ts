@@ -47,7 +47,7 @@ async function authorize(req: Request, supabase: ReturnType<typeof createClient>
       { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
   const token = authHeader.replace('Bearer ', '');
-  if (token === Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')) return null;
+  if (token === Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY')) return null;
   const { data, error } = await supabase.auth.getClaims(token);
   if (error || !data?.claims?.sub) {
     return new Response(JSON.stringify({ success: false, error: 'Sessão inválida' }),
@@ -62,8 +62,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabaseUrl = Deno.env.get('HUB_SUPABASE_URL')!
+    const supabaseServiceKey = Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
     const blocked = await authorize(req, supabase);

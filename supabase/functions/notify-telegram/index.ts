@@ -210,8 +210,8 @@ Deno.serve(async (req) => {
 
   const metadata = body.metadata && typeof body.metadata === "object" ? body.metadata : {};
 
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
+  const serviceKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, serviceKey);
 
   // Anti-spam

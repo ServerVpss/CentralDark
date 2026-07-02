@@ -112,8 +112,8 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-  const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+  const supabaseUrl = Deno.env.get('HUB_SUPABASE_URL')!;
+  const supabaseServiceKey = Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY')!;
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
@@ -217,7 +217,7 @@ async function notifyViaCentral(
   funcs: FunctionHealth[]
 ) {
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseUrl = Deno.env.get('HUB_SUPABASE_URL')!;
     const notifyKey = Deno.env.get('NOTIFY_API_KEY');
     if (!notifyKey) {
       console.error('[health-check] NOTIFY_API_KEY ausente — alerta perdido');

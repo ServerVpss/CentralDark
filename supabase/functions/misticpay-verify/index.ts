@@ -17,8 +17,8 @@ Deno.serve(async (req) => {
 
     // Se não vier no body, buscar do banco
     if (!clientId || !clientSecret) {
-      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-      const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const supabaseUrl = Deno.env.get('HUB_SUPABASE_URL')!;
+      const supabaseServiceKey = Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY')!;
       const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
       const { data: gateway } = await supabase

@@ -147,7 +147,7 @@ Deno.serve(async (req) => {
   // 🔒 Só service_role (cron) ou admin podem disparar
   const authHeader = req.headers.get('Authorization') || ''
   const token = authHeader.replace(/^Bearer\s+/i, '').trim()
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+  const serviceRoleKey = Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY') || ''
   if (!token) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -156,8 +156,8 @@ Deno.serve(async (req) => {
   if (token !== serviceRoleKey) {
     try {
       const sbAuth = createClient(
-        Deno.env.get('SUPABASE_URL')!,
-        Deno.env.get('SUPABASE_ANON_KEY')!,
+        Deno.env.get('HUB_SUPABASE_URL')!,
+        Deno.env.get('HUB_SUPABASE_ANON_KEY')!,
         { global: { headers: { Authorization: `Bearer ${token}` } } }
       )
       const { data: claimsData, error: claimsErr } = await sbAuth.auth.getClaims(token)
@@ -193,8 +193,8 @@ Deno.serve(async (req) => {
       // Sem body ou body inválido - usar comportamento padrão
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabaseUrl = Deno.env.get('HUB_SUPABASE_URL')!
+    const supabaseServiceKey = Deno.env.get('HUB_SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
     // Buscar todos os bots com fake engagement habilitado

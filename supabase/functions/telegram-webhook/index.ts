@@ -1350,8 +1350,8 @@ function keyboard(...rows: InlineButton[][]) {
 // Queue a failed message for later retry
 async function queueForRetry(token: string, method: string, body: Record<string, unknown> | undefined, retryAfterSec: number) {
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
     
     // Try to find bot_id from token
@@ -2873,8 +2873,8 @@ async function executeQueryWithCache(
   queryInput: string, 
   estado?: string
 ): Promise<{ data: Record<string, unknown>; fromCache: boolean; warnings: string[] }> {
-  const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
+  const serviceRoleKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
   
   logCmd('INFO', 'API_CALL', { queryType, input: queryInput.substring(0, 20), estado: estado || null });
   
@@ -7383,8 +7383,8 @@ class BotHandler {
     const finalPrice = isPrivate ? plan.price + PRIVATE_MARKUP : plan.price;
 
     try {
-      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
+      const serviceKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
 
       // Seleciona gateway ATIVO do dono do bot. Se nenhum ativo, fallback pra qualquer configurado.
       const { data: activeGw } = await this.supabase
@@ -7517,12 +7517,12 @@ class BotHandler {
 
   async checkPayment(chatId: number, telegramUserId: number, txid: string) {
     try {
-      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+      const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
       const response = await fetch(`${supabaseUrl}/functions/v1/efi-check-status`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          "Authorization": `Bearer ${Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")}`,
         },
         body: JSON.stringify({ txid }),
       });
@@ -9837,12 +9837,12 @@ class BotHandler {
         const { data: result } = await executeQueryWithCache(queryType, queryInput);
         
         // Call PDF generation function
-        const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+        const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
         const response = await fetch(`${supabaseUrl}/functions/v1/generate-pdf`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            "Authorization": `Bearer ${Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")}`,
           },
           body: JSON.stringify({
             queryType,
@@ -10571,8 +10571,8 @@ Deno.serve(async (req) => {
   const startTime = Date.now();
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const url = new URL(req.url);

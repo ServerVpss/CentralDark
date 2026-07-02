@@ -22,8 +22,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("HUB_SUPABASE_ANON_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -201,7 +201,7 @@ Deno.serve(async (req) => {
 
       console.log(`[backup-manager] Restoring data for user ${userId} in ${mode} mode`);
 
-      const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const supabaseServiceKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
       const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
       const results: { table: string; inserted: number; errors: string[] }[] = [];

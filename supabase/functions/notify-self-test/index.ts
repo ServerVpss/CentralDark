@@ -22,8 +22,8 @@ Deno.serve(async (req) => {
   }
 
   const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    Deno.env.get("HUB_SUPABASE_URL")!,
+    Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!,
   );
   const token = authHeader.replace("Bearer ", "");
   const { data: userData } = await supabase.auth.getUser(token);
@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
   }
 
   const notifyKey = Deno.env.get("NOTIFY_API_KEY")!;
-  const notifyUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/notify-telegram`;
+  const notifyUrl = `${Deno.env.get("HUB_SUPABASE_URL")}/functions/v1/notify-telegram`;
 
   // Opcional: { tipos: ["critico", ...] } pra filtrar quais disparar
   let body: { tipos?: string[] } = {};

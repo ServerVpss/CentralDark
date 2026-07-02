@@ -957,7 +957,7 @@ async function authorize(req: Request, supabase: ReturnType<typeof createClient>
     };
   }
   const token = authHeader.replace("Bearer ", "");
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const serviceKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
   // Chamada interna (bot/edge function)
   if (token === serviceKey) return { ok: true };
   // Usuário web autenticado
@@ -984,8 +984,8 @@ Deno.serve(async (req) => {
 
   try {
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      Deno.env.get("HUB_SUPABASE_URL")!,
+      Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
     // 🛡️ Bloqueia anônimos antes de consumir a API paga

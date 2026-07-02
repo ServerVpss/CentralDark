@@ -802,7 +802,7 @@ serve(async (req) => {
   // 🔒 Auth obrigatória: aceita JWT de usuário OU service_role
   const authHeader = req.headers.get("Authorization") || "";
   const token = authHeader.replace(/^Bearer\s+/i, "").trim();
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+  const serviceRoleKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY") || "";
   if (!token) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -812,8 +812,8 @@ serve(async (req) => {
     try {
       const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.57.4");
       const sb = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_ANON_KEY")!,
+        Deno.env.get("HUB_SUPABASE_URL")!,
+        Deno.env.get("HUB_SUPABASE_ANON_KEY")!,
         { global: { headers: { Authorization: `Bearer ${token}` } } }
       );
       const { data, error } = await sb.auth.getClaims(token);
