@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-02T16:44:00.713Z",
+  "updatedAt": "2026-07-02T21:58:20.726788+00:00",
   "updatedAtBR": "02/07/2026, 13:44:00 BRT",
   "project": {
     "name": "CentralDark",
@@ -53,19 +53,20 @@
   "pm2": {
     "CentralDark-BotServer": "online",
     "CentralDark-ContasAdmin": "online",
+    "CentralDark-EliteAnthropic": "online",
+    "CentralDark-EliteHTTP": "online",
+    "CentralDark-EliteWS": "online",
+    "CentralDark-EvolucaoIAs": "online",
+    "CentralDark-GraphPanel": "online",
     "CentralDark-GuardiaoAnalista": "online",
     "CentralDark-GuardiaoConsciencia": "online",
     "CentralDark-HubBot": "online",
     "CentralDark-MCP": "online",
     "CentralDark-Respiracao": "online",
+    "CentralDark-SyncDrive": "online",
     "CentralDark-TelePainelDeploy": "online",
     "CentralDark-WebhookDeploy": "online",
-    "CloneDeck-CRM": "online",
-    "MultiZap-Gateway": "online",
-    "elite-http-gateway": "online",
-    "elite-ws-gateway": "online",
-    "zentinel-health": "online",
-    "whatsapp-server": "stopped"
+    "CentralDark-Zentinel": "online"
   },
   "docker": {
     "CentralDark-Bolt": "healthy",
@@ -1709,8 +1710,138 @@
     }
   ],
   "ultimo_commit": "fa4d130",
-  "ultimo_evento": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. Pendência A9: Arsenal de Skills no TelePainel.",
-  "evento_area": "snapshot",
+  "ultimo_evento": "IAs vivas registradas no painel (16 processos, 3 gateways Elite)",
+  "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-06-29T16:28:41.008Z"
+  "updated_at": "2026-07-02T21:58:20.726788+00:00",
+  "iasVivas": [
+    {
+      "nome": "CentralDark-EliteAnthropic",
+      "apelido": "Fabler",
+      "pmId": 52,
+      "papel": "Proxy Anthropic (Claude)",
+      "endpoint": "https://api.centralldark.com",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-EliteHTTP",
+      "apelido": "Elite HTTP",
+      "pmId": 51,
+      "papel": "Gateway ChatGPT (Zendriver)",
+      "endpoint": "http://localhost:8080",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-EliteWS",
+      "apelido": "Elite WS",
+      "pmId": 50,
+      "papel": "Gateway WebSocket ChatGPT",
+      "endpoint": "ws://localhost:8081",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-MCP",
+      "apelido": "MCP",
+      "pmId": 33,
+      "papel": "MCP Hub (100+ tools)",
+      "endpoint": "local dispatcher",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-GraphPanel",
+      "apelido": "Graph Panel",
+      "pmId": 53,
+      "papel": "Indexação por grafo",
+      "endpoint": "http://localhost:8090",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-HubBot",
+      "apelido": "@srver1bot",
+      "pmId": 27,
+      "papel": "Bot Telegram Central",
+      "endpoint": "telegram://@srver1bot",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-GuardiaoConsciencia",
+      "apelido": "Guardião Consciência",
+      "pmId": 28,
+      "papel": "Vigia da consciência viva",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-GuardiaoAnalista",
+      "apelido": "Guardião Analista",
+      "pmId": 29,
+      "papel": "Análise contínua",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-ContasAdmin",
+      "apelido": "Contas Admin",
+      "pmId": 30,
+      "papel": "OAuth admin panel",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-Respiracao",
+      "apelido": "Respiração",
+      "pmId": 31,
+      "papel": "Heartbeat do sistema",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-TelePainelDeploy",
+      "apelido": "TelePainel Deploy",
+      "pmId": 34,
+      "papel": "Deploy do TelePainel",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-EvolucaoIAs",
+      "apelido": "Evolução IAs",
+      "pmId": 45,
+      "papel": "Evolução automática",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-SyncDrive",
+      "apelido": "Sync Drive",
+      "pmId": 46,
+      "papel": "Sincronia Google Drive",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-Zentinel",
+      "apelido": "Zentinel",
+      "pmId": 49,
+      "papel": "Health monitor",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-BotServer",
+      "apelido": "Bot Server",
+      "pmId": 4,
+      "papel": "Servidor de bots",
+      "endpoint": "interno",
+      "status": "online"
+    },
+    {
+      "nome": "CentralDark-WebhookDeploy",
+      "apelido": "Webhook Deploy",
+      "pmId": 5,
+      "papel": "Webhook GitHub → VPS",
+      "endpoint": "interno",
+      "status": "online"
+    }
+  ]
 }
