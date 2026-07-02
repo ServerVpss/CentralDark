@@ -31,6 +31,7 @@ import Plans from "@/apps/modulos/telepainel/pages/Plans";
 import Settings from "@/apps/modulos/telepainel/pages/Settings";
 import Consultas from "@/apps/modulos/telepainel/pages/Consultas";
 import TelegramUsers from "@/apps/modulos/telepainel/pages/TelegramUsers";
+import ConscienciaViva from "@/apps/modulos/telepainel/pages/ConscienciaViva";
 import QueryLogs from "@/apps/modulos/telepainel/pages/QueryLogs";
 import PixTransactions from "@/apps/modulos/telepainel/pages/PixTransactions";
 import NotFound from "@/apps/modulos/telepainel/pages/NotFound";
@@ -87,6 +88,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
   { path: "ponte-mcp", element: <PonteMCP />, adminOnly: true },
   { path: "mapa", element: <MapaSite />, adminOnly: true },
+  { path: "consciencia", element: <ConscienciaViva />, adminOnly: true },
   // Rota /hub removida — Hub agora vive em apps/modulos/hub/ como app independente
 ];
 
