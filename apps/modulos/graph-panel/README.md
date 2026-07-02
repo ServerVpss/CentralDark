@@ -28,6 +28,10 @@ Tudo do painel fica dentro desta pasta: servidor, tela, dados, scripts, logs e d
 
 ## Estratégia
 
-A rota principal usa a API Lovable quando a chave estiver disponível no ambiente. Se não estiver, o parser local mantém o painel funcionando com um grafo seguro básico.
+A rota principal tenta usar a API Lovable com `LOVABLE_API_KEY` no ambiente da VPS. Se a chave não estiver disponível para o processo, o parser local mantém o painel funcionando com um grafo seguro básico.
 
 O graphifyy não foi abandonado: ele fica como plano reserva.
+
+## Estado atual
+
+O painel está operacional com fallback local seguro. Para ativar a análise Lovable real na VPS, basta expor `LOVABLE_API_KEY` no ambiente do processo `graph-panel` e reiniciar o PM2.
