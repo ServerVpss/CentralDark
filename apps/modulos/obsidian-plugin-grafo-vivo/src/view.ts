@@ -101,7 +101,7 @@ export class GrafoVivoView extends ItemView {
       // Usa requestUrl do Obsidian pra ignorar CORS (funciona desktop e mobile).
       const resp = await requestUrl({ url: this.plugin.settings.urlGrafo, method: "GET" });
       if (resp.status < 200 || resp.status >= 300) throw new Error(`HTTP ${resp.status}`);
-      const dados: DadosGrafo = resp.json;
+      const dados = this.normalizarDados(resp.json);
       this.render(dados);
       const hora = new Date().toLocaleTimeString("pt-BR");
       if (this.statusEl) this.statusEl.setText(`🟢 ${dados.nodes.length} nós • ${hora}`);
@@ -109,6 +109,47 @@ export class GrafoVivoView extends ItemView {
       if (this.statusEl) this.statusEl.setText(`🔴 erro: ${e.message ?? e}`);
       console.error("[GrafoVivo] falha ao carregar", e);
     }
+  }
+
+  // Mapa de tipos/grupos vindos do graph-data.json → categorias de cor do plugin.
+  private mapearCategoria(tipo?: string, grupo?: string): string {
+    const chave = (tipo ?? grupo ?? "").toLowerCase();
+    if (!chave) return "doc";
+    if (chave.includes("bot")) return "bot";
+    if (chave.includes("mcp") || chave === "orquestrador" || chave === "core") return "mcp";
+    if (chave.includes("edge") || chave.includes("function")) return "edge";
+    if (chave.includes("supabase") || chave.includes("db")) return "supabase";
+    if (chave.includes("vps") || chave.includes("server")) return "vps";
+    if (chave.includes("ia") || chave.includes("ai") || chave.includes("gpt") || chave.includes("claude") || chave.includes("gemini")) return "ia";
+    if (chave.includes("modulo") || chave.includes("module") || chave.includes("app")) return "modulo";
+    return "doc";
+  }
+
+  // Normaliza o JSON bruto: aceita schema antigo (category/source/target/ativa)
+  // e o novo do status.centralldark.com (type/group/from/to/weight).
+  private normalizarDados(bruto: any): DadosGrafo {
+    if (!bruto || typeof bruto !== "object") {
+      return { nodes: [], edges: [] };
+    }
+    const nodesBrutos = Array.isArray(bruto.nodes) ? bruto.nodes : [];
+    const edgesBrutas = Array.isArray(bruto.edges) ? bruto.edges : [];
+
+    const nodes: NoGrafo[] = nodesBrutos.map((n: any) => ({
+      id: String(n.id),
+      label: n.label ?? n.id,
+      category: n.category ?? this.mapearCategoria(n.type, n.group),
+      obsidian_path: n.obsidian_path,
+    }));
+
+    const edges: ArestaGrafo[] = edgesBrutas.map((e: any) => {
+      const source = e.source ?? e.from;
+      const target = e.target ?? e.to;
+      const peso = typeof e.weight === "number" ? e.weight : undefined;
+      const ativa = e.ativa ?? (peso !== undefined ? peso >= 3 : true);
+      return { source: String(source), target: String(target), ativa };
+    }).filter((e) => e.source && e.target);
+
+    return { nodes, edges };
   }
 
   private dadosCache: DadosGrafo | null = null;
@@ -158,12 +199,12 @@ export class GrafoVivoView extends ItemView {
           ctx.arc(n.x, n.y, 10, 0, 2 * Math.PI);
           ctx.fill();
         })
-        .linkColor((l: any) => (l.ativa ? "rgba(52, 211, 153, 0.55)" : "rgba(148, 163, 184, 0.28)"))
-        .linkWidth((l: any) => (l.ativa ? 2.2 : 0.9))
-        .linkDirectionalParticles((l: any) => (l.ativa ? 5 : 1))
+        .linkColor((l: any) => (l.ativa ? "rgba(52, 211, 153, 0.65)" : "rgba(148, 163, 184, 0.4)"))
+        .linkWidth((l: any) => (l.ativa ? 2.4 : 1.1))
+        .linkDirectionalParticles((l: any) => (l.ativa ? 5 : 2))
         .linkDirectionalParticleSpeed(0.009)
-        .linkDirectionalParticleWidth((l: any) => (l.ativa ? 3.5 : 1.6))
-        .linkDirectionalParticleColor((l: any) => (l.ativa ? "#34d399" : "#64748b"))
+        .linkDirectionalParticleWidth((l: any) => (l.ativa ? 3.5 : 2))
+        .linkDirectionalParticleColor((l: any) => (l.ativa ? "#34d399" : "#94a3b8"))
         .onNodeClick((n: any) => this.aoClicarNo(n))
         .cooldownTicks(120)
         .warmupTicks(40);
@@ -187,10 +228,12 @@ export class GrafoVivoView extends ItemView {
   }
 
   private filtrar(dados: DadosGrafo): DadosGrafo {
-    if (this.filtroAtual === "todos") return dados;
-    const nodes = dados.nodes.filter((n) => n.category === this.filtroAtual);
+    const todosNodes = dados?.nodes ?? [];
+    const todasEdges = dados?.edges ?? [];
+    if (this.filtroAtual === "todos") return { nodes: todosNodes, edges: todasEdges };
+    const nodes = todosNodes.filter((n) => n.category === this.filtroAtual);
     const ids = new Set(nodes.map((n) => n.id));
-    const edges = dados.edges.filter((e) => ids.has(e.source) && ids.has(e.target));
+    const edges = todasEdges.filter((e) => ids.has(e.source) && ids.has(e.target));
     return { nodes, edges };
   }
 

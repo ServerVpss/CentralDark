@@ -1,78 +1,70 @@
-## Objetivo
+## O que tá rolando
 
-Deixar cada bot no seu lugar, sem gambiarra:
+Aquela screenshot **é o nosso plugin sim** — `CentralDark Grafo Vivo` (você reconhece pelo campo "todos" no topo e pelo painel lateral direito). O que aparece "Nova aba" à esquerda é o Obsidian padrão, o nosso é o painelzinho da direita que tá com erro `Cannot read properties of undefined (reading 'filter')`.
 
-- **@srver1bot (Central)** → HUB Supabase + PM2 id 27 na VPS. Continua como está.
-- **@SEGREDOPUXADASBOT (TelePainel/Fiscal)** → projeto Lovable Cloud atual (`kagejpghnwdfymddwxuf`), com edge function **dedicada** só pra ele (e futuros bots do TelePainel).
+**Por que tá quebrado**: o JSON que roda no `status.centralldark.com` mudou de formato depois que a gente montou o plugin. Hoje ele manda:
 
-Hoje as duas galáxias compartilham a mesma função `telegram-webhook` e eu tive que colocar um fallback "se não achou no HUB, tenta no local" — que resolveu na hora mas mistura os dois mundos. Vamos separar de verdade.
+- Nó: `{ id, label, type, group }`
+- Aresta: `{ from, to, label, weight }`
 
-## O que vai ser feito
+Mas o plugin espera:
 
-### 1. Nova edge function `telepainel-webhook` (projeto atual)
+- Nó: `{ id, label, category }`
+- Aresta: `{ source, target, ativa }`
 
-Cópia da lógica atual de `telegram-webhook`, mas com uma única diferença de fundo: consulta **sempre e apenas** o Supabase deste projeto (`SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`), nunca o HUB. É a casa oficial do Fiscal e dos próximos bots do TelePainel.
+Resultado: filtro retorna zero, cor cai no cinza padrão, partícula não anima e ainda estoura aquele erro quando o filtro roda sem dados.
 
-- Rota: `https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/telepainel-webhook?botId=<uuid>`
-- CORS padrão + `verify_jwt = false` (Telegram não manda JWT).
-- Log com tag `[TELEPAINEL]` pra distinguir dos logs do Hub.
+---
 
-### 2. `telegram-webhook` volta ao original (só HUB)
+## Como confirmar que é o nosso plugin (visual)
 
-Removo o fallback local que coloquei ontem. Essa função passa a ser exclusiva do @srver1bot e do resto do ecossistema Hub.
+- Nome oficial: **CentralDark Grafo Vivo** (Configurações → Community plugins).
+- Ícone na barra lateral: 🍴 (git-fork).
+- Comando na paleta (Ctrl+P): **"Abrir Grafo Vivo CentralDark"**.
+- Se aparecer com esses nomes, é o nosso. O erro do print confirma.
 
-### 3. Repontar o webhook do Fiscal no Telegram
+---
 
-Chamada `setWebhook` no Telegram trocando a URL do bot 65915466-… para `.../telepainel-webhook?botId=…`. Feito via edge function ou via curl direto usando o token que já está em `telegram_bots.token`.
+## Plano de correção
 
-Depois do repointing, confirmo com `getWebhookInfo` que subiu certo e mando um `/start` sintético pra ver o log `[TELEPAINEL] UPDATE_IN` chegando.
+**F8 — Grafo Vivo Obsidian: adaptador de schema + repaint**
 
-### 4. Atualizar o banco
+1. **`src/view.ts` — normalizar o JSON na entrada**
+   Adicionar função `normalizarDados(bruto)` que roda logo depois do `fetch`:
+   - `type` ou `group` → vira `category` (mapeando: `orquestrador`→`mcp`, `edge`→`edge`, `bot`→`bot`, `ia`→`ia`, `vps`→`vps`, `modulo`→`modulo`, `supabase`→`supabase`, resto→`doc`).
+   - `from`/`to` → vira `source`/`target`.
+   - `ativa` inferida: `weight >= 3` = true (linha grossa + partículas rápidas).
+   - Defesa: se `nodes`/`edges` vier `undefined`, cair pra `[]` e mostrar Notice amigável em vez de crashar.
 
-- `telegram_bots.webhook_url` do Fiscal → nova URL (`telepainel-webhook`).
-- Sem alteração de schema.
+2. **`src/view.ts` — filtro seguro**
+   Trocar `dados.nodes.filter(...)` por `(dados.nodes ?? []).filter(...)` (mata o erro do print de vez).
 
-### 5. Documentar a separação
+3. **`src/view.ts` — animação**
+   Garantir `linkDirectionalParticles` mínimo 1 mesmo sem `ativa`, pra sempre ter movimento (efeito Tony Stark).
 
-- **CLAUDE.md** → nova seção "Arquitetura de Bots" com o mapa oficial:
-  - `@srver1bot` = Central, HUB + VPS PM2 27, função `telegram-webhook`
-  - `@SEGREDOPUXADASBOT` = TelePainel/Fiscal, Lovable Cloud atual, função `telepainel-webhook`
-- **mem://architecture/bots-separacao** → mesma info em memória viva pra qualquer IA nova entender de cara.
-- **`.lovable/plan.md`** → registrar a decisão.
+4. **Bump `manifest.json` → `0.4.3`** + entrada no `changelog.json` explicando "adaptador do novo schema + fim do erro do filter".
 
-## Ordem de execução (segura, sem downtime)
+5. **Rebuild**: `cd apps/modulos/obsidian-plugin-grafo-vivo && npm run build` (gera `main.js` novo).
 
-```
-1. Cria telepainel-webhook (função nova, ninguém aponta pra ela ainda)
-2. Deploy + teste sintético (POST direto)  → tem que responder OK
-3. setWebhook do Fiscal → nova URL
-4. Confirma com getWebhookInfo + /start sintético
-5. Atualiza telegram_bots.webhook_url no banco
-6. Reverte o fallback da telegram-webhook (só HUB)
-7. Deploy da telegram-webhook original
-8. Documenta em CLAUDE.md + mem + plan.md
-```
+6. **Publicar via auto-update**: como o plugin já tem sistema de auto-update (v0.4.1 testou isso), basta você abrir o Obsidian e ele vai baixar sozinho a 0.4.3, ou clicar "Atualizar agora" na Notice.
 
-Se qualquer passo falhar entre 3 e 7, dá pra voltar o webhook do Fiscal pra `telegram-webhook` num segundo — o fallback ainda estará lá até o passo 6.
+7. **Fechar com `atualizar_painel`** marcando F8 concluído (já corrigido o param que falhou antes).
 
-## Detalhes técnicos
+---
 
-- A função `telepainel-webhook` fica em `supabase/functions/telepainel-webhook/index.ts`. É basicamente `telegram-webhook` com as 14+ ocorrências de `HUB_SUPABASE_URL` / `HUB_SUPABASE_SERVICE_ROLE_KEY` trocadas por `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`.
-- `supabase/config.toml` ganha bloco `[functions.telepainel-webhook]` só se precisar de `verify_jwt = false` explícito (a maioria das funções Lovable já vem assim por padrão).
-- O `setWebhook` usa o token gravado em `telegram_bots.token` (`7634758557:AAHH…`) — chamada direta à API do Telegram, sem passar pelo connector gateway (esse token é do Fiscal, não do bot do connector).
-- Rollback rápido: `setWebhook` de novo apontando pra URL antiga.
+## O que muda visualmente pra você
 
-## O que NÃO muda
+- Nós **coloridos por categoria** (verde bot, azul MCP, roxo edge, etc.).
+- Arestas com **partículas viajando** (o "movimento Tony Stark" que o status já mostra).
+- Filtro "todos/bot/mcp/…" funcionando sem erro.
+- Mesmo grafo do `status.centralldark.com`, só que dentro do vault.
 
-- Nada no HUB Supabase.
-- Nada no PM2 da VPS (id 27 continua rodando o @srver1bot).
-- Nada no Caddy (webhook do Fiscal já vai direto pro Lovable Cloud, não passa por `status.centralldark.com`).
-- Nenhum outro bot é tocado.
+---
 
-## Entrega final
+## Fora do escopo (por enquanto)
 
-Print/log mostrando:
-- `getWebhookInfo` do Fiscal apontando pra `telepainel-webhook` ✅
-- Log `[TELEPAINEL] UPDATE_IN` aparecendo quando você manda `/start` ✅
-- `telegram-webhook` sem o fallback, respondendo normal pro Hub ✅
-- CLAUDE.md e mem atualizados com o mapa oficial ✅
+- Não vou mexer no `graph-data.json` da VPS (área protegida do status).
+- Não vou trocar o motor de render (fica no `force-graph` mesmo).
+- Não vou renomear o plugin nem mexer no sistema de auto-update.
+
+Se topar, aprova que eu já ataco na build.
