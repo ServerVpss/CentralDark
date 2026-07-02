@@ -10,8 +10,8 @@ export interface GrafoVivoSettings {
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
-  urlGrafo: "https://status.centralldark.com/graph-data.json",
-  intervaloSegundos: 30,
+  urlGrafo: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/graph-data",
+  intervaloSegundos: 15,
   abrirNotaAoClicar: true,
 };
 
@@ -33,7 +33,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       .setDesc("Endpoint que retorna o JSON {nodes, edges} do ecossistema.")
       .addText((txt) =>
         txt
-          .setPlaceholder("https://status.centralldark.com/graph-data.json")
+          .setPlaceholder("https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/graph-data")
           .setValue(this.plugin.settings.urlGrafo)
           .onChange(async (v) => {
             this.plugin.settings.urlGrafo = v.trim();
