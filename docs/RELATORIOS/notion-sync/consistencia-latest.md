@@ -12,8 +12,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
-| decisoes | 20 | 20 | 20 | 0 | 0 |
-| aprendizados | 279 | 0 | 0 | 279 | 0 |
+| decisoes | 21 | 21 | 21 | 0 | 0 |
+| aprendizados | 280 | 0 | 0 | 280 | 0 |
 
 ## Detalhes
 
@@ -36,14 +36,14 @@
 
 ### decisoes
 
-- 🟩 OK: **20**
+- 🟩 OK: **21**
 - 🟥 Faltando no Notion: **0**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **279**
+- 🟥 Faltando no Notion: **280**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -327,4 +327,5 @@
 - uvicorn / FastAPI — Elite Anthropic Proxy
 - Diagnóstico Rápido da VPS
 - 263. Estilo gamificado é padrão oficial de comunicação
+- 264. Renomeação PM2 + fix Caddy status aplicados na VPS
 </details>
