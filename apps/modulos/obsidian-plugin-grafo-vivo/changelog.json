@@ -4,5 +4,6 @@
   "0.3.0": "Modal de changelog + verificação de integridade SHA-256 + rollback.",
   "0.2.1": "Auto-update via edge function segura.",
   "0.2.0": "Auto-update inicial via GitHub raw.",
-  "0.1.0": "Versão inicial: grafo vivo do CentralDark."
+  "0.1.0": "Versão inicial: grafo vivo do CentralDark.",
+  "0.4.2": "🛠️ v0.4.2 — Fix do reload travado\n- Recarregamento do plugin agora é deferido (não trava mais no 'Recarregando plugin...')\n- Força reload do manifest.json do disco antes de reabilitar\n- Notice de confirmação após reload bem-sucedido\n- Se falhar, avisa pra reiniciar o Obsidian manualmente"
 }
