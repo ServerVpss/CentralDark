@@ -67,6 +67,11 @@ jobs:
               { name: 'assign:vps-health',   color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
               { name: 'assign:painel-vivo',  color: 'c5def5', description: 'Painel-vivo (status.centralldark.com)' },
               { name: 'assign:sentinela',    color: 'ededed', description: 'Sentinela (detecta divergência geral)' },
+
+              // Graphify (pipeline do grafo)
+              { name: 'graphify',           color: '5319e7', description: 'Pipeline do Graphify e grafo do repo' },
+              { name: 'pipeline-broken',    color: 'b60205', description: 'Pipeline quebrado — precisa reparo urgente' },
+              { name: 'ignore-pending',     color: 'fbca04', description: '.graphifyignore precisa de update pra evitar lixo' },
               { name: 'assign:vigia',        color: 'ededed', description: 'Vigia (workflows vermelhos)' },
             ];
 

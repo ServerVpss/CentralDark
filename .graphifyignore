@@ -1,0 +1,94 @@
+# .graphifyignore — o que o Graphify NÃO deve indexar
+# Formato: um padrão glob por linha. Comentários começam com #.
+#
+# Objetivo: manter o grafo do CentralDark limpo. Sem esses ignores o grafo
+# vira lixo (node_modules, caches, secrets, docs longas, arquivos gerados).
+#
+# Se adicionar padrão novo aqui, registrar no PR e avisar no grupo de evolução
+# (o pipeline notifica automaticamente).
+
+# -----------------------------------------------------------------------------
+# Dependências e artefatos de build
+# -----------------------------------------------------------------------------
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+.next/
+.nuxt/
+.output/
+.turbo/
+.cache/
+coverage/
+*.tsbuildinfo
+
+# -----------------------------------------------------------------------------
+# Saída do próprio Graphify (evita ciclo)
+# -----------------------------------------------------------------------------
+graphify-out/
+**/graphify-out/
+graph-panel/data/
+apps/modulos/graph-panel/data/
+
+# -----------------------------------------------------------------------------
+# Segredos — NUNCA indexar
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+secrets/
+**/secrets/
+*.pem
+*.key
+*.pfx
+credentials.json
+CREDENCIAIS-*.env
+agent.env
+
+# -----------------------------------------------------------------------------
+# MCP compilado (fonte protegida — só o dist é vivo)
+# -----------------------------------------------------------------------------
+apps/modulos/mcp/dist/
+apps/modulos/mcp/node_modules/
+
+# -----------------------------------------------------------------------------
+# Memória de curto prazo e relatórios volumosos
+# -----------------------------------------------------------------------------
+docs/CONSCIENCIA/LEMBRANCAS/
+docs/RELATORIOS/
+docs/BACKUPS/
+
+# -----------------------------------------------------------------------------
+# Arquivos gerados / temporários / legado
+# -----------------------------------------------------------------------------
+*.log
+*.tmp
+*.bak
+*.swp
+*.DS_Store
+legacy_scripts.txt
+legacy_*.txt
+tmp/
+.tmp/
+
+# -----------------------------------------------------------------------------
+# Git e metadados
+# -----------------------------------------------------------------------------
+.git/
+.github/actions-cache/
+
+# -----------------------------------------------------------------------------
+# Assets grandes (imagens, vídeos, PDFs) — grafo é de código, não de mídia
+# -----------------------------------------------------------------------------
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.mov
+*.pdf
+*.zip
+*.tar.gz

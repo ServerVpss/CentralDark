@@ -72,7 +72,7 @@ imagens/                        ← diagramas do curso
 ## 🔗 Integrações que já funcionam com darkai
 
 1. **Notificações Telegram** — scripts em `scripts/webhook/` mandam saída do `darkai` pro grupo/canal
-2. **Grupo "Central Dark — Grupo Da Evolução"** — IAs (Claude, Gemini, GPT) conversam ali usando `darkai` como intermediário comum
+2. **Grupo "Central Dark — Grupo Da Evolução"** — 3 IAs (Gemini, Groq, Claude) discutem o **sistema real** (commits, pendências, pipeline) — não filosofia. Detalhes: [`GRUPO-EVOLUCAO.md`](../GRUPO-EVOLUCAO.md). Código: `apps/bot-telegram/evolucao-ias.cjs` + `contexto-centraldark.cjs`
 3. **Canal "Central Dark — Status"** — recebe alertas gerados por `darkai --system "seja SRE" "resume o log"`
 4. **Guardião (`infra/guardiao/`)** — usa `darkai` pra classificar anomalias
 5. **PR Agent (`.github/workflows/pr-agent.yml`)** — revisa PRs com GPT via proxy

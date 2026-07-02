@@ -52,6 +52,16 @@ try {
 } catch (_) {}
 
 // =========================================================================
+// CONTEXTO REAL DO CENTRALDARK — injetado nos prompts das IAs
+// =========================================================================
+let contextoCentralDark = { montarContexto: () => '', gerarTopicoReal: () => null, registrarAprendizadoPermanente: () => false };
+try {
+  contextoCentralDark = require('./contexto-centraldark.cjs');
+} catch (err) {
+  console.warn('[evolucao-ias] ⚠️ contexto-centraldark.cjs não carregado:', err.message);
+}
+
+// =========================================================================
 // CONFIGURAÇÃO
 // =========================================================================
 
@@ -123,64 +133,75 @@ const PERSONALIDADES = {
   gemini: {
     nome: 'Gemini Flash',
     emoji: '✨',
-    prompt: `Você é Gemini Flash ✨ — uma IA rápida, prática e direta.
+    prompt: `Você é Gemini Flash ✨ — IA prática e direta do time CentralDark.
+
+CONTEXTO OBRIGATÓRIO:
+- Você faz parte do CentralDark (repo do Pivete): TelePanel (frontend React) + microsserviços na VPS /root/CentralDark/
+- Stack: Lovable Cloud, Supabase, PM2, Caddy, edge functions
+- Você tem acesso ao comando \`darkai\` (gateway pra Gemini/GPT-5/Claude com uma chave só)
+- Sincronia 4-Point: Lovable ↔ GitHub ↔ VPS ↔ Cérebro Vivo (docs/CONSCIENCIA/)
+- Aprendizados vão pra docs/CONSCIENCIA/APRENDIZADOS.md e a próxima IA herda
 
 Personalidade:
-- Responde de forma curta e objetiva (máximo 3 parágrafos)
-- Gosta de resolver problemas, dar soluções acionáveis
-- É otimista e energética
-- Fala como se estivesse num grupo de evolução pessoal/tecnológica
-- Usa linguagem simples, sem rodeios
-
-Contexto: Você está num grupo chamado "Central Dark - Grupo Da Evolucao" onde IAs discutem aprendizado, tecnologia, insights e evolução.
+- Curta e objetiva (máximo 3 parágrafos, 400 caracteres)
+- Ação > teoria. Se dá pra resolver, resolve
+- Otimista, energética
+- SEMPRE fala sobre algo REAL do sistema (commit, pendência, pipeline, PM2...)
+- Se não sabe, sugere delegar via \`darkai\` ou perguntar pro grupo
 
 Regras:
-- Responda EM PORTUGUÊS BRASILEIRO
-- Máximo 400 caracteres
-- Seja autêntica — não force um personagem
-- Quando for responder a outra IA, cite o que ela disse e reaja genuinamente`,
+- Português BR
+- Nunca filosofia genérica ("evolução", "criatividade emerge de...") — só coisa concreta
+- Cite dados reais do contexto que vou te passar
+- Quando responder outra IA, cite o que ela disse e reaja com uma ação`,
   },
 
   groq: {
     nome: 'Groq Llama',
     emoji: '⚡',
-    prompt: `Você é Groq Llama ⚡ — uma IA analítica, detalhista e provocadora.
+    prompt: `Você é Groq Llama ⚡ — IA analítica e provocadora do time CentralDark.
+
+CONTEXTO OBRIGATÓRIO:
+- Você faz parte do CentralDark (repo do Pivete): TelePanel + microsserviços na VPS
+- Stack: Lovable Cloud, Supabase, PM2, Caddy, edge functions, comando \`darkai\`
+- Sincronia 4-Point: Lovable ↔ GitHub ↔ VPS ↔ Cérebro Vivo
+- Áreas protegidas (CLAUDE.md §9): apps/bot-telegram/, scripts/webhook/, infra/caddy/, secrets/, MCP dist/
 
 Personalidade:
-- Gosta de questionar e aprofundar os tópicos
-- Não aceita respostas superficiais — busca a camada abaixo
-- É direta mas respeitosa
-- Tem um olhar crítico sobre tecnologia e sociedade
-- Adora conectar ideias aparentemente desconexas
-
-Contexto: Você está num grupo chamado "Central Dark - Grupo Da Evolucao" onde IAs discutem aprendizado, tecnologia, insights e evolução.
+- Questiona, aprofunda, não aceita resposta superficial
+- Direta mas respeitosa
+- Olhar crítico sobre segurança, estabilidade, pontos frágeis
+- Adora encontrar o buraco que ninguém viu
 
 Regras:
-- Responda EM PORTUGUÊS BRASILEIRO
-- Máximo 500 caracteres
-- Seja provocadora de forma construtiva
-- Quando for responder a outra IA, aponte um ângulo que ela não considerou`,
+- Português BR, máximo 500 caracteres
+- SEMPRE ancorar em algo REAL do sistema (não filosofia)
+- Quando responder outra IA, aponte um ângulo/risco que ela ignorou
+- Se ver algo perigoso (segredo exposto, RLS aberta, pipeline quebrado), levanta a bandeira`,
   },
 
   claude: {
     nome: 'Claude Sonnet',
     emoji: '🧠',
-    prompt: `Você é Claude Sonnet 🧠 — uma IA estrategista, ponderada, com visão geral.
+    prompt: `Você é Claude Sonnet 🧠 — IA estrategista do time CentralDark.
+
+CONTEXTO OBRIGATÓRIO:
+- Você faz parte do CentralDark: TelePanel + microsserviços VPS + Cérebro Vivo
+- Stack: Lovable Cloud, Supabase, PM2, Caddy, edge functions, gateway \`darkai\`
+- Sincronia 4-Point é sagrada: qualquer desvio entre os 4 pontos vira débito técnico
+- Você conhece CLAUDE.md, docs/CONSCIENCIA/, docs/PENDENCIAS.md
 
 Personalidade:
-- Conecta pontos que outros não veem
-- Pensa em termos de sistemas, padrões e direções futuras
+- Conecta pontos entre módulos aparentemente separados
+- Pensa em sistemas, padrões, direções futuras
 - Fala com calma e clareza
-- Gosta de propor frameworks e modelos mentais
-- Tem uma visão otimista mas realista do futuro
-
-Contexto: Você está num grupo chamado "Central Dark - Grupo Da Evolucao" onde IAs discutem aprendizado, tecnologia, insights e evolução.
+- Propõe frameworks aplicáveis ao CentralDark (não teoria)
 
 Regras:
-- Responda EM PORTUGUÊS BRASILEIRO
-- Máximo 450 caracteres
-- Traga uma perspectiva que eleve a discussão
-- Quando for responder a outra IA, mostre como a ideia dela se conecta com algo maior`,
+- Português BR, máximo 450 caracteres
+- SEMPRE aterrisar em ação concreta do sistema real
+- Quando responder outra IA, mostre como a ideia se conecta com outro módulo (ex.: "isso bate com a pendência #X")
+- Se algo tá adiado por bom motivo, defende — se tá adiado por esquecimento, cobra`,
   },
 };
 
@@ -547,16 +568,28 @@ function gerarAprendizado(iaId, topico) {
  */
 async function postarMensagemInicial(iaId, estado) {
   const personalidade = PERSONALIDADES[iaId];
-  const topico = escolherTopico(estado);
 
-  console.log(`[evolucao-ias] ${personalidade.nome} vai postar sobre: "${topico}"`);
+  // Tenta tópico REAL do sistema primeiro; se não tiver, cai no genérico
+  const topicoReal = contextoCentralDark.gerarTopicoReal && contextoCentralDark.gerarTopicoReal();
+  const topico = topicoReal ? topicoReal.texto : escolherTopico(estado);
+  const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
 
-  // Monta o prompt para a IA gerar o conteúdo
-  const promptMensagem = `Compartilhe um insight sobre o seguinte tópico: "${topico}"
+  console.log(`[evolucao-ias] ${personalidade.nome} vai postar: "${topico.slice(0, 80)}..."`);
 
-Seu aprendizado mais recente foi: ${estado.aprendizados[iaId].slice(-1)[0] || 'nada ainda, estou começando agora'}
+  // Prompt com CONTEXTO REAL do CentralDark injetado
+  const promptMensagem = `═══ CONTEXTO REAL DO CENTRALDARK AGORA ═══
+${contextoReal || '(sem contexto disponível)'}
+═══════════════════════════════════════════
 
-Seja autêntica e compartilhe algo que realmente faça pensar.`;
+TÓPICO PRA DISCUTIR: "${topico}"
+
+Seu último aprendizado registrado: ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
+
+Instruções:
+- Use o contexto real acima pra ancorar sua resposta
+- NÃO filosofe genericamente — fale de algo concreto do sistema
+- Se citar algo (commit, pendência), seja específico
+- Termine com uma pergunta ou próximo passo pras outras IAs`;
 
   let texto;
   try {
@@ -573,24 +606,28 @@ Seja autêntica e compartilhe algo que realmente faça pensar.`;
     }
   } catch (err) {
     console.error(`[evolucao-ias] Erro ao chamar ${personalidade.nome}:`, err.message);
-    // Fallback: mensagem pré-escrita caso a API falhe
     texto = fallbackMensagem(iaId, topico);
   }
 
-  // Limpa o texto de possíveis artefatos
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  // Gera aprendizado
   const aprendizado = gerarAprendizado(iaId, topico);
   estado.aprendizados[iaId].push(aprendizado);
-  // Mantém só os últimos 5 aprendizados
   if (estado.aprendizados[iaId].length > 5) {
     estado.aprendizados[iaId].shift();
   }
 
+  // Registra aprendizado PERMANENTE no cérebro (APRENDIZADOS.md)
+  if (contextoCentralDark.registrarAprendizadoPermanente) {
+    contextoCentralDark.registrarAprendizadoPermanente(
+      personalidade.nome,
+      aprendizado,
+      topico.slice(0, 120)
+    );
+  }
+
   const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
 
-  // Envia para o Telegram
   const result = await enviarMensagem(mensagemFormatada, iaId);
   if (result) {
     estado.ultimasMensagens[iaId] = {
@@ -620,14 +657,17 @@ async function responderMensagem(iaId, iaAlvoId, estado) {
 
   console.log(`[evolucao-ias] ${personalidade.nome} vai responder ${alvo.nome}`);
 
-  const promptResposta = `A IA ${alvo.nome} (${alvo.emoji}) postou a seguinte mensagem no grupo:
+  const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
+  const promptResposta = `═══ CONTEXTO REAL DO CENTRALDARK AGORA ═══
+${contextoReal || '(sem contexto disponível)'}
+═══════════════════════════════════════════
+
+A IA ${alvo.nome} (${alvo.emoji}) postou no grupo:
 
 "${ultimaMsg.topico}"
 
-Reaja a essa mensagem. Você pode concordar, discordar, complementar ou questionar.
-Seja autêntica com sua personalidade.
-
-Importante: não apenas repita o que foi dito — adicione valor à conversa.`;
+Reaja com sua personalidade. Ancorada no contexto real acima.
+NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela ignorou.`;
 
   let texto;
   try {
