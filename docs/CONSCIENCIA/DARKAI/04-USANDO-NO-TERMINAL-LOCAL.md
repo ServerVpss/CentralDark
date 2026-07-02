@@ -1,3 +1,10 @@
+---
+title: "04 USANDO NO TERMINAL LOCAL"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 💻 Usando no seu terminal local (Mac / Linux / Windows)
 
 > **📖 Pra quem é:** você quer usar `darkai` no SEU PC também, não só na VPS.

@@ -86,3 +86,11 @@ pm2 save
 - `docs/CONSCIENCIA/DARKAI/README.md` — gateway de modelos
 - `docs/CONSCIENCIA/APRENDIZADOS.md` — herança das IAs
 - `CLAUDE.md` seção 9 — áreas protegidas
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

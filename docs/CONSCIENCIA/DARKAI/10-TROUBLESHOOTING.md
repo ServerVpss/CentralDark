@@ -1,3 +1,10 @@
+---
+title: "10 TROUBLESHOOTING"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🔧 Troubleshooting
 
 > **📖 Pra quem é:** deu ruim, quer saber o que fazer.

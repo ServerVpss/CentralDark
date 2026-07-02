@@ -1,3 +1,10 @@
+---
+title: "INSTALAR NA VPS"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # Instalar darkai na VPS
 
 ## 1. Copiar o script

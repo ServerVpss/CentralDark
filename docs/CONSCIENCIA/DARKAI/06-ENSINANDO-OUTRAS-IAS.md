@@ -1,3 +1,10 @@
+---
+title: "06 ENSINANDO OUTRAS IAS"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🎓 Ensinando outras IAs a usar DARKAI
 
 > **📖 Pra quem é:** você que quer que Claude Code, Cursor, ChatGPT, ou qualquer outra IA saiba usar o `darkai`.

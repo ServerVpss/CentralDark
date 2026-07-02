@@ -1,3 +1,10 @@
+---
+title: "09 ARQUITETURA E ORQUESTRACAO"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🏗️ Arquitetura e Orquestração
 
 > **📖 Pra quem é:** quem quer entender como o CentralDark inteiro se organiza.

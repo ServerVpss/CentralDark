@@ -1,3 +1,10 @@
+---
+title: "07 EXEMPLOS PRATICOS"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🛠️ Exemplos Práticos
 
 > **📖 Pra quem é:** quem aprende fazendo. 15+ casos reais.

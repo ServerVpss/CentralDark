@@ -1,3 +1,10 @@
+---
+title: "02 COMO FUNCIONA POR DENTRO"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # ⚙️ Como funciona por dentro
 
 > **📖 Pra quem é:** curiosos e IAs que precisam ensinar outras IAs.

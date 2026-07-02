@@ -1,3 +1,10 @@
+---
+title: "00 COMECE AQUI"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 📚 DARKAI — Comece Aqui
 
 > **📖 Pra quem é este arquivo:** você que abriu essa pasta pela primeira vez.

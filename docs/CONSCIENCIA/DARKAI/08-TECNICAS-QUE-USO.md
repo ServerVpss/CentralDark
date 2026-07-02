@@ -1,3 +1,10 @@
+---
+title: "08 TECNICAS QUE USO"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🧙 Técnicas que eu (Lovable) uso
 
 > **📖 Pra quem é:** você quer ensinar suas outras IAs a trabalharem como eu.

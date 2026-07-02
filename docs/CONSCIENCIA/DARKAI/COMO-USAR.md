@@ -1,3 +1,10 @@
+---
+title: "COMO USAR"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # Como usar o darkai
 
 ## Básico

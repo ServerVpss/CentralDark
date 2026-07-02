@@ -1,3 +1,10 @@
+---
+title: "03 CATALOGO DE MODELOS"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🎯 Catálogo de Modelos IA
 
 > **📖 Pra quem é:** quem quer escolher o modelo certo pra cada tarefa.

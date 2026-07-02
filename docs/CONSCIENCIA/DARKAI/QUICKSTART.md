@@ -1,3 +1,10 @@
+---
+title: "QUICKSTART"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # ⚡ QUICKSTART — darkai em 5 minutos
 
 > Zero enrolação. Copia, cola, roda.

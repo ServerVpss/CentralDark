@@ -1,3 +1,10 @@
+---
+title: "COMO ENSINAR OUTRA IA"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # Prompt pronto pra ensinar outra IA (colar tal e qual)
 
 Cole o bloco abaixo no Claude Code, GPT, Gemini novo, etc:

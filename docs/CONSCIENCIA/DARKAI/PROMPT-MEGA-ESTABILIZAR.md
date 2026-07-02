@@ -1,3 +1,10 @@
+---
+title: "PROMPT MEGA ESTABILIZAR"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🚀 PROMPT MEGA — Estabilizar Tudo numa Tacada Só
 
 > **Uso:** cola isso no Fable (ou qualquer IA forte tipo Claude Sonnet/Opus 4) rodando **em Ultracode / Effort máximo**, dentro do repo CentralDark na VPS.

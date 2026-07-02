@@ -1,3 +1,10 @@
+---
+title: "05 USANDO NA VPS"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🖥️ Usando na VPS
 
 > **📖 Pra quem é:** você (ou uma IA na VPS) quer usar `darkai` como comando global.

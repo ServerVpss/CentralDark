@@ -1,3 +1,10 @@
+---
+title: "01 O QUE E DARKAI"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🧠 O que é DARKAI?
 
 > **📖 Pra quem é:** você que nunca ouviu essa palavra.

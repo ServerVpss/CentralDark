@@ -1,3 +1,10 @@
+---
+title: "PROMPT UNIVERSAL"
+date: 2026-07-02
+tags: ["consciencia"]
+updated: 2026-07-02
+---
+
 # 🎓 PROMPT UNIVERSAL — Ensinar qualquer IA a operar no CentralDark
 
 > **Como usar:** copia TUDO abaixo da linha `===COMEÇO===` até `===FIM===` e cola no system prompt / instrução inicial / `.cursorrules` / `CLAUDE.md` da IA que você quer ensinar. Funciona pra Claude, GPT, Gemini, Cursor, Aider, Cline, Continue, bots Telegram, etc.
