@@ -1,0 +1,1 @@
+FILE:/dev-server/supabase/functions/plugin-release/index.ts
