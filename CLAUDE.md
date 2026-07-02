@@ -113,26 +113,6 @@ Se você é uma IA abrindo este repositório pela primeira vez:
 
 ---
 
-## 8.1. Padrão de Módulos — Fonte Única por Módulo (02/07/2026)
-
-**Regra inviolável:** cada funcionalidade grande vira UM módulo em `apps/modulos/<nome>/`. Nada duplicado em outros paths.
-
-| Módulo | Path oficial ÚNICO | Duplicatas a NÃO recriar |
-|--------|-------------------|--------------------------|
-| **Hub** (painel de segurança + orquestração) | `apps/modulos/hub/` | ~~`apps/hub/`~~ ~~`src/apps/hub/`~~ (removidos em 02/07/2026) |
-| **MCP** (servidor cognitivo) | `apps/modulos/mcp/` | — |
-| **TelePainel** (frontend admin) | `apps/modulos/telepainel/` + `src/` raiz | — |
-| **Bot Telegram** (@srver1bot) | `apps/bot-telegram/` | — |
-| **Graph Panel** | `apps/modulos/graph-panel/` | — |
-
-**Se você (IA) for criar algo relacionado a um módulo existente, edite dentro do path oficial. NUNCA crie `apps/<nome>/` fora de `modulos/`, nem `src/apps/<nome>/`.**
-
-Migrations SQL, edge functions, docs específicas do módulo ficam dentro do próprio módulo (`apps/modulos/<nome>/db/`, `apps/modulos/<nome>/docs/`, etc).
-
----
-
-
-
 ## 9. Áreas Protegidas — Trava Obrigatória
 
 **Estas áreas foram consolidadas e testadas. Nenhuma IA pode modificá-las sem:**
