@@ -280,6 +280,8 @@ async function refresh() {
     renderEvents(data);
     renderAiSuggestions(data);
     await renderLive(data);
+    renderMcpHealth().catch(e => console.warn('[mcpHealth]', e));
+    renderGrafoVivo().catch(e => console.warn('[grafoVivo]', e));
   } catch (err) {
     setGlobal(false, 'Erro no painel', 'Não consegui carregar painel-data.json');
     $('liveStatus').innerHTML =
