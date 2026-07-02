@@ -19,8 +19,8 @@ const ENDPOINTS = [
   { name: 'MCP health', url: 'https://mcp.centralldark.com/health', bot: 'grok' },
   { name: 'MCP status', url: 'https://mcp.centralldark.com/status.json', bot: 'grok' },
   { name: 'MCP tools', url: 'https://mcp.centralldark.com/tools.json', bot: 'codex' },
-  { name: 'Install status', url: 'https://install.centralldark.com/status.json', bot: 'lovable' },
-  { name: 'Painel', url: 'https://status.centralldark.com/', bot: 'lovable' },
+  { name: 'Install status', url: 'https://install.centralldark.com/status.json', bot: 'claude' },
+  { name: 'Painel', url: 'https://status.centralldark.com/', bot: 'claude' },
   { name: 'API', url: 'https://api.centralldark.com/health', bot: 'codex' },
 ];
 
@@ -85,7 +85,7 @@ function ensureLabels() {
     ['p3', 'FFFF00', 'Baixa'],
     ['assign:codex', '5319E7', 'Bot responsável: Codex'],
     ['assign:supabase-bot', '3ECF8E', 'Bot responsável: Supabase'],
-    ['assign:lovable', 'FF80B0', 'Bot responsável: Lovable'],
+    ['assign:claude', 'FF80B0', 'Bot responsável: Claude'],
     ['assign:grok', '1F6FEB', 'Bot responsável: Grok'],
     ['assign:chatgpt', '10A37F', 'Bot responsável: ChatGPT'],
     ['stale', '6E6E6E', 'Passou do TTL'],

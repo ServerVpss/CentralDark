@@ -88,8 +88,8 @@ async function api(req, res, pathname) {
   if (pathname === "/api/run") {
     if (req.method !== "POST") return json(res, 405, { error: "Use POST para iniciar um run." });
     const url = new URL(req.url, `http://${req.headers.host}`);
-    const mode = url.searchParams.get("mode") === "graphifyy" ? "graphifyy" : "lovable";
-    const script = mode === "graphifyy" ? "pipeline-graphifyy.sh" : "pipeline-lovable.py";
+    const mode = url.searchParams.get("mode") === "graphifyy" ? "graphifyy" : "vps";
+    const script = mode === "graphifyy" ? "pipeline-graphifyy.sh" : "pipeline-vps.py";
     const command = mode === "graphifyy" ? "bash" : "python3";
     const child = spawn(command, [join(SCRIPTS_DIR, script)], { cwd: ROOT, env: process.env, detached: true, stdio: ["ignore", "ignore", "ignore"] });
     child.unref();
