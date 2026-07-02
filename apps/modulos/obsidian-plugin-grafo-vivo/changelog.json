@@ -1,9 +1,10 @@
 {
+  "0.4.3": "🎨 v0.4.3 — Adaptador do novo schema + fim do erro do filter\n- Aceita o formato atual do graph-data.json (type/group/from/to/weight) além do antigo (category/source/target/ativa)\n- Mapeamento automático de type→category (cores voltam: bot verde, MCP azul, edge roxo, etc.)\n- Filtro blindado: nunca mais crasha com 'Cannot read properties of undefined (reading filter)'\n- Partículas animando em TODAS as arestas (mínimo 2 mesmo sem ativa=true) — efeito Tony Stark garantido\n- Arestas de peso ≥ 3 marcadas como ativas (verde brilhante + partículas rápidas)",
+  "0.4.2": "🛠️ v0.4.2 — Fix do reload travado\n- Recarregamento do plugin agora é deferido (não trava mais no 'Recarregando plugin...')\n- Força reload do manifest.json do disco antes de reabilitar\n- Notice de confirmação após reload bem-sucedido\n- Se falhar, avisa pra reiniciar o Obsidian manualmente",
   "0.4.1": "✨ v0.4.1 — Teste do fluxo completo de update\n- Bump de versão só pra você ver rodando: notificação de update, modal de changelog no boot, botão \"Atualizar agora\" / \"Depois\", download com verificação SHA-256 e log de diagnóstico.\n- Nenhuma mudança funcional além da versão — é o ensaio geral do sistema de auto-update.\n",
   "0.4.0": "🚀 v0.4.0\n- Logs de diagnóstico persistentes (checagem, download, hash, aplicar)\n- Painel de status nas configs (versão local/remota, últimas datas, sucesso/falha)\n- Modal de changelog abre no boot quando há update pendente\n- Toast com botão \"Ver detalhes do erro\"\n- Verificação SHA-256 obrigatória dos arquivos baixados\n- Botão Rollback no painel\n",
   "0.3.0": "Modal de changelog + verificação de integridade SHA-256 + rollback.",
   "0.2.1": "Auto-update via edge function segura.",
   "0.2.0": "Auto-update inicial via GitHub raw.",
-  "0.1.0": "Versão inicial: grafo vivo do CentralDark.",
-  "0.4.2": "🛠️ v0.4.2 — Fix do reload travado\n- Recarregamento do plugin agora é deferido (não trava mais no 'Recarregando plugin...')\n- Força reload do manifest.json do disco antes de reabilitar\n- Notice de confirmação após reload bem-sucedido\n- Se falhar, avisa pra reiniciar o Obsidian manualmente"
+  "0.1.0": "Versão inicial: grafo vivo do CentralDark."
 }
