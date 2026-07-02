@@ -1,4 +1,5 @@
 {
+  "0.4.1": "✨ v0.4.1 — Teste do fluxo completo de update\n- Bump de versão só pra você ver rodando: notificação de update, modal de changelog no boot, botão \"Atualizar agora\" / \"Depois\", download com verificação SHA-256 e log de diagnóstico.\n- Nenhuma mudança funcional além da versão — é o ensaio geral do sistema de auto-update.\n",
   "0.4.0": "🚀 v0.4.0\n- Logs de diagnóstico persistentes (checagem, download, hash, aplicar)\n- Painel de status nas configs (versão local/remota, últimas datas, sucesso/falha)\n- Modal de changelog abre no boot quando há update pendente\n- Toast com botão \"Ver detalhes do erro\"\n- Verificação SHA-256 obrigatória dos arquivos baixados\n- Botão Rollback no painel\n",
   "0.3.0": "Modal de changelog + verificação de integridade SHA-256 + rollback.",
   "0.2.1": "Auto-update via edge function segura.",
