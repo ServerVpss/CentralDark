@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-02T16:38:10.428Z",
-  "updatedAtBR": "02/07/2026, 13:38:10 BRT",
+  "updatedAt": "2026-07-02T16:39:55.119Z",
+  "updatedAtBR": "02/07/2026, 13:39:55 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "docs(pendencias): #14 proxy 2 modos (terminal+extensao) + #15 notificacao MCP mono",
+    "lastCommit": "Merge remoto origin/main e 16 processos PM2 renomeados para padrao CentralDark-*",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -582,6 +582,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-02T16:39:55.119Z",
+      "titulo": "Merge GitHub + Renomeação PM2 aplicada",
+      "detalhe": "Merge remoto origin/main e 16 processos PM2 renomeados para padrao CentralDark-*",
+      "area": "Infra/VPS",
+      "sha": "3b985a1",
+      "actor": "Lovable-IA"
+    },
     {
       "time": "2026-07-02T15:34:58.809Z",
       "title": "Painel \"Consciência Viva\" criado — feed ao vivo dos agentes em /telepainel/consciencia",
@@ -1233,6 +1241,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-02T16:39:55.119Z",
+      "ia": "@Lovable-IA",
+      "action": "📌 Merge GitHub + Renomeação PM2 aplicada (3b985a1)",
+      "area": "Infra/VPS",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-06-30T14:43:49.875Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ff0bae7586f0bbb6c0d3912e6147da5ab8f9e803 (ff0bae7)",
@@ -1572,13 +1587,6 @@
       "time": "2026-06-29T13:44:29.490Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · bb2be2a0e2e405b2ac7725069b880988f0afc6d3 (bb2be2a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T13:34:51.252Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 658ad344ee8b937e19bb6a3958d2cbf63ad5051c (658ad34)",
       "area": "Repositório",
       "status": "sucesso"
     }
