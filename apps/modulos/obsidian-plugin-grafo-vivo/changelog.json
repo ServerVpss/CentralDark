@@ -1,0 +1,7 @@
+{
+  "0.4.0": "🚀 v0.4.0\n- Logs de diagnóstico persistentes (checagem, download, hash, aplicar)\n- Painel de status nas configs (versão local/remota, últimas datas, sucesso/falha)\n- Modal de changelog abre no boot quando há update pendente\n- Toast com botão \"Ver detalhes do erro\"\n- Verificação SHA-256 obrigatória dos arquivos baixados\n- Botão Rollback no painel\n",
+  "0.3.0": "Modal de changelog + verificação de integridade SHA-256 + rollback.",
+  "0.2.1": "Auto-update via edge function segura.",
+  "0.2.0": "Auto-update inicial via GitHub raw.",
+  "0.1.0": "Versão inicial: grafo vivo do CentralDark."
+}
