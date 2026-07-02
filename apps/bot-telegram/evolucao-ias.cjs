@@ -657,14 +657,17 @@ async function responderMensagem(iaId, iaAlvoId, estado) {
 
   console.log(`[evolucao-ias] ${personalidade.nome} vai responder ${alvo.nome}`);
 
-  const promptResposta = `A IA ${alvo.nome} (${alvo.emoji}) postou a seguinte mensagem no grupo:
+  const contextoReal = contextoCentralDark.montarContexto && contextoCentralDark.montarContexto();
+  const promptResposta = `═══ CONTEXTO REAL DO CENTRALDARK AGORA ═══
+${contextoReal || '(sem contexto disponível)'}
+═══════════════════════════════════════════
+
+A IA ${alvo.nome} (${alvo.emoji}) postou no grupo:
 
 "${ultimaMsg.topico}"
 
-Reaja a essa mensagem. Você pode concordar, discordar, complementar ou questionar.
-Seja autêntica com sua personalidade.
-
-Importante: não apenas repita o que foi dito — adicione valor à conversa.`;
+Reaja com sua personalidade. Ancorada no contexto real acima.
+NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela ignorou.`;
 
   let texto;
   try {
