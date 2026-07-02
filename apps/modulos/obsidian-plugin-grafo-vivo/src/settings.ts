@@ -15,13 +15,18 @@ export interface GrafoVivoSettings {
 }
 
 export const SETTINGS_PADRAO: GrafoVivoSettings = {
-  urlGrafo: "https://status.centralldark.com/painel-data.json",
+  urlGrafo: "https://status.centralldark.com/graph-data.json",
   intervaloSegundos: 30,
   abrirNotaAoClicar: true,
   autoUpdateAtivo: true,
   autoUpdateBaseUrl: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/plugin-release",
   autoUpdateIntervaloMinutos: 60,
 };
+
+// URLs antigas que precisam ser migradas automaticamente pra graph-data.json.
+export const URLS_DEPRECIADAS = [
+  "https://status.centralldark.com/painel-data.json",
+];
 
 export class GrafoVivoSettingTab extends PluginSettingTab {
   private unsubStatus: (() => void) | null = null;
