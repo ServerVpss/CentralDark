@@ -69,7 +69,7 @@ export const eliteGatewayTools = [
             try {
                 const out = execSync("pm2 jlist 2>/dev/null", { encoding: "utf8", timeout: 5000 });
                 const list = JSON.parse(out);
-                const proc = list.find((p) => p.name === "elite-http-gateway");
+                const proc = list.find((p) => p.name === "CentralDark-EliteHTTP");
                 if (proc) {
                     pm2Status = proc.pm2_env?.status ?? "desconhecido";
                 }
