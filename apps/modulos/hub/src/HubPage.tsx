@@ -672,7 +672,9 @@ export default function HubPage() {
           ))}
         </div>
 
-        {loading ? (
+        {tab === 'servicos' ? (
+          <Section />
+        ) : loading ? (
           <div className="flex items-center justify-center py-20 text-muted-foreground">
             <Activity className="h-5 w-5 animate-spin mr-2" /> Carregando...
           </div>
