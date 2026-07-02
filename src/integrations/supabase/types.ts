@@ -557,6 +557,60 @@ export type Database = {
           },
         ]
       }
+      graph_runs: {
+        Row: {
+          audit_md: string | null
+          backend: string | null
+          communities_count: number
+          created_at: string
+          duration_seconds: number | null
+          edges_count: number
+          graph_json: Json
+          id: string
+          model: string | null
+          nodes_count: number
+          report_md: string | null
+          source: string
+          stats: Json
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          audit_md?: string | null
+          backend?: string | null
+          communities_count?: number
+          created_at?: string
+          duration_seconds?: number | null
+          edges_count?: number
+          graph_json: Json
+          id?: string
+          model?: string | null
+          nodes_count?: number
+          report_md?: string | null
+          source?: string
+          stats?: Json
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          audit_md?: string | null
+          backend?: string | null
+          communities_count?: number
+          created_at?: string
+          duration_seconds?: number | null
+          edges_count?: number
+          graph_json?: Json
+          id?: string
+          model?: string | null
+          nodes_count?: number
+          report_md?: string | null
+          source?: string
+          stats?: Json
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       menu_tips: {
         Row: {
           content: string
