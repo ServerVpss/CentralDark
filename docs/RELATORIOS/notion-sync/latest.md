@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-06-30T14:43:39.882Z
+# 🧠 Notion Sync — 2026-07-02T22:18:37.976Z
 
-- **Commit fonte:** `ff0bae7586f0bbb6c0d3912e6147da5ab8f9e803`
+- **Commit fonte:** `9abe3d6a263996f346a28867ce234d2b075a74c3`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 360 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 20 | 0 | 20 | 0 | 0 |
 | aprendizados | 265 | 0 | 265 | 0 | 0 |
-| estrutura | 70 | 0 | 70 | 0 | 0 |
+| estrutura | 71 | 1 | 70 | 0 | 0 |
 
 ## Operações
 
@@ -357,6 +357,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/README.md |
+| estrutura | criado | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
