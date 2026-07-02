@@ -44,21 +44,17 @@ Deno.serve(async (req) => {
     const token = Deno.env.get("GITHUB_TOKEN");
     if (!token) return json({ error: "GITHUB_TOKEN não configurado" }, 500);
 
-    const ghUrl = `https://api.github.com/repos/${REPO}/contents/${BASE_PATH}/${arquivo}?ref=${BRANCH}`;
-    const resp = await fetch(ghUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github.raw",
-        "User-Agent": "centraldark-plugin-release",
-      },
-    });
-
-    if (!resp.ok) {
-      const txt = await resp.text();
-      return json({ error: `GitHub ${resp.status}`, detalhes: txt.slice(0, 500) }, resp.status);
+    if (arquivo === "checksums.json") {
+      const checksums: Record<string, string> = {};
+      for (const nome of ["main.js", "manifest.json", "styles.css"]) {
+        const bruto = await buscarArquivoGithub(token, nome);
+        checksums[nome] = await sha256(aplicarPatchRelease(nome, bruto));
+      }
+      return json(checksums);
     }
 
-    const conteudo = await resp.text();
+    const bruto = await buscarArquivoGithub(token, arquivo);
+    const conteudo = aplicarPatchRelease(arquivo, bruto);
     return new Response(conteudo, {
       status: 200,
       headers: {
@@ -71,6 +67,58 @@ Deno.serve(async (req) => {
     return json({ error: String(e) }, 500);
   }
 });
+
+async function buscarArquivoGithub(token: string, arquivo: string) {
+  const ghUrl = `https://api.github.com/repos/${REPO}/contents/${BASE_PATH}/${arquivo}?ref=${BRANCH}`;
+  const resp = await fetch(ghUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github.raw",
+      "User-Agent": "centraldark-plugin-release",
+    },
+  });
+
+  if (!resp.ok) {
+    const txt = await resp.text();
+    throw new Error(`GitHub ${resp.status}: ${txt.slice(0, 500)}`);
+  }
+
+  return await resp.text();
+}
+
+function aplicarPatchRelease(arquivo: string, conteudo: string) {
+  if (arquivo === "manifest.json") {
+    const manifest = JSON.parse(conteudo);
+    manifest.version = "0.4.5";
+    return JSON.stringify(manifest, null, 2) + "\n";
+  }
+
+  if (arquivo === "changelog.json") {
+    const changelog = JSON.parse(conteudo);
+    return JSON.stringify({
+      "0.4.5": "🛠️ v0.4.5 — Fix real do grafo no Obsidian\n- Corrige o envio interno para o force-graph: agora o plugin entrega links em vez de edges\n- Mantém compatibilidade com graph-data.json usando edges, links, source/target e from/to\n- Blindagem extra contra mutação interna do force-graph\n- Resolve o erro Cannot read properties of undefined (reading 'filter') na renderização",
+      ...changelog,
+    }, null, 2) + "\n";
+  }
+
+  if (arquivo === "main.js") {
+    const alvo = "this.grafo.graphData(i),this.ajustarTamanho()";
+    const fix = "this.grafo.graphData({nodes:i.nodes.map(o=>({...o})),links:i.edges.map(o=>({...o}))}),this.ajustarTamanho()";
+    if (conteudo.includes(fix)) return conteudo;
+    if (!conteudo.includes(alvo)) {
+      throw new Error("Patch 0.4.5 não aplicado: ponto graphData não encontrado");
+    }
+    return conteudo.replace(alvo, fix);
+  }
+
+  return conteudo;
+}
+
+async function sha256(texto: string) {
+  const bytes = new TextEncoder().encode(texto);
+  const hash = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
 
 function json(obj: unknown, status = 200) {
   return new Response(JSON.stringify(obj), {
