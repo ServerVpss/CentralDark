@@ -4,8 +4,8 @@ import { z } from "zod";
 import { execSync } from "node:child_process";
 const GATEWAY_URL = "http://localhost:8080";
 const GATEWAY_TOKEN = "SEGREDO_ELITE_123";
-const LOG_OUT = "/root/.pm2/logs/elite-http-gateway-out.log";
-const LOG_ERR = "/root/.pm2/logs/elite-http-gateway-error.log";
+const LOG_OUT = "/root/.pm2/logs/CentralDark-EliteHTTP-out.log";
+const LOG_ERR = "/root/.pm2/logs/CentralDark-EliteHTTP-error.log";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
