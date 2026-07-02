@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-02T16:39:55.119Z",
-  "updatedAtBR": "02/07/2026, 13:39:55 BRT",
+  "updatedAt": "2026-07-02T16:44:00.713Z",
+  "updatedAtBR": "02/07/2026, 13:44:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Merge remoto origin/main e 16 processos PM2 renomeados para padrao CentralDark-*",
+    "lastCommit": "Root do painel atualizado de apps/projeto-dashboard para apps/modulos/status; Caddy recarregado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -582,6 +582,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-02T16:44:00.713Z",
+      "titulo": "Fix Caddy: status.centralldark.com volta a responder 200",
+      "detalhe": "Root do painel atualizado de apps/projeto-dashboard para apps/modulos/status; Caddy recarregado",
+      "area": "Infra/VPS",
+      "sha": "d2a7377",
+      "actor": "Lovable-IA"
+    },
     {
       "time": "2026-07-02T16:39:55.119Z",
       "titulo": "Merge GitHub + Renomeação PM2 aplicada",
@@ -1241,6 +1249,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-02T16:44:00.713Z",
+      "ia": "@Lovable-IA",
+      "action": "📌 Fix Caddy: status.centralldark.com volta a responder 200 (d2a7377)",
+      "area": "Infra/VPS",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-02T16:39:55.119Z",
       "ia": "@Lovable-IA",
       "action": "📌 Merge GitHub + Renomeação PM2 aplicada (3b985a1)",
@@ -1580,13 +1595,6 @@
       "time": "2026-06-29T14:11:23.941Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e2d9a33fd8cc67826c376e4084f2c27fd89d271b (e2d9a33)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T13:44:29.490Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bb2be2a0e2e405b2ac7725069b880988f0afc6d3 (bb2be2a)",
       "area": "Repositório",
       "status": "sucesso"
     }
