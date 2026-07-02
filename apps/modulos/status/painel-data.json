@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-02T22:02:01.816Z",
-  "updatedAtBR": "02/07/2026, 13:44:00 BRT",
+  "updatedAt": "2026-07-02T23:45:07.091Z",
+  "updatedAtBR": "02/07/2026, 20:45:07 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Root do painel atualizado de apps/projeto-dashboard para apps/modulos/status; Caddy recarregado",
+    "lastCommit": "Corrigiu pipelines quebrados",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -584,6 +584,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-02T23:45:07.091Z",
+      "titulo": "Push na main · 567c74e93d67b07d643678ce7f444a915b545575",
+      "detalhe": "Corrigiu pipelines quebrados",
+      "area": "Repositório",
+      "sha": "567c74e",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-02T16:44:00.713Z",
       "titulo": "Fix Caddy: status.centralldark.com volta a responder 200",
@@ -1251,6 +1259,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-02T23:45:07.091Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 567c74e93d67b07d643678ce7f444a915b545575 (567c74e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-02T16:44:00.713Z",
       "ia": "@Lovable-IA",
       "action": "📌 Fix Caddy: status.centralldark.com volta a responder 200 (d2a7377)",
@@ -1590,13 +1605,6 @@
       "time": "2026-06-29T14:32:14.350Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d3c5768b8be7ff88580e568ba0f067e138279e6f (d3c5768)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T14:11:23.941Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e2d9a33fd8cc67826c376e4084f2c27fd89d271b (e2d9a33)",
       "area": "Repositório",
       "status": "sucesso"
     }
