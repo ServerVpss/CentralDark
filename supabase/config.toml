@@ -83,3 +83,6 @@ verify_jwt = false
 
 
 
+
+[functions.plugin-release]
+verify_jwt = false
