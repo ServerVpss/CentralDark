@@ -40,7 +40,7 @@ Quando uma fase avançar, a IA deve atualizar `painel-data.json` no GitHub. Depo
 Este painel pode ser servido estaticamente pelo Caddy depois, sem PM2:
 
 ```txt
-Caddy -> CentralDark/apps/projeto-dashboard
+Caddy -> CentralDark/apps/modulos/status
 ```
 
 Não alterar Caddy sem confirmação explícita do usuário.

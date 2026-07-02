@@ -4,7 +4,7 @@ import { z } from "zod";
 import { readFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { notifyTelegramPainel } from "./telegram-notify.js";
-const PAINEL_PATH = "/root/CentralDark/apps/projeto-dashboard/painel-data.json";
+const PAINEL_PATH = "/root/CentralDark/apps/modulos/status/painel-data.json";
 const REPO_ROOT = "/root/CentralDark";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
@@ -161,7 +161,7 @@ export const painelTools = [
             let pushed = false;
             let gitError = "";
             try {
-                execSync(`git -C ${REPO_ROOT} add apps/projeto-dashboard/painel-data.json`, {
+                execSync(`git -C ${REPO_ROOT} add apps/modulos/status/painel-data.json`, {
                     stdio: "pipe",
                     timeout: 15000,
                 });

@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 
-const FILE = 'CentralDark/apps/projeto-dashboard/painel-data.json';
+const FILE = 'CentralDark/apps/modulos/status/painel-data.json';
 const OUT_DIR = 'docs/RELATORIOS/painel-vivo-validacao';
 
 mkdirSync(OUT_DIR, { recursive: true });
