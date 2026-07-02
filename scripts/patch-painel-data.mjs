@@ -3,7 +3,7 @@
 // Adiciona Lotes 4–10, agentes novos, eventos, ajusta maturity/milestones/nextSteps.
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const FILE = 'CentralDark/apps/projeto-dashboard/painel-data.json';
+const FILE = 'CentralDark/apps/modulos/status/painel-data.json';
 const data = JSON.parse(readFileSync(FILE, 'utf8'));
 const NOW = new Date().toISOString();
 
