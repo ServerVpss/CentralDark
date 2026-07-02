@@ -682,4 +682,110 @@ refresh = async function(){
 document.addEventListener('change',(e)=>{
   if(e.target&&(e.target.id==='timelineFilterIa'||e.target.id==='timelineFilterStatus')) applyTimelineFilter();
 });
+
+/* ============= MCP HEALTH (WATCHDOG) ============= */
+async function renderMcpHealth() {
+  try {
+    const res = await fetch('./mcp-health.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const h = await res.json();
+    const tag = document.getElementById('mcpHealthTag');
+    const lastStatus = h?.lastCheck?.status || 'unknown';
+    if (lastStatus === 'ok') {
+      tag.textContent = '🟢 estável';
+      tag.style.background = 'rgba(16,185,129,.15)';
+      tag.style.color = '#10b981';
+    } else if (lastStatus === 'pending_install') {
+      tag.textContent = '🟡 watchdog não instalado';
+      tag.style.background = 'rgba(245,158,11,.15)';
+      tag.style.color = '#f59e0b';
+    } else {
+      tag.textContent = '🔴 instável';
+      tag.style.background = 'rgba(239,68,68,.15)';
+      tag.style.color = '#ef4444';
+    }
+    document.getElementById('mhUptime').textContent = (h?.last24h?.uptimePct ?? '—') + '%';
+    document.getElementById('mhChecks').textContent = h?.last24h?.checks ?? '—';
+    document.getElementById('mhFails').textContent = h?.last24h?.failures ?? '—';
+    document.getElementById('mhRestarts').textContent = h?.last24h?.autoRestarts ?? '—';
+    document.getElementById('mhLatency').textContent = (h?.lastCheck?.latencyMs ?? '—') + ' ms';
+    document.getElementById('mhLastFail').textContent = h?.lastFailureAt && h.lastFailureAt !== 'null'
+      ? formatDate(h.lastFailureAt) : '—';
+  } catch (e) {
+    const tag = document.getElementById('mcpHealthTag');
+    if (tag) { tag.textContent = 'sem dados'; tag.style.color = '#6b7280'; }
+  }
+}
+
+/* ============= GRAFO VIVO (Cytoscape via CDN) ============= */
+let __cy = null;
+async function renderGrafoVivo() {
+  const container = document.getElementById('grafoVivoContainer');
+  const loading = document.getElementById('grafoVivoLoading');
+  const tag = document.getElementById('grafoTag');
+  if (!container) return;
+
+  // Carrega Cytoscape sob demanda (CDN)
+  if (typeof cytoscape === 'undefined') {
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js';
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    }).catch(() => { tag.textContent = 'lib offline'; return; });
+  }
+
+  // Puxa dados
+  let data;
+  try {
+    const res = await fetch('./graph-data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    data = await res.json();
+  } catch (e) {
+    if (loading) loading.textContent = '⚠️ graph-data.json ainda não gerado';
+    tag.textContent = 'sem dados';
+    return;
+  }
+
+  if (loading) loading.style.display = 'none';
+  tag.textContent = `${data.nodes?.length ?? 0} nós · ${data.edges?.length ?? 0} arestas`;
+
+  const colorByType = {
+    orquestrador: '#10b981', bot: '#f59e0b', gateway: '#8b5cf6',
+    servico: '#3b82f6', storage: '#6b7280', monitoramento: '#ec4899',
+    ia: '#10b981', default: '#94a3b8'
+  };
+
+  const elements = [
+    ...(data.nodes || []).map(n => ({
+      data: { id: n.id, label: n.label || n.id, type: n.type || 'default' }
+    })),
+    ...(data.edges || []).map((e, i) => ({
+      data: { id: 'e' + i, source: e.from, target: e.to, label: e.label || '', weight: e.weight || 1 }
+    }))
+  ];
+
+  if (__cy) { __cy.destroy(); __cy = null; }
+  __cy = cytoscape({
+    container, elements,
+    style: [
+      { selector: 'node', style: {
+        'background-color': ele => colorByType[ele.data('type')] || colorByType.default,
+        'label': 'data(label)', 'color': '#e6e9ef', 'font-size': 10,
+        'text-valign': 'bottom', 'text-margin-y': 6, 'text-outline-color': '#0a0d12',
+        'text-outline-width': 2, 'width': 20, 'height': 20, 'border-width': 1,
+        'border-color': '#1f2937'
+      }},
+      { selector: 'edge', style: {
+        'width': 'mapData(weight, 1, 10, 1, 4)', 'line-color': '#374151',
+        'curve-style': 'bezier', 'target-arrow-shape': 'triangle',
+        'target-arrow-color': '#374151', 'opacity': 0.55
+      }},
+      { selector: 'node:selected', style: { 'border-color': '#10b981', 'border-width': 3 }}
+    ],
+    layout: { name: 'cose', animate: true, idealEdgeLength: 90, nodeRepulsion: 8000, padding: 30 },
+    wheelSensitivity: 0.2
+  });
+}
+
 refresh();
