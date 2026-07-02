@@ -10556,11 +10556,12 @@ setInterval(() => {
 
 // =============== STRUCTURED LOGGER ===============
 function logCmd(level: 'INFO' | 'WARN' | 'ERROR', tag: string, data: Record<string, unknown>) {
-  const entry = { ts: new Date().toISOString(), level, tag, ...data };
+  const entry = { ts: new Date().toISOString(), level, tag: `[TELEPAINEL] ${tag}`, ...data };
   if (level === 'ERROR') console.error(JSON.stringify(entry));
   else if (level === 'WARN') console.warn(JSON.stringify(entry));
   else console.log(JSON.stringify(entry));
 }
+
 
 // =============== MAIN HANDLER ===============
 Deno.serve(async (req) => {
