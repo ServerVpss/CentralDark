@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Atualizador do Mega Painel (status.centralldark.com)
 // Recebe variáveis de ambiente do workflow `painel-auto-update.yml`
-// e registra o evento em apps/projeto-dashboard/painel-data.json.
+// e registra o evento em apps/modulos/status/painel-data.json.
 //
 // Variáveis lidas:
 //   PAINEL_EVENTO          — título curto do evento (ex.: "Push na main · <sha>")

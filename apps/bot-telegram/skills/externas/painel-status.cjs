@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const PAINEL_PATH = path.resolve('/root/CentralDark/apps/projeto-dashboard/painel-data.json');
+const PAINEL_PATH = path.resolve('/root/CentralDark/apps/modulos/status/painel-data.json');
 
 function lerPainel() {
   if (!fs.existsSync(PAINEL_PATH)) return null;

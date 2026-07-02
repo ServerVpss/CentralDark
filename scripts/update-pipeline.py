@@ -18,7 +18,7 @@ if not stage:
     print('Sem estágio — pulando atualização do painel')
     raise SystemExit(0)
 
-path = 'apps/projeto-dashboard/painel-data.json'
+path = 'apps/modulos/status/painel-data.json'
 with open(path) as f:
     data = json.load(f)
 

@@ -1,63 +1,71 @@
-# 🎯 Plano de Orquestração — Rodada Maestro
+# Plano: Grafo Vivo no Obsidian + Padronização VPS
 
-Você manda, eu orquestro tudo daqui (Lovable → GitHub → VPS → Cérebro Vivo). A #14 (Claude do seu PC) fica congelada por último, como você pediu.
+Três frentes, executadas em paralelo por sub-agentes.
 
----
+## 🧠 Frente 1 — Plugin Obsidian "CentralDark Live Graph"
 
-## 📋 Fila desta rodada
+Criar plugin próprio (não mexer no Juggl/Graph nativo, eles quebram a cada update do Obsidian). O plugin abre uma view lateral e renderiza o mesmo grafo que roda em `status.centralldark.com`, mas **dentro do Obsidian**, consumindo o mesmo `graph-data.json` da VPS.
 
-| Ordem | Pendência | O que faço |
-|---|---|---|
-| 1 | 🎨 **Padrão Visual pras IAs** | Publicar o formato "Status 4-Point + placar visual" que você curtiu no cérebro vivo, pra Claude/GPT/Gemini responderem no mesmo padrão |
-| 2 | 🔍 **Auditoria `/root/CentralDark/hub` + `/mcp`** | Ler o estado real na VPS, mapear o que falta no hub, checar processos PM2, portas, logs |
-| 3 | 🤖 **Robôs Telegram conversando** | Verificar bots ativos e disparar uma conversa curta entre eles sobre a CentralDark (você acompanha no chat) |
-| 4 | ✅ **#13 — Faxina numeração CONSCIENCIA** | Renumerar docs desalinhados, atualizar índice |
-| 5 | ✅ **#15 — Notif Telegram uso do MCP** | Hook no MCP → bot manda ping quando qualquer IA usar uma tool |
-| 6 | ✅ **#16 — Sync-loop Drive (temp)** | Deixar rodando o loop temporário até o Hub assumir |
-| 7 | ✅ **#17 — Radar Visual IA no Obsidian Graph** | Nó visual mostrando qual IA tá ativa no grafo |
-| 8 | 🏗️ **Terminar o Hub (`apps/hub`)** | Fechar o que faltava: Fase 1 (Approval Service + Telegram), UI de conectores/políticas, deploy |
-| 9 | 📊 **Relatório final consolidado** | Placar visual único, mostrando os 4 pontos alinhados |
+**Local no repo:** `apps/modulos/obsidian-plugin-grafo-vivo/`
 
----
+Arquivos:
+- `manifest.json` — id `centraldark-grafo-vivo`, versão 0.1.0
+- `main.ts` — registra comando "Abrir Grafo Vivo", cria `ItemView` custom
+- `view.ts` — canvas com `force-graph` (mesma lib do site), fetch em `https://status.centralldark.com/graph-data.json` a cada 30s, WebSocket futuro
+- `styles.css` — segue tema do Obsidian (usa vars `--background-primary`, `--text-normal`)
+- `esbuild.config.mjs` + `package.json` — build padrão de plugin Obsidian
+- `README.md` — instalação manual: copiar pasta pra `.obsidian/plugins/centraldark-grafo-vivo/`
 
-## 🧠 Detalhe técnico (pra quem for auditar depois)
+**Funcionalidades v1:**
+- Nós clicáveis abrem a nota correspondente no Obsidian (se o node tiver `obsidian_path`)
+- Cores por categoria (bots verde, MCP azul, edge functions roxo, etc)
+- Partículas animadas nas arestas ativas (chamadas em tempo real)
+- Filtro por módulo no topo da view
+- Botão "Sincronizar com Graph nativo" — exporta os nodes como notas vazias em `docs/CONSCIENCIA/00-MAPA/nodes/` pra aparecer no graph global do Obsidian também
 
-**1. Padrão Visual das IAs**
-- Criar `docs/CONSCIENCIA/22-PADRAO-STATUS-VISUAL.md` com o template do card `┌─ SINCRONIA 4-POINT ─┐` + 🟢🟡🔴 + placar `▓░`
-- Atualizar `.claude/prompts/reload-centraldark-v3.md` referenciando o novo padrão
-- Commit no repo → sync automático VPS → todas as IAs conectadas passam a ver
+**v2 (depois):** WebSocket direto no MCP pra ver as IAs se movimentando em tempo real (cada tool call vira uma partícula viajando pela aresta).
 
-**2. Auditoria Hub + MCP na VPS**
-- `ls -la /root/CentralDark/hub /root/CentralDark/apps/mcp`
-- `pm2 list | grep -E "hub|mcp"` + `pm2 logs --lines 30`
-- `curl localhost:9100/health` (MCP) e porta do Hub
-- Cruzar com `apps/hub/db/migrations/*.sql` pra ver o que já foi aplicado no Supabase
+## 🛠️ Frente 2 — Auditoria PM2 + Padronização
 
-**3. Robôs Telegram**
-- Listar bots ativos (`hub-adm.cjs`, `panel.cjs`, `srver1bot`)
-- Confirmar webhooks e PM2 status
-- Disparar mensagem seed pra iniciar diálogo curto entre 2 bots sobre "estado da CentralDark"
+Sub-agente audita `pm2 status` da VPS e produz relatório:
 
-**4-7. Pendências #13/#15/#16/#17**
-- Cada uma vira sub-tarefa via `spawn_agent` (Swarm Mode) — auditor + executor + validador em paralelo
-- Handoff em `/tmp/swarm-<id>/`, limpeza obrigatória no final
+**Padrão de nome obrigatório:** `CentralDark-<Modulo>` (PascalCase, sem hífens dentro do módulo).
 
-**8. Terminar o Hub**
-- Verificar quais migrations rodaram (`001_hub_foundation`, `002_hub_pdp_pep`, `003_hub_approval_service`)
-- Completar UI React (`apps/modulos/hub/`) — grid de conectores lendo `hub.connectors`, tela de políticas, fila de aprovações
-- Deploy edge function do Approval + notificação Telegram
-- Popular seeds finais
+Renomeações prováveis (aplicar via `pm2 delete <id> && pm2 start ... --name`):
+- `elite-http-gateway` → `CentralDark-EliteHttpGateway`
+- `elite-ws-gateway` → `CentralDark-EliteWsGateway`
+- `elite-anthropic-proxy` → `CentralDark-EliteAnthropicProxy`
+- `graph-panel` → `CentralDark-GraphPanel`
+- `zentinel-health` → `CentralDark-Zentinel`
+- `MultiZap-Gateway` → `CentralDark-MultiZap`
+- `CloneDeck-CRM` → `CentralDark-CloneDeck`
 
-**9. Relatório**
-- Card no formato novo, mostrando VPS / GitHub / Cérebro / Hub todos 🟢
+**Regra do WhatsApp/MultiZap:** Se CPU < 5% e restarts < 10 nas últimas 24h → deixa online (usuário confirmou). Se estiver flappando → `pm2 stop` + registrar em `docs/PENDENCIAS.md` pra consolidar depois.
 
----
+**IDs PM2:** Não dá pra fixar ID (PM2 atribui sequencial), mas dá pra garantir ordem consistente via `ecosystem.config.js` único. Criar `/root/CentralDark/ecosystem.config.js` que declara todos os processos na ordem canônica → `pm2 delete all && pm2 start ecosystem.config.js && pm2 save`.
 
-## ⚠️ Regras que sigo automático
-- Sincronia 4-Point a cada etapa
-- `pm2 save` depois de qualquer mudança de estado
-- Sem tocar em áreas protegidas (bot-telegram, caddy, mcp/dist) sem te avisar
-- Terra Arrasada: limpo lixo temporário no final
-- Relatório sempre no padrão visual novo
+## 🗺️ Frente 3 — Graph-Panel como indexador global (as "ruas")
 
-**Confirma que posso executar nessa ordem?** Se quiser reordenar ou pular algum item, me fala agora.
+Analogia certeira: o `graph-panel` é o mapa de ruas. Toda IA (MCP tools, bots, edge functions) deve consultar ele antes de "sair pra rua" — economiza tokens porque não precisa varrer o repo inteiro.
+
+Executar:
+1. Auditar quais serviços JÁ consomem `graph-panel/output.json` (sub-agente faz `rg` no repo)
+2. Adicionar hook nos que não usam: MCP tools de leitura de arquivo, bots que buscam skills, edge functions que roteiam
+3. Cron na VPS: `graph-panel` reindexa a cada 10min (ou por webhook do GitHub em push)
+4. "Ruas novas" = arquivos novos → indexer detecta diff e atualiza `output.json` incremental
+5. Expor endpoint `https://graph.centralldark.com/query?node=xxx` pra IAs consultarem sem baixar o JSON inteiro
+
+## 📊 Ordem de execução
+
+1. Frente 2 (auditoria PM2) — sub-agente, roda em paralelo, output = relatório
+2. Frente 3 (auditoria graph-panel) — sub-agente, roda em paralelo, output = lista de integrações faltando
+3. Frente 1 (plugin Obsidian) — eu construo enquanto os sub-agentes rodam
+4. Consolidação: aplicar renomeações PM2 via `vps_run_once_script`, commitar plugin, atualizar `painel-data.json` e `CLAUDE.md` §9
+
+## ⚠️ Riscos
+
+- Renomear processos PM2 quebra qualquer script hardcoded com nome antigo → sub-agente faz `rg` antes pra listar refs
+- Plugin Obsidian precisa de CORS liberado em `status.centralldark.com/graph-data.json` — verificar Caddy
+- `graph-panel` reindex pesado pode travar VPS → rodar com `nice -n 19`
+
+Aprova executar as 3 frentes?

@@ -247,7 +247,7 @@ app.get("/mcp", (_req, res) => {
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
 // ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────
-const PAINEL_DATA_PATH = "/root/CentralDark/apps/projeto-dashboard/painel-data.json";
+const PAINEL_DATA_PATH = "/root/CentralDark/apps/modulos/status/painel-data.json";
 const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY || "segredo_obraFullAdmin";
 app.post("/api/telemetry-ingest", (req, res) => {
     const auth = req.headers["authorization"] ?? "";

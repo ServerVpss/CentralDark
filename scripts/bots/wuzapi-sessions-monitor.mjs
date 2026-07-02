@@ -4,7 +4,7 @@
  *
  * O que faz:
  *  1) SSH na VPS, consulta WuzAPI admin (/admin/users), sanitiza tudo;
- *  2) Atualiza CentralDark/apps/projeto-dashboard/wuzapi-sessions.json;
+ *  2) Atualiza CentralDark/apps/modulos/status/wuzapi-sessions.json;
  *  3) Detecta sessão desconectada / sem login / sem JID → abre/atualiza Issue
  *     com marcador <!-- bot:wuzapi-sessions --> (deduplica, nunca cria 2).
  *
@@ -23,7 +23,7 @@ import { findBotIssue, createIssue, updateIssue } from './lib/gh.mjs';
 
 
 const MARKER = '<!-- bot:wuzapi-sessions -->';
-const OUT_PATH = resolve('CentralDark/apps/projeto-dashboard/wuzapi-sessions.json');
+const OUT_PATH = resolve('CentralDark/apps/modulos/status/wuzapi-sessions.json');
 const HOST = process.env.VPS_HOST_LOVABLE;
 const USER = process.env.VPS_USER_LOVABLE || 'root';
 const KEY = process.env.SSH_KEY_PATH;
@@ -162,7 +162,7 @@ async function main() {
 }
 
 /* ============= alertas push sanitizados ============= */
-const STATE_PATH = resolve('CentralDark/apps/projeto-dashboard/wuzapi-sessions.state.json');
+const STATE_PATH = resolve('CentralDark/apps/modulos/status/wuzapi-sessions.state.json');
 
 function loadPrevState() {
   try { return JSON.parse(readFileSync(STATE_PATH, 'utf8')); } catch { return null; }

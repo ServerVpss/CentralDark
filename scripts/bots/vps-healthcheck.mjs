@@ -10,7 +10,7 @@ import { findBotIssue, createIssue, updateIssue, repo } from "./lib/gh.mjs";
 const MARKER = "<!-- bot:vps-healthcheck -->";
 const LABELS = ["auto", "revisao-humana", "assign:grok", "p2"];
 const SSH_TIMEOUT = 20; // segundos por comando
-const HISTORY_FILE = "CentralDark/apps/projeto-dashboard/healthcheck-history.json";
+const HISTORY_FILE = "CentralDark/apps/modulos/status/healthcheck-history.json";
 const HISTORY_DAYS = 30;
 
 

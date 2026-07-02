@@ -192,6 +192,48 @@
         <pre class="mcp-test-output" id="mcpTestOutput">Clique num botão acima pra consultar o MCP ou ler docs públicas. Nada é gravado.</pre>
       </section>
 
+      <section class="panel wide" id="mcpHealthPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Watchdog · atualizado a cada 1min</p>
+            <h2>🐕 MCP Health (24h)</h2>
+          </div>
+          <span class="tag" id="mcpHealthTag">carregando…</span>
+        </div>
+        <div class="mcp-health-grid" id="mcpHealthGrid">
+          <div class="mcp-health-tile"><span class="mh-label">Uptime</span><span class="mh-value" id="mhUptime">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Checks 24h</span><span class="mh-value" id="mhChecks">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Falhas 24h</span><span class="mh-value" id="mhFails">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Restarts auto</span><span class="mh-value" id="mhRestarts">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Último ping</span><span class="mh-value" id="mhLatency">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Última queda</span><span class="mh-value" id="mhLastFail">—</span></div>
+        </div>
+      </section>
+
+      <section class="panel wide" id="grafoVivoPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Mapa em tempo real · beta</p>
+            <h2>🕸️ Grafo Vivo — quem chama quem</h2>
+          </div>
+          <span class="tag" id="grafoTag">carregando…</span>
+        </div>
+        <div id="grafoVivoContainer" style="width:100%;height:520px;background:#0a0d12;border-radius:12px;position:relative;overflow:hidden;">
+          <div id="grafoVivoLoading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4a5568;font-size:14px;">
+            🔄 Carregando grafo…
+          </div>
+        </div>
+        <p class="hc-legend" style="margin-top:12px;">
+          <span style="color:#10b981;">●</span> IAs / agentes
+          <span style="color:#3b82f6;">●</span> Serviços
+          <span style="color:#f59e0b;">●</span> Bots
+          <span style="color:#8b5cf6;">●</span> Gateways
+          <span style="color:#6b7280;">●</span> Storage / infra
+        </p>
+      </section>
+
+
+
       <section class="panel wide">
         <div class="section-title">
           <div><p class="eyebrow">Time multi-IA</p><h2>🧠 Cards por IA</h2></div>
