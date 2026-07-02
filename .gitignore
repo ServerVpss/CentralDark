@@ -83,3 +83,14 @@ graphify-debug.log*
 
 # Graph-panel — snapshots de histórico são runtime, não versionar (02/07/2026)
 apps/modulos/graph-panel/data/history/*.json
+
+# Ecosystem PM2 gerado na VPS — contém segredos e paths absolutos (02/07/2026)
+ecosystem.config.js
+
+# Arquivos de estado runtime que vazam pro repo (02/07/2026)
+apps/bot-telegram/evolucao-state.json
+scripts/issues-agent/.next_run
+scripts/memory-linker/.next_run
+scripts/memory-linker/analyst-decision.json
+scripts/memory-linker/last-report.json
+scripts/sync-loop.sh
