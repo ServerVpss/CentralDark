@@ -1,29 +1,60 @@
-## Fechar o loop das notificações (usando o que já existe)
+# Conserto do Vigia Actions Vermelhos
 
-Você tá certo — Telegram `@srver1bot` já tá conectado como connector neste projeto e a VPS já tá acessível. Não precisa criar nada novo, só usar.
+## Diagnóstico da causa raiz
 
-### Passos
+O `vigia-actions-vermelhos.yml` tem 3 problemas encadeados que geram o enxame de bolinhas cinza e o "Waiting for #2695":
 
-1. **Salvar o chat_id do canal Status como secret**
-   `TELEGRAM_STATUS_CHANNEL_ID = -1003669176367` (MultiZap Status)
-   → assim qualquer edge function futura acessa direto, sem hardcode.
+1. **Gatilho amplo demais**: dispara em `workflow_run: workflows: ["*"] types: [completed]` — ou seja, toda vez que qualquer workflow termina, o vigia começa. Nos picos, isso é 20+ execuções por minuto.
+2. **Fila serial**: `concurrency: cancel-in-progress: false` — cada nova execução espera a anterior terminar. Somado ao volume, empilha dezenas de runs em "Waiting".
+3. **Runner dependente**: `runs-on: [self-hosted, Linux]` — se o runner da VPS cai, tudo empilha. Foi o que aconteceu antes.
 
-2. **Postar retroativo do plugin v0.4.4 no canal Status**
-   Uma mensagem curta via connector Telegram (`@srver1bot`) com o resumo da sprint — a mesma coisa que já foi pro seu privado, só que enxuta pro canal.
+Resultado prático: mesmo com o vigia "funcionando", ele polui o Actions com fila gigante e ainda derruba a operação inteira se o runner tossir.
 
-3. **Gravar regra permanente na memória do projeto**
-   Adicionar em `mem://index.md` (Core):
-   > **Notificação pós-ação (obrigatório)**: ao fim de toda tarefa concluída → 2 posts via connector Telegram já linkado (`@srver1bot`): (a) card completo no privado admin `1901426549`, (b) linha curta no canal Status `-1003669176367`. Nunca postar no Monitoramento direto (Status já espelha). Nunca pedir token/VPS pra isso — o connector resolve.
+## O que vou mudar no `.github/workflows/vigia-actions-vermelhos.yml`
 
-### O que NÃO vou fazer
+1. **Trocar para runner do GitHub** (`runs-on: ubuntu-latest`)
+   - Deixa de depender do self-hosted; vira imune ao runner offline.
+   - Repo tem execução grátis suficiente pra isso (workflow curto, <1min).
 
-- Não criar edge function nova.
-- Não mexer em VPS/PM2.
-- Não pedir mais nenhum secret.
-- Não tentar `atualizar_painel` de novo (dispatcher quebrado, fica como pendência separada).
+2. **Concurrency inteligente**
+   - `group: vigia-${{ github.event.workflow_run.name || github.event_name }}`
+   - `cancel-in-progress: true`
+   - Efeito: só mantém 1 vigia vivo por workflow monitorado; qualquer novo cancela o anterior. Fila zera.
 
-### Resultado esperado
+3. **Filtro precoce no job (`if:`)**
+   - Só executa de verdade se: `conclusion == 'failure'` **ou** for `schedule`/`workflow_dispatch` **ou** for um `success` de workflow que estava na lista de falhas (recuperação).
+   - Ignora o próprio nome pra nunca disparar loop consigo.
+   - Ignora explicitamente `Farm — trailer Co-authored-by`, `CodeQL` e outros ruidosos que não precisam de alerta.
 
-Da próxima vez que eu terminar qualquer coisa (fix, deploy, ajuste), você vê a notificação chegar sem eu perguntar nada. Fluxo colado no `@srver1bot` que já existe.
+4. **Auto-limpeza no início do job**
+   - Primeiro passo: `gh api` cancela runs anteriores do próprio vigia que ainda estejam em `queued`/`waiting`. Rede de segurança.
 
-Aprovo?
+5. **Estado persistente movido de `/var/lib/centraldark/vigia` (VPS) para artifact + gist**
+   - Como agora roda em runner do GitHub, o `STATE_FILE` (evita notificações repetidas) precisa sobreviver entre runs.
+   - Solução simples: guardar `reported.txt` e `failing_workflows.txt` como **cache do GitHub Actions** (`actions/cache@v4`), chave fixa `vigia-state-v1`.
+   - Se o cache falhar (primeira vez), começa do zero — não quebra nada.
+
+6. **Funcionalidades novas pedidas**
+   - **Resumo diário consolidado**: no cron das 07h, envia 1 mensagem com "X falhas nas últimas 24h, Y recuperações, Z workflows saudáveis" em vez de heartbeat vazio.
+   - **Auto-mute de workflow rebelde**: se o mesmo workflow falhar 5x seguidas em 1h, o vigia manda uma notificação especial "🔕 workflow X em modo silencioso — investigue manualmente" e para de spammar até success.
+   - **Botão manual mais útil**: `workflow_dispatch` ganha input `janela_horas` (padrão 6) pra permitir varredura customizada.
+
+## Estrutura de arquivos afetados
+
+```
+.github/workflows/
+└── vigia-actions-vermelhos.yml   (reescrito)
+```
+
+Nenhum outro arquivo muda. Nada na VPS precisa ser mexido.
+
+## Como valido depois
+
+1. Contar runs do vigia por minuto — deve cair pra 1-2 em vez de 20+.
+2. Simular falha (workflow_dispatch com input) — confirmar que chega notificação no Telegram.
+3. Verificar que "Waiting for #XXXX" some da UI do GitHub Actions.
+
+## Riscos
+
+- Baixo. Se algo der errado, é só reverter o commit — o vigia velho volta.
+- Perda de estado do `reported.txt` na primeira execução (pode reenviar 1 alerta antigo) — aceito.
