@@ -1,1 +1,10 @@
-FILE:/dev-server/apps/modulos/obsidian-plugin-grafo-vivo/manifest.json
+{
+  "id": "centraldark-grafo-vivo",
+  "name": "CentralDark Grafo Vivo",
+  "version": "0.3.0",
+  "minAppVersion": "1.5.0",
+  "description": "Grafo vivo do ecossistema CentralDark dentro do Obsidian. Mostra bots, MCP, edge functions e módulos se movimentando em tempo real.",
+  "author": "Pivete & Enxame CentralDark",
+  "authorUrl": "https://centralldark.com",
+  "isDesktopOnly": false
+}
