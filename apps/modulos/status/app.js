@@ -93,17 +93,22 @@ function renderData(data) {
     '</article>'
   ).join('');
 
-  $('agentsList').innerHTML = (data.agents || []).map((agent) =>
-    '<article class="agent-card">' +
-      '<div class="agent-emoji">' + safe(agent.emoji || '🤖') + '</div>' +
+  $('agentsList').innerHTML = (data.agents || []).map((agent) => {
+    // Regra: emoji sempre embrulhado em .emoji-glyph pra usar a font-stack
+    // de emoji colorido. Se vier vazio, cai pra inicial do nome (nunca amarelo vazio).
+    const glyph = (agent.emoji && String(agent.emoji).trim())
+      ? safe(agent.emoji)
+      : safe((agent.name || '?').trim().charAt(0).toUpperCase());
+    return '<article class="agent-card">' +
+      '<div class="agent-emoji emoji-glyph">' + glyph + '</div>' +
       '<div>' +
         '<h3>' + safe(agent.name) + '</h3>' +
         '<small>' + safe(agent.role) + ' · ' + pct(agent.power) + '%</small>' +
         '<p>' + safe(agent.description) + '</p>' +
         '<div class="bar"><i style="width:' + pct(agent.power) + '%"></i></div>' +
       '</div>' +
-    '</article>'
-  ).join('');
+    '</article>';
+  }).join('');
 
   $('milestones').innerHTML = (data.milestones || []).map((m) =>
     '<article class="timeline-item ' + safe(m.status || '') + '">' +

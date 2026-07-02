@@ -386,6 +386,20 @@ h3 { font-size: 16px; }
   align-items: start;
 }
 
+/* Regra global: sempre que renderizar emoji em UI, usar essa stack.
+   Evita tofu/quadrado amarelo quando a fonte do sistema não tem o glyph.
+   Aplicar via classe .emoji-glyph em qualquer novo componente. */
+.emoji-glyph,
+.agent-emoji,
+.live-card .live-dot + span,
+.pipe-step,
+.pipe-badge {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji",
+               "Twemoji Mozilla", "EmojiOne Color", "Android Emoji",
+               system-ui, sans-serif;
+  font-variant-emoji: emoji;
+}
+
 .agent-emoji {
   width: 52px;
   height: 52px;
@@ -395,6 +409,7 @@ h3 { font-size: 16px; }
   background: hsl(var(--primary) / 0.12);
   color: hsl(var(--primary));
   font-size: 26px;
+  line-height: 1;
   box-shadow: var(--shadow-3d-soft);
 }
 
