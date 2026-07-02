@@ -76,6 +76,15 @@ async function api(req, res, pathname) {
     return json(res, 200, { ...countGraph(graph), modifiedAt, meta: graph.meta || {} });
   }
   if (pathname === "/api/history") return json(res, 200, { items: await latestHistory() });
+  if (pathname === "/api/status") {
+    const { execSync } = await import("node:child_process");
+    function sh(cmd) { try { return execSync(cmd, { timeout: 3000, encoding: "utf8", shell: "/bin/bash" }).trim(); } catch { return ""; } }
+    const pm2 = sh("pm2 list --no-color").split("\n").filter(l => l.includes("│")).map(l => { const p = l.split("│"); return { name: (p[2]||"").trim(), status: (p[4]||"").trim() }; }).filter(p => p.name);
+    const load = sh("cat /proc/loadavg").split(" ").slice(0,3).join(" ");
+    const mem = sh("free -h | grep Mem").split(/\s+/).slice(1,3).join("/");
+    const claude = sh("ps aux --no-headers 2>/dev/null | grep claude | head -3").split("\n").filter(Boolean).map(l => { const p = l.split(/\s+/); return { cpu: p[2], mem: p[3], cmd: p.slice(10).join(" ").slice(0,60) }; });
+    return json(res, 200, { pm2, system: { load, mem }, claude, time: new Date().toISOString() });
+  }
   if (pathname === "/api/run") {
     if (req.method !== "POST") return json(res, 405, { error: "Use POST para iniciar um run." });
     const url = new URL(req.url, `http://${req.headers.host}`);

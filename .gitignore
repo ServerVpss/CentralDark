@@ -76,3 +76,10 @@ apps/modulos/WebUI/*.bak*
 CREDENCIAIS-TEMP.env
 **/CREDENCIAIS-TEMP*
 *.env.temp
+
+# Graphify — saída/cache regenerável do skill, vive só na VPS (02/07/2026)
+graphify-out/
+graphify-debug.log*
+
+# Graph-panel — snapshots de histórico são runtime, não versionar (02/07/2026)
+apps/modulos/graph-panel/data/history/*.json

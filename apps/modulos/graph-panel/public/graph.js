@@ -34,4 +34,25 @@ async function startRun(mode) { const response = await fetch(`/api/run?mode=${mo
 document.getElementById("refresh").addEventListener("click", loadAll);
 document.getElementById("runLovable").addEventListener("click", () => startRun("lovable"));
 document.getElementById("runGraphifyy").addEventListener("click", () => startRun("graphifyy"));
+async function loadStatus() {
+  const statusEl = document.getElementById("live-status");
+  try {
+    const s = await getJson("/api/status");
+    let html = `<p><strong>Sistema:</strong> ${s.system.load} | RAM: ${s.system.mem}</p>`;
+    html += `<p><strong>PM2 online:</strong> ${s.pm2.filter(p => p.status === "online").length}/${s.pm2.length}</p>`;
+    if (s.claude.length) {
+      html += `<p><strong>🤖 Claude:</strong></p><ul>`;
+      s.claude.forEach(c => { html += `<li>CPU:${c.cpu}% ${c.cmd.slice(0,40)}</li>`; });
+      html += `</ul>`;
+    } else {
+      html += `<p>🤖 Claude: aguardando...</p>`;
+    }
+    html += `<small>${new Date(s.time).toLocaleString("pt-BR")}</small>`;
+    statusEl.innerHTML = html;
+  } catch {
+    statusEl.innerHTML = `<p>Offline</p>`;
+  }
+}
+loadStatus();
+setInterval(loadStatus, 5000);
 loadAll().catch((error) => { reportEl.textContent = `Falha ao carregar painel: ${error.message}`; });
