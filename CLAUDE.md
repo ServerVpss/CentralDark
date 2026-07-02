@@ -113,26 +113,51 @@ Se você é uma IA abrindo este repositório pela primeira vez:
 
 ---
 
-## 9. Áreas Protegidas — Trava Obrigatória
+## 9. Áreas Protegidas — Trava Obrigatória 🔒
 
 **Estas áreas foram consolidadas e testadas. Nenhuma IA pode modificá-las sem:**
 1. Informar EXATAMENTE o que pretende mudar e POR QUÊ (motivo técnico ou de negócio).
 2. Aguardar autorização explícita do Pivete.
 3. Registrar a decisão em `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`.
 
+### 9.1. Padrão Visual Obrigatório 🔒
+
+**Toda vez que uma IA exibir a estrutura de pastas/árvore do projeto pro Pivete, DEVE marcar áreas protegidas com o emoji cadeado `🔒`.** Aviso visual imediato de que aquele caminho não pode ser alterado sem autorização. Exemplo:
+
+```
+apps/
+├─ 🔒 bot-telegram/        (protegido — bot @srver1bot)
+├─ modulos/
+│   ├─ Bolt/               ← construtor de site
+│   ├─ 🔒 mcp/              (protegido)
+│   └─ 🔒 status/           (protegido — página oficial de status)
+```
+
+### 9.2. Tabela de Áreas Protegidas
+
 | Área | Motivo da Proteção | Consolidada em |
 |------|--------------------|----------------|
 | `apps/bot-telegram/` | Bot @srver1bot — restaurado e testado | 28/06/2026 |
-| `scripts/webhook/` | Deploy webhook + notificação Telegram VPS ATUALIZADA | 28/06/2026 |
-| `scripts/contas-admin/` | OAuth admin panel — restaurado com load_dotenv fix | 28/06/2026 |
-| `.github/workflows/pr-agent.yml` | Proxy Anthropic ap7 configurado (4 modelos HTTP 200) | 28/06/2026 |
-| `infra/caddy/` | Configuração Caddy — mudança quebra todos os subdomínios | — |
-| `secrets/` | Nunca commitar, nunca sobrescrever sem backup explícito | — |
+| `apps/modulos/mcp/` | MCP consolidado (100+ tools) — `dist/` é a única fonte até `src/` ser reconstruído | 30/06/2026 |
+| `apps/modulos/status/` | Página oficial (`status.centralldark.com`) — consumida por monitoramento | 02/07/2026 |
+| `apps/modulos/Bolt/` | Construtor de site próprio do Pivete — não mexer sem ordem | 02/07/2026 |
+| `apps/modulos/WebUI/` | Web UI próprio do Pivete — não mexer sem ordem | 02/07/2026 |
+| `apps/modulos/graph-panel/` | Graph panel (indexação por grafo) — economiza tokens e latência | 02/07/2026 |
+| `apps/modulos/elite-anthropic-proxy/` | Proxy Anthropic ap7 — 4 modelos HTTP 200 | 02/07/2026 |
+| `scripts/webhook/` | Deploy webhook + notificação Telegram VPS | 28/06/2026 |
+| `scripts/contas-admin/` | OAuth admin panel — restaurado com `load_dotenv` fix | 28/06/2026 |
+| `.github/workflows/pr-agent.yml` | Proxy Anthropic ap7 configurado | 28/06/2026 |
+| `.github/workflows/` em geral | Qualquer mudança pode derrubar CI/CD inteiro | — |
+| `infra/caddy/` | Mudança quebra todos os subdomínios | — |
+| `secrets/` | Nunca commitar, nunca sobrescrever sem backup | — |
 | `docs/CONSCIENCIA/` | Fonte de verdade do Cérebro Vivo — git é autoritativo | — |
-| `.github/workflows/` em geral | Qualquer mudança em workflow pode derrubar CI/CD inteiro | — |
-| `apps/modulos/mcp/` | MCP consolidado, versionado e equipado (100 tools + 4 cognitivas). Código vivo (`dist/`) é a única fonte até o `src/` ser reconstruído — não rodar build do zero nem mexer sem autorização | 30/06/2026 |
-| `docs/CONSCIENCIA/LEMBRANCAS/` | Memória de curto prazo (gerida pelas tools cognitivas do MCP) — não editar à mão sem necessidade | 30/06/2026 |
+| `docs/CONSCIENCIA/LEMBRANCAS/` | Memória de curto prazo (tools cognitivas do MCP) | 30/06/2026 |
 
-> **Palavras-chave de autorização:** O Pivete pode liberar com "PERMITO PIVETE" (padrão existente) ou com instrução explícita descrevendo o escopo exato da mudança.
+> **Palavras-chave de autorização:** "PERMITO PIVETE" ou instrução explícita descrevendo o escopo exato da mudança.
 
-> **Planos pendentes que ainda NÃO foram autorizados a executar:** reconstrução do `src/` TypeScript do MCP (etapa futura — o `dist/` já está versionado e protegido); reconstrução do **hub** (aguardar plano do Pivete); renomeação `docs/` → `.consciencia` (aguardar comando).
+> **Planos pendentes que ainda NÃO foram autorizados a executar:**
+> - Reconstrução do `src/` TypeScript do MCP (etapa futura — `dist/` já está protegido).
+> - Reconstrução do **hub** (aguardar confirmação do subdomínio `webhook.centralldark.com`).
+> - Mover `apps/bot-telegram/` → `apps/modulos/bot-telegram/` (requer coordenação com PM2 na VPS — NÃO fazer só no repo, derruba o @srver1bot).
+> - Limpar/mover `apps/projeto-dashboard/` (suspeita de duplicata do `apps/modulos/status/` — confirmar antes de apagar).
+> - Renomeação `docs/` → `.consciencia` (aguardar comando).
