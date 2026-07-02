@@ -1,69 +1,78 @@
-# Plano — Enxame Final de Estabilização do HUB
+## Objetivo
 
-Objetivo: deixar o HUB (`lyoigsqluyktoclwdaft`) rodando com a mesma paridade do projeto atual. O que já funcionava antes tem que continuar funcionando — se algum upstream (ex: VeiculosAPI) estiver fora, não é problema nosso, só garantimos que a rota/edge function responde bonito.
+Deixar cada bot no seu lugar, sem gambiarra:
 
-## Fase 1 — Hardening `api-status` 🛠️
+- **@srver1bot (Central)** → HUB Supabase + PM2 id 27 na VPS. Continua como está.
+- **@SEGREDOPUXADASBOT (TelePainel/Fiscal)** → projeto Lovable Cloud atual (`kagejpghnwdfymddwxuf`), com edge function **dedicada** só pra ele (e futuros bots do TelePainel).
 
-Editar `supabase/functions/api-status/index.ts`:
-- Antes de `.json()`, validar `response.ok` e `content-type: application/json`.
-- Se vier HTML/502/timeout do upstream (veiculosapi.com), retornar `503` com JSON `{ ok:false, upstream:"veiculosapi", status:502, message:"upstream indisponível" }` em vez de estourar 500.
-- Adicionar `console.log` estruturado: `[api-status] upstream=... status=... contentType=... latencyMs=...`.
+Hoje as duas galáxias compartilham a mesma função `telegram-webhook` e eu tive que colocar um fallback "se não achou no HUB, tenta no local" — que resolveu na hora mas mistura os dois mundos. Vamos separar de verdade.
 
-## Fase 2 — Logs no `telegram-webhook` 🔍
+## O que vai ser feito
 
-Editar `supabase/functions/telegram-webhook/index.ts`:
-- Log de entrada: método, path, headers relevantes (sem secret), `update_id`.
-- Log de saída: status devolvido + motivo (401/405/200).
-- Sem mudar lógica de auth (secret_token continua igual).
+### 1. Nova edge function `telepainel-webhook` (projeto atual)
 
-## Fase 3 — Caddy: liberar `/bot/webhook` no subdomínio status 🔓
+Cópia da lógica atual de `telegram-webhook`, mas com uma única diferença de fundo: consulta **sempre e apenas** o Supabase deste projeto (`SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`), nunca o HUB. É a casa oficial do Fiscal e dos próximos bots do TelePainel.
 
-Editar `infra/caddy/landings-centraldark.Caddyfile` no bloco `status.centralldark.com`:
-- Adicionar ANTES do `file_server`:
-  ```
-  handle /bot/webhook {
-      reverse_proxy https://lyoigsqluyktoclwdaft.supabase.co {
-          header_up Host lyoigsqluyktoclwdaft.supabase.co
-          rewrite * /functions/v1/telegram-webhook
-      }
-  }
-  ```
-- Fluxo: `caddy validate` → `systemctl reload caddy` → curl POST teste.
-- Rollback: `cp` do arquivo original antes da mudança.
+- Rota: `https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/telepainel-webhook?botId=<uuid>`
+- CORS padrão + `verify_jwt = false` (Telegram não manda JWT).
+- Log com tag `[TELEPAINEL]` pra distinguir dos logs do Hub.
 
-## Fase 4 — Enxame de mapeamento + paridade HUB 🐝
+### 2. `telegram-webhook` volta ao original (só HUB)
 
-3 sub-agentes em paralelo:
+Removo o fallback local que coloquei ontem. Essa função passa a ser exclusiva do @srver1bot e do resto do ecossistema Hub.
 
-**Agente A — Mapeador de Edge Functions**
-- Lista os 47 functions no HUB, faz `curl` (OPTIONS + POST vazio) em cada uma.
-- Marca: 🟢 responde (mesmo que erro esperado tipo 400), 🔴 não deployada / 500 real.
-- Cruza com Lovable Cloud atual pra ver se comportamento bate.
+### 3. Repontar o webhook do Fiscal no Telegram
 
-**Agente B — Mapeador de Secrets/Webhooks**
-- Confere as 26 secrets no HUB via Management API.
-- `getWebhookInfo` Telegram, lista webhooks EFI e MistcPay.
-- Reporta qualquer URL ainda apontando pro projeto antigo (`kagejpghnwdfymddwxuf`).
+Chamada `setWebhook` no Telegram trocando a URL do bot 65915466-… para `.../telepainel-webhook?botId=…`. Feito via edge function ou via curl direto usando o token que já está em `telegram_bots.token`.
 
-**Agente C — Deploy + Validação**
-- Deploya `api-status` e `telegram-webhook` atualizados no HUB.
-- Aplica Caddy (Fase 3).
-- Smoke test final: `/health-check`, `/telegram-webhook` (POST fake), `/api-status`, `/efi-check-status`, `/misticpay-verify`.
+Depois do repointing, confirmo com `getWebhookInfo` que subiu certo e mando um `/start` sintético pra ver o log `[TELEPAINEL] UPDATE_IN` chegando.
 
-## Fase 5 — Relatório Consolidado 📊
+### 4. Atualizar o banco
 
-Placar visual (Método Gamificado):
+- `telegram_bots.webhook_url` do Fiscal → nova URL (`telepainel-webhook`).
+- Sem alteração de schema.
+
+### 5. Documentar a separação
+
+- **CLAUDE.md** → nova seção "Arquitetura de Bots" com o mapa oficial:
+  - `@srver1bot` = Central, HUB + VPS PM2 27, função `telegram-webhook`
+  - `@SEGREDOPUXADASBOT` = TelePainel/Fiscal, Lovable Cloud atual, função `telepainel-webhook`
+- **mem://architecture/bots-separacao** → mesma info em memória viva pra qualquer IA nova entender de cara.
+- **`.lovable/plan.md`** → registrar a decisão.
+
+## Ordem de execução (segura, sem downtime)
+
 ```
-Edge Functions HUB    ▓▓▓▓▓▓▓▓▓▓ 47/47 ✅
-Secrets HUB           ▓▓▓▓▓▓▓▓▓▓ 26/26 ✅
-Webhooks              ▓▓▓▓▓▓▓▓▓░ 2/3  ⚠️
-Caddy /bot/webhook    ▓▓▓▓▓▓▓▓▓▓ POST 200 ✅
-api-status hardening  ▓▓▓▓▓▓▓▓▓▓ 503 amigável ✅
+1. Cria telepainel-webhook (função nova, ninguém aponta pra ela ainda)
+2. Deploy + teste sintético (POST direto)  → tem que responder OK
+3. setWebhook do Fiscal → nova URL
+4. Confirma com getWebhookInfo + /start sintético
+5. Atualiza telegram_bots.webhook_url no banco
+6. Reverte o fallback da telegram-webhook (só HUB)
+7. Deploy da telegram-webhook original
+8. Documenta em CLAUDE.md + mem + plan.md
 ```
-+ lista do que ficou 🟡/🔴 com causa (upstream fora vs bug nosso).
+
+Se qualquer passo falhar entre 3 e 7, dá pra voltar o webhook do Fiscal pra `telegram-webhook` num segundo — o fallback ainda estará lá até o passo 6.
 
 ## Detalhes técnicos
 
-- Arquivos tocados: `supabase/functions/api-status/index.ts`, `supabase/functions/telegram-webhook/index.ts`, `infra/caddy/landings-centraldark.Caddyfile` (área protegida — autorização explícita concedida nesta mensagem).
-- Nenhum schema DB alterado. Nenhum secret novo. Sem restart de whatsapp-server (fica `stopped`).
-- Se algum upstream (VeiculosAPI, iSeek) estiver fora, marcamos 🟡 no relatório com causa "upstream externo" — não é bloqueio.
+- A função `telepainel-webhook` fica em `supabase/functions/telepainel-webhook/index.ts`. É basicamente `telegram-webhook` com as 14+ ocorrências de `HUB_SUPABASE_URL` / `HUB_SUPABASE_SERVICE_ROLE_KEY` trocadas por `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`.
+- `supabase/config.toml` ganha bloco `[functions.telepainel-webhook]` só se precisar de `verify_jwt = false` explícito (a maioria das funções Lovable já vem assim por padrão).
+- O `setWebhook` usa o token gravado em `telegram_bots.token` (`7634758557:AAHH…`) — chamada direta à API do Telegram, sem passar pelo connector gateway (esse token é do Fiscal, não do bot do connector).
+- Rollback rápido: `setWebhook` de novo apontando pra URL antiga.
+
+## O que NÃO muda
+
+- Nada no HUB Supabase.
+- Nada no PM2 da VPS (id 27 continua rodando o @srver1bot).
+- Nada no Caddy (webhook do Fiscal já vai direto pro Lovable Cloud, não passa por `status.centralldark.com`).
+- Nenhum outro bot é tocado.
+
+## Entrega final
+
+Print/log mostrando:
+- `getWebhookInfo` do Fiscal apontando pra `telepainel-webhook` ✅
+- Log `[TELEPAINEL] UPDATE_IN` aparecendo quando você manda `/start` ✅
+- `telegram-webhook` sem o fallback, respondendo normal pro Hub ✅
+- CLAUDE.md e mem atualizados com o mapa oficial ✅
