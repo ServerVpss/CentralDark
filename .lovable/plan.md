@@ -1,60 +1,39 @@
-# Conserto do Vigia Actions Vermelhos
+## Diagnóstico dos vermelhos
 
-## Diagnóstico da causa raiz
+Confirmado via GitHub API + análise dos arquivos:
 
-O `vigia-actions-vermelhos.yml` tem 3 problemas encadeados que geram o enxame de bolinhas cinza e o "Waiting for #2695":
+- **`painel auto-update` (195 falhas acumuladas)** — o workflow aponta pra `apps/projeto-dashboard/` (que não existe mais). O painel foi consolidado em `apps/modulos/status/` no dia 02/07 e virou área protegida no `CLAUDE.md`, mas o `.yml` nunca foi atualizado.
+- **`Farm — trailer Co-authored-by`** — falha silenciosa provavelmente por `submodules` no `actions/checkout@v4` (padrão desse tipo de erro na VPS self-hosted, já resolvido em outros workflows com `submodules: false`).
 
-1. **Gatilho amplo demais**: dispara em `workflow_run: workflows: ["*"] types: [completed]` — ou seja, toda vez que qualquer workflow termina, o vigia começa. Nos picos, isso é 20+ execuções por minuto.
-2. **Fila serial**: `concurrency: cancel-in-progress: false` — cada nova execução espera a anterior terminar. Somado ao volume, empilha dezenas de runs em "Waiting".
-3. **Runner dependente**: `runs-on: [self-hosted, Linux]` — se o runner da VPS cai, tudo empilha. Foi o que aconteceu antes.
+A VPS em si **está OK** — recebeu o último commit `129aa54a`, os 17 processos PM2 estão online. Ou seja, esses vermelhos não estão bloqueando deploy real, só quebrando automações periféricas (painel e badge de co-author).
 
-Resultado prático: mesmo com o vigia "funcionando", ele polui o Actions com fila gigante e ainda derruba a operação inteira se o runner tossir.
+## Conserto
 
-## O que vou mudar no `.github/workflows/vigia-actions-vermelhos.yml`
+### 1. `painel-auto-update.yml` — trocar caminhos
+Três linhas a corrigir:
+- Linha 17 (`paths-ignore`): `apps/projeto-dashboard/painel-data.json` → `apps/modulos/status/painel-data.json`
+- Linha 48 (run): `node apps/projeto-dashboard/atualizar-painel-vivo.mjs` → `node apps/modulos/status/atualizar-painel-vivo.mjs`
+- Linha 54 (`git add`): mesmo caminho novo
+- Adicionar `submodules: false` no `actions/checkout@v4` (linhas 34-37) — evita erro se o repo tiver submódulo quebrado
 
-1. **Trocar para runner do GitHub** (`runs-on: ubuntu-latest`)
-   - Deixa de depender do self-hosted; vira imune ao runner offline.
-   - Repo tem execução grátis suficiente pra isso (workflow curto, <1min).
+### 2. `farm-co-author.yml` — proteger checkout
+- Adicionar `submodules: false` no `actions/checkout@v4` (linhas 27-30)
+- Adicionar `|| true` no final do step "Verificar trailer" pra ele **nunca marcar o workflow como failure** (é só um warning informativo pra farm de medalha, não deve derrubar CI)
 
-2. **Concurrency inteligente**
-   - `group: vigia-${{ github.event.workflow_run.name || github.event_name }}`
-   - `cancel-in-progress: true`
-   - Efeito: só mantém 1 vigia vivo por workflow monitorado; qualquer novo cancela o anterior. Fila zera.
+### 3. Validar antes de commitar
+Antes de fazer o commit, checar rapidamente se `apps/modulos/status/atualizar-painel-vivo.mjs` e `apps/modulos/status/painel-data.json` realmente existem no repo (já sei que `atualizar-painel-vivo.mjs` existe pelo `<codebase-context>`).
 
-3. **Filtro precoce no job (`if:`)**
-   - Só executa de verdade se: `conclusion == 'failure'` **ou** for `schedule`/`workflow_dispatch` **ou** for um `success` de workflow que estava na lista de falhas (recuperação).
-   - Ignora o próprio nome pra nunca disparar loop consigo.
-   - Ignora explicitamente `Farm — trailer Co-authored-by`, `CodeQL` e outros ruidosos que não precisam de alerta.
+### 4. Depois do commit
+- Aguardar o novo run do `painel auto-update` no push
+- Se passar 🟢, disparar 1 `workflow_dispatch` do `farm-co-author` pra confirmar que a mudança dele também funciona
+- Reportar o resultado
 
-4. **Auto-limpeza no início do job**
-   - Primeiro passo: `gh api` cancela runs anteriores do próprio vigia que ainda estejam em `queued`/`waiting`. Rede de segurança.
+## O que NÃO vou fazer
 
-5. **Estado persistente movido de `/var/lib/centraldark/vigia` (VPS) para artifact + gist**
-   - Como agora roda em runner do GitHub, o `STATE_FILE` (evita notificações repetidas) precisa sobreviver entre runs.
-   - Solução simples: guardar `reported.txt` e `failing_workflows.txt` como **cache do GitHub Actions** (`actions/cache@v4`), chave fixa `vigia-state-v1`.
-   - Se o cache falhar (primeira vez), começa do zero — não quebra nada.
+- Não vou mexer em `apps/modulos/status/` (área protegida) — só nos `.yml`
+- Não vou apagar os 195 runs vermelhos históricos (posso fazer isso depois se você quiser limpeza visual)
+- Não vou reescrever o painel — só corrigir o caminho que ficou quebrado
 
-6. **Funcionalidades novas pedidas**
-   - **Resumo diário consolidado**: no cron das 07h, envia 1 mensagem com "X falhas nas últimas 24h, Y recuperações, Z workflows saudáveis" em vez de heartbeat vazio.
-   - **Auto-mute de workflow rebelde**: se o mesmo workflow falhar 5x seguidas em 1h, o vigia manda uma notificação especial "🔕 workflow X em modo silencioso — investigue manualmente" e para de spammar até success.
-   - **Botão manual mais útil**: `workflow_dispatch` ganha input `janela_horas` (padrão 6) pra permitir varredura customizada.
+## Resultado esperado
 
-## Estrutura de arquivos afetados
-
-```
-.github/workflows/
-└── vigia-actions-vermelhos.yml   (reescrito)
-```
-
-Nenhum outro arquivo muda. Nada na VPS precisa ser mexido.
-
-## Como valido depois
-
-1. Contar runs do vigia por minuto — deve cair pra 1-2 em vez de 20+.
-2. Simular falha (workflow_dispatch com input) — confirmar que chega notificação no Telegram.
-3. Verificar que "Waiting for #XXXX" some da UI do GitHub Actions.
-
-## Riscos
-
-- Baixo. Se algo der errado, é só reverter o commit — o vigia velho volta.
-- Perda de estado do `reported.txt` na primeira execução (pode reenviar 1 alerta antigo) — aceito.
+Próximo push na main → `painel auto-update` 🟢 (atualiza `status.centralldark.com`) + `farm-co-author` deixa de aparecer vermelho. Tudo continua indo pra VPS normalmente como já vai.

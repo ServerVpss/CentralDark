@@ -14,7 +14,7 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "apps/projeto-dashboard/painel-data.json"
+      - "apps/modulos/status/painel-data.json"
   workflow_dispatch:
 
 permissions:
