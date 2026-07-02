@@ -543,6 +543,8 @@ export default function HubPage() {
     const ORDER = ['telegram', 'notion', 'drive', 'github', 'vps'];
     return (
       <div className="space-y-5">
+        <McpCard />
+
         <Card className="card-premium">
           <CardContent className="pt-5 pb-4 px-5 flex flex-wrap items-center justify-between gap-3">
             <div>
