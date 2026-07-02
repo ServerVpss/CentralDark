@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grafo CentralDark</title>
+    <meta name="description" content="Painel seguro para visualizar o grafo, resumo e auditoria do último mapeamento CentralDark." />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js" defer></script>
+    <script src="/graph.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div><p class="eyebrow">CentralDark</p><h1>Grafo de módulos</h1></div>
+      <div class="actions">
+        <button id="refresh" type="button">Atualizar</button>
+        <button id="runLovable" type="button">Run Lovable</button>
+        <button id="runGraphifyy" type="button">Run graphifyy</button>
+      </div>
+    </header>
+    <main class="layout">
+      <section class="graph-wrap" aria-label="Visualização do grafo"><div id="graph"></div></section>
+      <aside class="side">
+        <section class="stats" aria-label="Indicadores">
+          <article><strong id="nodes">0</strong><span>Nós</span></article>
+          <article><strong id="edges">0</strong><span>Ligações</span></article>
+          <article><strong id="communities">0</strong><span>Grupos</span></article>
+        </section>
+        <section class="panel"><div class="panel-head"><h2>Resumo</h2><span id="updated">—</span></div><div id="report" class="markdown"></div></section>
+        <section class="panel"><div class="panel-head"><h2>Auditoria</h2></div><div id="audit" class="markdown"></div></section>
+        <section class="panel compact"><h2>Histórico</h2><ul id="history"></ul></section>
+      </aside>
+    </main>
+  </body>
+</html>
