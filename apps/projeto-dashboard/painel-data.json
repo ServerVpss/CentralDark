@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-07-02T11:07:04.284Z",
-  "updatedAtBR": "02/07/2026, 08:07:04 BRT",
+  "updatedAt": "2026-07-02T15:12:21.848Z",
+  "updatedAtBR": "02/07/2026, 12:12:21 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
-    "currentTask": "Snapshot 29/06 — Cérebro Vivo Fase 1 concluída. 10 skills documentadas. Bot /arsenal ativo. Arsenal de Skills no TelePainel (A9) documentada e pronta para Lovable. Próximo: executar no Lovable.",
+    "currentTask": "Hub · Aba Serviços implementada (Telegram/Notion/Drive/GitHub/VPS + logs)",
     "branch": "main",
     "lastCommit": "docs(pendencias): #14 proxy 2 modos (terminal+extensao) + #15 notificacao MCP mono",
     "lastPR": "#103 mergeado · #106 mergeado",
@@ -583,6 +583,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-02T15:12:21.850Z",
+      "title": "Hub ganhou painel unificado de serviços com healthcheck via edge function hub-services-check. 5/5 serviços online no teste inicial.",
+      "area": "hub",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-06-30T14:43:49.875Z",
       "titulo": "Push na main · ff0bae7586f0bbb6c0d3912e6147da5ab8f9e803",
       "detalhe": "docs(pendencias): #14 proxy 2 modos (terminal+extensao) + #15 notificacao MCP mono",
@@ -812,174 +819,6 @@
       "detalhe": "feat(bot): terminal Telegram = Claude Code — write_file + padrão mono + system prompt completo",
       "area": "Repositório",
       "sha": "368bbb5",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T00:57:30.843Z",
-      "titulo": "Push na main · e038387d9101ac7faa68950c8e9bd2b1d9b5c9ac",
-      "detalhe": "feat(bot): tool use no HubBot — read_file, list_dir, run_command via Anthropic tools API",
-      "area": "Repositório",
-      "sha": "e038387",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T00:45:28.362Z",
-      "titulo": "Push na main · 1497f6bb5585cbf47fe050257a593c87f62ccc8c",
-      "detalhe": "feat(sessao): protocolo inicializacao + hook telegram + divergencias resolvidas",
-      "area": "Repositório",
-      "sha": "1497f6b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T00:27:07.227Z",
-      "titulo": "Push na main · 3cec5be6ca0cafdd04f59638b38f258490f55cd7",
-      "detalhe": "docs(consciencia): registrar sessao 29/06 — proxy v1.6, MCP openapi, WebUI, Notion e CORS",
-      "area": "Repositório",
-      "sha": "3cec5be",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T00:03:34.235Z",
-      "titulo": "Push na main · 49af8cdace93725bf0d0f1e7ebb22178feba138b",
-      "detalhe": "fix(infra): CORS mcp.Caddyfile + sync Caddy ao repo + artefatos de runtime",
-      "area": "Repositório",
-      "sha": "49af8cd",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T22:55:31.264Z",
-      "titulo": "Push na main · 977139cdb97ac51db77e823ead5bcd681102c2ef",
-      "detalhe": "fix(elite-proxy): v1.6 — conversão Anthropic→OpenAI no response + stream SSE correto",
-      "area": "Repositório",
-      "sha": "977139c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T19:29:32.097Z",
-      "titulo": "Push na main · 518929a9bf924f038e143cdacb3c097edff670a6",
-      "detalhe": "feat(cerebro-de-aco): Elite Anthropic Proxy v1.0 operacional na porta 8082",
-      "area": "Repositório",
-      "sha": "518929a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T19:18:50.247Z",
-      "titulo": "Push na main · 5acd9542077fa90b575fd0a4546fba0f26ef1320",
-      "detalhe": "docs(memoria): centralizando infraestrutura no Cerebro de Aco",
-      "area": "Repositório",
-      "sha": "5acd954",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T19:07:28.909Z",
-      "titulo": "Push na main · 5813311a4d98714ebba9d841171b19e08b08e85f",
-      "detalhe": "fix(memoria): corrigindo caminho da Fabrica de Artefatos para /apps/modulos/Bolt/",
-      "area": "Repositório",
-      "sha": "5813311",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T18:53:56.981Z",
-      "titulo": "Push na main · e8adedfb7554747b5e8d6e8e3967538c1be0d7e4",
-      "detalhe": "chore(painel): snapshot 29/06 — Cérebro Vivo Fase 1, 10 skills, bot /arsenal, pendência A9",
-      "area": "Repositório",
-      "sha": "e8adedf",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T15:14:13.396Z",
-      "titulo": "Push na main · d5ecb88410d0085fb1c7a8845481717d47628b14",
-      "detalhe": "fix(swarm): atualiza relatório + auto-fix Conexões Rápidas em 4 arquivos",
-      "area": "Repositório",
-      "sha": "d5ecb88",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T15:12:33.120Z",
-      "titulo": "Push na main · be2aa9fd2d4470b9916343cacdf5721559db8c9d",
-      "detalhe": "Auditou sistema e domínios",
-      "area": "Repositório",
-      "sha": "be2aa9f",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-29T15:04:05.108Z",
-      "titulo": "Push na main · fa4d13021a7f270583ee98ef01d11ed10dea1082",
-      "detalhe": "feat(retomada): contexto completo para tela Arsenal de Skills no TelePainel (A9)",
-      "area": "Repositório",
-      "sha": "fa4d130",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T15:02:11.639Z",
-      "titulo": "Push na main · aad7df5b1cbe96590d159ee7a249bb9a9d3d7e9f",
-      "detalhe": "feat(pendencias): adiciona A9 — tela Arsenal de Skills no TelePainel (Lovable)",
-      "area": "Repositório",
-      "sha": "aad7df5",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T14:57:28.006Z",
-      "titulo": "Push na main · ecc1d7f597f10120e1b9afd5a1fe078f8063ab62",
-      "detalhe": "feat(brain): catalogo de ideias visuais com referencia aos diagramas prontos",
-      "area": "Repositório",
-      "sha": "ecc1d7f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T14:46:35.880Z",
-      "titulo": "Push na main · f3830670ea6e77225f702e34e4f7e554b5577679",
-      "detalhe": "fix(guardiao): reduz polling debounce de 0.1s para 1.0s — elimina 22% CPU desnecessário",
-      "area": "Repositório",
-      "sha": "f383067",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T14:37:25.662Z",
-      "titulo": "Push na main · e01ccb16352d90ced2bc82f4e103d5f5e21ecfc9",
-      "detalhe": "feat(consciousness): apelidos de todas as 10 skills no roteador de intenção",
-      "area": "Repositório",
-      "sha": "e01ccb1",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T14:34:51.430Z",
-      "titulo": "Push na main · 3a74907466e993876875ce577b9f5f41e0830221",
-      "detalhe": "feat(brain): 4 diagramas Mermaid do sistema CentralDark no Obsidian",
-      "area": "Repositório",
-      "sha": "3a74907",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T14:32:14.350Z",
-      "titulo": "Push na main · d3c5768b8be7ff88580e568ba0f067e138279e6f",
-      "detalhe": "fix(bot): bot agora sabe que quem fala é o Pivete, o dono do sistema",
-      "area": "Repositório",
-      "sha": "d3c5768",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T14:11:23.941Z",
-      "titulo": "Push na main · e2d9a33fd8cc67826c376e4084f2c27fd89d271b",
-      "detalhe": "feat(bot): comando /arsenal com tabela completa de skills e apelidos",
-      "area": "Repositório",
-      "sha": "e2d9a33",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T13:44:29.490Z",
-      "titulo": "Push na main · bb2be2a0e2e405b2ac7725069b880988f0afc6d3",
-      "detalhe": "feat(agents-library): arsenal completo de 10 skills + prompt master CentralDark",
-      "area": "Repositório",
-      "sha": "bb2be2a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-29T13:34:51.252Z",
-      "titulo": "Push na main · 658ad344ee8b937e19bb6a3958d2cbf63ad5051c",
-      "detalhe": "docs(agents): apelidos simples em PT-BR para todas as skills",
-      "area": "Repositório",
-      "sha": "658ad34",
       "actor": "segredounlock"
     }
   ],
