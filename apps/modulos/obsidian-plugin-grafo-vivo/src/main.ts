@@ -69,6 +69,12 @@ export default class GrafoVivoPlugin extends Plugin {
 
   async carregarSettings() {
     this.settings = Object.assign({}, SETTINGS_PADRAO, await this.loadData());
+    // Migração automática de URLs antigas do grafo (ex: painel-data.json → graph-data.json).
+    const { URLS_DEPRECIADAS } = await import("./settings");
+    if (URLS_DEPRECIADAS.includes(this.settings.urlGrafo)) {
+      this.settings.urlGrafo = SETTINGS_PADRAO.urlGrafo;
+      await this.salvarSettings();
+    }
   }
 
   async salvarSettings() {
