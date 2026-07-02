@@ -1,18 +1,26 @@
-#!/usr/bin/env bash
-# Bloco 04 — PM2 (10 serviços esperados)
+#!/bin/env bash
+# Bloco 04 — PM2 (processos CentralDark esperados)
 source "$(dirname "$0")/_lib.sh"
 BLOCO="04-pm2"
 
 ESPERADOS=(
-  CloneDeck-CRM
-  CloneDeck-Supabase-Sync
-  MCP-CentralDark
-  MultiZap-Gateway
-  MultiZap-GitHub-Webhook
-  MultiZap-TelegramBot
-  github-webhook
-  wabot-bridge
-  webhook-bot
+  CentralDark-BotServer
+  CentralDark-WebhookDeploy
+  CentralDark-HubBot
+  CentralDark-GuardiaoConsciencia
+  CentralDark-GuardiaoAnalista
+  CentralDark-ContasAdmin
+  CentralDark-Respiracao
+  CentralDark-MCP
+  CentralDark-TelePainelDeploy
+  CentralDark-EvolucaoIAs
+  CentralDark-SyncDrive
+  CentralDark-Zentinel
+  CentralDark-EliteWS
+  CentralDark-EliteHTTP
+  CentralDark-EliteAnthropic
+  CentralDark-GraphPanel
+  # Mantidos por compatibilidade até migração completa
   whatsapp-server
 )
 
