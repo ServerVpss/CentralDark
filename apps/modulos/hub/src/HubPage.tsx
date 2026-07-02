@@ -537,8 +537,107 @@ export default function HubPage() {
     );
   };
 
+  // ── Aba Serviços ─────────────────────────────────────────────────
+  const Servicos = () => {
+    const svcMap = new Map(services.map((s) => [s.service, s]));
+    const ORDER = ['telegram', 'notion', 'drive', 'github', 'vps'];
+    return (
+      <div className="space-y-5">
+        <Card className="card-premium">
+          <CardContent className="pt-5 pb-4 px-5 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold flex items-center gap-2">
+                <Zap className="h-4 w-4 text-primary" /> Painel unificado de serviços
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Testa Telegram, Notion, Drive, GitHub e VPS via edge function segura. Logs em tempo real.
+              </p>
+            </div>
+            <Button
+              onClick={() => runHealthcheck()}
+              disabled={svcLoading}
+              size="sm"
+              className="gap-2 shadow-3d-soft active:translate-y-[1px]"
+            >
+              <Activity className={cn('h-4 w-4', svcLoading && 'animate-spin')} />
+              Testar todos
+            </Button>
+          </CardContent>
+        </Card>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {ORDER.map((key) => {
+            const meta = SERVICE_META[key];
+            const r = svcMap.get(key);
+            const Icon = meta.Icon;
+            const status = !r ? 'idle' : r.ok ? 'ok' : 'fail';
+            const statusCls =
+              status === 'ok' ? 'text-primary bg-primary/10 border-primary/25' :
+              status === 'fail' ? 'text-destructive bg-destructive/10 border-destructive/25' :
+              'text-muted-foreground bg-muted border-border';
+            return (
+              <Card key={key} className="card-premium">
+                <CardContent className="pt-5 pb-4 px-5 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className={cn('h-9 w-9 rounded-lg flex items-center justify-center', statusCls)}>
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">{meta.label}</p>
+                        <p className="text-[11px] text-muted-foreground">{meta.hint}</p>
+                      </div>
+                    </div>
+                    <Badge className={cn('text-[10px] border rounded-full px-2', statusCls)}>
+                      {status === 'ok' ? 'ONLINE' : status === 'fail' ? 'FALHA' : '—'}
+                    </Badge>
+                  </div>
+
+                  {r && (
+                    <div className="text-xs bg-muted/40 border border-border rounded-md p-2 space-y-1">
+                      <p className="font-mono truncate">{r.message}</p>
+                      <p className="text-muted-foreground">Latência: <span className="tabular-nums">{r.latency_ms}ms</span></p>
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={() => runHealthcheck(key)}
+                    disabled={svcLoading}
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-2 shadow-3d-soft active:translate-y-[1px]"
+                  >
+                    <Activity className={cn('h-3.5 w-3.5', svcLoading && 'animate-spin')} />
+                    Testar
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        <Card className="card-premium">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <History className="h-4 w-4 text-primary" /> Log de execução
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-black/90 text-emerald-300 font-mono text-[11px] rounded-md p-3 max-h-72 overflow-auto">
+              {svcLog.length === 0 ? (
+                <p className="text-muted-foreground">Nenhum teste executado ainda. Clique em "Testar todos" ou em um serviço.</p>
+              ) : (
+                svcLog.map((line, i) => <div key={i} className="whitespace-pre-wrap">{line}</div>)
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   const SECTIONS: Record<TabId, () => JSX.Element> = {
-    overview: Overview, conectores: Conectores, politicas: Politicas,
+    overview: Overview, servicos: Servicos, conectores: Conectores, politicas: Politicas,
     aprovacoes: Aprovacoes, auditoria: Auditoria, arquitetura: Arquitetura,
   };
   const Section = SECTIONS[tab];
