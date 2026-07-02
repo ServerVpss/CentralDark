@@ -66,7 +66,7 @@ Deno.serve(async (req) => {
           INSERT INTO auth.users (
             id, instance_id, aud, role, email, encrypted_password,
             email_confirmed_at, raw_user_meta_data, raw_app_meta_data,
-            created_at, updated_at, phone, confirmed_at, last_sign_in_at
+            created_at, updated_at, phone, last_sign_in_at
           ) VALUES (
             ${u.id}::uuid,
             '00000000-0000-0000-0000-000000000000'::uuid,
@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
             ${JSON.stringify(u.raw_user_meta_data)}::jsonb,
             ${JSON.stringify(u.raw_app_meta_data)}::jsonb,
             ${u.created_at}::timestamptz, now(),
-            ${u.phone}, ${u.confirmed_at}::timestamptz,
+            ${u.phone},
             ${u.last_sign_in_at}::timestamptz
           ) ON CONFLICT (id) DO NOTHING`;
         resultados.push({ email: u.email, status: "ok" });
