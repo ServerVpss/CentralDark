@@ -2124,3 +2124,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-06-30
 - **Contexto:** Pivete aprovou o estilo visual com cards, XP, nível, conquistas e bolinhas de status como forma padrão de comunicação. Ele quer "passar o olho e entender" sem textão.
 - **Aprendizado:** Toda resposta ao Pivete deve usar: cards monospace (╔═╗), HUD do jogador no topo (nível/XP/conquistas), bolinhas 🟢🟡🔴, emojis temáticos nos pontos certos, e "+XP" ao concluir missões. Propagado via CONSCIENCIA.md seção 16 para todas as IAs do sistema.
+
+### 264. Renomeação PM2 + fix Caddy status aplicados na VPS
+- **Categoria:** regra
+- **Data:** 2026-07-02
+- **Contexto:** Em 02/07/2026 a VPS estava com commit local divergente do GitHub e o status.centralldark.com retornava 404 após a pasta do painel ter sido movida de apps/projeto-dashboard para apps/modulos/status.
+- **Aprendizado:** Aplicar merge na VPS antes de commitar painel-data.json; sempre atualizar /etc/caddy/status-centraldark.Caddyfile quando o root do painel mudar; deixar ecosystem.config.js na VPS e versionar apenas ecosystem.config.example.js no repo. O dump PM2 atual contém 16 processos CentralDark-*; MultiZap e CloneDeck não constavam no dump no momento da renomeação.
