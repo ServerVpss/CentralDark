@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 export function useSystemSetting<T = any>(key: string, defaultValue: T) {
   const [value, setValue] = useState<T>(defaultValue);

@@ -46,7 +46,7 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/shared/hooks/useTelegramBots";
 import { BotHealthMonitor } from "@/apps/modulos/telepainel/components/bots/BotHealthMonitor";
 import { BotConfigCard } from "@/apps/modulos/telepainel/components/bots/BotConfigCard";

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/sha
 import { Button } from "@/shared/ui/button";
 import { CheckCircle2, AlertTriangle, XCircle, Server, Wrench } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { SyncStatusIcon, type SyncStatus } from "@/shared/ui/sync-status-icon";
 
 

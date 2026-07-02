@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
 import type { TelegramBot } from "@/shared/hooks/telegram/types";
 

@@ -24,7 +24,7 @@ import {
 } from "@/shared/ui/dialog";
 import { usePayments } from "@/shared/hooks/usePayments";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 interface EfiConfig {
   display_name: string;

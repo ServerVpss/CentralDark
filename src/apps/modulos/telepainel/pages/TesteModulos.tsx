@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { DashboardLayout } from "@/shared/layout/DashboardLayout";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";

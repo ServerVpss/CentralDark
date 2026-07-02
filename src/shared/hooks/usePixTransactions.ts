@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";

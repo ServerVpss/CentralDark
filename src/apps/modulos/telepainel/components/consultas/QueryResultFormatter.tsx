@@ -36,7 +36,7 @@ import {
   PaginationPrevious,
 } from "@/shared/ui/pagination";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 interface QueryResultFormatterProps {
   data: any;

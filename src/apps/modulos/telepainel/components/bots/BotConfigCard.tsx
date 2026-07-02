@@ -17,7 +17,7 @@ import { Switch } from "@/shared/ui/switch";
 import { Badge } from "@/shared/ui/badge";
 import { toast } from "sonner";
 import { TelegramBot } from "@/shared/hooks/useTelegramBots";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 
 interface BotConfigCardProps {
   bot: TelegramBot;

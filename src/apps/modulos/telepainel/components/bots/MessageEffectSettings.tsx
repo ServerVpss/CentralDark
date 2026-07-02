@@ -5,7 +5,7 @@ import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
 import { Sparkles, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/hub-client";
 import type { MessageEffectType } from "@/shared/hooks/useBotSettings";
 
 // Lista oficial — DEVE bater com EFFECT_MAP da edge function `test-message-effect`
