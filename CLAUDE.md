@@ -25,10 +25,10 @@ Essa pasta concentra TUDO sobre o comando `darkai` (CLI que dá acesso a Gemini/
 
 - **Nome:** TelePanel (frontend) + CentralDark (infra/microsserviços)
 - **Stack:** React 18 + Vite 5 + Tailwind v3 + TypeScript 5
-- **Backend:** Lovable Cloud (Supabase gerenciado) — projeto ref `kagejpghnwdfymddwxuf`
-- **Preview:** https://id-preview--85041dd2-d1da-4a30-acbc-50799ddf8668.lovable.app
-- **Publicado:** https://centraldark.lovable.app
-- **Repositório GitHub:** sincronizado bidirecionalmente via Lovable GitHub App (ver Plus (+) → GitHub no editor para URL exata da conta conectada)
+- **Backend:** Supabase gerenciado — projeto ref `kagejpghnwdfymddwxuf`
+- **Domínio oficial:** https://centralldark.com
+- **Painel de status:** https://status.centralldark.com
+- **Repositório GitHub:** sincronizado bidirecionalmente com a VPS (`/root/CentralDark/`) via webhook próprio
 
 ---
 

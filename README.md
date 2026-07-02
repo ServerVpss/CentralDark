@@ -41,20 +41,26 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 
 ---
 
-## Project info
+## Projeto
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+- **Domínio oficial**: https://centralldark.com
+- **Painel de status**: https://status.centralldark.com
+- **Repositório**: `ServerVpss/CentralDark` (sincroniza automaticamente com a VPS em `/root/CentralDark/`)
 
 ## Stack
+
 - Vite + React 18 + TypeScript
-- Tailwind CSS v3 + shadcn-ui
-- Lovable Cloud (Supabase) — Auth, DB, Edge Functions, Storage, Realtime
+- Tailwind CSS v3 + shadcn-ui (frontend TelePanel)
+- Node.js + PM2 na VPS (microsserviços CentralDark)
+- Supabase gerenciado — Auth, DB, Edge Functions, Storage, Realtime
 - PWA habilitado
 
 ## Como editar
-- **Lovable** (recomendado): https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+
+- **Editor assistido por IA**: qualquer alteração feita pelo agente é comitada no repo e sincronizada pra VPS automaticamente
 - **Local**: `git clone` → `npm i` → `npm run dev`
-- **GitHub**: edição direta + sync bidirecional com Lovable
+- **GitHub**: edição direta + sync bidirecional
 
 ## Deploy
-Lovable → Share → Publish.
+
+Push na `main` → webhook na VPS (`/root/CentralDark/scripts/webhook/`) faz `git pull` + `pm2 reload` do serviço afetado.
