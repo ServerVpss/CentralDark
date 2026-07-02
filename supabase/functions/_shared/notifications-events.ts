@@ -49,7 +49,7 @@ function getEnv(name: string): string {
 }
 
 function getServiceClient() {
-  return createClient(getEnv("SUPABASE_URL"), getEnv("SUPABASE_SERVICE_ROLE_KEY"));
+  return createClient(getEnv("HUB_SUPABASE_URL"), getEnv("HUB_SUPABASE_SERVICE_ROLE_KEY"));
 }
 
 function nowSP(): string {
@@ -168,14 +168,14 @@ export async function notify(input: NotifyInput): Promise<void> {
     });
 
     // Dispara notify-telegram fire-and-forget
-    const url = `${getEnv("SUPABASE_URL")}/functions/v1/notify-telegram`;
+    const url = `${getEnv("HUB_SUPABASE_URL")}/functions/v1/notify-telegram`;
     const notifyKey = Deno.env.get("NOTIFY_API_KEY") ?? "";
     const resp = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-Notify-Key": notifyKey,
-        Authorization: `Bearer ${getEnv("SUPABASE_ANON_KEY")}`,
+        Authorization: `Bearer ${getEnv("HUB_SUPABASE_ANON_KEY")}`,
       },
       body: JSON.stringify({
         origem: "central",
