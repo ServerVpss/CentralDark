@@ -1,57 +1,69 @@
-# Fase 5 — Ativar o HUB de verdade
+# Plano — Enxame Final de Estabilização do HUB
 
-## Situação atual (mapeada agora)
+Objetivo: deixar o HUB (`lyoigsqluyktoclwdaft`) rodando com a mesma paridade do projeto atual. O que já funcionava antes tem que continuar funcionando — se algum upstream (ex: VeiculosAPI) estiver fora, não é problema nosso, só garantimos que a rota/edge function responde bonito.
 
+## Fase 1 — Hardening `api-status` 🛠️
+
+Editar `supabase/functions/api-status/index.ts`:
+- Antes de `.json()`, validar `response.ok` e `content-type: application/json`.
+- Se vier HTML/502/timeout do upstream (veiculosapi.com), retornar `503` com JSON `{ ok:false, upstream:"veiculosapi", status:502, message:"upstream indisponível" }` em vez de estourar 500.
+- Adicionar `console.log` estruturado: `[api-status] upstream=... status=... contentType=... latencyMs=...`.
+
+## Fase 2 — Logs no `telegram-webhook` 🔍
+
+Editar `supabase/functions/telegram-webhook/index.ts`:
+- Log de entrada: método, path, headers relevantes (sem secret), `update_id`.
+- Log de saída: status devolvido + motivo (401/405/200).
+- Sem mudar lógica de auth (secret_token continua igual).
+
+## Fase 3 — Caddy: liberar `/bot/webhook` no subdomínio status 🔓
+
+Editar `infra/caddy/landings-centraldark.Caddyfile` no bloco `status.centralldark.com`:
+- Adicionar ANTES do `file_server`:
+  ```
+  handle /bot/webhook {
+      reverse_proxy https://lyoigsqluyktoclwdaft.supabase.co {
+          header_up Host lyoigsqluyktoclwdaft.supabase.co
+          rewrite * /functions/v1/telegram-webhook
+      }
+  }
+  ```
+- Fluxo: `caddy validate` → `systemctl reload caddy` → curl POST teste.
+- Rollback: `cp` do arquivo original antes da mudança.
+
+## Fase 4 — Enxame de mapeamento + paridade HUB 🐝
+
+3 sub-agentes em paralelo:
+
+**Agente A — Mapeador de Edge Functions**
+- Lista os 47 functions no HUB, faz `curl` (OPTIONS + POST vazio) em cada uma.
+- Marca: 🟢 responde (mesmo que erro esperado tipo 400), 🔴 não deployada / 500 real.
+- Cruza com Lovable Cloud atual pra ver se comportamento bate.
+
+**Agente B — Mapeador de Secrets/Webhooks**
+- Confere as 26 secrets no HUB via Management API.
+- `getWebhookInfo` Telegram, lista webhooks EFI e MistcPay.
+- Reporta qualquer URL ainda apontando pro projeto antigo (`kagejpghnwdfymddwxuf`).
+
+**Agente C — Deploy + Validação**
+- Deploya `api-status` e `telegram-webhook` atualizados no HUB.
+- Aplica Caddy (Fase 3).
+- Smoke test final: `/health-check`, `/telegram-webhook` (POST fake), `/api-status`, `/efi-check-status`, `/misticpay-verify`.
+
+## Fase 5 — Relatório Consolidado 📊
+
+Placar visual (Método Gamificado):
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  INFRA CENTRALDARK — mapa antes do swarm
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  🟢 Elite Gateway (fable)  http ok  29ms
-  🟢 MCP admin              70 tools, 8 destrutivas
-  🟢 Gemini                 chave presente
-  🟢 47 edge functions      publicadas no HUB
-  🟡 Secrets no HUB         ainda faltam ~30
-  🟡 Webhooks               apontam pro projeto Lovable
-  🟢 Frontend               já usa hub-client.ts
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Edge Functions HUB    ▓▓▓▓▓▓▓▓▓▓ 47/47 ✅
+Secrets HUB           ▓▓▓▓▓▓▓▓▓▓ 26/26 ✅
+Webhooks              ▓▓▓▓▓▓▓▓▓░ 2/3  ⚠️
+Caddy /bot/webhook    ▓▓▓▓▓▓▓▓▓▓ POST 200 ✅
+api-status hardening  ▓▓▓▓▓▓▓▓▓▓ 503 amigável ✅
 ```
++ lista do que ficou 🟡/🔴 com causa (upstream fora vs bug nosso).
 
-## O que vou fazer (swarm de 3 agentes em paralelo)
+## Detalhes técnicos
 
-**Agente 1 — Auditor de Secrets** (Elite Gateway/Gemini)
-- Varrer as 47 functions em `supabase/functions/*/index.ts`
-- Extrair todo `Deno.env.get("...")` usado
-- Cruzar com a lista de secrets da Lovable Cloud
-- Gerar lista final: nome → valor a espelhar no HUB
-
-**Agente 2 — Auditor de Webhooks**
-- `getWebhookInfo` no Telegram (via connector gateway)
-- Listar webhooks EFI e MistcPay ativos hoje
-- Descobrir URLs velhas (`kagejpghnwdfymddwxuf...`) que precisam virar
-
-**Agente 3 — Executor / Validator**
-- Aguarda os dois primeiros
-- Espelha as secrets pro HUB via Management API (`POST /v1/projects/lyoigsqluyktoclwdaft/secrets`) numa tacada
-- Redireciona os 3 webhooks pros endpoints novos
-- Smoke test: `health-check`, `ai-proxy`, `telegram-webhook` (getWebhookInfo), `efi-check-status`, `misticpay-verify`
-- Devolve placar final
-
-## O que muda no sistema
-
-- HUB próprio passa a receber pagamentos EFI/MistcPay e updates do Telegram diretamente
-- Projeto Lovable vira "reserva" — nada crítico depende mais dele
-- Sem downtime: o flip é atômico, um endpoint por vez
-
-## O que **não** vou fazer sem sua ordem
-
-- Apagar/desativar as functions no projeto Lovable (fica de backup por 7 dias)
-- Mudar DNS ou domínio custom
-- Mexer no `whatsapp-server` (segue stopped, como combinado)
-
-## Riscos e mitigação
-
-- **Secret faltando** → Auditor 1 lista antes; se algum não estiver na Lovable, eu paro e peço
-- **Webhook do Telegram cair** → uso `secret_token` derivado pra manter compatibilidade
-- **EFI pedir re-registro com certificado** → se acontecer, marco como pendência e sigo com o resto
-
-Manda "bora" que eu executo.
+- Arquivos tocados: `supabase/functions/api-status/index.ts`, `supabase/functions/telegram-webhook/index.ts`, `infra/caddy/landings-centraldark.Caddyfile` (área protegida — autorização explícita concedida nesta mensagem).
+- Nenhum schema DB alterado. Nenhum secret novo. Sem restart de whatsapp-server (fica `stopped`).
+- Se algum upstream (VeiculosAPI, iSeek) estiver fora, marcamos 🟡 no relatório com causa "upstream externo" — não é bloqueio.
