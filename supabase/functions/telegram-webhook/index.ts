@@ -10589,11 +10589,9 @@ Deno.serve(async (req) => {
   const startTime = Date.now();
 
   try {
-    const hubUrl = Deno.env.get("HUB_SUPABASE_URL")!;
-    const hubKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
-    const localUrl = Deno.env.get("SUPABASE_URL");
-    const localKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    let supabase = createClient(hubUrl, hubKey);
+    const supabaseUrl = Deno.env.get("HUB_SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     const url = new URL(req.url);
     const botId = url.searchParams.get("botId");
@@ -10630,23 +10628,11 @@ Deno.serve(async (req) => {
       ...(update.message?.managed_bot_created ? { managedBotCreated: true } : {}),
     });
 
-    let { data: bot } = await supabase
+    const { data: bot } = await supabase
       .from("telegram_bots")
       .select("*, bot_security_settings(*)")
       .eq("id", botId)
       .single();
-
-    // Fallback: se não achou no HUB, tenta no projeto local (onde a função vive)
-    if (!bot && localUrl && localKey) {
-      logCmd('INFO', 'BOT_LOOKUP_FALLBACK', { botId: botId.substring(0, 8) });
-      supabase = createClient(localUrl, localKey);
-      const r = await supabase
-        .from("telegram_bots")
-        .select("*, bot_security_settings(*)")
-        .eq("id", botId)
-        .single();
-      bot = r.data;
-    }
 
     if (!bot) {
       logCmd('ERROR', 'BOT_NOT_FOUND', { botId });
@@ -10658,6 +10644,8 @@ Deno.serve(async (req) => {
       .select("*")
       .eq("bot_id", botId)
       .single();
+
+
 
 
 

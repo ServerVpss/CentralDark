@@ -32,6 +32,23 @@ Essa pasta concentra TUDO sobre o comando `darkai` (CLI que dá acesso a Gemini/
 
 ---
 
+## 1.1. Arquitetura de Bots do Telegram (mapa oficial)
+
+Dois bots, dois mundos completamente separados. **Nunca misturar.**
+
+| Bot | Papel | Onde vive | Edge function | Banco |
+|---|---|---|---|---|
+| `@srver1bot` | **Central** — controle geral CentralDark | HUB Supabase (`lyoigsqluyktoclwdaft`) + VPS PM2 id 27 (`CentralDark-HubBot`) | `telegram-webhook` (Lovable Cloud atual, consulta o HUB) | HUB |
+| `@SEGREDOPUXADASBOT` (🩸FISCAL🩸) | **Módulo TelePainel** — puxadas/consultas | Lovable Cloud atual (`kagejpghnwdfymddwxuf`) | `telepainel-webhook` (dedicada, consulta o projeto local) | projeto atual |
+
+Regras:
+- Cada bot novo do TelePainel entra em `telegram_bots` deste projeto e usa `telepainel-webhook?botId=<uuid>`.
+- Bots do ecossistema Central (Hub) usam `telegram-webhook` e vivem no HUB.
+- Não colocar fallback cruzado entre as duas funções — separação limpa.
+
+---
+
+
 ## 2. Sincronia 4-Point (regra operacional vigente)
 
 Estamos operando sob o modelo **Sincronia 4-Point**. Os quatro pontos que devem permanecer espelhados/consistentes a cada alteração:
