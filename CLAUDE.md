@@ -1,7 +1,23 @@
 # CLAUDE.md
 
 > Dump de Estado do Projeto — leitura obrigatória para qualquer IA/Hub que abrir este repositório.
-> Última atualização: 28/06/2026
+> Última atualização: 02/07/2026
+
+---
+
+## 🧠 CÉREBRO COMPARTILHADO DAS IAs — `docs/CONSCIENCIA/DARKAI/`
+
+**Qualquer IA que abrir este repo deve ler PRIMEIRO:** [`docs/CONSCIENCIA/DARKAI/README.md`](docs/CONSCIENCIA/DARKAI/README.md)
+
+Essa pasta concentra TUDO sobre o comando `darkai` (CLI que dá acesso a Gemini/GPT-5/etc via edge function `ai-proxy` com uma única chave protegida na Lovable Cloud):
+- `README.md` — índice geral (comece aqui)
+- `QUICKSTART.md` — instalar e usar em 5 minutos
+- `PROMPT-UNIVERSAL.md` — prompt pronto pra colar em qualquer IA (Claude, GPT, Gemini, Cursor) e ensinar ela a usar `darkai`
+- `00-COMECE-AQUI.md` até `10-TROUBLESHOOTING.md` — curso completo
+- `darkai.sh` + `instalar-local.sh` + `instalar-windows.ps1` — scripts
+- `exemplos/` — receitas prontas
+
+**Regra:** tudo relacionado a orquestração de IAs, delegação, ensino de outras IAs, e o comando `darkai` mora AQUI. Não espalhar em outras pastas.
 
 ---
 
