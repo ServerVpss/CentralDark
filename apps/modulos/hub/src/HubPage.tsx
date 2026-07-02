@@ -119,6 +119,45 @@ export default function HubPage() {
   const [auditLog,   setAuditLog]   = useState<AuditEntry[]>([]);
   const [loading,    setLoading]    = useState(true);
   const [error,      setError]      = useState<string | null>(null);
+  const [services,   setServices]   = useState<ServiceResult[]>([]);
+  const [svcLoading, setSvcLoading] = useState(false);
+  const [svcLog,     setSvcLog]     = useState<string[]>([]);
+
+  const pushLog = useCallback((msg: string) => {
+    const ts = new Date().toLocaleTimeString('pt-BR');
+    setSvcLog((prev) => [`[${ts}] ${msg}`, ...prev].slice(0, 50));
+  }, []);
+
+  const runHealthcheck = useCallback(async (only?: string) => {
+    setSvcLoading(true);
+    pushLog(only ? `▶ Testando ${only}...` : '▶ Testando todos os serviços...');
+    try {
+      const url = only ? `${HEALTHCHECK_URL}?service=${only}` : HEALTHCHECK_URL;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${HEALTHCHECK_ANON}`, apikey: HEALTHCHECK_ANON },
+      });
+      const j = await res.json();
+      if (!j.ok) throw new Error(j.error || 'Falha no healthcheck');
+      const results: ServiceResult[] = j.results;
+      results.forEach((r) => {
+        pushLog(`${r.ok ? '✅' : '❌'} ${r.service} (${r.latency_ms}ms) — ${r.message}`);
+      });
+      if (only) {
+        setServices((prev) => {
+          const map = new Map(prev.map((r) => [r.service, r]));
+          results.forEach((r) => map.set(r.service, r));
+          return Array.from(map.values());
+        });
+      } else {
+        setServices(results);
+      }
+    } catch (e) {
+      pushLog(`❌ Erro: ${String(e).slice(0, 150)}`);
+      toast({ title: 'Erro no healthcheck', description: String(e), variant: 'destructive' });
+    } finally {
+      setSvcLoading(false);
+    }
+  }, [pushLog, toast]);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
