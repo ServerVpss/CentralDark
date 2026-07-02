@@ -80,6 +80,7 @@ const fmt = (iso: string, withDate = false) => {
 // ── Tabs ──────────────────────────────────────────────────────────
 const TABS = [
   { id: 'overview',    label: 'Overview',    Icon: LayoutDashboard },
+  { id: 'servicos',    label: 'Serviços',    Icon: Zap },
   { id: 'conectores',  label: 'Conectores',  Icon: Plug },
   { id: 'politicas',   label: 'Políticas',   Icon: ShieldCheck },
   { id: 'aprovacoes',  label: 'Aprovações',  Icon: CheckSquare },
@@ -87,6 +88,26 @@ const TABS = [
   { id: 'arquitetura', label: 'Arquitetura', Icon: Network },
 ] as const;
 type TabId = typeof TABS[number]['id'];
+
+// URL da edge function no projeto principal
+const HEALTHCHECK_URL = 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/hub-services-check';
+const HEALTHCHECK_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE';
+
+interface ServiceResult {
+  service: string;
+  ok: boolean;
+  latency_ms: number;
+  message: string;
+  detail?: unknown;
+}
+
+const SERVICE_META: Record<string, { label: string; Icon: any; hint: string }> = {
+  telegram: { label: 'Telegram',  Icon: Send,      hint: 'Bot via connector gateway' },
+  notion:   { label: 'Notion',    Icon: FileText,  hint: 'API oficial (NOTION_API_TOKEN)' },
+  drive:    { label: 'Google Drive', Icon: HardDrive, hint: 'rclone bisync na VPS' },
+  github:   { label: 'GitHub',    Icon: Github,    hint: 'API v3 com GITHUB_TOKEN' },
+  vps:      { label: 'VPS',       Icon: Server,    hint: 'Ping status.centralldark.com' },
+};
 
 // ── Componente principal ──────────────────────────────────────────
 export default function HubPage() {
