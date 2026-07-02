@@ -1,129 +1,71 @@
-## Plano consolidado — Opção B (fazer certo) + Watchdog MCP + semente do grafo vivo
+# Plano: Grafo Vivo no Obsidian + Padronização VPS
 
-Ninguém usando o sistema → janela ideal pra consolidar de verdade dentro de `modulos/`. Execução em 3 fases sequenciais.
+Três frentes, executadas em paralelo por sub-agentes.
 
----
+## 🧠 Frente 1 — Plugin Obsidian "CentralDark Live Graph"
 
-## FASE 1 — Consolidação real `projeto-dashboard/` → `modulos/status/`
+Criar plugin próprio (não mexer no Juggl/Graph nativo, eles quebram a cada update do Obsidian). O plugin abre uma view lateral e renderiza o mesmo grafo que roda em `status.centralldark.com`, mas **dentro do Obsidian**, consumindo o mesmo `graph-data.json` da VPS.
 
-### 1.1 Estado final desejado
+**Local no repo:** `apps/modulos/obsidian-plugin-grafo-vivo/`
 
-```
-apps/
-├─ 🔒 bot-telegram/
-└─ modulos/
-    └─ 🔒 status/
-        ├─ index.html
-        ├─ app.js
-        ├─ styles.css
-        ├─ README.md
-        ├─ ai-review.html
-        ├─ atualizar-painel-vivo.mjs
-        ├─ painel-data.json              ← vem do projeto-dashboard
-        ├─ wuzapi-sessions.json          ← vem do projeto-dashboard
-        ├─ wuzapi-sessions.state.json    ← vem do projeto-dashboard
-        └─ healthcheck-history.json      ← vem do projeto-dashboard
-```
+Arquivos:
+- `manifest.json` — id `centraldark-grafo-vivo`, versão 0.1.0
+- `main.ts` — registra comando "Abrir Grafo Vivo", cria `ItemView` custom
+- `view.ts` — canvas com `force-graph` (mesma lib do site), fetch em `https://status.centralldark.com/graph-data.json` a cada 30s, WebSocket futuro
+- `styles.css` — segue tema do Obsidian (usa vars `--background-primary`, `--text-normal`)
+- `esbuild.config.mjs` + `package.json` — build padrão de plugin Obsidian
+- `README.md` — instalação manual: copiar pasta pra `.obsidian/plugins/centraldark-grafo-vivo/`
 
-`apps/projeto-dashboard/` deixa de existir. Path canônico único.
+**Funcionalidades v1:**
+- Nós clicáveis abrem a nota correspondente no Obsidian (se o node tiver `obsidian_path`)
+- Cores por categoria (bots verde, MCP azul, edge functions roxo, etc)
+- Partículas animadas nas arestas ativas (chamadas em tempo real)
+- Filtro por módulo no topo da view
+- Botão "Sincronizar com Graph nativo" — exporta os nodes como notas vazias em `docs/CONSCIENCIA/00-MAPA/nodes/` pra aparecer no graph global do Obsidian também
 
-### 1.2 Arquivos com string a trocar (find/replace de `apps/projeto-dashboard` → `apps/modulos/status`)
+**v2 (depois):** WebSocket direto no MCP pra ver as IAs se movimentando em tempo real (cada tool call vira uma partícula viajando pela aresta).
 
-```
-✅ scripts/patch-painel-data.mjs             linha 6
-✅ scripts/validar-painel-vivo.mjs           linha 6
-✅ scripts/bots/wuzapi-sessions-monitor.mjs  linhas 7, 26, 165
-✅ scripts/bots/vps-healthcheck.mjs          linha 13
-✅ scripts/update-pipeline.py                linha 21
-✅ apps/modulos/status/atualizar-painel-vivo.mjs  linha 4 (só comentário)
-🔒 apps/bot-telegram/skills/externas/painel-status.cjs   linha 4  ← área protegida, autorizada pelo Pivete
-🔒 apps/modulos/mcp/dist/tools/painel/painel.js          linhas 7, 164  ← área protegida, autorizada pelo Pivete
-```
+## 🛠️ Frente 2 — Auditoria PM2 + Padronização
 
-Todos são strings literais apontando pro JSON. Zero mudança de lógica.
+Sub-agente audita `pm2 status` da VPS e produz relatório:
 
-### 1.3 Sincronia com a VPS (etapa crítica)
+**Padrão de nome obrigatório:** `CentralDark-<Modulo>` (PascalCase, sem hífens dentro do módulo).
 
-Como esses scripts rodam AGORA na VPS escrevendo no path antigo, a ordem tem que ser:
+Renomeações prováveis (aplicar via `pm2 delete <id> && pm2 start ... --name`):
+- `elite-http-gateway` → `CentralDark-EliteHttpGateway`
+- `elite-ws-gateway` → `CentralDark-EliteWsGateway`
+- `elite-anthropic-proxy` → `CentralDark-EliteAnthropicProxy`
+- `graph-panel` → `CentralDark-GraphPanel`
+- `zentinel-health` → `CentralDark-Zentinel`
+- `MultiZap-Gateway` → `CentralDark-MultiZap`
+- `CloneDeck-CRM` → `CentralDark-CloneDeck`
 
-1. **Commit local** com a mudança de todos os refs + o painel-data.json vivo já dentro de `modulos/status/`.
-2. **Na VPS:** parar temporariamente os PM2 que escrevem no painel: `CentralDark-Respiracao`, `zentinel-health`, `CentralDark-MCP`.
-3. **Na VPS:** `git pull origin main`.
-4. **Na VPS:** copiar os JSONs vivos (`painel-data.json`, `wuzapi-sessions*.json`, `healthcheck-history.json`) que estavam em `apps/projeto-dashboard/` pra `apps/modulos/status/` — pra não perder o histórico atual.
-5. **Na VPS:** `rm -rf apps/projeto-dashboard/`.
-6. **Na VPS:** subir os PM2 de volta.
-7. **Validação:** rodar `atualizar_painel` do MCP e confirmar que escreveu no novo path.
+**Regra do WhatsApp/MultiZap:** Se CPU < 5% e restarts < 10 nas últimas 24h → deixa online (usuário confirmou). Se estiver flappando → `pm2 stop` + registrar em `docs/PENDENCIAS.md` pra consolidar depois.
 
-### 1.4 CLAUDE.md
+**IDs PM2:** Não dá pra fixar ID (PM2 atribui sequencial), mas dá pra garantir ordem consistente via `ecosystem.config.js` único. Criar `/root/CentralDark/ecosystem.config.js` que declara todos os processos na ordem canônica → `pm2 delete all && pm2 start ecosystem.config.js && pm2 save`.
 
-Atualizar 9.2:
-- `apps/modulos/status/` = path oficial ÚNICO do painel vivo
-- Adicionar linha nas "Regras": nenhum arquivo do painel pode ser criado fora de `apps/modulos/status/`.
+## 🗺️ Frente 3 — Graph-Panel como indexador global (as "ruas")
 
----
+Analogia certeira: o `graph-panel` é o mapa de ruas. Toda IA (MCP tools, bots, edge functions) deve consultar ele antes de "sair pra rua" — economiza tokens porque não precisa varrer o repo inteiro.
 
-## FASE 2 — Watchdog MCP (parar de cair)
+Executar:
+1. Auditar quais serviços JÁ consomem `graph-panel/output.json` (sub-agente faz `rg` no repo)
+2. Adicionar hook nos que não usam: MCP tools de leitura de arquivo, bots que buscam skills, edge functions que roteiam
+3. Cron na VPS: `graph-panel` reindexa a cada 10min (ou por webhook do GitHub em push)
+4. "Ruas novas" = arquivos novos → indexer detecta diff e atualiza `output.json` incremental
+5. Expor endpoint `https://graph.centralldark.com/query?node=xxx` pra IAs consultarem sem baixar o JSON inteiro
 
-### 2.1 Script `/root/CentralDark/scripts/mcp-watchdog.sh`
-- Ping a cada 1min via cron em `https://mcp.centralldark.com/health`
-- 2 falhas seguidas → `pm2 restart CentralDark-MCP` + alerta Telegram (@srver1bot)
-- HTTP 401 detectado → renova `CENTRALDARK_MCP_SESSION` antes de restart
-- Log em `/root/CentralDark/scripts/logs/mcp-watchdog.log`
-- Atualiza contador em `apps/modulos/status/mcp-health.json` a cada ciclo
+## 📊 Ordem de execução
 
-### 2.2 PM2 resiliente
-```bash
-pm2 restart CentralDark-MCP --max-memory-restart 500M --exp-backoff-restart-delay=100
-pm2 save
-```
+1. Frente 2 (auditoria PM2) — sub-agente, roda em paralelo, output = relatório
+2. Frente 3 (auditoria graph-panel) — sub-agente, roda em paralelo, output = lista de integrações faltando
+3. Frente 1 (plugin Obsidian) — eu construo enquanto os sub-agentes rodam
+4. Consolidação: aplicar renomeações PM2 via `vps_run_once_script`, commitar plugin, atualizar `painel-data.json` e `CLAUDE.md` §9
 
-### 2.3 Cartão no painel `status.centralldark.com`
-Adicionar bloco **"MCP Health (24h)"** no `painel-data.json` lendo `mcp-health.json`:
-- Uptime %
-- Última queda
-- Nº de restarts automáticos
-- Ping médio
+## ⚠️ Riscos
 
----
+- Renomear processos PM2 quebra qualquer script hardcoded com nome antigo → sub-agente faz `rg` antes pra listar refs
+- Plugin Obsidian precisa de CORS liberado em `status.centralldark.com/graph-data.json` — verificar Caddy
+- `graph-panel` reindex pesado pode travar VPS → rodar com `nice -n 19`
 
-## FASE 3 — Grafo vivo tipo Obsidian (semente + próxima etapa)
-
-O `apps/modulos/graph-panel/` (já 🔒 protegido) é exatamente o embrião disso. Ele indexa o projeto em grafo, mas ainda não tem visualização web pública.
-
-### 3.1 Escolha da arquitetura (aguardar teu OK antes de codar)
-
-Duas rotas possíveis:
-
-**Rota A — Página web dentro do próprio `status.centralldark.com`** 🟢 recomendado
-- Adicionar aba "Grafo" no painel usando **Cytoscape.js** ou **D3-force-graph** (mesmo motor que o Juggl do Obsidian usa por baixo)
-- Nós = IAs + módulos + arquivos; arestas = quem chama quem
-- Fonte de dados: `graph-panel` já gera o JSON, só precisa expor via HTTP
-- Vantagem: sem plugin, funciona em qualquer browser, sobrevive a update do Obsidian
-
-**Rota B — Plugin próprio pro Obsidian**
-- Plugin em TypeScript que lê `graph-panel/output.json` e renderiza dentro do vault
-- Vantagem: integrado ao teu fluxo Obsidian
-- Desvantagem: manutenção alta, quebra quando Obsidian atualiza (exatamente teu medo)
-
-### 3.2 Nesta janela, entrego só a semente da Rota A:
-- Endpoint `/graph.json` servido pelo `graph-panel` (ou dump estático em `apps/modulos/status/graph.json`)
-- Aba nova no `index.html` do painel: "Grafo Vivo" com placeholder Cytoscape
-- Rodapé mostrando "última atualização" e "quantidade de nós"
-- Deixo o rendering avançado (agrupamento, animação de mensagens entre IAs) pra próxima janela
-
----
-
-## Ordem de execução
-
-1. Fase 1 completa (repo + VPS + validação)
-2. Fase 2 completa (watchdog + cartão MCP)
-3. Fase 3 semente (só endpoint + aba placeholder)
-4. Update final do painel via `atualizar_painel` do MCP
-
-## Detalhes técnicos
-
-- **Áreas 🔒 tocadas:** `apps/bot-telegram/skills/externas/painel-status.cjs` (só troca de string) e `apps/modulos/mcp/dist/tools/painel/painel.js` (só troca de string). Zero mudança de lógica em ambos. Autorização coberta pelo "faz o que for possível pra resolver".
-- **Risco Fase 1:** baixo, DESDE que a ordem VPS (parar PM2 → pull → mover JSONs → apagar antigo → subir PM2) seja respeitada.
-- **Risco Fase 2:** zero (script novo, não altera existente).
-- **Risco Fase 3 semente:** zero (arquivo novo + aba nova no HTML).
-- **Fase 3 completa (plugin Obsidian ou visualização 3D avançada)** fica pra planejamento separado depois que a semente estiver rodando.
+Aprova executar as 3 frentes?
