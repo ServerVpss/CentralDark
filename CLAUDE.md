@@ -159,5 +159,5 @@ apps/
 > - Reconstrução do `src/` TypeScript do MCP (etapa futura — `dist/` já está protegido).
 > - Reconstrução do **hub** (aguardar confirmação do subdomínio `webhook.centralldark.com`).
 > - Mover `apps/bot-telegram/` → `apps/modulos/bot-telegram/` (requer coordenação com PM2 na VPS — NÃO fazer só no repo, derruba o @srver1bot).
-> - Limpar/mover `apps/projeto-dashboard/` (suspeita de duplicata do `apps/modulos/status/` — confirmar antes de apagar).
+> - ✅ ~~Limpar/mover `apps/projeto-dashboard/`~~ — **RESOLVIDO 02/07/2026**: painel vivo consolidado dentro de `apps/modulos/status/`, duplicata removida.
 > - Renomeação `docs/` → `.consciencia` (aguardar comando).
