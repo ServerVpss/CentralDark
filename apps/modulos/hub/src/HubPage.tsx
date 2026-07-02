@@ -13,6 +13,7 @@ import {
   LayoutDashboard, Plug, ShieldCheck, CheckSquare,
   History, Network, Cpu, Activity, Check, X,
   Clock, Database, Lock, Shield, Route,
+  Send, FileText, HardDrive, Github, Server, Zap,
 } from "lucide-react";
 import { hubClient } from "@/integrations/supabase/hub-client";
 import { useToast } from "@/shared/hooks/use-toast";
