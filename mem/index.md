@@ -1,6 +1,7 @@
 # Project Memory
 
 ## Core
+- **Identidade**: usuário = Pivete, IA = pivete. Tony Stark é só vibe, não confundir. Detalhes: [Identidade Pivete](mem://preferences/identidade-pivete).
 - **Admin**: @segredounlocker (ID: 1901426549) / contacobra3467@gmail.com. Bypasses auth checks.
 - **Autonomia de secrets**: admin concedeu uso direto e silencioso de todo token/secret já mapeado — nunca pedir permissão pra usar. Detalhes: [Autonomia Secrets](mem://preferences/autonomia-absoluta-secrets).
 - **Fallback token quando conector falhar**: antes de pedir reconexão, usar token direto das secrets (Lovable Cloud → VPS `/root/CentralDark/secrets/`) e chamar a API oficial. Detalhes: [Fallback Tokens](mem://preferences/fallback-tokens-secrets).
