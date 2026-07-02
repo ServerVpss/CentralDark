@@ -81,6 +81,11 @@ verify_jwt = false
 [functions.ponte-mcp]
 verify_jwt = false
 
+[functions.mcp-status-notify]
+verify_jwt = false
+
+
+
 
 
 
