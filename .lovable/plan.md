@@ -1,61 +1,29 @@
-## Entendi a situação
+## Fechar o loop das notificações (usando o que já existe)
 
-Você tá certo em dois pontos:
+Você tá certo — Telegram `@srver1bot` já tá conectado como connector neste projeto e a VPS já tá acessível. Não precisa criar nada novo, só usar.
 
-**1. Notificações Telegram que eu deixei de mandar**
-Depois das fases 8 e 9 do plugin Obsidian (v0.4.3 e v0.4.4) eu não chamei o `atualizar_painel` nem disparei aviso no `@srver1bot`. Motivo real: o `atualizar_painel` tava quebrando com erro `<caminho-vps>` (bug do dispatcher MCP) e eu simplesmente pulei em vez de achar outro caminho. Foi egoísmo operacional mesmo, você tá coberto de razão.
+### Passos
 
-**2. URL do grafo**
-Sim, fui eu que troquei. Na fase 9 mudei o default de `painel-data.json` (que é o mega painel, sem `nodes`/`edges` → por isso o filter crashava) pra `https://status.centralldark.com/graph-data.json`. O `painel-data.json` continua sendo do status/monitoramento — não mexi nele.
+1. **Salvar o chat_id do canal Status como secret**
+   `TELEGRAM_STATUS_CHANNEL_ID = -1003669176367` (MultiZap Status)
+   → assim qualquer edge function futura acessa direto, sem hardcode.
 
----
+2. **Postar retroativo do plugin v0.4.4 no canal Status**
+   Uma mensagem curta via connector Telegram (`@srver1bot`) com o resumo da sprint — a mesma coisa que já foi pro seu privado, só que enxuta pro canal.
 
-## Plano — Notificação automática pós-ação (2 canais)
+3. **Gravar regra permanente na memória do projeto**
+   Adicionar em `mem://index.md` (Core):
+   > **Notificação pós-ação (obrigatório)**: ao fim de toda tarefa concluída → 2 posts via connector Telegram já linkado (`@srver1bot`): (a) card completo no privado admin `1901426549`, (b) linha curta no canal Status `-1003669176367`. Nunca postar no Monitoramento direto (Status já espelha). Nunca pedir token/VPS pra isso — o connector resolve.
 
-### Fluxo oficial que vou passar a seguir SEMPRE ao terminar qualquer tarefa
+### O que NÃO vou fazer
 
-```text
-┌─ [1] Privado @srver1bot (você) ──────────┐
-│  Card completo estilo "Sprint concluída" │
-│  - Título + placar ▓░ %                  │
-│  - Feito agora ✅                         │
-│  - O que sobrou ⚠️                        │
-│  - Próximo passo sugerido                │
-└──────────────────────────────────────────┘
-┌─ [2] Canal CentralDark — Status ─────────┐
-│  Post curto de evento                    │
-│  - 🚀/🛠️/🔴 + linha do que mudou          │
-│  - Commit/versão                         │
-│  - (Monitoramento recebe via vínculo)    │
-└──────────────────────────────────────────┘
-```
+- Não criar edge function nova.
+- Não mexer em VPS/PM2.
+- Não pedir mais nenhum secret.
+- Não tentar `atualizar_painel` de novo (dispatcher quebrado, fica como pendência separada).
 
-Regra: **nunca postar no Monitoramento diretamente** — o Status já espelha pra lá.
+### Resultado esperado
 
-### Como vou implementar operacionalmente
+Da próxima vez que eu terminar qualquer coisa (fix, deploy, ajuste), você vê a notificação chegar sem eu perguntar nada. Fluxo colado no `@srver1bot` que já existe.
 
-1. **Tentar `atualizar_painel` primeiro** (fluxo oficial). Se ele voltar a funcionar, ele já cobre o post no Status + commit no repo.
-2. **Se `atualizar_painel` falhar** (bug `<caminho-vps>`), fallback direto:
-   - Chamada ao Bot API do `@srver1bot` via token nas secrets da VPS (`/root/CentralDark/secrets/`) → `sendMessage` no seu privado (chat_id do admin) **e** no canal Status.
-   - Sem depender do dispatcher MCP quebrado.
-3. **Nunca mais fechar uma tarefa sem confirmar que pelo menos 1 dos 2 canais recebeu.** Se os dois falharem, aviso você no chat aqui explicitamente ("não consegui notificar, motivo X").
-
-### Retroativo — notificar o que já foi feito hoje
-
-Vou disparar 1 card consolidado no seu privado + 1 post curto no Status cobrindo:
-- Plugin Obsidian v0.4.2 → v0.4.4 (adapter de schema, fix filter, migração de URL padrão)
-- Descoberta: `painel-data.json` ≠ `graph-data.json`
-- Estado atual: aguardando você reabrir o Obsidian pra validar
-
-### Bug pendente (registrar como pendência oficial)
-
-Abrir pendência `atualizar_painel-dispatcher-caminho-vps`: dispatcher MCP tá injetando literal `<caminho-vps>` em vez do path real. Enquanto não for corrigido, uso o fallback direto via Bot API.
-
----
-
-## Confirma pra eu executar?
-
-Se OK, no modo build eu:
-1. Mando o card retroativo agora no seu privado + post no Status.
-2. Registro a pendência do dispatcher.
-3. Passo a seguir o fluxo dos 2 canais em toda tarefa daqui pra frente (fica salvo na memória do projeto).
+Aprovo?
