@@ -1,0 +1,16 @@
+{
+  "name": "centraldark-graph-panel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Painel de grafo CentralDark isolado em apps/modulos/graph-panel.",
+  "scripts": {
+    "start": "node server.js",
+    "run:lovable": "python3 scripts/pipeline-lovable.py",
+    "run:graphifyy": "bash scripts/pipeline-graphifyy.sh",
+    "audit": "python3 scripts/audit.py"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
