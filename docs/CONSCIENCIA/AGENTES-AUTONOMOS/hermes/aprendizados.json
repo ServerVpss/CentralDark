@@ -1,0 +1,138 @@
+{
+  "descricao": "Memória de lições do Hermes — o decisor injeta a categoria relevante no prompt antes de cada decisão; a ferramenta 'aprender' grava lições novas.",
+  "atualizado": "2026-07-03",
+  "categorias": {
+    "git": {
+      "gatilhos": [
+        "git",
+        "commit",
+        "push",
+        "rebase",
+        "stash",
+        "merge"
+      ],
+      "licoes": [
+        "NUNCA usar 'git add -A' — adicionar só os paths que a missão tocou (ex.: git add apps/modulos/hub).",
+        "NUNCA adicionar ao git: apps/modulos/status/painel-data.json (automation conflita sempre), .env, backups/.",
+        "Se o push falhar por non-fast-forward: git pull --rebase --autostash; se o rebase conflitar, git rebase --abort e relatar no final — não insistir.",
+        "Não criar stash pra 'limpar' a árvore — outros processos têm mudanças pendentes legítimas.",
+        "Commit falhou com 'nothing to commit' não é erro fatal — verificar git status e seguir."
+      ]
+    },
+    "timeout": {
+      "gatilhos": [
+        "timeout",
+        "command failed",
+        "falhou",
+        "etimedout"
+      ],
+      "licoes": [
+        "Falha exatamente no valor do timeout (15s/30s/45s) = processo pendurado em pipe/stdin, não lentidão do modelo.",
+        "Comando externo que lê stdin precisa do stdin fechado quando chamado por execFile/spawn."
+      ]
+    },
+    "json": {
+      "gatilhos": [
+        "json",
+        "parse",
+        "unexpected token"
+      ],
+      "licoes": [
+        "Sempre devolver JSON puro, sem markdown e sem ``` — o parser rejeita cercas de código.",
+        "Validar JSON gerado antes de gravar em arquivo consumido por página/serviço."
+      ]
+    },
+    "typescript": {
+      "gatilhos": [
+        "tsc",
+        "tsx",
+        "typecheck",
+        "ts2",
+        "type error",
+        "noemit"
+      ],
+      "licoes": [
+        "Antes de criar componente que importa de @/shared/ui/, conferir se o arquivo existe no kit — criar o primitivo primeiro se faltar.",
+        "Ao criar componente filho, usar EXATAMENTE os nomes de props que o componente pai já passa (ler o pai antes).",
+        "Hook e consumidor precisam combinar: conferir o objeto de retorno do hook antes de destructurar.",
+        "Corrigir o mínimo por arquivo; não reescrever arquivo inteiro que já compila."
+      ]
+    },
+    "permissao": {
+      "gatilhos": [
+        "permission denied",
+        "protegid",
+        "bloqueado",
+        "eacces"
+      ],
+      "licoes": [
+        "Áreas protegidas (apps/bot-telegram/, apps/modulos/status/, Bolt/, WebUI/, infra/caddy/, secrets/) são SÓ leitura — reportar em vez de editar.",
+        "Credencial ausente ($HUB_SUPABASE_DB_URL etc.): pular a etapa e anotar no relatório, não ficar tentando."
+      ]
+    },
+    "geral": {
+      "sempre": true,
+      "licoes": [
+        "Se as 2 últimas etapas devolveram o MESMO resultado, a estratégia atual não funciona — mude de abordagem ou pule com anotação.",
+        "Máximo 2 tentativas na mesma correção; na 3ª, anotar e seguir em frente.",
+        "Quando um erro ensinar algo novo, gravar com a ferramenta 'aprender' antes de seguir.",
+        "Arquivo disputado por outros processos (ex.: painel-data.json): não tocar; se PRECISAR, usar flock (exec 9>/tmp/lock; flock -n 9 || desistir)."
+      ]
+    },
+    "curl": {
+      "gatilhos": [
+        "curl",
+        "http",
+        "health",
+        "fetch",
+        "endpoint",
+        "api"
+      ],
+      "licoes": [
+        "curl em missão SEMPRE com -sS --max-time 10 (sem timeout pendura a etapa); retry: --retry 2 --retry-delay 2.",
+        "Só quer o status HTTP? curl -s -o /dev/null -w '%{http_code}' --max-time 5 URL.",
+        "Resposta JSON: extrair com | jq -r '.campo' — nunca parsear JSON com grep."
+      ]
+    },
+    "pm2": {
+      "gatilhos": [
+        "pm2",
+        "processo",
+        "daemon",
+        "restart",
+        "logs"
+      ],
+      "licoes": [
+        "pm2 logs SEMPRE com --nostream --lines N (sem --nostream trava a etapa até o timeout).",
+        "Após QUALQUER mudança de estado no PM2 (start/stop/restart): rodar pm2 save.",
+        "Nunca operar em massa (restart all / delete). Um processo por vez, pelo nome."
+      ]
+    },
+    "shell": {
+      "gatilhos": [
+        "sed",
+        "xargs",
+        "awk",
+        "substitui",
+        "renomea"
+      ],
+      "licoes": [
+        "Substituição em massa: 1) grep -rln 'padrao' lista os alvos; 2) xargs -r sed -i.bak 's/velho/novo/g'; 3) grep de novo confere; 4) só apagar os .bak depois da validação passar."
+      ]
+    },
+    "validacao": {
+      "gatilhos": [
+        "escrever_arquivo",
+        ".mjs",
+        ".tsx",
+        ".json",
+        "corrig"
+      ],
+      "licoes": [
+        "ANTES de sobrescrever arquivo que funciona: cp arquivo arquivo.bak (rollback barato).",
+        "DEPOIS de escrever_arquivo, validar na mesma missão: .mjs/.js → node --check; .json → python3 -c \"import json;json.load(open('X'))\"; .ts/.tsx → npx tsc --noEmit.",
+        "Validação falhou? Restaurar o .bak e tentar diferente — não empilhar correção em cima de arquivo quebrado."
+      ]
+    }
+  }
+}

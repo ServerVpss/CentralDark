@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-03T10:17:50.828Z",
-  "updatedAtBR": "03/07/2026, 07:17:50 BRT",
+  "updatedAt": "2026-07-03T10:21:30.414Z",
+  "updatedAtBR": "03/07/2026, 07:21:22 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -588,6 +588,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T10:21:22.645908Z",
+      "titulo": "Hermes concluiu o hub v2 SOZINHO — 77 etapas, typecheck zero, push próprio",
+      "detalhe": "Sistema de aprendizado implantado (aprendizados.json injetado no prompt + ferramenta 'aprender' + detectores de loop/releitura com escalação pro gemini-2.5-pro). Missões upgrade-hub-v2 e finalizar-hub-v2 concluídas. Commit 00f4403a3 feito e pushado pelo próprio Hermes aplicando git cirúrgico.",
+      "area": "Hermes / Aprendizado",
+      "actor": "hermes+tutor-fable"
+    },
     {
       "time": "2026-07-03T10:17:50.828Z",
       "titulo": "Push na main · 00f4403a37812e3410d08ff44dc1ea0bc18f0313",
@@ -1858,10 +1865,10 @@
     }
   ],
   "ultimo_commit": "fa4d130",
-  "ultimo_evento": "Hermes × darkai corrigido (stdin + env) + retomada automática de missões órfãs",
+  "ultimo_evento": "Hermes aprendeu e concluiu hub v2 sozinho (77 etapas, typecheck zero)",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-03T09:52:47.239434Z",
+  "updated_at": "2026-07-03T10:21:30.414Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",

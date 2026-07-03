@@ -340,3 +340,13 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 **Callers de darkai auditados:** `executor.mjs` (corrigido), `ARSENAL/hermes-vivo/decisor.mjs` (cópia legada, não roda — intocada), `apps/bot-telegram/handlers/regras.cjs` (🔒 protegido — tem o mesmo risco de trava no healthcheck de 20s e usa flag `-m` que o darkai não suporta; reportado, não alterado).
 
 **Backups:** `backups/2026-07-03-hermes-darkai/` (decisor, executor, daemon pré-fix e pré-retomada, darkai.sh, env).
+
+---
+
+## Hermes ganha sistema de aprendizado + conclui hub v2 sozinho (2026-07-03)
+
+**Decisão (ordem do Pivete: "ele tem que aprender" + missão Tutor):** o Hermes ganhou 3 camadas de aprendizado: (1) `hermes/aprendizados.json` — lições por categoria com gatilhos, injetadas pelo decisor no prompt de cada decisão (só a categoria relevante); (2) ferramenta `aprender` no executor — ele grava lições novas sozinho em runtime; (3) detectores anti-loop no decisor: chamada idêntica repetida E releitura do mesmo arquivo 3x/6 etapas (por qualquer ferramenta) → proíbe repetir no prompt e escala direto pro gemini-2.5-pro. Ledger humano em `ARSENAL/APRENDIZADOS.md` (formato do cerebro.mjs) + índice `ARSENAL/APRENDIZADOS-INDEX.json` + aula completa em `ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md` (6 técnicas: curl robusto, git cirúrgico, PM2, validação+rollback, sed em massa, flock).
+
+**Resultado:** missão `finalizar-hub-v2` concluída pelo Hermes em 77 etapas — typecheck do hub zerado (ele consertou PolicyEditor, api-client, telegram-client e exportou Policy do hook), commit `00f4403a3` pushado por ele MESMO aplicando as lições (add por path, pull --rebase --autostash, conferência via git log). Retomada automática segurou 3 restarts no meio da missão sem perder etapa.
+
+**Gaps anotados:** cerebro.mjs existe mas o daemon não o importa (canal vivo é o aprendizados.json); detector v3 pendente — repetição de comando com mesmo EFEITO e marcador diferente (ele rodou tsc 4x com echos diferentes pra "se convencer").

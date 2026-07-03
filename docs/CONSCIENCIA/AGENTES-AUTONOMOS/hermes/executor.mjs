@@ -58,6 +58,23 @@ export async function executar(ferramenta, args) {
         return { ok: true, saida: stdout.slice(0, 4000) };
       } catch (e) { return { ok: false, saida: `${(e.stderr || '').trim()} ${e.message}`.trim().slice(0, 1500) }; }
     }
+    case 'aprender': {
+      const categoria = String(args.categoria || 'geral').toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'geral';
+      const licao = String(args.licao || '').trim().slice(0, 300);
+      if (!licao) return { ok: false, saida: 'lição vazia' };
+      const APRENDIZADOS = `${ROOT}/docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/aprendizados.json`;
+      try {
+        const base = JSON.parse(await readFile(APRENDIZADOS, 'utf8'));
+        base.categorias ??= {};
+        base.categorias[categoria] ??= { gatilhos: [categoria], licoes: [] };
+        if (!base.categorias[categoria].licoes.includes(licao)) {
+          base.categorias[categoria].licoes.push(licao);
+          base.atualizado = new Date().toISOString().slice(0, 10);
+          await writeFile(APRENDIZADOS, JSON.stringify(base, null, 2));
+        }
+        return { ok: true, saida: `🧠 aprendizado salvo em [${categoria}]: ${licao}` };
+      } catch (e) { return { ok: false, saida: `falha ao salvar aprendizado: ${e.message.slice(0, 200)}` }; }
+    }
     case 'git': {
       const acao = args.acao || 'status';
       try {

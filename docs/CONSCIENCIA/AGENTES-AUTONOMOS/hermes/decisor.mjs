@@ -3,7 +3,33 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 const pexec = promisify(execFile);
+
+// ═══════════════════════════════════════════════════════════════
+// APRENDIZADOS — lições que o Hermes já pagou caro pra saber
+// (aprendizados.json; só a categoria relevante entra no prompt)
+// ═══════════════════════════════════════════════════════════════
+const APRENDIZADOS_PATH = join(dirname(fileURLToPath(import.meta.url)), 'aprendizados.json');
+
+function licoesRelevantes(missao, historico, erros_anteriores = []) {
+  try {
+    const base = JSON.parse(readFileSync(APRENDIZADOS_PATH, 'utf8'));
+    const contexto = (
+      missao + ' ' +
+      JSON.stringify(historico?.slice(-3) ?? []) + ' ' +
+      JSON.stringify(erros_anteriores)
+    ).toLowerCase();
+    const linhas = [];
+    for (const [cat, dados] of Object.entries(base.categorias || {})) {
+      const bate = dados.sempre === true || (dados.gatilhos || []).some(g => g && contexto.includes(g.toLowerCase()));
+      if (bate) for (const l of dados.licoes || []) linhas.push(`- [${cat}] ${l}`);
+    }
+    return linhas.slice(0, 14).join('\n');
+  } catch { return ''; }
+}
 
 // ═══════════════════════════════════════════════════════════════
 // CADEIA DE MODELOS (ordem de tentativa)
@@ -69,6 +95,9 @@ Você tem estas ferramentas disponíveis (escolha UMA por etapa):
 
 6. "notificar_progresso" — só posta no Telegram (informativo, sem executar nada)
    args: { "mensagem": "..." }
+
+7. "aprender" — grava uma lição aprendida pra NUNCA repetir o mesmo erro (memória permanente)
+   args: { "categoria": "git|timeout|json|typescript|permissao|geral", "licao": "frase curta e acionável" }
 `;
 
 const SCHEMA = `
@@ -85,6 +114,36 @@ Quando a missão estiver 100% concluída, devolva "terminou": true e "ferramenta
 
 const SYSTEM = `Você é o Hermes, executor autônomo da CentralDark. Pense passo-a-passo. Nunca desvie da missão. Sempre devolva JSON puro.`;
 
+// Loop = últimas etapas com MESMA ferramenta + MESMOS args (o modelo travou numa ideia)
+function detectarLoop(historico) {
+  const n = historico?.length ?? 0;
+  if (n < 2) return 0;
+  const assin = (h) => JSON.stringify({ f: h.ferramenta, a: h.args });
+  const ult = assin(historico[n - 1]);
+  let rep = 1;
+  for (let i = n - 2; i >= 0 && assin(historico[i]) === ult; i--) rep++;
+  return rep;
+}
+
+// Releitura = mesmo arquivo lido 3+ vezes nas últimas 6 etapas (por QUALQUER ferramenta: ler_arquivo ou shell cat)
+// — o modelo burla o detector de loop alternando ferramentas; o que importa é o EFEITO repetido
+function detectarReleituras(historico) {
+  const contagem = {};
+  for (const h of (historico ?? []).slice(-6)) {
+    let path = null;
+    if (h.ferramenta === 'ler_arquivo') path = h.args?.path;
+    else if (h.ferramenta === 'shell' && /\bcat\s+\S+/.test(h.args?.comando || ''))
+      path = (h.args.comando.match(/\bcat\s+([^\s|;&>]+)/) || [])[1];
+    if (!path) continue;
+    const norm = String(path).replace('/root/CentralDark/', '');
+    contagem[norm] = (contagem[norm] || 0) + 1;
+  }
+  let top = null;
+  for (const [p, c] of Object.entries(contagem))
+    if (c >= 3 && (!top || c > top.count)) top = { path: p, count: c };
+  return top;
+}
+
 function montarPrompt(missao, historico, erros_anteriores = []) {
   const hist = (historico || []).length === 0
     ? '(sem etapas ainda)'
@@ -96,7 +155,22 @@ function montarPrompt(missao, historico, erros_anteriores = []) {
     ? `\n\n[NOTA: Modelos anteriores falharam: ${erros_anteriores.map(e => `${e.modelo} (${e.erro})`).join(' | ')}]`
     : '';
 
-  return `MISSÃO ORIGINAL:\n${missao}\n\n---\nHISTÓRICO:\n${hist}${nota_erros}\n\n---\n${FERRAMENTAS}\n${SCHEMA}`;
+  const licoes = licoesRelevantes(missao, historico, erros_anteriores);
+  const bloco_licoes = licoes
+    ? `\n\n---\nLIÇÕES APRENDIDAS (você já errou nisso antes — respeite):\n${licoes}`
+    : '';
+
+  const rep = detectarLoop(historico);
+  const bloco_loop = rep >= 2
+    ? `\n\n🚨🚨 VOCÊ ESTÁ EM LOOP: as últimas ${rep} etapas usaram EXATAMENTE a mesma ferramenta com os mesmos args e nada mudou. É PROIBIDO repetir essa chamada. Mude de abordagem AGORA: se estava lendo, ESCREVA a correção (escrever_arquivo); se não sabe corrigir, pule e anote no relatório. 🚨🚨`
+    : '';
+
+  const rel = detectarReleituras(historico);
+  const bloco_rel = rel
+    ? `\n\n🚨 VOCÊ JÁ LEU ${rel.path} ${rel.count}x NAS ÚLTIMAS 6 ETAPAS sem corrigir nada. PROIBIDO ler esse arquivo de novo (por ler_arquivo OU shell). O conteúdo já está no seu histórico. A PRÓXIMA AÇÃO DEVE SER escrever_arquivo em ${rel.path} com o arquivo COMPLETO corrigido. 🚨`
+    : '';
+
+  return `MISSÃO ORIGINAL:\n${missao}\n\n---\nHISTÓRICO:\n${hist}${nota_erros}${bloco_licoes}${bloco_loop}${bloco_rel}\n\n---\n${FERRAMENTAS}\n${SCHEMA}`;
 }
 
 function extrairJSON(texto) {
@@ -155,8 +229,13 @@ export async function decidir(missao, historico) {
 
   const historico_erros = [];
 
-  // 2. Tenta os 3 modelos via darkai
-  for (const cfg of CADEIA_DARKAI) {
+  // Em loop ou releitura detectados, pula o Flash e vai direto pro modelo mais forte quebrar o empate
+  const emLoop = detectarLoop(historico) >= 3 || !!detectarReleituras(historico);
+  const cadeia = emLoop ? CADEIA_DARKAI.slice(1) : CADEIA_DARKAI;
+  if (emLoop) console.log('[decisor] 🔁 loop/releitura detectado — escalando direto pro gemini-2.5-pro');
+
+  // 2. Tenta os modelos via darkai
+  for (const cfg of cadeia) {
     const t0 = Date.now();
     try {
       const prompt = montarPrompt(missao, historico, historico_erros);

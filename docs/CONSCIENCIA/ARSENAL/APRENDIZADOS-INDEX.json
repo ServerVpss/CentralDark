@@ -1,0 +1,19 @@
+{
+  "descricao": "Índice por categoria dos aprendizados do Hermes — cada categoria lista os TIPO/CONTEXTO do ledger APRENDIZADOS.md. O Hermes lê SÓ a categoria relevante antes de agir (via hermes/aprendizados.json, que é o espelho operacional injetado no prompt pelo decisor).",
+  "atualizado": "2026-07-03",
+  "ledger": "docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md",
+  "espelho_operacional": "docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/aprendizados.json",
+  "categorias": {
+    "git": ["git add por path, nunca -A", "push rejeitado: pull --rebase --autostash; conflito = abort + relatar", "nunca tocar painel-data.json/.env/backups"],
+    "timeout": ["falha exata no timeout = pipe/stdin pendurado", "curl sempre com --max-time"],
+    "json-parse": ["JSON puro sem cercas de markdown", "validar com python3 json.load antes de servir"],
+    "typescript": ["tsc --noEmit como bússola", "ler o pai antes de criar filho", "conferir kit de UI antes de importar"],
+    "permissao": ["áreas protegidas são só leitura", "credencial ausente = pular e anotar"],
+    "loop": ["2 leituras do mesmo arquivo bastam; a 3ª ação é escrever", "2 resultados iguais = mudar estratégia"],
+    "curl": ["-sS --max-time --retry", "-o /dev/null -w '%{http_code}' pra só status", "jq -r pra extrair campo"],
+    "pm2": ["logs sempre --nostream", "pm2 save após mudança", "nunca operação em massa"],
+    "shell-massa": ["grep -rln lista → xargs sed -i.bak troca → grep confere"],
+    "validacao-rollback": ["cp .bak antes de sobrescrever", "node --check / json.load / tsc --noEmit depois de escrever", "falhou = restaurar .bak"],
+    "lock": ["flock em arquivo disputado ou não tocar"]
+  }
+}
