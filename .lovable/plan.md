@@ -1,30 +1,56 @@
+## Foco travado do Hermes — só 3 IDs
 
-# Padronizar posts Telegram: canal também em `<pre>` mono
+Ajustar mapa e rota fixa pra Hermes operar exclusivamente com:
 
-## Problema
-O card do admin já sai monoespaçado (fundo preto) porque uso `<pre>` + `parse_mode: HTML`. Mas o post do canal Status foi enviado como texto puro — apareceu na fonte normal do Telegram, quebrando o padrão visual.
+```
+🤖 @srver1bot               (bot central)
+📢 -1003669176367           canal Status CentralDark  ← posta AQUI
+👥 -5365750004              Grupo Evolução (recebe automático via canal linkado)
+👤 1901426549               @segredounlocker (admin, privado)
+```
 
-## Solução (2 pontos)
+Tudo o mais (TelePainel, @SEGREDOPUXADASBOT, supergrupos -1002205387838 e -1003994854326) sai do escopo do Hermes — continuam vivos, só não são alvo dele.
 
-**1. Regra fixa daqui pra frente**
-Todo post do Telegram (admin OU canal) sai com `parse_mode: "HTML"` + conteúdo dentro de `<pre>…</pre>`. Muda só o tamanho:
-- Admin privado → card completo (formato AULA-006, placar ▓░, etc)
-- Canal Status → 1-3 linhas curtas, mas ainda dentro de `<pre>` (mono, fundo escuro)
+---
 
-**2. Ensinar Hermes**
-Atualizar na VPS:
-- `HERMES/AULAS/AULA-003-telegram-notificacao.md` — adicionar seção "Formato visual obrigatório: sempre `<pre>` HTML, nunca texto puro"
-- `HERMES/ROTAS-FIXAS/notificacao-telegram.md` — checklist inclui "linha curta do canal também vai em `<pre>`"
-- `HERMES/APRENDIZADOS/008-canal-tambem-mono.md` — o porquê (padrão visual do Pivete, fundo preto/mono)
-- Aprendizado geral #272 no `docs/CONSCIENCIA/APRENDIZADOS.md`
+### Arquivos a mexer
 
-**3. Reenviar o post do canal (opcional, você decide)**
-Se quiser, disparo um novo post no canal Status agora, mesma info, mas em `<pre>` — pra ficar visualmente igual ao padrão. O antigo fica lá (Telegram não deixa editar autoria bot fácil, mas dá pra deletar se preferir).
+**1) `HERMES/ROTAS-FIXAS/mapa-telegram.md`** — rescrever com bloco "FOCO ATUAL" no topo:
+```
+🎯 FOCO ATIVO DO HERMES
+├─ Bot:    @srver1bot
+├─ Canal:  -1003669176367  (posta AQUI — grupo linkado recebe sozinho)
+├─ Grupo:  -5365750004     (espelho do canal, não postar direto)
+└─ Admin:  1901426549      (card privado pós-ação)
+```
+Rebaixar TelePainel/supergrupos pra seção "Fora do escopo Hermes (referência)".
 
-## Áreas tocadas
-Só `HERMES/` na VPS + 1 chamada opcional pro Telegram. Nada no `src/`.
+**2) `HERMES/ROTAS-FIXAS/notificacao-telegram.md`** — atualizar tabela:
+- Canal Status `-1003669176367` = destino primário (post público)
+- Grupo Evolução `-5365750004` = NÃO postar direto (recebe do canal automaticamente)
+- Admin `1901426549` = card privado completo
+- Remover/marcar como opcional qualquer outro destino
 
-## Confirma?
-Manda **"vai"** que eu:
-1. Grava a regra no Hermes
-2. Reenvio o post do canal em `<pre>` (a menos que peça pra não reenviar)
+**3) `HERMES/AULAS/AULA-016-foco-3-ids-canal-espelha-grupo.md`** (novo) — ensina:
+- Regra: post público sempre via canal → grupo linkado replica sozinho
+- Nunca duplicar (post no canal + post no grupo = spam)
+- Como validar que o link canal→grupo tá funcionando
+- Comportamento se link quebrar (fallback: post direto no grupo com aviso)
+
+**4) `HERMES/APRENDIZADOS/009-canal-linkado-espelha-grupo.md`** (novo) — registra a descoberta técnica: canal do Telegram com grupo de discussão vinculado espelha posts automaticamente, então basta 1 post.
+
+---
+
+### Fora do plano (não mexer agora)
+- @SEGREDOPUXADASBOT continua rodando normal (é o TelePainel, outro contexto)
+- Supergrupos -1002205387838 e -1003994854326 ficam listados como "referência", sem ação
+- Não pedir pro Fabler puxar mais dados do HUB agora — foco reduzido dispensa
+
+---
+
+### Definition of Done
+- [ ] `mapa-telegram.md` mostra "FOCO ATIVO" com os 3 IDs no topo
+- [ ] `notificacao-telegram.md` deixa claro: canal é o destino, grupo é espelho automático
+- [ ] AULA-016 criada explicando o padrão canal→grupo
+- [ ] APR-009 registrado
+- [ ] Commit padrão AULA-012: `🧠 Hermes/ROTAS-FIXAS: 016 foco travado 3 ids`
