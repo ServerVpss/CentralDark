@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T20:04:00.312Z",
-  "updatedAtBR": "03/07/2026, 17:04:00 BRT",
+  "updatedAt": "2026-07-03T21:01:02.531Z",
+  "updatedAtBR": "03/07/2026, 18:01:02 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Enviou logs do servidor",
+    "lastCommit": "Adicionou aliases categorizados",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T21:01:02.531Z",
+      "titulo": "Push na main · 5f3162e4d7f45b1aa2a7eda3c581c89fdaa46e1b",
+      "detalhe": "Adicionou aliases categorizados",
+      "area": "Repositório",
+      "sha": "5f3162e",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T20:04:00.312Z",
       "titulo": "Push na main · 8833c7d1ee90abda4db8828c568888bb9714513a",
       "detalhe": "Enviou logs do servidor",
@@ -977,13 +985,6 @@
       "area": "Infra/VPS",
       "sha": "3b985a1",
       "actor": "Lovable-IA"
-    },
-    {
-      "time": "2026-07-02T15:34:58.809Z",
-      "title": "Painel \"Consciência Viva\" criado — feed ao vivo dos agentes em /telepainel/consciencia",
-      "area": "TelePanel",
-      "status": "feito",
-      "detail": ""
     }
   ],
   "agents": [
@@ -1398,6 +1399,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T21:01:02.531Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 5f3162e4d7f45b1aa2a7eda3c581c89fdaa46e1b (5f3162e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T20:04:00.312Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 8833c7d1ee90abda4db8828c568888bb9714513a (8833c7d)",
@@ -1737,13 +1745,6 @@
       "time": "2026-06-30T14:27:53.321Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 595fe795a3fbfe6b6cedb5837af5e145a274450b (595fe79)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T14:18:07.965Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ad88277d53ffceef0567a94ef6da524c1241de19 (ad88277)",
       "area": "Repositório",
       "status": "sucesso"
     }
