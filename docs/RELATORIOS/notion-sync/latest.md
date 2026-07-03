@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T18:46:49.563Z
+# 🧠 Notion Sync — 2026-07-03T18:56:32.662Z
 
-- **Commit fonte:** `3cb653d36cdcd7ce052f3038a49c94e6a3b66e2c`
+- **Commit fonte:** `423a3ecd8cbd2790e9dd4b26ae2d6816af9e4b5c`
 - **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 306 atualizadas · ❌ 390 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 306 atualizadas · ❌ 396 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 271 | 0 | 271 | 0 | 0 |
-| estrutura | 390 | 0 | 0 | 0 | 390 |
+| estrutura | 396 | 0 | 0 | 0 | 396 |
 
 ## Operações
 
@@ -372,15 +372,21 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-003-telegram-notificacao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-004-3d-esmeralda-design-system.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-005-pipeline-deploy-continuo.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-009-nivel-e-skills.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-010-padrao-pre-telegram.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-011-auto-aprendizagem-e-memoria.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/TEMPLATE-AULA.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/001-gemini-sugere-aula-pipeline.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/TEMPLATE-DEBATE.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/EVOLUCAO/002-bloco6-fechado.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/arsenal-endpoints.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/comandos-curl-baseline.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/notificacao-telegram.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/webui-reload.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/STATUS.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/001-pre-carregar-graph.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/fix-catalogo-tools-json/missao.md |
