@@ -613,3 +613,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** Após migração /root/[oculto] → apps/modulos/elite-gateway/ (03/07/2026), grep achou 3 arquivos em CentralDark ainda referenciando /root/[oculto] Não bloqueia (gateway rodando), mas convém sanear.
 - **Onde mexer:** grep -rl "/root/[oculto]" /root/[oculto] /root/[oculto] — trocar por /root/[oculto]
 - **Critério pra fechar:** grep -r "/root/[oculto]" retorna 0 hits em /root/[oculto]
+### 18. Enxame no Grupo — 1 bot por persona (aguardando Telegram no HUB) — 🔴 ABERTO (03/07/2026, 18:07 BRT)
+- **Sintoma:** Só Claude Sonnet e Gemini Flash estão no grupo Central Dark. Faltam os outros modelos da Lovable AI (Gemini Pro/Lite, GPT-5, GPT-5.4, GPT-5.5 etc).
+- **Onde mexer:** 1) Aguardar Pivete conectar conta Telegram pessoal no HUB. 2) Listar bots já existentes na conta dele (via API Telegram do usuário). 3) Reutilizar bots existentes editando nome/@/bio via BotFather API pra virar cada persona (Gemini Pro, GPT-5 etc). 4) Criar os que faltarem. 5) Cada bot roda via edge function chamando o modelo correspondente no LOVABLE_API_KEY. 6) Adicionar todos ao grupo Central Dark como admin.
+- **Critério pra fechar:** Cada modelo da Lovable AI Gateway tem 1 bot Telegram próprio (nome + avatar + username) participando ativamente do grupo, reaproveitando bots que o Pivete já criou.
