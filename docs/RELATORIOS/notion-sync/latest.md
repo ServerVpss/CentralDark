@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T03:05:14.757Z
+# 🧠 Notion Sync — 2026-07-03T03:20:59.181Z
 
-- **Commit fonte:** `5b5f5bfd8181641e8d2551bf5e13668bca60113e`
+- **Commit fonte:** `a7b2f167b09f25f3701aa9d4914f95ac77e09a3d`
 - **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 8 criadas · ♻️ 624 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 636 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 21 | 0 | 21 | 0 | 0 |
 | aprendizados | 266 | 0 | 266 | 0 | 0 |
-| estrutura | 340 | 8 | 332 | 0 | 0 |
+| estrutura | 345 | 1 | 344 | 0 | 0 |
 
 ## Operações
 
@@ -355,14 +355,19 @@
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/README.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/README.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-3-nucleo-universal-telegram.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-4-regras-configuraveis.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-232402-router-diga-s-ok.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-3-nucleo-universal-telegram.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-4-regras-configuraveis.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-5-painel-visual.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md |
+| estrutura | criado | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-7-webui-integration.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/BOT_COMMANDS.md |
