@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T12:13:34.388Z
-- **Commit:** `8b4c62c60329a0a53d980c27c28561bf361a2848`
+- **Gerado:** 2026-07-03T17:09:18.816Z
+- **Commit:** `65bf46453bc4eabe579e3362c1837aa2dbad928f`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 24 | 24 | 24 | 0 | 0 |
-| aprendizados | 290 | 0 | 0 | 290 | 0 |
+| aprendizados | 291 | 0 | 0 | 291 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **290**
+- 🟥 Faltando no Notion: **291**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -338,4 +338,5 @@
 - 💬 Claude Sonnet — grupo evolução (2026-07-03)
 - 💬 Groq Llama — grupo evolução (2026-07-03)
 - 💬 Claude Sonnet — grupo evolução (2026-07-03)
+- 265. Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido
 </details>

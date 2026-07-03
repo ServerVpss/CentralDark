@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T12:13:31.915Z
+# 🧠 Notion Sync — 2026-07-03T17:09:15.270Z
 
-- **Commit fonte:** `8b4c62c60329a0a53d980c27c28561bf361a2848`
+- **Commit fonte:** `65bf46453bc4eabe579e3362c1837aa2dbad928f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 295 atualizadas · ❌ 363 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 296 atualizadas · ❌ 364 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 24 | 0 | 24 | 0 | 0 |
-| aprendizados | 266 | 0 | 266 | 0 | 0 |
-| estrutura | 363 | 0 | 0 | 0 | 363 |
+| aprendizados | 267 | 0 | 267 | 0 | 0 |
+| estrutura | 364 | 0 | 0 | 0 | 364 |
 
 ## Operações
 
@@ -317,7 +317,7 @@
 | aprendizados | atualizado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
 | aprendizados | atualizado | #263 — Estilo gamificado é padrão oficial de comunicação |
 | aprendizados | atualizado | #264 — Renomeação PM2 + fix Caddy status aplicados na VPS |
-| aprendizados | criado | #265 — Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido |
+| aprendizados | atualizado | #265 — Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -352,6 +352,7 @@
 | estrutura | erro | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/fix-catalogo-tools-json/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/revisao-hub-v2-rodada2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/upgrade-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
