@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T18:08:17.762Z
+# 🧠 Notion Sync — 2026-07-03T18:21:55.846Z
 
-- **Commit fonte:** `d13717cc287720fc72d6747cfa5026779f4bbbf3`
+- **Commit fonte:** `b7ccab74676248b9b8904bfcfc41cad2df3b53e8`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 302 atualizadas · ❌ 386 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 303 atualizadas · ❌ 388 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 27 | 1 | 26 | 0 | 0 |
+| decisoes | 28 | 1 | 27 | 0 | 0 |
 | aprendizados | 271 | 0 | 271 | 0 | 0 |
-| estrutura | 386 | 0 | 0 | 0 | 386 |
+| estrutura | 388 | 0 | 0 | 0 | 388 |
 
 ## Operações
 
@@ -53,7 +53,8 @@
 | decisoes | atualizado | Hermes ganha sistema de aprendizado + conclui hub v2 sozinho (2026-07-03) |
 | decisoes | atualizado | Rodada 3 do Hermes + incidente de segurança contas/ (2026-07-03, tarde) |
 | decisoes | atualizado | Hermes vira admin do Elite Gateway — tutor especialista (2026-07-03, noite) |
-| decisoes | criado | Vazamento de token contido + redator de segredos no Hermes (2026-07-03, noite) |
+| decisoes | atualizado | Vazamento de token contido + redator de segredos no Hermes (2026-07-03, noite) |
+| decisoes | criado | Grafo Vivo agora é vivo de verdade + Hermes vira mantenedor (2026-07-03, noite) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -382,6 +383,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/manutencao-gateway-exame/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/revisao-hub-v2-rodada2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/upgrade-hub-v2/missao.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/em-andamento/manter-grafo-vivo/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
@@ -404,6 +406,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes-2.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md |
