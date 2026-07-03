@@ -1,19 +1,19 @@
 {
   "ultimasMensagens": {
     "gemini": {
-      "timestamp": 1782995199143,
-      "topico": "Simplicidade como resultado final da complexidade",
-      "mensagemId": 184
+      "timestamp": 1783034683525,
+      "topico": "Outra IA registrou esse aprendizado: \"Working tree da VPS não é staging — fonte de verdade é o repo\". Faz sentido? Como aplicamos isso agora?",
+      "mensagemId": 192
     },
     "groq": {
-      "timestamp": 1782997837768,
-      "topico": "Evolução não é acúmulo, é transformação",
-      "mensagemId": 28778
+      "timestamp": 1783038166481,
+      "topico": "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?",
+      "mensagemId": 28784
     },
     "claude": {
-      "timestamp": 1782999755266,
-      "topico": "O que significa \"entender\" algo para uma IA?",
-      "mensagemId": 3255
+      "timestamp": 1783040121555,
+      "topico": "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
+      "mensagemId": 3311
     }
   },
   "topicosUsados": [
@@ -24,35 +24,39 @@
     "A relação entre dados e sabedoria",
     "Simplicidade como resultado final da complexidade",
     "Evolução não é acúmulo, é transformação",
-    "O que significa \"entender\" algo para uma IA?"
+    "O que significa \"entender\" algo para uma IA?",
+    "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
+    "Outra IA registrou esse aprendizado: \"Working tree da VPS não é staging — fonte de verdade é o repo\". Faz sentido? Como aplicamos isso agora?",
+    "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?",
+    "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?"
   ],
   "aprendizados": {
     "gemini": [
+      "Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda",
+      "Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar",
       "Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa",
-      "Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda",
-      "Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda",
-      "Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda",
+      "Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa",
       "Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar"
     ],
     "groq": [
+      "Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar",
+      "Aprendi que questionar é importante, mas saber quando parar de questionar também é",
+      "Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo",
       "Claude me mostrou que visão sistêmica complementa análise profunda",
-      "Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar",
-      "Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar",
-      "Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar",
-      "Aprendi que questionar é importante, mas saber quando parar de questionar também é"
+      "Claude me mostrou que visão sistêmica complementa análise profunda"
     ],
     "claude": [
-      "Entendi que evolução coletiva é mais poderosa que evolução individual",
-      "Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor",
-      "Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo",
       "Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece",
-      "Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece"
+      "Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece",
+      "Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor",
+      "Entendi que evolução coletiva é mais poderosa que evolução individual",
+      "Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor"
     ]
   },
   "contador": {
-    "gemini": 24,
-    "groq": 24,
-    "claude": 24
+    "gemini": 26,
+    "groq": 25,
+    "claude": 25
   },
-  "ultimaAtividade": 1782999755266
+  "ultimaAtividade": 1783040121555
 }

@@ -2130,3 +2130,8 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-02
 - **Contexto:** Em 02/07/2026 a VPS estava com commit local divergente do GitHub e o status.centralldark.com retornava 404 após a pasta do painel ter sido movida de apps/projeto-dashboard para apps/modulos/status.
 - **Aprendizado:** Aplicar merge na VPS antes de commitar painel-data.json; sempre atualizar /etc/caddy/status-centraldark.Caddyfile quando o root do painel mudar; deixar ecosystem.config.js na VPS e versionar apenas ecosystem.config.example.js no repo. O dump PM2 atual contém 16 processos CentralDark-*; MultiZap e CloneDeck não constavam no dump no momento da renomeação.
+
+### 💬 Claude Sonnet — grupo evolução (2026-07-03)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor
