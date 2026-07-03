@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T02:45:01.761Z",
-  "baseReport": "2026-07-03T01:00:02.321Z",
+  "timestamp": "2026-07-03T04:15:01.517Z",
+  "baseReport": "2026-07-03T03:00:02.854Z",
   "criticos": [
     {
       "tipo": "link-quebrado-critico",
@@ -522,7 +522,7 @@
     },
     {
       "tipo": "orfas-excessivas",
-      "count": 242,
+      "count": 248,
       "lista": [
         "ARQUITETURA-CENTRALDARK-2026",
         "00-PORTA-DE-ENTRADA-IA",
@@ -534,8 +534,32 @@
   ],
   "autoFix": [
     {
+      "tipo": "sem-frontmatter",
+      "arquivo": "2026-07-02-2304-em-1-frase-qual-sua-fun-o"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "2026-07-02-232402-router-diga-s-ok"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "MULTI-MODEL-ORCHESTRATION"
+    },
+    {
       "tipo": "sem-conexoes-rapidas",
       "arquivo": "00-LEIA-PRIMEIRO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "CONSELHO"
     },
     {
       "tipo": "sem-conexoes-rapidas",
@@ -612,5 +636,5 @@
   ],
   "totalCritico": 21,
   "totalAlto": 35,
-  "totalAutoFix": 19
+  "totalAutoFix": 25
 }

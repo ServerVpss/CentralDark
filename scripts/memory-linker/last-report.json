@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T03:00:02.854Z",
-  "nextRunMin": 76,
+  "timestamp": "2026-07-03T04:30:02.937Z",
+  "nextRunMin": 62,
   "orfas": [
     "ARQUITETURA-CENTRALDARK-2026",
     "00-PORTA-DE-ENTRADA-IA",
@@ -36,8 +36,15 @@
     "2026-07-02-2304-em-1-frase-qual-sua-fun-o",
     "2026-07-02-232402-router-diga-s-ok",
     "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi",
+    "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova",
+    "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu",
+    "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr",
     "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
     "MULTI-MODEL-ORCHESTRATION",
+    "fase-3-nucleo-universal-telegram",
+    "fase-4-regras-configuraveis",
+    "fase-5-painel-visual",
+    "fase-6-hermes-autonomo",
     "BOT_COMMANDS",
     "CODEX-INTEGRADO",
     "CODEX-REVISAO-PRS",
@@ -551,12 +558,18 @@
   },
   "noConexoes": [
     "00-LEIA-PRIMEIRO",
-    "CONSELHO",
     "2026-07-02-2304-em-1-frase-qual-sua-fun-o",
     "2026-07-02-232402-router-diga-s-ok",
     "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi",
+    "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova",
+    "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu",
+    "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr",
     "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
     "MULTI-MODEL-ORCHESTRATION",
+    "fase-3-nucleo-universal-telegram",
+    "fase-4-regras-configuraveis",
+    "fase-5-painel-visual",
+    "fase-6-hermes-autonomo",
     "00-LEIA-PRIMEIRO",
     "00-COMECE-AQUI",
     "01-O-QUE-E-DARKAI",
@@ -577,11 +590,13 @@
     "QUICKSTART"
   ],
   "semFrontmatter": [
-    "2026-07-02-2304-em-1-frase-qual-sua-fun-o",
-    "2026-07-02-232402-router-diga-s-ok",
-    "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi",
-    "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
-    "MULTI-MODEL-ORCHESTRATION"
+    "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova",
+    "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu",
+    "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr",
+    "fase-3-nucleo-universal-telegram",
+    "fase-4-regras-configuraveis",
+    "fase-5-painel-visual",
+    "fase-6-hermes-autonomo"
   ],
-  "total": 333
+  "total": 348
 }

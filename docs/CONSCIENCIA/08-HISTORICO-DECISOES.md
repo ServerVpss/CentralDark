@@ -306,3 +306,17 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 - `docs/CONSCIENCIA/DARKAI/README.md` (menciona integração)
 
 **Regra derivada:** qualquer IA nova que entrar no grupo tem que herdar o bloco de contexto obrigatório no prompt. Filosofia genérica volta se algum prompt for solto sem esse bloco.
+
+---
+
+## Fix STT do WebUI — whisper-1 mapeado no proxy audio-transcriptions (2026-07-03)
+
+**Problema:** transcrição de voz do Open WebUI (ui.centralldark.com) quebrada com `400 Bad Request` em `https://api.centralldark.com/v1/audio/transcriptions`. Causa raiz: o Open WebUI manda `model=whisper-1` (padrão OpenAI); a edge function `audio-transcriptions` (projeto `kagejpghnwdfymddwxuf`) prefixava para `openai/whisper-1` e o Lovable AI Gateway rejeitava — só aceita `openai/gpt-4o-transcribe` e `openai/gpt-4o-mini-transcribe`.
+
+**Decisão:** corrigir NO PROXY (edge function), não no WebUI (pasta protegida 🔒). A função agora tem allowlist `MODELOS_ACEITOS`; qualquer modelo fora dela (ex.: `whisper-1`) cai no default `openai/gpt-4o-mini-transcribe`. Endpoint fica OpenAI-compatível pra qualquer cliente.
+
+**Fluxo da rota (mapeado por enxame de agentes):** Open WebUI → `api.centralldark.com` (Caddy) → `handle /v1/audio/transcriptions` → edge function `audio-transcriptions` → Lovable AI Gateway. O fallback do domínio (demais rotas) vai pro EliteHTTP `:8080` (gateway ChatGPT via browser), que NÃO tem rota de áudio.
+
+**Execução:** working tree da VPS estava no branch `f1-mcp-catalog-walking-skeleton` (trabalho de outra sessão) — fix feito em worktree isolado a partir de `origin/main` e push direto pra `main` (commit `cc2c01c9d`). Deploy automático via sync Lovable↔GitHub.
+
+**Alternativa registrada (não executada):** VPS tem `GROQ_API_KEY` em `secrets/agent.env`; a Groq expõe `/openai/v1/audio/transcriptions` (whisper-large-v3) compatível — plano B seria rota local no Arsenal Adapter `:8090` + ajuste no Caddy, se um dia o gateway Lovable falhar.
