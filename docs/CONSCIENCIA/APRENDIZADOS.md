@@ -2204,3 +2204,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Fase 3 (Composer/Esmeralda UI) aplicou tema 3D tátil no Open WebUI via volume mount de CSS.
 - **Aprendizado:** CSS custom do Open WebUI (container `open-webui`) vive em `apps/modulos/WebUI/custom-css/esmeralda.css`, montado como `/app/backend/static/custom.css:ro` via `docker-compose.override.yml`. Reload = `docker restart open-webui` + Ctrl+Shift+R no browser. Variáveis emerald editáveis no topo do arquivo (`--em-primary`, `--em-radius`, sombras 3D). Regra: pra mudar visual do WebUI, editar SÓ esse .css — nada de mexer em `src/` do open-webui ou tema built-in.
+
+### 269. Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral)
+- **Categoria:** regra
+- **Data:** 2026-07-03
+- **Contexto:** Antes de organizar, aprendizados sobre Hermes/Arsenal ficavam soltos no APRENDIZADOS.md geral misturados com aprendizados de infra genérica.
+- **Aprendizado:** Tudo sobre Hermes vive em `docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/` com 6 subpastas obrigatórias: README.md, AULAS/, APRENDIZADOS/, ROTAS-FIXAS/, DEBATES/, EVOLUCAO/. Cada aula segue TEMPLATE-AULA.md fixo (7 seções). Aprendizados/rotas/debates também têm templates. Aprendizados sobre Hermes NÃO vão pro APRENDIZADOS.md geral — só os não-Hermes. Regra: se descoberta é sobre orquestração de IAs, agente autônomo, prompt de Hermes, ou capacidade dele, vai na árvore dele.
