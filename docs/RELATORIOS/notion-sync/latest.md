@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-02T22:18:37.976Z
+# 🧠 Notion Sync — 2026-07-03T00:23:49.182Z
 
-- **Commit fonte:** `9abe3d6a263996f346a28867ce234d2b075a74c3`
+- **Commit fonte:** `f3cd8972caac6b042778d5dff6f6217074218850`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 360 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 623 atualizadas · ❌ 1 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 20 | 0 | 20 | 0 | 0 |
-| aprendizados | 265 | 0 | 265 | 0 | 0 |
-| estrutura | 71 | 1 | 70 | 0 | 0 |
+| decisoes | 21 | 0 | 21 | 0 | 0 |
+| aprendizados | 266 | 0 | 266 | 0 | 0 |
+| estrutura | 332 | 0 | 331 | 0 | 1 |
 
 ## Operações
 
@@ -529,7 +529,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/README.md |
-| estrutura | criado | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
+| estrutura | atualizado | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
@@ -630,14 +630,14 @@
 | estrutura | atualizado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/README.md |
-| estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/decisoes/DECISOES-CENTRAL-DARK.md |
+| estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/decisoes/DECISOES-CENTRAL-DARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/exemplos/EXEMPLO-DECISAO-COMPLETA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/exemplos/EXEMPLOS-VETO-CLAUDE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PONTOS-DE-COMANDO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PROMPT-BASE-GRUPO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PROTOCOLO-V4-VETO-ABSOLUTO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
-| estrutura | criado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
+| estrutura | atualizado | docs/CONSCIENCIA/agente/elite-mapper/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |
@@ -645,6 +645,6 @@
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/04_DUPLICATAS_ENCONTRADAS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/05_PROPOSTA_ESTRUTURA_NOVA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/relatorios/06_ESTATISTICAS.md |
-| estrutura | criado | docs/CONSCIENCIA/sentinela/last-report.md |
+| estrutura | atualizado | docs/CONSCIENCIA/sentinela/last-report.md |
 
 > Gerado automaticamente por `.github/workflows/notion-sync.yml`.
