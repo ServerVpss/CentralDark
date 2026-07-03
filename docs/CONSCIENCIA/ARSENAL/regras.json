@@ -1,25 +1,54 @@
 {
-  "_comentario": "Regras configuráveis do Arsenal Council. Editável via Telegram (/router trocar). Hot-reload a cada 5s.",
-  "versao": 2,
+  "_comentario": "Regras Arsenal Council. Hot-reload 5s. Editável via /router.",
+  "versao": 3,
   "atualizado_em": "2026-07-03",
   "modelos": {
-    "router":   "gemini-3-flash-preview",
-    "voz1_pro": "gemini-3.1-pro-preview",
-    "voz2_gpt": "gpt-5",
-    "voz3_flash": "gemini-3-flash-preview",
-    "juiz":     "gemini-3.1-pro-preview"
+    "router":    "google/gemini-3-flash-preview",
+    "voz1_pro":  "google/gemini-3.1-pro-preview",
+    "voz2_gpt":  "openai/gpt-5",
+    "voz3_flash":"google/gemini-3-flash-preview",
+    "juiz":      "google/gemini-3.1-pro-preview"
   },
-  "timeouts": {
-    "router_s":   30,
-    "parallel_s": 90,
-    "debate_s":   180
-  },
+  "timeouts": { "router_s": 30, "parallel_s": 90, "debate_s": 180 },
   "modelos_disponiveis": [
-    "gemini-3-flash-preview",
-    "gemini-3.1-pro-preview",
-    "gpt-5",
-    "gpt-5-mini",
-    "claude-sonnet-4-5",
-    "claude-opus-4"
+    "google/gemini-3-flash-preview",
+    "google/gemini-3.1-flash-lite",
+    "google/gemini-3.1-pro-preview",
+    "google/gemini-3.5-flash",
+    "google/gemini-2.5-pro",
+    "google/gemini-2.5-flash",
+    "openai/gpt-5",
+    "openai/gpt-5-mini",
+    "openai/gpt-5.4",
+    "openai/gpt-5.5",
+    "anthropic/claude-sonnet-4-5",
+    "anthropic/claude-opus-4"
+  ],
+  "conselho_tutores": {
+    "_doc": "Elenco que ensina o Hermes. Cada persona tem papel único.",
+    "mestre_sabio":      { "emoji": "🧙", "nome": "Fabler",          "modelo": "anthropic/claude-sonnet-4-5", "papel": "Estratégia, arquitetura, revisão final.", "gateway": "elite-anthropic" },
+    "analista_profundo": { "emoji": "🧠", "nome": "GPT-5.5",         "modelo": "openai/gpt-5.5",              "papel": "Debate técnico, edge cases." },
+    "executor_rapido":   { "emoji": "⚡", "nome": "Gemini 3 Flash",  "modelo": "google/gemini-3-flash-preview","papel": "Iterações rápidas." },
+    "preciso":           { "emoji": "🎯", "nome": "GPT-5.4",         "modelo": "openai/gpt-5.4",              "papel": "Código exato." },
+    "cetico":            { "emoji": "🔍", "nome": "Gemini 2.5 Pro",  "modelo": "google/gemini-2.5-pro",       "papel": "Questionar, achar falhas." },
+    "criativo":          { "emoji": "🎨", "nome": "GPT-5",           "modelo": "openai/gpt-5",                "papel": "UX, fluxo." }
+  },
+  "cadeia_fallback": ["mestre_sabio", "analista_profundo", "cetico", "preciso", "executor_rapido"],
+  "modo_missao": {
+    "quorum_minimo": 3,
+    "kill_switch_falhas_seguidas": 3,
+    "notifica_admin_a_cada_round": true,
+    "notifica_canal_status_progresso": true,
+    "aprendizados_obrigatorio_por_round": true
+  },
+  "missoes_ativas": [
+    {
+      "id": "hub-mtproto",
+      "titulo": "HUB: fluxo real de vincular Telegram MTProto",
+      "pendencia": 19,
+      "checklist_arquivo": "docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/MISSOES/hub-mtproto.md",
+      "prioridade": "alta",
+      "iniciada_em": "2026-07-03"
+    }
   ]
 }
