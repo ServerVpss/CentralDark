@@ -47,7 +47,6 @@ const DB = {
   pendencias: "b37757f1-41a8-4d78-b738-b29068423419",
   decisoes: "3bffaefc-c606-4ed6-957a-c2bfb6fb6c7f",
   aprendizados: "f53285e1-891f-4645-bae8-160b44d6cb6c",
-  estrutura: "e9c95779-7a72-4bcc-872f-9903e7c1cf7e",
 };
 
 // NUNCA espelhar — mesma lista de docs/CONSCIENCIA/NOTION-MAPA.md

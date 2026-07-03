@@ -40,7 +40,7 @@ Página-mãe do workspace. Todos os databases abaixo são filhos dela.
 | 📚 Histórico de Consolidação | mudanças estruturais | https://app.notion.com/p/d7707d3027f543f88e2987bb935cd006 | `d7707d30-27f5-43f8-8e29-87bb935cd006` | — |
 | ⚖️ Registro de Decisões | `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` | https://app.notion.com/p/3bffaefcc6064ed6957ac2bfb6fb6c7f | `3bffaefc-c606-4ed6-957a-c2bfb6fb6c7f` | `66731d2b-4f3d-4a6d-82e3-323d81259b95` |
 | 📥 Import Queue | itens a triar | https://app.notion.com/p/b6450045bf614983861a0ea43ab7996f | `b6450045-bf61-4983-861a-0ea43ab7996f` | — |
-| 📂 Estrutura de Pastas & Agentes | todos os `.md` de `docs/CONSCIENCIA/` (inventário automático) | https://app.notion.com/p/e9c957797a724bcc872f9903e7c1cf7e | `e9c95779-7a72-4bcc-872f-9903e7c1cf7e` | — |
+| 📂 Estrutura de Pastas & Agentes | mapa de pastas | https://app.notion.com/p/e9c957797a724bcc872f9903e7c1cf7e | `e9c95779-7a72-4bcc-872f-9903e7c1cf7e` | — |
 | 🧠 Aprendizados | `docs/CONSCIENCIA/APRENDIZADOS.md` | https://app.notion.com/p/f53285e1891f4645bae8160b44d6cb6c | `f53285e1-891f-4645-bae8-160b44d6cb6c` | `d2dc1197-f0e2-4cea-9f8f-c3a5499a0303` |
 
 ---
@@ -55,7 +55,6 @@ Script: [`scripts/notion-sync/sync.mjs`](../../scripts/notion-sync/sync.mjs)
 - Faz **UPSERT** (cria se não existe, atualiza se existe) — rodar 100 vezes não duplica.
 - Cada execução escreve relatório em `docs/RELATORIOS/notion-sync/` (commitado pelo bot).
 - O workflow usa **Database ID**; os **Data Source IDs** ficam só para MCP/ferramentas Notion novas.
-- **Cobertura total (30/06/2026):** além dos databases de conteúdo (regras, decisões, aprendizados, pendências), o `sync.mjs` agora inventaria **todos** os `.md` de `docs/CONSCIENCIA/` no database 📂 Estrutura de Pastas & Agentes (chave UPSERT = `Caminho`). Documentos novos passam a aparecer no Notion sozinhos — não precisa mais cadastrar manualmente. Arquivos da blocklist de segurança continuam fora.
 
 **Secret necessário no repo:** `NOTION_API_KEY` (Settings → Secrets → Actions).
 
