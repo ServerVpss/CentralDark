@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T00:23:49.182Z
+# 🧠 Notion Sync — 2026-07-03T01:10:09.226Z
 
-- **Commit fonte:** `f3cd8972caac6b042778d5dff6f6217074218850`
+- **Commit fonte:** `6c7cbcd17bcc65589698451386cf1ebedcf04d9f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 623 atualizadas · ❌ 1 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 624 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 21 | 0 | 21 | 0 | 0 |
 | aprendizados | 266 | 0 | 266 | 0 | 0 |
-| estrutura | 332 | 0 | 331 | 0 | 1 |
+| estrutura | 332 | 0 | 332 | 0 | 0 |
 
 ## Operações
 
@@ -630,7 +630,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/SCRIPTING-STANDARDS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/README.md |
-| estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/decisoes/DECISOES-CENTRAL-DARK.md |
+| estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/decisoes/DECISOES-CENTRAL-DARK.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/exemplos/EXEMPLO-DECISAO-COMPLETA.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/exemplos/EXEMPLOS-VETO-CLAUDE.md |
 | estrutura | atualizado | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PONTOS-DE-COMANDO.md |
