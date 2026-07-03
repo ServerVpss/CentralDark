@@ -1,56 +1,60 @@
-# Upgrade Hermes — cadeia de 4 IAs (pronto pra executar)
+## Objetivo
 
-## Passo 0 — Descobrir rota do Elite (10s)
+Descobrir por que o GitHub parou de disparar o webhook de deploy no dia 28/06, consertar, e deixar a pasta `docs/CONSCIENCIA/ARSENAL/hermes-vivo/` 100% espelhada entre Lovable, GitHub e VPS.
 
-Testar em ordem via `curl` na VPS:
-1. `POST https://api.centralldark.com/v1/messages` (formato Anthropic nativo)
-2. Se 404 → `POST /v1/chat/completions` (formato OpenAI-compat)
+## O que sabemos agora
 
-Anotar rota vencedora + formato da resposta (`content[0].text` ou `choices[0].message.content`). Se pedir header de auth, extrair do PM2 do Elite (id 52).
+- **VPS travada no commit `5dfdf11f6`** (28/06). GitHub já está em `bd5cc9e68`.
+- **Webhook PM2 `CentralDark-WebhookDeploy` está online** escutando `http://127.0.0.1:9300`, sem erros no log.
+- **Último POST recebido do GitHub: 28/06/2026 17:47** — nada depois disso.
+- Na VPS existem 4 arquivos operacionais do Hermes (`daemon.mjs`, `executor.mjs`, `notify.mjs`, `CentralDark-Hermes.config.cjs`) que nunca subiram pro GitHub (`untracked`).
+- No Lovable/GitHub existem 2 arquivos (`README.md`, `plano-visual.png`) que ainda não desceram pra VPS.
 
-## Passo 1 — `models-map.json` (documentação humana)
+## Etapa 1 — Diagnóstico do webhook GitHub (só leitura)
 
-Criar `docs/CONSCIENCIA/ARSENAL/hermes-vivo/models-map.json` com os 4 níveis da cadeia, timeouts, tempo médio e uso de cada modelo. Não é lido pelo código — serve pra qualquer IA que abrir o repo entender de bate-pronto.
+1. Listar webhooks configurados no repo `ServerVpss/CentralDark` (ferramenta MCP `github_list_webhooks`).
+2. Ver últimos disparos de cada webhook — se estão retornando 200, 401, 502 ou "no response".
+3. Confirmar se a URL pública do webhook (provavelmente `https://webhook.centralldark.com/...` via Caddy) ainda responde.
 
-## Passo 2 — Editar `decisor.mjs` (só acréscimos)
+Resultado esperado: descobrir se foi (a) webhook deletado, (b) URL quebrada no Caddy, (c) GitHub desabilitou por falhas repetidas, ou (d) segredo/assinatura mudou.
 
-Arquivo real: `docs/CONSCIENCIA/ARSENAL/hermes-vivo/decisor.mjs`.
+## Etapa 2 — Reparo do webhook
 
-**Preservar tudo:** assinatura `decidir(missao, historico)`, system prompt, schema JSON, `execFile` async com `maxBuffer 10MB`, ordem dos modelos.
+Dependendo do achado da Etapa 1:
 
-**Adicionar:**
-- **Cache in-memory** — `Map()`, chave = SHA-1(missao + histórico), TTL 10min, máx 100 itens.
-- **Timeout por modelo** — 15s Gemini Flash, 30s Gemini Pro, 45s GPT-5 mini.
-- **4º fallback Elite Anthropic** — `fetch()` com `AbortSignal.timeout(30000)`, retry 1x com backoff 2s. Prompt inclui: "Modelos anteriores falharam: [lista]".
-- **Logs claros** — 💾 cache HIT, ✅ modelo respondeu, ⚠️ falhou, 🚨 caiu no Elite, 🔥 tudo falhou.
+- **Se foi desabilitado por falhas** → reabilitar no GitHub e disparar um "redeliver" do último payload.
+- **Se URL quebrou** → conferir Caddy (`infra/caddy/`) e o mapeamento do subdomínio.
+- **Se webhook sumiu** → recriar apontando pra URL pública correta com o secret certo.
 
-## Passo 3 — Testar
+## Etapa 3 — Sincronização imediata (uma vez o webhook OK)
 
-```bash
-pm2 restart CentralDark-Hermes && sleep 3 && pm2 logs CentralDark-Hermes --lines 30 --nostream
-```
-
-Criar `missoes/pendente/teste-cache.md` com "me diga que dia é hoje em 1 linha". Duplicar pra confirmar cache HIT na 2ª rodada.
-
-## Passo 4 — Commit + notificar
+Puxar manualmente na VPS pra não esperar o próximo commit:
 
 ```bash
 cd /root/CentralDark
-git add docs/CONSCIENCIA/ARSENAL/hermes-vivo/
-git commit -m "🤖 Hermes: cache 10min + timeouts por modelo + Elite Anthropic fallback (4 IAs)"
-git push origin main
+git fetch origin main
+git reset --hard origin/main
 ```
 
-Telegram (via connector já linkado `@srver1bot`):
-- Privado admin `1901426549`: card completo da cadeia final
-- Canal Status `-1003669176367`: "Hermes agora tem 4 cérebros ✅"
+Isso traz o `README.md` e a `plano-visual.png` pra pasta `hermes-vivo/` da VPS. (O `reset --hard` não mexe em arquivos untracked, então os `.mjs` operacionais continuam no lugar.)
 
-## Intocado
+## Etapa 4 — Subir os operacionais do Hermes pra fonte da verdade
 
-- `daemon.mjs`, `executor.mjs`, `notify.mjs`
-- Estrutura de pastas
-- Nada em `apps/` (pasta não existe pra hermes)
+Ler os 4 arquivos untracked da VPS (`daemon.mjs`, `executor.mjs`, `notify.mjs`, `CentralDark-Hermes.config.cjs`) e commitar no GitHub via MCP. Assim eles descem automaticamente pro Lovable pelo sync bidirecional e a pasta fica idêntica nos 3 pontos.
 
-## Estimativa
+## Etapa 5 — Validação final
 
-~2-3min de execução total.
+Rodar `deploy_status` + `vps_list_dir_safe` na pasta `hermes-vivo/` e conferir o mesmo conjunto de arquivos nos 3 lugares (Lovable, GitHub, VPS). Postar card curto no privado admin do Telegram com o resultado (conforme regra de notificação pós-ação).
+
+## Regras respeitadas
+
+- Nada destrutivo na VPS além do `git reset --hard origin/main` (padrão do próprio webhook).
+- `whatsapp-server` PM2 id 1 não é tocado.
+- Áreas protegidas (`infra/caddy/`, `scripts/webhook/`) só serão lidas na Etapa 1; qualquer alteração ali passa por autorização "PERMITO PIVETE".
+
+## Detalhes técnicos (para a IA que for executar)
+
+- Repo: `ServerVpss/CentralDark`, branch `main`.
+- Webhook local: porta `9300`, script em `scripts/webhook/deploy` (área protegida — só ler).
+- Comando de sync padrão do próprio webhook: `git reset --hard origin/main`.
+- Notificação obrigatória ao fim: card completo em `1901426549` + linha curta no canal Status `-1003669176367`, via connector Telegram já linkado (`@srver1bot`).
