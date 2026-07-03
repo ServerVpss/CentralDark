@@ -1,3 +1,10 @@
+---
+title: "Missao"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # MISSAO: Finalizar o upgrade HUB v2 ate o fim
 
 Alvo: /root/CentralDark/apps/modulos/hub/

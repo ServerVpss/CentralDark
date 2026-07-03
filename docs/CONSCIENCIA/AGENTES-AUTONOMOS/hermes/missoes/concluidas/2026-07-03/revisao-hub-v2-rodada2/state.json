@@ -1,0 +1,69 @@
+{
+  "missao": "# MISSAO: Revisao final do HUB v2 — rodada 2 (QA)\n\nAlvo: /root/CentralDark/apps/modulos/hub/\nContexto: voce concluiu o hub v2 (typecheck zero, commit 00f4403a3). Agora e a rodada de REVISAO: provar que o trabalho aguenta build real e endpoints reais, e listar o que ainda pode melhorar. Use as tecnicas que aprendeu (elas estao nas suas licoes).\n\n## Criterio de sucesso\n1. Typecheck continua ZERO: `cd /root/CentralDark/apps/modulos/hub && npx tsc --noEmit -p tsconfig.app.json && echo TSC_OK`\n2. BUILD real passa: `cd /root/CentralDark/apps/modulos/hub && npx vite build --outDir dist-preview && echo BUILD_OK`\n   ⚠️ REGRA ABSOLUTA: NUNCA buildar para `dist/` — e o site VIVO (hub.centralldark.com serve dist/). So `--outDir dist-preview`.\n3. Endpoints que os componentes usam respondem? Testar com curl robusto (--max-time 5, so status):\n   - https://mcp.centralldark.com/health\n   - https://mcp.centralldark.com/tools\n   Anotar o status HTTP de cada um no relatorio (200 = 🟢, resto = 🔴 com o codigo).\n4. Relatorio final honesto com: resultado do build, status dos endpoints, e 3 MELHORIAS que voce faria no hub (so listar, NAO implementar).\n\n## Se o build FALHAR\n- Ler o erro, corrigir o MINIMO no arquivo apontado, validar de novo (maximo 2 tentativas por arquivo).\n- Depois de corrigir: commit cirurgico (git add apps/modulos/hub — NUNCA -A, NUNCA painel-data.json/.env) + push com a receita que voce ja sabe.\n- Se nao corrigir em 2 tentativas: anotar no relatorio e seguir.\n\n## Limpeza obrigatoria no final\n- `rm -rf /root/CentralDark/apps/modulos/hub/dist-preview` (nao deixar lixo, nao commitar dist-preview)\n\n## Regras\n- Maximo 30 etapas.\n- Cada leitura de arquivo no maximo 2x — na terceira vez a acao e ESCREVER.\n- Comando que da certo sem imprimir nada: terminar com `&& echo OK` pra ter confirmacao.\n- Aprendeu algo novo com um erro? Gravar com a ferramenta `aprender` antes de seguir.\n- Areas protegidas continuam proibidas.",
+  "historico": [
+    {
+      "etapa_titulo": "Executando Typecheck (TSC) no Hub v2",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "cd /root/CentralDark/apps/modulos/hub && npx tsc --noEmit -p tsconfig.app.json && echo TSC_OK"
+      },
+      "resultado": "TSC_OK\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Executando Build Real (dist-preview)",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "cd /root/CentralDark/apps/modulos/hub && npx vite build --outDir dist-preview && echo BUILD_OK"
+      },
+      "resultado": "\u001b[36mvite v5.4.21 \u001b[32mbuilding for production...\u001b[36m\u001b[39m\ntransforming...\n\u001b[32m✓\u001b[39m 1702 modules transformed.\nrendering chunks...\ncomputing gzip size...\n\u001b[2mdist-preview/\u001b[22m\u001b[32mindex.html                 \u001b[39m\u001b[1m\u001b[2m  0.48 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   0.31 kB\u001b[22m\n\u001b[2mdist-preview/\u001b[22m\u001b[2massets/\u001b[22m\u001b[35mindex-D6-NYRgN.css  \u001b[39m\u001b[1m\u001b[2m 22.43 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   5.19 kB\u001b[22m\n\u001b[2mdist-preview/\u001b[22m\u001b[2massets/\u001b[22m\u001b[36mindex-DOwl0iec.js   \u001b[39m\u001b[1m\u001b[2m447.87 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip: 127.83 kB\u001b[22m\n\u001b[32m✓ built in 10.51s\u001b[39m\nBUILD_OK\n\n[stderr]\n\u001b[1m\u001b[33m[plugin:vite:reporter]\u001b[39m\u001b[22m \u001b[33m[plugin vite:reporter] \n(!) /root/CentralDark/apps/modulos/hub/src/integrations/supabase/hub-client.ts is dynamically imported by /root/CentralDark/apps/modulos/hub/src/components/catalog/CatalogTab.tsx, /root/CentralDark/apps/modulos/hub/src/components/catalog/CatalogTab.tsx but also statically imported by /root/CentralDark/apps/modulos/hub/src/hooks/useAudit.ts, /root/CentralDark/apps/modulos/hub/src/hooks/useAuth.ts, /root/CentralDark/apps/modulos/hub/src/hooks/usePolicies.ts, dynamic import will not move module into another chunk.\n\u001b[39m\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Testando endpoints MCP (Health/Tools)",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "echo '--- HEALTH ---' && curl -s -o /dev/null -w '%{http_code}' --max-time 5 https://mcp.centralldark.com/health && echo -e '\n--- TOOLS ---' && curl -s -o /dev/null -w '%{http_code}' --max-time 5 https://mcp.centralldark.com/tools"
+      },
+      "resultado": "--- HEALTH ---\n200\n--- TOOLS ---\n404",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Investigando URL de ferramentas no Hub",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "grep -r \"mcp.centralldark.com\" /root/CentralDark/apps/modulos/hub/src/ | grep \"tools\" || echo \"URL_NOT_FOUND_IN_SRC\""
+      },
+      "resultado": "URL_NOT_FOUND_IN_SRC\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Localizando endpoint de ferramentas no código",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "grep -r \"/tools\" /root/CentralDark/apps/modulos/hub/src | grep -v \"node_modules\" || grep -r \"mcp\" /root/CentralDark/apps/modulos/hub/src"
+      },
+      "resultado": "/root/CentralDark/apps/modulos/hub/src/services/mcp-client.ts:    const res = await fetch(`${MCP_API_URL}/tools`);\n/root/CentralDark/apps/modulos/hub/src/hooks/useMCP.ts:        fetch('/api/hub/tools'),\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Lendo mcp-client.ts para validar URL",
+      "ferramenta": "ler_arquivo",
+      "args": {
+        "path": "apps/modulos/hub/src/services/mcp-client.ts"
+      },
+      "resultado": "import { MCPHealth, MCPTool } from '../types/mcp';\n\nconst MCP_API_URL = 'https://mcp.centralldark.com';\nconst MCP_WS_URL = 'wss://mcp.centralldark.com/ws';\n\nexport const mcpClient = {\n  async getHealth(): Promise<MCPHealth> {\n    const res = await fetch(`${MCP_API_URL}/health`);\n    if (!res.ok) throw new Error('MCP Health check failed');\n    return res.json();\n  },\n\n  async getTools(): Promise<MCPTool[]> {\n    const res = await fetch(`${MCP_API_URL}/tools`);\n    if (!res.ok) throw new Error('Failed to fetch tools');\n    return res.json();\n  },\n\n  subscribeToHealth(callback: (health: MCPHealth) => void) {\n    const ws = new WebSocket(MCP_WS_URL);\n    \n    ws.onmessage = (event) => {\n      try {\n        const data = JSON.parse(event.data);\n        if (data.type === 'health_update') {\n          callback(data.payload);\n        }\n      } catch (err) {\n        console.error('WS Message error:', err);\n      }\n    };\n\n    return () => ws.close();\n  },\n\n  async syncTools(): Promise<{ success: boolean; message: string }> {\n    const res = await fetch(`${MCP_API_URL}/sync`, { method: 'POST' });\n    return res.json();\n  },\n\n  // usado pelo SyncButton do catálogo — mesma rota /sync, formato de resultado detalhado\n  async syncCatalog(): Promise<{ status: string; tools_found: number; tools_added: number; tools_updated: number; errors?: string[] }> {\n    const res = await fetch(`${MCP_API_URL}/sync`, { method: 'POST' });\n    if (!res.ok) throw new Error('Falha na sincronização do catálogo');\n    return res.json();\n  }\n};",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Limpeza do ambiente e conclusão",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "rm -rf /root/CentralDark/apps/modulos/hub/dist-preview && echo CLEANUP_OK"
+      },
+      "resultado": "CLEANUP_OK\n",
+      "ok": true
+    }
+  ],
+  "retomadas": 0
+}
