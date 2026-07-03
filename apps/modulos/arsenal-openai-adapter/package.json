@@ -1,0 +1,10 @@
+{
+  "name": "arsenal-openai-adapter",
+  "version": "1.0.0",
+  "description": "Expõe o Arsenal Council (router/parallel/debate) como modelos OpenAI-compatible pro Open WebUI.",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}
