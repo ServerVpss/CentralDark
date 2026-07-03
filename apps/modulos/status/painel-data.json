@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T17:41:05.582Z",
-  "updatedAtBR": "03/07/2026, 14:41:05 BRT",
+  "updatedAt": "2026-07-03T17:46:16.746Z",
+  "updatedAtBR": "03/07/2026, 14:46:16 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "feat(elite-gateway): gateway_admin.py + Hermes especialista em contas/manutenção",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T17:46:16.746Z",
+      "titulo": "Push na main · 405ee8729260283119a79afc059b15a336c84333",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "405ee87",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T17:41:05.582Z",
       "titulo": "Push na main · b04e5f2b7df536e3ab7cd77c0c414116e4a08cb3",
       "detalhe": "feat(elite-gateway): gateway_admin.py + Hermes especialista em contas/manutenção",
@@ -974,14 +982,6 @@
       "detalhe": "docs(aprendizados): adiciona explicacao conversacional do MCP (jeito do Pivete)",
       "area": "Repositório",
       "sha": "d775b1a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T09:04:14.883Z",
-      "titulo": "Push na main · 28b030b65ebd1b8a35536684a8432da322527ba5",
-      "detalhe": "feat(commands): cria /lembrar /contexto /status + card visual no MCP-EXPLICADO",
-      "area": "Repositório",
-      "sha": "28b030b",
       "actor": "segredounlock"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T17:46:16.746Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 405ee8729260283119a79afc059b15a336c84333 (405ee87)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T17:41:05.582Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b04e5f2b7df536e3ab7cd77c0c414116e4a08cb3 (b04e5f2)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T08:40:29.934Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ea70c3a5df7be6af5a7d27d570bef6103cdc97ea (ea70c3a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T07:30:15.160Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 175170e6a7fb347815c024f5cb9265dc0f570d4a (175170e)",
       "area": "Repositório",
       "status": "sucesso"
     }
