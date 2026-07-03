@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T05:47:16.727Z",
-  "updatedAtBR": "03/07/2026, 02:47:16 BRT",
+  "updatedAt": "2026-07-03T05:56:42.220Z",
+  "updatedAtBR": "03/07/2026, 02:56:42 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Lovable update",
+    "lastCommit": "docs(pendencias): nova #17 Limpar 3 refs residuais a /root/[oculto] fora do elite-gateway",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -586,6 +586,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T05:56:42.220Z",
+      "titulo": "Push na main · 678938ab4270ec7c9834333599e4faa638be1606",
+      "detalhe": "docs(pendencias): nova #17 Limpar 3 refs residuais a /root/[oculto] fora do elite-gateway",
+      "area": "Repositório",
+      "sha": "678938a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-03T05:47:16.727Z",
       "titulo": "Push na main · 281b1e5897eb9282c170e950c717cd2136082422",
@@ -1357,6 +1365,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T05:56:42.220Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 678938ab4270ec7c9834333599e4faa638be1606 (678938a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T05:47:16.727Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 281b1e5897eb9282c170e950c717cd2136082422 (281b1e5)",
@@ -1696,13 +1711,6 @@
       "time": "2026-06-29T22:55:31.264Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 977139cdb97ac51db77e823ead5bcd681102c2ef (977139c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T19:29:32.097Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 518929a9bf924f038e143cdacb3c097edff670a6 (518929a)",
       "area": "Repositório",
       "status": "sucesso"
     }
