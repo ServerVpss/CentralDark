@@ -61,12 +61,12 @@ call_darkai_juiz()   { darkai -m "$M_JUIZ"   "$1" 2>&1 || echo "[juiz falhou]"; 
 # ------------------------------------------------------------
 if [ "$MODO" = "router" ]; then
   echo "🎯 ROUTER: $TEMA"
-  RESP="$(call_darkai_flash "$TEMA")"
+  RESP="$(call_darkai_router "$TEMA")"
   {
     echo "# 🎯 ROUTER — $TS"
     echo ""
     echo "**Tema:** $TEMA"
-    echo "**Modelo:** gemini-3-flash-preview (rápido)"
+    echo "**Modelo:** $M_ROUTER"
     echo ""
     echo "---"
     echo "$RESP"
@@ -101,7 +101,7 @@ $(cat $TMP/flash.txt)
 === TAREFA ===
 Sintetize o melhor. Aponte convergências, divergências e dê VEREDICTO final. PT-BR, direto."
 
-  VEREDICTO="$(call_darkai_flash "$JUIZ")"
+  VEREDICTO="$(call_darkai_juiz "$JUIZ")"
 
   {
     echo "# ⚡ PARALLEL — $TS"
@@ -179,7 +179,7 @@ $(cat $TMP/r2-gpt.txt)
 === TAREFA ===
 Analise a evolução do debate. Aponte quem mudou de opinião, quem manteve, e dê o VEREDICTO final unificado. PT-BR, direto."
 
-  VEREDICTO="$(call_darkai_flash "$JUIZ")"
+  VEREDICTO="$(call_darkai_juiz "$JUIZ")"
 
   {
     echo "# 🔥 DEBATE — $TS"
