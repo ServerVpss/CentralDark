@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T06:01:22.957Z
+# 🧠 Notion Sync — 2026-07-03T07:06:46.899Z
 
-- **Commit fonte:** `678938ab4270ec7c9834333599e4faa638be1606`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `fa4244c2ae1ec13a98687ff2f8223adba50e2448`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 293 atualizadas · ❌ 351 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 293 atualizadas · ❌ 352 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 22 | 0 | 22 | 0 | 0 |
 | aprendizados | 266 | 0 | 266 | 0 | 0 |
-| estrutura | 351 | 0 | 0 | 0 | 351 |
+| estrutura | 352 | 0 | 0 | 0 | 352 |
 
 ## Operações
 
@@ -374,6 +374,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-5-painel-visual.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-7-webui-integration.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
 | estrutura | erro | docs/CONSCIENCIA/BOT_COMMANDS.md |
