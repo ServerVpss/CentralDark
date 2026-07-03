@@ -5,6 +5,9 @@ module.exports = {
     cwd: '/root/CentralDark/apps/modulos/arsenal-openai-adapter',
     env: {
       PORT: 8090,
+      // 0.0.0.0 pro container do WebUI alcançar via host.docker.internal
+      // (INPUT DROP do firewall continua barrando acesso público)
+      BIND: '0.0.0.0',
       ARSENAL_ADAPTER_KEY: 'arsenal-key-local-2026',
       PROVIDER_BASE: 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/arsenal-proxy',
       PROVIDER_KEY: 'arsenal-key-local-2026',

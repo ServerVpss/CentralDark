@@ -162,6 +162,11 @@ function chatOk(model, content) {
     choices: [{ index: 0, message: { role: 'assistant', content }, finish_reason: 'stop' }],
     usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 } };
 }
+// SSE de verdade pro Open WebUI: chunk no formato chat.completion.chunk
+function sseChunk(model, delta, finish = null) {
+  return `data: ${JSON.stringify({ id: 'chatcmpl-arsenal-' + Date.now(), object: 'chat.completion.chunk',
+    created: Math.floor(Date.now()/1000), model, choices: [{ index: 0, delta, finish_reason: finish }] })}\n\n`;
+}
 
 const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -186,21 +191,49 @@ const server = http.createServer(async (req, res) => {
       // Posta a pergunta do usuário no grupo (contexto)
       if (perguntaUser) postarPergunta(perguntaUser, modo.replace('arsenal-',''));
 
+      const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
+      const rodar = MODOS[modo];
+      if (!rodar) return json(res, 400, { error: `modelo desconhecido: ${modo}` });
+
+      // stream:true → SSE real (headers já vão, keepalive segura o cliente enquanto o Council trabalha)
+      const streaming = payload.stream === true;
+      let keepalive;
+      if (streaming) {
+        res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+        res.write(sseChunk(modo, { role: 'assistant' }));
+        keepalive = setInterval(() => res.write(': ping\n\n'), 15000);
+      }
+
       const regras = await lerRegras();
-      let resposta;
-      if (modo === 'arsenal-router') resposta = await modoRouter(regras, messages);
-      else if (modo === 'arsenal-parallel') resposta = await modoParallel(regras, messages);
-      else if (modo === 'arsenal-debate') resposta = await modoDebate(regras, messages);
-      else if (modo === 'arsenal-hermes') resposta = await modoHermes(regras, messages);
-      else return json(res, 400, { error: `modelo desconhecido: ${modo}` });
-      await salvarSaida(modo.replace('arsenal-',''), messages, resposta);
-      return json(res, 200, chatOk(modo, resposta));
+      try {
+        const resposta = await rodar(regras, messages);
+        await salvarSaida(modo.replace('arsenal-',''), messages, resposta);
+        if (streaming) {
+          clearInterval(keepalive);
+          res.write(sseChunk(modo, { content: resposta }));
+          res.write(sseChunk(modo, {}, 'stop'));
+          res.write('data: [DONE]\n\n');
+          return res.end();
+        }
+        return json(res, 200, chatOk(modo, resposta));
+      } catch (e) {
+        clearInterval(keepalive);
+        console.error('erro:', e);
+        if (streaming) {
+          res.write(sseChunk(modo, { content: `❌ Arsenal falhou: ${e.message}` }, 'stop'));
+          res.write('data: [DONE]\n\n');
+          return res.end();
+        }
+        return json(res, 500, { error: e.message });
+      }
     } catch (e) {
       console.error('erro:', e);
-      return json(res, 500, { error: e.message });
+      if (!res.headersSent) return json(res, 500, { error: e.message });
+      try { res.end(); } catch {}
     }
   }
   json(res, 404, { error: 'not found' });
 });
 
-server.listen(PORT, '127.0.0.1', () => console.log(`🔫 Arsenal Adapter :${PORT} → ${PROVIDER_BASE} · grupo ao vivo ativo`));
+const BIND = process.env.BIND || '127.0.0.1';
+server.listen(PORT, BIND, () => console.log(`🔫 Arsenal Adapter ${BIND}:${PORT} → ${PROVIDER_BASE} · grupo ao vivo ativo`));
