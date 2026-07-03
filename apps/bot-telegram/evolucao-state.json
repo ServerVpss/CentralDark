@@ -1,9 +1,9 @@
 {
   "ultimasMensagens": {
     "gemini": {
-      "timestamp": 1783047203473,
-      "topico": "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
-      "mensagemId": 193
+      "timestamp": 1783055478290,
+      "topico": "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?",
+      "mensagemId": 195
     },
     "groq": {
       "timestamp": 1783052259390,
@@ -33,15 +33,16 @@
     "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?",
     "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
     "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
-    "Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?"
+    "Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?",
+    "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?"
   ],
   "aprendizados": {
     "gemini": [
-      "Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa",
       "Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar",
       "Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar",
       "Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos",
-      "Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa"
+      "Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa",
+      "Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda"
     ],
     "groq": [
       "Aprendi que questionar é importante, mas saber quando parar de questionar também é",
@@ -59,9 +60,9 @@
     ]
   },
   "contador": {
-    "gemini": 27,
+    "gemini": 28,
     "groq": 27,
     "claude": 27
   },
-  "ultimaAtividade": 1783052259390
+  "ultimaAtividade": 1783055478290
 }

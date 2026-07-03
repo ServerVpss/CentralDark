@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { execSync } from "node:child_process";
 const GATEWAY_URL = "http://localhost:8080";
-const GATEWAY_TOKEN = "SEGREDO_ELITE_123";
+const GATEWAY_TOKEN = "9899b0faade8bb7b6d6a652a8a4fcfaa646096720dee7aa06d0b40f9a89287d6";
 const LOG_OUT = "/root/.pm2/logs/CentralDark-EliteHTTP-out.log";
 const LOG_ERR = "/root/.pm2/logs/CentralDark-EliteHTTP-error.log";
 function ok(data) {

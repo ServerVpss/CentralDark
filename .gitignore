@@ -94,3 +94,5 @@ scripts/memory-linker/.next_run
 scripts/memory-linker/analyst-decision.json
 scripts/memory-linker/last-report.json
 scripts/sync-loop.sh
+apps/modulos/elite-gateway/venv/
+apps/modulos/elite-gateway/config/
