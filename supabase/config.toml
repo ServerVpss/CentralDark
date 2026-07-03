@@ -93,3 +93,6 @@ verify_jwt = false
 
 [functions.plugin-release]
 verify_jwt = false
+
+[functions.ai-proxy]
+verify_jwt = false
