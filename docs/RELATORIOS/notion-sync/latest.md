@@ -317,6 +317,7 @@
 | aprendizados | atualizado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
 | aprendizados | atualizado | #263 — Estilo gamificado é padrão oficial de comunicação |
 | aprendizados | atualizado | #264 — Renomeação PM2 + fix Caddy status aplicados na VPS |
+| aprendizados | criado | #265 — Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
