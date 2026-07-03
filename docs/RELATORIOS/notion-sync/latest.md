@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T04:46:42.691Z
+# 🧠 Notion Sync — 2026-07-03T05:02:39.778Z
 
-- **Commit fonte:** `10faa6894703cf42aec980899ec55fc45cb361f5`
+- **Commit fonte:** `af98586bf9be140e1747f25b9eee3a817ce14a2e`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 3 criadas · ♻️ 637 atualizadas · ❌ 0 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 640 atualizadas · ❌ 0 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 21 | 0 | 21 | 0 | 0 |
+| decisoes | 22 | 1 | 21 | 0 | 0 |
 | aprendizados | 266 | 0 | 266 | 0 | 0 |
-| estrutura | 348 | 3 | 345 | 0 | 0 |
+| estrutura | 348 | 0 | 348 | 0 | 0 |
 
 ## Operações
 
@@ -48,6 +48,7 @@
 | decisoes | atualizado | MCP — versionado, equipado com tools cognitivas e trancado (30/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | decisoes | atualizado | Grupo Da Evolução aterrissado no CentralDark real (2026-07-02) |
+| decisoes | criado | Fix STT do WebUI — whisper-1 mapeado no proxy audio-transcriptions (2026-07-03) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -359,9 +360,9 @@
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-232402-router-diga-s-ok.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu.md |
-| estrutura | criado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu.md |
+| estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
 | estrutura | atualizado | docs/CONSCIENCIA/ARSENAL/README.md |
