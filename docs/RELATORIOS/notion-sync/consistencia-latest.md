@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T08:37:54.378Z
-- **Commit:** `2c09e511ba9464b3be0778ef72af2c4b537cc11c`
+- **Gerado:** 2026-07-03T10:04:12.520Z
+- **Commit:** `c223e699d3a90290cac185946d1f6f957010647c`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -12,8 +12,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
-| decisoes | 22 | 22 | 22 | 0 | 0 |
-| aprendizados | 287 | 0 | 0 | 287 | 0 |
+| decisoes | 23 | 23 | 23 | 0 | 0 |
+| aprendizados | 289 | 0 | 0 | 289 | 0 |
 
 ## Detalhes
 
@@ -36,14 +36,14 @@
 
 ### decisoes
 
-- 🟩 OK: **22**
+- 🟩 OK: **23**
 - 🟥 Faltando no Notion: **0**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **287**
+- 🟥 Faltando no Notion: **289**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -335,4 +335,6 @@
 - 💬 Groq Llama — grupo evolução (2026-07-03)
 - 💬 Gemini Flash — grupo evolução (2026-07-03)
 - 💬 Gemini Flash — grupo evolução (2026-07-03)
+- 💬 Claude Sonnet — grupo evolução (2026-07-03)
+- 💬 Groq Llama — grupo evolução (2026-07-03)
 </details>

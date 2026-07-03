@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T08:37:51.372Z
+# 🧠 Notion Sync — 2026-07-03T10:04:10.213Z
 
-- **Commit fonte:** `2c09e511ba9464b3be0778ef72af2c4b537cc11c`
+- **Commit fonte:** `c223e699d3a90290cac185946d1f6f957010647c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 293 atualizadas · ❌ 358 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 294 atualizadas · ❌ 359 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 22 | 0 | 22 | 0 | 0 |
+| decisoes | 23 | 0 | 23 | 0 | 0 |
 | aprendizados | 266 | 0 | 266 | 0 | 0 |
-| estrutura | 358 | 0 | 0 | 0 | 358 |
+| estrutura | 359 | 0 | 0 | 0 | 359 |
 
 ## Operações
 
@@ -49,6 +49,7 @@
 | decisoes | atualizado | Conexões Rápidas |
 | decisoes | atualizado | Grupo Da Evolução aterrissado no CentralDark real (2026-07-02) |
 | decisoes | atualizado | Fix STT do WebUI — whisper-1 mapeado no proxy audio-transcriptions (2026-07-03) |
+| decisoes | atualizado | Hermes × darkai — trava de stdin + env ausente no PM2 + retomada de missões órfãs (2026-07-03) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -348,6 +349,7 @@
 | estrutura | erro | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
 | estrutura | erro | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/upgrade-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
