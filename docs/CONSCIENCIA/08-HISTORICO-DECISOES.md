@@ -376,3 +376,13 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 **Bug confirmado pelo doctor (pendente do Pivete):** accounts.json tem 2 tokens com id=conta_padrao apontando pro MESMO perfil (zendriver_chatgpt_profile → symlink pra contas/profiles/chatgpt). Não é multi-conta real. Correção segura = criar conta_02 separada (add + login), sem tocar no token em uso. Renomear/remover token existente exige "PERMITO PIVETE".
 
 **Divisão de trabalho ensinada:** Zentinel cuida de latência (auto-restart cooldown 5min); Hermes cuida de login expirado/Cloudflare/conta nova; login com senha/2FA é sempre passo humano do Pivete via noVNC.
+
+---
+
+## Vazamento de token contido + redator de segredos no Hermes (2026-07-03, noite)
+
+**Incidente:** no exame do gateway, `gateway_admin.py add conta_02` imprimiu o token novo no stdout (entrega ao humano), e o executor do Hermes persiste o stdout cru de toda ferramenta em state.json, hermes.log e notificação Telegram → o token sk-elite- da conta_02 ficou gravado em 2 arquivos da pasta versionada missoes/concluidas/. Detectado ANTES de qualquer commit (arquivos ?? untracked); accounts.json (cofre) estava gitignored e intacto.
+
+**Correção:** (1) mascarado o token nos 2 arquivos locais (sk-elite-REDACTED); (2) redator central no executor.mjs — `executar()` virou wrapper que passa a `saida` de _executar() por `redigirSegredos()` (padrões: sk-elite-, sk-*, Bearer *, JWT eyJ...). Cobre state.json + log + Telegram num choke point só, pra QUALQUER ferramenta. Testado: `echo sk-elite-...` sai `sk-eli…REDACTED`. Hermes reiniciado + pm2 save.
+
+**Resultado:** grep de token cru em docs/ = 0; cofre intacto (conta_02 segue listada, 🟡 sem sessão, correto); gateway 200. Token real da conta_02 vive só no accounts.json local (gitignored) — Pivete recupera lá quando for logar/configurar cliente. É o 3º vazamento tapado hoje (.env, contas/, agora token) — agora com defesa estrutural, não só reativa.

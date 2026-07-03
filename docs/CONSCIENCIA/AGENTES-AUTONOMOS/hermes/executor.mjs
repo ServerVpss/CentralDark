@@ -32,7 +32,27 @@ function pathSafe(p) {
   return abs;
 }
 
+// Redator de segredos — nenhum token/chave persiste em state.json, hermes.log ou notificação.
+// Todo retorno de _executar passa por aqui (defesa em profundidade pra QUALQUER ferramenta).
+const PADROES_SEGREDO = [
+  /sk-elite-[A-Za-z0-9_-]{6,}/g,
+  /sk-[A-Za-z0-9_-]{20,}/g,
+  /Bearer\s+[A-Za-z0-9._-]{20,}/gi,
+  /eyJ[A-Za-z0-9._-]{20,}/g,           // JWT (supabase/anon keys)
+];
+function redigirSegredos(s) {
+  let t = String(s ?? '');
+  for (const rx of PADROES_SEGREDO)
+    t = t.replace(rx, m => m.slice(0, 6) + '…REDACTED');
+  return t;
+}
+
 export async function executar(ferramenta, args) {
+  const r = await _executar(ferramenta, args);
+  return { ...r, saida: redigirSegredos(r.saida) };
+}
+
+async function _executar(ferramenta, args) {
   switch (ferramenta) {
     case 'shell': {
       const cmd = String(args.comando || '').trim();
