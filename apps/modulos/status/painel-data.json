@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T11:29:50.344Z",
-  "updatedAtBR": "03/07/2026, 08:29:50 BRT",
+  "updatedAt": "2026-07-03T11:47:57.584Z",
+  "updatedAtBR": "03/07/2026, 08:47:57 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Aguardando as 3 respostas do plano",
+    "lastCommit": "Made the requested updates",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T11:47:57.584Z",
+      "titulo": "Push na main · 47d689ff9d1d18fb624c0b081e6bfae6cc2f3aa7",
+      "detalhe": "Made the requested updates",
+      "area": "Repositório",
+      "sha": "47d689f",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T11:29:50.344Z",
       "titulo": "Push na main · d73161472ed45431642c57ee25699217f2a6d9f3",
       "detalhe": "Aguardando as 3 respostas do plano",
@@ -974,14 +982,6 @@
       "detalhe": "feat(notion-sync): cobertura total — inventário automático de docs novos",
       "area": "Repositório",
       "sha": "f219348",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T04:02:37.879Z",
-      "titulo": "Push na main · b2a4e93cab718479d761a3668d4c37e725f66d45",
-      "detalhe": "fix(consciencia): corrige docs invisíveis no Obsidian + registra falha",
-      "area": "Repositório",
-      "sha": "b2a4e93",
       "actor": "segredounlock"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T11:47:57.584Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 47d689ff9d1d18fb624c0b081e6bfae6cc2f3aa7 (47d689f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T11:29:50.344Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · d73161472ed45431642c57ee25699217f2a6d9f3 (d731614)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T03:42:54.581Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 71821d0f8faec8136a96e1a02ad9903c23e3d3a7 (71821d0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T02:26:59.581Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6a4aa18549836752a3039ab8309dbc13c10637fb (6a4aa18)",
       "area": "Repositório",
       "status": "sucesso"
     }
