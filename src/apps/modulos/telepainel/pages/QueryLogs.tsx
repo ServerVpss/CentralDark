@@ -242,7 +242,7 @@ export default function QueryLogs() {
                         transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
                         className="flex items-center justify-center"
                       >
-                        <RefreshCw className="h-5 w-5 text-white" />
+                        <RefreshCw className="h-5 w-5 text-primary-foreground" />
                       </motion.div>
                     </motion.div>
                     <div className="flex-1">
@@ -362,7 +362,7 @@ export default function QueryLogs() {
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 shadow-lg">
-                  <History className="h-5 w-5 text-white" />
+                  <History className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.total}</p>
@@ -375,7 +375,7 @@ export default function QueryLogs() {
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 shadow-lg">
-                  <CheckCircle className="h-5 w-5 text-white" />
+                  <CheckCircle className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.success}</p>
@@ -388,7 +388,7 @@ export default function QueryLogs() {
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-red-500 shadow-lg">
-                  <XCircle className="h-5 w-5 text-white" />
+                  <XCircle className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.error}</p>
@@ -401,7 +401,7 @@ export default function QueryLogs() {
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-lg">
-                  <Clock className="h-5 w-5 text-white" />
+                  <Clock className="h-5 w-5 text-primary-foreground" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats.today}</p>

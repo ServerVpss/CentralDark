@@ -272,9 +272,9 @@ export function MonospaceResultDisplay({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="rounded-lg border border-cyan-900/60 bg-[#0d1117] overflow-hidden"
+          className="rounded-lg border border-cyan-900/60 bg-background/95 overflow-hidden"
         >
-          <div className="px-3 py-2 border-b border-cyan-900/40 bg-[#161b22] flex items-center justify-between gap-2 flex-wrap">
+          <div className="px-3 py-2 border-b border-cyan-900/40 bg-muted/50 flex items-center justify-between gap-2 flex-wrap">
             <span className="font-mono text-sm text-cyan-300 font-medium flex items-center gap-2">
               <User className="h-4 w-4" />
               📷 FOTO
@@ -317,9 +317,9 @@ export function MonospaceResultDisplay({
 
       {/* Raw Data */}
       {textLines.length > 0 && (
-        <div className="rounded-lg border border-cyan-900/60 bg-[#0d1117] overflow-hidden">
+        <div className="rounded-lg border border-cyan-900/60 bg-background/95 overflow-hidden">
           {showCopyButton && (
-            <div className="px-3 py-2 border-b border-cyan-900/40 bg-[#161b22] flex items-center justify-between">
+            <div className="px-3 py-2 border-b border-cyan-900/40 bg-muted/50 flex items-center justify-between">
               <span className="font-mono text-sm text-cyan-300 font-medium">📋 RESULTADO</span>
               <Button
                 variant="ghost"

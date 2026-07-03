@@ -28,7 +28,7 @@ const PROVIDER_CONFIG = {
   github: {
     label: "Entrar com GitHub",
     icone: Github,
-    cor: "bg-[#24292e] hover:bg-[#1b1f23] text-white",
+    cor: "bg-secondary hover:bg-secondary/80 text-secondary-foreground border border-border",
     funcao: "ponte-mcp-oauth-github",
   },
   openai: {
