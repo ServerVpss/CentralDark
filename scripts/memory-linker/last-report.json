@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T01:00:02.321Z",
-  "nextRunMin": 117,
+  "timestamp": "2026-07-03T03:00:02.854Z",
+  "nextRunMin": 76,
   "orfas": [
     "ARQUITETURA-CENTRALDARK-2026",
     "00-PORTA-DE-ENTRADA-IA",
@@ -32,6 +32,12 @@
     "ERRO_500_HTML",
     "PLAYBOOK-VALIDACAO-DE-ENDPOINTS",
     "DESIGN-SISTEMA",
+    "CONSELHO",
+    "2026-07-02-2304-em-1-frase-qual-sua-fun-o",
+    "2026-07-02-232402-router-diga-s-ok",
+    "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi",
+    "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
+    "MULTI-MODEL-ORCHESTRATION",
     "BOT_COMMANDS",
     "CODEX-INTEGRADO",
     "CODEX-REVISAO-PRS",
@@ -545,6 +551,12 @@
   },
   "noConexoes": [
     "00-LEIA-PRIMEIRO",
+    "CONSELHO",
+    "2026-07-02-2304-em-1-frase-qual-sua-fun-o",
+    "2026-07-02-232402-router-diga-s-ok",
+    "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi",
+    "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
+    "MULTI-MODEL-ORCHESTRATION",
     "00-LEIA-PRIMEIRO",
     "00-COMECE-AQUI",
     "01-O-QUE-E-DARKAI",
@@ -564,6 +576,12 @@
     "PROMPT-UNIVERSAL",
     "QUICKSTART"
   ],
-  "semFrontmatter": [],
-  "total": 316
+  "semFrontmatter": [
+    "2026-07-02-2304-em-1-frase-qual-sua-fun-o",
+    "2026-07-02-232402-router-diga-s-ok",
+    "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi",
+    "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
+    "MULTI-MODEL-ORCHESTRATION"
+  ],
+  "total": 333
 }

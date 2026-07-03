@@ -998,11 +998,18 @@ async function handleAdminCommand(chatId, text) {
       return __refinar.refinarHandler({ send, chatId, text }, 'debate');
     }
     case '/router': {
+<<<<<<< Updated upstream
       // subcomandos de regras: /router status|trocar|testar
       const args = text.split(/\s+/).slice(1);
       const sub = (args[0] || '').toLowerCase();
       if (__regras && ['status', 'trocar', 'testar'].includes(sub)) {
         return __regras.regrasHandler({ send, chatId }, args);
+=======
+      const _args = text.split(/\s+/).slice(1);
+      const _sub = (_args[0] || '').toLowerCase();
+      if (__regras && ['status','trocar','testar'].includes(_sub)) {
+        return __regras.regrasHandler({ send, chatId }, _args);
+>>>>>>> Stashed changes
       }
       if (!__refinar) return send(chatId, '❌ Handler refinar não carregado.');
       return __refinar.refinarHandler({ send, chatId, text }, 'router');
