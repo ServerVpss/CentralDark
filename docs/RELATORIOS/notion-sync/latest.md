@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T23:27:55.188Z
+# 🧠 Notion Sync — 2026-07-03T23:49:56.740Z
 
-- **Commit fonte:** `62ceecd9d7075cf627354c6bf7c5d8f1a6cd8fec`
+- **Commit fonte:** `bfd329ab983ebe3d76029e99f9bf81dc3765dcd6`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 308 atualizadas · ❌ 411 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 309 atualizadas · ❌ 415 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 274 | 1 | 273 | 0 | 0 |
-| estrutura | 411 | 0 | 0 | 0 | 411 |
+| aprendizados | 275 | 1 | 274 | 0 | 0 |
+| estrutura | 415 | 0 | 0 | 0 | 415 |
 
 ## Operações
 
@@ -175,7 +175,7 @@
 | aprendizados | atualizado | #114 — Padrão operacional tipo Lovable: memória antes e depois |
 | aprendizados | atualizado | #115 — Separar run-once por nível de risco |
 | aprendizados | atualizado | #116 — Caddy bot/api separado corretamente por file_server e API |
-| aprendizados | erro | #117 — bot.centralldark.com deve servir apps/bot/dist |
+| aprendizados | atualizado | #117 — bot.centralldark.com deve servir apps/bot/dist |
 | aprendizados | atualizado | #118 — Contacts/groups read-only toleram 401 da WuzAPI |
 | aprendizados | atualizado | #119 — Duas árvores apps/bot causaram build no lugar errado |
 | aprendizados | atualizado | #120 — CORS da API deve ficar em um só lugar |
@@ -330,7 +330,8 @@
 | aprendizados | atualizado | #269 — Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral) |
 | aprendizados | atualizado | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
 | aprendizados | atualizado | #271 — Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card |
-| aprendizados | criado | #272 — Vault CentralDark + vault-loader no Hermes (Agent OS) |
+| aprendizados | atualizado | #272 — Vault CentralDark + vault-loader no Hermes (Agent OS) |
+| aprendizados | criado | #273 — Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
