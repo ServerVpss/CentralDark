@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T10:21:30.414Z",
-  "updatedAtBR": "03/07/2026, 07:21:22 BRT",
+  "updatedAt": "2026-07-03T10:22:08.128Z",
+  "updatedAtBR": "03/07/2026, 07:22:08 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "feat(hub): hub v2 typecheck limpo + PolicyEditor funcional",
+    "lastCommit": "feat(hermes): sistema de aprendizado — lições no prompt, ferramenta aprender, detectores de loop/releitura",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T10:22:08.128Z",
+      "titulo": "Push na main · 79813c937fb9465b9e00d59eb7e7fdfeb65c1fde",
+      "detalhe": "feat(hermes): sistema de aprendizado — lições no prompt, ferramenta aprender, detectores de loop/releitura",
+      "area": "Repositório",
+      "sha": "79813c9",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-03T10:21:22.645908Z",
       "titulo": "Hermes concluiu o hub v2 SOZINHO — 77 etapas, typecheck zero, push próprio",
       "detalhe": "Sistema de aprendizado implantado (aprendizados.json injetado no prompt + ferramenta 'aprender' + detectores de loop/releitura com escalação pro gemini-2.5-pro). Missões upgrade-hub-v2 e finalizar-hub-v2 concluídas. Commit 00f4403a3 feito e pushado pelo próprio Hermes aplicando git cirúrgico.",
@@ -974,22 +982,6 @@
       "detalhe": "docs(decisoes): registrar ampliação manual do Notion sync + gap no trigger automático",
       "area": "Repositório",
       "sha": "9c43deb",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T03:49:24.119Z",
-      "titulo": "Push na main · 371556a4697e8c54a9820457a97f3b3dcfe89bd0",
-      "detalhe": "docs(consciencia): criar MAPA-DOS-BOTS.md — fluxo leigo-friendly de toda automação",
-      "area": "Repositório",
-      "sha": "371556a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T03:42:54.581Z",
-      "titulo": "Push na main · 71821d0f8faec8136a96e1a02ad9903c23e3d3a7",
-      "detalhe": "feat(mcp+llm): remove /mcp-public, ativa Groq/OpenRouter/Gemini, agenda backup Drive",
-      "area": "Repositório",
-      "sha": "71821d0",
       "actor": "segredounlock"
     }
   ],
@@ -1405,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T10:22:08.128Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 79813c937fb9465b9e00d59eb7e7fdfeb65c1fde (79813c9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T10:17:50.828Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 00f4403a37812e3410d08ff44dc1ea0bc18f0313 (00f4403)",
@@ -1744,13 +1743,6 @@
       "time": "2026-06-30T02:17:39.272Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5ac95596429a684a031f71be47cee185076fb23a (5ac9559)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T01:08:31.143Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3c7c87dfeccf737414777e33a25e4c0d318dfe14 (3c7c87d)",
       "area": "Repositório",
       "status": "sucesso"
     }
