@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T05:15:01.681Z",
-  "baseReport": "2026-07-03T04:30:02.937Z",
+  "timestamp": "2026-07-03T08:15:01.819Z",
+  "baseReport": "2026-07-03T07:30:02.550Z",
   "criticos": [
     {
       "tipo": "link-quebrado-critico",
@@ -522,7 +522,7 @@
     },
     {
       "tipo": "orfas-excessivas",
-      "count": 255,
+      "count": 259,
       "lista": [
         "ARQUITETURA-CENTRALDARK-2026",
         "00-PORTA-DE-ENTRADA-IA",
@@ -535,31 +535,19 @@
   "autoFix": [
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova"
+      "arquivo": "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu"
+      "arquivo": "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr"
+      "arquivo": "fase-7-webui-integration"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "fase-3-nucleo-universal-telegram"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "fase-4-regras-configuraveis"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "fase-5-painel-visual"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "fase-6-hermes-autonomo"
+      "arquivo": "REGISTRO-GUARDIAO-DECISOR-V3"
     },
     {
       "tipo": "sem-conexoes-rapidas",
@@ -567,23 +555,31 @@
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-02-2304-em-1-frase-qual-sua-fun-o"
+      "arquivo": "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-02-232402-router-diga-s-ok"
+      "arquivo": "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi"
+      "arquivo": "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub"
+      "arquivo": "fase-3-nucleo-universal-telegram"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "MULTI-MODEL-ORCHESTRATION"
+      "arquivo": "fase-4-regras-configuraveis"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "fase-5-painel-visual"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "fase-6-hermes-autonomo"
     },
     {
       "tipo": "sem-conexoes-rapidas",
@@ -660,6 +656,5 @@
   ],
   "totalCritico": 21,
   "totalAlto": 35,
-  "totalAutoFix": 0,
-  "executed": "2026-07-03T05:29:03.414Z"
+  "totalAutoFix": 30
 }

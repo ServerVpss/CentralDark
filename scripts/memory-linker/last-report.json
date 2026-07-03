@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T04:30:02.937Z",
-  "nextRunMin": 62,
+  "timestamp": "2026-07-03T07:30:02.550Z",
+  "nextRunMin": 81,
   "orfas": [
     "ARQUITETURA-CENTRALDARK-2026",
     "00-PORTA-DE-ENTRADA-IA",
@@ -39,12 +39,15 @@
     "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova",
     "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu",
     "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr",
+    "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta",
+    "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta",
     "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
     "MULTI-MODEL-ORCHESTRATION",
     "fase-3-nucleo-universal-telegram",
     "fase-4-regras-configuraveis",
     "fase-5-painel-visual",
     "fase-6-hermes-autonomo",
+    "fase-7-webui-integration",
     "BOT_COMMANDS",
     "CODEX-INTEGRADO",
     "CODEX-REVISAO-PRS",
@@ -158,6 +161,7 @@
     "NOTION-MAPA",
     "MCP-LOCAL-STDIO-VPS",
     "PROMPT-MESTRE-MULTI-IA",
+    "REGISTRO-GUARDIAO-DECISOR-V3",
     "REGRA-OFICIAL-GUARDIAO-MODO-PROPOR",
     "REGRA-OFICIAL-GUARDIAO-V2-ANALISTA",
     "REGRA-OFICIAL-HIERARQUIA-MEMORIA",
@@ -558,18 +562,16 @@
   },
   "noConexoes": [
     "00-LEIA-PRIMEIRO",
-    "2026-07-02-2304-em-1-frase-qual-sua-fun-o",
-    "2026-07-02-232402-router-diga-s-ok",
-    "2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi",
     "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova",
     "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu",
     "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr",
-    "hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub",
-    "MULTI-MODEL-ORCHESTRATION",
+    "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta",
+    "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta",
     "fase-3-nucleo-universal-telegram",
     "fase-4-regras-configuraveis",
     "fase-5-painel-visual",
     "fase-6-hermes-autonomo",
+    "fase-7-webui-integration",
     "00-LEIA-PRIMEIRO",
     "00-COMECE-AQUI",
     "01-O-QUE-E-DARKAI",
@@ -587,16 +589,14 @@
     "INSTALAR-NA-VPS",
     "PROMPT-MEGA-ESTABILIZAR",
     "PROMPT-UNIVERSAL",
-    "QUICKSTART"
+    "QUICKSTART",
+    "REGISTRO-GUARDIAO-DECISOR-V3"
   ],
   "semFrontmatter": [
-    "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova",
-    "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu",
-    "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr",
-    "fase-3-nucleo-universal-telegram",
-    "fase-4-regras-configuraveis",
-    "fase-5-painel-visual",
-    "fase-6-hermes-autonomo"
+    "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta",
+    "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta",
+    "fase-7-webui-integration",
+    "REGISTRO-GUARDIAO-DECISOR-V3"
   ],
   "total": 348
 }
