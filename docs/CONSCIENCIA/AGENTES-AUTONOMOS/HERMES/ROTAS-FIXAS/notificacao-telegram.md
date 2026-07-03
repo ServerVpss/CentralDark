@@ -4,13 +4,16 @@
 
 Após toda tarefa: posts via connector Telegram já linkado (`@srver1bot`, `connection_id std_01kvw4jkcbekyr1t33vs4p5e9w`) segundo a tabela de destinos abaixo.
 
-## Tabela de destinos
+## Tabela de destinos (FOCO ATIVO — só 3)
 
 | Destino | chat_id | Quando postar | Formato | Bloco nível+skills? |
 |---|---|---|---|---|
 | Admin privado | `1901426549` | Toda tarefa fechada | Card AULA-006 completo em `<pre>` | ✅ SIM (no fim) |
-| Canal Status | `-1003669176367` | Toda tarefa fechada | 1–3 linhas em `<pre>` | ❌ NUNCA |
-| Grupo Evolução (multi-IA) | `-5365750004` (Central Dark - Grupo Da Evoluçao) | Debate entre IAs (AULA-013) | Cada IA em `<pre>` próprio + veredito Hermes em `<pre>` + salvar em `HERMES/DEBATES/GRUPO-EVOLUCAO/NNN.md` | ❌ (skills só admin) |
+| Canal Status | `-1003669176367` | Toda tarefa fechada — **único destino público** | 1–3 linhas em `<pre>` (grupo `-5365750004` recebe automático via link do canal) | ❌ NUNCA |
+| Grupo Evolução (direto) | `-5365750004` | **SÓ debate multi-IA (AULA-013)** — não usar pra anúncio comum | Cada IA em `<pre>` próprio + veredito Hermes + salvar em `HERMES/DEBATES/GRUPO-EVOLUCAO/NNN.md` | ❌ (skills só admin) |
+
+⚠️ **Nunca postar no canal E no grupo pra mesma notícia** — o grupo é linkado ao canal, replicação é automática. Duplicar = spam. Ver **AULA-016**.
+
 
 ## Formato visual (obrigatório em TODOS)
 
