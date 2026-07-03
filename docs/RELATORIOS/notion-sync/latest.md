@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T18:56:32.662Z
+# 🧠 Notion Sync — 2026-07-03T19:07:55.639Z
 
-- **Commit fonte:** `423a3ecd8cbd2790e9dd4b26ae2d6816af9e4b5c`
+- **Commit fonte:** `99e23f9f8e882e5ffd5daf837801e9b188819f77`
 - **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 306 atualizadas · ❌ 396 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 305 atualizadas · ❌ 402 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 271 | 0 | 271 | 0 | 0 |
-| estrutura | 396 | 0 | 0 | 0 | 396 |
+| aprendizados | 271 | 0 | 270 | 0 | 1 |
+| estrutura | 401 | 0 | 0 | 0 | 401 |
 
 ## Operações
 
@@ -319,7 +319,7 @@
 | aprendizados | atualizado | #258 — Mapa de refatoracao da CONSCIENCIA: universalizar agentes + regra ferramenta-ausente |
 | aprendizados | atualizado | #259 — Regra universal: toda IA sugere modelo/esforco otimo para economizar creditos e tempo |
 | aprendizados | atualizado | #260 — Padrão de Apresentação — toda IA via MCP |
-| aprendizados | atualizado | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
+| aprendizados | erro | #261 — Deploy automático GitHub→VPS está QUEBRADO no lado GitHub (webhook não cadastrado) |
 | aprendizados | atualizado | #262 — Webhook de deploy faz `git reset --hard` e apaga trabalho local não-enviado (race condition) |
 | aprendizados | atualizado | #263 — Estilo gamificado é padrão oficial de comunicação |
 | aprendizados | atualizado | #264 — Renomeação PM2 + fix Caddy status aplicados na VPS |
@@ -375,8 +375,12 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-009-nivel-e-skills.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-010-padrao-pre-telegram.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-011-auto-aprendizagem-e-memoria.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-012-padrao-commit-github.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-013-grupo-evolucao-multi-ia.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/TEMPLATE-AULA.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/001-gemini-sugere-aula-pipeline.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/GRUPO-EVOLUCAO/README.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/GRUPO-EVOLUCAO/TEMPLATE.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/TEMPLATE-DEBATE.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/EVOLUCAO/002-bloco6-fechado.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/README.md |
@@ -386,6 +390,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/webui-reload.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/STATUS.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/001-pre-carregar-graph.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/002-backlog-proximas-aulas.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
