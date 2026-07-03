@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T17:40:40.921Z
+# 🧠 Notion Sync — 2026-07-03T17:56:31.871Z
 
-- **Commit fonte:** `b04e5f2b7df536e3ab7cd77c0c414116e4a08cb3`
+- **Commit fonte:** `efe1f05cd6c3695c039566118608efaf8c93201e`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 298 atualizadas · ❌ 366 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 301 atualizadas · ❌ 367 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 26 | 2 | 24 | 0 | 0 |
-| aprendizados | 269 | 0 | 269 | 0 | 0 |
-| estrutura | 366 | 0 | 0 | 0 | 366 |
+| decisoes | 26 | 0 | 26 | 0 | 0 |
+| aprendizados | 270 | 0 | 270 | 0 | 0 |
+| estrutura | 367 | 0 | 0 | 0 | 367 |
 
 ## Operações
 
@@ -51,8 +51,8 @@
 | decisoes | atualizado | Fix STT do WebUI — whisper-1 mapeado no proxy audio-transcriptions (2026-07-03) |
 | decisoes | atualizado | Hermes × darkai — trava de stdin + env ausente no PM2 + retomada de missões órfãs (2026-07-03) |
 | decisoes | atualizado | Hermes ganha sistema de aprendizado + conclui hub v2 sozinho (2026-07-03) |
-| decisoes | criado | Rodada 3 do Hermes + incidente de segurança contas/ (2026-07-03, tarde) |
-| decisoes | criado | Hermes vira admin do Elite Gateway — tutor especialista (2026-07-03, noite) |
+| decisoes | atualizado | Rodada 3 do Hermes + incidente de segurança contas/ (2026-07-03, tarde) |
+| decisoes | atualizado | Hermes vira admin do Elite Gateway — tutor especialista (2026-07-03, noite) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -322,6 +322,7 @@
 | aprendizados | atualizado | #265 — Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido |
 | aprendizados | atualizado | #266 — Bot Telegram: token de bot ≠ sessão de usuário |
 | aprendizados | atualizado | #267 — Arsenal Council: portas, endpoints e comandos consolidados |
+| aprendizados | atualizado | #268 — Open WebUI: rota fixa pra editar visual (custom.css via volume) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -354,6 +355,7 @@
 | estrutura | erro | docs/CONSCIENCIA/22-PADRAO-STATUS-VISUAL.md |
 | estrutura | erro | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
 | estrutura | erro | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/fix-catalogo-tools-json/missao.md |
