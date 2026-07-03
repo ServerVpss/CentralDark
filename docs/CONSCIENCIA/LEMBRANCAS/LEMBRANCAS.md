@@ -174,3 +174,13 @@ Conteúdo: Toda descoberta técnica nova (porta, endpoint, comando, workaround) 
 - **Promovida:** sim
 
 Conteúdo: Árvore oficial do Hermes: `docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/{README.md, AULAS/, APRENDIZADOS/, ROTAS-FIXAS/, DEBATES/, EVOLUCAO/}`. Padrão fixo de AULA (7 seções: O que é / Quando usar / Como fazer / Comandos / Armadilhas / Verificação / Ver também). Fallback de consultor IA quando Elite Anthropic cair: Elite HTTP → Elite WS → gemini_analisar → darkai. Nunca travar workflow por 1 IA offline.
+
+### [2026-07-03T18:02] Notificação Telegram SEMPRE monospace
+- **Data:** 2026-07-03
+- **Tags:** telegram, padrao-visual, monospace, notificacao
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-02
+- **Promovida:** sim
+
+Conteúdo: Toda notificação Telegram (privado admin E canal Status) DEVE vir 100% dentro de bloco &lt;pre&gt;...&lt;/pre&gt; (monospace) com estrutura de árvore ┌├└ e placar visual. Nunca mandar texto corrido/flat. Vale pra card longo e pra linha curta do Status.
