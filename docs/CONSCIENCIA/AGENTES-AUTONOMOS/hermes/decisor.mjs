@@ -85,7 +85,7 @@ Você tem estas ferramentas disponíveis (escolha UMA por etapa):
    args: { "modelo": "openai/gpt-5", "prompt": "..." }
 
 3. "git" — operações git (commit, push, status, diff)
-   args: { "acao": "commit_push", "mensagem": "..." }  |  { "acao": "status" }
+   args: { "acao": "commit_push", "mensagem": "...", "paths": ["apps/modulos/hub"] }  |  { "acao": "status" }\n   REGRA: paths é OBRIGATÓRIO no commit_push — só os caminhos que a missão tocou.
 
 4. "escrever_arquivo" — cria ou sobrescreve arquivo dentro de /root/CentralDark
    args: { "path": "docs/foo.md", "conteudo": "..." }
@@ -144,6 +144,29 @@ function detectarReleituras(historico) {
   return top;
 }
 
+// Efeito repetido (v3) = mesmo comando shell rodado 3+x mudando só o "marcador"
+// (ex.: `tsc --noEmit && echo v1` → `... && echo v2`) — normaliza e compara o EFEITO
+function normalizarComando(cmd) {
+  return String(cmd || '')
+    .replace(/(&&|;|\|\|)\s*echo\s+[^&;|]*/gi, ' ')
+    .replace(/#[^\n]*/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function detectarEfeitoRepetido(historico) {
+  const contagem = {};
+  for (const h of (historico ?? []).slice(-6)) {
+    if (h.ferramenta !== 'shell') continue;
+    const norm = normalizarComando(h.args?.comando);
+    if (!norm) continue;
+    contagem[norm] = (contagem[norm] || 0) + 1;
+  }
+  let top = null;
+  for (const [c, n] of Object.entries(contagem))
+    if (n >= 3 && (!top || n > top.count)) top = { comando: c.slice(0, 120), count: n };
+  return top;
+}
+
 function montarPrompt(missao, historico, erros_anteriores = []) {
   const hist = (historico || []).length === 0
     ? '(sem etapas ainda)'
@@ -170,7 +193,12 @@ function montarPrompt(missao, historico, erros_anteriores = []) {
     ? `\n\n🚨 VOCÊ JÁ LEU ${rel.path} ${rel.count}x NAS ÚLTIMAS 6 ETAPAS sem corrigir nada. PROIBIDO ler esse arquivo de novo (por ler_arquivo OU shell). O conteúdo já está no seu histórico. A PRÓXIMA AÇÃO DEVE SER escrever_arquivo em ${rel.path} com o arquivo COMPLETO corrigido. 🚨`
     : '';
 
-  return `MISSÃO ORIGINAL:\n${missao}\n\n---\nHISTÓRICO:\n${hist}${nota_erros}${bloco_licoes}${bloco_loop}${bloco_rel}\n\n---\n${FERRAMENTAS}\n${SCHEMA}`;
+  const efe = detectarEfeitoRepetido(historico);
+  const bloco_efeito = efe
+    ? `\n\n🚨 EFEITO REPETIDO: você rodou o MESMO comando ${efe.count}x nas últimas 6 etapas (mudar o echo/marcador NÃO muda o resultado): "${efe.comando}". O resultado já está no histórico — CONFIE no exit code da 1ª rodada. PROIBIDO rodar esse comando de novo. Avance: corrija, conclua ou anote no relatório. 🚨`
+    : '';
+
+  return `MISSÃO ORIGINAL:\n${missao}\n\n---\nHISTÓRICO:\n${hist}${nota_erros}${bloco_licoes}${bloco_loop}${bloco_rel}${bloco_efeito}\n\n---\n${FERRAMENTAS}\n${SCHEMA}`;
 }
 
 function extrairJSON(texto) {
@@ -230,7 +258,7 @@ export async function decidir(missao, historico) {
   const historico_erros = [];
 
   // Em loop ou releitura detectados, pula o Flash e vai direto pro modelo mais forte quebrar o empate
-  const emLoop = detectarLoop(historico) >= 3 || !!detectarReleituras(historico);
+  const emLoop = detectarLoop(historico) >= 3 || !!detectarReleituras(historico) || !!detectarEfeitoRepetido(historico);
   const cadeia = emLoop ? CADEIA_DARKAI.slice(1) : CADEIA_DARKAI;
   if (emLoop) console.log('[decisor] 🔁 loop/releitura detectado — escalando direto pro gemini-2.5-pro');
 

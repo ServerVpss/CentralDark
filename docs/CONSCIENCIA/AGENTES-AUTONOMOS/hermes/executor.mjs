@@ -6,6 +6,7 @@ import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve, isAbsolute } from 'node:path';
 
 const pexec = promisify(execFile);
+import { registrar as registrarNoLedger } from './cerebro.mjs';
 const ROOT = '/root/CentralDark';
 
 const BLOQUEIOS = [
@@ -72,7 +73,8 @@ export async function executar(ferramenta, args) {
           base.atualizado = new Date().toISOString().slice(0, 10);
           await writeFile(APRENDIZADOS, JSON.stringify(base, null, 2));
         }
-        return { ok: true, saida: `🧠 aprendizado salvo em [${categoria}]: ${licao}` };
+        try { registrarNoLedger('licao', `hermes-runtime cat=${categoria}`, '-', licao, 'hermes'); } catch {}
+        return { ok: true, saida: `🧠 aprendizado salvo em [${categoria}] (json + ledger ARSENAL): ${licao}` };
       } catch (e) { return { ok: false, saida: `falha ao salvar aprendizado: ${e.message.slice(0, 200)}` }; }
     }
     case 'git': {
@@ -84,7 +86,13 @@ export async function executar(ferramenta, args) {
         }
         if (acao === 'commit_push') {
           const msg = (args.mensagem || 'chore(hermes): auto-commit').replace(/"/g, '\\"');
-          const { stdout } = await pexec('bash', ['-lc', `cd ${ROOT} && git add -A && git commit -m "${msg}" && git pull --rebase origin main && git push origin main 2>&1 | tail -20`], { timeout: 120_000 });
+          // Git cirúrgico: NUNCA add -A. paths explícitos; fallback = só tracked, excluindo disputados.
+          const brutos = Array.isArray(args.paths) ? args.paths : [];
+          const limpos = brutos.map(x => String(x).replace(/[^\w@\/.\-]/g, '')).filter(Boolean);
+          const add = limpos.length
+            ? `git add ${limpos.map(x => `'${x}'`).join(' ')}`
+            : `git add -u -- ':!apps/modulos/status/painel-data.json' ':!*.env' ':!*.bak'`;
+          const { stdout } = await pexec('bash', ['-lc', `cd ${ROOT} && ${add} && git commit -m "${msg}" && (git push origin main || (git pull --rebase --autostash origin main && git push origin main) || (git rebase --abort; echo 'PUSH PENDENTE — relatar')) 2>&1 | tail -20`], { timeout: 120_000 });
           return { ok: true, saida: stdout.slice(0, 2000) };
         }
         return { ok: false, saida: `ação git desconhecida: ${acao}` };

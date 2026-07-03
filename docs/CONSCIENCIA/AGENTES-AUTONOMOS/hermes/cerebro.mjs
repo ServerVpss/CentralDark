@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'fs';
 import { join } from 'path';
 
-const APRENDIZADOS_PATH = join(import.meta.dirname, '../../docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md');
+const APRENDIZADOS_PATH = join(import.meta.dirname, '../../ARSENAL/APRENDIZADOS.md');
 
 export function consultar(tipo) {
   if (!existsSync(APRENDIZADOS_PATH)) return [];

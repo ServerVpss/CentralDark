@@ -16,7 +16,8 @@
         "NUNCA adicionar ao git: apps/modulos/status/painel-data.json (automation conflita sempre), .env, backups/.",
         "Se o push falhar por non-fast-forward: git pull --rebase --autostash; se o rebase conflitar, git rebase --abort e relatar no final — não insistir.",
         "Não criar stash pra 'limpar' a árvore — outros processos têm mudanças pendentes legítimas.",
-        "Commit falhou com 'nothing to commit' não é erro fatal — verificar git status e seguir."
+        "Commit falhou com 'nothing to commit' não é erro fatal — verificar git status e seguir.",
+        "A ferramenta git commit_push agora aceita paths: {\"acao\":\"commit_push\",\"mensagem\":\"...\",\"paths\":[\"apps/modulos/hub\"]} — SEMPRE passar os paths da missão. Sem paths ela usa add -u excluindo painel-data.json, arquivos de ambiente e .bak (nunca mais add -A)."
       ]
     },
     "timeout": {
@@ -76,7 +77,8 @@
         "Se as 2 últimas etapas devolveram o MESMO resultado, a estratégia atual não funciona — mude de abordagem ou pule com anotação.",
         "Máximo 2 tentativas na mesma correção; na 3ª, anotar e seguir em frente.",
         "Quando um erro ensinar algo novo, gravar com a ferramenta 'aprender' antes de seguir.",
-        "Arquivo disputado por outros processos (ex.: painel-data.json): não tocar; se PRECISAR, usar flock (exec 9>/tmp/lock; flock -n 9 || desistir)."
+        "Arquivo disputado por outros processos (ex.: painel-data.json): não tocar; se PRECISAR, usar flock (exec 9>/tmp/lock; flock -n 9 || desistir).",
+        "Validação que passou 1x é FATO. NUNCA rodar o mesmo comando de novo trocando echo/marcador 'pra confirmar' — o detector v3 normaliza o comando e bloqueia na 3ª."
       ]
     },
     "curl": {
@@ -131,7 +133,23 @@
       "licoes": [
         "ANTES de sobrescrever arquivo que funciona: cp arquivo arquivo.bak (rollback barato).",
         "DEPOIS de escrever_arquivo, validar na mesma missão: .mjs/.js → node --check; .json → python3 -c \"import json;json.load(open('X'))\"; .ts/.tsx → npx tsc --noEmit.",
-        "Validação falhou? Restaurar o .bak e tentar diferente — não empilhar correção em cima de arquivo quebrado."
+        "Validação falhou? Restaurar o .bak e tentar diferente — não empilhar correção em cima de arquivo quebrado.",
+        "Quer confirmação visível de sucesso? UMA rodada com '&& echo OK' basta. Repetir o comando não gera informação nova, só queima etapa."
+      ]
+    },
+    "memoria": {
+      "gatilhos": [
+        "aprender",
+        "licao",
+        "lição",
+        "aprendizado",
+        "memoria",
+        "memória"
+      ],
+      "licoes": [
+        "Cada 'aprender' grava em 2 camadas: aprendizados.json (vivo — entra no prompt por gatilho) + ARSENAL/APRENDIZADOS.md (ledger histórico via cerebro.mjs).",
+        "Lição boa é curta, acionável e com o comando certo dentro — lição vaga não previne erro.",
+        "Antes de missão longa num assunto, as lições da categoria já vêm no prompt — respeitar em vez de redescobrir na base do erro."
       ]
     }
   }

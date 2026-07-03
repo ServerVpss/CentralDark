@@ -4,16 +4,61 @@
   "ledger": "docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md",
   "espelho_operacional": "docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/aprendizados.json",
   "categorias": {
-    "git": ["git add por path, nunca -A", "push rejeitado: pull --rebase --autostash; conflito = abort + relatar", "nunca tocar painel-data.json/.env/backups"],
-    "timeout": ["falha exata no timeout = pipe/stdin pendurado", "curl sempre com --max-time"],
-    "json-parse": ["JSON puro sem cercas de markdown", "validar com python3 json.load antes de servir"],
-    "typescript": ["tsc --noEmit como bússola", "ler o pai antes de criar filho", "conferir kit de UI antes de importar"],
-    "permissao": ["áreas protegidas são só leitura", "credencial ausente = pular e anotar"],
-    "loop": ["2 leituras do mesmo arquivo bastam; a 3ª ação é escrever", "2 resultados iguais = mudar estratégia"],
-    "curl": ["-sS --max-time --retry", "-o /dev/null -w '%{http_code}' pra só status", "jq -r pra extrair campo"],
-    "pm2": ["logs sempre --nostream", "pm2 save após mudança", "nunca operação em massa"],
-    "shell-massa": ["grep -rln lista → xargs sed -i.bak troca → grep confere"],
-    "validacao-rollback": ["cp .bak antes de sobrescrever", "node --check / json.load / tsc --noEmit depois de escrever", "falhou = restaurar .bak"],
-    "lock": ["flock em arquivo disputado ou não tocar"]
+    "git": [
+      "git add por path, nunca -A",
+      "push rejeitado: pull --rebase --autostash; conflito = abort + relatar",
+      "nunca tocar painel-data.json/.env/backups",
+      "ferramenta commit_push com paths explícitos; fallback add -u com exclusões"
+    ],
+    "timeout": [
+      "falha exata no timeout = pipe/stdin pendurado",
+      "curl sempre com --max-time"
+    ],
+    "json-parse": [
+      "JSON puro sem cercas de markdown",
+      "validar com python3 json.load antes de servir"
+    ],
+    "typescript": [
+      "tsc --noEmit como bússola",
+      "ler o pai antes de criar filho",
+      "conferir kit de UI antes de importar"
+    ],
+    "permissao": [
+      "áreas protegidas são só leitura",
+      "credencial ausente = pular e anotar"
+    ],
+    "loop": [
+      "2 leituras do mesmo arquivo bastam; a 3ª ação é escrever",
+      "2 resultados iguais = mudar estratégia"
+    ],
+    "curl": [
+      "-sS --max-time --retry",
+      "-o /dev/null -w '%{http_code}' pra só status",
+      "jq -r pra extrair campo"
+    ],
+    "pm2": [
+      "logs sempre --nostream",
+      "pm2 save após mudança",
+      "nunca operação em massa"
+    ],
+    "shell-massa": [
+      "grep -rln lista → xargs sed -i.bak troca → grep confere"
+    ],
+    "validacao-rollback": [
+      "cp .bak antes de sobrescrever",
+      "node --check / json.load / tsc --noEmit depois de escrever",
+      "falhou = restaurar .bak"
+    ],
+    "lock": [
+      "flock em arquivo disputado ou não tocar"
+    ],
+    "efeito-repetido": [
+      "detector v3: comando normalizado (sem echo-marcador) 3x/6 etapas = bloqueio + escala pro 2.5-pro",
+      "validação que passou 1x é fato — confiar no exit code"
+    ],
+    "memoria": [
+      "aprender grava em 2 camadas: json vivo + ledger ARSENAL (cerebro.mjs integrado 03/07)",
+      "lição boa é curta e acionável"
+    ]
   }
 }
