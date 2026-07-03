@@ -3,7 +3,7 @@
 // Supabase: schema hub em lyoigsqluyktoclwdaft (via hubClient)
 
 import { useState, useEffect, useCallback } from "react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { DashboardLayout, type NavGroup } from "@/shared/layout/DashboardLayout";
 import {
   Card, CardContent, CardHeader, CardTitle,
 } from "@/shared/ui/card";
@@ -93,6 +93,36 @@ const TABS = [
   { id: 'arquitetura', label: 'Arquitetura', Icon: Network },
 ] as const;
 type TabId = typeof TABS[number]['id'];
+
+// Agrupamento visual pra sidebar (estilo MCP Market: MANAGE / MONITOR / WORKSPACE)
+const NAV_GROUPS: NavGroup[] = [
+  {
+    id: 'manage',
+    label: 'Manage',
+    items: [
+      { id: 'servicos',   label: 'Serviços',   Icon: Zap },
+      { id: 'catalogo',   label: 'Catálogo',   Icon: Package },
+      { id: 'conectores', label: 'Conectores', Icon: Plug },
+      { id: 'politicas',  label: 'Políticas',  Icon: ShieldCheck },
+    ],
+  },
+  {
+    id: 'monitor',
+    label: 'Monitor',
+    items: [
+      { id: 'overview',  label: 'Overview',  Icon: LayoutDashboard },
+      { id: 'auditoria', label: 'Auditoria', Icon: History },
+    ],
+  },
+  {
+    id: 'workspace',
+    label: 'Workspace',
+    items: [
+      { id: 'aprovacoes',  label: 'Aprovações',  Icon: CheckSquare },
+      { id: 'arquitetura', label: 'Arquitetura', Icon: Network },
+    ],
+  },
+];
 
 // URL da edge function no projeto principal
 const HEALTHCHECK_URL = 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/hub-services-check';
@@ -769,34 +799,35 @@ export default function HubPage() {
   };
   const Section = SECTIONS[tab];
 
+  // Anexa contador de pendentes ao item Aprovações
+  const groupsWithBadge: NavGroup[] = NAV_GROUPS.map(g => ({
+    ...g,
+    items: g.items.map(it =>
+      it.id === 'aprovacoes' && pending.length > 0
+        ? { ...it, badge: String(pending.length), badgeTone: 'warn' as const }
+        : it
+    ),
+  }));
+
+  const activeLabel = NAV_GROUPS.flatMap(g => g.items).find(i => i.id === tab)?.label ?? '';
+
   return (
-    <DashboardLayout>
-      <div className="p-4 md:p-6 space-y-5 max-w-7xl mx-auto">
-        <div className="flex flex-wrap items-start justify-between gap-3">
+    <DashboardLayout
+      groups={groupsWithBadge}
+      activeId={tab}
+      onSelect={(id) => setTab(id as TabId)}
+    >
+      <div className="p-6 md:p-8 space-y-5 max-w-6xl mx-auto">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-border">
           <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2 tracking-tight">
-              <ShieldCheck className="h-6 w-6 text-primary" /> Hub de Segurança
-            </h1>
-            <p className="text-sm text-muted-foreground">PDP · PEP · Aprovações · Audit hash-chain · <code className="font-mono text-xs">lyoigsqluyktoclwdaft</code></p>
+            <h1 className="text-[22px] font-semibold tracking-tight">{activeLabel}</h1>
+            <p className="text-[13px] text-muted-foreground mt-0.5">
+              Hub de Segurança CentralDark · PDP · PEP · Audit hash-chain
+            </p>
           </div>
           <Button onClick={loadAll} variant="outline" size="sm" className="gap-2 shadow-3d-soft active:translate-y-[1px]">
             <Activity className="h-4 w-4" /> Atualizar
           </Button>
-        </div>
-
-        <div className="flex gap-1 border-b border-border overflow-x-auto">
-          {TABS.map(({ id, label, Icon }) => (
-            <button key={id} onClick={() => setTab(id)}
-              className={cn(
-                'flex items-center gap-1.5 px-3 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
-                tab === id ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'
-              )}>
-              <Icon className="h-3.5 w-3.5" />{label}
-              {id === 'aprovacoes' && pending.length > 0 && (
-                <span className="ml-1 rounded-full bg-warning text-warning-foreground text-[10px] font-bold px-1.5">{pending.length}</span>
-              )}
-            </button>
-          ))}
         </div>
 
         {tab === 'servicos' ? (
