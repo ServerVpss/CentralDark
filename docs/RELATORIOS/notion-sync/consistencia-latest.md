@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T21:29:50.170Z
-- **Commit:** `9da8b9e04c291b990a346288dda8d03a13f20dd4`
+- **Gerado:** 2026-07-03T23:27:58.663Z
+- **Commit:** `62ceecd9d7075cf627354c6bf7c5d8f1a6cd8fec`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 297 | 0 | 0 | 297 | 0 |
+| aprendizados | 298 | 0 | 0 | 298 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **297**
+- 🟥 Faltando no Notion: **298**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -345,4 +345,5 @@
 - 269. Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral)
 - 270. Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub
 - 271. Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card
+- 272. Vault CentralDark + vault-loader no Hermes (Agent OS)
 </details>

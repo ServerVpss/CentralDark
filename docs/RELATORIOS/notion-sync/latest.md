@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T21:29:47.759Z
+# 🧠 Notion Sync — 2026-07-03T23:27:55.188Z
 
-- **Commit fonte:** `9da8b9e04c291b990a346288dda8d03a13f20dd4`
+- **Commit fonte:** `62ceecd9d7075cf627354c6bf7c5d8f1a6cd8fec`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 308 atualizadas · ❌ 411 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 308 atualizadas · ❌ 411 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 273 | 0 | 273 | 0 | 0 |
+| aprendizados | 274 | 1 | 273 | 0 | 0 |
 | estrutura | 411 | 0 | 0 | 0 | 411 |
 
 ## Operações
@@ -330,6 +330,7 @@
 | aprendizados | atualizado | #269 — Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral) |
 | aprendizados | atualizado | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
 | aprendizados | atualizado | #271 — Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card |
+| aprendizados | criado | #272 — Vault CentralDark + vault-loader no Hermes (Agent OS) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
