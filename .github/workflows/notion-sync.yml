@@ -9,16 +9,12 @@ on:
   push:
     branches: [main]
     paths:
-      # Cobertura: qualquer .md da CONSCIENCIA dispara o sync.
+      # Cobertura total: qualquer .md da CONSCIENCIA dispara o sync.
       # Arquivos sensíveis (NUNCA_ESPELHAR) disparam mas são pulados no código.
       - 'docs/CONSCIENCIA/**/*.md'
       - 'docs/PENDENCIAS.md'
       - 'scripts/notion-sync/**'
       - '.github/workflows/notion-sync.yml'
-    paths-ignore:
-      # Ruído de manutenção — não precisa espelhar toda hora.
-      - 'docs/CONSCIENCIA/LEMBRANCAS/**'
-      - 'docs/RELATORIOS/notion-sync/**'
   workflow_dispatch:
     inputs:
       dry_run:
