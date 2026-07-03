@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T17:29:49.474Z
-- **Commit:** `3ef7d9defb90398a5a9a3c9355f40204a439f455`
+- **Gerado:** 2026-07-03T17:45:24.916Z
+- **Commit:** `712e79262d5205219ea24100195f7d1e9438c22c`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -12,8 +12,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
-| decisoes | 24 | 24 | 24 | 0 | 0 |
-| aprendizados | 292 | 0 | 0 | 292 | 0 |
+| decisoes | 26 | 26 | 26 | 0 | 0 |
+| aprendizados | 294 | 0 | 0 | 294 | 0 |
 
 ## Detalhes
 
@@ -36,14 +36,14 @@
 
 ### decisoes
 
-- 🟩 OK: **24**
+- 🟩 OK: **26**
 - 🟥 Faltando no Notion: **0**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **292**
+- 🟥 Faltando no Notion: **294**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -340,4 +340,6 @@
 - 💬 Claude Sonnet — grupo evolução (2026-07-03)
 - 265. Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido
 - 266. Bot Telegram: token de bot ≠ sessão de usuário
+- 267. Arsenal Council: portas, endpoints e comandos consolidados
+- 268. Open WebUI: rota fixa pra editar visual (custom.css via volume)
 </details>
