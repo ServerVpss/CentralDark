@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T07:30:02.550Z",
-  "nextRunMin": 81,
+  "timestamp": "2026-07-03T09:00:01.765Z",
+  "nextRunMin": 89,
   "orfas": [
     "ARQUITETURA-CENTRALDARK-2026",
     "00-PORTA-DE-ENTRADA-IA",
@@ -18,6 +18,7 @@
     "12-COFRE-LOVABLE",
     "12-GUIA-PIVETE",
     "12-PASTA-OFICIAL-BOT",
+    "13-COFRE-SECRETS-CENTRALIZADO",
     "13-COMANDO-UNICO-VPS",
     "14-COFRE-SECRETS-CENTRALIZADO",
     "20-COLABORACAO-MULTI-IA",
@@ -27,6 +28,7 @@
     "22-PADRAO-STATUS-VISUAL",
     "23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS",
     "23-PAPEL-LOVABLE-CENTRAL-COMANDO",
+    "missao",
     "APRENDIZADO-99-bot-server-consolidacao",
     "CONFIGURACAO_CLINE",
     "ERRO_500_HTML",
@@ -48,6 +50,7 @@
     "fase-5-painel-visual",
     "fase-6-hermes-autonomo",
     "fase-7-webui-integration",
+    "MOVIDO",
     "BOT_COMMANDS",
     "CODEX-INTEGRADO",
     "CODEX-REVISAO-PRS",
@@ -165,6 +168,8 @@
     "REGRA-OFICIAL-GUARDIAO-MODO-PROPOR",
     "REGRA-OFICIAL-GUARDIAO-V2-ANALISTA",
     "REGRA-OFICIAL-HIERARQUIA-MEMORIA",
+    "2026-07-03-sessao-hermes-webhook",
+    "20260703T075750Z-consolidacao-root-docs-centraldark",
     "alinhamento-cerebro-20260630",
     "2026-06-25T21-15-31",
     "2026-06-25T23-00-16",
@@ -562,16 +567,13 @@
   },
   "noConexoes": [
     "00-LEIA-PRIMEIRO",
-    "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova",
-    "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu",
-    "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr",
+    "13-COFRE-SECRETS-CENTRALIZADO",
+    "missao",
+    "APRENDIZADOS",
     "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta",
     "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta",
-    "fase-3-nucleo-universal-telegram",
-    "fase-4-regras-configuraveis",
-    "fase-5-painel-visual",
-    "fase-6-hermes-autonomo",
     "fase-7-webui-integration",
+    "MOVIDO",
     "00-LEIA-PRIMEIRO",
     "00-COMECE-AQUI",
     "01-O-QUE-E-DARKAI",
@@ -590,13 +592,17 @@
     "PROMPT-MEGA-ESTABILIZAR",
     "PROMPT-UNIVERSAL",
     "QUICKSTART",
-    "REGISTRO-GUARDIAO-DECISOR-V3"
+    "REGISTRO-GUARDIAO-DECISOR-V3",
+    "2026-07-03-sessao-hermes-webhook",
+    "20260703T075750Z-consolidacao-root-docs-centraldark"
   ],
   "semFrontmatter": [
-    "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta",
-    "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta",
-    "fase-7-webui-integration",
-    "REGISTRO-GUARDIAO-DECISOR-V3"
+    "13-COFRE-SECRETS-CENTRALIZADO",
+    "missao",
+    "APRENDIZADOS",
+    "MOVIDO",
+    "2026-07-03-sessao-hermes-webhook",
+    "20260703T075750Z-consolidacao-root-docs-centraldark"
   ],
-  "total": 348
+  "total": 354
 }

@@ -4,7 +4,8 @@
 import { readFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
-const [,, titulo = 'Hermes', mensagem = '', destino = 'ambos'] = process.argv;
+const [,, titulo = 'Hermes', mensagem = '', destino = 'ambos', modo = 'pre'] = process.argv;
+// modo: 'pre' (monoespaçado, default) | 'plain' (texto normal)
 const ADMIN = 1901426549;
 const CANAL = -1003669176367;
 
@@ -40,8 +41,10 @@ async function send(chatId, texto) {
   return true;
 }
 
-const cardAdmin = `🤖 <b>${esc(titulo)}</b>\n\n${esc(mensagem)}`;
-const linhaCanal = `🤖 ${esc(titulo)} — ${esc(mensagem.slice(0, 140))}`;
+const corpoAdmin = modo === 'pre' ? `<pre>${esc(mensagem)}</pre>` : esc(mensagem);
+const cardAdmin = `🤖 <b>${esc(titulo)}</b>\n\n${corpoAdmin}`;
+const primeiraLinha = String(mensagem || '').split('\n')[0].slice(0, 140);
+const linhaCanal = `🤖 ${esc(titulo)} — ${esc(primeiraLinha)}`;
 
 const alvos = [];
 if (destino === 'ambos' || destino === 'admin') alvos.push(['admin', ADMIN, cardAdmin]);

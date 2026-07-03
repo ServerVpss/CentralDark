@@ -96,3 +96,7 @@ scripts/memory-linker/last-report.json
 scripts/sync-loop.sh
 apps/modulos/elite-gateway/venv/
 apps/modulos/elite-gateway/config/
+
+# secrets locais (não versionar)
+.env
+.env.bak-*

@@ -1,3 +1,10 @@
+---
+title: "2026 07 03 Sessao Hermes Webhook"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # Relatório da Sessão — 03/07/2026
 ## Hermes + Webhook + Elite Anthropic
 

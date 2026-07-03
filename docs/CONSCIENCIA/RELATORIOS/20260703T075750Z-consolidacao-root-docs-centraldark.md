@@ -1,3 +1,10 @@
+---
+title: "20260703T075750Z Consolidacao Root Docs Centraldark"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # 🔒 Relatório de consolidação — /root/docs → /root/CentralDark/docs
 
 Data UTC: 20260703T075750Z

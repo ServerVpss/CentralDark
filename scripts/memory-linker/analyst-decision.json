@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T08:15:01.819Z",
-  "baseReport": "2026-07-03T07:30:02.550Z",
+  "timestamp": "2026-07-03T09:45:01.362Z",
+  "baseReport": "2026-07-03T09:00:01.765Z",
   "criticos": [
     {
       "tipo": "link-quebrado-critico",
@@ -522,7 +522,7 @@
     },
     {
       "tipo": "orfas-excessivas",
-      "count": 259,
+      "count": 264,
       "lista": [
         "ARQUITETURA-CENTRALDARK-2026",
         "00-PORTA-DE-ENTRADA-IA",
@@ -535,19 +535,27 @@
   "autoFix": [
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta"
+      "arquivo": "13-COFRE-SECRETS-CENTRALIZADO"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta"
+      "arquivo": "missao"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "fase-7-webui-integration"
+      "arquivo": "APRENDIZADOS"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "REGISTRO-GUARDIAO-DECISOR-V3"
+      "arquivo": "MOVIDO"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "2026-07-03-sessao-hermes-webhook"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "20260703T075750Z-consolidacao-root-docs-centraldark"
     },
     {
       "tipo": "sem-conexoes-rapidas",
@@ -555,31 +563,15 @@
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova"
+      "arquivo": "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu"
+      "arquivo": "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "fase-3-nucleo-universal-telegram"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "fase-4-regras-configuraveis"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "fase-5-painel-visual"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "fase-6-hermes-autonomo"
+      "arquivo": "fase-7-webui-integration"
     },
     {
       "tipo": "sem-conexoes-rapidas",
@@ -652,9 +644,13 @@
     {
       "tipo": "sem-conexoes-rapidas",
       "arquivo": "QUICKSTART"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "REGISTRO-GUARDIAO-DECISOR-V3"
     }
   ],
   "totalCritico": 21,
   "totalAlto": 35,
-  "totalAutoFix": 30
+  "totalAutoFix": 29
 }

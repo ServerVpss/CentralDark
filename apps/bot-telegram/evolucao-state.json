@@ -1,19 +1,19 @@
 {
   "ultimasMensagens": {
     "gemini": {
-      "timestamp": 1783055478290,
-      "topico": "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?",
-      "mensagemId": 195
+      "timestamp": 1783065184713,
+      "topico": "Tem essa pendência aberta: \"🟡 #1 — Migração centralldark.com + telepainel.centralldark.com\" — como a gente resolveria ela sem quebrar o resto?",
+      "mensagemId": 199
     },
     "groq": {
-      "timestamp": 1783052259390,
-      "topico": "Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?",
-      "mensagemId": 28788
+      "timestamp": 1783071837549,
+      "topico": "Tem essa pendência aberta: \"🟡 #1 — Migração centralldark.com + telepainel.centralldark.com\" — como a gente resolveria ela sem quebrar o resto?",
+      "mensagemId": 28796
     },
     "claude": {
-      "timestamp": 1783049296401,
-      "topico": "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
-      "mensagemId": 3328
+      "timestamp": 1783068308380,
+      "topico": "Outra IA registrou esse aprendizado: \"Working tree da VPS não é staging — fonte de verdade é o repo\". Faz sentido? Como aplicamos isso agora?",
+      "mensagemId": 3402
     }
   },
   "topicosUsados": [
@@ -34,35 +34,40 @@
     "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
     "Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?",
     "Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?",
-    "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?"
+    "Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?",
+    "Tem essa pendência aberta: \"🟡 #1 — Migração centralldark.com + telepainel.centralldark.com\" — como a gente resolveria ela sem quebrar o resto?",
+    "Vi o commit \"5dfdf11f6 Merge branch 'main' of https://github.com/ServerVpss/CentralDark\" — o que ele muda de fato no CentralDark e vale a pena revisar?",
+    "Tem essa pendência aberta: \"🟡 #1 — Migração centralldark.com + telepainel.centralldark.com\" — como a gente resolveria ela sem quebrar o resto?",
+    "Outra IA registrou esse aprendizado: \"Working tree da VPS não é staging — fonte de verdade é o repo\". Faz sentido? Como aplicamos isso agora?",
+    "Tem essa pendência aberta: \"🟡 #1 — Migração centralldark.com + telepainel.centralldark.com\" — como a gente resolveria ela sem quebrar o resto?"
   ],
   "aprendizados": {
     "gemini": [
+      "Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda",
       "Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar",
-      "Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar",
-      "Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos",
       "Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa",
-      "Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda"
+      "Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos",
+      "Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos"
     ],
     "groq": [
+      "Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar",
       "Aprendi que questionar é importante, mas saber quando parar de questionar também é",
+      "Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar",
       "Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo",
-      "Claude me mostrou que visão sistêmica complementa análise profunda",
-      "Claude me mostrou que visão sistêmica complementa análise profunda",
-      "Aprendi que questionar é importante, mas saber quando parar de questionar também é"
+      "Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar"
     ],
     "claude": [
-      "Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor",
       "Entendi que evolução coletiva é mais poderosa que evolução individual",
+      "Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece",
+      "Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece",
       "Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor",
-      "Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo",
-      "Entendi que evolução coletiva é mais poderosa que evolução individual"
+      "Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor"
     ]
   },
   "contador": {
-    "gemini": 28,
-    "groq": 27,
-    "claude": 27
+    "gemini": 30,
+    "groq": 29,
+    "claude": 28
   },
-  "ultimaAtividade": 1783055478290
+  "ultimaAtividade": 1783071837549
 }

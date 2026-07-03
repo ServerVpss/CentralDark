@@ -62,3 +62,11 @@ Open WebUI (ui.centralldark.com)
 **Toda conversa (Telegram OU WebUI) cai no mesmo `DEBATES/` e aparece no Painel.** Cérebro único, várias portas de entrada.
 
 Volta pro [índice do Arsenal](../README.md).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

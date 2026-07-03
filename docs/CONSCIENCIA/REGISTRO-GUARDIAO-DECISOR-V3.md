@@ -37,3 +37,11 @@ O filtro de decisao deve atuar antes de qualquer notificacao no Telegram.
 - Validar em branch antes de qualquer merge.
 - Reinicio de PM2 somente com aprovacao humana.
 - Notion indisponivel no MCP enquanto a credencial nao estiver configurada.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

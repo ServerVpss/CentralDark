@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-03T06:05:02.460Z",
+  "atualizadoEm": "2026-07-03T09:55:02.220Z",
   "slots": {},
   "timeouts": {
     "router_s": 30,
@@ -11,6 +11,31 @@
     "totalEvolucoes": 1
   },
   "ultimosDebates": [
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta.md",
+      "quando": "2026-07-03T09:52:47.411Z",
+      "preview": "--- · title: \"2026 07 03T05 24 52 999Z Router Webui Diga Oi Em Uma Frase Curta\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta.md",
+      "quando": "2026-07-03T09:52:47.407Z",
+      "preview": "--- · title: \"2026 07 03T05 24 43 958Z Router Webui Diga Oi Em Uma Frase Curta\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova.md",
+      "quando": "2026-07-03T08:33:15.627Z",
+      "preview": "--- · title: \"2026 07 03T03 10 03 652Z Router Webui Responda Em Uma Linha Arsenal Funcionando Via Lova\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu.md",
+      "quando": "2026-07-03T08:33:15.627Z",
+      "preview": "--- · title: \"2026 07 03T03 10 41 847Z Parallel Webui Em Uma Frase Qual A Melhor Forma De Organizar Arqu\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr.md",
+      "quando": "2026-07-03T08:33:15.627Z",
+      "preview": "--- · title: \"2026 07 03T03 32 16 554Z Router Webui Teste Ao Vivo Do Webui Diga Oi Curto No Grupo 1 Fr\" · date: 2026-07-03"
+    },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md",
       "quando": "2026-07-03T05:29:01.958Z",
@@ -25,31 +50,6 @@
       "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md",
       "quando": "2026-07-03T05:29:01.958Z",
       "preview": "--- · title: \"2026 07 02 233739 Debate Como Resolver A Pend Ncia Centraldark 14 N Cleo Vi\" · date: 2026-07-03"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu.md",
-      "quando": "2026-07-03T05:29:01.918Z",
-      "preview": "--- · title: \"2026 07 03T03 10 41 847Z Parallel Webui Em Uma Frase Qual A Melhor Forma De Organizar Arqu\" · date: 2026-07-03"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr.md",
-      "quando": "2026-07-03T05:29:01.918Z",
-      "preview": "--- · title: \"2026 07 03T03 32 16 554Z Router Webui Teste Ao Vivo Do Webui Diga Oi Curto No Grupo 1 Fr\" · date: 2026-07-03"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova.md",
-      "quando": "2026-07-03T05:29:01.914Z",
-      "preview": "--- · title: \"2026 07 03T03 10 03 652Z Router Webui Responda Em Uma Linha Arsenal Funcionando Via Lova\" · date: 2026-07-03"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta.md",
-      "quando": "2026-07-03T05:24:52.999Z",
-      "preview": "# router · WebUI · **Quando:** 03/07/2026, 02:24:53 · **Origem:** ui.centralldark.com"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta.md",
-      "quando": "2026-07-03T05:24:43.963Z",
-      "preview": "# router · WebUI · **Quando:** 03/07/2026, 02:24:43 · **Origem:** ui.centralldark.com"
     }
   ],
   "ultimasEvolucoes": [

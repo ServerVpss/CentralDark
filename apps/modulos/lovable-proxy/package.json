@@ -1,0 +1,8 @@
+{
+  "name": "centraldark-lovable-proxy",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Proxy pro Lovable AI Gateway com conversão de header + rate limit + rota TTS",
+  "main": "index.mjs",
+  "scripts": { "start": "node index.mjs" }
+}

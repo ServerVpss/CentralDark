@@ -1,3 +1,10 @@
+---
+title: "13 COFRE SECRETS CENTRALIZADO"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # 13 — Cofre de Secrets Centralizado
 
 **Regra:** todo secret/.env do CentralDark vive em um único lugar:

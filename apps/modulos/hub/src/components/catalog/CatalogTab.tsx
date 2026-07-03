@@ -1,148 +1,168 @@
-// apps/modulos/hub/src/components/catalog/CatalogTab.tsx
-import React, { useState, useEffect } from 'react'
-import { hubClient as supabase } from '@/integrations/supabase/hub-client'
+import React, { useState, useEffect } from 'react';
+import { ToolCard } from './ToolCard';
+import { SyncButton } from './SyncButton';
+import { Badge } from '@/shared/ui/badge';
+import { Input } from '@/shared/ui/input';
+import { Search, Filter } from 'lucide-react';
 
 interface Tool {
-  id: string
-  name: string
-  description: string
-  category: string
-  tags: string[]
-  version: string
-  is_deprecated: boolean
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  tags: string[];
+  version: string;
+  is_deprecated: boolean;
+  health_status?: 'healthy' | 'degraded' | 'down' | 'unknown';
+  last_health_check?: string;
 }
 
 interface SyncRun {
-  id: string
-  status: string
-  started_at: string
-  finished_at: string
-  tools_found: number
-  tools_added: number
-  tools_updated: number
+  id: string;
+  status: string;
+  started_at: string;
+  finished_at: string;
+  tools_found: number;
+  tools_added: number;
+  tools_updated: number;
 }
 
-export const CatalogTab = (): JSX.Element => {
-  const [tools, setTools] = useState<Tool[]>([])
-  const [syncRuns, setSyncRuns] = useState<SyncRun[]>([])
-  const [syncing, setSyncing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export function CatalogTab() {
+  const [tools, setTools] = useState<Tool[]>([]);
+  const [syncRuns, setSyncRuns] = useState<SyncRun[]>([]);
+  const [search, setSearch] = useState('');
+  const [filterCategory, setFilterCategory] = useState<string>('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadTools()
-    loadSyncRuns()
-  }, [])
+    loadTools();
+    loadSyncRuns();
+  }, []);
 
-  const loadTools = async () => {
-    const { data } = await supabase
-      .schema('catalog').from('tools')
-      .select('*')
-      .order('name')
-    if (data) setTools(data)
-  }
-
-  const loadSyncRuns = async () => {
-    const { data } = await supabase
-      .schema('catalog').from('sync_runs')
-      .select('*')
-      .order('started_at', { ascending: false })
-      .limit(5)
-    if (data) setSyncRuns(data)
-  }
-
-  const handleSync = async () => {
-    setSyncing(true)
-    setError(null)
+  async function loadTools() {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/catalog-sync`,
-        { method: 'POST' }
-      )
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      await loadTools()
-      await loadSyncRuns()
+      const { hubClient } = await import('@/integrations/supabase/hub-client');
+      const { data } = await hubClient.from('catalog_tools').select('*').order('name');
+      if (data) setTools(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao sincronizar')
+      console.error('Erro ao carregar tools:', err);
     } finally {
-      setSyncing(false)
+      setLoading(false);
     }
   }
 
+  async function loadSyncRuns() {
+    try {
+      const { hubClient } = await import('@/integrations/supabase/hub-client');
+      const { data } = await hubClient.from('catalog_sync_runs').select('*').order('started_at', { ascending: false }).limit(5);
+      if (data) setSyncRuns(data);
+    } catch (err) {
+      console.error('Erro ao carregar sync runs:', err);
+    }
+  }
+
+  const categories = ['all', ...new Set(tools.map(t => t.category))];
+
+  const filteredTools = tools.filter(t => {
+    const matchSearch = !search || t.name.toLowerCase().includes(search.toLowerCase()) || t.description.toLowerCase().includes(search.toLowerCase());
+    const matchCategory = filterCategory === 'all' || t.category === filterCategory;
+    return matchSearch && matchCategory;
+  });
+
+  const healthCounts = {
+    healthy: tools.filter(t => t.health_status === 'healthy').length,
+    degraded: tools.filter(t => t.health_status === 'degraded').length,
+    down: tools.filter(t => t.health_status === 'down').length,
+    unknown: tools.filter(t => !t.health_status || t.health_status === 'unknown').length,
+  };
+
+  if (loading) {
+    return <div className="p-6 text-center text-muted-foreground">Carregando catálogo...</div>;
+  }
+
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Catálogo MCP</h2>
-        <button
-          onClick={handleSync}
-          disabled={syncing}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          {syncing ? 'Sincronizando...' : 'Sincronizar'}
-        </button>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold">Catálogo de Ferramentas</h2>
+          <p className="text-sm text-muted-foreground">{tools.length} ferramentas registradas</p>
+        </div>
+        <SyncButton onSyncComplete={() => { loadTools(); loadSyncRuns(); }} />
       </div>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+      {/* Indicadores de saúde */}
+      <div className="flex gap-4 flex-wrap">
+        <Badge variant="default" className="bg-green-500/10 text-green-500 border-green-500/30">
+          {healthCounts.healthy} saudáveis
+        </Badge>
+        <Badge variant="default" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/30">
+          {healthCounts.degraded} degradados
+        </Badge>
+        <Badge variant="default" className="bg-red-500/10 text-red-500 border-red-500/30">
+          {healthCounts.down} offline
+        </Badge>
+        <Badge variant="outline">{healthCounts.unknown} desconhecidos</Badge>
+      </div>
+
+      {/* Filtros */}
+      <div className="flex gap-4 items-center">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar ferramentas..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <div className="flex gap-2 items-center">
+          <Filter className="h-4 w-4 text-muted-foreground" />
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setFilterCategory(cat)}
+              className={`px-3 py-1 rounded-full text-sm ${
+                filterCategory === cat
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              }`}
+            >
+              {cat === 'all' ? 'Todas' : cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Grid de ferramentas */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filteredTools.map(tool => (
+          <ToolCard key={tool.id} tool={tool} />
+        ))}
+      </div>
+
+      {filteredTools.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          Nenhuma ferramenta encontrada com os filtros atuais.
         </div>
       )}
 
+      {/* Últimos syncs */}
       {syncRuns.length > 0 && (
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Últimas Sincronizações</h3>
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold mb-2">Últimas sincronizações</h3>
           <div className="space-y-2">
             {syncRuns.map(run => (
-              <div key={run.id} className="bg-gray-100 p-2 rounded text-sm">
-                <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                  run.status === 'completed' ? 'bg-green-500' :
-                  run.status === 'running' ? 'bg-yellow-500' : 'bg-red-500'
-                }`} />
-                {run.status} — {run.tools_found} ferramentas encontradas
-                ({run.tools_added} novas, {run.tools_updated} atualizadas)
+              <div key={run.id} className="flex items-center justify-between text-sm bg-muted/50 rounded-lg p-3">
+                <span className={run.status === 'completed' ? 'text-green-500' : run.status === 'running' ? 'text-yellow-500' : 'text-red-500'}>
+                  {run.status}
+                </span>
+                <span>{new Date(run.started_at).toLocaleString()}</span>
+                <span>{run.tools_found} encontradas, {run.tools_added} adicionadas, {run.tools_updated} atualizadas</span>
               </div>
             ))}
           </div>
         </div>
       )}
-
-      <div className="grid gap-3">
-        {tools.map(tool => (
-          <div key={tool.id} className="border rounded p-3 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold">{tool.name}</h3>
-                <p className="text-sm text-gray-600">{tool.description}</p>
-              </div>
-              <div className="flex gap-2">
-                {tool.category && (
-                  <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
-                    {tool.category}
-                  </span>
-                )}
-                {tool.is_deprecated && (
-                  <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">
-                    Deprecated
-                  </span>
-                )}
-                {tool.version && (
-                  <span className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">
-                    v{tool.version}
-                  </span>
-                )}
-              </div>
-            </div>
-            {tool.tags && tool.tags.length > 0 && (
-              <div className="flex gap-1 mt-2">
-                {tool.tags.map(tag => (
-                  <span key={tag} className="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
     </div>
-  )
+  );
 }

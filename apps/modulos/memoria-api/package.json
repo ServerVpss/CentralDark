@@ -1,0 +1,8 @@
+{
+  "name": "centraldark-memoria-api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "API de leitura da memória viva (docs/CONSCIENCIA/) pro Open WebUI",
+  "main": "index.mjs",
+  "scripts": { "start": "node index.mjs" }
+}
