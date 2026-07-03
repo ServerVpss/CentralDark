@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T18:56:59.429Z",
-  "updatedAtBR": "03/07/2026, 15:56:59 BRT",
+  "updatedAt": "2026-07-03T19:01:57.766Z",
+  "updatedAtBR": "03/07/2026, 16:01:57 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Travou padrão commit AULA-012",
+    "lastCommit": "Corrigiu proxy, blocos e salvou",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T19:01:57.766Z",
+      "titulo": "Push na main · 99e23f9f8e882e5ffd5daf837801e9b188819f77",
+      "detalhe": "Corrigiu proxy, blocos e salvou",
+      "area": "Repositório",
+      "sha": "99e23f9",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T18:56:59.429Z",
       "titulo": "Push na main · 2d9398e584be8f639fbf0799d3b6d2394584f562",
       "detalhe": "Travou padrão commit AULA-012",
@@ -974,14 +982,6 @@
       "detalhe": "docs(proxy): tutorial detalhado — Claude Code no terminal via proxy (sem conta)",
       "area": "Repositório",
       "sha": "595fe79",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T14:18:07.965Z",
-      "titulo": "Push na main · ad88277d53ffceef0567a94ef6da524c1241de19",
-      "detalhe": "security: remove API key exposta dos arquivos versionados",
-      "area": "Repositório",
-      "sha": "ad88277",
       "actor": "segredounlock"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T19:01:57.766Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 99e23f9f8e882e5ffd5daf837801e9b188819f77 (99e23f9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T18:56:59.429Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 2d9398e584be8f639fbf0799d3b6d2394584f562 (2d9398e)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T11:37:18.722Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9aed2257e5aed8c671aba6fd8b7d4b0d9151f5b6 (9aed225)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T11:28:05.763Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 71d4eafc6a80cdf1166793d8d319622a099cf832 (71d4eaf)",
       "area": "Repositório",
       "status": "sucesso"
     }
