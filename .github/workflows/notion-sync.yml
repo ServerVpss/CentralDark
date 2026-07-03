@@ -41,7 +41,7 @@ permissions:
 
 concurrency:
   group: notion-sync
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   sync:
