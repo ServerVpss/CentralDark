@@ -1,5 +1,6 @@
 // Auto-atualizador do plugin.
-// Busca manifest.json remoto no GitHub, compara versão e, se for mais nova,
+// Busca manifest.json remoto via edge function pública `plugin-release`
+// (que proxya o repo privado no GitHub) e, se a versão for maior,
 // baixa main.js + manifest.json + styles.css direto pra pasta do plugin.
 
 import { Notice, requestUrl } from "obsidian";
@@ -21,9 +22,7 @@ export class AutoAtualizador {
 
   iniciar() {
     if (!this.plugin.settings.autoUpdateAtivo) return;
-    // Checa na inicialização (5s de delay) e depois periodicamente.
     window.setTimeout(() => this.checarEAtualizar(true), 5000);
-
     const intervaloMs = Math.max(5, this.plugin.settings.autoUpdateIntervaloMinutos) * 60 * 1000;
     this.timer = window.setInterval(() => this.checarEAtualizar(true), intervaloMs);
   }
@@ -35,17 +34,15 @@ export class AutoAtualizador {
     }
   }
 
-  private baseUrl(): string {
-    // Ex.: https://raw.githubusercontent.com/ServerVpss/CentralDark/main/apps/modulos/obsidian-plugin-grafo-vivo
-    return this.plugin.settings.autoUpdateBaseUrl.replace(/\/+$/, "");
+  private urlArquivo(nome: string): string {
+    const base = this.plugin.settings.autoUpdateBaseUrl.replace(/\/+$/, "");
+    const sep = base.includes("?") ? "&" : "?";
+    return `${base}${sep}arquivo=${encodeURIComponent(nome)}&t=${Date.now()}`;
   }
 
   async checarAtualizacao(): Promise<UpdateInfo | null> {
     try {
-      const resp = await requestUrl({
-        url: `${this.baseUrl()}/manifest.json?t=${Date.now()}`,
-        method: "GET",
-      });
+      const resp = await requestUrl({ url: this.urlArquivo("manifest.json"), method: "GET" });
       const manifestRemoto = resp.json as { version: string };
       const versaoLocal = this.plugin.manifest.version;
       const versaoRemota = manifestRemoto.version;
@@ -73,7 +70,7 @@ export class AutoAtualizador {
     new Notice(`🚀 Atualizando Grafo Vivo: ${info.versaoLocal} → ${info.versaoRemota}...`);
     const ok = await this.baixarArquivos();
     if (ok) {
-      new Notice(`✅ Grafo Vivo atualizado pra ${info.versaoRemota}. Recarregando plugin...`, 6000);
+      new Notice(`✅ Grafo Vivo atualizado pra ${info.versaoRemota}. Recarregando...`, 6000);
       await this.recarregarPlugin();
     } else {
       new Notice("❌ Falha baixando arquivos da atualização.");
@@ -88,11 +85,9 @@ export class AutoAtualizador {
     const arquivos = ["main.js", "manifest.json", "styles.css"];
     try {
       for (const nome of arquivos) {
-        const url = `${this.baseUrl()}/${nome}?t=${Date.now()}`;
         try {
-          const resp = await requestUrl({ url, method: "GET" });
+          const resp = await requestUrl({ url: this.urlArquivo(nome), method: "GET" });
           if (resp.status >= 400) {
-            // styles.css é opcional — se der 404 ignora.
             if (nome === "styles.css") continue;
             throw new Error(`HTTP ${resp.status} em ${nome}`);
           }
@@ -110,9 +105,8 @@ export class AutoAtualizador {
   }
 
   private async recarregarPlugin() {
-    // API interna do Obsidian: disable + enable força reload do main.js novo.
     const id = this.plugin.manifest.id;
-    // @ts-ignore — API interna
+    // @ts-ignore — API interna do Obsidian
     const plugins = this.plugin.app.plugins;
     try {
       await plugins.disablePlugin(id);

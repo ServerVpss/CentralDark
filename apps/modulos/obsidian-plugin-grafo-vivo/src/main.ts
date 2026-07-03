@@ -11,7 +11,7 @@ export default class GrafoVivoPlugin extends Plugin {
   autoUpdater!: AutoAtualizador;
 
   async onload() {
-    await this.carregarSettings();
+    await this.loadSettings();
 
     this.registerView(
       VIEW_TYPE_GRAFO_VIVO,
@@ -24,7 +24,7 @@ export default class GrafoVivoPlugin extends Plugin {
 
     this.addCommand({
       id: "abrir-grafo-vivo",
-      name: "Abrir Grafo Vivo",
+      name: "Abrir Grafo Vivo CentralDark",
       callback: () => this.ativarView(),
     });
 
@@ -36,7 +36,6 @@ export default class GrafoVivoPlugin extends Plugin {
 
     this.addSettingTab(new GrafoVivoSettingTab(this.app, this));
 
-    // Auto-update inicia depois do onload pra não travar o boot.
     this.autoUpdater = new AutoAtualizador(this);
     this.autoUpdater.iniciar();
   }
@@ -52,22 +51,18 @@ export default class GrafoVivoPlugin extends Plugin {
 
     if (!leaf) {
       leaf = workspace.getRightLeaf(false);
-      await leaf?.setViewState({ type: VIEW_TYPE_GRAFO_VIVO, active: true });
+      if (leaf) {
+        await leaf.setViewState({ type: VIEW_TYPE_GRAFO_VIVO, active: true });
+      }
     }
     if (leaf) workspace.revealLeaf(leaf);
   }
 
-  async carregarSettings() {
-    this.settings = Object.assign({}, SETTINGS_PADRAO, await this.loadData());
-    // Migração automática de URLs antigas do grafo (ex: painel-data.json → graph-data.json).
-    const { URLS_DEPRECIADAS } = await import("./settings");
-    if (URLS_DEPRECIADAS.includes(this.settings.urlGrafo)) {
-      this.settings.urlGrafo = SETTINGS_PADRAO.urlGrafo;
-      await this.salvarSettings();
-    }
+  async loadSettings() {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
 
-  async salvarSettings() {
+  async saveSettings() {
     await this.saveData(this.settings);
   }
 }

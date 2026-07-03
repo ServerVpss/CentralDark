@@ -2,7 +2,6 @@
 
 import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import type GrafoVivoPlugin from "./main";
-import { formatarData } from "./logger";
 
 export interface GrafoVivoSettings {
   urlGrafo: string;
@@ -13,60 +12,59 @@ export interface GrafoVivoSettings {
   autoUpdateIntervaloMinutos: number;
 }
 
-export const SETTINGS_PADRAO: GrafoVivoSettings = {
-  urlGrafo: "https://status.centralldark.com/graph-data.json",
-  intervaloSegundos: 30,
+export const DEFAULT_SETTINGS: GrafoVivoSettings = {
+  urlGrafo: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/graph-data",
+  intervaloSegundos: 15,
   abrirNotaAoClicar: true,
   autoUpdateAtivo: true,
-  autoUpdateBaseUrl:
-    "https://raw.githubusercontent.com/ServerVpss/CentralDark/main/apps/modulos/obsidian-plugin-grafo-vivo",
+  autoUpdateBaseUrl: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/plugin-release",
   autoUpdateIntervaloMinutos: 10,
 };
 
-// URLs antigas que precisam ser migradas automaticamente pra graph-data.json.
-export const URLS_DEPRECIADAS = [
-  "https://status.centralldark.com/painel-data.json",
-];
-
 export class GrafoVivoSettingTab extends PluginSettingTab {
-  private unsubStatus: (() => void) | null = null;
-  private unsubLog: (() => void) | null = null;
+  plugin: GrafoVivoPlugin;
 
-  constructor(app: App, private plugin: GrafoVivoPlugin) {
+  constructor(app: App, plugin: GrafoVivoPlugin) {
     super(app, plugin);
+    this.plugin = plugin;
   }
 
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-
-    containerEl.createEl("h2", { text: "Grafo Vivo — Configurações" });
+    containerEl.createEl("h2", { text: "CentralDark Grafo Vivo" });
 
     new Setting(containerEl)
       .setName("URL do grafo")
-      .setDesc("Endpoint JSON do painel vivo")
-      .addText((t) =>
-        t.setValue(this.plugin.settings.urlGrafo).onChange(async (v) => {
-          this.plugin.settings.urlGrafo = v;
-          await this.plugin.salvarSettings();
-        }),
+      .setDesc("Endpoint que retorna o JSON {nodes, edges} do ecossistema.")
+      .addText((txt) =>
+        txt
+          .setPlaceholder("https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/graph-data")
+          .setValue(this.plugin.settings.urlGrafo)
+          .onChange(async (v) => {
+            this.plugin.settings.urlGrafo = v.trim();
+            await this.plugin.saveSettings();
+          }),
       );
 
     new Setting(containerEl)
-      .setName("Intervalo de refresh do grafo (segundos)")
-      .addText((t) =>
-        t.setValue(String(this.plugin.settings.intervaloSegundos)).onChange(async (v) => {
-          this.plugin.settings.intervaloSegundos = Math.max(5, Number(v) || 30);
-          await this.plugin.salvarSettings();
+      .setName("Intervalo de atualização (segundos)")
+      .setDesc("Frequência com que o grafo busca novos dados. Mínimo 5s.")
+      .addText((txt) =>
+        txt.setValue(String(this.plugin.settings.intervaloSegundos)).onChange(async (v) => {
+          const n = Math.max(5, parseInt(v, 10) || 30);
+          this.plugin.settings.intervaloSegundos = n;
+          await this.plugin.saveSettings();
         }),
       );
 
     new Setting(containerEl)
       .setName("Abrir nota ao clicar no nó")
-      .addToggle((t) =>
-        t.setValue(this.plugin.settings.abrirNotaAoClicar).onChange(async (v) => {
+      .setDesc("Se o nó tiver campo obsidian_path, clique abre a nota correspondente.")
+      .addToggle((tg) =>
+        tg.setValue(this.plugin.settings.abrirNotaAoClicar).onChange(async (v) => {
           this.plugin.settings.abrirNotaAoClicar = v;
-          await this.plugin.salvarSettings();
+          await this.plugin.saveSettings();
         }),
       );
 
@@ -74,7 +72,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Auto-atualizar plugin")
-      .setDesc("Baixa novas versões automaticamente do GitHub. Chega de zip.")
+      .setDesc("Baixa novas versões automaticamente. Chega de zip.")
       .addToggle((tg) =>
         tg.setValue(this.plugin.settings.autoUpdateAtivo).onChange(async (v) => {
           this.plugin.settings.autoUpdateAtivo = v;
@@ -85,28 +83,24 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("URL base do repositório")
-      .setDesc("Caminho raw do GitHub onde ficam main.js/manifest.json/styles.css.")
+      .setName("URL do endpoint de release")
+      .setDesc("Edge function que serve manifest.json, main.js e styles.css.")
       .addText((txt) =>
-        txt
-          .setValue(this.plugin.settings.autoUpdateBaseUrl)
-          .onChange(async (v) => {
-            this.plugin.settings.autoUpdateBaseUrl = v.trim();
-            await this.plugin.saveSettings();
-          }),
+        txt.setValue(this.plugin.settings.autoUpdateBaseUrl).onChange(async (v) => {
+          this.plugin.settings.autoUpdateBaseUrl = v.trim();
+          await this.plugin.saveSettings();
+        }),
       );
 
     new Setting(containerEl)
       .setName("Intervalo de checagem (minutos)")
-      .setDesc("De quanto em quanto tempo checar se saiu versão nova. Mínimo 5min.")
+      .setDesc("De quanto em quanto tempo checar versão nova. Mínimo 5min.")
       .addText((txt) =>
-        txt
-          .setValue(String(this.plugin.settings.autoUpdateIntervaloMinutos))
-          .onChange(async (v) => {
-            const n = Math.max(5, parseInt(v, 10) || 10);
-            this.plugin.settings.autoUpdateIntervaloMinutos = n;
-            await this.plugin.saveSettings();
-          }),
+        txt.setValue(String(this.plugin.settings.autoUpdateIntervaloMinutos)).onChange(async (v) => {
+          const n = Math.max(5, parseInt(v, 10) || 10);
+          this.plugin.settings.autoUpdateIntervaloMinutos = n;
+          await this.plugin.saveSettings();
+        }),
       );
 
     new Setting(containerEl)
