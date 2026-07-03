@@ -1,6 +1,6 @@
 // apps/modulos/hub/src/components/catalog/CatalogTab.tsx
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../../lib/supabaseClient'
+import { hubClient as supabase } from '@/integrations/supabase/hub-client'
 
 interface Tool {
   id: string
@@ -35,7 +35,7 @@ export const CatalogTab: React.FC = () => {
 
   const loadTools = async () => {
     const { data } = await supabase
-      .from('catalog.tools')
+      .schema('catalog').from('tools')
       .select('*')
       .order('name')
     if (data) setTools(data)
@@ -43,7 +43,7 @@ export const CatalogTab: React.FC = () => {
 
   const loadSyncRuns = async () => {
     const { data } = await supabase
-      .from('catalog.sync_runs')
+      .schema('catalog').from('sync_runs')
       .select('*')
       .order('started_at', { ascending: false })
       .limit(5)

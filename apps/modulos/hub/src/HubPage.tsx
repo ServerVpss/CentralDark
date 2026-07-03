@@ -13,13 +13,14 @@ import {
   LayoutDashboard, Plug, ShieldCheck, CheckSquare,
   History, Network, Cpu, Activity, Check, X,
   Clock, Database, Lock, Shield, Route,
-  Send, FileText, HardDrive, Github, Server, Zap,
+  Send, FileText, HardDrive, Github, Server, Zap, Package,
 } from "lucide-react";
 import { hubClient } from "@/integrations/supabase/hub-client";
 import { useToast } from "@/shared/hooks/use-toast";
 import { cn } from "@/shared/lib/utils";
 import { McpCard } from "./components/McpCard";
 import { TelegramMTProtoCard } from "./components/TelegramMTProtoCard";
+import { CatalogTab } from "./components/catalog/CatalogTab";
 
 
 // ── Tipos ──────────────────────────────────────────────────────────
@@ -84,6 +85,7 @@ const fmt = (iso: string, withDate = false) => {
 const TABS = [
   { id: 'overview',    label: 'Overview',    Icon: LayoutDashboard },
   { id: 'servicos',    label: 'Serviços',    Icon: Zap },
+  { id: 'catalogo',    label: 'Catálogo',    Icon: Package },
   { id: 'conectores',  label: 'Conectores',  Icon: Plug },
   { id: 'politicas',   label: 'Políticas',   Icon: ShieldCheck },
   { id: 'aprovacoes',  label: 'Aprovações',  Icon: CheckSquare },
@@ -644,6 +646,7 @@ export default function HubPage() {
 
   const SECTIONS: Record<TabId, () => JSX.Element> = {
     overview: Overview, servicos: Servicos, conectores: Conectores, politicas: Politicas,
+    catalogo: CatalogTab,
     aprovacoes: Aprovacoes, auditoria: Auditoria, arquitetura: Arquitetura,
   };
   const Section = SECTIONS[tab];
