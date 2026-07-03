@@ -10,7 +10,7 @@ Após toda tarefa: posts via connector Telegram já linkado (`@srver1bot`, `conn
 |---|---|---|---|---|
 | Admin privado | `1901426549` | Toda tarefa fechada | Card AULA-006 completo em `<pre>` | ✅ SIM (no fim) |
 | Canal Status | `-1003669176367` | Toda tarefa fechada | 1–3 linhas em `<pre>` | ❌ NUNCA |
-| Grupo Evolução (multi-IA) | `<AGUARDANDO ADMIN>` | Debate entre IAs (AULA-013) | Cada IA em `<pre>` próprio + veredito Hermes em `<pre>` + salvar em `HERMES/DEBATES/GRUPO-EVOLUCAO/NNN.md` | ❌ (skills só admin) |
+| Grupo Evolução (multi-IA) | `-5365750004` (Central Dark - Grupo Da Evoluçao) | Debate entre IAs (AULA-013) | Cada IA em `<pre>` próprio + veredito Hermes em `<pre>` + salvar em `HERMES/DEBATES/GRUPO-EVOLUCAO/NNN.md` | ❌ (skills só admin) |
 
 ## Formato visual (obrigatório em TODOS)
 
