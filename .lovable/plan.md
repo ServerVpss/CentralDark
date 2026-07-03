@@ -1,60 +1,54 @@
-## Objetivo
+# Plano: Relatório da sessão + Cartaz 4K estilo catálogo
 
-Descobrir por que o GitHub parou de disparar o webhook de deploy no dia 28/06, consertar, e deixar a pasta `docs/CONSCIENCIA/ARSENAL/hermes-vivo/` 100% espelhada entre Lovable, GitHub e VPS.
+## O que vou entregar
 
-## O que sabemos agora
+### 1. Documento markdown com tudo mapeado
+Arquivo: `docs/CONSCIENCIA/RELATORIOS/2026-07-03-sessao-hermes-webhook.md`
 
-- **VPS travada no commit `5dfdf11f6`** (28/06). GitHub já está em `bd5cc9e68`.
-- **Webhook PM2 `CentralDark-WebhookDeploy` está online** escutando `http://127.0.0.1:9300`, sem erros no log.
-- **Último POST recebido do GitHub: 28/06/2026 17:47** — nada depois disso.
-- Na VPS existem 4 arquivos operacionais do Hermes (`daemon.mjs`, `executor.mjs`, `notify.mjs`, `CentralDark-Hermes.config.cjs`) que nunca subiram pro GitHub (`untracked`).
-- No Lovable/GitHub existem 2 arquivos (`README.md`, `plano-visual.png`) que ainda não desceram pra VPS.
+Vai ter 4 blocos:
 
-## Etapa 1 — Diagnóstico do webhook GitHub (só leitura)
+**Bloco A — O que foi feito na VPS**
+- Arquivos criados/alterados (caminho exato)
+- Comandos disparados no PM2
+- Backups gerados
 
-1. Listar webhooks configurados no repo `ServerVpss/CentralDark` (ferramenta MCP `github_list_webhooks`).
-2. Ver últimos disparos de cada webhook — se estão retornando 200, 401, 502 ou "no response".
-3. Confirmar se a URL pública do webhook (provavelmente `https://webhook.centralldark.com/...` via Caddy) ainda responde.
+**Bloco B — O que foi feito no GitHub (Lovable)**
+- Commits enviados nas mensagens anteriores (daemon.mjs, executor.mjs, notify.mjs, config sanitizado)
+- Estado atual da sincronia
 
-Resultado esperado: descobrir se foi (a) webhook deletado, (b) URL quebrada no Caddy, (c) GitHub desabilitou por falhas repetidas, ou (d) segredo/assinatura mudou.
+**Bloco C — Modelos disponíveis nos 3 gateways Elite**
+Tabela detalhada com:
+- Nome do modelo
+- ID pra usar na API
+- Onde vive (qual PM2, qual porta, qual domínio)
+- ✅ Disponível / ❌ Fora do ar / ⚠️ Parcial
 
-## Etapa 2 — Reparo do webhook
+**Bloco D — Pontas soltas e recomendações**
+- O que ficou 100% resolvido
+- O que ainda pede atenção (nada crítico)
 
-Dependendo do achado da Etapa 1:
+### 2. Cartaz 4K (3840×2160) estilo catálogo/menu de loja
+Arquivo: `docs/CONSCIENCIA/ARSENAL/cartaz-sessao-2026-07-03.png`
 
-- **Se foi desabilitado por falhas** → reabilitar no GitHub e disparar um "redeliver" do último payload.
-- **Se URL quebrou** → conferir Caddy (`infra/caddy/`) e o mapeamento do subdomínio.
-- **Se webhook sumiu** → recriar apontando pra URL pública correta com o secret certo.
+Visual:
+- Fundo escuro elegante (esmeralda + preto — bate com o tema Esmeralda do projeto)
+- Título grande no topo: "CENTRALDARK — CATÁLOGO DA SESSÃO"
+- Data em destaque
+- 4 seções tipo "vitrine":
+  1. 🔑 SECRETS RESTAURADOS
+  2. 🚀 PROCESSOS PM2 TOCADOS
+  3. 🤖 MODELOS DE IA — DISPONÍVEIS / INDISPONÍVEIS
+  4. 🛠️ WEBHOOK & CADDY
+- Cada item com nome grande, subtítulo curto, badge de status (verde/amarelo/vermelho)
+- Sem valores/preços — só descritivo, como um menu de degustação
+- Rodapé com "gerado em 03/07/2026 · CentralDark Consciência Viva"
 
-## Etapa 3 — Sincronização imediata (uma vez o webhook OK)
+Fonte grande e legível, hierarquia bem clara, pra você bater o olho e entender tudo sem ler linha por linha.
 
-Puxar manualmente na VPS pra não esperar o próximo commit:
+## Como vou construir o cartaz
+Vou usar `imagegen` no modo premium (texto legível é obrigatório num cartaz-menu) com prompt bem detalhado listando cada seção, cores esmeralda/preto, estilo "menu de bar sofisticado" pra ficar bonito de ver.
 
-```bash
-cd /root/CentralDark
-git fetch origin main
-git reset --hard origin/main
-```
-
-Isso traz o `README.md` e a `plano-visual.png` pra pasta `hermes-vivo/` da VPS. (O `reset --hard` não mexe em arquivos untracked, então os `.mjs` operacionais continuam no lugar.)
-
-## Etapa 4 — Subir os operacionais do Hermes pra fonte da verdade
-
-Ler os 4 arquivos untracked da VPS (`daemon.mjs`, `executor.mjs`, `notify.mjs`, `CentralDark-Hermes.config.cjs`) e commitar no GitHub via MCP. Assim eles descem automaticamente pro Lovable pelo sync bidirecional e a pasta fica idêntica nos 3 pontos.
-
-## Etapa 5 — Validação final
-
-Rodar `deploy_status` + `vps_list_dir_safe` na pasta `hermes-vivo/` e conferir o mesmo conjunto de arquivos nos 3 lugares (Lovable, GitHub, VPS). Postar card curto no privado admin do Telegram com o resultado (conforme regra de notificação pós-ação).
-
-## Regras respeitadas
-
-- Nada destrutivo na VPS além do `git reset --hard origin/main` (padrão do próprio webhook).
-- `whatsapp-server` PM2 id 1 não é tocado.
-- Áreas protegidas (`infra/caddy/`, `scripts/webhook/`) só serão lidas na Etapa 1; qualquer alteração ali passa por autorização "PERMITO PIVETE".
-
-## Detalhes técnicos (para a IA que for executar)
-
-- Repo: `ServerVpss/CentralDark`, branch `main`.
-- Webhook local: porta `9300`, script em `scripts/webhook/deploy` (área protegida — só ler).
-- Comando de sync padrão do próprio webhook: `git reset --hard origin/main`.
-- Notificação obrigatória ao fim: card completo em `1901426549` + linha curta no canal Status `-1003669176367`, via connector Telegram já linkado (`@srver1bot`).
+## O que NÃO vou fazer
+- Não vou mexer em nada do código do app (é só relatório + imagem)
+- Não vou reiniciar processo, não vou tocar em Caddy, não vou commitar nada operacional novo
+- Não vou colocar preço/valor em lugar nenhum
