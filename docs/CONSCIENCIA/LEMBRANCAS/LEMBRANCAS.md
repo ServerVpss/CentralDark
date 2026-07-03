@@ -164,3 +164,13 @@ Conteúdo: Usuário reforçou que não quer Lovable envolvida nas operações do
 - **Promovida:** sim
 
 Conteúdo: Toda descoberta técnica nova (porta, endpoint, comando, workaround) tem que ser registrada via registrar_aprendizado E consolidada aqui — pra Hermes e próximas IAs pegarem a rota pronta em vez de gastar token redescobrindo. Regra: se eu resolvi algo em >2 tentativas, virou aprendizado obrigatório.
+
+### [2026-07-03T14:55] Árvore Hermes + fallback consultor IA
+- **Data:** 2026-07-03
+- **Tags:** hermes, arvore-organizada, fallback-ia, regra-fixa
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-02
+- **Promovida:** sim
+
+Conteúdo: Árvore oficial do Hermes: `docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/{README.md, AULAS/, APRENDIZADOS/, ROTAS-FIXAS/, DEBATES/, EVOLUCAO/}`. Padrão fixo de AULA (7 seções: O que é / Quando usar / Como fazer / Comandos / Armadilhas / Verificação / Ver também). Fallback de consultor IA quando Elite Anthropic cair: Elite HTTP → Elite WS → gemini_analisar → darkai. Nunca travar workflow por 1 IA offline.
