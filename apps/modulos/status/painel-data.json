@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T17:11:24.371Z",
-  "updatedAtBR": "03/07/2026, 14:11:24 BRT",
+  "updatedAt": "2026-07-03T17:25:26.384Z",
+  "updatedAtBR": "03/07/2026, 14:25:26 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Changes",
+    "lastCommit": "aprendizado(#266): Bot Telegram: token de bot ≠ sessão de usuário",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T17:25:26.384Z",
+      "titulo": "Push na main · 3ef7d9defb90398a5a9a3c9355f40204a439f455",
+      "detalhe": "aprendizado(#266): Bot Telegram: token de bot ≠ sessão de usuário",
+      "area": "Repositório",
+      "sha": "3ef7d9d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-03T17:11:24.371Z",
       "titulo": "Push na main · 7634572b21a79157d5100f829ea20754e13681f7",
       "detalhe": "Changes",
@@ -974,14 +982,6 @@
       "detalhe": "docs(aprendizados): padroniza pasta PROXY (maiusculo) + versiona aprendizados",
       "area": "Repositório",
       "sha": "f76f5c8",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T08:46:12.328Z",
-      "titulo": "Push na main · d7b2f4a020bf4333a031b18b8d35081cd12b92c1",
-      "detalhe": "docs(aprendizados): cria pasta MCP com explicacao do protocolo",
-      "area": "Repositório",
-      "sha": "d7b2f4a",
       "actor": "segredounlock"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T17:25:26.384Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3ef7d9defb90398a5a9a3c9355f40204a439f455 (3ef7d9d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T17:11:24.371Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 7634572b21a79157d5100f829ea20754e13681f7 (7634572)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T05:35:47.289Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · af147e0aae23ebecdafb5c16a367514f02b82484 (af147e0)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T04:33:21.721Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · a811b164ac6c2083541f89b0b0dbbd4b96c71efb (a811b16)",
       "area": "Repositório",
       "status": "sucesso"
     }
