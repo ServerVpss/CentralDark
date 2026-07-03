@@ -1,56 +1,54 @@
-# Upgrade Hermes — cadeia de 4 IAs (pronto pra executar)
+# Plano: Relatório da sessão + Cartaz 4K estilo catálogo
 
-## Passo 0 — Descobrir rota do Elite (10s)
+## O que vou entregar
 
-Testar em ordem via `curl` na VPS:
-1. `POST https://api.centralldark.com/v1/messages` (formato Anthropic nativo)
-2. Se 404 → `POST /v1/chat/completions` (formato OpenAI-compat)
+### 1. Documento markdown com tudo mapeado
+Arquivo: `docs/CONSCIENCIA/RELATORIOS/2026-07-03-sessao-hermes-webhook.md`
 
-Anotar rota vencedora + formato da resposta (`content[0].text` ou `choices[0].message.content`). Se pedir header de auth, extrair do PM2 do Elite (id 52).
+Vai ter 4 blocos:
 
-## Passo 1 — `models-map.json` (documentação humana)
+**Bloco A — O que foi feito na VPS**
+- Arquivos criados/alterados (caminho exato)
+- Comandos disparados no PM2
+- Backups gerados
 
-Criar `docs/CONSCIENCIA/ARSENAL/hermes-vivo/models-map.json` com os 4 níveis da cadeia, timeouts, tempo médio e uso de cada modelo. Não é lido pelo código — serve pra qualquer IA que abrir o repo entender de bate-pronto.
+**Bloco B — O que foi feito no GitHub (Lovable)**
+- Commits enviados nas mensagens anteriores (daemon.mjs, executor.mjs, notify.mjs, config sanitizado)
+- Estado atual da sincronia
 
-## Passo 2 — Editar `decisor.mjs` (só acréscimos)
+**Bloco C — Modelos disponíveis nos 3 gateways Elite**
+Tabela detalhada com:
+- Nome do modelo
+- ID pra usar na API
+- Onde vive (qual PM2, qual porta, qual domínio)
+- ✅ Disponível / ❌ Fora do ar / ⚠️ Parcial
 
-Arquivo real: `docs/CONSCIENCIA/ARSENAL/hermes-vivo/decisor.mjs`.
+**Bloco D — Pontas soltas e recomendações**
+- O que ficou 100% resolvido
+- O que ainda pede atenção (nada crítico)
 
-**Preservar tudo:** assinatura `decidir(missao, historico)`, system prompt, schema JSON, `execFile` async com `maxBuffer 10MB`, ordem dos modelos.
+### 2. Cartaz 4K (3840×2160) estilo catálogo/menu de loja
+Arquivo: `docs/CONSCIENCIA/ARSENAL/cartaz-sessao-2026-07-03.png`
 
-**Adicionar:**
-- **Cache in-memory** — `Map()`, chave = SHA-1(missao + histórico), TTL 10min, máx 100 itens.
-- **Timeout por modelo** — 15s Gemini Flash, 30s Gemini Pro, 45s GPT-5 mini.
-- **4º fallback Elite Anthropic** — `fetch()` com `AbortSignal.timeout(30000)`, retry 1x com backoff 2s. Prompt inclui: "Modelos anteriores falharam: [lista]".
-- **Logs claros** — 💾 cache HIT, ✅ modelo respondeu, ⚠️ falhou, 🚨 caiu no Elite, 🔥 tudo falhou.
+Visual:
+- Fundo escuro elegante (esmeralda + preto — bate com o tema Esmeralda do projeto)
+- Título grande no topo: "CENTRALDARK — CATÁLOGO DA SESSÃO"
+- Data em destaque
+- 4 seções tipo "vitrine":
+  1. 🔑 SECRETS RESTAURADOS
+  2. 🚀 PROCESSOS PM2 TOCADOS
+  3. 🤖 MODELOS DE IA — DISPONÍVEIS / INDISPONÍVEIS
+  4. 🛠️ WEBHOOK & CADDY
+- Cada item com nome grande, subtítulo curto, badge de status (verde/amarelo/vermelho)
+- Sem valores/preços — só descritivo, como um menu de degustação
+- Rodapé com "gerado em 03/07/2026 · CentralDark Consciência Viva"
 
-## Passo 3 — Testar
+Fonte grande e legível, hierarquia bem clara, pra você bater o olho e entender tudo sem ler linha por linha.
 
-```bash
-pm2 restart CentralDark-Hermes && sleep 3 && pm2 logs CentralDark-Hermes --lines 30 --nostream
-```
+## Como vou construir o cartaz
+Vou usar `imagegen` no modo premium (texto legível é obrigatório num cartaz-menu) com prompt bem detalhado listando cada seção, cores esmeralda/preto, estilo "menu de bar sofisticado" pra ficar bonito de ver.
 
-Criar `missoes/pendente/teste-cache.md` com "me diga que dia é hoje em 1 linha". Duplicar pra confirmar cache HIT na 2ª rodada.
-
-## Passo 4 — Commit + notificar
-
-```bash
-cd /root/CentralDark
-git add docs/CONSCIENCIA/ARSENAL/hermes-vivo/
-git commit -m "🤖 Hermes: cache 10min + timeouts por modelo + Elite Anthropic fallback (4 IAs)"
-git push origin main
-```
-
-Telegram (via connector já linkado `@srver1bot`):
-- Privado admin `1901426549`: card completo da cadeia final
-- Canal Status `-1003669176367`: "Hermes agora tem 4 cérebros ✅"
-
-## Intocado
-
-- `daemon.mjs`, `executor.mjs`, `notify.mjs`
-- Estrutura de pastas
-- Nada em `apps/` (pasta não existe pra hermes)
-
-## Estimativa
-
-~2-3min de execução total.
+## O que NÃO vou fazer
+- Não vou mexer em nada do código do app (é só relatório + imagem)
+- Não vou reiniciar processo, não vou tocar em Caddy, não vou commitar nada operacional novo
+- Não vou colocar preço/valor em lugar nenhum
