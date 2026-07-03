@@ -152,16 +152,14 @@ export function McpCard() {
           >
             <Activity className={cn("h-3.5 w-3.5", loading && "animate-spin")} /> Testar agora
           </Button>
-          <Button
-            asChild
-            size="sm"
-            variant="outline"
-            className="gap-2 shadow-3d-soft active:translate-y-[1px]"
+          <a
+            href={HEALTH_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-md font-medium h-7 px-3 text-xs border border-border bg-transparent hover:bg-muted shadow-3d-soft active:translate-y-[1px]"
           >
-            <a href={HEALTH_URL} target="_blank" rel="noreferrer">
-              <ExternalLink className="h-3.5 w-3.5" /> /health
-            </a>
-          </Button>
+            <ExternalLink className="h-3.5 w-3.5" /> /health
+          </a>
         </div>
       </CardContent>
     </Card>

@@ -22,7 +22,7 @@ interface SyncRun {
   tools_updated: number
 }
 
-export const CatalogTab: React.FC = () => {
+export const CatalogTab = (): JSX.Element => {
   const [tools, setTools] = useState<Tool[]>([])
   const [syncRuns, setSyncRuns] = useState<SyncRun[]>([])
   const [syncing, setSyncing] = useState(false)
