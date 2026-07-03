@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T06:55:52.687Z",
-  "updatedAtBR": "03/07/2026, 03:55:52 BRT",
+  "updatedAt": "2026-07-03T06:56:20.301Z",
+  "updatedAtBR": "03/07/2026, 03:56:20 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -586,6 +586,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T06:56:20.301Z",
+      "titulo": "Push na main · 05474c231976bb00ea5475f7e10346b707ea79e4",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "05474c2",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-03T06:55:52.687Z",
       "titulo": "Push na main · 5dfdf11f67268da27dd3af732d9e8b1cc6b13bf6",
@@ -1357,6 +1365,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T06:56:20.301Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 05474c231976bb00ea5475f7e10346b707ea79e4 (05474c2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T06:55:52.687Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5dfdf11f67268da27dd3af732d9e8b1cc6b13bf6 (5dfdf11)",
@@ -1696,13 +1711,6 @@
       "time": "2026-06-29T22:55:31.264Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 977139cdb97ac51db77e823ead5bcd681102c2ef (977139c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T19:29:32.097Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 518929a9bf924f038e143cdacb3c097edff670a6 (518929a)",
       "area": "Repositório",
       "status": "sucesso"
     }
