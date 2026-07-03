@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T18:21:55.846Z
+# 🧠 Notion Sync — 2026-07-03T18:31:21.513Z
 
-- **Commit fonte:** `b7ccab74676248b9b8904bfcfc41cad2df3b53e8`
+- **Commit fonte:** `ed8201a1e4a380791b5beec6ce82bde5e5566c79`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 303 atualizadas · ❌ 388 erros
+- **Resumo:** ✨ 2 criadas · ♻️ 304 atualizadas · ❌ 388 erros
 
 ## Por base
 
@@ -14,7 +14,7 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 28 | 1 | 27 | 0 | 0 |
+| decisoes | 30 | 2 | 28 | 0 | 0 |
 | aprendizados | 271 | 0 | 271 | 0 | 0 |
 | estrutura | 388 | 0 | 0 | 0 | 388 |
 
@@ -54,7 +54,9 @@
 | decisoes | atualizado | Rodada 3 do Hermes + incidente de segurança contas/ (2026-07-03, tarde) |
 | decisoes | atualizado | Hermes vira admin do Elite Gateway — tutor especialista (2026-07-03, noite) |
 | decisoes | atualizado | Vazamento de token contido + redator de segredos no Hermes (2026-07-03, noite) |
-| decisoes | criado | Grafo Vivo agora é vivo de verdade + Hermes vira mantenedor (2026-07-03, noite) |
+| decisoes | atualizado | Grafo Vivo agora é vivo de verdade + Hermes vira mantenedor (2026-07-03, noite) |
+| decisoes | criado | Grafo Vivo: render por saúde + loop 5min (2026-07-03) — AUTORIZADO "PERMITO PIVETE" |
+| decisoes | criado | Obsidian como visualização em tempo real do Grafo Vivo (2026-07-03) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
