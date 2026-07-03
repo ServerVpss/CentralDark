@@ -949,6 +949,9 @@ async function runSkill(chatId, input, skillName) {
 }
 
 // ── Comandos Admin ─────────────────────────────────────────────────────────
+let __refinar = null;
+try { __refinar = require('./handlers/refinar.cjs'); } catch(e) { console.error('[refinar handler não carregou]', e.message); }
+
 async function handleAdminCommand(chatId, text) {
   const cmd  = text.split(' ')[0].toLowerCase();
   const args = text.slice(cmd.length).trim();
@@ -983,6 +986,18 @@ async function handleAdminCommand(chatId, text) {
         }]),
         [{ text: '⬜ Modo Padrão', callback_data: 'hub:cog:reset' }, { text: '🔙 Painel', callback_data: 'hub:main' }],
       ]);
+    }
+    case '/refinar': case '/parallel': {
+      if (!__refinar) return send(chatId, '❌ Handler refinar não carregado.');
+      return __refinar.refinarHandler({ send, chatId, text }, 'parallel');
+    }
+    case '/debate': {
+      if (!__refinar) return send(chatId, '❌ Handler refinar não carregado.');
+      return __refinar.refinarHandler({ send, chatId, text }, 'debate');
+    }
+    case '/router': {
+      if (!__refinar) return send(chatId, '❌ Handler refinar não carregado.');
+      return __refinar.refinarHandler({ send, chatId, text }, 'router');
     }
     case '/relatorio': {
       return getRelatorioGeral(chatId);
