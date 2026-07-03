@@ -72,3 +72,11 @@ Desde hoje, um `aprender` grava nas duas de uma vez. Lição boa = curta, acion�
 1. `tsc` rodado 4x com echos diferentes → Técnica 7 + detector v3 (mecânico).
 2. `cerebro.mjs` órfão por path quebrado pós-move → integração em 2 camadas (mecânico).
 3. Ferramenta `git` interna com `add -A` → paths explícitos + fallback seguro (mecânico).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

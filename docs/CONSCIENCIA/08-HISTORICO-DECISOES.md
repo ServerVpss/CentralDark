@@ -350,3 +350,29 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 **Resultado:** missão `finalizar-hub-v2` concluída pelo Hermes em 77 etapas — typecheck do hub zerado (ele consertou PolicyEditor, api-client, telegram-client e exportou Policy do hook), commit `00f4403a3` pushado por ele MESMO aplicando as lições (add por path, pull --rebase --autostash, conferência via git log). Retomada automática segurou 3 restarts no meio da missão sem perder etapa.
 
 **Gaps anotados:** cerebro.mjs existe mas o daemon não o importa (canal vivo é o aprendizados.json); detector v3 pendente — repetição de comando com mesmo EFEITO e marcador diferente (ele rodou tsc 4x com echos diferentes pra "se convencer").
+
+---
+
+## Rodada 3 do Hermes + incidente de segurança contas/ (2026-07-03, tarde)
+
+**Missão fix-catalogo-tools-json (Hermes, 37 etapas):** bug real achado pela revisão dele (catálogo chamava /tools 404; certo é /tools.json) — corrigido, typecheck OK, build direto no dist/ (autorizado pelo Pivete), site 200, commit cirúrgico. Detector v4 (escrita-sem-validação) nasceu NO MEIO da missão após 7 reescritas às cegas e quebrou o ciclo na primeira ativação (TSC_OK em seguida). Guard-rail bloqueou tentativa de push --force dele. O push final travou em engarrafamento de git (3 sessões + automations empurrando; autostashes empilhados com painel-data.json).
+
+**Resgate do tutor:** daemon pausado → cherry-pick em worktree temporário a partir da origin (fix do hub deduplicado + commit sec/v4) → push 65bf46453 → main local reconciliada com reset --soft (SEM --hard, pra não apagar contas/ do disco) → daemon religado + pm2 save. Commits memory-executor locais descartados (agente tem 15 equivalentes upstream e se regenera).
+
+**🚨 INCIDENTE: perfil de navegador ChatGPT trackeado no git.** `contas/profiles/chatgpt/` (969 arquivos, 80MB, 18 arquivos de cookies/sessão/login) entrou no commit 21af148af via `git add -A` da primeira missão do Hermes e foi pro GitHub. Mitigado: `git rm -r --cached contas/` + `contas/` no .gitignore (arquivos locais intactos — gateway EliteHTTP segue funcionando). **PENDENTE (decisão do Pivete): (1) renovar a sessão ChatGPT do gateway (logout/login) pra invalidar os cookies expostos; (2) avaliar purge do histórico do GitHub (reescrita destrutiva — precisa autorização explícita).** Lição já estava no aprendizados.json (nunca add -A) — o incidente é anterior à lição.
+
+---
+
+## Hermes vira admin do Elite Gateway — tutor especialista (2026-07-03, noite)
+
+**Decisão (MODO ARSENAL — "torne o Hermes especialista em criar contas e manutenção"):** o Elite HTTP Gateway (ChatGPT via Zendriver/Chrome real, PM2 CentralDark-EliteHTTP :8080) ganhou uma camada de admin + o Hermes ganhou a especialização.
+
+**Entregas:**
+- `apps/modulos/elite-gateway/scripts/gateway_admin.py` — CLI de admin (list/health/doctor/add/login/login-stop/test/fix-duplicates). Backup automático do accounts.json, tokens sempre mascarados, login humano via Xvfb+Chrome+x11vnc+websockify (noVNC). Testada ao vivo contra o gateway.
+- `ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md` — arquitetura + runbooks.
+- `ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md` — 4 aulas (criar conta, manter/re-login, corrigir multi-conta, zentinel).
+- `hermes/aprendizados.json` — categoria `elite-gateway` (12 lições) injetada no prompt do decisor por gatilho.
+
+**Bug confirmado pelo doctor (pendente do Pivete):** accounts.json tem 2 tokens com id=conta_padrao apontando pro MESMO perfil (zendriver_chatgpt_profile → symlink pra contas/profiles/chatgpt). Não é multi-conta real. Correção segura = criar conta_02 separada (add + login), sem tocar no token em uso. Renomear/remover token existente exige "PERMITO PIVETE".
+
+**Divisão de trabalho ensinada:** Zentinel cuida de latência (auto-restart cooldown 5min); Hermes cuida de login expirado/Cloudflare/conta nova; login com senha/2FA é sempre passo humano do Pivete via noVNC.

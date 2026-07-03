@@ -119,3 +119,11 @@ Regra de ouro: se o arquivo é de outra automation, a melhor jogada é NÃO toca
 1. `git add -A` varreu `.env` + rebase conflitado em painel-data.json → git cirúrgico.
 2. Falso timeout do darkai (stdin aberto no `$(cat)`) → fechar stdin em subprocesso.
 3. Releitura 6× do mesmo arquivo alternando ferramentas → 2 leituras bastam, a 3ª ação é escrever (agora MECÂNICO: detector no decisor escala pro 2.5-pro e proíbe reler).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

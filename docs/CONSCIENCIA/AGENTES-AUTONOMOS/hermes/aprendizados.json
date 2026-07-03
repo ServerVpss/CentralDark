@@ -152,6 +152,38 @@
         "Lição boa é curta, acionável e com o comando certo dentro — lição vaga não previne erro.",
         "Antes de missão longa num assunto, as lições da categoria já vêm no prompt — respeitar em vez de redescobrir na base do erro."
       ]
+    },
+    "elite-gateway": {
+      "gatilhos": [
+        "gateway",
+        "elite",
+        "chatgpt",
+        "conta",
+        "account",
+        "zendriver",
+        "perfil",
+        "profile",
+        "cloudflare",
+        "zentinel",
+        "token",
+        "2fa",
+        "sessao",
+        "cookie"
+      ],
+      "licoes": [
+        "Elite Gateway = Chrome real via Zendriver falando com ChatGPT web (nao e API paga). Config: apps/modulos/elite-gateway/. Processo PM2: CentralDark-EliteHTTP (:8080).",
+        "Ferramenta oficial de admin: python3 scripts/gateway_admin.py <list|health|doctor|add|login|test|fix-duplicates>. Use ELA, nao edite accounts.json na mao.",
+        "Criar conta: gateway_admin.py add <id> gera perfil+token+entrada (backup automatico). O LOGIN e passo humano do Pivete (gateway_admin.py login <id> via noVNC) — ChatGPT pede senha/2FA. Depois: pm2 restart CentralDark-EliteHTTP && pm2 save; validar com test <id>.",
+        "accounts.json e contas/profiles/ sao CREDENCIAIS: nunca versionar (ja no .gitignore), nunca imprimir token cru, sempre backup antes de escrever.",
+        "Cada conta precisa de profile_dir PROPRIO. Dois tokens no mesmo perfil = mesma sessao (bug). Multi-conta real = ids distintos + perfis distintos + logins distintos.",
+        "Manutencao rapida: gateway_admin.py doctor (contas, duplicatas, sessao, zentinel em 3s). Log: pm2 logs CentralDark-EliteHTTP --lines 30 --nostream.",
+        "Sintomas: cloudflare_block/'just a moment' = re-login; input_not_found = DOM mudou ou deslogou; perfil sem Cookies no doctor = conta caiu, rodar login <id>.",
+        "Zentinel (PM2 CentralDark-Zentinel) ja vigia latencia e reinicia o gateway sozinho (cooldown 5min). Nunca restart em massa — so o processo pelo nome.",
+        "Antes de pm2 restart no gateway: checar health (ocupado=false) pra nao derrubar request em andamento.",
+        "Sessao viva = arquivo Cookies do perfil tocado recentemente. Cookie velho (>semanas) ou ausente = re-login. Nunca apagar o perfil de uma conta que funciona.",
+        "2FA: no primeiro login o Pivete resolve o 2FA na tela noVNC; a sessao salva no perfil sobrevive por semanas. Se o ChatGPT deslogar, e re-login (nao da pra automatizar o 2FA).",
+        "Aula completa em ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md (arquitetura + runbooks). Consultar antes de operar o gateway."
+      ]
     }
   }
 }
