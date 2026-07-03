@@ -1,7 +1,7 @@
 name: painel auto-update
 
 # Em todo push na main, registra um evento "push <sha>" no Mega Painel
-# (apps/projeto-dashboard/painel-data.json) e commita de volta.
+# (apps/modulos/status/painel-data.json) e commita de volta.
 # Mantém status.centralldark.com sempre vivo sem ação manual.
 #
 # ⚠️ EXCEÇÃO à regra "bots só via PR" (#116):
