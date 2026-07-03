@@ -181,14 +181,14 @@ except Exception:
 if data.get('error'):
     print('darkai: erro →', data.get('error'), data.get('message',''), file=sys.stderr)
     sys.exit(2)
-print(data.get('content') or data.get('choices',[{}])[0].get('message',{}).get('content') or json.dumps(data))
+print(data.get('text') or data.get('content') or data.get('choices',[{}])[0].get('message',{}).get('content') or json.dumps(data))
 " <<< "$RESPONSE"
   elif command -v jq >/dev/null 2>&1; then
     if echo "$RESPONSE" | jq -e '.error' >/dev/null 2>&1; then
       echo "darkai: erro → $(echo "$RESPONSE" | jq -r '.error, .message')" >&2
       exit 2
     fi
-    echo "$RESPONSE" | jq -r '.content // .choices[0].message.content // .'
+    echo "$RESPONSE" | jq -r '.text // .content // .choices[0].message.content // .'
   else
     echo "$RESPONSE"
   fi
