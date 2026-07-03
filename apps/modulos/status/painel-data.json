@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-02T23:45:07.091Z",
-  "updatedAtBR": "02/07/2026, 20:45:07 BRT",
+  "updatedAt": "2026-07-03T00:02:05.749Z",
+  "updatedAtBR": "02/07/2026, 21:02:05 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Corrigiu pipelines quebrados",
+    "lastCommit": "Corrigiu script ao ler .text",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -584,6 +584,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T00:02:05.749Z",
+      "titulo": "Push na main · c6b2ddb058293d3ef4c746f9e7cc4b29ed271f37",
+      "detalhe": "Corrigiu script ao ler .text",
+      "area": "Repositório",
+      "sha": "c6b2ddb",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-02T23:45:07.091Z",
       "titulo": "Push na main · 567c74e93d67b07d643678ce7f444a915b545575",
@@ -1259,6 +1267,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T00:02:05.749Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · c6b2ddb058293d3ef4c746f9e7cc4b29ed271f37 (c6b2ddb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-02T23:45:07.091Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 567c74e93d67b07d643678ce7f444a915b545575 (567c74e)",
@@ -1598,13 +1613,6 @@
       "time": "2026-06-29T14:34:51.430Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3a74907466e993876875ce577b9f5f41e0830221 (3a74907)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T14:32:14.350Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d3c5768b8be7ff88580e568ba0f067e138279e6f (d3c5768)",
       "area": "Repositório",
       "status": "sucesso"
     }
