@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T23:35:12.758Z",
-  "updatedAtBR": "03/07/2026, 20:35:12 BRT",
+  "updatedAt": "2026-07-03T23:45:03.553Z",
+  "updatedAtBR": "03/07/2026, 20:45:03 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Work in progress",
+    "lastCommit": "aprendizado(#273): Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T23:45:03.553Z",
+      "titulo": "Push na main · bfd329ab983ebe3d76029e99f9bf81dc3765dcd6",
+      "detalhe": "aprendizado(#273): Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env",
+      "area": "Repositório",
+      "sha": "bfd329a",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-03T23:35:12.758Z",
       "titulo": "Push na main · 81f206a9491d86cb3e4657d03c07ea591d56c687",
       "detalhe": "Work in progress",
@@ -976,14 +984,6 @@
       "detalhe": "feat(manutencao): script diario minimo — trunca logs Docker + graphify update (cron 03:00)",
       "area": "Repositório",
       "sha": "91dfe9e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-03T00:48:54.202Z",
-      "titulo": "Push na main · 4732d8d01845ee273cbb1423d01237832a66670f",
-      "detalhe": "chore(webui): limpar 12G docker morto + logging limits + hook graphify",
-      "area": "Repositório",
-      "sha": "4732d8d",
       "actor": "segredounlock"
     }
   ],
@@ -1399,6 +1399,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T23:45:03.553Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bfd329ab983ebe3d76029e99f9bf81dc3765dcd6 (bfd329a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T23:35:12.758Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 81f206a9491d86cb3e4657d03c07ea591d56c687 (81f206a)",
@@ -1738,13 +1745,6 @@
       "time": "2026-07-03T00:35:57.682Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7da98134561d6d29ff3c83b9a0eb7cffadc00643 (7da9813)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T00:24:14.292Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f3cd8972caac6b042778d5dff6f6217074218850 (f3cd897)",
       "area": "Repositório",
       "status": "sucesso"
     }
