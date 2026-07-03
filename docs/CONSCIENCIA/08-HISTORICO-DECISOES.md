@@ -398,3 +398,12 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 **Tutor do Hermes:** categoria grafo-vivo (6 lições) no aprendizados.json; aula em ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md; missão manter-grafo-vivo (regenerar + validar periodicamente). Backup do feed antigo em backups/2026-07-03-graph-data-pre-vivo.json.
 
 **Pendente (PERMITO PIVETE):** melhorar o RENDER (protegido) pra colorir nó por SAÚDE (verde/vermelho) além de por type, e legenda — proposto, não executado. Agendar o gerador (cron/loop 5min) pra "tempo real" contínuo.
+
+---
+
+## Grafo Vivo: render por saúde + loop 5min (2026-07-03) — AUTORIZADO "PERMITO PIVETE"
+
+**Autorização explícita do Pivete** para editar área protegida (apps/modulos/status/app.js):
+- `app.js`: `nodeColor` agora vence pelo status — processo `stopped`=vermelho, `errored/launching`=âmbar, resto mantém cor por tipo; nó caído ganha anel pulsante no canvas. Backup: backups/2026-07-03-app.js.pre-health.
+- `scripts/grafo-vivo/loop.mjs` + PM2 `CentralDark-GrafoVivo` (id 69): regenera graph-data.json a cada 5min → tempo-real contínuo. pm2 save feito.
+Mudança mínima e reversível; render segue compatível com force-graph. graph-data.json passa a ter churn de dados (como painel-data.json).

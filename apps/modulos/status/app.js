@@ -830,6 +830,7 @@ async function renderGrafoVivo() {
       id: n.id,
       label: n.label || n.id,
       type: n.type || 'default',
+      status: n.status || null,
       color: colorByType[n.type] || colorByType.default
     })),
     links: (raw.edges || []).map(e => ({
@@ -854,9 +855,23 @@ async function renderGrafoVivo() {
     .nodeId('id')
     .nodeLabel(n => `${n.label} · ${n.type}`)
     .nodeVal(n => Math.max(4, (n.type === 'orquestrador' ? 12 : 6)))
-    .nodeColor(n => n.color)
+    .nodeColor(n => {
+      // saúde vence o tipo: processo caído fica vermelho, degradado âmbar
+      if (n.status === 'stopped') return '#ef4444';
+      if (n.status === 'errored' || n.status === 'launching') return '#f59e0b';
+      return n.color;
+    })
     .nodeCanvasObjectMode(() => 'after')
     .nodeCanvasObject((node, ctx, globalScale) => {
+      // anel pulsante no nó caído — chama atenção mesmo de longe
+      if (node.status === 'stopped' || node.status === 'errored') {
+        const r = Math.max(6, (node.type === 'orquestrador' ? 12 : 6)) + 3;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = node.status === 'stopped' ? 'rgba(239,68,68,.9)' : 'rgba(245,158,11,.9)';
+        ctx.lineWidth = 1.5 / globalScale;
+        ctx.stroke();
+      }
       const label = node.label;
       const fontSize = Math.max(10 / globalScale, 3);
       ctx.font = `${fontSize}px Inter, sans-serif`;
