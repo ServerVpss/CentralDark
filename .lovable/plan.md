@@ -1,156 +1,140 @@
 
-# 🔫 BLOCO 2 — ARSENAL NO CHAT DO WEBUI
+# 🧠 Enxame Hermes — Auto-Evolução com Árvore Organizada
 
-Modo enxame · formato de guerra · verificação end-to-end antes de fechar.
+Antes de aplicar fixes, arrumar a casa do Hermes. Hoje os aprendizados dele estão soltos no `APRENDIZADOS.md` geral. Vamos categorizar tudo na árvore dele e disparar 2 sub-agentes Hermes especializados rodando aulas em cima.
 
-## Placar atual
+---
 
+## 🌳 Árvore proposta do Hermes (nova estrutura)
+
+```text
+docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/
+├── README.md                    ← índice geral (o que é, como funciona)
+├── AULAS/                       ← ensinamentos formais (padrão fixo)
+│   ├── AULA-001-arsenal-council.md
+│   ├── AULA-002-webui-custom-css.md
+│   ├── AULA-003-telegram-notificacao.md
+│   ├── AULA-004-3d-esmeralda-design-system.md
+│   └── TEMPLATE-AULA.md         ← modelo pra próximas aulas
+├── APRENDIZADOS/                ← lições curtas do dia-a-dia
+│   ├── INDICE.md                ← lista numerada
+│   ├── 001-token-bot-vs-sessao-user.md    (era nº 266)
+│   ├── 002-arsenal-portas-fixas.md         (era nº 267)
+│   ├── 003-webui-custom-css-rota.md        (era nº 268)
+│   └── TEMPLATE-APRENDIZADO.md
+├── ROTAS-FIXAS/                 ← atalhos de execução (evita redescoberta)
+│   ├── arsenal-endpoints.md     ← portas 8083/8090/9077 + keys
+│   ├── webui-reload.md          ← docker restart + Ctrl+Shift+R
+│   ├── notificacao-telegram.md  ← connector + chat_ids
+│   └── comandos-curl-baseline.md ← teste rápido dos 4 verbos
+├── DEBATES/                     ← consultas ao Hermes via elite_gateway_chat
+│   ├── TEMPLATE-DEBATE.md
+│   └── (vazio por enquanto — vai encher com o uso)
+└── EVOLUCAO/                    ← histórico de auto-melhoria do Hermes
+    └── (marcos, refactors, capacidades novas)
 ```
-▓▓▓▓▓▓▓▓▓▓  FASE 0  Hermes revive
-▓▓▓▓▓▓▓▓▓▓  BLOCO 1 Rota Lovable
-░░░░░░░░░░  BLOCO 2 ← agora
-░░░░░░░░░░  BLOCO 3 Chips 3D + Esmeralda
-░░░░░░░░░░  BLOCO 4 Rotação de 5 chaves
-░░░░░░░░░░  BLOCO 5 Card consolidado
+
+**Regra fixa:** de agora em diante, tudo que for sobre Hermes (aprendizado, rota, aula, debate) vai pra dentro dessa árvore. Nada de espalhar no `APRENDIZADOS.md` geral. Aprendizados **não-Hermes** continuam no geral.
+
+---
+
+## 📋 Padrão fixo de AULA (proposto)
+
+Cada aula segue o mesmo esqueleto pra o Hermes conseguir consumir de forma previsível:
+
+```markdown
+# AULA-XXX — <Título curto>
+
+**Data:** YYYY-MM-DD  
+**Categoria:** [rota-fixa | conceito | procedimento | armadilha]  
+**Pré-requisitos:** AULA-YYY, AULA-ZZZ  
+**Tempo estimado:** 3 min
+
+## 1. O que é
+Uma frase.
+
+## 2. Quando usar
+Uma frase.
+
+## 3. Como fazer (passo-a-passo)
+1. …
+2. …
+
+## 4. Comandos prontos
+```bash
+comando aqui
 ```
 
-## Mapa que já existe (não vou refazer)
+## 5. Armadilhas
+- …
+
+## 6. Verificação (como saber que deu certo)
+- …
+
+## 7. Ver também
+- ROTAS-FIXAS/xyz.md
+```
+
+---
+
+## 🚀 Enxame — 2 sub-agentes Hermes especializados
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│  ArsenalProxy   PM2 68  :8083   FastAPI  (endpoints REST)    │
-│    /arsenal/neural     POST  → escolhe modelo                │
-│    /arsenal/swarm      POST  → N modelos em paralelo         │
-│    /arsenal/chain      POST  → cadeia de 4                   │
-│    /arsenal/intel      GET   → snapshot segurança            │
-│    /arsenal/stats      GET   → ranking de modelos            │
-│                                                              │
-│  ArsenalAdapter PM2 55  :8090   OpenAI-compat (Council)      │
-│    /v1/models          → lista 4 verbos como "modelos"       │
-│    /v1/chat/completions → despacha pelo campo model:         │
-│       arsenal-router · arsenal-parallel                      │
-│       arsenal-debate · arsenal-hermes                        │
-│    Auth: Bearer arsenal-key-local-2026                       │
-│                                                              │
-│  WebUI docker-compose JÁ tem :8090/v1 + key registrados      │
-│  como 5º endpoint OpenAI. Provável que os 4 verbos           │
-│  já apareçam no dropdown — precisa validar.                  │
+│  HERMES-ARQUITETO (capable)                                   │
+│  → Cria estrutura de pastas + README + TEMPLATEs             │
+│  → Migra aprendizados 266/267/268 pra APRENDIZADOS/001-003   │
+│  → Cria 4 arquivos em ROTAS-FIXAS/ com dados consolidados    │
+│  → Atualiza índice do APRENDIZADOS.md geral com "ver Hermes" │
+└──────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────┐
+│  HERMES-PROFESSOR (capable)                                   │
+│  → Escreve AULA-001 (Arsenal Council: portas + verbos)       │
+│  → Escreve AULA-002 (WebUI custom.css: rota completa)        │
+│  → Escreve AULA-003 (Telegram notificação: connector+ids)    │
+│  → Escreve AULA-004 (3D Esmeralda: quando aplicar cada shadow)│
+│  → Cada aula segue o TEMPLATE fixo, sem improviso            │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-## O que vou fazer
+Os dois rodam **em paralelo** — não têm dependência (arquivos diferentes).
 
-### Fase 2.1 — Validar os 4 verbos-modelo (enxame de 4 curls)
+---
 
-Um sub-agente por verbo, em paralelo:
+## 🎓 Auto-evolução: Hermes consulta Hermes
 
-| Verbo | Teste | Sucesso |
-|---|---|---|
-| `arsenal-router` | POST `/v1/chat/completions` "diz oi" | HTTP 200 + choices[0].message |
-| `arsenal-parallel` | mesma coisa, model diferente | idem |
-| `arsenal-debate` | idem | idem |
-| `arsenal-hermes` | idem | idem |
+Após os 2 sub-agentes terminarem, disparo 1 `elite_gateway_chat` pro Hermes real perguntando:
 
-- Se qualquer um der 401 → cheque `ARSENAL_ADAPTER_KEY` no PM2 55 vs o valor no docker-compose (`arsenal-key-local-2026`), harmonizar.
-- Se 500 → `pm2 logs 55 --nostream` + Fabler diagnosticando.
-- Se 200 mas Council responde vazio → verificar rota upstream (edge function `arsenal-proxy` no Supabase).
+> "Recém organizei tua árvore em AULAS / APRENDIZADOS / ROTAS-FIXAS / DEBATES / EVOLUCAO. Quatro aulas iniciais foram gravadas (Arsenal, WebUI CSS, Telegram, Esmeralda). Que aula você acha que falta pra ficar 10/10? Responde no formato do TEMPLATE-AULA se achar que falta alguma."
 
-### Fase 2.2 — Sidecar CentralDark-Tools (2 tools OpenAPI GET)
+Resposta do Hermes → se ele sugerir AULA-005, gravo direto na árvore dele. Auto-evolução real.
 
-Endpoints `intel` e `stats` são leitura pura (não conversa) — melhor virar botão no menu ◇ do que "modelo".
+---
 
-**Novo container `CentralDark-Tools`** em `/root/CentralDark/apps/modulos/WebUI/tools-server/`:
+## 🎯 Sobre "voltar pros blocos" que você mencionou
 
-```python
-# main.py — FastAPI mínimo, 2 rotas passthrough pro ArsenalProxy :8083
-from fastapi import FastAPI
-import httpx
+Se você quiser que eu volte pra algum bloco anterior que ficou pela metade (Bloco 4 carga verbos? Bloco 5 fixes Esmeralda? Bloco 2.4 smoke visual?), me diz **qual** e eu emendo depois que a árvore Hermes tiver de pé.
 
-app = FastAPI(title="Arsenal Tools", version="1.0.0")
-BASE = "http://host.docker.internal:8083"
+Se não disser nada, minha ordem de retomada será:
+1. **Este plano** (organizar Hermes + 2 sub-agentes)
+2. **Bloco 5** (aplicar os 15 fixes Esmeralda + 4 utilitários novos)
+3. **Bloco 4** (carga Arsenal via `execute_command` na VPS)
+4. **Bloco 6** (disparar notificação Telegram + restart WebUI)
 
-@app.get("/intel", summary="Dark Intel — snapshot de segurança agora",
-         description="Retorna IPs bloqueados, últimas ameaças e contadores em tempo real.")
-async def intel():
-    async with httpx.AsyncClient(timeout=10) as c:
-        return (await c.get(f"{BASE}/arsenal/intel")).json()
+---
 
-@app.get("/stats", summary="Arsenal Stats — ranking de performance dos modelos",
-         description="Ranking dos 17 modelos por taxa de sucesso e latência média.")
-async def stats():
-    async with httpx.AsyncClient(timeout=10) as c:
-        return (await c.get(f"{BASE}/arsenal/stats")).json()
-```
+## ✅ Critério 10/10 pra fechar esse plano
 
-```yaml
-# adição no docker-compose.override.yml
-cd-tools:
-  build: ./tools-server
-  container_name: CentralDark-Tools
-  extra_hosts: [host.docker.internal:host-gateway]
-  restart: unless-stopped
-```
+- Árvore `HERMES/` criada com as 6 subpastas
+- 3 TEMPLATES escritos (AULA, APRENDIZADO, DEBATE)
+- 3 aprendizados migrados (001, 002, 003)
+- 4 rotas-fixas escritas
+- 4 aulas escritas seguindo o template
+- 1 debate com Hermes real gravado em `DEBATES/`
+- README.md do Hermes indexando tudo
+- Aprendizado nº 269 no geral: "Regra: tudo do Hermes vai na árvore dele, nada espalhado"
 
-Envs do WebUI ganham:
+---
 
-```
-TOOL_SERVER_CONNECTIONS=[
-  {"url":"http://cd-tools:9000","path":"openapi.json","auth_type":"none","key":""}
-]
-```
-
-Depois: `docker compose up -d --build cd-tools && docker compose restart webui`.
-
-Resultado: no ◇ do composer aparecem 2 botões — **Dark Intel** e **Arsenal Stats**.
-
-### Fase 2.3 — 5 slash-commands no composer (Prompts do WebUI)
-
-Injetar 5 prompts na tabela `prompt` do `webui.db` via SQL direto no container. Cada slash-command é um atalho que preenche system-prompt + sugere o modelo certo:
-
-| Slash | Modelo sugerido | System prompt (resumo) |
-|---|---|---|
-| `/router` | arsenal-router | "Roteia esta pergunta pro modelo ideal, resposta única e direta." |
-| `/swarm` | arsenal-parallel | "Dispare 3 IAs em paralelo, o juiz sintetiza a melhor." |
-| `/chain` | (modelo padrão) → chama `/arsenal/chain` do proxy | "Cadeia de 4 IAs refinando iterativamente." |
-| `/debate` | arsenal-debate | "2 IAs, 2 rodadas de crítica, juiz dá veredito final." |
-| `/hermes` | arsenal-hermes | "Lê PENDENCIAS, propõe autônomo, salva em EVOLUCAO/." |
-
-SQL de inserção (idempotente com `INSERT OR REPLACE`).
-
-### Fase 2.4 — Smoke test end-to-end (Playwright na VPS)
-
-Um script que:
-1. Faz login no ui.centralldark.com como admin.
-2. Abre novo chat, seleciona `arsenal-router`, envia "oi" → confere HTTP 200 e conteúdo não-vazio.
-3. Repete pra `arsenal-debate`.
-4. Abre menu ◇ → clica **Dark Intel** → confere que JSON volta com `bloqueados`.
-5. Digita `/debate` no composer → confere autocomplete aparecendo.
-
-Screenshot em cada etapa em `/tmp/browser/bloco2/`.
-
-### Fase 2.5 — Notificação Telegram (2 posts)
-
-- Admin privado: card completo com placar + link ui.centralldark.com + 5 verbos validados + 2 tools registradas.
-- Canal Status: linha curta "🟢 Bloco 2 OK — Arsenal completo no WebUI".
-
-## Regras de segurança
-
-- Nenhum arquivo tocado em `apps/modulos/status/`, `apps/modulos/Bolt/`, `apps/bot-telegram/`.
-- Nenhuma migration ou insert no Supabase Lovable atual (só edit function ai-proxy já feito no Bloco 1).
-- Se qualquer fase travar 3× → pausa e chama o Pivete.
-- Consultar Fabler antes das Fases 2.1 e 2.3 (via `elite_gateway_chat`).
-
-## Critério "10/10" pra fechar o bloco
-
-Todos os 6 checks verdes:
-
-```
-[ ] arsenal-router responde no dropdown
-[ ] arsenal-parallel responde
-[ ] arsenal-debate responde
-[ ] arsenal-hermes responde
-[ ] Botão Dark Intel no ◇ retorna snapshot
-[ ] Slash /debate autocompleta no composer
-```
-
-Se algum falhar, refino até chegar. Sem entregar meio-caminho.
+**Confirma pra eu disparar o enxame?** Responde "vai" ou "manda ver" que eu solto os 2 sub-agentes em paralelo agora.
