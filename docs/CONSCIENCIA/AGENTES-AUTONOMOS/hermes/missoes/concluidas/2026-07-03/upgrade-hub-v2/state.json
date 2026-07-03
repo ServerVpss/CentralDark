@@ -471,6 +471,52 @@
       },
       "resultado": "VITE_SUPABASE_URL=https://kagejpghnwdfymddwxuf.supabase.co\nVITE_SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthZ2VqcGdobndkZnltZGR3eHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0OTIwNzgsImV4cCI6MjA4NTA2ODA3OH0.47hoT1t4Vr1n-MaD3Vd9JWyjPMjMSJmz5Dat3zoAYdE\n",
       "ok": true
+    },
+    {
+      "etapa_titulo": "Commit do Upgrade do CentralDark HUB v2",
+      "ferramenta": "git",
+      "args": {
+        "acao": "commit_push",
+        "mensagem": "feat(hub): upgrade v2 - dashboard, catalog+, policies, audit, connectors e telegram-mtproto upgrade"
+      },
+      "resultado": "Command failed: bash -lc cd /root/CentralDark && git add -A && git commit -m \"feat(hub): upgrade v2 - dashboard, catalog+, policies, audit, connectors e telegram-mtproto upgrade\" && git pull --rebase origin main && git push origin main 2>&1 | tail -20\n[graphify hook] launching background rebuild (log: /root/.cache/graphify-rebuild.log)\nerror: cannot pull with rebase: You have unstaged changes.\nerror: please commit or stash them.\n",
+      "ok": false
+    },
+    {
+      "etapa_titulo": "Verificando status do Git para resolver conflito",
+      "ferramenta": "git",
+      "args": {
+        "acao": "status"
+      },
+      "resultado": " m apps/modulos/Bolt/source\n M apps/modulos/status/painel-data.json\n m apps/modulos/telepainel\n M docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/em-andamento/upgrade-hub-v2/state.json\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Git Stash e Preparação para Push",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "cd /root/CentralDark && git stash push -m 'temp stash for hub upgrade' && git add apps/modulos/hub/src && git commit -m 'feat(hub): upgrade v2 dashboard components and hooks' && git pull --rebase origin main && git push origin main && git stash pop"
+      },
+      "resultado": "exit=1 Saved working directory and index state On main: temp stash for hub upgrade\nOn branch main\nYour branch is ahead of 'origin/main' by 1 commit.\n  (use \"git push\" to publish your local commits)\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n  (commit or discard the untracked or modified content in submodules)\n\tmodified:   apps/modulos/Bolt/source (modified content)\n\tmodified:   apps/modulos/telepainel (modified content, untracked content)\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n\nCommand failed: bash -lc cd /root/CentralDark && cd /root/CentralDark && git stash push -m 'temp stash for hub upgrade' && git add apps/modulos/hub/src && git commit -m 'feat(hub): upgrade v2 dashboard components and hooks' && git pull --rebase origin main && git push origin main && git stash pop\n",
+      "ok": false
+    },
+    {
+      "etapa_titulo": "Git Reset & Commit Hub v2",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "cd /root/CentralDark && git checkout apps/modulos/Bolt/source apps/modulos/telepainel apps/modulos/status/painel-data.json && git add apps/modulos/hub/src/ && git commit -m 'feat(hub): upgrade v2 - components, hooks, services e types' && git pull --rebase origin main && git push origin main"
+      },
+      "resultado": "exit=1 On branch main\nYour branch is ahead of 'origin/main' by 1 commit.\n  (use \"git push\" to publish your local commits)\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n  (commit or discard the untracked or modified content in submodules)\n\tmodified:   apps/modulos/Bolt/source (modified content)\n\tmodified:   apps/modulos/telepainel (modified content, untracked content)\n\tmodified:   docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/em-andamento/upgrade-hub-v2/state.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n\nUpdated 0 paths from the index\n",
+      "ok": false
+    },
+    {
+      "etapa_titulo": "Git Push: Upgrade HUB v2",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "git add apps/modulos/hub/src/ && git commit -m 'feat(hub): upgrade v2 - dashboard, catalog, policies, audit, connectors components and hooks' && git push origin main"
+      },
+      "resultado": "exit=1 On branch main\nYour branch is ahead of 'origin/main' by 1 commit.\n  (use \"git push\" to publish your local commits)\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n  (commit or discard the untracked or modified content in submodules)\n\tmodified:   apps/modulos/Bolt/source (modified content)\n\tmodified:   apps/modulos/status/painel-data.json\n\tmodified:   apps/modulos/telepainel (modified content, untracked content)\n\tmodified:   docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/em-andamento/upgrade-hub-v2/state.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n\nCommand failed: bash -lc cd /root/CentralDark && git add apps/modulos/hub/src/ && git commit -m 'feat(hub): upgrade v2 - dashboard, catalog, policies, audit, connectors components and hooks' && git push origin main\n",
+      "ok": false
     }
   ],
   "retomadas": 1
