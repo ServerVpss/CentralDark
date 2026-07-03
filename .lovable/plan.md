@@ -1,39 +1,32 @@
-## Diagnóstico dos vermelhos
+## Instalar `darkai` na VPS de forma persistente
 
-Confirmado via GitHub API + análise dos arquivos:
+Objetivo: deixar o comando `darkai` disponível pra qualquer usuário na VPS, com as variáveis já carregadas no ambiente, testado e funcionando.
 
-- **`painel auto-update` (195 falhas acumuladas)** — o workflow aponta pra `apps/projeto-dashboard/` (que não existe mais). O painel foi consolidado em `apps/modulos/status/` no dia 02/07 e virou área protegida no `CLAUDE.md`, mas o `.yml` nunca foi atualizado.
-- **`Farm — trailer Co-authored-by`** — falha silenciosa provavelmente por `submodules` no `actions/checkout@v4` (padrão desse tipo de erro na VPS self-hosted, já resolvido em outros workflows com `submodules: false`).
+### Passos
 
-A VPS em si **está OK** — recebeu o último commit `129aa54a`, os 17 processos PM2 estão online. Ou seja, esses vermelhos não estão bloqueando deploy real, só quebrando automações periféricas (painel e badge de co-author).
+**1. Instalar o binário**
+- `cp /root/CentralDark/docs/CONSCIENCIA/DARKAI/darkai.sh /usr/local/bin/darkai`
+- `chmod +x /usr/local/bin/darkai`
 
-## Conserto
+**2. Configurar as variáveis pra todo mundo**
+- Criar `/etc/profile.d/darkai.sh` com:
+  - `export DARKAI_URL="https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/ai-proxy"`
+  - `export DARKAI_ANON_KEY="<anon key pública do projeto Lovable Cloud>"`
+  - `export DARKAI_MODEL="google/gemini-3-flash-preview"`
+- `chmod 644 /etc/profile.d/darkai.sh`
+- Assim qualquer shell novo (root ou não) já sobe com o darkai pronto.
 
-### 1. `painel-auto-update.yml` — trocar caminhos
-Três linhas a corrigir:
-- Linha 17 (`paths-ignore`): `apps/projeto-dashboard/painel-data.json` → `apps/modulos/status/painel-data.json`
-- Linha 48 (run): `node apps/projeto-dashboard/atualizar-painel-vivo.mjs` → `node apps/modulos/status/atualizar-painel-vivo.mjs`
-- Linha 54 (`git add`): mesmo caminho novo
-- Adicionar `submodules: false` no `actions/checkout@v4` (linhas 34-37) — evita erro se o repo tiver submódulo quebrado
+**3. Testar de verdade**
+- Rodar `bash -c 'source /etc/profile.d/darkai.sh && darkai "responda apenas: ok"'`
+- Se voltar "ok" → selado.
+- Se der erro (ex.: `jq` faltando, formato do ai-proxy diferente), corrijo na hora antes de terminar.
 
-### 2. `farm-co-author.yml` — proteger checkout
-- Adicionar `submodules: false` no `actions/checkout@v4` (linhas 27-30)
-- Adicionar `|| true` no final do step "Verificar trailer" pra ele **nunca marcar o workflow como failure** (é só um warning informativo pra farm de medalha, não deve derrubar CI)
+**4. Entregar o texto pronto pra Claude**
+Um bloquinho curtinho que você cola no chat dela:
+> "O `darkai` já tá instalado na VPS (`/usr/local/bin/darkai`) com as vars carregadas via `/etc/profile.d/darkai.sh`. Antes de qualquer leitura pesada do repo, delega pro Gemini com `darkai --model google/gemini-2.5-flash 'sua pergunta'`. Não usa Sonnet pra varrer árvore. Continua do passo 3 do teu roteiro."
 
-### 3. Validar antes de commitar
-Antes de fazer o commit, checar rapidamente se `apps/modulos/status/atualizar-painel-vivo.mjs` e `apps/modulos/status/painel-data.json` realmente existem no repo (já sei que `atualizar-painel-vivo.mjs` existe pelo `<codebase-context>`).
-
-### 4. Depois do commit
-- Aguardar o novo run do `painel auto-update` no push
-- Se passar 🟢, disparar 1 `workflow_dispatch` do `farm-co-author` pra confirmar que a mudança dele também funciona
-- Reportar o resultado
-
-## O que NÃO vou fazer
-
-- Não vou mexer em `apps/modulos/status/` (área protegida) — só nos `.yml`
-- Não vou apagar os 195 runs vermelhos históricos (posso fazer isso depois se você quiser limpeza visual)
-- Não vou reescrever o painel — só corrigir o caminho que ficou quebrado
-
-## Resultado esperado
-
-Próximo push na main → `painel auto-update` 🟢 (atualiza `status.centralldark.com`) + `farm-co-author` deixa de aparecer vermelho. Tudo continua indo pra VPS normalmente como já vai.
+### O que não vou fazer
+- Não commito nada no git.
+- Não toco em área protegida do CLAUDE.md.
+- Não mexo em `~/.claude-proxy/` do teu PC.
+- Não subo nem paro nada no PM2.
