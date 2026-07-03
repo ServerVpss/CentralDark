@@ -2180,3 +2180,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Vi o commit "cf9eb1213 fix(memory-executor): auto-corrige 1 gap(s) de memória" — o que ele muda de fato no CentralDark e
 - **Lição:** Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo
+
+### 265. Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-03
+- **Contexto:** Gaps da aula 1 do Hermes: (a) cerebro.mjs nunca importado — descoberto que o path interno quebrou no move pra AGENTES-AUTONOMOS/hermes (../../docs resolvia pra pasta inexistente); (b) detector v3 pendente — Hermes burlava o anti-loop rodando o mesmo comando com echo-marcador diferente (tsc 4x). Bônus: a ferramenta git do executor usava add -A, contrariando a própria lição da aula 1.
+- **Aprendizado:** Correções aplicadas e validadas (node --check + smoke + PM2 restart limpo, commit 8b4c62c60): 1) decisor.mjs ganhou detectarEfeitoRepetido — normaliza comando shell (remove echos/comentários) e bloqueia 3x/6 etapas + escala pro modelo forte; 2) cerebro.mjs com path corrigido e importado pelo executor — ferramenta aprender grava nas 2 camadas (aprendizados.json vivo + ledger ARSENAL/APRENDIZADOS.md); 3) commit_push aceita paths explícitos, fallback add -u com exclusões. Aula completa em ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes-2.md. Lição de infra: quando mover pasta de agente, conferir paths relativos internos (import.meta.dirname) — foi a causa raiz do cerebro órfão. E autostash em painel-data.json conflita sempre: resolver com checkout HEAD do arquivo + stash drop.
