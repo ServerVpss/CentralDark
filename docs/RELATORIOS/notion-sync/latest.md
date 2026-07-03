@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T10:28:36.056Z
+# 🧠 Notion Sync — 2026-07-03T12:13:31.915Z
 
-- **Commit fonte:** `79813c937fb9465b9e00d59eb7e7fdfeb65c1fde`
+- **Commit fonte:** `8b4c62c60329a0a53d980c27c28561bf361a2848`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 293 atualizadas · ❌ 362 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 295 atualizadas · ❌ 363 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 24 | 1 | 23 | 0 | 0 |
-| aprendizados | 266 | 0 | 265 | 0 | 1 |
-| estrutura | 361 | 0 | 0 | 0 | 361 |
+| decisoes | 24 | 0 | 24 | 0 | 0 |
+| aprendizados | 266 | 0 | 266 | 0 | 0 |
+| estrutura | 363 | 0 | 0 | 0 | 363 |
 
 ## Operações
 
@@ -50,7 +50,7 @@
 | decisoes | atualizado | Grupo Da Evolução aterrissado no CentralDark real (2026-07-02) |
 | decisoes | atualizado | Fix STT do WebUI — whisper-1 mapeado no proxy audio-transcriptions (2026-07-03) |
 | decisoes | atualizado | Hermes × darkai — trava de stdin + env ausente no PM2 + retomada de missões órfãs (2026-07-03) |
-| decisoes | criado | Hermes ganha sistema de aprendizado + conclui hub v2 sozinho (2026-07-03) |
+| decisoes | atualizado | Hermes ganha sistema de aprendizado + conclui hub v2 sozinho (2026-07-03) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -296,7 +296,7 @@
 | aprendizados | atualizado | #241 — Scripts de validação VPS não devem derrubar terminal com exit 127 |
 | aprendizados | atualizado | #242 — Diagnóstico TLS do Builder Bolt aponta certificado público OK e container parado |
 | aprendizados | atualizado | #243 — Builder Bolt container real chama CentralDark-Bolt e compose ativo fica em apps/Bolt |
-| aprendizados | erro | #244 — Builder Bolt Debian 12 sem ca-certificates quebra TLS no workerd |
+| aprendizados | atualizado | #244 — Builder Bolt Debian 12 sem ca-certificates quebra TLS no workerd |
 | aprendizados | atualizado | #245 — Comandos Gatilhos oficiais adicionados à Porta de Entrada |
 | aprendizados | atualizado | #246 — Seção Comandos Gatilhos refinada no 00-LEIA-PRIMEIRO.md |
 | aprendizados | atualizado | #247 — Comandos Gatilhos organizados por categoria no 00-LEIA-PRIMEIRO.md |
@@ -351,6 +351,7 @@
 | estrutura | erro | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/revisao-hub-v2-rodada2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/upgrade-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
@@ -373,6 +374,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes-2.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/README.md |
