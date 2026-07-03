@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T01:02:34.680Z",
-  "updatedAtBR": "02/07/2026, 22:02:34 BRT",
+  "updatedAt": "2026-07-03T01:10:23.326Z",
+  "updatedAtBR": "02/07/2026, 22:10:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "docs(lembrancas): registrar padrao manutencao = script+cron nao agente",
+    "lastCommit": "Corrigiu repetições no Notion Sync",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -584,6 +584,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T01:10:23.326Z",
+      "titulo": "Push na main · f3e06a39bb97b011196c733497210cc4c96813ff",
+      "detalhe": "Corrigiu repetições no Notion Sync",
+      "area": "Repositório",
+      "sha": "f3e06a3",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-03T01:02:34.680Z",
       "titulo": "Push na main · 6c7cbcd17bcc65589698451386cf1ebedcf04d9f",
@@ -1315,6 +1323,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T01:10:23.326Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · f3e06a39bb97b011196c733497210cc4c96813ff (f3e06a3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T01:02:34.680Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6c7cbcd17bcc65589698451386cf1ebedcf04d9f (6c7cbcd)",
@@ -1654,13 +1669,6 @@
       "time": "2026-06-29T15:14:13.396Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d5ecb88410d0085fb1c7a8845481717d47628b14 (d5ecb88)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T15:12:33.120Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · be2aa9fd2d4470b9916343cacdf5721559db8c9d (be2aa9f)",
       "area": "Repositório",
       "status": "sucesso"
     }
