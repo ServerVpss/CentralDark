@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T06:56:20.301Z",
-  "updatedAtBR": "03/07/2026, 03:56:20 BRT",
+  "updatedAt": "2026-07-03T07:01:07.445Z",
+  "updatedAtBR": "03/07/2026, 04:01:07 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Changes",
+    "lastCommit": "Salvou e atualizou README",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -586,6 +586,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T07:01:07.445Z",
+      "titulo": "Push na main · fa4244c2ae1ec13a98687ff2f8223adba50e2448",
+      "detalhe": "Salvou e atualizou README",
+      "area": "Repositório",
+      "sha": "fa4244c",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-03T06:56:20.301Z",
       "titulo": "Push na main · 05474c231976bb00ea5475f7e10346b707ea79e4",
@@ -1365,6 +1373,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T07:01:07.445Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · fa4244c2ae1ec13a98687ff2f8223adba50e2448 (fa4244c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T06:56:20.301Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 05474c231976bb00ea5475f7e10346b707ea79e4 (05474c2)",
@@ -1704,13 +1719,6 @@
       "time": "2026-06-30T00:03:34.235Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 49af8cdace93725bf0d0f1e7ebb22178feba138b (49af8cd)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T22:55:31.264Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 977139cdb97ac51db77e823ead5bcd681102c2ef (977139c)",
       "area": "Repositório",
       "status": "sucesso"
     }
