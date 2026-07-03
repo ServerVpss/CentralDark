@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T02:32:54.514Z",
-  "updatedAtBR": "02/07/2026, 23:32:54 BRT",
+  "updatedAt": "2026-07-03T02:41:04.675Z",
+  "updatedAtBR": "02/07/2026, 23:41:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Implementou Fase 4 - regras JSON",
+    "lastCommit": "Criou relatórios em docs/ARSENAL/",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -584,6 +584,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T02:41:04.675Z",
+      "titulo": "Push na main · 2d5163282bdc9a1843839c69a0210af39ad6a3b9",
+      "detalhe": "Criou relatórios em docs/ARSENAL/",
+      "area": "Repositório",
+      "sha": "2d51632",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-03T02:32:54.514Z",
       "titulo": "Push na main · e42a58d1c4c6b3abe01fa6dd6360db7fdd33413f",
@@ -1339,6 +1347,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T02:41:04.675Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 2d5163282bdc9a1843839c69a0210af39ad6a3b9 (2d51632)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T02:32:54.514Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · e42a58d1c4c6b3abe01fa6dd6360db7fdd33413f (e42a58d)",
@@ -1678,13 +1693,6 @@
       "time": "2026-06-29T19:18:50.247Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5acd9542077fa90b575fd0a4546fba0f26ef1320 (5acd954)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T19:07:28.909Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 5813311a4d98714ebba9d841171b19e08b08e85f (5813311)",
       "area": "Repositório",
       "status": "sucesso"
     }
