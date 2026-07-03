@@ -2228,3 +2228,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Pivete pediu implementar o "Vault / Agent OS" inspirado no vídeo Anthropic sobre Claude Code + Obsidian. Consultei Gemini pra base (Fabler estava com 524/500) e apliquei direto.
 - **Aprendizado:** Criado docs/CONSCIENCIA/VAULT/ com 4 arquivos (INDEX, REGRAS-AUTONOMIA 2 linhas, REGRAS-DOC-CHECK 3 linhas, PROMPT-MESTRE 15 linhas) + obsidian.json. Criado tools/vault-server/ (Node puro, sem deps além de marked) rodando em localhost:5174. No Hermes VPS: vault-loader.mjs com cache + hash sha256 + métrica logada a cada carga (arquivos+bytes+hash+force), patch mínimo no daemon.mjs (backup .bak4) via sed+python injetando `carregarVault({force: historico.length===0})` no início de rodarMissao e prepend com `vaultHeader()` só se não já contém 'CONTEXTO VAULT'. Validação: node --check ok, pm2 restart 66 ok, missão de teste disparou e log confirmou 'vault-loader carregado hash=a8b651ff6124 arquivos=4 bytes=3170 force=true'. Regra Fabler/Gemini de invalidar cache quando INDEX muda embutida em vaultMudou(). Fabler (elite_gateway_chat com claude-sonnet-4-5) estava indisponível — usar Gemini como fallback sempre funciona.
+
+### 273. Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-03
+- **Contexto:** Hermes (PM2 id 66) caía 100% no Elite Anthropic (Sonnet 4.5 caro) porque a cadeia grátis Flash→Pro→GPT5m falhava em 13-19ms. Faltavam vars exigidas pelo /usr/local/bin/darkai.
+- **Aprendizado:** Pra Hermes usar a cadeia grátis via CLI darkai, /root/[oculto] precisa DARKAI_URL=https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/ai-proxy E DARKAI_ANON_KEY=(anon key). Depois: pm2 restart 66 --update-env && pm2 save. Confirmação nos logs: [decisor] ✅ google/gemini-3-flash-preview respondeu em Xms.
