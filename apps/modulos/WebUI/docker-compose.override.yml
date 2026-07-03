@@ -1,9 +1,12 @@
 # Override automático — fixa o MCP CentralDark no Open-WebUI via mcpo sidecar
+# + injeta o tema 3D Esmeralda (light) via custom.css versionado
 services:
   webui:
     environment:
       - 'TOOL_SERVER_CONNECTIONS=[{"url":"http://mcpo:8000/centraldark","path":"openapi.json","auth_type":"none","key":""}]'
       - ENABLE_OPENAPI_SERVERS=true
+    volumes:
+      - ./custom-css/esmeralda.css:/app/backend/static/custom.css:ro
     depends_on:
       - mcpo
   mcpo:
