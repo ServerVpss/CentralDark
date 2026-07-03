@@ -1,3 +1,10 @@
+---
+title: "MULTI MODEL ORCHESTRATION"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # 🎼 Multi-Model Orchestration — visão do sistema
 
 > Filosofia: nunca chamar uma IA só quando dá pra combinar várias.

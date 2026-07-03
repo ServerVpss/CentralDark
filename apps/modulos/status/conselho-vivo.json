@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-03T03:02:10.950Z",
+  "atualizadoEm": "2026-07-03T04:30:02.063Z",
   "slots": {},
   "timeouts": {
     "router_s": 30,
@@ -7,31 +7,46 @@
     "debate_s": 180
   },
   "stats": {
-    "totalDebates": 3,
+    "totalDebates": 6,
     "totalEvolucoes": 1
   },
   "ultimosDebates": [
     {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md",
-      "quando": "2026-07-03T02:38:02.359Z",
-      "preview": "# 🔥 DEBATE — 2026-07-02-233739 · **Tema:** Como resolver a pendência CentralDark: 🟡 #14 — Núcleo Vivo de Ensinamentos (pós-Hub) · Contexto: CentralDark é a infra do @segredounlocker. Stack React+Vite+Supabase(Lovable Cloud) + VPS PM2 + bo"
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-32-16-554Z-router-webui-teste-ao-vivo-do-webui-diga-oi-curto-no-grupo-1-fr.md",
+      "quando": "2026-07-03T03:32:16.584Z",
+      "preview": "# router · WebUI · **Quando:** 03/07/2026, 00:32:16 · **Origem:** ui.centralldark.com"
     },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-232402-router-diga-s-ok.md",
-      "quando": "2026-07-03T02:24:04.158Z",
-      "preview": "# 🎯 ROUTER — 2026-07-02-232402 · **Tema:** diga só OK · **Modelo:** gemini-3-flash-preview (rápido)"
+      "quando": "2026-07-03T03:29:01.748Z",
+      "preview": "--- · title: \"2026 07 02 232402 Router Diga S Ok\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md",
+      "quando": "2026-07-03T03:29:01.748Z",
+      "preview": "--- · title: \"2026 07 02 233739 Debate Como Resolver A Pend Ncia Centraldark 14 N Cleo Vi\" · date: 2026-07-03"
     },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md",
-      "quando": "2026-07-03T02:04:35.192Z",
-      "preview": "# 🧠 CONSELHO DE IAs — 2026-07-02-2304 · **Tema:** Em 1 frase: qual sua função? · ---"
+      "quando": "2026-07-03T03:29:01.744Z",
+      "preview": "--- · title: \"2026 07 02 2304 Em 1 Frase Qual Sua Fun O\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-41-847Z-parallel-webui-em-uma-frase-qual-a-melhor-forma-de-organizar-arqu.md",
+      "quando": "2026-07-03T03:10:41.847Z",
+      "preview": "# parallel · WebUI · **Quando:** 03/07/2026, 00:10:41 · **Origem:** ui.centralldark.com"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T03-10-03-652Z-router-webui-responda-em-uma-linha-arsenal-funcionando-via-lova.md",
+      "quando": "2026-07-03T03:10:03.687Z",
+      "preview": "# router · WebUI · **Quando:** 03/07/2026, 00:10:03 · **Origem:** ui.centralldark.com"
     }
   ],
   "ultimasEvolucoes": [
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md",
-      "quando": "2026-07-03T02:38:02.411Z",
-      "preview": "# 🤖 HERMES — proposta autônoma · **Data:** 2026-07-02 23:38 · **Pendência:** 🟡 #14 — Núcleo Vivo de Ensinamentos (pós-Hub)"
+      "quando": "2026-07-03T03:29:01.752Z",
+      "preview": "--- · title: \"Hermes  14 N Cleo Vivo De Ensinamentos P S Hub\" · date: 2026-07-03"
     }
   ]
 }

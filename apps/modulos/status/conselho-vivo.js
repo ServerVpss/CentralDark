@@ -29,4 +29,19 @@
   $('updated').textContent = 'atualizado em ' + when(data.atualizadoEm);
   renderList($('debates'), data.ultimosDebates);
   renderList($('evolucoes'), data.ultimasEvolucoes);
+
+  // Destaque Hermes — última proposta autônoma em card grande no topo
+  const h = (data.ultimasEvolucoes || [])[0];
+  const hEl = $('hermes-destaque');
+  if (hEl) {
+    if (h) {
+      hEl.innerHTML = `<div class="list-item" style="border:none;padding:0">
+        <div class="when">${esc(when(h.quando))}</div>
+        <div class="file">${esc(h.arquivo)}</div>
+        <div class="prev" style="font-size:14px;margin-top:8px;line-height:1.6">${esc(h.preview || '')}</div>
+      </div>`;
+    } else {
+      hEl.innerHTML = '<div style="color:var(--muted)">Hermes ainda não fez proposta autônoma — próxima rodada às 06:00 UTC.</div>';
+    }
+  }
 })();
