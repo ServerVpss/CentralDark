@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T18:31:21.513Z
+# 🧠 Notion Sync — 2026-07-03T18:46:49.563Z
 
-- **Commit fonte:** `ed8201a1e4a380791b5beec6ce82bde5e5566c79`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `3cb653d36cdcd7ce052f3038a49c94e6a3b66e2c`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 304 atualizadas · ❌ 388 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 306 atualizadas · ❌ 390 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 30 | 2 | 28 | 0 | 0 |
+| decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 271 | 0 | 271 | 0 | 0 |
-| estrutura | 388 | 0 | 0 | 0 | 388 |
+| estrutura | 390 | 0 | 0 | 0 | 390 |
 
 ## Operações
 
@@ -55,8 +55,8 @@
 | decisoes | atualizado | Hermes vira admin do Elite Gateway — tutor especialista (2026-07-03, noite) |
 | decisoes | atualizado | Vazamento de token contido + redator de segredos no Hermes (2026-07-03, noite) |
 | decisoes | atualizado | Grafo Vivo agora é vivo de verdade + Hermes vira mantenedor (2026-07-03, noite) |
-| decisoes | criado | Grafo Vivo: render por saúde + loop 5min (2026-07-03) — AUTORIZADO "PERMITO PIVETE" |
-| decisoes | criado | Obsidian como visualização em tempo real do Grafo Vivo (2026-07-03) |
+| decisoes | atualizado | Grafo Vivo: render por saúde + loop 5min (2026-07-03) — AUTORIZADO "PERMITO PIVETE" |
+| decisoes | atualizado | Obsidian como visualização em tempo real do Grafo Vivo (2026-07-03) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -364,6 +364,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/002-arsenal-portas-fixas.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/003-webui-custom-css-rota.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/004-fallback-conselheiro.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/009-nivel-skills-so-privado.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/INDICE.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/TEMPLATE-APRENDIZADO.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-001-arsenal-council.md |
@@ -379,6 +380,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/comandos-curl-baseline.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/notificacao-telegram.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/webui-reload.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/STATUS.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/fix-catalogo-tools-json/missao.md |
