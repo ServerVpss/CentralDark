@@ -29,24 +29,44 @@ TMP="$(mktemp -d)"
 trap "rm -rf $TMP" EXIT
 
 # ------------------------------------------------------------
+# REGRAS — lê modelos configuráveis do regras.json (Fase 4)
+# Hot-reload: cada execução relê o JSON.
+# ------------------------------------------------------------
+REGRAS="$ROOT/regras.json"
+if command -v jq >/dev/null 2>&1 && [ -f "$REGRAS" ]; then
+  M_ROUTER=$(jq -r '.modelos.router // "gemini-3-flash-preview"' "$REGRAS")
+  M_PRO=$(jq -r    '.modelos.voz1_pro // "gemini-3.1-pro-preview"' "$REGRAS")
+  M_GPT=$(jq -r    '.modelos.voz2_gpt // "gpt-5"' "$REGRAS")
+  M_FLASH=$(jq -r  '.modelos.voz3_flash // "gemini-3-flash-preview"' "$REGRAS")
+  M_JUIZ=$(jq -r   '.modelos.juiz // "gemini-3.1-pro-preview"' "$REGRAS")
+else
+  M_ROUTER="gemini-3-flash-preview"
+  M_PRO="gemini-3.1-pro-preview"
+  M_GPT="gpt-5"
+  M_FLASH="gemini-3-flash-preview"
+  M_JUIZ="gemini-3.1-pro-preview"
+fi
+
+# ------------------------------------------------------------
 # HANDLERS — cada backend em uma função (fácil expandir)
 # ------------------------------------------------------------
-call_darkai_flash()   { darkai -m gemini-3-flash-preview "$1"     2>&1 || echo "[darkai-flash falhou]"; }
-call_darkai_pro()     { darkai -m gemini-3.1-pro-preview "$1"     2>&1 || echo "[darkai-pro falhou]"; }
-call_darkai_gpt5()    { darkai -m gpt-5 "$1"                      2>&1 || echo "[gpt5 falhou]"; }
-call_darkai_gpt5mini(){ darkai -m gpt-5-mini "$1"                 2>&1 || echo "[gpt5-mini falhou]"; }
+call_darkai_flash()  { darkai -m "$M_FLASH"  "$1" 2>&1 || echo "[flash falhou]"; }
+call_darkai_pro()    { darkai -m "$M_PRO"    "$1" 2>&1 || echo "[pro falhou]"; }
+call_darkai_gpt5()   { darkai -m "$M_GPT"    "$1" 2>&1 || echo "[gpt5 falhou]"; }
+call_darkai_router() { darkai -m "$M_ROUTER" "$1" 2>&1 || echo "[router falhou]"; }
+call_darkai_juiz()   { darkai -m "$M_JUIZ"   "$1" 2>&1 || echo "[juiz falhou]"; }
 
 # ------------------------------------------------------------
 # MODO: ROUTER — 1 IA só, resposta rápida
 # ------------------------------------------------------------
 if [ "$MODO" = "router" ]; then
   echo "🎯 ROUTER: $TEMA"
-  RESP="$(call_darkai_flash "$TEMA")"
+  RESP="$(call_darkai_router "$TEMA")"
   {
     echo "# 🎯 ROUTER — $TS"
     echo ""
     echo "**Tema:** $TEMA"
-    echo "**Modelo:** gemini-3-flash-preview (rápido)"
+    echo "**Modelo:** $M_ROUTER"
     echo ""
     echo "---"
     echo "$RESP"
@@ -81,7 +101,7 @@ $(cat $TMP/flash.txt)
 === TAREFA ===
 Sintetize o melhor. Aponte convergências, divergências e dê VEREDICTO final. PT-BR, direto."
 
-  VEREDICTO="$(call_darkai_flash "$JUIZ")"
+  VEREDICTO="$(call_darkai_juiz "$JUIZ")"
 
   {
     echo "# ⚡ PARALLEL — $TS"
@@ -159,7 +179,7 @@ $(cat $TMP/r2-gpt.txt)
 === TAREFA ===
 Analise a evolução do debate. Aponte quem mudou de opinião, quem manteve, e dê o VEREDICTO final unificado. PT-BR, direto."
 
-  VEREDICTO="$(call_darkai_flash "$JUIZ")"
+  VEREDICTO="$(call_darkai_juiz "$JUIZ")"
 
   {
     echo "# 🔥 DEBATE — $TS"
