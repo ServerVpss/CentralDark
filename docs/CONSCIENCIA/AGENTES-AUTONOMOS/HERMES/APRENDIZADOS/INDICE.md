@@ -5,6 +5,7 @@
 | 001 | Token de bot ≠ sessão de usuário | regra | 2026-07-03 | AULA-003 |
 | 002 | Arsenal Council: portas e endpoints fixos | atalho | 2026-07-03 | AULA-001 |
 | 003 | Open WebUI: custom.css via volume mount | atalho | 2026-07-03 | AULA-002 |
+| 004 | Fallback de conselheiro quando Elite Anthropic offline | regra | 2026-07-03 | DEBATE-001 |
 
 ## Como adicionar novo aprendizado
 
