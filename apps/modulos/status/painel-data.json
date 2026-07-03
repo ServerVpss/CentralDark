@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T03:02:18.163Z",
-  "updatedAtBR": "02/07/2026, 22:10:23 BRT",
+  "updatedAt": "2026-07-03T03:05:29.720Z",
+  "updatedAtBR": "03/07/2026, 00:05:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Corrigiu repetições no Notion Sync",
+    "lastCommit": "🔫 Fase 5 pós-merge (conselho vivo + stash restore)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -584,6 +584,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T03:05:29.720Z",
+      "titulo": "Push na main · 454fa821ff144ab0b01de12bbec280f596a20992",
+      "detalhe": "🔫 Fase 5 pós-merge (conselho vivo + stash restore)",
+      "area": "Repositório",
+      "sha": "454fa82",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-03T01:10:23.326Z",
       "titulo": "Push na main · f3e06a39bb97b011196c733497210cc4c96813ff",
@@ -1323,6 +1331,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T03:05:29.720Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 454fa821ff144ab0b01de12bbec280f596a20992 (454fa82)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T01:10:23.326Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · f3e06a39bb97b011196c733497210cc4c96813ff (f3e06a3)",
@@ -1662,13 +1677,6 @@
       "time": "2026-06-29T18:53:56.981Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e8adedfb7554747b5e8d6e8e3967538c1be0d7e4 (e8adedf)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T15:14:13.396Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d5ecb88410d0085fb1c7a8845481717d47628b14 (d5ecb88)",
       "area": "Repositório",
       "status": "sucesso"
     }
