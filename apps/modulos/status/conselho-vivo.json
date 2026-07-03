@@ -1,0 +1,37 @@
+{
+  "atualizadoEm": "2026-07-03T03:02:10.950Z",
+  "slots": {},
+  "timeouts": {
+    "router_s": 30,
+    "parallel_s": 90,
+    "debate_s": 180
+  },
+  "stats": {
+    "totalDebates": 3,
+    "totalEvolucoes": 1
+  },
+  "ultimosDebates": [
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md",
+      "quando": "2026-07-03T02:38:02.359Z",
+      "preview": "# 🔥 DEBATE — 2026-07-02-233739 · **Tema:** Como resolver a pendência CentralDark: 🟡 #14 — Núcleo Vivo de Ensinamentos (pós-Hub) · Contexto: CentralDark é a infra do @segredounlocker. Stack React+Vite+Supabase(Lovable Cloud) + VPS PM2 + bo"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-232402-router-diga-s-ok.md",
+      "quando": "2026-07-03T02:24:04.158Z",
+      "preview": "# 🎯 ROUTER — 2026-07-02-232402 · **Tema:** diga só OK · **Modelo:** gemini-3-flash-preview (rápido)"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md",
+      "quando": "2026-07-03T02:04:35.192Z",
+      "preview": "# 🧠 CONSELHO DE IAs — 2026-07-02-2304 · **Tema:** Em 1 frase: qual sua função? · ---"
+    }
+  ],
+  "ultimasEvolucoes": [
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md",
+      "quando": "2026-07-03T02:38:02.411Z",
+      "preview": "# 🤖 HERMES — proposta autônoma · **Data:** 2026-07-02 23:38 · **Pendência:** 🟡 #14 — Núcleo Vivo de Ensinamentos (pós-Hub)"
+    }
+  ]
+}

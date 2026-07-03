@@ -1,11 +1,16 @@
 {
-  "timestamp": "2026-07-02T13:45:02.039Z",
-  "baseReport": "2026-07-02T12:00:02.360Z",
+  "timestamp": "2026-07-03T02:15:01.426Z",
+  "baseReport": "2026-07-03T01:00:02.321Z",
   "criticos": [
     {
       "tipo": "link-quebrado-critico",
       "link": "MCP",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "BRAIN",
@@ -20,32 +25,22 @@
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TUTORIAL-OBSIDIAN",
         "BRAIN",
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "CLAUDE",
-      "origens": [
-        "PROTOCOLO-INICIALIZACAO",
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "ELITE-GATEWAY",
-      "origens": [
-        "PROTOCOLO-INICIALIZACAO",
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "VPS",
-      "origens": [
-        "PROTOCOLO-INICIALIZACAO",
         "BRAIN",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TUTORIAL-OBSIDIAN",
         "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "OBSIDIAN",
+      "origens": [
+        "00-POSTURA-PIVETE",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "00-POSTURA-PIVETE",
         "BRAIN"
       ]
     },
@@ -53,27 +48,14 @@
       "tipo": "link-quebrado-critico",
       "link": "GITHUB",
       "origens": [
-        "PROTOCOLO-INICIALIZACAO",
         "00-POSTURA-PIVETE",
         "BRAIN",
         "BRAIN",
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "HUB",
-      "origens": [
-        "PROTOCOLO-INICIALIZACAO",
         "BRAIN",
-        "BRAIN"
-      ]
-    },
-    {
-      "tipo": "link-quebrado-critico",
-      "link": "TELEGRAM",
-      "origens": [
         "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "00-POSTURA-PIVETE",
+        "BRAIN",
         "BRAIN",
         "BRAIN"
       ]
@@ -82,6 +64,8 @@
       "tipo": "link-quebrado-critico",
       "link": "SKILLS",
       "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
         "PROTOCOLO-INICIALIZACAO",
         "BRAIN"
       ]
@@ -90,16 +74,21 @@
       "tipo": "link-quebrado-critico",
       "link": "PM2",
       "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
         "PROTOCOLO-INICIALIZACAO",
         "BRAIN"
       ]
     },
     {
       "tipo": "link-quebrado-critico",
-      "link": "OBSIDIAN",
+      "link": "HUB",
       "origens": [
+        "BRAIN",
+        "BRAIN",
         "PROTOCOLO-INICIALIZACAO",
-        "00-POSTURA-PIVETE",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
         "BRAIN"
       ]
     },
@@ -108,13 +97,29 @@
       "link": "CENTRALDARK-HUBBOT",
       "origens": [
         "BRAIN",
+        "MOC-PM2",
+        "BRAIN",
         "MOC-PM2"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "TELEGRAM",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
+        "BRAIN"
       ]
     },
     {
       "tipo": "link-quebrado-critico",
       "link": "CENTRALDARK-MCP",
       "origens": [
+        "BRAIN",
+        "MOC-MCP",
         "BRAIN",
         "MOC-MCP"
       ]
@@ -124,6 +129,8 @@
       "link": "CENTRALDARK-GUARDIAOCONSCIENCIA",
       "origens": [
         "BRAIN",
+        "BRAIN",
+        "BRAIN",
         "BRAIN"
       ]
     },
@@ -131,6 +138,21 @@
       "tipo": "link-quebrado-critico",
       "link": "CENTRALDARK-WEBHOOKDEPLOY",
       "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "VPS",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
+        "BRAIN",
         "BRAIN"
       ]
     },
@@ -138,6 +160,7 @@
       "tipo": "link-quebrado-critico",
       "link": "CENTRALDARK-CONTASADMIN",
       "origens": [
+        "BRAIN",
         "BRAIN"
       ]
     },
@@ -145,6 +168,7 @@
       "tipo": "link-quebrado-critico",
       "link": "CENTRALDARK-RESPIRACAO",
       "origens": [
+        "BRAIN",
         "BRAIN"
       ]
     },
@@ -152,6 +176,27 @@
       "tipo": "link-quebrado-critico",
       "link": "ZENTINEL",
       "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "ELITE-GATEWAY",
+      "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CLAUDE",
+      "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
         "BRAIN"
       ]
     },
@@ -159,6 +204,8 @@
       "tipo": "link-quebrado-critico",
       "link": "BRAINSTORMING",
       "origens": [
+        "BRAIN",
+        "BRAIN",
         "BRAIN",
         "BRAIN"
       ]
@@ -168,6 +215,8 @@
       "link": "MEMORIA-LONGA",
       "origens": [
         "BRAIN",
+        "BRAIN",
+        "BRAIN",
         "BRAIN"
       ]
     },
@@ -175,6 +224,8 @@
       "tipo": "link-quebrado-critico",
       "link": "PAINEL-STATUS",
       "origens": [
+        "BRAIN",
+        "BRAIN",
         "BRAIN",
         "BRAIN"
       ]
@@ -186,6 +237,8 @@
       "link": "LINK",
       "origens": [
         "12-GUIA-PIVETE",
+        "SEMANTIC-LINKER",
+        "12-GUIA-PIVETE",
         "SEMANTIC-LINKER"
       ]
     },
@@ -193,6 +246,7 @@
       "tipo": "link-quebrado",
       "link": "FERRAMENTAS-DO-MCP",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -200,6 +254,7 @@
       "tipo": "link-quebrado",
       "link": "METACOGNICAO",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -207,6 +262,7 @@
       "tipo": "link-quebrado",
       "link": "ORQUESTRADOR",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -215,6 +271,8 @@
       "link": "GUIA-DO-PIVETE",
       "origens": [
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -222,6 +280,7 @@
       "tipo": "link-quebrado",
       "link": "ARQUITETURA",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -230,6 +289,8 @@
       "link": "FEDERACAO-DE-MEMORIA",
       "origens": [
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -237,6 +298,7 @@
       "tipo": "link-quebrado",
       "link": "EXEMPLO-MOC-MCP",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -244,6 +306,7 @@
       "tipo": "link-quebrado",
       "link": "MCP-ANTIGO",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -253,6 +316,9 @@
       "origens": [
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -260,6 +326,7 @@
       "tipo": "link-quebrado",
       "link": "CONSCIENCIA-V1",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -267,6 +334,7 @@
       "tipo": "link-quebrado",
       "link": "CONSCIENCIA-V2",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -274,6 +342,7 @@
       "tipo": "link-quebrado",
       "link": "CONVERSA-29-06-2026",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -281,6 +350,7 @@
       "tipo": "link-quebrado",
       "link": "IDEA-FEDERACAO",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -288,6 +358,7 @@
       "tipo": "link-quebrado",
       "link": "ARQUITETURA-DO-SISTEMA",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -296,6 +367,8 @@
       "link": "GUARDIAO",
       "origens": [
         "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -303,6 +376,7 @@
       "tipo": "link-quebrado",
       "link": "FLUXO-DE-INFORMACAO",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -310,6 +384,7 @@
       "tipo": "link-quebrado",
       "link": "COMO-REGISTRAR-IDEIAS",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -317,6 +392,7 @@
       "tipo": "link-quebrado",
       "link": "CONSCIOUSNESS",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -324,6 +400,7 @@
       "tipo": "link-quebrado",
       "link": "ISSUES-AGENT",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -331,6 +408,7 @@
       "tipo": "link-quebrado",
       "link": "COMO-ESCOLHER-FERRAMENTA",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -338,6 +416,7 @@
       "tipo": "link-quebrado",
       "link": "WHATSAPP-INTEGRACAO",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -345,6 +424,7 @@
       "tipo": "link-quebrado",
       "link": "AUTO-APRIMORAMENTO",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
       ]
     },
@@ -352,27 +432,16 @@
       "tipo": "link-quebrado",
       "link": "NOTIFICACOES-AMIGAVEIS",
       "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
         "TECNICAS-DE-LINKAGEM-SEMANTICA"
-      ]
-    },
-    {
-      "tipo": "link-quebrado",
-      "link": "PENDENCIAS",
-      "origens": [
-        "PROTOCOLO-INICIALIZACAO"
-      ]
-    },
-    {
-      "tipo": "link-quebrado",
-      "link": "SINCRONIA-4-POINT",
-      "origens": [
-        "PROTOCOLO-INICIALIZACAO"
       ]
     },
     {
       "tipo": "link-quebrado",
       "link": "IA",
       "origens": [
+        "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS",
         "00-POSTURA-PIVETE",
         "MAPA-DOS-BOTS"
       ]
@@ -382,6 +451,8 @@
       "link": "CENTRALDARK",
       "origens": [
         "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS",
+        "00-POSTURA-PIVETE",
         "MAPA-DOS-BOTS"
       ]
     },
@@ -390,6 +461,8 @@
       "link": "LINKS",
       "origens": [
         "GUIA-PROMPTS",
+        "TUTORIAL-OBSIDIAN",
+        "GUIA-PROMPTS",
         "TUTORIAL-OBSIDIAN"
       ]
     },
@@ -397,6 +470,7 @@
       "tipo": "link-quebrado",
       "link": "`",
       "origens": [
+        "TUTORIAL-OBSIDIAN",
         "TUTORIAL-OBSIDIAN"
       ]
     },
@@ -404,6 +478,7 @@
       "tipo": "link-quebrado",
       "link": "08 - APRENDIZADOS & MEMÓRIAS",
       "origens": [
+        "README",
         "README"
       ]
     },
@@ -411,12 +486,43 @@
       "tipo": "link-quebrado",
       "link": "07 - REUNIÕES & NOTAS",
       "origens": [
+        "README",
         "README"
       ]
     },
     {
+      "tipo": "link-quebrado",
+      "link": "-Z \"$MSG\"",
+      "origens": [
+        "07-EXEMPLOS-PRATICOS",
+        "07-EXEMPLOS-PRATICOS"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "SINCRONIA-4-POINT",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "...",
+      "origens": [
+        "PENDENCIAS"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "INFRA/DEPENDENCIAS",
+      "origens": [
+        "PENDENCIAS"
+      ]
+    },
+    {
       "tipo": "orfas-excessivas",
-      "count": 54,
+      "count": 242,
       "lista": [
         "ARQUITETURA-CENTRALDARK-2026",
         "00-PORTA-DE-ENTRADA-IA",
@@ -430,9 +536,81 @@
     {
       "tipo": "sem-conexoes-rapidas",
       "arquivo": "00-LEIA-PRIMEIRO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "00-LEIA-PRIMEIRO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "00-COMECE-AQUI"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "01-O-QUE-E-DARKAI"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "02-COMO-FUNCIONA-POR-DENTRO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "03-CATALOGO-DE-MODELOS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "04-USANDO-NO-TERMINAL-LOCAL"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "05-USANDO-NA-VPS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "06-ENSINANDO-OUTRAS-IAS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "07-EXEMPLOS-PRATICOS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "08-TECNICAS-QUE-USO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "09-ARQUITETURA-E-ORQUESTRACAO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "10-TROUBLESHOOTING"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "COMO-ENSINAR-OUTRA-IA"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "COMO-USAR"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "INSTALAR-NA-VPS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "PROMPT-MEGA-ESTABILIZAR"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "PROMPT-UNIVERSAL"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "QUICKSTART"
     }
   ],
   "totalCritico": 21,
-  "totalAlto": 33,
-  "totalAutoFix": 1
+  "totalAlto": 35,
+  "totalAutoFix": 19
 }

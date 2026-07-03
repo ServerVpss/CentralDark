@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🔫 Conselho Vivo — Arsenal Council · CentralDark</title>
+<meta name="description" content="Painel ao vivo do Arsenal Council: últimos debates entre IAs, evoluções do Hermes e slots de modelos ativos." />
+<link rel="stylesheet" href="./styles.css" />
+<style>
+  :root { --bg:#0b0f14; --card:#131a22; --border:#1f2a36; --fg:#e6edf3; --muted:#8b98a5; --primary:#7ee787; --accent:#58a6ff; --danger:#ff7b72; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,sans-serif; background:var(--bg); color:var(--fg); }
+  .wrap { max-width:1100px; margin:0 auto; padding:24px 20px 64px; }
+  h1 { font-size:28px; margin:0 0 4px; }
+  .sub { color:var(--muted); margin-bottom:24px; font-size:14px; }
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-bottom:24px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .card h2 { margin:0 0 12px; font-size:15px; color:var(--accent); text-transform:uppercase; letter-spacing:.5px; }
+  .kv { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--border); font-size:13px; }
+  .kv:last-child { border-bottom:none; }
+  .kv b { color:var(--primary); font-weight:500; font-family:ui-monospace,monospace; }
+  .list-item { padding:12px 0; border-bottom:1px solid var(--border); }
+  .list-item:last-child { border-bottom:none; }
+  .list-item .when { color:var(--muted); font-size:11px; margin-bottom:4px; }
+  .list-item .file { color:var(--accent); font-family:ui-monospace,monospace; font-size:12px; word-break:break-all; }
+  .list-item .prev { color:var(--fg); font-size:13px; margin-top:6px; opacity:.85; line-height:1.5; }
+  .refresh { color:var(--muted); font-size:12px; margin-top:8px; }
+  a.back { color:var(--accent); font-size:13px; text-decoration:none; }
+  a.back:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="./">← voltar pro painel</a>
+  <h1 style="margin-top:12px">🔫 Conselho Vivo</h1>
+  <p class="sub">Arsenal Council em tempo real — debates, evoluções do Hermes e slots de modelos.</p>
+  <div class="grid">
+    <div class="card"><h2>⚙️ Slots de Modelos</h2><div id="slots">carregando…</div></div>
+    <div class="card"><h2>⏱️ Timeouts</h2><div id="timeouts">carregando…</div></div>
+    <div class="card"><h2>📊 Stats</h2><div id="stats">carregando…</div><div class="refresh" id="updated"></div></div>
+  </div>
+  <div class="card"><h2>🥊 Últimos Debates</h2><div id="debates">carregando…</div></div>
+  <div class="card" style="margin-top:16px"><h2>🧬 Últimas Evoluções (Hermes)</h2><div id="evolucoes">carregando…</div></div>
+</main>
+<script src="./conselho-vivo.js" defer></script>
+</body>
+</html>
