@@ -73,3 +73,11 @@ No privado do @srver1bot:
 ## ⏭️ Próxima fase
 
 **Fase 6 — Hermes Autônomo**: cron roda todo dia às 6h da manhã, lê `PENDENCIAS.md`, discute sozinho, salva propostas e abre PR no GitHub quando o consenso for alto.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

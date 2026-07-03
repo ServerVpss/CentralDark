@@ -35,3 +35,11 @@ A melhor forma de organizar arquivos de um projeto é utilizando uma estrutura d
 ## 🧑‍⚖️ Veredito (gemini-3.1-pro-preview)
 
 Agrupe os arquivos por sua função ou domínio em pastas com nomes claros, consistentes e descritivos, criando uma estrutura lógica e intuitiva para qualquer colaborador.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

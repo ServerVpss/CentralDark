@@ -18,3 +18,11 @@ Teste ao vivo do WebUI: diga oi curto no grupo, 1 frase.
 🎯 **Router (gemini-3-flash-preview)**
 
 Oi, pessoal! 😉
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

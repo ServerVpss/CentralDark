@@ -1,3 +1,10 @@
+---
+title: "Fase 7 Webui Integration"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # Fase 7 — Arsenal no ChatWebUI (ui.centralldark.com)
 
 **Data:** 03/07/2026

@@ -18,3 +18,11 @@ Responda em uma linha: ARSENAL FUNCIONANDO VIA LOVABLE
 🎯 **Router (gemini-3-flash-preview)**
 
 Arsenal funcionando via LOVABLE significa que a equipe está operando de forma eficaz e com um espírito positivo, demonstrando que o trabalho em equipe e a paixão pelos objetivos são ingredientes para o sucesso.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

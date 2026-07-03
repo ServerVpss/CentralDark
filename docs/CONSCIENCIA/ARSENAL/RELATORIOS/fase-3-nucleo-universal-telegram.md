@@ -57,3 +57,11 @@ No privado do @srver1bot:
 ## ⏭️ Próxima fase
 
 **Fase 4 — Regras Configuráveis** (permitir trocar modelo sem editar código).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

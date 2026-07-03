@@ -2160,3 +2160,8 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Como o comando `darkai` pode ajudar a gente a orquestrar tarefas hoje? Quem deveria chamar quem?
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
+
+### 💬 Gemini Flash — grupo evolução (2026-07-03)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com" — como a gente resolveria e
+- **Lição:** Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos

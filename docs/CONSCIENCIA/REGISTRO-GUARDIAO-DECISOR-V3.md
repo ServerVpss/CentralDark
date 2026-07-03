@@ -1,3 +1,10 @@
+---
+title: "REGISTRO GUARDIAO DECISOR V3"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # Registro Guardiao Decisor v3
 
 Data: 2026-06-26

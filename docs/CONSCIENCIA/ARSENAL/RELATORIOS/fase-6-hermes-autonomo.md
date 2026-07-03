@@ -73,3 +73,11 @@ tail -50 /root/CentralDark/docs/CONSCIENCIA/ARSENAL/hermes.log
 ## ⏭️ Próxima fase
 
 **Fase 5 — Painel Visual**: card "Conselho Vivo" em `status.centralldark.com` mostrando debates recentes, últimas propostas do Hermes, botões pra disparar modo/tema pela web.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

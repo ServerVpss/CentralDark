@@ -51,3 +51,11 @@ Depois abre https://status.centralldark.com/conselho.html no navegador.
 Nenhuma linha alterada em `index.html`, `app.js`, `atualizar-painel-vivo.mjs` ou `painel-data.json`. Só adição de arquivos novos com prefixo `conselho-*`.
 
 Volta pro [índice do Arsenal](../README.md).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
