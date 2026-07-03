@@ -1,83 +1,96 @@
-## Diagnóstico honesto do que aconteceu hoje
+# 🤖 Hermes Vivo — Daemon Autônomo 24/7
 
-Auditei tudo desde 11h UTC (8h BRT). O quadro real, **ignorando o barulho do Vigia** (aqueles 519 cancelados eram o próprio spam que consertamos — não é trabalho perdido):
+## O que vai mudar
+
+Hoje o Hermes é um cron de 1x/dia que só debate. Vou transformar ele em um **processo vivo no PM2** que fica ligado, aceita missão, e executa sozinho de ponta a ponta usando todo o arsenal (darkai, MCP, VPS, gateways).
+
+## Como vai funcionar (visão do dia a dia)
 
 ```
-Workflow                          Estado real hoje
-─────────────────────────────────────────────────────────
-painel auto-update                3 FAILURES + ~40 cancelados   ← raiz
-Farm — trailer Co-authored-by     ~40 cancelados encadeados
-CodeQL — análise de segurança     ~40 skipped encadeados
-Notion Sync                       1 cancelado
-linear-pendencias-sync            3 cancelados
-sentinela-divergencias            1 cancelado
-VPS HealthCheck                   1 cancelado
-Vigia Actions Vermelhos           519 cancelados (esperado, spam)
+Você:    escreve a missão (arquivo ou comando)
+Hermes:  🟢 recebi — planejando
+Hermes:  ✅ Etapa 1/? concluída → [Telegram]
+Hermes:  ✅ Etapa 2/? concluída → [Telegram]
+Hermes:  ✅ Etapa N — missão concluída 🎉 → [Telegram]
 ```
 
-## Causa raiz (achei nos logs)
+Você acompanha tudo pelo `@srver1bot`. Cada etapa vira um post curto. Quando termina, um post consolidado com o resultado final.
 
-O `painel auto-update` tá quebrado por **duas coisas independentes**:
+## Como entregar missão pra ele
 
-1. **Caminho fantasma no YAML**: o workflow ainda aponta pra `apps/projeto-dashboard/atualizar-painel-vivo.mjs` e `apps/projeto-dashboard/painel-data.json` — mas isso foi consolidado dia 02/07 pra `apps/modulos/status/` (área protegida da seção 9 do CLAUDE.md). O script simplesmente não existe mais no caminho antigo → `Cannot find module`.
-2. **Submodule fantasma**: git enxerga `apps/modulos/Bolt/source` como submodule, mas `.gitmodules` tá vazio → `fatal: no submodule mapping found`. Quebra o `actions/checkout@v4`.
+Duas formas (a gente escolhe em runtime):
 
-Cada push na main dispara esse workflow, ele falha, e o `concurrency` da cadeia (Farm, CodeQL, painel) cancela em cascata. **Foi isso que gerou a impressão de "tudo em vão"** — mas o código dos nossos commits (`4e71bf41`, `5c3d0935`, `8009898e` do Vigia) está intacto no `main`.
+1. **Arquivo**: você (ou eu) cria `missoes/pendente/minha-missao.md` — Hermes detecta em 5s e começa.
+2. **Comando Telegram** (fase 2, se quiser depois): `/missao <texto>` no @srver1bot.
 
-## Plano de correção
+Começando pela **fase 1 (arquivo)** — mais simples e serve pra missão longa detalhada.
 
-### 1. Corrigir a raiz (2 arquivos)
+## Anatomia do daemon
 
-**`.github/workflows/painel-auto-update.yml`**
-- Trocar `apps/projeto-dashboard/atualizar-painel-vivo.mjs` → `apps/modulos/status/atualizar-painel-vivo.mjs`
-- Trocar `apps/projeto-dashboard/painel-data.json` → `apps/modulos/status/painel-data.json` (no `paths-ignore` e no `git add`)
-- Manter `runs-on: [self-hosted, Linux]` (runner tá online)
-- Adicionar `submodules: false` no `actions/checkout` pra não tropeçar no fantasma
+- **Processo PM2**  `O PROCESSO TEM QUE SER PADRAO IGUAL JA TEMOS CENTRALDARK NA FRENTE O O NOME DO LADO ENTAO SERIA ALGO COMO CENTRALCARK-HERMES AXO QUE T ASSIM VERIFICA`  (id novo, `autorestart: true`).
+- **Loop principal**: acorda a cada 5s, olha `missoes/pendente/`, se achar `.md` novo → executa.
+- **Cérebro decisor**: cada iteração chama `darkai --model gpt-5` (ou claude-sonnet-4) com:
+  - a missão original
+  - histórico das etapas já feitas
+  - lista das ferramentas disponíveis (darkai, execute_command, gemini_analisar, elite_gateway_chat, MCP tools)
+  - retorna JSON: `{ etapa, comando_ou_ferramenta, args, terminou: bool }`
+- **Executor**: roda o comando/ferramenta, captura saída, guarda no histórico.
+- **Notify Telegram**: após CADA etapa concluída → post curto no privado admin (1901426549) + linha no canal Status (-1003669176367).
+- **Fim**: quando o LLM decide `terminou: true` OU 3 falhas seguidas → move missão pra `missoes/concluidas/` com relatório final.
 
-**Submodule fantasma `apps/modulos/Bolt/source`**
-- Investigar com `git ls-files --stage apps/modulos/Bolt/source` (se aparecer como modo `160000` é gitlink órfão)
-- Remover o gitlink órfão: `git rm --cached apps/modulos/Bolt/source` e commit
-- Isso libera o `checkout` de qualquer workflow que use submodules por padrão
+## Estrutura de pastas
 
-### 2. Auditoria + fila de reprocessamento
+```
+docs/CONSCIENCIA/ARSENAL/hermes-vivo/
+├── daemon.mjs               ← processo PM2 (loop 5s)
+├── executor.mjs             ← executa etapas + captura saída
+├── decisor.mjs              ← chama darkai/claude pra decidir próxima etapa
+├── notify.mjs               ← posta Telegram (corrige o bug do token oculto)
+├── ferramentas.json         ← catálogo do que o Hermes pode usar
+└── README.md
 
-Depois do fix, reenfileirar os que falharam/cancelaram hoje sem terem tido uma execução `success` posterior:
-
-- 3 runs de `painel auto-update` em `failure` (#345, #346, #347) → re-run
-- Últimos cancelados de cada workflow importante que não teve sucesso hoje:
-  - `Notion Sync` #82
-  - `linear-pendencias-sync` #110
-  - `sentinela-divergencias` #33
-  - `VPS HealthCheck` #36
-- `Farm` e `CodeQL` **não precisam re-run manual** — vão disparar sozinhos no próximo push (que é o próprio commit do fix).
-
-Não vou re-rodar os 519 Vigia cancelados — eles eram lixo por design; a v2 já roda enxuta.
-
-### 3. Garantir deploy na VPS
-
-Depois que os workflows verdes voltarem, disparar `vps-ssh-exec.yml` (workflow_dispatch) com o comando:
-
-```bash
-cd /root/CentralDark && git fetch --all && git reset --hard origin/main && pm2 reload all --update-env && pm2 save
+missoes/
+├── pendente/                ← você joga .md aqui
+├── em-andamento/            ← Hermes move pra cá quando pega
+└── concluidas/YYYY-MM-DD/   ← final + relatório
 ```
 
-Isso garante que **todos os commits de hoje** (Vigia v2, fix do painel, submodule) cheguem na VPS de uma vez, com PM2 recarregado e dump salvo (regra do CLAUDE.md).
+## Segurança (bordas duras — não negociáveis)
 
-### 4. Monitor até estabilizar
+Mesmo autônomo total, o executor tem trava:
 
-Loop de leitura a cada 30s por até 10 min:
-- Contar runs `in_progress` + `queued` + `pending` (deve chegar a 0)
-- Confirmar que os 4 workflows re-executados fecharam em `success`
-- Se algum falhar de novo, ler o log e reportar antes de fechar
+- ❌ Bloqueia: `reboot`, `shutdown`, `rm -rf /`, mexer em `/root/` fora de `/root/CentralDark/`, tocar em `whatsapp-server` (PM2 id 1), `git push --force`.
+- ✅ Libera: darkai, execute_command dentro de `/root/CentralDark/`, PM2 restart (menos whatsapp), git commit+push normal, MCP tools, gateways.
+- ⏱️ Timeout por etapa: 5min (matar comando travado sem matar o daemon).
+- 🔁 Se uma etapa falha 3x → pausa a missão, avisa Telegram "🔴 travei, preciso de você", espera nova ordem.
 
-### 5. Notificação final
+## Fluxo de notificação Telegram (corrigindo o bug de ontem)
 
-Card no `@srver1bot` privado do admin + linha no canal Status, conforme regra do memory (`notificacao-pos-acao-telegram`).
+Motivo do notify ter quebrado: `hermes-notify.mjs` tenta ler token que sumiu de uma variável de ambiente. Vou refazer usando o mesmo padrão que já funciona no MCP dispatcher (lê direto de `/root/CentralDark/secrets/`). Notificação garantida em cada etapa.
 
-## Detalhes técnicos
+## Ordem de entrega (o que faço na hora que você aprovar)
 
-- **Nenhuma área protegida é modificada** (seção 9 do CLAUDE.md). O YAML do workflow não está na lista de protegidas; `apps/modulos/status/` **não é tocado** — só passamos a apontar corretamente pra ele.
-- **Sem risco de perder trabalho**: os 3 commits de hoje já estão no `main` (verificado via API). O plano só corrige o pipeline e reprocessa o que tinha ficado grey.
-- **Sem `git rm` de arquivos reais**: o `git rm --cached apps/modulos/Bolt/source` remove só a referência de gitlink órfã, não o conteúdo do módulo Bolt (área protegida — o conteúdo do diretório fica intacto).
+1. Criar as 4 pastas + os 5 arquivos `.mjs`
+2. Escrever o `ecosystem.hermes.cjs` do PM2
+3. `pm2 start ecosystem.hermes.cjs && pm2 save`
+4. Fazer 1 missão de teste bobinha ("me diga que dia é hoje e poste no Telegram") pra validar o loop inteiro
+5. Notificar Telegram: "🤖 Hermes Vivo online, aguardando primeira missão real"
+6. Você me passa a missão real (a que você mencionou que ia me falar) — eu escrevo o `.md` e ele já começa
 
-Se aprovar, executo tudo em sequência (fix → reenfileirar → dispatch VPS → monitor → notifica no Telegram) e volto com o placar final.
+## Detalhe técnico (pode pular se não quiser)
+
+- Daemon em Node ESM (`.mjs`) porque `darkai` já é bash e a stack VPS tá em Node.
+- Decisor usa prompt com system message forte: "Você é o Hermes. Executor de missões. Devolva SEMPRE JSON válido no schema X. Sem prosa."
+- Fallback de modelo: gpt-5 → claude-sonnet-4 → gemini-3-flash-preview (se um falhar).
+- Histórico da missão persistido em `missoes/em-andamento/<slug>/state.json` — se o daemon reiniciar, retoma do zero da etapa que travou.
+- Log completo por missão em `missoes/em-andamento/<slug>/hermes.log`.
+
+## O que NÃO faço nessa entrega
+
+- ❌ Comando `/missao` no Telegram (fica pra fase 2 se você gostar do modo arquivo)
+- ❌ Web UI pra visualizar missões (o painel de status já pode ganhar uma aba depois)
+- ❌ Múltiplas missões em paralelo (por enquanto 1 por vez — mais previsível)
+
+---
+
+**Aprovando isso, eu monto tudo, ligo no PM2, testo com missão fake, te aviso "pronto pra receber a missão real" — aí você me diz o que ele vai refinar pra você.**
