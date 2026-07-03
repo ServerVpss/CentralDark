@@ -1,23 +1,23 @@
-# Sentinela — 2026-07-03T03:31:50.194Z
+# Sentinela — 2026-07-03T09:23:04.965Z
 
 | Métrica | Valor |
 |---|---|
 | Endpoints checados | 6 |
 | Endpoints fora | 2 |
-| Workflows vermelhos 24h | 11 |
-| Divergências detectadas | 13 |
-| Issues novas | 5 |
-| Issues já abertas (dedupe) | 8 |
+| Workflows vermelhos 24h | 20 |
+| Divergências detectadas | 22 |
+| Issues novas | 9 |
+| Issues já abertas (dedupe) | 13 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 342ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 344ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 211ms · CORS=`*`
-- 🔴 **Install status** — `502` em 175ms
-- 🟢 **Painel** — `200` em 201ms · CORS=`*`
-- 🔴 **API** — `404` em 178ms
+- 🟢 **MCP health** — `200` em 322ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 241ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 129ms · CORS=`*`
+- 🔴 **Install status** — `502` em 117ms
+- 🟢 **Painel** — `200` em 130ms · CORS=`*`
+- 🔴 **API** — `404` em 127ms
 
 ## Divergências
 
@@ -26,11 +26,20 @@
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: Pipeline — Telegram + Painel (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: Pipeline — Telegram + Painel (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: Pipeline — Telegram + Painel (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: Pipeline — Telegram + Painel (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: .github/workflows/notion-sync.yml (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
