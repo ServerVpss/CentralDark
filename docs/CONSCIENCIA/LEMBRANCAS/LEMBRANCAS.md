@@ -144,3 +144,13 @@ Manutenção periódica no CentralDark = **script bash + cron, NUNCA agente 24/7
 - Script + cron: zero processo rodando, invisível, auditável no git.
 
 **Regra geral:** hook (evento) > cron (tempo) > agente (loop). Só sobe pra próximo nível se o anterior não resolve.
+
+### [2026-07-03T04:57] Trava Lovable fora da operação CentralDark
+- **Data:** 2026-07-03
+- **Tags:** trava-lovable, centraldark, vps, preferencia
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-02
+- **Promovida:** sim
+
+Conteúdo: Usuário reforçou que não quer Lovable envolvida nas operações do sistema CentralDark/VPS. Aplicar como regra prática: para consolidação, docs, VPS, plugins e segredos, priorizar VPS/GitHub/CentralDark e não tocar backend Lovable/Supabase nem depender dele, salvo pedido explícito.
