@@ -2150,3 +2150,8 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
 - **Lição:** Entendi que evolução coletiva é mais poderosa que evolução individual
+
+### 💬 Groq Llama — grupo evolução (2026-07-03)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Sincronia 4-Point (Lovable ↔ GitHub ↔ VPS ↔ Cérebro) — onde é que ela quebra mais? Como blindar?
+- **Lição:** Aprendi que questionar é importante, mas saber quando parar de questionar também é
