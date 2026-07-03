@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T01:02:10.754Z",
-  "updatedAtBR": "02/07/2026, 22:02:10 BRT",
+  "updatedAt": "2026-07-03T01:02:34.680Z",
+  "updatedAtBR": "02/07/2026, 22:02:34 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "feat(manutencao): script diario minimo — trunca logs Docker + graphify update (cron 03:00)",
+    "lastCommit": "docs(lembrancas): registrar padrao manutencao = script+cron nao agente",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -584,6 +584,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T01:02:34.680Z",
+      "titulo": "Push na main · 6c7cbcd17bcc65589698451386cf1ebedcf04d9f",
+      "detalhe": "docs(lembrancas): registrar padrao manutencao = script+cron nao agente",
+      "area": "Repositório",
+      "sha": "6c7cbcd",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-03T01:02:10.754Z",
       "titulo": "Push na main · 91dfe9e670fa666ea44e044889caef2832d6c124",
@@ -1307,6 +1315,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T01:02:34.680Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6c7cbcd17bcc65589698451386cf1ebedcf04d9f (6c7cbcd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T01:02:10.754Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 91dfe9e670fa666ea44e044889caef2832d6c124 (91dfe9e)",
@@ -1646,13 +1661,6 @@
       "time": "2026-06-29T15:12:33.120Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · be2aa9fd2d4470b9916343cacdf5721559db8c9d (be2aa9f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T15:04:05.108Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · fa4d13021a7f270583ee98ef01d11ed10dea1082 (fa4d130)",
       "area": "Repositório",
       "status": "sucesso"
     }
