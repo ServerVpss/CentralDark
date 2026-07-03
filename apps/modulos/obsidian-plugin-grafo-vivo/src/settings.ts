@@ -1,4 +1,4 @@
-// Configurações do plugin: URL do JSON, refresh e auto-update.
+// Configurações do plugin: URL do JSON, refresh, auto-update e rollback.
 
 import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 import type GrafoVivoPlugin from "./main";
@@ -36,10 +36,9 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("URL do grafo")
-      .setDesc("Endpoint que retorna o JSON {nodes, edges} do ecossistema.")
+      .setDesc("Endpoint que retorna o JSON {nodes, edges}.")
       .addText((txt) =>
         txt
-          .setPlaceholder("https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/graph-data")
           .setValue(this.plugin.settings.urlGrafo)
           .onChange(async (v) => {
             this.plugin.settings.urlGrafo = v.trim();
@@ -52,15 +51,13 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       .setDesc("Frequência com que o grafo busca novos dados. Mínimo 5s.")
       .addText((txt) =>
         txt.setValue(String(this.plugin.settings.intervaloSegundos)).onChange(async (v) => {
-          const n = Math.max(5, parseInt(v, 10) || 30);
-          this.plugin.settings.intervaloSegundos = n;
+          this.plugin.settings.intervaloSegundos = Math.max(5, parseInt(v, 10) || 30);
           await this.plugin.saveSettings();
         }),
       );
 
     new Setting(containerEl)
       .setName("Abrir nota ao clicar no nó")
-      .setDesc("Se o nó tiver campo obsidian_path, clique abre a nota correspondente.")
       .addToggle((tg) =>
         tg.setValue(this.plugin.settings.abrirNotaAoClicar).onChange(async (v) => {
           this.plugin.settings.abrirNotaAoClicar = v;
@@ -72,7 +69,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Auto-atualizar plugin")
-      .setDesc("Baixa novas versões automaticamente. Chega de zip.")
+      .setDesc("Mostra o changelog e pergunta antes de atualizar.")
       .addToggle((tg) =>
         tg.setValue(this.plugin.settings.autoUpdateAtivo).onChange(async (v) => {
           this.plugin.settings.autoUpdateAtivo = v;
@@ -84,7 +81,6 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("URL do endpoint de release")
-      .setDesc("Edge function que serve manifest.json, main.js e styles.css.")
       .addText((txt) =>
         txt.setValue(this.plugin.settings.autoUpdateBaseUrl).onChange(async (v) => {
           this.plugin.settings.autoUpdateBaseUrl = v.trim();
@@ -94,11 +90,10 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Intervalo de checagem (minutos)")
-      .setDesc("De quanto em quanto tempo checar versão nova. Mínimo 5min.")
+      .setDesc("Mínimo 5min.")
       .addText((txt) =>
         txt.setValue(String(this.plugin.settings.autoUpdateIntervaloMinutos)).onChange(async (v) => {
-          const n = Math.max(5, parseInt(v, 10) || 10);
-          this.plugin.settings.autoUpdateIntervaloMinutos = n;
+          this.plugin.settings.autoUpdateIntervaloMinutos = Math.max(5, parseInt(v, 10) || 10);
           await this.plugin.saveSettings();
         }),
       );
@@ -107,13 +102,34 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       .setName("Checar atualização agora")
       .setDesc(`Versão instalada: ${this.plugin.manifest.version}`)
       .addButton((btn) =>
-        btn
-          .setButtonText("Checar agora")
-          .setCta()
-          .onClick(async () => {
-            new Notice("🔎 Checando atualização...");
-            await this.plugin.autoUpdater.checarEAtualizar(false);
-          }),
+        btn.setButtonText("Checar agora").setCta().onClick(async () => {
+          new Notice("🔎 Checando atualização...");
+          await this.plugin.autoUpdater.checarComPrompt();
+        }),
       );
+
+    containerEl.createEl("h3", { text: "↩️ Rollback" });
+
+    const areaRollback = containerEl.createDiv();
+    this.renderizarRollback(areaRollback);
+  }
+
+  private async renderizarRollback(container: HTMLElement) {
+    container.empty();
+    const backup = await this.plugin.autoUpdater.temBackup();
+    const desc = backup
+      ? `Backup disponível: v${backup.versao}`
+      : "Nenhum backup ainda — o primeiro será criado na próxima atualização.";
+
+    new Setting(container)
+      .setName("Voltar pra versão anterior")
+      .setDesc(desc)
+      .addButton((btn) => {
+        btn.setButtonText("Fazer rollback").setWarning();
+        if (!backup) btn.setDisabled(true);
+        btn.onClick(async () => {
+          await this.plugin.autoUpdater.fazerRollback();
+        });
+      });
   }
 }

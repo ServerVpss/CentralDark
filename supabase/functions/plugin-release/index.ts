@@ -1,8 +1,15 @@
 // Edge function: serve os arquivos do plugin Obsidian a partir do repo privado
-// no GitHub. Uso: GET /plugin-release?arquivo=manifest.json (ou main.js, styles.css)
-// Sem autenticação — endpoint público, só serve arquivos da pasta do plugin.
+// no GitHub. Uso: GET /plugin-release?arquivo=manifest.json (ou main.js,
+// styles.css, checksums.json, changelog.json). Sem autenticação — endpoint
+// público, só serve arquivos da allowlist na pasta do plugin.
 
-const ARQUIVOS_PERMITIDOS = new Set(["manifest.json", "main.js", "styles.css"]);
+const ARQUIVOS_PERMITIDOS = new Set([
+  "manifest.json",
+  "main.js",
+  "styles.css",
+  "checksums.json",
+  "changelog.json",
+]);
 const REPO_OWNER = "ServerVpss";
 const REPO_NAME = "CentralDark";
 const BRANCH = "main";
@@ -13,6 +20,12 @@ const CORS = {
   "Access-Control-Allow-Methods": "GET, OPTIONS",
   "Access-Control-Allow-Headers": "*",
 };
+
+function contentTypeDe(arquivo: string): string {
+  if (arquivo.endsWith(".json")) return "application/json; charset=utf-8";
+  if (arquivo.endsWith(".css")) return "text/css; charset=utf-8";
+  return "application/javascript; charset=utf-8";
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
@@ -55,16 +68,10 @@ Deno.serve(async (req) => {
     }
 
     const conteudo = await r.text();
-    const contentType = arquivo.endsWith(".json")
-      ? "application/json; charset=utf-8"
-      : arquivo.endsWith(".css")
-        ? "text/css; charset=utf-8"
-        : "application/javascript; charset=utf-8";
-
     return new Response(conteudo, {
       headers: {
         ...CORS,
-        "Content-Type": contentType,
+        "Content-Type": contentTypeDe(arquivo),
         "Cache-Control": "no-store",
       },
     });
