@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T21:08:13.165Z",
-  "updatedAtBR": "03/07/2026, 18:08:13 BRT",
+  "updatedAt": "2026-07-03T21:19:26.271Z",
+  "updatedAtBR": "03/07/2026, 18:19:26 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "lembranca: Notificação Telegram SEMPRE monospace",
+    "lastCommit": "aprendizado(#270): Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T21:19:26.271Z",
+      "titulo": "Push na main · 5296657bac04aba148a5aa640d8ededc9596dacc",
+      "detalhe": "aprendizado(#270): Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub",
+      "area": "Repositório",
+      "sha": "5296657",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-03T21:08:13.165Z",
       "titulo": "Push na main · 5942a62d0def0e11eabcd240c6abccf94a15f65e",
       "detalhe": "lembranca: Notificação Telegram SEMPRE monospace",
@@ -977,14 +985,6 @@
       "area": "Repositório",
       "sha": "567c74e",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-02T16:44:00.713Z",
-      "titulo": "Fix Caddy: status.centralldark.com volta a responder 200",
-      "detalhe": "Root do painel atualizado de apps/projeto-dashboard para apps/modulos/status; Caddy recarregado",
-      "area": "Infra/VPS",
-      "sha": "d2a7377",
-      "actor": "Lovable-IA"
     }
   ],
   "agents": [
@@ -1399,6 +1399,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T21:19:26.271Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5296657bac04aba148a5aa640d8ededc9596dacc (5296657)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T21:08:13.165Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5942a62d0def0e11eabcd240c6abccf94a15f65e (5942a62)",
@@ -1739,13 +1746,6 @@
       "ia": "@Lovable-IA",
       "action": "📌 Merge GitHub + Renomeação PM2 aplicada (3b985a1)",
       "area": "Infra/VPS",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T14:43:49.875Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ff0bae7586f0bbb6c0d3912e6147da5ab8f9e803 (ff0bae7)",
-      "area": "Repositório",
       "status": "sucesso"
     }
   ],
