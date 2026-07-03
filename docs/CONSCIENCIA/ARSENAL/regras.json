@@ -1,0 +1,25 @@
+{
+  "_comentario": "Regras configuráveis do Arsenal Council. Editável via Telegram (/router trocar). Hot-reload a cada 5s.",
+  "versao": 2,
+  "atualizado_em": "2026-07-03",
+  "modelos": {
+    "router":   "gemini-3-flash-preview",
+    "voz1_pro": "gemini-3.1-pro-preview",
+    "voz2_gpt": "gpt-5",
+    "voz3_flash": "gemini-3-flash-preview",
+    "juiz":     "gemini-3.1-pro-preview"
+  },
+  "timeouts": {
+    "router_s":   30,
+    "parallel_s": 90,
+    "debate_s":   180
+  },
+  "modelos_disponiveis": [
+    "gemini-3-flash-preview",
+    "gemini-3.1-pro-preview",
+    "gpt-5",
+    "gpt-5-mini",
+    "claude-sonnet-4-5",
+    "claude-opus-4"
+  ]
+}
