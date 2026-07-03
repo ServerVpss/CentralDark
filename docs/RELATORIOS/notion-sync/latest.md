@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T19:18:34.095Z
+# 🧠 Notion Sync — 2026-07-03T21:07:57.830Z
 
-- **Commit fonte:** `af8dffa1e3ae7f8816d66de06bc2d5acc091f284`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `5942a62d0def0e11eabcd240c6abccf94a15f65e`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 306 atualizadas · ❌ 407 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 306 atualizadas · ❌ 409 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 271 | 0 | 271 | 0 | 0 |
-| estrutura | 407 | 0 | 0 | 0 | 407 |
+| estrutura | 409 | 0 | 0 | 0 | 409 |
 
 ## Operações
 
@@ -365,6 +365,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/003-webui-custom-css-rota.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/004-fallback-conselheiro.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/008-proxy-terminal-invertido.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/009-canal-linkado-espelha-grupo.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/009-nivel-skills-so-privado.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/INDICE.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/TEMPLATE-APRENDIZADO.md |
@@ -380,6 +381,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-013-grupo-evolucao-multi-ia.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-014-mapa-telegram-refresh.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-015-contornar-guardrails-mcp.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-016-foco-3-ids-canal-espelha-grupo.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/TEMPLATE-AULA.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/001-gemini-sugere-aula-pipeline.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/GRUPO-EVOLUCAO/README.md |
