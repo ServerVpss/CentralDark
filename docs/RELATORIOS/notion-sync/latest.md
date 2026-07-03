@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T21:07:57.830Z
+# 🧠 Notion Sync — 2026-07-03T21:19:07.181Z
 
-- **Commit fonte:** `5942a62d0def0e11eabcd240c6abccf94a15f65e`
+- **Commit fonte:** `5296657bac04aba148a5aa640d8ededc9596dacc`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 306 atualizadas · ❌ 409 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 306 atualizadas · ❌ 409 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 271 | 0 | 271 | 0 | 0 |
+| aprendizados | 272 | 1 | 271 | 0 | 0 |
 | estrutura | 409 | 0 | 0 | 0 | 409 |
 
 ## Operações
@@ -328,6 +328,7 @@
 | aprendizados | atualizado | #267 — Arsenal Council: portas, endpoints e comandos consolidados |
 | aprendizados | atualizado | #268 — Open WebUI: rota fixa pra editar visual (custom.css via volume) |
 | aprendizados | atualizado | #269 — Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral) |
+| aprendizados | criado | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

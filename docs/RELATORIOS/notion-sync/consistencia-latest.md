@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T21:08:00.002Z
-- **Commit:** `5942a62d0def0e11eabcd240c6abccf94a15f65e`
+- **Gerado:** 2026-07-03T21:19:10.646Z
+- **Commit:** `5296657bac04aba148a5aa640d8ededc9596dacc`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 295 | 0 | 0 | 295 | 0 |
+| aprendizados | 296 | 0 | 0 | 296 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **295**
+- 🟥 Faltando no Notion: **296**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -343,4 +343,5 @@
 - 267. Arsenal Council: portas, endpoints e comandos consolidados
 - 268. Open WebUI: rota fixa pra editar visual (custom.css via volume)
 - 269. Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral)
+- 270. Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub
 </details>
