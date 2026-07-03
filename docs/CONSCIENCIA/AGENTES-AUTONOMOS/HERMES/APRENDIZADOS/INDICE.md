@@ -6,6 +6,8 @@
 | 002 | Arsenal Council: portas e endpoints fixos | atalho | 2026-07-03 | AULA-001 |
 | 003 | Open WebUI: custom.css via volume mount | atalho | 2026-07-03 | AULA-002 |
 | 004 | Fallback de conselheiro quando Elite Anthropic offline | regra | 2026-07-03 | DEBATE-001 |
+| 008 | Canal público também usa `<pre>` monoespaçado | padrão-visual | 2026-07-03 | AULA-003 |
+| 009 | Nível + skills do Hermes só no privado do admin | padrão-visual | 2026-07-03 | AULA-003 |
 
 ## Como adicionar novo aprendizado
 
