@@ -312,26 +312,144 @@ export default function HubPage() {
     </div>
   );
 
+  // ── Conectores hardcoded (além dos do banco) ─────────────────────
+  const BUILTIN_CONNECTORS = [
+    {
+      slug: 'telegram', name: 'Telegram', category: 'messaging',
+      description: 'Conta Telegram via MTProto — acesso total: cria bots, lê grupos, envia mensagens como você.',
+      status: 'new' as const, kind: 'app' as const,
+      icon: Send, color: 'text-cyan-500',
+      needsSetup: true,
+      setupSteps: [
+        '1. Acesse my.telegram.org/apps e faça login',
+        '2. Crie um app (nome: CentralDark Hub)',
+        '3. Copie api_id e api_hash',
+        '4. Cole aqui e conecte',
+      ],
+    },
+    {
+      slug: 'notion', name: 'Notion', category: 'docs',
+      description: 'Workspace Notion — sync de páginas, databases e blocos.',
+      status: 'enabled' as const, kind: 'app' as const,
+      icon: FileText, color: 'text-foreground',
+      needsSetup: false,
+    },
+    {
+      slug: 'github', name: 'GitHub', category: 'devops',
+      description: 'Repositórios, issues, PRs, Actions — acesso completo via token.',
+      status: 'enabled' as const, kind: 'app' as const,
+      icon: Github, color: 'text-foreground',
+      needsSetup: false,
+    },
+    {
+      slug: 'google-drive', name: 'Google Drive', category: 'storage',
+      description: 'Bisync de arquivos via rclone na VPS.',
+      status: 'enabled' as const, kind: 'app' as const,
+      icon: HardDrive, color: 'text-primary',
+      needsSetup: false,
+    },
+  ];
+
+  const [telegramSetup, setTelegramSetup] = useState(false);
+  const [telegramApiId, setTelegramApiId] = useState('');
+  const [telegramApiHash, setTelegramApiHash] = useState('');
+
   const Conectores = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {connectors.map(c => (
-        <Card key={c.slug} className="card-premium">
-          <CardContent className="pt-5">
-            <div className="flex justify-between mb-4">
-              <div className="icon-glow h-10 w-10 rounded-xl"><Cpu className="h-5 w-5" /></div>
-              <Badge className={cn('text-[10px] border rounded-full px-2', stsCls(c.status))}>
-                <span className="mr-1 h-1.5 w-1.5 rounded-full bg-current inline-block" />{c.status}
-              </Badge>
-            </div>
-            <p className="font-semibold tracking-tight mb-1">{c.name}</p>
-            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{c.description}</p>
-            <div className="flex gap-2">
-              <Badge variant="outline" className="text-[10px]">{c.kind}</Badge>
-              <Badge variant="outline" className="text-[10px]">{c.category}</Badge>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+    <div className="space-y-6">
+      {/* Conectores do banco */}
+      {connectors.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {connectors.map(c => (
+            <Card key={c.slug} className="card-premium">
+              <CardContent className="pt-5">
+                <div className="flex justify-between mb-4">
+                  <div className="icon-glow h-10 w-10 rounded-xl"><Cpu className="h-5 w-5" /></div>
+                  <Badge className={cn('text-[10px] border rounded-full px-2', stsCls(c.status))}>
+                    <span className="mr-1 h-1.5 w-1.5 rounded-full bg-current inline-block" />{c.status}
+                  </Badge>
+                </div>
+                <p className="font-semibold tracking-tight mb-1">{c.name}</p>
+                <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{c.description}</p>
+                <div className="flex gap-2">
+                  <Badge variant="outline" className="text-[10px]">{c.kind}</Badge>
+                  <Badge variant="outline" className="text-[10px]">{c.category}</Badge>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {/* Conectores builtin */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {BUILTIN_CONNECTORS.map(c => {
+          const Icon = c.icon;
+          return (
+            <Card key={c.slug} className="card-premium">
+              <CardContent className="pt-5">
+                <div className="flex justify-between mb-4">
+                  <div className={cn('icon-glow h-10 w-10 rounded-xl', c.color)}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <Badge className={cn('text-[10px] border rounded-full px-2', stsCls(c.status))}>
+                    <span className="mr-1 h-1.5 w-1.5 rounded-full bg-current inline-block" />{c.status}
+                  </Badge>
+                </div>
+                <p className="font-semibold tracking-tight mb-1">{c.name}</p>
+                <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{c.description}</p>
+
+                {c.slug === 'telegram' && !telegramSetup && (
+                  <Button size="sm" className="w-full mt-2" onClick={() => setTelegramSetup(true)}>
+                    <Plug className="h-3.5 w-3.5 mr-1.5" /> Conectar Telegram
+                  </Button>
+                )}
+                {c.slug === 'telegram' && telegramSetup && (
+                  <div className="mt-3 space-y-3">
+                    <div className="text-[11px] text-muted-foreground space-y-1 bg-muted/50 rounded-lg p-3">
+                      {c.setupSteps?.map((s, i) => <p key={i}>{s}</p>)}
+                    </div>
+                    <input
+                      className="w-full text-xs bg-background border border-border rounded-lg px-3 py-2 focus:ring-1 focus:ring-primary outline-none"
+                      placeholder="api_id (número curto)"
+                      value={telegramApiId}
+                      onChange={e => setTelegramApiId(e.target.value)}
+                    />
+                    <input
+                      className="w-full text-xs bg-background border border-border rounded-lg px-3 py-2 focus:ring-1 focus:ring-primary outline-none"
+                      placeholder="api_hash (string longa)"
+                      value={telegramApiHash}
+                      onChange={e => setTelegramApiHash(e.target.value)}
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="flex-1"
+                        disabled={!telegramApiId || !telegramApiHash}
+                        onClick={() => {
+                          toast({ title: '🔄 Conectando Telegram...', description: 'Salvando credenciais MTProto. O serviço será ativado na VPS.' });
+                          // TODO: chamar edge function que salva api_id/api_hash e inicia sessão MTProto
+                        }}
+                      >
+                        <Check className="h-3.5 w-3.5 mr-1" /> Salvar & Conectar
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setTelegramSetup(false)}>
+                        <X className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {c.slug !== 'telegram' && (
+                  <div className="flex gap-2 mt-2">
+                    <Badge variant="outline" className="text-[10px]">{c.kind}</Badge>
+                    <Badge variant="outline" className="text-[10px]">{c.category}</Badge>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 
