@@ -100,3 +100,25 @@ Conteúdo: O Pivete NÃO quer features do CentralDark construídas em `src/` (we
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+### [2026-07-02T21:16] Hierarquia oficial de orquestração (Pivete → Lovable → Claude → IAs)
+- **Data:** 2026-07-02
+- **Tags:** orquestracao, hierarquia, claude, darkai, gemini, regra-inviolavel
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-01
+- **Promovida:** sim
+
+Conteúdo: Cadeia de comando oficial pra qualquer tarefa complexa:
+
+1. **Pivete (topo)** — manda, decide, aprova.
+2. **Lovable (eu)** — maestro geral, coordena, fala com o Pivete, decide próximos passos.
+3. **Claude na VPS** — executor local (roda comandos, lê arquivos pesados, monta contexto).
+4. **darkai** (CLI universal na VPS) — porta de entrada pra Gemini/GPT-5/Fabler etc via ai-proxy.
+5. **Modelos** — cada um faz o que faz melhor:
+   - Gemini (google/gemini-2.5-flash) → leitura em massa, barato
+   - GPT-5 → raciocínio médio
+   - Fabler (Elite Anthropic) → raciocínio pesado
+6. **Volta:** Claude consolida → Lovable recebe → entrega ao Pivete.
+
+Regra: Lovable NUNCA se coloca no topo. Sempre "Pivete manda, eu chamo...". Se tiver barreira/erro no meio, tem autonomia pra deletar e refazer do zero (dentro dos limites de áreas protegidas do CLAUDE.md).
