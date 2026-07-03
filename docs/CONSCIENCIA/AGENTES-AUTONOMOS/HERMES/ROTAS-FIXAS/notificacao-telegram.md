@@ -2,21 +2,26 @@
 
 ## Regra
 
-Após toda tarefa: 2 posts via connector Telegram já linkado (`@srver1bot`, `connection_id std_01kvw4jkcbekyr1t33vs4p5e9w`):
+Após toda tarefa: posts via connector Telegram já linkado (`@srver1bot`, `connection_id std_01kvw4jkcbekyr1t33vs4p5e9w`) segundo a tabela de destinos abaixo.
 
-1. **Card completo** no privado admin `1901426549` (`TELEGRAM_ADMIN_CHAT_ID`)
-2. **Linha curta** no canal Status `-1003669176367` (`TELEGRAM_STATUS_CHANNEL_ID`)
+## Tabela de destinos
 
-## Formato visual (obrigatório nos DOIS)
+| Destino | chat_id | Quando postar | Formato | Bloco nível+skills? |
+|---|---|---|---|---|
+| Admin privado | `1901426549` | Toda tarefa fechada | Card AULA-006 completo em `<pre>` | ✅ SIM (no fim) |
+| Canal Status | `-1003669176367` | Toda tarefa fechada | 1–3 linhas em `<pre>` | ❌ NUNCA |
+| Grupo Evolução (multi-IA) | `<AGUARDANDO ADMIN>` | Debate entre IAs (AULA-013) | Cada IA em `<pre>` próprio + veredito Hermes em `<pre>` + salvar em `HERMES/DEBATES/GRUPO-EVOLUCAO/NNN.md` | ❌ (skills só admin) |
+
+## Formato visual (obrigatório em TODOS)
 
 - `parse_mode: "HTML"` + corpo dentro de `<pre>…</pre>` (fundo preto monoespaçado).
-- Admin = card AULA-006 completo. Canal = 1–3 linhas dentro de `<pre>`.
+- Nunca postar markdown puro (`**negrito**` vaza) — sempre `<pre>`.
 
 ## Bloco NÍVEL+SKILLS do Hermes (SÓ no privado admin)
 
 - Fonte da verdade: `docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/STATUS.md`.
 - SEMPRE anexar o bloco `<pre>` de nível/XP/skills COLADO no final do card admin, depois do "PRÓXIMO PASSO".
-- ❌ Canal público NUNCA leva esse bloco (poluição visual).
+- ❌ Canal público e grupo Evolução NUNCA levam esse bloco (poluição visual).
 - Antes de postar: recalcular XP + skills se o bloco atual mexeu em algo, atualizar `STATUS.md`, regerar o `<pre>`.
 
 ## Proibido
