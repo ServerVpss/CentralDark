@@ -175,7 +175,7 @@
 | aprendizados | atualizado | #114 — Padrão operacional tipo Lovable: memória antes e depois |
 | aprendizados | atualizado | #115 — Separar run-once por nível de risco |
 | aprendizados | atualizado | #116 — Caddy bot/api separado corretamente por file_server e API |
-| aprendizados | atualizado | #117 — bot.centralldark.com deve servir apps/bot/dist |
+| aprendizados | erro | #117 — bot.centralldark.com deve servir apps/bot/dist |
 | aprendizados | atualizado | #118 — Contacts/groups read-only toleram 401 da WuzAPI |
 | aprendizados | atualizado | #119 — Duas árvores apps/bot causaram build no lugar errado |
 | aprendizados | atualizado | #120 — CORS da API deve ficar em um só lugar |
@@ -732,6 +732,10 @@
 | estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PONTOS-DE-COMANDO.md |
 | estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PROMPT-BASE-GRUPO.md |
 | estrutura | erro | docs/CONSCIENCIA/TREINAMENTO-IAS/protocolos/PROTOCOLO-V4-VETO-ABSOLUTO.md |
+| estrutura | erro | docs/CONSCIENCIA/VAULT/INDEX.md |
+| estrutura | erro | docs/CONSCIENCIA/VAULT/PROMPT-MESTRE.md |
+| estrutura | erro | docs/CONSCIENCIA/VAULT/REGRAS-AUTONOMIA.md |
+| estrutura | erro | docs/CONSCIENCIA/VAULT/REGRAS-DOC-CHECK.md |
 | estrutura | erro | docs/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
 | estrutura | erro | docs/CONSCIENCIA/agente/elite-mapper/README.md |
 | estrutura | erro | docs/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
