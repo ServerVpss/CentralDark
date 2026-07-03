@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T00:35:57.682Z",
-  "updatedAtBR": "02/07/2026, 21:35:57 BRT",
+  "updatedAt": "2026-07-03T00:48:54.202Z",
+  "updatedAtBR": "02/07/2026, 21:48:54 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "chore(graphify): ignorar Docker runtime em modulos/WebUI/var (economia >12G no grafo)",
+    "lastCommit": "chore(webui): limpar 12G docker morto + logging limits + hook graphify",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -584,6 +584,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-03T00:48:54.202Z",
+      "titulo": "Push na main · 4732d8d01845ee273cbb1423d01237832a66670f",
+      "detalhe": "chore(webui): limpar 12G docker morto + logging limits + hook graphify",
+      "area": "Repositório",
+      "sha": "4732d8d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-03T00:35:57.682Z",
       "titulo": "Push na main · 7da98134561d6d29ff3c83b9a0eb7cffadc00643",
@@ -1291,6 +1299,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T00:48:54.202Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4732d8d01845ee273cbb1423d01237832a66670f (4732d8d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T00:35:57.682Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7da98134561d6d29ff3c83b9a0eb7cffadc00643 (7da9813)",
@@ -1630,13 +1645,6 @@
       "time": "2026-06-29T15:02:11.639Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · aad7df5b1cbe96590d159ee7a249bb9a9d3d7e9f (aad7df5)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-29T14:57:28.006Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ecc1d7f597f10120e1b9afd5a1fe078f8063ab62 (ecc1d7f)",
       "area": "Repositório",
       "status": "sucesso"
     }
