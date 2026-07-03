@@ -1,0 +1,53 @@
+{
+  "descricao": "Cadeia oficial de modelos do Hermes-Vivo (referência humana — não é lida pelo código)",
+  "atualizado_em": "2026-07-03",
+  "cadeia_ordem": [
+    {
+      "nivel": 1,
+      "modelo": "google/gemini-3-flash-preview",
+      "via": "darkai (edge function ai-proxy)",
+      "timeout_s": 15,
+      "tempo_medio_s": 3,
+      "uso": "decisão rápida padrão, 90% das etapas"
+    },
+    {
+      "nivel": 2,
+      "modelo": "google/gemini-2.5-pro",
+      "via": "darkai",
+      "timeout_s": 30,
+      "tempo_medio_s": 8,
+      "uso": "raciocínio maior, contexto grande"
+    },
+    {
+      "nivel": 3,
+      "modelo": "openai/gpt-5-mini",
+      "via": "darkai",
+      "timeout_s": 45,
+      "tempo_medio_s": 15,
+      "uso": "backup se Gemini todo falhar"
+    },
+    {
+      "nivel": 4,
+      "modelo": "claude-sonnet-4-5",
+      "via": "Elite Anthropic Proxy — https://claude.ap7.site/v1/messages",
+      "auth_header": "x-api-key",
+      "timeout_s": 30,
+      "retry": "1x com backoff 2s",
+      "formato_resposta": "content[0].text",
+      "uso": "última bala, independente do darkai — sempre vivo"
+    }
+  ],
+  "cache": {
+    "tipo": "in-memory Map() no processo do Hermes",
+    "ttl_min": 10,
+    "chave": "sha1(missao + histórico.length + última_etapa)",
+    "max_itens": 100,
+    "observacao": "some no restart do PM2 — aceitável pra TTL de 10min"
+  },
+  "reserva_manual_fora_da_cadeia": {
+    "modelo": "claude CLI local (Claude Code)",
+    "comando": "claude -p '...'",
+    "disponivel_apos": "06:10 SP diariamente (reset da sessão)",
+    "uso": "só sob pedido explícito"
+  }
+}
