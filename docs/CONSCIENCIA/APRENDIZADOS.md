@@ -2216,3 +2216,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Pivete reforçou várias vezes: dentro do editor Lovable atual TelePainel nenhuma IA pode criar ou editar arquivo. Todo trabalho vive na VPS /root/[oculto] e no GitHub. Lovable é só preview do TelePainel.
 - **Aprendizado:** Regra inviolável. Ao receber pedido de feature de infra ou fluxo (Telegram MTProto, HUB, bots, painéis, edge functions do ecossistema Central), NUNCA usar code write ou line replace neste projeto Lovable. Sempre trabalhar em apps/modulos/MODULO/ na VPS via vps_write_file_safe e commitar via github_create_or_update_file. Exceção única: só o próprio TelePainel pode ter mudança aqui, e mesmo assim confirmar antes.
+
+### 271. Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card
+- **Categoria:** armadilha
+- **Data:** 2026-07-03
+- **Contexto:** Hermes recebeu tarefa de implementar vinculação MTProto no hub.centralldark.com. Entregou só TelegramMTProtoCard.tsx duplicado em duas pastas, sem plugar no ConnectorsTab, sem UI de telefone e código, sem backend, sem deploy. Bundle no ar continua mock.
+- **Aprendizado:** Checklist obrigatório de vinculação MTProto ou similar login por telefone. 1) UI com input telefone, botão enviar código, input código, botão confirmar e tratamento 2FA. 2) Backend real com endpoints sendCode que retorna phone_code_hash, signIn que consome código mais hash e devolve session string, e status. 3) Persistência da session criptografada no HUB Supabase, nunca em memória. 4) Serviço MTProto rodando na VPS via gramjs ou mtcute em PM2 com porta exposta via Caddy, sem inventar URL. 5) Plugar card no ConnectorsTab removendo o mock. 6) Build mais deploy mais verificar bundle novo servido. Sem os 6 a tarefa NÃO está pronta, não anunciar como concluída. Zero arquivo duplicado ou .bkp no repo.
