@@ -1,6 +1,6 @@
 {
   "name": "centraldark-grafo-vivo",
-  "version": "0.4.5",
+  "version": "0.2.0",
   "description": "Plugin Obsidian que renderiza o grafo vivo do ecossistema CentralDark",
   "main": "main.js",
   "scripts": {

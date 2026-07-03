@@ -1,27 +1,26 @@
-// Entry point do plugin CentralDark Grafo Vivo.
-// Orquestra: view do grafo + auto-updater + logger + tab de configs.
+// Plugin CentralDark Grafo Vivo — ponto de entrada.
+// Registra a view lateral, o comando de abertura e o auto-atualizador.
 
 import { Plugin, WorkspaceLeaf } from "obsidian";
 import { GrafoVivoView, VIEW_TYPE_GRAFO_VIVO } from "./view";
-import { GrafoVivoSettings, GrafoVivoSettingTab, SETTINGS_PADRAO } from "./settings";
-import { AutoUpdater } from "./autoUpdater";
-import { LoggerAutoUpdate } from "./logger";
+import { DEFAULT_SETTINGS, GrafoVivoSettings, GrafoVivoSettingTab } from "./settings";
+import { AutoAtualizador } from "./autoUpdater";
 
 export default class GrafoVivoPlugin extends Plugin {
-  settings!: GrafoVivoSettings;
-  autoUpdater!: AutoUpdater;
-  logger!: LoggerAutoUpdate;
+  settings: GrafoVivoSettings = DEFAULT_SETTINGS;
+  autoUpdater!: AutoAtualizador;
 
   async onload() {
     await this.carregarSettings();
 
-    this.logger = new LoggerAutoUpdate(this);
-    await this.logger.carregar();
-    this.autoUpdater = new AutoUpdater(this as any, this.logger);
+    this.registerView(
+      VIEW_TYPE_GRAFO_VIVO,
+      (leaf) => new GrafoVivoView(leaf, this),
+    );
 
-    this.registerView(VIEW_TYPE_GRAFO_VIVO, (leaf) => new GrafoVivoView(leaf, this));
-
-    this.addRibbonIcon("git-fork", "Abrir Grafo Vivo", () => this.ativarView());
+    this.addRibbonIcon("git-fork", "Abrir Grafo Vivo CentralDark", () => {
+      this.ativarView();
+    });
 
     this.addCommand({
       id: "abrir-grafo-vivo",
@@ -31,35 +30,26 @@ export default class GrafoVivoPlugin extends Plugin {
 
     this.addCommand({
       id: "checar-atualizacao-grafo-vivo",
-      name: "Checar atualização do plugin",
-      callback: () => this.autoUpdater.checar({ mostrarNotice: true }),
-    });
-
-    this.addCommand({
-      id: "rollback-grafo-vivo",
-      name: "Rollback do plugin (voltar versão)",
-      callback: () => this.autoUpdater.rollback(),
+      name: "Checar atualização do plugin agora",
+      callback: () => this.autoUpdater.checarEAtualizar(false),
     });
 
     this.addSettingTab(new GrafoVivoSettingTab(this.app, this));
 
-    // Log de boot pra sempre ter um rastro.
-    await this.logger.registrar({
-      nivel: "info", etapa: "boot",
-      mensagem: `Plugin carregado v${this.manifest.version}`,
-    });
-
-    // Dispara auto-updater (que faz checagem no boot com delay).
+    // Auto-update inicia depois do onload pra não travar o boot.
+    this.autoUpdater = new AutoAtualizador(this);
     this.autoUpdater.iniciar();
   }
 
-  onunload() {
+  async onunload() {
     this.autoUpdater?.parar();
   }
 
   async ativarView() {
     const { workspace } = this.app;
-    let leaf: WorkspaceLeaf | null = workspace.getLeavesOfType(VIEW_TYPE_GRAFO_VIVO)[0] ?? null;
+    let leaf: WorkspaceLeaf | null =
+      workspace.getLeavesOfType(VIEW_TYPE_GRAFO_VIVO)[0] ?? null;
+
     if (!leaf) {
       leaf = workspace.getRightLeaf(false);
       await leaf?.setViewState({ type: VIEW_TYPE_GRAFO_VIVO, active: true });
