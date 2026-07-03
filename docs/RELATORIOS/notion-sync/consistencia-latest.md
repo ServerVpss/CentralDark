@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 26 | 26 | 26 | 0 | 0 |
-| aprendizados | 294 | 0 | 0 | 294 | 0 |
+| aprendizados | 295 | 0 | 0 | 295 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **294**
+- 🟥 Faltando no Notion: **295**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -342,4 +342,5 @@
 - 266. Bot Telegram: token de bot ≠ sessão de usuário
 - 267. Arsenal Council: portas, endpoints e comandos consolidados
 - 268. Open WebUI: rota fixa pra editar visual (custom.css via volume)
+- 269. Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral)
 </details>
