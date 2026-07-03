@@ -30,6 +30,11 @@ services:
     labels:
       centraldark.app: webui
       centraldark.domain: ui.centralldark.com
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     restart: unless-stopped
 
 volumes:
