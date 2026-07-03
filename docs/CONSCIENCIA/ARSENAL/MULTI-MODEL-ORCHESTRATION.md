@@ -80,3 +80,11 @@ docs/CONSCIENCIA/ARSENAL/
 ```
 
 Tudo commitado no git → aparece no Notion (via sync) → você vê no celular.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

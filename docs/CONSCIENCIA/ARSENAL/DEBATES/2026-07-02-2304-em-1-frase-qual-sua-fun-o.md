@@ -34,3 +34,11 @@ Minha função é processar informações e gerar textos úteis, criativos e pre
 ## 🤖 Gemini Flash
 
 Minha função é processar informações e gerar textos úteis, criativos e precisos para auxiliar em diversas tarefas e tirar dúvidas.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

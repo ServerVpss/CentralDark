@@ -1,3 +1,10 @@
+---
+title: "Fase 3 Nucleo Universal Telegram"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # ✅ Fase 3 — Núcleo Universal + Telegram
 
 **Data:** 02/07/2026

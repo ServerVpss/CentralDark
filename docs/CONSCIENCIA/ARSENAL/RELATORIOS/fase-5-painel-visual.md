@@ -1,3 +1,10 @@
+---
+title: "Fase 5 Painel Visual"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # Fase 5 — Painel Visual "Conselho Vivo"
 
 **Data:** 03/07/2026

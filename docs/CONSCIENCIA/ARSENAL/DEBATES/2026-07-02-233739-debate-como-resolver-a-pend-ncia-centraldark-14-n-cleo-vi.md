@@ -196,3 +196,11 @@ Garanta que, após o pagamento/check-in no HUB (@srver1bot), a tabela de roles s
 
 ---
 **Resumo da estratégia:** Acesso controlado via `has_role()` no banco, interface reativa com cache no React, e engajamento via Webhook com o bot HUB, mantendo a integridade da rede Caddy/VPS.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

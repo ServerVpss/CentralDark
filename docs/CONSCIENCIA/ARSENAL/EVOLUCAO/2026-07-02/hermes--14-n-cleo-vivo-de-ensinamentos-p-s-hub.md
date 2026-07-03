@@ -60,3 +60,11 @@ Deploy limpo seguindo as restrições de infra.
 *   ⚠️ **RISCO (DEPLOY):** Se as novas rotas gerarem erro 404 ao atualizar a página, **não mexa no Caddy**. Mude temporariamente o roteamento do React para `HashRouter` (ex: `/#/nucleo`) até ter autorização para alterar o `Caddyfile`.
 
 **Status Final:** `whatsapp-server` permanece **STOPPED**. Comunicação 100% via Telegram e Web.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
