@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T17:56:31.871Z
+# 🧠 Notion Sync — 2026-07-03T18:08:17.762Z
 
-- **Commit fonte:** `efe1f05cd6c3695c039566118608efaf8c93201e`
+- **Commit fonte:** `d13717cc287720fc72d6747cfa5026779f4bbbf3`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 301 atualizadas · ❌ 367 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 302 atualizadas · ❌ 386 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 26 | 0 | 26 | 0 | 0 |
-| aprendizados | 270 | 0 | 270 | 0 | 0 |
-| estrutura | 367 | 0 | 0 | 0 | 367 |
+| decisoes | 27 | 1 | 26 | 0 | 0 |
+| aprendizados | 271 | 0 | 271 | 0 | 0 |
+| estrutura | 386 | 0 | 0 | 0 | 386 |
 
 ## Operações
 
@@ -53,6 +53,7 @@
 | decisoes | atualizado | Hermes ganha sistema de aprendizado + conclui hub v2 sozinho (2026-07-03) |
 | decisoes | atualizado | Rodada 3 do Hermes + incidente de segurança contas/ (2026-07-03, tarde) |
 | decisoes | atualizado | Hermes vira admin do Elite Gateway — tutor especialista (2026-07-03, noite) |
+| decisoes | criado | Vazamento de token contido + redator de segredos no Hermes (2026-07-03, noite) |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -323,6 +324,7 @@
 | aprendizados | atualizado | #266 — Bot Telegram: token de bot ≠ sessão de usuário |
 | aprendizados | atualizado | #267 — Arsenal Council: portas, endpoints e comandos consolidados |
 | aprendizados | atualizado | #268 — Open WebUI: rota fixa pra editar visual (custom.css via volume) |
+| aprendizados | atualizado | #269 — Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -355,10 +357,29 @@
 | estrutura | erro | docs/CONSCIENCIA/22-PADRAO-STATUS-VISUAL.md |
 | estrutura | erro | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
 | estrutura | erro | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/001-token-bot-vs-sessao-user.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/002-arsenal-portas-fixas.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/003-webui-custom-css-rota.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/004-fallback-conselheiro.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/INDICE.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/APRENDIZADOS/TEMPLATE-APRENDIZADO.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-001-arsenal-council.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-002-webui-custom-css.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-003-telegram-notificacao.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-004-3d-esmeralda-design-system.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/AULA-005-pipeline-deploy-continuo.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/AULAS/TEMPLATE-AULA.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/001-gemini-sugere-aula-pipeline.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/TEMPLATE-DEBATE.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/README.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/arsenal-endpoints.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/comandos-curl-baseline.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/notificacao-telegram.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/webui-reload.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/fix-catalogo-tools-json/missao.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/manutencao-gateway-exame/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/revisao-hub-v2-rodada2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/upgrade-hub-v2/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
