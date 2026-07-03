@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T16:31:16.994Z",
-  "updatedAtBR": "03/07/2026, 13:31:16 BRT",
+  "updatedAt": "2026-07-03T16:53:34.540Z",
+  "updatedAtBR": "03/07/2026, 13:53:34 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Registrou relatório da varredura",
+    "lastCommit": "Corrigiu rota Lovable no UI",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T16:53:34.540Z",
+      "titulo": "Push na main · 336b7ae57add54d2319626864b3f165d3bdf67e9",
+      "detalhe": "Corrigiu rota Lovable no UI",
+      "area": "Repositório",
+      "sha": "336b7ae",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T16:31:16.994Z",
       "titulo": "Push na main · acea384214bf99495e9d4024259059257cb9c9a7",
       "detalhe": "Registrou relatório da varredura",
@@ -974,14 +982,6 @@
       "detalhe": "Aplicou timeout e pool serial",
       "area": "Repositório",
       "sha": "175170e",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-30T05:35:47.289Z",
-      "titulo": "Push na main · af147e0aae23ebecdafb5c16a367514f02b82484",
-      "detalhe": "Aprovou modo somente-leitura",
-      "area": "Repositório",
-      "sha": "af147e0",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T16:53:34.540Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 336b7ae57add54d2319626864b3f165d3bdf67e9 (336b7ae)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T16:31:16.994Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · acea384214bf99495e9d4024259059257cb9c9a7 (acea384)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T04:02:37.879Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b2a4e93cab718479d761a3668d4c37e725f66d45 (b2a4e93)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T03:57:05.047Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9c43deba614dbf84022e04bbd346302b638f9718 (9c43deb)",
       "area": "Repositório",
       "status": "sucesso"
     }
