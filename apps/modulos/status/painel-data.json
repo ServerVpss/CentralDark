@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T18:10:48.215Z",
-  "updatedAtBR": "03/07/2026, 15:10:48 BRT",
+  "updatedAt": "2026-07-03T18:17:20.350Z",
+  "updatedAtBR": "03/07/2026, 15:17:20 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "sec(hermes): redator de segredos no executor + contém token vazado no exame",
+    "lastCommit": "feat(grafo-vivo): grafo quem-chama-quem agora reflete estado real do PM2 + Hermes mantenedor",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T18:17:20.350Z",
+      "titulo": "Push na main · b7ccab74676248b9b8904bfcfc41cad2df3b53e8",
+      "detalhe": "feat(grafo-vivo): grafo quem-chama-quem agora reflete estado real do PM2 + Hermes mantenedor",
+      "area": "Repositório",
+      "sha": "b7ccab7",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-03T18:10:48.215Z",
       "titulo": "Push na main · d13717cc287720fc72d6747cfa5026779f4bbbf3",
       "detalhe": "sec(hermes): redator de segredos no executor + contém token vazado no exame",
@@ -975,14 +983,6 @@
       "area": "Repositório",
       "sha": "8674468",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-30T09:38:19.464Z",
-      "titulo": "Push na main · 64511f250958571128dff600200fe72ea66357be",
-      "detalhe": "feat(notify): Claude notifica no privado + canal do Telegram",
-      "area": "Repositório",
-      "sha": "64511f2",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T18:17:20.350Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b7ccab74676248b9b8904bfcfc41cad2df3b53e8 (b7ccab7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T18:10:48.215Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d13717cc287720fc72d6747cfa5026779f4bbbf3 (d13717c)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T09:04:14.883Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 28b030b65ebd1b8a35536684a8432da322527ba5 (28b030b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T08:52:00.432Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f76f5c86ec34cea95ebc84b373ebf7e16ff0ca09 (f76f5c8)",
       "area": "Repositório",
       "status": "sucesso"
     }
