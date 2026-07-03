@@ -407,3 +407,15 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 - `app.js`: `nodeColor` agora vence pelo status — processo `stopped`=vermelho, `errored/launching`=âmbar, resto mantém cor por tipo; nó caído ganha anel pulsante no canvas. Backup: backups/2026-07-03-app.js.pre-health.
 - `scripts/grafo-vivo/loop.mjs` + PM2 `CentralDark-GrafoVivo` (id 69): regenera graph-data.json a cada 5min → tempo-real contínuo. pm2 save feito.
 Mudança mínima e reversível; render segue compatível com force-graph. graph-data.json passa a ter churn de dados (como painel-data.json).
+
+---
+
+## Obsidian como visualização em tempo real do Grafo Vivo (2026-07-03)
+
+**Nova frente do Pivete:** ver grafo/saúde/anomalias DENTRO do Obsidian, não só no browser. Solução: `scripts/grafo-vivo/obsidian-nota.mjs` lê graph-data.json e escreve `docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md` — card monospace + Mermaid focado (núcleo, legível) + tabela de saúde (16 processos 🟢/🔴) + anomalias + fluxos críticos. Mermaid é nativo do Obsidian (leve, sem plugin extra). Loop PM2 CentralDark-GrafoVivo atualiza grafo + nota a cada 5min.
+
+**Bug corrigido no caminho:** regex de emoji sem flag `u` corrompia labels (surrogate pair cortado pela metade, lixo acumulando por rodada). cleanLabel agora usa `/^[\u{1F7E2}...]/u` + limpeza de surrogates órfãos. Base restaurada do backup.
+
+**Design anti-spam (regra p/ Hermes):** graph-data.json e GRAFO-VIVO.md têm churn de 5min (dado). NÃO commitar a cada regeneração (spam + conflito com git plugin do Obsidian). Commitar a nota SÓ quando o estado de saúde mudar (processo caiu/voltou) — casando com a tarefa do Hermes de "reportar quando algo ficar anormal".
+
+**Pendente / possibilidades fluidas:** (1) commit da nota disparado por transição de anomalia (Hermes); (2) MOC/dataview no Obsidian puxando pendências+saúde; (3) nota de incidente automática quando processo cai.

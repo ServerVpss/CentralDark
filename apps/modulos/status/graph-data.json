@@ -1,10 +1,10 @@
 {
   "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 16 online / 0 off de 16 monitorados. Gateway: 0 req/15min.",
-  "updatedAt": "2026-07-03T18:20:44.825Z",
+  "updatedAt": "2026-07-03T18:24:48.505Z",
   "nodes": [
     {
       "id": "mcp-server",
-      "label": "🟢 \udfe2 \udfe2 MCP CentralDark",
+      "label": "🟢 MCP CentralDark",
       "type": "orquestrador",
       "group": "core",
       "status": "online",
@@ -24,7 +24,7 @@
     },
     {
       "id": "elite-http-gateway",
-      "label": "🟢 \udfe2 \udfe2 Elite HTTP Gateway",
+      "label": "🟢 Elite HTTP Gateway",
       "type": "gateway",
       "group": "core",
       "status": "online",
@@ -38,7 +38,7 @@
     },
     {
       "id": "bot-telegram",
-      "label": "🟢 \udfe2 \udfe2 @srver1bot",
+      "label": "🟢 @srver1bot",
       "type": "bot",
       "group": "bots",
       "status": "online",
@@ -82,7 +82,7 @@
     },
     {
       "id": "webhook-deploy",
-      "label": "🟢 \udfe2 \udfe2 Webhook Deploy",
+      "label": "🟢 Webhook Deploy",
       "type": "servico",
       "group": "bots",
       "status": "online",
@@ -342,7 +342,7 @@
     },
     {
       "id": "painel-status",
-      "label": "🟢 \udfe2 \udfe2 Painel status.centralldark",
+      "label": "🟢 Painel status.centralldark",
       "type": "monitoramento",
       "group": "monitoramento",
       "status": "online",
@@ -350,7 +350,7 @@
     },
     {
       "id": "graph-panel",
-      "label": "🟢 \udfe2 \udfe2 Graph Panel",
+      "label": "🟢 Graph Panel",
       "type": "monitoramento",
       "group": "monitoramento",
       "status": "online",
@@ -364,7 +364,7 @@
     },
     {
       "id": "hermes",
-      "label": "🟢 \udfe2 \udfe2 Hermes (executor)",
+      "label": "🟢 Hermes (executor)",
       "type": "orquestrador",
       "group": "monitoramento",
       "status": "online",
@@ -372,7 +372,7 @@
     },
     {
       "id": "zentinel",
-      "label": "🟢 \udfe2 \udfe2 Zentinel (latência)",
+      "label": "🟢 Zentinel (latência)",
       "type": "monitoramento",
       "group": "monitoramento",
       "status": "online",
@@ -380,7 +380,7 @@
     },
     {
       "id": "guardiaoconsciencia",
-      "label": "🟢 \udfe2 \udfe2 Guardião Consciência",
+      "label": "🟢 Guardião Consciência",
       "type": "monitoramento",
       "group": "monitoramento",
       "status": "online",
@@ -388,7 +388,7 @@
     },
     {
       "id": "guardiaoanalista",
-      "label": "🟢 \udfe2 \udfe2 Guardião Analista",
+      "label": "🟢 Guardião Analista",
       "type": "monitoramento",
       "group": "monitoramento",
       "status": "online",
@@ -396,7 +396,7 @@
     },
     {
       "id": "eliteanthropic",
-      "label": "🟢 \udfe2 \udfe2 Elite Anthropic",
+      "label": "🟢 Elite Anthropic",
       "type": "gateway",
       "group": "edge-ia",
       "status": "online",
@@ -404,7 +404,7 @@
     },
     {
       "id": "elitews",
-      "label": "🟢 \udfe2 \udfe2 Elite WS",
+      "label": "🟢 Elite WS",
       "type": "gateway",
       "group": "edge-ia",
       "status": "online",
@@ -412,7 +412,7 @@
     },
     {
       "id": "evolucaoias",
-      "label": "🟢 \udfe2 \udfe2 Evolução IAs",
+      "label": "🟢 Evolução IAs",
       "type": "ia",
       "group": "edge-ia",
       "status": "online",
@@ -420,7 +420,7 @@
     },
     {
       "id": "arsenaladapter",
-      "label": "🟢 \udfe2 \udfe2 Arsenal Adapter",
+      "label": "🟢 Arsenal Adapter",
       "type": "servico",
       "group": "edge-ia",
       "status": "online",
@@ -428,7 +428,7 @@
     },
     {
       "id": "memoria",
-      "label": "🟢 \udfe2 \udfe2 Memória API",
+      "label": "🟢 Memória API",
       "type": "servico",
       "group": "monitoramento",
       "status": "online",
@@ -436,7 +436,7 @@
     },
     {
       "id": "telegrammtproto",
-      "label": "🟢 \udfe2 \udfe2 Telegram MTProto",
+      "label": "🟢 Telegram MTProto",
       "type": "servico",
       "group": "edge-telegram",
       "status": "online",
@@ -1020,6 +1020,6 @@
     "offline": 0,
     "monitorados": 16,
     "gateway_req_15min": 0,
-    "gerado_em": "2026-07-03T18:20:44.825Z"
+    "gerado_em": "2026-07-03T18:24:48.505Z"
   }
 }

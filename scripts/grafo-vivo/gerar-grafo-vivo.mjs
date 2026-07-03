@@ -44,7 +44,11 @@ const LIVE_EXTRA = {
 };
 const norm = s => String(s || '').toLowerCase().replace(/^centraldark-/, '').replace(/[^a-z0-9]/g, '');
 const DOT = { online: '🟢', stopped: '🔴', errored: '🟡', launching: '🟡', unknown: '⚪' };
-const cleanLabel = l => String(l || '').replace(/^[🟢🔴🟡⚪]\s*/, '');
+// Remove o dot de status do label. Usa flag u (emoji = surrogate pair) e limpa lixo de corrupção anterior.
+const cleanLabel = l => String(l || '')
+  .replace(/^[\u{1F7E2}\u{1F534}\u{1F7E1}⚪]\s*/u, '')   // dot de status (pair-aware)
+  .replace(/[\uD800-\uDFFF�]/g, '')                     // surrogates órfãos + replacement chars
+  .trim();
 
 function pm2State() {
   try {

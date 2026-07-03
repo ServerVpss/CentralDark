@@ -202,7 +202,11 @@
         "O gerador PRESERVA a topologia curada (nodes/edges) e so sobrepoe status vivo (dot no label) + processos vivos novos. NUNCA reescreva graph-data.json na mao — sempre pelo gerador.",
         "Render do grafo (apps/modulos/status/index.html e app.js) e AREA PROTEGIDA 🔒 — so leitura. O gerador toca APENAS o feed graph-data.json (rotina, igual painel-data.json).",
         "Manter vivo = rodar o gerador periodicamente (o render faz fetch do graph-data.json a cada load da pagina). Processo caido aparece 🔴 no label; online aparece 🟢.",
-        "Adicionar processo vivo novo ao grafo: editar o mapa LIVE_EXTRA no gerador (id → label/type/group). Tipos que o render colore: orquestrador, bot, gateway, servico, storage, monitoramento, ia."
+        "Adicionar processo vivo novo ao grafo: editar o mapa LIVE_EXTRA no gerador (id → label/type/group). Tipos que o render colore: orquestrador, bot, gateway, servico, storage, monitoramento, ia.",
+        "Nota viva no Obsidian: scripts/grafo-vivo/obsidian-nota.mjs lê graph-data.json e escreve docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md (Mermaid + tabela de saúde + anomalias). O Pivete SÓ visualiza no Obsidian — nunca editar a nota à mão.",
+        "Loop PM2 CentralDark-GrafoVivo (id 69) roda gerar-grafo-vivo.mjs + obsidian-nota.mjs a cada 5min — mantém grafo E nota frescos localmente. Não precisa rodar na mão.",
+        "graph-data.json e GRAFO-VIVO.md têm churn a cada 5min (dado, como painel-data.json). NÃO commitar a cada regeneração (spam + conflito com o git plugin do Obsidian do Pivete). Commitar a nota SÓ quando o estado de saúde MUDAR (processo caiu/voltou) — aí sim é história útil + notificar Telegram.",
+        "Emoji em regex de label precisa da flag u (surrogate pair). cleanLabel usa /^[\\u{1F7E2}...]/u — sem a flag, corrompe o emoji e acumula lixo a cada rodada (bug real de 03/07)."
       ]
     }
   }
