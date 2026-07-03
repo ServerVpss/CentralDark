@@ -1,5 +1,14 @@
 import { MCPHealth, MCPTool } from '../types/mcp';
 
+// Esta interface é usada por SyncButton.tsx
+export interface SyncResult {
+  status: string;
+  tools_found: number;
+  tools_added: number;
+  tools_updated: number;
+  errors?: string[];
+}
+
 const MCP_API_URL = 'https://mcp.centralldark.com';
 const MCP_WS_URL = 'wss://mcp.centralldark.com/ws';
 
@@ -11,37 +20,21 @@ export const mcpClient = {
   },
 
   async getTools(): Promise<MCPTool[]> {
-    const res = await fetch(`${MCP_API_URL}/tools`);
-    if (!res.ok) throw new Error('Failed to fetch tools');
+    // CORREÇÃO: Apontar para o endpoint .json
+    const res = await fetch(`${MCP_API_URL}/tools.json`);
+    if (!res.ok) throw new Error('Failed to fetch tools from MCP');
     return res.json();
   },
 
-  subscribeToHealth(callback: (health: MCPHealth) => void) {
-    const ws = new WebSocket(MCP_WS_URL);
-    
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'health_update') {
-          callback(data.payload);
-        }
-      } catch (err) {
-        console.error('WS Message error:', err);
-      }
-    };
-
-    return () => ws.close();
-  },
-
-  async syncTools(): Promise<{ success: boolean; message: string }> {
-    const res = await fetch(`${MCP_API_URL}/sync`, { method: 'POST' });
+  // FIX: Restaurar método syncCatalog que causou o erro de build
+  async syncCatalog(): Promise<SyncResult> {
+    const res = await fetch(`${MCP_API_URL}/tools/sync`, { method: 'POST' });
+    if (!res.ok) throw new Error('Failed to sync catalog with MCP');
     return res.json();
   },
 
-  // usado pelo SyncButton do catálogo — mesma rota /sync, formato de resultado detalhado
-  async syncCatalog(): Promise<{ status: string; tools_found: number; tools_added: number; tools_updated: number; errors?: string[] }> {
-    const res = await fetch(`${MCP_API_URL}/sync`, { method: 'POST' });
-    if (!res.ok) throw new Error('Falha na sincronização do catálogo');
-    return res.json();
-  }
+  // FIX: Restaurar getter da URL do WebSocket
+  getWsUrl(): string {
+    return MCP_WS_URL;
+  },
 };
