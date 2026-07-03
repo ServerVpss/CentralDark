@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T12:13:49.781Z",
-  "updatedAtBR": "03/07/2026, 09:13:49 BRT",
+  "updatedAt": "2026-07-03T16:31:16.994Z",
+  "updatedAtBR": "03/07/2026, 13:31:16 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "feat(hermes): aula tutor 2 — detector v3 (efeito repetido), cerebro.mjs integrado, git cirurgico na ferramenta",
+    "lastCommit": "Registrou relatório da varredura",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T16:31:16.994Z",
+      "titulo": "Push na main · acea384214bf99495e9d4024259059257cb9c9a7",
+      "detalhe": "Registrou relatório da varredura",
+      "area": "Repositório",
+      "sha": "acea384",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T12:13:49.781Z",
       "titulo": "Push na main · 8b4c62c60329a0a53d980c27c28561bf361a2848",
       "detalhe": "feat(hermes): aula tutor 2 — detector v3 (efeito repetido), cerebro.mjs integrado, git cirurgico na ferramenta",
@@ -975,14 +983,6 @@
       "area": "Repositório",
       "sha": "af147e0",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-06-30T04:33:21.721Z",
-      "titulo": "Push na main · a811b164ac6c2083541f89b0b0dbbd4b96c71efb",
-      "detalhe": "fix(memory-executor): auto-corrige 7 gap(s) de memória",
-      "area": "Repositório",
-      "sha": "a811b16",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T16:31:16.994Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · acea384214bf99495e9d4024259059257cb9c9a7 (acea384)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T12:13:49.781Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8b4c62c60329a0a53d980c27c28561bf361a2848 (8b4c62c)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T03:57:05.047Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9c43deba614dbf84022e04bbd346302b638f9718 (9c43deb)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T03:49:24.119Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 371556a4697e8c54a9820457a97f3b3dcfe89bd0 (371556a)",
       "area": "Repositório",
       "status": "sucesso"
     }
