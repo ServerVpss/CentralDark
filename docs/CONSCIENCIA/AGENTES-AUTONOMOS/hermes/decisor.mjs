@@ -167,6 +167,24 @@ function detectarEfeitoRepetido(historico) {
   return top;
 }
 
+// Detector v4: 2+ escritas no mesmo path nas últimas 5 etapas SEM validação entre elas
+// (tsc/node --check/json.load) — reescrever no escuro não converge; a validação diz o que falta
+function detectarEscritaSemValidacao(historico) {
+  const ult = (historico ?? []).slice(-5);
+  const escritas = {};
+  let validou = false;
+  for (const h of ult) {
+    if (h.ferramenta === 'escrever_arquivo' && h.args?.path) {
+      const p = String(h.args.path).replace('/root/CentralDark/', '');
+      escritas[p] = (escritas[p] || 0) + 1;
+    }
+    if (h.ferramenta === 'shell' && /tsc --noEmit|node --check|json\.load|vite build/.test(h.args?.comando || '')) validou = true;
+  }
+  if (validou) return null;
+  for (const [p, n] of Object.entries(escritas)) if (n >= 2) return { path: p, count: n };
+  return null;
+}
+
 function montarPrompt(missao, historico, erros_anteriores = []) {
   const hist = (historico || []).length === 0
     ? '(sem etapas ainda)'
@@ -198,7 +216,12 @@ function montarPrompt(missao, historico, erros_anteriores = []) {
     ? `\n\n🚨 EFEITO REPETIDO: você rodou o MESMO comando ${efe.count}x nas últimas 6 etapas (mudar o echo/marcador NÃO muda o resultado): "${efe.comando}". O resultado já está no histórico — CONFIE no exit code da 1ª rodada. PROIBIDO rodar esse comando de novo. Avance: corrija, conclua ou anote no relatório. 🚨`
     : '';
 
-  return `MISSÃO ORIGINAL:\n${missao}\n\n---\nHISTÓRICO:\n${hist}${nota_erros}${bloco_licoes}${bloco_loop}${bloco_rel}${bloco_efeito}\n\n---\n${FERRAMENTAS}\n${SCHEMA}`;
+  const esc = detectarEscritaSemValidacao(historico);
+  const bloco_escrita = esc
+    ? `\n\n🚨 ESCRITA SEM VALIDAÇÃO: você escreveu ${esc.count}x em ${esc.path} sem validar entre as escritas. Reescrever no escuro NÃO converge. AÇÃO OBRIGATÓRIA AGORA (única aceita): ferramenta shell com \`cd /root/CentralDark/apps/modulos/hub && npx tsc --noEmit -p tsconfig.app.json && echo TSC_OK\` — o erro (ou o TSC_OK) decide o próximo passo. 🚨`
+    : '';
+
+  return `MISSÃO ORIGINAL:\n${missao}\n\n---\nHISTÓRICO:\n${hist}${nota_erros}${bloco_licoes}${bloco_loop}${bloco_rel}${bloco_efeito}${bloco_escrita}\n\n---\n${FERRAMENTAS}\n${SCHEMA}`;
 }
 
 function extrairJSON(texto) {
@@ -258,7 +281,7 @@ export async function decidir(missao, historico) {
   const historico_erros = [];
 
   // Em loop ou releitura detectados, pula o Flash e vai direto pro modelo mais forte quebrar o empate
-  const emLoop = detectarLoop(historico) >= 3 || !!detectarReleituras(historico) || !!detectarEfeitoRepetido(historico);
+  const emLoop = detectarLoop(historico) >= 3 || !!detectarReleituras(historico) || !!detectarEfeitoRepetido(historico) || !!detectarEscritaSemValidacao(historico);
   const cadeia = emLoop ? CADEIA_DARKAI.slice(1) : CADEIA_DARKAI;
   if (emLoop) console.log('[decisor] 🔁 loop/releitura detectado — escalando direto pro gemini-2.5-pro');
 

@@ -100,3 +100,4 @@ apps/modulos/elite-gateway/config/
 # secrets locais (não versionar)
 .env
 .env.bak-*
+contas/

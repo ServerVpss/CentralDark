@@ -131,6 +131,7 @@
         "corrig"
       ],
       "licoes": [
+        "REGRA DE OURO DA ESCRITA: depois de escrever_arquivo, a PRÓXIMA ação é validar (npx tsc --noEmit / node --check) — NUNCA escrever de novo no mesmo arquivo sem validar entre as escritas. O erro do typecheck diz o que falta melhor que reler ou reescrever no escuro.",
         "ANTES de sobrescrever arquivo que funciona: cp arquivo arquivo.bak (rollback barato).",
         "DEPOIS de escrever_arquivo, validar na mesma missão: .mjs/.js → node --check; .json → python3 -c \"import json;json.load(open('X'))\"; .ts/.tsx → npx tsc --noEmit.",
         "Validação falhou? Restaurar o .bak e tentar diferente — não empilhar correção em cima de arquivo quebrado.",

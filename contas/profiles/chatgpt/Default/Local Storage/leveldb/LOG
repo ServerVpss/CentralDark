@@ -1,6 +1,0 @@
-2026/07/03-04:55:23.811 1d4892 Reusing MANIFEST /root/CentralDark/contas/profiles/chatgpt/Default/Local Storage/leveldb/MANIFEST-000001
-2026/07/03-04:55:23.834 1d4892 Recovering log #8
-2026/07/03-04:55:23.836 1d4892 Reusing old log /root/CentralDark/contas/profiles/chatgpt/Default/Local Storage/leveldb/000008.log 
-2026/07/03-04:56:23.850 1d4895 Level-0 table #12: started
-2026/07/03-04:56:23.862 1d4895 Level-0 table #12: 112920 bytes OK
-2026/07/03-04:56:23.867 1d4895 Delete type=0 #8
