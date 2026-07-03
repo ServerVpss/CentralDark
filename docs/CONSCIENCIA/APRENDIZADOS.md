@@ -2210,3 +2210,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Antes de organizar, aprendizados sobre Hermes/Arsenal ficavam soltos no APRENDIZADOS.md geral misturados com aprendizados de infra genérica.
 - **Aprendizado:** Tudo sobre Hermes vive em `docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/` com 6 subpastas obrigatórias: README.md, AULAS/, APRENDIZADOS/, ROTAS-FIXAS/, DEBATES/, EVOLUCAO/. Cada aula segue TEMPLATE-AULA.md fixo (7 seções). Aprendizados/rotas/debates também têm templates. Aprendizados sobre Hermes NÃO vão pro APRENDIZADOS.md geral — só os não-Hermes. Regra: se descoberta é sobre orquestração de IAs, agente autônomo, prompt de Hermes, ou capacidade dele, vai na árvore dele.
+
+### 270. Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub
+- **Categoria:** regra
+- **Data:** 2026-07-03
+- **Contexto:** Pivete reforçou várias vezes: dentro do editor Lovable atual TelePainel nenhuma IA pode criar ou editar arquivo. Todo trabalho vive na VPS /root/[oculto] e no GitHub. Lovable é só preview do TelePainel.
+- **Aprendizado:** Regra inviolável. Ao receber pedido de feature de infra ou fluxo (Telegram MTProto, HUB, bots, painéis, edge functions do ecossistema Central), NUNCA usar code write ou line replace neste projeto Lovable. Sempre trabalhar em apps/modulos/MODULO/ na VPS via vps_write_file_safe e commitar via github_create_or_update_file. Exceção única: só o próprio TelePainel pode ter mudança aqui, e mesmo assim confirmar antes.
