@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T17:09:15.270Z
+# 🧠 Notion Sync — 2026-07-03T17:29:45.833Z
 
-- **Commit fonte:** `65bf46453bc4eabe579e3362c1837aa2dbad928f`
+- **Commit fonte:** `3ef7d9defb90398a5a9a3c9355f40204a439f455`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 296 atualizadas · ❌ 364 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 296 atualizadas · ❌ 364 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 24 | 0 | 24 | 0 | 0 |
-| aprendizados | 267 | 0 | 267 | 0 | 0 |
+| aprendizados | 268 | 1 | 267 | 0 | 0 |
 | estrutura | 364 | 0 | 0 | 0 | 364 |
 
 ## Operações
@@ -318,6 +318,7 @@
 | aprendizados | atualizado | #263 — Estilo gamificado é padrão oficial de comunicação |
 | aprendizados | atualizado | #264 — Renomeação PM2 + fix Caddy status aplicados na VPS |
 | aprendizados | atualizado | #265 — Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido |
+| aprendizados | criado | #266 — Bot Telegram: token de bot ≠ sessão de usuário |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

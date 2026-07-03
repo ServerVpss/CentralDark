@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T17:09:18.816Z
-- **Commit:** `65bf46453bc4eabe579e3362c1837aa2dbad928f`
+- **Gerado:** 2026-07-03T17:29:49.474Z
+- **Commit:** `3ef7d9defb90398a5a9a3c9355f40204a439f455`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 24 | 24 | 24 | 0 | 0 |
-| aprendizados | 291 | 0 | 0 | 291 | 0 |
+| aprendizados | 292 | 0 | 0 | 292 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **291**
+- 🟥 Faltando no Notion: **292**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -339,4 +339,5 @@
 - 💬 Groq Llama — grupo evolução (2026-07-03)
 - 💬 Claude Sonnet — grupo evolução (2026-07-03)
 - 265. Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido
+- 266. Bot Telegram: token de bot ≠ sessão de usuário
 </details>
