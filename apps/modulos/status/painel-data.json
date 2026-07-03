@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T18:26:42.759Z",
-  "updatedAtBR": "03/07/2026, 15:26:42 BRT",
+  "updatedAt": "2026-07-03T18:38:35.078Z",
+  "updatedAtBR": "03/07/2026, 15:38:35 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "feat(grafo-vivo): nota viva no Obsidian (Mermaid+saúde+anomalias) + fix emoji regex",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T18:38:35.078Z",
+      "titulo": "Push na main · 55ddecd24849304592bb92f42e5d2ab6aa0a1f35",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "55ddecd",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T18:26:42.759Z",
       "titulo": "Push na main · ed8201a1e4a380791b5beec6ce82bde5e5566c79",
       "detalhe": "feat(grafo-vivo): nota viva no Obsidian (Mermaid+saúde+anomalias) + fix emoji regex",
@@ -974,14 +982,6 @@
       "detalhe": "aprendizado(#263): Estilo gamificado é padrão oficial de comunicação",
       "area": "Repositório",
       "sha": "71d4eaf",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T11:22:39.063Z",
-      "titulo": "Push na main · 56188fef12f8398c3a134d6dfba25789f7f425ac",
-      "detalhe": "consciencia(secao 16): Adiciona seção de estilo gamificado como padrão oficial de comunicação com o Pivete",
-      "area": "Repositório",
-      "sha": "56188fe",
       "actor": "segredounlock"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T18:38:35.078Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 55ddecd24849304592bb92f42e5d2ab6aa0a1f35 (55ddecd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T18:26:42.759Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ed8201a1e4a380791b5beec6ce82bde5e5566c79 (ed8201a)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T09:17:15.460Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · bfd83be07f5716e201070499636a35918d63a13d (bfd83be)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T09:07:19.492Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d775b1a22c9dc6b96ad7b5dd05e2526783e1b276 (d775b1a)",
       "area": "Repositório",
       "status": "sucesso"
     }
