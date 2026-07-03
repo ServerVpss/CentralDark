@@ -10,7 +10,7 @@ CREATE TABLE catalog.servers (
   version TEXT,
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTPTZ DEFAULT now()
+  updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE catalog.tools (
@@ -25,7 +25,7 @@ CREATE TABLE catalog.tools (
   version TEXT,
   is_deprecated BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(server_id, name)
 );
 
