@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T08:02:19.740Z
-- **Commit:** `1fd45cc5c1b31609fd9fd2d127c9c10b2d7d5627`
+- **Gerado:** 2026-07-03T08:37:54.378Z
+- **Commit:** `2c09e511ba9464b3be0778ef72af2c4b537cc11c`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 22 | 22 | 22 | 0 | 0 |
-| aprendizados | 286 | 0 | 0 | 286 | 0 |
+| aprendizados | 287 | 0 | 0 | 287 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **286**
+- 🟥 Faltando no Notion: **287**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -333,5 +333,6 @@
 - 💬 Gemini Flash — grupo evolução (2026-07-03)
 - 💬 Claude Sonnet — grupo evolução (2026-07-03)
 - 💬 Groq Llama — grupo evolução (2026-07-03)
+- 💬 Gemini Flash — grupo evolução (2026-07-03)
 - 💬 Gemini Flash — grupo evolução (2026-07-03)
 </details>

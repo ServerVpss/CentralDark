@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T08:02:17.615Z
+# 🧠 Notion Sync — 2026-07-03T08:37:51.372Z
 
-- **Commit fonte:** `1fd45cc5c1b31609fd9fd2d127c9c10b2d7d5627`
+- **Commit fonte:** `2c09e511ba9464b3be0778ef72af2c4b537cc11c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 293 atualizadas · ❌ 353 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 293 atualizadas · ❌ 358 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 22 | 0 | 22 | 0 | 0 |
 | aprendizados | 266 | 0 | 266 | 0 | 0 |
-| estrutura | 353 | 0 | 0 | 0 | 353 |
+| estrutura | 358 | 0 | 0 | 0 | 358 |
 
 ## Operações
 
@@ -337,6 +337,7 @@
 | estrutura | erro | docs/CONSCIENCIA/11-SKIL-SH.md |
 | estrutura | erro | docs/CONSCIENCIA/12-GUIA-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/12-PASTA-OFICIAL-BOT.md |
+| estrutura | erro | docs/CONSCIENCIA/13-COFRE-SECRETS-CENTRALIZADO.md |
 | estrutura | erro | docs/CONSCIENCIA/13-COMANDO-UNICO-VPS.md |
 | estrutura | erro | docs/CONSCIENCIA/20-COLABORACAO-MULTI-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md |
@@ -346,6 +347,7 @@
 | estrutura | erro | docs/CONSCIENCIA/22-PADRAO-STATUS-VISUAL.md |
 | estrutura | erro | docs/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
 | estrutura | erro | docs/CONSCIENCIA/23-PAPEL-LOVABLE-CENTRAL-COMANDO.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
@@ -356,6 +358,7 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | erro | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-232402-router-diga-s-ok.md |
@@ -374,6 +377,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-5-painel-visual.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-7-webui-integration.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/MOVIDO.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
@@ -568,6 +572,7 @@
 | estrutura | erro | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
 | estrutura | erro | docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
 | estrutura | erro | docs/CONSCIENCIA/RELATORIOS/2026-07-03-sessao-hermes-webhook.md |
+| estrutura | erro | docs/CONSCIENCIA/RELATORIOS/20260703T075750Z-consolidacao-root-docs-centraldark.md |
 | estrutura | erro | docs/CONSCIENCIA/RELATORIOS/alinhamento-cerebro-20260630.md |
 | estrutura | erro | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T21-15-31.md |
 | estrutura | erro | docs/CONSCIENCIA/RELATORIOS/notion-sync/2026-06-25T23-00-16.md |
