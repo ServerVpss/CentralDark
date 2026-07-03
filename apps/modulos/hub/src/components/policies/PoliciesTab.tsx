@@ -12,12 +12,12 @@ import { useAuth } from '@/hooks/useAuth';
 interface Policy {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   rule_type: 'allow' | 'block' | 'require_veto';
   target_tool_id?: string;
   target_server_id?: string;
   enabled: boolean;
-  created_by: string;
+  created_by?: string;
   created_at: string;
   updated_at: string;
 }
@@ -32,7 +32,7 @@ export function PoliciesTab() {
 
   const filteredPolicies = policies.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.description.toLowerCase().includes(search.toLowerCase());
+      (p.description || '').toLowerCase().includes(search.toLowerCase());
     const matchesType = filterType === 'all' || p.rule_type === filterType;
     return matchesSearch && matchesType;
   });

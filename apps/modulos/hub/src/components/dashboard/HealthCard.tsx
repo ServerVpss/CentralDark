@@ -4,30 +4,34 @@ import { Badge } from '@/shared/ui/badge';
 import { Activity, Cpu, Server, Wifi } from 'lucide-react';
 
 interface HealthData {
-  status: 'healthy' | 'degraded' | 'down';
-  uptime: number;
-  cpu: number;
-  memory: number;
-  lastCheck: string;
-  services: { name: string; status: string }[];
+  status?: 'healthy' | 'degraded' | 'down' | string;
+  uptime?: number;
+  cpu?: number;
+  memory?: number;
+  lastCheck?: string;
+  services?: { name: string; status: string }[];
 }
 
 interface HealthCardProps {
-  data: HealthData;
+  health: HealthData | null;
 }
 
-export function HealthCard({ data }: HealthCardProps) {
-  const statusColor = {
-    healthy: 'bg-green-500',
-    degraded: 'bg-yellow-500',
-    down: 'bg-red-500',
-  }[data.status];
+export function HealthCard({ health }: HealthCardProps) {
+  const status = health?.status ?? 'down';
 
-  const statusLabel = {
-    healthy: 'Saudável',
-    degraded: 'Degradado',
-    down: 'Indisponível',
-  }[data.status];
+  const statusColor =
+    {
+      healthy: 'bg-green-500',
+      degraded: 'bg-yellow-500',
+      down: 'bg-red-500',
+    }[status] ?? 'bg-gray-500';
+
+  const statusLabel =
+    {
+      healthy: 'Saudável',
+      degraded: 'Degradado',
+      down: 'Indisponível',
+    }[status] ?? status;
 
   return (
     <Card>
@@ -43,22 +47,22 @@ export function HealthCard({ data }: HealthCardProps) {
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center gap-2">
             <Server className="h-4 w-4 text-muted-foreground" />
-            <span>Uptime: {Math.floor(data.uptime / 3600)}h</span>
+            <span>Uptime: {Math.floor((health?.uptime ?? 0) / 3600)}h</span>
           </div>
           <div className="flex items-center gap-2">
             <Cpu className="h-4 w-4 text-muted-foreground" />
-            <span>CPU: {data.cpu}%</span>
+            <span>CPU: {health?.cpu ?? '—'}%</span>
           </div>
           <div className="flex items-center gap-2">
             <Wifi className="h-4 w-4 text-muted-foreground" />
-            <span>RAM: {data.memory}%</span>
+            <span>RAM: {health?.memory ?? '—'}%</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Último: {data.lastCheck}</span>
+            <span className="text-xs text-muted-foreground">Último: {health?.lastCheck ?? '—'}</span>
           </div>
         </div>
         <div className="mt-4 space-y-1">
-          {data.services.map((svc) => (
+          {(health?.services ?? []).map((svc) => (
             <div key={svc.name} className="flex items-center justify-between text-xs">
               <span>{svc.name}</span>
               <Badge variant={svc.status === 'healthy' ? 'default' : 'destructive'}>

@@ -3,11 +3,11 @@ import { Badge } from '@/shared/ui/badge';
 import { Shield, ShieldCheck, ShieldX, AlertTriangle } from 'lucide-react';
 
 interface RuleBadgeProps {
-  ruleType: 'allow' | 'block' | 'require_veto';
-  enabled: boolean;
+  type: 'allow' | 'block' | 'require_veto';
+  enabled?: boolean;
 }
 
-export function RuleBadge({ ruleType, enabled }: RuleBadgeProps) {
+export function RuleBadge({ type: ruleType, enabled = true }: RuleBadgeProps) {
   if (!enabled) {
     return (
       <Badge variant="outline" className="text-muted-foreground">

@@ -15,11 +15,11 @@ interface AuditEntry {
 }
 
 interface AuditExportProps {
-  data: AuditEntry[];
+  entries: AuditEntry[];
   filename?: string;
 }
 
-export function AuditExport({ data, filename = 'audit-log.csv' }: AuditExportProps) {
+export function AuditExport({ entries: data, filename = 'audit-log.csv' }: AuditExportProps) {
   const { toast } = useToast();
 
   const handleExport = () => {

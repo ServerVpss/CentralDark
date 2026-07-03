@@ -1,24 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { hubClient } from '@/integrations/supabase/hub-client';
+import type { AuditLog } from '@/types/audit';
 
-export function useAudit(page = 0, pageSize = 20) {
-  const [logs, setLogs] = useState([]);
+const PAGE_SIZE = 20;
+
+export function useAudit(pageSize = PAGE_SIZE) {
+  const [entries, setEntries] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1); // 1-based (a UI mostra "Página X de Y")
+  const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    const fetchLogs = async () => {
-      setLoading(true);
-      const { data, error } = await hubClient
-        .from('audit_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .range(page * pageSize, (page + 1) * pageSize - 1);
-      
-      if (!error) setLogs(data);
-      setLoading(false);
-    };
-    fetchLogs();
+  const fetchLogs = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    const from = (page - 1) * pageSize;
+    const { data, error: err, count } = await hubClient
+      .from('audit_logs')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, from + pageSize - 1);
+
+    if (err) {
+      setError(err.message);
+    } else {
+      setEntries((data || []) as AuditLog[]);
+      setTotalPages(Math.max(1, Math.ceil((count || 0) / pageSize)));
+    }
+    setLoading(false);
   }, [page, pageSize]);
 
-  return { logs, loading };
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]);
+
+  return {
+    entries,
+    logs: entries, // alias de compatibilidade
+    loading,
+    error,
+    page,
+    totalPages,
+    setPage,
+    refresh: fetchLogs,
+  };
 }

@@ -19,16 +19,7 @@ export const telegramClient = {
     return response.data;
   },
 
-  async sendCode(requestId: string, code: string): Promise<{ success: boolean }> {
-    const response = await apiClient.post('/mtproto/verify', { requestId, code });
-    return response.data;
-  },
-
-  async disconnect(sessionId: string): Promise<void> {
-    await apiClient.post(`/mtproto/disconnect/${sessionId}`);
-  },
-
-  async reconnect(sessionId: string): Promise<void> {
-    await apiClient.post(`/mtproto/reconnect/${sessionId}`);
+  async verifyCode(requestId: string, code: string): Promise<void> {
+    await apiClient.post('/mtproto/verify', { requestId, code });
   }
 };

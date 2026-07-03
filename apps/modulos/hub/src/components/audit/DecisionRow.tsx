@@ -15,11 +15,11 @@ interface Decision {
 }
 
 interface DecisionRowProps {
-  decision: Decision;
+  entry: Decision;
   onViewDetails?: (id: string) => void;
 }
 
-export function DecisionRow({ decision, onViewDetails }: DecisionRowProps) {
+export function DecisionRow({ entry: decision, onViewDetails }: DecisionRowProps) {
   const resultConfig = {
     approved: { icon: CheckCircle2, color: 'bg-green-100 text-green-800 border-green-300' },
     vetoed: { icon: XCircle, color: 'bg-red-100 text-red-800 border-red-300' },

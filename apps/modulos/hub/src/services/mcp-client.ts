@@ -36,5 +36,12 @@ export const mcpClient = {
   async syncTools(): Promise<{ success: boolean; message: string }> {
     const res = await fetch(`${MCP_API_URL}/sync`, { method: 'POST' });
     return res.json();
+  },
+
+  // usado pelo SyncButton do catálogo — mesma rota /sync, formato de resultado detalhado
+  async syncCatalog(): Promise<{ status: string; tools_found: number; tools_added: number; tools_updated: number; errors?: string[] }> {
+    const res = await fetch(`${MCP_API_URL}/sync`, { method: 'POST' });
+    if (!res.ok) throw new Error('Falha na sincronização do catálogo');
+    return res.json();
   }
 };

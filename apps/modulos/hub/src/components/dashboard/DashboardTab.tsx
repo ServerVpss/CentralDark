@@ -20,7 +20,7 @@ export function DashboardTab() {
         </div>
       )}
       <HealthCard health={health} />
-      <StatusTimeline events={timeline} />
+      <StatusTimeline entries={timeline} />
     </div>
   );
 }

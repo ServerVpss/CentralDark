@@ -24,3 +24,12 @@ export interface SyncResult {
   tools_updated: number;
   errors: string[];
 }
+// Aliases usados pelo mcp-client (compat com nomes MCP*)
+export type MCPTool = McpTool;
+
+export interface MCPHealth {
+  status: string;
+  uptime?: number;
+  version?: string;
+  [k: string]: unknown;
+}

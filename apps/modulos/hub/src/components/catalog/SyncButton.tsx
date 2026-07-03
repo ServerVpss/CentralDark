@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { RefreshCw, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
-import { useToast } from '@/shared/hooks/useToast';
+import { useToast } from '@/shared/hooks/use-toast';
 import { mcpClient } from '@/services/mcp-client';
 
 interface SyncResult {
@@ -12,7 +12,11 @@ interface SyncResult {
   errors?: string[];
 }
 
-export function SyncButton() {
+interface SyncButtonProps {
+  onSyncComplete?: () => void;
+}
+
+export function SyncButton({ onSyncComplete }: SyncButtonProps) {
   const [syncing, setSyncing] = useState(false);
   const [result, setResult] = useState<SyncResult | null>(null);
   const { toast } = useToast();
@@ -28,6 +32,7 @@ export function SyncButton() {
         description: `${res.tools_added} adicionados, ${res.tools_updated} atualizados`,
         variant: res.status === 'completed' ? 'default' : 'destructive',
       });
+      onSyncComplete?.();
     } catch (err) {
       toast({ title: 'Erro na sincronização', description: String(err), variant: 'destructive' });
     } finally {
