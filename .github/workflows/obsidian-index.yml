@@ -5,31 +5,45 @@ on:
     branches: [main]
     paths:
       - 'docs/BRAIN/**'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: obsidian-index
+  cancel-in-progress: false
+
 jobs:
   regenerar-index:
+    name: 📚 Regenerar INDEX.md do Segundo Cérebro
     runs-on: self-hosted
     timeout-minutes: 5
-
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1
+          fetch-depth: 0
+          submodules: false
 
-      - name: Gerar INDEX.md
+      - name: 🔄 Regerar + commit + push (retry loop)
         run: |
-          node - <<'EOF'
+          set -e
+          git config user.name  "CentralDark Bot"
+          git config user.email "bot@centralldark.com"
+
+          MAX_TRIES=3
+          for TRY in $(seq 1 $MAX_TRIES); do
+            echo "🔄 Tentativa $TRY/$MAX_TRIES"
+            git fetch origin main
+            git reset --hard origin/main
+
+            node - <<'EOF'
           const fs = require('fs');
           const path = require('path');
-
           const BRAIN = path.join(process.cwd(), 'docs', 'BRAIN');
           const INDEX = path.join(BRAIN, 'INDEX.md');
-
           function listNotes() {
             const result = [];
             for (const entry of fs.readdirSync(BRAIN, { withFileTypes: true })) {
@@ -44,18 +58,14 @@ jobs:
             }
             return result;
           }
-
           const notes = listNotes();
           const byFolder = {};
           for (const n of notes) {
             const key = n.folder || '(raiz)';
-            if (!byFolder[key]) byFolder[key] = [];
-            byFolder[key].push(n);
+            (byFolder[key] = byFolder[key] || []).push(n);
           }
-
           const ts = new Date().toISOString().replace('T', ' ').slice(0, 16);
           let md = `# 📚 INDEX — Segundo Cérebro CentralDark\n\n> Gerado automaticamente em ${ts} UTC. Não editar manualmente.\n\n`;
-
           for (const [folder, items] of Object.entries(byFolder).sort()) {
             md += `## ${folder}\n\n`;
             for (const item of items.sort((a, b) => a.file.localeCompare(b.file))) {
@@ -63,20 +73,22 @@ jobs:
             }
             md += '\n';
           }
-
           fs.writeFileSync(INDEX, md);
-          console.log(`INDEX.md gerado: ${notes.length} notas em ${Object.keys(byFolder).length} pastas`);
+          console.log(`✅ INDEX.md gerado: ${notes.length} notas em ${Object.keys(byFolder).length} pastas`);
           EOF
 
-      - name: Commit INDEX.md
-        run: |
-          git config user.name  "CentralDark Bot"
-          git config user.email "bot@centralldark.com"
-          git add docs/BRAIN/INDEX.md
-          if git diff --cached --quiet; then
-            echo "INDEX.md sem mudanças — nada a commitar"
-          else
+            if git diff --quiet -- docs/BRAIN/INDEX.md; then
+              echo "✅ INDEX sem mudanças."
+              exit 0
+            fi
+            git add docs/BRAIN/INDEX.md
             git commit -m "chore(brain): regenerar INDEX.md automaticamente"
-            git pull --rebase origin main || true
-            git push
-          fi
+            if git push origin HEAD:main; then
+              echo "✅ INDEX publicado (tentativa $TRY)."
+              exit 0
+            fi
+            echo "⚠️ Push rejeitado, retry..."
+            sleep 2
+          done
+          echo "❌ Falhou após $MAX_TRIES tentativas."
+          exit 1
