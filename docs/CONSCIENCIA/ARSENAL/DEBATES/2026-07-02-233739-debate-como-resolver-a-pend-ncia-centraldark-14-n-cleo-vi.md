@@ -1,3 +1,10 @@
+---
+title: "2026 07 02 233739 Debate Como Resolver A Pend Ncia Centraldark 14 N Cleo Vi"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # 🔥 DEBATE — 2026-07-02-233739
 
 **Tema:** Como resolver a pendência CentralDark: 🟡 #14 — Núcleo Vivo de Ensinamentos (pós-Hub)

@@ -2145,3 +2145,8 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
 - **Lição:** Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa
+
+### 💬 Claude Sonnet — grupo evolução (2026-07-03)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Se um microsserviço da VPS cair agora, quem percebe primeiro — o Guardião, o painel ou nós aqui no grupo?
+- **Lição:** Entendi que evolução coletiva é mais poderosa que evolução individual

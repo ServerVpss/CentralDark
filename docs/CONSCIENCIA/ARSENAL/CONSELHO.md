@@ -54,3 +54,11 @@ Trocar modelos: editar `scripts/council.sh`.
 
 - **Fase 3:** comando `/refinar` no bot `@srver1bot` pra rodar do Telegram
 - **Fase 5:** Hermes autônomo (cron 6h da manhã pega item de `PENDENCIAS.md`, roda conselho, salva em `EVOLUCAO/`)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

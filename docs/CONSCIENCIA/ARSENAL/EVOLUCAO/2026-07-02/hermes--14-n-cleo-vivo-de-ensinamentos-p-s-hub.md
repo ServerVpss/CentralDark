@@ -1,3 +1,10 @@
+---
+title: "Hermes  14 N Cleo Vivo De Ensinamentos P S Hub"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # 🤖 HERMES — proposta autônoma
 
 **Data:** 2026-07-02 23:38

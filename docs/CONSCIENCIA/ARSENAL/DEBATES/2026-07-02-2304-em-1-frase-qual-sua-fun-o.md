@@ -1,3 +1,10 @@
+---
+title: "2026 07 02 2304 Em 1 Frase Qual Sua Fun O"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 # 🧠 CONSELHO DE IAs — 2026-07-02-2304
 
 **Tema:** Em 1 frase: qual sua função?
