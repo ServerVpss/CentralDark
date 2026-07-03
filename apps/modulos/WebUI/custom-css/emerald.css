@@ -1,0 +1,244 @@
+/* =========================================================================
+   CentralDark — Tema Esmeralda 3D pro Open WebUI
+   Estilo Claude Code + sistema tátil (Esmeralda do TelePanel)
+   Aplicado via config.ui.custom_css no banco do WebUI
+   ========================================================================= */
+
+:root {
+  --cd-emerald-50:  #ecfdf5;
+  --cd-emerald-100: #d1fae5;
+  --cd-emerald-300: #6ee7b7;
+  --cd-emerald-400: #34d399;
+  --cd-emerald-500: #10b981;
+  --cd-emerald-600: #059669;
+  --cd-emerald-700: #047857;
+  --cd-emerald-800: #065f46;
+  --cd-emerald-900: #064e3b;
+
+  --cd-ink:        #0a0f0d;
+  --cd-ink-2:      #0f1614;
+  --cd-ink-3:      #131b18;
+  --cd-surface:    #0d1310;
+  --cd-border:     rgba(52, 211, 153, .14);
+  --cd-border-2:   rgba(52, 211, 153, .28);
+  --cd-text:       #e6f5ee;
+  --cd-muted:      #94a3a0;
+
+  --cd-shadow-3d:        0 1px 0 rgba(255,255,255,.06) inset, 0 6px 16px -6px rgba(0,0,0,.55), 0 2px 0 rgba(0,0,0,.35);
+  --cd-shadow-primary:   0 1px 0 rgba(255,255,255,.14) inset, 0 8px 22px -8px rgba(16,185,129,.55), 0 2px 0 rgba(4,120,87,.7);
+  --cd-shadow-pressed:   0 1px 2px rgba(0,0,0,.5) inset;
+  --cd-radius:           14px;
+  --cd-radius-lg:        18px;
+}
+
+/* ---------- Fundo base do app inteiro ---------- */
+html, body,
+.app, .flex.h-screen, main {
+  background: radial-gradient(circle at 15% 10%, rgba(16,185,129,.08), transparent 40%),
+              radial-gradient(circle at 85% 90%, rgba(4,120,87,.06), transparent 45%),
+              linear-gradient(180deg, var(--cd-ink) 0%, var(--cd-ink-2) 100%) !important;
+  color: var(--cd-text) !important;
+}
+
+/* ---------- Sidebar (thread list) ---------- */
+nav#sidebar,
+aside[aria-label*="Sidebar"],
+.sidebar {
+  background: linear-gradient(180deg, var(--cd-ink-2), var(--cd-ink)) !important;
+  border-right: 1px solid var(--cd-border) !important;
+}
+
+/* Botão "Nova conversa" com brilho esmeralda */
+button:has(> svg + span):first-of-type,
+button[aria-label*="New Chat"],
+button[aria-label*="Nova"] {
+  background: linear-gradient(180deg, var(--cd-emerald-600), var(--cd-emerald-700)) !important;
+  color: #fff !important;
+  border: 1px solid var(--cd-emerald-800) !important;
+  border-radius: var(--cd-radius) !important;
+  box-shadow: var(--cd-shadow-primary) !important;
+  transition: transform .1s ease, box-shadow .15s ease !important;
+}
+button:has(> svg + span):first-of-type:active,
+button[aria-label*="New Chat"]:active {
+  transform: translateY(1px);
+  box-shadow: var(--cd-shadow-pressed) !important;
+}
+
+/* Thread ativa: highlight esmeralda */
+a[href*="/c/"].bg-gray-100,
+a[href*="/c/"][aria-current="page"],
+.chat-item.active,
+[data-active="true"] {
+  background: linear-gradient(90deg, rgba(16,185,129,.16), rgba(16,185,129,.04)) !important;
+  border-left: 3px solid var(--cd-emerald-500) !important;
+  color: var(--cd-emerald-100) !important;
+}
+
+/* ---------- Área do chat ---------- */
+.chat-container,
+#messages-container,
+main .max-w-full {
+  background: transparent !important;
+}
+
+/* Separador sutil entre turnos (estilo Claude Code) */
+.message + .message,
+[data-message-id] + [data-message-id] {
+  border-top: 1px solid var(--cd-border) !important;
+  padding-top: 1.25rem !important;
+  margin-top: 1rem !important;
+  position: relative;
+}
+.message + .message::before,
+[data-message-id] + [data-message-id]::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: 50%;
+  transform: translateX(-50%);
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cd-emerald-500), transparent);
+  filter: blur(.4px);
+}
+
+/* Mensagens do usuário: bolha esmeralda 3D */
+.user-message,
+[data-role="user"] .message-content,
+.message[data-message-role="user"] .prose {
+  background: linear-gradient(180deg, var(--cd-emerald-600), var(--cd-emerald-700)) !important;
+  color: #fff !important;
+  border: 1px solid var(--cd-emerald-800) !important;
+  border-radius: var(--cd-radius-lg) !important;
+  padding: .85rem 1.1rem !important;
+  box-shadow: var(--cd-shadow-primary) !important;
+  max-width: 78%;
+  margin-left: auto;
+}
+
+/* Mensagens do assistente: SEM bolha (estilo Claude, texto limpo) */
+.assistant-message,
+[data-role="assistant"] .message-content,
+.message[data-message-role="assistant"] .prose {
+  background: transparent !important;
+  color: var(--cd-text) !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: .25rem 0 !important;
+}
+
+/* Prose: parágrafos claros, títulos verdes suaves */
+.prose { color: var(--cd-text) !important; }
+.prose h1, .prose h2, .prose h3, .prose strong {
+  color: var(--cd-emerald-300) !important;
+}
+.prose a { color: var(--cd-emerald-400) !important; text-decoration: underline; text-decoration-color: var(--cd-border-2); }
+.prose blockquote {
+  border-left: 3px solid var(--cd-emerald-500) !important;
+  background: rgba(16,185,129,.05);
+  color: var(--cd-muted) !important;
+}
+
+/* ---------- Blocos de código (Claude-like) ---------- */
+.prose pre,
+pre code,
+.code-block {
+  background: var(--cd-ink) !important;
+  border: 1px solid var(--cd-border-2) !important;
+  border-radius: var(--cd-radius) !important;
+  box-shadow: var(--cd-shadow-3d) !important;
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  font-size: .88rem !important;
+  color: #d1fae5 !important;
+}
+:not(pre) > code {
+  background: rgba(16,185,129,.10) !important;
+  color: var(--cd-emerald-300) !important;
+  padding: .12em .38em !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--cd-border) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+}
+
+/* ---------- Tool calls (function calling do MCP) ---------- */
+[data-tool-call],
+.tool-call,
+details.tool-call {
+  background: linear-gradient(180deg, var(--cd-ink-3), var(--cd-ink-2)) !important;
+  border: 1px solid var(--cd-emerald-800) !important;
+  border-left: 3px solid var(--cd-emerald-500) !important;
+  border-radius: var(--cd-radius) !important;
+  padding: .6rem .85rem !important;
+  margin: .5rem 0 !important;
+  box-shadow: var(--cd-shadow-3d) !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-size: .84rem !important;
+}
+[data-tool-call] summary,
+.tool-call summary {
+  color: var(--cd-emerald-300) !important;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ---------- Composer (caixa de mensagem) ---------- */
+.prompt-input,
+form textarea,
+textarea[placeholder*="Send"],
+textarea[placeholder*="Mensagem"],
+textarea[placeholder*="Message"] {
+  background: var(--cd-ink-3) !important;
+  color: var(--cd-text) !important;
+  border: 1px solid var(--cd-border-2) !important;
+  border-radius: var(--cd-radius-lg) !important;
+  box-shadow: var(--cd-shadow-3d) !important;
+  padding: .85rem 1rem !important;
+}
+textarea:focus {
+  border-color: var(--cd-emerald-500) !important;
+  box-shadow: 0 0 0 3px rgba(16,185,129,.18), var(--cd-shadow-3d) !important;
+  outline: none !important;
+}
+
+/* Botão enviar: verde 3D */
+button[type="submit"],
+button[aria-label*="Send"],
+button[aria-label*="Enviar"] {
+  background: linear-gradient(180deg, var(--cd-emerald-500), var(--cd-emerald-700)) !important;
+  color: #fff !important;
+  border: 1px solid var(--cd-emerald-800) !important;
+  border-radius: 999px !important;
+  box-shadow: var(--cd-shadow-primary) !important;
+  transition: transform .1s ease !important;
+}
+button[type="submit"]:active,
+button[aria-label*="Send"]:active {
+  transform: translateY(1px);
+  box-shadow: var(--cd-shadow-pressed) !important;
+}
+
+/* ---------- Botões genéricos: 3D suave ---------- */
+button:not([type="submit"]):not([aria-label*="Send"]):not([aria-label*="New Chat"]) {
+  border-radius: var(--cd-radius) !important;
+  transition: transform .1s ease, background .15s ease !important;
+}
+button:not([type="submit"]):hover {
+  background: rgba(16,185,129,.08) !important;
+}
+
+/* Scrollbar esmeralda */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--cd-emerald-700), var(--cd-emerald-900));
+  border-radius: 999px;
+  border: 2px solid var(--cd-ink);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--cd-emerald-600); }
+
+/* Selecção de texto */
+::selection { background: var(--cd-emerald-600); color: #fff; }
+
+/* Badge/status "streaming" */
+.animate-pulse, [data-streaming="true"] {
+  color: var(--cd-emerald-400) !important;
+}
