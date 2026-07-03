@@ -19,6 +19,7 @@ import { hubClient } from "@/integrations/supabase/hub-client";
 import { useToast } from "@/shared/hooks/use-toast";
 import { cn } from "@/shared/lib/utils";
 import { McpCard } from "./components/McpCard";
+import { TelegramMTProtoCard } from "./components/TelegramMTProtoCard";
 
 
 // ── Tipos ──────────────────────────────────────────────────────────
@@ -545,6 +546,7 @@ export default function HubPage() {
     const ORDER = ['telegram', 'notion', 'drive', 'github', 'vps'];
     return (
       <div className="space-y-5">
+        <TelegramMTProtoCard />
         <McpCard />
 
         <Card className="card-premium">
