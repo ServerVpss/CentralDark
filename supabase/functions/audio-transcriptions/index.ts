@@ -6,6 +6,12 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/audio/transcriptions";
 const DEFAULT_MODEL = "openai/gpt-4o-mini-transcribe";
+// Únicos modelos de STT que o gateway aceita — qualquer outro (ex.: whisper-1
+// que o Open WebUI manda por padrão) cai no DEFAULT_MODEL
+const MODELOS_ACEITOS = new Set([
+  "openai/gpt-4o-transcribe",
+  "openai/gpt-4o-mini-transcribe",
+]);
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -34,10 +40,14 @@ Deno.serve(async (req) => {
       }
       
       // Garante prefixo do modelo
-      const model = formData.get("model") as string;
+      let model = (formData.get("model") as string) || "";
       if (model && !model.includes("/")) {
-        formData.set("model", `openai/${model}`);
+        model = `openai/${model}`;
       }
+      if (!MODELOS_ACEITOS.has(model)) {
+        model = DEFAULT_MODEL;
+      }
+      formData.set("model", model);
 
       const upstream = await fetch(GATEWAY_URL, {
         method: "POST",
