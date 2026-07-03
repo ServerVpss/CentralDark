@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T10:04:39.774Z",
-  "updatedAtBR": "03/07/2026, 07:04:39 BRT",
+  "updatedAt": "2026-07-03T10:17:50.828Z",
+  "updatedAtBR": "03/07/2026, 07:17:50 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "chore(hermes): missão upgrade-hub-v2 arquivada em concluidas/ (pausa por falhas de git — trabalho commitado em bc209bf96)",
+    "lastCommit": "feat(hub): hub v2 typecheck limpo + PolicyEditor funcional",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T10:17:50.828Z",
+      "titulo": "Push na main · 00f4403a37812e3410d08ff44dc1ea0bc18f0313",
+      "detalhe": "feat(hub): hub v2 typecheck limpo + PolicyEditor funcional",
+      "area": "Repositório",
+      "sha": "00f4403",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-03T10:04:39.774Z",
       "titulo": "Push na main · c223e699d3a90290cac185946d1f6f957010647c",
       "detalhe": "chore(hermes): missão upgrade-hub-v2 arquivada em concluidas/ (pausa por falhas de git — trabalho commitado em bc209bf96)",
@@ -975,14 +983,6 @@
       "detalhe": "feat(mcp+llm): remove /mcp-public, ativa Groq/OpenRouter/Gemini, agenda backup Drive",
       "area": "Repositório",
       "sha": "71821d0",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T02:26:59.581Z",
-      "titulo": "Push na main · 6a4aa18549836752a3039ab8309dbc13c10637fb",
-      "detalhe": "docs(pendencias): anexar mapeamento completo da CONSCIENCIA à pendência #9 — 6 achados específicos",
-      "area": "Repositório",
-      "sha": "6a4aa18",
       "actor": "segredounlock"
     }
   ],
@@ -1398,6 +1398,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T10:17:50.828Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 00f4403a37812e3410d08ff44dc1ea0bc18f0313 (00f4403)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T10:04:39.774Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c223e699d3a90290cac185946d1f6f957010647c (c223e69)",
@@ -1737,13 +1744,6 @@
       "time": "2026-06-30T01:08:31.143Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3c7c87dfeccf737414777e33a25e4c0d318dfe14 (3c7c87d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T01:07:40.762Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6d94339b1c611ff9153ba1993c6049692a48c75c (6d94339)",
       "area": "Repositório",
       "status": "sucesso"
     }
