@@ -1,101 +1,156 @@
-# 🎯 ARSENAL CIRÚRGICO — Missão "Central de Bate-Papo" (ui.centralldark.com)
 
-## O que a gente confirmou agora
+# 🔫 BLOCO 2 — ARSENAL NO CHAT DO WEBUI
 
-- `ui.centralldark.com` é **Open WebUI v0.10.1** em pt-BR, cadastro fechado (só quem já tem conta entra — ✅).
-- Já tem modelos `arsenal-router`, `arsenal-parallel`, `arsenal-debate` cadastrados lá dentro (a mensagem verde "SUCESSO" no seu print prova).
-- O bate-papo já tem visual de app nativo mobile bem parecido com este daqui (input flutuante, menu "+", modo de voz "Escutando").
-- Falta: (1) puxar TODAS as funções/botões e mapear, (2) plugar minha rota (Lovable AI Gateway) como um modelo lá dentro pra você falar comigo por lá igual falamos aqui, (3) adicionar botões-atalho pro Arsenal (router/parallel/debate/swarm/chain) dentro do chat.
+Modo enxame · formato de guerra · verificação end-to-end antes de fechar.
 
----
+## Placar atual
 
-## 🐝 Fase 1 — Enxame de 10 agentes fazendo varredura em paralelo
+```
+▓▓▓▓▓▓▓▓▓▓  FASE 0  Hermes revive
+▓▓▓▓▓▓▓▓▓▓  BLOCO 1 Rota Lovable
+░░░░░░░░░░  BLOCO 2 ← agora
+░░░░░░░░░░  BLOCO 3 Chips 3D + Esmeralda
+░░░░░░░░░░  BLOCO 4 Rotação de 5 chaves
+░░░░░░░░░░  BLOCO 5 Card consolidado
+```
 
-Cada agente cuida de uma área do Open WebUI, lê tudo (código + config + banco), volta com **lista completa de botão/função + o que cada um faz + se tá ligado ou não**. Hermes vai junto aprendendo o padrão de recon (registra em `docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md`).
+## Mapa que já existe (não vou refazer)
 
-| # | Agente | Área que varre |
+```
+┌──────────────────────────────────────────────────────────────┐
+│  ArsenalProxy   PM2 68  :8083   FastAPI  (endpoints REST)    │
+│    /arsenal/neural     POST  → escolhe modelo                │
+│    /arsenal/swarm      POST  → N modelos em paralelo         │
+│    /arsenal/chain      POST  → cadeia de 4                   │
+│    /arsenal/intel      GET   → snapshot segurança            │
+│    /arsenal/stats      GET   → ranking de modelos            │
+│                                                              │
+│  ArsenalAdapter PM2 55  :8090   OpenAI-compat (Council)      │
+│    /v1/models          → lista 4 verbos como "modelos"       │
+│    /v1/chat/completions → despacha pelo campo model:         │
+│       arsenal-router · arsenal-parallel                      │
+│       arsenal-debate · arsenal-hermes                        │
+│    Auth: Bearer arsenal-key-local-2026                       │
+│                                                              │
+│  WebUI docker-compose JÁ tem :8090/v1 + key registrados      │
+│  como 5º endpoint OpenAI. Provável que os 4 verbos           │
+│  já apareçam no dropdown — precisa validar.                  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+## O que vou fazer
+
+### Fase 2.1 — Validar os 4 verbos-modelo (enxame de 4 curls)
+
+Um sub-agente por verbo, em paralelo:
+
+| Verbo | Teste | Sucesso |
 |---|---|---|
-| 1 | **Auditor-Composer** | Barra de digitação: `+` (Carregar Arquivos, Capturar, Anexar Página Web, Anexar Arquivos, Anexar Notas, Anexar Base de Conhecimento, Chats de Referência), microfone, modo de voz "Escutando", botão de enviar |
-| 2 | **Auditor-Header** | Topo do chat: seletor de modelo, "Definir como padrão", ícone sidebar, novo chat (+), controles avançados (temperatura/system prompt), avatar |
-| 3 | **Auditor-Sidebar** | Menu lateral: lista de chats, pastas, arquivar, pin, busca, workspace, playground |
-| 4 | **Auditor-Menu-3-Pontos** | Aquele menu de contexto que aparece em cada mensagem: copiar, editar, regenerar, TTS, share, feedback 👍👎, continuar, ramificar (branch) |
-| 5 | **Auditor-Ferramentas** | Aba Tools/Ferramentas: quais tools estão instaladas, o que faz cada uma, se estão ativas no chat atual |
-| 6 | **Auditor-Funções** | Aba Functions: pipes, filters, actions cadastrados (é onde os `arsenal-router/parallel/debate` provavelmente vivem — confirmar) |
-| 7 | **Auditor-Conectores** | Connections: OpenAI-compatible endpoints cadastrados (Ollama, LiteLLM, elite-anthropic-proxy, lovable-proxy, etc.) — mapear URL, key e quais modelos cada um expõe |
-| 8 | **Auditor-Conhecimento** | Knowledge Base + notas: coleções, RAG, quais docs já indexados |
-| 9 | **Auditor-Admin** | Painel admin: usuários, permissões, features ativas/desativadas, whitelist, config global |
-| 10 | **Auditor-Integrações** | MCP servers, Code Interpreter, Web Search (Tavily/SearXNG), Image Gen, TTS/STT — quais já plugados, quais faltam |
+| `arsenal-router` | POST `/v1/chat/completions` "diz oi" | HTTP 200 + choices[0].message |
+| `arsenal-parallel` | mesma coisa, model diferente | idem |
+| `arsenal-debate` | idem | idem |
+| `arsenal-hermes` | idem | idem |
 
-**Entrega de cada agente:** JSON estruturado `{ "area": ..., "botoes": [{nome, o_que_faz, ativo}], "gaps": [...] }` juntado num relatório único.
+- Se qualquer um der 401 → cheque `ARSENAL_ADAPTER_KEY` no PM2 55 vs o valor no docker-compose (`arsenal-key-local-2026`), harmonizar.
+- Se 500 → `pm2 logs 55 --nostream` + Fabler diagnosticando.
+- Se 200 mas Council responde vazio → verificar rota upstream (edge function `arsenal-proxy` no Supabase).
 
----
+### Fase 2.2 — Sidecar CentralDark-Tools (2 tools OpenAPI GET)
 
-## 🔌 Fase 2 — Adicionar MINHA rota (Lovable AI Gateway) como modelo lá
+Endpoints `intel` e `stats` são leitura pura (não conversa) — melhor virar botão no menu ◇ do que "modelo".
 
-Você lembrou certo. O `darkai` que a gente montou é a **edge function `ai-proxy`** deste projeto Lovable Cloud — ela recebe pedido, valida um bearer key e chama o Lovable AI Gateway com a `LOVABLE_API_KEY` protegida.
+**Novo container `CentralDark-Tools`** em `/root/CentralDark/apps/modulos/WebUI/tools-server/`:
 
-Para o Open WebUI chamar essa mesma rota:
+```python
+# main.py — FastAPI mínimo, 2 rotas passthrough pro ArsenalProxy :8083
+from fastapi import FastAPI
+import httpx
 
-1. **Endpoint OpenAI-compatible** — a `ai-proxy` já responde no formato `/v1/chat/completions`. URL pública:
-   `https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/ai-proxy/v1`
-2. **Chave** — puxo da secret `DARKAI_KEY` (mesma que o CLI `darkai` usa) via `secrets--fetch_secrets`. Se não existir, gero uma nova forte.
-3. **Cadastro no Open WebUI** (Admin → Connections → OpenAI API):
-   - Base URL: a URL acima
-   - Key: o valor da secret
-   - Prefix: `lovable/`
-4. **Modelos que aparecem no seletor** (os que valem a pena):
-   - `lovable/google/gemini-3-flash-preview` ← rápido, default
-   - `lovable/google/gemini-3.1-pro-preview` ← raciocínio pesado
-   - `lovable/openai/gpt-5` ← qualidade máxima
-   - `lovable/openai/gpt-5-mini` ← equilibrado
-5. **Modelo custom "Lovable-Agent"** — cria uma persona no Open WebUI com system prompt que te faz agir igual você age aqui (mesmo tom, PT-BR, direto). Assim quando você abrir esse modelo lá, é literalmente "conversar com o Lovable/eu".
+app = FastAPI(title="Arsenal Tools", version="1.0.0")
+BASE = "http://host.docker.internal:8083"
 
----
+@app.get("/intel", summary="Dark Intel — snapshot de segurança agora",
+         description="Retorna IPs bloqueados, últimas ameaças e contadores em tempo real.")
+async def intel():
+    async with httpx.AsyncClient(timeout=10) as c:
+        return (await c.get(f"{BASE}/arsenal/intel")).json()
 
-## 🔫 Fase 3 — Botões do Arsenal dentro do chat
+@app.get("/stats", summary="Arsenal Stats — ranking de performance dos modelos",
+         description="Ranking dos 17 modelos por taxa de sucesso e latência média.")
+async def stats():
+    async with httpx.AsyncClient(timeout=10) as c:
+        return (await c.get(f"{BASE}/arsenal/stats")).json()
+```
 
-Duas formas de plugar, escolho a que der menos atrito:
+```yaml
+# adição no docker-compose.override.yml
+cd-tools:
+  build: ./tools-server
+  container_name: CentralDark-Tools
+  extra_hosts: [host.docker.internal:host-gateway]
+  restart: unless-stopped
+```
 
-**A) Como "Tools" do Open WebUI** (recomendado) — escrevo 5 tools Python curtas (`arsenal_router`, `arsenal_swarm`, `arsenal_chain`, `arsenal_stats`, `arsenal_intel`) que batem em `http://127.0.0.1:8083/arsenal/*`. Ficam no menu de ferramentas do chat, você marca as que quer usar naquele bate-papo e o modelo chama sozinho quando faz sentido.
+Envs do WebUI ganham:
 
-**B) Como botões-atalho no composer** — patch no CSS/JS custom do Open WebUI adicionando 3-4 chips acima da caixa de texto ("🧠 Router", "🐝 Swarm", "🔗 Chain") que injetam um prefixo no prompt. Mais visível, menos "mágico".
+```
+TOOL_SERVER_CONNECTIONS=[
+  {"url":"http://cd-tools:9000","path":"openapi.json","auth_type":"none","key":""}
+]
+```
 
-Faço as duas: A pra o modelo usar sozinho, B pra você ter atalho na mão.
+Depois: `docker compose up -d --build cd-tools && docker compose restart webui`.
 
----
+Resultado: no ◇ do composer aparecem 2 botões — **Dark Intel** e **Arsenal Stats**.
 
-## 📱 Fase 4 — Deixar a cara igual aqui (mobile)
+### Fase 2.3 — 5 slash-commands no composer (Prompts do WebUI)
 
-Custom CSS já existe (`/static/custom.css`). Vou aplicar o Sistema 3D Tátil ("Esmeralda") que tá na memória do projeto: sombras `shadow-3d`, `rounded-xl`, `active:translate-y-[1px]`, tema emerald, respiração das bolhas de mensagem, spacing gordo mobile-first, botão de enviar redondo com onda igual o seu print. Mantém o Open WebUI intacto, só troca a maquiagem.
+Injetar 5 prompts na tabela `prompt` do `webui.db` via SQL direto no container. Cada slash-command é um atalho que preenche system-prompt + sugere o modelo certo:
 
----
+| Slash | Modelo sugerido | System prompt (resumo) |
+|---|---|---|
+| `/router` | arsenal-router | "Roteia esta pergunta pro modelo ideal, resposta única e direta." |
+| `/swarm` | arsenal-parallel | "Dispare 3 IAs em paralelo, o juiz sintetiza a melhor." |
+| `/chain` | (modelo padrão) → chama `/arsenal/chain` do proxy | "Cadeia de 4 IAs refinando iterativamente." |
+| `/debate` | arsenal-debate | "2 IAs, 2 rodadas de crítica, juiz dá veredito final." |
+| `/hermes` | arsenal-hermes | "Lê PENDENCIAS, propõe autônomo, salva em EVOLUCAO/." |
 
-## 🧾 Fase 5 — Relatório de vitória + refinamento
+SQL de inserção (idempotente com `INSERT OR REPLACE`).
 
-No final você recebe:
+### Fase 2.4 — Smoke test end-to-end (Playwright na VPS)
 
-1. **Mapa completo** (JSON + versão leiga em markdown) de TUDO que o Open WebUI de vocês tem hoje
-2. **Lista de gaps** (o que falta pra virar central definitiva)
-3. **Print/screenshot** de como ficou a integração Arsenal + Lovable Gateway
-4. **Instrução curta** de como usar: "abre modelo X → digita → clica em Y"
-5. **Sugestões de refino** (ex.: mover botão Y, esconder feature Z que não usa, ligar MCP tal)
-6. Notificação Telegram no admin + linha no canal Status
+Um script que:
+1. Faz login no ui.centralldark.com como admin.
+2. Abre novo chat, seleciona `arsenal-router`, envia "oi" → confere HTTP 200 e conteúdo não-vazio.
+3. Repete pra `arsenal-debate`.
+4. Abre menu ◇ → clica **Dark Intel** → confere que JSON volta com `bloqueados`.
+5. Digita `/debate` no composer → confere autocomplete aparecendo.
 
----
+Screenshot em cada etapa em `/tmp/browser/bloco2/`.
 
-## 🔒 O que NÃO vou tocar sem sua ordem
-- Nada dentro do WebUI que já funciona (só adiciono).
-- 🔒 Nenhum arquivo em `apps/modulos/WebUI/`, `apps/modulos/status/`, `apps/bot-telegram/`.
-- Basic Auth do painel Arsenal em `status.centralldark.com` fica igual.
-- Não crio usuário novo no Open WebUI, não abro cadastro público.
+### Fase 2.5 — Notificação Telegram (2 posts)
 
----
+- Admin privado: card completo com placar + link ui.centralldark.com + 5 verbos validados + 2 tools registradas.
+- Canal Status: linha curta "🟢 Bloco 2 OK — Arsenal completo no WebUI".
 
-## ❓ Uma decisão sua antes de eu executar
+## Regras de segurança
 
-O Open WebUI é multiusuário. Quando eu plugar minha rota Lovable, a chave da Lovable AI vai bancar TODAS as chamadas de qualquer usuário que escolher esse modelo lá. Duas opções:
+- Nenhum arquivo tocado em `apps/modulos/status/`, `apps/modulos/Bolt/`, `apps/bot-telegram/`.
+- Nenhuma migration ou insert no Supabase Lovable atual (só edit function ai-proxy já feito no Bloco 1).
+- Se qualquer fase travar 3× → pausa e chama o Pivete.
+- Consultar Fabler antes das Fases 2.1 e 2.3 (via `elite_gateway_chat`).
 
-- **(1) Só admin** — o modelo `lovable/*` aparece só pra você (grupo admin). Mais barato, mais seguro. **Recomendo essa.**
-- **(2) Todo mundo** — qualquer usuário que entrar no ui.centralldark.com pode chamar. Só se você quiser deixar aberto pros seus.
+## Critério "10/10" pra fechar o bloco
 
-Me diz **1 ou 2** (ou "manda o padrão" que eu vou de 1) e libera o build mode que eu solto os 10 agentes.
+Todos os 6 checks verdes:
+
+```
+[ ] arsenal-router responde no dropdown
+[ ] arsenal-parallel responde
+[ ] arsenal-debate responde
+[ ] arsenal-hermes responde
+[ ] Botão Dark Intel no ◇ retorna snapshot
+[ ] Slash /debate autocompleta no composer
+```
+
+Se algum falhar, refino até chegar. Sem entregar meio-caminho.
