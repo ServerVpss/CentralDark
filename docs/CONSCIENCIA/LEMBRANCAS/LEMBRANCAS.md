@@ -154,3 +154,13 @@ Manutenção periódica no CentralDark = **script bash + cron, NUNCA agente 24/7
 - **Promovida:** sim
 
 Conteúdo: Usuário reforçou que não quer Lovable envolvida nas operações do sistema CentralDark/VPS. Aplicar como regra prática: para consolidação, docs, VPS, plugins e segredos, priorizar VPS/GitHub/CentralDark e não tocar backend Lovable/Supabase nem depender dele, salvo pedido explícito.
+
+### [2026-07-03T14:25] Preferência: economizar token via rotas fixas ensinadas ao Hermes
+- **Data:** 2026-07-03
+- **Tags:** hermes, economia-token, rotas-fixas, arsenal
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-02
+- **Promovida:** sim
+
+Conteúdo: Toda descoberta técnica nova (porta, endpoint, comando, workaround) tem que ser registrada via registrar_aprendizado E consolidada aqui — pra Hermes e próximas IAs pegarem a rota pronta em vez de gastar token redescobrindo. Regra: se eu resolvi algo em >2 tentativas, virou aprendizado obrigatório.
