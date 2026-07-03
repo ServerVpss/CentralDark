@@ -6,15 +6,30 @@
 
 ---
 
-## 📁 Estrutura
+## 📁 Estrutura (fonte única — tudo do Arsenal mora aqui)
 
 ```
 ARSENAL/
-├── README.md              ← este arquivo (inventário mestre)
-├── DEBATES/               ← histórico de debates entre IAs
-├── EVOLUCAO/YYYY-MM-DD/   ← melhorias diárias que o Hermes autônomo propõe
-└── REFINAMENTOS/          ← respostas refinadas por Council de IAs
+├── README.md              ← este arquivo (inventário mestre + índice)
+├── CONSELHO.md            ← doutrina do Council de IAs
+├── MULTI-MODEL-ORCHESTRATION.md
+├── regras.json            ← slots de modelos (hot-reload)
+├── scripts/               ← arsenal-council.sh + hermes.sh
+├── RELATORIOS/            ← histórico por fase (3, 4, 6, ...)
+├── DEBATES/               ← saída dos /refinar /debate /router
+└── EVOLUCAO/YYYY-MM-DD/   ← propostas diárias do Hermes autônomo
 ```
+
+> 📌 **Regra:** qualquer coisa nova do Arsenal Council (relatório, debate, evolução, doutrina) mora dentro desta pasta. Em outros cantos do repo só ficam **atalhos** apontando pra cá.
+
+### 🔗 Atalhos rápidos
+
+- 📚 [Relatórios por fase](./RELATORIOS/README.md)
+- 🥊 [Debates](./DEBATES/)
+- 🧬 [Evolução (Hermes)](./EVOLUCAO/)
+- ⚙️ [regras.json](./regras.json)
+- 📜 [Doutrina do Conselho](./CONSELHO.md)
+
 
 ---
 
