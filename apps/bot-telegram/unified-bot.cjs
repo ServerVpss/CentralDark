@@ -951,6 +951,8 @@ async function runSkill(chatId, input, skillName) {
 // ── Comandos Admin ─────────────────────────────────────────────────────────
 let __refinar = null;
 try { __refinar = require('./handlers/refinar.cjs'); } catch(e) { console.error('[refinar handler não carregou]', e.message); }
+let __regras = null;
+try { __regras = require('./handlers/regras.cjs'); } catch(e) { console.error('[regras handler não carregou]', e.message); }
 
 async function handleAdminCommand(chatId, text) {
   const cmd  = text.split(' ')[0].toLowerCase();
@@ -996,6 +998,12 @@ async function handleAdminCommand(chatId, text) {
       return __refinar.refinarHandler({ send, chatId, text }, 'debate');
     }
     case '/router': {
+      // subcomandos de regras: /router status|trocar|testar
+      const args = text.split(/\s+/).slice(1);
+      const sub = (args[0] || '').toLowerCase();
+      if (__regras && ['status', 'trocar', 'testar'].includes(sub)) {
+        return __regras.regrasHandler({ send, chatId }, args);
+      }
       if (!__refinar) return send(chatId, '❌ Handler refinar não carregado.');
       return __refinar.refinarHandler({ send, chatId, text }, 'router');
     }
