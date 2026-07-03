@@ -2192,3 +2192,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Pivete pediu pra criar 3 bots (Groq/Gemini/Claude) dentro do grupo "Central Dark - Grupo Da Evolução" e achou que dar o token do @srver1bot equivalia a dar acesso à conta pessoal dele no Telegram.
 - **Aprendizado:** Token de bot (Bot API) NÃO permite: (1) criar bots novos — só @BotFather via conta de usuário; (2) adicionar bots num grupo — só usuário humano adiciona; (3) agir como conta pessoal — isso exige MTProto/Telethon com sessão de user. Regra prática: quando o pedido é "cria bot X no grupo Y", ou o Pivete cria no BotFather e cola o token, OU adotamos alternativa de 1 bot só com múltiplos comandos (/groq, /gemini, /claude) roteando pra modelos diferentes via Lovable AI / Elite Gateway / provedor externo. Sempre oferecer as 2 opções antes de sair implementando.
+
+### 267. Arsenal Council: portas, endpoints e comandos consolidados
+- **Categoria:** atalho
+- **Data:** 2026-07-03
+- **Contexto:** Bloco 2 (Arsenal Tools) fechou 6/6. Mapa final ficou espalhado, precisa virar rota fixa pra Hermes/próximas IAs não redescobrirem.
+- **Aprendizado:** Rota fixa Arsenal na VPS: (a) ArsenalProxy porta 8083 expõe /arsenal/{neural,swarm,chain,intel,stats}; (b) ArsenalAdapter porta 8090 é OpenAI-compatible com 4 modelos verbais: arsenal-router (~2.5s), arsenal-parallel (~10s), arsenal-debate (~43s), arsenal-hermes (~50s) — key: arsenal-key-local-2026; (c) CentralDark-Tools sidecar porta 9077 (network_mode: host) expõe /intel e /stats via httpx pro 127.0.0.1:8083 — porta 9000 é PROIBIDA (conflita com webhook GitHub); (d) 5 slash-commands já plantados no webui.db: /router /swarm /chain /debate /hermes. Registrado em TOOL_SERVER_CONNECTIONS do docker-compose.override.yml. Pra qualquer nova integração de modelo/tool, usar esse esqueleto — não criar sidecar novo.
