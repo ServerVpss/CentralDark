@@ -105,3 +105,9 @@ apps/modulos/WebUI/node_modules/
 # Contas / dados de usuario
 contas/
 **/contas/
+
+# Docker runtime dentro de modulos (containers, snapshots, logs — dezenas de GB)
+apps/modulos/WebUI/var/
+**/WebUI/var/
+**/var/lib/docker/
+**/var/lib/containerd/
