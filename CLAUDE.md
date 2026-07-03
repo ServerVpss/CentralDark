@@ -19,6 +19,10 @@ Essa pasta concentra TUDO sobre o comando `darkai` (CLI que dá acesso a Gemini/
 
 **Regra:** tudo relacionado a orquestração de IAs, delegação, ensino de outras IAs, e o comando `darkai` mora AQUI. Não espalhar em outras pastas.
 
+### 🔫 Arsenal Council — `docs/CONSCIENCIA/ARSENAL/`
+
+Sistema de Conselho de IAs (`/router`, `/refinar`, `/debate` + Hermes autônomo). Tudo mora numa pasta só: relatórios por fase, debates, evolução, `regras.json` e scripts. Índice: [`docs/CONSCIENCIA/ARSENAL/README.md`](docs/CONSCIENCIA/ARSENAL/README.md).
+
 ---
 
 ## 1. Identidade do Projeto
