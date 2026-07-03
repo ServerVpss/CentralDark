@@ -1,15 +1,12 @@
-# .graphifyignore — o que o Graphify NÃO deve indexar
-# Formato: um padrão glob por linha. Comentários começam com #.
+# .graphifyignore — o que o Graphify NAO deve indexar
+# Formato: um padrao glob por linha. Comentarios comecam com #.
 #
 # Objetivo: manter o grafo do CentralDark limpo. Sem esses ignores o grafo
-# vira lixo (node_modules, caches, secrets, docs longas, arquivos gerados).
+# vira lixo (node_modules, caches, chaves, docs longas, arquivos gerados).
 #
-# Se adicionar padrão novo aqui, registrar no PR e avisar no grupo de evolução
-# (o pipeline notifica automaticamente).
+# Versao consolidada (Pivete + Lovable + Claude + Gemini via darkai).
 
-# -----------------------------------------------------------------------------
-# Dependências e artefatos de build
-# -----------------------------------------------------------------------------
+# Dependencias e artefatos de build
 node_modules/
 **/node_modules/
 dist/
@@ -17,78 +14,94 @@ dist/
 build/
 **/build/
 .next/
+**/.next/
 .nuxt/
 .output/
 .turbo/
 .cache/
+**/.cache/
+.vite/
+**/.vite/
 coverage/
-*.tsbuildinfo
+**/coverage/
+.parcel-cache/
+.svelte-kit/
 
-# -----------------------------------------------------------------------------
-# Saída do próprio Graphify (evita ciclo)
-# -----------------------------------------------------------------------------
-graphify-out/
-**/graphify-out/
-graph-panel/data/
-apps/modulos/graph-panel/data/
+# Runtime, logs e temporarios
+logs/
+**/logs/
+*.log
+tmp/
+**/tmp/
+.tmp/
+**/.tmp/
+mem/
+root/
+quarantine/
+install-callback/
 
-# -----------------------------------------------------------------------------
-# Segredos — NUNCA indexar
-# -----------------------------------------------------------------------------
-.env
-.env.*
-!.env.example
+# Backups e snapshots antigos
+revisoes/
+**/revisoes/
+*.bak
+*.bak.*
+*.backup
+backups/
+snapshots/
+
+# CI/CD runners e binarios de infra
+actions-runner/
+**/actions-runner/
+.github/actions/*/dist/
+
+# Chaves e credenciais (nunca indexar)
 secrets/
 **/secrets/
+.env
+.env.*
 *.pem
 *.key
-*.pfx
-credentials.json
-CREDENCIAIS-*.env
-agent.env
+*.crt
+credentials/
+tokens/
+sessions/
+.claude-proxy/
 
-# -----------------------------------------------------------------------------
-# MCP compilado (fonte protegida — só o dist é vivo)
-# -----------------------------------------------------------------------------
+# WhatsApp / WuzAPI
+whatsapp-sessions/
+wuzapi-data/
+**/whatsapp-server/data/
+**/*session*.json
+
+# Bancos locais e dumps
+*.sqlite
+*.sqlite3
+*.db
+dump.sql
+*.dump
+
+# Docs auto-geradas e relatorios repetitivos
+docs/RELATORIOS/notion-sync/*.md
+docs/RELATORIOS/**/*.log
+graphify-out/
+graphify-debug.log*
+
+# Sistema, editor, OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Areas protegidas (CLAUDE.md secao 9) que nao precisam indexar
 apps/modulos/mcp/dist/
 apps/modulos/mcp/node_modules/
+apps/modulos/Bolt/dist/
+apps/modulos/Bolt/node_modules/
+apps/modulos/WebUI/dist/
+apps/modulos/WebUI/node_modules/
 
-# -----------------------------------------------------------------------------
-# Memória de curto prazo e relatórios volumosos
-# -----------------------------------------------------------------------------
-docs/CONSCIENCIA/LEMBRANCAS/
-docs/RELATORIOS/
-docs/BACKUPS/
-
-# -----------------------------------------------------------------------------
-# Arquivos gerados / temporários / legado
-# -----------------------------------------------------------------------------
-*.log
-*.tmp
-*.bak
-*.swp
-*.DS_Store
-legacy_scripts.txt
-legacy_*.txt
-tmp/
-.tmp/
-
-# -----------------------------------------------------------------------------
-# Git e metadados
-# -----------------------------------------------------------------------------
-.git/
-.github/actions-cache/
-
-# -----------------------------------------------------------------------------
-# Assets grandes (imagens, vídeos, PDFs) — grafo é de código, não de mídia
-# -----------------------------------------------------------------------------
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.webp
-*.mp4
-*.mov
-*.pdf
-*.zip
-*.tar.gz
+# Contas / dados de usuario
+contas/
+**/contas/
