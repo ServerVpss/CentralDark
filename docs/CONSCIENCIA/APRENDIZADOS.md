@@ -2198,3 +2198,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Bloco 2 (Arsenal Tools) fechou 6/6. Mapa final ficou espalhado, precisa virar rota fixa pra Hermes/próximas IAs não redescobrirem.
 - **Aprendizado:** Rota fixa Arsenal na VPS: (a) ArsenalProxy porta 8083 expõe /arsenal/{neural,swarm,chain,intel,stats}; (b) ArsenalAdapter porta 8090 é OpenAI-compatible com 4 modelos verbais: arsenal-router (~2.5s), arsenal-parallel (~10s), arsenal-debate (~43s), arsenal-hermes (~50s) — key: arsenal-key-local-2026; (c) CentralDark-Tools sidecar porta 9077 (network_mode: host) expõe /intel e /stats via httpx pro 127.0.0.1:8083 — porta 9000 é PROIBIDA (conflita com webhook GitHub); (d) 5 slash-commands já plantados no webui.db: /router /swarm /chain /debate /hermes. Registrado em TOOL_SERVER_CONNECTIONS do docker-compose.override.yml. Pra qualquer nova integração de modelo/tool, usar esse esqueleto — não criar sidecar novo.
+
+### 268. Open WebUI: rota fixa pra editar visual (custom.css via volume)
+- **Categoria:** atalho
+- **Data:** 2026-07-03
+- **Contexto:** Fase 3 (Composer/Esmeralda UI) aplicou tema 3D tátil no Open WebUI via volume mount de CSS.
+- **Aprendizado:** CSS custom do Open WebUI (container `open-webui`) vive em `apps/modulos/WebUI/custom-css/esmeralda.css`, montado como `/app/backend/static/custom.css:ro` via `docker-compose.override.yml`. Reload = `docker restart open-webui` + Ctrl+Shift+R no browser. Variáveis emerald editáveis no topo do arquivo (`--em-primary`, `--em-radius`, sombras 3D). Regra: pra mudar visual do WebUI, editar SÓ esse .css — nada de mexer em `src/` do open-webui ou tema built-in.
