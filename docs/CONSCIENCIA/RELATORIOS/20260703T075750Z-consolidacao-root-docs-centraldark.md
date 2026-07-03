@@ -51,3 +51,11 @@ Os dois artefatos da sessão foram sincronizados diretamente de `origin/main`, s
 
 - `/root/CentralDark/docs/CONSCIENCIA/RELATORIOS/2026-07-03-sessao-hermes-webhook.md`
 - `/root/CentralDark/docs/CONSCIENCIA/ARSENAL/cartaz-sessao-2026-07-03.png`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

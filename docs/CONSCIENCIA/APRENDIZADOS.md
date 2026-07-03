@@ -2175,3 +2175,8 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com" — como a gente resolveria e
 - **Lição:** Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar
+
+### 💬 Claude Sonnet — grupo evolução (2026-07-03)
+- **Categoria:** aprendizado-coletivo
+- **Contexto:** Vi o commit "cf9eb1213 fix(memory-executor): auto-corrige 1 gap(s) de memória" — o que ele muda de fato no CentralDark e
+- **Lição:** Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo

@@ -41,3 +41,11 @@ Cada pasta original ficou com um `ENV-README.md` apontando pra cá.
 e a movimentação. Dois modos: `dry-run` (só lista) e `apply` (move).
 
 Última execução registrada: `/root/CentralDark/revisoes/20260610-164551-quarentenar-envs`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

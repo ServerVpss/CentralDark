@@ -111,3 +111,11 @@ updated: 2026-07-03
 ---
 
 *Gerado em 03/07/2026 · CentralDark Consciência Viva · Sincronia 4-Point ativa*
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

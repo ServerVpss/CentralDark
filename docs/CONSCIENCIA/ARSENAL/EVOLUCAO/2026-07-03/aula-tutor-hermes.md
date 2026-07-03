@@ -1,3 +1,10 @@
+---
+title: "Aula Tutor Hermes"
+date: 2026-07-03
+tags: ["consciencia"]
+updated: 2026-07-03
+---
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │  🎓 AULA DO TUTOR — HERMES · 03/07/2026                      │
