@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T16:53:34.540Z",
-  "updatedAtBR": "03/07/2026, 13:53:34 BRT",
+  "updatedAt": "2026-07-03T17:03:42.101Z",
+  "updatedAtBR": "03/07/2026, 14:03:42 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Corrigiu rota Lovable no UI",
+    "lastCommit": "sec+feat(hermes): remove perfil de navegador do git (contas/, 969 arquivos c/ cookies) + detector v4 escrita-sem-validação",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T17:03:42.101Z",
+      "titulo": "Push na main · 65bf46453bc4eabe579e3362c1837aa2dbad928f",
+      "detalhe": "sec+feat(hermes): remove perfil de navegador do git (contas/, 969 arquivos c/ cookies) + detector v4 escrita-sem-validação",
+      "area": "Repositório",
+      "sha": "65bf464",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-03T16:53:34.540Z",
       "titulo": "Push na main · 336b7ae57add54d2319626864b3f165d3bdf67e9",
       "detalhe": "Corrigiu rota Lovable no UI",
@@ -975,14 +983,6 @@
       "area": "Repositório",
       "sha": "ea70c3a",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-06-30T07:30:15.160Z",
-      "titulo": "Push na main · 175170e6a7fb347815c024f5cb9265dc0f570d4a",
-      "detalhe": "Aplicou timeout e pool serial",
-      "area": "Repositório",
-      "sha": "175170e",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T17:03:42.101Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 65bf46453bc4eabe579e3362c1837aa2dbad928f (65bf464)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T16:53:34.540Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 336b7ae57add54d2319626864b3f165d3bdf67e9 (336b7ae)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T04:18:23.587Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f2193480d272a38cd6545852340ac5deb4319698 (f219348)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T04:02:37.879Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b2a4e93cab718479d761a3668d4c37e725f66d45 (b2a4e93)",
       "area": "Repositório",
       "status": "sucesso"
     }
