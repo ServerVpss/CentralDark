@@ -608,3 +608,4 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 
 **Regra:** NÃO mexer agora. Só registro pra não esquecer.
 ### 15. MCP Catalog — rodar migration + deploy edge function no HUB — 🔴 ABERTO (03/07/2026, 01:39 BRT)
+### 16. MCP Catalog — cron 15min pro catalog-sync — 🟡 ABERTO (03/07/2026, 01:39 BRT)
