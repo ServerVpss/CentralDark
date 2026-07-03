@@ -320,3 +320,23 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 **Execução:** working tree da VPS estava no branch `f1-mcp-catalog-walking-skeleton` (trabalho de outra sessão) — fix feito em worktree isolado a partir de `origin/main` e push direto pra `main` (commit `cc2c01c9d`). Deploy automático via sync Lovable↔GitHub.
 
 **Alternativa registrada (não executada):** VPS tem `GROQ_API_KEY` em `secrets/agent.env`; a Groq expõe `/openai/v1/audio/transcriptions` (whisper-large-v3) compatível — plano B seria rota local no Arsenal Adapter `:8090` + ajuste no Caddy, se um dia o gateway Lovable falhar.
+
+---
+
+## Hermes × darkai — trava de stdin + env ausente no PM2 + retomada de missões órfãs (2026-07-03)
+
+**Problema:** o decisor do Hermes (PM2 66) tentava 3 modelos via `darkai` e todos "falhavam" exatamente no limite do timeout (15s/30s/45s), caindo sempre no Elite Anthropic — ~90s mortos por decisão. Causa raiz DUPLA, provada por teste: (1) o `darkai.sh` faz `STDIN_DATA="$(cat)"` quando stdin não é TTY, e o `execFile` do Node deixa o pipe de stdin aberto → o `cat` espera EOF pra sempre até o timeout matar o processo; (2) mascarado por baixo, o processo PM2 não tinha `DARKAI_URL`/`DARKAI_ANON_KEY` (só existiam no `~/.bashrc`, que PM2 não herda). Agravante: o decisor truncava o erro em 100 chars e descartava o stderr, escondendo tudo.
+
+**Decisão/execução (autorizada pelo Pivete — "MODO ARSENAL"):**
+- `decisor.mjs` e `executor.mjs`: `p.child.stdin.end()` após o `pexec('darkai', ...)` + stderr incluído na mensagem de erro.
+- `darkai.sh` (repo + `/usr/local/bin/darkai`): guarda `[[ -n "$STDIN_DATA" ]]` pra não anexar bloco `--- CONTEÚDO ---` vazio.
+- `.env`: adicionado `DARKAI_URL` (edge function ai-proxy do projeto kagejpghnwdfymddwxuf).
+- `daemon.mjs`: loader de `.env` no boot (PM2-safe, sobrevive a resurrect) + imports dinâmicos do decisor/executor pra env carregar antes.
+- `daemon.mjs`: **retomada automática de missões órfãs** — `retomarOrfas()` varre `missoes/em-andamento/` no boot, recarrega `state.json` (fallback `missao.md`) e continua da etapa onde parou, com contador de retomadas e flag `ocupado` contra corrida. Motivo: o restart do fix interrompeu a missão `upgrade-hub-v2` na etapa 29/29 OK, e o daemon só olhava `pendente/`.
+- **Resultado do teste:** Gemini Flash respondendo em ~2.8s (antes: 90s → Elite). Missão `upgrade-hub-v2` retomada da etapa 30 com histórico intacto.
+- **Segurança de bônus:** `.env` estava TRACKED no git (o `git add -A` do executor do Hermes empurrava secrets a cada etapa) apesar do `.gitignore` já listar `.env` — destrackeado com `git rm --cached` (arquivo intacto no disco). ⚠️ Pendência: secrets antigos permanecem no histórico do GitHub — avaliar rotação das chaves expostas (`DARKAI_ANON_KEY`, `ELITE_ANTHROPIC_TOKEN`).
+- Conflito UU antigo em `apps/modulos/status/painel-data.json` (stash mal aplicado) resolvido mantendo o lado mais novo; painel atualizado.
+
+**Callers de darkai auditados:** `executor.mjs` (corrigido), `ARSENAL/hermes-vivo/decisor.mjs` (cópia legada, não roda — intocada), `apps/bot-telegram/handlers/regras.cjs` (🔒 protegido — tem o mesmo risco de trava no healthcheck de 20s e usa flag `-m` que o darkai não suporta; reportado, não alterado).
+
+**Backups:** `backups/2026-07-03-hermes-darkai/` (decisor, executor, daemon pré-fix e pré-retomada, darkai.sh, env).

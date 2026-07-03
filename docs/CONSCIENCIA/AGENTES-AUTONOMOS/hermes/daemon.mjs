@@ -1,21 +1,35 @@
 #!/usr/bin/env node
 // 🤖 Hermes-Vivo daemon — loop 5s procurando missões em missoes/pendente/
-import { readdir, readFile, writeFile, mkdir, rename, appendFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+// + retomada automática de missões órfãs em missoes/em-andamento/ (sobrevive a restart/crash)
+import { readdir, readFile, writeFile, mkdir, rename, appendFile, stat } from 'node:fs/promises';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { decidir } from './decisor.mjs';
-import { executar } from './executor.mjs';
+
+// Carrega /root/CentralDark/.env no boot — PM2 não herda ~/.bashrc (DARKAI_URL, DARKAI_ANON_KEY, ELITE_ANTHROPIC_TOKEN)
+try {
+  for (const l of readFileSync('/root/CentralDark/.env', 'utf8').split('\n')) {
+    const line = l.split('#')[0].trim();
+    if (!line) continue;
+    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^['"]|['"]$/g, '');
+  }
+} catch {}
+
+const { decidir } = await import('./decisor.mjs');
+const { executar } = await import('./executor.mjs');
 
 const pexec = promisify(execFile);
-const ROOT = '/root/CentralDark';
+const ROOT = '/root/CentralDark/docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes';
 const PENDENTE  = `${ROOT}/missoes/pendente`;
 const ANDAMENTO = `${ROOT}/missoes/em-andamento`;
 const CONCLUIDA = `${ROOT}/missoes/concluidas`;
-const NOTIFY    = `${ROOT}/docs/CONSCIENCIA/ARSENAL/hermes-vivo/notify.mjs`;
+const NOTIFY    = `${ROOT}/notify.mjs`;
 const INTERVAL  = 5000;
 const MAX_FALHAS = 3;
+
+let ocupado = false; // trava: nunca rodar duas missões ao mesmo tempo
 
 const log = (...a) => console.log(`[${new Date().toISOString()}]`, ...a);
 
@@ -44,19 +58,57 @@ async function executarMissao(arquivoPendente) {
   const missao = (await readFile(arquivoPendente, 'utf8')).trim();
   await rename(arquivoPendente, join(dir, 'missao.md'));
 
-  const logPath = join(dir, 'hermes.log');
-  const statePath = join(dir, 'state.json');
-  const lg = (msg) => appendFile(logPath, `[${new Date().toISOString()}] ${msg}\n`).catch(()=>{});
-
-  await lg(`🚀 iniciando missão: ${slug}`);
   await notificar(
     `Hermes: nova missão`,
     `🚀 <b>${slug}</b>\n\n<i>${missao.slice(0, 400)}</i>\n\nProgresso será postado a cada etapa.`
   );
 
-  const historico = [];
+  await rodarMissao(dir, slug, missao, [], 0);
+}
+
+// 🔄 Missões órfãs: daemon caiu/reiniciou no meio — continua da etapa onde parou usando o state.json
+async function retomarOrfas() {
+  if (!existsSync(ANDAMENTO)) return;
+  const orfas = [];
+  for (const nome of await readdir(ANDAMENTO)) {
+    const dir = join(ANDAMENTO, nome);
+    if (!existsSync(join(dir, 'missao.md'))) continue;
+    orfas.push({ dir, nome, mtime: (await stat(dir)).mtimeMs });
+  }
+  orfas.sort((a, b) => a.mtime - b.mtime);
+
+  for (const { dir, nome } of orfas) {
+    let missao = '', historico = [], retomadas = 0;
+    try {
+      const s = JSON.parse(await readFile(join(dir, 'state.json'), 'utf8'));
+      missao = (s.missao || '').trim();
+      historico = Array.isArray(s.historico) ? s.historico : [];
+      retomadas = s.retomadas || 0;
+    } catch { /* state.json ausente/corrompido — cai pro missao.md com histórico zerado */ }
+    if (!missao) {
+      try { missao = (await readFile(join(dir, 'missao.md'), 'utf8')).trim(); } catch { continue; }
+    }
+    retomadas++;
+    log(`🔄 RETOMADA: ${nome} — continuando da etapa ${historico.length} (retomada #${retomadas})`);
+    await notificar(
+      'Hermes: RETOMADA 🔄',
+      `🔄 <b>${nome}</b>\nDaemon reiniciou no meio da missão — continuando da etapa ${historico.length} (retomada #${retomadas}). Nada foi re-executado.`
+    );
+    await rodarMissao(dir, nome, missao, historico, retomadas);
+  }
+}
+
+async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0) {
+  const logPath = join(dir, 'hermes.log');
+  const statePath = join(dir, 'state.json');
+  const lg = (msg) => appendFile(logPath, `[${new Date().toISOString()}] ${msg}\n`).catch(()=>{});
+
+  await lg(historico.length
+    ? `🔄 retomando missão: ${slug} (etapa ${historico.length}, retomada #${retomadas})`
+    : `🚀 iniciando missão: ${slug}`);
+
   let falhasSeguidas = 0;
-  let etapa = 0;
+  let etapa = historico.length;
 
   while (true) {
     etapa++;
@@ -87,7 +139,7 @@ async function executarMissao(arquivoPendente) {
     const resultado = await executar(ferramenta, args);
     await lg(`etapa ${etapa} resultado ok=${resultado.ok}: ${resultado.saida.slice(0, 200)}`);
     historico.push({ etapa_titulo, ferramenta, args, resultado: resultado.saida, ok: resultado.ok });
-    await writeFile(statePath, JSON.stringify({ missao, historico }, null, 2));
+    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas }, null, 2));
 
     const emoji = resultado.ok ? '✅' : '⚠️';
     await notificar(
@@ -123,14 +175,28 @@ async function executarMissao(arquivoPendente) {
 async function loop() {
   log('🤖 Hermes-Vivo online — vigiando missoes/pendente/');
   await notificar('Hermes: ONLINE', '🟢 daemon vivo, aguardando missões.\n\nEntregue em: <code>missoes/pendente/&lt;nome&gt;.md</code>');
+
+  // Antes de tudo: retoma missões que ficaram órfãs no último restart/crash
+  ocupado = true;
+  try { await retomarOrfas(); }
+  catch (e) {
+    log('erro na retomada:', e.message);
+    await notificar('Hermes: erro retomada', `⚠️ ${e.message.slice(0,300)}`);
+  }
+  finally { ocupado = false; }
+
   while (true) {
     try {
-      const proxima = await pegarProximaMissao();
-      if (proxima) {
-        log('nova missão:', proxima);
-        await executarMissao(proxima);
+      if (!ocupado) {
+        const proxima = await pegarProximaMissao();
+        if (proxima) {
+          ocupado = true;
+          log('nova missão:', proxima);
+          try { await executarMissao(proxima); } finally { ocupado = false; }
+        }
       }
     } catch (e) {
+      ocupado = false;
       log('erro no loop:', e.message);
       await notificar('Hermes: erro loop', `⚠️ ${e.message.slice(0,300)}`);
     }

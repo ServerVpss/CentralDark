@@ -160,17 +160,19 @@ export async function decidir(missao, historico) {
     const t0 = Date.now();
     try {
       const prompt = montarPrompt(missao, historico, historico_erros);
-      const { stdout } = await pexec('darkai', ['--model', cfg.modelo, '--system', SYSTEM, prompt], {
+      const p = pexec('darkai', ['--model', cfg.modelo, '--system', SYSTEM, prompt], {
         maxBuffer: 10 * 1024 * 1024,
         timeout: cfg.timeout_ms,
       });
+      p.child.stdin.end(); // darkai lê stdin quando não é TTY — pipe aberto trava no $(cat) até o timeout
+      const { stdout } = await p;
       const decisao = extrairJSON(stdout);
       decisao._modelo_usado = cfg.modelo;
       console.log(`[decisor] ✅ ${cfg.modelo} respondeu em ${Date.now()-t0}ms`);
       salvarCache(k, decisao);
       return decisao;
     } catch (e) {
-      const erro = (e.message || '').slice(0, 100);
+      const erro = (((e.stderr || '') + ' ' + (e.message || '')).trim().replace(/\s+/g, ' ')).slice(0, 300);
       console.error(`[decisor] ⚠️  ${cfg.modelo} falhou (${Date.now()-t0}ms): ${erro}`);
       historico_erros.push({ modelo: cfg.modelo, erro });
     }

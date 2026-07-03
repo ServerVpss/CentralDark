@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T09:22:09.004Z",
-  "updatedAtBR": "03/07/2026, 06:22:09 BRT",
+  "updatedAt": "2026-07-03T09:52:47.239434Z",
+  "updatedAtBR": "03/07/2026, 06:52:47 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Mapeou Caddyfiles e subiu Memória",
+    "lastCommit": "lembranca: Trava Lovable fora da operação CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -61,8 +61,10 @@
     "CentralDark-GraphPanel": "online",
     "CentralDark-GuardiaoAnalista": "online",
     "CentralDark-GuardiaoConsciencia": "online",
+    "CentralDark-Hermes": "online",
     "CentralDark-HubBot": "online",
     "CentralDark-MCP": "online",
+    "CentralDark-Memoria": "online",
     "CentralDark-RefreshIAs": "online",
     "CentralDark-Respiracao": "online",
     "CentralDark-SyncDrive": "online",
@@ -587,20 +589,11 @@
   ],
   "events": [
     {
-      "time": "2026-07-03T09:22:09.004Z",
-      "titulo": "Push na main · 986f3ac843c8416057608b0f11d325f5042f81b6",
-      "detalhe": "Mapeou Caddyfiles e subiu Memória",
-      "area": "Repositório",
-      "sha": "986f3ac",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T08:33:26.665Z",
-      "titulo": "Push na main · 2c09e511ba9464b3be0778ef72af2c4b537cc11c",
-      "detalhe": "feat(agentes): cria AGENTES-AUTONOMOS/ e migra Hermes",
-      "area": "Repositório",
-      "sha": "2c09e51",
-      "actor": "segredounlock"
+      "time": "2026-07-03T09:50:35.062238Z",
+      "titulo": "Hermes × darkai corrigido — cadeia de IAs 20x mais rápida",
+      "detalhe": "Bug de stdin travando darkai no $(cat) até o timeout (15/30/45s) + DARKAI_URL ausente no PM2. Corrigidos decisor.mjs, executor.mjs, darkai.sh e daemon.mjs (loader de .env + retomada automática de missões órfãs). Gemini Flash respondendo em ~3s. Missão upgrade-hub-v2 retomada da etapa 30.",
+      "area": "Hermes / darkai",
+      "actor": "claude-fable"
     },
     {
       "time": "2026-07-03T07:57:12.276Z",
@@ -982,6 +975,22 @@
       "detalhe": "docs(pendencias): registrar processos fantasma PM2 (id 3, 4, 6) como item #10",
       "area": "Repositório",
       "sha": "5ac9559",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-06-30T01:08:31.143Z",
+      "titulo": "Push na main · 3c7c87dfeccf737414777e33a25e4c0d318dfe14",
+      "detalhe": "fix(bot): executeTool async + Promise.all — await faltando em call_mcp_tool",
+      "area": "Repositório",
+      "sha": "3c7c87d",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-06-30T01:07:40.762Z",
+      "titulo": "Push na main · 6d94339b1c611ff9153ba1993c6049692a48c75c",
+      "detalhe": "feat(bot): MCP integrado ao Telegram — 96 tools + call_mcp_tool",
+      "area": "Repositório",
+      "sha": "6d94339",
       "actor": "segredounlock"
     }
   ],
@@ -1397,20 +1406,6 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-07-03T09:22:09.004Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 986f3ac843c8416057608b0f11d325f5042f81b6 (986f3ac)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T08:33:26.665Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2c09e511ba9464b3be0778ef72af2c4b537cc11c (2c09e51)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
       "time": "2026-07-03T07:57:12.276Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1fd45cc5c1b31609fd9fd2d127c9c10b2d7d5627 (1fd45cc)",
@@ -1745,6 +1740,20 @@
       "action": "📌 Push na main · 6d94339b1c611ff9153ba1993c6049692a48c75c (6d94339)",
       "area": "Repositório",
       "status": "sucesso"
+    },
+    {
+      "time": "2026-06-30T01:05:30.369Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 368bbb54b49bc50a5948d97796d4f33cc68faa0c (368bbb5)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-06-30T00:57:30.843Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e038387d9101ac7faa68950c8e9bd2b1d9b5c9ac (e038387)",
+      "area": "Repositório",
+      "status": "sucesso"
     }
   ],
   "telemetry": {
@@ -1857,10 +1866,10 @@
     }
   ],
   "ultimo_commit": "fa4d130",
-  "ultimo_evento": "IAs vivas registradas no painel (16 processos, 3 gateways Elite)",
+  "ultimo_evento": "Hermes × darkai corrigido (stdin + env) + retomada automática de missões órfãs",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-03T06:07:29.322Z",
+  "updated_at": "2026-07-03T09:52:47.239434Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",

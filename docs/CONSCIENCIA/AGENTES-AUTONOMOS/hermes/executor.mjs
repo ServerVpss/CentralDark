@@ -52,9 +52,11 @@ export async function executar(ferramenta, args) {
       const prompt = String(args.prompt || '');
       if (!prompt) return { ok: false, saida: 'prompt vazio' };
       try {
-        const { stdout } = await pexec('darkai', ['--model', modelo, prompt], { maxBuffer: 10*1024*1024, timeout: 180_000 });
+        const p = pexec('darkai', ['--model', modelo, prompt], { maxBuffer: 10*1024*1024, timeout: 180_000 });
+        p.child.stdin.end(); // darkai lê stdin quando não é TTY — pipe aberto trava no $(cat) até o timeout
+        const { stdout } = await p;
         return { ok: true, saida: stdout.slice(0, 4000) };
-      } catch (e) { return { ok: false, saida: e.message }; }
+      } catch (e) { return { ok: false, saida: `${(e.stderr || '').trim()} ${e.message}`.trim().slice(0, 1500) }; }
     }
     case 'git': {
       const acao = args.acao || 'status';

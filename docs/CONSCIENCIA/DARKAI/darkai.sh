@@ -110,13 +110,15 @@ done
 # ============================================================================
 if [[ ! -t 0 ]]; then
   STDIN_DATA="$(cat)"
-  if [[ -n "$PROMPT" ]]; then
-    PROMPT="$PROMPT
+  if [[ -n "$STDIN_DATA" ]]; then
+    if [[ -n "$PROMPT" ]]; then
+      PROMPT="$PROMPT
 
 --- CONTEÚDO ---
 $STDIN_DATA"
-  else
-    PROMPT="$STDIN_DATA"
+    else
+      PROMPT="$STDIN_DATA"
+    fi
   fi
 fi
 
