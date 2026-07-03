@@ -184,6 +184,26 @@
         "2FA: no primeiro login o Pivete resolve o 2FA na tela noVNC; a sessao salva no perfil sobrevive por semanas. Se o ChatGPT deslogar, e re-login (nao da pra automatizar o 2FA).",
         "Aula completa em ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md (arquitetura + runbooks). Consultar antes de operar o gateway."
       ]
+    },
+    "grafo-vivo": {
+      "gatilhos": [
+        "grafo",
+        "graph",
+        "quem chama",
+        "topologia",
+        "mapa",
+        "graph-data",
+        "status.centralldark",
+        "painel"
+      ],
+      "licoes": [
+        "Grafo Vivo (status.centralldark.com, aba 'quem chama quem') = mapa da arquitetura. Feed de dados: apps/modulos/status/graph-data.json. Gerador: scripts/grafo-vivo/gerar-grafo-vivo.mjs.",
+        "Regenerar o grafo com estado REAL: node /root/CentralDark/scripts/grafo-vivo/gerar-grafo-vivo.mjs (use --dry pra testar sem gravar). Ele le PM2 jlist + gateway.log e sobrepoe status vivo.",
+        "O gerador PRESERVA a topologia curada (nodes/edges) e so sobrepoe status vivo (dot no label) + processos vivos novos. NUNCA reescreva graph-data.json na mao — sempre pelo gerador.",
+        "Render do grafo (apps/modulos/status/index.html e app.js) e AREA PROTEGIDA 🔒 — so leitura. O gerador toca APENAS o feed graph-data.json (rotina, igual painel-data.json).",
+        "Manter vivo = rodar o gerador periodicamente (o render faz fetch do graph-data.json a cada load da pagina). Processo caido aparece 🔴 no label; online aparece 🟢.",
+        "Adicionar processo vivo novo ao grafo: editar o mapa LIVE_EXTRA no gerador (id → label/type/group). Tipos que o render colore: orquestrador, bot, gateway, servico, storage, monitoramento, ia."
+      ]
     }
   }
 }

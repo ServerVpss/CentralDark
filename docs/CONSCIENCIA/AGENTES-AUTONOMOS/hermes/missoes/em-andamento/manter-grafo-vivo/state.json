@@ -1,0 +1,33 @@
+{
+  "missao": "# MISSAO: Manter o Grafo Vivo respirando\n\nVoce agora cuida do Grafo Vivo (status.centralldark.com, aba \"quem chama quem\"). Suas licoes estao na categoria grafo-vivo do seu cerebro; a aula em docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md.\n\n## Criterio de sucesso\ngraph-data.json regenerado com estado vivo + relatorio no Telegram com o resumo (online/offline/req).\n\n## Passo a passo (max 10 etapas)\n1. Testar o gerador sem gravar: `node /root/CentralDark/scripts/grafo-vivo/gerar-grafo-vivo.mjs --dry`\n2. Ler o resumo (nós, arestas, online/offline, req/15min). Se algum processo aparecer 🔴 (offline), anotar qual.\n3. Regenerar de verdade: `node /root/CentralDark/scripts/grafo-vivo/gerar-grafo-vivo.mjs`\n4. Validar o feed: `python3 -c \"import json;d=json.load(open('/root/CentralDark/apps/modulos/status/graph-data.json'));print('online',d['stats']['online'],'offline',d['stats']['offline'])\"`\n5. Conferir que a pagina esta no ar: `curl -s -o /dev/null -w '%{http_code}' --max-time 5 https://status.centralldark.com`\n6. Relatorio final (terminou:true) com: nós/arestas, quantos online/offline, quais processos 🔴 (se houver), req/15min do gateway, e status HTTP da pagina.\n\n## PROIBIDO\n- NAO editar apps/modulos/status/index.html nem app.js (render protegido 🔒 — so leitura).\n- NAO editar graph-data.json na mao — so pelo gerador.\n- NAO commitar (o feed graph-data.json ja e versionado pela rotina; deixe o commit pro Pivete/tutor).\n\n## Regras\n- Valide cada resultado antes de seguir (nao repita comando as cegas).\n- Aprendeu algo novo? Grave com a ferramenta aprender (categoria grafo-vivo).",
+  "historico": [
+    {
+      "etapa_titulo": "Simulando geração do Grafo Vivo (Dry-run)",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "node /root/CentralDark/scripts/grafo-vivo/gerar-grafo-vivo.mjs --dry"
+      },
+      "resultado": "[DRY] 68 nós · 88 arestas · 16🟢/0🔴 · 0 req/15min\n{\n  \"total_nodes\": 68,\n  \"total_edges\": 88,\n  \"hubs\": [\n    {\n      \"node\": \"supabase\",\n      \"grau\": 22,\n      \"role\": \"banco central — quase toda EF lê/grava\"\n    },\n    {\n      \"node\": \"telegram-api\",\n      \"grau\": 15,\n      \"role\": \"destino universal de notificação\"\n    },\n    {\n      \"node\": \"mcp-server\",\n      \"grau\": 14,\n      \"role\": \"orquestrador de 8 famílias de tools\"\n    },\n    {\n      \"node\": \"github-api\",\n      \"grau\": 7,\n      \"role\": \"CI/CD, Issues, dispatch workflows\"\n    },\n    {\n      \"node\": \"fn-notify-telegram\",\n      \"grau\": 6,\n      \"role\": \"canal único de alerta\"\n    },\n    {\n      \"node\": \"lovable-gateway\",\n      \"grau\": 5,\n      \"role\": \"AI gateway (Gemini/GPT)\"\n    }\n  ],\n  \"fluxos_criticos\": [\n    \"PIX: Telegram → fn-telegram-webhook → fn-telegram-payment → fn-efi-generate → EFI Proxy → fn-efi-poll → Telegram\",\n    \"IA→MCP: Lovable/Claude → fn-ponte-mcp → mcp.centralldark.com → tools (VPS/GitHub/Supabase/Notion/Linear/Elite)\",\n    \"Deploy: GitHub push → webhook-deploy → git pull VPS → tool-painel → painel-data.json → status.centralldark.com\",\n    \"Sentinela: sentinela → MCP /health /tools.json → gh issue se divergência\",\n    \"Health: fn-health-check → OPTIONS 10 EFs → fn-notify-telegram → Canal Telegram\"\n  ],\n  \"processos_vivos\": 22,\n  \"online\": 16,\n  \"offline\": 0,\n  \"monitorados\": 16,\n  \"gateway_req_15min\": 0,\n  \"gerado_em\": \"2026-07-03T18:16:13.526Z\"\n}\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Regenerando Grafo Vivo (Real)",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "node /root/CentralDark/scripts/grafo-vivo/gerar-grafo-vivo.mjs"
+      },
+      "resultado": "[grafo-vivo] ✅ 68 nós · 88 arestas · 16🟢/0🔴 · 0 req/15min\n",
+      "ok": true
+    },
+    {
+      "etapa_titulo": "Validando feed graph-data.json",
+      "ferramenta": "shell",
+      "args": {
+        "comando": "python3 -c \"import json;d=json.load(open('/root/CentralDark/apps/modulos/status/graph-data.json'));print('online',d['stats']['online'],'offline',d['stats']['offline'])\""
+      },
+      "resultado": "online 16 offline 0\n",
+      "ok": true
+    }
+  ],
+  "retomadas": 0
+}

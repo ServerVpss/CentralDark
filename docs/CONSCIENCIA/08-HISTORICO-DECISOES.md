@@ -386,3 +386,15 @@ itens) e pediu pra finalizar/organizar/trancar a pasta, mais 4 tools de governan
 **Correção:** (1) mascarado o token nos 2 arquivos locais (sk-elite-REDACTED); (2) redator central no executor.mjs — `executar()` virou wrapper que passa a `saida` de _executar() por `redigirSegredos()` (padrões: sk-elite-, sk-*, Bearer *, JWT eyJ...). Cobre state.json + log + Telegram num choke point só, pra QUALQUER ferramenta. Testado: `echo sk-elite-...` sai `sk-eli…REDACTED`. Hermes reiniciado + pm2 save.
 
 **Resultado:** grep de token cru em docs/ = 0; cofre intacto (conta_02 segue listada, 🟡 sem sessão, correto); gateway 200. Token real da conta_02 vive só no accounts.json local (gitignored) — Pivete recupera lá quando for logar/configurar cliente. É o 3º vazamento tapado hoje (.env, contas/, agora token) — agora com defesa estrutural, não só reativa.
+
+---
+
+## Grafo Vivo agora é vivo de verdade + Hermes vira mantenedor (2026-07-03, noite)
+
+**Problema:** a aba "🕸️ Grafo Vivo — quem chama quem" (status.centralldark.com) era um snapshot ESTÁTICO de 02/07 (58 nós), gerado uma vez por sub-agente. Não refletia o estado real.
+
+**Solução (respeitando a trava do render 🔒):** gerador `scripts/grafo-vivo/gerar-grafo-vivo.mjs` (fora da pasta protegida) que preserva a topologia curada e SOBREPÕE estado vivo: lê `pm2 jlist` (status 🟢/🔴 no label de cada nó), adiciona processos vivos que não eram nós (Hermes, Zentinel, Guardiões etc. — 58→68 nós), mede atividade recente do gateway.log (arestas quentes), recalcula stats+updatedAt. Escreve APENAS o feed graph-data.json (dado, rotina como painel-data.json) — NÃO toca no render protegido (index.html/app.js).
+
+**Tutor do Hermes:** categoria grafo-vivo (6 lições) no aprendizados.json; aula em ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md; missão manter-grafo-vivo (regenerar + validar periodicamente). Backup do feed antigo em backups/2026-07-03-graph-data-pre-vivo.json.
+
+**Pendente (PERMITO PIVETE):** melhorar o RENDER (protegido) pra colorir nó por SAÚDE (verde/vermelho) além de por type, e legenda — proposto, não executado. Agendar o gerador (cron/loop 5min) pra "tempo real" contínuo.
