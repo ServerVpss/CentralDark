@@ -122,3 +122,25 @@ Conteúdo: Cadeia de comando oficial pra qualquer tarefa complexa:
 6. **Volta:** Claude consolida → Lovable recebe → entrega ao Pivete.
 
 Regra: Lovable NUNCA se coloca no topo. Sempre "Pivete manda, eu chamo...". Se tiver barreira/erro no meio, tem autonomia pra deletar e refazer do zero (dentro dos limites de áreas protegidas do CLAUDE.md).
+
+---
+
+## 🧠 Manutenção diária CentralDark: script + cron (não agente)
+**Data:** 2026-07-02 · **Relevância:** ALTA · **Promovida:** SIM · **Eixo:** presente
+**Tags:** manutencao, cron, docker, graphify, arquitetura
+
+Manutenção periódica no CentralDark = **script bash + cron, NUNCA agente 24/7.**
+
+**Localização:** `scripts/manutencao-diaria/graphify-e-logs.sh` (commit `91dfe9e67`)
+**Cron:** `0 3 * * *` (03:00 diário, no crontab do root da VPS)
+**O que faz:**
+1. Trunca `*-json.log` de containers Docker vivos com `: > file` (mantém FD aberto, não derruba container).
+2. Roda `graphify update` como fallback do hook `post-commit` (redundância caso o hook falhe).
+3. Log de cada rodada em `logs/manutencao-YYYY-MM-DD.log`.
+
+**Por que NÃO agente 24/7:**
+- Agente = PM2 + memória vazando + logs próprios (irônico) + atualização quebra ele.
+- "Trava pra ninguém mexer" é ilusão — qualquer IA com acesso à VPS mexe.
+- Script + cron: zero processo rodando, invisível, auditável no git.
+
+**Regra geral:** hook (evento) > cron (tempo) > agente (loop). Só sobe pra próximo nível se o anterior não resolve.
