@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-03T19:08:11.314Z",
-  "updatedAtBR": "03/07/2026, 16:08:11 BRT",
+  "updatedAt": "2026-07-03T19:19:05.485Z",
+  "updatedAtBR": "03/07/2026, 16:19:05 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Conectou o chat_id -5365750004",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-03T19:19:05.485Z",
+      "titulo": "Push na main · 78fb72a7b561d1ce08c6373bd32741334895d478",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "78fb72a",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-03T19:08:11.314Z",
       "titulo": "Push na main · 6e3cf7ca21621fb6d88dc03f89e2c72a91894023",
       "detalhe": "Conectou o chat_id -5365750004",
@@ -975,14 +983,6 @@
       "area": "hub",
       "status": "feito",
       "detail": ""
-    },
-    {
-      "time": "2026-06-30T14:43:49.875Z",
-      "titulo": "Push na main · ff0bae7586f0bbb6c0d3912e6147da5ab8f9e803",
-      "detalhe": "docs(pendencias): #14 proxy 2 modos (terminal+extensao) + #15 notificacao MCP mono",
-      "area": "Repositório",
-      "sha": "ff0bae7",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-03T19:19:05.485Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 78fb72a7b561d1ce08c6373bd32741334895d478 (78fb72a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-03T19:08:11.314Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 6e3cf7ca21621fb6d88dc03f89e2c72a91894023 (6e3cf7c)",
@@ -1736,13 +1743,6 @@
       "time": "2026-06-30T14:06:34.338Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · bbc430708af25dc78fec269a904f077e4c413575 (bbc4307)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-06-30T13:43:17.977Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 2e34078e1e6636a577564dcbe3bab9b088189bd3 (2e34078)",
       "area": "Repositório",
       "status": "sucesso"
     }
