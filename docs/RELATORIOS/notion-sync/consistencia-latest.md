@@ -1,8 +1,8 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T01:10:12.805Z
-- **Commit:** `6c7cbcd17bcc65589698451386cf1ebedcf04d9f`
-- **Disparado por:** segredounlock
+- **Gerado:** 2026-07-03T03:05:17.498Z
+- **Commit:** `5b5f5bfd8181641e8d2551bf5e13668bca60113e`
+- **Disparado por:** lovable-dev[bot]
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
 
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 21 | 21 | 21 | 0 | 0 |
-| aprendizados | 280 | 0 | 0 | 280 | 0 |
+| aprendizados | 281 | 0 | 0 | 281 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **280**
+- 🟥 Faltando no Notion: **281**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -328,4 +328,5 @@
 - Diagnóstico Rápido da VPS
 - 263. Estilo gamificado é padrão oficial de comunicação
 - 264. Renomeação PM2 + fix Caddy status aplicados na VPS
+- 💬 Claude Sonnet — grupo evolução (2026-07-03)
 </details>
