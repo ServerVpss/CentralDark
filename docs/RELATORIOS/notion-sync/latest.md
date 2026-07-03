@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T21:19:07.181Z
+# 🧠 Notion Sync — 2026-07-03T21:29:47.759Z
 
-- **Commit fonte:** `5296657bac04aba148a5aa640d8ededc9596dacc`
+- **Commit fonte:** `9da8b9e04c291b990a346288dda8d03a13f20dd4`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 306 atualizadas · ❌ 409 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 308 atualizadas · ❌ 411 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 272 | 1 | 271 | 0 | 0 |
-| estrutura | 409 | 0 | 0 | 0 | 409 |
+| aprendizados | 273 | 0 | 273 | 0 | 0 |
+| estrutura | 411 | 0 | 0 | 0 | 411 |
 
 ## Operações
 
@@ -328,7 +328,8 @@
 | aprendizados | atualizado | #267 — Arsenal Council: portas, endpoints e comandos consolidados |
 | aprendizados | atualizado | #268 — Open WebUI: rota fixa pra editar visual (custom.css via volume) |
 | aprendizados | atualizado | #269 — Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral) |
-| aprendizados | criado | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
+| aprendizados | atualizado | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
+| aprendizados | atualizado | #271 — Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -389,6 +390,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/GRUPO-EVOLUCAO/TEMPLATE.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/DEBATES/TEMPLATE-DEBATE.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/EVOLUCAO/002-bloco6-fechado.md |
+| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/MISSOES/hub-mtproto.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/arsenal-endpoints.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/ROTAS-FIXAS/comandos-curl-baseline.md |
@@ -626,6 +628,7 @@
 | estrutura | erro | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | erro | docs/CONSCIENCIA/NOTIFY/README.md |
 | estrutura | erro | docs/CONSCIENCIA/NOTION-MAPA.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
 | estrutura | erro | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | erro | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
 | estrutura | erro | docs/CONSCIENCIA/PLANO.md |
