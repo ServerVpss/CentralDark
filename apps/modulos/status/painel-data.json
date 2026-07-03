@@ -1,6 +1,11 @@
 {
+<<<<<<< Updated upstream
   "updatedAt": "2026-07-03T03:05:29.720Z",
   "updatedAtBR": "03/07/2026, 00:05:29 BRT",
+=======
+  "updatedAt": "2026-07-03T03:11:58.336Z",
+  "updatedAtBR": "02/07/2026, 22:10:23 BRT",
+>>>>>>> Stashed changes
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -51,6 +56,7 @@
     }
   },
   "pm2": {
+    "CentralDark-ArsenalAdapter": "online",
     "CentralDark-BotServer": "online",
     "CentralDark-ContasAdmin": "online",
     "CentralDark-EliteAnthropic": "online",
@@ -1794,7 +1800,7 @@
   "ultimo_evento": "IAs vivas registradas no painel (16 processos, 3 gateways Elite)",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-03T03:02:18.163Z",
+  "updated_at": "2026-07-03T03:11:58.336Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",
