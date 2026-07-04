@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T09:12:34.951Z",
-  "updatedAtBR": "04/07/2026, 06:12:34 BRT",
+  "updatedAt": "2026-07-04T09:17:38.811Z",
+  "updatedAtBR": "04/07/2026, 06:17:38 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Refatorou frontend do HUB v2",
+    "lastCommit": "feat(vault): esfera 3D com 3d-force-graph + partículas emerald + HUD monoespaçado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T09:17:38.811Z",
+      "titulo": "Push na main · caefddbc74a51ca593fdd0e48332524a9a211747",
+      "detalhe": "feat(vault): esfera 3D com 3d-force-graph + partículas emerald + HUD monoespaçado",
+      "area": "Repositório",
+      "sha": "caefddb",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T09:12:34.951Z",
       "titulo": "Push na main · b3affafa94ebfca44712221e656da0b42e50e065",
       "detalhe": "Refatorou frontend do HUB v2",
@@ -978,14 +986,6 @@
       "detalhe": "Changes",
       "area": "Repositório",
       "sha": "78fb72a",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T19:08:11.314Z",
-      "titulo": "Push na main · 6e3cf7ca21621fb6d88dc03f89e2c72a91894023",
-      "detalhe": "Conectou o chat_id -5365750004",
-      "area": "Repositório",
-      "sha": "6e3cf7c",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T09:17:38.811Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · caefddbc74a51ca593fdd0e48332524a9a211747 (caefddb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T09:12:34.951Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · b3affafa94ebfca44712221e656da0b42e50e065 (b3affaf)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T19:19:05.485Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 78fb72a7b561d1ce08c6373bd32741334895d478 (78fb72a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T19:08:11.314Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 6e3cf7ca21621fb6d88dc03f89e2c72a91894023 (6e3cf7c)",
       "area": "Repositório",
       "status": "sucesso"
     }
