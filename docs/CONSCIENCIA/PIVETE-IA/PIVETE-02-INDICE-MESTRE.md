@@ -1,6 +1,13 @@
+---
+title: "PIVETE 02 INDICE MESTRE"
+date: 2026-07-04
+tags: ["consciencia"]
+updated: 2026-07-04
+---
+
 # PIVETE-02 · ÍNDICE MESTRE
 
-Mapa completo dos 16 arquivos. Leia nesta ordem quando invocar o pivete.
+Mapa completo dos 19 arquivos. Leia nesta ordem quando invocar o pivete.
 
 | # | Arquivo | O que tem | Quando ler |
 |---|---------|-----------|------------|
@@ -15,12 +22,14 @@ Mapa completo dos 16 arquivos. Leia nesta ordem quando invocar o pivete.
 | 08 | `PIVETE-08-MCP-LIBERACAO.md` | O que foi destrancado no MCP e por quê | Antes de propor bloqueio novo |
 | 09 | `PIVETE-09-AUDITORIA-SISTEMA.md` | audit.js, rotas do gateway, aba do painel | Quando falar de logs/auditoria |
 | 10 | `PIVETE-10-INFRA-VPS.md` | PM2, portas, caminhos, subdomínios | Antes de deploy/restart |
-| 11 | `PIVETE-11-APRENDIZADOS.md` | Aprendizados #280, #281, #282 e demais | Pra herdar experiência |
+| 11 | `PIVETE-11-APRENDIZADOS.md` | Aprendizados #280+ acumulados | Pra herdar experiência |
 | 12 | `PIVETE-12-BASE-MILITAR-ABERTA.md` | Decisão de manter `/root/` acessível | Antes de propor trava |
 | 13 | `PIVETE-13-CITACOES-LITERAIS.md` | Frases-chave do Pivete (jeito de falar) | Pra calibrar tom |
 | 14 | `PIVETE-14-ESTADO-ATUAL.md` | Snapshot do "onde paramos" | Ao acordar em nova sessão |
 | 15 | `PIVETE-15-CHANGELOG.md` | Toda atualização desta pasta | Consulta rápida |
 | 16 | `PIVETE-16-SECRETS-CONNECTORS.md` | Nomes dos 58 secrets + 3 connectors | Antes de chamar API externa |
+| 17 | `PIVETE-17-MCPO-INTEGRATION.md` | Arquitetura base militar WebUI + MCPO + 3 personas | Ao operar dentro de `ui.centralldark.com` |
+| 18 | `PIVETE-18-ROTA-MEMORIA.md` | Ordem canônica de consulta de memória | **Sempre no início de sessão** |
 
 ## Regra de tamanho
 Cada arquivo ≤ 40KB. Se estourar, quebro em `-a`, `-b`, `-c`. Sem truncar.
