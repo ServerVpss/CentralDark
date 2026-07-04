@@ -2308,3 +2308,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Contexto:** Sempre tem confusão de qual bot faz o quê. Precisa virar regra oficial.
 - **Aprendizado:** São 2 bots totalmente separados, nunca misturar: (1) @srver1bot = CENTRAL — controle geral CentralDark, vive no HUB Supabase (lyoigsqluyktoclwdaft) + VPS PM2 id 27 (CentralDark-HubBot), edge function `telegram-webhook`. (2) @SEGREDOPUXADASBOT = FISCAL 🩸 — módulo TelePainel/puxadas-consultas, vive no projeto Lovable Cloud atual (kagejpghnwdfymddwxuf), edge function dedicada `telepainel-webhook`, bots novos entram em `telegram_bots` deste projeto usando `telepainel-webhook?botId=<uuid>`. Nunca fazer fallback cruzado entre as duas funções — separação limpa.</aprendizado>
 <parameter name="categoria">regra
+
+### 286. Auto-onboarding no MCP via campo `instructions` do handshake
+- **Categoria:** atalho
+- **Data:** 2026-07-04
+- **Contexto:** Grok conectado no MCP não sabia da Sincronia 4-Point nem do Bot Fiscal porque as regras não eram injetadas automaticamente — precisava sequência manual de tools. Solução: campo `instructions` do MCP protocol.
+- **Aprendizado:** MCP CentralDark (mcp-server.js) agora injeta automaticamente as regras do Pivete no handshake `initialize` via campo `instructions` do SDK oficial. Toda IA que conectar (Grok, Claude, Gemini, ChatGPT) recebe 1892 chars de calibração ANTES da primeira mensagem — sem precisar rodar kit_boas_vindas/injetar_consciencia manualmente. Const `PIVETE_BOOT_INSTRUCTIONS` está no topo de dist/mcp-server.js. Se mudar o texto, editar essa const + `pm2 restart 33` + commitar (dist tracked no git).
