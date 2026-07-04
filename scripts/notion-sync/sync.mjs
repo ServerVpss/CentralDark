@@ -37,7 +37,7 @@ if (!NOTION_TOKEN) {
   process.exit(1);
 }
 
-const notion = new Client({ auth: NOTION_TOKEN });
+const notion = wrap(new Client({ auth: NOTION_TOKEN }));
 
 // IDs oficiais dos databases para a API pública do Notion.
 // Atenção: não usar aqui os Data Source IDs (collection://) do MCP,
