@@ -1,8 +1,8 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T02:06:04.311Z
-- **Commit:** `964d493e78c1792d99d518fb43bc5c3ef03d2f80`
-- **Disparado por:** lovable-dev[bot]
+- **Gerado:** 2026-07-04T02:36:54.385Z
+- **Commit:** `e36d0284b11dfa6753c8cd7a7add9c9f9e017c23`
+- **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
 
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 307 | 0 | 0 | 307 | 0 |
+| aprendizados | 308 | 0 | 0 | 308 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **307**
+- 🟥 Faltando no Notion: **308**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -355,4 +355,5 @@
 - 279. WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com
 - 280. MCP execute_command: remover trava de docker/caddy/pm2 restart
 - 281. Auditoria universal do MCP + aba no painel Hermes
+- 282. Rota rápida de memória do Pivete no WebUI
 </details>
