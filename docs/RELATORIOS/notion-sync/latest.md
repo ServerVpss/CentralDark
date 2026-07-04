@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T07:11:45.986Z
+# 🧠 Notion Sync — 2026-07-04T07:59:25.360Z
 
-- **Commit fonte:** `2b51448b6a00a7d6e6a2afe31069e5aad6f18ea3`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `86246463e72701953fc4e8921cd49a29f6881c4a`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 436 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 437 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 288 | 0 | 288 | 0 | 0 |
-| estrutura | 436 | 0 | 0 | 0 | 436 |
+| estrutura | 437 | 0 | 0 | 0 | 437 |
 
 ## Operações
 
@@ -616,6 +616,7 @@
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/08-TECNICAS-QUE-USO.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/09-ARQUITETURA-E-ORQUESTRACAO.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/10-TROUBLESHOOTING.md |
+| estrutura | erro | docs/CONSCIENCIA/DARKAI/BOOT-CENTRALDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/COMO-ENSINAR-OUTRA-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/COMO-USAR.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/INSTALAR-NA-VPS.md |
