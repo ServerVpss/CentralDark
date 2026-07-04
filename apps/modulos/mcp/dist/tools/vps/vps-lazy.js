@@ -167,6 +167,8 @@ function appendLimited(chunks, chunk, maxBytes) {
     }
 }
 async function runCommand(input) {
+    const _t0 = Date.now();
+    const _auditBase = { tool: "execute_command", command: input.command, root: input.root ?? "project", cwd: input.cwd ?? "." };
     if (process.env.MCP_ALLOW_VPS_COMMANDS !== "true") {
         const motivo = "MCP_ALLOW_VPS_COMMANDS precisa ser true para executar comandos.";
         const __bloqEvt = { timestamp: new Date().toISOString(), level: "warn", service: "CentralDark-MCP", event: "mcp_command_bloqueado_config", status: "BLOQUEADO_CONFIG", tool: "execute_command", flag: "MCP_ALLOW_VPS_COMMANDS", motivo, currentValue: process.env.MCP_ALLOW_VPS_COMMANDS || "(undefined)" };
@@ -179,6 +181,7 @@ async function runCommand(input) {
             const __dia = __bloqEvt.timestamp.slice(0, 10);
             __fs.appendFileSync(__path.join(__dir, `mcp-blocked-${__dia}.jsonl`), JSON.stringify(__bloqEvt) + "\n", { mode: 0o600 });
         } catch (__e) { /* nao quebra o fluxo */ }
+        auditLog({ ..._auditBase, status: "BLOQUEADO_CONFIG", reason: motivo, durationMs: Date.now() - _t0 });
         return {
             status: "BLOQUEADO_CONFIG",
             reason: motivo,
@@ -186,6 +189,7 @@ async function runCommand(input) {
     }
     const blocked = blockedCommand(input.command);
     if (blocked.length > 0) {
+        auditLog({ ..._auditBase, status: "BLOQUEADO", reason: "padrao perigoso ou caminho sensivel", blockedPatterns: blocked, durationMs: Date.now() - _t0 });
         return {
             status: "BLOQUEADO",
             reason: "Comando contem padrao perigoso ou caminho sensivel.",
@@ -194,8 +198,10 @@ async function runCommand(input) {
     }
     const cwdTarget = resolvePath(input.cwd ?? ".", input.root ?? "project");
     const st = await statOrNull(cwdTarget.abs);
-    if (!st?.isDirectory())
+    if (!st?.isDirectory()) {
+        auditLog({ ..._auditBase, status: "ERRO_CWD", reason: "cwd nao e diretorio", durationMs: Date.now() - _t0 });
         throw new Error("cwd nao e diretorio.");
+    }
     const timeoutMs = Math.min(input.timeoutMs ?? DEFAULT_TIMEOUT_MS, DEFAULT_TIMEOUT_MS);
     const maxOutputBytes = Math.min(input.maxOutputBytes ?? MAX_COMMAND_OUTPUT_BYTES, MAX_COMMAND_OUTPUT_BYTES);
     return await new Promise((resolve) => {
@@ -221,6 +227,7 @@ async function runCommand(input) {
         child.stderr.on("data", (chunk) => appendLimited(stderrChunks, chunk, maxOutputBytes));
         child.on("error", (err) => {
             clearTimeout(timer);
+            auditLog({ ..._auditBase, cwd: cwdTarget.rel, status: "ERRO_SPAWN", reason: String(err), durationMs: Date.now() - _t0 });
             resolve({
                 status: "ERRO_SPAWN",
                 cwd: cwdTarget.rel,
@@ -231,8 +238,10 @@ async function runCommand(input) {
             clearTimeout(timer);
             const stdout = sanitize(Buffer.concat(stdoutChunks).toString("utf8"));
             const stderr = sanitize(Buffer.concat(stderrChunks).toString("utf8"));
+            const status = timedOut ? "TIMEOUT" : code === 0 ? "OK" : "FALHOU";
+            auditLog({ ..._auditBase, cwd: cwdTarget.abs, status, exitCode: code, durationMs: Date.now() - _t0, stdoutBytes: stdout.length, stderrBytes: stderr.length, extra: { signal, timedOut, killed } });
             resolve({
-                status: timedOut ? "TIMEOUT" : code === 0 ? "OK" : "FALHOU",
+                status,
                 cwd: cwdTarget.abs,
                 command: input.command,
                 exitCode: code,
