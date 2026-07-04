@@ -1024,4 +1024,7 @@ h3 { font-size: 16px; }
 }
 
 /* ===================== Grafo Vivo ===================== */
-#grafoVivoContainer canvas { border-radius: 12px; }
+#grafoVivoContainer canvas { border-radius: 12px; touch-action: none; }
+@media (max-width: 720px) {
+  #grafoVivoContainer { height: clamp(320px, 55vh, 480px) !important; }
+}

@@ -840,7 +840,13 @@ async function renderGrafoVivo() {
 
   // Atualização incremental (não recria — evita "pular")
   if (__fg) {
+    const antes = __fg.__snap || { n: 0, e: 0 };
     __fg.graphData(gdata);
+    // Só reaquenta se topologia mudou de verdade
+    if (antes.n !== gdata.nodes.length || antes.e !== gdata.links.length) {
+      __fg.d3ReheatSimulation();
+    }
+    __fg.__snap = { n: gdata.nodes.length, e: gdata.links.length };
     return;
   }
 
@@ -856,29 +862,32 @@ async function renderGrafoVivo() {
     .nodeLabel(n => `${n.label} · ${n.type}`)
     .nodeVal(n => Math.max(4, (n.type === 'orquestrador' ? 12 : 6)))
     .nodeColor(n => {
-      // saúde vence o tipo: processo caído fica vermelho, degradado âmbar
       if (n.status === 'stopped') return '#ef4444';
       if (n.status === 'errored' || n.status === 'launching') return '#f59e0b';
       return n.color;
     })
     .nodeCanvasObjectMode(() => 'after')
     .nodeCanvasObject((node, ctx, globalScale) => {
-      // anel pulsante no nó caído — chama atenção mesmo de longe
+      // cache do raio (evita recomputar todo frame)
+      if (node.__r == null) node.__r = Math.max(6, (node.type === 'orquestrador' ? 12 : 6));
+      // anel pulsante em nó caído
       if (node.status === 'stopped' || node.status === 'errored') {
-        const r = Math.max(6, (node.type === 'orquestrador' ? 12 : 6)) + 3;
+        const r = node.__r + 3;
         ctx.beginPath();
         ctx.arc(node.x, node.y, r, 0, 2 * Math.PI);
         ctx.strokeStyle = node.status === 'stopped' ? 'rgba(239,68,68,.9)' : 'rgba(245,158,11,.9)';
         ctx.lineWidth = 1.5 / globalScale;
         ctx.stroke();
       }
-      const label = node.label;
-      const fontSize = Math.max(10 / globalScale, 3);
-      ctx.font = `${fontSize}px Inter, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
-      ctx.fillStyle = 'rgba(230,233,239,.9)';
-      ctx.fillText(label, node.x, node.y + 9);
+      // label só quando dá pra ler — desafoga FPS quando o usuário afasta o zoom
+      if (globalScale > 0.6) {
+        const fontSize = Math.max(10 / globalScale, 3);
+        ctx.font = `${fontSize}px Inter, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = 'rgba(230,233,239,.9)';
+        ctx.fillText(node.label, node.x, node.y + 9);
+      }
     })
     .linkColor(() => 'rgba(148,163,184,.25)')
     .linkWidth(l => Math.min(3, 0.5 + l.value * 0.3))
@@ -886,22 +895,66 @@ async function renderGrafoVivo() {
     .linkDirectionalParticleSpeed(l => 0.003 + l.value * 0.0008)
     .linkDirectionalParticleColor(() => '#10b981')
     .linkDirectionalParticleWidth(2)
-    .cooldownTicks(120)
-    .d3AlphaDecay(0.03)
-    .d3VelocityDecay(0.35);
+    .warmupTicks(80)          // pré-calcula offscreen — 1º frame já entra parado
+    .cooldownTime(6000)       // para de calcular sozinho depois de 6s
+    .cooldownTicks(200)
+    .autoPauseRedraw(true)    // não redesenha quando nada muda (economia gigante)
+    .d3AlphaDecay(0.04)
+    .d3VelocityDecay(0.45);
 
-  // Ajuste de repulsão pra evitar bola-de-fios
-  if (__fg.d3Force && __fg.d3Force('charge')) {
-    __fg.d3Force('charge').strength(-140);
+  // ===== Física — espalhar os nós (fim do amontoado) =====
+  if (__fg.d3Force) {
+    const chg = __fg.d3Force('charge');
+    if (chg) chg.strength(-420).distanceMax(600);
+    const lnk = __fg.d3Force('link');
+    if (lnk) lnk.distance(80).strength(0.35);
+    const ctr = __fg.d3Force('center');
+    if (ctr && ctr.strength) ctr.strength(0.05);
+    // Colisão — impede sobreposição visual
+    if (window.d3 && window.d3.forceCollide) {
+      __fg.d3Force('collide', window.d3.forceCollide(n => (n.type === 'orquestrador' ? 22 : 14)));
+    } else {
+      // fallback: colisão manual leve via força custom
+      __fg.d3Force('collide', ((alpha) => {
+        const nodes = gdata.nodes;
+        return () => {
+          for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+              const a = nodes[i], b = nodes[j];
+              if (a.x == null || b.x == null) continue;
+              const dx = b.x - a.x, dy = b.y - a.y;
+              const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+              const min = (a.type === 'orquestrador' ? 22 : 14) + (b.type === 'orquestrador' ? 22 : 14);
+              if (dist < min) {
+                const push = ((min - dist) / dist) * 0.5 * alpha;
+                a.x -= dx * push; a.y -= dy * push;
+                b.x += dx * push; b.y += dy * push;
+              }
+            }
+          }
+        };
+      }));
+    }
   }
 
-  // Redimensiona junto com container
-  window.addEventListener('resize', () => {
-    if (__fg && container) {
-      __fg.width(container.clientWidth).height(container.clientHeight || 520);
-    }
+  __fg.__snap = { n: gdata.nodes.length, e: gdata.links.length };
+
+  // Redimensiona junto com container — ResizeObserver reage a mudança de painel na hora
+  const ajustar = () => {
+    if (!__fg || !container) return;
+    __fg.width(container.clientWidth).height(container.clientHeight || 520);
+  };
+  if (window.ResizeObserver) new ResizeObserver(ajustar).observe(container);
+  window.addEventListener('resize', ajustar);
+
+  // Pausa cálculo quando a aba tá em background — economia de bateria/CPU
+  document.addEventListener('visibilitychange', () => {
+    if (!__fg) return;
+    if (document.hidden) __fg.pauseAnimation();
+    else __fg.resumeAnimation();
   });
 }
+
 
 
 refresh();
