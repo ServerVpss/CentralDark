@@ -659,6 +659,8 @@
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-14-ESTADO-ATUAL.md |
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-15-CHANGELOG.md |
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-16-SECRETS-CONNECTORS.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-17-MCPO-INTEGRATION.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
 | estrutura | erro | docs/CONSCIENCIA/PLANO.md |
 | estrutura | erro | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
