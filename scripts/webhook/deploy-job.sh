@@ -39,7 +39,7 @@ write_summary() {
 }
 
 netflix_header "CentralDark Webhook Deploy"
-netflix_step 1 6 "Registrando contexto"
+netflix_step 1 7 "Registrando contexto"
 write_summary
 {
   printf 'pwd=%s\n' "$(pwd)"
@@ -50,7 +50,7 @@ write_summary
 } | sanitize_stream >>"$FULL_LOG"
 netflix_success "Contexto registrado"
 
-netflix_step 2 6 "Sincronizacao controlada"
+netflix_step 2 7 "Sincronizacao controlada"
 if [ -d "$ROOT/.git" ]; then
   log_run git -C "$ROOT" status --short
   log_run git -C "$ROOT" rev-parse --abbrev-ref HEAD
@@ -64,7 +64,7 @@ else
   netflix_warning "Repositorio git nao encontrado em ROOT"
 fi
 
-netflix_step 3 6 "Build apps/web quando existir"
+netflix_step 3 7 "Build apps/web quando existir"
 WEB_DIR="$ROOT/apps/web"
 if [ -f "$WEB_DIR/package.json" ]; then
   if [ -f "$WEB_DIR/package-lock.json" ]; then
@@ -78,7 +78,7 @@ else
   netflix_warning "apps/web/package.json ausente; build ignorado"
 fi
 
-netflix_step 3 6 "Build HUB (apps/modulos/hub) quando existir"
+netflix_step 4 7 "Build HUB (apps/modulos/hub) quando existir"
 HUB_DIR="$ROOT/apps/modulos/hub"
 if [ -f "$HUB_DIR/package.json" ]; then
   log_run bash "$ROOT/scripts/deploy-hub.sh"
@@ -93,9 +93,7 @@ else
   netflix_warning "apps/modulos/hub/package.json ausente; build HUB ignorado"
 fi
 
-
-
-netflix_step 4 6 "Validando dist/index.html"
+netflix_step 5 7 "Validando dist/index.html"
 DIST_INDEX="$ROOT/apps/web/dist/index.html"
 if [ -f "$DIST_INDEX" ]; then
   printf 'dist_index=ok\n' >>"$SUMMARY_FILE"
@@ -105,12 +103,13 @@ else
   netflix_warning "dist/index.html nao encontrado neste ambiente"
 fi
 
-netflix_step 5 6 "Validando dominios principais"
+netflix_step 6 7 "Validando dominios principais"
 for url in \
   "https://centralldark.com" \
   "https://www.centralldark.com" \
   "https://status.centralldark.com" \
   "https://bot.centralldark.com" \
+  "https://hub.centralldark.com" \
   "https://multizap.dev" \
   "https://www.multizap.dev" \
   "https://bot.multizap.dev"; do
@@ -120,7 +119,7 @@ for url in \
 done
 netflix_success "Validacao HTTP registrada"
 
-netflix_step 6 6 "Salvando resumo"
+netflix_step 7 7 "Salvando resumo"
 {
   printf '\nCOPIE-E-MANDE\n'
   printf 'Status: preparatorio\n'
