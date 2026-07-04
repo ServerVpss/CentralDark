@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T08:24:41.887Z",
-  "updatedAtBR": "04/07/2026, 05:24:41 BRT",
+  "updatedAt": "2026-07-04T08:25:21.632Z",
+  "updatedAtBR": "04/07/2026, 05:25:21 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "aprendizado(#287): HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent",
+    "lastCommit": "Adicionou estado erro aos hubs",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T08:25:21.632Z",
+      "titulo": "Push na main · 936667491bee93f5f63855b569d67358234973ff",
+      "detalhe": "Adicionou estado erro aos hubs",
+      "area": "Repositório",
+      "sha": "9366674",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-04T08:24:41.887Z",
       "titulo": "Push na main · 6c78f5842e7eb03b6a86f4e4ea67911b7222ee4f",
       "detalhe": "aprendizado(#287): HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent",
@@ -978,14 +986,6 @@
       "detalhe": "Adicionou nível e skills ao Hermes",
       "area": "Repositório",
       "sha": "3cb653d",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T18:40:31.805Z",
-      "titulo": "Push na main · b093c5ef493129d8ba2b08c2197fdfd2d3453f25",
-      "detalhe": "Reenviou post com terminal",
-      "area": "Repositório",
-      "sha": "b093c5e",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T08:25:21.632Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 936667491bee93f5f63855b569d67358234973ff (9366674)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T08:24:41.887Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6c78f5842e7eb03b6a86f4e4ea67911b7222ee4f (6c78f58)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T18:47:06.083Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 3cb653d36cdcd7ce052f3038a49c94e6a3b66e2c (3cb653d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T18:40:31.805Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · b093c5ef493129d8ba2b08c2197fdfd2d3453f25 (b093c5e)",
       "area": "Repositório",
       "status": "sucesso"
     }
