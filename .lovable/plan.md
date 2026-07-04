@@ -1,102 +1,51 @@
-# 🔌 Auto-onboarding: IA plugou → já assumiu a postura do Pivete
+# 🎯 Plano — Portas Ativas + Enxame Áudio (WebUI)
 
-## O problema hoje
+## Fase 1 — Mapa das Portas 🛠️
+Rodar na VPS (via `vps_run_once_script`) e te devolver o placar visual:
 
-Quando Grok/Claude/Gemini conecta no `mcp.centralldark.com`, ele **não sabe nada**. Precisa que eu (ou você) mande manualmente a sequência:
-
-```
-1. kit_boas_vindas
-2. injetar_consciencia_centraldark
-3. ler_consciencia
-4. consultar_memoria_reserva
-5. puxar_aprendizados
+```bash
+ss -tlnp | awk 'NR>1 {print $4, $6}' | sort -u
+pm2 jlist | jq -r '.[] | "\(.name) | pid=\(.pid) | status=\(.pm2_env.status) | port=\(.pm2_env.env.PORT // "-")"'
 ```
 
-Só depois disso ele fica "Pivete-mode". Isso é frágil: se o usuário esquece de mandar, a IA responde genérico e você perde 10 minutos calibrando.
+Saída: tabela `PORTA | SERVIÇO | STATUS` marcando 🟢/🔴 e destacando as do WebUI (8080/3000/8000 típicas do Open WebUI).
 
-## Como deveria funcionar
+## Fase 2 — Enxame Áudio (10 sub-agentes paralelos) 🔊🚀
 
-No instante em que a IA pluga no MCP, ela já recebe automaticamente:
-- Regras de conduta (zero enrolação, PT-BR, execução direta)
-- Regras técnicas do projeto (Sincronia 4-Point, bots, VPS, etc)
-- Últimas lembranças ativas do Pivete
-- Índice dos caminhos vivos
+Todos disparados em paralelo via `spawn_agent`, cada um com escopo cirúrgico. Nada sequencial.
 
-Sem precisar rodar nenhum comando. Já vem no "handshake" da conexão.
+| # | Agente | Missão |
+|---|--------|--------|
+| 1 | **LogHunter-WebUI** | `pm2 logs open-webui --lines 500 --nostream` filtrando `audio\|whisper\|tts\|stt\|ffmpeg\|codec` |
+| 2 | **STT-Scanner** | Checar backend Whisper/faster-whisper: modelo carregado, GPU/CPU, erro de load |
+| 3 | **TTS-Scanner** | Checar engine TTS (OpenAI/ElevenLabs/local): chave, endpoint, voz configurada |
+| 4 | **FFmpeg-Doctor** | `ffmpeg -version` + testar decode WebM/Opus (formato que o browser manda do mic) |
+| 5 | **Codec-Auditor** | Ver se libopus/libvorbis/libmp3lame estão presentes no container/host |
+| 6 | **Config-Reader** | Ler `config.json`/env do Open WebUI: `AUDIO_STT_ENGINE`, `AUDIO_TTS_ENGINE`, URLs |
+| 7 | **Network-Probe** | Testar endpoints internos de áudio (`/api/v1/audio/transcriptions`, `/speech`) com curl |
+| 8 | **Permission-Cop** | Checar permissões da pasta de upload/cache de áudio + espaço em disco |
+| 9 | **Browser-Console** | Puxar erros do console do WebUI (via replay se houver, ou instruir teste) |
+| 10 | **Fabler-Consult** | Consultar Fabler (`elite_gateway_chat`) com sintomas coletados pra segunda opinião |
 
-## Como o protocolo MCP resolve isso (2 mecanismos nativos)
+Cada agente devolve: **causa provável + evidência (log/linha) + fix sugerido**.
 
-O MCP tem dois campos padrão que a maioria dos clientes (Grok, Claude Desktop, ChatGPT connectors) lê **automaticamente** ao conectar:
-
-### 1. Campo `instructions` do server
-Cada MCP server declara um `instructions` no handshake inicial. O cliente injeta isso direto no system prompt — antes da primeira mensagem do usuário. Hoje o nosso MCP tem esse campo mas ele está **vazio ou genérico**.
-
-### 2. Resources com anotação `auto`
-MCP permite marcar resources com `annotations.priority: 1.0` que o cliente carrega sozinho. Podemos expor `consciencia://regras` e `consciencia://memorias-ativas` que o cliente puxa no boot.
-
-## O que muda na prática
+## Fase 3 — Consolidação 📊
+Placar único monospace:
 
 ```
-ANTES:                          DEPOIS:
-IA conecta                      IA conecta
-  ↓                               ↓
-"Como posso ajudar?"            [handshake carrega instructions +
-  ↓                              regras + últimas 5 lembranças]
-Você: "roda kit_boas_vindas"      ↓
-  ↓                             "E aí Pivete, tô calibrado — 
-Você: "roda injetar..."          Sincronia 4-Point ativa, Fiscal 
-  ↓ (x5)                         é o @SEGREDOPUXADASBOT, o que 
-IA calibrada                     manda?"
+ÁREA          STATUS   EVIDÊNCIA
+▓▓▓▓▓▓▓▓░░  STT      🔴 erro X linha Y
+▓▓▓▓▓▓░░░░  TTS      🟡 config faltando
+...
 ```
 
-## Plano de execução (na VPS, no repo do MCP)
++ **Diagnóstico final** (Leigo / Técnico) + **próximo passo** (1 clique).
 
-**Fase 1 — Enriquecer o `instructions` do server**  
-Editar `apps/modulos/mcp/src/server.ts` (ou equivalente) pra que o campo `instructions` do `Server({...})` retorne dinamicamente:
-- TL;DR da consciência (regras invioláveis, tom, quem é o Pivete)
-- Sincronia 4-Point resumida
-- Mapa dos 2 bots (Central vs Fiscal)
-- Instrução: "Se precisar de mais, chame `ler_consciencia` / `consultar_memoria_reserva`"
+## Fase 4 — Notificação 📣
+Card no privado admin + linha no canal Status (regra padrão pós-ação).
 
-Máximo 2-3 mil tokens, senão estoura contexto de clientes pequenos.
+---
 
-**Fase 2 — Expor resources auto-carregáveis**  
-Adicionar handlers `resources/list` e `resources/read` no MCP com:
-- `consciencia://regras` (conteúdo de CONSCIENCIA.md, cacheado)
-- `consciencia://lembrancas-ativas` (últimas 10 lembranças do Pivete)
-- `consciencia://aprendizados-recentes` (últimos 20 aprendizados)
+**Regras respeitadas:** Modo Enxame, Método Gamificado, consultar Fabler, não mexer em áreas 🔒, autoridade VPS (só leitura nesta fase).
 
-Marcar com `annotations: { priority: 1.0, audience: ["assistant"] }` pra clientes que suportam auto-load puxarem sozinhos.
-
-**Fase 3 — Fallback pra clientes burros**  
-Alguns clientes (Grok atual talvez) ignoram `instructions`. Pra esses, criar uma tool `_boot` que é chamada implicitamente pelo cliente na primeira interação (via prompt hint no `instructions`: "SE VOCÊ NÃO LEU AS REGRAS AINDA, chame `_boot` AGORA antes de responder").
-
-**Fase 4 — Deploy e teste**  
-- Commit → push (webhook atualiza VPS)  
-- `pm2 restart mcp-centraldark`  
-- Desconectar/reconectar Grok e Claude  
-- Perguntar direto "quem é o Fiscal?" **sem** rodar nenhum comando  
-- Se responder certo de primeira → 🟢 selado
-
-## Detalhes técnicos (pra IA que for implementar)
-
-- **Arquivo alvo suspeito:** `apps/modulos/mcp/src/index.ts` ou `server.ts` — precisa confirmar lendo com `vps_read_file_safe` antes.
-- **SDK MCP:** `@modelcontextprotocol/sdk` — `Server` construtor aceita `{ name, version }` no primeiro arg e `{ capabilities, instructions }` no segundo.
-- **Capabilities novas:** adicionar `resources: { subscribe: false, listChanged: true }` se ainda não tem.
-- **Cache:** carregar `CONSCIENCIA.md` uma vez no startup, não a cada request (o arquivo tem 31k chars — não pode reler toda hora).
-- **Área protegida:** `apps/modulos/mcp/` está sob a trava da Seção 9 do CLAUDE.md? Verificar antes de editar — se estiver, precisa de "PERMITO PIVETE" explícito.
-
-## Risco / o que pode dar errado
-
-- Cliente MCP que não implementa `instructions` (versões antigas) — pra esses, só o fallback da Fase 3 salva.
-- Estourar limite de contexto se o `instructions` ficar grande demais — manter enxuto, empurrar detalhe pros resources.
-- Grok pode não suportar `resources/read` automático — testar primeiro, e se não suportar, deixar a `instructions` mais robusta.
-
-## Refinamento em conselho (comando `/refinamento /debate`)
-
-Depois de aprovado o plano, se quiser antes de executar eu disparo:
-- **Fabler** (Anthropic ap7) — revisa a arquitetura do handshake
-- **Gemini** (via `gemini_analisar`) — cross-check das specs oficiais do protocolo MCP
-- **Hermes** (loop autônomo na VPS) — executa a modificação em branch e abre PR
-
-Só me confirma se rola.
+Confirma que disparo? 🚀
