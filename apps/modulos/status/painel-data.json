@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T10:19:51.886Z",
-  "updatedAtBR": "04/07/2026, 07:19:51 BRT",
+  "updatedAt": "2026-07-04T10:24:50.468Z",
+  "updatedAtBR": "04/07/2026, 07:24:50 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "feat(webhook): auto-build HUB (apps/modulos/hub) no deploy-job",
+    "lastCommit": "feat(hub): tema esmeralda idêntico ao TelePainel",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T10:24:50.468Z",
+      "titulo": "Push na main · 0092f8e9ffc817be90fb7663602642981454034e",
+      "detalhe": "feat(hub): tema esmeralda idêntico ao TelePainel",
+      "area": "Repositório",
+      "sha": "0092f8e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T10:19:51.886Z",
       "titulo": "Push na main · 812f9a9ea5b87fb6b59de2bdbc255eb76ae8e1bd",
       "detalhe": "feat(webhook): auto-build HUB (apps/modulos/hub) no deploy-job",
@@ -979,14 +987,6 @@
       "area": "Repositório",
       "sha": "81f206a",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T23:28:14.511Z",
-      "titulo": "Push na main · 62ceecd9d7075cf627354c6bf7c5d8f1a6cd8fec",
-      "detalhe": "aprendizado(#272): Vault CentralDark + vault-loader no Hermes (Agent OS)",
-      "area": "Repositório",
-      "sha": "62ceecd",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T10:24:50.468Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0092f8e9ffc817be90fb7663602642981454034e (0092f8e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T10:19:51.886Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 812f9a9ea5b87fb6b59de2bdbc255eb76ae8e1bd (812f9a9)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T23:35:12.758Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 81f206a9491d86cb3e4657d03c07ea591d56c687 (81f206a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T23:28:14.511Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 62ceecd9d7075cf627354c6bf7c5d8f1a6cd8fec (62ceecd)",
       "area": "Repositório",
       "status": "sucesso"
     }
