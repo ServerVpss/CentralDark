@@ -2294,3 +2294,10 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Migração completa da consciência do Pivete da Lovable pro Open WebUI. Personas cadastradas via SQL direto na tabela model do webui.db, config.web.search ligado, api_key admin criada e removida após teste.
 - **Aprendizado:** Base militar Pivete no ui.centralldark.com está OPERACIONAL. 10 models na API interna. Personas pivete/hermes/fabler apontam pros modelos reais do Elite ap7 (opus-4.8[1m], opus-4.8, sonnet-4.6[1m]). MCPO expõe 102 tools MCP via OpenAPI. Web search DuckDuckGo ligado. Toda a rota de memória documentada em PIVETE-17 e PIVETE-18. Script idempotente em apps/modulos/WebUI/scripts/popular-webui.sh.
+
+### 284. Sincronia 4-Point (regra oficial vigente)
+- **Categoria:** outro
+- **Data:** 2026-07-04
+- **Contexto:** Grok conectado no MCP não encontrou essa regra na CONSCIENCIA porque estava só no CLAUDE.md. Precisa virar regra oficial pra qualquer IA achar.
+- **Aprendizado:** A Sincronia 4-Point é a regra operacional vigente. Os 4 pontos que devem sempre estar espelhados a cada alteração são: (1) Lovable (editor/preview, fonte das mudanças assistidas por IA), (2) GitHub (repositório, sync bidirecional automática com Lovable — é a Fonte da Verdade), (3) VPS (/root/[oculto], microsserviços e PM2 — rodar `pm2 save` após mudança de estado), (4) Cérebro Vivo (docs/CONSCIENCIA/ + .claude/, contexto persistente consumido por qualquer IA/Hub). Nenhuma alteração estrutural é considerada concluída enquanto os 4 pontos não refletirem o mesmo estado.</aprendizado>
+<parameter name="categoria">regra
