@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T09:42:18.840Z",
-  "updatedAtBR": "04/07/2026, 06:42:18 BRT",
+  "updatedAt": "2026-07-04T09:53:17.859Z",
+  "updatedAtBR": "04/07/2026, 06:53:17 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Criou OAuth Broker para HUB",
+    "lastCommit": "fix(notify): admin recebe card gamificado, grupo recebe texto seco",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T09:53:17.859Z",
+      "titulo": "Push na main · 59406e8369a6baaaa7eaf79e5187900b12e92336",
+      "detalhe": "fix(notify): admin recebe card gamificado, grupo recebe texto seco",
+      "area": "Repositório",
+      "sha": "59406e8",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T09:42:18.840Z",
       "titulo": "Push na main · 87b4ff288c6a210c72d27dc4632cf6aeda85228e",
       "detalhe": "Criou OAuth Broker para HUB",
@@ -978,14 +986,6 @@
       "detalhe": "",
       "area": "Repositório",
       "sha": "9da8b9e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-03T21:19:26.271Z",
-      "titulo": "Push na main · 5296657bac04aba148a5aa640d8ededc9596dacc",
-      "detalhe": "aprendizado(#270): Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub",
-      "area": "Repositório",
-      "sha": "5296657",
       "actor": "segredounlock"
     }
   ],
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T09:53:17.859Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 59406e8369a6baaaa7eaf79e5187900b12e92336 (59406e8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T09:42:18.840Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 87b4ff288c6a210c72d27dc4632cf6aeda85228e (87b4ff2)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T21:31:16.763Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9da8b9e04c291b990a346288dda8d03a13f20dd4 (9da8b9e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T21:19:26.271Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 5296657bac04aba148a5aa640d8ededc9596dacc (5296657)",
       "area": "Repositório",
       "status": "sucesso"
     }
