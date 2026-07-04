@@ -2350,3 +2350,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Categoria:** aprendizado-coletivo
 - **Contexto:** Outra IA registrou esse aprendizado: "Working tree da VPS não é staging — fonte de verdade é o repo". Faz sentido? Como 
 - **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
+
+### 288. Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado
+- **Categoria:** atalho
+- **Data:** 2026-07-04
+- **Contexto:** Pivete pediu modo Jarvis no @srver1bot (HubBot id 74, apps/bot-telegram/unified-bot.cjs) pra operar tudo por botões, conectado ao grafoRAG (vault Obsidian em docs/BRAIN), delegando trabalho pesado pros cérebros (darkai CLI).
+- **Aprendizado:** 1) Jarvis no HubBot: módulo jarvis-menu.cjs (gerado via darkai/GPT-5.4 com contexto enxuto de assinaturas) + 3 hooks mínimos no unified-bot.cjs (require+instância antes de handleCallback; despacho de callback jv:*; comando /jarvis + consumo de texto pendente). Comando: /jarvis ou /j. 2) grafoRAG: vault-master-mcp instalado global (npx vault-master-mcp --vault docs/BRAIN — 42 notas indexadas) e registrado em .mcp.json na raiz. 3) ARMADILHA: stash pop parcial deixa marcadores de conflito silenciosos — sempre grep '^<<<<<<<' nos arquivos tocados antes de editar/reiniciar; o unified-bot.cjs tinha conflito na linha 1001 e só rodava da memória. 4) darkai >60s: rodar setsid em background gravando em /tmp e ler depois (timeout da tool é 60s).
