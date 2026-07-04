@@ -7,6 +7,8 @@ interface Provider {
   color: string;
   icon: string;
   scopes: string;
+  auth_type?: 'oauth' | 'api_key';
+  tier?: 1 | 2 | 3;
 }
 
 interface Connection {
@@ -19,13 +21,20 @@ interface Connection {
 
 const BROKER_BASE = 'https://hub.centralldark.com';
 
-// 🔒 Catálogo fallback — usado quando oauth_providers ainda não existe/está vazia
+// 🔒 Catálogo fallback — Tier 1 completo (foto do Pivete)
 const FALLBACK_PROVIDERS: Provider[] = [
-  { id: 'grok',   display_name: 'Grok / X',      color: '#000000', icon: 'grok',   scopes: 'chat.read chat.write' },
-  { id: 'notion', display_name: 'Notion',        color: '#000000', icon: 'notion', scopes: 'read.content update.content' },
-  { id: 'gdrive', display_name: 'Google Drive',  color: '#1a73e8', icon: 'drive',  scopes: 'drive.file drive.readonly' },
-  { id: 'github', display_name: 'GitHub',        color: '#24292f', icon: 'github', scopes: 'repo read:user' },
+  // IAs
+  { id: 'grok',     display_name: 'Grok / xAI',   color: '#000000', icon: 'grok',     scopes: 'chat.read chat.write', auth_type: 'api_key', tier: 1 },
+  { id: 'claude',   display_name: 'Claude',       color: '#d97706', icon: 'claude',   scopes: 'messages',              auth_type: 'api_key', tier: 1 },
+  { id: 'openai',   display_name: 'OpenAI',       color: '#10a37f', icon: 'openai',   scopes: 'chat completions',      auth_type: 'api_key', tier: 1 },
+  { id: 'gemini',   display_name: 'Gemini',       color: '#4285f4', icon: 'gemini',   scopes: 'generateContent',       auth_type: 'api_key', tier: 1 },
+  // Produtividade / Dev / Storage
+  { id: 'notion',   display_name: 'Notion',       color: '#000000', icon: 'notion',   scopes: 'read.content update.content', auth_type: 'oauth', tier: 1 },
+  { id: 'github',   display_name: 'GitHub',       color: '#24292f', icon: 'github',   scopes: 'repo read:user',        auth_type: 'oauth',   tier: 1 },
+  { id: 'gdrive',   display_name: 'Google Drive', color: '#1a73e8', icon: 'drive',    scopes: 'drive.file drive.readonly', auth_type: 'oauth', tier: 1 },
+  { id: 'supabase', display_name: 'Supabase',     color: '#3ecf8e', icon: 'supabase', scopes: 'management',            auth_type: 'api_key', tier: 1 },
 ];
+
 
 export function OAuthConnectors() {
   const [providers, setProviders] = useState<Provider[]>([]);
