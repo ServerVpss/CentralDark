@@ -145,8 +145,10 @@ export function OAuthConnectors() {
                   </div>
                   <span className={`text-xs px-2 py-0.5 rounded ${s.cls}`}>{s.txt}</span>
                 </div>
+              </div>
 
               <div className="flex gap-2">
+
                 <button onClick={() => connect(p.id)}
                         className="flex-1 rounded-lg px-3 py-2 text-white text-sm font-medium shadow-3d-primary active:translate-y-[1px]"
                         style={{ backgroundColor: p.color }}>
