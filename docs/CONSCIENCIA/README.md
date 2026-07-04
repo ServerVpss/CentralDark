@@ -2,7 +2,7 @@
 title: "CONSCIENCIA — Memória Operacional das IAs"
 date: 2026-06-29
 tags: ["consciencia", "memoria", "ia", "operacional", "regras"]
-updated: 2026-06-29
+updated: 2026-07-04
 ---
 
 # docs/CONSCIENCIA/
@@ -27,6 +27,11 @@ Pasta lida automaticamente pelo Custom GPT no começo de cada conversa, via MCP 
 - `09-ESTADO-ATUAL.md` — snapshot vivo (auto-atualizado a cada 6h)
 - `CUSTOM-GPT-SETUP.md` — passo a passo pra criar o GPT
 - `PLANO.md` — o que falta nessa pasta
+
+## Regras oficiais de infra (leitura obrigatória)
+
+- [`DNS-WILDCARD-CENTRALLDARK.md`](./DNS-WILDCARD-CENTRALLDARK.md) — Cloudflare tem wildcard `*.centralldark.com` → VPS. Subdomínio novo **não precisa cadastro DNS**, só bloco no Caddy.
+- [`REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`](./REGRA-OFICIAL-HIERARQUIA-MEMORIA.md) — regra de onde toda memória oficial deve viver.
 
 ## Como atualizar
 
