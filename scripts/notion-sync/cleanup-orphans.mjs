@@ -17,6 +17,7 @@
  */
 
 import { Client } from "@notionhq/client";
+import { wrap } from "./with-retry.mjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 
