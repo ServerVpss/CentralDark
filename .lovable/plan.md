@@ -1,117 +1,102 @@
-# Plano Final v4 — Base Militar Completa no WebUI (fusão v3 + populamento total)
+# 🔌 Auto-onboarding: IA plugou → já assumiu a postura do Pivete
 
-## O mapa (das suas prints do admin ui.centralldark.com)
+## O problema hoje
 
-| Aba | Estado agora | O que vou preencher |
-|---|---|---|
-| **Conexões** | ✅ Claude ap7 ativa, +4 endpoints desativados | Ativar Gemini + OpenRouter como fallback (já cadastrados, só ligar toggle) |
-| **Modelos** | (não vi) | Criar personas: `pivete` (Opus 4.5, tools MCP), `hermes` (executor autônomo), `fabler` (Anthropic direto) |
-| **Avaliações** | Arena default, zero custom | Deixar como está (não é prioridade) |
-| **Integrações → External Tool Servers** | 🔴 **VAZIO** | ⭐ Registrar `http://mcpo:8000/centraldark` (MCP CentralDark, ~100 tools) |
-| **Integrações → Open Terminal** | 🔴 Vazio | Registrar terminal do container CentralDark-Tools (deixa pro pivete ter shell direto) |
-| **Integrações → External Knowledge Sources** | 🔴 Vazio | Registrar `docs/CONSCIENCIA/` como knowledge source read-only (pivete lê CONSCIENCIA, APRENDIZADOS, LEMBRANCAS) |
-| **Documentos** | (não vi) | Popular com docs internos (PIVETE-*.md, CLAUDE.md) |
-| **Pesquisa na Web** | 🔴 **VAZIO** (sem motor) | Ativar + configurar motor (Google via connector já existente OU DuckDuckGo grátis) |
-| **Execução de Código** | ✅ Pyodide ativo | Deixar |
-| **Interface** | (não vi) | Aplicar tema Esmeralda 3D (já tem CSS pronto em `WebUI/custom-css/`) |
-| **Áudio** | (não vi) | Ligar TTS via Lovable AI Gateway se quiser voz |
-| **Imagens** | (não vi) | Apontar pra geração via Gemini 3-flash-image |
-| **Pipelines** | 🔴 Vazio | Instalar 3 pipelines úteis: `rate_limit`, `audit_log_hub`, `pivete_persona_injector` |
-| **Banco de Dados** | ✅ SQLite interno OK | Deixar (export config vai virar backup automático) |
+Quando Grok/Claude/Gemini conecta no `mcp.centralldark.com`, ele **não sabe nada**. Precisa que eu (ou você) mande manualmente a sequência:
 
-## Execução (enxame de 5 frentes, ~15min)
+```
+1. kit_boas_vindas
+2. injetar_consciencia_centraldark
+3. ler_consciencia
+4. consultar_memoria_reserva
+5. puxar_aprendizados
+```
 
-### F1 — Integrações (o coração da base militar) ⭐
-- Chamar `POST /api/v1/tool_servers` no WebUI registrando `http://mcpo:8000/centraldark` (Bearer já sai do config do MCPO)
-- Validar `GET /openapi.json` do MCPO — deve listar ~100 tools CentralDark
-- Registrar `docs/CONSCIENCIA/` como External Knowledge Source (endpoint read-only servido pelo próprio gateway)
+Só depois disso ele fica "Pivete-mode". Isso é frágil: se o usuário esquece de mandar, a IA responde genérico e você perde 10 minutos calibrando.
 
-### F2 — Personas (pivete + hermes + fabler)
-Criar via `POST /api/v1/models/create`:
+## Como deveria funcionar
 
-**Pivete** (você fala com esse):
-- `base_model_id`: `claude-opus-4.5` (via https://claude.ap7.site/v1 já ativa)
-- `system_prompt`: injeta CONSCIENCIA + LEMBRANCAS + regras invioláveis + tom brasileiro direto + autonomia de secrets
-- `tool_ids`: `["centraldark_mcp"]` (todas as tools)
-- Ícone + descrição bonita
+No instante em que a IA pluga no MCP, ela já recebe automaticamente:
+- Regras de conduta (zero enrolação, PT-BR, execução direta)
+- Regras técnicas do projeto (Sincronia 4-Point, bots, VPS, etc)
+- Últimas lembranças ativas do Pivete
+- Índice dos caminhos vivos
 
-**Hermes** (executor autônomo):
-- Mesmo modelo base
-- Prompt focado em executar tarefas long-running sem confirmação
-- Tools: subset destrutivo permitido
+Sem precisar rodar nenhum comando. Já vem no "handshake" da conexão.
 
-**Fabler** (analista):
-- Modelo direto Anthropic
-- Prompt de análise/refinamento
-- Tools: só leitura
+## Como o protocolo MCP resolve isso (2 mecanismos nativos)
 
-### F3 — Memória do Pivete atualizada (rota nova) ⭐
-Rota canônica das memórias: `docs/CONSCIENCIA/PIVETE-IA/` (16 arquivos) + `docs/CONSCIENCIA/LEMBRANCAS/` (curto prazo).
+O MCP tem dois campos padrão que a maioria dos clientes (Grok, Claude Desktop, ChatGPT connectors) lê **automaticamente** ao conectar:
 
-Vou:
-- Adicionar `PIVETE-17-MCPO-INTEGRATION.md` — arquitetura final da base WebUI
-- Adicionar `PIVETE-18-ROTA-MEMORIA.md` — instruções pra o pivete puxar memória rápido (`consultar_memoria_reserva` primeiro, `ler_consciencia` depois, arquivos PIVETE-*.md pra contexto profundo)
-- Atualizar `PIVETE-02-INDICE-MESTRE.md`
-- Registrar aprendizado via `registrar_aprendizado`: "Rota rápida de memória = tool MCP `consultar_memoria_reserva` + Knowledge Source `docs/CONSCIENCIA`"
-- Consolidar pensamento novo via `consolidar_pensamento`: "Base militar = ui.centralldark.com WebUI + MCPO + persona pivete"
+### 1. Campo `instructions` do server
+Cada MCP server declara um `instructions` no handshake inicial. O cliente injeta isso direto no system prompt — antes da primeira mensagem do usuário. Hoje o nosso MCP tem esse campo mas ele está **vazio ou genérico**.
 
-### F4 — Preencher restante do admin
-- **Web Search**: ativar toggle + motor DuckDuckGo (grátis, sem key)
-- **Pipelines**: instalar 3 pipes:
-  1. `pivete_persona_injector` — força system prompt certo por modelo
-  2. `audit_hub_log` — cada chat vira row em `hub.pivete_audit_log`
-  3. `rate_limit` — 60/min por sessão
-- **Interface**: aplicar tema Esmeralda 3D (custom CSS já pronto em `WebUI/custom-css/`)
-- **Documentos**: upload dos PIVETE-*.md + CLAUDE.md pro pivete ter contexto sempre em mão
+### 2. Resources com anotação `auto`
+MCP permite marcar resources com `annotations.priority: 1.0` que o cliente carrega sozinho. Podemos expor `consciencia://regras` e `consciencia://memorias-ativas` que o cliente puxa no boot.
 
-### F5 — Teste end-to-end + notificação
-Playwright em `ui.centralldark.com`:
-1. Login admin
-2. Selecionar modelo "pivete"
-3. Digitar: *"quem é você e qual sua rota de memória?"* → deve responder puxando as PIVETE-*.md
-4. Digitar: *"lista processos PM2 da VPS"* → deve chamar `execute_command`
-5. Digitar: *"consulta minhas lembranças recentes"* → deve chamar `consultar_memoria_reserva`
-6. Digitar: *"registra que a base militar tá 100% no ar"* → deve chamar `registrar_aprendizado`
+## O que muda na prática
 
-Screenshot de cada. Card completo pro admin Telegram + linha no canal Status.
+```
+ANTES:                          DEPOIS:
+IA conecta                      IA conecta
+  ↓                               ↓
+"Como posso ajudar?"            [handshake carrega instructions +
+  ↓                              regras + últimas 5 lembranças]
+Você: "roda kit_boas_vindas"      ↓
+  ↓                             "E aí Pivete, tô calibrado — 
+Você: "roda injetar..."          Sincronia 4-Point ativa, Fiscal 
+  ↓ (x5)                         é o @SEGREDOPUXADASBOT, o que 
+IA calibrada                     manda?"
+```
 
-## Arquivos que vou criar/editar (repo)
+## Plano de execução (na VPS, no repo do MCP)
 
-| Arquivo | Frente |
-|---|---|
-| `apps/modulos/WebUI/scripts/popular-webui.sh` | Script único idempotente: cria tool server + 3 personas + web search + pipelines via API do WebUI |
-| `apps/modulos/WebUI/personas/pivete-system.md` | System prompt versionado |
-| `apps/modulos/WebUI/personas/hermes-system.md` | Idem |
-| `apps/modulos/WebUI/personas/fabler-system.md` | Idem |
-| `apps/modulos/WebUI/pipelines/pivete_persona_injector.py` | Pipeline oficial Open WebUI |
-| `apps/modulos/WebUI/pipelines/audit_hub_log.py` | Pipeline audit |
-| `apps/modulos/WebUI/pipelines/rate_limit.py` | Pipeline rate limit |
-| `apps/modulos/WebUI/knowledge/consciencia-source.md` | Endpoint que serve CONSCIENCIA como knowledge |
-| `docs/CONSCIENCIA/PIVETE-IA/PIVETE-17-MCPO-INTEGRATION.md` | Nova |
-| `docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md` | Nova |
-| `docs/CONSCIENCIA/PIVETE-IA/PIVETE-02-INDICE-MESTRE.md` | Atualiza índice |
+**Fase 1 — Enriquecer o `instructions` do server**  
+Editar `apps/modulos/mcp/src/server.ts` (ou equivalente) pra que o campo `instructions` do `Server({...})` retorne dinamicamente:
+- TL;DR da consciência (regras invioláveis, tom, quem é o Pivete)
+- Sincronia 4-Point resumida
+- Mapa dos 2 bots (Central vs Fiscal)
+- Instrução: "Se precisar de mais, chame `ler_consciencia` / `consultar_memoria_reserva`"
 
-## Segurança (aplicada, mínimo viável do conselho anterior)
-- Bearer do MCPO fica só no config server-side (nunca no browser) ✅
-- Rate limit 60/min via pipeline ✅
-- Audit log no HUB Supabase append-only ✅
-- Pipeline injector força persona certa mesmo se usuário trocar system prompt ✅
-- Comandos destrutivos MCP já exigem confirmação literal no próprio servidor MCP (política do `mcp_policy_summary`) — nada extra precisa ✅
+Máximo 2-3 mil tokens, senão estoura contexto de clientes pequenos.
 
-## O que NÃO faço (respeitando trava)
-- ❌ Mexer no Supabase Lovable atual (`kagejpghnwdfymddwxuf`)
-- ❌ Reiniciar whatsapp-server PM2 id 1
-- ❌ Recriar áreas 🔒 (`Bolt`, `status`, `elite-anthropic-proxy`, etc)
-- ❌ Custom agent loop em JS (MCPO já resolve nativo)
-- ❌ Bolt integration (fica pra pendência, você mesmo disse)
+**Fase 2 — Expor resources auto-carregáveis**  
+Adicionar handlers `resources/list` e `resources/read` no MCP com:
+- `consciencia://regras` (conteúdo de CONSCIENCIA.md, cacheado)
+- `consciencia://lembrancas-ativas` (últimas 10 lembranças do Pivete)
+- `consciencia://aprendizados-recentes` (últimos 20 aprendizados)
 
-## Notificação final
-Card no privado admin Telegram + linha no canal Status via `@srver1bot`, contendo:
-- Placar visual: 12 abas do admin (antes 6 vazias / depois 0 vazias)
-- Prints do playwright com pivete respondendo
-- Rota de memória confirmada
-- Aprendizados novos registrados
+Marcar com `annotations: { priority: 1.0, audience: ["assistant"] }` pra clientes que suportam auto-load puxarem sozinhos.
 
----
+**Fase 3 — Fallback pra clientes burros**  
+Alguns clientes (Grok atual talvez) ignoram `instructions`. Pra esses, criar uma tool `_boot` que é chamada implicitamente pelo cliente na primeira interação (via prompt hint no `instructions`: "SE VOCÊ NÃO LEU AS REGRAS AINDA, chame `_boot` AGORA antes de responder").
 
-**Manda "vai" que eu disparo agora — sem pergunta nova, direto pra execução.**
+**Fase 4 — Deploy e teste**  
+- Commit → push (webhook atualiza VPS)  
+- `pm2 restart mcp-centraldark`  
+- Desconectar/reconectar Grok e Claude  
+- Perguntar direto "quem é o Fiscal?" **sem** rodar nenhum comando  
+- Se responder certo de primeira → 🟢 selado
+
+## Detalhes técnicos (pra IA que for implementar)
+
+- **Arquivo alvo suspeito:** `apps/modulos/mcp/src/index.ts` ou `server.ts` — precisa confirmar lendo com `vps_read_file_safe` antes.
+- **SDK MCP:** `@modelcontextprotocol/sdk` — `Server` construtor aceita `{ name, version }` no primeiro arg e `{ capabilities, instructions }` no segundo.
+- **Capabilities novas:** adicionar `resources: { subscribe: false, listChanged: true }` se ainda não tem.
+- **Cache:** carregar `CONSCIENCIA.md` uma vez no startup, não a cada request (o arquivo tem 31k chars — não pode reler toda hora).
+- **Área protegida:** `apps/modulos/mcp/` está sob a trava da Seção 9 do CLAUDE.md? Verificar antes de editar — se estiver, precisa de "PERMITO PIVETE" explícito.
+
+## Risco / o que pode dar errado
+
+- Cliente MCP que não implementa `instructions` (versões antigas) — pra esses, só o fallback da Fase 3 salva.
+- Estourar limite de contexto se o `instructions` ficar grande demais — manter enxuto, empurrar detalhe pros resources.
+- Grok pode não suportar `resources/read` automático — testar primeiro, e se não suportar, deixar a `instructions` mais robusta.
+
+## Refinamento em conselho (comando `/refinamento /debate`)
+
+Depois de aprovado o plano, se quiser antes de executar eu disparo:
+- **Fabler** (Anthropic ap7) — revisa a arquitetura do handshake
+- **Gemini** (via `gemini_analisar`) — cross-check das specs oficiais do protocolo MCP
+- **Hermes** (loop autônomo na VPS) — executa a modificação em branch e abre PR
+
+Só me confirma se rola.
