@@ -98,6 +98,15 @@ def resolve_account(token: str) -> dict:
 
 app = FastAPI()
 
+# CORS liberado pro WebUI (ui.centralldark.com) e uso local
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.middleware("http")
 async def request_logger(request: Request, call_next):
