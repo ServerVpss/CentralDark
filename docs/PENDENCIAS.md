@@ -627,3 +627,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** Grafo Jarvis 3D já no ar em grafo.centralldark.com/3d.html, mas o Obsidian ainda só tem a vista 2D do plugin v0.3.0 (conecta via Supabase edge functions graph-data/plugin-release).
 - **Onde mexer:** apps/modulos/obsidian-plugin-grafo-vivo/src + graph-panel (porta 3030)
 - **Critério pra fechar:** Vista 3D abre dentro do Obsidian via plugin (WorkspaceLeaf/iframe pra grafo.centralldark.com/3d.html) com comando dedicado; release publicado via edge function plugin-release; opcional: modo brain no /api/graph lendo docs/BRAIN.
+### 23. Painel Jarvis v2 — grafo 3D tempo real (ícones IA, setores, agentes se movendo) — 🔴 ABERTO (04/07/2026, 19:21 BRT)
+- **Sintoma:** Auditoria enxame 04/07: faltam ícone IA nos nós, labels sempre visíveis, agrupamento por setor/módulo, partículas pulsando nas arestas, tempo real (polling/ws) e movimento visível dos agentes. Pivete vai coordenar o sistema por esse painel.
+- **Onde mexer:** apps/modulos — source não-minificado do grafo/painel; rascunho de patch em /tmp/enxame/painel-patch.md (Gemini Pro)
+- **Critério pra fechar:** Painel exibindo em tempo real: nós com label+ícone IA agrupados por setor, arestas pulsando com partículas, agentes se movendo entre nós — validado visualmente pelo Pivete
