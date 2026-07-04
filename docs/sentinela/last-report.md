@@ -1,4 +1,4 @@
-# Sentinela — 2026-07-03T19:27:11.733Z
+# Sentinela — 2026-07-04T03:24:10.526Z
 
 | Métrica | Valor |
 |---|---|
@@ -6,23 +6,26 @@
 | Endpoints fora | 2 |
 | Workflows vermelhos 24h | 20 |
 | Divergências detectadas | 22 |
-| Issues novas | 7 |
-| Issues já abertas (dedupe) | 15 |
+| Issues novas | 5 |
+| Issues já abertas (dedupe) | 17 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 256ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 354ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 242ms · CORS=`*`
-- 🔴 **Install status** — `502` em 181ms
-- 🟢 **Painel** — `200` em 264ms · CORS=`*`
-- 🔴 **API** — `404` em 258ms
+- 🟢 **MCP health** — `200` em 316ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 322ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 161ms · CORS=`*`
+- 🔴 **Install status** — `502` em 133ms
+- 🟢 **Painel** — `200` em 137ms · CORS=`*`
+- 🔴 **API** — `404` em 150ms
 
 ## Divergências
 
 - **[p2]** Endpoints → Endpoint Install status fora do ar (HTTP 502) (bot: `claude`)
 - **[p2]** Endpoints → Endpoint API fora do ar (HTTP 404) (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: 🧠 Notion Sync (docs/CONSCIENCIA → Notion) (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: Obsidian — Regenerar INDEX (bot: `codex`)
@@ -40,6 +43,3 @@
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: Pipeline — Telegram + Painel (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: Pipeline — Telegram + Painel (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: Pipeline — Telegram + Painel (bot: `codex`)
