@@ -1,0 +1,17 @@
+{
+  "name": "hub-broker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Broker OAuth + API keys do HUB CentralDark (roda na VPS, fala com Supabase HUB)",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
