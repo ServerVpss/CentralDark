@@ -2,8 +2,6 @@
 
 > **Ponto único de verdade.** Todo material sobre como IAs (Claude, GPT, Gemini, Cursor, bots Telegram, scripts na VPS) conversam entre si e usam o "cérebro compartilhado" mora AQUI. Não procure em outra pasta.
 
-> 🎴 **NOTIFICAÇÃO OFICIAL: Card Hermes v1.2** — Toda ação relevante notifica no Telegram usando o padrão em [`../PADRAO-CARD-HERMES.md`](../PADRAO-CARD-HERMES.md). Bloco `<pre>` único, fundo preto, connector Telegram (`@srver1bot`), NUNCA `notify-telegram`.
-
 ---
 
 ## 🚀 Começou agora? Vai por essa ordem:

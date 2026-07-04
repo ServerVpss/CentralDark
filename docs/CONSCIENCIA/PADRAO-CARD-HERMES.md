@@ -1,29 +1,28 @@
-# 🎴 PADRÃO CARD HERMES — v1.2 (OFICIAL)
+# 🎴 PADRÃO CARD HERMES — v1.3 (OFICIAL)
 
 > **Status:** ✅ APROVADO E TRAVADO
-> **Autoria:** Fabler (v1.0) + Gemini (v1.1) + Fabler (v1.1.1) + Fabler+Gemini (v1.2)
-> **Validado por:** Pivete em 04/07/2026 — "agora sim foi direto pra meu privado, esse sim tá lindo"
+> **Autoria:** Fabler (v1.0) + Gemini (v1.1) + Fabler (v1.1.1) + Fabler+Gemini (v1.2) + Fabler+Gemini (v1.3)
+> **Validado por:** Pivete em 04/07/2026
 > **Regra dura:** TODA ação relevante do sistema DEVE mandar esse card. Nada de aviso solto, nada fora do padrão.
 
 ---
 
 ## 🔒 Regras invioláveis
 
-1. **TUDO dentro de UM único `<pre>...</pre>`.** Nada de texto fora. Sem título proporcional em cima. Sem rodapé fora do bloco. Nada.
-2. **Envio pelo connector Telegram** (`sendMessage`), NUNCA pelo `notify-telegram` (aquele exige `NOTIFY_API_KEY` e falha).
-   - Bot: `@srver1bot`
-   - `connection_id`: `std_01kvw4jkcbekyr1t33vs4p5e9w`
-   - `connector_id`: `telegram`
-   - `chat_id` admin: `1901426549` (secret `TELEGRAM_ADMIN_CHAT_ID`)
-   - `chat_id` canal status: `-1003669176367` (secret `TELEGRAM_STATUS_CHANNEL_ID`)
+1. **TUDO dentro de UM único `<pre>...</pre>`.** Nada de texto fora.
+2. **Envio pelo connector Telegram** (`sendMessage`), NUNCA pelo `notify-telegram`.
+   - Bot: `@srver1bot` · `connection_id`: `std_01kvw4jkcbekyr1t33vs4p5e9w` · `connector_id`: `telegram`
+   - Admin: `1901426549` (secret `TELEGRAM_ADMIN_CHAT_ID`) · Canal status: `-1003669176367` (`TELEGRAM_STATUS_CHANNEL_ID`)
    - `parse_mode`: `"HTML"`
-3. **Largura fixa:** 36 caracteres (moldura e separador).
+3. **Largura fixa:** 36 caracteres.
 4. **STATUS só emoji + palavra:** `✅ OK` / `⚠️ AVISO` / `❌ FALHA`. Nunca misturar prova técnica com status.
-5. **Prova técnica só no bloco `🔧 DETALHE TÉCNICO`** — commits, arquivos, IDs, validadores.
+5. **Prova técnica só em `🔧 DETALHE TÉCNICO`.**
+6. **Barras normalizadas:** 0–100 sempre em 10 blocos fixos (`▓░`), com **% no final** (ex.: `▓▓▓▓▓▓▓░░░ 70%`).
+7. **Linha "Próx:" nunca quebra** — se não couber, encurta o título.
 
 ---
 
-## 🧩 Template canônico v1.2
+## 🧩 Template canônico v1.3
 
 ```
 <pre>
@@ -47,13 +46,19 @@ RESPONS:   @segredounlocker
   {o que foi feito, 2-4 linhas}
 
 📊 PROGRESSO
-  NÍVEL: [████████░░] Lv.{N}
-  XP:    [██████████] {ganho}/{total}
-  PROG:  {0-100}%
+  NÍVEL: ▓▓▓▓▓▓▓▓░░ 80%
+  XP:    ▓▓▓▓▓▓▓▓▓▓ 320/320
 
-🧠 SKILLS UP
-  • {Skill}  +{XP} XP (Lv.{N})
-  • {Skill}  +{XP} XP (Lv.{N})
+🧠 HERMES · Nv.{N} {Título} · {XP} XP
+   Próx: {Título} (faltam {Z} XP)
+
+📊 SKILLS (por sistema)
+  Telegram    ▓▓▓▓▓▓▓▓░░ 85%
+  WebUI       ▓▓▓▓▓▓▓░░░ 70%
+  Arsenal     ▓▓▓▓▓▓▓▓░░ 75%
+  Esmeralda   ▓▓▓▓▓░░░░░ 55%
+  Aprendizad  ▓▓▓▓▓▓▓▓▓░ 90%
+  Auto-diag   ▓▓▓▓░░░░░░ 45%
 
 🚨 BLOQUEIOS
   {nenhum | descrição curta}
@@ -73,7 +78,7 @@ RESPONS:   @segredounlocker
 
 ---
 
-## 📞 Como chamar (o único jeito certo)
+## 📞 Como chamar
 
 **Ferramenta:** `standard_connectors--call_gateway_connection`
 
@@ -92,19 +97,18 @@ RESPONS:   @segredounlocker
 }
 ```
 
-Para o canal Status (linha resumida curta), mesmo formato mas para `chat_id: -1003669176367`.
-
 ---
 
-## 🚫 O que NÃO fazer (erros já cometidos)
+## 🚫 O que NÃO fazer
 
 | Erro | Motivo |
 |---|---|
-| Texto/título fora do `<pre>` | Vira letra proporcional, quebra o "fundo preto monoespaçado" |
-| Usar `notify-telegram` | Exige `NOTIFY_API_KEY` no header e retorna 401 |
-| Misturar hash de commit no `STATUS` | Polui coluna de status; prova vai só em `DETALHE TÉCNICO` |
-| Postar em bot errado (`@SEGREDOPUXADASBOT`) | Aquele é do TelePainel, não Central |
-| Card sem `PRÓXIMO PASSO` | Deixa Pivete sem saber o que vem a seguir |
+| Texto/título fora do `<pre>` | Vira letra proporcional, quebra o monoespaçado |
+| Usar `notify-telegram` | Exige `NOTIFY_API_KEY` e retorna 401 |
+| Barra sem % | Perde leitura rápida (regra v1.3) |
+| Barra com tamanho variável | Sempre 10 blocos normalizados |
+| Misturar hash de commit no `STATUS` | Prova só em `DETALHE TÉCNICO` |
+| Postar em `@SEGREDOPUXADASBOT` | Aquele é do TelePainel, não Central |
 
 ---
 
@@ -113,7 +117,8 @@ Para o canal Status (linha resumida curta), mesmo formato mas para `chat_id: -10
 - **v1.0** (Fabler) — estrutura base
 - **v1.1** (Gemini) — largura 36, STATUS no topo
 - **v1.1.1** (Fabler) — XP atual/total, PROVA só verificável
-- **v1.2** (Fabler+Gemini) — TEMPO, BLOQUEIOS, PRÓXIMO PASSO, RESPONSÁVEL, PRIORIDADE, LOG ID, TAGS + regra "sempre notificar"
+- **v1.2** (Fabler+Gemini) — TEMPO, BLOQUEIOS, PRÓXIMO PASSO, RESPONSÁVEL, PRIORIDADE, LOG ID, TAGS
+- **v1.3** (Fabler+Gemini) — `HERMES Nv/Próx`, bloco `SKILLS por sistema` com barras normalizadas 10 blocos + `%`
 
 ---
 

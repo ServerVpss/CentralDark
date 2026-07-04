@@ -204,13 +204,3 @@ Conteúdo: Base militar do Pivete = ui.centralldark.com (Open WebUI 0.10.1) + MC
 - **Promovida:** sim
 
 Conteúdo: Sincronia 4-Point = Lovable → GitHub → VPS → Cérebro Vivo (docs/CONSCIENCIA + .claude). Todos os 4 tem que estar espelhados a cada mudança. Bot Fiscal = @SEGREDOPUXADASBOT (TelePainel, projeto Lovable Cloud atual, edge `telepainel-webhook`). Bot Central = @srver1bot (HUB Supabase + VPS PM2 27, edge `telegram-webhook`). Nunca misturar.
-
-### [2026-07-04T03:25] Card Hermes v1.2 — padrão oficial de notificação Telegram
-- **Data:** 2026-07-04
-- **Tags:** telegram, card, padrao, hermes, notificacao, obrigatorio
-- **Relevância:** alta
-- **Eixo:** presente
-- **Expira:** 2026-08-03
-- **Promovida:** sim
-
-Conteúdo: TODA ação relevante do sistema notifica no Telegram usando Card Hermes v1.2. Regras duras: (1) TUDO dentro de UM único bloco <pre>...</pre>, nada fora — se sair do pre vira texto proporcional e quebra o "fundo preto monoespaçado" que o Pivete quer. (2) Envio SEMPRE pelo connector Telegram (standard_connectors--call_gateway_connection, connector_id=telegram, connection_id=std_01kvw4jkcbekyr1t33vs4p5e9w, path=/sendMessage, parse_mode=HTML, chat_id admin=1901426549, canal status=-1003669176367). NUNCA usar notify-telegram (exige NOTIFY_API_KEY e retorna 401). (3) Largura 36 chars, moldura ═. (4) Estrutura: STATUS(✅/⚠️/❌) + PRIORIDADE + RESPONSÁVEL + MISSÃO + FASE + TEMPO + LEIGO + AÇÃO + PROGRESSO(NÍVEL/XP/PROG%) + SKILLS UP + BLOQUEIOS + PRÓXIMO PASSO + separador + DETALHE TÉCNICO(arquivo/commit/validador/logID/tags). (5) Prova técnica só no DETALHE TÉCNICO, nunca misturar com STATUS. Fonte oficial: docs/CONSCIENCIA/PADRAO-CARD-HERMES.md. Validado por Pivete em 04/07/2026.
