@@ -1,6 +1,6 @@
 {
   "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 16 online / 0 off de 16 monitorados. Gateway: 0 req/15min.",
-  "updatedAt": "2026-07-03T18:24:48.505Z",
+  "updatedAt": "2026-07-04T09:19:48.772Z",
   "nodes": [
     {
       "id": "mcp-server",
@@ -1015,11 +1015,11 @@
       "Sentinela: sentinela → MCP /health /tools.json → gh issue se divergência",
       "Health: fn-health-check → OPTIONS 10 EFs → fn-notify-telegram → Canal Telegram"
     ],
-    "processos_vivos": 23,
+    "processos_vivos": 24,
     "online": 16,
     "offline": 0,
     "monitorados": 16,
     "gateway_req_15min": 0,
-    "gerado_em": "2026-07-03T18:24:48.505Z"
+    "gerado_em": "2026-07-04T09:19:48.772Z"
   }
 }

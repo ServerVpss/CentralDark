@@ -92,7 +92,41 @@ RESPONS:   @segredounlocker
 }
 ```
 
-Para o canal Status (linha resumida curta), mesmo formato mas para `chat_id: -1003669176367`.
+---
+
+## 📨 REGRA DE CANAL: ADMIN ≠ GRUPO (OBRIGATÓRIO)
+
+Nunca mandar o mesmo texto nos dois canais. Cada um tem formato próprio:
+
+### 🔹 ADMIN (privado — `1901426549`)
+**Público-alvo:** Pivete (leigo, precisa de gamificação)
+**Formato:** Card `<pre>` completo com moldura, emojis, progresso, XP, skills, próximo passo
+**Tom:** Gamificado, visual, didático — ele precisa ENTENDER o que aconteceu sem ler código
+**Conteúdo obrigatório:**
+- STATUS com emoji + palavra (`✅ OK` / `⚠️ AVISO` / `❌ FALHA`)
+- PRIORIDADE + RESPONSÁVEL
+- MISSÃO + FASE + TEMPO
+- 📘 LEIGO (2 linhas em português simples)
+- ⚙️ AÇÃO (o que foi feito)
+- 📊 PROGRESSO (barra + XP)
+- 🧠 SKILLS UP
+- 🚨 BLOQUEIOS
+- 🎯 PRÓXIMO PASSO
+- 🔧 DETALHE TÉCNICO (prova)
+
+### 🔸 GRUPO / CANAL STATUS (`-1003669176367`)
+**Público-alvo:** IAs, bots, sistemas
+**Formato:** Texto limpo, SEM `<pre>`, SEM moldura, SEM spoiler, SEM tags HTML visíveis
+**Tom:** Seco, técnico, informativo — elas precisam do fato, não da apresentação
+**Conteúdo:**
+- `🤖 {SISTEMA} — {resumo em 1 linha}`
+- Sem emojis decorativos, sem barras de progresso, sem XP
+- No máximo 2 linhas
+
+### ⚠️ Regra dura
+- Toda ação relevante do sistema DEVE mandar **nos dois canais**
+- Mas cada um com SEU formato — **nunca** o mesmo texto
+- O `notify.mjs` do Hermes já implementa essa separação automaticamente
 
 ---
 
