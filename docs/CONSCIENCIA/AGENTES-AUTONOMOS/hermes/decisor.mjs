@@ -57,14 +57,21 @@ function carregarCadeia() {
   try {
     const j = JSON.parse(readFileSync(CADEIA_PATH, 'utf8'));
     const ativos = (j.cadeia || []).filter(m => m.ativo !== false);
+    // schema tolerante: se linha tiver via: 'elite-anthropic' vira elite;
+    // senão trata como darkai. Também aceita fallback_final separado.
     const darkai = ativos
-      .filter(m => (m.via || 'darkai') === 'darkai')
+      .filter(m => (m.via || 'darkai') !== 'elite-anthropic')
       .map(m => ({ modelo: m.modelo, timeout_ms: (m.timeout_s || 30) * 1000 }));
     const eliteRow = ativos.find(m => m.via === 'elite-anthropic');
+    const ff = j.fallback_final && j.fallback_final.ativo !== false ? j.fallback_final : null;
     const elite = eliteRow ? {
       url: (j.elite && j.elite.url) || ELITE_FALLBACK.url,
       modelo: eliteRow.modelo,
       timeout_ms: (eliteRow.timeout_s || 30) * 1000,
+    } : ff ? {
+      url: ELITE_FALLBACK.url,
+      modelo: ff.modelo || ELITE_FALLBACK.modelo,
+      timeout_ms: (ff.timeout_s || 30) * 1000,
     } : ELITE_FALLBACK;
     _cadeiaCache = { ts: agora, darkai: darkai.length ? darkai : CADEIA_FALLBACK_DARKAI, elite };
   } catch (e) {
