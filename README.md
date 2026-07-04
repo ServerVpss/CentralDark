@@ -5,6 +5,12 @@
 > Este é o padrão visual **definitivo** de todo o ecossistema CentralDark.
 > Qualquer agente (IA ou humano) que editar este projeto **DEVE manter** este tema em toda nova tela, componente ou módulo. Não trocar paleta, não trocar fontes, não trocar estilo de sombras.
 
+> 🎴 **PADRÃO OFICIAL DE NOTIFICAÇÃO TELEGRAM: Card Hermes v1.2**
+>
+> Toda ação relevante do sistema (deploy, migration, bug corrigido, nova feature, alerta) **DEVE** notificar no Telegram usando o Card Hermes v1.2 — bloco único `<pre>` monoespaçado, fundo preto, enviado pelo connector Telegram (`@srver1bot` → admin `1901426549`).
+> 📖 Especificação completa: [`docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`](docs/CONSCIENCIA/PADRAO-CARD-HERMES.md)
+> ❌ Nunca usar `notify-telegram`. ❌ Nunca mandar texto fora do `<pre>`.
+
 ---
 
 ## 🎨 Tema Oficial: **Esmeralda** (Sistema 3D Tátil)
