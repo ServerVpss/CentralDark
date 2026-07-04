@@ -109,9 +109,14 @@ export function OAuthConnectors() {
         <h3 className="text-lg font-semibold">Conectar contas (OAuth)</h3>
         <p className="text-sm text-muted-foreground">
           Tokens cifrados no HUB Supabase · expiração 30d · logs no Hermes
-          {usingFallback && <span className="ml-2 text-amber-600">🟡 catálogo local ativo (broker/DB pendente)</span>}
+          {usingFallback && <span className="ml-2 text-amber-600">🟡 catálogo local ativo</span>}
+          {loadError && <span className="ml-2 text-red-600">🔴 {loadError}</span>}
+        </p>
+        <p className="text-xs text-muted-foreground mt-1">
+          🛠️ Futuro: Hub de Tokens via Supabase Vault + Edge Function <code>get-token</code>
         </p>
       </div>
+
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {providers.map(p => {
           const conn = conns.find(c => c.provider_id === p.id);
