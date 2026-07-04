@@ -23,6 +23,9 @@ interface Connection {
 }
 
 const BROKER_BASE = 'https://hub.centralldark.com';
+// Modo dev: enquanto não tem login, usa um user_id sintético.
+// Quando login for feito, real user.id sobrescreve.
+const DEV_USER_ID = 'dev-pivete';
 
 // 🔒 Catálogo fallback — Tier 1 completo
 const FALLBACK_PROVIDERS: Provider[] = [
@@ -39,7 +42,8 @@ const FALLBACK_PROVIDERS: Provider[] = [
 export function OAuthConnectors() {
   const [providers, setProviders] = useState<Provider[]>([]);
   const [conns, setConns] = useState<Connection[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string>(DEV_USER_ID);
+  const [isRealUser, setIsRealUser] = useState(false);
   const [loading, setLoading] = useState(true);
   const [usingFallback, setUsingFallback] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -47,12 +51,14 @@ export function OAuthConnectors() {
   async function load() {
     setLoading(true);
     setLoadError(null);
-    let uid: string | null = null;
+    let uid: string = DEV_USER_ID;
+    let real = false;
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      uid = user?.id ?? null;
-    } catch { uid = null; }
+      if (user?.id) { uid = user.id; real = true; }
+    } catch { /* mantém dev */ }
     setUserId(uid);
+    setIsRealUser(real);
 
     let p: Provider[] = [];
     let c: Connection[] = [];
@@ -67,13 +73,14 @@ export function OAuthConnectors() {
       fallback = true;
     }
 
-    if (uid) {
-      try {
-        const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label');
-        if (cr.error) throw cr.error;
-        if (cr.data) c = cr.data as Connection[];
-      } catch (e: any) {
-        c = [];
+    try {
+      const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label').eq('user_id', uid);
+      if (cr.error) throw cr.error;
+      if (cr.data) c = cr.data as Connection[];
+    } catch (e: any) {
+      c = [];
+      // silêncio se a tabela ainda não existe (fase MVP)
+      if (!/relation.*does not exist|not.found/i.test(e?.message ?? '')) {
         setLoadError(e?.message ?? 'erro ao carregar conexões');
       }
     }
@@ -86,10 +93,27 @@ export function OAuthConnectors() {
 
   useEffect(() => { load(); }, []);
 
-  function connect(providerId: string) {
-    if (!userId) { alert('🔴 Faça login no HUB primeiro'); return; }
+  async function connect(p: Provider) {
+    if (p.auth_type === 'api_key') {
+      const key = window.prompt(`🔑 Cole a API key do ${p.display_name}:`);
+      if (!key || key.trim().length < 10) return;
+      try {
+        const res = await fetch(`${BROKER_BASE}/api/keys/store`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId, provider_id: p.id, api_key: key.trim() }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        await load();
+        alert(`✅ ${p.display_name} conectado!`);
+      } catch (e: any) {
+        alert(`🔴 Falha ao salvar: ${e?.message ?? e}`);
+      }
+      return;
+    }
+    // OAuth
     const back = window.location.href;
-    window.location.href = `${BROKER_BASE}/oauth/${providerId}/start?user_id=${userId}&redirect_to=${encodeURIComponent(back)}`;
+    window.location.href = `${BROKER_BASE}/oauth/${p.id}/start?user_id=${userId}&redirect_to=${encodeURIComponent(back)}`;
   }
 
   async function disconnect(connId: string) {
@@ -109,37 +133,39 @@ export function OAuthConnectors() {
 
   const toneClass = {
     muted:   'bg-muted text-muted-foreground border-border',
-    success: 'bg-primary/10 text-primary border-primary/30',
-    warning: 'bg-[hsl(var(--warning))]/10 text-[hsl(var(--warning))] border-[hsl(var(--warning))]/30',
-    danger:  'bg-destructive/10 text-destructive border-destructive/30',
+    success: 'bg-primary/15 text-primary border-primary/40',
+    warning: 'bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))] border-[hsl(var(--warning))]/40',
+    danger:  'bg-destructive/15 text-destructive border-destructive/40',
   };
 
   if (loading) return <div className="p-6 text-muted-foreground text-sm">Carregando conectores…</div>;
 
   return (
-    <Card>
+    <Card className="card-premium border-border/60">
       <CardHeader className="space-y-2">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
-            <CardTitle>Conectar contas</CardTitle>
+            <CardTitle className="text-2xl">
+              Conectar contas <span className="text-gradient-emerald">OAuth</span>
+            </CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Tokens cifrados · expiração 30d · logs no Hermes
+              Tokens cifrados no HUB Supabase · expiração 30d · logs no Hermes
             </p>
           </div>
           <div className="flex flex-col items-end gap-1">
             {usingFallback && (
-              <Badge className={toneClass.warning}>🟡 catálogo local</Badge>
+              <Badge className={toneClass.warning}>🟡 catálogo local ativo</Badge>
             )}
             {loadError && (
               <Badge className={toneClass.danger}>🔴 {loadError}</Badge>
             )}
-            {!userId && (
-              <Badge className={toneClass.muted}>🔒 login pendente</Badge>
+            {!isRealUser && (
+              <Badge className={toneClass.muted}>🧪 modo dev · sem login</Badge>
             )}
           </div>
         </div>
-        <p className="text-xs text-muted-foreground border-l-2 border-primary/40 pl-2 mt-2">
-          🛠️ Futuro: Hub de Tokens via Supabase Vault + Edge Function <code className="font-mono">get-token</code>
+        <p className="text-xs text-muted-foreground border-l-2 border-primary/50 pl-2 mt-2">
+          🛠️ Backend: Supabase HUB (VPS) + Edge Functions <code className="font-mono text-primary">get-token</code> / <code className="font-mono text-primary">keys/store</code>
         </p>
       </CardHeader>
 
@@ -151,23 +177,27 @@ export function OAuthConnectors() {
             return (
               <div
                 key={p.id}
-                className="group rounded-lg border border-border bg-card p-4 space-y-3 transition-all hover:border-primary/40 hover:shadow-sm"
+                className="group relative overflow-hidden rounded-lg border border-border bg-card/60 p-4 space-y-3 transition-all hover:border-primary/50 hover:shadow-3d-primary hover:-translate-y-0.5"
               >
+                <div
+                  className="absolute inset-x-0 top-0 h-0.5 opacity-60 group-hover:opacity-100 transition-opacity"
+                  style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)` }}
+                />
                 <div className="flex items-start gap-3">
                   <div
-                    className="w-9 h-9 shrink-0 rounded-md flex items-center justify-center text-white text-sm font-semibold shadow-sm"
+                    className="w-10 h-10 shrink-0 rounded-lg flex items-center justify-center text-white text-base font-semibold shadow-3d"
                     style={{ backgroundColor: p.color }}
                   >
                     {p.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm truncate">{p.display_name}</div>
-                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                    <div className="font-semibold text-sm truncate">{p.display_name}</div>
+                    <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
                       {p.auth_type === 'api_key' && (
-                        <Badge className="text-[10px] py-0 px-1.5 bg-secondary text-secondary-foreground border-border">API KEY</Badge>
+                        <Badge className="text-[10px] py-0 px-1.5 bg-secondary text-secondary-foreground border-border">🔑 API KEY</Badge>
                       )}
                       {p.auth_type === 'oauth' && (
-                        <Badge className="text-[10px] py-0 px-1.5 bg-primary/10 text-primary border-primary/30">OAUTH</Badge>
+                        <Badge className="text-[10px] py-0 px-1.5 bg-primary/15 text-primary border-primary/40">🔐 OAUTH</Badge>
                       )}
                       <Badge className={`text-[10px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
                     </div>
@@ -176,10 +206,10 @@ export function OAuthConnectors() {
 
                 <div className="flex gap-2">
                   <Button
-                    onClick={() => connect(p.id)}
+                    onClick={() => connect(p)}
                     size="sm"
                     variant={conn ? 'outline' : 'default'}
-                    className="flex-1"
+                    className={conn ? 'flex-1' : 'flex-1 gradient-emerald text-primary-foreground border-0 hover:opacity-90'}
                   >
                     {conn ? 'Reconectar' : 'Conectar'}
                   </Button>
@@ -188,7 +218,7 @@ export function OAuthConnectors() {
                       onClick={() => disconnect(conn.id)}
                       size="sm"
                       variant="outline"
-                      className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
+                      className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/40"
                     >
                       Revogar
                     </Button>
