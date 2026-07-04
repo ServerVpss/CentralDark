@@ -239,6 +239,7 @@
           <nav class="tabs">
             <button class="tab-btn active" data-tab="cadeia">Cadeia</button>
             <button class="tab-btn" data-tab="audit">Auditoria</button>
+            <button class="tab-btn" data-tab="boot">Boot</button>
           </nav>
           <span class="x">×</span>
         </header>
