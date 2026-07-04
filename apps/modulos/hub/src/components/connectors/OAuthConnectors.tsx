@@ -138,10 +138,14 @@ export function OAuthConnectors() {
                   {p.display_name.charAt(0)}
                 </div>
                 <div className="flex-1">
-                  <div className="font-semibold">{p.display_name}</div>
+                  <div className="font-semibold flex items-center gap-2">
+                    {p.display_name}
+                    {p.auth_type === 'api_key' && <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">API KEY</span>}
+                    {p.auth_type === 'oauth' && <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">OAUTH</span>}
+                  </div>
                   <span className={`text-xs px-2 py-0.5 rounded ${s.cls}`}>{s.txt}</span>
                 </div>
-              </div>
+
               <div className="flex gap-2">
                 <button onClick={() => connect(p.id)}
                         className="flex-1 rounded-lg px-3 py-2 text-white text-sm font-medium shadow-3d-primary active:translate-y-[1px]"
