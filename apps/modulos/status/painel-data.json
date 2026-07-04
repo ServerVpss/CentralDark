@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T10:54:36.780Z",
-  "updatedAtBR": "04/07/2026, 07:54:36 BRT",
+  "updatedAt": "2026-07-04T10:55:16.865Z",
+  "updatedAtBR": "04/07/2026, 07:55:16 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "fix(hub): restaura App.tsx completo com tema claro",
+    "lastCommit": "chore(painel): registrar auditoria de infra IA/proxy (Fable)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T10:55:16.865Z",
+      "titulo": "Push na main · d17e02df4ee2ca426d72d1083a63286db1b62f7d",
+      "detalhe": "chore(painel): registrar auditoria de infra IA/proxy (Fable)",
+      "area": "Repositório",
+      "sha": "d17e02d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-04T10:54:36.780Z",
       "title": "🔍 Auditoria Arsenal Máximo: 24 processos PM2 + stack de proxies mapeados; Hermes em missão verificando chaves Elite; DarkAI apontou riscos (porta 9876 exposta, cascata 8090→8083→8082→ap7)",
@@ -1243,6 +1251,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T10:55:16.865Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d17e02df4ee2ca426d72d1083a63286db1b62f7d (d17e02d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T10:45:02.749Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d8ab3c96e9f63646a644ee15a3550a217451c91a (d8ab3c9)",
@@ -1582,13 +1597,6 @@
       "time": "2026-07-04T00:09:46.740Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 4588924334972688c21b98285b8c214b9c85fd5e (4588924)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:03:05.678Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · c5166d992198a0c29db9bb512e0b859b031e7675 (c5166d9)",
       "area": "Repositório",
       "status": "sucesso"
     }
