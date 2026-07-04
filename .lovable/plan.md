@@ -1,65 +1,66 @@
+# 🎛️ Painel da Cadeia no Web UI — arrastar, ligar/desligar, salvar
 
-# 📊 Relatório Vault (últimas 24h) + Mapa Gateways
+## Como vai funcionar pra você
 
-## 1. O que ficou pronto e rodando ✅
+Abre o Web UI → card **"Cadeia do Hermes"** aparece no menu lateral (mesmo lugar dos outros painéis que já ajustamos). Dentro dele:
 
-- `docs/CONSCIENCIA/VAULT/` criado com INDEX, REGRAS-AUTONOMIA, REGRAS-DOC-CHECK, PROMPT-MESTRE, REFLEXOES/.
-- `vault-loader.mjs` carrega os 4 arquivos, faz sha256, log de métricas (bytes, hash, arquivos, force) e invalida cache quando INDEX muda.
-- `daemon.mjs` (PM2 id 66 Hermes) patchado (backup `.bak4`): importa vault-loader e prepende `vaultHeader()` no início de toda missão (força reload na 1ª etapa).
-- Missão de teste `vault-teste-…` executou, Hermes leu o Vault, respondeu e concluiu (foto que você mandou = etapa 2 dessa missão).
-- Vault local em `tools/vault-server/` (Express + marked, `npm run vault` → http://localhost:5174).
-- Aprendizado #272 registrado.
+- Lista dos 15 modelos + Elite, cada um numa linha.
+- **Arrasta a linha pra cima** = fica mais forte (tenta antes).
+- **Switch verde/cinza** liga ou desliga sem precisar apagar.
+- Campo pequeno pra ajustar o **tempo limite** (segundos) de cada um.
+- Botão **"Salvar"** grava — Hermes pega em até 60s, sem restart.
+- Botão **"Reverter"** volta pra ordem anterior (guardo backup automático das últimas 5 versões).
 
-## 2. Por que a foto mostra "❌ Flash · ❌ Pro · ❌ GPT5m · ✅ Elite"
+Extra: cada linha mostra um **placar mini** — quantas vezes esse modelo respondeu ok / falhou nas últimas 100 missões. Assim você decide com base em dado real.
 
-A cadeia do Hermes é: **Flash → Pro → GPT5m → Elite (fallback pago)**.
-Os 3 primeiros caem em **12–30ms** com erro `DARKAI_URL not configured`. Motivo:
+## Onde vive cada coisa
 
-- `decisor.mjs` do Hermes tenta Flash/Pro/GPT5m via variável de ambiente `DARKAI_URL` (que deveria apontar pro edge `ai-proxy` da Lovable Cloud, que usa `LOVABLE_API_KEY` e roteia Gemini/GPT free).
-- Essa variável **nunca foi injetada no PM2** do Hermes (`pm2 env 66` não tem). O `.env` do `/root/CentralDark/` também não expõe.
-- Sem `DARKAI_URL`, os 3 primeiros falham na hora e o Hermes vai direto pro **Elite** (Sonnet 4.5 via `api.centralldark.com`), que é o caro. Por isso o "Balanço: Elite 100%" na foto.
+**Fonte da verdade** (mesmo arquivo do plano anterior — não muda):
+`docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json`
 
-**Resultado prático:** Hermes está funcionando, mas gastando Sonnet em toda etapa. Precisa setar `DARKAI_URL=https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/ai-proxy` no ecosystem do Hermes e `pm2 restart 66 --update-env`.
+**API** (mesma casa, `api.centraldark.com`, só rota nova):
+- `GET  /hermes/cadeia` → devolve o JSON atual + estatísticas
+- `PUT  /hermes/cadeia` → salva ordem/timeouts/ativos novos (com validação)
+- `POST /hermes/cadeia/reverter` → volta pra versão anterior
+- `GET  /hermes/cadeia/stats` → placar de sucesso por modelo (últimas 100)
 
-## 3. Mapa dos Gateways (o que é cada um / quem mora onde)
+Autenticação: mesmo token que os outros endpoints do `api.centraldark.com` já usam. Não crio nada paralelo.
 
-| Gateway | Onde vive | Chave/Auth | Modelos que atende |
-|---|---|---|---|
-| **Elite HTTP (`api.centralldark.com`)** | VPS PM2, porta 8080, status atual: online 46ms | Bearer fixo interno | **Anthropic Sonnet 4.5, Opus 4** (via Zendriver/Anthropic proxy). É o "caro" — usado como último fallback. |
-| **Elite Anthropic Proxy (ap7)** | VPS `apps/modulos/elite-anthropic-proxy/` | Session Anthropic | Alias interno pra Sonnet/Opus, mesmo mundo do Elite HTTP. |
-| **DarkAI / `ai-proxy` (edge Lovable Cloud)** | Edge function no projeto `kagejpghnwdfymddwxuf` | `LOVABLE_API_KEY` (auto) | **Gemini 3 Flash, Gemini 2.5 Pro, Gemini 3.5 Flash, GPT-5, GPT-5-mini, GPT-5-nano** — todos os "grátis do Cloud". É o gateway que o Hermes DEVERIA estar usando 90% do tempo. |
-| **Arsenal OpenAI Adapter** | VPS `apps/modulos/arsenal-openai-adapter/` | Interno | Adapta o Conselho (`/router`, `/debate`) pra formato OpenAI. Consome DarkAI + Elite. |
-| **Lovable AI Gateway** (nativo) | `ai.gateway.lovable.dev/v1` | `LOVABLE_API_KEY` | Backend do próprio `ai-proxy` — não é chamado direto pelo Hermes, sempre via edge. |
+**Web UI** (dentro do módulo que já existe em `apps/modulos/WebUI/`):
+- Novo card/página `Cadeia Hermes` no menu lateral
+- Componente de lista arrastável (drag & drop simples, tipo playlist)
+- Toast de "salvo ✅" quando confirma
+- Indicador "Hermes lê em ~60s" no topo pra deixar claro
 
-**Família por gateway (fica salvo pra você não perder):**
+## O que o código do Hermes muda
 
-- **Cloud/Free (Gemini + GPT-5 família):** vivem no **DarkAI (ai-proxy)** → Lovable AI Gateway.
-- **Anthropic Sonnet 4.5 / Opus 4:** vivem no **Elite HTTP** (`api.centralldark.com`).
-- **Conselho de IAs (router/refinar/debate):** Arsenal Adapter → escolhe entre DarkAI e Elite conforme `regras.json`.
-- **Fabler (mestre_sabio):** `anthropic/claude-sonnet-4-5` via **Elite Anthropic**.
+Igual ao plano anterior:
+1. `decisor.mjs` deixa de ter a lista fixa. Lê `cadeia.json` com cache de 60s.
+2. Se JSON quebrado → cadeia de segurança + aviso no Telegram.
+3. `PUT /hermes/cadeia` faz backup do JSON antigo em `cadeia.backups/YYYY-MM-DD-HH-MM.json` (últimos 5) antes de sobrescrever.
 
-## 4. Pendências abertas (o que falta pra fechar 100%)
+## Ordem de execução
 
-1. 🔴 **Setar `DARKAI_URL` no PM2 do Hermes** (bloqueador — sem isso, 100% das etapas caem no Sonnet caro).
-2. 🟡 Testar cadeia Flash→Pro→GPT5m→Elite depois do restart e confirmar `Balanço` distribuído.
-3. 🟡 Criar skill `hermes-verify` (valida se INDEX mudou antes de reagir a missão).
-4. 🟡 Criar skill `hermes-reflect` (auto-avaliação semanal em `REFLEXOES/YYYY-WW.md`).
-5. 🟡 Aba "Vault" no WebUI com 1-click dispatch de missão pré-formatada.
-6. 🟢 Escrever conteúdo de `REFLEXOES/.gitkeep` (primeiro placeholder).
-7. 🟢 Publicar `tools/vault-server/README.md` com instruções pt-BR completas.
+1. Criar `cadeia.json` (fonte da verdade).
+2. Adicionar rotas `/hermes/cadeia*` no serviço que já responde por `api.centraldark.com`.
+3. Refatorar `decisor.mjs` pra ler o JSON.
+4. Adicionar o card **"Cadeia Hermes"** no Web UI usando o padrão dos outros cards de lá.
+5. Teste ponta-a-ponta: abrir o card, reordenar, salvar, disparar missão, ver Hermes usando a nova ordem.
 
-## 5. Próxima ação proposta (modo bruto)
+## Arquivos que vou tocar
 
-Fase A — desbloquear cadeia grátis:
-- Adicionar `DARKAI_URL` no ecosystem do Hermes (`/root/CentralDark/agente/hermes/ecosystem.config.cjs`) apontando pro edge `ai-proxy`.
-- `pm2 restart 66 --update-env && pm2 save`.
-- Rodar missão-teste e conferir se pelo menos Flash responde ok (esperado: 1–3s, Balanço Elite < 20%).
+| Arquivo/pasta | O que faço |
+|---|---|
+| `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json` | criar |
+| `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/decisor.mjs` | ler JSON + cache + fallback seguro |
+| Serviço do `api.centraldark.com` (Elite HTTP, PM2 id 60) | 4 rotas novas `/hermes/cadeia*` |
+| `apps/modulos/WebUI/` | card **Cadeia Hermes** + página + chamadas às 4 rotas |
+| `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.backups/` | pasta pra últimas 5 versões |
 
-Fase B — skills:
-- Implementar `hermes-verify` + `hermes-reflect` como módulos em `agente/hermes/skills/`.
-- Registrar no `regras.json`.
+## Uma dúvida antes de codar
 
-Fase C — WebUI:
-- Aba "Vault" lendo `docs/CONSCIENCIA/VAULT/*.md` via `tools/vault-server` + botão "Dispatch missão".
+Confirma se prefere:
+- **(a)** Reordenação **arrastando** com o mouse/dedo (mais bonito, um pouquinho mais de código no card), ou
+- **(b)** Setinhas ⬆️⬇️ do lado de cada modelo (mais simples, funciona no celular sem drama).
 
-Aprovar essa fase A pra eu setar o `DARKAI_URL` e reiniciar o Hermes?
+Se não responder, vou de **(a) arrastar** que combina melhor com o resto do Web UI. Aprova o plano?
