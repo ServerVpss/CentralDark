@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T02:36:50.272Z
+# 🧠 Notion Sync — 2026-07-04T03:13:33.107Z
 
-- **Commit fonte:** `e36d0284b11dfa6753c8cd7a7add9c9f9e017c23`
+- **Commit fonte:** `105bf32946148a54584272bd95d159e2d05acb9f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 318 atualizadas · ❌ 432 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 320 atualizadas · ❌ 434 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 284 | 1 | 283 | 0 | 0 |
-| estrutura | 432 | 0 | 0 | 0 | 432 |
+| aprendizados | 286 | 1 | 285 | 0 | 0 |
+| estrutura | 434 | 0 | 0 | 0 | 434 |
 
 ## Operações
 
@@ -340,7 +340,9 @@
 | aprendizados | atualizado | #279 — WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com |
 | aprendizados | atualizado | #280 — MCP execute_command: remover trava de docker/caddy/pm2 restart |
 | aprendizados | atualizado | #281 — Auditoria universal do MCP + aba no painel Hermes |
-| aprendizados | criado | #282 — Rota rápida de memória do Pivete no WebUI |
+| aprendizados | atualizado | #282 — Rota rápida de memória do Pivete no WebUI |
+| aprendizados | atualizado | #283 — Base militar WebUI 100% operacional — modelos reais Elite ap7 |
+| aprendizados | criado | #284 — Sincronia 4-Point (regra oficial vigente) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

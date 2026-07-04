@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T02:36:54.385Z
-- **Commit:** `e36d0284b11dfa6753c8cd7a7add9c9f9e017c23`
+- **Gerado:** 2026-07-04T03:13:35.320Z
+- **Commit:** `105bf32946148a54584272bd95d159e2d05acb9f`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 308 | 0 | 0 | 308 | 0 |
+| aprendizados | 310 | 0 | 0 | 310 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **308**
+- 🟥 Faltando no Notion: **310**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -356,4 +356,6 @@
 - 280. MCP execute_command: remover trava de docker/caddy/pm2 restart
 - 281. Auditoria universal do MCP + aba no painel Hermes
 - 282. Rota rápida de memória do Pivete no WebUI
+- 283. Base militar WebUI 100% operacional — modelos reais Elite ap7
+- 284. Sincronia 4-Point (regra oficial vigente)
 </details>
