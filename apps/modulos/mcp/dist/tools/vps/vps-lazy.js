@@ -5,6 +5,7 @@ import { z } from "zod";
 import { config } from "../../config.js";
 import { sanitize } from "./vps.js";
 import { log } from "../../log.js";
+import { auditLog } from "../../lib/audit.js";
 const DEFAULT_MAX_BYTES = 80_000;
 const DEFAULT_MAX_LINES = 500;
 const MAX_READ_BYTES = 500_000;
