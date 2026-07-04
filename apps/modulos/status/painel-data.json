@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T08:25:21.632Z",
-  "updatedAtBR": "04/07/2026, 05:25:21 BRT",
+  "updatedAt": "2026-07-04T08:30:34.583Z",
+  "updatedAtBR": "04/07/2026, 05:30:34 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Adicionou estado erro aos hubs",
+    "lastCommit": "Expansiu Tier 1 com 8 conectores",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T08:30:34.583Z",
+      "titulo": "Push na main · df01e814a25f83b46801ebf182d16a19d4f96a98",
+      "detalhe": "Expansiu Tier 1 com 8 conectores",
+      "area": "Repositório",
+      "sha": "df01e81",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-04T08:25:21.632Z",
       "titulo": "Push na main · 936667491bee93f5f63855b569d67358234973ff",
       "detalhe": "Adicionou estado erro aos hubs",
@@ -978,14 +986,6 @@
       "detalhe": "Adicionou aulas e sugestões",
       "area": "Repositório",
       "sha": "423a3ec",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T18:47:06.083Z",
-      "titulo": "Push na main · 3cb653d36cdcd7ce052f3038a49c94e6a3b66e2c",
-      "detalhe": "Adicionou nível e skills ao Hermes",
-      "area": "Repositório",
-      "sha": "3cb653d",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T08:30:34.583Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · df01e814a25f83b46801ebf182d16a19d4f96a98 (df01e81)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T08:25:21.632Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 936667491bee93f5f63855b569d67358234973ff (9366674)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T18:51:41.366Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 423a3ecd8cbd2790e9dd4b26ae2d6816af9e4b5c (423a3ec)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T18:47:06.083Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 3cb653d36cdcd7ce052f3038a49c94e6a3b66e2c (3cb653d)",
       "area": "Repositório",
       "status": "sucesso"
     }
