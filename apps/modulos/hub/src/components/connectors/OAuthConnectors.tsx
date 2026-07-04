@@ -150,97 +150,146 @@ export function OAuthConnectors() {
     danger:  'bg-destructive/15 text-destructive border-destructive/40',
   };
 
-  if (loading) return <div className="p-6 text-muted-foreground text-sm">Carregando conectores…</div>;
+  if (loading) {
+    return (
+      <Card className="card-premium border-border/60">
+        <CardHeader>
+          <div className="h-6 w-56 bg-muted/50 rounded animate-pulse" />
+          <div className="h-3 w-80 bg-muted/30 rounded animate-pulse mt-2" />
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="rounded-lg border border-border bg-card/60 p-4 space-y-3">
+                <div className="flex gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-muted/50 animate-pulse" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3 w-24 bg-muted/50 rounded animate-pulse" />
+                    <div className="h-3 w-16 bg-muted/30 rounded animate-pulse" />
+                  </div>
+                </div>
+                <div className="h-8 bg-muted/30 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
-    <Card className="card-premium border-border/60">
-      <CardHeader className="space-y-2">
-        <div className="flex items-start justify-between gap-3 flex-wrap">
-          <div>
-            <CardTitle className="text-2xl">
-              Conectar contas <span className="text-gradient-emerald">OAuth</span>
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">
-              Tokens cifrados no HUB Supabase · expiração 30d · logs no Hermes
-            </p>
+    <>
+      <Card className="card-premium border-border/60">
+        <CardHeader className="space-y-2">
+          <div className="flex items-start justify-between gap-3 flex-wrap">
+            <div>
+              <CardTitle className="text-2xl">
+                Conectar contas <span className="text-gradient-emerald">OAuth</span>
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Tokens cifrados no HUB Supabase · expiração 30d · logs no Hermes
+              </p>
+            </div>
+            <div className="flex flex-col items-end gap-1">
+              {usingFallback && (
+                <Badge className={toneClass.warning}>🟡 catálogo local ativo</Badge>
+              )}
+              {loadError && (
+                <Badge className={toneClass.danger}>🔴 {loadError}</Badge>
+              )}
+              {!isRealUser && (
+                <Badge className={toneClass.muted}>🧪 modo dev · sem login</Badge>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col items-end gap-1">
-            {usingFallback && (
-              <Badge className={toneClass.warning}>🟡 catálogo local ativo</Badge>
-            )}
-            {loadError && (
-              <Badge className={toneClass.danger}>🔴 {loadError}</Badge>
-            )}
-            {!isRealUser && (
-              <Badge className={toneClass.muted}>🧪 modo dev · sem login</Badge>
-            )}
-          </div>
-        </div>
-        <p className="text-xs text-muted-foreground border-l-2 border-primary/50 pl-2 mt-2">
-          🛠️ Backend: Supabase HUB (VPS) + Edge Functions <code className="font-mono text-primary">get-token</code> / <code className="font-mono text-primary">keys/store</code>
-        </p>
-      </CardHeader>
+          <p className="text-xs text-muted-foreground border-l-2 border-primary/50 pl-2 mt-2">
+            🛠️ Backend: Supabase HUB (VPS) + Edge Functions <code className="font-mono text-primary">get-token</code> / <code className="font-mono text-primary">keys/store</code>
+          </p>
+        </CardHeader>
 
-      <CardContent>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {providers.map(p => {
-            const conn = conns.find(c => c.provider_id === p.id);
-            const s = statusInfo(conn);
-            return (
-              <div
-                key={p.id}
-                className="group relative overflow-hidden rounded-lg border border-border bg-card/60 p-4 space-y-3 transition-all hover:border-primary/50 hover:shadow-3d-primary hover:-translate-y-0.5"
-              >
-                <div
-                  className="absolute inset-x-0 top-0 h-0.5 opacity-60 group-hover:opacity-100 transition-opacity"
-                  style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)` }}
-                />
-                <div className="flex items-start gap-3">
+        <CardContent>
+          {providers.length === 0 ? (
+            <div className="text-center py-12 space-y-3 border border-dashed border-border rounded-lg">
+              <div className="text-4xl">📭</div>
+              <div className="text-sm text-muted-foreground">Nenhum provider disponível ainda.</div>
+              <Button size="sm" variant="outline" onClick={load}>🔄 Tentar de novo</Button>
+            </div>
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {providers.map(p => {
+                const conn = conns.find(c => c.provider_id === p.id);
+                const s = statusInfo(conn);
+                return (
                   <div
-                    className="w-10 h-10 shrink-0 rounded-lg flex items-center justify-center text-white text-base font-semibold shadow-3d"
-                    style={{ backgroundColor: p.color }}
+                    key={p.id}
+                    className="group relative overflow-hidden rounded-lg border border-border bg-card/60 p-4 space-y-3 transition-all hover:border-primary/50 hover:shadow-3d-primary hover:-translate-y-0.5"
                   >
-                    {p.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-sm truncate">{p.display_name}</div>
-                    <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                      {p.auth_type === 'api_key' && (
-                        <Badge className="text-[10px] py-0 px-1.5 bg-secondary text-secondary-foreground border-border">🔑 API KEY</Badge>
+                    <div
+                      className="absolute inset-x-0 top-0 h-0.5 opacity-60 group-hover:opacity-100 transition-opacity"
+                      style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)` }}
+                    />
+                    {p.tier && (
+                      <div className="absolute top-2 right-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-background/80 border border-border text-muted-foreground">
+                        T{p.tier}
+                      </div>
+                    )}
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="w-10 h-10 shrink-0 rounded-lg flex items-center justify-center text-white text-base font-semibold shadow-3d"
+                        style={{ backgroundColor: p.color }}
+                      >
+                        {p.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm truncate pr-6">{p.display_name}</div>
+                        <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                          {p.auth_type === 'api_key' && (
+                            <Badge className="text-[10px] py-0 px-1.5 bg-secondary text-secondary-foreground border-border">🔑 API KEY</Badge>
+                          )}
+                          {p.auth_type === 'oauth' && (
+                            <Badge className="text-[10px] py-0 px-1.5 bg-primary/15 text-primary border-primary/40">🔐 OAUTH</Badge>
+                          )}
+                          <Badge className={`text-[10px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => connect(p)}
+                        size="sm"
+                        variant={conn ? 'outline' : 'default'}
+                        className={conn ? 'flex-1' : 'flex-1 gradient-emerald text-primary-foreground border-0 hover:opacity-90'}
+                      >
+                        {conn ? 'Reconectar' : 'Conectar'}
+                      </Button>
+                      {conn && (
+                        <Button
+                          onClick={() => disconnect(conn.id, p.display_name)}
+                          size="sm"
+                          variant="outline"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/40"
+                        >
+                          Revogar
+                        </Button>
                       )}
-                      {p.auth_type === 'oauth' && (
-                        <Badge className="text-[10px] py-0 px-1.5 bg-primary/15 text-primary border-primary/40">🔐 OAUTH</Badge>
-                      )}
-                      <Badge className={`text-[10px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
                     </div>
                   </div>
-                </div>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
-                <div className="flex gap-2">
-                  <Button
-                    onClick={() => connect(p)}
-                    size="sm"
-                    variant={conn ? 'outline' : 'default'}
-                    className={conn ? 'flex-1' : 'flex-1 gradient-emerald text-primary-foreground border-0 hover:opacity-90'}
-                  >
-                    {conn ? 'Reconectar' : 'Conectar'}
-                  </Button>
-                  {conn && (
-                    <Button
-                      onClick={() => disconnect(conn.id)}
-                      size="sm"
-                      variant="outline"
-                      className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/40"
-                    >
-                      Revogar
-                    </Button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+      <ApiKeyDialog
+        open={!!dialogProvider}
+        providerName={dialogProvider?.display_name ?? ''}
+        providerColor={dialogProvider?.color ?? '#98C93C'}
+        onClose={() => setDialogProvider(null)}
+        onConfirm={(key) => dialogProvider ? saveApiKey(dialogProvider, key) : Promise.resolve()}
+      />
+    </>
   );
 }
+
