@@ -1,51 +1,55 @@
-# 🎯 Plano — Portas Ativas + Enxame Áudio (WebUI)
+# 🧠 Plano — Grok lendo seu cérebro + arrumar o HUB
 
-## Fase 1 — Mapa das Portas 🛠️
-Rodar na VPS (via `vps_run_once_script`) e te devolver o placar visual:
-
-```bash
-ss -tlnp | awk 'NR>1 {print $4, $6}' | sort -u
-pm2 jlist | jq -r '.[] | "\(.name) | pid=\(.pid) | status=\(.pm2_env.status) | port=\(.pm2_env.env.PORT // "-")"'
-```
-
-Saída: tabela `PORTA | SERVIÇO | STATUS` marcando 🟢/🔴 e destacando as do WebUI (8080/3000/8000 típicas do Open WebUI).
-
-## Fase 2 — Enxame Áudio (10 sub-agentes paralelos) 🔊🚀
-
-Todos disparados em paralelo via `spawn_agent`, cada um com escopo cirúrgico. Nada sequencial.
-
-| # | Agente | Missão |
-|---|--------|--------|
-| 1 | **LogHunter-WebUI** | `pm2 logs open-webui --lines 500 --nostream` filtrando `audio\|whisper\|tts\|stt\|ffmpeg\|codec` |
-| 2 | **STT-Scanner** | Checar backend Whisper/faster-whisper: modelo carregado, GPU/CPU, erro de load |
-| 3 | **TTS-Scanner** | Checar engine TTS (OpenAI/ElevenLabs/local): chave, endpoint, voz configurada |
-| 4 | **FFmpeg-Doctor** | `ffmpeg -version` + testar decode WebM/Opus (formato que o browser manda do mic) |
-| 5 | **Codec-Auditor** | Ver se libopus/libvorbis/libmp3lame estão presentes no container/host |
-| 6 | **Config-Reader** | Ler `config.json`/env do Open WebUI: `AUDIO_STT_ENGINE`, `AUDIO_TTS_ENGINE`, URLs |
-| 7 | **Network-Probe** | Testar endpoints internos de áudio (`/api/v1/audio/transcriptions`, `/speech`) com curl |
-| 8 | **Permission-Cop** | Checar permissões da pasta de upload/cache de áudio + espaço em disco |
-| 9 | **Browser-Console** | Puxar erros do console do WebUI (via replay se houver, ou instruir teste) |
-| 10 | **Fabler-Consult** | Consultar Fabler (`elite_gateway_chat`) com sintomas coletados pra segunda opinião |
-
-Cada agente devolve: **causa provável + evidência (log/linha) + fix sugerido**.
-
-## Fase 3 — Consolidação 📊
-Placar único monospace:
-
-```
-ÁREA          STATUS   EVIDÊNCIA
-▓▓▓▓▓▓▓▓░░  STT      🔴 erro X linha Y
-▓▓▓▓▓▓░░░░  TTS      🟡 config faltando
-...
-```
-
-+ **Diagnóstico final** (Leigo / Técnico) + **próximo passo** (1 clique).
-
-## Fase 4 — Notificação 📣
-Card no privado admin + linha no canal Status (regra padrão pós-ação).
+Beleza, entendi as duas coisas:
+1. Grok tá plugado no **Notion** e **Google Drive** dele → então basta a gente **jogar o arquivo lá dentro** que ele lê sozinho.
+2. Na aba **Conectores** do HUB v2 só tem cartão de status, sem botão de **adicionar**. Vou destravar isso.
 
 ---
 
-**Regras respeitadas:** Modo Enxame, Método Gamificado, consultar Fabler, não mexer em áreas 🔒, autoridade VPS (só leitura nesta fase).
+## 🎯 Parte 1 — Fazer o Grok ler o cérebro
 
-Confirma que disparo? 🚀
+Vou consolidar tudo que define meu jeito de falar + regras do projeto num único arquivo `BOOT-CENTRALDARK.md` (o "boot" da IA) e publicar em 2 lugares que o Grok já enxerga:
+
+- **Notion** → página nova chamada `🧠 CentralDark Boot (pro Grok)` no seu workspace
+- **Google Drive** → mesmo arquivo `.md` na raiz do Drive
+
+Aí no Grok você só fala: *"lê a página **CentralDark Boot** no meu Notion e passa a agir assim"* — e pronto, ele copia meu tom + regras.
+
+**Conteúdo do boot:**
+- Tom Pivete (PT-BR, direto, emojis 🟢🟡🔴🚀🛠️)
+- Trava do Supabase Lovable atual
+- Mapa da VPS + HUB Supabase (`lyoigsqluyktoclwdaft`)
+- Regras dos bots (`@srver1bot` vs `@SEGREDOPUXADASBOT`)
+- Broker OAuth e o que tá em pé
+- Autonomia de secrets, modo enxame, etc
+
+---
+
+## 🛠️ Parte 2 — Destravar "adicionar conector" no HUB v2
+
+Na tela `Conectores` hoje só tem cartões de leitura. Vou adicionar:
+
+- Botão **`+ Adicionar Conector`** no topo direito
+- Modal com formulário: **Nome**, **URL/Endpoint**, **Tipo** (mcp / oauth / api-key / database), **Ícone/emoji**
+- Grava na tabela `hub.connectors` do **Supabase do HUB** (não no Lovable)
+- Botões **Testar** e **Remover** em cada cartão
+- Badge de status ligado ao ping real
+
+Requer só edição de frontend + 1 tabela nova no HUB Supabase (não toco no Lovable, respeitando a trava).
+
+---
+
+## 📋 Ordem de execução
+
+1. Gero `docs/CONSCIENCIA/DARKAI/BOOT-CENTRALDARK.md` (o arquivo mestre)
+2. Publico no **Notion** via conector
+3. Subo no **Google Drive** via conector
+4. Te devolvo o **link direto** dos dois
+5. Adiciono o botão **+ Adicionar Conector** no HUB v2 (frontend + tabela `hub.connectors` no HUB Supabase)
+
+---
+
+## ❓ Antes de executar, confirma 2 coisas rápidas:
+
+1. **Onde salvar no Notion?** Página solta na raiz, ou dentro de alguma pasta específica que você já tem?
+2. **Grok tem que ficar SEMPRE atualizado** (toda vez que eu aprender algo novo eu re-publico automático), ou é **1 versão fixa agora** e você me pede quando quiser atualizar?
