@@ -214,3 +214,13 @@ Conteúdo: Sincronia 4-Point = Lovable → GitHub → VPS → Cérebro Vivo (doc
 - **Promovida:** sim
 
 Conteúdo: TODA ação relevante do sistema notifica no Telegram usando Card Hermes v1.2. Regras duras: (1) TUDO dentro de UM único bloco <pre>...</pre>, nada fora — se sair do pre vira texto proporcional e quebra o "fundo preto monoespaçado" que o Pivete quer. (2) Envio SEMPRE pelo connector Telegram (standard_connectors--call_gateway_connection, connector_id=telegram, connection_id=std_01kvw4jkcbekyr1t33vs4p5e9w, path=/sendMessage, parse_mode=HTML, chat_id admin=1901426549, canal status=-1003669176367). NUNCA usar notify-telegram (exige NOTIFY_API_KEY e retorna 401). (3) Largura 36 chars, moldura ═. (4) Estrutura: STATUS(✅/⚠️/❌) + PRIORIDADE + RESPONSÁVEL + MISSÃO + FASE + TEMPO + LEIGO + AÇÃO + PROGRESSO(NÍVEL/XP/PROG%) + SKILLS UP + BLOQUEIOS + PRÓXIMO PASSO + separador + DETALHE TÉCNICO(arquivo/commit/validador/logID/tags). (5) Prova técnica só no DETALHE TÉCNICO, nunca misturar com STATUS. Fonte oficial: docs/CONSCIENCIA/PADRAO-CARD-HERMES.md. Validado por Pivete em 04/07/2026.
+
+### [2026-07-04T03:32] Card Hermes v1.3 — skills por sistema + nível/próx
+- **Data:** 2026-07-04
+- **Tags:** telegram, card, padrao, hermes, v1.3
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-03
+- **Promovida:** sim
+
+Conteúdo: Card Hermes atualizado pra v1.3. Novidades vs v1.2: (a) linha "🧠 HERMES · Nv.X {Título} · YYY XP\n   Próx: {Título} (faltam Z XP)" logo após PROGRESSO; (b) bloco "📊 SKILLS (por sistema)" com barras ▓░ SEMPRE 10 blocos normalizados + % no final (ex: Telegram ▓▓▓▓▓▓▓▓░░ 85%). Regras extras: barras 0-100 sempre 10 blocos fixos; linha "Próx:" nunca quebra (encurta título se preciso); % obrigatório no fim de toda barra. Restante idêntico ao v1.2. Fonte oficial atualizada: docs/CONSCIENCIA/PADRAO-CARD-HERMES.md. Todo card daqui pra frente usa v1.3.
