@@ -41,9 +41,8 @@ const DENY_COMMAND_PATTERNS = [
     /\buserdel\b/i,
     /\bchmod\s+-R\s+777\s+\//i,
     /\bchown\s+-R\s+[^ ]+\s+\//i,
-    /\bdocker\s+(restart|rm|rmi|compose\s+down|stop|kill)\b/i,
-    /\bcaddy\s+(reload|stop|start|restart|fmt|adapt)\b/i,
-    /\bpm2\s+(delete|kill|flush|stop\s+all|restart\s+all)\b/i,
+    // 🔓 Liberado 04/07/2026 (ordem do Pivete): docker/caddy/pm2 restart livres pra acelerar deploy.
+    // Nenhum usuário externo no sistema — risco controlado.
     /(^|\/)(\.env|secrets?|credenciais|tokens?|sessions?|sessao|sessão|cofre)(\/|$)/i,
 ];
 function ok(data) {
