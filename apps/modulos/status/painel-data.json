@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T09:17:38.811Z",
-  "updatedAtBR": "04/07/2026, 06:17:38 BRT",
+  "updatedAt": "2026-07-04T09:21:27.483Z",
+  "updatedAtBR": "04/07/2026, 06:21:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "feat(vault): esfera 3D com 3d-force-graph + partículas emerald + HUD monoespaçado",
+    "lastCommit": "fix(hermes): notificação do grupo stripa HTML antes de enviar",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T09:21:27.483Z",
+      "titulo": "Push na main · d494f48008a1e0e253f7430395ce51728854320c",
+      "detalhe": "fix(hermes): notificação do grupo stripa HTML antes de enviar",
+      "area": "Repositório",
+      "sha": "d494f48",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T09:17:38.811Z",
       "titulo": "Push na main · caefddbc74a51ca593fdd0e48332524a9a211747",
       "detalhe": "feat(vault): esfera 3D com 3d-force-graph + partículas emerald + HUD monoespaçado",
@@ -978,14 +986,6 @@
       "detalhe": "Enviou logs do servidor",
       "area": "Repositório",
       "sha": "8833c7d",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T19:19:05.485Z",
-      "titulo": "Push na main · 78fb72a7b561d1ce08c6373bd32741334895d478",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "78fb72a",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T09:21:27.483Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d494f48008a1e0e253f7430395ce51728854320c (d494f48)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T09:17:38.811Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · caefddbc74a51ca593fdd0e48332524a9a211747 (caefddb)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T20:04:00.312Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 8833c7d1ee90abda4db8828c568888bb9714513a (8833c7d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T19:19:05.485Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 78fb72a7b561d1ce08c6373bd32741334895d478 (78fb72a)",
       "area": "Repositório",
       "status": "sucesso"
     }
