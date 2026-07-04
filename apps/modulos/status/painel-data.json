@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T10:15:10.759Z",
-  "updatedAtBR": "04/07/2026, 07:15:10 BRT",
+  "updatedAt": "2026-07-04T10:18:08.975Z",
+  "updatedAtBR": "04/07/2026, 07:18:08 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Corrigiu health mapping e UI",
+    "lastCommit": "Adicionou deploy do HUB ao webhook",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T10:18:08.975Z",
+      "titulo": "Push na main · eff4017a9a585ebf86324816ac6da3bad666f317",
+      "detalhe": "Adicionou deploy do HUB ao webhook",
+      "area": "Repositório",
+      "sha": "eff4017",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-04T10:15:10.759Z",
       "titulo": "Push na main · 29028bd21187f54619b92c6fddf65e746a7965ad",
       "detalhe": "Corrigiu health mapping e UI",
@@ -978,14 +986,6 @@
       "detalhe": "Atualizou card admin e heartbeat",
       "area": "Repositório",
       "sha": "2ebcd1a",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T21:31:44.933Z",
-      "titulo": "Push na main · a05ab43de4d158d9b7f3e710957238c1a9b3db74",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "a05ab43",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T10:18:08.975Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · eff4017a9a585ebf86324816ac6da3bad666f317 (eff4017)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T10:15:10.759Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 29028bd21187f54619b92c6fddf65e746a7965ad (29028bd)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T22:39:03.410Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 2ebcd1adc1e6f2093ef1eba2353c877113d7467b (2ebcd1a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T21:31:44.933Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · a05ab43de4d158d9b7f3e710957238c1a9b3db74 (a05ab43)",
       "area": "Repositório",
       "status": "sucesso"
     }
