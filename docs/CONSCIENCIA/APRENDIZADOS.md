@@ -2246,3 +2246,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Tentei servir painel Hermes num HTML standalone dentro do gateway (rota /hermes/painel). Pivete corrigiu: rota de painel é errado, painel vive no WebUI. Só API fica no gateway, e API é sempre api.centralldark.com — mesmo host, só muda o path interno.
 - **Aprendizado:** Regra: qualquer nova rota de infra entra em https://api.centralldark.com/<recurso>/*. Não criar subdomínio novo, não expor porta, não servir HTML pelo gateway. Rotas do Hermes: GET/PUT /hermes/cadeia, POST /hermes/cadeia/reverter, GET /hermes/cadeia/stats. Auth: Bearer com token do accounts.json. CORS liberado (allow_origins=["*"]) pro WebUI conseguir chamar do navegador.
+
+### 276. Injetar UI custom no Open WebUI = CSS mount + JS no admin
+- **Categoria:** atalho
+- **Data:** 2026-07-03
+- **Contexto:** Open WebUI é container Docker externo, não é React nosso. Só carrega /app/backend/static/custom.css automaticamente. Precisei adicionar painel Hermes (FAB + modal) sem forkar o WebUI.
+- **Aprendizado:** Padrão: (1) CSS extra vai em apps/modulos/WebUI/custom-css/*.css, montado como :ro no docker-compose.override.yml em /app/backend/static/. (2) esmeralda.css faz @import url('/static/hermes-panel.css') no fim. (3) JS não tem mount automático — cola manual em Admin → Settings → Interface → Custom JavaScript (fica salvo no SQLite do container). (4) Token da API fica em localStorage do navegador (chave hermes_api_token), pede via prompt no primeiro uso. Depois de mexer nos mounts: docker restart CentralDark-WebUI.
