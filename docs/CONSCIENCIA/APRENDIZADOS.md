@@ -2301,3 +2301,10 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Contexto:** Grok conectado no MCP não encontrou essa regra na CONSCIENCIA porque estava só no CLAUDE.md. Precisa virar regra oficial pra qualquer IA achar.
 - **Aprendizado:** A Sincronia 4-Point é a regra operacional vigente. Os 4 pontos que devem sempre estar espelhados a cada alteração são: (1) Lovable (editor/preview, fonte das mudanças assistidas por IA), (2) GitHub (repositório, sync bidirecional automática com Lovable — é a Fonte da Verdade), (3) VPS (/root/[oculto], microsserviços e PM2 — rodar `pm2 save` após mudança de estado), (4) Cérebro Vivo (docs/CONSCIENCIA/ + .claude/, contexto persistente consumido por qualquer IA/Hub). Nenhuma alteração estrutural é considerada concluída enquanto os 4 pontos não refletirem o mesmo estado.</aprendizado>
 <parameter name="categoria">regra
+
+### 285. Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal)
+- **Categoria:** outro
+- **Data:** 2026-07-04
+- **Contexto:** Sempre tem confusão de qual bot faz o quê. Precisa virar regra oficial.
+- **Aprendizado:** São 2 bots totalmente separados, nunca misturar: (1) @srver1bot = CENTRAL — controle geral CentralDark, vive no HUB Supabase (lyoigsqluyktoclwdaft) + VPS PM2 id 27 (CentralDark-HubBot), edge function `telegram-webhook`. (2) @SEGREDOPUXADASBOT = FISCAL 🩸 — módulo TelePainel/puxadas-consultas, vive no projeto Lovable Cloud atual (kagejpghnwdfymddwxuf), edge function dedicada `telepainel-webhook`, bots novos entram em `telegram_bots` deste projeto usando `telepainel-webhook?botId=<uuid>`. Nunca fazer fallback cruzado entre as duas funções — separação limpa.</aprendizado>
+<parameter name="categoria">regra
