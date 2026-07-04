@@ -7,6 +7,13 @@
       "/root/.vscode-server/data/Machine"
     ]
   },
+  "hermes": {
+    "core_path": "/root/CentralDark/apps/modulos/HERMES-CORE",
+    "core_path_relativo": "apps/modulos/HERMES-CORE",
+    "config": "apps/modulos/mcp/config/hermes.json",
+    "boot_log": "apps/modulos/mcp/logs/hermes-boot.json",
+    "boot_endpoint": "https://mcp.centralldark.com/hermes/boot"
+  },
   "hooks": {
     "Stop": [
       {
