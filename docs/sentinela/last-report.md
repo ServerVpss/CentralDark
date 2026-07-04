@@ -1,23 +1,23 @@
-# Sentinela — 2026-07-04T13:39:15.643Z
+# Sentinela — 2026-07-04T19:18:16.561Z
 
 | Métrica | Valor |
 |---|---|
 | Endpoints checados | 6 |
 | Endpoints fora | 2 |
-| Workflows vermelhos 24h | 13 |
-| Divergências detectadas | 15 |
-| Issues novas | 6 |
-| Issues já abertas (dedupe) | 9 |
+| Workflows vermelhos 24h | 6 |
+| Divergências detectadas | 8 |
+| Issues novas | 3 |
+| Issues já abertas (dedupe) | 5 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 264ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 217ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 101ms · CORS=`*`
-- 🔴 **Install status** — `502` em 136ms
-- 🟢 **Painel** — `200` em 145ms · CORS=`*`
-- 🔴 **API** — `404` em 136ms
+- 🟢 **MCP health** — `200` em 321ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 219ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 112ms · CORS=`*`
+- 🔴 **Install status** — `502` em 103ms
+- 🟢 **Painel** — `200` em 116ms · CORS=`*`
+- 🔴 **API** — `404` em 118ms
 
 ## Divergências
 
@@ -28,11 +28,4 @@
 - **[p2]** Workflows → Workflow vermelho: painel-validacao (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: 🧠 Notion Sync (docs/CONSCIENCIA → Notion) (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: Obsidian — Regenerar INDEX (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: 🧠 Notion Sync (docs/CONSCIENCIA → Notion) (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel auto-update (bot: `codex`)
