@@ -1,0 +1,15 @@
+{
+  "hermes_core_path": "apps/modulos/HERMES-CORE",
+  "modules_expected": ["agents", "core", "knowledge", "missions", "prompts", "skills", "utils"],
+  "agents_expected": [
+    "Auto-Diagnostico",
+    "Critic",
+    "Deploy-Watcher",
+    "Executor",
+    "GraphRAG-Master",
+    "Knowledge-Collector",
+    "Universal-Handler"
+  ],
+  "boot_log": "apps/modulos/mcp/logs/hermes-boot.json",
+  "updated": "2026-07-04"
+}

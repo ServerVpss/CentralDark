@@ -1,62 +1,58 @@
-# Script pra salvar auto-approve direto no `claude_desktop_config.json`
+Padronizar o caminho do Hermes em 3 lugares e adicionar log de boot mostrando o que o MCP carregou.
 
-Vou te entregar um **script PowerShell** que você cola no Windows (botão direito → "Executar com PowerShell" ou cola no terminal). Ele faz tudo sozinho:
+## 1. Criar arquivo único de config
 
-## O que o script faz
-
-1. Abre `%APPDATA%\Claude\claude_desktop_config.json`
-2. Faz **backup** (`.bak` com data/hora) — se der ruim, é só renomear de volta
-3. Adiciona o bloco `autoApprove` **só no seu MCP** (`mcp_custom_4aHUa`), com a lista de ferramentas read-only
-4. Preserva todo o resto do arquivo (outros MCPs, configs, nada é apagado)
-5. Mostra no final: quantas tools foram liberadas + caminho do backup
-
-## Lista de tools que entram no auto-approve (só leitura)
-
-Consulta / leitura pura — nada que escreve, deleta ou deploya:
-
-- **Memória/Consciência:** `consultar_memoria_reserva`, `ler_consciencia`, `ler_pendencias`, `ler_regras_inviolaveis`, `ler_instalador`, `puxar_aprendizados`, `pendencias_list`
-- **Status/Catálogo MCP:** `mcp_status`, `mcp_catalog_diff`, `mcp_admin_status`, `mcp_admin_catalog`, `mcp_policy_summary`, `mcp_audit_recent_logs`, `deploy_status`, `deploy_validate_mcp_catalog`
-- **VPS read-only:** `vps_read_file_safe`, `vps_list_dir_safe`, `vps_tree_safe`, `vps_git_status`, `vps_git_diff_safe`
-- **GitHub read-only:** `github_read`, `github_get_file`, `github_get_repo`, `github_list_commits`, `github_list_issues`, `github_list_pull_requests`, `github_list_repos`, `github_list_workflows`, `github_list_workflow_runs`, `github_list_webhooks`, `github_list_environments`, `github_list_repo_variables`, `github_list_secrets_names`, `github_get_actions_permissions`, `github_search_code`, `github_check_token`, `github_viewer`
-- **Notion read-only:** `notion_ler_pagina`, `notion_buscar`
-- **Linear read-only:** `linear_listar_issues`, `linear_listar_ciclos`, `linear_listar_equipes`
-- **Sentry read-only:** `sentry_listar_issues`, `sentry_detalhe_issue`, `sentry_status_credenciais`
-- **Supabase read-only:** `supabase_project_status`, `supabase_projects`, `supabase_schema_check`, `supabase_contacts_check`
-- **Gateway/Gemini status:** `elite_gateway_status`, `elite_gateway_logs`, `gemini_status`
-- **Skills read:** `skill_listar`, `skill_status`
-- **Arquivo local read:** `read_file`, `search_files`
-- **Análise cognitiva:** `analise_de_estado_cognitivo`
-
-**Fica pedindo aprovação (escrita/deploy):** tudo que começa com `atualizar_`, `adicionar_`, `registrar_`, `criar_`, `github_commit`, `github_create_*`, `github_delete_*`, `github_dispatch*`, `github_merge_*`, `github_rerun_*`, `vps_write_*`, `vps_run_once_*`, `execute_command`, `supabase_*` de escrita, `skill_instalar/atualizar`, etc.
-
-## Como vai ficar o JSON (trecho)
+Novo arquivo `apps/modulos/mcp/config/hermes.json` (fonte da verdade):
 
 ```json
 {
-  "mcpServers": {
-    "mcp_custom_4aHUa": {
-      "command": "...",
-      "args": ["..."],
-      "autoApprove": [
-        "consultar_memoria_reserva",
-        "ler_consciencia",
-        "..."
-      ]
-    }
-  }
+  "hermes_core_path": "apps/modulos/HERMES-CORE",
+  "modules_expected": ["agents", "core", "knowledge", "missions", "prompts", "skills", "utils"]
 }
 ```
 
-## Depois de rodar
+## 2. Log de boot no MCP (VPS)
 
-1. **Fechar o Claude Desktop completamente** (barra do sistema também — clicar com botão direito → Quit)
-2. Abrir de novo
-3. Testar: pedir algo tipo "lê minha consciência" — deve executar direto, sem popup
+Editar `apps/modulos/mcp/dist/index.js` pra ler o `hermes.json` no startup e imprimir:
 
-## Se der ruim
+```
+[HERMES-BOOT] caminho: /root/CentralDark/apps/modulos/HERMES-CORE
+[HERMES-BOOT] módulos encontrados: agents ✅ | core ✅ | knowledge ✅ | missions ✅ | prompts ✅ | skills ✅ | utils ✅
+[HERMES-BOOT] agentes: Auto-Diagnostico, Critic, Deploy-Watcher, Executor, GraphRAG-Master, Knowledge-Collector, Universal-Handler
+```
 
-Renomear o `.bak` de volta pra `claude_desktop_config.json` e tá tudo como antes.
+Aparece em `pm2 logs 33` e num arquivo `logs/hermes-boot.json` pro painel consumir.
 
----
+## 3. Config cliente (`.claude/settings.json`)
 
-Confirma que posso te mandar o script PowerShell pronto pra colar?
+Adicionar bloco:
+
+```json
+"hermes": {
+  "core_path": "/root/CentralDark/apps/modulos/HERMES-CORE",
+  "config": "apps/modulos/mcp/config/hermes.json"
+}
+```
+
+## 4. Painel Mega (status.centralldark.com)
+
+Adicionar bloco `hermes_boot` no `painel-data.json` via tool `atualizar_painel`:
+- caminho carregado
+- módulos ✅/❌
+- timestamp do último boot
+- lista de agentes
+
+## 5. Painel Hermes (WebUI aba Auditoria)
+
+Adicionar card "Boot Info" no topo lendo `logs/hermes-boot.json` (arquivo do passo 2).
+
+## 6. Restart
+
+`pm2 restart 33 && pm2 save` pra pegar o novo boot. Commit com msg `feat(hermes): padroniza caminho HERMES-CORE + log de boot nos 3 painéis`.
+
+## Detalhes técnicos
+
+- Edito arquivos no repo → git push → webhook VPS puxa → PM2 restart.
+- `dist/index.js` é o entrypoint atual (12k) — patcho no bloco de startup existente, sem quebrar oauth/painel/sessions.
+- Backup `.bak-hermes-boot-<timestamp>` antes de mexer.
+- Notificação Telegram final via Card Hermes v1.3 (bot @srver1bot).
