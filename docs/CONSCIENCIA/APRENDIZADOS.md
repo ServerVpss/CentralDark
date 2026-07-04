@@ -2314,3 +2314,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-04
 - **Contexto:** Grok conectado no MCP não sabia da Sincronia 4-Point nem do Bot Fiscal porque as regras não eram injetadas automaticamente — precisava sequência manual de tools. Solução: campo `instructions` do MCP protocol.
 - **Aprendizado:** MCP CentralDark (mcp-server.js) agora injeta automaticamente as regras do Pivete no handshake `initialize` via campo `instructions` do SDK oficial. Toda IA que conectar (Grok, Claude, Gemini, ChatGPT) recebe 1892 chars de calibração ANTES da primeira mensagem — sem precisar rodar kit_boas_vindas/injetar_consciencia manualmente. Const `PIVETE_BOOT_INSTRUCTIONS` está no topo de dist/mcp-server.js. Se mudar o texto, editar essa const + `pm2 restart 33` + commitar (dist tracked no git).
+
+### 287. HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent
+- **Categoria:** armadilha
+- **Data:** 2026-07-04
+- **Contexto:** HUB v2 aba Conectores ficava vazia mesmo depois de corrigir OAuthConnectors. Motivo: ConnectorsTab nunca importava/renderizava OAuthConnectors — só listava GatewayCards mock. Bundle grep exposeu na hora.
+- **Aprendizado:** Sempre validar que o Tab pai importa o subcomponente. Preferir bundle grep (`grep -oaE` no dist/assets) pra confirmar que a mudança chegou no browser antes de dar OK.
