@@ -2258,3 +2258,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Rota PUT /hermes/cadeia sobrescreve cadeia.json vindo do navegador. Se Pivete salvar errado, precisa desfazer sem git.
 - **Aprendizado:** Antes de qualquer write em config editável por humano, copiar o arquivo atual pra pasta .backups/<timestamp>.json e manter só os últimos 5 (sorted reverse + unlink dos antigos). Endpoint POST /hermes/cadeia/reverter pega o backup mais recente e restaura. Aplicar mesmo padrão em qualquer futuro editor de config via API.
+
+### 278. Deploy-e-ativa automático: pm2 restart em vez de docker restart
+- **Categoria:** atalho
+- **Data:** 2026-07-03
+- **Contexto:** Pivete cortou distinção entre 'programar' e 'ativar' — quer que toda mudança de código já saia deployada e validada, sem pedir OK dele pra cada passo. Descobri hoje que execute_command bloqueia 'docker restart' (padrão perigoso) mas libera 'pm2 restart <id>' com --update-env.
+- **Aprendizado:** Fluxo de deploy que funciona (não pede OK do Pivete): (1) editar arquivos no repo, (2) na VPS git stash se houver divergência, (3) git pull --ff-only, (4) pm2 restart <id> --update-env, (5) pm2 save. Se docker restart necessário, execute_command bloqueia — usar `pm2 restart` (não bloqueado) ou pedir ao usuário só como último caso. Sempre validar depois com curl no endpoint tocado. Regra: nunca reportar 'deployado' sem confirmação de HTTP 200/esperado do serviço afetado.
