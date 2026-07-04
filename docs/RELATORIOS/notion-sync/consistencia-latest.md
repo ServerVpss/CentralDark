@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T19:59:59.964Z
-- **Commit:** `b2e2667a8b7c3c618807d985cdb44a487e99c275`
+- **Gerado:** 2026-07-04T21:33:54.189Z
+- **Commit:** `b669969a8898fc46b1607f3c1d62224a97be57dc`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 319 | 0 | 0 | 319 | 0 |
+| aprendizados | 320 | 0 | 0 | 320 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **319**
+- 🟥 Faltando no Notion: **320**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -367,4 +367,5 @@
 - 💬 Claude Sonnet — grupo evolução (2026-07-04)
 - 💬 Gemini Flash — grupo evolução (2026-07-04)
 - 💬 Groq Llama — grupo evolução (2026-07-04)
+- 288. Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado
 </details>

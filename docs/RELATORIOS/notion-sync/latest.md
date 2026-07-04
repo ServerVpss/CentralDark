@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T19:59:56.086Z
+# 🧠 Notion Sync — 2026-07-04T21:33:51.354Z
 
-- **Commit fonte:** `b2e2667a8b7c3c618807d985cdb44a487e99c275`
+- **Commit fonte:** `b669969a8898fc46b1607f3c1d62224a97be57dc`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 324 atualizadas · ❌ 437 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 324 atualizadas · ❌ 437 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 289 | 0 | 289 | 0 | 0 |
+| aprendizados | 290 | 1 | 289 | 0 | 0 |
 | estrutura | 437 | 0 | 0 | 0 | 437 |
 
 ## Operações
@@ -346,6 +346,7 @@
 | aprendizados | atualizado | #285 — Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal) |
 | aprendizados | atualizado | #286 — Auto-onboarding no MCP via campo `instructions` do handshake |
 | aprendizados | atualizado | #287 — HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent |
+| aprendizados | criado | #288 — Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
