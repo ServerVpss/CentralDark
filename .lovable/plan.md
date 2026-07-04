@@ -1,61 +1,42 @@
-# Plano — Subir Broker HUB na VPS 🚀
+# Plano: consertar hub.centralldark.com de vez
 
-Frontend Lovable tá pronto, mas o destino `hub.centralldark.com` não tem serviço escutando. Precisa 3 movimentos coordenados na VPS (nada mais no Lovable).
+## O que o enxame descobriu
 
-## Diagnóstico atual
+- **Onde tá servido:** Caddy da VPS, servindo o estático de `/root/CentralDark/apps/modulos/hub/dist/`.
+- **Por que tava cru:** `dist/` fica no `.gitignore`. Quando dá `git pull` sem rodar `npm run build` depois, os `/assets/*.css` viram 404 e o site renderiza HTML pelado.
+- **Estado agora:** o CSS voltou (build feito hoje 08:27 UTC, CSS retorna 200 com 23kb de Tailwind). Meu print anterior pegou o momento sem build.
+- **Problema que sobrou:** o painel mostra **"Saúde do Sistema: Indisponível"** — é backend/API que o HUB tenta chamar e não responde.
 
-| Peça | Estado |
-|---|---|
-| Frontend Conectores + Login | 🟢 pronto no Lovable |
-| GitHub sync | 🟢 commit feito |
-| VPS pull | 🟡 2 commits atrás |
-| `hub.centralldark.com` broker | 🔴 não existe |
-| PM2 broker | 🔴 não tem processo |
-| Supabase HUB `lyoigsqluyktoclwdaft` | 🔴 MCP sem secret pra checar |
+## O que vou fazer (3 frentes)
 
-## Ação (tudo na VPS via MCP, zero Lovable)
+### 1. Confirmar visualmente que o CSS tá OK agora
+Novo screenshot de `hub.centralldark.com` pra bater o olho e confirmar (o print que tu viu antes era antigo/sem build).
 
-### 1. Forçar pull na VPS
-Rodar `git pull` em `/root/CentralDark/` pra puxar os 2 commits pendentes.
+### 2. Blindar contra o problema voltar
+Criar/atualizar hook de deploy na VPS pra que TODO `git pull` no `apps/modulos/hub/` rode automaticamente:
+```
+npm install --silent && npm run build
+```
+Isso vai num script `/root/CentralDark/scripts/deploy-hub.sh` + gancho no webhook de deploy que já existe em `scripts/webhook/`. Zero chance do site voltar a ficar cru.
 
-### 2. Criar o broker `hub-broker`
-Serviço Node/Bun mínimo em `/root/CentralDark/apps/hub-broker/` com 3 rotas:
-
-- `POST /api/keys/store` → cifra a API key (AES-GCM com secret da VPS) e grava em `oauth_connections` do Supabase HUB
-- `GET  /oauth/:provider/start` → redireciona pro OAuth do provider (Notion/GitHub/GDrive) com state assinado
-- `GET  /oauth/:provider/callback` → troca code por token, cifra e salva
-- `GET  /health` → `{ok:true}` pra monitoramento
-- `POST /api/get-token` → devolve token decifrado pra edge function autorizada
-
-Sobe no PM2 como `CentralDark-HubBroker` na porta interna 8790.
-
-### 3. Rotear no Caddy
-Adicionar bloco em `infra/caddy/` mapeando `hub.centralldark.com` → `localhost:8790`.
-
-### 4. Confirmar tabelas no HUB Supabase
-Checar `oauth_providers` e `oauth_connections` no `lyoigsqluyktoclwdaft` com GRANTs certos (`service_role` pro broker).
-
-## Secrets que preciso na VPS (verificar/criar)
-- `HUB_SUPABASE_URL`
-- `HUB_SUPABASE_SERVICE_ROLE`
-- `HUB_ENCRYPTION_KEY` (32 bytes pra AES-GCM)
-- `NOTION_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET`, `GDRIVE_CLIENT_ID/SECRET` (só pros OAuth reais — API keys tipo Grok/Claude não precisam)
-
-## Fora deste plano
-- Página de Login com auth real (fica pra depois — hoje o bypass `dev-pivete` cobre)
-- OAuth Google no login (idem)
+### 3. Diagnosticar o "Indisponível"
+Investigar qual endpoint o Dashboard do HUB chama pra medir saúde (código em `apps/modulos/hub/src/components/dashboard/`), ver se o path tá certo no Caddy (`hub.centralldark.com/api/*` → broker/HUB Supabase), e consertar o que tiver quebrado (rota faltando, CORS, ou proxy ausente no Caddyfile).
 
 ## Ordem de execução
-1. `git pull` na VPS (via `vps_run_once_script`) — teste seco primeiro
-2. Criar código do broker no repo local + commit + push (fluxo Lovable→GitHub→VPS)
-3. Verificar secrets faltantes na VPS antes de subir o PM2
-4. `pm2 start` + `pm2 save`
-5. Reload Caddy
-6. Testar `curl hub.centralldark.com/health` → deve retornar `{ok:true}`
-7. Testar do frontend: clicar "Conectar Grok" e ver o toast verde
 
-## Confirmação necessária antes de começar
-Antes de eu executar, me confirma:
-- (a) Pode criar o broker agora? Ou já existe um serviço parecido que só precisa ser corrigido?
-- (b) O subdomínio `hub.centralldark.com` já tem DNS apontando pra VPS ou preciso pedir pra você configurar?
-- (c) Os client_id/secret dos OAuth (Notion, GitHub, GDrive) já foram criados nos providers ou parto só com API keys (Grok, Claude, OpenAI, Gemini) numa v1?
+1. Screenshot fresh do site → confirmar CSS
+2. Ler `DashboardTab.tsx` + `useMCP` pra ver qual endpoint bate "Indisponível"
+3. Testar o endpoint direto na VPS pra saber se é 404, CORS, ou serviço off
+4. Aplicar correção (broker/proxy/rota)
+5. Criar script de auto-build pós-git-pull
+6. Screenshot final com Dashboard "Operacional"
+
+## Detalhes técnicos
+
+- Não vou mexer no OAuthBroker (aquele plano das 3 edições cirúrgicas fica separado — só executo se tu autorizar depois)
+- Não vou mexer em `apps/bot-telegram/`, `apps/modulos/status/`, `apps/modulos/Bolt/`, `apps/modulos/WebUI/` (áreas 🔒)
+- Alterações no `.github/workflows/` ou `infra/caddy/` só depois de te mostrar o diff
+
+## O que preciso de ti
+
+Só um "vai" pra eu sair executando. Se tu quiser que eu pule alguma frente (ex: só consertar o Indisponível e deixar auto-build pra depois), me diz.
