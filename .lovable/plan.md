@@ -1,42 +1,36 @@
-# Plano: consertar hub.centralldark.com de vez
+Plano de ataque para achar o erro da UI CentralDark AI sem alterar nada agora:
 
-## O que o enxame descobriu
+1. Confirmar a camada quebrada
+   - Testar a página pública da UI e separar: login funciona, frontend carrega, falha só aparece depois no chat/áudio.
+   - Verificar se o erro vem do Open WebUI, do proxy Python/FastAPI ou do gateway de modelos.
 
-- **Onde tá servido:** Caddy da VPS, servindo o estático de `/root/CentralDark/apps/modulos/hub/dist/`.
-- **Por que tava cru:** `dist/` fica no `.gitignore`. Quando dá `git pull` sem rodar `npm run build` depois, os `/assets/*.css` viram 404 e o site renderiza HTML pelado.
-- **Estado agora:** o CSS voltou (build feito hoje 08:27 UTC, CSS retorna 200 com 23kb de Tailwind). Meu print anterior pegou o momento sem build.
-- **Problema que sobrou:** o painel mostra **"Saúde do Sistema: Indisponível"** — é backend/API que o HUB tenta chamar e não responde.
+2. Auditar logs certos
+   - Puxar logs recentes do serviço da UI/Open WebUI.
+   - Puxar logs do proxy de modelos e do Elite/Anthropic.
+   - Procurar exatamente por:
+     - `'JSONResponse' object has no attribute 'body_iterator'`
+     - `Missing API key`
+     - `No token`
+     - `Unauthorized`
+     - `audio`, `tts`, `speech`, `voice`
 
-## O que vou fazer (3 frentes)
+3. Diagnóstico provável do erro `body_iterator`
+   - Esse erro costuma acontecer quando algum middleware tenta tratar uma resposta normal `JSONResponse` como se fosse resposta em streaming.
+   - Correção esperada: só acessar `body_iterator` em `StreamingResponse`, ou trocar a lógica para ler o corpo de `JSONResponse` corretamente.
+   - Área suspeita: proxy/chat streaming, filtro de resposta, middleware de log, rota de áudio/TTS ou adaptação OpenAI-compatible.
 
-### 1. Confirmar visualmente que o CSS tá OK agora
-Novo screenshot de `hub.centralldark.com` pra bater o olho e confirmar (o print que tu viu antes era antigo/sem build).
+4. Diagnóstico provável de modelos “sem token/key”
+   - Gateway Lovable e Gemini aparecem vivos nos sinais já coletados.
+   - Então a falha deve estar na configuração interna da UI/Open WebUI: provider sem chave cadastrada, variável não carregada no container/processo, ou modelo apontando para provider errado.
+   - Validar `/v1/models` e um `/v1/chat/completions` real no gateway usado pela UI.
 
-### 2. Blindar contra o problema voltar
-Criar/atualizar hook de deploy na VPS pra que TODO `git pull` no `apps/modulos/hub/` rode automaticamente:
-```
-npm install --silent && npm run build
-```
-Isso vai num script `/root/CentralDark/scripts/deploy-hub.sh` + gancho no webhook de deploy que já existe em `scripts/webhook/`. Zero chance do site voltar a ficar cru.
+5. Diagnóstico provável do áudio
+   - Separar se é autoplay do navegador ou falha real de geração/URL.
+   - Checar se a rota TTS retorna arquivo de áudio válido, MIME correto, CORS correto e URL acessível.
+   - Se o chat já falha antes, áudio pode ser consequência, não causa raiz.
 
-### 3. Diagnosticar o "Indisponível"
-Investigar qual endpoint o Dashboard do HUB chama pra medir saúde (código em `apps/modulos/hub/src/components/dashboard/`), ver se o path tá certo no Caddy (`hub.centralldark.com/api/*` → broker/HUB Supabase), e consertar o que tiver quebrado (rota faltando, CORS, ou proxy ausente no Caddyfile).
-
-## Ordem de execução
-
-1. Screenshot fresh do site → confirmar CSS
-2. Ler `DashboardTab.tsx` + `useMCP` pra ver qual endpoint bate "Indisponível"
-3. Testar o endpoint direto na VPS pra saber se é 404, CORS, ou serviço off
-4. Aplicar correção (broker/proxy/rota)
-5. Criar script de auto-build pós-git-pull
-6. Screenshot final com Dashboard "Operacional"
-
-## Detalhes técnicos
-
-- Não vou mexer no OAuthBroker (aquele plano das 3 edições cirúrgicas fica separado — só executo se tu autorizar depois)
-- Não vou mexer em `apps/bot-telegram/`, `apps/modulos/status/`, `apps/modulos/Bolt/`, `apps/modulos/WebUI/` (áreas 🔒)
-- Alterações no `.github/workflows/` ou `infra/caddy/` só depois de te mostrar o diff
-
-## O que preciso de ti
-
-Só um "vai" pra eu sair executando. Se tu quiser que eu pule alguma frente (ex: só consertar o Indisponível e deixar auto-build pra depois), me diz.
+6. Resultado que vou devolver depois da investigação
+   - Causa raiz mais provável.
+   - Trecho/serviço exato onde Fable deve mexer.
+   - Prompt cirúrgico para mandar ao Fable, sem pedir git/deploy/restart amplo.
+   - Ordem segura: primeiro chat/modelos, depois streaming `body_iterator`, por último áudio.
