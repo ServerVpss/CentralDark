@@ -38,6 +38,7 @@ export function OAuthConnectors() {
 
   async function load() {
     setLoading(true);
+    setLoadError(null);
     let uid: string | null = null;
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -61,8 +62,12 @@ export function OAuthConnectors() {
     if (uid) {
       try {
         const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label');
-        if (!cr.error && cr.data) c = cr.data as Connection[];
-      } catch { c = []; }
+        if (cr.error) throw cr.error;
+        if (cr.data) c = cr.data as Connection[];
+      } catch (e: any) {
+        c = [];
+        setLoadError(e?.message ?? 'erro ao carregar conexões');
+      }
     }
 
     setProviders(p);
@@ -70,6 +75,7 @@ export function OAuthConnectors() {
     setUsingFallback(fallback);
     setLoading(false);
   }
+
 
   useEffect(() => { load(); }, []);
 
