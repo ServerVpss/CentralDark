@@ -278,6 +278,7 @@ function extrairJSON(texto) {
 // FALLBACK 4 — Elite Anthropic Proxy
 // ═══════════════════════════════════════════════════════════════
 async function chamarEliteAnthropic(prompt) {
+  refreshEliteVars();
   if (!ELITE_TOKEN) throw new Error('ELITE_ANTHROPIC_TOKEN não configurado');
   const body = {
     model: ELITE_MODEL,
