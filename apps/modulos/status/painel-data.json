@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T21:36:29.486Z",
-  "updatedAtBR": "04/07/2026, 18:36:23 BRT",
+  "updatedAt": "2026-07-04T21:43:58.828Z",
+  "updatedAtBR": "04/07/2026, 18:43:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Grafo 3D Jarvis publicado; fase 2 = plugin Obsidian v0.4 com vista 3D embutida (pendência #22)",
     "branch": "main",
-    "lastCommit": "Deployed updated panels to VPS",
+    "lastCommit": "docs(pendencias): nova #22 Plugin Obsidian v0.4 — vista Grafo 3D embutida + camada BRAIN",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T21:43:58.828Z",
+      "titulo": "Push na main · 8be697340fcbc8341684c3eebf996ddea37f26e8",
+      "detalhe": "docs(pendencias): nova #22 Plugin Obsidian v0.4 — vista Grafo 3D embutida + camada BRAIN",
+      "area": "Repositório",
+      "sha": "8be6973",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-04T21:36:23.944Z",
       "title": "Grafo Jarvis 3D no ar: grafo.centralldark.com/3d.html (3d-force-graph, HUD, busca, foco de câmera) consumindo /api/graph do graph-panel",
@@ -1239,6 +1247,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T21:43:58.828Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 8be697340fcbc8341684c3eebf996ddea37f26e8 (8be6973)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T21:04:27.000Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · c4173e394f2888f086e6e00bd4d91c869fbfee98 (c4173e3)",
@@ -1578,13 +1593,6 @@
       "time": "2026-07-04T00:47:50.571Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e49bfc19b221dd9003e4cb3db0306e9e3e8155cb (e49bfc1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:26:32.559Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 71b5041225ceb7d16982c705e2f13f4487563215 (71b5041)",
       "area": "Repositório",
       "status": "sucesso"
     }
