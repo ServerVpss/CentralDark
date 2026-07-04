@@ -67,6 +67,33 @@ Deno.serve(async (req) => {
       return await proxyChatCompletions(req, lovableKey);
     }
 
+    // === Áudio: TTS (fala) ===
+    if (req.method === "POST" && path === "/v1/audio/speech") {
+      if (!authorizeOpenAI(req)) return unauthorized();
+      return await proxyAudioSpeech(req, lovableKey);
+    }
+
+    // === Áudio: STT (transcrição) ===
+    if (req.method === "POST" && path === "/v1/audio/transcriptions") {
+      if (!authorizeOpenAI(req)) return unauthorized();
+      return await proxyAudioTranscriptions(req, lovableKey);
+    }
+
+    // === Áudio: catálogo de vozes (compat Open WebUI) ===
+    if (req.method === "GET" && path === "/v1/audio/voices") {
+      if (!authorizeOpenAI(req)) return unauthorized();
+      return json({
+        voices: [
+          { id: "alloy",   name: "Alloy (neutra)" },
+          { id: "echo",    name: "Echo (masculina)" },
+          { id: "fable",   name: "Fable (britânica)" },
+          { id: "onyx",    name: "Onyx (grave)" },
+          { id: "nova",    name: "Nova (jovem)" },
+          { id: "shimmer", name: "Shimmer (suave)" },
+        ],
+      });
+    }
+
     // === Legado darkai (POST no root) ===
     if (req.method === "POST" && (path === "/" || path === "")) {
       return await legacyDarkai(req, lovableKey);
@@ -169,6 +196,69 @@ async function legacyDarkai(req: Request, lovableKey: string) {
   const data = await upstream.json();
   const text = data?.choices?.[0]?.message?.content ?? "";
   return json({ text, model });
+}
+
+// -------------------- Áudio (TTS + STT) --------------------
+
+async function proxyAudioSpeech(req: Request, lovableKey: string) {
+  const body = await req.json().catch(() => ({}));
+  const model = typeof body?.model === "string" && body.model ? body.model : "openai/gpt-4o-mini-tts";
+  const voice = typeof body?.voice === "string" && body.voice ? body.voice : "alloy";
+  const input = typeof body?.input === "string" ? body.input : "";
+  if (!input.trim()) return json({ error: "campo 'input' obrigatório" }, 400);
+
+  const upstream = await fetch(`${GATEWAY_BASE}/audio/speech`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${lovableKey}`,
+    },
+    body: JSON.stringify({ ...body, model, voice, input }),
+  });
+
+  if (upstream.status === 429) return json({ error: "rate_limited" }, 429);
+  if (upstream.status === 402) return json({ error: "sem_creditos" }, 402);
+  if (!upstream.ok) {
+    const t = await upstream.text();
+    return json({ error: "gateway_error", status: upstream.status, detail: t.slice(0, 500) }, 502);
+  }
+
+  // Repassa o áudio (bytes ou SSE) como está.
+  const contentType = upstream.headers.get("Content-Type") ?? "audio/mpeg";
+  return new Response(upstream.body, {
+    status: 200,
+    headers: {
+      ...corsHeaders,
+      "Content-Type": contentType,
+      "Cache-Control": "no-cache",
+    },
+  });
+}
+
+async function proxyAudioTranscriptions(req: Request, lovableKey: string) {
+  // Recebe multipart/form-data (file + model) — repassa cru pro gateway.
+  const form = await req.formData().catch(() => null);
+  if (!form) return json({ error: "esperado multipart/form-data" }, 400);
+
+  const forward = new FormData();
+  for (const [k, v] of form.entries()) forward.append(k, v as any);
+  if (!forward.has("model")) forward.append("model", "openai/gpt-4o-mini-transcribe");
+
+  const upstream = await fetch(`${GATEWAY_BASE}/audio/transcriptions`, {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${lovableKey}` },
+    body: forward,
+  });
+
+  if (upstream.status === 429) return json({ error: "rate_limited" }, 429);
+  if (upstream.status === 402) return json({ error: "sem_creditos" }, 402);
+  if (!upstream.ok) {
+    const t = await upstream.text();
+    return json({ error: "gateway_error", status: upstream.status, detail: t.slice(0, 500) }, 502);
+  }
+
+  const data = await upstream.json().catch(() => ({}));
+  return json(data);
 }
 
 // -------------------- helpers --------------------
