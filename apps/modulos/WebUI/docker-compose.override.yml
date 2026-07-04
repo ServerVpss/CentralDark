@@ -7,6 +7,8 @@ services:
       - ENABLE_OPENAPI_SERVERS=true
     volumes:
       - ./custom-css/esmeralda.css:/app/backend/static/custom.css:ro
+      - ./custom-css/hermes-panel.css:/app/backend/static/hermes-panel.css:ro
+      - ./custom-css/hermes-panel.js:/app/backend/static/hermes-panel.js:ro
     depends_on:
       - mcpo
   mcpo:
