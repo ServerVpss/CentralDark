@@ -622,3 +622,4 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Onde mexer:** VPS apps/modulos/hub/ (frontend). Criar novo módulo apps/modulos/mtproto-service/ com gramjs ou mtcute em PM2 e Caddy expondo /mtproto/*. HUB Supabase lyoigsqluyktoclwdaft com tabela telegram_sessions guardando session string criptografada.
 - **Critério pra fechar:** Aba Conectores renderiza card real sem mock, fluxo telefone > enviar código > recebe no Telegram > digita código > se precisar 2FA > conectado. Session salva no HUB. Deploy no ar servindo bundle novo. Zero duplicata ou .bkp no repo. Todos os 6 itens do aprendizado Aula pro Hermes atendidos.
 ### 20. DARKAI_URL não configurada na VPS — Hermes cai direto no Elite Sonnet 4.5 — 🔴 ABERTO (03/07/2026, 20:23 BRT)
+### 21. Hermes Grok Watcher — subir no PM2 com token do bot — 🟡 ABERTO (04/07/2026, 04:04 BRT)
