@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T14:24:49.677Z",
-  "updatedAtBR": "04/07/2026, 11:24:49 BRT",
+  "updatedAt": "2026-07-04T17:55:02.438Z",
+  "updatedAtBR": "04/07/2026, 14:55:02 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Changes",
+    "lastCommit": "aprendizado(#288): Fix do GitHub 401 no MCP — token de sessão OAuth vencia o env",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T17:55:02.438Z",
+      "titulo": "Push na main · 1b1da39796330c0d68e0defe37a83bbf4f9949a6",
+      "detalhe": "aprendizado(#288): Fix do GitHub 401 no MCP — token de sessão OAuth vencia o env",
+      "area": "Repositório",
+      "sha": "1b1da39",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-04T14:24:49.677Z",
       "titulo": "Push na main · 9422c39bba54f830439d29df3ed63bffabe91859",
@@ -1275,6 +1283,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T17:55:02.438Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1b1da39796330c0d68e0defe37a83bbf4f9949a6 (1b1da39)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T14:24:49.677Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 9422c39bba54f830439d29df3ed63bffabe91859 (9422c39)",
@@ -1614,13 +1629,6 @@
       "time": "2026-07-04T00:47:50.571Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e49bfc19b221dd9003e4cb3db0306e9e3e8155cb (e49bfc1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:26:32.559Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 71b5041225ceb7d16982c705e2f13f4487563215 (71b5041)",
       "area": "Repositório",
       "status": "sucesso"
     }
