@@ -1,6 +1,15 @@
 {
-  "atualizadoEm": "2026-07-02T17:32:18.523Z",
+  "atualizadoEm": "2026-07-04T22:00:06.450Z",
   "versoes": [
+    {
+      "versao": "0.4.0",
+      "data": "2026-07-04",
+      "mudancas": [
+        "Nova view: Grafo 3D · Jarvis (HUD tempo-real de grafo.centralldark.com embutido no Obsidian)",
+        "Novo ribbon (ícone orbit) e comando \"Abrir Grafo 3D · Jarvis\"",
+        "Dados vivos: /api/live com status PM2 fresco (setores, pulso online/off) — CentralDark Grafo Vivo"
+      ]
+    },
     {
       "versao": "0.3.0",
       "data": "2026-07-02",
