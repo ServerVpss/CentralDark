@@ -2282,3 +2282,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Toda ação executável do MCP (execute_command, vps_run_once_script) precisava ficar auditada com hora, usuário, IP, comando, status — e visível no painel Hermes.
 - **Aprendizado:** Formato: helper único `apps/modulos/mcp/dist/lib/audit.js` com `auditLog(evento)` que grava JSONL em `/root/[oculto]` (mode 600). Campos: timestamp, usuario (MCP_CALLER_USER || 'mcp-local'), ip (MCP_CALLER_IP || 'local-stdio'), hostname, pid, tool, status, command (truncado 4k), cwd, root, exitCode, durationMs, stdoutBytes, stderrBytes, blockedPatterns, reason. Chamado em TODOS os pontos de saída de runCommand (BLOQUEADO_CONFIG, BLOQUEADO, ERRO_CWD, ERRO_SPAWN, OK/FALHOU/TIMEOUT) e do handler vps_run_once_script (BLOQUEADO, DRY_RUN, EXECUTADO/FALHOU). Gateway `api.centralldark.com` expõe: GET /hermes/audit/dias, GET /hermes/audit?date=YYYY-MM-DD&limit=200&status=X, GET /hermes/audit/stats?dias=N — leitura por tail em blocos de 64k. Painel Hermes ganhou abas Cadeia/Auditoria com cards de resumo, filtro por dia+status, auto-refresh 10s. IP/usuário só aparecem se o transport HTTP do MCP setar MCP_CALLER_USER/MCP_CALLER_IP no env do processo — stdio local fica marcado honestamente como 'local-stdio'.
+
+### 282. Rota rápida de memória do Pivete no WebUI
+- **Categoria:** atalho
+- **Data:** 2026-07-03
+- **Contexto:** Base militar movida pra ui.centralldark.com via Open WebUI + MCPO. Precisa de rota de memória que qualquer instância do pivete (Claude/GPT/Gemini) siga sem confusão.
+- **Aprendizado:** Ordem canônica: 1) consultar_memoria_reserva (curto prazo) 2) ler_consciencia (regras) 3) ler_regras_inviolaveis (atalho) 4) arquivos PIVETE-*.md por tema (índice em PIVETE-02). Documentado em PIVETE-18-ROTA-MEMORIA.md. Não repetir consulta na mesma janela. Pular tudo se pergunta trivial.
