@@ -2264,3 +2264,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Pivete cortou distinção entre 'programar' e 'ativar' — quer que toda mudança de código já saia deployada e validada, sem pedir OK dele pra cada passo. Descobri hoje que execute_command bloqueia 'docker restart' (padrão perigoso) mas libera 'pm2 restart <id>' com --update-env.
 - **Aprendizado:** Fluxo de deploy que funciona (não pede OK do Pivete): (1) editar arquivos no repo, (2) na VPS git stash se houver divergência, (3) git pull --ff-only, (4) pm2 restart <id> --update-env, (5) pm2 save. Se docker restart necessário, execute_command bloqueia — usar `pm2 restart` (não bloqueado) ou pedir ao usuário só como último caso. Sempre validar depois com curl no endpoint tocado. Regra: nunca reportar 'deployado' sem confirmação de HTTP 200/esperado do serviço afetado.
+
+### 279. WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com
+- **Categoria:** regra
+- **Data:** 2026-07-03
+- **Contexto:** Pivete pediu pra 'dar acesso à pasta root/CentralDark e docs pro chat do WebUI ficar tão inteligente quanto a IA que ele conversa aqui'. Fui verificar e descobri que já tá integrado — só faltava explicar.
+- **Aprendizado:** O WebUI (Open WebUI) já tem MCP embutido via sidecar mcpo, configurado em apps/modulos/WebUI/mcpo-config/config.json apontando pra https://mcp.centralldark.com/mcp com Bearer token. Isso expõe TODAS as ferramentas MCP da CentralDark (vps_read_file_safe, ler_consciencia, consultar_memoria_reserva, puxar_aprendizados, github_*, execute_command, etc) direto no chat do WebUI como 'Tools'. Pra adicionar novos servidores MCP: editar o mcpServers em config.json e docker restart CentralDark-MCPO. Não precisa mexer no Open WebUI em si — o mcpo faz a ponte HTTP → OpenAPI que o WebUI entende.
