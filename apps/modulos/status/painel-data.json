@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T21:26:21.961Z",
-  "updatedAtBR": "04/07/2026, 18:26:21 BRT",
+  "updatedAt": "2026-07-04T21:36:29.486Z",
+  "updatedAtBR": "04/07/2026, 18:36:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
-    "currentTask": "Padronização HERMES-CORE path + boot logs nos 3 painéis (MCP, WebUI, Mega)",
+    "currentTask": "Grafo 3D Jarvis publicado; fase 2 = plugin Obsidian v0.4 com vista 3D embutida (pendência #22)",
     "branch": "main",
-    "lastCommit": "aprendizado(#288): Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado",
+    "lastCommit": "Deployed updated panels to VPS",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,28 +592,11 @@
   ],
   "events": [
     {
-      "time": "2026-07-04T21:26:21.961Z",
-      "titulo": "Push na main · b669969a8898fc46b1607f3c1d62224a97be57dc",
-      "detalhe": "aprendizado(#288): Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado",
-      "area": "Repositório",
-      "sha": "b669969",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T21:16:43.212Z",
-      "titulo": "Push na main · 4eb783df3496db15f0e9563ff206bfe969557acc",
-      "detalhe": "Made the requested updates",
-      "area": "Repositório",
-      "sha": "4eb783d",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T21:11:07.937Z",
-      "titulo": "Push na main · 7e9ef6706597960abb7c1131309e5b9bca06dbfa",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "7e9ef67",
-      "actor": "lovable-dev[bot]"
+      "time": "2026-07-04T21:36:23.944Z",
+      "title": "Grafo Jarvis 3D no ar: grafo.centralldark.com/3d.html (3d-force-graph, HUD, busca, foco de câmera) consumindo /api/graph do graph-panel",
+      "area": "GrafoVivo",
+      "status": "feito",
+      "detail": ""
     },
     {
       "time": "2026-07-04T21:04:27.000Z",
@@ -841,38 +824,6 @@
       "detalhe": "🛠️ HUB migration 004: oauth_providers + oauth_connections + seed Grok/Notion/Drive/GitHub",
       "area": "Repositório",
       "sha": "d4ffec8",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T08:13:17.475Z",
-      "titulo": "Push na main · 185ca9358c3b783f8176d55d5388d6ce59dcaec7",
-      "detalhe": "🛠️ HUB v2: fallback local pra Conectores (Grok/Notion/Drive/GitHub) quando oauth_providers vazio",
-      "area": "Repositório",
-      "sha": "185ca93",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T07:59:50.677Z",
-      "titulo": "Push na main · fb9f49b822007441494c52b3a478ce76dec7ee01",
-      "detalhe": "Corrigiu header do banco",
-      "area": "Repositório",
-      "sha": "fb9f49b",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T07:52:21.101Z",
-      "titulo": "Push na main · 86246463e72701953fc4e8921cd49a29f6881c4a",
-      "detalhe": "Criou página Notion e buscou HUB",
-      "area": "Repositório",
-      "sha": "8624646",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T07:12:02.614Z",
-      "titulo": "Push na main · 2b51448b6a00a7d6e6a2afe31069e5aad6f18ea3",
-      "detalhe": "docs(pendencias): nova #21 Hermes Grok Watcher — subir no PM2 com token do bot",
-      "area": "Repositório",
-      "sha": "2b51448",
       "actor": "segredounlock"
     }
   ],
@@ -1288,27 +1239,6 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-07-04T21:26:21.961Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b669969a8898fc46b1607f3c1d62224a97be57dc (b669969)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T21:16:43.212Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 4eb783df3496db15f0e9563ff206bfe969557acc (4eb783d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T21:11:07.937Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 7e9ef6706597960abb7c1131309e5b9bca06dbfa (7e9ef67)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
       "time": "2026-07-04T21:04:27.000Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · c4173e394f2888f086e6e00bd4d91c869fbfee98 (c4173e3)",
@@ -1636,6 +1566,27 @@
       "action": "📌 Push na main · d0e2211d4caddec47d9a633143e06738e6b3dfdc (d0e2211)",
       "area": "Repositório",
       "status": "sucesso"
+    },
+    {
+      "time": "2026-07-04T00:52:28.629Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 88eb6b428b5386c605c423d7394881ad379f7056 (88eb6b4)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-04T00:47:50.571Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e49bfc19b221dd9003e4cb3db0306e9e3e8155cb (e49bfc1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-04T00:26:32.559Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 71b5041225ceb7d16982c705e2f13f4487563215 (71b5041)",
+      "area": "Repositório",
+      "status": "sucesso"
     }
   ],
   "telemetry": {
@@ -1751,7 +1702,7 @@
   "ultimo_evento": "Hermes aprendeu e concluiu hub v2 sozinho (77 etapas, typecheck zero)",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-04T19:52:18.251Z",
+  "updated_at": "2026-07-04T21:36:29.486Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",
