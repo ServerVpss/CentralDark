@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T02:06:16.957Z",
-  "updatedAtBR": "03/07/2026, 23:06:16 BRT",
+  "updatedAt": "2026-07-04T02:32:10.017Z",
+  "updatedAtBR": "03/07/2026, 23:32:10 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Ativou 6 frentes do enxame",
+    "lastCommit": "aprendizado(#282): Rota rápida de memória do Pivete no WebUI",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T02:32:10.017Z",
+      "titulo": "Push na main · e36d0284b11dfa6753c8cd7a7add9c9f9e017c23",
+      "detalhe": "aprendizado(#282): Rota rápida de memória do Pivete no WebUI",
+      "area": "Repositório",
+      "sha": "e36d028",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T02:06:16.957Z",
       "titulo": "Push na main · 964d493e78c1792d99d518fb43bc5c3ef03d2f80",
       "detalhe": "Ativou 6 frentes do enxame",
@@ -977,14 +985,6 @@
       "area": "Repositório",
       "sha": "1fd45cc",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-03T07:35:46.630Z",
-      "titulo": "Push na main · 3f201aa2d5a95eac85cf86c43ff6fa837722859a",
-      "detalhe": "Gerou docs e cartaz 2026-07-03",
-      "area": "Repositório",
-      "sha": "3f201aa",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1399,6 +1399,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T02:32:10.017Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e36d0284b11dfa6753c8cd7a7add9c9f9e017c23 (e36d028)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T02:06:16.957Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 964d493e78c1792d99d518fb43bc5c3ef03d2f80 (964d493)",
@@ -1738,13 +1745,6 @@
       "time": "2026-07-03T07:21:13.415Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d6989080d531862bb2d8817533f1fff7de64c0bc (d698908)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T07:01:07.445Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · fa4244c2ae1ec13a98687ff2f8223adba50e2448 (fa4244c)",
       "area": "Repositório",
       "status": "sucesso"
     }
