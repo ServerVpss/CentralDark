@@ -1,36 +1,61 @@
-# Plano — Frontend HUB v2 (Modo Arsenal)
+# Plano — Subir Broker HUB na VPS 🚀
 
-Lovable = só gera. GitHub + VPS = destino final. Zero backend criado aqui.
+Frontend Lovable tá pronto, mas o destino `hub.centralldark.com` não tem serviço escutando. Precisa 3 movimentos coordenados na VPS (nada mais no Lovable).
 
-## Escopo (2 entregas)
+## Diagnóstico atual
 
-### 1. Aba Conectores — polimento final
-- Trocar `alert()` / `prompt()` por **toast** (sonner) e **Dialog** shadcn (colar API key com input mascarado)
-- **Skeleton** no loading em vez de texto
-- **Empty state** quando não vier provider nenhum
-- Badge de tier (1/2/3) no canto do card
-- Confirmar bypass dev (`user_id: dev-pivete`) + hook pronto pro `user.id` real quando login existir
+| Peça | Estado |
+|---|---|
+| Frontend Conectores + Login | 🟢 pronto no Lovable |
+| GitHub sync | 🟢 commit feito |
+| VPS pull | 🟡 2 commits atrás |
+| `hub.centralldark.com` broker | 🔴 não existe |
+| PM2 broker | 🔴 não tem processo |
+| Supabase HUB `lyoigsqluyktoclwdaft` | 🔴 MCP sem secret pra checar |
 
-### 2. Página de Login `/login` — só UI
-- Layout split: lado esquerdo hero com logo CentralDark + gradient emerald radial, lado direito form
-- Campos: email + senha, botão **Entrar com Google**, link "esqueci senha"
-- Fonte Geist, cards `.card-premium`, botão `.gradient-emerald`
-- **Sem lógica de auth** — apenas `onSubmit` stub que chama uma função `signIn()` exportada de `hooks/useAuth.ts` (já existe, só lê sessão hoje)
-- Rota adicionada no `App.tsx` do HUB via `react-router` (se não tiver, adiciono minimal)
+## Ação (tudo na VPS via MCP, zero Lovable)
 
-## Fora de escopo (fica pra VPS/HUB)
-- Endpoint `POST /api/keys/store` no broker
-- Configuração OAuth Google no Supabase HUB
-- Tabelas `oauth_providers` / `oauth_connections`
-- Edge Function `get-token`
+### 1. Forçar pull na VPS
+Rodar `git pull` em `/root/CentralDark/` pra puxar os 2 commits pendentes.
 
-## Entrega
-Ao terminar: código commitado pelo sync automático Lovable→GitHub. A partir daí VPS puxa via webhook (fluxo padrão CentralDark). Aviso final: "🚀 frontend pronto, VPS já pode puxar do GitHub".
+### 2. Criar o broker `hub-broker`
+Serviço Node/Bun mínimo em `/root/CentralDark/apps/hub-broker/` com 3 rotas:
 
-## Detalhes técnicos
-- Arquivos tocados:
-  - `apps/modulos/hub/src/components/connectors/OAuthConnectors.tsx` (dialog + toast + skeleton)
-  - `apps/modulos/hub/src/components/connectors/ApiKeyDialog.tsx` (novo)
-  - `apps/modulos/hub/src/pages/LoginPage.tsx` (novo)
-  - `apps/modulos/hub/src/App.tsx` (rota `/login`)
-- Dependências: `sonner` e `react-router-dom` já presentes no monorepo — reuso, sem instalar nada novo se possível.
+- `POST /api/keys/store` → cifra a API key (AES-GCM com secret da VPS) e grava em `oauth_connections` do Supabase HUB
+- `GET  /oauth/:provider/start` → redireciona pro OAuth do provider (Notion/GitHub/GDrive) com state assinado
+- `GET  /oauth/:provider/callback` → troca code por token, cifra e salva
+- `GET  /health` → `{ok:true}` pra monitoramento
+- `POST /api/get-token` → devolve token decifrado pra edge function autorizada
+
+Sobe no PM2 como `CentralDark-HubBroker` na porta interna 8790.
+
+### 3. Rotear no Caddy
+Adicionar bloco em `infra/caddy/` mapeando `hub.centralldark.com` → `localhost:8790`.
+
+### 4. Confirmar tabelas no HUB Supabase
+Checar `oauth_providers` e `oauth_connections` no `lyoigsqluyktoclwdaft` com GRANTs certos (`service_role` pro broker).
+
+## Secrets que preciso na VPS (verificar/criar)
+- `HUB_SUPABASE_URL`
+- `HUB_SUPABASE_SERVICE_ROLE`
+- `HUB_ENCRYPTION_KEY` (32 bytes pra AES-GCM)
+- `NOTION_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET`, `GDRIVE_CLIENT_ID/SECRET` (só pros OAuth reais — API keys tipo Grok/Claude não precisam)
+
+## Fora deste plano
+- Página de Login com auth real (fica pra depois — hoje o bypass `dev-pivete` cobre)
+- OAuth Google no login (idem)
+
+## Ordem de execução
+1. `git pull` na VPS (via `vps_run_once_script`) — teste seco primeiro
+2. Criar código do broker no repo local + commit + push (fluxo Lovable→GitHub→VPS)
+3. Verificar secrets faltantes na VPS antes de subir o PM2
+4. `pm2 start` + `pm2 save`
+5. Reload Caddy
+6. Testar `curl hub.centralldark.com/health` → deve retornar `{ok:true}`
+7. Testar do frontend: clicar "Conectar Grok" e ver o toast verde
+
+## Confirmação necessária antes de começar
+Antes de eu executar, me confirma:
+- (a) Pode criar o broker agora? Ou já existe um serviço parecido que só precisa ser corrigido?
+- (b) O subdomínio `hub.centralldark.com` já tem DNS apontando pra VPS ou preciso pedir pra você configurar?
+- (c) Os client_id/secret dos OAuth (Notion, GitHub, GDrive) já foram criados nos providers ou parto só com API keys (Grok, Claude, OpenAI, Gemini) numa v1?
