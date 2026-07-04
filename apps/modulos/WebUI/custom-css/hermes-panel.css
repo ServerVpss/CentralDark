@@ -127,3 +127,75 @@
 }
 #hermes-toast.err { background: #dc2626; }
 #hermes-toast.show { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════
+   Abas + Auditoria
+   ═══════════════════════════════════════════════════════════════ */
+#hermes-modal .box { max-width: 960px; }
+#hermes-modal header { gap: 12px; }
+#hermes-modal .tabs { display: flex; gap: 4px; margin-left: auto; margin-right: 8px; }
+#hermes-modal .tab-btn {
+  background: transparent; color: #94a3b8; border: 1px solid #1e293b;
+  padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px;
+}
+#hermes-modal .tab-btn.active { background: #10b981; color: #fff; border-color: #10b981; }
+#hermes-modal .tab-pane { display: none; }
+#hermes-modal .tab-pane.active { display: block; }
+#hermes-modal footer[data-tab="audit"] { display: none; }
+
+#hermes-modal .audit-cards {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px;
+}
+#hermes-modal .audit-cards .card {
+  background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+  padding: 10px; text-align: center;
+}
+#hermes-modal .audit-cards .card .n { font-size: 20px; font-weight: 700; }
+#hermes-modal .audit-cards .card .l { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+#hermes-modal .audit-cards .card.ok .n { color: #10b981; }
+#hermes-modal .audit-cards .card.err .n { color: #ef4444; }
+#hermes-modal .audit-cards .card.blk .n { color: #f59e0b; }
+#hermes-modal .audit-cards .card.info .n { color: #60a5fa; }
+
+#hermes-modal .audit-filtros {
+  display: flex; gap: 10px; align-items: center; margin-bottom: 8px;
+  font-size: 12px; color: #94a3b8; flex-wrap: wrap;
+}
+#hermes-modal .audit-filtros select {
+  background: #0f172a; color: #e2e8f0; border: 1px solid #334155;
+  border-radius: 6px; padding: 4px 6px; font-size: 12px; margin-left: 4px;
+}
+#hermes-modal .audit-reload {
+  background: #1e40af; color: #fff; border: none; padding: 6px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 12px; margin-left: auto;
+}
+
+#hermes-modal .audit-wrap {
+  max-height: 55vh; overflow: auto; border-radius: 10px; border: 1px solid #1e293b;
+}
+#hermes-modal .audit-table {
+  width: 100%; border-collapse: collapse; font-size: 11px;
+}
+#hermes-modal .audit-table th {
+  background: #0b1220; color: #6ee7b7; padding: 8px 6px; text-align: left;
+  position: sticky; top: 0; border-bottom: 1px solid #1e293b; font-weight: 600;
+}
+#hermes-modal .audit-table td {
+  padding: 6px; border-bottom: 1px solid #1e293b; vertical-align: top;
+}
+#hermes-modal .audit-table tr:hover td { background: #0b1220; }
+#hermes-modal .audit-table .cmd {
+  font-family: ui-monospace, Menlo, monospace; color: #cbd5e1;
+  max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+#hermes-modal .audit-table .empty { text-align: center; padding: 20px; color: #64748b; }
+
+#hermes-modal .badge {
+  display: inline-block; padding: 2px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 600;
+}
+#hermes-modal .badge.ok   { background: #064e3b; color: #6ee7b7; }
+#hermes-modal .badge.err  { background: #7f1d1d; color: #fca5a5; }
+#hermes-modal .badge.warn { background: #78350f; color: #fcd34d; }
+#hermes-modal .badge.blk  { background: #713f12; color: #fdba74; }
+#hermes-modal .badge.info { background: #1e3a8a; color: #93c5fd; }
