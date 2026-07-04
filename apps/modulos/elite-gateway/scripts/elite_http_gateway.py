@@ -498,5 +498,103 @@ async def hermes_cadeia_stats(request: Request):
 
 
 
+# ═══════════════════════════════════════════════════════════════
+# 🔍 Auditoria MCP — lê /root/CentralDark/logs/mcp-audit-*.jsonl
+# ═══════════════════════════════════════════════════════════════
+AUDIT_DIR = Path(os.environ.get("MCP_AUDIT_DIR", "/root/CentralDark/logs"))
+
+
+def _audit_files():
+    if not AUDIT_DIR.exists():
+        return []
+    return sorted(AUDIT_DIR.glob("mcp-audit-*.jsonl"))
+
+
+def _audit_read_tail(arquivo: Path, limit: int):
+    # Lê últimas N linhas sem carregar arquivo inteiro em memória.
+    linhas = []
+    try:
+        with arquivo.open("rb") as f:
+            f.seek(0, 2)
+            tam = f.tell()
+            bloco = 64 * 1024
+            buf = b""
+            pos = tam
+            while pos > 0 and len(linhas) <= limit + 50:
+                ler = min(bloco, pos)
+                pos -= ler
+                f.seek(pos)
+                buf = f.read(ler) + buf
+                linhas = buf.split(b"\n")
+        registros = []
+        for raw in linhas[-(limit + 1):]:
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                registros.append(json.loads(raw.decode("utf-8", errors="replace")))
+            except Exception:
+                continue
+        return registros[-limit:]
+    except Exception:
+        return []
+
+
+@app.get("/hermes/audit/dias")
+async def hermes_audit_dias(request: Request):
+    _hermes_auth(request)
+    dias = []
+    for f in _audit_files():
+        try:
+            dia = f.stem.replace("mcp-audit-", "")
+            dias.append({"dia": dia, "bytes": f.stat().st_size})
+        except Exception:
+            continue
+    dias.sort(key=lambda d: d["dia"], reverse=True)
+    return {"dias": dias}
+
+
+@app.get("/hermes/audit")
+async def hermes_audit_list(request: Request):
+    _hermes_auth(request)
+    q = request.query_params
+    dia = q.get("date") or datetime.utcnow().strftime("%Y-%m-%d")
+    try:
+        limit = min(int(q.get("limit", "200")), 1000)
+    except Exception:
+        limit = 200
+    filtro_status = q.get("status")
+    arquivo = AUDIT_DIR / f"mcp-audit-{dia}.jsonl"
+    if not arquivo.exists():
+        return {"dia": dia, "itens": [], "total": 0}
+    registros = _audit_read_tail(arquivo, limit * 3 if filtro_status else limit)
+    if filtro_status:
+        registros = [r for r in registros if r.get("status") == filtro_status]
+    registros = registros[-limit:]
+    registros.reverse()
+    return {"dia": dia, "itens": registros, "total": len(registros)}
+
+
+@app.get("/hermes/audit/stats")
+async def hermes_audit_stats(request: Request):
+    _hermes_auth(request)
+    try:
+        dias = min(int(request.query_params.get("dias", "1")), 30)
+    except Exception:
+        dias = 1
+    stats = {"por_status": {}, "por_ferramenta": {}, "por_usuario": {}, "total": 0}
+    files = _audit_files()[-dias:]
+    for arq in files:
+        for r in _audit_read_tail(arq, 5000):
+            stats["total"] += 1
+            s = r.get("status", "?")
+            t = r.get("tool", "?")
+            u = r.get("usuario", "?")
+            stats["por_status"][s] = stats["por_status"].get(s, 0) + 1
+            stats["por_ferramenta"][t] = stats["por_ferramenta"].get(t, 0) + 1
+            stats["por_usuario"][u] = stats["por_usuario"].get(u, 0) + 1
+    return stats
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
