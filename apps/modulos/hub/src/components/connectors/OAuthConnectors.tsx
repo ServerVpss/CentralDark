@@ -33,9 +33,12 @@ export function OAuthConnectors() {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [usingFallback, setUsingFallback] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
 
   async function load() {
     setLoading(true);
+    setLoadError(null);
     let uid: string | null = null;
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -59,8 +62,12 @@ export function OAuthConnectors() {
     if (uid) {
       try {
         const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label');
-        if (!cr.error && cr.data) c = cr.data as Connection[];
-      } catch { c = []; }
+        if (cr.error) throw cr.error;
+        if (cr.data) c = cr.data as Connection[];
+      } catch (e: any) {
+        c = [];
+        setLoadError(e?.message ?? 'erro ao carregar conexões');
+      }
     }
 
     setProviders(p);
@@ -68,6 +75,7 @@ export function OAuthConnectors() {
     setUsingFallback(fallback);
     setLoading(false);
   }
+
 
   useEffect(() => { load(); }, []);
 
@@ -101,9 +109,14 @@ export function OAuthConnectors() {
         <h3 className="text-lg font-semibold">Conectar contas (OAuth)</h3>
         <p className="text-sm text-muted-foreground">
           Tokens cifrados no HUB Supabase · expiração 30d · logs no Hermes
-          {usingFallback && <span className="ml-2 text-amber-600">🟡 catálogo local ativo (broker/DB pendente)</span>}
+          {usingFallback && <span className="ml-2 text-amber-600">🟡 catálogo local ativo</span>}
+          {loadError && <span className="ml-2 text-red-600">🔴 {loadError}</span>}
+        </p>
+        <p className="text-xs text-muted-foreground mt-1">
+          🛠️ Futuro: Hub de Tokens via Supabase Vault + Edge Function <code>get-token</code>
         </p>
       </div>
+
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {providers.map(p => {
           const conn = conns.find(c => c.provider_id === p.id);
