@@ -1,14 +1,15 @@
-import { useEffect } from "react";
-import { HubPage } from "./HubPage";
-import { LoginPage } from "./LoginPage";
+import { useEffect, useState } from "react";
+import HubPage from "./HubPage";
+import LoginPage from "./pages/LoginPage";
+import { ToastProvider } from "./components/Toast";
 
+// Router minimal (sem instalar react-router) — HUB é enxuto
 function useRoute() {
-  const get = () => window.location.pathname || "/";
-  const [path, setPath] = (require("react") as typeof import("react")).useState(get());
+  const [path, setPath] = useState(() => window.location.pathname);
   useEffect(() => {
-    const onPop = () => setPath(get());
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+    const on = () => setPath(window.location.pathname);
+    window.addEventListener("popstate", on);
+    return () => window.removeEventListener("popstate", on);
   }, []);
   return path;
 }
@@ -22,5 +23,5 @@ export default function App() {
   const path = useRoute();
   const page = path.startsWith("/login") ? <LoginPage /> : <HubPage />;
 
-  return page;
+  return <ToastProvider>{page}</ToastProvider>;
 }
