@@ -199,3 +199,18 @@
 #hermes-modal .badge.warn { background: #78350f; color: #fcd34d; }
 #hermes-modal .badge.blk  { background: #713f12; color: #fdba74; }
 #hermes-modal .badge.info { background: #1e3a8a; color: #93c5fd; }
+
+/* ═══════════════════════ Aba Boot (HERMES-CORE) ═══════════════════════ */
+.tab-boot .boot-card { padding: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 8px; }
+.tab-boot .boot-row { margin: 6px 0; font-size: 13px; }
+.tab-boot .boot-row code { background: rgba(0,0,0,.4); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+.tab-boot .boot-section { margin-top: 12px; }
+.tab-boot .boot-list { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.tab-boot .mod { padding: 3px 8px; border-radius: 12px; font-size: 12px; }
+.tab-boot .mod.ok { background: rgba(16,185,129,.15); color: #10b981; }
+.tab-boot .mod.err { background: rgba(239,68,68,.15); color: #ef4444; }
+.tab-boot .ag { padding: 3px 8px; border-radius: 12px; font-size: 12px; background: rgba(59,130,246,.15); color: #3b82f6; }
+.tab-boot .badge.ok { background: rgba(16,185,129,.2); color: #10b981; padding: 3px 8px; border-radius: 4px; }
+.tab-boot .badge.err { background: rgba(239,68,68,.2); color: #ef4444; padding: 3px 8px; border-radius: 4px; }
+.tab-boot .boot-loading, .tab-boot .boot-err { padding: 20px; text-align: center; opacity: .7; }
+.tab-boot .boot-err { color: #ef4444; }
