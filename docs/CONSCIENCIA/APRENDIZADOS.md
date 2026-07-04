@@ -2368,3 +2368,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-04
 - **Contexto:** O seletor do Vibe enviava IDs como ap7-sonnet/ap7-haiku, mas o proxy Anthropic aceitava só sonnet/haiku/opus; por isso parecia que o seletor não mudava ou caía no Haiku.
 - **Aprendizado:** No módulo Elite Anthropic Proxy, manter aliases explícitos ap7-sonnet -> sonnet-4.6, ap7-haiku -> haiku-4.6 e ap7-opus-1m -> opus-4.8[1m]. Ao diagnosticar seletor travado, testar o ID exato contra /v1/chat/completions e checar logs openai_converted.
+
+### 291. Start do Elite Anthropic sem caminho absoluto
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-04
+- **Contexto:** Após alterar o proxy, o PM2 reiniciou mas a porta 8082 caiu porque start.sh tinha caminho absoluto quebrado para o uvicorn/python.
+- **Aprendizado:** No Elite Anthropic Proxy, start.sh deve usar cd "$(dirname "$0")" e executar ./.venv/bin/python -m uvicorn proxy:app, evitando dependência de caminho absoluto sanitizado/quebrado.
