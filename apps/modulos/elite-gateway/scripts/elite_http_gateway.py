@@ -16,9 +16,17 @@ import logging
 import logging.handlers
 from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import zendriver as uc
 from zendriver import SpecialKeys
+from datetime import datetime
+import shutil, os
+
+# Caminhos do painel Hermes (cadeia editável via WebUI)
+HERMES_DIR     = Path("/root/CentralDark/docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes")
+HERMES_CADEIA  = HERMES_DIR / "cadeia.json"
+HERMES_BACKUPS = HERMES_DIR / "cadeia.backups"
 
 ACCOUNTS_FILE = Path("/root/CentralDark/apps/modulos/elite-gateway/config/accounts.json")
 CHROME_BIN    = "/usr/bin/google-chrome"
@@ -89,6 +97,15 @@ def resolve_account(token: str) -> dict:
 # ─── Middleware de logging de requisições ─────────────────────────────────────
 
 app = FastAPI()
+
+# CORS liberado pro WebUI (ui.centralldark.com) e uso local
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.middleware("http")
@@ -380,6 +397,105 @@ async def root():
         "ocupado": any(lock.locked() for lock in _locks.values()),
         "log": str(LOG_FILE),
     }
+
+
+# ═══════════════════════════════════════════════════════════════
+# HERMES — painel de cadeia de modelos (editável em quente via WebUI)
+# Base pública: https://api.centralldark.com/hermes/*
+# Auth: Bearer <token conhecido em accounts.json>
+# ═══════════════════════════════════════════════════════════════
+
+def _hermes_auth(request: Request):
+    auth = request.headers.get("authorization", "")
+    token = auth[7:].strip() if auth.lower().startswith("bearer ") else ""
+    if not token or token not in ACCOUNTS:
+        raise HTTPException(status_code=401, detail="Token inválido")
+    return ACCOUNTS[token]["id"]
+
+
+def _hermes_load():
+    if not HERMES_CADEIA.exists():
+        raise HTTPException(status_code=500, detail="cadeia.json não encontrado")
+    try:
+        return json.loads(HERMES_CADEIA.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"cadeia.json inválido: {e}")
+
+
+def _hermes_backup():
+    HERMES_BACKUPS.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.utcnow().strftime("%Y-%m-%d-%H-%M-%S")
+    dst = HERMES_BACKUPS / f"{stamp}.json"
+    shutil.copy2(HERMES_CADEIA, dst)
+    # mantém só últimos 5
+    backs = sorted(HERMES_BACKUPS.glob("*.json"), reverse=True)
+    for old in backs[5:]:
+        try: old.unlink()
+        except Exception: pass
+
+
+@app.get("/hermes/cadeia")
+async def hermes_cadeia_get(request: Request):
+    _hermes_auth(request)
+    return _hermes_load()
+
+
+@app.put("/hermes/cadeia")
+async def hermes_cadeia_put(request: Request):
+    _hermes_auth(request)
+    body = await request.json()
+    nova = body.get("cadeia")
+    if not isinstance(nova, list) or not nova:
+        raise HTTPException(status_code=400, detail="campo 'cadeia' deve ser lista não-vazia")
+    for i, m in enumerate(nova):
+        if not isinstance(m, dict) or "modelo" not in m:
+            raise HTTPException(status_code=400, detail=f"item {i} inválido")
+        m["posicao"] = i + 1
+        m["timeout_s"] = int(m.get("timeout_s", 30))
+        m["ativo"] = bool(m.get("ativo", True))
+    atual = _hermes_load()
+    _hermes_backup()
+    atual["cadeia"] = nova
+    atual["atualizado_em"] = datetime.utcnow().strftime("%Y-%m-%d")
+    HERMES_CADEIA.write_text(json.dumps(atual, ensure_ascii=False, indent=2), encoding="utf-8")
+    log("INFO", "hermes_cadeia_salva", itens=len(nova))
+    return {"ok": True, "itens": len(nova)}
+
+
+@app.post("/hermes/cadeia/reverter")
+async def hermes_cadeia_reverter(request: Request):
+    _hermes_auth(request)
+    HERMES_BACKUPS.mkdir(parents=True, exist_ok=True)
+    backs = sorted(HERMES_BACKUPS.glob("*.json"), reverse=True)
+    if not backs:
+        raise HTTPException(status_code=404, detail="sem backup pra reverter")
+    ultimo = backs[0]
+    shutil.copy2(ultimo, HERMES_CADEIA)
+    log("INFO", "hermes_cadeia_revertida", backup=ultimo.name)
+    return {"ok": True, "revertido_de": ultimo.name}
+
+
+@app.get("/hermes/cadeia/stats")
+async def hermes_cadeia_stats(request: Request):
+    _hermes_auth(request)
+    # placar simples: lê missoes/*.json e conta modelo_usado
+    missoes_dir = HERMES_DIR / "missoes"
+    stats = {}
+    if missoes_dir.exists():
+        arquivos = sorted(missoes_dir.glob("*.json"))[-100:]
+        for f in arquivos:
+            try:
+                m = json.loads(f.read_text(encoding="utf-8"))
+                for etapa in m.get("historico", []):
+                    mod = etapa.get("_modelo_usado") or etapa.get("modelo_usado")
+                    if not mod: continue
+                    s = stats.setdefault(mod, {"ok": 0, "err": 0})
+                    s["ok" if etapa.get("ok", True) else "err"] += 1
+            except Exception:
+                continue
+    return {"stats": stats, "amostras": sum(v["ok"] + v["err"] for v in stats.values())}
+
+
 
 
 if __name__ == "__main__":

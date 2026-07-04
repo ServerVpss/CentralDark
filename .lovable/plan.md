@@ -1,66 +1,48 @@
-# 🎛️ Painel da Cadeia no Web UI — arrastar, ligar/desligar, salvar
+# Plano — Painel Hermes dentro do WebUI + rotas no api.centralldark.com
 
-## Como vai funcionar pra você
+## O que muda em relação ao que já foi feito
 
-Abre o Web UI → card **"Cadeia do Hermes"** aparece no menu lateral (mesmo lugar dos outros painéis que já ajustamos). Dentro dele:
+Duas correções cirúrgicas, sem refazer o que já tá funcionando:
 
-- Lista dos 15 modelos + Elite, cada um numa linha.
-- **Arrasta a linha pra cima** = fica mais forte (tenta antes).
-- **Switch verde/cinza** liga ou desliga sem precisar apagar.
-- Campo pequeno pra ajustar o **tempo limite** (segundos) de cada um.
-- Botão **"Salvar"** grava — Hermes pega em até 60s, sem restart.
-- Botão **"Reverter"** volta pra ordem anterior (guardo backup automático das últimas 5 versões).
+### 1. Rotas — tudo em `api.centralldark.com`
+Hoje as rotas do Hermes vivem soltas no Elite HTTP Gateway (PM2 60) em caminhos tipo `/hermes/cadeia`. Isso fica, **mas passa a ser servido oficialmente pelo domínio único de API**: `https://api.centralldark.com` (mesmo host que já uso pro resto). Nada de subdomínio novo, nada de porta exposta.
 
-Extra: cada linha mostra um **placar mini** — quantas vezes esse modelo respondeu ok / falhou nas últimas 100 missões. Assim você decide com base em dado real.
+Rotas finais (mesma API, só rota interna diferente):
+- `GET  https://api.centralldark.com/hermes/cadeia`
+- `PUT  https://api.centralldark.com/hermes/cadeia`
+- `POST https://api.centralldark.com/hermes/cadeia/reverter`
+- `GET  https://api.centralldark.com/hermes/cadeia/stats`
 
-## Onde vive cada coisa
+Ação técnica: conferir o bloco do Caddy que já roteia `api.centralldark.com` → Elite HTTP (porta interna do PM2 60) e garantir que `/hermes/*` cai no mesmo upstream. Se já cai (é reverse proxy genérico do host), **não mexe em nada** — só documenta. Se tiver `location` específico bloqueando, adiciono `/hermes/*` na mesma regra.
 
-**Fonte da verdade** (mesmo arquivo do plano anterior — não muda):
-`docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json`
+O arquivo `hermes_painel.html` standalone que criei antes **é removido** — não é mais servido pelo gateway, o painel vive no WebUI (item 2).
 
-**API** (mesma casa, `api.centraldark.com`, só rota nova):
-- `GET  /hermes/cadeia` → devolve o JSON atual + estatísticas
-- `PUT  /hermes/cadeia` → salva ordem/timeouts/ativos novos (com validação)
-- `POST /hermes/cadeia/reverter` → volta pra versão anterior
-- `GET  /hermes/cadeia/stats` → placar de sucesso por modelo (últimas 100)
+### 2. Painel Hermes vira card DENTRO do WebUI
+Hoje o painel tá num HTML solto servido pelo gateway. Errado. O certo é card nativo no WebUI (`apps/modulos/WebUI/`), igual os outros cards que já existem lá.
 
-Autenticação: mesmo token que os outros endpoints do `api.centraldark.com` já usam. Não crio nada paralelo.
-
-**Web UI** (dentro do módulo que já existe em `apps/modulos/WebUI/`):
-- Novo card/página `Cadeia Hermes` no menu lateral
-- Componente de lista arrastável (drag & drop simples, tipo playlist)
-- Toast de "salvo ✅" quando confirma
-- Indicador "Hermes lê em ~60s" no topo pra deixar claro
-
-## O que o código do Hermes muda
-
-Igual ao plano anterior:
-1. `decisor.mjs` deixa de ter a lista fixa. Lê `cadeia.json` com cache de 60s.
-2. Se JSON quebrado → cadeia de segurança + aviso no Telegram.
-3. `PUT /hermes/cadeia` faz backup do JSON antigo em `cadeia.backups/YYYY-MM-DD-HH-MM.json` (últimos 5) antes de sobrescrever.
+O que entra no WebUI:
+- **Novo card "Cadeia Hermes"** no mesmo padrão visual dos cards atuais (mesma sidebar, mesmo tema Esmeralda 3D tátil, mesmos componentes shadcn que o WebUI já usa).
+- Conteúdo do card:
+  - Lista dos 15 modelos + Elite fallback, reordenável (setas ⬆️⬇️ + drag no desktop).
+  - Switch verde/cinza por modelo (ativo/inativo).
+  - Campo de timeout (segundos) por modelo.
+  - Botões **Salvar** / **Reverter última**.
+  - Mini placar de win/loss (últimas 100 missões) puxado de `/hermes/cadeia/stats`.
+- Toda a comunicação do card usa `fetch("https://api.centralldark.com/hermes/...")` com o mesmo token que o WebUI já envia hoje pras outras rotas de infra. Zero credencial nova.
 
 ## Ordem de execução
 
-1. Criar `cadeia.json` (fonte da verdade).
-2. Adicionar rotas `/hermes/cadeia*` no serviço que já responde por `api.centraldark.com`.
-3. Refatorar `decisor.mjs` pra ler o JSON.
-4. Adicionar o card **"Cadeia Hermes"** no Web UI usando o padrão dos outros cards de lá.
-5. Teste ponta-a-ponta: abrir o card, reordenar, salvar, disparar missão, ver Hermes usando a nova ordem.
+1. Descobrir onde ficam os cards atuais do WebUI (`apps/modulos/WebUI/`) pra encaixar o card Hermes no mesmo padrão — sem inventar layout novo.
+2. Criar o card `CadeiaHermes` seguindo esse padrão + rotas HTTP.
+3. Ajustar Caddy só se `/hermes/*` ainda não estiver liberado no `api.centralldark.com`.
+4. Remover `hermes_painel.html` standalone e a rota `GET /hermes/painel` do gateway (não serve mais painel HTML — só JSON).
+5. Testar no WebUI: reordenar, salvar, reverter, ver stats.
 
-## Arquivos que vou tocar
+## O que fica intocado (já tá certo)
+- `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json` — fonte da verdade, permanece.
+- `decisor.mjs` com loader dinâmico + cache 60s + fallback — permanece.
+- Endpoints JSON do gateway (`GET/PUT/POST /hermes/cadeia*`) — permanecem, só passam a ser chamados via `api.centralldark.com`.
+- PM2 60 (Elite HTTP) e 66 (Hermes) — sem restart, sem mudança de env.
 
-| Arquivo/pasta | O que faço |
-|---|---|
-| `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json` | criar |
-| `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/decisor.mjs` | ler JSON + cache + fallback seguro |
-| Serviço do `api.centraldark.com` (Elite HTTP, PM2 id 60) | 4 rotas novas `/hermes/cadeia*` |
-| `apps/modulos/WebUI/` | card **Cadeia Hermes** + página + chamadas às 4 rotas |
-| `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.backups/` | pasta pra últimas 5 versões |
-
-## Uma dúvida antes de codar
-
-Confirma se prefere:
-- **(a)** Reordenação **arrastando** com o mouse/dedo (mais bonito, um pouquinho mais de código no card), ou
-- **(b)** Setinhas ⬆️⬇️ do lado de cada modelo (mais simples, funciona no celular sem drama).
-
-Se não responder, vou de **(a) arrastar** que combina melhor com o resto do Web UI. Aprova o plano?
+## Pergunta rápida antes de partir pro código
+Confirma só uma coisa: o Caddy do `api.centralldark.com` já é reverse-proxy **genérico** pro Elite HTTP (repassa qualquer path), ou tem allowlist de rotas? Se souber, respondo direto; se não souber, eu inspeciono o Caddyfile na hora da execução e sigo — sem te travar.

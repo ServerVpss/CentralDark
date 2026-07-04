@@ -553,3 +553,10 @@ input:focus {
 /* ============================================================
    FIM DO ESMERALDA.CSS
    ============================================================ */
+
+/* ============================================================
+   HERMES PANEL — importa CSS do painel de cadeia de modelos
+   O JS deve ser colado em Admin → Settings → Interface → Custom JS
+   (conteúdo do arquivo custom-css/hermes-panel.js)
+   ============================================================ */
+@import url('/static/hermes-panel.css');

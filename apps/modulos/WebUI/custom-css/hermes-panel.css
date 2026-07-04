@@ -1,0 +1,129 @@
+/* ═══════════════════════════════════════════════════════════════
+   Cadeia Hermes — Painel embutido no Open WebUI
+   Cole no admin: Settings → Interface → Custom CSS (junto com esmeralda.css)
+   ═══════════════════════════════════════════════════════════════ */
+
+#hermes-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #10b981, #059669);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #047857, 0 10px 20px rgba(0,0,0,.25);
+  transition: transform .08s, box-shadow .08s;
+  user-select: none;
+}
+#hermes-fab:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #047857, 0 6px 12px rgba(0,0,0,.25);
+}
+
+#hermes-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0,0,0,.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#hermes-modal.open { display: flex; }
+
+#hermes-modal .box {
+  background: #0f172a;
+  color: #e2e8f0;
+  width: 100%;
+  max-width: 720px;
+  max-height: 88vh;
+  border-radius: 20px;
+  border: 1px solid #1e293b;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+#hermes-modal header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  background: linear-gradient(145deg, #064e3b, #052e2b);
+  border-bottom: 1px solid #1e293b;
+}
+#hermes-modal header h2 {
+  margin: 0; font-size: 16px; font-weight: 700; color: #6ee7b7;
+}
+#hermes-modal header .x {
+  cursor: pointer; font-size: 22px; color: #94a3b8; padding: 0 6px;
+}
+#hermes-modal .body {
+  padding: 12px 16px; overflow-y: auto; flex: 1;
+}
+#hermes-modal .row {
+  display: grid;
+  grid-template-columns: 28px 1fr 70px 42px 60px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #1e293b;
+  margin-bottom: 6px;
+  border: 1px solid #334155;
+}
+#hermes-modal .row.off { opacity: .45; }
+#hermes-modal .row .pos { font-weight: 700; color: #6ee7b7; text-align: center; }
+#hermes-modal .row .mod { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#hermes-modal .row .mod small { display: block; color: #94a3b8; font-size: 10px; }
+#hermes-modal .row input[type=number] {
+  width: 100%; padding: 4px 6px; background: #0f172a; color: #e2e8f0;
+  border: 1px solid #334155; border-radius: 6px; font-size: 12px; text-align: center;
+}
+#hermes-modal .row .arrows { display: flex; flex-direction: column; gap: 2px; }
+#hermes-modal .row .arrows button {
+  background: #334155; color: #e2e8f0; border: none; border-radius: 4px;
+  width: 40px; height: 18px; font-size: 10px; cursor: pointer;
+}
+#hermes-modal .row .arrows button:hover { background: #475569; }
+#hermes-modal .row .toggle {
+  width: 48px; height: 24px; border-radius: 12px; background: #475569;
+  position: relative; cursor: pointer; transition: background .15s;
+}
+#hermes-modal .row .toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 20px; height: 20px; border-radius: 50%; background: #fff;
+  transition: left .15s;
+}
+#hermes-modal .row.on .toggle { background: #10b981; }
+#hermes-modal .row.on .toggle::after { left: 26px; }
+
+#hermes-modal footer {
+  display: flex; gap: 8px; padding: 12px 16px;
+  border-top: 1px solid #1e293b; background: #0b1220;
+}
+#hermes-modal footer button {
+  flex: 1; padding: 10px; border-radius: 10px; border: none; cursor: pointer;
+  font-weight: 600; font-size: 13px;
+}
+#hermes-modal .btn-save { background: #10b981; color: #fff; }
+#hermes-modal .btn-save:active { transform: translateY(1px); }
+#hermes-modal .btn-revert { background: #334155; color: #e2e8f0; }
+#hermes-modal .btn-reload { background: #1e40af; color: #fff; }
+
+#hermes-toast {
+  position: fixed; bottom: 90px; right: 18px; z-index: 10001;
+  background: #10b981; color: #fff; padding: 10px 14px;
+  border-radius: 10px; font-size: 13px; display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+}
+#hermes-toast.err { background: #dc2626; }
+#hermes-toast.show { display: block; }

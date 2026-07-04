@@ -77,3 +77,25 @@ Depois de salvar, rodar `docker restart open-webui` e F5 no browser.
 | `esmeralda.css` | Tema Esmeralda 3D light — **este é o ativo** |
 | `emerald.css` | Tema Emerald dark (versão anterior, mantido como referência) |
 | `README.md` | Este arquivo |
+
+---
+
+## 🧠 Painel Hermes (Cadeia de Modelos)
+
+Adiciona um botão flutuante **H** no canto inferior direito do WebUI que abre o editor da cadeia de modelos do Hermes (reordenar, ativar/desativar, mudar timeout, reverter último backup).
+
+**API:** todas as chamadas vão pra `https://api.centralldark.com/hermes/*` (mesmo host, mesmo token de admin do gateway).
+
+### Arquivos
+- `hermes-panel.css` — visual do FAB + modal (já importado no fim do `esmeralda.css`)
+- `hermes-panel.js` — lógica do painel (buscar / salvar / reverter)
+
+### Instalação (uma vez só)
+1. `docker restart CentralDark-WebUI` — o mount novo já carrega o CSS.
+2. No WebUI, abra **Admin → Settings → Interface → Custom JavaScript**.
+3. Cole o conteúdo INTEIRO de `hermes-panel.js` no campo e salve.
+4. F5 na página. Um botão verde **H** aparece no canto inferior direito.
+5. Primeiro clique pede o token da API — cole o mesmo token que o gateway usa (fica salvo no localStorage do navegador).
+
+### Fonte da verdade
+O painel edita `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json`. Backups automáticos (últimos 5) ficam em `cadeia.backups/`. O decisor.mjs recarrega o arquivo a cada 60s — **não precisa reiniciar PM2**.
