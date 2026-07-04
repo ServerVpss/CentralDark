@@ -623,3 +623,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Critério pra fechar:** Aba Conectores renderiza card real sem mock, fluxo telefone > enviar código > recebe no Telegram > digita código > se precisar 2FA > conectado. Session salva no HUB. Deploy no ar servindo bundle novo. Zero duplicata ou .bkp no repo. Todos os 6 itens do aprendizado Aula pro Hermes atendidos.
 ### 20. DARKAI_URL não configurada na VPS — Hermes cai direto no Elite Sonnet 4.5 — 🔴 ABERTO (03/07/2026, 20:23 BRT)
 ### 21. Hermes Grok Watcher — subir no PM2 com token do bot — 🟡 ABERTO (04/07/2026, 04:04 BRT)
+### 22. Plugin Obsidian v0.4 — vista Grafo 3D embutida + camada BRAIN — 🟡 ABERTO (04/07/2026, 18:35 BRT)
+- **Sintoma:** Grafo Jarvis 3D já no ar em grafo.centralldark.com/3d.html, mas o Obsidian ainda só tem a vista 2D do plugin v0.3.0 (conecta via Supabase edge functions graph-data/plugin-release).
+- **Onde mexer:** apps/modulos/obsidian-plugin-grafo-vivo/src + graph-panel (porta 3030)
+- **Critério pra fechar:** Vista 3D abre dentro do Obsidian via plugin (WorkspaceLeaf/iframe pra grafo.centralldark.com/3d.html) com comando dedicado; release publicado via edge function plugin-release; opcional: modo brain no /api/graph lendo docs/BRAIN.
