@@ -78,6 +78,23 @@ else
   netflix_warning "apps/web/package.json ausente; build ignorado"
 fi
 
+netflix_step 3 6 "Build HUB (apps/modulos/hub) quando existir"
+HUB_DIR="$ROOT/apps/modulos/hub"
+if [ -f "$HUB_DIR/package.json" ]; then
+  log_run bash "$ROOT/scripts/deploy-hub.sh"
+  if [ -f "$HUB_DIR/dist/index.html" ]; then
+    printf 'hub_dist=ok\n' >>"$SUMMARY_FILE"
+    netflix_success "HUB dist gerado (hub.centralldark.com)"
+  else
+    printf 'hub_dist=missing\n' >>"$SUMMARY_FILE"
+    netflix_warning "HUB build rodou mas dist/index.html sumiu"
+  fi
+else
+  netflix_warning "apps/modulos/hub/package.json ausente; build HUB ignorado"
+fi
+
+
+
 netflix_step 4 6 "Validando dist/index.html"
 DIST_INDEX="$ROOT/apps/web/dist/index.html"
 if [ -f "$DIST_INDEX" ]; then
