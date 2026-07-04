@@ -1,8 +1,8 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T07:59:27.861Z
-- **Commit:** `86246463e72701953fc4e8921cd49a29f6881c4a`
-- **Disparado por:** lovable-dev[bot]
+- **Gerado:** 2026-07-04T08:24:23.540Z
+- **Commit:** `6c78f5842e7eb03b6a86f4e4ea67911b7222ee4f`
+- **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
 
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 312 | 0 | 0 | 312 | 0 |
+| aprendizados | 313 | 0 | 0 | 313 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **312**
+- 🟥 Faltando no Notion: **313**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -360,4 +360,5 @@
 - 284. Sincronia 4-Point (regra oficial vigente)
 - 285. Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal)
 - 286. Auto-onboarding no MCP via campo `instructions` do handshake
+- 287. HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent
 </details>

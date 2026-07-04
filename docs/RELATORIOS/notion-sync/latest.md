@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T07:59:25.360Z
+# 🧠 Notion Sync — 2026-07-04T08:24:20.618Z
 
-- **Commit fonte:** `86246463e72701953fc4e8921cd49a29f6881c4a`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `6c78f5842e7eb03b6a86f4e4ea67911b7222ee4f`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 437 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 323 atualizadas · ❌ 437 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 288 | 0 | 288 | 0 | 0 |
+| aprendizados | 289 | 1 | 288 | 0 | 0 |
 | estrutura | 437 | 0 | 0 | 0 | 437 |
 
 ## Operações
@@ -345,6 +345,7 @@
 | aprendizados | atualizado | #284 — Sincronia 4-Point (regra oficial vigente) |
 | aprendizados | atualizado | #285 — Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal) |
 | aprendizados | atualizado | #286 — Auto-onboarding no MCP via campo `instructions` do handshake |
+| aprendizados | criado | #287 — HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
