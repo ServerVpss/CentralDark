@@ -16,9 +16,17 @@ import logging
 import logging.handlers
 from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import zendriver as uc
 from zendriver import SpecialKeys
+from datetime import datetime
+import shutil, os
+
+# Caminhos do painel Hermes (cadeia editável via WebUI)
+HERMES_DIR     = Path("/root/CentralDark/docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes")
+HERMES_CADEIA  = HERMES_DIR / "cadeia.json"
+HERMES_BACKUPS = HERMES_DIR / "cadeia.backups"
 
 ACCOUNTS_FILE = Path("/root/CentralDark/apps/modulos/elite-gateway/config/accounts.json")
 CHROME_BIN    = "/usr/bin/google-chrome"
