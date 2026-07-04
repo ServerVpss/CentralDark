@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T03:34:22.703Z
+# 🧠 Notion Sync — 2026-07-04T03:57:09.827Z
 
-- **Commit fonte:** `2d99895c026c340a070e195b78a47a63e8ff45f3`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `dc607d12a6aa842a754dd599ce63672a5c944310`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 322 atualizadas · ❌ 434 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 434 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 288 | 1 | 287 | 0 | 0 |
+| aprendizados | 288 | 0 | 288 | 0 | 0 |
 | estrutura | 434 | 0 | 0 | 0 | 434 |
 
 ## Operações
@@ -344,7 +344,7 @@
 | aprendizados | atualizado | #283 — Base militar WebUI 100% operacional — modelos reais Elite ap7 |
 | aprendizados | atualizado | #284 — Sincronia 4-Point (regra oficial vigente) |
 | aprendizados | atualizado | #285 — Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal) |
-| aprendizados | criado | #286 — Auto-onboarding no MCP via campo `instructions` do handshake |
+| aprendizados | atualizado | #286 — Auto-onboarding no MCP via campo `instructions` do handshake |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
