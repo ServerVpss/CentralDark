@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T22:22:19.895Z",
-  "updatedAtBR": "04/07/2026, 19:21:21 BRT",
+  "updatedAt": "2026-07-04T22:37:23.397Z",
+  "updatedAtBR": "04/07/2026, 19:37:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Grafo 3D Jarvis publicado; fase 2 = plugin Obsidian v0.4 com vista 3D embutida (pendência #22)",
     "branch": "main",
-    "lastCommit": "be3591b",
+    "lastCommit": "aprendizado(#289): Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T22:37:23.397Z",
+      "titulo": "Push na main · 9d35ac57d0f2dad753465139ca394a8af7d6d3e2",
+      "detalhe": "aprendizado(#289): Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing",
+      "area": "Repositório",
+      "sha": "9d35ac5",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-04T22:21:21.292Z",
       "title": "Enxame 04/07: release plugin v0.4.0 corrigido (main.js d0249ac5 no GitHub, auto-update destravado) · Telegram validado ponta-a-ponta · Hermes vivo · Pendência #23 aberta (Painel Jarvis v2 tempo real)",
@@ -1238,6 +1246,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T22:37:23.397Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9d35ac57d0f2dad753465139ca394a8af7d6d3e2 (9d35ac5)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T21:04:27.000Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · c4173e394f2888f086e6e00bd4d91c869fbfee98 (c4173e3)",
@@ -1577,13 +1592,6 @@
       "time": "2026-07-04T00:47:50.571Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e49bfc19b221dd9003e4cb3db0306e9e3e8155cb (e49bfc1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:26:32.559Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 71b5041225ceb7d16982c705e2f13f4487563215 (71b5041)",
       "area": "Repositório",
       "status": "sucesso"
     }
