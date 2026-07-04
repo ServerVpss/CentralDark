@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T01:35:22.497Z
+# 🧠 Notion Sync — 2026-07-04T02:06:01.464Z
 
-- **Commit fonte:** `d0e2211d4caddec47d9a633143e06738e6b3dfdc`
+- **Commit fonte:** `964d493e78c1792d99d518fb43bc5c3ef03d2f80`
 - **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 318 atualizadas · ❌ 431 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 318 atualizadas · ❌ 432 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 283 | 0 | 283 | 0 | 0 |
-| estrutura | 431 | 0 | 0 | 0 | 431 |
+| estrutura | 432 | 0 | 0 | 0 | 432 |
 
 ## Operações
 
@@ -657,6 +657,7 @@
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-13-CITACOES-LITERAIS.md |
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-14-ESTADO-ATUAL.md |
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-15-CHANGELOG.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-16-SECRETS-CONNECTORS.md |
 | estrutura | erro | docs/CONSCIENCIA/PLANO.md |
 | estrutura | erro | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
