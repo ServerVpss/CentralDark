@@ -2288,3 +2288,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Base militar movida pra ui.centralldark.com via Open WebUI + MCPO. Precisa de rota de memória que qualquer instância do pivete (Claude/GPT/Gemini) siga sem confusão.
 - **Aprendizado:** Ordem canônica: 1) consultar_memoria_reserva (curto prazo) 2) ler_consciencia (regras) 3) ler_regras_inviolaveis (atalho) 4) arquivos PIVETE-*.md por tema (índice em PIVETE-02). Documentado em PIVETE-18-ROTA-MEMORIA.md. Não repetir consulta na mesma janela. Pular tudo se pergunta trivial.
+
+### 283. Base militar WebUI 100% operacional — modelos reais Elite ap7
+- **Categoria:** regra
+- **Data:** 2026-07-03
+- **Contexto:** Migração completa da consciência do Pivete da Lovable pro Open WebUI. Personas cadastradas via SQL direto na tabela model do webui.db, config.web.search ligado, api_key admin criada e removida após teste.
+- **Aprendizado:** Base militar Pivete no ui.centralldark.com está OPERACIONAL. 10 models na API interna. Personas pivete/hermes/fabler apontam pros modelos reais do Elite ap7 (opus-4.8[1m], opus-4.8, sonnet-4.6[1m]). MCPO expõe 102 tools MCP via OpenAPI. Web search DuckDuckGo ligado. Toda a rota de memória documentada em PIVETE-17 e PIVETE-18. Script idempotente em apps/modulos/WebUI/scripts/popular-webui.sh.
