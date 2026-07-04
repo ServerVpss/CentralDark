@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T19:52:18.251Z",
-  "updatedAtBR": "04/07/2026, 16:51:56 BRT",
+  "updatedAt": "2026-07-04T19:52:43.907Z",
+  "updatedAtBR": "04/07/2026, 16:52:43 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Padronização HERMES-CORE path + boot logs nos 3 painéis (MCP, WebUI, Mega)",
     "branch": "main",
-    "lastCommit": "chore(painel): sync painel-data.json + HERMES boot logs",
+    "lastCommit": "chore(painel): sync painel-data.json + hermes.json + APRENDIZADOS [auto-vps]",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T19:52:43.907Z",
+      "titulo": "Push na main · b2e2667a8b7c3c618807d985cdb44a487e99c275",
+      "detalhe": "chore(painel): sync painel-data.json + hermes.json + APRENDIZADOS [auto-vps]",
+      "area": "Repositório",
+      "sha": "b2e2667",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-04T19:51:56.490Z",
       "title": "Sincronização automática do painel-data.json — resolvido conflito de commit, HERMES-CORE Boot Logs ativos (7/7 módulos, 7/7 agentes)",
@@ -1240,6 +1248,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T19:52:43.907Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b2e2667a8b7c3c618807d985cdb44a487e99c275 (b2e2667)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T16:26:38.140Z",
       "ia": "@Pivete",
       "action": "📌 Hermes v5.0 — MISSÃO FINALIZADA",
@@ -1579,13 +1594,6 @@
       "time": "2026-07-04T00:10:07.349Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3ab6817adefc1c5e308575f02e71d8c959e9fcd1 (3ab6817)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:09:46.740Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 4588924334972688c21b98285b8c214b9c85fd5e (4588924)",
       "area": "Repositório",
       "status": "sucesso"
     }
