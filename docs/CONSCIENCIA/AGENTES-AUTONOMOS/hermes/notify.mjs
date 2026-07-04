@@ -41,10 +41,13 @@ async function send(chatId, texto) {
   return true;
 }
 
+// Admin (privado): card com <pre> técnico
+// Canal (grupo): texto limpo, sem <pre>, sem tags HTML visíveis
+const stripHtml = s => String(s || '').replace(/<[^>]+>/g, '').trim();
 const corpoAdmin = modo === 'pre' ? `<pre>${esc(mensagem)}</pre>` : esc(mensagem);
 const cardAdmin = `🤖 <b>${esc(titulo)}</b>\n\n${corpoAdmin}`;
-const primeiraLinha = String(mensagem || '').split('\n')[0].slice(0, 140);
-const linhaCanal = `🤖 ${esc(titulo)} — ${esc(primeiraLinha)}`;
+const primeiraLinha = stripHtml(mensagem).split('\n')[0].slice(0, 140);
+const linhaCanal = `🤖 ${stripHtml(titulo)} — ${primeiraLinha}`;
 
 const alvos = [];
 if (destino === 'ambos' || destino === 'admin') alvos.push(['admin', ADMIN, cardAdmin]);
