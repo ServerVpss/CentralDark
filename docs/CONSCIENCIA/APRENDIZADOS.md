@@ -2320,3 +2320,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-04
 - **Contexto:** HUB v2 aba Conectores ficava vazia mesmo depois de corrigir OAuthConnectors. Motivo: ConnectorsTab nunca importava/renderizava OAuthConnectors — só listava GatewayCards mock. Bundle grep exposeu na hora.
 - **Aprendizado:** Sempre validar que o Tab pai importa o subcomponente. Preferir bundle grep (`grep -oaE` no dist/assets) pra confirmar que a mudança chegou no browser antes de dar OK.
+
+### 288. Fix do GitHub 401 no MCP — token de sessão OAuth vencia o env
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-04
+- **Contexto:** Desde 29/06 todas as tools GitHub do MCP retornavam 401 com token gho_ (oauth-app) expirado. Restart com --update-env não resolvia porque resolveGhToken (dist/index.js) e os handlers de github-read.js priorizavam o token da sessão OAuth (ctx.token) sobre process.env. A VPS já tinha PAT classic válido no gh CLI (gh auth token, 200 na API).
+- **Aprendizado:** Patch de ponto único em resolveGhToken: prefixar getInternalGhToken() (env GITHUB_TOKEN/GH_TOKEN) antes do token de sessão nos 2 returns (branch OAuth e branch x-mcp-session). Cobre todas as tools GitHub de uma vez. Injetar o token com setsid bash -c 'export GITHUB_TOKEN=$(gh auth token); pm2 restart 33 --update-env' (desanexado, senão o restart mata o próprio shell). ATENÇÃO: patch vive só em dist/ (não existe src/ versionado — mesmo caso do fix /mcp-public); portar pro source quando src/ for reconstruído. Backups em revisoes/20260704-token-fix/.
