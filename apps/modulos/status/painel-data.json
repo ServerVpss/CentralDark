@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T20:56:43.555Z",
-  "updatedAtBR": "04/07/2026, 17:56:43 BRT",
+  "updatedAt": "2026-07-04T21:04:27.000Z",
+  "updatedAtBR": "04/07/2026, 18:04:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Padronização HERMES-CORE path + boot logs nos 3 painéis (MCP, WebUI, Mega)",
     "branch": "main",
-    "lastCommit": "Adicionou grafo visual ao app",
+    "lastCommit": "Deployed updated panels to VPS",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T21:04:27.000Z",
+      "titulo": "Push na main · c4173e394f2888f086e6e00bd4d91c869fbfee98",
+      "detalhe": "Deployed updated panels to VPS",
+      "area": "Repositório",
+      "sha": "c4173e3",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-04T20:56:43.555Z",
       "titulo": "Push na main · 883a2718e6e07cd1cfa2feeb463949932a32a15a",
@@ -1256,6 +1264,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T21:04:27.000Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · c4173e394f2888f086e6e00bd4d91c869fbfee98 (c4173e3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T20:56:43.555Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 883a2718e6e07cd1cfa2feeb463949932a32a15a (883a271)",
@@ -1595,13 +1610,6 @@
       "time": "2026-07-04T00:26:32.559Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 71b5041225ceb7d16982c705e2f13f4487563215 (71b5041)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:25:37.493Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3da87080ca07ce20804970547e3dd2e896b4a57f (3da8708)",
       "area": "Repositório",
       "status": "sucesso"
     }
