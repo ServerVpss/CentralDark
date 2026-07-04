@@ -1,58 +1,43 @@
-Padronizar o caminho do Hermes em 3 lugares e adicionar log de boot mostrando o que o MCP carregou.
+## Conselho debateu — resumo do que rola somar
 
-## 1. Criar arquivo único de config
+Chamei o Gemini como voto de peso. Convergimos que junto do efeito das partículas dá pra empilhar 5 melhorias baratas e de alto impacto visual, tudo no mesmo mexido, sem tocar em backend. Todas rodam em cima do force-graph (mesma lib do painel de status), então é uma migração só.
 
-Novo arquivo `apps/modulos/mcp/config/hermes.json` (fonte da verdade):
+## O pacote proposto (grafo.centralldark.com)
 
-```json
-{
-  "hermes_core_path": "apps/modulos/HERMES-CORE",
-  "modules_expected": ["agents", "core", "knowledge", "missions", "prompts", "skills", "utils"]
-}
-```
+**1. 🕸️ Partículas fluindo nas arestas** *(o pedido original)*
+Bolinhas verdes andando de nó pra nó, mais rápidas/densas nas conexões de maior peso — igual ao painel de status.
 
-## 2. Log de boot no MCP (VPS)
+**2. 🎨 Cor por status/categoria**
+Nó verde = OK, amarelo = alerta, vermelho = fora, azul = neutro. Bate o olho e entende a saúde na hora. (Hoje é tudo rosa/azul aleatório.)
 
-Editar `apps/modulos/mcp/dist/index.js` pra ler o `hermes.json` no startup e imprimir:
+**3. 💥 Pulso vivo em nó crítico**
+Anel concêntrico pulsando em quem tá com erro. O olho vai direto pro problema.
 
-```
-[HERMES-BOOT] caminho: /root/CentralDark/apps/modulos/HERMES-CORE
-[HERMES-BOOT] módulos encontrados: agents ✅ | core ✅ | knowledge ✅ | missions ✅ | prompts ✅ | skills ✅ | utils ✅
-[HERMES-BOOT] agentes: Auto-Diagnostico, Critic, Deploy-Watcher, Executor, GraphRAG-Master, Knowledge-Collector, Universal-Handler
-```
+**4. 🔦 Destaque no hover**
+Passa o mouse num nó → o resto do grafo desbota, só os vizinhos diretos e as arestas conectadas ficam acesas. Corta o ruído da bola-de-fios.
 
-Aparece em `pm2 logs 33` e num arquivo `logs/hermes-boot.json` pro painel consumir.
+**5. 🔍 Busca com zoom automático**
+Caixinha de busca no topo. Digita o nome do módulo → câmera voa até ele com transição suave e destaca.
 
-## 3. Config cliente (`.claude/settings.json`)
+**6. 🎚️ Filtro rápido**
+Botõezinhos: "só com erro", "esconder categoria X", "só edge functions", etc. Limpa o grafo dinamicamente.
 
-Adicionar bloco:
+**Fora do pacote (fica pra depois):** minimapa (custo médio, não crítico agora).
 
-```json
-"hermes": {
-  "core_path": "/root/CentralDark/apps/modulos/HERMES-CORE",
-  "config": "apps/modulos/mcp/config/hermes.json"
-}
-```
+## Arquivos que mudam
 
-## 4. Painel Mega (status.centralldark.com)
+- `apps/modulos/graph-panel/public/index.html` — trocar CDN vis-network → force-graph, adicionar barra de busca + filtros.
+- `apps/modulos/graph-panel/public/graph.js` — rewrite do renderer (58 → ~250 linhas) com force-graph + as 6 features.
+- `apps/modulos/graph-panel/public/style.css` — estilos da barra de busca/filtros e da legenda de cores.
 
-Adicionar bloco `hermes_boot` no `painel-data.json` via tool `atualizar_painel`:
-- caminho carregado
-- módulos ✅/❌
-- timestamp do último boot
-- lista de agentes
+**Não mexo em:** `server.js`, `data/`, `scripts/`, `vault.html`, backend, PM2. Só camada visual do browser.
 
-## 5. Painel Hermes (WebUI aba Auditoria)
+## ⚠️ Precisa autorização
 
-Adicionar card "Boot Info" no topo lendo `logs/hermes-boot.json` (arquivo do passo 2).
+`apps/modulos/graph-panel/` tá 🔒 **protegido** no CLAUDE.md. Manda **"PERMITO PIVETE"** e escolhe:
 
-## 6. Restart
+- **A)** Pacote completo (as 6 melhorias) — bomba visual, ~1 mexido só.
+- **B)** Só as partículas (item 1) — mínimo, cirúrgico.
+- **C)** Partículas + cor por status + hover destaque (1, 2, 4) — meio-termo, dá salto grande sem inflar.
 
-`pm2 restart 33 && pm2 save` pra pegar o novo boot. Commit com msg `feat(hermes): padroniza caminho HERMES-CORE + log de boot nos 3 painéis`.
-
-## Detalhes técnicos
-
-- Edito arquivos no repo → git push → webhook VPS puxa → PM2 restart.
-- `dist/index.js` é o entrypoint atual (12k) — patcho no bloco de startup existente, sem quebrar oauth/painel/sessions.
-- Backup `.bak-hermes-boot-<timestamp>` antes de mexer.
-- Notificação Telegram final via Card Hermes v1.3 (bot @srver1bot).
+Recomendo o **C** — 80% do impacto visual com 40% do trabalho.
