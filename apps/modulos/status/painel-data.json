@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T04:18:14.689Z",
-  "updatedAtBR": "04/07/2026, 01:18:14 BRT",
+  "updatedAt": "2026-07-04T04:56:11.804Z",
+  "updatedAtBR": "04/07/2026, 01:56:11 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Exporou TTS/STT na edge func.",
+    "lastCommit": "Lovable update",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T04:56:11.804Z",
+      "titulo": "Push na main · 39ca554ef86ad5d8fd2082f52e28a977157f5df4",
+      "detalhe": "Lovable update",
+      "area": "Repositório",
+      "sha": "39ca554",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-04T04:18:14.689Z",
       "titulo": "Push na main · 60721017184af8a1fa1aa69e435e156fcb17366c",
       "detalhe": "Exporou TTS/STT na edge func.",
@@ -979,14 +987,6 @@
       "area": "Repositório",
       "sha": "acea384",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T12:13:49.781Z",
-      "titulo": "Push na main · 8b4c62c60329a0a53d980c27c28561bf361a2848",
-      "detalhe": "feat(hermes): aula tutor 2 — detector v3 (efeito repetido), cerebro.mjs integrado, git cirurgico na ferramenta",
-      "area": "Repositório",
-      "sha": "8b4c62c",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T04:56:11.804Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 39ca554ef86ad5d8fd2082f52e28a977157f5df4 (39ca554)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T04:18:14.689Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 60721017184af8a1fa1aa69e435e156fcb17366c (6072101)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T16:31:16.994Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · acea384214bf99495e9d4024259059257cb9c9a7 (acea384)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T12:13:49.781Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8b4c62c60329a0a53d980c27c28561bf361a2848 (8b4c62c)",
       "area": "Repositório",
       "status": "sucesso"
     }
