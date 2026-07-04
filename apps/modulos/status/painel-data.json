@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T13:41:48.582Z",
-  "updatedAtBR": "04/07/2026, 10:41:48 BRT",
+  "updatedAt": "2026-07-04T14:24:49.677Z",
+  "updatedAtBR": "04/07/2026, 11:24:49 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Patched body_iterator no OpenAI",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T14:24:49.677Z",
+      "titulo": "Push na main · 9422c39bba54f830439d29df3ed63bffabe91859",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "9422c39",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-04T13:41:48.582Z",
       "titulo": "Push na main · ce27e1cdc81a155fe70ad251358c78adbe30a165",
@@ -1267,6 +1275,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T14:24:49.677Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 9422c39bba54f830439d29df3ed63bffabe91859 (9422c39)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T13:41:48.582Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · ce27e1cdc81a155fe70ad251358c78adbe30a165 (ce27e1c)",
@@ -1606,13 +1621,6 @@
       "time": "2026-07-04T00:26:32.559Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 71b5041225ceb7d16982c705e2f13f4487563215 (71b5041)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:25:37.493Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3da87080ca07ce20804970547e3dd2e896b4a57f (3da8708)",
       "area": "Repositório",
       "status": "sucesso"
     }
