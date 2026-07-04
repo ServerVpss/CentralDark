@@ -3,6 +3,8 @@ import { hubClient as supabase } from '@/integrations/supabase/hub-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
+import { ApiKeyDialog } from './ApiKeyDialog';
+import { useToast } from '@/components/Toast';
 
 interface Provider {
   id: string;
