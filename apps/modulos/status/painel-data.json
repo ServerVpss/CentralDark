@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T09:30:21.710Z",
-  "updatedAtBR": "04/07/2026, 06:30:21 BRT",
+  "updatedAt": "2026-07-04T09:39:29.773Z",
+  "updatedAtBR": "04/07/2026, 06:39:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Identificou broker e rede",
+    "lastCommit": "Criou broker OAuth e rede HUB",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T09:39:29.773Z",
+      "titulo": "Push na main · 9ba76e7a9c5df86102620ee2e9479c76cd10e080",
+      "detalhe": "Criou broker OAuth e rede HUB",
+      "area": "Repositório",
+      "sha": "9ba76e7",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-04T09:30:21.710Z",
       "titulo": "Push na main · 6beda4dc4343535c2edc7c283a416122240b115b",
       "detalhe": "Identificou broker e rede",
@@ -979,14 +987,6 @@
       "area": "Repositório",
       "sha": "5942a62",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-03T21:01:02.531Z",
-      "titulo": "Push na main · 5f3162e4d7f45b1aa2a7eda3c581c89fdaa46e1b",
-      "detalhe": "Adicionou aliases categorizados",
-      "area": "Repositório",
-      "sha": "5f3162e",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T09:39:29.773Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 9ba76e7a9c5df86102620ee2e9479c76cd10e080 (9ba76e7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T09:30:21.710Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 6beda4dc4343535c2edc7c283a416122240b115b (6beda4d)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T21:08:13.165Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 5942a62d0def0e11eabcd240c6abccf94a15f65e (5942a62)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T21:01:02.531Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 5f3162e4d7f45b1aa2a7eda3c581c89fdaa46e1b (5f3162e)",
       "area": "Repositório",
       "status": "sucesso"
     }
