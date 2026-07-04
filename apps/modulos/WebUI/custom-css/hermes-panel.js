@@ -185,6 +185,32 @@
     if (auditRefresh) { clearInterval(auditRefresh); auditRefresh = null; }
   }
 
+  // ═══════════════════════════ Aba Boot (HERMES-CORE) ═══════════════════
+  async function loadBoot() {
+    const pane = document.querySelector('#hermes-modal .tab-boot');
+    pane.innerHTML = '<div class="boot-loading">Carregando boot do MCP…</div>';
+    try {
+      const r = await fetch('https://mcp.centralldark.com/hermes/boot', { cache: 'no-store' });
+      const j = await r.json();
+      if (j.error) { pane.innerHTML = `<div class="boot-err">${j.error}</div>`; return; }
+      const modLine = Object.entries(j.modulos || {})
+        .map(([k, v]) => `<span class="mod ${v ? 'ok' : 'err'}">${k} ${v ? '✅' : '❌'}</span>`).join(' ');
+      const agLine = (j.agentes_encontrados || []).map(a => `<span class="ag">${a}</span>`).join(' ');
+      pane.innerHTML = `
+        <div class="boot-card">
+          <div class="boot-row"><b>Caminho carregado:</b> <code>${j.caminho_carregado}</code></div>
+          <div class="boot-row"><b>Relativo:</b> <code>${j.caminho_relativo}</code></div>
+          <div class="boot-row"><b>Boot em:</b> ${new Date(j.boot_em).toLocaleString('pt-BR')}</div>
+          <div class="boot-row"><b>Status:</b> ${j.modulos_ok ? '<span class="badge ok">TODOS OS MÓDULOS OK</span>' : '<span class="badge err">MÓDULOS FALTANDO</span>'}</div>
+          <div class="boot-section"><b>Módulos:</b><div class="boot-list">${modLine}</div></div>
+          <div class="boot-section"><b>Agentes (${(j.agentes_encontrados||[]).length}/${(j.agentes_esperados||[]).length}):</b><div class="boot-list">${agLine}</div></div>
+        </div>
+      `;
+    } catch (e) {
+      pane.innerHTML = `<div class="boot-err">Erro: ${e.message}</div>`;
+    }
+  }
+
   // ═══════════════════════════ Abas ═══════════════════════════
   function switchTab(nome) {
     const modal = document.querySelector('#hermes-modal');
@@ -194,6 +220,7 @@
     stopAuditAutoRefresh();
     if (nome === 'cadeia') { loadCadeia(); }
     else if (nome === 'audit') { loadAuditAll(); startAuditAutoRefresh(); }
+    else if (nome === 'boot') { loadBoot(); }
   }
 
   function buildUI() {
