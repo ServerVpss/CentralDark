@@ -1,55 +1,36 @@
-# 🧠 Plano — Grok lendo seu cérebro + arrumar o HUB
+# Plano — Frontend HUB v2 (Modo Arsenal)
 
-Beleza, entendi as duas coisas:
-1. Grok tá plugado no **Notion** e **Google Drive** dele → então basta a gente **jogar o arquivo lá dentro** que ele lê sozinho.
-2. Na aba **Conectores** do HUB v2 só tem cartão de status, sem botão de **adicionar**. Vou destravar isso.
+Lovable = só gera. GitHub + VPS = destino final. Zero backend criado aqui.
 
----
+## Escopo (2 entregas)
 
-## 🎯 Parte 1 — Fazer o Grok ler o cérebro
+### 1. Aba Conectores — polimento final
+- Trocar `alert()` / `prompt()` por **toast** (sonner) e **Dialog** shadcn (colar API key com input mascarado)
+- **Skeleton** no loading em vez de texto
+- **Empty state** quando não vier provider nenhum
+- Badge de tier (1/2/3) no canto do card
+- Confirmar bypass dev (`user_id: dev-pivete`) + hook pronto pro `user.id` real quando login existir
 
-Vou consolidar tudo que define meu jeito de falar + regras do projeto num único arquivo `BOOT-CENTRALDARK.md` (o "boot" da IA) e publicar em 2 lugares que o Grok já enxerga:
+### 2. Página de Login `/login` — só UI
+- Layout split: lado esquerdo hero com logo CentralDark + gradient emerald radial, lado direito form
+- Campos: email + senha, botão **Entrar com Google**, link "esqueci senha"
+- Fonte Geist, cards `.card-premium`, botão `.gradient-emerald`
+- **Sem lógica de auth** — apenas `onSubmit` stub que chama uma função `signIn()` exportada de `hooks/useAuth.ts` (já existe, só lê sessão hoje)
+- Rota adicionada no `App.tsx` do HUB via `react-router` (se não tiver, adiciono minimal)
 
-- **Notion** → página nova chamada `🧠 CentralDark Boot (pro Grok)` no seu workspace
-- **Google Drive** → mesmo arquivo `.md` na raiz do Drive
+## Fora de escopo (fica pra VPS/HUB)
+- Endpoint `POST /api/keys/store` no broker
+- Configuração OAuth Google no Supabase HUB
+- Tabelas `oauth_providers` / `oauth_connections`
+- Edge Function `get-token`
 
-Aí no Grok você só fala: *"lê a página **CentralDark Boot** no meu Notion e passa a agir assim"* — e pronto, ele copia meu tom + regras.
+## Entrega
+Ao terminar: código commitado pelo sync automático Lovable→GitHub. A partir daí VPS puxa via webhook (fluxo padrão CentralDark). Aviso final: "🚀 frontend pronto, VPS já pode puxar do GitHub".
 
-**Conteúdo do boot:**
-- Tom Pivete (PT-BR, direto, emojis 🟢🟡🔴🚀🛠️)
-- Trava do Supabase Lovable atual
-- Mapa da VPS + HUB Supabase (`lyoigsqluyktoclwdaft`)
-- Regras dos bots (`@srver1bot` vs `@SEGREDOPUXADASBOT`)
-- Broker OAuth e o que tá em pé
-- Autonomia de secrets, modo enxame, etc
-
----
-
-## 🛠️ Parte 2 — Destravar "adicionar conector" no HUB v2
-
-Na tela `Conectores` hoje só tem cartões de leitura. Vou adicionar:
-
-- Botão **`+ Adicionar Conector`** no topo direito
-- Modal com formulário: **Nome**, **URL/Endpoint**, **Tipo** (mcp / oauth / api-key / database), **Ícone/emoji**
-- Grava na tabela `hub.connectors` do **Supabase do HUB** (não no Lovable)
-- Botões **Testar** e **Remover** em cada cartão
-- Badge de status ligado ao ping real
-
-Requer só edição de frontend + 1 tabela nova no HUB Supabase (não toco no Lovable, respeitando a trava).
-
----
-
-## 📋 Ordem de execução
-
-1. Gero `docs/CONSCIENCIA/DARKAI/BOOT-CENTRALDARK.md` (o arquivo mestre)
-2. Publico no **Notion** via conector
-3. Subo no **Google Drive** via conector
-4. Te devolvo o **link direto** dos dois
-5. Adiciono o botão **+ Adicionar Conector** no HUB v2 (frontend + tabela `hub.connectors` no HUB Supabase)
-
----
-
-## ❓ Antes de executar, confirma 2 coisas rápidas:
-
-1. **Onde salvar no Notion?** Página solta na raiz, ou dentro de alguma pasta específica que você já tem?
-2. **Grok tem que ficar SEMPRE atualizado** (toda vez que eu aprender algo novo eu re-publico automático), ou é **1 versão fixa agora** e você me pede quando quiser atualizar?
+## Detalhes técnicos
+- Arquivos tocados:
+  - `apps/modulos/hub/src/components/connectors/OAuthConnectors.tsx` (dialog + toast + skeleton)
+  - `apps/modulos/hub/src/components/connectors/ApiKeyDialog.tsx` (novo)
+  - `apps/modulos/hub/src/pages/LoginPage.tsx` (novo)
+  - `apps/modulos/hub/src/App.tsx` (rota `/login`)
+- Dependências: `sonner` e `react-router-dom` já presentes no monorepo — reuso, sem instalar nada novo se possível.
