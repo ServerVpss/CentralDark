@@ -67,6 +67,33 @@ Deno.serve(async (req) => {
       return await proxyChatCompletions(req, lovableKey);
     }
 
+    // === Áudio: TTS (fala) ===
+    if (req.method === "POST" && path === "/v1/audio/speech") {
+      if (!authorizeOpenAI(req)) return unauthorized();
+      return await proxyAudioSpeech(req, lovableKey);
+    }
+
+    // === Áudio: STT (transcrição) ===
+    if (req.method === "POST" && path === "/v1/audio/transcriptions") {
+      if (!authorizeOpenAI(req)) return unauthorized();
+      return await proxyAudioTranscriptions(req, lovableKey);
+    }
+
+    // === Áudio: catálogo de vozes (compat Open WebUI) ===
+    if (req.method === "GET" && path === "/v1/audio/voices") {
+      if (!authorizeOpenAI(req)) return unauthorized();
+      return json({
+        voices: [
+          { id: "alloy",   name: "Alloy (neutra)" },
+          { id: "echo",    name: "Echo (masculina)" },
+          { id: "fable",   name: "Fable (britânica)" },
+          { id: "onyx",    name: "Onyx (grave)" },
+          { id: "nova",    name: "Nova (jovem)" },
+          { id: "shimmer", name: "Shimmer (suave)" },
+        ],
+      });
+    }
+
     // === Legado darkai (POST no root) ===
     if (req.method === "POST" && (path === "/" || path === "")) {
       return await legacyDarkai(req, lovableKey);
