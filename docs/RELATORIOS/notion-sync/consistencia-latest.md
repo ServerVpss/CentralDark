@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T18:02:20.060Z
-- **Commit:** `1b1da39796330c0d68e0defe37a83bbf4f9949a6`
+- **Gerado:** 2026-07-04T19:59:59.964Z
+- **Commit:** `b2e2667a8b7c3c618807d985cdb44a487e99c275`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 314 | 0 | 0 | 314 | 0 |
+| aprendizados | 319 | 0 | 0 | 319 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **314**
+- 🟥 Faltando no Notion: **319**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -361,5 +361,10 @@
 - 285. Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal)
 - 286. Auto-onboarding no MCP via campo `instructions` do handshake
 - 287. HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent
-- 288. Fix do GitHub 401 no MCP — token de sessão OAuth vencia o env
+- 💬 Claude Sonnet — grupo evolução (2026-07-04)
+- 💬 Claude Sonnet — grupo evolução (2026-07-04)
+- 💬 Gemini Flash — grupo evolução (2026-07-04)
+- 💬 Claude Sonnet — grupo evolução (2026-07-04)
+- 💬 Gemini Flash — grupo evolução (2026-07-04)
+- 💬 Groq Llama — grupo evolução (2026-07-04)
 </details>
