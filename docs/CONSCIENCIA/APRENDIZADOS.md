@@ -2240,3 +2240,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Antes, a ordem dos modelos vivia hardcoded dentro do decisor.mjs (3 modelos + Elite). Pra mudar prioridade era preciso editar código e reiniciar PM2. Pivete pediu painel visual pra reordenar e ativar/desativar modelos sem restart.
 - **Aprendizado:** Fonte da verdade da cadeia = docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json (lista com posicao/modelo/via/timeout_s/ativo/nota). decisor.mjs carrega esse arquivo com cache de 60s (função carregarCadeia) e usa CADEIA_FALLBACK_DARKAI + ELITE_FALLBACK se o JSON quebrar. Elite vars viram let atualizadas por refreshEliteVars() chamado dentro de chamarEliteAnthropic. Pra mudar prioridade: editar cadeia.json OU usar painel — Hermes pega em até 60s sem restart.
+
+### 275. Rotas de infra sempre em api.centralldark.com (nunca subdomínio novo)
+- **Categoria:** regra
+- **Data:** 2026-07-03
+- **Contexto:** Tentei servir painel Hermes num HTML standalone dentro do gateway (rota /hermes/painel). Pivete corrigiu: rota de painel é errado, painel vive no WebUI. Só API fica no gateway, e API é sempre api.centralldark.com — mesmo host, só muda o path interno.
+- **Aprendizado:** Regra: qualquer nova rota de infra entra em https://api.centralldark.com/<recurso>/*. Não criar subdomínio novo, não expor porta, não servir HTML pelo gateway. Rotas do Hermes: GET/PUT /hermes/cadeia, POST /hermes/cadeia/reverter, GET /hermes/cadeia/stats. Auth: Bearer com token do accounts.json. CORS liberado (allow_origins=["*"]) pro WebUI conseguir chamar do navegador.
