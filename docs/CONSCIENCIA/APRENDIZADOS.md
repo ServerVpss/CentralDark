@@ -2362,3 +2362,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-04
 - **Contexto:** Release v0.4.0 do plugin grafo-vivo foi commitado arquivo-a-arquivo via API (manifest, checksums, changelog, styles, src/*.ts) mas o build main.js (198KB) não subiu — GitHub ficou com build velho (20b1f420) enquanto checksums.json exigia d0249ac5, quebrando o auto-update. Repo local estava 22 commits atrás com 32 arquivos sujos, então push normal era arriscado.
 - **Aprendizado:** 1) Todo release do plugin DEVE terminar validando: sha256 do main.js em origin/main == valor no checksums.json. 2) Rota-fixa pra push cirúrgico de 1 arquivo sem tocar working tree sujo: git fetch + GIT_INDEX_FILE temporário + read-tree origin/main + hash-object -w + update-index --cacheinfo + write-tree + commit-tree -p origin/main + push SHA:main. 3) Padrão enxame: agentes em nohup escrevendo em /tmp/enxame/*.txt com marcador FIM_RELATORIO, coleta única com tail — economiza tokens do orquestrador.
+
+### 290. Proxy AP7 exige aliases ap7-*
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-04
+- **Contexto:** O seletor do Vibe enviava IDs como ap7-sonnet/ap7-haiku, mas o proxy Anthropic aceitava só sonnet/haiku/opus; por isso parecia que o seletor não mudava ou caía no Haiku.
+- **Aprendizado:** No módulo Elite Anthropic Proxy, manter aliases explícitos ap7-sonnet -> sonnet-4.6, ap7-haiku -> haiku-4.6 e ap7-opus-1m -> opus-4.8[1m]. Ao diagnosticar seletor travado, testar o ID exato contra /v1/chat/completions e checar logs openai_converted.
