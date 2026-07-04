@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T03:57:09.827Z
+# 🧠 Notion Sync — 2026-07-04T06:16:13.018Z
 
-- **Commit fonte:** `dc607d12a6aa842a754dd599ce63672a5c944310`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `865fb4298d51b311492ee58082c2f048bece9dae`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 434 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 435 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 288 | 0 | 288 | 0 | 0 |
-| estrutura | 434 | 0 | 0 | 0 | 434 |
+| estrutura | 435 | 0 | 0 | 0 | 435 |
 
 ## Operações
 
@@ -623,6 +623,7 @@
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/README.md |
+| estrutura | erro | docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
 | estrutura | erro | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
 | estrutura | erro | docs/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
