@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-03T23:49:56.740Z
+# 🧠 Notion Sync — 2026-07-04T00:15:22.793Z
 
-- **Commit fonte:** `bfd329ab983ebe3d76029e99f9bf81dc3765dcd6`
+- **Commit fonte:** `3ab6817adefc1c5e308575f02e71d8c959e9fcd1`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 309 atualizadas · ❌ 415 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 310 atualizadas · ❌ 415 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 275 | 1 | 274 | 0 | 0 |
+| aprendizados | 276 | 1 | 275 | 0 | 0 |
 | estrutura | 415 | 0 | 0 | 0 | 415 |
 
 ## Operações
@@ -331,7 +331,8 @@
 | aprendizados | atualizado | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
 | aprendizados | atualizado | #271 — Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card |
 | aprendizados | atualizado | #272 — Vault CentralDark + vault-loader no Hermes (Agent OS) |
-| aprendizados | criado | #273 — Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env |
+| aprendizados | atualizado | #273 — Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env |
+| aprendizados | criado | #274 — Cadeia Hermes editável em quente via cadeia.json + painel WebUI |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

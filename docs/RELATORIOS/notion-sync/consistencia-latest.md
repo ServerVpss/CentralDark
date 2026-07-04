@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-03T23:49:59.549Z
-- **Commit:** `bfd329ab983ebe3d76029e99f9bf81dc3765dcd6`
+- **Gerado:** 2026-07-04T00:15:26.389Z
+- **Commit:** `3ab6817adefc1c5e308575f02e71d8c959e9fcd1`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 299 | 0 | 0 | 299 | 0 |
+| aprendizados | 300 | 0 | 0 | 300 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **299**
+- 🟥 Faltando no Notion: **300**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -347,4 +347,5 @@
 - 271. Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card
 - 272. Vault CentralDark + vault-loader no Hermes (Agent OS)
 - 273. Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env
+- 274. Cadeia Hermes editável em quente via cadeia.json + painel WebUI
 </details>
