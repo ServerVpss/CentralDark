@@ -179,14 +179,31 @@ function renderGraph(graph) {
         fg.centerAt(n.x, n.y, 600);
         fg.zoom(2.2, 600);
       })
-      .cooldownTicks(150)
-      .d3AlphaDecay(0.028)
-      .d3VelocityDecay(0.35);
+      .warmupTicks(120)
+      .cooldownTicks(300)
+      .cooldownTime(8000)
+      .autoPauseRedraw(true)
+      .d3AlphaDecay(0.035)
+      .d3VelocityDecay(0.5);
 
-    if (fg.d3Force && fg.d3Force("charge")) fg.d3Force("charge").strength(-160);
+    // Física — espalhar bem, sem sobreposição
+    if (fg.d3Force) {
+      const chg = fg.d3Force("charge");
+      if (chg) chg.strength(-600).distanceMax(800);
+      const lnk = fg.d3Force("link");
+      if (lnk) lnk.distance(60).strength(0.25);
+      const ctr = fg.d3Force("center");
+      if (ctr && ctr.strength) ctr.strength(0.04);
+      if (window.d3 && window.d3.forceCollide) {
+        fg.d3Force("collide", window.d3.forceCollide(14));
+      }
+    }
 
-    window.addEventListener("resize", () => {
-      fg.width(graphEl.clientWidth).height(graphEl.clientHeight || 600);
+    const ajustar = () => fg.width(graphEl.clientWidth).height(graphEl.clientHeight || 600);
+    if (window.ResizeObserver) new ResizeObserver(ajustar).observe(graphEl);
+    window.addEventListener("resize", ajustar);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) fg.pauseAnimation(); else fg.resumeAnimation();
     });
   }
 
