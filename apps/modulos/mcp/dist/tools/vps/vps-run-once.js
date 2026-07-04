@@ -106,6 +106,8 @@ export const vpsRunOnceTools = [
             timeoutMs: z.number().int().min(1000).max(300000).optional(),
         }),
         handler: async (input) => {
+            const _t0 = Date.now();
+            const _auditBase = { tool: "vps_run_once_script", command: `[run-once:${input.name}]`, root: "project", cwd: repoRoot() };
             const name = safeName(input.name);
             const blocked = findBlocked(input.script);
             const stamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -124,6 +126,7 @@ ${input.script}
 `;
             await fs.writeFile(scriptPath, scriptBody, { mode: 0o700 });
             if (blocked.length > 0) {
+                auditLog({ ..._auditBase, status: "BLOQUEADO", reason: "padrao perigoso no script", blockedPatterns: blocked, durationMs: Date.now() - _t0, extra: { logDir: dir } });
                 return ok({
                     status: "BLOQUEADO",
                     reason: "Script contém padrão perigoso ou caminho sensível.",
@@ -134,6 +137,7 @@ ${input.script}
             }
             const dryRun = input.dryRun ?? true;
             if (dryRun || input.confirm !== CONFIRM_RUN_ONCE) {
+                auditLog({ ..._auditBase, status: "DRY_RUN", durationMs: Date.now() - _t0, extra: { logDir: dir } });
                 return ok({
                     status: "DRY_RUN",
                     logDir: dir,
@@ -148,8 +152,10 @@ ${input.script}
                 cwd: repoRoot(),
                 timeoutMs: input.timeoutMs ?? 120_000,
             });
+            const status = res.exitCode === 0 ? "EXECUTADO" : "FALHOU";
+            auditLog({ ..._auditBase, status, exitCode: res.exitCode, durationMs: Date.now() - _t0, extra: { logDir: dir, scriptPath } });
             return ok({
-                status: res.exitCode === 0 ? "EXECUTADO" : "FALHOU",
+                status,
                 cwd: repoRoot(),
                 exitCode: res.exitCode,
                 logDir: dir,
