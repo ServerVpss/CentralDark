@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T06:16:13.018Z
+# 🧠 Notion Sync — 2026-07-04T06:30:58.616Z
 
-- **Commit fonte:** `865fb4298d51b311492ee58082c2f048bece9dae`
+- **Commit fonte:** `43d845972b169737b93e5c038bf897adf23a17ce`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 435 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 323 atualizadas · ❌ 436 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 288 | 0 | 288 | 0 | 0 |
-| estrutura | 435 | 0 | 0 | 0 | 435 |
+| estrutura | 436 | 0 | 0 | 0 | 436 |
 
 ## Operações
 
@@ -644,6 +644,7 @@
 | estrutura | erro | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | erro | docs/CONSCIENCIA/NOTIFY/README.md |
 | estrutura | erro | docs/CONSCIENCIA/NOTION-MAPA.md |
+| estrutura | erro | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | erro | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
 | estrutura | erro | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | erro | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
