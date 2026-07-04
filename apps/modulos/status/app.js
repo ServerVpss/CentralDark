@@ -905,35 +905,13 @@ async function renderGrafoVivo() {
   // ===== Física — espalhar os nós (fim do amontoado) =====
   if (__fg.d3Force) {
     const chg = __fg.d3Force('charge');
-    if (chg) chg.strength(-420).distanceMax(600);
+    if (chg) chg.strength(-900).distanceMax(800);
     const lnk = __fg.d3Force('link');
-    if (lnk) lnk.distance(80).strength(0.35);
+    if (lnk) lnk.distance(130).strength(0.3);
     const ctr = __fg.d3Force('center');
-    if (ctr && ctr.strength) ctr.strength(0.05);
-    // Colisão — impede sobreposição visual
+    if (ctr && ctr.strength) ctr.strength(0.04);
     if (window.d3 && window.d3.forceCollide) {
-      __fg.d3Force('collide', window.d3.forceCollide(n => (n.type === 'orquestrador' ? 22 : 14)));
-    } else {
-      // fallback: colisão manual leve via força custom
-      __fg.d3Force('collide', ((alpha) => {
-        const nodes = gdata.nodes;
-        return () => {
-          for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-              const a = nodes[i], b = nodes[j];
-              if (a.x == null || b.x == null) continue;
-              const dx = b.x - a.x, dy = b.y - a.y;
-              const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-              const min = (a.type === 'orquestrador' ? 22 : 14) + (b.type === 'orquestrador' ? 22 : 14);
-              if (dist < min) {
-                const push = ((min - dist) / dist) * 0.5 * alpha;
-                a.x -= dx * push; a.y -= dy * push;
-                b.x += dx * push; b.y += dy * push;
-              }
-            }
-          }
-        };
-      }));
+      __fg.d3Force('collide', window.d3.forceCollide(n => (n.type === 'orquestrador' ? 32 : 20)));
     }
   }
 
