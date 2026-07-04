@@ -99,30 +99,38 @@ export function OAuthConnectors() {
 
   async function connect(p: Provider) {
     if (p.auth_type === 'api_key') {
-      const key = window.prompt(`🔑 Cole a API key do ${p.display_name}:`);
-      if (!key || key.trim().length < 10) return;
-      try {
-        const res = await fetch(`${BROKER_BASE}/api/keys/store`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: userId, provider_id: p.id, api_key: key.trim() }),
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        await load();
-        alert(`✅ ${p.display_name} conectado!`);
-      } catch (e: any) {
-        alert(`🔴 Falha ao salvar: ${e?.message ?? e}`);
-      }
+      setDialogProvider(p);
       return;
     }
-    // OAuth
+    // OAuth: redireciona pro broker do HUB
     const back = window.location.href;
     window.location.href = `${BROKER_BASE}/oauth/${p.id}/start?user_id=${userId}&redirect_to=${encodeURIComponent(back)}`;
   }
 
-  async function disconnect(connId: string) {
-    if (!confirm('Desconectar essa conta?')) return;
-    await supabase.from('oauth_connections').delete().eq('id', connId);
+  async function saveApiKey(p: Provider, key: string) {
+    try {
+      const res = await fetch(`${BROKER_BASE}/api/keys/store`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, provider_id: p.id, api_key: key }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      toast.success(`${p.display_name} conectado`);
+      setDialogProvider(null);
+      await load();
+    } catch (e: any) {
+      toast.error(`Falha ao salvar ${p.display_name}: ${e?.message ?? e}`);
+    }
+  }
+
+  async function disconnect(connId: string, name: string) {
+    if (!confirm(`Desconectar ${name}?`)) return;
+    const { error } = await supabase.from('oauth_connections').delete().eq('id', connId);
+    if (error) {
+      toast.error(`Erro ao revogar: ${error.message}`);
+      return;
+    }
+    toast.success(`${name} revogado`);
     load();
   }
 
