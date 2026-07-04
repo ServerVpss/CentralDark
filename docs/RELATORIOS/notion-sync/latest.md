@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T00:52:13.681Z
+# 🧠 Notion Sync — 2026-07-04T01:35:22.497Z
 
-- **Commit fonte:** `e49bfc19b221dd9003e4cb3db0306e9e3e8155cb`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `d0e2211d4caddec47d9a633143e06738e6b3dfdc`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 4 criadas · ♻️ 314 atualizadas · ❌ 415 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 318 atualizadas · ❌ 431 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 283 | 4 | 279 | 0 | 0 |
-| estrutura | 415 | 0 | 0 | 0 | 415 |
+| aprendizados | 283 | 0 | 283 | 0 | 0 |
+| estrutura | 431 | 0 | 0 | 0 | 431 |
 
 ## Operações
 
@@ -336,10 +336,10 @@
 | aprendizados | atualizado | #275 — Rotas de infra sempre em api.centralldark.com (nunca subdomínio novo) |
 | aprendizados | atualizado | #276 — Injetar UI custom no Open WebUI = CSS mount + JS no admin |
 | aprendizados | atualizado | #277 — Backup rotativo antes de sobrescrever config editável |
-| aprendizados | criado | #278 — Deploy-e-ativa automático: pm2 restart em vez de docker restart |
-| aprendizados | criado | #279 — WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com |
-| aprendizados | criado | #280 — MCP execute_command: remover trava de docker/caddy/pm2 restart |
-| aprendizados | criado | #281 — Auditoria universal do MCP + aba no painel Hermes |
+| aprendizados | atualizado | #278 — Deploy-e-ativa automático: pm2 restart em vez de docker restart |
+| aprendizados | atualizado | #279 — WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com |
+| aprendizados | atualizado | #280 — MCP execute_command: remover trava de docker/caddy/pm2 restart |
+| aprendizados | atualizado | #281 — Auditoria universal do MCP + aba no painel Hermes |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -641,6 +641,22 @@
 | estrutura | erro | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
 | estrutura | erro | docs/CONSCIENCIA/PENDENCIAS.md |
 | estrutura | erro | docs/CONSCIENCIA/PENDENCIAS/MCP-LOCAL-STDIO-VPS.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-00-INVOCACAO.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-01-IDENTIDADE.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-02-INDICE-MESTRE.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-03-REGRAS-VIVAS.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-04-HISTORICO-JANELA.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-05-DECISOES.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-06-ARQUIVOS-TOCADOS.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-07-HERMES-CADEIA.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-08-MCP-LIBERACAO.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-09-AUDITORIA-SISTEMA.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-10-INFRA-VPS.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-11-APRENDIZADOS.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-12-BASE-MILITAR-ABERTA.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-13-CITACOES-LITERAIS.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-14-ESTADO-ATUAL.md |
+| estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-15-CHANGELOG.md |
 | estrutura | erro | docs/CONSCIENCIA/PLANO.md |
 | estrutura | erro | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
