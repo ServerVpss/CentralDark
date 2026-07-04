@@ -6,9 +6,13 @@ import { Activity, Cpu, Server, Wifi } from 'lucide-react';
 interface HealthData {
   status?: 'healthy' | 'degraded' | 'down' | string;
   uptime?: number;
-  cpu?: number;
-  memory?: number;
+  cpu?: number | null;
+  memory?: number | null;
   lastCheck?: string;
+  latency?: number;
+  version?: string;
+  catalogVersion?: string;
+  toolCount?: number;
   services?: { name: string; status: string }[];
 }
 
@@ -47,18 +51,18 @@ export function HealthCard({ health }: HealthCardProps) {
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center gap-2">
             <Server className="h-4 w-4 text-muted-foreground" />
-            <span>Uptime: {Math.floor((health?.uptime ?? 0) / 3600)}h</span>
+            <span>Versão: {health?.version ?? '—'}</span>
           </div>
           <div className="flex items-center gap-2">
             <Cpu className="h-4 w-4 text-muted-foreground" />
-            <span>CPU: {health?.cpu ?? '—'}%</span>
+            <span>Ferramentas: {health?.toolCount ?? '—'}</span>
           </div>
           <div className="flex items-center gap-2">
             <Wifi className="h-4 w-4 text-muted-foreground" />
-            <span>RAM: {health?.memory ?? '—'}%</span>
+            <span>Latência: {health?.latency != null ? `${health.latency}ms` : '—'}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Último: {health?.lastCheck ?? '—'}</span>
+            <span className="text-xs text-muted-foreground">Último ping: {health?.lastCheck ?? '—'}</span>
           </div>
         </div>
         <div className="mt-4 space-y-1">
