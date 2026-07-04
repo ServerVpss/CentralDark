@@ -78,9 +78,15 @@ function carregarCadeia() {
 const CADEIA_DARKAI = new Proxy([], {
   get(_, prop) { const arr = carregarCadeia().darkai; return arr[prop] ?? Array.prototype[prop]?.bind(arr); },
 });
-const ELITE_URL     = () => carregarCadeia().elite.url;
-const ELITE_MODEL   = () => carregarCadeia().elite.modelo;
-const ELITE_TIMEOUT_MS = () => carregarCadeia().elite.timeout_ms;
+// Vars atualizadas a cada leitura de cadeia (via refreshEliteVars)
+let ELITE_URL         = ELITE_FALLBACK.url;
+let ELITE_MODEL       = ELITE_FALLBACK.modelo;
+let ELITE_TIMEOUT_MS  = ELITE_FALLBACK.timeout_ms;
+function refreshEliteVars() {
+  const e = carregarCadeia().elite;
+  ELITE_URL = e.url; ELITE_MODEL = e.modelo; ELITE_TIMEOUT_MS = e.timeout_ms;
+}
+refreshEliteVars();
 const ELITE_TOKEN = process.env.ELITE_ANTHROPIC_TOKEN || process.env.ANTHROPIC_AUTH_TOKEN || '';
 
 // ═══════════════════════════════════════════════════════════════
