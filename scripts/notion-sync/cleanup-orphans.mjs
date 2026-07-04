@@ -33,7 +33,7 @@ if (!NOTION_TOKEN) {
   process.exit(1);
 }
 
-const notion = new Client({ auth: NOTION_TOKEN });
+const notion = wrap(new Client({ auth: NOTION_TOKEN }));
 const log = (...a) => console.log("[cleanup-orphans]", ...a);
 
 const DB = {
