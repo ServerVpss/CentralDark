@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T00:15:26.389Z
-- **Commit:** `3ab6817adefc1c5e308575f02e71d8c959e9fcd1`
+- **Gerado:** 2026-07-04T00:52:16.475Z
+- **Commit:** `e49bfc19b221dd9003e4cb3db0306e9e3e8155cb`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 300 | 0 | 0 | 300 | 0 |
+| aprendizados | 307 | 0 | 0 | 307 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **300**
+- 🟥 Faltando no Notion: **307**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -348,4 +348,11 @@
 - 272. Vault CentralDark + vault-loader no Hermes (Agent OS)
 - 273. Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env
 - 274. Cadeia Hermes editável em quente via cadeia.json + painel WebUI
+- 275. Rotas de infra sempre em api.centralldark.com (nunca subdomínio novo)
+- 276. Injetar UI custom no Open WebUI = CSS mount + JS no admin
+- 277. Backup rotativo antes de sobrescrever config editável
+- 278. Deploy-e-ativa automático: pm2 restart em vez de docker restart
+- 279. WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com
+- 280. MCP execute_command: remover trava de docker/caddy/pm2 restart
+- 281. Auditoria universal do MCP + aba no painel Hermes
 </details>

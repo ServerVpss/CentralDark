@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T00:25:24.675Z
+# 🧠 Notion Sync — 2026-07-04T00:52:13.681Z
 
-- **Commit fonte:** `a1a872eb9ac8a6a2777678861713cd16be89537d`
+- **Commit fonte:** `e49bfc19b221dd9003e4cb3db0306e9e3e8155cb`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 302 atualizadas · ❌ 430 erros
+- **Resumo:** ✨ 4 criadas · ♻️ 314 atualizadas · ❌ 415 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 282 | 0 | 267 | 0 | 15 |
+| aprendizados | 283 | 4 | 279 | 0 | 0 |
 | estrutura | 415 | 0 | 0 | 0 | 415 |
 
 ## Operações
@@ -324,21 +324,22 @@
 | aprendizados | atualizado | #263 — Estilo gamificado é padrão oficial de comunicação |
 | aprendizados | atualizado | #264 — Renomeação PM2 + fix Caddy status aplicados na VPS |
 | aprendizados | atualizado | #265 — Aula Tutor 2 do Hermes — detector v3, cerebro.mjs integrado e git da ferramenta corrigido |
-| aprendizados | erro | #266 — Bot Telegram: token de bot ≠ sessão de usuário |
-| aprendizados | erro | #267 — Arsenal Council: portas, endpoints e comandos consolidados |
-| aprendizados | erro | #268 — Open WebUI: rota fixa pra editar visual (custom.css via volume) |
-| aprendizados | erro | #269 — Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral) |
-| aprendizados | erro | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
-| aprendizados | erro | #271 — Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card |
-| aprendizados | erro | #272 — Vault CentralDark + vault-loader no Hermes (Agent OS) |
-| aprendizados | erro | #273 — Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env |
-| aprendizados | erro | #274 — Cadeia Hermes editável em quente via cadeia.json + painel WebUI |
-| aprendizados | erro | #275 — Rotas de infra sempre em api.centralldark.com (nunca subdomínio novo) |
-| aprendizados | erro | #276 — Injetar UI custom no Open WebUI = CSS mount + JS no admin |
-| aprendizados | erro | #277 — Backup rotativo antes de sobrescrever config editável |
-| aprendizados | erro | #278 — Deploy-e-ativa automático: pm2 restart em vez de docker restart |
-| aprendizados | erro | #279 — WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com |
-| aprendizados | erro | #280 — MCP execute_command: remover trava de docker/caddy/pm2 restart |
+| aprendizados | atualizado | #266 — Bot Telegram: token de bot ≠ sessão de usuário |
+| aprendizados | atualizado | #267 — Arsenal Council: portas, endpoints e comandos consolidados |
+| aprendizados | atualizado | #268 — Open WebUI: rota fixa pra editar visual (custom.css via volume) |
+| aprendizados | atualizado | #269 — Regra: tudo do Hermes vai na árvore dele (nada espalhado no geral) |
+| aprendizados | atualizado | #270 — Nunca editar dentro do projeto Lovable TelePainel — só VPS + repo GitHub |
+| aprendizados | atualizado | #271 — Aula pro Hermes: fluxo Telegram MTProto no HUB tem 6 partes, não só o card |
+| aprendizados | atualizado | #272 — Vault CentralDark + vault-loader no Hermes (Agent OS) |
+| aprendizados | atualizado | #273 — Hermes: DarkAI CLI exige DARKAI_URL + DARKAI_ANON_KEY no .env |
+| aprendizados | atualizado | #274 — Cadeia Hermes editável em quente via cadeia.json + painel WebUI |
+| aprendizados | atualizado | #275 — Rotas de infra sempre em api.centralldark.com (nunca subdomínio novo) |
+| aprendizados | atualizado | #276 — Injetar UI custom no Open WebUI = CSS mount + JS no admin |
+| aprendizados | atualizado | #277 — Backup rotativo antes de sobrescrever config editável |
+| aprendizados | criado | #278 — Deploy-e-ativa automático: pm2 restart em vez de docker restart |
+| aprendizados | criado | #279 — WebUI já tem acesso à VPS/docs via mcpo → mcp.centralldark.com |
+| aprendizados | criado | #280 — MCP execute_command: remover trava de docker/caddy/pm2 restart |
+| aprendizados | criado | #281 — Auditoria universal do MCP + aba no painel Hermes |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
