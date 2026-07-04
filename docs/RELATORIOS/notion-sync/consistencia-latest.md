@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T03:13:35.320Z
-- **Commit:** `105bf32946148a54584272bd95d159e2d05acb9f`
+- **Gerado:** 2026-07-04T03:34:25.267Z
+- **Commit:** `2d99895c026c340a070e195b78a47a63e8ff45f3`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 310 | 0 | 0 | 310 | 0 |
+| aprendizados | 312 | 0 | 0 | 312 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **310**
+- 🟥 Faltando no Notion: **312**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -358,4 +358,6 @@
 - 282. Rota rápida de memória do Pivete no WebUI
 - 283. Base militar WebUI 100% operacional — modelos reais Elite ap7
 - 284. Sincronia 4-Point (regra oficial vigente)
+- 285. Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal)
+- 286. Auto-onboarding no MCP via campo `instructions` do handshake
 </details>
