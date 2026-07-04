@@ -1,4 +1,9 @@
-# Changelog — CentralDark Grafo Vivo
+# Changelog
+
+## v0.4.0 (2026-07-04)
+- Nova view: Grafo 3D · Jarvis (HUD tempo-real de grafo.centralldark.com embutido no Obsidian)
+- Novo ribbon (ícone orbit) e comando "Abrir Grafo 3D · Jarvis"
+- Dados vivos: /api/live com status PM2 fresco (setores, pulso online/off) — CentralDark Grafo Vivo
 
 ## v0.3.0 (2026-07-02)
 
