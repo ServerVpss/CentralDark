@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T10:55:16.865Z",
-  "updatedAtBR": "04/07/2026, 07:55:16 BRT",
+  "updatedAt": "2026-07-04T13:04:55.607Z",
+  "updatedAtBR": "04/07/2026, 10:04:55 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "chore(painel): registrar auditoria de infra IA/proxy (Fable)",
+    "lastCommit": "Corrigiu o streaming no UI",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T13:04:55.607Z",
+      "titulo": "Push na main · 2aa0e6275066997f9830401c0820d8bdbf5350d9",
+      "detalhe": "Corrigiu o streaming no UI",
+      "area": "Repositório",
+      "sha": "2aa0e62",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-04T10:55:16.865Z",
       "titulo": "Push na main · d17e02df4ee2ca426d72d1083a63286db1b62f7d",
@@ -1251,6 +1259,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T13:04:55.607Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 2aa0e6275066997f9830401c0820d8bdbf5350d9 (2aa0e62)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T10:55:16.865Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d17e02df4ee2ca426d72d1083a63286db1b62f7d (d17e02d)",
@@ -1590,13 +1605,6 @@
       "time": "2026-07-04T00:10:07.349Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3ab6817adefc1c5e308575f02e71d8c959e9fcd1 (3ab6817)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:09:46.740Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 4588924334972688c21b98285b8c214b9c85fd5e (4588924)",
       "area": "Repositório",
       "status": "sucesso"
     }
