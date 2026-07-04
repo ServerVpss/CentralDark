@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T08:13:17.475Z",
-  "updatedAtBR": "04/07/2026, 05:13:17 BRT",
+  "updatedAt": "2026-07-04T08:13:51.430Z",
+  "updatedAtBR": "04/07/2026, 05:13:51 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "🛠️ HUB v2: fallback local pra Conectores (Grok/Notion/Drive/GitHub) quando oauth_providers vazio",
+    "lastCommit": "🛠️ HUB migration 004: oauth_providers + oauth_connections + seed Grok/Notion/Drive/GitHub",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T08:13:51.430Z",
+      "titulo": "Push na main · d4ffec8795dd312711329e0d4b05fe8a3a6c7a3e",
+      "detalhe": "🛠️ HUB migration 004: oauth_providers + oauth_connections + seed Grok/Notion/Drive/GitHub",
+      "area": "Repositório",
+      "sha": "d4ffec8",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T08:13:17.475Z",
       "titulo": "Push na main · 185ca9358c3b783f8176d55d5388d6ce59dcaec7",
       "detalhe": "🛠️ HUB v2: fallback local pra Conectores (Grok/Notion/Drive/GitHub) quando oauth_providers vazio",
@@ -978,14 +986,6 @@
       "detalhe": "feat(grafo-vivo): nota viva no Obsidian (Mermaid+saúde+anomalias) + fix emoji regex",
       "area": "Repositório",
       "sha": "ed8201a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-03T18:17:20.350Z",
-      "titulo": "Push na main · b7ccab74676248b9b8904bfcfc41cad2df3b53e8",
-      "detalhe": "feat(grafo-vivo): grafo quem-chama-quem agora reflete estado real do PM2 + Hermes mantenedor",
-      "area": "Repositório",
-      "sha": "b7ccab7",
       "actor": "segredounlock"
     }
   ],
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T08:13:51.430Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d4ffec8795dd312711329e0d4b05fe8a3a6c7a3e (d4ffec8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T08:13:17.475Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 185ca9358c3b783f8176d55d5388d6ce59dcaec7 (185ca93)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T18:26:42.759Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ed8201a1e4a380791b5beec6ce82bde5e5566c79 (ed8201a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T18:17:20.350Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b7ccab74676248b9b8904bfcfc41cad2df3b53e8 (b7ccab7)",
       "area": "Repositório",
       "status": "sucesso"
     }
