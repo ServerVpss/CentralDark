@@ -33,6 +33,8 @@ export function OAuthConnectors() {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [usingFallback, setUsingFallback] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
 
   async function load() {
     setLoading(true);
