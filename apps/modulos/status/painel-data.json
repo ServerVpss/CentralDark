@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T13:04:55.607Z",
-  "updatedAtBR": "04/07/2026, 10:04:55 BRT",
+  "updatedAt": "2026-07-04T13:41:48.582Z",
+  "updatedAtBR": "04/07/2026, 10:41:48 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Corrigiu o streaming no UI",
+    "lastCommit": "Patched body_iterator no OpenAI",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-04T13:41:48.582Z",
+      "titulo": "Push na main · ce27e1cdc81a155fe70ad251358c78adbe30a165",
+      "detalhe": "Patched body_iterator no OpenAI",
+      "area": "Repositório",
+      "sha": "ce27e1c",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-04T13:04:55.607Z",
       "titulo": "Push na main · 2aa0e6275066997f9830401c0820d8bdbf5350d9",
@@ -1259,6 +1267,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T13:41:48.582Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · ce27e1cdc81a155fe70ad251358c78adbe30a165 (ce27e1c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T13:04:55.607Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 2aa0e6275066997f9830401c0820d8bdbf5350d9 (2aa0e62)",
@@ -1598,13 +1613,6 @@
       "time": "2026-07-04T00:25:37.493Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3da87080ca07ce20804970547e3dd2e896b4a57f (3da8708)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T00:10:07.349Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3ab6817adefc1c5e308575f02e71d8c959e9fcd1 (3ab6817)",
       "area": "Repositório",
       "status": "sucesso"
     }
