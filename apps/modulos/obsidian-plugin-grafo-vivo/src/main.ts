@@ -3,6 +3,7 @@
 
 import { Plugin, WorkspaceLeaf } from "obsidian";
 import { GrafoVivoView, VIEW_TYPE_GRAFO_VIVO } from "./view";
+import { Grafo3DView, VIEW_TYPE_GRAFO_3D } from "./view3d";
 import { DEFAULT_SETTINGS, GrafoVivoSettings, GrafoVivoSettingTab } from "./settings";
 import { AutoAtualizador } from "./autoUpdater";
 
@@ -18,8 +19,23 @@ export default class GrafoVivoPlugin extends Plugin {
       (leaf) => new GrafoVivoView(leaf, this),
     );
 
+    this.registerView(
+      VIEW_TYPE_GRAFO_3D,
+      (leaf) => new Grafo3DView(leaf),
+    );
+
     this.addRibbonIcon("git-fork", "Abrir Grafo Vivo CentralDark", () => {
       this.ativarView();
+    });
+
+    this.addRibbonIcon("orbit", "Abrir Grafo 3D · Jarvis", () => {
+      this.ativarView3D();
+    });
+
+    this.addCommand({
+      id: "abrir-grafo-3d",
+      name: "Abrir Grafo 3D · Jarvis",
+      callback: () => this.ativarView3D(),
     });
 
     this.addCommand({
@@ -57,6 +73,17 @@ export default class GrafoVivoPlugin extends Plugin {
     if (!leaf) {
       leaf = workspace.getRightLeaf(false);
       if (leaf) await leaf.setViewState({ type: VIEW_TYPE_GRAFO_VIVO, active: true });
+    }
+    if (leaf) workspace.revealLeaf(leaf);
+  }
+
+  async ativarView3D() {
+    const { workspace } = this.app;
+    let leaf: WorkspaceLeaf | null =
+      workspace.getLeavesOfType(VIEW_TYPE_GRAFO_3D)[0] ?? null;
+    if (!leaf) {
+      leaf = workspace.getRightLeaf(false);
+      if (leaf) await leaf.setViewState({ type: VIEW_TYPE_GRAFO_3D, active: true });
     }
     if (leaf) workspace.revealLeaf(leaf);
   }
