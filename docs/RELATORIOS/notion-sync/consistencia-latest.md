@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T21:43:40.849Z
-- **Commit:** `8be697340fcbc8341684c3eebf996ddea37f26e8`
+- **Gerado:** 2026-07-04T22:29:17.703Z
+- **Commit:** `9d35ac57d0f2dad753465139ca394a8af7d6d3e2`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 320 | 0 | 0 | 320 | 0 |
+| aprendizados | 321 | 0 | 0 | 321 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **320**
+- 🟥 Faltando no Notion: **321**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -368,4 +368,5 @@
 - 💬 Gemini Flash — grupo evolução (2026-07-04)
 - 💬 Groq Llama — grupo evolução (2026-07-04)
 - 288. Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado
+- 289. Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing
 </details>

@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T21:43:29.385Z
+# 🧠 Notion Sync — 2026-07-04T22:29:14.555Z
 
-- **Commit fonte:** `8be697340fcbc8341684c3eebf996ddea37f26e8`
+- **Commit fonte:** `9d35ac57d0f2dad753465139ca394a8af7d6d3e2`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 325 atualizadas · ❌ 437 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 324 atualizadas · ❌ 438 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 290 | 0 | 290 | 0 | 0 |
+| aprendizados | 291 | 1 | 289 | 0 | 1 |
 | estrutura | 437 | 0 | 0 | 0 | 437 |
 
 ## Operações
@@ -165,7 +165,7 @@
 | aprendizados | atualizado | #104 — Lote 7 rota groups read-only concluído |
 | aprendizados | atualizado | #105 — Lote 8 rota participantes de grupo concluído |
 | aprendizados | atualizado | #106 — Lote 9 detalhes de grupo concluído |
-| aprendizados | atualizado | #107 — Lote 10 histórico de mensagens concluído |
+| aprendizados | erro | #107 — Lote 10 histórico de mensagens concluído |
 | aprendizados | atualizado | #108 — Modo Lovable Modo Segredo ativo |
 | aprendizados | atualizado | #109 — Lovable deve registrar estado em locais oficiais do CentralDark |
 | aprendizados | atualizado | #110 — Status ao vivo aceita múltiplos formatos (ok/healthy/status/toolCount) |
@@ -347,6 +347,7 @@
 | aprendizados | atualizado | #286 — Auto-onboarding no MCP via campo `instructions` do handshake |
 | aprendizados | atualizado | #287 — HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent |
 | aprendizados | atualizado | #288 — Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado |
+| aprendizados | criado | #289 — Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
