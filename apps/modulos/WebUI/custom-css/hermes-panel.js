@@ -272,6 +272,7 @@
               </table>
             </div>
           </div>
+          <div class="tab-pane tab-boot" data-pane="boot"></div>
         </div>
         <footer data-tab="cadeia">
           <button class="btn-reload">↻ Recarregar</button>
