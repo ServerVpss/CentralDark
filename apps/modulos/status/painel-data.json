@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-07-04T19:50:24.160Z",
-  "updatedAtBR": "04/07/2026, 16:50:24 BRT",
+  "updatedAt": "2026-07-04T19:52:18.251Z",
+  "updatedAtBR": "04/07/2026, 16:51:56 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
-    "phase": "MCP CentralDark",
-    "currentTask": "MCP CentralDark: GitHub write restaurado (env vence token de sessão) + kit boas-vindas melhorado",
+    "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
+    "currentTask": "Padronização HERMES-CORE path + boot logs nos 3 painéis (MCP, WebUI, Mega)",
     "branch": "main",
-    "lastCommit": "Adicionou aba Boot no Painel",
+    "lastCommit": "chore(painel): sync painel-data.json + HERMES boot logs",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
     "summary": "Cérebro Vivo Fase 1 concluída: 10 skills documentadas em AGENTS-LIBRARY, bot /arsenal exibindo tabela completa, apelidos PT-BR no roteador de intenção, 4 diagramas Mermaid do sistema. Obsidian-writer criado com INDEX automático. Pendência A9: tela Arsenal de Skills no TelePainel (Lovable) documentada e aguardando execução. Guardião com polling reduzido (1.0s) eliminou 22% CPU. 10 issues sentinela abertas (automáticas, sem falha real).",
-    "overallProgress": 85,
+    "overallProgress": 100,
     "liveFallback": {
       "mcpStatus": "online",
       "mcpToolCount": 95,
@@ -592,20 +592,18 @@
   ],
   "events": [
     {
-      "time": "2026-07-04T19:50:24.160Z",
-      "titulo": "Push na main · a7fc2380d5e5e312967a34c928aa363fa2174a78",
-      "detalhe": "Adicionou aba Boot no Painel",
-      "area": "Repositório",
-      "sha": "a7fc238",
-      "actor": "lovable-dev[bot]"
+      "time": "2026-07-04T19:51:56.490Z",
+      "title": "Sincronização automática do painel-data.json — resolvido conflito de commit, HERMES-CORE Boot Logs ativos (7/7 módulos, 7/7 agentes)",
+      "area": "HERMES-CORE / Painel Mega",
+      "status": "feito",
+      "detail": ""
     },
     {
-      "time": "2026-07-04T18:41:41.952Z",
-      "titulo": "Push na main · e7ce95e7456ea72f29e8a3b6b24e741439d7e53f",
-      "detalhe": "Adicionou auto-approve MCP",
-      "area": "Repositório",
-      "sha": "e7ce95e",
-      "actor": "lovable-dev[bot]"
+      "time": "2026-07-04T19:48:21.963Z",
+      "title": "Hermes padronizado: caminho oficial apps/modulos/HERMES-CORE — MCP boot lista 7/7 módulos e 7/7 agentes carregados. Endpoint público: /hermes/boot",
+      "area": "HERMES-CORE",
+      "status": "feito",
+      "detail": ""
     },
     {
       "time": "2026-07-04T17:57:26.037Z",
@@ -828,22 +826,6 @@
       "area": "Repositório",
       "sha": "2b51448",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T06:40:43.874Z",
-      "titulo": "Push na main · 49431a6a02cec8bdabf288a71499a8774839240a",
-      "detalhe": "Travou seção 9.2 do card",
-      "area": "Repositório",
-      "sha": "49431a6",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T06:40:03.563Z",
-      "titulo": "Push na main · c3cd86b940b18b0e245e409bb525e13a4bce4929",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "c3cd86b",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1258,20 +1240,6 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-07-04T19:50:24.160Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · a7fc2380d5e5e312967a34c928aa363fa2174a78 (a7fc238)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T18:41:41.952Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · e7ce95e7456ea72f29e8a3b6b24e741439d7e53f (e7ce95e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
       "time": "2026-07-04T16:26:38.140Z",
       "ia": "@Pivete",
       "action": "📌 Hermes v5.0 — MISSÃO FINALIZADA",
@@ -1606,6 +1574,20 @@
       "action": "📌 Push na main · 3da87080ca07ce20804970547e3dd2e896b4a57f (3da8708)",
       "area": "Repositório",
       "status": "sucesso"
+    },
+    {
+      "time": "2026-07-04T00:10:07.349Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3ab6817adefc1c5e308575f02e71d8c959e9fcd1 (3ab6817)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-04T00:09:46.740Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 4588924334972688c21b98285b8c214b9c85fd5e (4588924)",
+      "area": "Repositório",
+      "status": "sucesso"
     }
   ],
   "telemetry": {
@@ -1721,7 +1703,7 @@
   "ultimo_evento": "Hermes aprendeu e concluiu hub v2 sozinho (77 etapas, typecheck zero)",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-04T17:59:26.727Z",
+  "updated_at": "2026-07-04T19:52:18.251Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",
