@@ -3,6 +3,7 @@ import path from "node:path";
 import { z } from "zod";
 import { config } from "../../config.js";
 import { runShell, sanitize } from "./vps.js";
+import { auditLog } from "../../lib/audit.js";
 const CONFIRM_RUN_ONCE = "CONFIRMO RUN ONCE";
 const LOG_BASE = "/root/CentralDark/revisoes";
 const DENY_SCRIPT_PATTERNS = [
