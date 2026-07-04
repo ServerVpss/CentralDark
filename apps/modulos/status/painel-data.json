@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T06:40:43.874Z",
-  "updatedAtBR": "04/07/2026, 03:40:43 BRT",
+  "updatedAt": "2026-07-04T07:12:02.614Z",
+  "updatedAtBR": "04/07/2026, 04:12:02 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "Travou seção 9.2 do card",
+    "lastCommit": "docs(pendencias): nova #21 Hermes Grok Watcher — subir no PM2 com token do bot",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T07:12:02.614Z",
+      "titulo": "Push na main · 2b51448b6a00a7d6e6a2afe31069e5aad6f18ea3",
+      "detalhe": "docs(pendencias): nova #21 Hermes Grok Watcher — subir no PM2 com token do bot",
+      "area": "Repositório",
+      "sha": "2b51448",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T06:40:43.874Z",
       "titulo": "Push na main · 49431a6a02cec8bdabf288a71499a8774839240a",
       "detalhe": "Travou seção 9.2 do card",
@@ -979,14 +987,6 @@
       "area": "Repositório",
       "sha": "405ee87",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-03T17:41:05.582Z",
-      "titulo": "Push na main · b04e5f2b7df536e3ab7cd77c0c414116e4a08cb3",
-      "detalhe": "feat(elite-gateway): gateway_admin.py + Hermes especialista em contas/manutenção",
-      "area": "Repositório",
-      "sha": "b04e5f2",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1401,6 +1401,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T07:12:02.614Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2b51448b6a00a7d6e6a2afe31069e5aad6f18ea3 (2b51448)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T06:40:43.874Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 49431a6a02cec8bdabf288a71499a8774839240a (49431a6)",
@@ -1740,13 +1747,6 @@
       "time": "2026-07-03T17:46:16.746Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 405ee8729260283119a79afc059b15a336c84333 (405ee87)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T17:41:05.582Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b04e5f2b7df536e3ab7cd77c0c414116e4a08cb3 (b04e5f2)",
       "area": "Repositório",
       "status": "sucesso"
     }
