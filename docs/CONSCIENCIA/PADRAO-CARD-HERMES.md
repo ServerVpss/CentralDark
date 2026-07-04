@@ -1,77 +1,120 @@
-# Padrão Oficial de Notificação — Card Hermes v1.1.1
+# 🎴 PADRÃO CARD HERMES — v1.2 (OFICIAL)
 
-**Data:** 04/07/2026
-**Autor original:** Fabler
-**Refinamento:** Gemini (v1.1) + Fabler (v1.1.1)
-**Responsável pela adoção:** Pivete
-**Categoria:** Padrão de comunicação / notificação
+> **Status:** ✅ APROVADO E TRAVADO
+> **Autoria:** Fabler (v1.0) + Gemini (v1.1) + Fabler (v1.1.1) + Fabler+Gemini (v1.2)
+> **Validado por:** Pivete em 04/07/2026 — "agora sim foi direto pra meu privado, esse sim tá lindo"
+> **Regra dura:** TODA ação relevante do sistema DEVE mandar esse card. Nada de aviso solto, nada fora do padrão.
 
 ---
 
-## Regra
+## 🔒 Regras invioláveis
 
-Toda notificação relevante (canal Status + admin) segue este template monoespaçado, enviado via edge function `notify-telegram` dentro de `<pre>...</pre>` (parse_mode HTML).
+1. **TUDO dentro de UM único `<pre>...</pre>`.** Nada de texto fora. Sem título proporcional em cima. Sem rodapé fora do bloco. Nada.
+2. **Envio pelo connector Telegram** (`sendMessage`), NUNCA pelo `notify-telegram` (aquele exige `NOTIFY_API_KEY` e falha).
+   - Bot: `@srver1bot`
+   - `connection_id`: `std_01kvw4jkcbekyr1t33vs4p5e9w`
+   - `connector_id`: `telegram`
+   - `chat_id` admin: `1901426549` (secret `TELEGRAM_ADMIN_CHAT_ID`)
+   - `chat_id` canal status: `-1003669176367` (secret `TELEGRAM_STATUS_CHANNEL_ID`)
+   - `parse_mode`: `"HTML"`
+3. **Largura fixa:** 36 caracteres (moldura e separador).
+4. **STATUS só emoji + palavra:** `✅ OK` / `⚠️ AVISO` / `❌ FALHA`. Nunca misturar prova técnica com status.
+5. **Prova técnica só no bloco `🔧 DETALHE TÉCNICO`** — commits, arquivos, IDs, validadores.
 
-## Template canônico v1.1.1
+---
+
+## 🧩 Template canônico v1.2
 
 ```
-╔════════════════════════════════════╗
-║ 📡 [MÓDULO/SISTEMA]                ║
-║ ▓▓▓▒▒▒  HERMES ENGINE v1.1  ▒▒▒▓▓▓ ║
-╚════════════════════════════════════╝
-STATUS: [✅ OK / ⚠️ AVISO / ❌ FALHA]
+<pre>
+╔══════════════════════════════════╗
+║  {SISTEMA} / {MÓDULO}            ║
+║  {NOME DA ENGINE} v{X.Y.Z}       ║
+╚══════════════════════════════════╝
 
-🧭 MISSÃO: [Título curto]
-🎯 FASE:   [Fase atual] -> [O que falta]
+STATUS:    ✅ OK
+PRIORID:   🟡 Média
+RESPONS:   @segredounlocker
 
-📘 LEIGO: [Impacto direto ao usuário]
-⚙️ AÇÃO:  [O que foi executado]
+🎯 MISSÃO: {frase curta}
+📌 FASE:   {fase atual → próxima}
+⏱  TEMPO:  {ex: 4m 12s}
+
+📘 LEIGO
+  {2 linhas em português simples}
+
+⚙️  AÇÃO
+  {o que foi feito, 2-4 linhas}
 
 📊 PROGRESSO
-NÍVEL: [▰▰▰▱▱▱▱▱▱▱] Lv.X
-XP:    [████████░░] atual/próximo_nível
+  NÍVEL: [████████░░] Lv.{N}
+  XP:    [██████████] {ganho}/{total}
+  PROG:  {0-100}%
 
 🧠 SKILLS UP
-• [Skill]: +X XP (Lv.N)
+  • {Skill}  +{XP} XP (Lv.{N})
+  • {Skill}  +{XP} XP (Lv.{N})
 
-──────────────────────────────────────
-🛠️ DETALHE TÉCNICO (PROVA)
-[Commits / arquivos / SQL — só dados verificáveis]
-──────────────────────────────────────
+🚨 BLOQUEIOS
+  {nenhum | descrição curta}
+
+🎯 PRÓXIMO PASSO
+  {1 linha objetiva}
+
+────────────────────────────────────
+🔧 DETALHE TÉCNICO (PROVA)
+  Arquivo:  {caminho}
+  Commits:  {hash} ({versão})
+  Validad:  {quem validou}
+  Log ID:   {uuid curto}
+  Tags:     #dev #consciencia
+</pre>
 ```
 
-## Regras de preenchimento
+---
 
-| Campo | Regra |
-|-------|-------|
-| STATUS | Só `✅ OK`, `⚠️ AVISO` ou `❌ FALHA`. Nada de "parcial", "quase" etc. |
-| FASE | Formato `Atual -> Próximo passo`. Se nada falta, `Concluído`. |
-| LEIGO | 1 frase, linguagem comum, foco em impacto. |
-| AÇÃO | Verbo no particípio (`Aplicado GRANT...`, `Registrado arquivo...`). |
-| XP | `atual/necessário_pro_próximo_nível`, nunca genérico. |
-| PROVA | Só dados verificáveis (hash de commit, path de arquivo, comando SQL). Sem narrativa. |
+## 📞 Como chamar (o único jeito certo)
 
-## Mapeamento pro payload `notify-telegram`
+**Ferramenta:** `standard_connectors--call_gateway_connection`
 
 ```json
 {
-  "origem": "modulo",
-  "tipo": "sucesso|aviso|erro|info|sistema",
-  "titulo": "Título curto (usado no push do Telegram)",
-  "parse_mode": "HTML",
-  "mensagem": "<pre>...template preenchido...</pre>",
-  "metadata": { "fase": N, "padrao": "hermes-v1.1.1" }
+  "connection_id": "std_01kvw4jkcbekyr1t33vs4p5e9w",
+  "connector_id": "telegram",
+  "method": "POST",
+  "path": "/sendMessage",
+  "reason_for_call": "Notificar admin da ação X",
+  "body": {
+    "chat_id": 1901426549,
+    "parse_mode": "HTML",
+    "text": "<pre>...card inteiro aqui...</pre>"
+  }
 }
 ```
 
-## Histórico
+Para o canal Status (linha resumida curta), mesmo formato mas para `chat_id: -1003669176367`.
 
-- **v1.0** (04/07/2026) — Fabler criou template original com skills check em tabela.
-- **v1.1** (04/07/2026) — Gemini enxugou: STATUS no topo, largura 36 chars, PROG% opcional.
-- **v1.1.1** (04/07/2026) — Fabler validou e refinou: XP com "atual/próximo", PROVA só verificável.
+---
 
-## Referências cruzadas
+## 🚫 O que NÃO fazer (erros já cometidos)
 
-- `docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md` — primeiro card no padrão
-- Regras Core `mem://index.md`: **Placar uniforme** + **Método Gamificado**
-- Canal oficial: edge function `notify-telegram` (HUB `notifications_log`)
+| Erro | Motivo |
+|---|---|
+| Texto/título fora do `<pre>` | Vira letra proporcional, quebra o "fundo preto monoespaçado" |
+| Usar `notify-telegram` | Exige `NOTIFY_API_KEY` no header e retorna 401 |
+| Misturar hash de commit no `STATUS` | Polui coluna de status; prova vai só em `DETALHE TÉCNICO` |
+| Postar em bot errado (`@SEGREDOPUXADASBOT`) | Aquele é do TelePainel, não Central |
+| Card sem `PRÓXIMO PASSO` | Deixa Pivete sem saber o que vem a seguir |
+
+---
+
+## 📜 Histórico
+
+- **v1.0** (Fabler) — estrutura base
+- **v1.1** (Gemini) — largura 36, STATUS no topo
+- **v1.1.1** (Fabler) — XP atual/total, PROVA só verificável
+- **v1.2** (Fabler+Gemini) — TEMPO, BLOQUEIOS, PRÓXIMO PASSO, RESPONSÁVEL, PRIORIDADE, LOG ID, TAGS + regra "sempre notificar"
+
+---
+
+**Este arquivo é a fonte da verdade. Qualquer IA/agente lê isso antes de mandar card no Telegram.**
