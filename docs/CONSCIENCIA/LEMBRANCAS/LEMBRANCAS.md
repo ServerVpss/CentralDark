@@ -194,3 +194,13 @@ Conteúdo: Toda notificação Telegram (privado admin E canal Status) DEVE vir 1
 - **Promovida:** nao
 
 Conteúdo: Base militar do Pivete = ui.centralldark.com (Open WebUI 0.10.1) + MCPO em http://mcpo:8000/centraldark expondo 102 tools MCP CentralDark via OpenAPI. Personas cadastradas: pivete (Opus 4.5), hermes (Opus 4.5 executor), fabler (Sonnet 4.5 analista). System prompts versionados em apps/modulos/WebUI/personas/. Sem custom agent loop — Open WebUI faz function calling nativo. Bearer fica só no MCPO server-side.
+
+### [2026-07-04T00:07] Sincronia 4-Point + Bot Fiscal (regra vigente)
+- **Data:** 2026-07-04
+- **Tags:** sincronia, 4-point, bots, fiscal, central, regra-oficial
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-03
+- **Promovida:** sim
+
+Conteúdo: Sincronia 4-Point = Lovable → GitHub → VPS → Cérebro Vivo (docs/CONSCIENCIA + .claude). Todos os 4 tem que estar espelhados a cada mudança. Bot Fiscal = @SEGREDOPUXADASBOT (TelePainel, projeto Lovable Cloud atual, edge `telepainel-webhook`). Bot Central = @srver1bot (HUB Supabase + VPS PM2 27, edge `telegram-webhook`). Nunca misturar.
