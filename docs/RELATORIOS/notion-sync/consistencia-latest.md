@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T09:53:04.976Z
-- **Commit:** `59406e8369a6baaaa7eaf79e5187900b12e92336`
+- **Gerado:** 2026-07-04T18:02:20.060Z
+- **Commit:** `1b1da39796330c0d68e0defe37a83bbf4f9949a6`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 313 | 0 | 0 | 313 | 0 |
+| aprendizados | 314 | 0 | 0 | 314 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **313**
+- 🟥 Faltando no Notion: **314**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -361,4 +361,5 @@
 - 285. Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal)
 - 286. Auto-onboarding no MCP via campo `instructions` do handshake
 - 287. HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent
+- 288. Fix do GitHub 401 no MCP — token de sessão OAuth vencia o env
 </details>

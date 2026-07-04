@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-04T09:53:01.885Z
+# 🧠 Notion Sync — 2026-07-04T18:02:15.919Z
 
-- **Commit fonte:** `59406e8369a6baaaa7eaf79e5187900b12e92336`
+- **Commit fonte:** `1b1da39796330c0d68e0defe37a83bbf4f9949a6`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 324 atualizadas · ❌ 437 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 324 atualizadas · ❌ 437 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 289 | 0 | 289 | 0 | 0 |
+| aprendizados | 290 | 1 | 289 | 0 | 0 |
 | estrutura | 437 | 0 | 0 | 0 | 437 |
 
 ## Operações
@@ -346,6 +346,7 @@
 | aprendizados | atualizado | #285 — Arquitetura oficial dos 2 bots Telegram (Central vs Fiscal) |
 | aprendizados | atualizado | #286 — Auto-onboarding no MCP via campo `instructions` do handshake |
 | aprendizados | atualizado | #287 — HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent |
+| aprendizados | criado | #288 — Fix do GitHub 401 no MCP — token de sessão OAuth vencia o env |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
