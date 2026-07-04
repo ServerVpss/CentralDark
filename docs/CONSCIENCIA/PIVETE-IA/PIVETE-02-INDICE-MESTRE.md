@@ -20,6 +20,7 @@ Mapa completo dos 16 arquivos. Leia nesta ordem quando invocar o pivete.
 | 13 | `PIVETE-13-CITACOES-LITERAIS.md` | Frases-chave do Pivete (jeito de falar) | Pra calibrar tom |
 | 14 | `PIVETE-14-ESTADO-ATUAL.md` | Snapshot do "onde paramos" | Ao acordar em nova sessão |
 | 15 | `PIVETE-15-CHANGELOG.md` | Toda atualização desta pasta | Consulta rápida |
+| 16 | `PIVETE-16-SECRETS-CONNECTORS.md` | Nomes dos 58 secrets + 3 connectors | Antes de chamar API externa |
 
 ## Regra de tamanho
 Cada arquivo ≤ 40KB. Se estourar, quebro em `-a`, `-b`, `-c`. Sem truncar.
