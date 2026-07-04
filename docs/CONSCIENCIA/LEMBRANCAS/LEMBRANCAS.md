@@ -184,3 +184,13 @@ Conteúdo: Árvore oficial do Hermes: `docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES
 - **Promovida:** sim
 
 Conteúdo: Toda notificação Telegram (privado admin E canal Status) DEVE vir 100% dentro de bloco &lt;pre&gt;...&lt;/pre&gt; (monospace) com estrutura de árvore ┌├└ e placar visual. Nunca mandar texto corrido/flat. Vale pra card longo e pra linha curta do Status.
+
+### [2026-07-03T23:32] Base militar Pivete no WebUI
+- **Data:** 2026-07-03
+- **Tags:** webui, mcpo, base-militar, arquitetura
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-02
+- **Promovida:** nao
+
+Conteúdo: Base militar do Pivete = ui.centralldark.com (Open WebUI 0.10.1) + MCPO em http://mcpo:8000/centraldark expondo 102 tools MCP CentralDark via OpenAPI. Personas cadastradas: pivete (Opus 4.5), hermes (Opus 4.5 executor), fabler (Sonnet 4.5 analista). System prompts versionados em apps/modulos/WebUI/personas/. Sem custom agent loop — Open WebUI faz function calling nativo. Bearer fica só no MCPO server-side.
