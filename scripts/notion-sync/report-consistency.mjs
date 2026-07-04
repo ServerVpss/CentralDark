@@ -18,6 +18,7 @@
  */
 
 import { Client } from "@notionhq/client";
+import { wrap } from "./with-retry.mjs";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -27,7 +28,7 @@ if (!TOKEN) {
   console.error("❌ NOTION_API_KEY ausente.");
   process.exit(1);
 }
-const notion = new Client({ auth: TOKEN });
+const notion = wrap(new Client({ auth: TOKEN }));
 
 // IDs oficiais dos databases para a API pública do Notion.
 // Não usar os Data Source IDs (collection://) aqui: o SDK v2 consulta databases.query({ database_id }).
