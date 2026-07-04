@@ -173,6 +173,7 @@ apps/
 | `secrets/` | Nunca commitar, nunca sobrescrever sem backup | — |
 | `docs/CONSCIENCIA/` | Fonte de verdade do Cérebro Vivo — git é autoritativo | — |
 | `docs/CONSCIENCIA/LEMBRANCAS/` | Memória de curto prazo (tools cognitivas do MCP) | 30/06/2026 |
+| 🔒 `docs/CONSCIENCIA/PADRAO-CARD-HERMES.md` | **Padrão OFICIAL de notificação Telegram (Card Hermes v1.3)** — travado. Toda ação relevante notifica seguindo esse formato. Só o Pivete altera. Envio SEMPRE via connector Telegram `sendMessage` (bot `@srver1bot`, `connection_id std_01kvw4jkcbekyr1t33vs4p5e9w`, admin `1901426549`). PROIBIDO usar `notify-telegram`. PROIBIDO texto fora do `<pre>`. | 04/07/2026 |
 
 > **Palavras-chave de autorização:** "PERMITO PIVETE" ou instrução explícita descrevendo o escopo exato da mudança.
 
