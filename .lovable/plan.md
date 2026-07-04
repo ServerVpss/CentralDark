@@ -1,48 +1,74 @@
-# Plano — Painel Hermes dentro do WebUI + rotas no api.centralldark.com
 
-## O que muda em relação ao que já foi feito
+## O que vai mudar
 
-Duas correções cirúrgicas, sem refazer o que já tá funcionando:
+Toda ação liberada no MCP (`execute_command` e `vps_run_once_script`) passa a gravar um registro de auditoria em arquivo, e o painel Hermes ganha uma aba **"Auditoria"** que lê esses registros ao vivo pelo `api.centralldark.com`.
 
-### 1. Rotas — tudo em `api.centralldark.com`
-Hoje as rotas do Hermes vivem soltas no Elite HTTP Gateway (PM2 60) em caminhos tipo `/hermes/cadeia`. Isso fica, **mas passa a ser servido oficialmente pelo domínio único de API**: `https://api.centralldark.com` (mesmo host que já uso pro resto). Nada de subdomínio novo, nada de porta exposta.
+## O que cada ação vai registrar
 
-Rotas finais (mesma API, só rota interna diferente):
-- `GET  https://api.centralldark.com/hermes/cadeia`
-- `PUT  https://api.centralldark.com/hermes/cadeia`
-- `POST https://api.centralldark.com/hermes/cadeia/reverter`
-- `GET  https://api.centralldark.com/hermes/cadeia/stats`
+Cada linha do log guarda:
 
-Ação técnica: conferir o bloco do Caddy que já roteia `api.centralldark.com` → Elite HTTP (porta interna do PM2 60) e garantir que `/hermes/*` cai no mesmo upstream. Se já cai (é reverse proxy genérico do host), **não mexe em nada** — só documenta. Se tiver `location` específico bloqueando, adiciono `/hermes/*` na mesma regra.
+- **Hora** (ISO 8601, com timezone)
+- **Usuário** (quem chamou — vem do cabeçalho do MCP; se não vier, marca `mcp-local`)
+- **IP** (remoto, capturado do transport HTTP do MCP; se for stdio local, marca `local-stdio`)
+- **Ferramenta** (`execute_command` ou `vps_run_once_script`)
+- **Comando** (sanitizado — segredos continuam mascarados pela sanitize atual)
+- **cwd** e **root** usados
+- **Status** (`OK`, `FALHOU`, `TIMEOUT`, `BLOQUEADO`, `BLOQUEADO_CONFIG`, `ERRO_SPAWN`)
+- **exitCode**, **duração em ms**, **tamanho de stdout/stderr**
+- **blockedPatterns** (quando aplicável)
+- **hostname/pid** do processo MCP
 
-O arquivo `hermes_painel.html` standalone que criei antes **é removido** — não é mais servido pelo gateway, o painel vive no WebUI (item 2).
+Arquivo: `/root/CentralDark/logs/mcp-audit-YYYY-MM-DD.jsonl` (mesma pasta e padrão do `mcp-blocked-*.jsonl` que já existe). Um arquivo por dia, `chmod 600`, rotação natural.
 
-### 2. Painel Hermes vira card DENTRO do WebUI
-Hoje o painel tá num HTML solto servido pelo gateway. Errado. O certo é card nativo no WebUI (`apps/modulos/WebUI/`), igual os outros cards que já existem lá.
+## Onde entra no código
 
-O que entra no WebUI:
-- **Novo card "Cadeia Hermes"** no mesmo padrão visual dos cards atuais (mesma sidebar, mesmo tema Esmeralda 3D tátil, mesmos componentes shadcn que o WebUI já usa).
-- Conteúdo do card:
-  - Lista dos 15 modelos + Elite fallback, reordenável (setas ⬆️⬇️ + drag no desktop).
-  - Switch verde/cinza por modelo (ativo/inativo).
-  - Campo de timeout (segundos) por modelo.
-  - Botões **Salvar** / **Reverter última**.
-  - Mini placar de win/loss (últimas 100 missões) puxado de `/hermes/cadeia/stats`.
-- Toda a comunicação do card usa `fetch("https://api.centralldark.com/hermes/...")` com o mesmo token que o WebUI já envia hoje pras outras rotas de infra. Zero credencial nova.
+### 1. MCP (`apps/modulos/mcp/dist/tools/vps/`)
 
-## Ordem de execução
+- **`vps-lazy.js` → `runCommand`**: envolvo o `spawn` num wrapper que mede tempo e, no `close`/`error`/bloqueio, chama uma função nova `auditLog(evento)` que faz `appendFileSync` no JSONL do dia. Também loga os casos `BLOQUEADO` e `BLOQUEADO_CONFIG` (hoje o segundo já grava, o primeiro não).
+- **`vps-run-once.js`**: mesma função `auditLog` disparada antes/depois da execução do script.
+- Helper `auditLog` fica num arquivo novo `apps/modulos/mcp/dist/lib/audit.js`, importado pelos dois.
+- Captura de usuário/IP: leio `process.env.MCP_CALLER_USER` e `process.env.MCP_CALLER_IP` que o próprio dispatcher HTTP do MCP já preenche por request (se não existir, aplico fallback `mcp-local` / `local-stdio` e registro assim mesmo — nada silencioso).
 
-1. Descobrir onde ficam os cards atuais do WebUI (`apps/modulos/WebUI/`) pra encaixar o card Hermes no mesmo padrão — sem inventar layout novo.
-2. Criar o card `CadeiaHermes` seguindo esse padrão + rotas HTTP.
-3. Ajustar Caddy só se `/hermes/*` ainda não estiver liberado no `api.centralldark.com`.
-4. Remover `hermes_painel.html` standalone e a rota `GET /hermes/painel` do gateway (não serve mais painel HTML — só JSON).
-5. Testar no WebUI: reordenar, salvar, reverter, ver stats.
+### 2. Gateway (`apps/modulos/elite-gateway/scripts/elite_http_gateway.py`)
 
-## O que fica intocado (já tá certo)
-- `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json` — fonte da verdade, permanece.
-- `decisor.mjs` com loader dinâmico + cache 60s + fallback — permanece.
-- Endpoints JSON do gateway (`GET/PUT/POST /hermes/cadeia*`) — permanecem, só passam a ser chamados via `api.centralldark.com`.
-- PM2 60 (Elite HTTP) e 66 (Hermes) — sem restart, sem mudança de env.
+Três rotas novas, mesmo padrão de Bearer das rotas `/hermes/cadeia`:
 
-## Pergunta rápida antes de partir pro código
-Confirma só uma coisa: o Caddy do `api.centralldark.com` já é reverse-proxy **genérico** pro Elite HTTP (repassa qualquer path), ou tem allowlist de rotas? Se souber, respondo direto; se não souber, eu inspeciono o Caddyfile na hora da execução e sigo — sem te travar.
+- `GET /hermes/audit/dias` → lista os arquivos de dia disponíveis.
+- `GET /hermes/audit?date=YYYY-MM-DD&limit=200&status=OK|FALHOU|BLOQUEADO` → devolve os últimos N registros do dia (default = hoje), filtro opcional por status.
+- `GET /hermes/audit/stats?dias=7` → contagem por status/dia pros cards de resumo.
+
+Leitura em modo tail (últimas N linhas) pra não estourar memória em arquivos grandes.
+
+### 3. Painel Hermes (`apps/modulos/WebUI/custom-css/hermes-panel.{js,css}`)
+
+- Adiciono duas abas no modal existente: **"Cadeia"** (o que já tem) e **"Auditoria"** (nova).
+- Aba Auditoria mostra:
+  - Cards de resumo no topo: OK / FALHOU / BLOQUEADO (últimas 24h).
+  - Tabela: Hora · Usuário · IP · Ferramenta · Comando (truncado, hover mostra completo) · Status (badge colorido) · Duração.
+  - Seletor de dia (dropdown com os dias que a rota `/dias` devolveu).
+  - Filtro por status.
+  - Botão "↻ Atualizar" + auto-refresh a cada 10s enquanto a aba está aberta.
+- CSS segue o mesmo estilo Esmeralda já em uso no painel.
+
+## Ativação na VPS
+
+Depois do merge:
+
+1. `git pull` no repo da VPS.
+2. `pm2 restart 33 --update-env` (MCP) e `pm2 restart 60 --update-env` (Gateway) em background.
+3. No WebUI, o `hermes-panel.js` já é montado pelo `docker-compose.override.yml` — Pivete só cola a versão nova em Admin → Settings → Interface → Custom JS (o painel avisa "versão nova disponível" se detectar hash diferente).
+
+Sem downtime, sem tocar em nada bloqueado, sem mexer em secrets.
+
+## Observação honesta sobre IP/usuário
+
+O MCP hoje aceita chamadas por dois transportes:
+
+- **HTTP** (dispatcher `mcp_admin_call`, etc.): consigo IP real e identificador do cliente pelos cabeçalhos — vai preenchido.
+- **stdio local** (quando alguém abre o MCP direto no processo): não existe IP; nesse caso o registro fica marcado `local-stdio` com o `pid` de quem chamou. Não invento IP falso.
+
+Isso vai estar visível no próprio painel pra não dar impressão de dado maquiado.
+
+## Aprendizado no Hermes
+
+Registro um aprendizado novo (categoria `regra`) explicando o formato do JSONL, as rotas novas do gateway e como o painel consome — pra qualquer IA futura mexer sem quebrar o padrão.
