@@ -1,43 +1,41 @@
-## Conselho debateu — resumo do que rola somar
+## Modo arsenal — desamontoar o grafo do status + FPS 120
 
-Chamei o Gemini como voto de peso. Convergimos que junto do efeito das partículas dá pra empilhar 5 melhorias baratas e de alto impacto visual, tudo no mesmo mexido, sem tocar em backend. Todas rodam em cima do force-graph (mesma lib do painel de status), então é uma migração só.
+Vou mexer no `apps/modulos/status/` (🔒 protegido — precisa "PERMITO PIVETE"). O gerador do Hermes fica intocado; só o render melhora.
 
-## O pacote proposto (grafo.centralldark.com)
+## Ajustes no `status/app.js` (bloco force-graph, linhas ~800–905)
 
-**1. 🕸️ Partículas fluindo nas arestas** *(o pedido original)*
-Bolinhas verdes andando de nó pra nó, mais rápidas/densas nas conexões de maior peso — igual ao painel de status.
+**Física — espalhar os nós:**
+- `charge` de `-140` → **`-420`** (repulsão 3x mais forte).
+- Força `link` com `.distance(80).strength(0.35)` — distância mínima garantida entre conectados.
+- `collide` novo: `d3.forceCollide(r => (r.type === 'orquestrador' ? 22 : 14))` — impede sobreposição visual.
+- `center` com força suave `0.05` pra não puxar tudo pro meio.
+- `d3AlphaDecay 0.03 → 0.04` e `d3VelocityDecay 0.35 → 0.45` — estabiliza mais rápido, menos "gelatina".
+- `cooldownTime` de 6s (para de calcular sozinho depois disso; hoje roda até 120 ticks sem timeout).
 
-**2. 🎨 Cor por status/categoria**
-Nó verde = OK, amarelo = alerta, vermelho = fora, azul = neutro. Bate o olho e entende a saúde na hora. (Hoje é tudo rosa/azul aleatório.)
+**FPS 120 (desafogar o loop de render):**
+- `enablePointerInteraction(true)` mantido, mas `warmupTicks(80)` pra pré-calcular offscreen — o primeiro frame já entra parado.
+- `nodeCanvasObjectMode` só desenha label quando `globalScale > 0.6` (some quando tá bem afastado — menos texto = mais FPS).
+- Cache do `Math.max` do raio no `node.__r` na primeira renderização (evita recalcular todo frame).
+- Trocar `setInterval` de refresh de dados (se estiver rodando junto) por `visibilitychange` — pausa quando a aba tá em background.
+- Adicionar `.autoPauseRedraw(true)` — força-graph deixa de redesenhar quando nada muda; economia gigante depois que estabiliza.
 
-**3. 💥 Pulso vivo em nó crítico**
-Anel concêntrico pulsando em quem tá com erro. O olho vai direto pro problema.
+**Update incremental sem recriar (já existe, vou reforçar):**
+- Quando `__fg.graphData(gdata)` é chamado com dados novos, dar `reheat` bem leve (`__fg.d3ReheatSimulation()` só se o número de nós/arestas mudou de fato — hoje reheata sempre).
 
-**4. 🔦 Destaque no hover**
-Passa o mouse num nó → o resto do grafo desbota, só os vizinhos diretos e as arestas conectadas ficam acesas. Corta o ruído da bola-de-fios.
+## Container responsivo (`index.html` linha 232 + `styles.css`)
 
-**5. 🔍 Busca com zoom automático**
-Caixinha de busca no topo. Digita o nome do módulo → câmera voa até ele com transição suave e destaca.
+- Trocar altura fixa `520px` por `clamp(360px, 60vh, 720px)` — encolhe em celular, cresce em monitor grande.
+- No CSS adicionar `@media (max-width: 720px) { #grafoVivoContainer { height: clamp(320px, 55vh, 480px); } }`.
+- Colocar `ResizeObserver` no container em vez de só `window resize` — reage a mudança de painel sem esperar redimensionar a janela.
+- `touch-action: none` no canvas pra não conflitar com scroll no mobile.
 
-**6. 🎚️ Filtro rápido**
-Botõezinhos: "só com erro", "esconder categoria X", "só edge functions", etc. Limpa o grafo dinamicamente.
+## Sobre o outro (grafo.centralldark.com)
 
-**Fora do pacote (fica pra depois):** minimapa (custo médio, não crítico agora).
+Confirmando: o código novo do `graph-panel` **já foi salvo aqui no repo**, mas quem serve o site é a **VPS via PM2**, não o preview do Lovable. Fluxo é: Lovable → GitHub (main) → webhook da VPS → `git pull` → PM2 recarrega. Se ainda tá aparecendo o mapa velho quando abre `grafo.centralldark.com`, ou o push pro GitHub ainda não saiu, ou o webhook não disparou. Depois de aprovar esse plano eu confiro no MCP se o commit tá no main e se a VPS puxou (com `github_list_commits` + `vps_git_status` + `elite_gateway_status`) e reinicio o PM2 do graph-panel se preciso.
 
-## Arquivos que mudam
+## Confirma com "PERMITO PIVETE"
 
-- `apps/modulos/graph-panel/public/index.html` — trocar CDN vis-network → force-graph, adicionar barra de busca + filtros.
-- `apps/modulos/graph-panel/public/graph.js` — rewrite do renderer (58 → ~250 linhas) com force-graph + as 6 features.
-- `apps/modulos/graph-panel/public/style.css` — estilos da barra de busca/filtros e da legenda de cores.
-
-**Não mexo em:** `server.js`, `data/`, `scripts/`, `vault.html`, backend, PM2. Só camada visual do browser.
-
-## ⚠️ Precisa autorização
-
-`apps/modulos/graph-panel/` tá 🔒 **protegido** no CLAUDE.md. Manda **"PERMITO PIVETE"** e escolhe:
-
-- **A)** Pacote completo (as 6 melhorias) — bomba visual, ~1 mexido só.
-- **B)** Só as partículas (item 1) — mínimo, cirúrgico.
-- **C)** Partículas + cor por status + hover destaque (1, 2, 4) — meio-termo, dá salto grande sem inflar.
-
-Recomendo o **C** — 80% do impacto visual com 40% do trabalho.
+Ao aprovar, faço tudo em sequência:
+1. Aplica os 3 blocos de ajuste no status.
+2. Verifica se o graph-panel novo tá no ar na VPS; se não tiver, dispara pull + `pm2 reload`.
+3. Reporta placar final ✅.
