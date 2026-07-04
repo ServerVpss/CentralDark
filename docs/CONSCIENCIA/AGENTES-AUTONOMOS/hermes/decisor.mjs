@@ -32,19 +32,56 @@ function licoesRelevantes(missao, historico, erros_anteriores = []) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// CADEIA DE MODELOS (ordem de tentativa)
+// CADEIA DE MODELOS — carregada de cadeia.json (editável em quente)
+// Painel no WebUI: fab "H" → https://api.centralldark.com/hermes/*
 // ═══════════════════════════════════════════════════════════════
-const CADEIA_DARKAI = [
+const CADEIA_PATH = join(dirname(fileURLToPath(import.meta.url)), 'cadeia.json');
+const CADEIA_TTL_MS = 60_000;
+let _cadeiaCache = { ts: 0, darkai: null, elite: null };
+
+// Fallback de segurança se cadeia.json quebrar
+const CADEIA_FALLBACK_DARKAI = [
   { modelo: 'google/gemini-3-flash-preview', timeout_ms: 15_000 },
   { modelo: 'google/gemini-2.5-pro',         timeout_ms: 30_000 },
   { modelo: 'openai/gpt-5-mini',             timeout_ms: 45_000 },
 ];
+const ELITE_FALLBACK = {
+  url: 'https://claude.ap7.site/v1/messages',
+  modelo: 'claude-sonnet-4-5',
+  timeout_ms: 30_000,
+};
 
-// Elite Anthropic Proxy (4º fallback, sempre vivo)
-const ELITE_URL   = 'https://claude.ap7.site/v1/messages';
-const ELITE_MODEL = 'claude-sonnet-4-5';
+function carregarCadeia() {
+  const agora = Date.now();
+  if (_cadeiaCache.darkai && (agora - _cadeiaCache.ts) < CADEIA_TTL_MS) return _cadeiaCache;
+  try {
+    const j = JSON.parse(readFileSync(CADEIA_PATH, 'utf8'));
+    const ativos = (j.cadeia || []).filter(m => m.ativo !== false);
+    const darkai = ativos
+      .filter(m => (m.via || 'darkai') === 'darkai')
+      .map(m => ({ modelo: m.modelo, timeout_ms: (m.timeout_s || 30) * 1000 }));
+    const eliteRow = ativos.find(m => m.via === 'elite-anthropic');
+    const elite = eliteRow ? {
+      url: (j.elite && j.elite.url) || ELITE_FALLBACK.url,
+      modelo: eliteRow.modelo,
+      timeout_ms: (eliteRow.timeout_s || 30) * 1000,
+    } : ELITE_FALLBACK;
+    _cadeiaCache = { ts: agora, darkai: darkai.length ? darkai : CADEIA_FALLBACK_DARKAI, elite };
+  } catch (e) {
+    console.error('[decisor] cadeia.json inválido, usando fallback:', e.message);
+    _cadeiaCache = { ts: agora, darkai: CADEIA_FALLBACK_DARKAI, elite: ELITE_FALLBACK };
+  }
+  return _cadeiaCache;
+}
+
+// Getters dinâmicos (mantém compat com resto do código)
+const CADEIA_DARKAI = new Proxy([], {
+  get(_, prop) { const arr = carregarCadeia().darkai; return arr[prop] ?? Array.prototype[prop]?.bind(arr); },
+});
+const ELITE_URL     = () => carregarCadeia().elite.url;
+const ELITE_MODEL   = () => carregarCadeia().elite.modelo;
+const ELITE_TIMEOUT_MS = () => carregarCadeia().elite.timeout_ms;
 const ELITE_TOKEN = process.env.ELITE_ANTHROPIC_TOKEN || process.env.ANTHROPIC_AUTH_TOKEN || '';
-const ELITE_TIMEOUT_MS = 30_000;
 
 // ═══════════════════════════════════════════════════════════════
 // CACHE in-memory (Map + TTL 10min + máx 100 itens)
