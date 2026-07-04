@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-04T03:08:01.994Z",
-  "updatedAtBR": "04/07/2026, 00:08:01 BRT",
+  "updatedAt": "2026-07-04T03:13:49.610Z",
+  "updatedAtBR": "04/07/2026, 00:13:49 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "MCP CentralDark",
     "currentTask": "Consciência Viva no ar (tabela + edge function + página)",
     "branch": "main",
-    "lastCommit": "aprendizado(#284): Sincronia 4-Point (regra oficial vigente)",
+    "lastCommit": "lembranca: Sincronia 4-Point + Bot Fiscal (regra vigente)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -589,6 +589,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T03:13:49.610Z",
+      "titulo": "Push na main · 91eff329034a367a531640b4327ef2861a6ae840",
+      "detalhe": "lembranca: Sincronia 4-Point + Bot Fiscal (regra vigente)",
+      "area": "Repositório",
+      "sha": "91eff32",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-04T03:08:01.994Z",
       "titulo": "Push na main · 105bf32946148a54584272bd95d159e2d05acb9f",
       "detalhe": "aprendizado(#284): Sincronia 4-Point (regra oficial vigente)",
@@ -977,14 +985,6 @@
       "detalhe": "feat(hub): hub v2 typecheck limpo + PolicyEditor funcional",
       "area": "Repositório",
       "sha": "00f4403",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-03T10:04:39.774Z",
-      "titulo": "Push na main · c223e699d3a90290cac185946d1f6f957010647c",
-      "detalhe": "chore(hermes): missão upgrade-hub-v2 arquivada em concluidas/ (pausa por falhas de git — trabalho commitado em bc209bf96)",
-      "area": "Repositório",
-      "sha": "c223e69",
       "actor": "segredounlock"
     }
   ],
@@ -1400,6 +1400,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-04T03:13:49.610Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 91eff329034a367a531640b4327ef2861a6ae840 (91eff32)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T03:08:01.994Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 105bf32946148a54584272bd95d159e2d05acb9f (105bf32)",
@@ -1739,13 +1746,6 @@
       "time": "2026-07-03T10:04:39.774Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c223e699d3a90290cac185946d1f6f957010647c (c223e69)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-03T09:52:58.691Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bf5df6706582c1a99dddd1899a332795c4bc0798 (bf5df67)",
       "area": "Repositório",
       "status": "sucesso"
     }
