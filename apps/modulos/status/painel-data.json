@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-04T10:45:02.749Z",
-  "updatedAtBR": "04/07/2026, 07:45:02 BRT",
+  "updatedAt": "2026-07-04T10:54:36.780Z",
+  "updatedAtBR": "04/07/2026, 07:54:36 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -52,12 +52,14 @@
   },
   "pm2": {
     "CentralDark-ArsenalAdapter": "online",
+    "CentralDark-ArsenalProxy": "online",
     "CentralDark-BotServer": "online",
     "CentralDark-ContasAdmin": "online",
     "CentralDark-EliteAnthropic": "online",
     "CentralDark-EliteHTTP": "online",
     "CentralDark-EliteWS": "online",
     "CentralDark-EvolucaoIAs": "online",
+    "CentralDark-GrafoVivo": "online",
     "CentralDark-GraphPanel": "online",
     "CentralDark-GuardiaoAnalista": "online",
     "CentralDark-GuardiaoConsciencia": "online",
@@ -65,6 +67,7 @@
     "CentralDark-HubBot": "online",
     "CentralDark-MCP": "online",
     "CentralDark-Memoria": "online",
+    "CentralDark-OAuthBroker": "online",
     "CentralDark-RefreshIAs": "online",
     "CentralDark-Respiracao": "online",
     "CentralDark-SyncDrive": "online",
@@ -589,6 +592,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-04T10:54:36.780Z",
+      "title": "🔍 Auditoria Arsenal Máximo: 24 processos PM2 + stack de proxies mapeados; Hermes em missão verificando chaves Elite; DarkAI apontou riscos (porta 9876 exposta, cascata 8090→8083→8082→ap7)",
+      "area": "infra",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-07-04T10:45:02.749Z",
       "titulo": "Push na main · d8ab3c96e9f63646a644ee15a3550a217451c91a",
       "detalhe": "fix(hub): restaura App.tsx completo com tema claro",
@@ -819,174 +829,6 @@
       "area": "Repositório",
       "sha": "865fb42",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T06:06:28.786Z",
-      "titulo": "Push na main · a0a066ff3c4ff12c4c60d8d3a6365c8b0ef3b326",
-      "detalhe": "Salvou wildcard DNS e mapeou",
-      "area": "Repositório",
-      "sha": "a0a066f",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T04:56:11.804Z",
-      "titulo": "Push na main · 39ca554ef86ad5d8fd2082f52e28a977157f5df4",
-      "detalhe": "Lovable update",
-      "area": "Repositório",
-      "sha": "39ca554",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T04:18:14.689Z",
-      "titulo": "Push na main · 60721017184af8a1fa1aa69e435e156fcb17366c",
-      "detalhe": "Exporou TTS/STT na edge func.",
-      "area": "Repositório",
-      "sha": "6072101",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T03:49:41.869Z",
-      "titulo": "Push na main · dc607d12a6aa842a754dd599ce63672a5c944310",
-      "detalhe": "Adicionou retry com throttle",
-      "area": "Repositório",
-      "sha": "dc607d1",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T03:34:58.731Z",
-      "titulo": "Push na main · c4268230400ea24c4f0f26fe282f5e0052e7a0eb",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "c426823",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T03:34:37.559Z",
-      "titulo": "Push na main · 2d99895c026c340a070e195b78a47a63e8ff45f3",
-      "detalhe": "aprendizado(#286): Auto-onboarding no MCP via campo `instructions` do handshake",
-      "area": "Repositório",
-      "sha": "2d99895",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T03:29:27.147Z",
-      "titulo": "Push na main · 3faac02ebc4a9311398b821b2eecf62bd0063a82",
-      "detalhe": "feat(mcp): auto-injeção da consciência Pivete no handshake initialize",
-      "area": "Repositório",
-      "sha": "3faac02",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T03:13:49.610Z",
-      "titulo": "Push na main · 91eff329034a367a531640b4327ef2861a6ae840",
-      "detalhe": "lembranca: Sincronia 4-Point + Bot Fiscal (regra vigente)",
-      "area": "Repositório",
-      "sha": "91eff32",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T03:08:01.994Z",
-      "titulo": "Push na main · 105bf32946148a54584272bd95d159e2d05acb9f",
-      "detalhe": "aprendizado(#284): Sincronia 4-Point (regra oficial vigente)",
-      "area": "Repositório",
-      "sha": "105bf32",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T02:42:46.293Z",
-      "titulo": "Push na main · aa5696c4efdbb604e24786b917ab01bc0616b8d3",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "aa5696c",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T02:37:10.158Z",
-      "titulo": "Push na main · 28f2a883a2d0c3c2121feb99aa15e379789632d5",
-      "detalhe": "lembranca: Base militar Pivete no WebUI",
-      "area": "Repositório",
-      "sha": "28f2a88",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T02:32:10.017Z",
-      "titulo": "Push na main · e36d0284b11dfa6753c8cd7a7add9c9f9e017c23",
-      "detalhe": "aprendizado(#282): Rota rápida de memória do Pivete no WebUI",
-      "area": "Repositório",
-      "sha": "e36d028",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T02:06:16.957Z",
-      "titulo": "Push na main · 964d493e78c1792d99d518fb43bc5c3ef03d2f80",
-      "detalhe": "Ativou 6 frentes do enxame",
-      "area": "Repositório",
-      "sha": "964d493",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T02:01:04.792Z",
-      "titulo": "Push na main · d0e2211d4caddec47d9a633143e06738e6b3dfdc",
-      "detalhe": "Gerou pivete e custom assets",
-      "area": "Repositório",
-      "sha": "d0e2211",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T00:52:28.629Z",
-      "titulo": "Push na main · 88eb6b428b5386c605c423d7394881ad379f7056",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "88eb6b4",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T00:47:50.571Z",
-      "titulo": "Push na main · e49bfc19b221dd9003e4cb3db0306e9e3e8155cb",
-      "detalhe": "aprendizado(#281): Auditoria universal do MCP + aba no painel Hermes",
-      "area": "Repositório",
-      "sha": "e49bfc1",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T00:26:32.559Z",
-      "titulo": "Push na main · 71b5041225ceb7d16982c705e2f13f4487563215",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "71b5041",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T00:25:37.493Z",
-      "titulo": "Push na main · 3da87080ca07ce20804970547e3dd2e896b4a57f",
-      "detalhe": "aprendizado(#277): Backup rotativo antes de sobrescrever config editável",
-      "area": "Repositório",
-      "sha": "3da8708",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T00:10:07.349Z",
-      "titulo": "Push na main · 3ab6817adefc1c5e308575f02e71d8c959e9fcd1",
-      "detalhe": "aprendizado(#274): Cadeia Hermes editável em quente via cadeia.json + painel WebUI",
-      "area": "Repositório",
-      "sha": "3ab6817",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T00:09:46.740Z",
-      "titulo": "Push na main · 4588924334972688c21b98285b8c214b9c85fd5e",
-      "detalhe": "Adicionou painel Hermes",
-      "area": "Repositório",
-      "sha": "4588924",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T00:03:05.678Z",
-      "titulo": "Push na main · c5166d992198a0c29db9bb512e0b859b031e7675",
-      "detalhe": "Implementou painel de cadeias",
-      "area": "Repositório",
-      "sha": "c5166d9",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1864,7 +1706,7 @@
   "ultimo_evento": "Hermes aprendeu e concluiu hub v2 sozinho (77 etapas, typecheck zero)",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-03T10:21:30.414Z",
+  "updated_at": "2026-07-04T10:54:27.169Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",
