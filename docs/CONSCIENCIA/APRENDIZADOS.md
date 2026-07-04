@@ -2234,3 +2234,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-03
 - **Contexto:** Hermes (PM2 id 66) caía 100% no Elite Anthropic (Sonnet 4.5 caro) porque a cadeia grátis Flash→Pro→GPT5m falhava em 13-19ms. Faltavam vars exigidas pelo /usr/local/bin/darkai.
 - **Aprendizado:** Pra Hermes usar a cadeia grátis via CLI darkai, /root/[oculto] precisa DARKAI_URL=https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/ai-proxy E DARKAI_ANON_KEY=(anon key). Depois: pm2 restart 66 --update-env && pm2 save. Confirmação nos logs: [decisor] ✅ google/gemini-3-flash-preview respondeu em Xms.
+
+### 274. Cadeia Hermes editável em quente via cadeia.json + painel WebUI
+- **Categoria:** regra
+- **Data:** 2026-07-03
+- **Contexto:** Antes, a ordem dos modelos vivia hardcoded dentro do decisor.mjs (3 modelos + Elite). Pra mudar prioridade era preciso editar código e reiniciar PM2. Pivete pediu painel visual pra reordenar e ativar/desativar modelos sem restart.
+- **Aprendizado:** Fonte da verdade da cadeia = docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json (lista com posicao/modelo/via/timeout_s/ativo/nota). decisor.mjs carrega esse arquivo com cache de 60s (função carregarCadeia) e usa CADEIA_FALLBACK_DARKAI + ELITE_FALLBACK se o JSON quebrar. Elite vars viram let atualizadas por refreshEliteVars() chamado dentro de chamarEliteAnthropic. Pra mudar prioridade: editar cadeia.json OU usar painel — Hermes pega em até 60s sem restart.
