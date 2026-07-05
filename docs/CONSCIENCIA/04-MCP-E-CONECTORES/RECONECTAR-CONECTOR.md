@@ -1,3 +1,10 @@
+---
+title: "RECONECTAR CONECTOR"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # Reconectar qualquer IA ao MCP CentralDark
 
 > **Vale pra:** ChatGPT, Claude, Grok, Gemini, Cursor, Codex, Copilot ou qualquer cliente MCP.

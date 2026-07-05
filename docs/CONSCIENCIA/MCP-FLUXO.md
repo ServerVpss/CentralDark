@@ -71,3 +71,11 @@ chmod 600 /root/CentralDark/secrets/mcp-admin.password
 - 🟢 **ok** — PM2 online + senha carregada + `/authorize` sem "ausente"
 - 🟡 **senha_nao_carregada** — processo up mas `.env` não foi injetado (rodar sync)
 - 🔴 **falha** — processo caído ou domínio fora do ar
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -95,3 +95,11 @@ multizap-gateway-postgreswuzapi-1   postgres:16-alpine                          
 
 ---
 _Este arquivo é regerado a cada execução. NÃO editar manualmente._
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -1,3 +1,10 @@
+---
+title: "INVENTARIO PM2 VPS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 🔒 Inventário Oficial PM2 — VPS CentralDark
 
 > **Fonte da verdade** dos processos PM2 da VPS `/root/CentralDark/`. Este documento é atualizado a cada auditoria. Qualquer IA que abrir o repo deve ler antes de mexer em processo.

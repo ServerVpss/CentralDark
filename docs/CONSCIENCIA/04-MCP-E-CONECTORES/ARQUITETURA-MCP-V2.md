@@ -1,3 +1,10 @@
+---
+title: "ARQUITETURA MCP V2"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # Arquitetura Definitiva — CentralDark MCP v2
 
 > Separação total entre **Modo Normal** e **Modo Admin**, carregamento dinâmico de tools, Vault blindado e base pronta pra GraphRAG + aprendizado contínuo.

@@ -1,3 +1,10 @@
+---
+title: "URLS DESCOBERTA"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # URLs públicas de auto-descoberta do MCP
 
 Qualquer IA (ChatGPT, Claude, Grok, Gemini) pode fazer `fetch` direto nessas URLs pra validar o estado do MCP sem precisar de tool.

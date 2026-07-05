@@ -1,3 +1,10 @@
+---
+title: "SYSTEM PROMPT USUARIO"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # System Prompt USUÁRIO COMUM — MCP CentralDark (leitura + tarefas seguras)
 
 > **Pra quem:** convidado, colaborador externo, IA de terceiro que só precisa consultar/ajudar.
