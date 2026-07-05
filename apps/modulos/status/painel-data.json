@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T16:03:04.255Z",
-  "updatedAtBR": "05/07/2026, 13:03:04 BRT",
+  "updatedAt": "2026-07-05T16:11:08.946Z",
+  "updatedAtBR": "05/07/2026, 13:11:08 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Adicionou health, E2E, logs",
+    "lastCommit": "Corrigiu E2E e cid do MCP",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T16:11:08.946Z",
+      "titulo": "Push na main · 701d874fb3393b0095517baed80b61ea0784d28d",
+      "detalhe": "Corrigiu E2E e cid do MCP",
+      "area": "Repositório",
+      "sha": "701d874",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-05T16:03:04.255Z",
       "titulo": "Push na main · b9f44281a9096a7f2d0bcb4e36e3360c707740f8",
       "detalhe": "Adicionou health, E2E, logs",
@@ -974,14 +982,6 @@
       "detalhe": "Ativou modo Arsenal com tema e bypass",
       "area": "Repositório",
       "sha": "3ab16dc",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T08:36:46.441Z",
-      "titulo": "Push na main · ba56098ff25feb7a6e7726360260f6d6fe57d45d",
-      "detalhe": "Made the requested updates",
-      "area": "Repositório",
-      "sha": "ba56098",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T16:11:08.946Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 701d874fb3393b0095517baed80b61ea0784d28d (701d874)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T16:03:04.255Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · b9f44281a9096a7f2d0bcb4e36e3360c707740f8 (b9f4428)",
@@ -1736,13 +1743,6 @@
       "time": "2026-07-04T08:13:17.475Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 185ca9358c3b783f8176d55d5388d6ce59dcaec7 (185ca93)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T07:59:50.677Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · fb9f49b822007441494c52b3a478ce76dec7ee01 (fb9f49b)",
       "area": "Repositório",
       "status": "sucesso"
     }
