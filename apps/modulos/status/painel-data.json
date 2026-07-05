@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-07-05T19:25:49.920Z",
-  "updatedAtBR": "05/07/2026, 16:25:49 BRT",
+  "updatedAt": "2026-07-05T19:43:23.565Z",
+  "updatedAtBR": "05/07/2026, 16:43:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
-    "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
+    "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
     "lastCommit": "Documentou reconnection flow",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
     "summary": "Cérebro Vivo Fase 1 concluída: 10 skills documentadas em AGENTS-LIBRARY, bot /arsenal exibindo tabela completa, apelidos PT-BR no roteador de intenção, 4 diagramas Mermaid do sistema. Obsidian-writer criado com INDEX automático. Pendência A9: tela Arsenal de Skills no TelePainel (Lovable) documentada e aguardando execução. Guardião com polling reduzido (1.0s) eliminou 22% CPU. 10 issues sentinela abertas (automáticas, sem falha real).",
-    "overallProgress": 60,
+    "overallProgress": 100,
     "liveFallback": {
       "mcpStatus": "online",
       "mcpToolCount": 95,
@@ -592,6 +592,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T19:43:23.583Z",
+      "title": "Correção MCP admin: rota /admin/mcp alinhada nos metadados OAuth, prompt admin ajustado e logs do painel exibindo horário de Brasília.",
+      "area": "MCP",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-07-05T19:25:49.920Z",
       "titulo": "Push na main · a737a9bb0b1c647f846adc90f050db0c59d1f171",
       "detalhe": "Documentou reconnection flow",
@@ -822,167 +829,6 @@
       "area": "Repositório",
       "sha": "8c2e69f",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-05T00:25:50.727Z",
-      "titulo": "Push na main · 5e7001d19e1995e3e2de2879b56b712e99adac92",
-      "detalhe": "fix(graph-panel): remove duplicata three.js que causava conflito de instancias no grafo 3D",
-      "area": "Repositório",
-      "sha": "5e7001d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-05T00:23:28.004Z",
-      "title": "Grafo 3D atualizado: icone IA, pulse scale, labels sempre visiveis, particulas coloridas, setores no centroide",
-      "area": "graph-panel",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-04T23:09:50.950Z",
-      "titulo": "Push na main · 738bcc55b55be47f3a17eb007bf71fe23851bb61",
-      "detalhe": "feat(painel): Jarvis v2 — icone IA nos agentes, burst de particulas em mudanca de estado, polling 3s (P23)",
-      "area": "Repositório",
-      "sha": "738bcc5",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T22:38:47.057Z",
-      "titulo": "Push na main · 6d3fd15b65ccf50202a172c64adc89b6d019bafc",
-      "detalhe": "aprendizado(#291): Start do Elite Anthropic sem caminho absoluto",
-      "area": "Repositório",
-      "sha": "6d3fd15",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T22:37:23.397Z",
-      "titulo": "Push na main · 9d35ac57d0f2dad753465139ca394a8af7d6d3e2",
-      "detalhe": "aprendizado(#289): Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing",
-      "area": "Repositório",
-      "sha": "9d35ac5",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T22:21:21.292Z",
-      "title": "Enxame 04/07: release plugin v0.4.0 corrigido (main.js d0249ac5 no GitHub, auto-update destravado) · Telegram validado ponta-a-ponta · Hermes vivo · Pendência #23 aberta (Painel Jarvis v2 tempo real)",
-      "area": "plugin-obsidian",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-04T21:36:23.944Z",
-      "title": "Grafo Jarvis 3D no ar: grafo.centralldark.com/3d.html (3d-force-graph, HUD, busca, foco de câmera) consumindo /api/graph do graph-panel",
-      "area": "GrafoVivo",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-04T21:04:27.000Z",
-      "titulo": "Push na main · c4173e394f2888f086e6e00bd4d91c869fbfee98",
-      "detalhe": "Deployed updated panels to VPS",
-      "area": "Repositório",
-      "sha": "c4173e3",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T20:56:43.555Z",
-      "titulo": "Push na main · 883a2718e6e07cd1cfa2feeb463949932a32a15a",
-      "detalhe": "Adicionou grafo visual ao app",
-      "area": "Repositório",
-      "sha": "883a271",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T19:52:43.907Z",
-      "titulo": "Push na main · b2e2667a8b7c3c618807d985cdb44a487e99c275",
-      "detalhe": "chore(painel): sync painel-data.json + hermes.json + APRENDIZADOS [auto-vps]",
-      "area": "Repositório",
-      "sha": "b2e2667",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T19:51:56.490Z",
-      "title": "Sincronização automática do painel-data.json — resolvido conflito de commit, HERMES-CORE Boot Logs ativos (7/7 módulos, 7/7 agentes)",
-      "area": "HERMES-CORE / Painel Mega",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-04T19:48:21.963Z",
-      "title": "Hermes padronizado: caminho oficial apps/modulos/HERMES-CORE — MCP boot lista 7/7 módulos e 7/7 agentes carregados. Endpoint público: /hermes/boot",
-      "area": "HERMES-CORE",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-04T17:57:26.037Z",
-      "title": "Fix GitHub 401 (pendência 29/06) + kit_boas_vindas v2 com Rotação de cérebros (darkai) e Hermes",
-      "area": "MCP",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-04T16:26:38.140Z",
-      "titulo": "Hermes v5.0 — MISSÃO FINALIZADA",
-      "detalhe": "ENOTEMPTY morto (fallback cp+rm imediato + teste determinístico), GC 6h com delete real, endpoint /health :8899, Universal-Handler, grafo auto-update, watchdog não mata missão em andamento",
-      "area": "Hermes Core",
-      "sha": "",
-      "actor": "Pivete"
-    },
-    {
-      "time": "2026-07-04T10:54:36.780Z",
-      "title": "🔍 Auditoria Arsenal Máximo: 24 processos PM2 + stack de proxies mapeados; Hermes em missão verificando chaves Elite; DarkAI apontou riscos (porta 9876 exposta, cascata 8090→8083→8082→ap7)",
-      "area": "infra",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-04T10:45:02.749Z",
-      "titulo": "Push na main · d8ab3c96e9f63646a644ee15a3550a217451c91a",
-      "detalhe": "fix(hub): restaura App.tsx completo com tema claro",
-      "area": "Repositório",
-      "sha": "d8ab3c9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T10:44:39.866Z",
-      "titulo": "Push na main · a443d2f2d41af59259a6cb8dd11119b773bf0421",
-      "detalhe": "fix(hub): força tema claro (idêntico ao TelePainel/home)",
-      "area": "Repositório",
-      "sha": "a443d2f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T10:43:18.230Z",
-      "titulo": "Push na main · dc4e89babb6d4a70489b166edc3f763751801cfe",
-      "detalhe": "fix(hub): tema claro (remove class dark) — idêntico ao TelePainel",
-      "area": "Repositório",
-      "sha": "dc4e89b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T10:24:50.468Z",
-      "titulo": "Push na main · 0092f8e9ffc817be90fb7663602642981454034e",
-      "detalhe": "feat(hub): tema esmeralda idêntico ao TelePainel",
-      "area": "Repositório",
-      "sha": "0092f8e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T10:19:51.886Z",
-      "titulo": "Push na main · 812f9a9ea5b87fb6b59de2bdbc255eb76ae8e1bd",
-      "detalhe": "feat(webhook): auto-build HUB (apps/modulos/hub) no deploy-job",
-      "area": "Repositório",
-      "sha": "812f9a9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T10:18:08.975Z",
-      "titulo": "Push na main · eff4017a9a585ebf86324816ac6da3bad666f317",
-      "detalhe": "Adicionou deploy do HUB ao webhook",
-      "area": "Repositório",
-      "sha": "eff4017",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
