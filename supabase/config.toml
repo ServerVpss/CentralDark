@@ -96,3 +96,6 @@ verify_jwt = false
 
 [functions.ai-proxy]
 verify_jwt = false
+
+[functions.hermes-cascade]
+verify_jwt = false
