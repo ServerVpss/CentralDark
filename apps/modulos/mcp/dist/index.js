@@ -10,6 +10,11 @@ import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAut
 import { getStatusHtml, getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
+import { correlationMiddleware } from "./correlation.js";
+import { healthDeep } from "./health-deep.js";
+import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, bootstrapAdminLogCapture, } from "./admin.js";
+// Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
+bootstrapAdminLogCapture();
 const app = express();
 app.disable("x-powered-by");
 function setCorsHeaders(res) {
@@ -27,6 +32,8 @@ app.options("*", (_req, res) => {
 });
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
+// V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
+app.use(correlationMiddleware);
 // ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
     res.json({
@@ -38,6 +45,16 @@ app.get("/health", (_req, res) => {
         time: new Date().toISOString(),
     });
 });
+// V2: healthcheck profundo (Health Score consumido pelo painel /admin)
+app.get("/health/deep", healthDeep);
+// ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
+app.get("/admin", adminGet);
+app.post("/admin/login", adminLogin);
+app.get("/admin/logout", adminLogout);
+app.get("/admin/api/rotas", adminRotas);
+app.get("/admin/api/tools", adminTools);
+app.get("/admin/logs/stream", adminLogsStream);
+app.post("/admin/api/testar-sse", adminTestarSse);
 // Manifesto público do catálogo de tools
 app.get("/tools.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
