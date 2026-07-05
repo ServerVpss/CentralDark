@@ -1,22 +1,26 @@
 // ai-proxy — cérebro compartilhado da CentralDark
 //
-// Duas caras, mesma edge function:
+// TODAS as rotas exigem WEBUI_LOVABLE_KEY (via Authorization: Bearer <key>
+// ou header X-Arsenal-Key). O repasse pro Lovable AI Gateway usa
+// LOVABLE_API_KEY (secret interna, nunca sai daqui).
 //
-// 1) Legado (darkai CLI + Arsenal):
-//    POST /ai-proxy       { prompt, system?, model? } -> { text }
-//    Auth: header X-Arsenal-Key (compat antiga) OU sem auth (chamada interna)
+// Rotas:
+//   GET  /v1/models
+//   POST /v1/chat/completions   (SSE quando stream:true)
+//   POST /v1/audio/speech
+//   POST /v1/audio/transcriptions
+//   GET  /v1/audio/voices
+//   POST /                       (legado darkai CLI + Arsenal)
+//   GET  /config                 (status + limites vigentes, exige auth)
 //
-// 2) OpenAI-compatible (Open WebUI, Cursor, qualquer cliente que fale OpenAI):
-//    GET  /ai-proxy/v1/models
-//    POST /ai-proxy/v1/chat/completions   (com streaming SSE)
-//    Auth: Authorization: Bearer <WEBUI_LOVABLE_KEY>
-//
-// Em ambos os casos, o repasse pro Lovable AI Gateway usa LOVABLE_API_KEY (secret interna).
+// Rate limit: janela deslizante em memória por chave (IP quando anônimo,
+// impossível chegar aqui sem chave — anônimo cai no 401 antes).
+// Configurável via env: AI_PROXY_RATE_PER_MIN (default 60),
+// AI_PROXY_RATE_PER_HOUR (default 1000). Zero desativa o limite.
 
 const GATEWAY_BASE = "https://ai.gateway.lovable.dev/v1";
 const DEFAULT_MODEL = "google/gemini-3-flash-preview";
 
-// Catálogo exposto no /v1/models (mantido curto e curado; adiciona quando quiser).
 const MODELS = [
   "google/gemini-3-flash-preview",
   "google/gemini-3.1-pro-preview",
@@ -32,6 +36,58 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 };
 
+// -------------------- Rate limit (memória) --------------------
+
+const RATE_PER_MIN = parseIntEnv("AI_PROXY_RATE_PER_MIN", 60);
+const RATE_PER_HOUR = parseIntEnv("AI_PROXY_RATE_PER_HOUR", 1000);
+
+// bucketId -> timestamps (ms). Poda automática na hora de contar.
+const hits = new Map<string, number[]>();
+
+function parseIntEnv(name: string, fallback: number): number {
+  const raw = Deno.env.get(name);
+  if (!raw) return fallback;
+  const n = parseInt(raw, 10);
+  return Number.isFinite(n) && n >= 0 ? n : fallback;
+}
+
+function bucketKeyOf(req: Request, apiKey: string): string {
+  // Hash simples da chave pra não guardar o valor cru na memória.
+  let h = 0;
+  for (let i = 0; i < apiKey.length; i++) h = ((h << 5) - h + apiKey.charCodeAt(i)) | 0;
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
+  return `${h}:${ip}`;
+}
+
+function checkRateLimit(bucket: string): { ok: true } | { ok: false; retryAfter: number; scope: string } {
+  const now = Date.now();
+  const arr = hits.get(bucket) ?? [];
+  // Poda tudo mais velho que 1h
+  const cutoffHour = now - 3600_000;
+  const kept = arr.filter((t) => t >= cutoffHour);
+  const cutoffMin = now - 60_000;
+  const lastMin = kept.filter((t) => t >= cutoffMin).length;
+
+  if (RATE_PER_MIN > 0 && lastMin >= RATE_PER_MIN) {
+    const oldest = kept.find((t) => t >= cutoffMin) ?? now;
+    const retryAfter = Math.max(1, Math.ceil((oldest + 60_000 - now) / 1000));
+    hits.set(bucket, kept);
+    return { ok: false, retryAfter, scope: "minuto" };
+  }
+  if (RATE_PER_HOUR > 0 && kept.length >= RATE_PER_HOUR) {
+    const oldest = kept[0] ?? now;
+    const retryAfter = Math.max(1, Math.ceil((oldest + 3600_000 - now) / 1000));
+    hits.set(bucket, kept);
+    return { ok: false, retryAfter, scope: "hora" };
+  }
+
+  kept.push(now);
+  hits.set(bucket, kept);
+  return { ok: true };
+}
+
+// -------------------- Server --------------------
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -43,13 +99,38 @@ Deno.serve(async (req) => {
   }
 
   const url = new URL(req.url);
-  // path relativo à edge function (Supabase entrega tipo /ai-proxy/v1/models)
   const path = url.pathname.replace(/^.*\/ai-proxy/, "") || "/";
 
+  // Auth obrigatória em TODAS as rotas (menos OPTIONS, já tratado).
+  const authed = authorize(req);
+  if (!authed.ok) return unauthorized(authed.reason);
+
+  // Rate limit por chave.
+  const bucket = bucketKeyOf(req, authed.key);
+  const rl = checkRateLimit(bucket);
+  if (!rl.ok) {
+    return json(
+      { error: "rate_limited", scope: rl.scope, retry_after: rl.retryAfter },
+      429,
+      { "Retry-After": String(rl.retryAfter) },
+    );
+  }
+
   try {
-    // === Rota OpenAI-compatible: /v1/models ===
+    if (req.method === "GET" && path === "/config") {
+      return json({
+        ok: true,
+        rate_limit: {
+          per_minute: RATE_PER_MIN,
+          per_hour: RATE_PER_HOUR,
+          enabled: RATE_PER_MIN > 0 || RATE_PER_HOUR > 0,
+        },
+        models: MODELS,
+        default_model: DEFAULT_MODEL,
+      });
+    }
+
     if (req.method === "GET" && path === "/v1/models") {
-      if (!authorizeOpenAI(req)) return unauthorized();
       return json({
         object: "list",
         data: MODELS.map((id) => ({
@@ -61,40 +142,31 @@ Deno.serve(async (req) => {
       });
     }
 
-    // === Rota OpenAI-compatible: /v1/chat/completions ===
     if (req.method === "POST" && path === "/v1/chat/completions") {
-      if (!authorizeOpenAI(req)) return unauthorized();
       return await proxyChatCompletions(req, lovableKey);
     }
 
-    // === Áudio: TTS (fala) ===
     if (req.method === "POST" && path === "/v1/audio/speech") {
-      if (!authorizeOpenAI(req)) return unauthorized();
       return await proxyAudioSpeech(req, lovableKey);
     }
 
-    // === Áudio: STT (transcrição) ===
     if (req.method === "POST" && path === "/v1/audio/transcriptions") {
-      if (!authorizeOpenAI(req)) return unauthorized();
       return await proxyAudioTranscriptions(req, lovableKey);
     }
 
-    // === Áudio: catálogo de vozes (compat Open WebUI) ===
     if (req.method === "GET" && path === "/v1/audio/voices") {
-      if (!authorizeOpenAI(req)) return unauthorized();
       return json({
         voices: [
-          { id: "alloy",   name: "Alloy (neutra)" },
-          { id: "echo",    name: "Echo (masculina)" },
-          { id: "fable",   name: "Fable (britânica)" },
-          { id: "onyx",    name: "Onyx (grave)" },
-          { id: "nova",    name: "Nova (jovem)" },
+          { id: "alloy", name: "Alloy (neutra)" },
+          { id: "echo", name: "Echo (masculina)" },
+          { id: "fable", name: "Fable (britânica)" },
+          { id: "onyx", name: "Onyx (grave)" },
+          { id: "nova", name: "Nova (jovem)" },
           { id: "shimmer", name: "Shimmer (suave)" },
         ],
       });
     }
 
-    // === Legado darkai (POST no root) ===
     if (req.method === "POST" && (path === "/" || path === "")) {
       return await legacyDarkai(req, lovableKey);
     }
@@ -107,20 +179,28 @@ Deno.serve(async (req) => {
 
 // -------------------- Auth --------------------
 
-function authorizeOpenAI(req: Request): boolean {
-  const expected = Deno.env.get("WEBUI_LOVABLE_KEY");
-  if (!expected) return false;
-  const auth = req.headers.get("Authorization") ?? "";
-  const bearer = auth.toLowerCase().startsWith("bearer ")
-    ? auth.slice(7).trim()
-    : "";
-  // aceita também X-Arsenal-Key pra compat interna
-  const arsenal = req.headers.get("X-Arsenal-Key") ?? "";
-  return bearer === expected || arsenal === expected;
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
 }
 
-function unauthorized() {
-  return json({ error: { message: "invalid_api_key", type: "auth" } }, 401);
+function authorize(req: Request): { ok: true; key: string } | { ok: false; reason: string } {
+  const expected = Deno.env.get("WEBUI_LOVABLE_KEY");
+  if (!expected) return { ok: false, reason: "servidor_sem_chave" };
+
+  const auth = req.headers.get("Authorization") ?? "";
+  const bearer = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7).trim() : "";
+  const arsenal = req.headers.get("X-Arsenal-Key") ?? "";
+  const provided = bearer || arsenal;
+  if (!provided) return { ok: false, reason: "sem_credencial" };
+  if (!timingSafeEqual(provided, expected)) return { ok: false, reason: "chave_invalida" };
+  return { ok: true, key: provided };
+}
+
+function unauthorized(reason = "invalid_api_key") {
+  return json({ error: { message: reason, type: "auth" } }, 401);
 }
 
 // -------------------- OpenAI-compatible chat --------------------
@@ -146,7 +226,6 @@ async function proxyChatCompletions(req: Request, lovableKey: string) {
     return json({ error: "gateway_error", status: upstream.status, detail: t.slice(0, 500) }, 502);
   }
 
-  // Streaming: repassa SSE cru + headers corretos.
   if (stream && upstream.body) {
     return new Response(upstream.body, {
       status: 200,
@@ -159,7 +238,6 @@ async function proxyChatCompletions(req: Request, lovableKey: string) {
     });
   }
 
-  // Não-streaming: passthrough JSON.
   const data = await upstream.json();
   return json(data);
 }
@@ -223,7 +301,6 @@ async function proxyAudioSpeech(req: Request, lovableKey: string) {
     return json({ error: "gateway_error", status: upstream.status, detail: t.slice(0, 500) }, 502);
   }
 
-  // Repassa o áudio (bytes ou SSE) como está.
   const contentType = upstream.headers.get("Content-Type") ?? "audio/mpeg";
   return new Response(upstream.body, {
     status: 200,
@@ -236,7 +313,6 @@ async function proxyAudioSpeech(req: Request, lovableKey: string) {
 }
 
 async function proxyAudioTranscriptions(req: Request, lovableKey: string) {
-  // Recebe multipart/form-data (file + model) — repassa cru pro gateway.
   const form = await req.formData().catch(() => null);
   if (!form) return json({ error: "esperado multipart/form-data" }, 400);
 
@@ -263,9 +339,9 @@ async function proxyAudioTranscriptions(req: Request, lovableKey: string) {
 
 // -------------------- helpers --------------------
 
-function json(obj: unknown, status = 200) {
+function json(obj: unknown, status = 200, extraHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(obj), {
     status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
+    headers: { ...corsHeaders, "Content-Type": "application/json", ...extraHeaders },
   });
 }
