@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T20:52:31.442Z
+# 🧠 Notion Sync — 2026-07-05T22:36:16.559Z
 
-- **Commit fonte:** `edc033d01e4d6e34683a7309528e6e8f94075d63`
+- **Commit fonte:** `7535220b8db1d70c238f7d367ecdf51a5b82d4bc`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 330 atualizadas · ❌ 450 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 331 atualizadas · ❌ 450 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 296 | 1 | 295 | 0 | 0 |
+| aprendizados | 296 | 0 | 296 | 0 | 0 |
 | estrutura | 450 | 0 | 0 | 0 | 450 |
 
 ## Operações
@@ -175,7 +175,7 @@
 | aprendizados | atualizado | #114 — Padrão operacional tipo Lovable: memória antes e depois |
 | aprendizados | atualizado | #115 — Separar run-once por nível de risco |
 | aprendizados | atualizado | #116 — Caddy bot/api separado corretamente por file_server e API |
-| aprendizados | erro | #117 — bot.centralldark.com deve servir apps/bot/dist |
+| aprendizados | atualizado | #117 — bot.centralldark.com deve servir apps/bot/dist |
 | aprendizados | atualizado | #118 — Contacts/groups read-only toleram 401 da WuzAPI |
 | aprendizados | atualizado | #119 — Duas árvores apps/bot causaram build no lugar errado |
 | aprendizados | atualizado | #120 — CORS da API deve ficar em um só lugar |
@@ -352,7 +352,7 @@
 | aprendizados | atualizado | #291 — Start do Elite Anthropic sem caminho absoluto |
 | aprendizados | atualizado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
 | aprendizados | atualizado | #293 — Sincronia VPS falhou por conflito de merge e foi resolvida |
-| aprendizados | criado | #294 — EliteHTTP porta real 8082 + Sentry precisa de org manual |
+| aprendizados | atualizado | #294 — EliteHTTP porta real 8082 + Sentry precisa de org manual |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
