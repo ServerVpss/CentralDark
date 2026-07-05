@@ -2385,3 +2385,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** Pivete reportou que o ChatGPT no chat.openai.com só listava ~39 tools do conector CentralDark, mesmo com o servidor publicando 73 em `/tools.json`. Também tentava "abrir" caminho de arquivo direto (`docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md`) e falhava.
 - **Aprendizado:** ChatGPT MCP client cacheia `tools/list` por thread. Fixes: (1) Disconnect + Reconnect + conversa NOVA — cache não sai da thread antiga. (2) Tools que somem podem ser chamadas via `mcp_admin_call({tool, input})` que ignora cache. (3) IA nunca "abre path" — sempre `github_get_file` ou `vps_read_file_safe`. Docs criados em `docs/CONSCIENCIA/04-MCP-E-CONECTORES/`: RECONECTAR-CHATGPT.md, SYSTEM-PROMPT-CHATGPT.md, URLS-DESCOBERTA.md.
+
+### 293. Sincronia VPS falhou por conflito de merge e foi resolvida
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-05
+- **Contexto:** Docs RECONECTAR-CONECTOR, SYSTEM-PROMPT-UNIVERSAL e URLS-DESCOBERTA foram criados no Lovable e sync para GitHub funcionou, mas a VPS ficou desatualizada. O git pull na VPS deu conflito em docs/CONSCIENCIA/PIVETE-IA/PIVETE-08-MCP-LIBERACAO.md entre seção 'Conexões Rápidas' local e 'Ensinar QUALQUER IA a usar o MCP' remota.
+- **Aprendizado:** Sempre verificar `git status` na VPS após criar docs no Lovable. Se houver conflito, resolver manualmente mantendo ambas as seções quando forem complementares, commitar merge e push de volta para GitHub. Não assumir que Lovable→GitHub implica VPS atualizada.
