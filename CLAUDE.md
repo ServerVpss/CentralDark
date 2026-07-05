@@ -174,6 +174,21 @@ apps/
 | `docs/CONSCIENCIA/` | Fonte de verdade do Cérebro Vivo — git é autoritativo | — |
 | `docs/CONSCIENCIA/LEMBRANCAS/` | Memória de curto prazo (tools cognitivas do MCP) | 30/06/2026 |
 | 🔒 `docs/CONSCIENCIA/PADRAO-CARD-HERMES.md` | **Padrão OFICIAL de notificação Telegram (Card Hermes v1.3)** — travado. Toda ação relevante notifica seguindo esse formato. Só o Pivete altera. Envio SEMPRE via connector Telegram `sendMessage` (bot `@srver1bot`, `connection_id std_01kvw4jkcbekyr1t33vs4p5e9w`, admin `1901426549`). PROIBIDO usar `notify-telegram`. PROIBIDO texto fora do `<pre>`. | 04/07/2026 |
+| 🔒 `apps/modulos/HERMES-CORE/` | Núcleo Hermes (core, agents, missions, logs). Loop autônomo + rede especialista (Executor, Critic, Knowledge-Collector, Auto-Diagnostico, Deploy-Watcher). Não mexer sem ordem. | 05/07/2026 |
+| 🔒 `apps/modulos/HERMES-CORE/agents/Log-Verificador/` | Hermes-Verificador 24h (PM2 id 77) — vigia todos processos PM2, auto-restart travado 3/24h, análise IA. | 05/07/2026 |
+| 🔒 `apps/modulos/Monitoramento24h/` | Monitoramento 24h consolidado — não mexer sem ordem. | 05/07/2026 |
+| 🔒 `apps/modulos/mapeamento/` | Módulo de mapeamento do ecossistema — fonte oficial do mapa vivo. | 05/07/2026 |
+| 🔒 `apps/modulos/memoria-api/` | API de memória (PM2 `CentralDark-Memoria`) — consumida pelo Hermes e Arsenal. | 05/07/2026 |
+| 🔒 `apps/modulos/oauth-broker/` | OAuth Broker (PM2 `CentralDark-OAuthBroker`) — consolidado. | 05/07/2026 |
+| 🔒 `apps/modulos/arsenal-openai-adapter/` | Arsenal Adapter (PM2 `CentralDark-ArsenalAdapter`) — plugue OpenAI-compat pro Conselho. | 05/07/2026 |
+| 🔒 `apps/modulos/elite-gateway/` | Elite Gateway HTTP (PM2 `CentralDark-EliteHTTP`/`EliteWS`) — Zendriver + orquestração. | 05/07/2026 |
+| 🔒 `apps/modulos/artifacts-builder/` | Artifacts Builder + Crafter (PM2 ids 75/76) — consolidado. | 05/07/2026 |
+| 🔒 `apps/modulos/proxy/` + `apps/modulos/lovable-proxy/` | Proxies de roteamento IA — travados. | 05/07/2026 |
+| 🔒 `apps/modulos/telepainel/` | Módulo TelePainel (bot @SEGREDOPUXADASBOT + edge `telepainel-webhook`). | 05/07/2026 |
+| 🔒 `apps/modulos/hub/` | HUB Supabase local (`lyoigsqluyktoclwdaft`) — fonte de verdade do Central. | 05/07/2026 |
+| 🔒 `apps/modulos/clone-deck/` | Clone-deck (baralho de clonagem) — consolidado. | 05/07/2026 |
+| 🔒 `apps/modulos/pivete-sync/` | Sincronizador do Pivete — não mexer sem ordem. | 05/07/2026 |
+| 🔒 `apps/modulos/obsidian-plugin-grafo-vivo/` | Plugin Obsidian do Grafo Vivo. | 05/07/2026 |
 
 > **Palavras-chave de autorização:** "PERMITO PIVETE" ou instrução explícita descrevendo o escopo exato da mudança.
 
