@@ -494,6 +494,14 @@ function parseMcpJson(texto) {
     try { return JSON.parse(dataLine.slice(5).trim()); } catch { return null; }
 }
 
+function extrairToolsCount(payload) {
+    if (Array.isArray(payload)) {
+        const item = payload.find((p) => p?.result?.tools || p?.error);
+        return { toolCount: item?.result?.tools?.length, error: item?.error?.message };
+    }
+    return { toolCount: payload?.result?.tools?.length, error: payload?.error?.message };
+}
+
 async function rodarE2EInterno({ comAdmin, cid }) {
     const base = `http://127.0.0.1:${config.port}`;
     const etapas = [];
@@ -596,19 +604,38 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     if (!init.ok || initJson?.error) { falhouEm = "initialize"; return { ok: false, falhouEm, etapas }; }
 
     // 6) tools/list via /mcp
-    const tools = await fazerRequest(`${base}/mcp`, {
+    let tools = await fazerRequest(`${base}/mcp`, {
         method: "POST",
         headers: { ...baseHeaders, "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}`, "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": "2025-06-18" },
         body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }),
     });
-    const toolsJson = tools.json || parseMcpJson(tools.texto);
-    const toolCount = toolsJson?.result?.tools?.length;
+    let toolsJson = tools.json || parseMcpJson(tools.texto);
+    let { toolCount, error: toolsError } = extrairToolsCount(toolsJson);
+    if (!tools.ok || toolsError || typeof toolCount !== "number") {
+        const batch = await fazerRequest(`${base}/mcp`, {
+            method: "POST",
+            headers: { ...baseHeaders, "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}`, "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": "2025-06-18" },
+            body: JSON.stringify([
+                { jsonrpc: "2.0", id: 10, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "MCP-Admin-E2E", version: "1.0.0" } } },
+                { jsonrpc: "2.0", method: "notifications/initialized", params: {} },
+                { jsonrpc: "2.0", id: 11, method: "tools/list", params: {} },
+            ]),
+        });
+        const batchJson = batch.json || parseMcpJson(batch.texto);
+        const batchExtract = extrairToolsCount(batchJson);
+        if (batch.ok && typeof batchExtract.toolCount === "number" && !batchExtract.error) {
+            tools = batch;
+            toolsJson = batchJson;
+            toolCount = batchExtract.toolCount;
+            toolsError = null;
+        }
+    }
     etapas.push({
         nome: "tools/list via /mcp",
         ok: tools.ok && typeof toolCount === "number",
         status: tools.status,
         ms: tools.ms,
-        detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (toolsJson?.error?.message || tools.erro || tools.texto),
+        detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (toolsError || tools.erro || tools.texto),
     });
 
     const allOk = etapas.every(e => e.ok !== false);
