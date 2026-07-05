@@ -12,7 +12,7 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
-import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, bootstrapAdminLogCapture, } from "./admin.js";
+import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
 // Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
 bootstrapAdminLogCapture();
 const app = express();
@@ -53,6 +53,10 @@ app.post("/admin/login", adminLogin);
 app.get("/admin/logout", adminLogout);
 app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
+app.get("/admin/api/logs", adminBuscarLogs);
+app.get("/admin/api/metricas", adminMetricas);
+app.post("/admin/api/e2e", adminE2E);
+app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
 app.post("/admin/api/testar-sse", adminTestarSse);
 // Manifesto público do catálogo de tools
