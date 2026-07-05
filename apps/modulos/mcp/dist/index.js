@@ -13,6 +13,46 @@ import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInsta
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
 import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
+// ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
+// Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
+process.on("uncaughtException", (err) => {
+    console.error("[FATAL] uncaughtException:", err?.stack || err);
+    try {
+        writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] uncaughtException\n${err?.stack || String(err)}\n\n`, { flag: "a" });
+    }
+    catch { }
+    process.exit(1);
+});
+process.on("unhandledRejection", (reason) => {
+    console.error("[FATAL] unhandledRejection:", reason?.stack || reason);
+    try {
+        writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] unhandledRejection\n${reason?.stack || String(reason)}\n\n`, { flag: "a" });
+    }
+    catch { }
+    process.exit(1);
+});
+// ─────────────────────── Validação de env obrigatórias (v2.3) ───────────────────────
+// Falha rápido com erro claro se algo essencial estiver faltando.
+function validarEnvsObrigatorias() {
+    const envsObrigatorias = [
+        "CENTRALDARK_ADMIN_KEY",
+        "MCP_SESSION_SECRET",
+        "GITHUB_CLIENT_ID",
+        "GITHUB_OAUTH_CALLBACK",
+    ];
+    const faltando = envsObrigatorias.filter((n) => !process.env[n] || process.env[n].trim() === "");
+    if (faltando.length > 0) {
+        const msg = `[BOOT] MCP não pode iniciar. Variáveis de ambiente ausentes: ${faltando.join(", ")}. Configure no ecosystem.config.cjs ou export antes de subir o PM2.`;
+        console.error(msg);
+        try {
+            writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] BOOT ABORTADO — envs faltando: ${faltando.join(", ")}\n\n`, { flag: "a" });
+        }
+        catch { }
+        process.exit(2);
+    }
+    console.log("[BOOT] Todas envs obrigatórias presentes ✓");
+}
+validarEnvsObrigatorias();
 // Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
 bootstrapAdminLogCapture();
 const app = express();
@@ -275,7 +315,7 @@ app.get("/mcp", (req, res) => {
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
 // ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────
 const PAINEL_DATA_PATH = "/root/CentralDark/apps/modulos/status/painel-data.json";
-const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY || "segredo_obraFullAdmin";
+const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY;
 app.post("/api/telemetry-ingest", (req, res) => {
     const auth = req.headers["authorization"] ?? "";
     const token = /^Bearer\s+(.+)$/i.exec(String(auth).trim())?.[1]?.trim();
