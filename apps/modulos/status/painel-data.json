@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T22:37:55.605Z",
-  "updatedAtBR": "05/07/2026, 19:37:55 BRT",
+  "updatedAt": "2026-07-05T22:43:28.606Z",
+  "updatedAtBR": "05/07/2026, 19:43:28 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "style(status): abas no padrão dos cards (surface-2 + line + shadow-3d)",
+    "lastCommit": "feat(inteligencia): tick v2 desacoplado + ecosystem próprio + .env.example do proxy",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T22:43:28.606Z",
+      "titulo": "Push na main · f17de00fdbd44a698a6dde11288fe29c65023cde",
+      "detalhe": "feat(inteligencia): tick v2 desacoplado + ecosystem próprio + .env.example do proxy",
+      "area": "Repositório",
+      "sha": "f17de00",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-05T22:37:55.605Z",
       "titulo": "Push na main · d81c21af87c7a65e86de90c2ec2b61fdc839f308",
@@ -1259,6 +1267,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T22:43:28.606Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f17de00fdbd44a698a6dde11288fe29c65023cde (f17de00)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T22:37:55.605Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d81c21af87c7a65e86de90c2ec2b61fdc839f308 (d81c21a)",
@@ -1598,13 +1613,6 @@
       "time": "2026-07-04T10:43:18.230Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · dc4e89babb6d4a70489b166edc3f763751801cfe (dc4e89b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T10:24:50.468Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0092f8e9ffc817be90fb7663602642981454034e (0092f8e)",
       "area": "Repositório",
       "status": "sucesso"
     }
