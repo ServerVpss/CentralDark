@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T04:36:34.191Z
+# 🧠 Notion Sync — 2026-07-05T19:08:52.468Z
 
-- **Commit fonte:** `781f2af699c42ea7e13a7eb341652447098f692d`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `e2a7c9cb7a283dac70c8ba625bcf208384756384`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 328 atualizadas · ❌ 439 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 329 atualizadas · ❌ 441 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 294 | 1 | 293 | 0 | 0 |
-| estrutura | 439 | 0 | 0 | 0 | 439 |
+| aprendizados | 294 | 0 | 294 | 0 | 0 |
+| estrutura | 441 | 0 | 0 | 0 | 441 |
 
 ## Operações
 
@@ -350,7 +350,7 @@
 | aprendizados | atualizado | #289 — Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing |
 | aprendizados | atualizado | #290 — Proxy AP7 exige aliases ap7-* |
 | aprendizados | atualizado | #291 — Start do Elite Anthropic sem caminho absoluto |
-| aprendizados | criado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
+| aprendizados | atualizado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -362,6 +362,7 @@
 | estrutura | erro | docs/CONSCIENCIA/02-PERMISSOES.md |
 | estrutura | erro | docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
 | estrutura | erro | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
@@ -643,6 +644,7 @@
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
+| estrutura | erro | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
