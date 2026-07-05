@@ -1,3 +1,10 @@
+---
+title: "BOOT CENTRALDARK"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 🧠 BOOT CENTRALDARK — Prompt Universal pra IA colaboradora
 
 > Cola isso no começo de qualquer chat (Grok, Claude, GPT, Gemini, Cursor).

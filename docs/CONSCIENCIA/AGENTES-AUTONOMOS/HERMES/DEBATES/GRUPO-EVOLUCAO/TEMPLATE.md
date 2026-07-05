@@ -1,3 +1,10 @@
+---
+title: "TEMPLATE"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # DEBATE-GRUPO-NNN — <tema curto>
 
 **Data:** YYYY-MM-DD HH:MM

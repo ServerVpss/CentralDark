@@ -1,3 +1,10 @@
+---
+title: "TEMPLATE AULA"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-XXX — &lt;Título curto&gt;
 
 **Data:** YYYY-MM-DD  

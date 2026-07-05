@@ -75,3 +75,11 @@ Sumiu do sistema. Nenhum vestígio da chave OpenRouter em código, env do PM2 sa
 - `apps/modulos/arsenal-openai-adapter/server.mjs` — auto-detecção de tipo de URL (linha 42)
 - `supabase/functions/arsenal-proxy/index.ts` — MAP de modelos que ainda precisa expansão
 - `docs/CONSCIENCIA/ARSENAL/regras.json` — conselho e modelos exigidos
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

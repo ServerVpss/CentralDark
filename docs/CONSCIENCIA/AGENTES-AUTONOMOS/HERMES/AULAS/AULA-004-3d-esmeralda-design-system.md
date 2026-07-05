@@ -1,3 +1,10 @@
+---
+title: "AULA 004 3d Esmeralda Design System"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-004 — Design System 3D Esmeralda (quando aplicar cada sombra)
 
 **Data:** 2026-07-03  

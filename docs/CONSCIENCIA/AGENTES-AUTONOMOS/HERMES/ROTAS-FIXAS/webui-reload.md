@@ -1,3 +1,10 @@
+---
+title: "Webui Reload"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # ROTA FIXA — Reload do Open WebUI após mudar CSS
 
 ## Passo único

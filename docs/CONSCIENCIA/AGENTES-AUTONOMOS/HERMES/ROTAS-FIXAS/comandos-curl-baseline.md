@@ -1,3 +1,10 @@
+---
+title: "Comandos Curl Baseline"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # ROTA FIXA — Comandos curl baseline (teste rápido dos 4 verbos)
 
 ## Rodar na VPS (não funciona fora — chave é local)

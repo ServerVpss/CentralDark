@@ -1,3 +1,10 @@
+---
+title: "PIVETE 11 APRENDIZADOS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-11 · APRENDIZADOS
 
 Extraídos de `docs/CONSCIENCIA/APRENDIZADOS.md`. Mais recentes primeiro.

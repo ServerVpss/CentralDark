@@ -1,3 +1,10 @@
+---
+title: "AULA 009 Nivel E Skills"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-009 — Sistema de Nível + Skills do Hermes (auto-evolução)
 
 **Data:** 2026-07-03

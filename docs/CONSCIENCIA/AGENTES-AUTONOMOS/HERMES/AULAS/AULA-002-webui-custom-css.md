@@ -1,3 +1,10 @@
+---
+title: "AULA 002 Webui Custom Css"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-002 — Open WebUI custom.css (tema Esmeralda)
 
 **Data:** 2026-07-03  

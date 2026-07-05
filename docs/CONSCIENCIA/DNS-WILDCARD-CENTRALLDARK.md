@@ -1,3 +1,10 @@
+---
+title: "DNS WILDCARD CENTRALLDARK"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # DNS Wildcard `*.centralldark.com` — Regra Oficial
 
 **Data:** 04/07/2026

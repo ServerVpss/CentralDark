@@ -1,3 +1,10 @@
+---
+title: "008 Proxy Terminal Invertido"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # APR-008 — Proxy do terminal invertido (`proxy on` desligava)
 
 **Data:** 03/07/2026

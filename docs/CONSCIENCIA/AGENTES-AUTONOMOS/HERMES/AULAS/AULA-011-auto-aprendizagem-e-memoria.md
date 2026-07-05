@@ -1,3 +1,10 @@
+---
+title: "AULA 011 Auto Aprendizagem E Memoria"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-011 — Auto-aprendizagem: memória, consciência, graph e sugestões
 
 **Data:** 2026-07-03

@@ -1,3 +1,10 @@
+---
+title: "PIVETE 03 REGRAS VIVAS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-03 · REGRAS VIVAS
 
 ## Memórias do usuário (`mem://~user`)

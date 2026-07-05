@@ -1,3 +1,10 @@
+---
+title: "AULA 003 Telegram Notificacao"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-003 — Notificação Telegram pós-ação
 
 **Data:** 2026-07-03  

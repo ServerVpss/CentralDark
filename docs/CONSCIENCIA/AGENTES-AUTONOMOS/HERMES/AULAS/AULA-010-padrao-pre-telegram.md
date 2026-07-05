@@ -1,3 +1,10 @@
+---
+title: "AULA 010 Padrao Pre Telegram"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-010 — Padrão `<pre>` Telegram (admin vs canal)
 
 **Data:** 2026-07-03

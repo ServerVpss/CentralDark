@@ -1,3 +1,10 @@
+---
+title: "003 Webui Custom Css Rota"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 003 — Open WebUI: custom.css via volume mount
 
 **Data:** 2026-07-03  

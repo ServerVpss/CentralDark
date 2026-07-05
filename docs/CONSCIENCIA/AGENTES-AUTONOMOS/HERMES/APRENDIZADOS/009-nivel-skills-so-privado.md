@@ -24,3 +24,11 @@ Todo card do admin fecha com o bloco `<pre>` de nível + XP + skills do Hermes (
 - Liga em APR-008 (canal também mono) — mesmo padrão visual `<pre>`, só muda o conteúdo por destino.
 - Fonte: `HERMES/STATUS.md`.
 - Rota: `HERMES/ROTAS-FIXAS/notificacao-telegram.md`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

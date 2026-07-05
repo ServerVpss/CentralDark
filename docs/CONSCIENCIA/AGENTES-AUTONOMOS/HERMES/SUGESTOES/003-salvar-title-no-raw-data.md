@@ -1,3 +1,10 @@
+---
+title: "003 Salvar Title No Raw Data"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # SUG-003 — Salvar `chat.title` completo no `telegram_messages.raw_data`
 
 ## Problema

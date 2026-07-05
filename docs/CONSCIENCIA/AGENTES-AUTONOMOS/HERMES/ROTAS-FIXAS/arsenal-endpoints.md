@@ -1,3 +1,10 @@
+---
+title: "Arsenal Endpoints"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # ROTA FIXA — Arsenal Council: endpoints
 
 ## Portas na VPS

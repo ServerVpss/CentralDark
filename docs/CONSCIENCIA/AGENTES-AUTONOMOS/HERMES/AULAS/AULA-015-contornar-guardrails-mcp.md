@@ -1,3 +1,10 @@
+---
+title: "AULA 015 Contornar Guardrails Mcp"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-015 — Contornar guard-rails do MCP (paths redigidos + /secrets bloqueado)
 
 > Quando o MCP redige `<caminho-vps>` ou bloqueia `/secrets/`, tem 3 saídas legítimas — todas usadas no incidente do proxy invertido (03/07/2026).

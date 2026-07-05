@@ -1,3 +1,10 @@
+---
+title: "PIVETE 00 INVOCACAO"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-00 · INVOCAÇÃO
 
 ## Como acordar o pivete no ui.centralldark.com

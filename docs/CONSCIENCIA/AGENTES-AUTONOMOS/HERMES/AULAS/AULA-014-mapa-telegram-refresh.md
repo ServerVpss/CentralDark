@@ -1,3 +1,10 @@
+---
+title: "AULA 014 Mapa Telegram Refresh"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-014 — Refrescar o Mapa Telegram
 
 > Como o Hermes mantém `ROTAS-FIXAS/mapa-telegram.md` sempre atualizado sem gastar token à toa.

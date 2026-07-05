@@ -1,3 +1,10 @@
+---
+title: "PIVETE 06 ARQUIVOS TOCADOS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-06 · ARQUIVOS TOCADOS NESTA JANELA
 
 ## Criados

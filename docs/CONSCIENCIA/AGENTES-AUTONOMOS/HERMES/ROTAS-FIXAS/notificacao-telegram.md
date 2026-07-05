@@ -1,3 +1,10 @@
+---
+title: "Notificacao Telegram"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # ROTA FIXA — Notificação Telegram (pós-ação obrigatória)
 
 ## Regra

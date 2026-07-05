@@ -1,3 +1,10 @@
+---
+title: "PIVETE 16 SECRETS CONNECTORS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-16 · SECRETS & CONNECTORS
 
 ⚠️ **Nunca expor valores.** Este arquivo lista **só os nomes** dos secrets e connectors que o pivete pode usar via MCP/Gateway. Os valores vivem em Lovable Cloud (secret manager) e/ou `/root/CentralDark/secrets/` na VPS.

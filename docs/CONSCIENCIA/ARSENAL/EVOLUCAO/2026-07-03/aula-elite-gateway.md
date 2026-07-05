@@ -1,3 +1,10 @@
+---
+title: "Aula Elite Gateway"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │  🎓 AULA DO TUTOR — HERMES vira admin do ELITE GATEWAY · 03/07    │

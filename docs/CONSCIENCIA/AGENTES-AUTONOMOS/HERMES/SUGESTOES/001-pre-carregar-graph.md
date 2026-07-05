@@ -1,3 +1,10 @@
+---
+title: "001 Pre Carregar Graph"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # SUG-001 — Pré-carregar graph antes de qualquer bloco
 
 **Data:** 2026-07-03

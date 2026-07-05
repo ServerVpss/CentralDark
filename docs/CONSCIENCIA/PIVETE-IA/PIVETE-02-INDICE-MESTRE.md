@@ -36,3 +36,11 @@ Cada arquivo ≤ 40KB. Se estourar, quebro em `-a`, `-b`, `-c`. Sem truncar.
 
 ## Regra de atualização
 Novos aprendizados, decisões ou arquivos tocados = append no arquivo certo + entrada em `PIVETE-15-CHANGELOG.md`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

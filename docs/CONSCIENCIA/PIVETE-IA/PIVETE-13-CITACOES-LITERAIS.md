@@ -1,3 +1,10 @@
+---
+title: "PIVETE 13 CITACOES LITERAIS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-13 · CITAÇÕES LITERAIS DO PIVETE
 
 Trechos exatos da janela — usar pra calibrar o jeito de falar dele e voltar a instrução original.

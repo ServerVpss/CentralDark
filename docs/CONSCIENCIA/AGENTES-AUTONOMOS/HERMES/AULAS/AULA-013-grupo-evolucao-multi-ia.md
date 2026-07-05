@@ -1,3 +1,10 @@
+---
+title: "AULA 013 Grupo Evolucao Multi Ia"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-013 — Grupo Central Dark Evolução (multi-IA: Claude + GPT + Gemini + Hermes)
 
 **Data:** 2026-07-03

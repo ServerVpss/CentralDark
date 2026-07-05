@@ -1,3 +1,10 @@
+---
+title: "TEMPLATE DEBATE"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # DEBATE-XXX — &lt;Assunto&gt;
 
 **Data:** YYYY-MM-DD  

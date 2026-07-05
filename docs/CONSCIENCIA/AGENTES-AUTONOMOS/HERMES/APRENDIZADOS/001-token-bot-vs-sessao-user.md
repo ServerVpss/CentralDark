@@ -1,3 +1,10 @@
+---
+title: "001 Token Bot Vs Sessao User"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 001 — Token de bot ≠ sessão de usuário
 
 **Data:** 2026-07-03  

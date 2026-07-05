@@ -1,3 +1,10 @@
+---
+title: "PIVETE 12 BASE MILITAR ABERTA"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-12 · BASE MILITAR ABERTA — DECISÃO FIRME
 
 ## O que o Pivete decidiu

@@ -1,3 +1,10 @@
+---
+title: "PIVETE 08 MCP LIBERACAO"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-08 · LIBERAÇÃO DO MCP
 
 ## Contexto

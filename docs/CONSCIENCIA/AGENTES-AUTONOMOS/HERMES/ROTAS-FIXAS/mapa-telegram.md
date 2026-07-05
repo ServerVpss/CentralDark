@@ -1,3 +1,10 @@
+---
+title: "Mapa Telegram"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 🗺️ Mapa Telegram — Foco Ativo do Hermes
 
 > Última atualização: 03/07/2026

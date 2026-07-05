@@ -1,3 +1,10 @@
+---
+title: "004 Hermes 24h Loop Autonomo"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # SUG-004 — Hermes em modo 24h (loop autônomo de estudo)
 
 ## Objetivo

@@ -1,3 +1,10 @@
+---
+title: "LOG VERIFICADOR"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 🔍 Hermes Log-Verificador — Documentação Oficial
 
 **Criado em:** 05/07/2026

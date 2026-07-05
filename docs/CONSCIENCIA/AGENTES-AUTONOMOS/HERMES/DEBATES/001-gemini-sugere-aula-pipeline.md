@@ -1,3 +1,10 @@
+---
+title: "001 Gemini Sugere Aula Pipeline"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # DEBATE-001 — Que aula falta pra árvore ficar 10/10?
 
 **Data:** 2026-07-03  

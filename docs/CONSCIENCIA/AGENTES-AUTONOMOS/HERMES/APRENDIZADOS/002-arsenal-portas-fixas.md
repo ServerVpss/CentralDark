@@ -1,3 +1,10 @@
+---
+title: "002 Arsenal Portas Fixas"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 002 — Arsenal Council: portas e endpoints fixos
 
 **Data:** 2026-07-03  

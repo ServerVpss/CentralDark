@@ -1,3 +1,10 @@
+---
+title: "PIVETE 10 INFRA VPS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-10 · INFRA VPS
 
 ## Raiz do projeto

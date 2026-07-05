@@ -1,3 +1,10 @@
+---
+title: "004 Fallback Conselheiro"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 004 — Fallback de conselheiro quando Elite Anthropic offline
 
 **Data:** 2026-07-03  

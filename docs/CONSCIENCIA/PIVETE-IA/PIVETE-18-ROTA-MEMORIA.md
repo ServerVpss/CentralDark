@@ -67,3 +67,11 @@ Usuário: "restart do gateway"
 3. Responde: "reiniciado ✅"
 4. (Opcional) registrar_aprendizado só se algo deu errado ou fluxo mudou
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

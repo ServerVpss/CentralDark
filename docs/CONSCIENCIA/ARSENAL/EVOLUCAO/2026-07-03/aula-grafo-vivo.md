@@ -1,3 +1,10 @@
+---
+title: "Aula Grafo Vivo"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │  🎓 AULA DO TUTOR — HERMES mantém o GRAFO VIVO · 03/07/2026       │

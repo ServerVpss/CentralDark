@@ -1,3 +1,10 @@
+---
+title: "009 Canal Linkado Espelha Grupo"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # APR-009 — Canal do Telegram com grupo linkado espelha posts automaticamente
 
 **Data:** 03/07/2026

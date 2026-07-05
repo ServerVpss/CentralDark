@@ -83,3 +83,11 @@ System prompts versionados em `apps/modulos/WebUI/personas/*.md`.
 - 12 endpoints REST no gateway (consolidado em 1 tool server).
 - Tokens escopados múltiplos (Bearer único no MCPO server-side já basta).
 - Bolt integration (pendência futura).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

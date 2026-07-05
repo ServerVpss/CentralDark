@@ -1,3 +1,10 @@
+---
+title: "Aulas Avancadas Gateway"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │  🎓 AULAS AVANÇADAS — HERMES ESPECIALISTA EM GATEWAY · 03/07/2026 │

@@ -1,3 +1,10 @@
+---
+title: "PIVETE 15 CHANGELOG"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-15 · CHANGELOG
 
 Toda atualização desta pasta entra aqui. Mais recente no topo.

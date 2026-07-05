@@ -109,3 +109,11 @@ Ver `docs/CONSCIENCIA/PADRAO-EMOJIS.md` — usar layout **Card admin** (privado)
 
 ## 🏁 Critério de fechamento
 Todos os 6 itens ✅ + Hermes anexa print/curl do fluxo funcionando + Pivete confirma no chat. Só então fechar pendência #19.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

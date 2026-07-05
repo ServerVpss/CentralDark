@@ -1,3 +1,10 @@
+---
+title: "INDICE"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # Índice de Aprendizados do Hermes
 
 | # | Título | Categoria | Data | Aula relacionada |

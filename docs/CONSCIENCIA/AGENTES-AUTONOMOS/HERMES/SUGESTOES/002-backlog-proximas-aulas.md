@@ -1,3 +1,10 @@
+---
+title: "002 Backlog Proximas Aulas"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # SUG-002 — Próximas aulas propostas (backlog)
 
 **Data:** 2026-07-03

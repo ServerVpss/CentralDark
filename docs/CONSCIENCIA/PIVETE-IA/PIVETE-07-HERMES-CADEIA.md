@@ -1,3 +1,10 @@
+---
+title: "PIVETE 07 HERMES CADEIA"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-07 · HERMES — CADEIA AUTÔNOMA
 
 ## Localização

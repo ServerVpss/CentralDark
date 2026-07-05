@@ -1,3 +1,10 @@
+---
+title: "PIVETE 01 IDENTIDADE"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-01 · IDENTIDADE
 
 ## Quem eu sou

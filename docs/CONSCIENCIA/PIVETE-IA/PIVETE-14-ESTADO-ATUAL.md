@@ -1,3 +1,10 @@
+---
+title: "PIVETE 14 ESTADO ATUAL"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-14 · ESTADO ATUAL (SNAPSHOT)
 
 **Última atualização:** 04/07/2026

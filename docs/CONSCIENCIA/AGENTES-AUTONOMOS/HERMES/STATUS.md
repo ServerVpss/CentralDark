@@ -1,3 +1,10 @@
+---
+title: "STATUS"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # HERMES — STATUS / NÍVEL / SKILLS
 
 > Fonte da verdade do "onde o Hermes tá agora". Toda notificação Telegram no **privado do admin** DEVE anexar o bloco `<pre>` renderizado a partir daqui. **Canal público NÃO leva esse bloco** (só linha curta).

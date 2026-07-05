@@ -1,3 +1,10 @@
+---
+title: "PADRAO CARD HERMES"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # 🎴 PADRÃO CARD HERMES — v1.2 (OFICIAL)
 
 > **Status:** ✅ APROVADO E TRAVADO

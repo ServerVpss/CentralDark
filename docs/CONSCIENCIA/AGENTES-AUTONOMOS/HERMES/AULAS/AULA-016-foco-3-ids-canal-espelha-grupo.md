@@ -1,3 +1,10 @@
+---
+title: "AULA 016 Foco 3 Ids Canal Espelha Grupo"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-016 — Foco em 3 IDs + canal espelha grupo automaticamente
 
 > Regra fundamental de comunicação do Hermes. Decorar.

@@ -1,3 +1,10 @@
+---
+title: "AULA 005 Pipeline Deploy Continuo"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-005 — Pipeline Deploy Contínuo (Webhook + PM2 + Docker + Supabase)
 
 **Data:** 2026-07-03  

@@ -1,3 +1,10 @@
+---
+title: "002 Bloco6 Fechado"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # EVOLUÇÃO-002 — Bloco 6 fechado (esqueleto — Fabler preenche)
 
 > Este arquivo foi pré-criado pelo Hermes/Lovable. Fabler executa o restart WebUI e preenche as seções abaixo. Segue formato consistente com EVOLUÇÃO-001.

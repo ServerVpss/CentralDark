@@ -1,3 +1,10 @@
+---
+title: "PIVETE 05 DECISOES"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-05 · DECISÕES DO PIVETE
 
 Cada linha = uma decisão consolidada. Ordem cronológica (mais recente embaixo).

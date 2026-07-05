@@ -1,3 +1,10 @@
+---
+title: "AULA 012 Padrao Commit Github"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-012 — Padrão de commit GitHub (🧠 Hermes/PASTA: NNN título)
 
 **Data:** 2026-07-03

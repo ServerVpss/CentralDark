@@ -1,3 +1,10 @@
+---
+title: "TEMPLATE APRENDIZADO"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # NNN — &lt;Título curto&gt;
 
 **Data:** YYYY-MM-DD  

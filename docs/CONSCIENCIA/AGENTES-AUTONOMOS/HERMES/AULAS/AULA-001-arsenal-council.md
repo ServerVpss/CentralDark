@@ -1,3 +1,10 @@
+---
+title: "AULA 001 Arsenal Council"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # AULA-001 — Arsenal Council
 
 **Data:** 2026-07-03  

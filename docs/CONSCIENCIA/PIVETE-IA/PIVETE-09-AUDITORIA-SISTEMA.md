@@ -1,3 +1,10 @@
+---
+title: "PIVETE 09 AUDITORIA SISTEMA"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-09 · SISTEMA DE AUDITORIA
 
 ## Módulo central — `apps/modulos/mcp/dist/lib/audit.js`

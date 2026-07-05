@@ -1,3 +1,10 @@
+---
+title: "PIVETE 04 HISTORICO JANELA"
+date: 2026-07-05
+tags: ["consciencia"]
+updated: 2026-07-05
+---
+
 # PIVETE-04 · HISTÓRICO DA JANELA
 
 Timeline dos turnos principais da janela Lovable que originou este pivete. Reconstruída a partir do contexto persistente disponível (parte inicial foi condensada pelo próprio sistema — ver `PIVETE-13` pra citações literais).
