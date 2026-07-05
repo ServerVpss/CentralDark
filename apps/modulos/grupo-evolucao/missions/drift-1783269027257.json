@@ -1,0 +1,21 @@
+{
+  "id": "drift-1783269027257",
+  "tema": "Drift detectado (3 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "MCP-CentralDark: +432 restarts"
+      },
+      {
+        "tipo": "pm2-status-mudou",
+        "detalhe": "CentralDark-EliteHTTP: stopped → errored"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "9a3965654 → da96cee6a"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "drift-1783263606954",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-novo",
+        "detalhe": "CentralDark-OAuthBroker"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

@@ -1,0 +1,211 @@
+// ============================================================
+// OAuth Broker CentralDark — porta 8098 (v1.4 — logs + list)
+// hub.centralldark.com/oauth/{provider}/start · /callback · /api/keys/*
+// ============================================================
+import express from "express";
+import crypto from "node:crypto";
+import { createClient } from "@supabase/supabase-js";
+import "dotenv/config";
+import fs from "node:fs";
+import path from "node:path";
+
+for (const f of ["/root/CentralDark/apps/modulos/hub/.env","/root/CentralDark/apps/modulos/oauth-broker/.env"]) {
+  if (fs.existsSync(f)) { const d = (await import("dotenv")).default; d.config({ path: f, override: false }); }
+}
+
+const {
+  HUB_SUPABASE_URL,
+  HUB_SUPABASE_SERVICE_ROLE_KEY,
+  VAULT_MASTER_KEY,
+  PORT = 8098,
+  PUBLIC_BASE = "https://hub.centralldark.com",
+} = process.env;
+
+if (!HUB_SUPABASE_URL || !HUB_SUPABASE_SERVICE_ROLE_KEY || !VAULT_MASTER_KEY) {
+  console.error("Faltam envs obrigatórias (HUB_SUPABASE_URL/SERVICE_ROLE_KEY/VAULT_MASTER_KEY)");
+  process.exit(1);
+}
+
+const sb = createClient(HUB_SUPABASE_URL, HUB_SUPABASE_SERVICE_ROLE_KEY, {
+  auth: { persistSession: false },
+});
+
+// ============================================================
+// 📝 LOGGER EM DISCO — toda ação no HUB fica registrada
+// ============================================================
+const LOG_DIR = "/root/CentralDark/apps/modulos/hub/logs";
+fs.mkdirSync(LOG_DIR, { recursive: true });
+const LOG_FILE = path.join(LOG_DIR, "hub-actions.log");
+
+function logAction(entry) {
+  const line = JSON.stringify({ ts: new Date().toISOString(), ...entry }) + "\n";
+  try { fs.appendFileSync(LOG_FILE, line); } catch (e) { console.error("log fail", e.message); }
+  // eco no stdout do PM2 também
+  console.log("[HUB-ACTION]", line.trim());
+}
+
+function toUuid(id) {
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(id))) return id;
+  const h = crypto.createHash("sha1").update("centraldark:" + String(id)).digest("hex");
+  return `${h.slice(0,8)}-${h.slice(8,12)}-5${h.slice(13,16)}-8${h.slice(17,20)}-${h.slice(20,32)}`;
+}
+
+const KEY = crypto.createHash("sha256").update(VAULT_MASTER_KEY).digest();
+function encrypt(plain) {
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv("aes-256-gcm", KEY, iv);
+  const enc = Buffer.concat([cipher.update(plain, "utf8"), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return Buffer.concat([iv, tag, enc]);
+}
+
+async function notifyHermes(event, detail) {
+  logAction({ kind: "hermes", event, detail });
+}
+
+const app = express();
+app.use(express.json({ limit: "1mb" }));
+
+// Middleware de log — TODA requisição fica registrada
+app.use((req, res, next) => {
+  const start = Date.now();
+  const bodyPreview = req.body && Object.keys(req.body).length
+    ? Object.fromEntries(Object.entries(req.body).map(([k,v]) =>
+        [k, k.toLowerCase().includes("key") || k.toLowerCase().includes("token") || k.toLowerCase().includes("secret")
+          ? `***${String(v).slice(-4)}`
+          : v]))
+    : undefined;
+  res.on("finish", () => {
+    logAction({
+      kind: "http",
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      ms: Date.now() - start,
+      ip: req.ip,
+      ua: req.headers["user-agent"]?.slice(0, 80),
+      body: bodyPreview,
+    });
+  });
+  next();
+});
+
+app.get("/health", (_req, res) => res.json({ ok: true, service: "oauth-broker", version: "1.4" }));
+
+// ============================================================
+// GET /api/keys/list?user_id=xxx — lista conexões (evita frontend bater direto)
+// ============================================================
+app.get("/api/keys/list", async (req, res) => {
+  try {
+    const user_id = toUuid(req.query.user_id);
+    if (!user_id) return res.status(400).json({ ok: false, error: "faltou user_id" });
+    const { data, error } = await sb.from("oauth_connections")
+      .select("id, provider_id, expires_at, status, account_label, consent_at")
+      .eq("user_id", user_id);
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.json({ ok: true, items: data || [] });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// ============================================================
+// GET /api/providers — catálogo (evita frontend bater direto)
+// ============================================================
+app.get("/api/providers", async (_req, res) => {
+  try {
+    const { data, error } = await sb.from("oauth_providers")
+      .select("*").eq("enabled", true).order("display_name");
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.json({ ok: true, items: data || [] });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// ============================================================
+// POST /api/keys/store — colar chave manual (API key)
+// ============================================================
+app.post("/api/keys/store", async (req, res) => {
+  try {
+    let { user_id, provider_id, api_key } = req.body || {};
+    user_id = toUuid(user_id);
+    if (!user_id || !provider_id || !api_key) {
+      return res.status(400).json({ ok: false, error: "faltou user_id/provider_id/api_key" });
+    }
+    if (String(api_key).trim().length < 10) {
+      return res.status(400).json({ ok: false, error: "api_key muito curta" });
+    }
+
+    const { data: prov } = await sb.from("oauth_providers")
+      .select("id, display_name, enabled").eq("id", provider_id).maybeSingle();
+    if (prov && prov.enabled === false) {
+      return res.status(400).json({ ok: false, error: "provider desabilitado" });
+    }
+
+    const enc = encrypt(String(api_key).trim());
+    const expiresAt = new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString();
+
+    const { data: conn, error } = await sb.from("oauth_connections").upsert({
+      user_id, provider_id,
+      access_token_enc: enc,
+      refresh_token_enc: null,
+      scopes_granted: "api_key",
+      expires_at: expiresAt,
+      consent_at: new Date().toISOString(),
+      status: "active",
+      account_label: "api-key",
+    }, { onConflict: "user_id,provider_id,account_label" }).select().maybeSingle();
+
+    if (error) {
+      await notifyHermes("apikey_save_error", { provider_id, user_id, err: error.message });
+      return res.status(500).json({ ok: false, error: error.message });
+    }
+
+    try {
+      await sb.from("oauth_consent_log").insert({
+        connection_id: conn?.id, user_id, provider_id,
+        event: "api_key_saved",
+        detail: { via: "hub-modal" },
+        ip: req.ip, user_agent: req.headers["user-agent"],
+      });
+    } catch {}
+
+    await notifyHermes("apikey_saved", { provider_id, user_id });
+    return res.json({ ok: true, connection_id: conn?.id, expires_at: expiresAt });
+  } catch (e) {
+    console.error("keys/store crash", e);
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// ============================================================
+// DELETE /api/keys/:id
+// ============================================================
+app.delete("/api/keys/:id", async (req, res) => {
+  try {
+    const { error } = await sb.from("oauth_connections").delete().eq("id", req.params.id);
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.json({ ok: true });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// ============================================================
+// GET /api/logs/tail — últimas 200 linhas do log (útil pro Hermes/painel)
+// ============================================================
+app.get("/api/logs/tail", (_req, res) => {
+  try {
+    if (!fs.existsSync(LOG_FILE)) return res.json({ ok: true, lines: [] });
+    const raw = fs.readFileSync(LOG_FILE, "utf8").trim().split("\n");
+    return res.json({ ok: true, lines: raw.slice(-200) });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+app.listen(PORT, "127.0.0.1", () => {
+  console.log(`oauth-broker on 127.0.0.1:${PORT} (v1.4 logging→${LOG_FILE})`);
+  logAction({ kind: "boot", port: PORT, version: "1.4" });
+});

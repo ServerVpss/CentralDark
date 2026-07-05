@@ -1,0 +1,11 @@
+{
+  "nome": "Arsenal Council - Painel de Modelos",
+  "tipo": "react-spa",
+  "slug": "arsenal-council---painel-de-modelos",
+  "tema": "dark",
+  "criado": "2026-07-05T00:50:51.307Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Painel visual do Arsenal Council mostrando todos os modelos de IA disponíveis (Gemini 3 Flash, Gemini 3.1 Pro, GPT-5, GPT-5.5, Claude Sonnet, Claude Opus) com status, latência, e modo de operação (Rou"
+}

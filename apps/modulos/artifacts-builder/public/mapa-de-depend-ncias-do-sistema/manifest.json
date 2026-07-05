@@ -1,0 +1,11 @@
+{
+  "nome": "Mapa de Dependências do Sistema",
+  "tipo": "react-spa",
+  "slug": "mapa-de-depend-ncias-do-sistema",
+  "tema": "dark",
+  "criado": "2026-07-05T00:59:11.608Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Mapa interativo mostrando todas as dependências entre módulos da CentralDark. Quem chama quem, portas, protocolos, e status das conexões."
+}

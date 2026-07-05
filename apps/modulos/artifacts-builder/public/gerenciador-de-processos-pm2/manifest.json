@@ -1,0 +1,11 @@
+{
+  "nome": "Gerenciador de Processos PM2",
+  "tipo": "react-spa",
+  "slug": "gerenciador-de-processos-pm2",
+  "tema": "dark",
+  "criado": "2026-07-05T00:58:41.525Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Interface web para gerenciar os 24 processos PM2: start/stop/restart, ver logs, monitorar CPU/memória por processo."
+}

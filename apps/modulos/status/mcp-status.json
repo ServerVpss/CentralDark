@@ -1,0 +1,12 @@
+{
+  "servico": "CentralDark-MCP",
+  "pm2_id": 17,
+  "pm2_status": "online",
+  "senha_no_disco": true,
+  "senha_carregada_no_processo": true,
+  "authorize_http_code": 400,
+  "authorize_saudavel": true,
+  "status": "ok",
+  "emoji": "🟢",
+  "checado_em": "2026-07-05T22:35:02Z"
+}

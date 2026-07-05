@@ -1,0 +1,11 @@
+{
+  "nome": "Relatório de Evolução - Diário",
+  "tipo": "react-spa",
+  "slug": "relat-rio-de-evolu-o---di-rio",
+  "tema": "dark",
+  "criado": "2026-07-05T00:59:41.650Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Relatório diário de evolução do sistema: artefatos criados, debates realizados, missões concluídas, mudanças no grafo, e métricas de saúde."
+}

@@ -1,0 +1,23 @@
+services:
+  hermes-thinker:
+    build: .
+    container_name: CentralDark-HermesThinker
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7801:7801"
+    environment:
+      - PORT=7801
+      # LLM: endpoint OpenAI-compatível. Padrão = Elite HTTP Gateway na VPS.
+      # Pode trocar por ai-proxy/OpenRouter/Groq sem rebuild (só editar e `docker compose up -d`).
+      - LLM_BASE_URL=${LLM_BASE_URL:-http://host.docker.internal:8080/v1}
+      - LLM_API_KEY=${LLM_API_KEY:-troque-me}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Missões compartilhadas com o Hermes principal (leitura/escrita)
+      - /root/CentralDark/docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes:/app/missoes
+      # Prints salvos aqui, visíveis pro resto do sistema
+      - /root/CentralDark/apps/modulos/hermes-thinker/shots:/app/shots
+    mem_limit: 2g
+    cpus: "2.0"

@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#29A664" />
+  <title>PR Review — Multi-IA · CentralDark</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    /* ── overrides específicos desta página ── */
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .provider-card {
+      background: hsl(var(--surface-2));
+      border: 1px solid hsl(var(--line));
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-3d-soft);
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (hover: hover) {
+      .provider-card:hover {
+        transform: translateY(-2px);
+        border-color: hsl(var(--primary) / 0.45);
+      }
+    }
+
+    .provider-card.is-active {
+      border-color: hsl(var(--primary) / 0.6);
+      box-shadow:
+        var(--shadow-3d-soft),
+        0 0 0 1px hsl(var(--primary) / 0.25),
+        inset 0 0 0 100px hsl(var(--primary) / 0.04);
+    }
+
+    .provider-card.is-active:hover {
+      transform: none;
+    }
+
+    .pc-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pc-emoji {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: hsl(var(--primary) / 0.12);
+      font-size: 22px;
+      box-shadow: var(--shadow-3d-soft);
+      flex-shrink: 0;
+    }
+
+    .pc-emoji.inactive {
+      background: hsl(var(--line) / 0.7);
+      filter: grayscale(0.4);
+    }
+
+    .pc-title { font-size: 15px; font-weight: 700; color: hsl(var(--text)); }
+    .pc-model { font-family: "Geist Mono", monospace; font-size: 11px; color: hsl(var(--muted-c)); margin-top: 2px; }
+    .pc-desc  { font-size: 13px; color: hsl(var(--muted-c)); line-height: 1.55; flex: 1; }
+
+    /* pill de custo */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+    .pill.free   { background: hsl(var(--green)  / 0.12); color: hsl(var(--green));  border: 1px solid hsl(var(--green)  / 0.3); }
+    .pill.paid   { background: hsl(var(--yellow) / 0.12); color: hsl(var(--yellow)); border: 1px solid hsl(var(--yellow) / 0.3); }
+    .pill.local  { background: hsl(var(--purple) / 0.12); color: hsl(var(--purple)); border: 1px solid hsl(var(--purple) / 0.3); }
+    .pill.active { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); border: 1px solid hsl(var(--primary) / 0.35); }
+
+    /* bloco de instrução dentro do card */
+    .pc-instruction {
+      background: hsl(var(--bg-2));
+      border: 1px solid hsl(var(--line));
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 12.5px;
+      color: hsl(var(--muted-c));
+      line-height: 1.55;
+    }
+
+    .pc-instruction a { color: hsl(var(--primary)); font-weight: 600; }
+
+    .secret-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 6px;
+      background: hsl(var(--surface));
+      border: 1px solid hsl(var(--line));
+      border-radius: 8px;
+      padding: 7px 10px;
+    }
+
+    .secret-row code {
+      font-family: "Geist Mono", monospace;
+      font-size: 12px;
+      color: hsl(var(--primary));
+      font-weight: 600;
+    }
+
+    .copy-pill {
+      background: hsl(var(--primary) / 0.10);
+      border: 1px solid hsl(var(--primary) / 0.25);
+      color: hsl(var(--primary));
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .copy-pill:hover { background: hsl(var(--primary) / 0.18); }
+
+    .pc-status-ok {
+      background: hsl(var(--primary) / 0.08);
+      border: 1px solid hsl(var(--primary) / 0.25);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 12.5px;
+      color: hsl(var(--primary));
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* botões de ação */
+    .pc-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.1s;
+      line-height: 1;
+    }
+    .btn-cta:hover { opacity: 0.88; transform: translateY(-1px); text-decoration: none; }
+
+    .btn-cta.primary {
+      background: hsl(var(--primary));
+      color: #fff;
+      box-shadow: var(--shadow-3d-primary);
+    }
+    .btn-cta.ghost {
+      background: hsl(var(--surface));
+      color: hsl(var(--soft-c));
+      border: 1px solid hsl(var(--line-strong));
+      box-shadow: var(--shadow-3d-soft);
+    }
+    .btn-cta.success {
+      background: hsl(var(--primary) / 0.12);
+      color: hsl(var(--primary));
+      border: 1px solid hsl(var(--primary) / 0.3);
+      cursor: default;
+    }
+    .btn-cta.success:hover { opacity: 1; transform: none; }
+
+    /* hero específico desta página */
+    .page-hero {
+      padding: clamp(20px, 4vw, 48px) 0 20px;
+      width: min(1320px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .page-hero__top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: hsl(var(--muted-c));
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: hsl(var(--primary)); text-decoration: none; }
+
+    /* resumo dos ativos */
+    .active-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* how-to steps */
+    .steps-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .step-item {
+      background: hsl(var(--surface-2));
+      border: 1px solid hsl(var(--line));
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-3d-soft);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .step-num {
+      min-width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: hsl(var(--primary));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-3d-primary);
+    }
+    .step-text { font-size: 13px; color: hsl(var(--muted-c)); line-height: 1.55; }
+    .step-text strong { color: hsl(var(--soft-c)); }
+    .step-text code { font-family: "Geist Mono", monospace; font-size: 11.5px; background: hsl(var(--line) / 0.6); padding: 1px 5px; border-radius: 4px; }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: hsl(var(--surface));
+      border: 1px solid hsl(var(--primary) / 0.4);
+      border-radius: 12px;
+      padding: 11px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: hsl(var(--primary));
+      box-shadow: var(--shadow-3d);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.22s ease;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 640px) {
+      .page-hero__top { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="noise"></div>
+
+<div class="page-hero">
+
+  <a class="back-link" href="/">← Voltar ao painel</a>
+
+  <div class="page-hero__top">
+    <div>
+      <p class="eyebrow">Multi-IA · Paralelo</p>
+      <h1 style="font-size: clamp(28px, 4vw, 48px); line-height: 1.1;">🤖 PR Review — Multi-IA</h1>
+      <p class="subtitle" style="margin-top: 8px;">
+        Cada PR é revisada por <strong id="active-count">…</strong> IAs simultaneamente.
+        Cada uma posta seu review independente — você lê e decide.
+      </p>
+    </div>
+    <div class="status-card" style="min-width: 220px; align-self: flex-start; margin-top: 36px;">
+      <span class="pulse ok" id="status-pulse"></span>
+      <div>
+        <strong id="status-label">Modo paralelo</strong>
+        <small id="status-detail">Carregando…</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="active-summary" id="active-summary"></div>
+
+</div>
+
+<main class="layout" style="padding-top: 0;">
+
+  <section class="panel wide">
+    <div class="section-title">
+      <div>
+        <p class="eyebrow">Provedores</p>
+        <h2>⚡ Selecionar IAs ativas</h2>
+      </div>
+      <span class="tag" id="active-tag">0 ativas</span>
+    </div>
+    <div class="provider-grid" id="grid"></div>
+  </section>
+
+  <section class="panel wide">
+    <div class="section-title">
+      <div>
+        <p class="eyebrow">Como funciona</p>
+        <h2>🔧 Ativar um provedor</h2>
+      </div>
+    </div>
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Gere a API key</strong><br>
+          Clique em <strong>"Gerar key"</strong> no card do provedor — vai abrir o console dele.
+          Crie uma key gratuita (sem cartão nos planos grátis).
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>Adicione o secret no GitHub</strong><br>
+          Copie o nome exato do secret (ex: <code>GROQ_API_KEY</code>) e clique em
+          <strong>"Adicionar secret"</strong> — abre direto a página certa do GitHub.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Pronto — automático</strong><br>
+          O workflow detecta o secret e inclui aquela IA no próximo review.
+          Sem reiniciar nada. Cada IA posta um comentário separado na PR.
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          <strong>Desativar</strong><br>
+          Remova o secret do GitHub e aquela IA para de revisar automaticamente
+          — sem alterar nenhum arquivo de código.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     🧠 Grupo de Evolução das IAs
+     ════════════════════════════════════════════════════════════════ -->
+
+<section class="panel wide" id="painel-evolucao" style="margin-top: 32px;">
+  <div class="section-title">
+    <div>
+      <p class="eyebrow">🧠 Grupo de IAs</p>
+      <h2>🧠 Grupo de Evolução das IAs</h2>
+    </div>
+    <span class="tag" id="evolucao-lock-tag">🔒 Bloqueado</span>
+  </div>
+
+  <!-- campo de senha -->
+  <div id="evolucao-senha-box" style="margin-bottom: 18px;">
+    <label style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));display:block;margin-bottom:6px;">
+      🔑 Senha de acesso
+    </label>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input type="password" id="evolucao-senha-input"
+        style="background:hsl(var(--surface));border:1px solid hsl(var(--line));border-radius:8px;padding:8px 12px;font-size:14px;color:hsl(var(--text));font-family:'Geist Mono',monospace;outline:none;width:200px;"
+        placeholder="Digite a senha" />
+      <button class="btn-cta primary" onclick="desbloquearEvolucao()">🔓 Desbloquear</button>
+      <span id="evolucao-senha-msg" style="font-size:12px;color:hsl(var(--muted-c));"></span>
+    </div>
+  </div>
+
+  <!-- conteúdo bloqueado -->
+  <div id="evolucao-content" style="display:none;">
+
+    <!-- 3 sliders de interação -->
+    <div style="margin-bottom: 20px;">
+      <p style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));margin-bottom:10px;">🎛️ Controle de Interação</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;" id="evolucao-sliders"></div>
+    </div>
+
+    <!-- métricas / progresso -->
+    <div style="margin-bottom: 20px;">
+      <p style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));margin-bottom:10px;">📊 Progresso do Grupo</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;" id="evolucao-metrics"></div>
+    </div>
+
+    <!-- status das IAs -->
+    <div>
+      <p style="font-size:13px;font-weight:600;color:hsl(var(--soft-c));margin-bottom:10px;">🟢 Status das IAs</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;" id="evolucao-status"></div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ── extras do painel de evolução ── */
+  .evol-card {
+    background: hsl(var(--surface-2));
+    border: 1px solid hsl(var(--line));
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-3d-soft);
+  }
+
+  .evol-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: hsl(var(--soft-c));
+    margin: 0 0 6px;
+  }
+
+  .evol-card .evol-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: hsl(var(--primary));
+    line-height: 1.2;
+  }
+
+  .evol-card .evol-label {
+    font-size: 11px;
+    color: hsl(var(--muted-c));
+    margin-top: 2px;
+  }
+
+  .evol-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: hsl(var(--line) / 0.5);
+    border-radius: 999px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .evol-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.6));
+    transition: width 0.4s ease;
+  }
+
+  .evol-bar-fill.xp {
+    background: linear-gradient(90deg, hsl(var(--yellow)), hsl(var(--orange)));
+  }
+
+  .evol-slider-wrap {
+    background: hsl(var(--surface-2));
+    border: 1px solid hsl(var(--line));
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    box-shadow: var(--shadow-3d-soft);
+  }
+
+  .evol-slider-wrap label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: hsl(var(--soft-c));
+    margin-bottom: 8px;
+  }
+
+  .evol-slider-wrap select {
+    width: 100%;
+    background: hsl(var(--surface));
+    border: 1px solid hsl(var(--line));
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: hsl(var(--text));
+    font-family: 'Geist Mono', monospace;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .evol-status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: hsl(var(--surface-2));
+    border: 1px solid hsl(var(--line));
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    box-shadow: var(--shadow-3d-soft);
+    font-size: 13px;
+    font-weight: 600;
+    color: hsl(var(--soft-c));
+  }
+
+  .evol-status-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .evol-status-item .dot.on  { background: hsl(var(--green));  box-shadow: 0 0 6px hsl(var(--green) / 0.5); }
+  .evol-status-item .dot.off { background: hsl(var(--red));    box-shadow: 0 0 6px hsl(var(--red) / 0.4); }
+</style>
+
+<script>
+// ── 🧠 Grupo de Evolução das IAs ──
+const EVOL_SENHA = 'Segredo1994';
+
+const EVOL_IAS = [
+  { id: 'gemini',   nome: 'Gemini',  icone: '✨' },
+  { id: 'groq',     nome: 'Groq',    icone: '⚡' },
+  { id: 'claude',   nome: 'Claude',  icone: '🧠' },
+];
+
+const EVOL_NIVEIS = ['Baixa', 'Média', 'Alta'];
+
+// estado interno
+let evolState = {
+  interacao: { gemini: 'Média', groq: 'Média', claude: 'Média' },
+  mensagensHoje: 142,
+  aprendizados: 38,
+  topicos: 12,
+  nivel: 4,
+  xpAtual: 320,
+  xpMax: 500,
+  status: { gemini: true, groq: true, claude: true },
+};
+
+function desbloquearEvolucao() {
+  const input = document.getElementById('evolucao-senha-input');
+  const msg   = document.getElementById('evolucao-senha-msg');
+  if (input.value === EVOL_SENHA) {
+    document.getElementById('evolucao-content').style.display = 'block';
+    document.getElementById('evolucao-senha-box').style.display = 'none';
+    document.getElementById('evolucao-lock-tag').textContent = '🔓 Desbloqueado';
+    document.getElementById('evolucao-lock-tag').style.background = 'hsl(var(--green) / 0.12)';
+    document.getElementById('evolucao-lock-tag').style.color = 'hsl(var(--green))';
+    document.getElementById('evolucao-lock-tag').style.border = '1px solid hsl(var(--green) / 0.3)';
+    renderEvolucao();
+  } else {
+    msg.textContent = '❌ Senha incorreta';
+    msg.style.color = 'hsl(var(--red))';
+    setTimeout(() => { msg.textContent = ''; }, 2000);
+  }
+}
+
+function renderEvolucao() {
+  // sliders
+  document.getElementById('evolucao-sliders').innerHTML = EVOL_IAS.map(ia => `
+    <div class="evol-slider-wrap">
+      <label>${ia.icone} ${ia.nome}</label>
+      <select onchange="evolState.interacao['${ia.id}']=this.value">
+        ${EVOL_NIVEIS.map(n => `<option value="${n}" ${evolState.interacao[ia.id] === n ? 'selected' : ''}>${n}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+
+  // métricas
+  const pctMsg  = Math.min(100, Math.round((evolState.mensagensHoje / 200) * 100));
+  const pctApre = Math.min(100, Math.round((evolState.aprendizados / 50) * 100));
+  const pctTop  = Math.min(100, Math.round((evolState.topicos / 20) * 100));
+  const pctXp   = Math.min(100, Math.round((evolState.xpAtual / evolState.xpMax) * 100));
+
+  document.getElementById('evolucao-metrics').innerHTML = `
+    <div class="evol-card">
+      <h4>💬 Mensagens hoje</h4>
+      <div class="evol-value">${evolState.mensagensHoje}</div>
+      <div class="evol-label">de 200 estimadas</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill" style="width:${pctMsg}%"></div></div>
+    </div>
+    <div class="evol-card">
+      <h4>📝 Aprendizados registrados</h4>
+      <div class="evol-value">${evolState.aprendizados}</div>
+      <div class="evol-label">de 50 meta</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill" style="width:${pctApre}%"></div></div>
+    </div>
+    <div class="evol-card">
+      <h4>🗣️ Tópicos discutidos</h4>
+      <div class="evol-value">${evolState.topicos}</div>
+      <div class="evol-label">de 20 planejados</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill" style="width:${pctTop}%"></div></div>
+    </div>
+    <div class="evol-card">
+      <h4>⬆️ Nível do grupo</h4>
+      <div class="evol-value" style="color:hsl(var(--yellow))">${evolState.nivel}</div>
+      <div class="evol-label">${evolState.xpAtual} / ${evolState.xpMax} XP</div>
+      <div class="evol-bar-bg"><div class="evol-bar-fill xp" style="width:${pctXp}%"></div></div>
+    </div>
+  `;
+
+  // status das IAs
+  document.getElementById('evolucao-status').innerHTML = EVOL_IAS.map(ia => {
+    const ativa = evolState.status[ia.id];
+    return `
+      <div class="evol-status-item">
+        <span class="dot ${ativa ? 'on' : 'off'}"></span>
+        ${ia.icone} ${ia.nome}
+        <span style="margin-left:auto;font-size:11px;color:${ativa ? 'hsl(var(--green))' : 'hsl(var(--red))'}">
+          ${ativa ? '🟢 Ativa' : '🔴 Inativa'}
+        </span>
+      </div>
+    `;
+  }).join('');
+}
+</script>
+
+<script>
+const SECRETS_URL = 'https://github.com/ServerVpss/CentralDark/settings/secrets/actions/new';
+
+const PROVIDERS = [
+  {
+    id: 'gemini',
+    icon: '✨',
+    name: 'Gemini Flash',
+    company: 'Google',
+    model: 'gemini/gemini-1.5-flash',
+    cost: 'free',
+    costLabel: 'Grátis',
+    desc: 'Modelo rápido do Google. 15 req/min, sem cartão. Melhor opção pra começar.',
+    secret: 'GEMINI_API_KEY',
+    keyUrl: 'https://aistudio.google.com/apikey',
+    keyLabel: 'Google AI Studio'
+  },
+  {
+    id: 'groq',
+    icon: '⚡',
+    name: 'Groq — Llama 3',
+    company: 'Groq',
+    model: 'llama3-70b-8192',
+    cost: 'free',
+    costLabel: 'Grátis',
+    desc: 'Inferência ultrarrápida. Llama 3 70B grátis com limite generoso.',
+    secret: 'GROQ_API_KEY',
+    keyUrl: 'https://console.groq.com/keys',
+    keyLabel: 'Groq Console'
+  },
+  {
+    id: 'anthropic',
+    icon: '🧠',
+    name: 'Claude Sonnet',
+    company: 'Anthropic',
+    model: 'claude-sonnet-4-6',
+    cost: 'paid',
+    costLabel: '~$0,01/PR',
+    desc: 'Review mais preciso e contextual. Usa a API da Anthropic (pay-per-use).',
+    secret: 'ANTHROPIC_API_KEY',
+    keyUrl: 'https://console.anthropic.com/settings/keys',
+    keyLabel: 'Anthropic Console'
+  },
+  {
+    id: 'openai',
+    icon: '💬',
+    name: 'GPT-4o Mini',
+    company: 'OpenAI',
+    model: 'gpt-4o-mini',
+    cost: 'paid',
+    costLabel: '~$0,005/PR',
+    desc: 'Modelo rápido e barato da OpenAI. Bom custo-benefício.',
+    secret: 'OPENAI_API_KEY',
+    keyUrl: 'https://platform.openai.com/api-keys',
+    keyLabel: 'OpenAI Platform'
+  },
+  {
+    id: 'ollama',
+    icon: '🦙',
+    name: 'Ollama (Local)',
+    company: 'Self-hosted',
+    model: 'ollama/llama3.1',
+    cost: 'local',
+    costLabel: 'Local',
+    desc: 'Roda na própria VPS. 100% grátis, sem API key. Precisa Ollama instalado.',
+    secret: null,
+    keyUrl: 'https://ollama.ai/',
+    keyLabel: 'Instalar Ollama'
+  }
+];
+
+let activeProviders = ['groq', 'gemini', 'anthropic'];
+
+async function init() {
+  try {
+    const r = await fetch('./painel-data.json?t=' + Date.now());
+    const d = await r.json();
+    if (d.aiReview) {
+      if (Array.isArray(d.aiReview.activeProviders)) {
+        activeProviders = d.aiReview.activeProviders;
+      } else if (d.aiReview.provider) {
+        activeProviders = [d.aiReview.provider];
+      }
+    }
+  } catch (_) {}
+  render();
+}
+
+function render() {
+  const n = activeProviders.length;
+
+  document.getElementById('active-count').textContent = n + (n === 1 ? ' IA' : ' IAs');
+  document.getElementById('active-tag').textContent   = n + (n === 1 ? ' ativa' : ' ativas');
+  document.getElementById('status-label').textContent = 'Modo paralelo';
+  document.getElementById('status-detail').textContent = n + ' de ' + PROVIDERS.length + ' provedores ativos';
+
+  // badges no topo
+  const summary = document.getElementById('active-summary');
+  summary.innerHTML = n === 0
+    ? '<span style="font-size:13px;color:hsl(var(--muted-c))">Nenhum provedor ativo</span>'
+    : activeProviders.map(id => {
+        const p = PROVIDERS.find(x => x.id === id);
+        return p ? `<span class="pill active">${p.icon} ${p.name}</span>` : '';
+      }).join('');
+
+  // grid de cards
+  document.getElementById('grid').innerHTML = PROVIDERS.map(p => {
+    const isActive = activeProviders.includes(p.id);
+    const costCls  = { free: 'free', paid: 'paid', local: 'local' }[p.cost] || 'free';
+
+    let infoBlock;
+    if (isActive) {
+      infoBlock = `
+        <div class="pc-status-ok">
+          ✅ <span>Secret <strong>${p.secret || 'não necessário'}</strong> configurado — inclusa no review paralelo</span>
+        </div>`;
+    } else if (p.id === 'ollama') {
+      infoBlock = `
+        <div class="pc-instruction">
+          Requisito: Ollama rodando na VPS na porta <code style="font-family:Geist Mono,monospace;font-size:11px;background:hsl(var(--line)/.6);padding:1px 5px;border-radius:4px">11434</code><br>
+          Sem necessidade de API key.
+        </div>`;
+    } else {
+      infoBlock = `
+        <div class="pc-instruction">
+          <strong style="color:hsl(var(--soft-c))">Para ativar:</strong><br>
+          1. Gere a key em <a href="${p.keyUrl}" target="_blank" rel="noopener">${p.keyLabel}</a><br>
+          2. Adicione no GitHub com o nome exato:
+          <div class="secret-row">
+            <code>${p.secret}</code>
+            <button class="copy-pill" onclick="copyText('${p.secret}')">copiar</button>
+          </div>
+        </div>`;
+    }
+
+    const actionBtn = isActive
+      ? `<button class="btn-cta success" disabled>✅ Ativo</button>`
+      : `<a class="btn-cta primary" href="${SECRETS_URL}" target="_blank" rel="noopener">➕ Adicionar secret</a>`;
+
+    const keyBtn = isActive ? '' : p.id === 'ollama'
+      ? `<a class="btn-cta ghost" href="${p.keyUrl}" target="_blank" rel="noopener">📖 Ver docs</a>`
+      : `<a class="btn-cta ghost" href="${p.keyUrl}" target="_blank" rel="noopener">🔑 Gerar key</a>`;
+
+    return `
+      <div class="provider-card ${isActive ? 'is-active' : ''}">
+        <div class="pc-header">
+          <div style="display:flex;align-items:center;gap:10px;flex:1">
+            <div class="pc-emoji ${isActive ? '' : 'inactive'}">${p.icon}</div>
+            <div>
+              <div class="pc-title">${p.name}</div>
+              <div class="pc-model">${p.model}</div>
+            </div>
+          </div>
+          <span class="pill ${costCls}">${p.costLabel}</span>
+        </div>
+        <p class="pc-desc">${p.desc}</p>
+        ${infoBlock}
+        <div class="pc-actions">
+          ${actionBtn}
+          ${keyBtn}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('✅ Copiado: ' + text))
+    .catch(() => showToast('❌ Erro ao copiar'));
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+init();
+</script>
+</body>
+</html>

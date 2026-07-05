@@ -1,0 +1,11 @@
+{
+  "nome": "HealthCheck VPS - Painel de Recursos",
+  "tipo": "react-spa",
+  "slug": "healthcheck-vps---painel-de-recursos",
+  "tema": "dark",
+  "criado": "2026-07-05T00:59:01.578Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Painel de monitoramento da VPS: CPU, RAM, disco, processos, temperatura. Gráficos em tempo real com histórico das últimas 24h."
+}

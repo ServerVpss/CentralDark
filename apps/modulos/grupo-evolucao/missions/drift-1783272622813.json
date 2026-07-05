@@ -1,0 +1,13 @@
+{
+  "id": "drift-1783272622813",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-HermesThinker: +58 restarts"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

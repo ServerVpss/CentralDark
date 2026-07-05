@@ -1,0 +1,13 @@
+{
+  "name": "hermes-thinker",
+  "version": "0.1.0",
+  "description": "Hermes-Thinker — agente pensador CentralDark (CoT agressivo + browser + prints + web search) em Docker",
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}

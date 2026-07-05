@@ -1,0 +1,11 @@
+{
+  "nome": "Debate Histórico - Timeline",
+  "tipo": "react-spa",
+  "slug": "debate-hist-rico---timeline",
+  "tema": "dark",
+  "criado": "2026-07-05T00:58:31.516Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Timeline visual de todos os debates já realizados pelo Arsenal Council. Cada debate é um card expansível com as rodadas, votos e veredito final."
+}

@@ -1,0 +1,236 @@
+// ============================================================
+// OAuth Broker CentralDark — porta 8098
+// hub.centralldark.com/oauth/{provider}/start · /callback · /api/keys/store
+// Reconstruído em 05/07/2026 (código perdido no incidente PM2)
+// ============================================================
+import express from "express";
+import crypto from "node:crypto";
+import { createClient } from "@supabase/supabase-js";
+import "dotenv/config";
+import fs from "node:fs";
+for (const f of ["/root/CentralDark/apps/modulos/hub/.env","/root/CentralDark/apps/modulos/oauth-broker/.env"]) {
+  if (fs.existsSync(f)) { const d = (await import("dotenv")).default; d.config({ path: f, override: false }); }
+}
+
+const {
+  HUB_SUPABASE_URL,
+  HUB_SUPABASE_SERVICE_ROLE_KEY,
+  VAULT_MASTER_KEY,
+  PORT = 8098,
+  PUBLIC_BASE = "https://hub.centralldark.com",
+} = process.env;
+
+if (!HUB_SUPABASE_URL || !HUB_SUPABASE_SERVICE_ROLE_KEY || !VAULT_MASTER_KEY) {
+  console.error("Faltam envs obrigatórias (HUB_SUPABASE_URL/SERVICE_ROLE_KEY/VAULT_MASTER_KEY)");
+  process.exit(1);
+}
+
+const sb = createClient(HUB_SUPABASE_URL, HUB_SUPABASE_SERVICE_ROLE_KEY, {
+  auth: { persistSession: false },
+});
+
+
+// Converte user_id não-UUID (ex: "dev-pivete") em UUID v5 determinístico
+function toUuid(id) {
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(id))) return id;
+  const h = crypto.createHash("sha1").update("centraldark:" + String(id)).digest("hex");
+  return `${h.slice(0,8)}-${h.slice(8,12)}-5${h.slice(13,16)}-8${h.slice(17,20)}-${h.slice(20,32)}`;
+}
+
+const KEY = crypto.createHash("sha256").update(VAULT_MASTER_KEY).digest();
+function encrypt(plain) {
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv("aes-256-gcm", KEY, iv);
+  const enc = Buffer.concat([cipher.update(plain, "utf8"), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return Buffer.concat([iv, tag, enc]);
+}
+
+const PROVIDERS = {
+  google:  { clientEnv: "GOOGLE_CLIENT_ID",   secretEnv: "GOOGLE_CLIENT_SECRET" },
+  drive:   { clientEnv: "GOOGLE_CLIENT_ID",   secretEnv: "GOOGLE_CLIENT_SECRET" },
+  docs:    { clientEnv: "GOOGLE_CLIENT_ID",   secretEnv: "GOOGLE_CLIENT_SECRET" },
+  gdrive:  { clientEnv: "GOOGLE_CLIENT_ID",   secretEnv: "GOOGLE_CLIENT_SECRET" },
+  notion:  { clientEnv: "NOTION_CLIENT_ID",   secretEnv: "NOTION_CLIENT_SECRET" },
+  github:  { clientEnv: "GITHUB_CLIENT_ID",   secretEnv: "GITHUB_CLIENT_SECRET" },
+  openai:  { clientEnv: "OPENAI_CLIENT_ID",   secretEnv: "OPENAI_CLIENT_SECRET" },
+  grok:    { clientEnv: "GROK_CLIENT_ID",     secretEnv: "GROK_CLIENT_SECRET"   },
+};
+
+async function notifyHermes(event, detail) {
+  try {
+    const inbox = "/root/CentralDark/revisoes/hermes-watch/inbox";
+    const fsp = await import("node:fs/promises");
+    await fsp.mkdir(inbox, { recursive: true });
+    const file = `${inbox}/oauth-${Date.now()}-${crypto.randomBytes(3).toString("hex")}.json`;
+    await fsp.writeFile(file, JSON.stringify({ src: "oauth-broker", event, detail, ts: new Date().toISOString() }, null, 2));
+  } catch (e) { console.error("hermes notify falhou", e.message); }
+}
+
+const app = express();
+app.use(express.json({ limit: "64kb" }));
+
+// CORS aberto — chamado pelo frontend estático do hub
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
+app.get("/health", (_, res) => res.json({ ok: true, ts: new Date().toISOString(), service: "oauth-broker" }));
+
+// ============================================================
+// POST /api/keys/store — colar chave manual (API key)
+// body: { user_id, provider_id, api_key }
+// ============================================================
+app.post("/api/keys/store", async (req, res) => {
+  try {
+    let { user_id, provider_id, api_key } = req.body || {};
+    user_id = toUuid(user_id);
+    if (!user_id || !provider_id || !api_key) {
+      return res.status(400).json({ ok: false, error: "faltou user_id/provider_id/api_key" });
+    }
+    if (String(api_key).trim().length < 10) {
+      return res.status(400).json({ ok: false, error: "api_key muito curta" });
+    }
+
+    // valida provider (opcional — se tabela existir)
+    const { data: prov } = await sb.from("oauth_providers")
+      .select("id, display_name, enabled").eq("id", provider_id).maybeSingle();
+    if (prov && prov.enabled === false) {
+      return res.status(400).json({ ok: false, error: "provider desabilitado" });
+    }
+
+    const enc = encrypt(String(api_key).trim());
+    const expiresAt = new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString(); // 1 ano
+
+    const { data: conn, error } = await sb.from("oauth_connections").upsert({
+      user_id,
+      provider_id,
+      access_token_enc: enc,
+      refresh_token_enc: null,
+      scopes_granted: "api_key",
+      expires_at: expiresAt,
+      consent_at: new Date().toISOString(),
+      status: "active",
+      account_label: "api-key",
+    }, { onConflict: "user_id,provider_id,account_label" }).select().maybeSingle();
+
+    if (error) {
+      await notifyHermes("apikey_save_error", { provider_id, user_id, err: error.message });
+      return res.status(500).json({ ok: false, error: error.message });
+    }
+
+    try {
+      await sb.from("oauth_consent_log").insert({
+        connection_id: conn?.id, user_id, provider_id,
+        event: "api_key_saved",
+        detail: { via: "hub-modal" },
+        ip: req.ip, user_agent: req.headers["user-agent"],
+      });
+    } catch {}
+
+    await notifyHermes("apikey_saved", { provider_id, user_id });
+    return res.json({ ok: true, connection_id: conn?.id, expires_at: expiresAt });
+  } catch (e) {
+    console.error("keys/store crash", e);
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// ============================================================
+// OAuth flow (código original recuperado)
+// ============================================================
+app.get("/oauth/:provider/start", async (req, res) => {
+  const { provider } = req.params;
+  const { user_id, redirect_to } = req.query;
+  if (!user_id) return res.status(400).send("faltou user_id");
+
+  const { data: prov, error } = await sb.from("oauth_providers")
+    .select("*").eq("id", provider).eq("enabled", true).maybeSingle();
+  if (error || !prov) return res.status(404).send("provider nao suportado");
+
+  const cfg = PROVIDERS[provider];
+  const clientId = process.env[cfg?.clientEnv];
+  if (!clientId) return res.status(503).send(`Falta ${cfg?.clientEnv} nas envs do broker`);
+
+  const state = crypto.randomBytes(24).toString("hex");
+  await sb.from("oauth_state").insert({ state, user_id, provider_id: provider, redirect_to: redirect_to || null });
+
+  const url = new URL(prov.auth_url);
+  url.searchParams.set("client_id", clientId);
+  url.searchParams.set("redirect_uri", `${PUBLIC_BASE}/oauth/${provider}/callback`);
+  url.searchParams.set("response_type", "code");
+  url.searchParams.set("scope", prov.scopes);
+  url.searchParams.set("state", state);
+  url.searchParams.set("access_type", "offline");
+  url.searchParams.set("prompt", "consent");
+  res.redirect(url.toString());
+});
+
+app.get("/oauth/:provider/callback", async (req, res) => {
+  const { provider } = req.params;
+  const { code, state, error: qErr } = req.query;
+  if (qErr) return res.status(400).send(`Provider erro: ${qErr}`);
+  if (!code || !state) return res.status(400).send("faltou code/state");
+
+  const { data: st } = await sb.from("oauth_state").select("*").eq("state", state).maybeSingle();
+  if (!st) return res.status(400).send("state invalido/expirado");
+  await sb.from("oauth_state").delete().eq("state", state);
+
+  const { data: prov } = await sb.from("oauth_providers").select("*").eq("id", provider).maybeSingle();
+  const cfg = PROVIDERS[provider];
+  const clientId = process.env[cfg?.clientEnv];
+  const clientSecret = process.env[cfg?.secretEnv];
+
+  const body = new URLSearchParams({
+    grant_type: "authorization_code",
+    code, client_id: clientId, client_secret: clientSecret,
+    redirect_uri: `${PUBLIC_BASE}/oauth/${provider}/callback`,
+  });
+
+  const tr = await fetch(prov.token_url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+    body,
+  });
+  const tok = await tr.json().catch(() => ({}));
+  if (!tr.ok || !tok.access_token) {
+    await notifyHermes("oauth_error", { provider, user_id: st.user_id, status: tr.status, tok });
+    return res.status(502).send(`troca de token falhou: ${JSON.stringify(tok)}`);
+  }
+
+  const expiresSec = tok.expires_in || 60 * 60 * 24 * 30;
+  const expiresAt = new Date(Date.now() + expiresSec * 1000).toISOString();
+
+  const { data: conn, error: upErr } = await sb.from("oauth_connections").upsert({
+    user_id: st.user_id,
+    provider_id: provider,
+    access_token_enc: encrypt(tok.access_token),
+    refresh_token_enc: tok.refresh_token ? encrypt(tok.refresh_token) : null,
+    scopes_granted: tok.scope || prov.scopes,
+    expires_at: expiresAt,
+    consent_at: new Date().toISOString(),
+    status: "active",
+  }, { onConflict: "user_id,provider_id,account_label" }).select().maybeSingle();
+
+  if (upErr) {
+    await notifyHermes("oauth_save_error", { provider, err: upErr.message });
+    return res.status(500).send("erro salvando conexao");
+  }
+
+  await sb.from("oauth_consent_log").insert({
+    connection_id: conn?.id, user_id: st.user_id, provider_id: provider,
+    event: "consent",
+    detail: { scope: tok.scope, expires_in: tok.expires_in },
+    ip: req.ip, user_agent: req.headers["user-agent"],
+  });
+  await notifyHermes("oauth_consent", { provider, user_id: st.user_id, expires_at: expiresAt });
+
+  const back = st.redirect_to || `${PUBLIC_BASE}/?conectado=${provider}`;
+  res.redirect(back);
+});
+
+app.listen(PORT, "127.0.0.1", () => console.log(`oauth-broker on 127.0.0.1:${PORT}`));

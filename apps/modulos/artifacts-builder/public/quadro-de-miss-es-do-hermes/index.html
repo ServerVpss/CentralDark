@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Quadro de Missões do Hermes · CentralDark</title>
+  <meta name="description" content="Kanban board das missões do Hermes: Pendente → Em Andamento → Concluída. Cada card mostra prioridade, tempo, e detalhes da execução."/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            dark: { bg: '#0a0f0d', surface: '#101a15', line: '#294235', text: '#eef8f1', muted: '#9fb8aa', primary: '#34d399' },
+            light: { bg: '#f0fdf4', surface: '#ffffff', line: '#d1fae5', text: '#0a1f14', muted: '#6b7280', primary: '#059669' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #0a0f0d; color: #eef8f1; font-family: ui-sans-serif, system-ui, sans-serif; margin: 0; }
+    .dark-card { background: #101a15; border: 1px solid #294235; border-radius: 12px; padding: 1.5rem; }
+    .dark-input { background: #16251e; border: 1px solid #294235; color: #eef8f1; border-radius: 8px; padding: 0.75rem; }
+    .dark-btn { background: #34d399; color: #0a0f0d; font-weight: 700; border: none; border-radius: 8px; padding: 0.75rem 1.5rem; cursor: pointer; }
+    .dark-btn:hover { background: #6ee7b7; }
+    .glow { box-shadow: 0 0 20px rgba(52, 211, 153, 0.15); }
+  </style>
+</head>
+<body class="dark">
+  <div id="root" class="min-h-screen"></div>
+  <script src="app.js"></script>
+</body>
+</html>

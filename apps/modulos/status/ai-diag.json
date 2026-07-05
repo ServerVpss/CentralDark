@@ -1,18 +1,18 @@
 {
-  "gerado_em": "2026-07-05T22:29:00.388Z",
-  "gerado_em_br": "05/07/2026, 19:29:00",
+  "gerado_em": "2026-07-05T22:35:00.172Z",
+  "gerado_em_br": "05/07/2026, 19:35:00",
   "tem_chave": false,
   "testes": {
     "proxy": {
       "label": "lovable-proxy /health",
       "ok": false,
-      "ms": 44,
+      "ms": 63,
       "erro": "fetch failed"
     },
     "gateway": {
       "label": "gateway /v1/models",
       "ok": false,
-      "ms": 177,
+      "ms": 264,
       "erro": "HTTP 404"
     },
     "chat": {
@@ -24,7 +24,7 @@
     "erros_recentes": {
       "label": "pm2 logs LovableProxy (erros)",
       "ok": true,
-      "ms": 305,
+      "ms": 320,
       "linhas": [
         "\u001b[1m\u001b[90m[TAILING] Tailing last 20 lines for [CentralDark-LovableProxy] process (change the value with --lines option)\u001b[39m\u001b[22m"
       ]
