@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-07-04T23:09:50.950Z",
-  "updatedAtBR": "04/07/2026, 20:09:50 BRT",
+  "updatedAt": "2026-07-05T00:23:28.003Z",
+  "updatedAtBR": "04/07/2026, 21:23:28 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
-    "currentTask": "Grafo 3D Jarvis publicado; fase 2 = plugin Obsidian v0.4 com vista 3D embutida (pendência #22)",
+    "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
     "lastCommit": "feat(painel): Jarvis v2 — icone IA nos agentes, burst de particulas em mudanca de estado, polling 3s (P23)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
     "summary": "Cérebro Vivo Fase 1 concluída: 10 skills documentadas em AGENTS-LIBRARY, bot /arsenal exibindo tabela completa, apelidos PT-BR no roteador de intenção, 4 diagramas Mermaid do sistema. Obsidian-writer criado com INDEX automático. Pendência A9: tela Arsenal de Skills no TelePainel (Lovable) documentada e aguardando execução. Guardião com polling reduzido (1.0s) eliminou 22% CPU. 10 issues sentinela abertas (automáticas, sem falha real).",
-    "overallProgress": 100,
+    "overallProgress": 60,
     "liveFallback": {
       "mcpStatus": "online",
       "mcpToolCount": 95,
@@ -516,7 +516,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Revisar /tmp/enxame/painel-patch.md e aplicar Painel Jarvis v2 no source (pendência #23)",
+  "nextIA": "Proximo: grafo de agentes IA em tempo real com Hermes",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -591,6 +591,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T00:23:28.004Z",
+      "title": "Grafo 3D atualizado: icone IA, pulse scale, labels sempre visiveis, particulas coloridas, setores no centroide",
+      "area": "graph-panel",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-07-04T23:09:50.950Z",
       "titulo": "Push na main · 738bcc55b55be47f3a17eb007bf71fe23851bb61",
@@ -816,38 +823,6 @@
       "area": "Repositório",
       "sha": "ba56098",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T08:30:34.583Z",
-      "titulo": "Push na main · df01e814a25f83b46801ebf182d16a19d4f96a98",
-      "detalhe": "Expansiu Tier 1 com 8 conectores",
-      "area": "Repositório",
-      "sha": "df01e81",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T08:25:21.632Z",
-      "titulo": "Push na main · 936667491bee93f5f63855b569d67358234973ff",
-      "detalhe": "Adicionou estado erro aos hubs",
-      "area": "Repositório",
-      "sha": "9366674",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T08:24:41.887Z",
-      "titulo": "Push na main · 6c78f5842e7eb03b6a86f4e4ea67911b7222ee4f",
-      "detalhe": "aprendizado(#287): HUB Conectores vazio: sempre validar cadeia de import Tab→SubComponent",
-      "area": "Repositório",
-      "sha": "6c78f58",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T08:16:35.031Z",
-      "titulo": "Push na main · 12f8f2f91fbfaae10a093a9e48795414394ad9ee",
-      "detalhe": "🛠️ HUB v2: ConnectorsTab agora renderiza OAuthConnectors (Grok/Notion/Drive/GitHub)",
-      "area": "Repositório",
-      "sha": "12f8f2f",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1725,7 +1700,7 @@
   "ultimo_evento": "Hermes aprendeu e concluiu hub v2 sozinho (77 etapas, typecheck zero)",
   "evento_area": "painel-vivo",
   "nextia": "Fase 2 disponível: dividir APRENDIZADOS.md (259KB) em 3 arquivos por tema. Aguardar autorização do Pivete.",
-  "updated_at": "2026-07-04T22:22:19.895Z",
+  "updated_at": "2026-07-05T00:23:23.489Z",
   "iasVivas": [
     {
       "nome": "CentralDark-EliteAnthropic",
