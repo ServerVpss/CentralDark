@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T01:54:53.895Z",
-  "updatedAtBR": "04/07/2026, 22:54:53 BRT",
+  "updatedAt": "2026-07-05T02:17:25.345Z",
+  "updatedAtBR": "04/07/2026, 23:17:25 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Subiu grafo central em 3 arquivos",
+    "lastCommit": "Criou script para trocar modos",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T02:17:25.345Z",
+      "titulo": "Push na main · b20d6d4de65bc54f1d653c2614a8f6b4d000c18f",
+      "detalhe": "Criou script para trocar modos",
+      "area": "Repositório",
+      "sha": "b20d6d4",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-05T01:54:53.895Z",
       "titulo": "Push na main · df5e255218bb7d55e85739c06f6f2c5716dc3b39",
@@ -1277,6 +1285,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T02:17:25.345Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · b20d6d4de65bc54f1d653c2614a8f6b4d000c18f (b20d6d4)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T01:54:53.895Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · df5e255218bb7d55e85739c06f6f2c5716dc3b39 (df5e255)",
@@ -1616,13 +1631,6 @@
       "time": "2026-07-04T03:13:49.610Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 91eff329034a367a531640b4327ef2861a6ae840 (91eff32)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T03:08:01.994Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 105bf32946148a54584272bd95d159e2d05acb9f (105bf32)",
       "area": "Repositório",
       "status": "sucesso"
     }
