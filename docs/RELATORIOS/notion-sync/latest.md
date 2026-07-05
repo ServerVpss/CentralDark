@@ -351,6 +351,7 @@
 | aprendizados | atualizado | #290 — Proxy AP7 exige aliases ap7-* |
 | aprendizados | atualizado | #291 — Start do Elite Anthropic sem caminho absoluto |
 | aprendizados | atualizado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
+| aprendizados | criado | #293 — Sincronia VPS falhou por conflito de merge e foi resolvida |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -444,6 +445,8 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/METODO-SWITCH-MODEL.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | erro | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
@@ -644,6 +647,8 @@
 | estrutura | erro | docs/CONSCIENCIA/GRUPO-EVOLUCAO.md |
 | estrutura | erro | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
 | estrutura | erro | docs/CONSCIENCIA/HERMES/LOG-VERIFICADOR.md |
+| estrutura | erro | docs/CONSCIENCIA/HERMES/PLAYBOOK-RESSUSCITACAO-PM2.md |
+| estrutura | erro | docs/CONSCIENCIA/INFRA-MAP.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
@@ -653,6 +658,7 @@
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
 | estrutura | erro | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | erro | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
+| estrutura | erro | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | erro | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/MODO-SEGREDO.md |
 | estrutura | erro | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |

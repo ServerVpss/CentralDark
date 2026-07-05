@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 324 | 0 | 0 | 324 | 0 |
+| aprendizados | 325 | 0 | 0 | 325 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **324**
+- 🟥 Faltando no Notion: **325**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -372,4 +372,5 @@
 - 290. Proxy AP7 exige aliases ap7-*
 - 291. Start do Elite Anthropic sem caminho absoluto
 - 292. CDN sem versão pinada quebrou o HUD 3D do GrafoVivo
+- 293. Sincronia VPS falhou por conflito de merge e foi resolvida
 </details>
