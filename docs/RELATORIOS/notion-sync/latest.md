@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T00:25:09.826Z
+# 🧠 Notion Sync — 2026-07-05T02:26:25.610Z
 
-- **Commit fonte:** `89288db3aa535c23094cc88f31fc8635a4788c69`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `51280ed109d1ce99737c27012b43436b477b83d5`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 328 atualizadas · ❌ 437 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 328 atualizadas · ❌ 438 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 293 | 0 | 293 | 0 | 0 |
-| estrutura | 437 | 0 | 0 | 0 | 437 |
+| estrutura | 438 | 0 | 0 | 0 | 438 |
 
 ## Operações
 
@@ -464,6 +464,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-5-painel-visual.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-6-hermes-autonomo.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-7-webui-integration.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/SWITCH-PROVIDER.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/MOVIDO.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/README.md |
