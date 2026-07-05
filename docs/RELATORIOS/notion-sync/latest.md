@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T16:37:22.231Z
+# 🧠 Notion Sync — 2026-07-05T19:08:52.468Z
 
-- **Commit fonte:** `3f568742b41fd4754ec2cc2e904aedcfe736b88a`
+- **Commit fonte:** `e2a7c9cb7a283dac70c8ba625bcf208384756384`
 - **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 329 atualizadas · ❌ 440 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 329 atualizadas · ❌ 441 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 294 | 0 | 294 | 0 | 0 |
-| estrutura | 440 | 0 | 0 | 0 | 440 |
+| estrutura | 441 | 0 | 0 | 0 | 441 |
 
 ## Operações
 
@@ -362,6 +362,7 @@
 | estrutura | erro | docs/CONSCIENCIA/02-PERMISSOES.md |
 | estrutura | erro | docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
 | estrutura | erro | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
