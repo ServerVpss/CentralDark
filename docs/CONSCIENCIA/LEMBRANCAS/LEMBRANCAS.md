@@ -224,3 +224,13 @@ Conteúdo: TODA ação relevante do sistema notifica no Telegram usando Card Her
 - **Promovida:** sim
 
 Conteúdo: Card Hermes atualizado pra v1.3. Novidades vs v1.2: (a) linha "🧠 HERMES · Nv.X {Título} · YYY XP\n   Próx: {Título} (faltam Z XP)" logo após PROGRESSO; (b) bloco "📊 SKILLS (por sistema)" com barras ▓░ SEMPRE 10 blocos normalizados + % no final (ex: Telegram ▓▓▓▓▓▓▓▓░░ 85%). Regras extras: barras 0-100 sempre 10 blocos fixos; linha "Próx:" nunca quebra (encurta título se preciso); % obrigatório no fim de toda barra. Restante idêntico ao v1.2. Fonte oficial atualizada: docs/CONSCIENCIA/PADRAO-CARD-HERMES.md. Todo card daqui pra frente usa v1.3.
+
+### [2026-07-04T21:23] Jarvis V2 - melhorias visuais grafo 3D
+- **Data:** 2026-07-04
+- **Tags:** graph-panel, jarvis, grafo-3d, three.js, visual
+- **Relevância:** alta
+- **Eixo:** passado
+- **Expira:** 2026-08-03
+- **Promovida:** nao
+
+Conteúdo: Grafo 3D (grafo.centralldark.com) atualizado com: (1) icone IA 🤖 acima de nos agentes via SpriteText, (2) labels SEMPRE visiveis sem toggle, (3) pulse com scale 1.0-1.15 em nos online, (4) nos down piscam vermelho com scale, (5) linkDirectionalParticles 2-6 com cor do no source, (6) labels de setor no centroide sempre visiveis, (7) Three.js duplicado removido. Arquivo: /root/[oculto]
