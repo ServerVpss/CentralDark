@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T16:11:08.946Z",
-  "updatedAtBR": "05/07/2026, 13:11:08 BRT",
+  "updatedAt": "2026-07-05T16:22:11.714Z",
+  "updatedAtBR": "05/07/2026, 13:22:11 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Corrigiu E2E e cid do MCP",
+    "lastCommit": "Lovable update",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T16:22:11.714Z",
+      "titulo": "Push na main · a40c18ed6f65a1fe5a81dc0d3875e460b88e21a0",
+      "detalhe": "Lovable update",
+      "area": "Repositório",
+      "sha": "a40c18e",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-05T16:11:08.946Z",
       "titulo": "Push na main · 701d874fb3393b0095517baed80b61ea0784d28d",
       "detalhe": "Corrigiu E2E e cid do MCP",
@@ -974,14 +982,6 @@
       "detalhe": "Refatorou frontend do HUB v2",
       "area": "Repositório",
       "sha": "b3affaf",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T08:45:34.589Z",
-      "titulo": "Push na main · 3ab16dc79dc15fb895da505a02332b62ff7bab66",
-      "detalhe": "Ativou modo Arsenal com tema e bypass",
-      "area": "Repositório",
-      "sha": "3ab16dc",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T16:22:11.714Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · a40c18ed6f65a1fe5a81dc0d3875e460b88e21a0 (a40c18e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T16:11:08.946Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 701d874fb3393b0095517baed80b61ea0784d28d (701d874)",
@@ -1736,13 +1743,6 @@
       "time": "2026-07-04T08:13:51.430Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d4ffec8795dd312711329e0d4b05fe8a3a6c7a3e (d4ffec8)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T08:13:17.475Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 185ca9358c3b783f8176d55d5388d6ce59dcaec7 (185ca93)",
       "area": "Repositório",
       "status": "sucesso"
     }
