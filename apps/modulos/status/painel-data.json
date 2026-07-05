@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T03:39:56.743Z",
-  "updatedAtBR": "05/07/2026, 00:39:56 BRT",
+  "updatedAt": "2026-07-05T04:36:52.199Z",
+  "updatedAtBR": "05/07/2026, 01:36:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "lembranca: Vault Grafo = prioridade real do Pivete (visão \"cérebro Homem de Ferro\")",
+    "lastCommit": "aprendizado(#292): CDN sem versão pinada quebrou o HUD 3D do GrafoVivo",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T04:36:52.199Z",
+      "titulo": "Push na main · 781f2af699c42ea7e13a7eb341652447098f692d",
+      "detalhe": "aprendizado(#292): CDN sem versão pinada quebrou o HUD 3D do GrafoVivo",
+      "area": "Repositório",
+      "sha": "781f2af",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-05T03:39:56.743Z",
       "titulo": "Push na main · a8f493c9306d0ef4ee6821e93631268dcc27ad94",
@@ -1325,6 +1333,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T04:36:52.199Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 781f2af699c42ea7e13a7eb341652447098f692d (781f2af)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T03:39:56.743Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · a8f493c9306d0ef4ee6821e93631268dcc27ad94 (a8f493c)",
@@ -1664,13 +1679,6 @@
       "time": "2026-07-04T04:56:11.804Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 39ca554ef86ad5d8fd2082f52e28a977157f5df4 (39ca554)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T04:18:14.689Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 60721017184af8a1fa1aa69e435e156fcb17366c (6072101)",
       "area": "Repositório",
       "status": "sucesso"
     }
