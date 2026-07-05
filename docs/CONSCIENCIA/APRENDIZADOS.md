@@ -2380,3 +2380,8 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** grafo.centralldark.com exibia "ERRO HUD: bibliotecas 3D não carregadas". O index.html carregava unpkg.com/3d-force-graph SEM versão; a unpkg passou a servir 1.80.0, que não expõe mais window.THREE como global (só consome se existir). O guard do HUD exige window.THREE e o código cria meshes/luzes com THREE direto.
 - **Aprendizado:** Nunca usar CDN sem versão pinada em produção. Fix: carregar three@0.149.0 UMD explícito antes + pinar 3d-force-graph@1.73.0 e three-spritetext@1.8.0 (ambos usam window.THREE quando presente, peer dep three ">=0.118 <1"). Verificação empírica: grep "window.THREE?" no bundle da unpkg antes de escolher versão.
+
+## 2026-07-05 — ChatGPT vendo só ~39 tools em vez de 73 do MCP
+- **Data:** 2026-07-05
+- **Contexto:** Pivete reportou que o ChatGPT no chat.openai.com só listava ~39 tools do conector CentralDark, mesmo com o servidor publicando 73 em `/tools.json`. Também tentava "abrir" caminho de arquivo direto (`docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md`) e falhava.
+- **Aprendizado:** ChatGPT MCP client cacheia `tools/list` por thread. Fixes: (1) Disconnect + Reconnect + conversa NOVA — cache não sai da thread antiga. (2) Tools que somem podem ser chamadas via `mcp_admin_call({tool, input})` que ignora cache. (3) IA nunca "abre path" — sempre `github_get_file` ou `vps_read_file_safe`. Docs criados em `docs/CONSCIENCIA/04-MCP-E-CONECTORES/`: RECONECTAR-CHATGPT.md, SYSTEM-PROMPT-CHATGPT.md, URLS-DESCOBERTA.md.
