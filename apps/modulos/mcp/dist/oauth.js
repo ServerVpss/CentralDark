@@ -395,13 +395,15 @@ function sendOAuthSuccessPage(res, input) {
 </body>
 </html>`);
 }
-export function getProtectedResourceMetadata(_req, res) {
+export function getProtectedResourceMetadata(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
+    const path = String(req?.path || req?.url || "");
+    const isAdmin = path.includes("/admin");
     res.json({
-        resource: `${config.publicUrl}/mcp`,
+        resource: `${config.publicUrl}${isAdmin ? "/admin/mcp" : "/mcp"}`,
         authorization_servers: [config.publicUrl],
         bearer_methods_supported: ["header"],
-        scopes_supported: ["mcp"],
+        scopes_supported: isAdmin ? ["mcp", "admin"] : ["mcp"],
         resource_documentation: `${config.publicUrl}/status`,
     });
 }
@@ -417,7 +419,7 @@ export function getAuthorizationServerMetadata(_req, res) {
         grant_types_supported: ["authorization_code", "refresh_token"],
         code_challenge_methods_supported: ["S256"],
         token_endpoint_auth_methods_supported: ["none", "client_secret_post", "client_secret_basic"],
-        scopes_supported: ["mcp"],
+        scopes_supported: ["mcp", "admin"],
         authorization_response_iss_parameter_supported: true,
     });
 }

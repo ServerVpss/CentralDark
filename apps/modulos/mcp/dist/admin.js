@@ -237,7 +237,17 @@ input,select{min-width:0}
 </main>
 <script>
 const $ = (id) => document.getElementById(id);
-function ts(){return new Date().toLocaleTimeString('pt-BR')}
+function horaBr(valor){
+  const data = valor ? new Date(valor) : new Date();
+  if (Number.isNaN(data.getTime())) return '--:--:--';
+  return new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(data);
+}
+function dataHoraBr(valor){
+  const data = valor ? new Date(valor) : new Date();
+  if (Number.isNaN(data.getTime())) return '?';
+  return new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(data);
+}
+function ts(){return horaBr()}
 setInterval(()=>$('clock').textContent=ts(),1000);
 
 async function carregarHealth(){
@@ -250,7 +260,7 @@ async function carregarHealth(){
     '<div class="row"><span>'+(c.nome||c.key)+'</span><span class="'+(c.ok?'ok':'err')+'">'+(c.ok?'✅ OK':'❌ FALHA')+'</span></div>'
   ).join('');
   $('proc').innerHTML =
-    '<div class="row"><span>Serviço iniciado</span><span>'+(j.servicoIniciadoEm||'?').replace('T',' ').slice(0,19)+'</span></div>'+
+    '<div class="row"><span>Serviço iniciado</span><span>'+dataHoraBr(j.servicoIniciadoEm)+'</span></div>'+
     '<div class="row"><span>Uptime</span><span>'+(j.uptimeLegivel||Math.round(j.uptimeSec/60)+' min')+'</span></div>'+
     '<div class="row"><span>RSS</span><span>'+j.memoryMb.rss+' MB</span></div>'+
     '<div class="row"><span>Heap</span><span>'+j.memoryMb.heap+' MB</span></div>'+
@@ -284,7 +294,7 @@ function conectarLogs(){
     const d = JSON.parse(ev.data);
     const el = document.createElement('div');
     el.className = d.level;
-    el.textContent = '['+d.t.slice(11,19)+'] ['+d.level.toUpperCase()+'] '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');
+    el.textContent = '['+horaBr(d.t)+'] ['+d.level.toUpperCase()+'] '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');
     box.appendChild(el);
     if (box.childNodes.length > 300) box.removeChild(box.firstChild);
     box.scrollTop = box.scrollHeight;
@@ -305,7 +315,7 @@ async function buscarLogs(){
   for (const d of j.logs) {
     const el = document.createElement('div');
     el.className = d.level;
-    el.textContent = '['+d.t.slice(11,19)+'] ['+d.level.toUpperCase()+'] '+(d.rota||'-')+' cid='+(d.cid||'-')+' · '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');
+    el.textContent = '['+horaBr(d.t)+'] ['+d.level.toUpperCase()+'] '+(d.rota||'-')+' cid='+(d.cid||'-')+' · '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');
     box.appendChild(el);
   }
   box.scrollTop = 0;
@@ -543,7 +553,7 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     }
     const authParams = new URLSearchParams({
         response_type: "code", client_id: clientId, redirect_uri: "http://127.0.0.1/callback",
-        code_challenge: codeChallenge, code_challenge_method: "S256", state, scope: "mcp",
+        code_challenge: codeChallenge, code_challenge_method: "S256", state, scope: "mcp admin",
     });
     const authz = await fazerRequest(`${base}/authorize`, {
         method: "POST", headers: { ...baseHeaders, "Content-Type": "application/x-www-form-urlencoded" },
@@ -587,15 +597,15 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     });
     if (!accessToken) { falhouEm = "token"; return { ok: false, falhouEm, etapas }; }
 
-    // 5) initialize via /mcp
-    const init = await fazerRequest(`${base}/mcp`, {
+    // 5) initialize via /admin/mcp
+    const init = await fazerRequest(`${base}/admin/mcp`, {
         method: "POST",
         headers: { ...baseHeaders, "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}`, "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": "2025-06-18" },
         body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "MCP-Admin-E2E", version: "1.0.0" } } }),
     });
     const initJson = init.json || parseMcpJson(init.texto);
     etapas.push({
-        nome: "initialize via /mcp",
+        nome: "initialize via /admin/mcp",
         ok: init.ok && !initJson?.error,
         status: init.status,
         ms: init.ms,
@@ -603,8 +613,8 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     });
     if (!init.ok || initJson?.error) { falhouEm = "initialize"; return { ok: false, falhouEm, etapas }; }
 
-    // 6) tools/list via /mcp
-    let tools = await fazerRequest(`${base}/mcp`, {
+    // 6) tools/list via /admin/mcp
+    let tools = await fazerRequest(`${base}/admin/mcp`, {
         method: "POST",
         headers: { ...baseHeaders, "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}`, "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": "2025-06-18" },
         body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }),
@@ -612,7 +622,7 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     let toolsJson = tools.json || parseMcpJson(tools.texto);
     let { toolCount, error: toolsError } = extrairToolsCount(toolsJson);
     if (!tools.ok || toolsError || typeof toolCount !== "number") {
-        const batch = await fazerRequest(`${base}/mcp`, {
+        const batch = await fazerRequest(`${base}/admin/mcp`, {
             method: "POST",
             headers: { ...baseHeaders, "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}`, "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": "2025-06-18" },
             body: JSON.stringify([
@@ -631,7 +641,7 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         }
     }
     etapas.push({
-        nome: "tools/list via /mcp",
+        nome: "tools/list via /admin/mcp",
         ok: tools.ok && typeof toolCount === "number",
         status: tools.status,
         ms: tools.ms,
