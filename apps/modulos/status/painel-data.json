@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T19:25:49.920Z",
-  "updatedAtBR": "05/07/2026, 16:25:49 BRT",
+  "updatedAt": "2026-07-05T19:42:22.559Z",
+  "updatedAtBR": "05/07/2026, 16:42:22 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Documentou reconnection flow",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T19:42:22.559Z",
+      "titulo": "Push na main · f0f74002b979ab496cf399edc1a8c1611a64122e",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "f0f7400",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-05T19:25:49.920Z",
       "titulo": "Push na main · a737a9bb0b1c647f846adc90f050db0c59d1f171",
       "detalhe": "Documentou reconnection flow",
@@ -975,14 +983,6 @@
       "area": "Repositório",
       "sha": "812f9a9",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T10:18:08.975Z",
-      "titulo": "Push na main · eff4017a9a585ebf86324816ac6da3bad666f317",
-      "detalhe": "Adicionou deploy do HUB ao webhook",
-      "area": "Repositório",
-      "sha": "eff4017",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T19:42:22.559Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · f0f74002b979ab496cf399edc1a8c1611a64122e (f0f7400)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T19:25:49.920Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · a737a9bb0b1c647f846adc90f050db0c59d1f171 (a737a9b)",
@@ -1736,13 +1743,6 @@
       "time": "2026-07-04T09:21:27.483Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d494f48008a1e0e253f7430395ce51728854320c (d494f48)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T09:17:38.811Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · caefddbc74a51ca593fdd0e48332524a9a211747 (caefddb)",
       "area": "Repositório",
       "status": "sucesso"
     }
