@@ -109,6 +109,7 @@ function buildServer(options) {
     const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
+        log.info("mcp_tools_list_start", { cid: options.cid, label: options.label ?? "private" });
         const result = {
             tools: visibleTools.map((t) => {
                 const annotations = t.annotations;
@@ -129,6 +130,7 @@ function buildServer(options) {
             exitCode: null,
             ok: true,
         });
+        log.info("mcp_tools_list_ok", { cid: options.cid, toolCount: result.tools.length, ms: Date.now() - startedAt });
         return result;
     });
     server.setRequestHandler(CallToolRequestSchema, async (req) => {
@@ -218,6 +220,6 @@ export async function handleMcpRequest(req, res, ghToken, options = {}) {
     });
     await server.connect(transport);
     await transport.handleRequest(req, res, req.body);
-    log.info("mcp_request_handled", {});
+    log.info("mcp_request_handled", { cid: options.cid, method: req.body?.method || "unknown" });
 }
 //# sourceMappingURL=mcp-server.js.map

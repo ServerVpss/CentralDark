@@ -10,9 +10,9 @@ import { performance } from "node:perf_hooks";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { config } from "./config.js";
 import { log } from "./log.js";
-import { activeSseSubscribers } from "./admin.js";
+import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
 
-const MCP_VERSION = "0.4.0-v2.1";
+const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
 
 function checkSecret(name) {
@@ -46,6 +46,7 @@ export async function healthDeep(req, res) {
         const rssMb = Math.round(mem.rss / 1024 / 1024);
         const heapMb = Math.round(mem.heapUsed / 1024 / 1024);
         const disk = checkDisk(config.log.dir);
+        const sse = getSseDiagnostics();
         const sseAtivas = activeSseSubscribers();
 
         // Dependências externas (checagem leve — sem network)
@@ -61,7 +62,7 @@ export async function healthDeep(req, res) {
             checkDependencia("oauth", oauthOk, { secretsPresentes: oauthOk }),
             checkDependencia("telegram_bot", telegramTokenOk, { tokenPresente: telegramTokenOk }),
             checkDependencia("github_api", githubOk, { tokenPresente: githubOk }),
-            checkDependencia("sse", true, { conexoesAtivas: sseAtivas, status: "operacional" }),
+            checkDependencia("sse", true, { conexoesAtivas: sseAtivas, eventosPorMinuto: sse.eventosPorMinuto, ultimoEventoHaMs: sse.ultimoEventoHaMs, status: "operacional" }),
             checkDependencia("disk_logs", disk.ok, disk),
             checkDependencia("memoria", rssMb < 512, { rssMb, heapMb }),
             checkDependencia("loadavg", os.loadavg()[0] < os.cpus().length * 2, { load: os.loadavg() }),
@@ -84,6 +85,7 @@ export async function healthDeep(req, res) {
             memoryMb: { rss: rssMb, heap: heapMb },
             loadavg: os.loadavg(),
             sseAtivas,
+            sse,
             dependencias,
             checks: dependencias.map(d => ({ key: d.nome, ok: d.ok, detail: d.detalhe })),
             elapsedMs: Math.round(performance.now() - t0),

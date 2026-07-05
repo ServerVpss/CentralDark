@@ -20,8 +20,8 @@ app.disable("x-powered-by");
 function setCorsHeaders(res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,Mcp-Session-Id,MCP-Protocol-Version,X-MCP-Session");
-    res.setHeader("Access-Control-Expose-Headers", "WWW-Authenticate,Mcp-Session-Id");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,Mcp-Session-Id,MCP-Protocol-Version,X-MCP-Session,X-Correlation-Id,X-Request-Id");
+    res.setHeader("Access-Control-Expose-Headers", "WWW-Authenticate,Mcp-Session-Id,X-Correlation-Id,X-Request-Id");
 }
 app.use((_req, res, next) => {
     setCorsHeaders(res);
@@ -150,13 +150,14 @@ app.post("/token", postToken);
 app.get("/oauth/start", handleOAuthStart);
 app.get("/oauth/callback", handleOAuthCallback);
 // ─────────────────────────────── MCP HTTP ────────────────────────────────
-function unauthorized(res, msg) {
+function unauthorized(req, res, msg) {
     setCorsHeaders(res);
     res.setHeader("WWW-Authenticate", `Bearer realm="mcp", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource/mcp", scope="mcp"`);
     res.status(401).json({
         jsonrpc: "2.0",
-        error: { code: -32000, message: msg },
+        error: { code: -32000, message: msg, data: { cid: req.cid } },
         id: null,
+        cid: req.cid,
     });
 }
 function redactHeadersForDebug(headers) {
@@ -246,25 +247,29 @@ function resolveGhToken(req) {
     return { error: "Authorization Bearer ausente." };
 }
 app.post("/mcp", (req, res) => {
+    const l = withCid(req.cid);
     const r = resolveGhToken(req);
     if ("error" in r) {
-        unauthorized(res, r.error);
+        l.warn("mcp_unauthorized", { reason: r.error });
+        unauthorized(req, res, r.error);
         return;
     }
-    handleMcpRequest(req, res, r.token).catch((err) => {
-        log.error("mcp_handler_unhandled", { error: String(err) });
+    l.info("mcp_request_authorized", { method: req.body?.method || "unknown" });
+    handleMcpRequest(req, res, r.token, { cid: req.cid }).catch((err) => {
+        l.error("mcp_handler_unhandled", { error: String(err) });
         if (!res.headersSent) {
             res.status(500).json({
                 jsonrpc: "2.0",
-                error: { code: -32603, message: "Erro interno do servidor MCP" },
+                error: { code: -32603, message: "Erro interno do servidor MCP", data: { cid: req.cid } },
                 id: null,
+                cid: req.cid,
             });
         }
     });
 });
 // GET /mcp — alguns clientes pingam pra checar OAuth via 401
-app.get("/mcp", (_req, res) => {
-    unauthorized(res, "Authorization Bearer ausente.");
+app.get("/mcp", (req, res) => {
+    unauthorized(req, res, "Authorization Bearer ausente.");
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
@@ -297,7 +302,7 @@ app.post("/api/telemetry-ingest", (req, res) => {
 });
 // 404 padrão
 app.use((_req, res) => {
-    res.status(404).json({ error: "not_found" });
+    res.status(404).json({ ok: false, error: "not_found" });
 });
 app.listen(config.port, "127.0.0.1", () => {
     log.info("mcp_listening", {
