@@ -1,12 +1,12 @@
 {
-  "at": "2026-07-04T19:18:16.561Z",
+  "at": "2026-07-05T08:56:33.729Z",
   "endpoints": [
     {
       "name": "MCP health",
       "url": "https://mcp.centralldark.com/health",
       "bot": "grok",
       "status": 200,
-      "latencyMs": 321,
+      "latencyMs": 323,
       "cors": "*"
     },
     {
@@ -14,7 +14,7 @@
       "url": "https://mcp.centralldark.com/status.json",
       "bot": "grok",
       "status": 200,
-      "latencyMs": 219,
+      "latencyMs": 217,
       "cors": "*"
     },
     {
@@ -22,7 +22,7 @@
       "url": "https://mcp.centralldark.com/tools.json",
       "bot": "codex",
       "status": 200,
-      "latencyMs": 112,
+      "latencyMs": 85,
       "cors": "*"
     },
     {
@@ -30,7 +30,7 @@
       "url": "https://install.centralldark.com/status.json",
       "bot": "claude",
       "status": 502,
-      "latencyMs": 103,
+      "latencyMs": 77,
       "cors": null
     },
     {
@@ -38,18 +38,18 @@
       "url": "https://status.centralldark.com/",
       "bot": "claude",
       "status": 200,
-      "latencyMs": 116,
+      "latencyMs": 98,
       "cors": "*"
     },
     {
       "name": "API",
       "url": "https://api.centralldark.com/health",
       "bot": "codex",
-      "status": 404,
-      "latencyMs": 118,
-      "cors": null
+      "status": 0,
+      "latencyMs": 5003,
+      "error": "This operation was aborted"
     }
   ],
-  "workflowsFailures24h": 6,
-  "divergencias": 8
+  "workflowsFailures24h": 3,
+  "divergencias": 5
 }
