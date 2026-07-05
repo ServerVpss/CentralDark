@@ -47,15 +47,15 @@ Variável `MCP_ALLOW_VPS_COMMANDS=true` no PM2 id 33.
 
 ---
 
-## Ensinar ChatGPT/Grok/Claude/Gemini a usar o MCP
+## Ensinar QUALQUER IA a usar o MCP (universal)
 
-Toda IA nova que conectar precisa saber o fluxo. Docs oficiais:
+Vale pra ChatGPT, Claude, Grok, Gemini, Cursor, Codex, Copilot — qualquer cliente MCP. Docs oficiais:
 
-- **[RECONECTAR-CHATGPT.md](../04-MCP-E-CONECTORES/RECONECTAR-CHATGPT.md)** — fix do cache (quando aparece só ~39 tools em vez das 73)
-- **[SYSTEM-PROMPT-CHATGPT.md](../04-MCP-E-CONECTORES/SYSTEM-PROMPT-CHATGPT.md)** — prompt oficial pra colar em Custom Instructions
+- **[RECONECTAR-CONECTOR.md](../04-MCP-E-CONECTORES/RECONECTAR-CONECTOR.md)** — fix do cache (quando aparece menos tools que o servidor publica)
+- **[SYSTEM-PROMPT-UNIVERSAL.md](../04-MCP-E-CONECTORES/SYSTEM-PROMPT-UNIVERSAL.md)** — prompt oficial pra colar em Custom Instructions de qualquer cliente
 - **[URLS-DESCOBERTA.md](../04-MCP-E-CONECTORES/URLS-DESCOBERTA.md)** — endpoints públicos (`/health`, `/tools.json`) pra IA validar catálogo sozinha
 
-**Regra de ouro que toda IA precisa saber:**
+**Regra de ouro universal:**
 1. Nunca "abre path direto" — usa `github_get_file` ou `vps_read_file_safe`
 2. Se tool não aparece, chama via `mcp_admin_call({tool, input})`
 3. Destrutivo exige `confirmAdmin: "CONFIRMO ADMIN"`
