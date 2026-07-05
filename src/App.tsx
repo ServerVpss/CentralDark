@@ -50,6 +50,7 @@ import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
 // Hub agora é app independente em apps/modulos/hub/ — não importado aqui
+import HermesPanel from "@/apps/modulos/hermes-panel/pages/HermesPanel";
 
 import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
 import { PageSplash } from "@/shared/transitions/PageSplash";
@@ -89,6 +90,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "ponte-mcp", element: <PonteMCP />, adminOnly: true },
   { path: "mapa", element: <MapaSite />, adminOnly: true },
   { path: "consciencia", element: <ConscienciaViva />, adminOnly: true },
+  { path: "hermes", element: <HermesPanel />, adminOnly: true },
   // Rota /hub removida — Hub agora vive em apps/modulos/hub/ como app independente
 ];
 
