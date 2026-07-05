@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T18:35:30.550Z",
-  "updatedAtBR": "05/07/2026, 15:35:30 BRT",
+  "updatedAt": "2026-07-05T19:09:27.882Z",
+  "updatedAtBR": "05/07/2026, 16:09:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Levei acesso total aos secrets",
+    "lastCommit": "Entregou arquitetura MCP v2",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T19:09:27.882Z",
+      "titulo": "Push na main · e2a7c9cb7a283dac70c8ba625bcf208384756384",
+      "detalhe": "Entregou arquitetura MCP v2",
+      "area": "Repositório",
+      "sha": "e2a7c9c",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-05T18:35:30.550Z",
       "titulo": "Push na main · e50b18b17e116447284861c919dfe897d255cb94",
       "detalhe": "Levei acesso total aos secrets",
@@ -975,14 +983,6 @@
       "area": "Repositório",
       "sha": "29028bd",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T09:53:17.859Z",
-      "titulo": "Push na main · 59406e8369a6baaaa7eaf79e5187900b12e92336",
-      "detalhe": "fix(notify): admin recebe card gamificado, grupo recebe texto seco",
-      "area": "Repositório",
-      "sha": "59406e8",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T19:09:27.882Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · e2a7c9cb7a283dac70c8ba625bcf208384756384 (e2a7c9c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T18:35:30.550Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · e50b18b17e116447284861c919dfe897d255cb94 (e50b18b)",
@@ -1736,13 +1743,6 @@
       "time": "2026-07-04T09:12:34.951Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · b3affafa94ebfca44712221e656da0b42e50e065 (b3affaf)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T08:45:34.589Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 3ab16dc79dc15fb895da505a02332b62ff7bab66 (3ab16dc)",
       "area": "Repositório",
       "status": "sucesso"
     }
