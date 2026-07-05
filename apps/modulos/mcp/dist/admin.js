@@ -58,15 +58,43 @@ function isAdmin(req) {
 const LOG_BUFFER = [];
 const LOG_BUFFER_MAX = 2000;
 const subscribers = new Set();
+const sseStats = {
+    totalConexoes: 0,
+    totalEventos: 0,
+    eventosRecentes: [],
+    ultimasMensagens: [],
+    ultimoEventoEm: null,
+};
 
 export function activeSseSubscribers() {
     return subscribers.size;
+}
+
+export function getSseDiagnostics() {
+    const now = Date.now();
+    const recentes = sseStats.eventosRecentes.filter((t) => now - t <= 60_000);
+    sseStats.eventosRecentes = recentes;
+    return {
+        conexoesAtivas: subscribers.size,
+        conexoesTotaisDesdeRestart: sseStats.totalConexoes,
+        eventosTotaisDesdeRestart: sseStats.totalEventos,
+        eventosPorMinuto: recentes.length,
+        ultimoEventoEm: sseStats.ultimoEventoEm,
+        ultimoEventoHaMs: sseStats.ultimoEventoEm ? now - new Date(sseStats.ultimoEventoEm).getTime() : null,
+        ultimasMensagens: sseStats.ultimasMensagens.slice(-20),
+    };
 }
 
 export function pushAdminLog(level, msg, meta) {
     const line = { t: new Date().toISOString(), level, msg, meta };
     LOG_BUFFER.push(line);
     if (LOG_BUFFER.length > LOG_BUFFER_MAX) LOG_BUFFER.shift();
+    sseStats.totalEventos++;
+    sseStats.ultimoEventoEm = line.t;
+    sseStats.eventosRecentes.push(Date.now());
+    if (sseStats.eventosRecentes.length > 2000) sseStats.eventosRecentes.splice(0, sseStats.eventosRecentes.length - 2000);
+    sseStats.ultimasMensagens.push({ t: line.t, level, msg, cid: meta?.cid, rota: meta?.path });
+    if (sseStats.ultimasMensagens.length > 50) sseStats.ultimasMensagens.shift();
     for (const send of subscribers) {
         try { send(line); } catch { /* silencioso */ }
     }
