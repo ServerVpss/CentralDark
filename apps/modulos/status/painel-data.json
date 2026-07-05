@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T23:47:51.222Z",
-  "updatedAtBR": "05/07/2026, 20:47:51 BRT",
+  "updatedAt": "2026-07-05T23:59:21.477Z",
+  "updatedAtBR": "05/07/2026, 20:59:21 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Testou chaves de API do Lovable",
+    "lastCommit": "Blindou proxy com auth e rate",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T23:59:21.477Z",
+      "titulo": "Push na main · 70017c92a6b65e0ebe53bcec1411982f2daed8d1",
+      "detalhe": "Blindou proxy com auth e rate",
+      "area": "Repositório",
+      "sha": "70017c9",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-05T23:47:51.222Z",
       "titulo": "Push na main · 717b0bdccb5a5fc381b52ae2df68d33b22d42788",
@@ -1299,6 +1307,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T23:59:21.477Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 70017c92a6b65e0ebe53bcec1411982f2daed8d1 (70017c9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T23:47:51.222Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 717b0bdccb5a5fc381b52ae2df68d33b22d42788 (717b0bd)",
@@ -1638,13 +1653,6 @@
       "time": "2026-07-04T20:56:43.555Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 883a2718e6e07cd1cfa2feeb463949932a32a15a (883a271)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T19:52:43.907Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b2e2667a8b7c3c618807d985cdb44a487e99c275 (b2e2667)",
       "area": "Repositório",
       "status": "sucesso"
     }
