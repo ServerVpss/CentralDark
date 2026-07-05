@@ -445,10 +445,11 @@ async function fazerRequest(url, opts = {}) {
     const t0 = performance.now();
     try {
         const r = await fetch(url, { ...opts, signal: AbortSignal.timeout(10000) });
+        const location = r.headers.get("location");
         const texto = await r.text();
         let json = null;
         try { json = JSON.parse(texto); } catch { /* ok */ }
-        return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), json, texto: texto.slice(0, 400) };
+        return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), json, texto: texto.slice(0, 400), location };
     } catch (err) {
         return { ok: false, status: 0, ms: Math.round(performance.now() - t0), erro: String(err?.message || err) };
     }
@@ -459,7 +460,7 @@ async function rodarE2EInterno({ comAdmin }) {
     const etapas = [];
     let falhouEm = null;
 
-    // 1) DCR — POST /register
+    // 1) DCR
     const dcr = await fazerRequest(`${base}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -471,59 +472,85 @@ async function rodarE2EInterno({ comAdmin }) {
             token_endpoint_auth_method: "none",
         }),
     });
-    etapas.push({ nome: "DCR /register", ok: dcr.ok, status: dcr.status, ms: dcr.ms, detalhe: dcr.json?.client_id ? "client_id emitido" : (dcr.erro || dcr.texto) });
-    if (!dcr.ok) { falhouEm = "DCR /register"; return { ok: false, falhouEm, etapas }; }
     const clientId = dcr.json?.client_id;
+    etapas.push({ nome: "DCR /register", ok: dcr.ok && !!clientId, status: dcr.status, ms: dcr.ms, detalhe: clientId ? "client_id emitido" : (dcr.erro || dcr.texto) });
+    if (!clientId) { falhouEm = "DCR /register"; return { ok: false, falhouEm, etapas }; }
 
-    // 2) Discovery / .well-known (sanidade)
+    // 2) Discovery
     const disc = await fazerRequest(`${base}/.well-known/oauth-authorization-server`);
     etapas.push({ nome: "Discovery /.well-known", ok: disc.ok, status: disc.status, ms: disc.ms, detalhe: disc.json?.issuer || disc.erro });
     if (!disc.ok) { falhouEm = "Discovery"; return { ok: false, falhouEm, etapas }; }
 
-    if (!comAdmin) {
-        // Versão pública encerra aqui — só valida que MCP está de pé e OAuth respondendo
-        return { ok: true, publico: true, etapas };
-    }
+    if (!comAdmin) return { ok: true, publico: true, etapas };
 
-    // 3) /authorize com senha admin (PKCE S256)
+    // 3) /authorize (PKCE+senha admin)
     const codeVerifier = crypto.randomBytes(32).toString("base64url");
     const codeChallenge = crypto.createHash("sha256").update(codeVerifier).digest("base64url");
     const state = crypto.randomBytes(16).toString("base64url");
     const senha = process.env.MCP_ADMIN_PASSWORD || "";
     const authParams = new URLSearchParams({
-        response_type: "code",
-        client_id: clientId,
-        redirect_uri: "http://127.0.0.1/callback",
-        code_challenge: codeChallenge,
-        code_challenge_method: "S256",
-        state,
-        scope: "mcp",
+        response_type: "code", client_id: clientId, redirect_uri: "http://127.0.0.1/callback",
+        code_challenge: codeChallenge, code_challenge_method: "S256", state, scope: "mcp",
     });
     const authz = await fazerRequest(`${base}/authorize`, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: authParams.toString() + `&password=${encodeURIComponent(senha)}`,
         redirect: "manual",
     });
+    
     let code = null;
-    // O endpoint /authorize deve redirecionar 302 com ?code=...
-    if (authz.status === 302 || authz.status === 303) {
-        // fetch com redirect:"manual" não expõe Location facilmente — fallback: tenta extrair do texto
+    if (authz.status === 302 && authz.location) {
+        try { code = new URL(authz.location).searchParams.get("code"); } catch {}
     }
-    // Tentativa: chamar novamente esperando redirect no body/location — se não conseguir, marca só se retornou algo
+    
     etapas.push({
         nome: "/authorize (PKCE+senha admin)",
-        ok: authz.status >= 200 && authz.status < 400,
+        ok: !!code,
         status: authz.status,
         ms: authz.ms,
-        detalhe: authz.status === 302 ? "302 redirect emitido" : (authz.texto?.slice(0, 100) || authz.erro),
+        detalhe: code ? "code emitido" : "Falhou em emitir code (verifique MCP_ADMIN_PASSWORD/GH_TOKEN)",
     });
-    // Sem seguir o redirect não conseguimos extrair `code`, então marcamos as próximas etapas como "não testadas nesta versão"
-    etapas.push({ nome: "/token (troca de code por Bearer)", ok: null, status: "-", ms: "-", detalhe: "requer captura do redirect (próxima versão)" });
-    etapas.push({ nome: "tools/list via /mcp", ok: null, status: "-", ms: "-", detalhe: "depende do token" });
+    if (!code) { falhouEm = "authorize"; return { ok: false, falhouEm, etapas }; }
+
+    // 4) /token
+    const tok = await fazerRequest(`${base}/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            grant_type: "authorization_code",
+            code,
+            code_verifier: codeVerifier,
+            client_id: clientId,
+            redirect_uri: "http://127.0.0.1/callback",
+        }),
+    });
+    const accessToken = tok.json?.access_token;
+    etapas.push({
+        nome: "/token (troca de code por Bearer)",
+        ok: !!accessToken,
+        status: tok.status,
+        ms: tok.ms,
+        detalhe: accessToken ? "token emitido" : (tok.json?.error_description || tok.erro || tok.texto),
+    });
+    if (!accessToken) { falhouEm = "token"; return { ok: false, falhouEm, etapas }; }
+
+    // 5) tools/list via /mcp
+    const tools = await fazerRequest(`${base}/mcp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }),
+    });
+    const toolCount = tools.json?.result?.tools?.length;
+    etapas.push({
+        nome: "tools/list via /mcp",
+        ok: tools.ok && typeof toolCount === "number",
+        status: tools.status,
+        ms: tools.ms,
+        detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (tools.json?.error?.message || tools.erro || tools.texto),
+    });
 
     const allOk = etapas.every(e => e.ok !== false);
-    return { ok: allOk, falhouEm: allOk ? null : "authorize", etapas };
+    return { ok: allOk, falhouEm: allOk ? null : "tools/list", etapas };
 }
 
 export async function adminE2E(req, res) {
