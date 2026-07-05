@@ -257,3 +257,19 @@ Conteúdo: Contexto retomado em 05/07/2026 a pedido do Pivete ("volta a trabalha
 - #23 (04/07, ABERTO): Painel Jarvis v2 — grafo 3D tempo real com ícones IA, agrupamento por setor, partículas pulsando, tempo real (polling/ws), movimento visível dos agentes. Fonte: apps/modulos (source não-minificado) + rascunho /tmp/enxame/painel-patch.md (Gemini Pro).
 
 **Rota lógica pra fechar (ordem sugerida):** FASE 0 (auditoria gap do plugin) → v0.2 WebSocket partículas → v0.3 sync notas vault → v0.4/#22 3D embutido no Obsidian (reaproveitar vault.html) → #23 painel Jarvis v2 (ícones/setor/tempo real) → v0.5 ícones SVG → #17 radar visual via Local REST API (pode rodar em paralelo, é plugin de terceiro, não o custom).
+
+### [2026-07-05T00:31] Vault Grafo = prioridade real do Pivete (visão "cérebro Homem de Ferro")
+- **Data:** 2026-07-05
+- **Tags:** obsidian, vault, grafo-vivo, visao-produto, nodesync, prioridade
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-04
+- **Promovida:** nao
+
+Conteúdo: Pivete deixou claro (05/07/2026) que o alvo real de todo o trabalho de grafo é o VAULT do Obsidian dele — o Graph View NATIVO que ele navega no dia a dia — não só o dashboard 3D externo (JARVIS Live Graph em grafo.centralldark.com). Visão dele: um "cérebro" estilo Homem de Ferro, com todos os setores bem organizados, onde ele consegue morar/se movimentar/ver onde está cada coisa.
+
+Achado técnico crítico que embasa a prioridade: hoje o vault nativo NÃO mostra nada do ecossistema CentralDark, porque os nós do grafo nunca viraram notas reais (FASE v0.3 "sync notas" do PLANO-ENXAME-v0.3+.md nunca foi implementada — não existe src/nodeSync.ts). O que existe hoje (view3d.ts com iframe pro grafo.centralldark.com, e o "JARVIS Live Graph" em graph-panel/public/index.html) é um dashboard externo bonito, mas SEPARADO do vault — não é "o cérebro dele", é uma janela pra um site.
+
+Decisão de rota: nodeSync (criar 1 nota .md por nó, em pastas por setor tipo docs/BRAIN/<categoria>/, com wikilinks refletindo as arestas) agora é a peça mais importante do roadmap do plugin — mais que o polish 3D. Cores/Groups do Graph View nativo do Obsidian são configuração local do app (não versionada no repo — confirmado que docs/.obsidian não existe no checkout da VPS), então isso o próprio Pivete configura 1x no app; meu trabalho é gerar as notas+links organizados.
+
+Pendência em aberto a resolver antes de codar: qual fonte de dado alimenta o nodeSync — a lista estática hardcoded na Supabase edge function graph-data (~24 nós fixos) vs. o feed vivo de PM2 em apps/modulos/status/graph-data.json (~68 nós reais, já espelhado a cada 5min em docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md).
