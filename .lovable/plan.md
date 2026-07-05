@@ -1,117 +1,84 @@
-# Plano refinado — Mistral Vibe ↔ claude.ap7.site
+# Plano — Grupo da Evolução + Mapeamento (100% VPS)
 
-Curl já passou (HTTP 200) em todos os testes, com e sem `anthropic-beta` gordo. Proxy tá liberado. Não precisa de nginx intermediário no caminho feliz — vira só rollback.
+## 🚫 Trava absoluta
+- **Zero Lovable** — nem painel, nem rota, nem edge function. Tudo VPS.
+- **Notificação sempre monoespaçada** dentro de `<pre>...</pre>`, padrão Card Hermes v1.3. Nunca texto solto.
 
-Gemini avisou 3 armadilhas que reescreveram o plano:
-- Vibe procura `ANTHROPIC_API_KEY` por padrão, não `CLAUDE_AP7_API_KEY`.
-- Beta `interleaved-thinking` muda o formato do SSE e pode quebrar o parser do Vibe.
-- Tool use (ler/escrever arquivos no VS Code) pode ser gated pelo nome do modelo — `haiku-4.6` talvez não seja reconhecido como "Claude" e desabilite as ferramentas.
+## 📁 Estrutura (só VPS)
 
-## Fase 0 — Descoberta (5 min, na VPS)
-
-Antes de configurar qualquer coisa, ler o schema real do Vibe:
-
-```text
-/root/.vscode-server/extensions/mistralai.mistral-vibe-code-1.11.5-linux-x64/
-├─ package.json          ← ver quais env vars a extensão lê
-├─ README.md             ← ver formato oficial do config.toml
-└─ bin/vibe-acp          ← binário ACP
+```
+/root/CentralDark/apps/modulos/
+├── grupo-evolucao/       🆕
+│   ├── agents/
+│   │   ├── arquiteto.mjs        (Gemini Pro — propõe melhorias)
+│   │   ├── pesquisador.mjs      (Flash + web — tendências)
+│   │   ├── critico.mjs          (GPT-5 — steelman)
+│   │   ├── produto.mjs          (Claude Elite — UX)
+│   │   └── historiador.mjs      (Flash — cruza CONSCIENCIA)
+│   ├── core/
+│   │   └── orquestrador.mjs     (cascata do debate)
+│   ├── missions/                (debates em execução)
+│   ├── logs/                    (vereditos)
+│   └── README.md
+│
+└── mapeamento/           🆕
+    ├── agents/
+    │   └── cartografo.mjs       (1 agente, cron 30min)
+    ├── core/
+    │   └── scanner.mjs
+    ├── missions/
+    ├── logs/
+    │   ├── mapa-atual.json
+    │   └── historico/
+    └── README.md
 ```
 
-Objetivo: confirmar 3 coisas
-1. Nome exato da env var (é `ANTHROPIC_API_KEY` mesmo?).
-2. Se o `config.toml` aceita bloco `headers = { ... }` por modelo (pra injetar `anthropic-beta` se precisar).
-3. Se aceita `api_style = "anthropic"` mesmo, ou se o nome do campo é outro.
+## 🔄 Fluxo
 
-Sem essa checagem, adivinhar o schema = 400 no primeiro request.
+1. **Cron 30min** → Cartógrafo escaneia apps/modulos/, PM2, edge functions, tabelas
+2. Detecta **drift** → salva em `logs/historico/` + dispara Grupo Evolução automaticamente
+3. Os 5 agentes debatem em cascata:
+   Pesquisador → Arquiteto → Crítico → Produto → Historiador → Veredito
+4. Veredito salvo em `grupo-evolucao/logs/vereditos/`
+5. **Notificação** → Card Hermes v1.3 em `<pre>` → connector Telegram (`@srver1bot`) → privado admin (1901426549)
 
-## Fase 1 — Config mínima, um modelo só
+## 📋 Formato obrigatório da notificação
 
-Guardar a chave via `add_secret` (nunca commitar). Na VPS, exportar as duas env vars por segurança:
+Toda notificação segue `docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`:
 
-```bash
-# ~/.bashrc
-export ANTHROPIC_API_KEY="sk-lab-..."
-export CLAUDE_AP7_API_KEY="sk-lab-..."
+```
+<pre>
+╔══════════════════════════════════╗
+║   CENTRAL DARK — [MÓDULO]         ║
+╠══════════════════════════════════╣
+║ Status:  ✅ / ⚠️ / ❌            ║
+║ Ação:    [o que aconteceu]        ║
+║ Prova:   [arquivo/PM2 id/rota]    ║
+║ Próxima: [next step]              ║
+╚══════════════════════════════════╝
+</pre>
 ```
 
-`~/.vibe/config.toml` mínimo, sem beta, sem streaming thinking, um modelo só:
+Envio **sempre** via connector Telegram `sendMessage` com `parse_mode: HTML`. Proibido `notify-telegram`, proibido texto fora do `<pre>`.
 
-```toml
-api_base = "https://claude.ap7.site"
-api_style = "anthropic"
+## 🛠️ Infra VPS
 
-[[models]]
-id = "haiku-4.6"
-display_name = "Haiku 4.6 (ap7)"
-context = 200000
-```
+- **PM2:**
+  - `grupo-evolucao` (daemon escutando triggers)
+  - `mapeamento-cron` (roda scanner a cada 30min)
+- **`pm2 save`** após registrar
+- **Persistência:** JSON local na VPS + espelho no HUB Supabase (`lyoigsqluyktoclwdaft`)
+- **IA:** cascata usa Lovable AI Gateway (Flash/Pro/GPT-5) + Elite Gateway (Claude) — chamados direto da VPS via `LOVABLE_API_KEY`
 
-Objetivo: garantir que texto simples flui antes de mexer em tool use / thinking / cache.
+## 🚀 Ordem de execução (modo enxame)
 
-## Fase 2 — Validação em camadas (na ordem, parando no primeiro erro)
+1. Criar 2 estruturas de pasta na VPS (paralelo)
+2. Escrever os 5 agentes + orquestrador do Grupo Evolução (paralelo, 5 sub-agentes)
+3. Escrever Cartógrafo + scanner do Mapeamento (paralelo)
+4. Registrar no PM2 + `pm2 save`
+5. Cron 30min via crontab
+6. Teste ponta-a-ponta: forçar drift → debate roda → notificação Card Hermes chega no Telegram
+7. Registrar áreas como 🔒 protegidas no CLAUDE.md
+8. Notificação final Card Hermes confirmando tudo online
 
-1. **Texto puro**: `/model haiku-4.6` no chat Vibe → mandar "oi" → tem que responder.
-2. **Streaming**: mandar prompt longo (~500 palavras de resposta). Se travar ou cortar → o parser SSE do Vibe é o problema.
-3. **Tool use**: pedir "leia o arquivo package.json e me diz a versão". Se o Vibe não chamar a tool → gating por nome do modelo, ir pra rota A da Fase 4.
-4. **Thinking blocks**: só depois que os 3 anteriores passarem, adicionar `anthropic-beta = "interleaved-thinking-2025-05-14"` no bloco do modelo (se o schema aceitar headers).
-
-## Fase 3 — Expandir catálogo
-
-Só depois da Fase 2 verde, adicionar os outros 5 modelos no `config.toml`:
-
-```toml
-[[models]]
-id = "sonnet-4.6"
-context = 200000
-
-[[models]]
-id = "sonnet-4.6[1m]"
-context = 1000000
-
-[[models]]
-id = "opus-4.8"
-context = 200000
-
-[[models]]
-id = "opus-4.8[1m]"
-context = 1000000
-
-[[models]]
-id = "haiku-4.6[1m]"
-context = 1000000
-```
-
-Testar cada um com um `ping` no `/model X`.
-
-## Fase 4 — Rotas de rollback (só se algo quebrar na Fase 2)
-
-**Rota A — Tool use não ativa porque nome do modelo é estranho**  
-Rebatizar no proxy (não no Vibe). Se você tiver acesso ao `claude.ap7.site`, mapear alias:  
-`claude-3-5-sonnet-latest` → `sonnet-4.6` internamente. Assim o Vibe reconhece como "Claude oficial" e libera tool use. Se não tiver acesso ao proxy, subir mini-nginx local (rota B) e fazer o rewrite ali.
-
-**Rota B — Vibe não deixa injetar `anthropic-beta` via config**  
-Nginx local em `127.0.0.1:8787` que:
-- Adiciona `anthropic-beta` que o Vibe não conseguiu mandar.
-- Ou remove `anthropic-beta` que o Vibe manda mas o proxy não gosta.
-- Reescreve nome de modelo se precisar.
-- Faz `proxy_pass https://claude.ap7.site;`
-
-Aponta o `api_base` do Vibe pra `http://127.0.0.1:8787`. Fica invisível pro Vibe.
-
-## O que NÃO fazer
-
-- Não colocar `anthropic-beta` gordo (4 flags) já na primeira config — o `interleaved-thinking` altera o SSE (`thinking_delta` antes de `text_delta`) e o parser do Vibe pode não entender.
-- Não commitar a chave em lugar nenhum do repo — só env var ou `add_secret`.
-- Não usar aliases fantasia tipo "sonnet-ap7" no config do Vibe se a suspeita do gating por nome for real. Manter o id igual ao que o proxy expõe, e resolver rename no proxy/nginx.
-
-## Detalhes técnicos (pra IA que for executar)
-
-- Rodar Fase 0 via `vps_read_file_safe` no `package.json` e `README.md` da extensão.
-- Salvar chave com `add_secret` (nome `CLAUDE_AP7_API_KEY`) além de exportar no bashrc, pra deixar rastreável.
-- Depois do `config.toml` gravado, VS Code precisa de "Developer: Reload Window" — não basta reabrir aba.
-- Teste de smoke automatizável: script bash roda `curl` em `/v1/messages` a cada 6 modelos e reporta HTTP+latência. Já tenho ele quase pronto do teste anterior.
-
-## Decisão que preciso de você
-
-Executo agora Fase 0 (só leitura na VPS pra descobrir schema real do Vibe) e volto com o `config.toml` já ajustado ao que a extensão de fato aceita?
+Bora disparar o enxame?
