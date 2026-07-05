@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T16:37:40.729Z",
-  "updatedAtBR": "05/07/2026, 13:37:40 BRT",
+  "updatedAt": "2026-07-05T17:37:03.595Z",
+  "updatedAtBR": "05/07/2026, 14:37:03 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Salvou dados críticos em 3 lugares",
+    "lastCommit": "Corrigiu loop de backup PiveteSync",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T17:37:03.595Z",
+      "titulo": "Push na main · f7dcc05ee1a662600b4ac085068bae537c7bf649",
+      "detalhe": "Corrigiu loop de backup PiveteSync",
+      "area": "Repositório",
+      "sha": "f7dcc05",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-05T16:37:40.729Z",
       "titulo": "Push na main · 3f568742b41fd4754ec2cc2e904aedcfe736b88a",
       "detalhe": "Salvou dados críticos em 3 lugares",
@@ -975,14 +983,6 @@
       "area": "Repositório",
       "sha": "6beda4d",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-04T09:21:27.483Z",
-      "titulo": "Push na main · d494f48008a1e0e253f7430395ce51728854320c",
-      "detalhe": "fix(hermes): notificação do grupo stripa HTML antes de enviar",
-      "area": "Repositório",
-      "sha": "d494f48",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T17:37:03.595Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · f7dcc05ee1a662600b4ac085068bae537c7bf649 (f7dcc05)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T16:37:40.729Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 3f568742b41fd4754ec2cc2e904aedcfe736b88a (3f56874)",
@@ -1736,13 +1743,6 @@
       "time": "2026-07-04T08:25:21.632Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 936667491bee93f5f63855b569d67358234973ff (9366674)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T08:24:41.887Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6c78f5842e7eb03b6a86f4e4ea67911b7222ee4f (6c78f58)",
       "area": "Repositório",
       "status": "sucesso"
     }
