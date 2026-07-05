@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-04T22:29:17.703Z
-- **Commit:** `9d35ac57d0f2dad753465139ca394a8af7d6d3e2`
+- **Gerado:** 2026-07-05T00:25:14.021Z
+- **Commit:** `89288db3aa535c23094cc88f31fc8635a4788c69`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 321 | 0 | 0 | 321 | 0 |
+| aprendizados | 323 | 0 | 0 | 323 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **321**
+- 🟥 Faltando no Notion: **323**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -369,4 +369,6 @@
 - 💬 Groq Llama — grupo evolução (2026-07-04)
 - 288. Jarvis no Telegram (HubBot) + grafoRAG vault-master-mcp plugado
 - 289. Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing
+- 290. Proxy AP7 exige aliases ap7-*
+- 291. Start do Elite Anthropic sem caminho absoluto
 </details>
