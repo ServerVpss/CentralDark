@@ -2391,3 +2391,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** Docs RECONECTAR-CONECTOR, SYSTEM-PROMPT-UNIVERSAL e URLS-DESCOBERTA foram criados no Lovable e sync para GitHub funcionou, mas a VPS ficou desatualizada. O git pull na VPS deu conflito em docs/CONSCIENCIA/PIVETE-IA/PIVETE-08-MCP-LIBERACAO.md entre seção 'Conexões Rápidas' local e 'Ensinar QUALQUER IA a usar o MCP' remota.
 - **Aprendizado:** Sempre verificar `git status` na VPS após criar docs no Lovable. Se houver conflito, resolver manualmente mantendo ambas as seções quando forem complementares, commitar merge e push de volta para GitHub. Não assumir que Lovable→GitHub implica VPS atualizada.
+
+### 294. EliteHTTP porta real 8082 + Sentry precisa de org manual
+- **Categoria:** regra
+- **Data:** 2026-07-05
+- **Contexto:** Varredura geral pedida pelo Pivete encontrou EliteHTTP com fetch failed (era porta errada no diagnóstico) e sentry_listar_issues falhando por falta de SENTRY_ORG.
+- **Aprendizado:** SELADO — não reverter: EliteHTTP roda na porta 8082 (uvicorn), não 8080. Diagnósticos futuros devem testar localhost:8082/health. Restart --update-env resolveu o log de "bad interpreter" residual. Pendência real: SENTRY_ORG ausente em secrets/mcp.env — não pode ser lida nem preenchida por IA (pasta secrets/ é bloqueada por política), exige o Pivete informar o slug do org manualmente.
