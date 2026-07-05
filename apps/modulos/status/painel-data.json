@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T19:45:20.203Z",
-  "updatedAtBR": "05/07/2026, 16:45:20 BRT",
+  "updatedAt": "2026-07-05T19:54:29.808Z",
+  "updatedAtBR": "05/07/2026, 16:54:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "fix(mcp): restaurar apps/modulos/mcp/dist/oauth.js",
+    "lastCommit": "fix(mcp): restaurar docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-ADMIN.md",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T19:54:29.808Z",
+      "titulo": "Push na main · 69bce5d5d414504abcb7339d1a623c7156161dd1",
+      "detalhe": "fix(mcp): restaurar docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-ADMIN.md",
+      "area": "Repositório",
+      "sha": "69bce5d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-05T19:45:20.203Z",
       "titulo": "Push na main · d9e638655d19e468456a126abb7cdadf2f1b1fb2",
       "detalhe": "fix(mcp): restaurar apps/modulos/mcp/dist/oauth.js",
@@ -974,14 +982,6 @@
       "detalhe": "fix(hub): força tema claro (idêntico ao TelePainel/home)",
       "area": "Repositório",
       "sha": "a443d2f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T10:43:18.230Z",
-      "titulo": "Push na main · dc4e89babb6d4a70489b166edc3f763751801cfe",
-      "detalhe": "fix(hub): tema claro (remove class dark) — idêntico ao TelePainel",
-      "area": "Repositório",
-      "sha": "dc4e89b",
       "actor": "segredounlock"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T19:54:29.808Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 69bce5d5d414504abcb7339d1a623c7156161dd1 (69bce5d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T19:45:20.203Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d9e638655d19e468456a126abb7cdadf2f1b1fb2 (d9e6386)",
@@ -1736,13 +1743,6 @@
       "time": "2026-07-04T09:42:18.840Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 87b4ff288c6a210c72d27dc4632cf6aeda85228e (87b4ff2)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T09:39:29.773Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 9ba76e7a9c5df86102620ee2e9479c76cd10e080 (9ba76e7)",
       "area": "Repositório",
       "status": "sucesso"
     }
