@@ -1,33 +1,60 @@
 {
-  "gerado_em": "2026-07-05T22:35:00.172Z",
-  "gerado_em_br": "05/07/2026, 19:35:00",
-  "tem_chave": false,
+  "gerado_em": "2026-07-05T22:43:00.781Z",
+  "gerado_em_br": "05/07/2026, 19:43:00",
+  "versao_tick": "2.0",
+  "ambiente": {
+    "tem_chave_lovable": false,
+    "proxy_ativo": {
+      "nome": "CentralDark-ArsenalProxy",
+      "url": "http://127.0.0.1:3101"
+    },
+    "proxies_conhecidos": [
+      {
+        "nome": "CentralDark-LovableProxy",
+        "status": "ausente"
+      },
+      {
+        "nome": "CentralDark-ArsenalProxy",
+        "status": "online"
+      }
+    ]
+  },
   "testes": {
     "proxy": {
-      "label": "lovable-proxy /health",
-      "ok": false,
-      "ms": 63,
-      "erro": "fetch failed"
+      "label": "proxy /health (local)",
+      "ok": true,
+      "ms": 61,
+      "proxy": "CentralDark-ArsenalProxy",
+      "url": "http://127.0.0.1:3101",
+      "status": 200,
+      "corpo": {
+        "ok": true,
+        "raiz": "/root/CentralDark/docs"
+      }
     },
     "gateway": {
-      "label": "gateway /v1/models",
-      "ok": false,
-      "ms": 264,
-      "erro": "HTTP 404"
+      "label": "gateway publico (ping)",
+      "ok": true,
+      "ms": 436,
+      "status": 404,
+      "alcancavel": true
     },
     "chat": {
-      "label": "chat via proxy (gemini-3-flash-preview)",
+      "label": "chat completion end-to-end",
       "ok": false,
-      "ms": 5,
-      "erro": "fetch failed"
+      "ms": 0,
+      "erro": "aguardando_chave: LOVABLE_API_KEY nao configurada no PM2"
     },
     "erros_recentes": {
-      "label": "pm2 logs LovableProxy (erros)",
-      "ok": true,
-      "ms": 320,
-      "linhas": [
-        "\u001b[1m\u001b[90m[TAILING] Tailing last 20 lines for [CentralDark-LovableProxy] process (change the value with --lines option)\u001b[39m\u001b[22m"
-      ]
+      "label": "logs de erro (CentralDark-ArsenalProxy)",
+      "existe": false,
+      "arquivo": "/root/.pm2/logs/CentralDark-ArsenalProxy-error.log",
+      "linhas": []
     }
+  },
+  "placar": {
+    "ok": 2,
+    "total": 3,
+    "saude": "degradado"
   }
 }

@@ -1,6 +1,6 @@
 {
   "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 7 online / 0 off de 7 monitorados. Gateway: 0 req/15min.",
-  "updatedAt": "2026-07-05T22:31:53.845Z",
+  "updatedAt": "2026-07-05T22:41:53.887Z",
   "nodes": [
     {
       "id": "mcp-server",
@@ -1002,6 +1002,6 @@
     "offline": 0,
     "monitorados": 7,
     "gateway_req_15min": 0,
-    "gerado_em": "2026-07-05T22:31:53.845Z"
+    "gerado_em": "2026-07-05T22:41:53.887Z"
   }
 }
