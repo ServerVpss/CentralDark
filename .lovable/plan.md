@@ -1,66 +1,54 @@
-## Fase Gemini — analisa TUDO antes de tocar em qualquer coisa
+## Objetivo
+Dar ao Hermes/MCP autoridade pra ler TODOS os segredos que ficam em `/root/CentralDark/secrets/` na VPS, de forma segura, sem expor nada pro frontend nem pro ChatGPT/Grok que conecta via MCP.
 
-Zero mudança em produção. Coleto tudo que a gente já mapeou, mando pro **Gemini 2.5 Pro via `ai-proxy` do darkai** (que já tá funcional na VPS), e ele devolve um parecer técnico completo. Só depois disso a gente decide o que fazer.
+## Como vai funcionar (visão simples)
 
-## O que vai pro Gemini analisar
+Hoje o `/admin/mcp` já tá autenticando com senha admin (acabamos de corrigir o bug do `gh_token`). Falta só uma coisa: uma **tool nova** dentro do MCP chamada `read_secret` (ou `list_secrets`) que, quando chamada por um cliente autenticado com escopo `admin`, lê os arquivos de `/root/CentralDark/secrets/` e devolve o conteúdo.
 
-**Bloco 1 — Duplicação Thinker (Docker vs PM2)**
-- `Dockerfile` + `docker-compose.yml` (que a IA criou e não commitou)
-- `src/index.mjs` do Thinker (o que roda no PM2)
-- Log dos 58 crashes do PM2 (motivo do `EADDRINUSE`)
-- Saída do container Docker funcionando OK
-- **Pergunta pro Gemini:** "Qual das duas versões manter? Docker isolado ou PM2 nativo? Trade-offs de segurança, memória, monitoramento e alinhamento com o padrão CentralDark."
+Fluxo:
 
-**Bloco 2 — PiveteSync quebrado**
-- Código completo de `pivete-sync.mjs`
-- Schema que ele espera (`hub.pivete_consciencia` + `hub.pivete_sync_log`)
-- Erro atual: `Could not find table 'api.pivete_consciencia' in schema cache`
-- **Pergunta pro Gemini:** "Este schema tá correto? RLS e GRANT tão cobrindo o service_role? Falta algo? Vai colidir com tabela existente no HUB?"
-
-**Bloco 3 — notify.mjs (Card Hermes v1.3) quebrado**
-- Código de `notify.mjs`
-- Padrão oficial `docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`
-- Log do erro atual ("Command failed")
-- **Pergunta pro Gemini:** "Por que quebrou? É path, env, ou lógica? Como consertar seguindo o padrão travado (connector Telegram `sendMessage`, connection `std_01kvw4jkcbekyr1t33vs4p5e9w`, admin `1901426549`)?"
-
-**Bloco 4 — Mapa geral dos 22 serviços**
-- Lista completa: 14 PM2 + 8 Docker + 1 systemd
-- Portas em uso e donos
-- Auditoria MCP dos últimos 3 dias
-- **Pergunta pro Gemini:** "Tem algum serviço redundante? Órfão? Faltando algo crítico? Recomendações de consolidação sem quebrar nada?"
-
-## Como vou rodar
-
-Via SSH na VPS, chamando o `ai-proxy` do darkai (que já tá vivo — PM2 `CentralDark-ArsenalProxy` + `CentralDark-ArsenalAdapter` conectados no Lovable AI Gateway):
-
-```text
-1) Colho todos os arquivos + logs em /tmp/analise-gemini/
-2) Monto 4 prompts (um por bloco), cada um com contexto completo
-3) Disparo em paralelo pro Gemini 2.5 Pro via darkai
-4) Salvo cada parecer em /tmp/analise-gemini/parecer-{N}.md
-5) Te apresento resumo em PT-BR + recomendação de ação por bloco
+```
+ChatGPT/Grok (com token admin)
+      ↓ chama tool "read_secret" via MCP
+/admin/mcp no VPS
+      ↓ valida escopo admin
+      ↓ lê /root/CentralDark/secrets/<arquivo>
+      ↓ devolve conteúdo
 ```
 
-## Tempo estimado
-- Coleta de arquivos: ~30s
-- 4 análises Gemini em paralelo: ~90s
-- Consolidação do parecer: instantâneo
-- **Total: ~2 minutos**
+## Segurança (regras travadas)
 
-## O que NÃO acontece nesta fase
-- ❌ Nenhum `pm2 delete`
-- ❌ Nenhum `docker compose down`
-- ❌ Nenhuma tabela criada no HUB
-- ❌ Nenhum commit no git
-- ❌ Nenhum arquivo alterado
+1. **Só escopo `admin`** — nunca escopo `mcp` normal. Se o token não tiver `admin`, retorna 403.
+2. **Whitelist de diretório** — a tool só lê de `/root/CentralDark/secrets/`. Qualquer tentativa de path traversal (`../`, `/etc/`, etc.) é bloqueada.
+3. **Auditoria** — cada leitura grava log em `/root/CentralDark/logs/mcp-secrets-audit.log` com timestamp, IP, nome do segredo lido.
+4. **Sem cache no cliente** — resposta com header `Cache-Control: no-store`.
+5. **Nenhum segredo vaza pro frontend Lovable** — isso vive 100% na VPS, dentro do `dist/index.js` do MCP.
 
-Só leitura + análise. Depois que tu ler os pareceres do Gemini, tu decide o que aprovar.
+## Três tools novas
 
-## Próxima fase (só depois do teu OK)
-Baseado nos pareceres:
-1. Decisão Thinker (mata PM2 ou mata Docker)
-2. Criação das tabelas HUB (se Gemini aprovar schema)
-3. Fix do notify.mjs
-4. Commit do Dockerfile + inventário oficial dos 22 serviços
+| Tool | O que faz | Escopo |
+|---|---|---|
+| `list_secrets` | Lista nomes dos arquivos em `/root/CentralDark/secrets/` (só nomes, sem valores) | `admin` |
+| `read_secret` | Recebe `{ name: "TELEGRAM_BOT_TOKEN" }` e devolve o valor | `admin` |
+| `read_all_secrets` | Devolve objeto `{ nome: valor }` com tudo de uma vez | `admin` |
 
-Aprova essa fase de análise pura?
+## Implementação (VPS, modo build)
+
+1. Editar `dist/index.js` (com backup `.bak.<timestamp>`) e adicionar as 3 tools no handler `/admin/mcp` na seção `tools/list` e `tools/call`.
+2. Criar pasta `/root/CentralDark/logs/` se não existir.
+3. `pm2 restart 17 --update-env`.
+4. Testar via curl:
+   ```
+   curl -H "Authorization: Bearer <admin_token>" \
+        -X POST https://webhook.centralldark.com/admin/mcp \
+        -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"list_secrets"}}'
+   ```
+5. Reconectar no ChatGPT/Grok e testar `list_secrets` → `read_secret`.
+
+## Perguntas antes de executar
+
+1. **Formato dos arquivos em `/root/CentralDark/secrets/`**: são arquivos soltos tipo `TELEGRAM_BOT_TOKEN.txt` com o valor cru, ou é um `.env` gigante com `CHAVE=valor`? Isso muda a lógica da tool.
+2. **Quer as 3 tools ou só `read_secret`+`list_secrets`?** (o `read_all_secrets` é conveniente mas mais perigoso se o token vazar).
+3. **Confirma que só a senha admin autoriza?** Ou quer adicionar uma segunda camada tipo IP whitelist da VPS/Lovable?
+
+Assim que responder isso + trocar pra build mode, eu aplico direto no VPS.
