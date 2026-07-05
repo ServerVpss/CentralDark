@@ -40,3 +40,4 @@ export const config = {
     },
 };
 //# sourceMappingURL=config.js.map
+//# sourceMappingURL=config.js.map

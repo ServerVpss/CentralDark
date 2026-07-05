@@ -239,3 +239,4 @@ const writeTools = [
 ];
 export const conscienciaTools = [...readTools, ...writeTools];
 //# sourceMappingURL=consciencia.js.map
+//# sourceMappingURL=consciencia.js.map

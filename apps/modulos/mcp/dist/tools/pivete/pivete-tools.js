@@ -1,20 +1,18 @@
 // Ferramentas temporárias para Pivete
 import { z } from "zod";
-
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
-
 export const piveteTools = [
     {
         name: "teste_temporario_pivete",
         description: "Ferramenta temporária para testes rápidos solicitados por Pivete. Use com responsabilidade.",
-        annotations: { 
-            readOnlyHint: true, 
-            destructiveHint: false, 
-            idempotentHint: true, 
-            openWorldHint: false, 
-            title: "Teste Temporário Pivete" 
+        annotations: {
+            readOnlyHint: true,
+            destructiveHint: false,
+            idempotentHint: true,
+            openWorldHint: false,
+            title: "Teste Temporário Pivete"
         },
         inputSchema: z.object({
             mensagem: z.string().optional().describe("Mensagem de teste opcional"),
@@ -33,4 +31,5 @@ export const piveteTools = [
         },
     },
 ];
+//# sourceMappingURL=pivete-tools.js.map
 //# sourceMappingURL=pivete-tools.js.map

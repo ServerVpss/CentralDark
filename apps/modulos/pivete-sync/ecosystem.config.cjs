@@ -4,6 +4,7 @@ module.exports = {
       name: 'CentralDark-PiveteSync',
       script: '/root/CentralDark/apps/modulos/pivete-sync/pivete-sync.mjs',
       interpreter: 'node',
+      node_args: ['-r', 'dotenv/config'],
       autorestart: true,
       max_restarts: 20,
       watch: false,

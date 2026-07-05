@@ -30,6 +30,8 @@ import { eliteGatewayTools } from "../elite/elite-gateway.js";
 import { piveteTools } from "../pivete/pivete-tools.js";
 import { cognitivoTools } from "../cognitivo/cognitivo.js";
 import { geminiTools } from "../gemini/gemini.js";
+import { hermesTools } from "../hermes/hermes.js";
+import { darkaiTools } from "../darkai/darkai.js";
 const TOOL_NAME_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const RAW_TOOLS = [
     ...aprendizadoTools,
@@ -54,6 +56,8 @@ const RAW_TOOLS = [
     ...piveteTools,
     ...cognitivoTools,
     ...geminiTools,
+    ...hermesTools,
+    ...darkaiTools,
 ];
 function isToolDefinition(tool) {
     return (typeof tool === "object" &&
@@ -104,4 +108,5 @@ export function getCatalogSummary() {
         })).sort((a, b) => a.name.localeCompare(b.name)),
     };
 }
+//# sourceMappingURL=tools-catalog.js.map
 //# sourceMappingURL=tools-catalog.js.map

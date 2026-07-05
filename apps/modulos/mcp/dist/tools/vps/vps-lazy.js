@@ -180,7 +180,8 @@ async function runCommand(input) {
             __fs.mkdirSync(__dir, { recursive: true });
             const __dia = __bloqEvt.timestamp.slice(0, 10);
             __fs.appendFileSync(__path.join(__dir, `mcp-blocked-${__dia}.jsonl`), JSON.stringify(__bloqEvt) + "\n", { mode: 0o600 });
-        } catch (__e) { /* nao quebra o fluxo */ }
+        }
+        catch (__e) { /* nao quebra o fluxo */ }
         auditLog({ ..._auditBase, status: "BLOQUEADO_CONFIG", reason: motivo, durationMs: Date.now() - _t0 });
         return {
             status: "BLOQUEADO_CONFIG",
@@ -409,4 +410,5 @@ export const vpsLazyTools = [
         handler: async (input) => ok(await runCommand(input)),
     },
 ];
+//# sourceMappingURL=vps-lazy.js.map
 //# sourceMappingURL=vps-lazy.js.map

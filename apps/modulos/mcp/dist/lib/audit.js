@@ -4,24 +4,20 @@
 import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
-
 const AUDIT_DIR = process.env.MCP_AUDIT_DIR || "/root/CentralDark/logs";
 const HOSTNAME = os.hostname();
 const PID = process.pid;
-
 function callerUser() {
     return process.env.MCP_CALLER_USER || process.env.MCP_CALLER || "mcp-local";
 }
-
 function callerIp() {
     return process.env.MCP_CALLER_IP || process.env.MCP_REMOTE_IP || "local-stdio";
 }
-
 function truncar(s, max = 4000) {
-    if (typeof s !== "string") return s;
+    if (typeof s !== "string")
+        return s;
     return s.length > max ? s.slice(0, max) + "…(truncado)" : s;
 }
-
 export function auditLog(evento) {
     try {
         const timestamp = new Date().toISOString();
@@ -53,3 +49,4 @@ export function auditLog(evento) {
         // Nunca quebrar fluxo por causa de auditoria.
     }
 }
+//# sourceMappingURL=audit.js.map

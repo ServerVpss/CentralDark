@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-05T00:20:01.490Z",
+  "atualizadoEm": "2026-07-05T22:25:01.854Z",
   "slots": {},
   "timeouts": {
     "router_s": 30,
@@ -54,19 +54,19 @@
   ],
   "ultimasEvolucoes": [
     {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md",
+      "quando": "2026-07-05T18:29:02.964Z",
+      "preview": "--- · title: \"Aula Grafo Vivo\" · date: 2026-07-05"
+    },
+    {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md",
-      "quando": "2026-07-05T00:08:41.055Z",
-      "preview": "``` · ┌──────────────────────────────────────────────────────────────────┐ · │  🎓 AULAS AVANÇADAS — HERMES ESPECIALISTA EM GATEWAY · 03/07/2026 │"
+      "quando": "2026-07-05T18:29:02.964Z",
+      "preview": "--- · title: \"Aulas Avancadas Gateway\" · date: 2026-07-05"
     },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md",
-      "quando": "2026-07-05T00:08:41.051Z",
-      "preview": "``` · ┌──────────────────────────────────────────────────────────────────┐ · │  🎓 AULA DO TUTOR — HERMES vira admin do ELITE GATEWAY · 03/07    │"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md",
-      "quando": "2026-07-05T00:08:41.051Z",
-      "preview": "``` · ┌──────────────────────────────────────────────────────────────────┐ · │  🎓 AULA DO TUTOR — HERMES mantém o GRAFO VIVO · 03/07/2026       │"
+      "quando": "2026-07-05T18:29:02.956Z",
+      "preview": "--- · title: \"Aula Elite Gateway\" · date: 2026-07-05"
     },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes-2.md",

@@ -12,9 +12,9 @@ updated: 2026-07-05
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│  🕸️ GRAFO VIVO · atualizado 04/07/2026, 21:22:11    │
-│   68 nós ·  88 arestas · 16 🟢 online ·  0 🔴 off       │
-│  24 processos PM2 ·   0 req ChatGPT/15min                │
+│  🕸️ GRAFO VIVO · atualizado 05/07/2026, 19:26:53    │
+│   68 nós ·  88 arestas ·  7 🟢 online ·  0 🔴 off       │
+│  14 processos PM2 ·   0 req ChatGPT/15min                │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -28,7 +28,6 @@ flowchart LR
     elite_http_gateway["🟢 Elite HTTP Gateway"]
     vps["VPS (Ubuntu/PM2)"]
     bot_telegram["🟢 @srver1bot"]
-    webhook_deploy["🟢 Webhook Deploy"]
     fn_ai_proxy["EF: ai-proxy"]
     fn_webapp_format["EF: webapp-format-ai"]
     tool_elite["MCP: elite_gateway"]
@@ -44,18 +43,17 @@ flowchart LR
     linear_api["Linear API"]
     veiculosapi["VeiculosAPI"]
     lovable_connector["Lovable Connector"]
-    painel_status["🟢 Painel status.centralldark"]
+    painel_status["Painel status.centralldark"]
     graph_panel["🟢 Graph Panel"]
     hermes["🟢 Hermes (executor)"]
-    zentinel["🟢 Zentinel (latência)"]
-    guardiaoconsciencia["🟢 Guardião Consciência"]
-    guardiaoanalista["🟢 Guardião Analista"]
-    eliteanthropic["🟢 Elite Anthropic"]
-    elitews["🟢 Elite WS"]
-    evolucaoias["🟢 Evolução IAs"]
+    zentinel["Zentinel (latência)"]
+    guardiaoconsciencia["Guardião Consciência"]
+    guardiaoanalista["Guardião Analista"]
+    eliteanthropic["Elite Anthropic"]
+    elitews["Elite WS"]
+    evolucaoias["Evolução IAs"]
     arsenaladapter["🟢 Arsenal Adapter"]
     memoria["🟢 Memória API"]
-    telegrammtproto["🟢 Telegram MTProto"]
     fn_ai_proxy -->|chat/completions| lovable_gateway
     fn_webapp_format -->|format AI| lovable_gateway
     mcp_server -->|invoca| tool_elite
@@ -75,7 +73,6 @@ flowchart LR
     tool_notion -->|fallback connector| lovable_connector
     tool_linear -->|GraphQL| linear_api
     bot_telegram -->|webhook updates| supabase
-    webhook_deploy -->|recebe push → git pull| github_api
     painel_status -->|GET status via proxy| mcp_server
     elite_http_gateway -->|roteia AI models| lovable_gateway
     hermes -->|roda na| vps
@@ -87,7 +84,6 @@ flowchart LR
     evolucaoias -->|roda na| vps
     arsenaladapter -->|roda na| vps
     memoria -->|roda na| vps
-    telegrammtproto -->|roda na| vps
 ```
 
 > Vermelho = processo caído. Diagrama focado no núcleo; a saúde completa está na tabela abaixo.
@@ -98,20 +94,11 @@ flowchart LR
 |--|----|----|----|
 | 🟢 | @srver1bot | `CentralDark-HubBot` | online |
 | 🟢 | Arsenal Adapter | `CentralDark-ArsenalAdapter` | online |
-| 🟢 | Elite Anthropic | `CentralDark-EliteAnthropic` | online |
 | 🟢 | Elite HTTP Gateway | `CentralDark-EliteHTTP` | online |
-| 🟢 | Elite WS | `CentralDark-EliteWS` | online |
-| 🟢 | Evolução IAs | `CentralDark-EvolucaoIAs` | online |
 | 🟢 | Graph Panel | `CentralDark-GraphPanel` | online |
-| 🟢 | Guardião Analista | `CentralDark-GuardiaoAnalista` | online |
-| 🟢 | Guardião Consciência | `CentralDark-GuardiaoConsciencia` | online |
 | 🟢 | Hermes (executor) | `CentralDark-Hermes` | online |
 | 🟢 | MCP CentralDark | `CentralDark-MCP` | online |
 | 🟢 | Memória API | `CentralDark-Memoria` | online |
-| 🟢 | Painel status.centralldark | `CentralDark-TelePainelDeploy` | online |
-| 🟢 | Telegram MTProto | `CentralDark-TelegramMTProto` | online |
-| 🟢 | Webhook Deploy | `CentralDark-WebhookDeploy` | online |
-| 🟢 | Zentinel (latência) | `CentralDark-Zentinel` | online |
 
 ## 🚨 Anomalias
 

@@ -1,6 +1,6 @@
 {
-  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 16 online / 0 off de 16 monitorados. Gateway: 0 req/15min.",
-  "updatedAt": "2026-07-05T00:22:11.844Z",
+  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 7 online / 0 off de 7 monitorados. Gateway: 0 req/15min.",
+  "updatedAt": "2026-07-05T22:26:53.906Z",
   "nodes": [
     {
       "id": "mcp-server",
@@ -82,11 +82,9 @@
     },
     {
       "id": "webhook-deploy",
-      "label": "🟢 Webhook Deploy",
+      "label": "Webhook Deploy",
       "type": "servico",
-      "group": "bots",
-      "status": "online",
-      "pm2": "CentralDark-WebhookDeploy"
+      "group": "bots"
     },
     {
       "id": "issues-agent",
@@ -342,11 +340,9 @@
     },
     {
       "id": "painel-status",
-      "label": "🟢 Painel status.centralldark",
+      "label": "Painel status.centralldark",
       "type": "monitoramento",
-      "group": "monitoramento",
-      "status": "online",
-      "pm2": "CentralDark-TelePainelDeploy"
+      "group": "monitoramento"
     },
     {
       "id": "graph-panel",
@@ -372,51 +368,39 @@
     },
     {
       "id": "zentinel",
-      "label": "🟢 Zentinel (latência)",
+      "label": "Zentinel (latência)",
       "type": "monitoramento",
-      "group": "monitoramento",
-      "status": "online",
-      "pm2": "CentralDark-Zentinel"
+      "group": "monitoramento"
     },
     {
       "id": "guardiaoconsciencia",
-      "label": "🟢 Guardião Consciência",
+      "label": "Guardião Consciência",
       "type": "monitoramento",
-      "group": "monitoramento",
-      "status": "online",
-      "pm2": "CentralDark-GuardiaoConsciencia"
+      "group": "monitoramento"
     },
     {
       "id": "guardiaoanalista",
-      "label": "🟢 Guardião Analista",
+      "label": "Guardião Analista",
       "type": "monitoramento",
-      "group": "monitoramento",
-      "status": "online",
-      "pm2": "CentralDark-GuardiaoAnalista"
+      "group": "monitoramento"
     },
     {
       "id": "eliteanthropic",
-      "label": "🟢 Elite Anthropic",
+      "label": "Elite Anthropic",
       "type": "gateway",
-      "group": "edge-ia",
-      "status": "online",
-      "pm2": "CentralDark-EliteAnthropic"
+      "group": "edge-ia"
     },
     {
       "id": "elitews",
-      "label": "🟢 Elite WS",
+      "label": "Elite WS",
       "type": "gateway",
-      "group": "edge-ia",
-      "status": "online",
-      "pm2": "CentralDark-EliteWS"
+      "group": "edge-ia"
     },
     {
       "id": "evolucaoias",
-      "label": "🟢 Evolução IAs",
+      "label": "Evolução IAs",
       "type": "ia",
-      "group": "edge-ia",
-      "status": "online",
-      "pm2": "CentralDark-EvolucaoIAs"
+      "group": "edge-ia"
     },
     {
       "id": "arsenaladapter",
@@ -436,11 +420,9 @@
     },
     {
       "id": "telegrammtproto",
-      "label": "🟢 Telegram MTProto",
+      "label": "Telegram MTProto",
       "type": "servico",
-      "group": "edge-telegram",
-      "status": "online",
-      "pm2": "CentralDark-TelegramMTProto"
+      "group": "edge-telegram"
     }
   ],
   "edges": [
@@ -1015,11 +997,11 @@
       "Sentinela: sentinela → MCP /health /tools.json → gh issue se divergência",
       "Health: fn-health-check → OPTIONS 10 EFs → fn-notify-telegram → Canal Telegram"
     ],
-    "processos_vivos": 24,
-    "online": 16,
+    "processos_vivos": 14,
+    "online": 7,
     "offline": 0,
-    "monitorados": 16,
+    "monitorados": 7,
     "gateway_req_15min": 0,
-    "gerado_em": "2026-07-05T00:22:11.844Z"
+    "gerado_em": "2026-07-05T22:26:53.906Z"
   }
 }

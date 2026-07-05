@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-07-03T10:15:01.499Z",
-  "baseReport": "2026-07-03T09:00:01.765Z",
+  "timestamp": "2026-07-05T22:15:01.800Z",
+  "baseReport": "2026-07-05T21:30:05.124Z",
   "criticos": [
     {
       "tipo": "link-quebrado-critico",
@@ -232,6 +232,13 @@
     }
   ],
   "altos": [
+    {
+      "tipo": "link-quebrado",
+      "link": "-N \"$STDIN_DATA\"",
+      "origens": [
+        "08-HISTORICO-DECISOES"
+      ]
+    },
     {
       "tipo": "link-quebrado",
       "link": "LINK",
@@ -522,7 +529,7 @@
     },
     {
       "tipo": "orfas-excessivas",
-      "count": 264,
+      "count": 351,
       "lista": [
         "ARQUITETURA-CENTRALDARK-2026",
         "00-PORTA-DE-ENTRADA-IA",
@@ -535,7 +542,15 @@
   "autoFix": [
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "13-COFRE-SECRETS-CENTRALIZADO"
+      "arquivo": "missao"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "missao"
+    },
+    {
+      "tipo": "sem-frontmatter",
+      "arquivo": "missao"
     },
     {
       "tipo": "sem-frontmatter",
@@ -546,32 +561,28 @@
       "arquivo": "APRENDIZADOS"
     },
     {
-      "tipo": "sem-frontmatter",
-      "arquivo": "MOVIDO"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "2026-07-03-sessao-hermes-webhook"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "20260703T075750Z-consolidacao-root-docs-centraldark"
-    },
-    {
       "tipo": "sem-conexoes-rapidas",
       "arquivo": "00-LEIA-PRIMEIRO"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta"
+      "arquivo": "ARQUITETURA-MCP-V2"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-07-03T05-24-52-999Z-router-webui-diga-oi-em-uma-frase-curta"
+      "arquivo": "RECONECTAR-CONECTOR"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "fase-7-webui-integration"
+      "arquivo": "SYSTEM-PROMPT-ADMIN"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "SYSTEM-PROMPT-USUARIO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "URLS-DESCOBERTA"
     },
     {
       "tipo": "sem-conexoes-rapidas",
@@ -647,10 +658,10 @@
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "REGISTRO-GUARDIAO-DECISOR-V3"
+      "arquivo": "INVENTARIO-PM2-VPS"
     }
   ],
   "totalCritico": 21,
-  "totalAlto": 35,
-  "totalAutoFix": 29
+  "totalAlto": 36,
+  "totalAutoFix": 30
 }

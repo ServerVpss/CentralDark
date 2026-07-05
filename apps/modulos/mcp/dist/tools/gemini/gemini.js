@@ -10,28 +10,26 @@ import { z } from "zod";
 import { readFile } from "fs/promises";
 import path from "path";
 import { config } from "../../config.js";
-
 function ok(data) {
     return { content: [{ type: "text", text: typeof data === "string" ? data : JSON.stringify(data, null, 2) }] };
 }
-
 // Lê a key: prioriza o ambiente; se faltar, lê a linha GEMINI_API_KEY do .env do MCP.
 async function geminiKey() {
-    if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+    if (process.env.GEMINI_API_KEY)
+        return process.env.GEMINI_API_KEY;
     try {
         const envPath = path.join(config.vps.repoPath, "apps/modulos/mcp/.env");
         const env = await readFile(envPath, "utf8");
         const m = env.match(/^GEMINI_API_KEY=(.+)$/m);
         return m ? m[1].trim().replace(/^["']|["']$/g, "") : null;
-    } catch {
+    }
+    catch {
         return null;
     }
 }
-
 const API = "https://generativelanguage.googleapis.com/v1beta/models";
 // "latest" acompanha sempre o flash mais novo (2026: 2.5-flash) — não desatualiza.
 const MODELO_PADRAO = "gemini-flash-latest";
-
 export const geminiTools = [
     {
         name: "gemini_analisar",
@@ -43,7 +41,8 @@ export const geminiTools = [
         }),
         handler: async (input) => {
             const key = await geminiKey();
-            if (!key) return ok({ erro: "GEMINI_API_KEY não encontrada (nem no ambiente, nem no .env do MCP)." });
+            if (!key)
+                return ok({ erro: "GEMINI_API_KEY não encontrada (nem no ambiente, nem no .env do MCP)." });
             const modelo = input.modelo || MODELO_PADRAO;
             try {
                 const res = await fetch(`${API}/${modelo}:generateContent?key=${key}`, {
@@ -59,7 +58,8 @@ export const geminiTools = [
                 const data = await res.json();
                 const texto = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join("") ?? "(sem resposta)";
                 return ok({ modelo, resposta: texto });
-            } catch (e) {
+            }
+            catch (e) {
                 return ok({ erro: e.message });
             }
         },
@@ -71,13 +71,16 @@ export const geminiTools = [
         inputSchema: z.object({}),
         handler: async () => {
             const key = await geminiKey();
-            if (!key) return ok({ ok: false, motivo: "sem GEMINI_API_KEY" });
+            if (!key)
+                return ok({ ok: false, motivo: "sem GEMINI_API_KEY" });
             try {
                 const res = await fetch(`${API}?key=${key}`, { signal: AbortSignal.timeout(15_000) });
                 return ok({ ok: res.ok, http: res.status, key: "presente (oculta)" });
-            } catch (e) {
+            }
+            catch (e) {
                 return ok({ ok: false, erro: e.message });
             }
         },
     },
 ];
+//# sourceMappingURL=gemini.js.map

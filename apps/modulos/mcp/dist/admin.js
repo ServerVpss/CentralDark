@@ -11,10 +11,8 @@ import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { log } from "./log.js";
 import { withCid } from "./correlation.js";
 import { config } from "./config.js";
-
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
-
 function secret() {
     return process.env.MCP_ADMIN_COOKIE_SECRET
         || process.env.MCP_SESSION_SECRET
@@ -26,24 +24,35 @@ function sign(payload) {
     return `${body}.${sig}`;
 }
 function verify(cookie) {
-    if (!cookie || typeof cookie !== "string" || !cookie.includes(".")) return null;
+    if (!cookie || typeof cookie !== "string" || !cookie.includes("."))
+        return null;
     const [body, sig] = cookie.split(".");
     const expected = crypto.createHmac("sha256", secret()).update(body).digest("base64url");
     try {
-        if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
-    } catch { return null; }
+        if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected)))
+            return null;
+    }
+    catch {
+        return null;
+    }
     try {
         const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
-        if (payload.exp < Date.now()) return null;
+        if (payload.exp < Date.now())
+            return null;
         return payload;
-    } catch { return null; }
+    }
+    catch {
+        return null;
+    }
 }
 function parseCookies(header) {
     const out = {};
-    if (!header) return out;
+    if (!header)
+        return out;
     for (const part of String(header).split(/;\s*/)) {
         const idx = part.indexOf("=");
-        if (idx === -1) continue;
+        if (idx === -1)
+            continue;
         out[part.slice(0, idx)] = decodeURIComponent(part.slice(idx + 1));
     }
     return out;
@@ -53,7 +62,6 @@ function isAdmin(req) {
     const p = verify(cookies[COOKIE]);
     return Boolean(p && p.role === "admin");
 }
-
 // ─── Buffer circular de logs em memória ────────────────────────────────
 const LOG_BUFFER = [];
 const LOG_BUFFER_MAX = 2000;
@@ -65,11 +73,9 @@ const sseStats = {
     ultimasMensagens: [],
     ultimoEventoEm: null,
 };
-
 export function activeSseSubscribers() {
     return subscribers.size;
 }
-
 export function getSseDiagnostics() {
     const now = Date.now();
     const recentes = sseStats.eventosRecentes.filter((t) => now - t <= 60_000);
@@ -84,30 +90,34 @@ export function getSseDiagnostics() {
         ultimasMensagens: sseStats.ultimasMensagens.slice(-20),
     };
 }
-
 export function pushAdminLog(level, msg, meta) {
     const line = { t: new Date().toISOString(), level, msg, meta };
     LOG_BUFFER.push(line);
-    if (LOG_BUFFER.length > LOG_BUFFER_MAX) LOG_BUFFER.shift();
+    if (LOG_BUFFER.length > LOG_BUFFER_MAX)
+        LOG_BUFFER.shift();
     sseStats.totalEventos++;
     sseStats.ultimoEventoEm = line.t;
     sseStats.eventosRecentes.push(Date.now());
-    if (sseStats.eventosRecentes.length > 2000) sseStats.eventosRecentes.splice(0, sseStats.eventosRecentes.length - 2000);
+    if (sseStats.eventosRecentes.length > 2000)
+        sseStats.eventosRecentes.splice(0, sseStats.eventosRecentes.length - 2000);
     sseStats.ultimasMensagens.push({ t: line.t, level, msg, cid: meta?.cid, rota: meta?.path });
-    if (sseStats.ultimasMensagens.length > 50) sseStats.ultimasMensagens.shift();
+    if (sseStats.ultimasMensagens.length > 50)
+        sseStats.ultimasMensagens.shift();
     for (const send of subscribers) {
-        try { send(line); } catch { /* silencioso */ }
+        try {
+            send(line);
+        }
+        catch { /* silencioso */ }
     }
 }
-
 function extrairRota(linha) {
     const p = linha.meta?.path;
-    if (typeof p === "string") return p;
+    if (typeof p === "string")
+        return p;
     // fallback: procura /algo no msg
     const m = /\s(\/[a-zA-Z0-9/_\-.]+)/.exec(String(linha.msg || ""));
     return m ? m[1] : "-";
 }
-
 // ─── HTML NOC (tema Esmeralda) — v2.1 ──────────────────────────────────
 const LOGIN_HTML = `<!doctype html><html lang="pt-BR"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -127,7 +137,6 @@ button:hover{filter:brightness(1.05)}.err{color:#fca5a5;font-size:13px;margin-to
 <button type="submit">Entrar</button>
 <div class="err">__ERR__</div>
 </form></body></html>`;
-
 const NOC_HTML = `<!doctype html><html lang="pt-BR"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>NOC — MCP CentralDark</title>
@@ -354,7 +363,6 @@ setInterval(carregarMetricas, 15000);
 conectarLogs();
 </script>
 </body></html>`;
-
 // ─── Rotas ────────────────────────────────────────────────────────────
 export function adminGet(req, res) {
     if (!isAdmin(req)) {
@@ -363,7 +371,6 @@ export function adminGet(req, res) {
     }
     res.type("text/html").send(NOC_HTML);
 }
-
 export function adminLogin(req, res) {
     const l = withCid(req.cid);
     const senha = String(req.body?.password || "");
@@ -378,7 +385,10 @@ export function adminLogin(req, res) {
         const a = Buffer.from(senha.padEnd(64, "\0").slice(0, 64));
         const b = Buffer.from(esperada.padEnd(64, "\0").slice(0, 64));
         ok = crypto.timingSafeEqual(a, b) && senha.length === esperada.length;
-    } catch { ok = false; }
+    }
+    catch {
+        ok = false;
+    }
     if (!ok) {
         l.warn("admin_login_falha", { ip: req.ip });
         res.status(401).type("text/html").send(LOGIN_HTML.replace("__ERR__", "Senha incorreta."));
@@ -389,14 +399,15 @@ export function adminLogin(req, res) {
     l.info("admin_login_ok", { ip: req.ip });
     res.redirect(302, "/admin");
 }
-
 export function adminLogout(_req, res) {
     res.setHeader("Set-Cookie", `${COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`);
     res.redirect(302, "/admin");
 }
-
 export function adminRotas(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     res.json({
         rotas: [
             { metodo: "GET", path: "/health", protegido: false },
@@ -418,21 +429,29 @@ export function adminRotas(req, res) {
         ],
     });
 }
-
 function inferirCategoria(t) {
     const n = (t.name || "").toLowerCase();
-    if (n.includes("github") || n.includes("repo") || n.includes("pr_")) return "GitHub";
-    if (n.includes("telegram") || n.includes("bot_")) return "Telegram";
-    if (n.includes("supabase") || n.includes("sql") || n.includes("db_")) return "Supabase";
-    if (n.includes("pm2") || n.includes("vps_") || n.includes("deploy")) return "Deploy/VPS";
-    if (n.includes("log") || n.includes("status") || n.includes("health") || n.includes("monitor")) return "Monitoramento";
-    if (n.includes("ai_") || n.includes("llm") || n.includes("chat") || n.includes("gemini") || n.includes("openai")) return "IA";
-    if (n.includes("admin") || n.includes("skill")) return "Admin";
+    if (n.includes("github") || n.includes("repo") || n.includes("pr_"))
+        return "GitHub";
+    if (n.includes("telegram") || n.includes("bot_"))
+        return "Telegram";
+    if (n.includes("supabase") || n.includes("sql") || n.includes("db_"))
+        return "Supabase";
+    if (n.includes("pm2") || n.includes("vps_") || n.includes("deploy"))
+        return "Deploy/VPS";
+    if (n.includes("log") || n.includes("status") || n.includes("health") || n.includes("monitor"))
+        return "Monitoramento";
+    if (n.includes("ai_") || n.includes("llm") || n.includes("chat") || n.includes("gemini") || n.includes("openai"))
+        return "IA";
+    if (n.includes("admin") || n.includes("skill"))
+        return "Admin";
     return "Utilidades";
 }
-
 export function adminTools(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const summary = getCatalogSummary();
     const categorias = {};
     for (const t of summary.tools || []) {
@@ -441,10 +460,12 @@ export function adminTools(req, res) {
     }
     res.json({ total: summary.toolCount, categorias });
 }
-
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────
 export function adminBuscarLogs(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const rota = String(req.query.rota || "").toLowerCase();
     const cid = String(req.query.cid || "").toLowerCase();
     const level = String(req.query.level || "").toLowerCase();
@@ -456,30 +477,39 @@ export function adminBuscarLogs(req, res) {
         const linha = LOG_BUFFER[i];
         const r = extrairRota(linha).toLowerCase();
         const c = String(linha.meta?.cid || "").toLowerCase();
-        if (rota && !r.includes(rota)) continue;
-        if (cid && !c.includes(cid)) continue;
-        if (level && linha.level !== level) continue;
-        if (q && !JSON.stringify(linha).toLowerCase().includes(q)) continue;
+        if (rota && !r.includes(rota))
+            continue;
+        if (cid && !c.includes(cid))
+            continue;
+        if (level && linha.level !== level)
+            continue;
+        if (q && !JSON.stringify(linha).toLowerCase().includes(q))
+            continue;
         out.push({ ...linha, rota: r, cid: c || undefined });
     }
     res.json({ total: out.length, logs: out });
 }
-
 // ─── Métricas: contagem de erros/warns/requests em 5 min ──────────────
 export function adminMetricas(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const corte = Date.now() - 5 * 60 * 1000;
     let erros = 0, warns = 0, requests = 0;
     for (let i = LOG_BUFFER.length - 1; i >= 0; i--) {
         const l = LOG_BUFFER[i];
-        if (new Date(l.t).getTime() < corte) break;
-        if (l.level === "error") erros++;
-        else if (l.level === "warn") warns++;
-        if (l.msg === "http_request_start") requests++;
+        if (new Date(l.t).getTime() < corte)
+            break;
+        if (l.level === "error")
+            erros++;
+        else if (l.level === "warn")
+            warns++;
+        if (l.msg === "http_request_start")
+            requests++;
     }
     res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size });
 }
-
 // ─── Teste E2E: DCR → authorize → token → tools/list ──────────────────
 async function fazerRequest(url, opts = {}) {
     const t0 = performance.now();
@@ -488,22 +518,34 @@ async function fazerRequest(url, opts = {}) {
         const location = r.headers.get("location");
         const texto = await r.text();
         let json = null;
-        try { json = JSON.parse(texto); } catch { /* ok */ }
+        try {
+            json = JSON.parse(texto);
+        }
+        catch { /* ok */ }
         return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), json, texto: texto.slice(0, 400), location, contentType: r.headers.get("content-type") || "" };
-    } catch (err) {
+    }
+    catch (err) {
         return { ok: false, status: 0, ms: Math.round(performance.now() - t0), erro: String(err?.message || err) };
     }
 }
-
 function parseMcpJson(texto) {
     const trimmed = String(texto || "").trim();
-    if (!trimmed) return null;
-    try { return JSON.parse(trimmed); } catch { /* tenta SSE */ }
+    if (!trimmed)
+        return null;
+    try {
+        return JSON.parse(trimmed);
+    }
+    catch { /* tenta SSE */ }
     const dataLine = trimmed.split(/\r?\n/).find((line) => line.startsWith("data:"));
-    if (!dataLine) return null;
-    try { return JSON.parse(dataLine.slice(5).trim()); } catch { return null; }
+    if (!dataLine)
+        return null;
+    try {
+        return JSON.parse(dataLine.slice(5).trim());
+    }
+    catch {
+        return null;
+    }
 }
-
 function extrairToolsCount(payload) {
     if (Array.isArray(payload)) {
         const item = payload.find((p) => p?.result?.tools || p?.error);
@@ -511,13 +553,11 @@ function extrairToolsCount(payload) {
     }
     return { toolCount: payload?.result?.tools?.length, error: payload?.error?.message };
 }
-
 async function rodarE2EInterno({ comAdmin, cid }) {
     const base = `http://127.0.0.1:${config.port}`;
     const etapas = [];
     let falhouEm = null;
     const baseHeaders = { "X-Correlation-Id": cid || crypto.randomUUID() };
-
     // 1) DCR
     const dcr = await fazerRequest(`${base}/register`, {
         method: "POST",
@@ -532,15 +572,19 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     });
     const clientId = dcr.json?.client_id;
     etapas.push({ nome: "DCR /register", ok: dcr.ok && !!clientId, status: dcr.status, ms: dcr.ms, detalhe: clientId ? "client_id emitido" : (dcr.erro || dcr.texto) });
-    if (!clientId) { falhouEm = "DCR /register"; return { ok: false, falhouEm, etapas }; }
-
+    if (!clientId) {
+        falhouEm = "DCR /register";
+        return { ok: false, falhouEm, etapas };
+    }
     // 2) Discovery
     const disc = await fazerRequest(`${base}/.well-known/oauth-authorization-server`, { headers: baseHeaders });
     etapas.push({ nome: "Discovery /.well-known", ok: disc.ok, status: disc.status, ms: disc.ms, detalhe: disc.json?.issuer || disc.erro });
-    if (!disc.ok) { falhouEm = "Discovery"; return { ok: false, falhouEm, etapas }; }
-
-    if (!comAdmin) return { ok: true, publico: true, etapas };
-
+    if (!disc.ok) {
+        falhouEm = "Discovery";
+        return { ok: false, falhouEm, etapas };
+    }
+    if (!comAdmin)
+        return { ok: true, publico: true, etapas };
     // 3) /authorize (PKCE+senha admin)
     const codeVerifier = crypto.randomBytes(32).toString("base64url");
     const codeChallenge = crypto.createHash("sha256").update(codeVerifier).digest("base64url");
@@ -560,12 +604,13 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         body: authParams.toString() + `&password=${encodeURIComponent(senha)}`,
         redirect: "manual",
     });
-    
     let code = null;
     if (authz.status === 302 && authz.location) {
-        try { code = new URL(authz.location, "http://127.0.0.1").searchParams.get("code"); } catch {}
+        try {
+            code = new URL(authz.location, "http://127.0.0.1").searchParams.get("code");
+        }
+        catch { }
     }
-    
     etapas.push({
         nome: "/authorize (PKCE+senha admin)",
         ok: !!code,
@@ -573,8 +618,10 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: authz.ms,
         detalhe: code ? "code capturado automaticamente" : (authz.texto || authz.erro || "Falhou em emitir code; verifique MCP_ADMIN_PASSWORD/GH_TOKEN"),
     });
-    if (!code) { falhouEm = "authorize"; return { ok: false, falhouEm, etapas }; }
-
+    if (!code) {
+        falhouEm = "authorize";
+        return { ok: false, falhouEm, etapas };
+    }
     // 4) /token
     const tok = await fazerRequest(`${base}/token`, {
         method: "POST",
@@ -595,8 +642,10 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: tok.ms,
         detalhe: accessToken ? "token emitido" : (tok.json?.error_description || tok.erro || tok.texto),
     });
-    if (!accessToken) { falhouEm = "token"; return { ok: false, falhouEm, etapas }; }
-
+    if (!accessToken) {
+        falhouEm = "token";
+        return { ok: false, falhouEm, etapas };
+    }
     // 5) initialize via /admin/mcp
     const init = await fazerRequest(`${base}/admin/mcp`, {
         method: "POST",
@@ -611,8 +660,10 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: init.ms,
         detalhe: initJson?.error?.message || initJson?.result?.serverInfo?.name || init.contentType || init.texto,
     });
-    if (!init.ok || initJson?.error) { falhouEm = "initialize"; return { ok: false, falhouEm, etapas }; }
-
+    if (!init.ok || initJson?.error) {
+        falhouEm = "initialize";
+        return { ok: false, falhouEm, etapas };
+    }
     // 6) tools/list via /admin/mcp
     let tools = await fazerRequest(`${base}/admin/mcp`, {
         method: "POST",
@@ -647,37 +698,41 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: tools.ms,
         detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (toolsError || tools.erro || tools.texto),
     });
-
     const allOk = etapas.every(e => e.ok !== false);
     return { ok: allOk, falhouEm: allOk ? null : "tools/list", etapas };
 }
-
 export async function adminE2E(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const l = withCid(req.cid);
     l.info("admin_e2e_start", {});
     try {
         const r = await rodarE2EInterno({ comAdmin: true, cid: req.cid });
         l.info("admin_e2e_end", { ok: r.ok, falhouEm: r.falhouEm });
         res.json(r);
-    } catch (err) {
+    }
+    catch (err) {
         l.error("admin_e2e_error", { error: String(err) });
         res.status(500).json({ ok: false, error: String(err) });
     }
 }
-
 export async function adminE2EPublico(req, res) {
     // Versão sem senha, usada pelo postdeploy-healthcheck.sh — só liveness DCR+Discovery
     try {
         const r = await rodarE2EInterno({ comAdmin: false, cid: req.cid });
         res.json(r);
-    } catch (err) {
+    }
+    catch (err) {
         res.status(500).json({ ok: false, error: String(err) });
     }
 }
-
 export function adminLogsStream(req, res) {
-    if (!isAdmin(req)) { res.status(401).end(); return; }
+    if (!isAdmin(req)) {
+        res.status(401).end();
+        return;
+    }
     sseStats.totalConexoes++;
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
@@ -700,7 +755,8 @@ export function adminLogsStream(req, res) {
         sseStats.ultimoEventoEm = line.t;
         sseStats.eventosRecentes.push(Date.now());
         sseStats.ultimasMensagens.push({ t: line.t, level: line.level, msg: line.msg, cid: req.cid, rota: req.path });
-        if (sseStats.ultimasMensagens.length > 50) sseStats.ultimasMensagens.shift();
+        if (sseStats.ultimasMensagens.length > 50)
+            sseStats.ultimasMensagens.shift();
         res.write(`:ping cid=${req.cid}\n\n`);
     }, 15000);
     req.on("close", () => {
@@ -709,21 +765,26 @@ export function adminLogsStream(req, res) {
         pushAdminLog("info", "admin_sse_desconectado", { cid: req.cid, path: req.path, conexoesAtivas: subscribers.size });
     });
 }
-
 export function adminTestarSse(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const l = withCid(req.cid);
     l.info("admin_sse_test", { origem: "botão painel" });
     pushAdminLog("info", "admin_sse_test", { origem: "botão painel", cid: req.cid });
     res.json({ ok: true, cid: req.cid, ts: new Date().toISOString() });
 }
-
 export function bootstrapAdminLogCapture() {
     for (const level of ["debug", "info", "warn", "error"]) {
         const orig = log[level].bind(log);
         log[level] = (msg, meta) => {
-            try { pushAdminLog(level, msg, meta); } catch { /* nunca quebrar log */ }
+            try {
+                pushAdminLog(level, msg, meta);
+            }
+            catch { /* nunca quebrar log */ }
             orig(msg, meta);
         };
     }
 }
+//# sourceMappingURL=admin.js.map

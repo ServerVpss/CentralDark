@@ -308,3 +308,4 @@ export function servePainel(_req, res) {
     res.send(HTML);
 }
 //# sourceMappingURL=painel.js.map
+//# sourceMappingURL=painel.js.map

@@ -9,3 +9,4 @@ export const log = {
     error: (msg, meta) => emit("error", msg, meta),
 };
 //# sourceMappingURL=log.js.map
+//# sourceMappingURL=log.js.map

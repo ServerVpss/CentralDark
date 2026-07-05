@@ -78,7 +78,7 @@ app.use(correlationMiddleware);
 app.get("/health", (_req, res) => {
     res.json({
         ok: true,
-        service: "mcp-centraldark",
+        service: "CentralDark-MCP",
         version: "0.4.0",
         catalogVersion: CATALOG_VERSION,
         toolCount: getCatalogSummary().toolCount,
@@ -179,8 +179,11 @@ app.get("/skills/:nome/install.sh", (req, res) => {
 // ───────────────────────── OAuth discovery (MCP) ─────────────────────────
 app.get("/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadata);
+app.get("/.well-known/oauth-protected-resource/admin", getProtectedResourceMetadata);
+app.get("/.well-known/oauth-protected-resource/admin/mcp", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
+app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
@@ -196,6 +199,16 @@ function unauthorized(req, res, msg) {
     res.status(401).json({
         jsonrpc: "2.0",
         error: { code: -32000, message: msg, data: { cid: req.cid } },
+        id: null,
+        cid: req.cid,
+    });
+}
+function unauthorizedAdmin(req, res, msg, status = 401) {
+    setCorsHeaders(res);
+    res.setHeader("WWW-Authenticate", `Bearer realm="mcp-admin", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource/admin/mcp", scope="admin"`);
+    res.status(status).json({
+        jsonrpc: "2.0",
+        error: { code: status === 403 ? -32001 : -32000, message: msg, data: { cid: req.cid } },
         id: null,
         cid: req.cid,
     });
@@ -311,6 +324,46 @@ app.post("/mcp", (req, res) => {
 app.get("/mcp", (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
+// ─────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ───────────────
+function requireAdminScope(req, res) {
+    const bearer = extractBearer(req);
+    if (!bearer) {
+        unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
+        return null;
+    }
+    const at = getAccessToken(bearer);
+    if (!at) {
+        unauthorizedAdmin(req, res, "Access token admin inválido ou expirado.");
+        return null;
+    }
+    const scope = String(at.oauth_scope || "");
+    if (!/\badmin\b/.test(scope)) {
+        unauthorizedAdmin(req, res, "escopo admin obrigatório", 403);
+        return null;
+    }
+    return at.gh_token;
+}
+app.post("/admin/mcp", (req, res) => {
+    const l = withCid(req.cid);
+    const tok = requireAdminScope(req, res);
+    if (!tok)
+        return;
+    l.info("mcp_admin_request_authorized", { method: req.body?.method || "unknown" });
+    handleMcpRequest(req, res, tok, { cid: req.cid, admin: true }).catch((err) => {
+        l.error("mcp_admin_handler_unhandled", { error: String(err) });
+        if (!res.headersSent) {
+            res.status(500).json({
+                jsonrpc: "2.0",
+                error: { code: -32603, message: "Erro interno do servidor MCP admin", data: { cid: req.cid } },
+                id: null,
+                cid: req.cid,
+            });
+        }
+    });
+});
+app.get("/admin/mcp", (req, res) => {
+    unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
+});
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
 // ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────
@@ -353,4 +406,5 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
+//# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

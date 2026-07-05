@@ -231,3 +231,4 @@ export async function handleSkillInstaller(req, res, baseUrl) {
     res.type("text/x-shellscript; charset=utf-8").send(gerarInstallSh(nome, baseUrl));
 }
 //# sourceMappingURL=skills-public.js.map
+//# sourceMappingURL=skills-public.js.map

@@ -11,33 +11,29 @@ import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
-
 const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
-
 function checkSecret(name) {
     const v = process.env[name];
     return { name, present: Boolean(v && v.trim() && !v.startsWith("__MISSING_")) };
 }
-
 function checkDisk(dir) {
     try {
         fs.accessSync(dir, fs.constants.W_OK);
         return { ok: true, dir };
-    } catch (err) {
+    }
+    catch (err) {
         return { ok: false, dir, error: String(err?.message || err) };
     }
 }
-
 function pct(ok, total) {
-    if (!total) return 100;
+    if (!total)
+        return 100;
     return Math.round((ok / total) * 100);
 }
-
 function checkDependencia(nome, ok, detalhe) {
     return { nome, ok, detalhe };
 }
-
 export async function healthDeep(req, res) {
     const t0 = performance.now();
     try {
@@ -48,7 +44,6 @@ export async function healthDeep(req, res) {
         const disk = checkDisk(config.log.dir);
         const sse = getSseDiagnostics();
         const sseAtivas = activeSseSubscribers();
-
         // Dependências externas (checagem leve — sem network)
         const telegramTokenOk = checkSecret("TELEGRAM_BOT_TOKEN").present
             || checkSecret("TELEGRAM_TOKEN").present;
@@ -56,7 +51,6 @@ export async function healthDeep(req, res) {
             && checkSecret("MCP_ADMIN_PASSWORD").present;
         const githubOk = checkSecret("GITHUB_TOKEN").present
             || checkSecret("GH_TOKEN").present;
-
         const dependencias = [
             checkDependencia("mcp_catalog", summary.toolCount > 0, { toolCount: summary.toolCount }),
             checkDependencia("oauth", oauthOk, { secretsPresentes: oauthOk }),
@@ -67,11 +61,9 @@ export async function healthDeep(req, res) {
             checkDependencia("memoria", rssMb < 512, { rssMb, heapMb }),
             checkDependencia("loadavg", os.loadavg()[0] < os.cpus().length * 2, { load: os.loadavg() }),
         ];
-
         const okCount = dependencias.filter((d) => d.ok).length;
         const score = pct(okCount, dependencias.length);
         const status = score === 100 ? "healthy" : score >= 60 ? "degraded" : "unhealthy";
-
         res.status(status === "unhealthy" ? 503 : 200).json({
             ok: status !== "unhealthy",
             status,
@@ -91,22 +83,26 @@ export async function healthDeep(req, res) {
             elapsedMs: Math.round(performance.now() - t0),
             time: new Date().toISOString(),
         });
-    } catch (err) {
+    }
+    catch (err) {
         log.error("health_deep_error", { error: String(err), cid: req.cid });
         if (!res.headersSent) {
             res.status(500).json({ ok: false, status: "error", error: String(err) });
         }
     }
 }
-
 function legivelTempo(seg) {
     const s = Math.round(seg);
     const d = Math.floor(s / 86400);
     const h = Math.floor((s % 86400) / 3600);
     const m = Math.floor((s % 3600) / 60);
     const partes = [];
-    if (d) partes.push(`${d}d`);
-    if (h) partes.push(`${h}h`);
-    if (m || (!d && !h)) partes.push(`${m}min`);
+    if (d)
+        partes.push(`${d}d`);
+    if (h)
+        partes.push(`${h}h`);
+    if (m || (!d && !h))
+        partes.push(`${m}min`);
     return partes.join(" ");
 }
+//# sourceMappingURL=health-deep.js.map

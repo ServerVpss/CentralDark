@@ -1,3 +1,9 @@
+import { adminVaultTools } from "../../modes/admin/tools/admin-vault.js";
+import { adminFileTools } from "../../modes/admin/tools/admin-files.js";
+import { adminPm2Tools } from "../../modes/admin/tools/admin-pm2.js";
+import { adminShellTools } from "../../modes/admin/tools/admin-shell.js";
+import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
+import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
 import { aprendizadoTools } from "../aprendizado/aprendizado.js";
@@ -32,6 +38,12 @@ const runtimeTools = [
     ...pendenciasTools,
     ...deployTools,
     ...supabaseTools,
+    ...adminVaultTools,
+    ...adminFileTools,
+    ...adminPm2Tools,
+    ...adminShellTools,
+    ...adminVaultRwTools,
+    ...adminGitTools,
 ];
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
 function safeToolInfo(tool) {
@@ -135,4 +147,5 @@ export const mcpAdminTools = [
         },
     },
 ];
+//# sourceMappingURL=mcp-admin.js.map
 //# sourceMappingURL=mcp-admin.js.map

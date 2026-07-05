@@ -22,7 +22,6 @@ import { z } from "zod";
 import { config } from "../../config.js";
 import * as gh from "../github/github.js";
 import { sanitizeFields } from "../../lib/sanitize.js";
-
 // Caminho único das Lembranças (relativo à raiz do repo).
 const LEMBRANCAS_PATH = "docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md";
 // Marcador que separa o cabeçalho explicativo das entradas reais.
@@ -30,11 +29,9 @@ const MARCADOR = "## 📌 Entradas";
 // Validade padrão de uma lembrança, em dias.
 const TTL_DIAS = 30;
 const CO_AUTHOR = "SegredoDev <segredounlock@users.noreply.github.com>";
-
 function textBlock(text) {
     return { content: [{ type: "text", text }] };
 }
-
 const READ_ANNOT = {
     readOnlyHint: true,
     destructiveHint: false,
@@ -47,9 +44,7 @@ const WRITE_ANNOT = {
     idempotentHint: false,
     openWorldHint: true,
 };
-
 /* ─────────── Datas (America/Sao_Paulo) ─────────── */
-
 function hojeSP() {
     return new Intl.DateTimeFormat("sv-SE", {
         timeZone: "America/Sao_Paulo",
@@ -69,28 +64,30 @@ function addDias(isoDate, n) {
     d.setUTCDate(d.getUTCDate() + n);
     return d.toISOString().slice(0, 10);
 }
-
 /* ─────────── Leitura/escrita no repo (GitHub + fallback local) ─────────── */
-
 async function lerLembrancas(token) {
     try {
         const file = await gh.getFileContent(token, config.github.owner, config.github.repo, LEMBRANCAS_PATH);
-        if (typeof file === "string") return file;
+        if (typeof file === "string")
+            return file;
         const f = file;
-        if (f.decoded) return f.decoded;
-        if (f.content) return Buffer.from(f.content, "base64").toString("utf-8");
+        if (f.decoded)
+            return f.decoded;
+        if (f.content)
+            return Buffer.from(f.content, "base64").toString("utf-8");
         return JSON.stringify(file);
-    } catch (err) {
+    }
+    catch (err) {
         // Fallback local quando o GitHub está indisponível ou o arquivo não existe.
         try {
             const localPath = path.join(config.vps.repoPath, LEMBRANCAS_PATH);
             return await readFile(localPath, "utf-8");
-        } catch {
+        }
+        catch {
             return baseVazia();
         }
     }
 }
-
 async function escreverLembrancas(token, conteudo, mensagem) {
     const result = await gh.createOrUpdateFile(token, config.github.owner, config.github.repo, {
         path: LEMBRANCAS_PATH,
@@ -101,7 +98,6 @@ async function escreverLembrancas(token, conteudo, mensagem) {
     const r = result;
     return { sha: r?.commit?.sha ?? null, url: r?.commit?.html_url ?? null };
 }
-
 // Esqueleto mínimo caso o arquivo não exista (não deve acontecer — criado na Fase 2).
 function baseVazia() {
     return [
@@ -116,14 +112,11 @@ function baseVazia() {
         "",
     ].join("\n");
 }
-
 /* ─────────── Parsing das entradas ─────────── */
-
 function campo(bloco, label) {
     const m = bloco.match(new RegExp(`\\*\\*${label}:\\*\\*\\s*([^\\n]+)`, "i"));
     return m ? m[1].trim() : "";
 }
-
 function parseBloco(bloco) {
     const titulo = (bloco.match(/^###\s+(.+)$/m) || [])[1]?.trim() || "(sem título)";
     const tagsRaw = campo(bloco, "Tags");
@@ -141,7 +134,6 @@ function parseBloco(bloco) {
         raw: bloco.trim(),
     };
 }
-
 // Divide o arquivo em { cabecalho, entradas[] }.
 function dividir(md) {
     const idx = md.indexOf(MARCADOR);
@@ -156,7 +148,6 @@ function dividir(md) {
         .filter((b) => b.startsWith("### "));
     return { cabecalho, entradas: blocos.map(parseBloco) };
 }
-
 function montarBloco(e) {
     return [
         `### [${e.id}] ${e.titulo}`,
@@ -170,14 +161,12 @@ function montarBloco(e) {
         `Conteúdo: ${e.conteudo}`,
     ].join("\n");
 }
-
 function expirada(e, hoje) {
-    if (e.promovida) return false;
+    if (e.promovida)
+        return false;
     return e.expira && e.expira < hoje; // comparação lexicográfica de YYYY-MM-DD
 }
-
 /* ─────────── 1. consultar_memoria_reserva ─────────── */
-
 const consultarTool = {
     name: "consultar_memoria_reserva",
     description: "Lê as Lembranças do Pivete (memória de curto prazo em docs/CONSCIENCIA/LEMBRANCAS). USE ISSO ANTES de responder qualquer pedido complexo: traz o padrão de pensamento, preferências e contexto recente (passado/presente/futuro) do usuário mestre. Pode filtrar por tema, tag ou eixo temporal.",
@@ -196,28 +185,28 @@ const consultarTool = {
         const q = (input.query || "").toLowerCase();
         const tag = (input.tag || "").toLowerCase();
         const limite = input.limite || 20;
-
         let res = entradas.filter((e) => input.incluir_expiradas || !expirada(e, hoje));
-        if (q) res = res.filter((e) => `${e.titulo} ${e.conteudo}`.toLowerCase().includes(q));
-        if (tag) res = res.filter((e) => e.tags.includes(tag));
-        if (input.eixo) res = res.filter((e) => e.eixo === input.eixo);
+        if (q)
+            res = res.filter((e) => `${e.titulo} ${e.conteudo}`.toLowerCase().includes(q));
+        if (tag)
+            res = res.filter((e) => e.tags.includes(tag));
+        if (input.eixo)
+            res = res.filter((e) => e.eixo === input.eixo);
         res = res.slice(-limite);
-
         if (!res.length) {
             return textBlock(JSON.stringify({ ok: true, total: 0, lembrancas: [], nota: "Nenhuma lembrança encontrada com esses filtros." }, null, 2));
         }
         // Agrupa por eixo temporal (contexto Passado/Presente/Futuro).
         const porEixo = { passado: [], presente: [], futuro: [] };
-        for (const e of res) (porEixo[e.eixo] || porEixo.presente).push({
-            titulo: e.titulo, data: e.data, tags: e.tags, relevancia: e.relevancia,
-            promovida: e.promovida, conteudo: e.conteudo,
-        });
+        for (const e of res)
+            (porEixo[e.eixo] || porEixo.presente).push({
+                titulo: e.titulo, data: e.data, tags: e.tags, relevancia: e.relevancia,
+                promovida: e.promovida, conteudo: e.conteudo,
+            });
         return textBlock(JSON.stringify({ ok: true, total: res.length, contexto_temporal: porEixo }, null, 2));
     },
 };
-
 /* ─────────── 2. consolidar_pensamento ─────────── */
-
 const consolidarTool = {
     name: "consolidar_pensamento",
     description: "Grava um insight/regra/padrão nas Lembranças do Pivete. CHAME ISSO sempre que aprender algo novo sobre como o usuário pensa, age, o que gosta, ou uma decisão/código importante. Guarda só o ouro (essencial), indexado por tags/relevância, com validade de 30 dias. Faz limpeza automática das lembranças vencidas. O servidor remove credenciais antes de gravar.",
@@ -235,12 +224,10 @@ const consolidarTool = {
         const md = await lerLembrancas(ctx.token);
         const { cabecalho, entradas } = dividir(md);
         const hoje = hojeSP();
-
         // Housekeeping: remove expiradas não-promovidas.
         const antes = entradas.length;
         const mantidas = entradas.filter((e) => !expirada(e, hoje));
         const removidas = antes - mantidas.length;
-
         // Nova lembrança.
         const nova = {
             id: agoraSP(),
@@ -253,7 +240,6 @@ const consolidarTool = {
             promovida: !!rawInput.promovida,
             conteudo: limpo.conteudo,
         };
-
         const corpo = [...mantidas.map((e) => e.raw), montarBloco(nova)].join("\n\n");
         const novoMd = `${cabecalho}\n\n${corpo}\n`;
         const r = await escreverLembrancas(ctx.token, novoMd, `lembranca: ${nova.titulo}`);
@@ -263,9 +249,7 @@ const consolidarTool = {
         }, null, 2));
     },
 };
-
 /* ─────────── 3. injetar_consciencia_centraldark ─────────── */
-
 // Regras de CONDUTA imutáveis (vivem no código, que é trancado). Complementam as
 // regras técnicas de docs/CONSCIENCIA (lidas por ler_consciencia/ler_regras_inviolaveis).
 const REGRAS_CONDUTA = `# ⚡ Consciência CentralDark — Regras de Conduta (imutáveis)
@@ -287,7 +271,6 @@ Toda IA recém-conectada DEVE ler isto antes de agir.
 8. SINCRONIA. Git é a fonte da verdade. Toda mudança relevante: registre e sincronize
    (GitHub, VPS, Cérebro Vivo, Notion).
 9. ÁREAS TRANCADAS (CLAUDE.md Seção 9) só com "PERMITO PIVETE".`;
-
 const injetarTool = {
     name: "injetar_consciencia_centraldark",
     description: "Retorna as regras de CONDUTA imutáveis da CentralDark (zero enrolação, pragmatismo, execução direta, foco, segurança). Toda IA recém-conectada deve chamar isto no início pra se calibrar. Complementa ler_consciencia (regras técnicas do projeto).",
@@ -295,9 +278,7 @@ const injetarTool = {
     inputSchema: z.object({}),
     handler: async () => textBlock(REGRAS_CONDUTA),
 };
-
 /* ─────────── 4. analise_de_estado_cognitivo ─────────── */
-
 const analiseTool = {
     name: "analise_de_estado_cognitivo",
     description: "Analisa as últimas Lembranças pra inferir o FOCO e o projeto atual do Pivete, e sugere o nível de detalhe técnico ideal da resposta. Também aponta lembranças candidatas a virar consciência oficial (cruzamento). Use pra adaptar seu tom ao momento dele.",
@@ -311,26 +292,23 @@ const analiseTool = {
         const hoje = hojeSP();
         const ativas = entradas.filter((e) => !expirada(e, hoje));
         const recentes = ativas.slice(-(input.limite || 15));
-
         if (!recentes.length) {
             return textBlock(JSON.stringify({ ok: true, foco: "indefinido", nota: "Sem lembranças ativas — peça contexto ao Pivete." }, null, 2));
         }
-
         // Frequência de tags → foco atual.
         const freq = {};
-        for (const e of recentes) for (const t of e.tags) freq[t] = (freq[t] || 0) + 1;
+        for (const e of recentes)
+            for (const t of e.tags)
+                freq[t] = (freq[t] || 0) + 1;
         const topTags = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([t, n]) => ({ tag: t, ocorrencias: n }));
-
         const altaRelevancia = recentes.filter((e) => e.relevancia === "alta").length;
         const ratioAlta = altaRelevancia / recentes.length;
         // Mais lembranças de alta relevância → contexto denso → mais detalhe técnico.
         const nivelDetalhe = ratioAlta > 0.5 ? "alto (técnico/profundo)" : ratioAlta > 0.2 ? "médio" : "baixo (direto e simples)";
-
         // Candidatos a promoção: alta relevância, recorrentes, ainda não promovidos.
         const candidatos = ativas
             .filter((e) => !e.promovida && e.relevancia === "alta")
             .map((e) => e.titulo);
-
         return textBlock(JSON.stringify({
             ok: true,
             lembrancas_ativas: ativas.length,
@@ -341,5 +319,5 @@ const analiseTool = {
         }, null, 2));
     },
 };
-
 export const cognitivoTools = [consultarTool, consolidarTool, injetarTool, analiseTool];
+//# sourceMappingURL=cognitivo.js.map

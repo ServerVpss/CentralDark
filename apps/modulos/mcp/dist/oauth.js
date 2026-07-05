@@ -635,3 +635,4 @@ export function handleOAuthStart(_req, res) {
     res.status(410).type("text/plain").send("OAuth via GitHub foi removido. Cadastre o cliente em /register e autorize por /authorize.");
 }
 //# sourceMappingURL=oauth.js.map
+//# sourceMappingURL=oauth.js.map

@@ -203,3 +203,4 @@ export const painelTools = [
     },
 ];
 //# sourceMappingURL=painel.js.map
+//# sourceMappingURL=painel.js.map

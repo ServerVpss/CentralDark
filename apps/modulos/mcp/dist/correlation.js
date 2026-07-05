@@ -4,7 +4,6 @@
 // numa timeline única. Isola bugs tipo body_iterator/streaming rapidamente.
 import { randomUUID } from "node:crypto";
 import { log } from "./log.js";
-
 export function correlationMiddleware(req, res, next) {
     const incoming = req.headers["x-correlation-id"] || req.headers["x-request-id"] || req.headers["cf-ray"];
     const cid = (typeof incoming === "string" && incoming.length >= 8 && incoming.length <= 64)
@@ -30,7 +29,6 @@ export function correlationMiddleware(req, res, next) {
         return originalJson(body);
     };
     const started = Date.now();
-
     log.info("http_request_start", {
         cid,
         method: req.method,
@@ -38,7 +36,6 @@ export function correlationMiddleware(req, res, next) {
         ua: (req.headers["user-agent"] || "").slice(0, 120),
         ip: req.ip || req.socket?.remoteAddress || "?",
     });
-
     // Instrumenta encerramento (cobre respostas normais e SSE fechadas)
     res.on("finish", () => {
         log.info("http_request_end", {
@@ -63,7 +60,6 @@ export function correlationMiddleware(req, res, next) {
     });
     next();
 }
-
 // Helper para logs específicos do MCP com CID embutido
 export function withCid(cid) {
     return {
@@ -73,3 +69,4 @@ export function withCid(cid) {
         error: (msg, meta = {}) => log.error(msg, { cid, ...meta }),
     };
 }
+//# sourceMappingURL=correlation.js.map
