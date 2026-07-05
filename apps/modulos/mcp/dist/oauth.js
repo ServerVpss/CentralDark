@@ -51,14 +51,33 @@ async function fetchClientMetadataDocument(client_id) {
     if (cached && cached.expiresAt > Date.now()) {
         return cached.client;
     }
-    const res = await fetchWithRetry(client_id, {
-        headers: {
-            Accept: "application/json",
-            "User-Agent": "MCP-CentralDark/0.4",
-        },
-        retries: 2,
-        label: "client_id_metadata",
-    });
+    // Fetch com timeout + retry manual (substitui fetchWithRetry que não existia)
+    let res;
+    let lastErr;
+    for (let tentativa = 0; tentativa <= 2; tentativa++) {
+        try {
+            res = await fetch(client_id, {
+                headers: {
+                    Accept: "application/json",
+                    "User-Agent": "MCP-CentralDark/0.4",
+                },
+                signal: AbortSignal.timeout(5000),
+            });
+            break;
+        }
+        catch (err) {
+            lastErr = err;
+            if (tentativa === 2) {
+                log.warn("oauth_client_metadata_fetch_falhou", { client_id, erro: String(err) });
+                return undefined;
+            }
+            await new Promise((r) => setTimeout(r, 200 * (tentativa + 1)));
+        }
+    }
+    if (!res) {
+        log.warn("oauth_client_metadata_sem_resposta", { client_id, erro: String(lastErr) });
+        return undefined;
+    }
     if (!res.ok) {
         log.warn("oauth_client_metadata_http_error", { client_id, status: res.status });
         return undefined;
