@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T23:42:09.765Z",
-  "updatedAtBR": "05/07/2026, 20:42:09 BRT",
+  "updatedAt": "2026-07-05T23:42:47.894Z",
+  "updatedAtBR": "05/07/2026, 20:42:47 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "chore(security): remover workflow temporario de injecao Lovable",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T23:42:47.894Z",
+      "titulo": "Push na main · 84b005917117fcdac36801fa87b84c4ca0bb66d9",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "84b0059",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-05T23:42:09.765Z",
       "titulo": "Push na main · 2c32df371b0b99e23618a133ebb128d34911f700",
@@ -1283,6 +1291,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T23:42:47.894Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 84b005917117fcdac36801fa87b84c4ca0bb66d9 (84b0059)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T23:42:09.765Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2c32df371b0b99e23618a133ebb128d34911f700 (2c32df3)",
@@ -1623,13 +1638,6 @@
       "ia": "@Pivete",
       "action": "📌 Hermes v5.0 — MISSÃO FINALIZADA",
       "area": "Hermes Core",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T10:45:02.749Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d8ab3c96e9f63646a644ee15a3550a217451c91a (d8ab3c9)",
-      "area": "Repositório",
       "status": "sucesso"
     }
   ],
