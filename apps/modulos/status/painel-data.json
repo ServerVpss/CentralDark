@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T19:43:23.565Z",
-  "updatedAtBR": "05/07/2026, 16:43:23 BRT",
+  "updatedAt": "2026-07-05T22:36:36.788Z",
+  "updatedAtBR": "05/07/2026, 19:36:36 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "consciencia(secao 12): Selar decisão: Pivete recusou Sentry/serviços externos de monitoramento, quer tudo centralizado na própria VPS",
+    "lastCommit": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T22:36:36.788Z",
+      "titulo": "Push na main · 7535220b8db1d70c238f7d367ecdf51a5b82d4bc",
+      "detalhe": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
+      "area": "Repositório",
+      "sha": "7535220",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-05T19:43:23.583Z",
       "title": "Correção MCP admin: rota /admin/mcp alinhada nos metadados OAuth, prompt admin ajustado e logs do painel exibindo horário de Brasília.",
@@ -1243,6 +1251,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T22:36:36.788Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7535220b8db1d70c238f7d367ecdf51a5b82d4bc (7535220)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T21:02:22.088Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d9b21eb7eaac88f8032dea02838ff6d1d0332d90 (d9b21eb)",
@@ -1582,13 +1597,6 @@
       "time": "2026-07-04T10:19:51.886Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 812f9a9ea5b87fb6b59de2bdbc255eb76ae8e1bd (812f9a9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T10:18:08.975Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · eff4017a9a585ebf86324816ac6da3bad666f317 (eff4017)",
       "area": "Repositório",
       "status": "sucesso"
     }
