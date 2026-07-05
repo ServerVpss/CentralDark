@@ -474,25 +474,21 @@ Mais as tools gerais de GitHub (`github_get_file`, `github_list_commits`, `githu
 
 ---
 
-## 12. ⏰ CENTRAL DE HORÁRIO
+## 12. MONITORAMENTO DE ERROS — SÓ LOCAL, NUNCA EXTERNO
 
-> **Pasta única:** `central-horario/` na raiz do repo. Fuso `America/Sao_Paulo`, locale `pt-BR`.
+**Decisão selada em 2026-07-05.** O Pivete recusou explicitamente qualquer serviço externo de monitoramento (Sentry, etc). Motivo: fragmenta o sistema em vários lugares/contas pra gerenciar, quebra o princípio de "tudo centralizado na minha própria VPS".
 
-| Arquivo | Pra que |
-|---------|---------|
-| `central-horario/frontend.ts` | TS/React (atalho `@/lib/datetime` continua) |
-| `central-horario/node.cjs` | Node CommonJS (atalho `apps/bot/server/src/lib/log-time.cjs` continua) |
-| `central-horario/README.md` | Documentação completa |
+**Regra:** monitoramento de erro, log e diagnóstico é **sempre local**, dentro da própria VPS:
+- `pm2 logs <nome> --lines N --nostream` → ver erros de um processo
+- `deploy_status` (tool MCP) → visão geral de saúde (PM2 + GitHub Actions)
+- `mcp_audit_recent_logs` → auditoria de execução do próprio MCP
 
-**Funções:** `formatDateTimeBR`, `formatDateBR`, `formatTimeBR`, `formatTimeWithSecondsBR`, `formatShortDateBR`, `isoBR`, `logTimeBR` (+ aliases PT-BR).
+**Proibido:**
+- Sugerir criar conta em Sentry, Datadog, New Relic ou qualquer APM externo.
+- Pedir pro Pivete "ir criar uma conta em [serviço X]" como solução de monitoramento.
+- Deixar pendência aberta pedindo credencial de serviço externo pra observabilidade.
 
-**Regras:**
-- ✅ Sempre importar daqui. Nunca duplicar lógica de hora.
-- ✅ Logs → `logTimeBR()`. **NUNCA** `new Date().toISOString()` em log.
-- ✅ Colunas de BD → `new Date().toISOString()` (UTC). Conversão pra BR só na exibição.
-- ✅ Função nova → colocar nos DOIS arquivos + atualizar README.
-
----
+Se uma tool do MCP (`sentry_*`) falhar por falta de config, a resposta correta é: **não é bug, é feature morta por decisão do usuário** — ignorar e seguir com as ferramentas locais acima.
 
 ## 13. 🔐 SANITIZAÇÃO DE LOGS
 
