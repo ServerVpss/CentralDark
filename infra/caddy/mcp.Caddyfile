@@ -9,7 +9,7 @@
 #
 # OAuth 2.1: o app expõe /.well-known/oauth-authorization-server,
 # /.well-known/oauth-protected-resource, /register, /authorize, /token,
-# /oauth/github/callback, /health, /mcp. Todas precisam chegar no backend.
+# /health, /mcp. Todas precisam chegar no backend.
 # Solução: proxy total pro 9100 e deixar o app decidir o que é 404.
 
 mcp.centralldark.com {
@@ -57,6 +57,13 @@ mcp.centralldark.com {
 
 	# Preflight OPTIONS responde 204 direto, sem chamar o backend.
 	@preflight method OPTIONS
+	header @preflight {
+		Access-Control-Allow-Origin "*"
+		Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		Access-Control-Allow-Headers "Authorization, Content-Type, Accept, Mcp-Session-Id, MCP-Protocol-Version, X-MCP-Session"
+		Access-Control-Expose-Headers "WWW-Authenticate, Mcp-Session-Id"
+		Access-Control-Max-Age "86400"
+	}
 	respond @preflight 204
 
 	reverse_proxy 127.0.0.1:9100 {

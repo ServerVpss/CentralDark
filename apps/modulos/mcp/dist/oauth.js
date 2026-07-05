@@ -1,19 +1,30 @@
 // OAuth 2.1 do MCP CentralDark.
 import crypto from "node:crypto";
 import { config } from "./config.js";
-import { fetchWithRetry } from "./lib/fetch-retry.js";
 import { log } from "./log.js";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
-import { consumeAuthCode, consumeAuthRequest, consumePendingState, consumeRefreshToken, createAuthRequest, createPendingState, createSession, getClient, issueAuthCode, issueTokenPair, registerClient, } from "./sessions.js";
-const GITHUB_AUTHORIZE = "https://github.com/login/oauth/authorize";
-const GITHUB_TOKEN = "https://github.com/login/oauth/access_token";
-const GITHUB_USER = "https://api.github.com/user";
+import { consumeAuthCode, consumeRefreshToken, createAuthRequest, getClient, issueAuthCode, issueTokenPair, registerClient, } from "./sessions.js";
 const CLIENT_METADATA_TTL_MS = 1000 * 60 * 10;
-const allowedLogins = (process.env.MCP_ALLOWED_GH_LOGINS ?? "")
-    .split(",")
-    .map((s) => s.trim().toLowerCase())
-    .filter(Boolean);
 const clientMetadataCache = new Map();
+function getAdminPassword() {
+    return (process.env.MCP_ADMIN_PASSWORD ?? process.env.CENTRALDARK_MCP_ADMIN_PASSWORD ?? "").trim();
+}
+function getOwnerToolToken() {
+    return (process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? process.env.MCP_OWNER_TOOL_TOKEN ?? "").trim();
+}
+function timingSafeEqualText(a, b) {
+    const aa = Buffer.from(a);
+    const bb = Buffer.from(b);
+    return aa.length === bb.length && crypto.timingSafeEqual(aa, bb);
+}
+function param(req, name) {
+    const source = req.method === "POST" ? req.body ?? {} : req.query ?? {};
+    const value = source[name];
+    return Array.isArray(value) ? String(value[0] ?? "") : String(value ?? "");
+}
+function oauthError(res, status, error, description) {
+    res.status(status).json({ error, error_description: description });
+}
 function isUrlClientId(client_id) {
     try {
         const url = new URL(client_id);
@@ -391,6 +402,23 @@ export function getAuthorizationServerMetadata(_req, res) {
         authorization_response_iss_parameter_supported: true,
     });
 }
+function redirectWithOAuthError(res, redirect_uri, error, state, description) {
+    const back = new URL(redirect_uri);
+    back.searchParams.set("error", error);
+    if (description)
+        back.searchParams.set("error_description", description);
+    if (state)
+        back.searchParams.set("state", state);
+    back.searchParams.set("iss", config.publicUrl);
+    res.redirect(302, back.toString());
+}
+function sendOwnerConsentPage(res, input) {
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Referrer-Policy", "no-referrer");
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.send(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CENTRAL DARK - Autorizar</title><style>:root{--bg:#052e2b;--panel:rgba(6,44,40,.92);--line:rgba(52,211,153,.36);--text:#e6fff9;--muted:#a7f3d0;--brand:#34d399;--brand2:#10b981}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:radial-gradient(circle at 50% 30%,#0a3d38,var(--bg) 60%,#031f1d);color:var(--text)}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:32px 28px;max-width:460px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(3,31,29,.62)}h1{margin:0 0 8px;font-size:21px;color:var(--brand)}.sub{color:var(--muted);font-size:14px;margin:0 0 24px;opacity:.9}.row{background:rgba(5,46,43,.72);padding:10px 12px;border-radius:8px;font-size:13px;margin:6px 0;border:1px solid rgba(52,211,153,.16)}.k{color:#6ee7b7;font-weight:700}input[type=password]{width:100%;padding:12px 14px;background:rgba(5,46,43,.86);border:1px solid rgba(52,211,153,.38);color:var(--text);border-radius:8px;font-size:15px;margin:16px 0 12px;outline:none}input[type=password]:focus{border-color:var(--brand2);box-shadow:0 0 0 3px rgba(16,185,129,.18)}button{width:100%;padding:13px;background:linear-gradient(135deg,var(--brand2),#059669);color:#052e2b;border:0;border-radius:8px;font-weight:800;font-size:15px;cursor:pointer}.foot{text-align:center;margin-top:16px;font-size:11px;color:#6ee7b7;opacity:.68}.err{margin:12px 0 0;color:#fecaca;font-size:13px}</style></head><body><form class="card" method="POST" action="/authorize"><input type="hidden" name="client_id" value="${escapeHtml(input.client_id)}"><input type="hidden" name="redirect_uri" value="${escapeHtml(input.redirect_uri)}"><input type="hidden" name="response_type" value="${escapeHtml(input.response_type)}"><input type="hidden" name="code_challenge" value="${escapeHtml(input.code_challenge)}"><input type="hidden" name="code_challenge_method" value="${escapeHtml(input.code_challenge_method)}"><input type="hidden" name="state" value="${escapeHtml(input.client_state ?? "")}"><input type="hidden" name="scope" value="${escapeHtml(input.scope ?? "mcp")}"><h1>Autorizar conector</h1><p class="sub">Um cliente quer se conectar ao MCP do dono.</p><div class="row"><span class="k">Cliente:</span> ${escapeHtml(input.client_name || input.client_id)}</div><div class="row"><span class="k">Retorno:</span> <span style="word-break:break-all;font-size:12px">${escapeHtml(input.redirect_uri)}</span></div><input type="password" name="password" placeholder="Senha do admin" autofocus required><button type="submit">Aprovar acesso total</button>${input.error ? `<p class="err">${escapeHtml(input.error)}</p>` : ""}<div class="foot">CENTRAL DARK - MCP OAuth - dono only</div></form></body></html>`);
+}
 export function postRegister(req, res) {
     const body = (req.body ?? {});
     const redirect_uris = Array.isArray(body.redirect_uris)
@@ -414,6 +442,7 @@ export function postRegister(req, res) {
     });
     res.status(201).json({
         client_id: client.client_id,
+        client_id_issued_at: Math.floor(client.createdAt / 1000),
         client_name: client.client_name,
         redirect_uris: client.redirect_uris,
         token_endpoint_auth_method: client.token_endpoint_auth_method,
@@ -423,50 +452,74 @@ export function postRegister(req, res) {
 }
 export async function handleAuthorize(req, res) {
     try {
-        const client_id = String(req.query.client_id ?? "");
-        const redirect_uri = String(req.query.redirect_uri ?? "");
-        const response_type = String(req.query.response_type ?? "");
-        const code_challenge = String(req.query.code_challenge ?? "");
-        const code_challenge_method = String(req.query.code_challenge_method ?? "");
-        const client_state = req.query.state ? String(req.query.state) : undefined;
-        const scope = req.query.scope ? String(req.query.scope) : undefined;
+        const client_id = param(req, "client_id");
+        const redirect_uri = param(req, "redirect_uri");
+        const response_type = param(req, "response_type");
+        const code_challenge = param(req, "code_challenge");
+        const code_challenge_method = param(req, "code_challenge_method");
+        const client_state = param(req, "state") || undefined;
+        const scope = param(req, "scope") || "mcp";
         const client = await resolveClientRegistration(client_id, redirect_uri);
         if (!client) {
-            res.status(400).send("client_id desconhecido. Faça /register antes ou use Client ID Metadata Document compatível.");
+            oauthError(res, 400, "invalid_client", "client_id desconhecido. Faça /register antes ou use Client ID Metadata Document compatível.");
             return;
         }
         if (!client.redirect_uris.includes(redirect_uri)) {
-            res.status(400).send("redirect_uri não registrado pra esse client.");
+            oauthError(res, 400, "invalid_request", "redirect_uri não registrado pra esse client.");
             return;
         }
         if (response_type !== "code") {
-            res.status(400).send("response_type inválido — só 'code' é suportado.");
+            redirectWithOAuthError(res, redirect_uri, "unsupported_response_type", client_state, "só response_type=code é suportado");
             return;
         }
         if (!code_challenge || code_challenge_method !== "S256") {
-            res.status(400).send("PKCE S256 é obrigatório.");
+            redirectWithOAuthError(res, redirect_uri, "invalid_request", client_state, "PKCE S256 é obrigatório");
             return;
         }
-        const authReq = createAuthRequest({
-            client_id: client.client_id,
-            redirect_uri,
-            client_state,
-            code_challenge,
-            code_challenge_method,
-            scope,
+        const payload = { client_id, redirect_uri, response_type, code_challenge, code_challenge_method, client_state, scope, client_name: client.client_name };
+        if (req.method !== "POST") {
+            sendOwnerConsentPage(res, payload);
+            return;
+        }
+        const configuredPassword = getAdminPassword();
+        const submittedPassword = param(req, "password");
+        if (!configuredPassword) {
+            log.error("oauth_admin_password_missing");
+            sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+            return;
+        }
+        if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
+            log.warn("oauth_admin_password_invalid", { client_id: client.client_id });
+            sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
+            return;
+        }
+        const ownerToken = getOwnerToolToken();
+        if (!ownerToken) {
+            log.error("oauth_owner_tool_token_missing");
+            sendOwnerConsentPage(res, { ...payload, error: "Token interno do dono ausente no servidor." });
+            return;
+        }
+        const authReq = createAuthRequest({ client_id: client.client_id, redirect_uri, client_state, code_challenge, code_challenge_method, scope });
+        const ac = issueAuthCode({
+            client_id: authReq.client_id,
+            redirect_uri: authReq.redirect_uri,
+            code_challenge: authReq.code_challenge,
+            code_challenge_method: authReq.code_challenge_method,
+            gh_token: ownerToken,
+            gh_scope: "owner-admin",
+            gh_login: "centraldark-admin",
         });
-        const url = new URL(GITHUB_AUTHORIZE);
-        url.searchParams.set("client_id", config.github.clientId);
-        url.searchParams.set("redirect_uri", config.github.callbackUrl);
-        url.searchParams.set("scope", config.github.scopes);
-        url.searchParams.set("state", authReq.state);
-        url.searchParams.set("allow_signup", "false");
+        const back = new URL(authReq.redirect_uri);
+        back.searchParams.set("code", ac.code);
+        if (authReq.client_state)
+            back.searchParams.set("state", authReq.client_state);
+        back.searchParams.set("iss", config.publicUrl);
         log.info("oauth_authorize", {
             client_id: client.client_id,
             redirect_uri,
-            state: authReq.state.slice(0, 8) + "...",
+            mode: "owner_password",
         });
-        res.redirect(url.toString());
+        res.redirect(302, back.toString());
     }
     catch (err) {
         log.error("oauth_authorize_exception", { error: String(err) });
@@ -476,106 +529,7 @@ export async function handleAuthorize(req, res) {
     }
 }
 export async function handleOAuthCallback(req, res) {
-    const code = String(req.query.code ?? "");
-    const state = String(req.query.state ?? "");
-    if (!code || !state) {
-        res.status(400).send("Faltando parâmetros code/state.");
-        return;
-    }
-    if (!config.github.clientSecret) {
-        log.error("oauth_callback_missing_secret");
-        res.status(500).send("Servidor mal configurado: GITHUB_CLIENT_SECRET ausente.");
-        return;
-    }
-    const authReq = consumeAuthRequest(state);
-    const legacyOk = !authReq && consumePendingState(state);
-    if (!authReq && !legacyOk) {
-        res.status(400).send("State inválido ou expirado. Tente entrar de novo.");
-        return;
-    }
-    try {
-        const tokenRes = await fetchWithRetry(GITHUB_TOKEN, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "User-Agent": "MCP-CentralDark/0.3",
-            },
-            body: JSON.stringify({
-                client_id: config.github.clientId,
-                client_secret: config.github.clientSecret,
-                code,
-                redirect_uri: config.github.callbackUrl,
-            }),
-            retries: 3,
-            label: "github_token_exchange",
-        });
-        if (!tokenRes.ok) {
-            log.error("oauth_token_http_error", { status: tokenRes.status });
-            res.status(502).send("Erro ao trocar code por token no GitHub.");
-            return;
-        }
-        const data = (await tokenRes.json());
-        if (!data.access_token) {
-            log.error("oauth_token_error", { error: data.error, desc: data.error_description });
-            res.status(400).send(`GitHub recusou o token: ${data.error_description ?? data.error}`);
-            return;
-        }
-        const userRes = await fetchWithRetry(GITHUB_USER, {
-            headers: {
-                Authorization: `Bearer ${data.access_token}`,
-                Accept: "application/vnd.github+json",
-                "User-Agent": "MCP-CentralDark/0.3",
-            },
-            retries: 3,
-            label: "github_user",
-        });
-        if (!userRes.ok) {
-            log.error("oauth_user_http_error", { status: userRes.status });
-            res.status(502).send("Não consegui consultar o GitHub pra confirmar o usuário.");
-            return;
-        }
-        const user = (await userRes.json());
-        const login = (user.login ?? "").toLowerCase();
-        if (allowedLogins.length > 0 && !allowedLogins.includes(login)) {
-            log.warn("oauth_user_not_allowed", { login });
-            res.status(403).send(`Usuário GitHub "${login}" não está autorizado neste MCP.`);
-            return;
-        }
-        if (authReq) {
-            const ac = issueAuthCode({
-                client_id: authReq.client_id,
-                redirect_uri: authReq.redirect_uri,
-                code_challenge: authReq.code_challenge,
-                code_challenge_method: authReq.code_challenge_method,
-                gh_token: data.access_token,
-                gh_scope: data.scope ?? "",
-                gh_login: login,
-            });
-            const back = new URL(authReq.redirect_uri);
-            back.searchParams.set("code", ac.code);
-            if (authReq.client_state)
-                back.searchParams.set("state", authReq.client_state);
-            back.searchParams.set("iss", config.publicUrl);
-            log.info("oauth_code_issued", {
-                client_id: authReq.client_id,
-                gh_login: login,
-                redirect_uri: authReq.redirect_uri,
-            });
-            // Redirect HTTP 302 real (RFC 6749 §4.1.2). Clients que processam a resposta
-            // de autorização no backend (ex.: ChatGPT) não executam JS, então a antiga
-            // página de sucesso com redirect via window.location nunca os levava de volta.
-            res.redirect(302, back.toString());
-            return;
-        }
-        const session = createSession(data.access_token, data.scope ?? "");
-        log.info("oauth_session_created", { id: session.id.slice(0, 8) + "...", scope: data.scope });
-        sendOAuthSuccessPage(res, { login, legacySessionCreated: true });
-    }
-    catch (err) {
-        log.error("oauth_callback_exception", { error: String(err) });
-        res.status(500).send("Erro interno no callback OAuth.");
-    }
+    res.status(410).type("text/plain").send("OAuth via GitHub foi removido. Use /authorize do MCP CentralDark.");
 }
 export function postToken(req, res) {
     const body = (req.body ?? {});
@@ -645,14 +599,6 @@ export function postToken(req, res) {
     res.status(400).json({ error: "unsupported_grant_type" });
 }
 export function handleOAuthStart(_req, res) {
-    const state = createPendingState();
-    const url = new URL(GITHUB_AUTHORIZE);
-    url.searchParams.set("client_id", config.github.clientId);
-    url.searchParams.set("redirect_uri", config.github.callbackUrl);
-    url.searchParams.set("scope", config.github.scopes);
-    url.searchParams.set("state", state);
-    url.searchParams.set("allow_signup", "false");
-    log.info("oauth_start_legacy", { state: state.slice(0, 8) + "..." });
-    res.redirect(url.toString());
+    res.status(410).type("text/plain").send("OAuth via GitHub foi removido. Cadastre o cliente em /register e autorize por /authorize.");
 }
 //# sourceMappingURL=oauth.js.map
