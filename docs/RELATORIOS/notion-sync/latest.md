@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T22:36:16.559Z
+# 🧠 Notion Sync — 2026-07-05T23:55:44.674Z
 
-- **Commit fonte:** `7535220b8db1d70c238f7d367ecdf51a5b82d4bc`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `717b0bdccb5a5fc381b52ae2df68d33b22d42788`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 331 atualizadas · ❌ 450 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 331 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 296 | 0 | 296 | 0 | 0 |
-| estrutura | 450 | 0 | 0 | 0 | 450 |
+| estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
 
@@ -449,6 +449,7 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
+| estrutura | erro | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
 | estrutura | erro | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
