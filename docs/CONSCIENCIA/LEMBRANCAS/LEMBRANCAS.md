@@ -234,3 +234,26 @@ Conteúdo: Card Hermes atualizado pra v1.3. Novidades vs v1.2: (a) linha "🧠 H
 - **Promovida:** nao
 
 Conteúdo: Grafo 3D (grafo.centralldark.com) atualizado com: (1) icone IA 🤖 acima de nos agentes via SpriteText, (2) labels SEMPRE visiveis sem toggle, (3) pulse com scale 1.0-1.15 em nos online, (4) nos down piscam vermelho com scale, (5) linkDirectionalParticles 2-6 com cor do no source, (6) labels de setor no centroide sempre visiveis, (7) Three.js duplicado removido. Arquivo: /root/[oculto]
+
+### [2026-07-05T00:11] Estado do Plugin Obsidian Grafo Vivo + rota pendente (grafo 3D/mobile)
+- **Data:** 2026-07-05
+- **Tags:** obsidian, plugin-grafo-vivo, grafo-3d, painel-jarvis, pendencias, roadmap
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-04
+- **Promovida:** nao
+
+Conteúdo: Contexto retomado em 05/07/2026 a pedido do Pivete ("volta a trabalhar no grafo e no plugin obsidian e obsidian mobile, mapear rota até o plano pendente").
+
+**Estado real do plugin** (`apps/modulos/obsidian-plugin-grafo-vivo/`):
+- manifest.json já está em v0.4.0, isDesktopOnly:false (mobile habilitado no manifest).
+- src/ tem: main.ts, view.ts, view3d.ts (já existe!), settings.ts, autoUpdater.ts, modalChangelog.ts, logger.ts.
+- Existe plano oficial `PLANO-ENXAME-v0.3+.md` com fases v0.2 (WebSocket partículas) → v0.3 (sync notas do vault) → v0.4 (3D, reaproveitando `apps/modulos/graph-panel/public/vault.html` como base 3d-force-graph) → v0.5 (ícones SVG por categoria).
+- O plano pede FASE 0 (auditoria do gap: o que cada arquivo src/ realmente implementa vs. o que o número de versão promete) ANTES de codar qualquer fase nova — essa auditoria ainda não foi preenchida na seção "## Estado auditado" do próprio plano.
+
+**Pendências relacionadas no PENDENCIAS.md (rota até o plano):**
+- #17 (01/07): Radar Visual de Atividade IA no Graph View nativo do Obsidian via plugin Local REST API + tagging dinâmico #processando — separado do plugin custom grafo-vivo.
+- #22 (04/07, ABERTO): Plugin Obsidian v0.4 — vista Grafo 3D embutida + camada BRAIN. Grafo 3D já no ar em grafo.centralldark.com/3d.html; falta portar pra dentro do Obsidian via plugin (WorkspaceLeaf/iframe ou bundle), publicar release via edge function plugin-release, modo brain opcional lendo docs/BRAIN.
+- #23 (04/07, ABERTO): Painel Jarvis v2 — grafo 3D tempo real com ícones IA, agrupamento por setor, partículas pulsando, tempo real (polling/ws), movimento visível dos agentes. Fonte: apps/modulos (source não-minificado) + rascunho /tmp/enxame/painel-patch.md (Gemini Pro).
+
+**Rota lógica pra fechar (ordem sugerida):** FASE 0 (auditoria gap do plugin) → v0.2 WebSocket partículas → v0.3 sync notas vault → v0.4/#22 3D embutido no Obsidian (reaproveitar vault.html) → #23 painel Jarvis v2 (ícones/setor/tempo real) → v0.5 ícones SVG → #17 radar visual via Local REST API (pode rodar em paralelo, é plugin de terceiro, não o custom).
