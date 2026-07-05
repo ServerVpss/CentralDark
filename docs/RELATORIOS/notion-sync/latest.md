@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T19:08:52.468Z
+# 🧠 Notion Sync — 2026-07-05T19:24:52.185Z
 
-- **Commit fonte:** `e2a7c9cb7a283dac70c8ba625bcf208384756384`
+- **Commit fonte:** `a737a9bb0b1c647f846adc90f050db0c59d1f171`
 - **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 329 atualizadas · ❌ 441 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 329 atualizadas · ❌ 444 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 294 | 0 | 294 | 0 | 0 |
-| estrutura | 441 | 0 | 0 | 0 | 441 |
+| estrutura | 444 | 0 | 0 | 0 | 444 |
 
 ## Operações
 
@@ -364,6 +364,9 @@
 | estrutura | erro | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CHATGPT.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-CHATGPT.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/URLS-DESCOBERTA.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
 | estrutura | erro | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md |
