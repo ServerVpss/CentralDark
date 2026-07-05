@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T19:24:52.185Z
+# 🧠 Notion Sync — 2026-07-05T20:52:31.442Z
 
-- **Commit fonte:** `a737a9bb0b1c647f846adc90f050db0c59d1f171`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `edc033d01e4d6e34683a7309528e6e8f94075d63`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 329 atualizadas · ❌ 444 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 330 atualizadas · ❌ 450 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 294 | 0 | 294 | 0 | 0 |
-| estrutura | 444 | 0 | 0 | 0 | 444 |
+| aprendizados | 296 | 1 | 295 | 0 | 0 |
+| estrutura | 450 | 0 | 0 | 0 | 450 |
 
 ## Operações
 
@@ -175,7 +175,7 @@
 | aprendizados | atualizado | #114 — Padrão operacional tipo Lovable: memória antes e depois |
 | aprendizados | atualizado | #115 — Separar run-once por nível de risco |
 | aprendizados | atualizado | #116 — Caddy bot/api separado corretamente por file_server e API |
-| aprendizados | atualizado | #117 — bot.centralldark.com deve servir apps/bot/dist |
+| aprendizados | erro | #117 — bot.centralldark.com deve servir apps/bot/dist |
 | aprendizados | atualizado | #118 — Contacts/groups read-only toleram 401 da WuzAPI |
 | aprendizados | atualizado | #119 — Duas árvores apps/bot causaram build no lugar errado |
 | aprendizados | atualizado | #120 — CORS da API deve ficar em um só lugar |
@@ -351,6 +351,8 @@
 | aprendizados | atualizado | #290 — Proxy AP7 exige aliases ap7-* |
 | aprendizados | atualizado | #291 — Start do Elite Anthropic sem caminho absoluto |
 | aprendizados | atualizado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
+| aprendizados | atualizado | #293 — Sincronia VPS falhou por conflito de merge e foi resolvida |
+| aprendizados | criado | #294 — EliteHTTP porta real 8082 + Sentry precisa de org manual |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -364,8 +366,9 @@
 | estrutura | erro | docs/CONSCIENCIA/03-FLUXO-DEPLOY.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
-| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CHATGPT.md |
-| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-CHATGPT.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CONECTOR.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-ADMIN.md |
+| estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-USUARIO.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/URLS-DESCOBERTA.md |
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
 | estrutura | erro | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
@@ -444,6 +447,8 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/METODO-SWITCH-MODEL.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | erro | docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/CONSELHO.md |
@@ -644,6 +649,8 @@
 | estrutura | erro | docs/CONSCIENCIA/GRUPO-EVOLUCAO.md |
 | estrutura | erro | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
 | estrutura | erro | docs/CONSCIENCIA/HERMES/LOG-VERIFICADOR.md |
+| estrutura | erro | docs/CONSCIENCIA/HERMES/PLAYBOOK-RESSUSCITACAO-PM2.md |
+| estrutura | erro | docs/CONSCIENCIA/INFRA-MAP.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
@@ -653,6 +660,7 @@
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
 | estrutura | erro | docs/CONSCIENCIA/MAPA-DO-CEREBRO.md |
 | estrutura | erro | docs/CONSCIENCIA/MAPA-DOS-BOTS.md |
+| estrutura | erro | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | erro | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/MODO-SEGREDO.md |
 | estrutura | erro | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |

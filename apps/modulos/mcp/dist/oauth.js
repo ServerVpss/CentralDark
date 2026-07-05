@@ -395,13 +395,14 @@ function sendOAuthSuccessPage(res, input) {
 </body>
 </html>`);
 }
-export function getProtectedResourceMetadata(_req, res) {
+export function getProtectedResourceMetadata(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
+    const isAdmin = String((req && (req.path || req.url)) || "").includes("/admin");
     res.json({
-        resource: `${config.publicUrl}/mcp`,
+        resource: `${config.publicUrl}${isAdmin ? "/admin/mcp" : "/mcp"}`,
         authorization_servers: [config.publicUrl],
         bearer_methods_supported: ["header"],
-        scopes_supported: ["mcp"],
+        scopes_supported: isAdmin ? ["mcp", "admin"] : ["mcp"],
         resource_documentation: `${config.publicUrl}/status`,
     });
 }
@@ -417,7 +418,7 @@ export function getAuthorizationServerMetadata(_req, res) {
         grant_types_supported: ["authorization_code", "refresh_token"],
         code_challenge_methods_supported: ["S256"],
         token_endpoint_auth_methods_supported: ["none", "client_secret_post", "client_secret_basic"],
-        scopes_supported: ["mcp"],
+        scopes_supported: ["mcp", "admin"],
         authorization_response_iss_parameter_supported: true,
     });
 }
@@ -479,7 +480,12 @@ export async function handleAuthorize(req, res) {
         const code_challenge = param(req, "code_challenge");
         const code_challenge_method = param(req, "code_challenge_method");
         const client_state = param(req, "state") || undefined;
-        const scope = param(req, "scope") || "mcp";
+        const resource = param(req, "resource");
+        const requestedScope = param(req, "scope");
+        const isAdminResource = /\/admin\/mcp(?:$|[?#])/.test(resource);
+        const scope = isAdminResource
+            ? (requestedScope && /\badmin\b/.test(requestedScope) ? requestedScope : "mcp admin")
+            : (requestedScope || "mcp");
         const client = await resolveClientRegistration(client_id, redirect_uri);
         if (!client) {
             oauthError(res, 400, "invalid_client", "client_id desconhecido. Faça /register antes ou use Client ID Metadata Document compatível.");
@@ -529,6 +535,7 @@ export async function handleAuthorize(req, res) {
             gh_token: ownerToken,
             gh_scope: "owner-admin",
             gh_login: "centraldark-admin",
+            oauth_scope: authReq.scope || "mcp admin",
         });
         const back = new URL(authReq.redirect_uri);
         back.searchParams.set("code", ac.code);
@@ -584,14 +591,15 @@ export function postToken(req, res) {
             gh_token: ac.gh_token,
             gh_scope: ac.gh_scope,
             gh_login: ac.gh_login,
+            oauth_scope: ac.oauth_scope || "mcp admin",
         });
-        log.info("oauth_token_issued", { cid: req.cid, client_id, gh_login: ac.gh_login });
+        log.info("oauth_token_issued", { cid: req.cid, client_id, gh_login: ac.gh_login, oauth_scope: ac.oauth_scope });
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",
             expires_in: Math.floor((pair.access.expiresAt - Date.now()) / 1000),
             refresh_token: pair.refresh.token,
-            scope: "mcp",
+            scope: ac.oauth_scope || "mcp",
             cid: req.cid,
         });
         return;
@@ -608,14 +616,15 @@ export function postToken(req, res) {
             gh_token: rt.gh_token,
             gh_scope: rt.gh_scope,
             gh_login: rt.gh_login,
+            oauth_scope: rt.oauth_scope || "mcp",
         });
-        log.info("oauth_token_refreshed", { cid: req.cid, client_id: rt.client_id, gh_login: rt.gh_login });
+        log.info("oauth_token_refreshed", { cid: req.cid, client_id: rt.client_id, gh_login: rt.gh_login, oauth_scope: rt.oauth_scope });
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",
             expires_in: Math.floor((pair.access.expiresAt - Date.now()) / 1000),
             refresh_token: pair.refresh.token,
-            scope: "mcp",
+            scope: rt.oauth_scope || "mcp",
             cid: req.cid,
         });
         return;
