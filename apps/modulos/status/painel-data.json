@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T00:23:32.630Z",
-  "updatedAtBR": "04/07/2026, 21:23:28 BRT",
+  "updatedAt": "2026-07-05T00:25:50.727Z",
+  "updatedAtBR": "04/07/2026, 21:25:50 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "feat(painel): Jarvis v2 — icone IA nos agentes, burst de particulas em mudanca de estado, polling 3s (P23)",
+    "lastCommit": "fix(graph-panel): remove duplicata three.js que causava conflito de instancias no grafo 3D",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T00:25:50.727Z",
+      "titulo": "Push na main · 5e7001d19e1995e3e2de2879b56b712e99adac92",
+      "detalhe": "fix(graph-panel): remove duplicata three.js que causava conflito de instancias no grafo 3D",
+      "area": "Repositório",
+      "sha": "5e7001d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-05T00:23:28.004Z",
       "title": "Grafo 3D atualizado: icone IA, pulse scale, labels sempre visiveis, particulas coloridas, setores no centroide",
@@ -1237,6 +1245,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T00:25:50.727Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5e7001d19e1995e3e2de2879b56b712e99adac92 (5e7001d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-04T23:09:50.950Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 738bcc55b55be47f3a17eb007bf71fe23851bb61 (738bcc5)",
@@ -1576,13 +1591,6 @@
       "time": "2026-07-04T02:06:16.957Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 964d493e78c1792d99d518fb43bc5c3ef03d2f80 (964d493)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T02:01:04.792Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · d0e2211d4caddec47d9a633143e06738e6b3dfdc (d0e2211)",
       "area": "Repositório",
       "status": "sucesso"
     }
