@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T02:54:13.244Z",
-  "updatedAtBR": "04/07/2026, 23:54:13 BRT",
+  "updatedAt": "2026-07-05T03:19:45.285Z",
+  "updatedAtBR": "05/07/2026, 00:19:45 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Hermes refez mapa do zero",
+    "lastCommit": "lembranca: Estado do Plugin Obsidian Grafo Vivo + rota pendente (grafo 3D/mobile)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T03:19:45.285Z",
+      "titulo": "Push na main · d18b0b6467d5e729d375f2e4a3ad15ce408e43d2",
+      "detalhe": "lembranca: Estado do Plugin Obsidian Grafo Vivo + rota pendente (grafo 3D/mobile)",
+      "area": "Repositório",
+      "sha": "d18b0b6",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-05T02:54:13.244Z",
       "titulo": "Push na main · 48be6a5e75d9de6b19c82278414b13dcc9c77245",
@@ -1309,6 +1317,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T03:19:45.285Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d18b0b6467d5e729d375f2e4a3ad15ce408e43d2 (d18b0b6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T02:54:13.244Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 48be6a5e75d9de6b19c82278414b13dcc9c77245 (48be6a5)",
@@ -1648,13 +1663,6 @@
       "time": "2026-07-04T03:49:41.869Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · dc607d12a6aa842a754dd599ce63672a5c944310 (dc607d1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T03:34:58.731Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · c4268230400ea24c4f0f26fe282f5e0052e7a0eb (c426823)",
       "area": "Repositório",
       "status": "sucesso"
     }
