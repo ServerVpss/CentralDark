@@ -1,0 +1,123 @@
+name: Obsidian Plugin Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/modulos/obsidian-plugin-grafo-vivo/manifest.json"
+      - "apps/modulos/obsidian-plugin-grafo-vivo/checksums.json"
+  workflow_dispatch:
+
+concurrency:
+  group: obsidian-plugin-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  detect:
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: self-hosted
+    outputs:
+      versao: ${{ steps.info.outputs.versao }}
+      tag: ${{ steps.info.outputs.tag }}
+      skip: ${{ steps.info.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ler versão do manifest e checar tag existente
+        id: info
+        working-directory: apps/modulos/obsidian-plugin-grafo-vivo
+        run: |
+          set -euo pipefail
+          VERSAO=$(node -p "require('./manifest.json').version")
+          TAG="obsidian-plugin-v${VERSAO}"
+          echo "versao=${VERSAO}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "🟡 Tag ${TAG} já existe — pulando release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "🟢 Nova versão ${VERSAO} detectada."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  validate:
+    needs: detect
+    if: needs.detect.outputs.skip == 'false'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar SHA-256 dos assets contra checksums.json
+        working-directory: apps/modulos/obsidian-plugin-grafo-vivo
+        run: |
+          set -euo pipefail
+          node -e '
+            const { createHash } = require("node:crypto");
+            const { readFileSync, existsSync } = require("node:fs");
+            const checks = JSON.parse(readFileSync("checksums.json","utf8"));
+            let falhou = false;
+            for (const [nome, esperado] of Object.entries(checks.arquivos)) {
+              if (!existsSync(nome)) {
+                console.error(`🔴 Arquivo ausente: ${nome}`);
+                falhou = true; continue;
+              }
+              const atual = createHash("sha256").update(readFileSync(nome)).digest("hex");
+              if (atual !== esperado) {
+                console.error(`🔴 SHA divergente em ${nome}\n  esperado: ${esperado}\n  atual:    ${atual}`);
+                falhou = true;
+              } else {
+                console.log(`🟢 ${nome} OK (${atual.slice(0,12)}…)`);
+              }
+            }
+            if (falhou) { console.error("❌ Checksums não batem. Rode gerar-release-assets.mjs e commit novamente."); process.exit(1); }
+            console.log("✅ Todos os checksums batem para v" + checks.versao);
+          '
+
+  release:
+    needs: [detect, validate]
+    if: needs.detect.outputs.skip == 'false'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extrair notas do changelog.json
+        id: notas
+        working-directory: apps/modulos/obsidian-plugin-grafo-vivo
+        env:
+          VERSAO: ${{ needs.detect.outputs.versao }}
+        run: |
+          set -euo pipefail
+          node -e '
+            const fs = require("node:fs");
+            const versao = process.env.VERSAO;
+            const cl = JSON.parse(fs.readFileSync("changelog.json","utf8"));
+            const entrada = (cl.versoes || []).find(v => v.versao === versao);
+            let corpo;
+            if (!entrada) {
+              corpo = `Release automática v${versao}.\n\n_(entrada não encontrada em changelog.json)_`;
+            } else {
+              const bullets = (entrada.mudancas || []).map(m => `- ${m}`).join("\n");
+              corpo = `## Obsidian Plugin v${versao}\n\n**Data:** ${entrada.data}\n\n### Mudanças\n${bullets}\n\n---\n\n**Assets:** main.js · manifest.json · styles.css\n_Auto-updater do plugin detecta e instala sozinho._`;
+            }
+            fs.writeFileSync("release-notes.md", corpo);
+            console.log("📝 release-notes.md gerado (" + corpo.length + " bytes)");
+          '
+          echo "notes_path=apps/modulos/obsidian-plugin-grafo-vivo/release-notes.md" >> "$GITHUB_OUTPUT"
+
+      - name: Criar GitHub Release com assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.detect.outputs.tag }}
+          name: Obsidian Plugin v${{ needs.detect.outputs.versao }}
+          body_path: ${{ steps.notas.outputs.notes_path }}
+          target_commitish: ${{ github.sha }}
+          fail_on_unmatched_files: true
+          files: |
+            apps/modulos/obsidian-plugin-grafo-vivo/main.js
+            apps/modulos/obsidian-plugin-grafo-vivo/manifest.json
+            apps/modulos/obsidian-plugin-grafo-vivo/styles.css
