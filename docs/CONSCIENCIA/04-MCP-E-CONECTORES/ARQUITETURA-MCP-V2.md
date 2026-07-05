@@ -221,3 +221,11 @@ router.use(buildMcpHandler(registry));
 12. **Testes** — smoke por modo (`curl /health` + `tools.json` diff vs manifest), teste de isolamento (garantir que `mcp-normal` retorna 404 em `vault_*`).
 13. **Rotação de tokens** — cron mensal + notificação Hermes.
 14. **Kill-switch + runbook** — documentar em `docs/CONSCIENCIA/04-MCP-E-CONECTORES/RUNBOOK-INCIDENTE.md`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

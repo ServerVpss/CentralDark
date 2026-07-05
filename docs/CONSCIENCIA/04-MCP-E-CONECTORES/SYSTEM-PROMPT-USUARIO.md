@@ -73,3 +73,11 @@ Se precisar de algo além disso, avisa o Pivete pra ele fazer com a conta admin.
 | VPS write / deploy | ✅ (com CONFIRMO) | ❌ |
 | Merge / delete | ✅ | ❌ |
 | Dispatcher `mcp_admin_call` | ✅ | ❌ |
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

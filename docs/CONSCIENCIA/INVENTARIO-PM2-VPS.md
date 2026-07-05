@@ -102,3 +102,11 @@ Os logs continuam em `/root/.pm2/logs/`. Ressuscitar apenas com autorização ex
 3. **Ao criar/remover processo** → `pm2 save` + atualizar este inventário no mesmo commit
 4. **EADDRINUSE porta 9100** = race condition entre restarts do MCP, NÃO é zumbi externo
 5. **Envs do MCP** (`CENTRALDARK_ADMIN_KEY`, `MCP_SESSION_SECRET`, `GITHUB_CLIENT_ID`, `GITHUB_OAUTH_CALLBACK`) devem estar no `ecosystem.config.js` — nunca só no shell
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

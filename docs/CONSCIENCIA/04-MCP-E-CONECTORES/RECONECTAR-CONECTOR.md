@@ -44,3 +44,11 @@ O dispatcher está sempre disponível — funciona mesmo se a tool não aparece 
 - `https://mcp.centralldark.com/tools.json` — lista crua de todas as tools
 
 Se essas URLs mostram 73 e o cliente mostra 39 → é 100% cache do cliente. Sempre.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

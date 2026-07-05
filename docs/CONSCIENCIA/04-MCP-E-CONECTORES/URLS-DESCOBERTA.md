@@ -37,3 +37,11 @@ curl -s https://mcp.centralldark.com/health | jq '{toolCount, catalogVersion}'
 Esperado: `toolCount >= 73`
 
 Se a IA está vendo menos que isso no conector dela → é cache do cliente, ver [RECONECTAR-CHATGPT.md](./RECONECTAR-CHATGPT.md).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

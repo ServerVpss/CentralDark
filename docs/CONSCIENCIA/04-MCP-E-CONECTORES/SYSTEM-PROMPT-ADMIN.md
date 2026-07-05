@@ -75,3 +75,11 @@ Sincronia 4-Point sempre: Lovable ↔ GitHub ↔ VPS ↔ Cérebro Vivo.
 ## Validação
 Pergunta pra IA: **"Quantas tools você enxerga e qual foi sua ordem de boas-vindas?"**
 Se responder 73+ e listar as 3 chamadas na ordem → ✅ configurada.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
