@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T02:26:25.610Z
+# 🧠 Notion Sync — 2026-07-05T02:41:51.465Z
 
-- **Commit fonte:** `51280ed109d1ce99737c27012b43436b477b83d5`
+- **Commit fonte:** `de79d389e29ff2e02172a43db18865f318fd4ceb`
 - **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 328 atualizadas · ❌ 438 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 328 atualizadas · ❌ 439 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 293 | 0 | 293 | 0 | 0 |
-| estrutura | 438 | 0 | 0 | 0 | 438 |
+| estrutura | 439 | 0 | 0 | 0 | 439 |
 
 ## Operações
 
@@ -638,6 +638,7 @@
 | estrutura | erro | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
 | estrutura | erro | docs/CONSCIENCIA/GRUPO-EVOLUCAO.md |
 | estrutura | erro | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
+| estrutura | erro | docs/CONSCIENCIA/HERMES/LOG-VERIFICADOR.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
