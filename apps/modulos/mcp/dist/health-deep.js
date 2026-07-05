@@ -12,7 +12,7 @@ import { config } from "./config.js";
 import { log } from "./log.js";
 import { activeSseSubscribers, getSseDiagnostics } from "./admin.js";
 
-const MCP_VERSION = "0.4.0-v2.1";
+const MCP_VERSION = "0.4.0-v2.2";
 const SERVICE_STARTED_AT = new Date().toISOString();
 
 function checkSecret(name) {
