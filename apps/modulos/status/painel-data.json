@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T15:00:45.025Z",
-  "updatedAtBR": "05/07/2026, 12:00:45 BRT",
+  "updatedAt": "2026-07-05T15:38:56.460Z",
+  "updatedAtBR": "05/07/2026, 12:38:56 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Corrigiu mapeamento da auditoria",
+    "lastCommit": "Refatorou o flow MCP de auth",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T15:38:56.460Z",
+      "titulo": "Push na main · d1d32dd3514ae7644e63811d363f284b7f158394",
+      "detalhe": "Refatorou o flow MCP de auth",
+      "area": "Repositório",
+      "sha": "d1d32dd",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-05T15:00:45.025Z",
       "titulo": "Push na main · 15ff8d96cd3e09809ad452da444b26c9b5a5e79d",
@@ -1365,6 +1373,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T15:38:56.460Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · d1d32dd3514ae7644e63811d363f284b7f158394 (d1d32dd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T15:00:45.025Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 15ff8d96cd3e09809ad452da444b26c9b5a5e79d (15ff8d9)",
@@ -1704,13 +1719,6 @@
       "time": "2026-07-04T06:40:43.874Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 49431a6a02cec8bdabf288a71499a8774839240a (49431a6)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T06:40:03.563Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · c3cd86b940b18b0e245e409bb525e13a4bce4929 (c3cd86b)",
       "area": "Repositório",
       "status": "sucesso"
     }
