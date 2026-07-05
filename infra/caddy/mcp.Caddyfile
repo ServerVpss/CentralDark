@@ -9,7 +9,7 @@
 #
 # OAuth 2.1: o app expõe /.well-known/oauth-authorization-server,
 # /.well-known/oauth-protected-resource, /register, /authorize, /token,
-# /oauth/github/callback, /health, /mcp. Todas precisam chegar no backend.
+# /health, /mcp. Todas precisam chegar no backend.
 # Solução: proxy total pro 9100 e deixar o app decidir o que é 404.
 
 mcp.centralldark.com {

@@ -123,8 +123,9 @@ app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMet
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
+app.post("/authorize", handleAuthorize);
 app.post("/token", postToken);
-// ─────────────────────────── OAuth GitHub bridge ─────────────────────────
+// ─────────────────────────── OAuth legado desativado ─────────────────────
 app.get("/oauth/start", handleOAuthStart);
 app.get("/oauth/callback", handleOAuthCallback);
 // ─────────────────────────────── MCP HTTP ────────────────────────────────
