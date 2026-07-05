@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T16:24:28.150Z",
-  "updatedAtBR": "05/07/2026, 13:24:28 BRT",
+  "updatedAt": "2026-07-05T16:37:40.729Z",
+  "updatedAtBR": "05/07/2026, 13:37:40 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Adicionou validação de envs",
+    "lastCommit": "Salvou dados críticos em 3 lugares",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-05T16:37:40.729Z",
+      "titulo": "Push na main · 3f568742b41fd4754ec2cc2e904aedcfe736b88a",
+      "detalhe": "Salvou dados críticos em 3 lugares",
+      "area": "Repositório",
+      "sha": "3f56874",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-05T16:24:28.150Z",
       "titulo": "Push na main · da96cee6a2b2e9dbcdc1778f3e9412ef2ed2c454",
       "detalhe": "Adicionou validação de envs",
@@ -974,14 +982,6 @@
       "detalhe": "fix(hermes): notificação do grupo stripa HTML antes de enviar",
       "area": "Repositório",
       "sha": "d494f48",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-04T09:17:38.811Z",
-      "titulo": "Push na main · caefddbc74a51ca593fdd0e48332524a9a211747",
-      "detalhe": "feat(vault): esfera 3D com 3d-force-graph + partículas emerald + HUD monoespaçado",
-      "area": "Repositório",
-      "sha": "caefddb",
       "actor": "segredounlock"
     }
   ],
@@ -1397,6 +1397,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T16:37:40.729Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 3f568742b41fd4754ec2cc2e904aedcfe736b88a (3f56874)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T16:24:28.150Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · da96cee6a2b2e9dbcdc1778f3e9412ef2ed2c454 (da96cee)",
@@ -1736,13 +1743,6 @@
       "time": "2026-07-04T08:24:41.887Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6c78f5842e7eb03b6a86f4e4ea67911b7222ee4f (6c78f58)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T08:16:35.031Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 12f8f2f91fbfaae10a093a9e48795414394ad9ee (12f8f2f)",
       "area": "Repositório",
       "status": "sucesso"
     }
