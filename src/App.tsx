@@ -49,6 +49,7 @@ import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
 import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
+import AiProxyConfig from "@/apps/modulos/telepainel/pages/AiProxyConfig";
 // Hub agora é app independente em apps/modulos/hub/ — não importado aqui
 import HermesPanel from "@/apps/modulos/hermes-panel/pages/HermesPanel";
 
