@@ -474,26 +474,36 @@ export function adminMetricas(req, res) {
 async function fazerRequest(url, opts = {}) {
     const t0 = performance.now();
     try {
-        const r = await fetch(url, { ...opts, signal: AbortSignal.timeout(10000) });
+        const r = await fetch(url, { redirect: "manual", ...opts, signal: AbortSignal.timeout(10000) });
         const location = r.headers.get("location");
         const texto = await r.text();
         let json = null;
         try { json = JSON.parse(texto); } catch { /* ok */ }
-        return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), json, texto: texto.slice(0, 400), location };
+        return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), json, texto: texto.slice(0, 400), location, contentType: r.headers.get("content-type") || "" };
     } catch (err) {
         return { ok: false, status: 0, ms: Math.round(performance.now() - t0), erro: String(err?.message || err) };
     }
 }
 
-async function rodarE2EInterno({ comAdmin }) {
+function parseMcpJson(texto) {
+    const trimmed = String(texto || "").trim();
+    if (!trimmed) return null;
+    try { return JSON.parse(trimmed); } catch { /* tenta SSE */ }
+    const dataLine = trimmed.split(/\r?\n/).find((line) => line.startsWith("data:"));
+    if (!dataLine) return null;
+    try { return JSON.parse(dataLine.slice(5).trim()); } catch { return null; }
+}
+
+async function rodarE2EInterno({ comAdmin, cid }) {
     const base = `http://127.0.0.1:${config.port}`;
     const etapas = [];
     let falhouEm = null;
+    const baseHeaders = { "X-Correlation-Id": cid || crypto.randomUUID() };
 
     // 1) DCR
     const dcr = await fazerRequest(`${base}/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { ...baseHeaders, "Content-Type": "application/json" },
         body: JSON.stringify({
             client_name: "MCP-Admin-E2E",
             redirect_uris: ["http://127.0.0.1/callback"],
@@ -507,7 +517,7 @@ async function rodarE2EInterno({ comAdmin }) {
     if (!clientId) { falhouEm = "DCR /register"; return { ok: false, falhouEm, etapas }; }
 
     // 2) Discovery
-    const disc = await fazerRequest(`${base}/.well-known/oauth-authorization-server`);
+    const disc = await fazerRequest(`${base}/.well-known/oauth-authorization-server`, { headers: baseHeaders });
     etapas.push({ nome: "Discovery /.well-known", ok: disc.ok, status: disc.status, ms: disc.ms, detalhe: disc.json?.issuer || disc.erro });
     if (!disc.ok) { falhouEm = "Discovery"; return { ok: false, falhouEm, etapas }; }
 
@@ -518,19 +528,24 @@ async function rodarE2EInterno({ comAdmin }) {
     const codeChallenge = crypto.createHash("sha256").update(codeVerifier).digest("base64url");
     const state = crypto.randomBytes(16).toString("base64url");
     const senha = process.env.MCP_ADMIN_PASSWORD || "";
+    if (!senha) {
+        etapas.push({ nome: "/authorize (PKCE+senha admin)", ok: false, status: "config", ms: 0, detalhe: "MCP_ADMIN_PASSWORD ausente" });
+        falhouEm = "authorize";
+        return { ok: false, falhouEm, etapas };
+    }
     const authParams = new URLSearchParams({
         response_type: "code", client_id: clientId, redirect_uri: "http://127.0.0.1/callback",
         code_challenge: codeChallenge, code_challenge_method: "S256", state, scope: "mcp",
     });
     const authz = await fazerRequest(`${base}/authorize`, {
-        method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: "POST", headers: { ...baseHeaders, "Content-Type": "application/x-www-form-urlencoded" },
         body: authParams.toString() + `&password=${encodeURIComponent(senha)}`,
         redirect: "manual",
     });
     
     let code = null;
     if (authz.status === 302 && authz.location) {
-        try { code = new URL(authz.location).searchParams.get("code"); } catch {}
+        try { code = new URL(authz.location, "http://127.0.0.1").searchParams.get("code"); } catch {}
     }
     
     etapas.push({
@@ -538,21 +553,21 @@ async function rodarE2EInterno({ comAdmin }) {
         ok: !!code,
         status: authz.status,
         ms: authz.ms,
-        detalhe: code ? "code emitido" : "Falhou em emitir code (verifique MCP_ADMIN_PASSWORD/GH_TOKEN)",
+        detalhe: code ? "code capturado automaticamente" : (authz.texto || authz.erro || "Falhou em emitir code; verifique MCP_ADMIN_PASSWORD/GH_TOKEN"),
     });
     if (!code) { falhouEm = "authorize"; return { ok: false, falhouEm, etapas }; }
 
     // 4) /token
     const tok = await fazerRequest(`${base}/token`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        headers: { ...baseHeaders, "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+        body: new URLSearchParams({
             grant_type: "authorization_code",
             code,
             code_verifier: codeVerifier,
             client_id: clientId,
             redirect_uri: "http://127.0.0.1/callback",
-        }),
+        }).toString(),
     });
     const accessToken = tok.json?.access_token;
     etapas.push({
@@ -564,19 +579,36 @@ async function rodarE2EInterno({ comAdmin }) {
     });
     if (!accessToken) { falhouEm = "token"; return { ok: false, falhouEm, etapas }; }
 
-    // 5) tools/list via /mcp
+    // 5) initialize via /mcp
+    const init = await fazerRequest(`${base}/mcp`, {
+        method: "POST",
+        headers: { ...baseHeaders, "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}`, "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": "2025-06-18" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "MCP-Admin-E2E", version: "1.0.0" } } }),
+    });
+    const initJson = init.json || parseMcpJson(init.texto);
+    etapas.push({
+        nome: "initialize via /mcp",
+        ok: init.ok && !initJson?.error,
+        status: init.status,
+        ms: init.ms,
+        detalhe: initJson?.error?.message || initJson?.result?.serverInfo?.name || init.contentType || init.texto,
+    });
+    if (!init.ok || initJson?.error) { falhouEm = "initialize"; return { ok: false, falhouEm, etapas }; }
+
+    // 6) tools/list via /mcp
     const tools = await fazerRequest(`${base}/mcp`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
-        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }),
+        headers: { ...baseHeaders, "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}`, "Accept": "application/json, text/event-stream", "MCP-Protocol-Version": "2025-06-18" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }),
     });
-    const toolCount = tools.json?.result?.tools?.length;
+    const toolsJson = tools.json || parseMcpJson(tools.texto);
+    const toolCount = toolsJson?.result?.tools?.length;
     etapas.push({
         nome: "tools/list via /mcp",
         ok: tools.ok && typeof toolCount === "number",
         status: tools.status,
         ms: tools.ms,
-        detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (tools.json?.error?.message || tools.erro || tools.texto),
+        detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (toolsJson?.error?.message || tools.erro || tools.texto),
     });
 
     const allOk = etapas.every(e => e.ok !== false);
