@@ -1,69 +1,50 @@
-## Objetivo
-Redesenhar o painel `grafo.centralldark.com` (`apps/modulos/graph-panel/`) subindo pro nível 3 esmeralda, com grafo **vivo** (nós pulsando, arestas fluindo) e layout organizado estilo Linear/Vercel. Zero mudança em JS de dados/backend — só camada visual + parâmetros do force-graph.
+# 🔴 MCP TÁ OFFLINE — DIAGNÓSTICO DE GUERRA
 
-⚠️ Pasta está travada (Seção 9 do CLAUDE.md). Preciso do **"PERMITO PIVETE"** pra tocar em `apps/modulos/graph-panel/`. Sem isso, só planejo.
+## Sintoma confirmado agora
+Tentei bater no `mcp_custom_4aHUa--mcp_status` e a resposta foi **"Connection Failed — integration currently unavailable"**. Ou seja: o servidor MCP em `mcp.centralldark.com` não tá respondendo pro Lovable. Todas as ~130 tools do CentralDark (github, vps, supabase, memória, Hermes, etc.) tão fora do ar por tabela.
 
-## Escopo visual
+Como o próprio MCP caiu, **eu não consigo mais tocar a VPS a partir daqui** (nenhuma tool `vps_*`, `execute_command`, `github_*` funciona enquanto ele tá down). Preciso te pedir 1 comando ou ligar o Hermes-Guilda via outra via.
 
-### 1. Paleta Esmeralda (substitui `#000308` e verde chapado)
-- Fundo: gradiente radial `#052e2b → #0a3d38` + mesh sutil emerald glow
-- Superfícies: `#0f2e2a` com borda `rgba(52,211,153,.18)`
-- Primário: `#10b981` / hover `#34d399`
-- Destaque dourado sutil `#c9a84c` só em métricas-chave
-- Texto: `#e6f5ee` / muted `#94a3a0`
-- **Zero `#000` puro**
+## Mapa do que vou disparar (enxame paralelo, 3 frentes)
 
-### 2. Layout reorganizado (topbar + 3 zonas)
-```text
-┌─────────────────────────────────────────────┐
-│  TOPBAR (logo · título · ações · status)    │
-├──────────────────────────┬──────────────────┤
-│                          │  Resumo (stats)  │
-│                          ├──────────────────┤
-│   GRAFO (canvas)         │  Status VPS 🟢   │
-│   fundo esmeralda        ├──────────────────┤
-│   glow nos nós ativos    │  Relatório       │
-│                          ├──────────────────┤
-│                          │  Auditoria       │
-│                          ├──────────────────┤
-│                          │  Histórico       │
-└──────────────────────────┴──────────────────┘
+### Frente 1 — PM2 vivo ou morto?
 ```
-- Sidebar 380px, cards `rounded-xl`, sombras 3D suaves (não flat)
-- Stats no topo da sidebar em grid 2x2 (Nós / Arestas / Comunidades / Última att.)
-- Cada card tem cabeçalho com ícone + título + timestamp
+pm2 describe mcp-server          # ou o nome real do processo
+pm2 logs mcp-server --lines 100 --nostream
+ss -ltnp | grep -E ':(3333|8787|443)'   # porta que o MCP escuta
+```
+Objetivo: saber se o processo caiu, ficou em loop de restart, ou tá up mas travado.
 
-### 3. Grafo VIVO (a alma do pedido)
-Ajustes no `graph.js` **apenas nos parâmetros visuais do force-graph** (sem tocar em fetch/dados):
-- **Nós pulsam** conforme atividade — `nodeCanvasObject` custom que desenha halo com `sin(Date.now())` proporcional ao "heat" do nó (última atualização recente = pulsa forte)
-- **Setores em ação piscam** — nós com status `running`/`updated` nos últimos 60s ganham glow emerald animado; `idle` fica opaco
-- **Arestas fluindo** — `linkDirectionalParticles` ativo, partículas emerald correndo no sentido do fluxo (já é feature nativa da lib, só ligar)
-- **Mole-like / gelatinoso** — reduzir `d3AlphaDecay` pra `0.008` e `d3VelocityDecay` pra `0.25` → grafo balança suave quando arrasta, volta com inércia
-- **Hover** — nó cresce 1.3x com transição suave, mostra tooltip esmeralda flutuante
-- **Cores dos nós por tipo/status** — verde vivo = ativo, dourado = crítico, cinza-esverdeado = idle
-- Fundo do canvas: transparente (deixa o gradiente da página aparecer)
+### Frente 2 — Caddy / entrada pública
+```
+systemctl status caddy
+curl -sSI https://mcp.centralldark.com/health
+curl -sS  https://mcp.centralldark.com/tools.json | head -50
+journalctl -u caddy --since "30 min ago" | tail -50
+```
+Objetivo: separar "MCP caiu" de "Caddy não tá roteando" de "cert/DNS quebrou".
 
-### 4. Micro-interações
-- Botões com `active:translate-y-[1px]` e shadow-3d-primary (padrão sistema)
-- Cards com hover glow sutil
-- Loading dos painéis: skeleton pulsante emerald (não "Carregando..." cru)
-- Timestamps em tempo real "há 3s" atualizando
+### Frente 3 — Darkai + Hermes cruzam olhar
+- `darkai gemini "resume esses 100 linhas de log do mcp-server: <cola>"` → Gemini digere rápido e aponta o culpado (OOM, erro de módulo, porta ocupada, token expirado).
+- Aciono o `Hermes-Verificador` (PM2 id 77) pra registrar o incidente no `docs/CONSCIENCIA/HERMES/` e mandar Card Hermes v1.3 no admin do Telegram assim que o MCP voltar.
 
-## Arquivos a editar (todos dentro da área travada 🔒)
-1. `apps/modulos/graph-panel/public/style.css` — reescrita completa (paleta + layout + animações)
-2. `apps/modulos/graph-panel/public/2d.html` — reordenar sidebar (stats no topo), adicionar ícones, ajustar wrapper do grafo (remover `background:#000308` inline)
-3. `apps/modulos/graph-panel/public/graph.js` — **só** ajustar parâmetros visuais do ForceGraph (nodeCanvasObject com pulse, linkDirectionalParticles, alphaDecay). Zero mudança em fetch/URLs/dados.
-4. **Backup obrigatório** antes de cada write via `vps_write_file_safe` (a tool já faz)
+## Ação de reparo (depois do diagnóstico)
+Escolho automaticamente conforme o achado:
+- **Processo morto** → `pm2 restart mcp-server && pm2 save`
+- **Loop de restart** → `pm2 logs` pra ver stacktrace, corrijo a causa (env faltando, arquivo movido, etc.)
+- **Caddy quebrado** → `caddy reload` ou fix do `Caddyfile`
+- **Porta ocupada** → mato o zumbi e reinicio
+- **Nada disso** → escalo pra você com o log completo + hipótese do Gemini
 
-## Fora de escopo (não vou mexer)
-- Nenhuma rota, endpoint, fetch, WebSocket
-- Nenhum arquivo do 3D (`index.html`) — só o `2d.html` desta vez
-- Nenhum PM2 restart necessário (arquivos estáticos servidos pelo Caddy)
+## O que eu preciso de você agora
+Como o MCP tá offline, tenho 2 caminhos:
 
-## Entrega
-- Deploy via `vps_write_file_safe` nos 3 arquivos
-- Reload duro do `grafo.centralldark.com/2d.html` (Ctrl+Shift+R)
-- Card Hermes v1.3 no admin notificando "🎨 Grafo 2D redesenhado — nível 3 esmeralda vivo"
+**A) Você roda 1 comando na VPS e me cola a saída** (30 segundos):
+```bash
+pm2 list | grep -i mcp && curl -sSI https://mcp.centralldark.com/health && systemctl is-active caddy
+```
+Com isso eu já sei em qual das 3 frentes atacar e monto o fix.
 
-## Autorizações necessárias
-Preciso que você responda **"PERMITO PIVETE grafo-panel visual"** pra eu poder tocar na pasta travada. Sem isso não escrevo nada na VPS.
+**B) Você me dá o "PERMITO PIVETE" pra eu (quando o MCP voltar por qualquer meio) fazer restart automático + registrar tudo no Cérebro Vivo + Card Hermes no Telegram**, e enquanto isso eu só fico monitorando.
+
+Qual dos dois? (ou os dois — recomendo A + B juntos, é o mais rápido)
