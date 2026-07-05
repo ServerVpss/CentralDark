@@ -620,7 +620,7 @@ export async function adminE2E(req, res) {
     const l = withCid(req.cid);
     l.info("admin_e2e_start", {});
     try {
-        const r = await rodarE2EInterno({ comAdmin: true });
+        const r = await rodarE2EInterno({ comAdmin: true, cid: req.cid });
         l.info("admin_e2e_end", { ok: r.ok, falhouEm: r.falhouEm });
         res.json(r);
     } catch (err) {
@@ -629,10 +629,10 @@ export async function adminE2E(req, res) {
     }
 }
 
-export async function adminE2EPublico(_req, res) {
+export async function adminE2EPublico(req, res) {
     // Versão sem senha, usada pelo postdeploy-healthcheck.sh — só liveness DCR+Discovery
     try {
-        const r = await rodarE2EInterno({ comAdmin: false });
+        const r = await rodarE2EInterno({ comAdmin: false, cid: req.cid });
         res.json(r);
     } catch (err) {
         res.status(500).json({ ok: false, error: String(err) });
@@ -641,11 +641,14 @@ export async function adminE2EPublico(_req, res) {
 
 export function adminLogsStream(req, res) {
     if (!isAdmin(req)) { res.status(401).end(); return; }
+    sseStats.totalConexoes++;
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache, no-transform",
         Connection: "keep-alive",
         "X-Accel-Buffering": "no",
+        "X-Correlation-Id": req.cid,
+        "X-Request-Id": req.cid,
     });
     res.write(`retry: 3000\n\n`);
     for (const line of LOG_BUFFER.slice(-100)) {
@@ -653,10 +656,20 @@ export function adminLogsStream(req, res) {
     }
     const send = (line) => res.write(`data: ${JSON.stringify(line)}\n\n`);
     subscribers.add(send);
-    const ping = setInterval(() => res.write(`:ping\n\n`), 15000);
+    pushAdminLog("info", "admin_sse_conectado", { cid: req.cid, path: req.path, conexoesAtivas: subscribers.size });
+    const ping = setInterval(() => {
+        const line = { t: new Date().toISOString(), level: "debug", msg: "admin_sse_ping", meta: { cid: req.cid, path: req.path } };
+        sseStats.totalEventos++;
+        sseStats.ultimoEventoEm = line.t;
+        sseStats.eventosRecentes.push(Date.now());
+        sseStats.ultimasMensagens.push({ t: line.t, level: line.level, msg: line.msg, cid: req.cid, rota: req.path });
+        if (sseStats.ultimasMensagens.length > 50) sseStats.ultimasMensagens.shift();
+        res.write(`:ping cid=${req.cid}\n\n`);
+    }, 15000);
     req.on("close", () => {
         clearInterval(ping);
         subscribers.delete(send);
+        pushAdminLog("info", "admin_sse_desconectado", { cid: req.cid, path: req.path, conexoesAtivas: subscribers.size });
     });
 }
 
