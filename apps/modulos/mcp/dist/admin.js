@@ -254,7 +254,9 @@ async function carregarHealth(){
     '<div class="row"><span>Uptime</span><span>'+(j.uptimeLegivel||Math.round(j.uptimeSec/60)+' min')+'</span></div>'+
     '<div class="row"><span>RSS</span><span>'+j.memoryMb.rss+' MB</span></div>'+
     '<div class="row"><span>Heap</span><span>'+j.memoryMb.heap+' MB</span></div>'+
-    '<div class="row"><span>Loadavg</span><span>'+j.loadavg.map(n=>n.toFixed(2)).join(' · ')+'</span></div>';
+    '<div class="row"><span>Loadavg</span><span>'+j.loadavg.map(n=>n.toFixed(2)).join(' · ')+'</span></div>'+
+    '<div class="row"><span>SSE eventos/min</span><span>'+(j.sse?.eventosPorMinuto ?? 0)+'</span></div>'+
+    '<div class="row"><span>Último evento SSE</span><span>'+(j.sse?.ultimoEventoHaMs == null ? 'sem evento' : Math.round(j.sse.ultimoEventoHaMs/1000)+'s atrás')+'</span></div>';
   $('kpiSse').textContent = j.sseAtivas ?? '0';
 }
 
