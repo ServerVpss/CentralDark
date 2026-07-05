@@ -53,3 +53,11 @@ curl -X POST https://connector-gateway.lovable.dev/telegram/sendMessage \
 ## 7. Ver também
 - ROTAS-FIXAS/notificacao-telegram.md
 - APRENDIZADOS/001-token-bot-vs-sessao-user.md
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

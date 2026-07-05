@@ -47,3 +47,11 @@ Sem esse gatilho, base fica aberta. Ponto.
 - `/root/whatsapp-server/` — nunca mexer (áreas protegidas + regra permanente).
 - `reboot`, `shutdown`, `poweroff` — nunca, sob nenhum pretexto.
 - Sobrescrever `/etc/passwd`, `/etc/shadow` — nunca.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

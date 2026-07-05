@@ -145,3 +145,11 @@ Se algum não → volta o loop.
 - `HERMES/STATUS.md`
 - AULA-009 (nível+skills)
 - AULA-010 (padrão `<pre>`)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

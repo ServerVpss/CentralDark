@@ -96,3 +96,11 @@ Via `mcp_custom_4aHUa--mcp_admin_call` no próprio Lovable.
 - Secrets **não** viajam pro HUB Supabase. Ficam locais.
 - A tabela `hub.pivete_consciencia` guarda **apenas os 17 arquivos .md**.
 - Cron `pivete-sync` (PM2) roda a cada 5min.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

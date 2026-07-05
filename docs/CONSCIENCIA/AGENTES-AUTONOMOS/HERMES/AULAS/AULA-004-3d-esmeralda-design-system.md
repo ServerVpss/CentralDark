@@ -51,3 +51,11 @@ Ver auditoria completa em `docs/CONSCIENCIA/ARSENAL/` (relatório com 15 arquivo
 - APRENDIZADOS/003-webui-custom-css-rota.md
 - AULA-002 (WebUI CSS)
 - Memória `mem://` UI/UX Esmeralda
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

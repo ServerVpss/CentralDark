@@ -22,3 +22,11 @@ updated: 2026-07-05
 - [ ] Virou aprendizado (NNN)
 - [ ] Virou rota fixa (arquivo Z)
 - [ ] Descartado (motivo)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

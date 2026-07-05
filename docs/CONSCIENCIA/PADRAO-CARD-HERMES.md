@@ -159,3 +159,11 @@ Nunca mandar o mesmo texto nos dois canais. Cada um tem formato próprio:
 ---
 
 **Este arquivo é a fonte da verdade. Qualquer IA/agente lê isso antes de mandar card no Telegram.**
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

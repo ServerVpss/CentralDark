@@ -42,3 +42,11 @@ Deixar Hermes rodando full-time consumindo `AULAS/`, `APRENDIZADOS/`, `SUGESTOES
 
 ## Prioridade
 Alta — mas só depois de rodar Onda 1 (AULAS 013/014/020) e ter mais 5 APR pra Hermes ter base sólida.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

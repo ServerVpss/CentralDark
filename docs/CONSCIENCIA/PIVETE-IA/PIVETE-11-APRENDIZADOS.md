@@ -40,3 +40,11 @@ Extraídos de `docs/CONSCIENCIA/APRENDIZADOS.md`. Mais recentes primeiro.
 
 ## Onde ler tudo
 `docs/CONSCIENCIA/APRENDIZADOS.md` (autoritativo, no repo).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -52,3 +52,11 @@ Cada uma cobre um buraco real do fluxo Hermes ↔ Fabler ↔ admin. Ordem = prio
 
 ## Próximo passo (se admin aprovar)
 Confirmar a onda 1 → disparo as 3 aulas em paralelo agora, mesmo padrão de STATUS+rastro+commit `🧠 Hermes/AULAS: NNN …`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

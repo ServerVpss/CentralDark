@@ -32,3 +32,11 @@ Pra qualquer nova integração de modelo/tool, usar esse esqueleto — não cria
 - AULA-001 (Arsenal Council completo)
 - ROTAS-FIXAS/arsenal-endpoints.md
 - ROTAS-FIXAS/comandos-curl-baseline.md
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

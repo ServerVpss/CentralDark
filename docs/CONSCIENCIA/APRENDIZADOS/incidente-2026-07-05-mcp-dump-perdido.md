@@ -31,3 +31,11 @@ Aplicado o `PLAYBOOK-RESSUSCITACAO-PM2.md`:
 ## Blindagem instalada
 - `scripts/socorro-pm2.sh` — ressuscitação automática segura (backup → subir só o que falta → só salva se 100% ok → registra falha + Card Telegram)
 - Documentação no cérebro vivo: `docs/CONSCIENCIA/HERMES/PLAYBOOK-RESSUSCITACAO-PM2.md`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

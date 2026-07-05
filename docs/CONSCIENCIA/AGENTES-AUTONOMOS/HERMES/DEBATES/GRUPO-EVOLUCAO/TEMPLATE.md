@@ -53,3 +53,11 @@ updated: 2026-07-05
 - [ ] XP somado
 - [ ] Skill bumpada
 - [ ] `<pre>` de nível regerado
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

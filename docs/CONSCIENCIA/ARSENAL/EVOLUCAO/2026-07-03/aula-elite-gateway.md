@@ -110,3 +110,11 @@ pm2 logs CentralDark-EliteHTTP --lines 30 --nostream   # últimos eventos
 - `accounts.json` e `contas/profiles/` são **credenciais** (tokens + cookies de sessão). NUNCA versionar no git (já estão no `.gitignore`). NUNCA imprimir token cru — sempre mascarado.
 - Bug ativo achado no `doctor`: as 2 contas têm `id=conta_padrao` e o **mesmo** `profile_dir`. Multi-conta real = ids distintos + perfis distintos + logins distintos. Corrigir com cuidado (renomear id quebra o token em uso — coordenar com o Pivete).
 - Perfil ChatGPT vazou pro histórico do GitHub (via `git add -A` antigo). Pendência do Pivete: rotacionar a sessão (re-login) e avaliar purge do histórico.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

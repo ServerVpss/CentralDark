@@ -65,3 +65,11 @@ docker logs open-webui --tail 50
 - AULA-003 (Telegram — como notificar)
 - ROTAS-FIXAS/webui-reload.md (caso específico WebUI)
 - DEBATES/001-gemini-sugere-aula-pipeline.md (origem desta aula)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

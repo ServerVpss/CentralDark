@@ -49,3 +49,11 @@ _Fabler preenche: o que faria diferente da próxima vez? Grava em `HERMES/SUGEST
 - [ ] Fechar Bloco 4 (baseline authed com Bearer).
 - [ ] Postar card admin + linha canal (formato `<pre>` — AULA-010).
 - [ ] Colar bloco de nível+skills atualizado no card admin (AULA-009).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

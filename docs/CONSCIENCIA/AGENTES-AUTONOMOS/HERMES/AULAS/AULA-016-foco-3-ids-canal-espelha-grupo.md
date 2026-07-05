@@ -93,3 +93,11 @@ Manda 1 post de teste no canal via `sendMessage`. Se em ~5s aparecer no grupo co
 - [ ] Formato `<pre>` + `parse_mode: HTML` sempre.
 
 +15 XP · Skill "Comunicação disciplinada" +10
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

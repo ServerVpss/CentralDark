@@ -38,3 +38,11 @@ Só variáveis no topo do `esmeralda.css`:
 docker ps | grep open-webui   # tem que estar Up
 curl -s http://localhost:PORTA_WEBUI/static/custom.css | head -5
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -36,3 +36,11 @@ updated: 2026-07-05
 
 ## Próxima ação
 Quando Elite Anthropic voltar ao ar, refazer a mesma pergunta com Hermes real e comparar respostas. Se Hermes discordar/complementar, gerar DEBATE-002.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -39,3 +39,11 @@ pivete reload
 - Repo: `docs/CONSCIENCIA/PIVETE-IA/` (autoritativo)
 - VPS: `/root/CentralDark/docs/CONSCIENCIA/PIVETE-IA/` (espelho via git sync)
 - Backup: `/root/CentralDark-backups/pivete-ia-<data>.tar.gz`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

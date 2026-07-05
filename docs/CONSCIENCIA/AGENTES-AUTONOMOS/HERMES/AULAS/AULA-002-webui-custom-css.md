@@ -44,3 +44,11 @@ docker logs open-webui --tail 20   # verificar sem erro
 ## 7. Ver também
 - ROTAS-FIXAS/webui-reload.md
 - APRENDIZADOS/003-webui-custom-css-rota.md
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

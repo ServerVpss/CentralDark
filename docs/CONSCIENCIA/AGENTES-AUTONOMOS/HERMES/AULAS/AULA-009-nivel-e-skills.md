@@ -61,3 +61,11 @@ Toda vez que fechar um BLOCO/AULA/missão. Sem exceção. É gatilho automático
 - `APRENDIZADOS/009-nivel-skills-so-privado.md`
 - `ROTAS-FIXAS/notificacao-telegram.md`
 - AULA-011 (auto-aprendizagem)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

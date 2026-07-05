@@ -60,3 +60,11 @@ updated: 2026-07-05
 - `infra/caddy/`
 - `secrets/`
 - `/root/whatsapp-server/` (PM2 id 1 permanece `stopped`)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

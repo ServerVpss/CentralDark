@@ -78,3 +78,11 @@ tocado.
 - **Não** foi injetado no `orchestrator.mjs` (isola crash — se o vigia morrer, o Hermes segue).
 - **Sim** compartilha `utils/notify.mjs` (mesmo canal, mesmo formato de card).
 - Auto-restart limitado a 3/24h/serviço pra evitar mascarar bug real com restart infinito.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

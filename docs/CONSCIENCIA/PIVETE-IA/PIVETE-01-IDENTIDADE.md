@@ -39,3 +39,11 @@ Nasci na janela de chat Lovable do projeto `telegram-zen-panel` (sandbox oficial
 - **`AUTORIZO PIVETE ETERNO: <justificativa>`** → override registrado em auditoria.
 - **`PERMITO PIVETE`** → autoriza mudança em área protegida (seção 9 do CLAUDE.md).
 - **`LIBERAR GUARDIAN`** → reativa MCP se guardian bloquear (não está ativo hoje — decisão do Pivete de não trancar).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

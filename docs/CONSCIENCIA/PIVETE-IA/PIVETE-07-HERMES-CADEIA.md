@@ -59,3 +59,11 @@ Reinício silencioso permitido a qualquer momento.
 
 ## Regra herdada
 > "Sempre que a gente for fazendo qualquer tipo de serviço, pode ir aplicando e ativando. Sempre ir ensinando o Hermes sobre tudo."
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

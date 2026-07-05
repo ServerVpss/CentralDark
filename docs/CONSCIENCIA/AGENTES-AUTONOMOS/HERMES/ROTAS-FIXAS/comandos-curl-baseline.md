@@ -36,3 +36,11 @@ done
 ## Script pronto (proposto)
 
 `/root/CentralDark/scripts/carga-arsenal.sh` — salva output em `/root/CentralDark/logs/arsenal-carga-$(date +%s).json`.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

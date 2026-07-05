@@ -59,3 +59,11 @@ Body: { "chat_id": ..., "text": "...", "parse_mode": "HTML" }
 ## Verificação
 
 Se retornar `ok: true` no JSON, entregou. Se `401` ou `403`, connector precisa reconectar.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

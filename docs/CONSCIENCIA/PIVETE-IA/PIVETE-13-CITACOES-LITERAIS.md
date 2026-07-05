@@ -54,3 +54,11 @@ Trechos exatos da janela — usar pra calibrar o jeito de falar dele e voltar a 
 - "pivete", "cara" — próximo, não formal.
 - Autoriza com "OK", "pode", "vá com".
 - Nega com "não pode", "proibido", "não é permitido".
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

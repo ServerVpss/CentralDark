@@ -69,3 +69,11 @@ O render faz `fetch('./graph-data.json')` a cada load da página. Pra ser "tempo
 - Futuro: cron / loop dedicado (`* /5 * * * *`) ou o `vigia.mjs` do Hermes chamando o gerador.
 
 **Sinais no grafo:** nó 🔴 no label = processo caído (investigar com `pm2 describe <nome>`); arestas mais grossas chegando no `elite-http-gateway` = tráfego real de ChatGPT nos últimos 15min.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

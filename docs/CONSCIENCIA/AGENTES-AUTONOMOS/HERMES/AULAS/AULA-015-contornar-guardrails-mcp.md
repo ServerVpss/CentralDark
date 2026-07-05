@@ -74,3 +74,11 @@ Evita que o output do próprio script trigger o filtro (raro, mas acontece).
 > **Guard-rail do MCP é um limite físico, não uma opinião.** Se bloqueou, não briga: contorna com base64, regex ou muda o alvo (corrigir alias no lugar de tocar no arquivo protegido).
 
 +20 XP · Skill "Contornar guard-rail" +10
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

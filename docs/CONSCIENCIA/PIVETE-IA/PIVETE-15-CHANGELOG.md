@@ -39,3 +39,11 @@ Toda atualização desta pasta entra aqui. Mais recente no topo.
 - Novos aprendizados/decisões
 - Ação na VPS (se houver)
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

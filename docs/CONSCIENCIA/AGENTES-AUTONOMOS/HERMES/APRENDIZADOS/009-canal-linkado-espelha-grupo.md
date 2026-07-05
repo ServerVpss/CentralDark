@@ -33,3 +33,11 @@ Consequência para o Hermes:
 - AULA-016 (foco 3 IDs)
 - `HERMES/ROTAS-FIXAS/mapa-telegram.md`
 - `HERMES/ROTAS-FIXAS/notificacao-telegram.md`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

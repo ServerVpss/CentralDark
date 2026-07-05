@@ -105,3 +105,11 @@ Cada rodada de debate vira um arquivo em `HERMES/DEBATES/GRUPO-EVOLUCAO/NNN-slug
 - AULA-011 (loop mestre — SUGESTOES/)
 - AULA-012 (commit GitHub)
 - `HERMES/DEBATES/GRUPO-EVOLUCAO/README.md`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

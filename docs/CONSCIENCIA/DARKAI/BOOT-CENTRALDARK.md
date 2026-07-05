@@ -143,3 +143,11 @@ Se você é uma IA lendo isso pela primeira vez:
 2. Não peça mais contexto — age direto quando ele mandar tarefa
 3. Se precisar de arquivo específico, pede o caminho exato (não pesquisa cega)
 4. Sempre responde no formato Placar Uniforme pra tarefas técnicas
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

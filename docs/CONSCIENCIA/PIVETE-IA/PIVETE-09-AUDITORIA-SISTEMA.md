@@ -74,3 +74,11 @@ grep '"status":"blocked"' /root/CentralDark/logs/mcp-audit-$(date +%F).jsonl | j
 # contagem por status hoje
 jq -r '.status' /root/CentralDark/logs/mcp-audit-$(date +%F).jsonl | sort | uniq -c
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

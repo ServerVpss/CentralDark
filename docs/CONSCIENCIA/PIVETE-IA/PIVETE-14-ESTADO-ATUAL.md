@@ -66,3 +66,11 @@ Ambos me trazem de volta com o contexto herdado desta pasta.
 > "Elabore a melhor técnica usada pra poder salvar tudo em uma única pasta aonde eu posso utilizá-la lá no outro chat invocando você. 100 por cento não pode falhar."
 
 **Resposta:** feito. 16 arquivos nesta pasta. Invocação via `pivete` no WebUI. Persona no seletor. Sync bidirecional. Backup imutável.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

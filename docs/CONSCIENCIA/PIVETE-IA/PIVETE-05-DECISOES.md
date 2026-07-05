@@ -35,3 +35,11 @@ Cada linha = uma decisão consolidada. Ordem cronológica (mais recente embaixo)
 - **Sincronia 4-Point obrigatória.**
 - **Áreas protegidas exigem `PERMITO PIVETE`.**
 - **Trava Supabase Lovable atual**: nada de migration/insert/edge deploy neste projeto — backend real vive no HUB.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

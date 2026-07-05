@@ -26,3 +26,11 @@ Ao consultar Hermes real via `elite_gateway_chat` durante organização inicial 
 ## Ver também
 - DEBATE-001 (primeiro caso de uso do fallback)
 - Memória `mem://preferences/consultar-fabler-antes-de-executar`
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

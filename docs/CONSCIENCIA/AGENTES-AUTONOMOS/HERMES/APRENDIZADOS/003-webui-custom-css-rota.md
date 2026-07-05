@@ -24,3 +24,11 @@ Fase 3 (Composer/Esmeralda UI) aplicou tema 3D tátil no Open WebUI via volume m
 ## Ver também
 - AULA-002 (WebUI custom CSS completo)
 - ROTAS-FIXAS/webui-reload.md
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -70,3 +70,11 @@ Chame `scripts/socorro-pm2.sh` sempre que suspeitar de queda em massa (o script 
 
 ## 📚 Histórico
 - **05/07/2026**: incidente MCP → dump.pm2 sobrescrito com só 7 processos → aplicação deste playbook restaurou 12 daemons. Ficou pendente: LovableProxy (sem chave) e EliteHTTP (venv precisa recriar).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

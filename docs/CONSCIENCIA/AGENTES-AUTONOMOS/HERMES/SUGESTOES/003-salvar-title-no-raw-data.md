@@ -22,3 +22,11 @@ Média. Fazer junto com a próxima manutenção do `telepainel-webhook`.
 
 ## Owner
 Hermes propõe → Fabler valida no HUB → Lovable aplica migration + edge deploy.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

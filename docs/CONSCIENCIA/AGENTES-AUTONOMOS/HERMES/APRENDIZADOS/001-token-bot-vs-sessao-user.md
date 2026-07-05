@@ -24,3 +24,11 @@ Token de bot (Bot API) NÃO permite:
 ## Ver também
 - AULA-003 (Telegram notificação)
 - ROTAS-FIXAS/notificacao-telegram.md
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

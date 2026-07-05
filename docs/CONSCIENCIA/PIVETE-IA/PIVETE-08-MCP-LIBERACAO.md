@@ -51,3 +51,11 @@ Variável `MCP_ALLOW_VPS_COMMANDS=true` no PM2 id 33.
 🟢 MCP totalmente liberado
 🟢 Auditoria universal ativa
 🟡 Zero trava proativa — proteção é comportamental
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

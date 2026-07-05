@@ -81,3 +81,11 @@ Lovable → GitHub → VPS (`/root/CentralDark/`, `pm2 save` obrigatório) → C
 
 ## Lovable Cloud
 Backend = Supabase (nunca falar "Supabase" pro Pivete — dizer "Lovable Cloud / backend / database / auth / functions / storage"). Ref atual: `kagejpghnwdfymddwxuf`. `SUPABASE_SERVICE_ROLE_KEY` e senha do banco não estão disponíveis nesse modo — nunca inventar valor.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

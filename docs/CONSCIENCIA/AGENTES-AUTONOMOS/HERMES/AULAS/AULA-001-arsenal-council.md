@@ -53,3 +53,11 @@ done
 - ROTAS-FIXAS/arsenal-endpoints.md
 - ROTAS-FIXAS/comandos-curl-baseline.md
 - APRENDIZADOS/002-arsenal-portas-fixas.md
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

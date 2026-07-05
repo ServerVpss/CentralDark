@@ -18,3 +18,11 @@ Regra prática que ficou.
 
 ## Ver também
 - AULA-YYY (se aprofundou virou aula)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

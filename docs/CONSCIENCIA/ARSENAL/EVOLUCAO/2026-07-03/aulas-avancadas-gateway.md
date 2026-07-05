@@ -113,3 +113,11 @@ pm2 describe CentralDark-Zentinel | grep -E 'status|restarts'   # o vigia está 
 | Gateway morto (processo) | 🧠 Hermes (`pm2 restart` + `save`) |
 | Zentinel morto | 🧠 Hermes (`pm2 restart CentralDark-Zentinel`) |
 ```
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -33,3 +33,11 @@ Feito via `vps_run_once_script` com regex Python (evitou literal `/secrets/` no 
 - Antes de tocar em script sensível, sempre checar se o fix no **alias** resolve — menos risco e não esbarra no guard-rail.
 - MCP redige paths e bloqueia `/secrets/` — usar `base64` pra ler, regex pra manipular.
 - Ver AULA-015 (contornar guard-rails) e AULA-014 (mapa telegram).
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

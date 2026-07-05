@@ -45,3 +45,11 @@ Verificado em 04/07/2026 com 7 subdomínios (`www`, `telepainel`, `install`, `qu
 
 - `infra/caddy/` — onde adicionar bloco por subdomínio novo
 - `docs/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md` — este arquivo é a fonte oficial; espelho em `mem://` do Lovable é apenas cache
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -40,3 +40,11 @@ updated: 2026-07-05
 
 - ❌ Porta 9000 (conflita com webhook GitHub)
 - ❌ Chamar o adapter externamente (chave só valida `127.0.0.1`)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

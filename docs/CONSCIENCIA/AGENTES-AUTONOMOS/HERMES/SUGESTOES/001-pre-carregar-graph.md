@@ -28,3 +28,11 @@ Adicionar passo obrigatório 0 no loop da AULA-011:
 1. Atualizar AULA-011 §3.1 marcando graph como **passo 0 obrigatório** (não só "mais barato").
 2. Criar `HERMES/ROTAS-FIXAS/consultar-graph.md` com curl pronto + exemplos de query.
 3. Bumpar skill "Auto-diagnóstico" +10 na primeira execução com graph-first.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

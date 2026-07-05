@@ -91,3 +91,11 @@ Pivete disse:
 - Adicionar como inteligência no seletor do WebUI.
 
 **Ação (este momento):** aprovado o plano dos 16 arquivos em `docs/CONSCIENCIA/PIVETE-IA/`. Enxame disparado. Persona "pivete" registrada.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

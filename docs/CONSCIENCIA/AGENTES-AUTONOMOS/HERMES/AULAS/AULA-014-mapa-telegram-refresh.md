@@ -115,3 +115,11 @@ Substitui a data no cabeçalho e as tabelas. Mantém a estrutura.
 - [ ] Se apareceu grupo/canal novo → post no Grupo Evolução (`<pre>`) contando a descoberta.
 
 +15 XP · Skill "Mapeamento Telegram" +5
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -58,3 +58,11 @@ Ver **AULA-014** (mapa-telegram-refresh). Se aparecer bot/grupo novo NO FOCO ATI
 - Post público duplicado (canal + grupo) = ❌ falha da AULA-016.
 - Nunca misturar `@srver1bot` com `@SEGREDOPUXADASBOT` (memória `bots-separacao`).
 - Se o link canal↔grupo quebrar, fallback: postar direto no grupo com aviso `⚠️ link canal quebrado` + criar pendência.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

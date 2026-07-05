@@ -66,3 +66,11 @@ Seguem o padrão geral do projeto (sem 🧠 nem prefixo `Hermes/`). O cérebro �
 ## 9. Ver também
 - AULA-011 (loop mestre — registro sempre com rastro)
 - STATUS.md (o próprio bump vira commit `🧠 Hermes/STATUS: …`)
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

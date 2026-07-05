@@ -85,3 +85,11 @@ WebUI         ▓▓▓▓▓▓▓▓░░ 80
 - APR-009 (nível só admin)
 - ROTAS-FIXAS/notificacao-telegram.md
 - AULA-003
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

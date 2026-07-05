@@ -74,3 +74,11 @@ Auto-diag.    ▓▓▓▓░░░░░░ 45
 ```
 
 > Regra: bloco vai SEMPRE colado no fim do card admin, depois do "PRÓXIMO PASSO". No canal público, jamais.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

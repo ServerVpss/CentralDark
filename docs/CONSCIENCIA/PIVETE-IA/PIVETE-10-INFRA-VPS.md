@@ -79,3 +79,11 @@ tail -n 20 /root/CentralDark/logs/mcp-audit-$(date +%F).jsonl | jq -c
 🟢 **ABERTA** por decisão do Pivete (turno 5).
 Sem `nftables` novo, sem guardian, sem DENY_ETERNO.
 Proteção é comportamental — pivete não roda comando suicida, ponto.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre

@@ -22,3 +22,11 @@ updated: 2026-07-05
 2. Preencher
 3. Adicionar linha nesta tabela
 4. Se virou aula, apontar coluna "Aula relacionada"
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
