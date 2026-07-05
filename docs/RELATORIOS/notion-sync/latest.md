@@ -175,7 +175,7 @@
 | aprendizados | atualizado | #114 — Padrão operacional tipo Lovable: memória antes e depois |
 | aprendizados | atualizado | #115 — Separar run-once por nível de risco |
 | aprendizados | atualizado | #116 — Caddy bot/api separado corretamente por file_server e API |
-| aprendizados | atualizado | #117 — bot.centralldark.com deve servir apps/bot/dist |
+| aprendizados | erro | #117 — bot.centralldark.com deve servir apps/bot/dist |
 | aprendizados | atualizado | #118 — Contacts/groups read-only toleram 401 da WuzAPI |
 | aprendizados | atualizado | #119 — Duas árvores apps/bot causaram build no lugar errado |
 | aprendizados | atualizado | #120 — CORS da API deve ficar em um só lugar |
