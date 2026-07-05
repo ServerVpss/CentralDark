@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-05T13:59:13.528Z",
-  "updatedAtBR": "05/07/2026, 10:59:13 BRT",
+  "updatedAt": "2026-07-05T15:00:45.025Z",
+  "updatedAtBR": "05/07/2026, 12:00:45 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "Melhorias visuais grafo 3D Jarvis V2",
     "branch": "main",
-    "lastCommit": "Consertou processo MCP no VPS",
+    "lastCommit": "Corrigiu mapeamento da auditoria",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-05T15:00:45.025Z",
+      "titulo": "Push na main · 15ff8d96cd3e09809ad452da444b26c9b5a5e79d",
+      "detalhe": "Corrigiu mapeamento da auditoria",
+      "area": "Repositório",
+      "sha": "15ff8d9",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-05T13:59:13.528Z",
       "titulo": "Push na main · d592451fb054bacae86645ea878bd5e506b41331",
@@ -1357,6 +1365,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-05T15:00:45.025Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 15ff8d96cd3e09809ad452da444b26c9b5a5e79d (15ff8d9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-05T13:59:13.528Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · d592451fb054bacae86645ea878bd5e506b41331 (d592451)",
@@ -1696,13 +1711,6 @@
       "time": "2026-07-04T06:40:03.563Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · c3cd86b940b18b0e245e409bb525e13a4bce4929 (c3cd86b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T06:31:15.871Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 43d845972b169737b93e5c038bf897adf23a17ce (43d8459)",
       "area": "Repositório",
       "status": "sucesso"
     }
