@@ -92,6 +92,7 @@ const telepainelRoutes: Array<{ path: string; element: JSX.Element; adminOnly?: 
   { path: "mapa", element: <MapaSite />, adminOnly: true },
   { path: "consciencia", element: <ConscienciaViva />, adminOnly: true },
   { path: "hermes", element: <HermesPanel />, adminOnly: true },
+  { path: "ai-proxy", element: <AiProxyConfig />, adminOnly: true },
   // Rota /hub removida — Hub agora vive em apps/modulos/hub/ como app independente
 ];
 
