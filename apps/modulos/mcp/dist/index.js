@@ -53,6 +53,10 @@ app.post("/admin/login", adminLogin);
 app.get("/admin/logout", adminLogout);
 app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
+app.get("/admin/api/logs", adminBuscarLogs);
+app.get("/admin/api/metricas", adminMetricas);
+app.post("/admin/api/e2e", adminE2E);
+app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
 app.post("/admin/api/testar-sse", adminTestarSse);
 // Manifesto público do catálogo de tools
