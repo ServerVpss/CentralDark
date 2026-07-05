@@ -12,7 +12,7 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
-import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, bootstrapAdminLogCapture, } from "./admin.js";
+import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
 // Captura logs pro buffer do painel /admin (deve rodar ANTES do primeiro log)
 bootstrapAdminLogCapture();
 const app = express();
