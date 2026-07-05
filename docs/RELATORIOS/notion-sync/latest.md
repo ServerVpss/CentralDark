@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T19:54:12.023Z
+# 🧠 Notion Sync — 2026-07-05T20:52:31.442Z
 
-- **Commit fonte:** `69bce5d5d414504abcb7339d1a623c7156161dd1`
+- **Commit fonte:** `edc033d01e4d6e34683a7309528e6e8f94075d63`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 329 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 330 atualizadas · ❌ 450 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 295 | 0 | 294 | 0 | 1 |
+| aprendizados | 296 | 1 | 295 | 0 | 0 |
 | estrutura | 450 | 0 | 0 | 0 | 450 |
 
 ## Operações
@@ -114,7 +114,7 @@
 | aprendizados | atualizado | #53 — MCP recuperado apos setar callback OAuth |
 | aprendizados | atualizado | #54 — vps_pm2_ls estabilizado via dump local |
 | aprendizados | atualizado | #55 — Ordem oficial de foco após pausa do painel |
-| aprendizados | erro | #56 — Não omitir componentes oficiais em resumos críticos |
+| aprendizados | atualizado | #56 — Não omitir componentes oficiais em resumos críticos |
 | aprendizados | atualizado | #57 — Autoajuste consciente quando houver erro ou dúvida |
 | aprendizados | atualizado | #58 — Codex deve herdar autoajuste consciente |
 | aprendizados | atualizado | #59 — Consultar Mestre Segredo quando houver risco, dúvida ou desvio de padrão |
@@ -352,6 +352,7 @@
 | aprendizados | atualizado | #291 — Start do Elite Anthropic sem caminho absoluto |
 | aprendizados | atualizado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
 | aprendizados | atualizado | #293 — Sincronia VPS falhou por conflito de merge e foi resolvida |
+| aprendizados | criado | #294 — EliteHTTP porta real 8082 + Sentry precisa de org manual |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
