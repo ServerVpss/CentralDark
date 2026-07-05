@@ -6,12 +6,29 @@ import { randomUUID } from "node:crypto";
 import { log } from "./log.js";
 
 export function correlationMiddleware(req, res, next) {
-    const incoming = req.headers["x-correlation-id"];
+    const incoming = req.headers["x-correlation-id"] || req.headers["x-request-id"] || req.headers["cf-ray"];
     const cid = (typeof incoming === "string" && incoming.length >= 8 && incoming.length <= 64)
         ? incoming
         : randomUUID();
     req.cid = cid;
     res.setHeader("X-Correlation-Id", cid);
+    res.setHeader("X-Request-Id", cid);
+    const originalJson = res.json.bind(res);
+    res.json = (body) => {
+        if (body && typeof body === "object" && !Array.isArray(body)) {
+            if (body.jsonrpc === "2.0") {
+                body.cid = body.cid || cid;
+                if (body.error && typeof body.error === "object") {
+                    body.error.data = { ...(body.error.data || {}), cid };
+                }
+            }
+            else {
+                body.cid = body.cid || cid;
+                body.requestId = body.requestId || cid;
+            }
+        }
+        return originalJson(body);
+    };
     const started = Date.now();
 
     log.info("http_request_start", {

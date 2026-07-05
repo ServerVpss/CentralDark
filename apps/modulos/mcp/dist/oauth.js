@@ -436,6 +436,7 @@ export function postRegister(req, res) {
         response_types: body.response_types,
     });
     log.info("oauth_dcr_registered", {
+        cid: req.cid,
         client_id: client.client_id,
         client_name: client.client_name,
         redirect_uris: client.redirect_uris,
@@ -448,6 +449,7 @@ export function postRegister(req, res) {
         token_endpoint_auth_method: client.token_endpoint_auth_method,
         grant_types: client.grant_types,
         response_types: client.response_types,
+        cid: req.cid,
     });
 }
 export async function handleAuthorize(req, res) {
@@ -484,18 +486,18 @@ export async function handleAuthorize(req, res) {
         const configuredPassword = getAdminPassword();
         const submittedPassword = param(req, "password");
         if (!configuredPassword) {
-            log.error("oauth_admin_password_missing");
+            log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
             sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
             return;
         }
         if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
-            log.warn("oauth_admin_password_invalid", { client_id: client.client_id });
+            log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
             sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
             return;
         }
         const ownerToken = getOwnerToolToken();
         if (!ownerToken) {
-            log.error("oauth_owner_tool_token_missing");
+            log.error("oauth_owner_tool_token_missing", { cid: req.cid, client_id: client.client_id });
             sendOwnerConsentPage(res, { ...payload, error: "Token interno do dono ausente no servidor." });
             return;
         }
@@ -515,6 +517,7 @@ export async function handleAuthorize(req, res) {
             back.searchParams.set("state", authReq.client_state);
         back.searchParams.set("iss", config.publicUrl);
         log.info("oauth_authorize", {
+            cid: req.cid,
             client_id: client.client_id,
             redirect_uri,
             mode: "owner_password",
@@ -522,7 +525,7 @@ export async function handleAuthorize(req, res) {
         res.redirect(302, back.toString());
     }
     catch (err) {
-        log.error("oauth_authorize_exception", { error: String(err) });
+        log.error("oauth_authorize_exception", { cid: req.cid, error: String(err) });
         if (!res.headersSent) {
             res.status(500).send("Erro interno no authorize OAuth.");
         }
@@ -563,13 +566,14 @@ export function postToken(req, res) {
             gh_scope: ac.gh_scope,
             gh_login: ac.gh_login,
         });
-        log.info("oauth_token_issued", { client_id, gh_login: ac.gh_login });
+        log.info("oauth_token_issued", { cid: req.cid, client_id, gh_login: ac.gh_login });
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",
             expires_in: Math.floor((pair.access.expiresAt - Date.now()) / 1000),
             refresh_token: pair.refresh.token,
             scope: "mcp",
+            cid: req.cid,
         });
         return;
     }
@@ -586,13 +590,14 @@ export function postToken(req, res) {
             gh_scope: rt.gh_scope,
             gh_login: rt.gh_login,
         });
-        log.info("oauth_token_refreshed", { client_id: rt.client_id, gh_login: rt.gh_login });
+        log.info("oauth_token_refreshed", { cid: req.cid, client_id: rt.client_id, gh_login: rt.gh_login });
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",
             expires_in: Math.floor((pair.access.expiresAt - Date.now()) / 1000),
             refresh_token: pair.refresh.token,
             scope: "mcp",
+            cid: req.cid,
         });
         return;
     }
