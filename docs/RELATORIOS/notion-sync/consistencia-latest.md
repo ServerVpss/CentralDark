@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-05T03:39:41.318Z
-- **Commit:** `a8f493c9306d0ef4ee6821e93631268dcc27ad94`
+- **Gerado:** 2026-07-05T04:36:36.935Z
+- **Commit:** `781f2af699c42ea7e13a7eb341652447098f692d`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 323 | 0 | 0 | 323 | 0 |
+| aprendizados | 324 | 0 | 0 | 324 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **323**
+- 🟥 Faltando no Notion: **324**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -371,4 +371,5 @@
 - 289. Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing
 - 290. Proxy AP7 exige aliases ap7-*
 - 291. Start do Elite Anthropic sem caminho absoluto
+- 292. CDN sem versão pinada quebrou o HUD 3D do GrafoVivo
 </details>

@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T03:39:38.141Z
+# 🧠 Notion Sync — 2026-07-05T04:36:34.191Z
 
-- **Commit fonte:** `a8f493c9306d0ef4ee6821e93631268dcc27ad94`
+- **Commit fonte:** `781f2af699c42ea7e13a7eb341652447098f692d`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 328 atualizadas · ❌ 439 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 328 atualizadas · ❌ 439 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 293 | 0 | 293 | 0 | 0 |
+| aprendizados | 294 | 1 | 293 | 0 | 0 |
 | estrutura | 439 | 0 | 0 | 0 | 439 |
 
 ## Operações
@@ -350,6 +350,7 @@
 | aprendizados | atualizado | #289 — Release do plugin Obsidian: main.js ficou de fora + fix cirúrgico via git plumbing |
 | aprendizados | atualizado | #290 — Proxy AP7 exige aliases ap7-* |
 | aprendizados | atualizado | #291 — Start do Elite Anthropic sem caminho absoluto |
+| aprendizados | criado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
