@@ -1,0 +1,33 @@
+{
+  "descricao": "Cadeia oficial de modelos do Hermes — EDITÁVEL. O decisor.mjs recarrega este arquivo a cada 60s. Reordene, ative/desative ou ajuste timeouts sem reiniciar PM2.",
+  "atualizado_em": "2026-07-04",
+  "cadeia": [
+    { "posicao": 1,  "modelo": "google/gemini-3-flash-preview",       "via": "darkai",             "timeout_s": 15, "ativo": true, "nota": "decisão rápida padrão (~90% das etapas)" },
+    { "posicao": 2,  "modelo": "google/gemini-2.5-pro",               "via": "darkai",             "timeout_s": 30, "ativo": true, "nota": "raciocínio maior, contexto grande" },
+    { "posicao": 3,  "modelo": "google/gemini-2.5-flash",             "via": "darkai",             "timeout_s": 20, "ativo": true, "nota": "flash médio" },
+    { "posicao": 4,  "modelo": "google/gemini-2.5-flash-lite",        "via": "darkai",             "timeout_s": 15, "ativo": true, "nota": "flash lite, econômico" },
+    { "posicao": 5,  "modelo": "openai/gpt-5",                        "via": "darkai",             "timeout_s": 60, "ativo": true, "nota": "GPT-5 completo" },
+    { "posicao": 6,  "modelo": "openai/gpt-5-mini",                   "via": "darkai",             "timeout_s": 45, "ativo": true, "nota": "backup se Gemini falhar" },
+    { "posicao": 7,  "modelo": "openai/gpt-5-nano",                   "via": "darkai",             "timeout_s": 20, "ativo": true, "nota": "nano rápido" },
+    { "posicao": 8,  "modelo": "openai/gpt-5-chat",                   "via": "darkai",             "timeout_s": 45, "ativo": true, "nota": "chat generalista" },
+    { "posicao": 9,  "modelo": "openai/gpt-5-pro",                    "via": "darkai",             "timeout_s": 90, "ativo": false,"nota": "top tier, alto custo — desligado por padrão" },
+    { "posicao": 10, "modelo": "anthropic/claude-opus-4-1",           "via": "darkai",             "timeout_s": 60, "ativo": true, "nota": "opus grande" },
+    { "posicao": 11, "modelo": "anthropic/claude-sonnet-4-5",         "via": "darkai",             "timeout_s": 45, "ativo": true, "nota": "sonnet forte" },
+    { "posicao": 12, "modelo": "anthropic/claude-haiku-4-5",          "via": "darkai",             "timeout_s": 20, "ativo": true, "nota": "haiku rápido" },
+    { "posicao": 13, "modelo": "x-ai/grok-4",                         "via": "darkai",             "timeout_s": 45, "ativo": true, "nota": "grok padrão" },
+    { "posicao": 14, "modelo": "x-ai/grok-4-fast",                    "via": "darkai",             "timeout_s": 20, "ativo": true, "nota": "grok fast" },
+    { "posicao": 15, "modelo": "x-ai/grok-code-fast-1",               "via": "darkai",             "timeout_s": 30, "ativo": true, "nota": "grok código" },
+    { "posicao": 16, "modelo": "claude-sonnet-4-5",                   "via": "elite-anthropic",    "timeout_s": 30, "ativo": true, "nota": "ELITE — última bala, sempre vivo (claude.ap7.site)" }
+  ],
+  "elite": {
+    "url": "https://claude.ap7.site/v1/messages",
+    "auth_header": "x-api-key",
+    "env_token": "ELITE_ANTHROPIC_TOKEN",
+    "retry": 1,
+    "backoff_s": 2
+  },
+  "cache": {
+    "ttl_min": 10,
+    "max_itens": 100
+  }
+}
