@@ -442,6 +442,7 @@ export function postRegister(req, res) {
     });
     res.status(201).json({
         client_id: client.client_id,
+        client_id_issued_at: Math.floor(client.createdAt / 1000),
         client_name: client.client_name,
         redirect_uris: client.redirect_uris,
         token_endpoint_auth_method: client.token_endpoint_auth_method,

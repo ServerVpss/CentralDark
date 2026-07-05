@@ -57,6 +57,13 @@ mcp.centralldark.com {
 
 	# Preflight OPTIONS responde 204 direto, sem chamar o backend.
 	@preflight method OPTIONS
+	header @preflight {
+		Access-Control-Allow-Origin "*"
+		Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		Access-Control-Allow-Headers "Authorization, Content-Type, Accept, Mcp-Session-Id, MCP-Protocol-Version, X-MCP-Session"
+		Access-Control-Expose-Headers "WWW-Authenticate, Mcp-Session-Id"
+		Access-Control-Max-Age "86400"
+	}
 	respond @preflight 204
 
 	reverse_proxy 127.0.0.1:9100 {
