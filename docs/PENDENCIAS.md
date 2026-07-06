@@ -646,3 +646,6 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 ### 28. AiDiag parado + EliteHTTP/MCP com histórico de restarts — 🟢 ABERTO (05/07/2026, 23:55 BRT)
 - **Sintoma:** CentralDark-AiDiag está 'stopped'. Decidir: religar ou remover do PM2. EliteHTTP com 31 restarts e MCP com 20 (histórico, ambos online agora).
 - **Critério pra fechar:** AiDiag online ou removido de vez se não for mais usado
+### 29. Hermes: ReferenceError x is not defined trava executor de missões — 🔴 ABERTO (06/07/2026, 00:05 BRT)
+- **Sintoma:** CAUSA-RAIZ ISOLADA: 'ReferenceError: x is not defined' no executor de missões do Hermes (reaparece a cada ciclo, ex 2026-07-06T00:05:23). É variável 'x' não declarada no código do loop de missões. Trava ANTES de pegar a missão. Consertar isto destrava o grafo Jarvis (missão thinker-grafo-jarvis está parada em pendente/). Achar o 'x' órfão no script do executor Hermes e corrigir.
+- **Critério pra fechar:** Hermes processa missoes/pendente/ sem crashar
