@@ -55,6 +55,8 @@ export const adminVaultRwTools = [
     handler: async (input) => {
       const full = safeResolve(input.name);
       if (!existsSync(DR)) mkdirSync(DR, { recursive: true, mode: 0o700 });
+      const parent = dirname(full);
+      if (!existsSync(parent)) mkdirSync(parent, { recursive: true, mode: 0o700 });
       const overwrite = input.overwrite !== false;
       let backup = null;
       if (existsSync(full)) {
