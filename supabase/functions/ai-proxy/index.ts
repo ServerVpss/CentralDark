@@ -21,13 +21,59 @@
 const GATEWAY_BASE = "https://ai.gateway.lovable.dev/v1";
 const DEFAULT_MODEL = "google/gemini-3-flash-preview";
 
+// Catálogo completo do Lovable AI Gateway (chat/text).
 const MODELS = [
   "google/gemini-3-flash-preview",
+  "google/gemini-3.1-flash-lite",
+  "google/gemini-3.5-flash",
   "google/gemini-3.1-pro-preview",
+  "google/gemini-2.5-pro",
+  "google/gemini-2.5-flash",
+  "google/gemini-2.5-flash-lite",
   "openai/gpt-5",
   "openai/gpt-5-mini",
   "openai/gpt-5-nano",
+  "openai/gpt-5.2",
+  "openai/gpt-5.4",
+  "openai/gpt-5.4-mini",
+  "openai/gpt-5.4-nano",
+  "openai/gpt-5.4-pro",
+  "openai/gpt-5.5",
+  "openai/gpt-5.5-pro",
 ];
+
+// Aliases curtos (darkai/CLI) -> id oficial do gateway.
+// Assim `darkai --model gpt-5` funciona igual `--model openai/gpt-5`.
+const MODEL_ALIASES: Record<string, string> = {
+  "gpt-5": "openai/gpt-5",
+  "gpt-5-mini": "openai/gpt-5-mini",
+  "gpt-5-nano": "openai/gpt-5-nano",
+  "gpt-5.2": "openai/gpt-5.2",
+  "gpt-5.4": "openai/gpt-5.4",
+  "gpt-5.4-mini": "openai/gpt-5.4-mini",
+  "gpt-5.4-nano": "openai/gpt-5.4-nano",
+  "gpt-5.4-pro": "openai/gpt-5.4-pro",
+  "gpt-5.5": "openai/gpt-5.5",
+  "gpt-5.5-pro": "openai/gpt-5.5-pro",
+  "gemini-3-flash-preview": "google/gemini-3-flash-preview",
+  "gemini-3.1-flash-lite": "google/gemini-3.1-flash-lite",
+  "gemini-3.5-flash": "google/gemini-3.5-flash",
+  "gemini-3.1-pro-preview": "google/gemini-3.1-pro-preview",
+  "gemini-2.5-pro": "google/gemini-2.5-pro",
+  "gemini-2.5-flash": "google/gemini-2.5-flash",
+  "gemini-2.5-flash-lite": "google/gemini-2.5-flash-lite",
+  // atalhos ainda mais curtos
+  "flash": "google/gemini-3-flash-preview",
+  "pro": "google/gemini-3.1-pro-preview",
+  "gpt": "openai/gpt-5",
+};
+
+function normalizeModel(input: unknown): string {
+  const raw = typeof input === "string" ? input.trim() : "";
+  if (!raw) return DEFAULT_MODEL;
+  if (raw.includes("/")) return raw; // já vem no formato vendor/model
+  return MODEL_ALIASES[raw] ?? raw; // se não bater, deixa passar pro gateway responder o erro real
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -207,7 +253,7 @@ function unauthorized(reason = "invalid_api_key") {
 
 async function proxyChatCompletions(req: Request, lovableKey: string) {
   const body = await req.json().catch(() => ({}));
-  const model = typeof body?.model === "string" && body.model ? body.model : DEFAULT_MODEL;
+  const model = normalizeModel(body?.model);
   const stream = body?.stream === true;
 
   const upstream = await fetch(`${GATEWAY_BASE}/chat/completions`, {
@@ -248,7 +294,7 @@ async function legacyDarkai(req: Request, lovableKey: string) {
   const body = await req.json().catch(() => ({}));
   const prompt = typeof body?.prompt === "string" ? body.prompt.trim() : "";
   const system = typeof body?.system === "string" ? body.system : undefined;
-  const model = typeof body?.model === "string" && body.model ? body.model : DEFAULT_MODEL;
+  const model = normalizeModel(body?.model);
   if (!prompt) return json({ error: "campo 'prompt' obrigatório" }, 400);
 
   const messages: Array<{ role: string; content: string }> = [];
