@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T20:12:06.250Z",
-  "updatedAtBR": "06/07/2026, 17:12:06 BRT",
+  "updatedAt": "2026-07-06T20:11:48.539Z",
+  "updatedAtBR": "06/07/2026, 17:11:48 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "hotfix(hermes): recria utils/notify.mjs (silencioso + telegram opcional)",
+    "lastCommit": "hotfix(hermes): recria utils/notify.mjs (silencioso sem token, telegram opcional)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,14 +596,6 @@
     }
   ],
   "events": [
-    {
-      "time": "2026-07-06T20:12:06.250Z",
-      "titulo": "Push na main · 2ebb568297564bdc9127aece3686b4ebaaaad1fb",
-      "detalhe": "hotfix(hermes): recria utils/notify.mjs (silencioso + telegram opcional)",
-      "area": "Repositório",
-      "sha": "2ebb568",
-      "actor": "segredounlock"
-    },
     {
       "time": "2026-07-06T20:00:04.641Z",
       "title": "🛠️ Hermes: `utils/notify.mjs` recriado — erro \"notify falhou\" resolvido (fallback silencioso + Telegram opcional via TELEGRAM_BOT_TOKEN).",
@@ -1251,13 +1243,6 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-07-06T20:12:06.250Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2ebb568297564bdc9127aece3686b4ebaaaad1fb (2ebb568)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
       "time": "2026-07-06T15:25:33.122Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6823041117e2ea8c1d831f00d01dce26c3e4a312 (6823041)",
@@ -1597,6 +1582,13 @@
       "time": "2026-07-05T20:44:47.038Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · edc033d01e4d6e34683a7309528e6e8f94075d63 (edc033d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T19:54:29.808Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 69bce5d5d414504abcb7339d1a623c7156161dd1 (69bce5d)",
       "area": "Repositório",
       "status": "sucesso"
     }
