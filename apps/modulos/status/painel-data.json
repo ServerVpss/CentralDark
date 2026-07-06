@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T19:53:32.606Z",
-  "updatedAtBR": "06/07/2026, 16:53:32 BRT",
+  "updatedAt": "2026-07-06T15:34:48.856Z",
+  "updatedAtBR": "06/07/2026, 12:34:48 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Rebootou daemon DarkAI e 17 processos",
+    "lastCommit": "aprendizado(#303): HUD Grafo 3D — three.js UMD precisa ser carregado à parte",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,62 +596,6 @@
     }
   ],
   "events": [
-    {
-      "time": "2026-07-06T19:53:32.606Z",
-      "titulo": "Push na main · dd239ae228326eddc42894cddb5d30c88893a556",
-      "detalhe": "Rebootou daemon DarkAI e 17 processos",
-      "area": "Repositório",
-      "sha": "dd239ae",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T19:41:35.963Z",
-      "titulo": "Push na main · e12e6ab25079e7bd36967dd1fea71ade5c4b0c3f",
-      "detalhe": "Corrigiu key da AI no Edge",
-      "area": "Repositório",
-      "sha": "e12e6ab",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T17:22:02.902Z",
-      "titulo": "Push na main · 6646223b6a49fd6f5196792302d05ce487f37c24",
-      "detalhe": "Redesign admin MCP em abas",
-      "area": "Repositório",
-      "sha": "6646223",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T16:37:49.034Z",
-      "titulo": "Push na main · cddfaee8ed8a3ca51a47e3c1abaaee7351dab3d7",
-      "detalhe": "Corrigiu conexão tool_server",
-      "area": "Repositório",
-      "sha": "cddfaee",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T16:16:31.930Z",
-      "titulo": "Push na main · f306e7ee9ff13756be1cdbb0de6688fee41965c2",
-      "detalhe": "Lovable update",
-      "area": "Repositório",
-      "sha": "f306e7e",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T15:36:11.304Z",
-      "titulo": "Push na main · cc7cff3bb717a5aa4dc33594b64ef78f92a51a98",
-      "detalhe": "aprendizado(#304): unpkg sem versão pode entregar build ESM sem global — travar versão",
-      "area": "Repositório",
-      "sha": "cc7cff3",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T15:34:15.259Z",
-      "titulo": "Push na main · 8c2cfce85c88f2f31f14d9164bd19d8c5ff5f4c8",
-      "detalhe": "fix(graph-panel): travar 3d-force-graph@1.73.4 (UMD global) e three-spritetext@1.8.2 — HUD 3D voltou",
-      "area": "Repositório",
-      "sha": "8c2cfce",
-      "actor": "segredounlock"
-    },
     {
       "time": "2026-07-06T15:25:33.122Z",
       "titulo": "Push na main · 6823041117e2ea8c1d831f00d01dce26c3e4a312",
@@ -1340,55 +1284,6 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-07-06T19:53:32.606Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · dd239ae228326eddc42894cddb5d30c88893a556 (dd239ae)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T19:41:35.963Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · e12e6ab25079e7bd36967dd1fea71ade5c4b0c3f (e12e6ab)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T17:22:02.902Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 6646223b6a49fd6f5196792302d05ce487f37c24 (6646223)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T16:37:49.034Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · cddfaee8ed8a3ca51a47e3c1abaaee7351dab3d7 (cddfaee)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T16:16:31.930Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · f306e7ee9ff13756be1cdbb0de6688fee41965c2 (f306e7e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T15:36:11.304Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · cc7cff3bb717a5aa4dc33594b64ef78f92a51a98 (cc7cff3)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T15:34:15.259Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8c2cfce85c88f2f31f14d9164bd19d8c5ff5f4c8 (8c2cfce)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
       "time": "2026-07-06T15:25:33.122Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6823041117e2ea8c1d831f00d01dce26c3e4a312 (6823041)",
@@ -1686,6 +1581,55 @@
       "time": "2026-07-05T23:40:03.074Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e181d5c1e8bd0f4b256aa064c35234b5ba1310db (e181d5c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T22:43:28.606Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f17de00fdbd44a698a6dde11288fe29c65023cde (f17de00)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T22:37:55.605Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d81c21af87c7a65e86de90c2ec2b61fdc839f308 (d81c21a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T22:36:36.788Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7535220b8db1d70c238f7d367ecdf51a5b82d4bc (7535220)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T21:02:22.088Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d9b21eb7eaac88f8032dea02838ff6d1d0332d90 (d9b21eb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T20:53:24.375Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2740e9ec93aacd8d50ea488ad8f32740f10d53f6 (2740e9e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T20:44:47.038Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · edc033d01e4d6e34683a7309528e6e8f94075d63 (edc033d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T19:54:29.808Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 69bce5d5d414504abcb7339d1a623c7156161dd1 (69bce5d)",
       "area": "Repositório",
       "status": "sucesso"
     }
