@@ -2451,3 +2451,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** https://grafo.centralldark.com quebrou com "ERRO HUD: bibliotecas 3D não carregadas". O index.html carregava só 3d-force-graph e three-spritetext via unpkg. A página usa new THREE.Group()/Mesh() direto, mas 3d-force-graph tem o THREE bundlado internamente sem expor como window.THREE — o guard disparava.
 - **Aprendizado:** Sempre carregar three.js UMD ANTES de 3d-force-graph quando a página consumir THREE global. Travar em three@0.160.0 — versões >= r163 removeram build/three.min.js do unpkg (404). Fix: <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script> como primeira lib 3D. Commit 86f742f4.
+
+### 304. unpkg sem versão pode entregar build ESM sem global — travar versão
+- **Categoria:** armadilha
+- **Data:** 2026-07-06
+- **Contexto:** Após adicionar three.js UMD, o HUD ainda dava erro: window.THREE=object mas ForceGraph3D=undefined. Causa: `https://unpkg.com/3d-force-graph` (sem versão) redirecionava pra 1.80.0, que é build ESM/AMD e NÃO registra global no window.
+- **Aprendizado:** Nunca usar unpkg sem versão em produção. Pra vasos onde a página consome global (window.ForceGraph3D), travar em versões UMD clássicas: 3d-force-graph@1.73.4 e three-spritetext@1.8.2 são as últimas com UMD que registra global. Padrão UMD detectável no arquivo: começa com `!function(t,e){"object"==typeof exports...`. Commit 8c2cfce8.
