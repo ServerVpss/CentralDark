@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T06:55:50.227Z",
-  "updatedAtBR": "06/07/2026, 03:55:50 BRT",
+  "updatedAt": "2026-07-06T06:59:02.157Z",
+  "updatedAtBR": "06/07/2026, 03:59:02 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Criou bridge Lovable Edge",
+    "lastCommit": "Conectou bridge Lovable/VPS",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T06:59:02.157Z",
+      "titulo": "Push na main · a0b78e7b7802e95812e23a713e56559c0811d91c",
+      "detalhe": "Conectou bridge Lovable/VPS",
+      "area": "Repositório",
+      "sha": "a0b78e7",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-06T06:55:50.227Z",
       "titulo": "Push na main · 58516b5c20efb41532009892e9420cbfd5e10937",
       "detalhe": "Criou bridge Lovable Edge",
@@ -980,14 +988,6 @@
       "detalhe": "Verificou arquivos dist",
       "area": "Repositório",
       "sha": "9628201",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-05T18:03:22.548Z",
-      "titulo": "Push na main · 006a4db8f93e107151bc9d9851a056d6a377f145",
-      "detalhe": "Corrigiu SSH via Nix e redact",
-      "area": "Repositório",
-      "sha": "006a4db",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T06:59:02.157Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · a0b78e7b7802e95812e23a713e56559c0811d91c (a0b78e7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T06:55:50.227Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 58516b5c20efb41532009892e9420cbfd5e10937 (58516b5)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T19:45:20.203Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d9e638655d19e468456a126abb7cdadf2f1b1fb2 (d9e6386)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T19:44:32.279Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 68259e44b655d05bbda21fe9b21bd9302ce9e1ed (68259e4)",
       "area": "Repositório",
       "status": "sucesso"
     }
