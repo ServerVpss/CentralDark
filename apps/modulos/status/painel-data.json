@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T03:34:40.801Z",
-  "updatedAtBR": "06/07/2026, 00:34:40 BRT",
+  "updatedAt": "2026-07-06T03:35:29.977Z",
+  "updatedAtBR": "06/07/2026, 00:35:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "aprendizado(#299): Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)",
+    "lastCommit": "docs(pendencias): nova #30 Hermes potente + web search + debate + fix Telegram (executar com token cheio)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T03:35:29.977Z",
+      "titulo": "Push na main · bce3c61c1958c98a72d3ea5c31221603d636bd13",
+      "detalhe": "docs(pendencias): nova #30 Hermes potente + web search + debate + fix Telegram (executar com token cheio)",
+      "area": "Repositório",
+      "sha": "bce3c61",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-06T03:34:40.801Z",
       "titulo": "Push na main · 4f2e4abb7ab77ddc133a95db810d9f43e8e740e9",
       "detalhe": "aprendizado(#299): Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)",
@@ -980,14 +988,6 @@
       "detalhe": "Salvou docs do switch-provider",
       "area": "Repositório",
       "sha": "51280ed",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-05T02:17:25.345Z",
-      "titulo": "Push na main · b20d6d4de65bc54f1d653c2614a8f6b4d000c18f",
-      "detalhe": "Criou script para trocar modos",
-      "area": "Repositório",
-      "sha": "b20d6d4",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T03:35:29.977Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bce3c61c1958c98a72d3ea5c31221603d636bd13 (bce3c61)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T03:34:40.801Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4f2e4abb7ab77ddc133a95db810d9f43e8e740e9 (4f2e4ab)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T04:42:13.024Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c8fc0649702965c01ddf93cc88d66b72d01cf13d (c8fc064)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T04:36:52.199Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 781f2af699c42ea7e13a7eb341652447098f692d (781f2af)",
       "area": "Repositório",
       "status": "sucesso"
     }
