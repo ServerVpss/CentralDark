@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T10:07:46.349Z",
-  "updatedAtBR": "06/07/2026, 07:07:46 BRT",
+  "updatedAt": "2026-07-06T10:08:44.933Z",
+  "updatedAtBR": "06/07/2026, 07:08:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Grafo 3D voltou a funcionar (three r149 + 3d-force-graph 1.73 + spritetext 1.8, validado headless). Pivete confirmar visualmente no navegador.",
     "branch": "main",
-    "lastCommit": "fdba09393",
+    "lastCommit": "docs(pendencias): nova #33 Passo 2 — ativar Grupo da Evolução (aguardando ok pra ligar)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T10:08:44.933Z",
+      "titulo": "Push na main · f6bea09673092a7e15b0c8deb1790d394e315704",
+      "detalhe": "docs(pendencias): nova #33 Passo 2 — ativar Grupo da Evolução (aguardando ok pra ligar)",
+      "area": "Repositório",
+      "sha": "f6bea09",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-06T10:01:38.378Z",
       "title": "Grafo Jarvis (grafo.centralldark.com) CONSERTADO — libs 3D locais pinadas, erro 'bibliotecas 3D não carregadas' resolvido conforme aprendizado #292",
@@ -1245,6 +1253,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T10:08:44.933Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f6bea09673092a7e15b0c8deb1790d394e315704 (f6bea09)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T06:10:03.751Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6d75ae65e54ce7bdb60ef53abe688c3ad211a657 (6d75ae6)",
@@ -1584,13 +1599,6 @@
       "time": "2026-07-05T19:25:49.920Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · a737a9bb0b1c647f846adc90f050db0c59d1f171 (a737a9b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T19:09:27.882Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · e2a7c9cb7a283dac70c8ba625bcf208384756384 (e2a7c9c)",
       "area": "Repositório",
       "status": "sucesso"
     }
