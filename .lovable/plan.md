@@ -1,40 +1,51 @@
-# Plano: mover ai-proxy pro HUB e apontar VPS só pro HUB
+# Plano: Sistema híbrido OAuth + Token pra contas Supabase no HUB
 
-## 1. Você cola o `sbp_...` (SUPABASE_ACCESS_TOKEN)
-Assim que colar, salvo no cofre da VPS em `keys/hub/SUPABASE_ACCESS_TOKEN`.
+## O que vai existir
 
-## 2. Configurar secrets no HUB (`lyoigsqluyktoclwdaft`)
-Via `supabase secrets set --project-ref lyoigsqluyktoclwdaft`:
-- `LOVABLE_API_KEY` (lida de `keys/keys.env` da VPS)
-- `WEBUI_LOVABLE_KEY=wlk_qPOrs99RBjX0zW5ZWFw3OBMljHneBua0DBrVerxq3N0`
-- Taxas/config padrão do proxy (se existirem no atual)
+1. **Tabela `hub.supabase_accounts`** no HUB — guarda cada conta conectada (label, e-mail, tipo `oauth`/`token`, access_token cifrado, refresh_token cifrado, expires_at, org_id opcional).
+2. **Fluxo OAuth** — botão "Conectar via OAuth" leva pro Supabase, você loga na conta desejada, autoriza, volta pro app já salvando os tokens.
+3. **Fluxo Token** — o modal atual continua funcionando (cola `sbp_...`), só que agora salva na mesma tabela unificada.
+4. **Painel de contas** — lista todas conectadas, mostra tipo (🔗 OAuth / 🔑 Token), permite renomear, testar conexão, remover.
 
-## 3. Deploy da edge no HUB
-- Copiar `supabase/functions/ai-proxy/index.ts` do repo pra VPS
-- `supabase functions deploy ai-proxy --project-ref lyoigsqluyktoclwdaft --no-verify-jwt`
+## Passos
 
-## 4. Trocar `.env` da VPS pra apontar SÓ pro HUB
-No `/root/CentralDark/.env`:
-- Remover: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` do Lovable atual (kagejpghnwdfymddwxuf)
-- Deixar apenas as do HUB (renomeadas sem prefixo `HUB_`, viram as principais)
-- Backup do `.env` antigo em `.env.backup-lovable-YYYYMMDD`
+### 1. Você cria o OAuth App no Supabase (1 vez só)
+- Vai em `supabase.com/dashboard/org/_/oauth-apps` → New OAuth App
+- Nome: "CentralDark Hub"
+- Redirect URL: `https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/supabase-oauth-callback`
+- Salva o `client_id` e `client_secret` e me passa
 
-## 5. Atualizar consumidores pra nova URL
-- `darkai.sh` → aponta pra `https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/ai-proxy`
-- `AiProxyConfig.tsx` (se existir referência hardcoded) → mesma URL
-- Restart PM2 dos serviços que leem `.env`
+### 2. Salvo os segredos no HUB
+- `SUPABASE_OAUTH_CLIENT_ID`
+- `SUPABASE_OAUTH_CLIENT_SECRET`
 
-## 6. Testar tudo no HUB
-- `curl` sem chave → 401
-- `curl` com `WEBUI_LOVABLE_KEY` → 200 e resposta real
-- Rodar `darkai "oi"` na VPS → resposta do Gemini
+### 3. Migration no HUB — tabela `supabase_accounts`
+Cifrada com `pgp_sym_encrypt` usando `VAULT_MASTER_KEY`. Campos: `id`, `label`, `account_email`, `method` (`oauth`|`token`), `access_token_encrypted`, `refresh_token_encrypted`, `expires_at`, `org_ids[]`, `created_at`, `last_used_at`.
 
-## 7. Desligar o antigo (só depois do 6 passar)
-- Deletar edge `ai-proxy` do Lovable Cloud atual
-- Card no Telegram (@srver1bot → admin) confirmando migração
+### 4. Duas edge functions no HUB
+- **`supabase-oauth-start`** — gera state, monta URL de authorize do Supabase, redireciona
+- **`supabase-oauth-callback`** — recebe `code`, troca por tokens no `https://api.supabase.com/v1/oauth/token`, cifra e salva
+
+### 5. Painel no frontend (Lovable atual)
+- Botão "🔗 Conectar via OAuth" (novo) ao lado do "🔑 Adicionar via Token" (atual)
+- Lista de contas conectadas com badges do tipo
+- Ações: renomear, testar, remover
+- Ao usar qualquer operação que precise de token, o painel escolhe a conta (dropdown)
+
+### 6. Auto-renovação do OAuth
+Edge function `supabase-token-refresh` roda quando `expires_at` tá perto do fim — usa o `refresh_token` pra renovar sem o usuário precisar logar de novo.
+
+## O que muda pro usuário
+
+- Continua podendo colar `sbp_...` normal
+- **OU** clica "Conectar via OAuth", loga na conta Supabase desejada, autoriza, pronto
+- Pode conectar N contas (principal, trabalho, cliente X...) e trocar entre elas
+- Todas ficam salvas no HUB, cifradas, compartilhadas entre qualquer serviço que precisar
 
 ## Detalhes técnicos
-- HUB fica como fonte única de secrets do proxy (respeita a regra "conexões OAuth/API keys só no HUB")
-- Lovable Cloud atual (kagejpghnwdfymddwxuf) continua vivo só pro `@SEGREDOPUXADASBOT` (TelePainel) — não é tocado
-- Nenhuma migration nova neste projeto Lovable (respeita a trava)
-- Rollback: restaurar `.env.backup-*` e reverter URLs no `darkai.sh`
+- Endpoint de troca: `POST https://api.supabase.com/v1/oauth/token` com `grant_type=authorization_code` (docs: supabase.com/docs/guides/integrations/build-a-supabase-integration)
+- Escopos padrão: `all` (leitura+escrita nas orgs autorizadas)
+- Refresh token roda ~24h antes de expirar
+- Cifra: `pgp_sym_encrypt(token, current_setting('app.vault_key'))` — mesma pattern do `vault_secrets` existente
+- Nada de token em plain text nem em log
+- Fallback: se OAuth falhar (Supabase fora do ar, etc), token colado sempre funciona
