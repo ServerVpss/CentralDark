@@ -2439,3 +2439,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** Fix do notifier.py do Guardião foi aplicado 2x e continuou falhando: o cat>heredoc não gravou de verdade (arquivo seguiu com NOTIFY_API_KEY), e pm2 restart --update-env não recarrega código Python novo. Só resolveu com base64 -d + delete/start limpo.
 - **Aprendizado:** Ao editar arquivo .py que roda no PM2: (1) confirmar via grep -c que o conteúdo REALMENTE gravou (heredoc cat> pode falhar silencioso); (2) confirmar QUAL arquivo o import resolve com python -c 'import x; print(x.__file__)' — pode haver duplicatas; (3) apagar __pycache__; (4) usar pm2 delete + start (não restart --update-env) pra forçar recarga do código. Transferência confiável de conteúdo do ambiente do agente pra VPS = base64 -d, não heredoc.
+
+### 302. MCP ChatGPT exige compatibilidade no token e Accept
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-06
+- **Contexto:** Conector ChatGPT retornava erro vermelho após consentimento OAuth no MCP CentralDark.
+- **Aprendizado:** Para MCP ChatGPT, o /token precisa aceitar client_id via Authorization Basic além do corpo; /mcp precisa anunciar resource_metadata correto; tools/list exige Accept: application/json, text/event-stream. Validar E2E com DCR, authorize 302, token 200 e tools/list 200.
