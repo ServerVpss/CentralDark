@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Shield, RefreshCw, Zap, Lock, AlertTriangle } from "lucide-react";
+import { Shield, RefreshCw, Zap, Lock, AlertTriangle, KeyRound, Copy } from "lucide-react";
 import { DashboardLayout } from "@/shared/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
