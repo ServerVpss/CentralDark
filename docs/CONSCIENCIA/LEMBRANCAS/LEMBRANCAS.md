@@ -293,3 +293,13 @@ Conteúdo: Antes de qualquer teoria sobre chave/token Lovable, rodar curl direto
 - **Promovida:** nao
 
 Conteúdo: GRAFO CENTRALDARK · JARVIS = HUD único do Pivete em grafo.centralldark.com. Visão selada: opção B (impressionar) com alma da A (mesma navegação 3D fluida que já existe). Requisitos: (1) um arquivo só, botão interno alterna 2D⇄3D sem trocar página; (2) libs 3D pinadas (three@0.149 + 3d-force-graph@1.73 + spritetext@1.8); (3) painel de controles estilo Obsidian: forças (centrípeta/repulsão/link/distância), tamanho nós, grossura links, busca, toggle labels, CONTROLE DE FONTE/TAMANHO DE TEXTO, zoom/reset; (4) mapa do sistema operacional CentralDark inteiro por SETORES navegáveis — Pivete entra num setor, vê quem trabalha ali, se tá vazio/precisa arrumar, onde tem pendência, estado da pasta do Hermes; (5) VIDA: nós online com glow respirando, pontas/setores pulsando levemente, partículas nas conexões ativas; (6) Hermes vivo dentro via /api/live refletindo atividade real — nó acende/pulsa quando agente recebe comando. Objetivo do Pivete: 'ver a bagunça de fora e resolver todos os problemas pelo HUD'. NÃO destruir a lógica de navegação atual.
+
+### [2026-07-06T03:12] Grafo Vivo v0.4 — 3D real bundleado concluído
+- **Data:** 2026-07-06
+- **Tags:** grafo-vivo, obsidian, 3d, force-graph, v0.4
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-05
+- **Promovida:** nao
+
+Conteúdo: Plugin Obsidian Grafo Vivo agora tem view 3D real com 3d-force-graph bundleado (1.9MB, offline). view3d.ts reescrito: consome /api/graph, nós com glow/pulso (online respira verde, offline pisca vermelho), labels de setor flutuando no centroide, ícone 🤖 em agentes, controles (rotação/reset/foco). Dependências: 3d-force-graph, three, three-spritetext. Build via esbuild sem external. Manifest e docs atualizados. Pendentes: v0.2 (WebSocket) e v0.3 (sync notas vault).
