@@ -66,6 +66,24 @@ export default function AiProxyConfig() {
     }
   };
 
+  const generateStrongKey = () => {
+    const bytes = new Uint8Array(32);
+    crypto.getRandomValues(bytes);
+    const b64 = btoa(String.fromCharCode(...bytes))
+      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const newKey = `wlk_${b64}`;
+    setKey(newKey);
+    localStorage.setItem("ai_proxy_test_key", newKey);
+    navigator.clipboard?.writeText(newKey).catch(() => {});
+    toast.success("Chave gerada e copiada — agora clique em 'Salvar no backend'");
+  };
+
+  const copyKey = () => {
+    if (!key.trim()) return toast.error("Sem chave pra copiar");
+    navigator.clipboard.writeText(key.trim());
+    toast.success("Chave copiada");
+  };
+
   useEffect(() => {
     if (key) fetchConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps
