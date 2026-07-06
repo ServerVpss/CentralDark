@@ -31,8 +31,14 @@ TEXTO="<pre>$(esc "$EMOJI") $(esc "$TITULO")\n\n$(esc "$MSG")\n\n🕐 ${DATA}</p
 
 # Destinos: privado (ADMIN) sempre; canal só se configurado. Cada envio é
 # independente — se um falhar (ex.: bot não é admin do canal), o outro segue.
-DESTINOS="$ADMIN_ID"
-[ -n "$CHANNEL_ID" ] && DESTINOS="$DESTINOS $CHANNEL_ID"
+# NOTIFY_CHAT_ID (env) tem prioridade: manda pro destino escolhido (ex.: grupo).
+# Sem ela, mantém o comportamento antigo: ADMIN privado (+ canal se houver).
+if [ -n "$NOTIFY_CHAT_ID" ]; then
+  DESTINOS="$NOTIFY_CHAT_ID"
+else
+  DESTINOS="$ADMIN_ID"
+  [ -n "$CHANNEL_ID" ] && DESTINOS="$DESTINOS $CHANNEL_ID"
+fi
 
 for DEST in $DESTINOS; do
   curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
