@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T12:07:18.843Z",
-  "updatedAtBR": "06/07/2026, 09:07:18 BRT",
+  "updatedAt": "2026-07-06T13:33:58.794Z",
+  "updatedAtBR": "06/07/2026, 10:33:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Grafo 3D voltou a funcionar (three r149 + 3d-force-graph 1.73 + spritetext 1.8, validado headless). Pivete confirmar visualmente no navegador.",
     "branch": "main",
-    "lastCommit": "Criou extensão de leitura nativa",
+    "lastCommit": "Salvou relatório em txt",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T13:33:58.794Z",
+      "titulo": "Push na main · 9e06d45884755774a7a8f0c0e028d89117500041",
+      "detalhe": "Salvou relatório em txt",
+      "area": "Repositório",
+      "sha": "9e06d45",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-06T12:07:18.843Z",
       "titulo": "Push na main · c3f518f539dd43f9c8be93ca7121c50c410d0740",
@@ -1269,6 +1277,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T13:33:58.794Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 9e06d45884755774a7a8f0c0e028d89117500041 (9e06d45)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T12:07:18.843Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · c3f518f539dd43f9c8be93ca7121c50c410d0740 (c3f518f)",
@@ -1608,13 +1623,6 @@
       "time": "2026-07-05T19:45:20.203Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d9e638655d19e468456a126abb7cdadf2f1b1fb2 (d9e6386)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T19:44:32.279Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 68259e44b655d05bbda21fe9b21bd9302ce9e1ed (68259e4)",
       "area": "Repositório",
       "status": "sucesso"
     }
