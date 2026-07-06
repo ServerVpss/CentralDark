@@ -23,6 +23,19 @@ C_GRAY='\033[0;90m'
 C_BOLD='\033[1m'
 
 # ─── Painel de status (roda 1x no início e sempre que apertar ENTER) ─────
+contar_grep() {
+  local padrao="$1"
+  local arquivo="$2"
+  [ -f "$arquivo" ] || { echo 0; return; }
+  grep -cE "$padrao" "$arquivo" 2>/dev/null || true
+}
+
+contar_linhas() {
+  local arquivo="$1"
+  [ -f "$arquivo" ] || { echo 0; return; }
+  wc -l < "$arquivo" 2>/dev/null || echo 0
+}
+
 painel() {
   clear
   echo -e "${C_BOLD}${C_GREEN}╔══════════════════════════════════════════════════════════╗${C_RESET}"
@@ -39,17 +52,19 @@ painel() {
   fi
 
   # Contadores
-  PAGS=$(grep -c 'Página' "$LOG" 2>/dev/null || echo 0)
-  ERR429=$(grep -c '429' "$LOG" 2>/dev/null || echo 0)
-  FATAIS=$(grep -cE 'FATAL|ERRO' "$LOG" 2>/dev/null || echo 0)
-  DECS=$(wc -l < "$DEC" 2>/dev/null || echo 0)
-  REAS=$(wc -l < "$REA" 2>/dev/null || echo 0)
+  PAGS=$(contar_grep 'Página' "$LOG")
+  ERR429=$(contar_grep '429' "$LOG")
+  ERR401=$(contar_grep '401' "$LOG")
+  FATAIS=$(contar_grep 'FATAL|ERRO' "$LOG")
+  DECS=$(contar_linhas "$DEC")
+  REAS=$(contar_linhas "$REA")
 
   echo ""
   echo -e "  ${C_YELLOW}📄 Páginas processadas:${C_RESET} $PAGS"
   echo -e "  ${C_CYAN}🧠 Decisões capturadas:${C_RESET} $DECS"
   echo -e "  ${C_CYAN}🔗 Cadeias de raciocínio:${C_RESET} $REAS"
   echo -e "  ${C_MAGENTA}⚠️  Rate-limit (429):${C_RESET} $ERR429"
+  echo -e "  ${C_RED}🔐 Auth falhou (401):${C_RESET} $ERR401"
   echo -e "  ${C_RED}💥 Erros/Fatais:${C_RESET} $FATAIS"
 
   # Estado JSON
@@ -80,6 +95,7 @@ tail -F -n 30 "$LOG" 2>/dev/null | while IFS= read -r linha; do
     *"INICIANDO"*)                 echo -e "${C_CYAN}${linha}${C_RESET}" ;;
     *"FINALIZADO"*|*"✅"*)         echo -e "${C_GREEN}${linha}${C_RESET}" ;;
     *"FATAL"*|*"ERRO"*)            echo -e "${C_RED}${linha}${C_RESET}" ;;
+    *"401"*)                       echo -e "${C_RED}${linha}${C_RESET}" ;;
     *"429"*)                       echo -e "${C_MAGENTA}${linha}${C_RESET}" ;;
     *"Página"*)                    echo -e "${C_YELLOW}${linha}${C_RESET}" ;;
     *"Decisão"*|*"Decisões"*)      echo -e "${C_BOLD}${C_CYAN}${linha}${C_RESET}" ;;
