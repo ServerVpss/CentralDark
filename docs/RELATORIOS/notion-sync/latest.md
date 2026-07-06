@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T02:32:43.897Z
+# 🧠 Notion Sync — 2026-07-06T02:51:43.897Z
 
-- **Commit fonte:** `94ada3bc9dd73e532232f6dde881a86940870851`
+- **Commit fonte:** `1f29f3c4bd6e6b7403e43642056c12f1f8424f90`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 334 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 335 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 300 | 1 | 299 | 0 | 0 |
+| aprendizados | 300 | 0 | 300 | 0 | 0 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -356,7 +356,7 @@
 | aprendizados | atualizado | #295 — Grok deve escrever secrets pelo admin_vault_write |
 | aprendizados | atualizado | #296 — Curso Condefonte v1 salvo no cofre e no Hermes |
 | aprendizados | atualizado | #297 — Curso Condefonte mora dentro de LOVABLE_TOKEN/ |
-| aprendizados | criado | #298 — Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes) |
+| aprendizados | atualizado | #298 — Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
