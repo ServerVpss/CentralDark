@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T02:15:46.568Z",
-  "updatedAtBR": "05/07/2026, 23:15:46 BRT",
+  "updatedAt": "2026-07-06T02:24:45.321Z",
+  "updatedAtBR": "05/07/2026, 23:24:45 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "lembranca: Regra de ouro debug de chave Lovable",
+    "lastCommit": "aprendizado(#297): Curso Condefonte mora dentro de LOVABLE_TOKEN/",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T02:24:45.321Z",
+      "titulo": "Push na main · 78d5fe8602a347b144f7ec0761dde5b92829037a",
+      "detalhe": "aprendizado(#297): Curso Condefonte mora dentro de LOVABLE_TOKEN/",
+      "area": "Repositório",
+      "sha": "78d5fe8",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-06T02:15:46.568Z",
       "titulo": "Push na main · dbaac052d52411d3cce69c81e906afd9ba7c31c0",
       "detalhe": "lembranca: Regra de ouro debug de chave Lovable",
@@ -981,14 +989,6 @@
       "area": "Repositório",
       "sha": "beebb24",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-05T00:34:33.219Z",
-      "titulo": "Push na main · 8c2e69f8d3b04f76a337bf209105b14962741b75",
-      "detalhe": "lembranca: Jarvis V2 - melhorias visuais grafo 3D",
-      "area": "Repositório",
-      "sha": "8c2e69f",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T02:24:45.321Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 78d5fe8602a347b144f7ec0761dde5b92829037a (78d5fe8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T02:15:46.568Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · dbaac052d52411d3cce69c81e906afd9ba7c31c0 (dbaac05)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T02:54:13.244Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 48be6a5e75d9de6b19c82278414b13dcc9c77245 (48be6a5)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T02:34:34.823Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · de79d389e29ff2e02172a43db18865f318fd4ceb (de79d38)",
       "area": "Repositório",
       "status": "sucesso"
     }
