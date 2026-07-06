@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T15:34:15.259Z",
-  "updatedAtBR": "06/07/2026, 12:34:15 BRT",
+  "updatedAt": "2026-07-06T15:36:11.304Z",
+  "updatedAtBR": "06/07/2026, 12:36:11 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(graph-panel): travar 3d-force-graph@1.73.4 (UMD global) e three-spritetext@1.8.2 — HUD 3D voltou",
+    "lastCommit": "aprendizado(#304): unpkg sem versão pode entregar build ESM sem global — travar versão",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T15:36:11.304Z",
+      "titulo": "Push na main · cc7cff3bb717a5aa4dc33594b64ef78f92a51a98",
+      "detalhe": "aprendizado(#304): unpkg sem versão pode entregar build ESM sem global — travar versão",
+      "area": "Repositório",
+      "sha": "cc7cff3",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-06T15:34:15.259Z",
       "titulo": "Push na main · 8c2cfce85c88f2f31f14d9164bd19d8c5ff5f4c8",
@@ -1292,6 +1300,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T15:36:11.304Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cc7cff3bb717a5aa4dc33594b64ef78f92a51a98 (cc7cff3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T15:34:15.259Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8c2cfce85c88f2f31f14d9164bd19d8c5ff5f4c8 (8c2cfce)",
@@ -1631,13 +1646,6 @@
       "time": "2026-07-05T20:53:24.375Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2740e9ec93aacd8d50ea488ad8f32740f10d53f6 (2740e9e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T20:44:47.038Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · edc033d01e4d6e34683a7309528e6e8f94075d63 (edc033d)",
       "area": "Repositório",
       "status": "sucesso"
     }
