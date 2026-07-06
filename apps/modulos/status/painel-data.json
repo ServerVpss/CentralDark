@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-06T08:48:35.176Z",
-  "updatedAtBR": "06/07/2026, 05:48:35 BRT",
+  "updatedAt": "2026-07-06T08:48:41.421Z",
+  "updatedAtBR": "06/07/2026, 05:48:41 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -597,6 +597,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T08:48:41.421Z",
+      "title": "WebUI: SQLite tinha model_ids fixos herdados do ap7 (sonnet-4.6[1m], opus-4.8, gpt-4o) apontando pro bridge Lovable — reset pra auto-discovery via /v1/models, prefix \"lovable\". 29 modelos reais agora aparecem.",
+      "area": "WebUI",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-07-06T08:43:27.452Z",
       "title": "WebUI/Bridge: URL http://host.docker.internal:8099/v1 e alias 172.21.0.1 agora persistidos no docker-compose.override.yml — não quebra mais em restart/recriação da rede",
       "area": "Infra",
@@ -823,14 +830,6 @@
       "area": "Repositório",
       "sha": "d28ddc1",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T01:02:33.067Z",
-      "titulo": "Push na main · cd7026866cd761e290a406c7e0ac2548787ba78b",
-      "detalhe": "Melhorou monitor Condefonte v2.1",
-      "area": "Repositório",
-      "sha": "cd70268",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
