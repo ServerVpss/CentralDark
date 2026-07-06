@@ -1,62 +1,75 @@
+## 🎯 Missão: Liberar MCP no Open-WebUI com Conselho + Enxame de Recon
 
-# Consertar conexão do ChatGPT no MCP CentralDark
+Vídeo de referência: `https://www.youtube.com/watch?v=ZEJ5oX0zkP4&t=49s` (tutorial oficial de como plugar MCP na aba **Admin → Settings → Integrations** do Open-WebUI via **mcpo**).
 
-## O que tá acontecendo (em português de gente)
-
-Você tá colando a URL `http://mcp.centralldark.com/admin/mcp` no conector MCP do ChatGPT. Aí ele tenta logar, redireciona errado, e volta pro chat com aquele erro vermelho de "tente mais tarde".
-
-Três problemas empilhados:
-
-1. **URL é HTTP puro** — o ChatGPT (e qualquer conector MCP sério) só aceita conexão por HTTPS. Sem cadeado, ele corta a conversa.
-2. **Path errado** — `/admin/mcp` é o endpoint de teste interno do painel admin (aquele botão "simular ChatGPT"). O endpoint público de verdade é `/mcp` (na raiz do domínio).
-3. **Tela de login OAuth exige senha admin no POST** — o ChatGPT não sabe disso. Ele espera uma telinha de "Autorizar / Recusar" onde clica um botão. Do jeito atual, o `/authorize` só aceita senha via form escondido, então o ChatGPT nunca consegue completar.
-
-## O que vou fazer
-
-### 1. Garantir HTTPS no domínio `mcp.centralldark.com`
-Verificar o Caddy da VPS. Se já tem TLS, ótimo. Se não, ajustar o `Caddyfile` pra emitir cert automático e forçar redirect HTTP→HTTPS. Sem HTTPS, nada disso funciona.
-
-### 2. Corrigir a URL que você cola no ChatGPT
-A URL certa passa a ser:
-```
-https://mcp.centralldark.com/mcp
-```
-(sem `/admin`, com `https`)
-
-Vou confirmar isso batendo no `/.well-known/oauth-authorization-server` e vendo o `issuer` que o próprio MCP anuncia — se ele tiver anunciando `http://`, também conserto ali pra sair `https://`.
-
-### 3. Trocar o `/authorize` por uma tela de consent de verdade
-Hoje o `/authorize` exige senha admin embutida no POST (isso serve pro teste E2E do painel, não pro ChatGPT).
-
-Vou fazer o seguinte fluxo:
-- ChatGPT bate em `/authorize` → mostra uma **página HTML com botão "Autorizar ChatGPT"** (protegida pelo cookie do admin — se você não tiver logado ainda, cai no `/admin/login` normal e volta pra tela de consent depois).
-- Você aperta "Autorizar" uma única vez → o MCP emite o `code` e redireciona de volta pro ChatGPT.
-- ChatGPT troca o `code` por Bearer no `/token` e conecta.
-
-Isso preserva a segurança (só quem tem a senha do admin consegue autorizar novos clientes) e faz o ChatGPT parar de quebrar.
-
-### 4. Teste ao vivo
-Depois do patch:
-- Abro `https://mcp.centralldark.com/.well-known/oauth-authorization-server` e confirmo que todas as URLs saem em HTTPS.
-- Rodo o teste E2E do próprio painel (DCR → authorize → token → tools/list) pra confirmar que não quebrei nada.
-- Te aviso pra colar `https://mcp.centralldark.com/mcp` no ChatGPT e conectar de novo.
-
-## Arquivos que vou tocar
-
-- `apps/modulos/mcp/src/admin.js` — trocar handler do `/authorize` por página de consent HTML + POST de aprovação.
-- `apps/modulos/mcp/src/` (arquivo do OAuth server, provavelmente `oauth.js` ou dentro do `server.js`) — forçar `issuer` e endpoints em HTTPS mesmo quando request chega via proxy Caddy (usar `X-Forwarded-Proto`).
-- **Verificar** (não necessariamente alterar) `infra/caddy/Caddyfile` — só ajusto se `mcp.centralldark.com` não tiver HTTPS ativo.
-
-## O que NÃO vou mexer (áreas protegidas)
-
-- Não mexo em `apps/modulos/HERMES-CORE/`, `elite-gateway/`, `hub/`, `Bolt/` — só no MCP.
-- Não mexo no fluxo de login admin humano (`/admin/login` + cookie) — ele continua igual, só passa a servir também como gate pra tela de consent OAuth.
-- Não crio migration, edge function nem toco em Supabase.
-
-## Rollback
-
-Antes de qualquer edit, faço backup do `admin.js` atual em `admin.js.bak.consent.<timestamp>`. Se algo quebrar, `mv` de volta e `pm2 restart CentralDark-MCP` em 10 segundos.
+Alvo: `https://ui.centralldark.com/admin/settings/integrations`
 
 ---
 
-Manda "PERMITO PIVETE" (ou só "toca") que eu saio do plano e executo.
+## 📋 Fase 1 — Preparo (VPS, só leitura)
+
+Rodar em paralelo (enxame de reconhecimento inicial):
+- **Agente A — Vídeo:** baixar transcrição do YouTube (`yt-dlp --write-auto-sub --skip-download`) e resumir os passos exatos que o autor executa na tela de Integrations.
+- **Agente B — Estado atual:** ler `apps/modulos/WebUI/docker-compose.override.yml`, `mcpo-config/config.json` e `docker logs CentralDark-MCPO --tail 200` — confirma se o sidecar mcpo tá vivo, qual URL responde no `openapi.json`, e o que já tá cadastrado no WebUI (via `curl http://localhost:8000/centraldark/openapi.json`).
+- **Agente C — Doc oficial:** buscar `docs.openwebui.com` sobre "External Tool Servers" e "MCP via mcpo" pra bater com o vídeo.
+
+Saída: um único relatório `docs/CONSCIENCIA/APRENDIZADOS/mcp-webui-liberacao.md` com passo-a-passo consolidado (vídeo + doc + realidade da VPS).
+
+---
+
+## 📋 Fase 2 — Conselho `/refinar` + `/debate` (10 rodadas)
+
+Usar o Arsenal Council (`apps/modulos/HERMES-CORE` + `docs/CONSCIENCIA/ARSENAL/`):
+
+1. **`/refinar`** — pega o relatório da Fase 1 e refina em plano operacional curto (o que clicar, qual URL, qual bearer, qual `TOOL_SERVER_CONNECTIONS` colar).
+2. **`/debate 10`** — 10 rodadas entre modelos (Claude Opus + GPT-5 + Gemini Pro via `darkai_chat`), tema: *"Qual a forma mais segura e correta de expor os 102 tools do MCP CentralDark no Open-WebUI sem vazar bearer e sem quebrar o mcpo atual?"*
+   - Cada rodada: proposta → crítica → contra-proposta → veredito parcial.
+   - Consenso final vira `docs/CONSCIENCIA/ARSENAL/debate-mcp-webui-<timestamp>.md`.
+
+---
+
+## 📋 Fase 3 — Enxame paralelo durante o debate
+
+Enquanto as 10 rodadas rolam, disparar **3 sub-agentes em paralelo** (via `spawn_agent`):
+
+| Agente | Missão | Ferramentas |
+|---|---|---|
+| 🕵️ **Mapeador** | Abrir `https://ui.centralldark.com/admin/settings/integrations` via Playwright headless com sessão admin, capturar screenshot, listar cada campo/aba, e extrair erros do console + network 4xx/5xx. Gera `revisoes/<ts>/webui-integrations-mapa.md` + prints. | Playwright + `vps_read_file_safe` |
+| 🐛 **Caçador de Falhas** | Varrer logs (`docker logs CentralDark-WebUI`, `CentralDark-MCPO`), `pm2 logs`, `journalctl -u caddy`, e o próprio `mcp.centralldark.com/health` + `/tools.json`. Cruzar com erros que o Mapeador achou. Classificar por severidade. | `execute_command` + `vps_read_file_safe` |
+| 📚 **Coletor de Info** | Puxar tudo sobre MCP+WebUI: docs oficiais Open-WebUI, repo `open-webui/mcpo` (issues abertas relacionadas), Anthropic MCP spec, changelog do WebUI 0.10.x. Resume em `docs/CONSCIENCIA/APRENDIZADOS/mcp-webui-conhecimento.md`. | `websearch` + `fetch_website` |
+
+Os 3 agentes rodam **em paralelo** com o debate. Quando o debate fecha, os 3 relatórios já estão prontos pra serem cruzados no veredito.
+
+---
+
+## 📋 Fase 4 — Veredito + Aplicação (aguarda "PERMITO PIVETE")
+
+Consolidar:
+- Passo-a-passo do vídeo (Fase 1)
+- Consenso do debate 10 rodadas (Fase 2)
+- Mapa real + falhas + conhecimento (Fase 3)
+
+→ Gera **um único plano de execução** com: comandos exatos, arquivos a editar, ordem de restart, rollback. **NÃO aplica sem autorização** (`apps/modulos/WebUI/` está travado 🔒).
+
+Notificação final via connector Telegram (Card Hermes v1.3) no privado admin + canal Status.
+
+---
+
+## 🔒 Travas respeitadas
+- `apps/modulos/WebUI/` protegido → só leio; alterações esperam "PERMITO PIVETE"
+- Bearer do mcpo nunca aparece em log, screenshot ou chat
+- Debate/Enxame rodam **na VPS** (regra: Grupo Evolução + Mapeamento = só VPS, nunca Lovable)
+
+---
+
+## ▶️ Ordem de disparo (resumo)
+```
+Fase 1 (3 agentes paralelos: Vídeo, Estado, Doc)
+   ↓
+Fase 2 (/refinar → /debate 10 rodadas)  ─┐
+Fase 3 (3 agentes paralelos: Mapeador, Caçador, Coletor) ─┤ rodam juntos
+   ↓
+Fase 4 (veredito + card Hermes + aguarda PERMITO PIVETE pra aplicar)
+```
+
+Pode aprovar que eu disparo Fase 1 + 2 + 3 já em paralelo?
