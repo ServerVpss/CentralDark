@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T05:37:52.035Z",
-  "updatedAtBR": "06/07/2026, 02:37:52 BRT",
+  "updatedAt": "2026-07-06T05:53:21.971Z",
+  "updatedAtBR": "06/07/2026, 02:53:21 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Criou botão de OAuth no frontend",
+    "lastCommit": "chore(grafo-vivo): add 3d-force-graph, three, spritetext deps",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T05:53:21.971Z",
+      "titulo": "Push na main · 44ee6a24bea26960b9aa19f5eeee85965f893a3b",
+      "detalhe": "chore(grafo-vivo): add 3d-force-graph, three, spritetext deps",
+      "area": "Repositório",
+      "sha": "44ee6a2",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-06T05:37:52.035Z",
       "titulo": "Push na main · 80126b80766849c9378b87b1bc6de2a6ab822f9c",
       "detalhe": "Criou botão de OAuth no frontend",
@@ -980,14 +988,6 @@
       "detalhe": "Corrigiu mapeamento da auditoria",
       "area": "Repositório",
       "sha": "15ff8d9",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-05T13:59:13.528Z",
-      "titulo": "Push na main · d592451fb054bacae86645ea878bd5e506b41331",
-      "detalhe": "Consertou processo MCP no VPS",
-      "area": "Repositório",
-      "sha": "d592451",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T05:53:21.971Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 44ee6a24bea26960b9aa19f5eeee85965f893a3b (44ee6a2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T05:37:52.035Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 80126b80766849c9378b87b1bc6de2a6ab822f9c (80126b8)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T16:22:11.714Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · a40c18ed6f65a1fe5a81dc0d3875e460b88e21a0 (a40c18e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T16:11:08.946Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 701d874fb3393b0095517baed80b61ea0784d28d (701d874)",
       "area": "Repositório",
       "status": "sucesso"
     }
