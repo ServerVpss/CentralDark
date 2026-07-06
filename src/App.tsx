@@ -50,6 +50,7 @@ import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
 import AiProxyConfig from "@/apps/modulos/telepainel/pages/AiProxyConfig";
+import BridgeConfig from "@/apps/modulos/telepainel/pages/BridgeConfig";
 // Hub agora é app independente em apps/modulos/hub/ — não importado aqui
 import HermesPanel from "@/apps/modulos/hermes-panel/pages/HermesPanel";
 
