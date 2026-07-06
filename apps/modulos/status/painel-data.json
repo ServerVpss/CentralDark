@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T05:54:28.115Z",
-  "updatedAtBR": "06/07/2026, 02:54:28 BRT",
+  "updatedAt": "2026-07-06T05:54:57.847Z",
+  "updatedAtBR": "06/07/2026, 02:54:57 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "feat(grafo-vivo): v0.4 real — view3d com 3d-force-graph bundleado, controles, setores, glow",
+    "lastCommit": "chore(grafo-vivo): update esbuild config for 3d-force-graph bundle",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T05:54:57.847Z",
+      "titulo": "Push na main · 7f626dd8b01abd2161add4c4701dd3bc32de7d5e",
+      "detalhe": "chore(grafo-vivo): update esbuild config for 3d-force-graph bundle",
+      "area": "Repositório",
+      "sha": "7f626dd",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-06T05:54:28.115Z",
       "titulo": "Push na main · c134081d412ef123a8326e6494c9e5fd5e3f30f7",
       "detalhe": "feat(grafo-vivo): v0.4 real — view3d com 3d-force-graph bundleado, controles, setores, glow",
@@ -980,14 +988,6 @@
       "detalhe": "Corrigiu import de `winston",
       "area": "Repositório",
       "sha": "c8e56d3",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-05T15:38:56.460Z",
-      "titulo": "Push na main · d1d32dd3514ae7644e63811d363f284b7f158394",
-      "detalhe": "Refatorou o flow MCP de auth",
-      "area": "Repositório",
-      "sha": "d1d32dd",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T05:54:57.847Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7f626dd8b01abd2161add4c4701dd3bc32de7d5e (7f626dd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T05:54:28.115Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c134081d412ef123a8326e6494c9e5fd5e3f30f7 (c134081)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T16:37:40.729Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 3f568742b41fd4754ec2cc2e904aedcfe736b88a (3f56874)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T16:24:28.150Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · da96cee6a2b2e9dbcdc1778f3e9412ef2ed2c454 (da96cee)",
       "area": "Repositório",
       "status": "sucesso"
     }
