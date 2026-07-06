@@ -303,3 +303,13 @@ Conteúdo: GRAFO CENTRALDARK · JARVIS = HUD único do Pivete em grafo.centralld
 - **Promovida:** nao
 
 Conteúdo: Plugin Obsidian Grafo Vivo agora tem view 3D real com 3d-force-graph bundleado (1.9MB, offline). view3d.ts reescrito: consome /api/graph, nós com glow/pulso (online respira verde, offline pisca vermelho), labels de setor flutuando no centroide, ícone 🤖 em agentes, controles (rotação/reset/foco). Dependências: 3d-force-graph, three, three-spritetext. Build via esbuild sem external. Manifest e docs atualizados. Pendentes: v0.2 (WebSocket) e v0.3 (sync notas vault).
+
+### [2026-07-06T06:47] Guardião consertado: notifica no grupo Evolução via NOTIFY_CHAT_ID
+- **Data:** 2026-07-06
+- **Tags:** guardiao, notificacao, telegram, grupo-evolucao, notify_chat_id
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-05
+- **Promovida:** nao
+
+Conteúdo: O Guardião da Consciência (PM2 CentralDark-GuardiaoConsciencia) estava desligado e com notifier quebrado. Consertado em 06/07/2026: notifier.py agora chama scripts/notify-claude/notify-telegram.sh (Bot API direta, formato <pre> monoespaçado) em vez da edge function notify-telegram do Supabase (que exigia NOTIFY_API_KEY nunca configurada). O script ganhou suporte à env NOTIFY_CHAT_ID pra escolher destino. Guardião sobe com NOTIFY_CHAT_ID=-5365750004 e notifica no grupo 'Central Dark - Grupo Da Evolução' (chat_id -5365750004, sem prefixo -100). Modo 'propor' (nunca move arquivo). Vigia docs/CONSCIENCIA + PM2 + Docker + Git. Commit dbf19e904 no remoto. Padrão NOTIFY_CHAT_ID deve ser reusado pra Hermes e grupo-evolucao também.
