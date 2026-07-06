@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T05:00:15.292Z",
-  "updatedAtBR": "06/07/2026, 02:00:15 BRT",
+  "updatedAt": "2026-07-06T05:04:12.045Z",
+  "updatedAtBR": "06/07/2026, 02:04:12 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Corrigiu modelos e gateway",
+    "lastCommit": "Adicionou fluxo de WebUI Key",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T05:04:12.045Z",
+      "titulo": "Push na main · beee0a036df4b054c5e106da47507b2e963bfe7d",
+      "detalhe": "Adicionou fluxo de WebUI Key",
+      "area": "Repositório",
+      "sha": "beee0a0",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-06T05:00:15.292Z",
       "titulo": "Push na main · b6b684d6a66ea11854521e4de7bd7efef92ea3a6",
       "detalhe": "Corrigiu modelos e gateway",
@@ -980,14 +988,6 @@
       "detalhe": "aprendizado(#292): CDN sem versão pinada quebrou o HUD 3D do GrafoVivo",
       "area": "Repositório",
       "sha": "781f2af",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-05T03:39:56.743Z",
-      "titulo": "Push na main · a8f493c9306d0ef4ee6821e93631268dcc27ad94",
-      "detalhe": "lembranca: Vault Grafo = prioridade real do Pivete (visão \"cérebro Homem de Ferro\")",
-      "area": "Repositório",
-      "sha": "a8f493c",
       "actor": "segredounlock"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T05:04:12.045Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · beee0a036df4b054c5e106da47507b2e963bfe7d (beee0a0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T05:00:15.292Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · b6b684d6a66ea11854521e4de7bd7efef92ea3a6 (b6b684d)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T15:45:49.174Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · c8e56d3458a2c7727402101e88ef54eaee9c802e (c8e56d3)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T15:38:56.460Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · d1d32dd3514ae7644e63811d363f284b7f158394 (d1d32dd)",
       "area": "Repositório",
       "status": "sucesso"
     }
