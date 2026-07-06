@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
   const path = url.pathname.replace(/^\/functions\/v1/, "").replace(/^\/openai-lovable-bridge/, "");
 
   if (!LOVABLE_KEY) return json({ error: "LOVABLE_API_KEY ausente no ambiente" }, 500);
-  if (!BRIDGE_SECRET) return json({ error: "WEBUI_BRIDGE_SECRET ausente no ambiente" }, 500);
+  if (!BRIDGE_SECRET) return json({ error: "WEBUI_LOVABLE_KEY ausente no ambiente" }, 500);
   if (!autorizado(req)) return json({ error: "Chave inválida" }, 401);
 
   // GET /v1/models  — Open WebUI usa isso pra popular o dropdown
