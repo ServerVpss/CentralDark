@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0 (2026-07-06)
+- Grafo agora consome o feed VIVO (status.centralldark.com/graph-data.json) — 68 nós com status real do PM2, nós pulsam por online/offline
+- Controles novos na toolbar: A+ / A− (tamanho da fonte dos rótulos) e 🏷️ labels (mostrar/ocultar nomes sempre visíveis)
+- Corrige rótulos que só apareciam ao passar o mouse
+
+
 ## v0.4.0 (2026-07-06)
 - View 3D real com 3d-force-graph bundleado (sem CDN, funciona offline)
 - Nós com glow/pulso: online respira verde, offline pisca vermelho

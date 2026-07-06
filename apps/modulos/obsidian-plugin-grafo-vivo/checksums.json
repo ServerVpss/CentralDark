@@ -1,9 +1,9 @@
 {
-  "versao": "0.4.0",
-  "geradoEm": "2026-07-04T22:00:06.435Z",
+  "versao": "0.5.0",
+  "geradoEm": "2026-07-06T10:17:14.001Z",
   "arquivos": {
-    "main.js": "d0249ac5aec0d25887b4dc5ce59080e2ea87ee0ebcf50597f4f953c23c060196",
-    "manifest.json": "7f959cd10c62b6f4471edc96c15def10f56bc6e7e1ea60a455dc398657d56db1",
+    "main.js": "2c67e144865bf4ae3ab21926f965f9259b08b9a8503b2189ec553d69272562da",
+    "manifest.json": "0db30d1fcbe6bc931106c2187a36e7f415befa785ce68df28fcf915f057734bb",
     "styles.css": "d797d77552f5788846bbb3228b0b9145b21bb6d4a6832f1592b32f93aaa5f043"
   }
 }

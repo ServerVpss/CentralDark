@@ -1,6 +1,15 @@
 {
-  "atualizadoEm": "2026-07-06T18:00:00.000Z",
+  "atualizadoEm": "2026-07-06T10:17:14.015Z",
   "versoes": [
+    {
+      "versao": "0.5.0",
+      "data": "2026-07-06",
+      "mudancas": [
+        "Grafo agora consome o feed VIVO (status.centralldark.com/graph-data.json) — 68 nós com status real do PM2, nós pulsam por online/offline",
+        "Controles novos na toolbar: A+ / A− (tamanho da fonte dos rótulos) e 🏷️ labels (mostrar/ocultar nomes sempre visíveis)",
+        "Corrige rótulos que só apareciam ao passar o mouse"
+      ]
+    },
     {
       "versao": "0.4.0",
       "data": "2026-07-06",

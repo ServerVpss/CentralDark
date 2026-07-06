@@ -13,7 +13,7 @@ export interface GrafoVivoSettings {
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
-  urlGrafo: "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/graph-data",
+  urlGrafo: "https://status.centralldark.com/graph-data.json",
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
   autoUpdateAtivo: true,

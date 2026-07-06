@@ -82,6 +82,8 @@ export class Grafo3DView extends ItemView {
   private statusEl: HTMLSpanElement | null = null;
   private statsEl: HTMLSpanElement | null = null;
   private rotating = false;
+  private labelScale = 1;      // multiplicador de tamanho de fonte dos rótulos
+  private labelsAlwaysOn = true; // rótulos sempre visíveis
   private selected: any = null;
   private pollTimer: number | null = null;
   private sectorSprites: Record<string, SpriteText> = {};
@@ -116,6 +118,16 @@ export class Grafo3DView extends ItemView {
     const btnReload = toolbar.createEl("button", { text: "🔄", cls: "cd-grafo-btn" });
     btnReload.setAttr("aria-label", "Recarregar agora");
     btnReload.addEventListener("click", () => this.carregar());
+
+    // Controle de tamanho da fonte dos rótulos
+    const btnFontMenos = toolbar.createEl("button", { text: "A−", cls: "cd-grafo-btn" });
+    btnFontMenos.setAttr("aria-label", "Diminuir fonte");
+    btnFontMenos.addEventListener("click", () => { this.labelScale = Math.max(0.5, this.labelScale - 0.2); this.aplicarEscalaLabels(); });
+    const btnFontMais = toolbar.createEl("button", { text: "A+", cls: "cd-grafo-btn" });
+    btnFontMais.setAttr("aria-label", "Aumentar fonte");
+    btnFontMais.addEventListener("click", () => { this.labelScale = Math.min(3, this.labelScale + 0.2); this.aplicarEscalaLabels(); });
+    const btnLabels = toolbar.createEl("button", { text: "🏷️ labels", cls: "cd-grafo-btn" });
+    btnLabels.addEventListener("click", () => { this.labelsAlwaysOn = !this.labelsAlwaysOn; this.aplicarEscalaLabels(); btnLabels.setText(this.labelsAlwaysOn ? "🏷️ ON" : "🏷️ off"); });
 
     this.statusEl = toolbar.createEl("span", { cls: "cd-grafo-status", text: "…" });
     this.statsEl = toolbar.createEl("span", { cls: "cd-grafo-status", text: "" });
@@ -310,11 +322,14 @@ export class Grafo3DView extends ItemView {
 
     // Label
     const txt = new SpriteText(String(n.label || n.id || ""));
-    txt.textHeight = isAgent(n) ? 3.4 : 2.5;
+    const baseH = isAgent(n) ? 3.4 : 2.5;
+    n.__labelBase = baseH;
+    txt.textHeight = baseH * this.labelScale;
     txt.color = "#bfefff";
     txt.position.y = r * 2.15;
     txt.material.depthWrite = false;
     group.add(txt);
+    n.__label = txt;
 
     // Ícone de agente
     if (isAgent(n)) {
@@ -406,6 +421,18 @@ export class Grafo3DView extends ItemView {
         core.material.emissive.set("#586a78");
         core.material.emissiveIntensity = 0.12;
         if (obj) obj.scale.set(1, 1, 1);
+      }
+    });
+  }
+
+
+  private aplicarEscalaLabels(): void {
+    this.graphData.nodes.forEach((n: any) => {
+      const t = n.__label;
+      if (t) {
+        const base = n.__labelBase || 2.5;
+        t.textHeight = base * this.labelScale;
+        t.visible = this.labelsAlwaysOn;
       }
     });
   }
