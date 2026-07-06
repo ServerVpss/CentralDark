@@ -116,7 +116,7 @@ export const mcpAdminTools = [
     },
     {
         name: "mcp_admin_call",
-        description: "Dispatcher fixo do MCP. Chama uma tool interna pelo nome, sem precisar reconectar quando o backend ganhar novas ações. Tools destrutivas exigem confirmAdmin='CONFIRMO ADMIN'.",
+        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmAdmin='CONFIRMO ADMIN'. Para escrever em /root/CentralDark/secrets/, use tool='admin_vault_write' com input={name, content, overwrite:true}; não use vps_write_file_safe.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
         inputSchema: z.object({
             tool: z.string().min(1).describe("Nome exato da tool interna"),
@@ -141,7 +141,7 @@ export const mcpAdminTools = [
                     tool: input.tool,
                     destructive: true,
                     requiredConfirmAdmin: ADMIN_CONFIRM,
-                    observacao: "Nada foi executado. Além desta confirmação genérica, a própria tool ainda pode exigir confirmação específica, como CONFIRMO DELETAR ou CONFIRMO LIMPAR.",
+                    observacao: "Nada foi executado. Para secrets, use mcp_admin_call com tool='admin_vault_write', confirmAdmin='CONFIRMO ADMIN' e input={name, content, overwrite:true}. Outras tools podem exigir confirmação específica, como CONFIRMO DELETAR ou CONFIRMO LIMPAR.",
                 });
             }
             return tool.handler(input.input ?? {}, ctx);

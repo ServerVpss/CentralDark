@@ -42,10 +42,10 @@ export const adminVaultRwTools = [
   },
   {
     name: "admin_vault_write",
-    description: "ADMIN DESTRUTIVO: cria ou atualiza um segredo em /root/CentralDark/secrets/. Faz backup automatico se ja existir. Exige confirmAdmin=CONFIRMO ADMIN.",
+    description: "EXCEÇÃO ADMIN EXPLÍCITA PARA GROK/NAVEGADOR: cria ou atualiza arquivo em /root/CentralDark/secrets/ pelo nome do arquivo. Use via mcp_admin_call com confirmAdmin='CONFIRMO ADMIN' e input={name, content, overwrite:true}. Faz backup automatico se ja existir. Não aceita caminho completo nem subpastas.",
     annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Admin vault write" },
     inputSchema: z.object({
-      name: z.string().min(1).describe("Nome do arquivo no vault"),
+      name: z.string().min(1).describe("Nome simples do arquivo dentro de /root/CentralDark/secrets/; não use caminho completo nem subpasta"),
       content: z.string().describe("Conteudo completo do segredo"),
       overwrite: z.boolean().optional().describe("Se false e o arquivo ja existe, falha. Default true."),
     }),

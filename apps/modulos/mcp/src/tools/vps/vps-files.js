@@ -7,6 +7,7 @@ const CONFIRM_WRITE = "CONFIRMO ESCREVER";
 const REPORT_BASE = path.join(config.vps.repoPath, "revisoes");
 const DENY_PATH = /(^|\/)(\.env|secrets?|credenciais|tokens?|sessions?|sessao|sessão|\.ssh)(\/|$)|\.(pem|key|p12|pfx|sqlite|db)$/i;
 const SKIP_DIRS = new Set([".git", "node_modules", ".next", "dist", "build"]);
+const VAULT_ADMIN_HINT = "Path bloqueado por segurança no writer comum. Exceção admin liberada: para escrever em /root/CentralDark/secrets/, use mcp_admin_call com tool='admin_vault_write', confirmAdmin='CONFIRMO ADMIN' e input={ name:'arquivo.ext', content:'conteudo', overwrite:true }. Não use vps_write_file_safe para secrets.";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
@@ -27,7 +28,7 @@ function safeRel(p) {
     if (!clean || clean.includes("..") || clean.startsWith("/"))
         throw new Error("Path inválido.");
     if (DENY_PATH.test(clean))
-        throw new Error("Path bloqueado por segurança.");
+        throw new Error(VAULT_ADMIN_HINT);
     return clean;
 }
 function resolveSafe(rootKey, relPath) {
@@ -41,7 +42,7 @@ function resolveSafe(rootKey, relPath) {
     if (!inside(root, abs))
         throw new Error("Path fora da raiz permitida.");
     if (DENY_PATH.test(abs.replace(/\\/g, "/")))
-        throw new Error("Path bloqueado por segurança.");
+        throw new Error(VAULT_ADMIN_HINT);
     return { rootName, root, rel, abs };
 }
 async function statSafe(abs) {
@@ -95,7 +96,7 @@ export const vpsFileTools = [
     },
     {
         name: "vps_write_file_safe",
-        description: "Cria ou atualiza arquivo de texto com backup e dry-run por padrão. Escrita real exige CONFIRMO ESCREVER. Bloqueia paths sensíveis.",
+        description: "Cria ou atualiza arquivo comum com backup e dry-run. NÃO use para /root/CentralDark/secrets/. Para secrets existe exceção admin explícita: chame mcp_admin_call com tool='admin_vault_write', confirmAdmin='CONFIRMO ADMIN' e input={name, content, overwrite:true}.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Escrever arquivo seguro" },
         inputSchema: z.object({
             path: z.string().min(1),
