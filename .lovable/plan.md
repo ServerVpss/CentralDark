@@ -1,79 +1,62 @@
-# Extensão CentralDark Voice — botão "Ler em voz alta" do Claude toca com voz premium
 
-## Objetivo em 1 linha
+# Consertar conexão do ChatGPT no MCP CentralDark
 
-Fazer o botão nativo **"Ler em voz alta"** (`data-testid="action-bar-read-aloud"`) do Claude.ai / Claude Desktop tocar com a **voz premium do bridge CentralDark** em português brasileiro nativo, em vez da voz robótica do Windows.
+## O que tá acontecendo (em português de gente)
 
-## Por que precisa de extensão (e não é config do bridge)
+Você tá colando a URL `http://mcp.centralldark.com/admin/mcp` no conector MCP do ChatGPT. Aí ele tenta logar, redireciona errado, e volta pro chat com aquele erro vermelho de "tente mais tarde".
 
-Aquele botão é frontend da Anthropic e usa `window.speechSynthesis` do navegador — não passa pela nossa bridge. A única forma de trocar a voz sem depender da Microsoft é **injetar código no navegador** que intercepta o clique e chama nosso `/v1/audio/speech`.
+Três problemas empilhados:
 
-## O que entregar
+1. **URL é HTTP puro** — o ChatGPT (e qualquer conector MCP sério) só aceita conexão por HTTPS. Sem cadeado, ele corta a conversa.
+2. **Path errado** — `/admin/mcp` é o endpoint de teste interno do painel admin (aquele botão "simular ChatGPT"). O endpoint público de verdade é `/mcp` (na raiz do domínio).
+3. **Tela de login OAuth exige senha admin no POST** — o ChatGPT não sabe disso. Ele espera uma telinha de "Autorizar / Recusar" onde clica um botão. Do jeito atual, o `/authorize` só aceita senha via form escondido, então o ChatGPT nunca consegue completar.
 
-**Uma extensão MV3** (Chrome/Edge/Brave) chamada `centraldark-voice`, que:
+## O que vou fazer
 
-1. Roda como `content_script` em `https://claude.ai/*` e `https://claude.com/*`.
-2. Escuta clique em `[data-testid="action-bar-read-aloud"]` via delegação no `document`.
-3. Cancela o `speechSynthesis.speak` padrão (chama `speechSynthesis.cancel()`).
-4. Pega o texto da mensagem irmã do Claude (busca ancestor `[data-testid="user-message"]`, `.font-claude-message` ou `article` mais próximo).
-5. `POST https://bridge.centralldark.com/v1/audio/speech` com:
-   - Header `x-api-key: <chave>` (guardada no `chrome.storage.local`, configurada no popup).
-   - Body `{ model, voice, input, response_format:"mp3", instructions }`.
-6. Toca o MP3 retornado com um `<audio>` gerenciado (pause + reset + `URL.revokeObjectURL` no fim — padrão que o Lovable já documenta).
-7. Botão do próprio Claude fica com feedback visual (adiciona classe custom "tocando com CentralDark").
+### 1. Garantir HTTPS no domínio `mcp.centralldark.com`
+Verificar o Caddy da VPS. Se já tem TLS, ótimo. Se não, ajustar o `Caddyfile` pra emitir cert automático e forçar redirect HTTP→HTTPS. Sem HTTPS, nada disso funciona.
 
-**Cinto de segurança:** também monkey-patch de `window.speechSynthesis.speak` — se por algum motivo o clique escapar, ainda capturamos o texto do `SpeechSynthesisUtterance` e desviamos pro bridge.
-
-**Popup de configuração** (`popup.html`):
-- Campo pra colar a `x-api-key` (a `cd-webui-...`).
-- Dropdown com as 9 vozes (alloy/nova/onyx/shimmer/echo/fable/ash/coral/sage) + botão "🔊 testar".
-- Toggle liga/desliga o hijack.
-- Campo `instructions` (padrão: "Fale em português brasileiro nativo, tom natural e conversacional").
-
-## Arquivos (tudo dentro de `apps/modulos/centraldark-voice/`)
-
+### 2. Corrigir a URL que você cola no ChatGPT
+A URL certa passa a ser:
 ```
-apps/modulos/centraldark-voice/
-├─ manifest.json          (MV3, permissions: storage; host: claude.ai/*, claude.com/*, bridge.centralldark.com/*)
-├─ content.js             (hook do botão + monkey-patch speechSynthesis + player)
-├─ background.js          (service worker mínimo, só pra ativar o popup)
-├─ popup.html + popup.js  (configuração: chave, voz, teste)
-├─ icons/                 (16/48/128 em esmeralda #10b981, fundo #052e2b)
-└─ README.md              (como instalar em Chrome/Edge: chrome://extensions → modo desenvolvedor → carregar sem compactar)
+https://mcp.centralldark.com/mcp
 ```
+(sem `/admin`, com `https`)
 
-## Compatibilidade com Claude Desktop (Electron)
+Vou confirmar isso batendo no `/.well-known/oauth-authorization-server` e vendo o `issuer` que o próprio MCP anuncia — se ele tiver anunciando `http://`, também conserto ali pra sair `https://`.
 
-Claude Desktop é Chromium sob o capô. A mesma extensão pode ser **empacotada como .crx** e carregada via override do Electron (`--load-extension=<pasta>`), ou o Pivete usa o **Claude no navegador** (Chrome/Edge) que já suporta MV3 nativamente. Documentar os dois caminhos no README.
+### 3. Trocar o `/authorize` por uma tela de consent de verdade
+Hoje o `/authorize` exige senha admin embutida no POST (isso serve pro teste E2E do painel, não pro ChatGPT).
 
-## Deploy (fluxo Lovable → GitHub → VPS)
+Vou fazer o seguinte fluxo:
+- ChatGPT bate em `/authorize` → mostra uma **página HTML com botão "Autorizar ChatGPT"** (protegida pelo cookie do admin — se você não tiver logado ainda, cai no `/admin/login` normal e volta pra tela de consent depois).
+- Você aperta "Autorizar" uma única vez → o MCP emite o `code` e redireciona de volta pro ChatGPT.
+- ChatGPT troca o `code` por Bearer no `/token` e conecta.
 
-- Repo: nova pasta `apps/modulos/centraldark-voice/` (nova, não protegida).
-- Commit: `feat(voice): extensão MV3 que hijacka o botão Ler em voz alta do Claude pra usar bridge CentralDark`.
-- **Não** precisa PM2, **não** precisa Caddy, **não** precisa novo secret — a extensão só consome o bridge existente.
-- Pivete instala local: baixa a pasta, `chrome://extensions` → "Modo desenvolvedor" ON → "Carregar sem compactar" → aponta pra pasta.
+Isso preserva a segurança (só quem tem a senha do admin consegue autorizar novos clientes) e faz o ChatGPT parar de quebrar.
 
-## Validação (o AI roda antes de entregar)
+### 4. Teste ao vivo
+Depois do patch:
+- Abro `https://mcp.centralldark.com/.well-known/oauth-authorization-server` e confirmo que todas as URLs saem em HTTPS.
+- Rodo o teste E2E do próprio painel (DCR → authorize → token → tools/list) pra confirmar que não quebrei nada.
+- Te aviso pra colar `https://mcp.centralldark.com/mcp` no ChatGPT e conectar de novo.
 
-1. `manifest.json` valida no `chrome://extensions` sem erro.
-2. Abrir `claude.ai`, clicar no botão nativo → console mostra `[CentralDark Voice] interceptado` + toca MP3 do bridge.
-3. Desligar toggle no popup → botão volta a usar voz do Windows.
-4. Testar as 9 vozes pelo popup → todas tocam.
-5. Simular mudança de seletor: forçar clique em outro elemento → monkey-patch de `speechSynthesis` ainda captura.
+## Arquivos que vou tocar
 
-## Fora de escopo
+- `apps/modulos/mcp/src/admin.js` — trocar handler do `/authorize` por página de consent HTML + POST de aprovação.
+- `apps/modulos/mcp/src/` (arquivo do OAuth server, provavelmente `oauth.js` ou dentro do `server.js`) — forçar `issuer` e endpoints em HTTPS mesmo quando request chega via proxy Caddy (usar `X-Forwarded-Proto`).
+- **Verificar** (não necessariamente alterar) `infra/caddy/Caddyfile` — só ajusto se `mcp.centralldark.com` não tiver HTTPS ativo.
 
-- Não mexer no bridge (já suporta tudo que a extensão precisa).
-- Não mexer em áreas 🔒.
-- Não publicar na Chrome Web Store agora (uso privado do Pivete).
-- Não tentar hijack no Claude Code CLI (aquele nem tem botão de voz — usa o `/play/` que já entregamos).
+## O que NÃO vou mexer (áreas protegidas)
 
-## Plano B (se o Pivete não quiser instalar extensão)
+- Não mexo em `apps/modulos/HERMES-CORE/`, `elite-gateway/`, `hub/`, `Bolt/` — só no MCP.
+- Não mexo no fluxo de login admin humano (`/admin/login` + cookie) — ele continua igual, só passa a servir também como gate pra tela de consent OAuth.
+- Não crio migration, edge function nem toco em Supabase.
 
-Instalar voz **Microsoft Maria/Francisca (pt-BR)** no Windows:
-`Configurações → Hora e Idioma → Idioma e Região → Adicionar idioma → Português (Brasil) → Voz`.
-O botão nativo do Claude passa a falar em PT-BR robótico decente, sem código.
+## Rollback
+
+Antes de qualquer edit, faço backup do `admin.js` atual em `admin.js.bak.consent.<timestamp>`. Se algo quebrar, `mv` de volta e `pm2 restart CentralDark-MCP` em 10 segundos.
 
 ---
 
-Confirma **"PERMITO PIVETE"** que eu monto a extensão completa no repo e te mando o passo-a-passo de instalação em 3 cliques.
+Manda "PERMITO PIVETE" (ou só "toca") que eu saio do plano e executo.
