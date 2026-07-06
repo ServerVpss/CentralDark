@@ -4,12 +4,13 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║  🍴 CENTRALDARK GRAFO VIVO — PLANO EXECUTÁVEL POR QUALQUER IA ║
 ╠══════════════════════════════════════════════════════════════╣
-║  Estado real  : manifest diz v0.3.0, mas features v0.2+       ║
-║                 NÃO estão implementadas (nº subiu, código não)║
+║  Estado real  : manifest diz v0.4.0, features reais:          ║
+║                 v0.1 (2D) + v0.4 (3D bundleado) ✅            ║
+║                 v0.2 (WS) e v0.3 (sync notas) ❌ pendentes    ║
 ║  Alvo         : v0.2 (WebSocket) → v0.3 (sync notas) →        ║
-║                 v0.4 (3D) → v0.5 (ícones)                     ║
+║                 v0.5 (ícones)                                  ║
 ║  Regime       : enxame + Hermes construtor + Council          ║
-║  Fonte dados  : graph-panel PM2 53 (/api/graph, 318 nós)      ║
+║  Fonte dados  : graph-panel PM2 (/api/graph, ~68 nós)         ║
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
@@ -24,7 +25,7 @@
 3. `docs/CONSCIENCIA/ARSENAL/README.md` — Council: `/router` `/refinar` `/debate` + Hermes.
 4. `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/` — loop decisor → executor → validador.
 5. `apps/modulos/obsidian-plugin-grafo-vivo/README.md` — roadmap oficial v0.1→v0.5.
-6. `apps/modulos/graph-panel/` — fonte real do grafo (`/api/graph`, 318 nós / 317 edges).
+6. `apps/modulos/graph-panel/` — fonte real do grafo (`/api/graph`, ~68 nós).
 7. `apps/modulos/status/` — 🔒 protegido, **só leitura**.
 
 ## 🧰 Armas liberadas
@@ -35,27 +36,27 @@
 | Arsenal Council (`/router` `/refinar` `/debate`) | decisão técnica pesada / arquitetura |
 | Hermes autônomo (`missoes/pendente/*.md`) | loops de build + validate sem babá |
 | MCP tools (`vps_*`, `github_*`, `elite_gateway_*`) | deploy e commits |
-| graph-panel PM2 53 | fonte de dados real pra testar |
+| graph-panel PM2 | fonte de dados real pra testar |
 | WebSocket do MCP | base da Fase v0.2 (partículas em tempo real) |
-| `apps/modulos/graph-panel/public/vault.html` | **base 3D pronta** (3d-force-graph) → reaproveitar na v0.4 |
+| `apps/modulos/graph-panel/public/vault.html` | base 3D de referência (já portada pra v0.4) |
 
 ---
 
 ## 🔎 FASE 0 — Auditoria do gap (fazer PRIMEIRO, não pular)
 
-O `manifest.json` está em `0.3.0` mas o `README` lista v0.2/v0.3 como pendentes. **Antes de codar, descobrir o que realmente existe:**
+O `manifest.json` está em `0.4.0` mas o `README` lista v0.2/v0.3 como pendentes. **Antes de codar, descobrir o que realmente existe:**
 
-- [ ] Ler `src/main.ts`, `src/view.ts`, `src/settings.ts`, `src/autoUpdater.ts` e mapear o que a v0.1 realmente faz.
-- [ ] Confirmar: tem WebSocket? tem sync de notas? tem 3D? (provável: só fetch 30s + partículas em arestas `ativa`).
-- [ ] Alinhar `manifest.version` com a realidade (se features não existem, o número está mentindo).
-- [ ] `npm install && npm run build` — garantir que o build passa limpo antes de mexer.
+- [x] Ler `src/main.ts`, `src/view.ts`, `src/settings.ts`, `src/autoUpdater.ts` e mapear o que a v0.1 realmente faz.
+- [x] Confirmar: tem WebSocket? tem sync de notas? tem 3D? (provável: só fetch 30s + partículas em arestas `ativa`).
+- [x] Alinhar `manifest.version` com a realidade (se features não existem, o número está mentindo).
+- [x] `npm install && npm run build` — garantir que o build passa limpo antes de mexer.
 - **Critério:** um parágrafo no fim deste arquivo ("## Estado auditado") dizendo o que existe de verdade por versão.
 
 ## 🌐 FASE v0.2 — WebSocket MCP → partícula em tempo real
 
 - **Objetivo:** cada `tool call` do MCP vira uma partícula viajando na aresta correspondente, < 1s de latência.
 - **Arquivos:** `src/view.ts` (render de partículas), novo `src/mcpSocket.ts` (conexão WS), `src/settings.ts` (URL do WS).
-- **Fonte:** WebSocket do MCP (`CentralDark-MCP` PM2 33). Confirmar o endpoint WS e o formato do evento de tool call.
+- **Fonte:** WebSocket do MCP (`CentralDark-MCP` PM2). Confirmar o endpoint WS e o formato do evento de tool call.
 - **Critério:** rodar uma tool no MCP → em < 1s uma partícula acende na aresta certa do plugin. Fallback: se WS cair, volta pro fetch 30s (não quebrar a v0.1).
 
 ## 🗂️ FASE v0.3 — Sincronizar nós como notas do vault
@@ -65,12 +66,13 @@ O `manifest.json` está em `0.3.0` mas o `README` lista v0.2/v0.3 como pendentes
 - **Cuidado:** idempotente (não recriar/duplicar nota existente); respeitar frontmatter; não sobrescrever nota com conteúdo.
 - **Critério:** abrir o Graph nativo do Obsidian e ver os nós do CentralDark como notas reais, linkadas.
 
-## 🌌 FASE v0.4 — Modo 3D (reaproveitar o VAULT)
+## 🌌 FASE v0.4 — Modo 3D (reaproveitar o VAULT) ✅ CONCLUÍDO
 
 - **Objetivo:** toggle "2D / 3D" na view; 3D usa `3d-force-graph` com bloom/partículas, tema Esmeralda.
 - **Base pronta:** `apps/modulos/graph-panel/public/vault.html` já tem o render 3D funcionando (paleta emerald, partículas, HUD). **Portar a lógica** pra dentro da view do plugin (`src/view3d.ts`).
-- **Cuidado:** Obsidian é Electron — `3d-force-graph` via bundle (esbuild) ou CDN? Preferir bundle local (plugin `isDesktopOnly:false`, mas 3D só faz sentido desktop — checar `Platform.isMobile`).
-- **Critério:** botão 3D na view → esfera girando com os 318 nós, 60fps no desktop.
+- **Cuidado:** Obsidian é Electron — `3d-force-graph` via bundle (esbuild) — `isDesktopOnly:false`, mas 3D só faz sentido desktop — checar `Platform.isMobile`.
+- **Critério:** botão 3D na view → esfera girando com os ~68 nós, 60fps no desktop.
+- **Status:** ✅ CONCLUÍDO em 2026-07-06. `view3d.ts` reescrito com `3d-force-graph` bundleado, controles (rotação/reset), setores com labels flutuantes, glow/pulso online/offline, ícone 🤖 em agentes, poll a cada 5s do `/api/graph`.
 
 ## 🎨 FASE v0.5 — Ícones custom por categoria (SVG inline)
 
@@ -100,5 +102,14 @@ O `manifest.json` está em `0.3.0` mas o `README` lista v0.2/v0.3 como pendentes
 
 ---
 
-## Estado auditado
-_(a primeira IA que rodar a Fase 0 preenche aqui o que cada versão realmente entrega hoje)_
+## Estado auditado (preenchido em 2026-07-06)
+
+**v0.1** ✅ Existe de verdade. `view.ts` com force-graph 2D, fetch periódico (padrão 15s), filtro por categoria, partículas em arestas ativas, clique abre nota via `obsidian_path`, pulso nos nós online. Cores por categoria. Auto-updater com SHA-256, backup e rollback.
+
+**v0.2 (WebSocket)** ❌ Não existe. Não há `src/mcpSocket.ts`. O fetch atual é HTTP polling.
+
+**v0.3 (sync notas vault)** ❌ Não existe. Não há `src/nodeSync.ts`. Nenhum nó vira nota .md no vault.
+
+**v0.4 (3D)** ✅ CONCLUÍDO em 2026-07-06. `view3d.ts` reescrito com `3d-force-graph` bundleado (npm dep, não CDN). Consome `/api/graph` do graph-panel. Controles: rotação automática, reset de câmera. Nós com glow/pulso (online respira verde, offline pisca vermelho). Labels de setor flutuando no centroide. Ícone 🤖 em agentes. Poll a cada 5s. Dependências adicionadas: `3d-force-graph`, `three`, `three-spritetext`, `@types/three`.
+
+**v0.5 (ícones SVG)** ❌ Não existe. Não há `src/icons.ts`.
