@@ -2397,3 +2397,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** Varredura geral pedida pelo Pivete encontrou EliteHTTP com fetch failed (era porta errada no diagnóstico) e sentry_listar_issues falhando por falta de SENTRY_ORG.
 - **Aprendizado:** SELADO — não reverter: EliteHTTP roda na porta 8082 (uvicorn), não 8080. Diagnósticos futuros devem testar localhost:8082/health. Restart --update-env resolveu o log de "bad interpreter" residual. Pendência real: SENTRY_ORG ausente em secrets/mcp.env — não pode ser lida nem preenchida por IA (pasta secrets/ é bloqueada por política), exige o Pivete informar o slug do org manualmente.
+
+### 295. Grok deve escrever secrets pelo admin_vault_write
+- **Categoria:** regra
+- **Data:** 2026-07-05
+- **Contexto:** vps_write_file_safe bloqueia secrets por segurança e não deve ser liberado globalmente.
+- **Aprendizado:** Para Grok/navegador gravar no vault, usar mcp_admin_call com tool='admin_vault_write', confirmAdmin='CONFIRMO ADMIN' e input={name, content, overwrite:true}. O writer comum continua bloqueado.
