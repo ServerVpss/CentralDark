@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T15:36:11.304Z",
-  "updatedAtBR": "06/07/2026, 12:36:11 BRT",
+  "updatedAt": "2026-07-06T16:16:31.930Z",
+  "updatedAtBR": "06/07/2026, 13:16:31 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#304): unpkg sem versão pode entregar build ESM sem global — travar versão",
+    "lastCommit": "Lovable update",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T16:16:31.930Z",
+      "titulo": "Push na main · f306e7ee9ff13756be1cdbb0de6688fee41965c2",
+      "detalhe": "Lovable update",
+      "area": "Repositório",
+      "sha": "f306e7e",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-06T15:36:11.304Z",
       "titulo": "Push na main · cc7cff3bb717a5aa4dc33594b64ef78f92a51a98",
@@ -1300,6 +1308,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T16:16:31.930Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · f306e7ee9ff13756be1cdbb0de6688fee41965c2 (f306e7e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T15:36:11.304Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · cc7cff3bb717a5aa4dc33594b64ef78f92a51a98 (cc7cff3)",
@@ -1639,13 +1654,6 @@
       "time": "2026-07-05T21:02:22.088Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d9b21eb7eaac88f8032dea02838ff6d1d0332d90 (d9b21eb)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T20:53:24.375Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2740e9ec93aacd8d50ea488ad8f32740f10d53f6 (2740e9e)",
       "area": "Repositório",
       "status": "sucesso"
     }
