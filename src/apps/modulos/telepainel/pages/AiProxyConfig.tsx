@@ -137,6 +137,28 @@ export default function AiProxyConfig() {
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Testar sem chave (deve dar 401)
               </Button>
+              <Button
+                variant="outline"
+                onClick={generateStrongKey}
+                className="border-emerald-500/40 text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-100"
+              >
+                <KeyRound className="h-4 w-4 mr-2" />
+                Gerar chave forte
+              </Button>
+              <Button
+                variant="outline"
+                onClick={copyKey}
+                className="border-emerald-500/40 text-emerald-200 hover:bg-emerald-500/10 hover:text-emerald-100"
+              >
+                <Copy className="h-4 w-4 mr-2" />
+                Copiar
+              </Button>
+            </div>
+            <div className="rounded-lg bg-emerald-900/30 border border-emerald-500/20 p-3 text-xs text-emerald-200/85 space-y-1">
+              <p className="font-medium text-emerald-100">Como salvar no backend:</p>
+              <p>1. Clique em <b>Gerar chave forte</b> (ou cole uma que você já tenha).</p>
+              <p>2. Peça no chat: <code className="text-emerald-300">"atualiza a WEBUI_LOVABLE_KEY"</code> — vou abrir o formulário seguro pra você colar o valor.</p>
+              <p>3. Depois clique em <b>Ler configuração</b> aqui. Se voltar HTTP 200, tá sincronizado.</p>
             </div>
             {lastStatus && (
               <div className="text-xs text-emerald-300/80">
