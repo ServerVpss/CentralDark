@@ -1,134 +1,75 @@
+# Bridge vNext.1 — auth híbrido + player de áudio que toca no Windows
 
-## Síntese final — Bridge vNext (Claude Code-ready)
+## Por que precisa mudar
 
-Um PR só, um arquivo só, pronto pra Claude Code enxergar tudo no dropdown e o AUTO decidir sozinho — inclusive quando gerar áudio.
+**1) Auth híbrido (baseado na doc oficial + CodeRouter):**
+O Claude Code manda a chave em **dois headers diferentes** dependendo do modo:
+- `ANTHROPIC_API_KEY` (modo direto) → envia `x-api-key: <chave>`
+- `ANTHROPIC_AUTH_TOKEN` (modo gateway/proxy) → envia `Authorization: Bearer <chave>`
 
-### O que muda
+Hoje o bridge só aceita um dos dois — quem configurar do "jeito errado" leva 401. O painel do usuário já tem o seletor "Esquema de autenticação do gateway", mas o servidor precisa aceitar **os dois ao mesmo tempo** pra ser tolerante.
 
-- **Arquivo:** `apps/modulos/lovable-openai-bridge/server.mjs` (único).
-- **Branch:** `feat/bridge-router-hermes-tts`.
-- **Fluxo:** Lovable → GitHub (PR) → merge → VPS (`pm2 restart`).
-- **Fora de escopo:** frontend, Open WebUI, MCPO, áreas 🔒, novos PM2, novos domínios.
+**2) Áudio não toca no Claude Code Desktop Windows:**
+Confirmado na fonte do Claude Code (`@anthropic/ink` = renderizador TUI de terminal): **não existe player de áudio embutido**. Ele só renderiza texto, markdown, tool_use, tool_result e imagem. Áudio inline é impossível pelo cliente.
 
-### Catálogo categorizado em `/v1/models`
+O caminho real é o **link clicável** que abre no navegador do Windows. Se hoje "não toca", é porque:
+- a URL pode estar chegando sem `https://` absoluto (Windows Terminal não linkifica);
+- o MP3 servido pode estar vindo com `Content-Disposition: attachment` (força download em vez de tocar);
+- não existe fallback quando o terminal não é clicável (PowerShell antigo, `cmd.exe`).
 
-Cada modelo com `id`, `name` bonito com emoji e `owned_by` pro Claude Code agrupar sozinho:
+## O que fazer (patch único no `server.mjs` da VPS)
 
-```text
-🤖 AUTO       auto · auto-fast · auto-smart · auto-cheap · auto-voice
-🏛️ HERMES     hermes · hermes-dispatch · hermes-status
-🧠 CLAUDE     claude-opus-4-1 · claude-sonnet-4-5 · claude-haiku-4-5
-🚀 OPENAI     gpt-5 · gpt-5.5 · gpt-5-mini · gpt-5-nano (+ variantes)
-⚡ GOOGLE     gemini-3-flash-preview · 3.1-flash-lite · 3.5-flash · 2.5-pro · 2.5-flash
-🎨 IMAGEM     gemini-3.1-flash-image · gpt-image-2
-🔊 VOZ        voice · gpt-4o-mini-tts
-🧬 EMBEDDING  gemini-embedding-001 · text-embedding-3-small · 3-large
-```
+Branch: `feat/bridge-auth-hibrido-player-audio`. Backup: `server.mjs.bak-auth-<timestamp>`.
 
-### Roteador AUTO (heurística leve)
+### A) Auth híbrido nas rotas `/v1/*`
 
-```text
-auto-fast   → gemini-3-flash-preview
-auto-smart  → gpt-5.5
-auto-cheap  → gpt-5-nano
-auto-voice  → responde em texto + gera áudio automático
-auto        → detecta intenção:
-              código/stack trace     → gpt-5
-              prompt > 2000 chars    → gpt-5.5
-              "desenha/gera imagem"  → gemini-3.1-flash-image
-              "fala isso/áudio/voz"  → dispara TTS
-              resto                  → gemini-3-flash-preview
-```
+Middleware `extrairChave(req)` que aceita, nesta ordem:
+1. `x-api-key: <chave>`
+2. `Authorization: Bearer <chave>`
+3. `Authorization: <chave>` (fallback tolerante)
 
-Header `X-Bridge-Router: auto→gpt-5` sempre presente pro Pivete auditar.
+Compara em tempo constante contra `WEBUI_LOVABLE_KEY`. 401 só se **nenhum** dos headers bater. Header de resposta `X-Bridge-Auth-Scheme: x-api-key|bearer` pra auditoria.
 
-### Hermes virtual
+### B) Áudio que realmente toca no Windows
 
-- `hermes` → cria missão com o prompt + devolve resumo.
-- `hermes-dispatch` → mesma coisa, prioridade alta.
-- `hermes-status` → só consulta estado (ignora prompt).
+Três melhorias na rota TTS:
 
-Bridge chama `HERMES_BASE_URL` (127.0.0.1) e devolve texto formatado. Se Hermes offline: `🏛️ Hermes indisponível agora — tenta em 30s.`
+1. **Rota nova `GET /play/<uuid>`** — devolve uma página HTML mínima com `<audio controls autoplay src="/audio/<uuid>.mp3">` + botão "baixar". Isso resolve terminal que não sabe tocar MP3 direto: abre o navegador padrão do Windows, autoplay dispara, funciona em qualquer versão.
 
-### TTS com "play nativo" possível
+2. **Rota `GET /audio/<uuid>.mp3` ajustada** — headers explícitos:
+   - `Content-Type: audio/mpeg`
+   - `Content-Disposition: inline; filename="fala.mp3"` (nunca `attachment`)
+   - `Accept-Ranges: bytes` (Windows Media Foundation exige pra streaming)
+   - `Cache-Control: public, max-age=86400`
 
-Claude Code (CLI + VSCode) só renderiza texto/markdown — não existe player embutido. O mais nativo que dá é:
+3. **Resposta do modelo `voice`/`auto-voice`** volta em markdown com **duas linhas**:
+   ```
+   🔊 [▶️ Tocar agora](https://bridge.centralldark.com/play/<uuid>)
+   ⬇️ [Baixar MP3](https://bridge.centralldark.com/audio/<uuid>.mp3)
+   ```
+   `BRIDGE_PUBLIC_BASEURL` garante URL absoluta com `https://` (Windows Terminal / Claude Code Desktop só linkificam URL absoluta).
 
-1. Bridge chama `openai/gpt-4o-mini-tts` via Lovable AI Gateway.
-2. Salva `mp3` em `/var/lib/lovable-bridge/audio/<uuid>.mp3` (700, TTL 24h, limpeza no boot).
-3. Expõe `GET /audio/<uuid>.mp3` (Content-Type correto, cache 24h, nome UUID, sem listagem).
-4. Devolve resposta com:
+### C) Detecção automática de intenção de voz (mantém o "auto" esperto)
 
-```text
-🔊 Áudio (24h): https://bridge.centralldark.com/audio/<uuid>.mp3
-▶️ Cmd/Ctrl+clique pra tocar no player nativo do sistema.
+Router `auto` já existe. Só ajustar heurística: se o prompt tiver `"fala", "leia", "narre", "áudio", "voz", "tts"` → roteia pra pipeline TTS **sem** o usuário precisar trocar o modelo. Header `X-Bridge-Router: auto->voice` pra auditoria.
 
-<texto da resposta, quando auto-voice>
-```
+## Validação (o AI roda antes de entregar)
 
-VSCode, iTerm e Windows Terminal abrem o link no player padrão do OS (QuickTime/Media Player/mpv). Sem companion, sem hack.
+- `curl -H "x-api-key: $K" .../v1/models` → 200
+- `curl -H "Authorization: Bearer $K" .../v1/models` → 200
+- `curl -H "x-api-key: errada" .../v1/models` → 401
+- `POST /v1/chat/completions` com `model: "voice"` → resposta contém `/play/` e `/audio/`
+- `curl -I .../audio/<uuid>.mp3` → `Content-Type: audio/mpeg`, `Content-Disposition: inline`, `Accept-Ranges: bytes`
+- Abrir `/play/<uuid>` no navegador Windows → toca sozinho
 
-### Ambas as rotas
+## Fora de escopo
 
-`/v1/chat/completions` **e** `/v1/messages` passam pelo mesmo dispatcher, que trata `auto*`, `hermes*`, `voice` e `claude-*` antes de chamar o provider real. Resposta formatada no shape de cada rota (OpenAI-compat ou Anthropic-compat).
+Frontend, Open WebUI, MCPO, áreas 🔒, novos PM2, novos domínios, novos secrets. Reuso total da infra existente.
 
-### Config (env)
+## Deploy
 
 ```bash
-BRIDGE_PUBLIC_BASEURL=https://bridge.centralldark.com
-BRIDGE_AUDIO_DIR=/var/lib/lovable-bridge/audio
-BRIDGE_AUDIO_TTL_HOURS=24
-BRIDGE_TTS_ENABLED=true
-BRIDGE_TTS_MODEL=gpt-4o-mini-tts
-BRIDGE_TTS_VOICE=alloy
-HERMES_BASE_URL=http://127.0.0.1:3299
-HERMES_TIMEOUT_MS=10000
-BRIDGE_RATE_LIMIT_RPM=120
-```
-
-`WEBUI_LOVABLE_KEY` continua sendo a chave upstream (já existe, nada novo).
-
-### Segurança & observabilidade
-
-- Nomes UUID v4, TTL 24h, sem listagem de diretório, sem logar URL completa em INFO.
-- Rate limit por IP (RPM configurável).
-- Header `X-Bridge-Router` em toda resposta.
-- Métricas opcionais (req/modelo, tts_total, falhas, duração) — plugáveis no mesmo PR se quiser.
-
-### Testes de aceitação (rodo no PR)
-
-```bash
-# Catálogo com pelo menos 30 modelos
-curl -s $BRIDGE/v1/models | jq '.data | length'   # >= 30
-
-# AUTO detecta código → gpt-5
-curl -s $BRIDGE/v1/messages -d '{"model":"auto","messages":[{"role":"user","content":"```js\nconsole.log(1)\n```"}]}' -D - | grep X-Bridge-Router
-
-# AUTO detecta voz → link de áudio
-curl -s $BRIDGE/v1/messages -d '{"model":"auto","messages":[{"role":"user","content":"me responde falando isso"}]}' | jq -r '.content[0].text'
-
-# Voice direto gera MP3 acessível
-curl -s $BRIDGE/v1/messages -d '{"model":"voice","messages":[{"role":"user","content":"Olá"}]}' | jq -r '.content[0].text'
-curl -sI https://bridge.centralldark.com/audio/<uuid>.mp3   # 200 + audio/mpeg
-
-# Hermes status
-curl -s $BRIDGE/v1/messages -d '{"model":"hermes-status","messages":[{"role":"user","content":""}]}' | jq
-```
-
-### Deploy (após merge)
-
-```bash
-sudo install -d -m 700 /var/lib/lovable-bridge/audio   # 1ª vez só; runtime também cria
 pm2 restart CentralDark-LovableBridge --update-env
-pm2 save
 ```
 
-Backup automático: `server.mjs.bak-router-<timestamp>` no diretório do bridge.
-
-### Resultado
-
-Claude Code passa a mostrar dropdown organizado por categoria, AUTO escolhe modelo sozinho, Hermes vira modelo virtual e áudio gera link clicável que abre no player nativo do OS. Nada quebra do que já funciona.
-
----
-
-Confirma **"PERMITO PIVETE"** que eu abro o PR no fluxo Lovable → GitHub → VPS.
+Confirma **"PERMITO PIVETE"** e eu abro o PR + deploy no mesmo fluxo (Lovable → GitHub → VPS).
