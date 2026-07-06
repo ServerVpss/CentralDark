@@ -15,8 +15,11 @@ function audit(action, name, meta) {
 
 function safeResolve(name) {
   if (!name || typeof name !== "string") throw new Error("nome obrigatorio");
-  if (name.includes("..") || name.includes("/") || name.includes("\\") || name.includes("\0")) throw new Error("nome invalido");
-  const full = pathJoin(DR, name);
+  // Normaliza: aceita subpasta (ex: keys/foo.key) mas bloqueia traversal, backslash, null, path absoluto
+  const clean = name.replace(/^\/+/, "");
+  if (clean.includes("..") || clean.includes("\\") || clean.includes("\0")) throw new Error("nome invalido (traversal/backslash/null)");
+  if (!/^[A-Za-z0-9_.\-\/]+$/.test(clean)) throw new Error("nome invalido (use apenas [A-Za-z0-9_.-/])");
+  const full = pathJoin(DR, clean);
   if (!full.startsWith(DR + sep) && full !== DR) throw new Error("path fora do vault");
   return full;
 }
