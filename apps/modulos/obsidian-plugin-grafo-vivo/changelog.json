@@ -1,13 +1,17 @@
 {
-  "atualizadoEm": "2026-07-04T22:00:06.450Z",
+  "atualizadoEm": "2026-07-06T18:00:00.000Z",
   "versoes": [
     {
       "versao": "0.4.0",
-      "data": "2026-07-04",
+      "data": "2026-07-06",
       "mudancas": [
-        "Nova view: Grafo 3D · Jarvis (HUD tempo-real de grafo.centralldark.com embutido no Obsidian)",
-        "Novo ribbon (ícone orbit) e comando \"Abrir Grafo 3D · Jarvis\"",
-        "Dados vivos: /api/live com status PM2 fresco (setores, pulso online/off) — CentralDark Grafo Vivo"
+        "View 3D real com 3d-force-graph bundleado (sem CDN, funciona offline)",
+        "Nós com glow/pulso: online respira verde, offline pisca vermelho",
+        "Labels de setor flutuando no centroide de cada grupo",
+        "Ícone 🤖 em nós de agente (bot, mcp, hermes, etc)",
+        "Controles: rotação automática, reset de câmera, clique para foco",
+        "Poll a cada 5s do /api/graph (grafo.centralldark.com)",
+        "Dependências: 3d-force-graph, three, three-spritetext"
       ]
     },
     {
