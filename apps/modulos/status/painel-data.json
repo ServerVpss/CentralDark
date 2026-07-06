@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T14:09:11.783Z",
-  "updatedAtBR": "06/07/2026, 11:09:11 BRT",
+  "updatedAt": "2026-07-06T14:10:04.598Z",
+  "updatedAtBR": "06/07/2026, 11:10:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fdba09393",
+    "lastCommit": "aprendizado(#302): MCP ChatGPT exige compatibilidade no token e Accept",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T14:10:04.598Z",
+      "titulo": "Push na main · cf1e18ee2e32b28ebe7927069d51e8bd916a7050",
+      "detalhe": "aprendizado(#302): MCP ChatGPT exige compatibilidade no token e Accept",
+      "area": "Repositório",
+      "sha": "cf1e18e",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-06T14:09:11.783Z",
       "title": "🟢 MCP OAuth corrigido: fluxo ChatGPT passou em DCR → authorize 302 → token Basic 200 → tools/list 200.",
@@ -1244,6 +1252,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T14:10:04.598Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cf1e18ee2e32b28ebe7927069d51e8bd916a7050 (cf1e18e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T06:10:03.751Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6d75ae65e54ce7bdb60ef53abe688c3ad211a657 (6d75ae6)",
@@ -1583,13 +1598,6 @@
       "time": "2026-07-05T19:25:49.920Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · a737a9bb0b1c647f846adc90f050db0c59d1f171 (a737a9b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T19:09:27.882Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · e2a7c9cb7a283dac70c8ba625bcf208384756384 (e2a7c9c)",
       "area": "Repositório",
       "status": "sucesso"
     }
