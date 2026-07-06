@@ -2403,3 +2403,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** vps_write_file_safe bloqueia secrets por segurança e não deve ser liberado globalmente.
 - **Aprendizado:** Para Grok/navegador gravar no vault, usar mcp_admin_call com tool='admin_vault_write', confirmAdmin='CONFIRMO ADMIN' e input={name, content, overwrite:true}. O writer comum continua bloqueado.
+
+### 296. Curso Condefonte v1 salvo no cofre e no Hermes
+- **Categoria:** regra
+- **Data:** 2026-07-05
+- **Contexto:** Depois da caçada da WEBUI_LOVABLE_KEY (que Grok jurava ser do gateway mas dava 401 "must start with sk_"), Pivete pediu um curso completo pra qualquer IA aprender a técnica sem repetir o erro.
+- **Aprendizado:** Toda vez que uma IA reclamar de 401/403/402 numa chave Lovable: (1) rodar curl direto no endpoint FINAL, (2) LER o body cru — o próprio Lovable diz o motivo, (3) nunca chutar "é sessão/CORS/proxy" antes de ler. Curso completo em 2 lugares: condefonte/CURSO-CONDEFONTE.md (cofre) e apps/modulos/HERMES-CORE/agents/Knowledge-Collector/aprendizados/CURSO-CONDEFONTE.md (Hermes). Atualizar sempre que a tática evoluir.
