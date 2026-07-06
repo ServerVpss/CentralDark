@@ -643,3 +643,6 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 ### 27. Load average alto sustentado (~7) — algo consumindo CPU — 🟡 ABERTO (05/07/2026, 23:55 BRT)
 - **Sintoma:** Load average 6.93/7.15/7.19 — MUITO alto e sustentado. CentralDark-Builder consumindo 15% CPU contínuo. Investigar o que está pesando (possível loop ou build travado).
 - **Critério pra fechar:** Load volta pra baixo de 4 (idealmente <2)
+### 28. AiDiag parado + EliteHTTP/MCP com histórico de restarts — 🟢 ABERTO (05/07/2026, 23:55 BRT)
+- **Sintoma:** CentralDark-AiDiag está 'stopped'. Decidir: religar ou remover do PM2. EliteHTTP com 31 restarts e MCP com 20 (histórico, ambos online agora).
+- **Critério pra fechar:** AiDiag online ou removido de vez se não for mais usado
