@@ -1,75 +1,63 @@
-## 🎯 Missão: Liberar MCP no Open-WebUI com Conselho + Enxame de Recon
+# Plano — WebUI editável ao vivo (bind-mount) + fix do Integrations
 
-Vídeo de referência: `https://www.youtube.com/watch?v=ZEJ5oX0zkP4&t=49s` (tutorial oficial de como plugar MCP na aba **Admin → Settings → Integrations** do Open-WebUI via **mcpo**).
+## Objetivo
+Parar de reconstruir container toda vez. Deixar 3 áreas do Open-WebUI editáveis direto na VPS, com reflexo imediato (ou restart de 3s). E de quebra resolver o erro 500 do `/api/v1/configs/tool_servers` que travou a página de integrações.
 
-Alvo: `https://ui.centralldark.com/admin/settings/integrations`
+## O que vai virar bind-mount
 
----
+| Área | Caminho no host (VPS) | Caminho dentro do container | Como recarrega |
+|---|---|---|---|
+| **Config/integrações** (tool_servers, MCP, modelos, providers) | `/root/CentralDark/apps/modulos/WebUI/data/` (já existe) | `/app/backend/data/` | Muda pela UI, salva no `webui.db` — zero restart |
+| **Tema/CSS/logo CentralDark** | `/root/CentralDark/apps/modulos/WebUI/custom/static/` | `/app/backend/open_webui/static/` | Refresh do browser (Ctrl+F5) |
+| **Prompts/personas/functions** | `/root/CentralDark/apps/modulos/WebUI/custom/functions/` | `/app/backend/data/functions/` | Auto-reload do WebUI (sem restart) |
 
-## 📋 Fase 1 — Preparo (VPS, só leitura)
+## Fases
 
-Rodar em paralelo (enxame de reconhecimento inicial):
-- **Agente A — Vídeo:** baixar transcrição do YouTube (`yt-dlp --write-auto-sub --skip-download`) e resumir os passos exatos que o autor executa na tela de Integrations.
-- **Agente B — Estado atual:** ler `apps/modulos/WebUI/docker-compose.override.yml`, `mcpo-config/config.json` e `docker logs CentralDark-MCPO --tail 200` — confirma se o sidecar mcpo tá vivo, qual URL responde no `openapi.json`, e o que já tá cadastrado no WebUI (via `curl http://localhost:8000/centraldark/openapi.json`).
-- **Agente C — Doc oficial:** buscar `docs.openwebui.com` sobre "External Tool Servers" e "MCP via mcpo" pra bater com o vídeo.
+### Fase 1 — Fix imediato do Integrations (destravar hoje)
+1. Backup do `docker-compose.override.yml` atual
+2. Remover a linha `TOOL_SERVER_CONNECTIONS=...` (JSON mal escapado que quebra o `json.loads()` e retorna 500)
+3. `docker compose up -d webui` — sobe limpo em ~5s
+4. Cadastrar MCP na UI: **Settings → Connections → External Tool Servers → +**
+   - URL: `https://mcp.centralldark.com/mcp`
+   - Auth: Bearer `<MCP_SESSION_SECRET>` (já tá no cofre)
+5. Verificar as 107 tools aparecendo
 
-Saída: um único relatório `docs/CONSCIENCIA/APRENDIZADOS/mcp-webui-liberacao.md` com passo-a-passo consolidado (vídeo + doc + realidade da VPS).
+### Fase 2 — Bind-mount das 3 áreas editáveis
+1. Criar estrutura no host:
+   ```
+   /root/CentralDark/apps/modulos/WebUI/custom/
+   ├── static/          ← tema/logo/CSS
+   └── functions/       ← prompts/personas
+   ```
+2. Copiar os arquivos atuais de dentro do container pro host (uma vez só, pra preservar defaults)
+3. Editar `docker-compose.override.yml` adicionando volumes:
+   ```yaml
+   volumes:
+     - ./data:/app/backend/data
+     - ./custom/static:/app/backend/open_webui/static
+     - ./custom/functions:/app/backend/data/functions
+   ```
+4. `docker compose up -d webui` uma última vez pra ativar os mounts
+5. A partir daí: edita no host → efeito imediato ou restart de 3s (`docker restart CentralDark-WebUI`)
 
----
+### Fase 3 — Documentação viva
+Criar `apps/modulos/WebUI/EDITAR.md` com o mapa: "quer mudar X? edita arquivo Y". Assim qualquer IA nova (ou você em 3 semanas) sabe onde mexer sem quebrar nada.
 
-## 📋 Fase 2 — Conselho `/refinar` + `/debate` (10 rodadas)
+## Trava e segurança
+- `apps/modulos/WebUI/` é 🔒 protegido — este plano é o pedido formal de autorização (**PERMITO PIVETE WEBUI**)
+- Backup automático do `docker-compose.override.yml` antes de qualquer edit (feito pelo `vps_write_file_safe`)
+- Rollback = restaurar backup + `docker compose up -d`
+- MCP secret nunca sai do cofre, nunca aparece em log
+- Notificação Card Hermes v1.3 no @srver1bot quando concluir
 
-Usar o Arsenal Council (`apps/modulos/HERMES-CORE` + `docs/CONSCIENCIA/ARSENAL/`):
+## O que NÃO vai mudar
+- Container continua Docker (isolamento preservado)
+- Caddy/subdomínio `ui.centralldark.com` intocado
+- Banco `webui.db` intocado (já era volume)
+- Nenhuma migration, nenhuma reinstalação, nenhum downtime além dos 5s de restart
 
-1. **`/refinar`** — pega o relatório da Fase 1 e refina em plano operacional curto (o que clicar, qual URL, qual bearer, qual `TOOL_SERVER_CONNECTIONS` colar).
-2. **`/debate 10`** — 10 rodadas entre modelos (Claude Opus + GPT-5 + Gemini Pro via `darkai_chat`), tema: *"Qual a forma mais segura e correta de expor os 102 tools do MCP CentralDark no Open-WebUI sem vazar bearer e sem quebrar o mcpo atual?"*
-   - Cada rodada: proposta → crítica → contra-proposta → veredito parcial.
-   - Consenso final vira `docs/CONSCIENCIA/ARSENAL/debate-mcp-webui-<timestamp>.md`.
-
----
-
-## 📋 Fase 3 — Enxame paralelo durante o debate
-
-Enquanto as 10 rodadas rolam, disparar **3 sub-agentes em paralelo** (via `spawn_agent`):
-
-| Agente | Missão | Ferramentas |
-|---|---|---|
-| 🕵️ **Mapeador** | Abrir `https://ui.centralldark.com/admin/settings/integrations` via Playwright headless com sessão admin, capturar screenshot, listar cada campo/aba, e extrair erros do console + network 4xx/5xx. Gera `revisoes/<ts>/webui-integrations-mapa.md` + prints. | Playwright + `vps_read_file_safe` |
-| 🐛 **Caçador de Falhas** | Varrer logs (`docker logs CentralDark-WebUI`, `CentralDark-MCPO`), `pm2 logs`, `journalctl -u caddy`, e o próprio `mcp.centralldark.com/health` + `/tools.json`. Cruzar com erros que o Mapeador achou. Classificar por severidade. | `execute_command` + `vps_read_file_safe` |
-| 📚 **Coletor de Info** | Puxar tudo sobre MCP+WebUI: docs oficiais Open-WebUI, repo `open-webui/mcpo` (issues abertas relacionadas), Anthropic MCP spec, changelog do WebUI 0.10.x. Resume em `docs/CONSCIENCIA/APRENDIZADOS/mcp-webui-conhecimento.md`. | `websearch` + `fetch_website` |
-
-Os 3 agentes rodam **em paralelo** com o debate. Quando o debate fecha, os 3 relatórios já estão prontos pra serem cruzados no veredito.
-
----
-
-## 📋 Fase 4 — Veredito + Aplicação (aguarda "PERMITO PIVETE")
-
-Consolidar:
-- Passo-a-passo do vídeo (Fase 1)
-- Consenso do debate 10 rodadas (Fase 2)
-- Mapa real + falhas + conhecimento (Fase 3)
-
-→ Gera **um único plano de execução** com: comandos exatos, arquivos a editar, ordem de restart, rollback. **NÃO aplica sem autorização** (`apps/modulos/WebUI/` está travado 🔒).
-
-Notificação final via connector Telegram (Card Hermes v1.3) no privado admin + canal Status.
-
----
-
-## 🔒 Travas respeitadas
-- `apps/modulos/WebUI/` protegido → só leio; alterações esperam "PERMITO PIVETE"
-- Bearer do mcpo nunca aparece em log, screenshot ou chat
-- Debate/Enxame rodam **na VPS** (regra: Grupo Evolução + Mapeamento = só VPS, nunca Lovable)
-
----
-
-## ▶️ Ordem de disparo (resumo)
-```
-Fase 1 (3 agentes paralelos: Vídeo, Estado, Doc)
-   ↓
-Fase 2 (/refinar → /debate 10 rodadas)  ─┐
-Fase 3 (3 agentes paralelos: Mapeador, Caçador, Coletor) ─┤ rodam juntos
-   ↓
-Fase 4 (veredito + card Hermes + aguarda PERMITO PIVETE pra aplicar)
-```
-
-Pode aprovar que eu disparo Fase 1 + 2 + 3 já em paralelo?
+## Tempo estimado
+- Fase 1: 5 min
+- Fase 2: 10 min
+- Fase 3: 5 min
+- **Total: ~20 min**
