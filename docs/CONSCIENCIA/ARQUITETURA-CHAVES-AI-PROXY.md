@@ -133,3 +133,11 @@ Pontos que valem virar backlog:
 - A VPS opera 100% do fluxo normal com só a primeira; a segunda é fallback/gateway-direto.
 - Fluxo canônico: `cliente → lovable-proxy (VPS) → ai-proxy (edge) → ai.gateway.lovable.dev`.
 - Único buraco real hoje: `POST /` do ai-proxy sem auth. Fechar quando puder.
+
+---
+
+## Conexões Rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
