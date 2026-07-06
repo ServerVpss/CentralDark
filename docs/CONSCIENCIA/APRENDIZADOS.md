@@ -2445,3 +2445,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** Conector ChatGPT retornava erro vermelho após consentimento OAuth no MCP CentralDark.
 - **Aprendizado:** Para MCP ChatGPT, o /token precisa aceitar client_id via Authorization Basic além do corpo; /mcp precisa anunciar resource_metadata correto; tools/list exige Accept: application/json, text/event-stream. Validar E2E com DCR, authorize 302, token 200 e tools/list 200.
+
+### 303. HUD Grafo 3D — three.js UMD precisa ser carregado à parte
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-06
+- **Contexto:** https://grafo.centralldark.com quebrou com "ERRO HUD: bibliotecas 3D não carregadas". O index.html carregava só 3d-force-graph e three-spritetext via unpkg. A página usa new THREE.Group()/Mesh() direto, mas 3d-force-graph tem o THREE bundlado internamente sem expor como window.THREE — o guard disparava.
+- **Aprendizado:** Sempre carregar three.js UMD ANTES de 3d-force-graph quando a página consumir THREE global. Travar em three@0.160.0 — versões >= r163 removeram build/three.min.js do unpkg (404). Fix: <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script> como primeira lib 3D. Commit 86f742f4.
