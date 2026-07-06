@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T00:37:34.734Z",
-  "updatedAtBR": "05/07/2026, 21:37:34 BRT",
+  "updatedAt": "2026-07-06T00:50:58.985Z",
+  "updatedAtBR": "05/07/2026, 21:50:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Corrigiu validação de subpastas",
+    "lastCommit": "Salvou o script no GitHub",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T00:50:58.985Z",
+      "titulo": "Push na main · 9176687c8ccca36e71766f1a902dd3a877483e16",
+      "detalhe": "Salvou o script no GitHub",
+      "area": "Repositório",
+      "sha": "9176687",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-06T00:37:34.734Z",
       "titulo": "Push na main · bed174a811080c55934582d5dbb3aa4a81e83321",
@@ -1355,6 +1363,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T00:50:58.985Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 9176687c8ccca36e71766f1a902dd3a877483e16 (9176687)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T00:37:34.734Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · bed174a811080c55934582d5dbb3aa4a81e83321 (bed174a)",
@@ -1694,13 +1709,6 @@
       "time": "2026-07-05T00:50:17.916Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · beebb2410f46ffb34ac2f1d4cde1815baa0bec83 (beebb24)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T00:34:33.219Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8c2e69f8d3b04f76a337bf209105b14962741b75 (8c2e69f)",
       "area": "Repositório",
       "status": "sucesso"
     }
