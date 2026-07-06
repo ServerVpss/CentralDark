@@ -1,4 +1,5 @@
 // Build do plugin. Em dev: watch. Em prod: minify.
+// 3d-force-graph, three e spritetext são bundleados (não external)
 import esbuild from "esbuild";
 import process from "node:process";
 import builtins from "builtin-modules";
