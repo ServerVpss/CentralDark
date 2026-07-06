@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T04:50:07.663Z
+# 🧠 Notion Sync — 2026-07-06T06:17:47.386Z
 
-- **Commit fonte:** `6339b6df706d9d1128effcba5679d43e1d5e55b0`
+- **Commit fonte:** `6d75ae65e54ce7bdb60ef53abe688c3ad211a657`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 336 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 336 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 301 | 0 | 301 | 0 | 0 |
+| aprendizados | 302 | 1 | 301 | 0 | 0 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -358,6 +358,7 @@
 | aprendizados | atualizado | #297 — Curso Condefonte mora dentro de LOVABLE_TOKEN/ |
 | aprendizados | atualizado | #298 — Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes) |
 | aprendizados | atualizado | #299 — Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i) |
+| aprendizados | criado | #300 — Grafo Vivo v0.4: 3D bundleado sem CDN |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
