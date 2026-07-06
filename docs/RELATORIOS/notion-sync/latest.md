@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T09:50:50.875Z
+# 🧠 Notion Sync — 2026-07-06T10:08:26.820Z
 
-- **Commit fonte:** `7b0eb3f2ceeb3ad49c30c01bb7ae395ec18ff0b5`
+- **Commit fonte:** `f6bea09673092a7e15b0c8deb1790d394e315704`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 337 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 337 atualizadas · ❌ 452 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 303 | 1 | 302 | 0 | 0 |
+| aprendizados | 303 | 0 | 302 | 0 | 1 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -158,7 +158,7 @@
 | aprendizados | atualizado | #97 — Anti-segredo não deve acusar regex do próprio validador |
 | aprendizados | atualizado | #98 — Lote 1 WhatsApp read-only mergeado e propagado |
 | aprendizados | atualizado | #99 — Lote 2 bot-server consolidado no caminho operacional |
-| aprendizados | atualizado | #100 — Lote 3 chats compostos concluído |
+| aprendizados | erro | #100 — Lote 3 chats compostos concluído |
 | aprendizados | atualizado | #101 — Lote 4 rota chats read-only concluído |
 | aprendizados | atualizado | #102 — Lote 5 rota contacts read-only concluído |
 | aprendizados | atualizado | #103 — Lote 6 rota avatar read-only concluído |
@@ -359,7 +359,7 @@
 | aprendizados | atualizado | #298 — Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes) |
 | aprendizados | atualizado | #299 — Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i) |
 | aprendizados | atualizado | #300 — Grafo Vivo v0.4: 3D bundleado sem CDN |
-| aprendizados | criado | #301 — Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start |
+| aprendizados | atualizado | #301 — Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
