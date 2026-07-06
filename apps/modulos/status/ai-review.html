@@ -866,41 +866,45 @@ init();
      Bloco isolado. Não interage com PR Review nem Evolução.
      Fonte de dados: ai-diag.json (atualizado a cada 60s por CentralDark-AiDiag)
      ═══════════════════════════════════════════════════════════════════ -->
-<section class="panel wide si-tab-content" data-tab="inteligencia" id="setor-inteligencia" style="margin-top:0;border:1px solid rgba(16,185,129,.35);border-radius:14px;padding:22px;background:linear-gradient(180deg,rgba(16,185,129,.05),rgba(5,46,43,.15));">
+<section class="panel wide si-tab-content" data-tab="inteligencia" id="setor-inteligencia" style="margin-top:0;border:1px solid #d1e7dc;border-radius:16px;padding:26px;background:#f7fbf8;box-shadow:0 1px 2px rgba(6,95,70,.04);">
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
-    <h2 style="margin:0;color:#34d399;">🧠 Setor de Inteligência</h2>
-    <span class="tag" id="si-status-tag" style="background:rgba(52,211,153,.15);color:#6ee7b7;border:1px solid rgba(52,211,153,.4);">carregando…</span>
-    <small id="si-last-update" style="margin-left:auto;color:#6ee7b7;">—</small>
-    <button id="si-refresh" style="background:linear-gradient(180deg,#10b981,#059669);color:#052e2b;border:0;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;">↻ atualizar</button>
+    <h2 style="margin:0;color:#0f2e24;font-family:'Instrument Serif',Georgia,serif;font-weight:500;font-size:28px;letter-spacing:-.5px;">🧠 Setor de Inteligência</h2>
+    <span class="tag" id="si-status-tag" style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;">carregando…</span>
+    <small id="si-last-update" style="margin-left:auto;color:#5e7a70;font-family:ui-monospace,monospace;">—</small>
+    <button id="si-refresh" style="background:#10b981;color:#fff;border:0;padding:8px 16px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:600;box-shadow:0 1px 2px rgba(16,185,129,.3);">↻ atualizar</button>
   </div>
-  <p style="margin:0 0 18px;color:#a7f3d0;font-size:13px;line-height:1.5;">
-    Diagnóstico ao vivo do caminho <strong style="color:#34d399;">VPS → Lovable Proxy → Lovable AI Gateway</strong>.
+  <p style="margin:0 0 22px;color:#3f5a52;font-size:13px;line-height:1.6;">
+    Diagnóstico ao vivo do caminho <strong style="color:#065f46;">VPS → Lovable Proxy → Lovable AI Gateway</strong>.
     Detecta se o proxy interno está de pé, se a chave está válida, quais modelos o gateway devolve
     e se uma chamada real de chat responde. Atualiza sozinho a cada 60s.
   </p>
 
   <!-- 4 cartões de teste -->
-  <div id="si-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:20px;">
+  <div id="si-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:22px;">
     <div class="si-card" data-key="proxy">
-      <div class="si-card-h">🔌 Lovable Proxy (VPS)</div>
+      <div class="si-card-icon">🔌</div>
+      <div class="si-card-h">Lovable Proxy (VPS)</div>
       <div class="si-card-status" data-status>—</div>
       <div class="si-card-detail" data-detail>127.0.0.1:3102/health</div>
       <div class="si-card-ms" data-ms></div>
     </div>
     <div class="si-card" data-key="gateway">
-      <div class="si-card-h">☁️ Lovable AI Gateway</div>
+      <div class="si-card-icon">☁️</div>
+      <div class="si-card-h">Lovable AI Gateway</div>
       <div class="si-card-status" data-status>—</div>
       <div class="si-card-detail" data-detail>ai.gateway.lovable.dev/v1/models</div>
       <div class="si-card-ms" data-ms></div>
     </div>
     <div class="si-card" data-key="chat">
-      <div class="si-card-h">💬 Chat real (Gemini flash)</div>
+      <div class="si-card-icon">💬</div>
+      <div class="si-card-h">Chat real (Gemini flash)</div>
       <div class="si-card-status" data-status>—</div>
       <div class="si-card-detail" data-detail>ping via proxy</div>
       <div class="si-card-ms" data-ms></div>
     </div>
     <div class="si-card" data-key="chave">
-      <div class="si-card-h">🔑 LOVABLE_API_KEY</div>
+      <div class="si-card-icon">🔑</div>
+      <div class="si-card-h">LOVABLE_API_KEY</div>
       <div class="si-card-status" data-status>—</div>
       <div class="si-card-detail" data-detail>no ambiente do proxy</div>
       <div class="si-card-ms" data-ms></div>
@@ -908,25 +912,25 @@ init();
   </div>
 
   <!-- Modelos disponíveis -->
-  <details style="margin-bottom:16px;background:linear-gradient(180deg,rgba(6,95,70,.3),rgba(5,46,43,.5));border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:12px 16px;">
-    <summary style="cursor:pointer;color:#6ee7b7;font-weight:600;">📚 Modelos disponíveis no gateway (<span id="si-models-count">0</span>)</summary>
+  <details style="margin-bottom:14px;background:#fff;border:1px solid #d1e7dc;border-radius:12px;padding:14px 18px;">
+    <summary style="cursor:pointer;color:#065f46;font-weight:600;font-size:14px;">📚 Modelos disponíveis no gateway (<span id="si-models-count">0</span>)</summary>
     <div id="si-models-list" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;"></div>
   </details>
 
   <!-- Erros recentes PM2 -->
-  <details style="margin-bottom:16px;background:linear-gradient(180deg,rgba(6,95,70,.3),rgba(5,46,43,.5));border:1px solid rgba(248,113,113,.25);border-radius:10px;padding:12px 16px;">
-    <summary style="cursor:pointer;color:#fca5a5;font-weight:600;">🚨 Últimos erros do proxy (PM2)</summary>
-    <pre id="si-errors" style="margin:12px 0 0;padding:10px;background:rgba(5,46,43,.7);border:1px solid rgba(248,113,113,.2);border-radius:6px;font-size:11px;color:#fecaca;max-height:220px;overflow:auto;white-space:pre-wrap;">carregando…</pre>
+  <details style="margin-bottom:14px;background:#fff;border:1px solid #d1e7dc;border-radius:12px;padding:14px 18px;">
+    <summary style="cursor:pointer;color:#b91c1c;font-weight:600;font-size:14px;">🚨 Últimos erros do proxy (PM2)</summary>
+    <pre id="si-errors" style="margin:12px 0 0;padding:12px;background:#fef7f7;border:1px solid #fecaca;border-radius:8px;font-size:11px;color:#7f1d1d;max-height:220px;overflow:auto;white-space:pre-wrap;">carregando…</pre>
   </details>
 
   <!-- Console de prompt (v2 — em breve) -->
-  <div style="background:linear-gradient(180deg,rgba(6,95,70,.25),rgba(5,46,43,.45));border:1px dashed rgba(52,211,153,.4);border-radius:10px;padding:14px 16px;">
+  <div style="background:#fff;border:1px dashed #a7f3d0;border-radius:12px;padding:16px 18px;">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-      <strong style="color:#ecfdf5;">🧪 Console de prompt manual</strong>
-      <span style="background:rgba(245,158,11,.2);color:#fcd34d;border:1px solid rgba(245,158,11,.4);padding:2px 8px;border-radius:6px;font-size:10px;">em breve</span>
+      <strong style="color:#0f2e24;font-size:14px;">🧪 Console de prompt manual</strong>
+      <span style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:2px 10px;border-radius:999px;font-size:10px;font-weight:600;">em breve</span>
     </div>
-    <small style="color:#a7f3d0;line-height:1.5;display:block;opacity:.85;">
-      Aguardando ordem <em>"PERMITO PIVETE"</em> pra expor rota autenticada <code style="color:#6ee7b7;">/api/ai-diag/prompt</code>
+    <small style="color:#5e7a70;line-height:1.6;display:block;">
+      Aguardando ordem <em>"PERMITO PIVETE"</em> pra expor rota autenticada <code style="color:#065f46;background:#ecfdf5;padding:1px 6px;border-radius:4px;">/api/ai-diag/prompt</code>
       no Caddy. Vai permitir mandar prompt manual, escolher modelo, ver latência, tokens e custo estimado
       sem sair do painel.
     </small>
@@ -934,17 +938,22 @@ init();
 </section>
 
 <style>
-  #setor-inteligencia .si-card{background:linear-gradient(180deg,rgba(6,95,70,.35),rgba(5,46,43,.55));border:1px solid rgba(52,211,153,.3);border-radius:10px;padding:14px;transition:border-color .2s,box-shadow .2s;}
-  #setor-inteligencia .si-card.ok{border-color:rgba(52,211,153,.7);box-shadow:0 0 0 1px rgba(52,211,153,.15) inset;}
-  #setor-inteligencia .si-card.fail{border-color:rgba(248,113,113,.65);box-shadow:0 0 0 1px rgba(248,113,113,.15) inset;}
-  #setor-inteligencia .si-card-h{font-size:12px;color:#6ee7b7;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
-  #setor-inteligencia .si-card-status{font-size:22px;font-weight:700;color:#ecfdf5;margin-bottom:4px;}
-  #setor-inteligencia .si-card.ok .si-card-status{color:#34d399;}
-  #setor-inteligencia .si-card.fail .si-card-status{color:#fca5a5;}
-  #setor-inteligencia .si-card-detail{font-size:11px;color:#a7f3d0;opacity:.8;font-family:ui-monospace,monospace;}
-  #setor-inteligencia .si-card-ms{font-size:11px;color:#6ee7b7;margin-top:6px;}
-  #setor-inteligencia .si-model-chip{background:rgba(16,185,129,.15);border:1px solid rgba(52,211,153,.4);color:#d1fae5;padding:3px 8px;border-radius:6px;font-size:11px;font-family:ui-monospace,monospace;}
+  #setor-inteligencia .si-card{position:relative;background:#fff;border:1px solid #d1e7dc;border-radius:14px;padding:18px;transition:border-color .2s,box-shadow .2s,transform .2s;box-shadow:0 1px 2px rgba(6,95,70,.04);}
+  #setor-inteligencia .si-card:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(6,95,70,.08);}
+  #setor-inteligencia .si-card.ok{border-color:#a7f3d0;}
+  #setor-inteligencia .si-card.fail{border-color:#fecaca;background:#fef7f7;}
+  #setor-inteligencia .si-card-icon{width:36px;height:36px;border-radius:10px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px;border:1px solid #d1fae5;}
+  #setor-inteligencia .si-card.fail .si-card-icon{background:#fef2f2;border-color:#fecaca;}
+  #setor-inteligencia .si-card-h{font-size:11px;color:#5e7a70;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;font-family:ui-monospace,monospace;}
+  #setor-inteligencia .si-card-status{font-size:22px;font-weight:700;color:#0f2e24;margin-bottom:6px;letter-spacing:-.3px;}
+  #setor-inteligencia .si-card.ok .si-card-status{color:#059669;}
+  #setor-inteligencia .si-card.fail .si-card-status{color:#dc2626;}
+  #setor-inteligencia .si-card-detail{font-size:11px;color:#5e7a70;font-family:ui-monospace,monospace;word-break:break-all;}
+  #setor-inteligencia .si-card-ms{font-size:11px;color:#065f46;margin-top:8px;font-weight:600;font-family:ui-monospace,monospace;}
+  #setor-inteligencia .si-model-chip{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;padding:4px 10px;border-radius:999px;font-size:11px;font-family:ui-monospace,monospace;font-weight:500;}
+  #setor-inteligencia details summary::marker{color:#10b981;}
 </style>
+
 
 <script>
 (function(){
