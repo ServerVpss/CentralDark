@@ -490,16 +490,23 @@ Mais as tools gerais de GitHub (`github_get_file`, `github_list_commits`, `githu
 
 Se uma tool do MCP (`sentry_*`) falhar por falta de config, a resposta correta é: **não é bug, é feature morta por decisão do usuário** — ignorar e seguir com as ferramentas locais acima.
 
-## 13. 🔐 SANITIZAÇÃO DE LOGS
+## 13. GRAFO OFICIAL — grafo.centralldark.com (ÚNICO E SELADO)
 
-Antes de **salvar ou mostrar** qualquer log, filtrar:
-```bash
-sed -E 's/(token|password|authorization|apikey|api_key|secret|BOT_TOKEN|SUPABASE[^=]*=)[^ ,"]+/\1***OCULTO***/Ig'
-```
+**Decisão selada em 2026-07-05 pelo Pivete. NÃO REABRIR.**
 
-**Zero exceção.** Vale pra relatórios em `revisoes/`, snippets no chat, arquivos copiados — tudo.
+**O grafo oficial e ÚNICO do sistema é `grafo.centralldark.com`** (módulo graph-panel, porta 3030, plugin Obsidian "CentralDark Grafo Vivo"). É o HUD Jarvis do Pivete: tem view 3D e 2D, é o visual definitivo que ele quer. Ele monitora por aqui, no PC (navegador) e no celular (plugin Obsidian).
 
----
+**Regras invioláveis:**
+- `grafo.centralldark.com` = feed `/api/live` (mapa + status vivo dos processos PM2). Rota criada e validada em 2026-07-05.
+- O grafo DEVE ser mantido vivo pelo Hermes automaticamente (mesma doutrina do antigo Grafo Vivo): regenerar feed periodicamente, marcar 🟢 online / 🔴 offline, refletir atividade em tempo real quando um agente recebe comando.
+- O Pivete quer CONTROLES no grafo (2D e 3D) equivalentes aos do grafo nativo do Obsidian: forças (centrípeta, repulsão, links, distância), filtros, tamanho de nós, grossura de links, zoom. Tanto no navegador quanto no plugin.
+
+**MORTO / PROIBIDO:**
+- `status.centralldark.com` NÃO é mais grafo. O "Grafo Vivo" antigo (apps/modulos/status, graph-data.json, gerar-grafo-vivo.mjs, obsidian-nota.mjs) foi APOSENTADO como grafo por decisão do Pivete. `status.` fica reservado para outras coisas (métricas/painel), nunca grafo.
+- NENHUMA IA deve sugerir voltar pro status. como grafo, nem manter os dois em paralelo. Um grafo só: grafo.centralldark.com.
+- Nada de serviços externos. Tudo local, na própria VPS. Plugins próprios do Pivete, não ferramentas de terceiros na ativa.
+
+**Doutrina geral que o Pivete cravou:** tudo que for consolidado deve ser SELADO de forma fixa/ativa em todos os lugares (consciência + pendências + aprendizados), pra ninguém mexer depois.
 
 ## 14. 🔁 CICLO DE TRABALHO
 
