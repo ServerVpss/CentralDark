@@ -1,0 +1,400 @@
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║          RELATÓRIO COMPLETO DO ECOSSISTEMA CENTRALDARK — VPS                   ║
+║          Gerado em: 2026-07-06 13:32:47 UTC                                       ║
+║          Caminho: /root/CentralDark/apps/modulos/elite-gateway/                ║
+╚══════════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ★ RESUMO EXECUTIVO (10 linhas)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. O CentralDark é uma plataforma multi-IA auto-orquestrada rodando em VPS única (89.117.78.124),
+   com 22 módulos ativos em /root/CentralDark/apps/modulos/ e 19 processos PM2 registrados.
+
+2. O orquestrador central é o HERMES-CORE v5.0 — loop de 5s lendo missões de /missions/pendente/,
+   delegando a uma cadeia de 16 modelos de IA (Gemini, GPT-5, Claude, Grok) via DarkAI + Elite Proxy.
+
+3. O Elite Gateway (elite-gateway) é o proxy HTTP/WS Python (FastAPI + zendriver/Chrome) que
+   autentica requisições nas contas Claude/ChatGPT via CDP browser automation (v2.7).
+
+4. O MCP CentralDark (porta 9100 / mcp.centralldark.com) expõe 102 ferramentas a qualquer IA
+   autorizada — GitHub (~37), VPS (~10), Consciência (7), Supabase (4), cognitivas (4), Gemini (2), etc.
+
+5. A rede de agentes Hermes tem 8 agentes especializados: Executor, Critic, Deploy-Watcher,
+   Auto-Diagnostico, Log-Verificador, Knowledge-Collector, GraphRAG-Master e Universal-Handler.
+
+6. O módulo Mapeamento (Cartógrafo) escaneia o ecossistema a cada 30min; se detectar drift,
+   aciona o Grupo-Evolução (5 agentes debatedores) para propor melhorias em cascata.
+
+7. Toda notificação relevante segue o padrão Card Hermes v1.2/v1.3 — bloco <pre> monoespaçado
+   enviado via @srver1bot no Telegram para o admin 1901426549.
+
+8. O frontend (TelePanel) usa React 18 + Vite + Tailwind no tema Esmeralda (3D Tátil), hospedado
+   em centralldark.com, sincronizado via webhook GitHub → pm2 reload automático.
+
+9. Segurança: áreas protegidas por CLAUDE.md §9 (bot-telegram, webhook, secrets, elite-anthropic-proxy
+   etc.) só são modificáveis com senha "PERMITO PIVETE". Critic audita cada etapa.
+
+10. Stack VPS: Node.js/bun (agentes), Python/FastAPI (gateways), PM2 (gerenciador), Caddy (reverso),
+    Supabase (DB/Auth), GitHub (CI), Playwright/Chrome (automação web).
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (A) MAPA DE MÓDULOS — FUNÇÃO DE CADA UM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MÓDULO                       │ TIPO   │ FUNÇÃO
+─────────────────────────────┼────────┼──────────────────────────────────────────────────────────
+Bolt                         │ Docker │ Open WebUI isolado em Docker (interface web para IAs)
+HERMES-CORE                  │ Node   │ Orquestrador central v5.0 — loop missões + 8 agentes + 16 modelos
+WebUI                        │ Docker │ Open WebUI customizado (personas, CSS, tune-config) via Docker
+arsenal-openai-adapter       │ Node   │ Expõe Arsenal Council (router/parallel/debate) como modelos OpenAI-compat
+artifacts-builder            │ Node   │ Builder de artefatos (agentes + core + missions) — geração de conteúdo
+centraldark-voice            │ Ext.   │ Extensão Chrome — substitui TTS nativo Claude por bridge premium PT-BR
+elite-anthropic-proxy        │ Python │ Proxy reverso Anthropic com fallback (claude.ap7.site) — "última bala"
+elite-gateway                │ Python │ Gateway HTTP/WS FastAPI + zendriver (Chrome CDP) — autentica contas Claude/GPT
+graph-panel                  │ Node   │ Painel de grafo do ecossistema (porta 3030 / grafo.centralldark.com)
+grupo-evolucao               │ Node   │ 5 agentes debatedores (Arquiteto, Pesquisador, Crítico, Produto, Historiador)
+hermes-thinker               │ Docker │ Agente pensador CoT agressivo + browser + web search (Docker)
+hub                          │ Node   │ Hub central @centraldark/hub — roteador interno de serviços
+lovable-proxy                │ Node   │ Proxy Lovable AI Gateway — header conversion + rate limit + TTS route
+mapeamento                   │ Node   │ Cartógrafo: escaneia módulos + PM2 + git a cada 30min; detecção de drift
+mcp                          │ Node   │ Servidor MCP v0.4.0 — 102 ferramentas para IAs (porta 9100)
+memoria-api                  │ Node   │ API de leitura da memória viva (docs/CONSCIENCIA/) para Open WebUI
+oauth-broker                 │ Node   │ Broker OAuth — gerencia providers e sessões de autenticação
+obsidian-plugin-grafo-vivo   │ Node   │ Plugin Obsidian que renderiza grafo vivo do ecossistema em tempo real
+pivete-sync                  │ Node   │ Sync bidirecional Lovable ↔ VPS (pivete-sync)
+proxy                        │ Node   │ Arsenal Proxy (porta 8083): Neural Router, Swarm, Chain, Intel, Forge, Evolve
+status                       │ Static │ Painel estático HTML — status público do projeto e evolução
+telepainel                   │ React  │ Frontend principal TelePanel (React 18 + Vite + tema Esmeralda)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (B) PROCESSOS PM2 — REGISTRADOS NO ECOSYSTEM.CONFIG.CJS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NOTA: PM2 não está disponível no ambiente de sandbox Lovable — dados extraídos do
+      ecosystem.config.cjs (fonte de verdade dos processos registrados na VPS).
+
+Nº  │ NOME PM2                      │ PORTA  │ SCRIPT / RUNTIME
+────┼───────────────────────────────┼────────┼────────────────────────────────────────────────
+ 1  │ CentralDark-Zentinel          │  —     │ /root/CentralDark/apps/modulos/elite-gateway/scripts/zentinel_health.py
+ 2  │ CentralDark-MultiZap          │  3100  │ /root/Multizap/gateway/server.js (Node)
+ 3  │ CentralDark-BotServer         │  —     │ /root/CentralDark/apps/bot-server/start.sh
+ 4  │ CentralDark-WebhookDeploy     │  —     │ scripts/webhook/github-webhook-deploy.mjs
+ 5  │ CentralDark-CloneDeck         │  —     │ /root/Multizap/apps/clone-deck/apps/crm/start-crm.sh
+ 6  │ CentralDark-EliteWS           │  —     │ elite_ws_gateway.py (WebSocket gateway)
+ 7  │ CentralDark-EliteHTTP         │  —     │ elite_http_gateway.py (FastAPI + Chrome CDP)
+ 8  │ CentralDark-HubBot            │  —     │ apps/bot-telegram/unified-bot.cjs
+ 9  │ CentralDark-GuardiaoConsciencia│ —     │ infra/guardiao/guardiao.py
+10  │ CentralDark-GuardiaoAnalista  │  —     │ infra/guardiao/analista/analista.py
+11  │ CentralDark-ContasAdmin       │  —     │ scripts/contas-admin/venv/bin/uvicorn
+12  │ CentralDark-Respiracao        │  —     │ scripts/vps-reporter.js (reporter de saúde)
+13  │ CentralDark-MCP               │  9100  │ apps/modulos/mcp/dist/index.js
+14  │ CentralDark-TelePainelDeploy  │  —     │ scripts/webhook/telepainel-deploy.mjs
+15  │ CentralDark-EvolucaoIAs       │  —     │ apps/bot-telegram/evolucao-ias.cjs
+16  │ CentralDark-SyncDrive         │  —     │ scripts/sync-loop.sh
+17  │ CentralDark-EliteAnthropic    │  —     │ apps/modulos/elite-anthropic-proxy/start.sh
+18  │ CentralDark-GraphPanel        │  3030  │ apps/modulos/graph-panel/server.js
+
+TOTAL: 18 processos registrados no ecosystem.config.cjs.
+
+Status em tempo real disponível via: pm2 jlist | pm2 list (na VPS diretamente)
+Endpoint de saúde: curl http://localhost:9100/health (MCP)
+                   curl http://localhost:3030/api/health (GraphPanel)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (C) AGENTES HERMES — REDE HERMES-CORE v5.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ARQUITETURA DO HERMES-CORE
+  /root/CentralDark/apps/modulos/HERMES-CORE/
+  ├── core/
+  │   ├── orchestrator.mjs   ← Loop principal 5s (lê /missions/pendente/ → executa → archiva)
+  │   ├── decisor.mjs        ← Cadeia de 16 modelos + cache 10min + GraphRAG context injection
+  │   └── cadeia.json        ← Configuração editável em quente dos modelos (sem restart PM2)
+  ├── agents/
+  │   ├── Executor/          ← Executa etapas com travas de segurança (sem rm -rf /, shutdown etc.)
+  │   ├── Critic/            ← Audita CADA etapa; veta áreas protegidas (CLAUDE.md §9)
+  │   ├── Knowledge-Collector/ ← Ledger de aprendizados em ARSENAL/APRENDIZADOS.md
+  │   ├── Log-Verificador/   ← Daemon 60s: escaneia PM2 logs, detecta crash-loops, auto-restart
+  │   ├── Deploy-Watcher/    ← Monitora git diff local vs origin/main + PM2 saúde
+  │   ├── Auto-Diagnostico/  ← Vigia PENDENCIAS.md + PM2 errored (anti-spam por janela horária)
+  │   ├── GraphRAG-Master/   ← Memória viva: grafo.centralldark.com:3030 + fallback knowledge/
+  │   └── Universal-Handler/ ← Interface HTTP genérica: ping, webhook, deploy, pm2 read-only
+  ├── missions/
+  │   ├── pendente/          ← Fila de entrada (JSON por missão)
+  │   ├── em-andamento/      ← Missão sendo executada (trava: 1 por vez)
+  │   └── concluidas/        ← Arquivo histórico
+  ├── knowledge/
+  │   └── aprendizados.json  ← Base de lições categorizadas injetada no decisor
+  └── utils/
+      ├── notify.mjs         ← Card Hermes Telegram (padrão v1.3)
+      └── fs-safe.mjs        ← rename com retry (evita ENOTEMPTY)
+
+CICLO DE EXECUÇÃO DO HERMES
+  1. orchestrator.mjs acorda a cada 5s
+  2. Lê /missions/pendente/ — pega primeira missão .json
+  3. Move para /missions/em-andamento/ (trava: só 1 por vez)
+  4. GraphRAG-Master injeta contexto do grafo + knowledge/ no decisor
+  5. decisor.mjs consulta cadeia de IAs (falha → próximo modelo):
+       Pos.1: gemini-3-flash-preview (darkai) — ~90% dos casos — timeout 15s
+       Pos.2: gemini-2.5-pro                  — contexto grande — timeout 30s
+       Pos.3: gemini-2.5-flash                — flash médio    — timeout 20s
+       ... (16 modelos total, última bala: claude-sonnet-4-5 via elite-anthropic)
+  6. Critic.vetar() — veto prévio se tocar área protegida → missão rejeitada
+  7. Executor executa a etapa (com BLOQUEIOS: reboot, shutdown, rm -rf /, git push --force)
+  8. Critic.auditar() — parecer pós-etapa (gemini flash só se houve falha)
+  9. Knowledge-Collector registra lição no ledger
+  10. Missão movida para /missions/concluidas/
+  11. Notify → Card Hermes v1.3 no Telegram admin
+
+AGENTES STANDALONE (rodam fora do loop principal)
+  ┌─────────────────────┬────────────────────────────────────────────────────────┐
+  │ Log-Verificador     │ Daemon PM2 próprio — escaneia logs a cada 60s          │
+  │                     │ Auto-restart com cooldown 30min, max 3x/24h/serviço    │
+  │                     │ Placar horário completo no Telegram                    │
+  ├─────────────────────┼────────────────────────────────────────────────────────┤
+  │ Auto-Diagnostico    │ Chamado por missão/cron — verifica PENDENCIAS.md       │
+  │                     │ + PM2 errored/high-restarts; anti-spam por janela hora │
+  ├─────────────────────┼────────────────────────────────────────────────────────┤
+  │ Deploy-Watcher      │ Chamado sob demanda — git local vs origin/main diff    │
+  │                     │ Delega diagnóstico PM2 ao Auto-Diagnostico              │
+  └─────────────────────┴────────────────────────────────────────────────────────┘
+
+CADEIA DE MODELOS (cadeia.json — atualizada 2026-07-04)
+  Pos  │ Modelo                              │ Via               │ Timeout │ Status
+  ─────┼─────────────────────────────────────┼───────────────────┼─────────┼────────
+    1  │ google/gemini-3-flash-preview        │ darkai            │   15s   │ ATIVO
+    2  │ google/gemini-2.5-pro                │ darkai            │   30s   │ ATIVO
+    3  │ google/gemini-2.5-flash              │ darkai            │   20s   │ ATIVO
+    4  │ google/gemini-2.5-flash-lite         │ darkai            │   15s   │ ATIVO
+    5  │ openai/gpt-5                         │ darkai            │   60s   │ ATIVO
+    6  │ openai/gpt-5-mini                    │ darkai            │   45s   │ ATIVO
+    7  │ openai/gpt-5-nano                    │ darkai            │   20s   │ ATIVO
+    8  │ openai/gpt-5-chat                    │ darkai            │   45s   │ ATIVO
+    9  │ openai/gpt-5-pro                     │ darkai            │   90s   │ INATIVO (custo)
+   10  │ anthropic/claude-opus-4-1            │ darkai            │   60s   │ ATIVO
+   11  │ anthropic/claude-sonnet-4-5          │ darkai            │   45s   │ ATIVO
+   12  │ anthropic/claude-haiku-4-5           │ darkai            │   20s   │ ATIVO
+   13  │ x-ai/grok-4                          │ darkai            │   45s   │ ATIVO
+   14  │ x-ai/grok-4-fast                     │ darkai            │   20s   │ ATIVO
+   15  │ x-ai/grok-code-fast-1                │ darkai            │   30s   │ ATIVO
+   16  │ claude-sonnet-4-5                    │ elite-anthropic   │   30s   │ ATIVO ← última bala
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (D) ELITE GATEWAY — ESTADO E ARQUITETURA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LOCALIZAÇÃO: /root/CentralDark/apps/modulos/elite-gateway/
+PROCESSOS PM2: CentralDark-EliteHTTP + CentralDark-EliteWS + CentralDark-Zentinel
+
+ARQUITETURA DO ELITE GATEWAY v2.7
+  /elite-gateway/
+  ├── scripts/
+  │   ├── elite_http_gateway.py      ← FastAPI principal (v2.7 "Zendriver patch")
+  │   ├── elite_ws_gateway.py        ← WebSocket gateway
+  │   ├── zentinel_health.py         ← Monitor de latência ChatGPT → restart cirúrgico
+  │   ├── gateway_admin.py           ← Painel administrativo
+  │   ├── humanizer.py               ← Humanizador de requests (anti-bot)
+  │   ├── mapeamento_humano_v3.py    ← Seletor de ação humana para CDP
+  │   ├── openai_http_gateway.py     ← Gateway compatível OpenAI
+  │   ├── pivete_routes.py           ← Rotas especiais do Pivete
+  │   └── send_and_dump.py           ← Debug: envia e dumpa resposta raw
+  ├── requirements.txt               ← beautifulsoup4, boto3, playwright, zendriver, fastapi, etc.
+  ├── run_zentinel.sh                ← Ativa venv e roda zentinel_health.py
+  └── install.sh                     ← Script de instalação do módulo
+
+ELITE HTTP GATEWAY v2.7 — FEATURES PRINCIPAIS
+  a) POOL: perfil Chrome efêmero por sessão (/tmp/chrome-<uuid>) — sem vazamento de estado
+  b) TTL/Kill: SIGTERM → wait 3s → SIGKILL (evita zumbis de Chrome)
+  c) CIRCUIT BREAKER: por conta com jitter 30-90s no reset automático
+  d) HEALTH /health: cache 5s, retorna "degraded" se CDP travar
+  e) LOGS: flush contínuo + sanitização Bearer/Authorization/JWT (REDACTED nos logs)
+  f) SIGTERM handler: drena fila com 503 antes de morrer graciosamente
+
+ZENTINEL (Watchdog)
+  - Verifica latência de https://chatgpt.com a cada 45s
+  - Threshold: MAX_LATENCY=15s (configurável via .env)
+  - Ao ultrapassar: restart CIRÚRGICO apenas do processo elite-http-gateway
+  - COOLDOWN: 300s (5min) entre restarts — evita loop em degradação
+  - Logs: /var/log/centralldark/gateway.log (10MB + 5 rotações = max 50MB)
+
+DEPENDÊNCIAS RUNTIME
+  beautifulsoup4, boto3, zendriver, playwright, fastapi, uvicorn,
+  python-dotenv, markdownify, markitdown, numpy, pillow, pytesseract,
+  requests, lxml, onnxruntime, reportlab, xlsxwriter, magika
+
+LOGS RUNTIME
+  /var/log/centralldark/gateway.log — centralizado com sanitização automática
+  ~/.pm2/logs/CentralDark-EliteHTTP-*.log — saída PM2
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (E) CONFIGS RELEVANTES ENCONTRADAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. /root/CentralDark/ecosystem.config.cjs
+   → Fonte de verdade de todos os processos PM2 da VPS (18 processos)
+   → Contém todas as env vars (tokens, URLs, segredos) por processo
+
+2. /root/CentralDark/apps/modulos/HERMES-CORE/core/cadeia.json
+   → Cadeia de 16 modelos editável em quente sem restart PM2
+   → Recarregada pelo decisor.mjs a cada 60s
+   → Configurações de timeout, ativo/inativo, via de roteamento
+
+3. /root/CentralDark/apps/modulos/elite-gateway/config/accounts.json
+   → Contas Claude/ChatGPT usadas pelo Chrome CDP
+   → Gerenciado pelo gateway_admin.py
+
+4. /root/CentralDark/apps/modulos/elite-gateway/config/.env
+   → MAX_LATENCY_SECONDS, HEALTH_CHECK_INTERVAL, RESTART_COOLDOWN_SECONDS
+   → ZENTINEL_TARGET_PROCESS (padrão: elite-http-gateway)
+
+5. /root/CentralDark/docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/cadeia.json
+   → Cópia da cadeia no diretório de consciência (backup / referência)
+
+6. /root/CentralDark/docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md
+   → Ledger de aprendizados do Knowledge-Collector
+   → Injetado no decisor via licoesRelevantes() por categoria
+
+7. /root/CentralDark/docs/PENDENCIAS.md
+   → Fila de pendências lida pelo Auto-Diagnostico
+   → Janela anti-spam por horário definida no agente
+
+8. /root/CentralDark/.env
+   → Carregado pelo orchestrator.mjs no boot (DARKAI_URL, DARKAI_ANON_KEY, ELITE_ANTHROPIC_TOKEN)
+   → PM2 não herda ~/.bashrc — carregamento manual necessário
+
+9. /root/CentralDark/docs/CONSCIENCIA/ (diretório)
+   → Regras de conduta, padrões, histórico de decisões
+   → LEMBRANCAS/ — memórias do Pivete com validade 30 dias
+   → PADRAO-CARD-HERMES.md — spec oficial do formato de notificação
+
+10. /root/CentralDark/apps/modulos/HERMES-CORE/knowledge/aprendizados.json
+    → Base de lições categorizadas com gatilhos e bandeiras de "sempre injetar"
+
+INTEGRAÇÕES EXTERNAS MAPEADAS
+  ├── Supabase:           db.lyoigsqluyktoclwdaft.supabase.co:5432 (Auth + DB + Edge Functions)
+  ├── GitHub:             ServerVpss/CentralDark (sync bidirecional via webhook)
+  ├── Telegram:           @srver1bot → admin 1901426549 (todas as notificações)
+  ├── DarkAI:             API multi-modelo (darkai) — rota principal do Hermes
+  ├── Elite Anthropic:    claude.ap7.site/v1/messages (última bala)
+  ├── WuzAPI:             http://127.0.0.1:8081 (WhatsApp)
+  ├── MultiZap Gateway:   proxy.multizap.dev (porta 3100)
+  ├── MCP público:        mcp.centralldark.com (porta 9100, OAuth obrigatório)
+  └── Graph Panel:        grafo.centralldark.com (porta 3030)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (F) MÓDULOS ESPECIAIS — DETALHAMENTO ADICIONAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MCP (apps/modulos/mcp) — v0.4.0
+  102 ferramentas em categorias:
+  GitHub(37) | VPS(10) | Consciência(7) | Skills(4) | Cognitivas(4) |
+  Supabase(4) | Pendências(3) | Aprendizado(3) | Integrações(13) |
+  Elite Gateway(3) | Admin/Painel(9) | Gemini(2) | Outras(2)
+  Porta: 9100 | Auth: OAuth GitHub | URL pública: mcp.centralldark.com
+
+GRUPO-EVOLUÇÃO — 5 agentes debatedores
+  Arquiteto    (gemini-3.1-pro-preview)  → propõe refactor estrutural
+  Pesquisador  (gemini-3-flash-preview)  → busca tendências e libs novas
+  Crítico      (gpt-5)                   → steelman — ataca cada ideia
+  Produto      (gpt-5)                   → valida UX e impacto no usuário
+  Historiador  (gemini-3-flash-preview)  → cruza com CONSCIENCIA/decisões antigas
+  Disparado por: Cartógrafo (mapeamento) quando detecta drift
+  Output: logs/vereditos/YYYY-MM-DD-tema.json + Card Hermes Telegram
+
+MAPEAMENTO (Cartógrafo)
+  Cron: */30 * * * * node cartografo.mjs
+  Escaneia: módulos, PM2, commit git
+  Output: logs/mapa-atual.json (diff histórico)
+  Trigger: drift → aciona Grupo-Evolução
+
+ARSENAL PROXY (apps/modulos/proxy — porta 8083)
+  1. Neural Router      → POST /arsenal/neural
+  2. Auto-Healing Swarm → POST /arsenal/swarm
+  3. Chain Reaction 4IA → POST /arsenal/chain
+  4. Dark Intel         → GET  /arsenal/intel
+  5. Synthetic Forge    → POST /arsenal/synthetic
+  6. Self-Evolution     → POST /arsenal/evolve | GET /arsenal/stats
+  Painel: status.centralldark.com/arsenal.html (Basic Auth)
+
+GUARDIÃO DA CONSCIÊNCIA (infra/guardiao/)
+  guardiao.py    → vigia docs/CONSCIENCIA/ por mudanças não autorizadas
+  analista.py    → analisa padrões e anomalias na consciência do sistema
+
+RESPIRAÇÃO (scripts/vps-reporter.js)
+  Reporter de saúde da VPS — heartbeat periódico do estado geral
+
+CENTRALDARK-VOICE (apps/modulos/centraldark-voice)
+  Extensão Chrome — intercepta botão TTS do Claude.ai
+  Bridge: bridge.centralldark.com/v1/audio/speech
+  Fallback: sobrescreve window.speechSynthesis.speak global
+
+HERMES-THINKER (apps/modulos/hermes-thinker)
+  Agente CoT agressivo + Playwright browser + web search
+  Rodando em Docker isolado
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (G) DOMÍNIOS E PORTAS PÚBLICAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+URL PÚBLICA                        │ PORTA INT │ SERVIÇO
+───────────────────────────────────┼───────────┼────────────────────────────────
+centralldark.com                   │ —         │ TelePanel (React/Vite, Caddy)
+mcp.centralldark.com               │  9100     │ MCP Server (102 tools, OAuth)
+grafo.centralldark.com             │  3030     │ Graph Panel (grafo vivo)
+status.centralldark.com            │  —        │ Painel de status estático
+bridge.centralldark.com            │  —        │ TTS bridge (voz premium PT-BR)
+claude.ap7.site                    │  —        │ Elite Anthropic Proxy (última bala)
+proxy.multizap.dev                 │  3100     │ MultiZap Gateway
+api.centralldark.com               │  —        │ API Hub (Hermes painel)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ (H) REGRAS DE GOVERNANÇA / SEGURANÇA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ÁREAS PROTEGIDAS (CLAUDE.md §9 — requer "PERMITO PIVETE")
+  apps/bot-telegram/
+  apps/modulos/status/
+  apps/modulos/Bolt/
+  apps/modulos/WebUI/
+  apps/modulos/graph-panel/
+  apps/modulos/elite-anthropic-proxy/
+  scripts/webhook/
+  scripts/contas-admin/
+  .github/workflows/
+  infra/caddy/
+  secrets/
+
+BLOQUEIOS DE EXECUTOR (hardcoded no Executor/agent.mjs)
+  reboot, shutdown, halt, poweroff
+  rm -rf / ou rm -rf /*
+  whatsapp-server (qualquer menção)
+  git push --force
+  pm2 delete/stop/restart 1 (whatsapp)
+
+PADRÃO DE NOTIFICAÇÃO OBRIGATÓRIO
+  Card Hermes v1.2/v1.3 — bloco <pre> monoespaçado
+  Enviado por @srver1bot → admin 1901426549
+  NUNCA: texto solto, notify-telegram, conteúdo fora do <pre>
+
+TEMA VISUAL OBRIGATÓRIO (TelePanel)
+  Nome: Esmeralda (Sistema 3D Tátil)
+  Paleta: emerald como accent, modo light padrão
+  Fontes: Geist + Geist Mono
+  Utilitários: shadow-3d, shadow-3d-soft, shadow-3d-primary, shadow-3d-pressed
+  Tokens: hsl(var(--primary)), bg-card — NUNCA hardcodar cores
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FIM DO RELATÓRIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Gerado automaticamente — dados coletados de ecosystem.config.cjs, package.json,
+README.md e código-fonte dos módulos. Versão: 1.0 | Data: 2026-07-06 13:32:47 UTC
