@@ -2409,3 +2409,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** Depois da caçada da WEBUI_LOVABLE_KEY (que Grok jurava ser do gateway mas dava 401 "must start with sk_"), Pivete pediu um curso completo pra qualquer IA aprender a técnica sem repetir o erro.
 - **Aprendizado:** Toda vez que uma IA reclamar de 401/403/402 numa chave Lovable: (1) rodar curl direto no endpoint FINAL, (2) LER o body cru — o próprio Lovable diz o motivo, (3) nunca chutar "é sessão/CORS/proxy" antes de ler. Curso completo em 2 lugares: condefonte/CURSO-CONDEFONTE.md (cofre) e apps/modulos/HERMES-CORE/agents/Knowledge-Collector/aprendizados/CURSO-CONDEFONTE.md (Hermes). Atualizar sempre que a tática evoluir.
+
+### 297. Curso Condefonte mora dentro de LOVABLE_TOKEN/
+- **Categoria:** regra
+- **Data:** 2026-07-05
+- **Contexto:** Tentativa de leitura no caminho antigo keys/condefonte/CURSO-CONDEFONTE.md retornou ENOENT. O arquivo foi movido pra pasta oficial LOVABLE_TOKEN por decisão do Pivete.
+- **Aprendizado:** Caminho oficial: keys/condefonte/LOVABLE_TOKEN/CURSO-CONDEFONTE.md. Qualquer IA que quiser ler o manual da guerra das chaves usa admin_vault_read com esse name exato. O caminho antigo foi desativado.
