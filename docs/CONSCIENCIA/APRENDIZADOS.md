@@ -2427,3 +2427,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** Última bala: isolei que o Hermes crasha por um 'x' solto na linha 617 do executor (ReferenceError). O .catch do loop chama notificar (Telegram falha) + process.exit(1), matando o Hermes antes de pegar missões. Tentei remover o x mas o arquivo é imutável (EPERM em chmod/sed/write).
 - **Aprendizado:** FIX PRONTO (falta permissão): o arquivo do executor Hermes está IMUTÁVEL (chattr +i provável — chmod/sed/writeFile dão 'Operation not permitted' mesmo root). Para consertar: 1) 'chattr -i <arquivo-hermes>' pra destravar, 2) remover a última linha (o 'x' órfão na linha 617), 3) 'node --check' (já validado: sintaxe fica OK sem o x), 4) opcional 'chattr +i' de volta, 5) pm2 restart CentralDark-Hermes --update-env. Isso destrava o executor de missões (a missão thinker-grafo-jarvis está esperando em pendente/) E conserta o notify do Telegram (o crash chamava notificar+exit). Backup já existe: <arquivo>.bak-x-*.
+
+### 300. Grafo Vivo v0.4: 3D bundleado sem CDN
+- **Categoria:** atalho
+- **Data:** 2026-07-06
+- **Contexto:** Plugin Obsidian Grafo Vivo migrou de force-graph 2D (CDN) pra 3d-force-graph bundleado (offline). Precisou de: 3d-force-graph, three, three-spritetext como deps npm, external: [] no esbuild, e node builtins falsos.
+- **Aprendizado:** Pra bundlear 3d-force-graph no Obsidian: (1) npm install 3d-force-graph three three-spritetext, (2) esbuild.config.mjs com external vazio e define:{"process.env.NODE_ENV":"\"production\""}, (3) import ForceGraph3D direto, sem dynamic import. O main.js vai pra ~1.9MB mas funciona offline.
