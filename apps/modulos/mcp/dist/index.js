@@ -5,7 +5,7 @@ import { config } from "./config.js";
 import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
-import { getAccessToken, getSession } from "./sessions.js";
+import { getAccessToken, getSession, getStateStats } from "./sessions.js";
 import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
 import { getStatusHtml, getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
@@ -78,7 +78,7 @@ app.use(correlationMiddleware);
 app.get("/health", (_req, res) => {
     res.json({
         ok: true,
-        service: "CentralDark-MCP",
+        service: "mcp-centraldark",
         version: "0.4.0",
         catalogVersion: CATALOG_VERSION,
         toolCount: getCatalogSummary().toolCount,
@@ -179,10 +179,12 @@ app.get("/skills/:nome/install.sh", (req, res) => {
 // ───────────────────────── OAuth discovery (MCP) ─────────────────────────
 app.get("/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadata);
+app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin/mcp", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
+app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
@@ -195,7 +197,7 @@ app.get("/oauth/callback", handleOAuthCallback);
 // ─────────────────────────────── MCP HTTP ────────────────────────────────
 function unauthorized(req, res, msg) {
     setCorsHeaders(res);
-    res.setHeader("WWW-Authenticate", `Bearer realm="mcp", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource/mcp", scope="mcp"`);
+    res.setHeader("WWW-Authenticate", `Bearer realm="mcp", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource", scope="mcp"`);
     res.status(401).json({
         jsonrpc: "2.0",
         error: { code: -32000, message: msg, data: { cid: req.cid } },
@@ -271,32 +273,64 @@ function getInternalGhToken() {
     return process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
 }
 function resolveGhToken(req) {
+    const l = withCid(req.cid);
+    const rawAuth = findHeaderCaseInsensitive(req, "authorization") ??
+        findHeaderCaseInsensitive(req, "x-forwarded-authorization") ??
+        findHeaderCaseInsensitive(req, "x-original-authorization");
+    const hasAuthHeader = Boolean(rawAuth);
+    const schemeMatch = rawAuth ? /^(\S+)\s+(.+)$/.exec(String(rawAuth).trim()) : null;
+    const authScheme = schemeMatch ? schemeMatch[1] : (rawAuth ? "raw" : "none");
     const bearer = extractBearer(req);
+    const tokenPrefix = bearer ? bearer.slice(0, 8) : null;
+    const stats = (() => { try { return getStateStats(); } catch { return { accessTokens: -1 }; } })();
+
+    // Diagnóstico obrigatório em toda request /mcp (níveis 1..5 de causa-raiz)
+    const logAuth = (lookupResult, extra = {}) => {
+        l.info("mcp_auth_diagnostic", {
+            has_auth_header: hasAuthHeader,
+            auth_scheme: authScheme,
+            token_prefix: tokenPrefix,
+            token_lookup_result: lookupResult,
+            store_size: stats.accessTokens,
+            ...extra,
+        });
+    };
+
     if (bearer) {
         const directToken = process.env.MCP_CENTRALDARK_TOKEN ||
             process.env.CENTRALDARK_MCP_TOKEN ||
             process.env.MCP_TOKEN;
-        // Token direto do MCP (para uso interno / Cline / agentes confiáveis)
         if (directToken && bearer === directToken) {
             const internal = getInternalGhToken();
-            if (!internal)
+            if (!internal) {
+                logAuth("direct_token_but_gh_missing");
                 return { error: "Token interno do servidor não configurado." };
+            }
+            logAuth("direct_token_ok");
             return { token: internal };
         }
         // Fluxo OAuth normal (ChatGPT / clientes externos)
         const at = getAccessToken(bearer);
-        if (!at)
+        if (!at) {
+            // Diferencia not_found vs expired olhando direto no cache bruto
+            logAuth("not_found_or_expired");
             return { error: "Access token inválido ou expirado." };
+        }
+        logAuth("found_in_store", { ttl_ms: at.expiresAt - Date.now(), gh_login: at.gh_login });
         return { token: at.gh_token };
     }
     // Retrocompatibilidade: header x-mcp-session
     const sid = String(req.header("x-mcp-session") ?? "");
     if (sid) {
         const s = getSession(sid);
-        if (!s)
+        if (!s) {
+            logAuth("session_header_invalid");
             return { error: "Sessão inválida ou expirada." };
+        }
+        logAuth("session_header_ok");
         return { token: s.githubAccessToken };
     }
+    logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
 }
 app.post("/mcp", (req, res) => {
@@ -327,15 +361,9 @@ app.get("/mcp", (req, res) => {
 // ─────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ───────────────
 function requireAdminScope(req, res) {
     const bearer = extractBearer(req);
-    if (!bearer) {
-        unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
-        return null;
-    }
+    if (!bearer) { unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente."); return null; }
     const at = getAccessToken(bearer);
-    if (!at) {
-        unauthorizedAdmin(req, res, "Access token admin inválido ou expirado.");
-        return null;
-    }
+    if (!at) { unauthorizedAdmin(req, res, "Access token admin inválido ou expirado."); return null; }
     const scope = String(at.oauth_scope || "");
     if (!/\badmin\b/.test(scope)) {
         unauthorizedAdmin(req, res, "escopo admin obrigatório", 403);
@@ -346,8 +374,7 @@ function requireAdminScope(req, res) {
 app.post("/admin/mcp", (req, res) => {
     const l = withCid(req.cid);
     const tok = requireAdminScope(req, res);
-    if (!tok)
-        return;
+    if (!tok) return;
     l.info("mcp_admin_request_authorized", { method: req.body?.method || "unknown" });
     handleMcpRequest(req, res, tok, { cid: req.cid, admin: true }).catch((err) => {
         l.error("mcp_admin_handler_unhandled", { error: String(err) });
@@ -406,5 +433,4 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
-//# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
