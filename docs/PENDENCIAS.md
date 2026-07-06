@@ -637,3 +637,6 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 ### 25. Hermes parou de notificar no Telegram (notify falhou no heartbeat) — 🔴 ABERTO (05/07/2026, 23:55 BRT)
 - **Sintoma:** Hermes 'notify falhou: Command failed' a cada 5min no heartbeat — script de notify Telegram quebrado (Command failed ao chamar node). Por isso parou de notificar.
 - **Critério pra fechar:** Telegram volta a receber heartbeat do Hermes
+### 26. Hermes não pegou missão do grafo — ERR_MODULE_NOT_FOUND no executor — 🔴 ABERTO (05/07/2026, 23:55 BRT)
+- **Sintoma:** Hermes tem ERR_MODULE_NOT_FOUND (Cannot find module) e ReferenceError: x is not defined nos logs. Missão thinker-grafo-jarvis ficou parada em pendente/ (não foi pega). O watchdog roda mas o executor de missões pode estar quebrado pelo módulo faltante.
+- **Critério pra fechar:** Hermes processa missoes/pendente/ automaticamente de novo
