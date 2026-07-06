@@ -1,6 +1,6 @@
 # 🕸️ CentralDark Grafo Vivo — Plugin Obsidian
 
-Plugin custom pra ver o ecossistema **CentralDark** se movimentando em tempo real dentro do seu Obsidian. Consome o mesmo `graph-data.json` que roda em `status.centralldark.com`, mas renderiza numa view lateral do vault.
+Plugin custom pra ver o ecossistema **CentralDark** se movimentando em tempo real dentro do seu Obsidian. Consome o mesmo `/api/graph` que roda em `grafo.centralldark.com`, mas renderiza numa view lateral do vault.
 
 Nada de mexer no Juggl ou no Graph nativo — esse aqui é **nosso**, sobrevive a update do Obsidian.
 
@@ -23,16 +23,26 @@ Nada de mexer no Juggl ou no Graph nativo — esse aqui é **nosso**, sobrevive 
    ```
 3. Reiniciar o Obsidian → **Configurações → Community plugins → Ativar "CentralDark Grafo Vivo"**.
 4. Clicar no ícone de bifurcação (🍴) na barra lateral esquerda **ou** rodar o comando **"Abrir Grafo Vivo CentralDark"** na paleta.
+5. Para o 3D: clicar no ícone de órbita (🌀) ou comando **"Abrir Grafo 3D · Jarvis"**.
 
 ---
 
 ## 🎨 O que ele mostra
 
+### View 2D (Grafo Vivo)
 - **Nós coloridos por categoria**: bots (verde), MCP (azul), edge functions (roxo), Supabase (verde neon), VPS (laranja), IAs (rosa), módulos (amarelo).
 - **Arestas** ligando quem chama quem.
 - **Partículas** viajando pelas arestas ativas → dá pra ver as IAs se movimentando.
 - **Filtro** por categoria no topo.
 - **Clique** num nó com `obsidian_path` → abre a nota correspondente no vault.
+
+### View 3D (Grafo 3D · Jarvis)
+- **Render 3D completo** com `3d-force-graph` bundleado (sem CDN, funciona offline).
+- **Nós com glow e pulso** — online respira verde, offline pisca vermelho.
+- **Labels de setor** flutuando no centroide de cada grupo.
+- **Ícone 🤖** em nós de agente.
+- **Controles**: rotação automática, reset de câmera, clique no nó para foco.
+- **Dados vivos** do `/api/graph` com poll a cada 5s.
 
 ---
 
@@ -75,10 +85,10 @@ Campos:
 ## 🛣️ Roadmap
 
 - **v0.1** ✅ Fetch periódico, filtro, clique abre nota, partículas em arestas ativas.
-- **v0.2** WebSocket direto no MCP → cada `tool call` vira partícula em tempo real (< 1s de latência).
-- **v0.3** Sincronizar nós como notas vazias em `docs/CONSCIENCIA/00-MAPA/nodes/` pra aparecer no Graph nativo também.
-- **v0.4** Modo 3D opcional (`3d-force-graph`).
-- **v0.5** Ícones custom por categoria (SVG inline).
+- **v0.2** 🔄 WebSocket direto no MCP → cada `tool call` vira partícula em tempo real (< 1s de latência).
+- **v0.3** 🔄 Sincronizar nós como notas vazias em `docs/CONSCIENCIA/00-MAPA/nodes/` pra aparecer no Graph nativo também.
+- **v0.4** ✅ Modo 3D real com `3d-force-graph` bundleado, controles, setores, glow/pulso, labels de agente.
+- **v0.5** 🔄 Ícones custom por categoria (SVG inline).
 
 ---
 
