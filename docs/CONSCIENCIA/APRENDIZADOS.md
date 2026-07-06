@@ -2415,3 +2415,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** Tentativa de leitura no caminho antigo keys/condefonte/CURSO-CONDEFONTE.md retornou ENOENT. O arquivo foi movido pra pasta oficial LOVABLE_TOKEN por decisão do Pivete.
 - **Aprendizado:** Caminho oficial: keys/condefonte/LOVABLE_TOKEN/CURSO-CONDEFONTE.md. Qualquer IA que quiser ler o manual da guerra das chaves usa admin_vault_read com esse name exato. O caminho antigo foi desativado.
+
+### 298. Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes)
+- **Categoria:** atalho
+- **Data:** 2026-07-05
+- **Contexto:** Pivete pediu MODO MÁXIMO TOTAL: memória viva compartilhada entre agente Lovable e Hermes via extração stealth pelo MCP/Condefonte.
+- **Aprendizado:** Sistema de Memória Viva 3-peças ativo: (1) PROMPT-STEALTH.md no cofre orienta o agente a fechar mensagens com bloco <<<MEMORY_DUMP>>>...JSON...<<<END>>>; (2) Condefonte v3.5 (PM2 id 22, CentralDark-CondefonteV35) puxa trajectory a cada 45s, regex extrai, JSON valida, dedup por SHA1, grava no cofre + espelha no memory-stream do Hermes com INDEX.jsonl; (3) canal MCP reusa admin_vault_write (sem tool nova). Pipeline testado end-to-end via --stdin. Watcher rodando, aguardando JWT via refresh_token.
