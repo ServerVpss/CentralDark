@@ -130,110 +130,179 @@ button:hover{filter:brightness(1.05)}.err{color:#fca5a5;font-size:13px;margin-to
 
 const NOC_HTML = `<!doctype html><html lang="pt-BR"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>NOC — MCP CentralDark</title>
+<title>MCP CentralDark — Admin</title>
 <style>
-:root{--bg:#052e2b;--surf:#0a3d38;--surf2:#0d4a44;--border:#0f5951;--text:#e6fff8;--muted:#7fb8ac;--em:#10b981;--em2:#34d399;--warn:#fbbf24;--err:#f87171}
-*{box-sizing:border-box}body{margin:0;background:#031f1c;color:var(--text);font:14px/1.5 ui-monospace,Menlo,Consolas,monospace}
-header{background:linear-gradient(180deg,#0a3d38,#052e2b);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
-header h1{margin:0;font-size:16px;color:var(--em2)}header .meta{color:var(--muted);font-size:12px}
-main{padding:20px;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));max-width:1600px;margin:0 auto}
-.card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:0 10px 30px -12px rgba(0,0,0,.5)}
-.card h2{margin:0 0 12px;font-size:13px;color:var(--em2);text-transform:uppercase;letter-spacing:.08em}
-.bar{height:14px;background:#052e2b;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
-.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--em),var(--em2));transition:width .3s}
-.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--border);font-size:13px;gap:8px}
-.row:last-child{border:0}.ok{color:var(--em2)}.warn{color:var(--warn)}.err{color:var(--err)}
-.tag{display:inline-block;padding:2px 8px;border-radius:6px;background:var(--surf2);border:1px solid var(--border);font-size:11px;color:var(--muted);margin:2px}
-.log{background:#020e0d;border:1px solid var(--border);border-radius:10px;padding:10px;max-height:340px;overflow-y:auto;font-size:12px}
-.log div{padding:2px 4px;border-bottom:1px solid #0a2b28;white-space:pre-wrap;word-break:break-all}
-.log .info{color:#a7f3d0}.log .warn{color:var(--warn)}.log .error{color:var(--err)}.log .debug{color:#5eead4}
-button,input,select{background:var(--surf2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:8px;font:inherit;margin:2px 2px}
-button{cursor:pointer}button:hover{background:var(--em);color:#052e2b}
-input,select{min-width:0}
-.cat{margin-top:10px}.cat h3{margin:8px 0 4px;font-size:12px;color:var(--em2)}
-.grid2{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
-.metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
-.metricas .kpi{background:var(--surf2);border:1px solid var(--border);border-radius:10px;padding:10px}
-.metricas .kpi b{display:block;font-size:22px;color:var(--em2);margin-top:2px}
-.metricas .kpi small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-.etapa{display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:8px;border-radius:8px;background:var(--surf2);margin:4px 0;border:1px solid var(--border)}
-.etapa.ok{border-color:var(--em)}.etapa.err{border-color:var(--err)}
-</style></head><body>
+:root{--bg:#052e2b;--bg2:#031f1d;--surf:#0a3d38;--surf2:#0d4a44;--border:#0f5951;--border2:#137a6e;--text:#e6fff8;--muted:#7fb8ac;--em:#10b981;--em2:#34d399;--err:#f87171;--warn:#fbbf24;--info:#60a5fa}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#0a3d38 0%,var(--bg) 60%,var(--bg2) 100%);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;border-bottom:1px solid var(--border);background:rgba(5,46,43,.7);backdrop-filter:blur(10px);position:sticky;top:0;z-index:20}
+header h1{margin:0;font-size:18px;letter-spacing:.3px;display:flex;align-items:center;gap:10px}
+header h1::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--em);box-shadow:0 0 12px var(--em)}
+header .meta{font-size:12px;color:var(--muted);display:flex;gap:16px;align-items:center}
+header .meta b{color:var(--em2)}
+.tabs{display:flex;gap:4px;padding:12px 28px 0;border-bottom:1px solid var(--border);background:rgba(3,31,29,.6);overflow-x:auto}
+.tab{padding:10px 18px;border-radius:8px 8px 0 0;cursor:pointer;color:var(--muted);font-weight:600;font-size:13px;border:1px solid transparent;border-bottom:none;transition:all .15s;white-space:nowrap}
+.tab:hover{color:var(--text);background:rgba(16,185,129,.08)}
+.tab.active{color:var(--em2);background:var(--surf);border-color:var(--border);position:relative}
+.tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--em)}
+main{padding:24px 28px 40px;max-width:1400px;margin:0 auto}
+.pane{display:none;animation:fade .2s ease}
+.pane.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:linear-gradient(135deg,var(--surf) 0%,var(--surf2) 100%);border:1px solid var(--border);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--em),var(--em2))}
+.kpi .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.kpi .val{font-size:28px;font-weight:700;color:var(--em2);margin-top:6px;line-height:1}
+.kpi.hero-score .val{font-size:22px;color:var(--text)}
+.bar{height:8px;background:rgba(15,89,81,.5);border-radius:99px;overflow:hidden;margin-top:12px}
+.bar>div{height:100%;background:linear-gradient(90deg,var(--em),var(--em2));transition:width .5s;box-shadow:0 0 12px rgba(52,211,153,.5)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+.card h2{margin:0 0 14px;font-size:14px;color:var(--em2);text-transform:uppercase;letter-spacing:.6px;display:flex;justify-content:space-between;align-items:center}
+.card h2 .badge{font-size:11px;background:rgba(16,185,129,.15);color:var(--em2);padding:3px 10px;border-radius:99px;text-transform:none;letter-spacing:0;font-weight:600}
+.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed rgba(15,89,81,.6);font-size:13px}
+.row:last-child{border-bottom:none}
+.row span:first-child{color:var(--muted)}
+.ok{color:var(--em2);font-weight:600}
+.err{color:var(--err);font-weight:600}
+.warn{color:var(--warn)}
+.info{color:var(--info)}
+.cat{margin-bottom:16px}
+.cat h3{margin:0 0 8px;font-size:12px;color:var(--em2);text-transform:uppercase;letter-spacing:.6px}
+.tag{display:inline-block;background:rgba(16,185,129,.12);border:1px solid rgba(52,211,153,.3);color:var(--em2);padding:4px 10px;border-radius:8px;font-size:11px;margin:3px 3px 3px 0;font-family:ui-monospace,monospace;cursor:help}
+.tag:hover{background:rgba(16,185,129,.22)}
+.log-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;height:420px;overflow-y:auto;font-family:ui-monospace,'SF Mono',monospace;font-size:11.5px;line-height:1.6}
+.log-box>div{padding:2px 4px;border-radius:4px}
+.log-box .error,.log-box .err{color:var(--err)}
+.log-box .warn{color:var(--warn)}
+.log-box .info{color:var(--info)}
+.log-box .debug{color:var(--muted)}
+.filters{display:grid;grid-template-columns:repeat(4,1fr) auto auto;gap:8px;margin-bottom:12px}
+.filters input,.filters select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;font-family:inherit}
+.filters input:focus,.filters select:focus{outline:none;border-color:var(--em)}
+.btn{background:linear-gradient(135deg,var(--em),var(--em2));color:#052e2b;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;letter-spacing:.3px;transition:transform .1s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--em2);border:1px solid var(--border2)}
+.conector-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.conector-card h3{margin:0 0 8px;color:var(--em2);font-size:13px;display:flex;align-items:center;gap:8px}
+pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;overflow:auto;font-size:11.5px;color:#c8f5eb;margin:0;font-family:ui-monospace,'SF Mono',monospace;max-height:280px}
+.etapa{display:grid;grid-template-columns:1fr 100px 90px;gap:10px;padding:8px 12px;border-radius:8px;background:rgba(10,61,56,.5);margin:6px 0;font-size:12.5px;align-items:center}
+.etapa.ok{border-left:3px solid var(--em2)}
+.etapa.err{border-left:3px solid var(--err)}
+.diag-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+@media(max-width:900px){.hero{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:1fr}.conector-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}}
+</style></head>
+<body>
 <header>
-  <h1>🟢 NOC CentralDark — MCP Dono</h1>
-  <div class="meta">
-    <span id="clock">--:--:--</span>
-    · v<span id="ver">?</span>
-    · <a href="/admin/logout" style="color:var(--muted)">sair</a>
-  </div>
+  <h1>MCP CentralDark · Painel Admin</h1>
+  <div class="meta"><span>versão <b id="ver">?</b></span><span id="clock">--:--:--</span></div>
 </header>
+<nav class="tabs">
+  <div class="tab active" data-p="visao">Visão Geral</div>
+  <div class="tab" data-p="tools">Ferramentas</div>
+  <div class="tab" data-p="audit">Auditoria</div>
+  <div class="tab" data-p="conector">Conector</div>
+  <div class="tab" data-p="diag">Diagnóstico</div>
+</nav>
 <main>
-  <section class="card" style="grid-column:1/-1">
-    <h2>Health Score</h2>
-    <div class="grid2">
-      <div class="bar"><span id="scoreBar" style="width:0%"></span></div>
-      <strong id="scoreTxt" style="min-width:80px;text-align:right">--%</strong>
+
+  <div class="pane active" id="p-visao">
+    <div class="hero">
+      <div class="kpi hero-score">
+        <div class="lbl">Score de Saúde</div>
+        <div class="val" id="scoreTxt">--</div>
+        <div class="bar"><div id="scoreBar" style="width:0%"></div></div>
+      </div>
+      <div class="kpi"><div class="lbl">SSE ativas</div><div class="val" id="kpiSse">-</div></div>
+      <div class="kpi"><div class="lbl">Erros</div><div class="val" id="kpiErros">-</div></div>
+      <div class="kpi"><div class="lbl">Warns</div><div class="val" id="kpiWarns">-</div></div>
+      <div class="kpi"><div class="lbl">Requests</div><div class="val" id="kpiReqs">-</div></div>
+      <div class="kpi"><div class="lbl">Tools</div><div class="val" id="toolCount">-</div></div>
     </div>
-    <div id="checks" style="margin-top:12px"></div>
-  </section>
-
-  <section class="card">
-    <h2>Métricas (últimos 5 min)</h2>
-    <div class="metricas">
-      <div class="kpi"><small>Erros</small><b id="kpiErros">-</b></div>
-      <div class="kpi"><small>Warns</small><b id="kpiWarns">-</b></div>
-      <div class="kpi"><small>Requests</small><b id="kpiReqs">-</b></div>
-      <div class="kpi"><small>SSE ativas</small><b id="kpiSse">-</b></div>
+    <div class="grid">
+      <div class="card"><h2>Dependências <span class="badge">health/deep</span></h2><div id="checks"></div></div>
+      <div class="card"><h2>Processo <span class="badge">runtime</span></h2><div id="proc"></div></div>
     </div>
-  </section>
+  </div>
 
-  <section class="card">
-    <h2>Info do processo</h2>
-    <div id="proc"></div>
-  </section>
+  <div class="pane" id="p-tools">
+    <div class="card"><h2>Catálogo de ferramentas MCP <span class="badge" id="toolCountBadge">carregando…</span></h2><div id="tools"></div></div>
+  </div>
 
-  <section class="card" style="grid-column:1/-1">
-    <h2>🧪 Teste end-to-end OAuth</h2>
-    <div>Simula um cliente ChatGPT: DCR → authorize → token → tools/list.</div>
-    <div style="margin-top:8px">
-      <button onclick="rodarE2E()">▶️ Rodar teste E2E</button>
-      <span id="e2eStatus" style="margin-left:8px;color:var(--muted)"></span>
+  <div class="pane" id="p-audit">
+    <div class="card">
+      <h2>Buscar logs <span class="badge">/admin/api/logs</span></h2>
+      <div class="filters">
+        <input id="fRota" placeholder="rota (ex: /health)"/>
+        <input id="fCid" placeholder="cid"/>
+        <select id="fLevel"><option value="">— level —</option><option>error</option><option>warn</option><option>info</option><option>debug</option></select>
+        <input id="fQ" placeholder="texto livre"/>
+        <button class="btn" onclick="buscarLogs()">Buscar</button>
+        <button class="btn ghost" onclick="limparBusca()">Limpar</button>
+      </div>
+      <div id="resultBusca" class="log-box" style="height:220px"></div>
     </div>
-    <div id="e2eResultado" style="margin-top:10px"></div>
-  </section>
+    <div style="height:14px"></div>
+    <div class="card"><h2>Stream ao vivo <span class="badge">SSE /admin/logs/stream</span></h2><div id="log" class="log-box"></div></div>
+  </div>
 
-  <section class="card" style="grid-column:1/-1">
-    <h2>🔎 Busca de logs</h2>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-      <input id="fRota" placeholder="rota (ex: /token)" size="18"/>
-      <input id="fCid" placeholder="request-id (cid)" size="24"/>
-      <select id="fLevel">
-        <option value="">todos os níveis</option>
-        <option value="debug">debug</option>
-        <option value="info">info</option>
-        <option value="warn">warn</option>
-        <option value="error">error</option>
-      </select>
-      <input id="fQ" placeholder="texto livre" size="20"/>
-      <button onclick="buscarLogs()">Buscar</button>
-      <button onclick="limparBusca()">Limpar</button>
+  <div class="pane" id="p-conector">
+    <div class="card">
+      <h2>Como conectar clientes MCP <span class="badge">config</span></h2>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 14px">Cole os snippets abaixo no arquivo de config do cliente. Endpoint público oficial: <b>https://mcp.centralldark.com/mcp</b></p>
+      <div class="conector-grid">
+        <div class="conector-card">
+          <h3>🖥️ Claude Desktop</h3>
+          <pre class="snippet">{
+  "mcpServers": {
+    "centraldark": {
+      "type": "http",
+      "url": "https://mcp.centralldark.com/mcp"
+    }
+  }
+}</pre>
+        </div>
+        <div class="conector-card">
+          <h3>⚡ Cursor</h3>
+          <pre class="snippet">{
+  "mcpServers": {
+    "centraldark": {
+      "url": "https://mcp.centralldark.com/mcp",
+      "transport": "http"
+    }
+  }
+}</pre>
+        </div>
+        <div class="conector-card">
+          <h3>🧠 Codex CLI</h3>
+          <pre class="snippet">[mcp.centraldark]
+transport = "http"
+url = "https://mcp.centralldark.com/mcp"</pre>
+        </div>
+        <div class="conector-card">
+          <h3>🔌 Outros (SSE)</h3>
+          <pre class="snippet">endpoint: https://mcp.centralldark.com/mcp
+transport: streamable-http
+auth: bearer &lt;TOKEN&gt;  (opcional)</pre>
+        </div>
+      </div>
     </div>
-    <div id="resultBusca" class="log" style="max-height:260px"></div>
-  </section>
+  </div>
 
-  <section class="card" style="grid-column:1/-1">
-    <h2>Catálogo de tools <span id="toolCount" class="tag">…</span></h2>
-    <div id="tools"></div>
-  </section>
-
-  <section class="card" style="grid-column:1/-1">
-    <h2>Logs ao vivo (SSE)</h2>
-    <div>
-      <button onclick="testarSse()">🔬 Testar SSE</button>
-      <button onclick="recarregar()">🔄 Recarregar tudo</button>
+  <div class="pane" id="p-diag">
+    <div class="card">
+      <h2>Diagnóstico end-to-end <span class="badge">E2E</span></h2>
+      <div class="diag-actions">
+        <button class="btn" onclick="rodarE2E()">▶ Rodar suíte E2E</button>
+        <button class="btn ghost" onclick="testarSse()">📡 Testar SSE</button>
+        <button class="btn ghost" onclick="recarregar()">🔄 Recarregar métricas</button>
+      </div>
+      <div id="e2eStatus" style="margin-bottom:10px;color:var(--muted);font-size:13px">aguardando…</div>
+      <div id="e2eResultado"></div>
     </div>
-    <div id="log" class="log" style="margin-top:10px">Aguardando eventos…</div>
-  </section>
+  </div>
+
 </main>
 <script>
 const $ = (id) => document.getElementById(id);
@@ -249,6 +318,13 @@ function dataHoraBr(valor){
 }
 function ts(){return horaBr()}
 setInterval(()=>$('clock').textContent=ts(),1000);
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  $('p-'+t.dataset.p).classList.add('active');
+}));
 
 async function carregarHealth(){
   const r = await fetch('/health/deep'); const j = await r.json();
@@ -279,7 +355,8 @@ async function carregarMetricas(){
 
 async function carregarTools(){
   const r = await fetch('/admin/api/tools'); const j = await r.json();
-  $('toolCount').textContent = j.total+' tools';
+  $('toolCount').textContent = j.total;
+  const badge = $('toolCountBadge'); if (badge) badge.textContent = j.total+' tools';
   $('tools').innerHTML = Object.entries(j.categorias).map(([cat,list]) =>
     '<div class="cat"><h3>'+cat+' ('+list.length+')</h3>'+
     list.map(t=>'<span class="tag" title="'+(t.description||'').replace(/"/g,'&quot;')+'">'+t.name+'</span>').join('')+
