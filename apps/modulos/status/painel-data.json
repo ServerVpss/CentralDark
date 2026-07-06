@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T09:51:25.650Z",
-  "updatedAtBR": "06/07/2026, 06:51:25 BRT",
+  "updatedAt": "2026-07-06T09:51:44.936Z",
+  "updatedAtBR": "06/07/2026, 06:51:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Guardião online no grupo. Próximo: replicar NOTIFY_CHAT_ID no Hermes + subir grupo-evolucao (5 IAs) no PM2",
     "branch": "main",
-    "lastCommit": "aprendizado(#301): Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start",
+    "lastCommit": "dbf19e904",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,14 +596,6 @@
     }
   ],
   "events": [
-    {
-      "time": "2026-07-06T09:51:25.650Z",
-      "titulo": "Push na main · 7b0eb3f2ceeb3ad49c30c01bb7ae395ec18ff0b5",
-      "detalhe": "aprendizado(#301): Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start",
-      "area": "Repositório",
-      "sha": "7b0eb3f",
-      "actor": "segredounlock"
-    },
     {
       "time": "2026-07-06T09:47:53.401Z",
       "title": "Guardião da Consciência religado e consertado — agora notifica no grupo Central Dark - Grupo da Evolução (padrão NOTIFY_CHAT_ID)",
@@ -1254,13 +1246,6 @@
   ],
   "iaTimeline": [
     {
-      "time": "2026-07-06T09:51:25.650Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7b0eb3f2ceeb3ad49c30c01bb7ae395ec18ff0b5 (7b0eb3f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
       "time": "2026-07-06T06:10:03.751Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6d75ae65e54ce7bdb60ef53abe688c3ad211a657 (6d75ae6)",
@@ -1600,6 +1585,13 @@
       "time": "2026-07-05T19:25:49.920Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · a737a9bb0b1c647f846adc90f050db0c59d1f171 (a737a9b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-07-05T19:09:27.882Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · e2a7c9cb7a283dac70c8ba625bcf208384756384 (e2a7c9c)",
       "area": "Repositório",
       "status": "sucesso"
     }
