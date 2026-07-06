@@ -1,63 +1,32 @@
-# Plano — WebUI editável ao vivo (bind-mount) + fix do Integrations
+# Sincronizar DarkAI nos processos PM2
 
-## Objetivo
-Parar de reconstruir container toda vez. Deixar 3 áreas do Open-WebUI editáveis direto na VPS, com reflexo imediato (ou restart de 3s). E de quebra resolver o erro 500 do `/api/v1/configs/tool_servers` que travou a página de integrações.
+## Situação
 
-## O que vai virar bind-mount
+O DarkAI já responde certinho na edge function (chave nova `DARKAI_CLI_KEY` aceita) e o binário `darkai` funciona pra shell nova. Mas os processos PM2 que estavam rodando ANTES da troca da chave (Hermes, ArsenalAdapter, LovableBridge, GuardiaoConsciencia, HubBot, etc) carregaram o env antigo em memória e vão continuar apanhando `chave_invalida` até serem reiniciados.
 
-| Área | Caminho no host (VPS) | Caminho dentro do container | Como recarrega |
-|---|---|---|---|
-| **Config/integrações** (tool_servers, MCP, modelos, providers) | `/root/CentralDark/apps/modulos/WebUI/data/` (já existe) | `/app/backend/data/` | Muda pela UI, salva no `webui.db` — zero restart |
-| **Tema/CSS/logo CentralDark** | `/root/CentralDark/apps/modulos/WebUI/custom/static/` | `/app/backend/open_webui/static/` | Refresh do browser (Ctrl+F5) |
-| **Prompts/personas/functions** | `/root/CentralDark/apps/modulos/WebUI/custom/functions/` | `/app/backend/data/functions/` | Auto-reload do WebUI (sem restart) |
+Confirmei olhando `/proc/<pid>/environ` do Hermes: ele ainda tem a `DARKAI_ANON_KEY` velha.
 
-## Fases
+## O que vou fazer
 
-### Fase 1 — Fix imediato do Integrations (destravar hoje)
-1. Backup do `docker-compose.override.yml` atual
-2. Remover a linha `TOOL_SERVER_CONNECTIONS=...` (JSON mal escapado que quebra o `json.loads()` e retorna 500)
-3. `docker compose up -d webui` — sobe limpo em ~5s
-4. Cadastrar MCP na UI: **Settings → Connections → External Tool Servers → +**
-   - URL: `https://mcp.centralldark.com/mcp`
-   - Auth: Bearer `<MCP_SESSION_SECRET>` (já tá no cofre)
-5. Verificar as 107 tools aparecendo
+1. **Descobrir quem usa** — listar processos PM2 cujo env atual contém `DARKAI_` (comparar valor em memória com o novo `/etc/profile.d/darkai.sh`).
+2. **Recarregar env dos serviços afetados** com `pm2 restart <nome> --update-env`. Isso reinicia SÓ os processos identificados, um por um, sem tocar em nada não relacionado.
+3. **Ordem segura** (menos crítico → mais crítico):
+   - `CentralDark-ArsenalAdapter`
+   - `CentralDark-LovableBridge`
+   - `CentralDark-GuardiaoConsciencia`
+   - `CentralDark-Hermes` (por último, é o orquestrador)
+   - qualquer outro que apareça no scan
+4. **`pm2 save`** pra fixar o estado no dump.
+5. **Validação**: pra cada serviço, checar que voltou `online` e uptime resetou. Depois disparar 1 chamada de teste no Hermes (via `hermes_dispatch_mission` com missão fake tipo "responda pong via darkai") pra confirmar que a cadeia inteira responde.
+6. **Notificar no Telegram** o resultado, no padrão Card Hermes.
 
-### Fase 2 — Bind-mount das 3 áreas editáveis
-1. Criar estrutura no host:
-   ```
-   /root/CentralDark/apps/modulos/WebUI/custom/
-   ├── static/          ← tema/logo/CSS
-   └── functions/       ← prompts/personas
-   ```
-2. Copiar os arquivos atuais de dentro do container pro host (uma vez só, pra preservar defaults)
-3. Editar `docker-compose.override.yml` adicionando volumes:
-   ```yaml
-   volumes:
-     - ./data:/app/backend/data
-     - ./custom/static:/app/backend/open_webui/static
-     - ./custom/functions:/app/backend/data/functions
-   ```
-4. `docker compose up -d webui` uma última vez pra ativar os mounts
-5. A partir daí: edita no host → efeito imediato ou restart de 3s (`docker restart CentralDark-WebUI`)
+## Detalhes técnicos
 
-### Fase 3 — Documentação viva
-Criar `apps/modulos/WebUI/EDITAR.md` com o mapa: "quer mudar X? edita arquivo Y". Assim qualquer IA nova (ou você em 3 semanas) sabe onde mexer sem quebrar nada.
+- Não vou mexer em `whatsapp-server` (id 1, estado `stopped` é intencional).
+- Nada de `pm2 restart all` — cada processo por nome.
+- Se o restart do Hermes falhar, rollback imediato: reiniciar de novo lendo o dump anterior.
+- Backup do `/etc/profile.d/darkai.sh` já existe (`.bak.<timestamp>`) do turno passado.
 
-## Trava e segurança
-- `apps/modulos/WebUI/` é 🔒 protegido — este plano é o pedido formal de autorização (**PERMITO PIVETE WEBUI**)
-- Backup automático do `docker-compose.override.yml` antes de qualquer edit (feito pelo `vps_write_file_safe`)
-- Rollback = restaurar backup + `docker compose up -d`
-- MCP secret nunca sai do cofre, nunca aparece em log
-- Notificação Card Hermes v1.3 no @srver1bot quando concluir
+## Risco
 
-## O que NÃO vai mudar
-- Container continua Docker (isolamento preservado)
-- Caddy/subdomínio `ui.centralldark.com` intocado
-- Banco `webui.db` intocado (já era volume)
-- Nenhuma migration, nenhuma reinstalação, nenhum downtime além dos 5s de restart
-
-## Tempo estimado
-- Fase 1: 5 min
-- Fase 2: 10 min
-- Fase 3: 5 min
-- **Total: ~20 min**
+Baixo. Restart controlado, um serviço por vez, com validação após cada um. Downtime esperado por serviço: 2-5 segundos.
