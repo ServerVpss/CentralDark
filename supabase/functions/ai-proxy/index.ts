@@ -253,7 +253,7 @@ function unauthorized(reason = "invalid_api_key") {
 
 async function proxyChatCompletions(req: Request, lovableKey: string) {
   const body = await req.json().catch(() => ({}));
-  const model = typeof body?.model === "string" && body.model ? body.model : DEFAULT_MODEL;
+  const model = normalizeModel(body?.model);
   const stream = body?.stream === true;
 
   const upstream = await fetch(`${GATEWAY_BASE}/chat/completions`, {
