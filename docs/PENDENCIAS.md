@@ -634,3 +634,6 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 ### 24. DECISÃO SELADA: Sentry descartado, monitoramento fica 100% local via PM2 — 🟢 ABERTO (05/07/2026, 17:48 BRT)
 - **Sintoma:** sentry_listar_issues falha por falta de SENTRY_ORG — decisão: não usar Sentry, é serviço externo desnecessário
 - **Critério pra fechar:** Nunca reabrir pedido de configurar Sentry. Monitoramento de erro é local: pm2 logs + deploy_status.
+### 25. Hermes parou de notificar no Telegram (notify falhou no heartbeat) — 🔴 ABERTO (05/07/2026, 23:55 BRT)
+- **Sintoma:** Hermes 'notify falhou: Command failed' a cada 5min no heartbeat — script de notify Telegram quebrado (Command failed ao chamar node). Por isso parou de notificar.
+- **Critério pra fechar:** Telegram volta a receber heartbeat do Hermes
