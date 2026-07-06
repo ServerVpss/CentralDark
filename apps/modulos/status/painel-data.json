@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T04:42:24.162Z",
-  "updatedAtBR": "06/07/2026, 01:42:24 BRT",
+  "updatedAt": "2026-07-06T05:00:15.292Z",
+  "updatedAtBR": "06/07/2026, 02:00:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "docs(pendencias): nova #32 Grupo da Evolução — 5 IAs paradas, debate nunca rodou, não notifica no grupo",
+    "lastCommit": "Corrigiu modelos e gateway",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T05:00:15.292Z",
+      "titulo": "Push na main · b6b684d6a66ea11854521e4de7bd7efef92ea3a6",
+      "detalhe": "Corrigiu modelos e gateway",
+      "area": "Repositório",
+      "sha": "b6b684d",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-06T04:42:24.162Z",
       "titulo": "Push na main · 6339b6df706d9d1128effcba5679d43e1d5e55b0",
       "detalhe": "docs(pendencias): nova #32 Grupo da Evolução — 5 IAs paradas, debate nunca rodou, não notifica no grupo",
@@ -980,14 +988,6 @@
       "detalhe": "lembranca: Vault Grafo = prioridade real do Pivete (visão \"cérebro Homem de Ferro\")",
       "area": "Repositório",
       "sha": "a8f493c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-05T03:19:45.285Z",
-      "titulo": "Push na main · d18b0b6467d5e729d375f2e4a3ad15ce408e43d2",
-      "detalhe": "lembranca: Estado do Plugin Obsidian Grafo Vivo + rota pendente (grafo 3D/mobile)",
-      "area": "Repositório",
-      "sha": "d18b0b6",
       "actor": "segredounlock"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T05:00:15.292Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · b6b684d6a66ea11854521e4de7bd7efef92ea3a6 (b6b684d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T04:42:24.162Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6339b6df706d9d1128effcba5679d43e1d5e55b0 (6339b6d)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T15:38:56.460Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · d1d32dd3514ae7644e63811d363f284b7f158394 (d1d32dd)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T15:00:45.025Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 15ff8d96cd3e09809ad452da444b26c9b5a5e79d (15ff8d9)",
       "area": "Repositório",
       "status": "sucesso"
     }
