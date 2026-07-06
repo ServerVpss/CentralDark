@@ -2433,3 +2433,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** Plugin Obsidian Grafo Vivo migrou de force-graph 2D (CDN) pra 3d-force-graph bundleado (offline). Precisou de: 3d-force-graph, three, three-spritetext como deps npm, external: [] no esbuild, e node builtins falsos.
 - **Aprendizado:** Pra bundlear 3d-force-graph no Obsidian: (1) npm install 3d-force-graph three three-spritetext, (2) esbuild.config.mjs com external vazio e define:{"process.env.NODE_ENV":"\"production\""}, (3) import ForceGraph3D direto, sem dynamic import. O main.js vai pra ~1.9MB mas funciona offline.
+
+### 301. Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start
+- **Categoria:** armadilha
+- **Data:** 2026-07-06
+- **Contexto:** Fix do notifier.py do Guardião foi aplicado 2x e continuou falhando: o cat>heredoc não gravou de verdade (arquivo seguiu com NOTIFY_API_KEY), e pm2 restart --update-env não recarrega código Python novo. Só resolveu com base64 -d + delete/start limpo.
+- **Aprendizado:** Ao editar arquivo .py que roda no PM2: (1) confirmar via grep -c que o conteúdo REALMENTE gravou (heredoc cat> pode falhar silencioso); (2) confirmar QUAL arquivo o import resolve com python -c 'import x; print(x.__file__)' — pode haver duplicatas; (3) apagar __pycache__; (4) usar pm2 delete + start (não restart --update-env) pra forçar recarga do código. Transferência confiável de conteúdo do ambiente do agente pra VPS = base64 -d, não heredoc.
