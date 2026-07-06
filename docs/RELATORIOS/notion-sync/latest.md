@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T10:08:26.820Z
+# 🧠 Notion Sync — 2026-07-06T10:22:28.367Z
 
-- **Commit fonte:** `f6bea09673092a7e15b0c8deb1790d394e315704`
+- **Commit fonte:** `94455bc1d4c39f772d0dd6964fd7ef6e991eccb4`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 337 atualizadas · ❌ 452 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 338 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 303 | 0 | 302 | 0 | 1 |
+| aprendizados | 303 | 0 | 303 | 0 | 0 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -158,7 +158,7 @@
 | aprendizados | atualizado | #97 — Anti-segredo não deve acusar regex do próprio validador |
 | aprendizados | atualizado | #98 — Lote 1 WhatsApp read-only mergeado e propagado |
 | aprendizados | atualizado | #99 — Lote 2 bot-server consolidado no caminho operacional |
-| aprendizados | erro | #100 — Lote 3 chats compostos concluído |
+| aprendizados | atualizado | #100 — Lote 3 chats compostos concluído |
 | aprendizados | atualizado | #101 — Lote 4 rota chats read-only concluído |
 | aprendizados | atualizado | #102 — Lote 5 rota contacts read-only concluído |
 | aprendizados | atualizado | #103 — Lote 6 rota avatar read-only concluído |
