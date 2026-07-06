@@ -313,3 +313,13 @@ Conteúdo: Plugin Obsidian Grafo Vivo agora tem view 3D real com 3d-force-graph 
 - **Promovida:** nao
 
 Conteúdo: O Guardião da Consciência (PM2 CentralDark-GuardiaoConsciencia) estava desligado e com notifier quebrado. Consertado em 06/07/2026: notifier.py agora chama scripts/notify-claude/notify-telegram.sh (Bot API direta, formato <pre> monoespaçado) em vez da edge function notify-telegram do Supabase (que exigia NOTIFY_API_KEY nunca configurada). O script ganhou suporte à env NOTIFY_CHAT_ID pra escolher destino. Guardião sobe com NOTIFY_CHAT_ID=-5365750004 e notifica no grupo 'Central Dark - Grupo Da Evolução' (chat_id -5365750004, sem prefixo -100). Modo 'propor' (nunca move arquivo). Vigia docs/CONSCIENCIA + PM2 + Docker + Git. Commit dbf19e904 no remoto. Padrão NOTIFY_CHAT_ID deve ser reusado pra Hermes e grupo-evolucao também.
+
+### [2026-07-06T18:35] Padrão Tutor Leigo: renomear técnico → amigável
+- **Data:** 2026-07-06
+- **Tags:** ux-leigo, nomenclatura, tutor, preferencia-pivete
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-05
+- **Promovida:** sim
+
+Conteúdo: Sempre que expor lista de opções técnicas pro Pivete (modelos de IA, serviços, comandos, tools), renomear/rotular como um TUTOR ensinando leigo: cada item precisa dizer PRA QUE SERVE em 2-3 palavras (ex: "rapido-", "leitura-", "top-", "codigo-", "barato-"). Exemplo aplicado no /root/[oculto]: aliases viraram "top-gpt55-mais-inteligente", "leitura-gemini25-pro-textao", "rapido-gemini25-flash", "codigo-devstral". Regra: nome técnico puro (gpt-5.5, gemini-2.5-pro) NUNCA sozinho — sempre com prefixo de uso. Vale pra qualquer picker/menu/lista que ele vá ler.
