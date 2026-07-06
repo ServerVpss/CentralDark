@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T02:33:05.260Z",
-  "updatedAtBR": "05/07/2026, 23:33:05 BRT",
+  "updatedAt": "2026-07-06T03:08:41.279Z",
+  "updatedAtBR": "06/07/2026, 00:08:41 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "aprendizado(#298): Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes)",
+    "lastCommit": "consciencia(secao 13): Selar grafo oficial único (grafo.centralldark.com), aposentar status. como grafo — decisão do Pivete",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T03:08:41.279Z",
+      "titulo": "Push na main · 1f29f3c4bd6e6b7403e43642056c12f1f8424f90",
+      "detalhe": "consciencia(secao 13): Selar grafo oficial único (grafo.centralldark.com), aposentar status. como grafo — decisão do Pivete",
+      "area": "Repositório",
+      "sha": "1f29f3c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-06T02:33:05.260Z",
       "titulo": "Push na main · 94ada3bc9dd73e532232f6dde881a86940870851",
       "detalhe": "aprendizado(#298): Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes)",
@@ -980,14 +988,6 @@
       "detalhe": "Subiu grafo central em 3 arquivos",
       "area": "Repositório",
       "sha": "df5e255",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-05T01:20:46.080Z",
-      "titulo": "Push na main · e0da89341a7fe520aafa53d661db9bb2b053813c",
-      "detalhe": "Implementou notificações v1.3",
-      "area": "Repositório",
-      "sha": "e0da893",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T03:08:41.279Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1f29f3c4bd6e6b7403e43642056c12f1f8424f90 (1f29f3c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T02:33:05.260Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 94ada3bc9dd73e532232f6dde881a86940870851 (94ada3b)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T03:39:56.743Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · a8f493c9306d0ef4ee6821e93631268dcc27ad94 (a8f493c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T03:19:45.285Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d18b0b6467d5e729d375f2e4a3ad15ce408e43d2 (d18b0b6)",
       "area": "Repositório",
       "status": "sucesso"
     }
