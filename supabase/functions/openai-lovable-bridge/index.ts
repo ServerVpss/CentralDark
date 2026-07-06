@@ -6,7 +6,7 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 const LOVABLE_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const LOVABLE_KEY = Deno.env.get("LOVABLE_API_KEY");
-const BRIDGE_SECRET = Deno.env.get("WEBUI_BRIDGE_SECRET");
+const BRIDGE_SECRET = Deno.env.get("WEBUI_LOVABLE_KEY");
 
 // Catálogo oficial — 19 modelos que o WebUI vai listar no dropdown
 const MODELOS = [
@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
   const path = url.pathname.replace(/^\/functions\/v1/, "").replace(/^\/openai-lovable-bridge/, "");
 
   if (!LOVABLE_KEY) return json({ error: "LOVABLE_API_KEY ausente no ambiente" }, 500);
-  if (!BRIDGE_SECRET) return json({ error: "WEBUI_BRIDGE_SECRET ausente no ambiente" }, 500);
+  if (!BRIDGE_SECRET) return json({ error: "WEBUI_LOVABLE_KEY ausente no ambiente" }, 500);
   if (!autorizado(req)) return json({ error: "Chave inválida" }, 401);
 
   // GET /v1/models  — Open WebUI usa isso pra popular o dropdown
