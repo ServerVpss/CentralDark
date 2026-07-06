@@ -6,7 +6,7 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 const LOVABLE_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const LOVABLE_KEY = Deno.env.get("LOVABLE_API_KEY");
-const BRIDGE_SECRET = Deno.env.get("WEBUI_BRIDGE_SECRET");
+const BRIDGE_SECRET = Deno.env.get("WEBUI_LOVABLE_KEY");
 
 // Catálogo oficial — 19 modelos que o WebUI vai listar no dropdown
 const MODELOS = [
