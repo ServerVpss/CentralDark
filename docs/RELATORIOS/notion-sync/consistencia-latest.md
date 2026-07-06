@@ -1,8 +1,8 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-05T23:55:47.511Z
-- **Commit:** `717b0bdccb5a5fc381b52ae2df68d33b22d42788`
-- **Disparado por:** lovable-dev[bot]
+- **Gerado:** 2026-07-06T00:36:52.149Z
+- **Commit:** `8741b74e2ae93424042fc7ee7c4fad7084a139b1`
+- **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
 
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 326 | 0 | 0 | 326 | 0 |
+| aprendizados | 327 | 0 | 0 | 327 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **326**
+- 🟥 Faltando no Notion: **327**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -374,4 +374,5 @@
 - 292. CDN sem versão pinada quebrou o HUD 3D do GrafoVivo
 - 293. Sincronia VPS falhou por conflito de merge e foi resolvida
 - 294. EliteHTTP porta real 8082 + Sentry precisa de org manual
+- 295. Grok deve escrever secrets pelo admin_vault_write
 </details>

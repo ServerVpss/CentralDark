@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-05T23:55:44.674Z
+# 🧠 Notion Sync — 2026-07-06T00:36:48.574Z
 
-- **Commit fonte:** `717b0bdccb5a5fc381b52ae2df68d33b22d42788`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `8741b74e2ae93424042fc7ee7c4fad7084a139b1`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 331 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 331 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 296 | 0 | 296 | 0 | 0 |
+| aprendizados | 297 | 1 | 296 | 0 | 0 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -353,6 +353,7 @@
 | aprendizados | atualizado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
 | aprendizados | atualizado | #293 — Sincronia VPS falhou por conflito de merge e foi resolvida |
 | aprendizados | atualizado | #294 — EliteHTTP porta real 8082 + Sentry precisa de org manual |
+| aprendizados | criado | #295 — Grok deve escrever secrets pelo admin_vault_write |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
