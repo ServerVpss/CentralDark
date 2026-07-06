@@ -1,75 +1,79 @@
-# Bridge vNext.1 — auth híbrido + player de áudio que toca no Windows
+# Extensão CentralDark Voice — botão "Ler em voz alta" do Claude toca com voz premium
 
-## Por que precisa mudar
+## Objetivo em 1 linha
 
-**1) Auth híbrido (baseado na doc oficial + CodeRouter):**
-O Claude Code manda a chave em **dois headers diferentes** dependendo do modo:
-- `ANTHROPIC_API_KEY` (modo direto) → envia `x-api-key: <chave>`
-- `ANTHROPIC_AUTH_TOKEN` (modo gateway/proxy) → envia `Authorization: Bearer <chave>`
+Fazer o botão nativo **"Ler em voz alta"** (`data-testid="action-bar-read-aloud"`) do Claude.ai / Claude Desktop tocar com a **voz premium do bridge CentralDark** em português brasileiro nativo, em vez da voz robótica do Windows.
 
-Hoje o bridge só aceita um dos dois — quem configurar do "jeito errado" leva 401. O painel do usuário já tem o seletor "Esquema de autenticação do gateway", mas o servidor precisa aceitar **os dois ao mesmo tempo** pra ser tolerante.
+## Por que precisa de extensão (e não é config do bridge)
 
-**2) Áudio não toca no Claude Code Desktop Windows:**
-Confirmado na fonte do Claude Code (`@anthropic/ink` = renderizador TUI de terminal): **não existe player de áudio embutido**. Ele só renderiza texto, markdown, tool_use, tool_result e imagem. Áudio inline é impossível pelo cliente.
+Aquele botão é frontend da Anthropic e usa `window.speechSynthesis` do navegador — não passa pela nossa bridge. A única forma de trocar a voz sem depender da Microsoft é **injetar código no navegador** que intercepta o clique e chama nosso `/v1/audio/speech`.
 
-O caminho real é o **link clicável** que abre no navegador do Windows. Se hoje "não toca", é porque:
-- a URL pode estar chegando sem `https://` absoluto (Windows Terminal não linkifica);
-- o MP3 servido pode estar vindo com `Content-Disposition: attachment` (força download em vez de tocar);
-- não existe fallback quando o terminal não é clicável (PowerShell antigo, `cmd.exe`).
+## O que entregar
 
-## O que fazer (patch único no `server.mjs` da VPS)
+**Uma extensão MV3** (Chrome/Edge/Brave) chamada `centraldark-voice`, que:
 
-Branch: `feat/bridge-auth-hibrido-player-audio`. Backup: `server.mjs.bak-auth-<timestamp>`.
+1. Roda como `content_script` em `https://claude.ai/*` e `https://claude.com/*`.
+2. Escuta clique em `[data-testid="action-bar-read-aloud"]` via delegação no `document`.
+3. Cancela o `speechSynthesis.speak` padrão (chama `speechSynthesis.cancel()`).
+4. Pega o texto da mensagem irmã do Claude (busca ancestor `[data-testid="user-message"]`, `.font-claude-message` ou `article` mais próximo).
+5. `POST https://bridge.centralldark.com/v1/audio/speech` com:
+   - Header `x-api-key: <chave>` (guardada no `chrome.storage.local`, configurada no popup).
+   - Body `{ model, voice, input, response_format:"mp3", instructions }`.
+6. Toca o MP3 retornado com um `<audio>` gerenciado (pause + reset + `URL.revokeObjectURL` no fim — padrão que o Lovable já documenta).
+7. Botão do próprio Claude fica com feedback visual (adiciona classe custom "tocando com CentralDark").
 
-### A) Auth híbrido nas rotas `/v1/*`
+**Cinto de segurança:** também monkey-patch de `window.speechSynthesis.speak` — se por algum motivo o clique escapar, ainda capturamos o texto do `SpeechSynthesisUtterance` e desviamos pro bridge.
 
-Middleware `extrairChave(req)` que aceita, nesta ordem:
-1. `x-api-key: <chave>`
-2. `Authorization: Bearer <chave>`
-3. `Authorization: <chave>` (fallback tolerante)
+**Popup de configuração** (`popup.html`):
+- Campo pra colar a `x-api-key` (a `cd-webui-...`).
+- Dropdown com as 9 vozes (alloy/nova/onyx/shimmer/echo/fable/ash/coral/sage) + botão "🔊 testar".
+- Toggle liga/desliga o hijack.
+- Campo `instructions` (padrão: "Fale em português brasileiro nativo, tom natural e conversacional").
 
-Compara em tempo constante contra `WEBUI_LOVABLE_KEY`. 401 só se **nenhum** dos headers bater. Header de resposta `X-Bridge-Auth-Scheme: x-api-key|bearer` pra auditoria.
+## Arquivos (tudo dentro de `apps/modulos/centraldark-voice/`)
 
-### B) Áudio que realmente toca no Windows
+```
+apps/modulos/centraldark-voice/
+├─ manifest.json          (MV3, permissions: storage; host: claude.ai/*, claude.com/*, bridge.centralldark.com/*)
+├─ content.js             (hook do botão + monkey-patch speechSynthesis + player)
+├─ background.js          (service worker mínimo, só pra ativar o popup)
+├─ popup.html + popup.js  (configuração: chave, voz, teste)
+├─ icons/                 (16/48/128 em esmeralda #10b981, fundo #052e2b)
+└─ README.md              (como instalar em Chrome/Edge: chrome://extensions → modo desenvolvedor → carregar sem compactar)
+```
 
-Três melhorias na rota TTS:
+## Compatibilidade com Claude Desktop (Electron)
 
-1. **Rota nova `GET /play/<uuid>`** — devolve uma página HTML mínima com `<audio controls autoplay src="/audio/<uuid>.mp3">` + botão "baixar". Isso resolve terminal que não sabe tocar MP3 direto: abre o navegador padrão do Windows, autoplay dispara, funciona em qualquer versão.
+Claude Desktop é Chromium sob o capô. A mesma extensão pode ser **empacotada como .crx** e carregada via override do Electron (`--load-extension=<pasta>`), ou o Pivete usa o **Claude no navegador** (Chrome/Edge) que já suporta MV3 nativamente. Documentar os dois caminhos no README.
 
-2. **Rota `GET /audio/<uuid>.mp3` ajustada** — headers explícitos:
-   - `Content-Type: audio/mpeg`
-   - `Content-Disposition: inline; filename="fala.mp3"` (nunca `attachment`)
-   - `Accept-Ranges: bytes` (Windows Media Foundation exige pra streaming)
-   - `Cache-Control: public, max-age=86400`
+## Deploy (fluxo Lovable → GitHub → VPS)
 
-3. **Resposta do modelo `voice`/`auto-voice`** volta em markdown com **duas linhas**:
-   ```
-   🔊 [▶️ Tocar agora](https://bridge.centralldark.com/play/<uuid>)
-   ⬇️ [Baixar MP3](https://bridge.centralldark.com/audio/<uuid>.mp3)
-   ```
-   `BRIDGE_PUBLIC_BASEURL` garante URL absoluta com `https://` (Windows Terminal / Claude Code Desktop só linkificam URL absoluta).
-
-### C) Detecção automática de intenção de voz (mantém o "auto" esperto)
-
-Router `auto` já existe. Só ajustar heurística: se o prompt tiver `"fala", "leia", "narre", "áudio", "voz", "tts"` → roteia pra pipeline TTS **sem** o usuário precisar trocar o modelo. Header `X-Bridge-Router: auto->voice` pra auditoria.
+- Repo: nova pasta `apps/modulos/centraldark-voice/` (nova, não protegida).
+- Commit: `feat(voice): extensão MV3 que hijacka o botão Ler em voz alta do Claude pra usar bridge CentralDark`.
+- **Não** precisa PM2, **não** precisa Caddy, **não** precisa novo secret — a extensão só consome o bridge existente.
+- Pivete instala local: baixa a pasta, `chrome://extensions` → "Modo desenvolvedor" ON → "Carregar sem compactar" → aponta pra pasta.
 
 ## Validação (o AI roda antes de entregar)
 
-- `curl -H "x-api-key: $K" .../v1/models` → 200
-- `curl -H "Authorization: Bearer $K" .../v1/models` → 200
-- `curl -H "x-api-key: errada" .../v1/models` → 401
-- `POST /v1/chat/completions` com `model: "voice"` → resposta contém `/play/` e `/audio/`
-- `curl -I .../audio/<uuid>.mp3` → `Content-Type: audio/mpeg`, `Content-Disposition: inline`, `Accept-Ranges: bytes`
-- Abrir `/play/<uuid>` no navegador Windows → toca sozinho
+1. `manifest.json` valida no `chrome://extensions` sem erro.
+2. Abrir `claude.ai`, clicar no botão nativo → console mostra `[CentralDark Voice] interceptado` + toca MP3 do bridge.
+3. Desligar toggle no popup → botão volta a usar voz do Windows.
+4. Testar as 9 vozes pelo popup → todas tocam.
+5. Simular mudança de seletor: forçar clique em outro elemento → monkey-patch de `speechSynthesis` ainda captura.
 
 ## Fora de escopo
 
-Frontend, Open WebUI, MCPO, áreas 🔒, novos PM2, novos domínios, novos secrets. Reuso total da infra existente.
+- Não mexer no bridge (já suporta tudo que a extensão precisa).
+- Não mexer em áreas 🔒.
+- Não publicar na Chrome Web Store agora (uso privado do Pivete).
+- Não tentar hijack no Claude Code CLI (aquele nem tem botão de voz — usa o `/play/` que já entregamos).
 
-## Deploy
+## Plano B (se o Pivete não quiser instalar extensão)
 
-```bash
-pm2 restart CentralDark-LovableBridge --update-env
-```
+Instalar voz **Microsoft Maria/Francisca (pt-BR)** no Windows:
+`Configurações → Hora e Idioma → Idioma e Região → Adicionar idioma → Português (Brasil) → Voz`.
+O botão nativo do Claude passa a falar em PT-BR robótico decente, sem código.
 
-Confirma **"PERMITO PIVETE"** e eu abro o PR + deploy no mesmo fluxo (Lovable → GitHub → VPS).
+---
+
+Confirma **"PERMITO PIVETE"** que eu monto a extensão completa no repo e te mando o passo-a-passo de instalação em 3 cliques.
