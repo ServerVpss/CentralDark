@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-06T09:45:44.382Z",
-  "updatedAtBR": "06/07/2026, 06:45:44 BRT",
+  "updatedAt": "2026-07-06T09:46:44.472Z",
+  "updatedAtBR": "06/07/2026, 06:46:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -597,27 +597,6 @@
   ],
   "events": [
     {
-      "time": "2026-07-06T08:48:41.421Z",
-      "title": "WebUI: SQLite tinha model_ids fixos herdados do ap7 (sonnet-4.6[1m], opus-4.8, gpt-4o) apontando pro bridge Lovable — reset pra auto-discovery via /v1/models, prefix \"lovable\". 29 modelos reais agora aparecem.",
-      "area": "WebUI",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-06T08:43:27.452Z",
-      "title": "WebUI/Bridge: URL http://host.docker.internal:8099/v1 e alias 172.21.0.1 agora persistidos no docker-compose.override.yml — não quebra mais em restart/recriação da rede",
-      "area": "Infra",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-06T08:41:45.778Z",
-      "title": "Fluxo do painel agora usa GitHub Contents API — imune a working tree sujo e ahead/behind",
-      "area": "Painel",
-      "status": "feito",
-      "detail": ""
-    },
-    {
       "time": "2026-07-06T08:40:39.664Z",
       "title": "Teste: fluxo de push do painel agora com retry + rebase -X theirs (nossa versão vence)",
       "area": "Painel",
@@ -830,6 +809,30 @@
       "area": "Repositório",
       "sha": "d28ddc1",
       "actor": "segredounlock"
+    },
+    {
+      "time": "2026-07-06T01:02:33.067Z",
+      "titulo": "Push na main · cd7026866cd761e290a406c7e0ac2548787ba78b",
+      "detalhe": "Melhorou monitor Condefonte v2.1",
+      "area": "Repositório",
+      "sha": "cd70268",
+      "actor": "lovable-dev[bot]"
+    },
+    {
+      "time": "2026-07-06T00:50:58.985Z",
+      "titulo": "Push na main · 9176687c8ccca36e71766f1a902dd3a877483e16",
+      "detalhe": "Salvou o script no GitHub",
+      "area": "Repositório",
+      "sha": "9176687",
+      "actor": "lovable-dev[bot]"
+    },
+    {
+      "time": "2026-07-06T00:37:34.734Z",
+      "titulo": "Push na main · bed174a811080c55934582d5dbb3aa4a81e83321",
+      "detalhe": "Corrigiu validação de subpastas",
+      "area": "Repositório",
+      "sha": "bed174a",
+      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
