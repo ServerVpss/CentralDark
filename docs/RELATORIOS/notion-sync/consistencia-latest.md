@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-06T06:17:50.582Z
-- **Commit:** `6d75ae65e54ce7bdb60ef53abe688c3ad211a657`
+- **Gerado:** 2026-07-06T09:50:54.392Z
+- **Commit:** `7b0eb3f2ceeb3ad49c30c01bb7ae395ec18ff0b5`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 332 | 0 | 0 | 332 | 0 |
+| aprendizados | 333 | 0 | 0 | 333 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **332**
+- 🟥 Faltando no Notion: **333**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -380,4 +380,5 @@
 - 298. Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes)
 - 299. Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)
 - 300. Grafo Vivo v0.4: 3D bundleado sem CDN
+- 301. Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start
 </details>
