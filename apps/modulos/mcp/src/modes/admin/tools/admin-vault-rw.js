@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync, copyFileSync, appendFileSync } from "node:fs";
-import { join as pathJoin, sep } from "node:path";
+import { join as pathJoin, sep, dirname } from "node:path";
 
 const DR = "/root/CentralDark/secrets";
 const LOG_DIR = "/root/CentralDark/logs";
