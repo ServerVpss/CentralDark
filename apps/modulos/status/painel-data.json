@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T01:31:06.960Z",
-  "updatedAtBR": "05/07/2026, 22:31:06 BRT",
+  "updatedAt": "2026-07-06T02:07:30.837Z",
+  "updatedAtBR": "05/07/2026, 23:07:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Ajustou cores para esmeralda",
+    "lastCommit": "aprendizado(#296): Curso Condefonte v1 salvo no cofre e no Hermes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T02:07:30.837Z",
+      "titulo": "Push na main · 66463d7f6b3e322fc7d95d8699eaafe287ff20f2",
+      "detalhe": "aprendizado(#296): Curso Condefonte v1 salvo no cofre e no Hermes",
+      "area": "Repositório",
+      "sha": "66463d7",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-06T01:31:06.960Z",
       "titulo": "Push na main · 874ccab13abffbc863cd6e6954ecaa5cac789ac6",
@@ -1387,6 +1395,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T02:07:30.837Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 66463d7f6b3e322fc7d95d8699eaafe287ff20f2 (66463d7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T01:31:06.960Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 874ccab13abffbc863cd6e6954ecaa5cac789ac6 (874ccab)",
@@ -1726,13 +1741,6 @@
       "time": "2026-07-05T02:26:59.498Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 51280ed109d1ce99737c27012b43436b477b83d5 (51280ed)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T02:17:25.345Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · b20d6d4de65bc54f1d653c2614a8f6b4d000c18f (b20d6d4)",
       "area": "Repositório",
       "status": "sucesso"
     }
