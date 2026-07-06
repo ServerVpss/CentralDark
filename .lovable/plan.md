@@ -1,65 +1,134 @@
-# Plano — Plugar Lovable AI Gateway no Open WebUI (ui.centralldark.com)
 
-## Objetivo
-Fazer os **19 modelos** da Lovable AI Gateway aparecerem no dropdown do Open WebUI, funcionando com **1 chave só** (`LOVABLE_API_KEY`), rápido e sem pedir configuração manual.
+## Síntese final — Bridge vNext (Claude Code-ready)
 
-## Diagnóstico atual
-- `ui.centralldark.com` roda **Open WebUI em Docker** (`apps/modulos/WebUI/`).
-- Open WebUI fala **OpenAI-compat** (espera `Authorization: Bearer <chave>`).
-- Lovable Gateway usa **`Lovable-API-Key`** no header → **não bate direto**, precisa tradutor.
-- Já existe `CentralDark-ArsenalAdapter` (PM2 id 2) — vou auditar se ele já traduz pra Lovable ou se precisa de um mini-proxy novo dedicado.
+Um PR só, um arquivo só, pronto pra Claude Code enxergar tudo no dropdown e o AUTO decidir sozinho — inclusive quando gerar áudio.
 
-## Etapas (modo enxame paralelo)
+### O que muda
 
-**Fase 1 — Auditoria relâmpago (3 sub-agentes em paralelo)**
-1. **Agente WebUI:** ler `docker-compose.yml` + `.override.yml` do WebUI, ver env vars atuais (`OPENAI_API_BASE_URLS`, `OPENAI_API_KEYS`), porta interna, quem tá plugado hoje.
-2. **Agente Adapter:** inspecionar `apps/modulos/arsenal-openai-adapter/` — descobrir se já roteia pra Lovable Gateway, quais modelos expõe no `/v1/models`, porta e health.
-3. **Agente Caddy:** confirmar rota `ui.centralldark.com` → container WebUI, e se precisa expor endpoint interno pro adapter.
+- **Arquivo:** `apps/modulos/lovable-openai-bridge/server.mjs` (único).
+- **Branch:** `feat/bridge-router-hermes-tts`.
+- **Fluxo:** Lovable → GitHub (PR) → merge → VPS (`pm2 restart`).
+- **Fora de escopo:** frontend, Open WebUI, MCPO, áreas 🔒, novos PM2, novos domínios.
 
-**Fase 2 — Debate curto (Conselho: Gemini + GPT-5)**
-Decidir entre 2 caminhos:
-- **A)** Reaproveitar `ArsenalAdapter` (se já traduz Lovable) — mais rápido, zero código novo.
-- **B)** Criar mini-proxy dedicado `lovable-openai-bridge` (Node, ~50 linhas) na porta 8091, só pra traduzir header e listar os 19 modelos em `/v1/models`.
-Voto majoritário decide. Se empatar, vai na **B** (isolamento total, não mexe em módulo protegido de outro serviço).
+### Catálogo categorizado em `/v1/models`
 
-**Fase 3 — Execução**
-1. Provisionar `LOVABLE_API_KEY` (se ainda não tiver) via `ai_gateway--create`.
-2. Guardar a chave como secret na VPS (`/root/CentralDark/secrets/lovable-api-key.env`).
-3. Subir/ajustar o bridge (opção escolhida) via PM2 + `pm2 save`.
-4. Editar `docker-compose.override.yml` do WebUI adicionando:
-   - `OPENAI_API_BASE_URLS=http://host.docker.internal:<porta>/v1`
-   - `OPENAI_API_KEYS=<LOVABLE_API_KEY>`
-   - `ENABLE_OPENAI_API=true`
-5. `docker compose up -d` no WebUI (restart limpo).
-6. Recarregar Caddy se preciso.
+Cada modelo com `id`, `name` bonito com emoji e `owned_by` pro Claude Code agrupar sozinho:
 
-**Fase 4 — Validação end-to-end**
-- `curl` no `/v1/models` do bridge → esperar 19 modelos listados.
-- Abrir `ui.centralldark.com`, logar, ver dropdown com os 19.
-- Testar chat com `google/gemini-3-flash-preview` (mais rápido) e `openai/gpt-5.5` (mais top).
-- Screenshot da UI mostrando lista + resposta funcionando.
-- Notificação Card Hermes no Telegram admin com placar ✅/❌.
-
-## Correções previstas (caso ache erro na auditoria)
-- Env vars velhas apontando pra OpenAI cru → atualizo pra Lovable.
-- Modelos listados desatualizados → sincronizo com o catálogo oficial (19 atuais).
-- Caddy com rota quebrada → conserto e recarrego.
-- PM2 fora do `dump.pm2` → salvo.
-
-## Áreas tocadas
-- 🔒 `apps/modulos/WebUI/docker-compose.override.yml` (com PERMITO PIVETE ✅)
-- 🔒 `apps/modulos/arsenal-openai-adapter/` (só se opção A vencer — com PERMITO PIVETE ✅)
-- Novo: `apps/modulos/lovable-openai-bridge/` (se opção B vencer — pasta nova, sem proteção)
-- `/etc/caddy/` (só se precisar de rota nova)
-
-## Saída pro Pivete
-Placar final único no chat:
-```
-✅ Bridge: online porta XXXX
-✅ WebUI: 19 modelos listados
-✅ Teste chat: resposta OK em Xs
-✅ PM2 dump salvo
-✅ Card Hermes disparado
+```text
+🤖 AUTO       auto · auto-fast · auto-smart · auto-cheap · auto-voice
+🏛️ HERMES     hermes · hermes-dispatch · hermes-status
+🧠 CLAUDE     claude-opus-4-1 · claude-sonnet-4-5 · claude-haiku-4-5
+🚀 OPENAI     gpt-5 · gpt-5.5 · gpt-5-mini · gpt-5-nano (+ variantes)
+⚡ GOOGLE     gemini-3-flash-preview · 3.1-flash-lite · 3.5-flash · 2.5-pro · 2.5-flash
+🎨 IMAGEM     gemini-3.1-flash-image · gpt-image-2
+🔊 VOZ        voice · gpt-4o-mini-tts
+🧬 EMBEDDING  gemini-embedding-001 · text-embedding-3-small · 3-large
 ```
 
-Sem enrolação. Só confirmação de que tá funcionando.
+### Roteador AUTO (heurística leve)
+
+```text
+auto-fast   → gemini-3-flash-preview
+auto-smart  → gpt-5.5
+auto-cheap  → gpt-5-nano
+auto-voice  → responde em texto + gera áudio automático
+auto        → detecta intenção:
+              código/stack trace     → gpt-5
+              prompt > 2000 chars    → gpt-5.5
+              "desenha/gera imagem"  → gemini-3.1-flash-image
+              "fala isso/áudio/voz"  → dispara TTS
+              resto                  → gemini-3-flash-preview
+```
+
+Header `X-Bridge-Router: auto→gpt-5` sempre presente pro Pivete auditar.
+
+### Hermes virtual
+
+- `hermes` → cria missão com o prompt + devolve resumo.
+- `hermes-dispatch` → mesma coisa, prioridade alta.
+- `hermes-status` → só consulta estado (ignora prompt).
+
+Bridge chama `HERMES_BASE_URL` (127.0.0.1) e devolve texto formatado. Se Hermes offline: `🏛️ Hermes indisponível agora — tenta em 30s.`
+
+### TTS com "play nativo" possível
+
+Claude Code (CLI + VSCode) só renderiza texto/markdown — não existe player embutido. O mais nativo que dá é:
+
+1. Bridge chama `openai/gpt-4o-mini-tts` via Lovable AI Gateway.
+2. Salva `mp3` em `/var/lib/lovable-bridge/audio/<uuid>.mp3` (700, TTL 24h, limpeza no boot).
+3. Expõe `GET /audio/<uuid>.mp3` (Content-Type correto, cache 24h, nome UUID, sem listagem).
+4. Devolve resposta com:
+
+```text
+🔊 Áudio (24h): https://bridge.centralldark.com/audio/<uuid>.mp3
+▶️ Cmd/Ctrl+clique pra tocar no player nativo do sistema.
+
+<texto da resposta, quando auto-voice>
+```
+
+VSCode, iTerm e Windows Terminal abrem o link no player padrão do OS (QuickTime/Media Player/mpv). Sem companion, sem hack.
+
+### Ambas as rotas
+
+`/v1/chat/completions` **e** `/v1/messages` passam pelo mesmo dispatcher, que trata `auto*`, `hermes*`, `voice` e `claude-*` antes de chamar o provider real. Resposta formatada no shape de cada rota (OpenAI-compat ou Anthropic-compat).
+
+### Config (env)
+
+```bash
+BRIDGE_PUBLIC_BASEURL=https://bridge.centralldark.com
+BRIDGE_AUDIO_DIR=/var/lib/lovable-bridge/audio
+BRIDGE_AUDIO_TTL_HOURS=24
+BRIDGE_TTS_ENABLED=true
+BRIDGE_TTS_MODEL=gpt-4o-mini-tts
+BRIDGE_TTS_VOICE=alloy
+HERMES_BASE_URL=http://127.0.0.1:3299
+HERMES_TIMEOUT_MS=10000
+BRIDGE_RATE_LIMIT_RPM=120
+```
+
+`WEBUI_LOVABLE_KEY` continua sendo a chave upstream (já existe, nada novo).
+
+### Segurança & observabilidade
+
+- Nomes UUID v4, TTL 24h, sem listagem de diretório, sem logar URL completa em INFO.
+- Rate limit por IP (RPM configurável).
+- Header `X-Bridge-Router` em toda resposta.
+- Métricas opcionais (req/modelo, tts_total, falhas, duração) — plugáveis no mesmo PR se quiser.
+
+### Testes de aceitação (rodo no PR)
+
+```bash
+# Catálogo com pelo menos 30 modelos
+curl -s $BRIDGE/v1/models | jq '.data | length'   # >= 30
+
+# AUTO detecta código → gpt-5
+curl -s $BRIDGE/v1/messages -d '{"model":"auto","messages":[{"role":"user","content":"```js\nconsole.log(1)\n```"}]}' -D - | grep X-Bridge-Router
+
+# AUTO detecta voz → link de áudio
+curl -s $BRIDGE/v1/messages -d '{"model":"auto","messages":[{"role":"user","content":"me responde falando isso"}]}' | jq -r '.content[0].text'
+
+# Voice direto gera MP3 acessível
+curl -s $BRIDGE/v1/messages -d '{"model":"voice","messages":[{"role":"user","content":"Olá"}]}' | jq -r '.content[0].text'
+curl -sI https://bridge.centralldark.com/audio/<uuid>.mp3   # 200 + audio/mpeg
+
+# Hermes status
+curl -s $BRIDGE/v1/messages -d '{"model":"hermes-status","messages":[{"role":"user","content":""}]}' | jq
+```
+
+### Deploy (após merge)
+
+```bash
+sudo install -d -m 700 /var/lib/lovable-bridge/audio   # 1ª vez só; runtime também cria
+pm2 restart CentralDark-LovableBridge --update-env
+pm2 save
+```
+
+Backup automático: `server.mjs.bak-router-<timestamp>` no diretório do bridge.
+
+### Resultado
+
+Claude Code passa a mostrar dropdown organizado por categoria, AUTO escolhe modelo sozinho, Hermes vira modelo virtual e áudio gera link clicável que abre no player nativo do OS. Nada quebra do que já funciona.
+
+---
+
+Confirma **"PERMITO PIVETE"** que eu abro o PR no fluxo Lovable → GitHub → VPS.
