@@ -233,15 +233,19 @@ function timingSafeEqual(a: string, b: string): boolean {
 }
 
 function authorize(req: Request): { ok: true; key: string } | { ok: false; reason: string } {
-  const expected = Deno.env.get("WEBUI_LOVABLE_KEY");
-  if (!expected) return { ok: false, reason: "servidor_sem_chave" };
+  const expectedWebui = Deno.env.get("WEBUI_LOVABLE_KEY") ?? "";
+  const expectedCli = Deno.env.get("DARKAI_CLI_KEY") ?? "";
+  if (!expectedWebui && !expectedCli) return { ok: false, reason: "servidor_sem_chave" };
 
   const auth = req.headers.get("Authorization") ?? "";
   const bearer = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7).trim() : "";
   const arsenal = req.headers.get("X-Arsenal-Key") ?? "";
   const provided = bearer || arsenal;
   if (!provided) return { ok: false, reason: "sem_credencial" };
-  if (!timingSafeEqual(provided, expected)) return { ok: false, reason: "chave_invalida" };
+
+  const okWebui = expectedWebui && timingSafeEqual(provided, expectedWebui);
+  const okCli = expectedCli && timingSafeEqual(provided, expectedCli);
+  if (!okWebui && !okCli) return { ok: false, reason: "chave_invalida" };
   return { ok: true, key: provided };
 }
 
