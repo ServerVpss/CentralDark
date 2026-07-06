@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-06T10:22:31.426Z
-- **Commit:** `94455bc1d4c39f772d0dd6964fd7ef6e991eccb4`
+- **Gerado:** 2026-07-06T14:18:18.226Z
+- **Commit:** `cf1e18ee2e32b28ebe7927069d51e8bd916a7050`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 333 | 0 | 0 | 333 | 0 |
+| aprendizados | 334 | 0 | 0 | 334 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **333**
+- 🟥 Faltando no Notion: **334**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -381,4 +381,5 @@
 - 299. Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)
 - 300. Grafo Vivo v0.4: 3D bundleado sem CDN
 - 301. Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start
+- 302. MCP ChatGPT exige compatibilidade no token e Accept
 </details>
