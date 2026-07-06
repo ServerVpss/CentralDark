@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T01:02:33.067Z",
-  "updatedAtBR": "05/07/2026, 22:02:33 BRT",
+  "updatedAt": "2026-07-06T01:15:18.736Z",
+  "updatedAtBR": "05/07/2026, 22:15:18 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Melhorou monitor Condefonte v2.1",
+    "lastCommit": "Corrige monitor CONDEFONTE e alias love",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T01:15:18.736Z",
+      "titulo": "Push na main · d28ddc1f75d68df757c1a72e00c4da2ecc9929c1",
+      "detalhe": "Corrige monitor CONDEFONTE e alias love",
+      "area": "Repositório",
+      "sha": "d28ddc1",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-06T01:02:33.067Z",
       "titulo": "Push na main · cd7026866cd761e290a406c7e0ac2548787ba78b",
@@ -1371,6 +1379,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T01:15:18.736Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d28ddc1f75d68df757c1a72e00c4da2ecc9929c1 (d28ddc1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T01:02:33.067Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · cd7026866cd761e290a406c7e0ac2548787ba78b (cd70268)",
@@ -1710,13 +1725,6 @@
       "time": "2026-07-05T01:54:53.895Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · df5e255218bb7d55e85739c06f6f2c5716dc3b39 (df5e255)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T01:20:46.080Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · e0da89341a7fe520aafa53d661db9bb2b053813c (e0da893)",
       "area": "Repositório",
       "status": "sucesso"
     }
