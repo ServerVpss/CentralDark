@@ -25,6 +25,24 @@ function param(req, name) {
 function oauthError(res, status, error, description) {
     res.status(status).json({ error, error_description: description });
 }
+function basicClientId(req) {
+    const header = String(req.headers?.authorization ?? "").trim();
+    const match = /^Basic\s+(.+)$/i.exec(header);
+    if (!match)
+        return "";
+    try {
+        const decoded = Buffer.from(match[1], "base64").toString("utf8");
+        const separator = decoded.indexOf(":");
+        const rawId = separator >= 0 ? decoded.slice(0, separator) : decoded;
+        return decodeURIComponent(rawId || "");
+    }
+    catch {
+        return "";
+    }
+}
+function tokenClientId(req, body) {
+    return String(body.client_id ?? "") || basicClientId(req);
+}
 function isUrlClientId(client_id) {
     try {
         const url = new URL(client_id);
@@ -566,23 +584,27 @@ export function postToken(req, res) {
     if (grant_type === "authorization_code") {
         const code = String(body.code ?? "");
         const code_verifier = String(body.code_verifier ?? "");
-        const client_id = String(body.client_id ?? "");
+        const client_id = tokenClientId(req, body);
         const redirect_uri = String(body.redirect_uri ?? "");
         const ac = consumeAuthCode(code);
         if (!ac) {
+            log.warn("oauth_token_invalid_code", { cid: req.cid, client_id_present: Boolean(client_id) });
             res.status(400).json({ error: "invalid_grant", error_description: "code inválido ou expirado" });
             return;
         }
         if (ac.client_id !== client_id) {
+            log.warn("oauth_token_client_mismatch", { cid: req.cid, expected_client_id: ac.client_id, received_client_id_present: Boolean(client_id) });
             res.status(400).json({ error: "invalid_grant", error_description: "client_id não bate" });
             return;
         }
         if (ac.redirect_uri !== redirect_uri) {
+            log.warn("oauth_token_redirect_mismatch", { cid: req.cid, client_id });
             res.status(400).json({ error: "invalid_grant", error_description: "redirect_uri não bate" });
             return;
         }
         const expected = crypto.createHash("sha256").update(code_verifier).digest("base64url");
         if (expected !== ac.code_challenge) {
+            log.warn("oauth_token_pkce_mismatch", { cid: req.cid, client_id });
             res.status(400).json({ error: "invalid_grant", error_description: "PKCE verifier inválido" });
             return;
         }
@@ -606,9 +628,16 @@ export function postToken(req, res) {
     }
     if (grant_type === "refresh_token") {
         const refresh_token = String(body.refresh_token ?? "");
+        const client_id = tokenClientId(req, body);
         const rt = consumeRefreshToken(refresh_token);
         if (!rt) {
+            log.warn("oauth_refresh_invalid", { cid: req.cid, client_id_present: Boolean(client_id) });
             res.status(400).json({ error: "invalid_grant", error_description: "refresh_token inválido ou expirado" });
+            return;
+        }
+        if (client_id && rt.client_id !== client_id) {
+            log.warn("oauth_refresh_client_mismatch", { cid: req.cid, expected_client_id: rt.client_id, received_client_id_present: true });
+            res.status(400).json({ error: "invalid_grant", error_description: "client_id não bate" });
             return;
         }
         const pair = issueTokenPair({
