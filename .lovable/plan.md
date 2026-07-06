@@ -1,43 +1,65 @@
+# Plano — Plugar Lovable AI Gateway no Open WebUI (ui.centralldark.com)
+
 ## Objetivo
-Tirar a rota separada `/admin/modo-livre` e colocar os botões **LIGAR / DESLIGAR** direto no painel principal `/admin`, naquele card vazio que tá do lado do "Info do Processo" (o quadrado com borda vermelha na imagem).
+Fazer os **19 modelos** da Lovable AI Gateway aparecerem no dropdown do Open WebUI, funcionando com **1 chave só** (`LOVABLE_API_KEY`), rápido e sem pedir configuração manual.
 
-## O que muda na VPS (`CentralDark-MCP`)
+## Diagnóstico atual
+- `ui.centralldark.com` roda **Open WebUI em Docker** (`apps/modulos/WebUI/`).
+- Open WebUI fala **OpenAI-compat** (espera `Authorization: Bearer <chave>`).
+- Lovable Gateway usa **`Lovable-API-Key`** no header → **não bate direto**, precisa tradutor.
+- Já existe `CentralDark-ArsenalAdapter` (PM2 id 2) — vou auditar se ele já traduz pra Lovable ou se precisa de um mini-proxy novo dedicado.
 
-**1. Painel principal `/admin` — adicionar card "Modo Livre"**
-No lugar do card vazio, injetar um bloco assim:
+## Etapas (modo enxame paralelo)
 
-```text
-┌─ MODO LIVRE ──────────────────────┐
-│  Status: 🔴 DESLIGADO             │
-│  [ 🔓 LIGAR ]   [ 🔒 DESLIGAR ]   │
-│  Última mudança: 06/07 03:01      │
-└───────────────────────────────────┘
+**Fase 1 — Auditoria relâmpago (3 sub-agentes em paralelo)**
+1. **Agente WebUI:** ler `docker-compose.yml` + `.override.yml` do WebUI, ver env vars atuais (`OPENAI_API_BASE_URLS`, `OPENAI_API_KEYS`), porta interna, quem tá plugado hoje.
+2. **Agente Adapter:** inspecionar `apps/modulos/arsenal-openai-adapter/` — descobrir se já roteia pra Lovable Gateway, quais modelos expõe no `/v1/models`, porta e health.
+3. **Agente Caddy:** confirmar rota `ui.centralldark.com` → container WebUI, e se precisa expor endpoint interno pro adapter.
+
+**Fase 2 — Debate curto (Conselho: Gemini + GPT-5)**
+Decidir entre 2 caminhos:
+- **A)** Reaproveitar `ArsenalAdapter` (se já traduz Lovable) — mais rápido, zero código novo.
+- **B)** Criar mini-proxy dedicado `lovable-openai-bridge` (Node, ~50 linhas) na porta 8091, só pra traduzir header e listar os 19 modelos em `/v1/models`.
+Voto majoritário decide. Se empatar, vai na **B** (isolamento total, não mexe em módulo protegido de outro serviço).
+
+**Fase 3 — Execução**
+1. Provisionar `LOVABLE_API_KEY` (se ainda não tiver) via `ai_gateway--create`.
+2. Guardar a chave como secret na VPS (`/root/CentralDark/secrets/lovable-api-key.env`).
+3. Subir/ajustar o bridge (opção escolhida) via PM2 + `pm2 save`.
+4. Editar `docker-compose.override.yml` do WebUI adicionando:
+   - `OPENAI_API_BASE_URLS=http://host.docker.internal:<porta>/v1`
+   - `OPENAI_API_KEYS=<LOVABLE_API_KEY>`
+   - `ENABLE_OPENAI_API=true`
+5. `docker compose up -d` no WebUI (restart limpo).
+6. Recarregar Caddy se preciso.
+
+**Fase 4 — Validação end-to-end**
+- `curl` no `/v1/models` do bridge → esperar 19 modelos listados.
+- Abrir `ui.centralldark.com`, logar, ver dropdown com os 19.
+- Testar chat com `google/gemini-3-flash-preview` (mais rápido) e `openai/gpt-5.5` (mais top).
+- Screenshot da UI mostrando lista + resposta funcionando.
+- Notificação Card Hermes no Telegram admin com placar ✅/❌.
+
+## Correções previstas (caso ache erro na auditoria)
+- Env vars velhas apontando pra OpenAI cru → atualizo pra Lovable.
+- Modelos listados desatualizados → sincronizo com o catálogo oficial (19 atuais).
+- Caddy com rota quebrada → conserto e recarrego.
+- PM2 fora do `dump.pm2` → salvo.
+
+## Áreas tocadas
+- 🔒 `apps/modulos/WebUI/docker-compose.override.yml` (com PERMITO PIVETE ✅)
+- 🔒 `apps/modulos/arsenal-openai-adapter/` (só se opção A vencer — com PERMITO PIVETE ✅)
+- Novo: `apps/modulos/lovable-openai-bridge/` (se opção B vencer — pasta nova, sem proteção)
+- `/etc/caddy/` (só se precisar de rota nova)
+
+## Saída pro Pivete
+Placar final único no chat:
+```
+✅ Bridge: online porta XXXX
+✅ WebUI: 19 modelos listados
+✅ Teste chat: resposta OK em Xs
+✅ PM2 dump salvo
+✅ Card Hermes disparado
 ```
 
-- Quando ligado: fundo fica amarelo/alerta, status vira `🟢 LIGADO`
-- Botões chamam `fetch('/admin/api/modo-livre', {method:'POST', body:{acao:'ligar'|'desligar'}})` — sem recarregar página, sem redirect, sem pedir confirmação
-- Auto-refresh do status a cada 5s (já tem polling no painel)
-
-**2. Remover a rota `/admin/modo-livre`**
-- Deleta `GET /admin/modo-livre` (a página HTML separada)
-- Deleta `POST /admin/modo-livre` (o form submit)
-- **Mantém** `GET /admin/api/modo-livre` e `POST /admin/api/modo-livre` (os endpoints JSON que os botões usam)
-
-**3. Passar direto sem pedir permissão**
-O `modo-livre.js` já faz bypass dos validadores quando ligado. O que falta é: quando ligado, **não logar warning nem pedir confirmação** em nenhum lugar. Vou varrer `vps-files.js`, `vps-lazy.js`, `admin-files.js` e garantir que o `if (isModoLivre()) return { ok:true }` seja a PRIMEIRA linha, antes de qualquer `console.warn` ou prompt.
-
-## Arquivos tocados na VPS
-
-| Arquivo | Ação |
-|---|---|
-| `src/dist/index.js` | Remover 2 rotas HTML, manter as 2 API |
-| `src/dist/admin-panel.html` (ou template inline) | Injetar card Modo Livre no slot vazio |
-| `src/dist/modo-livre.js` | Sem mudança (já funciona) |
-| `src/dist/vps-files.js` · `vps-lazy.js` · `admin-files.js` | Garantir bypass silencioso (sem warn) |
-
-## Deploy
-`pm2 restart CentralDark-MCP` e valida abrindo `https://mcp.centralldark.com/admin` — o card aparece no lugar do quadrado vazio, botões funcionam sem sair da página.
-
-## Fora de escopo
-- Não mexer em nada do Lovable (esse projeto aqui é só frontend do painel de status, o admin do MCP mora na VPS).
-- Não criar novas travas de tempo (segue "só desliga manual" como já combinado).
+Sem enrolação. Só confirmação de que tá funcionando.
