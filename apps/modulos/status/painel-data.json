@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T00:09:35.289Z",
-  "updatedAtBR": "05/07/2026, 21:09:35 BRT",
+  "updatedAt": "2026-07-06T00:16:51.924Z",
+  "updatedAtBR": "05/07/2026, 21:16:51 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Corrigiu cores do terminal",
+    "lastCommit": "Ajustou layout da CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -591,6 +591,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T00:16:51.924Z",
+      "titulo": "Push na main · 9f603cfa853bd5e0592671fe78f9d1bbcf977efb",
+      "detalhe": "Ajustou layout da CentralDark",
+      "area": "Repositório",
+      "sha": "9f603cf",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-06T00:09:35.289Z",
       "titulo": "Push na main · 8d637510b1d62165596498e8e6cb463861579158",
@@ -1323,6 +1331,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T00:16:51.924Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 9f603cfa853bd5e0592671fe78f9d1bbcf977efb (9f603cf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T00:09:35.289Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 8d637510b1d62165596498e8e6cb463861579158 (8d63751)",
@@ -1662,13 +1677,6 @@
       "time": "2026-07-04T22:38:47.057Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6d3fd15b65ccf50202a172c64adc89b6d019bafc (6d3fd15)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-04T22:37:23.397Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9d35ac57d0f2dad753465139ca394a8af7d6d3e2 (9d35ac5)",
       "area": "Repositório",
       "status": "sucesso"
     }
