@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T09:47:44.550Z",
-  "updatedAtBR": "06/07/2026, 06:47:44 BRT",
+  "updatedAt": "2026-07-06T09:47:53.400Z",
+  "updatedAtBR": "06/07/2026, 06:47:53 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
-    "currentTask": "Corrigido acesso Docker ao bridge e normalização de parâmetro max_tokens para GPT-5.",
+    "currentTask": "Guardião online no grupo. Próximo: replicar NOTIFY_CHAT_ID no Hermes + subir grupo-evolucao (5 IAs) no PM2",
     "branch": "main",
-    "lastCommit": "aprendizado(#300): Grafo Vivo v0.4: 3D bundleado sem CDN",
+    "lastCommit": "dbf19e904",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T09:47:53.401Z",
+      "title": "Guardião da Consciência religado e consertado — agora notifica no grupo Central Dark - Grupo da Evolução (padrão NOTIFY_CHAT_ID)",
+      "area": "infra/guardiao",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-07-06T08:40:39.664Z",
       "title": "Teste: fluxo de push do painel agora com retry + rebase -X theirs (nossa versão vence)",
       "area": "Painel",
@@ -824,14 +831,6 @@
       "detalhe": "Salvou o script no GitHub",
       "area": "Repositório",
       "sha": "9176687",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T00:37:34.734Z",
-      "titulo": "Push na main · bed174a811080c55934582d5dbb3aa4a81e83321",
-      "detalhe": "Corrigiu validação de subpastas",
-      "area": "Repositório",
-      "sha": "bed174a",
       "actor": "lovable-dev[bot]"
     }
   ],
