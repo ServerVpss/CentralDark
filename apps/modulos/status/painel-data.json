@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T19:59:28.571Z",
-  "updatedAtBR": "06/07/2026, 16:59:28 BRT",
+  "updatedAt": "2026-07-06T20:00:04.640Z",
+  "updatedAtBR": "06/07/2026, 17:00:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#303): HUD Grafo 3D — three.js UMD precisa ser carregado à parte",
+    "lastCommit": "hotfix(hermes): recria utils/notify.mjs (silencioso sem token, telegram opcional)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -521,7 +521,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Proximo: grafo de agentes IA em tempo real com Hermes",
+  "nextIA": "Configurar TELEGRAM_BOT_TOKEN no env do Hermes se quiser cards no privado admin.",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -596,6 +596,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T20:00:04.641Z",
+      "title": "🛠️ Hermes: `utils/notify.mjs` recriado — erro \"notify falhou\" resolvido (fallback silencioso + Telegram opcional via TELEGRAM_BOT_TOKEN).",
+      "area": "HERMES-CORE",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-07-06T15:25:33.122Z",
       "titulo": "Push na main · 6823041117e2ea8c1d831f00d01dce26c3e4a312",
@@ -821,54 +828,6 @@
       "detalhe": "consciencia(secao 13): Selar grafo oficial único (grafo.centralldark.com), aposentar status. como grafo — decisão do Pivete",
       "area": "Repositório",
       "sha": "1f29f3c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T02:33:05.260Z",
-      "titulo": "Push na main · 94ada3bc9dd73e532232f6dde881a86940870851",
-      "detalhe": "aprendizado(#298): Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes)",
-      "area": "Repositório",
-      "sha": "94ada3b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T02:24:45.321Z",
-      "titulo": "Push na main · 78d5fe8602a347b144f7ec0761dde5b92829037a",
-      "detalhe": "aprendizado(#297): Curso Condefonte mora dentro de LOVABLE_TOKEN/",
-      "area": "Repositório",
-      "sha": "78d5fe8",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T02:15:46.568Z",
-      "titulo": "Push na main · dbaac052d52411d3cce69c81e906afd9ba7c31c0",
-      "detalhe": "lembranca: Regra de ouro debug de chave Lovable",
-      "area": "Repositório",
-      "sha": "dbaac05",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T02:07:30.837Z",
-      "titulo": "Push na main · 66463d7f6b3e322fc7d95d8699eaafe287ff20f2",
-      "detalhe": "aprendizado(#296): Curso Condefonte v1 salvo no cofre e no Hermes",
-      "area": "Repositório",
-      "sha": "66463d7",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T01:31:06.960Z",
-      "titulo": "Push na main · 874ccab13abffbc863cd6e6954ecaa5cac789ac6",
-      "detalhe": "Ajustou cores para esmeralda",
-      "area": "Repositório",
-      "sha": "874ccab",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T01:15:18.736Z",
-      "titulo": "Push na main · d28ddc1f75d68df757c1a72e00c4da2ecc9929c1",
-      "detalhe": "Corrige monitor CONDEFONTE e alias love",
-      "area": "Repositório",
-      "sha": "d28ddc1",
       "actor": "segredounlock"
     }
   ],
