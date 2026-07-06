@@ -640,3 +640,6 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 ### 26. Hermes não pegou missão do grafo — ERR_MODULE_NOT_FOUND no executor — 🔴 ABERTO (05/07/2026, 23:55 BRT)
 - **Sintoma:** Hermes tem ERR_MODULE_NOT_FOUND (Cannot find module) e ReferenceError: x is not defined nos logs. Missão thinker-grafo-jarvis ficou parada em pendente/ (não foi pega). O watchdog roda mas o executor de missões pode estar quebrado pelo módulo faltante.
 - **Critério pra fechar:** Hermes processa missoes/pendente/ automaticamente de novo
+### 27. Load average alto sustentado (~7) — algo consumindo CPU — 🟡 ABERTO (05/07/2026, 23:55 BRT)
+- **Sintoma:** Load average 6.93/7.15/7.19 — MUITO alto e sustentado. CentralDark-Builder consumindo 15% CPU contínuo. Investigar o que está pesando (possível loop ou build travado).
+- **Critério pra fechar:** Load volta pra baixo de 4 (idealmente <2)
