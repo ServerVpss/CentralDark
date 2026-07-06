@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T20:17:56.137Z",
-  "updatedAtBR": "06/07/2026, 17:17:56 BRT",
+  "updatedAt": "2026-07-06T20:18:23.404Z",
+  "updatedAtBR": "06/07/2026, 17:18:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "hotfix(hermes): recria utils/notify.mjs (silencioso sem token, telegram opcional)",
+    "lastCommit": "feat(hermes): notify v2 carrega TELEGRAM_BOT_TOKEN do arquivo dedicado",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -521,7 +521,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Configurar TELEGRAM_BOT_TOKEN no env do Hermes se quiser cards no privado admin.",
+  "nextIA": "Pivete ajusta URL do conector Lovable para `/mcp` e clica em Adicionar novamente.",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -596,6 +596,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T20:18:23.404Z",
+      "title": "🟢 Hermes notify v2 online — carrega TELEGRAM_BOT_TOKEN de `secrets/telegram-alerts.env`. Card de teste enviado com sucesso. Diagnóstico MCP: URL correta é `https://mcp.centralldark.com/mcp` (não `/sse`), OAuth 2.1 com DCR já ativo (107 tools).",
+      "area": "HERMES-CORE + MCP",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-07-06T20:00:04.641Z",
       "title": "🛠️ Hermes: `utils/notify.mjs` recriado — erro \"notify falhou\" resolvido (fallback silencioso + Telegram opcional via TELEGRAM_BOT_TOKEN).",
@@ -820,14 +827,6 @@
       "detalhe": "aprendizado(#299): Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)",
       "area": "Repositório",
       "sha": "4f2e4ab",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T03:08:41.279Z",
-      "titulo": "Push na main · 1f29f3c4bd6e6b7403e43642056c12f1f8424f90",
-      "detalhe": "consciencia(secao 13): Selar grafo oficial único (grafo.centralldark.com), aposentar status. como grafo — decisão do Pivete",
-      "area": "Repositório",
-      "sha": "1f29f3c",
       "actor": "segredounlock"
     }
   ],
