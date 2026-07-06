@@ -486,7 +486,8 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 **Achado 8 (30/06/2026):** módulo MCP (`apps/modulos/mcp/`) não tem pasta `src/` versionada no Git — só `dist/` (compilado, gitignored) + `package.json` + `tsconfig.json`. Toda edição em `dist/` (como a remoção do `/mcp-public`) é a única cópia existente e não sobrevive a um rebuild do zero. Isso é a raiz do problema já citado em `09-ESTADO-ATUAL.md` ("fix do /openapi.json só existe no dist"). Precisa decidir: reconstruir o `src/` a partir do `dist/` atual, ou aceitar editar `dist/` como prática permanente (arriscado).
 
 - **Critério pra fechar (mapeamento):** revisar item por item com o Pivete antes de qualquer edição em `docs/CONSCIENCIA/` (área protegida — Seção 9 do CLAUDE.md). Registrar cada decisão em `08-HISTORICO-DECISOES.md` conforme for fechando.
-### 10. Processos fantasma no PM2 — id 3, 4, 6 com pid N/A — 🟡 ABERTO (30/06/2026, 22:15 BRT)
+### 10. Processos fantasma no PM2 — id 3, 4, 6 com pid N/A — 🟡 ABERTO (30/06/2026, 22:15 BRT) — ✅ CONCLUÍDO em 2026-07-06
+- **Nota final:** Confirmado via enxame (06/07): CentralDark-BotServer, MultiZap-Gateway e CloneDeck-CRM não aparecem mais nem no runtime PM2 nem no dump.pm2 salvo. Fantasmas eliminados sem necessidade de ação — não existe mais processo pra apagar. Fechado.
 - **Sintoma:** `pm2 list` mostra 3 processos como "online" mas sem PID real (não estão de fato rodando): `CentralDark-BotServer` (id 4), `MultiZap-Gateway` (id 3), `CloneDeck-CRM` (id 6).
 - **Causa identificada:** `CentralDark-BotServer` aponta pro script `apps/bot-server/start.sh`, que não existe mais — sumiu na reestruturação pra `apps/bot-telegram/` (o bot real que roda é `CentralDark-HubBot`, id 27, via `unified-bot.cjs`). `MultiZap-Gateway` e `CloneDeck-CRM` apontam pra `/root/Multizap/` — sistema legado (CentralDark1VPS).
 - **Onde mexer:** PM2 (`pm2 delete`/`pm2 restart` conforme decisão) + `dump.pm2` (rodar `pm2 save` depois)
