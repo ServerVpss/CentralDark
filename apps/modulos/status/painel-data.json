@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T14:33:18.399Z",
-  "updatedAtBR": "06/07/2026, 11:33:18 BRT",
+  "updatedAt": "2026-07-06T14:34:07.653Z",
+  "updatedAtBR": "06/07/2026, 11:34:07 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Work in progress",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T14:34:07.653Z",
+      "titulo": "Push na main · a03476a55a8ecf887f2b2ad019be287023a5a050",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "a03476a",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-06T14:19:08.637Z",
       "titulo": "Push na main · 4176b760af4043863e760c03879efa65310d24f7",
@@ -1260,6 +1268,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T14:34:07.653Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · a03476a55a8ecf887f2b2ad019be287023a5a050 (a03476a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T14:19:08.637Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 4176b760af4043863e760c03879efa65310d24f7 (4176b76)",
@@ -1599,13 +1614,6 @@
       "time": "2026-07-05T19:44:32.279Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 68259e44b655d05bbda21fe9b21bd9302ce9e1ed (68259e4)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T19:42:22.559Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · f0f74002b979ab496cf399edc1a8c1611a64122e (f0f7400)",
       "area": "Repositório",
       "status": "sucesso"
     }
