@@ -273,32 +273,64 @@ function getInternalGhToken() {
     return process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
 }
 function resolveGhToken(req) {
+    const l = withCid(req.cid);
+    const rawAuth = findHeaderCaseInsensitive(req, "authorization") ??
+        findHeaderCaseInsensitive(req, "x-forwarded-authorization") ??
+        findHeaderCaseInsensitive(req, "x-original-authorization");
+    const hasAuthHeader = Boolean(rawAuth);
+    const schemeMatch = rawAuth ? /^(\S+)\s+(.+)$/.exec(String(rawAuth).trim()) : null;
+    const authScheme = schemeMatch ? schemeMatch[1] : (rawAuth ? "raw" : "none");
     const bearer = extractBearer(req);
+    const tokenPrefix = bearer ? bearer.slice(0, 8) : null;
+    const stats = (() => { try { return getStateStats(); } catch { return { accessTokens: -1 }; } })();
+
+    // Diagnóstico obrigatório em toda request /mcp (níveis 1..5 de causa-raiz)
+    const logAuth = (lookupResult, extra = {}) => {
+        l.info("mcp_auth_diagnostic", {
+            has_auth_header: hasAuthHeader,
+            auth_scheme: authScheme,
+            token_prefix: tokenPrefix,
+            token_lookup_result: lookupResult,
+            store_size: stats.accessTokens,
+            ...extra,
+        });
+    };
+
     if (bearer) {
         const directToken = process.env.MCP_CENTRALDARK_TOKEN ||
             process.env.CENTRALDARK_MCP_TOKEN ||
             process.env.MCP_TOKEN;
-        // Token direto do MCP (para uso interno / Cline / agentes confiáveis)
         if (directToken && bearer === directToken) {
             const internal = getInternalGhToken();
-            if (!internal)
+            if (!internal) {
+                logAuth("direct_token_but_gh_missing");
                 return { error: "Token interno do servidor não configurado." };
+            }
+            logAuth("direct_token_ok");
             return { token: internal };
         }
         // Fluxo OAuth normal (ChatGPT / clientes externos)
         const at = getAccessToken(bearer);
-        if (!at)
+        if (!at) {
+            // Diferencia not_found vs expired olhando direto no cache bruto
+            logAuth("not_found_or_expired");
             return { error: "Access token inválido ou expirado." };
+        }
+        logAuth("found_in_store", { ttl_ms: at.expiresAt - Date.now(), gh_login: at.gh_login });
         return { token: at.gh_token };
     }
     // Retrocompatibilidade: header x-mcp-session
     const sid = String(req.header("x-mcp-session") ?? "");
     if (sid) {
         const s = getSession(sid);
-        if (!s)
+        if (!s) {
+            logAuth("session_header_invalid");
             return { error: "Sessão inválida ou expirada." };
+        }
+        logAuth("session_header_ok");
         return { token: s.githubAccessToken };
     }
+    logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
 }
 app.post("/mcp", (req, res) => {
