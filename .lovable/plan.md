@@ -1,51 +1,43 @@
-# Plano: Sistema híbrido OAuth + Token pra contas Supabase no HUB
+## Objetivo
+Tirar a rota separada `/admin/modo-livre` e colocar os botões **LIGAR / DESLIGAR** direto no painel principal `/admin`, naquele card vazio que tá do lado do "Info do Processo" (o quadrado com borda vermelha na imagem).
 
-## O que vai existir
+## O que muda na VPS (`CentralDark-MCP`)
 
-1. **Tabela `hub.supabase_accounts`** no HUB — guarda cada conta conectada (label, e-mail, tipo `oauth`/`token`, access_token cifrado, refresh_token cifrado, expires_at, org_id opcional).
-2. **Fluxo OAuth** — botão "Conectar via OAuth" leva pro Supabase, você loga na conta desejada, autoriza, volta pro app já salvando os tokens.
-3. **Fluxo Token** — o modal atual continua funcionando (cola `sbp_...`), só que agora salva na mesma tabela unificada.
-4. **Painel de contas** — lista todas conectadas, mostra tipo (🔗 OAuth / 🔑 Token), permite renomear, testar conexão, remover.
+**1. Painel principal `/admin` — adicionar card "Modo Livre"**
+No lugar do card vazio, injetar um bloco assim:
 
-## Passos
+```text
+┌─ MODO LIVRE ──────────────────────┐
+│  Status: 🔴 DESLIGADO             │
+│  [ 🔓 LIGAR ]   [ 🔒 DESLIGAR ]   │
+│  Última mudança: 06/07 03:01      │
+└───────────────────────────────────┘
+```
 
-### 1. Você cria o OAuth App no Supabase (1 vez só)
-- Vai em `supabase.com/dashboard/org/_/oauth-apps` → New OAuth App
-- Nome: "CentralDark Hub"
-- Redirect URL: `https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/supabase-oauth-callback`
-- Salva o `client_id` e `client_secret` e me passa
+- Quando ligado: fundo fica amarelo/alerta, status vira `🟢 LIGADO`
+- Botões chamam `fetch('/admin/api/modo-livre', {method:'POST', body:{acao:'ligar'|'desligar'}})` — sem recarregar página, sem redirect, sem pedir confirmação
+- Auto-refresh do status a cada 5s (já tem polling no painel)
 
-### 2. Salvo os segredos no HUB
-- `SUPABASE_OAUTH_CLIENT_ID`
-- `SUPABASE_OAUTH_CLIENT_SECRET`
+**2. Remover a rota `/admin/modo-livre`**
+- Deleta `GET /admin/modo-livre` (a página HTML separada)
+- Deleta `POST /admin/modo-livre` (o form submit)
+- **Mantém** `GET /admin/api/modo-livre` e `POST /admin/api/modo-livre` (os endpoints JSON que os botões usam)
 
-### 3. Migration no HUB — tabela `supabase_accounts`
-Cifrada com `pgp_sym_encrypt` usando `VAULT_MASTER_KEY`. Campos: `id`, `label`, `account_email`, `method` (`oauth`|`token`), `access_token_encrypted`, `refresh_token_encrypted`, `expires_at`, `org_ids[]`, `created_at`, `last_used_at`.
+**3. Passar direto sem pedir permissão**
+O `modo-livre.js` já faz bypass dos validadores quando ligado. O que falta é: quando ligado, **não logar warning nem pedir confirmação** em nenhum lugar. Vou varrer `vps-files.js`, `vps-lazy.js`, `admin-files.js` e garantir que o `if (isModoLivre()) return { ok:true }` seja a PRIMEIRA linha, antes de qualquer `console.warn` ou prompt.
 
-### 4. Duas edge functions no HUB
-- **`supabase-oauth-start`** — gera state, monta URL de authorize do Supabase, redireciona
-- **`supabase-oauth-callback`** — recebe `code`, troca por tokens no `https://api.supabase.com/v1/oauth/token`, cifra e salva
+## Arquivos tocados na VPS
 
-### 5. Painel no frontend (Lovable atual)
-- Botão "🔗 Conectar via OAuth" (novo) ao lado do "🔑 Adicionar via Token" (atual)
-- Lista de contas conectadas com badges do tipo
-- Ações: renomear, testar, remover
-- Ao usar qualquer operação que precise de token, o painel escolhe a conta (dropdown)
+| Arquivo | Ação |
+|---|---|
+| `src/dist/index.js` | Remover 2 rotas HTML, manter as 2 API |
+| `src/dist/admin-panel.html` (ou template inline) | Injetar card Modo Livre no slot vazio |
+| `src/dist/modo-livre.js` | Sem mudança (já funciona) |
+| `src/dist/vps-files.js` · `vps-lazy.js` · `admin-files.js` | Garantir bypass silencioso (sem warn) |
 
-### 6. Auto-renovação do OAuth
-Edge function `supabase-token-refresh` roda quando `expires_at` tá perto do fim — usa o `refresh_token` pra renovar sem o usuário precisar logar de novo.
+## Deploy
+`pm2 restart CentralDark-MCP` e valida abrindo `https://mcp.centralldark.com/admin` — o card aparece no lugar do quadrado vazio, botões funcionam sem sair da página.
 
-## O que muda pro usuário
-
-- Continua podendo colar `sbp_...` normal
-- **OU** clica "Conectar via OAuth", loga na conta Supabase desejada, autoriza, pronto
-- Pode conectar N contas (principal, trabalho, cliente X...) e trocar entre elas
-- Todas ficam salvas no HUB, cifradas, compartilhadas entre qualquer serviço que precisar
-
-## Detalhes técnicos
-- Endpoint de troca: `POST https://api.supabase.com/v1/oauth/token` com `grant_type=authorization_code` (docs: supabase.com/docs/guides/integrations/build-a-supabase-integration)
-- Escopos padrão: `all` (leitura+escrita nas orgs autorizadas)
-- Refresh token roda ~24h antes de expirar
-- Cifra: `pgp_sym_encrypt(token, current_setting('app.vault_key'))` — mesma pattern do `vault_secrets` existente
-- Nada de token em plain text nem em log
-- Fallback: se OAuth falhar (Supabase fora do ar, etc), token colado sempre funciona
+## Fora de escopo
+- Não mexer em nada do Lovable (esse projeto aqui é só frontend do painel de status, o admin do MCP mora na VPS).
+- Não criar novas travas de tempo (segue "só desliga manual" como já combinado).
