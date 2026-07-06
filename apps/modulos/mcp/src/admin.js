@@ -196,7 +196,7 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
 <body>
 <header>
   <h1>MCP CentralDark · Painel Admin</h1>
-  <div class="meta"><span>versão <b id="ver">?</b></span><span id="clock">--:--:--</span></div>
+  <div class="meta"><span>versão <b id="ver">?</b></span><span id="clock">--:--:--</span><a href="/admin/logout" class="btn ghost" style="text-decoration:none;padding:6px 12px">sair</a></div>
 </header>
 <nav class="tabs">
   <div class="tab active" data-p="visao">Visão Geral</div>
