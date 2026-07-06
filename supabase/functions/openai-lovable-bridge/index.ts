@@ -90,9 +90,8 @@ async function proxy(subpath: string, req: Request): Promise<Response> {
 
   const init: RequestInit = { method: req.method, headers };
   if (req.method !== "GET" && req.method !== "HEAD") {
-    init.body = req.body;
-    // @ts-ignore Deno aceita duplex pra body streamável
-    init.duplex = "half";
+    // Ler o body como bytes (suporta JSON e multipart binário)
+    init.body = new Uint8Array(await req.arrayBuffer());
   }
 
   const res = await fetch(upstream.toString(), init);
