@@ -1,49 +1,53 @@
 
-# Plano — Fazer o ChatGPT usar o MCP CentralDark de verdade
+# Plano — Migrar ai-proxy pro HUB Supabase (lyoigsqluyktoclwdaft)
 
-## Diagnóstico rápido
-- O ChatGPT tá listando **~39 tools** (screenshot) mas o servidor publica **73**. Isso é **cache do conector** no lado do ChatGPT.
-- Ele tentou "ler" `docs/CONSCIENCIA/04-MCP-E-CONECTORES/ARQUITETURA-MCP-V2.md` por path direto — não existe tool assim. Ele precisa chamar `github_get_file` (ou `vps_read_file_safe`).
-- Falta um **guia de uso** dizendo QUANDO chamar cada tool.
+## Ideia curta
+Usar a infra que já existe no HUB + VPS. Eu faço tudo pela VPS (via MCP admin), sem depender do Lovable Cloud atual.
 
-## O que vou entregar
+## Passos que eu executo (nessa ordem)
 
-### 1. Fix do cache do conector (lado ChatGPT) — instrução operacional
-Documento curto em `docs/CONSCIENCIA/04-MCP-E-CONECTORES/RECONECTAR-CHATGPT.md` com o passo-a-passo:
-- Settings → Connectors → CentralDark → **Disconnect**
-- Recarregar página, **Reconnect** via OAuth
-- Abrir **conversa NOVA** (não a atual — cache fica preso na thread)
-- Validar chamando `mcp_admin_status` + `mcp_admin_catalog` (devem retornar 73 tools)
+### 1. Copiar código do ai-proxy pra dentro do repo CentralDark
+- Origem: `supabase/functions/ai-proxy/index.ts` (versão atual, já com 18 modelos + aliases + rate limit)
+- Destino no repo: `supabase/functions/ai-proxy/index.ts` do `CentralDark`
+- Ferramenta: `github_create_or_update_file`
 
-### 2. System Prompt oficial pro ChatGPT — `docs/CONSCIENCIA/04-MCP-E-CONECTORES/SYSTEM-PROMPT-CHATGPT.md`
-Bloco pronto pra colar em "Custom Instructions" ou no início de conversa nova. Contém:
-- Identidade (você tá no MCP CentralDark, 73 tools)
-- **Ordem obrigatória de boas-vindas:** `kit_boas_vindas` → `ler_regras_inviolaveis` → `mcp_admin_catalog`
-- **Regra de leitura de arquivo:** nunca "abrir path" — sempre `github_get_file` (repo) ou `vps_read_file_safe` (VPS)
-- **Regra do dispatcher:** se uma tool sumir do catálogo visível, chamar via `mcp_admin_call({tool:"nome", input:{...}})`
-- Tabela **"quando usar cada tool"** com 15 casos mais comuns (ler arquivo, listar PM2, ver deploy, criar issue, buscar código, etc)
-- Regras destrutivas: `confirmAdmin:"CONFIRMO ADMIN"`
+### 2. Salvar as secrets no HUB (via VPS)
+Comandos rodados por `execute_command` na VPS, usando Supabase CLI já instalado:
+```
+supabase secrets set --project-ref lyoigsqluyktoclwdaft \
+  WEBUI_LOVABLE_KEY=wlk_qPOrs99RBjX0zW5ZWFw3OBMljHneBua0DBrVerxq3N0 \
+  LOVABLE_API_KEY=<pega do cofre /root/CentralDark/secrets/LOVABLE_API_KEY> \
+  AI_PROXY_RATE_PER_MIN=<valor atual> \
+  AI_PROXY_RATE_PER_HOUR=<valor atual>
+```
 
-### 3. Endpoint público de auto-descoberta — `docs/CONSCIENCIA/04-MCP-E-CONECTORES/URLS-DESCOBERTA.md`
-Lista os endpoints que o ChatGPT pode `fetch` sozinho pra validar catálogo:
-- `https://mcp.centralldark.com/health` → toolCount + catalogVersion
-- `https://mcp.centralldark.com/tools.json` → lista crua das 73
-- `https://mcp.centralldark.com/status.json` → status geral
+### 3. Deploy da edge no HUB (via VPS)
+```
+supabase functions deploy ai-proxy \
+  --project-ref lyoigsqluyktoclwdaft \
+  --no-verify-jwt
+```
 
-### 4. Atualização do `PIVETE-08-MCP-LIBERACAO.md`
-Adicionar seção **"Ensinar ChatGPT/Grok/Claude a usar o MCP"** com link pros 3 docs acima. Assim toda IA nova que carregar consciência do pivete já sabe do fluxo.
+### 4. Trocar URL nos consumidores
+Um único ponto no frontend:
+- `src/apps/modulos/telepainel/pages/AiProxyConfig.tsx`
+  - `AI_PROXY_URL` passa a apontar pro HUB: `https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/ai-proxy`
 
-### 5. Registro
-- Aprendizado no `docs/CONSCIENCIA/APRENDIZADOS.md`: "ChatGPT precisa reconectar + system prompt pra enxergar 73 tools"
-- Não vou mexer em código do MCP nem da VPS — só docs. Mudança 100% no repo, seguindo o fluxo GitHub → VPS.
+E no CLI (via GitHub):
+- `docs/CONSCIENCIA/DARKAI/darkai.sh` → mesma troca de URL
 
-## O que NÃO vou fazer (fora de escopo neste plano)
-- Mexer no servidor MCP (`apps/modulos/mcp/dist/`) — o backend tá certo, publica 73 tools.
-- Mexer no Caddy/OAuth — já funciona.
-- Criar tool nova — o problema não é falta de tool.
+### 5. Testar
+- No console `/ai-proxy` do painel: colar a chave, clicar **Ler configuração** → HTTP 200
+- Bater `/v1/models` sem chave → HTTP 401
+- `darkai --model gpt-5 "ping"` → resposta real
 
-## Detalhe técnico (pra referência)
-O ChatGPT MCP client faz `tools/list` uma vez na conexão e cacheia por thread. Reconectar força novo `tools/list`. O dispatcher `mcp_admin_call` já contorna isso pras tools novas — o system prompt vai ensinar a usar.
+### 6. Desligar o antigo (só depois do 5 passar)
+- Deletar edge `ai-proxy` do Lovable Cloud atual
+- Deletar secret `WEBUI_LOVABLE_KEY` do Lovable Cloud atual
+- `LOVABLE_API_KEY` do Lovable atual fica (é gerenciado, outras funções usam)
 
-## Próximo passo
-Aprovar o plano → eu crio os 4 arquivos `.md` + registro aprendizado.
+## O que eu preciso confirmar com você antes de disparar
+
+- **`LOVABLE_API_KEY` pro HUB**: você tem uma chave Lovable AI própria salva no cofre da VPS (`/root/CentralDark/secrets/LOVABLE_API_KEY`)? Se sim, uso ela. Se não, você gera uma no dashboard e me diz o nome do arquivo — sem isso o proxy no HUB não fala com o gateway.
+
+Se responder **"tem sim, usa"** eu executo tudo do 1 ao 6 direto.
