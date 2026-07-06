@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-06T03:07:59.978Z
-- **Commit:** `51c700a91220ccc8920ac2f61aa6ef60f7c96880`
+- **Gerado:** 2026-07-06T03:24:58.278Z
+- **Commit:** `4f2e4abb7ab77ddc133a95db810d9f43e8e740e9`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 330 | 0 | 0 | 330 | 0 |
+| aprendizados | 331 | 0 | 0 | 331 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **330**
+- 🟥 Faltando no Notion: **331**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -378,4 +378,5 @@
 - 296. Curso Condefonte v1 salvo no cofre e no Hermes
 - 297. Curso Condefonte mora dentro de LOVABLE_TOKEN/
 - 298. Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes)
+- 299. Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)
 </details>
