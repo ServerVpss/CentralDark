@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T10:00:45.757Z",
-  "updatedAtBR": "06/07/2026, 07:00:45 BRT",
+  "updatedAt": "2026-07-06T10:01:38.368Z",
+  "updatedAtBR": "06/07/2026, 07:01:38 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
-    "currentTask": "Guardião online no grupo. Próximo: replicar NOTIFY_CHAT_ID no Hermes + subir grupo-evolucao (5 IAs) no PM2",
+    "currentTask": "Grafo 3D voltou a funcionar (three r149 + 3d-force-graph 1.73 + spritetext 1.8, validado headless). Pivete confirmar visualmente no navegador.",
     "branch": "main",
-    "lastCommit": "dbf19e904",
+    "lastCommit": "fdba09393",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T10:01:38.378Z",
+      "title": "Grafo Jarvis (grafo.centralldark.com) CONSERTADO — libs 3D locais pinadas, erro 'bibliotecas 3D não carregadas' resolvido conforme aprendizado #292",
+      "area": "graph-panel",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-07-06T09:47:53.401Z",
       "title": "Guardião da Consciência religado e consertado — agora notifica no grupo Central Dark - Grupo da Evolução (padrão NOTIFY_CHAT_ID)",
       "area": "infra/guardiao",
@@ -823,14 +830,6 @@
       "detalhe": "Melhorou monitor Condefonte v2.1",
       "area": "Repositório",
       "sha": "cd70268",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T00:50:58.985Z",
-      "titulo": "Push na main · 9176687c8ccca36e71766f1a902dd3a877483e16",
-      "detalhe": "Salvou o script no GitHub",
-      "area": "Repositório",
-      "sha": "9176687",
       "actor": "lovable-dev[bot]"
     }
   ],
