@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T16:37:49.034Z",
-  "updatedAtBR": "06/07/2026, 13:37:49 BRT",
+  "updatedAt": "2026-07-06T17:22:02.902Z",
+  "updatedAtBR": "06/07/2026, 14:22:02 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Corrigiu conexão tool_server",
+    "lastCommit": "Redesign admin MCP em abas",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-06T17:22:02.902Z",
+      "titulo": "Push na main · 6646223b6a49fd6f5196792302d05ce487f37c24",
+      "detalhe": "Redesign admin MCP em abas",
+      "area": "Repositório",
+      "sha": "6646223",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-06T16:37:49.034Z",
       "titulo": "Push na main · cddfaee8ed8a3ca51a47e3c1abaaee7351dab3d7",
@@ -1316,6 +1324,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T17:22:02.902Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 6646223b6a49fd6f5196792302d05ce487f37c24 (6646223)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T16:37:49.034Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · cddfaee8ed8a3ca51a47e3c1abaaee7351dab3d7 (cddfaee)",
@@ -1655,13 +1670,6 @@
       "time": "2026-07-05T22:37:55.605Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d81c21af87c7a65e86de90c2ec2b61fdc839f308 (d81c21a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T22:36:36.788Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7535220b8db1d70c238f7d367ecdf51a5b82d4bc (7535220)",
       "area": "Repositório",
       "status": "sucesso"
     }
