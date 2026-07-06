@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T03:24:55.230Z
+# 🧠 Notion Sync — 2026-07-06T04:04:18.722Z
 
-- **Commit fonte:** `4f2e4abb7ab77ddc133a95db810d9f43e8e740e9`
+- **Commit fonte:** `1b379863507cfe839fa85d45f00eadd87aeaed69`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 335 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 336 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 301 | 1 | 300 | 0 | 0 |
+| aprendizados | 301 | 0 | 301 | 0 | 0 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -357,7 +357,7 @@
 | aprendizados | atualizado | #296 — Curso Condefonte v1 salvo no cofre e no Hermes |
 | aprendizados | atualizado | #297 — Curso Condefonte mora dentro de LOVABLE_TOKEN/ |
 | aprendizados | atualizado | #298 — Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes) |
-| aprendizados | criado | #299 — Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i) |
+| aprendizados | atualizado | #299 — Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
