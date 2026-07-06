@@ -1,3 +1,10 @@
+---
+title: "ARQUITETURA CHAVES AI PROXY"
+date: 2026-07-06
+tags: ["consciencia"]
+updated: 2026-07-06
+---
+
 # Arquitetura das Chaves de API — `ai-proxy` (CentralDark)
 
 > Análise técnica real feita direto da VPS de produção contra a edge function
