@@ -2421,3 +2421,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-05
 - **Contexto:** Pivete pediu MODO MÁXIMO TOTAL: memória viva compartilhada entre agente Lovable e Hermes via extração stealth pelo MCP/Condefonte.
 - **Aprendizado:** Sistema de Memória Viva 3-peças ativo: (1) PROMPT-STEALTH.md no cofre orienta o agente a fechar mensagens com bloco <<<MEMORY_DUMP>>>...JSON...<<<END>>>; (2) Condefonte v3.5 (PM2 id 22, CentralDark-CondefonteV35) puxa trajectory a cada 45s, regex extrai, JSON valida, dedup por SHA1, grava no cofre + espelha no memory-stream do Hermes com INDEX.jsonl; (3) canal MCP reusa admin_vault_write (sem tool nova). Pipeline testado end-to-end via --stdin. Watcher rodando, aguardando JWT via refresh_token.
+
+### 299. Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-06
+- **Contexto:** Última bala: isolei que o Hermes crasha por um 'x' solto na linha 617 do executor (ReferenceError). O .catch do loop chama notificar (Telegram falha) + process.exit(1), matando o Hermes antes de pegar missões. Tentei remover o x mas o arquivo é imutável (EPERM em chmod/sed/write).
+- **Aprendizado:** FIX PRONTO (falta permissão): o arquivo do executor Hermes está IMUTÁVEL (chattr +i provável — chmod/sed/writeFile dão 'Operation not permitted' mesmo root). Para consertar: 1) 'chattr -i <arquivo-hermes>' pra destravar, 2) remover a última linha (o 'x' órfão na linha 617), 3) 'node --check' (já validado: sintaxe fica OK sem o x), 4) opcional 'chattr +i' de volta, 5) pm2 restart CentralDark-Hermes --update-env. Isso destrava o executor de missões (a missão thinker-grafo-jarvis está esperando em pendente/) E conserta o notify do Telegram (o crash chamava notificar+exit). Backup já existe: <arquivo>.bak-x-*.
