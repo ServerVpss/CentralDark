@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T15:33:52.811Z
+# 🧠 Notion Sync — 2026-07-06T20:11:22.252Z
 
-- **Commit fonte:** `6823041117e2ea8c1d831f00d01dce26c3e4a312`
+- **Commit fonte:** `2ebb568297564bdc9127aece3686b4ebaaaad1fb`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 339 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 340 atualizadas · ❌ 453 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 305 | 1 | 304 | 0 | 0 |
-| estrutura | 451 | 0 | 0 | 0 | 451 |
+| aprendizados | 306 | 0 | 305 | 0 | 1 |
+| estrutura | 452 | 0 | 0 | 0 | 452 |
 
 ## Operações
 
@@ -88,7 +88,7 @@
 | aprendizados | atualizado | #27 — CRM legado: PM2 online mas logs indicam dist/server ausente |
 | aprendizados | atualizado | #28 — Modo Segredo |
 | aprendizados | atualizado | #29 — CRM dist/client sem index.html |
-| aprendizados | atualizado | #30 — Objetivo de organização: bots centralizados em um único lugar |
+| aprendizados | erro | #30 — Objetivo de organização: bots centralizados em um único lugar |
 | aprendizados | atualizado | #31 — Modo Segredo como padrão operacional oficial |
 | aprendizados | atualizado | #32 — BOT online validado sem mexer no CRM |
 | aprendizados | atualizado | #33 — BOT validado: rotas SPA 200 e próxima etapa de telas reais |
@@ -361,7 +361,8 @@
 | aprendizados | atualizado | #300 — Grafo Vivo v0.4: 3D bundleado sem CDN |
 | aprendizados | atualizado | #301 — Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start |
 | aprendizados | atualizado | #302 — MCP ChatGPT exige compatibilidade no token e Accept |
-| aprendizados | criado | #303 — HUD Grafo 3D — three.js UMD precisa ser carregado à parte |
+| aprendizados | atualizado | #303 — HUD Grafo 3D — three.js UMD precisa ser carregado à parte |
+| aprendizados | atualizado | #304 — unpkg sem versão pode entregar build ESM sem global — travar versão |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -456,6 +457,7 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/METODO-SWITCH-MODEL.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/conversa-mcp-webui-liberacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | erro | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |

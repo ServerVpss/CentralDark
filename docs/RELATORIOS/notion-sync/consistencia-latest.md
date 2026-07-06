@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-06T15:33:55.954Z
-- **Commit:** `6823041117e2ea8c1d831f00d01dce26c3e4a312`
+- **Gerado:** 2026-07-06T20:11:25.141Z
+- **Commit:** `2ebb568297564bdc9127aece3686b4ebaaaad1fb`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 335 | 0 | 0 | 335 | 0 |
+| aprendizados | 336 | 0 | 0 | 336 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **335**
+- 🟥 Faltando no Notion: **336**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -383,4 +383,5 @@
 - 301. Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start
 - 302. MCP ChatGPT exige compatibilidade no token e Accept
 - 303. HUD Grafo 3D — three.js UMD precisa ser carregado à parte
+- 304. unpkg sem versão pode entregar build ESM sem global — travar versão
 </details>
