@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T05:04:12.045Z",
-  "updatedAtBR": "06/07/2026, 02:04:12 BRT",
+  "updatedAt": "2026-07-06T05:12:36.703Z",
+  "updatedAtBR": "06/07/2026, 02:12:36 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "Adicionou fluxo de WebUI Key",
+    "lastCommit": "Adicionou guarda de Lovable API",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T05:12:36.703Z",
+      "titulo": "Push na main · 54390a05d10e8308e9fb9792a1da9551393e9239",
+      "detalhe": "Adicionou guarda de Lovable API",
+      "area": "Repositório",
+      "sha": "54390a0",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-06T05:04:12.045Z",
       "titulo": "Push na main · beee0a036df4b054c5e106da47507b2e963bfe7d",
       "detalhe": "Adicionou fluxo de WebUI Key",
@@ -980,14 +988,6 @@
       "detalhe": "ci(obsidian-plugin): auto-release quando manifest/checksums mudam",
       "area": "Repositório",
       "sha": "c8fc064",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-05T04:36:52.199Z",
-      "titulo": "Push na main · 781f2af699c42ea7e13a7eb341652447098f692d",
-      "detalhe": "aprendizado(#292): CDN sem versão pinada quebrou o HUD 3D do GrafoVivo",
-      "area": "Repositório",
-      "sha": "781f2af",
       "actor": "segredounlock"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T05:12:36.703Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 54390a05d10e8308e9fb9792a1da9551393e9239 (54390a0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T05:04:12.045Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · beee0a036df4b054c5e106da47507b2e963bfe7d (beee0a0)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T15:55:31.718Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · b954c5635ee2fd1668717bbd60355842ceba3ade (b954c56)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T15:45:49.174Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · c8e56d3458a2c7727402101e88ef54eaee9c802e (c8e56d3)",
       "area": "Repositório",
       "status": "sucesso"
     }
