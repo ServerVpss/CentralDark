@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-06T08:42:34.622Z",
-  "updatedAtBR": "06/07/2026, 05:42:34 BRT",
+  "updatedAt": "2026-07-06T08:43:27.451Z",
+  "updatedAtBR": "06/07/2026, 05:43:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -597,6 +597,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T08:43:27.452Z",
+      "title": "WebUI/Bridge: URL http://host.docker.internal:8099/v1 e alias 172.21.0.1 agora persistidos no docker-compose.override.yml — não quebra mais em restart/recriação da rede",
+      "area": "Infra",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-07-06T08:41:45.778Z",
       "title": "Fluxo do painel agora usa GitHub Contents API — imune a working tree sujo e ahead/behind",
       "area": "Painel",
@@ -823,14 +830,6 @@
       "detalhe": "Melhorou monitor Condefonte v2.1",
       "area": "Repositório",
       "sha": "cd70268",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T00:50:58.985Z",
-      "titulo": "Push na main · 9176687c8ccca36e71766f1a902dd3a877483e16",
-      "detalhe": "Salvou o script no GitHub",
-      "area": "Repositório",
-      "sha": "9176687",
       "actor": "lovable-dev[bot]"
     }
   ],
