@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-06T02:15:29.429Z
-- **Commit:** `66463d7f6b3e322fc7d95d8699eaafe287ff20f2`
+- **Gerado:** 2026-07-06T02:32:47.580Z
+- **Commit:** `94ada3bc9dd73e532232f6dde881a86940870851`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 328 | 0 | 0 | 328 | 0 |
+| aprendizados | 330 | 0 | 0 | 330 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **328**
+- 🟥 Faltando no Notion: **330**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -376,4 +376,6 @@
 - 294. EliteHTTP porta real 8082 + Sentry precisa de org manual
 - 295. Grok deve escrever secrets pelo admin_vault_write
 - 296. Curso Condefonte v1 salvo no cofre e no Hermes
+- 297. Curso Condefonte mora dentro de LOVABLE_TOKEN/
+- 298. Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes)
 </details>

@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T02:15:26.292Z
+# 🧠 Notion Sync — 2026-07-06T02:32:43.897Z
 
-- **Commit fonte:** `66463d7f6b3e322fc7d95d8699eaafe287ff20f2`
+- **Commit fonte:** `94ada3bc9dd73e532232f6dde881a86940870851`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 332 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 334 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 298 | 1 | 297 | 0 | 0 |
+| aprendizados | 300 | 1 | 299 | 0 | 0 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -354,7 +354,9 @@
 | aprendizados | atualizado | #293 — Sincronia VPS falhou por conflito de merge e foi resolvida |
 | aprendizados | atualizado | #294 — EliteHTTP porta real 8082 + Sentry precisa de org manual |
 | aprendizados | atualizado | #295 — Grok deve escrever secrets pelo admin_vault_write |
-| aprendizados | criado | #296 — Curso Condefonte v1 salvo no cofre e no Hermes |
+| aprendizados | atualizado | #296 — Curso Condefonte v1 salvo no cofre e no Hermes |
+| aprendizados | atualizado | #297 — Curso Condefonte mora dentro de LOVABLE_TOKEN/ |
+| aprendizados | criado | #298 — Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
