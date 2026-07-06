@@ -2457,3 +2457,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** Após adicionar three.js UMD, o HUD ainda dava erro: window.THREE=object mas ForceGraph3D=undefined. Causa: `https://unpkg.com/3d-force-graph` (sem versão) redirecionava pra 1.80.0, que é build ESM/AMD e NÃO registra global no window.
 - **Aprendizado:** Nunca usar unpkg sem versão em produção. Pra vasos onde a página consome global (window.ForceGraph3D), travar em versões UMD clássicas: 3d-force-graph@1.73.4 e three-spritetext@1.8.2 são as últimas com UMD que registra global. Padrão UMD detectável no arquivo: começa com `!function(t,e){"object"==typeof exports...`. Commit 8c2cfce8.
+
+### 305. Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM
+- **Categoria:** regra
+- **Data:** 2026-07-06
+- **Contexto:** Pivete pediu pra renomear os modelos do Mistral Vibe (arquivo /root/[oculto]) porque os aliases originais (gateway-gpt-5.5, gateway-gemini-pro) não diziam PRA QUÊ cada um servia. Um leigo não sabe se Gemini Pro é rápido ou bom pra ler. Aplicamos aliases descritivos em PT-BR: "top-gpt55-mais-inteligente", "leitura-gemini25-pro-textao", "rapido-gemini25-flash", "codigo-devstral" etc.
+- **Aprendizado:** Toda vez que a IA for mostrar uma lista de opções técnicas pro Pivete (modelos de IA no /model do Vibe, comandos, tools, serviços PM2, etc), reetiquetar como TUTOR: prefixar com o uso ("rapido-", "leitura-", "top-", "codigo-", "barato-", "equilibrado-") + nome técnico curto. Nunca deixar só o id cru (ex: "openai/gpt-5.5"). Assim ele escolhe pelo que serve, não pelo nome do fabricante.
