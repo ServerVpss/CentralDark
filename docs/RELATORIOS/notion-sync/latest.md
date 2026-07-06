@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T14:18:13.401Z
+# 🧠 Notion Sync — 2026-07-06T15:33:52.811Z
 
-- **Commit fonte:** `cf1e18ee2e32b28ebe7927069d51e8bd916a7050`
+- **Commit fonte:** `6823041117e2ea8c1d831f00d01dce26c3e4a312`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 338 atualizadas · ❌ 451 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 339 atualizadas · ❌ 451 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 304 | 1 | 303 | 0 | 0 |
+| aprendizados | 305 | 1 | 304 | 0 | 0 |
 | estrutura | 451 | 0 | 0 | 0 | 451 |
 
 ## Operações
@@ -360,7 +360,8 @@
 | aprendizados | atualizado | #299 — Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i) |
 | aprendizados | atualizado | #300 — Grafo Vivo v0.4: 3D bundleado sem CDN |
 | aprendizados | atualizado | #301 — Editar .py no PM2: validar gravação real + qual arquivo o import resolve + delete/start |
-| aprendizados | criado | #302 — MCP ChatGPT exige compatibilidade no token e Accept |
+| aprendizados | atualizado | #302 — MCP ChatGPT exige compatibilidade no token e Accept |
+| aprendizados | criado | #303 — HUD Grafo 3D — three.js UMD precisa ser carregado à parte |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
