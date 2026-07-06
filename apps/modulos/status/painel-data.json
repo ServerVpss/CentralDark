@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T05:55:55.840Z",
-  "updatedAtBR": "06/07/2026, 02:55:55 BRT",
+  "updatedAt": "2026-07-06T05:56:34.474Z",
+  "updatedAtBR": "06/07/2026, 02:56:34 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Sincronia 4-Point concluída — MCP + Cliente + Painel",
     "currentTask": "MCP admin conectado pela rota correta e painel com horário BR",
     "branch": "main",
-    "lastCommit": "docs(grafo-vivo): estado auditado + v0.4 concluído (3D real)",
+    "lastCommit": "docs(grafo-vivo): update changelog — v0.4 real (3D bundleado)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -592,6 +592,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-06T05:56:34.474Z",
+      "titulo": "Push na main · edf395d46169135bf5ad5c3805787ecb50e16f1a",
+      "detalhe": "docs(grafo-vivo): update changelog — v0.4 real (3D bundleado)",
+      "area": "Repositório",
+      "sha": "edf395d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-06T05:55:55.840Z",
       "titulo": "Push na main · 8c0a2eafb5fe3ce1b56f5d25a2faab35fb78775a",
       "detalhe": "docs(grafo-vivo): estado auditado + v0.4 concluído (3D real)",
@@ -980,14 +988,6 @@
       "detalhe": "Corrigiu E2E e cid do MCP",
       "area": "Repositório",
       "sha": "701d874",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-05T16:03:04.255Z",
-      "titulo": "Push na main · b9f44281a9096a7f2d0bcb4e36e3360c707740f8",
-      "detalhe": "Adicionou health, E2E, logs",
-      "area": "Repositório",
-      "sha": "b9f4428",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1403,6 +1403,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-06T05:56:34.474Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · edf395d46169135bf5ad5c3805787ecb50e16f1a (edf395d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T05:55:55.840Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8c0a2eafb5fe3ce1b56f5d25a2faab35fb78775a (8c0a2ea)",
@@ -1742,13 +1749,6 @@
       "time": "2026-07-05T18:33:08.066Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 9628201c352adc74b9ab0a1224d39e574e437f6b (9628201)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T18:03:22.548Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 006a4db8f93e107151bc9d9851a056d6a377f145 (006a4db)",
       "area": "Repositório",
       "status": "sucesso"
     }
