@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T20:11:22.252Z
+# 🧠 Notion Sync — 2026-07-06T21:44:03.399Z
 
-- **Commit fonte:** `2ebb568297564bdc9127aece3686b4ebaaaad1fb`
+- **Commit fonte:** `49743efe0b7ac3ad6c57e34c4a7364e4fcf33b1d`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 340 atualizadas · ❌ 453 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 341 atualizadas · ❌ 452 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 306 | 0 | 305 | 0 | 1 |
+| aprendizados | 306 | 0 | 306 | 0 | 0 |
 | estrutura | 452 | 0 | 0 | 0 | 452 |
 
 ## Operações
@@ -88,7 +88,7 @@
 | aprendizados | atualizado | #27 — CRM legado: PM2 online mas logs indicam dist/server ausente |
 | aprendizados | atualizado | #28 — Modo Segredo |
 | aprendizados | atualizado | #29 — CRM dist/client sem index.html |
-| aprendizados | erro | #30 — Objetivo de organização: bots centralizados em um único lugar |
+| aprendizados | atualizado | #30 — Objetivo de organização: bots centralizados em um único lugar |
 | aprendizados | atualizado | #31 — Modo Segredo como padrão operacional oficial |
 | aprendizados | atualizado | #32 — BOT online validado sem mexer no CRM |
 | aprendizados | atualizado | #33 — BOT validado: rotas SPA 200 e próxima etapa de telas reais |
