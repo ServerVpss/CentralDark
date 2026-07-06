@@ -273,3 +273,13 @@ Achado técnico crítico que embasa a prioridade: hoje o vault nativo NÃO mostr
 Decisão de rota: nodeSync (criar 1 nota .md por nó, em pastas por setor tipo docs/BRAIN/<categoria>/, com wikilinks refletindo as arestas) agora é a peça mais importante do roadmap do plugin — mais que o polish 3D. Cores/Groups do Graph View nativo do Obsidian são configuração local do app (não versionada no repo — confirmado que docs/.obsidian não existe no checkout da VPS), então isso o próprio Pivete configura 1x no app; meu trabalho é gerar as notas+links organizados.
 
 Pendência em aberto a resolver antes de codar: qual fonte de dado alimenta o nodeSync — a lista estática hardcoded na Supabase edge function graph-data (~24 nós fixos) vs. o feed vivo de PM2 em apps/modulos/status/graph-data.json (~68 nós reais, já espelhado a cada 5min em docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md).
+
+### [2026-07-05T23:07] Regra de ouro debug de chave Lovable
+- **Data:** 2026-07-05
+- **Tags:** lovable, chaves, debug, condefonte, curso, hermes
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-04
+- **Promovida:** sim
+
+Conteúdo: Antes de qualquer teoria sobre chave/token Lovable, rodar curl direto no endpoint FINAL e LER a mensagem literal do body. O gateway devolve o motivo exato do 401 (ex: "must start with 'sk_' prefix"). Consultar CURSO-CONDEFONTE.md (cofre condefonte/ ou HERMES-CORE Knowledge-Collector aprendizados/) antes de propor qualquer solução relacionada a: chaves Lovable, JWT expirando, refresh_token, Condefonte, monitor de crédito, console de prompt manual.
