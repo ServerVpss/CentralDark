@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 336 | 0 | 0 | 336 | 0 |
+| aprendizados | 337 | 0 | 0 | 337 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **336**
+- 🟥 Faltando no Notion: **337**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -384,4 +384,5 @@
 - 302. MCP ChatGPT exige compatibilidade no token e Accept
 - 303. HUD Grafo 3D — three.js UMD precisa ser carregado à parte
 - 304. unpkg sem versão pode entregar build ESM sem global — travar versão
+- 305. Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM
 </details>

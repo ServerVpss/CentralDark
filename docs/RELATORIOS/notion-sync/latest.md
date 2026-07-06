@@ -363,6 +363,7 @@
 | aprendizados | atualizado | #302 — MCP ChatGPT exige compatibilidade no token e Accept |
 | aprendizados | atualizado | #303 — HUD Grafo 3D — three.js UMD precisa ser carregado à parte |
 | aprendizados | atualizado | #304 — unpkg sem versão pode entregar build ESM sem global — travar versão |
+| aprendizados | criado | #305 — Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
