@@ -245,17 +245,7 @@ function authorize(req: Request): { ok: true; key: string } | { ok: false; reaso
 
   const okWebui = expectedWebui && timingSafeEqual(provided, expectedWebui);
   const okCli = expectedCli && timingSafeEqual(provided, expectedCli);
-  if (!okWebui && !okCli) {
-    console.log("[auth-debug]", JSON.stringify({
-      provided_len: provided.length,
-      provided_prefix: provided.slice(0, 4),
-      webui_len: expectedWebui.length,
-      webui_prefix: expectedWebui.slice(0, 4),
-      cli_len: expectedCli.length,
-      cli_prefix: expectedCli.slice(0, 4),
-    }));
-    return { ok: false, reason: "chave_invalida" };
-  }
+  if (!okWebui && !okCli) return { ok: false, reason: "chave_invalida" };
   return { ok: true, key: provided };
 }
 
