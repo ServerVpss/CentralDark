@@ -283,3 +283,13 @@ Pendência em aberto a resolver antes de codar: qual fonte de dado alimenta o no
 - **Promovida:** sim
 
 Conteúdo: Antes de qualquer teoria sobre chave/token Lovable, rodar curl direto no endpoint FINAL e LER a mensagem literal do body. O gateway devolve o motivo exato do 401 (ex: "must start with 'sk_' prefix"). Consultar CURSO-CONDEFONTE.md (cofre condefonte/ ou HERMES-CORE Knowledge-Collector aprendizados/) antes de propor qualquer solução relacionada a: chaves Lovable, JWT expirando, refresh_token, Condefonte, monitor de crédito, console de prompt manual.
+
+### [2026-07-05T23:51] Especificação selada do Grafo CentralDark · Jarvis (HUD oficial)
+- **Data:** 2026-07-05
+- **Tags:** grafo-3d, jarvis, hermes, hud, obsidian
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-04
+- **Promovida:** nao
+
+Conteúdo: GRAFO CENTRALDARK · JARVIS = HUD único do Pivete em grafo.centralldark.com. Visão selada: opção B (impressionar) com alma da A (mesma navegação 3D fluida que já existe). Requisitos: (1) um arquivo só, botão interno alterna 2D⇄3D sem trocar página; (2) libs 3D pinadas (three@0.149 + 3d-force-graph@1.73 + spritetext@1.8); (3) painel de controles estilo Obsidian: forças (centrípeta/repulsão/link/distância), tamanho nós, grossura links, busca, toggle labels, CONTROLE DE FONTE/TAMANHO DE TEXTO, zoom/reset; (4) mapa do sistema operacional CentralDark inteiro por SETORES navegáveis — Pivete entra num setor, vê quem trabalha ali, se tá vazio/precisa arrumar, onde tem pendência, estado da pasta do Hermes; (5) VIDA: nós online com glow respirando, pontas/setores pulsando levemente, partículas nas conexões ativas; (6) Hermes vivo dentro via /api/live refletindo atividade real — nó acende/pulsa quando agente recebe comando. Objetivo do Pivete: 'ver a bagunça de fora e resolver todos os problemas pelo HUD'. NÃO destruir a lógica de navegação atual.
