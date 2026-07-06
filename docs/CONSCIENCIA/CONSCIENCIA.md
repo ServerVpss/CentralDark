@@ -508,44 +508,33 @@ Se uma tool do MCP (`sentry_*`) falhar por falta de config, a resposta correta �
 
 **Doutrina geral que o Pivete cravou:** tudo que for consolidado deve ser SELADO de forma fixa/ativa em todos os lugares (consciência + pendências + aprendizados), pra ninguém mexer depois.
 
-## 14. 🔁 CICLO DE TRABALHO
+## 14. PLANO MESTRE — VISÃO DO PIVETE (ler ao conectar, SEMPRE)
 
-```
-diagnosticar → editar → testar → aplicar → validar logs →
-corrigir de novo se preciso → relatório → resumo curto no chat
-```
+**Objetivo final:** CentralDark = sistema operacional pessoal estilo Jarvis/Homem de Ferro. O Pivete NÃO executa — ele PEDE, o sistema (mordomo) executa e reporta. "Cria um setor X" → sistema cria e responde "criei o setor X". "Resolve o erro Y" → sistema pesquisa (internet + plugins + arsenal) e resolve.
 
-### 14.1 Método CentralDark de diagnóstico em funil
+**Papéis:**
+- Pivete = orquestrador supremo (mente, dá ordens, é leigo em execução).
+- IA/tutor (Claude etc) = orquestrador técnico: BOLA o plano, DELEGA pro enxame (Hermes, Gemini, Elite Gateway, run-once), LÊ o resultado, reporta. Não faz braçal — manda fazer.
+- Hermes = cérebro executor na VPS (processa missões de missoes/pendente/).
+- darkai/multi-IA = braços de pesquisa/síntese (economizam tokens do tutor).
 
-Quando um serviço cair, estiver em loop ou os logs do PM2 vierem vazios, usar o método padrão:
+**PRIORIDADES (ordem fixa):**
+1. GRAFO CentralDark·Jarvis (grafo.centralldark.com) = HUD único. Ver Seção 13.
+2. HERMES vivo e executando missões + notificando Telegram.
+3. Memória persistente (resolver o esquecimento — problema #1 do Pivete).
+4. Futuro: comando por voz (falar pelo celular/PC e controlar tudo).
 
-1. Não reiniciar tudo e não mexer em várias áreas ao mesmo tempo.
-2. Rodar o serviço manualmente para capturar o erro real.
-3. Deixar o erro atual guiar a próxima ação.
-4. Buscar arquivos por nome exato e pela fonte oficial do repo.
-5. Eliminar dependência de pastas legadas; consolidar no ecossistema CentralDark.
-6. Validar sintaxe antes de reiniciar, por exemplo com `node --check` quando for Node.js.
-7. Buscar segredos apenas por presença, formato ou teste seguro; nunca imprimir valores.
-8. Migrar segredos para o cofre oficial com permissão restrita.
-9. Reiniciar somente o serviço afetado, preferindo `--update-env` quando houve mudança de ambiente.
-10. Confirmar `status online`, log saudável e ausência de novo loop.
-11. Só depois salvar PM2, limpar contador histórico e registrar aprendizado.
+**PROBLEMA-RAIZ DO PIVETE:** troca de contexto/sessão por limite de token → sistema "esquece", agentes se perdem, nada fica anotado, coisas quebram em silêncio. SOLUÇÃO: consolidação obrigatória. Toda decisão consolidada vira: (a) Seção na consciência, (b) pendência, (c) aprendizado. Selada, imutável, lida ao conectar via kit_boas_vindas.
 
-Resumo curto do método:
+**REGRA DE OURO DO MORDOMO:** toda IA que conectar DEVE, no primeiro contato: (1) ler kit_boas_vindas + esta consciência, (2) ler o grafo/mapa vivo pra saber o estado real, (3) ativar modo turbo (delegar ao enxame), (4) ao aprender algo, ENSINAR o Hermes (gravar memória/aprendizado) pra ficar persistente. Nunca deixar conhecimento só na sessão.
 
-```
-erro atual → busca exata → fonte oficial → patch mínimo → validação manual → restart só do serviço → memória salva
-```
+**MCP — melhorias pedidas (pendência):** conector MCP deve funcionar em qualquer plataforma, modo normal + modo Admin (senha) pra liberar tudo. Ao conectar, auto-reconhecer o projeto lendo grafo+mapa. Memória persistente via kit boas-vindas sempre ativa. Consolidar informações de outros agentes conectados → alimentar o Hermes ("fórmulas secretas").
 
-**Tarefa SÓ está concluída quando:**
-- ✅ Serviços online, sem loop de restart
-- ✅ Logs sem erro novo repetido
-- ✅ Build/test relevante passou
-- ✅ Relatório criado em `revisoes/`
-- ✅ Nenhuma ação sensível feita sem confirmação
-- ✅ `docs/PENDENCIAS.md` atualizado quando houver pendência
-- ✅ `docs/INSTALADOR/` atualizado se houve mudança estrutural
-- ✅ `PLANO.md` da pasta atualizado quando a pasta foi alterada
+**CONDEFONTE v3.5 (Espelho do Hermes) — como funciona (do print do Pivete):** PM2 CentralDark-CondefonteV35 lê a cada 45s o que o agente Lovable "pensa em voz alta" (blocos <<<MEMORY_DUMP>>>...<<<END>>>), valida JSON, gera SHA1, grava em 2 lugares: cofre secrets/keys/condefonte/memory_dumps/*.json + espelho HERMES-CORE/agents/Knowledge-Collector/memory-stream/*.json + INDEX.jsonl. Hermes lê o INDEX e aprende. STATUS: serviço roda, pipeline testado, mas renovação automática do JWT pendente (falta refresh_token do localStorage → dá 401 na renovação). Rodando com token manual.
+
+**status.centralldark.com:** era tentativa antiga de painel antes do Jarvis. Sair dos trilhos. Decisão: manter no ar por enquanto (Pivete usa às vezes), mas NÃO é o oficial — o grafo é. Agentes devem mapear e sugerir melhorias, sem quebrar.
+
+**PENDÊNCIAS ABERTAS (2026-07-05):** #25 Telegram parado (notify falhou), #26 Hermes não pega missão (ERR_MODULE_NOT_FOUND), #27 load alto ~7 (Builder 15% CPU), #28 AiDiag parado. #24 Sentry descartado. Consertar #26 destrava a construção do grafo Jarvis.
 
 ## 15. 🏆 GITHUB ACHIEVEMENTS & FARM
 
