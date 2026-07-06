@@ -294,7 +294,7 @@ async function legacyDarkai(req: Request, lovableKey: string) {
   const body = await req.json().catch(() => ({}));
   const prompt = typeof body?.prompt === "string" ? body.prompt.trim() : "";
   const system = typeof body?.system === "string" ? body.system : undefined;
-  const model = typeof body?.model === "string" && body.model ? body.model : DEFAULT_MODEL;
+  const model = normalizeModel(body?.model);
   if (!prompt) return json({ error: "campo 'prompt' obrigatório" }, 400);
 
   const messages: Array<{ role: string; content: string }> = [];
