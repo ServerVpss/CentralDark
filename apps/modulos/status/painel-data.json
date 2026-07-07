@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T13:39:01.099Z",
-  "updatedAtBR": "07/07/2026, 10:39:01 BRT",
+  "updatedAt": "2026-07-07T13:49:45.711Z",
+  "updatedAtBR": "07/07/2026, 10:49:45 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs: adicionar prompt universal de bordo",
+    "lastCommit": "docs: fixar protocolo de orquestracao no boot",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-07T13:49:45.711Z",
+      "titulo": "Push na main · 916265d618f9e215cb6ac98336a960ff753c6407",
+      "detalhe": "docs: fixar protocolo de orquestracao no boot",
+      "area": "Repositório",
+      "sha": "916265d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-07T13:39:01.099Z",
       "titulo": "Push na main · 02d696f74e3e540f511beb451396037e35c587b7",
       "detalhe": "docs: adicionar prompt universal de bordo",
@@ -979,14 +987,6 @@
       "detalhe": "pendencia(#10): fechado",
       "area": "Repositório",
       "sha": "1b37986",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T03:35:29.977Z",
-      "titulo": "Push na main · bce3c61c1958c98a72d3ea5c31221603d636bd13",
-      "detalhe": "docs(pendencias): nova #30 Hermes potente + web search + debate + fix Telegram (executar com token cheio)",
-      "area": "Repositório",
-      "sha": "bce3c61",
       "actor": "segredounlock"
     }
   ],
@@ -1402,6 +1402,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T13:49:45.711Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 916265d618f9e215cb6ac98336a960ff753c6407 (916265d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-07T13:39:01.099Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 02d696f74e3e540f511beb451396037e35c587b7 (02d696f)",
@@ -1741,13 +1748,6 @@
       "time": "2026-07-06T02:07:30.837Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 66463d7f6b3e322fc7d95d8699eaafe287ff20f2 (66463d7)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T01:31:06.960Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 874ccab13abffbc863cd6e6954ecaa5cac789ac6 (874ccab)",
       "area": "Repositório",
       "status": "sucesso"
     }
