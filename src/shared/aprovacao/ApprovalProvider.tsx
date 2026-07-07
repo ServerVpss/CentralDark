@@ -178,7 +178,7 @@ export function ApprovalProvider({ children }: { children: React.ReactNode }) {
               className="w-full rounded-lg text-xs shadow-3d-soft active:translate-y-[1px]"
             >
               <ShieldOff className="mr-2 h-3.5 w-3.5" />
-              Permitir tudo nesta sessão (bypass)
+              Ativar bypass destrutivo local nesta sessão do painel
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -206,7 +206,7 @@ function BannerBypass({ ativo, desligar }: { ativo: boolean; desligar: () => voi
   return (
     <div className="fixed inset-x-0 top-0 z-[60] flex items-center justify-center gap-3 bg-amber-500/95 px-3 py-1.5 text-xs font-medium text-amber-950 shadow-3d-soft">
       <ShieldCheck className="h-4 w-4" />
-      Bypass ativo — ações destrutivas liberadas nesta sessão
+      Bypass destrutivo local ativo — só nesta sessão do painel; não é MCP Admin
       <button
         type="button"
         onClick={desligar}
