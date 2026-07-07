@@ -2,7 +2,7 @@
 title: "Portão de Entrada — Memória das IAs"
 date: 2026-06-29
 tags: ["navegacao", "obrigatorio", "ia"]
-updated: 2026-06-29
+updated: 2026-07-07
 ---
 
 # 00 — Leia primeiro (portão de entrada para IAs)
@@ -52,7 +52,8 @@ Esta pasta é a **memória operacional** de qualquer IA/agente que trabalha com 
 9. `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` — decisões grandes já tomadas
 10. `docs/CONSCIENCIA/09-ESTADO-ATUAL.md` — snapshot vivo do sistema
 11. `docs/CONSCIENCIA/10-FALLBACK-LOVABLE.md` — **CRÍTICO**: como sincronizar Lovable↔GitHub quando o sync nativo falha
-12. `docs/PENDENCIAS.md` — lista oficial de pendências do projeto
+12. `docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md` — **CRÍTICO**: como Pivete comanda, DarkAI debate, Actions provam e IAs variam sem perder o fio
+13. `docs/PENDENCIAS.md` — lista oficial de pendências do projeto
 
 > Se houver arquivo `RETOMADA-*.md` na raiz de `docs/CONSCIENCIA/`, leia também — ele contém o estado da última sessão de trabalho.
 
@@ -77,6 +78,8 @@ Pra entender quem faz o quê na automação (Guardião, Analista, Memory-Linker,
 ## Protocolo de Inicialização de Sessão
 
 Toda IA deve executar o [[PROTOCOLO-INICIALIZACAO]] ao começar uma sessão nova. Ele inclui leituras, verificações de PM2 e health checks — e entrega um Relatório de Alinhamento em 4 seções ao Pivete antes de perguntar o que fazer.
+
+Além disso, toda IA deve aplicar o [[PROTOCOLO-ORQUESTRACAO-PIVETE]] para manter a hierarquia operacional: Pivete comanda, DarkAI debate, Actions provam e IAs variam conforme a missão.
 
 ---
 
