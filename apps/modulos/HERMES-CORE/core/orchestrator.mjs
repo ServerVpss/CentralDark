@@ -614,4 +614,3 @@ loop().catch(async e => {
   await notificar('Hermes: CRASH', `💥 ${e.message}`);
   process.exit(1);
 });
-x
