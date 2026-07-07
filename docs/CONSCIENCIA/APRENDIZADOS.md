@@ -2499,3 +2499,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-07
 - **Contexto:** Durante correção dos workflows supabase-bot/painel-validacao, o push local para main foi rejeitado. Após fetch, a branch local estava 87 commits à frente e 2 atrás de origin/main. Dos commits à frente, 86 eram 'chore(painel): IA atualiza painel — atualização' gerados em loop e apenas 1 era correção real. O diff líquido também deletaria relatórios notion-sync presentes no remoto.
 - **Aprendizado:** Se main local aparecer muitos commits ahead por automação de painel, NÃO fazer push e NUNCA force-push. Criar backup/branch de quarentena, basear correções em origin/main limpo e aplicar só arquivos/commit real por cherry-pick ou commit GitHub/MCP. Registrar pendência para investigar o loop de commits automáticos antes de realinhar a main local.
+
+### 312. Indicar modo recomendado em formato universal
+- **Categoria:** regra
+- **Data:** 2026-07-07
+- **Contexto:** O Pivete quer orquestrar várias IAs e interfaces diferentes. Nem todo chat usa os mesmos nomes de modo como Chat, Plan, Auto Approve ou Default, então a IA não pode depender só do rótulo da interface.
+- **Aprendizado:** Ao orientar operação, a IA deve indicar o modo recomendado em formato universal e, se útil, também traduzir para o nome local da ferramenta. Exemplo universal: conversa/planejamento sem ferramentas; leitura e diagnóstico read-only; edição controlada; execução livre com travas; pausa/finalização. Em interfaces como Vibe, isso pode mapear para Chat, Plan, Default, Accept Edits ou Auto Approve, mas a recomendação deve funcionar em qualquer chat/agente.
