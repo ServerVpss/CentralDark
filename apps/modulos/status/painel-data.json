@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-07-07T02:10:20.465Z",
-  "updatedAtBR": "06/07/2026, 23:10:20 BRT",
+  "updatedAt": "2026-07-07T02:10:52.471Z",
+  "updatedAtBR": "06/07/2026, 23:10:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
-    "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
+    "currentTask": "ApprovalProvider agora deixa claro: bypass destrutivo local da sessão do painel, não MCP Admin.",
     "branch": "main",
     "lastCommit": "feat(hermes): notify v2 carrega TELEGRAM_BOT_TOKEN do arquivo dedicado",
     "lastPR": "#103 mergeado · #106 mergeado",
@@ -597,6 +597,13 @@
   ],
   "events": [
     {
+      "time": "2026-07-07T02:10:52.471Z",
+      "title": "Ajustado texto do bypass destrutivo local para não ser confundido com MCP Admin.",
+      "area": "telepainel/aprovacao",
+      "status": "feito",
+      "detail": ""
+    },
+    {
       "time": "2026-07-06T20:18:23.404Z",
       "title": "🟢 Hermes notify v2 online — carrega TELEGRAM_BOT_TOKEN de `secrets/telegram-alerts.env`. Card de teste enviado com sucesso. Diagnóstico MCP: URL correta é `https://mcp.centralldark.com/mcp` (não `/sse`), OAuth 2.1 com DCR já ativo (107 tools).",
       "area": "HERMES-CORE + MCP",
@@ -819,14 +826,6 @@
       "detalhe": "docs(pendencias): nova #30 Hermes potente + web search + debate + fix Telegram (executar com token cheio)",
       "area": "Repositório",
       "sha": "bce3c61",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T03:34:40.801Z",
-      "titulo": "Push na main · 4f2e4abb7ab77ddc133a95db810d9f43e8e740e9",
-      "detalhe": "aprendizado(#299): Hermes: fix do x órfão pronto, bloqueado por arquivo imutável (chattr -i)",
-      "area": "Repositório",
-      "sha": "4f2e4ab",
       "actor": "segredounlock"
     }
   ],
