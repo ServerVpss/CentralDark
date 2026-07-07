@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T16:16:30.641Z",
-  "updatedAtBR": "07/07/2026, 13:16:30 BRT",
+  "updatedAt": "2026-07-07T16:25:21.104Z",
+  "updatedAtBR": "07/07/2026, 13:25:21 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(consciencia): alinhar boots ao ciclo validar provar registrar",
+    "lastCommit": "feat(status): adicionar pagina publica de protocolos CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-07T16:25:21.104Z",
+      "titulo": "Push na main · 6c49b05873febc04ac5396bc19668772d916085e",
+      "detalhe": "feat(status): adicionar pagina publica de protocolos CentralDark",
+      "area": "Repositório",
+      "sha": "6c49b05",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-07T16:16:30.641Z",
       "titulo": "Push na main · b13a9ea874d7783520c003d59fce89966469e071",
       "detalhe": "docs(consciencia): alinhar boots ao ciclo validar provar registrar",
@@ -979,14 +987,6 @@
       "detalhe": "Criou botão de OAuth no frontend",
       "area": "Repositório",
       "sha": "80126b8",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-06T05:19:21.607Z",
-      "titulo": "Push na main · f2bbdfe7bfd24bf63bca58d8a359240ba43d7fd9",
-      "detalhe": "Criou o Edge Function `send-email",
-      "area": "Repositório",
-      "sha": "f2bbdfe",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1402,6 +1402,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T16:25:21.104Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6c49b05873febc04ac5396bc19668772d916085e (6c49b05)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-07T16:16:30.641Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b13a9ea874d7783520c003d59fce89966469e071 (b13a9ea)",
@@ -1741,13 +1748,6 @@
       "time": "2026-07-06T04:04:54.992Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1b379863507cfe839fa85d45f00eadd87aeaed69 (1b37986)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T03:35:29.977Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bce3c61c1958c98a72d3ea5c31221603d636bd13 (bce3c61)",
       "area": "Repositório",
       "status": "sucesso"
     }
