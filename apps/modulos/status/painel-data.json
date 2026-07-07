@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T10:02:19.213Z",
-  "updatedAtBR": "07/07/2026, 07:02:19 BRT",
+  "updatedAt": "2026-07-07T10:02:40.636Z",
+  "updatedAtBR": "07/07/2026, 07:02:40 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "ApprovalProvider agora deixa claro: bypass destrutivo local da sessão do painel, não MCP Admin.",
     "branch": "main",
-    "lastCommit": "feat(hermes): notify v2 carrega TELEGRAM_BOT_TOKEN do arquivo dedicado",
+    "lastCommit": "305b0e3 — Aprendizado #309 (protocolo boot + rota PWA-first)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -521,7 +521,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Pivete ajusta URL do conector Lovable para `/mcp` e clica em Adicionar novamente.",
+  "nextIA": "Consertar #29 (ReferenceError x no executor Hermes) pra fila andar; depois #26/#25; iniciar PWA comando-mobile no Lovable",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -596,6 +596,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-07T10:02:40.637Z",
+      "title": "Protocolo de Boot oficializado (docs/PROTOCOLO-BOOT.md) · pack mobile renomeado pra comando-mobile · varredura de pendências auditada (DarkAI) · missão de renumeração na fila do Hermes",
+      "area": "docs",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-07-07T02:10:52.471Z",
       "title": "Ajustado texto do bypass destrutivo local para não ser confundido com MCP Admin.",
@@ -818,14 +825,6 @@
       "detalhe": "pendencia(#10): fechado",
       "area": "Repositório",
       "sha": "1b37986",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T03:35:29.977Z",
-      "titulo": "Push na main · bce3c61c1958c98a72d3ea5c31221603d636bd13",
-      "detalhe": "docs(pendencias): nova #30 Hermes potente + web search + debate + fix Telegram (executar com token cheio)",
-      "area": "Repositório",
-      "sha": "bce3c61",
       "actor": "segredounlock"
     }
   ],
