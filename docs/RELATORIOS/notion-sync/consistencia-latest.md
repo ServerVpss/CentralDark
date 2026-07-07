@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 342 | 0 | 0 | 342 | 0 |
+| aprendizados | 343 | 0 | 0 | 343 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **342**
+- 🟥 Faltando no Notion: **343**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -390,4 +390,5 @@
 - 308. Estabilização de Conector MCP Nativo - ChatGPT SSE
 - 309. Protocolo de Boot oficializado + rota PWA-first pro Comando Mobile
 - 310. Cartilha anti-descontrole do Hermes + bases PM2 oficiais
+- 311. Não pushar main local ahead dezenas por commits automáticos de painel
 </details>

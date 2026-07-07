@@ -289,7 +289,7 @@
 | aprendizados | atualizado | #228 — MCP V2 Arsenal deve usar lazy loading e nomes compatíveis |
 | aprendizados | atualizado | #229 — tools.json deve publicar objetos e toolNames |
 | aprendizados | atualizado | #230 — Deploy real do MCP deve validar PM2 por `jlist` |
-| aprendizados | atualizado | #231 — Challenge OAuth do MCP deve incluir scope e metadata do recurso |
+| aprendizados | erro | #231 — Challenge OAuth do MCP deve incluir scope e metadata do recurso |
 | aprendizados | atualizado | #232 — Callback OAuth deve exibir handoff visual CENTRAL DARK |
 | aprendizados | atualizado | #233 — Memória operacional do Pivete deve apontar para o repo oficial |
 | aprendizados | atualizado | #234 — Billing Guard aplicado por migração seletiva de bots para self-hosted |
