@@ -23,7 +23,7 @@ type: architecture
 | 8 | CentralDark-HermesThinker | `apps/modulos/hermes-thinker/src/index.mjs` |
 | 10 | CentralDark-Memoria | `apps/modulos/memoria-api/index.mjs` |
 | 12 | CentralDark-ArsenalProxy | `apps/modulos/proxy/start.sh` |
-| 14 | CentralDark-EliteHTTP | `apps/modulos/elite-anthropic-proxy/start-fallback.sh` (⚠️ errored) |
+| 14 | CentralDark-EliteHTTP | Gateway público OpenAI-compat em `elite.centralldark.com` (ChatGPT Plus via Zendriver). ⚠️ **PENDENTE — evolução agendada, NÃO ressuscitar no chute.** Ver `docs/PENDENCIAS.md` #35. Código em `apps/modulos/elite-gateway/`. |
 | 15 | CentralDark-PiveteSync | `apps/modulos/pivete-sync/pivete-sync.mjs` |
 | 16 | CentralDark-OAuthBroker | `apps/modulos/oauth-broker/server.mjs` |
 
