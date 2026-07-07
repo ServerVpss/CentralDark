@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T10:00:57.638Z",
-  "updatedAtBR": "07/07/2026, 07:00:57 BRT",
+  "updatedAt": "2026-07-07T10:20:52.065Z",
+  "updatedAtBR": "07/07/2026, 07:20:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs: oficializa PROTOCOLO-BOOT.md (prompt âncora + ritual de saída + mapa do tesouro)",
+    "lastCommit": "docs(pendencias): nova #35 Central de Comando Mobile — consolidar pack e construir PWA (voz + texto)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-07T10:20:52.065Z",
+      "titulo": "Push na main · aa39e60d9eb800c0cf3544fdec6b1074a6b79c7f",
+      "detalhe": "docs(pendencias): nova #35 Central de Comando Mobile — consolidar pack e construir PWA (voz + texto)",
+      "area": "Repositório",
+      "sha": "aa39e60",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-07T10:00:57.638Z",
       "titulo": "Push na main · b7ac106ca3f74376b40544a2578890685fe8b0ac",
@@ -1322,6 +1330,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T10:20:52.065Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · aa39e60d9eb800c0cf3544fdec6b1074a6b79c7f (aa39e60)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-07T10:00:57.638Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b7ac106ca3f74376b40544a2578890685fe8b0ac (b7ac106)",
@@ -1661,13 +1676,6 @@
       "time": "2026-07-05T23:59:21.477Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 70017c92a6b65e0ebe53bcec1411982f2daed8d1 (70017c9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T23:47:51.222Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 717b0bdccb5a5fc381b52ae2df68d33b22d42788 (717b0bd)",
       "area": "Repositório",
       "status": "sucesso"
     }
