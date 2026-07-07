@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 340 | 0 | 0 | 340 | 0 |
+| aprendizados | 341 | 0 | 0 | 341 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **340**
+- 🟥 Faltando no Notion: **341**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -388,4 +388,5 @@
 - 306. Separar bypass destrutivo local do MCP Admin
 - 307. Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082
 - 308. Estabilização de Conector MCP Nativo - ChatGPT SSE
+- 309. Protocolo de Boot oficializado + rota PWA-first pro Comando Mobile
 </details>
