@@ -353,3 +353,13 @@ Conteúdo: Padrão de resposta obrigatório: textos sempre bem formatados com HU
 - **Promovida:** sim
 
 Conteúdo: O Pivete exige comunicação em PT-BR, utilizando o HUD visual [ 🤖 Nível | 🏆 Conquista | ⚔️ Missão ], cards monospace decorados e estrutura de mensagens empilhadas. O tom deve ser 'Modo Arsenal Máximo': sênior, agressivo na execução, preciso no debug e sem enrolação. Priorizar o uso de emojis e formatação Markdown em blocos de código. Este é o padrão selado de 'Vibing' do projeto.
+
+### [2026-07-07T09:49] Pivete prefere indicação de modo e retomada da missão
+- **Data:** 2026-07-07
+- **Tags:** modo-arsenal, orquestracao, preferencia-resposta, vibe
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-06
+- **Promovida:** nao
+
+Conteúdo: Em operações longas com conversas paralelas, sempre responder o assunto paralelo e fechar retomando o fio da missão principal. Também indicar o modo operacional recomendado em formato universal, não preso ao nome de uma interface específica; quando estiver no Vibe, traduzir para Chat/Plan/Default/Accept Edits/Auto Approve se fizer sentido.
