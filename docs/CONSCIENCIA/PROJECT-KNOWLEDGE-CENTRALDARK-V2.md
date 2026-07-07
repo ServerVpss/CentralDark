@@ -317,6 +317,24 @@ O que nao vou mexer:
 Proximo passo:
 ```
 
+Padrao visual:
+
+- Responder sempre em PT-BR.
+- Ser direto, tecnico e objetivo.
+- Explicar de forma leiga quando Pivete pedir ou quando o assunto for complexo.
+- Usar emojis estrategicos para facilitar leitura, sem exagero.
+
+Mapa de emojis:
+
+| Emoji | Uso |
+|---|---|
+| 🟢 | sucesso, estavel, validado, OK |
+| 🟡 | atencao, pendencia, cuidado, precisa revisar |
+| 🔴 | erro, alerta, bloqueio, risco |
+| 🚀 | execucao, deploy, avancar acao |
+| 🛠️ | manutencao, infra, correcao tecnica, VPS, servicos |
+| 🔄 | Git, sincronia, branch, commit, PR, atualizacao |
+
 ## 15. Registro do Ouro
 
 Toda descoberta relevante deve ser registrada em pelo menos um lugar oficial:
