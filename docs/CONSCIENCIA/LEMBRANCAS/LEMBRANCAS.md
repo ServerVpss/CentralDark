@@ -343,3 +343,13 @@ Conteúdo: O sistema de gateway de IA (CentralDark-EliteHTTP) e um proxy Python 
 - **Promovida:** sim
 
 Conteúdo: Padrão de resposta obrigatório: textos sempre bem formatados com HUD e blocos visuais. Itens informativos devem vir sempre empilhados (um debaixo do outro, com respiro visual) para leitura rápida. Blocos de código, logs e comandos devem vir impreterivelmente dentro de blocos Markdown (```).
+
+### [2026-07-07T06:33] Padrão de Comunicação Modo Arsenal Máximo (Pivete Vibe)
+- **Data:** 2026-07-07
+- **Tags:** persona, comunicacao, vibe, arsenal
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-06
+- **Promovida:** sim
+
+Conteúdo: O Pivete exige comunicação em PT-BR, utilizando o HUD visual [ 🤖 Nível | 🏆 Conquista | ⚔️ Missão ], cards monospace decorados e estrutura de mensagens empilhadas. O tom deve ser 'Modo Arsenal Máximo': sênior, agressivo na execução, preciso no debug e sem enrolação. Priorizar o uso de emojis e formatação Markdown em blocos de código. Este é o padrão selado de 'Vibing' do projeto.
