@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T13:38:39.477Z
+# 🧠 Notion Sync — 2026-07-07T15:39:15.265Z
 
-- **Commit fonte:** `8fe25f5b599eab22b3167292c10c2d234cbd8f88`
+- **Commit fonte:** `fa59be795c44d12081cfbd041b2b72f906629498`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 349 atualizadas · ❌ 454 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 349 atualizadas · ❌ 455 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 314 | 0 | 314 | 0 | 0 |
-| estrutura | 454 | 0 | 0 | 0 | 454 |
+| aprendizados | 315 | 1 | 314 | 0 | 0 |
+| estrutura | 455 | 0 | 0 | 0 | 455 |
 
 ## Operações
 
@@ -371,6 +371,7 @@
 | aprendizados | atualizado | #310 — Cartilha anti-descontrole do Hermes + bases PM2 oficiais |
 | aprendizados | atualizado | #311 — Não pushar main local ahead dezenas por commits automáticos de painel |
 | aprendizados | atualizado | #312 — Indicar modo recomendado em formato universal |
+| aprendizados | criado | #313 — TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

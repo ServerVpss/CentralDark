@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-07T13:38:42.450Z
-- **Commit:** `8fe25f5b599eab22b3167292c10c2d234cbd8f88`
+- **Gerado:** 2026-07-07T15:39:19.483Z
+- **Commit:** `fa59be795c44d12081cfbd041b2b72f906629498`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 344 | 0 | 0 | 344 | 0 |
+| aprendizados | 345 | 0 | 0 | 345 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **344**
+- 🟥 Faltando no Notion: **345**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -392,4 +392,5 @@
 - 310. Cartilha anti-descontrole do Hermes + bases PM2 oficiais
 - 311. Não pushar main local ahead dezenas por commits automáticos de painel
 - 312. Indicar modo recomendado em formato universal
+- 313. TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta
 </details>
