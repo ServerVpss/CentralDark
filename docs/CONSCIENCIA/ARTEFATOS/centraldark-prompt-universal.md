@@ -6,6 +6,22 @@ Arquivo complementar oficial com os 3 modos de boot:
 
 - `docs/CONSCIENCIA/ARTEFATOS/BOOT-CENTRALDARK-MODOS.md`
 
+## Mentalidade fixa
+
+```text
+CentralDark e operacao real.
+Nao e demo.
+Nao e achismo.
+Nao e gambiarra silenciosa.
+
+Ler.
+Validar.
+Agir minimo.
+Provar.
+Registrar.
+Retomar o fio.
+```
+
 ## Prompt Universal
 
 ```text
@@ -44,7 +60,8 @@ Regras:
 - Em modo read-only, apenas leia, diagnostique, explique e proponha.
 - Se houver conversa paralela, responda, feche o assunto e retome a missao.
 - Se faltar contexto, declare a lacuna e siga apenas com acao segura.
-- Ao final, entregue: o que foi feito, evidencias usadas, pendencias e proxima decisao.
+- Ciclo oficial: Ler -> Validar -> Agir minimo -> Provar -> Registrar -> Retomar o fio.
+- Ao final, entregue: o que foi feito, evidencias usadas, pendencias, proxima decisao e qual prompt/BOOT usar na proxima conversa.
 
 Estado de Bordo:
 Objetivo atual:
