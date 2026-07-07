@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-06T21:44:25.169Z",
-  "updatedAtBR": "06/07/2026, 18:44:25 BRT",
+  "updatedAt": "2026-07-07T02:11:15.302Z",
+  "updatedAtBR": "06/07/2026, 23:11:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#305): Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM",
+    "lastCommit": "aprendizado(#306): Separar bypass destrutivo local do MCP Admin",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-07T02:11:15.302Z",
+      "titulo": "Push na main · 3ff5749b661b35da75a8de4167d0115770c29c18",
+      "detalhe": "aprendizado(#306): Separar bypass destrutivo local do MCP Admin",
+      "area": "Repositório",
+      "sha": "3ff5749",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-06T21:44:25.169Z",
       "titulo": "Push na main · 30fa83ad574e084dfca7a85e22204010ca717810",
@@ -1266,6 +1274,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T02:11:15.302Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3ff5749b661b35da75a8de4167d0115770c29c18 (3ff5749)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-06T21:44:25.169Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 30fa83ad574e084dfca7a85e22204010ca717810 (30fa83a)",
@@ -1605,13 +1620,6 @@
       "time": "2026-07-05T22:36:36.788Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 7535220b8db1d70c238f7d367ecdf51a5b82d4bc (7535220)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T21:02:22.088Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d9b21eb7eaac88f8032dea02838ff6d1d0332d90 (d9b21eb)",
       "area": "Repositório",
       "status": "sucesso"
     }
