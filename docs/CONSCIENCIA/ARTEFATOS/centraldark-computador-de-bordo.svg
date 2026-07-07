@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" role="img" aria-labelledby="title desc">
+  <title id="title">CENTRALDARK — COMPUTADOR DE BORDO</title>
+  <desc id="desc">Poster 9:16 com protocolo universal de orquestracao para Pivete comandar IAs, manter evidencia e nao perder o fio da meada.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020506"/>
+      <stop offset="0.48" stop-color="#071119"/>
+      <stop offset="1" stop-color="#020204"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#16ff7c"/>
+      <stop offset="0.5" stop-color="#10d7ff"/>
+      <stop offset="1" stop-color="#ff27d7"/>
+    </linearGradient>
+    <linearGradient id="cardStroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16ff7c"/>
+      <stop offset="0.58" stop-color="#10d7ff"/>
+      <stop offset="1" stop-color="#3d56ff"/>
+    </linearGradient>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="9" flood-color="#10d7ff" flood-opacity="0.15"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.52"/>
+    </filter>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0 L0 0 0 54" fill="none" stroke="#153442" stroke-width="1" opacity="0.42"/>
+    </pattern>
+    <style>
+      .body { font-family: "Inter", "Segoe UI", Arial, sans-serif; }
+      .tech { font-family: "Rajdhani", "Arial Narrow", "Segoe UI", Arial, sans-serif; letter-spacing: 1.5px; }
+      .eyebrow { font-size: 21px; font-weight: 800; fill: #68ffb0; letter-spacing: 5px; }
+      .title { font-size: 43px; font-weight: 900; fill: #f4feff; letter-spacing: 1px; }
+      .sub { font-size: 22px; font-weight: 650; fill: #a5f6ff; }
+      .card-title { font-size: 24px; font-weight: 900; fill: #061014; letter-spacing: 2.4px; }
+      .txt { font-size: 24px; font-weight: 720; fill: #ebfdff; }
+      .txts { font-size: 22px; font-weight: 700; fill: #ebfdff; }
+      .tiny { font-size: 19px; font-weight: 700; fill: #b9eff5; }
+      .footer { font-size: 24px; font-weight: 850; fill: #efffff; }
+    </style>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <rect width="1080" height="1920" fill="url(#grid)" opacity="0.58"/>
+  <path d="M0 320 C230 230 360 390 585 285 C770 198 900 170 1080 215" fill="none" stroke="#10d7ff" stroke-width="2" opacity="0.17"/>
+  <path d="M0 1495 C210 1380 330 1570 540 1484 C745 1400 830 1295 1080 1345 L1080 1920 L0 1920 Z" fill="#06222a" opacity="0.5"/>
+
+  <g opacity="0.8">
+    <path d="M40 44 H260 M40 44 V214 M1040 44 H820 M1040 44 V214 M40 1876 H260 M40 1876 V1706 M1040 1876 H820 M1040 1876 V1706" fill="none" stroke="url(#neon)" stroke-width="4" stroke-linecap="round" filter="url(#glow)"/>
+  </g>
+
+  <g transform="translate(70 66)">
+    <text class="tech eyebrow" x="0" y="22">PROTOCOLO CENTRALDARK</text>
+    <text class="tech title" x="0" y="63">CENTRALDARK</text>
+    <text class="tech title" x="0" y="105">COMPUTADOR DE BORDO</text>
+    <rect x="0" y="132" width="940" height="4" rx="2" fill="url(#neon)" filter="url(#glow)"/>
+    <text class="body sub" x="0" y="164">Pivete comanda. IAs variam. O método permanece.</text>
+  </g>
+
+  <g transform="translate(70 250)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="270" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">COMANDO FIXO</text>
+    <text class="body txt" x="24" y="92">Pivete decide</text>
+    <text class="body txt" x="24" y="130">DarkAI debate</text>
+    <text class="body txt" x="24" y="168">Actions provam</text>
+    <text class="body txts" x="24" y="213">IAs cumprem o papel</text>
+    <text class="body txts" x="24" y="246">designado por Pivete</text>
+  </g>
+
+  <g transform="translate(555 250)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="270" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">BOOT DA MISSÃO</text>
+    <text class="body txts" x="24" y="92">Ler fonte da verdade</text>
+    <text class="body txts" x="24" y="128">Carregar pendências</text>
+    <text class="body txts" x="24" y="164">Confirmar estado atual</text>
+    <text class="body txts" x="24" y="200">Declarar modo e limites</text>
+    <text class="body txts" x="24" y="236">Perguntar antes de risco</text>
+  </g>
+
+  <g transform="translate(70 555)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="335" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">MISSÃO ATUAL</text>
+    <text class="body txt" x="24" y="94">Objetivo:</text>
+    <text class="body txt" x="24" y="137">Escopo permitido:</text>
+    <text class="body txt" x="24" y="180">Fora de escopo:</text>
+    <text class="body txt" x="24" y="223">Modo atual:</text>
+    <text class="body txt" x="24" y="266">Critério de pronto:</text>
+    <path d="M24 302 H431" stroke="#16ff7c" stroke-width="2" opacity="0.45"/>
+  </g>
+
+  <g transform="translate(555 555)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="335" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">MODOS</text>
+    <text class="body txt" x="24" y="94">Conversa</text>
+    <text class="body txt" x="24" y="137">Planejamento</text>
+    <text class="body txt" x="24" y="180">Read-only</text>
+    <text class="body txt" x="24" y="223">Edição controlada</text>
+    <text class="body txt" x="24" y="266">Execução com travas</text>
+    <text class="body tiny" x="24" y="306">Sempre declarar o modo antes.</text>
+  </g>
+
+  <g transform="translate(70 925)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="360" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">ESTADO DE BORDO</text>
+    <text class="body txts" x="24" y="94">Objetivo atual</text>
+    <text class="body txts" x="24" y="135">Decisão recente de Pivete</text>
+    <text class="body txts" x="24" y="176">Plano em execução</text>
+    <text class="body txts" x="24" y="217">Evidências / validações</text>
+    <text class="body txts" x="24" y="258">Pendências</text>
+    <text class="body txts" x="24" y="299">Próxima decisão</text>
+  </g>
+
+  <g transform="translate(555 925)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="360" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">SEGURANÇA</text>
+    <text class="body txts" x="24" y="94">Sem secrets / .env</text>
+    <text class="body txts" x="24" y="135">Sem ação mutável</text>
+    <text class="body txts" x="24" y="176">sem autorização</text>
+    <text class="body txts" x="24" y="217">Sem produção</text>
+    <text class="body txts" x="24" y="258">sem evidência</text>
+    <text class="body tiny" x="24" y="312">Fato, inferência e lacuna separados.</text>
+  </g>
+
+  <g transform="translate(70 1320)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="300" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">FIO DA MEADA</text>
+    <text class="body txts" x="24" y="96">Conversa paralela?</text>
+    <text class="body txt" x="24" y="142">Responder</text>
+    <text class="body txt" x="24" y="184">Fechar</text>
+    <text class="body txt" x="24" y="226">Retomar missão</text>
+    <text class="body txt" x="24" y="268">Dizer próximo passo</text>
+  </g>
+
+  <g transform="translate(555 1320)" filter="url(#shadow)">
+    <rect x="0" y="0" width="455" height="300" rx="18" fill="#070b12" stroke="url(#cardStroke)" stroke-width="2"/>
+    <path d="M0 0 H455 V56 H0 Z" fill="url(#neon)"/>
+    <text class="tech card-title" x="24" y="37">DEPÓSITO DE SAÍDA</text>
+    <text class="body txts" x="24" y="96">Registrar o ouro</text>
+    <text class="body txts" x="24" y="137">Decisão tomada</text>
+    <text class="body txts" x="24" y="178">Evidência usada</text>
+    <text class="body txts" x="24" y="219">Pendência aberta</text>
+    <text class="body txts" x="24" y="260">Próxima decisão</text>
+  </g>
+
+  <g transform="translate(70 1650)" filter="url(#shadow)">
+    <rect x="0" y="0" width="940" height="155" rx="20" fill="#071114" stroke="url(#neon)" stroke-width="3"/>
+    <text class="tech" x="28" y="48" fill="#68ffb0" font-size="24" font-weight="900" letter-spacing="4">REGRA DE OURO</text>
+    <text class="body footer" x="28" y="94">Ler → Perguntar → Agir → Registrar.</text>
+    <text class="body footer" x="28" y="132">Evidência primeiro. Histórico vivo.</text>
+  </g>
+
+  <g opacity="0.82">
+    <text class="tech" x="70" y="1848" fill="#5dfca2" font-size="18" letter-spacing="5">PIVETE COMANDA</text>
+    <text class="tech" x="430" y="1848" fill="#6eeeff" font-size="18" letter-spacing="5">DARKAI DEBATE</text>
+    <text class="tech" x="790" y="1848" fill="#ff70dc" font-size="18" letter-spacing="5">ACTIONS PROVAM</text>
+  </g>
+</svg>
