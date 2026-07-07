@@ -2511,3 +2511,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-07
 - **Contexto:** Incidente em ui.centralldark.com: TTS gerava 401 no ai-proxy sem Authorization e api.centralldark.com/v1/audio/speech retornava 502. Investigação confirmou WebUI online, LovableBridge online em 8099, mas sem rota /v1/audio/speech; Caddy apontava /v1/audio/speech para 127.0.0.1:3102, porta fechada.
 - **Aprendizado:** Para TTS do WebUI/CentralDark, a rota pública /v1/audio/speech deve apontar para a bridge ativa 127.0.0.1:8099. A bridge precisa implementar POST /v1/audio/speech e injetar LOVABLE_API_KEY server-side para ai.gateway.lovable.dev. Validar com node --check, pm2 restart apenas do CentralDark-LovableBridge, curl local 8099 retornando audio/mpeg e curl público api.centralldark.com retornando 200 audio/mpeg. Não enviar LOVABLE_API_KEY para frontend.
+
+### 314. WebhookDeploy fora do PM2 bloqueia card novo do status
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-07
+- **Contexto:** Durante validação do status.centralldark.com, o GitHub/main já continha o card novo, mas a VPS não atualizava porque a porta local 9300 recusava conexão e o processo CentralDark-WebhookDeploy estava ausente do PM2. O script correto existia em scripts/webhook/github-webhook-deploy.mjs.
+- **Aprendizado:** Quando o status.centralldark.com estiver atrasado apesar de main conter a alteração, validar primeiro 127.0.0.1:9300/health e PM2. Se CentralDark-WebhookDeploy estiver ausente, subir o script scripts/webhook/github-webhook-deploy.mjs com WEBHOOK_DEPLOY_PORT=9300 e REPO_PATH do repo, validar health e só então pedir autorização separada para POST /webhook, pois esse endpoint executa safeResetToOrigin.
