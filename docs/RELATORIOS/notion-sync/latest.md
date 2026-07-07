@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T10:11:26.913Z
+# 🧠 Notion Sync — 2026-07-07T10:40:24.771Z
 
-- **Commit fonte:** `aa39e60d9eb800c0cf3544fdec6b1074a6b79c7f`
+- **Commit fonte:** `a0d047e041f46868f4e26f2d24f3d8878e6c2868`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 344 atualizadas · ❌ 454 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 345 atualizadas · ❌ 454 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 310 | 0 | 309 | 0 | 1 |
+| aprendizados | 312 | 1 | 310 | 0 | 1 |
 | estrutura | 453 | 0 | 0 | 0 | 453 |
 
 ## Operações
@@ -92,7 +92,7 @@
 | aprendizados | atualizado | #31 — Modo Segredo como padrão operacional oficial |
 | aprendizados | atualizado | #32 — BOT online validado sem mexer no CRM |
 | aprendizados | atualizado | #33 — BOT validado: rotas SPA 200 e próxima etapa de telas reais |
-| aprendizados | atualizado | #34 — Install-Callback exige `pm2 restart` explícito ao mudar server.js |
+| aprendizados | erro | #34 — Install-Callback exige `pm2 restart` explícito ao mudar server.js |
 | aprendizados | atualizado | #35 — ChatGPT Grok e Lovable devem trabalhar sincronizados |
 | aprendizados | atualizado | #36 — Protocolo RELOAD MEMORIA para sincronizar ChatGPT Grok e Lovable |
 | aprendizados | atualizado | #37 — Toda ação deve deixar mensagem para a próxima IA |
@@ -104,7 +104,7 @@
 | aprendizados | atualizado | #43 — Padrão final para testar sincronização entre IAs |
 | aprendizados | atualizado | #44 — Referências WhatsApp WuzAPI Whatsmeow e WazAPI |
 | aprendizados | atualizado | #45 — Arquitetura BOT com bot-server central |
-| aprendizados | erro | #46 — Separação oficial apps bot crm e bot-server |
+| aprendizados | atualizado | #46 — Separação oficial apps bot crm e bot-server |
 | aprendizados | atualizado | #47 — Instalador deve acompanhar arquitetura bot-server |
 | aprendizados | atualizado | #48 — Ajustar MCP para bloquear risco real e permitir esqueleto seguro |
 | aprendizados | atualizado | #49 — Padrão automático para ações seguras e reinício MCP |
@@ -367,6 +367,8 @@
 | aprendizados | atualizado | #306 — Separar bypass destrutivo local do MCP Admin |
 | aprendizados | atualizado | #307 — Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082 |
 | aprendizados | atualizado | #308 — Estabilização de Conector MCP Nativo - ChatGPT SSE |
+| aprendizados | atualizado | #309 — Protocolo de Boot oficializado + rota PWA-first pro Comando Mobile |
+| aprendizados | criado | #310 — Cartilha anti-descontrole do Hermes + bases PM2 oficiais |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

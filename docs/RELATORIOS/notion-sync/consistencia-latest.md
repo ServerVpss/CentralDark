@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-07T10:11:29.587Z
-- **Commit:** `aa39e60d9eb800c0cf3544fdec6b1074a6b79c7f`
+- **Gerado:** 2026-07-07T10:40:27.806Z
+- **Commit:** `a0d047e041f46868f4e26f2d24f3d8878e6c2868`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 341 | 0 | 0 | 341 | 0 |
+| aprendizados | 342 | 0 | 0 | 342 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **341**
+- 🟥 Faltando no Notion: **342**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -389,4 +389,5 @@
 - 307. Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082
 - 308. Estabilização de Conector MCP Nativo - ChatGPT SSE
 - 309. Protocolo de Boot oficializado + rota PWA-first pro Comando Mobile
+- 310. Cartilha anti-descontrole do Hermes + bases PM2 oficiais
 </details>
