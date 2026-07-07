@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T15:39:15.265Z
+# 🧠 Notion Sync — 2026-07-07T15:56:41.188Z
 
-- **Commit fonte:** `fa59be795c44d12081cfbd041b2b72f906629498`
+- **Commit fonte:** `19ae76a91ffa71c7c332d91dbdbcbf9ed7f11bf3`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 349 atualizadas · ❌ 455 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 350 atualizadas · ❌ 456 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 315 | 1 | 314 | 0 | 0 |
-| estrutura | 455 | 0 | 0 | 0 | 455 |
+| aprendizados | 315 | 0 | 315 | 0 | 0 |
+| estrutura | 456 | 0 | 0 | 0 | 456 |
 
 ## Operações
 
@@ -371,7 +371,7 @@
 | aprendizados | atualizado | #310 — Cartilha anti-descontrole do Hermes + bases PM2 oficiais |
 | aprendizados | atualizado | #311 — Não pushar main local ahead dezenas por commits automáticos de painel |
 | aprendizados | atualizado | #312 — Indicar modo recomendado em formato universal |
-| aprendizados | criado | #313 — TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta |
+| aprendizados | atualizado | #313 — TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -713,6 +713,7 @@
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-17-MCPO-INTEGRATION.md |
 | estrutura | erro | docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md |
 | estrutura | erro | docs/CONSCIENCIA/PLANO.md |
+| estrutura | erro | docs/CONSCIENCIA/PROJECT-KNOWLEDGE-CENTRALDARK-V2.md |
 | estrutura | erro | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
 | estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md |
