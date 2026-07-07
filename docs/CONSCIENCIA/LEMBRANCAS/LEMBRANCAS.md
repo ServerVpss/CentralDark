@@ -333,3 +333,13 @@ Conteúdo: Sempre que expor lista de opções técnicas pro Pivete (modelos de I
 - **Promovida:** sim
 
 Conteúdo: O sistema de gateway de IA (CentralDark-EliteHTTP) e um proxy Python (nao Node) escutando na porta 8082 com uvicorn. A ferramenta diagnostico do mcp avisa 'fetch failed' porque procura na 8080 (isso e um falso alarme / ping cego). Em hipotese nenhuma devemos configurar node ou tentar alterar essa estrutura estavel e funcional de porta.
+
+### [2026-07-07T00:10] Regra Visual: Empilhado e Código em Markdown
+- **Data:** 2026-07-07
+- **Tags:** visual, formato, markdown, ux
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-06
+- **Promovida:** sim
+
+Conteúdo: Padrão de resposta obrigatório: textos sempre bem formatados com HUD e blocos visuais. Itens informativos devem vir sempre empilhados (um debaixo do outro, com respiro visual) para leitura rápida. Blocos de código, logs e comandos devem vir impreterivelmente dentro de blocos Markdown (```).
