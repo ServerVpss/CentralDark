@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T09:41:15.675Z
+# 🧠 Notion Sync — 2026-07-07T10:11:26.913Z
 
-- **Commit fonte:** `3da8ebc0291e8b8b024e205a96c3aa0077aac041`
+- **Commit fonte:** `aa39e60d9eb800c0cf3544fdec6b1074a6b79c7f`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 343 atualizadas · ❌ 454 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 344 atualizadas · ❌ 454 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 310 | 1 | 308 | 0 | 1 |
+| aprendizados | 310 | 0 | 309 | 0 | 1 |
 | estrutura | 453 | 0 | 0 | 0 | 453 |
 
 ## Operações
@@ -63,7 +63,7 @@
 | aprendizados | atualizado | #2 — MCP usa ServerVpss/CentralDark e /root/[oculto] como alvo oficial |
 | aprendizados | atualizado | #3 — Transformar repo espelho em backup passivo sem Actions |
 | aprendizados | atualizado | #4 — Neutralizar workflows do repo espelho com stub passivo |
-| aprendizados | erro | #5 — Repo espelho passivo: desativar Actions nas configurações do GitHub |
+| aprendizados | atualizado | #5 — Repo espelho passivo: desativar Actions nas configurações do GitHub |
 | aprendizados | atualizado | #6 — Consenso final ChatGPT + Grok para espelho GitHub |
 | aprendizados | atualizado | #7 — Prioridade de backup agora é frontend e serviços ativos |
 | aprendizados | atualizado | #8 — Escopo enxuto de backup/migração: front e serviços ativos |
@@ -104,7 +104,7 @@
 | aprendizados | atualizado | #43 — Padrão final para testar sincronização entre IAs |
 | aprendizados | atualizado | #44 — Referências WhatsApp WuzAPI Whatsmeow e WazAPI |
 | aprendizados | atualizado | #45 — Arquitetura BOT com bot-server central |
-| aprendizados | atualizado | #46 — Separação oficial apps bot crm e bot-server |
+| aprendizados | erro | #46 — Separação oficial apps bot crm e bot-server |
 | aprendizados | atualizado | #47 — Instalador deve acompanhar arquitetura bot-server |
 | aprendizados | atualizado | #48 — Ajustar MCP para bloquear risco real e permitir esqueleto seguro |
 | aprendizados | atualizado | #49 — Padrão automático para ações seguras e reinício MCP |
@@ -366,7 +366,7 @@
 | aprendizados | atualizado | #305 — Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM |
 | aprendizados | atualizado | #306 — Separar bypass destrutivo local do MCP Admin |
 | aprendizados | atualizado | #307 — Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082 |
-| aprendizados | criado | #308 — Estabilização de Conector MCP Nativo - ChatGPT SSE |
+| aprendizados | atualizado | #308 — Estabilização de Conector MCP Nativo - ChatGPT SSE |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
