@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T03:14:27.981Z",
-  "updatedAtBR": "07/07/2026, 00:14:27 BRT",
+  "updatedAt": "2026-07-07T09:21:18.346Z",
+  "updatedAtBR": "07/07/2026, 06:21:18 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "lembranca: Regra Visual: Empilhado e Código em Markdown",
+    "lastCommit": "Atualizou inventário PM2",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-07T09:21:18.346Z",
+      "titulo": "Push na main · 36fa77fdae2d924e3c962f35ded04067f01e6925",
+      "detalhe": "Atualizou inventário PM2",
+      "area": "Repositório",
+      "sha": "36fa77f",
+      "actor": "lovable-dev[bot]"
+    },
     {
       "time": "2026-07-07T03:14:27.981Z",
       "titulo": "Push na main · 02a7ed77cfb43ce06484424735c67a9cdf438dd4",
@@ -1290,6 +1298,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T09:21:18.346Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 36fa77fdae2d924e3c962f35ded04067f01e6925 (36fa77f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-07T03:14:27.981Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 02a7ed77cfb43ce06484424735c67a9cdf438dd4 (02a7ed7)",
@@ -1629,13 +1644,6 @@
       "time": "2026-07-05T23:40:03.074Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e181d5c1e8bd0f4b256aa064c35234b5ba1310db (e181d5c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T22:43:28.606Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f17de00fdbd44a698a6dde11288fe29c65023cde (f17de00)",
       "area": "Repositório",
       "status": "sucesso"
     }
