@@ -2505,3 +2505,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-07
 - **Contexto:** O Pivete quer orquestrar várias IAs e interfaces diferentes. Nem todo chat usa os mesmos nomes de modo como Chat, Plan, Auto Approve ou Default, então a IA não pode depender só do rótulo da interface.
 - **Aprendizado:** Ao orientar operação, a IA deve indicar o modo recomendado em formato universal e, se útil, também traduzir para o nome local da ferramenta. Exemplo universal: conversa/planejamento sem ferramentas; leitura e diagnóstico read-only; edição controlada; execução livre com travas; pausa/finalização. Em interfaces como Vibe, isso pode mapear para Chat, Plan, Default, Accept Edits ou Auto Approve, mas a recomendação deve funcionar em qualquer chat/agente.
+
+### 313. TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-07
+- **Contexto:** Incidente em ui.centralldark.com: TTS gerava 401 no ai-proxy sem Authorization e api.centralldark.com/v1/audio/speech retornava 502. Investigação confirmou WebUI online, LovableBridge online em 8099, mas sem rota /v1/audio/speech; Caddy apontava /v1/audio/speech para 127.0.0.1:3102, porta fechada.
+- **Aprendizado:** Para TTS do WebUI/CentralDark, a rota pública /v1/audio/speech deve apontar para a bridge ativa 127.0.0.1:8099. A bridge precisa implementar POST /v1/audio/speech e injetar LOVABLE_API_KEY server-side para ai.gateway.lovable.dev. Validar com node --check, pm2 restart apenas do CentralDark-LovableBridge, curl local 8099 retornando audio/mpeg e curl público api.centralldark.com retornando 200 audio/mpeg. Não enviar LOVABLE_API_KEY para frontend.
