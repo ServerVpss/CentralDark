@@ -6,7 +6,7 @@
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 344 atualizadas · ❌ 453 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 343 atualizadas · ❌ 454 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 309 | 0 | 309 | 0 | 0 |
+| aprendizados | 310 | 1 | 308 | 0 | 1 |
 | estrutura | 453 | 0 | 0 | 0 | 453 |
 
 ## Operações
@@ -63,7 +63,7 @@
 | aprendizados | atualizado | #2 — MCP usa ServerVpss/CentralDark e /root/[oculto] como alvo oficial |
 | aprendizados | atualizado | #3 — Transformar repo espelho em backup passivo sem Actions |
 | aprendizados | atualizado | #4 — Neutralizar workflows do repo espelho com stub passivo |
-| aprendizados | atualizado | #5 — Repo espelho passivo: desativar Actions nas configurações do GitHub |
+| aprendizados | erro | #5 — Repo espelho passivo: desativar Actions nas configurações do GitHub |
 | aprendizados | atualizado | #6 — Consenso final ChatGPT + Grok para espelho GitHub |
 | aprendizados | atualizado | #7 — Prioridade de backup agora é frontend e serviços ativos |
 | aprendizados | atualizado | #8 — Escopo enxuto de backup/migração: front e serviços ativos |
@@ -366,6 +366,7 @@
 | aprendizados | atualizado | #305 — Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM |
 | aprendizados | atualizado | #306 — Separar bypass destrutivo local do MCP Admin |
 | aprendizados | atualizado | #307 — Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082 |
+| aprendizados | criado | #308 — Estabilização de Conector MCP Nativo - ChatGPT SSE |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
