@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-07T19:10:55.965Z
-- **Commit:** `5f047ab710d13c18af56807e47c8d2878127b71e`
+- **Gerado:** 2026-07-07T19:31:11.254Z
+- **Commit:** `abfec3e4faed15bae97b0724a8ff129eaf5827e1`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 347 | 0 | 0 | 347 | 0 |
+| aprendizados | 348 | 0 | 0 | 348 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **347**
+- 🟥 Faltando no Notion: **348**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -395,4 +395,5 @@
 - 313. TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta
 - 314. WebhookDeploy fora do PM2 bloqueia card novo do status
 - 315. WebhookDeploy pode precisar esperar logs antes de validar card público
+- 316. Inventário IA + varredura UI read-only — padrão e artefatos
 </details>
