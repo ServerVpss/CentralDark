@@ -2,6 +2,17 @@
 
 > Histórico cronológico de cada execução do workflow `notion-sync.yml`.
 
+## 2026-07-07T02:19:25.559Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `3ff5749b661b35da75a8de4167d0115770c29c18`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 30 atualizadas · 0 ignoradas · 0 erros (Git: 30)
+  - **aprendizados**: 1 criadas · 307 atualizadas · 0 ignoradas · 0 erros (Git: 308)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 452 erros (Git: 452)
+
 ## 2026-07-06T21:44:03.399Z · EXEC · target=all · por @segredounlock
 
 - Commit fonte: `49743efe0b7ac3ad6c57e34c4a7364e4fcf33b1d`

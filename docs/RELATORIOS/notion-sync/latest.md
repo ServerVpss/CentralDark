@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-06T21:44:03.399Z
+# 🧠 Notion Sync — 2026-07-07T02:19:25.559Z
 
-- **Commit fonte:** `49743efe0b7ac3ad6c57e34c4a7364e4fcf33b1d`
+- **Commit fonte:** `3ff5749b661b35da75a8de4167d0115770c29c18`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 341 atualizadas · ❌ 452 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 342 atualizadas · ❌ 452 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 306 | 0 | 306 | 0 | 0 |
+| aprendizados | 308 | 1 | 307 | 0 | 0 |
 | estrutura | 452 | 0 | 0 | 0 | 452 |
 
 ## Operações
@@ -363,7 +363,8 @@
 | aprendizados | atualizado | #302 — MCP ChatGPT exige compatibilidade no token e Accept |
 | aprendizados | atualizado | #303 — HUD Grafo 3D — three.js UMD precisa ser carregado à parte |
 | aprendizados | atualizado | #304 — unpkg sem versão pode entregar build ESM sem global — travar versão |
-| aprendizados | criado | #305 — Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM |
+| aprendizados | atualizado | #305 — Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM |
+| aprendizados | criado | #306 — Separar bypass destrutivo local do MCP Admin |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-06T21:44:06.417Z
-- **Commit:** `49743efe0b7ac3ad6c57e34c4a7364e4fcf33b1d`
+- **Gerado:** 2026-07-07T02:19:28.791Z
+- **Commit:** `3ff5749b661b35da75a8de4167d0115770c29c18`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 337 | 0 | 0 | 337 | 0 |
+| aprendizados | 338 | 0 | 0 | 338 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **337**
+- 🟥 Faltando no Notion: **338**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -385,4 +385,5 @@
 - 303. HUD Grafo 3D — three.js UMD precisa ser carregado à parte
 - 304. unpkg sem versão pode entregar build ESM sem global — travar versão
 - 305. Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM
+- 306. Separar bypass destrutivo local do MCP Admin
 </details>
