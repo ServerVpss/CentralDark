@@ -323,3 +323,13 @@ Conteúdo: O Guardião da Consciência (PM2 CentralDark-GuardiaoConsciencia) est
 - **Promovida:** sim
 
 Conteúdo: Sempre que expor lista de opções técnicas pro Pivete (modelos de IA, serviços, comandos, tools), renomear/rotular como um TUTOR ensinando leigo: cada item precisa dizer PRA QUE SERVE em 2-3 palavras (ex: "rapido-", "leitura-", "top-", "codigo-", "barato-"). Exemplo aplicado no /root/[oculto]: aliases viraram "top-gpt55-mais-inteligente", "leitura-gemini25-pro-textao", "rapido-gemini25-flash", "codigo-devstral". Regra: nome técnico puro (gpt-5.5, gemini-2.5-pro) NUNCA sozinho — sempre com prefixo de uso. Vale pra qualquer picker/menu/lista que ele vá ler.
+
+### [2026-07-07T00:07] SELO: Elite Gateway e Python na porta 8082
+- **Data:** 2026-07-07
+- **Tags:** elite, python, gateway, 8082, selado
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-06
+- **Promovida:** sim
+
+Conteúdo: O sistema de gateway de IA (CentralDark-EliteHTTP) e um proxy Python (nao Node) escutando na porta 8082 com uvicorn. A ferramenta diagnostico do mcp avisa 'fetch failed' porque procura na 8080 (isso e um falso alarme / ping cego). Em hipotese nenhuma devemos configurar node ou tentar alterar essa estrutura estavel e funcional de porta.
