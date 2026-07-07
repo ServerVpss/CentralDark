@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <rect width="1600" height="1200" fill="#09130f"/>
+  <rect x="50" y="40" width="1500" height="110" rx="24" fill="#0f1d18" stroke="#2b5244"/>
+  <text x="90" y="110" fill="#f7faf9" font-size="54" font-family="Arial" font-weight="700">Central Dark — Arsenal Multi-IA</text>
+  <text x="90" y="150" fill="#a7beb5" font-size="24" font-family="Arial">Orquestracao por papeis • Handoff • 10-80-10 • Status + Admin</text>
+
+  <rect x="50" y="190" width="720" height="210" rx="24" fill="#10201a" stroke="#2b5244"/>
+  <text x="90" y="250" fill="#d1fae5" font-size="32" font-family="Arial" font-weight="700">Regra-mae</text>
+  <text x="90" y="305" fill="#edf7f3" font-size="24" font-family="Arial">A IA mais forte nao executa tudo.</text>
+  <text x="90" y="340" fill="#edf7f3" font-size="24" font-family="Arial">Ela orquestra, planeja e valida.</text>
+  <text x="90" y="375" fill="#edf7f3" font-size="24" font-family="Arial">A execucao vai para modelos baratos, especializados ou locais.</text>
+
+  <rect x="810" y="190" width="740" height="210" rx="24" fill="#10201a" stroke="#2b5244"/>
+  <text x="850" y="250" fill="#d1fae5" font-size="32" font-family="Arial" font-weight="700">Matematica</text>
+  <text x="850" y="305" fill="#fef3c7" font-size="26" font-family="Courier New">C_total = 0.20*C_top + 0.80*C_exec</text>
+  <text x="850" y="345" fill="#fef3c7" font-size="26" font-family="Courier New">Se C_exec = 0.10*C_top -> C_total = 0.28*C_top</text>
+  <text x="850" y="385" fill="#fef3c7" font-size="26" font-family="Courier New">Economia teorica = 72%</text>
+
+  <rect x="50" y="440" width="470" height="250" rx="24" fill="#10201a" stroke="#2b5244"/>
+  <text x="90" y="500" fill="#d1fae5" font-size="32" font-family="Arial" font-weight="700">10-80-10</text>
+  <text x="90" y="555" fill="#edf7f3" font-size="24" font-family="Arial">10% planejar</text>
+  <text x="90" y="590" fill="#edf7f3" font-size="24" font-family="Arial">80% executar</text>
+  <text x="90" y="625" fill="#edf7f3" font-size="24" font-family="Arial">10% validar</text>
+
+  <rect x="560" y="440" width="490" height="250" rx="24" fill="#10201a" stroke="#2b5244"/>
+  <text x="600" y="500" fill="#d1fae5" font-size="32" font-family="Arial" font-weight="700">Papeis</text>
+  <text x="600" y="555" fill="#edf7f3" font-size="22" font-family="Arial">Arquiteto Principal</text>
+  <text x="600" y="585" fill="#edf7f3" font-size="22" font-family="Arial">Executor Premium / Economico / Local</text>
+  <text x="600" y="615" fill="#edf7f3" font-size="22" font-family="Arial">Validador Final • Auditor • Roteador</text>
+
+  <rect x="1090" y="440" width="460" height="250" rx="24" fill="#10201a" stroke="#2b5244"/>
+  <text x="1130" y="500" fill="#d1fae5" font-size="32" font-family="Arial" font-weight="700">Handoff</text>
+  <text x="1130" y="555" fill="#edf7f3" font-size="22" font-family="Arial">- O que decidimos</text>
+  <text x="1130" y="585" fill="#edf7f3" font-size="22" font-family="Arial">- O que construimos</text>
+  <text x="1130" y="615" fill="#edf7f3" font-size="22" font-family="Arial">- Proximos passos</text>
+  <text x="1130" y="645" fill="#edf7f3" font-size="22" font-family="Arial">- Restricoes / riscos</text>
+
+  <rect x="50" y="730" width="1500" height="300" rx="24" fill="#10201a" stroke="#2b5244"/>
+  <text x="90" y="790" fill="#d1fae5" font-size="32" font-family="Arial" font-weight="700">Status x Admin</text>
+  <text x="90" y="845" fill="#edf7f3" font-size="24" font-family="Arial">status.centralldark.com = cockpit operacional diario</text>
+  <text x="90" y="885" fill="#edf7f3" font-size="24" font-family="Arial">Painel Admin = quartel-general definitivo de configuracao</text>
+  <text x="90" y="935" fill="#edf7f3" font-size="24" font-family="Arial">Artefatos mandatórios: ARSENAL_MASTER, ROUTING_POLICY, HANDOFF_TEMPLATE, SESSION_PROTOCOL, TASK_CLASSIFIER, MCP_CATALOG, QUALITY_GATES, PROJECT_STATE, COST_POLICY</text>
+
+  <text x="90" y="1110" fill="#b7c9c2" font-size="20" font-family="Arial">ServerVpss/CentralDark • Registro consolidado em 2026-07-07</text>
+</svg>
