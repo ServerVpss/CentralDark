@@ -2481,3 +2481,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-07
 - **Contexto:** Instalação do MCP CentralDark como App Nativo no ChatGPT (SSE/OAuth) estava falhando por timeout e ReferenceError em logs.
 - **Aprendizado:** Correção de loop de erro em telemetria e restauração de sanidade para fluxo de OAuth no MCP nativo do ChatGPT. Recuperação de arquivos fantasmas do painel melhora o tempo de resposta da autorização significativamente.
+
+### 309. Protocolo de Boot oficializado + rota PWA-first pro Comando Mobile
+- **Categoria:** regra
+- **Data:** 2026-07-07
+- **Contexto:** Pivete pediu regra fixa pra nunca perder o fio da meada entre chats/IAs, reorganização de docs e consolidação do pack mobile (apps/modulos/centraldecomandomobile, criado via FTP com design-system, api-map e esqueleto Expo). Descoberto no caminho: tool adicionar_pendencia quebrada (espera seção '## 🔴 Alta prioridade' que não existe no PENDENCIAS.md atual — usar pendencias_add) e numeração de pendências com 5 colisões.
+- **Aprendizado:** 1) Ritual oficial agora vive em docs/PROTOCOLO-BOOT.md (commit b7ac106): prompt âncora de entrada + ritual de saída obrigatório + mapa do tesouro + ponteiro curto pra colar na memória nativa de cada ferramenta (Claude, ChatGPT, Lovable Knowledge, WebUI, Bolt) — nunca duplicar conteúdo, só ponteiro. 2) Pack mobile renomeado pra apps/modulos/comando-mobile; rota de entrega decidida: PWA-first no Lovable (mobile.centralldark.com) reusando os tokens do pack, esqueleto Expo congelado como fase 2. 3) Missão de renumeração/setorização do PENDENCIAS.md despachada pro Hermes (id 1783418534290-h2zckx) — só roda depois do fix da #29 (ReferenceError x no executor). Top de ataque auditado: 29→26→25→34→19.
