@@ -1,7 +1,7 @@
-# 🧠 Notion Sync — 2026-07-07T09:29:24.054Z
+# 🧠 Notion Sync — 2026-07-07T09:41:15.675Z
 
-- **Commit fonte:** `36fa77fdae2d924e3c962f35ded04067f01e6925`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `3da8ebc0291e8b8b024e205a96c3aa0077aac041`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
