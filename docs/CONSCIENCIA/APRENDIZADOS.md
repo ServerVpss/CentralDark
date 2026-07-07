@@ -2469,3 +2469,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** O rótulo antigo do ApprovalProvider dizia 'Permitir tudo nesta sessão (bypass)' e o banner dizia 'Bypass ativo', o que gerou confusão com MCP Admin e modo livre do MCP.
 - **Aprendizado:** No TelePainel, textos de aprovação destrutiva devem deixar explícito que o bypass é local da sessão do painel e não é MCP Admin nem modo livre do MCP. A lógica fica em src/shared/aprovacao/ApprovalProvider.tsx.
+
+### 307. Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-07
+- **Contexto:** Gateway EliteHTTP com erros de 'bad interpreter' e 'fetch failed' contínuos logo após deploy ou restart no PM2. A configuração de ecosystem.config.js apontava para um pseudo-caminho Node (apps/modulos/EliteHTTP/index.js) que não existia.
+- **Aprendizado:** O Elite HTTP Gateway não é Node.js, é um ecossistema Python self-hosted. O script real fica em 'apps/modulos/elite-gateway/scripts/elite_http_gateway.py' e sobe com Uvicorn na porta 8082. O 'ecosystem.config.js' (PM2) estava rodando um falso Node e dando 'bad interpreter'. A correção exigiu regex (sed/python) direto no ecosystem para injetar o caminho do interpretador VENV (venv/bin/python) e os args corretos. Obs: A ferramenta de diagnóstico 'centraldark_elite_gateway_status' nativa bate na porta 8080 (gerando falso 'fetch failed'), mas o gateway está escutando na 8082 com retorno 522/200 dependendo do Host.
