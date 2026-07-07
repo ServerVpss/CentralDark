@@ -2517,3 +2517,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-07
 - **Contexto:** Durante validação do status.centralldark.com, o GitHub/main já continha o card novo, mas a VPS não atualizava porque a porta local 9300 recusava conexão e o processo CentralDark-WebhookDeploy estava ausente do PM2. O script correto existia em scripts/webhook/github-webhook-deploy.mjs.
 - **Aprendizado:** Quando o status.centralldark.com estiver atrasado apesar de main conter a alteração, validar primeiro 127.0.0.1:9300/health e PM2. Se CentralDark-WebhookDeploy estiver ausente, subir o script scripts/webhook/github-webhook-deploy.mjs com WEBHOOK_DEPLOY_PORT=9300 e REPO_PATH do repo, validar health e só então pedir autorização separada para POST /webhook, pois esse endpoint executa safeResetToOrigin.
+
+### 315. WebhookDeploy pode precisar esperar logs antes de validar card público
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-07
+- **Contexto:** Após acionar POST /webhook, a primeira validação ocorreu cedo demais: o endpoint respondeu imediatamente, mas o safeResetToOrigin continuava em background. O card ainda não aparecia nos primeiros segundos. Ao reler os logs, o deploy concluiu com backup branch, stash reaplicado, HEAD alinhado a origin/main e o card apareceu no worktree.
+- **Aprendizado:** Depois de POST /webhook no CentralDark-WebhookDeploy, não validar o card imediatamente só pelo 200 do POST. O POST responde antes do deploy terminar. Esperar logs com '[deploy] OK' e então validar HEAD==origin/main, grep local do card e só depois checar status.centralldark.com.
