@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T15:56:41.188Z
+# 🧠 Notion Sync — 2026-07-07T16:15:22.269Z
 
-- **Commit fonte:** `19ae76a91ffa71c7c332d91dbdbcbf9ed7f11bf3`
+- **Commit fonte:** `a82c3c96c1ddfd8043d63c7b0cb9c630e7562b63`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 350 atualizadas · ❌ 456 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 350 atualizadas · ❌ 457 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 315 | 0 | 315 | 0 | 0 |
-| estrutura | 456 | 0 | 0 | 0 | 456 |
+| estrutura | 457 | 0 | 0 | 0 | 457 |
 
 ## Operações
 
@@ -499,6 +499,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/SWITCH-PROVIDER.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/MOVIDO.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/README.md |
+| estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/BOOT-CENTRALDARK-MODOS.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
