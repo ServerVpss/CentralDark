@@ -500,6 +500,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/hermes-vivo/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
+| estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
 | estrutura | erro | docs/CONSCIENCIA/BOT_COMMANDS.md |
 | estrutura | erro | docs/CONSCIENCIA/BRAIN/00 - Mapa do Sistema/00-POSTURA-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/BRAIN/00 - Mapa do Sistema/INDEX.md |
