@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T09:41:36.140Z",
-  "updatedAtBR": "07/07/2026, 06:41:36 BRT",
+  "updatedAt": "2026-07-07T09:52:30.223Z",
+  "updatedAtBR": "07/07/2026, 06:52:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "lembranca: Padrão de Comunicação Modo Arsenal Máximo (Pivete Vibe)",
+    "lastCommit": "aprendizado(#308): Estabilização de Conector MCP Nativo - ChatGPT SSE",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-07T09:52:30.223Z",
+      "titulo": "Push na main · 9b69b20e5f16fca14d422c51c6c4bc7cb05fb314",
+      "detalhe": "aprendizado(#308): Estabilização de Conector MCP Nativo - ChatGPT SSE",
+      "area": "Repositório",
+      "sha": "9b69b20",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-07T09:41:36.140Z",
       "titulo": "Push na main · 3da8ebc0291e8b8b024e205a96c3aa0077aac041",
@@ -1306,6 +1314,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T09:52:30.223Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9b69b20e5f16fca14d422c51c6c4bc7cb05fb314 (9b69b20)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-07T09:41:36.140Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3da8ebc0291e8b8b024e205a96c3aa0077aac041 (3da8ebc)",
@@ -1645,13 +1660,6 @@
       "time": "2026-07-05T23:42:47.894Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 84b005917117fcdac36801fa87b84c4ca0bb66d9 (84b0059)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-05T23:42:09.765Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2c32df371b0b99e23618a133ebb128d34911f700 (2c32df3)",
       "area": "Repositório",
       "status": "sucesso"
     }
