@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T16:34:17.613Z
+# 🧠 Notion Sync — 2026-07-07T17:14:27.170Z
 
-- **Commit fonte:** `17be6d55f5d07360dab0c621c736dfcf089d0981`
+- **Commit fonte:** `4610bb16d9a92722cd3750259b932e147530a67d`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 350 atualizadas · ❌ 457 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 350 atualizadas · ❌ 457 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 315 | 0 | 315 | 0 | 0 |
+| aprendizados | 316 | 1 | 315 | 0 | 0 |
 | estrutura | 457 | 0 | 0 | 0 | 457 |
 
 ## Operações
@@ -372,6 +372,7 @@
 | aprendizados | atualizado | #311 — Não pushar main local ahead dezenas por commits automáticos de painel |
 | aprendizados | atualizado | #312 — Indicar modo recomendado em formato universal |
 | aprendizados | atualizado | #313 — TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta |
+| aprendizados | criado | #314 — WebhookDeploy fora do PM2 bloqueia card novo do status |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
