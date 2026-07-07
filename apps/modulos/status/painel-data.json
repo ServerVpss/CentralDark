@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T16:25:21.104Z",
-  "updatedAtBR": "07/07/2026, 13:25:21 BRT",
+  "updatedAt": "2026-07-07T16:34:38.760Z",
+  "updatedAtBR": "07/07/2026, 13:34:38 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "feat(status): adicionar pagina publica de protocolos CentralDark",
+    "lastCommit": "docs(consciencia): alinhar prompt universal ao ciclo oficial",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-07T16:34:38.760Z",
+      "titulo": "Push na main · 17be6d55f5d07360dab0c621c736dfcf089d0981",
+      "detalhe": "docs(consciencia): alinhar prompt universal ao ciclo oficial",
+      "area": "Repositório",
+      "sha": "17be6d5",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-07T16:25:21.104Z",
       "titulo": "Push na main · 6c49b05873febc04ac5396bc19668772d916085e",
       "detalhe": "feat(status): adicionar pagina publica de protocolos CentralDark",
@@ -980,14 +988,6 @@
       "area": "Repositório",
       "sha": "44ee6a2",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T05:37:52.035Z",
-      "titulo": "Push na main · 80126b80766849c9378b87b1bc6de2a6ab822f9c",
-      "detalhe": "Criou botão de OAuth no frontend",
-      "area": "Repositório",
-      "sha": "80126b8",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1402,6 +1402,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T16:34:38.760Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 17be6d55f5d07360dab0c621c736dfcf089d0981 (17be6d5)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-07T16:25:21.104Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6c49b05873febc04ac5396bc19668772d916085e (6c49b05)",
@@ -1741,13 +1748,6 @@
       "time": "2026-07-06T04:18:42.094Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6ec1987049a797af7aa48a4eaafaee70fe7b8614 (6ec1987)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T04:04:54.992Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1b379863507cfe839fa85d45f00eadd87aeaed69 (1b37986)",
       "area": "Repositório",
       "status": "sucesso"
     }
