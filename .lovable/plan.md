@@ -1,32 +1,24 @@
-# Sincronizar DarkAI nos processos PM2
+# Plano — Registrar o CentralDark-EliteHTTP como pendência
 
-## Situação
-
-O DarkAI já responde certinho na edge function (chave nova `DARKAI_CLI_KEY` aceita) e o binário `darkai` funciona pra shell nova. Mas os processos PM2 que estavam rodando ANTES da troca da chave (Hermes, ArsenalAdapter, LovableBridge, GuardiaoConsciencia, HubBot, etc) carregaram o env antigo em memória e vão continuar apanhando `chave_invalida` até serem reiniciados.
-
-Confirmei olhando `/proc/<pid>/environ` do Hermes: ele ainda tem a `DARKAI_ANON_KEY` velha.
+Não vamos mexer no processo agora. Só deixar bem documentado pra próxima IA (ou pro agente que a gente colocar depois) não se perder e saber exatamente o que é.
 
 ## O que vou fazer
 
-1. **Descobrir quem usa** — listar processos PM2 cujo env atual contém `DARKAI_` (comparar valor em memória com o novo `/etc/profile.d/darkai.sh`).
-2. **Recarregar env dos serviços afetados** com `pm2 restart <nome> --update-env`. Isso reinicia SÓ os processos identificados, um por um, sem tocar em nada não relacionado.
-3. **Ordem segura** (menos crítico → mais crítico):
-   - `CentralDark-ArsenalAdapter`
-   - `CentralDark-LovableBridge`
-   - `CentralDark-GuardiaoConsciencia`
-   - `CentralDark-Hermes` (por último, é o orquestrador)
-   - qualquer outro que apareça no scan
-4. **`pm2 save`** pra fixar o estado no dump.
-5. **Validação**: pra cada serviço, checar que voltou `online` e uptime resetou. Depois disparar 1 chamada de teste no Hermes (via `hermes_dispatch_mission` com missão fake tipo "responda pong via darkai") pra confirmar que a cadeia inteira responde.
-6. **Notificar no Telegram** o resultado, no padrão Card Hermes.
+1. **Adicionar pendência oficial** em `docs/PENDENCIAS.md` (prioridade média) com:
+   - **Título:** Evoluir gateway público EliteHTTP (elite.centralldark.com)
+   - **Descrição:** Processo PM2 `CentralDark-EliteHTTP` (id 14) está errored desde o incidente 05/07. Função esperada: gateway OpenAI-compatível público em `elite.centralldark.com`, usando ChatGPT Plus via Zendriver (contas-admin), pra plugar Cline/Bolt/Cursor/Continue/Aider sem pagar API. Documentação em `docs/GATEWAY/ELITE_ENDPOINT_PUBLICO.md`.
+   - **Como fechar:** Colocar um agente dedicado pra levar o gateway até o fim — recriar venv, validar login noVNC do perfil ChatGPT, subir processo, testar `/v1/models` e `/v1/chat/completions` com Bearer, confirmar Caddy roteando `elite.centralldark.com → 127.0.0.1:8080`.
+   - **Onde mexer:** `apps/modulos/elite-gateway/`, `infra/caddy/`, PM2 id 14.
 
-## Detalhes técnicos
+2. **Atualizar o inventário PM2** em `mem/architecture/inventario-pm2-vps.md` marcando o id 14 como "⚠️ pendente — evolução agendada, ver PENDENCIAS.md" pra ninguém tentar ressuscitar no chute.
 
-- Não vou mexer em `whatsapp-server` (id 1, estado `stopped` é intencional).
-- Nada de `pm2 restart all` — cada processo por nome.
-- Se o restart do Hermes falhar, rollback imediato: reiniciar de novo lendo o dump anterior.
-- Backup do `/etc/profile.d/darkai.sh` já existe (`.bak.<timestamp>`) do turno passado.
+3. **Nota curta no cérebro vivo** em `docs/CONSCIENCIA/APRENDIZADOS/` explicando: EliteHTTP ≠ elite-anthropic-proxy. São gateways diferentes. Um é público (ChatGPT Plus/OpenAI-compat), o outro é interno (Anthropic/Claude). Pra próxima IA não confundir de novo.
 
-## Risco
+## O que NÃO vou fazer agora
 
-Baixo. Restart controlado, um serviço por vez, com validação após cada um. Downtime esperado por serviço: 2-5 segundos.
+- Não recriar venv
+- Não subir o processo
+- Não mexer no Caddy
+- Não deletar do dump.pm2
+
+Fica dormindo até você mandar acordar.
