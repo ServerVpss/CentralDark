@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-07T02:19:28.791Z
-- **Commit:** `3ff5749b661b35da75a8de4167d0115770c29c18`
+- **Gerado:** 2026-07-07T03:13:26.342Z
+- **Commit:** `8fedadb9590cdce7c673f47446fbbee3b7794125`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 338 | 0 | 0 | 338 | 0 |
+| aprendizados | 339 | 0 | 0 | 339 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **338**
+- 🟥 Faltando no Notion: **339**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -386,4 +386,5 @@
 - 304. unpkg sem versão pode entregar build ESM sem global — travar versão
 - 305. Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM
 - 306. Separar bypass destrutivo local do MCP Admin
+- 307. Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082
 </details>

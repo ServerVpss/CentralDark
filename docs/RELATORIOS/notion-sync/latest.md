@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T02:19:25.559Z
+# 🧠 Notion Sync — 2026-07-07T03:13:22.075Z
 
-- **Commit fonte:** `3ff5749b661b35da75a8de4167d0115770c29c18`
+- **Commit fonte:** `8fedadb9590cdce7c673f47446fbbee3b7794125`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 342 atualizadas · ❌ 452 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 343 atualizadas · ❌ 452 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 308 | 1 | 307 | 0 | 0 |
+| aprendizados | 309 | 1 | 308 | 0 | 0 |
 | estrutura | 452 | 0 | 0 | 0 | 452 |
 
 ## Operações
@@ -364,7 +364,8 @@
 | aprendizados | atualizado | #303 — HUD Grafo 3D — three.js UMD precisa ser carregado à parte |
 | aprendizados | atualizado | #304 — unpkg sem versão pode entregar build ESM sem global — travar versão |
 | aprendizados | atualizado | #305 — Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM |
-| aprendizados | criado | #306 — Separar bypass destrutivo local do MCP Admin |
+| aprendizados | atualizado | #306 — Separar bypass destrutivo local do MCP Admin |
+| aprendizados | criado | #307 — Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082 |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
