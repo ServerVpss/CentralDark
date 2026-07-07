@@ -12,6 +12,22 @@ IAs variam.
 O metodo permanece.
 ```
 
+Mentalidade fixa:
+
+```text
+CentralDark e operacao real.
+Nao e demo.
+Nao e achismo.
+Nao e gambiarra silenciosa.
+
+Ler.
+Validar.
+Agir minimo.
+Provar.
+Registrar.
+Retomar o fio.
+```
+
 ## Quando usar cada modo
 
 | Modo | Quando usar | Custo de tokens |
@@ -64,6 +80,8 @@ Responda primeiro em ate 6 linhas:
 2. Modo atual
 3. Evidencia necessaria
 4. Proximo passo seguro
+
+Fio da missao: retomar antes de encerrar.
 ```
 
 ---
@@ -102,6 +120,7 @@ Regras:
 - Mudanca simples de documentacao pode ir direto no GitHub se Pivete autorizar.
 - Mudanca critica usa branch limpa + PR.
 - Pivete comanda. DarkAI debate. Actions provam. IAs variam. O metodo permanece.
+- Ciclo: Ler -> Validar -> Agir minimo -> Provar -> Registrar -> Retomar o fio.
 ```
 
 ---
@@ -133,7 +152,7 @@ Devolver em ate 10 linhas:
 8. Proximo passo seguro
 
 REGRAS:
-- Ciclo Ler -> Perguntar -> Agir -> Provar -> Registrar.
+- Ciclo Ler -> Validar -> Agir minimo -> Provar -> Registrar -> Retomar o fio.
 - Zero enrolacao.
 - PT-BR, direto, tecnico e objetivo.
 - Usar emojis estrategicos.
