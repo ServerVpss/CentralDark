@@ -1,0 +1,14 @@
+{
+  "name": "supabase-bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Bot read-only do Supabase integrado ao GitHub do CentralDark",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}

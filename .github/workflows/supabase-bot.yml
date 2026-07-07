@@ -10,7 +10,7 @@ on:
   push:
     paths:
       - 'infra/supabase/migrations/**'
-      - 'CentralDark/apps/supabase-bot/**'
+      - 'apps/supabase-bot/**'
   issues:
     types: [labeled]
 
@@ -30,7 +30,7 @@ jobs:
           node-version: '20'
 
       - name: Instalar deps do bot
-        working-directory: CentralDark/apps/supabase-bot
+        working-directory: apps/supabase-bot
         run: npm install --omit=dev --no-audit --no-fund
 
       - name: Rodar checks read-only
@@ -40,7 +40,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_ALVO: ${{ github.repository }}
           ISSUE_NUM: ${{ github.event.issue.number || '' }}
-        run: node CentralDark/apps/supabase-bot/src/index.mjs
+        run: node apps/supabase-bot/src/index.mjs
 
       - name: Commit relatório
         run: |

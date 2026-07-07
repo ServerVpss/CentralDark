@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'CentralDark/apps/projeto-dashboard/painel-data.json'
+      - 'apps/modulos/status/painel-data.json'
       - 'scripts/validar-painel-vivo.mjs'
 
 permissions:
