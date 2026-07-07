@@ -2463,3 +2463,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-06
 - **Contexto:** Pivete pediu pra renomear os modelos do Mistral Vibe (arquivo /root/[oculto]) porque os aliases originais (gateway-gpt-5.5, gateway-gemini-pro) não diziam PRA QUÊ cada um servia. Um leigo não sabe se Gemini Pro é rápido ou bom pra ler. Aplicamos aliases descritivos em PT-BR: "top-gpt55-mais-inteligente", "leitura-gemini25-pro-textao", "rapido-gemini25-flash", "codigo-devstral" etc.
 - **Aprendizado:** Toda vez que a IA for mostrar uma lista de opções técnicas pro Pivete (modelos de IA no /model do Vibe, comandos, tools, serviços PM2, etc), reetiquetar como TUTOR: prefixar com o uso ("rapido-", "leitura-", "top-", "codigo-", "barato-", "equilibrado-") + nome técnico curto. Nunca deixar só o id cru (ex: "openai/gpt-5.5"). Assim ele escolhe pelo que serve, não pelo nome do fabricante.
+
+### 306. Separar bypass destrutivo local do MCP Admin
+- **Categoria:** regra
+- **Data:** 2026-07-06
+- **Contexto:** O rótulo antigo do ApprovalProvider dizia 'Permitir tudo nesta sessão (bypass)' e o banner dizia 'Bypass ativo', o que gerou confusão com MCP Admin e modo livre do MCP.
+- **Aprendizado:** No TelePainel, textos de aprovação destrutiva devem deixar explícito que o bypass é local da sessão do painel e não é MCP Admin nem modo livre do MCP. A lógica fica em src/shared/aprovacao/ApprovalProvider.tsx.
