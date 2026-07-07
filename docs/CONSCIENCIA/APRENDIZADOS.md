@@ -2523,3 +2523,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-07
 - **Contexto:** Após acionar POST /webhook, a primeira validação ocorreu cedo demais: o endpoint respondeu imediatamente, mas o safeResetToOrigin continuava em background. O card ainda não aparecia nos primeiros segundos. Ao reler os logs, o deploy concluiu com backup branch, stash reaplicado, HEAD alinhado a origin/main e o card apareceu no worktree.
 - **Aprendizado:** Depois de POST /webhook no CentralDark-WebhookDeploy, não validar o card imediatamente só pelo 200 do POST. O POST responde antes do deploy terminar. Esperar logs com '[deploy] OK' e então validar HEAD==origin/main, grep local do card e só depois checar status.centralldark.com.
+
+### 316. Inventário IA + varredura UI read-only — padrão e artefatos
+- **Categoria:** regra
+- **Data:** 2026-07-07
+- **Contexto:** Execução das issues #115 (inventário de CLIs/agentes na VPS) e #116 (varredura de https://ui.centralldark.com) em modo leitura via MCP. Capturamos PM2/Docker/bins e geramos headers/HTML/screenshots/logs com Chrome headless.
+- **Aprendizado:** Fixar o procedimento: (1) Inventário: pm2 list + pm2 jlist, docker ps, which darkai/node/python/chrome e ls apps/modulos; (2) Varredura UI: salvar em /root/[oculto]<YYYYMMDD-HHMMSS> os arquivos headers.txt, index.html, loader.js, custom.css, desktop.png, mobile.png, netlog.json e logs; (3) Ao usar --user-agent iPhone no bash, escapar parênteses em variável UA; (4) Responder com caminhos e 3 evidências objetivas (PM2 online, 200 no HEAD, screenshots geradas). Registrar sempre como relatório em revisões e não tocar serviços. 
