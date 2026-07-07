@@ -1,0 +1,19 @@
+ARQUITETURA CENTRAL DARK
+
+Usuario/Pivete
+  -> Jarvis / Central Brain
+     -> Classificador de tarefa
+        -> Arquiteto Principal (planejamento)
+        -> Executor Premium (execucao padrao)
+        -> Executor Economico (execucao economica)
+        -> Executor Local (bracal / lote)
+     -> Validador Final
+     -> Artefatos persistentes
+        -> status.centralldark.com
+        -> Painel Admin
+
+SISTEMA 10-80-10
+10% planejar -> 80% executar -> 10% validar
+
+HANDOFF
+Sessao pesada -> gerar handoff -> novo chat -> contexto leve -> continua o trabalho
