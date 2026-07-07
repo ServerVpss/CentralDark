@@ -1,21 +1,21 @@
-# 🧠 Notion Sync — 2026-07-07T12:27:18.146Z
+# 🧠 Notion Sync — 2026-07-07T12:58:01.673Z
 
-- **Commit fonte:** `c63f3b1069ff9eef74046766608ef9f70a60b53f`
+- **Commit fonte:** `eb25c21e37527cb5d242f3814177ec7efd05d58b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 325 atualizadas · ❌ 475 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 348 atualizadas · ❌ 453 erros
 
 ## Por base
 
 | Base | Git | Criadas | Atualizadas | Ignoradas | Erros |
 |---|---:|---:|---:|---:|---:|
-| regras | 4 | 0 | 1 | 0 | 3 |
-| pendencias | 1 | 0 | 0 | 0 | 1 |
-| decisoes | 30 | 0 | 12 | 0 | 18 |
-| aprendizados | 312 | 0 | 312 | 0 | 0 |
+| regras | 4 | 0 | 4 | 0 | 0 |
+| pendencias | 1 | 0 | 1 | 0 | 0 |
+| decisoes | 30 | 0 | 30 | 0 | 0 |
+| aprendizados | 313 | 0 | 313 | 0 | 0 |
 | estrutura | 453 | 0 | 0 | 0 | 453 |
 
 ## Operações
@@ -23,28 +23,28 @@
 | Base | Ação | Título |
 |---|---|---|
 | regras | atualizado | Protocolo Multi-Agente Semântico (Ler → Agir → Registrar) |
-| regras | erro | Hierarquia de Memória — Git é a única fonte da verdade |
-| regras | erro | Guardião da Consciência — Modo Propor Obrigatório (até 08/07/2026) |
-| regras | erro | Guardião v2 — Arquitetura de 2 camadas (Olho + Cérebro/Fila) |
-| pendencias | erro | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
-| decisoes | erro | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
-| decisoes | erro | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
-| decisoes | erro | Decisões da sessão 30/06/2026 — multi-provider LLM + remoção do /mcp-public |
-| decisoes | erro | Decisões da sessão 29/06/2026 — tarde (CLI) |
-| decisoes | erro | Migração CentralDark (em andamento) |
-| decisoes | erro | Fluxo de deploy |
-| decisoes | erro | Instalador + doc viva |
-| decisoes | erro | Setor único de pendências |
-| decisoes | erro | Central de horário |
-| decisoes | erro | Docs por pasta |
-| decisoes | erro | MCP CentralDark |
-| decisoes | erro | Memória eterna do agente ChatGPT |
-| decisoes | erro | GitHub Achievements |
-| decisoes | erro | Permissões do agente |
-| decisoes | erro | Gerenciador de pacotes — npm (raiz) |
-| decisoes | erro | Elite Anthropic Proxy — Operacional (29/06/2026) |
-| decisoes | erro | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
-| decisoes | erro | Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026) |
+| regras | atualizado | Hierarquia de Memória — Git é a única fonte da verdade |
+| regras | atualizado | Guardião da Consciência — Modo Propor Obrigatório (até 08/07/2026) |
+| regras | atualizado | Guardião v2 — Arquitetura de 2 camadas (Olho + Cérebro/Fila) |
+| pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
+| decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
+| decisoes | atualizado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
+| decisoes | atualizado | Decisões da sessão 30/06/2026 — multi-provider LLM + remoção do /mcp-public |
+| decisoes | atualizado | Decisões da sessão 29/06/2026 — tarde (CLI) |
+| decisoes | atualizado | Migração CentralDark (em andamento) |
+| decisoes | atualizado | Fluxo de deploy |
+| decisoes | atualizado | Instalador + doc viva |
+| decisoes | atualizado | Setor único de pendências |
+| decisoes | atualizado | Central de horário |
+| decisoes | atualizado | Docs por pasta |
+| decisoes | atualizado | MCP CentralDark |
+| decisoes | atualizado | Memória eterna do agente ChatGPT |
+| decisoes | atualizado | GitHub Achievements |
+| decisoes | atualizado | Permissões do agente |
+| decisoes | atualizado | Gerenciador de pacotes — npm (raiz) |
+| decisoes | atualizado | Elite Anthropic Proxy — Operacional (29/06/2026) |
+| decisoes | atualizado | Cérebro de Aço — Unificação arquitetural (29/06/2026) |
+| decisoes | atualizado | Falha registrada — Docs "para o Pivete ver" criados na pasta errada (30/06/2026) |
 | decisoes | atualizado | MCP — versionado, equipado com tools cognitivas e trancado (30/06/2026) |
 | decisoes | atualizado | Conexões Rápidas |
 | decisoes | atualizado | Grupo Da Evolução aterrissado no CentralDark real (2026-07-02) |
@@ -289,7 +289,7 @@
 | aprendizados | atualizado | #228 — MCP V2 Arsenal deve usar lazy loading e nomes compatíveis |
 | aprendizados | atualizado | #229 — tools.json deve publicar objetos e toolNames |
 | aprendizados | atualizado | #230 — Deploy real do MCP deve validar PM2 por `jlist` |
-| aprendizados | erro | #231 — Challenge OAuth do MCP deve incluir scope e metadata do recurso |
+| aprendizados | atualizado | #231 — Challenge OAuth do MCP deve incluir scope e metadata do recurso |
 | aprendizados | atualizado | #232 — Callback OAuth deve exibir handoff visual CENTRAL DARK |
 | aprendizados | atualizado | #233 — Memória operacional do Pivete deve apontar para o repo oficial |
 | aprendizados | atualizado | #234 — Billing Guard aplicado por migração seletiva de bots para self-hosted |
@@ -369,6 +369,7 @@
 | aprendizados | atualizado | #308 — Estabilização de Conector MCP Nativo - ChatGPT SSE |
 | aprendizados | atualizado | #309 — Protocolo de Boot oficializado + rota PWA-first pro Comando Mobile |
 | aprendizados | atualizado | #310 — Cartilha anti-descontrole do Hermes + bases PM2 oficiais |
+| aprendizados | atualizado | #311 — Não pushar main local ahead dezenas por commits automáticos de painel |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
