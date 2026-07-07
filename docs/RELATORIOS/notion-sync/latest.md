@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T03:13:22.075Z
+# 🧠 Notion Sync — 2026-07-07T09:29:24.054Z
 
-- **Commit fonte:** `8fedadb9590cdce7c673f47446fbbee3b7794125`
-- **Disparado por:** segredounlock
+- **Commit fonte:** `36fa77fdae2d924e3c962f35ded04067f01e6925`
+- **Disparado por:** lovable-dev[bot]
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 343 atualizadas · ❌ 452 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 344 atualizadas · ❌ 453 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 309 | 1 | 308 | 0 | 0 |
-| estrutura | 452 | 0 | 0 | 0 | 452 |
+| aprendizados | 309 | 0 | 309 | 0 | 0 |
+| estrutura | 453 | 0 | 0 | 0 | 453 |
 
 ## Operações
 
@@ -365,7 +365,7 @@
 | aprendizados | atualizado | #304 — unpkg sem versão pode entregar build ESM sem global — travar versão |
 | aprendizados | atualizado | #305 — Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM |
 | aprendizados | atualizado | #306 — Separar bypass destrutivo local do MCP Admin |
-| aprendizados | criado | #307 — Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082 |
+| aprendizados | atualizado | #307 — Elite HTTP Gateway é um Proxy Python (Não Node) na porta 8082 |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -461,6 +461,7 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/PLAYBOOK-VALIDACAO-DE-ENDPOINTS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/conversa-mcp-webui-liberacao.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/elitehttp-vs-elite-anthropic-nao-confundir.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/incidente-2026-07-05-mcp-dump-perdido.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/socorro-2026-07-05.md |
 | estrutura | erro | docs/CONSCIENCIA/ARQUITETURA-CHAVES-AI-PROXY.md |
