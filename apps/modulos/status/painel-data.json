@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-07T10:30:33.934Z",
-  "updatedAtBR": "07/07/2026, 07:30:33 BRT",
+  "updatedAt": "2026-07-07T10:40:44.892Z",
+  "updatedAtBR": "07/07/2026, 07:40:44 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#310): Cartilha anti-descontrole do Hermes + bases PM2 oficiais",
+    "lastCommit": "docs(pendencias): nova #37 Bases dos agentes — PM2 namespaces já + Docker seletivo por critério (VEREDITO)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -596,6 +596,14 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-07T10:40:44.892Z",
+      "titulo": "Push na main · cb0c11d7f74c0101e5230f710d6454b739b09865",
+      "detalhe": "docs(pendencias): nova #37 Bases dos agentes — PM2 namespaces já + Docker seletivo por critério (VEREDITO)",
+      "area": "Repositório",
+      "sha": "cb0c11d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-07-07T10:30:33.934Z",
       "titulo": "Push na main · a0d047e041f46868f4e26f2d24f3d8878e6c2868",
@@ -1346,6 +1354,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-07T10:40:44.892Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cb0c11d7f74c0101e5230f710d6454b739b09865 (cb0c11d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-07T10:30:33.934Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · a0d047e041f46868f4e26f2d24f3d8878e6c2868 (a0d047e)",
@@ -1685,13 +1700,6 @@
       "time": "2026-07-06T00:16:51.924Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 9f603cfa853bd5e0592671fe78f9d1bbcf977efb (9f603cf)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T00:09:35.289Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 8d637510b1d62165596498e8e6cb463861579158 (8d63751)",
       "area": "Repositório",
       "status": "sucesso"
     }
