@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-07T12:58:01.673Z
+# 🧠 Notion Sync — 2026-07-07T13:38:39.477Z
 
-- **Commit fonte:** `eb25c21e37527cb5d242f3814177ec7efd05d58b`
+- **Commit fonte:** `8fe25f5b599eab22b3167292c10c2d234cbd8f88`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 348 atualizadas · ❌ 453 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 349 atualizadas · ❌ 454 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 313 | 0 | 313 | 0 | 0 |
-| estrutura | 453 | 0 | 0 | 0 | 453 |
+| aprendizados | 314 | 0 | 314 | 0 | 0 |
+| estrutura | 454 | 0 | 0 | 0 | 454 |
 
 ## Operações
 
@@ -370,6 +370,7 @@
 | aprendizados | atualizado | #309 — Protocolo de Boot oficializado + rota PWA-first pro Comando Mobile |
 | aprendizados | atualizado | #310 — Cartilha anti-descontrole do Hermes + bases PM2 oficiais |
 | aprendizados | atualizado | #311 — Não pushar main local ahead dezenas por commits automáticos de painel |
+| aprendizados | atualizado | #312 — Indicar modo recomendado em formato universal |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -712,6 +713,7 @@
 | estrutura | erro | docs/CONSCIENCIA/PLANO.md |
 | estrutura | erro | docs/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
 | estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
+| estrutura | erro | docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/README.md |
 | estrutura | erro | docs/CONSCIENCIA/REGISTRO-GUARDIAO-DECISOR-V3.md |
 | estrutura | erro | docs/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
