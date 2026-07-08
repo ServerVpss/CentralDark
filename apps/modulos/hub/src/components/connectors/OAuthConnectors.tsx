@@ -53,11 +53,12 @@ const DEV_USER_ID = 'dev-pivete';
 // 🔒 Catálogo fallback — TODAS as APIs de IA + integrações Tier 1
 const FALLBACK_PROVIDERS: Provider[] = [
   // ===== IA — Chat / LLM =====
-  { id: 'openai',       display_name: 'OpenAI',            color: '#10a37f', icon: 'O',  scopes: 'chat completions embeddings', auth_type: 'api_key', tier: 1 },
-  { id: 'claude',       display_name: 'Anthropic Claude',  color: '#d97706', icon: 'C',  scopes: 'messages',      auth_type: 'api_key', tier: 1 },
-  { id: 'gemini',       display_name: 'Google Gemini',     color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1 },
-  { id: 'grok',         display_name: 'Grok / xAI',        color: '#000000', icon: '𝕏',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
+  { id: 'openai',       display_name: 'OpenAI',            color: '#10a37f', icon: 'O',  scopes: 'chat completions embeddings', auth_type: 'api_key', tier: 1, web_oauth: true },
+  { id: 'claude',       display_name: 'Anthropic Claude',  color: '#d97706', icon: 'C',  scopes: 'messages',      auth_type: 'api_key', tier: 1, web_oauth: true },
+  { id: 'gemini',       display_name: 'Google Gemini',     color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1, web_oauth: true },
+  { id: 'grok',         display_name: 'Grok / xAI',        color: '#000000', icon: '𝕏',  scopes: 'chat',          auth_type: 'api_key', tier: 1, web_oauth: true },
   { id: 'deepseek',     display_name: 'DeepSeek',          color: '#1e40af', icon: 'DS', scopes: 'chat reasoner', auth_type: 'api_key', tier: 1 },
+
   { id: 'mistral',      display_name: 'Mistral AI',        color: '#ff7000', icon: 'M',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
   { id: 'perplexity',   display_name: 'Perplexity',        color: '#20808d', icon: 'P',  scopes: 'chat search',   auth_type: 'api_key', tier: 1 },
   { id: 'cohere',       display_name: 'Cohere',            color: '#ff7759', icon: 'Co', scopes: 'chat rerank',   auth_type: 'api_key', tier: 2 },
