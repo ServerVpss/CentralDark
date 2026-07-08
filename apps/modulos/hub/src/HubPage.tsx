@@ -5,6 +5,7 @@ import { CatalogTab } from './components/catalog/CatalogTab';
 import { PoliciesTab } from './components/policies/PoliciesTab';
 import { AuditTab } from './components/audit/AuditTab';
 import { ConnectorsTab } from './components/connectors/ConnectorsTab';
+import { AbacusTab } from './components/abacus/AbacusTab';
 import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles } from 'lucide-react';
 
