@@ -108,8 +108,11 @@ export function OAuthConnectors() {
   const [loading, setLoading] = useState(true);
   const [usingFallback, setUsingFallback] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [tableMissing, setTableMissing] = useState(false);
   const [dialogProvider, setDialogProvider] = useState<Provider | null>(null);
+  const [chooseProvider, setChooseProvider] = useState<Provider | null>(null);
   const toast = useToast();
+
 
   async function load() {
     setLoading(true);
