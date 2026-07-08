@@ -332,8 +332,12 @@ export function OAuthConnectors() {
                           {p.auth_type === 'oauth' && (
                             <Badge className="text-[10px] py-0 px-1.5 bg-primary/15 text-primary border-primary/40">🔐 OAUTH</Badge>
                           )}
+                          {p.web_oauth && (
+                            <Badge className="text-[10px] py-0 px-1.5 bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))] border-[hsl(var(--warning))]/40">🌐 WEB</Badge>
+                          )}
                           <Badge className={`text-[10px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
                         </div>
+
                       </div>
                     </div>
 
