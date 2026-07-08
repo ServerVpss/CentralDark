@@ -1,7 +1,7 @@
 # 🗺️ MEGA PACOTÃO DE DESEJOS — CentralDark
 > Documento único, versionado no repo. Cada bloco é uma fase com checklist `[ ]` — marcar `[x]` ao consolidar.
 > **Status:** rascunho vivo · **Aceita:** sugestões, PRs, refinamentos · **Dono:** Pivete
-> Criado: 2026-07-08
+> Criado: 2026-07-08 · Última atualização: 2026-07-08 (adicionadas fases N-R)
 
 ---
 
@@ -20,6 +20,11 @@
 - **FASE K** — Kit Produtividade VPS (tmux/fzf/btop/ncdu/just/direnv)
 - **FASE L** — Auto-Reconstrutor 24h (loop de pendências → PR)
 - **FASE M** — 🔒 Segredos de Guerra (dinheiro & vantagem)
+- **FASE N** — Relatório Consolidado (PDF + HTML)
+- **FASE O** — Agendador Universal + Log Central + Alertas
+- **FASE P** — Snapshot Automático + Rollback 1-Clique
+- **FASE Q** — Modo Dry-Run Universal
+- **FASE R** — Jarvis Integrado com "Sets de Operação"
 
 ---
 
@@ -190,14 +195,87 @@ Interface de botões dentro do TelePainel/Bolt onde o Pivete opera sem digitar c
 
 ---
 
+## FASE N — 📄 Relatório Consolidado (PDF + HTML)
+
+Um arquivo pronto pra arquivar e mandar por email/Telegram no fim de cada auditoria.
+
+- [ ] N.1 Template HTML bonito (paleta esmeralda) com sumário executivo no topo
+- [ ] N.2 Blocos: duplicados · órfãos · gordura · segredos vazados · regressões · sugestões
+- [ ] N.3 Gráficos embutidos (Chart.js inline) — pizza de tipos, barras de severidade
+- [ ] N.4 Exporta PDF via `puppeteer` (mesmo HTML → PDF pixel-perfect)
+- [ ] N.5 Nome auto: `auditoria-YYYY-MM-DD-HHMM.pdf` salvo em `relatorios/`
+- [ ] N.6 Envio automático: anexa no Telegram + upload no bucket externo (Fase G)
+- [ ] N.7 Assinatura digital (hash SHA256 no rodapé) — comprova que não foi editado
+- [ ] N.8 Botão no Jarvis "📎 gerar relatório agora" + histórico dos últimos 30
+
+---
+
+## FASE O — ⏰ Agendador Universal + Log Central + Alertas
+
+- [ ] O.1 `systemd timer` ou `node-cron` configurável via YAML (`agenda.yml`)
+- [ ] O.2 Horários por tarefa: auditoria diária 03:00, reconstrução preventiva domingo 04:00, snapshot semanal, etc.
+- [ ] O.3 Log centralizado em `/var/log/centraldark/*.log` + `journalctl` unificado
+- [ ] O.4 Painel `/logs` no Jarvis com filtro por serviço/severidade/data
+- [ ] O.5 Alerta Telegram quando: erro crítico · inconsistência detectada · job falhou · demorou >2x o normal
+- [ ] O.6 Silenciar alertas por janela (ex: madrugada de sábado) — configurável no Jarvis
+- [ ] O.7 Métricas: quantos jobs rodaram, taxa de sucesso, tempo médio → dashboard
+
+---
+
+## FASE P — 💾 Snapshot Automático + Rollback 1-Clique
+
+Toda mudança do Reconstrutor (Fase B) fica reversível.
+
+- [ ] P.1 Antes de QUALQUER mudança estrutural: snapshot completo (`btrfs snapshot` ou `restic`)
+- [ ] P.2 Snapshot inclui: código, `dump.pm2`, banco, `.env`, configs Caddy
+- [ ] P.3 Etiqueta o snapshot com o motivo (`reorg-2026-07-08-14h`, `deploy-hermes-v3`)
+- [ ] P.4 Retenção inteligente: últimas 20 mudanças + 1 por dia da semana + 1 por mês
+- [ ] P.5 Botão "↩️ rollback" no Jarvis: lista snapshots com preview do diff
+- [ ] P.6 Rollback dispara healthcheck e só confirma se todos serviços subirem
+- [ ] P.7 Se healthcheck falhar → tenta próximo snapshot mais antigo automaticamente
+- [ ] P.8 Notifica Telegram antes/depois do rollback com placar
+
+---
+
+## FASE Q — 🧪 Modo Dry-Run Universal
+
+Nada é alterado até o Pivete confirmar.
+
+- [ ] Q.1 Todo robô (auditor, reconstrutor, faxineiro) tem flag `--dry-run` **default**
+- [ ] Q.2 Gera relatório de "o que faria" com diff colorido + estimativa de impacto
+- [ ] Q.3 Cada ação recebe ID único (`act_abc123`) pra aprovação individual ou em lote
+- [ ] Q.4 No Jarvis: lista de ações pendentes com checkbox `[✅ aprovar] [❌ rejeitar] [👁️ ver detalhe]`
+- [ ] Q.5 Aprovar em lote por categoria: "aprovar todos duplicados de confiança alta"
+- [ ] Q.6 Ações rejeitadas viram histórico (o robô não sugere de novo por 30 dias)
+- [ ] Q.7 Modo "auto-aprovar seguros" opcional: só ações de confiança >95% executam sozinhas
+
+---
+
+## FASE R — 🎛️ Jarvis Integrado — "Sets de Operação"
+
+Painel que junta auditor + reconstrutor + agendador num só lugar, salvando presets.
+
+- [ ] R.1 Conceito "Set": pacote nomeado de config (ex: Set "Faxina Semanal", Set "Deploy Seguro")
+- [ ] R.2 Cada Set guarda: alvo (pasta/serviço), robôs ativos, horário, thresholds, canal de alerta
+- [ ] R.3 Tudo salvo em UMA tabela `operation_sets` no Lovable Cloud (JSONB por Set)
+- [ ] R.4 UI: card por Set com botões `[▶️ rodar agora] [✏️ editar] [📅 agendar] [🗑️ excluir]`
+- [ ] R.5 Wizard leigo: 4 passos guiados pra criar Set novo (alvo → o que fazer → quando → como avisar)
+- [ ] R.6 Botões diretos no header do Jarvis: `[🏛️ Auditar] [🔧 Reconstruir] [📄 Relatório] [↩️ Rollback] [🚨 Pânico]`
+- [ ] R.7 Menu por setor mapeado (vem do Grafo Vivo): click → ações contextuais daquele setor
+- [ ] R.8 Histórico por Set: últimas 50 execuções com status, duração e diff
+- [ ] R.9 Compartilhar Set: exporta JSON pra reusar em outro projeto/VPS
+- [ ] R.10 Templates prontos: "Set Segurança", "Set Limpeza", "Set Deploy", "Set Backup"
+
+---
+
 ## 📌 Como usar este documento
 
 1. Este arquivo mora em `docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md` no repo.
 2. Não deletar nada. Só marcar `[x]` quando consolidar uma fase.
 3. Adicionar sub-itens conforme surgirem ideias — commit direto.
 4. Ao ativar uma fase, criar issue no GitHub linkando pra esta seção.
-5. Ordem sugerida de ataque: **F → G → A → E → C → B → L → D → J → K → H → I → M**
-   (primeiro segurança e backup, depois visibilidade, depois autonomia, depois lucro)
+5. Ordem sugerida de ataque: **F → G → P → Q → A → N → O → E → C → R → B → L → D → J → K → H → I → M**
+   (segurança → backup → reversibilidade → dry-run → auditoria → relatório → agenda → visibilidade → painel → reconstrução → autonomia → lucro)
 
 ---
 
