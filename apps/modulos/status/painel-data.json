@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T09:06:08.063Z",
-  "updatedAtBR": "08/07/2026, 06:06:08 BRT",
+  "updatedAt": "2026-07-08T09:14:38.040Z",
+  "updatedAtBR": "08/07/2026, 06:14:38 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs: adiciona fases N-R (relatório PDF/HTML, agendador, snapshot+rollback, dry-run, Jarvis com Sets)",
+    "lastCommit": "docs: expande pacotão — M.16-M.30, Fases S/T/U (hacker+tokens+enxame) e Relatório Estratégico 2026",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T09:14:38.040Z",
+      "titulo": "Push na main · 16d7bf382a6fd4dc02dd879d4e70ce1d7fc70c91",
+      "detalhe": "docs: expande pacotão — M.16-M.30, Fases S/T/U (hacker+tokens+enxame) e Relatório Estratégico 2026",
+      "area": "Repositório",
+      "sha": "16d7bf3",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-08T09:06:08.063Z",
       "titulo": "Push na main · 89e20ea2280e1704417131ee73fba912c6e56821",
       "detalhe": "docs: adiciona fases N-R (relatório PDF/HTML, agendador, snapshot+rollback, dry-run, Jarvis com Sets)",
@@ -984,13 +992,6 @@
       "time": "2026-07-06T20:18:23.404Z",
       "title": "🟢 Hermes notify v2 online — carrega TELEGRAM_BOT_TOKEN de `secrets/telegram-alerts.env`. Card de teste enviado com sucesso. Diagnóstico MCP: URL correta é `https://mcp.centralldark.com/mcp` (não `/sse`), OAuth 2.1 com DCR já ativo (107 tools).",
       "area": "HERMES-CORE + MCP",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-06T20:00:04.641Z",
-      "title": "🛠️ Hermes: `utils/notify.mjs` recriado — erro \"notify falhou\" resolvido (fallback silencioso + Telegram opcional via TELEGRAM_BOT_TOKEN).",
-      "area": "HERMES-CORE",
       "status": "feito",
       "detail": ""
     }
@@ -1407,6 +1408,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T09:14:38.040Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 16d7bf382a6fd4dc02dd879d4e70ce1d7fc70c91 (16d7bf3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T09:06:08.063Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 89e20ea2280e1704417131ee73fba912c6e56821 (89e20ea)",
@@ -1746,13 +1754,6 @@
       "time": "2026-07-06T15:25:33.122Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 6823041117e2ea8c1d831f00d01dce26c3e4a312 (6823041)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T15:24:47.632Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 86f742f44bb072479831765b617de08d18d87925 (86f742f)",
       "area": "Repositório",
       "status": "sucesso"
     }
