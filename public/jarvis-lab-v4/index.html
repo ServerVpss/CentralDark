@@ -96,14 +96,12 @@ addEventListener('resize',()=>{
 }
 
 // ---------- Data ----------
-const ENDPOINTS=[
-  'https://grafo.centralldark.com/api/graph',
-  'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/grafo-proxy'
-];
+const GRAFO_ENDPOINT='https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/grafo-proxy';
 async function loadGraph(){
-  for(const u of ENDPOINTS){
-    try{ const r=await fetch(u); if(r.ok) return await r.json(); }catch(e){}
-  }
+  try{
+    const r=await fetch(GRAFO_ENDPOINT,{cache:'no-store',headers:{'accept':'application/json'}});
+    if(r.ok) return await r.json();
+  }catch(e){}
   // fallback sintético elegante
   const nodes=[], links=[];
   for(let i=0;i<400;i++) nodes.push({id:'n'+i});

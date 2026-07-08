@@ -135,11 +135,13 @@ scene.add(new THREE.AmbientLight(0x10b981, 0.35));
 const dl = new THREE.DirectionalLight(0x34d399, 1.2); dl.position.set(50,80,50); scene.add(dl);
 
 // ── Dados (mock) ───────────────────────────────────────────
+const GRAFO_ENDPOINT = 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/grafo-proxy';
 async function loadData(){
   try {
-    let r;
-    try { r = await fetch('https://grafo.centralldark.com/api/graph', {mode:'cors'}); if(!r.ok) throw 0; }
-    catch { r = await fetch('https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/grafo-proxy'); }
+    const r = await fetch(GRAFO_ENDPOINT, {
+      cache: 'no-store',
+      headers: { 'accept': 'application/json' }
+    });
     const ct = r.headers.get('content-type') || '';
     if (r.ok && ct.includes('application/json')) return await r.json();
     console.warn('[lab-v2] API devolveu', r.status, ct, '→ usando mock');
@@ -152,7 +154,9 @@ async function loadData(){
   return { nodes, links };
 }
 const data = await loadData();
-document.getElementById('nodes').textContent = data.nodes.length;
+const graphNodes = data.nodes || [];
+const graphLinks = data.links || data.edges || [];
+document.getElementById('nodes').textContent = graphNodes.length;
 
 // ── Instancing dos nós ─────────────────────────────────────
 const nodeGeo = new THREE.SphereGeometry(1.2, 12, 12);
@@ -160,13 +164,13 @@ const nodeMat = new THREE.MeshStandardMaterial({
   color: 0x10b981, emissive: 0x10b981, emissiveIntensity: 1.2,
   metalness: 0.7, roughness: 0.25
 });
-const inst = new THREE.InstancedMesh(nodeGeo, nodeMat, data.nodes.length);
+const inst = new THREE.InstancedMesh(nodeGeo, nodeMat, graphNodes.length);
 inst.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 scene.add(inst);
 
 // links (linhas)
 const linkGeo = new THREE.BufferGeometry();
-const linkPos = new Float32Array(data.links.length*2*3);
+const linkPos = new Float32Array(graphLinks.length*2*3);
 linkGeo.setAttribute('position', new THREE.BufferAttribute(linkPos, 3));
 const linkMat = new THREE.LineBasicMaterial({ color: 0x10b981, transparent:true, opacity:0.25 });
 scene.add(new THREE.LineSegments(linkGeo, linkMat));
@@ -174,7 +178,8 @@ scene.add(new THREE.LineSegments(linkGeo, linkMat));
 // ── Worker de layout ───────────────────────────────────────
 const workerBlob = new Blob([document.getElementById('force-worker').textContent], {type:'application/javascript'});
 const worker = new Worker(URL.createObjectURL(workerBlob));
-worker.postMessage({type:'init', nodes:data.nodes, links:data.links});
+const workerLinks = graphLinks.map(l=>({source:l.source?.id ?? l.source ?? l.from, target:l.target?.id ?? l.target ?? l.to}));
+worker.postMessage({type:'init', nodes:graphNodes, links:workerLinks});
 
 const dummy = new THREE.Object3D();
 let latestPositions = null;
@@ -195,17 +200,17 @@ function animate(){
   controls.update();
 
   if (latestPositions) {
-    for (let i=0;i<data.nodes.length;i++){
+    for (let i=0;i<graphNodes.length;i++){
       dummy.position.set(latestPositions[i*3], latestPositions[i*3+1], latestPositions[i*3+2]);
       dummy.updateMatrix();
       inst.setMatrixAt(i, dummy.matrix);
     }
     inst.instanceMatrix.needsUpdate = true;
 
-    for (let i=0;i<data.links.length;i++){
-      const l = data.links[i];
-      const si = data.nodes.findIndex(n=>n.id===l.source);
-      const ti = data.nodes.findIndex(n=>n.id===l.target);
+    for (let i=0;i<workerLinks.length;i++){
+      const l = workerLinks[i];
+      const si = graphNodes.findIndex(n=>n.id===l.source);
+      const ti = graphNodes.findIndex(n=>n.id===l.target);
       if (si<0||ti<0) continue;
       linkPos[i*6]=latestPositions[si*3]; linkPos[i*6+1]=latestPositions[si*3+1]; linkPos[i*6+2]=latestPositions[si*3+2];
       linkPos[i*6+3]=latestPositions[ti*3]; linkPos[i*6+4]=latestPositions[ti*3+1]; linkPos[i*6+5]=latestPositions[ti*3+2];

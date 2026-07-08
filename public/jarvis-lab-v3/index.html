@@ -39,7 +39,11 @@
       engine = new BABYLON.WebGPUEngine(canvas, { antialias:true });
       await engine.initAsync();
       engineLabel = 'WebGPU';
-    } catch(e){ console.warn('WebGPU falhou, fallback WebGL', e); }
+    } catch(e){
+      console.warn('WebGPU falhou, fallback WebGL', e);
+      try { engine?.dispose?.(); } catch(_) {}
+      engine = null;
+    }
   }
   if (!engine) engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer:false, stencil:false });
   document.getElementById('engine').textContent = engineLabel;
@@ -95,11 +99,13 @@
   await starMesh.buildMeshAsync();
 
   // Dados
+  const GRAFO_ENDPOINT = 'https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/grafo-proxy';
   async function loadData(){
     try {
-      let r;
-      try { r = await fetch('https://grafo.centralldark.com/api/graph', {mode:'cors'}); if(!r.ok) throw 0; }
-      catch { r = await fetch('https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/grafo-proxy'); }
+      const r = await fetch(GRAFO_ENDPOINT, {
+        cache: 'no-store',
+        headers: { 'accept': 'application/json' }
+      });
       const ct = r.headers.get('content-type') || '';
       if (r.ok && ct.includes('application/json')) return await r.json();
       console.warn('[lab-v3] API devolveu', r.status, ct, '→ usando mock');
@@ -111,7 +117,9 @@
     return { nodes, links };
   }
   const data = await loadData();
-  document.getElementById('nodes').textContent = data.nodes.length;
+  const graphNodes = data.nodes || [];
+  const graphLinks = data.links || data.edges || [];
+  document.getElementById('nodes').textContent = graphNodes.length;
 
   // Nó base + PBR
   const nodeBase = BABYLON.MeshBuilder.CreateSphere('node', { diameter: 2.4, segments: 12 }, scene);
@@ -124,8 +132,8 @@
   nodeBase.material = pbr;
 
   // Posições iniciais + Thin Instances (1 draw call pra tudo)
-  const N = data.nodes.length;
-  const nodes = data.nodes.map(()=>({
+  const N = graphNodes.length;
+  const nodes = graphNodes.map(()=>({
     x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, z:(Math.random()-0.5)*200,
     vx:0, vy:0, vz:0
   }));
@@ -137,9 +145,11 @@
   nodeBase.thinInstanceSetBuffer('matrix', matrices, 16, false);
 
   // Links (LineSystem)
-  const linkPairs = data.links.map(l => {
-    const s = data.nodes.findIndex(n=>n.id===l.source);
-    const t = data.nodes.findIndex(n=>n.id===l.target);
+  const linkPairs = graphLinks.map(l => {
+    const source = l.source?.id ?? l.source ?? l.from;
+    const target = l.target?.id ?? l.target ?? l.to;
+    const s = graphNodes.findIndex(n=>n.id===source);
+    const t = graphNodes.findIndex(n=>n.id===target);
     return [s, t];
   }).filter(([s,t]) => s>=0 && t>=0);
   const lineArr = linkPairs.map(([s,t]) => [
