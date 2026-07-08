@@ -1,54 +1,80 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><title>Lab Jarvis — Comparador</title>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Lab Jarvis — Comparador dos 4</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-body{margin:0;background:#020806;color:#d1fae5;font-family:ui-monospace,Menlo,monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;}
-.wrap{max-width:900px;text-align:center;}
+body{margin:0;background:#020806;color:#d1fae5;font-family:ui-monospace,Menlo,monospace;min-height:100vh;padding:40px 20px;}
+.wrap{max-width:1400px;margin:0 auto;text-align:center;}
 h1{font-size:32px;letter-spacing:.3em;color:#10b981;text-shadow:0 0 20px #10b981;margin-bottom:8px;}
-p{color:#6ee7b7;letter-spacing:.1em;margin-bottom:40px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.card{border:1px solid #10b98155;background:#052e2b88;padding:30px;border-radius:16px;
+p.sub{color:#6ee7b7;letter-spacing:.1em;margin-bottom:40px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+.card{border:1px solid #10b98155;background:#052e2b88;padding:24px;border-radius:16px;
   backdrop-filter:blur(8px);transition:all .2s;text-decoration:none;color:#d1fae5;
-  box-shadow:0 0 30px #10b98122;}
+  box-shadow:0 0 30px #10b98122;display:flex;flex-direction:column;text-align:left;}
 .card:hover{transform:translateY(-4px);border-color:#10b981;box-shadow:0 0 40px #10b98166;}
-.card h2{color:#fff;letter-spacing:.2em;margin-bottom:10px;}
-.card .tag{display:inline-block;padding:4px 10px;border-radius:99px;font-size:11px;
-  background:#10b98122;border:1px solid #10b98155;margin-bottom:12px;letter-spacing:.15em;}
-.card ul{text-align:left;color:#6ee7b7;font-size:13px;line-height:1.7;list-style:none;padding:0;}
+.card h2{color:#fff;letter-spacing:.15em;margin:0 0 8px;font-size:18px;}
+.card .tag{display:inline-block;padding:3px 9px;border-radius:99px;font-size:10px;
+  background:#10b98122;border:1px solid #10b98155;margin-bottom:12px;letter-spacing:.15em;align-self:flex-start;}
+.card .fps{color:#10b981;font-size:11px;letter-spacing:.15em;margin-bottom:12px;}
+.card ul{color:#6ee7b7;font-size:12px;line-height:1.6;list-style:none;padding:0;margin:0;flex:1;}
 .card li::before{content:'▸ ';color:#10b981;}
-@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.foot{margin-top:40px;font-size:11px;opacity:.5;}
 </style></head>
 <body><div class="wrap">
 <h1>L A B · J A R V I S</h1>
-<p>Comparador visual — original VS versão turbinada</p>
+<p class="sub">Comparador dos 4 laboratórios gráficos — escolha o vencedor</p>
+
 <div class="grid">
   <a class="card" href="/jarvis-lab/original.html">
     <span class="tag">ORIGINAL · VPS</span>
     <h2>Grafo Atual</h2>
+    <div class="fps">FPS estimado: ~30-45</div>
     <ul>
-      <li>Cópia exata do grafo.centralldark.com</li>
+      <li>Cópia do grafo.centralldark.com</li>
       <li>Three.js r160 + 3d-force-graph</li>
       <li>HUD ciano padrão</li>
-      <li>Sem bloom / sem starfield</li>
-      <li>Consome /api/live da VPS</li>
+      <li>Sem bloom, sem starfield</li>
     </ul>
   </a>
+
   <a class="card" href="/jarvis-lab/index.html">
-    <span class="tag">V2 · JARVIS MODE</span>
-    <h2>Reforma Turbinada</h2>
+    <span class="tag">V1 · TURBO</span>
+    <h2>Jarvis Mode</h2>
+    <div class="fps">FPS estimado: ~45-60</div>
     <ul>
-      <li>Paleta ESMERALDA oficial</li>
-      <li>UnrealBloomPass (efeito Iron Man)</li>
-      <li>Starfield 3000 estrelas + nebulosa</li>
-      <li>Fog cinematográfico + halos rotativos</li>
-      <li>Menu radial no right-click</li>
-      <li>Boot sequence + scanlines CRT</li>
-      <li>Modo tempestade auto (3+ down)</li>
-      <li>Tour cinematográfico</li>
-      <li>Áudio Web Audio API (bipes)</li>
-      <li>Mock data se offline</li>
-      <li>Atalhos: F R H S T /</li>
+      <li>Paleta esmeralda oficial</li>
+      <li>UnrealBloomPass + starfield</li>
+      <li>Menu radial + tour cinematográfico</li>
+      <li>Modo tempestade automático</li>
+      <li>Áudio Web Audio API</li>
+    </ul>
+  </a>
+
+  <a class="card" href="/jarvis-lab-v2/index.html">
+    <span class="tag">V2 · WEBGPU</span>
+    <h2>Three.js WebGPU</h2>
+    <div class="fps">FPS estimado: ~90-120</div>
+    <ul>
+      <li>Renderer WebGPU (fallback WebGL)</li>
+      <li>GPU instancing — 1 draw call</li>
+      <li>Layout em Web Worker (não trava tela)</li>
+      <li>Bloom pmndrs otimizado</li>
+      <li>Melhor equilíbrio esforço × ganho</li>
+    </ul>
+  </a>
+
+  <a class="card" href="/jarvis-lab-v3/index.html">
+    <span class="tag">V3 · BABYLON</span>
+    <h2>Babylon.js PBR</h2>
+    <div class="fps">FPS estimado: ~100-140</div>
+    <ul>
+      <li>WebGPU nativo (fallback WebGL)</li>
+      <li>PBR real — cromado esmeralda</li>
+      <li>Glow Layer nativo (efeito Jarvis)</li>
+      <li>Thin Instances — escala 10k+ nós</li>
+      <li>Visual cinema, curva de learning maior</li>
     </ul>
   </a>
 </div>
-<p style="margin-top:40px;font-size:11px;opacity:.5;">Esta pasta está gitignorada — nada vai pro repositório.</p>
+
+<p class="foot">Todos rodam com dados mockados se a VPS estiver offline. Nada disso vai pro repositório principal — só arquivos estáticos servidos.</p>
 </div></body></html>
