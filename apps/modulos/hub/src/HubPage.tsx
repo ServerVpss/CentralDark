@@ -6,6 +6,7 @@ import { PoliciesTab } from './components/policies/PoliciesTab';
 import { AuditTab } from './components/audit/AuditTab';
 import { ConnectorsTab } from './components/connectors/ConnectorsTab';
 import { AbacusTab } from './components/abacus/AbacusTab';
+import { HermesTab } from './components/hermes/HermesTab';
 import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles } from 'lucide-react';
 
@@ -35,8 +36,9 @@ export default function HubPage() {
 
       <main className="container mx-auto p-6 space-y-6">
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 h-auto sm:h-11 p-1 card-premium gap-1">
+          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-7 h-auto sm:h-11 p-1 card-premium gap-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Dashboard</TabsTrigger>
+            <TabsTrigger value="hermes" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧠 Hermes</TabsTrigger>
             <TabsTrigger value="catalog" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Catálogo</TabsTrigger>
             <TabsTrigger value="policies" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Políticas</TabsTrigger>
             <TabsTrigger value="connectors" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Conectores</TabsTrigger>
@@ -45,6 +47,7 @@ export default function HubPage() {
           </TabsList>
 
           <TabsContent value="dashboard"><DashboardTab /></TabsContent>
+          <TabsContent value="hermes"><HermesTab /></TabsContent>
           <TabsContent value="catalog"><CatalogTab /></TabsContent>
           <TabsContent value="policies">
             <RoleGuard requiredRole="admin"><PoliciesTab /></RoleGuard>
