@@ -373,9 +373,29 @@ export function OAuthConnectors() {
         open={!!dialogProvider}
         providerName={dialogProvider?.display_name ?? ''}
         providerColor={dialogProvider?.color ?? '#98C93C'}
+        helpText={dialogProvider ? API_KEY_HELP[dialogProvider.id]?.text : undefined}
+        helpUrl={dialogProvider ? API_KEY_HELP[dialogProvider.id]?.url : undefined}
         onClose={() => setDialogProvider(null)}
         onConfirm={(key) => dialogProvider ? saveApiKey(dialogProvider, key) : Promise.resolve()}
       />
+
+      <ChooseAuthDialog
+        open={!!chooseProvider}
+        providerName={chooseProvider?.display_name ?? ''}
+        providerColor={chooseProvider?.color ?? '#98C93C'}
+        onClose={() => setChooseProvider(null)}
+        onPickApiKey={() => {
+          const p = chooseProvider;
+          setChooseProvider(null);
+          if (p) setDialogProvider(p);
+        }}
+        onPickOAuth={() => {
+          const p = chooseProvider;
+          setChooseProvider(null);
+          if (p) startOAuth(p);
+        }}
+      />
+
     </>
   );
 }
