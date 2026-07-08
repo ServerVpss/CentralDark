@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 350 | 0 | 0 | 350 | 0 |
+| aprendizados | 351 | 0 | 0 | 351 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **350**
+- 🟥 Faltando no Notion: **351**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -398,4 +398,5 @@
 - 316. Inventário IA + varredura UI read-only — padrão e artefatos
 - 317. Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus)
 - 318. Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian
+- 319. Funcionou → Consolida → Sela (regra de ouro)
 </details>
