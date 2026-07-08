@@ -101,3 +101,8 @@ apps/modulos/elite-gateway/config/
 .env
 .env.bak-*
 contas/
+
+# elite-recon-ia
+apps/modulos/elite-recon-ia/.env
+apps/modulos/elite-recon-ia/node_modules/
+apps/modulos/elite-recon-ia/logs/

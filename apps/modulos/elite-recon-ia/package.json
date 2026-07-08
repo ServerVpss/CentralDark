@@ -1,0 +1,14 @@
+{
+  "name": "elite-recon-ia",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Varredura paralela Gemini 2.5 Pro+Flash com rate-limit, backoff 429 e health-check do arsenal",
+  "scripts": {
+    "recon": "node src/recon.mjs",
+    "health": "node src/health-check.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "undici": "^6.19.8"
+  }
+}
