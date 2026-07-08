@@ -5,6 +5,7 @@ import { CatalogTab } from './components/catalog/CatalogTab';
 import { PoliciesTab } from './components/policies/PoliciesTab';
 import { AuditTab } from './components/audit/AuditTab';
 import { ConnectorsTab } from './components/connectors/ConnectorsTab';
+import { AbacusTab } from './components/abacus/AbacusTab';
 import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles } from 'lucide-react';
 
@@ -34,11 +35,12 @@ export default function HubPage() {
 
       <main className="container mx-auto p-6 space-y-6">
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 h-11 p-1 card-premium">
+          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 h-auto sm:h-11 p-1 card-premium gap-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Dashboard</TabsTrigger>
             <TabsTrigger value="catalog" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Catálogo</TabsTrigger>
             <TabsTrigger value="policies" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Políticas</TabsTrigger>
             <TabsTrigger value="connectors" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Conectores</TabsTrigger>
+            <TabsTrigger value="abacus" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Abacus</TabsTrigger>
             <TabsTrigger value="audit" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Auditoria</TabsTrigger>
           </TabsList>
 
@@ -48,6 +50,7 @@ export default function HubPage() {
             <RoleGuard requiredRole="admin"><PoliciesTab /></RoleGuard>
           </TabsContent>
           <TabsContent value="connectors"><ConnectorsTab /></TabsContent>
+          <TabsContent value="abacus"><AbacusTab /></TabsContent>
           <TabsContent value="audit"><AuditTab /></TabsContent>
         </Tabs>
       </main>
