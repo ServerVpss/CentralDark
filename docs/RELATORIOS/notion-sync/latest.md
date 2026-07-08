@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-08T15:33:54.840Z
+# 🧠 Notion Sync — 2026-07-08T15:58:44.676Z
 
-- **Commit fonte:** `e9fee893e35ffb34c5499f336ac93f56ee39f295`
+- **Commit fonte:** `f6c3e13d123897fd13a5fdf9b80034814c671aab`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 353 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 354 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 319 | 1 | 318 | 0 | 0 |
+| aprendizados | 320 | 1 | 319 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -375,7 +375,8 @@
 | aprendizados | atualizado | #314 — WebhookDeploy fora do PM2 bloqueia card novo do status |
 | aprendizados | atualizado | #315 — WebhookDeploy pode precisar esperar logs antes de validar card público |
 | aprendizados | atualizado | #316 — Inventário IA + varredura UI read-only — padrão e artefatos |
-| aprendizados | criado | #317 — Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus) |
+| aprendizados | atualizado | #317 — Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus) |
+| aprendizados | criado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
