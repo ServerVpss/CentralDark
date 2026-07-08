@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T19:54:05.119Z",
-  "updatedAtBR": "08/07/2026, 16:54:05 BRT",
+  "updatedAt": "2026-07-08T20:02:39.697Z",
+  "updatedAtBR": "08/07/2026, 17:02:39 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "lembranca: Padrão do Pivete: funcionou → consolida → sela",
+    "lastCommit": "aprendizado(#319): Funcionou → Consolida → Sela (regra de ouro)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T20:02:39.697Z",
+      "titulo": "Push na main · db2d6a26bd102951819db744b28808defbae1b22",
+      "detalhe": "aprendizado(#319): Funcionou → Consolida → Sela (regra de ouro)",
+      "area": "Repositório",
+      "sha": "db2d6a2",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-08T19:54:05.119Z",
       "titulo": "Push na main · f50022c1b4d7c4c00f445e5d83481495c89593bf",
       "detalhe": "lembranca: Padrão do Pivete: funcionou → consolida → sela",
@@ -986,14 +994,6 @@
       "detalhe": "feat(status): adicionar botao de protocolos CentralDark",
       "area": "Repositório",
       "sha": "bd2fba9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-07T16:34:38.760Z",
-      "titulo": "Push na main · 17be6d55f5d07360dab0c621c736dfcf089d0981",
-      "detalhe": "docs(consciencia): alinhar prompt universal ao ciclo oficial",
-      "area": "Repositório",
-      "sha": "17be6d5",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T20:02:39.697Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · db2d6a26bd102951819db744b28808defbae1b22 (db2d6a2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T19:54:05.119Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f50022c1b4d7c4c00f445e5d83481495c89593bf (f50022c)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-07T16:43:18.977Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · bd2fba9944cbb7b8c8f200e15c7f3fb759635e16 (bd2fba9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-07T16:34:38.760Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 17be6d55f5d07360dab0c621c736dfcf089d0981 (17be6d5)",
       "area": "Repositório",
       "status": "sucesso"
     }
