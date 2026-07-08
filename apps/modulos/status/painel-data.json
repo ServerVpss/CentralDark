@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T13:25:22.319Z",
-  "updatedAtBR": "08/07/2026, 10:25:22 BRT",
+  "updatedAt": "2026-07-08T13:32:58.818Z",
+  "updatedAtBR": "08/07/2026, 10:32:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Changes",
+    "lastCommit": "Travou regra VPS + GitHub",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T13:32:58.818Z",
+      "titulo": "Push na main · 47e35654e43b048d3abcac0ddc31a95884f515cf",
+      "detalhe": "Travou regra VPS + GitHub",
+      "area": "Repositório",
+      "sha": "47e3565",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-08T13:25:22.319Z",
       "titulo": "Push na main · 0d90373096db5c50bac67bfdaff77a6e23b5d073",
       "detalhe": "Changes",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#311): Não pushar main local ahead dezenas por commits automáticos de painel",
       "area": "Repositório",
       "sha": "74b32bc",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-07T12:18:24.648Z",
-      "titulo": "Push na main · c63f3b1069ff9eef74046766608ef9f70a60b53f",
-      "detalhe": "docs(pendencias): nova #38 Sanear main local divergente com commits automáticos de painel",
-      "area": "Repositório",
-      "sha": "c63f3b1",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T13:32:58.818Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 47e35654e43b048d3abcac0ddc31a95884f515cf (47e3565)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T13:25:22.319Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 0d90373096db5c50bac67bfdaff77a6e23b5d073 (0d90373)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-07T12:27:49.037Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 74b32bc700864c12da21c4be767741c2baa2ee61 (74b32bc)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-07T12:18:24.648Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c63f3b1069ff9eef74046766608ef9f70a60b53f (c63f3b1)",
       "area": "Repositório",
       "status": "sucesso"
     }
