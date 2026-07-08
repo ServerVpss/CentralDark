@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-08T08:29:11.245Z
+# 🧠 Notion Sync — 2026-07-08T08:56:58.204Z
 
-- **Commit fonte:** `9ffd72a78eef17cac4322844e8fd9ce59feb8300`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `8836e16d55a680dcb60954dd34bfd5a3b0b29c89`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 353 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 353 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 318 | 0 | 318 | 0 | 0 |
-| estrutura | 458 | 0 | 0 | 0 | 458 |
+| estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
 
@@ -667,6 +667,7 @@
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/README.md |
+| estrutura | erro | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
 | estrutura | erro | docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
 | estrutura | erro | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
