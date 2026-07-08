@@ -296,6 +296,114 @@ async function proxyChatCompletions(req: Request, lovableKey: string) {
   return json(data);
 }
 
+// -------------------- OpenAI Responses API (usado pelo Codex CLI 0.14+) --------------------
+
+// Converte o campo `input` do Responses API pra array `messages` do chat/completions.
+function responsesInputToMessages(input: unknown, instructions?: string): Array<{ role: string; content: string }> {
+  const msgs: Array<{ role: string; content: string }> = [];
+  if (typeof instructions === "string" && instructions.trim()) {
+    msgs.push({ role: "system", content: instructions });
+  }
+  if (typeof input === "string") {
+    msgs.push({ role: "user", content: input });
+    return msgs;
+  }
+  if (Array.isArray(input)) {
+    for (const item of input) {
+      if (!item || typeof item !== "object") continue;
+      const role = (item as any).role ?? "user";
+      const raw = (item as any).content;
+      let text = "";
+      if (typeof raw === "string") {
+        text = raw;
+      } else if (Array.isArray(raw)) {
+        for (const part of raw) {
+          if (part && typeof part === "object") {
+            if (typeof (part as any).text === "string") text += (part as any).text;
+            else if (typeof (part as any).input_text === "string") text += (part as any).input_text;
+          } else if (typeof part === "string") {
+            text += part;
+          }
+        }
+      }
+      msgs.push({ role, content: text });
+    }
+  }
+  return msgs;
+}
+
+async function proxyResponses(req: Request, lovableKey: string) {
+  const body = await req.json().catch(() => ({}));
+  const model = normalizeModel(body?.model);
+  const stream = body?.stream === true;
+  const messages = responsesInputToMessages(body?.input, body?.instructions);
+
+  const chatPayload: Record<string, unknown> = { model, messages, stream };
+  if (typeof body?.temperature === "number") chatPayload.temperature = body.temperature;
+  if (typeof body?.max_output_tokens === "number") chatPayload.max_tokens = body.max_output_tokens;
+  if (Array.isArray(body?.tools)) chatPayload.tools = body.tools;
+  if (body?.tool_choice) chatPayload.tool_choice = body.tool_choice;
+
+  const upstream = await fetch(`${GATEWAY_BASE}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${lovableKey}`,
+    },
+    body: JSON.stringify(chatPayload),
+  });
+
+  if (upstream.status === 429) return json({ error: "rate_limited" }, 429);
+  if (upstream.status === 402) return json({ error: "sem_creditos" }, 402);
+  if (!upstream.ok) {
+    const t = await upstream.text();
+    return json({ error: "gateway_error", status: upstream.status, detail: t.slice(0, 500) }, 502);
+  }
+
+  // Stream: repassa SSE cru — Codex faz fallback pra HTTPS não-stream se preferir.
+  if (stream && upstream.body) {
+    return new Response(upstream.body, {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+      },
+    });
+  }
+
+  // Não-stream: traduz chat/completions pro formato Responses API.
+  const data = await upstream.json();
+  const choice = data?.choices?.[0] ?? {};
+  const msg = choice?.message ?? {};
+  const text = typeof msg?.content === "string" ? msg.content : "";
+  const now = Math.floor(Date.now() / 1000);
+  const responsesShape = {
+    id: data?.id ?? `resp_${crypto.randomUUID()}`,
+    object: "response",
+    created_at: data?.created ?? now,
+    status: "completed",
+    model: data?.model ?? model,
+    output: [
+      {
+        type: "message",
+        id: `msg_${crypto.randomUUID()}`,
+        role: "assistant",
+        status: "completed",
+        content: [{ type: "output_text", text, annotations: [] }],
+      },
+    ],
+    output_text: text,
+    usage: {
+      input_tokens: data?.usage?.prompt_tokens ?? 0,
+      output_tokens: data?.usage?.completion_tokens ?? 0,
+      total_tokens: data?.usage?.total_tokens ?? 0,
+    },
+  };
+  return json(responsesShape);
+}
+
 // -------------------- Legado darkai --------------------
 
 async function legacyDarkai(req: Request, lovableKey: string) {
