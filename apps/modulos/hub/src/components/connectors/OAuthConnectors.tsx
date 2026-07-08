@@ -282,6 +282,12 @@ export function OAuthConnectors() {
           <p className="text-xs text-muted-foreground border-l-2 border-primary/50 pl-2 mt-2">
             🛠️ Backend: Supabase HUB (VPS) + Edge Functions <code className="font-mono text-primary">get-token</code> / <code className="font-mono text-primary">keys/store</code>
           </p>
+          {tableMissing && (
+            <p className="text-[11px] text-muted-foreground/80 border-l-2 border-muted-foreground/40 pl-2 italic">
+              ℹ️ modo dev: tabela <code className="font-mono">oauth_connections</code> ainda não criada no HUB — as conexões salvas não aparecem até a migration rodar.
+            </p>
+          )}
+
         </CardHeader>
 
         <CardContent>
