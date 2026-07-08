@@ -1,0 +1,13 @@
+# Dados sensíveis e artefatos gerados pelo condefonte-watcher
+LOVABLE_TOKEN/
+memory_dumps/
+logs/
+*.log
+*.bak.*
+*.tmp
+extraction.out
+state_v2.json
+watcher_v35_state.json
+trajectory_v2_raw.jsonl
+decisions.jsonl
+reasoning_chains.jsonl
