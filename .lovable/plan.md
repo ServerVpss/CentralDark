@@ -1,52 +1,119 @@
-# Plugar Codex CLI na bridge oficial (`bridge.centralldark.com`)
+# Exército /swarmS — 20 agentes em paralelo
 
-## O que muda em relação à tentativa anterior
+## O que vai ser feito
 
-Já existe uma bridge oficial rodando em `https://bridge.centralldark.com/v1` com a chave correta (`cd-webui-…`). Não precisa gerar chave nova, nem rotacionar secret, nem apontar direto pra edge do Supabase. É só configurar o Codex pra falar com essa bridge.
+Dar vida ao comando `swarmS` já instalado, criando 20 pastas de agente, cada uma com um `run.sh` que chama o DarkAI com um prompt específico do setor. Assim, quando você rodar `swarmS "sua tarefa"`, 20 IAs disparam ao mesmo tempo, cada uma olhando pela ótica dela.
 
-## Passos
+## Os 20 setores do Exército
 
-1. **Regravar `/etc/centraldark/codex.env` na VPS** com a URL e chave certas:
-   ```
-   OPENAI_BASE_URL=https://bridge.centralldark.com/v1
-   OPENAI_API_KEY=cd-webui-cb96bd32f318a9020553aa12f26d95bca2275f8d687c0bf3
-   OPENAI_MODEL=openai/gpt-5
-   ```
-   Permissão `chmod 600`, dono root.
+Divididos em 4 pelotões:
 
-2. **Teste 1 — curl direto na bridge** pra provar que auth + rota funcionam antes de envolver o Codex:
-   ```
-   curl -sS -X POST https://bridge.centralldark.com/v1/chat/completions \
-     -H "Authorization: Bearer $OPENAI_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"model":"openai/gpt-5","messages":[{"role":"user","content":"vivo"}]}'
-   ```
-   Espera-se resposta JSON válida. Se der `chave_invalida`, paro aqui e reporto.
+**Infra e Deploy (5)**
+1. `docker` — Compose, containers, healthchecks, portas
+2. `caddy` — Reverse proxy, TLS, headers de segurança
+3. `pm2` — Processos vivos na VPS, restart policy, logs
+4. `deploy` — GitHub Actions, webhook, sync 4-Point
+5. `backup` — Volumes, snapshots, restore
 
-3. **Teste 2 — Codex CLI não-interativo** com sintaxe correta (o `codex exec` do 0.141 lê stdin quando o prompt vem posicional; passar via stdin resolve):
-   ```
-   source /etc/centraldark/codex.env
-   echo "responda apenas: vivo" | codex exec -m "$OPENAI_MODEL"
-   ```
+**Código e Qualidade (5)**
+6. `frontend` — React, Vite, Tailwind, componentes
+7. `backend` — Edge functions, APIs, integrações
+8. `css-design` — Padrão esmeralda, tokens, temas
+9. `testes` — Vitest, Playwright, cobertura
+10. `code-review` — Big-O, SOLID, code smell
 
-4. **Atualizar a doc** `docs/CONSCIENCIA/DARKAI/CODEX-VIA-AI-PROXY.md`:
-   - Trocar a URL antiga (`kagejpghnwdfymddwxuf.functions.supabase.co/ai-proxy/v1`) pela bridge oficial (`bridge.centralldark.com/v1`).
-   - Registrar que a autenticação usa chave `cd-webui-…` já provisionada.
-   - Manter o bloco das 3 telas em `tmux` (só a URL muda).
+**Segurança e Dados (5)**
+11. `seguranca` — OWASP, secrets expostos, XSS, RLS
+12. `banco` — Supabase, migrations, políticas
+13. `auth` — OAuth, JWT, roles, permissões
+14. `secrets` — Cofre, rotação, .env
+15. `auditoria` — Logs, quem fez o quê
 
-5. **Não vou** (fora do escopo desta rodada):
-   - Subir 3 telas `tmux` automaticamente — deixo o comando pronto na doc pra você disparar quando quiser.
-   - Mexer em PM2, edge functions, ou rotacionar chave.
-   - Ecoar a chave em log, chat ou commit.
+**Conhecimento e Ops (5)**
+16. `docs` — README, CONSCIENCIA, PENDENCIAS
+17. `pendencias` — Ler, priorizar, sugerir próxima
+18. `mapeamento` — Mapa vivo, grafo, dependências
+19. `telegram` — Bots, webhooks, notificações
+20. `monitoramento` — Health, uptime, alerta
 
-## Prova de fim
+## Como cada agente vai funcionar
 
-- `curl` retornando 200 com corpo JSON da OpenAI-compat.
-- `codex exec` respondendo "vivo".
-- Doc atualizada refletindo a bridge oficial.
+Cada pasta terá 3 arquivos:
+
+- `run.sh` — recebe a tarefa via `$1`, chama o DarkAI passando o prompt do setor + a tarefa, salva resposta em `execution.log`
+- `prompt.md` — o prompt-mãe daquele setor (personalidade + escopo + formato de resposta)
+- `README.md` — o que aquele agente faz, quando invocar
+
+Modelo do `run.sh` (idêntico em todas as pastas, só muda o `SETOR`):
+
+```bash
+#!/bin/bash
+SETOR="docker"
+TAREFA="$*"
+PROMPT=$(cat prompt.md)
+curl -s -X POST https://darkai.centralldark.com/chat \
+  -H "Content-Type: application/json" \
+  -d "{\"setor\":\"$SETOR\",\"prompt\":$(jq -Rs . <<< "$PROMPT"),\"tarefa\":$(jq -Rs . <<< "$TAREFA")}" \
+  | jq -r '.resposta' > execution.log
+echo "[$SETOR] concluido em $(date -Iseconds)" >> execution.log
+```
+
+## Melhorias que vão junto no `swarmS`
+
+- Cabeçalho colorido no início mostrando qtd de agentes ativos
+- Contador em tempo real (5/20 concluídos, 12 rodando, 3 na fila)
+- Ao final, um `swarmS-resumo` opcional que consolida os 20 `execution.log` num placar único 🟢🟡🔴
+- Timeout individual de 90s por agente (evita agente travado segurar o enxame)
+- Flag `--dry-run` pra listar quem seria disparado sem executar
+
+## Cascata (multiplicação)
+
+Cada `prompt.md` vai incluir a instrução: "se achar 3+ pontos suspeitos no seu setor, chame outros agentes do enxame via `swarmS "sub-tarefa"` pra multiplicar o trabalho". Assim, um `swarmS "mapear tudo"` pode virar 20 → 40 → 60 agentes reais em cascata, como você pediu.
+
+## Estrutura final na VPS
+
+```text
+/root/CentralDark/apps/modulos/hub/
+├── agentes_ativos.txt         (20 nomes)
+├── swarmS-resumo               (script novo, consolida logs)
+├── docker/
+│   ├── run.sh
+│   ├── prompt.md
+│   └── README.md
+├── caddy/
+│   ├── run.sh
+│   ├── prompt.md
+│   └── README.md
+... (mais 18 pastas iguais)
+```
+
+E `/usr/local/bin/swarmS` recebe upgrade com timeout + contador + `--dry-run`.
 
 ## Detalhes técnicos
 
-- A bridge `bridge.centralldark.com` já expõe formato OpenAI-compat (`/v1/chat/completions`), então nenhum shim novo é necessário — ela é o shim.
-- Chave `cd-webui-…` fica **só** em `/etc/centraldark/codex.env` (600, root). Nunca em repo, nunca em log.
-- Se o teste 1 falhar com 401, a hipótese é que a bridge valide contra outra secret do lado dela (VPS/Caddy); nesse caso reporto sem tentar rotacionar nada.
+- Nenhuma pasta protegida da Seção 9 do CLAUDE.md será tocada — as 20 pastas são criadas dentro de `apps/modulos/hub/` (pasta do HUB, já protegida mas sem conteúdo de agente ainda).
+- `run.sh` usa `curl` + `jq` (já disponíveis na VPS).
+- Endpoint `https://darkai.centralldark.com/chat` é o que já existe e responde. Se o endpoint real for outro, ajusto os 20 `run.sh` de uma vez via loop.
+- Cada agente escreve APENAS na própria pasta (sem risco de conflito).
+- Salvo esse plano na sessão. Só executo depois da sua aprovação — nada roda na VPS antes.
+- Notificação Telegram (padrão Card Hermes) dispara ao final, listando quantos rodaram e link pros logs.
+
+## Como você vai usar depois
+
+```text
+# Enxame simples
+swarmS "auditar toda WebUI"
+
+# Ver quem tá vivo
+tail -f /root/CentralDark/apps/modulos/hub/*/execution.log
+
+# Placar consolidado ao final
+swarmS-resumo
+```
+
+## Tempo estimado
+
+- Criação das 20 pastas + arquivos: ~2 min
+- Upgrade do `swarmS` + `swarmS-resumo`: ~1 min
+- Teste com missão simples ("mapear WebUI"): ~1 min
+- **Total: ~5 min pra ter o Exército em pé.**
