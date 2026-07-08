@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-08T09:26:02.519Z
-- **Commit:** `2c0fabf782484676c7aa2d0faa3ec92799c5e263`
+- **Gerado:** 2026-07-08T15:33:59.524Z
+- **Commit:** `e9fee893e35ffb34c5499f336ac93f56ee39f295`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 348 | 0 | 0 | 348 | 0 |
+| aprendizados | 349 | 0 | 0 | 349 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **348**
+- 🟥 Faltando no Notion: **349**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -396,4 +396,5 @@
 - 314. WebhookDeploy fora do PM2 bloqueia card novo do status
 - 315. WebhookDeploy pode precisar esperar logs antes de validar card público
 - 316. Inventário IA + varredura UI read-only — padrão e artefatos
+- 317. Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus)
 </details>

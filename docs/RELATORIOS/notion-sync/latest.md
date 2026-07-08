@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-08T09:25:59.576Z
+# 🧠 Notion Sync — 2026-07-08T15:33:54.840Z
 
-- **Commit fonte:** `2c0fabf782484676c7aa2d0faa3ec92799c5e263`
+- **Commit fonte:** `e9fee893e35ffb34c5499f336ac93f56ee39f295`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 353 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 353 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 318 | 0 | 318 | 0 | 0 |
+| aprendizados | 319 | 1 | 318 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -375,6 +375,7 @@
 | aprendizados | atualizado | #314 — WebhookDeploy fora do PM2 bloqueia card novo do status |
 | aprendizados | atualizado | #315 — WebhookDeploy pode precisar esperar logs antes de validar card público |
 | aprendizados | atualizado | #316 — Inventário IA + varredura UI read-only — padrão e artefatos |
+| aprendizados | criado | #317 — Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
