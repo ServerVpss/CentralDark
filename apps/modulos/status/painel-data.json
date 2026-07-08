@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T08:57:17.539Z",
-  "updatedAtBR": "08/07/2026, 05:57:17 BRT",
+  "updatedAt": "2026-07-08T09:06:08.063Z",
+  "updatedAtBR": "08/07/2026, 06:06:08 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs: mega pacotão de desejos (fases A-M) — auditor, reconstrutor, Jarvis, segredos",
+    "lastCommit": "docs: adiciona fases N-R (relatório PDF/HTML, agendador, snapshot+rollback, dry-run, Jarvis com Sets)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T09:06:08.063Z",
+      "titulo": "Push na main · 89e20ea2280e1704417131ee73fba912c6e56821",
+      "detalhe": "docs: adiciona fases N-R (relatório PDF/HTML, agendador, snapshot+rollback, dry-run, Jarvis com Sets)",
+      "area": "Repositório",
+      "sha": "89e20ea",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-08T08:57:17.539Z",
       "titulo": "Push na main · 8836e16d55a680dcb60954dd34bfd5a3b0b29c89",
       "detalhe": "docs: mega pacotão de desejos (fases A-M) — auditor, reconstrutor, Jarvis, segredos",
@@ -985,14 +993,6 @@
       "area": "HERMES-CORE",
       "status": "feito",
       "detail": ""
-    },
-    {
-      "time": "2026-07-06T15:25:33.122Z",
-      "titulo": "Push na main · 6823041117e2ea8c1d831f00d01dce26c3e4a312",
-      "detalhe": "aprendizado(#303): HUD Grafo 3D — three.js UMD precisa ser carregado à parte",
-      "area": "Repositório",
-      "sha": "6823041",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1407,6 +1407,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T09:06:08.063Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 89e20ea2280e1704417131ee73fba912c6e56821 (89e20ea)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T08:57:17.539Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8836e16d55a680dcb60954dd34bfd5a3b0b29c89 (8836e16)",
@@ -1746,13 +1753,6 @@
       "time": "2026-07-06T15:24:47.632Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 86f742f44bb072479831765b617de08d18d87925 (86f742f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T14:34:07.653Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · a03476a55a8ecf887f2b2ad019be287023a5a050 (a03476a)",
       "area": "Repositório",
       "status": "sucesso"
     }
