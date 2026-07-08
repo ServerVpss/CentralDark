@@ -80,6 +80,7 @@ async function pingEndpoint(name: string, url: string) {
 }
 
 async function handleStatus() {
+  const { key, hint } = await loadKey();
   const endpoints = await Promise.all([
     pingEndpoint("Abacus RouteLLM", `${ABACUS_BASE}/models`),
     pingEndpoint("Abacus ChatLLM", "https://chatllm.abacus.ai/"),
@@ -87,10 +88,10 @@ async function handleStatus() {
   ]);
 
   let modelCount = 0;
-  if (ABACUS_KEY) {
+  if (key) {
     try {
       const r = await fetch(`${ABACUS_BASE}/models`, {
-        headers: { Authorization: `Bearer ${ABACUS_KEY}` },
+        headers: { Authorization: `Bearer ${key}` },
       });
       if (r.ok) {
         const j = await r.json();
@@ -100,17 +101,38 @@ async function handleStatus() {
   }
 
   return json({
-    keyConfigured: Boolean(ABACUS_KEY),
+    keyConfigured: Boolean(key),
+    keyHint: key ? hint : null,   // só últimos 4 chars, nunca a chave inteira
     endpoints,
     modelCount,
   });
 }
 
+async function handleSetKey(req: Request, userId: string) {
+  const body = await req.json().catch(() => ({}));
+  const apiKey = String(body?.apiKey ?? "").trim();
+  if (apiKey.length < 8) {
+    return json({ error: "chave curta demais" }, 400);
+  }
+  const svc = createClient(SUPA_URL, SUPA_SERVICE);
+  const { error } = await svc.from("abacus_config").upsert({
+    id: 1,
+    api_key: apiKey,
+    key_hint: apiKey.slice(-4),
+    updated_by: userId,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) return json({ error: error.message }, 500);
+  keyCache = null;   // invalida cache
+  return json({ ok: true, keyHint: apiKey.slice(-4) });
+}
+
 async function handleModels() {
-  if (!ABACUS_KEY) return json({ models: [], reason: "no_key" });
+  const { key } = await loadKey();
+  if (!key) return json({ models: [], reason: "no_key" });
   try {
     const r = await fetch(`${ABACUS_BASE}/models`, {
-      headers: { Authorization: `Bearer ${ABACUS_KEY}` },
+      headers: { Authorization: `Bearer ${key}` },
     });
     if (!r.ok) return json({ models: [], reason: `upstream_${r.status}` });
     const j = await r.json();
@@ -144,10 +166,11 @@ async function handleChat(req: Request, userId: string) {
   const model = body?.model ?? "route-llm";
   const t0 = performance.now();
 
-  if (!ABACUS_KEY) {
+  const { key } = await loadKey();
+  if (!key) {
     return json({
-      error: "ABACUS_API_KEY não configurada no cofre do HUB",
-      hint: "Roda: supabase secrets set ABACUS_API_KEY=<chave> --project-ref lyoigsqluyktoclwdaft",
+      error: "ABACUS_API_KEY não configurada",
+      hint: "Configura pela aba Abacus do HUB (botão Configurar chave)",
     }, 503);
   }
 
