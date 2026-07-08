@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
 import { ApiKeyDialog } from './ApiKeyDialog';
+import { ChooseAuthDialog } from './ChooseAuthDialog';
 import { useToast } from '@/components/Toast';
 
 interface Provider {
@@ -14,7 +15,27 @@ interface Provider {
   scopes: string;
   auth_type?: 'oauth' | 'api_key';
   tier?: 1 | 2 | 3;
+  web_oauth?: boolean; // permite também login via sessão web (Zendriver)
 }
+
+// Dicas por provedor: onde pegar a chave oficial
+const API_KEY_HELP: Record<string, { text: string; url?: string }> = {
+  openai:     { text: 'Cria a chave em API keys da OpenAI (formato sk-...). Precisa de billing ativo.', url: 'https://platform.openai.com/api-keys' },
+  claude:     { text: 'Cria a chave no console da Anthropic (sk-ant-...).', url: 'https://console.anthropic.com/settings/keys' },
+  gemini:     { text: 'Gera a chave no Google AI Studio (AIza...).', url: 'https://aistudio.google.com/apikey' },
+  grok:       { text: 'Cria em console.x.ai (xai-...).', url: 'https://console.x.ai' },
+  deepseek:   { text: 'Chave no painel DeepSeek (sk-...).', url: 'https://platform.deepseek.com/api_keys' },
+  openrouter: { text: 'Chave única do OpenRouter (sk-or-...) roteia p/ vários modelos.', url: 'https://openrouter.ai/keys' },
+  groq:       { text: 'Chave rápida da Groq (gsk_...).', url: 'https://console.groq.com/keys' },
+  lovable_ai: { text: 'Chave do Gateway Lovable — normalmente injetada automática.' },
+  elevenlabs: { text: 'API key ElevenLabs (xi-api-...).', url: 'https://elevenlabs.io/app/settings/api-keys' },
+  telegram:   { text: 'Cola o token do @BotFather (formato 123456:ABC...).' },
+  cloudflare: { text: 'Cria API Token com escopos Zone/DNS/Workers.', url: 'https://dash.cloudflare.com/profile/api-tokens' },
+  supabase:   { text: 'Personal Access Token do Supabase (sbp_...).', url: 'https://supabase.com/dashboard/account/tokens' },
+};
+
+const WEB_OAUTH_IDS = new Set(['openai', 'claude', 'gemini', 'grok']);
+
 
 interface Connection {
   id: string;
