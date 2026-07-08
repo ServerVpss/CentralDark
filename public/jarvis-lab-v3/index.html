@@ -78,7 +78,7 @@
     try {
       let r;
       try { r = await fetch('https://grafo.centralldark.com/api/graph', {mode:'cors'}); if(!r.ok) throw 0; }
-      catch { r = await fetch('https://corsproxy.io/?https%3A%2F%2Fgrafo.centralldark.com%2Fapi%2Fgraph'); }
+      catch { r = await fetch('https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/grafo-proxy'); }
       const ct = r.headers.get('content-type') || '';
       if (r.ok && ct.includes('application/json')) return await r.json();
       console.warn('[lab-v3] API devolveu', r.status, ct, '→ usando mock');
