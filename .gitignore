@@ -101,3 +101,7 @@ apps/modulos/elite-gateway/config/
 .env
 .env.bak-*
 contas/
+
+# Lab de experimentos visuais — não versionar
+public/lab-jarvis/
+
