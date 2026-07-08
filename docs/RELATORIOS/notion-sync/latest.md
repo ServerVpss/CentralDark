@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-08T19:53:26.935Z
+# 🧠 Notion Sync — 2026-07-08T20:10:43.626Z
 
-- **Commit fonte:** `f50022c1b4d7c4c00f445e5d83481495c89593bf`
+- **Commit fonte:** `98a5f4ef31844cc6c338e64efa63139eb3b9e1f5`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 355 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 356 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 320 | 0 | 320 | 0 | 0 |
+| aprendizados | 322 | 1 | 321 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -377,6 +377,8 @@
 | aprendizados | atualizado | #316 — Inventário IA + varredura UI read-only — padrão e artefatos |
 | aprendizados | atualizado | #317 — Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus) |
 | aprendizados | atualizado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
+| aprendizados | atualizado | #319 — Funcionou → Consolida → Sela (regra de ouro) |
+| aprendizados | criado | #320 — Bot Telegram pode trocar própria foto via setMyProfilePhoto |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

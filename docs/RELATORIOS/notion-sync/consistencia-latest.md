@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-08T19:53:30.431Z
-- **Commit:** `f50022c1b4d7c4c00f445e5d83481495c89593bf`
+- **Gerado:** 2026-07-08T20:10:47.558Z
+- **Commit:** `98a5f4ef31844cc6c338e64efa63139eb3b9e1f5`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 351 | 0 | 0 | 351 | 0 |
+| aprendizados | 352 | 0 | 0 | 352 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **351**
+- 🟥 Faltando no Notion: **352**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -399,4 +399,5 @@
 - 317. Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus)
 - 318. Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian
 - 319. Funcionou → Consolida → Sela (regra de ouro)
+- 320. Bot Telegram pode trocar própria foto via setMyProfilePhoto
 </details>
