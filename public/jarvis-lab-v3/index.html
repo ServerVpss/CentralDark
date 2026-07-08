@@ -76,7 +76,7 @@
   // Dados
   async function loadData(){
     try {
-      const r = await fetch('https://grafo.centralldark.com/api/live', {mode:'cors'});
+      const r = await fetch('https://grafo.centralldark.com/api/graph', {mode:'cors'});
       const ct = r.headers.get('content-type') || '';
       if (r.ok && ct.includes('application/json')) return await r.json();
       console.warn('[lab-v3] API devolveu', r.status, ct, '→ usando mock');
