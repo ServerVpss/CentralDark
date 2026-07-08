@@ -29,16 +29,53 @@ const BROKER_BASE = 'https://hub.centralldark.com';
 // Quando login for feito, real user.id sobrescreve.
 const DEV_USER_ID = 'dev-pivete';
 
-// 🔒 Catálogo fallback — Tier 1 completo
+// 🔒 Catálogo fallback — TODAS as APIs de IA + integrações Tier 1
 const FALLBACK_PROVIDERS: Provider[] = [
-  { id: 'grok',     display_name: 'Grok / xAI',   color: '#000000', icon: '𝕏',  scopes: 'chat', auth_type: 'api_key', tier: 1 },
-  { id: 'claude',   display_name: 'Claude',       color: '#d97706', icon: 'C',  scopes: 'messages', auth_type: 'api_key', tier: 1 },
-  { id: 'openai',   display_name: 'OpenAI',       color: '#10a37f', icon: 'O',  scopes: 'chat completions', auth_type: 'api_key', tier: 1 },
-  { id: 'gemini',   display_name: 'Gemini',       color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1 },
-  { id: 'notion',   display_name: 'Notion',       color: '#000000', icon: 'N',  scopes: 'read.content update.content', auth_type: 'oauth', tier: 1 },
-  { id: 'github',   display_name: 'GitHub',       color: '#24292f', icon: 'GH', scopes: 'repo read:user', auth_type: 'oauth', tier: 1 },
-  { id: 'gdrive',   display_name: 'Google Drive', color: '#1a73e8', icon: 'D',  scopes: 'drive.file drive.readonly', auth_type: 'oauth', tier: 1 },
-  { id: 'supabase', display_name: 'Supabase',     color: '#3ecf8e', icon: 'S',  scopes: 'management', auth_type: 'api_key', tier: 1 },
+  // ===== IA — Chat / LLM =====
+  { id: 'openai',       display_name: 'OpenAI',            color: '#10a37f', icon: 'O',  scopes: 'chat completions embeddings', auth_type: 'api_key', tier: 1 },
+  { id: 'claude',       display_name: 'Anthropic Claude',  color: '#d97706', icon: 'C',  scopes: 'messages',      auth_type: 'api_key', tier: 1 },
+  { id: 'gemini',       display_name: 'Google Gemini',     color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1 },
+  { id: 'grok',         display_name: 'Grok / xAI',        color: '#000000', icon: '𝕏',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
+  { id: 'deepseek',     display_name: 'DeepSeek',          color: '#1e40af', icon: 'DS', scopes: 'chat reasoner', auth_type: 'api_key', tier: 1 },
+  { id: 'mistral',      display_name: 'Mistral AI',        color: '#ff7000', icon: 'M',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
+  { id: 'perplexity',   display_name: 'Perplexity',        color: '#20808d', icon: 'P',  scopes: 'chat search',   auth_type: 'api_key', tier: 1 },
+  { id: 'cohere',       display_name: 'Cohere',            color: '#ff7759', icon: 'Co', scopes: 'chat rerank',   auth_type: 'api_key', tier: 2 },
+  { id: 'groq',         display_name: 'Groq',              color: '#f55036', icon: 'Gq', scopes: 'chat',          auth_type: 'api_key', tier: 1 },
+  { id: 'openrouter',   display_name: 'OpenRouter',        color: '#6366f1', icon: 'OR', scopes: 'chat',          auth_type: 'api_key', tier: 1 },
+  { id: 'together',     display_name: 'Together AI',       color: '#0f6fff', icon: 'T',  scopes: 'chat',          auth_type: 'api_key', tier: 2 },
+  { id: 'fireworks',    display_name: 'Fireworks AI',      color: '#a855f7', icon: 'FW', scopes: 'chat',          auth_type: 'api_key', tier: 2 },
+  { id: 'moonshot',     display_name: 'Moonshot / Kimi',   color: '#111827', icon: 'K',  scopes: 'chat',          auth_type: 'api_key', tier: 2 },
+  { id: 'qwen',         display_name: 'Qwen / DashScope',  color: '#615ced', icon: 'Q',  scopes: 'chat',          auth_type: 'api_key', tier: 2 },
+  { id: 'huggingface',  display_name: 'Hugging Face',      color: '#ffcc4d', icon: 'HF', scopes: 'inference',     auth_type: 'api_key', tier: 2 },
+  { id: 'lovable_ai',   display_name: 'Lovable AI Gateway',color: '#10b981', icon: 'L',  scopes: 'chat image tts', auth_type: 'api_key', tier: 1 },
+
+  // ===== IA — Imagem / Vídeo / Áudio =====
+  { id: 'replicate',    display_name: 'Replicate',         color: '#000000', icon: 'R',  scopes: 'predictions',   auth_type: 'api_key', tier: 1 },
+  { id: 'stability',    display_name: 'Stability AI',      color: '#ff4d8d', icon: 'SD', scopes: 'generation',    auth_type: 'api_key', tier: 2 },
+  { id: 'fal',          display_name: 'fal.ai',            color: '#7c3aed', icon: 'F',  scopes: 'run',           auth_type: 'api_key', tier: 2 },
+  { id: 'ideogram',     display_name: 'Ideogram',          color: '#ec4899', icon: 'I',  scopes: 'generate',      auth_type: 'api_key', tier: 2 },
+  { id: 'leonardo',     display_name: 'Leonardo AI',       color: '#f59e0b', icon: 'Le', scopes: 'generations',   auth_type: 'api_key', tier: 3 },
+  { id: 'recraft',      display_name: 'Recraft',           color: '#111827', icon: 'Rc', scopes: 'images',        auth_type: 'api_key', tier: 3 },
+  { id: 'runway',       display_name: 'Runway',            color: '#000000', icon: 'Rw', scopes: 'video',         auth_type: 'api_key', tier: 2 },
+  { id: 'luma',         display_name: 'Luma Dream Machine',color: '#0ea5e9', icon: 'Lu', scopes: 'video',         auth_type: 'api_key', tier: 3 },
+  { id: 'kling',        display_name: 'Kling AI',          color: '#8b5cf6', icon: 'Kl', scopes: 'video',         auth_type: 'api_key', tier: 3 },
+  { id: 'pika',         display_name: 'Pika Labs',         color: '#f43f5e', icon: 'Pk', scopes: 'video',         auth_type: 'api_key', tier: 3 },
+  { id: 'elevenlabs',   display_name: 'ElevenLabs',        color: '#000000', icon: '11', scopes: 'tts voices',    auth_type: 'api_key', tier: 1 },
+  { id: 'suno',         display_name: 'Suno',              color: '#111827', icon: 'Su', scopes: 'music',         auth_type: 'api_key', tier: 3 },
+  { id: 'assemblyai',   display_name: 'AssemblyAI',        color: '#2563eb', icon: 'AA', scopes: 'transcribe',    auth_type: 'api_key', tier: 3 },
+  { id: 'deepgram',     display_name: 'Deepgram',          color: '#13ef95', icon: 'Dg', scopes: 'transcribe',    auth_type: 'api_key', tier: 3 },
+
+  // ===== Integrações / Infra =====
+  { id: 'notion',       display_name: 'Notion',            color: '#000000', icon: 'N',  scopes: 'read.content update.content', auth_type: 'oauth',  tier: 1 },
+  { id: 'github',       display_name: 'GitHub',            color: '#24292f', icon: 'GH', scopes: 'repo read:user', auth_type: 'oauth', tier: 1 },
+  { id: 'gdrive',       display_name: 'Google Drive',      color: '#1a73e8', icon: 'D',  scopes: 'drive.file drive.readonly', auth_type: 'oauth', tier: 1 },
+  { id: 'supabase',     display_name: 'Supabase',          color: '#3ecf8e', icon: 'S',  scopes: 'management',    auth_type: 'api_key', tier: 1 },
+  { id: 'cloudflare',   display_name: 'Cloudflare',        color: '#f38020', icon: 'CF', scopes: 'zone dns workers', auth_type: 'api_key', tier: 1 },
+  { id: 'telegram',     display_name: 'Telegram Bot',      color: '#229ed9', icon: 'TG', scopes: 'bot',           auth_type: 'api_key', tier: 1 },
+  { id: 'lovable',      display_name: 'Lovable',           color: '#10b981', icon: 'L',  scopes: 'projects',      auth_type: 'oauth',   tier: 1 },
+  { id: 'efi',          display_name: 'EFI Pay',           color: '#00a868', icon: 'E',  scopes: 'pix cobranças', auth_type: 'api_key', tier: 2 },
+  { id: 'iseek',        display_name: 'iSeek',             color: '#7c3aed', icon: 'iS', scopes: 'consultas',     auth_type: 'api_key', tier: 2 },
+  { id: 'consultas',    display_name: 'Consultas',         color: '#1f2937', icon: 'CQ', scopes: 'consultas',     auth_type: 'api_key', tier: 2 },
 ];
 
 export function OAuthConnectors() {
