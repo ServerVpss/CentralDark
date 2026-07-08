@@ -7,9 +7,12 @@ interface Props {
   open: boolean;
   providerName: string;
   providerColor: string;
+  helpText?: string;
+  helpUrl?: string;
   onClose: () => void;
   onConfirm: (key: string) => Promise<void> | void;
 }
+
 
 // Modal de colagem de API key — sem dependência de shadcn/dialog
 export function ApiKeyDialog({ open, providerName, providerColor, onClose, onConfirm }: Props) {
