@@ -151,7 +151,8 @@
   lines.alpha = 0.3;
 
   // Layout de força (leve, roda em setInterval)
-  const REPULSION=6, SPRING=0.02, DAMPING=0.88, CENTER=0.001;
+  // Layout de força mais fluido (menos rígido, movimento contínuo)
+  const REPULSION=8, SPRING=0.008, DAMPING=0.94, CENTER=0.0006;
   function stepLayout(){
     for (let i=0;i<N;i++){
       const a = nodes[i];
