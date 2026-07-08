@@ -1,0 +1,8 @@
+logs/
+*.log
+*.bak
+*.bak.*
+node_modules/
+.env
+.env.*
+!.gitignore

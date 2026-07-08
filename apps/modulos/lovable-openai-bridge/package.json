@@ -1,0 +1,1 @@
+{ "name": "lovable-openai-bridge", "version": "1.0.0", "type": "module", "main": "server.mjs" }
