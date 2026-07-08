@@ -137,7 +137,9 @@ const dl = new THREE.DirectionalLight(0x34d399, 1.2); dl.position.set(50,80,50);
 // ── Dados (mock) ───────────────────────────────────────────
 async function loadData(){
   try {
-    const r = await fetch('https://grafo.centralldark.com/api/graph', {mode:'cors'});
+    let r;
+    try { r = await fetch('https://grafo.centralldark.com/api/graph', {mode:'cors'}); if(!r.ok) throw 0; }
+    catch { r = await fetch('https://corsproxy.io/?https%3A%2F%2Fgrafo.centralldark.com%2Fapi%2Fgraph'); }
     const ct = r.headers.get('content-type') || '';
     if (r.ok && ct.includes('application/json')) return await r.json();
     console.warn('[lab-v2] API devolveu', r.status, ct, '→ usando mock');
