@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { HealthCard } from './HealthCard';
 import { AlertBanner } from './AlertBanner';
 import { StatusTimeline } from './StatusTimeline';
+import { ApiCardsGrid } from './ApiCardsGrid';
 import { useHealth } from '@/hooks/useHealth';
 
 export function DashboardTab() {
@@ -20,6 +21,7 @@ export function DashboardTab() {
         </div>
       )}
       <HealthCard health={health} />
+      <ApiCardsGrid />
       <StatusTimeline entries={timeline} />
     </div>
   );
