@@ -192,6 +192,10 @@ Deno.serve(async (req) => {
       return await proxyChatCompletions(req, lovableKey);
     }
 
+    if (req.method === "POST" && path === "/v1/responses") {
+      return await proxyResponses(req, lovableKey);
+    }
+
     if (req.method === "POST" && path === "/v1/audio/speech") {
       return await proxyAudioSpeech(req, lovableKey);
     }
