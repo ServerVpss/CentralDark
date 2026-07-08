@@ -7,12 +7,15 @@ interface Props {
   open: boolean;
   providerName: string;
   providerColor: string;
+  helpText?: string;
+  helpUrl?: string;
   onClose: () => void;
   onConfirm: (key: string) => Promise<void> | void;
 }
 
+
 // Modal de colagem de API key — sem dependência de shadcn/dialog
-export function ApiKeyDialog({ open, providerName, providerColor, onClose, onConfirm }: Props) {
+export function ApiKeyDialog({ open, providerName, providerColor, helpText, helpUrl, onClose, onConfirm }: Props) {
   const [value, setValue] = useState('');
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -70,6 +73,19 @@ export function ApiKeyDialog({ open, providerName, providerColor, onClose, onCon
               A chave é enviada cifrada para o Supabase HUB. Nunca fica no frontend.
             </p>
           </div>
+
+          {helpText && (
+            <div className="text-xs text-muted-foreground border-l-2 border-primary/50 pl-3 py-1 bg-primary/5 rounded-r">
+              {helpText}
+              {helpUrl && (
+                <>
+                  {' '}
+                  <a href={helpUrl} target="_blank" rel="noreferrer" className="text-primary underline">abrir painel</a>
+                </>
+              )}
+            </div>
+          )}
+
 
           <div className="space-y-2">
             <Label htmlFor="apikey" className="text-xs uppercase tracking-wide text-muted-foreground">

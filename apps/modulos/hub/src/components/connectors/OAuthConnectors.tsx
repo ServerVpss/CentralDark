@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
 import { ApiKeyDialog } from './ApiKeyDialog';
+import { ChooseAuthDialog } from './ChooseAuthDialog';
 import { useToast } from '@/components/Toast';
 
 interface Provider {
@@ -14,7 +15,27 @@ interface Provider {
   scopes: string;
   auth_type?: 'oauth' | 'api_key';
   tier?: 1 | 2 | 3;
+  web_oauth?: boolean; // permite também login via sessão web (Zendriver)
 }
+
+// Dicas por provedor: onde pegar a chave oficial
+const API_KEY_HELP: Record<string, { text: string; url?: string }> = {
+  openai:     { text: 'Cria a chave em API keys da OpenAI (formato sk-...). Precisa de billing ativo.', url: 'https://platform.openai.com/api-keys' },
+  claude:     { text: 'Cria a chave no console da Anthropic (sk-ant-...).', url: 'https://console.anthropic.com/settings/keys' },
+  gemini:     { text: 'Gera a chave no Google AI Studio (AIza...).', url: 'https://aistudio.google.com/apikey' },
+  grok:       { text: 'Cria em console.x.ai (xai-...).', url: 'https://console.x.ai' },
+  deepseek:   { text: 'Chave no painel DeepSeek (sk-...).', url: 'https://platform.deepseek.com/api_keys' },
+  openrouter: { text: 'Chave única do OpenRouter (sk-or-...) roteia p/ vários modelos.', url: 'https://openrouter.ai/keys' },
+  groq:       { text: 'Chave rápida da Groq (gsk_...).', url: 'https://console.groq.com/keys' },
+  lovable_ai: { text: 'Chave do Gateway Lovable — normalmente injetada automática.' },
+  elevenlabs: { text: 'API key ElevenLabs (xi-api-...).', url: 'https://elevenlabs.io/app/settings/api-keys' },
+  telegram:   { text: 'Cola o token do @BotFather (formato 123456:ABC...).' },
+  cloudflare: { text: 'Cria API Token com escopos Zone/DNS/Workers.', url: 'https://dash.cloudflare.com/profile/api-tokens' },
+  supabase:   { text: 'Personal Access Token do Supabase (sbp_...).', url: 'https://supabase.com/dashboard/account/tokens' },
+};
+
+const WEB_OAUTH_IDS = new Set(['openai', 'claude', 'gemini', 'grok']);
+
 
 interface Connection {
   id: string;
@@ -32,11 +53,12 @@ const DEV_USER_ID = 'dev-pivete';
 // 🔒 Catálogo fallback — TODAS as APIs de IA + integrações Tier 1
 const FALLBACK_PROVIDERS: Provider[] = [
   // ===== IA — Chat / LLM =====
-  { id: 'openai',       display_name: 'OpenAI',            color: '#10a37f', icon: 'O',  scopes: 'chat completions embeddings', auth_type: 'api_key', tier: 1 },
-  { id: 'claude',       display_name: 'Anthropic Claude',  color: '#d97706', icon: 'C',  scopes: 'messages',      auth_type: 'api_key', tier: 1 },
-  { id: 'gemini',       display_name: 'Google Gemini',     color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1 },
-  { id: 'grok',         display_name: 'Grok / xAI',        color: '#000000', icon: '𝕏',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
+  { id: 'openai',       display_name: 'OpenAI',            color: '#10a37f', icon: 'O',  scopes: 'chat completions embeddings', auth_type: 'api_key', tier: 1, web_oauth: true },
+  { id: 'claude',       display_name: 'Anthropic Claude',  color: '#d97706', icon: 'C',  scopes: 'messages',      auth_type: 'api_key', tier: 1, web_oauth: true },
+  { id: 'gemini',       display_name: 'Google Gemini',     color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1, web_oauth: true },
+  { id: 'grok',         display_name: 'Grok / xAI',        color: '#000000', icon: '𝕏',  scopes: 'chat',          auth_type: 'api_key', tier: 1, web_oauth: true },
   { id: 'deepseek',     display_name: 'DeepSeek',          color: '#1e40af', icon: 'DS', scopes: 'chat reasoner', auth_type: 'api_key', tier: 1 },
+
   { id: 'mistral',      display_name: 'Mistral AI',        color: '#ff7000', icon: 'M',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
   { id: 'perplexity',   display_name: 'Perplexity',        color: '#20808d', icon: 'P',  scopes: 'chat search',   auth_type: 'api_key', tier: 1 },
   { id: 'cohere',       display_name: 'Cohere',            color: '#ff7759', icon: 'Co', scopes: 'chat rerank',   auth_type: 'api_key', tier: 2 },
@@ -86,8 +108,11 @@ export function OAuthConnectors() {
   const [loading, setLoading] = useState(true);
   const [usingFallback, setUsingFallback] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [tableMissing, setTableMissing] = useState(false);
   const [dialogProvider, setDialogProvider] = useState<Provider | null>(null);
+  const [chooseProvider, setChooseProvider] = useState<Provider | null>(null);
   const toast = useToast();
+
 
   async function load() {
     setLoading(true);
@@ -114,18 +139,23 @@ export function OAuthConnectors() {
       fallback = true;
     }
 
+    let missing = false;
     try {
       const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label').eq('user_id', uid);
       if (cr.error) throw cr.error;
       if (cr.data) c = cr.data as Connection[];
     } catch (e: any) {
       c = [];
-      // silêncio se a tabela ainda não existe (fase MVP)
-      if (!/relation.*does not exist|not.found/i.test(e?.message ?? '')) {
-        setLoadError(e?.message ?? 'erro ao carregar conexões');
+      const msg = e?.message ?? '';
+      if (/relation.*does not exist|not.?found|schema cache|PGRST|404/i.test(msg) || e?.code === 'PGRST205' || e?.code === '42P01') {
+        // tabela ainda não criada — modo dev, silencia
+        missing = true;
+      } else {
+        setLoadError(msg || 'erro ao carregar conexões');
       }
     }
 
+    setTableMissing(missing);
     setProviders(p);
     setConns(c);
     setUsingFallback(fallback);
@@ -134,15 +164,24 @@ export function OAuthConnectors() {
 
   useEffect(() => { load(); }, []);
 
-  async function connect(p: Provider) {
+  function connect(p: Provider) {
+    // Provedores com dupla via (API oficial + login web) abrem o seletor
+    if (p.web_oauth && (p.auth_type === 'api_key' || !p.auth_type)) {
+      setChooseProvider(p);
+      return;
+    }
     if (p.auth_type === 'api_key') {
       setDialogProvider(p);
       return;
     }
-    // OAuth: redireciona pro broker do HUB
+    startOAuth(p);
+  }
+
+  function startOAuth(p: Provider) {
     const back = window.location.href;
     window.location.href = `${BROKER_BASE}/oauth/${p.id}/start?user_id=${userId}&redirect_to=${encodeURIComponent(back)}`;
   }
+
 
   async function saveApiKey(p: Provider, key: string) {
     try {
@@ -232,8 +271,9 @@ export function OAuthConnectors() {
                 <Badge className={toneClass.warning}>🟡 catálogo local ativo</Badge>
               )}
               {loadError && (
-                <Badge className={toneClass.danger}>🔴 {loadError}</Badge>
+                <Badge className={toneClass.warning}>⚠️ {loadError}</Badge>
               )}
+
               {!isRealUser && (
                 <Badge className={toneClass.muted}>🧪 modo dev · sem login</Badge>
               )}
@@ -242,6 +282,12 @@ export function OAuthConnectors() {
           <p className="text-xs text-muted-foreground border-l-2 border-primary/50 pl-2 mt-2">
             🛠️ Backend: Supabase HUB (VPS) + Edge Functions <code className="font-mono text-primary">get-token</code> / <code className="font-mono text-primary">keys/store</code>
           </p>
+          {tableMissing && (
+            <p className="text-[11px] text-muted-foreground/80 border-l-2 border-muted-foreground/40 pl-2 italic">
+              ℹ️ modo dev: tabela <code className="font-mono">oauth_connections</code> ainda não criada no HUB — as conexões salvas não aparecem até a migration rodar.
+            </p>
+          )}
+
         </CardHeader>
 
         <CardContent>
@@ -286,8 +332,12 @@ export function OAuthConnectors() {
                           {p.auth_type === 'oauth' && (
                             <Badge className="text-[10px] py-0 px-1.5 bg-primary/15 text-primary border-primary/40">🔐 OAUTH</Badge>
                           )}
+                          {p.web_oauth && (
+                            <Badge className="text-[10px] py-0 px-1.5 bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))] border-[hsl(var(--warning))]/40">🌐 WEB</Badge>
+                          )}
                           <Badge className={`text-[10px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
                         </div>
+
                       </div>
                     </div>
 
@@ -323,9 +373,29 @@ export function OAuthConnectors() {
         open={!!dialogProvider}
         providerName={dialogProvider?.display_name ?? ''}
         providerColor={dialogProvider?.color ?? '#98C93C'}
+        helpText={dialogProvider ? API_KEY_HELP[dialogProvider.id]?.text : undefined}
+        helpUrl={dialogProvider ? API_KEY_HELP[dialogProvider.id]?.url : undefined}
         onClose={() => setDialogProvider(null)}
         onConfirm={(key) => dialogProvider ? saveApiKey(dialogProvider, key) : Promise.resolve()}
       />
+
+      <ChooseAuthDialog
+        open={!!chooseProvider}
+        providerName={chooseProvider?.display_name ?? ''}
+        providerColor={chooseProvider?.color ?? '#98C93C'}
+        onClose={() => setChooseProvider(null)}
+        onPickApiKey={() => {
+          const p = chooseProvider;
+          setChooseProvider(null);
+          if (p) setDialogProvider(p);
+        }}
+        onPickOAuth={() => {
+          const p = chooseProvider;
+          setChooseProvider(null);
+          if (p) startOAuth(p);
+        }}
+      />
+
     </>
   );
 }
