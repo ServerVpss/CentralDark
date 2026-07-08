@@ -15,7 +15,7 @@ interface Props {
 
 
 // Modal de colagem de API key — sem dependência de shadcn/dialog
-export function ApiKeyDialog({ open, providerName, providerColor, onClose, onConfirm }: Props) {
+export function ApiKeyDialog({ open, providerName, providerColor, helpText, helpUrl, onClose, onConfirm }: Props) {
   const [value, setValue] = useState('');
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
