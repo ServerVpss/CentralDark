@@ -1,43 +1,41 @@
-## Plano — Fechar segurança + entregar v2 (WebGPU) e v3 (Babylon) lado a lado
+## O que aconteceu
 
-### 1. Segurança 🔒 (migration no HUB via ferramenta oficial)
-Fechar RLS das 2 tabelas que estão abertas:
-- `bot_query_rate_tracking` → só `service_role` lê/escreve
-- `webapp_results` → só `service_role` lê/escreve (limpeza continua via trigger `SECURITY DEFINER`)
+O grabber v0.3 pegou um ID errado do localStorage (`OThmNTIwMzQtNzc1Yi00` — parece pedaço de base64, não workspace real). Por isso tudo deu 404. O ID verdadeiro que apareceu no sniffer foi `SnHKuU0wOdEEUsYxWOrJ`.
 
-Bots continuam funcionando normal porque rodam com `service_role` no backend. Nenhum usuário final perde nada.
+## Plano
 
-### 2. Laboratório v2 — Three.js + WebGPU (`public/jarvis-lab-v2/index.html`)
-- Mesmo grafo, backend WebGPU do Three.js (`WebGPURenderer`)
-- Fallback automático pra WebGL se o navegador não suportar
-- GPU instancing nas esferas (10 mil nós = 1 draw call)
-- Layout de força movido pra Web Worker (`d3-force-3d`) — tela não trava
-- Bloom via `postprocessing` da pmndrs (mais leve que o `UnrealBloomPass` clássico)
-- Paleta esmeralda mantida
+### 1. Grabber v0.4 (console) — detecção robusta
 
-### 3. Laboratório v3 — Babylon.js (`public/jarvis-lab-v3/index.html`)
-- Reescrita em Babylon.js 7 (WebGPU nativo)
-- PBR real nos nós (metalness + roughness → visual "cromado esmeralda")
-- Glow layer nativo (efeito Jarvis sem custo de postprocessing manual)
-- Thin instances pra escalar 10 mil+ nós
-- HUD overlay em HTML/CSS por cima do canvas
+Trocar a heurística furada por três fontes em ordem:
 
-### 4. Comparador atualizado (`public/jarvis-lab/comparador.html`)
-Passa a mostrar **4 cards lado a lado**:
-1. Original (VPS)
-2. v1 Turbo (Three.js + bloom clássico) ← o que já tá pronto
-3. v2 WebGPU (Three.js WebGPU + worker)
-4. v3 Babylon (WebGPU nativo + PBR)
+- **Fonte A (mais confiável):** interceptar `fetch` por 2 segundos e capturar o primeiro `workspaces/{ID}/...` que a página chamar sozinha.
+- **Fonte B:** ler cookies/sessionStorage procurando chave que contenha "workspace" com valor no formato certo (20 chars alfanuméricos misturando maiúsc/minúsc).
+- **Fonte C (fallback):** `prompt()` pedindo pro Pivete colar o ID visto no sniffer.
 
-Cada card com FPS estimado, tecnologia e link direto.
+Assim nunca mais chuta ID errado.
 
-### 5. Peso no repositório
-Tudo em `public/` como HTML puro com CDN (esm.sh / unpkg). **Zero dependência nova no `package.json`**, zero impacto no bundle do app principal. Só arquivos estáticos servidos.
+### 2. Rodar em cada workspace
 
-### Detalhes técnicos
-- WebGPU: `if (!navigator.gpu) → fallback WebGL` (sandbox de preview não tem GPU, então o fallback é obrigatório)
-- Worker: mensagem `{nodes, links}` → devolve `{positions}` a cada tick
-- Babylon via CDN: `https://cdn.babylonjs.com/babylon.js` + `loaders`
-- Nada disso vai pro GitHub principal (`public/jarvis-lab*/` já estão no `.gitignore` local do lab — só o v1 foi liberado temporariamente pra publicar; v2 e v3 seguem a mesma estratégia)
+Pivete troca de workspace no site → roda o script → cada workspace vira uma chave em `window.__grabber`. No final: `copy(JSON.stringify(window.__grabber, null, 2))` e cola aqui pra eu ver.
 
-Depois de aprovar, você testa os 4 lado a lado e me diz qual vira o oficial pra levar pra VPS.
+### 3. Próximo passo (HUB) — só depois que o v0.4 funcionar
+
+Quando os JSONs dos workspaces estiverem batendo certo, subir no HUB (`lyoigsqluyktoclwdaft`, via MCP/VPS, respeitando a trava):
+
+- Tabela `contas_lovable` (workspace_id PK, nome, saldo_restante, saldo_concedido, usado_periodo, diário, bônus_json, expirações_json, período, raw_json, coletado_em)
+- Edge function `lovable-ingest` validando `X-Hub-Token`
+- Preencher `HUB_URL` + `HUB_TOKEN` no topo do grabber → envio automático
+
+### 4. Card no TelePainel (etapa 3)
+
+Ler `contas_lovable` do HUB e mostrar os workspaces lado a lado com saldos, no padrão visual esmeralda dos outros cards.
+
+## Fora do escopo agora
+
+- OAuth "Sign in with Lovable" (não existe hoje, já discutido)
+- Extensão Chrome empacotada (fica pra depois que o fluxo manual estiver rodando)
+- Rotação automática de contas (depois de ter os dados no HUB)
+
+## O que preciso confirmar antes de sair do plan mode
+
+Você quer que eu **só corrija o grabber v0.4** agora (rápido, você testa nos seus workspaces), ou já quer que eu **prepare também os arquivos SQL + edge function** pra você levar pro HUB via MCP na sequência?
