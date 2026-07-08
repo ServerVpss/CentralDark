@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T07:05:23.220Z",
-  "updatedAtBR": "08/07/2026, 04:05:23 BRT",
+  "updatedAt": "2026-07-08T07:17:31.675Z",
+  "updatedAtBR": "08/07/2026, 04:17:31 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(pendencias): nova #39 Card \"Contas Lovable\" no HUB — saldo/créditos via API",
+    "lastCommit": "Pronto: 40 APIs plugadas",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T07:17:31.675Z",
+      "titulo": "Push na main · e3665231eb1fef057d6d2b054bbd27e4aeee1733",
+      "detalhe": "Pronto: 40 APIs plugadas",
+      "area": "Repositório",
+      "sha": "e366523",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-08T07:05:23.220Z",
       "titulo": "Push na main · ca666163aff80003999bc34b31a41662dbc349af",
       "detalhe": "docs(pendencias): nova #39 Card \"Contas Lovable\" no HUB — saldo/créditos via API",
@@ -981,13 +989,6 @@
       "time": "2026-07-06T10:01:38.378Z",
       "title": "Grafo Jarvis (grafo.centralldark.com) CONSERTADO — libs 3D locais pinadas, erro 'bibliotecas 3D não carregadas' resolvido conforme aprendizado #292",
       "area": "graph-panel",
-      "status": "feito",
-      "detail": ""
-    },
-    {
-      "time": "2026-07-06T09:47:53.401Z",
-      "title": "Guardião da Consciência religado e consertado — agora notifica no grupo Central Dark - Grupo da Evolução (padrão NOTIFY_CHAT_ID)",
-      "area": "infra/guardiao",
       "status": "feito",
       "detail": ""
     }
@@ -1404,6 +1405,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T07:17:31.675Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · e3665231eb1fef057d6d2b054bbd27e4aeee1733 (e366523)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T07:05:23.220Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ca666163aff80003999bc34b31a41662dbc349af (ca66616)",
@@ -1743,13 +1751,6 @@
       "time": "2026-07-06T05:55:55.840Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8c0a2eafb5fe3ce1b56f5d25a2faab35fb78775a (8c0a2ea)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T05:55:31.446Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 59ce7b76c2fc67aec0e390969860dfe9540655c5 (59ce7b7)",
       "area": "Repositório",
       "status": "sucesso"
     }
