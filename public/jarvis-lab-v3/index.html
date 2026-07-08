@@ -60,9 +60,30 @@
   const dir = new BABYLON.DirectionalLight('d', new BABYLON.Vector3(-1,-2,-1), scene);
   dir.intensity = 1.2; dir.diffuse = new BABYLON.Color3(0.2, 0.9, 0.6);
 
-  // Glow layer (o "efeito Jarvis" nativo)
-  const glow = new BABYLON.GlowLayer('glow', scene, { mainTextureFixedSize: 512, blurKernelSize: 32 });
-  glow.intensity = 1.3;
+  // Glow layer bem mais borrado (efeito Jarvis fluido)
+  const glow = new BABYLON.GlowLayer('glow', scene, { mainTextureFixedSize: 1024, blurKernelSize: 96 });
+  glow.intensity = 2.4;
+
+  // Pipeline com bloom pesado + chromatic aberration + grão pra ficar cinematográfico
+  const pipe = new BABYLON.DefaultRenderingPipeline('pipe', true, scene, [camera]);
+  pipe.bloomEnabled = true;
+  pipe.bloomThreshold = 0.05;
+  pipe.bloomWeight = 1.8;
+  pipe.bloomKernel = 128;
+  pipe.bloomScale = 0.75;
+  pipe.imageProcessing.exposure = 1.2;
+  pipe.imageProcessing.contrast = 1.1;
+  pipe.chromaticAberrationEnabled = true;
+  pipe.chromaticAberration.aberrationAmount = 18;
+  pipe.grainEnabled = true;
+  pipe.grain.intensity = 6;
+  pipe.samples = 4;
+
+  // Motion blur pra dar sensação fluida no movimento
+  const motion = new BABYLON.MotionBlurPostProcess('motion', scene, 1.0, camera);
+  motion.motionStrength = 1.4;
+  motion.motionBlurSamples = 24;
+
 
   // Starfield
   const stars = BABYLON.MeshBuilder.CreatePoints ? null : null; // fallback
