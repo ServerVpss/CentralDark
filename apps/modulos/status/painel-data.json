@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T13:32:58.818Z",
-  "updatedAtBR": "08/07/2026, 10:32:58 BRT",
+  "updatedAt": "2026-07-08T14:48:46.263Z",
+  "updatedAtBR": "08/07/2026, 11:48:46 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Travou regra VPS + GitHub",
+    "lastCommit": "Changes",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T14:48:46.263Z",
+      "titulo": "Push na main · 8bcc5c9e989236932e2b319c4a91da1c72295e5b",
+      "detalhe": "Changes",
+      "area": "Repositório",
+      "sha": "8bcc5c9",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-08T13:32:58.818Z",
       "titulo": "Push na main · 47e35654e43b048d3abcac0ddc31a95884f515cf",
       "detalhe": "Travou regra VPS + GitHub",
@@ -986,14 +994,6 @@
       "detalhe": "lembranca: Pivete prefere indicação de modo e retomada da missão",
       "area": "Repositório",
       "sha": "eb25c21",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-07T12:27:49.037Z",
-      "titulo": "Push na main · 74b32bc700864c12da21c4be767741c2baa2ee61",
-      "detalhe": "aprendizado(#311): Não pushar main local ahead dezenas por commits automáticos de painel",
-      "area": "Repositório",
-      "sha": "74b32bc",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T14:48:46.263Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 8bcc5c9e989236932e2b319c4a91da1c72295e5b (8bcc5c9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T13:32:58.818Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 47e35654e43b048d3abcac0ddc31a95884f515cf (47e3565)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-07T12:49:27.439Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · eb25c21e37527cb5d242f3814177ec7efd05d58b (eb25c21)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-07T12:27:49.037Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 74b32bc700864c12da21c4be767741c2baa2ee61 (74b32bc)",
       "area": "Repositório",
       "status": "sucesso"
     }
