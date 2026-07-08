@@ -184,7 +184,7 @@ async function handleChat(req: Request, userId: string) {
     const r = await fetch(`${ABACUS_BASE}/chat/completions`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${ABACUS_KEY}`,
+        Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...body, stream: false }),
@@ -265,6 +265,7 @@ Deno.serve(async (req) => {
 
     if (path === "/models" && req.method === "GET") return await handleModels();
     if (path === "/logs" && req.method === "GET") return await handleLogs(req, user.id);
+    if (path === "/set-key" && req.method === "POST") return await handleSetKey(req, user.id);
     if (path === "/v1/chat/completions" && req.method === "POST") return await handleChat(req, user.id);
 
     return json({ error: "not_found", path }, 404);
