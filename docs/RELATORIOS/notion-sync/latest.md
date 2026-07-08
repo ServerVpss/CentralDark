@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-08T15:58:44.676Z
+# 🧠 Notion Sync — 2026-07-08T19:53:26.935Z
 
-- **Commit fonte:** `f6c3e13d123897fd13a5fdf9b80034814c671aab`
+- **Commit fonte:** `f50022c1b4d7c4c00f445e5d83481495c89593bf`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 354 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 355 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 320 | 1 | 319 | 0 | 0 |
+| aprendizados | 320 | 0 | 320 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -376,7 +376,7 @@
 | aprendizados | atualizado | #315 — WebhookDeploy pode precisar esperar logs antes de validar card público |
 | aprendizados | atualizado | #316 — Inventário IA + varredura UI read-only — padrão e artefatos |
 | aprendizados | atualizado | #317 — Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus) |
-| aprendizados | criado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
+| aprendizados | atualizado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
