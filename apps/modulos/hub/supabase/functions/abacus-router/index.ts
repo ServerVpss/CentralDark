@@ -14,11 +14,30 @@ const cors = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 };
 
-const ABACUS_KEY = Deno.env.get("ABACUS_API_KEY") ?? "";
+const ABACUS_ENV_KEY = Deno.env.get("ABACUS_API_KEY") ?? "";
 const ABACUS_BASE = Deno.env.get("ABACUS_BASE_URL") ?? "https://routellm.abacus.ai/v1";
 const SUPA_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPA_ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
 const SUPA_SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+// Cache curtinho pra não ir no banco toda request
+let keyCache: { key: string; hint: string; loadedAt: number } | null = null;
+const KEY_TTL_MS = 30_000;
+
+async function loadKey(): Promise<{ key: string; hint: string }> {
+  if (ABACUS_ENV_KEY) {
+    return { key: ABACUS_ENV_KEY, hint: ABACUS_ENV_KEY.slice(-4) };
+  }
+  if (keyCache && Date.now() - keyCache.loadedAt < KEY_TTL_MS) {
+    return { key: keyCache.key, hint: keyCache.hint };
+  }
+  const svc = createClient(SUPA_URL, SUPA_SERVICE);
+  const { data } = await svc.from("abacus_config").select("api_key, key_hint").eq("id", 1).maybeSingle();
+  const key = data?.api_key ?? "";
+  const hint = data?.key_hint ?? "";
+  keyCache = { key, hint, loadedAt: Date.now() };
+  return { key, hint };
+}
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
