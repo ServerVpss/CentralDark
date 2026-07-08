@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T10:03:15.299Z",
-  "updatedAtBR": "08/07/2026, 07:03:15 BRT",
+  "updatedAt": "2026-07-08T10:38:09.806Z",
+  "updatedAtBR": "08/07/2026, 07:38:09 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Criou versãoturbada do grafo",
+    "lastCommit": "Migrou comparador para /comparador",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T10:38:09.806Z",
+      "titulo": "Push na main · 459af0d3e693baccbe4b3c31ff279c1d7e43ae84",
+      "detalhe": "Migrou comparador para /comparador",
+      "area": "Repositório",
+      "sha": "459af0d",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-08T10:03:15.299Z",
       "titulo": "Push na main · cac38fc837952091be336eab2d1bf1425c86971d",
       "detalhe": "Criou versãoturbada do grafo",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#305): Padrão Tutor Leigo: nomes de opções sempre dizem PRA QUE SERVEM",
       "area": "Repositório",
       "sha": "30fa83a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-06T21:36:00.052Z",
-      "titulo": "Push na main · 49743efe0b7ac3ad6c57e34c4a7364e4fcf33b1d",
-      "detalhe": "lembranca: Padrão Tutor Leigo: renomear técnico → amigável",
-      "area": "Repositório",
-      "sha": "49743ef",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T10:38:09.806Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 459af0d3e693baccbe4b3c31ff279c1d7e43ae84 (459af0d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T10:03:15.299Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · cac38fc837952091be336eab2d1bf1425c86971d (cac38fc)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-06T21:44:25.169Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 30fa83ad574e084dfca7a85e22204010ca717810 (30fa83a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-06T21:36:00.052Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 49743efe0b7ac3ad6c57e34c4a7364e4fcf33b1d (49743ef)",
       "area": "Repositório",
       "status": "sucesso"
     }
