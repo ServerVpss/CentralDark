@@ -74,6 +74,19 @@ export function ApiKeyDialog({ open, providerName, providerColor, helpText, help
             </p>
           </div>
 
+          {helpText && (
+            <div className="text-xs text-muted-foreground border-l-2 border-primary/50 pl-3 py-1 bg-primary/5 rounded-r">
+              {helpText}
+              {helpUrl && (
+                <>
+                  {' '}
+                  <a href={helpUrl} target="_blank" rel="noreferrer" className="text-primary underline">abrir painel</a>
+                </>
+              )}
+            </div>
+          )}
+
+
           <div className="space-y-2">
             <Label htmlFor="apikey" className="text-xs uppercase tracking-wide text-muted-foreground">
               API key
