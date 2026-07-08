@@ -139,18 +139,23 @@ export function OAuthConnectors() {
       fallback = true;
     }
 
+    let missing = false;
     try {
       const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label').eq('user_id', uid);
       if (cr.error) throw cr.error;
       if (cr.data) c = cr.data as Connection[];
     } catch (e: any) {
       c = [];
-      // silêncio se a tabela ainda não existe (fase MVP)
-      if (!/relation.*does not exist|not.found/i.test(e?.message ?? '')) {
-        setLoadError(e?.message ?? 'erro ao carregar conexões');
+      const msg = e?.message ?? '';
+      if (/relation.*does not exist|not.?found|schema cache|PGRST|404/i.test(msg) || e?.code === 'PGRST205' || e?.code === '42P01') {
+        // tabela ainda não criada — modo dev, silencia
+        missing = true;
+      } else {
+        setLoadError(msg || 'erro ao carregar conexões');
       }
     }
 
+    setTableMissing(missing);
     setProviders(p);
     setConns(c);
     setUsingFallback(fallback);
@@ -159,15 +164,24 @@ export function OAuthConnectors() {
 
   useEffect(() => { load(); }, []);
 
-  async function connect(p: Provider) {
+  function connect(p: Provider) {
+    // Provedores com dupla via (API oficial + login web) abrem o seletor
+    if (p.web_oauth && (p.auth_type === 'api_key' || !p.auth_type)) {
+      setChooseProvider(p);
+      return;
+    }
     if (p.auth_type === 'api_key') {
       setDialogProvider(p);
       return;
     }
-    // OAuth: redireciona pro broker do HUB
+    startOAuth(p);
+  }
+
+  function startOAuth(p: Provider) {
     const back = window.location.href;
     window.location.href = `${BROKER_BASE}/oauth/${p.id}/start?user_id=${userId}&redirect_to=${encodeURIComponent(back)}`;
   }
+
 
   async function saveApiKey(p: Provider, key: string) {
     try {
