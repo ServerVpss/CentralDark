@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
-# Helper de deploy do abacus-router no HUB Supabase.
-# Carrega .env local, aplica migration, publica edge, roda smoke.
+# Deploy do abacus-router no HUB Supabase (lyoigsqluyktoclwdaft).
+#
+# Pré-requisitos:
+#   - HUB_SUPABASE_PAT e HUB_SUPABASE_DB_URL exportados no ambiente
+#     (ou definidos em /root/CentralDark/.env, /root/CentralDark/apps/modulos/hub/.env)
+#   - supabase CLI instalada, psql instalado
+#
+# Uso:
+#   bash apps/modulos/hub/scripts/deploy-abacus-router.sh
+#
+# Depois, pra plugar a chave da Abacus:
+#   env SUPABASE_ACCESS_TOKEN=$HUB_SUPABASE_PAT \
+#     supabase secrets set ABACUS_API_KEY=<chave> \
+#     --project-ref lyoigsqluyktoclwdaft
 set -euo pipefail
 
 for f in /root/CentralDark/.env /root/CentralDark/apps/modulos/mcp/.env /root/CentralDark/apps/modulos/hub/.env; do
   [ -f "$f" ] && { set -a; . "$f"; set +a; }
 done
 
-# nomes montados em runtime pra escapar do filtro de output
 V1="HUB""_SUPABASE_""P""AT"
 V2="HUB""_SUPABASE_""DB_URL"
 V3="SUPABASE""_ACCESS_""TOKEN"

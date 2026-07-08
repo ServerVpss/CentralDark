@@ -1,8 +1,11 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
-import { Button } from '@/shared/ui/button';
-import { Activity, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
+import {
+  Activity, AlertTriangle, CheckCircle2, XCircle,
+  Github, ShieldCheck, FileText, Server, ListChecks,
+  Sparkles, Database, Wrench, FolderTree, Brain, Package,
+} from 'lucide-react';
 
 interface ToolCardProps {
   tool: {
@@ -18,37 +21,60 @@ interface ToolCardProps {
   onSelect?: (id: string) => void;
 }
 
+// Ícone + cor original por categoria (paleta esmeralda CentralDark)
+const CATEGORY_STYLE: Record<string, { icon: React.ReactNode; ring: string; bg: string }> = {
+  github:     { icon: <Github      className="h-5 w-5" />, ring: 'ring-slate-500/40',   bg: 'bg-slate-500/10 text-slate-200' },
+  admin:      { icon: <ShieldCheck className="h-5 w-5" />, ring: 'ring-rose-500/40',    bg: 'bg-rose-500/10 text-rose-300' },
+  docs:       { icon: <FileText    className="h-5 w-5" />, ring: 'ring-sky-500/40',     bg: 'bg-sky-500/10 text-sky-300' },
+  vps:        { icon: <Server      className="h-5 w-5" />, ring: 'ring-emerald-500/40', bg: 'bg-emerald-500/10 text-emerald-300' },
+  pendencias: { icon: <ListChecks  className="h-5 w-5" />, ring: 'ring-amber-500/40',   bg: 'bg-amber-500/10 text-amber-300' },
+  skills:     { icon: <Sparkles    className="h-5 w-5" />, ring: 'ring-violet-500/40',  bg: 'bg-violet-500/10 text-violet-300' },
+  supabase:   { icon: <Database    className="h-5 w-5" />, ring: 'ring-teal-500/40',    bg: 'bg-teal-500/10 text-teal-300' },
+  ops:        { icon: <Wrench      className="h-5 w-5" />, ring: 'ring-orange-500/40',  bg: 'bg-orange-500/10 text-orange-300' },
+  fs:         { icon: <FolderTree  className="h-5 w-5" />, ring: 'ring-indigo-500/40',  bg: 'bg-indigo-500/10 text-indigo-300' },
+  ia:         { icon: <Brain       className="h-5 w-5" />, ring: 'ring-fuchsia-500/40', bg: 'bg-fuchsia-500/10 text-fuchsia-300' },
+};
+
+const FALLBACK_STYLE = { icon: <Package className="h-5 w-5" />, ring: 'ring-muted', bg: 'bg-muted text-muted-foreground' };
+
 export function ToolCard({ tool, onSelect }: ToolCardProps) {
   const healthIcon = {
-    healthy: <CheckCircle2 className="h-4 w-4 text-green-500" />,
-    degraded: <AlertTriangle className="h-4 w-4 text-yellow-500" />,
-    down: <XCircle className="h-4 w-4 text-red-500" />,
-    unknown: <Activity className="h-4 w-4 text-gray-400" />,
+    healthy: <CheckCircle2 className="h-4 w-4 text-emerald-400" />,
+    degraded: <AlertTriangle className="h-4 w-4 text-amber-400" />,
+    down: <XCircle className="h-4 w-4 text-rose-400" />,
+    unknown: <Activity className="h-4 w-4 text-muted-foreground" />,
   };
 
   const healthColor = {
-    healthy: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    degraded: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-    down: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-    unknown: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+    healthy: 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30',
+    degraded: 'bg-amber-500/10 text-amber-300 border border-amber-500/30',
+    down: 'bg-rose-500/10 text-rose-300 border border-rose-500/30',
+    unknown: 'bg-muted text-muted-foreground border border-border',
   };
+
+  const style = CATEGORY_STYLE[tool.category] ?? FALLBACK_STYLE;
 
   return (
     <Card
-      className={`cursor-pointer transition-all hover:shadow-md ${tool.is_deprecated ? 'opacity-60' : ''}`}
+      className={`cursor-pointer transition-all hover:shadow-lg hover:-translate-y-0.5 ${tool.is_deprecated ? 'opacity-60' : ''}`}
       onClick={() => onSelect?.(tool.id)}
     >
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold">{tool.name}</CardTitle>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 ${style.ring} ${style.bg}`}>
+              {style.icon}
+            </div>
+            <CardTitle className="text-base font-semibold truncate">{tool.name}</CardTitle>
+          </div>
           {tool.health_status && (
-            <div className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${healthColor[tool.health_status]}`}>
+            <div className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs shrink-0 ${healthColor[tool.health_status]}`}>
               {healthIcon[tool.health_status]}
               <span>{tool.health_status}</span>
             </div>
           )}
         </div>
-        <p className="text-sm text-muted-foreground">{tool.description}</p>
+        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{tool.description}</p>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-1.5">

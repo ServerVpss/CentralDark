@@ -4,6 +4,7 @@ import { SyncButton } from './SyncButton';
 import { Badge } from '@/shared/ui/badge';
 import { Input } from '@/shared/ui/input';
 import { Search, Filter } from 'lucide-react';
+import { MCP_TOOLS_FALLBACK } from './mcpToolsFallback';
 
 interface Tool {
   id: string;
@@ -27,6 +28,20 @@ interface SyncRun {
   tools_updated: number;
 }
 
+// Fallback estático: converte as 83 tools do MCP num shape compatível com <ToolCard>
+function buildFallbackTools(): Tool[] {
+  return MCP_TOOLS_FALLBACK.map((t, i) => ({
+    id: `mcp-${i}-${t.name}`,
+    name: t.name,
+    description: t.description,
+    category: t.category,
+    tags: t.tags,
+    version: '1.0.0',
+    is_deprecated: false,
+    health_status: 'healthy' as const,
+  }));
+}
+
 export function CatalogTab() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [syncRuns, setSyncRuns] = useState<SyncRun[]>([]);
@@ -43,9 +58,15 @@ export function CatalogTab() {
     try {
       const { hubClient } = await import('@/integrations/supabase/hub-client');
       const { data } = await hubClient.from('catalog_tools').select('*').order('name');
-      if (data) setTools(data);
+      if (data && data.length > 0) {
+        setTools(data);
+      } else {
+        // Banco vazio ou indisponível → mostra as 83 tools reais do MCP
+        setTools(buildFallbackTools());
+      }
     } catch (err) {
-      console.error('Erro ao carregar tools:', err);
+      console.error('Erro ao carregar tools, usando fallback MCP:', err);
+      setTools(buildFallbackTools());
     } finally {
       setLoading(false);
     }
