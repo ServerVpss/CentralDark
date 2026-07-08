@@ -138,9 +138,11 @@ const dl = new THREE.DirectionalLight(0x34d399, 1.2); dl.position.set(50,80,50);
 async function loadData(){
   try {
     const r = await fetch('https://grafo.centralldark.com/api/live', {mode:'cors'});
-    if (r.ok) return await r.json();
-  } catch(e){}
-  // fallback mock
+    const ct = r.headers.get('content-type') || '';
+    if (r.ok && ct.includes('application/json')) return await r.json();
+    console.warn('[lab-v2] API devolveu', r.status, ct, '→ usando mock');
+  } catch(e){ console.warn('[lab-v2] fetch falhou → mock', e.message); }
+  // fallback mock (sempre funciona, sem token, sem CORS)
   const N = 400;
   const nodes = Array.from({length:N}, (_,i)=>({id:'n'+i, group:i%6}));
   const links = [];

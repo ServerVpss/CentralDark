@@ -77,8 +77,10 @@
   async function loadData(){
     try {
       const r = await fetch('https://grafo.centralldark.com/api/live', {mode:'cors'});
-      if (r.ok) return await r.json();
-    } catch(e){}
+      const ct = r.headers.get('content-type') || '';
+      if (r.ok && ct.includes('application/json')) return await r.json();
+      console.warn('[lab-v3] API devolveu', r.status, ct, '→ usando mock');
+    } catch(e){ console.warn('[lab-v3] fetch falhou → mock', e.message); }
     const N = 400;
     const nodes = Array.from({length:N}, (_,i)=>({id:'n'+i}));
     const links = [];
