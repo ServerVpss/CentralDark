@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { RefreshCw, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
+import { RefreshCw, CheckCircle2, XCircle, AlertTriangle, KeyRound, Loader2 } from 'lucide-react';
 import { abacusApi, AbacusStatus } from '@/services/abacus-client';
 
 export function StatusPanel() {
   const [data, setData] = useState<AbacusStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
+
+  // form de chave
+  const [editing, setEditing] = useState(false);
+  const [keyInput, setKeyInput] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -20,6 +26,27 @@ export function StatusPanel() {
   };
 
   useEffect(() => { load(); }, []);
+
+  const submitKey = async () => {
+    if (!keyInput.trim()) return;
+    setSaving(true);
+    setSaveMsg(null);
+    try {
+      const r = await abacusApi.setKey(keyInput.trim());
+      if (r.ok) {
+        setSaveMsg('✅ Chave ativada');
+        setKeyInput('');
+        setEditing(false);
+        await load();
+      } else {
+        setSaveMsg(`❌ ${r.error ?? 'falha ao salvar'}`);
+      }
+    } catch (e: any) {
+      setSaveMsg(`❌ ${e.message ?? 'erro'}`);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -41,33 +68,69 @@ export function StatusPanel() {
           <div>
             <p className="font-medium">Edge <code>abacus-router</code> indisponível</p>
             <p className="text-xs opacity-80 mt-0.5">{err}</p>
-            <p className="text-xs opacity-80 mt-1">Provável: função ainda não deployada no HUB. Roda o deploy pela VPS.</p>
+            <p className="text-xs opacity-80 mt-1">Provável: função ainda não deployada no HUB.</p>
           </div>
         </div>
       )}
 
       {data && (
         <>
-          <div className={`p-4 rounded-lg border flex items-center gap-3 ${
+          {/* Card da chave */}
+          <div className={`p-4 rounded-lg border ${
             data.keyConfigured
               ? 'border-primary/40 bg-primary/10'
               : 'border-yellow-500/40 bg-yellow-500/10'
           }`}>
-            {data.keyConfigured
-              ? <CheckCircle2 className="h-5 w-5 text-primary" />
-              : <AlertTriangle className="h-5 w-5 text-yellow-500" />}
-            <div className="flex-1 text-sm">
-              <p className="font-medium">
-                {data.keyConfigured ? 'ABACUS_API_KEY configurada no cofre do HUB' : 'ABACUS_API_KEY não configurada'}
-              </p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {data.keyConfigured
-                  ? `${data.modelCount} modelos detectados via /models`
-                  : 'Cole a chave via SSH pra ativar chamadas reais. Ping dos endpoints continua funcionando.'}
-              </p>
+            <div className="flex items-center gap-3">
+              {data.keyConfigured
+                ? <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
+                : <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0" />}
+              <div className="flex-1 min-w-0 text-sm">
+                <p className="font-medium">
+                  {data.keyConfigured
+                    ? <>ABACUS_API_KEY <span className="text-primary">ativada</span> · <span className="font-mono text-xs opacity-80">••••{data.keyHint}</span></>
+                    : 'ABACUS_API_KEY não configurada'}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {data.keyConfigured
+                    ? `${data.modelCount} modelos detectados via /models`
+                    : 'Cola a chave abaixo pra ativar chamadas reais. Ela nunca volta pro navegador.'}
+                </p>
+              </div>
+              <button
+                onClick={() => { setEditing((v) => !v); setSaveMsg(null); }}
+                className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border/60 hover:bg-muted/40 transition shrink-0"
+              >
+                <KeyRound className="h-3 w-3" />
+                {data.keyConfigured ? 'Trocar' : 'Configurar'}
+              </button>
             </div>
+
+            {editing && (
+              <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                <input
+                  type="password"
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={keyInput}
+                  onChange={(e) => setKeyInput(e.target.value)}
+                  placeholder="Cola aqui a chave Abacus (s2_...)"
+                  className="flex-1 px-3 py-2 text-sm font-mono rounded-md border border-border/60 bg-background/60 focus:outline-none focus:border-primary/60"
+                />
+                <button
+                  onClick={submitKey}
+                  disabled={saving || keyInput.length < 8}
+                  className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40 flex items-center gap-1.5"
+                >
+                  {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <CheckCircle2 className="h-3 w-3" />}
+                  Salvar no cofre
+                </button>
+              </div>
+            )}
+            {saveMsg && <p className="text-xs mt-2 opacity-80">{saveMsg}</p>}
           </div>
 
+          {/* Endpoints */}
           <div className="space-y-2">
             {data.endpoints.map((e) => (
               <div key={e.name} className="p-3 rounded-lg border border-border/60 bg-background/40 flex items-center gap-3">

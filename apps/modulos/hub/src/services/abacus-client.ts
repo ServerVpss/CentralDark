@@ -12,6 +12,7 @@ async function headers() {
 
 export interface AbacusStatus {
   keyConfigured: boolean;
+  keyHint: string | null;
   endpoints: { name: string; url: string; status: number; latencyMs: number; ok: boolean }[];
   modelCount: number;
 }
@@ -52,6 +53,15 @@ export const abacusApi = {
     if (!r.ok) throw new Error(`logs ${r.status}`);
     const j = await r.json();
     return j.logs ?? [];
+  },
+
+  async setKey(apiKey: string): Promise<{ ok: boolean; keyHint?: string; error?: string }> {
+    const r = await fetch(`${FN_BASE}/set-key`, {
+      method: 'POST',
+      headers: await headers(),
+      body: JSON.stringify({ apiKey }),
+    });
+    return r.json();
   },
 
   async chat(model: string, prompt: string): Promise<{ ok: boolean; content: string; latencyMs: number; status: number }> {
