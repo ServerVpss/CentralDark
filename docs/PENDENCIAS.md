@@ -746,3 +746,16 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** README lista só 3 arquivos (faltam `hermes-panel.*`, `pivete-invocacao.*`, `pivete-mcp-bridge.js`, `pivete-persona.json`). Ora fala `docker restart open-webui`, ora `CentralDark-WebUI`. Diz que só `esmeralda.css` é montado, mas ele faz `@import '/static/hermes-panel.css'` que quebra.
 - **Onde mexer:** `apps/modulos/WebUI/custom-css/README.md` + `docker-compose.override.yml`
 - **Critério pra fechar:** Atualizar tabela do README com os 9 arquivos, fixar 1 nome de container (`CentralDark-WebUI`), garantir que `hermes-panel.css` seja montado junto no compose ou remover o `@import`.
+
+### 51. Arsenal 2026 — mapear 7 setores do zip nos módulos reais da VPS — ✅ CONCLUÍDO em 08/07/2026
+- **Sintoma inicial:** `CentralDark_Arsenal_2026.zip` chegou como esqueleto (7 pastas de setor vazias + 3 docs + `regras.json`). Dúvida: precisava implementar do zero?
+- **Resultado do mapeamento (7/7 cobertos por código real já em PM2):**
+  - **COMANDO** → `apps/modulos/HERMES-CORE/` (loop + rede especialista)
+  - **ARSENAL** → `apps/modulos/arsenal-openai-adapter/` + `docs/CONSCIENCIA/ARSENAL/`
+  - **ESCUDO** → `HERMES-CORE/agents/Log-Verificador/` (PM2 id 77) + `apps/modulos/Monitoramento24h/`
+  - **INTELIGÊNCIA** → `apps/modulos/graph-panel/` + `apps/modulos/mapeamento/` + `apps/modulos/obsidian-plugin-grafo-vivo/`
+  - **MEMÓRIA** → `apps/modulos/memoria-api/` + `docs/CONSCIENCIA/` + `LEMBRANCAS/`
+  - **EXECUÇÃO** → `apps/modulos/elite-gateway/` + `elite-anthropic-proxy/` + `proxy/` + `lovable-proxy/` + `artifacts-builder/` + MCP
+  - **LOGÍSTICA** → `scripts/webhook/` + `apps/modulos/pivete-sync/` + `oauth-broker/` + `status/`
+- **Conclusão:** zip é doutrina/nomenclatura militar, não código novo. 0 pastas precisam ser preenchidas do zero. Todos os 7 setores já rodam.
+- **Próximo passo opcional:** escrever `docs/CONSCIENCIA/ARSENAL/MAPA-SETORES.md` fixando essa tabela pras próximas IAs herdarem o mapa direto.
