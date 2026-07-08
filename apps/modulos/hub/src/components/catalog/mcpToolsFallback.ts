@@ -93,4 +93,6 @@ export const MCP_TOOLS_FALLBACK: McpToolStatic[] = [
   { name: 'vps_run_once_script', description: 'Destrutivo: script run-once (dry-run por padrão)', category: 'vps', tags: ['vps', 'shell', 'destructive'] },
   { name: 'vps_tree_safe', description: 'Árvore curta de arquivos/pastas (sanitizada)', category: 'vps', tags: ['vps', 'fs', 'readonly'] },
   { name: 'vps_write_file_safe', description: 'Destrutivo: cria/atualiza arquivo (dry-run por padrão)', category: 'vps', tags: ['vps', 'fs', 'destructive'] },
+  { name: 'motion-ui-patterns', description: 'Skill de padrões de motion UI (mcpmarket.com) — animações, transições e microinterações', category: 'skills', tags: ['skills', 'ui', 'motion', 'mcpmarket'] },
+  { name: 'using-superpowers', description: 'Skill Mega Powers do repo claude-mermaid-collab — orquestração avançada', category: 'skills', tags: ['skills', 'superpowers'] },
 ];
