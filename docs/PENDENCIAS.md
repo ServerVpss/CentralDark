@@ -692,3 +692,57 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** Pivete quer um card no HUB (padrão multi-conta, igual Grok/Claude/OpenAI/Gemini) pra listar contas Lovable e puxar saldo/créditos/limites de cada workspace via API. Hoje só dá pra ver manualmente entrando em cada workspace no site.
 - **Onde mexer:** HUB Supabase (lyoigsqluyktoclwdaft) — nova tabela contas_lovable (multi-conta por workspace). Endpoint interno da Lovable usado pelo agente: credits--get_credit_balance e credits--get_my_usage. Retorna: total_remaining, total_granted, current_period_used, daily_remaining, grant_type_balances (daily/billing/bonus), upcoming_expirations, billing_period (start/end). Filtros aceitos: start_date, end_date, group_by (user/project/billable_item), project_id, user_id, applicability, limit. LIMITAÇÃO: API do agente é per-workspace, não lista outros workspaces do mesmo email — precisa 1 token/registro por workspace. OAuth público "Sign in with Lovable" NÃO EXISTE hoje, então cadastro é manual (colar token de cada workspace). Tutorial base do darkai/gateway já está no stash CONSCIENCIA/DARKAI.
 - **Critério pra fechar:** Card "Lovable" no HUB aceitando N contas, cada linha mostrando: nome do workspace, saldo restante, saldo concedido, uso do período, diário restante, próximos vencimentos de bônus. Botão "atualizar" chama API e regrava. Documentação completa colada em docs/CONSCIENCIA/DARKAI/ junto com o tutorial existente.
+### 40. [MAPEAMENTO WebUI] Placar do enxame — 19 achados (10 🔴 + 9 🟡) — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** Enxame de 12 sub-agentes varreu `apps/modulos/WebUI/` + `infra/caddy/` e achou 10 problemas críticos + 9 atenções. Cada 🔴 tem pendência filha #41..#50 abaixo.
+- **Onde mexer:** `apps/modulos/WebUI/`, `infra/caddy/`
+- **Critério pra fechar:** Fechar #41..#50 e revisar os 9 amarelos (rede docker sem `centraldark-net`; branco puro no CSS; paradoxo em `pivete-system.md`; CSP ausente em Caddyfiles; z-index alto; triggers "acordar pivete" não documentados; `catch{}` silencioso; mount CSS frágil; setInterval sem cancelar request).
+
+### 41. [WebUI/01] Compose: tag `:main`, `WEBUI_SECRET_KEY` vazia, sem healthcheck, Anthropic key exposta — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** `docker-compose.yml` usa image com tag móvel `:main` (quebras inesperadas), `WEBUI_SECRET_KEY` vazia (sessões vulneráveis), sem healthcheck (container zumbi), API key da Anthropic marcada como exposta em `environment`.
+- **Onde mexer:** `apps/modulos/WebUI/docker-compose.yml`
+- **Critério pra fechar:** Pinar tag da imagem (ex: `open-webui:v0.6.x`), mover secrets pra `.env`, adicionar healthcheck HTTP na porta 8080, remover keys hardcoded do `environment`.
+
+### 42. [WebUI/03] Conflito `emerald.css` × `esmeralda.css` com `!important` nos mesmos seletores — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** `emerald.css` (dark) e `esmeralda.css` (light) estilizam `html`, `body`, `sidebar`, `user-message` com `!important`. Se carregados juntos, cascata fica imprevisível.
+- **Onde mexer:** `apps/modulos/WebUI/custom-css/emerald.css` e `esmeralda.css`
+- **Critério pra fechar:** Definir 1 tema oficial (esmeralda), remover `!important` em favor de especificidade, ou usar `prefers-color-scheme` pra separar dark/light.
+
+### 43. [WebUI/04] Bearer token hardcoded em `mcpo-config/config.json` — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** Campo `Authorization` contém `Bearer 1eb4912da7a27677...` fixo. Sem timeout definido pra conexão com servidor centraldark.
+- **Onde mexer:** `apps/modulos/WebUI/mcpo-config/config.json`
+- **Critério pra fechar:** Substituir token literal por `${MCP_TOKEN}` via env, rotacionar o token exposto, adicionar `timeout`/`requestTimeout`.
+
+### 44. [WebUI/06] `popular-webui.sh` acessa `/var/lib/docker/volumes` direto (exige root, quebra portabilidade) — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** Script acessa path do volume docker no host e assume `/root/CentralDark/` fixo. Falha em qualquer host com root do docker em outro path ou sem sudo.
+- **Onde mexer:** `apps/modulos/WebUI/scripts/popular-webui.sh`
+- **Critério pra fechar:** Trocar acesso direto ao volume por `docker exec` no container ou `docker cp`, e resolver path do projeto via `$(git rev-parse --show-toplevel)` ou variável.
+
+### 45. [WebUI/07] `tune-config.py`: chaves hardcoded, SQLite sem close, path fixo — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** Chaves `SEGREDO_ELITE_123` em várias linhas. `sqlite3.connect` nunca fechado (sem context manager). Path `/app/backend/data/webui.db` rígido. Sem `try/except`.
+- **Onde mexer:** `apps/modulos/WebUI/tune-config.py`
+- **Critério pra fechar:** Mover keys pra env, usar `with sqlite3.connect(...) as conn`, tornar `DB_PATH` configurável, envolver em `try/except` com log estruturado.
+
+### 46. [WebUI/08] `pivete-mcp-bridge.js` sem timeout, sem retry, sem auth header — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** Requests ao MCP podem ficar pendentes indefinidamente. Se carga inicial do catálogo falhar, chat fica sem tools. Listener `DOMContentLoaded` sem `{ once: true }`.
+- **Onde mexer:** `apps/modulos/WebUI/custom-css/pivete-mcp-bridge.js`
+- **Critério pra fechar:** Wrapper de `fetch` com `AbortController` (timeout 15s) + retry exponencial (3 tentativas) + header `Authorization` vindo de config, e `{ once: true }` no listener.
+
+### 47. [WebUI/09] `hermes-panel.js` usa `innerHTML` com dados de API → risco XSS + race condition — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** `renderCadeia`/`loadAuditItens`/`loadBoot` injetam dados via `innerHTML` sem sanitizar. `setInterval` de 10s não cancela request anterior. Vários `catch{}` silenciosos.
+- **Onde mexer:** `apps/modulos/WebUI/custom-css/hermes-panel.js`
+- **Critério pra fechar:** Substituir `innerHTML` por `textContent` ou DOMPurify, adicionar `AbortController` pra cancelar refresh anterior, logar erros nos catch.
+
+### 48. [WebUI/10] `pivete-invocacao`: sem `prefers-reduced-motion`, banner sem ARIA nem botão fechar — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** Animação `pivete-slide-in` sem fallback pra usuários com sensibilidade vestibular. Banner sem `role=status`/`aria-live`. Auto-desaparece em 5s sem controle do usuário (viola WCAG 2.1).
+- **Onde mexer:** `apps/modulos/WebUI/custom-css/pivete-invocacao.css` e `.js`
+- **Critério pra fechar:** `@media (prefers-reduced-motion: reduce)` desabilitando animação; adicionar `role=status` + `aria-live=polite`; botão de fechar + pausar timer no hover/focus.
+
+### 49. [WebUI/11] `ui.centralldark.com` NÃO existe em `infra/caddy/` (Caddy cego pra WebUI) — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** Nenhum bloco de site pra `ui.centralldark.com` ou `webui.centralldark.com` em `infra/caddy/`. Config está solta na VPS, sem versionamento. Sem CSP em Caddyfile nenhum. HSTS inconsistente entre módulos.
+- **Onde mexer:** `infra/caddy/`
+- **Critério pra fechar:** Criar `infra/caddy/webui.Caddyfile` com `reverse_proxy` pra `localhost:3000`, HSTS, CSP, `X-Content-Type-Options`, `Referrer-Policy`. Importar do Caddyfile principal.
+
+### 50. [WebUI/12] README documenta 3 de 9 arquivos + nome de container inconsistente + `@import` quebrado — 🔴 ABERTO (08/07/2026)
+- **Sintoma:** README lista só 3 arquivos (faltam `hermes-panel.*`, `pivete-invocacao.*`, `pivete-mcp-bridge.js`, `pivete-persona.json`). Ora fala `docker restart open-webui`, ora `CentralDark-WebUI`. Diz que só `esmeralda.css` é montado, mas ele faz `@import '/static/hermes-panel.css'` que quebra.
+- **Onde mexer:** `apps/modulos/WebUI/custom-css/README.md` + `docker-compose.override.yml`
+- **Critério pra fechar:** Atualizar tabela do README com os 9 arquivos, fixar 1 nome de container (`CentralDark-WebUI`), garantir que `hermes-panel.css` seja montado junto no compose ou remover o `@import`.
