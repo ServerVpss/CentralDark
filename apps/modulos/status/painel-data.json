@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T15:35:41.184Z",
-  "updatedAtBR": "08/07/2026, 12:35:41 BRT",
+  "updatedAt": "2026-07-08T15:50:57.455Z",
+  "updatedAtBR": "08/07/2026, 12:50:57 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Changes",
+    "lastCommit": "aprendizado(#318): Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-08T15:50:57.455Z",
+      "titulo": "Push na main · f6c3e13d123897fd13a5fdf9b80034814c671aab",
+      "detalhe": "aprendizado(#318): Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian",
+      "area": "Repositório",
+      "sha": "f6c3e13",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-08T15:35:41.184Z",
       "titulo": "Push na main · 2185b5c00a1cd5b2f36120e29a565ffa6859954b",
       "detalhe": "Changes",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#313): TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta",
       "area": "Repositório",
       "sha": "fa59be7",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-07T13:49:45.711Z",
-      "titulo": "Push na main · 916265d618f9e215cb6ac98336a960ff753c6407",
-      "detalhe": "docs: fixar protocolo de orquestracao no boot",
-      "area": "Repositório",
-      "sha": "916265d",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-08T15:50:57.455Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f6c3e13d123897fd13a5fdf9b80034814c671aab (f6c3e13)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T15:35:41.184Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 2185b5c00a1cd5b2f36120e29a565ffa6859954b (2185b5c)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-07T15:39:40.721Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · fa59be795c44d12081cfbd041b2b72f906629498 (fa59be7)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-07T13:49:45.711Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 916265d618f9e215cb6ac98336a960ff753c6407 (916265d)",
       "area": "Repositório",
       "status": "sucesso"
     }
