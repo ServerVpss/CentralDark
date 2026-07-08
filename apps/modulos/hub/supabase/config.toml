@@ -1,0 +1,5 @@
+# Config do projeto HUB (lyoigsqluyktoclwdaft) — isolado do Lovable atual
+project_id = "lyoigsqluyktoclwdaft"
+
+[functions.abacus-router]
+verify_jwt = false
