@@ -271,8 +271,9 @@ export function OAuthConnectors() {
                 <Badge className={toneClass.warning}>🟡 catálogo local ativo</Badge>
               )}
               {loadError && (
-                <Badge className={toneClass.danger}>🔴 {loadError}</Badge>
+                <Badge className={toneClass.warning}>⚠️ {loadError}</Badge>
               )}
+
               {!isRealUser && (
                 <Badge className={toneClass.muted}>🧪 modo dev · sem login</Badge>
               )}
