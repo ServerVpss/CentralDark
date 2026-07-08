@@ -363,3 +363,13 @@ Conteúdo: O Pivete exige comunicação em PT-BR, utilizando o HUD visual [ 🤖
 - **Promovida:** nao
 
 Conteúdo: Em operações longas com conversas paralelas, sempre responder o assunto paralelo e fechar retomando o fio da missão principal. Também indicar o modo operacional recomendado em formato universal, não preso ao nome de uma interface específica; quando estiver no Vibe, traduzir para Chat/Plan/Default/Accept Edits/Auto Approve se fizer sentido.
+
+### [2026-07-08T16:43] Padrão do Pivete: funcionou → consolida → sela
+- **Data:** 2026-07-08
+- **Tags:** metodologia, selar, consolidar, areas-protegidas, regra-de-ouro, pivete
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-07
+- **Promovida:** sim
+
+Conteúdo: Toda vez que algo funciona de verdade e prova valor (uma regra de segurança que bloqueou o certo, um script que rodou limpo, um módulo estabilizado, uma automação testada), o passo seguinte é CONSOLIDAR + SELAR imediatamente — não deixar solto. Sinais de que precisa selar: bloqueio de path funcionou como esperado, script rodou 3x sem erro, módulo tá em produção estável, padrão foi validado. Como selar: (1) adicionar à lista de Áreas Protegidas 🔒 no CLAUDE.md, (2) documentar em docs/CONSCIENCIA/ com data e motivo, (3) escrever a regra no .claude/ pra próxima IA respeitar, (4) marcar visualmente com 🔒 sempre que exibir estrutura de pastas. Nunca reabrir o que foi selado sem autorização explícita ("PERMITO PIVETE"). Regra oposta também vale: enquanto não funciona/não prova, fica aberto pra iterar. Selar é RECOMPENSA por ter funcionado.
