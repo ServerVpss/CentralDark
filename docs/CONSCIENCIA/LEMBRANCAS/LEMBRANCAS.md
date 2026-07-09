@@ -403,3 +403,13 @@ Conteúdo: Pra `AbacusApiCard` ficar verde no HUB: (1) `ABACUS_API_KEY` real col
 - **Promovida:** nao
 
 Conteúdo: Sandbox Lovable NÃO tem `ssh` no PATH — precisa rodar via `nix run nixpkgs#openssh -- -i ~/.ssh/vps_key ...`. Chave `[nome-de-segredo]` vem em uma linha só, reformatar em blocos de 70 chars com header/footer antes de usar. Host: `[servidor]`. Uma vez montado, dá acesso total à VPS mesmo com MCP em 401.
+
+### [2026-07-09T14:55] MCP saudável na VPS — 401 é do lado Lovable
+- **Data:** 2026-07-09
+- **Tags:** mcp, abacus, diagnostico, 401
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: MCP CentralDark (PM2 id 10) está ONLINE em 127.0.0.1:9100 e webhook.centralldark.com/mcp responde 200. O 401 do conector Lovable `mcp_custom_A1pyZ` é problema de CREDENCIAL/token expirado do lado do Lovable, não da VPS. Solução: reconectar o conector na UI Lovable, não mexer no MCP da VPS. `ABACUS_API_KEY=` no /root/[oculto] está VAZIO (stub) — por isso api.centralldark.com/v1/models retorna 401 e o AbacusApiCard fica 🔴.
