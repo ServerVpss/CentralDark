@@ -383,3 +383,13 @@ Conteúdo: Toda vez que algo funciona de verdade e prova valor (uma regra de seg
 - **Promovida:** nao
 
 Conteúdo: Quando o conector MCP `mcp_custom_A1pyZ` estiver em 401, usar SSH direto na VPS com a chave `[nome-de-segredo]` (reformatar pro padrão OpenSSH antes). Rastro obrigatório: branch `chore/rastro-lovable-ssh-YYYYMMDD` + log em `/root/[oculto]`. Nunca editar direto na main — Regra de Ouro.
+
+### [2026-07-09T14:51] Card Abacus 🟢 exige 3 condições
+- **Data:** 2026-07-09
+- **Tags:** abacus, hub, caddy, arsenal-adapter, checklist
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: Pra `AbacusApiCard` ficar verde no HUB: (1) `ABACUS_API_KEY` real colada em `/root/[oculto]`, (2) chave publicada no HUB Supabase `lyoigsqluyktoclwdaft` via edge `set-key`, (3) PM2 `CentralDark-ArsenalAdapter` UP na porta 8090. Caddy já corrigido: `api.centralldark.com` → 127.0.0.1:8090. Endpoint saiu de 502 pra 401 (auth pendente).
