@@ -171,7 +171,7 @@ function sseChunk(model, delta, finish = null) {
 
 const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key, api-key');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   if (req.method === 'OPTIONS') return res.end();
 
@@ -183,8 +183,10 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('X-Request-Id', requestId);
 
   // Autentica sempre (não bloqueia em shadow). Preserva fallback do AUTH_KEY legado.
-  const authRaw = req.headers.authorization || '';
-  const legacyOk = AUTH_KEY && authRaw.includes(AUTH_KEY);
+  // Aceita Authorization: Bearer <k>, x-api-key: <k> e api-key: <k> (Claude Desktop usa x-api-key).
+  const authRaw = (req.headers.authorization || '').toString();
+  const xKeyRaw = (req.headers['x-api-key'] || req.headers['api-key'] || '').toString();
+  const legacyOk = AUTH_KEY && (authRaw.includes(AUTH_KEY) || xKeyRaw.includes(AUTH_KEY));
   const authResult = await authenticate(req);
   let modelForAudit = null;
 
