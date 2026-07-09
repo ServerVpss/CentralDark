@@ -4,7 +4,9 @@
 # ============================================================
 
 param(
-  [string]$Url = "https://api.centralldark.com/v1",
+  # IMPORTANTE: sem /v1 no final — Claude Desktop e clientes OpenAI-compat
+  # anexam /v1/... sozinhos. Com /v1 aqui vira /v1/v1/models -> 404.
+  [string]$Url = "https://api.centralldark.com",
   [string]$Key = "cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE"
 )
 
