@@ -2559,3 +2559,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-09
 - **Contexto:** Rodada 09/07 via SSH direto na VPS (MCP em 401)
 - **Aprendizado:** Dedup 53 chaves repetidas + stub ABACUS_API_KEY + Caddy api.centralldark.com apontando pra 127.0.0.1:8090 (ArsenalAdapter). Endpoint saiu 502→401 (auth pendente). Rastro: branch chore/rastro-lovable-ssh-20260709 + revisoes/lovable-20260709-124938-api-centraldark-e-env.md.
+
+### 322. MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia
+- **Categoria:** outro
+- **Data:** 2026-07-09
+- **Contexto:** Diagnóstico completo VPS via SSH (nix openssh) — MCP vs Abacus
+- **Aprendizado:** Rodada 09/07 via SSH direto: MCP na VPS (PM2 id 10) online e healthy em webhook.centralldark.com/mcp (200 OK). O 401 do conector Lovable `mcp_custom_A1pyZ` é token expirado do lado do Lovable — reconectar na UI resolve, sem tocar na VPS. Confirmado que ABACUS_API_KEY no .env está VAZIA (len=0, apenas stub que deixei) — por isso ArsenalAdapter :8090 e api.centralldark.com/v1/models retornam 401. Pendente: chave real do Abacus + publicar no HUB Supabase.
