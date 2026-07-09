@@ -10,6 +10,8 @@ import { GatewayTab } from './components/gateway/GatewayTab';
 import { HermesTab } from './components/hermes/HermesTab';
 import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles } from 'lucide-react';
+import { ButtonLogDrawer } from './components/ButtonLogDrawer';
+import { logButton } from './lib/buttonLog';
 
 export default function HubPage() {
   return (
@@ -36,7 +38,7 @@ export default function HubPage() {
       </header>
 
       <main className="container mx-auto p-6 space-y-6">
-        <Tabs defaultValue="dashboard" className="space-y-6">
+        <Tabs defaultValue="dashboard" className="space-y-6" onValueChange={(v) => logButton('hub.tab-change', { tab: v })}>
           <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 h-auto sm:h-11 p-1 card-premium gap-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Dashboard</TabsTrigger>
             <TabsTrigger value="hermes" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">🧠 Hermes</TabsTrigger>
@@ -60,6 +62,7 @@ export default function HubPage() {
           <TabsContent value="audit"><AuditTab /></TabsContent>
         </Tabs>
       </main>
+      <ButtonLogDrawer />
     </div>
   );
 }
