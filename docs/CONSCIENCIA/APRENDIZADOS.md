@@ -2565,3 +2565,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-09
 - **Contexto:** Diagnóstico completo VPS via SSH (nix openssh) — MCP vs Abacus
 - **Aprendizado:** Rodada 09/07 via SSH direto: MCP na VPS (PM2 id 10) online e healthy em webhook.centralldark.com/mcp (200 OK). O 401 do conector Lovable `mcp_custom_A1pyZ` é token expirado do lado do Lovable — reconectar na UI resolve, sem tocar na VPS. Confirmado que ABACUS_API_KEY no .env está VAZIA (len=0, apenas stub que deixei) — por isso ArsenalAdapter :8090 e api.centralldark.com/v1/models retornam 401. Pendente: chave real do Abacus + publicar no HUB Supabase.
+
+### 323. Auditoria de permissões da view api.ai_requests no HUB
+- **Categoria:** regra
+- **Data:** 2026-07-09
+- **Contexto:** Após expor public.ai_requests via view api.ai_requests no HUB Supabase (lyoigsqluyktoclwdaft) pra destravar a aba Logs IA, era preciso confirmar que a superfície ficou mínima e segura pra anon/authenticated.
+- **Aprendizado:** Padrão validado: view em schema `api` com GRANT SELECT só pra anon/authenticated + tabela base em public SEM grant pra anon = leitura pública controlada, escrita bloqueada (INSERT anon retorna 401 "permission denied for view"), acesso direto à tabela base bloqueado (401 com hint do Postgres pedindo grant — exatamente o comportamento desejado). Auditoria via curl testando 5 vetores: SELECT anon na view, INSERT anon, sem apikey, SELECT anon na tabela base (Accept-Profile: public), e enumeração de colunas expostas. Não precisa RLS na view quando não há coluna de tenant — o grant já limita a leitura pública a dados operacionais não-PII (latência, tokens, status).
