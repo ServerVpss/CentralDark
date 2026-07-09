@@ -110,6 +110,8 @@ Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
 
 ## 5. Regras de Execução Defensiva
 
+> 🛡️ **SELO DOUTRINA:** esta seção é reforçada por [`docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md`](docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md). Toda IA subordinada ao CentralDark deve obedecer a Doutrina de Proteção Estratégica além destas regras. Ação sem "PERMITO PIVETE" explícito = violação.
+
 1. Antes de gravar/alterar qualquer arquivo crítico (como este `CLAUDE.md`), verificar se já existe e **preservar conteúdo prévio** — atualizar seções sem sobrescrever cegamente.
 2. Não adivinhar caminhos de arquivos na VPS — usar catálogo, busca ou inspeção de leitura antes.
 3. Não editar código de aplicação diretamente na VPS como Fonte da Verdade. Código/script/doc nasce ou é atualizado no GitHub.
@@ -170,6 +172,8 @@ Se o Pivete pedir uma ação que quebra o fluxo, avise:
 ---
 
 ## 9. Áreas Protegidas — Trava Obrigatória 🔒
+
+> 🛡️ **SELO DOUTRINA:** áreas 🔒 são intocáveis sem autorização EXPLÍCITA ("PERMITO PIVETE"). Ver [`docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md`](docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md) e [`.github/CODEOWNERS`](.github/CODEOWNERS). Lógica estratégica do Pivete (arquitetura, gateway, secrets, fluxo, governança) NÃO pode ser alterada por nenhuma IA sem autorização nominal.
 
 **Estas áreas foram consolidadas e testadas. Nenhuma IA pode modificá-las sem:**
 1. Informar EXATAMENTE o que pretende mudar e POR QUÊ (motivo técnico ou de negócio).
