@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 352 | 0 | 0 | 352 | 0 |
+| aprendizados | 354 | 0 | 0 | 354 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **352**
+- 🟥 Faltando no Notion: **354**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -400,4 +400,6 @@
 - 318. Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian
 - 319. Funcionou → Consolida → Sela (regra de ouro)
 - 320. Bot Telegram pode trocar própria foto via setMyProfilePhoto
+- 321. Dedup .env VPS + fix Caddy api.centralldark.com
+- 322. MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia
 </details>

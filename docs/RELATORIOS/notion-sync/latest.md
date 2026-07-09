@@ -61,7 +61,7 @@
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
 | aprendizados | atualizado | #2 — MCP usa ServerVpss/CentralDark e /root/[oculto] como alvo oficial |
-| aprendizados | atualizado | #3 — Transformar repo espelho em backup passivo sem Actions |
+| aprendizados | erro | #3 — Transformar repo espelho em backup passivo sem Actions |
 | aprendizados | atualizado | #4 — Neutralizar workflows do repo espelho com stub passivo |
 | aprendizados | atualizado | #5 — Repo espelho passivo: desativar Actions nas configurações do GitHub |
 | aprendizados | atualizado | #6 — Consenso final ChatGPT + Grok para espelho GitHub |
@@ -379,6 +379,8 @@
 | aprendizados | atualizado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
 | aprendizados | atualizado | #319 — Funcionou → Consolida → Sela (regra de ouro) |
 | aprendizados | atualizado | #320 — Bot Telegram pode trocar própria foto via setMyProfilePhoto |
+| aprendizados | criado | #321 — Dedup .env VPS + fix Caddy api.centralldark.com |
+| aprendizados | criado | #322 — MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
