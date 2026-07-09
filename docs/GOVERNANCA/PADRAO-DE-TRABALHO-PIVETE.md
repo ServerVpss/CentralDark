@@ -2,7 +2,9 @@
 
 **STATUS:** 🟢 PADRÃO ATUAL OFICIAL  
 **DATA:** 2026-07-09  
-**REPOSITÓRIO:** `ServerVpss/CentralDark`
+**REPOSITÓRIO:** `ServerVpss/CentralDark`  
+**GATEWAY OFICIAL:** `https://api.centralldark.com/`  
+**ARQUITETURA:** `docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md`
 
 ---
 
@@ -224,9 +226,10 @@ NÃO RESTARTAR SEM OK.
 NÃO DELETAR SEM BACKUP.
 NÃO PUXAR/PUSHAR SEM MAPEAR DIVERGÊNCIA.
 NÃO REMOVER VARIÁVEL SEM SABER QUEM USA.
+NÃO TROCAR ENDPOINT OFICIAL SEM AUTORIZAÇÃO DO PIVETE.
 ```
 
-Se envolver VPS, produção, GitHub, deploy, PM2, systemd, Docker, secrets ou tokens, o modo é sempre:
+Se envolver VPS, produção, GitHub, deploy, PM2, systemd, Docker, secrets, tokens ou Gateway CentralDark, o modo é sempre:
 
 ```txt
 MAPEAR PRIMEIRO.
@@ -239,11 +242,12 @@ AGIR DEPOIS.
 
 ```txt
 🟢 LABELS PADRONIZADAS — FASE 1 CONCLUÍDA
+🟢 GATEWAY OFICIAL REGISTRADO: https://api.centralldark.com/
 🟡 FALTA SNAPSHOT FINAL DAS LABELS
 🟡 FALTA MAPEAR DUPLICATAS ANTIGAS
 🟡 FALTA DECIDIR O QUE MANTER / UNIFICAR / REMOVER
 🟡 FALTA CONTINUAR MISSÃO VPS ↔ GITHUB
-🔴 PRINCIPAL FUTURO: REMOVER claude.ap7.site / ANTHROPIC_BASE_URL DA VPS COM MAPA SEGURO
+🔴 PRINCIPAL FUTURO: MAPEAR ENDPOINTS/VARIÁVEIS ANTIGAS E CONSOLIDAR O GATEWAY OFICIAL
 ```
 
 ---
@@ -276,27 +280,40 @@ Esses comandos são leitura e ajudam a montar o mapa.
 
 ---
 
-## 13. MISSÃO claude.ap7.site / ANTHROPIC_BASE_URL
+## 13. MISSÃO API CENTRALDARK / ANTHROPIC_BASE_URL
+
+Endpoint oficial da arquitetura CentralDark:
+
+```txt
+https://api.centralldark.com/
+```
 
 Objetivo futuro:
 
 ```txt
-MAPEAR TODO USO DE claude.ap7.site NA VPS
+MAPEAR TODO USO DE ENDPOINTS ANTIGOS NA VPS
 MAPEAR TODO USO DE ANTHROPIC_BASE_URL NA VPS
 DESCOBRIR QUEM DEPENDE DISSO
-PROPOR SUBSTITUIÇÃO SEGURA
-REMOVER DA VPS SÓ DEPOIS DE VALIDAR
+PROPOR SUBSTITUIÇÃO SEGURA PARA O GATEWAY OFICIAL
+REMOVER OU TROCAR SOMENTE DEPOIS DE VALIDAR
 ```
 
 Entendimento atual:
 
 ```txt
-PC DO PIVETE = PODE TER CONFIGURAÇÃO PESSOAL DO CLAUDE
-VPS = SÓ DEVE TER SE ALGUM SERVIÇO REALMENTE PRECISAR
+PC DO PIVETE = PODE TER CONFIGURAÇÃO PESSOAL DE FERRAMENTA LOCAL
+VPS = SÓ DEVE TER VARIÁVEL SE ALGUM SERVIÇO REALMENTE PRECISAR
 REPOSITÓRIO = NÃO DEVE TER TOKEN NEM CONFIG SENSÍVEL
+GATEWAY OFICIAL = https://api.centralldark.com/
 ```
 
-Nada deve ser removido antes de saber se Jarvis, Hermes, MCP, bots, PM2, cron, Docker, systemd ou scripts dependem disso.
+Nada deve ser removido antes de saber se Jarvis, Hermes, MCP, bots, PM2, cron, Docker, systemd, scripts, Nginx, Supabase Hub ou Edge Functions dependem disso.
+
+Documento de arquitetura oficial:
+
+```txt
+docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md
+```
 
 ---
 
@@ -331,6 +348,7 @@ GitHub alinhado.
 VPS preservada.
 Scripts únicos.
 Labels bonitas.
+Gateway oficial em https://api.centralldark.com/.
 Ações com evidência.
 Correção mínima.
 Sem secrets.
