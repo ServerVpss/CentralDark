@@ -6,6 +6,7 @@ import http from 'node:http';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { postarComoBot, postarPergunta } from './telegram-grupo.mjs';
+import { authenticate, shouldBlock, audit, newRequestId, enforceMode } from './auth-audit.mjs';
 
 const PORT = process.env.PORT || 8090;
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
@@ -174,9 +175,49 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   if (req.method === 'OPTIONS') return res.end();
 
-  const auth = req.headers.authorization || '';
-  if (!auth.includes(AUTH_KEY) && req.url !== '/health') return json(res, 401, { error: 'unauthorized' });
-  if (req.url === '/health') return json(res, 200, { ok: true, provider: PROVIDER_BASE, models: MODELS.map(m=>m.id) });
+  // === PR#2 shadow-audit wrapper ===
+  const t0 = Date.now();
+  const requestId = newRequestId();
+  const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').toString().split(',')[0].trim();
+  const ua = (req.headers['user-agent'] || '').toString();
+  res.setHeader('X-Request-Id', requestId);
+
+  // Autentica sempre (não bloqueia em shadow). Preserva fallback do AUTH_KEY legado.
+  const authRaw = req.headers.authorization || '';
+  const legacyOk = AUTH_KEY && authRaw.includes(AUTH_KEY);
+  const authResult = await authenticate(req);
+  let modelForAudit = null;
+
+  // /health continua público
+  if (req.url === '/health') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: '/health', method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    return json(res, 200, { ok: true, provider: PROVIDER_BASE, models: MODELS.map(m=>m.id),
+                            auth_enforce: enforceMode(), request_id: requestId });
+  }
+
+  // Enforce mode: bloqueia se a chave não bater E o fallback legado também não bater
+  const block = shouldBlock(authResult);
+  if (block && !legacyOk) {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
+            status: block.status, error_code: block.error, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    return json(res, block.status, { error: block.error, request_id: requestId });
+  }
+  // Shadow mode: se a chave não bate E o legado não bate, mantém comportamento antigo (401).
+  if (!legacyOk && authResult.decision !== 'ok') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
+            status: 401, error_code: `shadow_${authResult.decision}`, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    return json(res, 401, { error: 'unauthorized', request_id: requestId });
+  }
+
+  // Hook para o handler existente registrar o modelo alvo
+  res.on('finish', () => {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
+            status: res.statusCode, model: modelForAudit, latency_ms: Date.now() - t0,
+            ip, user_agent: ua });
+  });
+  req._auditSetModel = (m) => { modelForAudit = m; };
+
   if (req.url === '/v1/models' || req.url === '/models')
     return json(res, 200, { object: 'list', data: MODELS.map(m => ({ id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name })) });
 
@@ -186,6 +227,7 @@ const server = http.createServer(async (req, res) => {
     try {
       const payload = JSON.parse(body);
       const modo = payload.model;
+      req._auditSetModel?.(modo);
       const messages = payload.messages || [];
       const perguntaUser = messages.filter(m=>m.role==='user').slice(-1)[0]?.content || '';
       // Posta a pergunta do usuário no grupo (contexto)
