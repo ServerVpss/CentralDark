@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-09T17:58:58.764Z
+# 🧠 Notion Sync — 2026-07-09T18:52:40.833Z
 
-- **Commit fonte:** `29ca440f040c79d0b46898aaa84c9acca3efb53d`
+- **Commit fonte:** `fedc19fe4a25e38eedd49ab0c614d5f3416ee89a`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 357 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 359 atualizadas · ❌ 460 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 322 | 0 | 322 | 0 | 0 |
-| estrutura | 459 | 0 | 0 | 0 | 459 |
+| aprendizados | 324 | 0 | 324 | 0 | 0 |
+| estrutura | 460 | 0 | 0 | 0 | 460 |
 
 ## Operações
 
@@ -61,7 +61,7 @@
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
 | aprendizados | atualizado | #2 — MCP usa ServerVpss/CentralDark e /root/[oculto] como alvo oficial |
-| aprendizados | erro | #3 — Transformar repo espelho em backup passivo sem Actions |
+| aprendizados | atualizado | #3 — Transformar repo espelho em backup passivo sem Actions |
 | aprendizados | atualizado | #4 — Neutralizar workflows do repo espelho com stub passivo |
 | aprendizados | atualizado | #5 — Repo espelho passivo: desativar Actions nas configurações do GitHub |
 | aprendizados | atualizado | #6 — Consenso final ChatGPT + Grok para espelho GitHub |
@@ -379,8 +379,8 @@
 | aprendizados | atualizado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
 | aprendizados | atualizado | #319 — Funcionou → Consolida → Sela (regra de ouro) |
 | aprendizados | atualizado | #320 — Bot Telegram pode trocar própria foto via setMyProfilePhoto |
-| aprendizados | criado | #321 — Dedup .env VPS + fix Caddy api.centralldark.com |
-| aprendizados | criado | #322 — MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia |
+| aprendizados | atualizado | #321 — Dedup .env VPS + fix Caddy api.centralldark.com |
+| aprendizados | atualizado | #322 — MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -468,6 +468,7 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/em-andamento/manter-grafo-vivo/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-abacus-router-hub-online.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
