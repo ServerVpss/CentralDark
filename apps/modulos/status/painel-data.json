@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-09T17:36:50.862Z",
-  "updatedAtBR": "09/07/2026, 14:36:50 BRT",
+  "updatedAt": "2026-07-09T17:59:37.813Z",
+  "updatedAtBR": "09/07/2026, 14:59:37 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs: corrigir gateway oficial CentralDark no padrão Pivete",
+    "lastCommit": "lembranca: SSH VPS como fallback quando MCP cai em 401",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-09T17:59:37.813Z",
+      "titulo": "Push na main · 29ca440f040c79d0b46898aaa84c9acca3efb53d",
+      "detalhe": "lembranca: SSH VPS como fallback quando MCP cai em 401",
+      "area": "Repositório",
+      "sha": "29ca440",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-09T17:36:50.862Z",
       "titulo": "Push na main · 79719cbab8e3daf14cc13f6ab9371446e2d0e5d9",
       "detalhe": "docs: corrigir gateway oficial CentralDark no padrão Pivete",
@@ -986,14 +994,6 @@
       "detalhe": "Instalou superpowers & ícones",
       "area": "Repositório",
       "sha": "cd1df6e",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-08T07:48:50.982Z",
-      "titulo": "Push na main · 099042dc266b3855f8f177b5dd89e491eacba7d6",
-      "detalhe": "Mostrou ferramentas MCP via fallback",
-      "area": "Repositório",
-      "sha": "099042d",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-09T17:59:37.813Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 29ca440f040c79d0b46898aaa84c9acca3efb53d (29ca440)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-09T17:36:50.862Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 79719cbab8e3daf14cc13f6ab9371446e2d0e5d9 (79719cb)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T07:52:47.016Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · cd1df6e96bcf8ca9774aa79e535e92d396e51247 (cd1df6e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T07:48:50.982Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 099042dc266b3855f8f177b5dd89e491eacba7d6 (099042d)",
       "area": "Repositório",
       "status": "sucesso"
     }
