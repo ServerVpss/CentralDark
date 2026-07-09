@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-09T18:52:44.680Z
-- **Commit:** `fedc19fe4a25e38eedd49ab0c614d5f3416ee89a`
+- **Gerado:** 2026-07-09T20:34:29.723Z
+- **Commit:** `8a86833f287a79bedea8ec1bcacb6f8c88543759`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 354 | 0 | 0 | 354 | 0 |
+| aprendizados | 355 | 0 | 0 | 355 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **354**
+- 🟥 Faltando no Notion: **355**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -402,4 +402,5 @@
 - 320. Bot Telegram pode trocar própria foto via setMyProfilePhoto
 - 321. Dedup .env VPS + fix Caddy api.centralldark.com
 - 322. MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia
+- 323. Auditoria de permissões da view api.ai_requests no HUB
 </details>

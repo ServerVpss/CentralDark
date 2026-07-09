@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-09T18:52:40.833Z
+# 🧠 Notion Sync — 2026-07-09T20:34:26.900Z
 
-- **Commit fonte:** `fedc19fe4a25e38eedd49ab0c614d5f3416ee89a`
+- **Commit fonte:** `8a86833f287a79bedea8ec1bcacb6f8c88543759`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 359 atualizadas · ❌ 460 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 359 atualizadas · ❌ 461 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 324 | 0 | 324 | 0 | 0 |
-| estrutura | 460 | 0 | 0 | 0 | 460 |
+| aprendizados | 325 | 1 | 324 | 0 | 0 |
+| estrutura | 461 | 0 | 0 | 0 | 461 |
 
 ## Operações
 
@@ -381,6 +381,7 @@
 | aprendizados | atualizado | #320 — Bot Telegram pode trocar própria foto via setMyProfilePhoto |
 | aprendizados | atualizado | #321 — Dedup .env VPS + fix Caddy api.centralldark.com |
 | aprendizados | atualizado | #322 — MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia |
+| aprendizados | criado | #323 — Auditoria de permissões da view api.ai_requests no HUB |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -469,6 +470,7 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-abacus-router-hub-online.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-gateway-centraldark-chave-propria.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
