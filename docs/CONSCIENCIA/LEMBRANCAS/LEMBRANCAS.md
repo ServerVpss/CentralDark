@@ -373,3 +373,13 @@ Conteúdo: Em operações longas com conversas paralelas, sempre responder o ass
 - **Promovida:** sim
 
 Conteúdo: Toda vez que algo funciona de verdade e prova valor (uma regra de segurança que bloqueou o certo, um script que rodou limpo, um módulo estabilizado, uma automação testada), o passo seguinte é CONSOLIDAR + SELAR imediatamente — não deixar solto. Sinais de que precisa selar: bloqueio de path funcionou como esperado, script rodou 3x sem erro, módulo tá em produção estável, padrão foi validado. Como selar: (1) adicionar à lista de Áreas Protegidas 🔒 no CLAUDE.md, (2) documentar em docs/CONSCIENCIA/ com data e motivo, (3) escrever a regra no .claude/ pra próxima IA respeitar, (4) marcar visualmente com 🔒 sempre que exibir estrutura de pastas. Nunca reabrir o que foi selado sem autorização explícita ("PERMITO PIVETE"). Regra oposta também vale: enquanto não funciona/não prova, fica aberto pra iterar. Selar é RECOMPENSA por ter funcionado.
+
+### [2026-07-09T14:51] SSH VPS como fallback quando MCP cai em 401
+- **Data:** 2026-07-09
+- **Tags:** ssh, vps, fallback, mcp, regra-de-ouro
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: Quando o conector MCP `mcp_custom_A1pyZ` estiver em 401, usar SSH direto na VPS com a chave `[nome-de-segredo]` (reformatar pro padrão OpenSSH antes). Rastro obrigatório: branch `chore/rastro-lovable-ssh-YYYYMMDD` + log em `/root/[oculto]`. Nunca editar direto na main — Regra de Ouro.
