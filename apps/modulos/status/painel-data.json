@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-09T18:53:29.679Z",
-  "updatedAtBR": "09/07/2026, 15:53:29 BRT",
+  "updatedAt": "2026-07-09T19:03:30.865Z",
+  "updatedAtBR": "09/07/2026, 16:03:30 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(consciencia): gateway centraldark com chave própria + routellm",
+    "lastCommit": "Aguardando confirmação",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-09T19:03:30.865Z",
+      "titulo": "Push na main · 233e823eca720cbf95dc4fe45b3d382e83cccb14",
+      "detalhe": "Aguardando confirmação",
+      "area": "Repositório",
+      "sha": "233e823",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-09T18:53:29.679Z",
       "titulo": "Push na main · b20c81e77e29c7650316a02c943cd1df83e9f536",
       "detalhe": "docs(consciencia): gateway centraldark com chave própria + routellm",
@@ -986,14 +994,6 @@
       "detalhe": "docs: adiciona fases N-R (relatório PDF/HTML, agendador, snapshot+rollback, dry-run, Jarvis com Sets)",
       "area": "Repositório",
       "sha": "89e20ea",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-08T08:57:17.539Z",
-      "titulo": "Push na main · 8836e16d55a680dcb60954dd34bfd5a3b0b29c89",
-      "detalhe": "docs: mega pacotão de desejos (fases A-M) — auditor, reconstrutor, Jarvis, segredos",
-      "area": "Repositório",
-      "sha": "8836e16",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-09T19:03:30.865Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 233e823eca720cbf95dc4fe45b3d382e83cccb14 (233e823)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-09T18:53:29.679Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b20c81e77e29c7650316a02c943cd1df83e9f536 (b20c81e)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T09:06:08.063Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 89e20ea2280e1704417131ee73fba912c6e56821 (89e20ea)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T08:57:17.539Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8836e16d55a680dcb60954dd34bfd5a3b0b29c89 (8836e16)",
       "area": "Repositório",
       "status": "sucesso"
     }
