@@ -19,9 +19,13 @@ const cache = new Map();
 function sha256hex(s) { return createHash('sha256').update(s).digest('hex'); }
 
 function extractBearer(req) {
-  const raw = req.headers?.authorization || req.headers?.Authorization || '';
-  const m = /^Bearer\s+(.+)$/i.exec(raw.trim());
-  return m ? m[1].trim() : '';
+  // Suporta Authorization: Bearer <k>, x-api-key: <k> e api-key: <k>
+  const auth = (req.headers?.authorization || req.headers?.Authorization || '').toString().trim();
+  const m = /^Bearer\s+(.+)$/i.exec(auth);
+  if (m) return m[1].trim();
+  if (auth && !/^Bearer\b/i.test(auth)) return auth; // Authorization sem prefixo
+  const xkey = (req.headers?.['x-api-key'] || req.headers?.['X-Api-Key'] || req.headers?.['api-key'] || '').toString().trim();
+  return xkey || '';
 }
 
 // Sanitizador: remove qualquer segredo comum (cdk_live_, sk-, service_role JWT, Bearer, Authorization) de strings antes de logar.
