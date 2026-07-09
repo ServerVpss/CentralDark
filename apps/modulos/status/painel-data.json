@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-09T19:36:24.128Z",
-  "updatedAtBR": "09/07/2026, 16:36:24 BRT",
+  "updatedAt": "2026-07-09T19:47:29.949Z",
+  "updatedAtBR": "09/07/2026, 16:47:29 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "🛡️ doutrina: sela DOUTRINA-PROTECAO-ESTRATEGICA + CODEOWNERS + selo em CLAUDE.md",
+    "lastCommit": "docs(governanca): sela 6 regras operacionais do Pivete",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-09T19:47:29.949Z",
+      "titulo": "Push na main · 8bbfbcf163f5f9c954e41fbdd316224dcbc532c0",
+      "detalhe": "docs(governanca): sela 6 regras operacionais do Pivete",
+      "area": "Repositório",
+      "sha": "8bbfbcf",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-09T19:36:24.128Z",
       "titulo": "Push na main · d2f0c35df0285d2daaae8687295feeae2d04ce14",
       "detalhe": "🛡️ doutrina: sela DOUTRINA-PROTECAO-ESTRATEGICA + CODEOWNERS + selo em CLAUDE.md",
@@ -987,14 +995,6 @@
       "area": "Repositório",
       "sha": "cac38fc",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-08T09:18:16.040Z",
-      "titulo": "Push na main · 2c0fabf782484676c7aa2d0faa3ec92799c5e263",
-      "detalhe": "docs: adiciona fases V, W, X, Y, Z (governança RED, agenda enxame, relatório mensal 2026, watchdog, custos)",
-      "area": "Repositório",
-      "sha": "2c0fabf",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-09T19:47:29.949Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 8bbfbcf163f5f9c954e41fbdd316224dcbc532c0 (8bbfbcf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-09T19:36:24.128Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · d2f0c35df0285d2daaae8687295feeae2d04ce14 (d2f0c35)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T10:03:15.299Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · cac38fc837952091be336eab2d1bf1425c86971d (cac38fc)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T09:18:16.040Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2c0fabf782484676c7aa2d0faa3ec92799c5e263 (2c0fabf)",
       "area": "Repositório",
       "status": "sucesso"
     }
