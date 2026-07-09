@@ -22,6 +22,7 @@ export function DashboardTab() {
         </div>
       )}
       <HealthCard health={health} />
+      <AbacusApiCard />
       <ApiCardsGrid />
       <StatusTimeline entries={timeline} />
     </div>
