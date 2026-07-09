@@ -195,7 +195,99 @@ proteger estratégia
 
 ---
 
-## 9. Ordem final para qualquer IA
+## 9. Segredo prático do GitHub para o Pivete
+
+O GitHub não é só lugar de código. Ele é o painel de comando oficial da memória do projeto.
+
+Regra de organização:
+
+```txt
+Issue = conversa de trabalho, auditoria ou tarefa em andamento.
+Documento .md = regra oficial limpa e durável.
+Commit = prova de que algo entrou no projeto.
+PR = pacote de mudança para revisar antes de entrar na linha principal.
+```
+
+Mandamento prático:
+
+```txt
+Mesmo assunto = melhora o que já existe.
+Novo assunto grande = cria issue nova.
+Regra permanente = vira documento .md.
+Resumo final = aponta para o documento oficial.
+```
+
+Regra curta:
+
+```txt
+Issue conversa.
+Documento sela.
+Commit prova.
+```
+
+---
+
+## 10. Bots, Jarvis e automação futura
+
+Objetivo futuro do CentralDark:
+
+```txt
+O Pivete comanda por voz ou texto.
+Os bots entendem a intenção.
+As IAs organizam a execução.
+O GitHub registra.
+A VPS executa.
+O Supabase guarda estado vivo.
+O Gateway roteia.
+O painel mostra prova.
+```
+
+Todo bot, Jarvis, agente, worker, MCP ou conector deve seguir a mesma doutrina deste documento.
+
+```txt
+Bot não trabalha solto.
+Bot segue o modo do Pivete.
+Bot registra o que for importante.
+Bot explica termo técnico.
+Bot respeita GitHub como memória oficial.
+Bot não mexe em área sensível sem escopo e autorização.
+```
+
+---
+
+## 11. Sincronia futura GitHub, VPS e Supabase
+
+Quando a automação estiver pronta, o fluxo desejado é:
+
+```txt
+Pivete fala.
+IA entende.
+GitHub registra.
+Webhook avisa.
+VPS executa.
+Supabase registra estado vivo.
+Painel mostra evidência.
+```
+
+Explicações:
+
+```txt
+Webhook = aviso automático entre sistemas.
+VPS = servidor onde o sistema roda de verdade.
+Supabase = lugar onde ficam dados vivos e status dinâmicos.
+Gateway = entrada controlada para as chamadas da API.
+```
+
+Regra:
+
+```txt
+Automatizar não significa agir no escuro.
+Automatizar significa repetir o Fluxo de Ouro com menos trabalho manual.
+```
+
+---
+
+## 12. Ordem final para qualquer IA
 
 ```txt
 Leia este documento.
@@ -219,8 +311,8 @@ Se for execução, prova.
 
 ---
 
-## 10. Selo
+## 13. Selo
 
 ```txt
-MODO DE PENSAR DO PIVETE = doutrina central para alinhar o Vault, as IAs, o MCP, o GitHub, a VPS, o Supabase, o Gateway e o sistema inteiro.
+MODO DE PENSAR DO PIVETE = doutrina central para alinhar o Vault, as IAs, o MCP, o GitHub, a VPS, o Supabase, o Gateway, os bots e o sistema inteiro.
 ```
