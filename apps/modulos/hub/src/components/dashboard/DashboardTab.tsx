@@ -3,6 +3,7 @@ import { HealthCard } from './HealthCard';
 import { AlertBanner } from './AlertBanner';
 import { StatusTimeline } from './StatusTimeline';
 import { ApiCardsGrid } from './ApiCardsGrid';
+import { AbacusApiCard } from './AbacusApiCard';
 import { useHealth } from '@/hooks/useHealth';
 
 export function DashboardTab() {
