@@ -1,7 +1,11 @@
 # CLAUDE.md
 
 > Dump de Estado do Projeto — leitura obrigatória para qualquer IA/Hub que abrir este repositório.
-> Última atualização: 02/07/2026
+> Última atualização: 09/07/2026
+>
+> **Fluxo oficial atual:** GitHub = Fonte da Verdade · VPS = Executor · Supabase = Estado Vivo · Gateway = `https://api.centralldark.com/`
+>
+> **Documento de arquitetura:** [`docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md`](docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md)
 
 ---
 
@@ -9,7 +13,7 @@
 
 **Qualquer IA que abrir este repo deve ler PRIMEIRO:** [`docs/CONSCIENCIA/DARKAI/README.md`](docs/CONSCIENCIA/DARKAI/README.md)
 
-Essa pasta concentra TUDO sobre o comando `darkai` (CLI que dá acesso a Gemini/GPT-5/etc via edge function `ai-proxy` com uma única chave protegida na Lovable Cloud):
+Essa pasta concentra TUDO sobre o comando `darkai` (CLI que dá acesso a provedores/rotas autorizadas via infraestrutura CentralDark, com chave protegida e sem expor segredo ao usuário final):
 - `README.md` — índice geral (comece aqui)
 - `QUICKSTART.md` — instalar e usar em 5 minutos
 - `PROMPT-UNIVERSAL.md` — prompt pronto pra colar em qualquer IA (Claude, GPT, Gemini, Cursor) e ensinar ela a usar `darkai`
@@ -32,7 +36,9 @@ Sistema de Conselho de IAs (`/router`, `/refinar`, `/debate` + Hermes autônomo)
 - **Backend:** Supabase gerenciado — projeto ref `kagejpghnwdfymddwxuf`
 - **Domínio oficial:** https://centralldark.com
 - **Painel de status:** https://status.centralldark.com
-- **Repositório GitHub:** sincronizado bidirecionalmente com a VPS (`/root/CentralDark/`) via webhook próprio
+- **Gateway oficial CentralDark:** https://api.centralldark.com/
+- **Repositório GitHub:** `ServerVpss/CentralDark` é a Fonte da Verdade para código, documentação, scripts oficiais, governança e arquitetura.
+- **VPS:** `/root/CentralDark/` é runtime/executor. Não é oficina principal de edição manual.
 
 ---
 
@@ -52,24 +58,37 @@ Regras:
 
 ---
 
+## 2. Fluxo de Ouro 5-Point (regra operacional vigente)
 
-## 2. Sincronia 4-Point (regra operacional vigente)
+Estamos operando sob o modelo **Fluxo de Ouro 5-Point**.
 
-Estamos operando sob o modelo **Sincronia 4-Point**. Os quatro pontos que devem permanecer espelhados/consistentes a cada alteração:
+```txt
+PIVETE COMANDA.
+IA ORGANIZA.
+GITHUB REGISTRA.
+VPS EXECUTA.
+SUPABASE GUARDA ESTADO VIVO.
+GATEWAY CENTRALDARK ROTEIA.
+AÇÕES PROVAM.
+NADA NO ESCURO.
+```
 
-1. **Lovable (editor / preview)** — fonte de mudanças assistidas por IA.
-2. **GitHub (repositório)** — sync bidirecional automática com Lovable.
-3. **VPS (`/root/CentralDark/`)** — microsserviços, scripts utilitários e PM2 (rodar `pm2 save` após qualquer mudança de estado).
-4. **Cérebro Vivo (`docs/CONSCIENCIA/` + `.claude/`)** — contexto persistente, regras e memória de projeto consumida por qualquer IA/Hub.
+Os pontos oficiais são:
 
-> Regra: nenhuma alteração estrutural é considerada concluída enquanto os 4 pontos não refletirem o mesmo estado.
+1. **GitHub (`ServerVpss/CentralDark`)** — Fonte da Verdade para código, docs, scripts oficiais, governança, runbooks e histórico.
+2. **VPS (`/root/CentralDark/`)** — executor/runtime: PM2, Node, Nginx, webhooks, logs e validação real.
+3. **Supabase** — estado vivo: painel, status dinâmico, eventos, filas, logs estruturados leves e dados que mudam rápido.
+4. **Gateway CentralDark (`https://api.centralldark.com/`)** — roteamento autorizado, padronizado, seguro e documentado.
+5. **Cérebro Vivo (`docs/CONSCIENCIA/` + `.claude/`)** — contexto persistente, regras e memória de projeto consumida por qualquer IA/Hub.
+
+> Regra: alteração estrutural só é considerada concluída quando o GitHub registra, a VPS executa/valida quando necessário, e a evidência volta para GitHub/Supabase. Estado vivo não vira commit repetido na `main`.
 
 ---
 
 ## 3. Diretórios do Cérebro Vivo
 
-- **`.claude/`** — instruções, regras de execução defensiva, agentes especializados e prompts persistentes para IAs/Hub externas.
-- **`docs/CONSCIENCIA/`** — base de conhecimento viva (decisões, aprendizados, regras, runbooks). É o "estado de longo prazo" que sobrevive entre sessões. Git é a fonte da verdade; Notion é espelho humano (sync automático via workflow).
+- **`.claude/`** — instruções, regras de execução defensiva, comandos slash, settings e prompts persistentes para IAs/Hub externas.
+- **`docs/CONSCIENCIA/`** — base de conhecimento viva (decisões, aprendizados, regras, runbooks). É o estado de longo prazo que sobrevive entre sessões. GitHub é a Fonte da Verdade; Notion é espelho humano quando houver sync.
 
 > Nota: a pasta `docs/` será futuramente renomeada para `.consciencia` — aguardar comando explícito do Pivete antes de qualquer renomeação.
 
@@ -79,31 +98,40 @@ Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
 
 ## 4. Infra (resumo)
 
-- **VPS:** hospeda `CentralDark` em `/root/CentralDark/`. Scripts utilitários e webhooks ficam em `/root/CentralDark/scripts/`, gerenciados por **PM2** com `pm2 save` obrigatório após qualquer mudança de estado.
+- **VPS:** hospeda runtime do `CentralDark` em `/root/CentralDark/`. Deve executar o que foi aprovado/versionado no GitHub.
+- **Scripts oficiais:** comandos repetíveis devem morar no repositório, preferencialmente em `scripts/` ou `scripts/vps/`. Comando solto na VPS é temporário; script no GitHub é padrão oficial.
+- **PM2:** usado para processos vivos. Qualquer mudança de estado relevante precisa autorização, validação e registro.
 - **whatsapp-server (PM2 id 1):** estado desejado é `stopped` (salvo em `dump.pm2`). Não subir automaticamente, não reportar como erro.
-- **Páginas de status** (ex.: `status.centralldark.com`) consomem `/health` e `/status.json` das portas internas da VPS.
-- **Backend Lovable Cloud:** Supabase com RLS obrigatório, Edge Functions padrão `Deno.serve` + CORS expandido.
+- **Páginas de status** (ex.: `status.centralldark.com`) consomem `/health`, `/status.json` ou estado vivo apropriado.
+- **Backend Lovable Cloud / Supabase:** RLS obrigatório, Edge Functions padrão `Deno.serve`, CORS controlado e secrets fora do Git.
+- **Estado vivo do painel:** não deve commitar timestamp na `main`; deve migrar para Supabase/Edge Function, como `painel-write`.
 
 ---
 
 ## 5. Regras de Execução Defensiva
 
-1. Antes de gravar/alterar qualquer arquivo crítico (como este `CLAUDE.md`), verificar se já existe e **preservar conteúdo prévio** — atualizar a seção "Estado Atual" em vez de sobrescrever cegamente.
-2. Não adivinhar caminhos de arquivos na VPS — usar o catálogo do MCP para inspeção absoluta.
-3. Scripts e automações ficam **isolados** em `/root/CentralDark/scripts/` e versionados explicitamente no PM2.
-4. Pré-deploy: rodar a skill `audit-rls` antes de qualquer publish ou após nova migration / edge function. Bloquear publish em achado crítico.
-5. Nunca expor service role key, senha de banco ou IDs/URLs internas do Supabase ao usuário final.
+1. Antes de gravar/alterar qualquer arquivo crítico (como este `CLAUDE.md`), verificar se já existe e **preservar conteúdo prévio** — atualizar seções sem sobrescrever cegamente.
+2. Não adivinhar caminhos de arquivos na VPS — usar catálogo, busca ou inspeção de leitura antes.
+3. Não editar código de aplicação diretamente na VPS como Fonte da Verdade. Código/script/doc nasce ou é atualizado no GitHub.
+4. Não trocar endpoint oficial sem autorização do Pivete. Gateway oficial atual: `https://api.centralldark.com/`.
+5. Não usar Git como banco de estado vivo. `updatedAt`, logs, fila, status temporário e painel vivo vão para Supabase/storage/log, não para commit automático na `main`.
+6. Pré-deploy: rodar auditoria adequada antes de publish/migration/edge function. Bloquear publish em achado crítico.
+7. Nunca expor service role key, senha de banco, token, `.env`, chave SSH ou segredo ao usuário final.
+8. Não executar `git pull`, `git push`, `reset --hard`, restart PM2, deploy ou remoção sem mapear risco e confirmar escopo.
 
 ---
 
 ## 6. Estado Atual / Meta
 
-- **Meta atual:** Sincronia 4-Point estável. Qualquer IA em qualquer Hub deve conseguir retomar o contexto apenas lendo `CLAUDE.md` + `.claude/` + `docs/CONSCIENCIA/`.
+- **Meta atual:** Fluxo de Ouro estável. Qualquer IA em qualquer Hub deve conseguir retomar o contexto apenas lendo `CLAUDE.md`, `.claude/`, `docs/CONSCIENCIA/` e os documentos de `docs/GOVERNANCA/`.
+- **Gateway oficial:** `https://api.centralldark.com/`.
 - **Grandes planos pendentes (aguardar comando do Pivete):**
   - Reconstrução total do MCP + hub (novo plano a ser apresentado pelo Pivete).
   - Renomeação `docs/` → `.consciencia` (aguardar comando explícito).
+  - Migração do painel vivo para Supabase/Edge Function `painel-write`.
 - **Próximos passos ativos:**
-  - Validar periodicamente que o PM2 da VPS bate com o `dump.pm2` salvo.
+  - Auditar rotas antigas, `.claude/`, `.github/workflows/`, `.agents/`, `.lovable/` e scripts duplicados.
+  - Validar periodicamente que o PM2 da VPS bate com o estado desejado.
   - Manter este arquivo como ponto único de entrada de contexto.
 
 ---
@@ -114,10 +142,17 @@ Se você é uma IA abrindo este repositório pela primeira vez:
 
 1. Leia **este arquivo inteiro**.
 2. Leia `.claude/` (regras operacionais) e `docs/CONSCIENCIA/` (contexto vivo e aprendizados).
-3. Assuma que a **Sincronia 4-Point** está ativa.
-4. Não execute mudanças destrutivas sem confirmar com o usuário.
-5. Responda sempre em **PT-BR**, tom direto e conversacional.
-6. Verifique a **Seção 9** abaixo antes de tocar em qualquer arquivo — há áreas protegidas que exigem autorização explícita.
+3. Leia [`docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md`](docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md).
+4. Assuma que o **Fluxo de Ouro 5-Point** está ativo.
+5. Não execute mudanças destrutivas sem confirmar com o usuário.
+6. Responda sempre em **PT-BR**, tom direto e conversacional.
+7. Verifique a **Seção 9** abaixo antes de tocar em qualquer arquivo — há áreas protegidas que exigem autorização explícita.
+
+Se o Pivete pedir uma ação que quebra o fluxo, avise:
+
+```txt
+🛑 Epa, Pivete, pera lá! Fazendo isso vamos sair do Fluxo de Ouro e criar divergência entre VPS e GitHub. Se editarmos direto na produção, outras IAs não vão enxergar a mudança, alterações podem se perder e o deploy pode quebrar. O caminho seguro é criar ou alterar isso no GitHub, registrar o commit/PR, e depois refletir na VPS com validação. Manda a braba por aqui no Seguro?
+```
 
 ---
 
@@ -125,9 +160,9 @@ Se você é uma IA abrindo este repositório pela primeira vez:
 
 **Regra operacional vigente a partir de agora.**
 
-1. **Hierarquia:** O repositório `ServerVpss/CentralDark` é a única **Fonte da Verdade** para novos desenvolvimentos e para a estrutura do Cérebro Vivo.
+1. **Hierarquia:** O repositório `ServerVpss/CentralDark` é a única **Fonte da Verdade** para novos desenvolvimentos, scripts oficiais, docs e estrutura do Cérebro Vivo.
 2. **Respeito ao Legado:** O repositório `ServerVpss/CentralDark1VPS` é mantido como **Servidor de Operação Ativa**. Não alterar, não sobrescrever e não remover nada de lá sem instrução explícita de **"Migração de Automação"**.
-3. **Fluxo de Trabalho:** Todo novo desenvolvimento ocorre no `CentralDark`. Quando uma funcionalidade for concluída e testada, faremos a migração (deploy) dela para substituir a versão antiga no `CentralDark1VPS` de forma controlada.
+3. **Fluxo de Trabalho:** Todo novo desenvolvimento ocorre no `CentralDark`. Quando uma funcionalidade for concluída e testada, faremos a migração/deploy para substituir a versão antiga no `CentralDark1VPS` de forma controlada.
 4. **Zero-Downtime:** Nenhuma automação atual pode ser interrompida. A migração deve ser gradual e segura.
 
 > Esta política é a regra de operação daqui para frente. Qualquer IA que abrir este repositório deve respeitá-la.
@@ -145,7 +180,7 @@ Se você é uma IA abrindo este repositório pela primeira vez:
 
 **Toda vez que uma IA exibir a estrutura de pastas/árvore do projeto pro Pivete, DEVE marcar áreas protegidas com o emoji cadeado `🔒`.** Aviso visual imediato de que aquele caminho não pode ser alterado sem autorização. Exemplo:
 
-```
+```txt
 apps/
 ├─ 🔒 bot-telegram/        (protegido — bot @srver1bot)
 ├─ modulos/
@@ -159,16 +194,18 @@ apps/
 | Área | Motivo da Proteção | Consolidada em |
 |------|--------------------|----------------|
 | `apps/bot-telegram/` | Bot @srver1bot — restaurado e testado | 28/06/2026 |
-
-| `apps/modulos/status/` | Página oficial (`status.centralldark.com`) — consolidada com o painel vivo (index.html + app.js + painel-data.json + atualizar-painel-vivo.mjs) — consumida por monitoramento | 02/07/2026 |
+| `apps/modulos/status/` | Página oficial (`status.centralldark.com`) — consolidada com o painel vivo (index.html + app.js + painel-data.json + atualizar-painel-vivo.mjs). Atenção: estado vivo deve migrar para Supabase/`painel-write`, não commit automático. | 02/07/2026 |
 | `apps/modulos/Bolt/` | Construtor de site próprio do Pivete — não mexer sem ordem | 02/07/2026 |
 | `apps/modulos/WebUI/` | Web UI próprio do Pivete — não mexer sem ordem | 02/07/2026 |
 | `apps/modulos/graph-panel/` | Graph panel (indexação por grafo) — economiza tokens e latência | 02/07/2026 |
-| `apps/modulos/elite-anthropic-proxy/` | Proxy Anthropic ap7 — 4 modelos HTTP 200 | 02/07/2026 |
+| `apps/modulos/elite-anthropic-proxy/` | Proxy/Gateway de IA legado. Revisar e alinhar ao Gateway oficial `https://api.centralldark.com/` antes de qualquer mudança. | 02/07/2026 |
 | `scripts/webhook/` | Deploy webhook + notificação Telegram VPS | 28/06/2026 |
 | `scripts/contas-admin/` | OAuth admin panel — restaurado com `load_dotenv` fix | 28/06/2026 |
-| `.github/workflows/pr-agent.yml` | Proxy Anthropic ap7 configurado | 28/06/2026 |
+| `.github/workflows/pr-agent.yml` | Workflow protegido. Qualquer endpoint antigo deve ser mapeado antes de trocar; Gateway oficial atual é `https://api.centralldark.com/`. | 28/06/2026 |
 | `.github/workflows/` em geral | Qualquer mudança pode derrubar CI/CD inteiro | — |
+| `.claude/` | Comandos, settings e instruções persistentes do Claude/Hub. Não mexer sem alinhar com Fluxo de Ouro. | — |
+| `.agents/` | Skills/agentes. Revisar antes de alterar; pode conter instruções operacionais. | — |
+| `.lovable/` | Configurações/ponte com Lovable. Revisar antes de alterar. | — |
 | `infra/caddy/` | Mudança quebra todos os subdomínios | — |
 | `secrets/` | Nunca commitar, nunca sobrescrever sem backup | — |
 | `docs/CONSCIENCIA/` | Fonte de verdade do Cérebro Vivo — git é autoritativo | — |
@@ -183,7 +220,7 @@ apps/
 | 🔒 `apps/modulos/arsenal-openai-adapter/` | Arsenal Adapter (PM2 `CentralDark-ArsenalAdapter`) — plugue OpenAI-compat pro Conselho. | 05/07/2026 |
 | 🔒 `apps/modulos/elite-gateway/` | Elite Gateway HTTP (PM2 `CentralDark-EliteHTTP`/`EliteWS`) — Zendriver + orquestração. | 05/07/2026 |
 | 🔒 `apps/modulos/artifacts-builder/` | Artifacts Builder + Crafter (PM2 ids 75/76) — consolidado. | 05/07/2026 |
-| 🔒 `apps/modulos/proxy/` + `apps/modulos/lovable-proxy/` | Proxies de roteamento IA — travados. | 05/07/2026 |
+| 🔒 `apps/modulos/proxy/` + `apps/modulos/lovable-proxy/` | Proxies de roteamento IA — travados. Devem seguir Gateway oficial e documentação antes de qualquer troca. | 05/07/2026 |
 | 🔒 `apps/modulos/telepainel/` | Módulo TelePainel (bot @SEGREDOPUXADASBOT + edge `telepainel-webhook`). | 05/07/2026 |
 | 🔒 `apps/modulos/hub/` | HUB Supabase local (`lyoigsqluyktoclwdaft`) — fonte de verdade do Central. | 05/07/2026 |
 | 🔒 `apps/modulos/clone-deck/` | Clone-deck (baralho de clonagem) — consolidado. | 05/07/2026 |
@@ -198,3 +235,28 @@ apps/
 > - Mover `apps/bot-telegram/` → `apps/modulos/bot-telegram/` (requer coordenação com PM2 na VPS — NÃO fazer só no repo, derruba o @srver1bot).
 > - ✅ ~~Limpar/mover `apps/projeto-dashboard/`~~ — **RESOLVIDO 02/07/2026**: painel vivo consolidado dentro de `apps/modulos/status/`, duplicata removida.
 > - Renomeação `docs/` → `.consciencia` (aguardar comando).
+
+---
+
+## 10. Documentos Oficiais do Fluxo de Ouro
+
+As IAs devem consultar e obedecer:
+
+```txt
+docs/GOVERNANCA/PADRAO-DE-TRABALHO-PIVETE.md
+docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md
+docs/AUDITORIAS/AUDITORIA-FLUXO-DE-OURO.md   # quando existir
+Issue #144 — AUDITORIA FLUXO DE OURO
+```
+
+Regra final:
+
+```txt
+GitHub = Fonte da Verdade.
+VPS = executor.
+Supabase = estado vivo.
+Gateway oficial = https://api.centralldark.com/.
+Nada de edição manual em produção como fonte oficial.
+Nada de commit automático inútil na main.
+Nada de trocar endpoint sem mapear dependência.
+```
