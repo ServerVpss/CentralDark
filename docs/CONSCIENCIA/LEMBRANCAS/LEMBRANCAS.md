@@ -393,3 +393,13 @@ Conteúdo: Quando o conector MCP `mcp_custom_A1pyZ` estiver em 401, usar SSH dir
 - **Promovida:** nao
 
 Conteúdo: Pra `AbacusApiCard` ficar verde no HUB: (1) `ABACUS_API_KEY` real colada em `/root/[oculto]`, (2) chave publicada no HUB Supabase `lyoigsqluyktoclwdaft` via edge `set-key`, (3) PM2 `CentralDark-ArsenalAdapter` UP na porta 8090. Caddy já corrigido: `api.centralldark.com` → 127.0.0.1:8090. Endpoint saiu de 502 pra 401 (auth pendente).
+
+### [2026-07-09T14:55] SSH via nix na sandbox Lovable (fallback MCP)
+- **Data:** 2026-07-09
+- **Tags:** ssh, nix, vps, fallback, lovable-sandbox
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: Sandbox Lovable NÃO tem `ssh` no PATH — precisa rodar via `nix run nixpkgs#openssh -- -i ~/.ssh/vps_key ...`. Chave `[nome-de-segredo]` vem em uma linha só, reformatar em blocos de 70 chars com header/footer antes de usar. Host: `[servidor]`. Uma vez montado, dá acesso total à VPS mesmo com MCP em 401.
