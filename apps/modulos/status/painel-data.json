@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-09T18:26:25.983Z",
-  "updatedAtBR": "09/07/2026, 15:26:25 BRT",
+  "updatedAt": "2026-07-09T18:44:32.400Z",
+  "updatedAtBR": "09/07/2026, 15:44:32 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs: alinhar CLAUDE.md ao Fluxo de Ouro CentralDark",
+    "lastCommit": "docs(consciencia): registra ouro — abacus-router HUB online, 134 modelos",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-09T18:44:32.400Z",
+      "titulo": "Push na main · fedc19fe4a25e38eedd49ab0c614d5f3416ee89a",
+      "detalhe": "docs(consciencia): registra ouro — abacus-router HUB online, 134 modelos",
+      "area": "Repositório",
+      "sha": "fedc19f",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-09T18:26:25.983Z",
       "titulo": "Push na main · 49094c80e9f72e7daaac1ac0c75525bae26a3573",
       "detalhe": "docs: alinhar CLAUDE.md ao Fluxo de Ouro CentralDark",
@@ -986,14 +994,6 @@
       "detalhe": "Instalou comando swarmS na VPS",
       "area": "Repositório",
       "sha": "bf8841c",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-08T08:29:32.188Z",
-      "titulo": "Push na main · 9ffd72a78eef17cac4322844e8fd9ce59feb8300",
-      "detalhe": "Salvou 11 pendências",
-      "area": "Repositório",
-      "sha": "9ffd72a",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-09T18:44:32.400Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · fedc19fe4a25e38eedd49ab0c614d5f3416ee89a (fedc19f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-09T18:26:25.983Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 49094c80e9f72e7daaac1ac0c75525bae26a3573 (49094c8)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T08:30:33.817Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · bf8841c69a8b4398a477bcf6bf917085db0479cf (bf8841c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T08:29:32.188Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 9ffd72a78eef17cac4322844e8fd9ce59feb8300 (9ffd72a)",
       "area": "Repositório",
       "status": "sucesso"
     }
