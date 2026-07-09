@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-09T15:18:11.751Z",
-  "updatedAtBR": "09/07/2026, 12:18:11 BRT",
+  "updatedAt": "2026-07-09T15:35:34.276Z",
+  "updatedAtBR": "09/07/2026, 12:35:34 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Lovable update",
+    "lastCommit": "Reconectou MCP CentralDark",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-09T15:35:34.276Z",
+      "titulo": "Push na main · fc56583d1c4712bce017d54a7e9bfef1356b5b98",
+      "detalhe": "Reconectou MCP CentralDark",
+      "area": "Repositório",
+      "sha": "fc56583",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-09T15:18:11.751Z",
       "titulo": "Push na main · f60e1afb8a37c834a072e8b9f98dfbb3c9cb122d",
       "detalhe": "Lovable update",
@@ -986,14 +994,6 @@
       "detalhe": "Salvou tutorial e chave API",
       "area": "Repositório",
       "sha": "9d85e57",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-08T06:22:27.197Z",
-      "titulo": "Push na main · 736348390add230636ea47fe15ae96e581d7467e",
-      "detalhe": "Salvou chave e limpa routes",
-      "area": "Repositório",
-      "sha": "7363483",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-09T15:35:34.276Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · fc56583d1c4712bce017d54a7e9bfef1356b5b98 (fc56583)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-09T15:18:11.751Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · f60e1afb8a37c834a072e8b9f98dfbb3c9cb122d (f60e1af)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T06:27:18.075Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 9d85e57b01aeccec735d1ffc96c62d52fe0f7c32 (9d85e57)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T06:22:27.197Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 736348390add230636ea47fe15ae96e581d7467e (7363483)",
       "area": "Repositório",
       "status": "sucesso"
     }
