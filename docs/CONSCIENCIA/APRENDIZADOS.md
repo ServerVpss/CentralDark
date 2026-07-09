@@ -2553,3 +2553,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-08
 - **Contexto:** Eu afirmei ao Pivete que Bot API do Telegram não permite bot trocar a própria foto de perfil e que só o BotFather aceitava. Pivete me corrigiu e mandou pesquisar.
 - **Aprendizado:** A Bot API tem SIM o método setMyProfilePhoto (multipart com campo `photo`, aceita .jpg/.png estático ou .mp4 animado). Também existe setMyDescription, setMyShortDescription, setMyName, setMyCommands. Regra: nunca afirmar limitação da API sem checar a doc atual — o Telegram adiciona métodos com frequência. Observação prática: o connector gateway do Lovable tem bug específico com /setMyProfilePhoto (retorna "photo isn't specified" mesmo com multipart correto, enquanto /sendPhoto aceita). Pra trocar foto de bot via API precisa do token direto do bot, não dá pelo gateway atual.
+
+### 321. Dedup .env VPS + fix Caddy api.centralldark.com
+- **Categoria:** outro
+- **Data:** 2026-07-09
+- **Contexto:** Rodada 09/07 via SSH direto na VPS (MCP em 401)
+- **Aprendizado:** Dedup 53 chaves repetidas + stub ABACUS_API_KEY + Caddy api.centralldark.com apontando pra 127.0.0.1:8090 (ArsenalAdapter). Endpoint saiu 502→401 (auth pendente). Rastro: branch chore/rastro-lovable-ssh-20260709 + revisoes/lovable-20260709-124938-api-centraldark-e-env.md.
