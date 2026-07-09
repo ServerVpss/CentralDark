@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-09T00:00:08.656Z
+# 🧠 Notion Sync — 2026-07-09T14:43:21.200Z
 
-- **Commit fonte:** `a235cafe0a0953ed5598a4b39b468cc397e2335d`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `068f252e30d1526e5ecc08b1ef51e29ae7c57f1d`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 357 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 355 atualizadas · ❌ 461 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 322 | 0 | 322 | 0 | 0 |
+| aprendizados | 322 | 0 | 320 | 0 | 2 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -353,7 +353,7 @@
 | aprendizados | atualizado | #292 — CDN sem versão pinada quebrou o HUD 3D do GrafoVivo |
 | aprendizados | atualizado | #293 — Sincronia VPS falhou por conflito de merge e foi resolvida |
 | aprendizados | atualizado | #294 — EliteHTTP porta real 8082 + Sentry precisa de org manual |
-| aprendizados | atualizado | #295 — Grok deve escrever secrets pelo admin_vault_write |
+| aprendizados | erro | #295 — Grok deve escrever secrets pelo admin_vault_write |
 | aprendizados | atualizado | #296 — Curso Condefonte v1 salvo no cofre e no Hermes |
 | aprendizados | atualizado | #297 — Curso Condefonte mora dentro de LOVABLE_TOKEN/ |
 | aprendizados | atualizado | #298 — Sistema de Memória Viva stealth (Condefonte v3.5 + Prompt Stealth + espelho Hermes) |
@@ -374,7 +374,7 @@
 | aprendizados | atualizado | #313 — TTS do Open WebUI deve passar pela LovableBridge 8099, não por porta 3102 morta |
 | aprendizados | atualizado | #314 — WebhookDeploy fora do PM2 bloqueia card novo do status |
 | aprendizados | atualizado | #315 — WebhookDeploy pode precisar esperar logs antes de validar card público |
-| aprendizados | atualizado | #316 — Inventário IA + varredura UI read-only — padrão e artefatos |
+| aprendizados | erro | #316 — Inventário IA + varredura UI read-only — padrão e artefatos |
 | aprendizados | atualizado | #317 — Padrão de merge multi-modelo + memory injection (Unlimited AI / Abacus) |
 | aprendizados | atualizado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
 | aprendizados | atualizado | #319 — Funcionou → Consolida → Sela (regra de ouro) |
