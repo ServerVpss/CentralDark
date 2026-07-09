@@ -19,7 +19,8 @@ const HUB_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2lnc3FsdXlrdG9jbHdkYWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTk0MDAsImV4cCI6MjA5NTU5NTQwMH0.24eXsWvtmTd-sQmUIN1aCAdw85BE9c-ay-XYErNT62k';
 
 const CAMPOS_ESPERADOS = ['tokens_in', 'tokens_out', 'status', 'error', 'latency_ms', 'model', 'created_at', 'id'];
-const CAMPOS_PROIBIDOS = ['api_key', 'apikey', 'authorization', 'secret', 'password', 'token', 'bearer'];
+// substrings sensíveis; "token" sozinho é permitido (tokens_in/tokens_out são métricas).
+const CAMPOS_PROIBIDOS = ['api_key', 'apikey', 'authorization', 'secret', 'password', 'bearer', 'access_token', 'refresh_token'];
 
 let falhas = 0;
 const passar = (nome) => console.log(`🟢 ${nome}`);
