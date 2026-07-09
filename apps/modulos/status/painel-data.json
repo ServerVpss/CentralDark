@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-08T20:11:27.072Z",
-  "updatedAtBR": "08/07/2026, 17:11:27 BRT",
+  "updatedAt": "2026-07-09T00:00:33.760Z",
+  "updatedAtBR": "08/07/2026, 21:00:33 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#320): Bot Telegram pode trocar própria foto via setMyProfilePhoto",
+    "lastCommit": "Marcou #51 como resolvido",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-09T00:00:33.760Z",
+      "titulo": "Push na main · a235cafe0a0953ed5598a4b39b468cc397e2335d",
+      "detalhe": "Marcou #51 como resolvido",
+      "area": "Repositório",
+      "sha": "a235caf",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-08T20:11:27.072Z",
       "titulo": "Push na main · 98a5f4ef31844cc6c338e64efa63139eb3b9e1f5",
       "detalhe": "aprendizado(#320): Bot Telegram pode trocar própria foto via setMyProfilePhoto",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#314): WebhookDeploy fora do PM2 bloqueia card novo do status",
       "area": "Repositório",
       "sha": "4610bb1",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-07T16:50:23.241Z",
-      "titulo": "Push na main · c812cd76f05a84cd1b7d9813293e98d2740801b6",
-      "detalhe": "feat(status): destacar botoes de uso diario CentralDark",
-      "area": "Repositório",
-      "sha": "c812cd7",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-09T00:00:33.760Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · a235cafe0a0953ed5598a4b39b468cc397e2335d (a235caf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-08T20:11:27.072Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 98a5f4ef31844cc6c338e64efa63139eb3b9e1f5 (98a5f4e)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-07T17:06:22.743Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4610bb16d9a92722cd3750259b932e147530a67d (4610bb1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-07T16:50:23.241Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c812cd76f05a84cd1b7d9813293e98d2740801b6 (c812cd7)",
       "area": "Repositório",
       "status": "sucesso"
     }
