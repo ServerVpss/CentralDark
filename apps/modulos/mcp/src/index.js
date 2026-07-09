@@ -34,11 +34,11 @@ process.on("unhandledRejection", (reason) => {
 // ─────────────────────── Validação de env obrigatórias (v2.3) ───────────────────────
 // Falha rápido com erro claro se algo essencial estiver faltando.
 function validarEnvsObrigatorias() {
+    // Só o que é essencial pro NOSSO sistema. GitHub OAuth é opcional
+    // (endpoints que dependerem falham em runtime com erro claro).
     const envsObrigatorias = [
         "CENTRALDARK_ADMIN_KEY",
         "MCP_SESSION_SECRET",
-        "GITHUB_CLIENT_ID",
-        "GITHUB_OAUTH_CALLBACK",
     ];
     const faltando = envsObrigatorias.filter((n) => !process.env[n] || process.env[n].trim() === "");
     if (faltando.length > 0) {
