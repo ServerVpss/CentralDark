@@ -188,7 +188,6 @@ const server = http.createServer(async (req, res) => {
   const xKeyRaw = (req.headers['x-api-key'] || req.headers['api-key'] || '').toString();
   const legacyOk = AUTH_KEY && (authRaw.includes(AUTH_KEY) || xKeyRaw.includes(AUTH_KEY));
   const authResult = await authenticate(req);
-  const authResult = await authenticate(req);
   let modelForAudit = null;
 
   // /health continua público
