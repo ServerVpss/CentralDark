@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-09T20:34:26.900Z
+# 🧠 Notion Sync — 2026-07-09T20:52:22.485Z
 
-- **Commit fonte:** `8a86833f287a79bedea8ec1bcacb6f8c88543759`
+- **Commit fonte:** `a54e2ae0580d1bad1bcec4afd957b78e2980cad0`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 359 atualizadas · ❌ 461 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 461 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 325 | 1 | 324 | 0 | 0 |
+| aprendizados | 325 | 0 | 325 | 0 | 0 |
 | estrutura | 461 | 0 | 0 | 0 | 461 |
 
 ## Operações
@@ -381,7 +381,7 @@
 | aprendizados | atualizado | #320 — Bot Telegram pode trocar própria foto via setMyProfilePhoto |
 | aprendizados | atualizado | #321 — Dedup .env VPS + fix Caddy api.centralldark.com |
 | aprendizados | atualizado | #322 — MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia |
-| aprendizados | criado | #323 — Auditoria de permissões da view api.ai_requests no HUB |
+| aprendizados | atualizado | #323 — Auditoria de permissões da view api.ai_requests no HUB |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
