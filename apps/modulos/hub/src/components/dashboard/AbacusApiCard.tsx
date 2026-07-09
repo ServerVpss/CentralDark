@@ -10,8 +10,15 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/shared/ui/dialog';
-import { Sparkles, RefreshCw, KeyRound, Bot } from 'lucide-react';
+import { Sparkles, RefreshCw, KeyRound, Bot, Copy, Check } from 'lucide-react';
 import { abacusApi, AbacusStatus, AbacusModel } from '@/services/abacus-client';
+
+const PS_SCRIPT = `# CentralDark Gateway — set env vars (Windows)
+[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_URL","https://api.centralldark.com/v1","User")
+[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_KEY","cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE","User")
+[System.Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL","https://api.centralldark.com/v1","User")
+[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY","cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE","User")
+Start-Process powershell -ArgumentList '-NoExit','-Command','Write-Host "Gateway ativo: $env:CENTRALDARK_GATEWAY_URL" -ForegroundColor Green'`;
 
 const GATEWAY_URL = 'https://api.centralldark.com/v1';
 
@@ -23,6 +30,13 @@ export function AbacusApiCard() {
   const [models, setModels] = useState<AbacusModel[]>([]);
   const [loadingModels, setLoadingModels] = useState(false);
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyPs = async () => {
+    await navigator.clipboard.writeText(PS_SCRIPT);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   const refreshStatus = useCallback(async () => {
     setPing('checking');
@@ -111,6 +125,15 @@ export function AbacusApiCard() {
         <code className="block truncate rounded bg-black/30 px-2 py-1 text-[10px] text-emerald-200/80">
           {GATEWAY_URL}
         </code>
+
+        <Button
+          size="sm"
+          onClick={copyPs}
+          className="w-full h-9 gap-1.5 bg-emerald-500 text-emerald-950 hover:bg-emerald-400 font-medium shadow-lg shadow-emerald-500/20"
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          {copied ? 'Copiado! Cola no PowerShell' : 'Copiar script Windows (PowerShell)'}
+        </Button>
 
         <div className="flex gap-2">
           <Dialog open={open} onOpenChange={setOpen}>
