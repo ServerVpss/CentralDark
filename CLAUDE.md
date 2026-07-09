@@ -111,6 +111,8 @@ Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
 ## 5. Regras de Execução Defensiva
 
 > 🛡️ **SELO DOUTRINA:** esta seção é reforçada por [`docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md`](docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md). Toda IA subordinada ao CentralDark deve obedecer a Doutrina de Proteção Estratégica além destas regras. Ação sem "PERMITO PIVETE" explícito = violação.
+>
+> 📌 **Leitura obrigatória:** [`docs/GOVERNANCA/REGRAS-OPERACIONAIS-PIVETE.md`](docs/GOVERNANCA/REGRAS-OPERACIONAIS-PIVETE.md) — 6 regras operacionais seladas pelo Pivete.
 
 1. Antes de gravar/alterar qualquer arquivo crítico (como este `CLAUDE.md`), verificar se já existe e **preservar conteúdo prévio** — atualizar seções sem sobrescrever cegamente.
 2. Não adivinhar caminhos de arquivos na VPS — usar catálogo, busca ou inspeção de leitura antes.
