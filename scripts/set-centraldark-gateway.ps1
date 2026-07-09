@@ -1,33 +1,55 @@
 # ============================================================
-# CentralDark Gateway — Setter de variáveis de ambiente (Windows)
-# Uso:  powershell -ExecutionPolicy Bypass -File .\set-centraldark-gateway.ps1
+# CentralDark Gateway - Setter de variaveis de ambiente (Windows)
+# Uso recomendado (copiar/colar no PowerShell):
+#   powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\Downloads\set-centraldark-gateway.ps1"
 # ============================================================
 
 param(
-  # IMPORTANTE: sem /v1 no final — Claude Desktop e clientes OpenAI-compat
+  # IMPORTANTE: sem /v1 no final - Claude Desktop e clientes OpenAI-compat
   # anexam /v1/... sozinhos. Com /v1 aqui vira /v1/v1/models -> 404.
   [string]$Url = "https://api.centralldark.com",
   [string]$Key = "cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE"
 )
 
-Write-Host "🟢 Definindo CENTRALDARK_GATEWAY_URL = $Url" -ForegroundColor Green
-[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_URL", $Url, "User")
+$ErrorActionPreference = "Stop"
 
-Write-Host "🟢 Definindo CENTRALDARK_GATEWAY_KEY = (oculta)" -ForegroundColor Green
-[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_KEY", $Key, "User")
+try {
+  Write-Host ""
+  Write-Host "=== CentralDark Gateway - Setup Windows ===" -ForegroundColor Green
+  Write-Host ""
 
-# Espelha também nas Anthropic vars para clientes que usam esse esquema
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", $Url, "User")
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", $Key, "User")
+  Write-Host "[1/4] CENTRALDARK_GATEWAY_URL = $Url" -ForegroundColor Green
+  [System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_URL", $Url, "User")
 
-Write-Host "`n✅ Variáveis salvas no escopo do usuário." -ForegroundColor Cyan
-Write-Host "🔄 Abrindo novo PowerShell para carregar as vars..." -ForegroundColor Yellow
+  Write-Host "[2/4] CENTRALDARK_GATEWAY_KEY = (oculta)" -ForegroundColor Green
+  [System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_KEY", $Key, "User")
 
-Start-Process powershell -ArgumentList '-NoExit','-Command',@"
-Write-Host '=== CentralDark Gateway ativo ===' -ForegroundColor Green
-Write-Host 'URL: ' -NoNewline; Write-Host `$env:CENTRALDARK_GATEWAY_URL -ForegroundColor Cyan
-Write-Host 'KEY: ' -NoNewline; Write-Host (`$env:CENTRALDARK_GATEWAY_KEY.Substring(0,12) + '...') -ForegroundColor Cyan
-Write-Host ''
-Write-Host 'Teste rápido:' -ForegroundColor Yellow
-Write-Host '  curl -H "Authorization: Bearer `$env:CENTRALDARK_GATEWAY_KEY" `$env:CENTRALDARK_GATEWAY_URL/models'
-"@
+  Write-Host "[3/4] ANTHROPIC_BASE_URL = $Url" -ForegroundColor Green
+  [System.Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", $Url, "User")
+
+  Write-Host "[4/4] ANTHROPIC_API_KEY = (oculta)" -ForegroundColor Green
+  [System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", $Key, "User")
+
+  Write-Host ""
+  Write-Host "OK - Variaveis salvas no escopo do usuario." -ForegroundColor Cyan
+  Write-Host "IMPORTANTE: feche e abra o Claude Desktop / Cursor / VSCode para carregarem." -ForegroundColor Yellow
+  Write-Host ""
+  Write-Host "Testando /v1/models..." -ForegroundColor Yellow
+
+  try {
+    $r = Invoke-WebRequest -Uri "$Url/v1/models" -Headers @{ Authorization = "Bearer $Key" } -UseBasicParsing -TimeoutSec 15
+    Write-Host ("HTTP {0} - Gateway respondendo." -f $r.StatusCode) -ForegroundColor Green
+  } catch {
+    Write-Host ("Falha no teste: {0}" -f $_.Exception.Message) -ForegroundColor Red
+  }
+}
+catch {
+  Write-Host ""
+  Write-Host "ERRO:" -ForegroundColor Red
+  Write-Host $_.Exception.Message -ForegroundColor Red
+}
+finally {
+  Write-Host ""
+  Write-Host "Pressione ENTER para fechar..." -ForegroundColor DarkGray
+  [void][System.Console]::ReadLine()
+}
