@@ -197,7 +197,22 @@ export function GatewayTab() {
 }
 
 function AiRequestsPanel() {
-  const { rows, loading, error, filter, setFilter, refresh } = useAiRequests(100);
+  const {
+    rows,
+    total,
+    models,
+    loading,
+    error,
+    filter,
+    setFilter,
+    modelFilter,
+    setModelFilter,
+    page,
+    setPage,
+    pageSize,
+    totalPages,
+    refresh,
+  } = useAiRequests({ pageSize: 25 });
 
   const filters: { id: AiRequestFilter; label: string; dot: string }[] = useMemo(
     () => [
@@ -208,6 +223,9 @@ function AiRequestsPanel() {
     ],
     [],
   );
+
+  const from = total === 0 ? 0 : page * pageSize + 1;
+  const to = Math.min(total, (page + 1) * pageSize);
 
   return (
     <Card className="border-emerald-500/20">
@@ -221,21 +239,35 @@ function AiRequestsPanel() {
         </Button>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="flex flex-wrap gap-1.5">
-          {filters.map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setFilter(f.id)}
-              className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs transition ${
-                filter === f.id
-                  ? 'border-emerald-500/60 bg-emerald-500/15 text-emerald-100'
-                  : 'border-border/50 hover:border-emerald-500/30 text-muted-foreground'
-              }`}
-            >
-              <span className={`h-2 w-2 rounded-full ${f.dot}`} />
-              {f.label}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap gap-1.5">
+            {filters.map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setFilter(f.id)}
+                className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs transition ${
+                  filter === f.id
+                    ? 'border-emerald-500/60 bg-emerald-500/15 text-emerald-100'
+                    : 'border-border/50 hover:border-emerald-500/30 text-muted-foreground'
+                }`}
+              >
+                <span className={`h-2 w-2 rounded-full ${f.dot}`} />
+                {f.label}
+              </button>
+            ))}
+          </div>
+          <select
+            value={modelFilter}
+            onChange={(e) => setModelFilter(e.target.value)}
+            className="ml-auto h-7 rounded border border-emerald-500/30 bg-black/40 px-2 text-xs text-emerald-100 focus:outline-none focus:border-emerald-500/60"
+          >
+            <option value="all">Todos os modelos ({models.length})</option>
+            {models.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
         </div>
 
         {error && (
@@ -296,6 +328,35 @@ function AiRequestsPanel() {
               })}
             </tbody>
           </table>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-muted-foreground">
+          <div>
+            {loading ? 'Carregando…' : `${from}–${to} de ${total}`}
+          </div>
+          <div className="flex items-center gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 px-2 text-xs"
+              disabled={page === 0 || loading}
+              onClick={() => setPage(Math.max(0, page - 1))}
+            >
+              ← Anterior
+            </Button>
+            <span className="px-2 tabular-nums">
+              {page + 1} / {totalPages}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 px-2 text-xs"
+              disabled={page + 1 >= totalPages || loading}
+              onClick={() => setPage(page + 1)}
+            >
+              Próxima →
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
