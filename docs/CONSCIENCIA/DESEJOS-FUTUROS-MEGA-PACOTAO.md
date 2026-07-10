@@ -1,7 +1,7 @@
 # 🗺️ MEGA PACOTÃO DE DESEJOS — CentralDark
 > Documento único, versionado no repo. Cada bloco é uma fase com checklist `[ ]` — marcar `[x]` ao consolidar.
 > **Status:** rascunho vivo · **Aceita:** sugestões, PRs, refinamentos · **Dono:** Pivete
-> Criado: 2026-07-08 · Última atualização: 2026-07-08 (Fases V, W, X, Y, Z adicionadas)
+> Criado: 2026-07-08 · Última atualização: 2026-07-09 (Fases AA, AB, AC, AD adicionadas)
 
 ---
 
@@ -33,6 +33,10 @@
 - **FASE X** — 📅 Relatório Mensal Automático 2026
 - **FASE Y** — 🩺 Healthcheck Contínuo + Watchdog
 - **FASE Z** — 💸 Painel de Custos + Estratégia Adaptativa
+- **FASE AA** — 🧭 Mapa Vivo + Cockpit CentralDark
+- **FASE AB** — 🔄 Sincronização GitHub → VPS → Supabase → HUB
+- **FASE AC** — 🎮 Orquestração Gamificada Multiagente
+- **FASE AD** — 🎨 Redesign HUB estilo Linear + Preview Vivo
 - **📊 RELATÓRIO ESTRATÉGICO 2026** — no fim do arquivo
 
 ---
@@ -405,15 +409,164 @@ Você vê onde o dinheiro sai. O sistema ajusta sozinho.
 
 ---
 
-## 🔗 Como as fases V-Z se conectam
+## FASE AA — 🧭 Mapa Vivo + Cockpit CentralDark
 
-- **V (governança)** protege quem executa **S (hacker)** e **U (enxame)**
-- **W (agenda enxame)** obedece janelas + coordena com **O** e **R**
-- **X (relatório mensal)** consome dados de V, W, Y, Z + fases anteriores
-- **Y (watchdog)** vigia agentes de C, L, S, U — falhou → aciona **P (rollback)**
-- **Z (custos)** observa TODAS as chamadas IA e retroalimenta **T (economia)**
+CentralDark é o sistema principal. Os demais domínios, módulos, bots, painéis e serviços entram como peças complementares dentro dele.
 
-Ciclo fechado: **executar com segurança → dentro da janela → sob vigilância → medindo custo → reportando mensal.**
+- [ ] AA.1 Criar tela MVP `Mapa Vivo` no HUB.
+- [ ] AA.2 Cards mínimos: GitHub, VPS, Supabase, Gateway, Bots, Domínios, Agentes, Missões, Handoffs, Watchdog, Divergências, Ações pendentes.
+- [ ] AA.3 Mostrar status por card: 🟢 ok, 🟡 revisar, 🔴 risco, 🔒 protegido.
+- [ ] AA.4 Mostrar comparação: existe no GitHub e na VPS; existe só no GitHub; existe só na VPS; protegido; risco; próximo passo.
+- [ ] AA.5 Mostrar prova visual: último commit, último heartbeat, último log, último smoke test, último snapshot.
+- [ ] AA.6 Permitir comentário do Pivete por card: aprovar, pedir ajuste, pausar, marcar para revisão.
+- [ ] AA.7 Começar com dados mockados para o Pivete ver a tela funcionando rápido.
+- [ ] AA.8 Evoluir para leitura real: GitHub primeiro, Supabase depois, VPS somente leitura depois.
+- [ ] AA.9 Linkar com `docs/GOVERNANCA/MVP-MAPA-VIVO-CENTRALDARK.md`.
+
+MVP = primeira versão pequena, funcional e auditável.
+
+Regra:
+
+```txt
+Primeiro a gente enxerga.
+Depois compara.
+Depois audita.
+Depois automatiza.
+```
+
+---
+
+## FASE AB — 🔄 Sincronização GitHub → VPS → Supabase → HUB
+
+Fluxo oficial desejado para sair do modo manual e chegar no Jarvis operacional.
+
+- [ ] AB.1 Pivete fala ou manda comando por texto/voz.
+- [ ] AB.2 IA entende, organiza e transforma em plano seguro.
+- [ ] AB.3 GitHub registra mudança oficial via commit/PR.
+- [ ] AB.4 Webhook avisa a VPS quando houver mudança aprovada.
+- [ ] AB.5 VPS puxa/executa somente o que foi aprovado.
+- [ ] AB.6 Smoke test roda depois da execução.
+- [ ] AB.7 Supabase salva estado vivo, log, status e resultado.
+- [ ] AB.8 HUB mostra prova em tempo real.
+- [ ] AB.9 Pivete audita e manda ajustar.
+- [ ] AB.10 Começar com modo somente leitura antes de permitir execução automática.
+
+Webhook = aviso automático entre sistemas.
+Smoke test = teste rápido para ver se o básico não quebrou.
+Somente leitura = olha o estado, mas não altera nada.
+
+Regra:
+
+```txt
+GitHub = fonte oficial.
+VPS = executor.
+Supabase = estado vivo.
+HUB = prova visual.
+```
+
+Trava:
+
+```txt
+Nada de VPS -> GitHub automático no começo.
+Primeiro VPS informa.
+GitHub decide.
+Pivete aprova.
+Depois automatiza.
+```
+
+---
+
+## FASE AC — 🎮 Orquestração Gamificada Multiagente
+
+Referência: Overclock e outros cockpits multiagente entram como inspiração de arquitetura, não como dependência fixa.
+
+- [ ] AC.1 Criar contrato de missão antes de abrir squad.
+- [ ] AC.2 Contrato mínimo: objetivo em 1 frase, Definition of Done, restrições, prazo.
+- [ ] AC.3 Criar papéis: Piloto, Scout, Builder, Reviewer, QA, Auditor, Consolidador, Executor.
+- [ ] AC.4 Gerar `org_id` por missão para isolar contexto.
+- [ ] AC.5 Criar panes/agentes em paralelo com escopo pequeno.
+- [ ] AC.6 Exigir HANDOFF de cada agente.
+- [ ] AC.7 Reconciliar handoffs e mostrar placar final.
+- [ ] AC.8 Watchdog detecta agente sem heartbeat, pane travada ou missão sem avanço.
+- [ ] AC.9 Pool antigo não é reutilizado sem validação.
+- [ ] AC.10 Pools vivos de outros orgs são ignorados quando a missão for diferente.
+- [ ] AC.11 Mostrar no HUB: Missão, Squad, Panes, Placar, Handoffs, Watchdog e Próximo passo.
+- [ ] AC.12 Controle de custo por modelo/agente antes de expandir para dezenas de agentes.
+
+Handoff = relatório curto que permite outro agente continuar sem perder contexto.
+org_id = identificação da missão/grupo para não misturar contexto.
+Watchdog = vigia automático que detecta agente travado, morto ou sem resposta.
+Heartbeat = sinal periódico de que o agente ainda está vivo.
+Gamificação = deixar a execução visual, acompanhável e fácil de auditar como um jogo de missão.
+
+Modelo mental:
+
+```txt
+Missão = objetivo.
+Squad = time escolhido.
+Panes = jogadores/agentes em campo.
+Placar = DONE / PARTIAL / BLOCKED.
+Handoff = relatório de cada jogador.
+Watchdog = juiz que percebe travamento.
+Consolidador = técnico que junta resultado final.
+Pivete = comandante que aprova ou manda ajustar.
+```
+
+Regra:
+
+```txt
+Agente não trabalha solto.
+Agente recebe contrato.
+Agente devolve handoff.
+Consolidador junta.
+Pivete vê placar.
+GitHub registra.
+```
+
+---
+
+## FASE AD — 🎨 Redesign HUB estilo Linear + Preview Vivo
+
+Objetivo: deixar o HUB com cara de produto grande, rápido, limpo, escuro e premium, sem quebrar a lógica atual.
+
+- [ ] AD.1 Usar Linear como referência visual: limpo, elegante, rápido, escuro e sem poluição.
+- [ ] AD.2 Redesenhar aba por aba, nunca tudo de uma vez.
+- [ ] AD.3 Primeira aba: Overview / Visão Geral.
+- [ ] AD.4 Depois: Mapa Vivo, Bots e Agentes, Logs/Auditoria, Chaves API, Supabase, Gateway, GitHub, Configurações.
+- [ ] AD.5 Preview vivo para o Pivete auditar antes de consolidar.
+- [ ] AD.6 Manter lógica atual do HUB; visual muda, backend não muda sem autorização.
+- [ ] AD.7 Não alterar secrets, Supabase, Gateway, autenticação, rotas críticas ou VPS nesta fase.
+- [ ] AD.8 Commit pequeno por aba.
+- [ ] AD.9 Diff obrigatório antes de passar para próxima aba.
+- [ ] AD.10 Padrão visual deve combinar com CentralDark, não copiar identidade de terceiros.
+
+UI = parte visual da tela.
+UX = experiência de uso.
+Preview = visualização ao vivo do que está sendo construído.
+Diff = comparação do que mudou no código.
+
+Regra:
+
+```txt
+Visual pode mudar.
+Lógica não muda sem autorização.
+```
+
+---
+
+## 🔗 Como as fases V-AD se conectam
+
+- **V (governança)** protege quem executa **S (hacker)** e **U (enxame)**.
+- **W (agenda enxame)** obedece janelas + coordena com **O** e **R**.
+- **X (relatório mensal)** consome dados de V, W, Y, Z + fases anteriores.
+- **Y (watchdog)** vigia agentes de C, L, S, U e AC — falhou → aciona **P (rollback)**.
+- **Z (custos)** observa TODAS as chamadas IA e retroalimenta **T (economia)**.
+- **AA (Mapa Vivo)** mostra a verdade do ecossistema.
+- **AB (sincronização)** liga GitHub, VPS, Supabase e HUB sem edição no escuro.
+- **AC (orquestração gamificada)** transforma comando do Pivete em missão com squad, placar e prova.
+- **AD (redesign HUB)** dá a experiência visual premium para operar tudo.
+
+Ciclo fechado: **comandar → mapear → executar com segurança → vigiar → medir custo → mostrar prova → auditar → melhorar.**
 
 ---
 
@@ -422,7 +575,7 @@ Ciclo fechado: **executar com segurança → dentro da janela → sob vigilânci
 2. Marca `[x]` ao consolidar
 3. Adiciona sub-itens com commit direto
 4. Ao ativar, cria issue linkando aqui
-5. Ordem sugerida: **F → G → P → Q → V → Y → Z → A → N → O → X → E → C → R → W → T → S → U → B → L → D → J → K → H → I → M**
+5. Ordem sugerida: **F → G → P → Q → AA → AB → AC → AD → V → Y → Z → A → N → O → X → E → C → R → W → T → S → U → B → L → D → J → K → H → I → M**
 
 ---
 
@@ -449,7 +602,7 @@ Ciclo fechado: **executar com segurança → dentro da janela → sob vigilânci
 
 ## 🧭 Fio trimestral
 - **Q3 2026 — Fundação:** F, G, P, Q, T, V, Y, Z
-- **Q4 2026 — Visibilidade:** A, N, O, X, E, C
+- **Q4 2026 — Visibilidade:** A, N, O, X, E, C, AA, AB, AC, AD
 - **Q1 2027 — Autonomia:** R, W, B, L, D, J
 - **Q2 2027 — Guerra:** S, U, K
 - **Q3 2027 — Monetização defensiva:** M.11, M.23, M.5
@@ -461,6 +614,8 @@ Ciclo fechado: **executar com segurança → dentro da janela → sob vigilânci
 3. Não ignorar Time RED interno
 4. Não escalar enxame sem W.5 (derruba VPS em 3min)
 5. Não misturar HUB e Lovable Cloud
+6. Não depender de uma IA única; ferramenta muda, fluxo fica
+7. Não permitir preview virar fonte oficial; GitHub registra
 
 ## 💰 Meta financeira
 | Fonte | 6m | 12m |
