@@ -19,16 +19,21 @@ import { RoleGuard } from '@/components/shared/RoleGuard';
 import { ApiKeysManager } from './ApiKeysManager';
 
 const DEFAULT_URL = 'https://api.centralldark.com/v1';
-const DEFAULT_KEY = 'cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE';
+const DEFAULT_KEY = '';
+const KEY_PLACEHOLDER = 'SUA_CHAVE_AQUI';
 const LS_URL = 'cdk_gateway_url';
 const LS_KEY = 'cdk_gateway_key';
 
-const PS_SCRIPT = `# CentralDark Gateway — set env vars (Windows)
+function buildPsScript(key: string) {
+  const keyValue = key || KEY_PLACEHOLDER;
+  return `# CentralDark Gateway — set env vars (Windows)
+# ATENCAO: troque ${KEY_PLACEHOLDER} pela sua chave real, gerada na aba "Chaves" (API Keys) deste HUB.
 [System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_URL","${DEFAULT_URL}","User")
-[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_KEY","${DEFAULT_KEY}","User")
+[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_KEY","${keyValue}","User")
 [System.Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL","${DEFAULT_URL}","User")
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY","${DEFAULT_KEY}","User")
+[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY","${keyValue}","User")
 Start-Process powershell -ArgumentList '-NoExit','-Command','Write-Host "Gateway ativo: $env:CENTRALDARK_GATEWAY_URL" -ForegroundColor Green'`;
+}
 
 type TestState =
   | { kind: 'idle' }
@@ -86,7 +91,7 @@ export function GatewayTab() {
   };
 
   const downloadPs = () => {
-    const blob = new Blob([PS_SCRIPT], { type: 'text/plain' });
+    const blob = new Blob([buildPsScript(key)], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'set-centraldark-gateway.ps1';
@@ -139,6 +144,7 @@ export function GatewayTab() {
                 type={showKey ? 'text' : 'password'}
                 value={key}
                 onChange={(e) => setKey(e.target.value)}
+                placeholder="Cole sua chave (aba Chaves / API Keys)"
                 className="font-mono text-xs bg-black/30 border-emerald-500/20"
               />
             </div>
@@ -173,7 +179,7 @@ export function GatewayTab() {
             <Button variant="outline" className="h-9 gap-1.5" onClick={downloadPs}>
               <Download className="h-4 w-4" /> Baixar .ps1
             </Button>
-            <CopyButton text={PS_SCRIPT} label="Copiar script PowerShell" />
+            <CopyButton text={buildPsScript(key)} label="Copiar script PowerShell" />
           </div>
 
           {test.kind === 'fail' && (
@@ -184,7 +190,8 @@ export function GatewayTab() {
 
           <div className="rounded border border-emerald-500/10 bg-black/20 p-3 text-xs text-muted-foreground">
             <div className="mb-1 font-medium text-emerald-300">Como aplicar no Windows</div>
-            1. Clique <b>Copiar script PowerShell</b> · 2. Cole num PowerShell (Admin não precisa) · 3. Abra{' '}
+            1. Cole sua chave real no campo <b>API Key</b> acima (pegue na aba "Chaves"/API Keys) ·
+            2. Clique <b>Copiar script PowerShell</b> · 3. Cole num PowerShell (Admin não precisa) · 4. Abra{' '}
             <b>novo</b> terminal — as vars valem daí pra frente. No Claude Desktop, use exatamente{' '}
             <code className="text-emerald-200">{DEFAULT_URL}</code> +{' '}
             <code className="text-emerald-200">Bearer &lt;key&gt;</code>.
@@ -285,7 +292,7 @@ function AiRequestsPanel() {
 
         <div className="overflow-x-auto rounded border border-border/50">
           <table className="w-full text-xs">
-            <thead className="bg-black/30 text-muted-foreground">
+            <thead className="bg-muted/50 text-muted-foreground">
               <tr>
                 <th className="px-3 py-2 text-left">Quando</th>
                 <th className="px-3 py-2 text-left">Modelo</th>
@@ -307,27 +314,30 @@ function AiRequestsPanel() {
                 const isFb = !!r.fallback_used;
                 const isErr = r.status === 'error';
                 const badge = isErr
-                  ? 'bg-red-500/20 text-red-200'
+                  ? 'bg-red-500/15 text-red-700 dark:text-red-300'
                   : isFb
-                    ? 'bg-amber-500/20 text-amber-200'
-                    : 'bg-emerald-500/20 text-emerald-200';
+                    ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
+                    : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300';
                 const label = isErr ? 'erro' : isFb ? 'fallback' : r.status ?? '—';
                 return (
-                  <tr key={r.id} className="hover:bg-emerald-500/[0.03]">
+                  <tr key={r.id} className="bg-card hover:bg-muted/40 transition-colors">
                     <td className="px-3 py-2 whitespace-nowrap text-muted-foreground">
                       {new Date(r.created_at).toLocaleString('pt-BR')}
                     </td>
-                    <td className="px-3 py-2 font-mono">{r.model ?? '—'}</td>
+                    <td className="px-3 py-2 font-mono text-foreground">{r.model ?? '—'}</td>
                     <td className="px-3 py-2">
-                      <span className={`rounded px-1.5 py-0.5 ${badge}`}>{label}</span>
+                      <span className={`rounded px-1.5 py-0.5 font-medium ${badge}`}>{label}</span>
                     </td>
-                    <td className="px-3 py-2 text-right tabular-nums">
+                    <td className="px-3 py-2 text-right tabular-nums text-foreground">
                       {r.latency_ms != null ? `${r.latency_ms}ms` : '—'}
                     </td>
                     <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
                       {(r.tokens_in ?? 0) + (r.tokens_out ?? 0) || '—'}
                     </td>
-                    <td className="px-3 py-2 max-w-[220px] truncate text-red-200/80" title={r.error ?? ''}>
+                    <td
+                      className="px-3 py-2 max-w-[220px] truncate text-red-600 dark:text-red-300/80"
+                      title={r.error ?? ''}
+                    >
                       {r.error ?? ''}
                     </td>
                   </tr>

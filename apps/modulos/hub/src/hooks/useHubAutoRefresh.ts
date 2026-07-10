@@ -1,6 +1,6 @@
 // Auto-atualização do HUB — dispara ao montar, em intervalo e ao voltar visível.
 import { useEffect, useRef } from "react";
-import { hubClient } from "@/integrations/supabase/hub-client";
+import { hubAuth } from "@/integrations/supabase/hub-client";
 import { trackAction, logWarn } from "@/lib/buttonLog";
 import { abacusApi } from "@/services/abacus-client";
 
@@ -27,7 +27,9 @@ export function useHubAutoRefresh({ intervalMs = 60_000, onStatus, onModels }: U
           return { status: 200, ok: true };
         }).catch(() => {});
 
-        const { data: { session } } = await hubClient.auth.getSession();
+        // hubAuth é o único client com persistSession: true — mesmo bug do useAuth.ts:
+        // hubClient nunca hidrata sessão do storage, então getSession() sempre voltava null aqui.
+        const { data: { session } } = await hubAuth.auth.getSession();
         if (!session?.access_token) {
           logWarn("hub:auto:models", "Pulado — sem sessão ativa. Faça login para carregar modelos.");
         } else {

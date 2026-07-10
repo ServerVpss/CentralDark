@@ -15,10 +15,11 @@ import { abacusApi, AbacusStatus, AbacusModel } from '@/services/abacus-client';
 import { logButton } from '@/lib/buttonLog';
 
 const PS_SCRIPT = `# CentralDark Gateway — set env vars (Windows)
+# ATENCAO: troque SUA_CHAVE_AQUI pela sua chave real, gerada na aba "Chaves" (API Keys) deste HUB.
 [System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_URL","https://api.centralldark.com/v1","User")
-[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_KEY","cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE","User")
+[System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_KEY","SUA_CHAVE_AQUI","User")
 [System.Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL","https://api.centralldark.com/v1","User")
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY","cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE","User")
+[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY","SUA_CHAVE_AQUI","User")
 Start-Process powershell -ArgumentList '-NoExit','-Command','Write-Host "Gateway ativo: $env:CENTRALDARK_GATEWAY_URL" -ForegroundColor Green'`;
 
 const GATEWAY_URL = 'https://api.centralldark.com/v1';
@@ -98,7 +99,9 @@ export function AbacusApiCard() {
       <CardContent className="space-y-3">
         <p className="text-xs text-muted-foreground">
           Gateway OpenAI-compat com modelos free-tier. Use em qualquer app que aceita
-          OpenAI API: base URL abaixo + sua chave do HUB.
+          OpenAI API: base URL abaixo + sua chave do HUB. O script abaixo traz um
+          placeholder <code>SUA_CHAVE_AQUI</code> — troque pela sua chave real
+          (aba "Chaves"/API Keys) antes de rodar.
         </p>
 
         <div className="grid grid-cols-2 gap-2 text-xs">

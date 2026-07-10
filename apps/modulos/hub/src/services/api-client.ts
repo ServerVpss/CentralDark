@@ -1,7 +1,8 @@
-import { hubClient as supabase } from '@/integrations/supabase/hub-client';
+import { hubAuth } from '@/integrations/supabase/hub-client';
 
 const getHeaders = async () => {
-  const { data: { session } } = await supabase.auth.getSession();
+  // hubAuth é o único client com persistSession: true (mesmo bug corrigido em useAuth.ts).
+  const { data: { session } } = await hubAuth.auth.getSession();
   return {
     'Authorization': `Bearer ${session?.access_token}`,
     'Content-Type': 'application/json'

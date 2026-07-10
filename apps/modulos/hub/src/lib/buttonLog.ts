@@ -1,5 +1,5 @@
 // Logger de botões do HUB — ring buffer local + persistência em Supabase HUB (TTL 30d).
-import { hubClient } from "@/integrations/supabase/hub-client";
+import { hubClient, hubAuth } from "@/integrations/supabase/hub-client";
 
 export type ButtonLogLevel = "info" | "ok" | "warn" | "error";
 
@@ -31,7 +31,8 @@ let buffer: ButtonLogEntry[] = typeof window !== "undefined" ? load() : [];
 
 async function persistRemote(entry: ButtonLogEntry) {
   try {
-    const { data: { session } } = await hubClient.auth.getSession();
+    // hubAuth é o único client com persistSession: true (mesmo bug corrigido em useAuth.ts).
+    const { data: { session } } = await hubAuth.auth.getSession();
     if (!session?.user) return;
     await hubClient.from("button_log_events").insert({
       client_id: entry.id,
