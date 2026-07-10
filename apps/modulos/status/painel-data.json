@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-10T16:25:16.320Z",
-  "updatedAtBR": "10/07/2026, 13:25:16 BRT",
+  "updatedAt": "2026-07-10T16:27:41.104Z",
+  "updatedAtBR": "10/07/2026, 13:27:41 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T16:27:41.104Z",
+      "titulo": "Push na main · d825f871746d615bf2c341894c40e34f1c7c9b50",
+      "detalhe": "Code edited in Lovable Code Editor",
+      "area": "Repositório",
+      "sha": "d825f87",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-10T16:25:16.320Z",
       "titulo": "Push na main · 943914513daf11b1e1519e1f767207218d13d991",
       "detalhe": "Code edited in Lovable Code Editor",
@@ -987,14 +995,6 @@
       "area": "Repositório",
       "sha": "4bb8acc",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T20:35:37.741Z",
-      "titulo": "Push na main · 35fba0cfb6cb37348d90d3356f0dac8cd414a1b1",
-      "detalhe": "Adicionou filtros e smoke test",
-      "area": "Repositório",
-      "sha": "35fba0c",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T16:27:41.104Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · d825f871746d615bf2c341894c40e34f1c7c9b50 (d825f87)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T16:25:16.320Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 943914513daf11b1e1519e1f767207218d13d991 (9439145)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T20:43:23.099Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4bb8acc44ecab7f40faf035bf81ca95f6fb171e0 (4bb8acc)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T20:35:37.741Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 35fba0cfb6cb37348d90d3356f0dac8cd414a1b1 (35fba0c)",
       "area": "Repositório",
       "status": "sucesso"
     }
