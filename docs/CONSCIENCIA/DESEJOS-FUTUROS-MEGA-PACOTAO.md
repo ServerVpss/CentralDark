@@ -165,13 +165,13 @@
 - [ ] M.21 **Franquia CentralDark** (R$ 5-15k por setup)
 - [ ] M.22 **Marketplace de agentes** (20% de cada uso)
 - [ ] M.23 **Assinatura Segundo Cérebro** (datalake pra consultores)
-- [ ] M.24 **Sniper de domínios expirando**
-- [ ] M.25 **Rede de honeypots** (threat feed vendido)
-- [ ] M.26 **IA que abre PRs pra open-source** (reputação)
-- [ ] M.27 **Cloaked affiliate router**
-- [ ] M.28 **Voice-cloning ético** (Vapi + ElevenLabs)
-- [ ] M.29 **Auto-arbitragem de gateways de IA**
-- [ ] M.30 **Kit IA whitelabel** (R$ 297 template)
+- [ ] M.24 **Sniper de domínios expirando"
+- [ ] M.25 **Rede de honeypots" (threat feed vendido)
+- [ ] M.26 **IA que abre PRs pra open-source" (reputação)
+- [ ] M.27 **Cloaked affiliate router"
+- [ ] M.28 **Voice-cloning ético" (Vapi + ElevenLabs)
+- [ ] M.29 **Auto-arbitragem de gateways de IA"
+- [ ] M.30 **Kit IA whitelabel" (R$ 297 template)
 
 ---
 
@@ -492,6 +492,9 @@ Referência: Overclock e outros cockpits multiagente entram como inspiração de
 - [ ] AC.10 Pools vivos de outros orgs são ignorados quando a missão for diferente.
 - [ ] AC.11 Mostrar no HUB: Missão, Squad, Panes, Placar, Handoffs, Watchdog e Próximo passo.
 - [ ] AC.12 Controle de custo por modelo/agente antes de expandir para dezenas de agentes.
+- [ ] AC.13 Integração com Grok (OAuth + sessão salva pro VPS e agentes)
+- [ ] AC.14 Contexto de Agentes (ler GitHub + entender o projeto do Pivete)
+- [ ] AC.15 Ferramentas do Pivete (Grok Build CLI + VS Code integration)
 
 Handoff = relatório curto que permite outro agente continuar sem perder contexto.
 org_id = identificação da missão/grupo para não misturar contexto.
@@ -510,6 +513,7 @@ Handoff = relatório de cada jogador.
 Watchdog = juiz que percebe travamento.
 Consolidador = técnico que junta resultado final.
 Pivete = comandante que aprova ou manda ajustar.
+Grok = provedor de IA integrado via OAuth no HUB.
 ```
 
 Regra:
@@ -566,7 +570,7 @@ Lógica não muda sem autorização.
 - **AC (orquestração gamificada)** transforma comando do Pivete em missão com squad, placar e prova.
 - **AD (redesign HUB)** dá a experiência visual premium para operar tudo.
 
-Ciclo fechado: **comandar → mapear → executar com segurança → vigiar → medir custo → mostrar prova → auditar → melhorar.**
+Ciclo fechado: **comandar → mapear → executar com segurança → vigitar → medir custo → mostrar prova → auditar → melhorar.**
 
 ---
 
