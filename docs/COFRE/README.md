@@ -1,34 +1,55 @@
 # 🔐 COFRE DO PIVETE — Onde ficam as regras do CentralDark
 
-Este é o índice para localizar rapidamente as regras, o fluxo, o jeito de comunicação e o BOOT das IAs.
+Este é o índice para localizar rapidamente a porta de entrada, a hierarquia, o fluxo, o jeito de comunicação e os BOOTs das IAs.
 
-## Entrada principal
+## Porta universal
+
+```text
+00-COMECE-AQUI-IA.md
+```
+
+Depois dela, toda IA deve abrir:
 
 ```text
 AGENTS.md
 ```
 
-Toda IA deve começar por esse arquivo.
-
 ## Mapa do cofre
 
 | Assunto | Local oficial |
 |---|---|
-| Entrada obrigatória de qualquer IA | `AGENTS.md` |
+| Porta universal de qualquer IA | `00-COMECE-AQUI-IA.md` |
+| Regras universais de qualquer IA | `AGENTS.md` |
+| Hierarquia e precedência | `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md` |
 | Como falar e trabalhar com o Pivete | `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md` |
+| BOOT operacional antes de agir | `docs/GOVERNANCA/BOOT-IA.md` |
 | Fluxo DEV → Auditoria → Main | `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md` |
-| Checklist antes de editar | `docs/GOVERNANCA/BOOT-IA.md` |
+| Memória e continuidade da sessão | `docs/PROTOCOLO-BOOT.md` |
 | Instrução curta para Grok | `GROK.md` |
-| Instrução curta para Claude | `CLAUDE.md` |
+| Contexto específico do Claude | `CLAUDE.md` e `.claude/BOOT-PIVETE.md` |
 | Instrução curta para Gemini | `GEMINI.md` |
 | Instrução para GitHub Copilot | `.github/copilot-instructions.md` |
 | Verificador do ambiente Git | `scripts/ia/verificar-ambiente.sh` |
 | Este índice | `docs/COFRE/README.md` |
 
+## Dois BOOTs, funções diferentes
+
+```text
+BOOT operacional:
+docs/GOVERNANCA/BOOT-IA.md
+→ branch, SHA, escopo, risco, testes, deploy, prova e rollback
+
+BOOT de memória e continuidade:
+docs/PROTOCOLO-BOOT.md
+→ pendências, aprendizados, estado vivo e encerramento da sessão
+```
+
+O BOOT de memória nunca substitui o BOOT operacional.
+
 ## Frase curta para enviar a qualquer IA
 
 ```text
-Antes de tocar no CentralDark, leia AGENTS.md na raiz, execute o BOOT indicado e confirme branch, SHA, ambiente, escopo, riscos, testes e rollback. Não altere nada antes disso.
+Antes de tocar no CentralDark, abra ou inspecione pivete/dev, leia 00-COMECE-AQUI-IA.md e AGENTS.md, siga a hierarquia oficial e execute o BOOT operacional. Confirme workspace, ref, SHA, escopo, riscos, testes, prova e rollback. Não altere nada antes disso.
 ```
 
 ## Fluxo em uma linha
@@ -90,4 +111,4 @@ Este cofre contém apenas caminhos, processos, comunicação e governança. Nunc
 
 - Criado primeiro na branch `pivete/dev`.
 - Deve passar por `pivete/auditoria` antes de chegar à `main`.
-- Enquanto ainda não estiver na `main`, uma IA deve ser instruída a abrir especificamente a branch `pivete/dev` para encontrá-lo.
+- Enquanto ainda não estiver na `main`, uma IA deve ser instruída a abrir ou inspecionar especificamente a branch `pivete/dev` para encontrá-lo.
