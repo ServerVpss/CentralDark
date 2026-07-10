@@ -1,0 +1,10 @@
+{
+  "provider": "grok",
+  "mode": "zendriver",
+  "connected": false,
+  "lastLoginAt": null,
+  "cookieExpiresAt": null,
+  "cookieName": "GROK_SESSION_COOKIE",
+  "runner": "elite-gateway (PM2 id 8)",
+  "note": "Ainda nao capturado - rodar login web manual 1x na VPS para popular este arquivo."
+}
