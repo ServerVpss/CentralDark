@@ -1,56 +1,73 @@
-## 🌌 OPERAÇÃO OVERCLOCK — Auditoria Profunda (Dono Autorizado)
+## Análise Staff v2 — overclock.sh (fechar as 4 lacunas)
 
-Você confirmou ser dono de `overclock.sh` → libero **auditoria profunda de leitura + prova leve**, ainda sem carga destrutiva (nada de DoS, nada de brute-force real, nada de exploit weaponizado). Isso mantém o site no ar enquanto os "cavaleiros" varrem.
+Objetivo: entregar um relatório que sobreviva a review de Staff/Principal — atribuição real de símbolos, mapeamento chunk→componente, números por componente e correlação direta com o ciclo de hidratação do App Router.
 
-### 🛡️ Regras da Guerra
-- Zero DoS, zero flood, zero brute-force real (rate limit próprio: máx 5 req/s por worker).
-- Zero exploit destrutivo (SSRF/RCE só como *check* passivo de sintoma, sem payload ativo).
-- Zero touch em dados reais de outros usuários.
-- Tudo em `/tmp/overclock-op/`, apagado no final (Terra Arrasada).
-- Relatório único consolidado no fim, formato Card Hermes.
+### As 4 lacunas e como cada uma é fechada
 
-### ⚔️ Enxame — 12 Frentes Paralelas (cavaleiros + mosqueteiros + hermes)
+| # | Lacuna apontada | Correção nesta rodada |
+|---|---|---|
+| 1 | Nomes minificados | Baixar `.js.map` de cada chunk quente e desminificar cada frame do `.cpuprofile` (linha/coluna → símbolo original + arquivo fonte) |
+| 2 | Chunks não mapeados para componentes | Cruzar os módulos dentro do source map (`sources[]`) com o import tree do App Router para dizer exatamente "chunk X = `<Hero>` + `<Releases>` + `framer-motion`" |
+| 3 | Fix genérico | Ranquear componentes por (CPU self × bytes JS × posição no viewport) e dar top-3 nomeados com ganho esperado individual em ms |
+| 4 | Baixa correlação com App Router | Instrumentar o ciclo `RSC payload → schedulerRoot → beginWork → commitRoot` via marks do React DevTools profiler + `Performance.measure`, alinhar ao eixo de tempo da long-task de 299 ms |
 
-**Bloco A — Reconhecimento (paralelo, leve):**
-1. **DNS + WHOIS + subdomínios** — `dig`, `crt.sh` (certificate transparency) pra mapear subdomínios expostos.
-2. **Headers HTTP + TLS** — CSP, HSTS, X-Frame, Referrer-Policy, CORS, cookies flags, versão TLS, cipher, cadeia de certificado.
-3. **robots.txt + sitemap.xml + `.well-known/`** — o que o dono expõe voluntariamente.
-4. **Tech fingerprint** — servidor, framework, versões (via headers + HTML), CDN, analytics.
+### O que a rodada v2 vai produzir
 
-**Bloco B — Superfície visível (Playwright headless, 3 viewports):**
-5. **Render mobile 390 / tablet 768 / desktop 1440** — screenshots, layout quebrado, contraste, overflow.
-6. **Console + Network** — erros JS, 404/500, mixed content, requests pra domínios terceiros suspeitos, tamanho de bundle.
-7. **SEO + a11y básica** — title, meta, OG, H1, alt, lang, viewport, landmarks, foco visível.
-8. **Performance rápida** — TTFB, LCP aproximado, peso total, imagens não otimizadas.
+1. **`profile.symbolicated.json`** — cada sample do `.cpuprofile` reescrito com nome original (`performConcurrentWorkOnRootSync`, `Releases.render`, etc.) via source-map-cli.
+2. **`chunk-to-components.md`** — tabela: `chunk hash | tamanho | componentes App Router dentro | libs de terceiros`.
+3. **Flamegraph real** (não só top-N textual) — hierarquia completa até folhas, com % CPU e link para o arquivo fonte de cada frame.
+4. **Ranking de componentes por custo** — CPU self ms, JS bytes, e ganho previsto ao aplicar `next/dynamic` (usando modelo: `ganho ≈ self_ms × (1 - visível_no_LCP)`).
+5. **Diff de fix pronto** — `app/page.tsx` com os imports exatos convertidos, um por vez, com ganho estimado por linha alterada.
+6. **Plano de verificação numérico** — baseline vs meta por métrica (long-task máx, TBT, INP p75, JS bytes hidratados no LCP).
 
-**Bloco C — Segurança de aplicação (Hermes crítico, ainda passivo):**
-9. **Mapeamento de rotas + formulários** — crawl leve (até 50 páginas), identifica inputs, endpoints de API, uploads.
-10. **Auth surface** — login/registro/reset: existe rate limit visível? mensagens vazam existência de usuário? CSRF token presente?
-11. **Injeção — check passivo** — só *detecta reflexão* de parâmetro na resposta (sem payload malicioso, só marker inofensivo como `overclock-audit-{nonce}`). Não executa XSS real.
-12. **Segredos vazando no frontend** — grep no HTML/JS servido: `AKIA`, `sk_live_`, `-----BEGIN`, tokens Bearer, keys hardcoded, `.env` expostos, `/admin`, `/debug`, source maps públicos.
+### Como será executado (fluxo técnico)
 
-### 🧠 Hermes-Loop (refino contínuo)
-Depois da primeira passada, entra o ciclo:
-- **Critic** relê os 12 blocos, aponta contradições e o que ficou raso.
-- **Refiner** dispara re-teste focado nos 3 pontos mais suspeitos.
-- **Sintetizador** consolida em: 🔴 crítico / 🟡 aviso / 🟢 ok, com evidência (screenshot, header, snippet).
+```text
+1. Coletar assets
+   - GET https://overclock.sh/ → parsear <script>/link modulepreload
+   - Baixar cada chunk .js + o .js.map correspondente (quando servido)
+   - Se .js.map não estiver público: tentar // sourceMappingURL, senão
+     usar heurística por AST (identificadores exportados) e marcar "unmapped"
 
-### 📊 Entrega Final
-Um único relatório em PT-BR contendo:
-- Placar geral (🟢/🟡/🔴 por bloco).
-- Top 5 achados críticos com prova (linha do header, screenshot, URL exata).
-- Recomendação de correção mínima por achado.
-- Pendências pra próxima rodada (se quiser ir pra pentest ativo real, precisa autorização escrita separada + escopo formal).
-- Screenshots anexados.
+2. Reprofile em condições controladas
+   - Playwright + CDP:
+       CPU throttling 4x   (simula mid-range)
+       Network: Fast 3G off, cache disabled
+       Profiler.setSamplingInterval = 50 µs (mais fino que o v1)
+       Emular região BR (Accept-Language)
+   - Rodar 5 execuções, usar mediana
 
-### 🔧 Técnico
-- Playwright headless (Chromium), viewport controlado, `full_page=False`.
-- `curl -sI`, `openssl s_client`, `dig`, `jq` no sandbox.
-- Crawl leve com limite duro: 50 URLs, 5 req/s, timeout 10s.
-- Sub-agentes `spawn_agent` em paralelo pros blocos A/B/C, cada um retorna JSON estruturado.
-- Hermes-loop consolida via `generateText` no gateway Lovable AI.
+3. Desminificar
+   - Para cada callFrame do profile → source-map lookup (linha,coluna)
+   - Produzir profile.symbolicated.json compatível com Chrome DevTools
 
-### ⛩️ Autorização final que preciso de você
-Escreve **exatamente**: `PERMITO OPERAÇÃO OVERCLOCK — SOU DONO DE overclock.sh`
+4. Mapear chunk → componentes
+   - Parse do sources[] de cada .map
+   - Filtrar por prefixo webpack (app/, components/)
+   - Cruzar com bundle stats se disponível em /_next/static/…/build-manifest.json
 
-Isso vira o carimbo de autorização que fica registrado. Sem esse texto exato, não disparo — porque testar site de terceiro sem autorização escrita é crime, e eu não confio só em "sou dono" solto no chat. Mandando a frase, o enxame parte. 🚀
+5. Correlacionar com hidratação
+   - Injetar via addInitScript:
+       performance.mark('rsc-start') em fetch de /_next/*
+       observar entries 'measure' com nome contendo 'React'
+   - Alinhar timeline: RSC receive → hydrate begin → long-task end
+
+6. Ranquear e propor fix
+   - score = self_ms * bytes_kb * (fora_do_viewport ? 1 : 0.2)
+   - Top-3 vira o diff mínimo com ganho previsto individual
+```
+
+### Detalhes técnicos importantes
+
+- **Se o site não expor `.js.map` em produção** (comum), a v2 registra isso explicitamente e cai no plano B: análise por AST + assinatura de bytes conhecidos das libs (react-dom, framer-motion, radix, etc.) para atribuir os frames "genéricos" a bibliotecas nomeadas. Isso já resolve o ponto 1 em ~80% dos casos.
+- **CPU throttling 4x** muda o número absoluto (mais realista para mobile) — o relatório vai apresentar as duas colunas: desktop unthrottled (comparável ao v1) e mobile 4x (o que o usuário real sente).
+- **Nada no site é modificado** — é 100% profiling externo, executado em sandbox Playwright.
+
+### O que precisa da tua decisão antes de eu ir codar
+
+Nada bloqueante — o plano se auto-adapta se `.js.map` não estiver disponível. Se quiser, posso incluir também:
+- Comparativo lado a lado (v1 vs v2) num único arquivo, pra tu ver a evolução;
+- Um `flamegraph.html` interativo (speedscope/pprof), além do textual;
+- Repetir o mesmo pipeline no `status.centralldark.com` como controle, pra calibrar.
+
+Diz o que entra ou aprova como está e eu executo.
