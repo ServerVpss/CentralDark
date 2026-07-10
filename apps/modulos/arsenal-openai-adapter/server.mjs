@@ -24,6 +24,46 @@ const MODELS = [
   { id: 'arsenal-hermes',   name: '🤖 Hermes (proposta autônoma)' },
 ];
 
+// Aliases para clientes que filtram modelos por famílias conhecidas.
+// Mantém Arsenal como runtime real, mas deixa Claude Desktop/Cursor enxergarem modelos utilizáveis.
+const MODEL_ALIASES = {
+  'claude-3-5-sonnet-latest': 'arsenal-router',
+  'claude-3-5-sonnet-20241022': 'arsenal-router',
+  'claude-3-5-sonnet-20240620': 'arsenal-router',
+  'claude-3-5-haiku-latest': 'arsenal-router',
+  'claude-3-5-haiku-20241022': 'arsenal-router',
+  'claude-3-opus-latest': 'arsenal-parallel',
+  'claude-3-opus-20240229': 'arsenal-parallel',
+  'claude-3-sonnet-20240229': 'arsenal-router',
+  'claude-3-haiku-20240307': 'arsenal-router',
+  'claude-sonnet-4-20250514': 'arsenal-debate',
+  'claude-opus-4-20250514': 'arsenal-debate',
+  'claude-3-7-sonnet-latest': 'arsenal-router',
+  'gpt-4o': 'arsenal-router',
+  'gpt-4o-mini': 'arsenal-router',
+  'gpt-4-turbo': 'arsenal-router',
+  'gpt-4': 'arsenal-router',
+  'gpt-3.5-turbo': 'arsenal-router',
+  'gpt-5': 'arsenal-parallel',
+  'gpt-5-mini': 'arsenal-router',
+  'o1': 'arsenal-debate',
+  'o1-mini': 'arsenal-router',
+  'gemini-2.5-pro': 'arsenal-parallel',
+  'gemini-2.5-flash': 'arsenal-router',
+  'gemini-1.5-pro': 'arsenal-router',
+  'gemini-1.5-flash': 'arsenal-router',
+};
+
+const DISCOVERY_MODELS = [
+  ...MODELS.map(m => ({ id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name })),
+  ...Object.keys(MODEL_ALIASES).map(id => {
+    const owner = id.startsWith('claude') ? 'anthropic'
+                : id.startsWith('gemini') ? 'google'
+                : 'openai';
+    return { id, object: 'model', created: 1700000000, owned_by: owner, name: id + ' -> ' + MODEL_ALIASES[id] };
+  }),
+];
+
 // Mapeia modelo lógico -> bot Telegram (Gemini/Groq/Claude)
 function botDoModelo(modelo) {
   const m = (modelo || '').toLowerCase();
@@ -181,6 +221,9 @@ const server = http.createServer(async (req, res) => {
   const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').toString().split(',')[0].trim();
   const ua = (req.headers['user-agent'] || '').toString();
   res.setHeader('X-Request-Id', requestId);
+  // Normaliza path: remove querystring e trailing slash (/v1/models/ = /v1/models)
+  const rawUrl = req.url || '/';
+  const pathOnly = rawUrl.split('?')[0].replace(/\/+$/, '') || '/';
 
   // Autentica sempre (não bloqueia em shadow). Preserva fallback do AUTH_KEY legado.
   // Aceita Authorization: Bearer <k>, x-api-key: <k> e api-key: <k> (Claude Desktop usa x-api-key).
@@ -191,7 +234,7 @@ const server = http.createServer(async (req, res) => {
   let modelForAudit = null;
 
   // /health continua público
-  if (req.url === '/health') {
+  if (pathOnly === '/health') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: '/health', method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
     return json(res, 200, { ok: true, provider: PROVIDER_BASE, models: MODELS.map(m=>m.id),
@@ -200,12 +243,10 @@ const server = http.createServer(async (req, res) => {
 
   // /v1/models é público — catálogo apenas, sem inferência.
   // Clientes (Claude Desktop, Cursor) descobrem os modelos SEM chave.
-  if (req.url === '/v1/models' || req.url === '/models') {
+  if (pathOnly === '/v1/models' || pathOnly === '/models') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
-    return json(res, 200, { object: 'list', data: MODELS.map(m => ({
-      id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name
-    })) });
+    return json(res, 200, { object: 'list', data: DISCOVERY_MODELS });
   }
 
     // Enforce mode: bloqueia se a chave não bater E o fallback legado também não bater
@@ -230,13 +271,14 @@ const server = http.createServer(async (req, res) => {
   });
   req._auditSetModel = (m) => { modelForAudit = m; };
 
-  if (req.url === '/v1/chat/completions' || req.url === '/chat/completions') {
+  if (pathOnly === '/v1/chat/completions' || pathOnly === '/chat/completions') {
     let body = '';
     for await (const chunk of req) body += chunk;
     try {
       const payload = JSON.parse(body);
-      const modo = payload.model;
-      req._auditSetModel?.(modo);
+      const requestedModel = payload.model;
+      const modo = MODEL_ALIASES[requestedModel] || requestedModel;
+      req._auditSetModel?.(requestedModel === modo ? modo : `${requestedModel}->${modo}`);
       const messages = payload.messages || [];
       const perguntaUser = messages.filter(m=>m.role==='user').slice(-1)[0]?.content || '';
       // Posta a pergunta do usuário no grupo (contexto)
@@ -244,7 +286,7 @@ const server = http.createServer(async (req, res) => {
 
       const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
       const rodar = MODOS[modo];
-      if (!rodar) return json(res, 400, { error: `modelo desconhecido: ${modo}` });
+      if (!rodar) return json(res, 400, { error: `modelo desconhecido: ${requestedModel}`, mapped_to: modo });
 
       // stream:true → SSE real (headers já vão, keepalive segura o cliente enquanto o Council trabalha)
       const streaming = payload.stream === true;
@@ -283,6 +325,43 @@ const server = http.createServer(async (req, res) => {
       try { res.end(); } catch {}
     }
   }
+  if (pathOnly === '/v1/messages') {
+    let body = '';
+    for await (const chunk of req) body += chunk;
+    try {
+      const payload = JSON.parse(body || '{}');
+      const requestedModel = payload.model;
+      const modo = MODEL_ALIASES[requestedModel] || (requestedModel && requestedModel.startsWith('arsenal-') ? requestedModel : 'arsenal-router');
+      req._auditSetModel?.(requestedModel + '->' + modo);
+      const msgs = [];
+      if (payload.system) msgs.push({ role: 'system', content: typeof payload.system === 'string' ? payload.system : JSON.stringify(payload.system) });
+      for (const m of (payload.messages || [])) {
+        const content = typeof m.content === 'string'
+          ? m.content
+          : (Array.isArray(m.content) ? m.content.map(c => c.text || c.content || '').join('\n') : String(m.content || ''));
+        msgs.push({ role: m.role, content });
+      }
+      const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
+      const rodar = MODOS[modo] || modoRouter;
+      const regras = await lerRegras();
+      const resposta = await rodar(regras, msgs);
+      const msgId = 'msg_' + Math.random().toString(36).slice(2, 14);
+      return json(res, 200, {
+        id: msgId,
+        type: 'message',
+        role: 'assistant',
+        model: requestedModel,
+        content: [{ type: 'text', text: resposta }],
+        stop_reason: 'end_turn',
+        stop_sequence: null,
+        usage: { input_tokens: 0, output_tokens: 0 },
+      });
+    } catch (e) {
+      console.error('erro /v1/messages:', e);
+      return json(res, 500, { type: 'error', error: { type: 'api_error', message: e.message } });
+    }
+  }
+
   json(res, 404, { error: 'not found' });
 });
 
