@@ -1,0 +1,42 @@
+name: Arsenal Adapter — Tests
+
+on:
+  pull_request:
+    paths:
+      - 'apps/modulos/arsenal-openai-adapter/**'
+      - '.github/workflows/arsenal-adapter-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/modulos/arsenal-openai-adapter/**'
+      - '.github/workflows/arsenal-adapter-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  test-models:
+    name: /v1/models — invariantes críticos
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Sintaxe (node --check)
+        run: |
+          cd apps/modulos/arsenal-openai-adapter
+          node --check server.mjs
+          [ -f auth-audit.mjs ] && node --check auth-audit.mjs || echo "auth-audit.mjs ausente — ok"
+          node --check tests/models.test.mjs
+          echo "🟢 sintaxe OK"
+
+      - name: Teste /v1/models (gateway público + auth CentralDark)
+        env:
+          GATEWAY_URL: https://api.centralldark.com
+          CENTRALDARK_API_KEY: ${{ secrets.CENTRALDARK_API_KEY }}
+        run: |
+          cd apps/modulos/arsenal-openai-adapter
+          npm test
