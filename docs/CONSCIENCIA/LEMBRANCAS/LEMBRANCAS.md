@@ -413,3 +413,29 @@ Conteúdo: Sandbox Lovable NÃO tem `ssh` no PATH — precisa rodar via `nix run
 - **Promovida:** nao
 
 Conteúdo: MCP CentralDark (PM2 id 10) está ONLINE em 127.0.0.1:9100 e webhook.centralldark.com/mcp responde 200. O 401 do conector Lovable `mcp_custom_A1pyZ` é problema de CREDENCIAL/token expirado do lado do Lovable, não da VPS. Solução: reconectar o conector na UI Lovable, não mexer no MCP da VPS. `ABACUS_API_KEY=` no /root/[oculto] está VAZIO (stub) — por isso api.centralldark.com/v1/models retorna 401 e o AbacusApiCard fica 🔴.
+
+### [2026-07-10T11:55] Doutrina do Enxame Titânico Ômega
+- **Data:** 2026-07-10
+- **Tags:** enxame, doutrina, swarm, moa, ia, orquestracao, padrao-oficial
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-09
+- **Promovida:** sim
+
+Conteúdo: Técnica oficial CentralDark pra resolver problemas complexos com IA:
+
+**Nome:** Enxame Titânico Ômega (dialeto CentralDark)
+**Nomes técnicos equivalentes:** Swarm Prompting / Multi-Agent Swarm / Mixture of Agents (MoA) / LLM Council / Ensemble Prompting / Fan-out + Fan-in
+
+**Fórmula:** Fan-out de 20 modelos × 3 rodadas + Juiz Claude Opus consolidando = Mixture of Agents com Debate Cruzado
+
+**Cascata (o que faz funcionar):**
+1. Rodada 1 — cada IA responde crua (diversidade máxima)
+2. Rodada 2 — cada IA lê o que as outras disseram e critica (refina)
+3. Rodada 3 — juiz final consolida o consenso
+
+**Por que funciona:** quebra o viés de modelo único. Nenhuma IA sozinha acerta tudo, mas 20 discutindo convergem rápido no ouro.
+
+**Quando usar:** problema técnico complexo, decisão arquitetural, diagnóstico multi-camada, resolução de bug travado, plano estratégico.
+
+**Modo econômico:** só serializa se pedir explicitamente ("modo econômico") — padrão é cascata paralela sempre.
