@@ -1,73 +1,61 @@
-## Análise Staff v2 — overclock.sh (fechar as 4 lacunas)
+# Dossiê Arsenal Máximo — Estado atual CentralDark
 
-Objetivo: entregar um relatório que sobreviva a review de Staff/Principal — atribuição real de símbolos, mapeamento chunk→componente, números por componente e correlação direta com o ciclo de hidratação do App Router.
+Vou montar UM único markdown grandão em `/mnt/documents/perfdiag/DOSSIE-ARSENAL-2026-07-10.md` (mais um `.zip` opcional com os anexos brutos), pronto pra você abrir aqui ou baixar.
 
-### As 4 lacunas e como cada uma é fechada
+## O que vai ter dentro (seções fixas)
 
-| # | Lacuna apontada | Correção nesta rodada |
-|---|---|---|
-| 1 | Nomes minificados | Baixar `.js.map` de cada chunk quente e desminificar cada frame do `.cpuprofile` (linha/coluna → símbolo original + arquivo fonte) |
-| 2 | Chunks não mapeados para componentes | Cruzar os módulos dentro do source map (`sources[]`) com o import tree do App Router para dizer exatamente "chunk X = `<Hero>` + `<Releases>` + `framer-motion`" |
-| 3 | Fix genérico | Ranquear componentes por (CPU self × bytes JS × posição no viewport) e dar top-3 nomeados com ganho esperado individual em ms |
-| 4 | Baixa correlação com App Router | Instrumentar o ciclo `RSC payload → schedulerRoot → beginWork → commitRoot` via marks do React DevTools profiler + `Performance.measure`, alinhar ao eixo de tempo da long-task de 299 ms |
+1. **Sumário executivo** — o que tá vivo, o que tá quebrado, o que tá pendente. Placar 🟢🟡🔴.
+2. **Mapa do HUB Supabase** (`lyoigsqluyktoclwdaft`)
+   - schema `api` vs `hub` vs `public`
+   - tabelas críticas (`api_keys`, `audit_log_api`, `oauth_connections`, `user_roles`, `ai_requests`, `path_query_keys`)
+   - edge functions ativas (`abacus-router`, `proxy`, `super-admin-status`, `telegram-webhook`, etc.) — status de cada uma
+   - migrations aplicadas nas últimas 2 semanas
+3. **Mapa de pastas do repo** (`ServerVpss/CentralDark`)
+   - árvore anotada de `apps/modulos/` com 🔒 nas áreas travadas
+   - onde vive o HUB frontend (`apps/modulos/hub/`) vs TelePainel (`src/apps/modulos/telepainel/`)
+4. **Gateway `api.centralldark.com` — os 162 modelos**
+   - fonte: `fetchAbacusCatalog()` do ArsenalAdapter (PM2)
+   - contagem real por provedor (OpenAI / Anthropic / Google / Meta / xAI / DeepSeek / Mistral / outros)
+   - **tabela de aliases** com duplicidades marcadas em 🟡/🔴
+   - modelos "fantasma" (adicionados manualmente pro Claude Desktop) vs modelos reais do Abacus
+5. **Cadeia Ativa da API** (fluxo request → resposta)
+   - Caddy → ArsenalAdapter (127.0.0.1:8090) → Abacus RouteLLM
+   - rotas `/v1/models`, `/v1/chat/completions`, `/v1/messages`
+   - autenticação suportada: `Authorization: Bearer`, `x-api-key`, `api-key`
+6. **O que foi feito nesta jornada** (changelog cronológico dos últimos ~15 dias)
+   - PRs #147, #148, #149, #150, #155, #156 com status (merged/aberto)
+   - commits marcantes (b020598, b77c58a, 846e0720, 32fd0b97, baff34c)
+   - deploys de edge functions e migrations
+7. **🔴 Erros que ainda não caíram**
+   - aliases duplicados detectados (lista concreta)
+   - modelos que respondem 404 no gateway
+   - `oauth_connections` ausente causando warning na UI dev
+   - long-tasks do TelePainel (referência ao Staff v3.1)
+   - qualquer 4xx/5xx recorrente nos logs `audit_log_api` das últimas 24h
+8. **🟡 Pendências abertas** (leitura de `docs/PENDENCIAS/`)
+9. **Próximos passos sugeridos** (3-5 ações objetivas, sem executar)
+10. **Anexos brutos** (opcional em ZIP): `catalogo-abacus.json`, `aliases-diff.csv`, `audit-24h.csv`, `edge-functions-status.json`
 
-### O que a rodada v2 vai produzir
+## Como vou coletar
 
-1. **`profile.symbolicated.json`** — cada sample do `.cpuprofile` reescrito com nome original (`performConcurrentWorkOnRootSync`, `Releases.render`, etc.) via source-map-cli.
-2. **`chunk-to-components.md`** — tabela: `chunk hash | tamanho | componentes App Router dentro | libs de terceiros`.
-3. **Flamegraph real** (não só top-N textual) — hierarquia completa até folhas, com % CPU e link para o arquivo fonte de cada frame.
-4. **Ranking de componentes por custo** — CPU self ms, JS bytes, e ganho previsto ao aplicar `next/dynamic` (usando modelo: `ganho ≈ self_ms × (1 - visível_no_LCP)`).
-5. **Diff de fix pronto** — `app/page.tsx` com os imports exatos convertidos, um por vez, com ganho estimado por linha alterada.
-6. **Plano de verificação numérico** — baseline vs meta por métrica (long-task máx, TBT, INP p75, JS bytes hidratados no LCP).
+Só leitura, nada destrutivo:
+- `mcp_custom--vps_read_file_safe` + `vps_list_dir_safe` na VPS pra pegar `regras.json`, `ecosystem.config.cjs`, catálogo cacheado do adapter
+- `github_read` no repo pra confirmar código atual das edges e migrations
+- `supabase--read_query` no HUB pra contar linhas de `api_keys`, `audit_log_api`, ver últimas migrations
+- HTTP GET direto em `https://api.centralldark.com/v1/models` pra bater a lista viva vs regras
+- Cruzo tudo em Python pra gerar a tabela de aliases duplicados
 
-### Como será executado (fluxo técnico)
+## Entrega
 
-```text
-1. Coletar assets
-   - GET https://overclock.sh/ → parsear <script>/link modulepreload
-   - Baixar cada chunk .js + o .js.map correspondente (quando servido)
-   - Se .js.map não estiver público: tentar // sourceMappingURL, senão
-     usar heurística por AST (identificadores exportados) e marcar "unmapped"
+- `/mnt/documents/perfdiag/DOSSIE-ARSENAL-2026-07-10.md` (markdown único, ~1500-2500 linhas)
+- `/mnt/documents/perfdiag/DOSSIE-ARSENAL-2026-07-10.zip` com o md + anexos brutos
+- Ambos aparecem na aba de artefatos pra você ler/baixar na hora
 
-2. Reprofile em condições controladas
-   - Playwright + CDP:
-       CPU throttling 4x   (simula mid-range)
-       Network: Fast 3G off, cache disabled
-       Profiler.setSamplingInterval = 50 µs (mais fino que o v1)
-       Emular região BR (Accept-Language)
-   - Rodar 5 execuções, usar mediana
+## Fora do escopo (não vou fazer sem ordem)
 
-3. Desminificar
-   - Para cada callFrame do profile → source-map lookup (linha,coluna)
-   - Produzir profile.symbolicated.json compatível com Chrome DevTools
+- Não vou corrigir alias duplicado nem dar deploy — só relatar
+- Não vou mexer em edge function, PM2, Caddy
+- Não vou tocar em `apps/modulos/**` protegidos
+- Não vou notificar no Telegram (sem PERMITO explícito pra ação)
 
-4. Mapear chunk → componentes
-   - Parse do sources[] de cada .map
-   - Filtrar por prefixo webpack (app/, components/)
-   - Cruzar com bundle stats se disponível em /_next/static/…/build-manifest.json
-
-5. Correlacionar com hidratação
-   - Injetar via addInitScript:
-       performance.mark('rsc-start') em fetch de /_next/*
-       observar entries 'measure' com nome contendo 'React'
-   - Alinhar timeline: RSC receive → hydrate begin → long-task end
-
-6. Ranquear e propor fix
-   - score = self_ms * bytes_kb * (fora_do_viewport ? 1 : 0.2)
-   - Top-3 vira o diff mínimo com ganho previsto individual
-```
-
-### Detalhes técnicos importantes
-
-- **Se o site não expor `.js.map` em produção** (comum), a v2 registra isso explicitamente e cai no plano B: análise por AST + assinatura de bytes conhecidos das libs (react-dom, framer-motion, radix, etc.) para atribuir os frames "genéricos" a bibliotecas nomeadas. Isso já resolve o ponto 1 em ~80% dos casos.
-- **CPU throttling 4x** muda o número absoluto (mais realista para mobile) — o relatório vai apresentar as duas colunas: desktop unthrottled (comparável ao v1) e mobile 4x (o que o usuário real sente).
-- **Nada no site é modificado** — é 100% profiling externo, executado em sandbox Playwright.
-
-### O que precisa da tua decisão antes de eu ir codar
-
-Nada bloqueante — o plano se auto-adapta se `.js.map` não estiver disponível. Se quiser, posso incluir também:
-- Comparativo lado a lado (v1 vs v2) num único arquivo, pra tu ver a evolução;
-- Um `flamegraph.html` interativo (speedscope/pprof), além do textual;
-- Repetir o mesmo pipeline no `status.centralldark.com` como controle, pra calibrar.
-
-Diz o que entra ou aprova como está e eu executo.
+Confirma que pode partir pra coleta e montar o dossiê?
