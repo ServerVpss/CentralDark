@@ -22,7 +22,7 @@ O erro anterior do Claude Desktop vinha do catálogo só anunciar modelos própr
 
 ## Correção aplicada na VPS
 
-O adapter agora anuncia aliases públicos no `/v1/models` e mapeia internamente para o runtime Arsenal:
+O adapter anuncia aliases públicos no `/v1/models` e mapeia internamente para o runtime Arsenal:
 
 - `claude-3-5-sonnet-latest` → `arsenal-router`
 - `claude-3-5-sonnet-20241022` → `arsenal-router`
@@ -39,3 +39,7 @@ object list
 count 9
 ids arsenal-router,arsenal-parallel,arsenal-debate,arsenal-hermes,claude-3-5-sonnet-latest,claude-3-5-sonnet-20241022,claude-3-opus-latest,gpt-4o,gpt-4o-mini
 ```
+
+## Pendência operacional
+
+Se o cliente ainda mostrar erro vermelho, limpar/reconectar a credencial no Claude Desktop e testar novamente a descoberta. O gateway já responde catálogo OpenAI-compatible com aliases reconhecíveis.
