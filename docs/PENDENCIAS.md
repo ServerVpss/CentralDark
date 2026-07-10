@@ -759,3 +759,5 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
   - **LOGÍSTICA** → `scripts/webhook/` + `apps/modulos/pivete-sync/` + `oauth-broker/` + `status/`
 - **Conclusão:** zip é doutrina/nomenclatura militar, não código novo. 0 pastas precisam ser preenchidas do zero. Todos os 7 setores já rodam.
 - **Próximo passo opcional:** escrever `docs/CONSCIENCIA/ARSENAL/MAPA-SETORES.md` fixando essa tabela pras próximas IAs herdarem o mapa direto.
+### 52. Merge PR #142 — sanitize tool_call.id > 64 chars — 🔴 ABERTO (09/07/2026, 11:31 BRT)
+- **Onde mexer:** https://github.com/ServerVpss/CentralDark/pull/142

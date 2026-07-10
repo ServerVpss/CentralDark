@@ -66,11 +66,11 @@ function montarCard(titulo, mensagem) {
   ].join('\n');
 }
 
-const cardHtml = `<pre>${escapeHtml(montarCard(titulo, mensagem))}</pre>`;
-
 function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
+const cardHtml = `<pre>${escapeHtml(montarCard(titulo, mensagem))}</pre>`;
 
 try {
   const r = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {

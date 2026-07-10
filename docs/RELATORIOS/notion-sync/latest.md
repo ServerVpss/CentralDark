@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-09T00:00:08.656Z
+# 🧠 Notion Sync — 2026-07-10T15:04:02.406Z
 
-- **Commit fonte:** `a235cafe0a0953ed5598a4b39b468cc397e2335d`
-- **Disparado por:** lovable-dev[bot]
+- **Commit fonte:** `485263db96d54be91e9d94b516b40aa225fea362`
+- **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 357 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 462 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 322 | 0 | 322 | 0 | 0 |
-| estrutura | 459 | 0 | 0 | 0 | 459 |
+| aprendizados | 325 | 0 | 325 | 0 | 0 |
+| estrutura | 462 | 0 | 0 | 0 | 462 |
 
 ## Operações
 
@@ -379,6 +379,9 @@
 | aprendizados | atualizado | #318 — Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian |
 | aprendizados | atualizado | #319 — Funcionou → Consolida → Sela (regra de ouro) |
 | aprendizados | atualizado | #320 — Bot Telegram pode trocar própria foto via setMyProfilePhoto |
+| aprendizados | atualizado | #321 — Dedup .env VPS + fix Caddy api.centralldark.com |
+| aprendizados | atualizado | #322 — MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia |
+| aprendizados | atualizado | #323 — Auditoria de permissões da view api.ai_requests no HUB |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -466,6 +469,8 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/em-andamento/manter-grafo-vivo/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-abacus-router-hub-online.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-gateway-centraldark-chave-propria.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
@@ -496,6 +501,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/PROVA-CATALOGO-CLAUDE-DESKTOP.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-3-nucleo-universal-telegram.md |

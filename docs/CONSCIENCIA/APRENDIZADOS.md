@@ -2553,3 +2553,28 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-08
 - **Contexto:** Eu afirmei ao Pivete que Bot API do Telegram não permite bot trocar a própria foto de perfil e que só o BotFather aceitava. Pivete me corrigiu e mandou pesquisar.
 - **Aprendizado:** A Bot API tem SIM o método setMyProfilePhoto (multipart com campo `photo`, aceita .jpg/.png estático ou .mp4 animado). Também existe setMyDescription, setMyShortDescription, setMyName, setMyCommands. Regra: nunca afirmar limitação da API sem checar a doc atual — o Telegram adiciona métodos com frequência. Observação prática: o connector gateway do Lovable tem bug específico com /setMyProfilePhoto (retorna "photo isn't specified" mesmo com multipart correto, enquanto /sendPhoto aceita). Pra trocar foto de bot via API precisa do token direto do bot, não dá pelo gateway atual.
+
+### 321. Dedup .env VPS + fix Caddy api.centralldark.com
+- **Categoria:** outro
+- **Data:** 2026-07-09
+- **Contexto:** Rodada 09/07 via SSH direto na VPS (MCP em 401)
+- **Aprendizado:** Dedup 53 chaves repetidas + stub ABACUS_API_KEY + Caddy api.centralldark.com apontando pra 127.0.0.1:8090 (ArsenalAdapter). Endpoint saiu 502→401 (auth pendente). Rastro: branch chore/rastro-lovable-ssh-20260709 + revisoes/lovable-20260709-124938-api-centraldark-e-env.md.
+
+### 322. MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia
+- **Categoria:** outro
+- **Data:** 2026-07-09
+- **Contexto:** Diagnóstico completo VPS via SSH (nix openssh) — MCP vs Abacus
+- **Aprendizado:** Rodada 09/07 via SSH direto: MCP na VPS (PM2 id 10) online e healthy em webhook.centralldark.com/mcp (200 OK). O 401 do conector Lovable `mcp_custom_A1pyZ` é token expirado do lado do Lovable — reconectar na UI resolve, sem tocar na VPS. Confirmado que ABACUS_API_KEY no .env está VAZIA (len=0, apenas stub que deixei) — por isso ArsenalAdapter :8090 e api.centralldark.com/v1/models retornam 401. Pendente: chave real do Abacus + publicar no HUB Supabase.
+
+### 323. Auditoria de permissões da view api.ai_requests no HUB
+- **Categoria:** regra
+- **Data:** 2026-07-09
+- **Contexto:** Após expor public.ai_requests via view api.ai_requests no HUB Supabase (lyoigsqluyktoclwdaft) pra destravar a aba Logs IA, era preciso confirmar que a superfície ficou mínima e segura pra anon/authenticated.
+- **Aprendizado:** Padrão validado: view em schema `api` com GRANT SELECT só pra anon/authenticated + tabela base em public SEM grant pra anon = leitura pública controlada, escrita bloqueada (INSERT anon retorna 401 "permission denied for view"), acesso direto à tabela base bloqueado (401 com hint do Postgres pedindo grant — exatamente o comportamento desejado). Auditoria via curl testando 5 vetores: SELECT anon na view, INSERT anon, sem apikey, SELECT anon na tabela base (Accept-Profile: public), e enumeração de colunas expostas. Não precisa RLS na view quando não há coluna de tenant — o grant já limita a leitura pública a dados operacionais não-PII (latência, tokens, status).
+
+## #244 — Smoke test ai_requests com paginação e payload scan (atalho)
+
+**Data:** 2026-07-09
+**Contexto:** Expandindo `scripts/smoke-ai-requests.mjs` pra cobrir paginação real + detecção de vazamento no payload da view `api.ai_requests` do HUB.
+**Aprendizado:** PostgREST expõe contagem total via header `Content-Range` quando enviamos `Prefer: count=exact` — dá pra validar paginação (primeira/última página, sem sobreposição de IDs) sem query extra. Combinar isso com regex-scan por padrões (`sk-`, `Bearer`, JWT `eyJ...`, `cdk_live_`, `xoxb-`) em cada célula da resposta cobre vazamento acidental que a checagem só de nomes de coluna não pega. Fallback quando MCP GitHub cai (502/504): curl direto na REST API com `GITHUB_TOKEN` — buscar SHA atual, PUT base64 do conteúdo.
+**Commit:** 4bb8acc

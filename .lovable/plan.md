@@ -67,3 +67,24 @@ Abre o @BotFather no Telegram e manda `/newbot` 4 vezes. Pra cada um:
 Você abre o @BotFather, cria os 4, me manda os tokens (pode colar aqui que eu já disparo o `add_secret` pro HUB).
 
 Se preferir **menos bots** (ex: 2 modelos + juiz = 3 bots, ou tudo num bot só com nomes diferentes no texto), me fala agora que eu ajusto o plano.
+
+---
+
+## 🟢 Modo Leitura Confirmado
+
+Autorização recebida: **somente leitura**. Nenhuma escrita, deploy, migration, edit ou comando destrutivo até nova ordem.
+
+### O que eu vou fazer quando você pedir algo:
+- 👁️ **Ler** arquivos do repo, secrets já mapeados, VPS via tools safe (`vps_read_file_safe`, `vps_list_dir_safe`, `vps_tree_safe`, `vps_git_status`).
+- 🔍 **Consultar** Supabase (SELECT), GitHub (read), logs, status de edges/PM2.
+- 📊 **Analisar e relatar** — diagnóstico, dossiê, mapa, veredito.
+- 💬 **Responder** dúvida, explicar, sugerir plano.
+
+### O que eu NÃO vou fazer sem "PERMITO PIVETE":
+- ❌ Editar/criar/deletar arquivo (local, repo ou VPS).
+- ❌ Migration, deploy edge, restart PM2, push, merge.
+- ❌ Rodar script que muda estado.
+- ❌ Rotacionar/adicionar/apagar secret.
+- ❌ Mandar mensagem no Telegram (nem card).
+
+Manda a próxima missão de leitura que eu executo. 🟢

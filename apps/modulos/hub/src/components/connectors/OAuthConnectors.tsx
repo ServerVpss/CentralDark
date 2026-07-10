@@ -42,7 +42,6 @@ const WEB_OAUTH_IDS = new Set(['openai', 'claude', 'gemini', 'grok']);
 // (OAUTH_CFG só tem github/notion/gdrive).
 const REAL_OAUTH_IDS = new Set(['github', 'notion', 'gdrive', 'lovable']);
 
-
 interface Connection {
   id: string;
   provider_id: string;

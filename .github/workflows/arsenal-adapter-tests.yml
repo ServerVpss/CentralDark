@@ -1,0 +1,72 @@
+name: Arsenal Adapter — Tests
+
+on:
+  pull_request:
+    paths:
+      - 'apps/modulos/arsenal-openai-adapter/**'
+      - '.github/workflows/arsenal-adapter-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/modulos/arsenal-openai-adapter/**'
+      - '.github/workflows/arsenal-adapter-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  test-models:
+    name: /v1/models — invariantes críticos (localhost)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Sintaxe (node --check)
+        run: |
+          cd apps/modulos/arsenal-openai-adapter
+          node --check server.mjs
+          [ -f auth-audit.mjs ] && node --check auth-audit.mjs || echo "auth-audit.mjs ausente — ok"
+          node --check tests/models.test.mjs
+          echo "🟢 sintaxe OK"
+
+      - name: Subir Arsenal Adapter em localhost:8090
+        run: |
+          cd apps/modulos/arsenal-openai-adapter
+          REGRAS_PATH=./regras.json PORT=8090 BIND=127.0.0.1 nohup node server.mjs > /tmp/adapter.log 2>&1 &
+          echo $! > /tmp/adapter.pid
+          for i in 1 2 3 4 5 6 7 8; do
+            sleep 1
+            if curl -sf http://127.0.0.1:8090/v1/models -o /dev/null; then
+              echo "🟢 adapter respondendo (tentativa $i)"
+              exit 0
+            fi
+          done
+          echo "🔴 adapter não subiu"
+          cat /tmp/adapter.log
+          exit 1
+
+      - name: Teste /v1/models (localhost)
+        env:
+          GATEWAY_URL: http://127.0.0.1:8090
+        run: |
+          cd apps/modulos/arsenal-openai-adapter
+          npm test
+
+      - name: Prova externa (gateway público — soft)
+        continue-on-error: true
+        env:
+          GATEWAY_URL: https://api.centralldark.com
+          CENTRALDARK_API_KEY: ${{ secrets.CENTRALDARK_API_KEY }}
+        run: |
+          cd apps/modulos/arsenal-openai-adapter
+          echo "🟡 Prova externa (pode 403 se WAF bloquear IP do runner)"
+          npm test || echo "🟡 gateway externo indisponível pro runner — não crítico"
+
+      - name: Parar adapter
+        if: always()
+        run: |
+          [ -f /tmp/adapter.pid ] && kill $(cat /tmp/adapter.pid) 2>/dev/null || true

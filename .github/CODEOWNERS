@@ -1,0 +1,47 @@
+# CODEOWNERS — CentralDark
+# Sinalização de propriedade estratégica. Não bloqueia merge sozinho
+# (requer branch protection ativa). Referência: docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md
+
+# Fallback global
+*                                       @ServerVpss
+
+# Governança e doutrina
+/CLAUDE.md                              @ServerVpss
+/docs/GOVERNANCA/**                     @ServerVpss
+/docs/CONSCIENCIA/**                    @ServerVpss
+
+# Cérebro / regras persistentes das IAs
+/.claude/**                             @ServerVpss
+/.agents/**                             @ServerVpss
+/.lovable/**                            @ServerVpss
+
+# CI/CD e infra crítica
+/.github/**                             @ServerVpss
+/infra/caddy/**                         @ServerVpss
+/scripts/vps/**                         @ServerVpss
+
+# Secrets (nunca commitar — dupla trava)
+/secrets/**                             @ServerVpss
+
+# Áreas 🔒 (ver Seção 9 do CLAUDE.md)
+/apps/bot-telegram/**                   @ServerVpss
+/apps/modulos/status/**                 @ServerVpss
+/apps/modulos/Bolt/**                   @ServerVpss
+/apps/modulos/WebUI/**                  @ServerVpss
+/apps/modulos/graph-panel/**            @ServerVpss
+/apps/modulos/elite-anthropic-proxy/**  @ServerVpss
+/apps/modulos/HERMES-CORE/**            @ServerVpss
+/apps/modulos/Monitoramento24h/**       @ServerVpss
+/apps/modulos/mapeamento/**             @ServerVpss
+/apps/modulos/memoria-api/**            @ServerVpss
+/apps/modulos/oauth-broker/**           @ServerVpss
+/apps/modulos/arsenal-openai-adapter/** @ServerVpss
+/apps/modulos/elite-gateway/**          @ServerVpss
+/apps/modulos/artifacts-builder/**      @ServerVpss
+/apps/modulos/proxy/**                  @ServerVpss
+/apps/modulos/lovable-proxy/**          @ServerVpss
+/apps/modulos/telepainel/**             @ServerVpss
+/apps/modulos/hub/**                    @ServerVpss
+/apps/modulos/clone-deck/**             @ServerVpss
+/apps/modulos/pivete-sync/**            @ServerVpss
+/apps/modulos/obsidian-plugin-grafo-vivo/** @ServerVpss

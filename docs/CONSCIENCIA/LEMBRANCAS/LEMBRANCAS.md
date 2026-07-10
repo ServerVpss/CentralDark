@@ -373,3 +373,94 @@ Conteúdo: Em operações longas com conversas paralelas, sempre responder o ass
 - **Promovida:** sim
 
 Conteúdo: Toda vez que algo funciona de verdade e prova valor (uma regra de segurança que bloqueou o certo, um script que rodou limpo, um módulo estabilizado, uma automação testada), o passo seguinte é CONSOLIDAR + SELAR imediatamente — não deixar solto. Sinais de que precisa selar: bloqueio de path funcionou como esperado, script rodou 3x sem erro, módulo tá em produção estável, padrão foi validado. Como selar: (1) adicionar à lista de Áreas Protegidas 🔒 no CLAUDE.md, (2) documentar em docs/CONSCIENCIA/ com data e motivo, (3) escrever a regra no .claude/ pra próxima IA respeitar, (4) marcar visualmente com 🔒 sempre que exibir estrutura de pastas. Nunca reabrir o que foi selado sem autorização explícita ("PERMITO PIVETE"). Regra oposta também vale: enquanto não funciona/não prova, fica aberto pra iterar. Selar é RECOMPENSA por ter funcionado.
+
+### [2026-07-09T14:51] SSH VPS como fallback quando MCP cai em 401
+- **Data:** 2026-07-09
+- **Tags:** ssh, vps, fallback, mcp, regra-de-ouro
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: Quando o conector MCP `mcp_custom_A1pyZ` estiver em 401, usar SSH direto na VPS com a chave `[nome-de-segredo]` (reformatar pro padrão OpenSSH antes). Rastro obrigatório: branch `chore/rastro-lovable-ssh-YYYYMMDD` + log em `/root/[oculto]`. Nunca editar direto na main — Regra de Ouro.
+
+### [2026-07-09T14:51] Card Abacus 🟢 exige 3 condições
+- **Data:** 2026-07-09
+- **Tags:** abacus, hub, caddy, arsenal-adapter, checklist
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: Pra `AbacusApiCard` ficar verde no HUB: (1) `ABACUS_API_KEY` real colada em `/root/[oculto]`, (2) chave publicada no HUB Supabase `lyoigsqluyktoclwdaft` via edge `set-key`, (3) PM2 `CentralDark-ArsenalAdapter` UP na porta 8090. Caddy já corrigido: `api.centralldark.com` → 127.0.0.1:8090. Endpoint saiu de 502 pra 401 (auth pendente).
+
+### [2026-07-09T14:55] SSH via nix na sandbox Lovable (fallback MCP)
+- **Data:** 2026-07-09
+- **Tags:** ssh, nix, vps, fallback, lovable-sandbox
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: Sandbox Lovable NÃO tem `ssh` no PATH — precisa rodar via `nix run nixpkgs#openssh -- -i ~/.ssh/vps_key ...`. Chave `[nome-de-segredo]` vem em uma linha só, reformatar em blocos de 70 chars com header/footer antes de usar. Host: `[servidor]`. Uma vez montado, dá acesso total à VPS mesmo com MCP em 401.
+
+### [2026-07-09T14:55] MCP saudável na VPS — 401 é do lado Lovable
+- **Data:** 2026-07-09
+- **Tags:** mcp, abacus, diagnostico, 401
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-08
+- **Promovida:** nao
+
+Conteúdo: MCP CentralDark (PM2 id 10) está ONLINE em 127.0.0.1:9100 e webhook.centralldark.com/mcp responde 200. O 401 do conector Lovable `mcp_custom_A1pyZ` é problema de CREDENCIAL/token expirado do lado do Lovable, não da VPS. Solução: reconectar o conector na UI Lovable, não mexer no MCP da VPS. `ABACUS_API_KEY=` no /root/[oculto] está VAZIO (stub) — por isso api.centralldark.com/v1/models retorna 401 e o AbacusApiCard fica 🔴.
+
+### [2026-07-10T11:55] Doutrina do Enxame Titânico Ômega
+- **Data:** 2026-07-10
+- **Tags:** enxame, doutrina, swarm, moa, ia, orquestracao, padrao-oficial
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-09
+- **Promovida:** sim
+
+Conteúdo: Técnica oficial CentralDark pra resolver problemas complexos com IA:
+
+**Nome:** Enxame Titânico Ômega (dialeto CentralDark)
+**Nomes técnicos equivalentes:** Swarm Prompting / Multi-Agent Swarm / Mixture of Agents (MoA) / LLM Council / Ensemble Prompting / Fan-out + Fan-in
+
+**Fórmula:** Fan-out de 20 modelos × 3 rodadas + Juiz Claude Opus consolidando = Mixture of Agents com Debate Cruzado
+
+**Cascata (o que faz funcionar):**
+1. Rodada 1 — cada IA responde crua (diversidade máxima)
+2. Rodada 2 — cada IA lê o que as outras disseram e critica (refina)
+3. Rodada 3 — juiz final consolida o consenso
+
+**Por que funciona:** quebra o viés de modelo único. Nenhuma IA sozinha acerta tudo, mas 20 discutindo convergem rápido no ouro.
+
+**Quando usar:** problema técnico complexo, decisão arquitetural, diagnóstico multi-camada, resolução de bug travado, plano estratégico.
+
+**Modo econômico:** só serializa se pedir explicitamente ("modo econômico") — padrão é cascata paralela sempre.
+
+### [2026-07-10T11:57] Doutrina do Enxame Ômega (nome oficial)
+- **Data:** 2026-07-10
+- **Tags:** enxame-omega, doutrina, renomeacao, padrao-oficial, swarm, moa
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-09
+- **Promovida:** sim
+
+Conteúdo: **RENOMEAÇÃO OFICIAL:** a técnica antes chamada "Enxame Titânico Ômega" agora se chama apenas **Enxame Ômega**.
+
+**Regra de escrita:** aceita QUALQUER capitalização — "Enxame Ômega", "enxame omega", "ENXAME OMEGA", "Enxame Omega" (sem acento), tudo vale. Case-insensitive e acento-insensitive. Reconhecer todas as variações como o mesmo comando.
+
+**Nomes técnicos equivalentes (fora do dialeto CentralDark):** Swarm Prompting / Multi-Agent Swarm / Mixture of Agents (MoA) / LLM Council / Ensemble Prompting / Fan-out + Fan-in.
+
+**Fórmula:** Fan-out de 20 modelos × 3 rodadas + Juiz Claude Opus consolidando.
+
+**Cascata:**
+1. Rodada 1 — cada IA responde crua (diversidade)
+2. Rodada 2 — cada IA critica as outras (refina)
+3. Rodada 3 — juiz consolida o consenso
+
+**Quando disparar:** Pivete falou "enxame omega" (em qualquer grafia) = execute a técnica.
+
+**Autorizado pelo Pivete em 10/07/2026.**

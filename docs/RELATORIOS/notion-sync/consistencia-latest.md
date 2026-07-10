@@ -1,8 +1,8 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-09T00:00:14.771Z
-- **Commit:** `a235cafe0a0953ed5598a4b39b468cc397e2335d`
-- **Disparado por:** lovable-dev[bot]
+- **Gerado:** 2026-07-10T15:04:05.727Z
+- **Commit:** `485263db96d54be91e9d94b516b40aa225fea362`
+- **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
 
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 352 | 0 | 0 | 352 | 0 |
+| aprendizados | 355 | 0 | 0 | 355 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **352**
+- 🟥 Faltando no Notion: **355**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -400,4 +400,7 @@
 - 318. Grafo Celestial no ar + armadilha do bundle + spec fase-2 Obsidian
 - 319. Funcionou → Consolida → Sela (regra de ouro)
 - 320. Bot Telegram pode trocar própria foto via setMyProfilePhoto
+- 321. Dedup .env VPS + fix Caddy api.centralldark.com
+- 322. MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia
+- 323. Auditoria de permissões da view api.ai_requests no HUB
 </details>

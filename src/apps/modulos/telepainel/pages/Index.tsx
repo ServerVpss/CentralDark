@@ -1,19 +1,46 @@
+import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/shared/layout/DashboardLayout";
 import { HeroStatsCard } from "@/apps/modulos/telepainel/components/dashboard/HeroStatsCard";
 import { StatsCard } from "@/apps/modulos/telepainel/components/dashboard/StatsCard";
-import { BotsSection } from "@/apps/modulos/telepainel/components/dashboard/BotsSection";
-import { ActivityFeed } from "@/apps/modulos/telepainel/components/dashboard/ActivityFeed";
-import { QuickActions } from "@/apps/modulos/telepainel/components/dashboard/QuickActions";
-import { MaintenanceToggle } from "@/apps/modulos/telepainel/components/dashboard/MaintenanceToggle";
-import { SystemStatus } from "@/apps/modulos/telepainel/components/dashboard/SystemStatus";
 import { ApiStatusCard } from "@/apps/modulos/telepainel/components/dashboard/ApiStatusCard";
-import { DashboardAnalyticsChart } from "@/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart";
-import { QueryMonitor } from "@/apps/modulos/telepainel/components/dashboard/QueryMonitor";
 import { useAdminData } from "@/shared/hooks/useAdminData";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
+
+// 👇 Componentes below-the-fold — carregados/hidratados sob demanda (code-split)
+const BotsSection = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/BotsSection").then((m) => ({ default: m.BotsSection })),
+);
+const DashboardAnalyticsChart = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart").then((m) => ({
+    default: m.DashboardAnalyticsChart,
+  })),
+);
+const QueryMonitor = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/QueryMonitor").then((m) => ({ default: m.QueryMonitor })),
+);
+const ActivityFeed = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/ActivityFeed").then((m) => ({ default: m.ActivityFeed })),
+);
+const QuickActions = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/QuickActions").then((m) => ({ default: m.QuickActions })),
+);
+const SystemStatus = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/SystemStatus").then((m) => ({ default: m.SystemStatus })),
+);
+const MaintenanceToggle = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/MaintenanceToggle").then((m) => ({
+    default: m.MaintenanceToggle,
+  })),
+);
+
+const BlockFallback = ({ h = 200 }: { h?: number }) => (
+  <div className="card-premium flex items-center justify-center" style={{ minHeight: h }}>
+    <Loader2 className="h-5 w-5 animate-spin text-primary" />
+  </div>
+);
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -162,29 +189,42 @@ export default function Index() {
         {/* Bots + Chart */}
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <BotsSection bots={bots} />
+            <Suspense fallback={<BlockFallback h={320} />}>
+              <BotsSection bots={bots} />
+            </Suspense>
           </div>
           <div>
-            <DashboardAnalyticsChart />
+            <Suspense fallback={<BlockFallback h={320} />}>
+              <DashboardAnalyticsChart />
+            </Suspense>
           </div>
         </section>
 
         {/* Monitor de Consultas */}
-        <QueryMonitor />
+        <Suspense fallback={<BlockFallback h={240} />}>
+          <QueryMonitor />
+        </Suspense>
 
         {/* Activity + Sidebar */}
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <ActivityFeed />
+            <Suspense fallback={<BlockFallback h={400} />}>
+              <ActivityFeed />
+            </Suspense>
           </div>
           <div className="space-y-4">
-            <QuickActions />
-            <SystemStatus botsTotal={bots.length} botsOnline={stats.botsOnline} />
-            <MaintenanceToggle botId={bots[0]?.id ?? null} />
+            <Suspense fallback={<BlockFallback h={140} />}>
+              <QuickActions />
+            </Suspense>
+            <Suspense fallback={<BlockFallback h={140} />}>
+              <SystemStatus botsTotal={bots.length} botsOnline={stats.botsOnline} />
+            </Suspense>
+            <Suspense fallback={<BlockFallback h={100} />}>
+              <MaintenanceToggle botId={bots[0]?.id ?? null} />
+            </Suspense>
           </div>
         </section>
       </div>
     </DashboardLayout>
   );
 }
-
