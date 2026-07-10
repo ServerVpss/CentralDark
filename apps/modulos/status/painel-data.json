@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T04:26:25.014Z",
-  "updatedAtBR": "10/07/2026, 01:26:25 BRT",
+  "updatedAt": "2026-07-10T05:51:14.132Z",
+  "updatedAtBR": "10/07/2026, 02:51:14 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "chore(arsenal-adapter): npm test roda tests/models.test.mjs",
+    "lastCommit": "Eliminou hits de claude.ap7.site",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T05:51:14.132Z",
+      "titulo": "Push na main · 2cdd72cef794f4ad95f6a103d76f37d836625a7b",
+      "detalhe": "Eliminou hits de claude.ap7.site",
+      "area": "Repositório",
+      "sha": "2cdd72c",
+      "actor": "lovable-dev[bot]"
+    },
+    {
       "time": "2026-07-10T04:26:25.014Z",
       "titulo": "Push na main · ac01f39819ea14b866a441e9f88bdc519bf77ae2",
       "detalhe": "chore(arsenal-adapter): npm test roda tests/models.test.mjs",
@@ -986,14 +994,6 @@
       "detalhe": "docs: corrigir gateway oficial CentralDark no padrão Pivete",
       "area": "Repositório",
       "sha": "79719cb",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T17:36:19.133Z",
-      "titulo": "Push na main · 01846d18b5792535d365fde30bcb2a9e68a9b619",
-      "detalhe": "docs: registrar fluxo de ouro e gateway oficial CentralDark",
-      "area": "Repositório",
-      "sha": "01846d1",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T05:51:14.132Z",
+      "ia": "@lovable-dev[bot]",
+      "action": "📌 Push na main · 2cdd72cef794f4ad95f6a103d76f37d836625a7b (2cdd72c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T04:26:25.014Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ac01f39819ea14b866a441e9f88bdc519bf77ae2 (ac01f39)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T17:36:50.862Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 79719cbab8e3daf14cc13f6ab9371446e2d0e5d9 (79719cb)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T17:36:19.133Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 01846d18b5792535d365fde30bcb2a9e68a9b619 (01846d1)",
       "area": "Repositório",
       "status": "sucesso"
     }
