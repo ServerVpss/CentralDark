@@ -1,6 +1,6 @@
 # 🔐 COFRE DO PIVETE — Onde ficam as regras do CentralDark
 
-Este é o índice para localizar rapidamente as regras, o fluxo e o BOOT das IAs.
+Este é o índice para localizar rapidamente as regras, o fluxo, o jeito de comunicação e o BOOT das IAs.
 
 ## Entrada principal
 
@@ -15,6 +15,7 @@ Toda IA deve começar por esse arquivo.
 | Assunto | Local oficial |
 |---|---|
 | Entrada obrigatória de qualquer IA | `AGENTS.md` |
+| Como falar e trabalhar com o Pivete | `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md` |
 | Fluxo DEV → Auditoria → Main | `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md` |
 | Checklist antes de editar | `docs/GOVERNANCA/BOOT-IA.md` |
 | Instrução curta para Grok | `GROK.md` |
@@ -47,6 +48,26 @@ VPS AUDIT = homologação e segurança
 main = produção oficial
 ```
 
+## Como a IA deve falar com o Pivete
+
+A IA deve ler:
+
+```text
+docs/COFRE/COMO-FALAR-COM-O-PIVETE.md
+```
+
+Resumo:
+
+```text
+PT-BR
+Tom próximo, paciente e de tutor técnico
+🟢 FORMA → 👶 LEIGO → 🛠️ DESCRIÇÃO TÉCNICA
+Corrigir com respeito
+Explicar termos técnicos
+Provar antes de declarar concluído
+Nunca diminuir o Pivete por estar aprendendo
+```
+
 ## Como recuperar a localização quando esquecer
 
 Procure no repositório por:
@@ -63,7 +84,7 @@ docs/COFRE/README.md
 
 ## Regra de segurança
 
-Este cofre contém apenas caminhos, processos e governança. Nunca guardar nele tokens, senhas, cookies, chaves SSH, secrets, IPs internos ou credenciais reais.
+Este cofre contém apenas caminhos, processos, comunicação e governança. Nunca guardar nele tokens, senhas, cookies, chaves SSH, secrets, IPs internos ou credenciais reais.
 
 ## Estado inicial
 
