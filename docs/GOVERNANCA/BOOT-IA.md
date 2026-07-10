@@ -1,14 +1,23 @@
-# BOOT obrigatório de IA — CentralDark
+# BOOT operacional obrigatório de IA — CentralDark
 
-Nenhuma IA deve editar, commitar, fazer push ou deploy antes de concluir este BOOT.
+Este é o BOOT autoritativo para branch, edição, commit, push, deploy, auditoria, risco, prova e rollback.
+
+Nenhuma IA deve editar, commitar, fazer push, deploy, merge ou mudança de estado antes de concluir este BOOT.
+
+O ritual de `docs/PROTOCOLO-BOOT.md` é complementar e serve para memória, pendências, estado vivo e continuidade. Ele não substitui este documento.
 
 ## 1. Leitura obrigatória
 
 ```text
+00-COMECE-AQUI-IA.md
 AGENTS.md
+docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
 docs/COFRE/README.md
+docs/COFRE/COMO-FALAR-COM-O-PIVETE.md
 docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md
 ```
+
+Depois do BOOT operacional, consultar `docs/PROTOCOLO-BOOT.md` quando a missão exigir recuperação de memória ou continuidade entre sessões.
 
 ## 2. Verificação técnica
 
@@ -20,6 +29,7 @@ git branch --show-current
 git rev-parse HEAD
 git remote -v
 git fetch origin
+git rev-parse origin/pivete/dev
 ```
 
 Também pode executar:
@@ -28,13 +38,28 @@ Também pode executar:
 bash scripts/ia/verificar-ambiente.sh
 ```
 
+### Workspace diferente da ref inspecionada
+
+Em tarefa somente leitura, é permitido consultar `origin/pivete/dev` sem fazer checkout. A IA deve diferenciar:
+
+```text
+Branch do workspace: branch realmente retornada por git branch --show-current
+Ref inspecionada: origin/pivete/dev, quando aplicável
+SHA do workspace: git rev-parse HEAD
+SHA da ref inspecionada: git rev-parse origin/pivete/dev
+```
+
+Nunca declarar que a branch atual é `pivete/dev` se o checkout local estiver na `main` ou em outra branch.
+
 ## 3. Resposta obrigatória antes de agir
 
 ```text
 BOOT CENTRALDARK
 
-Branch atual:
-Commit atual:
+Branch do workspace:
+SHA do workspace:
+Ref inspecionada:
+SHA da ref inspecionada:
 Diretório de trabalho:
 Ambiente de deploy:
 Missão:
@@ -46,7 +71,14 @@ Testes obrigatórios:
 Prova esperada:
 Rollback:
 Status do workspace:
+Li 00-COMECE-AQUI-IA.md: SIM/NÃO
+Li AGENTS.md: SIM/NÃO
+Li a hierarquia oficial: SIM/NÃO
+Li o Cofre do Pivete: SIM/NÃO
+Aguardando autorização para editar: SIM/NÃO
 ```
+
+Para uma tarefa read-only, `Aguardando autorização para editar` deve permanecer `SIM`, e nenhuma escrita deve ocorrer.
 
 ## 4. Decisão por branch
 
@@ -59,7 +91,7 @@ Status do workspace:
 
 ### `pivete/dev`
 
-- Edição e testes do MVP permitidos.
+- Edição e testes do MVP permitidos após autorização e BOOT concluído.
 - Commit pequeno, descritivo e reversível.
 - Push obrigatório antes do deploy.
 - Deploy somente no ambiente DEV.
@@ -68,7 +100,7 @@ Status do workspace:
 ### `pivete/auditoria`
 
 - Auditoria, correção, testes e homologação permitidos.
-- Ciclos autônomos de diagnóstico → correção → teste → commit podem continuar.
+- Ciclos autônomos de diagnóstico → correção → teste → commit podem continuar dentro do escopo autorizado.
 - Deploy somente no ambiente AUDIT/STAGING.
 - Merge para `main` continua bloqueado sem gates e autorização.
 
@@ -86,6 +118,7 @@ Status do workspace:
 - Build ou validação sintática executada.
 - Testes relevantes executados.
 - Nenhuma alteração incidental ou arquivo estranho.
+- Branch e SHA confirmados novamente.
 
 ## 6. Gates antes do deploy
 
@@ -114,6 +147,8 @@ Explicação simples, sem presumir conhecimento técnico.
 Branch, SHA, diff, testes, riscos, evidência e rollback.
 ```
 
+A regra completa de comunicação está em `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md`.
+
 ## 8. Ações que exigem parada e autorização
 
 - perda ou remoção de dados;
@@ -123,15 +158,28 @@ Branch, SHA, diff, testes, riscos, evidência e rollback.
 - mudança direta em produção;
 - force-push ou reescrita de histórico;
 - conflito entre a intenção do Pivete e a implementação técnica;
-- dúvida sobre qual ambiente ou branch usar.
+- dúvida sobre qual ambiente ou branch usar;
+- divergência entre documentos sem solução explícita na hierarquia oficial.
 
-## 9. Encerramento obrigatório
+## 9. Continuidade de memória
+
+Depois de concluir este BOOT, a IA pode executar o ritual complementar de `docs/PROTOCOLO-BOOT.md` para recuperar pendências, aprendizados e estado da VPS.
+
+Se o MCP correspondente estiver indisponível:
+
+- informar a falha;
+- não inventar estado;
+- continuar apenas dentro do escopo que puder ser comprovado;
+- não usar a falha como justificativa para pular este BOOT.
+
+## 10. Encerramento obrigatório
 
 Toda missão termina com:
 
 ```text
 Status: CONCLUÍDO | PARCIAL | BLOQUEADO
-Branch:
+Branch do workspace:
+Ref trabalhada:
 Commit SHA:
 Arquivos alterados:
 Testes:
@@ -140,4 +188,5 @@ Evidências:
 Riscos restantes:
 Rollback:
 Próximo handoff:
+Registro de memória executado: SIM | NÃO | INDISPONÍVEL
 ```
