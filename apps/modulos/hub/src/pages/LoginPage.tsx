@@ -1,34 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Card } from '@/shared/ui/card';
 import { useToast } from '@/components/Toast';
+import { hubAuth } from '@/integrations/supabase/hub-client';
+import { trackAction, logButton } from '@/lib/buttonLog';
 
-// Página de login — SOMENTE UI. Lógica de auth fica no HUB Supabase (VPS).
+// Página de login do HUB — plugada no Supabase HUB (lyoigsqluyktoclwdaft).
+// Toda ação passa pelo buttonLog pra ficar registrada no drawer 🪵.
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const toast = useToast();
 
+  useEffect(() => {
+    hubAuth.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        logButton('login.session-existente', { user: data.session.user.email });
+        window.location.replace('/');
+      }
+    });
+  }, []);
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
-    // stub — plugar no HUB depois
-    setTimeout(() => {
+    try {
+      await trackAction('login.email-password', async () => {
+        const { data, error } = await hubAuth.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        return { status: 200, user: data.user?.email };
+      }, { email });
+      toast.info('🟢 login OK — abrindo HUB');
+      window.location.replace('/');
+    } catch (e: any) {
+      toast.info(`🔴 ${e?.message ?? 'falha no login'}`);
+    } finally {
       setBusy(false);
-      toast.info('🔌 login será plugado no HUB Supabase (VPS) — frontend pronto');
-    }, 600);
+    }
   }
 
-  function google() {
-    toast.info('🔌 Google OAuth: configurar no HUB Supabase');
+  async function google() {
+    try {
+      await trackAction('login.google-oauth', async () => {
+        const { error } = await hubAuth.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: `${window.location.origin}/` },
+        });
+        if (error) throw error;
+        return { status: 200 };
+      });
+    } catch (e: any) {
+      toast.info(`🔴 Google OAuth: ${e?.message ?? 'falha'}`);
+    }
   }
+
 
   return (
     <div className="min-h-screen w-full grid md:grid-cols-2 bg-background">
-      {/* Hero esquerdo */}
       <div className="relative hidden md:flex flex-col justify-between overflow-hidden p-10 border-r border-border/60">
         <div
           className="absolute inset-0 opacity-70"
@@ -69,7 +100,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Form direito */}
       <div className="flex items-center justify-center p-6 md:p-10">
         <Card className="card-premium w-full max-w-md p-8 space-y-6 border-border/60">
           <div className="space-y-1">
