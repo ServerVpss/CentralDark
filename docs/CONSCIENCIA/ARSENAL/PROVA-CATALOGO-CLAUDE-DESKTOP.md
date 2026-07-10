@@ -30,7 +30,7 @@ O adapter anuncia aliases públicos no `/v1/models` e mapeia internamente para o
 - `gpt-4o` → `arsenal-router`
 - `gpt-4o-mini` → `arsenal-router`
 
-## Evidência terminal
+## Evidência de descoberta
 
 ```txt
 status 200
@@ -39,6 +39,12 @@ object list
 count 9
 ids arsenal-router,arsenal-parallel,arsenal-debate,arsenal-hermes,claude-3-5-sonnet-latest,claude-3-5-sonnet-20241022,claude-3-opus-latest,gpt-4o,gpt-4o-mini
 ```
+
+## Evidência de roteamento
+
+✅ Chamada de chat usando `claude-3-5-sonnet-latest` foi aceita pelo adapter.
+✅ Auditoria registrou o mapeamento `claude-3-5-sonnet-latest->arsenal-router`.
+✅ Resposta de teste retornou `200 OK` com `PONG-CENTRALDARK`.
 
 ## Pendência operacional
 
