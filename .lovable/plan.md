@@ -1,27 +1,56 @@
-## Objetivo
-Trocar a chave usada pelo robô do CI (GitHub Actions) no teste automático do gateway. Sair de `ABACUS_API_KEY` (chave da Abacus) e passar pra `CENTRALDARK_API_KEY` (sua chave `cdk_live_...`).
+## 🌌 OPERAÇÃO OVERCLOCK — Auditoria Profunda (Dono Autorizado)
 
-## O que muda (curto)
-- **Antes:** robô do CI usava chave da Abacus pra rodar o teste.
-- **Depois:** robô passa a usar sua própria chave CentralDark.
-- **Resultado prático:** você não depende mais de conta Abacus externa pro CI. O gateway continua puxando os 161 modelos da Abacus por dentro, isso não muda.
+Você confirmou ser dono de `overclock.sh` → libero **auditoria profunda de leitura + prova leve**, ainda sem carga destrutiva (nada de DoS, nada de brute-force real, nada de exploit weaponizado). Isso mantém o site no ar enquanto os "cavaleiros" varrem.
 
-## O que NÃO muda
-- Gateway `api.centralldark.com` segue igual.
-- Claude Desktop segue igual.
-- 161 modelos seguem sendo puxados normal.
-- `ap7.site` continua morto e enterrado.
+### 🛡️ Regras da Guerra
+- Zero DoS, zero flood, zero brute-force real (rate limit próprio: máx 5 req/s por worker).
+- Zero exploit destrutivo (SSRF/RCE só como *check* passivo de sintoma, sem payload ativo).
+- Zero touch em dados reais de outros usuários.
+- Tudo em `/tmp/overclock-op/`, apagado no final (Terra Arrasada).
+- Relatório único consolidado no fim, formato Card Hermes.
 
-## Passos técnicos (PR #147)
-1. Editar `.github/workflows/arsenal-adapter-tests.yml`:
-   - Trocar `secrets.ABACUS_API_KEY` → `secrets.CENTRALDARK_API_KEY`.
-   - Renomear a env var passada pro teste (`API_KEY` ou similar) pra apontar pra nova.
-2. Confirmar que o secret `CENTRALDARK_API_KEY` existe no GitHub (`ServerVpss/CentralDark`). Se não existir, você cadastra em Settings → Secrets → Actions (a chave `cdk_live_...` que você já tem).
-3. Ajustar `tests/models.test.mjs` se ele lê nome específico de env — só rename, sem mudar lógica.
-4. Commit único na branch `pivete/adapter-auth-audit-fix`, push, esperar CI verde.
-5. Registrar o ouro: linha curta no `docs/GOVERNANCA/MVP-MAPA-VIVO-CENTRALDARK.md` dizendo "CI agora usa CENTRALDARK_API_KEY".
+### ⚔️ Enxame — 12 Frentes Paralelas (cavaleiros + mosqueteiros + hermes)
 
-## Pré-requisito seu
-Confirmar: o secret `CENTRALDARK_API_KEY` já está cadastrado no repositório do GitHub? Se não estiver, você precisa colar ele lá uma vez (eu não vejo/toco em secret real).
+**Bloco A — Reconhecimento (paralelo, leve):**
+1. **DNS + WHOIS + subdomínios** — `dig`, `crt.sh` (certificate transparency) pra mapear subdomínios expostos.
+2. **Headers HTTP + TLS** — CSP, HSTS, X-Frame, Referrer-Policy, CORS, cookies flags, versão TLS, cipher, cadeia de certificado.
+3. **robots.txt + sitemap.xml + `.well-known/`** — o que o dono expõe voluntariamente.
+4. **Tech fingerprint** — servidor, framework, versões (via headers + HTML), CDN, analytics.
 
-## Manda "PERMITO" que eu faço.
+**Bloco B — Superfície visível (Playwright headless, 3 viewports):**
+5. **Render mobile 390 / tablet 768 / desktop 1440** — screenshots, layout quebrado, contraste, overflow.
+6. **Console + Network** — erros JS, 404/500, mixed content, requests pra domínios terceiros suspeitos, tamanho de bundle.
+7. **SEO + a11y básica** — title, meta, OG, H1, alt, lang, viewport, landmarks, foco visível.
+8. **Performance rápida** — TTFB, LCP aproximado, peso total, imagens não otimizadas.
+
+**Bloco C — Segurança de aplicação (Hermes crítico, ainda passivo):**
+9. **Mapeamento de rotas + formulários** — crawl leve (até 50 páginas), identifica inputs, endpoints de API, uploads.
+10. **Auth surface** — login/registro/reset: existe rate limit visível? mensagens vazam existência de usuário? CSRF token presente?
+11. **Injeção — check passivo** — só *detecta reflexão* de parâmetro na resposta (sem payload malicioso, só marker inofensivo como `overclock-audit-{nonce}`). Não executa XSS real.
+12. **Segredos vazando no frontend** — grep no HTML/JS servido: `AKIA`, `sk_live_`, `-----BEGIN`, tokens Bearer, keys hardcoded, `.env` expostos, `/admin`, `/debug`, source maps públicos.
+
+### 🧠 Hermes-Loop (refino contínuo)
+Depois da primeira passada, entra o ciclo:
+- **Critic** relê os 12 blocos, aponta contradições e o que ficou raso.
+- **Refiner** dispara re-teste focado nos 3 pontos mais suspeitos.
+- **Sintetizador** consolida em: 🔴 crítico / 🟡 aviso / 🟢 ok, com evidência (screenshot, header, snippet).
+
+### 📊 Entrega Final
+Um único relatório em PT-BR contendo:
+- Placar geral (🟢/🟡/🔴 por bloco).
+- Top 5 achados críticos com prova (linha do header, screenshot, URL exata).
+- Recomendação de correção mínima por achado.
+- Pendências pra próxima rodada (se quiser ir pra pentest ativo real, precisa autorização escrita separada + escopo formal).
+- Screenshots anexados.
+
+### 🔧 Técnico
+- Playwright headless (Chromium), viewport controlado, `full_page=False`.
+- `curl -sI`, `openssl s_client`, `dig`, `jq` no sandbox.
+- Crawl leve com limite duro: 50 URLs, 5 req/s, timeout 10s.
+- Sub-agentes `spawn_agent` em paralelo pros blocos A/B/C, cada um retorna JSON estruturado.
+- Hermes-loop consolida via `generateText` no gateway Lovable AI.
+
+### ⛩️ Autorização final que preciso de você
+Escreve **exatamente**: `PERMITO OPERAÇÃO OVERCLOCK — SOU DONO DE overclock.sh`
+
+Isso vira o carimbo de autorização que fica registrado. Sem esse texto exato, não disparo — porque testar site de terceiro sem autorização escrita é crime, e eu não confio só em "sou dono" solto no chat. Mandando a frase, o enxame parte. 🚀
