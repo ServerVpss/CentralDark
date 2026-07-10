@@ -1,20 +1,19 @@
 // Teste automatizado /v1/models — Arsenal Adapter (Gateway CentralDark)
 //
 // Invariantes CRÍTICOS (falha 🔴 quebra CI):
-//   1. HTTP 200 no gateway
+//   1. HTTP 200 no gateway (/v1/models público)
 //   2. Shape OpenAI-compat ({ object: 'list', data: [...] })
 //   3. Aliases Arsenal presentes (arsenal-router/parallel/debate/hermes)
 //
 // Warnings 🟡 (não quebram CI):
 //   - Família Grok-4 (só existe quando catálogo dinâmico Abacus está ativo)
 //   - Aliases Claude/GPT (fase discovery — reintroduzidos em PR dedicado)
-//   - Comparação com upstream Abacus (requer ABACUS_API_KEY)
+//   - Prova autenticada com CENTRALDARK_API_KEY (requer secret cadastrado)
 
 import assert from 'node:assert/strict';
 
 const GATEWAY = (process.env.GATEWAY_URL || 'https://api.centralldark.com').replace(/\/+$/, '');
-const ABACUS_UPSTREAM = process.env.ABACUS_UPSTREAM || 'https://routellm.abacus.ai/v1/models';
-const ABACUS_KEY = process.env.ABACUS_API_KEY || '';
+const CENTRALDARK_KEY = process.env.CENTRALDARK_API_KEY || '';
 
 const ARSENAL_OBRIGATORIOS = ['arsenal-router', 'arsenal-parallel', 'arsenal-debate', 'arsenal-hermes'];
 const CLAUDE_ESPERADOS   = ['claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest'];
@@ -70,20 +69,24 @@ async function main() {
     ? ok('Aliases GPT presentes', GPT_ESPERADOS.join(', '))
     : warn('Aliases GPT ausentes (não crítico)', faltamGPT.join(', '));
 
-  if (ABACUS_KEY) {
-    try {
-      const up = await fetchJson(ABACUS_UPSTREAM, { Authorization: `Bearer ${ABACUS_KEY}` });
-      const totalUpstream = Array.isArray(up.body?.data) ? up.body.data.length : 0;
-      const totalGateway = ids.length;
-      const diff = totalGateway - totalUpstream;
-      totalGateway >= totalUpstream
-        ? ok('Total gateway >= Abacus upstream', `gateway=${totalGateway} · abacus=${totalUpstream} · delta=+${diff}`)
-        : warn('Total gateway < Abacus upstream (não crítico)', `gateway=${totalGateway} · abacus=${totalUpstream} · delta=${diff}`);
-    } catch (e) {
-      warn('Comparação com Abacus upstream falhou', e.message);
+  // Prova autenticada com chave própria do CentralDark (substitui a antiga comparação Abacus).
+  if (CENTRALDARK_KEY) {
+    const tentativas = [
+      { nome: 'Authorization: Bearer', headers: { Authorization: `Bearer ${CENTRALDARK_KEY}` } },
+      { nome: 'x-api-key',             headers: { 'x-api-key': CENTRALDARK_KEY } },
+    ];
+    for (const t of tentativas) {
+      try {
+        const r = await fetchJson(`${GATEWAY}/v1/models`, t.headers);
+        assert.equal(r.status, 200);
+        assert.ok(Array.isArray(r.body?.data), 'data array');
+        ok(`Auth CentralDark (${t.nome})`, `total=${r.body.data.length}`);
+      } catch (e) {
+        warn(`Auth CentralDark falhou (${t.nome})`, e.message);
+      }
     }
   } else {
-    warn('ABACUS_API_KEY não setada', `pulando comparação com ${ABACUS_UPSTREAM}`);
+    warn('CENTRALDARK_API_KEY não setada', 'pulando prova autenticada — cadastre em Settings → Secrets → Actions');
   }
 
   imprimirPlacar();
