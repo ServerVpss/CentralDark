@@ -70,14 +70,56 @@ entrada pelo Gateway
 prova no painel
 ```
 
-## 7. Regra curta
+## 7. Orquestração multiagente
+
+O CentralDark pode usar dezenas de agentes em paralelo, desde que exista coordenação.
+
+Orquestração = vários agentes trabalhando juntos com missão, limite e prova.
+
+Padrão seguro:
+
+```txt
+Pivete = comando e prioridade.
+Orquestrador = divide missão e distribui tarefas.
+Agentes = executam partes pequenas.
+Revisor = confere resultado.
+Auditor = procura risco, duplicação e quebra de fluxo.
+Consolidador = junta apenas o que foi aprovado.
+GitHub = registra.
+Painel = mostra prova.
+```
+
+Regra:
+
+```txt
+Muitos agentes sem controle viram bagunça.
+Muitos agentes com escopo, fila, revisão e prova viram força operacional.
+```
+
+## 8. Camadas mínimas do MVP multiagente
+
+Para o MVP, não começar com ação destrutiva ou escrita livre.
+
+Começar com:
+
+- leitura;
+- mapeamento;
+- comparação;
+- relatório;
+- sugestão;
+- aprovação do Pivete;
+- registro.
+
+Depois evoluir para execução controlada.
+
+## 9. Regra curta
 
 Ferramenta muda.
 Fluxo fica.
 Execução importa.
 Registro prova.
 
-## 8. Primeira entrega sugerida
+## 10. Primeira entrega sugerida
 
 Criar uma tela MVP chamada Mapa Vivo no HUB.
 
@@ -89,19 +131,22 @@ Essa tela deve mostrar cards simples:
 - Gateway
 - Bots
 - Domínios
+- Agentes
 - Divergências
 - Ações pendentes
 
 Cada card deve ter status, resumo e link para detalhe.
 
-## 9. Segurança
+## 11. Segurança
 
 Não salvar secrets.
 Não expor tokens.
 Não executar ação destrutiva.
 Não mexer em produção sem autorização.
 Não tratar VPS como fonte oficial.
+Não deixar agente operar sem escopo.
+Não consolidar mudança sem revisão.
 
-## 10. Selo
+## 12. Selo
 
-Mapa Vivo CentralDark = visão de ponta a ponta para o Pivete auditar, comandar e evoluir o sistema sem depender de uma IA específica.
+Mapa Vivo CentralDark = visão de ponta a ponta para o Pivete auditar, comandar, orquestrar agentes e evoluir o sistema sem depender de uma IA específica.
