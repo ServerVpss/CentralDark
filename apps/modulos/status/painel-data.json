@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T00:18:16.410Z",
-  "updatedAtBR": "09/07/2026, 21:18:16 BRT",
+  "updatedAt": "2026-07-10T00:24:39.319Z",
+  "updatedAtBR": "09/07/2026, 21:24:39 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(governanca): adiciona orquestracao multiagente ao mapa vivo",
+    "lastCommit": "docs(governanca): adiciona handoff e watchdog multiagente",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T00:24:39.319Z",
+      "titulo": "Push na main · 51c995c98e7b3565dfa189b5a5fc63fd2856fd70",
+      "detalhe": "docs(governanca): adiciona handoff e watchdog multiagente",
+      "area": "Repositório",
+      "sha": "51c995c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-10T00:18:16.410Z",
       "titulo": "Push na main · b759e769e549a67ad7b427dac2a9e594890b039e",
       "detalhe": "docs(governanca): adiciona orquestracao multiagente ao mapa vivo",
@@ -986,14 +994,6 @@
       "detalhe": "Criou deploy do PAT do HUB",
       "area": "Repositório",
       "sha": "cc83032",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-08T18:04:33.198Z",
-      "titulo": "Push na main · 4e399e8cd878350eeeafe18d5f71012d26ecbfaf",
-      "detalhe": "Ajustou erro OAuth e auth flow",
-      "area": "Repositório",
-      "sha": "4e399e8",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T00:24:39.319Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 51c995c98e7b3565dfa189b5a5fc63fd2856fd70 (51c995c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T00:18:16.410Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b759e769e549a67ad7b427dac2a9e594890b039e (b759e76)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T18:26:09.249Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · cc8303214536ccb45bb547a3d0bff8c247eca53c (cc83032)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T18:04:33.198Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 4e399e8cd878350eeeafe18d5f71012d26ecbfaf (4e399e8)",
       "area": "Repositório",
       "status": "sucesso"
     }
