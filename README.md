@@ -1,5 +1,19 @@
 # CentralDark — TelePanel
 
+> 🚪 **ENTRADA OBRIGATÓRIA PARA QUALQUER IA**
+>
+> Antes de interpretar este README, `CLAUDE.md`, `GROK.md`, `GEMINI.md` ou qualquer documento antigo:
+>
+> ```text
+> 1. Abra ou inspecione a branch pivete/dev
+> 2. Leia 00-COMECE-AQUI-IA.md
+> 3. Leia AGENTS.md
+> 4. Siga docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
+> 5. Execute docs/GOVERNANCA/BOOT-IA.md antes de agir
+> ```
+>
+> `docs/PROTOCOLO-BOOT.md` é complementar para memória e continuidade; não substitui o BOOT operacional.
+
 > ⚠️ **TEMA OFICIAL DO SISTEMA: "Esmeralda" (Sistema 3D Tátil)**
 >
 > Este é o padrão visual **definitivo** de todo o ecossistema CentralDark.
