@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T15:04:26.984Z",
-  "updatedAtBR": "10/07/2026, 12:04:26 BRT",
+  "updatedAt": "2026-07-10T15:14:16.619Z",
+  "updatedAtBR": "10/07/2026, 12:14:16 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "lembranca: Doutrina do Enxame Titânico Ômega",
+    "lastCommit": "lembranca: Doutrina do Enxame Ômega (nome oficial)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T15:14:16.619Z",
+      "titulo": "Push na main · 4ce875dc5e464200e4e0052df7999204e0dba175",
+      "detalhe": "lembranca: Doutrina do Enxame Ômega (nome oficial)",
+      "area": "Repositório",
+      "sha": "4ce875d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-10T15:04:26.984Z",
       "titulo": "Push na main · 485263db96d54be91e9d94b516b40aa225fea362",
       "detalhe": "lembranca: Doutrina do Enxame Titânico Ômega",
@@ -987,14 +995,6 @@
       "area": "Repositório",
       "sha": "8a86833",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T20:01:44.020Z",
-      "titulo": "Push na main · 04bd8d53ac323a5a837aabe8d67e36060cd85f60",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "04bd8d5",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T15:14:16.619Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4ce875dc5e464200e4e0052df7999204e0dba175 (4ce875d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T15:04:26.984Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 485263db96d54be91e9d94b516b40aa225fea362 (485263d)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T20:34:45.823Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 8a86833f287a79bedea8ec1bcacb6f8c88543759 (8a86833)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T20:01:44.020Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 04bd8d53ac323a5a837aabe8d67e36060cd85f60 (04bd8d5)",
       "area": "Repositório",
       "status": "sucesso"
     }
