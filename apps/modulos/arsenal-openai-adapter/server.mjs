@@ -24,6 +24,25 @@ const MODELS = [
   { id: 'arsenal-hermes',   name: '🤖 Hermes (proposta autônoma)' },
 ];
 
+// Aliases para clientes que filtram modelos por famílias conhecidas.
+// Mantém Arsenal como runtime real, mas deixa Claude Desktop/Cursor enxergarem modelos utilizáveis.
+const MODEL_ALIASES = {
+  'claude-3-5-sonnet-latest': 'arsenal-router',
+  'claude-3-5-sonnet-20241022': 'arsenal-router',
+  'claude-3-opus-latest': 'arsenal-parallel',
+  'gpt-4o': 'arsenal-router',
+  'gpt-4o-mini': 'arsenal-router',
+};
+
+const DISCOVERY_MODELS = [
+  ...MODELS.map(m => ({ id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name })),
+  { id: 'claude-3-5-sonnet-latest', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3.5 Sonnet → Arsenal Router' },
+  { id: 'claude-3-5-sonnet-20241022', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3.5 Sonnet 20241022 → Arsenal Router' },
+  { id: 'claude-3-opus-latest', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3 Opus → Arsenal Parallel' },
+  { id: 'gpt-4o', object: 'model', created: 1700000000, owned_by: 'openai', name: 'GPT-4o → Arsenal Router' },
+  { id: 'gpt-4o-mini', object: 'model', created: 1700000000, owned_by: 'openai', name: 'GPT-4o Mini → Arsenal Router' },
+];
+
 // Mapeia modelo lógico -> bot Telegram (Gemini/Groq/Claude)
 function botDoModelo(modelo) {
   const m = (modelo || '').toLowerCase();
@@ -181,6 +200,9 @@ const server = http.createServer(async (req, res) => {
   const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').toString().split(',')[0].trim();
   const ua = (req.headers['user-agent'] || '').toString();
   res.setHeader('X-Request-Id', requestId);
+  // Normaliza path: remove querystring e trailing slash (/v1/models/ = /v1/models)
+  const rawUrl = req.url || '/';
+  const pathOnly = rawUrl.split('?')[0].replace(/\/+$/, '') || '/';
 
   // Autentica sempre (não bloqueia em shadow). Preserva fallback do AUTH_KEY legado.
   // Aceita Authorization: Bearer <k>, x-api-key: <k> e api-key: <k> (Claude Desktop usa x-api-key).
@@ -191,7 +213,7 @@ const server = http.createServer(async (req, res) => {
   let modelForAudit = null;
 
   // /health continua público
-  if (req.url === '/health') {
+  if (pathOnly === '/health') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: '/health', method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
     return json(res, 200, { ok: true, provider: PROVIDER_BASE, models: MODELS.map(m=>m.id),
@@ -201,12 +223,10 @@ const server = http.createServer(async (req, res) => {
   // /v1/models também é público — é apenas o catálogo (sem inferência).
   // Clientes de gateway (Claude Desktop, Cursor, etc) chamam sem chave pra descobrir modelos.
   // Fica ANTES do bloco de auth pra não retornar 401 e ser mal-interpretado como 404.
-  if (req.url === '/v1/models' || req.url === '/models') {
+  if (pathOnly === '/v1/models' || pathOnly === '/models') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
-    return json(res, 200, { object: 'list', data: MODELS.map(m => ({
-      id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name
-    })) });
+    return json(res, 200, { object: 'list', data: DISCOVERY_MODELS });
   }
 
   // Enforce mode: bloqueia se a chave não bater E o fallback legado também não bater
@@ -232,13 +252,14 @@ const server = http.createServer(async (req, res) => {
   req._auditSetModel = (m) => { modelForAudit = m; };
 
 
-  if (req.url === '/v1/chat/completions' || req.url === '/chat/completions') {
+  if (pathOnly === '/v1/chat/completions' || pathOnly === '/chat/completions') {
     let body = '';
     for await (const chunk of req) body += chunk;
     try {
       const payload = JSON.parse(body);
-      const modo = payload.model;
-      req._auditSetModel?.(modo);
+      const requestedModel = payload.model;
+      const modo = MODEL_ALIASES[requestedModel] || requestedModel;
+      req._auditSetModel?.(requestedModel === modo ? modo : `${requestedModel}->${modo}`);
       const messages = payload.messages || [];
       const perguntaUser = messages.filter(m=>m.role==='user').slice(-1)[0]?.content || '';
       // Posta a pergunta do usuário no grupo (contexto)
@@ -246,7 +267,7 @@ const server = http.createServer(async (req, res) => {
 
       const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
       const rodar = MODOS[modo];
-      if (!rodar) return json(res, 400, { error: `modelo desconhecido: ${modo}` });
+      if (!rodar) return json(res, 400, { error: `modelo desconhecido: ${requestedModel}`, mapped_to: modo });
 
       // stream:true → SSE real (headers já vão, keepalive segura o cliente enquanto o Council trabalha)
       const streaming = payload.stream === true;
