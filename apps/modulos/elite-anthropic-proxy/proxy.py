@@ -19,7 +19,7 @@ import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse, Response, JSONResponse, HTMLResponse, FileResponse
 
-UPSTREAM = "https://claude.ap7.site"
+UPSTREAM = "https://api.centralldark.com"
 KEYS_FILE = Path(__file__).parent / "keys.json"
 LOG_FILE = Path(__file__).parent / "logs" / "elite-anthropic.log"
 VERSION = "1.6.0"
