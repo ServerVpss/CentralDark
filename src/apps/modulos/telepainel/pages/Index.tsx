@@ -189,25 +189,39 @@ export default function Index() {
         {/* Bots + Chart */}
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <BotsSection bots={bots} />
+            <Suspense fallback={<BlockFallback h={320} />}>
+              <BotsSection bots={bots} />
+            </Suspense>
           </div>
           <div>
-            <DashboardAnalyticsChart />
+            <Suspense fallback={<BlockFallback h={320} />}>
+              <DashboardAnalyticsChart />
+            </Suspense>
           </div>
         </section>
 
         {/* Monitor de Consultas */}
-        <QueryMonitor />
+        <Suspense fallback={<BlockFallback h={240} />}>
+          <QueryMonitor />
+        </Suspense>
 
         {/* Activity + Sidebar */}
         <section className="grid gap-4 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <ActivityFeed />
+            <Suspense fallback={<BlockFallback h={400} />}>
+              <ActivityFeed />
+            </Suspense>
           </div>
           <div className="space-y-4">
-            <QuickActions />
-            <SystemStatus botsTotal={bots.length} botsOnline={stats.botsOnline} />
-            <MaintenanceToggle botId={bots[0]?.id ?? null} />
+            <Suspense fallback={<BlockFallback h={140} />}>
+              <QuickActions />
+            </Suspense>
+            <Suspense fallback={<BlockFallback h={140} />}>
+              <SystemStatus botsTotal={bots.length} botsOnline={stats.botsOnline} />
+            </Suspense>
+            <Suspense fallback={<BlockFallback h={100} />}>
+              <MaintenanceToggle botId={bots[0]?.id ?? null} />
+            </Suspense>
           </div>
         </section>
       </div>
