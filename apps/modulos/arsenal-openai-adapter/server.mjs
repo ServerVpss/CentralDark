@@ -198,7 +198,17 @@ const server = http.createServer(async (req, res) => {
                             auth_enforce: enforceMode(), request_id: requestId });
   }
 
-  // Enforce mode: bloqueia se a chave não bater E o fallback legado também não bater
+  // /v1/models é público — catálogo apenas, sem inferência.
+  // Clientes (Claude Desktop, Cursor) descobrem os modelos SEM chave.
+  if (req.url === '/v1/models' || req.url === '/models') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    return json(res, 200, { object: 'list', data: MODELS.map(m => ({
+      id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name
+    })) });
+  }
+
+    // Enforce mode: bloqueia se a chave não bater E o fallback legado também não bater
   const block = shouldBlock(authResult);
   if (block && !legacyOk) {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
@@ -219,9 +229,6 @@ const server = http.createServer(async (req, res) => {
             ip, user_agent: ua });
   });
   req._auditSetModel = (m) => { modelForAudit = m; };
-
-  if (req.url === '/v1/models' || req.url === '/models')
-    return json(res, 200, { object: 'list', data: MODELS.map(m => ({ id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name })) });
 
   if (req.url === '/v1/chat/completions' || req.url === '/chat/completions') {
     let body = '';

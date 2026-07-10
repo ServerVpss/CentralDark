@@ -6,12 +6,12 @@ export type ButtonLogLevel = 'info' | 'ok' | 'warn' | 'error';
 
 export interface ButtonLogEntry {
   id: string;
-  ts: number;              // epoch ms
-  action: string;          // ex.: 'abacus.sync-models'
+  ts: number;
+  action: string;
   level: ButtonLogLevel;
-  status?: number;         // HTTP status quando aplicável
+  status?: number;
   latencyMs?: number;
-  detail?: unknown;        // payload / resposta resumida
+  detail?: unknown;
   error?: string;
 }
 
@@ -23,13 +23,11 @@ function load(): ButtonLogEntry[] {
   try {
     const raw = sessionStorage.getItem(KEY);
     return raw ? (JSON.parse(raw) as ButtonLogEntry[]) : [];
-  } catch {
-    return [];
-  }
+  } catch { return []; }
 }
 
 function save(entries: ButtonLogEntry[]) {
-  try { sessionStorage.setItem(KEY, JSON.stringify(entries)); } catch { /* ignore */ }
+  try { sessionStorage.setItem(KEY, JSON.stringify(entries)); } catch {}
   window.dispatchEvent(new CustomEvent(EVT, { detail: entries }));
 }
 
@@ -39,33 +37,15 @@ function push(entry: ButtonLogEntry) {
   buffer = [entry, ...buffer].slice(0, MAX);
   save(buffer);
   const badge = entry.level === 'error' ? '🔴' : entry.level === 'warn' ? '🟡' : entry.level === 'ok' ? '🟢' : '🪵';
-  // eslint-disable-next-line no-console
-  console.log(
-    `[🪵 HUB] ${badge} ${entry.action}`,
-    {
-      status: entry.status,
-      latencyMs: entry.latencyMs,
-      error: entry.error,
-      detail: entry.detail,
-    },
-  );
-}
-
-export function logButton(action: string, detail?: unknown) {
-  push({
-    id: crypto.randomUUID(),
-    ts: Date.now(),
-    action,
-    level: 'info',
-    detail,
+  console.log(`[🪵 HUB] ${badge} ${entry.action}`, {
+    status: entry.status, latencyMs: entry.latencyMs, error: entry.error, detail: entry.detail,
   });
 }
 
-/**
- * Envolve uma ação assíncrona e registra início, fim, latência e erro.
- * Se o resultado tiver `status` numérico (ex.: fetch/JSON `{status}`),
- * ele é capturado automaticamente.
- */
+export function logButton(action: string, detail?: unknown) {
+  push({ id: crypto.randomUUID(), ts: Date.now(), action, level: 'info', detail });
+}
+
 export async function trackAction<T>(action: string, fn: () => Promise<T>, detail?: unknown): Promise<T> {
   const t0 = performance.now();
   logButton(`${action}:start`, detail);
@@ -73,41 +53,17 @@ export async function trackAction<T>(action: string, fn: () => Promise<T>, detai
     const res = await fn();
     const latencyMs = Math.round(performance.now() - t0);
     const status = (res && typeof res === 'object' && 'status' in (res as any) && typeof (res as any).status === 'number')
-      ? (res as any).status as number
-      : undefined;
+      ? (res as any).status as number : undefined;
     const ok = status === undefined ? true : status >= 200 && status < 400;
-    push({
-      id: crypto.randomUUID(),
-      ts: Date.now(),
-      action: `${action}:done`,
-      level: ok ? 'ok' : 'error',
-      status,
-      latencyMs,
-      detail: res,
-    });
+    push({ id: crypto.randomUUID(), ts: Date.now(), action: `${action}:done`, level: ok ? 'ok' : 'error', status, latencyMs, detail: res });
     return res;
   } catch (e: any) {
     const latencyMs = Math.round(performance.now() - t0);
-    push({
-      id: crypto.randomUUID(),
-      ts: Date.now(),
-      action: `${action}:fail`,
-      level: 'error',
-      latencyMs,
-      error: e?.message ?? String(e),
-      detail,
-    });
+    push({ id: crypto.randomUUID(), ts: Date.now(), action: `${action}:fail`, level: 'error', latencyMs, error: e?.message ?? String(e), detail });
     throw e;
   }
 }
 
-export function getButtonLogs(): ButtonLogEntry[] {
-  return [...buffer];
-}
-
-export function clearButtonLogs() {
-  buffer = [];
-  save(buffer);
-}
-
+export function getButtonLogs(): ButtonLogEntry[] { return [...buffer]; }
+export function clearButtonLogs() { buffer = []; save(buffer); }
 export const BUTTON_LOG_EVENT = EVT;

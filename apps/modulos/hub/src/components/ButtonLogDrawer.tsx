@@ -7,10 +7,6 @@ import {
   type ButtonLogEntry,
 } from '@/lib/buttonLog';
 
-/**
- * Drawer flutuante que mostra TODOS os cliques/ações registrados via `logButton`
- * ou `trackAction`. Sempre montado no HubPage — botão fica no canto inferior direito.
- */
 export function ButtonLogDrawer() {
   const [open, setOpen] = useState(false);
   const [entries, setEntries] = useState<ButtonLogEntry[]>(() => getButtonLogs());
@@ -43,18 +39,10 @@ export function ButtonLogDrawer() {
               <span className="font-semibold text-sm">Log de ações do painel</span>
             </div>
             <div className="flex items-center gap-1">
-              <button
-                onClick={() => clearButtonLogs()}
-                className="h-8 w-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center"
-                title="Limpar"
-              >
+              <button onClick={() => clearButtonLogs()} className="h-8 w-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center" title="Limpar">
                 <Trash2 className="h-4 w-4" />
               </button>
-              <button
-                onClick={() => setOpen(false)}
-                className="h-8 w-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center"
-                title="Fechar"
-              >
+              <button onClick={() => setOpen(false)} className="h-8 w-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center" title="Fechar">
                 <X className="h-4 w-4" />
               </button>
             </div>
