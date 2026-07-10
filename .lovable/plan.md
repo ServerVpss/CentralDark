@@ -1,27 +1,81 @@
-## Objetivo
-Trocar a chave usada pelo robô do CI (GitHub Actions) no teste automático do gateway. Sair de `ABACUS_API_KEY` (chave da Abacus) e passar pra `CENTRALDARK_API_KEY` (sua chave `cdk_live_...`).
+# Hero Cockpit Animado — Preview Isolado (sem plugar no app)
 
-## O que muda (curto)
-- **Antes:** robô do CI usava chave da Abacus pra rodar o teste.
-- **Depois:** robô passa a usar sua própria chave CentralDark.
-- **Resultado prático:** você não depende mais de conta Abacus externa pro CI. O gateway continua puxando os 161 modelos da Abacus por dentro, isso não muda.
+Só o front-end, numa pasta separada e numa rota escondida pra você olhar. **Não mexe** no `/`, no login, no HUB nem em nada existente.
 
-## O que NÃO muda
-- Gateway `api.centralldark.com` segue igual.
-- Claude Desktop segue igual.
-- 161 modelos seguem sendo puxados normal.
-- `ap7.site` continua morto e enterrado.
+## Onde vai ficar
 
-## Passos técnicos (PR #147)
-1. Editar `.github/workflows/arsenal-adapter-tests.yml`:
-   - Trocar `secrets.ABACUS_API_KEY` → `secrets.CENTRALDARK_API_KEY`.
-   - Renomear a env var passada pro teste (`API_KEY` ou similar) pra apontar pra nova.
-2. Confirmar que o secret `CENTRALDARK_API_KEY` existe no GitHub (`ServerVpss/CentralDark`). Se não existir, você cadastra em Settings → Secrets → Actions (a chave `cdk_live_...` que você já tem).
-3. Ajustar `tests/models.test.mjs` se ele lê nome específico de env — só rename, sem mudar lógica.
-4. Commit único na branch `pivete/adapter-auth-audit-fix`, push, esperar CI verde.
-5. Registrar o ouro: linha curta no `docs/GOVERNANCA/MVP-MAPA-VIVO-CENTRALDARK.md` dizendo "CI agora usa CENTRALDARK_API_KEY".
+Pasta nova, isolada:
+```
+src/preview/cockpit-hero/
+├─ index.tsx              ← página completa do preview
+├─ CockpitHero.tsx        ← orquestrador (piloto + grid)
+├─ CockpitPane.tsx        ← pane reutilizável
+├─ PilotoChat.tsx         ← chat com typewriter
+├─ MatrixRain.tsx         ← canvas de fundo
+├─ cockpit.css            ← estilos e keyframes locais (escopo próprio)
+└─ dados.ts               ← linhas de log + falas do piloto
+```
 
-## Pré-requisito seu
-Confirmar: o secret `CENTRALDARK_API_KEY` já está cadastrado no repositório do GitHub? Se não estiver, você precisa colar ele lá uma vez (eu não vejo/toco em secret real).
+Rota escondida (só pra você ver): `/preview/cockpit`
+- Adicionada como rota nova no `App.tsx`, **sem tocar** em `/`, `/auth`, `/hub`, `/telepainel`.
+- Não aparece em menu nenhum. É só digitar a URL.
+- Se depois você gostar, a gente promove pra landing oficial. Se não gostar, deleta a pasta e some.
 
-## Manda "PERMITO" que eu faço.
+## Visual — Híbrido Esmeralda + neon (padrão oficial)
+- Base esmeralda `#052e2b` → `#0a3d38`, texto off-white, moldura `#10b981`/`#34d399`
+- 6 panes com acento neon próprio (Hermes esmeralda · Arsenal âmbar · Gateway ciano · HUB violeta · TelePainel rosa · Enxame vermelho)
+- Cores dentro do `cockpit.css` local com CSS variables próprias (não polui os tokens globais do app)
+
+## Layout
+```
+┌────────────────────────────────────────────────────────────┐
+│  logo CentralDark  ·  (preview isolado)                     │
+├──────────────────┬─────────────────────────────────────────┤
+│  PILOTO          │  ┌─────────┬─────────┬─────────┐        │
+│  chat rolando    │  │ Hermes  │ Arsenal │ Gateway │        │
+│  headline        │  ├─────────┼─────────┼─────────┤        │
+│  subheadline     │  │  HUB    │TelePainl│ Enxame  │        │
+│  (sem CTA real)  │  └─────────┴─────────┴─────────┘        │
+└──────────────────┴─────────────────────────────────────────┘
+   fundo: matrix rain em canvas, opacidade baixa
+```
+Mobile: piloto empilha em cima, grade vira 2x3 embaixo.
+
+## Animações (CSS + canvas, sem libs novas)
+1. Matrix rain de caracteres verdes caindo no fundo
+2. 6 panes com logs temáticos rolando (jitter 400-900ms), fade nas bordas
+3. Status pill por pane (bolinha pulsando + texto ok/processando/aguardando)
+4. Piloto: mensagens caem uma a uma com typewriter e auto-scroll
+5. Glow pulse sutil na palavra "CentralDark" da headline
+6. Respeita `prefers-reduced-motion`
+
+## Conteúdo (temático CentralDark)
+Panes:
+- **Hermes**: `[hermes] loop 4287 · 0 divergências` · `enxame paralelo (10 agentes)`
+- **Arsenal**: `/debate rodada 2 · consenso 87%` · `veredito consolidado`
+- **Gateway**: `POST /v1/messages 200 · 342ms` · `catálogo · 161 modelos`
+- **HUB**: `health 200 · 140 modelos online` · `correlation_id abc123`
+- **TelePainel**: `webhook 200 · @SEGREDOPUXADASBOT` · `RLS ok`
+- **Enxame**: `[ômega] fase 2/4 · 20 sub-agentes` · `veredito → opus`
+
+Piloto chat:
+```
+Piloto: bora auditar o gateway
+Hermes: subindo enxame de 10 agentes ✓
+Arsenal: consenso 92% em 2 rodadas
+Gateway: 140 modelos respondendo
+Piloto: veredito?
+Hermes: 🟢 tudo estável, pivete
+```
+
+## O que muda no app existente
+Só uma linha: adicionar uma `<Route path="/preview/cockpit" element={<CockpitPreview />} />` no `App.tsx`. Nada mais é tocado.
+
+## Fora de escopo
+- Não mexe em `/`, `/auth`, `/hub`, `/telepainel`
+- Não muda tokens globais do `index.css` nem do `tailwind.config.ts`
+- Sem backend, sem edge, sem migration
+- Sem libs novas
+
+## Como você vai ver
+Depois de pronto: abrir a URL `/preview/cockpit` no preview do Lovable. Se rolar, tá lindo. Se não, você fala e a gente ajusta ou apaga a pasta inteira.
