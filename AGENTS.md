@@ -6,12 +6,35 @@ Este arquivo se aplica a todo o repositório.
 
 Toda IA, agente, CLI, bot ou assistente deve:
 
-1. Ler `docs/COFRE/README.md`.
-2. Ler `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md`.
-3. Ler `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`.
-4. Ler `docs/GOVERNANCA/BOOT-IA.md`.
-5. Executar o BOOT e informar branch, commit, missão, escopo, risco, testes e rollback.
-6. Não alterar arquivos antes de concluir o BOOT.
+1. Ler `00-COMECE-AQUI-IA.md`.
+2. Ler `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
+3. Ler `docs/COFRE/README.md`.
+4. Ler `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md`.
+5. Ler `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`.
+6. Ler `docs/GOVERNANCA/BOOT-IA.md`.
+7. Executar o BOOT operacional e informar branch, commit, missão, escopo, risco, testes, prova e rollback.
+8. Depois do BOOT operacional, consultar `docs/PROTOCOLO-BOOT.md` quando precisar recuperar memória, pendências, estado vivo e continuidade da sessão.
+9. Não alterar arquivos antes de concluir o BOOT operacional.
+
+## Hierarquia e precedência
+
+Em caso de conflito, prevalece:
+
+```text
+00-COMECE-AQUI-IA.md
+→ AGENTS.md
+→ docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
+→ docs/GOVERNANCA/BOOT-IA.md
+→ docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md
+→ docs/PROTOCOLO-BOOT.md
+→ instruções específicas de ferramenta e documentos antigos
+```
+
+Regras essenciais:
+
+- `BOOT-IA.md` governa branch, edição, commit, push, deploy, auditoria e rollback.
+- `PROTOCOLO-BOOT.md` governa memória e continuidade, sem substituir o BOOT operacional.
+- `CLAUDE.md`, `GROK.md`, `GEMINI.md`, `.claude/` e equivalentes complementam, mas não substituem esta entrada universal.
 
 ## Papéis
 
@@ -57,8 +80,9 @@ pivete/dev → PR → pivete/auditoria → PR → main
 Toda entrega deve informar:
 
 ```text
-branch
-commit SHA
+branch do workspace
+ref inspecionada, quando diferente do workspace
+commit SHA verificado
 arquivos alterados
 resumo do diff
 testes executados
