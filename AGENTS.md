@@ -7,10 +7,11 @@ Este arquivo se aplica a todo o repositório.
 Toda IA, agente, CLI, bot ou assistente deve:
 
 1. Ler `docs/COFRE/README.md`.
-2. Ler `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`.
-3. Ler `docs/GOVERNANCA/BOOT-IA.md`.
-4. Executar o BOOT e informar branch, commit, missão, escopo, risco, testes e rollback.
-5. Não alterar arquivos antes de concluir o BOOT.
+2. Ler `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md`.
+3. Ler `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`.
+4. Ler `docs/GOVERNANCA/BOOT-IA.md`.
+5. Executar o BOOT e informar branch, commit, missão, escopo, risco, testes e rollback.
+6. Não alterar arquivos antes de concluir o BOOT.
 
 ## Papéis
 
@@ -69,6 +70,12 @@ rollback
 ```
 
 ## Comunicação obrigatória com o Pivete
+
+A regra completa está em:
+
+```text
+docs/COFRE/COMO-FALAR-COM-O-PIVETE.md
+```
 
 Responder assuntos técnicos no formato:
 
