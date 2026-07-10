@@ -1,19 +1,46 @@
+import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/shared/layout/DashboardLayout";
 import { HeroStatsCard } from "@/apps/modulos/telepainel/components/dashboard/HeroStatsCard";
 import { StatsCard } from "@/apps/modulos/telepainel/components/dashboard/StatsCard";
-import { BotsSection } from "@/apps/modulos/telepainel/components/dashboard/BotsSection";
-import { ActivityFeed } from "@/apps/modulos/telepainel/components/dashboard/ActivityFeed";
-import { QuickActions } from "@/apps/modulos/telepainel/components/dashboard/QuickActions";
-import { MaintenanceToggle } from "@/apps/modulos/telepainel/components/dashboard/MaintenanceToggle";
-import { SystemStatus } from "@/apps/modulos/telepainel/components/dashboard/SystemStatus";
 import { ApiStatusCard } from "@/apps/modulos/telepainel/components/dashboard/ApiStatusCard";
-import { DashboardAnalyticsChart } from "@/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart";
-import { QueryMonitor } from "@/apps/modulos/telepainel/components/dashboard/QueryMonitor";
 import { useAdminData } from "@/shared/hooks/useAdminData";
 import { useAuthContext } from "@/shared/auth/AuthProvider";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Bot, CreditCard, MessageSquare, Users } from "lucide-react";
+
+// 👇 Componentes below-the-fold — carregados/hidratados sob demanda (code-split)
+const BotsSection = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/BotsSection").then((m) => ({ default: m.BotsSection })),
+);
+const DashboardAnalyticsChart = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/DashboardAnalyticsChart").then((m) => ({
+    default: m.DashboardAnalyticsChart,
+  })),
+);
+const QueryMonitor = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/QueryMonitor").then((m) => ({ default: m.QueryMonitor })),
+);
+const ActivityFeed = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/ActivityFeed").then((m) => ({ default: m.ActivityFeed })),
+);
+const QuickActions = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/QuickActions").then((m) => ({ default: m.QuickActions })),
+);
+const SystemStatus = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/SystemStatus").then((m) => ({ default: m.SystemStatus })),
+);
+const MaintenanceToggle = lazy(() =>
+  import("@/apps/modulos/telepainel/components/dashboard/MaintenanceToggle").then((m) => ({
+    default: m.MaintenanceToggle,
+  })),
+);
+
+const BlockFallback = ({ h = 200 }: { h?: number }) => (
+  <div className="card-premium flex items-center justify-center" style={{ minHeight: h }}>
+    <Loader2 className="h-5 w-5 animate-spin text-primary" />
+  </div>
+);
 
 function getGreeting() {
   const h = new Date().getHours();
