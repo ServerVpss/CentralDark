@@ -1,5 +1,5 @@
 // Arsenal OpenAI Adapter — Módulo de autenticação + auditoria (SHADOW-safe)
-// Autor: Pivete via Lovable (PR#2 Bootstrap Admin-Only)
+// Autor: Pivete via Lovable (PR#2 Bootstrap Admin-Only + fix normalização de path)
 // Comportamento:
 //   AUTH_ENFORCE=shadow  → nunca bloqueia; só resolve a chave e loga em api.audit_log_api
 //   AUTH_ENFORCE=enforce → bloqueia com 401/403 quando a chave não existe / está revogada / fora do escopo
@@ -17,6 +17,46 @@ const CACHE_TTL = 60_000; // 60s
 const cache = new Map();
 
 function sha256hex(s) { return createHash('sha256').update(s).digest('hex'); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Normalização de path (fix: evita diferença falsa entre `/rota` e `/rota/`)
+//
+// Regras:
+//  1. Remove query string (`?a=1`) e fragment (`#x`).
+//  2. Colapsa múltiplas barras (`//foo` → `/foo`).
+//  3. Remove trailing slash, exceto se o path é só `/`.
+//  4. Nunca lança — se `url` for undefined/estranho, devolve `/`.
+//
+// Uso:
+//   import { normalizePath } from './auth-audit.mjs';
+//   const p = normalizePath(req.url);        // '/v1/models'
+//   if (p === '/v1/models') { ... }
+//
+// Log/auditoria: passamos o path normalizado + guardamos a query separada
+// (sanitizada) em `path_query` pra rastreabilidade sem duplicar rota.
+// ─────────────────────────────────────────────────────────────────────────────
+export function normalizePath(rawUrl) {
+  if (typeof rawUrl !== 'string' || rawUrl.length === 0) return '/';
+  // Corta query e fragment
+  let p = rawUrl.split('#')[0].split('?')[0];
+  // Colapsa barras duplicadas
+  p = p.replace(/\/{2,}/g, '/');
+  // Se ficou vazio, é raiz
+  if (p.length === 0) return '/';
+  // Remove trailing slash (mas preserva "/")
+  if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
+  return p;
+}
+
+// Retorna { path, query } — query sanitizada (só chaves, sem valores) pra log.
+export function splitPathAndQuery(rawUrl) {
+  const path = normalizePath(rawUrl);
+  if (typeof rawUrl !== 'string' || !rawUrl.includes('?')) return { path, query: null };
+  const rawQuery = rawUrl.split('?')[1].split('#')[0];
+  // Só nomes das chaves — nunca valores (evita vazar token em query string)
+  const keys = rawQuery.split('&').map(kv => kv.split('=')[0]).filter(Boolean);
+  return { path, query: keys.length ? keys.join(',') : null };
+}
 
 function extractBearer(req) {
   // Suporta Authorization: Bearer <k>, x-api-key: <k> e api-key: <k>
@@ -81,13 +121,17 @@ export function shouldBlock(authResult) {
 }
 
 // Registra uma entrada em api.audit_log_api. Nunca lança — falha silenciosa.
+// entry.path pode vir cru (req.url) — normalizamos aqui pra garantir consistência
+// mesmo se o chamador esquecer de normalizar.
 export async function audit(entry) {
   if (!HUB_URL || !HUB_KEY) return;
   try {
+    const { path, query } = splitPathAndQuery(entry.path);
     const body = {
       request_id:                entry.request_id,
       key_prefix:                entry.key_prefix || null,
-      path:                      entry.path,
+      path:                      path,
+      path_query_keys:           query,
       method:                    entry.method,
       status:                    entry.status,
       model:                     entry.model || null,
