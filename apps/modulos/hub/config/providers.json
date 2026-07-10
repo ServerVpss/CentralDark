@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "owner": "Pivete",
+    "atualizado": "2026-07-10",
+    "fonte_da_verdade": "GitHub ServerVpss/CentralDark",
+    "consumido_por": "apps/modulos/hub (frontend + HUB Supabase lyoigsqluyktoclwdaft)",
+    "observacao": "Cofre declarativo. Runtime real: arsenal-openai-adapter (8090) + elite-gateway (Python Zendriver)."
+  },
+  "providers": {
+    "grok": {
+      "name": "Grok xAI",
+      "enabled": true,
+      "baseUrl": "https://api.x.ai/v1",
+      "authType": "web_session",
+      "providerType": "zendriver",
+      "runner": {
+        "engine": "elite-gateway",
+        "scripts": [
+          "apps/modulos/elite-gateway/scripts/humanizer.py",
+          "apps/modulos/elite-gateway/scripts/mapeamento_humano_v3.py",
+          "apps/modulos/elite-gateway/scripts/elite_http_gateway.py"
+        ],
+        "sessionCookieEnv": "GROK_SESSION_COOKIE",
+        "loginUrl": "https://grok.com/login",
+        "notes": "Login web com conta X (email+senha). Cookie em secrets/grok-session.json (600 root:root)."
+      },
+      "fallback": {
+        "authType": "bearer",
+        "keyEnv": "GROK_API_KEY",
+        "notes": "Se web_session cair, Bearer direto na xAI API."
+      },
+      "modelMap": {
+        "grok-beta": "grok-4.5",
+        "grok-4": "grok-4.5",
+        "grok-4.5": "grok-4.5",
+        "grok-4.3": "grok-4.3"
+      },
+      "defaultModel": "grok-4.5",
+      "timeoutMs": 120000,
+      "healthcheck": {
+        "type": "chat_completions",
+        "path": "/v1/chat/completions",
+        "sample": { "model": "grok-4.5", "messages": [{ "role": "user", "content": "PONG" }], "max_tokens": 8 }
+      }
+    }
+  }
+}
