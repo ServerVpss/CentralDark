@@ -195,7 +195,46 @@ proteger estratégia
 
 ---
 
-## 9. Segredo prático do GitHub para o Pivete
+## 9. Regra de adaptação universal
+
+Todo contexto, prompt, print, comando, skill, fluxo, referência externa ou ideia trazida pelo Pivete deve ser tratado como matéria-prima para o CentralDark.
+
+Matéria-prima = conteúdo bruto que ainda precisa ser adaptado antes de virar regra, código, automação ou execução.
+
+Regra:
+
+```txt
+Nada entra cru.
+Tudo é adaptado ao CentralDark.
+Tudo respeita o Fluxo de Ouro.
+Tudo precisa caber no GitHub, VPS, Supabase, Gateway, HUB, bots, MCPs e auditoria.
+```
+
+Antes de usar qualquer referência externa, a IA deve converter para:
+
+```txt
+1. intenção do Pivete;
+2. papel dentro do CentralDark;
+3. risco;
+4. arquivos ou módulos afetados;
+5. gate obrigatório;
+6. handoff esperado;
+7. prova exigida;
+8. local correto de registro.
+```
+
+Regra curta:
+
+```txt
+Referência inspira.
+CentralDark governa.
+Prompt externo não manda no sistema.
+O modo do Pivete adapta tudo.
+```
+
+---
+
+## 10. Segredo prático do GitHub para o Pivete
 
 O GitHub não é só lugar de código. Ele é o painel de comando oficial da memória do projeto.
 
@@ -227,7 +266,7 @@ Commit prova.
 
 ---
 
-## 10. Bots, Jarvis e automação futura
+## 11. Bots, Jarvis e automação futura
 
 Objetivo futuro do CentralDark:
 
@@ -255,7 +294,7 @@ Bot não mexe em área sensível sem escopo e autorização.
 
 ---
 
-## 11. Sincronia futura GitHub, VPS e Supabase
+## 12. Sincronia futura GitHub, VPS e Supabase
 
 Quando a automação estiver pronta, o fluxo desejado é:
 
@@ -287,7 +326,7 @@ Automatizar significa repetir o Fluxo de Ouro com menos trabalho manual.
 
 ---
 
-## 12. Ordem final para qualquer IA
+## 13. Ordem final para qualquer IA
 
 ```txt
 Leia este documento.
@@ -311,7 +350,7 @@ Se for execução, prova.
 
 ---
 
-## 13. Selo
+## 14. Selo
 
 ```txt
 MODO DE PENSAR DO PIVETE = doutrina central para alinhar o Vault, as IAs, o MCP, o GitHub, a VPS, o Supabase, o Gateway, os bots e o sistema inteiro.
