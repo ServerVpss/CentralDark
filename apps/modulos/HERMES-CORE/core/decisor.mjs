@@ -49,7 +49,7 @@ const CADEIA_FALLBACK_DARKAI = [
   { modelo: 'openai/gpt-5-mini',             timeout_ms: 45_000 },
 ];
 const ELITE_FALLBACK = {
-  url: 'https://claude.ap7.site/v1/messages',
+  url: 'https://api.centralldark.com/v1/messages',
   modelo: 'claude-sonnet-4-5',
   timeout_ms: 30_000,
 };
