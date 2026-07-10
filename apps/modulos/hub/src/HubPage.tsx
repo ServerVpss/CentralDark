@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { DashboardTab } from './components/dashboard/DashboardTab';
 import { CatalogTab } from './components/catalog/CatalogTab';
@@ -9,9 +9,11 @@ import { AbacusTab } from './components/abacus/AbacusTab';
 import { GatewayTab } from './components/gateway/GatewayTab';
 import { HermesTab } from './components/hermes/HermesTab';
 import { RoleGuard } from './components/shared/RoleGuard';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
-import { logButton } from './lib/buttonLog';
+import { logButton, trackAction } from './lib/buttonLog';
+import { hubAuth } from './integrations/supabase/hub-client';
+
 
 export default function HubPage() {
   return (
