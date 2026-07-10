@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-10T00:52:31.423Z
+# 🧠 Notion Sync — 2026-07-10T03:15:31.997Z
 
-- **Commit fonte:** `edc3cf566c0888d2a953b35be5ae8b2fecf36dde`
+- **Commit fonte:** `8dc19d6e8b4db5e41d7d247f8983012d4147661c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 461 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 462 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 325 | 0 | 325 | 0 | 0 |
-| estrutura | 461 | 0 | 0 | 0 | 461 |
+| estrutura | 462 | 0 | 0 | 0 | 462 |
 
 ## Operações
 
@@ -501,6 +501,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/PROVA-CATALOGO-CLAUDE-DESKTOP.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-3-nucleo-universal-telegram.md |
