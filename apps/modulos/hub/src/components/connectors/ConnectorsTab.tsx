@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GatewayCard } from './GatewayCard';
 import { OAuthConnectors } from './OAuthConnectors';
+import { GrokZendriverStatus } from './GrokZendriverStatus';
 import { useMCP } from '@/hooks/useMCP';
 
 interface Connector {
@@ -37,6 +38,9 @@ export function ConnectorsTab() {
 
       {/* 🔒 Bloco OAuth (Grok/Notion/Drive/GitHub) — fallback local ativo enquanto broker/DB pendente */}
       <OAuthConnectors />
+
+      {/* Status detalhado do Grok Zendriver (login web + cookie) */}
+      <GrokZendriverStatus />
 
       <hr className="my-6" />
 
