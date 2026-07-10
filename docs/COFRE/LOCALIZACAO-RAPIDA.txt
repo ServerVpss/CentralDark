@@ -1,0 +1,10 @@
+COFRE DO PIVETE
+
+Abra primeiro:
+docs/COFRE/README.md
+
+Entrada de qualquer IA:
+AGENTS.md
+
+Frase curta:
+Antes de tocar no CentralDark, leia AGENTS.md, execute o BOOT e confirme branch, SHA, ambiente, escopo, riscos, testes e rollback.
