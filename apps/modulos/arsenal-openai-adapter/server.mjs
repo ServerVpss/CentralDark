@@ -198,6 +198,17 @@ const server = http.createServer(async (req, res) => {
                             auth_enforce: enforceMode(), request_id: requestId });
   }
 
+  // /v1/models também é público — é apenas o catálogo (sem inferência).
+  // Clientes de gateway (Claude Desktop, Cursor, etc) chamam sem chave pra descobrir modelos.
+  // Fica ANTES do bloco de auth pra não retornar 401 e ser mal-interpretado como 404.
+  if (req.url === '/v1/models' || req.url === '/models') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    return json(res, 200, { object: 'list', data: MODELS.map(m => ({
+      id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name
+    })) });
+  }
+
   // Enforce mode: bloqueia se a chave não bater E o fallback legado também não bater
   const block = shouldBlock(authResult);
   if (block && !legacyOk) {
@@ -220,8 +231,6 @@ const server = http.createServer(async (req, res) => {
   });
   req._auditSetModel = (m) => { modelForAudit = m; };
 
-  if (req.url === '/v1/models' || req.url === '/models')
-    return json(res, 200, { object: 'list', data: MODELS.map(m => ({ id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name })) });
 
   if (req.url === '/v1/chat/completions' || req.url === '/chat/completions') {
     let body = '';
