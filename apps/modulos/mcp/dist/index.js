@@ -6,7 +6,7 @@ import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
-import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
+import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
 import { getStatusHtml, getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
@@ -99,6 +99,9 @@ app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
 app.post("/admin/api/testar-sse", adminTestarSse);
+// Emissão administrativa de chave (autenticada por senha) — usada pelo painel
+// /admin (aba Chaves) e pelo fluxo "Entrar com GitHub" da Ponte MCP.
+app.post("/admin/api/issue-key", handleIssueKey);
 // Manifesto público do catálogo de tools
 app.get("/tools.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
@@ -282,8 +285,12 @@ function resolveGhToken(req) {
     const authScheme = schemeMatch ? schemeMatch[1] : (rawAuth ? "raw" : "none");
     const bearer = extractBearer(req);
     const tokenPrefix = bearer ? bearer.slice(0, 8) : null;
-    const stats = (() => { try { return getStateStats(); } catch { return { accessTokens: -1 }; } })();
-
+    const stats = (() => { try {
+        return getStateStats();
+    }
+    catch {
+        return { accessTokens: -1 };
+    } })();
     // Diagnóstico obrigatório em toda request /mcp (níveis 1..5 de causa-raiz)
     const logAuth = (lookupResult, extra = {}) => {
         l.info("mcp_auth_diagnostic", {
@@ -295,7 +302,6 @@ function resolveGhToken(req) {
             ...extra,
         });
     };
-
     if (bearer) {
         const directToken = process.env.MCP_CENTRALDARK_TOKEN ||
             process.env.CENTRALDARK_MCP_TOKEN ||
@@ -361,9 +367,15 @@ app.get("/mcp", (req, res) => {
 // ─────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ───────────────
 function requireAdminScope(req, res) {
     const bearer = extractBearer(req);
-    if (!bearer) { unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente."); return null; }
+    if (!bearer) {
+        unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
+        return null;
+    }
     const at = getAccessToken(bearer);
-    if (!at) { unauthorizedAdmin(req, res, "Access token admin inválido ou expirado."); return null; }
+    if (!at) {
+        unauthorizedAdmin(req, res, "Access token admin inválido ou expirado.");
+        return null;
+    }
     const scope = String(at.oauth_scope || "");
     if (!/\badmin\b/.test(scope)) {
         unauthorizedAdmin(req, res, "escopo admin obrigatório", 403);
@@ -374,7 +386,8 @@ function requireAdminScope(req, res) {
 app.post("/admin/mcp", (req, res) => {
     const l = withCid(req.cid);
     const tok = requireAdminScope(req, res);
-    if (!tok) return;
+    if (!tok)
+        return;
     l.info("mcp_admin_request_authorized", { method: req.body?.method || "unknown" });
     handleMcpRequest(req, res, tok, { cid: req.cid, admin: true }).catch((err) => {
         l.error("mcp_admin_handler_unhandled", { error: String(err) });
@@ -433,4 +446,5 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
+//# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

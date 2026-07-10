@@ -721,4 +721,39 @@ export function postToken(req, res) {
 export function handleOAuthStart(_req, res) {
     res.status(410).type("text/plain").send("OAuth via GitHub foi removido. Cadastre o cliente em /register e autorize por /authorize.");
 }
+// Emissão administrativa de chave — substitui a antiga tentativa (Ponte MCP/Lovable)
+// de "injetar" token numa rota /set-token que nunca existiu. Autenticada com a
+// mesma senha do admin usada em /authorize, gera um token real via issueTokenPair
+// (o mesmo mecanismo de sessões pareadas access+refresh já usado pelo /token).
+export function handleIssueKey(req, res) {
+    const configuredPassword = getAdminPassword();
+    if (!configuredPassword) {
+        res.status(500).json({ error: "server_error", error_description: "MCP_ADMIN_PASSWORD ausente no servidor." });
+        return;
+    }
+    const submittedPassword = String(req.body?.password ?? "");
+    if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
+        log.warn("issue_key_password_invalid", { cid: req.cid });
+        res.status(401).json({ error: "invalid_password" });
+        return;
+    }
+    const agentName = String(req.body?.agent_name ?? "").trim().slice(0, 80) || "Agente sem nome";
+    const scope = String(req.body?.scope ?? "mcp").trim() || "mcp";
+    const pair = issueTokenPair({
+        client_id: "issued_" + crypto.randomBytes(8).toString("hex"),
+        gh_token: "",
+        gh_scope: "issued-key",
+        gh_login: agentName,
+        oauth_scope: scope,
+    });
+    log.info("issue_key_created", { cid: req.cid, agent_name: agentName, scope });
+    res.json({
+        access_token: pair.access.token,
+        token_type: "Bearer",
+        expires_in: Math.floor((pair.access.expiresAt - Date.now()) / 1000),
+        refresh_token: pair.refresh.token,
+        scope,
+        agent_name: agentName,
+    });
+}
 //# sourceMappingURL=oauth.js.map

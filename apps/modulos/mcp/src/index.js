@@ -6,7 +6,7 @@ import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
-import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
+import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
 import { getStatusHtml, getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
@@ -99,6 +99,9 @@ app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
 app.post("/admin/api/testar-sse", adminTestarSse);
+// Emissão administrativa de chave (autenticada por senha) — usada pelo painel
+// /admin (aba Chaves) e pelo fluxo "Entrar com GitHub" da Ponte MCP.
+app.post("/admin/api/issue-key", handleIssueKey);
 // Manifesto público do catálogo de tools
 app.get("/tools.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
