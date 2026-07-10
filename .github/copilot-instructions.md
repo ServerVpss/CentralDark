@@ -2,11 +2,16 @@
 
 Antes de sugerir ou alterar código:
 
-1. Leia `AGENTS.md`.
-2. Leia `docs/COFRE/README.md`.
-3. Leia `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`.
-4. Execute o BOOT descrito em `docs/GOVERNANCA/BOOT-IA.md`.
-5. Confirme branch, SHA, ambiente, escopo, riscos, testes e rollback.
+1. Abra ou inspecione `pivete/dev`.
+2. Leia `00-COMECE-AQUI-IA.md`.
+3. Leia `AGENTS.md`.
+4. Leia `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
+5. Leia `docs/COFRE/README.md`.
+6. Leia `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`.
+7. Execute o BOOT operacional descrito em `docs/GOVERNANCA/BOOT-IA.md`.
+8. Confirme branch do workspace, ref inspecionada, SHA, ambiente, escopo, riscos, testes, prova e rollback.
+
+`docs/PROTOCOLO-BOOT.md` é complementar para memória e continuidade; não substitui o BOOT operacional.
 
 Nunca editar diretamente na `main`. DEV implanta apenas em DEV. AUDITORIA implanta apenas em AUDIT/STAGING. Nenhum deploy de código não commitado.
 
