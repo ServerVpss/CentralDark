@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-10T15:04:02.406Z
+# 🧠 Notion Sync — 2026-07-10T18:29:19.275Z
 
-- **Commit fonte:** `485263db96d54be91e9d94b516b40aa225fea362`
+- **Commit fonte:** `b08b47f42f61efca50b0c279e2a3dac9e5f4e6d8`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 462 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 466 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 325 | 0 | 325 | 0 | 0 |
-| estrutura | 462 | 0 | 0 | 0 | 462 |
+| estrutura | 466 | 0 | 0 | 0 | 466 |
 
 ## Operações
 
@@ -402,6 +402,7 @@
 | estrutura | erro | docs/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
 | estrutura | erro | docs/CONSCIENCIA/06-MCP-CENTRALDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md |
+| estrutura | erro | docs/CONSCIENCIA/08-HISTORICO-DECISOES-2026-07-10-gateway-hub.md |
 | estrutura | erro | docs/CONSCIENCIA/08-HISTORICO-DECISOES.md |
 | estrutura | erro | docs/CONSCIENCIA/09-ESTADO-ATUAL.md |
 | estrutura | erro | docs/CONSCIENCIA/10-FALLBACK-LOVABLE.md |
@@ -471,6 +472,8 @@
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-abacus-router-hub-online.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-gateway-centraldark-chave-propria.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-gateway-138-modelos-e-schema-real-hub.md |
+| estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-10-primeiro-acesso-admin-hub.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/MCP/MCP-EXPLICADO.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/APRENDIZADOS_PROXY.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/PROXY/CONFIGURACAO_CLINE.md |
@@ -502,6 +505,7 @@
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/MULTI-MODEL-ORCHESTRATION.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/PROVA-CATALOGO-CLAUDE-DESKTOP.md |
+| estrutura | erro | docs/CONSCIENCIA/ARSENAL/PROVA-V1-MESSAGES-CLAUDE-DESKTOP.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/ARSENAL/RELATORIOS/fase-3-nucleo-universal-telegram.md |
