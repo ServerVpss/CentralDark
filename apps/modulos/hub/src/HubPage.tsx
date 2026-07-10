@@ -12,11 +12,13 @@ import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
 import { logButton, trackAction } from './lib/buttonLog';
+import { useHubAutoRefresh } from './hooks/useHubAutoRefresh';
 import { hubAuth } from './integrations/supabase/hub-client';
 
 
 export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  useHubAutoRefresh({ intervalMs: 60000 });
 
   useEffect(() => {
     hubAuth.auth.getSession().then(({ data }) => setUserEmail(data.session?.user.email ?? null));
@@ -38,7 +40,6 @@ export default function HubPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Header estilo landing CentralDark */}
       <header className="border-b border-border/50 bg-background/60 backdrop-blur-xl sticky top-0 z-10">
         <div className="container mx-auto px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">

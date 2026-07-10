@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [busy, setBusy] = useState(false);
   const toast = useToast();
 
-  // Se já existe sessão, manda direto pro HUB.
   useEffect(() => {
     hubAuth.auth.getSession().then(({ data }) => {
       if (data.session) {
@@ -33,7 +32,7 @@ export default function LoginPage() {
         const { data, error } = await hubAuth.auth.signInWithPassword({ email, password });
         if (error) throw error;
         return { status: 200, user: data.user?.email };
-      }, { email });
+      }, { detail: { email } });
       toast.info('🟢 login OK — abrindo HUB');
       window.location.replace('/');
     } catch (e: any) {
@@ -61,7 +60,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full grid md:grid-cols-2 bg-background">
-      {/* Hero esquerdo */}
       <div className="relative hidden md:flex flex-col justify-between overflow-hidden p-10 border-r border-border/60">
         <div
           className="absolute inset-0 opacity-70"
@@ -102,7 +100,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Form direito */}
       <div className="flex items-center justify-center p-6 md:p-10">
         <Card className="card-premium w-full max-w-md p-8 space-y-6 border-border/60">
           <div className="space-y-1">
