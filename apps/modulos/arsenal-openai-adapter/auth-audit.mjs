@@ -1,5 +1,5 @@
 // Arsenal OpenAI Adapter — Módulo de autenticação + auditoria (SHADOW-safe)
-// Autor: Pivete via Lovable (PR#2 Bootstrap Admin-Only + fix normalização de path)
+// Autor: Pivete via Lovable (PR#147 revisão Codex)
 // Comportamento:
 //   AUTH_ENFORCE=shadow  → nunca bloqueia; só resolve a chave e loga em api.audit_log_api
 //   AUTH_ENFORCE=enforce → bloqueia com 401/403 quando a chave não existe / está revogada / fora do escopo
@@ -20,30 +20,12 @@ function sha256hex(s) { return createHash('sha256').update(s).digest('hex'); }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Normalização de path (fix: evita diferença falsa entre `/rota` e `/rota/`)
-//
-// Regras:
-//  1. Remove query string (`?a=1`) e fragment (`#x`).
-//  2. Colapsa múltiplas barras (`//foo` → `/foo`).
-//  3. Remove trailing slash, exceto se o path é só `/`.
-//  4. Nunca lança — se `url` for undefined/estranho, devolve `/`.
-//
-// Uso:
-//   import { normalizePath } from './auth-audit.mjs';
-//   const p = normalizePath(req.url);        // '/v1/models'
-//   if (p === '/v1/models') { ... }
-//
-// Log/auditoria: passamos o path normalizado + guardamos a query separada
-// (sanitizada) em `path_query` pra rastreabilidade sem duplicar rota.
 // ─────────────────────────────────────────────────────────────────────────────
 export function normalizePath(rawUrl) {
   if (typeof rawUrl !== 'string' || rawUrl.length === 0) return '/';
-  // Corta query e fragment
   let p = rawUrl.split('#')[0].split('?')[0];
-  // Colapsa barras duplicadas
   p = p.replace(/\/{2,}/g, '/');
-  // Se ficou vazio, é raiz
   if (p.length === 0) return '/';
-  // Remove trailing slash (mas preserva "/")
   if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
   return p;
 }
@@ -53,22 +35,20 @@ export function splitPathAndQuery(rawUrl) {
   const path = normalizePath(rawUrl);
   if (typeof rawUrl !== 'string' || !rawUrl.includes('?')) return { path, query: null };
   const rawQuery = rawUrl.split('?')[1].split('#')[0];
-  // Só nomes das chaves — nunca valores (evita vazar token em query string)
   const keys = rawQuery.split('&').map(kv => kv.split('=')[0]).filter(Boolean);
   return { path, query: keys.length ? keys.join(',') : null };
 }
 
 function extractBearer(req) {
-  // Suporta Authorization: Bearer <k>, x-api-key: <k> e api-key: <k>
   const auth = (req.headers?.authorization || req.headers?.Authorization || '').toString().trim();
   const m = /^Bearer\s+(.+)$/i.exec(auth);
   if (m) return m[1].trim();
-  if (auth && !/^Bearer\b/i.test(auth)) return auth; // Authorization sem prefixo
+  if (auth && !/^Bearer\b/i.test(auth)) return auth;
   const xkey = (req.headers?.['x-api-key'] || req.headers?.['X-Api-Key'] || req.headers?.['api-key'] || '').toString().trim();
   return xkey || '';
 }
 
-// Sanitizador: remove qualquer segredo comum (cdk_live_, sk-, service_role JWT, Bearer, Authorization) de strings antes de logar.
+// Sanitizador: remove qualquer segredo comum de strings antes de logar.
 export function sanitize(s) {
   if (typeof s !== 'string') return s;
   return s
@@ -76,7 +56,53 @@ export function sanitize(s) {
     .replace(/cdk_live_[A-Za-z0-9._\-]{10,}/g, 'cdk_live_<redacted>')
     .replace(/sk-[A-Za-z0-9._\-]{10,}/g, 'sk-<redacted>')
     .replace(/eyJ[A-Za-z0-9._\-]{20,}/g, '<jwt-redacted>')
+    .replace(/apikey["'\s:=]+[A-Za-z0-9._\-]{10,}/gi, 'apikey=<redacted>')
+    .replace(/authorization["'\s:=]+[A-Za-z0-9._\-]{10,}/gi, 'authorization=<redacted>')
     .slice(0, 500);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Log defensivo de falha de auditoria (não silencioso, mas SEM vazar segredo).
+// Escreve em stderr com prefixo estruturado; nenhum token, header Authorization,
+// payload, corpo de request ou service_role aparece na saída.
+// Se STDERR estiver indisponível (ambientes onde process.stderr foi removido),
+// cai pra console.warn — ainda sanitizado.
+// ─────────────────────────────────────────────────────────────────────────────
+let __auditFailCount = 0;
+let __auditFailFirstAt = 0;
+const AUDIT_FAIL_WINDOW_MS = 60_000; // janela de 60s pra contar falhas
+function logAuditFailure(stage, err, ctx) {
+  try {
+    const now = Date.now();
+    if (now - __auditFailFirstAt > AUDIT_FAIL_WINDOW_MS) {
+      __auditFailFirstAt = now;
+      __auditFailCount = 0;
+    }
+    __auditFailCount += 1;
+    // Rate-limit: máximo 5 linhas por minuto no stderr pra não spamar em outage.
+    if (__auditFailCount > 5) return;
+    const msg = sanitize(err instanceof Error ? (err.message || err.name || 'unknown') : String(err ?? 'unknown'));
+    const record = {
+      lvl: 'warn',
+      src: 'arsenal-openai-adapter.audit',
+      stage,                                          // 'insert' | 'lookup' | 'build'
+      err: msg,
+      status: ctx?.status ?? null,                    // status HTTP recebido do PostgREST, se houver
+      path: ctx?.path ?? null,                        // path já normalizado (sem query, sem host)
+      method: ctx?.method ?? null,
+      request_id: ctx?.request_id ?? null,
+      // NUNCA logamos: HUB_URL, HUB_KEY, Authorization header, body cru, ip cru, user agent completo, token.
+      ts: new Date(now).toISOString(),
+    };
+    const line = JSON.stringify(record);
+    if (typeof process !== 'undefined' && process.stderr && typeof process.stderr.write === 'function') {
+      process.stderr.write(line + '\n');
+    } else if (typeof console !== 'undefined' && console.warn) {
+      console.warn(line);
+    }
+  } catch {
+    // Se até o log falhar, engolimos — auditoria nunca pode derrubar request.
+  }
 }
 
 async function lookupKey(token) {
@@ -95,15 +121,21 @@ async function lookupKey(token) {
         'Accept-Profile': 'api',
       },
     });
-    if (!r.ok) return null;
+    if (!r.ok) {
+      logAuditFailure('lookup', new Error(`HUB api_keys HTTP ${r.status}`), { status: r.status });
+      return null;
+    }
     const rows = await r.json();
     const row = Array.isArray(rows) && rows[0] ? rows[0] : null;
     cache.set(hash, { row, exp: Date.now() + CACHE_TTL });
     return row;
-  } catch { return null; }
+  } catch (err) {
+    logAuditFailure('lookup', err, {});
+    return null;
+  }
 }
 
-// Autentica (sem bloquear em shadow). Retorna { keyId, prefix, scopes, decision, reason }.
+// Autentica (sem bloquear em shadow).
 export async function authenticate(req) {
   const token = extractBearer(req);
   if (!token) return { keyId: null, prefix: null, scopes: [], decision: 'missing', reason: 'no_bearer' };
@@ -120,14 +152,18 @@ export function shouldBlock(authResult) {
            error: `auth_${authResult.decision}` };
 }
 
-// Registra uma entrada em api.audit_log_api. Nunca lança — falha silenciosa.
-// entry.path pode vir cru (req.url) — normalizamos aqui pra garantir consistência
-// mesmo se o chamador esquecer de normalizar.
+// Registra uma entrada em api.audit_log_api.
+// Nunca derruba a request, mas AGORA emite log sanitizado quando falha —
+// atende o item 3 da revisão do PR#147 (falha não pode ser 100% invisível).
 export async function audit(entry) {
-  if (!HUB_URL || !HUB_KEY) return;
+  if (!HUB_URL || !HUB_KEY) {
+    logAuditFailure('build', new Error('HUB_URL ou HUB_SERVICE_ROLE_KEY ausentes'), { path: normalizePath(entry?.path), method: entry?.method });
+    return;
+  }
+  let body;
+  const { path, query } = splitPathAndQuery(entry?.path);
   try {
-    const { path, query } = splitPathAndQuery(entry.path);
-    const body = {
+    body = {
       request_id:                entry.request_id,
       key_prefix:                entry.key_prefix || null,
       path:                      path,
@@ -143,7 +179,12 @@ export async function audit(entry) {
       ip_hash:                   entry.ip ? sha256hex(entry.ip + IP_SALT).slice(0, 32) : null,
       user_agent_family:         (entry.user_agent || '').split(/[\s/(]/)[0]?.slice(0, 40) || null,
     };
-    await fetch(`${HUB_URL}/rest/v1/audit_log_api`, {
+  } catch (err) {
+    logAuditFailure('build', err, { path, method: entry?.method, request_id: entry?.request_id });
+    return;
+  }
+  try {
+    const r = await fetch(`${HUB_URL}/rest/v1/audit_log_api`, {
       method: 'POST',
       headers: {
         'apikey': HUB_KEY,
@@ -154,7 +195,18 @@ export async function audit(entry) {
       },
       body: JSON.stringify(body),
     });
-  } catch { /* silencioso — auditoria nunca derruba requisição */ }
+    if (!r.ok) {
+      // Corpo NÃO é lido/repassado pra evitar vazar detalhes do HUB. Só status.
+      logAuditFailure('insert', new Error(`PostgREST HTTP ${r.status}`), {
+        status: r.status,
+        path,
+        method: entry?.method,
+        request_id: entry?.request_id,
+      });
+    }
+  } catch (err) {
+    logAuditFailure('insert', err, { path, method: entry?.method, request_id: entry?.request_id });
+  }
 }
 
 export function newRequestId() { return randomUUID(); }
