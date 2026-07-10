@@ -1,77 +1,128 @@
+# ⚔️ MODO ARSENAL MÁXIMO — Erradicar `claude.ap7.site` + 5 Frentes em Paralelo
 
-# 🗺️ ENXAME TOTAL — Erradicar `claude.ap7.site` do CentralDark
+## Doutrina desta operação
+> **Nós somos o gateway agora.** `api.centralldark.com` (nossa VPS + Abacus 161 modelos) substitui `claude.ap7.site` em 100% do ecossistema. Nada mais depende do host morto.
 
-## Motivo
-Gateway `claude.ap7.site` devolveu **Cloudflare 524 (origin timeout, 120s)**. Origem instável / possivelmente morta. Ordem do Pivete: **"NAO PODE TER AI MAIS"**.
+Enxame **6 frentes paralelas**, cada uma um sub-agente independente com relatório único no final. Nenhuma bloqueia a outra. Zero espera sequencial.
 
-## Mapa do envolvimento (varredura no repo)
+```
+                    ┌──────────────────────────────────────┐
+                    │   MAESTRO (eu, Lovable)              │
+                    │   coordena, coleta, entrega o ouro   │
+                    └───────────────┬──────────────────────┘
+                                    │ spawn_agent x6 (paralelo)
+     ┌──────────┬────────┬──────────┼──────────┬────────┬─────────┐
+     ▼          ▼        ▼          ▼          ▼        ▼         ▼
+   [F1]       [F2]     [F3]       [F4]       [F5]     [F6]     [MON]
+  ERRADI-   ORQUES-   GATEWAY    GROK       PR #147  DOCS+    HERMES
+  CAR AP7   TRAR      +161       ZENDRIVER  AUDIT    CARD     VIGIA
+            PARALEL   MODELOS    OAUTH               HERMES   24h
+```
 
-### 🔴 Código ativo que ainda usa `claude.ap7.site` (produção)
-| # | Arquivo | Uso |
-|---|--------|-----|
-| 1 | `ecosystem.config.cjs` (linhas 638, 1156, 1220, 1279) | `ANTHROPIC_BASE_URL=https://claude.ap7.site` em 4 processos PM2 |
-| 2 | `apps/modulos/elite-anthropic-proxy/proxy.py` L22 | `UPSTREAM = "https://claude.ap7.site"` |
-| 3 | `apps/modulos/HERMES-CORE/core/decisor.mjs` L52 | rota `https://claude.ap7.site/v1/messages` |
-| 4 | `apps/modulos/HERMES-CORE/core/cadeia.json` L20-23 | posição 16 da cadeia (elite última bala) |
+---
 
-### 🟡 Documentação que ainda referencia (precisa marcar como DEPRECATED)
-- `docs/APRENDIZADOS/PROXY/*` (5 arquivos)
-- `docs/CONSCIENCIA/APRENDIZADOS/PROXY/*` (espelho)
-- `docs/CONSCIENCIA/ARSENAL/hermes-vivo/{README.md,models-map.json,decisor.mjs}`
-- `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/{decisor.mjs,models-map.json}`
-- `docs/CONSCIENCIA/CONSCIENCIA/08-HISTORICO-DECISOES.md` + `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`
-- `docs/BRAIN/00-MAPA.md` + `docs/CONSCIENCIA/BRAIN/00-MAPA.md`
-- `docs/PENDENCIAS.md` + `docs/CONSCIENCIA/PENDENCIAS.md`
-- `docs/CONSCIENCIA/APRENDIZADOS.md` (L1961, L1970)
-- `apps/modulos/mcp/README.md`, `apps/modulos/elite-gateway/RELATORIO-ECOSSISTEMA.txt`
-- `docs/GOVERNANCA/{PADRAO-DE-TRABALHO-PIVETE,FLUXO-DE-OURO-GATEWAY-CENTRALDARK}.md`
+## Frente 1 — 🪦 ERRADICAR `claude.ap7.site` (prioridade máxima)
+**Alvo:** eliminar as 4 referências vivas + `cadeia.json` posição 16 + `elite` block.
+**Ações:**
+- `ecosystem.config.cjs` (4 hits) → `ANTHROPIC_BASE_URL=https://api.centralldark.com`
+- `apps/modulos/elite-anthropic-proxy/proxy.py` L22 → `UPSTREAM = "https://api.centralldark.com"` (ou marcar módulo como DEPRECATED — nosso adapter já cobre `/v1/messages`)
+- `apps/modulos/HERMES-CORE/core/decisor.mjs` L52 → nossa URL
+- `apps/modulos/HERMES-CORE/core/cadeia.json` posição 16 + bloco `elite.url` → `https://api.centralldark.com/v1/messages`, nota: "ELITE — via CentralDark Gateway (nós somos o proxy agora)"
+**Prova:** `grep -rE "claude\.ap7\.site" apps/ ecosystem.config.cjs` = 0 hits em código ativo.
+**Restart PM2:** `CentralDark-EliteAnthropicProxy`, `CentralDark-HERMES-Core`, `CentralDark-HERMES-Verificador`, `CentralDark-ArsenalAdapter` — um por um com `pm2 logs` 10s.
+**Branch:** já existe → `pivete/erradicar-claude-ap7` (commit `60cf2be1c`). Só falta merge na main + restart.
 
-### 🟢 Já corretos (referência oficial `api.centralldark.com`) — não mexer
-- `docs/GATEWAY/TUTORIAL-WINDOWS-CLAUDE-DESKTOP.md`
-- `apps/modulos/hub/src/components/gateway/GatewayTab.tsx`
-- `apps/modulos/hub/src/components/dashboard/AbacusApiCard.tsx`
+## Frente 2 — 🧬 Finalizar `orquestrar_paralelo` no MCP
+**Estado:** tool já existe no MCP `Eu2zA` (visível no tool_search). Falta: validar que aceita até 50 tasks, retorna `{ok,erro}` individual, timeout por task.
+**Ações:**
+- Ler código atual da tool na VPS (`apps/modulos/mcp/`)
+- Adicionar timeout default 30s + limite hard 50 tasks (se ausente)
+- Teste smoke: disparar 5 leituras VPS + 3 checks status em paralelo
+**Prova:** relatório com `total_ms`, `parallel_ms`, ganho >3x vs sequencial.
 
-### ⚪ Backups históricos — deixar como estão (evidência do passado)
-- `ecosystem.config.js.bak-*`
-- `backups/2026-07-03-hermes-darkai/decisor.mjs`
-- `busca_profunda.sh` (script de auditoria — o pattern é útil pra caçar restos)
+## Frente 3 — 🚀 Estabilizar Gateway + 161 modelos
+**Alvo:** confirmar que `api.centralldark.com` serve o catálogo dinâmico Abacus estável.
+**Ações:**
+- `curl /v1/models | jq '.data|length'` → deve retornar ≥161
+- `curl /v1/messages` (Anthropic-compat) com Sonnet → 200 OK
+- `curl /v1/chat/completions` (OpenAI-compat) com Gemini → 200 OK
+- Verificar cache 5min do `fetchAbacusCatalog()` funcionando (2ª chamada <50ms)
+- Auditar duplicidade (mismatch Gemini→Claude que o Pivete pegou no print)
+**Prova:** 3 curls verdes + log `/var/log/arsenal-adapter-out.log` limpo.
 
-## Plano de erradicação (após "PERMITO PIVETE")
+## Frente 4 — 🔫 Grok Zendriver OAuth no HUB
+**Estado atual:** `providers.json` + `grok-zendriver.js` já criados na branch `pivete/hub-provider-grok`. Falta: capturar `GROK_SESSION_COOKIE` na VPS + integrar no card do HUB.
+**Ações:**
+- Documentar procedimento de captura do cookie (o Pivete faz manual — não dá pra automatizar login humano)
+- Ativar `GrokZendriverStatus.tsx` no `ConnectorsTab.tsx` (já feito, só validar build)
+- Rota `/grok/status` no runner PM2 servindo `grok-session.json`
+**Prova:** card Grok no HUB mostra 🟢 último login + expiração cookie.
 
-**Substituto oficial:** `https://api.centralldark.com/` (Gateway CentralDark já em pé, 161 modelos dinâmicos + aliases Anthropic via `/v1/messages`).
+## Frente 5 — 🔍 Auditoria PR #147 (adapter-auth-audit-fix)
+**Alvo:** destravar merge do PR travado há dias.
+**Ações:**
+- Verificar migration `path_query_keys` idempotente
+- Confirmar edge `super-admin-status` retornando `{firstAdminExists: bool}`
+- Confirmar log sanitizado (sem token, sem IP raw — usar `AUDIT_IP_SALT`)
+- Rodar `npm test` do arsenal-openai-adapter
+**Prova:** relatório 🟢/🔴 por arquivo do PR + recomendação merge/rework.
 
-### Fase 1 — VPS (produção viva) 🚨
-1. `ecosystem.config.cjs`: trocar as 4 ocorrências de `ANTHROPIC_BASE_URL` para `https://api.centralldark.com`. **Não fazer PM2 restart automático** — listar processos afetados e pedir confirmação individual.
-2. `apps/modulos/elite-anthropic-proxy/proxy.py`: trocar `UPSTREAM` OU marcar módulo como deprecated (o gateway novo já cobre `/v1/messages`).
-3. `apps/modulos/HERMES-CORE/core/decisor.mjs`: substituir URL da posição elite pelo gateway oficial.
-4. `apps/modulos/HERMES-CORE/core/cadeia.json`: reescrever posição 16 (`via: centraldark-gateway`, url `https://api.centralldark.com/v1/messages`, nota atualizada).
+## Frente 6 — 📄 Docs DEPRECATED + Card Hermes
+**Alvo:** marcar histórico, notificar Telegram.
+**Ações:**
+- Banner `⚠️ DEPRECATED 10/07/2026 — substituto: api.centralldark.com` em:
+  - `docs/APRENDIZADOS/PROXY/*` (5 arquivos)
+  - `docs/CONSCIENCIA/APRENDIZADOS/PROXY/*`
+  - `docs/CONSCIENCIA/ARSENAL/hermes-vivo/README.md`
+  - `docs/BRAIN/00-MAPA.md`
+  - `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` (nova entrada)
+- Atualizar §20 `MVP-MAPA-VIVO-CENTRALDARK.md` (Cadeia Ativa sem ap7)
+- Card Hermes v1.3 no admin `1901426549` + linha canal Status via connector Telegram (`std_01kvw4jkcbekyr1t33vs4p5e9w`)
 
-### Fase 2 — Documentação viva (sinalizar histórico, não apagar)
-- Marcar cada doc de `APRENDIZADOS/PROXY/*` com banner `⚠️ DEPRECATED — proxy claude.ap7.site desativado em 10/07/2026 por instabilidade (Cloudflare 524). Substituto: api.centralldark.com`.
-- Atualizar `08-HISTORICO-DECISOES.md`, `BRAIN/00-MAPA.md`, `PENDENCIAS.md`, `APRENDIZADOS.md` (L1961/L1970) refletindo o novo estado.
-- Atualizar `docs/GOVERNANCA/PADRAO-DE-TRABALHO-PIVETE.md` §13 e `FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md` §18 (missão concluída — sem `claude.ap7.site`).
-- `apps/modulos/elite-gateway/RELATORIO-ECOSSISTEMA.txt` + `apps/modulos/mcp/README.md`: remover a linha "última bala claude.ap7.site".
+## Frente MON — 🛠️ Hermes-Verificador rodando
+**Alvo:** garantir que PM2 id 77 (`Hermes-Verificador`) continua vivo durante toda a operação, vigiando os restarts das Frentes 1-4.
+**Ações:** `pm2 status Hermes-Verificador` a cada 5min · log `/root/CentralDark/apps/modulos/HERMES-CORE/agents/Log-Verificador/logs/vigia.log` sem alertas críticos.
 
-### Fase 3 — Registro do Ouro (Card Hermes v1.3 + Git)
-- Commit único na `main` do repo `ServerVpss/CentralDark`, título:
-  `refactor(gateway): erradica claude.ap7.site — tudo via api.centralldark.com`
-- Card Hermes v1.3 no privado admin + linha no canal Status via connector Telegram.
-- Aprendizado registrado em `docs/CONSCIENCIA/APRENDIZADOS.md`.
+---
 
-### Fase 4 — Prova
-- `grep -rE "claude\.ap7\.site" apps/ ecosystem.config.cjs docs/GOVERNANCA` deve retornar **0 hits em código ativo** (só backups e docs marcados DEPRECATED).
-- `curl -sS https://api.centralldark.com/v1/models | jq '.data|length'` deve continuar retornando ≥ 161.
-- PM2 `Hermes-Core`, `elite-anthropic-proxy` (se mantido) reportando 🟢 depois do restart autorizado.
+## Ordem de execução (paralela)
+```
+T+0min   → Frentes 1, 2, 3, 4, 5, 6 disparadas simultaneamente via spawn_agent
+T+5min   → coleta resultados F2 (mais rápida) + F5 (só leitura)
+T+10min  → coleta F3 (curls), F6 (docs)
+T+15min  → coleta F1 (código + branch pronta pra merge)
+T+20min  → coleta F4 (Grok — depende de cookie manual do Pivete)
+T+25min  → MAESTRO consolida relatório único + dispara Card Hermes final
+```
 
-## Áreas protegidas envolvidas (exigem "PERMITO PIVETE" explícito)
-🔒 `apps/modulos/HERMES-CORE/` · 🔒 `apps/modulos/elite-anthropic-proxy/` (via seção 9 do CLAUDE.md — `arsenal-openai-adapter` cobre esse território) · `ecosystem.config.cjs` (afeta PM2 vivo) · `docs/GOVERNANCA/*`.
+## Prova final (definição de vitória)
+- ✅ `grep claude.ap7.site apps/ ecosystem.config.cjs` = 0 hits em código ativo
+- ✅ 4 processos PM2 restartados sem erro
+- ✅ `/v1/models` retorna ≥161 modelos via nossa VPS
+- ✅ `/v1/messages` responde 200 OK sem tocar em ap7
+- ✅ Branch `pivete/erradicar-claude-ap7` mergeada na `main`
+- ✅ Card Hermes v1.3 disparado no Telegram
+- ✅ `orquestrar_paralelo` validado com teste smoke
+- ✅ PR #147 com veredicto (merge ou rework)
+- ✅ Grok card no HUB (mesmo que ainda precise do cookie manual)
 
-## Escopo do que NÃO faço nesta rodada
-- Não deleto backups históricos.
-- Não faço `pm2 restart` sem confirmação nominal por processo.
-- Não removo o módulo `elite-anthropic-proxy` inteiro sem sua ordem — só reaponto ou marco deprecated.
-- Nada é feito no Lovable atual (backend/edge/migration) — trabalho vai pra VPS + GitHub, como manda o escopo padrão.
+## Áreas 🔒 tocadas (com autorização implícita desta ordem)
+- `apps/modulos/HERMES-CORE/` (F1)
+- `apps/modulos/elite-anthropic-proxy/` (F1)
+- `apps/modulos/arsenal-openai-adapter/` (F3, F5)
+- `apps/modulos/hub/` (F4)
+- `ecosystem.config.cjs` (F1)
 
-## Próximo comando esperado
-> `PERMITO PIVETE — ERRADICAR claude.ap7.site (Fases 1-4)`
-> ou parcial: `PERMITO PIVETE — SÓ FASE 1` / `SÓ DOCS`.
+## O que NÃO faço nesta operação
+- ❌ Não faço `pm2 kill` nem restart em massa (`restart all`)
+- ❌ Não force-push
+- ❌ Não deleto backups históricos (`.bak-*`, `backups/`)
+- ❌ Não mexo no bot `@srver1bot` nem no `whatsapp-server` (id 1 stopped por design)
+- ❌ Não toco no Lovable Cloud atual (backend fica no HUB `lyoig`)
+
+---
+
+## Pergunta única
+Manda **`PERMITO ARSENAL MÁXIMO`** que eu disparo as 6 frentes em paralelo agora e volto só com o relatório de vitória consolidado.
+
+Se quiser dosar: `PERMITO F1+F3+F6` (só o essencial da erradicação + prova + notificação), ou `PERMITO TUDO MENOS F4` (deixa Grok pra depois porque exige cookie manual).
