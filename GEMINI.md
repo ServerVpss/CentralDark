@@ -2,11 +2,16 @@
 
 Antes de qualquer ação no CentralDark:
 
-1. Leia `AGENTS.md`.
-2. Leia `docs/COFRE/README.md`.
-3. Execute o BOOT em `docs/GOVERNANCA/BOOT-IA.md`.
-4. Confirme branch, SHA, ambiente, escopo, riscos, testes e rollback.
-5. Não altere nada antes de concluir o BOOT.
+1. Abra ou inspecione `pivete/dev`.
+2. Leia `00-COMECE-AQUI-IA.md`.
+3. Leia `AGENTS.md`.
+4. Leia `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
+5. Leia `docs/COFRE/README.md`.
+6. Execute o BOOT operacional em `docs/GOVERNANCA/BOOT-IA.md`.
+7. Confirme branch do workspace, ref inspecionada, SHA, ambiente, escopo, riscos, testes, prova e rollback.
+8. Não altere nada antes de concluir o BOOT operacional.
+
+`docs/PROTOCOLO-BOOT.md` serve depois para memória e continuidade; não substitui o BOOT operacional.
 
 A fonte oficial das regras é o GitHub. Não use apenas memória de conversa.
 
