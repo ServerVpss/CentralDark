@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T00:24:39.319Z",
-  "updatedAtBR": "09/07/2026, 21:24:39 BRT",
+  "updatedAt": "2026-07-10T00:27:09.875Z",
+  "updatedAtBR": "09/07/2026, 21:27:09 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(governanca): adiciona handoff e watchdog multiagente",
+    "lastCommit": "docs(governanca): registra squads e skills do mapa vivo",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T00:27:09.875Z",
+      "titulo": "Push na main · f55ebdf3d42a1af9d3c16f188e2c9bee3bf86901",
+      "detalhe": "docs(governanca): registra squads e skills do mapa vivo",
+      "area": "Repositório",
+      "sha": "f55ebdf",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-10T00:24:39.319Z",
       "titulo": "Push na main · 51c995c98e7b3565dfa189b5a5fc63fd2856fd70",
       "detalhe": "docs(governanca): adiciona handoff e watchdog multiagente",
@@ -986,14 +994,6 @@
       "detalhe": "Adicionou aba Hermes ao HUB",
       "area": "Repositório",
       "sha": "5b1292a",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-08T18:26:09.249Z",
-      "titulo": "Push na main · cc8303214536ccb45bb547a3d0bff8c247eca53c",
-      "detalhe": "Criou deploy do PAT do HUB",
-      "area": "Repositório",
-      "sha": "cc83032",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T00:27:09.875Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f55ebdf3d42a1af9d3c16f188e2c9bee3bf86901 (f55ebdf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T00:24:39.319Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 51c995c98e7b3565dfa189b5a5fc63fd2856fd70 (51c995c)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T18:54:46.383Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 5b1292a2de44988528d559091790194663d6a351 (5b1292a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T18:26:09.249Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · cc8303214536ccb45bb547a3d0bff8c247eca53c (cc83032)",
       "area": "Repositório",
       "status": "sucesso"
     }
