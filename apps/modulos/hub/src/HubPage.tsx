@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { DashboardTab } from './components/dashboard/DashboardTab';
 import { CatalogTab } from './components/catalog/CatalogTab';
@@ -9,11 +9,33 @@ import { AbacusTab } from './components/abacus/AbacusTab';
 import { GatewayTab } from './components/gateway/GatewayTab';
 import { HermesTab } from './components/hermes/HermesTab';
 import { RoleGuard } from './components/shared/RoleGuard';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
-import { logButton } from './lib/buttonLog';
+import { logButton, trackAction } from './lib/buttonLog';
+import { hubAuth } from './integrations/supabase/hub-client';
+
 
 export default function HubPage() {
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    hubAuth.auth.getSession().then(({ data }) => setUserEmail(data.session?.user.email ?? null));
+    const { data: sub } = hubAuth.auth.onAuthStateChange((_evt, session) => {
+      setUserEmail(session?.user.email ?? null);
+      logButton('hub.auth-state-change', { user: session?.user.email ?? null });
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  async function sair() {
+    await trackAction('hub.logout', async () => {
+      const { error } = await hubAuth.auth.signOut();
+      if (error) throw error;
+      return { status: 200 };
+    });
+    window.location.replace('/login');
+  }
+
   return (
     <div className="min-h-screen">
       {/* Header estilo landing CentralDark */}
@@ -30,12 +52,34 @@ export default function HubPage() {
               <p className="text-xs text-muted-foreground mt-1">Orquestração · Políticas · Auditoria</p>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-            <span>mcp.centralldark.com</span>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="hidden sm:inline-flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <span>mcp.centralldark.com</span>
+            </span>
+            {userEmail ? (
+              <button
+                onClick={sair}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border hover:border-primary/60 hover:bg-primary/5 transition text-foreground"
+                title={userEmail}
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline max-w-[140px] truncate">{userEmail}</span>
+                <span className="sm:hidden">Sair</span>
+              </button>
+            ) : (
+              <a
+                href="/login"
+                onClick={() => logButton('hub.click-login-link')}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md gradient-emerald text-primary-foreground shadow-3d-primary hover:opacity-90 transition"
+              >
+                <LogIn className="h-3.5 w-3.5" /> Entrar
+              </a>
+            )}
           </div>
         </div>
       </header>
+
 
       <main className="container mx-auto p-6 space-y-6">
         <Tabs defaultValue="dashboard" className="space-y-6" onValueChange={(v) => logButton('hub.tab-change', { tab: v })}>

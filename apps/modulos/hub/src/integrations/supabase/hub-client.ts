@@ -12,3 +12,15 @@ export const hubClient = createClient(HUB_URL, HUB_KEY, {
   db: { schema: "api" },
   auth: { persistSession: false },
 });
+
+// Cliente dedicado ao fluxo de autenticação (persistência de sessão + refresh automático).
+// Compartilha o storageKey com o hubClient pra manter uma sessão única no navegador.
+export const hubAuth = createClient(HUB_URL, HUB_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: "cd-hub-auth",
+  },
+});
+
