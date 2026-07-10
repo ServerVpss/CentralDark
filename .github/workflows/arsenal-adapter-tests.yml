@@ -33,10 +33,10 @@ jobs:
           node --check tests/models.test.mjs
           echo "🟢 sintaxe OK"
 
-      - name: Teste /v1/models (gateway público)
+      - name: Teste /v1/models (gateway público + auth CentralDark)
         env:
           GATEWAY_URL: https://api.centralldark.com
-          ABACUS_API_KEY: ${{ secrets.ABACUS_API_KEY }}
+          CENTRALDARK_API_KEY: ${{ secrets.CENTRALDARK_API_KEY }}
         run: |
           cd apps/modulos/arsenal-openai-adapter
           npm test
