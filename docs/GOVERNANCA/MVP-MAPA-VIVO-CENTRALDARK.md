@@ -58,7 +58,7 @@ Painel mostra prova.
 
 Nenhuma IA é fixa.
 
-Lovable, ChatGPT, Claude, Codex, Gemini, Mistral ou outro agente podem mudar por preço, crédito, limite, qualidade ou disponibilidade.
+Lovable, ChatGPT, Claude, Codex, Gemini, Mistral, Grok ou outro agente podem mudar por preço, crédito, limite, qualidade ou disponibilidade.
 
 O que deve ser fixo é o fluxo:
 
@@ -68,6 +68,13 @@ estado vivo no Supabase
 execução na VPS
 entrada pelo Gateway
 prova no painel
+```
+
+Regra:
+
+```txt
+Não limitar o CentralDark a Claude Cloud, Lovable, ChatGPT ou qualquer fornecedor único.
+O CentralDark deve usar o que estiver disponível, melhor e autorizado pelo Pivete.
 ```
 
 ## 7. Orquestração multiagente
@@ -154,6 +161,8 @@ Cada missão tem org_id.
 Cada pane/agente pertence a um org_id.
 Agentes de uma missão não reutilizam contexto de outra missão sem autorização.
 Missões paralelas podem coexistir sem pisar uma na outra.
+Pool antigo não deve ser reutilizado sem validação.
+Pools vivos de outros orgs devem ser ignorados quando a missão for diferente.
 ```
 
 ## 11. Watchdog de agentes
@@ -179,7 +188,38 @@ Missão parada precisa aparecer no HUB.
 Pivete precisa ver quem está vivo, quem travou e qual é o próximo passo.
 ```
 
-## 12. Catálogo inicial de squads e skills
+## 12. Contrato de missão gamificado
+
+Antes de iniciar missão multiagente, o sistema deve perguntar o mínimo necessário.
+
+Formato observado e adaptado:
+
+```txt
+Qual a missão?
+- Objetivo em 1 frase:
+- Definition of Done:
+- Restrições: não tocar em X, respeitar Y
+- Prazo:
+```
+
+Definition of Done = critério objetivo para saber que a missão terminou.
+
+Esse contrato permite transformar comando do Pivete em jogo operacional:
+
+```txt
+Missão = objetivo.
+Squad = time escolhido.
+Panes = jogadores/agentes em campo.
+Placar = DONE / PARTIAL / BLOCKED.
+Handoff = relatório de cada jogador.
+Watchdog = juiz que percebe travamento.
+Consolidador = técnico que junta o resultado final.
+Pivete = comandante que aprova ou manda ajustar.
+```
+
+Gamificação = deixar a execução visual, acompanhável e fácil de auditar como se fosse um jogo de missão.
+
+## 13. Catálogo inicial de squads e skills
 
 Este catálogo vem das referências trazidas pelo Pivete para o modelo de operação multiagente.
 
@@ -278,7 +318,7 @@ Go-to-market = plano para colocar produto no mercado.
 /curator-chief        -> cortes, curadoria e organização de conteúdo
 ```
 
-## 13. Contrato de missão para workers
+## 14. Contrato de missão para workers
 
 Todo worker deve receber um contrato curto antes de executar.
 
@@ -298,7 +338,7 @@ Devolva HANDOFF ao terminar.
 
 Definition of Done = critério objetivo para saber que a tarefa terminou.
 
-## 14. Painéis, panes e preview
+## 15. Painéis, panes e preview
 
 O modelo observado usa panes paralelos para acompanhar muitos agentes ao mesmo tempo.
 
@@ -313,6 +353,7 @@ pane_wait_many        -> esperar vários panes concluírem
 pane_read_many        -> ler handoffs quando ficarem ociosos
 preview_live          -> mostrar resultado em tempo real
 placar_missao         -> mostrar DONE / PARTIAL / BLOCKED por agente
+pool_status           -> mostrar SPANNED / IGNORED / DEAD / ACTIVE
 ```
 
 Regra:
@@ -324,14 +365,38 @@ Preview não substitui GitHub.
 Preview ajuda auditoria antes do commit.
 ```
 
-## 15. Regra curta
+## 16. Referência Overclock
 
+Overclock entra como referência de arquitetura para sala de comando multiagente.
+
+Referência não significa copiar marca, código proprietário ou depender da ferramenta.
+
+Significa observar padrões úteis:
+
+```txt
+cockpit multiagente
+panes paralelos
+preview em tempo real
+workers com papel claro
+squads por especialidade
+handoff obrigatório
+placar de missão
+watchdog de agentes
+isolamento por missão
+controle de custo por modelo
+uso de múltiplos provedores
+```
+
+Regra:
+
+```txt
+Overclock inspira.
+CentralDark governa.
 Ferramenta muda.
 Fluxo fica.
-Execução importa.
-Registro prova.
+```
 
-## 16. Primeira entrega sugerida
+## 17. Primeira entrega sugerida
 
 Criar uma tela MVP chamada Mapa Vivo no HUB.
 
@@ -349,12 +414,13 @@ Essa tela deve mostrar cards simples:
 - Watchdog
 - Squads e Skills
 - Preview
+- Pools e org_id
 - Divergências
 - Ações pendentes
 
 Cada card deve ter status, resumo e link para detalhe.
 
-## 17. Segurança
+## 18. Segurança
 
 Não salvar secrets.
 Não expor tokens.
@@ -367,7 +433,8 @@ Não misturar missões sem org_id.
 Não ignorar agente travado sem registrar.
 Não usar bypass de permissão em área protegida ou produção.
 Não permitir que preview substitua commit oficial.
+Não copiar código proprietário de ferramenta externa.
 
-## 18. Selo
+## 19. Selo
 
-Mapa Vivo CentralDark = visão de ponta a ponta para o Pivete auditar, comandar, orquestrar agentes, usar squads e evoluir o sistema sem depender de uma IA específica.
+Mapa Vivo CentralDark = visão de ponta a ponta para o Pivete auditar, comandar, orquestrar agentes, usar squads, aplicar gamificação operacional e evoluir o sistema sem depender de uma IA específica.
