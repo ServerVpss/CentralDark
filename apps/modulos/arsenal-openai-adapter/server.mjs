@@ -1,12 +1,17 @@
 // Arsenal OpenAI Adapter — expõe o Council como modelos OpenAI-compatible.
 // Consumido pelo Open WebUI (ui.centralldark.com) + posta AO VIVO no grupo
 // "Central Dark - Grupo da Evolução" pelos bots individuais.
+//
+// PATCH pivete/adapter-auth-audit-fix:
+//   - Usa normalizePath() de auth-audit.mjs pra tratar /rota e /rota/ como iguais
+//   - Comparações de rota (/health, /v1/models, /v1/chat/completions) via path normalizado
+//   - Auditoria continua recebendo req.url cru (auth-audit.mjs normaliza+separa query)
 
 import http from 'node:http';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { postarComoBot, postarPergunta } from './telegram-grupo.mjs';
-import { authenticate, shouldBlock, audit, newRequestId, enforceMode } from './auth-audit.mjs';
+import { authenticate, shouldBlock, audit, newRequestId, enforceMode, normalizePath } from './auth-audit.mjs';
 
 const PORT = process.env.PORT || 8090;
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
@@ -58,7 +63,6 @@ async function callProvider(modelo, messages) {
 
 async function modoRouter(regras, messages) {
   const out = await callProvider(regras.modelos.router, messages);
-  // Router é single-shot: posta 1 vez no grupo pelo bot correspondente
   postarComoBot(botDoModelo(regras.modelos.router), out, { nome: `Router · ${regras.modelos.router}` });
   return `🎯 **Router (${regras.modelos.router})**\n\n${out}`;
 }
@@ -68,7 +72,6 @@ async function modoParallel(regras, messages) {
   const respostas = await Promise.all(modelos.map(async m => {
     try {
       const texto = await callProvider(m, messages);
-      // Cada voz posta AO VIVO no grupo pelo seu bot
       postarComoBot(botDoModelo(m), texto, { nome: m });
       return { modelo: m, texto };
     } catch (e) { return { modelo: m, texto: `❌ falhou: ${e.message}` }; }
@@ -112,7 +115,7 @@ async function modoHermes(regras, messages) {
 
   const sistema = `Você é o HERMES — IA autônoma do Arsenal Council da CentralDark.
 Missão: analisar pendências reais e propor evoluções concretas em PT-BR.
-Contexto: React+Vite+Supabase(Lovable Cloud) + VPS PM2 + bots Telegram (@srver1bot HUB, @SEGREDOPUXADASBOT TelePainel).
+Contexto: React+Vite+Supabase(Lovable Cloud) + VPS PM2 + bots Telegram.
 Regras: não mexer em Caddy sem OK, whatsapp-server fica stopped, roles em tabela separada com has_role().
 Tom: direto, gamificado (▓░ ✅⚠️❌), 3-5 passos práticos. Sinalize risco em deploy/migration.
 
@@ -163,7 +166,6 @@ function chatOk(model, content) {
     choices: [{ index: 0, message: { role: 'assistant', content }, finish_reason: 'stop' }],
     usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 } };
 }
-// SSE de verdade pro Open WebUI: chunk no formato chat.completion.chunk
 function sseChunk(model, delta, finish = null) {
   return `data: ${JSON.stringify({ id: 'chatcmpl-arsenal-' + Date.now(), object: 'chat.completion.chunk',
     created: Math.floor(Date.now()/1000), model, choices: [{ index: 0, delta, finish_reason: finish }] })}\n\n`;
@@ -175,33 +177,35 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   if (req.method === 'OPTIONS') return res.end();
 
-  // === PR#2 shadow-audit wrapper ===
+  // === PR#2 shadow-audit wrapper + normalização de path ===
   const t0 = Date.now();
   const requestId = newRequestId();
   const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').toString().split(',')[0].trim();
   const ua = (req.headers['user-agent'] || '').toString();
   res.setHeader('X-Request-Id', requestId);
 
-  // Autentica sempre (não bloqueia em shadow). Preserva fallback do AUTH_KEY legado.
-  // Aceita Authorization: Bearer <k>, x-api-key: <k> e api-key: <k> (Claude Desktop usa x-api-key).
+  // Path normalizado: `/rota` e `/rota/` e `/rota?x=1` viram todos `/rota`.
+  // A audit() ainda recebe req.url cru — auth-audit.mjs normaliza+separa query keys.
+  const routePath = normalizePath(req.url);
+
   const authRaw = (req.headers.authorization || '').toString();
   const xKeyRaw = (req.headers['x-api-key'] || req.headers['api-key'] || '').toString();
   const legacyOk = AUTH_KEY && (authRaw.includes(AUTH_KEY) || xKeyRaw.includes(AUTH_KEY));
   const authResult = await authenticate(req);
   let modelForAudit = null;
 
-  // /health continua público
-  if (req.url === '/health') {
-    audit({ request_id: requestId, key_prefix: authResult.prefix, path: '/health', method: req.method,
+  // /health é público
+  if (routePath === '/health') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
     return json(res, 200, { ok: true, provider: PROVIDER_BASE, models: MODELS.map(m=>m.id),
                             auth_enforce: enforceMode(), request_id: requestId });
   }
 
-  // /v1/models também é público — é apenas o catálogo (sem inferência).
-  // Clientes de gateway (Claude Desktop, Cursor, etc) chamam sem chave pra descobrir modelos.
+  // /v1/models e /models são públicos (descoberta de catálogo).
   // Fica ANTES do bloco de auth pra não retornar 401 e ser mal-interpretado como 404.
-  if (req.url === '/v1/models' || req.url === '/models') {
+  // Aceita variações: `/v1/models`, `/v1/models/`, `/v1/models?limit=1000`, `/models`, `/models/`.
+  if (routePath === '/v1/models' || routePath === '/models') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
     return json(res, 200, { object: 'list', data: MODELS.map(m => ({
@@ -223,7 +227,6 @@ const server = http.createServer(async (req, res) => {
     return json(res, 401, { error: 'unauthorized', request_id: requestId });
   }
 
-  // Hook para o handler existente registrar o modelo alvo
   res.on('finish', () => {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: res.statusCode, model: modelForAudit, latency_ms: Date.now() - t0,
@@ -231,8 +234,7 @@ const server = http.createServer(async (req, res) => {
   });
   req._auditSetModel = (m) => { modelForAudit = m; };
 
-
-  if (req.url === '/v1/chat/completions' || req.url === '/chat/completions') {
+  if (routePath === '/v1/chat/completions' || routePath === '/chat/completions') {
     let body = '';
     for await (const chunk of req) body += chunk;
     try {
@@ -241,14 +243,12 @@ const server = http.createServer(async (req, res) => {
       req._auditSetModel?.(modo);
       const messages = payload.messages || [];
       const perguntaUser = messages.filter(m=>m.role==='user').slice(-1)[0]?.content || '';
-      // Posta a pergunta do usuário no grupo (contexto)
       if (perguntaUser) postarPergunta(perguntaUser, modo.replace('arsenal-',''));
 
       const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
       const rodar = MODOS[modo];
       if (!rodar) return json(res, 400, { error: `modelo desconhecido: ${modo}` });
 
-      // stream:true → SSE real (headers já vão, keepalive segura o cliente enquanto o Council trabalha)
       const streaming = payload.stream === true;
       let keepalive;
       if (streaming) {
@@ -285,7 +285,7 @@ const server = http.createServer(async (req, res) => {
       try { res.end(); } catch {}
     }
   }
-  json(res, 404, { error: 'not found' });
+  json(res, 404, { error: 'not found', path: routePath, request_id: requestId });
 });
 
 const BIND = process.env.BIND || '127.0.0.1';
