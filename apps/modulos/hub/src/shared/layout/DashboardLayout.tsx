@@ -53,7 +53,7 @@ export function DashboardLayout({
               {brand.primary}
             </span>
             <span className="text-sidebar-border">|</span>
-            <span className="text-[11px] font-semibold tracking-[0.14em] text-muted-foreground">
+            <span className="text-[11px] font-semibold tracking-wider text-muted-foreground">
               {brand.suffix}
             </span>
           </div>
@@ -61,7 +61,7 @@ export function DashboardLayout({
           <nav className="flex-1 overflow-y-auto px-3 pb-4">
             {groups!.map((group) => (
               <div key={group.id} className="mt-4 first:mt-2">
-                <div className="px-2 py-1 text-[10.5px] font-semibold tracking-[0.14em] text-muted-foreground/80 uppercase">
+                <div className="px-2 py-1 text-[10.5px] font-semibold tracking-wider text-muted-foreground/80 uppercase">
                   {group.label}
                 </div>
                 <ul className="mt-1 space-y-0.5">

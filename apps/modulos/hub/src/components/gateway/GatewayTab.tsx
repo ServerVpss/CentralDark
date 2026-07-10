@@ -15,6 +15,8 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { useAiRequests, AiRequestFilter } from '@/hooks/useAiRequests';
+import { RoleGuard } from '@/components/shared/RoleGuard';
+import { ApiKeysManager } from './ApiKeysManager';
 
 const DEFAULT_URL = 'https://api.centralldark.com/v1';
 const DEFAULT_KEY = 'cdk_live_UW_-Ad10vjqkFOcVYtUry2nrwhKAdE9L7lMUEesDktE';
@@ -189,6 +191,11 @@ export function GatewayTab() {
           </div>
         </CardContent>
       </Card>
+
+      {/* API KEYS DO GATEWAY (admin) */}
+      <RoleGuard requiredRole="admin">
+        <ApiKeysManager />
+      </RoleGuard>
 
       {/* LOGS IA */}
       <AiRequestsPanel />

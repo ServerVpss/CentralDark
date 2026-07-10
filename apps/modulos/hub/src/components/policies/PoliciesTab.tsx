@@ -8,19 +8,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Shield, Plus, Search, Filter } from 'lucide-react';
 import { Input } from '@/shared/ui/input';
 import { useAuth } from '@/hooks/useAuth';
-
-interface Policy {
-  id: string;
-  name: string;
-  description?: string;
-  rule_type: 'allow' | 'block' | 'require_veto';
-  target_tool_id?: string;
-  target_server_id?: string;
-  enabled: boolean;
-  created_by?: string;
-  created_at: string;
-  updated_at: string;
-}
+import type { Policy } from '@/types/policies';
 
 export function PoliciesTab() {
   const { policies, loading, error, refresh } = usePolicies();
@@ -29,11 +17,13 @@ export function PoliciesTab() {
   const [filterType, setFilterType] = useState<string>('all');
   const [showEditor, setShowEditor] = useState(false);
   const [editingPolicy, setEditingPolicy] = useState<Policy | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const filteredPolicies = policies.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-      (p.description || '').toLowerCase().includes(search.toLowerCase());
-    const matchesType = filterType === 'all' || p.rule_type === filterType;
+    const matchesSearch = p.tool.toLowerCase().includes(search.toLowerCase()) ||
+      p.environment.toLowerCase().includes(search.toLowerCase());
+    const matchesType = filterType === 'all' ||
+      (filterType === 'needs_approval' ? p.needs_approval : String(p.tier) === filterType);
     return matchesSearch && matchesType;
   });
 
@@ -51,6 +41,11 @@ export function PoliciesTab() {
     setShowEditor(false);
     setEditingPolicy(null);
     refresh();
+  };
+
+  const handleCreateClick = () => {
+    setActionError(null);
+    handleCreate();
   };
 
   if (loading) {
@@ -78,7 +73,7 @@ export function PoliciesTab() {
           <Badge variant="outline">{policies.length} regras</Badge>
         </div>
         {isAdmin && (
-          <Button size="sm" onClick={handleCreate}>
+          <Button size="sm" onClick={handleCreateClick}>
             <Plus className="h-4 w-4 mr-1" /> Nova Política
           </Button>
         )}
@@ -88,7 +83,7 @@ export function PoliciesTab() {
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Buscar políticas..."
+            placeholder="Buscar por tool ou environment..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="pl-8"
@@ -99,17 +94,27 @@ export function PoliciesTab() {
           value={filterType}
           onChange={e => setFilterType(e.target.value)}
         >
-          <option value="all">Todos os tipos</option>
-          <option value="allow">Allow</option>
-          <option value="block">Block</option>
-          <option value="require_veto">Require Veto</option>
+          <option value="all">Todos os tiers</option>
+          <option value="0">Tier 0</option>
+          <option value="1">Tier 1</option>
+          <option value="2">Tier 2</option>
+          <option value="3">Tier 3</option>
+          <option value="4">Tier 4 (desativado)</option>
+          <option value="needs_approval">Requer aprovação</option>
         </select>
       </div>
+
+      {actionError && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {actionError}
+        </div>
+      )}
 
       {showEditor && (
         <PolicyEditor
           policy={editingPolicy}
           onClose={handleEditorClose}
+          onError={setActionError}
         />
       )}
 
@@ -127,11 +132,11 @@ export function PoliciesTab() {
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-base flex items-center gap-2">
-                      {policy.name}
-                      <RuleBadge type={policy.rule_type} />
+                      {policy.tool}
+                      <RuleBadge tier={policy.tier} needsApproval={policy.needs_approval} />
                     </CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {policy.description}
+                      Environment: {policy.environment}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -152,14 +157,11 @@ export function PoliciesTab() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  {policy.target_tool_id && (
-                    <Badge variant="outline">Tool: {policy.target_tool_id}</Badge>
+                  <Badge variant="outline">Tier: {policy.tier}</Badge>
+                  {policy.needs_approval && (
+                    <Badge variant="outline">Requer aprovação</Badge>
                   )}
-                  {policy.target_server_id && (
-                    <Badge variant="outline">Server: {policy.target_server_id}</Badge>
-                  )}
-                  <span>Criado por: {policy.created_by}</span>
-                  <span>Atualizado: {new Date(policy.updated_at).toLocaleDateString()}</span>
+                  <span>Criado: {new Date(policy.created_at).toLocaleDateString()}</span>
                 </div>
               </CardContent>
             </Card>

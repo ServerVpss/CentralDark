@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { hubClient as supabase } from '@/integrations/supabase/hub-client';
+import { hubClient as supabase, hubAuth } from '@/integrations/supabase/hub-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
@@ -15,7 +15,6 @@ interface Provider {
   scopes: string;
   auth_type?: 'oauth' | 'api_key';
   tier?: 1 | 2 | 3;
-  web_oauth?: boolean; // permite também login via sessão web (Zendriver)
 }
 
 // Dicas por provedor: onde pegar a chave oficial
@@ -36,6 +35,13 @@ const API_KEY_HELP: Record<string, { text: string; url?: string }> = {
 
 const WEB_OAUTH_IDS = new Set(['openai', 'claude', 'gemini', 'grok']);
 
+// Providers com OAuth2 público OFICIAL configurado no oauth-broker (client_id/secret reais,
+// authorize/token endpoints de verdade). xAI/Grok, OpenAI, Anthropic e Google (Gemini) NÃO
+// oferecem OAuth de app-to-app pro usuário final — só API key — então "Login Web" pra eles é
+// sessão de navegador (Zendriver), não OAuth oficial. Ver apps/modulos/oauth-broker/server.mjs
+// (OAUTH_CFG só tem github/notion/gdrive).
+const REAL_OAUTH_IDS = new Set(['github', 'notion', 'gdrive', 'lovable']);
+
 
 interface Connection {
   id: string;
@@ -53,10 +59,10 @@ const DEV_USER_ID = 'dev-pivete';
 // 🔒 Catálogo fallback — TODAS as APIs de IA + integrações Tier 1
 const FALLBACK_PROVIDERS: Provider[] = [
   // ===== IA — Chat / LLM =====
-  { id: 'openai',       display_name: 'OpenAI',            color: '#10a37f', icon: 'O',  scopes: 'chat completions embeddings', auth_type: 'api_key', tier: 1, web_oauth: true },
-  { id: 'claude',       display_name: 'Anthropic Claude',  color: '#d97706', icon: 'C',  scopes: 'messages',      auth_type: 'api_key', tier: 1, web_oauth: true },
-  { id: 'gemini',       display_name: 'Google Gemini',     color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1, web_oauth: true },
-  { id: 'grok',         display_name: 'Grok / xAI',        color: '#000000', icon: '𝕏',  scopes: 'chat',          auth_type: 'api_key', tier: 1, web_oauth: true },
+  { id: 'openai',       display_name: 'OpenAI',            color: '#10a37f', icon: 'O',  scopes: 'chat completions embeddings', auth_type: 'api_key', tier: 1 },
+  { id: 'claude',       display_name: 'Anthropic Claude',  color: '#d97706', icon: 'C',  scopes: 'messages',      auth_type: 'api_key', tier: 1 },
+  { id: 'gemini',       display_name: 'Google Gemini',     color: '#4285f4', icon: 'G',  scopes: 'generateContent', auth_type: 'api_key', tier: 1 },
+  { id: 'grok',         display_name: 'Grok / xAI',        color: '#000000', icon: '𝕏',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
   { id: 'deepseek',     display_name: 'DeepSeek',          color: '#1e40af', icon: 'DS', scopes: 'chat reasoner', auth_type: 'api_key', tier: 1 },
 
   { id: 'mistral',      display_name: 'Mistral AI',        color: '#ff7000', icon: 'M',  scopes: 'chat',          auth_type: 'api_key', tier: 1 },
@@ -117,13 +123,16 @@ export function OAuthConnectors() {
   async function load() {
     setLoading(true);
     setLoadError(null);
-    let uid: string = DEV_USER_ID;
+    // user_id em oauth_connections é uuid — string sintética tipo 'dev-pivete' falha
+    // em queries reais. Só buscamos conexões quando temos um uuid real de sessão
+    // (via hubAuth, que persiste sessão; hubClient não persiste).
+    let uid: string | null = null;
     let real = false;
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user?.id) { uid = user.id; real = true; }
+      const { data: { session } } = await hubAuth.auth.getSession();
+      if (session?.user?.id) { uid = session.user.id; real = true; }
     } catch { /* mantém dev */ }
-    setUserId(uid);
+    setUserId(uid ?? DEV_USER_ID);
     setIsRealUser(real);
 
     let p: Provider[] = [];
@@ -140,20 +149,24 @@ export function OAuthConnectors() {
     }
 
     let missing = false;
-    try {
-      const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label').eq('user_id', uid);
-      if (cr.error) throw cr.error;
-      if (cr.data) c = cr.data as Connection[];
-    } catch (e: any) {
-      c = [];
-      const msg = e?.message ?? '';
-      if (/relation.*does not exist|not.?found|schema cache|PGRST|404/i.test(msg) || e?.code === 'PGRST205' || e?.code === '42P01') {
-        // tabela ainda não criada — modo dev, silencia
-        missing = true;
-      } else {
-        setLoadError(msg || 'erro ao carregar conexões');
+    if (uid) {
+      try {
+        const cr = await supabase.from('oauth_connections').select('id, provider_id, expires_at, status, account_label').eq('user_id', uid);
+        if (cr.error) throw cr.error;
+        if (cr.data) c = cr.data as Connection[];
+      } catch (e: any) {
+        c = [];
+        const msg = e?.message ?? '';
+        if (/relation.*does not exist|not.?found|schema cache|PGRST|404/i.test(msg) || e?.code === 'PGRST205' || e?.code === '42P01') {
+          // tabela ainda não criada — modo dev, silencia
+          missing = true;
+        } else {
+          setLoadError(msg || 'erro ao carregar conexões');
+        }
       }
     }
+    // sem sessão real (uid nulo): não consulta oauth_connections (user_id é uuid,
+    // não aceitaria a string sintética DEV_USER_ID) — fica em modo dev, sem conexões.
 
     setTableMissing(missing);
     setProviders(p);
@@ -165,8 +178,10 @@ export function OAuthConnectors() {
   useEffect(() => { load(); }, []);
 
   function connect(p: Provider) {
-    // Provedores com dupla via (API oficial + login web) abrem o seletor
-    if (p.web_oauth && (p.auth_type === 'api_key' || !p.auth_type)) {
+    // Provedores com dupla via (API oficial + login web) abrem o seletor.
+    // WEB_OAUTH_IDS é uma lista fixa no frontend — a coluna web_oauth não existe
+    // em public.oauth_providers, então essa decisão é só local/cosmética.
+    if (WEB_OAUTH_IDS.has(p.id) && (p.auth_type === 'api_key' || !p.auth_type)) {
       setChooseProvider(p);
       return;
     }
@@ -177,9 +192,11 @@ export function OAuthConnectors() {
     startOAuth(p);
   }
 
-  function startOAuth(p: Provider) {
+  function startOAuth(p: Provider, accountLabel?: string) {
     const back = window.location.href;
-    window.location.href = `${BROKER_BASE}/oauth/${p.id}/start?user_id=${userId}&redirect_to=${encodeURIComponent(back)}`;
+    const params = new URLSearchParams({ user_id: userId, redirect_to: back });
+    if (accountLabel) params.set('label', accountLabel);
+    window.location.href = `${BROKER_BASE}/oauth/${p.id}/start?${params.toString()}`;
   }
 
 
@@ -332,7 +349,7 @@ export function OAuthConnectors() {
                           {p.auth_type === 'oauth' && (
                             <Badge className="text-[10px] py-0 px-1.5 bg-primary/15 text-primary border-primary/40">🔐 OAUTH</Badge>
                           )}
-                          {p.web_oauth && (
+                          {WEB_OAUTH_IDS.has(p.id) && (
                             <Badge className="text-[10px] py-0 px-1.5 bg-[hsl(var(--warning))]/15 text-[hsl(var(--warning))] border-[hsl(var(--warning))]/40">🌐 WEB</Badge>
                           )}
                           <Badge className={`text-[10px] py-0 px-1.5 ${toneClass[s.tone]}`}>{s.txt}</Badge>
@@ -346,7 +363,7 @@ export function OAuthConnectors() {
                         onClick={() => connect(p)}
                         size="sm"
                         variant={conn ? 'outline' : 'default'}
-                        className={conn ? 'flex-1' : 'flex-1 gradient-emerald text-primary-foreground border-0 hover:opacity-90'}
+                        className={conn ? 'flex-1' : 'flex-1 gradient-emerald text-primary-foreground border-0 hover:brightness-95'}
                       >
                         {conn ? 'Reconectar' : 'Conectar'}
                       </Button>
@@ -381,18 +398,31 @@ export function OAuthConnectors() {
 
       <ChooseAuthDialog
         open={!!chooseProvider}
+        providerId={chooseProvider?.id ?? ''}
         providerName={chooseProvider?.display_name ?? ''}
         providerColor={chooseProvider?.color ?? '#98C93C'}
+        hasRealOAuth={chooseProvider ? REAL_OAUTH_IDS.has(chooseProvider.id) : false}
+        existingWebSessions={chooseProvider ? conns.filter(c => c.provider_id === chooseProvider.id) : []}
         onClose={() => setChooseProvider(null)}
         onPickApiKey={() => {
           const p = chooseProvider;
           setChooseProvider(null);
           if (p) setDialogProvider(p);
         }}
-        onPickOAuth={() => {
+        onPickOAuth={(accountLabel) => {
           const p = chooseProvider;
           setChooseProvider(null);
-          if (p) startOAuth(p);
+          if (!p) return;
+          if (!REAL_OAUTH_IDS.has(p.id)) {
+            // Sem OAuth público oficial (ex: Grok/xAI) e ainda sem endpoint de sessão
+            // web (Zendriver) exposto no oauth-broker — não redireciona pra rota que
+            // não existe (broker responde 404 pra provider fora de OAUTH_CFG).
+            toast.error(
+              `Login Web de ${p.display_name} ainda não está disponível no broker (sem OAuth público do provedor). Usa a API KEY por enquanto.`
+            );
+            return;
+          }
+          startOAuth(p, accountLabel);
         }}
       />
 

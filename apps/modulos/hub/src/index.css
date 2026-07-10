@@ -138,11 +138,16 @@
   }
 
   .text-gradient-gold,
-  .text-gradient-money {
+  .text-gradient-money,
+  .text-gradient-emerald {
     background: linear-gradient(180deg, hsl(var(--foreground)), hsl(var(--foreground) / 0.55));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  .gradient-emerald {
+    background: var(--gradient-gold);
   }
 
   .icon-glow {

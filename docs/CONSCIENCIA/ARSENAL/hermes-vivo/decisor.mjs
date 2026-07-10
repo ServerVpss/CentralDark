@@ -15,7 +15,7 @@ const CADEIA_DARKAI = [
 ];
 
 // Elite Anthropic Proxy (4º fallback, sempre vivo)
-const ELITE_URL   = 'https://claude.ap7.site/v1/messages';
+const ELITE_URL   = 'https://api.centralldark.com/v1/messages';
 const ELITE_MODEL = 'claude-sonnet-4-5';
 const ELITE_TOKEN = process.env.ELITE_ANTHROPIC_TOKEN || process.env.ANTHROPIC_AUTH_TOKEN || '';
 const ELITE_TIMEOUT_MS = 30_000;

@@ -29,7 +29,7 @@
     {
       "nivel": 4,
       "modelo": "claude-sonnet-4-5",
-      "via": "Elite Anthropic Proxy — https://claude.ap7.site/v1/messages",
+      "via": "Elite Anthropic Proxy — https://api.centralldark.com/v1/messages",
       "auth_header": "x-api-key",
       "timeout_s": 30,
       "retry": "1x com backoff 2s",

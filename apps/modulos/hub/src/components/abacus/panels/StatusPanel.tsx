@@ -120,7 +120,7 @@ export function StatusPanel() {
                 <button
                   onClick={submitKey}
                   disabled={saving || keyInput.length < 8}
-                  className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40 flex items-center gap-1.5"
+                  className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:brightness-95 disabled:opacity-40 flex items-center gap-1.5"
                 >
                   {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <CheckCircle2 className="h-3 w-3" />}
                   Salvar no cofre

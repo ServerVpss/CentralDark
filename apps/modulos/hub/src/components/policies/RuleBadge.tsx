@@ -3,11 +3,14 @@ import { Badge } from '@/shared/ui/badge';
 import { Shield, ShieldCheck, ShieldX, AlertTriangle } from 'lucide-react';
 
 interface RuleBadgeProps {
-  type: 'allow' | 'block' | 'require_veto';
+  tier: number;
+  needsApproval?: boolean;
   enabled?: boolean;
 }
 
-export function RuleBadge({ type: ruleType, enabled = true }: RuleBadgeProps) {
+// Reflete a decisão do PDP (hub.pdp_evaluate): tier 4 nunca autoriza,
+// needs_approval exige aprovação humana, senão é allow direto.
+export function RuleBadge({ tier, needsApproval = false, enabled = true }: RuleBadgeProps) {
   if (!enabled) {
     return (
       <Badge variant="outline" className="text-muted-foreground">
@@ -17,18 +20,28 @@ export function RuleBadge({ type: ruleType, enabled = true }: RuleBadgeProps) {
     );
   }
 
-  const config = {
-    allow: { icon: ShieldCheck, label: 'Permitir', variant: 'success' as const },
-    block: { icon: ShieldX, label: 'Bloquear', variant: 'destructive' as const },
-    require_veto: { icon: AlertTriangle, label: 'Requer Veto', variant: 'warning' as const },
-  };
+  if (tier >= 4) {
+    return (
+      <Badge variant="destructive">
+        <ShieldX className="w-3 h-3 mr-1" />
+        Tier 4 · Bloqueado
+      </Badge>
+    );
+  }
 
-  const { icon: Icon, label, variant } = config[ruleType];
+  if (needsApproval) {
+    return (
+      <Badge variant="warning">
+        <AlertTriangle className="w-3 h-3 mr-1" />
+        Requer Aprovação
+      </Badge>
+    );
+  }
 
   return (
-    <Badge variant={variant}>
-      <Icon className="w-3 h-3 mr-1" />
-      {label}
+    <Badge variant="success">
+      <ShieldCheck className="w-3 h-3 mr-1" />
+      Permitir · Tier {tier}
     </Badge>
   );
 }

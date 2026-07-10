@@ -4,6 +4,7 @@ import { StatusPanel } from './panels/StatusPanel';
 import { ModelsPanel } from './panels/ModelsPanel';
 import { LogsPanel } from './panels/LogsPanel';
 import { ConsolePanel } from './panels/ConsolePanel';
+import { logButton } from '@/lib/buttonLog';
 
 type SubTab = 'status' | 'models' | 'logs' | 'console';
 
@@ -53,7 +54,7 @@ export function AbacusModal({ open, onClose }: Props) {
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={() => { logButton('abacus-modal.close'); onClose(); }}
             aria-label="Fechar"
             className="h-9 w-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-primary-foreground transition"
           >
@@ -69,7 +70,7 @@ export function AbacusModal({ open, onClose }: Props) {
             return (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => { logButton('abacus-modal.tab', { tab: t.id }); setTab(t.id); }}
                 className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-t-lg text-xs sm:text-sm font-medium whitespace-nowrap transition ${
                   active
                     ? 'gradient-emerald text-primary-foreground shadow-3d-primary'

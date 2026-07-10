@@ -5,7 +5,11 @@
 import { readFileSync, existsSync } from 'node:fs';
 
 const CHAT_ID = process.env.EVOLUCAO_CHAT_ID || '-5365750004';
-const ENV_PATH = '/root/CentralDark/secrets/agent.env';
+// NOTA: agent.env foi arquivado em 07/07/2026 para secrets/_arquivo-20260707-175614/agent.env
+// mas os tokens BOT_TOKEN_* dos bots do grupo continuam ativos e usados só por aqui.
+const ENV_PATH = existsSync('/root/CentralDark/secrets/agent.env')
+  ? '/root/CentralDark/secrets/agent.env'
+  : '/root/CentralDark/secrets/_arquivo-20260707-175614/agent.env';
 
 let TOKENS = null;
 function carregarTokens() {

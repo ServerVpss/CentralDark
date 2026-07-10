@@ -12,6 +12,7 @@ import {
 } from '@/shared/ui/dialog';
 import { Sparkles, RefreshCw, KeyRound, Bot, Copy, Check } from 'lucide-react';
 import { abacusApi, AbacusStatus, AbacusModel } from '@/services/abacus-client';
+import { logButton } from '@/lib/buttonLog';
 
 const PS_SCRIPT = `# CentralDark Gateway — set env vars (Windows)
 [System.Environment]::SetEnvironmentVariable("CENTRALDARK_GATEWAY_URL","https://api.centralldark.com/v1","User")
@@ -33,6 +34,7 @@ export function AbacusApiCard() {
   const [copied, setCopied] = useState(false);
 
   const copyPs = async () => {
+    logButton('abacus.copy-ps-script');
     await navigator.clipboard.writeText(PS_SCRIPT);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
@@ -136,9 +138,9 @@ export function AbacusApiCard() {
         </Button>
 
         <div className="flex gap-2">
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog open={open} onOpenChange={(v) => { logButton('abacus.dialog', { open: v }); setOpen(v); }}>
             <DialogTrigger asChild>
-              <Button size="sm" className="h-8 flex-1 text-xs">
+              <Button size="sm" className="h-8 flex-1 text-xs" onClick={() => logButton('abacus.click-ver-modelos')}>
                 Ver modelos
               </Button>
             </DialogTrigger>
@@ -160,7 +162,7 @@ export function AbacusApiCard() {
                   size="sm"
                   variant="outline"
                   className="h-7 gap-1.5 text-xs"
-                  onClick={refreshModels}
+                  onClick={() => { logButton('abacus.click-sincronizar'); refreshModels(); }}
                   disabled={loadingModels}
                 >
                   <RefreshCw
@@ -229,7 +231,7 @@ export function AbacusApiCard() {
             size="sm"
             variant="outline"
             className="h-8 text-xs"
-            onClick={refreshStatus}
+            onClick={() => { logButton('abacus.click-refresh-status'); refreshStatus(); }}
           >
             <RefreshCw
               className={`h-3 w-3 ${ping === 'checking' ? 'animate-spin' : ''}`}

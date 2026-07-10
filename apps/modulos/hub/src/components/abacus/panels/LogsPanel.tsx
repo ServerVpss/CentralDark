@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RefreshCw, Download } from 'lucide-react';
 import { abacusApi, AbacusLog } from '@/services/abacus-client';
+import { logButton } from '@/lib/buttonLog';
 
 export function LogsPanel() {
   const [logs, setLogs] = useState<AbacusLog[]>([]);
@@ -49,7 +50,7 @@ export function LogsPanel() {
           {(['all', 'ok', 'error'] as const).map((f) => (
             <button
               key={f}
-              onClick={() => setFilter(f)}
+              onClick={() => { logButton('abacus.logs.filter', { filter: f }); setFilter(f); }}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition ${
                 filter === f
                   ? 'gradient-emerald text-primary-foreground'
@@ -62,13 +63,13 @@ export function LogsPanel() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={exportCsv}
+            onClick={() => { logButton('abacus.logs.export-csv', { rows: filtered.length }); exportCsv(); }}
             className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border/60 hover:bg-muted/40 transition"
           >
             <Download className="h-3 w-3" /> CSV
           </button>
           <button
-            onClick={load}
+            onClick={() => { logButton('abacus.logs.reload'); load(); }}
             disabled={loading}
             className="text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border/60 hover:bg-muted/40 transition"
           >

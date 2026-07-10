@@ -16,9 +16,9 @@ export function useAudit(pageSize = PAGE_SIZE) {
     setError(null);
     const from = (page - 1) * pageSize;
     const { data, error: err, count } = await hubClient
-      .from('audit_logs')
+      .from('audit_log')
       .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false })
+      .order('ts', { ascending: false })
       .range(from, from + pageSize - 1);
 
     if (err) {

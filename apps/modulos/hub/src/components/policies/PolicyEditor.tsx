@@ -3,23 +3,27 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
-import { Textarea } from '@/shared/ui/textarea';
 import { usePolicies } from '@/hooks/usePolicies';
-import type { Policy, RuleType } from '@/types/policies';
+import type { Policy } from '@/types/policies';
 
 interface PolicyEditorProps {
   policy: Policy | null;
   onClose: () => void;
+  onError?: (message: string) => void;
 }
 
-export function PolicyEditor({ policy, onClose }: PolicyEditorProps) {
+// NOTA: api.policies é uma VIEW somente leitura de hub.policies (sistema PDP oficial).
+// addPolicy/updatePolicy hoje sempre lançam erro amigável (ver usePolicies.ts) — este
+// formulário existe pra manter a UI, mas a escrita real ainda não está disponível.
+export function PolicyEditor({ policy, onClose, onError }: PolicyEditorProps) {
   const { addPolicy, updatePolicy } = usePolicies();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<Policy>>(policy || {
-    name: '',
-    description: '',
-    rule_type: 'allow',
-    enabled: true
+    tool: '',
+    environment: '*',
+    tier: 1,
+    needs_approval: false,
+    enabled: true,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,11 +33,12 @@ export function PolicyEditor({ policy, onClose }: PolicyEditorProps) {
       if (policy?.id) {
         await updatePolicy(policy.id, formData);
       } else {
-        await addPolicy(formData as Omit<Policy, 'id' | 'created_at' | 'updated_at'>);
+        await addPolicy(formData);
       }
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Erro ao salvar policy:', err);
+      onError?.(err?.message || 'Erro ao salvar política');
     } finally {
       setLoading(false);
     }
@@ -47,43 +52,58 @@ export function PolicyEditor({ policy, onClose }: PolicyEditorProps) {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nome</Label>
+            <Label htmlFor="tool">Tool</Label>
             <Input
-              id="name"
-              value={formData.name || ''}
-              onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              id="tool"
+              value={formData.tool || ''}
+              onChange={e => setFormData(prev => ({ ...prev, tool: e.target.value }))}
+              placeholder="ex: github_commit, deploy_status, *"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Descrição</Label>
-            <Textarea
-              id="description"
-              value={formData.description || ''}
-              onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            <Label htmlFor="environment">Environment</Label>
+            <Input
+              id="environment"
+              value={formData.environment ?? '*'}
+              onChange={e => setFormData(prev => ({ ...prev, environment: e.target.value }))}
+              placeholder="ex: prod, dev, *"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="rule_type">Tipo de Regra</Label>
+            <Label htmlFor="tier">Tier (0-4)</Label>
             <select
-              id="rule_type"
+              id="tier"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              value={formData.rule_type || 'allow'}
-              onChange={e => setFormData(prev => ({ ...prev, rule_type: e.target.value as RuleType }))}
+              value={formData.tier ?? 1}
+              onChange={e => setFormData(prev => ({ ...prev, tier: Number(e.target.value) }))}
             >
-              <option value="allow">Permitir (Allow)</option>
-              <option value="block">Bloquear (Block)</option>
-              <option value="require_veto">Exigir Veto</option>
+              <option value={0}>0</option>
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4 (sempre deny)</option>
             </select>
           </div>
 
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
+              id="needs_approval"
+              checked={!!formData.needs_approval}
+              onChange={e => setFormData(prev => ({ ...prev, needs_approval: e.target.checked }))}
+              className="h-4 w-4 rounded border-gray-300"
+            />
+            <Label htmlFor="needs_approval">Requer aprovação humana</Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
               id="enabled"
-              checked={formData.enabled}
+              checked={!!formData.enabled}
               onChange={e => setFormData(prev => ({ ...prev, enabled: e.target.checked }))}
               className="h-4 w-4 rounded border-gray-300"
             />

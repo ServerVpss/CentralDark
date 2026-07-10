@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bot, CheckCircle2 } from 'lucide-react';
 import { abacusApi, AbacusModel } from '@/services/abacus-client';
+import { logButton } from '@/lib/buttonLog';
 
 // Fallback estático caso a edge ainda esteja sem chave (não bloqueia o painel)
 const FALLBACK: AbacusModel[] = [
@@ -46,7 +47,7 @@ export function ModelsPanel({ selected, onSelect }: Props) {
           return (
             <button
               key={m.id}
-              onClick={() => onSelect(m.id)}
+              onClick={() => { logButton('abacus.select-model', { model: m.id }); onSelect(m.id); }}
               className={`text-left p-3 rounded-lg border flex items-center gap-3 transition ${
                 active
                   ? 'border-primary bg-primary/10 shadow-3d-primary'

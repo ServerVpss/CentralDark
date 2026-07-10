@@ -1,15 +1,16 @@
+// Schema real: api.audit_log é VIEW (somente leitura) de hub.audit_log — hash-chain imutável
+// (trigger audit_chain). Sem created_at/event_type/result/metadata como o código antigo esperava.
 export interface AuditLog {
-  id: string;
-  event_type: string;
-  agent: string;
-  action: string;
-  target: string;
-  result: 'approved' | 'vetoed' | 'pending' | 'error';
-  veto_reason?: string;
-  metadata: Record<string, any>;
-  immutable: boolean;
-  superseded_by?: string;
-  created_at: string;
+  id: number;
+  ts: string;
+  agent_identity: string;
+  tool: string;
+  args_hash: string;
+  decision: string; // 'allow' | 'deny' | 'require_approval' (ver hub.pdp_evaluate)
+  tier: number;
+  approval_id?: string;
+  prev_hash: string;
+  row_hash: string;
 }
 
 export interface AccessLog {

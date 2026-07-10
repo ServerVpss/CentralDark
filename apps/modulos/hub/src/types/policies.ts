@@ -1,14 +1,11 @@
-export type RuleType = 'allow' | 'block' | 'require_veto';
-
+// Schema real: api.policies é VIEW (somente leitura) de hub.policies — sistema PDP oficial
+// (Policy Decision Point: tier/needs_approval por tool+environment). Não é CRUD genérico de "regras".
 export interface Policy {
   id: string;
-  name: string;
-  description?: string;
-  rule_type: RuleType;
-  target_tool_id?: string;
-  target_server_id?: string;
+  tool: string;
+  environment: string; // default '*'
+  tier: number; // 0-4
+  needs_approval: boolean;
   enabled: boolean;
-  created_by?: string;
   created_at: string;
-  updated_at: string;
 }

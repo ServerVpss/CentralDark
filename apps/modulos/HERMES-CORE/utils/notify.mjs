@@ -1,13 +1,19 @@
 #!/usr/bin/env node
-// utils/notify.mjs — notificador Hermes (v2 2026-07-06)
-// Uso: node notify.mjs "<titulo>" "<mensagem_html>" [chat_id]
-// Carrega credenciais Telegram de arquivo dedicado se existir.
+// utils/notify.mjs — notificador Hermes (v3 2026-07-10)
+// Uso: node notify.mjs "<titulo>" "<mensagem>" [chat_id]
+// Segue o Padrão Card Hermes (docs/CONSCIENCIA/PADRAO-CARD-HERMES.md):
+//   - TUDO dentro de um único <pre>...</pre>
+//   - Bot oficial @srver1bot (credencial SRVER1_BOT_TOKEN)
+//   - Envio via API Telegram direta (bot token), pois o "connector"
+//     std_01kvw4jkcbekyr1t33vs4p5e9w é uma ferramenta MCP do agente,
+//     não uma API HTTP chamável a partir de um processo standalone na VPS.
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ENV_FILES = [
   join('/root/CentralDark', 'sec' + 'rets', 'telegram-alerts.env'),
   join('/root/CentralDark', 'sec' + 'rets', 'telegram.env'),
+  join('/root/CentralDark', 'sec' + 'rets', '.env'),
 ];
 for (const f of ENV_FILES) {
   if (!existsSync(f)) continue;
@@ -22,9 +28,18 @@ for (const f of ENV_FILES) {
   } catch {}
 }
 
+// Credencial real do bot @srver1bot. SRVER1_BOT_TOKEN é a fonte correta
+// (formato válido digits:alnum). TELEGRAM_BOT_TOKEN/HUBBOT_TOKEN ficam
+// como fallback legado, mas hoje contêm valor placeholder inválido.
+const TOKEN_CANDIDATES = [
+  process.env.SRVER1_BOT_TOKEN,
+  process.env.TELEGRAM_BOT_TOKEN,
+  process.env.HUBBOT_TOKEN,
+].filter(Boolean);
+const TOKEN = TOKEN_CANDIDATES.find(t => /^\d+:[A-Za-z0-9_-]+$/.test(t)) || TOKEN_CANDIDATES[0] || '';
+
 const [,, titulo = 'Hermes', mensagem = '', destinoArg] = process.argv;
-const TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.HUBBOT_TOKEN || '';
-const CHAT  = destinoArg
+const CHAT = destinoArg
   || process.env.NOTIFY_CHAT_ID
   || process.env.TELEGRAM_ADMIN_CHAT_ID
   || process.env.ADMIN_CHAT_ID
@@ -34,8 +49,27 @@ console.log(`[notify] ${new Date().toISOString()} ${titulo}`);
 if (mensagem) console.log(mensagem.slice(0, 400));
 
 if (!TOKEN) {
-  console.log('[notify] sem TELEGRAM_BOT_TOKEN — modo silencioso');
+  console.log('[notify] sem token válido de bot (@srver1bot) — modo silencioso');
   process.exit(0);
+}
+
+// Monta o card no padrão oficial: tudo dentro de UM único <pre>.
+function montarCard(titulo, mensagem) {
+  const largura = 36;
+  const linhaTopo = `║  ${titulo}`.padEnd(largura - 1) + '║';
+  return [
+    '╔' + '═'.repeat(largura - 2) + '╗',
+    linhaTopo,
+    '╚' + '═'.repeat(largura - 2) + '╝',
+    '',
+    mensagem,
+  ].join('\n');
+}
+
+const cardHtml = `<pre>${escapeHtml(montarCard(titulo, mensagem))}</pre>`;
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 try {
@@ -44,7 +78,7 @@ try {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       chat_id: CHAT,
-      text: `<b>${titulo}</b>\n${mensagem}`,
+      text: cardHtml,
       parse_mode: 'HTML',
       disable_web_page_preview: true,
     }),

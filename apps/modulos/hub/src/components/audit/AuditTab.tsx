@@ -5,27 +5,16 @@ import { AuditExport } from './AuditExport';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Search, Filter, RefreshCw, Download } from 'lucide-react';
-
-interface AuditEntry {
-  id: string;
-  event_type: string;
-  agent: string;
-  action: string;
-  target: string;
-  result: 'approved' | 'vetoed' | 'pending' | 'error';
-  veto_reason?: string;
-  metadata?: Record<string, unknown>;
-  created_at: string;
-}
+import type { AuditLog } from '@/types/audit';
 
 export function AuditTab() {
   const { entries, loading, error, page, totalPages, setPage, refresh } = useAudit();
   const [search, setSearch] = useState('');
   const [filterResult, setFilterResult] = useState<string>('all');
 
-  const filtered = entries.filter((e: AuditEntry) => {
-    if (search && !e.event_type.toLowerCase().includes(search.toLowerCase()) && !e.agent.toLowerCase().includes(search.toLowerCase())) return false;
-    if (filterResult !== 'all' && e.result !== filterResult) return false;
+  const filtered = entries.filter((e: AuditLog) => {
+    if (search && !e.tool.toLowerCase().includes(search.toLowerCase()) && !e.agent_identity.toLowerCase().includes(search.toLowerCase())) return false;
+    if (filterResult !== 'all' && e.decision !== filterResult) return false;
     return true;
   });
 
@@ -54,7 +43,7 @@ export function AuditTab() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Buscar por evento ou agente..."
+            placeholder="Buscar por tool ou agente..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-10"
@@ -66,10 +55,9 @@ export function AuditTab() {
           className="border rounded-md px-3 py-2 text-sm bg-background"
         >
           <option value="all">Todos</option>
-          <option value="approved">Aprovado</option>
-          <option value="vetoed">Vetado</option>
-          <option value="pending">Pendente</option>
-          <option value="error">Erro</option>
+          <option value="allow">Allow</option>
+          <option value="deny">Deny</option>
+          <option value="require_approval">Requer Aprovação</option>
         </select>
       </div>
 
@@ -77,7 +65,7 @@ export function AuditTab() {
         {filtered.length === 0 ? (
           <p className="text-center text-muted-foreground py-8">Nenhum registro de auditoria encontrado.</p>
         ) : (
-          filtered.map((entry: AuditEntry) => (
+          filtered.map((entry: AuditLog) => (
             <DecisionRow key={entry.id} entry={entry} />
           ))
         )}

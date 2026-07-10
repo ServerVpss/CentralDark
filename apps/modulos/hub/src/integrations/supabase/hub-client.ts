@@ -4,7 +4,10 @@ import { createClient } from "@supabase/supabase-js";
 
 const HUB_URL = import.meta.env.VITE_HUB_SUPABASE_URL || "https://lyoigsqluyktoclwdaft.supabase.co";
 const HUB_KEY = import.meta.env.VITE_HUB_SUPABASE_ANON_KEY
-  || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2lnc3FsdXlrdG9jbHdkYWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxMTUyMjIsImV4cCI6MjA3NzY5MTIyMn0.LWFDXfBz9GBAmXpi7uCTHYqjOMwzcRZk_i7EITvL1LI";
+  || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5b2lnc3FsdXlrdG9jbHdkYWZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTk0MDAsImV4cCI6MjA5NTU5NTQwMH0.24eXsWvtmTd-sQmUIN1aCAdw85BE9c-ay-XYErNT62k";
+// ⚠️ 2026-07-10: anon key antiga (iat 1762115222) foi rotacionada/revogada no projeto lyoig — API respondia
+// "Invalid API key" (401 UNAUTHORIZED_INVALID_API_KEY direto no gateway Supabase, nada a ver com PostgREST/RLS).
+// Key nova copiada de hub-public.ts (mesmo projeto, mesma role anon), confirmada via curl direto no REST antes da troca.
 
 // schema "api" — PostgREST deste projeto expõe 'api' como padrão; views espelham hub.*
 export const hubClient = createClient(HUB_URL, HUB_KEY, {

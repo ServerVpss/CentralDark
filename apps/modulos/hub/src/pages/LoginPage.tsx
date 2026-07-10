@@ -32,7 +32,7 @@ export default function LoginPage() {
         const { data, error } = await hubAuth.auth.signInWithPassword({ email, password });
         if (error) throw error;
         return { status: 200, user: data.user?.email };
-      }, { email });
+      }, { detail: { email } });
       toast.info('🟢 login OK — abrindo HUB');
       window.location.replace('/');
     } catch (e: any) {
@@ -165,7 +165,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={busy}
-              className="w-full h-11 gradient-emerald text-primary-foreground border-0 hover:opacity-90"
+              className="w-full h-11 gradient-emerald text-primary-foreground border-0 hover:brightness-95"
             >
               {busy ? '🚀 entrando...' : 'Entrar'}
             </Button>

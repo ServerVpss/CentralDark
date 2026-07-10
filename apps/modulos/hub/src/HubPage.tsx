@@ -12,11 +12,13 @@ import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
 import { logButton, trackAction } from './lib/buttonLog';
+import { useHubAutoRefresh } from './hooks/useHubAutoRefresh';
 import { hubAuth } from './integrations/supabase/hub-client';
 
 
 export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  useHubAutoRefresh({ intervalMs: 60000 });
 
   useEffect(() => {
     hubAuth.auth.getSession().then(({ data }) => setUserEmail(data.session?.user.email ?? null));
@@ -70,7 +72,7 @@ export default function HubPage() {
               <a
                 href="/login"
                 onClick={() => logButton('hub.click-login-link')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md gradient-emerald text-primary-foreground shadow-3d-primary hover:opacity-90 transition"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md gradient-emerald text-primary-foreground shadow-3d-primary hover:brightness-95 transition"
               >
                 <LogIn className="h-3.5 w-3.5" /> Entrar
               </a>

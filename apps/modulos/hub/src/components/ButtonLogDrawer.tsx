@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollText, Trash2, X } from 'lucide-react';
-import {
-  getButtonLogs,
-  clearButtonLogs,
-  BUTTON_LOG_EVENT,
-  type ButtonLogEntry,
-} from '@/lib/buttonLog';
+import React, { useEffect, useRef, useState } from "react";
+import { ScrollText, Trash2, X, Copy } from "lucide-react";
+import { getButtonLogs, clearButtonLogs, BUTTON_LOG_EVENT, type ButtonLogEntry } from "@/lib/buttonLog";
 
 export function ButtonLogDrawer() {
   const [open, setOpen] = useState(false);
   const [entries, setEntries] = useState<ButtonLogEntry[]>(() => getButtonLogs());
+  const drawerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handler = (e: Event) => setEntries((e as CustomEvent<ButtonLogEntry[]>).detail ?? getButtonLogs());
@@ -17,22 +13,52 @@ export function ButtonLogDrawer() {
     return () => window.removeEventListener(BUTTON_LOG_EVENT, handler);
   }, []);
 
-  const errors = entries.filter((e) => e.level === 'error').length;
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (drawerRef.current && !drawerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [open]);
+
+  const errors = entries.filter((e) => e.level === "error").length;
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
+      <button type="button" onClick={() => setOpen((v) => !v)}
         className="fixed bottom-4 right-4 z-40 flex items-center gap-2 px-3 py-2 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-500/30 hover:bg-emerald-500 transition"
-        title="Log de ações"
-      >
+        title="Log de ações">
         <ScrollText className="h-4 w-4" />
-        <span className="text-xs font-medium">Logs ({entries.length}){errors > 0 && <span className="ml-1 text-red-200">· {errors} erro{errors > 1 ? 's' : ''}</span>}</span>
+        <span className="text-xs font-medium">
+          Logs ({entries.length})
+          {errors > 0 && <span className="ml-1 text-red-200">· {errors} erro{errors > 1 ? "s" : ""}</span>}
+        </span>
       </button>
 
       {open && (
-        <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md border-l border-border/60 bg-card shadow-2xl flex flex-col">
+        <div
+          className="fixed inset-0 z-40 bg-black/40"
+          aria-hidden="true"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {open && (
+        <div
+          ref={drawerRef}
+          className="fixed inset-y-0 right-0 z-50 w-full max-w-md border-l border-border/60 bg-card shadow-2xl flex flex-col">
           <div className="flex items-center justify-between px-4 py-3 border-b border-border/60 gradient-emerald text-primary-foreground">
             <div className="flex items-center gap-2">
               <ScrollText className="h-4 w-4" />
@@ -55,30 +81,33 @@ export function ButtonLogDrawer() {
               </div>
             )}
             {entries.map((e) => {
-              const color =
-                e.level === 'error' ? 'text-red-400 border-red-500/40' :
-                e.level === 'warn'  ? 'text-amber-300 border-amber-500/40' :
-                e.level === 'ok'    ? 'text-emerald-300 border-emerald-500/40' :
-                                      'text-muted-foreground border-border/40';
+              const style =
+                e.level === "error" ? { text: "text-red-300", border: "border-l-red-500", row: "bg-red-500/[0.06]" } :
+                e.level === "warn"  ? { text: "text-amber-300", border: "border-l-amber-500", row: "bg-amber-500/[0.05]" } :
+                e.level === "ok"    ? { text: "text-emerald-300", border: "border-l-emerald-500", row: "bg-emerald-500/[0.05]" } :
+                                       { text: "text-foreground/80", border: "border-l-border", row: "" };
               return (
-                <div key={e.id} className={`px-3 py-2 text-xs border-l-2 ${color}`}>
+                <div key={e.id} className={`px-3 py-2 text-xs border-l-2 ${style.border} ${style.row}`}>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono truncate">{e.action}</span>
-                    <span className="text-[10px] text-muted-foreground shrink-0">
-                      {new Date(e.ts).toLocaleTimeString('pt-BR')}
-                    </span>
+                    <span className={`font-mono font-medium truncate ${style.text}`}>{e.action}</span>
+                    <span className="text-[10px] text-muted-foreground shrink-0">{new Date(e.ts).toLocaleTimeString("pt-BR")}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] text-muted-foreground mt-1">
+                  <div className="flex items-center gap-2 text-[10px] text-foreground/70 mt-1 flex-wrap">
                     {e.status !== undefined && <span>HTTP {e.status}</span>}
                     {e.latencyMs !== undefined && <span>{e.latencyMs}ms</span>}
-                    {e.error && <span className="text-red-400 truncate">{e.error}</span>}
+                    {e.correlationId && (
+                      <button onClick={() => navigator.clipboard.writeText(e.correlationId!)}
+                        className="inline-flex items-center gap-1 rounded bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 font-mono text-emerald-300 hover:text-emerald-200 hover:bg-emerald-500/20"
+                        title="Copiar correlation-id">
+                        <Copy className="h-2.5 w-2.5" />{e.correlationId}
+                      </button>
+                    )}
+                    {e.error && <span className="text-red-300 font-medium truncate">{e.error}</span>}
                   </div>
                   {e.detail !== undefined && e.detail !== null && (
                     <details className="mt-1">
-                      <summary className="cursor-pointer text-[10px] text-muted-foreground/70 hover:text-foreground">detalhes</summary>
-                      <pre className="mt-1 max-h-40 overflow-auto text-[10px] bg-black/30 rounded p-2 whitespace-pre-wrap break-words">
-                        {safeStringify(e.detail)}
-                      </pre>
+                      <summary className="cursor-pointer text-[10px] text-foreground/60 hover:text-foreground">detalhes</summary>
+                      <pre className="mt-1 max-h-40 overflow-auto text-[10px] bg-black/30 rounded p-2 whitespace-pre-wrap break-words text-foreground/80">{safeStringify(e.detail)}</pre>
                     </details>
                   )}
                 </div>

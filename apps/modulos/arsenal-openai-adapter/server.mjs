@@ -60,6 +60,32 @@ async function lerRegras() {
   catch { return { modelos: { router:'gemini-3-flash-preview', voz1_pro:'gemini-3.1-pro-preview', voz2_gpt:'gpt-5', voz3_flash:'gemini-3-flash-preview', juiz:'gemini-3.1-pro-preview' } }; }
 }
 
+// Catálogo dinâmico do Abacus RouteLLM (os modelos "crus" por trás do Council).
+// Cache de 5min pra não bater no upstream a cada /v1/models.
+let abacusCatalogCache = { at: 0, models: [] };
+const ABACUS_CATALOG_TTL_MS = 5 * 60 * 1000;
+
+async function fetchAbacusCatalog() {
+  if (Date.now() - abacusCatalogCache.at < ABACUS_CATALOG_TTL_MS && abacusCatalogCache.models.length) {
+    return abacusCatalogCache.models;
+  }
+  try {
+    const base = PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE.replace(/\/chat\/completions$/, '') : PROVIDER_BASE;
+    const r = await fetch(`${base}/models`, { headers: { Authorization: `Bearer ${PROVIDER_KEY}` } });
+    if (!r.ok) return abacusCatalogCache.models;
+    const data = await r.json();
+    const models = Array.isArray(data?.data) ? data.data.map(m => m.id).filter(Boolean) : [];
+    if (models.length) {
+      abacusCatalogCache = { at: Date.now(), models };
+      console.log(`[Catalog] Abacus loaded ${models.length} models`);
+    }
+    return abacusCatalogCache.models;
+  } catch (e) {
+    console.error('[Catalog] falhou:', e.message);
+    return abacusCatalogCache.models;
+  }
+}
+
 async function callProvider(modelo, messages) {
   const r = await fetch(PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE : `${PROVIDER_BASE}/chat/completions`, {
     method: 'POST',
@@ -228,11 +254,16 @@ const server = http.createServer(async (req, res) => {
   if (pathOnly === '/v1/models' || pathOnly === '/models') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
-    const data = DISCOVERY_MODELS.map(m => {
+    const curados = DISCOVERY_MODELS.map(m => {
       const alias_of = MODEL_ALIASES[m.id] || null;
       return alias_of ? { ...m, alias_of } : m;
     });
-    return json(res, 200, { object: 'list', data });
+    const curadosIds = new Set(curados.map(m => m.id));
+    const abacusIds = await fetchAbacusCatalog();
+    const crus = abacusIds
+      .filter(id => !curadosIds.has(id))
+      .map(id => ({ id, object: 'model', created: 0, owned_by: 'abacus', name: id }));
+    return json(res, 200, { object: 'list', data: [...curados, ...crus] });
   }
 
   // Enforce mode: bloqueia se a chave não bater E o fallback legado também não bater
@@ -273,7 +304,32 @@ const server = http.createServer(async (req, res) => {
 
       const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
       const rodar = MODOS[modo];
-      if (!rodar) return json(res, 400, { error: `modelo desconhecido: ${requestedModel}`, mapped_to: modo });
+
+      // Passthrough: modelo não é um modo Arsenal, mas existe no catálogo real do Abacus (138 modelos).
+      // Chama o Abacus direto com o modelo pedido, sem passar pelo Council.
+      if (!rodar) {
+        const catalogo = await fetchAbacusCatalog();
+        if (!catalogo.includes(requestedModel)) {
+          return json(res, 400, { error: `modelo desconhecido: ${requestedModel}`, mapped_to: modo });
+        }
+        req._auditSetModel?.(`passthrough:${requestedModel}`);
+        const streamingPt = payload.stream === true;
+        try {
+          const respostaPt = await callProvider(requestedModel, messages);
+          if (streamingPt) {
+            res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+            res.write(sseChunk(requestedModel, { role: 'assistant' }));
+            res.write(sseChunk(requestedModel, { content: respostaPt }));
+            res.write(sseChunk(requestedModel, {}, 'stop'));
+            res.write('data: [DONE]\n\n');
+            return res.end();
+          }
+          return json(res, 200, chatOk(requestedModel, respostaPt));
+        } catch (e) {
+          console.error('passthrough erro:', e);
+          return json(res, 502, { error: e.message });
+        }
+      }
 
       // stream:true → SSE real (headers já vão, keepalive segura o cliente enquanto o Council trabalha)
       const streaming = payload.stream === true;

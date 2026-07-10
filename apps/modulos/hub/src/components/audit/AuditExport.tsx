@@ -2,20 +2,10 @@ import React from 'react';
 import { Button } from '@/shared/ui/button';
 import { Download } from 'lucide-react';
 import { useToast } from '@/shared/hooks/use-toast';
-
-interface AuditEntry {
-  id: string;
-  event_type: string;
-  agent: string;
-  action: string;
-  target: string;
-  result: string;
-  veto_reason?: string;
-  created_at: string;
-}
+import type { AuditLog } from '@/types/audit';
 
 interface AuditExportProps {
-  entries: AuditEntry[];
+  entries: AuditLog[];
   filename?: string;
 }
 
@@ -24,7 +14,7 @@ export function AuditExport({ entries: data, filename = 'audit-log.csv' }: Audit
 
   const handleExport = () => {
     try {
-      const headers = ['id', 'event_type', 'agent', 'action', 'target', 'result', 'veto_reason', 'created_at'];
+      const headers = ['id', 'ts', 'agent_identity', 'tool', 'args_hash', 'decision', 'tier', 'approval_id', 'prev_hash', 'row_hash'];
       const csvRows = [headers.join(',')];
 
       for (const entry of data) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Loader2 } from 'lucide-react';
 import { abacusApi } from '@/services/abacus-client';
+import { logButton } from '@/lib/buttonLog';
 
 interface Props {
   model: string;
@@ -12,6 +13,7 @@ export function ConsolePanel({ model }: Props) {
   const [result, setResult] = useState<{ ok: boolean; content: string; latencyMs: number; status: number } | null>(null);
 
   const send = async () => {
+    logButton('abacus.console.send', { model, promptLen: prompt.length });
     if (!prompt.trim()) return;
     setLoading(true);
     setResult(null);

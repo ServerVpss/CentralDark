@@ -22,7 +22,7 @@ export function AbacusTab() {
           </div>
           <button
             onClick={() => setOpen(true)}
-            className="w-full sm:w-auto gradient-emerald text-primary-foreground px-5 py-3 rounded-lg font-medium shadow-3d-primary hover:opacity-95 transition flex items-center justify-center gap-2"
+            className="w-full sm:w-auto gradient-emerald text-primary-foreground px-5 py-3 rounded-lg font-medium shadow-3d-primary hover:brightness-95 transition flex items-center justify-center gap-2"
           >
             <Sparkles className="h-4 w-4" />
             Abrir painel

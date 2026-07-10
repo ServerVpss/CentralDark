@@ -51,23 +51,20 @@ export function usePolicies() {
     }
   }, []);
 
-  const addPolicy = async (policy: Partial<Policy>) => {
-    const { data, error: err } = await supabase.from('policies').insert([policy]).select().single();
-    if (err) throw err;
-    await fetchPolicies();
-    return data;
+  // api.policies é uma VIEW somente leitura de hub.policies (sistema PDP oficial).
+  // Não existe RPC de escrita publicada para o schema api — edição real é feita
+  // diretamente em hub.policies pelo banco. Lançamos erro amigável em vez de
+  // deixar o INSERT/UPDATE/DELETE falhar silenciosamente contra a view.
+  const addPolicy = async (_policy: Partial<Policy>) => {
+    throw new Error('Edição de políticas ainda não disponível nesta versão — sistema PDP é gerenciado via hub.policies diretamente');
   };
 
-  const updatePolicy = async (id: string, updates: Partial<Policy>) => {
-    const { error: err } = await supabase.from('policies').update(updates).eq('id', id);
-    if (err) throw err;
-    await fetchPolicies();
+  const updatePolicy = async (_id: string, _updates: Partial<Policy>) => {
+    throw new Error('Edição de políticas ainda não disponível nesta versão — sistema PDP é gerenciado via hub.policies diretamente');
   };
 
-  const deletePolicy = async (id: string) => {
-    const { error: err } = await supabase.from('policies').delete().eq('id', id);
-    if (err) throw err;
-    await fetchPolicies();
+  const deletePolicy = async (_id: string) => {
+    throw new Error('Edição de políticas ainda não disponível nesta versão — sistema PDP é gerenciado via hub.policies diretamente');
   };
 
   useEffect(() => {

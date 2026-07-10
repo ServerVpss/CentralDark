@@ -126,7 +126,7 @@ export function ApiKeyDialog({ open, providerName, providerColor, helpText, help
             <Button
               type="submit"
               disabled={value.trim().length < 10 || busy}
-              className="gradient-emerald text-primary-foreground border-0 hover:opacity-90 min-w-[110px]"
+              className="gradient-emerald text-primary-foreground border-0 hover:brightness-95 min-w-[110px]"
             >
               {busy ? '🚀 salvando...' : 'Salvar chave'}
             </Button>

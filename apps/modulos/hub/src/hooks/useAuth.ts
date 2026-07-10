@@ -14,20 +14,33 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchRole = async (userId: string): Promise<UserRole> => {
+      const { data: userRole, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .single();
+
+      if (error) {
+        // PGRST116 = nenhuma linha encontrada (usuário novo, sem role atribuída ainda) — 'viewer' é esperado.
+        // Qualquer outro erro (tabela/coluna inexistente, RLS bloqueando, etc.) merece log pra debug.
+        if (error.code !== 'PGRST116') {
+          console.error('[useAuth] Falha ao buscar role em user_roles:', error);
+        }
+        return 'viewer';
+      }
+
+      return (userRole?.role as UserRole) || 'viewer';
+    };
+
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
-        // Busca role customizada se houver tabela de perfis, caso contrário assume viewer
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-
+        const role = await fetchRole(session.user.id);
         setUser({
           id: session.user.id,
           email: session.user.email || '',
-          role: (profile?.role as UserRole) || 'viewer',
+          role,
         });
       }
       setLoading(false);
@@ -37,15 +50,19 @@ export function useAuth() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email || '',
-          role: 'viewer', // Refresh trigger usualmente exigiria re-fetch de profile
-        });
+        (async () => {
+          const role = await fetchRole(session.user.id);
+          setUser({
+            id: session.user.id,
+            email: session.user.email || '',
+            role,
+          });
+          setLoading(false);
+        })();
       } else {
         setUser(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();

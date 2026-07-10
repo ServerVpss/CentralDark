@@ -17,10 +17,10 @@
     { "posicao": 13, "modelo": "x-ai/grok-4",                         "via": "darkai",             "timeout_s": 45, "ativo": true, "nota": "grok padrão" },
     { "posicao": 14, "modelo": "x-ai/grok-4-fast",                    "via": "darkai",             "timeout_s": 20, "ativo": true, "nota": "grok fast" },
     { "posicao": 15, "modelo": "x-ai/grok-code-fast-1",               "via": "darkai",             "timeout_s": 30, "ativo": true, "nota": "grok código" },
-    { "posicao": 16, "modelo": "claude-sonnet-4-5",                   "via": "elite-anthropic",    "timeout_s": 30, "ativo": true, "nota": "ELITE — última bala, sempre vivo (claude.ap7.site)" }
+    { "posicao": 16, "modelo": "claude-sonnet-4-5",                   "via": "elite-anthropic",    "timeout_s": 30, "ativo": true, "nota": "ELITE — última bala, sempre vivo (migrado de claude.ap7.site para api.centralldark.com em 10/07/2026)" }
   ],
   "elite": {
-    "url": "https://claude.ap7.site/v1/messages",
+    "url": "https://api.centralldark.com/v1/messages",
     "auth_header": "x-api-key",
     "env_token": "ELITE_ANTHROPIC_TOKEN",
     "retry": 1,

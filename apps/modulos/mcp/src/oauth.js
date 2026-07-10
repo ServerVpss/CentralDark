@@ -450,12 +450,70 @@ function redirectWithOAuthError(res, redirect_uri, error, state, description) {
     back.searchParams.set("iss", config.publicUrl);
     res.redirect(302, back.toString());
 }
+const SCOPE_LABELS = {
+    mcp: { title: "Usar as ferramentas do MCP", desc: "Chamar as tools disponíveis (github, vps, docs, skills etc)." },
+    admin: { title: "Acesso administrativo completo", desc: "Painel /admin, PM2, git, vault, shell — controle total do CentralDark." },
+};
+function scopeChecklistHtml(scope) {
+    const scopes = String(scope || "mcp").split(/\s+/).filter(Boolean);
+    return scopes
+        .map((s) => {
+        const label = SCOPE_LABELS[s] || { title: s, desc: "" };
+        return `<div class="perm"><span class="check">✓</span><div><div class="perm-title">${escapeHtml(label.title)}</div>${label.desc ? `<div class="perm-desc">${escapeHtml(label.desc)}</div>` : ""}</div></div>`;
+    })
+        .join("");
+}
 function sendOwnerConsentPage(res, input) {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("Referrer-Policy", "no-referrer");
     res.setHeader("X-Content-Type-Options", "nosniff");
-    res.send(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CENTRAL DARK - Autorizar</title><style>:root{--bg:#052e2b;--panel:rgba(6,44,40,.92);--line:rgba(52,211,153,.36);--text:#e6fff9;--muted:#a7f3d0;--brand:#34d399;--brand2:#10b981}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:radial-gradient(circle at 50% 30%,#0a3d38,var(--bg) 60%,#031f1d);color:var(--text)}.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:32px 28px;max-width:460px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(3,31,29,.62)}h1{margin:0 0 8px;font-size:21px;color:var(--brand)}.sub{color:var(--muted);font-size:14px;margin:0 0 24px;opacity:.9}.row{background:rgba(5,46,43,.72);padding:10px 12px;border-radius:8px;font-size:13px;margin:6px 0;border:1px solid rgba(52,211,153,.16)}.k{color:#6ee7b7;font-weight:700}input[type=password]{width:100%;padding:12px 14px;background:rgba(5,46,43,.86);border:1px solid rgba(52,211,153,.38);color:var(--text);border-radius:8px;font-size:15px;margin:16px 0 12px;outline:none}input[type=password]:focus{border-color:var(--brand2);box-shadow:0 0 0 3px rgba(16,185,129,.18)}button{width:100%;padding:13px;background:linear-gradient(135deg,var(--brand2),#059669);color:#052e2b;border:0;border-radius:8px;font-weight:800;font-size:15px;cursor:pointer}.foot{text-align:center;margin-top:16px;font-size:11px;color:#6ee7b7;opacity:.68}.err{margin:12px 0 0;color:#fecaca;font-size:13px}</style></head><body><form class="card" method="POST" action="/authorize"><input type="hidden" name="client_id" value="${escapeHtml(input.client_id)}"><input type="hidden" name="redirect_uri" value="${escapeHtml(input.redirect_uri)}"><input type="hidden" name="response_type" value="${escapeHtml(input.response_type)}"><input type="hidden" name="code_challenge" value="${escapeHtml(input.code_challenge)}"><input type="hidden" name="code_challenge_method" value="${escapeHtml(input.code_challenge_method)}"><input type="hidden" name="state" value="${escapeHtml(input.client_state ?? "")}"><input type="hidden" name="scope" value="${escapeHtml(input.scope ?? "mcp")}"><h1>Autorizar conector</h1><p class="sub">Um cliente quer se conectar ao MCP do dono.</p><div class="row"><span class="k">Cliente:</span> ${escapeHtml(input.client_name || input.client_id)}</div><div class="row"><span class="k">Retorno:</span> <span style="word-break:break-all;font-size:12px">${escapeHtml(input.redirect_uri)}</span></div><input type="password" name="password" placeholder="Senha do admin" autofocus required><button type="submit">Aprovar acesso total</button>${input.error ? `<p class="err">${escapeHtml(input.error)}</p>` : ""}<div class="foot">CENTRAL DARK - MCP OAuth - dono only</div></form></body></html>`);
+    res.send(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CentralDark - Autorizar conector</title><style>
+:root{--bg:#f4f6f5;--panel:#ffffff;--line:#e3e8e6;--text:#111827;--muted:#6b7280;--brand:#10b981;--brand-deep:#059669;--brand-soft:#ecfdf5}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:32px 28px;max-width:440px;width:calc(100% - 32px);box-shadow:0 10px 40px rgba(16,24,40,.06)}
+.badge{width:44px;height:44px;border-radius:12px;background:var(--brand-soft);color:var(--brand-deep);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;margin-bottom:16px}
+h1{margin:0 0 4px;font-size:19px;font-weight:700}
+.sub{color:var(--muted);font-size:14px;margin:0 0 20px}
+.client-row{background:var(--brand-soft);border:1px solid rgba(16,185,129,.18);padding:10px 14px;border-radius:10px;font-size:13px;margin:0 0 18px}
+.client-row b{color:var(--brand-deep)}
+.perms{margin:0 0 20px}
+.perm{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
+.check{color:var(--brand);font-weight:800;flex-shrink:0}
+.perm-title{font-weight:600;font-size:14px}
+.perm-desc{color:var(--muted);font-size:12px;margin-top:2px}
+input[type=password]{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--line);color:var(--text);border-radius:10px;font-size:15px;margin:0 0 14px;outline:none}
+input[type=password]:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(16,185,129,.15)}
+.actions{display:flex;gap:10px}
+button{flex:1;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--line)}
+.btn-allow{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn-allow:hover{background:var(--brand-deep)}
+.btn-deny{background:#fff;color:var(--text)}
+.foot{text-align:center;margin-top:18px;font-size:11px;color:var(--muted)}
+.err{margin:0 0 14px;color:#b91c1c;font-size:13px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 12px}
+</style></head><body>
+<form class="card" method="POST" action="/authorize">
+<div class="badge">CD</div>
+<h1>Autorizar conector</h1>
+<p class="sub">Um cliente quer se conectar ao MCP CentralDark.</p>
+<div class="client-row"><b>${escapeHtml(input.client_name || input.client_id)}</b> quer acessar sua conta.</div>
+<div class="perms">${scopeChecklistHtml(input.scope)}</div>
+<input type="hidden" name="client_id" value="${escapeHtml(input.client_id)}">
+<input type="hidden" name="redirect_uri" value="${escapeHtml(input.redirect_uri)}">
+<input type="hidden" name="response_type" value="${escapeHtml(input.response_type)}">
+<input type="hidden" name="code_challenge" value="${escapeHtml(input.code_challenge)}">
+<input type="hidden" name="code_challenge_method" value="${escapeHtml(input.code_challenge_method)}">
+<input type="hidden" name="state" value="${escapeHtml(input.client_state ?? "")}">
+<input type="hidden" name="scope" value="${escapeHtml(input.scope ?? "mcp")}">
+${input.error ? `<p class="err">${escapeHtml(input.error)}</p>` : ""}
+<input type="password" name="password" placeholder="Senha do admin" autofocus required>
+<div class="actions">
+<button type="button" class="btn-deny" onclick="history.back()">Deny</button>
+<button type="submit" class="btn-allow">Allow</button>
+</div>
+<div class="foot">CentralDark MCP · conexão segura via OAuth 2.1</div>
+</form></body></html>`);
 }
 export function postRegister(req, res) {
     const body = (req.body ?? {});
