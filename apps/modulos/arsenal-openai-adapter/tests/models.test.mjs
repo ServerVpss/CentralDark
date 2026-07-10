@@ -1,14 +1,17 @@
 // Teste automatizado /v1/models — Arsenal Adapter (Gateway CentralDark)
 //
 // Invariantes CRÍTICOS (falha 🔴 quebra CI):
-//   1. HTTP 200 no gateway (/v1/models público)
+//   1. HTTP 200 no gateway (/v1/models)
 //   2. Shape OpenAI-compat ({ object: 'list', data: [...] })
 //   3. Aliases Arsenal presentes (arsenal-router/parallel/debate/hermes)
 //
 // Warnings 🟡 (não quebram CI):
 //   - Família Grok-4 (só existe quando catálogo dinâmico Abacus está ativo)
 //   - Aliases Claude/GPT (fase discovery — reintroduzidos em PR dedicado)
-//   - Prova autenticada com CENTRALDARK_API_KEY (requer secret cadastrado)
+//
+// Observação:
+//   Se CENTRALDARK_API_KEY estiver setada, o fetch crítico já vai autenticado
+//   (contorna WAF que bloqueia IPs de runners externos como GitHub Actions).
 
 import assert from 'node:assert/strict';
 
@@ -18,6 +21,10 @@ const CENTRALDARK_KEY = process.env.CENTRALDARK_API_KEY || '';
 const ARSENAL_OBRIGATORIOS = ['arsenal-router', 'arsenal-parallel', 'arsenal-debate', 'arsenal-hermes'];
 const CLAUDE_ESPERADOS   = ['claude-3-5-sonnet-latest', 'claude-3-5-haiku-latest'];
 const GPT_ESPERADOS      = ['gpt-4o', 'gpt-4o-mini'];
+
+const authHeaders = CENTRALDARK_KEY
+  ? { Authorization: `Bearer ${CENTRALDARK_KEY}`, 'x-api-key': CENTRALDARK_KEY }
+  : {};
 
 const resultados = [];
 const ok   = (n, d = '') => resultados.push({ n, s: '🟢', d });
@@ -31,11 +38,11 @@ async function fetchJson(url, headers = {}) {
 }
 
 async function main() {
-  console.log(`🚀 Testando ${GATEWAY}/v1/models ...`);
+  console.log(`🚀 Testando ${GATEWAY}/v1/models ${CENTRALDARK_KEY ? '(autenticado)' : '(anônimo)'} ...`);
 
   let gw;
   try {
-    gw = await fetchJson(`${GATEWAY}/v1/models`);
+    gw = await fetchJson(`${GATEWAY}/v1/models`, authHeaders);
     assert.equal(gw.status, 200, 'status HTTP');
     assert.equal(gw.body?.object, 'list', 'shape object=list');
     assert.ok(Array.isArray(gw.body?.data), 'shape data=[]');
@@ -70,11 +77,10 @@ async function main() {
     : warn('Aliases GPT ausentes (não crítico)', faltamGPT.join(', '));
 
   if (CENTRALDARK_KEY) {
-    const tentativas = [
+    for (const t of [
       { nome: 'Authorization: Bearer', headers: { Authorization: `Bearer ${CENTRALDARK_KEY}` } },
       { nome: 'x-api-key',             headers: { 'x-api-key': CENTRALDARK_KEY } },
-    ];
-    for (const t of tentativas) {
+    ]) {
       try {
         const r = await fetchJson(`${GATEWAY}/v1/models`, t.headers);
         assert.equal(r.status, 200);
@@ -85,19 +91,16 @@ async function main() {
       }
     }
   } else {
-    warn('CENTRALDARK_API_KEY não setada', 'pulando prova autenticada — cadastre em Settings → Secrets → Actions');
+    warn('CENTRALDARK_API_KEY não setada', 'pulando prova autenticada');
   }
 
   imprimirPlacar();
-  const falhou = resultados.some((r) => r.s === '🔴');
-  process.exit(falhou ? 1 : 0);
+  process.exit(resultados.some((r) => r.s === '🔴') ? 1 : 0);
 }
 
 function imprimirPlacar() {
   console.log('\n📊 Placar do teste /v1/models');
-  for (const r of resultados) {
-    console.log(`  ${r.s} ${r.n}${r.d ? ' — ' + r.d : ''}`);
-  }
+  for (const r of resultados) console.log(`  ${r.s} ${r.n}${r.d ? ' — ' + r.d : ''}`);
   const g = resultados.filter((r) => r.s === '🟢').length;
   const y = resultados.filter((r) => r.s === '🟡').length;
   const rd = resultados.filter((r) => r.s === '🔴').length;
