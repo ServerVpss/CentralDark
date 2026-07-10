@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T07:30:10.168Z",
-  "updatedAtBR": "10/07/2026, 04:30:10 BRT",
+  "updatedAt": "2026-07-10T07:33:52.920Z",
+  "updatedAtBR": "10/07/2026, 04:33:52 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(test): autentica fetch crítico com CENTRALDARK_API_KEY 🟢",
+    "lastCommit": "ci(arsenal-adapter): sobe server em localhost pra contornar WAF 🟢",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T07:33:52.920Z",
+      "titulo": "Push na main · baff34c62cb2c53745793447b12f34b508d85ea7",
+      "detalhe": "ci(arsenal-adapter): sobe server em localhost pra contornar WAF 🟢",
+      "area": "Repositório",
+      "sha": "baff34c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-10T07:30:10.168Z",
       "titulo": "Push na main · fb4a299a5e4983a43a3f0ea872e2f658c682990b",
       "detalhe": "fix(test): autentica fetch crítico com CENTRALDARK_API_KEY 🟢",
@@ -986,14 +994,6 @@
       "detalhe": "Adicionou logs IA, teste e PS",
       "area": "Repositório",
       "sha": "8779ad6",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T19:03:30.865Z",
-      "titulo": "Push na main · 233e823eca720cbf95dc4fe45b3d382e83cccb14",
-      "detalhe": "Aguardando confirmação",
-      "area": "Repositório",
-      "sha": "233e823",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T07:33:52.920Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · baff34c62cb2c53745793447b12f34b508d85ea7 (baff34c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T07:30:10.168Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · fb4a299a5e4983a43a3f0ea872e2f658c682990b (fb4a299)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T19:21:39.834Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 8779ad64eef112ed0a32c53ff075815760c320ef (8779ad6)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T19:03:30.865Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 233e823eca720cbf95dc4fe45b3d382e83cccb14 (233e823)",
       "area": "Repositório",
       "status": "sucesso"
     }
