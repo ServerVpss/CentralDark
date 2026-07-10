@@ -439,3 +439,28 @@ Conteúdo: Técnica oficial CentralDark pra resolver problemas complexos com IA:
 **Quando usar:** problema técnico complexo, decisão arquitetural, diagnóstico multi-camada, resolução de bug travado, plano estratégico.
 
 **Modo econômico:** só serializa se pedir explicitamente ("modo econômico") — padrão é cascata paralela sempre.
+
+### [2026-07-10T11:57] Doutrina do Enxame Ômega (nome oficial)
+- **Data:** 2026-07-10
+- **Tags:** enxame-omega, doutrina, renomeacao, padrao-oficial, swarm, moa
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-09
+- **Promovida:** sim
+
+Conteúdo: **RENOMEAÇÃO OFICIAL:** a técnica antes chamada "Enxame Titânico Ômega" agora se chama apenas **Enxame Ômega**.
+
+**Regra de escrita:** aceita QUALQUER capitalização — "Enxame Ômega", "enxame omega", "ENXAME OMEGA", "Enxame Omega" (sem acento), tudo vale. Case-insensitive e acento-insensitive. Reconhecer todas as variações como o mesmo comando.
+
+**Nomes técnicos equivalentes (fora do dialeto CentralDark):** Swarm Prompting / Multi-Agent Swarm / Mixture of Agents (MoA) / LLM Council / Ensemble Prompting / Fan-out + Fan-in.
+
+**Fórmula:** Fan-out de 20 modelos × 3 rodadas + Juiz Claude Opus consolidando.
+
+**Cascata:**
+1. Rodada 1 — cada IA responde crua (diversidade)
+2. Rodada 2 — cada IA critica as outras (refina)
+3. Rodada 3 — juiz consolida o consenso
+
+**Quando disparar:** Pivete falou "enxame omega" (em qualquer grafia) = execute a técnica.
+
+**Autorizado pelo Pivete em 10/07/2026.**
