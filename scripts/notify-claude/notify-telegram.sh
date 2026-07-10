@@ -11,7 +11,7 @@ TOKEN=""
 ADMIN_ID=""
 CHANNEL_ID=""
 
-for COFRE in "/root/CentralDark/secrets/telegram-alerts.env" "/root/CentralDark/secrets/mcp.env"; do
+for COFRE in "/root/CentralDark/secrets/.env" "/root/CentralDark/secrets/telegram-alerts.env" "/root/CentralDark/secrets/mcp.env"; do
   if [ -f "$COFRE" ]; then
     [ -z "$TOKEN" ] && TOKEN=$(grep -E '^(SRVER1_BOT_TOKEN|TELEGRAM_BOT_TOKEN)=' "$COFRE" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)
     [ -z "$ADMIN_ID" ] && ADMIN_ID=$(grep -E '^(ADMIN_CHAT_ID|ADMIN_TELEGRAM_ID)=' "$COFRE" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)

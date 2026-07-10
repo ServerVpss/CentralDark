@@ -574,3 +574,13 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+## Pendência nova (10/07/2026) — proteção técnica de áreas críticas contra edição
+
+Pivete pediu reforço técnico (não só documentação no CLAUDE.md) contra edição de código em áreas protegidas sem aprovação explícita. Hoje a proteção é só convenção escrita (Seção 9 do CLAUDE.md) — não há barreira técnica real impedindo uma IA de editar arquivo em `apps/modulos/HERMES-CORE/`, `apps/modulos/mcp/` etc sem autorização.
+
+Ideias a explorar numa próxima sessão:
+- Git hook `pre-commit` que bloqueia commit em paths protegidos sem uma flag/marcador explícito de autorização no corpo do commit.
+- Permissão de arquivo (chmod) mais restrita nos diretórios mais críticos, exigindo sudo/confirmação extra.
+- CODEOWNERS do GitHub já existe (`.github/CODEOWNERS`, criado hoje) — verificar se cobre os paths certos e se pode ser reforçado com branch protection rules (exige review antes de merge).
+- Isso conecta com a arquitetura de 8 agentes GitHub↔VPS já documentada (`docs/CONSCIENCIA/ARSENAL/ARQUITETURA-GITHUB-VPS-8-AGENTES.md`) — o `codex-github-security` e `codex-vps-reviewer` são exatamente os papéis que fariam esse tipo de checagem antes de aplicar mudança.
