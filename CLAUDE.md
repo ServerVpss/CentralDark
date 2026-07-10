@@ -1,9 +1,22 @@
 # CLAUDE.md
 
-> Dump de Estado do Projeto — leitura obrigatória para qualquer IA/Hub que abrir este repositório.
-> Última atualização: 09/07/2026
+> 🚪 **PRECEDÊNCIA OBRIGATÓRIA PARA CLAUDE E QUALQUER IA**
 >
-> **Fluxo oficial atual:** GitHub = Fonte da Verdade · VPS = Executor · Supabase = Estado Vivo · Gateway = `https://api.centralldark.com/`
+> Antes de interpretar este arquivo, siga:
+>
+> ```text
+> 00-COMECE-AQUI-IA.md
+> → AGENTS.md
+> → docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
+> → docs/GOVERNANCA/BOOT-IA.md
+> ```
+>
+> Este `CLAUDE.md` é um dump de estado e contexto específico. Ele complementa, mas não substitui a porta universal nem o BOOT operacional.
+>
+> Dump de Estado do Projeto — leitura obrigatória depois do BOOT universal para qualquer IA/Hub que precise do contexto completo deste repositório.
+> Última atualização: 10/07/2026
+>
+> **Fluxo oficial atual:** `pivete/dev → pivete/auditoria → main` · GitHub = Fonte da Verdade · VPS DEV/AUDIT = oficina remota e homologação · VPS PROD = Executor · Supabase = Estado Vivo · Gateway = `https://api.centralldark.com/`
 >
 > **Documento de arquitetura:** [`docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md`](docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md)
 
@@ -11,7 +24,7 @@
 
 ## 🧠 CÉREBRO COMPARTILHADO DAS IAs — `docs/CONSCIENCIA/DARKAI/`
 
-**Qualquer IA que abrir este repo deve ler PRIMEIRO:** [`docs/CONSCIENCIA/DARKAI/README.md`](docs/CONSCIENCIA/DARKAI/README.md)
+**Depois de concluir o BOOT universal, qualquer IA que trabalhar com `darkai` deve ler:** [`docs/CONSCIENCIA/DARKAI/README.md`](docs/CONSCIENCIA/DARKAI/README.md)
 
 Essa pasta concentra TUDO sobre o comando `darkai` (CLI que dá acesso a provedores/rotas autorizadas via infraestrutura CentralDark, com chave protegida e sem expor segredo ao usuário final):
 - `README.md` — índice geral (comece aqui)
@@ -38,7 +51,7 @@ Sistema de Conselho de IAs (`/router`, `/refinar`, `/debate` + Hermes autônomo)
 - **Painel de status:** https://status.centralldark.com
 - **Gateway oficial CentralDark:** https://api.centralldark.com/
 - **Repositório GitHub:** `ServerVpss/CentralDark` é a Fonte da Verdade para código, documentação, scripts oficiais, governança e arquitetura.
-- **VPS:** `/root/CentralDark/` é runtime/executor. Não é oficina principal de edição manual.
+- **VPS:** ambientes DEV/AUDIT podem ser oficina remota; produção é runtime/executor. A VPS nunca é a única cópia nem substitui commit e push no GitHub.
 
 ---
 
@@ -76,7 +89,7 @@ NADA NO ESCURO.
 Os pontos oficiais são:
 
 1. **GitHub (`ServerVpss/CentralDark`)** — Fonte da Verdade para código, docs, scripts oficiais, governança, runbooks e histórico.
-2. **VPS (`/root/CentralDark/`)** — executor/runtime: PM2, Node, Nginx, webhooks, logs e validação real.
+2. **VPS (`/root/CentralDark/`)** — ambientes remotos de desenvolvimento, auditoria e runtime: PM2, Node, Nginx, webhooks, logs e validação real. Toda mudança persistente precisa voltar ao GitHub por commit e push antes do deploy correspondente.
 3. **Supabase** — estado vivo: painel, status dinâmico, eventos, filas, logs estruturados leves e dados que mudam rápido.
 4. **Gateway CentralDark (`https://api.centralldark.com/`)** — roteamento autorizado, padronizado, seguro e documentado.
 5. **Cérebro Vivo (`docs/CONSCIENCIA/` + `.claude/`)** — contexto persistente, regras e memória de projeto consumida por qualquer IA/Hub.
@@ -92,13 +105,13 @@ Os pontos oficiais são:
 
 > Nota: a pasta `docs/` será futuramente renomeada para `.consciencia` — aguardar comando explícito do Pivete antes de qualquer renomeação.
 
-Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
+Depois da porta universal e do BOOT operacional, qualquer IA nova deve consultar estes dois diretórios antes de propor mudanças que dependam do contexto vivo.
 
 ---
 
 ## 4. Infra (resumo)
 
-- **VPS:** hospeda runtime do `CentralDark` em `/root/CentralDark/`. Deve executar o que foi aprovado/versionado no GitHub.
+- **VPS:** hospeda runtime do `CentralDark` em `/root/CentralDark/`. DEV/AUDIT podem ser usados como oficina remota conforme a governança; produção deve executar somente o SHA aprovado/versionado no GitHub.
 - **Scripts oficiais:** comandos repetíveis devem morar no repositório, preferencialmente em `scripts/` ou `scripts/vps/`. Comando solto na VPS é temporário; script no GitHub é padrão oficial.
 - **PM2:** usado para processos vivos. Qualquer mudança de estado relevante precisa autorização, validação e registro.
 - **whatsapp-server (PM2 id 1):** estado desejado é `stopped` (salvo em `dump.pm2`). Não subir automaticamente, não reportar como erro.
@@ -116,7 +129,7 @@ Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
 
 1. Antes de gravar/alterar qualquer arquivo crítico (como este `CLAUDE.md`), verificar se já existe e **preservar conteúdo prévio** — atualizar seções sem sobrescrever cegamente.
 2. Não adivinhar caminhos de arquivos na VPS — usar catálogo, busca ou inspeção de leitura antes.
-3. Não editar código de aplicação diretamente na VPS como Fonte da Verdade. Código/script/doc nasce ou é atualizado no GitHub.
+3. Código pode ser editado na VPS DEV/AUDIT dentro da branch autorizada, mas o GitHub continua sendo a Fonte da Verdade: testar, commitar, fazer push e só então implantar o SHA. Nunca editar produção como fonte oficial.
 4. Não trocar endpoint oficial sem autorização do Pivete. Gateway oficial atual: `https://api.centralldark.com/`.
 5. Não usar Git como banco de estado vivo. `updatedAt`, logs, fila, status temporário e painel vivo vão para Supabase/storage/log, não para commit automático na `main`.
 6. Pré-deploy: rodar auditoria adequada antes de publish/migration/edge function. Bloquear publish em achado crítico.
@@ -127,7 +140,7 @@ Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
 
 ## 6. Estado Atual / Meta
 
-- **Meta atual:** Fluxo de Ouro estável. Qualquer IA em qualquer Hub deve conseguir retomar o contexto apenas lendo `CLAUDE.md`, `.claude/`, `docs/CONSCIENCIA/` e os documentos de `docs/GOVERNANCA/`.
+- **Meta atual:** Fluxo de Ouro estável. Qualquer IA em qualquer Hub deve começar por `00-COMECE-AQUI-IA.md`, `AGENTS.md` e `BOOT-IA.md`; depois retomar o contexto por `CLAUDE.md`, `.claude/`, `docs/CONSCIENCIA/` e os documentos de `docs/GOVERNANCA/`.
 - **Gateway oficial:** `https://api.centralldark.com/`.
 - **Grandes planos pendentes (aguardar comando do Pivete):**
   - Reconstrução total do MCP + hub (novo plano a ser apresentado pelo Pivete).
@@ -136,7 +149,7 @@ Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
 - **Próximos passos ativos:**
   - Auditar rotas antigas, `.claude/`, `.github/workflows/`, `.agents/`, `.lovable/` e scripts duplicados.
   - Validar periodicamente que o PM2 da VPS bate com o estado desejado.
-  - Manter este arquivo como ponto único de entrada de contexto.
+  - Manter este arquivo como mapa de estado e contexto específico, subordinado à entrada universal.
 
 ---
 
@@ -144,13 +157,16 @@ Qualquer IA nova deve ler estes dois diretórios **antes** de propor mudanças.
 
 Se você é uma IA abrindo este repositório pela primeira vez:
 
-1. Leia **este arquivo inteiro**.
-2. Leia `.claude/` (regras operacionais) e `docs/CONSCIENCIA/` (contexto vivo e aprendizados).
-3. Leia [`docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md`](docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md).
-4. Assuma que o **Fluxo de Ouro 5-Point** está ativo.
-5. Não execute mudanças destrutivas sem confirmar com o usuário.
-6. Responda sempre em **PT-BR**, tom direto e conversacional.
-7. Verifique a **Seção 9** abaixo antes de tocar em qualquer arquivo — há áreas protegidas que exigem autorização explícita.
+1. Pare e leia `00-COMECE-AQUI-IA.md`.
+2. Leia `AGENTS.md` e `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
+3. Execute `docs/GOVERNANCA/BOOT-IA.md` antes de agir.
+4. Depois leia **este arquivo inteiro**.
+5. Leia `.claude/` (regras operacionais) e `docs/CONSCIENCIA/` (contexto vivo e aprendizados).
+6. Leia [`docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md`](docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md).
+7. Assuma que o **Fluxo de Ouro 5-Point** está ativo.
+8. Não execute mudanças destrutivas sem confirmar com o usuário.
+9. Responda sempre em **PT-BR**, tom direto e conversacional.
+10. Verifique a **Seção 9** abaixo antes de tocar em qualquer arquivo — há áreas protegidas que exigem autorização explícita.
 
 Se o Pivete pedir uma ação que quebra o fluxo, avise:
 
@@ -249,6 +265,11 @@ apps/
 As IAs devem consultar e obedecer:
 
 ```txt
+00-COMECE-AQUI-IA.md
+AGENTS.md
+docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
+docs/GOVERNANCA/BOOT-IA.md
+docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md
 docs/GOVERNANCA/PADRAO-DE-TRABALHO-PIVETE.md
 docs/GOVERNANCA/FLUXO-DE-OURO-GATEWAY-CENTRALDARK.md
 docs/AUDITORIAS/AUDITORIA-FLUXO-DE-OURO.md   # quando existir
@@ -259,7 +280,8 @@ Regra final:
 
 ```txt
 GitHub = Fonte da Verdade.
-VPS = executor.
+VPS DEV/AUDIT = oficina remota e homologação versionada.
+VPS PROD = executor do SHA aprovado.
 Supabase = estado vivo.
 Gateway oficial = https://api.centralldark.com/.
 Nada de edição manual em produção como fonte oficial.
