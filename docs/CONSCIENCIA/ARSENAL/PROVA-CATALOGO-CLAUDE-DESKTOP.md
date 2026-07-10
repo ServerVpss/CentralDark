@@ -46,6 +46,10 @@ ids arsenal-router,arsenal-parallel,arsenal-debate,arsenal-hermes,claude-3-5-son
 ✅ Auditoria registrou o mapeamento `claude-3-5-sonnet-latest->arsenal-router`.
 ✅ Resposta de teste retornou `200 OK` com `PONG-CENTRALDARK`.
 
+## Ouro registrado
+
+O gateway está OpenAI-compatible para descoberta e inferência por alias. O Claude Desktop deve usar o alias público e o runtime interno continua sendo Arsenal.
+
 ## Pendência operacional
 
 Se o cliente ainda mostrar erro vermelho, limpar/reconectar a credencial no Claude Desktop e testar novamente a descoberta. O gateway já responde catálogo OpenAI-compatible com aliases reconhecíveis.
