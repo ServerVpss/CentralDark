@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T07:18:09.992Z",
-  "updatedAtBR": "10/07/2026, 04:18:09 BRT",
+  "updatedAt": "2026-07-10T07:26:15.576Z",
+  "updatedAtBR": "10/07/2026, 04:26:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Updated CI to use CentralDark",
+    "lastCommit": "ci(arsenal-adapter): ativa workflow /v1/models na main com CENTRALDARK_API_KEY 🚀",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T07:26:15.576Z",
+      "titulo": "Push na main · 2e3f61f22e8020f6bac04c4ddbe142ee513e2ba3",
+      "detalhe": "ci(arsenal-adapter): ativa workflow /v1/models na main com CENTRALDARK_API_KEY 🚀",
+      "area": "Repositório",
+      "sha": "2e3f61f",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-10T07:18:09.992Z",
       "titulo": "Push na main · a6d756088b61f60e8aa62ee679bf04c90ca80b22",
       "detalhe": "Updated CI to use CentralDark",
@@ -986,14 +994,6 @@
       "detalhe": "docs(consciencia): registra ouro — abacus-router HUB online, 134 modelos",
       "area": "Repositório",
       "sha": "fedc19f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T18:26:25.983Z",
-      "titulo": "Push na main · 49094c80e9f72e7daaac1ac0c75525bae26a3573",
-      "detalhe": "docs: alinhar CLAUDE.md ao Fluxo de Ouro CentralDark",
-      "area": "Repositório",
-      "sha": "49094c8",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T07:26:15.576Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2e3f61f22e8020f6bac04c4ddbe142ee513e2ba3 (2e3f61f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T07:18:09.992Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · a6d756088b61f60e8aa62ee679bf04c90ca80b22 (a6d7560)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T18:44:32.400Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · fedc19fe4a25e38eedd49ab0c614d5f3416ee89a (fedc19f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T18:26:25.983Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 49094c80e9f72e7daaac1ac0c75525bae26a3573 (49094c8)",
       "area": "Repositório",
       "status": "sucesso"
     }
