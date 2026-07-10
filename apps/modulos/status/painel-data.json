@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T00:27:09.875Z",
-  "updatedAtBR": "09/07/2026, 21:27:09 BRT",
+  "updatedAt": "2026-07-10T00:35:57.540Z",
+  "updatedAtBR": "09/07/2026, 21:35:57 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(governanca): registra squads e skills do mapa vivo",
+    "lastCommit": "docs(governanca): registra arquitetura gamificada multiagente",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T00:35:57.540Z",
+      "titulo": "Push na main · f7e60bd645da33b61275c2dcd1bfa2c5a053ed02",
+      "detalhe": "docs(governanca): registra arquitetura gamificada multiagente",
+      "area": "Repositório",
+      "sha": "f7e60bd",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-10T00:27:09.875Z",
       "titulo": "Push na main · f55ebdf3d42a1af9d3c16f188e2c9bee3bf86901",
       "detalhe": "docs(governanca): registra squads e skills do mapa vivo",
@@ -986,14 +994,6 @@
       "detalhe": "Salvou os tokens do @BotFather",
       "area": "Repositório",
       "sha": "d23b4eb",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-08T18:54:46.383Z",
-      "titulo": "Push na main · 5b1292a2de44988528d559091790194663d6a351",
-      "detalhe": "Adicionou aba Hermes ao HUB",
-      "area": "Repositório",
-      "sha": "5b1292a",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T00:35:57.540Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f7e60bd645da33b61275c2dcd1bfa2c5a053ed02 (f7e60bd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T00:27:09.875Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f55ebdf3d42a1af9d3c16f188e2c9bee3bf86901 (f55ebdf)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-08T19:34:07.236Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · d23b4eb29e9123edff62e20f8b18d8690824133f (d23b4eb)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-08T18:54:46.383Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 5b1292a2de44988528d559091790194663d6a351 (5b1292a)",
       "area": "Repositório",
       "status": "sucesso"
     }
