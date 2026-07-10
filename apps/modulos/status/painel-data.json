@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-10T18:28:22.216Z",
-  "updatedAtBR": "10/07/2026, 15:28:22 BRT",
+  "updatedAt": "2026-07-10T18:29:47.598Z",
+  "updatedAtBR": "10/07/2026, 15:29:47 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Updated login and profile pages",
+    "lastCommit": "chore(painel): IA atualiza painel — atualização",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-10T18:29:47.598Z",
+      "titulo": "Push na main · b08b47f42f61efca50b0c279e2a3dac9e5f4e6d8",
+      "detalhe": "chore(painel): IA atualiza painel — atualização",
+      "area": "Repositório",
+      "sha": "b08b47f",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-10T06:36:14.770Z",
       "titulo": "Push na main · a6e45c794243308240238ea2082d38db56e36759",
       "detalhe": "Updated login and profile pages",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#322): MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia",
       "area": "Repositório",
       "sha": "0fbe37d",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T17:59:37.813Z",
-      "titulo": "Push na main · 29ca440f040c79d0b46898aaa84c9acca3efb53d",
-      "detalhe": "lembranca: SSH VPS como fallback quando MCP cai em 401",
-      "area": "Repositório",
-      "sha": "29ca440",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-10T18:29:47.598Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b08b47f42f61efca50b0c279e2a3dac9e5f4e6d8 (b08b47f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T06:36:14.770Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · a6e45c794243308240238ea2082d38db56e36759 (a6e45c7)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T18:00:12.391Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 0fbe37de41962df247eb13ccc3c497e0059564a6 (0fbe37d)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T17:59:37.813Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 29ca440f040c79d0b46898aaa84c9acca3efb53d (29ca440)",
       "area": "Repositório",
       "status": "sucesso"
     }
