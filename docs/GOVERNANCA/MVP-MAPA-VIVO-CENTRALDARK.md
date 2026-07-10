@@ -179,14 +179,159 @@ Missão parada precisa aparecer no HUB.
 Pivete precisa ver quem está vivo, quem travou e qual é o próximo passo.
 ```
 
-## 12. Regra curta
+## 12. Catálogo inicial de squads e skills
+
+Este catálogo vem das referências trazidas pelo Pivete para o modelo de operação multiagente.
+
+Skill = capacidade ou comando especializado de um agente.
+Squad = grupo de agentes com papéis complementares.
+
+### Design e planejamento
+
+```txt
+/brainstorming        -> alinhar direção
+/architect-first      -> mapa técnico
+/senior-architect     -> segunda opinião arquitetural
+@architect +design    -> decisão formal arquitetural
+```
+
+### Implementação
+
+```txt
+/senior-backend       -> backend, banco, integrações
+/senior-frontend      -> frontend, React, Tailwind
+/senior-fullstack     -> fluxo completo ponta a ponta
+/react-best-practices -> performance e renderização
+@dev +develop-story   -> transformar tarefa em entrega técnica
+```
+
+### UI/UX
+
+```txt
+/apex-lead            -> squad frontend completo
+/impeccable           -> polimento visual forte
+/ui-design-system     -> tokens e consistência visual
+/dashboard-design     -> telas de dados e painéis
+/dataviz              -> gráficos e cores
+/frontend-design      -> design criativo em código
+```
+
+UI = parte visual da tela.
+UX = experiência de uso.
+Dataviz = visualização de dados em gráficos, cards e painéis.
+
+### Qualidade
+
+```txt
+/simplify             -> limpar duplicação
+/code-review          -> revisão geral
+/security-review      -> segurança e secrets
+@qa +qa-gate          -> gate oficial de qualidade
+/paranoid-audit       -> auditoria máxima
+/blind-spot-audit     -> procurar o que foi esquecido
+/verify-6-levels      -> múltiplos níveis de checagem
+```
+
+Gate = barreira de validação antes de avançar.
+
+### Orquestração
+
+```txt
+/dispatch-chief       -> decompor decisão arquitetural em tarefas menores
+/overclock-skill      -> mecânica multiagente inspirada em panes
+/class-calc           -> plano global antes de executar
+/swarm-architect      -> padrão de swarm controlado
+/wave-execute         -> execução em ondas estruturadas
+```
+
+Swarm = enxame de agentes trabalhando em paralelo.
+Wave = onda de execução com fase, limite e revisão.
+
+### Pesquisa
+
+```txt
+/dc-orchestrator      -> pesquisa profunda com várias mentes
+/context7             -> documentação oficial de bibliotecas
+/tech-research        -> escolher stack e ferramenta
+/spy                  -> benchmark de concorrente
+```
+
+Benchmark = comparar com referências externas para melhorar o produto.
+
+### Go-to-market
+
+```txt
+/offer                -> oferta
+/pricing              -> precificação
+/copy                 -> texto persuasivo
+/hooks                -> ganchos de atenção
+/copy-chief           -> escrita geral
+/ads-audit            -> auditoria de criativos
+/brand-chief          -> narrativa da marca
+```
+
+Go-to-market = plano para colocar produto no mercado.
+
+### Conteúdo
+
+```txt
+/curator-chief        -> cortes, curadoria e organização de conteúdo
+```
+
+## 13. Contrato de missão para workers
+
+Todo worker deve receber um contrato curto antes de executar.
+
+Worker = agente trabalhador que executa uma parte da missão.
+
+Formato base:
+
+```txt
+Contrato novo.
+Papel: <role>
+Tarefa: <tarefa>
+Arquivos exclusivos seus: <lista>
+Skill sugerida: <skill>
+Definition of Done: <critério>
+Devolva HANDOFF ao terminar.
+```
+
+Definition of Done = critério objetivo para saber que a tarefa terminou.
+
+## 14. Painéis, panes e preview
+
+O modelo observado usa panes paralelos para acompanhar muitos agentes ao mesmo tempo.
+
+Pane = janela/painel de execução de um agente.
+Preview = visualização ao vivo do que está sendo construído.
+
+Para o CentralDark, isso vira:
+
+```txt
+pane_spawn_many       -> criar vários panes/agentes
+pane_wait_many        -> esperar vários panes concluírem
+pane_read_many        -> ler handoffs quando ficarem ociosos
+preview_live          -> mostrar resultado em tempo real
+placar_missao         -> mostrar DONE / PARTIAL / BLOCKED por agente
+```
+
+Regra:
+
+```txt
+Pivete precisa ver o trabalho acontecendo.
+Agente precisa mostrar estado.
+Preview não substitui GitHub.
+Preview ajuda auditoria antes do commit.
+```
+
+## 15. Regra curta
 
 Ferramenta muda.
 Fluxo fica.
 Execução importa.
 Registro prova.
 
-## 13. Primeira entrega sugerida
+## 16. Primeira entrega sugerida
 
 Criar uma tela MVP chamada Mapa Vivo no HUB.
 
@@ -202,12 +347,14 @@ Essa tela deve mostrar cards simples:
 - Missões
 - Handoffs
 - Watchdog
+- Squads e Skills
+- Preview
 - Divergências
 - Ações pendentes
 
 Cada card deve ter status, resumo e link para detalhe.
 
-## 14. Segurança
+## 17. Segurança
 
 Não salvar secrets.
 Não expor tokens.
@@ -218,7 +365,9 @@ Não deixar agente operar sem escopo.
 Não consolidar mudança sem revisão.
 Não misturar missões sem org_id.
 Não ignorar agente travado sem registrar.
+Não usar bypass de permissão em área protegida ou produção.
+Não permitir que preview substitua commit oficial.
 
-## 15. Selo
+## 18. Selo
 
-Mapa Vivo CentralDark = visão de ponta a ponta para o Pivete auditar, comandar, orquestrar agentes e evoluir o sistema sem depender de uma IA específica.
+Mapa Vivo CentralDark = visão de ponta a ponta para o Pivete auditar, comandar, orquestrar agentes, usar squads e evoluir o sistema sem depender de uma IA específica.
