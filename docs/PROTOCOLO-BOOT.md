@@ -1,14 +1,28 @@
-# 🔑 PROTOCOLO DE BOOT — CentralDark
+# 🔑 PROTOCOLO DE MEMÓRIA E CONTINUIDADE — CentralDark
 
-> Fonte única do ritual de entrada e saída de QUALQUER IA no sistema.
-> Criado: 2026-07-07 · Dono: Pivete · Status: OFICIAL
+> Ritual complementar de memória, pendências, estado vivo e encerramento de sessão.
+> Criado: 2026-07-07 · Dono: Pivete · Status: OFICIAL COMO COMPLEMENTO
+>
+> **Não é mais a porta universal nem substitui o BOOT operacional.**
+> Antes de usar este protocolo, toda IA deve seguir:
+>
+> ```text
+> 00-COMECE-AQUI-IA.md
+> → AGENTS.md
+> → docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
+> → docs/GOVERNANCA/BOOT-IA.md
+> ```
+>
+> Para branch, edição, commit, push, deploy, auditoria, risco e rollback, prevalece `docs/GOVERNANCA/BOOT-IA.md`.
 
 ---
 
-## 1. O Prompt Âncora (colar no início de TODA conversa)
+## 1. Prompt Âncora de memória — executar depois do BOOT operacional
+
+Use quando as ferramentas MCP correspondentes estiverem disponíveis:
 
 ```
-🔑 BOOT CENTRALDARK — execute ANTES de responder:
+🔑 CONTINUIDADE CENTRALDARK — execute depois do BOOT operacional:
 1. kit_boas_vindas (MCP CentralDark)
 2. Ler docs/PENDENCIAS.md
 3. Ler docs/CONSCIENCIA/APRENDIZADOS.md
@@ -22,6 +36,8 @@ NO FIM da sessão: gravar o ouro com
 registrar_aprendizado antes de encerrar.
 ```
 
+Se uma ferramenta MCP estiver indisponível ou com credencial expirada, informe claramente. Não invente dados e não trate a falha do MCP como autorização para pular o BOOT operacional.
+
 ## 2. Ritual de saída (sem isso a próxima IA herda NADA)
 
 - `registrar_aprendizado` — erro+correção, atalho, regra ou armadilha da sessão
@@ -31,11 +47,17 @@ registrar_aprendizado antes de encerrar.
 
 **Boot sem depósito = amnésia com cerimônia.**
 
+O ritual de saída não autoriza commit automático inútil, exposição de segredo ou alteração em produção. Deve respeitar `AGENTS.md` e o fluxo DEV → Auditoria → Main.
+
 ## 3. Mapa do tesouro (onde cada coisa mora)
 
 | O quê | Onde | Tool MCP |
 |---|---|---|
-| Regras de conduta | (injetadas) | `injetar_consciencia_centraldark` |
+| Porta universal das IAs | `00-COMECE-AQUI-IA.md` | leitura GitHub |
+| Regra universal | `AGENTS.md` | leitura GitHub |
+| BOOT operacional | `docs/GOVERNANCA/BOOT-IA.md` | leitura GitHub |
+| Hierarquia das instruções | `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md` | leitura GitHub |
+| Regras de conduta legadas/complementares | (injetadas) | `injetar_consciencia_centraldark` |
 | Consciência mestra | docs/CONSCIENCIA/CONSCIENCIA.md | `ler_consciencia` |
 | Pendências (fonte única) | docs/PENDENCIAS.md | `ler_pendencias` |
 | Aprendizados (eterno) | docs/CONSCIENCIA/APRENDIZADOS.md | `puxar_aprendizados` |
@@ -44,15 +66,16 @@ registrar_aprendizado antes de encerrar.
 | Grafo vivo (bússola) | grafo.centralldark.com | pendência #34 |
 | Comando Mobile | apps/modulos/comando-mobile/ | `vps_tree_safe` |
 
-## 4. Ponteiro pras memórias nativas (colar 1x em cada ferramenta)
+## 4. Ponteiro para memórias nativas (colar uma vez em cada ferramenta)
 
-Cada ferramenta guarda SÓ este ponteiro — nunca conteúdo duplicado:
+Cada ferramenta guarda somente este ponteiro — nunca conteúdo duplicado:
 
 ```
-Fonte da verdade: repo ServerVpss/CentralDark via MCP
-mcp.centralldark.com. Início de conversa: executar o BOOT
-de docs/PROTOCOLO-BOOT.md. Fim de conversa: registrar
-aprendizado. Ciclo Ler→Perguntar→Agir→Registrar.
+Fonte da verdade: repo ServerVpss/CentralDark.
+Início: abrir pivete/dev e ler 00-COMECE-AQUI-IA.md + AGENTS.md.
+Executar o BOOT operacional de docs/GOVERNANCA/BOOT-IA.md.
+Depois, quando disponível, executar a continuidade de docs/PROTOCOLO-BOOT.md.
+Fim: registrar aprendizado. Ciclo Ler→Perguntar→Agir→Registrar.
 ```
 
 Onde colar:
@@ -65,3 +88,14 @@ Onde colar:
 
 Nenhuma ferramenta é dona da história. **O repo é a história.**
 Chat é volátil; repo é eterno. Se não está no repo, não aconteceu.
+
+## 6. Precedência
+
+Em qualquer divergência, seguir `docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md`.
+
+Resumo:
+
+```text
+BOOT-IA.md governa ação.
+PROTOCOLO-BOOT.md governa memória e continuidade.
+```
