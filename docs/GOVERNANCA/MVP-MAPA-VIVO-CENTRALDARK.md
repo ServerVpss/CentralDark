@@ -112,14 +112,81 @@ Começar com:
 
 Depois evoluir para execução controlada.
 
-## 9. Regra curta
+## 9. Handoff e reconciliação
+
+Cada agente deve devolver um handoff padronizado.
+
+Handoff = relatório curto que permite outro agente continuar sem perder contexto.
+
+Formato mínimo:
+
+```txt
+from: agente ou painel
+role: papel do agente
+status: DONE | BLOCKED | PARTIAL
+files_changed: arquivos alterados ou analisados
+decisions: decisões tomadas
+blockers: impedimentos encontrados
+next: próxima ação sugerida
+```
+
+Reconciliação = juntar os handoffs, resolver conflito e apresentar um placar final.
+
+Regra:
+
+```txt
+Agente não termina em silêncio.
+Agente termina com handoff.
+Consolidador junta handoffs.
+Pivete vê placar e prova.
+```
+
+## 10. Isolamento de missões por org_id
+
+Quando vários grupos de agentes estiverem rodando ao mesmo tempo, cada missão deve ter identificador próprio.
+
+org_id = identificação da missão/grupo para não misturar contexto.
+
+Regra:
+
+```txt
+Cada missão tem org_id.
+Cada pane/agente pertence a um org_id.
+Agentes de uma missão não reutilizam contexto de outra missão sem autorização.
+Missões paralelas podem coexistir sem pisar uma na outra.
+```
+
+## 11. Watchdog de agentes
+
+Watchdog = vigia automático que detecta agente travado, morto, sem resposta ou sem heartbeat.
+
+Heartbeat = sinal periódico de que o agente ainda está vivo.
+
+O watchdog deve:
+
+- verificar snapshots de estado;
+- marcar agente parado;
+- marcar missão sem avanço;
+- liberar pane/agente morto;
+- evitar duplicação de execução;
+- avisar o painel do Pivete.
+
+Regra:
+
+```txt
+Agente sem heartbeat não pode ficar segurando missão.
+Missão parada precisa aparecer no HUB.
+Pivete precisa ver quem está vivo, quem travou e qual é o próximo passo.
+```
+
+## 12. Regra curta
 
 Ferramenta muda.
 Fluxo fica.
 Execução importa.
 Registro prova.
 
-## 10. Primeira entrega sugerida
+## 13. Primeira entrega sugerida
 
 Criar uma tela MVP chamada Mapa Vivo no HUB.
 
@@ -132,12 +199,15 @@ Essa tela deve mostrar cards simples:
 - Bots
 - Domínios
 - Agentes
+- Missões
+- Handoffs
+- Watchdog
 - Divergências
 - Ações pendentes
 
 Cada card deve ter status, resumo e link para detalhe.
 
-## 11. Segurança
+## 14. Segurança
 
 Não salvar secrets.
 Não expor tokens.
@@ -146,7 +216,9 @@ Não mexer em produção sem autorização.
 Não tratar VPS como fonte oficial.
 Não deixar agente operar sem escopo.
 Não consolidar mudança sem revisão.
+Não misturar missões sem org_id.
+Não ignorar agente travado sem registrar.
 
-## 12. Selo
+## 15. Selo
 
 Mapa Vivo CentralDark = visão de ponta a ponta para o Pivete auditar, comandar, orquestrar agentes e evoluir o sistema sem depender de uma IA específica.
