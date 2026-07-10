@@ -2,17 +2,20 @@
 
 > 🚪 **ENTRADA OBRIGATÓRIA PARA QUALQUER IA**
 >
-> Antes de interpretar este README, `CLAUDE.md`, `GROK.md`, `GEMINI.md` ou qualquer documento antigo:
+> Antes de interpretar este README ou qualquer documento antigo:
 >
 > ```text
 > 1. Abra ou inspecione a branch pivete/dev
 > 2. Leia 00-COMECE-AQUI-IA.md
-> 3. Leia AGENTS.md
-> 4. Siga docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
-> 5. Execute docs/GOVERNANCA/BOOT-IA.md antes de agir
+> 3. Leia integralmente CLAUDE.md — Constituição universal de todas as IAs
+> 4. Leia AGENTS.md
+> 5. Siga docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md
+> 6. Execute docs/GOVERNANCA/BOOT-IA.md antes de agir
 > ```
 >
-> `docs/PROTOCOLO-BOOT.md` é complementar para memória e continuidade; não substitui o BOOT operacional.
+> `GROK.md`, `GEMINI.md`, `.claude/`, Copilot e arquivos semelhantes são apenas pontes para `CLAUDE.md`.
+>
+> `docs/PROTOCOLO-BOOT.md` é complementar para memória e continuidade; não substitui a Constituição nem o BOOT operacional.
 
 > ⚠️ **TEMA OFICIAL DO SISTEMA: "Esmeralda" (Sistema 3D Tátil)**
 >
@@ -65,7 +68,7 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 
 - **Domínio oficial**: https://centralldark.com
 - **Painel de status**: https://status.centralldark.com
-- **Repositório**: `ServerVpss/CentralDark` (sincroniza automaticamente com a VPS em `/root/CentralDark/`)
+- **Repositório**: `ServerVpss/CentralDark` — Fonte da Verdade
 
 ## Stack
 
@@ -77,13 +80,22 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 
 ## Como editar
 
-- **Editor assistido por IA**: qualquer alteração feita pelo agente é comitada no repo e sincronizada pra VPS automaticamente
-- **Local**: `git clone` → `npm i` → `npm run dev`
-- **GitHub**: edição direta + sync bidirecional
+- **Branch de trabalho:** `pivete/dev`.
+- **Oficina remota:** ambiente DEV da VPS, separado de produção.
+- **Sequência obrigatória:** editar → testar → commit → push → deploy do SHA exato em DEV → smoke test → evidência.
+- **Auditoria:** após aprovação visual do Pivete, PR de `pivete/dev` para `pivete/auditoria`.
+- **Produção:** nunca editar diretamente na `main` nem usar produção como oficina.
+- **Computador local:** opcional; o histórico oficial permanece no GitHub.
 
 ## Deploy
 
-Push na `main` → webhook na VPS (`/root/CentralDark/scripts/webhook/`) faz `git pull` + `pm2 reload` do serviço afetado.
+```text
+pivete/dev        → deploy somente no ambiente DEV
+pivete/auditoria  → deploy somente no ambiente AUDIT/STAGING
+main              → deploy de produção somente após auditoria, gates verdes e autorização explícita
+```
+
+O webhook de produção só deve executar o SHA aprovado da `main`. Nenhum deploy pode usar mudança não commitada.
 
 ---
 
