@@ -41,6 +41,8 @@ const POSES: Record<PoseHermes, string> = {
 interface Props {
   /** ID do último log emitido no cockpit (muda → mascote reage) */
   ultimoEvento?: { id: number; texto: string; pane: string } | null;
+  /** true = renderiza dentro da sidebar (sem position fixed) */
+  inline?: boolean;
 }
 
 /** Traduz o prefixo do log pra pose do Hermes. */
