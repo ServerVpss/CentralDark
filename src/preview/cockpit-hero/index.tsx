@@ -116,11 +116,11 @@ export default function CockpitPreview() {
               <li>● arsenal <span>—</span></li>
             </ul>
             <div className="oc-side-head" style={{ marginTop: 16 }}>ARQUIVADOS <b>12</b></div>
-            <div className="oc-side-trophy">
-              <div className="oc-trophy-glow" />
-              <div className="oc-trophy-meta">
-                <b>LV 3</b>
-                <span>59.8M</span>
+            <div className="oc-side-hermes">
+              <img src={require("./hermes/idle.png.asset.json").url} alt="Hermes" />
+              <div className="oc-side-hermes-meta">
+                <b>hermes</b>
+                <span>LV 3 · 59.8M</span>
               </div>
             </div>
           </aside>
