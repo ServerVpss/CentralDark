@@ -29,7 +29,6 @@ export default function CockpitPreview() {
   return (
     <div className="cockpit-root oc-page">
       <MatrixRain />
-      <HermesMascote ultimoEvento={ultimoEvento} />
 
 
       {/* NAV */}
