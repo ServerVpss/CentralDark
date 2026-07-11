@@ -92,7 +92,7 @@ export function HermesMascote({ ultimoEvento, inline = false }: Props) {
   void decorativo;
 
   return (
-    <div className={`hermes-wrap ${ocioso ? "hermes-ocioso" : ""}`}>
+    <div className={`hermes-wrap ${inline ? "hermes-inline" : ""} ${ocioso ? "hermes-ocioso" : ""}`}>
       {balao && (
         <div className="hermes-balao">
           <span>{balao}</span>
