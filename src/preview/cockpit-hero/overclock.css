@@ -311,15 +311,13 @@
   background: transparent;
   border: none;
 }
-.oc-side-hermes img {
+/* Restringe o Hermes animado ao tamanho original da sidebar */
+.oc-side-hermes .hermes-wrap { width: 100%; }
+.oc-side-hermes .hermes-glow {
   width: 96px;
   height: 96px;
-  object-fit: contain;
-  background: transparent;
-  filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.55))
-    drop-shadow(0 0 6px rgba(52, 211, 153, 0.4));
-  animation: ck-pulse 3.6s ease-in-out infinite;
 }
+
 .oc-side-hermes-meta {
   display: flex;
   flex-direction: column;
