@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import "./cockpit.css";
 import "./overclock.css";
+import "./hermes.css";
 import { MatrixRain } from "./MatrixRain";
 import { CockpitPane } from "./CockpitPane";
+import { HermesMascote } from "./HermesMascote";
 import { PANES } from "./dados";
+
 
 const TABS = [
   { id: "cinema", label: "CINEMA SITE", sub: "Landing cinematográfica gerada pelo enxame." },
@@ -15,11 +18,18 @@ const TABS = [
 
 export default function CockpitPreview() {
   const [tab, setTab] = useState("saas");
+  const [ultimoEvento, setUltimoEvento] = useState<{ id: number; texto: string; pane: string } | null>(null);
   const active = TABS.find((t) => t.id === tab)!;
+
+  const receberLog = useCallback((ev: { id: number; texto: string; pane: string }) => {
+    setUltimoEvento(ev);
+  }, []);
 
   return (
     <div className="cockpit-root oc-page">
       <MatrixRain />
+      <HermesMascote ultimoEvento={ultimoEvento} />
+
 
       {/* NAV */}
       <header className="oc-nav">
@@ -118,7 +128,7 @@ export default function CockpitPreview() {
           <div className="oc-panes">
             {PANES.map((p, i) => (
               <div className="oc-pane-wrap" key={p.key}>
-                <CockpitPane pane={p} seed={i} />
+                <CockpitPane pane={p} seed={i} onLog={receberLog} />
               </div>
             ))}
           </div>

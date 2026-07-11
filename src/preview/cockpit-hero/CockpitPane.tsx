@@ -4,7 +4,9 @@ import type { PaneConfig } from "./dados";
 interface Props {
   pane: PaneConfig;
   seed: number;
+  onLog?: (evento: { id: number; texto: string; pane: string }) => void;
 }
+
 
 const MAX_LOGS = 9;
 
@@ -59,7 +61,7 @@ function tokenizarLinha(linha: string, key: string) {
   );
 }
 
-export function CockpitPane({ pane, seed }: Props) {
+export function CockpitPane({ pane, seed, onLog }: Props) {
   const [logs, setLogs] = useState<Array<{ id: number; texto: string }>>(() =>
     pane.logs.slice(0, MAX_LOGS).map((texto, i) => ({ id: i, texto }))
   );
@@ -72,7 +74,9 @@ export function CockpitPane({ pane, seed }: Props) {
     const timer = window.setInterval(() => {
       cursor = (cursor + 1) % pane.logs.length;
       const nova = pane.logs[cursor];
-      setLogs((prev) => [{ id: idCounter++, texto: nova }, ...prev].slice(0, MAX_LOGS));
+      const id = idCounter++;
+      setLogs((prev) => [{ id, texto: nova }, ...prev].slice(0, MAX_LOGS));
+      onLog?.({ id, texto: nova, pane: pane.key });
     }, jitter + Math.random() * 500);
 
     const statusTimer = window.setInterval(() => {
@@ -80,7 +84,8 @@ export function CockpitPane({ pane, seed }: Props) {
     }, 2400 + seed * 300);
 
     return () => { clearInterval(timer); clearInterval(statusTimer); };
-  }, [pane, seed]);
+  }, [pane, seed, onLog]);
+
 
   const status = pane.status[statusIdx];
 
