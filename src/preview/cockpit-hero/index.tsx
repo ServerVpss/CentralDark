@@ -118,7 +118,7 @@ export default function CockpitPreview() {
             </ul>
             <div className="oc-side-head" style={{ marginTop: 16 }}>ARQUIVADOS <b>12</b></div>
             <div className="oc-side-hermes">
-              <img src={require("./hermes/idle.png.asset.json").url} alt="Hermes" />
+              <img src={hermesIdle.url} alt="Hermes" />
               <div className="oc-side-hermes-meta">
                 <b>hermes</b>
                 <span>LV 3 · 59.8M</span>
