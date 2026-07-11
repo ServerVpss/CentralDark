@@ -128,7 +128,7 @@ export default function CockpitPreview() {
           <div className="oc-panes">
             {PANES.map((p, i) => (
               <div className="oc-pane-wrap" key={p.key}>
-                <CockpitPane pane={p} seed={i} />
+                <CockpitPane pane={p} seed={i} onLog={receberLog} />
               </div>
             ))}
           </div>
