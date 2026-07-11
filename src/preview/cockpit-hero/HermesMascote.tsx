@@ -41,8 +41,6 @@ const POSES: Record<PoseHermes, string> = {
 interface Props {
   /** ID do último log emitido no cockpit (muda → mascote reage) */
   ultimoEvento?: { id: number; texto: string; pane: string } | null;
-  /** true = renderiza dentro da sidebar (sem position fixed) */
-  inline?: boolean;
 }
 
 /** Traduz o prefixo do log pra pose do Hermes. */
@@ -56,7 +54,7 @@ function poseParaLog(texto: string): PoseHermes {
   return "idle";
 }
 
-export function HermesMascote({ ultimoEvento, inline = false }: Props) {
+export function HermesMascote({ ultimoEvento }: Props) {
   const [pose, setPose] = useState<PoseHermes>("idle");
   const [balao, setBalao] = useState<string | null>(null);
   const [ocioso, setOcioso] = useState(false);
@@ -92,7 +90,7 @@ export function HermesMascote({ ultimoEvento, inline = false }: Props) {
   void decorativo;
 
   return (
-    <div className={`hermes-wrap ${inline ? "hermes-inline" : ""} ${ocioso ? "hermes-ocioso" : ""}`}>
+    <div className={`hermes-wrap ${ocioso ? "hermes-ocioso" : ""}`}>
       {balao && (
         <div className="hermes-balao">
           <span>{balao}</span>

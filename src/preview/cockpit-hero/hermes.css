@@ -158,25 +158,3 @@
   .hermes-wrap { right: 8px; bottom: 8px; }
   .hermes-balao { max-width: 180px; font-size: 10px; }
 }
-
-/* Variante inline: Hermes dentro da sidebar, sem position fixed */
-.hermes-wrap.hermes-inline {
-  position: relative;
-  right: auto;
-  bottom: auto;
-  margin-top: 10px;
-  z-index: 1;
-}
-.hermes-wrap.hermes-inline .hermes-glow {
-  width: 100px;
-  height: 100px;
-}
-.hermes-wrap.hermes-inline .hermes-balao {
-  max-width: 160px;
-  font-size: 10px;
-  padding: 6px 9px;
-}
-.hermes-wrap.hermes-inline .hermes-plaqueta {
-  font-size: 9px;
-  padding: 3px 8px;
-}
