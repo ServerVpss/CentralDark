@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-10T19:22:24.973Z
+# 🧠 Notion Sync — 2026-07-11T16:53:55.136Z
 
-- **Commit fonte:** `1773a0e6b5cfcd0c72f4733617fb6371a787cad4`
+- **Commit fonte:** `b926e63775490731546cf6a1c1619411bb2c6028`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 466 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 360 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 30 | 0 | 30 | 0 | 0 |
 | aprendizados | 325 | 0 | 325 | 0 | 0 |
-| estrutura | 466 | 0 | 0 | 0 | 466 |
+| estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
 
@@ -462,12 +462,6 @@
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/004-hermes-24h-loop-autonomo.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/SUGESTOES/README.md |
 | estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/README.md |
-| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/finalizar-hub-v2/missao.md |
-| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/fix-catalogo-tools-json/missao.md |
-| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/manutencao-gateway-exame/missao.md |
-| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/revisao-hub-v2-rodada2/missao.md |
-| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/concluidas/2026-07-03/upgrade-hub-v2/missao.md |
-| estrutura | erro | docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/missoes/em-andamento/manter-grafo-vivo/missao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS.md |
 | estrutura | erro | docs/CONSCIENCIA/APRENDIZADOS/2026-07-09-abacus-router-hub-online.md |
@@ -691,8 +685,6 @@
 | estrutura | erro | docs/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
 | estrutura | erro | docs/CONSCIENCIA/GRUPO-EVOLUCAO.md |
 | estrutura | erro | docs/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
-| estrutura | erro | docs/CONSCIENCIA/HERMES/LOG-VERIFICADOR.md |
-| estrutura | erro | docs/CONSCIENCIA/HERMES/PLAYBOOK-RESSUSCITACAO-PM2.md |
 | estrutura | erro | docs/CONSCIENCIA/INFRA-MAP.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/13-centraldark-portal.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
