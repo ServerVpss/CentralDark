@@ -6,6 +6,7 @@ import { MatrixRain } from "./MatrixRain";
 import { CockpitPane } from "./CockpitPane";
 import { HermesMascote } from "./HermesMascote";
 import { PANES } from "./dados";
+import hermesIdle from "./hermes/idle.png.asset.json";
 
 
 const TABS = [
