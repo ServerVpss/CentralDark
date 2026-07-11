@@ -56,7 +56,7 @@ function poseParaLog(texto: string): PoseHermes {
   return "idle";
 }
 
-export function HermesMascote({ ultimoEvento }: Props) {
+export function HermesMascote({ ultimoEvento, inline = false }: Props) {
   const [pose, setPose] = useState<PoseHermes>("idle");
   const [balao, setBalao] = useState<string | null>(null);
   const [ocioso, setOcioso] = useState(false);
