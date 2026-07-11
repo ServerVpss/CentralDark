@@ -3,10 +3,10 @@
   "pm2_id": 17,
   "pm2_status": "online",
   "senha_no_disco": true,
-  "senha_carregada_no_processo": true,
+  "senha_carregada_no_processo": false,
   "authorize_http_code": 400,
   "authorize_saudavel": true,
-  "status": "ok",
-  "emoji": "🟢",
-  "checado_em": "2026-07-05T22:43:02Z"
+  "status": "falha",
+  "emoji": "🔴",
+  "checado_em": "2026-07-11T16:45:04Z"
 }

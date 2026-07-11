@@ -1,6 +1,6 @@
 {
-  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 7 online / 0 off de 7 monitorados. Gateway: 0 req/15min.",
-  "updatedAt": "2026-07-05T22:41:53.887Z",
+  "_note": "Grafo VIVO — regenerado por scripts/grafo-vivo/gerar-grafo-vivo.mjs. PM2: 9 online / 0 off de 9 monitorados. Gateway: 0 req/15min.",
+  "updatedAt": "2026-07-11T16:42:15.598Z",
   "nodes": [
     {
       "id": "mcp-server",
@@ -82,9 +82,11 @@
     },
     {
       "id": "webhook-deploy",
-      "label": "Webhook Deploy",
+      "label": "🟢 Webhook Deploy",
       "type": "servico",
-      "group": "bots"
+      "group": "bots",
+      "status": "online",
+      "pm2": "CentralDark-WebhookDeploy"
     },
     {
       "id": "issues-agent",
@@ -374,9 +376,11 @@
     },
     {
       "id": "guardiaoconsciencia",
-      "label": "Guardião Consciência",
+      "label": "🟢 Guardião Consciência",
       "type": "monitoramento",
-      "group": "monitoramento"
+      "group": "monitoramento",
+      "status": "online",
+      "pm2": "CentralDark-GuardiaoConsciencia"
     },
     {
       "id": "guardiaoanalista",
@@ -997,11 +1001,11 @@
       "Sentinela: sentinela → MCP /health /tools.json → gh issue se divergência",
       "Health: fn-health-check → OPTIONS 10 EFs → fn-notify-telegram → Canal Telegram"
     ],
-    "processos_vivos": 14,
-    "online": 7,
+    "processos_vivos": 21,
+    "online": 9,
     "offline": 0,
-    "monitorados": 7,
+    "monitorados": 9,
     "gateway_req_15min": 0,
-    "gerado_em": "2026-07-05T22:41:53.887Z"
+    "gerado_em": "2026-07-11T16:42:15.598Z"
   }
 }

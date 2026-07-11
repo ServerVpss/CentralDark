@@ -1,9 +1,9 @@
 {
-  "gerado_em": "2026-07-05T22:43:00.781Z",
-  "gerado_em_br": "05/07/2026, 19:43:00",
+  "gerado_em": "2026-07-11T16:45:00.681Z",
+  "gerado_em_br": "11/07/2026, 13:45:00",
   "versao_tick": "2.0",
   "ambiente": {
-    "tem_chave_lovable": false,
+    "tem_chave_lovable": true,
     "proxy_ativo": {
       "nome": "CentralDark-ArsenalProxy",
       "url": "http://127.0.0.1:3101"
@@ -23,7 +23,7 @@
     "proxy": {
       "label": "proxy /health (local)",
       "ok": true,
-      "ms": 61,
+      "ms": 228,
       "proxy": "CentralDark-ArsenalProxy",
       "url": "http://127.0.0.1:3101",
       "status": 200,
@@ -35,15 +35,15 @@
     "gateway": {
       "label": "gateway publico (ping)",
       "ok": true,
-      "ms": 436,
+      "ms": 213,
       "status": 404,
       "alcancavel": true
     },
     "chat": {
       "label": "chat completion end-to-end",
       "ok": false,
-      "ms": 0,
-      "erro": "aguardando_chave: LOVABLE_API_KEY nao configurada no PM2"
+      "ms": 21,
+      "erro": "HTTP 404: {\"error\":\"rota não encontrada\",\"rota\":\"/v1/chat/completions\"}"
     },
     "erros_recentes": {
       "label": "logs de erro (CentralDark-ArsenalProxy)",

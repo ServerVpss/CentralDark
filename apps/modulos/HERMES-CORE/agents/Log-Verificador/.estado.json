@@ -1,36 +1,21 @@
 {
   "alertasAtivos": {
-    "CentralDark-GuardiaoConsciencia|aviso|": {
-      "ts": 1783219640308,
-      "servico": "CentralDark-GuardiaoConsciencia",
+    "CentralDark-Hermes|aviso|": {
+      "ts": 1783746568817,
+      "servico": "CentralDark-Hermes",
       "nivel": "aviso"
     },
-    "CentralDark-MCP|aviso|": {
-      "ts": 1783219640308,
-      "servico": "CentralDark-MCP",
-      "nivel": "aviso"
+    "CentralDark-PiveteSync|erro|####-##-##T##:##:##: log falhou: HUB ###: {\"code\":\"#####\",\"details\":null,\"hint\":": {
+      "ts": 1783746568817,
+      "servico": "CentralDark-PiveteSync",
+      "nivel": "erro"
     },
-    "CentralDark-EvolucaoIAs|aviso|": {
-      "ts": 1783219640308,
-      "servico": "CentralDark-EvolucaoIAs",
-      "nivel": "aviso"
-    },
-    "CentralDark-ArsenalAdapter|aviso|": {
-      "ts": 1783219640308,
-      "servico": "CentralDark-ArsenalAdapter",
-      "nivel": "aviso"
-    },
-    "CentralDark-GuardiaoAnalista|aviso|": {
-      "ts": 1783221170311,
-      "servico": "CentralDark-GuardiaoAnalista",
-      "nivel": "aviso"
-    },
-    "CentralDark-EliteAnthropic|erro|": {
-      "ts": 1783258805981,
-      "servico": "CentralDark-EliteAnthropic",
+    "CentralDark-ReconHealth|erro|": {
+      "ts": 1783747545236,
+      "servico": "CentralDark-ReconHealth",
       "nivel": "erro"
     }
   },
-  "ultimoResumo": 1783256069754,
+  "ultimoResumo": 1783786697893,
   "restarts24h": {}
 }

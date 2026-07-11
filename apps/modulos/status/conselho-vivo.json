@@ -1,5 +1,5 @@
 {
-  "atualizadoEm": "2026-07-05T22:40:01.899Z",
+  "atualizadoEm": "2026-07-11T16:45:01.154Z",
   "slots": {},
   "timeouts": {
     "router_s": 30,
@@ -11,6 +11,16 @@
     "totalEvolucoes": 6
   },
   "ultimosDebates": [
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-10T18-21-43-518Z-debate-webui-vou-fechar-um-merge-git-com-allow-unrelated-histor.md",
+      "quando": "2026-07-10T18:21:43.519Z",
+      "preview": "# debate · WebUI · **Quando:** 10/07/2026, 15:21:43 · **Origem:** ui.centralldark.com"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-10T18-21-31-026Z-router-webui-resumido-vou-fazer-commit-push-de-um-merge-git-all.md",
+      "quando": "2026-07-10T18:21:31.184Z",
+      "preview": "# router · WebUI · **Quando:** 10/07/2026, 15:21:31 · **Origem:** ui.centralldark.com"
+    },
     {
       "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-03T05-24-43-958Z-router-webui-diga-oi-em-uma-frase-curta.md",
       "quando": "2026-07-03T09:58:32.584Z",
@@ -40,16 +50,6 @@
       "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-2304-em-1-frase-qual-sua-fun-o.md",
       "quando": "2026-07-03T05:29:01.958Z",
       "preview": "--- · title: \"2026 07 02 2304 Em 1 Frase Qual Sua Fun O\" · date: 2026-07-03"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-232402-router-diga-s-ok.md",
-      "quando": "2026-07-03T05:29:01.958Z",
-      "preview": "--- · title: \"2026 07 02 232402 Router Diga S Ok\" · date: 2026-07-03"
-    },
-    {
-      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-07-02-233739-debate-como-resolver-a-pend-ncia-centraldark-14-n-cleo-vi.md",
-      "quando": "2026-07-03T05:29:01.958Z",
-      "preview": "--- · title: \"2026 07 02 233739 Debate Como Resolver A Pend Ncia Centraldark 14 N Cleo Vi\" · date: 2026-07-03"
     }
   ],
   "ultimasEvolucoes": [
