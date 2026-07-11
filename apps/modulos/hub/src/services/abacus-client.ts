@@ -1,4 +1,4 @@
-import { hubClient } from "@/integrations/supabase/hub-client";
+import { hubAuth } from "@/integrations/supabase/hub-client";
 import { newCorrelationId, logWarn } from "@/lib/buttonLog";
 
 const FN_BASE = `${import.meta.env.VITE_HUB_SUPABASE_URL || "https://lyoigsqluyktoclwdaft.supabase.co"}/functions/v1/abacus-router`;
@@ -9,13 +9,15 @@ export class AuthRequiredError extends Error {
 }
 
 async function requireSession() {
-  const { data: { session } } = await hubClient.auth.getSession();
+  // Usa hubAuth (persistSession: true) — mesmo cliente usado no login (LoginPage.tsx).
+  // hubClient tem persistSession: false e nunca reidrata sessão do storage.
+  const { data: { session } } = await hubAuth.auth.getSession();
   if (!session?.access_token) throw new AuthRequiredError();
   return session;
 }
 
 async function authHeaders(correlationId: string, needSession: boolean) {
-  const session = needSession ? await requireSession() : (await hubClient.auth.getSession()).data.session;
+  const session = needSession ? await requireSession() : (await hubAuth.auth.getSession()).data.session;
   return {
     "Content-Type": "application/json",
     "x-correlation-id": correlationId,

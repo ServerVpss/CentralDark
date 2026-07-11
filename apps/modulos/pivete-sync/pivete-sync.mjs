@@ -57,6 +57,10 @@ async function hubFetch(path, opts = {}) {
       Authorization: `Bearer ${HUB_KEY}`,
       'Content-Type': 'application/json',
       Prefer: 'return=representation',
+      // Tabelas vivem no schema "hub" (nao "public"/"api"), o PostgREST
+      // precisa desses headers pra saber onde procurar.
+      'Accept-Profile': 'hub',
+      'Content-Profile': 'hub',
       ...(opts.headers || {}),
     },
   });
