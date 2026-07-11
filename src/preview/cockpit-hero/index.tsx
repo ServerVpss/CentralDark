@@ -116,7 +116,7 @@ export default function CockpitPreview() {
           </aside>
 
           <div className="oc-panes">
-            {PANES.slice(0, 3).map((p, i) => (
+            {PANES.map((p, i) => (
               <div className="oc-pane-wrap" key={p.key}>
                 <CockpitPane pane={p} seed={i} />
               </div>
