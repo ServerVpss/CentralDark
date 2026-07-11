@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import "./cockpit.css";
 import "./overclock.css";
+import "./hermes.css";
 import { MatrixRain } from "./MatrixRain";
 import { CockpitPane } from "./CockpitPane";
+import { HermesMascote } from "./HermesMascote";
 import { PANES } from "./dados";
+
 
 const TABS = [
   { id: "cinema", label: "CINEMA SITE", sub: "Landing cinematográfica gerada pelo enxame." },
