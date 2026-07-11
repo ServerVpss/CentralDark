@@ -29,7 +29,6 @@ export default function CockpitPreview() {
   return (
     <div className="cockpit-root oc-page">
       <MatrixRain />
-      <HermesMascote ultimoEvento={ultimoEvento} />
 
 
       {/* NAV */}
@@ -118,11 +117,7 @@ export default function CockpitPreview() {
             </ul>
             <div className="oc-side-head" style={{ marginTop: 16 }}>ARQUIVADOS <b>12</b></div>
             <div className="oc-side-hermes">
-              <img src={hermesIdle.url} alt="Hermes" />
-              <div className="oc-side-hermes-meta">
-                <b>hermes</b>
-                <span>LV 3 · 59.8M</span>
-              </div>
+              <HermesMascote ultimoEvento={ultimoEvento} />
             </div>
           </aside>
 
