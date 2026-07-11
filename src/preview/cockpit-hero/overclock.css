@@ -302,35 +302,33 @@
   border-left: 2px solid #fca5a5;
 }
 .oc-missions li span { color: var(--ck-fg-mute); font-size: 11px; }
-.oc-side-trophy {
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #062a26, #04211f);
-  border: 1px solid var(--ck-border);
+.oc-side-hermes {
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
 }
-.oc-trophy-glow {
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
-  background:
-    radial-gradient(circle at 50% 40%, #fbbf24aa, transparent 60%),
-    linear-gradient(180deg, #f59e0b55, #10b98122);
-  box-shadow: 0 0 24px #fbbf2440;
-  animation: ck-pulse 3s ease-in-out infinite;
+.oc-side-hermes img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  background: transparent;
+  filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.55))
+    drop-shadow(0 0 6px rgba(52, 211, 153, 0.4));
+  animation: ck-pulse 3.6s ease-in-out infinite;
 }
-.oc-trophy-meta {
+.oc-side-hermes-meta {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 11px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
 }
-.oc-trophy-meta b { color: var(--ck-esmeralda-2); }
-.oc-trophy-meta span { color: var(--ck-fg-mute); }
+.oc-side-hermes-meta b { color: var(--ck-esmeralda-2); letter-spacing: 0.08em; }
+.oc-side-hermes-meta span { color: var(--ck-fg-mute); }
 
 /* PANES DENTRO DA JANELA — grid 3×2 estilo overclock cockpit */
 .oc-panes {
