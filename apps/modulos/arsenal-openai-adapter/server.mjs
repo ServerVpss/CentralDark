@@ -17,6 +17,20 @@ const DEBATES_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES';
 const EVOLUCAO_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO';
 const PENDENCIAS_PATH = '/root/CentralDark/docs/PENDENCIAS.md';
 
+// OpenAI-compat permite `content` como string simples OU array de blocos
+// multimodais ([{type:'text',text:'...'}, {type:'image_url',...}]). Sem isso,
+// String(array) vira literalmente "[object Object],[object Object]" no Telegram.
+function extrairTexto(content) {
+  if (typeof content === 'string') return content;
+  if (Array.isArray(content)) {
+    return content
+      .map(b => (typeof b === 'string' ? b : b?.text || (b?.type ? `[${b.type}]` : '')))
+      .filter(Boolean)
+      .join(' ');
+  }
+  return content == null ? '' : String(content);
+}
+
 const MODELS = [
   { id: 'arsenal-router',   name: '🎯 Arsenal Router (rápido)' },
   { id: 'arsenal-parallel', name: '⚡ Arsenal Parallel (3 IAs + juiz)' },
@@ -24,15 +38,32 @@ const MODELS = [
   { id: 'arsenal-hermes',   name: '🤖 Hermes (proposta autônoma)' },
 ];
 
-// Aliases para clientes que filtram modelos por famílias conhecidas.
-// Mantém Arsenal como runtime real, mas deixa Claude Desktop/Cursor enxergarem modelos utilizáveis.
+// =====================================================
+// MODEL_ALIASES - Mapeamento Inteligente (Fase 1)
+// Editado por Grok via MCP em 2026-07-12
+// Objetivo: Suporte amplo a Sonnet 5, Fable, Opus 4.x com fallback
+// =====================================================
 const MODEL_ALIASES = {
-  'claude-3-5-sonnet-latest': 'arsenal-router',
-  'claude-3-5-sonnet-20241022': 'arsenal-router',
-  'claude-3-opus-latest': 'arsenal-parallel',
-  'claude-3-opus-20240229': 'arsenal-parallel',
-  'gpt-4o': 'arsenal-router',
-  'gpt-4o-mini': 'arsenal-router',
+  // SONNET
+  "claude-3-5-sonnet-latest": "arsenal-router",
+  "claude-3-5-sonnet-20241022": "arsenal-router",
+  "claude-sonnet-5": "arsenal-router",
+  "claude-sonnet-4-6": "arsenal-router",
+  "claude-sonnet-4-5-20250929": "arsenal-router",
+
+  // OPUS
+  "claude-3-opus-latest": "arsenal-parallel",
+  "claude-3-opus-20240229": "arsenal-parallel",
+  "claude-opus-4-8": "arsenal-parallel",
+  "claude-opus-4-7": "arsenal-parallel",
+  "claude-opus-4-6": "arsenal-parallel",
+
+  // FABLE
+  "claude-fable-5": "arsenal-router",
+
+  // GPT
+  "gpt-4o": "arsenal-router",
+  "gpt-4o-mini": "arsenal-router",
 };
 
 const DISCOVERY_MODELS = [
@@ -123,7 +154,7 @@ async function modoParallel(regras, messages) {
   const bloco = respostas.map(r => `### ${r.modelo}\n${r.texto}`).join('\n\n---\n\n');
   const sintese = await callProvider(regras.modelos.juiz, [
     { role: 'system', content: 'Você é o Juiz do Conselho. Recebeu 3 respostas de 3 IAs pra mesma pergunta. Sintetize a MELHOR resposta única. Direto, PT-BR.' },
-    { role: 'user', content: `Pergunta: ${messages.map(m=>m.content).join('\n')}\n\nRespostas:\n\n${bloco}` },
+    { role: 'user', content: `Pergunta: ${messages.map(m=>extrairTexto(m.content)).join('\n')}\n\nRespostas:\n\n${bloco}` },
   ]);
   postarComoBot('juiz', sintese, { nome: `Juiz · ${regras.modelos.juiz}` });
   return `⚡ **Arsenal Parallel · 3 vozes + Juiz**\n\n${bloco}\n\n---\n\n## 🧑‍⚖️ Veredito (${regras.modelos.juiz})\n\n${sintese}`;
@@ -144,7 +175,7 @@ async function modoDebate(regras, messages) {
 
   const veredito = await callProvider(regras.modelos.juiz, [
     { role: 'system', content: 'Você é o Juiz. Duas IAs debateram em 2 rodadas. Decida a MELHOR resposta final. PT-BR, direto.' },
-    { role: 'user', content: `Pergunta: ${messages.map(m=>m.content).join('\n')}\n\n=== R1 ===\n**${A}:** ${rA1}\n\n**${B}:** ${rB1}\n\n=== R2 ===\n**${A}:** ${rA2}\n\n**${B}:** ${rB2}` },
+    { role: 'user', content: `Pergunta: ${messages.map(m=>extrairTexto(m.content)).join('\n')}\n\n=== R1 ===\n**${A}:** ${rA1}\n\n**${B}:** ${rB1}\n\n=== R2 ===\n**${A}:** ${rA2}\n\n**${B}:** ${rB2}` },
   ]);
   postarComoBot('juiz', veredito, { nome: `Juiz · ${regras.modelos.juiz}` });
   return `🔥 **Arsenal Debate · 2 rodadas**\n\n### R1 · ${A}\n${rA1}\n\n### R1 · ${B}\n${rB1}\n\n### R2 · ${A}\n${rA2}\n\n### R2 · ${B}\n${rB2}\n\n---\n\n## 🧑‍⚖️ Veredito (${regras.modelos.juiz})\n\n${veredito}`;
@@ -166,7 +197,7 @@ Tom: direto, gamificado (▓░ ✅⚠️❌), 3-5 passos práticos. Sinalize ri
 Pendências abertas agora:
 ${pendencias}`;
 
-  const pergunta = messages.filter(m => m.role === 'user').map(m => m.content).join('\n').trim()
+  const pergunta = messages.filter(m => m.role === 'user').map(m => extrairTexto(m.content)).join('\n').trim()
     || 'Escolha a pendência mais urgente da lista acima e proponha o próximo passo.';
 
   const propostaA = await callProvider(regras.modelos.voz1_pro, [
@@ -196,7 +227,7 @@ async function salvarSaida(modo, messages, resposta) {
       : DEBATES_DIR;
     await mkdir(baseDir, { recursive: true });
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
-    const pergunta = messages.filter(m => m.role === 'user').slice(-1)[0]?.content?.slice(0, 60) || 'sem';
+    const pergunta = extrairTexto(messages.filter(m => m.role === 'user').slice(-1)[0]?.content).slice(0, 60) || 'sem';
     const slug = pergunta.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
     const prefix = isHermes ? 'hermes-webui' : `${modo}-webui`;
     await writeFile(join(baseDir, `${ts}-${prefix}-${slug}.md`),
@@ -298,7 +329,7 @@ const server = http.createServer(async (req, res) => {
       const modo = MODEL_ALIASES[requestedModel] || requestedModel;
       req._auditSetModel?.(requestedModel === modo ? modo : `${requestedModel}->${modo}`);
       const messages = payload.messages || [];
-      const perguntaUser = messages.filter(m=>m.role==='user').slice(-1)[0]?.content || '';
+      const perguntaUser = extrairTexto(messages.filter(m=>m.role==='user').slice(-1)[0]?.content);
       // Posta a pergunta do usuário no grupo (contexto)
       if (perguntaUser) postarPergunta(perguntaUser, modo.replace('arsenal-',''));
 
