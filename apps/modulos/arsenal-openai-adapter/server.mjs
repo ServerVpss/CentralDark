@@ -66,14 +66,18 @@ const MODEL_ALIASES = {
   "gpt-4o-mini": "arsenal-router",
 };
 
+// Gerado A PARTIR de MODEL_ALIASES — antes eram 2 listas mantidas na mão e
+// desincronizavam (7 de 13 aliases sumiam do /v1/models, achado por teste real).
+function ownerDoAlias(id) {
+  if (id.startsWith('claude')) return 'anthropic';
+  if (id.startsWith('gpt')) return 'openai';
+  return 'arsenal-council';
+}
 const DISCOVERY_MODELS = [
   ...MODELS.map(m => ({ id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name })),
-  { id: 'claude-3-5-sonnet-latest', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3.5 Sonnet → Arsenal Router' },
-  { id: 'claude-3-5-sonnet-20241022', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3.5 Sonnet 20241022 → Arsenal Router' },
-  { id: 'claude-3-opus-latest', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3 Opus → Arsenal Parallel' },
-  { id: 'claude-3-opus-20240229', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3 Opus 20240229 → Arsenal Parallel' },
-  { id: 'gpt-4o', object: 'model', created: 1700000000, owned_by: 'openai', name: 'GPT-4o → Arsenal Router' },
-  { id: 'gpt-4o-mini', object: 'model', created: 1700000000, owned_by: 'openai', name: 'GPT-4o Mini → Arsenal Router' },
+  ...Object.entries(MODEL_ALIASES).map(([id, destino]) => ({
+    id, object: 'model', created: 1700000000, owned_by: ownerDoAlias(id), name: `${id} → ${destino}`,
+  })),
 ];
 
 // Mapeia modelo lógico -> bot Telegram (Gemini/Groq/Claude)
