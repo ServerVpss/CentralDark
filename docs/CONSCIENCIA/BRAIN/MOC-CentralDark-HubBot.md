@@ -13,7 +13,7 @@ updated: 2026-06-29
 
 ## Dados técnicos
 
-- **PM2 id:** 27
+- **PM2 id:** 17 (corrigido 12/07/2026 — estava documentado como 27 por engano; id 27 real é `CentralDark-HermesVerificador`)
 - **Arquivo:** `/root/CentralDark/apps/bot-telegram/unified-bot.cjs`
 - **Modo:** cluster (múltiplas instâncias)
 - **Status:** online 24/7

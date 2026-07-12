@@ -48,7 +48,7 @@ Dois bots, dois mundos completamente separados. **Nunca misturar.**
 
 | Bot | Papel | Onde vive | Edge function | Banco |
 |---|---|---|---|---|
-| `@srver1bot` | **Central** — controle geral CentralDark | HUB Supabase (`lyoigsqluyktoclwdaft`) + VPS PM2 id 27 (`CentralDark-HubBot`) | `telegram-webhook` (Lovable Cloud atual, consulta o HUB) | HUB |
+| `@srver1bot` | **Central** — controle geral CentralDark | HUB Supabase (`lyoigsqluyktoclwdaft`) + VPS PM2 id 17 (`CentralDark-HubBot`) | `telegram-webhook` (Lovable Cloud atual, consulta o HUB) | HUB |
 | `@SEGREDOPUXADASBOT` (🩸FISCAL🩸) | **Módulo TelePainel** — puxadas/consultas | Lovable Cloud atual (`kagejpghnwdfymddwxuf`) | `telepainel-webhook` (dedicada, consulta o projeto local) | projeto atual |
 
 Regras:

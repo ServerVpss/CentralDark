@@ -140,22 +140,42 @@ function circuitAberto() {
   return true;
 }
 
-function registrarFalhaProvider(erro) {
+function registrarFalhaProvider(erro, categoria) {
   cbFailureCount++;
   cbLastFailure = Date.now();
-  console.error(`[circuit-breaker] falha ${cbFailureCount}/${CB_FAILURE_THRESHOLD}: ${erro.message}`);
+  console.error(`[circuit-breaker] falha ${cbFailureCount}/${CB_FAILURE_THRESHOLD} [${categoria}]: ${erro.message}`);
 }
 
-function mockResposta(modelo, motivo) {
-  return `⚠️ [mock — ${motivo}] O provider (${modelo}) está indisponível agora. Esta é uma resposta de fallback pra manter o fluxo vivo; o conteúdo real volta assim que o provider normalizar.`;
+// Mensagens de mock CURTAS e específicas por tipo de falha — sem despejar o
+// corpo cru do erro HTTP (que às vezes vem em JSON gigante do Abacus).
+function mockResposta(modelo, categoria) {
+  const textos = {
+    sem_credito: 'sem créditos no provider (Abacus)',
+    rate_limit: 'rate limit do provider (429) — muitas chamadas em pouco tempo',
+    timeout: 'provider não respondeu a tempo (timeout 15s)',
+    circuito_aberto: 'circuit breaker aberto — provider instável, pausado por 30s',
+    erro_generico: 'provider retornou erro',
+  };
+  return `⚠️ [mock — ${textos[categoria] || textos.erro_generico}] O provider (${modelo}) está indisponível agora. Esta é uma resposta de fallback pra manter o fluxo vivo; o conteúdo real volta assim que o provider normalizar.`;
+}
+
+// Classifica a falha em uma categoria conhecida — texto do mock fica limpo e
+// consistente em vez de ecoar o corpo cru do erro (JSON gigante do Abacus, etc).
+function classificarFalha(e, httpStatus) {
+  if (e.name === 'TimeoutError' || e.name === 'AbortError') return 'timeout';
+  if (httpStatus === 429) return 'rate_limit';
+  if (httpStatus === 402) return 'sem_credito';
+  if (/remaining credits|no credits/i.test(e.message || '')) return 'sem_credito';
+  return 'erro_generico';
 }
 
 async function callProvider(modelo, messages) {
   if (circuitAberto()) {
     console.log(`[circuit-breaker] ABERTO — pulando chamada real, caindo no mock (${modelo})`);
-    return mockResposta(modelo, 'circuit breaker aberto');
+    return mockResposta(modelo, 'circuito_aberto');
   }
 
+  let httpStatus = null;
   try {
     const r = await fetch(PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE : `${PROVIDER_BASE}/chat/completions`, {
       method: 'POST',
@@ -169,15 +189,15 @@ async function callProvider(modelo, messages) {
       body: JSON.stringify({ model: modelo, messages, stream: false }),
       signal: AbortSignal.timeout(15_000), // timeout agressivo — não deixa o Adapter travar esperando
     });
+    httpStatus = r.status;
     if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}: ${(await r.text()).slice(0,180)}`);
     const data = await r.json();
     cbFailureCount = 0; // sucesso reseta o contador
     return data.choices?.[0]?.message?.content || '(sem resposta)';
   } catch (e) {
-    registrarFalhaProvider(e);
-    // "sem créditos" (Abacus 400) é o caso mais comum agora — cai no mock
-    // em vez de propagar a exceção e derrubar o modo (router/parallel/debate/hermes).
-    return mockResposta(modelo, e.message.slice(0, 80));
+    const categoria = classificarFalha(e, httpStatus);
+    registrarFalhaProvider(e, categoria);
+    return mockResposta(modelo, categoria);
   }
 }
 
