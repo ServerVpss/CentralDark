@@ -232,6 +232,7 @@ apps/
 | 🔒 `apps/modulos/clone-deck/` | Clone-deck (baralho de clonagem) — consolidado. | 05/07/2026 |
 | 🔒 `apps/modulos/pivete-sync/` | Sincronizador do Pivete — não mexer sem ordem. | 05/07/2026 |
 | 🔒 `apps/modulos/obsidian-plugin-grafo-vivo/` | Plugin Obsidian do Grafo Vivo. | 05/07/2026 |
+| 🔒 **Central de Notificações** (`scripts/notify-claude/`, `scripts/agent-notify.mjs`, `infra/notify/`, `apps/modulos/HERMES-CORE/utils/notify.mjs`, `scripts/webhook/lib/notify-telegram.mjs`, edge functions Supabase `notify-*`) | Trava em construção — Pivete vai mandar a estrutura definitiva de consolidação (1 pasta, 1 motor único, formato Card Hermes v1.3) via GitHub. Até a estrutura chegar e ser executada, NENHUMA IA mexe em nenhum script de notificação existente. Ver `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` (sessão 2026-07-11/12) para o mapeamento completo e o achado de conflito com `PADRAO-CARD-HERMES.md`. | 12/07/2026 |
 
 > **Palavras-chave de autorização:** "PERMITO PIVETE" ou instrução explícita descrevendo o escopo exato da mudança.
 

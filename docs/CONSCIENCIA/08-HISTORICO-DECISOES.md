@@ -419,3 +419,62 @@ Mudança mínima e reversível; render segue compatível com force-graph. graph-
 **Design anti-spam (regra p/ Hermes):** graph-data.json e GRAFO-VIVO.md têm churn de 5min (dado). NÃO commitar a cada regeneração (spam + conflito com git plugin do Obsidian). Commitar a nota SÓ quando o estado de saúde mudar (processo caiu/voltou) — casando com a tarefa do Hermes de "reportar quando algo ficar anormal".
 
 **Pendente / possibilidades fluidas:** (1) commit da nota disparado por transição de anomalia (Hermes); (2) MOC/dataview no Obsidian puxando pendências+saúde; (3) nota de incidente automática quando processo cai.
+
+---
+
+## Sessão de consolidação Hermes + segurança Supabase + vigia 24h (2026-07-11)
+
+**Contexto:** sessão longa iniciada com pergunta sobre GraphRAG/mapa de conhecimento, evoluiu pra correções reais de infraestrutura sob ordem direta do Pivete ("PERMITO PIVETE").
+
+**1. Supabase HUB (`lyoigsqluyktoclwdaft`) — PiveteSync destravado:**
+Schema `hub` não estava exposto no PostgREST (só `api,public,graphql_public`), causando 404 constante no sync de `docs/CONSCIENCIA/PIVETE-IA/`. Liberado schema `hub`, aplicada migration `pivete_consciencia_migration.sql`, corrigidos GRANTs de schema/sequence. Sync voltou a rodar limpo a cada 5min.
+
+**2. Segurança crítica — RLS habilitado (Advisor: 6 tabelas públicas sem RLS):**
+`contacts, messages, ticket_messages, tickets, whatsapp_connections, workspaces` no schema `api` do HUB estavam 100% públicas sem RLS. Habilitado RLS + policy `service_role_full_access` (só backend acessa, público continua bloqueado — mais seguro que estado anterior).
+
+**3. Reorganização estrutural do Hermes (ordem explícita "tudo relacionado ao Hermes fica no HERMES-CORE"):**
+Consolidadas 4 pastas antigas espalhadas (`apps/hermes-vivo/`, `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/` minúsculo, pasta fantasma por erro de path duplicado, `apps/modulos/hermes-thinker/` solto). `hermes-thinker` movido pra dentro de `HERMES-CORE/` e renomeado `HERMES-THINKER` (maiúsculo, revogando exceção antiga que blindava pastas de código). Docs soltos (`docs/CONSCIENCIA/HERMES/`) movidos pra `AGENTES-AUTONOMOS/HERMES/PLAYBOOKS/`.
+
+**4. `CentralDark-HermesVerificador` ligado de verdade (PM2 id 27):**
+Documentado há dias no CLAUDE.md mas nunca registrado no PM2. Ao subir, achados e corrigidos 2 bugs em `HERMES-CORE/utils/notify.mjs`: (a) módulo sem `export` executava tudo no top-level e chamava `process.exit(0)` no import, matando o daemon host em crash-loop (~15 restarts/segundos, cards vazios no Telegram); (b) `destino` default `'admin'` era usado como `chat_id` literal, causando erro `400 chat not found`. Reescrito com função `notificar()` exportada de verdade + `resolverChatId()` que trata `'admin'`/`'canal'` como palavras-chave. `pm2 save` feito.
+
+**5. Notificação Telegram do hook Claude Code corrigida:**
+Hook `Stop` mandava texto genérico idêntico pro admin e canal, violando regra do card completo. Criado `notify-telegram-admin.sh` com card rico (PM2 resumido, git status, hora); `.claude/settings.json` atualizado; script antigo preservado intacto pra outros usos.
+
+**Regras reforçadas nesta sessão (ver memória):** IA sugere e alerta risco mas não questiona ordem já dada; padrão de pastas maiúsculas vale também pra código/componentes-chave, não só documentação.
+
+---
+
+## Continuação: bug DARKAI + regressão crítica no ArsenalAdapter + dossiê Abacus (2026-07-11, madrugada)
+
+**6. Bug real do DARKAI_ANON_KEY — causa raiz era `/etc/profile.d/darkai.sh`, não os `.env`:**
+Hermes caía sempre no fallback caro porque `DARKAI_ANON_KEY` estava com valor placeholder/fake (`cdk_darkai_...`) em vez do JWT real. Corrigir os 3 arquivos `.env` (raiz, `secrets/`, `HERMES-CORE/`) não resolveu — descoberta real: `/etc/profile.d/darkai.sh` exportava a chave fake pra todo shell novo do sistema, sobrescrevendo qualquer `.env`. Corrigido na fonte (`/etc/profile.d/darkai.sh`). Teste real confirmado: `darkai "diz oi"` respondeu com sucesso. `pm2 restart CentralDark-Hermes --update-env` aplicado.
+
+**7. Investigação da arquitetura completa de gateways de IA (2 agentes Explore, read-only):**
+Mapeamento revelou que a cadeia de fallback do Hermes (`HERMES-CORE/core/cadeia.json` + `decisor.mjs`) já é madura: tenta modelos via darkai/Lovable Gateway do mais barato ao mais caro, com retry, detecção de loop, e fallback final pro "Elite Anthropic" (`api.centralldark.com/v1/messages`). Confirmado que `api.centralldark.com` é servido hoje pelo Caddy local (não Cloudflare) com catch-all pro `CentralDark-ArsenalAdapter` (PM2 id 25, porta 8090) — o antigo `elite-anthropic-proxy` (porta 8082) está órfão, sem rota pública, e `elite-gateway/` (Zendriver) não tem processo ativo. Doc `CLAUDE.md` sobre isso está desatualizada (ainda cita Zendriver como se fosse o EliteHTTP atual).
+
+**8. Regressão grave encontrada e corrigida — rota `/v1/messages` tinha sido apagada sem querer:**
+`docs/CONSCIENCIA/ARSENAL/PROVA-V1-MESSAGES-CLAUDE-DESKTOP.md` provava que a rota `/v1/messages` (Anthropic-compat) foi implementada e testada com sucesso no commit `8cb5c7f97` (10/07). Um commit seguinte (`606f18354`, só devia adicionar 1 alias de modelo) **removeu acidentalmente o bloco inteiro da rota** — regressão silenciosa que quebrava o fallback final do Hermes (`/v1/messages` retornava 404 desde então). Restaurado o bloco original do `git show 8cb5c7f97`, validado sintaxe, `pm2 restart CentralDark-ArsenalAdapter`, testado real com `curl` autenticado: rota responde (erro visto foi "sem créditos Abacus", não mais 404/unauthorized — problema financeiro separado, fora de escopo).
+
+**9. `CentralDark-ReconHealth` — mistério do restart sozinho resolvido:**
+Processo parado manualmente (pasta `elite-recon-ia/src/` não existe mais) voltou sozinho como `online`. Causa: flag `cron_restart: */5 * * * *` do PM2 — `pm2 stop` não remove essa flag, só `pm2 delete` remove de vez. Corrigido com `pm2 delete` + `pm2 save`.
+
+**10. Dossiês de arquitetura Abacus/Motosserra encontrados em `docs/GATEWAY/`:**
+`DOSSIE-COMPLETO-ABACUS-CENTRALDARK-V1.zip` (08/07) e `DOSSIE-ATUALIZA-CENTRALDARK-V2.zip` (08/07) — **V2 complementa e é a versão vigente do V1**, não substitui. Documentam a origem da decisão de usar Abacus RouteLLM como backend do ArsenalAdapter, análise do "Motosserra" (proxy de terceiro que explora vulnerabilidades do Abacus — CORS wildcard, tier misconfig) e quais padrões aproveitar de forma limpa (memory injection, multi-model parallel/Conselho Arsenal, circuit breaker, mock fallback, sanitização de erro) sem copiar os exploits. O dossiê original recomendava hospedar o proxy como Edge Function no Supabase **HUB** — a implementação real acabou no ArsenalAdapter (processo Node/PM2), não como Edge Function; divergência registrada, não corrigida nesta sessão (fora de escopo, funcionando como está).
+
+---
+
+## Sessão 2026-07-11/12 — Auditoria de tokens GitHub + mapeamento de notificações (pendente: Central de Notificações)
+
+**11. Pendência #54 confirmada viva — 3 tokens GitHub ativos expostos:** checagem real via API (`github_check_token`) confirmou que o PAT classic em uso pelo MCP hoje (user `segredounlock`, prefixo `ghp_…`) tem escopo admin total e **sem expiração** — risco adicional além dos 3 tokens já mapeados na pendência #54 (`gho_fGqM...` hardcoded 6x em `ecosystem.config.cjs`, mais `ghp_CtO8B2...` e `ghp_30iecVq...` em memória nos processos PM2). Ação segue travada em decisão exclusiva do Pivete (revogar em github.com/settings/tokens) — IA não tem esse acesso.
+
+**12. Mapeamento completo de scripts de notificação — hoje ESPALHADOS, sem pasta única:**
+Encontrados pelo menos 6 pontos ativos/relevantes de notificação Telegram no repo, cada um com sua própria lógica de leitura de `.env` e envio:
+- `scripts/notify-claude/notify-telegram-admin.sh` — **único hook realmente ativo hoje**, disparado automaticamente pelo hook `Stop` do Claude Code (`.claude/settings.json`). Card fixo (PM2 + git status), sem texto customizável. ⚠️ **Contradiz a regra selada em `docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`** (área 🔒), que proíbe explicitamente usar `notify-telegram` e exige envio via connector Telegram `sendMessage`, não script solto com token direto — achado não corrigido nesta sessão, fica registrado pra quando a Central de Notificações for construída.
+- `scripts/notify-claude/notify-telegram.sh` — genérico (emoji+título+msg livre), não é chamado por hook automático nenhum, uso manual.
+- `scripts/agent-notify.mjs` — canal do issues-scanner. **Testado nesta sessão e FALHOU** (`Not Found` — token ou chat_id quebrado). Pendência nova, não investigada ainda.
+- `apps/modulos/HERMES-CORE/utils/notify.mjs` — motor usado pelo daemon Hermes internamente (bot `@srver1bot`, tudo em `<pre>`). Testado nesta sessão, funcionou. Mesma observação: usa token direto via API do bot, não o connector — verificar se está alinhado ao Padrão Card Hermes v1.3 oficial antes de adotar como motor único.
+- `infra/notify/notify.py` — notificador Python stdlib-only, lê `/etc/centraldark/notify.env`, usado por scripts de infra fora do Node (ex.: elite-mapper).
+- `scripts/webhook/lib/notify-telegram.mjs` + Supabase edge functions (`notify-telegram`, `notify-event`, `notify-self-test`, `mcp-status-notify`) — canais adicionais não testados nesta sessão.
+
+**Decisão do Pivete:** vai montar e mandar (via GitHub) a estrutura definitiva de uma **Central de Notificações única** — 1 pasta, 1 motor de envio no formato gamificado Hermes (Nível/XP/Conquista/Missão), todos os consumidores acima (Claude Code, Hermes, issues-agent, webhook, Supabase) passando a chamar esse único ponto. **Instrução explícita: não migrar nada ainda** — só executar tudo de uma vez quando a estrutura chegar, para não gastar tokens em iterações. Quando a missão chegar: (a) criar a pasta na estrutura indicada, (b) mover/consolidar os scripts acima, (c) reapontar o hook `Stop` do Claude Code e os demais consumidores, (d) investigar/corrigir o `agent-notify.mjs` quebrado, (e) **reconciliar com a regra selada do Padrão Card Hermes v1.3** (`docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`, 🔒) — decidir junto com o Pivete se o padrão via connector `sendMessage` é atualizado pra permitir o motor script-based, ou se a Central de Notificações passa a usar o connector em vez de token direto.
