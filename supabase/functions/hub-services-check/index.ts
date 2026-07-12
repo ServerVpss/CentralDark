@@ -1,6 +1,7 @@
 // Edge function: testa Telegram, Notion, Drive, GitHub e VPS
 // Retorna status de cada serviço com latência e mensagem.
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { createClient } from 'npm:@supabase/supabase-js@2';
 
 type Result = {
   service: string;
@@ -20,22 +21,28 @@ async function timed<T>(fn: () => Promise<T>): Promise<{ value?: T; err?: unknow
   }
 }
 
+// Conector Telegram do Lovable foi removido de propósito pelo Pivete (11/07/2026) —
+// Lovable é só front, não é canal de integração real aqui. O bot @srver1bot opera via
+// token direto salvo em telegram_bots (mesmo mecanismo de notify-telegram/index.ts),
+// não via connector-gateway.lovable.dev. Testamos o caminho REAL, não o abandonado.
 async function checkTelegram(): Promise<Result> {
-  const key = Deno.env.get('TELEGRAM_API_KEY');
-  const lovableKey = Deno.env.get('LOVABLE_API_KEY');
-  if (!key || !lovableKey) {
-    return { service: 'telegram', ok: false, latency_ms: 0, message: 'Chave não configurada' };
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!supabaseUrl || !serviceKey) {
+    return { service: 'telegram', ok: false, latency_ms: 0, message: 'SUPABASE_URL/SERVICE_ROLE_KEY ausentes' };
   }
   const r = await timed(async () => {
-    const res = await fetch('https://connector-gateway.lovable.dev/telegram/getMe', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${lovableKey}`,
-        'X-Connection-Api-Key': key,
-        'Content-Type': 'application/json',
-      },
-      body: '{}',
-    });
+    const client = createClient(supabaseUrl, serviceKey);
+    const { data: bots, error: dbErr } = await client
+      .from('telegram_bots')
+      .select('token, bot_username')
+      .eq('is_active', true)
+      .order('created_at', { ascending: true });
+    if (dbErr) throw new Error(`telegram_bots query: ${dbErr.message}`);
+    const bot = bots?.find((b) => b.bot_username === 'srver1bot') ?? bots?.[0];
+    if (!bot?.token) throw new Error('nenhum bot ativo cadastrado em telegram_bots');
+
+    const res = await fetch(`https://api.telegram.org/bot${bot.token}/getMe`);
     const j = await res.json();
     if (!res.ok || !j.ok) throw new Error(JSON.stringify(j));
     return j.result;
