@@ -540,3 +540,23 @@ Achado separado, mais antigo, não é a causa do silêncio recente: `apps/bot-te
 **24. `hub-status` (Edge Function nova) criada, deploy pendente — falta credencial do Pivete:** `apps/modulos/hub/supabase/functions/hub-status/index.ts` testa ao vivo (sem cache) schema `hub` (6 tabelas), Abacus RouteLLM e Arsenal Adapter, devolve JSON com status por componente. Não fez deploy: exige `SUPABASE_ACCESS_TOKEN` formato `sbp_...` (Personal Access Token da conta Supabase do Pivete) — varredura completa em `secrets/.env` e `secrets/keys/*.env` não achou nenhum token nesse formato (`HUB_SUPABASE_PAT` existe mas não é PAT válido). Não há alternativa: CLI `supabase functions deploy` exige esse token sem exceção, nenhuma flag substitui. **Ação necessária do Pivete:** gerar em supabase.com/dashboard/account/tokens e passar pra IA aplicar o deploy.
 
 **25. Recado registrado no GitHub (issue #133, comentário) com achados + 4 sugestões de melhoria estrutural** — pra essa classe de regressão (DISCOVERY_MODELS desincronizando) não se repetir uma 4ª vez: (1) teste automatizado simples comparando `MODEL_ALIASES` vs `DISCOVERY_MODELS` no CI, (2) reforçar regra em `docs/CONSCIENCIA/ARSENAL/README.md`, (3) changelog local dentro do módulo pra próxima sessão achar correções já feitas sem varrer issues manualmente, (4) rastreamento da pendência do deploy `hub-status`.
+
+**26. `hub-status` DEPLOYADA E TESTADA — pendência #24 fechada.** Pivete passou a credencial via arquivo temporário local (`1.txt`, apagado com `shred -u` imediatamente após uso — nunca colado no chat). Achado técnico: o valor era a mesma `HUB_SUPABASE_PAT` do cofre, mas formato `sbp_v0...` (47 chars) — o CLI `supabase` REJEITA esse formato na validação client-side (regex fixa espera `sbp_` + hex), **mesmo o token sendo válido de verdade** (confirmado: `GET api.supabase.com/v1/projects/lyoigsqluyktoclwdaft` → `200`). Contornado fazendo o deploy direto via Management API REST (`POST /v1/projects/{ref}/functions/deploy?slug=hub-status`, multipart com `metadata` JSON + `file`), sem depender do CLI — `201 Created`, function `ACTIVE`.
+
+**Teste real do endpoint (`GET .../functions/v1/hub-status`) confirma o diagnóstico da sessão inteira, agora automatizado:**
+```json
+{
+  "status": "degraded",
+  "componentes": {
+    "schema_hub_tabelas": { "tickets": {"ok":true}, "contacts": {"ok":true}, "ticket_messages": {"ok":true}, "messages": {"ok":true}, "whatsapp_connections": {"ok":true}, "workspaces": {"ok":true} },
+    "abacus_routellm": { "ok": false, "http": 400, "detalhe": "sem créditos" },
+    "arsenal_adapter": { "ok": true, "http": 200 }
+  }
+}
+```
+
+**Achado bônus — já existe uma function irmã, `hub-services-check` (ACTIVE, não criada nesta sessão):** checa conectores EXTERNOS (Telegram, Notion, Drive, GitHub) — testada ao vivo, todos OK exceto Telegram (`401 Credential not found`, causa não investigada, pendência nova). `hub-status` (nova) e `hub-services-check` (existente) são complementares, não duplicadas — uma cobre infra interna (Abacus/Arsenal/schema), outra cobre integrações externas.
+
+**Pendência nova registrada:** `hub-services-check` reporta Telegram com credencial ausente/inválida (`connectors_gateway`, 401) — não investigado nesta sessão, fica pro próximo passo junto com a recarga de crédito Abacus.
+
+**Regra de segurança que funcionou:** nunca colar secret em texto de chat — usar arquivo temporário na VPS, ler, usar, apagar (`shred -u`) na sequência. Vale documentar como padrão oficial pra próxima vez que precisar passar credencial.
