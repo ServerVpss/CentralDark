@@ -1,0 +1,13 @@
+{
+  "id": "drift-1783818015214",
+  "tema": "Drift detectado (1 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "commit-novo",
+        "detalhe": "3b81dbb41 → 331ec23d3"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

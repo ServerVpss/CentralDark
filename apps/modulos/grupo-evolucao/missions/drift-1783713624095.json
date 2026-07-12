@@ -1,0 +1,17 @@
+{
+  "id": "drift-1783713624095",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "pm2-instavel",
+        "detalhe": "CentralDark-ReconHealth: +6 restarts"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "08ec77506 → aacd15feb"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}

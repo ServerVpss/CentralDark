@@ -1,0 +1,17 @@
+{
+  "id": "drift-1783850414969",
+  "tema": "Drift detectado (2 mudanças)",
+  "contexto": {
+    "drift": [
+      {
+        "tipo": "modulo-removido",
+        "detalhe": "condefonte-watcher"
+      },
+      {
+        "tipo": "commit-novo",
+        "detalhe": "95383b81b → 9bc4b46f8"
+      }
+    ]
+  },
+  "origem": "cartografo"
+}
