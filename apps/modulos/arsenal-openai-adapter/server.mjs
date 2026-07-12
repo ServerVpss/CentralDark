@@ -117,21 +117,64 @@ async function fetchAbacusCatalog() {
   }
 }
 
+// ─────────────────────────────────────────────────────────────
+// Circuit Breaker do provider (Abacus) — evita martelar um backend
+// sem crédito/instável. Após N falhas seguidas, abre por COOLDOWN_MS
+// e cai direto no mock sem nem tentar a rede.
+// ─────────────────────────────────────────────────────────────
+const CB_FAILURE_THRESHOLD = 3;
+const CB_COOLDOWN_MS = 30_000;
+let cbFailureCount = 0;
+let cbLastFailure = 0;
+
+function circuitAberto() {
+  if (cbFailureCount < CB_FAILURE_THRESHOLD) return false;
+  if (Date.now() - cbLastFailure >= CB_COOLDOWN_MS) {
+    cbFailureCount = 0; // cooldown passou — meio-aberto, deixa tentar de novo
+    return false;
+  }
+  return true;
+}
+
+function registrarFalhaProvider(erro) {
+  cbFailureCount++;
+  cbLastFailure = Date.now();
+  console.error(`[circuit-breaker] falha ${cbFailureCount}/${CB_FAILURE_THRESHOLD}: ${erro.message}`);
+}
+
+function mockResposta(modelo, motivo) {
+  return `⚠️ [mock — ${motivo}] O provider (${modelo}) está indisponível agora. Esta é uma resposta de fallback pra manter o fluxo vivo; o conteúdo real volta assim que o provider normalizar.`;
+}
+
 async function callProvider(modelo, messages) {
-  const r = await fetch(PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE : `${PROVIDER_BASE}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${PROVIDER_KEY}`,
-      'X-Arsenal-Key': PROVIDER_KEY,
-      'HTTP-Referer': 'https://ui.centralldark.com',
-      'X-Title': 'CentralDark Arsenal Council',
-    },
-    body: JSON.stringify({ model: modelo, messages, stream: false }),
-  });
-  if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}: ${(await r.text()).slice(0,180)}`);
-  const data = await r.json();
-  return data.choices?.[0]?.message?.content || '(sem resposta)';
+  if (circuitAberto()) {
+    console.log(`[circuit-breaker] ABERTO — pulando chamada real, caindo no mock (${modelo})`);
+    return mockResposta(modelo, 'circuit breaker aberto');
+  }
+
+  try {
+    const r = await fetch(PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE : `${PROVIDER_BASE}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${PROVIDER_KEY}`,
+        'X-Arsenal-Key': PROVIDER_KEY,
+        'HTTP-Referer': 'https://ui.centralldark.com',
+        'X-Title': 'CentralDark Arsenal Council',
+      },
+      body: JSON.stringify({ model: modelo, messages, stream: false }),
+      signal: AbortSignal.timeout(15_000), // timeout agressivo — não deixa o Adapter travar esperando
+    });
+    if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}: ${(await r.text()).slice(0,180)}`);
+    const data = await r.json();
+    cbFailureCount = 0; // sucesso reseta o contador
+    return data.choices?.[0]?.message?.content || '(sem resposta)';
+  } catch (e) {
+    registrarFalhaProvider(e);
+    // "sem créditos" (Abacus 400) é o caso mais comum agora — cai no mock
+    // em vez de propagar a exceção e derrubar o modo (router/parallel/debate/hermes).
+    return mockResposta(modelo, e.message.slice(0, 80));
+  }
 }
 
 async function modoRouter(regras, messages) {
