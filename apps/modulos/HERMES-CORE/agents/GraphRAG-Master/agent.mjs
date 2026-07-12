@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 // 🕸️  GraphRAG-Master — memória oficial do Hermes Core.
 // buscarContexto(missao): consulta o grafo vivo (grafo.centralldark.com / graph-panel :3030);
-// se o grafo falhar ou não achar nada, fallback pros arquivos locais de knowledge/.
+// se o grafo falhar ou não achar nada, cai pros docs locais de knowledge/;
+// e sempre soma a 3ª fonte — Condefonte Universal (trajetórias/aprendizados já em disco,
+// sem API externa nem credencial: substitui o Condefonte-Lovable antigo, que dependia de
+// um JWT de sessão de browser expirando em 1h e nunca conseguiu autenticar de verdade).
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,10 +12,19 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 const pexec = promisify(execFile);
 
-const KNOWLEDGE = join(dirname(fileURLToPath(import.meta.url)), '../../knowledge');
+const BASE = join(dirname(fileURLToPath(import.meta.url)), '../..'); // HERMES-CORE/
+const KNOWLEDGE = join(BASE, 'knowledge');
 const GRAPH_URL = process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030';
 const GERADOR_GRAFO = '/root/CentralDark/scripts/grafo-vivo/gerar-grafo-vivo.mjs';
 const MAX = 6;
+
+// ── Condefonte Universal: fontes locais de memória (sem API externa) ──
+const CONCLUIDAS = join(BASE, 'missions/concluidas');
+const DEBATES_DIRS = [
+  '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES',
+  '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO',
+];
+const APRENDIZADOS_MD = '/root/CentralDark/docs/CONSCIENCIA/APRENDIZADOS.md';
 
 // ── Auto-update: o grafo se mantém vivo sozinho ──
 // Roda o gerador oficial (scripts/grafo-vivo/gerar-grafo-vivo.mjs), que recalcula o estado
@@ -80,13 +92,102 @@ function buscarLocal(missao) {
     ranking.slice(0, MAX).map(d => `- ${relative('/root/CentralDark', d.p)} — "${String(d.titulo).slice(0, 80)}"`).join('\n');
 }
 
+// ── Fonte 3a: DEBATES/EVOLUCAO — pergunta+resposta reais entre IAs (Arsenal) ──
+function buscarDebates(missao) {
+  const ts = termos(missao);
+  const ranking = [];
+  for (const dir of DEBATES_DIRS) {
+    if (!existsSync(dir)) continue;
+    const varrer = (d) => {
+      for (const e of readdirSync(d)) {
+        const p = join(d, e);
+        try {
+          if (statSync(p).isDirectory()) { varrer(p); continue; }
+          if (!e.endsWith('.md') || e.endsWith('.md.erro')) continue;
+          const corpo = readFileSync(p, 'utf8').slice(0, 3000).toLowerCase();
+          const score = ts.reduce((s, t) => s + (e.toLowerCase().includes(t) ? 2 : 0) + (corpo.includes(t) ? 1 : 0), 0);
+          if (score > 0) ranking.push({ p, score });
+        } catch {}
+      }
+    };
+    try { varrer(dir); } catch {}
+  }
+  if (!ranking.length) return '';
+  ranking.sort((a, b) => b.score - a.score);
+  return 'Debates/Evolução (Arsenal — perguntas e respostas reais entre IAs):\n' +
+    ranking.slice(0, MAX).map(d => `- ${relative('/root/CentralDark', d.p)}`).join('\n');
+}
+
+// ── Fonte 3b: missões concluídas do próprio Hermes — trajetória real (comando→resultado) ──
+function buscarMissoesConcluidas(missao) {
+  if (!existsSync(CONCLUIDAS)) return '';
+  const ts = termos(missao);
+  const ranking = [];
+  try {
+    for (const data of readdirSync(CONCLUIDAS)) {
+      const dirData = join(CONCLUIDAS, data);
+      if (!statSync(dirData).isDirectory()) continue;
+      for (const nome of readdirSync(dirData)) {
+        const statePath = join(dirData, nome, 'state.json');
+        if (!existsSync(statePath)) continue;
+        try {
+          const s = JSON.parse(readFileSync(statePath, 'utf8'));
+          const corpo = String(s.missao || '').toLowerCase();
+          const score = ts.reduce((sc, t) => sc + (nome.toLowerCase().includes(t) ? 2 : 0) + (corpo.includes(t) ? 1 : 0), 0);
+          if (score > 0) {
+            const etapas = Array.isArray(s.historico) ? s.historico.length : 0;
+            const falhas = Array.isArray(s.historico) ? s.historico.filter(h => h.ok === false).length : 0;
+            ranking.push({ nome, data, score, etapas, falhas });
+          }
+        } catch {}
+      }
+    }
+  } catch { return ''; }
+  if (!ranking.length) return '';
+  ranking.sort((a, b) => b.score - a.score);
+  return 'Missões concluídas (Hermes — trajetória real de execução):\n' +
+    ranking.slice(0, MAX).map(m => `- ${m.data}/${m.nome} (${m.etapas} etapas, ${m.falhas} falhas)`).join('\n');
+}
+
+// ── Fonte 3c: APRENDIZADOS.md — lições já curadas (causa → correção) ──
+function buscarAprendizados(missao) {
+  if (!existsSync(APRENDIZADOS_MD)) return '';
+  const ts = termos(missao);
+  try {
+    const conteudo = readFileSync(APRENDIZADOS_MD, 'utf8');
+    const blocos = conteudo.split(/^###\s+/m).slice(1); // cada entrada começa com "### N. Título"
+    const ranking = [];
+    for (const b of blocos) {
+      const titulo = (b.split('\n')[0] || '').trim();
+      const corpo = b.slice(0, 1200).toLowerCase();
+      const score = ts.reduce((s, t) => s + (titulo.toLowerCase().includes(t) ? 2 : 0) + (corpo.includes(t) ? 1 : 0), 0);
+      if (score > 0) ranking.push({ titulo, score });
+    }
+    if (!ranking.length) return '';
+    ranking.sort((a, b) => b.score - a.score);
+    return 'Aprendizados curados (APRENDIZADOS.md):\n' +
+      ranking.slice(0, MAX).map(a => `- ${a.titulo}`).join('\n');
+  } catch { return ''; }
+}
+
+// ── Condefonte Universal: combina as 3 fontes locais acima ──
+function buscarCondefonteUniversal(missao) {
+  const blocos = [buscarDebates(missao), buscarMissoesConcluidas(missao), buscarAprendizados(missao)]
+    .filter(Boolean);
+  return blocos.join('\n\n');
+}
+
 // ── API principal ──
 export async function buscarContexto(missao) {
+  let base = '';
   try {
-    const doGrafo = await buscarNoGrafo(missao);
-    if (doGrafo) return doGrafo.slice(0, 1500);
+    base = await buscarNoGrafo(missao);
   } catch { /* grafo fora do ar — cai pro local */ }
-  return buscarLocal(missao).slice(0, 1500);
+  if (!base) base = buscarLocal(missao);
+
+  const universal = buscarCondefonteUniversal(missao);
+  const combinado = [base, universal].filter(Boolean).join('\n\n');
+  return combinado.slice(0, 1500);
 }
 
 // compat: nome antigo usado pelo decisor
