@@ -42,18 +42,27 @@ function resolverToken() {
   return candidatos.find(t => /^\d+:[A-Za-z0-9_-]+$/.test(t)) || candidatos[0] || '';
 }
 
-function montarCardTopo(titulo) {
+function montarCard(titulo, mensagem) {
   const largura = 36;
   const linhaTopo = `║  ${titulo}`.padEnd(largura - 1) + '║';
   return [
     '╔' + '═'.repeat(largura - 2) + '╗',
     linhaTopo,
     '╚' + '═'.repeat(largura - 2) + '╝',
+    '',
+    mensagem,
   ].join('\n');
 }
 
 function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Telegram NÃO renderiza tags HTML (<b>, <code>) dentro de <pre> — a tag some
+// ignorada, mas fica plana sem quebrar nada. Removemos aqui pra não sobrar
+// lixo residual caso algum chamador ainda mande <b>/<code>/<i> de propósito.
+function limparTagsSemEfeito(s) {
+  return String(s).replace(/<\/?(b|code|i|u|s)>/gi, '');
 }
 
 // Palavras-chave aceitas em `destino` — resolvem pro ID real, nunca viram chat_id literal.
@@ -88,10 +97,11 @@ export async function notificar(titulo = 'Hermes', mensagem = '', destino) {
     return { ok: false, motivo: 'sem_token' };
   }
 
-  // Cabeçalho vira caixa monoespaçada (<pre>, título escapado — nunca tem HTML de propósito).
-  // Mensagem fica FORA do <pre>: os chamadores (ex.: orchestrator.mjs) já mandam com tags
-  // HTML intencionais (<b>, <code>) que precisam renderizar, não aparecer cruas.
-  const cardHtml = `<pre>${escapeHtml(montarCardTopo(titulo))}</pre>\n\n${mensagem}`;
+  // Card inteiro (título + mensagem) dentro de UM <pre> só — visual mono-espaçado
+  // original. Tags HTML (<b>/<code>) não renderizam dentro de <pre> no Telegram
+  // (a API aceita mas ignora), então removemos antes de escapar pra não sobrar
+  // "&lt;b&gt;" cru no card.
+  const cardHtml = `<pre>${escapeHtml(montarCard(titulo, limparTagsSemEfeito(mensagem)))}</pre>`;
 
   try {
     const r = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
