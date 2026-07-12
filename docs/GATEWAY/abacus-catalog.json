@@ -1,0 +1,598 @@
+{
+  "meta": {
+    "gerado_em": "2026-07-12T12:08:06.150Z",
+    "fonte": "https://routellm.abacus.ai/v1/models",
+    "total_abacus": 140,
+    "total_adapter": 148,
+    "billing_nota": "Chat pode falhar com sem créditos mesmo com catálogo 200",
+    "hub_nota": "ModelsPanel do HUB lista plana ou fallback 10 — UI 🔒 não alterada por este script"
+  },
+  "resumo_por_familia": [
+    {
+      "key": "00-route",
+      "familia": "Route-LLM",
+      "emoji": "🧭",
+      "kind": "router",
+      "qtd": 1
+    },
+    {
+      "key": "01-claude",
+      "familia": "Claude (Anthropic)",
+      "emoji": "🟣",
+      "kind": "chat",
+      "qtd": 9
+    },
+    {
+      "key": "02-openai-reason",
+      "familia": "OpenAI Reasoning (o-series)",
+      "emoji": "🧠",
+      "kind": "chat",
+      "qtd": 5
+    },
+    {
+      "key": "03-openai-code",
+      "familia": "OpenAI Codex / Code",
+      "emoji": "💻",
+      "kind": "chat",
+      "qtd": 4
+    },
+    {
+      "key": "04-openai-chat",
+      "familia": "OpenAI Chat (GPT)",
+      "emoji": "🟢",
+      "kind": "chat",
+      "qtd": 19
+    },
+    {
+      "key": "05-gemini",
+      "familia": "Gemini / Gemma (Google)",
+      "emoji": "🔵",
+      "kind": "chat",
+      "qtd": 13
+    },
+    {
+      "key": "06-grok",
+      "familia": "Grok (xAI) Chat",
+      "emoji": "⚫",
+      "kind": "chat",
+      "qtd": 2
+    },
+    {
+      "key": "07-deepseek",
+      "familia": "DeepSeek",
+      "emoji": "🐋",
+      "kind": "chat",
+      "qtd": 3
+    },
+    {
+      "key": "08-llama",
+      "familia": "Llama (Meta)",
+      "emoji": "🦙",
+      "kind": "chat",
+      "qtd": 3
+    },
+    {
+      "key": "09-qwen",
+      "familia": "Qwen",
+      "emoji": "🔶",
+      "kind": "chat",
+      "qtd": 3
+    },
+    {
+      "key": "10-kimi",
+      "familia": "Kimi (Moonshot)",
+      "emoji": "🌙",
+      "kind": "chat",
+      "qtd": 3
+    },
+    {
+      "key": "11-glm",
+      "familia": "GLM (Zhipu)",
+      "emoji": "🔷",
+      "kind": "chat",
+      "qtd": 6
+    },
+    {
+      "key": "12-minimax-chat",
+      "familia": "MiniMax Chat",
+      "emoji": "⚡",
+      "kind": "chat",
+      "qtd": 2
+    },
+    {
+      "key": "13-mimo",
+      "familia": "Mimo",
+      "emoji": "✨",
+      "kind": "chat",
+      "qtd": 1
+    },
+    {
+      "key": "20-audio",
+      "familia": "Áudio / TTS",
+      "emoji": "🔊",
+      "kind": "audio",
+      "qtd": 3
+    },
+    {
+      "key": "21-image",
+      "familia": "Imagem",
+      "emoji": "🖼️",
+      "kind": "image",
+      "qtd": 35
+    },
+    {
+      "key": "22-video",
+      "familia": "Vídeo",
+      "emoji": "🎬",
+      "kind": "video",
+      "qtd": 28
+    }
+  ],
+  "resumo_por_tipo": {
+    "chat": 68,
+    "image": 35,
+    "audio": 3,
+    "multimodal": 5,
+    "video": 28,
+    "router": 1
+  },
+  "council": {
+    "router": "gemini-3-flash-preview",
+    "voz1_pro": "gemini-3.1-pro-preview",
+    "voz2_gpt": "gpt-5.5",
+    "voz3_flash": "gemini-3-flash-preview",
+    "juiz": "gemini-3.1-pro-preview"
+  },
+  "modelos_disponiveis_regras": [
+    "gemini-3-flash-preview",
+    "gemini-3.1-flash-lite",
+    "gemini-3.1-pro-preview",
+    "gemini-3.5-flash",
+    "gpt-5.4-mini",
+    "gpt-5.4",
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "claude-sonnet-5",
+    "claude-haiku-4-5-20251001",
+    "claude-opus-4-8",
+    "route-llm"
+  ],
+  "tutores": {
+    "mestre_sabio": "claude-sonnet-5",
+    "analista_profundo": "gpt-5.5",
+    "executor_rapido": "gemini-3-flash-preview",
+    "preciso": "gpt-5.4",
+    "cetico": "gemini-3.1-pro-preview",
+    "criativo": "gpt-5.6-terra"
+  },
+  "familias": [
+    {
+      "key": "00-route",
+      "familia": "Route-LLM",
+      "emoji": "🧭",
+      "kind": "router",
+      "modelos": [
+        "route-llm"
+      ]
+    },
+    {
+      "key": "01-claude",
+      "familia": "Claude (Anthropic)",
+      "emoji": "🟣",
+      "kind": "chat",
+      "modelos": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-5-20251101",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-sonnet-4-5-20250929",
+        "claude-sonnet-4-6",
+        "claude-sonnet-5"
+      ]
+    },
+    {
+      "key": "02-openai-reason",
+      "familia": "OpenAI Reasoning (o-series)",
+      "emoji": "🧠",
+      "kind": "chat",
+      "modelos": [
+        "o3",
+        "o3-mini",
+        "o3-pro",
+        "o4-mini",
+        "openai/gpt-oss-120b"
+      ]
+    },
+    {
+      "key": "03-openai-code",
+      "familia": "OpenAI Codex / Code",
+      "emoji": "💻",
+      "kind": "chat",
+      "modelos": [
+        "gpt-5-codex",
+        "gpt-5.1-codex",
+        "gpt-5.2-codex",
+        "gpt-5.3-codex"
+      ]
+    },
+    {
+      "key": "04-openai-chat",
+      "familia": "OpenAI Chat (GPT)",
+      "emoji": "🟢",
+      "kind": "chat",
+      "modelos": [
+        "gpt-4.1",
+        "gpt-4.1-mini",
+        "gpt-4.1-nano",
+        "gpt-4o",
+        "gpt-4o-mini",
+        "gpt-5",
+        "gpt-5-mini",
+        "gpt-5-nano",
+        "gpt-5.1",
+        "gpt-5.2",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.4-nano",
+        "gpt-5.5",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-audio-1.5",
+        "gpt-audio-mini"
+      ]
+    },
+    {
+      "key": "05-gemini",
+      "familia": "Gemini / Gemma (Google)",
+      "emoji": "🔵",
+      "kind": "chat",
+      "modelos": [
+        "gemini_omni_flash",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-image",
+        "gemini-2.5-flash-preview-tts",
+        "gemini-2.5-pro",
+        "gemini-2.5-pro-preview-tts",
+        "gemini-3-flash-preview",
+        "gemini-3-pro-image-preview",
+        "gemini-3.1-flash-image-preview",
+        "gemini-3.1-flash-lite",
+        "gemini-3.1-pro-preview",
+        "gemini-3.5-flash",
+        "google/gemma-4-31b-it"
+      ]
+    },
+    {
+      "key": "06-grok",
+      "familia": "Grok (xAI) Chat",
+      "emoji": "⚫",
+      "kind": "chat",
+      "modelos": [
+        "grok-4.3",
+        "grok-4.5"
+      ]
+    },
+    {
+      "key": "07-deepseek",
+      "familia": "DeepSeek",
+      "emoji": "🐋",
+      "kind": "chat",
+      "modelos": [
+        "deepseek-ai/DeepSeek-V3.2",
+        "deepseek-ai/DeepSeek-V4-Flash",
+        "deepseek-ai/DeepSeek-V4-Pro"
+      ]
+    },
+    {
+      "key": "08-llama",
+      "familia": "Llama (Meta)",
+      "emoji": "🦙",
+      "kind": "chat",
+      "modelos": [
+        "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "meta-llama/Meta-Llama-3.1-8B-Instruct",
+        "meta-llama/Meta-Llama-3.3-70B-Instruct"
+      ]
+    },
+    {
+      "key": "09-qwen",
+      "familia": "Qwen",
+      "emoji": "🔶",
+      "kind": "chat",
+      "modelos": [
+        "Qwen/Qwen3-32B",
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+        "Qwen/Qwen3.6-27B"
+      ]
+    },
+    {
+      "key": "10-kimi",
+      "familia": "Kimi (Moonshot)",
+      "emoji": "🌙",
+      "kind": "chat",
+      "modelos": [
+        "moonshotai/Kimi-K2-Instruct",
+        "moonshotai/Kimi-K2.6",
+        "moonshotai/Kimi-K2.7-Code"
+      ]
+    },
+    {
+      "key": "11-glm",
+      "familia": "GLM (Zhipu)",
+      "emoji": "🔷",
+      "kind": "chat",
+      "modelos": [
+        "zai-org/GLM-4.5",
+        "zai-org/GLM-4.6",
+        "zai-org/GLM-4.7",
+        "zai-org/GLM-5",
+        "zai-org/GLM-5.1",
+        "zai-org/GLM-5.2"
+      ]
+    },
+    {
+      "key": "12-minimax-chat",
+      "familia": "MiniMax Chat",
+      "emoji": "⚡",
+      "kind": "chat",
+      "modelos": [
+        "MiniMaxAI/MiniMax-M2.7",
+        "MiniMaxAI/MiniMax-M3"
+      ]
+    },
+    {
+      "key": "13-mimo",
+      "familia": "Mimo",
+      "emoji": "✨",
+      "kind": "chat",
+      "modelos": [
+        "mimo-v2-pro"
+      ]
+    },
+    {
+      "key": "20-audio",
+      "familia": "Áudio / TTS",
+      "emoji": "🔊",
+      "kind": "audio",
+      "modelos": [
+        "elevenlabs",
+        "hume",
+        "openai_tts"
+      ]
+    },
+    {
+      "key": "21-image",
+      "familia": "Imagem",
+      "emoji": "🖼️",
+      "kind": "image",
+      "modelos": [
+        "dalle",
+        "dreamina",
+        "flux_kontext",
+        "flux_kontext_edit",
+        "flux_pro",
+        "flux_pro_canny",
+        "flux_pro_depth",
+        "flux_pro_ultra",
+        "flux2",
+        "flux2_pro",
+        "gpt_image_edit",
+        "gpt_image15",
+        "gpt_image2",
+        "gpt_image2_edit",
+        "grok_imagine_image",
+        "grok_imagine_image_quality",
+        "hunyuan",
+        "hunyuan_image",
+        "ideogram",
+        "ideogram_character",
+        "imagine_art",
+        "magnific",
+        "midjourney",
+        "nano_banana",
+        "nano_banana_lite",
+        "nano_banana_pro",
+        "nano_banana2",
+        "qwen_image_edit",
+        "recraft",
+        "recraft_svg",
+        "recraft_vectorize",
+        "seedream",
+        "seedream5_lite",
+        "seedream5_pro",
+        "topaz"
+      ]
+    },
+    {
+      "key": "22-video",
+      "familia": "Vídeo",
+      "emoji": "🎬",
+      "kind": "video",
+      "modelos": [
+        "grok_imagine_video",
+        "grok_imagine_video15",
+        "kling_ai",
+        "kling_ai_o1",
+        "kling_ai_o3",
+        "kling_ai_v2",
+        "kling_ai_v21",
+        "kling_ai_v25",
+        "kling_ai_v26",
+        "kling_ai_v26_motion",
+        "kling_ai_v3",
+        "luma_labs",
+        "minimax",
+        "muse-spark-1.1",
+        "runway",
+        "seedance",
+        "seedance_pro",
+        "seedance15_pro",
+        "seedance20",
+        "seedance20_mini",
+        "sora",
+        "veo",
+        "veo3",
+        "veo31",
+        "veo31_lite",
+        "wan",
+        "wan25",
+        "wan27"
+      ]
+    }
+  ],
+  "todos_ids": [
+    "claude-fable-5",
+    "claude-haiku-4-5-20251001",
+    "claude-opus-4-5-20251101",
+    "claude-opus-4-6",
+    "claude-opus-4-7",
+    "claude-opus-4-8",
+    "claude-sonnet-4-5-20250929",
+    "claude-sonnet-4-6",
+    "claude-sonnet-5",
+    "dalle",
+    "deepseek-ai/DeepSeek-V3.2",
+    "deepseek-ai/DeepSeek-V4-Flash",
+    "deepseek-ai/DeepSeek-V4-Pro",
+    "dreamina",
+    "elevenlabs",
+    "flux_kontext",
+    "flux_kontext_edit",
+    "flux_pro",
+    "flux_pro_canny",
+    "flux_pro_depth",
+    "flux_pro_ultra",
+    "flux2",
+    "flux2_pro",
+    "gemini_omni_flash",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-image",
+    "gemini-2.5-flash-preview-tts",
+    "gemini-2.5-pro",
+    "gemini-2.5-pro-preview-tts",
+    "gemini-3-flash-preview",
+    "gemini-3-pro-image-preview",
+    "gemini-3.1-flash-image-preview",
+    "gemini-3.1-flash-lite",
+    "gemini-3.1-pro-preview",
+    "gemini-3.5-flash",
+    "google/gemma-4-31b-it",
+    "gpt_image_edit",
+    "gpt_image15",
+    "gpt_image2",
+    "gpt_image2_edit",
+    "gpt-4.1",
+    "gpt-4.1-mini",
+    "gpt-4.1-nano",
+    "gpt-4o",
+    "gpt-4o-mini",
+    "gpt-5",
+    "gpt-5-codex",
+    "gpt-5-mini",
+    "gpt-5-nano",
+    "gpt-5.1",
+    "gpt-5.1-codex",
+    "gpt-5.2",
+    "gpt-5.2-codex",
+    "gpt-5.3-codex",
+    "gpt-5.4",
+    "gpt-5.4-mini",
+    "gpt-5.4-nano",
+    "gpt-5.5",
+    "gpt-5.6-luna",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-audio-1.5",
+    "gpt-audio-mini",
+    "grok_imagine_image",
+    "grok_imagine_image_quality",
+    "grok_imagine_video",
+    "grok_imagine_video15",
+    "grok-4.3",
+    "grok-4.5",
+    "hume",
+    "hunyuan",
+    "hunyuan_image",
+    "ideogram",
+    "ideogram_character",
+    "imagine_art",
+    "kling_ai",
+    "kling_ai_o1",
+    "kling_ai_o3",
+    "kling_ai_v2",
+    "kling_ai_v21",
+    "kling_ai_v25",
+    "kling_ai_v26",
+    "kling_ai_v26_motion",
+    "kling_ai_v3",
+    "luma_labs",
+    "magnific",
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+    "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "meta-llama/Meta-Llama-3.3-70B-Instruct",
+    "midjourney",
+    "mimo-v2-pro",
+    "minimax",
+    "MiniMaxAI/MiniMax-M2.7",
+    "MiniMaxAI/MiniMax-M3",
+    "moonshotai/Kimi-K2-Instruct",
+    "moonshotai/Kimi-K2.6",
+    "moonshotai/Kimi-K2.7-Code",
+    "muse-spark-1.1",
+    "nano_banana",
+    "nano_banana_lite",
+    "nano_banana_pro",
+    "nano_banana2",
+    "o3",
+    "o3-mini",
+    "o3-pro",
+    "o4-mini",
+    "openai_tts",
+    "openai/gpt-oss-120b",
+    "qwen_image_edit",
+    "Qwen/Qwen3-32B",
+    "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+    "Qwen/Qwen3.6-27B",
+    "recraft",
+    "recraft_svg",
+    "recraft_vectorize",
+    "route-llm",
+    "runway",
+    "seedance",
+    "seedance_pro",
+    "seedance15_pro",
+    "seedance20",
+    "seedance20_mini",
+    "seedream",
+    "seedream5_lite",
+    "seedream5_pro",
+    "sora",
+    "topaz",
+    "veo",
+    "veo3",
+    "veo31",
+    "veo31_lite",
+    "wan",
+    "wan25",
+    "wan27",
+    "zai-org/GLM-4.5",
+    "zai-org/GLM-4.6",
+    "zai-org/GLM-4.7",
+    "zai-org/GLM-5",
+    "zai-org/GLM-5.1",
+    "zai-org/GLM-5.2"
+  ],
+  "adapter_extras": [
+    "arsenal-router",
+    "arsenal-parallel",
+    "arsenal-debate",
+    "arsenal-hermes",
+    "claude-3-5-sonnet-latest",
+    "claude-3-5-sonnet-20241022",
+    "claude-3-opus-latest",
+    "claude-3-opus-20240229"
+  ]
+}
