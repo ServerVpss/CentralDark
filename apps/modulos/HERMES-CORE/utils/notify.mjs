@@ -42,15 +42,13 @@ function resolverToken() {
   return candidatos.find(t => /^\d+:[A-Za-z0-9_-]+$/.test(t)) || candidatos[0] || '';
 }
 
-function montarCard(titulo, mensagem) {
+function montarCardTopo(titulo) {
   const largura = 36;
   const linhaTopo = `║  ${titulo}`.padEnd(largura - 1) + '║';
   return [
     '╔' + '═'.repeat(largura - 2) + '╗',
     linhaTopo,
     '╚' + '═'.repeat(largura - 2) + '╝',
-    '',
-    mensagem,
   ].join('\n');
 }
 
@@ -90,7 +88,10 @@ export async function notificar(titulo = 'Hermes', mensagem = '', destino) {
     return { ok: false, motivo: 'sem_token' };
   }
 
-  const cardHtml = `<pre>${escapeHtml(montarCard(titulo, mensagem))}</pre>`;
+  // Cabeçalho vira caixa monoespaçada (<pre>, título escapado — nunca tem HTML de propósito).
+  // Mensagem fica FORA do <pre>: os chamadores (ex.: orchestrator.mjs) já mandam com tags
+  // HTML intencionais (<b>, <code>) que precisam renderizar, não aparecer cruas.
+  const cardHtml = `<pre>${escapeHtml(montarCardTopo(titulo))}</pre>\n\n${mensagem}`;
 
   try {
     const r = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
