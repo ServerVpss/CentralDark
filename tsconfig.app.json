@@ -3,11 +3,7 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleDetection": "force",
     "moduleResolution": "bundler",
@@ -17,19 +13,23 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/shared/ui/*": ["./src/compartilhado/interface/*"],
+      "@/shared/ui": ["./src/compartilhado/interface"],
+      "@/shared/hooks/*": ["./src/compartilhado/comportamentos/*"],
+      "@/shared/hooks": ["./src/compartilhado/comportamentos"],
+      "@/shared/lib/*": ["./src/compartilhado/utilitarios/*"],
+      "@/shared/lib": ["./src/compartilhado/utilitarios"],
+      "@/shared/*": ["./src/compartilhado/*"],
+      "@/shared": ["./src/compartilhado"],
+      "@/preview/cockpit-hero/*": ["./src/admin/cockpit/*"],
+      "@/preview/cockpit-hero": ["./src/admin/cockpit"],
+      "@/*": ["./src/*"]
     },
     "skipLibCheck": true,
     "strict": false,
     "target": "ES2020",
-    "types": [
-      "vitest/globals"
-    ],
+    "types": ["vitest/globals"],
     "useDefineForClassFields": true
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
