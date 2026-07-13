@@ -2379,6 +2379,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      is_super_admin: { Args: { _user_id: string }; Returns: boolean }
       recalc_module_health: { Args: never; Returns: undefined }
       record_module_attempt: {
         Args: { p_module_key: string; p_outcome: string }
@@ -2387,7 +2388,7 @@ export type Database = {
       run_data_cleanup: { Args: never; Returns: number }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "super_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2515,7 +2516,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "super_admin"],
     },
   },
 } as const
