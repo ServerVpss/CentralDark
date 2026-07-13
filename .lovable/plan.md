@@ -1,89 +1,24 @@
-# 🗺️ Mapa da Situação — Onde a gente tá e o que falta
+Plano seguro para destravar essa tela preta e continuar a Fase 3 sem bagunçar mais nada:
 
-## ✅ O que já tá pronto e travado
+1. Corrigir o alias quebrado do import novo
+   - O app importa `@/compartilhado/lib/hostRouting`, mas o arquivo real está em `src/compartilhado/utilitarios/hostRouting.ts`.
+   - Vou ajustar só esse import para o caminho certo em português.
 
-**1. Conexão GitHub 🟢**
-- Repo: `ServerVpss/CentralDark`
-- Branch: `pivete/dev` (correto conforme a Constituição)
-- Sync automático: toda edição aqui vai pro GitHub sozinha
+2. Tratar `/index` como rota válida de entrada
+   - A tela do celular mostra que a prévia abriu em `/index`, mas o app hoje só tem `/`, `/auth`, `/telepainel`, `/dashboard` e rotas internas.
+   - Vou adicionar uma rota simples `/index` redirecionando para `/`, para não cair em tela preta/404 quando o Lovable ou o navegador abrir nesse caminho.
 
-**2. Faxina Visual — Fase 1 e 2 🟢**
-- `src/shared` → `src/compartilhado`
-- `src/preview/cockpit-hero` → `src/admin/cockpit`
-- `src/apps/modulos/` → `src/funcionalidades/`
-- `src/apps/web/` → `src/paginas/portal-publico/`
-- Aliases configurados (nada quebrou)
-- Build passando 🟢
+3. Melhorar a tela de rota não encontrada
+   - Hoje o 404 ainda está em inglês e muito cru.
+   - Vou deixar em PT-BR, com botão claro para voltar ao início, sem mudar design geral.
 
-**3. Cockpit Hermes 🟢**
-- Rota `/admin/cockpit` funcionando
-- 6 terminais coloridos (Hermes, Arsenal, Gateway, HUB, TelePainel, Enxame)
-- Mascote Hermes animado na sidebar (11 poses)
-- Motor de vida reagindo aos logs
+4. Verificar sem mexer em backend, VPS, banco ou design pesado
+   - Só frontend/roteamento.
+   - Depois valido a prévia em `/index` e `/` para confirmar que voltou a renderizar.
 
-**4. Backend/Infra 🟢**
-- HUB Bot online (VPS PM2)
-- Gateway `api.centralldark.com` com 140 modelos
-- 29 aliases de modelos
-
----
-
-## 🟡 O que falta (por prioridade)
-
-### 🔥 Prioridade ALTA — Coisas que ainda incomodam
-
-**A. Faxina Visual — Fase 3**
-- Reescrever os imports antigos gradualmente (ainda usam `@/shared`, `@/apps`)
-- Split real do `App.tsx` (hoje tá gigante)
-- Popular `sistema-visual/` com tokens de design de verdade
-
-**B. Separação TelePainel × CentralDark**
-- A sidebar do TelePainel ainda mistura itens de infra CentralDark
-- Precisa limpar pra cada um ter sua identidade
-
-**C. Aliases duplicados no Gateway**
-- Alguns modelos aparecem 2x com nomes diferentes
-- Falta consolidar o `regras.json`
-
-### 🟢 Prioridade MÉDIA — Melhorias
-
-**D. Login/Autenticação do HUB**
-- `LoginPage.tsx` criada mas falta polir fluxo bootstrap admin
-- Trigger de auto-admin pra primeira conta
-
-**E. Documentação visual do TelePainel**
-- Manual bonito no tema Esmeralda dentro do painel
-
-### 🔵 Prioridade BAIXA — Pode esperar
-
-**F. Renomear `docs/` → `.consciencia`** (aguardando ordem)
-**G. Reconstrução do MCP + hub** (plano futuro)
-
----
-
-## 🎯 Minha recomendação: por onde começar
-
-Como você tá meio perdido, sugiro atacar **UM problema por vez**, na ordem:
-
-1. **PRIMEIRO** → Fase 3 da Faxina (reescrever imports + split do App.tsx)
-   - Motivo: deixa o código organizado antes de qualquer feature nova
-   - Risco: baixo (só reorganização)
-   - Tempo: 1 sessão
-
-2. **DEPOIS** → Separação TelePainel × CentralDark
-   - Motivo: resolve a confusão visual que você reclamou
-   - Risco: baixo (só sidebar/rotas)
-
-3. **DEPOIS** → Aliases duplicados no Gateway
-   - Motivo: melhora a experiência de quem usa a API
-   - Atenção: mexe em código da VPS, precisa de commit + deploy
-
----
-
-## 🤔 O que eu preciso de você
-
-Só me responde **uma coisa**:
-
-> "Vai na Fase 3 da Faxina" — OU — "Prefiro atacar outra prioridade primeiro" — OU — "Me explica melhor o item X"
-
-E aí eu monto o plano **detalhado só daquela frente**, sem misturar tudo. Beleza, Pivete? 🟢
+Resultado esperado:
+```text
+/index → redireciona para /
+/      → abre a tela inicial correta
+rotas inexistentes → mostram 404 amigável em PT-BR
+```
