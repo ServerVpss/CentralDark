@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
 import { TrendingUp, MessageSquare } from "lucide-react";
 
 interface DayData {

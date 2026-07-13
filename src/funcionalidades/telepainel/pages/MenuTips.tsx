@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Textarea } from "@/shared/ui/textarea";
-import { Switch } from "@/shared/ui/switch";
-import { Card } from "@/shared/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Textarea } from "@/compartilhado/ui/textarea";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Card } from "@/compartilhado/ui/card";
 import { toast } from "sonner";
 import { Loader2, Plus, Trash2, Save, Lightbulb } from "lucide-react";
-import { invalidateTipsCache } from "@/shared/transitions/PageSplash";
+import { invalidateTipsCache } from "@/compartilhado/transitions/PageSplash";
 
 interface Tip {
   id: string;

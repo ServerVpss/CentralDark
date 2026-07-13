@@ -1,9 +1,9 @@
 import { CreditCard, MessageSquare, Search, Shield, CheckCircle, AlertTriangle, RefreshCw, Clock } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
-import { useNotifications } from "@/shared/hooks/useNotifications";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { Button } from "@/shared/ui/button";
-import { ScrollArea } from "@/shared/ui/scroll-area";
+import { cn } from "@/compartilhado/lib/utils";
+import { useNotifications } from "@/compartilhado/hooks/useNotifications";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import { Button } from "@/compartilhado/ui/button";
+import { ScrollArea } from "@/compartilhado/ui/scroll-area";
 import { useMemo, memo } from "react";
 
 const iconMap = {

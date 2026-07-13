@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
-import { Card } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/shared/ui/sheet";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { Card } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Button } from "@/compartilhado/ui/button";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/compartilhado/ui/sheet";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/compartilhado/ui/table";
 import { Search, Filter, X, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { CATEGORIES, RISKS, ToolCategoryBadge, ToolRiskBadge } from "./badges";

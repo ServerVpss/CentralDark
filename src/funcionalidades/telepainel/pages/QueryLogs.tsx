@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { Progress } from "@/shared/ui/progress";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import { Progress } from "@/compartilhado/ui/progress";
 import {
   History,
   Search,
@@ -15,25 +15,25 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Badge } from "@/shared/ui/badge";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Button } from "@/compartilhado/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Badge } from "@/compartilhado/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
+} from "@/compartilhado/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@/compartilhado/ui/select";
 import {
   Table,
   TableBody,
@@ -41,12 +41,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/ui/table";
+} from "@/compartilhado/ui/table";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { Loader2 } from "lucide-react";
 import { Json } from "@/integrations/supabase/hub-types";
-import { QueryResultFormatter } from "@/apps/modulos/telepainel/components/consultas/QueryResultFormatter";
+import { QueryResultFormatter } from "@/funcionalidades/telepainel/components/consultas/QueryResultFormatter";
 
 interface QueryLog {
   id: string;

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Button } from "@/compartilhado/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
 import {
   Search,
   CreditCard,
@@ -17,7 +17,7 @@ import {
   TimerReset,
   CalendarClock,
 } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/compartilhado/lib/utils";
 
 interface PixTx {
   id: string;

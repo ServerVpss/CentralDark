@@ -5,10 +5,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/shared/ui/dialog";
-import { Badge } from "@/shared/ui/badge";
-import { Button } from "@/shared/ui/button";
-import { Separator } from "@/shared/ui/separator";
+} from "@/compartilhado/ui/dialog";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Button } from "@/compartilhado/ui/button";
+import { Separator } from "@/compartilhado/ui/separator";
 import {
   Car,
   Hash,
@@ -29,7 +29,7 @@ import {
   FileText,
 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/compartilhado/lib/utils";
 
 interface VehicleResultModalProps {
   open: boolean;

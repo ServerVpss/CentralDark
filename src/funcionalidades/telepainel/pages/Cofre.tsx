@@ -2,21 +2,21 @@
 // Nome neutro pra não entregar que é a central de controle do dono.
 // Reaproveita design Esmeralda (3D tátil). Admin-only (AdminRoute).
 import { useState } from "react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Card } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Switch } from "@/shared/ui/switch";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Card } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/compartilhado/ui/tabs";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Switch } from "@/compartilhado/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@/compartilhado/ui/select";
 import {
   Shield,
   Bot as BotIcon,
@@ -31,13 +31,13 @@ import {
   XCircle,
   Activity,
 } from "lucide-react";
-import { useTelegramBots } from "@/shared/hooks/useTelegramBots";
+import { useTelegramBots } from "@/compartilhado/hooks/useTelegramBots";
 import {
   useNotificationRoutes,
   TIPOS_EVENTO,
   type TipoEvento,
-} from "@/shared/hooks/useNotificationRoutes";
-import { useNotificationsLog } from "@/shared/hooks/useNotificationsLog";
+} from "@/compartilhado/hooks/useNotificationRoutes";
+import { useNotificationsLog } from "@/compartilhado/hooks/useNotificationsLog";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 

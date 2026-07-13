@@ -1,8 +1,8 @@
 // Card de notificações ao vivo — espelha o canal CentralDark — Status no painel web.
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
 import { Bell, CheckCircle2, AlertTriangle, XCircle, Info, Siren } from "lucide-react";
-import { useNotificationsLog, type NotifyTipo } from "@/shared/hooks/useNotificationsLog";
+import { useNotificationsLog, type NotifyTipo } from "@/compartilhado/hooks/useNotificationsLog";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 

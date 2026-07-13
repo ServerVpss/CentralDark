@@ -8,8 +8,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/shared/ui/alert-dialog";
-import { Button } from "@/shared/ui/button";
+} from "@/compartilhado/ui/alert-dialog";
+import { Button } from "@/compartilhado/ui/button";
 import { AlertTriangle, ShieldOff, ShieldCheck } from "lucide-react";
 
 // === Tipos ===

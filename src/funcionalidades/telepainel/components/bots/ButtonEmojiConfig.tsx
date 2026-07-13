@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Button } from "@/compartilhado/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
 import { Save, Sparkles, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";

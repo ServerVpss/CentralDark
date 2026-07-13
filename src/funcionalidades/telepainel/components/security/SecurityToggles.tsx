@@ -1,8 +1,8 @@
 import { Link, MessageSquare, AlertTriangle, Ban, ShieldCheck, Users } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Switch } from "@/shared/ui/switch";
-import { Skeleton } from "@/shared/ui/skeleton";
-import type { BotSecuritySettings } from "@/shared/hooks/telegram/types";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import type { BotSecuritySettings } from "@/compartilhado/hooks/telegram/types";
 
 interface ToggleSetting {
   id: string;

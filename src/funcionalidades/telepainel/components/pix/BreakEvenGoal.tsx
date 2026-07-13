@@ -1,7 +1,7 @@
 import { Target, TrendingUp, AlertCircle, CheckCircle2, Sparkles } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
-import { Skeleton } from "@/shared/ui/skeleton";
-import type { PixSummary } from "@/shared/hooks/usePixTransactions";
+import { cn } from "@/compartilhado/lib/utils";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import type { PixSummary } from "@/compartilhado/hooks/usePixTransactions";
 
 interface BreakEvenGoalProps {
   summary: PixSummary | undefined;

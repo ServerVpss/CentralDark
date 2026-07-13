@@ -5,14 +5,14 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Textarea } from "@/shared/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
-import { Badge } from "@/shared/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+} from "@/compartilhado/ui/dialog";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Textarea } from "@/compartilhado/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/compartilhado/ui/radio-group";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
 import {

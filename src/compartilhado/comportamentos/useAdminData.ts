@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
-import type { TelegramBot } from "@/shared/hooks/telegram/types";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
+import type { TelegramBot } from "@/compartilhado/hooks/telegram/types";
 
 // Re-export for backwards compatibility
 export type { TelegramBot };

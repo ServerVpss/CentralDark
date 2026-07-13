@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/compartilhado/ui/dialog";
+import { Button } from "@/compartilhado/ui/button";
 import { RefreshCw, Smartphone, ExternalLink } from "lucide-react";
 
 interface Props {

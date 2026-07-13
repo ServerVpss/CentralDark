@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Label } from "@/shared/ui/label";
-import { Switch } from "@/shared/ui/switch";
-import { Button } from "@/shared/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Label } from "@/compartilhado/ui/label";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Button } from "@/compartilhado/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/compartilhado/ui/select";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 import { Trash2, RefreshCw, Loader2 } from "lucide-react";

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Activity, CheckCircle, XCircle, AlertCircle, RefreshCw, Wifi } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { Progress } from "@/shared/ui/progress";
-import { TelegramBot, useTelegramBots } from "@/shared/hooks/useTelegramBots";
-import { cn } from "@/shared/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Progress } from "@/compartilhado/ui/progress";
+import { TelegramBot, useTelegramBots } from "@/compartilhado/hooks/useTelegramBots";
+import { cn } from "@/compartilhado/lib/utils";
 
 interface BotHealthMonitorProps {
   bots: TelegramBot[];

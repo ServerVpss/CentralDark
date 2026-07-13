@@ -11,7 +11,7 @@ import {
   ShieldCheck,
   Zap,
 } from "lucide-react";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/compartilhado/ui/button";
 
 const modules = [
   { name: "TelePainel", tag: "Bot Telegram de consultas", href: "/telepainel", icon: Terminal, accent: "152 76% 50%", status: "ativo" },

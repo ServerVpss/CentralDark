@@ -1,7 +1,7 @@
 import { Ban, AlertTriangle, ShieldCheck, Zap } from "lucide-react";
-import { Card, CardContent } from "@/shared/ui/card";
-import { Skeleton } from "@/shared/ui/skeleton";
-import type { SecurityStats as Stats } from "@/shared/hooks/useSecurity";
+import { Card, CardContent } from "@/compartilhado/ui/card";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import type { SecurityStats as Stats } from "@/compartilhado/hooks/useSecurity";
 
 interface SecurityStatsProps {
   stats: Stats;

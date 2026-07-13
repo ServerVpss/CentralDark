@@ -9,14 +9,14 @@ import {
   CheckCircle,
   Wifi,
 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Switch } from "@/shared/ui/switch";
-import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Badge } from "@/compartilhado/ui/badge";
 import { toast } from "sonner";
-import { TelegramBot } from "@/shared/hooks/useTelegramBots";
+import { TelegramBot } from "@/compartilhado/hooks/useTelegramBots";
 import { supabase } from "@/integrations/supabase/hub-client";
 
 interface BotConfigCardProps {

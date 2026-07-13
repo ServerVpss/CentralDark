@@ -1,13 +1,13 @@
 import { Shield, RefreshCw } from "lucide-react";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/compartilhado/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
-import type { TelegramBot } from "@/shared/hooks/telegram/types";
+} from "@/compartilhado/ui/select";
+import type { TelegramBot } from "@/compartilhado/hooks/telegram/types";
 
 interface SecurityHeaderProps {
   bots: TelegramBot[];

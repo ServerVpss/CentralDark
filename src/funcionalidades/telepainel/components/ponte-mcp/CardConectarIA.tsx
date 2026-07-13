@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plug, Copy, CheckCircle2 } from "lucide-react";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/compartilhado/ui/button";
 import { BotaoOAuth, type ResultadoOAuth } from "./BotaoOAuth";
 import { toast } from "sonner";
 

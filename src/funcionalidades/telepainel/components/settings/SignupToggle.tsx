@@ -1,7 +1,7 @@
-import { Switch } from "@/shared/ui/switch";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
 import { Power, UserPlus } from "lucide-react";
-import { useSystemSetting } from "@/shared/hooks/useSystemSetting";
+import { useSystemSetting } from "@/compartilhado/hooks/useSystemSetting";
 import { toast } from "sonner";
 
 export function SignupToggle() {

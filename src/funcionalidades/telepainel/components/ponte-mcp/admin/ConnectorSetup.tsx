@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { Card } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
+import { Card } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/compartilhado/ui/tabs";
 import { Copy, Plug, Link2, Terminal, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import {

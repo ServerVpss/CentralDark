@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { Server, CheckCircle, XCircle, AlertCircle, RefreshCw, Clock } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/compartilhado/lib/utils";
 
 interface FunctionHealth {
   name: string;

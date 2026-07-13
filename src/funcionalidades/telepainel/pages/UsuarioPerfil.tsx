@@ -2,20 +2,20 @@
 // 4 abas: Dados, Atividade (audit_logs), Permissões e Sessões.
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { fetchUserDetail } from "@/shared/hooks/useAdminUsers";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Badge } from "@/shared/ui/badge";
-import { Button } from "@/shared/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { fetchUserDetail } from "@/compartilhado/hooks/useAdminUsers";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Button } from "@/compartilhado/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/compartilhado/ui/avatar";
 import {
   ArrowLeft, Loader2, ShieldCheck, Eye, Mail, Calendar, Clock,
   Activity, KeyRound, User as UserIcon, Settings as SettingsIcon, Smartphone,
 } from "lucide-react";
 import { toast } from "sonner";
-import { startViewAs } from "@/shared/lib/viewAsMode";
-import { clearAdminCache } from "@/shared/hooks/useIsAdmin";
+import { startViewAs } from "@/compartilhado/lib/viewAsMode";
+import { clearAdminCache } from "@/compartilhado/hooks/useIsAdmin";
 
 function fmt(iso: string | null | undefined) {
   if (!iso) return "—";

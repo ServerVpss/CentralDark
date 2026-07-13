@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Wrench } from "lucide-react";
-import { Switch } from "@/shared/ui/switch";
-import { Badge } from "@/shared/ui/badge";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Badge } from "@/compartilhado/ui/badge";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 

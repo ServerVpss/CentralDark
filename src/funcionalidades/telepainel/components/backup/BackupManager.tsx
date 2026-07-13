@@ -12,19 +12,19 @@ import {
   ChevronDown,
   XCircle,
 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
-import { Label } from "@/shared/ui/label";
-import { Input } from "@/shared/ui/input";
-import { Progress } from "@/shared/ui/progress";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/compartilhado/ui/radio-group";
+import { Label } from "@/compartilhado/ui/label";
+import { Input } from "@/compartilhado/ui/input";
+import { Progress } from "@/compartilhado/ui/progress";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/shared/ui/accordion";
+} from "@/compartilhado/ui/accordion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,8 +34,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/shared/ui/alert-dialog";
-import { useBackup, RestoreResult, ExportResult, TableResult } from "@/shared/hooks/useBackup";
+} from "@/compartilhado/ui/alert-dialog";
+import { useBackup, RestoreResult, ExportResult, TableResult } from "@/compartilhado/hooks/useBackup";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 

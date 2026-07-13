@@ -14,12 +14,12 @@ import {
   Eye,
   EyeOff
 } from "lucide-react";
-import { Card, CardContent } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Switch } from "@/shared/ui/switch";
-import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Badge } from "@/compartilhado/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -27,8 +27,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
-import { usePayments } from "@/shared/hooks/usePayments";
+} from "@/compartilhado/ui/dialog";
+import { usePayments } from "@/compartilhado/hooks/usePayments";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
 

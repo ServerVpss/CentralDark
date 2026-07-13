@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { PixTransactionsTable } from "@/apps/modulos/telepainel/components/pix/PixTransactionsTable";
-import { PixFinancialSummary } from "@/apps/modulos/telepainel/components/pix/PixFinancialSummary";
-import { PixCharts } from "@/apps/modulos/telepainel/components/pix/PixCharts";
-import { OperationalCostConfig } from "@/apps/modulos/telepainel/components/pix/OperationalCostConfig";
-import { BreakEvenGoal } from "@/apps/modulos/telepainel/components/pix/BreakEvenGoal";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { usePixTransactions } from "@/shared/hooks/usePixTransactions";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { PixTransactionsTable } from "@/funcionalidades/telepainel/components/pix/PixTransactionsTable";
+import { PixFinancialSummary } from "@/funcionalidades/telepainel/components/pix/PixFinancialSummary";
+import { PixCharts } from "@/funcionalidades/telepainel/components/pix/PixCharts";
+import { OperationalCostConfig } from "@/funcionalidades/telepainel/components/pix/OperationalCostConfig";
+import { BreakEvenGoal } from "@/funcionalidades/telepainel/components/pix/BreakEvenGoal";
+import { Tabs, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
+import { usePixTransactions } from "@/compartilhado/hooks/usePixTransactions";
 import { TrendingUp } from "lucide-react";
 
 export default function PixTransactions() {

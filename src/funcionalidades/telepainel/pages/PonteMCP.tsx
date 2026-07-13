@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Card } from "@/shared/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Card } from "@/compartilhado/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/compartilhado/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/compartilhado/ui/dialog";
 import {
   Copy, Key, Trash2, Power, RefreshCw, Server, Terminal,
   AlertTriangle, CheckCircle, X, LayoutDashboard, Wrench,

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
-import { playSplash } from "@/shared/transitions/PageSplash";
+import { playSplash } from "@/compartilhado/transitions/PageSplash";
 
 export interface Profile {
   id: string;
@@ -118,7 +118,7 @@ export function useAuth() {
   const signOut = async () => {
     playSplash();
     // limpa cache global de admin pra próximo login revalidar
-    const { clearAdminCache } = await import("@/shared/hooks/useIsAdmin");
+    const { clearAdminCache } = await import("@/compartilhado/hooks/useIsAdmin");
     clearAdminCache();
     const { error } = await supabase.auth.signOut();
 
