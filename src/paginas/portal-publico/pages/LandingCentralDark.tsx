@@ -15,9 +15,9 @@ import { Button } from "@/compartilhado/ui/button";
 
 const modules = [
   { name: "TelePainel", tag: "Bot Telegram de consultas", href: "/telepainel", icon: Terminal, accent: "152 76% 50%", status: "ativo" },
-  { name: "Bot WhatsApp", tag: "Atendimento no WhatsApp", href: "/whatsapp", icon: MessageCircle, accent: "160 76% 45%", status: "em breve" },
-  { name: "CRM", tag: "Clientes e funis", href: "/crm", icon: Users, accent: "148 70% 42%", status: "em breve" },
-  { name: "Financeiro", tag: "Cobranças e PIX", href: "/financeiro", icon: Wallet, accent: "156 80% 55%", status: "em breve" },
+  { name: "Bot WhatsApp", tag: "Atendimento no WhatsApp", href: "/whatsapp", icon: MessageCircle, accent: "160 76% 45%", status: "em processo" },
+  { name: "CRM", tag: "Clientes e funis", href: "/crm", icon: Users, accent: "148 70% 42%", status: "em processo" },
+  { name: "Financeiro", tag: "Cobranças e PIX", href: "/financeiro", icon: Wallet, accent: "156 80% 55%", status: "em processo" },
 ];
 
 const benefits = [
