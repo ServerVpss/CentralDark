@@ -1,81 +1,89 @@
-# Hero Cockpit Animado — Preview Isolado (sem plugar no app)
+# 🗺️ Mapa da Situação — Onde a gente tá e o que falta
 
-Só o front-end, numa pasta separada e numa rota escondida pra você olhar. **Não mexe** no `/`, no login, no HUB nem em nada existente.
+## ✅ O que já tá pronto e travado
 
-## Onde vai ficar
+**1. Conexão GitHub 🟢**
+- Repo: `ServerVpss/CentralDark`
+- Branch: `pivete/dev` (correto conforme a Constituição)
+- Sync automático: toda edição aqui vai pro GitHub sozinha
 
-Pasta nova, isolada:
-```
-src/preview/cockpit-hero/
-├─ index.tsx              ← página completa do preview
-├─ CockpitHero.tsx        ← orquestrador (piloto + grid)
-├─ CockpitPane.tsx        ← pane reutilizável
-├─ PilotoChat.tsx         ← chat com typewriter
-├─ MatrixRain.tsx         ← canvas de fundo
-├─ cockpit.css            ← estilos e keyframes locais (escopo próprio)
-└─ dados.ts               ← linhas de log + falas do piloto
-```
+**2. Faxina Visual — Fase 1 e 2 🟢**
+- `src/shared` → `src/compartilhado`
+- `src/preview/cockpit-hero` → `src/admin/cockpit`
+- `src/apps/modulos/` → `src/funcionalidades/`
+- `src/apps/web/` → `src/paginas/portal-publico/`
+- Aliases configurados (nada quebrou)
+- Build passando 🟢
 
-Rota escondida (só pra você ver): `/preview/cockpit`
-- Adicionada como rota nova no `App.tsx`, **sem tocar** em `/`, `/auth`, `/hub`, `/telepainel`.
-- Não aparece em menu nenhum. É só digitar a URL.
-- Se depois você gostar, a gente promove pra landing oficial. Se não gostar, deleta a pasta e some.
+**3. Cockpit Hermes 🟢**
+- Rota `/admin/cockpit` funcionando
+- 6 terminais coloridos (Hermes, Arsenal, Gateway, HUB, TelePainel, Enxame)
+- Mascote Hermes animado na sidebar (11 poses)
+- Motor de vida reagindo aos logs
 
-## Visual — Híbrido Esmeralda + neon (padrão oficial)
-- Base esmeralda `#052e2b` → `#0a3d38`, texto off-white, moldura `#10b981`/`#34d399`
-- 6 panes com acento neon próprio (Hermes esmeralda · Arsenal âmbar · Gateway ciano · HUB violeta · TelePainel rosa · Enxame vermelho)
-- Cores dentro do `cockpit.css` local com CSS variables próprias (não polui os tokens globais do app)
+**4. Backend/Infra 🟢**
+- HUB Bot online (VPS PM2)
+- Gateway `api.centralldark.com` com 140 modelos
+- 29 aliases de modelos
 
-## Layout
-```
-┌────────────────────────────────────────────────────────────┐
-│  logo CentralDark  ·  (preview isolado)                     │
-├──────────────────┬─────────────────────────────────────────┤
-│  PILOTO          │  ┌─────────┬─────────┬─────────┐        │
-│  chat rolando    │  │ Hermes  │ Arsenal │ Gateway │        │
-│  headline        │  ├─────────┼─────────┼─────────┤        │
-│  subheadline     │  │  HUB    │TelePainl│ Enxame  │        │
-│  (sem CTA real)  │  └─────────┴─────────┴─────────┘        │
-└──────────────────┴─────────────────────────────────────────┘
-   fundo: matrix rain em canvas, opacidade baixa
-```
-Mobile: piloto empilha em cima, grade vira 2x3 embaixo.
+---
 
-## Animações (CSS + canvas, sem libs novas)
-1. Matrix rain de caracteres verdes caindo no fundo
-2. 6 panes com logs temáticos rolando (jitter 400-900ms), fade nas bordas
-3. Status pill por pane (bolinha pulsando + texto ok/processando/aguardando)
-4. Piloto: mensagens caem uma a uma com typewriter e auto-scroll
-5. Glow pulse sutil na palavra "CentralDark" da headline
-6. Respeita `prefers-reduced-motion`
+## 🟡 O que falta (por prioridade)
 
-## Conteúdo (temático CentralDark)
-Panes:
-- **Hermes**: `[hermes] loop 4287 · 0 divergências` · `enxame paralelo (10 agentes)`
-- **Arsenal**: `/debate rodada 2 · consenso 87%` · `veredito consolidado`
-- **Gateway**: `POST /v1/messages 200 · 342ms` · `catálogo · 161 modelos`
-- **HUB**: `health 200 · 140 modelos online` · `correlation_id abc123`
-- **TelePainel**: `webhook 200 · @SEGREDOPUXADASBOT` · `RLS ok`
-- **Enxame**: `[ômega] fase 2/4 · 20 sub-agentes` · `veredito → opus`
+### 🔥 Prioridade ALTA — Coisas que ainda incomodam
 
-Piloto chat:
-```
-Piloto: bora auditar o gateway
-Hermes: subindo enxame de 10 agentes ✓
-Arsenal: consenso 92% em 2 rodadas
-Gateway: 140 modelos respondendo
-Piloto: veredito?
-Hermes: 🟢 tudo estável, pivete
-```
+**A. Faxina Visual — Fase 3**
+- Reescrever os imports antigos gradualmente (ainda usam `@/shared`, `@/apps`)
+- Split real do `App.tsx` (hoje tá gigante)
+- Popular `sistema-visual/` com tokens de design de verdade
 
-## O que muda no app existente
-Só uma linha: adicionar uma `<Route path="/preview/cockpit" element={<CockpitPreview />} />` no `App.tsx`. Nada mais é tocado.
+**B. Separação TelePainel × CentralDark**
+- A sidebar do TelePainel ainda mistura itens de infra CentralDark
+- Precisa limpar pra cada um ter sua identidade
 
-## Fora de escopo
-- Não mexe em `/`, `/auth`, `/hub`, `/telepainel`
-- Não muda tokens globais do `index.css` nem do `tailwind.config.ts`
-- Sem backend, sem edge, sem migration
-- Sem libs novas
+**C. Aliases duplicados no Gateway**
+- Alguns modelos aparecem 2x com nomes diferentes
+- Falta consolidar o `regras.json`
 
-## Como você vai ver
-Depois de pronto: abrir a URL `/preview/cockpit` no preview do Lovable. Se rolar, tá lindo. Se não, você fala e a gente ajusta ou apaga a pasta inteira.
+### 🟢 Prioridade MÉDIA — Melhorias
+
+**D. Login/Autenticação do HUB**
+- `LoginPage.tsx` criada mas falta polir fluxo bootstrap admin
+- Trigger de auto-admin pra primeira conta
+
+**E. Documentação visual do TelePainel**
+- Manual bonito no tema Esmeralda dentro do painel
+
+### 🔵 Prioridade BAIXA — Pode esperar
+
+**F. Renomear `docs/` → `.consciencia`** (aguardando ordem)
+**G. Reconstrução do MCP + hub** (plano futuro)
+
+---
+
+## 🎯 Minha recomendação: por onde começar
+
+Como você tá meio perdido, sugiro atacar **UM problema por vez**, na ordem:
+
+1. **PRIMEIRO** → Fase 3 da Faxina (reescrever imports + split do App.tsx)
+   - Motivo: deixa o código organizado antes de qualquer feature nova
+   - Risco: baixo (só reorganização)
+   - Tempo: 1 sessão
+
+2. **DEPOIS** → Separação TelePainel × CentralDark
+   - Motivo: resolve a confusão visual que você reclamou
+   - Risco: baixo (só sidebar/rotas)
+
+3. **DEPOIS** → Aliases duplicados no Gateway
+   - Motivo: melhora a experiência de quem usa a API
+   - Atenção: mexe em código da VPS, precisa de commit + deploy
+
+---
+
+## 🤔 O que eu preciso de você
+
+Só me responde **uma coisa**:
+
+> "Vai na Fase 3 da Faxina" — OU — "Prefiro atacar outra prioridade primeiro" — OU — "Me explica melhor o item X"
+
+E aí eu monto o plano **detalhado só daquela frente**, sem misturar tudo. Beleza, Pivete? 🟢
