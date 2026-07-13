@@ -728,6 +728,42 @@ export type Database = {
         }
         Relationships: []
       }
+      modulos_portal: {
+        Row: {
+          created_at: string
+          href: string
+          icone: string
+          id: string
+          nome: string
+          ordem: number
+          slug: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          href: string
+          icone: string
+          id?: string
+          nome: string
+          ordem?: number
+          slug: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          href?: string
+          icone?: string
+          id?: string
+          nome?: string
+          ordem?: number
+          slug?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notification_events: {
         Row: {
           body_template: string | null
