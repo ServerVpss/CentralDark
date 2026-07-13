@@ -1,30 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { LogOut, Sparkles } from "lucide-react";
+import { LogOut, Sparkles, Loader2 } from "lucide-react";
 import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
-import iconWhatsapp from "@/compartilhado/assets/icon-whatsapp.png";
-import iconCrm from "@/compartilhado/assets/icon-crm.png";
-import iconTelegram from "@/compartilhado/assets/icon-telegram.png";
-import iconFinanceiro from "@/compartilhado/assets/icon-financeiro.png";
-
-type Module = {
-  id: string;
-  name: string;
-  icon: string;
-  href: string;
-  status: "ativo" | "em processo";
-};
-
-const modules: Module[] = [
-  { id: "whatsapp", name: "Bot WhatsApp", icon: iconWhatsapp, href: "/whatsapp", status: "em processo" },
-  { id: "crm", name: "CRM", icon: iconCrm, href: "/crm", status: "em processo" },
-  { id: "telegram", name: "TelePainel", icon: iconTelegram, href: "/telepainel/dashboard", status: "ativo" },
-  { id: "financeiro", name: "Financeiro", icon: iconFinanceiro, href: "/financeiro", status: "em processo" },
-];
+import { useModulosPortal } from "@/paginas/centraldark-admin/hooks/useModulosPortal";
+import { resolverIcone } from "@/paginas/centraldark-admin/lib/icones-modulos";
 
 export default function Portal() {
   const { signOut, user } = useAuthContext();
   const navigate = useNavigate();
+  const { modulos, loading } = useModulosPortal();
 
   const handleSignOut = async () => {
     await signOut();
@@ -81,44 +65,50 @@ export default function Portal() {
 
         {/* Grid 2 colunas estilo app */}
         <div className="mt-7 grid grid-cols-2 gap-4">
-          {modules.map((m) => {
-            const ativo = m.status === "ativo";
-            const Card = (
-              <div
-                className={
-                  "relative aspect-square rounded-2xl border bg-card p-3 transition-all active:translate-y-[1px] " +
-                  (ativo
-                    ? "border-primary/40 shadow-3d-primary hover:border-primary/60"
-                    : "border-border shadow-3d-soft opacity-90")
-                }
-              >
-                {!ativo && (
-                  <span className="absolute right-2 top-2 rounded-full border border-border bg-background/80 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-muted-foreground">
-                    em processo
-                  </span>
-                )}
-                <div className="flex h-full flex-col items-center justify-center gap-2">
-                  <img
-                    src={m.icon}
-                    alt={m.name}
-                    loading="lazy"
-                    width={512}
-                    height={512}
-                    className="h-[58%] w-[58%] object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)]"
-                  />
-                  <span className="text-center text-[13px] font-medium leading-tight text-foreground">
-                    {m.name}
-                  </span>
+          {loading && modulos.length === 0 ? (
+            <div className="col-span-2 flex justify-center py-10 text-muted-foreground">
+              <Loader2 className="h-5 w-5 animate-spin" />
+            </div>
+          ) : (
+            modulos.map((m) => {
+              const ativo = m.status === "ativo";
+              const Card = (
+                <div
+                  className={
+                    "relative aspect-square rounded-2xl border bg-card p-3 transition-all active:translate-y-[1px] " +
+                    (ativo
+                      ? "border-primary/40 shadow-3d-primary hover:border-primary/60"
+                      : "border-border shadow-3d-soft opacity-90")
+                  }
+                >
+                  {!ativo && (
+                    <span className="absolute right-2 top-2 rounded-full border border-border bg-background/80 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-muted-foreground">
+                      em processo
+                    </span>
+                  )}
+                  <div className="flex h-full flex-col items-center justify-center gap-2">
+                    <img
+                      src={resolverIcone(m.icone)}
+                      alt={m.nome}
+                      loading="lazy"
+                      width={512}
+                      height={512}
+                      className="h-[58%] w-[58%] object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)]"
+                    />
+                    <span className="text-center text-[13px] font-medium leading-tight text-foreground">
+                      {m.nome}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            );
+              );
 
-            return (
-              <Link key={m.id} to={m.href} className={ativo ? "block" : "block cursor-default"}>
-                {Card}
-              </Link>
-            );
-          })}
+              return (
+                <Link key={m.id} to={m.href} className={ativo ? "block" : "block cursor-default"}>
+                  {Card}
+                </Link>
+              );
+            })
+          )}
         </div>
 
         <p className="mt-10 text-center font-mono text-[10px] text-muted-foreground">
