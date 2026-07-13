@@ -2379,6 +2379,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      is_super_admin: { Args: { _user_id: string }; Returns: boolean }
       recalc_module_health: { Args: never; Returns: undefined }
       record_module_attempt: {
         Args: { p_module_key: string; p_outcome: string }
