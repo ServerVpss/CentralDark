@@ -1,82 +1,70 @@
-# Mapa de Migração — Faxina Visual CentralDark
+# Mapa de Migração — Fase 2
 
-> Registro caminho-a-caminho do que mudou nesta faxina. Base: commit `4db6a1b`, branch `pivete/dev`. Só frontend do projeto Lovable atual foi tocado.
+> Base: commit `221b931` (fim da Fase 1). Branch: `pivete/dev`. Somente frontend do projeto Lovable.
 
-## O que foi movido fisicamente
+## Moves físicos executados
 
-| Antes                              | Depois                                  | Motivo |
-|------------------------------------|-----------------------------------------|--------|
-| `src/App.tsx`                      | `src/app/App.tsx`                       | Ponto de entrada oficial vai para `src/app/` |
-| `src/preview/cockpit-hero/`        | `src/admin/cockpit/`                    | Cockpit deixa de ser preview e vira área admin oficial |
-| `src/shared/`                      | `src/compartilhado/`                    | Nome oficial em PT-BR |
-| `src/shared/ui/`                   | `src/compartilhado/interface/`          | Nome PT-BR (componentes shadcn e UI base) |
-| `src/shared/hooks/`                | `src/compartilhado/comportamentos/`     | Nome PT-BR (hooks React) |
-| `src/shared/lib/`                  | `src/compartilhado/utilitarios/`        | Nome PT-BR (utilitários) |
+| Antes                                | Depois                                     |
+|--------------------------------------|--------------------------------------------|
+| `src/apps/web/`                      | `src/paginas/portal-publico/`              |
+| `src/apps/modulos/telepainel/`       | `src/funcionalidades/telepainel/`          |
+| `src/apps/modulos/hermes-panel/`     | `src/funcionalidades/hermes/`              |
+| `src/apps/modulos/bot-whatsapp/`     | `src/funcionalidades/bot-whatsapp/`        |
+| `src/apps/modulos/crm/`              | `src/funcionalidades/crm/`                 |
+| `src/apps/modulos/financeiro/`       | `src/funcionalidades/financeiro/`          |
+| `src/apps/modulos/README.md`         | `src/funcionalidades/README.md`            |
+| `src/apps/web/README.md`             | (foi movido junto com portal-publico)      |
+| `src/lib/notifications-events.ts`    | `src/compartilhado/servicos/notifications-events.ts` |
 
-## O que foi criado (esqueleto oficial da árvore-alvo)
+## Diretórios removidos (após ficarem vazios)
 
-Todas as pastas abaixo foram criadas vazias (com `.gitkeep`) para ancorar a árvore-alvo. A próxima etapa vai preencher cada uma movendo o conteúdo hoje espalhado em `src/apps/`.
+- `src/apps/modulos/`
+- `src/apps/`
+- `src/lib/`
 
-- `src/app/rotas.tsx` (âncora — reexporta App)
-- `src/app/provedores.tsx` (âncora — reexporta App)
-- `src/app/configuracao.ts` (queryClient, chave de tema, modo)
-- `src/sistema-visual/{fundamentos,componentes,estilos}/`
-- `src/estruturas-de-pagina/`
-- `src/paginas/`
-- `src/funcionalidades/`
-- `src/recursos-visuais/`
-- `src/compartilhado/{tipos,servicos,dados-de-exemplo}/`
+## Aliases-ponte criados nesta fase
 
-## O que foi criado como ponte (aliases)
+Em `vite.config.ts`, `tsconfig.json` e `tsconfig.app.json`:
 
-Nenhum arquivo antigo foi apagado enquanto imports apontavam para ele. As pontes vivem apenas em `tsconfig.json`, `tsconfig.app.json` e `vite.config.ts`:
+- `@/apps/web/*` → `src/paginas/portal-publico/*`
+- `@/apps/modulos/telepainel/*` → `src/funcionalidades/telepainel/*`
+- `@/apps/modulos/hermes-panel/*` → `src/funcionalidades/hermes/*`
+- `@/apps/modulos/bot-whatsapp/*` → `src/funcionalidades/bot-whatsapp/*`
+- `@/apps/modulos/crm/*` → `src/funcionalidades/crm/*`
+- `@/apps/modulos/financeiro/*` → `src/funcionalidades/financeiro/*`
+- `@/lib/notifications-events` → `src/compartilhado/servicos/notifications-events`
 
-- `@/shared/ui/*` → `src/compartilhado/interface/*`
-- `@/shared/hooks/*` → `src/compartilhado/comportamentos/*`
-- `@/shared/lib/*` → `src/compartilhado/utilitarios/*`
-- `@/shared/*` → `src/compartilhado/*`
-- `@/preview/cockpit-hero` → `src/admin/cockpit`
+Motivo: **nenhum dos 16 arquivos com imports `@/apps/...`** precisou ser reescrito. Reescrita fica para a fase 3.
 
-Por causa das pontes, **nenhum dos 175+ imports antigos precisou ser reescrito nesta etapa**, e o build passa (`npm run build` = 🟢).
+## Nota técnica
 
-## O que foi apagado
+Regex `find` no `vite.config.ts` para os novos aliases não estava casando no `configResolved` do Vite (comportamento diferente dos `@/shared` da fase 1). Substituído por aliases de string simples (casam por prefixo), padrão suportado e estável.
 
-- `src/preview/` (pasta), depois que `cockpit-hero` migrou para `src/admin/cockpit`. Não havia mais nada dentro.
+## Arquivos editados fora dos moves
 
-Nada mais foi apagado. Nenhum arquivo funcional foi removido.
+- `vite.config.ts` — novos aliases adicionados.
+- `tsconfig.json` — novos paths adicionados.
+- `tsconfig.app.json` — novos paths adicionados.
 
-## Rotas alteradas
+Nenhum `.tsx`/`.ts` de negócio foi tocado.
 
-- **Adicionada:** `/admin/cockpit` → aponta para `src/admin/cockpit` (Cockpit oficial).
-- **Preservada por compatibilidade:** `/preview/cockpit` → agora **redireciona** para `/admin/cockpit` via `<Navigate>`.
-- Nenhuma outra rota do sistema (`/telepainel/*`, `/whatsapp`, `/crm`, `/financeiro`, `/portal`, `/auth`, `/docs`, etc.) foi tocada.
+## Módulos que não puderam ser movidos
 
-## Arquivos editados (fora dos moves)
-
-- `src/main.tsx` → `import App from "@/app/App"`
-- `src/app/App.tsx` → import de Cockpit passou para `@/admin/cockpit`, rotas atualizadas.
-- `tsconfig.json`, `tsconfig.app.json` → paths com aliases PT-BR + pontes.
-- `vite.config.ts` → `resolve.alias` em array (ordem específica primeiro).
+Nenhum. Todos os cinco módulos de `src/apps/modulos/` migraram sem incidente.
 
 ## Build
 
 ```
-npm run build   →  🟢 built in 15.40s
+npm run build   →  🟢 built in 13.94s
 ```
-
-Avisos (não bloqueiam):
-- Aviso de `@import` em `index.css` antes de `@tailwind` (herdado, estético).
-- Aviso de `useIsAdmin.ts` importado dinâmica e estaticamente (herdado, não introduzido aqui).
-
-## Pendências (próxima etapa)
-
-1. Migrar páginas de `src/apps/modulos/telepainel/pages/` → `src/paginas/`.
-2. Migrar componentes de negócio → `src/funcionalidades/`.
-3. Migrar `src/apps/web/pages/` (landings) → `src/paginas/`.
-4. Mover `src/lib/notifications-events.ts` → `src/compartilhado/utilitarios/`.
-5. Split real de `App.tsx` em `rotas.tsx` + `provedores.tsx`.
-6. Remover pontes/aliases `@/shared/*` e `@/preview/cockpit-hero` quando todos os imports antigos tiverem sido reescritos para os novos caminhos PT-BR.
 
 ## Rollback
 
-Histórico Git é o rollback. Cada rename foi feito com `mv` normal (sem `git mv`), então o Git verá "arquivo apagado + arquivo criado" — o histórico dos arquivos internos continua rastreável via `git log --follow`. Nenhum force-push, nenhuma reescrita de histórico, nenhum merge.
+Histórico Git. Nenhum force-push, nenhuma reescrita de histórico. `git log --follow` acompanha cada arquivo interno.
+
+## Próxima fase (sugerida, não executada)
+
+1. Reescrita gradual dos imports `@/apps/...` e `@/lib/notifications-events` para os novos caminhos PT-BR.
+2. Remoção dos aliases-ponte quando todos os imports antigos tiverem sido reescritos.
+3. Split real de `App.tsx` em `rotas.tsx` + `provedores.tsx`.
+4. Popular `sistema-visual/` extraindo tokens/estilos de `index.css`.
