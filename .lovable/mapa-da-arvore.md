@@ -1,92 +1,78 @@
-# Mapa da Árvore — CentralDark (frontend Lovable)
+# Mapa da Árvore — CentralDark (frontend Lovable) — Fase 2
 
-> Atualizado agora, na branch `pivete/dev`. Este é o **mapa oficial** de onde cada coisa vive no frontend depois da faxina. Backend, Supabase, Edge Functions, VPS, workflows e áreas 🔒 **não foram tocados**.
+> Atualizado após Fase 2. `src/apps/` e `src/lib/` **eliminados**. Backend, Supabase, VPS, workflows e áreas 🔒 intocados.
 
-## Árvore-alvo (estado atual do repo)
+## Árvore atual
 
 ```
 src/
-├─ app/                        ← ponto de entrada do app (React)
-│  ├─ App.tsx                  ← componente raiz (rotas + provedores por enquanto juntos aqui)
-│  ├─ rotas.tsx                ← âncora futura das rotas (por ora reexporta App)
-│  ├─ provedores.tsx           ← âncora futura dos provedores (por ora reexporta App)
-│  └─ configuracao.ts          ← queryClient, chave de tema, modo (full/web/portal)
-│
+├─ app/                        ← entry React (App.tsx + configuracao.ts + âncoras)
 ├─ admin/
-│  └─ cockpit/                 ← Cockpit oficial (antes: src/preview/cockpit-hero)
-│                                 rota: /admin/cockpit
+│  └─ cockpit/                 ← Cockpit oficial (rota /admin/cockpit)
 │
-├─ sistema-visual/             ← futuro lar dos tokens/base de design (vazio, .gitkeep)
-│  ├─ fundamentos/
-│  ├─ componentes/
-│  └─ estilos/
+├─ paginas/
+│  └─ portal-publico/          ← antes: src/apps/web/
+│     └─ pages/                   (LandingCentralDark, Portal, Auth, Status)
 │
-├─ estruturas-de-pagina/       ← futuros layouts (vazio, .gitkeep)
-├─ paginas/                    ← futura consolidação de páginas (vazio, .gitkeep)
-├─ funcionalidades/            ← futuras features de negócio (vazio, .gitkeep)
-├─ recursos-visuais/           ← futuros assets globais (vazio, .gitkeep)
+├─ funcionalidades/
+│  ├─ telepainel/              ← antes: src/apps/modulos/telepainel/
+│  ├─ hermes/                  ← antes: src/apps/modulos/hermes-panel/
+│  ├─ bot-whatsapp/            ← antes: src/apps/modulos/bot-whatsapp/
+│  ├─ crm/                     ← antes: src/apps/modulos/crm/
+│  └─ financeiro/              ← antes: src/apps/modulos/financeiro/
 │
-├─ compartilhado/              ← antes: src/shared
-│  ├─ interface/               ← antes: shared/ui         (shadcn e afins)
-│  ├─ comportamentos/          ← antes: shared/hooks
-│  ├─ utilitarios/             ← antes: shared/lib
-│  ├─ auth/                    ← preservado (AuthProvider, guards)
-│  ├─ theme/                   ← preservado (ThemeProvider)
-│  ├─ transitions/             ← preservado (splash, page transitions)
-│  ├─ layout/                  ← preservado (Dashboard, Logo, etc.)
-│  ├─ aprovacao/               ← preservado (ApprovalProvider)
-│  ├─ pwa/                     ← preservado (InstallPrompt)
-│  ├─ assets/                  ← preservado (imagens compartilhadas)
-│  ├─ test/                    ← preservado (setup Vitest)
-│  ├─ tipos/                   ← esqueleto (.gitkeep)
-│  ├─ servicos/                ← esqueleto (.gitkeep)
-│  └─ dados-de-exemplo/        ← esqueleto (.gitkeep)
+├─ compartilhado/
+│  ├─ interface/               (antes: shared/ui — shadcn)
+│  ├─ comportamentos/          (antes: shared/hooks)
+│  ├─ utilitarios/             (antes: shared/lib)
+│  ├─ servicos/                ← notifications-events.ts vive aqui agora
+│  ├─ auth/  theme/  transitions/  layout/  aprovacao/  pwa/  assets/  test/
+│  └─ tipos/  dados-de-exemplo/  (esqueleto)
 │
-├─ apps/                       ← mantido temporariamente (telepainel, web, módulos)
-│                                 será dissolvido em `paginas/` + `funcionalidades/` na próxima etapa
+├─ sistema-visual/             (esqueleto — fundamentos/componentes/estilos)
+├─ estruturas-de-pagina/       (esqueleto)
+├─ recursos-visuais/           (esqueleto)
+│
 ├─ integrations/               ← client Supabase auto-gerado (não mexer)
-├─ lib/                        ← utilitário mínimo (notifications-events) — a mover
-│
-├─ main.tsx                    ← bootstrap React (importa @/app/App)
-├─ index.css                   ← estilos globais (Tailwind + tokens)
-└─ vite-env.d.ts
+├─ main.tsx  index.css  vite-env.d.ts
 ```
 
-## Rotas principais preservadas
+## Rotas
 
-- `/`                    → Landing CentralDark (ou WhatsApp/CRM/Financeiro por host)
-- `/auth`                → Autenticação
-- `/telepainel`          → Landing TelePainel (ou dashboard, se logado)
-- `/telepainel/*`        → Todas as páginas do produto TelePainel
-- `/docs`                → Documentação pública
-- `/portal`              → Portal (protegido)
-- **`/admin/cockpit`**   → **Cockpit oficial** (novo caminho canônico)
-- `/preview/cockpit`     → Redireciona para `/admin/cockpit` (compatibilidade)
-- `/dev/transitions`     → Bancada de transições
-- `*`                    → NotFound
+Inalteradas. Mesmas de antes: `/`, `/auth`, `/telepainel/*`, `/whatsapp`, `/crm`, `/financeiro`, `/portal`, `/docs`, `/admin/cockpit`, `/preview/cockpit` (redirect), `/dev/transitions`, `*`.
 
-## Aliases de compatibilidade (bridge temporária)
+## Aliases de compatibilidade
 
-Para não quebrar os **175+ arquivos** que ainda importam do caminho antigo, os aliases abaixo apontam nomes antigos para os novos — em `tsconfig.json`, `tsconfig.app.json` e `vite.config.ts`:
+Nenhum import legado foi reescrito. Todos continuam funcionando via aliases:
 
-| Import antigo                | Resolve para                        |
-|------------------------------|-------------------------------------|
-| `@/shared/ui/*`              | `src/compartilhado/interface/*`     |
-| `@/shared/hooks/*`           | `src/compartilhado/comportamentos/*`|
-| `@/shared/lib/*`             | `src/compartilhado/utilitarios/*`   |
-| `@/shared/*`                 | `src/compartilhado/*`               |
-| `@/preview/cockpit-hero`     | `src/admin/cockpit`                 |
-| `@/*`                        | `src/*`                             |
+| Import legado                            | Resolve para                             |
+|------------------------------------------|------------------------------------------|
+| `@/shared/ui/*`                          | `src/compartilhado/interface/*`          |
+| `@/shared/hooks/*`                       | `src/compartilhado/comportamentos/*`     |
+| `@/shared/lib/*`                         | `src/compartilhado/utilitarios/*`        |
+| `@/shared/*`                             | `src/compartilhado/*`                    |
+| `@/preview/cockpit-hero`                 | `src/admin/cockpit`                      |
+| `@/apps/web/*`                           | `src/paginas/portal-publico/*`           |
+| `@/apps/modulos/telepainel/*`            | `src/funcionalidades/telepainel/*`       |
+| `@/apps/modulos/hermes-panel/*`          | `src/funcionalidades/hermes/*`           |
+| `@/apps/modulos/bot-whatsapp/*`          | `src/funcionalidades/bot-whatsapp/*`     |
+| `@/apps/modulos/crm/*`                   | `src/funcionalidades/crm/*`              |
+| `@/apps/modulos/financeiro/*`            | `src/funcionalidades/financeiro/*`       |
+| `@/lib/notifications-events`             | `src/compartilhado/servicos/notifications-events` |
+| `@/*`                                    | `src/*`                                  |
 
-Esses aliases **funcionam**, o build passa (`npm run build` 🟢), e a árvore física já está em PT-BR. A remoção dos aliases fica para uma segunda etapa, quando trocarmos os imports antigos por escrito, aos poucos, sem risco.
+## Build
 
-## Pendências reais (registradas — não bloqueiam)
+`npm run build` → 🟢 13.94s, 3971 módulos, `index-lesRdIY0.js` 2043 kB.
 
-1. **`src/apps/` ainda existe.** Contém `web/`, `modulos/telepainel/`, `modulos/hermes-panel/`, `modulos/bot-whatsapp/`, `modulos/crm/`, `modulos/financeiro/`. Migrar para `paginas/` + `funcionalidades/` exige reorganização de dezenas de páginas e é a próxima grande etapa.
-2. **`src/lib/notifications-events.ts`** deve migrar para `src/compartilhado/utilitarios/` ou `src/compartilhado/servicos/`.
-3. **Split real de `App.tsx`** em `rotas.tsx` + `provedores.tsx`. Hoje os dois arquivos existem mas reexportam `App` (âncora oficial). O split é seguro fazer sozinho num próximo commit.
-4. **Aviso Vite (não erro):** `useIsAdmin.ts` é importado dinamicamente em um lugar e estaticamente em outros. Herdado, não introduzido por esta faxina.
-5. **`@import` de Google Fonts em `index.css`** aparece com aviso do Vite (deve vir antes de `@tailwind`). Estético, não quebra build.
+## Pendências (não bloqueiam)
+
+1. Reescrever imports `@/apps/...` e `@/lib/...` gradualmente e depois remover os aliases-ponte.
+2. Split real de `App.tsx` em `rotas.tsx` + `provedores.tsx` (hoje ambos reexportam App).
+3. Preencher `sistema-visual/`, `estruturas-de-pagina/`, `recursos-visuais/`.
+4. Aviso Vite: `useIsAdmin.ts` importado dinâmica e estaticamente (herdado).
+5. Aviso Vite: `@import` de Google Fonts em `index.css` deve vir antes de `@tailwind` (estético).
+6. Bundle > 500 kB — considerar code-split via dynamic import (fora do escopo desta faxina).
 
 ## O que **não** foi tocado
 
@@ -94,3 +80,4 @@ Esses aliases **funcionam**, o build passa (`npm run build` 🟢), e a árvore f
 - VPS, PM2, Caddy, workflows GitHub Actions, scripts, secrets, `.env`
 - `apps/modulos/hub/` (app HUB independente na raiz)
 - Áreas 🔒 listadas em `CLAUDE.md`
+- Nenhuma regra de negócio, componente, hook, estilo, asset ou contrato de API

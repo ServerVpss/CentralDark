@@ -23,6 +23,13 @@
       "@/shared": ["./src/compartilhado"],
       "@/preview/cockpit-hero/*": ["./src/admin/cockpit/*"],
       "@/preview/cockpit-hero": ["./src/admin/cockpit"],
+      "@/apps/web/*": ["./src/paginas/portal-publico/*"],
+      "@/apps/modulos/telepainel/*": ["./src/funcionalidades/telepainel/*"],
+      "@/apps/modulos/hermes-panel/*": ["./src/funcionalidades/hermes/*"],
+      "@/apps/modulos/bot-whatsapp/*": ["./src/funcionalidades/bot-whatsapp/*"],
+      "@/apps/modulos/crm/*": ["./src/funcionalidades/crm/*"],
+      "@/apps/modulos/financeiro/*": ["./src/funcionalidades/financeiro/*"],
+      "@/lib/notifications-events": ["./src/compartilhado/servicos/notifications-events"],
       "@/*": ["./src/*"]
     },
     "skipLibCheck": true,
