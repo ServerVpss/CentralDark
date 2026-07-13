@@ -1,12 +1,12 @@
 {
-  "at": "2026-07-13T03:17:55.101Z",
+  "at": "2026-07-13T09:32:47.836Z",
   "endpoints": [
     {
       "name": "MCP health",
       "url": "https://mcp.centralldark.com/health",
       "bot": "grok",
       "status": 200,
-      "latencyMs": 334,
+      "latencyMs": 312,
       "cors": "*"
     },
     {
@@ -14,7 +14,7 @@
       "url": "https://mcp.centralldark.com/status.json",
       "bot": "grok",
       "status": 200,
-      "latencyMs": 230,
+      "latencyMs": 262,
       "cors": "*"
     },
     {
@@ -22,7 +22,7 @@
       "url": "https://mcp.centralldark.com/tools.json",
       "bot": "codex",
       "status": 200,
-      "latencyMs": 138,
+      "latencyMs": 146,
       "cors": "*"
     },
     {
@@ -30,7 +30,7 @@
       "url": "https://install.centralldark.com/status.json",
       "bot": "claude",
       "status": 502,
-      "latencyMs": 100,
+      "latencyMs": 117,
       "cors": null
     },
     {
@@ -46,7 +46,7 @@
       "url": "https://api.centralldark.com/health",
       "bot": "codex",
       "status": 200,
-      "latencyMs": 127,
+      "latencyMs": 131,
       "cors": "*"
     }
   ],
