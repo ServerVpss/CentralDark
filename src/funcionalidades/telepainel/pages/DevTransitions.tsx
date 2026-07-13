@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Card } from "@/shared/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Card } from "@/compartilhado/ui/card";
 import { toast } from "sonner";
-import { playSplash, SplashStyle } from "@/shared/transitions/PageSplash";
+import { playSplash, SplashStyle } from "@/compartilhado/transitions/PageSplash";
 import {
   SplashConfigMap,
   getSplashConfig,
   saveSplashConfig,
   subscribeSplashConfig,
-} from "@/shared/transitions/SplashController";
+} from "@/compartilhado/transitions/SplashController";
 
 const STYLES: SplashStyle[] = ["flash", "fade", "pulse", "wipe"];
 const PRESET_DURATIONS = [400, 600, 750, 1000, 1600];

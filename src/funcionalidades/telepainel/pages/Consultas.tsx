@@ -22,29 +22,29 @@ import {
   Wallet,
   Cog,
 } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Button } from "@/shared/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Button } from "@/compartilhado/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/compartilhado/ui/alert";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
-import { Label } from "@/shared/ui/label";
-import { Badge } from "@/shared/ui/badge";
+} from "@/compartilhado/ui/select";
+import { Label } from "@/compartilhado/ui/label";
+import { Badge } from "@/compartilhado/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
 
-import { QueryInput } from "@/apps/modulos/telepainel/components/consultation/QueryInput";
-import { QueryHistoryList } from "@/apps/modulos/telepainel/components/consultation/QueryHistoryList";
-import { ProviderStatusList } from "@/apps/modulos/telepainel/components/consultation/ProviderStatusList";
-import { UniversalResultModal } from "@/apps/modulos/telepainel/components/consultas/UniversalResultModal";
+import { QueryInput } from "@/funcionalidades/telepainel/components/consultation/QueryInput";
+import { QueryHistoryList } from "@/funcionalidades/telepainel/components/consultation/QueryHistoryList";
+import { ProviderStatusList } from "@/funcionalidades/telepainel/components/consultation/ProviderStatusList";
+import { UniversalResultModal } from "@/funcionalidades/telepainel/components/consultas/UniversalResultModal";
 
-import { ConfettiCelebration } from "@/apps/modulos/telepainel/components/gamification/ConfettiCelebration";
-import { MotionPage, MotionFadeIn } from "@/shared/ui/motion";
+import { ConfettiCelebration } from "@/funcionalidades/telepainel/components/gamification/ConfettiCelebration";
+import { MotionPage, MotionFadeIn } from "@/compartilhado/ui/motion";
 
 interface QueryResult {
   success: boolean;

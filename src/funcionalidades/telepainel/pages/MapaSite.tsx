@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
 
 type ItemPagina = {
   arquivo: string;

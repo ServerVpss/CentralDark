@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Shield, RefreshCw, Zap, Lock, AlertTriangle, KeyRound, Copy } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Badge } from "@/shared/ui/badge";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Badge } from "@/compartilhado/ui/badge";
 import { toast } from "sonner";
 
 const AI_PROXY_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/ai-proxy`;

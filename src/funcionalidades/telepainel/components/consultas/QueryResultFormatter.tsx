@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Badge } from "@/shared/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
 import {
   User,
   Mail,
@@ -34,7 +34,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/shared/ui/pagination";
+} from "@/compartilhado/ui/pagination";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
 

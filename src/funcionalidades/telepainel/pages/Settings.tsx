@@ -11,26 +11,26 @@ import {
   Sun,
   User,
 } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Switch } from "@/shared/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Textarea } from "@/shared/ui/textarea";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Button } from "@/compartilhado/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
+import { Textarea } from "@/compartilhado/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@/compartilhado/ui/select";
 import { toast } from "sonner";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
-import { BackupManager } from "@/apps/modulos/telepainel/components/backup/BackupManager";
-import { CleanupSettings } from "@/apps/modulos/telepainel/components/settings/CleanupSettings";
-import { SignupToggle } from "@/apps/modulos/telepainel/components/settings/SignupToggle";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
+import { BackupManager } from "@/funcionalidades/telepainel/components/backup/BackupManager";
+import { CleanupSettings } from "@/funcionalidades/telepainel/components/settings/CleanupSettings";
+import { SignupToggle } from "@/funcionalidades/telepainel/components/settings/SignupToggle";
 import { Trash2 } from "lucide-react";
 
 export default function Settings() {

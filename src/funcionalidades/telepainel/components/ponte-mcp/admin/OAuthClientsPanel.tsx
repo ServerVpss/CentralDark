@@ -1,6 +1,6 @@
-import { Card } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Card } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
 import { AlertTriangle, KeyRound, Users } from "lucide-react";
 import type { OAuthClient } from "./mcp-adapter";
 

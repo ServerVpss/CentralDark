@@ -1,4 +1,4 @@
-import { Badge } from "@/shared/ui/badge";
+import { Badge } from "@/compartilhado/ui/badge";
 import type { ToolCategory, ToolRisk } from "./mcp-adapter";
 import {
   Server, Github, Brain, Database, Rocket, ScrollText,

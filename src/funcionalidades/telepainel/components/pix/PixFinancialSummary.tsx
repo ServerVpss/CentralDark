@@ -1,7 +1,7 @@
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
 import { TrendingUp, DollarSign, Receipt, Percent, Target, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
-import type { PixSummary } from "@/shared/hooks/usePixTransactions";
+import { cn } from "@/compartilhado/lib/utils";
+import type { PixSummary } from "@/compartilhado/hooks/usePixTransactions";
 
 interface PixFinancialSummaryProps {
   summary: PixSummary | undefined;

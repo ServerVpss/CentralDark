@@ -1,9 +1,9 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Label } from "@/shared/ui/label";
-import { Slider } from "@/shared/ui/slider";
-import { Switch } from "@/shared/ui/switch";
-import { Textarea } from "@/shared/ui/textarea";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Label } from "@/compartilhado/ui/label";
+import { Slider } from "@/compartilhado/ui/slider";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Textarea } from "@/compartilhado/ui/textarea";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
 
 import {
   Select,
@@ -11,8 +11,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
-import type { BotSecuritySettings } from "@/shared/hooks/telegram/types";
+} from "@/compartilhado/ui/select";
+import type { BotSecuritySettings } from "@/compartilhado/hooks/telegram/types";
 
 interface SecurityAdvancedProps {
   settings: BotSecuritySettings | null;

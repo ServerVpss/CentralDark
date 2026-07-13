@@ -5,9 +5,9 @@ import { Logo } from "./Logo";
 import { BottomNav } from "./BottomNav";
 import { MobileAvatarMenu } from "./MobileAvatarMenu";
 import { Menu } from "lucide-react";
-import { Button } from "@/shared/ui/button";
-import { cn } from "@/shared/lib/utils";
-import { MenuRevealTransition } from "@/shared/transitions/MenuRevealTransition";
+import { Button } from "@/compartilhado/ui/button";
+import { cn } from "@/compartilhado/lib/utils";
+import { MenuRevealTransition } from "@/compartilhado/transitions/MenuRevealTransition";
 
 interface DashboardLayoutProps {
   children: ReactNode;

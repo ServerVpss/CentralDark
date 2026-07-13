@@ -17,25 +17,25 @@ import {
   Filter,
   Clock,
 } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Button } from "@/shared/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { ScrollArea } from "@/shared/ui/scroll-area";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Button } from "@/compartilhado/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
+import { ScrollArea } from "@/compartilhado/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
-import { cn } from "@/shared/lib/utils";
+} from "@/compartilhado/ui/select";
+import { cn } from "@/compartilhado/lib/utils";
 import {
   useNotificationsLog,
   type NotifyTipo,
   type PeriodoFiltro,
-} from "@/shared/hooks/useNotificationsLog";
+} from "@/compartilhado/hooks/useNotificationsLog";
 
 const TIPO_META: Record<
   NotifyTipo,

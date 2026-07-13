@@ -12,12 +12,12 @@ import {
   Bar,
   Legend,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { useBotAnalytics } from "@/shared/hooks/useBotAnalytics";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
+import { useBotAnalytics } from "@/compartilhado/hooks/useBotAnalytics";
 import { Loader2, Calendar } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/compartilhado/ui/button";
 
 interface AnalyticsChartProps {
   botId?: string;

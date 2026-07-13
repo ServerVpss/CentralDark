@@ -1,11 +1,11 @@
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { History, User, MessageSquare, AlertCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { ScrollArea } from "@/shared/ui/scroll-area";
-import { Skeleton } from "@/shared/ui/skeleton";
-import type { BlockedMessage } from "@/shared/hooks/useSecurity";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { ScrollArea } from "@/compartilhado/ui/scroll-area";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import type { BlockedMessage } from "@/compartilhado/hooks/useSecurity";
 
 interface SecurityHistoryProps {
   messages: BlockedMessage[];

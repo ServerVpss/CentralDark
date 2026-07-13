@@ -6,11 +6,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
+} from "@/compartilhado/ui/dialog";
+import { Button } from "@/compartilhado/ui/button";
 import { toast } from "sonner";
-import { usePayments, SubscriptionPlan } from "@/shared/hooks/usePayments";
-import { ConfettiCelebration } from "@/apps/modulos/telepainel/components/gamification/ConfettiCelebration";
+import { usePayments, SubscriptionPlan } from "@/compartilhado/hooks/usePayments";
+import { ConfettiCelebration } from "@/funcionalidades/telepainel/components/gamification/ConfettiCelebration";
 
 interface PixPaymentDialogProps {
   open: boolean;

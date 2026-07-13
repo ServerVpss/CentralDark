@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { LogOut, Sparkles } from "lucide-react";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
-import iconWhatsapp from "@/shared/assets/icon-whatsapp.png";
-import iconCrm from "@/shared/assets/icon-crm.png";
-import iconTelegram from "@/shared/assets/icon-telegram.png";
-import iconFinanceiro from "@/shared/assets/icon-financeiro.png";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
+import iconWhatsapp from "@/compartilhado/assets/icon-whatsapp.png";
+import iconCrm from "@/compartilhado/assets/icon-crm.png";
+import iconTelegram from "@/compartilhado/assets/icon-telegram.png";
+import iconFinanceiro from "@/compartilhado/assets/icon-financeiro.png";
 
 type Module = {
   id: string;

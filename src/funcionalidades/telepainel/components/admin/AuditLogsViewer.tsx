@@ -12,18 +12,18 @@ import {
   Loader2,
   Filter,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Button } from "@/compartilhado/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
-import { useAuditLogs, AuditLog } from "@/shared/hooks/useAuditLogs";
-import { cn } from "@/shared/lib/utils";
+} from "@/compartilhado/ui/select";
+import { useAuditLogs, AuditLog } from "@/compartilhado/hooks/useAuditLogs";
+import { cn } from "@/compartilhado/lib/utils";
 import { useState } from "react";
 
 const actionIcons: Record<string, React.ComponentType<{ className?: string }>> = {

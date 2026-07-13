@@ -1,38 +1,38 @@
 // Gestão completa de usuários do painel (admin only)
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { useAdminUsers, AdminUser } from "@/shared/hooks/useAdminUsers";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Badge } from "@/shared/ui/badge";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { useAdminUsers, AdminUser } from "@/compartilhado/hooks/useAdminUsers";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Badge } from "@/compartilhado/ui/badge";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/shared/ui/table";
+} from "@/compartilhado/ui/table";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/shared/ui/select";
+} from "@/compartilhado/ui/select";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter,
   DialogHeader, DialogTitle, DialogTrigger,
-} from "@/shared/ui/dialog";
+} from "@/compartilhado/ui/dialog";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
-} from "@/shared/ui/alert-dialog";
+} from "@/compartilhado/ui/alert-dialog";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuLabel,
-} from "@/shared/ui/dropdown-menu";
+} from "@/compartilhado/ui/dropdown-menu";
 import {
   Loader2, MoreVertical, UserCog, UserPlus, RefreshCw, Search, ShieldCheck,
   KeyRound, Mail, Ban, CheckCircle2, Trash2, ShieldOff, Lock, Eye, IdCard,
 } from "lucide-react";
-import { startViewAs } from "@/shared/lib/viewAsMode";
-import { clearAdminCache } from "@/shared/hooks/useIsAdmin";
+import { startViewAs } from "@/compartilhado/lib/viewAsMode";
+import { clearAdminCache } from "@/compartilhado/hooks/useIsAdmin";
 import { toast } from "sonner";
 
 function fmtDate(iso: string | null) {

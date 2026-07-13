@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { Input } from "@/shared/ui/input";
-import { Switch } from "@/shared/ui/switch";
-import { Label } from "@/shared/ui/label";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Input } from "@/compartilhado/ui/input";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Label } from "@/compartilhado/ui/label";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter,
   DialogHeader, DialogTitle, DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
+} from "@/compartilhado/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/compartilhado/ui/tooltip";
 import {
   Sparkles, Copy, Check, Palette, Type, Square, Layers, MousePointerClick,
   PanelsTopLeft, Bell, ShieldCheck, ArrowRight, Loader2, Heart,

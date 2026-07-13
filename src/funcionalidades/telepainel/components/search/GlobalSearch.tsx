@@ -8,7 +8,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/shared/ui/command";
+} from "@/compartilhado/ui/command";
 import {
   LayoutDashboard,
   Bot,

@@ -1,16 +1,16 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Switch } from "@/shared/ui/switch";
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/shared/ui/dialog";
-import { Label } from "@/shared/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Input } from "@/compartilhado/ui/input";
+import { Button } from "@/compartilhado/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/compartilhado/ui/tooltip";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/compartilhado/ui/dialog";
+import { Label } from "@/compartilhado/ui/label";
 import { AlertTriangle, Info, Server, ChevronDown, ChevronUp, Loader2, RefreshCw, Activity, ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { useModuleHealth, type HealthLabel } from "@/shared/hooks/useModuleHealth";
+import { useModuleHealth, type HealthLabel } from "@/compartilhado/hooks/useModuleHealth";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 

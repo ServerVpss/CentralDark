@@ -1,7 +1,7 @@
-import { Card } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { Card } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/compartilhado/ui/table";
 import { ScrollText, ShieldCheck } from "lucide-react";
 import type { AuditEntry } from "./mcp-adapter";
 import { format } from "date-fns";

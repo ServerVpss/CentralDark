@@ -10,11 +10,11 @@ import {
   Lock,
   Coins,
 } from "lucide-react";
-import { Card, CardContent } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Switch } from "@/shared/ui/switch";
-import { Badge } from "@/shared/ui/badge";
-import { usePayments, useMisticPayGateway } from "@/shared/hooks/usePayments";
+import { Card, CardContent } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Badge } from "@/compartilhado/ui/badge";
+import { usePayments, useMisticPayGateway } from "@/compartilhado/hooks/usePayments";
 import { EfiGatewayConfigDialog } from "./EfiGatewayConfigDialog";
 import { MisticPayGatewayConfigDialog } from "./MisticPayGatewayConfigDialog";
 

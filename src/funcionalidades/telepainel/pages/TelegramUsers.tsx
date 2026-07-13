@@ -19,12 +19,12 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Badge } from "@/shared/ui/badge";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Button } from "@/compartilhado/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Badge } from "@/compartilhado/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -32,20 +32,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
+} from "@/compartilhado/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@/compartilhado/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
+} from "@/compartilhado/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -53,10 +53,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/ui/table";
+} from "@/compartilhado/ui/table";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { useTelegramBots } from "@/shared/hooks/useTelegramBots";
+import { useTelegramBots } from "@/compartilhado/hooks/useTelegramBots";
 import { Loader2 } from "lucide-react";
 
 interface TelegramSubscription {

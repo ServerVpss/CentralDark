@@ -1,8 +1,8 @@
 import { Crown, Clock, AlertCircle, CheckCircle } from "lucide-react";
-import { Card, CardContent } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Progress } from "@/shared/ui/progress";
-import { usePayments } from "@/shared/hooks/usePayments";
+import { Card, CardContent } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Progress } from "@/compartilhado/ui/progress";
+import { usePayments } from "@/compartilhado/hooks/usePayments";
 
 interface SubscriptionStatusProps {
   onUpgrade?: () => void;

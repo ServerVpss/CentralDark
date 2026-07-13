@@ -5,14 +5,14 @@ import { Helmet } from "react-helmet-async";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Activity, AlertTriangle, CheckCircle2, Info, Shield, XCircle, Radio, Filter } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Button } from "@/shared/ui/button";
-import { ScrollArea } from "@/shared/ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Button } from "@/compartilhado/ui/button";
+import { ScrollArea } from "@/compartilhado/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/compartilhado/ui/select";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/compartilhado/lib/utils";
 
 interface AgentEvent {
   id: number;

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Card } from "@/shared/ui/card";
-import { Switch } from "@/shared/ui/switch";
-import { Label } from "@/shared/ui/label";
-import { Slider } from "@/shared/ui/slider";
-import { Textarea } from "@/shared/ui/textarea";
-import { Button } from "@/shared/ui/button";
+import { Card } from "@/compartilhado/ui/card";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Label } from "@/compartilhado/ui/label";
+import { Slider } from "@/compartilhado/ui/slider";
+import { Textarea } from "@/compartilhado/ui/textarea";
+import { Button } from "@/compartilhado/ui/button";
 import { Sparkles, Clock, Users, Zap } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/compartilhado/lib/utils";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
 

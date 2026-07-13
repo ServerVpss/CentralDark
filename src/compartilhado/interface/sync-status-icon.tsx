@@ -1,11 +1,11 @@
 import { CheckCircle2, AlertTriangle, RefreshCw, Loader2 } from "lucide-react";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/compartilhado/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/shared/ui/tooltip";
+} from "@/compartilhado/ui/tooltip";
 
 /**
  * Estados visuais unificados de sincronização/carregamento usados em todo o painel.

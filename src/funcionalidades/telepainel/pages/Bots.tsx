@@ -19,14 +19,14 @@ import {
   X,
   Power,
 } from "lucide-react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { useAprovacao } from "@/shared/aprovacao/ApprovalProvider";
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Switch } from "@/shared/ui/switch";
-import { Badge } from "@/shared/ui/badge";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { useAprovacao } from "@/compartilhado/aprovacao/ApprovalProvider";
+import { Button } from "@/compartilhado/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Badge } from "@/compartilhado/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -35,23 +35,23 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "@/shared/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Textarea } from "@/shared/ui/textarea";
+} from "@/compartilhado/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
+import { Textarea } from "@/compartilhado/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@/compartilhado/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/shared/hooks/useTelegramBots";
-import { BotHealthMonitor } from "@/apps/modulos/telepainel/components/bots/BotHealthMonitor";
-import { BotConfigCard } from "@/apps/modulos/telepainel/components/bots/BotConfigCard";
-import { EdgeFunctionsStatus } from "@/apps/modulos/telepainel/components/bots/EdgeFunctionsStatus";
-import { AnalyticsChart } from "@/apps/modulos/telepainel/components/dashboard/AnalyticsChart";
+import { useTelegramBots, useBotSecuritySettings, TelegramBot } from "@/compartilhado/hooks/useTelegramBots";
+import { BotHealthMonitor } from "@/funcionalidades/telepainel/components/bots/BotHealthMonitor";
+import { BotConfigCard } from "@/funcionalidades/telepainel/components/bots/BotConfigCard";
+import { EdgeFunctionsStatus } from "@/funcionalidades/telepainel/components/bots/EdgeFunctionsStatus";
+import { AnalyticsChart } from "@/funcionalidades/telepainel/components/dashboard/AnalyticsChart";
 
 // Regex para validar formato do token do Telegram: ID:HASH
 const TELEGRAM_TOKEN_REGEX = /^\d{8,10}:[A-Za-z0-9_-]{35}$/;

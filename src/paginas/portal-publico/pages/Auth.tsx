@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/compartilhado/ui/tabs";
 import { Rocket, Mail, Lock, User, Loader2, Lock as LockIcon } from "lucide-react";
 import { z } from "zod";
-import { useSystemSetting } from "@/shared/hooks/useSystemSetting";
+import { useSystemSetting } from "@/compartilhado/hooks/useSystemSetting";
 import { toast } from "sonner";
 
 const emailSchema = z.string().email("Email inválido");

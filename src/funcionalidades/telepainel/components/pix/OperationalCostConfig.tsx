@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/compartilhado/ui/card";
+import { Input } from "@/compartilhado/ui/input";
+import { Label } from "@/compartilhado/ui/label";
+import { Button } from "@/compartilhado/ui/button";
 import { DollarSign, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/hub-client";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/shared/hooks/use-toast";
+import { toast } from "@/compartilhado/hooks/use-toast";
 
 type PaymentGatewaySettingsCost = {
   id?: string;

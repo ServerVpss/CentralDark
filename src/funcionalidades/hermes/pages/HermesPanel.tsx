@@ -1,9 +1,9 @@
 // Painel do Hermes — chat direto com cascata visual ao vivo (Flash → Pro → GPT → Elite)
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Send, Zap, Sparkles, Brain, Crown, Loader2, AlertCircle } from "lucide-react";
-import { Button } from "@/shared/ui/button";
-import { Textarea } from "@/shared/ui/textarea";
-import { Card } from "@/shared/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Textarea } from "@/compartilhado/ui/textarea";
+import { Card } from "@/compartilhado/ui/card";
 import { toast } from "sonner";
 
 type EstadoCerebro = "aguardando" | "processando" | "ok" | "erro";

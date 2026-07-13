@@ -1,26 +1,26 @@
 import { useState, useEffect } from "react";
-import { Card } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Textarea } from "@/shared/ui/textarea";
-import { Switch } from "@/shared/ui/switch";
-import { Label } from "@/shared/ui/label";
-import { Slider } from "@/shared/ui/slider";
+import { Card } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
+import { Textarea } from "@/compartilhado/ui/textarea";
+import { Switch } from "@/compartilhado/ui/switch";
+import { Label } from "@/compartilhado/ui/label";
+import { Slider } from "@/compartilhado/ui/slider";
 import { MessageSquarePlus, Trash2, Edit2, Save, X, Info, Clock, Zap, Hash, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/hub-client";
 import { toast } from "sonner";
-import { useAuthContext } from "@/shared/auth/AuthProvider";
+import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
+} from "@/compartilhado/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/shared/ui/tooltip";
+} from "@/compartilhado/ui/tooltip";
 
 interface EngagementMessage {
   id: string;

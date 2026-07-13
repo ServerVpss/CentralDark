@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Shield } from "lucide-react";
-import { Progress } from "@/shared/ui/progress";
-import { Button } from "@/shared/ui/button";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { useApiStatus } from "@/shared/hooks/useApiStatus";
-import { useApiUsageHistory, type ApiUsagePeriod } from "@/shared/hooks/useApiUsageHistory";
-import { cn } from "@/shared/lib/utils";
-import { SyncStatusIcon } from "@/shared/ui/sync-status-icon";
+import { Progress } from "@/compartilhado/ui/progress";
+import { Button } from "@/compartilhado/ui/button";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import { useApiStatus } from "@/compartilhado/hooks/useApiStatus";
+import { useApiUsageHistory, type ApiUsagePeriod } from "@/compartilhado/hooks/useApiUsageHistory";
+import { cn } from "@/compartilhado/lib/utils";
+import { SyncStatusIcon } from "@/compartilhado/ui/sync-status-icon";
 
 const PERIODS: { key: ApiUsagePeriod; label: string }[] = [
   { key: "today", label: "Hoje" },

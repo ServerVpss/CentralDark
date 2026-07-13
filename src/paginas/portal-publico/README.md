@@ -15,8 +15,8 @@ Esse é o "rosto público" do ecossistema. Tudo que um visitante anônimo enxerg
 
 ## Dependências
 
-- `@/shared/auth/AuthProvider` — sessão de usuário.
-- `@/shared/ui/*` — componentes shadcn.
+- `@/compartilhado/auth/AuthProvider` — sessão de usuário.
+- `@/compartilhado/ui/*` — componentes shadcn.
 - `@/integrations/supabase/client` — Lovable Cloud.
 
 ## Status

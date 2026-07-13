@@ -1,16 +1,16 @@
 import { useState, useEffect, useMemo } from "react";
-import { Card } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+import { Card } from "@/compartilhado/ui/card";
+import { Badge } from "@/compartilhado/ui/badge";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
+import { Button } from "@/compartilhado/ui/button";
+import { Input } from "@/compartilhado/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@/compartilhado/ui/select";
 import {
   Table,
   TableBody,
@@ -18,11 +18,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/ui/table";
+} from "@/compartilhado/ui/table";
 import { CreditCard, User, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Search, X } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import type { PixTransaction } from "@/shared/hooks/usePixTransactions";
+import type { PixTransaction } from "@/compartilhado/hooks/usePixTransactions";
 
 interface PixTransactionsTableProps {
   transactions: PixTransaction[] | undefined;

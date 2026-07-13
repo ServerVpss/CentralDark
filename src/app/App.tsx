@@ -1,64 +1,64 @@
-import { Toaster } from "@/shared/ui/toaster";
-import { Toaster as Sonner } from "@/shared/ui/sonner";
-import { TooltipProvider } from "@/shared/ui/tooltip";
+import { Toaster } from "@/compartilhado/ui/toaster";
+import { Toaster as Sonner } from "@/compartilhado/ui/sonner";
+import { TooltipProvider } from "@/compartilhado/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuthContext } from "@/shared/auth/AuthProvider";
-import { ThemeProvider } from "@/shared/theme/ThemeProvider";
-import { ProtectedRoute } from "@/shared/auth/ProtectedRoute";
-import { AdminRoute } from "@/shared/auth/AdminRoute";
-import { GlobalSearch } from "@/apps/modulos/telepainel/components/search/GlobalSearch";
-import { InstallPrompt } from "@/shared/pwa/InstallPrompt";
-import { detectHostKind, getRootRedirectFor } from "@/shared/lib/hostRouting";
+import { AuthProvider, useAuthContext } from "@/compartilhado/auth/AuthProvider";
+import { ThemeProvider } from "@/compartilhado/theme/ThemeProvider";
+import { ProtectedRoute } from "@/compartilhado/auth/ProtectedRoute";
+import { AdminRoute } from "@/compartilhado/auth/AdminRoute";
+import { GlobalSearch } from "@/funcionalidades/telepainel/components/search/GlobalSearch";
+import { InstallPrompt } from "@/compartilhado/pwa/InstallPrompt";
+import { detectHostKind, getRootRedirectFor } from "@/compartilhado/lib/hostRouting";
 // === Páginas do app "web" (portal público) ===
-import LandingCentralDark from "@/apps/web/pages/LandingCentralDark";
-import Portal from "@/apps/web/pages/Portal";
-import Auth from "@/apps/web/pages/Auth";
-import Status from "@/apps/web/pages/Status";
+import LandingCentralDark from "@/paginas/portal-publico/pages/LandingCentralDark";
+import Portal from "@/paginas/portal-publico/pages/Portal";
+import Auth from "@/paginas/portal-publico/pages/Auth";
+import Status from "@/paginas/portal-publico/pages/Status";
 
 // === Páginas dos módulos só-landing ===
-import LandingWhatsapp from "@/apps/modulos/bot-whatsapp/pages/LandingWhatsapp";
-import LandingCRM from "@/apps/modulos/crm/pages/LandingCRM";
-import LandingFinanceiro from "@/apps/modulos/financeiro/pages/LandingFinanceiro";
+import LandingWhatsapp from "@/funcionalidades/bot-whatsapp/pages/LandingWhatsapp";
+import LandingCRM from "@/funcionalidades/crm/pages/LandingCRM";
+import LandingFinanceiro from "@/funcionalidades/financeiro/pages/LandingFinanceiro";
 
 // === Páginas do módulo TelePainel (produto real) ===
-import LandingTelePainel from "@/apps/modulos/telepainel/pages/LandingTelePainel";
-import Index from "@/apps/modulos/telepainel/pages/Index";
-import Bots from "@/apps/modulos/telepainel/pages/Bots";
-import BotSettingsPage from "@/apps/modulos/telepainel/pages/BotSettings";
-import MigrateSubscriptions from "@/apps/modulos/telepainel/pages/MigrateSubscriptions";
-import Plans from "@/apps/modulos/telepainel/pages/Plans";
-import Settings from "@/apps/modulos/telepainel/pages/Settings";
-import Consultas from "@/apps/modulos/telepainel/pages/Consultas";
-import TelegramUsers from "@/apps/modulos/telepainel/pages/TelegramUsers";
-import ConscienciaViva from "@/apps/modulos/telepainel/pages/ConscienciaViva";
-import QueryLogs from "@/apps/modulos/telepainel/pages/QueryLogs";
-import PixTransactions from "@/apps/modulos/telepainel/pages/PixTransactions";
-import NotFound from "@/apps/modulos/telepainel/pages/NotFound";
-import Security from "@/apps/modulos/telepainel/pages/Security";
-import SubscriptionAudit from "@/apps/modulos/telepainel/pages/SubscriptionAudit";
-import WebAppResult from "@/apps/modulos/telepainel/pages/WebAppResult";
-import MenuTips from "@/apps/modulos/telepainel/pages/MenuTips";
-import DatabaseInfo from "@/apps/modulos/telepainel/pages/DatabaseInfo";
-import DevTransitions from "@/apps/modulos/telepainel/pages/DevTransitions";
-import TesteModulos from "@/apps/modulos/telepainel/pages/TesteModulos";
-import UsuariosPainel from "@/apps/modulos/telepainel/pages/UsuariosPainel";
-import UsuarioPerfil from "@/apps/modulos/telepainel/pages/UsuarioPerfil";
-import Docs from "@/apps/modulos/telepainel/pages/Docs";
-import PonteMCP from "@/apps/modulos/telepainel/pages/PonteMCP";
-import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
-import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
-import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
-import AiProxyConfig from "@/apps/modulos/telepainel/pages/AiProxyConfig";
+import LandingTelePainel from "@/funcionalidades/telepainel/pages/LandingTelePainel";
+import Index from "@/funcionalidades/telepainel/pages/Index";
+import Bots from "@/funcionalidades/telepainel/pages/Bots";
+import BotSettingsPage from "@/funcionalidades/telepainel/pages/BotSettings";
+import MigrateSubscriptions from "@/funcionalidades/telepainel/pages/MigrateSubscriptions";
+import Plans from "@/funcionalidades/telepainel/pages/Plans";
+import Settings from "@/funcionalidades/telepainel/pages/Settings";
+import Consultas from "@/funcionalidades/telepainel/pages/Consultas";
+import TelegramUsers from "@/funcionalidades/telepainel/pages/TelegramUsers";
+import ConscienciaViva from "@/funcionalidades/telepainel/pages/ConscienciaViva";
+import QueryLogs from "@/funcionalidades/telepainel/pages/QueryLogs";
+import PixTransactions from "@/funcionalidades/telepainel/pages/PixTransactions";
+import NotFound from "@/funcionalidades/telepainel/pages/NotFound";
+import Security from "@/funcionalidades/telepainel/pages/Security";
+import SubscriptionAudit from "@/funcionalidades/telepainel/pages/SubscriptionAudit";
+import WebAppResult from "@/funcionalidades/telepainel/pages/WebAppResult";
+import MenuTips from "@/funcionalidades/telepainel/pages/MenuTips";
+import DatabaseInfo from "@/funcionalidades/telepainel/pages/DatabaseInfo";
+import DevTransitions from "@/funcionalidades/telepainel/pages/DevTransitions";
+import TesteModulos from "@/funcionalidades/telepainel/pages/TesteModulos";
+import UsuariosPainel from "@/funcionalidades/telepainel/pages/UsuariosPainel";
+import UsuarioPerfil from "@/funcionalidades/telepainel/pages/UsuarioPerfil";
+import Docs from "@/funcionalidades/telepainel/pages/Docs";
+import PonteMCP from "@/funcionalidades/telepainel/pages/PonteMCP";
+import MegaPainel from "@/funcionalidades/telepainel/pages/MegaPainel";
+import Cofre from "@/funcionalidades/telepainel/pages/Cofre";
+import MapaSite from "@/funcionalidades/telepainel/pages/MapaSite";
+import AiProxyConfig from "@/funcionalidades/telepainel/pages/AiProxyConfig";
 import CockpitPreview from "@/admin/cockpit";
 
 // Hub agora é app independente em apps/modulos/hub/ — não importado aqui
-import HermesPanel from "@/apps/modulos/hermes-panel/pages/HermesPanel";
+import HermesPanel from "@/funcionalidades/hermes-panel/pages/HermesPanel";
 
-import { ViewAsBanner } from "@/shared/auth/ViewAsBanner";
-import { PageSplash } from "@/shared/transitions/PageSplash";
-import { SplashController } from "@/shared/transitions/SplashController";
-import { ApprovalProvider } from "@/shared/aprovacao/ApprovalProvider";
+import { ViewAsBanner } from "@/compartilhado/auth/ViewAsBanner";
+import { PageSplash } from "@/compartilhado/transitions/PageSplash";
+import { SplashController } from "@/compartilhado/transitions/SplashController";
+import { ApprovalProvider } from "@/compartilhado/aprovacao/ApprovalProvider";
 
 const queryClient = new QueryClient();
 

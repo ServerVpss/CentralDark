@@ -1,5 +1,5 @@
 import { Wallet } from "lucide-react";
-import ModuleLanding from "@/apps/modulos/telepainel/components/landing/ModuleLanding";
+import ModuleLanding from "@/funcionalidades/telepainel/components/landing/ModuleLanding";
 
 export default function LandingFinanceiro() {
   return (

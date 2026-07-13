@@ -1,7 +1,7 @@
-import { Card } from "@/shared/ui/card";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Card } from "@/compartilhado/ui/card";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import type { ChartDataPoint } from "@/shared/hooks/usePixTransactions";
+import type { ChartDataPoint } from "@/compartilhado/hooks/usePixTransactions";
 
 interface PixChartsProps {
   chartData: ChartDataPoint[] | undefined;

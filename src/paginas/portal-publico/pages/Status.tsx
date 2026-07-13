@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { DashboardLayout } from "@/shared/layout/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
+import { DashboardLayout } from "@/compartilhado/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/compartilhado/ui/card";
+import { Button } from "@/compartilhado/ui/button";
 import { Activity, Smartphone, Rocket, ListChecks } from "lucide-react";
-import { VpsDeployPlugin } from "@/apps/modulos/telepainel/components/devops/VpsDeployPlugin";
-import { DeployHistoryList } from "@/apps/modulos/telepainel/components/devops/DeployHistoryList";
-import { RoadmapList } from "@/apps/modulos/telepainel/components/devops/RoadmapList";
-import { IPhonePreviewModal } from "@/apps/modulos/telepainel/components/devops/IPhonePreviewModal";
-import { McpStatusCard } from "@/apps/modulos/telepainel/components/devops/McpStatusCard";
-import { NotificationsFeedCard } from "@/apps/modulos/telepainel/components/devops/NotificationsFeedCard";
-import { useVpsDeploy } from "@/shared/hooks/useVpsDeploy";
+import { VpsDeployPlugin } from "@/funcionalidades/telepainel/components/devops/VpsDeployPlugin";
+import { DeployHistoryList } from "@/funcionalidades/telepainel/components/devops/DeployHistoryList";
+import { RoadmapList } from "@/funcionalidades/telepainel/components/devops/RoadmapList";
+import { IPhonePreviewModal } from "@/funcionalidades/telepainel/components/devops/IPhonePreviewModal";
+import { McpStatusCard } from "@/funcionalidades/telepainel/components/devops/McpStatusCard";
+import { NotificationsFeedCard } from "@/funcionalidades/telepainel/components/devops/NotificationsFeedCard";
+import { useVpsDeploy } from "@/compartilhado/hooks/useVpsDeploy";
 
 export default function Status() {
   const [previewOpen, setPreviewOpen] = useState(false);

@@ -1,5 +1,5 @@
-import { Card } from "@/shared/ui/card";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Card } from "@/compartilhado/ui/card";
+import { Skeleton } from "@/compartilhado/ui/skeleton";
 import { Activity, Boxes, ShieldOff, Clock, Tag, AlertTriangle } from "lucide-react";
 import type { McpHealth } from "./mcp-adapter";
 
