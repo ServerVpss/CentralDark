@@ -12,14 +12,14 @@ type Module = {
   name: string;
   icon: string;
   href: string;
-  status: "ativo" | "em breve";
+  status: "ativo" | "em processo";
 };
 
 const modules: Module[] = [
-  { id: "whatsapp", name: "Bot WhatsApp", icon: iconWhatsapp, href: "/whatsapp", status: "em breve" },
-  { id: "crm", name: "CRM", icon: iconCrm, href: "/crm", status: "em breve" },
+  { id: "whatsapp", name: "Bot WhatsApp", icon: iconWhatsapp, href: "/whatsapp", status: "em processo" },
+  { id: "crm", name: "CRM", icon: iconCrm, href: "/crm", status: "em processo" },
   { id: "telegram", name: "TelePainel", icon: iconTelegram, href: "/telepainel/dashboard", status: "ativo" },
-  { id: "financeiro", name: "Financeiro", icon: iconFinanceiro, href: "/financeiro", status: "em breve" },
+  { id: "financeiro", name: "Financeiro", icon: iconFinanceiro, href: "/financeiro", status: "em processo" },
 ];
 
 export default function Portal() {
