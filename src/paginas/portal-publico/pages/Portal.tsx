@@ -94,7 +94,7 @@ export default function Portal() {
               >
                 {!ativo && (
                   <span className="absolute right-2 top-2 rounded-full border border-border bg-background/80 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-muted-foreground">
-                    em breve
+                    em processo
                   </span>
                 )}
                 <div className="flex h-full flex-col items-center justify-center gap-2">
@@ -113,10 +113,10 @@ export default function Portal() {
               </div>
             );
 
-            return ativo ? (
-              <Link key={m.id} to={m.href} className="block">{Card}</Link>
-            ) : (
-              <div key={m.id}>{Card}</div>
+            return (
+              <Link key={m.id} to={m.href} className={ativo ? "block" : "block cursor-default"}>
+                {Card}
+              </Link>
             );
           })}
         </div>
