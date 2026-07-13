@@ -5,8 +5,6 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 // Aliases em ordem: os mais específicos primeiro (Vite casa por prefixo).
-// "@/shared/*" e "@/preview/cockpit-hero" são pontes de compatibilidade
-// para os 175+ imports antigos, apontando para os novos caminhos em PT-BR.
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
@@ -16,23 +14,13 @@ export default defineConfig(({ mode }) => ({
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: [
-      { find: /^@\/shared\/ui(\/.*)?$/, replacement: path.resolve(__dirname, "./src/compartilhado/interface") + "$1" },
-      { find: /^@\/shared\/hooks(\/.*)?$/, replacement: path.resolve(__dirname, "./src/compartilhado/comportamentos") + "$1" },
-      { find: /^@\/shared\/lib(\/.*)?$/, replacement: path.resolve(__dirname, "./src/compartilhado/utilitarios") + "$1" },
-      { find: /^@\/shared(\/.*)?$/, replacement: path.resolve(__dirname, "./src/compartilhado") + "$1" },
       { find: /^@\/compartilhado\/ui(\/.*)?$/, replacement: path.resolve(__dirname, "./src/compartilhado/interface") + "$1" },
       { find: /^@\/compartilhado\/hooks(\/.*)?$/, replacement: path.resolve(__dirname, "./src/compartilhado/comportamentos") + "$1" },
       { find: /^@\/compartilhado\/lib(\/.*)?$/, replacement: path.resolve(__dirname, "./src/compartilhado/utilitarios") + "$1" },
       { find: /^@\/preview\/cockpit-hero(\/.*)?$/, replacement: path.resolve(__dirname, "./src/admin/cockpit") + "$1" },
       { find: "@/funcionalidades/hermes-panel", replacement: path.resolve(__dirname, "./src/funcionalidades/hermes") },
-      { find: "@/apps/web", replacement: path.resolve(__dirname, "./src/paginas/portal-publico") },
-      { find: "@/apps/modulos/telepainel", replacement: path.resolve(__dirname, "./src/funcionalidades/telepainel") },
-      { find: "@/apps/modulos/hermes-panel", replacement: path.resolve(__dirname, "./src/funcionalidades/hermes") },
-      { find: "@/apps/modulos/bot-whatsapp", replacement: path.resolve(__dirname, "./src/funcionalidades/bot-whatsapp") },
-      { find: "@/apps/modulos/crm", replacement: path.resolve(__dirname, "./src/funcionalidades/crm") },
-      { find: "@/apps/modulos/financeiro", replacement: path.resolve(__dirname, "./src/funcionalidades/financeiro") },
-      { find: "@/lib/notifications-events", replacement: path.resolve(__dirname, "./src/compartilhado/servicos/notifications-events") },
       { find: "@", replacement: path.resolve(__dirname, "./src") },
     ],
   },
 }));
+
