@@ -1,6 +1,6 @@
 // Roteador raiz. Cada domínio (portal público, telepainel, admin) mora no seu
 // arquivo dedicado dentro de ./rotas/*. Aqui só juntamos tudo.
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Docs from "@/funcionalidades/telepainel/pages/Docs";
 import WebAppResult from "@/funcionalidades/telepainel/pages/WebAppResult";
 import NotFound from "@/funcionalidades/telepainel/pages/NotFound";
@@ -8,7 +8,6 @@ import { ehModoWeb, ehModoPortal, ehModoFull } from "./configuracao";
 import { rotasPortalPublico } from "./rotas/rotas-portal-publico";
 import { rotasTelepainel } from "./rotas/rotas-telepainel";
 import { rotasAdmin } from "./rotas/rotas-admin";
-import { Navigate } from "react-router-dom";
 
 export function RotasApp() {
   return (
