@@ -9,7 +9,7 @@ import { ProtectedRoute } from "@/compartilhado/auth/ProtectedRoute";
 import { AdminRoute } from "@/compartilhado/auth/AdminRoute";
 import { GlobalSearch } from "@/funcionalidades/telepainel/components/search/GlobalSearch";
 import { InstallPrompt } from "@/compartilhado/pwa/InstallPrompt";
-import { detectHostKind, getRootRedirectFor } from "@/compartilhado/lib/hostRouting";
+import { detectHostKind, getRootRedirectFor } from "@/compartilhado/utilitarios/hostRouting";
 // === Páginas do app "web" (portal público) ===
 import LandingCentralDark from "@/paginas/portal-publico/pages/LandingCentralDark";
 import Portal from "@/paginas/portal-publico/pages/Portal";
@@ -126,6 +126,7 @@ const App = () => (
                 <Routes>
                   {(isWeb || isFull) && (
                     <>
+                      <Route path="/index" element={<Navigate to="/" replace />} />
                       <Route
                         path="/"
                         element={(() => {
