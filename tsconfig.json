@@ -5,20 +5,24 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/shared/ui/*": ["./src/compartilhado/interface/*"],
+      "@/shared/ui": ["./src/compartilhado/interface"],
+      "@/shared/hooks/*": ["./src/compartilhado/comportamentos/*"],
+      "@/shared/hooks": ["./src/compartilhado/comportamentos"],
+      "@/shared/lib/*": ["./src/compartilhado/utilitarios/*"],
+      "@/shared/lib": ["./src/compartilhado/utilitarios"],
+      "@/shared/*": ["./src/compartilhado/*"],
+      "@/shared": ["./src/compartilhado"],
+      "@/preview/cockpit-hero/*": ["./src/admin/cockpit/*"],
+      "@/preview/cockpit-hero": ["./src/admin/cockpit"],
+      "@/*": ["./src/*"]
     },
     "skipLibCheck": true,
     "strictNullChecks": false
   },
   "files": [],
   "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
   ]
 }

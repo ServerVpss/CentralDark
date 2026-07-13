@@ -50,7 +50,7 @@ import MegaPainel from "@/apps/modulos/telepainel/pages/MegaPainel";
 import Cofre from "@/apps/modulos/telepainel/pages/Cofre";
 import MapaSite from "@/apps/modulos/telepainel/pages/MapaSite";
 import AiProxyConfig from "@/apps/modulos/telepainel/pages/AiProxyConfig";
-import CockpitPreview from "@/preview/cockpit-hero";
+import CockpitPreview from "@/admin/cockpit";
 
 // Hub agora é app independente em apps/modulos/hub/ — não importado aqui
 import HermesPanel from "@/apps/modulos/hermes-panel/pages/HermesPanel";
@@ -180,7 +180,9 @@ const App = () => (
                   )}
 
                   <Route path="/dev/transitions" element={<DevTransitions />} />
-                  <Route path="/preview/cockpit" element={<CockpitPreview />} />
+                  {/* Cockpit oficial — antes vivia em /preview/cockpit */}
+                  <Route path="/admin/cockpit" element={<CockpitPreview />} />
+                  <Route path="/preview/cockpit" element={<Navigate to="/admin/cockpit" replace />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               );
