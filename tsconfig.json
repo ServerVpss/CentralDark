@@ -5,14 +5,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "@/shared/ui/*": ["./src/compartilhado/interface/*"],
-      "@/shared/ui": ["./src/compartilhado/interface"],
-      "@/shared/hooks/*": ["./src/compartilhado/comportamentos/*"],
-      "@/shared/hooks": ["./src/compartilhado/comportamentos"],
-      "@/shared/lib/*": ["./src/compartilhado/utilitarios/*"],
-      "@/shared/lib": ["./src/compartilhado/utilitarios"],
-      "@/shared/*": ["./src/compartilhado/*"],
-      "@/shared": ["./src/compartilhado"],
       "@/compartilhado/ui/*": ["./src/compartilhado/interface/*"],
       "@/compartilhado/ui": ["./src/compartilhado/interface"],
       "@/compartilhado/hooks/*": ["./src/compartilhado/comportamentos/*"],
@@ -22,15 +14,9 @@
       "@/preview/cockpit-hero/*": ["./src/admin/cockpit/*"],
       "@/preview/cockpit-hero": ["./src/admin/cockpit"],
       "@/funcionalidades/hermes-panel/*": ["./src/funcionalidades/hermes/*"],
-      "@/apps/web/*": ["./src/paginas/portal-publico/*"],
-      "@/apps/modulos/telepainel/*": ["./src/funcionalidades/telepainel/*"],
-      "@/apps/modulos/hermes-panel/*": ["./src/funcionalidades/hermes/*"],
-      "@/apps/modulos/bot-whatsapp/*": ["./src/funcionalidades/bot-whatsapp/*"],
-      "@/apps/modulos/crm/*": ["./src/funcionalidades/crm/*"],
-      "@/apps/modulos/financeiro/*": ["./src/funcionalidades/financeiro/*"],
-      "@/lib/notifications-events": ["./src/compartilhado/servicos/notifications-events"],
       "@/*": ["./src/*"]
     },
+
     "skipLibCheck": true,
     "strictNullChecks": false
   },
