@@ -7,11 +7,11 @@ export default function LandingWhatsapp() {
       brand="Bot WhatsApp"
       tagline="atendimento e consultas no WhatsApp"
       description="Um bot completo de WhatsApp pra atender clientes, responder consultas e automatizar fluxos — com a mesma pegada profissional do TelePainel."
-      status="em breve"
+      status="em processo"
       accent="142 70% 45%"
       icon={MessageCircle}
       pageTitle="Bot WhatsApp — CentralDark"
-      pageDescription="Bot WhatsApp da CentralDark. Em breve disponível."
+      pageDescription="Bot WhatsApp da CentralDark. Em processo."
       features={[
         { title: "Atendimento 24/7", desc: "Respostas automáticas, filas e transferência humana quando preciso." },
         { title: "Consultas integradas", desc: "Mesmas fontes de dados do TelePainel, agora direto no WhatsApp." },

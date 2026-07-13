@@ -10,7 +10,7 @@ export type ModuleLandingProps = {
   brand: string;
   tagline: string;
   description: string;
-  status: "ativo" | "em breve";
+  status: "ativo" | "em processo";
   accent: string; // ex: "152 76% 50%"
   icon: LucideIcon;
   ctaHref?: string;
@@ -97,7 +97,7 @@ export default function ModuleLanding({
             ) : (
               <>
                 <Clock className="h-3 w-3" />
-                em breve
+                em processo
               </>
             )}
           </span>
@@ -133,7 +133,7 @@ export default function ModuleLanding({
                 size="lg"
                 className="h-11 cursor-not-allowed rounded-lg bg-muted px-5 font-mono text-[13px] text-muted-foreground"
               >
-                em breve
+                em processo
               </Button>
             )}
             <Button
