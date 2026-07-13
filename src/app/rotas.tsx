@@ -8,6 +8,7 @@ import { ehModoWeb, ehModoPortal, ehModoFull } from "./configuracao";
 import { rotasPortalPublico } from "./rotas/rotas-portal-publico";
 import { rotasTelepainel } from "./rotas/rotas-telepainel";
 import { rotasAdmin } from "./rotas/rotas-admin";
+import { rotasCentraldarkAdmin } from "./rotas/rotas-centraldark-admin";
 
 export function RotasApp() {
   return (
@@ -27,6 +28,8 @@ export function RotasApp() {
       {(ehModoPortal || ehModoFull) && rotasTelepainel()}
 
       {rotasAdmin()}
+
+      {rotasCentraldarkAdmin()}
 
       <Route path="*" element={<NotFound />} />
     </Routes>
