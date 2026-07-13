@@ -1,24 +1,28 @@
-Plano seguro para destravar essa tela preta e continuar a Fase 3 sem bagunçar mais nada:
+## Ajuste dos módulos no Portal
 
-1. Corrigir o alias quebrado do import novo
-   - O app importa `@/compartilhado/lib/hostRouting`, mas o arquivo real está em `src/compartilhado/utilitarios/hostRouting.ts`.
-   - Vou ajustar só esse import para o caminho certo em português.
+Na tela do Portal (`src/paginas/portal-publico/pages/Portal.tsx`), hoje só o **TelePainel** está realmente ativo. Os outros ainda não existem dentro do CentralDark, mas estão marcados como "ativo" e clicáveis — o que dá a impressão errada.
 
-2. Tratar `/index` como rota válida de entrada
-   - A tela do celular mostra que a prévia abriu em `/index`, mas o app hoje só tem `/`, `/auth`, `/telepainel`, `/dashboard` e rotas internas.
-   - Vou adicionar uma rota simples `/index` redirecionando para `/`, para não cair em tela preta/404 quando o Lovable ou o navegador abrir nesse caminho.
+### O que muda
+Só o campo `status` de cada módulo no array `modules`:
 
-3. Melhorar a tela de rota não encontrada
-   - Hoje o 404 ainda está em inglês e muito cru.
-   - Vou deixar em PT-BR, com botão claro para voltar ao início, sem mudar design geral.
+| Módulo | Antes | Depois |
+|---|---|---|
+| Bot WhatsApp | ativo | **em breve** |
+| CRM | ativo | **em breve** |
+| TelePainel | ativo | ativo (continua) |
+| Financeiro | em breve | em breve (continua) |
 
-4. Verificar sem mexer em backend, VPS, banco ou design pesado
-   - Só frontend/roteamento.
-   - Depois valido a prévia em `/index` e `/` para confirmar que voltou a renderizar.
+Efeito visual (já está pronto no componente):
+- Ganham o selo "em breve" no canto.
+- Ficam levemente opacos.
+- Deixam de ser clicáveis (sem `<Link>`).
 
-Resultado esperado:
-```text
-/index → redireciona para /
-/      → abre a tela inicial correta
-rotas inexistentes → mostram 404 amigável em PT-BR
-```
+### O que NÃO muda
+- Nada de design, cores, layout, rotas ou lógica.
+- Landing pages (`/whatsapp`, `/crm`, `/financeiro`) continuam existindo no código — só ficam inacessíveis pelo Portal por enquanto.
+- TelePainel segue clicável e funcional.
+
+### Lembrete registrado pra depois
+Quando a gente começar a construir o **Painel de Comando (Admin CentralDark)**, esses módulos "em breve" (WhatsApp, CRM, Financeiro) passam a ser administrados por lá. Fica anotado como próximo passo, não faz parte dessa mudança.
+
+**Agora:** só ajustar os rótulos de "em breve" → **Próximo:** você conferir no preview e a gente atacar o Painel de Comando da CentralDark.
