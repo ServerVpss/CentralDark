@@ -135,7 +135,7 @@ function LinhaModulo({
         <input
           value={m.nome}
           onChange={(e) => setM({ ...m, nome: e.target.value })}
-          className="input-admin"
+          className="h-9 rounded-lg border border-border bg-background px-2.5 font-mono text-[12px] text-foreground focus:border-primary focus:outline-none"
         />
       </Campo>
 
@@ -143,7 +143,7 @@ function LinhaModulo({
         <input
           value={m.slug}
           onChange={(e) => setM({ ...m, slug: e.target.value })}
-          className="input-admin"
+          className="h-9 rounded-lg border border-border bg-background px-2.5 font-mono text-[12px] text-foreground focus:border-primary focus:outline-none"
         />
       </Campo>
 
@@ -151,7 +151,7 @@ function LinhaModulo({
         <input
           value={m.href}
           onChange={(e) => setM({ ...m, href: e.target.value })}
-          className="input-admin"
+          className="h-9 rounded-lg border border-border bg-background px-2.5 font-mono text-[12px] text-foreground focus:border-primary focus:outline-none"
         />
       </Campo>
 
@@ -159,7 +159,7 @@ function LinhaModulo({
         <select
           value={m.icone}
           onChange={(e) => setM({ ...m, icone: e.target.value })}
-          className="input-admin"
+          className="h-9 rounded-lg border border-border bg-background px-2.5 font-mono text-[12px] text-foreground focus:border-primary focus:outline-none"
         >
           {OPCOES_ICONE.map((k) => (
             <option key={k} value={k}>{k}</option>
@@ -171,7 +171,7 @@ function LinhaModulo({
         <select
           value={m.status}
           onChange={(e) => setM({ ...m, status: e.target.value as ModuloPortal["status"] })}
-          className="input-admin"
+          className="h-9 rounded-lg border border-border bg-background px-2.5 font-mono text-[12px] text-foreground focus:border-primary focus:outline-none"
         >
           <option value="ativo">ativo</option>
           <option value="em processo">em processo</option>
