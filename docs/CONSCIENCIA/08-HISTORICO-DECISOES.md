@@ -23,7 +23,7 @@ updated: 2026-06-29
    - Valida `BOT_EXPECTED_REPOSITORY == GITHUB_REPOSITORY`.
 4. `docs/BOTS/README.md`, `docs/BOTS/TIME-DE-BOTS.md` e `docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md` atualizados. Nova seção "Duas camadas" deixa explícito que `assign:*` (roteamento/dono) e camada humana (`🟢/🟡/🔴 PT-BR`) coexistem sem fundir; e que `assign:chatgpt`/`assign:grok` são dono, com nota futura sobre `area:chatgpt`/`area:grok-cli`.
 
-**Pares migrados:**
+**Pares de migração preparados (execução pendente do `workflow_dispatch`):**
 
 ```
 assign:faxineiro     → assign:faxineiro-repo
@@ -32,6 +32,8 @@ assign:seguranca     → assign:guarda-seguranca
 assign:vps-health    → assign:vps-healthcheck
 ```
 
+> A migração **foi codificada e commitada**, mas **ainda não foi executada** no GitHub. Nenhum item foi remarcado e nenhum alias foi removido do repositório até o Pivete disparar o workflow manualmente.
+
 **Por quê:**
 
 - O seed antigo semeava alias e canônico ao mesmo tempo, criando duplicidade permanente e ruído para o Dispatcher.
@@ -39,14 +41,35 @@ assign:vps-health    → assign:vps-healthcheck
 
 **Reversível:**
 
-- Aliases podem ser recriados manualmente com `gh label create` se necessário. Histórico de labels aplicadas fica preservado nos itens (o job de migração adiciona canônico antes de remover alias).
+- Como a migração ainda não foi executada, nada precisa ser desfeito hoje. Após execução, aliases podem ser recriados manualmente com `gh label create` se necessário. O job de migração adiciona canônico antes de remover alias, preservando histórico.
 - Nenhum issue/PR foi fechado por essa mudança. Nenhum secret foi lido. Nenhum deploy foi feito.
 
 **Como rodar a migração (Pivete, quando quiser):**
 
-1. Actions → "Bots — seed de labels oficiais" → Run workflow → `dry_run=true`, `run_migration=true`. Ler o log.
+1. Actions → "Bots — seed de labels oficiais" → Run workflow → `dry_run=true`, `run_migration=true`. Ler o log/summary.
 2. Reexecutar com `dry_run=false`, `run_migration=true`.
 3. Conferir: `gh label list | grep -E 'assign:(faxineiro|auditor|seguranca|vps-health)$'` deve vir vazio.
+
+## Revisão do commit anterior — endurecimento do controller e da migração (2026-07-14)
+
+**Autorização:** "PERMITO PIVETE" — revisão do commit `7b6a4321f045b3036919a0ef1ebc3e3789ec95e1`, sem deploy, sem executar migração, sem fechar issue/PR.
+
+**Correções aplicadas:**
+
+1. Documentação alinhada à realidade: todas as frases que davam a migração como "executada/removida" foram corrigidas para "preparada, execução pendente do `workflow_dispatch`".
+2. `.github/workflows/github-bot-controller.yml`: checkout com `ref: ${{ github.event.repository.default_branch }}`, `persist-credentials: false`, `clean: true` (self-hosted não pode executar código vindo do PR). Adicionado `actions/upload-artifact@v4` com `if: always()`, nome único por `run_id`/`run_attempt`, `retention-days: 7`, `if-no-files-found: warn`. Sem commit do relatório.
+3. `scripts/github-bot-controller.mjs`: fechamento manual passa a exigir linha explícita `Supersedes: #N #N …` no corpo do PR mergeado (case-insensitive); `BOT_SUPERSEDES` precisa ser subconjunto dessa linha. Preflight valida todos os alvos (existência, `state=open`, base.ref igual ao do merged, diferentes do merged_pr) e a existência da label `superseded` antes de qualquer escrita. Qualquer falha aborta o **lote inteiro** sem escrita. Auditoria pagina PRs abertos (não corta em 100) e escreve resumo em `GITHUB_STEP_SUMMARY` quando disponível. Removida a alegação de "rate-limit ciente".
+4. `.github/workflows/bots-labels-seed.yml`: dispatch-only para migração + schedule mensal só de seed (mantido). Job `migrate` passa a **falhar o workflow** se algum item de migração ou deleção de alias falhar (`failedMig > 0` agora tem efeito), sem apagar alias que ainda tenha uso.
+
+**Validação:**
+
+- `node --check scripts/github-bot-controller.mjs` OK.
+- YAMLs conferidos com `yq`.
+- Busca no repo confirma que os quatro aliases não aparecem no catálogo canônico do seed — só no mapa de migração e em docs marcadas como legado.
+- Busca confirma que nenhuma doc afirma migração já executada.
+
+**Ainda pendente:** disparo manual do workflow pelo Pivete (dry-run → aplicado).
+
 
 
 
