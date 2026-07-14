@@ -1,12 +1,12 @@
-name: Bots — seed de labels oficiais
+name: Bots — seed de labels oficiais (só emoji)
 
-# Cria/atualiza as labels padrão do Time de Bots de forma idempotente.
-# Roda manual (workflow_dispatch) e 1x por mês. Não apaga label existente.
+# Cria/atualiza labels padrão CentralDark — SOMENTE emoji (Pivete).
+# Roda manual + 1x/mês. Não apaga labels; não recria assign: / bug / p1.
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 6 1 * *' # dia 1 de cada mês, 06:00 UTC
+    - cron: '0 6 1 * *'
 
 permissions:
   issues: write
@@ -17,84 +17,81 @@ jobs:
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark'
     steps:
-      - name: Criar/atualizar labels padrão
+      - name: Seed labels emoji
         uses: actions/github-script@v7
         with:
           script: |
             const { owner, repo } = context.repo;
-
-            // Catálogo oficial — alinhado a docs/BOTS/README.md e TIME-DE-BOTS.md
+            // Catálogo único — alinhado a docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md
             const labels = [
-              // Governança humana
-              { name: 'revisao-humana',     color: 'd93f0b', description: 'Humano precisa olhar antes de mergear/aplicar' },
-              { name: 'vigia',              color: 'ededed', description: 'Monitoramento de workflows e divergências' },
-              { name: 'auto',               color: 'ededed', description: 'Issue/PR criada por bot, não por humano' },
-              { name: 'stale',              color: '999999', description: 'Sem ação em 7 dias — escalada pela sentinela-stale' },
-              { name: 'needs-codex-review', color: '5319e7', description: 'Codex precisa revisar (gatilho do conector)' },
-              { name: 'dependencies',        color: '0366d6', description: 'Atualizações de dependências' },
-              { name: 'mcp',                 color: '5319e7', description: 'MCP CentralDark e conectores' },
-              { name: 'linear',              color: '0e8a16', description: 'Integração Linear / pendências' },
-              { name: 'sentry',              color: '5319e7', description: 'Integração Sentry / observabilidade' },
-              { name: 'notion',              color: 'c5def5', description: 'Integração Notion / documentação' },
-              { name: 'security',            color: 'b60205', description: 'Segurança, hardening e auditoria' },
-              { name: 'github-actions',      color: '2088ff', description: 'GitHub Actions e workflows' },
-              { name: 'bot-server',          color: '0e8a16', description: 'Bot-server e rotas WhatsApp read-only' },
-              { name: 'install-callback',    color: 'fbca04', description: 'Install callback e porta de entrada oficial' },
-              { name: 'frontend',            color: 'c5def5', description: 'Frontend, UI e painel' },
-
-              // Severidade
-              { name: 'p0', color: 'b60205', description: 'Crítico — segredo exposto / produção caiu / dado em risco' },
-              { name: 'p1', color: 'd93f0b', description: 'Alto — workflow/rota pública quebrada, divergência GitHub/VPS' },
-              { name: 'p2', color: 'fbca04', description: 'Médio — docs/teste/pendência sem dono' },
-              { name: 'p3', color: '0e8a16', description: 'Baixo — melhoria, organização, refator' },
-
-              // Assign por bot/IA dona
-              { name: 'assign:chatgpt',      color: '1d76db', description: 'ChatGPT (pente fino final, validação cadeia 7 passos)' },
-              { name: 'assign:codex',        color: '5319e7', description: 'Codex (revisão de código + PRs pequenos)' },
-              { name: 'assign:lovable',      color: 'c5def5', description: 'Lovable (frontend / painel / UI)' },
-              { name: 'assign:grok',         color: 'bfd4f2', description: 'Grok (VPS/PM2/SSH read-only)' },
-              { name: 'assign:supabase-bot', color: '3ecf8e', description: 'Bot de schema/RLS Supabase' },
-              { name: 'assign:dependabot',   color: '0366d6', description: 'Dependabot (atualizações de dep)' },
-              { name: 'assign:codeql',       color: '0e8a16', description: 'CodeQL (SAST nativo)' },
-              { name: 'assign:doc-guardiao', color: 'fef2c0', description: 'Doc-guardião (cobra README/PLANO por pasta)' },
-              { name: 'assign:faxineiro-repo', color: 'fef2c0', description: 'Faxineiro-repo (órfãos/ZIPs em modo relatório)' },
-              { name: 'assign:auditor-divergencia', color: 'fef2c0', description: 'Auditor de divergência repo↔VPS' },
-              { name: 'assign:guarda-seguranca', color: 'b60205', description: 'Guarda-segurança (Gitleaks/Semgrep/OSV/Trivy)' },
-              { name: 'assign:vps-healthcheck', color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
-              { name: 'assign:faxineiro',    color: 'fef2c0', description: 'Faxineiro-repo (órfãos/ZIPs em modo relatório)' },
-              { name: 'assign:auditor',      color: 'fef2c0', description: 'Auditor de divergência repo↔VPS' },
-              { name: 'assign:seguranca',    color: 'b60205', description: 'Guarda-segurança (Gitleaks/Semgrep/OSV/Trivy)' },
-              { name: 'assign:vps-health',   color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
-              { name: 'assign:painel-vivo',  color: 'c5def5', description: 'Painel-vivo (status.centralldark.com)' },
-              { name: 'assign:sentinela',    color: 'ededed', description: 'Sentinela (detecta divergência geral)' },
-
-              // Graphify (pipeline do grafo)
-              { name: 'graphify',           color: '5319e7', description: 'Pipeline do Graphify e grafo do repo' },
-              { name: 'pipeline-broken',    color: 'b60205', description: 'Pipeline quebrado — precisa reparo urgente' },
-              { name: 'ignore-pending',     color: 'fbca04', description: '.graphifyignore precisa de update pra evitar lixo' },
-              { name: 'assign:vigia',        color: 'ededed', description: 'Vigia (workflows vermelhos)' },
+              { name: '🟢 PRONTO-PARA-IA', color: '0E8A16', description: 'Tarefa clara — IA pode trabalhar' },
+              { name: '🟢 CORREÇÃO-SEGURA', color: '0E8A16', description: 'Correção baixo risco em branch/PR' },
+              { name: '🟢 SUCESSO', color: '0E8A16', description: 'Validado / estável / concluído' },
+              { name: '🟢 PRIORIDADE-BAIXA', color: '0E8A16', description: 'Pode esperar' },
+              { name: '🟢 SUPABASE', color: '3ECF8E', description: 'Supabase / banco / auth / storage' },
+              { name: '🟡 PRECISA-DE-OK', color: 'FBCA04', description: 'Aguarda PERMITO do Pivete' },
+              { name: '🟡 IA-PRECISA-REVISAR', color: 'FBCA04', description: 'IA revisou ou precisa validação' },
+              { name: '🟡 PENDÊNCIA', color: 'FBCA04', description: 'Aguarda decisão ou prova' },
+              { name: '🟡 ATENÇÃO', color: 'FBCA04', description: 'Cuidado antes de seguir' },
+              { name: '🟡 PRIORIDADE-MÉDIA', color: 'FFA500', description: 'Importante mas planejável' },
+              { name: '🔴 RISCO-SERVIDOR', color: 'D93F0B', description: 'VPS / PM2 / deploy / produção' },
+              { name: '🔴 FALTA-EVIDÊNCIA', color: 'D93F0B', description: 'Sem log/print/prova' },
+              { name: '🔴 ERRO', color: 'B60205', description: 'Falha confirmada' },
+              { name: '🔴 PRIORIDADE-ALTA', color: 'FF0000', description: 'Resolver logo' },
+              { name: '🔐 SEGURANÇA', color: 'B60205', description: 'Token secret chave RLS exposição' },
+              { name: '🛠️ INFRA', color: 'D93F0B', description: 'VPS servidor deploy PM2 nginx' },
+              { name: '🧠 AGENTE-GROK', color: '1F6FEB', description: 'Grok responsável (VPS/PM2/SSH/infra)' },
+              { name: '🧠 AGENTE-CODEX', color: '5319E7', description: 'Codex responsável (código/PR)' },
+              { name: '🧠 AGENTE-CLAUDE', color: 'B088FF', description: 'Claude responsável' },
+              { name: '🧠 AGENTE-CHATGPT', color: '10A37F', description: 'ChatGPT/DarkAI responsável' },
+              { name: '🧠 AGENTE-LOVABLE', color: 'FF80B0', description: 'Lovable / UI responsável' },
+              { name: '🧠 AGENTE-HERMES', color: '7057FF', description: 'Hermes envolvido' },
+              { name: '🧠 AGENTE-SENTINELA', color: 'B60205', description: 'Sentinela criou/detectou' },
+              { name: '🧠 AGENTE-SUPABASE', color: '3ECF8E', description: 'Supabase bot/agente banco' },
+              { name: '🧠 AGENTE-JARVIS', color: '0052CC', description: 'Jarvis envolvido' },
+              { name: '🤖 IA-EXECUTAR', color: '5319E7', description: 'IA pode executar controlado' },
+              { name: '🤖 IA-REVISAR', color: '5319E7', description: 'IA precisa revisar' },
+              { name: '🤖 IA-INFRA', color: 'D93F0B', description: 'IA em VPS/deploy/Git' },
+              { name: '🤖 IA-FRONTEND', color: 'FF80B0', description: 'IA em tela/layout' },
+              { name: '🤖 IA-DOCUMENTAR', color: '0075CA', description: 'IA documentar/organizar' },
+              { name: '🤖 IA-PESQUISAR', color: '1F6FEB', description: 'IA pesquisar contexto' },
+              { name: '🤖 IA-VALIDAR', color: '0E8A16', description: 'IA provar se está correto' },
+              { name: '🤖 AUTO', color: '5319E7', description: 'Criado/atualizado por automação' },
+              { name: '🤖 AGENTIC-DEVOPS', color: '5319E7', description: 'Orquestração self-heal / run-once (sem V3)' },
+              { name: '🔧 SELF-HEAL', color: '0E8A16', description: 'Script puro PM2/Docker restart determinístico' },
+              { name: '🕸️ GRAPHIFY', color: '5319E7', description: 'Pipeline Graphify / grafo do repo' },
+              { name: '🛡️ SENTINELA', color: 'B60205', description: 'Veio da sentinela/monitoramento' },
+              { name: '🧭 PAINEL', color: '0052CC', description: 'Painel dashboard admin cockpit' },
+              { name: '🧩 DIVERGÊNCIA', color: 'D93F0B', description: 'Estados diferentes para alinhar' },
+              { name: '🔄 GIT', color: '1F6FEB', description: 'Branch commit pull push merge' },
+              { name: '🔄 GIT-DIVERGÊNCIA', color: 'D93F0B', description: 'VPS e GitHub diferentes' },
+              { name: '🐞 BUG', color: 'D73A4A', description: 'Algo quebrado' },
+              { name: '✨ MELHORIA', color: 'A2EEEF', description: 'Melhoria refinamento' },
+              { name: '📚 DOCS', color: '0075CA', description: 'Documentação registro memória' },
+              { name: '🎨 FRONTEND', color: 'FF80B0', description: 'Tela layout mobile' },
+              { name: '♻️ DUPLICADO', color: 'CFD3D7', description: 'Já existe outra issue' },
+              { name: '❓ DÚVIDA', color: 'D876E3', description: 'Falta esclarecer' },
+              { name: '🆘 AJUDA-NECESSÁRIA', color: '008672', description: 'Precisa apoio' },
+              { name: '🌱 BOM-PARA-INICIAR', color: '7057FF', description: 'Tarefa simples' },
+              { name: '🚫 INVÁLIDO', color: 'E4E669', description: 'Issue não faz sentido' },
+              { name: '🧊 PARADO', color: 'CFD3D7', description: 'Velha sem movimento' },
+              { name: '🧊 NÃO-FAZER', color: 'FFFFFF', description: 'Decidido não seguir' },
             ];
 
             let created = 0, updated = 0, kept = 0, failed = 0;
-
             for (const lbl of labels) {
               try {
                 const existing = await github.rest.issues.getLabel({ owner, repo, name: lbl.name }).catch(() => null);
                 if (!existing) {
                   await github.rest.issues.createLabel({ owner, repo, ...lbl });
                   created++;
-                  core.info(`+ criado: ${lbl.name}`);
-                } else if (existing.data.color !== lbl.color || (existing.data.description || '') !== lbl.description) {
+                } else if (existing.data.color.toLowerCase() !== lbl.color.toLowerCase() || (existing.data.description || '') !== lbl.description) {
                   await github.rest.issues.updateLabel({ owner, repo, name: lbl.name, new_name: lbl.name, color: lbl.color, description: lbl.description });
                   updated++;
-                  core.info(`~ atualizado: ${lbl.name}`);
-                } else {
-                  kept++;
-                }
+                } else kept++;
               } catch (e) {
                 failed++;
-                core.warning(`falha em ${lbl.name}: ${e.message}`);
+                core.warning(`falha ${lbl.name}: ${e.message}`);
               }
             }
-
-            core.notice(`labels — criadas: ${created} · atualizadas: ${updated} · iguais: ${kept} · falhas: ${failed}`);
+            core.notice(`labels emoji — +${created} ~${updated} =${kept} !${failed}`);

@@ -10,17 +10,31 @@ Label tecnica demais confunde.
 Label em portugues ajuda o Pivete a operar o sistema sem depender de tradutor mental.
 ```
 
-## Labels oficiais
+## Regra 2026-07-14 (Pivete)
 
-| Label | Equivalente tecnico | Quando usar | Permissao operacional |
-|---|---|---|---|
-| 🟢 PRONTO-PARA-IA | codex-ready | Tarefa clara, com contexto suficiente para IA trabalhar. | IA pode analisar e propor correcao. |
-| 🟡 IA-PRECISA-REVISAR | needs-codex-review | Codigo/PR precisa de revisao da IA antes de seguir. | IA revisa, comenta e aponta risco. |
-| 🔴 RISCO-SERVIDOR | vps-sensitive | Mexe em VPS, deploy, PM2, Caddy, runner, banco ou producao. | Exige BOOT Completo e confirmacao humana para acao sensivel. |
-| 🟡 PRECISA-DE-OK | manual-confirm | A acao esta pausada aguardando autorizacao humana. | IA nao continua sozinha. |
-| 🔴 SEGURANÇA | security | Envolve RLS, secrets, tokens, credenciais, auth, banco ou vazamento. | Read-only primeiro; qualquer alteracao exige confirmacao. |
-| 🟢 CORREÇÃO-SEGURA | auto-fix-safe | Correcao de baixo risco, sem producao, sem segredo e sem impacto destrutivo. | IA pode aplicar em branch/PR. |
-| 🔴 FALTA-EVIDÊNCIA | blocked-evidence | Falta log, print, erro, teste ou prova antes de agir. | Bloqueia execucao ate existir evidencia. |
+```text
+SÓ labels com emoji.
+Proibido: assign:grok, bug, p1, documentation, stale…
+Dono IA = 🧠 AGENTE-GROK / 🧠 AGENTE-CODEX / etc.
+Seed: .github/workflows/bots-labels-seed.yml (só emoji).
+```
+
+## Labels oficiais (núcleo)
+
+| Label | Quando usar | Permissao operacional |
+|---|---|---|
+| 🟢 PRONTO-PARA-IA | Tarefa clara, contexto suficiente | IA analisa / propõe |
+| 🟡 IA-PRECISA-REVISAR | Precisa revisão IA | IA revisa, não mergea sozinha |
+| 🔴 RISCO-SERVIDOR | VPS, deploy, PM2, Caddy, produção | BOOT Completo + confirmação |
+| 🟡 PRECISA-DE-OK | Aguarda PERMITO Pivete | IA para |
+| 🔐 SEGURANÇA | RLS, secrets, tokens, auth | Read-only primeiro |
+| 🟢 CORREÇÃO-SEGURA | Baixo risco, sem segredo/destrutivo | Branch/PR ok |
+| 🔴 FALTA-EVIDÊNCIA | Sem log/print/prova | Bloqueia até prova |
+| 🧠 AGENTE-GROK | Grok dono (VPS/PM2/infra) | Roteamento |
+| 🧠 AGENTE-CODEX | Codex dono (código/PR) | Roteamento |
+| 🛠️ INFRA | Servidor / deploy / PM2 | Com RISCO se produção |
+| 🔧 SELF-HEAL | Script puro restart | Preferir sem IA |
+| 🤖 AGENTIC-DEVOPS | Orquestração self-heal | Sem inventar V3 |
 
 ## Como aplicar
 
