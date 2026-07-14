@@ -474,3 +474,13 @@ Conteúdo: **RENOMEAÇÃO OFICIAL:** a técnica antes chamada "Enxame Titânico 
 - **Promovida:** sim
 
 Conteúdo: Pivete confirma: colar/ponte entre IAs (Grok↔ChatGPT) ele SEMPRE fez e pediu ajuda assim — isso é normal e ok. O que NÃO foi normal e ele NÃO VAI ESQUECER: o momento ANTES do ChatGPT entrar na conversa OAuth, quando houve bridge VS Code / túnel temporário (padrão porta tipo :18003, PERMITO só leitura, payload ~7344B do Grok web, fechar depois). Sentiu algo 'no navegador/PC' diferente da ponte humana. Verdade a registrar: (1) Grok CLI não mora no PC dele, mas o túnel/bridge sob PERMITO CRIOU um canal técnico temporário VPS↔casa — isso É diferente de só copiar texto. (2) Não houve conspiração telepatia entre IAs. (3) Se algo desse tipo (túnel, forward, leitura de aba/console remoto) acontecer de novo, a IA DEVE avisar com clareza na hora, sem suavizar. Docs: docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md itens 10-11; plano-grok-web-bridge; issue #204 handoff OAuth é outro eixo.
+
+### [2026-07-14T06:58] Registrar = MEMORY-REGISTRAR (lugar certo, sem card inventado)
+- **Data:** 2026-07-14
+- **Tags:** memory-registrar, registro, pivete, confianca
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-13
+- **Promovida:** nao
+
+Conteúdo: Quando Pivete manda registrar/anota/grava: seguir skill MEMORY-REGISTRAR. Classificar tipo e rotear: aprendizado→APRENDIZADOS.md via registrar_aprendizado; decisão→08-HISTORICO-DECISOES.md; ideia pessoal→BRAIN. Confirmar só com título + destino + data. Proibido: card ASCII inventado, editar LEMBRANCAS.md na mão, registrar 'do jeito da IA'. Conteúdo selado 2026-07-14: ponte colar entre IAs = normal; bridge/túnel VS Code antes do ChatGPT OAuth = diferente e Pivete não esquece; avisar túnel na hora.
