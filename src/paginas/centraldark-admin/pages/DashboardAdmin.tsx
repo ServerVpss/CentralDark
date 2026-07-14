@@ -1,6 +1,7 @@
 // Visão geral: cards com contagens reais (módulos ativos, usuários).
 import { useEffect, useState } from "react";
-import { Boxes, Users, CheckCircle2, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Boxes, Users, CheckCircle2, Clock, Gamepad2, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useModulosPortal } from "../hooks/useModulosPortal";
 
