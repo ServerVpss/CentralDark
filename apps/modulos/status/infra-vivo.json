@@ -1,0 +1,201 @@
+{
+  "ok": true,
+  "purpose": "infra-vivo-simples",
+  "updatedAt": "2026-07-14T13:54:48.672Z",
+  "updatedAtBR": "14/07/2026, 10:54:48",
+  "host": "vmi3256920",
+  "uptime_sec": 1947360,
+  "load": {
+    "1m": "2.90",
+    "5m": "3.66",
+    "15m": "3.35"
+  },
+  "mem": {
+    "total_gb": 25.2,
+    "used_gb": 4.6,
+    "avail_gb": 7.4,
+    "used_pct": 18.3
+  },
+  "disk": {
+    "used_pct": 47,
+    "avail": "108299720",
+    "size": "203056560",
+    "used": "94740456",
+    "mount": "/"
+  },
+  "pm2": {
+    "online": 19,
+    "stopped": 1,
+    "errored": 0,
+    "total": 20,
+    "procs": [
+      {
+        "name": "CentralDark-ArtifactsCrafter",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 70,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-ArtifactsBuilder",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 75,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-Hermes",
+        "status": "online",
+        "restarts": 9,
+        "mem_mb": 78,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-GraphPanel",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 78,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-GrafoVivo",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 73,
+        "cpu": 1.3
+      },
+      {
+        "name": "CentralDark-Memoria",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 77,
+        "cpu": 2.5
+      },
+      {
+        "name": "CentralDark-ArsenalProxy",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 41,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-EliteHTTP",
+        "status": "online",
+        "restarts": 7,
+        "mem_mb": 46,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-OAuthBroker",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 90,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-MCP",
+        "status": "online",
+        "restarts": 17,
+        "mem_mb": 115,
+        "cpu": 1.3
+      },
+      {
+        "name": "CentralDark-PiveteSync",
+        "status": "online",
+        "restarts": 6,
+        "mem_mb": 89,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-AiDiag",
+        "status": "stopped",
+        "restarts": 2,
+        "mem_mb": 0,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-AiPromptAPI",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 69,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-GuardiaoConsciencia",
+        "status": "online",
+        "restarts": 4,
+        "mem_mb": 34,
+        "cpu": 23.8
+      },
+      {
+        "name": "CentralDark-HubBot",
+        "status": "online",
+        "restarts": 2,
+        "mem_mb": 83,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-LovableBridge",
+        "status": "online",
+        "restarts": 12,
+        "mem_mb": 69,
+        "cpu": 1.3
+      },
+      {
+        "name": "CentralDark-WebhookDeploy",
+        "status": "online",
+        "restarts": 1,
+        "mem_mb": 74,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-ProxyUnlimi",
+        "status": "online",
+        "restarts": 3,
+        "mem_mb": 94,
+        "cpu": 0
+      },
+      {
+        "name": "CentralDark-HermesVerificador",
+        "status": "online",
+        "restarts": 2,
+        "mem_mb": 93,
+        "cpu": 1.3
+      },
+      {
+        "name": "CentralDark-ArsenalAdapter",
+        "status": "online",
+        "restarts": 0,
+        "mem_mb": 94,
+        "cpu": 1.3
+      }
+    ]
+  },
+  "fail2ban": {
+    "jail": "sshd",
+    "currently_banned": 17,
+    "total_banned": 1125,
+    "banned_sample": [
+      "20.229.115.183",
+      "176.53.159.198",
+      "120.48.175.69",
+      "140.249.22.89",
+      "176.53.159.197",
+      "2.57.121.112",
+      "146.190.209.45",
+      "125.244.114.221"
+    ]
+  },
+  "mcp": {
+    "ok": true,
+    "service": "mcp-centraldark",
+    "version": "0.4.0",
+    "toolCount": 102
+  },
+  "notes": [
+    "Sem secrets neste JSON.",
+    "Telegram: só via infra-movimento-watch (delta), não heartbeat.",
+    "UI: /infra.html em status.centralldark.com"
+  ],
+  "motion_fingerprint": "{\"pm2\":\"CentralDark-AiDiag:stopped|CentralDark-AiPromptAPI:online|CentralDark-ArsenalAdapter:online|CentralDark-ArsenalProxy:online|CentralDark-ArtifactsBuilder:online|CentralDark-ArtifactsCrafter:online|CentralDark-EliteHTTP:online|CentralDark-GrafoVivo:online|CentralDark-GraphPanel:online|CentralDark-GuardiaoConsciencia:online|CentralDark-Hermes:online|CentralDark-HermesVerificador:online|CentralDark-HubBot:online|CentralDark-LovableBridge:online|CentralDark-MCP:online|CentralDark-Memoria:online|CentralDark-OAuthBroker:online|CentralDark-PiveteSync:online|CentralDark-ProxyUnlimi:online|CentralDark-WebhookDeploy:online\",\"disk\":47,\"mcp\":true,\"f2b\":17,\"stopped\":1,\"errored\":0}"
+}
