@@ -12,7 +12,7 @@ on:
           - "true"
           - "false"
       merged_pr:
-        description: "PR consolidada mergeada que substituiu outras PRs"
+        description: "PR consolidada mergeada que substituiu outras PRs (número, ex.: 149)"
         required: false
         default: ""
       supersedes:
@@ -37,7 +37,7 @@ concurrency:
 
 jobs:
   controller:
-    name: Auditar PRs e fechar substituídas com segurança
+    name: Auditar PRs e (só em dispatch com referência explícita) fechar substituídas
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
 
@@ -52,7 +52,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
-          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'auto' }}
+          # schedule/pull_request => sempre DRY_RUN. workflow_dispatch => respeita input.
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'true' }}
+          BOT_EVENT_NAME: ${{ github.event_name }}
           BOT_MERGED_PR: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr || '' }}
           BOT_SUPERSEDES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.supersedes || '' }}
-        run: node CentralDark/scripts/github-bot-controller.mjs
+        run: node scripts/github-bot-controller.mjs
