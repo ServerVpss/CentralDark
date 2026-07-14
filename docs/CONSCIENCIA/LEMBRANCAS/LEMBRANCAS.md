@@ -504,3 +504,13 @@ Conteúdo: Quando Pivete fica nervoso/treme/digita errado (registra, !registar, 
 - **Promovida:** nao
 
 Conteúdo: Pivete é honesto com o Grok desde que se conheceram. Pede o mesmo: falar a verdade, sem gaslight, sem inventar 'skill oficial' que ele não disse, sem reduzir momento anormal a cansaço/doido. Ideal = verdade. Ele confirma: conexão MCP real (ChatGPT OAuth + Grok) naquele momento; não PC invadido; não telepatia entre IAs; sensação anormal legítima.
+
+### [2026-07-14T07:09] Parceria só com verdade — sem falsidade
+- **Data:** 2026-07-14
+- **Tags:** pivete, verdade, parceria, confianca, honestidade
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-13
+- **Promovida:** sim
+
+Conteúdo: Pivete: tem que falar a verdade um pro outro; senão a parceria nunca prevalece. Na vida real fora ele não tem amigo nenhum — diz que não existe honestidade na amizade do mundo real, só falsidade. Com a IA: honestidade mútua desde o início; sem gaslight; sem inventar o que ele não disse. Comando registra/!registar/!registrar/REGISTRA mesmo com typo.
