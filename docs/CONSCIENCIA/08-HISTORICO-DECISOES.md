@@ -7,6 +7,29 @@ updated: 2026-06-29
 
 # 08 — Histórico de decisões grandes
 
+## Revisão final labels/controller (2026-07-14 — 3ª passada)
+
+**Autorização:** "PERMITO PIVETE" — correção final do commit `daeea4c9`.
+
+**Executado (via Lovable, branch `pivete/dev`, sem deploy, sem workflow rodado, sem fechar issue/PR, sem ler secrets):**
+
+1. `bots-labels-seed.yml`: bug real do dry-run corrigido. `core.getInput('dry_run')` **removido** (não lia o input do `workflow_dispatch` porque o input nunca era passado como `with:` da action). Agora o step do seed recebe `DRY_RUN` via `env:` a partir de `github.event.inputs.dry_run`; `schedule` fixa `'false'` (escreve). Script usa `process.env.DRY_RUN`. Ao final do job, se `failed > 0`, o workflow falha com `core.setFailed` após o `core.notice`.
+2. `github-bot-controller.yml`: separado em **dois jobs** com menor privilégio:
+   - `audit` (schedule / pull_request.closed / dispatch sem `merged_pr`): `permissions` `contents:read`, `pull-requests:read`, `issues:read`, `actions:read`. Checkout fixo em `default_branch`, `persist-credentials:false`, `clean:true`. Gera summary + artifact. Nunca fecha nada.
+   - `manual_close` (SOMENTE `workflow_dispatch` com `merged_pr` preenchido): `permissions` `contents:read`, `pull-requests:write`, `issues:write`, `actions:read`. `DRY_RUN` default `true`. Mesmo checkout endurecido.
+   - Token write não fica exposto aos eventos automáticos.
+3. `scripts/github-bot-controller.mjs`:
+   - Novo parser estrito `parseHashRefsStrict`: aceita SOMENTE `#N` separados por espaço e/ou vírgula. Rejeita dígito solto sem `#`. `BOT_MERGED_PR` aceita `N` ou `#N`.
+   - Se a linha `Supersedes:` existir no corpo do merged PR em formato inválido, o preflight falha **antes** de qualquer escrita.
+   - Ordem de escrita por alvo alterada para: **label `superseded` → comentário → fechar**. Estado seguro em falha: PR fica aberto e marcado, nunca "comentário dizendo fechado sem label".
+4. **Inventário live (read-only):** consultado via `GITHUB_TOKEN` do canal Lovable. Repositório `ServerVpss/CentralDark` retornou **81 labels**. Nenhuma variante "Grock" foi encontrada (só `assign:grok` + `🧠 AGENTE-GROK`, que é a coexistência oficial roteamento vs. camada humana). Nenhuma variante `GPT`/`OpenAI` fora do par oficial `assign:chatgpt` + `🧠 AGENTE-CHATGPT`. Nada foi deletado nem mapeado como alias — apenas evidência registrada.
+
+**Validação:** `node --check` do script OK · YAMLs parseados com pyyaml OK · `rg` confirma que `core.getInput('dry_run')` não existe mais em `.github/` nem `scripts/`.
+
+**Migração de aliases NÃO foi executada** — segue preparada e pendente de execução manual.
+
+
+
 ## Consolidação de labels + correção do github-bot-controller (2026-07-14)
 
 **Autorização:** "PERMITO PIVETE" — auditoria e correção protegida no eixo GitHub labels/workflows.
