@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-14T15:34:07.395Z",
-  "updatedAtBR": "14/07/2026, 12:34:07 BRT",
+  "updatedAt": "2026-07-14T15:34:41.206Z",
+  "updatedAtBR": "14/07/2026, 12:34:41 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-14T15:34:41.206Z",
+      "titulo": "Push na main · ad76e2c2cd74c863b98906df96d2cb5e66016820",
+      "detalhe": "chore(labels): só emoji — remove assign:/bug/p1 (Pivete)",
+      "area": "Repositório",
+      "sha": "ad76e2c",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-14T15:34:07.395Z",
       "titulo": "Push na main · 14aaea9aff0177e141b704263c5db57b6fa6b699",
       "detalhe": "chore(labels): só emoji — remove assign:/bug/p1 (Pivete)",
@@ -987,14 +995,6 @@
       "area": "Repositório",
       "sha": "fa0b49c",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T21:34:34.358Z",
-      "titulo": "Push na main · 57e67f5d1aa63bd4aee221db8019218bb87d9ff8",
-      "detalhe": "feat(hub): PR#1 schema api_keys + audit_log_api admin-only (Fluxo Ouro)",
-      "area": "Repositório",
-      "sha": "57e67f5",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-14T15:34:41.206Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ad76e2c2cd74c863b98906df96d2cb5e66016820 (ad76e2c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-14T15:34:07.395Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 14aaea9aff0177e141b704263c5db57b6fa6b699 (14aaea9)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T21:35:04.291Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · fa0b49c6916844b3d02afd17fb746bc395338f49 (fa0b49c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T21:34:34.358Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 57e67f5d1aa63bd4aee221db8019218bb87d9ff8 (57e67f5)",
       "area": "Repositório",
       "status": "sucesso"
     }
