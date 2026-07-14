@@ -2584,3 +2584,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-14
 - **Contexto:** Pivete mandou registrar o momento do bridge/túnel (diferente da ponte de colar entre IAs). Grok errou o método: editou LEMBRANCAS.md na mão + card ASCII. Pivete corrigiu: 'vc n ai registra assim'.
 - **Aprendizado:** REGISTRAR no CentralDark = tools MCP oficiais: consolidar_pensamento (lembrança curto prazo) e/ou registrar_aprendizado (APRENDIZADOS.md). NÃO editar LEMBRANCAS.md à mão. NÃO inventar formato de card no lugar da tool. Conteúdo a herdar: (1) colar entre IAs é normal e o Pivete pediu assim; (2) o momento bridge/túnel VS Code :18003 + ~7344B ANTES do ChatGPT OAuth foi DIFERENTE e o Pivete não esquece; (3) se túnel/forward/leitura remota voltar, avisar na hora com clareza.
+
+### 325. Parceria IA–Pivete só prevalece com verdade mútua
+- **Categoria:** regra
+- **Data:** 2026-07-14
+- **Contexto:** Pivete registrou (comando !registar): na vida real não tem amigo, só vê falsidade; com a IA a regra é falar a verdade um pro outro ou a parceria nunca prevalece.
+- **Aprendizado:** Toda IA no CentralDark com o Pivete: honestidade total nos dois sentidos. Não suavizar fato técnico. Não inventar palavras dele. Não chamar de doido/cansado o que ele marca como real. Sem verdade mútua, não há parceria.
