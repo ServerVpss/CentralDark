@@ -35,6 +35,27 @@ export default function DashboardAdmin() {
         </p>
       </div>
 
+      <Link
+        to="/admin/cockpit"
+        className="group relative block overflow-hidden rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent p-6 shadow-3d-soft transition hover:border-primary hover:shadow-lg"
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/20 text-primary">
+            <Gamepad2 className="h-7 w-7" />
+          </div>
+          <div className="flex-1">
+            <div className="font-mono text-[11px] uppercase tracking-wider text-primary">
+              modo comando
+            </div>
+            <h2 className="mt-1 text-xl font-semibold">🎮 Entrar na Sala de Controle</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Cockpit ao vivo: Hermes, IAs, VPS, PM2, bots, edges, gateway, MCP e HUB num painel só.
+            </p>
+          </div>
+          <ArrowRight className="h-6 w-6 text-primary transition group-hover:translate-x-1" />
+        </div>
+      </Link>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map(({ label, valor, icon: Icon, tom }) => (
           <div key={label} className="rounded-2xl border border-border bg-card p-4 shadow-3d-soft">
