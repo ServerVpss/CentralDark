@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-14T14:11:23.258Z",
-  "updatedAtBR": "14/07/2026, 11:11:23 BRT",
+  "updatedAt": "2026-07-14T14:11:56.619Z",
+  "updatedAtBR": "14/07/2026, 11:11:56 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(grafo): fonte unica (apps/modulos/graph-panel/server.js)",
+    "lastCommit": "fix(grafo): fonte unica (docs/RELATORIOS/2026-07-14-grafo-fonte-unica.md)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-14T14:11:56.619Z",
+      "titulo": "Push na main · d551a04bb570ac73d2783ed422c5a7fb1094585d",
+      "detalhe": "fix(grafo): fonte unica (docs/RELATORIOS/2026-07-14-grafo-fonte-unica.md)",
+      "area": "Repositório",
+      "sha": "d551a04",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-14T14:11:23.258Z",
       "titulo": "Push na main · dd0381a81383750207b704e71b8da4d4967b633e",
       "detalhe": "fix(grafo): fonte unica (apps/modulos/graph-panel/server.js)",
@@ -986,14 +994,6 @@
       "detalhe": "Ajuda o script a mostrar erro",
       "area": "Repositório",
       "sha": "7156e7f",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T21:00:49.163Z",
-      "titulo": "Push na main · 4fc99e26efa6f5dd623096a5e19fdacfcc885d0b",
-      "detalhe": "Corrigiu Base URL sem /v1",
-      "area": "Repositório",
-      "sha": "4fc99e2",
       "actor": "lovable-dev[bot]"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-14T14:11:56.619Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d551a04bb570ac73d2783ed422c5a7fb1094585d (d551a04)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-14T14:11:23.258Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · dd0381a81383750207b704e71b8da4d4967b633e (dd0381a)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T21:08:24.713Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 7156e7fd80fa2390baa108d1329aab9fedd2524d (7156e7f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T21:00:49.163Z",
-      "ia": "@lovable-dev[bot]",
-      "action": "📌 Push na main · 4fc99e26efa6f5dd623096a5e19fdacfcc885d0b (4fc99e2)",
       "area": "Repositório",
       "status": "sucesso"
     }
