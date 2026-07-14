@@ -107,6 +107,10 @@ export default function SalaControle() {
                 <NoCard key={n.id} no={n} />
               ))}
             </>
+          ) : aba === "grok" ? (
+            <div style={{ overflow: "auto", maxHeight: "100%" }}>
+              <GrokMissoes />
+            </div>
           ) : (
             <div className="sc-panel">
               <h2>{aba}</h2>
