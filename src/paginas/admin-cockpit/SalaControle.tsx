@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./sala-controle.css";
 import { useCockpitLive, type CockpitNo, type NoStatus } from "./hooks/useCockpitLive";
+import GrokMissoes from "@/components/GrokMissoes";
 
 const ABAS = [
   { id: "mapa",  label: "MAPA" },
@@ -12,6 +13,7 @@ const ABAS = [
   { id: "hub",   label: "HUB" },
   { id: "infra", label: "INFRA" },
   { id: "ias",   label: "IAs" },
+  { id: "grok",  label: "GROK" },
   { id: "logs",  label: "LOGS" },
 ] as const;
 type AbaId = typeof ABAS[number]["id"];
