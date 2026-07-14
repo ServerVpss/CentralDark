@@ -15,7 +15,10 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
+// Fonte canônica única (status + grafo.centralldark.com + Obsidian nota)
 const GRAPH   = '/root/CentralDark/apps/modulos/status/graph-data.json';
+// Espelho pro graph-panel (:3030 /api/graph) — sem segundo gerador
+const GRAPH_PANEL_MIRROR = '/root/CentralDark/apps/modulos/graph-panel/data/graph.json';
 const GWLOG   = '/var/log/centralldark/gateway.log';
 const DRY     = process.argv.includes('--dry');
 
@@ -143,7 +146,13 @@ function main() {
 
   const resumo = `${g.nodes.length} nós · ${g.edges.length} arestas · ${online}🟢/${offline}🔴 · ${hits} req/15min`;
   if (DRY) { console.log('[DRY] ' + resumo); console.log(JSON.stringify(g.stats, null, 2)); return; }
-  writeFileSync(GRAPH, JSON.stringify(g, null, 2));
+  const payload = JSON.stringify(g, null, 2);
+  writeFileSync(GRAPH, payload);
+  try {
+    writeFileSync(GRAPH_PANEL_MIRROR, payload);
+  } catch (e) {
+    console.error('[grafo-vivo] ⚠️ espelho graph-panel falhou: ' + String(e.message || e).slice(0, 120));
+  }
   console.log('[grafo-vivo] ✅ ' + resumo);
 }
 
