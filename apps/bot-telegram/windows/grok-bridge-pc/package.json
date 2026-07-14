@@ -1,0 +1,10 @@
+{
+  "name": "grok-bridge-pc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PC Windows worker: puxa /tmp/grok_request da VPS, roda Grok local, devolve response",
+  "main": "worker.js",
+  "scripts": {
+    "start": "node worker.js"
+  }
+}
