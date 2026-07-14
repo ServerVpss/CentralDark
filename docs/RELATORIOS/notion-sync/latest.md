@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-14T10:06:50.050Z
+# 🧠 Notion Sync — 2026-07-14T10:28:28.055Z
 
-- **Commit fonte:** `8b1fadec488cdd77c84ac2c131f1cef70a751c51`
+- **Commit fonte:** `871e542a44af53eac12c2ab25ed750d8b1a46a9b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 359 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 369 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -14,8 +14,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 30 | 0 | 30 | 0 | 0 |
-| aprendizados | 325 | 0 | 324 | 0 | 1 |
+| decisoes | 38 | 0 | 38 | 0 | 0 |
+| aprendizados | 327 | 1 | 326 | 0 | 0 |
 | estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
@@ -127,7 +127,7 @@
 | aprendizados | atualizado | #58 — Codex deve herdar autoajuste consciente |
 | aprendizados | atualizado | #59 — Consultar Mestre Segredo quando houver risco, dúvida ou desvio de padrão |
 | aprendizados | atualizado | #60 — Automação profissional com controle |
-| aprendizados | erro | #61 — Raiz Git real da VPS é /root |
+| aprendizados | atualizado | #61 — Raiz Git real da VPS é /root |
 | aprendizados | atualizado | #62 — GitHub deve ser usado como plataforma profissional viva |
 | aprendizados | atualizado | #63 — Scripts run-once devem usar saída limpa estilo painel |
 | aprendizados | atualizado | #64 — Designar tarefas contínuas para evolução profissional do repositório |
