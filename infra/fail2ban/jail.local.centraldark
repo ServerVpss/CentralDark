@@ -1,5 +1,5 @@
-# CentralDark — fail2ban jail.local (sshd)
-# Atualizado: 2026-07-14 · PERMITO Pivete (harden bantime / recidive)
+# CentralDark — fail2ban jail.local (sshd + notify Telegram)
+# Atualizado: 2026-07-14 · PERMITO Pivete (harden + alerta invasores)
 # Cópia oficial no repo; na VPS: /etc/fail2ban/jail.local
 # NÃO desliga PasswordAuthentication (outro PERMITO).
 
@@ -19,6 +19,10 @@ bantime.factor = 2
 bantime.maxtime = 5w
 bantime.overalljails = true
 
+# Ban iptables + Telegram (segurança → Guardião / fallback)
+action = %(action_)s
+         telegram-centraldark
+
 [sshd]
 enabled  = true
 port     = ssh
@@ -36,3 +40,5 @@ banaction = %(banaction_allports)s
 bantime  = 604800
 findtime = 86400
 maxretry = 3
+action = %(banaction_allports)s[name=%(__name__)s]
+         telegram-centraldark
