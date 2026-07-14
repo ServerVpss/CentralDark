@@ -602,19 +602,50 @@ ${cogLine}${termLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs 
       [
         { text: '🛠️ Ferramentas',  callback_data: 'hub:tools' },
         { text: '🧬 Cognição',     callback_data: 'hub:cog' },
+        { text: '⚔️ Arsenal',      callback_data: 'hub:council' },
       ],
       [
+        { text: '📡 Status',       callback_data: 'hub:status' },
+        { text: '📋 Issues',       callback_data: 'hub:issues' },
         { text: '📊 Relatório',    callback_data: 'hub:relatorio' },
+      ],
+      [
+        { text: '⚡ Skills',       callback_data: 'hub:skills' },
         { text: '⚙️ Config',       callback_data: 'hub:config' },
+        { text: '❓ Help',         callback_data: 'hub:help' },
       ],
       [
         termBtn,
-      ],
-      [
         { text: '🧹 Limpar Hist.', callback_data: 'hub:clear' },
       ],
     ],
   };
+}
+
+function buildCouncilText() {
+  return `<pre>┌────────────────────────────────┐
+│  ⚔️  ARSENAL COUNCIL           │
+└────────────────────────────────┘
+
+  /refinar &lt;tema&gt;   — parallel
+  /debate  &lt;tema&gt;   — debate
+  /router  &lt;pergunta&gt; — roteia
+  /router status|trocar|testar
+
+  Digite o comando com o tema.
+  Ou abra o card de skills.</pre>`;
+}
+
+function buildHelpAdminText() {
+  return (
+    '❓ <b>Hub ADM @srver1bot</b>\n\n' +
+    '<b>Painel:</b> /hub /menu /start /painel\n' +
+    '<b>Ops:</b> /status /issues /ferramentas /cognicao /relatorio /limpar /agente\n' +
+    '<b>Council:</b> /refinar /debate /router /parallel\n' +
+    '<b>Skills:</b> /skills /arsenal /mode /use /memory\n' +
+    '<b>Terminal:</b> /terminal on|off\n\n' +
+    '💬 Texto livre → agente LLM ativo'
+  );
 }
 
 // ── Status VPS (endpoints internos) ───────────────────────────────────────
@@ -1043,13 +1074,7 @@ async function handleAdminCommand(chatId, text) {
     case '/arsenal':
       return send(chatId, ARSENAL_TEXT);
     case '/help':
-      return send(chatId,
-        '❓ <b>Hub ADM:</b>\n' +
-        '/hub /status /issues /limpar /agente\n' +
-        '/ferramentas /cognicao /relatorio\n\n' +
-        '<b>Skills:</b> /skills /arsenal /mode /use /memory\n\n' +
-        '💬 Texto livre → agente LLM ativo'
-      );
+      return send(chatId, buildHelpAdminText(), [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
     default: return null;
   }
 }
@@ -1274,6 +1299,29 @@ async function handleCallback(cq) {
     // ── Relatório Geral
     if (data === 'hub:relatorio') {
       return getRelatorioGeral(chatId);
+    }
+
+    // ── Arsenal Council (menu)
+    if (data === 'hub:council') {
+      return edit(chatId, msgId, buildCouncilText(), [
+        [{ text: '🤖 Card Arsenal', callback_data: 'hub:arsenal' }],
+        [{ text: '⚡ Listar Skills', callback_data: 'hub:skills' }],
+        [{ text: '🔙 Painel', callback_data: 'hub:main' }],
+      ]);
+    }
+    if (data === 'hub:arsenal') {
+      return edit(chatId, msgId, ARSENAL_TEXT, [[{ text: '🔙 Arsenal', callback_data: 'hub:council' }, { text: '🏠 Painel', callback_data: 'hub:main' }]]);
+    }
+    if (data === 'hub:skills') {
+      if (!skillsOk) {
+        return edit(chatId, msgId, '⚠️ Skills indisponível.', [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
+      }
+      const all = manager.listAll();
+      const body = `⚡ <b>Skills (${all.length})</b>\n\n${all.map(s => `${s.active ? '✅' : '⬜'} <code>${s.slug}</code>`).join('\n')}\n\n/use nome`;
+      return edit(chatId, msgId, body, [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
+    }
+    if (data === 'hub:help') {
+      return edit(chatId, msgId, buildHelpAdminText(), [[{ text: '🔙 Painel', callback_data: 'hub:main' }]]);
     }
 
     // ── Panel skills / mode callbacks
