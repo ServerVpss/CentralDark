@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
   padding: 10px 14px;
   border: 1px solid var(--sc-line, #10b98133);
   border-radius: 6px;
@@ -186,6 +187,30 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
+}
+.gk-quest-actions .gk-btn {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gk-btn-conclude {
+  grid-column: 1 / -1;
+  background: linear-gradient(90deg, #059669, #10b981);
+  border-color: var(--sc-em, #10b981);
+  color: #041a18;
+  font-weight: 700;
+}
+.gk-btn-conclude:hover {
+  background: linear-gradient(90deg, #10b981, #34d399);
+  color: #041a18;
+}
+@media (max-width: 520px) {
+  .gk-quest-actions { grid-template-columns: 1fr; }
 }
 
 /* Concluídas */
