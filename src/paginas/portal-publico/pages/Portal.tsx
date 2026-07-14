@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { LogOut, Sparkles, Loader2 } from "lucide-react";
+import { LogOut, Sparkles, Loader2, ShieldCheck } from "lucide-react";
 import { useAuthContext } from "@/compartilhado/auth/AuthProvider";
+import { useIsAdmin } from "@/compartilhado/comportamentos/useIsAdmin";
 import { useModulosPortal } from "@/paginas/centraldark-admin/hooks/useModulosPortal";
 import { resolverIcone } from "@/paginas/centraldark-admin/lib/icones-modulos";
 
@@ -9,6 +10,7 @@ export default function Portal() {
   const { signOut, user } = useAuthContext();
   const navigate = useNavigate();
   const { modulos, loading } = useModulosPortal();
+  const { isAdmin } = useIsAdmin();
 
   const handleSignOut = async () => {
     await signOut();
