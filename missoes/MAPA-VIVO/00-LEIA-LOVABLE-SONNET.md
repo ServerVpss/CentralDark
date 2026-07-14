@@ -119,7 +119,8 @@ Guardião no mesmo canal por enquanto = **ok**, desde que não vire sirene.
 |------|------|------|
 | 2026-07-14 | Grok | Criou MAPA-VIVO; TEMP MCP público fechado; fail2ban harden; issues #204 #205 |
 | 2026-07-14 | Pivete | Quer Lovable no admin quando Grok deixar mapa; bot notify novo; hub central depois |
-| — | Lovable | *(preencher)* |
+| 2026-07-14 | Grok | **Trilha A+B parcial:** `infra.html` + `infra-vivo.json` + watch movimento (sem loop tele). Inventário notifiers em docs/RELATORIOS. PERMITO missão visão+tele. |
+| — | Lovable | *(preencher)* — pode começar trilha D admin UI |
 
 ---
 

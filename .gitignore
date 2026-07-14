@@ -105,3 +105,6 @@ contas/
 # Lab de experimentos visuais — não versionar
 public/lab-jarvis/
 
+
+# infra vivo motion state (local)
+apps/modulos/status/.infra-vivo-prev.json
