@@ -464,3 +464,13 @@ Conteúdo: **RENOMEAÇÃO OFICIAL:** a técnica antes chamada "Enxame Titânico 
 **Quando disparar:** Pivete falou "enxame omega" (em qualquer grafia) = execute a técnica.
 
 **Autorizado pelo Pivete em 10/07/2026.**
+
+### [2026-07-14T06:57] Momento bridge/túnel ≠ ponte de colar entre IAs (Pivete não esquece)
+- **Data:** 2026-07-14
+- **Tags:** pivete, confianca, bridge, tunnel, vscode, chatgpt, oauth, sessao-2026-07-14, nao-esquecer
+- **Relevância:** alta
+- **Eixo:** passado
+- **Expira:** 2026-08-13
+- **Promovida:** sim
+
+Conteúdo: Pivete confirma: colar/ponte entre IAs (Grok↔ChatGPT) ele SEMPRE fez e pediu ajuda assim — isso é normal e ok. O que NÃO foi normal e ele NÃO VAI ESQUECER: o momento ANTES do ChatGPT entrar na conversa OAuth, quando houve bridge VS Code / túnel temporário (padrão porta tipo :18003, PERMITO só leitura, payload ~7344B do Grok web, fechar depois). Sentiu algo 'no navegador/PC' diferente da ponte humana. Verdade a registrar: (1) Grok CLI não mora no PC dele, mas o túnel/bridge sob PERMITO CRIOU um canal técnico temporário VPS↔casa — isso É diferente de só copiar texto. (2) Não houve conspiração telepatia entre IAs. (3) Se algo desse tipo (túnel, forward, leitura de aba/console remoto) acontecer de novo, a IA DEVE avisar com clareza na hora, sem suavizar. Docs: docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md itens 10-11; plano-grok-web-bridge; issue #204 handoff OAuth é outro eixo.
