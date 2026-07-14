@@ -31,6 +31,33 @@
 
 ---
 
+## 2026-07-14 14:30 BRT — Revisão do commit anterior (endurecimento controller + migração)
+
+- **Fio da missão:** "PERMITO PIVETE" — revisar o commit `7b6a4321f045b3036919a0ef1ebc3e3789ec95e1`, sem deploy, sem executar migração real, sem fechar issue/PR e sem tocar em secrets.
+- **Escopo:** infra (workflows) + docs.
+- **Área tocada:**
+  - `.github/workflows/github-bot-controller.yml`
+  - `.github/workflows/bots-labels-seed.yml`
+  - `scripts/github-bot-controller.mjs`
+  - `docs/BOTS/README.md`, `docs/BOTS/TIME-DE-BOTS.md`
+  - `docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md`
+  - `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`
+- **O que mudou:**
+  - Verdade documental: todas as frases que davam a migração como "executada/removida" viraram "preparada, execução pendente do `workflow_dispatch`".
+  - Controller workflow: checkout fixa `ref: default_branch`, `persist-credentials: false`, `clean: true` (self-hosted não executa código de PR); relatório persiste via `actions/upload-artifact@v4` (`if: always()`, nome único por `run_id`/`run_attempt`, retention 7 dias, `if-no-files-found: warn`); script escreve resumo em `GITHUB_STEP_SUMMARY` quando disponível.
+  - Fechamento manual mais forte: agora exige linha explícita `Supersedes: #N #N …` no corpo do PR mergeado (case-insensitive); `BOT_SUPERSEDES` precisa ser subconjunto dela; preflight valida existência/estado/base de todos os alvos e a existência da label `superseded`. Qualquer falha aborta o lote inteiro sem escrita. Auditoria pagina PRs abertos (sem corte em 100). Removida a alegação de "rate-limit ciente".
+  - Migração de labels: dispatch-only mantido; `failedMig` agora tem efeito — o job falha o workflow no final se algum item ou deleção falhar, sem apagar alias que ainda tenha uso.
+- **Supabase / backend:** —
+- **Depende da VPS / equipe GitHub?:** sim — Pivete ainda precisa disparar o workflow manualmente (dry-run → aplicar).
+- **Como testar (leigo):** Actions → "Bots — seed de labels oficiais" → Run workflow com `dry_run=true, run_migration=true` → ler log/summary. Depois `dry_run=false`. Actions → "GitHub Bot Controller" (dispatch sem inputs) gera relatório baixável (artifact) e resumo no summary.
+- **Evidência:** `node --check scripts/github-bot-controller.mjs` OK; YAMLs validados com `yq`; busca no repo confirma que nenhum canônico contém alias legado e que nenhuma doc afirma migração já executada.
+- **Pendências deixadas:** dispatch manual da migração ainda não rodado.
+- **Próximo passo:** Pivete disparar o workflow em dry-run, revisar summary/artefato, depois aplicar.
+- **Commit:** `[LOVABLE][infra] Revisar controller e migração — verdade documental + preflight forte` — este commit (SHA informado no chat/PR).
+- **Branch:** `pivete/dev`.
+
+---
+
 ## 2026-07-14 12:00 BRT — Consolidação de labels + fix github-bot-controller
 
 - **Fio da missão:** "PERMITO PIVETE" — corrigir duplicidade alias/canônico no seed de labels e o workflow quebrado do controller, sem fechar issue/PR e sem tocar em produção.
@@ -39,12 +66,12 @@
   - `.github/workflows/bots-labels-seed.yml` (reescrito: 2 jobs — seed canônicos + migrate opcional)
   - `.github/workflows/github-bot-controller.yml` (path corrigido; DRY_RUN default true)
   - `scripts/github-bot-controller.mjs` (novo, seguro e reversível)
-  - `docs/BOTS/README.md`, `docs/BOTS/TIME-DE-BOTS.md` (nota de aliases migrados)
+  - `docs/BOTS/README.md`, `docs/BOTS/TIME-DE-BOTS.md` (nota de migração de aliases **preparada**, execução pendente)
   - `docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md` (seção "Duas camadas")
   - `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` (registro da decisão)
 - **O que mudou:**
   - Seed passa a criar/atualizar somente canônicos (roteamento `assign:*` + camada humana emoji/PT-BR). Aliases legados (`assign:faxineiro`, `:auditor`, `:seguranca`, `:vps-health`) saem do seed.
-  - Novo job `migrate` (dispatch-only, `dry_run`+`run_migration`) troca alias→canônico em issues/PRs abertos e fechados e só deleta a label alias quando a contagem restante é 0. Nunca fecha issue/PR.
+  - Novo job `migrate` (dispatch-only, `dry_run`+`run_migration`) troca alias→canônico em issues/PRs abertos e fechados e só deleta a label alias quando a contagem restante é 0. Nunca fecha issue/PR. **Migração preparada, ainda não executada.**
   - `github-bot-controller` corrigido pra `scripts/github-bot-controller.mjs`. Modo agenda/PR-closed = auditoria (relatório em `docs/RELATORIOS/github-bot-controller/`). Modo dispatch só fecha PR substituído quando merged_pr está mergeado, cada superseded está aberto e é referenciado explicitamente (`#<n>`) no merged.
 - **Supabase / backend:** —
 - **Depende da VPS / equipe GitHub?:** sim — Pivete precisa rodar manualmente o workflow "Bots — seed de labels oficiais" primeiro com `dry_run=true, run_migration=true`, revisar o log, depois com `dry_run=false, run_migration=true`.
@@ -52,7 +79,7 @@
 - **Evidência:** `node --check` OK; YAML validado com `yq eval`.
 - **Pendências deixadas:** dispatch manual da migração ainda não foi rodado (aguarda Pivete).
 - **Próximo passo:** Pivete dispara o workflow em dry-run, valida, depois aplica.
-- **Commit:** `[LOVABLE][infra] Consolidar labels e corrigir github-bot-controller` — este commit (SHA informado no chat/PR).
+- **Commit:** `[LOVABLE][infra] Consolidar labels e corrigir github-bot-controller` — SHA `7b6a4321f045b3036919a0ef1ebc3e3789ec95e1`.
 - **Branch:** `pivete/dev`.
 
 
