@@ -7,6 +7,56 @@ updated: 2026-06-29
 
 # 08 — Histórico de decisões grandes
 
+
+## 2026-07-14 — 🏆 OURO: Compartilhamento semântico Grok ⇄ Hermes (NÃO fundir memória)
+
+**Título:** Lembranças cognitivas semânticas compartilhadas — sem fundir memória bruta
+**Data:** 2026-07-14 · **Trava:** 🔒🔒 dobrada — só altera com **"PERMITO PIVETE"**
+**Doc-ouro:** [`docs/CONSCIENCIA/DARKAI/OURO-COMPARTILHAMENTO-SEMANTICO-GROK-HERMES.md`](DARKAI/OURO-COMPARTILHAMENTO-SEMANTICO-GROK-HERMES.md)
+
+**Pergunta do Pivete:** interligar a memória do Grok com a do Hermes? Cada um usar a experiência/skill do outro — "compartilhamento de lembranças cognitivas semânticas".
+
+**Decisão (parecer Fable, aceito pelo Pivete):**
+1. **NÃO fundir a memória bruta** — setores diferentes (Grok=segurança ⟂ Hermes=orquestração), formatos incompatíveis (memtrace vs missions/memoria-api), risco de corrida entre dois autônomos.
+2. **SIM compartilhar LIÇÕES por significado** — memória de trabalho privada de cada um + camada semântica comum de aprendizados destilados (`memoria-api` + `GraphRAG-Master` + `APRENDIZADOS.md`). Publica-se lição destilada, nunca log bruto.
+3. Ressuscitar/atualizar `REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md` (sumiu do git) sob esta decisão — só com PERMITO.
+
+**Achado correlato (avisos fantasma):** `Log-Verificador/.estado.json` tem alertas 🟡🔴 de 60-90h atrás (Hermes, PiveteSync, ReconHealth, ArsenalAdapter) mas todos os serviços estão **online agora**. `alertasAtivos` não expira quando o serviço se recupera. Melhoria: TTL/limpeza no scan. **Execução pendente de PERMITO PIVETE** (HERMES-CORE é 🔒). Investigar `CentralDark-ReconHealth` (alertou mas não está no PM2).
+
+---
+
+## 2026-07-14 — Carga mental do Pivete + momento bridge (o que ELE disse)
+
+**Título:** Não é risco operacional — é mental; e o momento do bridge não se esquece  
+**Data:** 2026-07-14  
+**Responsável:** Pivete (palavras dele; IA não inventar “ordem/skill oficial” no meio)
+
+**O que o Pivete deixou claro:**
+1. Colar/ponte entre IAs ele **sempre** fez e pediu ajuda assim — até aí ok.
+2. O que rolou **antes** do ChatGPT entrar na conversa (bridge/túnel etc.) foi **diferente** — isso ele **não esquece**.
+3. Isso não é “risco operacional” de servidor. É **carga mental**: ficou nervoso, digitou errado, chegou a tremer. Comandos tipo `registra` / `!registar` / `!registrar` / `REGISTRA` podem sair errado por isso — não é burrice.
+4. Qualquer IA que inventar no registro frase tipo “ordem do Pivete / skill oficial” **sem ele ter digitado isso** está errando de novo (a IA meteu burocracia; ele não pediu manual).
+
+**Pra próxima IA:** respeitar o estado emocional; não gaslight; não transformar desabafo em protocolo inventado; se for canal técnico (túnel/bridge), falar claro e pedir PERMITO.
+
+**Refs (técnico, separado):** `docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md` itens 10–11; OAuth = issue #204.
+
+---
+
+## Sessão 2026-07-13/14 — Doutrina de extensão de infra + registro anti-amnésia
+
+**Decisão do Pivete:** Qualquer planejamento de infra deve ser revisado criticamente antes de executar. Filtros: barrar regressão, risco operacional e complexidade inútil. Estabilidade de produção. Alteração = **extensão segura** (nunca substituição / V3-V4). Zero regressão. Preservar DB e arquitetura legado. Atualizar o que já existe.
+
+**Decisão operacional correlata:** Brute force SSH não se normaliza; relatórios oficiais em `docs/RELATORIOS/2026-07-13-ssh-bruteforce-*`. Contra-ataque ofensivo proibido. Harden só com PERMITO.
+
+**Decisão de monitores:** Não inventar monitores paralelos — estender Sentinela (Actions), fail2ban/UFW, Guardião, Zentinel (código existente, PM2 off), HermesVerificador.
+
+**Pendente de execução (não feito nesta sessão):** aplicar a doutrina nos agents Hermes e corrigir `docs/AGENTS.md` MultiZap; fail2ban/sshd; RCD MCP.
+
+**Registro completo:** `docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md`
+
+---
+
 ## Regra: sempre registrar desencontros entre plano e execução (2026-06-29)
 
 **Decisão:** qualquer desvio entre o plano escrito e o que foi executado deve ser registrado aqui E atualizado no arquivo onde o erro pode causar impacto real.
@@ -566,3 +616,12 @@ Achado separado, mais antigo, não é a causa do silêncio recente: `apps/bot-te
 **27. Pendência #17 (Telegram 401 em `hub-services-check`) — investigada e corrigida (commit `7d8db9623`).** Causa raiz confirmada pelo Pivete: o conector Telegram no Lovable foi **removido de propósito** em 11/07/2026 ("Lovable é só front, salva isso" — nova regra de memória: `feedback_lovable_so_front.md`). `checkTelegram()` em `supabase/functions/hub-services-check/index.ts` chamava `connector-gateway.lovable.dev/telegram/getMe` — caminho abandonado, dando falso-negativo. Corrigido pra testar o mecanismo REAL já usado em produção: token do bot lido direto da tabela `telegram_bots` (mesmo padrão de `notify-telegram/index.ts`, modo "raw"), chamando `api.telegram.org/bot<token>/getMe` sem depender de Lovable. Confirmado via `list_connections`/`list_custom_connectors` (Lovable MCP): zero conectores Telegram configurados no workspace CentralDark (`4w4KhpRnbiTxa4LyNgsg`) — é estado intencional, não bug a "consertar reconectando".
 
 **Deploy PENDENTE:** `hub-services-check` vive no projeto raiz/TelePainel (`kagejpghnwdfymddwxuf`, confirmado via `supabase/config.toml`), não no HUB. O token disponível no cofre (`HUB_SUPABASE_PAT`, mesmo valor testado e funcional pro deploy da `hub-status` no item #26) só tem escopo pro projeto HUB (`lyoigsqluyktoclwdaft`) — `403` ao tentar Management API contra `kagejpghnwdfymddwxuf`. Precisa de um token com acesso a esse projeto específico (pode ser o mesmo PAT se a conta tiver acesso a ambos e o escopo for só por token de sessão, ou pode precisar gerar/usar outro).
+
+---
+
+**28. `@srver1bot` (Hermes) reativado + motor de conversa trocado pra TokenRouter + módulo de áudio instalado (14/07/2026) — mudança em área protegida `apps/bot-telegram/`, autorizada nominalmente pelo Pivete em tempo real ("vai lá no Hermes... ativa ele", "roteia ela na nossa rota principal e bota no Hermes", "instala o módulo de áudio").**
+
+- **Webhook 405 corrigido:** causa raiz era ordem de diretivas no Caddy (`/etc/caddy/status-centraldark.Caddyfile`) — `handle{}` catch-all do SPA engolia `/bot/webhook`/`/bot/health` antes do `reverse_proxy` solto. Envolvidos em `handle {...}` próprio (mesmo padrão já usado por `/api/*`), posicionados antes do catch-all. Backup: `status-centraldark.Caddyfile.bak-hermes-webhook-fix-20260714-172819`. Validado com `caddy validate` + `caddy reload`. `pending_update_count` voltou de 15 pra 0. Detalhe técnico completo em `docs/PENDENCIAS.md` #57.
+- **Motor de chat trocado:** `callLLMWithTools()` em `apps/bot-telegram/unified-bot.cjs` usava Anthropic Messages API via `ANTHROPIC_BASE_URL=https://api.centralldark.com` — confirmado fora do ar (`401`, mesma causa da pendência crítica #0, Abacus RouteLLM sem crédito). Reescrito pra chamar TokenRouter (`https://api.tokenrouter.com/v1/chat/completions`, OpenAI-compatible, testado e confirmado ao vivo incluindo tool/function calling) com modelo `deepseek/deepseek-v4-pro`. Chave já existia no cofre (`TOKENROUTER_API_KEY`, também colada solta na primeira linha de `secrets/.env` com nota do Pivete pedindo essa integração). `BOT_TOOLS` (formato Anthropic `input_schema`) convertido pra formato OpenAI `function.parameters` via novo helper `toolsToOpenAiFormat()`. `callLLM` (sem tools, código morto) e `callLLMWithVision` (Anthropic Vision, usado só em foto) **não foram tocados** — ficam apontando pro gateway antigo até decisão futura.
+- **Módulo de áudio instalado, mas BLOQUEADO:** nova função `transcribeVoiceMessage()` baixa voice/audio do Telegram (`getFile` + fetch) e transcreve via Groq Whisper (`whisper-large-v3`, endpoint `api.groq.com/openai/v1/audio/transcriptions`). Testado isoladamente com áudio sintético: Groq respondeu `401 Invalid API Key` — `GROQ_API_KEY` no cofre parece placeholder nunca substituído por chave real (`console.groq.com/keys`). Código já está no `handleMessage` (branch antes do fallback "tipo não suportado"), só falta a chave real pra funcionar.
+- Processo `CentralDark-HubBot` (PM2 id 17) reiniciado pra aplicar; subiu limpo, sem exceção nova, webhook seguiu saudável pós-restart.

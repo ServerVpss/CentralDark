@@ -16,7 +16,7 @@
 const fs   = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { execSync } = require('child_process');
+const { execSync, execFile, spawn } = require('child_process');
 
 function loadEnv(p) {
   try {
@@ -88,7 +88,25 @@ const BRAIN_PROMPTS = {
     'Você é o parceiro de PLANO do Pivete no @Guardiaonotify_bot. ' +
     'Modo: bolar plano junto. PT-BR, calmo. Estrutura simples: 1) objetivo 2) passos curtos 3) risco 4) próximo passo. ' +
     'Sem wall of text. Segurança e ops CentralDark. Pergunte 1 coisa se faltar contexto.',
+  claudecode:
+    'Você é o Claude Code no @Guardiaonotify_bot — terminal real da VPS CentralDark. ' +
+    'PT-BR, curto. Executa, analisa código e roda comando de verdade.',
 };
+
+// Claude Code CLI (terminal real na VPS) — as "duas funções" do canal Claude
+const CLAUDE_BIN = process.env.CLAUDE_BIN || '/usr/bin/claude';
+const CLAUDE_CWD = process.env.CLAUDE_CODE_CWD || '/root/CentralDark';
+const CLAUDE_TIMEOUT = Number(process.env.CLAUDE_CODE_TIMEOUT_MS || 170000);
+
+// Grok CLI — login/logout da Plataforma X via device-code (OAuth oficial, seguro)
+const GROK_BIN = process.env.GROK_BIN || '/root/.grok/bin/grok';
+const GROK_AUTH_FILE = process.env.GROK_AUTH_FILE || '/root/.grok/auth.json';
+
+// 🎙️ Módulo de áudio (opcional, liga/desliga). Transcrição precisa de key STT.
+// Configurar em secrets/.env: AUDIO_STT_URL (OpenAI-compat /audio/transcriptions) + AUDIO_STT_KEY + AUDIO_STT_MODEL
+const AUDIO_STT_URL = process.env.AUDIO_STT_URL || '';
+const AUDIO_STT_KEY = process.env.AUDIO_STT_KEY || process.env.TOKENROUTER_API_KEY || '';
+const AUDIO_STT_MODEL = process.env.AUDIO_STT_MODEL || 'whisper-1';
 
 const ALLOW_PATH = '/root/CentralDark/secrets/guardiao-allowlist.json';
 const AUTH_PATH  = '/root/CentralDark/secrets/guardiao-auth-session.json';
@@ -116,6 +134,7 @@ function getSess(chatId) {
     sessions.set(chatId, {
       talk: false,
       await: null,
+      audio: false, // 🎙️ módulo de áudio (liga/desliga)
       // default Grok — Pivete quer falar com Grok no Telegram
       brain: 'grok',
       hist: { grok: [], claude: [], plano: [] },
@@ -193,6 +212,62 @@ function esc(s) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+/** Quebra texto em linhas de no máx `width` chars (respeita palavras) — sem scroll no cel. */
+function wrapText(str, width) {
+  const out = [];
+  for (const rawLine of String(str).split('\n')) {
+    const line = rawLine.replace(/\s+$/, '');
+    if (line.length <= width) { out.push(line); continue; }
+    let cur = '';
+    for (const word of line.split(/\s+/)) {
+      if (word.length > width) {
+        if (cur) { out.push(cur); cur = ''; }
+        for (let i = 0; i < word.length; i += width) out.push(word.slice(i, i + width));
+        continue;
+      }
+      if ((cur + (cur ? ' ' : '') + word).length > width) { out.push(cur); cur = word; }
+      else cur = cur ? cur + ' ' + word : word;
+    }
+    if (cur) out.push(cur);
+  }
+  return out.join('\n');
+}
+
+/**
+ * Card de CONVERSA monoespaçado (padrão Hermes: tudo dentro de UM <pre>).
+ * Usado pras respostas de Grok/Claude/Plano ficarem dentro do bloco.
+ */
+function conversaCard(brain, reply) {
+  // tira a assinatura solta do bridge (fica redundante com o rodapé do card)
+  const clean = String(reply || '')
+    .replace(/\n*—\s*(🟣\s*)?via [^\n]*$/i, '')
+    .replace(/\s*\(fallback\)\s*$/i, '')
+    .trim()
+    .slice(0, 3400);
+  const head =
+    brain === 'grok' ? '🟣  GROK · TERMINAL' :
+    brain === 'claudecode' ? '🖥️  CLAUDE CODE · CLI' :
+    brain === 'claude' ? '🟠  CLAUDE · CHAT' :
+    '📝  PLANO';
+  const rodape =
+    brain === 'grok' ? '🧠 memória viva ✔' :
+    brain === 'claudecode' ? '🖥️ terminal VPS ✔' :
+    brain === 'claude' ? '💬 canal Claude' :
+    '💬 canal Plano';
+  const hora = new Date().toLocaleTimeString('pt-BR', {
+    timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit',
+  });
+  const body = esc(wrapText(clean, 34));
+  return `<pre>╔══════════════════════════════════╗
+║  ${head}
+╚══════════════════════════════════╝
+
+${body}
+
+──────────────────────────────────
+${rodape}   ⏱ ${hora}</pre>`;
 }
 
 async function send(chatId, text, buttons, opts = {}) {
@@ -309,15 +384,49 @@ function bridgeOnline() {
 }
 
 function brainLabel(b) {
-  if (b === 'grok') return '🟣 Grok · PC 24/7 (arquivo /tmp) — bot só mensageiro';
-  if (b === 'claude') return '🟠 Claude · ap7 (outro canal/key)';
+  if (b === 'grok') return '🟣 Grok · terminal real da VPS (segurança)';
+  if (b === 'claudecode') return '🖥️ Claude Code · CLI real na VPS (executa/analisa)';
+  if (b === 'claude') return '💬 Claude · ap7 (conversa/pergunta)';
   return '📝 Plano · ap7 (outro canal)';
 }
 
 function channelBanner(b) {
-  if (b === 'grok') return 'Canal 🟣 GROK — VPS escreve request, PC processa, VPS devolve. Claude não entra.';
-  if (b === 'claude') return 'Canal 🟠 CLAUDE (ap7) — Grok não entra.';
+  if (b === 'grok') return 'Canal 🟣 GROK — terminal real, executa comando na VPS.';
+  if (b === 'claudecode') return 'Canal 🖥️ CLAUDE CODE — CLI real, executa/analisa de verdade na VPS.';
+  if (b === 'claude') return 'Canal 💬 CLAUDE (ap7) — conversa/pergunta rápida.';
   return 'Canal 📝 PLANO — separado.';
+}
+
+function buildClaudeMenu(chatId) {
+  const s = getSess(chatId);
+  const b = s.brain;
+  return {
+    text:
+`<pre>╔══════════════════════════════════╗
+║  🤖  CLAUDE CODE · vocês na VPS  ║
+╚══════════════════════════════════╝
+
+  Precisou de nós? Escolhe a função:
+
+  💬 Chat   → conversa / pergunta
+              rápida (ap7)
+  🖥️ Code   → Claude Code CLI real:
+              executa, analisa código,
+              roda comando na VPS
+
+  Canal atual: ${b === 'claudecode' ? '🖥️ Code' : b === 'claude' ? '💬 Chat' : '(outro)'}
+  ${s.talk ? '🟢 conversa ON' : '🔴 conversa OFF — liga abaixo'}</pre>`,
+    buttons: [
+      [
+        { text: (b === 'claude' ? '✅ ' : '') + '💬 Claude Chat', callback_data: 'sec:brain:claude' },
+        { text: (b === 'claudecode' ? '✅ ' : '') + '🖥️ Claude Code', callback_data: 'sec:brain:claudecode' },
+      ],
+      [s.talk
+        ? { text: '🔴 DESLIGAR conversa', callback_data: 'sec:talk:off' }
+        : { text: '🟢 LIGAR conversa', callback_data: 'sec:talk:on' }],
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ],
+  };
 }
 
 /** Protocolo Grok via PC: request/response em /tmp (não chama API na VPS). */
@@ -431,6 +540,117 @@ async function askTerminalGrok(chatId, text, timeoutMs = 120000) {
   return null;
 }
 
+// ─────────────────────────────────────────────────────────────────────
+// 🔐 PLATAFORMA X / GROK — login (device-code OAuth) e logout por botão
+// ─────────────────────────────────────────────────────────────────────
+let xLoginProc = null; // processo de login pendente (aguardando o Pivete autenticar)
+
+function xIsLogged() {
+  try {
+    const a = JSON.parse(fs.readFileSync(GROK_AUTH_FILE, 'utf8'));
+    return Object.keys(a || {}).some((k) => /x\.ai/i.test(k));
+  } catch { return false; }
+}
+
+/**
+ * Inicia login device-code. Captura URL+código do output e manda pro Pivete;
+ * deixa o processo vivo até ele autenticar (ou timeout). Não bloqueia o bot.
+ */
+function startXLogin(chatId) {
+  if (xLoginProc) { try { xLoginProc.kill(); } catch {} xLoginProc = null; }
+  const child = spawn(GROK_BIN, ['login', '--device-auth'], { env: process.env });
+  xLoginProc = child;
+  let buf = '';
+  let sent = false;
+  const softTimer = setTimeout(() => {
+    if (!sent) {
+      sent = true;
+      send(chatId, cardX('AGUARDE', buf || 'Login iniciando… se travar, tente de novo.'), [
+        [{ text: '🔁 Tentar de novo', callback_data: 'sec:xlogin' }],
+        [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+      ]);
+    }
+  }, 9000);
+  const onData = (d) => {
+    buf += d.toString();
+    const url = buf.match(/https?:\/\/\S+/);
+    const code = buf.match(/\b[A-Z0-9]{4}[-\s]?[A-Z0-9]{4}\b/);
+    if (url && !sent) {
+      sent = true;
+      clearTimeout(softTimer);
+      const linhas =
+        `Abra o link e autorize na X (site oficial):\n\n` +
+        `🔗 ${url[0]}\n` +
+        (code ? `\n🔑 Código: ${code[0]}\n` : '') +
+        `\nDepois de autorizar, eu te aviso aqui. ✅`;
+      send(chatId, cardX('LOGIN X', linhas), [
+        [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+      ]);
+    }
+  };
+  child.stdout.on('data', onData);
+  child.stderr.on('data', onData);
+  child.on('exit', (code) => {
+    clearTimeout(softTimer);
+    if (xLoginProc === child) xLoginProc = null;
+    if (code === 0 && xIsLogged()) {
+      send(chatId, cardX('✅ LOGADO', 'Conta X/Grok conectada! O terminal 🟣 Grok já usa esse acesso.'), [
+        [{ text: '🟣 Falar com Grok', callback_data: 'sec:brain:grok' }],
+        [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+      ]);
+    }
+  });
+  child.on('error', (e) => {
+    clearTimeout(softTimer);
+    if (xLoginProc === child) xLoginProc = null;
+    if (!sent) send(chatId, cardX('❌ ERRO', 'Não consegui iniciar o login: ' + String(e.message).slice(0, 120)));
+  });
+  // hard timeout 5 min — não deixa processo pendurado
+  setTimeout(() => { try { child.kill(); } catch {} if (xLoginProc === child) xLoginProc = null; }, 300000);
+}
+
+function doXLogout() {
+  try {
+    const out = execSafe(`${GROK_BIN} logout 2>&1`);
+    return out || 'ok';
+  } catch (e) { return String(e.message || e); }
+}
+
+function cardX(status, body) {
+  return `<pre>╔══════════════════════════════════╗
+║  🔐  PLATAFORMA X / GROK         ║
+╚══════════════════════════════════╝
+
+  ${status}
+
+${esc(wrapText(String(body), 34))}</pre>`;
+}
+
+function buildXMenu() {
+  const logged = xIsLogged();
+  return {
+    text:
+`<pre>╔══════════════════════════════════╗
+║  🔐  PLATAFORMA X / GROK         ║
+╚══════════════════════════════════╝
+
+  Estado: ${logged ? '🟢 CONECTADO' : '🔴 desconectado'}
+
+  🔐 Entrar → abre login oficial da X
+             (device-code, seguro)
+  🚪 Sair   → desconecta a conta
+
+  O terminal 🟣 Grok usa esse acesso.</pre>`,
+    buttons: [
+      [
+        { text: logged ? '♻️ Reconectar X' : '🔐 Entrar na X/Grok', callback_data: 'sec:xlogin' },
+        { text: '🚪 Sair (logout)', callback_data: 'sec:xlogout' },
+      ],
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ],
+  };
+}
+
 function buildMenu(chatId) {
   const s = getSess(chatId);
   const auth = loadJson(AUTH_PATH, { ok: false });
@@ -459,9 +679,17 @@ function buildMenu(chatId) {
     buttons: [
       [talkBtn],
       [
+        { text: '🛡️ Central Segurança', callback_data: 'sec:central' },
+        { text: '🧰 Skills', callback_data: 'sec:skills' },
+      ],
+      [
+        { text: (xIsLogged() ? '🟢 ' : '') + '🔐 X/Grok login', callback_data: 'sec:xmenu' },
+        { text: (s.audio ? '🎙️ Áudio ON' : '🔇 Áudio OFF'), callback_data: s.audio ? 'sec:audio:off' : 'sec:audio:on' },
+      ],
+      [
         { text: (b === 'plano' ? '✅ ' : '') + '📝 Plano', callback_data: 'sec:brain:plano' },
-        { text: (b === 'grok' ? '✅ ' : '') + '🟣 Grok', callback_data: 'sec:brain:grok' },
-        { text: (b === 'claude' ? '✅ ' : '') + '🟠 Claude', callback_data: 'sec:brain:claude' },
+        { text: (b === 'grok' ? '✅ ' : '') + '🟣 Grok terminal', callback_data: 'sec:brain:grok' },
+        { text: ((b === 'claude' || b === 'claudecode') ? '✅ ' : '') + '🤖 Claude Code', callback_data: 'sec:claudemenu' },
       ],
       [{ text: '🔓 Liberar acesso', callback_data: 'sec:liberar' }],
       [
@@ -532,6 +760,164 @@ async function getBansList() {
 ${esc(lines)}</pre>`;
 }
 
+// ─────────────────────────────────────────────────────────────────────
+// 🛡️ CENTRAL DE SEGURANÇA — combos fáceis pra leigo (read-only + reversível)
+// ─────────────────────────────────────────────────────────────────────
+
+/** Combo 1-toque: raio-x de segurança da VPS (só leitura). */
+function getSecurityDashboard() {
+  const banRaw = execSafe("fail2ban-client status sshd 2>/dev/null | sed -n 's/.*Currently banned:[[:space:]]*//p'");
+  const banned = (banRaw || '0').split('\n')[0].trim() || '0';
+  const totalRaw = execSafe("fail2ban-client status sshd 2>/dev/null | sed -n 's/.*Total banned:[[:space:]]*//p'");
+  const totalBan = (totalRaw || '0').split('\n')[0].trim() || '0';
+  let failed = execSafe("journalctl -u ssh -u sshd --since '24 hours ago' 2>/dev/null | grep -c 'Failed password'");
+  if (!failed || /error|not/i.test(failed)) failed = execSafe('lastb 2>/dev/null | grep -c . || echo 0');
+  const ports = execSafe("ss -tlnp 2>/dev/null | awk 'NR>1{print $4}' | sed 's/.*://g' | sort -un | tr '\\n' ' '").trim();
+  const f2bUp = execSafe('systemctl is-active fail2ban 2>/dev/null') || '?';
+  const ufw = execSafe('ufw status 2>/dev/null | head -1') || 'ufw: n/d';
+  const ts = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const nivel = Number(failed) > 200 ? '🔴 ALTO' : Number(failed) > 40 ? '🟡 MÉDIO' : '🟢 CALMO';
+  return `<pre>┌────────────────────────────────┐
+│  🛡️  ESCUDO · RAIO-X VPS       │
+└────────────────────────────────┘
+
+  Ameaça (24h)   ${nivel}
+  Fail2ban       ${esc(f2bUp)}
+  IPs banidos    ${esc(banned)}  (total: ${esc(totalBan)})
+  Ataques SSH    ${esc(String(failed).trim())} tentativas
+  Firewall       ${esc(ufw)}
+  Portas abertas ${esc(ports || '?')}
+
+  ⏰ ${ts}</pre>`;
+}
+
+/** Últimas tentativas de invasão (só leitura). */
+function getFailedAttempts() {
+  let out = execSafe("journalctl -u ssh -u sshd --since '24 hours ago' 2>/dev/null | grep 'Failed password' | tail -12 | sed 's/.*sshd\\[[0-9]*\\]: //'");
+  if (!out) out = execSafe('lastb -a 2>/dev/null | head -12');
+  return `<pre>┌────────────────────────────────┐
+│  👁️  QUEM TENTOU ENTRAR        │
+└────────────────────────────────┘
+
+${esc(out || '  (nada registrado — tudo limpo 🟢)')}</pre>`;
+}
+
+/** Blindagem SSH — só relatório, não muda nada (evita trancar o Pivete). */
+function getSshHardening() {
+  const cfg = execSafe("sshd -T 2>/dev/null | grep -Ei '^(permitrootlogin|passwordauthentication|port|pubkeyauthentication|permitemptypasswords) '");
+  const rows = {};
+  (cfg || '').split('\n').forEach((l) => {
+    const [k, ...v] = l.trim().split(/\s+/);
+    if (k) rows[k] = v.join(' ');
+  });
+  const chk = (k, good) => {
+    const val = rows[k] || '?';
+    const ok = String(val).toLowerCase() === good;
+    return `  ${ok ? '🟢' : '🟡'} ${k.padEnd(22)} ${val}`;
+  };
+  return `<pre>┌────────────────────────────────┐
+│  🔒  BLINDAGEM SSH (leitura)   │
+└────────────────────────────────┘
+
+${chk('passwordauthentication', 'no')}
+${chk('permitrootlogin', 'prohibit-password')}
+${chk('pubkeyauthentication', 'yes')}
+${chk('permitemptypasswords', 'no')}
+  ℹ️ porta          ${esc(rows.port || '?')}
+
+  🟢 ok  🟡 revisar. Mudança de SSH
+  só com sua ordem (não tranco você).</pre>`;
+}
+
+/** Bane IP manualmente (reversível pelo unban). Nunca bane IP protegido. */
+function banIpManual(ip, fromId) {
+  const v = String(ip).trim();
+  if (!isValidIp(v)) return { ok: false, msg: '❌ IP inválido. Ex: 45.148.10.99' };
+  if (PROTECTED_IPS.has(v)) return { ok: false, msg: `⛔ <code>${esc(v)}</code> é IP protegido (sua casa). Não bano.` };
+  const r = execSafe(`fail2ban-client set sshd banip ${v} 2>&1`);
+  logLiberar(`BAN_MANUAL ip=${v} by=${fromId} r=${r}`);
+  return {
+    ok: true,
+    msg: `🚫 IP banido: <code>${esc(v)}</code>\n<pre>${esc(r || 'ok')}</pre>\n♻️ Pra soltar: 🔓 Liberar → Só unban.`,
+  };
+}
+
+function buildCentralSeg() {
+  return {
+    text:
+`<pre>┌──────────────────────────────────┐
+│  🛡️  CENTRAL DE SEGURANÇA        │
+│      um toque = ação              │
+└──────────────────────────────────┘
+
+  🛡️ Escudo   → raio-x agora
+  👁️ Tentativas → quem atacou
+  🚫 Banir    → tranca um IP
+  🔓 Liberar  → solta IP/conta
+  🔒 SSH      → blindagem (leitura)
+
+  Aperta um botão. Sem terminal.</pre>`,
+    buttons: [
+      [
+        { text: '🛡️ Escudo (raio-x)', callback_data: 'sec:escudo' },
+        { text: '👁️ Tentativas', callback_data: 'sec:tentativas' },
+      ],
+      [
+        { text: '🚫 Banir IP', callback_data: 'sec:await:banip' },
+        { text: '🔓 Liberar', callback_data: 'sec:liberar' },
+      ],
+      [
+        { text: '🔒 Blindagem SSH', callback_data: 'sec:ssh' },
+        { text: '📋 Bans', callback_data: 'sec:bans' },
+      ],
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ],
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 🧰 SKILLS — inventário organizado + instalar do GitHub pelo terminal Grok
+// ─────────────────────────────────────────────────────────────────────
+const SKILLS_CFG = '/root/CentralDark/apps/bot-telegram/skills/config/skills.json';
+
+function listSkillsHtml() {
+  const cfg = loadJson(SKILLS_CFG, {});
+  const icon = {};
+  (cfg.categories || []).forEach((c) => { icon[c.key] = c.icon; });
+  const meth = (cfg.methodology?.skills || []).filter((s) => s.active);
+  const exec = (cfg.executable?.skills || []).filter((s) => s.active);
+  const methLines = meth.length
+    ? meth.map((s) => `  📖 ${s.slug}`).join('\n')
+    : '  (nenhuma)';
+  const execLines = exec.length
+    ? exec.map((s) => `  ${icon[s.category] || '⚡'} ${s.slug} — ${String(s.description || '').slice(0, 34)}`).join('\n')
+    : '  (nenhuma)';
+  return `<pre>┌────────────────────────────────┐
+│  🧰  SKILLS · INVENTÁRIO        │
+└────────────────────────────────┘
+
+ 📖 METODOLOGIA (${meth.length})
+${esc(methLines)}
+
+ ⚡ EXECUTÁVEIS (${exec.length})
+${esc(execLines)}
+
+ 🟣 Terminal Grok: peça qualquer
+ skill em conversa normal, ele faz.
+ 📦 Instalar do GitHub → botão abaixo.</pre>`;
+}
+
+function buildSkillsMenu() {
+  return {
+    text: listSkillsHtml(),
+    buttons: [
+      [{ text: '📦 Instalar Skill (link GitHub)', callback_data: 'sec:await:skill' }],
+      [{ text: '🟣 Falar com Grok (terminal)', callback_data: 'sec:brain:grok' }],
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ],
+  };
+}
+
 function listAllowHtml() {
   const a = loadAllow();
   const auth = loadJson(AUTH_PATH, {});
@@ -570,10 +956,48 @@ async function readJsonSafe(r) {
  * - grok  → NÃO chama API na VPS. Só mensageiro /tmp/grok_request.json ↔ /tmp/grok_response.json (PC processa).
  * - claude/plano → ap7 (inalterado). TokenRouter continua no secrets pro PC usar; VPS não invoca no botão Grok.
  */
+/**
+ * Claude Code CLI real na VPS (terminal). withTools=true → executa/analisa de verdade.
+ * @returns {Promise<string|null>}
+ */
+function askClaudeCli(text, withTools) {
+  return new Promise((resolve) => {
+    const args = ['-p', String(text)];
+    if (withTools) args.push('--dangerously-skip-permissions');
+    let done = false;
+    const child = execFile(
+      CLAUDE_BIN,
+      args,
+      { cwd: CLAUDE_CWD, timeout: CLAUDE_TIMEOUT, maxBuffer: 4 * 1024 * 1024, env: process.env },
+      (err, stdout, stderr) => {
+        if (done) return;
+        done = true;
+        const out = String(stdout || '')
+          // eslint-disable-next-line no-control-regex
+          .replace(/\x1B\[[0-9;?]*[A-Za-z]/g, '').replace(/\r/g, '').trim();
+        if (out) return resolve(out);
+        if (err) return resolve(null);
+        resolve('');
+      },
+    );
+    child.on('error', () => { if (!done) { done = true; resolve(null); } });
+  });
+}
+
 async function callLLM(history, brain) {
   const mode = BRAIN_PROMPTS[brain] ? brain : 'plano';
   const system = BRAIN_PROMPTS[mode];
   const msgs = history.slice(-12);
+
+  // ─── CANAL CLAUDE CODE: CLI real na VPS (executa/analisa de verdade) ───
+  if (mode === 'claudecode') {
+    const lastUser = [...msgs].reverse().find((m) => m.role === 'user');
+    const userText = lastUser ? lastUser.content : '';
+    if (!userText) return 'Manda o que você quer que o Claude Code faça na VPS.';
+    const reply = await askClaudeCli(userText, true);
+    if (reply) return reply;
+    return 'Claude Code (CLI) não respondeu a tempo. Tenta de novo em 1 linha, ou usa 💬 Chat.';
+  }
 
   // ─── CANAL GROK: mensageiro de arquivo (PC 24/7). Claude NUNCA. ───
   if (mode === 'grok') {
@@ -775,12 +1199,15 @@ async function handleCallback(cq) {
       email: 'Manda o email da conta.\nEx: <code>pivete@email.com</code>',
       tid: 'Manda o ID numérico do Telegram.\n(Seu admin já é conhecido)',
       unban: 'Manda o IP pra só tirar do ban.',
+      banip: 'Manda o IP do atacante pra <b>banir</b>.\nEx: <code>45.148.10.99</code>\n(reversível pelo unban)',
+      skill: 'Cola o <b>link do GitHub</b> da skill.\nEx: <code>https://github.com/user/repo</code>\n\nO Grok clona, instala e te diz o que ela faz.',
     };
+    const cancelTo = kind === 'banip' ? 'sec:central' : kind === 'skill' ? 'sec:skills' : 'sec:liberar';
     return edit(
       chatId,
       msgId,
       `✏️ <b>Aguardando ${esc(kind)}</b>\n\n${hints[kind] || ''}\n\n/cancel cancela.`,
-      [[{ text: '❌ Cancelar', callback_data: 'sec:liberar' }]],
+      [[{ text: '❌ Cancelar', callback_data: cancelTo }]],
     );
   }
   if (data === 'sec:auth:on') {
@@ -806,10 +1233,143 @@ async function handleCallback(cq) {
   if (data === 'sec:f2b') return edit(chatId, msgId, await getFail2banStatus(), back);
   if (data === 'sec:bans') return edit(chatId, msgId, await getBansList(), back);
   if (data === 'sec:lista') return edit(chatId, msgId, listAllowHtml(), back);
+
+  // 🛡️ Central de Segurança (combos)
+  if (data === 'sec:central') {
+    s.await = null;
+    const m = buildCentralSeg();
+    return edit(chatId, msgId, m.text, m.buttons);
+  }
+  const segBack = [[{ text: '🛡️ Segurança', callback_data: 'sec:central' }, { text: '🏠 Menu', callback_data: 'sec:menu' }]];
+  if (data === 'sec:escudo') return edit(chatId, msgId, getSecurityDashboard(), segBack);
+  if (data === 'sec:tentativas') return edit(chatId, msgId, getFailedAttempts(), segBack);
+  if (data === 'sec:ssh') return edit(chatId, msgId, getSshHardening(), segBack);
+
+  // 🧰 Skills
+  if (data === 'sec:skills') {
+    s.await = null;
+    const m = buildSkillsMenu();
+    return edit(chatId, msgId, m.text, m.buttons);
+  }
+
+  // 🤖 Menu Claude Code (vocês) — 2 funções: Chat + Code
+  if (data === 'sec:claudemenu') {
+    s.await = null;
+    const m = buildClaudeMenu(chatId);
+    return edit(chatId, msgId, m.text, m.buttons);
+  }
+
+  // 🔐 Plataforma X / Grok — login/logout
+  if (data === 'sec:xmenu') {
+    s.await = null;
+    const m = buildXMenu();
+    return edit(chatId, msgId, m.text, m.buttons);
+  }
+  if (data === 'sec:xlogin') {
+    await edit(chatId, msgId, cardX('INICIANDO', 'Abrindo login oficial da X… já te mando o link aqui.'), [
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ]);
+    startXLogin(chatId);
+    return;
+  }
+  if (data === 'sec:xlogout') {
+    return edit(chatId, msgId, cardX('⚠️ CONFIRMAR', 'Sair desconecta a conta X/Grok e o terminal 🟣 Grok para até você logar de novo. Confirma?'), [
+      [{ text: '🚪 Sim, sair', callback_data: 'sec:xlogout:sim' }],
+      [{ text: '↩️ Não, voltar', callback_data: 'sec:xmenu' }],
+    ]);
+  }
+  if (data === 'sec:xlogout:sim') {
+    const out = doXLogout();
+    logLiberar(`X_LOGOUT by=${fromId} r=${out}`);
+    return edit(chatId, msgId, cardX('🚪 SAIU', 'Conta X/Grok desconectada.\n\n' + out.slice(0, 200)), [
+      [{ text: '🔐 Entrar de novo', callback_data: 'sec:xlogin' }],
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ]);
+  }
+
+  // 🎙️ Áudio — liga/desliga
+  if (data === 'sec:audio:on') {
+    s.audio = true;
+    const ok = AUDIO_STT_URL && AUDIO_STT_KEY;
+    const m = buildMenu(chatId);
+    await edit(chatId, msgId, m.text, m.buttons);
+    return send(chatId, cardMini('🎙️ ÁUDIO ON', ok
+      ? 'Módulo ligado! Manda um áudio que eu transcrevo e respondo.'
+      : 'Ligado, mas falta a key de transcrição.\nConfigura AUDIO_STT_URL + AUDIO_STT_KEY no secrets/.env.\nDoc: docs/CONSCIENCIA/DARKAI/GUARDIAO-CONFIG.md'));
+  }
+  if (data === 'sec:audio:off') {
+    s.audio = false;
+    const m = buildMenu(chatId);
+    await edit(chatId, msgId, m.text, m.buttons);
+    return send(chatId, cardMini('🔇 ÁUDIO OFF', 'Módulo de áudio desligado.'));
+  }
   if (data === 'sec:clear') {
     s.history = [];
     return edit(chatId, msgId, '🧹 Histórico IA limpo.', back);
   }
+}
+
+/**
+ * 🎙️ Baixa o voice do Telegram e transcreve (STT OpenAI-compat).
+ * Precisa de AUDIO_STT_URL + AUDIO_STT_KEY nos secrets. Sem isso, retorna null.
+ * @returns {Promise<string|null>}
+ */
+async function transcribeVoice(fileId) {
+  if (!AUDIO_STT_URL || !AUDIO_STT_KEY) return null;
+  try {
+    const gf = await tg('getFile', { file_id: fileId });
+    if (!gf.ok) return null;
+    const filePath = gf.result.file_path;
+    const url = `${TG}/file/bot${TOKEN}/${filePath}`;
+    const audioRes = await fetch(url);
+    const arrBuf = await audioRes.arrayBuffer();
+    const form = new FormData();
+    form.append('file', new Blob([arrBuf]), 'voice.ogg');
+    form.append('model', AUDIO_STT_MODEL);
+    const r = await fetch(AUDIO_STT_URL, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${AUDIO_STT_KEY}` },
+      body: form,
+      signal: AbortSignal.timeout(90000),
+    });
+    const d = await r.json().catch(() => ({}));
+    return (d.text || '').trim() || null;
+  } catch (e) {
+    console.error('[GuardiaoBot] transcribe', e.message);
+    return null;
+  }
+}
+
+async function handleVoice(msg) {
+  const chatId = msg.chat?.id;
+  const fromId = msg.from?.id;
+  if (!chatId || fromId !== ADMIN_ID) return;
+  const s = getSess(chatId);
+  if (!s.audio) {
+    return send(chatId, cardMini('🎙️ ÁUDIO', 'Recebi teu áudio, mas o módulo de áudio está 🔴 desligado.\nLiga em: 🏠 Menu → 🎙️ Áudio.'), [
+      [{ text: '🎙️ Ligar áudio', callback_data: 'sec:audio:on' }, { text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ]);
+  }
+  const fileId = msg.voice?.file_id || msg.audio?.file_id;
+  if (!fileId) return;
+  await tg('sendChatAction', { chat_id: chatId, action: 'typing' });
+  const texto = await transcribeVoice(fileId);
+  if (!texto) {
+    return send(chatId, cardMini('🎙️ ÁUDIO', 'Áudio ligado, mas falta configurar a transcrição.\nCole AUDIO_STT_URL + AUDIO_STT_KEY no secrets/.env.\nVer doc: docs/CONSCIENCIA/DARKAI/GUARDIAO-CONFIG.md'), [
+      [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
+    ]);
+  }
+  // trata o texto transcrito como se fosse mensagem digitada
+  await send(chatId, cardMini('🎙️ VOCÊ DISSE', texto));
+  return handleMessage({ ...msg, text: texto, voice: undefined, audio: undefined });
+}
+
+function cardMini(head, body) {
+  return `<pre>╔══════════════════════════════════╗
+║  ${head}
+╚══════════════════════════════════╝
+
+${esc(wrapText(String(body), 34))}</pre>`;
 }
 
 async function handleMessage(msg) {
@@ -840,6 +1400,41 @@ async function handleMessage(msg) {
   if (s.await) {
     const kind = s.await;
     s.await = null;
+
+    // 🚫 banir IP manual
+    if (kind === 'banip') {
+      const r = banIpManual(text, fromId);
+      return send(chatId, r.msg, [
+        [{ text: '🚫 Banir outro', callback_data: 'sec:await:banip' }],
+        [{ text: '🛡️ Segurança', callback_data: 'sec:central' }, { text: '🏠 Menu', callback_data: 'sec:menu' }],
+      ]);
+    }
+
+    // 📦 instalar skill do GitHub — vai pro terminal Grok de verdade
+    if (kind === 'skill') {
+      const url = text.trim();
+      if (!/^https?:\/\/(www\.)?github\.com\//i.test(url) && !/github\.com/i.test(url)) {
+        return send(chatId, '❌ Não parece link do GitHub. Cola algo como <code>https://github.com/user/repo</code>.', [
+          [{ text: '📦 Tentar de novo', callback_data: 'sec:await:skill' }],
+          [{ text: '🧰 Skills', callback_data: 'sec:skills' }],
+        ]);
+      }
+      await tg('sendChatAction', { chat_id: chatId, action: 'typing' });
+      await send(chatId, `📦 Instalando skill do GitHub…\n<code>${esc(url)}</code>\n\n🟣 Grok tá clonando e configurando no terminal. Aguenta ~1-2min.`);
+      const prompt =
+        `Instale a skill do repositório GitHub: ${url}\n` +
+        `Passos: 1) git clone dentro de /root/Grock/projects (crie a pasta se não existir); ` +
+        `2) leia SKILL.md ou README para entender o que ela faz e como instalar; ` +
+        `3) se houver instalador (install.sh/package.json/requirements.txt), rode o adequado; ` +
+        `4) me responda em PT-BR curto: nome da skill, o que ela faz, e como eu uso. Se falhar, diga o erro em 1 linha.`;
+      let reply = await askGrokViaPcFiles(chatId, prompt, []);
+      if (!reply) reply = 'Pedi pro terminal Grok instalar mas não veio resposta a tempo. Tenta de novo, ou fala com o Grok direto no canal 🟣.';
+      return send(chatId, '🟣 ' + reply.slice(0, 3850), [
+        [{ text: '📦 Instalar outra', callback_data: 'sec:await:skill' }],
+        [{ text: '🧰 Skills', callback_data: 'sec:skills' }, { text: '🏠 Menu', callback_data: 'sec:menu' }],
+      ], { html: false });
+    }
+
     const r = processLiberar(kind, text, fromId);
     return send(chatId, r.msg, [
       [{ text: '🔓 Liberar outro', callback_data: 'sec:liberar' }],
@@ -870,6 +1465,19 @@ async function handleMessage(msg) {
   }
   if (cmd === '/lista') return send(chatId, listAllowHtml());
   if (cmd === '/f2b') return send(chatId, await getFail2banStatus());
+  if (cmd === '/seg' || cmd === '/seguro') {
+    const m = buildCentralSeg();
+    return send(chatId, m.text, m.buttons);
+  }
+  if (cmd === '/escudo') return send(chatId, getSecurityDashboard(), [[{ text: '🛡️ Segurança', callback_data: 'sec:central' }]]);
+  if (cmd === '/skills' || cmd === '/skill') {
+    const m = buildSkillsMenu();
+    return send(chatId, m.text, m.buttons);
+  }
+  if (cmd === '/claude' || cmd === '/code') {
+    const m = buildClaudeMenu(chatId);
+    return send(chatId, m.text, m.buttons);
+  }
 
   // /ip 1.2.3.4
   if (cmd === '/ip' && text.split(/\s+/)[1]) {
@@ -908,16 +1516,16 @@ async function handleMessage(msg) {
   const reply = await callLLM(h, s.brain);
   h.push({ role: 'assistant', content: reply });
   if (h.length > 20) s.hist[s.brain] = h.slice(-20);
-  const tag = s.brain === 'grok' ? '🟣' : s.brain === 'claude' ? '🟠' : '📝';
-  return send(chatId, tag + ' ' + reply.slice(0, 3850), [
+  // Card monoespaçado (padrão Hermes: tudo dentro de UM <pre>)
+  return send(chatId, conversaCard(s.brain, reply), [
     [{ text: '🔴 Desligar', callback_data: 'sec:talk:off' }],
     [
       { text: '📝 Plano', callback_data: 'sec:brain:plano' },
       { text: '🟣 Grok', callback_data: 'sec:brain:grok' },
-      { text: '🟠 Claude', callback_data: 'sec:brain:claude' },
+      { text: '🤖 Claude', callback_data: 'sec:claudemenu' },
     ],
     [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
-  ], { html: false });
+  ]);
 }
 
 let offset = 0;
@@ -936,6 +1544,7 @@ async function poll() {
       offset = u.update_id + 1;
       try {
         if (u.callback_query) await handleCallback(u.callback_query);
+        else if (u.message && (u.message.voice || u.message.audio)) await handleVoice(u.message);
         else if (u.message) await handleMessage(u.message);
       } catch (e) {
         console.error('[GuardiaoBot] update', e.message);
