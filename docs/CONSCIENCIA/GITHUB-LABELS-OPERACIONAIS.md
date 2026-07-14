@@ -21,7 +21,7 @@ Regra semantica:
 
 - `assign:chatgpt` e `assign:grok` = **dono/roteamento** (quem executa).
 - Se um dia surgirem `area:chatgpt` ou `area:grok-cli`, terao semantica de **area/integrador** (do que a tarefa trata) e nao substituem `assign:*`.
-- Aliases legados (`assign:faxineiro`, `assign:auditor`, `assign:seguranca`, `assign:vps-health`) foram migrados para os canonicos (`assign:faxineiro-repo`, `assign:auditor-divergencia`, `assign:guarda-seguranca`, `assign:vps-healthcheck`) via `bots-labels-seed.yml` (job `migrate`). Nao recriar.
+- Aliases legados (`assign:faxineiro`, `assign:auditor`, `assign:seguranca`, `assign:vps-health`) têm migração **preparada** para os canonicos (`assign:faxineiro-repo`, `assign:auditor-divergencia`, `assign:guarda-seguranca`, `assign:vps-healthcheck`) via `bots-labels-seed.yml` (job `migrate`, `workflow_dispatch`). A execução real ainda **não foi rodada** — está pendente do Pivete. Nao recriar.
 
 ## Labels oficiais
 

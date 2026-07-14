@@ -85,7 +85,7 @@ Lote 8  ⏳ painel-vivo com contadores por bot
 | `p1` / `p2` / `p3` | bot que abriu       | Severidade                             |
 | `stale`            | sentinela-stale     | Sem ação em 7d                         |
 
-Aliases legados (`assign:faxineiro`, `assign:auditor`, `assign:seguranca`, `assign:vps-health`) foram migrados para os canônicos correspondentes e removidos. Não recriar — usar sempre os nomes canônicos.
+Aliases legados (`assign:faxineiro`, `assign:auditor`, `assign:seguranca`, `assign:vps-health`) têm migração **preparada** para os canônicos correspondentes via `bots-labels-seed.yml` (job `migrate`, `workflow_dispatch`). A execução real ainda está **pendente** — Pivete precisa rodar o workflow manualmente. Enquanto não roda, os aliases podem seguir existindo; após a execução limpa, não recriar — usar sempre os nomes canônicos.
 
 ## Avaliação de risco (do plano original)
 

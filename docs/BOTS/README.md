@@ -26,7 +26,7 @@ Matriz oficial "quem faz o quê". Cada bot tem escopo fixo e label de assign. Se
 | **Guarda-segurança** | `assign:guarda-seguranca` | Gitleaks/Semgrep/OSV/Trivy | planejado | modo relatório |
 | **VPS-healthcheck** | `assign:vps-healthcheck` | SSH read-only, sem restart | GitHub Actions | `vps-healthcheck.yml` |
 
-> Migração de aliases: os antigos `assign:faxineiro`, `assign:auditor`, `assign:seguranca`, `assign:vps-health` foram migrados para os canônicos correspondentes via `bots-labels-seed.yml` (job `migrate`, workflow_dispatch). Não recriar. Registro em `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`.
+> Migração de aliases (PREPARADA, execução pendente): os antigos `assign:faxineiro`, `assign:auditor`, `assign:seguranca`, `assign:vps-health` devem migrar para os canônicos correspondentes via `bots-labels-seed.yml` (job `migrate`, `workflow_dispatch`). A execução real (dispatch com `dry_run=false`, `run_migration=true`) ainda **não foi rodada** — está pendente do Pivete. Não recriar aliases. Registro em `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`.
 
 ## Regras invioláveis
 
