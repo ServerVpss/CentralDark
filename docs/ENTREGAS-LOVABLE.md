@@ -52,6 +52,7 @@
 - **Próximo passo único:** operador rodar o seed manualmente para validar (`dry_run=true` primeiro).
 - **Registro do commit anterior:** `daeea4c9`.
 
+## 2026-07-14 14:30 BRT — Revisão do commit anterior (endurecimento controller + migração)
 
 
 - **Fio da missão:** "PERMITO PIVETE" — revisar o commit `7b6a4321f045b3036919a0ef1ebc3e3789ec95e1`, sem deploy, sem executar migração real, sem fechar issue/PR e sem tocar em secrets.
