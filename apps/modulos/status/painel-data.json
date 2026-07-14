@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-14T10:19:32.401Z",
-  "updatedAtBR": "14/07/2026, 07:19:32 BRT",
+  "updatedAt": "2026-07-14T10:20:00.105Z",
+  "updatedAtBR": "14/07/2026, 07:20:00 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "lembranca: Pivete: honestidade mútua desde o início",
+    "lastCommit": "aprendizado(#325): Parceria IA–Pivete só prevalece com verdade mútua",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-14T10:20:00.105Z",
+      "titulo": "Push na main · 871e542a44af53eac12c2ab25ed750d8b1a46a9b",
+      "detalhe": "aprendizado(#325): Parceria IA–Pivete só prevalece com verdade mútua",
+      "area": "Repositório",
+      "sha": "871e542",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-14T10:19:32.401Z",
       "titulo": "Push na main · 9bc7347a5b363658684267d9262fb6ce13cf7009",
       "detalhe": "lembranca: Pivete: honestidade mútua desde o início",
@@ -986,14 +994,6 @@
       "detalhe": "fix(hub): conteudo real do AbacusRouteLLMCard (corrige placeholder do commit e78b938)",
       "area": "Repositório",
       "sha": "9f32ccd",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T19:59:50.977Z",
-      "titulo": "Push na main · e78b9385d9d188c2c715782124d6bdd8bf47f08e",
-      "detalhe": "feat(hub): view api.ai_requests + fonte edge proxy + card Abacus RouteLLM",
-      "area": "Repositório",
-      "sha": "e78b938",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-14T10:20:00.105Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 871e542a44af53eac12c2ab25ed750d8b1a46a9b (871e542)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-14T10:19:32.401Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9bc7347a5b363658684267d9262fb6ce13cf7009 (9bc7347)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T20:00:34.289Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9f32ccdd2708bd7fef5c1d205cc95c60b3aac35e (9f32ccd)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T19:59:50.977Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e78b9385d9d188c2c715782124d6bdd8bf47f08e (e78b938)",
       "area": "Repositório",
       "status": "sucesso"
     }
