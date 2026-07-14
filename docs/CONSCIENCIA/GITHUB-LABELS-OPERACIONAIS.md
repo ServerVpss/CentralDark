@@ -10,7 +10,22 @@ Label tecnica demais confunde.
 Label em portugues ajuda o Pivete a operar o sistema sem depender de tradutor mental.
 ```
 
+## Duas camadas de labels (nao fundir)
+
+O CentralDark opera com duas camadas de labels que **coexistem** e **nao devem ser fundidas**:
+
+1. **Camada humana operacional** — emoji + PT-BR maiusculo (ex.: `🟢 PRONTO-PARA-IA`, `🔴 RISCO-SERVIDOR`). Sinaliza intencao/estado para o Pivete e para revisao humana. Documentada nesta pagina.
+2. **Camada de roteamento de maquina** — minusculas, namespaced `assign:*` (ex.: `assign:codex`, `assign:grok`, `assign:lovable`). Diz **qual bot e dono** da tarefa. Consumida por `dispatcher-bots.yml` e afins.
+
+Regra semantica:
+
+- `assign:chatgpt` e `assign:grok` = **dono/roteamento** (quem executa).
+- Se um dia surgirem `area:chatgpt` ou `area:grok-cli`, terao semantica de **area/integrador** (do que a tarefa trata) e nao substituem `assign:*`.
+- Aliases legados (`assign:faxineiro`, `assign:auditor`, `assign:seguranca`, `assign:vps-health`) têm migração **preparada** para os canonicos (`assign:faxineiro-repo`, `assign:auditor-divergencia`, `assign:guarda-seguranca`, `assign:vps-healthcheck`) via `bots-labels-seed.yml` (job `migrate`, `workflow_dispatch`). A execução real ainda **não foi rodada** — está pendente do Pivete. Nao recriar.
+
 ## Labels oficiais
+
+
 
 | Label | Equivalente tecnico | Quando usar | Permissao operacional |
 |---|---|---|---|

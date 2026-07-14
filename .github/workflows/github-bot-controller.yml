@@ -1,5 +1,11 @@
 name: GitHub Bot Controller
 
+# Dois jobs, escopo mínimo de token por evento:
+#   - audit:        schedule / pull_request.closed / workflow_dispatch (sem merged_pr).
+#                   Permissões READ-only. Gera summary + artifact. NUNCA fecha.
+#   - manual_close: SOMENTE workflow_dispatch com merged_pr preenchido.
+#                   Permissões write só onde precisa. DRY_RUN default true.
+
 on:
   workflow_dispatch:
     inputs:
@@ -12,11 +18,11 @@ on:
           - "true"
           - "false"
       merged_pr:
-        description: "PR consolidada mergeada que substituiu outras PRs"
+        description: "PR consolidada mergeada que substituiu outras PRs (número, ex.: 149). Se vazio, roda só auditoria."
         required: false
         default: ""
       supersedes:
-        description: "Lista de PRs substituídas. Exemplo: #14 #16 #11"
+        description: "Lista de PRs substituídas. Formato: #14 #16 ou #14,#16 (precisa bater com a linha 'Supersedes:' do corpo do PR mergeado)"
         required: false
         default: ""
   pull_request:
@@ -25,34 +31,102 @@ on:
   schedule:
     - cron: "17 9 * * *"
 
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
-  actions: read
-
 concurrency:
   group: github-bot-controller-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  controller:
-    name: Auditar PRs e fechar substituídas com segurança
+  audit:
+    name: Auditoria (read-only)
+    # Roda em schedule, pull_request.closed e em dispatch quando merged_pr está vazio.
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      (
+        github.event_name == 'schedule' ||
+        github.event_name == 'pull_request' ||
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr == '')
+      )
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      actions: read
 
     steps:
-      - name: Checkout
+      - name: Checkout (default branch, sem credenciais, workspace limpo)
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          clean: true
 
       - name: Validar runtime Node
         run: node --version
 
-      - name: Executar GitHub Bot Controller
+      - name: Executar GitHub Bot Controller (auditoria)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
-          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'auto' }}
-          BOT_MERGED_PR: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr || '' }}
-          BOT_SUPERSEDES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.supersedes || '' }}
-        run: node CentralDark/scripts/github-bot-controller.mjs
+          # Auditoria não fecha nada; DRY_RUN é irrelevante mas fica true por segurança.
+          DRY_RUN: "true"
+          BOT_EVENT_NAME: ${{ github.event_name }}
+          BOT_MERGED_PR: ""
+          BOT_SUPERSEDES: ""
+        run: node scripts/github-bot-controller.mjs
+
+      - name: Publicar relatório como artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-bot-controller-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/RELATORIOS/github-bot-controller/*.md
+          if-no-files-found: warn
+          retention-days: 7
+
+  manual_close:
+    name: Fechamento manual (write mínimo)
+    # SÓ dispatch com merged_pr preenchido.
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.merged_pr != ''
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      actions: read
+
+    steps:
+      - name: Checkout (default branch, sem credenciais, workspace limpo)
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          clean: true
+
+      - name: Validar runtime Node
+        run: node --version
+
+      - name: Executar GitHub Bot Controller (fechamento manual)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
+          # DRY_RUN default true; só escreve quando o operador força false explicitamente.
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
+          BOT_EVENT_NAME: ${{ github.event_name }}
+          BOT_MERGED_PR: ${{ github.event.inputs.merged_pr }}
+          BOT_SUPERSEDES: ${{ github.event.inputs.supersedes }}
+        run: node scripts/github-bot-controller.mjs
+
+      - name: Publicar relatório como artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-bot-controller-manual-${{ github.run_id }}-${{ github.run_attempt }}
+          path: docs/RELATORIOS/github-bot-controller/*.md
+          if-no-files-found: warn
+          retention-days: 7
