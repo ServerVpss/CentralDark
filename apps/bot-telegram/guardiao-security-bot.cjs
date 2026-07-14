@@ -65,6 +65,10 @@ const LLM_MODEL = process.env.LLM_MODEL || process.env.ARSENAL_MODEL || 'claude-
 const XAI_KEY = process.env.XAI_API_KEY || process.env.GROK_API_KEY || process.env.XAI_KEY || '';
 const XAI_BASE = (process.env.XAI_BASE_URL || 'https://api.x.ai/v1').replace(/\/$/, '');
 const XAI_MODEL = process.env.XAI_MODEL || process.env.GROK_MODEL || 'grok-3-mini';
+// TokenRouter (Pivete) — https://www.tokenrouter.com/docs — multi-model real (não persona)
+const TR_KEY = process.env.TOKENROUTER_API_KEY || process.env.USER_EXTRA_API_KEY || '';
+const TR_BASE = (process.env.TOKENROUTER_BASE_URL || 'https://api.tokenrouter.com/v1').replace(/\/$/, '');
+const TR_MODEL = process.env.TOKENROUTER_MODEL || 'deepseek/deepseek-v4-pro';
 const TG = 'https://api.telegram.org';
 
 function isMockText(t) {
@@ -91,6 +95,10 @@ const AUTH_PATH  = '/root/CentralDark/secrets/guardiao-auth-session.json';
 const LOG_PATH   = '/var/log/centraldark-guarda/liberar.log';
 const JAIL_LOCAL = '/etc/fail2ban/jail.local';
 const JAIL_REPO  = '/root/CentralDark/infra/fail2ban/jail.local';
+const BRIDGE_DIR = '/root/CentralDark/secrets/guardiao-bridge';
+const BRIDGE_IN  = path.join(BRIDGE_DIR, 'inbox.jsonl');
+const BRIDGE_OUT = path.join(BRIDGE_DIR, 'outbox.jsonl');
+const BRIDGE_ST  = path.join(BRIDGE_DIR, 'status.json');
 
 // IP casa do Pivete — nunca revogar da allowlist fail2ban via bot
 const PROTECTED_IPS = new Set(['127.0.0.1', '::1', '187.15.72.86']);
@@ -108,12 +116,13 @@ function getSess(chatId) {
     sessions.set(chatId, {
       talk: false,
       await: null,
-      brain: 'plano',
+      // default Grok — Pivete quer falar com Grok no Telegram
+      brain: 'grok',
       hist: { grok: [], claude: [], plano: [] },
     });
   }
   const s = sessions.get(chatId);
-  if (!s.brain) s.brain = 'plano';
+  if (!s.brain) s.brain = 'grok';
   if (!s.hist) s.hist = { grok: [], claude: [], plano: [] };
   for (const k of ['grok', 'claude', 'plano']) {
     if (!Array.isArray(s.hist[k])) s.hist[k] = [];
@@ -290,20 +299,136 @@ function activateAuthSession(meta) {
   return obj;
 }
 
-function brainLabel(b) {
-  if (b === 'grok') {
-    return XAI_KEY
-      ? '🟣 Grok · key xAI · canal próprio'
-      : '🟣 Grok · SEM XAI_API_KEY (canal fechado até colar key)';
+function bridgeOnline() {
+  try {
+    const st = JSON.parse(fs.readFileSync(BRIDGE_ST, 'utf8'));
+    return !!(st && st.online);
+  } catch {
+    return false;
   }
-  if (b === 'claude') return '🟠 Claude · key ap7 · canal próprio';
-  return '📝 Plano · canal próprio (ap7 só pra plano)';
+}
+
+function brainLabel(b) {
+  if (b === 'grok') return '🟣 Grok · PC 24/7 (arquivo /tmp) — bot só mensageiro';
+  if (b === 'claude') return '🟠 Claude · ap7 (outro canal/key)';
+  return '📝 Plano · ap7 (outro canal)';
 }
 
 function channelBanner(b) {
-  if (b === 'grok') return 'Canal 🟣 GROK — Claude NÃO entra aqui.';
-  if (b === 'claude') return 'Canal 🟠 CLAUDE (ap7) — Grok NÃO entra aqui.';
-  return 'Canal 📝 PLANO — só bolar plano; separado de Grok/Claude chat.';
+  if (b === 'grok') return 'Canal 🟣 GROK — VPS escreve request, PC processa, VPS devolve. Claude não entra.';
+  if (b === 'claude') return 'Canal 🟠 CLAUDE (ap7) — Grok não entra.';
+  return 'Canal 📝 PLANO — separado.';
+}
+
+/** Protocolo Grok via PC: request/response em /tmp (não chama API na VPS). */
+const GROK_REQ = '/tmp/grok_request.json';
+const GROK_RES = '/tmp/grok_response.json';
+const GROK_WAIT_MS = Number(process.env.GROK_PC_WAIT_MS || 180000);
+const GROK_POLL_MS = Number(process.env.GROK_PC_POLL_MS || 500);
+
+/**
+ * Mensageiro: grava pedido do Telegram, espera resposta do PC.
+ * @returns {Promise<string|null>}
+ */
+async function askGrokViaPcFiles(chatId, text, historySlice) {
+  const id = crypto.randomBytes(8).toString('hex');
+  const request = {
+    id,
+    chat_id: chatId,
+    text: String(text || ''),
+    history: (historySlice || []).slice(-12).map((m) => ({
+      role: m.role,
+      content: m.content,
+    })),
+    ts: new Date().toISOString(),
+    source: 'telegram:@Guardiaonotify_bot',
+    brain: 'grok',
+  };
+
+  // limpa response antiga do mesmo ciclo (evita pegar reply velho)
+  try {
+    if (fs.existsSync(GROK_RES)) {
+      const old = JSON.parse(fs.readFileSync(GROK_RES, 'utf8'));
+      if (old && old.id === id) fs.unlinkSync(GROK_RES);
+      // se response é de id diferente, ainda apaga pra forçar resposta nova
+      else fs.unlinkSync(GROK_RES);
+    }
+  } catch {
+    try { fs.unlinkSync(GROK_RES); } catch { /* ok */ }
+  }
+
+  fs.writeFileSync(GROK_REQ, JSON.stringify(request, null, 2) + '\n', { mode: 0o600 });
+  console.log('[GuardiaoBot] Grok mensageiro →', GROK_REQ, 'id=', id);
+
+  const deadline = Date.now() + GROK_WAIT_MS;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, GROK_POLL_MS));
+    try {
+      if (!fs.existsSync(GROK_RES)) continue;
+      const raw = fs.readFileSync(GROK_RES, 'utf8');
+      if (!raw.trim()) continue;
+      const res = JSON.parse(raw);
+      // aceita se id bate OU se PC só mandou { reply } genérico após o request
+      if (res.id && res.id !== id) continue;
+      const reply = res.reply || res.text || res.response || res.message || '';
+      if (!reply) continue;
+      console.log('[GuardiaoBot] Grok mensageiro ←', GROK_RES, 'id=', res.id || id);
+      // limpa request processado (opcional)
+      try { fs.unlinkSync(GROK_REQ); } catch { /* ok */ }
+      return String(reply).trim();
+    } catch {
+      // JSON incompleto enquanto PC escreve — tenta de novo
+    }
+  }
+  return null;
+}
+
+function appendJsonl(file, obj) {
+  try {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.appendFileSync(file, JSON.stringify(obj) + '\n');
+  } catch (e) {
+    console.error('[GuardiaoBot] bridge write', e.message);
+  }
+}
+
+/** Envia msg pro terminal Grok e espera resposta no outbox (até timeoutMs). */
+async function askTerminalGrok(chatId, text, timeoutMs = 120000) {
+  const id = crypto.randomBytes(6).toString('hex');
+  const ts = Date.now();
+  appendJsonl(BRIDGE_IN, {
+    id,
+    chatId,
+    text,
+    ts,
+    from: 'telegram',
+  });
+  const deadline = Date.now() + timeoutMs;
+  let lastSize = 0;
+  try {
+    lastSize = fs.statSync(BRIDGE_OUT).size;
+  } catch { lastSize = 0; }
+
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 800));
+    let raw = '';
+    try {
+      raw = fs.readFileSync(BRIDGE_OUT, 'utf8');
+    } catch {
+      continue;
+    }
+    const lines = raw.trim().split('\n').filter(Boolean);
+    for (let i = lines.length - 1; i >= 0; i--) {
+      try {
+        const o = JSON.parse(lines[i]);
+        if (o.id === id && o.reply) {
+          console.log('[GuardiaoBot] canal=GROK via terminal-bridge');
+          return String(o.reply).trim();
+        }
+      } catch { /* skip */ }
+    }
+  }
+  return null;
 }
 
 function buildMenu(chatId) {
@@ -440,50 +565,36 @@ async function readJsonSafe(r) {
   }
 }
 
-/** Canal por KEY: grok=só xAI | claude=só ap7 | plano=só ap7 com prompt de plano. SEM misturar. */
+/**
+ * Canal por botão:
+ * - grok  → NÃO chama API na VPS. Só mensageiro /tmp/grok_request.json ↔ /tmp/grok_response.json (PC processa).
+ * - claude/plano → ap7 (inalterado). TokenRouter continua no secrets pro PC usar; VPS não invoca no botão Grok.
+ */
 async function callLLM(history, brain) {
   const mode = BRAIN_PROMPTS[brain] ? brain : 'plano';
   const system = BRAIN_PROMPTS[mode];
   const msgs = history.slice(-12);
 
-  // ─── CANAL GROK: SOMENTE xAI. Claude NÃO entra. ───
+  // ─── CANAL GROK: mensageiro de arquivo (PC 24/7). Claude NUNCA. ───
   if (mode === 'grok') {
-    if (!XAI_KEY) {
-      return (
-        'Canal 🟣 GROK fechado: falta XAI_API_KEY no secrets.\n\n' +
-        'Claude NÃO responde neste botão (regra: canal por key).\n\n' +
-        'Cola a key e reinicia o bot, ou usa 🟠 Claude / 📝 Plano.'
-      );
-    }
-    try {
-      const r = await fetch(`${XAI_BASE}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${XAI_KEY}`,
-        },
-        body: JSON.stringify({
-          model: XAI_MODEL,
-          messages: [{ role: 'system', content: system }, ...msgs],
-          max_tokens: 800,
-          temperature: 0.5,
-        }),
-        signal: AbortSignal.timeout(90000),
-      });
-      const data = await readJsonSafe(r);
-      if (!data._html && !data._parseErr && r.ok) {
-        const txt = data.choices?.[0]?.message?.content;
-        if (txt && !isMockText(txt)) {
-          console.log('[GuardiaoBot] canal=GROK key=xAI');
-          return String(txt).trim();
-        }
-      }
-      console.error('[GuardiaoBot] xAI fail', r.status, data._raw || data.error || '');
-      return 'Canal 🟣 GROK: xAI falhou agora. Tenta de novo ou checa a key. Claude não assume este canal.';
-    } catch (e) {
-      console.error('[GuardiaoBot] xAI err', e.message);
-      return 'Canal 🟣 GROK: erro de rede na xAI. Claude não assume este canal.';
-    }
+    const lastUser = [...msgs].reverse().find((m) => m.role === 'user');
+    const userText = lastUser ? lastUser.content : '';
+    if (!userText) return 'Manda uma mensagem de texto no canal Grok.';
+
+    const chatId = history._chatId || 0;
+    const reply = await askGrokViaPcFiles(chatId, userText, msgs);
+    if (reply) return reply;
+
+    return (
+      'Canal 🟣 Grok: pedi pro PC e não veio resposta a tempo.\n\n' +
+      'No PC (sempre ligado) precisa rodar o worker que:\n' +
+      '1) lê /tmp/grok_request.json na VPS\n' +
+      '2) chama Grok/TokenRouter aí\n' +
+      '3) grava /tmp/grok_response.json\n\n' +
+      'Claude não entra neste botão. Timeout ' +
+      Math.round(GROK_WAIT_MS / 1000) +
+      's.'
+    );
   }
 
   // ─── CANAL CLAUDE e PLANO: SOMENTE ap7 (Anthropic-compat). Grok NÃO entra. ───
@@ -793,6 +904,7 @@ async function handleMessage(msg) {
   await tg('sendChatAction', { chat_id: chatId, action: 'typing' });
   const h = histOf(s);
   h.push({ role: 'user', content: text });
+  h._chatId = chatId;
   const reply = await callLLM(h, s.brain);
   h.push({ role: 'assistant', content: reply });
   if (h.length > 20) s.hist[s.brain] = h.slice(-20);
