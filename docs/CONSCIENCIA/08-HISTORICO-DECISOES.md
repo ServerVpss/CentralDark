@@ -7,6 +7,49 @@ updated: 2026-06-29
 
 # 08 — Histórico de decisões grandes
 
+## Consolidação de labels + correção do github-bot-controller (2026-07-14)
+
+**Autorização:** "PERMITO PIVETE" — auditoria e correção protegida no eixo GitHub labels/workflows.
+
+**Executado (via Lovable, branch `pivete/dev`):**
+
+1. `.github/workflows/bots-labels-seed.yml` reestruturado em dois jobs:
+   - `seed` — semeia apenas canônicos (roteamento `assign:*` + camada humana emoji/PT-BR + severidade + integrações). Aliases legados não são mais semeados.
+   - `migrate` — `workflow_dispatch`-only com inputs `dry_run` e `run_migration`. Migra issues/PRs (abertos E fechados) do alias para o canônico e só remove o alias quando a contagem restante é 0. **Nunca fecha issue/PR.**
+2. `.github/workflows/github-bot-controller.yml` corrigido: caminho `node scripts/github-bot-controller.mjs` (antes apontava para `CentralDark/scripts/...` inexistente, falhava em ~9s).
+3. Novo `scripts/github-bot-controller.mjs`:
+   - `workflow_dispatch` com `BOT_MERGED_PR` + `BOT_SUPERSEDES` + `DRY_RUN=false` é o **único** modo que fecha PRs; exige que o merged_pr esteja mergeado, cada superseded esteja aberto e seja referenciado explicitamente (`#<n>`) no título/corpo do merged_pr. Aplica label `superseded` + comentário antes de fechar. Nunca fecha issue.
+   - `schedule` e `pull_request.closed` → modo auditoria: gera `docs/RELATORIOS/github-bot-controller/<data>.md` e não fecha nada. Nunca fecha por idade.
+   - Valida `BOT_EXPECTED_REPOSITORY == GITHUB_REPOSITORY`.
+4. `docs/BOTS/README.md`, `docs/BOTS/TIME-DE-BOTS.md` e `docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md` atualizados. Nova seção "Duas camadas" deixa explícito que `assign:*` (roteamento/dono) e camada humana (`🟢/🟡/🔴 PT-BR`) coexistem sem fundir; e que `assign:chatgpt`/`assign:grok` são dono, com nota futura sobre `area:chatgpt`/`area:grok-cli`.
+
+**Pares migrados:**
+
+```
+assign:faxineiro     → assign:faxineiro-repo
+assign:auditor       → assign:auditor-divergencia
+assign:seguranca     → assign:guarda-seguranca
+assign:vps-health    → assign:vps-healthcheck
+```
+
+**Por quê:**
+
+- O seed antigo semeava alias e canônico ao mesmo tempo, criando duplicidade permanente e ruído para o Dispatcher.
+- O workflow `github-bot-controller.yml` apontava para script inexistente e podia (por design anterior) fechar PRs a partir de agenda/evento sem referência explícita — risco alto de perder trabalho.
+
+**Reversível:**
+
+- Aliases podem ser recriados manualmente com `gh label create` se necessário. Histórico de labels aplicadas fica preservado nos itens (o job de migração adiciona canônico antes de remover alias).
+- Nenhum issue/PR foi fechado por essa mudança. Nenhum secret foi lido. Nenhum deploy foi feito.
+
+**Como rodar a migração (Pivete, quando quiser):**
+
+1. Actions → "Bots — seed de labels oficiais" → Run workflow → `dry_run=true`, `run_migration=true`. Ler o log.
+2. Reexecutar com `dry_run=false`, `run_migration=true`.
+3. Conferir: `gh label list | grep -E 'assign:(faxineiro|auditor|seguranca|vps-health)$'` deve vir vazio.
+
+
+
 ## Regra: sempre registrar desencontros entre plano e execução (2026-06-29)
 
 **Decisão:** qualquer desvio entre o plano escrito e o que foi executado deve ser registrado aqui E atualizado no arquivo onde o erro pode causar impacto real.
