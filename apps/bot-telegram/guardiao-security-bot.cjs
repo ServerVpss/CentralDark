@@ -49,9 +49,12 @@ resolveEnv();
 
 const TOKEN = process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
 const ADMIN_ID = Number(process.env.GUARDA_TELEGRAM_CHAT_ID || process.env.ADMIN_CHAT_ID || '0');
-const LLM_BASE = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/$/, '');
+// LLM: prefer Arsenal local (OpenAI-compat). api.centralldark.com às vezes devolve HTML/CF 1010.
+const ARSENAL_BASE = (process.env.ARSENAL_BASE_URL || 'http://127.0.0.1:8090').replace(/\/$/, '');
+const ARSENAL_KEY  = process.env.ARSENAL_ADAPTER_KEY || process.env.OPENAI_API_KEY || '';
+const LLM_BASE = (process.env.ANTHROPIC_BASE_URL || '').replace(/\/$/, '');
 const LLM_KEY  = process.env.ANTHROPIC_AUTH_TOKEN || process.env.ANTHROPIC_API_KEY || '';
-const LLM_MODEL = process.env.LLM_MODEL || 'claude-sonnet-4-6';
+const LLM_MODEL = process.env.LLM_MODEL || process.env.ARSENAL_MODEL || 'arsenal-router';
 const TG = 'https://api.telegram.org';
 
 const ALLOW_PATH = '/root/CentralDark/secrets/guardiao-allowlist.json';
@@ -117,7 +120,13 @@ async function tg(method, body) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body || {}),
   });
-  return r.json();
+  const raw = await r.text();
+  try {
+    return JSON.parse(raw);
+  } catch {
+    console.error('[GuardiaoBot] tg non-json', method, raw.slice(0, 120));
+    return { ok: false, description: 'non-json from telegram' };
+  }
 }
 
 function esc(s) {
@@ -127,15 +136,28 @@ function esc(s) {
     .replace(/>/g, '&gt;');
 }
 
-async function send(chatId, text, buttons) {
+async function send(chatId, text, buttons, opts = {}) {
   const body = {
     chat_id: chatId,
     text: String(text).slice(0, 4000),
-    parse_mode: 'HTML',
     disable_web_page_preview: true,
   };
+  // HTML só quando pediu (menus). Texto da IA = plain, evita erro de parse.
+  if (opts.html !== false && (opts.html === true || /<\/?[a-z]|<pre/i.test(String(text)))) {
+    body.parse_mode = 'HTML';
+  }
   if (buttons) body.reply_markup = { inline_keyboard: buttons };
-  return tg('sendMessage', body);
+  const res = await tg('sendMessage', body);
+  if (!res.ok) {
+    console.error('[GuardiaoBot] send fail', res.description);
+    // retry plain
+    if (body.parse_mode) {
+      delete body.parse_mode;
+      body.text = String(text).replace(/<[^>]+>/g, '').slice(0, 4000);
+      return tg('sendMessage', body);
+    }
+  }
+  return res;
 }
 
 async function edit(chatId, msgId, text, buttons) {
@@ -333,34 +355,98 @@ ${esc((a.telegram_ids.length ? a.telegram_ids.map((x) => '  · ' + x).join('\n')
 </pre>`;
 }
 
-async function callLLM(history) {
-  if (!LLM_KEY) return '⚠️ LLM sem chave. Menu e liberar ainda funcionam.';
-  const system =
-    'Você é o canal de SEGURANÇA do Pivete (@Guardiaonotify_bot). PT-BR, direto. ' +
-    'Segurança VPS, fail2ban, liberar IP/email. Não invente invasão. ' +
-    'Se o Pivete tiver teclado ruim, sugira botões do menu.';
-  try {
-    const r = await fetch(`${LLM_BASE}/v1/messages`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': LLM_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: LLM_MODEL,
-        max_tokens: 1200,
-        system,
-        messages: history.slice(-12),
-      }),
-      signal: AbortSignal.timeout(90000),
-    });
-    const data = await r.json();
-    if (!r.ok) return `❌ LLM ${r.status}`;
-    return (data.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n') || '(vazio)';
-  } catch (e) {
-    return `❌ LLM: ${esc(e.message)}`;
+async function readJsonSafe(r) {
+  const raw = await r.text();
+  if (!raw) return { _raw: '', _empty: true };
+  if (raw.trimStart().startsWith('<')) {
+    return { _html: true, _raw: raw.slice(0, 120) };
   }
+  try {
+    return JSON.parse(raw);
+  } catch (e) {
+    return { _parseErr: e.message, _raw: raw.slice(0, 120) };
+  }
+}
+
+async function callLLM(history) {
+  const system =
+    'Você é o canal de SEGURANÇA do Pivete no Telegram (@Guardiaonotify_bot). ' +
+    'Fale PT-BR, calmo, curto, como humano. Segurança VPS, fail2ban, liberar IP/email. ' +
+    'Não invente invasão. Teclado do Pivete é ruim: prefira sugerir botões.';
+
+  const msgs = history.slice(-12);
+
+  // 1) Arsenal local OpenAI-compat (estável na VPS)
+  if (ARSENAL_KEY) {
+    try {
+      const openaiMsgs = [{ role: 'system', content: system }, ...msgs];
+      const r = await fetch(`${ARSENAL_BASE}/v1/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${ARSENAL_KEY}`,
+          'x-api-key': ARSENAL_KEY,
+        },
+        body: JSON.stringify({
+          model: LLM_MODEL,
+          messages: openaiMsgs,
+          max_tokens: 800,
+          temperature: 0.4,
+        }),
+        signal: AbortSignal.timeout(90000),
+      });
+      const data = await readJsonSafe(r);
+      if (data._html || data._parseErr) {
+        console.error('[GuardiaoBot] arsenal non-json', data._raw || data._parseErr);
+      } else if (r.ok) {
+        const txt = data.choices?.[0]?.message?.content;
+        if (txt) return String(txt).trim();
+      } else {
+        console.error('[GuardiaoBot] arsenal status', r.status, JSON.stringify(data).slice(0, 200));
+      }
+    } catch (e) {
+      console.error('[GuardiaoBot] arsenal err', e.message);
+    }
+  }
+
+  // 2) Anthropic-style (só se base local/saudável — evita CF HTML)
+  if (LLM_KEY && LLM_BASE && !/centralldark\.com$/i.test(LLM_BASE.replace(/^https?:\/\//, '').split('/')[0])) {
+    try {
+      const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
+      const r = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': LLM_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
+          max_tokens: 800,
+          system,
+          messages: msgs,
+        }),
+        signal: AbortSignal.timeout(90000),
+      });
+      const data = await readJsonSafe(r);
+      if (!data._html && !data._parseErr && r.ok) {
+        const txt = (data.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
+        if (txt) return txt.trim();
+      }
+    } catch (e) {
+      console.error('[GuardiaoBot] anthropic err', e.message);
+    }
+  }
+
+  // 3) Fallback sem LLM — menu ainda serve
+  return (
+    'Beleza, tô online no canal de segurança, mas a IA de conversa tá instável agora.\n\n' +
+    'Usa os botões:\n' +
+    '· 🔓 Liberar IP / email\n' +
+    '· 🚨 Fail2ban / bans\n' +
+    '· ✅ Ativar sessão IA\n\n' +
+    'Menu: /menu'
+  );
 }
 
 function processLiberar(kind, value, fromId) {
