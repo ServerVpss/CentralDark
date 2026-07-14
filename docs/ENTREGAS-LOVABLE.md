@@ -31,6 +31,32 @@
 
 ---
 
+## 2026-07-14 12:00 BRT — Consolidação de labels + fix github-bot-controller
+
+- **Fio da missão:** "PERMITO PIVETE" — corrigir duplicidade alias/canônico no seed de labels e o workflow quebrado do controller, sem fechar issue/PR e sem tocar em produção.
+- **Escopo:** infra (workflows) + docs.
+- **Área tocada:**
+  - `.github/workflows/bots-labels-seed.yml` (reescrito: 2 jobs — seed canônicos + migrate opcional)
+  - `.github/workflows/github-bot-controller.yml` (path corrigido; DRY_RUN default true)
+  - `scripts/github-bot-controller.mjs` (novo, seguro e reversível)
+  - `docs/BOTS/README.md`, `docs/BOTS/TIME-DE-BOTS.md` (nota de aliases migrados)
+  - `docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md` (seção "Duas camadas")
+  - `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` (registro da decisão)
+- **O que mudou:**
+  - Seed passa a criar/atualizar somente canônicos (roteamento `assign:*` + camada humana emoji/PT-BR). Aliases legados (`assign:faxineiro`, `:auditor`, `:seguranca`, `:vps-health`) saem do seed.
+  - Novo job `migrate` (dispatch-only, `dry_run`+`run_migration`) troca alias→canônico em issues/PRs abertos e fechados e só deleta a label alias quando a contagem restante é 0. Nunca fecha issue/PR.
+  - `github-bot-controller` corrigido pra `scripts/github-bot-controller.mjs`. Modo agenda/PR-closed = auditoria (relatório em `docs/RELATORIOS/github-bot-controller/`). Modo dispatch só fecha PR substituído quando merged_pr está mergeado, cada superseded está aberto e é referenciado explicitamente (`#<n>`) no merged.
+- **Supabase / backend:** —
+- **Depende da VPS / equipe GitHub?:** sim — Pivete precisa rodar manualmente o workflow "Bots — seed de labels oficiais" primeiro com `dry_run=true, run_migration=true`, revisar o log, depois com `dry_run=false, run_migration=true`.
+- **Como testar (leigo):** Actions → "Bots — seed de labels oficiais" → Run workflow → escolher dry_run/run_migration → ler o log e o summary. Depois `gh label list` não deve mais mostrar as 4 labels alias.
+- **Evidência:** `node --check` OK; YAML validado com `yq eval`.
+- **Pendências deixadas:** dispatch manual da migração ainda não foi rodado (aguarda Pivete).
+- **Próximo passo:** Pivete dispara o workflow em dry-run, valida, depois aplica.
+- **Commit:** `[LOVABLE][infra] Consolidar labels e corrigir github-bot-controller` — este commit (SHA informado no chat/PR).
+- **Branch:** `pivete/dev`.
+
+
+
 ## 2026-07-14 09:20 BRT — Cockpit vira Sala de Controle (etapa 1)
 
 - **Fio da missão:** transformar `/admin/cockpit` numa sala de controle densa (Overclock-like), sem cara de site, esperando o dossiê do Grok pra ganhar dados reais.
