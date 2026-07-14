@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
   padding: 10px 14px;
   border: 1px solid var(--sc-line, #10b98133);
   border-radius: 6px;
