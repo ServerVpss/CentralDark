@@ -199,7 +199,7 @@ export default function GrokMissoes() {
                 <button className="gk-btn" onClick={() => bossReview(quest)}>🐉 ENFRENTAR BOSS</button>
                 <button className="gk-btn" onClick={() => resgate(quest)}>🛟 TENTAR RESGATE</button>
                 <button className="gk-btn" onClick={() => verStatus(quest)}>📊 VER STATUS</button>
-                <button className="gk-btn gk-btn-primary" onClick={() => concluirQuest(quest)}>✅ CONCLUIR</button>
+                <button className="gk-btn gk-btn-conclude" onClick={() => concluirQuest(quest)}>✅ CONCLUIR</button>
               </div>
             </div>
           ))}
