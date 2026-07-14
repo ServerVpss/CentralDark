@@ -1,0 +1,240 @@
+/* Sala de Controle — estilo cabine densa, sem cara de site.
+   Paleta esmeralda oficial CentralDark. */
+
+.sc-root {
+  --sc-bg:      #052e2b;
+  --sc-bg2:     #0a3d38;
+  --sc-line:    #10b98133;
+  --sc-line-2:  #10b98166;
+  --sc-em:      #10b981;
+  --sc-em-hi:   #34d399;
+  --sc-txt:     #d1fae5;
+  --sc-mut:     #6ee7b799;
+  --sc-warn:    #fbbf24;
+  --sc-err:     #f87171;
+  --sc-idle:    #64748b;
+
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at top, var(--sc-bg2), var(--sc-bg) 60%, #041f1d 100%);
+  color: var(--sc-txt);
+  font-family: "Inter", system-ui, sans-serif;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.sc-mono { font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace; }
+
+/* Scanline sutil */
+.sc-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 3px,
+    #10b98108 3px 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.sc-grid {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-rows: 44px 1fr 160px;
+  grid-template-columns: 180px 1fr 300px;
+  grid-template-areas:
+    "head head head"
+    "nav  map  feed"
+    "nav  term feed";
+  height: 100vh;
+  gap: 1px;
+  background: var(--sc-line);
+}
+
+.sc-cell {
+  background: linear-gradient(180deg, #061f1d, #041a18);
+  border: 1px solid var(--sc-line);
+  overflow: hidden;
+}
+
+/* HEADER */
+.sc-head {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 18px;
+  font-size: 12px;
+}
+.sc-head-brand { color: var(--sc-em-hi); font-weight: 600; letter-spacing: .12em; }
+.sc-head-brand em { font-style: normal; color: var(--sc-txt); }
+.sc-head-sep { color: var(--sc-mut); }
+.sc-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--sc-em); box-shadow: 0 0 8px var(--sc-em);
+  animation: sc-pulse 1.6s ease-in-out infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.sc-dot.warn { background: var(--sc-warn); box-shadow: 0 0 8px var(--sc-warn); }
+.sc-dot.err  { background: var(--sc-err);  box-shadow: 0 0 8px var(--sc-err); }
+.sc-dot.idle { background: var(--sc-idle); box-shadow: none; animation: none; }
+.sc-head-right { margin-left: auto; display: flex; gap: 14px; align-items: center; color: var(--sc-mut); }
+.sc-head-close {
+  color: var(--sc-mut); text-decoration: none; font-size: 11px;
+  border: 1px solid var(--sc-line-2); padding: 4px 10px; border-radius: 4px;
+}
+.sc-head-close:hover { color: var(--sc-em-hi); border-color: var(--sc-em); }
+
+/* NAV */
+.sc-nav {
+  grid-area: nav;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 6px;
+  gap: 2px;
+}
+.sc-nav-title {
+  color: var(--sc-mut); font-size: 10px; letter-spacing: .18em;
+  padding: 8px 10px 6px;
+}
+.sc-nav button {
+  all: unset;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 4px;
+  font-size: 12px; letter-spacing: .08em; cursor: pointer;
+  color: var(--sc-txt); opacity: .72;
+  border-left: 2px solid transparent;
+}
+.sc-nav button:hover { opacity: 1; background: #10b98111; }
+.sc-nav button.on {
+  opacity: 1; background: #10b98122; color: var(--sc-em-hi);
+  border-left-color: var(--sc-em);
+}
+.sc-nav-hermes {
+  margin-top: auto;
+  padding: 10px; text-align: center;
+  border-top: 1px solid var(--sc-line);
+  color: var(--sc-mut); font-size: 10px;
+}
+.sc-nav-hermes b { color: var(--sc-em-hi); }
+
+/* MAPA */
+.sc-map { grid-area: map; position: relative; }
+.sc-map svg { width: 100%; height: 100%; display: block; }
+.sc-map-title {
+  position: absolute; top: 10px; left: 12px;
+  font-size: 10px; letter-spacing: .18em; color: var(--sc-mut);
+}
+.sc-map-title b { color: var(--sc-em-hi); }
+
+.sc-no {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 6px 10px;
+  border: 1px solid var(--sc-line-2);
+  background: #041a18ee;
+  border-radius: 6px;
+  font-size: 11px;
+  min-width: 110px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .18s;
+  backdrop-filter: blur(4px);
+}
+.sc-no:hover { border-color: var(--sc-em); box-shadow: 0 0 12px #10b98166; }
+.sc-no-grp {
+  display: block;
+  font-size: 8px; letter-spacing: .16em;
+  color: var(--sc-mut); margin-bottom: 2px;
+}
+.sc-no-nome { color: var(--sc-txt); font-weight: 500; }
+.sc-no-det { display: block; margin-top: 3px; font-size: 9px; color: var(--sc-mut); }
+
+/* Linhas animadas */
+.sc-link {
+  stroke: var(--sc-em);
+  stroke-width: 1;
+  fill: none;
+  opacity: .35;
+  stroke-dasharray: 4 6;
+  animation: sc-flow 3s linear infinite;
+}
+@keyframes sc-flow {
+  to { stroke-dashoffset: -20; }
+}
+@keyframes sc-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .55; transform: scale(1.25); }
+}
+
+/* TERMINAL */
+.sc-term {
+  grid-area: term;
+  padding: 10px 14px;
+  overflow-y: auto;
+  font-size: 11.5px;
+}
+.sc-term-head {
+  display: flex; justify-content: space-between;
+  color: var(--sc-mut); font-size: 10px; letter-spacing: .16em;
+  padding-bottom: 6px; border-bottom: 1px solid var(--sc-line);
+  margin-bottom: 8px;
+}
+.sc-term-line {
+  color: var(--sc-em-hi); padding: 2px 0;
+  white-space: pre-wrap;
+}
+.sc-term-line span { color: var(--sc-mut); margin-right: 8px; }
+
+/* FEED */
+.sc-feed {
+  grid-area: feed;
+  display: flex; flex-direction: column;
+}
+.sc-feed-head {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--sc-line);
+  color: var(--sc-mut); font-size: 10px; letter-spacing: .18em;
+}
+.sc-feed-head b { color: var(--sc-em-hi); }
+.sc-feed-list {
+  flex: 1; overflow-y: auto; padding: 6px 0;
+}
+.sc-ev {
+  padding: 8px 14px;
+  border-bottom: 1px dashed #10b98122;
+  font-size: 11.5px;
+}
+.sc-ev-top {
+  display: flex; justify-content: space-between;
+  color: var(--sc-mut); font-size: 9px; margin-bottom: 3px;
+  letter-spacing: .1em;
+}
+.sc-ev-src { color: var(--sc-em-hi); }
+.sc-ev-txt.info { color: var(--sc-txt); }
+.sc-ev-txt.ok   { color: var(--sc-em-hi); }
+.sc-ev-txt.warn { color: var(--sc-warn); }
+.sc-ev-txt.err  { color: var(--sc-err); }
+
+/* Painel de aba (quando não é o mapa) */
+.sc-panel {
+  padding: 20px;
+  color: var(--sc-mut);
+  font-size: 12px;
+  height: 100%;
+  overflow-y: auto;
+}
+.sc-panel h2 {
+  color: var(--sc-em-hi);
+  font-size: 13px; letter-spacing: .16em;
+  margin-bottom: 12px; text-transform: uppercase;
+}
+.sc-panel .sc-empty {
+  border: 1px dashed var(--sc-line-2);
+  padding: 40px 20px; text-align: center; border-radius: 6px;
+  color: var(--sc-mut);
+}
