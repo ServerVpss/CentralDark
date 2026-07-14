@@ -166,13 +166,19 @@ jobs:
             };
 
             const summary = [];
+            let anyFailure = false;
 
             for (const { alias, canonical } of pairs) {
               const aliasExists = await github.rest.issues.getLabel({ owner, repo, name: alias }).catch(() => null);
               if (!aliasExists) { core.info(`- alias ausente, nada a migrar: ${alias}`); continue; }
 
               const canon = await github.rest.issues.getLabel({ owner, repo, name: canonical }).catch(() => null);
-              if (!canon) { core.setFailed(`canônico ausente: ${canonical} — seed deve rodar antes`); return; }
+              if (!canon) {
+                anyFailure = true;
+                summary.push(`❌ canônico ausente: ${canonical} — seed deve rodar antes`);
+                core.error(`canônico ausente: ${canonical} — seed deve rodar antes`);
+                continue;
+              }
 
               const items = await listAll(alias);
               core.info(`→ ${alias}: ${items.length} item(ns) para migrar`);
@@ -195,29 +201,43 @@ jobs:
                 }
               }
 
-              // Confere se sobrou alguém com o alias antes de deletar
+              if (failedMig > 0) {
+                anyFailure = true;
+                summary.push(`⚠️ ${alias} → ${canonical}: ${migrated} migrado(s), ${failedMig} FALHA(s); alias NÃO será removido`);
+                core.error(`falhas na migração de ${alias}: ${failedMig}`);
+                continue; // não tenta deletar alias enquanto há falha ou uso pendente
+              }
+
+              // Confere se sobrou alguém com o alias antes de deletar.
               const remainingRaw = dry ? 0 : (await listAll(alias)).length;
               if (!dry && remainingRaw === 0) {
                 try {
                   await github.rest.issues.deleteLabel({ owner, repo, name: alias });
                   core.notice(`✓ alias removido: ${alias} (migrados: ${migrated})`);
-                  summary.push(`${alias} → ${canonical}: ${migrated} migrado(s), alias removido`);
+                  summary.push(`✅ ${alias} → ${canonical}: ${migrated} migrado(s), alias removido`);
                 } catch (e) {
+                  anyFailure = true;
                   core.warning(`falha ao remover alias ${alias}: ${e.message}`);
-                  summary.push(`${alias} → ${canonical}: ${migrated} migrado(s), FALHA ao remover label`);
+                  summary.push(`❌ ${alias} → ${canonical}: ${migrated} migrado(s), FALHA ao remover label alias`);
                 }
               } else if (dry) {
-                summary.push(`[dry] ${alias} → ${canonical}: ${migrated} previsto(s)`);
+                summary.push(`🧪 [dry] ${alias} → ${canonical}: ${migrated} previsto(s)`);
               } else {
+                // ainda há uso do alias — não é falha "de execução", mas o alias fica.
                 core.warning(`ainda restam ${remainingRaw} item(ns) com ${alias}; alias NÃO removido`);
-                summary.push(`${alias} → ${canonical}: ${migrated} migrado(s), ${remainingRaw} restante(s), alias mantido`);
+                summary.push(`ℹ️ ${alias} → ${canonical}: ${migrated} migrado(s), ${remainingRaw} restante(s), alias mantido`);
               }
 
               // Nunca fecha issue/PR. Nunca altera state.
             }
 
-            core.summary
+            await core.summary
               .addHeading('Migração de aliases')
               .addRaw(`Modo: ${dry ? 'DRY-RUN' : 'APLICADO'}\n\n`)
               .addList(summary.length ? summary : ['(nada a fazer)'])
               .write();
+
+            if (anyFailure) {
+              core.setFailed('Migração terminou com falhas — ver summary acima. Nenhum alias em uso foi removido.');
+            }
+
