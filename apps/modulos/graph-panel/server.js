@@ -9,8 +9,13 @@ const ROOT = resolve(process.cwd());
 const PUBLIC_DIR = join(ROOT, "public");
 const DATA_DIR = join(ROOT, "data");
 const SCRIPTS_DIR = join(ROOT, "scripts");
-// Fonte canônica do Grafo Vivo (mesmo arquivo do Mega Painel + Obsidian)
-const CANONICAL_GRAPH = process.env.GRAPH_DATA_PATH
+// Feeds (padrão 2026: Graphify + GrafoVivo + plugin consome API):
+// - UI (default): data/graph.json — import Graphify reduzido (~2.5k nós)
+// - full: data/graph-full.json — Graphify completo (~25k)
+// - vivo: status/graph-data.json — PM2 operacional (~68)
+const UI_GRAPH = join(DATA_DIR, "graph.json");
+const FULL_GRAPH = join(DATA_DIR, "graph-full.json");
+const VIVO_GRAPH = process.env.GRAPH_DATA_PATH
   || "/root/CentralDark/apps/modulos/status/graph-data.json";
 
 const contentTypes = {
@@ -44,16 +49,27 @@ async function readJson(relativePath, fallback) {
   try { return JSON.parse(await readFile(join(DATA_DIR, relativePath), "utf8")); } catch { return fallback; }
 }
 
-/** Preferir graph-data.json canônico; fallback data/graph.json legado. */
-async function readGraphCanonical(fallback = { nodes: [], edges: [], meta: { source: "empty" } }) {
+/** mode=vivo|full|ui(default). */
+async function readGraphForMode(mode, fallback = { nodes: [], edges: [], meta: { source: "empty" } }) {
+  const m = String(mode || "ui").toLowerCase();
+  const wantVivo = m === "vivo" || m === "live" || m === "pm2";
+  const wantFull = m === "full" || m === "all" || m === "graphify";
+  const path = wantVivo ? VIVO_GRAPH : wantFull ? FULL_GRAPH : UI_GRAPH;
+  const label = wantVivo ? "grafo-vivo-pm2" : wantFull ? "graphify-full" : "graphify-ui";
   try {
-    if (existsSync(CANONICAL_GRAPH)) {
-      const g = JSON.parse(await readFile(CANONICAL_GRAPH, "utf8"));
-      g.meta = { ...(g.meta || {}), source: "grafo-vivo-canonical", path: CANONICAL_GRAPH };
+    if (existsSync(path)) {
+      const g = JSON.parse(await readFile(path, "utf8"));
+      g.meta = {
+        ...(g.meta || {}),
+        source: label,
+        path,
+        modes: "default=ui graphify | mode=vivo PM2 | mode=full graphify completo",
+      };
       return g;
     }
   } catch { /* fallthrough */ }
-  return readJson("graph.json", fallback);
+  if (!wantVivo && !wantFull) return readJson("graph.json", fallback);
+  return fallback;
 }
 
 function countGraph(graph) {
@@ -76,19 +92,32 @@ async function latestHistory() {
   } catch { return []; }
 }
 
-async function api(req, res, pathname) {
+async function api(req, res, pathname, url) {
+  const mode = url?.searchParams?.get("mode") || "";
   if (pathname === "/api/health") {
-    const graph = await readGraphCanonical({ nodes: [], edges: [] });
-    return json(res, 200, { ok: true, service: "graph-panel", port: PORT, data: countGraph(graph), canonical: CANONICAL_GRAPH, time: new Date().toISOString() });
+    const ui = await readGraphForMode("ui", { nodes: [], edges: [] });
+    const vivo = await readGraphForMode("vivo", { nodes: [], edges: [] });
+    const full = await readGraphForMode("full", { nodes: [], edges: [] });
+    return json(res, 200, {
+      ok: true,
+      service: "graph-panel",
+      port: PORT,
+      ui: countGraph(ui),
+      vivo: countGraph(vivo),
+      full: countGraph(full),
+      plugin_url_recomendado: "https://grafo.centralldark.com/api/graph?mode=vivo",
+      time: new Date().toISOString(),
+    });
   }
-  if (pathname === "/api/graph") return json(res, 200, await readGraphCanonical());
+  if (pathname === "/api/graph") return json(res, 200, await readGraphForMode(mode || "ui"));
   if (pathname === "/api/report") return json(res, 200, { markdown: await readText("report.md", "# Resumo\n\nSem relatório disponível.") });
   if (pathname === "/api/audit") return json(res, 200, { markdown: await readText("audit.md", "# Auditoria\n\nSem auditoria disponível.") });
   if (pathname === "/api/stats") {
-    const graph = await readGraphCanonical({ nodes: [], edges: [] });
-    const graphFile = existsSync(CANONICAL_GRAPH) ? CANONICAL_GRAPH : join(DATA_DIR, "graph.json");
+    const graph = await readGraphForMode(mode || "ui", { nodes: [], edges: [] });
+    const m = String(mode || "ui").toLowerCase();
+    const graphFile = m === "vivo" || m === "live" ? VIVO_GRAPH : m === "full" ? FULL_GRAPH : UI_GRAPH;
     const modifiedAt = existsSync(graphFile) ? (await stat(graphFile)).mtime.toISOString() : null;
-    return json(res, 200, { ...countGraph(graph), modifiedAt, meta: graph.meta || {}, canonical: CANONICAL_GRAPH });
+    return json(res, 200, { ...countGraph(graph), modifiedAt, meta: graph.meta || {} });
   }
   if (pathname === "/api/history") return json(res, 200, { items: await latestHistory() });
   if (pathname === "/api/status") {
@@ -131,7 +160,7 @@ async function servePublic(req, res, pathname) {
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
-    if (url.pathname.startsWith("/api/")) return await api(req, res, url.pathname);
+    if (url.pathname.startsWith("/api/")) return await api(req, res, url.pathname, url);
     return await servePublic(req, res, url.pathname);
   } catch (error) {
     return json(res, 500, { error: "Falha interna no graph-panel.", detail: error.message });
