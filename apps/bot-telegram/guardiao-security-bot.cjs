@@ -100,15 +100,34 @@ if (!TOKEN) {
   process.exit(1);
 }
 
-const sessions = new Map(); // chatId -> { talk, history, await, brain }
+// Canais SEPARADOS por key/botão — histórico NÃO mistura Grok ↔ Claude ↔ Plano
+const sessions = new Map(); // chatId -> { talk, await, brain, hist: { grok, claude, plano } }
 
 function getSess(chatId) {
   if (!sessions.has(chatId)) {
-    sessions.set(chatId, { talk: false, history: [], await: null, brain: 'plano' });
+    sessions.set(chatId, {
+      talk: false,
+      await: null,
+      brain: 'plano',
+      hist: { grok: [], claude: [], plano: [] },
+    });
   }
   const s = sessions.get(chatId);
   if (!s.brain) s.brain = 'plano';
+  if (!s.hist) s.hist = { grok: [], claude: [], plano: [] };
+  for (const k of ['grok', 'claude', 'plano']) {
+    if (!Array.isArray(s.hist[k])) s.hist[k] = [];
+  }
+  // migra history antigo se existir
+  if (Array.isArray(s.history) && s.history.length) {
+    s.hist[s.brain] = s.history;
+    delete s.history;
+  }
   return s;
+}
+
+function histOf(s) {
+  return s.hist[s.brain] || (s.hist[s.brain] = []);
 }
 
 function logLiberar(msg) {
@@ -272,9 +291,19 @@ function activateAuthSession(meta) {
 }
 
 function brainLabel(b) {
-  if (b === 'grok') return XAI_KEY ? '🟣 Grok (API xAI)' : '🟣 Grok (voz no ap7 — sem XAI_KEY ainda)';
-  if (b === 'claude') return '🟠 Claude (teu ap7)';
-  return '📝 Plano (bolar junto)';
+  if (b === 'grok') {
+    return XAI_KEY
+      ? '🟣 Grok · key xAI · canal próprio'
+      : '🟣 Grok · SEM XAI_API_KEY (canal fechado até colar key)';
+  }
+  if (b === 'claude') return '🟠 Claude · key ap7 · canal próprio';
+  return '📝 Plano · canal próprio (ap7 só pra plano)';
+}
+
+function channelBanner(b) {
+  if (b === 'grok') return 'Canal 🟣 GROK — Claude NÃO entra aqui.';
+  if (b === 'claude') return 'Canal 🟠 CLAUDE (ap7) — Grok NÃO entra aqui.';
+  return 'Canal 📝 PLANO — só bolar plano; separado de Grok/Claude chat.';
 }
 
 function buildMenu(chatId) {
@@ -411,13 +440,21 @@ async function readJsonSafe(r) {
   }
 }
 
+/** Canal por KEY: grok=só xAI | claude=só ap7 | plano=só ap7 com prompt de plano. SEM misturar. */
 async function callLLM(history, brain) {
   const mode = BRAIN_PROMPTS[brain] ? brain : 'plano';
   const system = BRAIN_PROMPTS[mode];
   const msgs = history.slice(-12);
 
-  // 0) Grok real via xAI se brain=grok e key existir
-  if (mode === 'grok' && XAI_KEY) {
+  // ─── CANAL GROK: SOMENTE xAI. Claude NÃO entra. ───
+  if (mode === 'grok') {
+    if (!XAI_KEY) {
+      return (
+        'Canal 🟣 GROK fechado: falta XAI_API_KEY no secrets.\n\n' +
+        'Claude NÃO responde neste botão (regra: canal por key).\n\n' +
+        'Cola a key e reinicia o bot, ou usa 🟠 Claude / 📝 Plano.'
+      );
+    }
     try {
       const r = await fetch(`${XAI_BASE}/chat/completions`, {
         method: 'POST',
@@ -437,91 +474,60 @@ async function callLLM(history, brain) {
       if (!data._html && !data._parseErr && r.ok) {
         const txt = data.choices?.[0]?.message?.content;
         if (txt && !isMockText(txt)) {
-          console.log('[GuardiaoBot] LLM via xAI', XAI_MODEL);
+          console.log('[GuardiaoBot] canal=GROK key=xAI');
           return String(txt).trim();
         }
-      } else {
-        console.error('[GuardiaoBot] xAI fail', r.status, data._raw || data.error || '');
       }
+      console.error('[GuardiaoBot] xAI fail', r.status, data._raw || data.error || '');
+      return 'Canal 🟣 GROK: xAI falhou agora. Tenta de novo ou checa a key. Claude não assume este canal.';
     } catch (e) {
       console.error('[GuardiaoBot] xAI err', e.message);
+      return 'Canal 🟣 GROK: erro de rede na xAI. Claude não assume este canal.';
     }
   }
 
-  // 1) ap7 (Claude / também voz Grok ou Plano se sem xAI)
-  if (LLM_KEY && LLM_BASE) {
+  // ─── CANAL CLAUDE e PLANO: SOMENTE ap7 (Anthropic-compat). Grok NÃO entra. ───
+  if ((mode === 'claude' || mode === 'plano') && LLM_KEY && LLM_BASE) {
     try {
       const host = LLM_BASE.replace(/^https?:\/\//, '').split('/')[0];
-      if (!/centralldark\.com$/i.test(host)) {
-        const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
-        const r = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': LLM_KEY,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
-            max_tokens: 800,
-            system:
-              mode === 'grok' && !XAI_KEY
-                ? system + ' (API xAI ainda sem key — respondendo no teu ap7 com persona Grok.)'
-                : system,
-            messages: msgs,
-          }),
-          signal: AbortSignal.timeout(90000),
-        });
-        const data = await readJsonSafe(r);
-        if (!data._html && !data._parseErr && r.ok) {
-          const txt = (data.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
-          if (txt && !isMockText(txt)) {
-            console.log('[GuardiaoBot] LLM via', host, 'brain', mode);
-            return txt.trim();
-          }
+      if (/centralldark\.com$/i.test(host)) {
+        return 'Canal 🟠 ap7: base URL errada (centralldark). Ajusta GUARDIAO_LLM_BASE.';
+      }
+      const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
+      const r = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': LLM_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
+          max_tokens: 800,
+          system,
+          messages: msgs,
+        }),
+        signal: AbortSignal.timeout(90000),
+      });
+      const data = await readJsonSafe(r);
+      if (!data._html && !data._parseErr && r.ok) {
+        const txt = (data.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
+        if (txt && !isMockText(txt)) {
+          console.log('[GuardiaoBot] canal=' + mode.toUpperCase() + ' key=ap7 host=' + host);
+          return txt.trim();
         }
       }
+      console.error('[GuardiaoBot] ap7 fail', r.status, data._raw || '');
     } catch (e) {
       console.error('[GuardiaoBot] ap7 err', e.message);
     }
+    return (
+      (mode === 'plano' ? 'Canal 📝 PLANO' : 'Canal 🟠 CLAUDE') +
+      ': ap7 falhou agora. Grok não assume este canal.\n\n/menu'
+    );
   }
 
-  // 2) Arsenal (Abacus) — sem mock
-  if (ARSENAL_KEY) {
-    for (const model of ['arsenal-router', 'gemini-3-flash-preview', 'gemini-3.1-flash-lite']) {
-      try {
-        const r = await fetch(`${ARSENAL_BASE}/v1/chat/completions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${ARSENAL_KEY}`,
-            'x-api-key': ARSENAL_KEY,
-          },
-          body: JSON.stringify({
-            model,
-            messages: [{ role: 'system', content: system }, ...msgs],
-            max_tokens: 800,
-            temperature: 0.4,
-          }),
-          signal: AbortSignal.timeout(60000),
-        });
-        const data = await readJsonSafe(r);
-        if (data._html || data._parseErr || !r.ok) continue;
-        const txt = data.choices?.[0]?.message?.content;
-        if (txt && !isMockText(txt)) {
-          console.log('[GuardiaoBot] arsenal', model, mode);
-          return String(txt).trim();
-        }
-      } catch (e) {
-        console.error('[GuardiaoBot] arsenal', model, e.message);
-      }
-    }
-  }
-
-  return (
-    'Canal online, mas a IA de conversa falhou agora.\n\n' +
-    'Ainda rola:\n· 🔓 Liberar\n· 🚨 Fail2ban\n· 📝/🟣/🟠 trocar cérebro\n\n/menu'
-  );
+  return 'Canal sem key configurada pra este botão.\nGrok→XAI_API_KEY | Claude/Plano→ANTHROPIC no ap7\n\n/menu';
 }
 
 function processLiberar(kind, value, fromId) {
@@ -609,7 +615,11 @@ async function handleCallback(cq) {
     await edit(chatId, msgId, m.text, m.buttons);
     return send(
       chatId,
-      '🟢 Conversa LIGADA.\nCérebro: ' + brainLabel(s.brain) + '\n\nManda o que quiser. Vamos bolar o plano.',
+      '🟢 Conversa LIGADA.\n' +
+        channelBanner(s.brain) +
+        '\n' +
+        brainLabel(s.brain) +
+        '\n\nManda texto. Cada botão = canal e key separados.',
       null,
       { html: false },
     );
@@ -624,17 +634,21 @@ async function handleCallback(cq) {
     const b = data.slice('sec:brain:'.length);
     if (!BRAIN_PROMPTS[b]) return;
     s.brain = b;
-    s.history = []; // troca de cérebro limpa histórico
+    // NÃO apaga histórico do canal — só troca de canal (história separada)
     const m = buildMenu(chatId);
     await edit(chatId, msgId, m.text, m.buttons);
-    let extra = '';
-    if (b === 'grok' && !XAI_KEY) {
-      extra = '\n\n(Ainda sem XAI_API_KEY no secrets — falo com persona Grok no teu ap7. Cola a key depois e vira Grok de verdade.)';
-    }
-    if (b === 'plano') {
-      extra = '\n\nModo plano: me fala o objetivo em 1 linha que a gente monta os passos.';
-    }
-    return send(chatId, 'Cérebro: ' + brainLabel(b) + extra + (s.talk ? '' : '\n\nAperta 🟢 pra ligar conversa.'), null, { html: false });
+    const n = histOf(s).length;
+    return send(
+      chatId,
+      channelBanner(b) +
+        '\n' +
+        brainLabel(b) +
+        '\nMsgs neste canal: ' +
+        n +
+        (s.talk ? '' : '\n\nAperta 🟢 pra falar neste canal.'),
+      null,
+      { html: false },
+    );
   }
   if (data === 'sec:liberar') {
     s.await = null;
@@ -777,13 +791,19 @@ async function handleMessage(msg) {
   }
 
   await tg('sendChatAction', { chat_id: chatId, action: 'typing' });
-  s.history.push({ role: 'user', content: text });
-  const reply = await callLLM(s.history, s.brain);
-  s.history.push({ role: 'assistant', content: reply });
-  if (s.history.length > 20) s.history = s.history.slice(-20);
-  return send(chatId, reply.slice(0, 3900), [
-    [{ text: '🔴 Desligar', callback_data: 'sec:talk:off' }, { text: '📝 Plano', callback_data: 'sec:brain:plano' }],
-    [{ text: '🟣 Grok', callback_data: 'sec:brain:grok' }, { text: '🟠 Claude', callback_data: 'sec:brain:claude' }],
+  const h = histOf(s);
+  h.push({ role: 'user', content: text });
+  const reply = await callLLM(h, s.brain);
+  h.push({ role: 'assistant', content: reply });
+  if (h.length > 20) s.hist[s.brain] = h.slice(-20);
+  const tag = s.brain === 'grok' ? '🟣' : s.brain === 'claude' ? '🟠' : '📝';
+  return send(chatId, tag + ' ' + reply.slice(0, 3850), [
+    [{ text: '🔴 Desligar', callback_data: 'sec:talk:off' }],
+    [
+      { text: '📝 Plano', callback_data: 'sec:brain:plano' },
+      { text: '🟣 Grok', callback_data: 'sec:brain:grok' },
+      { text: '🟠 Claude', callback_data: 'sec:brain:claude' },
+    ],
     [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
   ], { html: false });
 }
