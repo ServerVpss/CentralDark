@@ -49,13 +49,25 @@ resolveEnv();
 
 const TOKEN = process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
 const ADMIN_ID = Number(process.env.GUARDA_TELEGRAM_CHAT_ID || process.env.ADMIN_CHAT_ID || '0');
-// LLM: prefer Arsenal local (OpenAI-compat). api.centralldark.com às vezes devolve HTML/CF 1010.
+// LLM cascade (dossiê secrets + ap7 vivo na VPS):
+// 1) GUARDIAO_LLM_BASE / claude.ap7.site (Anthropic-compat) — funciona agora
+// 2) Arsenal local 8090 (Abacus) — se não for mock
+// 3) texto fixo + botões
 const ARSENAL_BASE = (process.env.ARSENAL_BASE_URL || 'http://127.0.0.1:8090').replace(/\/$/, '');
 const ARSENAL_KEY  = process.env.ARSENAL_ADAPTER_KEY || process.env.OPENAI_API_KEY || '';
-const LLM_BASE = (process.env.ANTHROPIC_BASE_URL || '').replace(/\/$/, '');
 const LLM_KEY  = process.env.ANTHROPIC_AUTH_TOKEN || process.env.ANTHROPIC_API_KEY || '';
-const LLM_MODEL = process.env.LLM_MODEL || process.env.ARSENAL_MODEL || 'arsenal-router';
+const LLM_BASE = (
+  process.env.GUARDIAO_LLM_BASE ||
+  process.env.ANTHROPIC_BASE_URL ||
+  'https://claude.ap7.site'
+).replace(/\/$/, '');
+const LLM_MODEL = process.env.LLM_MODEL || process.env.ARSENAL_MODEL || 'claude-sonnet-4-6';
 const TG = 'https://api.telegram.org';
+
+function isMockText(t) {
+  const s = String(t || '').toLowerCase();
+  return s.includes('[mock') || s.includes('circuit breaker') || s.includes('sem créditos no provider');
+}
 
 const ALLOW_PATH = '/root/CentralDark/secrets/guardiao-allowlist.json';
 const AUTH_PATH  = '/root/CentralDark/secrets/guardiao-auth-session.json';
@@ -376,76 +388,85 @@ async function callLLM(history) {
 
   const msgs = history.slice(-12);
 
-  // 1) Arsenal local OpenAI-compat (estável na VPS)
+  // 1) ap7 / GUARDIAO_LLM_BASE (Anthropic) — testado vivo na VPS
+  if (LLM_KEY && LLM_BASE) {
+    try {
+      const host = LLM_BASE.replace(/^https?:\/\//, '').split('/')[0];
+      // evita api.centralldark.com (CF 1010 HTML)
+      if (!/centralldark\.com$/i.test(host)) {
+        const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
+        const r = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': LLM_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: process.env.ANTHROPIC_MODEL || LLM_MODEL || 'claude-sonnet-4-6',
+            max_tokens: 800,
+            system,
+            messages: msgs,
+          }),
+          signal: AbortSignal.timeout(90000),
+        });
+        const data = await readJsonSafe(r);
+        if (!data._html && !data._parseErr && r.ok) {
+          const txt = (data.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
+          if (txt && !isMockText(txt)) {
+            console.log('[GuardiaoBot] LLM via', host);
+            return txt.trim();
+          }
+        } else {
+          console.error('[GuardiaoBot] ap7 fail', r.status, data._raw || data.error || '');
+        }
+      }
+    } catch (e) {
+      console.error('[GuardiaoBot] ap7 err', e.message);
+    }
+  }
+
+  // 2) Arsenal local (Abacus free/tier) — ignora mock
   if (ARSENAL_KEY) {
-    try {
-      const openaiMsgs = [{ role: 'system', content: system }, ...msgs];
-      const r = await fetch(`${ARSENAL_BASE}/v1/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${ARSENAL_KEY}`,
-          'x-api-key': ARSENAL_KEY,
-        },
-        body: JSON.stringify({
-          model: LLM_MODEL,
-          messages: openaiMsgs,
-          max_tokens: 800,
-          temperature: 0.4,
-        }),
-        signal: AbortSignal.timeout(90000),
-      });
-      const data = await readJsonSafe(r);
-      if (data._html || data._parseErr) {
-        console.error('[GuardiaoBot] arsenal non-json', data._raw || data._parseErr);
-      } else if (r.ok) {
+    for (const model of ['arsenal-router', 'gemini-3-flash-preview', 'gemini-3.1-flash-lite']) {
+      try {
+        const openaiMsgs = [{ role: 'system', content: system }, ...msgs];
+        const r = await fetch(`${ARSENAL_BASE}/v1/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${ARSENAL_KEY}`,
+            'x-api-key': ARSENAL_KEY,
+          },
+          body: JSON.stringify({
+            model,
+            messages: openaiMsgs,
+            max_tokens: 800,
+            temperature: 0.4,
+          }),
+          signal: AbortSignal.timeout(60000),
+        });
+        const data = await readJsonSafe(r);
+        if (data._html || data._parseErr || !r.ok) continue;
         const txt = data.choices?.[0]?.message?.content;
-        if (txt) return String(txt).trim();
-      } else {
-        console.error('[GuardiaoBot] arsenal status', r.status, JSON.stringify(data).slice(0, 200));
+        if (txt && !isMockText(txt)) {
+          console.log('[GuardiaoBot] LLM via arsenal', model);
+          return String(txt).trim();
+        }
+      } catch (e) {
+        console.error('[GuardiaoBot] arsenal', model, e.message);
       }
-    } catch (e) {
-      console.error('[GuardiaoBot] arsenal err', e.message);
     }
   }
 
-  // 2) Anthropic-style (só se base local/saudável — evita CF HTML)
-  if (LLM_KEY && LLM_BASE && !/centralldark\.com$/i.test(LLM_BASE.replace(/^https?:\/\//, '').split('/')[0])) {
-    try {
-      const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
-      const r = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': LLM_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
-          max_tokens: 800,
-          system,
-          messages: msgs,
-        }),
-        signal: AbortSignal.timeout(90000),
-      });
-      const data = await readJsonSafe(r);
-      if (!data._html && !data._parseErr && r.ok) {
-        const txt = (data.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
-        if (txt) return txt.trim();
-      }
-    } catch (e) {
-      console.error('[GuardiaoBot] anthropic err', e.message);
-    }
-  }
-
-  // 3) Fallback sem LLM — menu ainda serve
+  // 3) Fallback — botões ainda funcionam (dossiê: mock limpo)
   return (
-    'Beleza, tô online no canal de segurança, mas a IA de conversa tá instável agora.\n\n' +
-    'Usa os botões:\n' +
+    'Tô no canal de segurança, mas os free tiers/Abacus tão sem crédito ou bloqueados da VPS agora.\n\n' +
+    'Ainda funciona sem IA:\n' +
     '· 🔓 Liberar IP / email\n' +
     '· 🚨 Fail2ban / bans\n' +
     '· ✅ Ativar sessão IA\n\n' +
-    'Menu: /menu'
+    '/menu'
   );
 }
 
