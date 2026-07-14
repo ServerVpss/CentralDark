@@ -12,8 +12,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
-| decisoes | 30 | 30 | 30 | 0 | 0 |
-| aprendizados | 355 | 0 | 0 | 355 | 0 |
+| decisoes | 38 | 38 | 38 | 0 | 0 |
+| aprendizados | 356 | 0 | 0 | 356 | 0 |
 
 ## Detalhes
 
@@ -36,14 +36,14 @@
 
 ### decisoes
 
-- 🟩 OK: **30**
+- 🟩 OK: **38**
 - 🟥 Faltando no Notion: **0**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **355**
+- 🟥 Faltando no Notion: **356**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -403,4 +403,5 @@
 - 321. Dedup .env VPS + fix Caddy api.centralldark.com
 - 322. MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia
 - 323. Auditoria de permissões da view api.ai_requests no HUB
+- 324. Como o Pivete manda REGISTRAR (e o que não esquecer do bridge)
 </details>
