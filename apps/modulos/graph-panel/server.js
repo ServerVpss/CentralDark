@@ -9,6 +9,9 @@ const ROOT = resolve(process.cwd());
 const PUBLIC_DIR = join(ROOT, "public");
 const DATA_DIR = join(ROOT, "data");
 const SCRIPTS_DIR = join(ROOT, "scripts");
+// Fonte canônica do Grafo Vivo (mesmo arquivo do Mega Painel + Obsidian)
+const CANONICAL_GRAPH = process.env.GRAPH_DATA_PATH
+  || "/root/CentralDark/apps/modulos/status/graph-data.json";
 
 const contentTypes = {
   ".html": "text/html; charset=utf-8",
@@ -41,6 +44,18 @@ async function readJson(relativePath, fallback) {
   try { return JSON.parse(await readFile(join(DATA_DIR, relativePath), "utf8")); } catch { return fallback; }
 }
 
+/** Preferir graph-data.json canônico; fallback data/graph.json legado. */
+async function readGraphCanonical(fallback = { nodes: [], edges: [], meta: { source: "empty" } }) {
+  try {
+    if (existsSync(CANONICAL_GRAPH)) {
+      const g = JSON.parse(await readFile(CANONICAL_GRAPH, "utf8"));
+      g.meta = { ...(g.meta || {}), source: "grafo-vivo-canonical", path: CANONICAL_GRAPH };
+      return g;
+    }
+  } catch { /* fallthrough */ }
+  return readJson("graph.json", fallback);
+}
+
 function countGraph(graph) {
   const nodes = Array.isArray(graph?.nodes) ? graph.nodes.length : 0;
   const edges = Array.isArray(graph?.edges) ? graph.edges.length : 0;
@@ -63,17 +78,17 @@ async function latestHistory() {
 
 async function api(req, res, pathname) {
   if (pathname === "/api/health") {
-    const graph = await readJson("graph.json", { nodes: [], edges: [] });
-    return json(res, 200, { ok: true, service: "graph-panel", port: PORT, data: countGraph(graph), time: new Date().toISOString() });
+    const graph = await readGraphCanonical({ nodes: [], edges: [] });
+    return json(res, 200, { ok: true, service: "graph-panel", port: PORT, data: countGraph(graph), canonical: CANONICAL_GRAPH, time: new Date().toISOString() });
   }
-  if (pathname === "/api/graph") return json(res, 200, await readJson("graph.json", { nodes: [], edges: [], meta: { source: "empty" } }));
+  if (pathname === "/api/graph") return json(res, 200, await readGraphCanonical());
   if (pathname === "/api/report") return json(res, 200, { markdown: await readText("report.md", "# Resumo\n\nSem relatório disponível.") });
   if (pathname === "/api/audit") return json(res, 200, { markdown: await readText("audit.md", "# Auditoria\n\nSem auditoria disponível.") });
   if (pathname === "/api/stats") {
-    const graph = await readJson("graph.json", { nodes: [], edges: [] });
-    const graphFile = join(DATA_DIR, "graph.json");
+    const graph = await readGraphCanonical({ nodes: [], edges: [] });
+    const graphFile = existsSync(CANONICAL_GRAPH) ? CANONICAL_GRAPH : join(DATA_DIR, "graph.json");
     const modifiedAt = existsSync(graphFile) ? (await stat(graphFile)).mtime.toISOString() : null;
-    return json(res, 200, { ...countGraph(graph), modifiedAt, meta: graph.meta || {} });
+    return json(res, 200, { ...countGraph(graph), modifiedAt, meta: graph.meta || {}, canonical: CANONICAL_GRAPH });
   }
   if (pathname === "/api/history") return json(res, 200, { items: await latestHistory() });
   if (pathname === "/api/status") {
