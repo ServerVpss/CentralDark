@@ -31,6 +31,21 @@
 
 ---
 
+## 2026-07-14 17:30 BRT — Migração live de labels BLOQUEADA no precheck
+
+- **Fio da missão:** "PERMITO PIVETE" — rodar a migração alias→canônico das 4 labels no `ServerVpss/CentralDark` via `workflow_dispatch` (dry-run + apply).
+- **Escopo:** github/labels (READ-ONLY até o precheck passar).
+- **Resultado:** 🔴 BLOQUEADO. Nada disparado. Nada alterado.
+- **Motivo (evidência live):**
+  - `default_branch=main`, `SHA=b3f8df527dd45ab4a5f431aec0d81c53e551286c`.
+  - `bots-labels-seed.yml` na `main` NÃO tem `process.env.DRY_RUN`, job `migrate`, input `run_migration` nem `core.setFailed`. Só o job `seed` legado (100 linhas).
+  - `github-bot-controller.yml` na `main` tem um único job `controller` (58 linhas), sem `audit`/`manual_close` separados nem permissions divididas.
+  - As versões endurecidas ficaram no espelho Lovable / `pivete/dev` e não foram propagadas ao repo oficial.
+- **Inventário read-only dos 4 pares alias→canônico:** todas as 8 labels retornam `404`; 0 issues/PRs (open/closed) em qualquer uma. Aliases só existem no código-fonte do workflow.
+- **Ações tomadas:** nenhuma. Sem `workflow_dispatch`, sem edição/deleção de label, sem fechar issue/PR, sem `manual_close`, sem tocar em secrets.
+- **Próximo passo único:** abrir PR `pivete/dev → main` no `ServerVpss/CentralDark` com os 3 arquivos endurecidos (`bots-labels-seed.yml`, `github-bot-controller.yml`, `scripts/github-bot-controller.mjs`), mergear, revalidar o precheck e só então rodar dry-run + apply.
+- **Branch:** `pivete/dev`.
+
 ## 2026-07-14 16:00 BRT — Correção final labels/controller (3ª passada)
 
 - **Fio da missão:** revisão final do commit `daeea4c9` — dry-run do seed não escrevia, controller com token write em eventos automáticos, parser de `Supersedes` frouxo demais e ordem de escrita insegura.
