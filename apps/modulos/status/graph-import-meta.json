@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "src": "/root/CentralDark/graphify-out/graph.json",
+  "full_nodes": 24887,
+  "full_edges": 43550,
+  "ui_nodes": 2500,
+  "ui_edges": 9609,
+  "importedAt": "2026-07-14T14:33:49.905Z",
+  "full_path": "/root/CentralDark/apps/modulos/graph-panel/data/graph-full.json",
+  "ui_path": "/root/CentralDark/apps/modulos/graph-panel/data/graph.json"
+}

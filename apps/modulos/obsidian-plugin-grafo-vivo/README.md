@@ -52,8 +52,8 @@ Vai em **Configurações → CentralDark Grafo Vivo**:
 
 | Opção | Padrão |
 |-------|--------|
-| URL do grafo | `https://status.centralldark.com/graph-data.json` |
-| Intervalo de atualização | 30 segundos |
+| URL do grafo | `https://grafo.centralldark.com/api/graph?mode=vivo` (PM2) · sem mode = Graphify UI · `mode=full` = 25k nós |
+| Intervalo de atualização | 15 segundos (poll) · auto-update do plugin separado |
 | Abrir nota ao clicar | ✅ ativado |
 
 ---
