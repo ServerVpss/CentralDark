@@ -185,13 +185,24 @@ async function auditMode() {
 }
 
 async function closeSupersededMode() {
-  const mergedNum = parseInt(MERGED_PR.replace(/[^0-9]/g, ""), 10);
-  const requested = parseNumbersFromList(SUPERSEDES);
-
-  if (!mergedNum) {
+  // merged_pr aceita "149" ou "#149" — nada mais.
+  const mergedRawTrim = MERGED_PR.trim();
+  const mergedMatch = /^#?(\d+)$/.exec(mergedRawTrim);
+  if (!mergedRawTrim) {
     console.log("[controller] merged_pr vazio — nada a fazer");
     return;
   }
+  if (!mergedMatch) {
+    throw new Error(`BOT_MERGED_PR inválido: '${mergedRawTrim}' — use 'N' ou '#N'.`);
+  }
+  const mergedNum = parseInt(mergedMatch[1], 10);
+
+  // Supersedes: parser estrito #N #N ou #N,#N. Rejeita dígito sem '#'.
+  const parsedReq = parseHashRefsStrict(SUPERSEDES);
+  if (!parsedReq.ok) {
+    throw new Error(`BOT_SUPERSEDES inválido — ${parsedReq.reason}`);
+  }
+  const requested = parsedReq.numbers;
   if (requested.length === 0) {
     throw new Error("BOT_SUPERSEDES vazio — nada a fazer (abortando por segurança)");
   }
