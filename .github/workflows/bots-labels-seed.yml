@@ -138,6 +138,10 @@ jobs:
 
             core.notice(`labels — criadas: ${created} · atualizadas: ${updated} · iguais: ${kept} · falhas: ${failed} · dry=${dry}`);
 
+            if (failed > 0) {
+              core.setFailed(`Seed terminou com ${failed} falha(s) no catálogo canônico — ver logs acima.`);
+            }
+
   migrate:
     name: Migrar aliases legados → canônicos
     needs: seed
