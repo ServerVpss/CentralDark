@@ -62,12 +62,29 @@ const LLM_BASE = (
   'https://claude.ap7.site'
 ).replace(/\/$/, '');
 const LLM_MODEL = process.env.LLM_MODEL || process.env.ARSENAL_MODEL || 'claude-sonnet-4-6';
+const XAI_KEY = process.env.XAI_API_KEY || process.env.GROK_API_KEY || process.env.XAI_KEY || '';
+const XAI_BASE = (process.env.XAI_BASE_URL || 'https://api.x.ai/v1').replace(/\/$/, '');
+const XAI_MODEL = process.env.XAI_MODEL || process.env.GROK_MODEL || 'grok-3-mini';
 const TG = 'https://api.telegram.org';
 
 function isMockText(t) {
   const s = String(t || '').toLowerCase();
   return s.includes('[mock') || s.includes('circuit breaker') || s.includes('sem créditos no provider');
 }
+
+const BRAIN_PROMPTS = {
+  claude:
+    'Você é o canal de SEGURANÇA do Pivete (@Guardiaonotify_bot), voz Claude/ap7. ' +
+    'PT-BR, calmo, curto, humano. Fail2ban, IP, liberar acesso. Não invente invasão. Teclado ruim: sugira botões.',
+  grok:
+    'Você é o Grok no canal de SEGURANÇA do Pivete (@Guardiaonotify_bot). ' +
+    'PT-BR, direto, parceiro, sem firula. Ajuda a bolar plano e segurança da VPS. ' +
+    'Não invente invasão. Teclado ruim: respostas curtas e botões.',
+  plano:
+    'Você é o parceiro de PLANO do Pivete no @Guardiaonotify_bot. ' +
+    'Modo: bolar plano junto. PT-BR, calmo. Estrutura simples: 1) objetivo 2) passos curtos 3) risco 4) próximo passo. ' +
+    'Sem wall of text. Segurança e ops CentralDark. Pergunte 1 coisa se faltar contexto.',
+};
 
 const ALLOW_PATH = '/root/CentralDark/secrets/guardiao-allowlist.json';
 const AUTH_PATH  = '/root/CentralDark/secrets/guardiao-auth-session.json';
@@ -83,13 +100,15 @@ if (!TOKEN) {
   process.exit(1);
 }
 
-const sessions = new Map(); // chatId -> { talk, history, await }
+const sessions = new Map(); // chatId -> { talk, history, await, brain }
 
 function getSess(chatId) {
   if (!sessions.has(chatId)) {
-    sessions.set(chatId, { talk: false, history: [], await: null });
+    sessions.set(chatId, { talk: false, history: [], await: null, brain: 'plano' });
   }
-  return sessions.get(chatId);
+  const s = sessions.get(chatId);
+  if (!s.brain) s.brain = 'plano';
+  return s;
 }
 
 function logLiberar(msg) {
@@ -252,6 +271,12 @@ function activateAuthSession(meta) {
   return obj;
 }
 
+function brainLabel(b) {
+  if (b === 'grok') return XAI_KEY ? '🟣 Grok (API xAI)' : '🟣 Grok (voz no ap7 — sem XAI_KEY ainda)';
+  if (b === 'claude') return '🟠 Claude (teu ap7)';
+  return '📝 Plano (bolar junto)';
+}
+
 function buildMenu(chatId) {
   const s = getSess(chatId);
   const auth = loadJson(AUTH_PATH, { ok: false });
@@ -260,6 +285,7 @@ function buildMenu(chatId) {
     ? { text: '🔴 DESLIGAR conversa', callback_data: 'sec:talk:off' }
     : { text: '🟢 LIGAR conversa', callback_data: 'sec:talk:on' };
 
+  const b = s.brain || 'plano';
   const text =
 `<pre>┌──────────────────────────────────┐
 │  🛡️  GUARDIÃO · SEGURANÇA        │
@@ -267,27 +293,32 @@ function buildMenu(chatId) {
 └──────────────────────────────────┘
 
   CONVERSA  ${s.talk ? '🟢 ON' : '🔴 OFF'}
-  SESSÃO IA ${authLive ? '🟢 ATIVA até ' + (auth.expiresAt || '').slice(11, 16) + 'Z' : '⬜ off'}
-  CÓDIGO    ${authLive ? auth.code : '—'}
+  CÉREBRO   ${brainLabel(b)}
+  SESSÃO IA ${authLive ? '🟢 ' + (auth.code || '') : '⬜ off'}
 
-  Liberar IP/email/id = teclado mínimo.
-  Sessão IA = prova p/ qualquer agente na VPS.
+  Escolhe cérebro → liga conversa → bola o plano.
+  Grok API: ${XAI_KEY ? 'key ok' : 'falta XAI_API_KEY no secrets'}
 </pre>`;
 
   return {
     text,
     buttons: [
       [talkBtn],
+      [
+        { text: (b === 'plano' ? '✅ ' : '') + '📝 Plano', callback_data: 'sec:brain:plano' },
+        { text: (b === 'grok' ? '✅ ' : '') + '🟣 Grok', callback_data: 'sec:brain:grok' },
+        { text: (b === 'claude' ? '✅ ' : '') + '🟠 Claude', callback_data: 'sec:brain:claude' },
+      ],
       [{ text: '🔓 Liberar acesso', callback_data: 'sec:liberar' }],
       [
         { text: '🚨 Fail2ban', callback_data: 'sec:f2b' },
         { text: '📋 Bans', callback_data: 'sec:bans' },
       ],
       [
-        { text: authLive ? '♻️ Renovar sessão IA' : '✅ Ativar sessão IA', callback_data: 'sec:auth:on' },
+        { text: authLive ? '♻️ Renovar sessão' : '✅ Ativar sessão IA', callback_data: 'sec:auth:on' },
         { text: '⏹️ Encerrar sessão', callback_data: 'sec:auth:off' },
       ],
-      [{ text: '📜 Ver liberados', callback_data: 'sec:lista' }],
+      [{ text: '📜 Liberados', callback_data: 'sec:lista' }],
       [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
     ],
   };
@@ -380,19 +411,47 @@ async function readJsonSafe(r) {
   }
 }
 
-async function callLLM(history) {
-  const system =
-    'Você é o canal de SEGURANÇA do Pivete no Telegram (@Guardiaonotify_bot). ' +
-    'Fale PT-BR, calmo, curto, como humano. Segurança VPS, fail2ban, liberar IP/email. ' +
-    'Não invente invasão. Teclado do Pivete é ruim: prefira sugerir botões.';
-
+async function callLLM(history, brain) {
+  const mode = BRAIN_PROMPTS[brain] ? brain : 'plano';
+  const system = BRAIN_PROMPTS[mode];
   const msgs = history.slice(-12);
 
-  // 1) ap7 / GUARDIAO_LLM_BASE (Anthropic) — testado vivo na VPS
+  // 0) Grok real via xAI se brain=grok e key existir
+  if (mode === 'grok' && XAI_KEY) {
+    try {
+      const r = await fetch(`${XAI_BASE}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${XAI_KEY}`,
+        },
+        body: JSON.stringify({
+          model: XAI_MODEL,
+          messages: [{ role: 'system', content: system }, ...msgs],
+          max_tokens: 800,
+          temperature: 0.5,
+        }),
+        signal: AbortSignal.timeout(90000),
+      });
+      const data = await readJsonSafe(r);
+      if (!data._html && !data._parseErr && r.ok) {
+        const txt = data.choices?.[0]?.message?.content;
+        if (txt && !isMockText(txt)) {
+          console.log('[GuardiaoBot] LLM via xAI', XAI_MODEL);
+          return String(txt).trim();
+        }
+      } else {
+        console.error('[GuardiaoBot] xAI fail', r.status, data._raw || data.error || '');
+      }
+    } catch (e) {
+      console.error('[GuardiaoBot] xAI err', e.message);
+    }
+  }
+
+  // 1) ap7 (Claude / também voz Grok ou Plano se sem xAI)
   if (LLM_KEY && LLM_BASE) {
     try {
       const host = LLM_BASE.replace(/^https?:\/\//, '').split('/')[0];
-      // evita api.centralldark.com (CF 1010 HTML)
       if (!/centralldark\.com$/i.test(host)) {
         const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
         const r = await fetch(url, {
@@ -403,9 +462,12 @@ async function callLLM(history) {
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: process.env.ANTHROPIC_MODEL || LLM_MODEL || 'claude-sonnet-4-6',
+            model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
             max_tokens: 800,
-            system,
+            system:
+              mode === 'grok' && !XAI_KEY
+                ? system + ' (API xAI ainda sem key — respondendo no teu ap7 com persona Grok.)'
+                : system,
             messages: msgs,
           }),
           signal: AbortSignal.timeout(90000),
@@ -414,11 +476,9 @@ async function callLLM(history) {
         if (!data._html && !data._parseErr && r.ok) {
           const txt = (data.content || []).filter((c) => c.type === 'text').map((c) => c.text).join('\n');
           if (txt && !isMockText(txt)) {
-            console.log('[GuardiaoBot] LLM via', host);
+            console.log('[GuardiaoBot] LLM via', host, 'brain', mode);
             return txt.trim();
           }
-        } else {
-          console.error('[GuardiaoBot] ap7 fail', r.status, data._raw || data.error || '');
         }
       }
     } catch (e) {
@@ -426,11 +486,10 @@ async function callLLM(history) {
     }
   }
 
-  // 2) Arsenal local (Abacus free/tier) — ignora mock
+  // 2) Arsenal (Abacus) — sem mock
   if (ARSENAL_KEY) {
     for (const model of ['arsenal-router', 'gemini-3-flash-preview', 'gemini-3.1-flash-lite']) {
       try {
-        const openaiMsgs = [{ role: 'system', content: system }, ...msgs];
         const r = await fetch(`${ARSENAL_BASE}/v1/chat/completions`, {
           method: 'POST',
           headers: {
@@ -440,7 +499,7 @@ async function callLLM(history) {
           },
           body: JSON.stringify({
             model,
-            messages: openaiMsgs,
+            messages: [{ role: 'system', content: system }, ...msgs],
             max_tokens: 800,
             temperature: 0.4,
           }),
@@ -450,7 +509,7 @@ async function callLLM(history) {
         if (data._html || data._parseErr || !r.ok) continue;
         const txt = data.choices?.[0]?.message?.content;
         if (txt && !isMockText(txt)) {
-          console.log('[GuardiaoBot] LLM via arsenal', model);
+          console.log('[GuardiaoBot] arsenal', model, mode);
           return String(txt).trim();
         }
       } catch (e) {
@@ -459,14 +518,9 @@ async function callLLM(history) {
     }
   }
 
-  // 3) Fallback — botões ainda funcionam (dossiê: mock limpo)
   return (
-    'Tô no canal de segurança, mas os free tiers/Abacus tão sem crédito ou bloqueados da VPS agora.\n\n' +
-    'Ainda funciona sem IA:\n' +
-    '· 🔓 Liberar IP / email\n' +
-    '· 🚨 Fail2ban / bans\n' +
-    '· ✅ Ativar sessão IA\n\n' +
-    '/menu'
+    'Canal online, mas a IA de conversa falhou agora.\n\n' +
+    'Ainda rola:\n· 🔓 Liberar\n· 🚨 Fail2ban\n· 📝/🟣/🟠 trocar cérebro\n\n/menu'
   );
 }
 
@@ -553,13 +607,34 @@ async function handleCallback(cq) {
     s.await = null;
     const m = buildMenu(chatId);
     await edit(chatId, msgId, m.text, m.buttons);
-    return send(chatId, '🟢 Conversa LIGADA. Manda texto.');
+    return send(
+      chatId,
+      '🟢 Conversa LIGADA.\nCérebro: ' + brainLabel(s.brain) + '\n\nManda o que quiser. Vamos bolar o plano.',
+      null,
+      { html: false },
+    );
   }
   if (data === 'sec:talk:off') {
     s.talk = false;
     const m = buildMenu(chatId);
     await edit(chatId, msgId, m.text, m.buttons);
     return send(chatId, '🔴 Conversa DESLIGADA.');
+  }
+  if (data.startsWith('sec:brain:')) {
+    const b = data.slice('sec:brain:'.length);
+    if (!BRAIN_PROMPTS[b]) return;
+    s.brain = b;
+    s.history = []; // troca de cérebro limpa histórico
+    const m = buildMenu(chatId);
+    await edit(chatId, msgId, m.text, m.buttons);
+    let extra = '';
+    if (b === 'grok' && !XAI_KEY) {
+      extra = '\n\n(Ainda sem XAI_API_KEY no secrets — falo com persona Grok no teu ap7. Cola a key depois e vira Grok de verdade.)';
+    }
+    if (b === 'plano') {
+      extra = '\n\nModo plano: me fala o objetivo em 1 linha que a gente monta os passos.';
+    }
+    return send(chatId, 'Cérebro: ' + brainLabel(b) + extra + (s.talk ? '' : '\n\nAperta 🟢 pra ligar conversa.'), null, { html: false });
   }
   if (data === 'sec:liberar') {
     s.await = null;
@@ -703,13 +778,14 @@ async function handleMessage(msg) {
 
   await tg('sendChatAction', { chat_id: chatId, action: 'typing' });
   s.history.push({ role: 'user', content: text });
-  const reply = await callLLM(s.history);
+  const reply = await callLLM(s.history, s.brain);
   s.history.push({ role: 'assistant', content: reply });
   if (s.history.length > 20) s.history = s.history.slice(-20);
   return send(chatId, reply.slice(0, 3900), [
-    [{ text: '🔴 Desligar', callback_data: 'sec:talk:off' }, { text: '🔓 Liberar', callback_data: 'sec:liberar' }],
+    [{ text: '🔴 Desligar', callback_data: 'sec:talk:off' }, { text: '📝 Plano', callback_data: 'sec:brain:plano' }],
+    [{ text: '🟣 Grok', callback_data: 'sec:brain:grok' }, { text: '🟠 Claude', callback_data: 'sec:brain:claude' }],
     [{ text: '🏠 Menu', callback_data: 'sec:menu' }],
-  ]);
+  ], { html: false });
 }
 
 let offset = 0;
