@@ -108,9 +108,9 @@ jobs:
               { name: 'ignore-pending',  color: 'fbca04', description: '.graphifyignore precisa de update pra evitar lixo' },
             ];
 
-            const dry = (context.eventName === 'workflow_dispatch')
-              ? (core.getInput('dry_run') || 'true') === 'true'
-              : false; // schedule sempre escreve seed (idempotente)
+            // DRY_RUN vem do env do step. schedule chega como 'false' (escreve seed).
+            const dry = process.env.DRY_RUN === 'true';
+
 
             let created = 0, updated = 0, kept = 0, failed = 0;
 
