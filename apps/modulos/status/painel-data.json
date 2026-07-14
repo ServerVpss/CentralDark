@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-07-14T22:44:47.634Z",
-  "updatedAtBR": "14/07/2026, 19:44:47 BRT",
+  "updatedAt": "2026-07-14T22:45:48.648Z",
+  "updatedAtBR": "14/07/2026, 19:45:48 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-14T22:45:47.614Z",
+      "titulo": "Push na main",
+      "detalhe": "",
+      "area": "Repositório",
+      "sha": "",
+      "actor": "desconhecido"
+    },
+    {
       "time": "2026-07-10T19:14:24.261Z",
       "titulo": "Push na main · 1773a0e6b5cfcd0c72f4733617fb6371a787cad4",
       "detalhe": "chore(painel): IA atualiza painel — atualização",
@@ -987,14 +995,6 @@
       "area": "Repositório",
       "sha": "233e823",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T18:53:29.679Z",
-      "titulo": "Push na main · b20c81e77e29c7650316a02c943cd1df83e9f536",
-      "detalhe": "docs(consciencia): gateway centraldark com chave própria + routellm",
-      "area": "Repositório",
-      "sha": "b20c81e",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-14T22:45:47.614Z",
+      "ia": "@desconhecido",
+      "action": "📌 Push na main",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-10T19:14:24.261Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 1773a0e6b5cfcd0c72f4733617fb6371a787cad4 (1773a0e)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T19:03:30.865Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 233e823eca720cbf95dc4fe45b3d382e83cccb14 (233e823)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T18:53:29.679Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b20c81e77e29c7650316a02c943cd1df83e9f536 (b20c81e)",
       "area": "Repositório",
       "status": "sucesso"
     }
