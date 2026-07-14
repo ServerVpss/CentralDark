@@ -8,7 +8,7 @@ export function rotasAdmin() {
   return (
     <>
       <Route path="/dev/transitions" element={<DevTransitions />} />
-      <Route path="/admin/cockpit" element={<CockpitPreview />} />
+      <Route path="/admin/cockpit" element={<SalaControle />} />
       <Route path="/preview/cockpit" element={<Navigate to="/admin/cockpit" replace />} />
     </>
   );
