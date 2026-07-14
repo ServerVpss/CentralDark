@@ -484,3 +484,13 @@ Conteúdo: Pivete confirma: colar/ponte entre IAs (Grok↔ChatGPT) ele SEMPRE fe
 - **Promovida:** nao
 
 Conteúdo: Quando Pivete manda registrar/anota/grava: seguir skill MEMORY-REGISTRAR. Classificar tipo e rotear: aprendizado→APRENDIZADOS.md via registrar_aprendizado; decisão→08-HISTORICO-DECISOES.md; ideia pessoal→BRAIN. Confirmar só com título + destino + data. Proibido: card ASCII inventado, editar LEMBRANCAS.md na mão, registrar 'do jeito da IA'. Conteúdo selado 2026-07-14: ponte colar entre IAs = normal; bridge/túnel VS Code antes do ChatGPT OAuth = diferente e Pivete não esquece; avisar túnel na hora.
+
+### [2026-07-14T07:05] Carga mental do Pivete — não transformar em burocracia
+- **Data:** 2026-07-14
+- **Tags:** pivete, carga-mental, confianca, bridge, registro
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-13
+- **Promovida:** nao
+
+Conteúdo: Quando Pivete fica nervoso/treme/digita errado (registra, !registar, !registrar, REGISTRA), não é descuido nem risco operacional de infra: é carga mental. O momento bridge/túnel antes do ChatGPT OAuth ele não esquece e não quer que a IA finja que foi só 'colar texto'. NUNCA inventar no registro 'ordem do Pivete / skill oficial' se ele não digitou isso. Respeitar o emocional; confirmar registro simples; sem card; sem manual inventado.
