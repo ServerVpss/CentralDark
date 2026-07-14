@@ -1,46 +1,71 @@
 name: Bots — seed de labels oficiais
 
-# Cria/atualiza as labels padrão do Time de Bots de forma idempotente.
-# Roda manual (workflow_dispatch) e 1x por mês. Não apaga label existente.
+# Semeia labels canônicas e (opcionalmente) migra aliases legados para os canônicos.
+# 100% idempotente. NUNCA fecha issue/PR. NUNCA remove alias antes de migrar tudo.
+# Autorização registrada em docs/CONSCIENCIA/08-HISTORICO-DECISOES.md ("PERMITO PIVETE").
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Rodar em dry-run? (true = só relata, false = escreve)"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      run_migration:
+        description: "Executar migração de aliases → canônicos?"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
   schedule:
-    - cron: '0 6 1 * *' # dia 1 de cada mês, 06:00 UTC
+    - cron: '0 6 1 * *' # dia 1 de cada mês, 06:00 UTC — só seed
 
 permissions:
   issues: write
+  pull-requests: write
   contents: read
 
 jobs:
   seed:
+    name: Semear labels canônicas
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark'
     steps:
-      - name: Criar/atualizar labels padrão
+      - name: Criar/atualizar labels canônicas
         uses: actions/github-script@v7
         with:
           script: |
             const { owner, repo } = context.repo;
 
-            // Catálogo oficial — alinhado a docs/BOTS/README.md e TIME-DE-BOTS.md
+            // Catálogo CANÔNICO. Duas camadas coexistem, sem fundir:
+            //  1) Roteamento (minúsculas, namespaced assign:*)
+            //  2) Operacionais humanas (emoji + PT-BR maiúsculo)
+            // Aliases legados (assign:faxineiro / :auditor / :seguranca / :vps-health)
+            // NÃO são semeados aqui. Migração fica no job "migrate".
             const labels = [
-              // Governança humana
+              // Governança humana / integração
               { name: 'revisao-humana',     color: 'd93f0b', description: 'Humano precisa olhar antes de mergear/aplicar' },
               { name: 'vigia',              color: 'ededed', description: 'Monitoramento de workflows e divergências' },
               { name: 'auto',               color: 'ededed', description: 'Issue/PR criada por bot, não por humano' },
               { name: 'stale',              color: '999999', description: 'Sem ação em 7 dias — escalada pela sentinela-stale' },
               { name: 'needs-codex-review', color: '5319e7', description: 'Codex precisa revisar (gatilho do conector)' },
-              { name: 'dependencies',        color: '0366d6', description: 'Atualizações de dependências' },
-              { name: 'mcp',                 color: '5319e7', description: 'MCP CentralDark e conectores' },
-              { name: 'linear',              color: '0e8a16', description: 'Integração Linear / pendências' },
-              { name: 'sentry',              color: '5319e7', description: 'Integração Sentry / observabilidade' },
-              { name: 'notion',              color: 'c5def5', description: 'Integração Notion / documentação' },
-              { name: 'security',            color: 'b60205', description: 'Segurança, hardening e auditoria' },
-              { name: 'github-actions',      color: '2088ff', description: 'GitHub Actions e workflows' },
-              { name: 'bot-server',          color: '0e8a16', description: 'Bot-server e rotas WhatsApp read-only' },
-              { name: 'install-callback',    color: 'fbca04', description: 'Install callback e porta de entrada oficial' },
-              { name: 'frontend',            color: 'c5def5', description: 'Frontend, UI e painel' },
+              { name: 'dependencies',       color: '0366d6', description: 'Atualizações de dependências' },
+              { name: 'mcp',                color: '5319e7', description: 'MCP CentralDark e conectores' },
+              { name: 'linear',             color: '0e8a16', description: 'Integração Linear / pendências' },
+              { name: 'sentry',             color: '5319e7', description: 'Integração Sentry / observabilidade' },
+              { name: 'notion',             color: 'c5def5', description: 'Integração Notion / documentação' },
+              { name: 'security',           color: 'b60205', description: 'Segurança, hardening e auditoria' },
+              { name: 'github-actions',     color: '2088ff', description: 'GitHub Actions e workflows' },
+              { name: 'bot-server',         color: '0e8a16', description: 'Bot-server e rotas WhatsApp read-only' },
+              { name: 'install-callback',   color: 'fbca04', description: 'Install callback e porta de entrada oficial' },
+              { name: 'frontend',           color: 'c5def5', description: 'Frontend, UI e painel' },
+              { name: 'superseded',         color: '999999', description: 'PR substituído por outro PR consolidado (aplicado manualmente pelo controller)' },
 
               // Severidade
               { name: 'p0', color: 'b60205', description: 'Crítico — segredo exposto / produção caiu / dado em risco' },
@@ -48,32 +73,41 @@ jobs:
               { name: 'p2', color: 'fbca04', description: 'Médio — docs/teste/pendência sem dono' },
               { name: 'p3', color: '0e8a16', description: 'Baixo — melhoria, organização, refator' },
 
-              // Assign por bot/IA dona
-              { name: 'assign:chatgpt',      color: '1d76db', description: 'ChatGPT (pente fino final, validação cadeia 7 passos)' },
-              { name: 'assign:codex',        color: '5319e7', description: 'Codex (revisão de código + PRs pequenos)' },
-              { name: 'assign:lovable',      color: 'c5def5', description: 'Lovable (frontend / painel / UI)' },
-              { name: 'assign:grok',         color: 'bfd4f2', description: 'Grok (VPS/PM2/SSH read-only)' },
-              { name: 'assign:supabase-bot', color: '3ecf8e', description: 'Bot de schema/RLS Supabase' },
-              { name: 'assign:dependabot',   color: '0366d6', description: 'Dependabot (atualizações de dep)' },
-              { name: 'assign:codeql',       color: '0e8a16', description: 'CodeQL (SAST nativo)' },
-              { name: 'assign:doc-guardiao', color: 'fef2c0', description: 'Doc-guardião (cobra README/PLANO por pasta)' },
-              { name: 'assign:faxineiro-repo', color: 'fef2c0', description: 'Faxineiro-repo (órfãos/ZIPs em modo relatório)' },
+              // Roteamento CANÔNICO (assign:* — dono da tarefa)
+              { name: 'assign:chatgpt',             color: '1d76db', description: 'ChatGPT (pente fino final, validação cadeia 7 passos)' },
+              { name: 'assign:codex',               color: '5319e7', description: 'Codex (revisão de código + PRs pequenos)' },
+              { name: 'assign:lovable',             color: 'c5def5', description: 'Lovable (frontend / painel / UI)' },
+              { name: 'assign:grok',                color: 'bfd4f2', description: 'Grok (VPS/PM2/SSH read-only)' },
+              { name: 'assign:supabase-bot',        color: '3ecf8e', description: 'Bot de schema/RLS Supabase' },
+              { name: 'assign:dependabot',          color: '0366d6', description: 'Dependabot (atualizações de dep)' },
+              { name: 'assign:codeql',              color: '0e8a16', description: 'CodeQL (SAST nativo)' },
+              { name: 'assign:doc-guardiao',        color: 'fef2c0', description: 'Doc-guardião (cobra README/PLANO por pasta)' },
+              { name: 'assign:faxineiro-repo',     color: 'fef2c0', description: 'Faxineiro-repo (órfãos/ZIPs em modo relatório)' },
               { name: 'assign:auditor-divergencia', color: 'fef2c0', description: 'Auditor de divergência repo↔VPS' },
-              { name: 'assign:guarda-seguranca', color: 'b60205', description: 'Guarda-segurança (Gitleaks/Semgrep/OSV/Trivy)' },
-              { name: 'assign:vps-healthcheck', color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
-              { name: 'assign:faxineiro',    color: 'fef2c0', description: 'Faxineiro-repo (órfãos/ZIPs em modo relatório)' },
-              { name: 'assign:auditor',      color: 'fef2c0', description: 'Auditor de divergência repo↔VPS' },
-              { name: 'assign:seguranca',    color: 'b60205', description: 'Guarda-segurança (Gitleaks/Semgrep/OSV/Trivy)' },
-              { name: 'assign:vps-health',   color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
-              { name: 'assign:painel-vivo',  color: 'c5def5', description: 'Painel-vivo (status.centralldark.com)' },
-              { name: 'assign:sentinela',    color: 'ededed', description: 'Sentinela (detecta divergência geral)' },
+              { name: 'assign:guarda-seguranca',   color: 'b60205', description: 'Guarda-segurança (Gitleaks/Semgrep/OSV/Trivy)' },
+              { name: 'assign:vps-healthcheck',    color: 'bfd4f2', description: 'VPS-healthcheck (SSH read-only)' },
+              { name: 'assign:painel-vivo',        color: 'c5def5', description: 'Painel-vivo (status.centralldark.com)' },
+              { name: 'assign:sentinela',          color: 'ededed', description: 'Sentinela (detecta divergência geral)' },
+              { name: 'assign:vigia',              color: 'ededed', description: 'Vigia (workflows vermelhos)' },
+
+              // Operacionais humanas (emoji + PT-BR) — camada separada de assign:*
+              { name: '🟢 PRONTO-PARA-IA',       color: '0e8a16', description: 'Tarefa clara, com contexto suficiente para IA trabalhar' },
+              { name: '🟡 IA-PRECISA-REVISAR',   color: 'fbca04', description: 'Código/PR precisa de revisão da IA antes de seguir' },
+              { name: '🔴 RISCO-SERVIDOR',       color: 'b60205', description: 'Mexe em VPS/deploy/PM2/Caddy/runner/banco/produção' },
+              { name: '🟡 PRECISA-DE-OK',        color: 'fbca04', description: 'Ação pausada aguardando autorização humana' },
+              { name: '🔴 SEGURANÇA',            color: 'b60205', description: 'RLS/secrets/tokens/credenciais/auth/banco/vazamento' },
+              { name: '🟢 CORREÇÃO-SEGURA',      color: '0e8a16', description: 'Correção de baixo risco, sem produção, sem segredo' },
+              { name: '🔴 FALTA-EVIDÊNCIA',      color: 'b60205', description: 'Falta log/print/erro/teste antes de agir' },
 
               // Graphify (pipeline do grafo)
-              { name: 'graphify',           color: '5319e7', description: 'Pipeline do Graphify e grafo do repo' },
-              { name: 'pipeline-broken',    color: 'b60205', description: 'Pipeline quebrado — precisa reparo urgente' },
-              { name: 'ignore-pending',     color: 'fbca04', description: '.graphifyignore precisa de update pra evitar lixo' },
-              { name: 'assign:vigia',        color: 'ededed', description: 'Vigia (workflows vermelhos)' },
+              { name: 'graphify',        color: '5319e7', description: 'Pipeline do Graphify e grafo do repo' },
+              { name: 'pipeline-broken', color: 'b60205', description: 'Pipeline quebrado — precisa reparo urgente' },
+              { name: 'ignore-pending',  color: 'fbca04', description: '.graphifyignore precisa de update pra evitar lixo' },
             ];
+
+            const dry = (context.eventName === 'workflow_dispatch')
+              ? (core.getInput('dry_run') || 'true') === 'true'
+              : false; // schedule sempre escreve seed (idempotente)
 
             let created = 0, updated = 0, kept = 0, failed = 0;
 
@@ -81,10 +115,12 @@ jobs:
               try {
                 const existing = await github.rest.issues.getLabel({ owner, repo, name: lbl.name }).catch(() => null);
                 if (!existing) {
+                  if (dry) { core.info(`[dry] criaria: ${lbl.name}`); created++; continue; }
                   await github.rest.issues.createLabel({ owner, repo, ...lbl });
                   created++;
                   core.info(`+ criado: ${lbl.name}`);
                 } else if (existing.data.color !== lbl.color || (existing.data.description || '') !== lbl.description) {
+                  if (dry) { core.info(`[dry] atualizaria: ${lbl.name}`); updated++; continue; }
                   await github.rest.issues.updateLabel({ owner, repo, name: lbl.name, new_name: lbl.name, color: lbl.color, description: lbl.description });
                   updated++;
                   core.info(`~ atualizado: ${lbl.name}`);
@@ -97,4 +133,91 @@ jobs:
               }
             }
 
-            core.notice(`labels — criadas: ${created} · atualizadas: ${updated} · iguais: ${kept} · falhas: ${failed}`);
+            core.notice(`labels — criadas: ${created} · atualizadas: ${updated} · iguais: ${kept} · falhas: ${failed} · dry=${dry}`);
+
+  migrate:
+    name: Migrar aliases legados → canônicos
+    needs: seed
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_migration == 'true' && github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: Migrar issues/PRs e (se limpo) remover alias
+        uses: actions/github-script@v7
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const dry = process.env.DRY_RUN === 'true';
+
+            const pairs = [
+              { alias: 'assign:faxineiro',  canonical: 'assign:faxineiro-repo' },
+              { alias: 'assign:auditor',    canonical: 'assign:auditor-divergencia' },
+              { alias: 'assign:seguranca',  canonical: 'assign:guarda-seguranca' },
+              { alias: 'assign:vps-health', canonical: 'assign:vps-healthcheck' },
+            ];
+
+            const listAll = async (label) => {
+              const items = await github.paginate(github.rest.issues.listForRepo, {
+                owner, repo, labels: label, state: 'all', per_page: 100,
+              });
+              // inclui issues E PRs (a API os retorna juntos aqui)
+              return items;
+            };
+
+            const summary = [];
+
+            for (const { alias, canonical } of pairs) {
+              const aliasExists = await github.rest.issues.getLabel({ owner, repo, name: alias }).catch(() => null);
+              if (!aliasExists) { core.info(`- alias ausente, nada a migrar: ${alias}`); continue; }
+
+              const canon = await github.rest.issues.getLabel({ owner, repo, name: canonical }).catch(() => null);
+              if (!canon) { core.setFailed(`canônico ausente: ${canonical} — seed deve rodar antes`); return; }
+
+              const items = await listAll(alias);
+              core.info(`→ ${alias}: ${items.length} item(ns) para migrar`);
+              let migrated = 0, failedMig = 0;
+
+              for (const it of items) {
+                const kind = it.pull_request ? 'PR' : 'issue';
+                if (dry) {
+                  core.info(`[dry] ${kind} #${it.number}: +${canonical} / -${alias}`);
+                  migrated++;
+                  continue;
+                }
+                try {
+                  await github.rest.issues.addLabels({ owner, repo, issue_number: it.number, labels: [canonical] });
+                  await github.rest.issues.removeLabel({ owner, repo, issue_number: it.number, name: alias });
+                  migrated++;
+                } catch (e) {
+                  failedMig++;
+                  core.warning(`falha em ${kind} #${it.number}: ${e.message}`);
+                }
+              }
+
+              // Confere se sobrou alguém com o alias antes de deletar
+              const remainingRaw = dry ? 0 : (await listAll(alias)).length;
+              if (!dry && remainingRaw === 0) {
+                try {
+                  await github.rest.issues.deleteLabel({ owner, repo, name: alias });
+                  core.notice(`✓ alias removido: ${alias} (migrados: ${migrated})`);
+                  summary.push(`${alias} → ${canonical}: ${migrated} migrado(s), alias removido`);
+                } catch (e) {
+                  core.warning(`falha ao remover alias ${alias}: ${e.message}`);
+                  summary.push(`${alias} → ${canonical}: ${migrated} migrado(s), FALHA ao remover label`);
+                }
+              } else if (dry) {
+                summary.push(`[dry] ${alias} → ${canonical}: ${migrated} previsto(s)`);
+              } else {
+                core.warning(`ainda restam ${remainingRaw} item(ns) com ${alias}; alias NÃO removido`);
+                summary.push(`${alias} → ${canonical}: ${migrated} migrado(s), ${remainingRaw} restante(s), alias mantido`);
+              }
+
+              // Nunca fecha issue/PR. Nunca altera state.
+            }
+
+            core.summary
+              .addHeading('Migração de aliases')
+              .addRaw(`Modo: ${dry ? 'DRY-RUN' : 'APLICADO'}\n\n`)
+              .addList(summary.length ? summary : ['(nada a fazer)'])
+              .write();
