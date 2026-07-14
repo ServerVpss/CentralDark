@@ -3,14 +3,14 @@
 # Roda 1x por dia via cron (03:30).
 #
 # CORREÇÃO 2026-06-03:
-# A versão anterior escrevia o output dentro de /root/Multizap, e o find varria
+# A versão anterior escrevia o output dentro de /root/CentralDark, e o find varria
 # essa mesma pasta procurando *.log — então cada execução lia o próprio output
 # da rodada anterior e o tamanho dobrava. Em poucos dias chegou em 58G e encheu
 # o disco. Mudanças:
 #   1) Output movido para /var/log/multizap/ (fora do escopo do find).
 #   2) Truncamos o arquivo antes de cada rodada (não acumula entre execuções).
 #   3) Limite duro de 5 MB no pipe (head -c) — se algo escapar, não explode.
-#   4) Exclusão explícita do próprio output e da pasta /root/Multizap/revisoes
+#   4) Exclusão explícita do próprio output e da pasta /root/CentralDark/revisoes
 #      (que tem 45k+ arquivos de relatórios e não precisa ser varrida).
 set -euo pipefail
 
@@ -23,10 +23,10 @@ chmod 700 "$OUT_DIR"
 : > "$OUT"   # trunca antes de começar
 chmod 600 "$OUT"
 
-timeout 600 find /root/Multizap /root/.pm2/logs /var/log \
+timeout 600 find /root/CentralDark /root/.pm2/logs /var/log \
   -path "*/node_modules/*" -prune -o \
   -path "*/.git/*" -prune -o \
-  -path "/root/Multizap/revisoes" -prune -o \
+  -path "/root/CentralDark/revisoes" -prune -o \
   -path "/var/log/multizap*" -prune -o \
   -type f \
   \( -name "*.env" -o -name "*.log" -o -name "*.bak" -o -name "*.txt" -o -name "*.json" -o -name "*.sh" \) \

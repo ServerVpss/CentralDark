@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
-ENV_FILE="/root/Multizap/secrets/wabot.env"
+ENV_FILE="/root/CentralDark/secrets/wabot.env"
 LOG_FILE="/var/log/guarda-env-normalizar.log"
 
 mkdir -p "$(dirname "$LOG_FILE")" 2>/dev/null || true

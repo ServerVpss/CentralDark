@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
-STATE_DIR="/root/Multizap/guarda"
+STATE_DIR="/root/CentralDark/guarda"
 STATUS_FILE="$STATE_DIR/status.json"
 INCIDENTS_FILE="$STATE_DIR/incidentes.log"
-LOG_FILE="/var/log/guarda-status.log"
+LOG_FILE="/var/log/centraldark-guarda/status.log"
 NOW="$(date '+%Y-%m-%d %H:%M:%S')"
 
 mkdir -p "$STATE_DIR" /var/log 2>/dev/null || true
@@ -24,14 +24,14 @@ except Exception:
     apps = []
 
 watch = [
-    'MultiZap-TelegramBot',
-    'MultiZap-Gateway',
-    'CloneDeck-CRM',
-    'CloneDeck-Supabase-Sync',
-    'github-webhook',
-    'wabot-bridge',
-    'webhook-bot',
-    'whatsapp-server',
+    'CentralDark-HubBot',
+    'CentralDark-MCP',
+    'CentralDark-Hermes',
+    'CentralDark-HermesVerificador',
+    'CentralDark-WebhookDeploy',
+    'CentralDark-GuardiaoConsciencia',
+    'CentralDark-OAuthBroker',
+    'CentralDark-ArsenalAdapter',
 ]
 
 by_name = {a.get('name'): a for a in apps}

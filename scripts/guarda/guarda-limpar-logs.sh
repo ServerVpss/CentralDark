@@ -6,7 +6,7 @@ set -uo pipefail
 # Não remove secrets, código, banco de dados, sessões WhatsApp ou arquivos de configuração.
 
 RETENTION_MINUTES="${GUARDA_LOG_RETENTION_MINUTES:-2880}"
-LOG="/var/log/guarda-limpeza-logs.log"
+LOG="/var/log/centraldark-guarda-limpeza-logs.log"
 STAMP="$(date '+%Y-%m-%d %H:%M:%S')"
 DRY_RUN="${GUARDA_LOG_CLEAN_DRY_RUN:-0}"
 
@@ -50,15 +50,15 @@ if [ -d /root/.pm2/logs ] && [ "$DRY_RUN" != "1" ]; then
 fi
 
 # 3) Revisões antigas: apaga só logs pesados dentro de revisões antigas, mantém resumo.md quando existir.
-run_find_delete /root/Multizap/revisoes "*.log"
-run_find_delete /root/Multizap/revisoes "*.txt"
-run_find_delete /root/Multizap/revisoes "*.tmp"
-run_find_empty_dirs /root/Multizap/revisoes
+run_find_delete /root/CentralDark/revisoes "*.log"
+run_find_delete /root/CentralDark/revisoes "*.txt"
+run_find_delete /root/CentralDark/revisoes "*.tmp"
+run_find_empty_dirs /root/CentralDark/revisoes
 
 # 4) Logs do projeto/diagnósticos temporários
-run_find_delete /root/Multizap/apps/clone-deck "*.log"
-run_find_delete /root/Multizap/apps/clone-deck "npm-debug.log*"
-run_find_delete /root/Multizap/apps/clone-deck ".DS_Store"
+run_find_delete /root/CentralDark/apps/clone-deck "*.log"
+run_find_delete /root/CentralDark/apps/clone-deck "npm-debug.log*"
+run_find_delete /root/CentralDark/apps/clone-deck ".DS_Store"
 
 # 5) Cache npm antigo, sem remover pacote instalado em node_modules.
 if [ -d /root/.npm/_logs ]; then
