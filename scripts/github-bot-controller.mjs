@@ -270,13 +270,15 @@ async function closeSupersededMode() {
   for (const t of targets) {
     const n = t.number;
     if (DRY_RUN) {
-      console.log(`[dry] comentaria + label superseded + fecharia PR #${n} (substituído por #${mergedNum})`);
+      console.log(`[dry] aplicaria label 'superseded' + comentaria + fecharia PR #${n} (substituído por #${mergedNum})`);
       continue;
     }
+    // Ordem segura: label PRIMEIRO. Se algo quebrar depois, o PR fica ABERTO e MARCADO,
+    // nunca comentado dizendo "fechado" sem estar realmente marcado.
+    await gh("POST", `/repos/${REPO}/issues/${n}/labels`, { labels: ["superseded"] });
     await gh("POST", `/repos/${REPO}/issues/${n}/comments`, {
       body: `Este PR foi substituído por #${mergedNum} (mergeado). Fechando via github-bot-controller com autorização explícita (linha 'Supersedes:' confirmada).`,
     });
-    await gh("POST", `/repos/${REPO}/issues/${n}/labels`, { labels: ["superseded"] });
     await gh("PATCH", `/repos/${REPO}/pulls/${n}`, { state: "closed" });
     console.log(`[controller] PR #${n} fechado (substituído por #${mergedNum})`);
   }
