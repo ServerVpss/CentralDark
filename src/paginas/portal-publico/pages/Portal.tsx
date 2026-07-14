@@ -113,6 +113,28 @@ export default function Portal() {
           )}
         </div>
 
+        {isAdmin && (
+          <Link
+            to="/centraldark/admin"
+            className="mt-6 flex items-center gap-3 rounded-2xl border border-primary/40 bg-primary/[0.06] p-4 shadow-3d-primary transition-all hover:border-primary/60 active:translate-y-[1px]"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-xl border border-primary/40 bg-background icon-glow">
+              <ShieldCheck className="h-5 w-5 text-primary" />
+            </span>
+            <span className="flex-1">
+              <span className="block text-[13px] font-semibold text-foreground">
+                Admin CentralDark
+              </span>
+              <span className="block font-mono text-[10px] text-muted-foreground">
+                gerenciar módulos, usuários e ecossistema
+              </span>
+            </span>
+            <span className="rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-primary">
+              admin
+            </span>
+          </Link>
+        )}
+
         <p className="mt-10 text-center font-mono text-[10px] text-muted-foreground">
           CentralDark · {new Date().getFullYear()}
         </p>
