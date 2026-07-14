@@ -535,12 +535,14 @@ function iniciarHealthServer() {
 // LOOP PRINCIPAL
 // ═══════════════════════════════════════════════════════════════
 const RETOMAR_INTERVALO = 45_000;
-const GRAFO_INTERVAL = 30 * 60_000; // 30min — o grafo se atualiza sozinho
+// 2026-07-14 PERMITO Pivete: um só escritor do grafo = PM2 CentralDark-GrafoVivo (5min).
+// Hermes ainda LÊ o grafo (GraphRAG); NÃO regenera em paralelo (evita corrida/duplicata).
+const GRAFO_INTERVAL = 0; // 0 = desligado (era 30min)
 let ultimaRetomada = 0;
 let ultimoGC = 0;
 let ultimoHeartbeatEnvio = 0;
 let ultimoGrafo = 0;
-let ultimoGrafoResumo = { ts: 0, ok: null, saida: null };
+let ultimoGrafoResumo = { ts: 0, ok: null, saida: null, off: true };
 
 async function loop() {
   log('🤖 HERMES CORE v5.0 online — vigiando missions/pendente/');
@@ -580,8 +582,8 @@ async function loop() {
           gc(); // fire-and-forget
         }
 
-        // Grafo se atualiza sozinho (fire-and-forget)
-        if (Date.now() - ultimoGrafo >= GRAFO_INTERVAL) {
+        // Grafo: NÃO auto-update aqui se GRAFO_INTERVAL===0 (fonte única = GrafoVivo)
+        if (GRAFO_INTERVAL > 0 && Date.now() - ultimoGrafo >= GRAFO_INTERVAL) {
           ultimoGrafo = Date.now();
           atualizarGrafo()
             .then(r => { ultimoGrafoResumo = { ts: Date.now(), ok: r.ok, saida: r.saida }; log('🕸️ grafo auto-update: ' + r.saida); })
