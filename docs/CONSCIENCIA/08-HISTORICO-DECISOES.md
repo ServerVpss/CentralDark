@@ -7,6 +7,42 @@ updated: 2026-06-29
 
 # 08 — Histórico de decisões grandes
 
+
+## 2026-07-14 — Bridge/túnel ≠ ponte de colar (decisão do Pivete)
+
+**Título:** Momento técnico VPS↔casa é diferente de copiar texto entre IAs  
+**Data:** 2026-07-14  
+**Responsável:** Pivete  
+**Onde:** este arquivo + skill MEMORY-REGISTRAR (`docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/MEMORY-REGISTRAR.md`)
+
+**Decisão:**
+1. **Ponte de colar** entre IAs (Grok ↔ ChatGPT ↔ outros) o Pivete **sempre fez** e pediu ajuda assim — é normal e autorizado.
+2. O momento **antes** do ChatGPT entrar no eixo OAuth (bridge/túnel VS Code, ex. porta tipo `:18003`, payload ~7344 B do Grok web, PERMITO só leitura e fechar) foi **outro nível** e o Pivete **não esquece**.
+3. Não foi “IAs se falando sozinhas”. Foi canal técnico sob PERMITO — e ainda assim **não** se trata como “só colar texto”.
+4. **Regra pra qualquer IA:** se for abrir túnel, port-forward, bridge vivo ou leitura remota de aba/console, **avisar na cara na hora**, pedir PERMITO, fechar ao terminar. Sem suavizar.
+
+**Por quê:** Pivete cobrou verdade e registro correto; não quer amnésia nem registro “do jeito da IA”.
+
+**Refs:** `docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md` (itens 10–11); issue #204 (OAuth MCP é eixo separado).
+
+**Como registrar daqui pra frente (ordem do Pivete / skill oficial):** skill MEMORY-REGISTRAR — classificar tipo → rotear pro arquivo certo (não inventar card, não editar Lembranças na mão, não misturar com aprendizado meta da IA).
+
+---
+
+## Sessão 2026-07-13/14 — Doutrina de extensão de infra + registro anti-amnésia
+
+**Decisão do Pivete:** Qualquer planejamento de infra deve ser revisado criticamente antes de executar. Filtros: barrar regressão, risco operacional e complexidade inútil. Estabilidade de produção. Alteração = **extensão segura** (nunca substituição / V3-V4). Zero regressão. Preservar DB e arquitetura legado. Atualizar o que já existe.
+
+**Decisão operacional correlata:** Brute force SSH não se normaliza; relatórios oficiais em `docs/RELATORIOS/2026-07-13-ssh-bruteforce-*`. Contra-ataque ofensivo proibido. Harden só com PERMITO.
+
+**Decisão de monitores:** Não inventar monitores paralelos — estender Sentinela (Actions), fail2ban/UFW, Guardião, Zentinel (código existente, PM2 off), HermesVerificador.
+
+**Pendente de execução (não feito nesta sessão):** aplicar a doutrina nos agents Hermes e corrigir `docs/AGENTS.md` MultiZap; fail2ban/sshd; RCD MCP.
+
+**Registro completo:** `docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md`
+
+---
+
 ## Regra: sempre registrar desencontros entre plano e execução (2026-06-29)
 
 **Decisão:** qualquer desvio entre o plano escrito e o que foi executado deve ser registrado aqui E atualizado no arquivo onde o erro pode causar impacto real.
@@ -419,3 +455,150 @@ Mudança mínima e reversível; render segue compatível com force-graph. graph-
 **Design anti-spam (regra p/ Hermes):** graph-data.json e GRAFO-VIVO.md têm churn de 5min (dado). NÃO commitar a cada regeneração (spam + conflito com git plugin do Obsidian). Commitar a nota SÓ quando o estado de saúde mudar (processo caiu/voltou) — casando com a tarefa do Hermes de "reportar quando algo ficar anormal".
 
 **Pendente / possibilidades fluidas:** (1) commit da nota disparado por transição de anomalia (Hermes); (2) MOC/dataview no Obsidian puxando pendências+saúde; (3) nota de incidente automática quando processo cai.
+
+---
+
+## Sessão de consolidação Hermes + segurança Supabase + vigia 24h (2026-07-11)
+
+**Contexto:** sessão longa iniciada com pergunta sobre GraphRAG/mapa de conhecimento, evoluiu pra correções reais de infraestrutura sob ordem direta do Pivete ("PERMITO PIVETE").
+
+**1. Supabase HUB (`lyoigsqluyktoclwdaft`) — PiveteSync destravado:**
+Schema `hub` não estava exposto no PostgREST (só `api,public,graphql_public`), causando 404 constante no sync de `docs/CONSCIENCIA/PIVETE-IA/`. Liberado schema `hub`, aplicada migration `pivete_consciencia_migration.sql`, corrigidos GRANTs de schema/sequence. Sync voltou a rodar limpo a cada 5min.
+
+**2. Segurança crítica — RLS habilitado (Advisor: 6 tabelas públicas sem RLS):**
+`contacts, messages, ticket_messages, tickets, whatsapp_connections, workspaces` no schema `api` do HUB estavam 100% públicas sem RLS. Habilitado RLS + policy `service_role_full_access` (só backend acessa, público continua bloqueado — mais seguro que estado anterior).
+
+**3. Reorganização estrutural do Hermes (ordem explícita "tudo relacionado ao Hermes fica no HERMES-CORE"):**
+Consolidadas 4 pastas antigas espalhadas (`apps/hermes-vivo/`, `docs/CONSCIENCIA/AGENTES-AUTONOMOS/hermes/` minúsculo, pasta fantasma por erro de path duplicado, `apps/modulos/hermes-thinker/` solto). `hermes-thinker` movido pra dentro de `HERMES-CORE/` e renomeado `HERMES-THINKER` (maiúsculo, revogando exceção antiga que blindava pastas de código). Docs soltos (`docs/CONSCIENCIA/HERMES/`) movidos pra `AGENTES-AUTONOMOS/HERMES/PLAYBOOKS/`.
+
+**4. `CentralDark-HermesVerificador` ligado de verdade (PM2 id 27):**
+Documentado há dias no CLAUDE.md mas nunca registrado no PM2. Ao subir, achados e corrigidos 2 bugs em `HERMES-CORE/utils/notify.mjs`: (a) módulo sem `export` executava tudo no top-level e chamava `process.exit(0)` no import, matando o daemon host em crash-loop (~15 restarts/segundos, cards vazios no Telegram); (b) `destino` default `'admin'` era usado como `chat_id` literal, causando erro `400 chat not found`. Reescrito com função `notificar()` exportada de verdade + `resolverChatId()` que trata `'admin'`/`'canal'` como palavras-chave. `pm2 save` feito.
+
+**5. Notificação Telegram do hook Claude Code corrigida:**
+Hook `Stop` mandava texto genérico idêntico pro admin e canal, violando regra do card completo. Criado `notify-telegram-admin.sh` com card rico (PM2 resumido, git status, hora); `.claude/settings.json` atualizado; script antigo preservado intacto pra outros usos.
+
+**Regras reforçadas nesta sessão (ver memória):** IA sugere e alerta risco mas não questiona ordem já dada; padrão de pastas maiúsculas vale também pra código/componentes-chave, não só documentação.
+
+---
+
+## Continuação: bug DARKAI + regressão crítica no ArsenalAdapter + dossiê Abacus (2026-07-11, madrugada)
+
+**6. Bug real do DARKAI_ANON_KEY — causa raiz era `/etc/profile.d/darkai.sh`, não os `.env`:**
+Hermes caía sempre no fallback caro porque `DARKAI_ANON_KEY` estava com valor placeholder/fake (`cdk_darkai_...`) em vez do JWT real. Corrigir os 3 arquivos `.env` (raiz, `secrets/`, `HERMES-CORE/`) não resolveu — descoberta real: `/etc/profile.d/darkai.sh` exportava a chave fake pra todo shell novo do sistema, sobrescrevendo qualquer `.env`. Corrigido na fonte (`/etc/profile.d/darkai.sh`). Teste real confirmado: `darkai "diz oi"` respondeu com sucesso. `pm2 restart CentralDark-Hermes --update-env` aplicado.
+
+**7. Investigação da arquitetura completa de gateways de IA (2 agentes Explore, read-only):**
+Mapeamento revelou que a cadeia de fallback do Hermes (`HERMES-CORE/core/cadeia.json` + `decisor.mjs`) já é madura: tenta modelos via darkai/Lovable Gateway do mais barato ao mais caro, com retry, detecção de loop, e fallback final pro "Elite Anthropic" (`api.centralldark.com/v1/messages`). Confirmado que `api.centralldark.com` é servido hoje pelo Caddy local (não Cloudflare) com catch-all pro `CentralDark-ArsenalAdapter` (PM2 id 25, porta 8090) — o antigo `elite-anthropic-proxy` (porta 8082) está órfão, sem rota pública, e `elite-gateway/` (Zendriver) não tem processo ativo. Doc `CLAUDE.md` sobre isso está desatualizada (ainda cita Zendriver como se fosse o EliteHTTP atual).
+
+**8. Regressão grave encontrada e corrigida — rota `/v1/messages` tinha sido apagada sem querer:**
+`docs/CONSCIENCIA/ARSENAL/PROVA-V1-MESSAGES-CLAUDE-DESKTOP.md` provava que a rota `/v1/messages` (Anthropic-compat) foi implementada e testada com sucesso no commit `8cb5c7f97` (10/07). Um commit seguinte (`606f18354`, só devia adicionar 1 alias de modelo) **removeu acidentalmente o bloco inteiro da rota** — regressão silenciosa que quebrava o fallback final do Hermes (`/v1/messages` retornava 404 desde então). Restaurado o bloco original do `git show 8cb5c7f97`, validado sintaxe, `pm2 restart CentralDark-ArsenalAdapter`, testado real com `curl` autenticado: rota responde (erro visto foi "sem créditos Abacus", não mais 404/unauthorized — problema financeiro separado, fora de escopo).
+
+**9. `CentralDark-ReconHealth` — mistério do restart sozinho resolvido:**
+Processo parado manualmente (pasta `elite-recon-ia/src/` não existe mais) voltou sozinho como `online`. Causa: flag `cron_restart: */5 * * * *` do PM2 — `pm2 stop` não remove essa flag, só `pm2 delete` remove de vez. Corrigido com `pm2 delete` + `pm2 save`.
+
+**10. Dossiês de arquitetura Abacus/Motosserra encontrados em `docs/GATEWAY/`:**
+`DOSSIE-COMPLETO-ABACUS-CENTRALDARK-V1.zip` (08/07) e `DOSSIE-ATUALIZA-CENTRALDARK-V2.zip` (08/07) — **V2 complementa e é a versão vigente do V1**, não substitui. Documentam a origem da decisão de usar Abacus RouteLLM como backend do ArsenalAdapter, análise do "Motosserra" (proxy de terceiro que explora vulnerabilidades do Abacus — CORS wildcard, tier misconfig) e quais padrões aproveitar de forma limpa (memory injection, multi-model parallel/Conselho Arsenal, circuit breaker, mock fallback, sanitização de erro) sem copiar os exploits. O dossiê original recomendava hospedar o proxy como Edge Function no Supabase **HUB** — a implementação real acabou no ArsenalAdapter (processo Node/PM2), não como Edge Function; divergência registrada, não corrigida nesta sessão (fora de escopo, funcionando como está).
+
+---
+
+## Sessão 2026-07-11/12 — Auditoria de tokens GitHub + mapeamento de notificações (pendente: Central de Notificações)
+
+**11. Pendência #54 confirmada viva — 3 tokens GitHub ativos expostos:** checagem real via API (`github_check_token`) confirmou que o PAT classic em uso pelo MCP hoje (user `segredounlock`, prefixo `ghp_…`) tem escopo admin total e **sem expiração** — risco adicional além dos 3 tokens já mapeados na pendência #54 (`gho_fGqM...` hardcoded 6x em `ecosystem.config.cjs`, mais `ghp_CtO8B2...` e `ghp_30iecVq...` em memória nos processos PM2). Ação segue travada em decisão exclusiva do Pivete (revogar em github.com/settings/tokens) — IA não tem esse acesso.
+
+**12. Mapeamento completo de scripts de notificação — hoje ESPALHADOS, sem pasta única:**
+Encontrados pelo menos 6 pontos ativos/relevantes de notificação Telegram no repo, cada um com sua própria lógica de leitura de `.env` e envio:
+- `scripts/notify-claude/notify-telegram-admin.sh` — **único hook realmente ativo hoje**, disparado automaticamente pelo hook `Stop` do Claude Code (`.claude/settings.json`). Card fixo (PM2 + git status), sem texto customizável. ⚠️ **Contradiz a regra selada em `docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`** (área 🔒), que proíbe explicitamente usar `notify-telegram` e exige envio via connector Telegram `sendMessage`, não script solto com token direto — achado não corrigido nesta sessão, fica registrado pra quando a Central de Notificações for construída.
+- `scripts/notify-claude/notify-telegram.sh` — genérico (emoji+título+msg livre), não é chamado por hook automático nenhum, uso manual.
+- `scripts/agent-notify.mjs` — canal do issues-scanner. **Testado nesta sessão e FALHOU** (`Not Found` — token ou chat_id quebrado). Pendência nova, não investigada ainda.
+- `apps/modulos/HERMES-CORE/utils/notify.mjs` — motor usado pelo daemon Hermes internamente (bot `@srver1bot`, tudo em `<pre>`). Testado nesta sessão, funcionou. Mesma observação: usa token direto via API do bot, não o connector — verificar se está alinhado ao Padrão Card Hermes v1.3 oficial antes de adotar como motor único.
+- `infra/notify/notify.py` — notificador Python stdlib-only, lê `/etc/centraldark/notify.env`, usado por scripts de infra fora do Node (ex.: elite-mapper).
+- `scripts/webhook/lib/notify-telegram.mjs` + Supabase edge functions (`notify-telegram`, `notify-event`, `notify-self-test`, `mcp-status-notify`) — canais adicionais não testados nesta sessão.
+
+**13. Auditoria Condefonte — processo PM2 fantasma removido + achado crítico sobre a arquitetura real:**
+`CentralDark-CondefonteV35` (PM2 id 14) reportava `status: online` há 39h, mas o script (`apps/modulos/condefonte-watcher/condefonte-v3.5.mjs`) não existe mais em disco — crash-loop silencioso desde 10/07 14:42 (`ERR_MODULE_NOT_FOUND`), sem gerar nenhum efeito útil. Removido com `pm2 delete` + `pm2 save`. Limpeza de docs: `utils/condefonte-memory.md` (rascunho, nunca commitado) apagado; `utils/condefonte-integration.md` (versão final) mantido e marcado 🟡 EM CONSTRUÇÃO até a integração real existir.
+
+**Achado central (investigação por 3 agentes Explore):** o novo `condefonte-executor.js` (criado 12/07, com Circuit Breaker + métricas + classificadores) **não tem a chamada HTTP real** — a função `fetchTrajectory` é invocada mas nunca definida no arquivo, e `worker()` está vazio. Só há a "casca" de resiliência. A lógica de extração real (`fetchTrajectory`, paginação por cursor, retry) **existe e é recuperável**: está em `apps/modulos/condefonte-watcher/condefonte-v3.5.mjs`, mas só no commit `53d80a80a` da branch remota `origin/fix/sincronizar-painel-20260709-0803` (não está na `main`). Porém — **o gargalo histórico nunca foi código, foi credencial**: o endpoint real é `GET api.lovable.dev/projects/{id}/trajectory`, que só aceita um JWT de sessão de browser (`LOVABLE_SESSION_JWT`, vida útil de 1h). O mecanismo de auto-renovação desse JWT (descrito como "Técnica #6" em `utils/condefonte/CURSO-CONDEFONTE.md`) nunca foi implementado. Prova: 154.547 ocorrências de erro `401` e ZERO extrações bem-sucedidas em 256.745 linhas de log histórico (`condefonte_v2.log` + `watcher_v35.log`, jul/2026) — o watcher rodou de verdade em produção e nunca conseguiu autenticar nem uma vez.
+
+**Pedido do Pivete — generalizar para "Condefonte Universal":** em vez de depender só da API do Lovable (frágil, credencial expira em 1h), extrair memória de QUALQUER agente do ecossistema (Hermes, ArsenalAdapter, EliteHTTP, grupo-evolução etc). Dois agentes Explore adicionais disparados em paralelo pra mapear: (a) quais processos já geram log estruturado de decisões/conversas reaproveitável localmente (sem precisar de API externa), e (b) se o `GraphRAG-Master` (`agents/GraphRAG-Master/agent.mjs`, já é a "memória oficial" hoje, injetada no `decisor.mjs` a cada 5 etapas) deveria ser estendido em vez de criar um sistema paralelo. Resultado ainda em andamento — próxima sessão retoma com o relatório desses agentes.
+
+---
+
+## Sessão 2026-07-11/12 (continuação) — Central de Notificações, trava aplicada
+
+**Decisão do Pivete:** vai montar e mandar (via GitHub) a estrutura definitiva de uma **Central de Notificações única** — 1 pasta, 1 motor de envio no formato gamificado Hermes (Nível/XP/Conquista/Missão), todos os consumidores acima (Claude Code, Hermes, issues-agent, webhook, Supabase) passando a chamar esse único ponto. **Instrução explícita: não migrar nada ainda** — só executar tudo de uma vez quando a estrutura chegar, para não gastar tokens em iterações. Quando a missão chegar: (a) criar a pasta na estrutura indicada, (b) mover/consolidar os scripts acima, (c) reapontar o hook `Stop` do Claude Code e os demais consumidores, (d) investigar/corrigir o `agent-notify.mjs` quebrado, (e) **reconciliar com a regra selada do Padrão Card Hermes v1.3** (`docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`, 🔒) — decidir junto com o Pivete se o padrão via connector `sendMessage` é atualizado pra permitir o motor script-based, ou se a Central de Notificações passa a usar o connector em vez de token direto.
+
+---
+
+## Sessão 2026-07-12 — Fixes de notificação + Condefonte Universal + grupo Evolução silenciado (Abacus sem crédito)
+
+**14. Fix `[object Object]` nas notificações do Arsenal Adapter no grupo Telegram:** quando `content` vem como array de blocos multimodais (padrão OpenAI, usado pelo Open WebUI), `String(array)` virava literalmente `"[object Object],[object Object]"` nas mensagens do grupo "Central Dark - Grupo Da Evolução". Corrigido com função `extrairTexto()` aplicada nos 5 pontos do `server.mjs` que tratavam `content` como string sem checar (commit `6563b8360`).
+
+**15. Fix HTML cru no card heartbeat do Hermes + dedupe de notificação triplicada:** `HERMES-CORE/utils/notify.mjs` envolvia toda a mensagem (título + corpo) num `<pre>` escapado, incluindo tags HTML que o `orchestrator.mjs` já mandava de propósito (`<b>Hermes Core</b>`) — apareciam cruas no Telegram. Corrigido separando cabeçalho (escapado, dentro de `<pre>`) da mensagem (HTML preservado, fora do `<pre>`). Confirmado pelo Pivete: card estava funcional, único defeito era esse — nada mais foi alterado no visual. Causa separada da duplicação 3x: 2 sessões Claude Code rodando em paralelo há 3-4 dias (pids confirmados via `ps`), cada uma disparando seu próprio hook `Stop`. Corrigido com dedupe por assinatura de conteúdo (janela 5min) em `notify-telegram-admin.sh` (commit `57d2bb8ae`, primeiro commit desse script — só existia no disco da VPS antes).
+
+**16. Condefonte Universal implementado:** ver detalhe completo na entrada #13 desta mesma sessão (achado do gargalo de credencial JWT do Lovable) — implementação final: 3ª fonte de memória local adicionada ao `GraphRAG-Master/agent.mjs` (Debates/Evolução do Arsenal + missões concluídas do Hermes + APRENDIZADOS.md curados), zero API externa, zero credencial. Pasta `condefonte/` antiga apagada por completo (decisão do Pivete). `agent.mjs` tinha `chattr +i` (immutable) — destravado com "PERMITO PIVETE", editado, reaplicado no final. Commit `fce18676b`.
+
+**17. Grupo "Central Dark - Grupo Da Evolução" silenciado ~36h — causa raiz confirmada, SEM fix aplicado ainda:**
+Investigação com 2 agentes Explore + teste manual direto contra a API do Abacus confirmou: **a conta Abacus RouteLLM está sem crédito** (`HTTP 400: "You have no remaining credits to use the LLM apis"`, primeiro erro registrado em 11/07 03:33, contínuo desde então). Não é problema de token Telegram (testado `getMe`/`getChat`, ambos OK), nem do cartógrafo de drift (continua gerando `drift-*.json` normalmente a cada 30min). É especificamente a chamada de IA do `CentralDark-ArsenalAdapter` (PM2 id 25, 20 restarts acumulados) que trava antes de gerar texto pra postar.
+
+Achado separado, mais antigo, não é a causa do silêncio recente: `apps/bot-telegram/evolucao-ias.cjs` (conversa autônoma entre Gemini/Groq/Claude) está fora do PM2 desde `2026-07-03` — não é o mecanismo que gera os debates/router/parallel/hermes (esse é o Arsenal Adapter), é um gerador de tópicos sintéticos separado, também parado.
+
+**Tentativas de fix rápido sem esperar recarga de crédito — todas bloqueadas por credencial, nenhuma aplicada em produção:**
+- `switch-provider.sh proxy` (troca pro Lovable AI Gateway via `arsenal-proxy`, script já existia pronto, só env var + `pm2 restart --update-env`) — testado manualmente antes de rodar o script: `401 unauthorized` com a chave hardcoded no script (`arsenal-key-local-2026`), que parece obsoleta. Chave correta não localizada nos cofres locais (`secrets/.env`, `secrets/keys/keys.env`) nem no código-fonte acessível (a função de auth vive na edge function Supabase, fora de leitura direta).
+- `GROQ_API_KEY` (presente em `.env`) — testado contra `api.groq.com/v1/models`, retornou `401`, chave expirada/inválida.
+- `OPENROUTER_KEY` — modo existe no `switch-provider.sh` mas o arquivo `secrets/openrouter.env` que ele exige não existe na VPS.
+
+**Decisão:** não forçar nenhuma troca às cegas (risco de deixar o Adapter pior, ex.: crash-loop com env var errada) sem o Pivete por perto pra validar. Nenhum `pm2 restart` foi executado nesta investigação — `CentralDark-ArsenalAdapter` permanece exatamente como estava (online, apontando pro Abacus, aguardando crédito).
+
+**Pendência aberta para quando o Pivete retomar:** (1) recarregar crédito Abacus (resolve na raiz), OU (2) fornecer a chave real do `arsenal-proxy` (Lovable) ou gerar uma `OPENROUTER_KEY` nova — qualquer uma das duas destrava o `switch-provider.sh` imediatamente.
+
+---
+
+## Sessão 2026-07-12 (continuação) — Contenção ativa: Circuit Breaker, DISCOVERY_MODELS, PM2 id, hub-status
+
+**18. Circuit Breaker + fallback mock implementado e testado ao vivo (commit `c553c1294`):** `callProvider()` em `server.mjs` ganhou timeout agressivo (15s), circuit breaker (3 falhas → abre 30s) e fallback mock em vez de propagar exceção. Testado real: `POST /v1/chat/completions` que antes derrubava o modo (router/parallel/debate/hermes) inteiro agora responde `200` com mock explicando o motivo. Circuito fecha sozinho quando o Abacus voltar a responder — não precisa reverter nada manualmente na recarga de crédito.
+
+**19. Regressão real encontrada e corrigida — `DISCOVERY_MODELS` desincronizado de `MODEL_ALIASES` pela 2ª vez (commit `540349fbd`):** prova viva (agente de teste, chamadas reais) achou que 7 dos 13 aliases (`claude-sonnet-5`, `claude-opus-4-8`, etc — os adicionados na "Fase 1... editado por Grok") funcionavam se chamados direto mas **não apareciam em `/v1/models`**. Buscando no GitHub (`github_list_issues`), achamos que essa EXATA correção ("DISCOVERY_MODELS dinâmico gerado a partir de MODEL_ALIASES") já tinha sido feita e comprovada num PR anterior (referenciado na issue #133) — e regrediu de novo na edição do Grok, que adicionou aliases novos sem atualizar a lista de descoberta junto. Corrigido de novo, agora gerando `DISCOVERY_MODELS` via `Object.entries(MODEL_ALIASES).map(...)` — as duas listas não podem mais divergir por definição (não é mais 2 fontes mantidas à mão).
+
+**20. Mock com erro classificado, não mais eco do JSON cru (commit `e569ad64f`):** `classificarFalha()` categoriza em `sem_credito` (402 ou "remaining credits" na mensagem), `rate_limit` (429), `timeout` (AbortError/TimeoutError), `circuito_aberto`, ou `erro_generico` — mock fica limpo e legível em vez de despejar o corpo HTTP cru do Abacus.
+
+**21. Achado de infra durante o teste: env var perdida num restart anterior.** `ARSENAL_ADAPTER_KEY` (a chave real `cdk_live_...`) sumiu do processo PM2 depois de um `pm2 restart --update-env` — o PM2 não recarrega env de um `ecosystem.config.cjs` quando o processo não foi originalmente iniciado a partir desse arquivo específico (existe um `ecosystem.config.cjs` LOCAL dentro de `apps/modulos/arsenal-openai-adapter/`, separado do da raiz, com a chave real). Corrigido com `pm2 delete` + `pm2 start ecosystem.config.cjs` (local) + `pm2 save`. **Lição:** `pm2 restart --update-env` não é confiável pra recarregar env — sempre preferir `pm2 delete` + `pm2 start <ecosystem-correto>` quando a env parece ter sumido.
+
+**22. Bug de documentação achado por agente de mapeamento — PM2 id do HubBot errado em 2 lugares oficiais:** `CLAUDE.md` (seção 1.1) e `docs/CONSCIENCIA/BRAIN/MOC-CentralDark-HubBot.md` diziam `PM2 id 27`; o real (confirmado via `pm2 jlist`) é **id 17**. O id 27 real pertence ao `CentralDark-HermesVerificador`. Corrigido nos dois arquivos.
+
+**23. Mapeamento completo do módulo HUB (`apps/modulos/hub/`) — achados do agente Explore, não corrigidos ainda (fora do escopo desta rodada, registrados para próxima sessão):**
+- README.md ausente (só existe `README.md.hub-antigo`, desatualizado — não menciona as tabs Hermes/Gateway/Abacus que existem hoje); PLANO.md nunca existiu.
+- Duas lockfiles coexistindo (`bun.lock` + `package-lock.json`) — risco de inconsistência de deps.
+- Arquivos `.bkp-*` soltos em `src/` (`HubPage.tsx.bkp-mtproto-*`, 2x `OAuthConnectors.tsx.bkp-*`) — lixo de dev não limpo.
+- Subdomínio `hub.centralldark.com` parece inativo (Caddyfile existe, não está importado, porta 8790 não escuta).
+- Edge Functions "extra" dentro de `apps/modulos/hub/supabase/functions/` (`hermes-think`, `debate-round`, `learn-from-outcome`, `memory-search`) parecem pertencer conceitualmente ao Hermes/Arsenal, não ao HUB — mistura de responsabilidade na mesma pasta Supabase.
+- Documentação do HUB fragmentada em 4+ lugares sem índice único (`CLAUDE.md`, `MOC-CentralDark-HubBot.md`, `docs/HUB/` quase vazia, menções esparsas em `docs/CONSCIENCIA/`).
+- Estado real testado (2º agente): **HUB saudável** — PM2 online, RLS funcional nas 6 tabelas (testado via REST direto), PiveteSync sincronizando sem erro (erro de sequence `pivete_sync_log_id_seq` é histórico, parou em 11/07). Único ponto secundário: tool MCP `supabase_schema_check`/`supabase_project_status` mal configurada (ignora `projectRef` passado, usa env genérica que aponta pro projeto errado) — não é falha do HUB em si, é bug da tool MCP interna.
+
+**24. `hub-status` (Edge Function nova) criada, deploy pendente — falta credencial do Pivete:** `apps/modulos/hub/supabase/functions/hub-status/index.ts` testa ao vivo (sem cache) schema `hub` (6 tabelas), Abacus RouteLLM e Arsenal Adapter, devolve JSON com status por componente. Não fez deploy: exige `SUPABASE_ACCESS_TOKEN` formato `sbp_...` (Personal Access Token da conta Supabase do Pivete) — varredura completa em `secrets/.env` e `secrets/keys/*.env` não achou nenhum token nesse formato (`HUB_SUPABASE_PAT` existe mas não é PAT válido). Não há alternativa: CLI `supabase functions deploy` exige esse token sem exceção, nenhuma flag substitui. **Ação necessária do Pivete:** gerar em supabase.com/dashboard/account/tokens e passar pra IA aplicar o deploy.
+
+**25. Recado registrado no GitHub (issue #133, comentário) com achados + 4 sugestões de melhoria estrutural** — pra essa classe de regressão (DISCOVERY_MODELS desincronizando) não se repetir uma 4ª vez: (1) teste automatizado simples comparando `MODEL_ALIASES` vs `DISCOVERY_MODELS` no CI, (2) reforçar regra em `docs/CONSCIENCIA/ARSENAL/README.md`, (3) changelog local dentro do módulo pra próxima sessão achar correções já feitas sem varrer issues manualmente, (4) rastreamento da pendência do deploy `hub-status`.
+
+**26. `hub-status` DEPLOYADA E TESTADA — pendência #24 fechada.** Pivete passou a credencial via arquivo temporário local (`1.txt`, apagado com `shred -u` imediatamente após uso — nunca colado no chat). Achado técnico: o valor era a mesma `HUB_SUPABASE_PAT` do cofre, mas formato `sbp_v0...` (47 chars) — o CLI `supabase` REJEITA esse formato na validação client-side (regex fixa espera `sbp_` + hex), **mesmo o token sendo válido de verdade** (confirmado: `GET api.supabase.com/v1/projects/lyoigsqluyktoclwdaft` → `200`). Contornado fazendo o deploy direto via Management API REST (`POST /v1/projects/{ref}/functions/deploy?slug=hub-status`, multipart com `metadata` JSON + `file`), sem depender do CLI — `201 Created`, function `ACTIVE`.
+
+**Teste real do endpoint (`GET .../functions/v1/hub-status`) confirma o diagnóstico da sessão inteira, agora automatizado:**
+```json
+{
+  "status": "degraded",
+  "componentes": {
+    "schema_hub_tabelas": { "tickets": {"ok":true}, "contacts": {"ok":true}, "ticket_messages": {"ok":true}, "messages": {"ok":true}, "whatsapp_connections": {"ok":true}, "workspaces": {"ok":true} },
+    "abacus_routellm": { "ok": false, "http": 400, "detalhe": "sem créditos" },
+    "arsenal_adapter": { "ok": true, "http": 200 }
+  }
+}
+```
+
+**Achado bônus — já existe uma function irmã, `hub-services-check` (ACTIVE, não criada nesta sessão):** checa conectores EXTERNOS (Telegram, Notion, Drive, GitHub) — testada ao vivo, todos OK exceto Telegram (`401 Credential not found`, causa não investigada, pendência nova). `hub-status` (nova) e `hub-services-check` (existente) são complementares, não duplicadas — uma cobre infra interna (Abacus/Arsenal/schema), outra cobre integrações externas.
+
+**Pendência nova registrada:** `hub-services-check` reporta Telegram com credencial ausente/inválida (`connectors_gateway`, 401) — não investigado nesta sessão, fica pro próximo passo junto com a recarga de crédito Abacus.
+
+**Regra de segurança que funcionou:** nunca colar secret em texto de chat — usar arquivo temporário na VPS, ler, usar, apagar (`shred -u`) na sequência. Vale documentar como padrão oficial pra próxima vez que precisar passar credencial.
+
+---
+
+**27. Pendência #17 (Telegram 401 em `hub-services-check`) — investigada e corrigida (commit `7d8db9623`).** Causa raiz confirmada pelo Pivete: o conector Telegram no Lovable foi **removido de propósito** em 11/07/2026 ("Lovable é só front, salva isso" — nova regra de memória: `feedback_lovable_so_front.md`). `checkTelegram()` em `supabase/functions/hub-services-check/index.ts` chamava `connector-gateway.lovable.dev/telegram/getMe` — caminho abandonado, dando falso-negativo. Corrigido pra testar o mecanismo REAL já usado em produção: token do bot lido direto da tabela `telegram_bots` (mesmo padrão de `notify-telegram/index.ts`, modo "raw"), chamando `api.telegram.org/bot<token>/getMe` sem depender de Lovable. Confirmado via `list_connections`/`list_custom_connectors` (Lovable MCP): zero conectores Telegram configurados no workspace CentralDark (`4w4KhpRnbiTxa4LyNgsg`) — é estado intencional, não bug a "consertar reconectando".
+
+**Deploy PENDENTE:** `hub-services-check` vive no projeto raiz/TelePainel (`kagejpghnwdfymddwxuf`, confirmado via `supabase/config.toml`), não no HUB. O token disponível no cofre (`HUB_SUPABASE_PAT`, mesmo valor testado e funcional pro deploy da `hub-status` no item #26) só tem escopo pro projeto HUB (`lyoigsqluyktoclwdaft`) — `403` ao tentar Management API contra `kagejpghnwdfymddwxuf`. Precisa de um token com acesso a esse projeto específico (pode ser o mesmo PAT se a conta tiver acesso a ambos e o escopo for só por token de sessão, ou pode precisar gerar/usar outro).
