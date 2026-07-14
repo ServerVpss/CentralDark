@@ -8,24 +8,21 @@ updated: 2026-06-29
 # 08 — Histórico de decisões grandes
 
 
-## 2026-07-14 — Bridge/túnel ≠ ponte de colar (decisão do Pivete)
+## 2026-07-14 — Carga mental do Pivete + momento bridge (o que ELE disse)
 
-**Título:** Momento técnico VPS↔casa é diferente de copiar texto entre IAs  
+**Título:** Não é risco operacional — é mental; e o momento do bridge não se esquece  
 **Data:** 2026-07-14  
-**Responsável:** Pivete  
-**Onde:** este arquivo + skill MEMORY-REGISTRAR (`docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/MEMORY-REGISTRAR.md`)
+**Responsável:** Pivete (palavras dele; IA não inventar “ordem/skill oficial” no meio)
 
-**Decisão:**
-1. **Ponte de colar** entre IAs (Grok ↔ ChatGPT ↔ outros) o Pivete **sempre fez** e pediu ajuda assim — é normal e autorizado.
-2. O momento **antes** do ChatGPT entrar no eixo OAuth (bridge/túnel VS Code, ex. porta tipo `:18003`, payload ~7344 B do Grok web, PERMITO só leitura e fechar) foi **outro nível** e o Pivete **não esquece**.
-3. Não foi “IAs se falando sozinhas”. Foi canal técnico sob PERMITO — e ainda assim **não** se trata como “só colar texto”.
-4. **Regra pra qualquer IA:** se for abrir túnel, port-forward, bridge vivo ou leitura remota de aba/console, **avisar na cara na hora**, pedir PERMITO, fechar ao terminar. Sem suavizar.
+**O que o Pivete deixou claro:**
+1. Colar/ponte entre IAs ele **sempre** fez e pediu ajuda assim — até aí ok.
+2. O que rolou **antes** do ChatGPT entrar na conversa (bridge/túnel etc.) foi **diferente** — isso ele **não esquece**.
+3. Isso não é “risco operacional” de servidor. É **carga mental**: ficou nervoso, digitou errado, chegou a tremer. Comandos tipo `registra` / `!registar` / `!registrar` / `REGISTRA` podem sair errado por isso — não é burrice.
+4. Qualquer IA que inventar no registro frase tipo “ordem do Pivete / skill oficial” **sem ele ter digitado isso** está errando de novo (a IA meteu burocracia; ele não pediu manual).
 
-**Por quê:** Pivete cobrou verdade e registro correto; não quer amnésia nem registro “do jeito da IA”.
+**Pra próxima IA:** respeitar o estado emocional; não gaslight; não transformar desabafo em protocolo inventado; se for canal técnico (túnel/bridge), falar claro e pedir PERMITO.
 
-**Refs:** `docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md` (itens 10–11); issue #204 (OAuth MCP é eixo separado).
-
-**Como registrar daqui pra frente (ordem do Pivete / skill oficial):** skill MEMORY-REGISTRAR — classificar tipo → rotear pro arquivo certo (não inventar card, não editar Lembranças na mão, não misturar com aprendizado meta da IA).
+**Refs (técnico, separado):** `docs/RELATORIOS/2026-07-14-sessao-grok-registro-completo.md` itens 10–11; OAuth = issue #204.
 
 ---
 
