@@ -2,7 +2,7 @@
 // Coisas internas do time — separadas do portal e do TelePainel.
 import { Route, Navigate } from "react-router-dom";
 import DevTransitions from "@/funcionalidades/telepainel/pages/DevTransitions";
-import CockpitPreview from "@/admin/cockpit";
+import SalaControle from "@/paginas/admin-cockpit/SalaControle";
 
 export function rotasAdmin() {
   return (
