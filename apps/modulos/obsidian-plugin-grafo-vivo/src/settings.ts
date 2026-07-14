@@ -13,7 +13,9 @@ export interface GrafoVivoSettings {
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
-  urlGrafo: "https://status.centralldark.com/graph-data.json",
+  // Padrão 2026: plugin só CONSOME API (mesmo stack Graphify+GrafoVivo)
+  // mode=vivo = PM2 operacional (leve, tempo real). UI full: /api/graph
+  urlGrafo: "https://grafo.centralldark.com/api/graph?mode=vivo",
   intervaloSegundos: 15,
   abrirNotaAoClicar: true,
   autoUpdateAtivo: true,
