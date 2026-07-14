@@ -7,6 +7,40 @@ updated: 2026-06-29
 
 # 08 — Histórico de decisões grandes
 
+## Migração live de labels (2026-07-14 — BLOQUEADA no precheck)
+
+**Autorização:** "PERMITO PIVETE" — execução da migração alias→canônico no `ServerVpss/CentralDark`.
+
+**Resultado:** 🔴 **BLOQUEADO no precheck. Nada foi disparado, nada foi alterado.**
+
+**Contexto live:**
+- `default_branch = main` · `SHA = b3f8df527dd45ab4a5f431aec0d81c53e551286c`
+- Leitura via API dos workflows na `main`:
+  - `.github/workflows/bots-labels-seed.yml` (100 linhas) — **não contém** `process.env.DRY_RUN`, **não contém** job `migrate`, **não contém** input `run_migration`, **não contém** `core.setFailed`. É a versão anterior às correções da 3ª passada.
+  - `.github/workflows/github-bot-controller.yml` (58 linhas) — tem um único job `controller`. **Não contém** jobs `audit` e `manual_close` com permissions separadas.
+- As correções endurecidas descritas nas passadas anteriores existem apenas no espelho Lovable (branch `pivete/dev`) e **não foram propagadas ao repositório oficial** `ServerVpss/CentralDark` na `main`.
+
+**Inventário read-only dos 4 pares alias→canônico (SHA `b3f8df5`):**
+
+| Label | HTTP | issue open | issue closed | pr open | pr closed |
+|---|---:|---:|---:|---:|---:|
+| `assign:faxineiro` | 404 | 0 | 0 | 0 | 0 |
+| `assign:faxineiro-repo` | 404 | 0 | 0 | 0 | 0 |
+| `assign:auditor` | 404 | 0 | 0 | 0 | 0 |
+| `assign:auditor-divergencia` | 404 | 0 | 0 | 0 | 0 |
+| `assign:seguranca` | 404 | 0 | 0 | 0 | 0 |
+| `assign:guarda-seguranca` | 404 | 0 | 0 | 0 | 0 |
+| `assign:vps-health` | 404 | 0 | 0 | 0 | 0 |
+| `assign:vps-healthcheck` | 404 | 0 | 0 | 0 | 0 |
+
+Nenhuma das 8 labels existe no repo live — nem aliases nem canônicas. O seed atual (main) ainda não foi rodado com o catálogo consolidado; os aliases citados só existem no código-fonte do workflow.
+
+**Ações tomadas:** nenhuma. Nenhum `workflow_dispatch`, nenhuma edição de label, nenhum fechamento de issue/PR, nenhum toque em secrets, nenhum `github-bot-controller manual_close`.
+
+**Próximo passo requerido antes de tentar de novo:** sincronizar `pivete/dev → main` no `ServerVpss/CentralDark` (PR + merge) com as versões endurecidas de `bots-labels-seed.yml`, `github-bot-controller.yml` e `scripts/github-bot-controller.mjs`. Só depois o precheck passa e o dry-run pode ser disparado.
+
+---
+
 ## Revisão final labels/controller (2026-07-14 — 3ª passada)
 
 **Autorização:** "PERMITO PIVETE" — correção final do commit `daeea4c9`.
