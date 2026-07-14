@@ -31,6 +31,31 @@
 
 ---
 
+## 2026-07-14 09:20 BRT — Cockpit vira Sala de Controle (etapa 1)
+
+- **Fio da missão:** transformar `/admin/cockpit` numa sala de controle densa (Overclock-like), sem cara de site, esperando o dossiê do Grok pra ganhar dados reais.
+- **Escopo:** frontend.
+- **Área tocada:**
+  - `src/paginas/admin-cockpit/SalaControle.tsx` (novo)
+  - `src/paginas/admin-cockpit/sala-controle.css` (novo)
+  - `src/paginas/admin-cockpit/hooks/useCockpitLive.ts` (novo, mock estruturado)
+  - `src/app/rotas/rotas-admin.tsx` (rota `/admin/cockpit` → SalaControle)
+  - `src/paginas/centraldark-admin/pages/DashboardAdmin.tsx` (botão "🎮 Entrar na Sala de Controle")
+- **O que mudou:** rota `/admin/cockpit` agora renderiza uma cabine (header · nav · mapa vivo SVG · feed IA · console) em paleta esmeralda oficial, com nós/linhas animados e dados mock no formato que o dossiê do Grok vai preencher. Painel admin ganhou card destacado levando pro cockpit.
+- **Supabase / backend:** — (mock local; consumo de HUB `/cockpit/state` é entrega separada).
+- **Depende da VPS / equipe GitHub?:** não pra rodar. Sim depois: HUB precisa expor endpoint/WebSocket de estado vivo.
+- **Como testar (leigo):** logar como admin → em `/centraldark/admin` clicar em "🎮 Entrar na Sala de Controle" → ver mapa com nós pulsando, feed do Hermes rolando e console embutido.
+- **Evidência:** rota carrega sem erro, layout bate com o wireframe enviado pelo Pivete.
+- **Pendências deixadas:**
+  - Antigos arquivos `src/admin/cockpit/*` seguem no repo (não referenciados). Remover em etapa seguinte.
+  - Abas MCP/HUB/Infra/IAs/Logs mostram placeholder até o dossiê chegar.
+  - Conectar dados reais depende do HUB expor `/cockpit/state`.
+- **Próximo passo:** aguardar dossiê do Grok e trocar a fonte de `useCockpitLive` do mock pro endpoint real.
+- **Commit:** `[LOVABLE][admin] Reconstruir cockpit como Sala de Controle` — este commit (SHA informado no chat/PR).
+- **Branch:** `pivete/dev`.
+
+---
+
 ## 2026-07-13 16:28 BRT — Padronizar entregas e labels (Lovable ↔ GitHub)
 
 - **Fio da missão:** Pivete pediu um fluxo contínuo entre Lovable e a equipe/automação do GitHub, pra ninguém adivinhar o que a Lovable mudou nem gastar tokens repetindo contexto.
