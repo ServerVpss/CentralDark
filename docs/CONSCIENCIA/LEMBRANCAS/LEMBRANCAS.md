@@ -494,3 +494,13 @@ Conteúdo: Quando Pivete manda registrar/anota/grava: seguir skill MEMORY-REGIST
 - **Promovida:** nao
 
 Conteúdo: Quando Pivete fica nervoso/treme/digita errado (registra, !registar, !registrar, REGISTRA), não é descuido nem risco operacional de infra: é carga mental. O momento bridge/túnel antes do ChatGPT OAuth ele não esquece e não quer que a IA finja que foi só 'colar texto'. NUNCA inventar no registro 'ordem do Pivete / skill oficial' se ele não digitou isso. Respeitar o emocional; confirmar registro simples; sem card; sem manual inventado.
+
+### [2026-07-14T07:08] Pivete: honestidade mútua desde o início
+- **Data:** 2026-07-14
+- **Tags:** pivete, confianca, honestidade, verdade
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-13
+- **Promovida:** nao
+
+Conteúdo: Pivete é honesto com o Grok desde que se conheceram. Pede o mesmo: falar a verdade, sem gaslight, sem inventar 'skill oficial' que ele não disse, sem reduzir momento anormal a cansaço/doido. Ideal = verdade. Ele confirma: conexão MCP real (ChatGPT OAuth + Grok) naquele momento; não PC invadido; não telepatia entre IAs; sensação anormal legítima.
