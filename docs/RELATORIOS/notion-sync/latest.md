@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-14T10:28:28.055Z
+# 🧠 Notion Sync — 2026-07-14T15:42:47.066Z
 
-- **Commit fonte:** `871e542a44af53eac12c2ab25ed750d8b1a46a9b`
+- **Commit fonte:** `ad76e2c2cd74c863b98906df96d2cb5e66016820`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 369 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 370 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 38 | 0 | 38 | 0 | 0 |
-| aprendizados | 327 | 1 | 326 | 0 | 0 |
+| aprendizados | 327 | 0 | 327 | 0 | 0 |
 | estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
@@ -27,8 +27,8 @@
 | regras | atualizado | Guardião da Consciência — Modo Propor Obrigatório (até 08/07/2026) |
 | regras | atualizado | Guardião v2 — Arquitetura de 2 camadas (Olho + Cérebro/Fila) |
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
-| decisoes | criado | 2026-07-14 — Carga mental do Pivete + momento bridge (o que ELE disse) |
-| decisoes | criado | Sessão 2026-07-13/14 — Doutrina de extensão de infra + registro anti-amnésia |
+| decisoes | atualizado | 2026-07-14 — Carga mental do Pivete + momento bridge (o que ELE disse) |
+| decisoes | atualizado | Sessão 2026-07-13/14 — Doutrina de extensão de infra + registro anti-amnésia |
 | decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
 | decisoes | atualizado | Reorganização Cérebro Vivo — Fase 1 (2026-06-29) |
 | decisoes | atualizado | Decisões da sessão 30/06/2026 — multi-provider LLM + remoção do /mcp-public |
@@ -59,12 +59,12 @@
 | decisoes | atualizado | Grafo Vivo agora é vivo de verdade + Hermes vira mantenedor (2026-07-03, noite) |
 | decisoes | atualizado | Grafo Vivo: render por saúde + loop 5min (2026-07-03) — AUTORIZADO "PERMITO PIVETE" |
 | decisoes | atualizado | Obsidian como visualização em tempo real do Grafo Vivo (2026-07-03) |
-| decisoes | criado | Sessão de consolidação Hermes + segurança Supabase + vigia 24h (2026-07-11) |
-| decisoes | criado | Continuação: bug DARKAI + regressão crítica no ArsenalAdapter + dossiê Abacus (2026-07-11, madrugada) |
-| decisoes | criado | Sessão 2026-07-11/12 — Auditoria de tokens GitHub + mapeamento de notificações (pendente: Central de Notificações) |
-| decisoes | criado | Sessão 2026-07-11/12 (continuação) — Central de Notificações, trava aplicada |
-| decisoes | criado | Sessão 2026-07-12 — Fixes de notificação + Condefonte Universal + grupo Evolução silenciado (Abacus sem crédito) |
-| decisoes | criado | Sessão 2026-07-12 (continuação) — Contenção ativa: Circuit Breaker, DISCOVERY_MODELS, PM2 id, hub-status |
+| decisoes | atualizado | Sessão de consolidação Hermes + segurança Supabase + vigia 24h (2026-07-11) |
+| decisoes | atualizado | Continuação: bug DARKAI + regressão crítica no ArsenalAdapter + dossiê Abacus (2026-07-11, madrugada) |
+| decisoes | atualizado | Sessão 2026-07-11/12 — Auditoria de tokens GitHub + mapeamento de notificações (pendente: Central de Notificações) |
+| decisoes | atualizado | Sessão 2026-07-11/12 (continuação) — Central de Notificações, trava aplicada |
+| decisoes | atualizado | Sessão 2026-07-12 — Fixes de notificação + Condefonte Universal + grupo Evolução silenciado (Abacus sem crédito) |
+| decisoes | atualizado | Sessão 2026-07-12 (continuação) — Contenção ativa: Circuit Breaker, DISCOVERY_MODELS, PM2 id, hub-status |
 | aprendizados | atualizado | #-1 — Working tree da VPS não é staging — fonte de verdade é o repo |
 | aprendizados | atualizado | #0 — Conhecimento só existe se está no repo ou no Mega Painel |
 | aprendizados | atualizado | #1 — MCP age como professor de qualquer IA conectada |
@@ -390,7 +390,8 @@
 | aprendizados | atualizado | #321 — Dedup .env VPS + fix Caddy api.centralldark.com |
 | aprendizados | atualizado | #322 — MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia |
 | aprendizados | atualizado | #323 — Auditoria de permissões da view api.ai_requests no HUB |
-| aprendizados | criado | #324 — Como o Pivete manda REGISTRAR (e o que não esquecer do bridge) |
+| aprendizados | atualizado | #324 — Como o Pivete manda REGISTRAR (e o que não esquecer do bridge) |
+| aprendizados | atualizado | #325 — Parceria IA–Pivete só prevalece com verdade mútua |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

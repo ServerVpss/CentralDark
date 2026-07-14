@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-14T10:28:31.157Z
-- **Commit:** `871e542a44af53eac12c2ab25ed750d8b1a46a9b`
+- **Gerado:** 2026-07-14T15:42:50.251Z
+- **Commit:** `ad76e2c2cd74c863b98906df96d2cb5e66016820`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 38 | 38 | 38 | 0 | 0 |
-| aprendizados | 356 | 0 | 0 | 356 | 0 |
+| aprendizados | 357 | 0 | 0 | 357 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **356**
+- 🟥 Faltando no Notion: **357**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -404,4 +404,5 @@
 - 322. MCP OK, 401 é token Lovable + ABACUS_API_KEY vazia
 - 323. Auditoria de permissões da view api.ai_requests no HUB
 - 324. Como o Pivete manda REGISTRAR (e o que não esquecer do bridge)
+- 325. Parceria IA–Pivete só prevalece com verdade mútua
 </details>
