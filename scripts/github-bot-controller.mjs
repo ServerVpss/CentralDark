@@ -88,21 +88,50 @@ async function ghPaginate(path, { perPage = 100, hardCap = 1000 } = {}) {
   return { items: results, cappedAt: hardCap, reachedCap: results.length >= hardCap };
 }
 
-function parseNumbersFromList(input) {
-  return Array.from(new Set(
-    (input.match(/\d+/g) || []).map((n) => parseInt(n, 10)).filter((n) => n > 0)
-  ));
+// Parser estrito: aceita SOMENTE referências #N separadas por espaço e/ou vírgula.
+// Rejeita qualquer dígito sem '#' e qualquer token não-numérico.
+// Retorna { ok, numbers, reason }.
+function parseHashRefsStrict(input) {
+  const raw = (input || "").trim();
+  if (!raw) return { ok: true, numbers: [] };
+  // Divide por vírgula ou espaços; cada token precisa casar exatamente com #<digitos>.
+  const tokens = raw.split(/[\s,]+/).filter(Boolean);
+  const nums = [];
+  for (const tk of tokens) {
+    const m = /^#(\d+)$/.exec(tk);
+    if (!m) {
+      return {
+        ok: false,
+        numbers: [],
+        reason: `token inválido: '${tk}' — esperado formato '#N' separado por espaço/vírgula`,
+      };
+    }
+    const n = parseInt(m[1], 10);
+    if (!(n > 0)) {
+      return { ok: false, numbers: [], reason: `número inválido em '${tk}'` };
+    }
+    nums.push(n);
+  }
+  return { ok: true, numbers: Array.from(new Set(nums)) };
 }
 
 // Extrai a lista da linha "Supersedes: #N #N ..." no corpo do PR (case-insensitive).
-// Retorna [] se a linha não existir; retorna array de números se existir.
+// Retorna null se a linha não existir; array de números se existir.
+// Se a linha existir mas o formato dela for inválido, lança erro (preflight falha).
 function extractSupersedesLine(body) {
   if (!body) return null;
   const lines = body.split(/\r?\n/);
   for (const raw of lines) {
-    const m = /^\s*supersedes\s*:\s*(.+)$/i.exec(raw);
+    const m = /^\s*supersedes\s*:\s*(.+?)\s*$/i.exec(raw);
     if (m) {
-      return parseNumbersFromList(m[1]);
+      const parsed = parseHashRefsStrict(m[1]);
+      if (!parsed.ok) {
+        throw new Error(
+          `Linha 'Supersedes:' presente no corpo mas em formato inválido — ${parsed.reason}. ` +
+          `Use apenas '#N' separados por espaço e/ou vírgula.`
+        );
+      }
+      return parsed.numbers;
     }
   }
   return null;
@@ -156,13 +185,24 @@ async function auditMode() {
 }
 
 async function closeSupersededMode() {
-  const mergedNum = parseInt(MERGED_PR.replace(/[^0-9]/g, ""), 10);
-  const requested = parseNumbersFromList(SUPERSEDES);
-
-  if (!mergedNum) {
+  // merged_pr aceita "149" ou "#149" — nada mais.
+  const mergedRawTrim = MERGED_PR.trim();
+  const mergedMatch = /^#?(\d+)$/.exec(mergedRawTrim);
+  if (!mergedRawTrim) {
     console.log("[controller] merged_pr vazio — nada a fazer");
     return;
   }
+  if (!mergedMatch) {
+    throw new Error(`BOT_MERGED_PR inválido: '${mergedRawTrim}' — use 'N' ou '#N'.`);
+  }
+  const mergedNum = parseInt(mergedMatch[1], 10);
+
+  // Supersedes: parser estrito #N #N ou #N,#N. Rejeita dígito sem '#'.
+  const parsedReq = parseHashRefsStrict(SUPERSEDES);
+  if (!parsedReq.ok) {
+    throw new Error(`BOT_SUPERSEDES inválido — ${parsedReq.reason}`);
+  }
+  const requested = parsedReq.numbers;
   if (requested.length === 0) {
     throw new Error("BOT_SUPERSEDES vazio — nada a fazer (abortando por segurança)");
   }
@@ -230,13 +270,15 @@ async function closeSupersededMode() {
   for (const t of targets) {
     const n = t.number;
     if (DRY_RUN) {
-      console.log(`[dry] comentaria + label superseded + fecharia PR #${n} (substituído por #${mergedNum})`);
+      console.log(`[dry] aplicaria label 'superseded' + comentaria + fecharia PR #${n} (substituído por #${mergedNum})`);
       continue;
     }
+    // Ordem segura: label PRIMEIRO. Se algo quebrar depois, o PR fica ABERTO e MARCADO,
+    // nunca comentado dizendo "fechado" sem estar realmente marcado.
+    await gh("POST", `/repos/${REPO}/issues/${n}/labels`, { labels: ["superseded"] });
     await gh("POST", `/repos/${REPO}/issues/${n}/comments`, {
       body: `Este PR foi substituído por #${mergedNum} (mergeado). Fechando via github-bot-controller com autorização explícita (linha 'Supersedes:' confirmada).`,
     });
-    await gh("POST", `/repos/${REPO}/issues/${n}/labels`, { labels: ["superseded"] });
     await gh("PATCH", `/repos/${REPO}/pulls/${n}`, { state: "closed" });
     console.log(`[controller] PR #${n} fechado (substituído por #${mergedNum})`);
   }

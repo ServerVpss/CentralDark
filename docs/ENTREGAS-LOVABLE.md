@@ -31,7 +31,29 @@
 
 ---
 
+## 2026-07-14 16:00 BRT — Correção final labels/controller (3ª passada)
+
+- **Fio da missão:** revisão final do commit `daeea4c9` — dry-run do seed não escrevia, controller com token write em eventos automáticos, parser de `Supersedes` frouxo demais e ordem de escrita insegura.
+- **Escopo:** infra (workflows) + docs.
+- **Área tocada:**
+  - `.github/workflows/bots-labels-seed.yml`
+  - `.github/workflows/github-bot-controller.yml`
+  - `scripts/github-bot-controller.mjs`
+  - `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`
+  - `docs/ENTREGAS-LOVABLE.md`
+- **O que mudou:**
+  1. Seed: removido `core.getInput('dry_run')` (não funcionava — input não era passado via `with:`). Agora o step recebe `DRY_RUN` via `env:` a partir de `github.event.inputs.dry_run`; `schedule` fixa `'false'`. Script usa `process.env.DRY_RUN`. `core.setFailed` no final se `failed > 0`.
+  2. Controller separado em dois jobs: `audit` (read-only, roda em schedule / pull_request / dispatch sem merged_pr) e `manual_close` (write mínimo, só em dispatch com merged_pr preenchido). Token write nunca aparece em eventos automáticos.
+  3. Novo parser estrito `parseHashRefsStrict`: só aceita `#N` separado por espaço/vírgula; rejeita dígito sem `#`. Linha `Supersedes:` inválida quebra o preflight antes de qualquer escrita.
+  4. Ordem por alvo: **label `superseded` → comentário → close**. Em falha o PR fica aberto e marcado, nunca comentado como fechado sem marca.
+- **Inventário live (read-only):** feito via `GITHUB_TOKEN` do canal Lovable. `ServerVpss/CentralDark` tem **81 labels**. Não existe variante "Grock"; existem apenas `assign:grok` (roteamento) e `🧠 AGENTE-GROK` (camada humana) — coexistência oficial das duas camadas. Idem para ChatGPT: `assign:chatgpt` + `🧠 AGENTE-CHATGPT`. Nada deletado, nada mapeado como alias.
+- **Como testar (leigo):** abrir Actions → "Bots — seed de labels oficiais" → **Run workflow** com `dry_run=true` para ver o dry-run só relatando; depois `dry_run=false` para efetivamente aplicar. O controller só fecha PRs se o operador rodar "GitHub Bot Controller" via dispatch com `merged_pr` E `supersedes` preenchidos EXATAMENTE como aparecem na linha `Supersedes:` do corpo do PR mergeado.
+- **Pendências:** migração de aliases legados segue **preparada**, execução manual pendente.
+- **Próximo passo único:** operador rodar o seed manualmente para validar (`dry_run=true` primeiro).
+- **Registro do commit anterior:** `daeea4c9`.
+
 ## 2026-07-14 14:30 BRT — Revisão do commit anterior (endurecimento controller + migração)
+
 
 - **Fio da missão:** "PERMITO PIVETE" — revisar o commit `7b6a4321f045b3036919a0ef1ebc3e3789ec95e1`, sem deploy, sem executar migração real, sem fechar issue/PR e sem tocar em secrets.
 - **Escopo:** infra (workflows) + docs.
