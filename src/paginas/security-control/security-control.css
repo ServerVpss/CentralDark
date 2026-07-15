@@ -103,7 +103,7 @@
 @media (min-width: 720px) { .sc-hud { grid-template-columns: auto 1fr; align-items: center; } }
 .sc-hud-selo {
   width: 96px; height: 96px; border-radius: 50%;
-  background: url("/src/recursos-visuais/selo-centraldark.png") center/cover no-repeat;
+  background-size: cover; background-position: center;
   margin: 0 auto;
   box-shadow: 0 0 0 1px var(--sc-gold-soft), 0 0 32px rgba(212,162,74,0.25);
 }
