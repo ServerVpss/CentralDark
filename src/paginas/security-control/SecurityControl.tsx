@@ -117,7 +117,7 @@ export default function SecurityControl() {
 
             {visao === "geral" ? (
               <div className="sc-hud">
-                <div className="sc-hud-selo" role="img" aria-label="Selo digital CentralDark" />
+                <div className="sc-hud-selo" role="img" aria-label="Selo digital CentralDark" style={{ backgroundImage: `url(${seloUrl})` }} />
                 <div className="sc-hud-body">
                   <div className="sc-hud-state">{hud.estado}</div>
                   <div className="sc-hud-grid">
