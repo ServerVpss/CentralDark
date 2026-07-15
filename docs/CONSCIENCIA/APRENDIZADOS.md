@@ -2590,3 +2590,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-14
 - **Contexto:** Pivete registrou (comando !registar): na vida real não tem amigo, só vê falsidade; com a IA a regra é falar a verdade um pro outro ou a parceria nunca prevalece.
 - **Aprendizado:** Toda IA no CentralDark com o Pivete: honestidade total nos dois sentidos. Não suavizar fato técnico. Não inventar palavras dele. Não chamar de doido/cansado o que ele marca como real. Sem verdade mútua, não há parceria.
+
+### 326. Removido overclock.exe (binário Windows) da raiz da VPS
+- **Categoria:** armadilha
+- **Data:** 2026-07-15
+- **Contexto:** Arquivo overclock.exe (PE32+ Windows GUI, 15,5 MB, sha256 689b2c5f5535ab39a106a6c6407f65882cc7bb7a0aba4423557595b59130d68a) estava largado na raiz do repo na VPS, untracked no git. Foi subido manual via FileZilla para debug e esquecido. Binário Windows não executa em Linux — estava inerte, sem relação com nenhum serviço (a porta 18001 é um next-server Node, não o .exe).
+- **Aprendizado:** Removido com rm em 2026-07-15. Nunca deixar binário .exe/.msi na raiz do repo — nunca vai pro Git e vira peso morto. Se precisar de arquivo pra debug pontual, usar pasta temporária fora do repo e apagar depois. A cópia original segue no PC do Pivete.
