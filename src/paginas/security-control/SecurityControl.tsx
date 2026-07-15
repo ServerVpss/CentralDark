@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
+import seloUrl from "@/recursos-visuais/selo-centraldark.png";
 import {
   hud,
   soldados as SOLDADOS,
