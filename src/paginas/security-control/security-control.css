@@ -44,7 +44,7 @@
 }
 .sc-selo {
   width: 34px; height: 34px; border-radius: 50%;
-  background: url("/src/recursos-visuais/selo-centraldark.png") center/cover no-repeat, #000;
+  background-size: cover; background-position: center; background-color: #000;
   box-shadow: 0 0 0 1px var(--sc-gold-soft), 0 0 14px rgba(212,162,74,0.25);
   flex-shrink: 0;
 }
