@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
 import seloUrl from "@/recursos-visuais/selo-centraldark.png";
+import hudCanonicalUrl from "@/recursos-visuais/hud-centraldark-v1-canonical.png";
 import {
   hud,
   soldados as SOLDADOS,
@@ -318,15 +319,57 @@ export default function SecurityControl() {
 
           {/* Aba: evidências */}
           {aba === "evidencias" && (
-            <section className="sc-card" aria-label="Evidências">
-              <div className="sc-card-h"><span className="sc-card-t">Evidências · trilha</span></div>
-              <ol style={{ margin: 0, paddingLeft: 18, color: "var(--sc-text)", fontSize: 13, lineHeight: 1.7 }}>
-                <li>🔴 <b>SSH-block</b> · IP {INCIDENTE.ipMascarado} · {INCIDENTE.horario} · {INCIDENTE.traceId}</li>
-                <li>🟡 aprovação pendente · rotação de chave gateway · trc_ap2…002</li>
-                <li>🟢 varredura completa · postura ZERO TRUST mantida · agora</li>
-                <li>🟣 missão MIS-014 · GPT→Grok · mapear.infra · executando</li>
-              </ol>
-            </section>
+            <>
+              <section className="sc-card gold" aria-label="Artefato canônico HUD v1">
+                <div className="sc-card-h">
+                  <span className="sc-card-t">Artefato Canônico · HUD CentralDark</span>
+                  <span className="sc-chip on" style={{ borderColor: "rgba(212,162,74,0.5)", color: "#fde68a", background: "rgba(212,162,74,0.08)" }}>
+                    V1 · SELADO
+                  </span>
+                </div>
+                <figure style={{ margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                  <a href={hudCanonicalUrl} target="_blank" rel="noreferrer" style={{ display: "block", border: "1px solid rgba(212,162,74,0.28)", borderRadius: 10, overflow: "hidden", background: "#050607" }}>
+                    <img
+                      src={hudCanonicalUrl}
+                      alt="HUD CentralDark v1 — artefato canônico selado"
+                      loading="lazy"
+                      style={{ display: "block", width: "100%", height: "auto" }}
+                    />
+                  </a>
+                  <figcaption className="sc-hud-grid" style={{ fontSize: 12 }}>
+                    <div className="sc-hud-row"><span className="sc-hud-k">trace_id</span><span className="sc-hud-v sc-mono">hud-canonical-001</span></div>
+                    <div className="sc-hud-row"><span className="sc-hud-k">Integridade</span><span className="sc-hud-v" style={{ color: "#34d399" }}>VERIFICADA</span></div>
+                    <div className="sc-hud-row"><span className="sc-hud-k">Selo</span><span className="sc-hud-v" style={{ color: "#fde68a" }}>V1 · SELADO</span></div>
+                    <div className="sc-hud-row"><span className="sc-hud-k">Escopo</span><span className="sc-hud-v">referência visual congelada</span></div>
+                  </figcaption>
+                </figure>
+
+                <div className="sc-sec-title" style={{ marginTop: 14 }}>Regras travadas do contrato</div>
+                <ol style={{ margin: "6px 0 0", paddingLeft: 18, color: "var(--sc-text)", fontSize: 13, lineHeight: 1.7 }}>
+                  <li>Nenhuma coluna alinhada manualmente por espaços.</li>
+                  <li>Horário sempre dinâmico, com fuso BRT.</li>
+                  <li>GROK · TERMINAL não pertence ao HUD fixado.</li>
+                  <li>Caminhos íntegros; quebra apenas visual.</li>
+                  <li>Botões em <span className="sc-mono">inline_keyboard</span>, fora do corpo.</li>
+                  <li>Telegram HTML + <span className="sc-mono">editMessageText</span>.</li>
+                  <li>“message is not modified” = sucesso idempotente.</li>
+                </ol>
+                <p style={{ color: "var(--sc-muted)", fontSize: 12, marginTop: 10 }}>
+                  A imagem não substitui o componente responsivo; é a referência visual congelada e a evidência do contrato.
+                </p>
+              </section>
+
+              <section className="sc-card" aria-label="Trilha de evidências">
+                <div className="sc-card-h"><span className="sc-card-t">Evidências · trilha</span></div>
+                <ol style={{ margin: 0, paddingLeft: 18, color: "var(--sc-text)", fontSize: 13, lineHeight: 1.7 }}>
+                  <li>🟡 artefato canônico HUD v1 · <span className="sc-mono">hud-canonical-001</span> · V1 · SELADO</li>
+                  <li>🔴 <b>SSH-block</b> · IP {INCIDENTE.ipMascarado} · {INCIDENTE.horario} · {INCIDENTE.traceId}</li>
+                  <li>🟡 aprovação pendente · rotação de chave gateway · trc_ap2…002</li>
+                  <li>🟢 varredura completa · postura ZERO TRUST mantida · agora</li>
+                  <li>🟣 missão MIS-014 · GPT→Grok · mapear.infra · executando</li>
+                </ol>
+              </section>
+            </>
           )}
 
           {/* Rodapé operacional */}
