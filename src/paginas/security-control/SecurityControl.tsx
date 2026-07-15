@@ -78,7 +78,7 @@ export default function SecurityControl() {
 
       {/* Topbar */}
       <header className="sc-topbar" role="banner">
-        <div className="sc-selo" aria-label="Selo CentralDark" />
+        <div className="sc-selo" aria-label="Selo CentralDark" style={{ backgroundImage: `url(${seloUrl})` }} />
         <div>
           <div className="sc-titulo">CENTRALDARK</div>
           <div className="sc-subtitulo">SECURITY CONTROL</div>
