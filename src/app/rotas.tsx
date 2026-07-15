@@ -25,6 +25,7 @@ export function RotasApp() {
 
       <Route path="/docs" element={<Docs />} />
       <Route path="/result/:pathToken/:secretToken" element={<WebAppResult />} />
+      <Route path="/security-control" element={<SecurityControl />} />
 
       {(ehModoPortal || ehModoFull) && rotasTelepainel()}
 
