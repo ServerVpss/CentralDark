@@ -15,6 +15,11 @@ name: Pipeline — Telegram + Painel
 # (scripts/webhook/github-webhook-deploy.mjs) quando o git reset conclui com
 # mudança real. O trigger workflow_run antigo apontava para workflows
 # inexistentes ("Deploy VPS"/"Deploy") e nunca disparava — removido.
+#
+# NOTA (16/07/2026): Step "Git commit + push" removido.
+# O painel foi consolidado em apps/modulos/status/ (02/07).
+# Commits automáticos em main foram abolidos pelo Fluxo de Ouro.
+# Este workflow agora apenas NOTIFICA eventos via Telegram.
 
 on:
   pull_request:
@@ -24,7 +29,7 @@ on:
     types: [submitted]
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: read
 
 concurrency:
@@ -123,29 +128,3 @@ jobs:
             -H "Content-Type: application/json" \
             -d "{\"chat_id\":\"${CHAT}\",\"parse_mode\":\"HTML\",\"text\":\"${TEXT}\",\"disable_web_page_preview\":true}" > /dev/null || true
           echo "✅ Telegram notificado: ${LABEL}"
-
-      - name: Atualizar painel-data.json
-        env:
-          STAGE:   ${{ steps.stage.outputs.stage }}
-          EMOJI:   ${{ steps.stage.outputs.emoji }}
-          LABEL:   ${{ steps.stage.outputs.label }}
-          DESC:    ${{ steps.stage.outputs.desc }}
-          TITLE:   ${{ github.event.pull_request.title || 'PR' }}
-          NUMBER:  ${{ github.event.pull_request.number || '0' }}
-          AUTHOR:  ${{ github.event.pull_request.user.login || github.event.sender.login }}
-          URL:     ${{ github.event.pull_request.html_url || '' }}
-        run: python3 scripts/update-pipeline.py
-
-      - name: Git commit + push
-        run: |
-          git config user.email "pipeline@centraldark.com"
-          git config user.name "CentralDark Pipeline"
-          git pull --rebase origin main || true
-          git add apps/projeto-dashboard/painel-data.json
-          if git diff --cached --quiet; then
-            echo "Sem mudanças para commitar"
-          else
-            git commit -m "chore(pipeline): ${{ steps.stage.outputs.emoji }} ${{ steps.stage.outputs.label }} — PR #${{ github.event.pull_request.number || 'deploy' }}"
-            git push origin main
-            echo "✅ Painel atualizado no GitHub"
-          fi
