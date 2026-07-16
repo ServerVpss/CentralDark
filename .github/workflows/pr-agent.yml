@@ -37,9 +37,10 @@ jobs:
           "$VENV/bin/python" -m pip install --quiet --upgrade pip
           "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent pyOpenSSL cryptography
           "$VENV/bin/python" - <<'PY'
+          from importlib.metadata import version
           import OpenSSL
           import cryptography
-          print(f"pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
+          print(f"pr-agent={version('pr-agent')} pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
           PY
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
@@ -47,11 +48,25 @@ jobs:
           GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -z "$GROQ_API_KEY" ]; then echo "⚠️ GROQ_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=groq
-          export CONFIG__MODEL=llama3-70b-8192
+          set -euo pipefail
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "::notice::GROQ_API_KEY não configurado — revisor Groq não executado"
+            exit 0
+          fi
+          export GROQ__KEY="$GROQ_API_KEY"
+          export CONFIG__MODEL="groq/llama3-70b-8192"
+          export CONFIG__FALLBACK_MODELS='["groq/llama3-70b-8192"]'
+          export CONFIG__CUSTOM_MODEL_MAX_TOKENS=8192
+          LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
           echo "🤖 Groq Llama3-70B iniciando review..."
-          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          set +e
+          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review 2>&1 | tee "$LOG"
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if [ "$STATUS" -ne 0 ] || grep -q "Failed to review PR:" "$LOG"; then
+            echo "::error::Groq não concluiu o review"
+            exit 1
+          fi
 
   review-gemini:
     name: "✨ Gemini — Flash 1.5"
@@ -70,9 +85,10 @@ jobs:
           "$VENV/bin/python" -m pip install --quiet --upgrade pip
           "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent pyOpenSSL cryptography
           "$VENV/bin/python" - <<'PY'
+          from importlib.metadata import version
           import OpenSSL
           import cryptography
-          print(f"pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
+          print(f"pr-agent={version('pr-agent')} pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
           PY
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
@@ -80,12 +96,25 @@ jobs:
           GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -z "$GEMINI_API_KEY" ]; then echo "⚠️ GEMINI_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=google
-          export CONFIG__MODEL=gemini/gemini-1.5-flash
-          export GOOGLE_AI_STUDIO_KEY=$GEMINI_API_KEY
+          set -euo pipefail
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::GEMINI_API_KEY não configurado"
+            exit 1
+          fi
+          export GOOGLE_AI_STUDIO__GEMINI_API_KEY="$GEMINI_API_KEY"
+          export CONFIG__MODEL="gemini/gemini-1.5-flash"
+          export CONFIG__FALLBACK_MODELS='["gemini/gemini-1.5-flash"]'
+          export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
+          LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
           echo "🤖 Gemini Flash 1.5 iniciando review..."
-          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          set +e
+          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review 2>&1 | tee "$LOG"
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if [ "$STATUS" -ne 0 ] || grep -q "Failed to review PR:" "$LOG"; then
+            echo "::error::Gemini não concluiu o review"
+            exit 1
+          fi
 
   review-claude:
     name: "🧠 Claude — Sonnet 4.6"
@@ -104,9 +133,10 @@ jobs:
           "$VENV/bin/python" -m pip install --quiet --upgrade pip
           "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent pyOpenSSL cryptography
           "$VENV/bin/python" - <<'PY'
+          from importlib.metadata import version
           import OpenSSL
           import cryptography
-          print(f"pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
+          print(f"pr-agent={version('pr-agent')} pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
           PY
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
@@ -115,8 +145,22 @@ jobs:
           ANTHROPIC_BASE_URL:   https://api.centralldark.com
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "⚠️ ANTHROPIC_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=anthropic
-          export CONFIG__MODEL=claude-sonnet-4-6
+          set -euo pipefail
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::error::ANTHROPIC_API_KEY não configurado"
+            exit 1
+          fi
+          export ANTHROPIC__KEY="$ANTHROPIC_API_KEY"
+          export CONFIG__MODEL="anthropic/claude-sonnet-4-6"
+          export CONFIG__FALLBACK_MODELS='["anthropic/claude-sonnet-4-6"]'
+          export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
+          LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
           echo "🤖 Claude Sonnet 4.6 iniciando review via gateway oficial..."
-          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          set +e
+          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review 2>&1 | tee "$LOG"
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if [ "$STATUS" -ne 0 ] || grep -q "Failed to review PR:" "$LOG"; then
+            echo "::error::Claude não concluiu o review"
+            exit 1
+          fi
