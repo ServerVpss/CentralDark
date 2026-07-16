@@ -21,7 +21,7 @@ BASE = Path(__file__).parent
 CHAMADAS = BASE / "logs/chamadas.jsonl"
 CHAMADAS.parent.mkdir(parents=True, exist_ok=True)
 
-app = FastAPI(title="CentralDark Arsenal Proxy", version=VERSION)
+app = FastAPI(title="CentralDark Arsenal Proxy", version=VERSION, docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

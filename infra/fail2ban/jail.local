@@ -5,8 +5,9 @@
 
 [DEFAULT]
 # Ban base: 24h (antes era 1h = recycle dos bots)
+# findtime 1h (antes 15min) - pega ataque lento/rotativo que ficava sob o radar
 bantime  = 86400
-findtime = 900
+findtime = 3600
 maxretry = 3
 backend  = systemd
 
@@ -29,7 +30,7 @@ port     = ssh
 logpath  = %(sshd_log)s
 backend  = %(sshd_backend)s
 maxretry = 3
-findtime = 900
+findtime = 3600
 bantime  = 86400
 
 # Quem já foi banido várias vezes no dia → ban 7 dias em todas as portas
