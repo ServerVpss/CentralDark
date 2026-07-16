@@ -35,7 +35,7 @@ jobs:
           VENV="$(mktemp -d "$RUNNER_TEMP/pr-agent-${GITHUB_RUN_ID}-${GITHUB_JOB}.XXXXXX")"
           python3 -m venv "$VENV"
           "$VENV/bin/python" -m pip install --quiet --upgrade pip
-          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent
+          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent pyOpenSSL cryptography
           "$VENV/bin/python" - <<'PY'
           import OpenSSL
           import cryptography
@@ -68,7 +68,7 @@ jobs:
           VENV="$(mktemp -d "$RUNNER_TEMP/pr-agent-${GITHUB_RUN_ID}-${GITHUB_JOB}.XXXXXX")"
           python3 -m venv "$VENV"
           "$VENV/bin/python" -m pip install --quiet --upgrade pip
-          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent
+          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent pyOpenSSL cryptography
           "$VENV/bin/python" - <<'PY'
           import OpenSSL
           import cryptography
@@ -102,7 +102,7 @@ jobs:
           VENV="$(mktemp -d "$RUNNER_TEMP/pr-agent-${GITHUB_RUN_ID}-${GITHUB_JOB}.XXXXXX")"
           python3 -m venv "$VENV"
           "$VENV/bin/python" -m pip install --quiet --upgrade pip
-          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent
+          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent pyOpenSSL cryptography
           "$VENV/bin/python" - <<'PY'
           import OpenSSL
           import cryptography
