@@ -2631,3 +2631,10 @@ REGRA: bridge.centralldark.com (:8099) é rota morta/legado, não órgão vital.
 - **Aprendizado:** EXECUTADO (16/07): install, ui e bridge agora respondem 503 limpo (era 502). Trocado reverse_proxy morto por `respond "..." 503` em: /etc/caddy/Caddyfile (ui:3000, bridge:8099) e install nos 2 arquivos (/etc/caddy/centralldark-origin.Caddyfile + centraldark-managed/root-imports/install.Caddyfile). Portas originais pra REVERTER: install→127.0.0.1:9200 (PM2 install-callback), ui→127.0.0.1:3000 (container WebUI), bridge→127.0.0.1:8099. Backups em /tmp/*.bak_20260716_101309.
 
 ARMADILHA PILLOW: ao trocar reverse_proxy por respond via sed/perl, cuidar de remover TAMBÉM o bloco log{} que vem depois dentro do site block — senão o Caddy lê 'log' como novo site address e a validação falha (erro: 'parsed log as a site address'). SEMPRE caddy validate antes do reload, com restore automático do backup se falhar — foi o que salvou (v1 falhou na validação e reverteu sozinho, zero downtime).
+
+### 330. ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK)
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-16
+- **Contexto:** Pivete há 15 dias com "conector sem tools" no ChatGPT, achando que era MCP mal feito. A 90% do limite de uso, pediu leitura rápida e solução.
+- **Aprendizado:** DIAGNÓSTICO (16/07): erro de 15 dias "conector CentralDark instalado mas sem tools no ChatGPT" NÃO é MCP mal feito. Provado ao vivo: mcp.centralldark.com/health=200, /tools.json=102 tools JSON válido, PM2 CentralDark-MCP online, e o Claude usa as 102 tools sem falha. O problema é 100% na camada de plugins/conectores do APP do ChatGPT: reconhece o ID do conector (asdk_app_...) mas não anexa o catálogo à sessão — sintoma de DUPLICATAS travadas.
+SOLUÇÃO: (1) não reconectar (cada tentativa cria +1 duplicata); (2) remover TODAS as cópias do conector nas Settings; (3) fechar o app inteiro e reabrir; (4) reconectar 1x só em conversa nova; (5) se a remoção travar no mobile, remover pela web (desktop chatgpt.com → Settings → Connectors). O MCP tem 102 tools e serve Claude e outros canais normalmente — ChatGPT é só um consumidor, não bloqueia o resto.
