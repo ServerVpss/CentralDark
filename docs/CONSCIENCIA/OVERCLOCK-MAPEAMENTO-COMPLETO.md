@@ -215,11 +215,12 @@ Via tela "Diagnóstico Local" (menu conta → Diagnóstico): **toda a cockpit UI
 
 ---
 
-## 7. Artefatos de código auxiliares (referência visual, não o mapeamento em si)
+## 7. Artefatos de código auxiliares (referência visual, não o mapeamento em si) — 🗑️ removidos em 16/07/2026
 
-- `/root/overclock-cockpit/` — projeto React/Vite/Tailwind. Contém `reference-original.html` (592 linhas, HTML real raspado) + `overclock-original.css` — **isso é da LANDING PAGE de marketing (overclock.sh o site), não da UI do app** (que é o que está mapeado na seção 4). Não confundir os dois.
-- `/root/overclock-next/` — clone Next.js da mesma landing page, rodando na porta **18001**, repositório git próprio.
-- Ambos são só referência estética — não têm a lógica do app (panes, squads, MCP local).
+- `/root/overclock-cockpit/` — projeto React/Vite/Tailwind. Continha `reference-original.html` (592 linhas, HTML real raspado) + `overclock-original.css` — **era da LANDING PAGE de marketing (overclock.sh o site), não da UI do app** (que é o que está mapeado na seção 4). Não confundir os dois.
+- `/root/overclock-next/` — clone Next.js da mesma landing page, rodava na porta **18001**, repositório git próprio.
+- Ambos eram só referência estética — não tinham a lógica do app (panes, squads, MCP local). **Deletados por decisão do Pivete (16/07/2026)** — eram clones descartáveis do site de marketing, sem valor arquitetural único (o que importa está nas seções 10-13, extraído do código-fonte real). Processo órfão do `overclock-next` (porta 18001) foi encerrado antes da remoção.
+- **O que ficou:** só `/root/overclock-relatorio/` (laudo `.exe` + `Overclock.zip` + `extraido/` com o código-fonte completo do sidecar) — mantido de propósito porque o projeto ainda está em construção e pode precisar de revisão.
 
 ---
 
@@ -228,7 +229,7 @@ Via tela "Diagnóstico Local" (menu conta → Diagnóstico): **toda a cockpit UI
 1. **🟢 RESOLVIDO — Stack confirmado definitivamente: Tauri, não Electron.** Ver seção 10 — evidência direta no `package.json` do sidecar, não mais inferência por strings.
 2. **🟢 RESOLVIDO — Sidecar Node.js obtido e analisado por completo.** Código-fonte TypeScript compilado (não ofuscado, com `.d.ts` e testes) — 26 módulos principais mapeados. Ver seção 11.
 3. **🟢 RESOLVIDO — Protocolo IPC identificado.** Pacote `@overclock-app/ipc-types` expõe os schemas reais (`WsAuth`, `WsInvoke`, `WsEvent`, `WsClientMessage`/`WsServerMessage`, `ProviderContract`, `PtySpawnConfigContract`). Ver seção 11.
-4. **🟡 ABERTO — Crawl público do site nunca terminou.** Missão do Grok (`FIO-ATIVO-OVERCLOCK-ARQUITETURA.md`) ficou parada na Fase A, aguardando path de vault que nunca chegou — rotas de API do overclock.sh não mapeadas. Baixa prioridade (não é mais o alvo principal — o alvo é o app, já mapeado).
+4. **🟢 ENCERRADO (16/07/2026) — Crawl público do site.** Missão do Grok (`FIO-ATIVO-OVERCLOCK-ARQUITETURA.md`) nunca rodou a Fase A (ficou pra trás quando a sessão foi puxada pro incidente de brute force SSH); Fase B (vault key) nunca foi necessária. Decisão do Pivete: encerrar — o objetivo de fundo já foi resolvido, e com muito mais qualidade, pela engenharia reversa direta do código-fonte (seções 10-13). Não retomar salvo pedido explícito.
 5. **🟢 RESOLVIDO — UI real do app vs. landing page**, já esclarecido na seção 7. A descrição da seção 4 (prints do Pivete) é suficiente pra implementar; não é pixel-perfect mas não é gap crítico.
 6. **🟡 ABERTO por decisão de doutrina, não por falta de dado — texto verbatim dos prompts/playbooks proprietários não foi copiado pra este documento.** Temos o conteúdo completo (system prompt injetado no Claude Code, os 6 `PLAYBOOK.md` dos squads de fábrica) salvo localmente em `/root/overclock-relatorio/extraido/` (fora do Git, não commitado). Este documento registra os **padrões** extraídos deles (seções 12-13), não o texto original — consistente com a regra já selada de não reproduzir código/conteúdo proprietário do Overclock. Se precisar do texto exato de novo, está na pasta local.
 
