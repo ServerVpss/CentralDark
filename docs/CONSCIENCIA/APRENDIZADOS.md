@@ -2623,3 +2623,11 @@ RECOMENDAÇÃO #133/#134: consolidar os 13 subdomínios no portal (Central Únic
 3) bridge.centralldark.com (:8099) → INVESTIGADO pelo Guardião: já estava MORTO, NÃO é o canal do Grok. A comunicação real Telegram↔Grok vive em CentralDark-GuardiaoBot + CentralDark-GuardiaoBridge (PM2, ambos online) + fila /tmp/grok_request.json (escrita hoje 09:31, canal funcional). Desligar o 8099 é seguro — não corta o rádio com o Grok. O "não veio resposta a tempo" de ontem era o worker do PC desligado, não o bridge da VPS.
 
 REGRA: bridge.centralldark.com (:8099) é rota morta/legado, não órgão vital. O canal vivo do Grok é GuardiaoBot+GuardiaoBridge+fila /tmp.
+
+### 329. 502→503 limpo em install/ui/bridge + armadilha do bloco log no Caddy
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-16
+- **Contexto:** Pivete autorizou tirar os alarmes 502 de install/ui/bridge (que ele mesmo desligou), com opção de religar depois.
+- **Aprendizado:** EXECUTADO (16/07): install, ui e bridge agora respondem 503 limpo (era 502). Trocado reverse_proxy morto por `respond "..." 503` em: /etc/caddy/Caddyfile (ui:3000, bridge:8099) e install nos 2 arquivos (/etc/caddy/centralldark-origin.Caddyfile + centraldark-managed/root-imports/install.Caddyfile). Portas originais pra REVERTER: install→127.0.0.1:9200 (PM2 install-callback), ui→127.0.0.1:3000 (container WebUI), bridge→127.0.0.1:8099. Backups em /tmp/*.bak_20260716_101309.
+
+ARMADILHA PILLOW: ao trocar reverse_proxy por respond via sed/perl, cuidar de remover TAMBÉM o bloco log{} que vem depois dentro do site block — senão o Caddy lê 'log' como novo site address e a validação falha (erro: 'parsed log as a site address'). SEMPRE caddy validate antes do reload, com restore automático do backup se falhar — foi o que salvou (v1 falhou na validação e reverteu sozinho, zero downtime).
