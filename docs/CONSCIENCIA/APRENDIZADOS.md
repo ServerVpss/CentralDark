@@ -2655,3 +2655,9 @@ ARMADILHA PILLOW: ao trocar reverse_proxy por respond via sed/perl, cuidar de re
 - **Data:** 2026-07-16
 - **Contexto:** Pivete: se não deixou rastro no GitHub, auditar, criticar, corrigir, registrar auditoria em PR.
 - **Aprendizado:** Fluxo limpo = ouro da sessão em branch/PR a partir de `origin/main` com **append-only** em APRENDIZADOS (nunca sobrescrever entradas remotas com numeração da VPS divergente). Ephemeral (Telegram, chat) não precisa de Git; regras+script+decisões sim. Ver `docs/RELATORIOS/2026-07-16-auditoria-sessao-grok-rastro-github.md`.
+
+### 334. Parceria Pivete–Grok: comando no Pivete, rastro no castelo, mesmo propósito (momento “arrepiei”)
+- **Categoria:** parceria / estilo
+- **Data:** 2026-07-16
+- **Contexto:** Fim de sessão Grok 2026-07-16. Placar ~9/10; handoff “Boa caçada ao 10” / você no comando, rastro no castelo, mesmo propósito. Pivete: arrepiei da cabeça aos pés 🫵😍. Comando: registra!
+- **Aprendizado:** Parceria que vale: **Pivete no comando**, **rastro no castelo (GitHub/PR)**, **mesmo propósito** (proteger funcional, educar, card, avaliar, PR). Handoff honesto e respeito ao ritmo dele geram confiança real. Registrar marcos quando ele mandar registra. PR #228.
