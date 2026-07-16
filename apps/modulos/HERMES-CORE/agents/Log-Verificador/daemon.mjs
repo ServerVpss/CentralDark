@@ -14,6 +14,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFile } from 'node:child_process';
 import { escanear, autoRestart, analisarComIA, resumoHorario } from './agent.mjs';
 
 const DIR = dirname(fileURLToPath(import.meta.url));
@@ -33,28 +34,40 @@ try {
 } catch {}
 
 // ── Notificação (Card Hermes) ────────────────────────────────────────
-// Prefere o utils/notify.mjs do Hermes Core (que já usa connector Telegram + fallback).
-// Se não existir, cai pro log em stdout — nunca derruba o daemon.
-let notifyPath = '/root/CentralDark/apps/modulos/HERMES-CORE/utils/notify.mjs';
-let notifyFn = null;
-try {
-  if (existsSync(notifyPath)) {
-    const mod = await import(notifyPath);
-    notifyFn = mod.notificar || mod.default || null;
-  }
-} catch (e) { console.warn('[verificador] notify.mjs não carregou:', e.message); }
+// utils/notify.mjs é um script de CLI standalone (lê process.argv, chama
+// process.exit(0) no final) — NÃO é um módulo pra importar. Importar ele
+// diretamente (`import()`) executa o script inteiro na hora e mata o
+// processo que importou. Por isso chama como subprocesso, do jeito que
+// ele foi desenhado: `node notify.mjs "<titulo>" "<mensagem>" [chat_id]`.
+const notifyPath = '/root/CentralDark/apps/modulos/HERMES-CORE/utils/notify.mjs';
+const notifyDisponivel = existsSync(notifyPath);
+if (!notifyDisponivel) console.warn('[verificador] notify.mjs não encontrado — modo log-only');
 
 async function notificar(titulo, mensagem, destino = 'admin') {
   console.log(`[${new Date().toISOString()}] [${destino}] ${titulo}\n${mensagem}\n`);
-  if (notifyFn) {
-    try { await notifyFn(titulo, mensagem, destino); } catch (e) { console.warn('notify fail:', e.message); }
-  }
+  if (!notifyDisponivel) return;
+  // 'admin' é o destino simbólico padrão — não é um chat_id real, então
+  // não passa como argv nesse caso (deixa o notify.mjs resolver o chat
+  // padrão pelas env vars dele). Só passa se for um chat_id de verdade.
+  const args = destino && destino !== 'admin' ? [titulo, mensagem, destino] : [titulo, mensagem];
+  await new Promise((resolve) => {
+    const child = execFile('node', [notifyPath, ...args], { timeout: 15_000 }, (err) => {
+      if (err) console.warn('notify fail:', err.message);
+      resolve();
+    });
+    child.stdin?.end();
+  });
 }
 
 // ── Estado persistido (só o que precisa sobreviver a restart) ────────
 function carregarEstado() {
-  try { return JSON.parse(readFileSync(ESTADO_PATH, 'utf8')); }
-  catch { return { alertasAtivos: {}, ultimoResumo: 0, restarts24h: {} }; }
+  try {
+    const s = JSON.parse(readFileSync(ESTADO_PATH, 'utf8'));
+    if (!s.offsets) s.offsets = {};
+    if (!s.ultimoHeartbeatDiario) s.ultimoHeartbeatDiario = 0;
+    return s;
+  }
+  catch { return { alertasAtivos: {}, ultimoResumo: 0, ultimoHeartbeatDiario: 0, restarts24h: {}, offsets: {} }; }
 }
 function salvarEstado(s) {
   try { mkdirSync(dirname(ESTADO_PATH), { recursive: true }); writeFileSync(ESTADO_PATH, JSON.stringify(s, null, 2)); }
@@ -63,7 +76,9 @@ function salvarEstado(s) {
 
 // ── Loop principal ───────────────────────────────────────────────────
 const INTERVALO_SCAN_MS = 60_000;             // 1 min
-const INTERVALO_RESUMO_MS = 60 * 60_000;      // 1h
+const INTERVALO_RESUMO_MS = 60 * 60_000;      // checa o placar a cada 1h...
+const INTERVALO_HEARTBEAT_MS = 24 * 3600_000; // ...mas só ENVIA de hora em hora se tiver problema real.
+                                               // Se estiver tudo ok, manda 1x por dia (heartbeat "tô vivo").
 const AUTO_RESTART_HABILITADO = true;
 
 let estado = carregarEstado();
@@ -75,7 +90,8 @@ function chaveAlerta(s) {
 }
 
 async function ciclo() {
-  const snap = escanear();
+  const snap = escanear({ offsets: estado.offsets });
+  estado.offsets = snap.offsets || estado.offsets;
   const agora = Date.now();
   const novosAlertas = [];
 
@@ -119,10 +135,20 @@ async function ciclo() {
     await notificar('Hermes-Verificador 🚨', corpo);
   }
 
-  // Resumo horário
+  // Placar: checa a cada 1h, mas só ENVIA se tiver problema real (evento) ou
+  // se já faz 24h que não manda nada (heartbeat "tô vivo" diário). Isso troca
+  // o antigo "manda sempre, toda hora" por um modelo orientado a evento.
   if (agora - (estado.ultimoResumo || 0) >= INTERVALO_RESUMO_MS) {
     estado.ultimoResumo = agora;
-    await notificar('Hermes-Verificador — Placar 1h', resumoHorario(snap));
+    const temProblema = snap.servicos.some(s => s.nivel !== 'ok');
+    const heartbeatDevido = agora - (estado.ultimoHeartbeatDiario || 0) >= INTERVALO_HEARTBEAT_MS;
+    if (temProblema) {
+      await notificar('Hermes-Verificador — Placar (problema ativo)', resumoHorario(snap));
+    } else if (heartbeatDevido) {
+      estado.ultimoHeartbeatDiario = agora;
+      await notificar('Hermes-Verificador — Heartbeat diário', resumoHorario(snap));
+    }
+    // se não tem problema e o heartbeat diário ainda não venceu: fica em silêncio.
   }
 
   salvarEstado(estado);

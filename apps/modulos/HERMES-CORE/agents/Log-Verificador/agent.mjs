@@ -7,7 +7,7 @@
 //   autoRestart(nome)→ pm2 restart <nome> com trava anti-abuso (max 3/24h por serviço)
 // Não roda loop próprio — o daemon.mjs orquestra a periodicidade.
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, statSync, openSync, readSync, closeSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
@@ -53,6 +53,38 @@ function lerTail(caminho, linhas = 80) {
   } catch { return ''; }
 }
 
+// Lê só o que foi ESCRITO DE NOVO no arquivo desde o offset salvo (evita
+// reler pra sempre um erro antigo que ficou parado nas últimas N linhas
+// só porque o arquivo não recebeu linha nova — "alerta fantasma").
+// Primeira vez que vê um arquivo (offset undefined): pula o histórico
+// existente (offset = tamanho atual) e não gera hit — só reage daqui pra frente.
+function lerNovoConteudo(caminho, offsetAnterior) {
+  if (!existsSync(caminho)) return { conteudo: '', offset: offsetAnterior ?? 0 };
+  let tamanho;
+  try { tamanho = statSync(caminho).size; } catch { return { conteudo: '', offset: offsetAnterior ?? 0 }; }
+
+  if (offsetAnterior === undefined) {
+    // primeiro scan deste arquivo: não varre histórico, só marca a posição atual
+    return { conteudo: '', offset: tamanho };
+  }
+  if (tamanho < offsetAnterior) {
+    // arquivo foi rotacionado/truncado — reseta e lê o que tiver (é novo, é pequeno)
+    offsetAnterior = 0;
+  }
+  if (tamanho === offsetAnterior) return { conteudo: '', offset: offsetAnterior };
+
+  try {
+    const fd = openSync(caminho, 'r');
+    const tamanhoLer = tamanho - offsetAnterior;
+    const buf = Buffer.alloc(tamanhoLer);
+    readSync(fd, buf, 0, tamanhoLer, offsetAnterior);
+    closeSync(fd);
+    return { conteudo: buf.toString('utf8'), offset: tamanho };
+  } catch {
+    return { conteudo: '', offset: offsetAnterior };
+  }
+}
+
 function analisarTexto(txt) {
   if (!txt) return { hits: [], ruidoErro: 0 };
   const linhas = txt.split('\n');
@@ -76,12 +108,17 @@ function analisarTexto(txt) {
 }
 
 // ─── Escaneia TODOS os processos PM2 ──────────────────────────────────
-export function escanear({ ignorarPmIds = [1] } = {}) {
+// offsets: { [caminhoDoLog]: byteOffset } — persistido pelo chamador (daemon.mjs)
+// entre ciclos, pra só analisar o que foi ESCRITO DE NOVO desde o último scan.
+// Isso é o que torna o alerta "orientado a evento": erro de dias atrás que
+// já parou de acontecer não fica sendo relido pra sempre (alerta fantasma).
+export function escanear({ ignorarPmIds = [1], offsets = {} } = {}) {
   const jlist = shJSON('pm2 jlist');
-  if (!jlist) return { ok: false, erro: 'pm2 jlist falhou', servicos: [] };
+  if (!jlist) return { ok: false, erro: 'pm2 jlist falhou', servicos: [], offsets };
 
   const agora = Date.now();
   const servicos = [];
+  const novosOffsets = { ...offsets };
 
   for (const p of jlist) {
     if (ignorarPmIds.includes(p.pm_id)) continue;
@@ -92,10 +129,13 @@ export function escanear({ ignorarPmIds = [1] } = {}) {
     const errPath = p.pm2_env?.pm_err_log_path || join(LOG_DIR, `${nome}-error.log`);
     const outPath = p.pm2_env?.pm_out_log_path || join(LOG_DIR, `${nome}-out.log`);
 
-    const tailErr = lerTail(errPath, 80);
-    const tailOut = lerTail(outPath, 40);
-    const analErr = analisarTexto(tailErr);
-    const analOut = analisarTexto(tailOut);
+    const novoErr = lerNovoConteudo(errPath, offsets[errPath]);
+    const novoOut = lerNovoConteudo(outPath, offsets[outPath]);
+    novosOffsets[errPath] = novoErr.offset;
+    novosOffsets[outPath] = novoOut.offset;
+
+    const analErr = analisarTexto(novoErr.conteudo);
+    const analOut = analisarTexto(novoOut.conteudo);
 
     // Heurística de crash-loop: uptime < 5min E restarts > 20
     const crashLoop = st === 'online' && uptimeMs < 5 * 60_000 && restarts > 20;
@@ -131,6 +171,7 @@ export function escanear({ ignorarPmIds = [1] } = {}) {
     total: servicos.length,
     problemas: problemas.length,
     servicos,
+    offsets: novosOffsets,
   };
 }
 
