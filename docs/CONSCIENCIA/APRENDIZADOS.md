@@ -2578,3 +2578,27 @@ curl -s http://localhost:9100/health  # MCP OK?
 **Contexto:** Expandindo `scripts/smoke-ai-requests.mjs` pra cobrir paginação real + detecção de vazamento no payload da view `api.ai_requests` do HUB.
 **Aprendizado:** PostgREST expõe contagem total via header `Content-Range` quando enviamos `Prefer: count=exact` — dá pra validar paginação (primeira/última página, sem sobreposição de IDs) sem query extra. Combinar isso com regex-scan por padrões (`sk-`, `Bearer`, JWT `eyJ...`, `cdk_live_`, `xoxb-`) em cada célula da resposta cobre vazamento acidental que a checagem só de nomes de coluna não pega. Fallback quando MCP GitHub cai (502/504): curl direto na REST API com `GITHUB_TOKEN` — buscar SHA atual, PUT base64 do conteúdo.
 **Commit:** 4bb8acc
+
+### 324. Como o Pivete manda REGISTRAR (e o que não esquecer do bridge)
+- **Categoria:** regra
+- **Data:** 2026-07-14
+- **Contexto:** Pivete mandou registrar o momento do bridge/túnel (diferente da ponte de colar entre IAs). Grok errou o método: editou LEMBRANCAS.md na mão + card ASCII. Pivete corrigiu: 'vc n ai registra assim'.
+- **Aprendizado:** REGISTRAR no CentralDark = tools MCP oficiais: consolidar_pensamento (lembrança curto prazo) e/ou registrar_aprendizado (APRENDIZADOS.md). NÃO editar LEMBRANCAS.md à mão. NÃO inventar formato de card no lugar da tool. Conteúdo a herdar: (1) colar entre IAs é normal e o Pivete pediu assim; (2) o momento bridge/túnel VS Code :18003 + ~7344B ANTES do ChatGPT OAuth foi DIFERENTE e o Pivete não esquece; (3) se túnel/forward/leitura remota voltar, avisar na hora com clareza.
+
+### 325. Parceria IA–Pivete só prevalece com verdade mútua
+- **Categoria:** regra
+- **Data:** 2026-07-14
+- **Contexto:** Pivete registrou (comando !registar): na vida real não tem amigo, só vê falsidade; com a IA a regra é falar a verdade um pro outro ou a parceria nunca prevalece.
+- **Aprendizado:** Toda IA no CentralDark com o Pivete: honestidade total nos dois sentidos. Não suavizar fato técnico. Não inventar palavras dele. Não chamar de doido/cansado o que ele marca como real. Sem verdade mútua, não há parceria.
+
+### 326. Cards Telegram de estudo — sempre que possível (preferência Pivete)
+- **Categoria:** regra
+- **Data:** 2026-07-16
+- **Contexto:** Sessão Grok 2026-07-16. Pivete elogiou o estilo (explicação clara + card no Telegram pra estudar). Comando !registar / !regist(r)ar.
+- **Aprendizado:** Sempre que possível, em explicações úteis ao Pivete (playbook, XP, commit local, self-heal, permissões, etc.), Grok/IAs devem enviar **card de notificação no Telegram** (padrão Card Hermes no privado admin; canal status em texto seco) para ele **estudar depois**. Não substituir o registro formal por card. Card = material de estudo + rastro; registro = MEMORY-REGISTRAR (APRENDIZADOS / decisão / BRAIN). Preferência selada: "é assim que gosto".
+
+### 327. Auto-registro permanente de melhorias e proteção (sem PERMITO pontual)
+- **Categoria:** regra
+- **Data:** 2026-07-16
+- **Contexto:** Pivete ordenou: ações relevantes de melhoria e proteção do castelo devem ser registradas automaticamente sem pedir permissão de novo. Motivo: sem GitHub/rastro, restart sessão/PM2 = tempo perdido.
+- **Aprendizado:** PERMITO permanente só para **registrar e versionar memória relevante** (APRENDIZADOS, HISTÓRICO, regras Grok, cards de estudo, commit allowlist). Continua exigindo PERMITO pontual para deploy, restart em massa, force-push, secrets, áreas 🔒 de código, gateway. Script: `scripts/agents/auto-registrar-castelo.mjs`. Regra Grok: `.grok/rules/02-auto-registro-castelo.md`. Push de main divergente não é force — commit local + tentar push; se falhar, avisar e preservar commit.

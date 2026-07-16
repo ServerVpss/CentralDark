@@ -633,3 +633,22 @@ Achado separado, mais antigo, não é a causa do silêncio recente: `apps/bot-te
 - **Caddy headers — parcial.** `X-Frame-Options: SAMEORIGIN` adicionado em `api.centralldark.com` e `status.centralldark.com` (validado com `caddy validate` antes de recarregar, sites confirmados no ar depois). HSTS e `X-Content-Type-Options` **já vinham da Cloudflare**, não precisou mexer. CSP **não aplicado** — risco de quebrar SPA sem testar site por site (`centralldark.com`, `ui`, `hub`, `telepainel`, `builder`, `grafo`, `bridge` têm perfis diferentes de script/estilo). Rate-limit **não aplicado** — binário do Caddy não tem o módulo `caddy-ratelimit` compilado; adicionar exigiria rebuild do binário que roda TODOS os sites, risco desproporcional pra fazer no meio dessa rodada. **Achado bônus:** o `Caddyfile` principal e o `status-centraldark.Caddyfile` não têm cópia versionada neste repo — backups locais feitos (`.bak-pre-headers-*`) antes de editar, mas a "Fonte da Verdade" desses arquivos hoje é só a própria VPS. Fora de escopo resolver agora (decisão estrutural maior).
 
 **Pendências reais que sobraram, registradas pra não se perder:** CSP no Caddy (precisa trabalho por site), rate-limit no Caddy (precisa rebuild do binário), versionar os Caddyfiles principais no repo, e a permissão de `/root`/`/root/CentralDark` (precisa mapear os 4 caminhos do Caddy antes de mexer).
+
+
+---
+
+**32. Auto-registro castelo (melhoria + proteção) sem PERMITO pontual para memória** — 2026-07-16.
+
+Ordem do Pivete na sessão Grok: a partir de agora, o que for **relevante** para **melhorias** e **proteção** do castelo deve ser **registrado automaticamente** (e versionado no Git quando possível), **sem pedir permissão de novo** só para o ato de registrar. Motivo declarado: se não for pro GitHub / Fonte da Verdade, reinício de sessão, restart PM2 etc. torna o trabalho irrelevante = tempo perdido.
+
+**Escopo liberado em permanente:**
+- Escrever APRENDIZADOS / HISTÓRICO DECISÕES / regras de sessão Grok / preferências / cards Telegram de estudo
+- `git add` + `git commit` **somente** em paths allowlist de documentação/memória (ver `.grok/rules/02-auto-registro-castelo.md` e `scripts/agents/auto-registrar-castelo.mjs`)
+
+**Escopo que NÃO foi liberado por esta ordem:**
+- Deploy, restart PM2 em massa, Caddy/DNS
+- force-push, reset --hard, reescrever main
+- secrets, gateway oficial, refator de áreas 🔒 de aplicação
+- Instalar stack paralela / V3
+
+**Implementação imediata:** regra Grok `02-auto-registro-castelo.md` + script `scripts/agents/auto-registrar-castelo.mjs` + este registro.
