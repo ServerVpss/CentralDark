@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-16T13:00:17.086Z
+# 🧠 Notion Sync — 2026-07-16T13:18:34.839Z
 
-- **Commit fonte:** `eb295b39f8549fc3cc59ef8b923fa9c56def4eab`
+- **Commit fonte:** `ab211761af678bd690959a2d29ba36e6d0ff37d7`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 371 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 372 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 38 | 0 | 38 | 0 | 0 |
-| aprendizados | 329 | 1 | 328 | 0 | 0 |
+| aprendizados | 330 | 1 | 329 | 0 | 0 |
 | estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
@@ -393,7 +393,8 @@
 | aprendizados | atualizado | #324 — Como o Pivete manda REGISTRAR (e o que não esquecer do bridge) |
 | aprendizados | atualizado | #325 — Parceria IA–Pivete só prevalece com verdade mútua |
 | aprendizados | atualizado | #326 — Removido overclock.exe (binário Windows) da raiz da VPS |
-| aprendizados | criado | #327 — Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133) |
+| aprendizados | atualizado | #327 — Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133) |
+| aprendizados | criado | #328 — Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
