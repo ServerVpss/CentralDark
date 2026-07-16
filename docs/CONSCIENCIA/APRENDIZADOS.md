@@ -2612,3 +2612,14 @@ RAIZ DOS 502 (confirmada com ss/docker):
 3) bridge→:8099 morta — casa com o bridge Grok/Telegram não-commitado de ontem (trabalho solto). Provisório até decidir o Grok-Telegram.
 
 RECOMENDAÇÃO #133/#134: consolidar os 13 subdomínios no portal (Central Única #36) via submenus; manter só api.* (entrada de API) e grafo.* standalone. Descontinuar/unificar candidatos: install+elite (mesma porta morta, redundância), ui (webui caiu). Nada destrutivo sem ok do Pivete.
+
+### 328. Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar)
+- **Categoria:** regra
+- **Data:** 2026-07-16
+- **Contexto:** Pivete ordenou install e ui desligados, e pediu ao Guardião pra investigar se mexer no bridge cortaria a comunicação atual com o Grok antes de qualquer ação.
+- **Aprendizado:** DECISÕES DO PIVETE sobre os 502 (16/07):
+1) install.centralldark.com → FICA DESLIGADO (ordem do dono). Remover do Caddy ou deixar retornar 404/410 limpo em vez de 502.
+2) ui.centralldark.com → FICA DESLIGADO (ordem do dono). Container CentralDark-WebUI Exited(137) permanece parado; remover rota do Caddy pra não gerar 502.
+3) bridge.centralldark.com (:8099) → INVESTIGADO pelo Guardião: já estava MORTO, NÃO é o canal do Grok. A comunicação real Telegram↔Grok vive em CentralDark-GuardiaoBot + CentralDark-GuardiaoBridge (PM2, ambos online) + fila /tmp/grok_request.json (escrita hoje 09:31, canal funcional). Desligar o 8099 é seguro — não corta o rádio com o Grok. O "não veio resposta a tempo" de ontem era o worker do PC desligado, não o bridge da VPS.
+
+REGRA: bridge.centralldark.com (:8099) é rota morta/legado, não órgão vital. O canal vivo do Grok é GuardiaoBot+GuardiaoBridge+fila /tmp.
