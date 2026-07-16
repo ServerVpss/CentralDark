@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-16T13:00:41.840Z",
-  "updatedAtBR": "16/07/2026, 10:00:41 BRT",
+  "updatedAt": "2026-07-16T13:18:59.516Z",
+  "updatedAtBR": "16/07/2026, 10:18:59 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#327): Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133)",
+    "lastCommit": "aprendizado(#328): Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-16T13:18:59.516Z",
+      "titulo": "Push na main · ab211761af678bd690959a2d29ba36e6d0ff37d7",
+      "detalhe": "aprendizado(#328): Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar)",
+      "area": "Repositório",
+      "sha": "ab21176",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-16T13:00:41.840Z",
       "titulo": "Push na main · eb295b39f8549fc3cc59ef8b923fa9c56def4eab",
       "detalhe": "aprendizado(#327): Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133)",
@@ -987,14 +995,6 @@
       "area": "Repositório",
       "sha": "2c65dea",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T22:33:32.138Z",
-      "titulo": "Push na main · 1026f83c7527e205821edb0dcfd2ade903d55b99",
-      "detalhe": "docs(governanca): sobrescreve com Modo de Pensar do Pivete (versão oficial)",
-      "area": "Repositório",
-      "sha": "1026f83",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-16T13:18:59.516Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ab211761af678bd690959a2d29ba36e6d0ff37d7 (ab21176)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-16T13:00:41.840Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · eb295b39f8549fc3cc59ef8b923fa9c56def4eab (eb295b3)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-09T22:34:07.154Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 2c65dea469d7f0fdfabca5f51b301914427871e6 (2c65dea)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-09T22:33:32.138Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1026f83c7527e205821edb0dcfd2ade903d55b99 (1026f83)",
       "area": "Repositório",
       "status": "sucesso"
     }
