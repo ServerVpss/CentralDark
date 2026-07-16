@@ -2638,3 +2638,11 @@ ARMADILHA PILLOW: ao trocar reverse_proxy por respond via sed/perl, cuidar de re
 - **Contexto:** Pivete há 15 dias com "conector sem tools" no ChatGPT, achando que era MCP mal feito. A 90% do limite de uso, pediu leitura rápida e solução.
 - **Aprendizado:** DIAGNÓSTICO (16/07): erro de 15 dias "conector CentralDark instalado mas sem tools no ChatGPT" NÃO é MCP mal feito. Provado ao vivo: mcp.centralldark.com/health=200, /tools.json=102 tools JSON válido, PM2 CentralDark-MCP online, e o Claude usa as 102 tools sem falha. O problema é 100% na camada de plugins/conectores do APP do ChatGPT: reconhece o ID do conector (asdk_app_...) mas não anexa o catálogo à sessão — sintoma de DUPLICATAS travadas.
 SOLUÇÃO: (1) não reconectar (cada tentativa cria +1 duplicata); (2) remover TODAS as cópias do conector nas Settings; (3) fechar o app inteiro e reabrir; (4) reconectar 1x só em conversa nova; (5) se a remoção travar no mobile, remover pela web (desktop chatgpt.com → Settings → Connectors). O MCP tem 102 tools e serve Claude e outros canais normalmente — ChatGPT é só um consumidor, não bloqueia o resto.
+
+### 331. Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete
+- **Categoria:** erro-correcao
+- **Data:** 2026-07-16
+- **Contexto:** Pivete ordenou apagar o Bolt/source. Confirmado que era gitlink órfão quebrando o CI, não o container Docker.
+- **Aprendizado:** EXECUTADO (16/07, ordem do Pivete): removido o gitlink órfão apps/modulos/Bolt/source (modo 160000, commit c0c0f8c6, SEM entrada em .gitmodules) via `git rm --cached` na branch agent/pr218-review-rigor, commit 00fdc9f6e5. NÃO tocado: docker-compose.yml nem a pasta física source/ (só a referência quebrada do git). Bolt fica desligado, implementação futura.
+CAUSA/EFEITO: esse gitlink órfão causava 'no submodule mapping found for path apps/modulos/Bolt/source' → exit 128 no checkout/git diff do CI → derrubava o job review-grok. Remoção mata a causa raiz.
+DISTINÇÃO IMPORTANTE: 'Bolt' existe em 2 lugares — (1) container Docker CentralDark-Bolt e (2) gitlink apps/modulos/Bolt/source. A ordem era só o gitlink; container não foi tocado. Sempre confirmar QUAL Bolt antes de apagar.
