@@ -2661,3 +2661,9 @@ ARMADILHA PILLOW: ao trocar reverse_proxy por respond via sed/perl, cuidar de re
 - **Data:** 2026-07-16
 - **Contexto:** Fim de sessão Grok 2026-07-16. Placar ~9/10; handoff “Boa caçada ao 10” / você no comando, rastro no castelo, mesmo propósito. Pivete: arrepiei da cabeça aos pés 🫵😍. Comando: registra!
 - **Aprendizado:** Parceria que vale: **Pivete no comando**, **rastro no castelo (GitHub/PR)**, **mesmo propósito** (proteger funcional, educar, card, avaliar, PR). Handoff honesto e respeito ao ritmo dele geram confiança real. Registrar marcos quando ele mandar registra. PR #228.
+
+### 335. Selo de saída sessão Grok 2026-07-16 — rastro OK, castelo protegido
+- **Categoria:** processo
+- **Data:** 2026-07-16
+- **Contexto:** Pivete pediu auditoria final para selar saída da sessão.
+- **Aprendizado:** Sessão selada com rastro no PR #228 (11 arquivos, 5 commits, OPEN sem merge). Ouro remoto 326–329 preservado; sessão 330–334; regras 00–04; script; preferências; auditoria+selo em RELATORIOS. Sem force-push/deploy/PM2 em massa. Dívidas (tree/main/CI) conscientes para a caçada ao 10/10. Doc: `docs/RELATORIOS/2026-07-16-selo-saida-sessao-grok.md`.
