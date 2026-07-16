@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-16T23:14:45.367Z
+# 🧠 Notion Sync — 2026-07-16T23:56:50.452Z
 
-- **Commit fonte:** `593451927604bab07a91deae0b52b7fc9be71890`
+- **Commit fonte:** `c130cb405b47aaf8ad0e42d4226fd3d33820731c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 374 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 375 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 38 | 0 | 38 | 0 | 0 |
-| aprendizados | 332 | 1 | 331 | 0 | 0 |
+| aprendizados | 333 | 1 | 332 | 0 | 0 |
 | estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
@@ -396,7 +396,8 @@
 | aprendizados | atualizado | #327 — Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133) |
 | aprendizados | atualizado | #328 — Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar) |
 | aprendizados | atualizado | #329 — 502→503 limpo em install/ui/bridge + armadilha do bloco log no Caddy |
-| aprendizados | criado | #330 — ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK) |
+| aprendizados | atualizado | #330 — ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK) |
+| aprendizados | criado | #331 — Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

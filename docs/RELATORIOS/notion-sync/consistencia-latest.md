@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-16T23:14:49.113Z
-- **Commit:** `593451927604bab07a91deae0b52b7fc9be71890`
+- **Gerado:** 2026-07-16T23:56:53.680Z
+- **Commit:** `c130cb405b47aaf8ad0e42d4226fd3d33820731c`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 38 | 38 | 38 | 0 | 0 |
-| aprendizados | 362 | 0 | 0 | 362 | 0 |
+| aprendizados | 363 | 0 | 0 | 363 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **362**
+- 🟥 Faltando no Notion: **363**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -410,4 +410,5 @@
 - 328. Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar)
 - 329. 502→503 limpo em install/ui/bridge + armadilha do bloco log no Caddy
 - 330. ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK)
+- 331. Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete
 </details>
