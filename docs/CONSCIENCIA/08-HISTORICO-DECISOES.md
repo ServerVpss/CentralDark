@@ -8,23 +8,6 @@ updated: 2026-06-29
 # 08 — Histórico de decisões grandes
 
 
-## 2026-07-14 — 🏆 OURO: Compartilhamento semântico Grok ⇄ Hermes (NÃO fundir memória)
-
-**Título:** Lembranças cognitivas semânticas compartilhadas — sem fundir memória bruta
-**Data:** 2026-07-14 · **Trava:** 🔒🔒 dobrada — só altera com **"PERMITO PIVETE"**
-**Doc-ouro:** [`docs/CONSCIENCIA/DARKAI/OURO-COMPARTILHAMENTO-SEMANTICO-GROK-HERMES.md`](DARKAI/OURO-COMPARTILHAMENTO-SEMANTICO-GROK-HERMES.md)
-
-**Pergunta do Pivete:** interligar a memória do Grok com a do Hermes? Cada um usar a experiência/skill do outro — "compartilhamento de lembranças cognitivas semânticas".
-
-**Decisão (parecer Fable, aceito pelo Pivete):**
-1. **NÃO fundir a memória bruta** — setores diferentes (Grok=segurança ⟂ Hermes=orquestração), formatos incompatíveis (memtrace vs missions/memoria-api), risco de corrida entre dois autônomos.
-2. **SIM compartilhar LIÇÕES por significado** — memória de trabalho privada de cada um + camada semântica comum de aprendizados destilados (`memoria-api` + `GraphRAG-Master` + `APRENDIZADOS.md`). Publica-se lição destilada, nunca log bruto.
-3. Ressuscitar/atualizar `REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md` (sumiu do git) sob esta decisão — só com PERMITO.
-
-**Achado correlato (avisos fantasma):** `Log-Verificador/.estado.json` tem alertas 🟡🔴 de 60-90h atrás (Hermes, PiveteSync, ReconHealth, ArsenalAdapter) mas todos os serviços estão **online agora**. `alertasAtivos` não expira quando o serviço se recupera. Melhoria: TTL/limpeza no scan. **Execução pendente de PERMITO PIVETE** (HERMES-CORE é 🔒). Investigar `CentralDark-ReconHealth` (alertou mas não está no PM2).
-
----
-
 ## 2026-07-14 — Carga mental do Pivete + momento bridge (o que ELE disse)
 
 **Título:** Não é risco operacional — é mental; e o momento do bridge não se esquece  
@@ -619,9 +602,4 @@ Achado separado, mais antigo, não é a causa do silêncio recente: `apps/bot-te
 
 ---
 
-**28. `@srver1bot` (Hermes) reativado + motor de conversa trocado pra TokenRouter + módulo de áudio instalado (14/07/2026) — mudança em área protegida `apps/bot-telegram/`, autorizada nominalmente pelo Pivete em tempo real ("vai lá no Hermes... ativa ele", "roteia ela na nossa rota principal e bota no Hermes", "instala o módulo de áudio").**
-
-- **Webhook 405 corrigido:** causa raiz era ordem de diretivas no Caddy (`/etc/caddy/status-centraldark.Caddyfile`) — `handle{}` catch-all do SPA engolia `/bot/webhook`/`/bot/health` antes do `reverse_proxy` solto. Envolvidos em `handle {...}` próprio (mesmo padrão já usado por `/api/*`), posicionados antes do catch-all. Backup: `status-centraldark.Caddyfile.bak-hermes-webhook-fix-20260714-172819`. Validado com `caddy validate` + `caddy reload`. `pending_update_count` voltou de 15 pra 0. Detalhe técnico completo em `docs/PENDENCIAS.md` #57.
-- **Motor de chat trocado:** `callLLMWithTools()` em `apps/bot-telegram/unified-bot.cjs` usava Anthropic Messages API via `ANTHROPIC_BASE_URL=https://api.centralldark.com` — confirmado fora do ar (`401`, mesma causa da pendência crítica #0, Abacus RouteLLM sem crédito). Reescrito pra chamar TokenRouter (`https://api.tokenrouter.com/v1/chat/completions`, OpenAI-compatible, testado e confirmado ao vivo incluindo tool/function calling) com modelo `deepseek/deepseek-v4-pro`. Chave já existia no cofre (`TOKENROUTER_API_KEY`, também colada solta na primeira linha de `secrets/.env` com nota do Pivete pedindo essa integração). `BOT_TOOLS` (formato Anthropic `input_schema`) convertido pra formato OpenAI `function.parameters` via novo helper `toolsToOpenAiFormat()`. `callLLM` (sem tools, código morto) e `callLLMWithVision` (Anthropic Vision, usado só em foto) **não foram tocados** — ficam apontando pro gateway antigo até decisão futura.
-- **Módulo de áudio instalado, mas BLOQUEADO:** nova função `transcribeVoiceMessage()` baixa voice/audio do Telegram (`getFile` + fetch) e transcreve via Groq Whisper (`whisper-large-v3`, endpoint `api.groq.com/openai/v1/audio/transcriptions`). Testado isoladamente com áudio sintético: Groq respondeu `401 Invalid API Key` — `GROQ_API_KEY` no cofre parece placeholder nunca substituído por chave real (`console.groq.com/keys`). Código já está no `handleMessage` (branch antes do fallback "tipo não suportado"), só falta a chave real pra funcionar.
-- Processo `CentralDark-HubBot` (PM2 id 17) reiniciado pra aplicar; subiu limpo, sem exceção nova, webhook seguiu saudável pós-restart.
+**28. Mapeamento do Overclock consolidado num documento único** (`docs/CONSCIENCIA/OVERCLOCK-MAPEAMENTO-COMPLETO.md`) — estava espalhado em 5+ lugares (relatórios do `.exe`, mapeamento de UI só na memória de projeto do Claude, clones visuais, doutrina no MVP-MAPA-VIVO). Nada tinha se perdido, só estava fragmentado. Na sequência, Pivete reenviou não o `.exe` sozinho mas a **pasta de instalação completa extraída** (zip 192 MB, 11.360 arquivos) — bem mais rico que a análise estática anterior: revelou o código-fonte completo do sidecar Node (não ofuscado), confirmando **definitivamente Tauri** (não Electron) via `package.json` literal ("Node sidecar... for Tauri migration"), com nuance real: o núcleo (`@overclock-app/core`) é compartilhado entre um Electron main histórico e o Tauri atual — ou seja, o app migrou de Electron pra Tauri em algum momento, o que explica a dúvida inicial do Pivete sobre o stack. Também revelou os 6 squads de fábrica do app (inclusive o meta-squad "Squad Former" que monta outros squads sob gates obrigatórios) e a fonte real do marketplace deles: `github.com/davila7/claude-code-templates` (aitmpl, público). **Decisão de doutrina reforçada nesta sessão:** o texto verbatim dos prompts/playbooks proprietários extraídos NÃO foi copiado pro documento do repositório — só os padrões arquiteturais foram documentados (consistente com a regra já selada de não reproduzir código/conteúdo do Overclock). O material bruto fica só localmente em `/root/overclock-relatorio/extraido/`, fora do Git.
