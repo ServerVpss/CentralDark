@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-15T22:04:56.306Z
+# 🧠 Notion Sync — 2026-07-16T13:00:17.086Z
 
-- **Commit fonte:** `35077d7865a24639303fa09522fea3aed15facbc`
+- **Commit fonte:** `eb295b39f8549fc3cc59ef8b923fa9c56def4eab`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 370 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 371 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 38 | 0 | 38 | 0 | 0 |
-| aprendizados | 328 | 1 | 327 | 0 | 0 |
+| aprendizados | 329 | 1 | 328 | 0 | 0 |
 | estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
@@ -392,7 +392,8 @@
 | aprendizados | atualizado | #323 — Auditoria de permissões da view api.ai_requests no HUB |
 | aprendizados | atualizado | #324 — Como o Pivete manda REGISTRAR (e o que não esquecer do bridge) |
 | aprendizados | atualizado | #325 — Parceria IA–Pivete só prevalece com verdade mútua |
-| aprendizados | criado | #326 — Removido overclock.exe (binário Windows) da raiz da VPS |
+| aprendizados | atualizado | #326 — Removido overclock.exe (binário Windows) da raiz da VPS |
+| aprendizados | criado | #327 — Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
