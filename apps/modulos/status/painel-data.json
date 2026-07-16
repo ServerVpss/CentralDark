@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-07-16T12:51:13.575Z",
-  "updatedAtBR": "16/07/2026, 09:51:13 BRT",
+  "updatedAt": "2026-07-16T12:51:51.076Z",
+  "updatedAtBR": "16/07/2026, 09:51:51 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
-    "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
+    "currentTask": "Inventário de domínios #134 concluído — aguardando decisão de manter/unificar/descontinuar",
     "branch": "main",
     "lastCommit": "chore(labels): só emoji — remove assign:/bug/p1 (Pivete)",
     "lastPR": "#103 mergeado · #106 mergeado",
@@ -521,7 +521,7 @@
     "MultiZap-BOT errored — não crítico",
     "Pendência A9: executar tela Arsenal de Skills no Lovable"
   ],
-  "nextIA": "Pivete ajusta URL do conector Lovable para `/mcp` e clica em Adicionar novamente.",
+  "nextIA": "Decidir com Pivete os 502: (1) elite+install → apontar Caddy pra porta real do EliteHTTP; (2) ui → subir container WebUI ou descontinuar; (3) bridge → depende da decisão Grok-Telegram. Consolidação #133: unificar subdomínios no portal, manter api.* e grafo.*",
   "linearSync": {
     "statusConexao": "ok",
     "statusConexaoDetalhe": "Conectado — workspace Segredo (SEG) configurado em português",
@@ -596,6 +596,13 @@
     }
   ],
   "events": [
+    {
+      "time": "2026-07-16T12:51:51.077Z",
+      "title": "🧵 Inventário live de domínios (#134): 13 mapeados — 8 OK, 4 em 502 (install/elite→:8080 morta, ui→:3000 webui OOM, bridge→:8099). Raiz dos 502 identificada. Aprendizado #327.",
+      "area": "arquitetura",
+      "status": "feito",
+      "detail": ""
+    },
     {
       "time": "2026-07-14T15:34:41.206Z",
       "titulo": "Push na main · ad76e2c2cd74c863b98906df96d2cb5e66016820",
@@ -827,174 +834,6 @@
       "area": "Repositório",
       "sha": "8dc19d6",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T03:00:28.508Z",
-      "titulo": "Push na main · b77c58a4720d1db7dcabc14d3d5ba81db825b790",
-      "detalhe": "feat(hub): auto-refresh + correlation-id + auth guard + audit trail 30d",
-      "area": "Repositório",
-      "sha": "b77c58a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T02:44:08.718Z",
-      "titulo": "Push na main · b020598b80d249a451ead345db73a2cead52b869",
-      "detalhe": "fix(arsenal/regras): remove prefixos vendor — Abacus RouteLLM rejeita 'google/', 'openai/', 'anthropic/'",
-      "area": "Repositório",
-      "sha": "b020598",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T01:59:04.770Z",
-      "titulo": "Push na main · 9027e13449bb820444e9e174573575e2c2154d49",
-      "detalhe": "docs(mapa-vivo): restaura documento e anexa secao 20",
-      "area": "Repositório",
-      "sha": "9027e13",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T01:34:53.156Z",
-      "titulo": "Push na main · dbf2a64f060d3f9a6ab37c1c4cc5dc48ab452f77",
-      "detalhe": "docs(governanca): adiciona regra de adaptacao universal",
-      "area": "Repositório",
-      "sha": "dbf2a64",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T01:30:00.986Z",
-      "titulo": "Push na main · 1bfc99119f8cc88349ff1ba7257ba53ce0b80cbb",
-      "detalhe": "docs(mapa-vivo): §20 Cadeia Ativa — Gateways de IA (HUB card 134 modelos + gateway pessoal api.centralldark.com), placeholders <REDACTED>/<PROVIDER_ALIAS>/<ENV_PROVIDER_KEY>/<INTERNAL_BASE_URL>, sem secret/URL interna/porta",
-      "area": "Repositório",
-      "sha": "1bfc991",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T01:02:45.923Z",
-      "titulo": "Push na main · 5904c2811d41ecb66945cee5293fcaeffb55f37f",
-      "detalhe": "docs(governanca): registra regra de secrets e variaveis",
-      "area": "Repositório",
-      "sha": "5904c28",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T00:44:25.068Z",
-      "titulo": "Push na main · edc3cf566c0888d2a953b35be5ae8b2fecf36dde",
-      "detalhe": "docs(consciencia): incorpora mapa vivo e cockpit multiagente ao mega pacotao",
-      "area": "Repositório",
-      "sha": "edc3cf5",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T00:35:57.540Z",
-      "titulo": "Push na main · f7e60bd645da33b61275c2dcd1bfa2c5a053ed02",
-      "detalhe": "docs(governanca): registra arquitetura gamificada multiagente",
-      "area": "Repositório",
-      "sha": "f7e60bd",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T00:27:09.875Z",
-      "titulo": "Push na main · f55ebdf3d42a1af9d3c16f188e2c9bee3bf86901",
-      "detalhe": "docs(governanca): registra squads e skills do mapa vivo",
-      "area": "Repositório",
-      "sha": "f55ebdf",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T00:24:39.319Z",
-      "titulo": "Push na main · 51c995c98e7b3565dfa189b5a5fc63fd2856fd70",
-      "detalhe": "docs(governanca): adiciona handoff e watchdog multiagente",
-      "area": "Repositório",
-      "sha": "51c995c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T00:18:16.410Z",
-      "titulo": "Push na main · b759e769e549a67ad7b427dac2a9e594890b039e",
-      "detalhe": "docs(governanca): adiciona orquestracao multiagente ao mapa vivo",
-      "area": "Repositório",
-      "sha": "b759e76",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T00:11:24.584Z",
-      "titulo": "Push na main · 636fa41d17a674dbcf71165d538830013020d96f",
-      "detalhe": "Integrou login e modelos ao Hub",
-      "area": "Repositório",
-      "sha": "636fa41",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T23:55:07.687Z",
-      "titulo": "Push na main · 224d96505095cbb501d2d9fd78d8c873a4ff4596",
-      "detalhe": "docs(governanca): registra MVP do mapa vivo CentralDark",
-      "area": "Repositório",
-      "sha": "224d965",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T23:53:46.527Z",
-      "titulo": "Push na main · 631d06204286c0a24dd732c498557d2eec39fbbd",
-      "detalhe": "Instrumentou botões do HUB",
-      "area": "Repositório",
-      "sha": "631d062",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T23:04:26.725Z",
-      "titulo": "Push na main · c2c5439d7882e9d66b1cbbda7dbd21a08ca4224a",
-      "detalhe": "Suportou x-api-key e bearer",
-      "area": "Repositório",
-      "sha": "c2c5439",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T22:57:30.161Z",
-      "titulo": "Push na main · e28613ef90ed87424671b1efc5c50e8e5b52bd2b",
-      "detalhe": "docs(governanca): reforça GitHub e bots no modo Pivete",
-      "area": "Repositório",
-      "sha": "e28613e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T22:34:07.154Z",
-      "titulo": "Push na main · 2c65dea469d7f0fdfabca5f51b301914427871e6",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "2c65dea",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T22:33:32.138Z",
-      "titulo": "Push na main · 1026f83c7527e205821edb0dcfd2ade903d55b99",
-      "detalhe": "docs(governanca): sobrescreve com Modo de Pensar do Pivete (versão oficial)",
-      "area": "Repositório",
-      "sha": "1026f83",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T22:05:09.108Z",
-      "titulo": "Push na main · 3c901cd47f90122fecf6267796c2ed68dfa21f96",
-      "detalhe": "docs(governanca): registra modo de trabalho do Pivete",
-      "area": "Repositório",
-      "sha": "3c901cd",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-09T21:51:15.158Z",
-      "titulo": "Push na main · 23b15b0cf2c83e6334263959cdae847f6d5ed7e9",
-      "detalhe": "Deployou adapter shadow + 2 edges",
-      "area": "Repositório",
-      "sha": "23b15b0",
-      "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-09T21:35:04.291Z",
-      "titulo": "Push na main · fa0b49c6916844b3d02afd17fb746bc395338f49",
-      "detalhe": "Changes",
-      "area": "Repositório",
-      "sha": "fa0b49c",
-      "actor": "lovable-dev[bot]"
     }
   ],
   "agents": [
