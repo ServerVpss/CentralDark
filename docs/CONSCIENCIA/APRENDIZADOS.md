@@ -2602,3 +2602,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-16
 - **Contexto:** Pivete ordenou: ações relevantes de melhoria e proteção do castelo devem ser registradas automaticamente sem pedir permissão de novo. Motivo: sem GitHub/rastro, restart sessão/PM2 = tempo perdido.
 - **Aprendizado:** PERMITO permanente só para **registrar e versionar memória relevante** (APRENDIZADOS, HISTÓRICO, regras Grok, cards de estudo, commit allowlist). Continua exigindo PERMITO pontual para deploy, restart em massa, force-push, secrets, áreas 🔒 de código, gateway. Script: `scripts/agents/auto-registrar-castelo.mjs`. Regra Grok: `.grok/rules/02-auto-registro-castelo.md`. Push de main divergente não é force — commit local + tentar push; se falhar, avisar e preservar commit.
+
+### 328. Pivete determina quando aprendeu o suficiente (não a IA)
+- **Categoria:** regra
+- **Data:** 2026-07-16
+- **Contexto:** Grok disse que Pivete "já sabe o suficiente" sobre working tree. Pivete corrigiu: regra de ouro — quem determina o aprendizado é ele.
+- **Aprendizado:** A IA nunca fecha o ciclo de aprendizado do Pivete. Explica e oferece; não declara "já entendeu" / "já basta". Decisão de "aprendi o suficiente" é só do Pivete. Regra Grok: `.grok/rules/04-pivete-determina-quando-aprendeu.md`.
