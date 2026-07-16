@@ -24,13 +24,24 @@ jobs:
     name: "⚡ Groq — Llama3-70B"
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Instalar pr-agent
-        run: python3 -m pip install pr-agent --quiet --upgrade
+      - name: Instalar pr-agent em ambiente isolado
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV="$(mktemp -d "$RUNNER_TEMP/pr-agent-${GITHUB_RUN_ID}-${GITHUB_JOB}.XXXXXX")"
+          python3 -m venv "$VENV"
+          "$VENV/bin/python" -m pip install --quiet --upgrade pip
+          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent
+          "$VENV/bin/python" - <<'PY'
+          import OpenSSL
+          import cryptography
+          print(f"pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
+          PY
+          echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
           GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
@@ -40,19 +51,30 @@ jobs:
           export CONFIG__AI_PROVIDER=groq
           export CONFIG__MODEL=llama3-70b-8192
           echo "🤖 Groq Llama3-70B iniciando review..."
-          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
 
   review-gemini:
     name: "✨ Gemini — Flash 1.5"
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Instalar pr-agent
-        run: python3 -m pip install pr-agent --quiet --upgrade
+      - name: Instalar pr-agent em ambiente isolado
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV="$(mktemp -d "$RUNNER_TEMP/pr-agent-${GITHUB_RUN_ID}-${GITHUB_JOB}.XXXXXX")"
+          python3 -m venv "$VENV"
+          "$VENV/bin/python" -m pip install --quiet --upgrade pip
+          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent
+          "$VENV/bin/python" - <<'PY'
+          import OpenSSL
+          import cryptography
+          print(f"pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
+          PY
+          echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
           GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
@@ -63,27 +85,38 @@ jobs:
           export CONFIG__MODEL=gemini/gemini-1.5-flash
           export GOOGLE_AI_STUDIO_KEY=$GEMINI_API_KEY
           echo "🤖 Gemini Flash 1.5 iniciando review..."
-          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
 
   review-claude:
     name: "🧠 Claude — Sonnet 4.6"
     runs-on: [self-hosted, Linux]
     if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Instalar pr-agent
-        run: python3 -m pip install pr-agent --quiet --upgrade
+      - name: Instalar pr-agent em ambiente isolado
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV="$(mktemp -d "$RUNNER_TEMP/pr-agent-${GITHUB_RUN_ID}-${GITHUB_JOB}.XXXXXX")"
+          python3 -m venv "$VENV"
+          "$VENV/bin/python" -m pip install --quiet --upgrade pip
+          "$VENV/bin/python" -m pip install --quiet --constraint .github/constraints/reviewers.txt pr-agent
+          "$VENV/bin/python" - <<'PY'
+          import OpenSSL
+          import cryptography
+          print(f"pyOpenSSL={OpenSSL.__version__} cryptography={cryptography.__version__}")
+          PY
+          echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
           ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_BASE_URL:   https://claude.ap7.site
+          ANTHROPIC_BASE_URL:   https://api.centralldark.com
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then echo "⚠️ ANTHROPIC_API_KEY não configurado — pulando"; exit 0; fi
           export CONFIG__AI_PROVIDER=anthropic
           export CONFIG__MODEL=claude-sonnet-4-6
-          echo "🤖 Claude Sonnet 4.6 iniciando review (via proxy ap7)..."
-          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          echo "🤖 Claude Sonnet 4.6 iniciando review via gateway oficial..."
+          "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
