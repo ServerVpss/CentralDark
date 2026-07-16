@@ -1,0 +1,17 @@
+# binários de análise — não versionar
+*.exe
+*.dll
+*.asar
+*.pak
+*.node
+*.zip
+*.7z
+*.rar
+incoming/
+lab-bin/
+
+# grock work
+grock/inbox/*
+!grock/inbox/.gitkeep
+grock/out/*
+!grock/out/.gitkeep
