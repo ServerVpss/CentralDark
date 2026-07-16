@@ -2596,3 +2596,19 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-15
 - **Contexto:** Arquivo overclock.exe (PE32+ Windows GUI, 15,5 MB, sha256 689b2c5f5535ab39a106a6c6407f65882cc7bb7a0aba4423557595b59130d68a) estava largado na raiz do repo na VPS, untracked no git. Foi subido manual via FileZilla para debug e esquecido. Binário Windows não executa em Linux — estava inerte, sem relação com nenhum serviço (a porta 18001 é um next-server Node, não o .exe).
 - **Aprendizado:** Removido com rm em 2026-07-15. Nunca deixar binário .exe/.msi na raiz do repo — nunca vai pro Git e vira peso morto. Se precisar de arquivo pra debug pontual, usar pasta temporária fora do repo e apagar depois. A cópia original segue no PC do Pivete.
+
+### 327. Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133)
+- **Categoria:** outro
+- **Data:** 2026-07-16
+- **Contexto:** Fio da missão #134 (arquitetura de domínios) cruzando com #133. Varredura live de Caddy + portas escutando + HTTP de cada domínio em 08/07/2026.
+- **Aprendizado:** INVENTÁRIO DE 13 DOMÍNIOS (HTTP ao vivo):
+ATIVOS OK: crm(200), financeiro(200), grafo(200,:3030), portal(200), telepainel(200), whatsapp(200), www(200), api(401=auth ok,:3101).
+QUEBRADOS 502 (upstream MORTO): install→:8080 · elite→:8080 · ui→:3000 · bridge→:8099.
+builder(404,:3090): sobe mas sem rota raiz.
+
+RAIZ DOS 502 (confirmada com ss/docker):
+1) install E elite apontam pro MESMO upstream 127.0.0.1:8080 que está MORTO. 8080 era gateway antigo; EliteHTTP hoje roda em outra porta (PM2 CentralDark-EliteHTTP online). Caddy aponta pra porta velha. FIX: corrigir reverse_proxy em elite.centralldark.com.Caddyfile pra porta real do EliteHTTP.
+2) ui→:3000 morta porque container CentralDark-WebUI está Exited(137)=OOM há 7 dias. FIX: docker start CentralDark-WebUI OU descontinuar ui em favor do portal.
+3) bridge→:8099 morta — casa com o bridge Grok/Telegram não-commitado de ontem (trabalho solto). Provisório até decidir o Grok-Telegram.
+
+RECOMENDAÇÃO #133/#134: consolidar os 13 subdomínios no portal (Central Única #36) via submenus; manter só api.* (entrada de API) e grafo.* standalone. Descontinuar/unificar candidatos: install+elite (mesma porta morta, redundância), ui (webui caiu). Nada destrutivo sem ok do Pivete.
