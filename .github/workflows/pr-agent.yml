@@ -93,20 +93,21 @@ jobs:
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
-          GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
+          GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          if [ -z "$GEMINI_API_KEY" ]; then
-            echo "::error::GEMINI_API_KEY não configurado"
+          if [ -z "$CENTRALDARK_GATEWAY_KEY" ]; then
+            echo "::error::CENTRALDARK_GATEWAY_KEY não configurado"
             exit 1
           fi
-          export GOOGLE_AI_STUDIO__GEMINI_API_KEY="$GEMINI_API_KEY"
-          export CONFIG__MODEL="gemini/gemini-1.5-flash"
-          export CONFIG__FALLBACK_MODELS='["gemini/gemini-1.5-flash"]'
+          export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
+          export OPENAI__API_BASE="https://api.centralldark.com/v1"
+          export CONFIG__MODEL="openai/gemini-flash-latest"
+          export CONFIG__FALLBACK_MODELS='["openai/gemini-flash-latest"]'
           export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
           LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
-          echo "🤖 Gemini Flash 1.5 iniciando review..."
+          echo "🤖 Gemini Flash iniciando review via gateway oficial..."
           set +e
           "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review 2>&1 | tee "$LOG"
           STATUS=${PIPESTATUS[0]}
@@ -141,18 +142,18 @@ jobs:
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
-          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_BASE_URL:   https://api.centralldark.com
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
+          GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::error::ANTHROPIC_API_KEY não configurado"
+          if [ -z "$CENTRALDARK_GATEWAY_KEY" ]; then
+            echo "::error::CENTRALDARK_GATEWAY_KEY não configurado"
             exit 1
           fi
-          export ANTHROPIC__KEY="$ANTHROPIC_API_KEY"
-          export CONFIG__MODEL="anthropic/claude-sonnet-4-6"
-          export CONFIG__FALLBACK_MODELS='["anthropic/claude-sonnet-4-6"]'
+          export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
+          export OPENAI__API_BASE="https://api.centralldark.com/v1"
+          export CONFIG__MODEL="openai/claude-sonnet-4-6"
+          export CONFIG__FALLBACK_MODELS='["openai/claude-sonnet-4-6"]'
           export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
           LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
           echo "🤖 Claude Sonnet 4.6 iniciando review via gateway oficial..."
