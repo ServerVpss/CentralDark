@@ -2608,3 +2608,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-16
 - **Contexto:** Grok disse que Pivete "já sabe o suficiente" sobre working tree. Pivete corrigiu: regra de ouro — quem determina o aprendizado é ele.
 - **Aprendizado:** A IA nunca fecha o ciclo de aprendizado do Pivete. Explica e oferece; não declara "já entendeu" / "já basta". Decisão de "aprendi o suficiente" é só do Pivete. Regra Grok: `.grok/rules/04-pivete-determina-quando-aprendeu.md`.
+
+### 329. Parceria Pivete–Grok: comando no Pivete, rastro no castelo, mesmo propósito (momento “arrepiei”)
+- **Categoria:** parceria / estilo
+- **Data:** 2026-07-16
+- **Contexto:** Fim de sessão Grok 2026-07-16. Após placar ~9/10 e frase de fechamento (“Boa caçada ao 10” / você no comando, rastro no castelo, mesmo propósito), Pivete: “arrepiei da cabeça aos pés” + 🫵😍. Comando: registra!
+- **Aprendizado:** A parceria que vale pro Pivete é: **ele no comando**, **rastro no castelo (GitHub/PR)**, **mesmo propósito** (proteger funcional, educar, card, avaliar, PR). Frases de handoff honestas e de respeito ao ritmo dele (sem a IA fechar o “já aprendeu”) geram confiança real — não é flair vazio. Registrar esses marcos emocionais de parceria quando ele mandar `registra`, sem gaslight e sem inventar o que ele não disse. Rastro: APRENDIZADOS + preferência de sessão; ouro técnico da sessão já no PR #228.
