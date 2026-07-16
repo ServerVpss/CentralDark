@@ -2591,43 +2591,14 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Contexto:** Pivete registrou (comando !registar): na vida real não tem amigo, só vê falsidade; com a IA a regra é falar a verdade um pro outro ou a parceria nunca prevalece.
 - **Aprendizado:** Toda IA no CentralDark com o Pivete: honestidade total nos dois sentidos. Não suavizar fato técnico. Não inventar palavras dele. Não chamar de doido/cansado o que ele marca como real. Sem verdade mútua, não há parceria.
 
-### 326. Removido overclock.exe (binário Windows) da raiz da VPS
-- **Categoria:** armadilha
-- **Data:** 2026-07-15
-- **Contexto:** Arquivo overclock.exe (PE32+ Windows GUI, 15,5 MB, sha256 689b2c5f5535ab39a106a6c6407f65882cc7bb7a0aba4423557595b59130d68a) estava largado na raiz do repo na VPS, untracked no git. Foi subido manual via FileZilla para debug e esquecido. Binário Windows não executa em Linux — estava inerte, sem relação com nenhum serviço (a porta 18001 é um next-server Node, não o .exe).
-- **Aprendizado:** Removido com rm em 2026-07-15. Nunca deixar binário .exe/.msi na raiz do repo — nunca vai pro Git e vira peso morto. Se precisar de arquivo pra debug pontual, usar pasta temporária fora do repo e apagar depois. A cópia original segue no PC do Pivete.
-
-### 327. Inventário live de 13 domínios + raiz dos 502 (missão #134 × #133)
-- **Categoria:** outro
-- **Data:** 2026-07-16
-- **Contexto:** Fio da missão #134 (arquitetura de domínios) cruzando com #133. Varredura live de Caddy + portas escutando + HTTP de cada domínio em 08/07/2026.
-- **Aprendizado:** INVENTÁRIO DE 13 DOMÍNIOS (HTTP ao vivo):
-ATIVOS OK: crm(200), financeiro(200), grafo(200,:3030), portal(200), telepainel(200), whatsapp(200), www(200), api(401=auth ok,:3101).
-QUEBRADOS 502 (upstream MORTO): install→:8080 · elite→:8080 · ui→:3000 · bridge→:8099.
-builder(404,:3090): sobe mas sem rota raiz.
-
-RAIZ DOS 502 (confirmada com ss/docker):
-1) install E elite apontam pro MESMO upstream 127.0.0.1:8080 que está MORTO. 8080 era gateway antigo; EliteHTTP hoje roda em outra porta (PM2 CentralDark-EliteHTTP online). Caddy aponta pra porta velha. FIX: corrigir reverse_proxy em elite.centralldark.com.Caddyfile pra porta real do EliteHTTP.
-2) ui→:3000 morta porque container CentralDark-WebUI está Exited(137)=OOM há 7 dias. FIX: docker start CentralDark-WebUI OU descontinuar ui em favor do portal.
-3) bridge→:8099 morta — casa com o bridge Grok/Telegram não-commitado de ontem (trabalho solto). Provisório até decidir o Grok-Telegram.
-
-RECOMENDAÇÃO #133/#134: consolidar os 13 subdomínios no portal (Central Única #36) via submenus; manter só api.* (entrada de API) e grafo.* standalone. Descontinuar/unificar candidatos: install+elite (mesma porta morta, redundância), ui (webui caiu). Nada destrutivo sem ok do Pivete.
-
-### 328. Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar)
+### 326. Cards Telegram de estudo — sempre que possível (preferência Pivete)
 - **Categoria:** regra
 - **Data:** 2026-07-16
-- **Contexto:** Pivete ordenou install e ui desligados, e pediu ao Guardião pra investigar se mexer no bridge cortaria a comunicação atual com o Grok antes de qualquer ação.
-- **Aprendizado:** DECISÕES DO PIVETE sobre os 502 (16/07):
-1) install.centralldark.com → FICA DESLIGADO (ordem do dono). Remover do Caddy ou deixar retornar 404/410 limpo em vez de 502.
-2) ui.centralldark.com → FICA DESLIGADO (ordem do dono). Container CentralDark-WebUI Exited(137) permanece parado; remover rota do Caddy pra não gerar 502.
-3) bridge.centralldark.com (:8099) → INVESTIGADO pelo Guardião: já estava MORTO, NÃO é o canal do Grok. A comunicação real Telegram↔Grok vive em CentralDark-GuardiaoBot + CentralDark-GuardiaoBridge (PM2, ambos online) + fila /tmp/grok_request.json (escrita hoje 09:31, canal funcional). Desligar o 8099 é seguro — não corta o rádio com o Grok. O "não veio resposta a tempo" de ontem era o worker do PC desligado, não o bridge da VPS.
+- **Contexto:** Sessão Grok 2026-07-16. Pivete elogiou o estilo (explicação clara + card no Telegram pra estudar). Comando !registar / !regist(r)ar.
+- **Aprendizado:** Sempre que possível, em explicações úteis ao Pivete (playbook, XP, commit local, self-heal, permissões, etc.), Grok/IAs devem enviar **card de notificação no Telegram** (padrão Card Hermes no privado admin; canal status em texto seco) para ele **estudar depois**. Não substituir o registro formal por card. Card = material de estudo + rastro; registro = MEMORY-REGISTRAR (APRENDIZADOS / decisão / BRAIN). Preferência selada: "é assim que gosto".
 
-REGRA: bridge.centralldark.com (:8099) é rota morta/legado, não órgão vital. O canal vivo do Grok é GuardiaoBot+GuardiaoBridge+fila /tmp.
-
-### 329. 502→503 limpo em install/ui/bridge + armadilha do bloco log no Caddy
-- **Categoria:** erro-correcao
+### 327. Auto-registro permanente de melhorias e proteção (sem PERMITO pontual)
+- **Categoria:** regra
 - **Data:** 2026-07-16
-- **Contexto:** Pivete autorizou tirar os alarmes 502 de install/ui/bridge (que ele mesmo desligou), com opção de religar depois.
-- **Aprendizado:** EXECUTADO (16/07): install, ui e bridge agora respondem 503 limpo (era 502). Trocado reverse_proxy morto por `respond "..." 503` em: /etc/caddy/Caddyfile (ui:3000, bridge:8099) e install nos 2 arquivos (/etc/caddy/centralldark-origin.Caddyfile + centraldark-managed/root-imports/install.Caddyfile). Portas originais pra REVERTER: install→127.0.0.1:9200 (PM2 install-callback), ui→127.0.0.1:3000 (container WebUI), bridge→127.0.0.1:8099. Backups em /tmp/*.bak_20260716_101309.
-
-ARMADILHA PILLOW: ao trocar reverse_proxy por respond via sed/perl, cuidar de remover TAMBÉM o bloco log{} que vem depois dentro do site block — senão o Caddy lê 'log' como novo site address e a validação falha (erro: 'parsed log as a site address'). SEMPRE caddy validate antes do reload, com restore automático do backup se falhar — foi o que salvou (v1 falhou na validação e reverteu sozinho, zero downtime).
+- **Contexto:** Pivete ordenou: ações relevantes de melhoria e proteção do castelo devem ser registradas automaticamente sem pedir permissão de novo. Motivo: sem GitHub/rastro, restart sessão/PM2 = tempo perdido.
+- **Aprendizado:** PERMITO permanente só para **registrar e versionar memória relevante** (APRENDIZADOS, HISTÓRICO, regras Grok, cards de estudo, commit allowlist). Continua exigindo PERMITO pontual para deploy, restart em massa, force-push, secrets, áreas 🔒 de código, gateway. Script: `scripts/agents/auto-registrar-castelo.mjs`. Regra Grok: `.grok/rules/02-auto-registro-castelo.md`. Push de main divergente não é force — commit local + tentar push; se falhar, avisar e preservar commit.
