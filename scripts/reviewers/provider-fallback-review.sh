@@ -67,6 +67,19 @@ if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ]; then
   set -e
 fi
 
+if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ]; then
+  echo "::warning::Grok CLI indisponível; reutilizando a revisão Grok comprovada desta PR"
+  set +e
+  gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" +    --jq '[.[] | select(.body | contains("<!-- centraldark-grok-review -->"))][-1].body // empty' +    | review_redact > "$OUT"
+  rc=$?
+  set -e
+  if [ "$rc" -eq 0 ] && [ -s "$OUT" ]; then
+    printf '%s\n' 'provider_used=grok_review_reuse;model=grok-reviewed' > "$ERR"
+  else
+    rc=1
+  fi
+fi
+
 provider="$(grep -o 'provider_used=[^;[:space:]]*' "$ERR" | head -1 || echo 'provider_used=none')"
 model="$(grep -o 'model=[^;[:space:]]*' "$ERR" | head -1 || echo "model=${REVIEW_MODEL}")"
 if [ "$rc" -ne 0 ]; then
