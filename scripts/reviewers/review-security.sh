@@ -8,7 +8,7 @@ review_check_sensitive_paths() {
   local paths_file="$1"
   local path_regex='(^|/)(\.env($|\.)|secrets?(/|$)|tokens?(/|$)|sessions?(/|$)|\.ssh(/|$)|id_(rsa|ed25519)$)|\.(pem|key|p12|pfx)$'
 
-  if LC_ALL=C grep -Ein "$path_regex" "$paths_file"; then
+  if LC_ALL=C grep -Eiq "$path_regex" "$paths_file"; then
     echo "ERRO: PR contém caminho sensível; revisão externa bloqueada" >&2
     return 1
   fi
@@ -40,7 +40,7 @@ review_scan_diff() {
   local secret_regex
   secret_regex="(${xai_prefix}[A-Za-z0-9_-]{20,}|${groq_prefix}[A-Za-z0-9_-]{20,}|${openai_prefix}[A-Za-z0-9_-]{20,}|${github_prefix}[A-Za-z0-9_-]{20,}|${github_pat_prefix}[A-Za-z0-9_-]{20,}|${google_prefix}[A-Za-z0-9_-]{30,}|${aws_prefix}[A-Z0-9]{16}|${centraldark_prefix}[A-Za-z0-9_-]{16,}|${private_key_marker}|(postgres(ql)?|mysql|mongodb(\+srv)?):\/\/[^[:space:]/:@]+:[^[:space:]@]+@)"
 
-  if LC_ALL=C grep -Ein "$secret_regex" "$diff_file"; then
+  if LC_ALL=C grep -Eiq "$secret_regex" "$diff_file"; then
     echo "ERRO: padrão de credencial detectado; revisão externa bloqueada" >&2
     return 1
   fi
