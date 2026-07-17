@@ -21,7 +21,13 @@ payload="$(jq -n --arg model "$MODEL" '{
 response="$(mktemp)"
 trap 'rm -f "$response"' EXIT
 
-status="$(curl -sS --max-time 45 -o "$response" -w '%{http_code}' +  -H "Authorization: Bearer ${KEY}" +  -H "Content-Type: application/json" +  -d "$payload" "$BASE/chat/completions")"
+status="$(
+  curl -sS --max-time 45 -o "$response" -w '%{http_code}' \
+    -H "Authorization: Bearer ${KEY}" \
+    -H "Content-Type: application/json" \
+    -d "$payload" \
+    "$BASE/chat/completions"
+)"
 
 if [ "$status" != "200" ]; then
   echo "ERRO: Gateway CentralDark retornou HTTP $status" >&2
