@@ -31,6 +31,7 @@ jobs:
           node --check server.mjs
           [ -f auth-audit.mjs ] && node --check auth-audit.mjs || echo "auth-audit.mjs ausente — ok"
           node --check tests/models.test.mjs
+          node --check tests/providers-routes.test.mjs
           echo "🟢 sintaxe OK"
 
       - name: Subir Arsenal Adapter em localhost:8090
@@ -55,6 +56,11 @@ jobs:
         run: |
           cd apps/modulos/arsenal-openai-adapter
           npm test
+
+      - name: Teste rotas puras + fallback (upstreams mockados)
+        run: |
+          cd apps/modulos/arsenal-openai-adapter
+          npm run test:providers
 
       - name: Prova externa (gateway público — soft)
         continue-on-error: true
