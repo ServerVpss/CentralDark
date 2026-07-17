@@ -28,6 +28,14 @@ function getTraceHeader() {
     .join('->');
 }
 
+function getResolvedUpstreamModel() {
+  const chain = requestTrace.getStore()?.chain || [];
+  for (let index = chain.length - 1; index >= 0; index -= 1) {
+    if (chain[index]?.ok && chain[index]?.model) return chain[index].model;
+  }
+  return null;
+}
+
 const PORT = process.env.PORT || 8090;
 const MAX_BODY_BYTES = Number(process.env.MAX_BODY_BYTES || 1024 * 1024);
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
@@ -722,6 +730,7 @@ const server = http.createServer(async (req, res) => {
               respostaPt = await callProvider(requestedModel, messages);
             }
             const trace = getTraceHeader();
+            const responseModel = getResolvedUpstreamModel() || requestedModel;
             if (trace) res.setHeader('X-CentralDark-Upstream', trace);
             res.setHeader('X-CentralDark-Route', 'v1');
             if (streamingPt) {
@@ -730,13 +739,17 @@ const server = http.createServer(async (req, res) => {
                 'Cache-Control': 'no-cache',
                 Connection: 'keep-alive',
               });
-              res.write(sseChunk(requestedModel, { role: 'assistant' }));
-              res.write(sseChunk(requestedModel, { content: respostaPt }));
-              res.write(sseChunk(requestedModel, {}, 'stop'));
+              res.write(sseChunk(responseModel, { role: 'assistant' }));
+              res.write(sseChunk(responseModel, { content: respostaPt }));
+              res.write(sseChunk(responseModel, {}, 'stop'));
               res.write('data: [DONE]\n\n');
               return res.end();
             }
-            return json(res, 200, chatOk(requestedModel, respostaPt, { route: 'v1', fallback: FALLBACK_ENABLED }));
+            return json(res, 200, chatOk(responseModel, respostaPt, {
+              route: 'v1',
+              fallback: FALLBACK_ENABLED,
+              requested_model: requestedModel,
+            }));
           } catch (e) {
             console.error('passthrough/fallback erro:', e?.name || 'Error');
             return json(res, 502, {
