@@ -1,7 +1,7 @@
-# 🧠 Aprendizados: Conexão e Autenticação Proxy
+> **OBSOLETO:** o proxy antigo foi removido. Use somente o Gateway CentralDark em `https://api.centralldark.com/v1` com `CENTRALDARK_GATEWAY_KEY`.\n\n# 🧠 Aprendizados: Conexão e Autenticação Proxy
 
 ### 🎯 Objetivo
-Resolver o erro de autenticação (401 Unauthorized) e configurar o Cline com o proxy claude.ap7.site.
+Resolver o erro de autenticação (401 Unauthorized) e configurar o Cline com o proxy api.centralldark.com.
 
 ### 🛠️ O Diagnóstico
 * **Identificação do Erro**: O uso do header Authorization: Bearer não era suportado pelo proxy; o sistema exige estritamente o header x-api-key.
@@ -12,7 +12,7 @@ Resolver o erro de autenticação (401 Unauthorized) e configurar o Cline com o 
 1. **Chave Válida**: A chave sk-lab-***[KEY-EXPOSTA-PRECISA-ROTACIONAR]*** foi validada.
 2. **Configuração no Cline**:
     * **API Provider**: Anthropic
-    * **Base URL**: https://claude.ap7.site
+    * **Base URL**: https://api.centralldark.com
     * **API Key**: sk-lab-***[KEY-EXPOSTA-PRECISA-ROTACIONAR]***
     * **Model ID**: sonnet-4.6 (ou opus-4.8)
 3. **Fluxo de Debug**: Estabelecemos o uso de scripts de auditoria que:
