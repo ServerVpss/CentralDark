@@ -1,4 +1,4 @@
----
+> **OBSOLETO:** o proxy antigo foi removido. Use somente o Gateway CentralDark em `https://api.centralldark.com/v1` com `CENTRALDARK_GATEWAY_KEY`.\n\n---
 title: "TUTORIAL — Claude Code no terminal sem conta (via proxy)"
 date: 2026-07-01
 tags: ["tutorial", "proxy", "terminal", "claude-code", "contingencia", "switch-model"]
@@ -12,7 +12,7 @@ updated: 2026-07-01
 ║   🔌 MODO PROXY — terminal sem depender de conta logada    ║
 ╠══════════════════════════════════════════════════════════╣
 ║   Pra quê:  rodar o Claude Code (CLI, leve) pelo seu       ║
-║             proxy claude.ap7.site quando a conta cair      ║
+║             proxy api.centralldark.com quando a conta cair      ║
 ║   Script:   secrets/claude-proxy.sh  (testado 🟢 HTTP 200) ║
 ║   Key:      mora no cofre secrets/anthropic.env 🔒         ║
 ║   Liga/desliga: por terminal — fechou, voltou ao normal   ║
@@ -232,7 +232,7 @@ Se quiser levar este script pra outra máquina:
    Conteúdo:
    ```env
    ANTHROPIC_AUTH_TOKEN=sua-key-aqui
-   ANTHROPIC_BASE_URL=https://claude.ap7.site
+   ANTHROPIC_BASE_URL=https://api.centralldark.com
    ```
 
 3. **Edite a linha 18 do script** apontando pro novo cofre:
