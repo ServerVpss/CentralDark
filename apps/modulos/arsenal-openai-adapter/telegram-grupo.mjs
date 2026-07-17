@@ -73,8 +73,8 @@ export async function postarComoBot(botKey, texto, opts = {}) {
   const partes = fatiar(texto);
 
   for (let i = 0; i < partes.length; i++) {
-    const cabecalho = i === 0 ? `${emoji} ${esc(nome)}\n\n` : '';
-    const body = `<pre>${cabecalho}${esc(partes[i])}</pre>`;
+    const cabecalho = i === 0 ? `${emoji} <b>${esc(nome)}</b>\n\n` : '';
+    const body = cabecalho + esc(partes[i]);
     try {
       const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
@@ -97,7 +97,7 @@ export async function postarPergunta(pergunta, modo) {
   const tokens = carregarTokens();
   const token = tokens.BOT_TOKEN_CLAUDE || tokens.BOT_TOKEN_GEMINI || tokens.BOT_TOKEN_GROQ;
   if (!token) return false;
-  const texto = `<pre>👤 Pivete (via WebUI) — modo ${esc(modo)}\n\n${esc(pergunta)}</pre>`;
+  const texto = `👤 <b>Pivete (via WebUI)</b> — <i>modo ${esc(modo)}</i>\n\n${esc(pergunta)}`;
   try {
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',

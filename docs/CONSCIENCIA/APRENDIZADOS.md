@@ -2638,3 +2638,14 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-17
 - **Contexto:** Pivete: abrir PR, registrar e botar lá que está esperando revisão dos revisores.
 - **Aprendizado:** PR https://github.com/ServerVpss/CentralDark/pull/234 — feat gateway rotas + fallback. Comentário no PR: status ESPERANDO REVISÃO DOS REVISORES; merge só após crítica + OK. Labels: AGENTE-GROK, INFRA, MELHORIA, DOCS, CORREÇÃO-SEGURA, IA-VALIDAR, PRECISA-DE-OK, GIT. Card Telegram enviado.
+
+### 333. Liquidação ouro VPS: allowlist + limpeza + #218 na VPS
+- **Categoria:** governança / ops
+- **Data:** 2026-07-17
+- **Contexto:** Pivete: liquidar, limpar não-ouro, salvar ouro, puxar 218, allowlist.
+- **Aprendizado:**
+  - **Ouro funcional fora da main:** gateway `server.mjs` (TokenRouter+fallback) = PR #234; secrets só VPS; `proxy-unlimi` funcional untracked.
+  - **Não-ouro limpo:** DEBATES testes, EVOLUCAO solta, drift-*.json (243), bak, grock2.txt. Backup em `.cleanup-evidence/20260717-ouro/nao-ouro-backup.tgz`.
+  - **#218 na VPS:** regra multi-agente 5 passos + 00-LEIA-PRIMEIRO do `origin/main`; espelho AGENTES-AUTONOMOS.
+  - **Allowlist:** `docs/CONSCIENCIA/ALLOWLIST-OURO-VPS-GITHUB.md`.
+  - Gateway live pós-limpeza: health ok, providers arsenal/abacus/tokenrouter.
