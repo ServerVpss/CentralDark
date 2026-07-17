@@ -29,7 +29,7 @@ Antes de agir:
 
 ## Arquivos sensíveis
 
-Não leia, copie, edite ou exponha arquivos sensíveis, incluindo `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, certificados, cookies e credenciais.
+Não leia, copie, edite ou exponha arquivos sensíveis: configurações de ambiente, cofres de credenciais, tokens, sessões, dados SSH, chaves privadas, certificados, cookies e credenciais.
 
 Use placeholders como `<REDACTED>` e nomes de variáveis sem seus valores.
 
