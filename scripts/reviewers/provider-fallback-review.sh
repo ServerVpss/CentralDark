@@ -2,6 +2,9 @@
 # Fallback comum dos revisores: Grok CLI da VPS -> xAI API.
 # Requer REVIEWER_NAME, REVIEW_MARKER, PR_NUMBER, BASE_SHA, HEAD_SHA e GH_TOKEN.
 set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=review-security.sh
+source "$ROOT/review-security.sh"
 
 : "${REVIEWER_NAME:?REVIEWER_NAME ausente}"
 : "${REVIEW_MARKER:?REVIEW_MARKER ausente}"
@@ -41,6 +44,9 @@ if [ -z "$got" ]; then
   git diff "$BASE_SHA".."$HEAD_SHA" > "$DIFF" 2>/dev/null || echo "(diff indisponível)" > "$DIFF"
 fi
 [ -s "$DIFF" ] || echo "(diff vazio)" > "$DIFF"
+git diff --name-only "$BASE_SHA".."$HEAD_SHA" > "$WORK/paths.txt"
+review_check_sensitive_paths "$WORK/paths.txt"
+review_scan_diff "$DIFF"
 
 set +e
 bash scripts/reviewers/grok-review.sh --prompt-file "$PROMPT" --diff-file "$DIFF" > "$OUT" 2> "$ERR"
