@@ -93,3 +93,11 @@ Gateway Arsenal **não** tocado — continua online com fallback.
 curl -s http://127.0.0.1:8090/providers | jq '.fallback, [.providers[].id]'
 # esperado: fallback.enabled=true, providers: arsenal, abacus, tokenrouter
 ```
+
+---
+
+## 🚨 Secret no diff (2026-07-17)
+
+Se o GitHub/CI gritar **padrão de segredo no diff** → **não mergear**.  
+Ver regra: `.grok/rules/05-pr-secret-scan-nunca-merge.md` · Aprendizado **#335**.  
+Caminho certo: PR limpo a partir de `origin/main` (ex. #235), nunca monstro tipo #234.

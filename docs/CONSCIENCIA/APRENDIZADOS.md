@@ -2646,3 +2646,10 @@ SOLUÇÃO: (1) não reconectar (cada tentativa cria +1 duplicata); (2) remover T
 - **Aprendizado:** EXECUTADO (16/07, ordem do Pivete): removido o gitlink órfão apps/modulos/Bolt/source (modo 160000, commit c0c0f8c6, SEM entrada em .gitmodules) via `git rm --cached` na branch agent/pr218-review-rigor, commit 00fdc9f6e5. NÃO tocado: docker-compose.yml nem a pasta física source/ (só a referência quebrada do git). Bolt fica desligado, implementação futura.
 CAUSA/EFEITO: esse gitlink órfão causava 'no submodule mapping found for path apps/modulos/Bolt/source' → exit 128 no checkout/git diff do CI → derrubava o job review-grok. Remoção mata a causa raiz.
 DISTINÇÃO IMPORTANTE: 'Bolt' existe em 2 lugares — (1) container Docker CentralDark-Bolt e (2) gitlink apps/modulos/Bolt/source. A ordem era só o gitlink; container não foi tocado. Sempre confirmar QUAL Bolt antes de apagar.
+
+
+### 335. Alerta de secret no diff = freio absoluto (PR #234 → #235)
+- **Categoria:** segurança / PR / regra Grok
+- **Data:** 2026-07-17
+- **Contexto:** PR #234 poluído + alerta automático de secret no diff. Pivete pediu salvar pra não errar mais.
+- **Aprendizado:** Alerta de segredo no diff = não mergear. Isolar ouro em PR limpo da main. Rotacionar keys. Regra: `.grok/rules/05-pr-secret-scan-nunca-merge.md`.
