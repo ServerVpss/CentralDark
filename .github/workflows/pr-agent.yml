@@ -1,8 +1,8 @@
 name: PR Review — Multi-IA (paralelo)
 
 # Quatro revisores independentes. Falha real não pode virar verde.
-# Secrets: GROQ_API_KEY · CENTRALDARK_GATEWAY_KEY · XAI_API_KEY (fallback do Grok).
-# Gemini e Claude usam o Gateway CentralDark, cuja cadeia interna faz fallback.
+# Secrets: GROQ_API_KEY · GEMINI_API_KEY · ANTHROPIC_API_KEY · XAI_API_KEY.
+# Cada provedor usa sua própria key; falha/ausência cai no Grok CLI + xAI API.
 
 on:
   pull_request:
@@ -35,6 +35,7 @@ jobs:
           set -euo pipefail
           node --check apps/modulos/arsenal-openai-adapter/server.mjs
           bash -n scripts/reviewers/grok-review.sh
+          bash -n scripts/reviewers/provider-fallback-review.sh
           test -s .github/constraints/reviewers.txt
           test -s apps/modulos/arsenal-openai-adapter/PROVIDERS-ROUTES.md
           SENSITIVE_ENV_PATH="$(printf '.%s' 'env')"
@@ -44,7 +45,7 @@ jobs:
           fi
 
   review-groq:
-    name: "⚡ Groq — Llama 3.3 70B"
+    name: "⚡ Groq — API → Grok fallback"
     needs: validate
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
@@ -71,26 +72,17 @@ jobs:
       - name: Review
         env:
           GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
-          CENTRALDARK_GATEWAY_BASE: ${{ vars.CENTRALDARK_GATEWAY_BASE || 'http://127.0.0.1:8090/v1' }}
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          if [ -n "$GROQ_API_KEY" ]; then
-            export GROQ__KEY="$GROQ_API_KEY"
-            export CONFIG__MODEL="groq/llama-3.3-70b-versatile"
-            export CONFIG__FALLBACK_MODELS='["groq/llama-3.3-70b-versatile"]'
-            echo "provider=groq_direct"
-          elif [ -n "$CENTRALDARK_GATEWAY_KEY" ]; then
-            export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
-            export OPENAI__API_BASE="$CENTRALDARK_GATEWAY_BASE"
-            export CONFIG__MODEL="openai/llama-3.3-70b-versatile"
-            export CONFIG__FALLBACK_MODELS='["openai/llama-3.3-70b-versatile"]'
-            echo "provider=centraldark_gateway_fallback"
-          else
-            echo "::error::GROQ_API_KEY e CENTRALDARK_GATEWAY_KEY ausentes"
-            exit 1
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "primary_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::GROQ_API_KEY ausente; acionando fallback"
+            exit 0
           fi
+          export GROQ__KEY="$GROQ_API_KEY"
+          export CONFIG__MODEL="groq/llama-3.3-70b-versatile"
+          export CONFIG__FALLBACK_MODELS='["groq/llama-3.3-70b-versatile"]'
           export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
           LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
           echo "🤖 Groq Llama 3.3 70B iniciando review..."
@@ -99,12 +91,26 @@ jobs:
           STATUS=${PIPESTATUS[0]}
           set -e
           if [ "$STATUS" -ne 0 ] || grep -q "Failed to review PR:" "$LOG"; then
-            echo "::error::Groq não concluiu o review"
-            exit 1
+            echo "primary_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Groq direto falhou; acionando fallback"
+            exit 0
           fi
+          echo "primary_ok=true" >> "$GITHUB_OUTPUT"
+        id: primary
+      - name: Fallback Groq via Grok CLI
+        if: steps.primary.outputs.primary_ok != 'true'
+        env:
+          XAI_API_KEY:   ${{ secrets.XAI_API_KEY }}
+          GH_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          REVIEWER_NAME: Groq
+          REVIEW_MARKER: centraldark-groq-fallback-review
+          PR_NUMBER:     ${{ github.event.pull_request.number }}
+          BASE_SHA:      ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA:      ${{ github.event.pull_request.head.sha }}
+        run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-gemini:
-    name: "✨ Gemini — gateway + fallback"
+    name: "✨ Gemini — API → Grok fallback"
     needs: validate
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
@@ -130,33 +136,46 @@ jobs:
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
-          CENTRALDARK_GATEWAY_BASE: ${{ vars.CENTRALDARK_GATEWAY_BASE || 'http://127.0.0.1:8090/v1' }}
+          GEMINI_API_KEY:          ${{ secrets.GEMINI_API_KEY }}
           GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          if [ -z "$CENTRALDARK_GATEWAY_KEY" ]; then
-            echo "::error::CENTRALDARK_GATEWAY_KEY não configurado"
-            exit 1
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "primary_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::GEMINI_API_KEY ausente; acionando fallback"
+            exit 0
           fi
-          export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
-          export OPENAI__API_BASE="$CENTRALDARK_GATEWAY_BASE"
-          export CONFIG__MODEL="openai/gemini-flash-latest"
-          export CONFIG__FALLBACK_MODELS='["openai/gemini-flash-latest"]'
+          export GOOGLE_AI_STUDIO_KEY="$GEMINI_API_KEY"
+          export CONFIG__MODEL="gemini/gemini-2.5-flash"
+          export CONFIG__FALLBACK_MODELS='["gemini/gemini-2.5-flash"]'
           export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
           LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
-          echo "🤖 Gemini Flash iniciando review via gateway oficial..."
+          echo "🤖 Gemini Flash iniciando review via API direta..."
           set +e
           "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review 2>&1 | tee "$LOG"
           STATUS=${PIPESTATUS[0]}
           set -e
           if [ "$STATUS" -ne 0 ] || grep -q "Failed to review PR:" "$LOG"; then
-            echo "::error::Gemini não concluiu o review"
-            exit 1
+            echo "primary_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Gemini direto falhou; acionando fallback"
+            exit 0
           fi
+          echo "primary_ok=true" >> "$GITHUB_OUTPUT"
+        id: primary
+      - name: Fallback Gemini via Grok CLI
+        if: steps.primary.outputs.primary_ok != 'true'
+        env:
+          XAI_API_KEY:   ${{ secrets.XAI_API_KEY }}
+          GH_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          REVIEWER_NAME: Gemini
+          REVIEW_MARKER: centraldark-gemini-fallback-review
+          PR_NUMBER:     ${{ github.event.pull_request.number }}
+          BASE_SHA:      ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA:      ${{ github.event.pull_request.head.sha }}
+        run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-claude:
-    name: "🧠 Claude Sonnet — gateway + fallback"
+    name: "🧠 Claude Sonnet — API → Grok fallback"
     needs: validate
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
@@ -182,30 +201,43 @@ jobs:
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
-          CENTRALDARK_GATEWAY_BASE: ${{ vars.CENTRALDARK_GATEWAY_BASE || 'http://127.0.0.1:8090/v1' }}
+          ANTHROPIC_API_KEY:       ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          if [ -z "$CENTRALDARK_GATEWAY_KEY" ]; then
-            echo "::error::CENTRALDARK_GATEWAY_KEY não configurado"
-            exit 1
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "primary_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ANTHROPIC_API_KEY ausente; acionando fallback"
+            exit 0
           fi
-          export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
-          export OPENAI__API_BASE="$CENTRALDARK_GATEWAY_BASE"
-          export CONFIG__MODEL="openai/claude-sonnet-4-6"
-          export CONFIG__FALLBACK_MODELS='["openai/claude-sonnet-4-6"]'
+          export CONFIG__AI_PROVIDER=anthropic
+          export CONFIG__MODEL="claude-sonnet-4-6"
+          export CONFIG__FALLBACK_MODELS='["claude-sonnet-4-6"]'
           export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
           LOG="$RUNNER_TEMP/pr-agent-${GITHUB_JOB}.log"
-          echo "🤖 Claude Sonnet 4.6 iniciando review via gateway oficial..."
+          echo "🤖 Claude Sonnet 4.6 iniciando review via API direta..."
           set +e
           "$PR_AGENT_PYTHON" -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review 2>&1 | tee "$LOG"
           STATUS=${PIPESTATUS[0]}
           set -e
           if [ "$STATUS" -ne 0 ] || grep -q "Failed to review PR:" "$LOG"; then
-            echo "::error::Claude não concluiu o review"
-            exit 1
+            echo "primary_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Claude direto falhou; acionando fallback"
+            exit 0
           fi
+          echo "primary_ok=true" >> "$GITHUB_OUTPUT"
+        id: primary
+      - name: Fallback Claude via Grok CLI
+        if: steps.primary.outputs.primary_ok != 'true'
+        env:
+          XAI_API_KEY:   ${{ secrets.XAI_API_KEY }}
+          GH_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          REVIEWER_NAME: Claude Sonnet
+          REVIEW_MARKER: centraldark-claude-fallback-review
+          PR_NUMBER:     ${{ github.event.pull_request.number }}
+          BASE_SHA:      ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA:      ${{ github.event.pull_request.head.sha }}
+        run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-grok:
     name: "🌀 Grok — xAI (CLI + API fallback)"
