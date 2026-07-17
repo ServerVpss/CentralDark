@@ -29,7 +29,16 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
+          persist-credentials: true
+      - &scrub_checkout_credentials
+        name: Remover credencial Git sem percorrer gitlinks órfãos
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r key; do
+            git config --local --unset-all "$key" || true
+          done < <(git config --local --name-only --get-regexp '^includeIf\.gitdir:' || true)
+          git config --local --unset-all http.https://github.com/.extraheader || true
       - name: Validar sintaxe, paths e diff
         shell: bash
         run: |
@@ -66,7 +75,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
+          persist-credentials: true
+      - *scrub_checkout_credentials
       - name: Revisar via Gateway CentralDark
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
@@ -94,7 +104,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
+          persist-credentials: true
+      - *scrub_checkout_credentials
       - name: Revisar via Gateway CentralDark
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
@@ -122,7 +133,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
+          persist-credentials: true
+      - *scrub_checkout_credentials
       - name: Revisar via Gateway CentralDark
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
@@ -150,7 +162,8 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
+          persist-credentials: true
+      - *scrub_checkout_credentials
       - name: Revisar via assinatura CLI
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
@@ -182,7 +195,8 @@ jobs:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
+          persist-credentials: true
+      - *scrub_checkout_credentials
 
       - name: Montar evidências sanitizadas para o Codex
         shell: bash
