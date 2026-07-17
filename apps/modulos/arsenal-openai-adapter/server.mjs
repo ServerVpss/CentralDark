@@ -3,6 +3,7 @@
 // "Central Dark - Grupo da Evolução" pelos bots individuais.
 
 import http from 'node:http';
+import { readFileSync, existsSync } from 'node:fs';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { postarComoBot, postarPergunta } from './telegram-grupo.mjs';
@@ -17,19 +18,26 @@ const DEBATES_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES';
 const EVOLUCAO_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO';
 const PENDENCIAS_PATH = '/root/CentralDark/docs/PENDENCIAS.md';
 
-// OpenAI-compat permite `content` como string simples OU array de blocos
-// multimodais ([{type:'text',text:'...'}, {type:'image_url',...}]). Sem isso,
-// String(array) vira literalmente "[object Object],[object Object]" no Telegram.
-function extrairTexto(content) {
-  if (typeof content === 'string') return content;
-  if (Array.isArray(content)) {
-    return content
-      .map(b => (typeof b === 'string' ? b : b?.text || (b?.type ? `[${b.type}]` : '')))
-      .filter(Boolean)
-      .join(' ');
-  }
-  return content == null ? '' : String(content);
+// ── Secrets (VPS only) — TokenRouter e afins. Nunca commitar valores. ──
+// Env do processo tem prioridade; fallback lê secrets/.env (fora do Git).
+function loadSecretsFile(path = '/root/CentralDark/secrets/.env') {
+  if (!existsSync(path)) return {};
+  const out = {};
+  try {
+    for (const line of readFileSync(path, 'utf8').split('\n')) {
+      const m = line.match(/^\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/);
+      if (!m) continue;
+      let v = m[2];
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+      out[m[1]] = v;
+    }
+  } catch { /* silencioso */ }
+  return out;
 }
+const SECRETS = loadSecretsFile();
+const TOKENROUTER_BASE = (process.env.TOKENROUTER_BASE_URL || SECRETS.TOKENROUTER_BASE_URL || 'https://api.tokenrouter.com/v1').replace(/\/+$/, '');
+const TOKENROUTER_KEY = process.env.TOKENROUTER_API_KEY || SECRETS.TOKENROUTER_API_KEY || '';
+const TOKENROUTER_DEFAULT_MODEL = process.env.TOKENROUTER_MODEL || SECRETS.TOKENROUTER_MODEL || 'deepseek/deepseek-v4-pro';
 
 const MODELS = [
   { id: 'arsenal-router',   name: '🎯 Arsenal Router (rápido)' },
@@ -38,46 +46,25 @@ const MODELS = [
   { id: 'arsenal-hermes',   name: '🤖 Hermes (proposta autônoma)' },
 ];
 
-// =====================================================
-// MODEL_ALIASES - Mapeamento Inteligente (Fase 1)
-// Editado por Grok via MCP em 2026-07-12
-// Objetivo: Suporte amplo a Sonnet 5, Fable, Opus 4.x com fallback
-// =====================================================
+// Aliases para clientes que filtram modelos por famílias conhecidas.
+// Mantém Arsenal como runtime real, mas deixa Claude Desktop/Cursor enxergarem modelos utilizáveis.
 const MODEL_ALIASES = {
-  // SONNET
-  "claude-3-5-sonnet-latest": "arsenal-router",
-  "claude-3-5-sonnet-20241022": "arsenal-router",
-  "claude-sonnet-5": "arsenal-router",
-  "claude-sonnet-4-6": "arsenal-router",
-  "claude-sonnet-4-5-20250929": "arsenal-router",
-
-  // OPUS
-  "claude-3-opus-latest": "arsenal-parallel",
-  "claude-3-opus-20240229": "arsenal-parallel",
-  "claude-opus-4-8": "arsenal-parallel",
-  "claude-opus-4-7": "arsenal-parallel",
-  "claude-opus-4-6": "arsenal-parallel",
-
-  // FABLE
-  "claude-fable-5": "arsenal-router",
-
-  // GPT
-  "gpt-4o": "arsenal-router",
-  "gpt-4o-mini": "arsenal-router",
+  'claude-3-5-sonnet-latest': 'arsenal-router',
+  'claude-3-5-sonnet-20241022': 'arsenal-router',
+  'claude-3-opus-latest': 'arsenal-parallel',
+  'claude-3-opus-20240229': 'arsenal-parallel',
+  'gpt-4o': 'arsenal-router',
+  'gpt-4o-mini': 'arsenal-router',
 };
 
-// Gerado A PARTIR de MODEL_ALIASES — antes eram 2 listas mantidas na mão e
-// desincronizavam (7 de 13 aliases sumiam do /v1/models, achado por teste real).
-function ownerDoAlias(id) {
-  if (id.startsWith('claude')) return 'anthropic';
-  if (id.startsWith('gpt')) return 'openai';
-  return 'arsenal-council';
-}
 const DISCOVERY_MODELS = [
   ...MODELS.map(m => ({ id: m.id, object: 'model', created: 0, owned_by: 'arsenal-council', name: m.name })),
-  ...Object.entries(MODEL_ALIASES).map(([id, destino]) => ({
-    id, object: 'model', created: 1700000000, owned_by: ownerDoAlias(id), name: `${id} → ${destino}`,
-  })),
+  { id: 'claude-3-5-sonnet-latest', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3.5 Sonnet → Arsenal Router' },
+  { id: 'claude-3-5-sonnet-20241022', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3.5 Sonnet 20241022 → Arsenal Router' },
+  { id: 'claude-3-opus-latest', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3 Opus → Arsenal Parallel' },
+  { id: 'claude-3-opus-20240229', object: 'model', created: 1700000000, owned_by: 'anthropic', name: 'Claude 3 Opus 20240229 → Arsenal Parallel' },
+  { id: 'gpt-4o', object: 'model', created: 1700000000, owned_by: 'openai', name: 'GPT-4o → Arsenal Router' },
+  { id: 'gpt-4o-mini', object: 'model', created: 1700000000, owned_by: 'openai', name: 'GPT-4o Mini → Arsenal Router' },
 ];
 
 // Mapeia modelo lógico -> bot Telegram (Gemini/Groq/Claude)
@@ -121,84 +108,191 @@ async function fetchAbacusCatalog() {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Circuit Breaker do provider (Abacus) — evita martelar um backend
-// sem crédito/instável. Após N falhas seguidas, abre por COOLDOWN_MS
-// e cai direto no mock sem nem tentar a rede.
-// ─────────────────────────────────────────────────────────────
-const CB_FAILURE_THRESHOLD = 3;
-const CB_COOLDOWN_MS = 30_000;
-let cbFailureCount = 0;
-let cbLastFailure = 0;
-
-function circuitAberto() {
-  if (cbFailureCount < CB_FAILURE_THRESHOLD) return false;
-  if (Date.now() - cbLastFailure >= CB_COOLDOWN_MS) {
-    cbFailureCount = 0; // cooldown passou — meio-aberto, deixa tentar de novo
-    return false;
-  }
-  return true;
-}
-
-function registrarFalhaProvider(erro, categoria) {
-  cbFailureCount++;
-  cbLastFailure = Date.now();
-  console.error(`[circuit-breaker] falha ${cbFailureCount}/${CB_FAILURE_THRESHOLD} [${categoria}]: ${erro.message}`);
-}
-
-// Mensagens de mock CURTAS e específicas por tipo de falha — sem despejar o
-// corpo cru do erro HTTP (que às vezes vem em JSON gigante do Abacus).
-function mockResposta(modelo, categoria) {
-  const textos = {
-    sem_credito: 'sem créditos no provider (Abacus)',
-    rate_limit: 'rate limit do provider (429) — muitas chamadas em pouco tempo',
-    timeout: 'provider não respondeu a tempo (timeout 15s)',
-    circuito_aberto: 'circuit breaker aberto — provider instável, pausado por 30s',
-    erro_generico: 'provider retornou erro',
-  };
-  return `⚠️ [mock — ${textos[categoria] || textos.erro_generico}] O provider (${modelo}) está indisponível agora. Esta é uma resposta de fallback pra manter o fluxo vivo; o conteúdo real volta assim que o provider normalizar.`;
-}
-
-// Classifica a falha em uma categoria conhecida — texto do mock fica limpo e
-// consistente em vez de ecoar o corpo cru do erro (JSON gigante do Abacus, etc).
-function classificarFalha(e, httpStatus) {
-  if (e.name === 'TimeoutError' || e.name === 'AbortError') return 'timeout';
-  if (httpStatus === 429) return 'rate_limit';
-  if (httpStatus === 402) return 'sem_credito';
-  if (/remaining credits|no credits/i.test(e.message || '')) return 'sem_credito';
-  return 'erro_generico';
-}
-
 async function callProvider(modelo, messages) {
-  if (circuitAberto()) {
-    console.log(`[circuit-breaker] ABERTO — pulando chamada real, caindo no mock (${modelo})`);
-    return mockResposta(modelo, 'circuito_aberto');
+  const r = await fetch(PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE : `${PROVIDER_BASE}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${PROVIDER_KEY}`,
+      'X-Arsenal-Key': PROVIDER_KEY,
+      'HTTP-Referer': 'https://ui.centralldark.com',
+      'X-Title': 'CentralDark Arsenal Council',
+    },
+    body: JSON.stringify({ model: modelo, messages, stream: false }),
+  });
+  if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}: ${(await r.text()).slice(0,180)}`);
+  const data = await r.json();
+  return data.choices?.[0]?.message?.content || '(sem resposta)';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PROVEDORES ORGANIZADOS (cada um na sua rota — sem misturar)
+//   /providers                      → mapa
+//   /providers/abacus/v1/*          → Abacus RouteLLM
+//   /providers/tokenrouter/v1/*     → TokenRouter
+//   /v1/*                           → Arsenal Council + Abacus (legado/default)
+// ═══════════════════════════════════════════════════════════════
+
+let tokenRouterCatalogCache = { at: 0, models: [] };
+const TR_CATALOG_TTL_MS = 5 * 60 * 1000;
+
+async function fetchTokenRouterCatalog() {
+  if (!TOKENROUTER_KEY) return [];
+  if (Date.now() - tokenRouterCatalogCache.at < TR_CATALOG_TTL_MS && tokenRouterCatalogCache.models.length) {
+    return tokenRouterCatalogCache.models;
+  }
+  try {
+    const r = await fetch(`${TOKENROUTER_BASE}/models`, {
+      headers: { Authorization: `Bearer ${TOKENROUTER_KEY}`, Accept: 'application/json' },
+    });
+    if (!r.ok) return tokenRouterCatalogCache.models;
+    const data = await r.json();
+    const models = Array.isArray(data?.data)
+      ? data.data.map((m) => (typeof m === 'string' ? m : m?.id)).filter(Boolean)
+      : [];
+    if (models.length) {
+      tokenRouterCatalogCache = { at: Date.now(), models };
+      console.log(`[Catalog] TokenRouter loaded ${models.length} models`);
+    }
+    return tokenRouterCatalogCache.models;
+  } catch (e) {
+    console.error('[Catalog] TokenRouter falhou:', e.message);
+    return tokenRouterCatalogCache.models;
+  }
+}
+
+/** Extrai texto útil — modelos reasoning do TR podem vir com content vazio. */
+function extractMessageText(msg) {
+  if (!msg || typeof msg !== 'object') return '';
+  const c = msg.content;
+  if (typeof c === 'string' && c.trim()) return c;
+  if (Array.isArray(c)) {
+    const joined = c.map((p) => (typeof p === 'string' ? p : p?.text || '')).join('');
+    if (joined.trim()) return joined;
+  }
+  if (typeof msg.reasoning_content === 'string' && msg.reasoning_content.trim()) {
+    return msg.reasoning_content;
+  }
+  return '';
+}
+
+async function callTokenRouter(modelo, messages, opts = {}) {
+  if (!TOKENROUTER_KEY) throw new Error('TOKENROUTER_API_KEY não configurada (secrets/.env)');
+  const model = modelo || TOKENROUTER_DEFAULT_MODEL;
+  const max_tokens = opts.max_tokens ?? 1024;
+  const r = await fetch(`${TOKENROUTER_BASE}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${TOKENROUTER_KEY}`,
+      'User-Agent': 'CentralDark-ArsenalAdapter',
+    },
+    body: JSON.stringify({ model, messages, stream: false, max_tokens, temperature: opts.temperature ?? 0.2 }),
+  });
+  if (!r.ok) throw new Error(`tokenrouter ${model} HTTP ${r.status}: ${(await r.text()).slice(0, 180)}`);
+  const data = await r.json();
+  const text = extractMessageText(data.choices?.[0]?.message);
+  if (!text) throw new Error(`tokenrouter ${model}: resposta vazia (finish=${data.choices?.[0]?.finish_reason || '?'})`);
+  return text;
+}
+
+function providersMap() {
+  return {
+    object: 'providers',
+    note: 'Cada provedor tem rota própria. /v1/* = Arsenal+Abacus (default). Não misturar keys entre rotas.',
+    providers: [
+      {
+        id: 'arsenal',
+        name: 'Arsenal Council (default gateway)',
+        base: '/v1',
+        routes: { models: '/v1/models', chat: '/v1/chat/completions' },
+        upstream: PROVIDER_BASE,
+        configured: Boolean(PROVIDER_KEY),
+      },
+      {
+        id: 'abacus',
+        name: 'Abacus RouteLLM',
+        base: '/providers/abacus/v1',
+        routes: {
+          models: '/providers/abacus/v1/models',
+          chat: '/providers/abacus/v1/chat/completions',
+        },
+        upstream: PROVIDER_BASE,
+        configured: Boolean(PROVIDER_KEY),
+      },
+      {
+        id: 'tokenrouter',
+        name: 'TokenRouter',
+        base: '/providers/tokenrouter/v1',
+        routes: {
+          models: '/providers/tokenrouter/v1/models',
+          chat: '/providers/tokenrouter/v1/chat/completions',
+        },
+        aliases: {
+          models: '/tokenrouter/v1/models',
+          chat: '/tokenrouter/v1/chat/completions',
+        },
+        upstream: TOKENROUTER_BASE,
+        default_model: TOKENROUTER_DEFAULT_MODEL,
+        configured: Boolean(TOKENROUTER_KEY),
+      },
+    ],
+  };
+}
+
+async function readJsonBody(req) {
+  let body = '';
+  for await (const chunk of req) body += chunk;
+  return body ? JSON.parse(body) : {};
+}
+
+async function respondProviderChat(res, req, providerId, payload) {
+  const requestedModel = payload.model;
+  const messages = payload.messages || [];
+  const streaming = payload.stream === true;
+  req._auditSetModel?.(`${providerId}:${requestedModel || 'default'}`);
+
+  let text;
+  let modelOut = requestedModel;
+
+  if (providerId === 'abacus') {
+    if (!requestedModel) return json(res, 400, { error: 'model obrigatório na rota abacus' });
+    const catalogo = await fetchAbacusCatalog();
+    if (catalogo.length && !catalogo.includes(requestedModel)) {
+      return json(res, 400, { error: `modelo desconhecido no abacus: ${requestedModel}` });
+    }
+    text = await callProvider(requestedModel, messages);
+    modelOut = requestedModel;
+  } else if (providerId === 'tokenrouter') {
+    if (!TOKENROUTER_KEY) {
+      return json(res, 503, { error: 'tokenrouter não configurado (TOKENROUTER_API_KEY ausente)' });
+    }
+    modelOut = requestedModel || TOKENROUTER_DEFAULT_MODEL;
+    const catalogo = await fetchTokenRouterCatalog();
+    // Se o catálogo estiver vazio (falha transitória), ainda tenta o default / pedido.
+    if (catalogo.length && requestedModel && !catalogo.includes(requestedModel)) {
+      return json(res, 400, {
+        error: `modelo desconhecido no tokenrouter: ${requestedModel}`,
+        available: catalogo.slice(0, 30),
+      });
+    }
+    text = await callTokenRouter(modelOut, messages, {
+      max_tokens: payload.max_tokens ?? 1024,
+      temperature: payload.temperature,
+    });
+  } else {
+    return json(res, 404, { error: `provedor desconhecido: ${providerId}` });
   }
 
-  let httpStatus = null;
-  try {
-    const r = await fetch(PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE : `${PROVIDER_BASE}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${PROVIDER_KEY}`,
-        'X-Arsenal-Key': PROVIDER_KEY,
-        'HTTP-Referer': 'https://ui.centralldark.com',
-        'X-Title': 'CentralDark Arsenal Council',
-      },
-      body: JSON.stringify({ model: modelo, messages, stream: false }),
-      signal: AbortSignal.timeout(15_000), // timeout agressivo — não deixa o Adapter travar esperando
-    });
-    httpStatus = r.status;
-    if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}: ${(await r.text()).slice(0,180)}`);
-    const data = await r.json();
-    cbFailureCount = 0; // sucesso reseta o contador
-    return data.choices?.[0]?.message?.content || '(sem resposta)';
-  } catch (e) {
-    const categoria = classificarFalha(e, httpStatus);
-    registrarFalhaProvider(e, categoria);
-    return mockResposta(modelo, categoria);
+  if (streaming) {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+    res.write(sseChunk(modelOut, { role: 'assistant' }));
+    res.write(sseChunk(modelOut, { content: text }));
+    res.write(sseChunk(modelOut, {}, 'stop'));
+    res.write('data: [DONE]\n\n');
+    return res.end();
   }
+  return json(res, 200, chatOk(modelOut, text));
 }
 
 async function modoRouter(regras, messages) {
@@ -221,7 +315,7 @@ async function modoParallel(regras, messages) {
   const bloco = respostas.map(r => `### ${r.modelo}\n${r.texto}`).join('\n\n---\n\n');
   const sintese = await callProvider(regras.modelos.juiz, [
     { role: 'system', content: 'Você é o Juiz do Conselho. Recebeu 3 respostas de 3 IAs pra mesma pergunta. Sintetize a MELHOR resposta única. Direto, PT-BR.' },
-    { role: 'user', content: `Pergunta: ${messages.map(m=>extrairTexto(m.content)).join('\n')}\n\nRespostas:\n\n${bloco}` },
+    { role: 'user', content: `Pergunta: ${messages.map(m=>m.content).join('\n')}\n\nRespostas:\n\n${bloco}` },
   ]);
   postarComoBot('juiz', sintese, { nome: `Juiz · ${regras.modelos.juiz}` });
   return `⚡ **Arsenal Parallel · 3 vozes + Juiz**\n\n${bloco}\n\n---\n\n## 🧑‍⚖️ Veredito (${regras.modelos.juiz})\n\n${sintese}`;
@@ -242,7 +336,7 @@ async function modoDebate(regras, messages) {
 
   const veredito = await callProvider(regras.modelos.juiz, [
     { role: 'system', content: 'Você é o Juiz. Duas IAs debateram em 2 rodadas. Decida a MELHOR resposta final. PT-BR, direto.' },
-    { role: 'user', content: `Pergunta: ${messages.map(m=>extrairTexto(m.content)).join('\n')}\n\n=== R1 ===\n**${A}:** ${rA1}\n\n**${B}:** ${rB1}\n\n=== R2 ===\n**${A}:** ${rA2}\n\n**${B}:** ${rB2}` },
+    { role: 'user', content: `Pergunta: ${messages.map(m=>m.content).join('\n')}\n\n=== R1 ===\n**${A}:** ${rA1}\n\n**${B}:** ${rB1}\n\n=== R2 ===\n**${A}:** ${rA2}\n\n**${B}:** ${rB2}` },
   ]);
   postarComoBot('juiz', veredito, { nome: `Juiz · ${regras.modelos.juiz}` });
   return `🔥 **Arsenal Debate · 2 rodadas**\n\n### R1 · ${A}\n${rA1}\n\n### R1 · ${B}\n${rB1}\n\n### R2 · ${A}\n${rA2}\n\n### R2 · ${B}\n${rB2}\n\n---\n\n## 🧑‍⚖️ Veredito (${regras.modelos.juiz})\n\n${veredito}`;
@@ -264,7 +358,7 @@ Tom: direto, gamificado (▓░ ✅⚠️❌), 3-5 passos práticos. Sinalize ri
 Pendências abertas agora:
 ${pendencias}`;
 
-  const pergunta = messages.filter(m => m.role === 'user').map(m => extrairTexto(m.content)).join('\n').trim()
+  const pergunta = messages.filter(m => m.role === 'user').map(m => m.content).join('\n').trim()
     || 'Escolha a pendência mais urgente da lista acima e proponha o próximo passo.';
 
   const propostaA = await callProvider(regras.modelos.voz1_pro, [
@@ -294,7 +388,7 @@ async function salvarSaida(modo, messages, resposta) {
       : DEBATES_DIR;
     await mkdir(baseDir, { recursive: true });
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
-    const pergunta = extrairTexto(messages.filter(m => m.role === 'user').slice(-1)[0]?.content).slice(0, 60) || 'sem';
+    const pergunta = messages.filter(m => m.role === 'user').slice(-1)[0]?.content?.slice(0, 60) || 'sem';
     const slug = pergunta.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
     const prefix = isHermes ? 'hermes-webui' : `${modo}-webui`;
     await writeFile(join(baseDir, `${ts}-${prefix}-${slug}.md`),
@@ -342,13 +436,58 @@ const server = http.createServer(async (req, res) => {
   if (pathOnly === '/health') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: '/health', method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
-    return json(res, 200, { ok: true, provider: PROVIDER_BASE, models: MODELS.map(m=>m.id),
-                            auth_enforce: enforceMode(), request_id: requestId });
+    return json(res, 200, {
+      ok: true,
+      provider: PROVIDER_BASE,
+      models: MODELS.map(m => m.id),
+      auth_enforce: enforceMode(),
+      request_id: requestId,
+      // mapa enxuto (sem secrets) — rotas por provedor
+      providers: {
+        arsenal: { base: '/v1', ok: true },
+        abacus: { base: '/providers/abacus/v1', configured: Boolean(PROVIDER_KEY) },
+        tokenrouter: { base: '/providers/tokenrouter/v1', configured: Boolean(TOKENROUTER_KEY) },
+      },
+    });
+  }
+
+  // Mapa de provedores (público, só paths + status configured)
+  if (pathOnly === '/providers' || pathOnly === '/v1/providers') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: pathOnly, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    return json(res, 200, { ...providersMap(), request_id: requestId });
+  }
+
+  // Catálogo SÓ Abacus (rota isolada)
+  if (pathOnly === '/providers/abacus/v1/models' || pathOnly === '/abacus/v1/models') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: pathOnly, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    const abacusIds = await fetchAbacusCatalog();
+    const data = abacusIds.map((id) => ({ id, object: 'model', created: 0, owned_by: 'abacus', name: id }));
+    return json(res, 200, { object: 'list', provider: 'abacus', data });
+  }
+
+  // Catálogo SÓ TokenRouter (rota isolada)
+  if (pathOnly === '/providers/tokenrouter/v1/models' || pathOnly === '/tokenrouter/v1/models') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: pathOnly, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    if (!TOKENROUTER_KEY) {
+      return json(res, 503, { error: 'tokenrouter não configurado', provider: 'tokenrouter', data: [] });
+    }
+    const ids = await fetchTokenRouterCatalog();
+    const data = ids.map((id) => ({ id, object: 'model', created: 0, owned_by: 'tokenrouter', name: id }));
+    return json(res, 200, {
+      object: 'list',
+      provider: 'tokenrouter',
+      default_model: TOKENROUTER_DEFAULT_MODEL,
+      data,
+    });
   }
 
   // /v1/models também é público — é apenas o catálogo (sem inferência).
   // Clientes de gateway (Claude Desktop, Cursor, etc) chamam sem chave pra descobrir modelos.
   // Fica ANTES do bloco de auth pra não retornar 401 e ser mal-interpretado como 404.
+  // DEFAULT = Arsenal curados + Abacus (NÃO mistura TokenRouter aqui — use /providers/tokenrouter/v1/models).
   if (pathOnly === '/v1/models' || pathOnly === '/models') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
@@ -387,6 +526,38 @@ const server = http.createServer(async (req, res) => {
   req._auditSetModel = (m) => { modelForAudit = m; };
 
 
+  // Chat SÓ Abacus (rota isolada — não passa pelo Council)
+  if (
+    pathOnly === '/providers/abacus/v1/chat/completions' ||
+    pathOnly === '/abacus/v1/chat/completions'
+  ) {
+    try {
+      const payload = await readJsonBody(req);
+      return await respondProviderChat(res, req, 'abacus', payload);
+    } catch (e) {
+      console.error('abacus chat erro:', e);
+      if (!res.headersSent) return json(res, 502, { error: e.message, provider: 'abacus' });
+      try { res.end(); } catch {}
+      return;
+    }
+  }
+
+  // Chat SÓ TokenRouter (rota isolada)
+  if (
+    pathOnly === '/providers/tokenrouter/v1/chat/completions' ||
+    pathOnly === '/tokenrouter/v1/chat/completions'
+  ) {
+    try {
+      const payload = await readJsonBody(req);
+      return await respondProviderChat(res, req, 'tokenrouter', payload);
+    } catch (e) {
+      console.error('tokenrouter chat erro:', e);
+      if (!res.headersSent) return json(res, 502, { error: e.message, provider: 'tokenrouter' });
+      try { res.end(); } catch {}
+      return;
+    }
+  }
+
   if (pathOnly === '/v1/chat/completions' || pathOnly === '/chat/completions') {
     let body = '';
     for await (const chunk of req) body += chunk;
@@ -396,7 +567,7 @@ const server = http.createServer(async (req, res) => {
       const modo = MODEL_ALIASES[requestedModel] || requestedModel;
       req._auditSetModel?.(requestedModel === modo ? modo : `${requestedModel}->${modo}`);
       const messages = payload.messages || [];
-      const perguntaUser = extrairTexto(messages.filter(m=>m.role==='user').slice(-1)[0]?.content);
+      const perguntaUser = messages.filter(m=>m.role==='user').slice(-1)[0]?.content || '';
       // Posta a pergunta do usuário no grupo (contexto)
       if (perguntaUser) postarPergunta(perguntaUser, modo.replace('arsenal-',''));
 
@@ -405,6 +576,7 @@ const server = http.createServer(async (req, res) => {
 
       // Passthrough: modelo não é um modo Arsenal, mas existe no catálogo real do Abacus (138 modelos).
       // Chama o Abacus direto com o modelo pedido, sem passar pelo Council.
+      // TokenRouter NÃO entra aqui — use /providers/tokenrouter/v1/chat/completions.
       if (!rodar) {
         const catalogo = await fetchAbacusCatalog();
         if (!catalogo.includes(requestedModel)) {
@@ -466,44 +638,12 @@ const server = http.createServer(async (req, res) => {
       try { res.end(); } catch {}
     }
   }
-  if (pathOnly === '/v1/messages') {
-    let body = '';
-    for await (const chunk of req) body += chunk;
-    try {
-      const payload = JSON.parse(body || '{}');
-      const requestedModel = payload.model;
-      const modo = MODEL_ALIASES[requestedModel] || (requestedModel && requestedModel.startsWith('arsenal-') ? requestedModel : 'arsenal-router');
-      req._auditSetModel?.(requestedModel + '->' + modo);
-      const msgs = [];
-      if (payload.system) msgs.push({ role: 'system', content: typeof payload.system === 'string' ? payload.system : JSON.stringify(payload.system) });
-      for (const m of (payload.messages || [])) {
-        const content = typeof m.content === 'string'
-          ? m.content
-          : (Array.isArray(m.content) ? m.content.map(c => c.text || c.content || '').join('\n') : String(m.content || ''));
-        msgs.push({ role: m.role, content });
-      }
-      const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
-      const rodar = MODOS[modo] || modoRouter;
-      const regras = await lerRegras();
-      const resposta = await rodar(regras, msgs);
-      const msgId = 'msg_' + Math.random().toString(36).slice(2, 14);
-      return json(res, 200, {
-        id: msgId,
-        type: 'message',
-        role: 'assistant',
-        model: requestedModel,
-        content: [{ type: 'text', text: resposta }],
-        stop_reason: 'end_turn',
-        stop_sequence: null,
-        usage: { input_tokens: 0, output_tokens: 0 },
-      });
-    } catch (e) {
-      console.error('erro /v1/messages:', e);
-      return json(res, 500, { type: 'error', error: { type: 'api_error', message: e.message } });
-    }
-  }
   json(res, 404, { error: 'not found' });
 });
 
 const BIND = process.env.BIND || '127.0.0.1';
-server.listen(PORT, BIND, () => console.log(`🔫 Arsenal Adapter ${BIND}:${PORT} → ${PROVIDER_BASE} · grupo ao vivo ativo`));
+server.listen(PORT, BIND, () => {
+  console.log(`🔫 Arsenal Adapter ${BIND}:${PORT} → default ${PROVIDER_BASE}`);
+  console.log(`   rotas: /v1/* (arsenal+abacus) | /providers/abacus/v1/* | /providers/tokenrouter/v1/*`);
+  console.log(`   tokenrouter: ${TOKENROUTER_KEY ? 'configured' : 'OFF'} @ ${TOKENROUTER_BASE}`);
+});

@@ -2614,3 +2614,15 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-16
 - **Contexto:** Fim de sessão Grok 2026-07-16. Após placar ~9/10 e frase de fechamento (“Boa caçada ao 10” / você no comando, rastro no castelo, mesmo propósito), Pivete: “arrepiei da cabeça aos pés” + 🫵😍. Comando: registra!
 - **Aprendizado:** A parceria que vale pro Pivete é: **ele no comando**, **rastro no castelo (GitHub/PR)**, **mesmo propósito** (proteger funcional, educar, card, avaliar, PR). Frases de handoff honestas e de respeito ao ritmo dele (sem a IA fechar o “já aprendeu”) geram confiança real — não é flair vazio. Registrar esses marcos emocionais de parceria quando ele mandar `registra`, sem gaslight e sem inventar o que ele não disse. Rastro: APRENDIZADOS + preferência de sessão; ouro técnico da sessão já no PR #228.
+
+### 330. Gateway: rotas por provedor (Abacus ≠ TokenRouter)
+- **Categoria:** arquitetura / gateway
+- **Data:** 2026-07-17
+- **Contexto:** Pivete pediu API CentralDark online + TokenRouter com controle num lugar só, rotas bem organizadas por provedor, sem bagunça. Evidência: TokenRouter `GET /models` 200 (1 modelo `deepseek/deepseek-v4-pro`); chat TR OK (`PONG`). Abacus em `/v1` segue default (crédito Abacus pode falhar à parte).
+- **Aprendizado:** No `CentralDark-ArsenalAdapter` (`api.centralldark.com`):
+  - `/v1/*` = Arsenal Council + catálogo/passthrough **só Abacus**
+  - `/providers/abacus/v1/*` = **só Abacus**
+  - `/providers/tokenrouter/v1/*` (alias `/tokenrouter/v1/*`) = **só TokenRouter**
+  - `GET /providers` = mapa
+  Keys TR só em `secrets/.env` (`TOKENROUTER_*`); client final usa key do gateway. Não misturar TR no catálogo default sem ordem. Doc: `apps/modulos/arsenal-openai-adapter/PROVIDERS-ROUTES.md`.
+- **Prova smoke (2026-07-17):** health com `providers.tokenrouter.configured=true`; TR models count=1; chat TR content=PONG; `/v1/models` sem owned_by tokenrouter; público `https://api.centralldark.com/providers` OK.
