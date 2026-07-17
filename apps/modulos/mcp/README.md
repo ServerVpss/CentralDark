@@ -38,7 +38,7 @@ pm2 logs CentralDark-MCP         # vê os logs
 | 🗄️ Supabase | 4 | Consultar banco, schema, migrations |
 | 🚀 Deploy | 1–2 | Status de deploy |
 | 📡 Integrações | 13 | Notion, Linear, Sentry |
-| 🌐 Elite Gateway | 3 | Falar com os modelos via proxy próprio (claude.ap7.site) |
+| 🌐 Elite Gateway | 3 | Falar com os modelos via Gateway próprio (api.centralldark.com) |
 | 📊 Painel/Admin | ~9 | Atualizar painel, admin e diagnóstico do próprio MCP |
 | 🧩 Outras | 2 | Code reviewer, ferramenta de teste do Pivete |
 | **🧠 Cognitivas** | **4** | **Lembranças + governança cognitiva — ver abaixo** |
