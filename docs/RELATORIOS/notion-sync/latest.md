@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-16T23:56:50.452Z
+# 🧠 Notion Sync — 2026-07-17T04:05:47.182Z
 
-- **Commit fonte:** `c130cb405b47aaf8ad0e42d4226fd3d33820731c`
+- **Commit fonte:** `c387aa04e66bd4edf5573bd895adffcb6550115c`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 375 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 376 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -14,8 +14,8 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 38 | 0 | 38 | 0 | 0 |
-| aprendizados | 333 | 1 | 332 | 0 | 0 |
+| decisoes | 39 | 1 | 38 | 0 | 0 |
+| aprendizados | 333 | 0 | 333 | 0 | 0 |
 | estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
@@ -27,6 +27,7 @@
 | regras | atualizado | Guardião da Consciência — Modo Propor Obrigatório (até 08/07/2026) |
 | regras | atualizado | Guardião v2 — Arquitetura de 2 camadas (Olho + Cérebro/Fila) |
 | pendencias | atualizado | #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20) |
+| decisoes | criado | 2026-07-16 — Reformulação da regra-mãe multi-agente (alinhamento ao canon de julho) |
 | decisoes | atualizado | 2026-07-14 — Carga mental do Pivete + momento bridge (o que ELE disse) |
 | decisoes | atualizado | Sessão 2026-07-13/14 — Doutrina de extensão de infra + registro anti-amnésia |
 | decisoes | atualizado | Regra: sempre registrar desencontros entre plano e execução (2026-06-29) |
@@ -397,7 +398,7 @@
 | aprendizados | atualizado | #328 — Decisões 502: install OFF, ui OFF, bridge é rota morta (canal Grok vive noutro lugar) |
 | aprendizados | atualizado | #329 — 502→503 limpo em install/ui/bridge + armadilha do bloco log no Caddy |
 | aprendizados | atualizado | #330 — ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK) |
-| aprendizados | criado | #331 — Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete |
+| aprendizados | atualizado | #331 — Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
