@@ -45,6 +45,10 @@ jobs:
             echo "ERRO: argumento curl contém operador '+' inválido" >&2
             exit 1
           fi
+          if grep -Fq -- '--diff-file "$DIFF"' scripts/reviewers/provider-fallback-review.sh; then
+            echo "ERRO: fallback tenta enviar diff não sanitizado" >&2
+            exit 1
+          fi
           test -s apps/modulos/arsenal-openai-adapter/PROVIDERS-ROUTES.md
           bash scripts/reviewers/review-security.test.sh
           source scripts/reviewers/review-security.sh
