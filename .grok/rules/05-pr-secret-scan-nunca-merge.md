@@ -8,7 +8,7 @@
 ```text
 🚨 Alerta de segurança automático
 ⛔ Padrão de segredo detectado no diff — revisar antes do merge.
-Verificar: .env, secrets/, tokens/, sessions/, *.pem, *.key, -----BEGIN PRIVATE KEY.
+Verificar: arquivos de ambiente, cofres, tokens, sessões, certificados e chaves privadas.
 ```
 
 Qualquer mensagem equivalente (secret scan, gitleaks, “credential in diff”) = **mesma lei**.
@@ -24,7 +24,7 @@ Qualquer mensagem equivalente (secret scan, gitleaks, “credential in diff”) 
 ## Antes de `git push` / abrir PR (checklist Grok)
 
 - [ ] Branch criada de `origin/main` (não da VPS divergente com 7k commits)
-- [ ] `git status` / `git diff --name-only` — zero: `.env`, `secrets/`, `*.pem`, `*.key`, `tokens/`, `sessions/`
+- [ ] `git status` / `git diff --name-only` — zero paths classificados como configuração privada, cofre, token, sessão, certificado ou chave
 - [ ] Nenhum literal: `cdk_live_…`, `sk-…`, `gsk_…`, `BEGIN PRIVATE KEY`, connection string com senha
 - [ ] Ecosystem/PM2: keys só via `process.env` / arquivo **fora** do Git — nunca string fixa no commit
 - [ ] Se o scan gritar → **parar**, listar **só paths**, abrir PR limpo, comentar DO NOT MERGE no sujo
@@ -53,7 +53,7 @@ Qualquer mensagem equivalente (secret scan, gitleaks, “credential in diff”) 
 
 - Auto-registro castelo: incidente de secret **sempre** registra (proteção)
 - PR pra crítica: corpo do PR pede relevância + sem destruir legado; **secret bloqueia merge**
-- Fluxo de Ouro: GitHub = Fonte da Verdade **sem** secrets; secrets = VPS/`secrets/` fora do Git
+- Fluxo de Ouro: GitHub = Fonte da Verdade **sem credenciais**; o cofre fica na VPS, fora do Git
 
 ## Nunca
 
