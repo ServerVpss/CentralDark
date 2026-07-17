@@ -2626,3 +2626,9 @@ curl -s http://localhost:9100/health  # MCP OK?
   - `GET /providers` = mapa
   Keys TR só em `secrets/.env` (`TOKENROUTER_*`); client final usa key do gateway. Não misturar TR no catálogo default sem ordem. Doc: `apps/modulos/arsenal-openai-adapter/PROVIDERS-ROUTES.md`.
 - **Prova smoke (2026-07-17):** health com `providers.tokenrouter.configured=true`; TR models count=1; chat TR content=PONG; `/v1/models` sem owned_by tokenrouter; público `https://api.centralldark.com/providers` OK.
+
+### 331. Fallback central abacus→tokenrouter em api.centralldark.com
+- **Categoria:** arquitetura / resiliência
+- **Data:** 2026-07-17
+- **Contexto:** Pivete: fallback sempre no sistema de API central; se uma falha, joga pra outra; concentrar providers organizados.
+- **Aprendizado:** No Arsenal Adapter, `callProvider` (Council + passthrough `/v1`) tenta Abacus e, se falhar, TokenRouter (`TOKENROUTER_MODEL`). Rotas `/providers/{abacus|tokenrouter}/v1/*` ficam **puras** (sem cruzar) pra manutenção. Prova: header `X-CentralDark-Upstream` (ASCII) + campo `centraldark` no JSON. Smoke 2026-07-17: arsenal-router → abacus fail (sem crédito) → tokenrouter ok deepseek → content FALLBACK_OK.

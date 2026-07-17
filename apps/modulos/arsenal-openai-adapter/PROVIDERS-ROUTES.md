@@ -18,10 +18,29 @@ Aliases curtos Abacus: `/abacus/v1/models` e `/abacus/v1/chat/completions`.
 
 ## O que cada um faz
 
-- **`/v1/*`** — Council Arsenal (`arsenal-router|parallel|debate|hermes`) + passthrough **só Abacus**.  
-  Catálogo default = curados Arsenal + modelos Abacus. **TokenRouter não entra aqui.**
-- **`/providers/abacus/v1/*`** — só Abacus (`PROVIDER_BASE` / RouteLLM).
-- **`/providers/tokenrouter/v1/*`** — só TokenRouter (`TOKENROUTER_*` em `secrets/.env`).
+- **`/v1/*`** — **sistema central** (Council + passthrough) com **FALLBACK automático**:  
+  `abacus → tokenrouter` (default model TR se o modelo pedido não existir no TR).  
+  Catálogo GET ainda lista Arsenal + Abacus (TR fica na rota própria).  
+  Headers de prova: `X-CentralDark-Upstream`, `X-CentralDark-Route`. Body: `centraldark.upstream`.
+- **`/providers/abacus/v1/*`** — Abacus **puro** (sem fallback) — diagnóstico/manutenção.
+- **`/providers/tokenrouter/v1/*`** — TokenRouter **puro** (sem fallback) — diagnóstico/manutenção.
+
+### Fallback (sempre no `/v1`)
+
+```text
+pedido /v1/chat  ou  arsenal-*
+       │
+       ▼
+   Abacus RouteLLM
+       │ falha (crédito, 5xx, vazio…)
+       ▼
+   TokenRouter (modelo pedido se tiver acesso, senão TOKENROUTER_MODEL)
+       │ falha
+       ▼
+   erro estruturado: "fallback esgotado..."
+```
+
+Desligar: `FALLBACK_ENABLED=false` no env do PM2.
 
 ## Secrets (VPS, fora do Git)
 
