@@ -128,7 +128,7 @@
       "via": "centraldark-gateway",
       "timeout_s": 30,
       "ativo": true,
-      "nota": "ELITE — última bala via Gateway CentralDark (api.centralldark.com). Migrado em 10/07/2026 (Cloudflare 524 no ap7.site)."
+      "nota": "ELITE — última bala via Gateway CentralDark (api.centralldark.com). Migrado em 10/07/2026 após remoção do proxy legado."
     }
   ],
   "elite": {
@@ -137,7 +137,7 @@
     "env_token": "CENTRALLDARK_API_KEY",
     "retry": 1,
     "backoff_s": 2,
-    "nota": "Migrado do claude.ap7.site para api.centralldark.com em 10/07/2026"
+    "nota": "Gateway oficial consolidado em api.centralldark.com em 10/07/2026"
   },
   "cache": {
     "ttl_min": 10,
