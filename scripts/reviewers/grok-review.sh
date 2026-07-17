@@ -69,7 +69,13 @@ try_gateway() {
       {role: "user", content: .}
     ]
   }' < "$COMBINED")"
-  status="$(curl -sS --max-time 300 -o "$RESP" -w '%{http_code}' +    -H "Authorization: Bearer ${CENTRALDARK_GATEWAY_KEY}" +    -H "Content-Type: application/json" +    -d "$body" "$base/chat/completions")" || return 1
+  status="$(
+    curl -sS --max-time 300 -o "$RESP" -w '%{http_code}' \
+      -H "Authorization: Bearer ${CENTRALDARK_GATEWAY_KEY}" \
+      -H "Content-Type: application/json" \
+      -d "$body" \
+      "$base/chat/completions"
+  )" || return 1
   case "$status" in 2??) ;; *) return 1 ;; esac
   jq -e '.choices[0].message.content | strings | select(length > 0)' "$RESP" >/dev/null 2>&1 || return 1
   jq -r '.choices[0].message.content' "$RESP" > "$OUT"
