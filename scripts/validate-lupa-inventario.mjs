@@ -3,10 +3,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const repoRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const paths = {
   config: path.join(repoRoot, 'apps/bot-telegram/skills/config/skills.json'),
@@ -16,6 +17,9 @@ const paths = {
 };
 
 const checks = [];
+let expectedSkillHash = 'N/A';
+let expectedPromptHash = 'N/A';
+
 const check = (name, condition, detail = '') => {
   checks.push({ name, ok: Boolean(condition), detail });
 };
@@ -29,8 +33,8 @@ if (checks.some(item => !item.ok)) finish();
 const config = JSON.parse(fs.readFileSync(paths.config, 'utf-8'));
 const skillText = fs.readFileSync(paths.skill, 'utf-8');
 const promptText = fs.readFileSync(paths.prompt, 'utf-8');
-const expectedSkillHash = sha256(skillText);
-const expectedPromptHash = sha256(promptText);
+expectedSkillHash = sha256(skillText);
+expectedPromptHash = sha256(promptText);
 
 const registrations = (config.methodology?.skills || [])
   .filter(skill => skill.slug === 'tecnica-da-lupa-premium');
@@ -117,8 +121,8 @@ function finish() {
   console.log('# Prova — Técnica da Lupa Premium + Inventário FULL');
   console.log(`branch=${process.env.GITHUB_REF_NAME || 'local'}`);
   console.log(`head_sha=${process.env.GITHUB_SHA || 'local'}`);
-  console.log(`skill_sha256=${typeof expectedSkillHash === 'undefined' ? 'N/A' : expectedSkillHash}`);
-  console.log(`prompt_sha256=${typeof expectedPromptHash === 'undefined' ? 'N/A' : expectedPromptHash}`);
+  console.log(`skill_sha256=${expectedSkillHash}`);
+  console.log(`prompt_sha256=${expectedPromptHash}`);
   console.log(`checks=${checks.length - failed.length}/${checks.length}`);
 
   for (const item of checks) {
