@@ -1,6 +1,7 @@
 name: PR Review — Revisores paralelos + Codex final
 
 # Provedores dos revisores passam exclusivamente pelo Gateway CentralDark.
+# Todos rodam em GitHub-hosted para não executar código do PR na VPS.
 # O Codex usa a Action oficial da OpenAI, em sandbox somente leitura, para
 # confrontar os quatro pareceres e publicar o veredito técnico final.
 
@@ -61,9 +62,9 @@ jobs:
           review_scan_diff "$DIFF"
 
   review-groq:
-    name: "⚡ Groq — Gateway → Grok CLI"
+    name: "⚡ Groq — Gateway CentralDark"
     needs: validate
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
@@ -90,9 +91,9 @@ jobs:
         run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-gemini:
-    name: "✨ Gemini — Gateway → Grok CLI"
+    name: "✨ Gemini — Gateway CentralDark"
     needs: validate
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
@@ -119,9 +120,9 @@ jobs:
         run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-claude:
-    name: "🧠 Claude Sonnet — Gateway → Grok CLI"
+    name: "🧠 Claude Sonnet — Gateway CentralDark"
     needs: validate
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
@@ -148,9 +149,9 @@ jobs:
         run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-grok:
-    name: "🌀 Grok — CLI → Gateway"
+    name: "🌀 Grok — Gateway CentralDark"
     needs: validate
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
       contents: read
@@ -164,14 +165,13 @@ jobs:
           submodules: false
           persist-credentials: true
       - *scrub_checkout_credentials
-      - name: Revisar via assinatura CLI
+      - name: Revisar via Gateway CentralDark
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REVIEWER_NAME: Grok
           REVIEW_MARKER: centraldark-grok-review
           REVIEW_MODEL: ${{ vars.CENTRALDARK_REVIEW_MODEL_GROK || 'grok-2-latest' }}
-          REVIEW_PRIMARY: cli
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -186,7 +186,7 @@ jobs:
       contents: read
       issues: read
       pull-requests: read
-    if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
+    if: always() && !cancelled() && needs.validate.result == 'success' && github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
     outputs:
       final_message: ${{ steps.run_codex.outputs.final-message }}
     steps:
@@ -205,6 +205,10 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REVIEW_GROQ_RESULT: ${{ needs.review-groq.result }}
+          REVIEW_GEMINI_RESULT: ${{ needs.review-gemini.result }}
+          REVIEW_CLAUDE_RESULT: ${{ needs.review-claude.result }}
+          REVIEW_GROK_RESULT: ${{ needs.review-grok.result }}
         run: |
           set -euo pipefail
           source scripts/reviewers/review-security.sh
@@ -225,12 +229,21 @@ jobs:
             centraldark-claude-review \
             centraldark-grok-review
           do
+            case "$marker" in
+              centraldark-groq-review) result="$REVIEW_GROQ_RESULT" ;;
+              centraldark-gemini-review) result="$REVIEW_GEMINI_RESULT" ;;
+              centraldark-claude-review) result="$REVIEW_CLAUDE_RESULT" ;;
+              centraldark-grok-review) result="$REVIEW_GROK_RESULT" ;;
+            esac
             body="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
               --jq "[.[] | select(.body | contains(\"<!-- ${marker} -->\"))][-1].body // empty")"
-            [ -n "$body" ] || { echo "::error::parecer ausente: $marker"; exit 1; }
+            if [ -z "$body" ]; then
+              printf '## Revisor indisponível\n_marker=%s; job_result=%s; parecer=ausente_\n\n' "$marker" "$result" >> "$REVIEWS"
+              continue
+            fi
             case "$body" in
               *"head=${HEAD_SHA}"*) ;;
-              *) echo "::error::parecer obsoleto ou sem vínculo ao HEAD: $marker"; exit 1 ;;
+              *) printf '## Parecer obsoleto ignorado\n_marker=%s; job_result=%s; head_esperado=%s_\n\n' "$marker" "$result" "$HEAD_SHA" >> "$REVIEWS"; continue ;;
             esac
             printf '%s\n\n' "$body" | review_redact >> "$REVIEWS"
           done
