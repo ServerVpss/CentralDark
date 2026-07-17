@@ -72,6 +72,7 @@ jobs:
         env:
           GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
+          CENTRALDARK_GATEWAY_BASE: ${{ vars.CENTRALDARK_GATEWAY_BASE || 'http://127.0.0.1:8090/v1' }}
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
@@ -82,7 +83,7 @@ jobs:
             echo "provider=groq_direct"
           elif [ -n "$CENTRALDARK_GATEWAY_KEY" ]; then
             export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
-            export OPENAI__API_BASE="https://api.centralldark.com/v1"
+            export OPENAI__API_BASE="$CENTRALDARK_GATEWAY_BASE"
             export CONFIG__MODEL="openai/llama-3.3-70b-versatile"
             export CONFIG__FALLBACK_MODELS='["openai/llama-3.3-70b-versatile"]'
             echo "provider=centraldark_gateway_fallback"
@@ -130,6 +131,7 @@ jobs:
       - name: Review
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
+          CENTRALDARK_GATEWAY_BASE: ${{ vars.CENTRALDARK_GATEWAY_BASE || 'http://127.0.0.1:8090/v1' }}
           GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
@@ -138,7 +140,7 @@ jobs:
             exit 1
           fi
           export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
-          export OPENAI__API_BASE="https://api.centralldark.com/v1"
+          export OPENAI__API_BASE="$CENTRALDARK_GATEWAY_BASE"
           export CONFIG__MODEL="openai/gemini-flash-latest"
           export CONFIG__FALLBACK_MODELS='["openai/gemini-flash-latest"]'
           export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
@@ -181,6 +183,7 @@ jobs:
       - name: Review
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
+          CENTRALDARK_GATEWAY_BASE: ${{ vars.CENTRALDARK_GATEWAY_BASE || 'http://127.0.0.1:8090/v1' }}
           GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
@@ -189,7 +192,7 @@ jobs:
             exit 1
           fi
           export OPENAI__KEY="$CENTRALDARK_GATEWAY_KEY"
-          export OPENAI__API_BASE="https://api.centralldark.com/v1"
+          export OPENAI__API_BASE="$CENTRALDARK_GATEWAY_BASE"
           export CONFIG__MODEL="openai/claude-sonnet-4-6"
           export CONFIG__FALLBACK_MODELS='["openai/claude-sonnet-4-6"]'
           export CONFIG__CUSTOM_MODEL_MAX_TOKENS=32768
