@@ -62,7 +62,7 @@ jobs:
           submodules: false
       - name: Revisar via Gateway CentralDark
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REVIEWER_NAME: Groq
           REVIEW_MARKER: centraldark-groq-review
@@ -85,7 +85,7 @@ jobs:
           submodules: false
       - name: Revisar via Gateway CentralDark
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REVIEWER_NAME: Gemini
           REVIEW_MARKER: centraldark-gemini-review
@@ -108,7 +108,7 @@ jobs:
           submodules: false
       - name: Revisar via Gateway CentralDark
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REVIEWER_NAME: Claude Sonnet
           REVIEW_MARKER: centraldark-claude-review
@@ -131,7 +131,7 @@ jobs:
           submodules: false
       - name: Revisar via assinatura CLI
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REVIEWER_NAME: Grok
           REVIEW_MARKER: centraldark-grok-review
