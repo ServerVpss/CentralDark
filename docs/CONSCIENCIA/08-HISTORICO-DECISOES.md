@@ -8,6 +8,26 @@ updated: 2026-06-29
 # 08 — Histórico de decisões grandes
 
 
+## 2026-07-16 — Reformulação da regra-mãe multi-agente (alinhamento ao canon de julho)
+
+**Título:** `REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md` atualizada in-place — Lei Zero e guardrails corrigidos
+**Data:** 2026-07-16
+**Responsável:** Pivete (autorização explícita na sessão: "EU AUTORIZO VOCÊ A MELHORAR") · execução Claude
+**Reversível:** sim (git revert; mudança só em docs, via branch + PR)
+
+**O que mudou e por quê:**
+1. **Lei Zero:** ciclo `Ler → Agir → Registrar` virou o ciclo canônico de 5 passos `Ler → Perguntar → Agir → Provar → Registrar` (o mesmo do `PROTOCOLO-ORQUESTRACAO-PIVETE.md` — um ciclo só pro ecossistema). Pivete agora está explícito no topo da lei; definição objetiva de "tarefa relevante"; kill-switch (`TRAVA`/`PARA`/`!CALIBRA`); precedência entre documentos.
+2. **Guardrails:** protocolo de autorização alinhado à Doutrina (`PERMITO PIVETE` / escopo nomeado / silêncio = não agir); áreas protegidas por referência à tabela canônica do `CLAUDE.md` Seção 9 (fim da lista duplicada divergente); corrigidos dois erros factuais — `/mcp-public` (removido 30/06) ainda citado como ativo, e `notify-telegram` citado como exemplo válido quando é proibido pelo `PADRAO-CARD-HERMES.md`.
+3. **Fonte da Verdade:** doc passou a refletir o Fluxo de Ouro 5-Point (GitHub/VPS/Supabase/Gateway/Cérebro Vivo); Notion rebaixado ao papel real de espelho humano automático via `notion-sync` (registrar direto no Notion não vale como prova).
+4. **Papéis:** papéis fixos por marca ("Claude planeja, Lovable executa, Codex lê") substituídos por papéis funcionais ("IAs variam, o método permanece"), com roteamento via Arsenal/`darkai` e inclusão dos agentes autônomos internos no escopo da regra.
+5. **Proibições:** expandidas com as críticas do canon (secrets, `pm2 restart all`, `whatsapp-server`, force-push na main, endpoint oficial).
+
+**Método (decisão de forma, acordada com o Pivete):** sem arquivo novo, sem rótulo "v2" — extensão segura do que existe, conforme doutrina selada em 2026-07-13/14 ("Alteração = extensão segura, nunca substituição / V3-V4"). Quem versiona é o git. Espelhada também a cópia em `docs/CONSCIENCIA/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/` e atualizada a descrição no `00-ENTRADA/00-LEIA-PRIMEIRO.md`.
+
+**Pendência anotada (não executada):** a árvore duplicada `docs/CONSCIENCIA/CONSCIENCIA/` (~110 arquivos espelhados) merece auditoria futura — decidir se consolida ou remove.
+
+---
+
 ## 2026-07-14 — Carga mental do Pivete + momento bridge (o que ELE disse)
 
 **Título:** Não é risco operacional — é mental; e o momento do bridge não se esquece  
