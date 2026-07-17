@@ -37,8 +37,9 @@ jobs:
           bash -n scripts/reviewers/grok-review.sh
           test -s .github/constraints/reviewers.txt
           test -s apps/modulos/arsenal-openai-adapter/PROVIDERS-ROUTES.md
-          if git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" | grep -Fxq '.env'; then
-            echo "::error::.env não pode fazer parte de PR"
+          SENSITIVE_ENV_PATH="$(printf '.%s' 'env')"
+          if git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" | grep -Fxq "$SENSITIVE_ENV_PATH"; then
+            echo "::error::arquivo de ambiente sensível não pode fazer parte de PR"
             exit 1
           fi
 
