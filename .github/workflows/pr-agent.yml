@@ -51,7 +51,7 @@ jobs:
 
   review-groq:
     name: "⚡ Groq — Gateway → Grok CLI"
-    needs: validate
+    needs: [validate, review-grok]
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
@@ -74,7 +74,7 @@ jobs:
 
   review-gemini:
     name: "✨ Gemini — Gateway → Grok CLI"
-    needs: validate
+    needs: [validate, review-grok]
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
@@ -97,7 +97,7 @@ jobs:
 
   review-claude:
     name: "🧠 Claude Sonnet — Gateway → Grok CLI"
-    needs: validate
+    needs: [validate, review-grok]
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
