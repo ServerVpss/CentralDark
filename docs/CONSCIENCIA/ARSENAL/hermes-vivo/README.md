@@ -22,7 +22,7 @@
 | 1 | `google/gemini-3-flash-preview` | 15s | `darkai` (padrão) |
 | 2 | `google/gemini-2.5-pro` | 30s | `darkai --model ...` |
 | 3 | `openai/gpt-5-mini` | 45s | `darkai --model ...` |
-| 4 | **Elite Anthropic Proxy** (`claude-sonnet-4-5`) | 30s + 1 retry (2s backoff) | `fetch` direto pra `https://claude.ap7.site/v1/messages` |
+| 4 | **Gateway CentralDark** (`claude-sonnet-4-5`) | 30s + 1 retry (2s backoff) | `chamada OpenAI-compatible para `https://api.centralldark.com/v1/chat/completions` |
 
 Se **todos os 4** falharem → erro total (extremamente raro).
 
@@ -42,7 +42,7 @@ Se **todos os 4** falharem → erro total (extremamente raro).
 
 > No diagrama aparece "PASSO 0: descobrir rota com curl" — **já foi resolvido**.
 
-- **Rota confirmada**: `POST https://claude.ap7.site/v1/messages`
+- **Rota confirmada**: `POST https://api.centralldark.com/v1/chat/completions`
 - **Header de auth**: `x-api-key: $ELITE_ANTHROPIC_TOKEN`
 - **Modelo**: `claude-sonnet-4-5`
 - **Token**: extraído do PM2 id 52 (`ANTHROPIC_AUTH_TOKEN`) e injetado em `CentralDark-Hermes.config.cjs` como `ELITE_ANTHROPIC_TOKEN`.
