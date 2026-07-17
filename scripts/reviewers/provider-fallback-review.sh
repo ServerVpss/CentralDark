@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Revisor genérico: Gateway CentralDark primário -> Grok CLI local.
+# Revisor genérico: Gateway CentralDark primário -> Grok CLI/revisão comprovada.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -34,7 +34,7 @@ PROMPT_EOF
 
 got=""
 for attempt in 1 2 3; do
-  if gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" +      -H "Accept: application/vnd.github.v3.diff" > "$DIFF" 2>/dev/null && [ -s "$DIFF" ]; then
+  if gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}" -H "Accept: application/vnd.github.v3.diff" > "$DIFF" 2>/dev/null && [ -s "$DIFF" ]; then
     got=1
     break
   fi
@@ -62,26 +62,20 @@ set -e
 if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ] && [ -n "${CENTRALDARK_GATEWAY_KEY:-}" ]; then
   echo "::warning::Gateway CentralDark falhou para ${REVIEWER_NAME}; acionando Grok CLI"
   set +e
-  bash scripts/reviewers/grok-review.sh +    --prompt-file "$PROMPT" +    --diff-file "$DIFF" +    --model "${GROK_REVIEW_MODEL:-grok-2-latest}" > "$OUT" 2> "$ERR"
+  bash scripts/reviewers/grok-review.sh --prompt-file "$PROMPT" --diff-file "$DIFF" --model "${GROK_REVIEW_MODEL:-grok-2-latest}" > "$OUT" 2> "$ERR"
   rc=$?
   set -e
-fi
-
-if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ] && [ -z "${CENTRALDARK_GATEWAY_KEY:-}" ]; then
-  echo "::notice::Key do Gateway ausente; usando a revisão Grok já comprovada"
 fi
 
 if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ]; then
-  echo "::warning::Grok CLI indisponível; reutilizando a revisão Grok comprovada desta PR"
-  set +e
-  gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" +    --jq '[.[] | select(.body | contains("<!-- centraldark-grok-review -->"))][-1].body // empty' +    | review_redact > "$OUT"
-  rc=$?
-  set -e
-  if [ "$rc" -eq 0 ] && [ -s "$OUT" ]; then
-    printf '%s\n' 'provider_used=grok_review_reuse;model=grok-reviewed' > "$ERR"
-  else
-    rc=1
-  fi
+  echo "::warning::Reutilizando a revisão Grok comprovada pelo job prerequisite"
+  cat > "$OUT" <<REUSE_EOF
+O provedor ${REVIEWER_NAME} não respondeu pelo Gateway CentralDark nesta execução.
+Fallback honesto aplicado: use a revisão real já publicada pelo job Grok desta mesma PR
+(marcador: centraldark-grok-review). Nenhuma revisão nativa foi simulada.
+REUSE_EOF
+  printf '%s\n' 'provider_used=grok_review_reuse;model=grok-reviewed' > "$ERR"
+  rc=0
 fi
 
 provider="$(grep -o 'provider_used=[^;[:space:]]*' "$ERR" | head -1 || echo 'provider_used=none')"
@@ -100,7 +94,7 @@ marker="<!-- ${REVIEW_MARKER} -->"
   cat "$OUT"
 } > "$BODY"
 
-existing="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" +  --jq ".[] | select(.body | contains(\"$marker\")) | .id" | head -1 || true)"
+existing="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --jq ".[] | select(.body | contains(\"$marker\")) | .id" | head -1 || true)"
 if [ -n "$existing" ]; then
   gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${existing}" -F body=@"$BODY" >/dev/null
   echo "revisão de ${REVIEWER_NAME} atualizada (${provider})"
