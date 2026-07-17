@@ -51,7 +51,7 @@ WebUI                        │ Docker │ Open WebUI customizado (personas, CS
 arsenal-openai-adapter       │ Node   │ Expõe Arsenal Council (router/parallel/debate) como modelos OpenAI-compat
 artifacts-builder            │ Node   │ Builder de artefatos (agentes + core + missions) — geração de conteúdo
 centraldark-voice            │ Ext.   │ Extensão Chrome — substitui TTS nativo Claude por bridge premium PT-BR
-elite-anthropic-proxy        │ Python │ Proxy reverso Anthropic com fallback (claude.ap7.site) — "última bala"
+elite-anthropic-proxy        │ Python │ LEGADO REMOVIDO; roteamento no Gateway CentralDark — "última bala"
 elite-gateway                │ Python │ Gateway HTTP/WS FastAPI + zendriver (Chrome CDP) — autentica contas Claude/GPT
 graph-panel                  │ Node   │ Painel de grafo do ecossistema (porta 3030 / grafo.centralldark.com)
 grupo-evolucao               │ Node   │ 5 agentes debatedores (Arquiteto, Pesquisador, Crítico, Produto, Historiador)
@@ -281,7 +281,7 @@ INTEGRAÇÕES EXTERNAS MAPEADAS
   ├── GitHub:             ServerVpss/CentralDark (sync bidirecional via webhook)
   ├── Telegram:           @srver1bot → admin 1901426549 (todas as notificações)
   ├── DarkAI:             API multi-modelo (darkai) — rota principal do Hermes
-  ├── Elite Anthropic:    claude.ap7.site/v1/messages (última bala)
+  ├── Elite Anthropic:    api.centralldark.com/v1/chat/completions (última bala)
   ├── WuzAPI:             http://127.0.0.1:8081 (WhatsApp)
   ├── MultiZap Gateway:   proxy.multizap.dev (porta 3100)
   ├── MCP público:        mcp.centralldark.com (porta 9100, OAuth obrigatório)
@@ -351,7 +351,7 @@ mcp.centralldark.com               │  9100     │ MCP Server (102 tools, OAut
 grafo.centralldark.com             │  3030     │ Graph Panel (grafo vivo)
 status.centralldark.com            │  —        │ Painel de status estático
 bridge.centralldark.com            │  —        │ TTS bridge (voz premium PT-BR)
-claude.ap7.site                    │  —        │ Elite Anthropic Proxy (última bala)
+api.centralldark.com                    │  —        │ Gateway multi-provider oficial
 proxy.multizap.dev                 │  3100     │ MultiZap Gateway
 api.centralldark.com               │  —        │ API Hub (Hermes painel)
 
