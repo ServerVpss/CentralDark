@@ -1,4 +1,4 @@
----
+> **OBSOLETO:** o proxy antigo foi removido. Use somente o Gateway CentralDark em `https://api.centralldark.com/v1` com `CENTRALDARK_GATEWAY_KEY`.\n\n---
 title: "MÉTODO — Switch de modelos no proxy (comando switch embutido)"
 date: 2026-07-01
 tags: ["proxy", "switch-model", "claude-code", "terminal", "tutorial"]
@@ -8,7 +8,7 @@ tags: ["proxy", "switch-model", "claude-code", "terminal", "tutorial"]
 
 ## O problema
 
-O proxy `claude.ap7.site` expõe 6 modelos (Opus 4.8, Sonnet 4.6, Haiku 4.6 e suas variantes `[1m]`), mas o Claude Code CLI nem sempre lista todos no `/switch-model` nativo. Além disso, o usuário queria poder escolher o modelo **sem depender de comandos extras ou pastas `.claude/commands/`**.
+O proxy `api.centralldark.com` expõe 6 modelos (Opus 4.8, Sonnet 4.6, Haiku 4.6 e suas variantes `[1m]`), mas o Claude Code CLI nem sempre lista todos no `/switch-model` nativo. Além disso, o usuário queria poder escolher o modelo **sem depender de comandos extras ou pastas `.claude/commands/`**.
 
 ## A solução
 
