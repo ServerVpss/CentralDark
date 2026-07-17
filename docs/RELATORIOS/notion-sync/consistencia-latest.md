@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-17T06:18:26.790Z
-- **Commit:** `935e89654892c693d64d2e96451508b5d7b43627`
+- **Gerado:** 2026-07-17T06:36:23.070Z
+- **Commit:** `25f78a4cc9c02abf5dacc256d678eb80b2d2d5dc`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 364 | 0 | 0 | 364 | 0 |
+| aprendizados | 365 | 0 | 0 | 365 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **364**
+- 🟥 Faltando no Notion: **365**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -412,4 +412,5 @@
 - 330. ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK)
 - 331. Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete
 - 332. Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução
+- 333. Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core
 </details>

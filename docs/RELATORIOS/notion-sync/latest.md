@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-17T06:18:22.079Z
+# 🧠 Notion Sync — 2026-07-17T06:36:20.273Z
 
-- **Commit fonte:** `935e89654892c693d64d2e96451508b5d7b43627`
+- **Commit fonte:** `25f78a4cc9c02abf5dacc256d678eb80b2d2d5dc`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 377 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 378 atualizadas · ❌ 458 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 334 | 1 | 333 | 0 | 0 |
+| aprendizados | 335 | 1 | 334 | 0 | 0 |
 | estrutura | 458 | 0 | 0 | 0 | 458 |
 
 ## Operações
@@ -399,7 +399,8 @@
 | aprendizados | atualizado | #329 — 502→503 limpo em install/ui/bridge + armadilha do bloco log no Caddy |
 | aprendizados | atualizado | #330 — ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK) |
 | aprendizados | atualizado | #331 — Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete |
-| aprendizados | criado | #332 — Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução |
+| aprendizados | atualizado | #332 — Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução |
+| aprendizados | criado | #333 — Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
