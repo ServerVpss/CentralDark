@@ -52,7 +52,7 @@ review_scan_diff "$DIFF"
 SAFE_DIFF="$WORK/diff.sanitized.txt"
 review_redact < "$DIFF" > "$SAFE_DIFF"
 
-runner=(bash scripts/reviewers/grok-review.sh --prompt-file "$PROMPT" --diff-file "$SAFE_DIFF")
+runner=(bash "$ROOT/grok-review.sh" --prompt-file "$PROMPT" --diff-file "$SAFE_DIFF")
 if [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ]; then
   runner+=(--force-gateway --model "$REVIEW_MODEL")
 fi
@@ -65,7 +65,7 @@ set -e
 if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ] && [ -n "${CENTRALDARK_GATEWAY_KEY:-}" ]; then
   echo "::warning::Gateway CentralDark falhou para ${REVIEWER_NAME}; acionando Grok CLI"
   set +e
-  bash scripts/reviewers/grok-review.sh --prompt-file "$PROMPT" --diff-file "$DIFF" --model "${GROK_REVIEW_MODEL:-grok-2-latest}" > "$OUT" 2> "$ERR"
+  bash "$ROOT/grok-review.sh" --prompt-file "$PROMPT" --diff-file "$SAFE_DIFF" --model "${GROK_REVIEW_MODEL:-grok-2-latest}" > "$OUT" 2> "$ERR"
   rc=$?
   set -e
 fi
