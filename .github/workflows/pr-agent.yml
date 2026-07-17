@@ -1,7 +1,7 @@
 name: PR Review — Multi-IA via Gateway CentralDark
 
 # O Gateway CentralDark é a única saída HTTP para provedores.
-# Grok CLI local continua como fallback sem expor credenciais de provedor.
+# Grok CLI roda somente no runner próprio; jobs HTTP usam runner hospedado e fallback comprovado.
 
 on:
   pull_request:
@@ -60,9 +60,9 @@ jobs:
           review_scan_diff "$DIFF"
 
   review-groq:
-    name: "⚡ Groq — Gateway → Grok CLI"
+    name: "⚡ Groq — Gateway → revisão Grok"
     needs: [validate, review-grok]
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
     steps:
@@ -83,9 +83,9 @@ jobs:
         run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-gemini:
-    name: "✨ Gemini — Gateway → Grok CLI"
+    name: "✨ Gemini — Gateway → revisão Grok"
     needs: [validate, review-grok]
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
     steps:
@@ -106,9 +106,9 @@ jobs:
         run: bash scripts/reviewers/provider-fallback-review.sh
 
   review-claude:
-    name: "🧠 Claude Sonnet — Gateway → Grok CLI"
+    name: "🧠 Claude Sonnet — Gateway → revisão Grok"
     needs: [validate, review-grok]
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
     steps:
