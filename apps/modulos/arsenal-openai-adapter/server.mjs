@@ -3,10 +3,31 @@
 // "Central Dark - Grupo da Evolução" pelos bots individuais.
 
 import http from 'node:http';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { readFileSync, existsSync } from 'node:fs';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { postarComoBot, postarPergunta } from './telegram-grupo.mjs';
 import { authenticate, shouldBlock, audit, newRequestId, enforceMode } from './auth-audit.mjs';
+
+// Rastro por request: qual upstream respondeu (seguro p/ concorrência)
+const requestTrace = new AsyncLocalStorage();
+function noteTrace(entry) {
+  const store = requestTrace.getStore();
+  if (store?.chain) store.chain.push({ ...entry, t: Date.now() });
+}
+function getTraceHeader() {
+  const store = requestTrace.getStore();
+  if (!store?.chain?.length) return null;
+  // Só ASCII no header HTTP (Node rejeita seta unicode etc.)
+  return store.chain
+    .map((e) => {
+      const st = e.ok ? 'ok' : 'fail';
+      const m = e.model ? `:${String(e.model).replace(/[^\w./+-]/g, '').slice(0, 48)}` : '';
+      return `${e.provider}:${st}${m}`;
+    })
+    .join('->');
+}
 
 const PORT = process.env.PORT || 8090;
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
@@ -16,6 +37,27 @@ const REGRAS_PATH = process.env.REGRAS_PATH || '/root/CentralDark/docs/CONSCIENC
 const DEBATES_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES';
 const EVOLUCAO_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO';
 const PENDENCIAS_PATH = '/root/CentralDark/docs/PENDENCIAS.md';
+
+// ── Secrets (VPS only) — TokenRouter e afins. Nunca commitar valores. ──
+// Env do processo tem prioridade; fallback lê secrets/.env (fora do Git).
+function loadSecretsFile(path = '/root/CentralDark/secrets/.env') {
+  if (!existsSync(path)) return {};
+  const out = {};
+  try {
+    for (const line of readFileSync(path, 'utf8').split('\n')) {
+      const m = line.match(/^\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/);
+      if (!m) continue;
+      let v = m[2];
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+      out[m[1]] = v;
+    }
+  } catch { /* silencioso */ }
+  return out;
+}
+const SECRETS = loadSecretsFile();
+const TOKENROUTER_BASE = (process.env.TOKENROUTER_BASE_URL || SECRETS.TOKENROUTER_BASE_URL || 'https://api.tokenrouter.com/v1').replace(/\/+$/, '');
+const TOKENROUTER_KEY = process.env.TOKENROUTER_API_KEY || SECRETS.TOKENROUTER_API_KEY || '';
+const TOKENROUTER_DEFAULT_MODEL = process.env.TOKENROUTER_MODEL || SECRETS.TOKENROUTER_MODEL || 'deepseek/deepseek-v4-pro';
 
 const MODELS = [
   { id: 'arsenal-router',   name: '🎯 Arsenal Router (rápido)' },
@@ -86,7 +128,8 @@ async function fetchAbacusCatalog() {
   }
 }
 
-async function callProvider(modelo, messages) {
+/** Chamada pura Abacus (sem fallback). Usada pela rota isolada e como 1º hop do fallback. */
+async function callAbacus(modelo, messages) {
   const r = await fetch(PROVIDER_BASE.includes('/functions/v1/') ? PROVIDER_BASE : `${PROVIDER_BASE}/chat/completions`, {
     method: 'POST',
     headers: {
@@ -100,7 +143,244 @@ async function callProvider(modelo, messages) {
   });
   if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}: ${(await r.text()).slice(0,180)}`);
   const data = await r.json();
-  return data.choices?.[0]?.message?.content || '(sem resposta)';
+  const text = data.choices?.[0]?.message?.content || '';
+  if (!text.trim()) throw new Error(`${modelo}: resposta vazia do abacus`);
+  return text;
+}
+
+// Fallback central do gateway /v1 e Council:
+//   abacus → tokenrouter (sempre que TR configurado)
+// Rotas isoladas /providers/{nome}/v1/* NÃO usam isso — ficam puras p/ diagnóstico.
+const FALLBACK_ENABLED = String(process.env.FALLBACK_ENABLED ?? 'true').toLowerCase() !== 'false';
+
+/**
+ * callProvider = caminho com fallback do sistema central.
+ * Mantém o nome antigo pra não quebrar Council (router/parallel/debate/hermes).
+ */
+async function callProvider(modelo, messages) {
+  const errors = [];
+
+  // 1) Abacus
+  try {
+    const text = await callAbacus(modelo, messages);
+    noteTrace({ provider: 'abacus', ok: true, model: modelo });
+    return text;
+  } catch (e) {
+    errors.push(`abacus:${e.message}`);
+    noteTrace({ provider: 'abacus', ok: false, model: modelo, err: String(e.message).slice(0, 120) });
+    console.warn(`[fallback] abacus falhou (${modelo}): ${e.message}`);
+  }
+
+  // 2) TokenRouter (se habilitado + key) — tenta modelo pedido, depois default TR
+  if (FALLBACK_ENABLED && TOKENROUTER_KEY) {
+    const trCandidates = [...new Set(
+      [modelo, TOKENROUTER_DEFAULT_MODEL].filter(Boolean),
+    )];
+    for (const trModel of trCandidates) {
+      try {
+        const text = await callTokenRouter(trModel, messages, { max_tokens: 1024 });
+        noteTrace({ provider: 'tokenrouter', ok: true, model: trModel, via: 'fallback' });
+        console.log(`[fallback] ok abacus→tokenrouter model=${trModel} (pedido era ${modelo})`);
+        return text;
+      } catch (e) {
+        errors.push(`tokenrouter(${trModel}):${e.message}`);
+        noteTrace({ provider: 'tokenrouter', ok: false, model: trModel, err: String(e.message).slice(0, 120) });
+        console.warn(`[fallback] tokenrouter falhou (${trModel}): ${e.message}`);
+      }
+    }
+  } else if (!TOKENROUTER_KEY) {
+    errors.push('tokenrouter:não configurado');
+  }
+
+  throw new Error(`fallback esgotado no gateway central: ${errors.join(' | ')}`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PROVEDORES ORGANIZADOS (cada um na sua rota — sem misturar)
+//   /providers                      → mapa
+//   /providers/abacus/v1/*          → Abacus RouteLLM
+//   /providers/tokenrouter/v1/*     → TokenRouter
+//   /v1/*                           → Arsenal Council + Abacus (legado/default)
+// ═══════════════════════════════════════════════════════════════
+
+let tokenRouterCatalogCache = { at: 0, models: [] };
+const TR_CATALOG_TTL_MS = 5 * 60 * 1000;
+
+async function fetchTokenRouterCatalog() {
+  if (!TOKENROUTER_KEY) return [];
+  if (Date.now() - tokenRouterCatalogCache.at < TR_CATALOG_TTL_MS && tokenRouterCatalogCache.models.length) {
+    return tokenRouterCatalogCache.models;
+  }
+  try {
+    const r = await fetch(`${TOKENROUTER_BASE}/models`, {
+      headers: { Authorization: `Bearer ${TOKENROUTER_KEY}`, Accept: 'application/json' },
+    });
+    if (!r.ok) return tokenRouterCatalogCache.models;
+    const data = await r.json();
+    const models = Array.isArray(data?.data)
+      ? data.data.map((m) => (typeof m === 'string' ? m : m?.id)).filter(Boolean)
+      : [];
+    if (models.length) {
+      tokenRouterCatalogCache = { at: Date.now(), models };
+      console.log(`[Catalog] TokenRouter loaded ${models.length} models`);
+    }
+    return tokenRouterCatalogCache.models;
+  } catch (e) {
+    console.error('[Catalog] TokenRouter falhou:', e.message);
+    return tokenRouterCatalogCache.models;
+  }
+}
+
+/** Extrai texto útil — modelos reasoning do TR podem vir com content vazio. */
+function extractMessageText(msg) {
+  if (!msg || typeof msg !== 'object') return '';
+  const c = msg.content;
+  if (typeof c === 'string' && c.trim()) return c;
+  if (Array.isArray(c)) {
+    const joined = c.map((p) => (typeof p === 'string' ? p : p?.text || '')).join('');
+    if (joined.trim()) return joined;
+  }
+  if (typeof msg.reasoning_content === 'string' && msg.reasoning_content.trim()) {
+    return msg.reasoning_content;
+  }
+  return '';
+}
+
+async function callTokenRouter(modelo, messages, opts = {}) {
+  if (!TOKENROUTER_KEY) throw new Error('TOKENROUTER_API_KEY não configurada (secrets/.env)');
+  const model = modelo || TOKENROUTER_DEFAULT_MODEL;
+  const max_tokens = opts.max_tokens ?? 1024;
+  const r = await fetch(`${TOKENROUTER_BASE}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${TOKENROUTER_KEY}`,
+      'User-Agent': 'CentralDark-ArsenalAdapter',
+    },
+    body: JSON.stringify({ model, messages, stream: false, max_tokens, temperature: opts.temperature ?? 0.2 }),
+  });
+  if (!r.ok) throw new Error(`tokenrouter ${model} HTTP ${r.status}: ${(await r.text()).slice(0, 180)}`);
+  const data = await r.json();
+  const text = extractMessageText(data.choices?.[0]?.message);
+  if (!text) throw new Error(`tokenrouter ${model}: resposta vazia (finish=${data.choices?.[0]?.finish_reason || '?'})`);
+  return text;
+}
+
+function providersMap() {
+  return {
+    object: 'providers',
+    note: 'Rotas isoladas = puras. /v1/* = sistema central com FALLBACK abacus→tokenrouter.',
+    fallback: {
+      enabled: FALLBACK_ENABLED,
+      chain: ['abacus', 'tokenrouter'],
+      applies_to: ['/v1/chat/completions', 'arsenal-router', 'arsenal-parallel', 'arsenal-debate', 'arsenal-hermes'],
+      pure_routes: ['/providers/abacus/v1/*', '/providers/tokenrouter/v1/*'],
+      tokenrouter_default_model: TOKENROUTER_DEFAULT_MODEL,
+    },
+    providers: [
+      {
+        id: 'arsenal',
+        name: 'Arsenal Council (default gateway + fallback)',
+        base: '/v1',
+        routes: { models: '/v1/models', chat: '/v1/chat/completions' },
+        upstream: PROVIDER_BASE,
+        fallback: FALLBACK_ENABLED ? 'abacus→tokenrouter' : 'off',
+        configured: Boolean(PROVIDER_KEY),
+      },
+      {
+        id: 'abacus',
+        name: 'Abacus RouteLLM (puro)',
+        base: '/providers/abacus/v1',
+        routes: {
+          models: '/providers/abacus/v1/models',
+          chat: '/providers/abacus/v1/chat/completions',
+        },
+        upstream: PROVIDER_BASE,
+        fallback: 'none (rota pura)',
+        configured: Boolean(PROVIDER_KEY),
+      },
+      {
+        id: 'tokenrouter',
+        name: 'TokenRouter (puro)',
+        base: '/providers/tokenrouter/v1',
+        routes: {
+          models: '/providers/tokenrouter/v1/models',
+          chat: '/providers/tokenrouter/v1/chat/completions',
+        },
+        aliases: {
+          models: '/tokenrouter/v1/models',
+          chat: '/tokenrouter/v1/chat/completions',
+        },
+        upstream: TOKENROUTER_BASE,
+        default_model: TOKENROUTER_DEFAULT_MODEL,
+        fallback: 'none (rota pura)',
+        configured: Boolean(TOKENROUTER_KEY),
+      },
+    ],
+  };
+}
+
+async function readJsonBody(req) {
+  let body = '';
+  for await (const chunk of req) body += chunk;
+  return body ? JSON.parse(body) : {};
+}
+
+async function respondProviderChat(res, req, providerId, payload) {
+  const requestedModel = payload.model;
+  const messages = payload.messages || [];
+  const streaming = payload.stream === true;
+  req._auditSetModel?.(`${providerId}:${requestedModel || 'default'}`);
+
+  let text;
+  let modelOut = requestedModel;
+
+  if (providerId === 'abacus') {
+    // Rota PURA — sem fallback (diagnóstico / manutenção explícita do Abacus)
+    if (!requestedModel) return json(res, 400, { error: 'model obrigatório na rota abacus' });
+    const catalogo = await fetchAbacusCatalog();
+    if (catalogo.length && !catalogo.includes(requestedModel)) {
+      return json(res, 400, { error: `modelo desconhecido no abacus: ${requestedModel}` });
+    }
+    text = await callAbacus(requestedModel, messages);
+    noteTrace({ provider: 'abacus', ok: true, model: requestedModel, pure: true });
+    modelOut = requestedModel;
+  } else if (providerId === 'tokenrouter') {
+    // Rota PURA — sem fallback (diagnóstico / manutenção explícita do TokenRouter)
+    if (!TOKENROUTER_KEY) {
+      return json(res, 503, { error: 'tokenrouter não configurado (TOKENROUTER_API_KEY ausente)' });
+    }
+    modelOut = requestedModel || TOKENROUTER_DEFAULT_MODEL;
+    const catalogo = await fetchTokenRouterCatalog();
+    // Se o catálogo estiver vazio (falha transitória), ainda tenta o default / pedido.
+    if (catalogo.length && requestedModel && !catalogo.includes(requestedModel)) {
+      return json(res, 400, {
+        error: `modelo desconhecido no tokenrouter: ${requestedModel}`,
+        available: catalogo.slice(0, 30),
+      });
+    }
+    text = await callTokenRouter(modelOut, messages, {
+      max_tokens: payload.max_tokens ?? 1024,
+      temperature: payload.temperature,
+    });
+    noteTrace({ provider: 'tokenrouter', ok: true, model: modelOut, pure: true });
+  } else {
+    return json(res, 404, { error: `provedor desconhecido: ${providerId}` });
+  }
+
+  const trace = getTraceHeader();
+  if (trace) res.setHeader('X-CentralDark-Upstream', trace);
+  res.setHeader('X-CentralDark-Route', `providers/${providerId}`);
+
+  if (streaming) {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+    res.write(sseChunk(modelOut, { role: 'assistant' }));
+    res.write(sseChunk(modelOut, { content: text }));
+    res.write(sseChunk(modelOut, {}, 'stop'));
+    res.write('data: [DONE]\n\n');
+    return res.end();
+  }
+  return json(res, 200, chatOk(modelOut, text, { route: `providers/${providerId}`, pure: true }));
 }
 
 async function modoRouter(regras, messages) {
@@ -205,10 +485,23 @@ async function salvarSaida(modo, messages, resposta) {
 }
 
 function json(res, code, body) { res.writeHead(code, { 'Content-Type': 'application/json' }); res.end(JSON.stringify(body)); }
-function chatOk(model, content) {
-  return { id: 'chatcmpl-arsenal-' + Date.now(), object: 'chat.completion', created: Math.floor(Date.now()/1000), model,
+function chatOk(model, content, meta = {}) {
+  const upstream = getTraceHeader();
+  return {
+    id: 'chatcmpl-arsenal-' + Date.now(),
+    object: 'chat.completion',
+    created: Math.floor(Date.now() / 1000),
+    model,
     choices: [{ index: 0, message: { role: 'assistant', content }, finish_reason: 'stop' }],
-    usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 } };
+    usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+    // Campo extra (clientes OpenAI costumam ignorar) — prova de fallback/rota
+    centraldark: {
+      gateway: 'https://api.centralldark.com',
+      fallback_enabled: FALLBACK_ENABLED,
+      upstream: upstream || null,
+      ...meta,
+    },
+  };
 }
 // SSE de verdade pro Open WebUI: chunk no formato chat.completion.chunk
 function sseChunk(model, delta, finish = null) {
@@ -244,13 +537,58 @@ const server = http.createServer(async (req, res) => {
   if (pathOnly === '/health') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: '/health', method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
-    return json(res, 200, { ok: true, provider: PROVIDER_BASE, models: MODELS.map(m=>m.id),
-                            auth_enforce: enforceMode(), request_id: requestId });
+    return json(res, 200, {
+      ok: true,
+      provider: PROVIDER_BASE,
+      models: MODELS.map(m => m.id),
+      auth_enforce: enforceMode(),
+      request_id: requestId,
+      // mapa enxuto (sem secrets) — rotas por provedor
+      providers: {
+        arsenal: { base: '/v1', ok: true },
+        abacus: { base: '/providers/abacus/v1', configured: Boolean(PROVIDER_KEY) },
+        tokenrouter: { base: '/providers/tokenrouter/v1', configured: Boolean(TOKENROUTER_KEY) },
+      },
+    });
+  }
+
+  // Mapa de provedores (público, só paths + status configured)
+  if (pathOnly === '/providers' || pathOnly === '/v1/providers') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: pathOnly, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    return json(res, 200, { ...providersMap(), request_id: requestId });
+  }
+
+  // Catálogo SÓ Abacus (rota isolada)
+  if (pathOnly === '/providers/abacus/v1/models' || pathOnly === '/abacus/v1/models') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: pathOnly, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    const abacusIds = await fetchAbacusCatalog();
+    const data = abacusIds.map((id) => ({ id, object: 'model', created: 0, owned_by: 'abacus', name: id }));
+    return json(res, 200, { object: 'list', provider: 'abacus', data });
+  }
+
+  // Catálogo SÓ TokenRouter (rota isolada)
+  if (pathOnly === '/providers/tokenrouter/v1/models' || pathOnly === '/tokenrouter/v1/models') {
+    audit({ request_id: requestId, key_prefix: authResult.prefix, path: pathOnly, method: req.method,
+            status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
+    if (!TOKENROUTER_KEY) {
+      return json(res, 503, { error: 'tokenrouter não configurado', provider: 'tokenrouter', data: [] });
+    }
+    const ids = await fetchTokenRouterCatalog();
+    const data = ids.map((id) => ({ id, object: 'model', created: 0, owned_by: 'tokenrouter', name: id }));
+    return json(res, 200, {
+      object: 'list',
+      provider: 'tokenrouter',
+      default_model: TOKENROUTER_DEFAULT_MODEL,
+      data,
+    });
   }
 
   // /v1/models também é público — é apenas o catálogo (sem inferência).
   // Clientes de gateway (Claude Desktop, Cursor, etc) chamam sem chave pra descobrir modelos.
   // Fica ANTES do bloco de auth pra não retornar 401 e ser mal-interpretado como 404.
+  // DEFAULT = Arsenal curados + Abacus (NÃO mistura TokenRouter aqui — use /providers/tokenrouter/v1/models).
   if (pathOnly === '/v1/models' || pathOnly === '/models') {
     audit({ request_id: requestId, key_prefix: authResult.prefix, path: req.url, method: req.method,
             status: 200, latency_ms: Date.now() - t0, ip, user_agent: ua });
@@ -289,87 +627,164 @@ const server = http.createServer(async (req, res) => {
   req._auditSetModel = (m) => { modelForAudit = m; };
 
 
+  // Chat SÓ Abacus (rota isolada — NÃO usa fallback cruzado)
+  if (
+    pathOnly === '/providers/abacus/v1/chat/completions' ||
+    pathOnly === '/abacus/v1/chat/completions'
+  ) {
+    return requestTrace.run({ chain: [] }, async () => {
+      try {
+        const payload = await readJsonBody(req);
+        return await respondProviderChat(res, req, 'abacus', payload);
+      } catch (e) {
+        console.error('abacus chat erro:', e);
+        if (!res.headersSent) return json(res, 502, { error: e.message, provider: 'abacus' });
+        try { res.end(); } catch {}
+      }
+    });
+  }
+
+  // Chat SÓ TokenRouter (rota isolada — NÃO usa fallback cruzado)
+  if (
+    pathOnly === '/providers/tokenrouter/v1/chat/completions' ||
+    pathOnly === '/tokenrouter/v1/chat/completions'
+  ) {
+    return requestTrace.run({ chain: [] }, async () => {
+      try {
+        const payload = await readJsonBody(req);
+        return await respondProviderChat(res, req, 'tokenrouter', payload);
+      } catch (e) {
+        console.error('tokenrouter chat erro:', e);
+        if (!res.headersSent) return json(res, 502, { error: e.message, provider: 'tokenrouter' });
+        try { res.end(); } catch {}
+      }
+    });
+  }
+
+  // Sistema central: Arsenal + passthrough com FALLBACK abacus→tokenrouter
   if (pathOnly === '/v1/chat/completions' || pathOnly === '/chat/completions') {
-    let body = '';
-    for await (const chunk of req) body += chunk;
-    try {
-      const payload = JSON.parse(body);
-      const requestedModel = payload.model;
-      const modo = MODEL_ALIASES[requestedModel] || requestedModel;
-      req._auditSetModel?.(requestedModel === modo ? modo : `${requestedModel}->${modo}`);
-      const messages = payload.messages || [];
-      const perguntaUser = messages.filter(m=>m.role==='user').slice(-1)[0]?.content || '';
-      // Posta a pergunta do usuário no grupo (contexto)
-      if (perguntaUser) postarPergunta(perguntaUser, modo.replace('arsenal-',''));
+    return requestTrace.run({ chain: [] }, async () => {
+      let body = '';
+      for await (const chunk of req) body += chunk;
+      try {
+        const payload = JSON.parse(body);
+        const requestedModel = payload.model;
+        const modo = MODEL_ALIASES[requestedModel] || requestedModel;
+        req._auditSetModel?.(requestedModel === modo ? modo : `${requestedModel}->${modo}`);
+        const messages = payload.messages || [];
+        const perguntaUser = messages.filter(m => m.role === 'user').slice(-1)[0]?.content || '';
+        if (perguntaUser) postarPergunta(perguntaUser, modo.replace('arsenal-', ''));
 
-      const MODOS = { 'arsenal-router': modoRouter, 'arsenal-parallel': modoParallel, 'arsenal-debate': modoDebate, 'arsenal-hermes': modoHermes };
-      const rodar = MODOS[modo];
+        const MODOS = {
+          'arsenal-router': modoRouter,
+          'arsenal-parallel': modoParallel,
+          'arsenal-debate': modoDebate,
+          'arsenal-hermes': modoHermes,
+        };
+        const rodar = MODOS[modo];
 
-      // Passthrough: modelo não é um modo Arsenal, mas existe no catálogo real do Abacus (138 modelos).
-      // Chama o Abacus direto com o modelo pedido, sem passar pelo Council.
-      if (!rodar) {
-        const catalogo = await fetchAbacusCatalog();
-        if (!catalogo.includes(requestedModel)) {
-          return json(res, 400, { error: `modelo desconhecido: ${requestedModel}`, mapped_to: modo });
+        // Passthrough: não é modo Arsenal → tenta Abacus, se falhar cai no TokenRouter (callProvider).
+        // Se o modelo nem está no Abacus mas está no TR (ou fallback on), ainda tenta a cadeia.
+        if (!rodar) {
+          const catalogo = await fetchAbacusCatalog();
+          const trCat = TOKENROUTER_KEY ? await fetchTokenRouterCatalog() : [];
+          const inAbacus = catalogo.includes(requestedModel);
+          const inTr = trCat.includes(requestedModel);
+          if (!inAbacus && !inTr && !(FALLBACK_ENABLED && TOKENROUTER_KEY)) {
+            return json(res, 400, {
+              error: `modelo desconhecido: ${requestedModel}`,
+              hint: 'Use /providers/abacus/v1 ou /providers/tokenrouter/v1, ou GET /providers',
+            });
+          }
+          req._auditSetModel?.(`central-passthrough:${requestedModel}`);
+          const streamingPt = payload.stream === true;
+          try {
+            // Se só existe no TR, pula Abacus (evita erro inútil)
+            let respostaPt;
+            if (!inAbacus && inTr) {
+              respostaPt = await callTokenRouter(requestedModel, messages, { max_tokens: payload.max_tokens ?? 1024 });
+              noteTrace({ provider: 'tokenrouter', ok: true, model: requestedModel, via: 'direct-tr' });
+            } else {
+              respostaPt = await callProvider(requestedModel, messages);
+            }
+            const trace = getTraceHeader();
+            if (trace) res.setHeader('X-CentralDark-Upstream', trace);
+            res.setHeader('X-CentralDark-Route', 'v1');
+            if (streamingPt) {
+              res.writeHead(200, {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                Connection: 'keep-alive',
+              });
+              res.write(sseChunk(requestedModel, { role: 'assistant' }));
+              res.write(sseChunk(requestedModel, { content: respostaPt }));
+              res.write(sseChunk(requestedModel, {}, 'stop'));
+              res.write('data: [DONE]\n\n');
+              return res.end();
+            }
+            return json(res, 200, chatOk(requestedModel, respostaPt, { route: 'v1', fallback: FALLBACK_ENABLED }));
+          } catch (e) {
+            console.error('passthrough/fallback erro:', e);
+            return json(res, 502, {
+              error: e.message,
+              centraldark: { route: 'v1', fallback: FALLBACK_ENABLED, upstream: getTraceHeader() },
+            });
+          }
         }
-        req._auditSetModel?.(`passthrough:${requestedModel}`);
-        const streamingPt = payload.stream === true;
+
+        const streaming = payload.stream === true;
+        let keepalive;
+        if (streaming) {
+          res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
+          });
+          res.write(sseChunk(modo, { role: 'assistant' }));
+          keepalive = setInterval(() => res.write(': ping\n\n'), 15000);
+        }
+
+        const regras = await lerRegras();
         try {
-          const respostaPt = await callProvider(requestedModel, messages);
-          if (streamingPt) {
-            res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
-            res.write(sseChunk(requestedModel, { role: 'assistant' }));
-            res.write(sseChunk(requestedModel, { content: respostaPt }));
-            res.write(sseChunk(requestedModel, {}, 'stop'));
+          const resposta = await rodar(regras, messages);
+          await salvarSaida(modo.replace('arsenal-', ''), messages, resposta);
+          const trace = getTraceHeader();
+          if (trace && !streaming) res.setHeader('X-CentralDark-Upstream', trace);
+          if (!streaming) res.setHeader('X-CentralDark-Route', 'v1-arsenal');
+          if (streaming) {
+            clearInterval(keepalive);
+            res.write(sseChunk(modo, { content: resposta }));
+            res.write(sseChunk(modo, {}, 'stop'));
             res.write('data: [DONE]\n\n');
             return res.end();
           }
-          return json(res, 200, chatOk(requestedModel, respostaPt));
+          return json(res, 200, chatOk(modo, resposta, { route: 'v1-arsenal', fallback: FALLBACK_ENABLED }));
         } catch (e) {
-          console.error('passthrough erro:', e);
-          return json(res, 502, { error: e.message });
-        }
-      }
-
-      // stream:true → SSE real (headers já vão, keepalive segura o cliente enquanto o Council trabalha)
-      const streaming = payload.stream === true;
-      let keepalive;
-      if (streaming) {
-        res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
-        res.write(sseChunk(modo, { role: 'assistant' }));
-        keepalive = setInterval(() => res.write(': ping\n\n'), 15000);
-      }
-
-      const regras = await lerRegras();
-      try {
-        const resposta = await rodar(regras, messages);
-        await salvarSaida(modo.replace('arsenal-',''), messages, resposta);
-        if (streaming) {
           clearInterval(keepalive);
-          res.write(sseChunk(modo, { content: resposta }));
-          res.write(sseChunk(modo, {}, 'stop'));
-          res.write('data: [DONE]\n\n');
-          return res.end();
+          console.error('erro:', e);
+          if (streaming) {
+            res.write(sseChunk(modo, { content: `❌ Arsenal falhou: ${e.message}` }, 'stop'));
+            res.write('data: [DONE]\n\n');
+            return res.end();
+          }
+          return json(res, 500, {
+            error: e.message,
+            centraldark: { route: 'v1-arsenal', upstream: getTraceHeader() },
+          });
         }
-        return json(res, 200, chatOk(modo, resposta));
       } catch (e) {
-        clearInterval(keepalive);
         console.error('erro:', e);
-        if (streaming) {
-          res.write(sseChunk(modo, { content: `❌ Arsenal falhou: ${e.message}` }, 'stop'));
-          res.write('data: [DONE]\n\n');
-          return res.end();
-        }
-        return json(res, 500, { error: e.message });
+        if (!res.headersSent) return json(res, 500, { error: e.message });
+        try { res.end(); } catch {}
       }
-    } catch (e) {
-      console.error('erro:', e);
-      if (!res.headersSent) return json(res, 500, { error: e.message });
-      try { res.end(); } catch {}
-    }
+    });
   }
   json(res, 404, { error: 'not found' });
 });
 
 const BIND = process.env.BIND || '127.0.0.1';
-server.listen(PORT, BIND, () => console.log(`🔫 Arsenal Adapter ${BIND}:${PORT} → ${PROVIDER_BASE} · grupo ao vivo ativo`));
+server.listen(PORT, BIND, () => {
+  console.log(`🔫 Arsenal Adapter ${BIND}:${PORT} → default ${PROVIDER_BASE}`);
+  console.log(`   rotas: /v1/* (arsenal+abacus) | /providers/abacus/v1/* | /providers/tokenrouter/v1/*`);
+  console.log(`   tokenrouter: ${TOKENROUTER_KEY ? 'configured' : 'OFF'} @ ${TOKENROUTER_BASE}`);
+});
