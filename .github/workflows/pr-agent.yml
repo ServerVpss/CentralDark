@@ -71,7 +71,7 @@ jobs:
       - name: Review
         env:
           GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
           GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
@@ -129,7 +129,7 @@ jobs:
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
           GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
@@ -180,7 +180,7 @@ jobs:
           echo "PR_AGENT_PYTHON=$VENV/bin/python" >> "$GITHUB_ENV"
       - name: Review
         env:
-          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.ANTHROPIC_API_KEY }}
           GITHUB__USER_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
