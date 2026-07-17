@@ -4,7 +4,6 @@
 
 import http from 'node:http';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { readFileSync, existsSync } from 'node:fs';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { postarComoBot, postarPergunta } from './telegram-grupo.mjs';
@@ -38,26 +37,11 @@ const DEBATES_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES';
 const EVOLUCAO_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO';
 const PENDENCIAS_PATH = '/root/CentralDark/docs/PENDENCIAS.md';
 
-// ── Secrets (VPS only) — TokenRouter e afins. Nunca commitar valores. ──
-// Env do processo tem prioridade; fallback lê secrets/.env (fora do Git).
-function loadSecretsFile(path = '/root/CentralDark/secrets/.env') {
-  if (!existsSync(path)) return {};
-  const out = {};
-  try {
-    for (const line of readFileSync(path, 'utf8').split('\n')) {
-      const m = line.match(/^\s*(?:export\s+)?([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/);
-      if (!m) continue;
-      let v = m[2];
-      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
-      out[m[1]] = v;
-    }
-  } catch { /* silencioso */ }
-  return out;
-}
-const SECRETS = loadSecretsFile();
-const TOKENROUTER_BASE = (process.env.TOKENROUTER_BASE_URL || SECRETS.TOKENROUTER_BASE_URL || 'https://api.tokenrouter.com/v1').replace(/\/+$/, '');
-const TOKENROUTER_KEY = process.env.TOKENROUTER_API_KEY || SECRETS.TOKENROUTER_API_KEY || '';
-const TOKENROUTER_DEFAULT_MODEL = process.env.TOKENROUTER_MODEL || SECRETS.TOKENROUTER_MODEL || 'deepseek/deepseek-v4-pro';
+// Secrets são injetados no processo pelo gerenciador de serviço; este módulo
+// nunca abre ou interpreta arquivos de credenciais diretamente.
+const TOKENROUTER_BASE = (process.env.TOKENROUTER_BASE_URL || 'https://api.tokenrouter.com/v1').replace(/\/+$/, '');
+const TOKENROUTER_KEY = process.env.TOKENROUTER_API_KEY || '';
+const TOKENROUTER_DEFAULT_MODEL = process.env.TOKENROUTER_MODEL || 'deepseek/deepseek-v4-pro';
 
 const MODELS = [
   { id: 'arsenal-router',   name: '🎯 Arsenal Router (rápido)' },
@@ -247,7 +231,7 @@ function extractMessageText(msg) {
 }
 
 async function callTokenRouter(modelo, messages, opts = {}) {
-  if (!TOKENROUTER_KEY) throw new Error('TOKENROUTER_API_KEY não configurada (secrets/.env)');
+  if (!TOKENROUTER_KEY) throw new Error('TOKENROUTER_API_KEY não configurada no processo');
   const model = modelo || TOKENROUTER_DEFAULT_MODEL;
   const max_tokens = opts.max_tokens ?? 1024;
   const r = await fetch(`${TOKENROUTER_BASE}/chat/completions`, {
