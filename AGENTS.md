@@ -33,11 +33,11 @@ Arquivos sensíveis não devem ser lidos, copiados, editados, registrados ou usa
 
 Exemplos:
 
-- `.env` e variantes;
-- `secrets/`;
-- `tokens/`;
-- `sessions/`;
-- `.ssh/`;
+- configurações de ambiente e variantes;
+- cofres de credenciais;
+- depósitos de tokens;
+- dados de sessões;
+- material de acesso SSH;
 - certificados e chaves privadas;
 - cookies e connection strings.
 
