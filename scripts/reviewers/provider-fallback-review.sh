@@ -6,6 +6,12 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=review-security.sh
 source "$ROOT/review-security.sh"
 
+# Secret do Actions vence; se estiver vazio, preserva a variável já injetada
+# no serviço do runner/VPS. Nenhum arquivo de credencial é lido.
+if [ -n "${CENTRALDARK_GATEWAY_KEY_ACTIONS:-}" ]; then
+  export CENTRALDARK_GATEWAY_KEY="$CENTRALDARK_GATEWAY_KEY_ACTIONS"
+fi
+
 : "${REVIEWER_NAME:?REVIEWER_NAME ausente}"
 : "${REVIEW_MARKER:?REVIEW_MARKER ausente}"
 : "${REVIEW_MODEL:?REVIEW_MODEL ausente}"
