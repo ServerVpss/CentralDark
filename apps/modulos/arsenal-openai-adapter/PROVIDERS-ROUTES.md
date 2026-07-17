@@ -69,15 +69,16 @@ curl -s http://127.0.0.1:8090/providers/tokenrouter/v1/chat/completions \
 
 ## GitHub Actions (revisores)
 
-Para Multi-IA sem key nativa de Sonnet, apontar pr-agent para:
+Contrato do workflow `.github/workflows/pr-agent.yml`:
 
-```text
-OPENAI__API_BASE=https://api.centralldark.com/providers/tokenrouter/v1
-OPENAI__KEY=<chave do gateway CentralDark>
-CONFIG__MODEL=openai/deepseek/deepseek-v4-pro
-```
+- endpoint único: `CENTRALDARK_GATEWAY_URL=https://api.centralldark.com/v1`;
+- autenticação: secret canônico `CENTRALDARK_GATEWAY_KEY`;
+- Grok CLI: runner self-hosted, com Gateway como contingência;
+- Gemini, Claude Sonnet e Groq: `ubuntu-latest`, via Gateway;
+- modelos: variables `CENTRALDARK_REVIEW_MODEL_GEMINI`, `CENTRALDARK_REVIEW_MODEL_CLAUDE`, `CENTRALDARK_REVIEW_MODEL_GROQ` e `CENTRALDARK_REVIEW_MODEL_GROK`;
+- indisponibilidade do Gateway: comentário marcado `provider_used=grok_review_reuse`, sem simular revisão nativa.
 
-(ou manter Abacus em `/providers/abacus/v1` se houver crédito).
+Credenciais dos provedores ficam atrás do Gateway. O workflow recebe somente a chave do próprio Gateway.
 
 ## Não fazer
 
