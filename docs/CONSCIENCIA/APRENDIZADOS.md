@@ -2632,3 +2632,9 @@ curl -s http://localhost:9100/health  # MCP OK?
 - **Data:** 2026-07-17
 - **Contexto:** Pivete: fallback sempre no sistema de API central; se uma falha, joga pra outra; concentrar providers organizados.
 - **Aprendizado:** No Arsenal Adapter, `callProvider` (Council + passthrough `/v1`) tenta Abacus e, se falhar, TokenRouter (`TOKENROUTER_MODEL`). Rotas `/providers/{abacus|tokenrouter}/v1/*` ficam **puras** (sem cruzar) pra manutenção. Prova: header `X-CentralDark-Upstream` (ASCII) + campo `centraldark` no JSON. Smoke 2026-07-17: arsenal-router → abacus fail (sem crédito) → tokenrouter ok deepseek → content FALLBACK_OK.
+
+### 332. PR #234 gateway providers+fallback aguardando revisores
+- **Categoria:** processo / PR
+- **Data:** 2026-07-17
+- **Contexto:** Pivete: abrir PR, registrar e botar lá que está esperando revisão dos revisores.
+- **Aprendizado:** PR https://github.com/ServerVpss/CentralDark/pull/234 — feat gateway rotas + fallback. Comentário no PR: status ESPERANDO REVISÃO DOS REVISORES; merge só após crítica + OK. Labels: AGENTE-GROK, INFRA, MELHORIA, DOCS, CORREÇÃO-SEGURA, IA-VALIDAR, PRECISA-DE-OK, GIT. Card Telegram enviado.
