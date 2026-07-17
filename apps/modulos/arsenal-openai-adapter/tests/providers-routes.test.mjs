@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const TEST_MODEL = 'test/model-primary';
 const FALLBACK_MODEL = 'test/model-fallback';
+const DEFAULT_ONLY_MODEL = 'test/model-needs-default';
 const GATEWAY_KEY = 'test-gateway-key-not-a-secret';
 const PROVIDER_KEY = 'test-provider-key-not-a-secret';
 const TOKENROUTER_KEY = 'test-tokenrouter-key-not-a-secret';
@@ -119,7 +120,7 @@ async function request(base, path, payload) {
 const abacus = await listen(async (req, res) => {
   if (req.url === '/v1/models') {
     stats.abacusModels += 1;
-    return json(res, 200, { object: 'list', data: [{ id: TEST_MODEL }] });
+    return json(res, 200, { object: 'list', data: [{ id: TEST_MODEL }, { id: DEFAULT_ONLY_MODEL }] });
   }
   if (req.url === '/v1/chat/completions') {
     stats.abacusChat += 1;
@@ -137,6 +138,9 @@ const tokenRouter = await listen(async (req, res) => {
   if (req.url === '/v1/chat/completions') {
     stats.tokenChat += 1;
     const payload = await body(req);
+    if (payload.model === DEFAULT_ONLY_MODEL) {
+      return json(res, 503, { error: 'mock exige modelo default' });
+    }
     return json(res, 200, {
       choices: [{ message: { role: 'assistant', content: `TOKENROUTER_OK:${payload.model}` } }],
     });
@@ -176,6 +180,18 @@ try {
   assert.match(central.headers.get('x-centraldark-upstream') || '', /^abacus:fail:.*->tokenrouter:ok:/);
   assert.ok(stats.abacusChat >= 1, 'Abacus não foi chamado antes do fallback');
   assert.ok(stats.tokenChat >= 2, 'TokenRouter não recebeu chamada de fallback');
+
+  const actualFallback = await request(adapter.base, '/v1/chat/completions', {
+    model: DEFAULT_ONLY_MODEL,
+    messages: [{ role: 'user', content: 'use o modelo default real' }],
+  });
+  assert.equal(actualFallback.status, 200);
+  assert.equal(actualFallback.body.model, FALLBACK_MODEL);
+  assert.equal(actualFallback.body.centraldark.requested_model, DEFAULT_ONLY_MODEL);
+  assert.match(
+    actualFallback.headers.get('x-centraldark-upstream') || '',
+    /abacus:fail:.*->tokenrouter:fail:.*->tokenrouter:ok:/,
+  );
 
   const abacusPureBeforeToken = stats.tokenChat;
   const abacusPure = await request(adapter.base, '/providers/abacus/v1/chat/completions', {
