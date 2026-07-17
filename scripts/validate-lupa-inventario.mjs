@@ -67,7 +67,7 @@ const requiredPromptTerms = [
   'não enviar automaticamente ao Telegram',
   'E-001, E-002, E-003',
   'Hipótese de arquitetura herdada',
-  'Plano de Regressão',
+  'REGRESSÃO NECESSÁRIA',
   'ROLLBACK FUTURO',
   'APTO PARA REVISÃO E AUTORIZAÇÃO DO PIVETE',
 ];
