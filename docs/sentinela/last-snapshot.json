@@ -1,36 +1,36 @@
 {
-  "at": "2026-07-17T02:49:58.921Z",
+  "at": "2026-07-17T08:13:36.697Z",
   "endpoints": [
     {
       "name": "MCP health",
       "url": "https://mcp.centralldark.com/health",
       "bot": "grok",
-      "status": 200,
-      "latencyMs": 232,
-      "cors": "*"
+      "status": 502,
+      "latencyMs": 237,
+      "cors": null
     },
     {
       "name": "MCP status",
       "url": "https://mcp.centralldark.com/status.json",
       "bot": "grok",
-      "status": 200,
-      "latencyMs": 231,
-      "cors": "*"
+      "status": 502,
+      "latencyMs": 91,
+      "cors": null
     },
     {
       "name": "MCP tools",
       "url": "https://mcp.centralldark.com/tools.json",
       "bot": "codex",
-      "status": 200,
-      "latencyMs": 100,
-      "cors": "*"
+      "status": 502,
+      "latencyMs": 93,
+      "cors": null
     },
     {
       "name": "Install status",
       "url": "https://install.centralldark.com/status.json",
       "bot": "claude",
       "status": 503,
-      "latencyMs": 65,
+      "latencyMs": 83,
       "cors": null
     },
     {
@@ -38,18 +38,18 @@
       "url": "https://status.centralldark.com/",
       "bot": "claude",
       "status": 200,
-      "latencyMs": 120,
+      "latencyMs": 125,
       "cors": "*"
     },
     {
       "name": "API",
       "url": "https://api.centralldark.com/health",
       "bot": "codex",
-      "status": 200,
-      "latencyMs": 99,
-      "cors": "*"
+      "status": 502,
+      "latencyMs": 104,
+      "cors": null
     }
   ],
-  "workflowsFailures24h": 17,
-  "divergencias": 18
+  "workflowsFailures24h": 20,
+  "divergencias": 25
 }
