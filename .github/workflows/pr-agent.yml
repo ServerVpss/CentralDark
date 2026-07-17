@@ -39,6 +39,12 @@ jobs:
           bash -n scripts/reviewers/provider-fallback-review.sh
           bash -n scripts/reviewers/review-security.sh
           bash -n scripts/reviewers/review-security.test.sh
+          bash -n scripts/test-centraldark-gateway.sh
+          if grep -Eq '[+][[:space:]]+(-H|-d)' \
+              scripts/reviewers/grok-review.sh scripts/test-centraldark-gateway.sh; then
+            echo "ERRO: argumento curl contém operador '+' inválido" >&2
+            exit 1
+          fi
           test -s apps/modulos/arsenal-openai-adapter/PROVIDERS-ROUTES.md
           bash scripts/reviewers/review-security.test.sh
           source scripts/reviewers/review-security.sh
