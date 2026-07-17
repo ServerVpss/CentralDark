@@ -516,7 +516,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO PIVETE).
 
 ### 14. Claude Code via proxy nos 2 modos (terminal + extensão VSCode) — 🟡 ABERTO (30/06/2026)
-- **Objetivo:** quando a conta principal cair, o Pivete continua trabalhando via proxy `claude.ap7.site` — tanto no terminal quanto na extensão do VSCode.
+- **Objetivo:** quando a conta principal cair, o Pivete continua trabalhando via Gateway CentralDark `api.centralldark.com` — tanto no terminal quanto na extensão do VSCode.
 - **Terminal:** ✅ PRONTO e testado (HTTP 200). Script `secrets/claude-proxy.sh` (liga/desliga, lê key do cofre). Tutorial em `docs/APRENDIZADOS/PROXY/TUTORIAL-TERMINAL-SEM-CONTA.md`.
 - **Extensão VSCode (barra lateral):** 🟡 pendente — apontar a extensão pro proxy (vars no ambiente do VSCode Server) + recarregar janela; documentar liga/desliga no tutorial. O Pivete escolheu "os dois".
 - **Continuidade:** garantida pela memória (Lembranças + Consciência) — qualquer conta nova retoma com `/contexto`.
