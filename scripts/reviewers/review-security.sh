@@ -32,7 +32,11 @@ review_scan_diff() {
   local google_prefix="A""Iza"
   local aws_prefix="A""KIA"
   local centraldark_prefix="cdk_""live_"
-  local private_key_marker="-----BEGIN "".*PRIVATE KEY-----"
+  local private_begin='-----BE'
+  private_begin+='GIN '
+  local private_kind='PRIVATE'
+  private_kind+=' KEY-----'
+  local private_key_marker="${private_begin}.*${private_kind}"
   local secret_regex
   secret_regex="(${xai_prefix}[A-Za-z0-9_-]{20,}|${groq_prefix}[A-Za-z0-9_-]{20,}|${openai_prefix}[A-Za-z0-9_-]{20,}|${github_prefix}[A-Za-z0-9_-]{20,}|${github_pat_prefix}[A-Za-z0-9_-]{20,}|${google_prefix}[A-Za-z0-9_-]{30,}|${aws_prefix}[A-Z0-9]{16}|${centraldark_prefix}[A-Za-z0-9_-]{16,}|${private_key_marker}|(postgres(ql)?|mysql|mongodb(\+srv)?):\/\/[^[:space:]/:@]+:[^[:space:]@]+@)"
 
@@ -50,6 +54,11 @@ review_redact() {
   local github_pat_prefix="github""_pat_"
   local google_prefix="A""Iza"
   local centraldark_prefix="cdk_""live_"
+  local private_begin='-----BE'
+  private_begin+='GIN '
+  local private_kind='PRIVATE'
+  private_kind+=' KEY-----'
+  local private_key_marker="${private_begin}.*${private_kind}"
   local key_regex
   key_regex="(${xai_prefix}|${groq_prefix}|${openai_prefix}|${github_prefix}|${github_pat_prefix}|${google_prefix}|${centraldark_prefix})[A-Za-z0-9._-]{8,}"
 
@@ -57,5 +66,5 @@ review_redact() {
     | sed -E "s/${key_regex}/<REDACTED>/g" \
     | sed -E 's/(Bearer )[A-Za-z0-9._-]+/\1<REDACTED>/gi' \
     | sed -E 's#((postgres(ql)?|mysql|mongodb(\+srv)?):\/\/[^[:space:]/:@]+:)[^[:space:]@]+@#\1<REDACTED>@#gi' \
-    | sed -E 's/-----BEGIN .*PRIVATE KEY-----/<REDACTED PRIVATE KEY>/g'
+    | sed -E "s/${private_key_marker}/<REDACTED PRIVATE KEY>/g"
 }
