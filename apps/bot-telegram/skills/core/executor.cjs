@@ -16,13 +16,24 @@
  *   executor.pipeline(['brainstorming', 'writing-plans'], { topic: 'melhorar chat' })
  */
 
+const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const manager = require('./manager.cjs');
 
 const moduleCache = new Map();
+const methodologyCache = new Map();
+const skillsRoot = path.resolve(__dirname, '..');
+
+function resolveSkillPath(skillPath) {
+  const fullPath = path.resolve(skillsRoot, skillPath);
+  const insideSkillsRoot = fullPath === skillsRoot || fullPath.startsWith(`${skillsRoot}${path.sep}`);
+  return insideSkillsRoot ? fullPath : null;
+}
 
 function loadSkillModule(skillPath) {
-  const fullPath = path.join(__dirname, '..', skillPath);
+  const fullPath = resolveSkillPath(skillPath);
+  if (!fullPath) return null;
   if (moduleCache.has(fullPath)) return moduleCache.get(fullPath);
 
   try {
@@ -31,6 +42,33 @@ function loadSkillModule(skillPath) {
     return mod;
   } catch (err) {
     return null;
+  }
+}
+
+function loadMethodologyDocument(skillPath) {
+  const fullPath = resolveSkillPath(skillPath);
+  if (!fullPath) {
+    return { ok: false, error: `Caminho de metodologia fora de skills/: ${skillPath}` };
+  }
+
+  if (methodologyCache.has(fullPath)) return methodologyCache.get(fullPath);
+
+  try {
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    if (!content.trim()) {
+      return { ok: false, error: `Metodologia vazia: ${skillPath}` };
+    }
+
+    const loaded = {
+      ok: true,
+      content,
+      sha256: crypto.createHash('sha256').update(content, 'utf-8').digest('hex'),
+      fullPath,
+    };
+    methodologyCache.set(fullPath, loaded);
+    return loaded;
+  } catch (err) {
+    return { ok: false, error: `Falha ao carregar metodologia "${skillPath}": ${err.message}` };
   }
 }
 
@@ -48,12 +86,29 @@ module.exports = {
     }
 
     if (skill.type === 'methodology') {
+      const loaded = loadMethodologyDocument(skill.path);
+      if (!loaded.ok) return loaded;
+
+      const advice = getMethodologyAdvice(slug);
+      const methodologyResult = {
+        skillSlug: slug,
+        skillPath: skill.path,
+        skillSha256: loaded.sha256,
+        skillContent: loaded.content,
+        advice,
+      };
+
       return {
         ok: true,
         type: 'methodology',
-        message: `"${slug}" é metodologia. Leia: skills/${skill.path}`,
+        slug,
+        message: `Metodologia "${slug}" carregada de skills/${skill.path}`,
         path: skill.path,
-        advice: getMethodologyAdvice(slug),
+        loaded: true,
+        sha256: loaded.sha256,
+        content: loaded.content,
+        advice,
+        result: methodologyResult,
       };
     }
 
@@ -115,6 +170,7 @@ module.exports = {
   // Limpar cache
   clearCache() {
     moduleCache.clear();
+    methodologyCache.clear();
   },
 };
 
@@ -128,6 +184,7 @@ function getMethodologyAdvice(slug) {
     'using-superpowers': 'Use todas as ferramentas disponíveis (bash, fetch, file).',
     'verification-before-completion': 'Build deve passar. Console sem erros. Evidência real.',
     'writing-plans': 'Plano de 7 pontos para tarefas multi-arquivo.',
+    'tecnica-da-lupa-premium': 'Aplique Regra de Ouro, Zoom Out, Zoom In, Feynman, cenários, prova e rollback antes do veredito.',
   };
   return advices[slug] || 'Leia o SKILL.md para detalhes.';
 }
