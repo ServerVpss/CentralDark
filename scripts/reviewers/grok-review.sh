@@ -38,8 +38,16 @@ RESP="$WORK/response.json"
 
 try_cli() {
   command -v grok >/dev/null 2>&1 || return 1
-  timeout 300 grok --prompt-file "$COMBINED" --output-format plain > "$OUT" 2>"$WORK/cli.err" || return 1
-  [ -s "$OUT" ]
+  local attempt
+  for attempt in 1 2 3; do
+    : > "$OUT"
+    if timeout 300 grok --prompt-file "$COMBINED" --output-format plain > "$OUT" 2>"$WORK/cli.err" && [ -s "$OUT" ]; then
+      return 0
+    fi
+    echo "tentativa Grok CLI $attempt falhou" >&2
+    [ "$attempt" -eq 3 ] || sleep $((attempt * 10))
+  done
+  return 1
 }
 
 try_gateway() {
