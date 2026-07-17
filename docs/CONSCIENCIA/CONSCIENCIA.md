@@ -44,6 +44,7 @@ updated: 2026-06-29
 | 18 | 📚 Índice rápido de "onde fica" | [#18-onde-fica-cada-coisa](#18-onde-fica-cada-coisa) |
 | 19 | 🔄 Manutenção desta Consciência | [#19-manutenção-desta-consciência](#19-manutenção-desta-consciência) |
 | 20 | ⚡ Comando Único na VPS (REGRA) | [13-COMANDO-UNICO-VPS.md](./13-COMANDO-UNICO-VPS.md) |
+| 21 | ⚖️ Lei do Juiz — fim de ciclo multi-IA | [#21-lei-do-juiz](#21-lei-do-juiz--fim-de-ciclo-multi-ia-selada-17072026) |
 
 ---
 
@@ -755,6 +756,61 @@ SYNC_PAUSED_INSTANCES=Recargas Brasil
 - 🤖 Custom GPT "CentralDark Consciência" puxa via raw GitHub a cada conversa.
 - 🧬 Auto-aprendizado (seção 16) mantém a memória viva entre sessões.
 - 🚨 **Esta consciência é viva.** Algo desatualizado aqui = bug crítico. Corrige na hora.
+
+---
+
+## 21. ⚖️ LEI DO JUIZ — FIM DE CICLO MULTI-IA (SELADA 17/07/2026)
+
+**Origem:** caso #234 → #235 → #236. Quatro revisores de IA, **19 comentários de bot em 73 minutos**, **0 review formal**, **0 veredito**, 3 PRs empilhados — e o PR sujo seguindo aberto **26h depois** de acordo unânime de fechá-lo.
+**Diagnóstico:** não faltava revisor. Faltava **juiz**.
+
+### 21.1 Lei Zero do ciclo
+Revisor **opina**. Juiz **decide**. Pivete **ratifica** ação sensível.
+Todo PR nasce com **UM juiz declarado**. Sem juiz declarado, o PR não recebe revisão — fica em draft.
+
+### 21.2 Quorum fechado
+Máximo **3 revisores de IA por PR** e **UM único workflow de revisão ativo** no repo.
+Revisor novo só entra **desligando um antigo no mesmo PR**.
+Proibido `pr-agent` + `pr-auto-review` + `codex-*` revisando o mesmo diff ao mesmo tempo.
+
+### 21.3 Um revisor = um comentário (upsert obrigatório)
+Cada revisor tem **um marker único** (`<!-- centraldark-<nome>-review -->`) e **edita** esse comentário.
+- Proibido `create` quando o marker já existe.
+- Proibido marker paralelo: `-fallback-review` é o **mesmo** revisor, logo **mesmo** marker.
+- Placeholder tipo `Preparing review...` é **proibido**: ou o parecer sai pronto, ou não sai. Job cancelado não deixa cadáver no PR.
+
+### 21.4 Veredito é review formal, não comentário
+Parecer só conta como `APPROVE` / `REQUEST_CHANGES` amarrado ao `HEAD_SHA`.
+Comentário solto é ruído e **não decide nada**. Sem veredito do juiz → check vermelho, PR não anda.
+
+### 21.5 Fim de ciclo obrigatório — a regra que faltava
+- **Acordo sem execução não existe.** Quem escreve "fechar como superseded" **fecha no mesmo ato**. Proibido delegar a ação pra "próxima IA".
+- **Não se responde a PR ruim abrindo outro PR.** Ou corrige a branch, ou **fecha a antiga no mesmo ato de abrir a nova**, com `Closes #N` no corpo.
+- **Teto de 2 rodadas.** Mesmo diff voltou 2x sem veredito → o juiz decide sozinho: merge ou close. Não existe rodada 3.
+- **Teto de 24h.** PR sem veredito em 24h → juiz fecha ou marca `congelado` e sobe pendência.
+- **Teto de 3 PRs abertos por assunto.** O 4º não abre.
+
+### 21.6 Secret: freio é na PRODUÇÃO, não no fluxo (decisão do Pivete, 17/07/2026)
+O repositório é **privado e fechado**. Não há produção, não há usuário. Chave em repo fechado **não para o trabalho**.
+- ❌ **Proibido** travar PR, congelar branch ou abrir ritual de rotação por causa de secret no repo.
+- ✅ **Ação:** eliminar a branch/arquivo e seguir. O Pivete rotaciona a chave em segundos — não é gargalo, não vira pendência.
+- 🚨 **O único freio real:** secret **não vai pra produção**. Deploy com chave exposta = bloqueio absoluto.
+- 🚨 **Nunca** expor valor de chave em log, comentário de PR ou chat. Só nome da variável e caminho.
+
+Regra-mãe: **o site pode subir; a chave não sobe junto.** Parar o fluxo por chave em repo fechado é teatro de segurança.
+
+### 21.7 Quem julga: **HERMES** (decisão do Pivete, 17/07/2026)
+O juiz **não é** o Pivete e **não é** IA de fora. É o **Hermes** — ele está dentro da infra, com os outros agentes.
+
+- **Juiz:** `Hermes Core v5.0` → `agents/Critic/agent.mjs` (`vetar()` = veto prévio, `auditar()` = parecer pós-etapa).
+- **Cérebro:** `decisor.mjs` (DarkAI, rotação de modelos + GraphRAG).
+- **Entrada:** missão `.md` em `missions/pendente/` — **só `.md`**, `.json` é ignorado em silêncio.
+- **Pivete não é instância de recurso.** Ele não arbitra briga de IA. Se o ciclo travou, o Hermes decide.
+- **Ao Pivete só sobe o que ele é o único que pode resolver** (chave, verba, direção de produto) — via **Telegram**, com **o local exato** (arquivo + variável + linha), **uma** frase, **zero** opções.
+
+Impedimento: quem escreveu o diff não julga o próprio diff.
+
+> **Lição de 17/07:** o enxame de IAs no #234 só existiu porque o **Hermes estava morto havia 12 dias** — online no painel, watchdog batendo, executando zero missões. Sem orquestrador, o vácuo virou briga. **Juiz ausente não é neutralidade: é vácuo de poder.**
 
 ---
 
