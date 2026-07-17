@@ -19,7 +19,7 @@ Toda atuação do Codex deve apontar para o repositório oficial `ServerVpss/Cen
 
 - Não alterar `main` diretamente quando a missão exigir branch.
 - Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita.
-- Não editar configurações privadas, dados de sessão, tokens, chaves ou cookies.
+- Não editar `.env`, `sessions/`, tokens, chaves ou cookies.
 - Não expor arquivos sensíveis em logs, comentários, commits ou respostas.
 - Não criar arquivos duplicados para evitar corrigir o arquivo oficial.
 
