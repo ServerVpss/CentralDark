@@ -78,6 +78,7 @@ async function startAdapter({ fallbackEnabled, abacusPort, tokenPort }) {
       TOKENROUTER_API_KEY: TOKENROUTER_KEY,
       TOKENROUTER_MODEL: FALLBACK_MODEL,
       FALLBACK_ENABLED: String(fallbackEnabled),
+      MAX_BODY_BYTES: '1024',
       REGRAS_PATH: resolve(ROOT, 'regras.json'),
     },
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -182,7 +183,36 @@ try {
     messages: [{ role: 'user', content: 'sem fallback' }],
   });
   assert.equal(abacusPure.status, 502);
+  assert.equal(abacusPure.body.error, 'upstream_error');
+  assert.equal(JSON.stringify(abacusPure.body).includes('mock abacus indisponível'), false);
   assert.equal(stats.tokenChat, abacusPureBeforeToken, 'rota Abacus pura acionou TokenRouter');
+
+  const abacusBeforeOversized = stats.abacusChat;
+  const oversizedResponse = await fetch(`${adapter.base}/providers/abacus/v1/chat/completions`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${GATEWAY_KEY}`,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: TEST_MODEL,
+      messages: [{ role: 'user', content: 'x'.repeat(2048) }],
+    }),
+  });
+  assert.equal(oversizedResponse.status, 413);
+  assert.equal((await oversizedResponse.json()).error, 'payload_too_large');
+  assert.equal(stats.abacusChat, abacusBeforeOversized, 'payload grande alcançou upstream');
+
+  const invalidResponse = await fetch(`${adapter.base}/providers/abacus/v1/chat/completions`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${GATEWAY_KEY}`,
+      'content-type': 'application/json',
+    },
+    body: '{invalid',
+  });
+  assert.equal(invalidResponse.status, 400);
+  assert.equal((await invalidResponse.json()).error, 'invalid_json');
 
   const combinedLogs = adapter.logs.join('');
   for (const secret of [GATEWAY_KEY, PROVIDER_KEY, TOKENROUTER_KEY]) {
