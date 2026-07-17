@@ -29,6 +29,7 @@ function getTraceHeader() {
 }
 
 const PORT = process.env.PORT || 8090;
+const MAX_BODY_BYTES = Number(process.env.MAX_BODY_BYTES || 1024 * 1024);
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
 const PROVIDER_BASE = process.env.PROVIDER_BASE || 'https://openrouter.ai/api/v1';
 const PROVIDER_KEY = process.env.PROVIDER_KEY || '';
@@ -125,7 +126,7 @@ async function callAbacus(modelo, messages) {
     },
     body: JSON.stringify({ model: modelo, messages, stream: false }),
   });
-  if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}: ${(await r.text()).slice(0,180)}`);
+  if (!r.ok) throw new Error(`${modelo} HTTP ${r.status}`);
   const data = await r.json();
   const text = data.choices?.[0]?.message?.content || '';
   if (!text.trim()) throw new Error(`${modelo}: resposta vazia do abacus`);
@@ -243,7 +244,7 @@ async function callTokenRouter(modelo, messages, opts = {}) {
     },
     body: JSON.stringify({ model, messages, stream: false, max_tokens, temperature: opts.temperature ?? 0.2 }),
   });
-  if (!r.ok) throw new Error(`tokenrouter ${model} HTTP ${r.status}: ${(await r.text()).slice(0, 180)}`);
+  if (!r.ok) throw new Error(`tokenrouter ${model} HTTP ${r.status}`);
   const data = await r.json();
   const text = extractMessageText(data.choices?.[0]?.message);
   if (!text) throw new Error(`tokenrouter ${model}: resposta vazia (finish=${data.choices?.[0]?.finish_reason || '?'})`);
@@ -304,10 +305,39 @@ function providersMap() {
   };
 }
 
+class PublicHttpError extends Error {
+  constructor(status, code) {
+    super(code);
+    this.status = status;
+    this.publicCode = code;
+  }
+}
+
+function publicFailure(error, fallbackCode = 'upstream_error', fallbackStatus = 502) {
+  if (error instanceof PublicHttpError) {
+    return { status: error.status, code: error.publicCode };
+  }
+  return { status: fallbackStatus, code: fallbackCode };
+}
+
 async function readJsonBody(req) {
-  let body = '';
-  for await (const chunk of req) body += chunk;
-  return body ? JSON.parse(body) : {};
+  if (!Number.isFinite(MAX_BODY_BYTES) || MAX_BODY_BYTES < 1024) {
+    throw new Error('MAX_BODY_BYTES inválido');
+  }
+  const chunks = [];
+  let bytes = 0;
+  for await (const chunk of req) {
+    const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+    bytes += buffer.length;
+    if (bytes > MAX_BODY_BYTES) throw new PublicHttpError(413, 'payload_too_large');
+    chunks.push(buffer);
+  }
+  if (!chunks.length) return {};
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+  } catch {
+    throw new PublicHttpError(400, 'invalid_json');
+  }
 }
 
 async function respondProviderChat(res, req, providerId, payload) {
@@ -621,8 +651,9 @@ const server = http.createServer(async (req, res) => {
         const payload = await readJsonBody(req);
         return await respondProviderChat(res, req, 'abacus', payload);
       } catch (e) {
-        console.error('abacus chat erro:', e);
-        if (!res.headersSent) return json(res, 502, { error: e.message, provider: 'abacus' });
+        console.error('abacus chat erro:', e?.name || 'Error');
+        const failure = publicFailure(e);
+        if (!res.headersSent) return json(res, failure.status, { error: failure.code, provider: 'abacus' });
         try { res.end(); } catch {}
       }
     });
@@ -638,8 +669,9 @@ const server = http.createServer(async (req, res) => {
         const payload = await readJsonBody(req);
         return await respondProviderChat(res, req, 'tokenrouter', payload);
       } catch (e) {
-        console.error('tokenrouter chat erro:', e);
-        if (!res.headersSent) return json(res, 502, { error: e.message, provider: 'tokenrouter' });
+        console.error('tokenrouter chat erro:', e?.name || 'Error');
+        const failure = publicFailure(e);
+        if (!res.headersSent) return json(res, failure.status, { error: failure.code, provider: 'tokenrouter' });
         try { res.end(); } catch {}
       }
     });
@@ -648,10 +680,8 @@ const server = http.createServer(async (req, res) => {
   // Sistema central: Arsenal + passthrough com FALLBACK abacus→tokenrouter
   if (pathOnly === '/v1/chat/completions' || pathOnly === '/chat/completions') {
     return requestTrace.run({ chain: [] }, async () => {
-      let body = '';
-      for await (const chunk of req) body += chunk;
       try {
-        const payload = JSON.parse(body);
+        const payload = await readJsonBody(req);
         const requestedModel = payload.model;
         const modo = MODEL_ALIASES[requestedModel] || requestedModel;
         req._auditSetModel?.(requestedModel === modo ? modo : `${requestedModel}->${modo}`);
@@ -708,9 +738,9 @@ const server = http.createServer(async (req, res) => {
             }
             return json(res, 200, chatOk(requestedModel, respostaPt, { route: 'v1', fallback: FALLBACK_ENABLED }));
           } catch (e) {
-            console.error('passthrough/fallback erro:', e);
+            console.error('passthrough/fallback erro:', e?.name || 'Error');
             return json(res, 502, {
-              error: e.message,
+              error: 'upstream_error',
               centraldark: { route: 'v1', fallback: FALLBACK_ENABLED, upstream: getTraceHeader() },
             });
           }
@@ -747,18 +777,19 @@ const server = http.createServer(async (req, res) => {
           clearInterval(keepalive);
           console.error('erro:', e);
           if (streaming) {
-            res.write(sseChunk(modo, { content: `❌ Arsenal falhou: ${e.message}` }, 'stop'));
+            res.write(sseChunk(modo, { content: '❌ Arsenal temporariamente indisponível' }, 'stop'));
             res.write('data: [DONE]\n\n');
             return res.end();
           }
           return json(res, 500, {
-            error: e.message,
+            error: 'arsenal_error',
             centraldark: { route: 'v1-arsenal', upstream: getTraceHeader() },
           });
         }
       } catch (e) {
-        console.error('erro:', e);
-        if (!res.headersSent) return json(res, 500, { error: e.message });
+        console.error('erro de request:', e?.name || 'Error');
+        const failure = publicFailure(e, 'request_error', 500);
+        if (!res.headersSent) return json(res, failure.status, { error: failure.code });
         try { res.end(); } catch {}
       }
     });
