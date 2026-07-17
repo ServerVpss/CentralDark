@@ -37,7 +37,10 @@ RESP="$WORK/response.json"
 } > "$COMBINED"
 
 try_cli() {
-  command -v grok >/dev/null 2>&1 || return 1
+  command -v grok >/dev/null 2>&1 || {
+    echo "Grok CLI ausente do PATH" >&2
+    return 1
+  }
   local attempt
   for attempt in 1 2 3; do
     : > "$OUT"
