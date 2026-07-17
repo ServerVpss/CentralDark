@@ -790,15 +790,27 @@ Comentário solto é ruído e **não decide nada**. Sem veredito do juiz → che
 - **Teto de 24h.** PR sem veredito em 24h → juiz fecha ou marca `congelado` e sobe pendência.
 - **Teto de 3 PRs abertos por assunto.** O 4º não abre.
 
-### 21.6 Freio absoluto de secret (precede tudo)
-Secret no diff = **freio**. E fechar o PR **NÃO** resolve: a branch continua no remote e o blob continua acessível.
-Ordem inegociável: **1) rotacionar a credencial → 2) deletar a branch → 3) só então fechar o PR.**
-Fechar antes de rotacionar é falso conforto — fica **proibido**.
+### 21.6 Secret: freio é na PRODUÇÃO, não no fluxo (decisão do Pivete, 17/07/2026)
+O repositório é **privado e fechado**. Não há produção, não há usuário. Chave em repo fechado **não para o trabalho**.
+- ❌ **Proibido** travar PR, congelar branch ou abrir ritual de rotação por causa de secret no repo.
+- ✅ **Ação:** eliminar a branch/arquivo e seguir. O Pivete rotaciona a chave em segundos — não é gargalo, não vira pendência.
+- 🚨 **O único freio real:** secret **não vai pra produção**. Deploy com chave exposta = bloqueio absoluto.
+- 🚨 **Nunca** expor valor de chave em log, comentário de PR ou chat. Só nome da variável e caminho.
 
-### 21.7 Quem julga
-Juiz padrão: **Codex** (read-only, GitHub-hosted).
-Impedimento: **quem escreveu o diff não julga o próprio diff.**
-Empate ou impedimento → sobe pro Pivete com **uma** recomendação, nunca com quatro pareceres.
+Regra-mãe: **o site pode subir; a chave não sobe junto.** Parar o fluxo por chave em repo fechado é teatro de segurança.
+
+### 21.7 Quem julga: **HERMES** (decisão do Pivete, 17/07/2026)
+O juiz **não é** o Pivete e **não é** IA de fora. É o **Hermes** — ele está dentro da infra, com os outros agentes.
+
+- **Juiz:** `Hermes Core v5.0` → `agents/Critic/agent.mjs` (`vetar()` = veto prévio, `auditar()` = parecer pós-etapa).
+- **Cérebro:** `decisor.mjs` (DarkAI, rotação de modelos + GraphRAG).
+- **Entrada:** missão `.md` em `missions/pendente/` — **só `.md`**, `.json` é ignorado em silêncio.
+- **Pivete não é instância de recurso.** Ele não arbitra briga de IA. Se o ciclo travou, o Hermes decide.
+- **Ao Pivete só sobe o que ele é o único que pode resolver** (chave, verba, direção de produto) — via **Telegram**, com **o local exato** (arquivo + variável + linha), **uma** frase, **zero** opções.
+
+Impedimento: quem escreveu o diff não julga o próprio diff.
+
+> **Lição de 17/07:** o enxame de IAs no #234 só existiu porque o **Hermes estava morto havia 12 dias** — online no painel, watchdog batendo, executando zero missões. Sem orquestrador, o vácuo virou briga. **Juiz ausente não é neutralidade: é vácuo de poder.**
 
 ---
 
