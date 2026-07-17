@@ -863,7 +863,7 @@
     {
       "time": "2026-07-10T05:51:14.132Z",
       "titulo": "Push na main · 2cdd72cef794f4ad95f6a103d76f37d836625a7b",
-      "detalhe": "Eliminou hits de claude.ap7.site",
+      "detalhe": "Eliminou referências ao proxy legado",
       "area": "Repositório",
       "sha": "2cdd72c",
       "actor": "lovable-dev[bot]"
