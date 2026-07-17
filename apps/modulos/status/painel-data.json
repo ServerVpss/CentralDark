@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-17T06:37:03.239Z",
-  "updatedAtBR": "17/07/2026, 03:37:03 BRT",
+  "updatedAt": "2026-07-17T06:45:49.666Z",
+  "updatedAtBR": "17/07/2026, 03:45:49 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#333): Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core",
+    "lastCommit": "docs(consciencia): Seção 21 — Lei do Juiz (Hermes) (#237)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-17T06:45:49.666Z",
+      "titulo": "Push na main · 02d9aa891431c16714dcff24e0be79fb937f0116",
+      "detalhe": "docs(consciencia): Seção 21 — Lei do Juiz (Hermes) (#237)",
+      "area": "Repositório",
+      "sha": "02d9aa8",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-17T06:37:03.239Z",
       "titulo": "Push na main · 25f78a4cc9c02abf5dacc256d678eb80b2d2d5dc",
       "detalhe": "aprendizado(#333): Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core",
@@ -986,14 +994,6 @@
       "detalhe": "docs(governanca): registra arquitetura gamificada multiagente",
       "area": "Repositório",
       "sha": "f7e60bd",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T00:27:09.875Z",
-      "titulo": "Push na main · f55ebdf3d42a1af9d3c16f188e2c9bee3bf86901",
-      "detalhe": "docs(governanca): registra squads e skills do mapa vivo",
-      "area": "Repositório",
-      "sha": "f55ebdf",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-17T06:45:49.666Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 02d9aa891431c16714dcff24e0be79fb937f0116 (02d9aa8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-17T06:37:03.239Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 25f78a4cc9c02abf5dacc256d678eb80b2d2d5dc (25f78a4)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-10T00:35:57.540Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · f7e60bd645da33b61275c2dcd1bfa2c5a053ed02 (f7e60bd)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-10T00:27:09.875Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f55ebdf3d42a1af9d3c16f188e2c9bee3bf86901 (f55ebdf)",
       "area": "Repositório",
       "status": "sucesso"
     }
