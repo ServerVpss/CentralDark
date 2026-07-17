@@ -42,16 +42,17 @@ pedido /v1/chat  ou  arsenal-*
 
 Desligar: `FALLBACK_ENABLED=false` no env do PM2.
 
-## Secrets (VPS, fora do Git)
+## Credenciais (VPS, fora do Git)
+
+O processo recebe estas variáveis pelo ambiente seguro do serviço:
 
 ```text
-secrets/.env
-  TOKENROUTER_API_KEY=...
-  TOKENROUTER_BASE_URL=https://api.tokenrouter.com/v1
-  TOKENROUTER_MODEL=deepseek/deepseek-v4-pro
+TOKENROUTER_API_KEY=<REDACTED>
+TOKENROUTER_BASE_URL=https://api.tokenrouter.com/v1
+TOKENROUTER_MODEL=deepseek/deepseek-v4-pro
 ```
 
-O adapter lê o arquivo no boot (process env sobrescreve).  
+O adapter não lê arquivo de credenciais; o runtime deve injetar as variáveis no processo.  
 Chat exige auth (Bearer / x-api-key do adapter). Models/health/providers são públicos.
 
 ## Smoke (local)
