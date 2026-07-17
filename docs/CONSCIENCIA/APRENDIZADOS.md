@@ -2658,3 +2658,39 @@ DISTINÇÃO IMPORTANTE: 'Bolt' existe em 2 lugares — (1) container Docker Cent
 - **Data:** 2026-07-17
 - **Contexto:** 17/07/2026: enxame de IAs no PR #234/#235. Investigação revelou que o Hermes Core v5.0 estava online no PM2 desde 05/07 mas executando ZERO missões — três falhas empilhadas: (a) pasta missions/pendente nunca existiu na BASE do módulo; (b) utils/fs-safe.mjs recriado em 05/07 com assinatura (src,dst,opts) e `return;` undefined, enquanto o Core chama (src,dst,tag,{log,onEnotempty}) e testa rr.ok → TypeError no primeiro rename; (c) utils/notify.mjs sem a palavra-chave 'ambos' que o Core manda por padrão → 400 chat not found, Hermes mudo. Corrigidos os três; Hermes voltou a fechar ciclo em ~3s e a avisar no Telegram.
 - **Aprendizado:** 1) PM2 "online" NÃO significa vivo. Hermes ficou 12 dias com watchdog batendo e ZERO missões. Sempre validar com trabalho real (plantar missão .md e ver sair de pendente/), nunca com status do PM2 ou cor do painel. 2) O padrão do bug (2x no mesmo dia): módulo recriado com contrato diferente do chamador, e ninguém testou a integração — só o arquivo isolado. `fs-safe.mjs` (recriado 05/07) fazia `return;` e throw; o Core esperava `{ok,error,reason}` e nunca throw → `Cannot read properties of undefined (reading 'ok')` matava o loop no 1º rename. `notify.mjs` só conhecia destino 'admin'/'canal'; o Core manda `destino='ambos'` por padrão → virava chat_id literal → Telegram 400 chat not found. Ao recriar qualquer módulo: grepar TODOS os call sites e casar assinatura + retorno. 3) Formato de missão do Hermes: SÓ `.md` (`filter(f => f.endsWith('.md'))`). `.json` é ignorado em silêncio — parece que o Hermes está morto quando só está sendo alimentado errado. 4) A caixa de entrada `missions/pendente|em-andamento|concluidas` fica na BASE do módulo Hermes, não em /root/[oculto] (essa é outra pasta, PT, de outro dono). 5) Diagnóstico de Telegram: 400 chat not found = chat_id errado; 401 = token. Nunca confundir. Testar par token+chat com sendMessage antes de acusar o token. 6) LIÇÃO MAIOR: o enxame de IAs brigando no #234 foi SINTOMA, não doença. A doença era o orquestrador morto. Juiz ausente não é neutralidade — é vácuo de poder, e o vácuo é preenchido por briga. Antes de criar regra/revisor/workflow para controlar IAs, verificar se o orquestrador está de fato executando.
+
+
+### Card Telegram sempre (Grok 2026-07-17 reforço)
+- **Pivete ensinou / reafirmou:** em ação relevante e material de estudo, Grok **manda Card Hermes no Telegram** (admin `<pre>` + linha seca no canal status).
+- **Violação desta sessão:** inventário read-only + smoke Abacus foram entregues só no chat CLI, sem card — Pivete cobrou.
+- **Correção:** reenviado card ⚠️ AVISO via `HERMES-CORE/utils/notify.mjs` admin + status 200; rotina reativada.
+- **Regra Grok:** `.grok/rules/01-cards-estudo-telegram-pivete.md` — cumprir sempre, não só quando lembrar.
+
+
+### Anexo Telegram grande/segurança (Grok 2026-07-17)
+- **Pivete selou:** relatórios de nível inventário/auditoria/segurança com muito volume **devem** ir como anexo `.md` e/ou `.txt` (preferência **os dois**), bem estruturados e categorizados (Regras de Ouro), via `@srver1bot` admin — não só no chat CLI.
+- **Prova:** `sendDocument` OK (`vazio.md` msg 6971, `vazio.txt` msg 6972); 0-byte falha → usar conteúdo real.
+- **Regra Grok:** `.grok/rules/06-anexo-telegram-grande-seguranca.md` (+ espelho `~/.grok/rules/`).
+- **Complementa** card Hermes (01) — card = resumo; anexo = corpo completo; zero secrets.
+
+
+### 336. Entrega Telegram: card Hermes + anexo MD/TXT (anti-esquecimento entre sessões)
+- **Categoria:** preferência Pivete / comunicação / regra Grok · **REFORÇO SELADO**
+- **Data:** 2026-07-17 (reforçado na mesma sessão — “pra não esquecer entre sessões”)
+- **Contexto:** Grok entregou inventário 100% read-only e smoke Abacus **só no chat CLI**. Pivete cobrou cards. Depois selou: entregas **grandes/segurança** vão em **anexo `.md` e/ou `.txt`** (preferência os dois), bem estruturados. Pediu reforço para **não se perder entre sessões**.
+- **Aprendizado (pacote completo):**
+  1. **Card Hermes** em ação relevante e material de estudo → admin `<pre>` + linha seca no canal status (`@srver1bot`).
+  2. **Anexo** em inventário/auditoria/segurança/volume alto → `sendDocument` `.md` e/ou `.txt` categorizados (Regras de Ouro), **zero secrets**.
+  3. Card = resumo; anexo = corpo; chat CLI sozinho = **entrega incompleta**.
+  4. 0-byte anexo pode falhar; usar conteúdo real.
+  5. Missão inventário foi **read-only** (sem alterar Caddy/PM2); entrega final em RELATORIOS + Telegram msg 6974/6975.
+- **Onde está gravado (camadas anti-perda):**
+  - `.grok/rules/01-cards-estudo-telegram-pivete.md`
+  - `.grok/rules/06-anexo-telegram-grande-seguranca.md`
+  - `~/.grok/rules/` (espelho)
+  - `mem/preferences/entrega-telegram-anexo-e-cards-hermes.md`
+  - `docs/RELATORIOS/2026-07-17-inventario-readonly-infra-centraldark.md` (+.txt)
+  - `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md` (decisão desta data)
+- **Como aplicar em toda sessão nova:** ler rules 01+06 no boot; se entrega densa → anexar; se relevante → card; nunca “só CLI”.
+- **Prova Telegram:** 6971/6972 (teste vazio), 6974/6975 (inventário MD+TXT).
+

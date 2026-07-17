@@ -619,3 +619,21 @@ Achado separado, mais antigo, não é a causa do silêncio recente: `apps/bot-te
 **27. Pendência #17 (Telegram 401 em `hub-services-check`) — investigada e corrigida (commit `7d8db9623`).** Causa raiz confirmada pelo Pivete: o conector Telegram no Lovable foi **removido de propósito** em 11/07/2026 ("Lovable é só front, salva isso" — nova regra de memória: `feedback_lovable_so_front.md`). `checkTelegram()` em `supabase/functions/hub-services-check/index.ts` chamava `connector-gateway.lovable.dev/telegram/getMe` — caminho abandonado, dando falso-negativo. Corrigido pra testar o mecanismo REAL já usado em produção: token do bot lido direto da tabela `telegram_bots` (mesmo padrão de `notify-telegram/index.ts`, modo "raw"), chamando `api.telegram.org/bot<token>/getMe` sem depender de Lovable. Confirmado via `list_connections`/`list_custom_connectors` (Lovable MCP): zero conectores Telegram configurados no workspace CentralDark (`4w4KhpRnbiTxa4LyNgsg`) — é estado intencional, não bug a "consertar reconectando".
 
 **Deploy PENDENTE:** `hub-services-check` vive no projeto raiz/TelePainel (`kagejpghnwdfymddwxuf`, confirmado via `supabase/config.toml`), não no HUB. O token disponível no cofre (`HUB_SUPABASE_PAT`, mesmo valor testado e funcional pro deploy da `hub-status` no item #26) só tem escopo pro projeto HUB (`lyoigsqluyktoclwdaft`) — `403` ao tentar Management API contra `kagejpghnwdfymddwxuf`. Precisa de um token com acesso a esse projeto específico (pode ser o mesmo PAT se a conta tiver acesso a ambos e o escopo for só por token de sessão, ou pode precisar gerar/usar outro).
+
+---
+
+**33. Entrega Telegram em duas camadas (card + anexo grande) — anti-esquecimento entre sessões** — 2026-07-17.
+
+**Decisão do Pivete (sessão Grok CLI):**
+1. Ação relevante / estudo → **sempre Card Hermes** no admin + linha seca no canal status.
+2. Entregas de **nível inventário / auditoria / segurança / volume alto** → além do card, **anexo `.md` e/ou `.txt`** (preferência os dois), bem estruturado, via `@srver1bot` (`sendDocument`).
+3. Versionar no GitHub (Fonte da Verdade) em branch limpa a partir de `main`, sem arrastar VPS divergente.
+
+**Artefatos:**
+- `.grok/rules/01-cards-estudo-telegram-pivete.md` (reforço)
+- `.grok/rules/06-anexo-telegram-grande-seguranca.md`
+- `mem/preferences/entrega-telegram-anexo-e-cards-hermes.md`
+- `docs/RELATORIOS/2026-07-17-inventario-readonly-infra-centraldark.md` (+.txt)
+- APRENDIZADOS #336
+
+**Não libera:** mexer Central de Notificações 🔒, secrets no anexo, force-push, alterar Caddy/PM2 sem ordem.
