@@ -55,7 +55,8 @@ jobs:
           fi
           # Padrões "cara de segredo" adicionados no diff
           if git diff "$BASE" "$HEAD" -- . \
-              ':(exclude)**/*.md' ':(exclude)**/package-lock.json' \
+              ':(exclude,glob)*.md' ':(exclude,glob)**/*.md' \
+              ':(exclude,glob)package-lock.json' ':(exclude,glob)**/package-lock.json' \
               | grep -E '^\+' \
               | grep -E '(\.env(\s|$)|secrets/|tokens/|sessions/|\.ssh/|-----BEGIN [A-Z ]*PRIVATE KEY-----|\.pem"|\.key")' \
               >/dev/null; then
@@ -231,7 +232,21 @@ jobs:
             const secretSuspect = process.env.SECRET_SUSPECT === 'true';
             const touchedSens   = process.env.TOUCHED_SENS === 'true';
             if (!secretSuspect && !touchedSens) {
-              core.info('Sem alertas críticos — pulando comentário de segurança.');
+              const marker = '<!-- pr-security-alert -->';
+              const comments = await github.rest.issues.listComments({ owner, repo, issue_number: pr, per_page: 100 });
+              const existing = comments.data.find(c => c.body && c.body.includes(marker));
+              if (existing) {
+                const body = [
+                  marker,
+                  '## ✅ Alerta de segurança resolvido',
+                  '',
+                  'A verificação mais recente não encontrou padrão suspeito nem path operacional sensível no diff.',
+                  '',
+                  '_Atualizado automaticamente por pr-auto-review.yml · CentralDark_'
+                ].join('\n');
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              }
+              core.info('Sem alertas críticos — estado anterior encerrado.');
               return;
             }
             const marker = '<!-- pr-security-alert -->';
