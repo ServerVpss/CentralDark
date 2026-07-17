@@ -63,6 +63,21 @@
 
 ---
 
+
+## 🧹 Liquidação 2026-07-17 (resto = lixo — Pivete)
+
+| Item | Ação |
+|------|------|
+| `apps/modulos/proxy-unlimi/` | **Removido** + PM2 `CentralDark-ProxyUnlimi` stop/delete + `pm2 save`. Backup: `.cleanup-evidence/20260717-lixo-final/proxy-unlimi.tgz` |
+| `HERMES-CORE/HERMES-THINKER/` | **Removido**. Backup sem node_modules no evidence |
+| Working tree suja (bot-telegram noise, elite-recon WT, status painel vivo, graph-panel, etc.) | **`git restore`** pro HEAD (não reescreve histórico) |
+| Debates/EVOLUCAO ARSENAL de teste (tracked) | **Apagados** (não-ouro) |
+| graph-vivo dumps, dossiês zip, drifts, relatórios soltos | **Apagados** |
+| Ouro salvo na limpeza | `TECNICA-DA-LUPA.md`, `TECNICA-RADIO-MULTI-SETOR.md` (versionar) |
+
+Gateway Arsenal **não** tocado — continua online com fallback.
+
+
 ## ⚠️ Nunca nesta limpeza
 
 - `rm -rf` em `secrets/`, `HERMES-CORE` núcleo, `hub`, bots 🔒  

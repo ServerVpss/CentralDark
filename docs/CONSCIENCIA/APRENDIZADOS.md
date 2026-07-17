@@ -2649,3 +2649,9 @@ curl -s http://localhost:9100/health  # MCP OK?
   - **#218 na VPS:** regra multi-agente 5 passos + 00-LEIA-PRIMEIRO do `origin/main`; espelho AGENTES-AUTONOMOS.
   - **Allowlist:** `docs/CONSCIENCIA/ALLOWLIST-OURO-VPS-GITHUB.md`.
   - Gateway live pós-limpeza: health ok, providers arsenal/abacus/tokenrouter.
+
+### 334. Resto = lixo — limpeza final proxy-unlimi / THINKER / tree suja
+- **Categoria:** ops / higiene
+- **Data:** 2026-07-17
+- **Contexto:** Pivete: o que sobrou (proxy-unlimi, HERMES-THINKER, tree suja, painel) é LIXO — jogar fora.
+- **Aprendizado:** Removido proxy-unlimi (PM2 stop+delete+save), HERMES-THINKER, dumps graph, zips dossiê, debates/evolucao teste. Working tree de ruído restaurada com `git restore` (sem force-push/reset hard). Ouro: gateway Arsenal, técnicas Lupa/Rádio versionadas. Backup em `.cleanup-evidence/20260717-lixo-final/`.
