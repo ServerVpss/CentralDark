@@ -1,4 +1,4 @@
-# Sentinela — 2026-07-18T07:55:45.036Z
+# Sentinela — 2026-07-18T13:21:12.306Z
 
 | Métrica | Valor |
 |---|---|
@@ -12,19 +12,19 @@
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 383ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 269ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 116ms · CORS=`*`
-- 🔴 **Install status** — `503` em 116ms
-- 🟢 **Painel** — `200` em 116ms · CORS=`*`
-- 🟢 **API** — `200` em 136ms · CORS=`*`
+- 🟢 **MCP health** — `200` em 269ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 248ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 112ms · CORS=`*`
+- 🔴 **Install status** — `503` em 78ms
+- 🟢 **Painel** — `200` em 154ms · CORS=`*`
+- 🟢 **API** — `200` em 145ms · CORS=`*`
 
 ## Divergências
 
 - **[p2]** Endpoints → Endpoint Install status fora do ar (HTTP 503) (bot: `claude`)
-- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel-validacao (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
