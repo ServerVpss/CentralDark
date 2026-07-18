@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-17T06:36:20.273Z
+# 🧠 Notion Sync — 2026-07-18T18:02:51.603Z
 
-- **Commit fonte:** `25f78a4cc9c02abf5dacc256d678eb80b2d2d5dc`
+- **Commit fonte:** `b97419a3461bd9c09513432b5a40c99f209a10a1`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 378 atualizadas · ❌ 458 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 379 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,8 +15,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 335 | 1 | 334 | 0 | 0 |
-| estrutura | 458 | 0 | 0 | 0 | 458 |
+| aprendizados | 335 | 0 | 335 | 0 | 0 |
+| estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
 
@@ -400,7 +400,7 @@
 | aprendizados | atualizado | #330 — ChatGPT "conector sem tools" = duplicata no app, NÃO é o MCP (102 tools OK) |
 | aprendizados | atualizado | #331 — Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete |
 | aprendizados | atualizado | #332 — Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução |
-| aprendizados | criado | #333 — Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core |
+| aprendizados | atualizado | #333 — Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -709,6 +709,7 @@
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/14-sync-monorepo.md |
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
 | estrutura | erro | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
+| estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/AUTO-EVOLUCAO-MENTAL-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/README.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
