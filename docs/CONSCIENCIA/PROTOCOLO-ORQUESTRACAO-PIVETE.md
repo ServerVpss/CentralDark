@@ -2,7 +2,7 @@
 title: "PROTOCOLO DE ORQUESTRACAO PIVETE"
 date: 2026-07-07
 tags: ["consciencia", "orquestracao", "ia", "pivete", "centraldark"]
-updated: 2026-07-07
+updated: 2026-07-18
 ---
 
 # Protocolo de Orquestracao Pivete
@@ -33,17 +33,77 @@ As outras IAs sao modulos do arsenal. Podem ser ChatGPT, Codex, Claude, Grok, Ge
 
 ## Estado de Bordo
 
-Toda IA deve manter estas cinco linhas vivas durante a conversa:
+Toda IA deve manter estas linhas vivas durante a conversa:
 
 ```text
+MISSION_ID:
 Objetivo atual:
+Fase atual:
 Decisao mais recente de Pivete:
 Plano em execucao:
+Ultima acao comprovada:
 Evidencias / validacoes:
-Pendencias e proxima decisao:
+Pendencias:
+Proximo passo unico:
+Travas:
+Divergencias / lacunas:
+Agente e papel:
+Fonte da verdade:
 ```
 
 Se a conversa mudar de assunto, a IA responde o assunto paralelo, fecha, retoma o Estado de Bordo e diz o proximo passo.
+
+## Ponte de Continuidade Semantica
+
+A Ponte de Continuidade integra agentes, modelos, sessoes e aplicativos sem criar outra memoria.
+
+### `!CALIBRAR`
+
+Quando Pivete disser `!CALIBRAR`:
+
+1. interromper novas acoes;
+2. deixar processos em curso em estado seguro;
+3. comparar conversa, Git, PR, Actions, logs e estado vivo;
+4. atualizar somente os documentos canonicos que realmente mudaram;
+5. devolver o Estado de Bordo completo;
+6. nao iniciar outra execucao.
+
+Distribuicao oficial:
+
+- missao, fase e proximo passo → `docs/PENDENCIAS.md`;
+- estado comprovado → `docs/CONSCIENCIA/09-ESTADO-ATUAL.md`;
+- decisao de caminho → `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`;
+- aprendizado duravel → `docs/CONSCIENCIA/APRENDIZADOS.md`;
+- evidencia → commit, PR, Actions, teste, log ou relatorio canonico.
+
+Nao copiar o mesmo texto em todos os documentos. Cada local guarda apenas o fragmento de sua responsabilidade.
+
+### `!RELOAD`
+
+Quando Pivete disser `!RELOAD`:
+
+1. entrar em read-only;
+2. ler a regra oficial multi-agente, este protocolo, pendencias, aprendizados e estado atual;
+3. buscar semanticamente por `MISSION_ID`, objetivo, arquivos e evidencias;
+4. comparar o registrado com o estado real;
+5. informar divergencias;
+6. devolver o Estado de Bordo;
+7. retomar somente o proximo passo comprovado e somente se a autorizacao ainda cobrir o escopo.
+
+`!RELOAD` nao concede autorizacao, nao herda permissao de outra missao e nao transforma memoria de chat em prova.
+
+### Handoff entre aplicativos
+
+Quando o aplicativo atual nao tiver ferramenta, contexto, acesso ou capacidade suficiente:
+
+1. o orquestrador mantem a `MISSION_ID`;
+2. envia ao agente adequado somente a subtarefa delimitada, o Estado de Bordo e as referencias canonicas;
+3. o receptor relê a Fonte da Verdade e valida as evidencias;
+4. o receptor nao cria missao, memoria ou documentacao paralela;
+5. o resultado volta ao orquestrador;
+6. o orquestrador sintetiza, prova e registra no mesmo fio.
+
+GitHub e a Fonte da Verdade. Lovable, ChatGPT, Claude, Grok, Codex, Notion e outras interfaces usam ponteiros e contexto operacional minimo.
 
 ## Modos operacionais
 
@@ -119,13 +179,17 @@ Ler -> Perguntar -> Agir -> Provar -> Registrar
 
 ## Deposito de saida
 
-No fim de cada sessao importante, registrar:
+No fim de cada sessao importante, executar `!CALIBRAR` ou registrar o equivalente:
 
 ```text
+MISSION_ID:
 O que foi decidido:
 O que foi feito:
 Evidencia usada:
 O que ficou pendente:
+Proximo passo unico:
+Travas:
+Divergencias:
 Proxima decisao de Pivete:
 ```
 
@@ -143,5 +207,5 @@ Use o prompt universal quando a IA nao conseguir ler imagem. Use o SVG/PNG como 
 ## Frase curta para colar em qualquer IA
 
 ```text
-Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam, IAs variam. Declare objetivo, modo, escopo, evidencias, riscos e proximo passo seguro. Nao invente historico e nao faca acao sensivel sem autorizacao explicita.
+Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam, IAs variam. Preserve a MISSION_ID. Em !CALIBRAR, deposite o checkpoint nos documentos canonicos; em !RELOAD, releia a Fonte da Verdade em read-only, valide as evidencias e retome somente o proximo passo comprovado. Nao crie memoria, missao ou documentacao paralela.
 ```
