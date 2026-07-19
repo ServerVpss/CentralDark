@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-19T10:12:11.948Z",
-  "updatedAtBR": "19/07/2026, 07:12:11 BRT",
+  "updatedAt": "2026-07-19T16:53:54.944Z",
+  "updatedAtBR": "19/07/2026, 13:53:54 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#335): Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval",
+    "lastCommit": "fix(ci): isolar checkout do codex-validate no runner",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-19T16:53:54.944Z",
+      "titulo": "Push na main · eb45b38b1cdb7c975d2f7a8c63db1011d9cd14c0",
+      "detalhe": "fix(ci): isolar checkout do codex-validate no runner",
+      "area": "Repositório",
+      "sha": "eb45b38",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-19T10:12:11.948Z",
       "titulo": "Push na main · 569e2a888e9348fe9d9a70677eee5efac4c484e2",
       "detalhe": "aprendizado(#335): Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval",
@@ -986,14 +994,6 @@
       "detalhe": "feat(hub): auto-refresh + correlation-id + auth guard + audit trail 30d",
       "area": "Repositório",
       "sha": "b77c58a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T02:44:08.718Z",
-      "titulo": "Push na main · b020598b80d249a451ead345db73a2cead52b869",
-      "detalhe": "fix(arsenal/regras): remove prefixos vendor — Abacus RouteLLM rejeita 'google/', 'openai/', 'anthropic/'",
-      "area": "Repositório",
-      "sha": "b020598",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-19T16:53:54.944Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · eb45b38b1cdb7c975d2f7a8c63db1011d9cd14c0 (eb45b38)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-19T10:12:11.948Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 569e2a888e9348fe9d9a70677eee5efac4c484e2 (569e2a8)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-10T03:00:28.508Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b77c58a4720d1db7dcabc14d3d5ba81db825b790 (b77c58a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-10T02:44:08.718Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b020598b80d249a451ead345db73a2cead52b869 (b020598)",
       "area": "Repositório",
       "status": "sucesso"
     }
