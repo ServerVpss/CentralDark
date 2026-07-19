@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-19T07:45:02.746Z
-- **Commit:** `017a97eb04324d405b29730f999fa7cbdcd138a1`
+- **Gerado:** 2026-07-19T10:11:44.155Z
+- **Commit:** `569e2a888e9348fe9d9a70677eee5efac4c484e2`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 366 | 0 | 0 | 366 | 0 |
+| aprendizados | 367 | 0 | 0 | 367 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **366**
+- 🟥 Faltando no Notion: **367**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -414,4 +414,5 @@
 - 332. Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução
 - 333. Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core
 - 334. Regras aprovadas pelo Pivete: pessoa ≠ ideia + preservação sem v2 (incidentes reais com IA)
+- 335. Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval
 </details>
