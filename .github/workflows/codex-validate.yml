@@ -18,11 +18,26 @@ jobs:
     name: Validate Codex operational kit
     runs-on: [self-hosted, Linux]
     steps:
+      - name: Prepare isolated checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          checkout_dir="$GITHUB_WORKSPACE/.ci-codex-validate"
+          if [[ "$checkout_dir" != "$GITHUB_WORKSPACE/.ci-codex-validate" ]]; then
+            echo "Unsafe checkout directory: $checkout_dir"
+            exit 1
+          fi
+          rm -rf "$checkout_dir"
+
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          path: .ci-codex-validate
+          submodules: false
 
       - name: Validate required Codex files
         shell: bash
+        working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
 
@@ -42,6 +57,7 @@ jobs:
 
       - name: Check official repository references
         shell: bash
+        working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
 
@@ -52,6 +68,7 @@ jobs:
 
       - name: Check sensitive-file guardrails are explicit
         shell: bash
+        working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
 
@@ -78,6 +95,7 @@ jobs:
 
       - name: Check docs do not contain real secret values
         shell: bash
+        working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
 
@@ -113,7 +131,7 @@ jobs:
               for pattern in patterns:
                   for match in pattern.finditer(text):
                       value = match.group(1) if match.groups() else match.group(0)
-                      normalized = value.strip().strip('"\'')
+                      normalized = value.strip().strip("\"'")
                       if normalized in allowed_placeholders:
                           continue
                       findings.append(f"{file}: possible real secret value near: {match.group(0)[:40]}")
@@ -129,6 +147,7 @@ jobs:
 
       - name: Validate Markdown presence
         shell: bash
+        working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
           grep -q "Repositório oficial" AGENTS.md
