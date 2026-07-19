@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-18T21:47:13.110Z
-- **Commit:** `c0210b9064da87aa8028d5c5a82ec4a2c68e8208`
+- **Gerado:** 2026-07-19T07:45:02.746Z
+- **Commit:** `017a97eb04324d405b29730f999fa7cbdcd138a1`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 365 | 0 | 0 | 365 | 0 |
+| aprendizados | 366 | 0 | 0 | 366 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **365**
+- 🟥 Faltando no Notion: **366**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -413,4 +413,5 @@
 - 331. Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete
 - 332. Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução
 - 333. Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core
+- 334. Regras aprovadas pelo Pivete: pessoa ≠ ideia + preservação sem v2 (incidentes reais com IA)
 </details>

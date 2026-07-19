@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-18T21:47:07.165Z
+# 🧠 Notion Sync — 2026-07-19T07:44:59.138Z
 
-- **Commit fonte:** `c0210b9064da87aa8028d5c5a82ec4a2c68e8208`
+- **Commit fonte:** `017a97eb04324d405b29730f999fa7cbdcd138a1`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 379 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 379 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 335 | 0 | 335 | 0 | 0 |
+| aprendizados | 336 | 1 | 335 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -401,6 +401,7 @@
 | aprendizados | atualizado | #331 — Gitlink órfão Bolt/source removido (destrava CI) — ordem do Pivete |
 | aprendizados | atualizado | #332 — Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução |
 | aprendizados | atualizado | #333 — Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core |
+| aprendizados | criado | #334 — Regras aprovadas pelo Pivete: pessoa ≠ ideia + preservação sem v2 (incidentes reais com IA) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
