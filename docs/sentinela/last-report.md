@@ -1,4 +1,4 @@
-# Sentinela — 2026-07-19T19:10:12.075Z
+# Sentinela — 2026-07-20T03:24:42.178Z
 
 | Métrica | Valor |
 |---|---|
@@ -12,12 +12,12 @@
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 258ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 243ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 121ms · CORS=`*`
-- 🔴 **Install status** — `503` em 94ms
-- 🟢 **Painel** — `200` em 106ms · CORS=`*`
-- 🟢 **API** — `200` em 119ms · CORS=`*`
+- 🟢 **MCP health** — `200` em 298ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 245ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 189ms · CORS=`*`
+- 🔴 **Install status** — `503` em 97ms
+- 🟢 **Painel** — `200` em 125ms · CORS=`*`
+- 🟢 **API** — `200` em 128ms · CORS=`*`
 
 ## Divergências
 
