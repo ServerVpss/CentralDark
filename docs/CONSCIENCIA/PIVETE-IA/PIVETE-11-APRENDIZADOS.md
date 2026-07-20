@@ -2,12 +2,18 @@
 title: "PIVETE 11 APRENDIZADOS"
 date: 2026-07-05
 tags: ["consciencia"]
-updated: 2026-07-05
+updated: 2026-07-20
 ---
 
 # PIVETE-11 · APRENDIZADOS
 
 Extraídos de `docs/CONSCIENCIA/APRENDIZADOS.md`. Mais recentes primeiro.
+
+## #283 — adaptar primeiro; destruir só quando houver motivo real
+**Categoria:** regra de operação e aprendizado
+**Contexto:** Pivete explicou que o Grok ajudou a perder o medo de quebrar, aprender e refazer. Ele sabe que consegue apagar uma VPS e reconstruir tudo, mas reconhece que capacidade de reconstrução não significa necessidade de destruir o que já funciona.
+**Aprendizado:** quando o caminho direto não estiver disponível, adaptar por outro caminho, outra ferramenta ou outro ambiente. Preservar produção quando não existe motivo técnico para reconstruir. Usar sandbox para quebrar, estudar e refazer à vontade. A coragem de destruir é capacidade; a decisão de preservar é controle.
+**Regra prática:** `não consigo pelo caminho direto → adapto o caminho → preservo o que funciona → valido → registro`. Produção evolui por correção mínima; sandbox recebe experimentos destrutivos.
 
 ## #282 — pivete = ponte de consciência Lovable ↔ WebUI
 **Categoria:** atalho
