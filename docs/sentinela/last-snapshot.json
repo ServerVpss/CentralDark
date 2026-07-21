@@ -1,12 +1,12 @@
 {
-  "at": "2026-07-20T19:46:45.682Z",
+  "at": "2026-07-21T02:52:38.028Z",
   "endpoints": [
     {
       "name": "MCP health",
       "url": "https://mcp.centralldark.com/health",
       "bot": "grok",
       "status": 200,
-      "latencyMs": 321,
+      "latencyMs": 268,
       "cors": "*"
     },
     {
@@ -22,7 +22,7 @@
       "url": "https://mcp.centralldark.com/tools.json",
       "bot": "codex",
       "status": 200,
-      "latencyMs": 109,
+      "latencyMs": 103,
       "cors": "*"
     },
     {
@@ -30,7 +30,7 @@
       "url": "https://install.centralldark.com/status.json",
       "bot": "claude",
       "status": 503,
-      "latencyMs": 141,
+      "latencyMs": 68,
       "cors": null
     },
     {
@@ -38,7 +38,7 @@
       "url": "https://status.centralldark.com/",
       "bot": "claude",
       "status": 200,
-      "latencyMs": 140,
+      "latencyMs": 90,
       "cors": "*"
     },
     {
@@ -46,10 +46,10 @@
       "url": "https://api.centralldark.com/health",
       "bot": "codex",
       "status": 200,
-      "latencyMs": 148,
+      "latencyMs": 118,
       "cors": "*"
     }
   ],
-  "workflowsFailures24h": 3,
-  "divergencias": 4
+  "workflowsFailures24h": 8,
+  "divergencias": 9
 }
