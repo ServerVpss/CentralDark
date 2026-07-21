@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-21T00:51:40.236Z
-- **Commit:** `9bf0a1e836d3b8adcec264436d379f53c7d3a4d5`
+- **Gerado:** 2026-07-21T01:09:45.820Z
+- **Commit:** `66088c66f428ca3eae3f4b6cc7f594b608fbc1ea`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 368 | 0 | 0 | 368 | 0 |
+| aprendizados | 369 | 0 | 0 | 369 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **368**
+- 🟥 Faltando no Notion: **369**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -416,4 +416,5 @@
 - 334. Regras aprovadas pelo Pivete: pessoa ≠ ideia + preservação sem v2 (incidentes reais com IA)
 - 335. Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval
 - 336. Update do Hermes faz git reset --hard e stasha os patches locais
+- 337. Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR)
 </details>
