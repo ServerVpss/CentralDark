@@ -17,25 +17,53 @@ concurrency:
 
 jobs:
   validate:
-    name: Validar migrations sem producao
+    name: Validar migrations sem produção
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: false
 
       - name: Instalar Supabase CLI
-        uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf # v2.1.1
+        uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf
         with:
           version: 2.109.1
 
       - name: Validar scripts e migrations
         shell: bash
         run: |
+          set -euo pipefail
           bash -n scripts/migrations/validate-migrations.sh
           bash -n scripts/migrations/apply-migrations-vps.sh
           bash scripts/migrations/validate-migrations.sh
 
+      - name: Detectar mudança real em migration
+        id: migration_changes
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "apply_local=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if git diff --name-only "$BASE_SHA...$HEAD_SHA" | grep -q '^supabase/migrations/.*\.sql$'; then
+            echo "apply_local=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "apply_local=false" >> "$GITHUB_OUTPUT"
+            echo "Nenhum arquivo SQL de migration mudou; teste local do banco não é necessário."
+          fi
+
       - name: Aplicar migrations somente no banco local do runner
+        if: steps.migration_changes.outputs.apply_local == 'true'
         run: supabase db start
+
+      - name: Encerrar banco local
+        if: always() && steps.migration_changes.outputs.apply_local == 'true'
+        run: supabase db stop --no-backup || true

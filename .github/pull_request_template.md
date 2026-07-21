@@ -1,3 +1,5 @@
+# Pull Request — ServerVpss/CentralDark
+
 ## Objetivo
 
 <!-- O que muda e por quê? -->
@@ -12,11 +14,17 @@
 - [ ] Checks obrigatórios verdes
 - [ ] Revisores independentes concluíram
 - [ ] Codex publicou parecer final para o HEAD atual
+- [ ] Verifiquei comentários de agentes no PR antes do merge
 
-## Segurança
+## Arquivos sensíveis
 
-- [ ] Sem `.env`, secrets, tokens, chaves, sessões ou credenciais no diff/log
-- [ ] Sem deploy, restart, migration ou produção sem autorização
+- [ ] Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis
+- [ ] Sem `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves ou credenciais no diff e nos logs
+
+## Ações sensíveis
+
+- [ ] Sem deploy, restart, migration ou produção sem autorização explícita
+- [ ] Sem force-push ou reset destrutivo
 - [ ] Sem falso verde ou `continue-on-error` mascarando falha obrigatória
 
 ## Riscos e rollback

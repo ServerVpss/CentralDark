@@ -103,20 +103,11 @@ jobs:
               Path(".github/codex/prompts/centraldark-system.md"),
               Path(".github/pull_request_template.md"),
           ]
-
           patterns = [
               re.compile(r"-----BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----", re.I),
               re.compile(r"(?i)\b(?:token|password|passwd|secret|cookie|session|connection_string|database_url|api_key|apikey)\b\s*[:=]\s*['\"]?([^'\"\s<>`]{12,})"),
           ]
-
-          allowed_placeholders = {
-              "***OCULTO***",
-              "REDACTED",
-              "CHANGEME",
-              "EXAMPLE",
-              "PLACEHOLDER",
-          }
-
+          allowed_placeholders = {"***OCULTO***", "REDACTED", "CHANGEME", "EXAMPLE", "PLACEHOLDER"}
           findings = []
           for file in files:
               text = file.read_text(encoding="utf-8")
@@ -127,13 +118,11 @@ jobs:
                       if normalized in allowed_placeholders:
                           continue
                       findings.append(f"{file}: possible real secret value near: {match.group(0)[:40]}")
-
           if findings:
               print("Potential real secret-like values found in Codex docs:")
               for item in findings:
                   print("-", item)
               sys.exit(1)
-
           print("OK: no real secret-like values found in Codex docs")
           PY
 
@@ -155,7 +144,13 @@ jobs:
       - uses: actions/checkout@v6
         with:
           submodules: false
-          persist-credentials: false
+      - name: Remover credencial do checkout
+        shell: bash
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          while IFS= read -r key; do
+            git config --local --unset-all "$key" || true
+          done < <(git config --local --name-only --get-regexp '^includeIf\.gitdir:' || true)
       - uses: actions/setup-node@v6
         with:
           node-version: '20'

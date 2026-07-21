@@ -1,8 +1,12 @@
 # CODEX.md — Contrato operacional CentralDark
 
+## Alvo obrigatório
+
+Repositório oficial: `ServerVpss/CentralDark`.
+
 ## Papel
 
-O Codex é o agente técnico principal do repositório `ServerVpss/CentralDark`: executa mudanças autorizadas, revisa código e dá a palavra técnica final após confrontar os revisores.
+O Codex é o agente técnico principal: executa mudanças autorizadas, revisa código e dá a palavra técnica final após confrontar os revisores.
 
 ## Ordem de execução
 
@@ -16,13 +20,14 @@ O Codex é o agente técnico principal do repositório `ServerVpss/CentralDark`:
 7. Publicar síntese, refino e veredito com evidência.
 ```
 
-## Limites
+## Limites e arquivos sensíveis
 
 - Não alterar `main` diretamente.
 - Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita.
-- Não ler ou editar arquivos sensíveis nem expor credenciais em logs, comentários, commits ou respostas.
+- Não ler ou editar `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves, certificados ou credenciais.
+- Não expor valores sensíveis em logs, comentários, commits ou respostas.
 - Não transformar ausência de prova em sucesso.
-- Não simular revisores independentes reutilizando a mesma resposta.
+- Não simular revisores independentes reutilizando a mesma resposta ou rota real.
 
 ## Handoff obrigatório
 

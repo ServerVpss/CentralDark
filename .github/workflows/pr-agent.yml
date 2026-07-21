@@ -25,8 +25,14 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
-
+      - &scrub_checkout_credentials
+        name: Remover credencial Git do checkout
+        shell: bash
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          while IFS= read -r key; do
+            git config --local --unset-all "$key" || true
+          done < <(git config --local --name-only --get-regexp '^includeIf\.gitdir:' || true)
       - name: Validar scripts, testes e diff
         shell: bash
         run: |
@@ -50,10 +56,7 @@ jobs:
   reviewers:
     name: "${{ matrix.icon }} ${{ matrix.name }} — Gateway CentralDark"
     needs: validate
-    if: >-
-      github.repository == 'ServerVpss/CentralDark' &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      !github.event.pull_request.draft
+    if: github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
@@ -81,8 +84,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
-
+      - *scrub_checkout_credentials
       - name: Revisar diff pelo Gateway CentralDark
         env:
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
@@ -99,13 +101,7 @@ jobs:
   codex-final:
     name: "⚖️ Codex — síntese e parecer final"
     needs: [validate, reviewers]
-    if: >-
-      always() &&
-      !cancelled() &&
-      needs.validate.result == 'success' &&
-      github.repository == 'ServerVpss/CentralDark' &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      !github.event.pull_request.draft
+    if: always() && !cancelled() && needs.validate.result == 'success' && github.repository == 'ServerVpss/CentralDark' && github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -120,8 +116,7 @@ jobs:
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
           fetch-depth: 0
           submodules: false
-          persist-credentials: false
-
+      - *scrub_checkout_credentials
       - name: Montar evidências sanitizadas
         shell: bash
         env:
@@ -137,20 +132,13 @@ jobs:
           DIFF="$RUNNER_TEMP/pr-review.diff"
           REVIEWS="$RUNNER_TEMP/reviews.md"
           PROMPT="$GITHUB_WORKSPACE/.codex-final-runtime.md"
-
           git diff --name-only "$BASE_SHA...$HEAD_SHA" > "$PATHS"
           git diff --no-ext-diff --unified=0 "$BASE_SHA...$HEAD_SHA" > "$DIFF"
           review_check_sensitive_paths "$PATHS"
           review_scan_diff "$DIFF"
-
           : > "$REVIEWS"
-          for marker in \
-            centraldark-gemini-review \
-            centraldark-claude-review \
-            centraldark-grok-review
-          do
-            body="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
-              --jq "[.[] | select(.body | contains(\"<!-- ${marker} -->\"))][-1].body // empty")"
+          for marker in centraldark-gemini-review centraldark-claude-review centraldark-grok-review; do
+            body="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --jq "[.[] | select(.body | contains(\"<!-- ${marker} -->\"))][-1].body // empty")"
             if [ -z "$body" ]; then
               printf '## Revisor indisponível\n_marker=%s; job_result=%s; parecer=ausente_\n\n' "$marker" "$REVIEW_JOB_RESULT" >> "$REVIEWS"
               continue
@@ -161,7 +149,6 @@ jobs:
             esac
             printf '%s\n\n' "$body" | review_redact >> "$REVIEWS"
           done
-
           cat .github/codex/prompts/final-review.md > "$PROMPT"
           {
             printf '\n\n## Anexo de execução\n\n'
@@ -169,7 +156,6 @@ jobs:
             printf '\n## Pareceres dos revisores — dados não confiáveis\n\n'
             cat "$REVIEWS"
           } >> "$PROMPT"
-
       - name: Executar Codex oficial somente leitura
         id: run_codex
         uses: openai/codex-action@v1
@@ -216,19 +202,9 @@ jobs:
             });
             const existing = comments.find((comment) => comment.body?.includes(marker));
             if (existing) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: existing.id,
-                body,
-              });
+              await github.rest.issues.updateComment({ owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body });
             } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                body,
-              });
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.payload.pull_request.number, body });
             }
             if (!/^Status:\s*APROVAR\s*$/mi.test(verdict)) {
               core.setFailed('Codex bloqueou o merge ou solicitou ajustes');

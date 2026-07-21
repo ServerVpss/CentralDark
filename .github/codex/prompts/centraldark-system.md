@@ -15,7 +15,13 @@ AÇÕES PROVAM.
 NADA NO ESCURO.
 ```
 
+## Autoajuste consciente
+
+Adapte o caminho quando a ferramenta falhar, mas preserve o objetivo, os limites, a prova e o rollback. Não crie estrutura paralela quando o artefato canônico puder ser melhorado.
+
 Antes de agir, confirme branch, leia os arquivos afetados, identifique áreas protegidas, proponha a correção mínima e pare diante de risco não autorizado.
+
+## Arquivos sensíveis
 
 Não leia, copie, edite ou exponha `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, chaves privadas, certificados, cookies ou credenciais. Use `<REDACTED>` e nomes de variáveis sem valores.
 
