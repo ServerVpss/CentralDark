@@ -182,10 +182,18 @@ jobs:
           git -C "$REPO_DIR" diff --quiet
           git -C "$REPO_DIR" diff --cached --quiet
 
+          git -C "$REPO_DIR" fetch --prune origin main
+          FINAL_MAIN_SHA="$(git -C "$REPO_DIR" rev-parse origin/main)"
+          git -C "$REPO_DIR" merge-base --is-ancestor "$DEPLOY_SHA" "$FINAL_MAIN_SHA"
+          git -C "$REPO_DIR" diff --quiet "$DEPLOY_SHA" "$FINAL_MAIN_SHA" -- apps/modulos/mcp
+          if [[ "$DEPLOY_SHA" != "$FINAL_MAIN_SHA" ]]; then
+            git -C "$REPO_DIR" merge --ff-only "$FINAL_MAIN_SHA"
+          fi
+
           trap - ERR
           echo "DEPLOYED_TO_MAIN"
           echo "event_sha=$TARGET_SHA"
-          echo "deployed_sha=$DEPLOY_SHA"
+          echo "deployed_sha=$FINAL_MAIN_SHA"
           echo "pm2_app=$PM2_APP"
           echo "health=ok"
           echo "startup_audit=ok"
