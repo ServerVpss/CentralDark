@@ -154,3 +154,18 @@ jobs:
           grep -q "Alvo obrigatório" CODEX.md
           grep -q "Autoajuste consciente" .github/codex/prompts/centraldark-system.md
           grep -q "Ações sensíveis" .github/pull_request_template.md
+
+  validate-admin-guard:
+    name: Validate MCP admin guard (offline)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Run admin guard unit tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test apps/modulos/mcp/tests/admin-guard.test.mjs
