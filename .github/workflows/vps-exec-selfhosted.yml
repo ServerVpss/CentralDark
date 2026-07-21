@@ -55,38 +55,43 @@ jobs:
 
           ORIGIN_SHA="$(git rev-parse origin/main)"
           CURRENT_SHA="$(git rev-parse HEAD)"
-          [[ "$ORIGIN_SHA" == "$TARGET_SHA" ]] || {
-            echo "ORIGIN_MAIN_SHA_MISMATCH"
+          git merge-base --is-ancestor "$TARGET_SHA" "$ORIGIN_SHA" || {
+            echo "EVENT_SHA_NOT_ANCESTOR_OF_ORIGIN_MAIN"
             echo "target=$TARGET_SHA"
             echo "origin=$ORIGIN_SHA"
             exit 24
           }
+          git diff --quiet "$TARGET_SHA" "$ORIGIN_SHA" -- apps/modulos/mcp || {
+            echo "MCP_CHANGED_AFTER_EVENT_SHA"
+            exit 25
+          }
+          DEPLOY_SHA="$ORIGIN_SHA"
 
           git diff --quiet
           git diff --cached --quiet
-          git merge-base --is-ancestor "$CURRENT_SHA" "$ORIGIN_SHA" || {
+          git merge-base --is-ancestor "$CURRENT_SHA" "$DEPLOY_SHA" || {
             echo "LOCAL_HEAD_NOT_ANCESTOR_OF_MAIN"
-            exit 25
-          }
-
-          if [[ "$CURRENT_SHA" != "$ORIGIN_SHA" ]]; then
-            git merge --ff-only "$ORIGIN_SHA"
-          fi
-
-          [[ "$(git rev-parse HEAD)" == "$TARGET_SHA" ]] || {
-            echo "LOCAL_HEAD_SHA_MISMATCH"
             exit 26
           }
 
-          CHANGE_SHA="$(git rev-list --first-parent -1 "$TARGET_SHA" -- apps/modulos/mcp || true)"
+          if [[ "$CURRENT_SHA" != "$DEPLOY_SHA" ]]; then
+            git merge --ff-only "$DEPLOY_SHA"
+          fi
+
+          [[ "$(git rev-parse HEAD)" == "$DEPLOY_SHA" ]] || {
+            echo "LOCAL_HEAD_SHA_MISMATCH"
+            exit 27
+          }
+
+          CHANGE_SHA="$(git rev-list --first-parent -1 "$DEPLOY_SHA" -- apps/modulos/mcp || true)"
           [[ -n "$CHANGE_SHA" ]] || {
             echo "MCP_CHANGE_SHA_NOT_FOUND"
-            exit 27
+            exit 28
           }
           ROLLBACK_SHA="$(git rev-parse "$CHANGE_SHA^1")"
           git merge-base --is-ancestor "$ROLLBACK_SHA" "$TARGET_SHA" || {
             echo "ROLLBACK_SHA_INVALID"
-            exit 28
+            exit 29
           }
 
           restart_attempted=0
@@ -135,17 +140,17 @@ jobs:
           done
           [[ "$HEALTH_OK" == "true" ]] || {
             echo "MCP_HEALTH_FAILED"
-            exit 29
+            exit 30
           }
 
           NEW_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
           [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 ]] || {
             echo "MCP_PM2_PID_INVALID"
-            exit 30
+            exit 31
           }
           [[ "$NEW_PID" != "$OLD_PID" ]] || {
             echo "MCP_PM2_PID_DID_NOT_CHANGE"
-            exit 31
+            exit 32
           }
 
           pm2 jlist | jq -e --arg app "$PM2_APP" '
@@ -170,16 +175,17 @@ jobs:
           done
           [[ "$AUDIT_OK" == "true" ]] || {
             echo "MCP_STARTUP_AUDIT_NOT_PROVEN"
-            exit 32
+            exit 33
           }
 
-          [[ "$(git -C "$REPO_DIR" rev-parse HEAD)" == "$TARGET_SHA" ]]
+          [[ "$(git -C "$REPO_DIR" rev-parse HEAD)" == "$DEPLOY_SHA" ]]
           git -C "$REPO_DIR" diff --quiet
           git -C "$REPO_DIR" diff --cached --quiet
 
           trap - ERR
           echo "DEPLOYED_TO_MAIN"
-          echo "sha=$TARGET_SHA"
+          echo "event_sha=$TARGET_SHA"
+          echo "deployed_sha=$DEPLOY_SHA"
           echo "pm2_app=$PM2_APP"
           echo "health=ok"
           echo "startup_audit=ok"
