@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-19T10:11:41.372Z
+# 🧠 Notion Sync — 2026-07-21T00:51:37.489Z
 
-- **Commit fonte:** `569e2a888e9348fe9d9a70677eee5efac4c484e2`
+- **Commit fonte:** `9bf0a1e836d3b8adcec264436d379f53c7d3a4d5`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 380 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 381 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 337 | 1 | 336 | 0 | 0 |
+| aprendizados | 338 | 1 | 337 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -402,7 +402,8 @@
 | aprendizados | atualizado | #332 — Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução |
 | aprendizados | atualizado | #333 — Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core |
 | aprendizados | atualizado | #334 — Regras aprovadas pelo Pivete: pessoa ≠ ideia + preservação sem v2 (incidentes reais com IA) |
-| aprendizados | criado | #335 — Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval |
+| aprendizados | atualizado | #335 — Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval |
+| aprendizados | criado | #336 — Update do Hermes faz git reset --hard e stasha os patches locais |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
