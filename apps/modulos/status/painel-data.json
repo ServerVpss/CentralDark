@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-21T01:22:15.515Z",
-  "updatedAtBR": "20/07/2026, 22:22:15 BRT",
+  "updatedAt": "2026-07-21T01:39:49.573Z",
+  "updatedAtBR": "20/07/2026, 22:39:49 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#338): Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código",
+    "lastCommit": "aprendizado(#339): api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-21T01:39:49.573Z",
+      "titulo": "Push na main · 32c189bb51cdc18d2c320ded29aba01609cdc29b",
+      "detalhe": "aprendizado(#339): api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA",
+      "area": "Repositório",
+      "sha": "32c189b",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-21T01:22:15.515Z",
       "titulo": "Push na main · 2a2a5cd26199aebc180e28be80fc8c796086d51a",
       "detalhe": "aprendizado(#338): Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código",
@@ -986,14 +994,6 @@
       "detalhe": "test(arsenal-adapter): teste automatizado /v1/models (Grok-4.x + aliases + total Abacus)",
       "area": "Repositório",
       "sha": "e6c2921",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T03:24:25.859Z",
-      "titulo": "Push na main · 846e0720c6ddbe8bc22e111132d4cee80aaf8526",
-      "detalhe": "fix(gateway): sincroniza aliases compatíveis no adapter",
-      "area": "Repositório",
-      "sha": "846e072",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-21T01:39:49.573Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 32c189bb51cdc18d2c320ded29aba01609cdc29b (32c189b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-21T01:22:15.515Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 2a2a5cd26199aebc180e28be80fc8c796086d51a (2a2a5cd)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-10T04:25:57.074Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e6c292196c0dfbb8aed7c089cbb2622841c512e0 (e6c2921)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-10T03:24:25.859Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 846e0720c6ddbe8bc22e111132d4cee80aaf8526 (846e072)",
       "area": "Repositório",
       "status": "sucesso"
     }
