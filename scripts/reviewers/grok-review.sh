@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
-# Runner de revisão: Grok CLI local -> Gateway CentralDark.
-# Não recebe keys de provedores; somente a key do gateway.
+# Runner de revisão: Gateway CentralDark ou Grok CLI local.
+# Nunca imprime chave, resposta de erro ou conteúdo sensível.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=review-security.sh
 source "$ROOT/review-security.sh"
 
 PROMPT_FILE=""
 DIFF_FILE=""
 FORCE_GATEWAY=0
 MODEL="${GROK_REVIEW_MODEL:-grok-2-latest}"
+GATEWAY_FAILURE_REASON="not_attempted"
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --prompt-file) PROMPT_FILE="$2"; shift 2 ;;
     --diff-file) DIFF_FILE="$2"; shift 2 ;;
     --force-gateway) FORCE_GATEWAY=1; shift ;;
     --model) MODEL="$2"; shift 2 ;;
-    *) echo "arg desconhecido: $1" >&2; exit 2 ;;
+    *) echo "review_failure=unknown_argument" >&2; exit 2 ;;
   esac
 done
 
-[ -n "$PROMPT_FILE" ] && [ -f "$PROMPT_FILE" ] || { echo "prompt-file ausente" >&2; exit 2; }
-[ -n "$DIFF_FILE" ] && [ -f "$DIFF_FILE" ] || { echo "diff-file ausente" >&2; exit 2; }
+[ -n "$PROMPT_FILE" ] && [ -f "$PROMPT_FILE" ] || { echo "review_failure=prompt_file_missing" >&2; exit 2; }
+[ -n "$DIFF_FILE" ] && [ -f "$DIFF_FILE" ] || { echo "review_failure=diff_file_missing" >&2; exit 2; }
 review_scan_diff "$DIFF_FILE"
 
 WORK="$(mktemp -d)"
@@ -39,7 +39,7 @@ HEADERS="$WORK/response.headers"
 
 try_cli() {
   command -v grok >/dev/null 2>&1 || {
-    echo "Grok CLI ausente do PATH" >&2
+    echo "cli_failure=grok_cli_missing" >&2
     return 1
   }
   local attempt
@@ -48,15 +48,22 @@ try_cli() {
     if timeout 300 grok --prompt-file "$COMBINED" --output-format plain > "$OUT" 2>"$WORK/cli.err" && [ -s "$OUT" ]; then
       return 0
     fi
-    echo "tentativa Grok CLI $attempt falhou" >&2
+    echo "cli_failure=attempt_${attempt}" >&2
     [ "$attempt" -eq 3 ] || sleep $((attempt * 10))
   done
   return 1
 }
 
 try_gateway() {
-  [ -n "${CENTRALDARK_GATEWAY_KEY:-}" ] || return 1
-  command -v jq >/dev/null 2>&1 || return 1
+  if [ -z "${CENTRALDARK_GATEWAY_KEY:-}" ]; then
+    GATEWAY_FAILURE_REASON="missing_gateway_key"
+    return 1
+  fi
+  if ! command -v jq >/dev/null 2>&1; then
+    GATEWAY_FAILURE_REASON="jq_missing"
+    return 1
+  fi
+
   local base body status
   base="${CENTRALDARK_GATEWAY_URL:-https://api.centralldark.com}"
   base="${base%/}"
@@ -70,17 +77,31 @@ try_gateway() {
       {role: "user", content: .}
     ]
   }' < "$COMBINED")"
-  status="$(curl -sS --max-time 300 \
+
+  if ! status="$(curl -sS --max-time 300 \
     -D "$HEADERS" \
     -o "$RESP" \
     -w '%{http_code}' \
     -H "Authorization: Bearer ${CENTRALDARK_GATEWAY_KEY}" \
     -H "Content-Type: application/json" \
     -d "$body" \
-    "$base/chat/completions")" || return 1
-  case "$status" in 2??) ;; *) return 1 ;; esac
-  jq -e '.choices[0].message.content | strings | select(length > 0)' "$RESP" >/dev/null 2>&1 || return 1
+    "$base/chat/completions")"; then
+    GATEWAY_FAILURE_REASON="network_error"
+    return 1
+  fi
+
+  case "$status" in
+    2??) ;;
+    *) GATEWAY_FAILURE_REASON="http_${status}"; return 1 ;;
+  esac
+
+  if ! jq -e '.choices[0].message.content | strings | select(length > 0)' "$RESP" >/dev/null 2>&1; then
+    GATEWAY_FAILURE_REASON="invalid_response"
+    return 1
+  fi
+
   jq -r '.choices[0].message.content' "$RESP" > "$OUT"
+  GATEWAY_FAILURE_REASON="none"
 }
 
 PROVIDER=""
@@ -94,7 +115,7 @@ elif try_gateway; then
   ROUTE="${ROUTE:-centraldark_gateway:unreported}"
   ROUTE="$(printf '%s' "$ROUTE" | tr -cd '[:alnum:]_./:+>-')"
 else
-  echo "ERRO: CLI e Gateway CentralDark indisponíveis" >&2
+  echo "review_failure=${GATEWAY_FAILURE_REASON}" >&2
   exit 1
 fi
 
