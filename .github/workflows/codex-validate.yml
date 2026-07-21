@@ -169,3 +169,34 @@ jobs:
         run: |
           set -euo pipefail
           node --test apps/modulos/mcp/tests/admin-guard.test.mjs
+
+  diagnose-webhook-port:
+    name: Diagnose webhook port 9300 (read-only)
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 3
+    steps:
+      - name: Verify listener, PM2 owner and health
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          listener="$(ss -H -ltnp '( sport = :9300 )' 2>/dev/null || true)"
+          listener_pid="$(printf '%s\n' "$listener" | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
+          pm2_pid="$(pm2 pid CentralDark-WebhookDeploy 2>/dev/null | tail -n1 || true)"
+          health_code="$(curl -sS -o /tmp/centraldark-port9300-health.json -w '%{http_code}' --max-time 5 http://127.0.0.1:9300/health || true)"
+
+          printf 'listener_present=%s\n' "$([[ -n "$listener" ]] && echo true || echo false)"
+          printf 'listener_pid=%s\n' "${listener_pid:-none}"
+          printf 'pm2_pid=%s\n' "${pm2_pid:-none}"
+          printf 'health_code=%s\n' "${health_code:-000}"
+
+          if [[ -n "$listener_pid" && -r "/proc/$listener_pid/comm" ]]; then
+            printf 'listener_command=%s\n' "$(tr -cd '[:alnum:]_.-\n' <"/proc/$listener_pid/comm" | head -n1)"
+          fi
+
+          test -n "$listener_pid" || { echo 'PORT_9300_NO_LISTENER'; exit 1; }
+          [[ "$pm2_pid" =~ ^[0-9]+$ && "$pm2_pid" -gt 0 ]] || { echo 'WEBHOOK_PM2_NOT_RUNNING'; exit 1; }
+          [[ "$listener_pid" == "$pm2_pid" ]] || { echo 'PORT_9300_OWNED_BY_OTHER_PROCESS'; exit 1; }
+          [[ "$health_code" == "200" ]] || { echo 'PORT_9300_HEALTH_FAILED'; exit 1; }
+
+          echo 'PORT_9300_HEALTHY'
