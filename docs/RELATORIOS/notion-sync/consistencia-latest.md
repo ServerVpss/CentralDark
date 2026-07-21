@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-21T01:09:45.820Z
-- **Commit:** `66088c66f428ca3eae3f4b6cc7f594b608fbc1ea`
+- **Gerado:** 2026-07-21T01:21:57.429Z
+- **Commit:** `2a2a5cd26199aebc180e28be80fc8c796086d51a`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 369 | 0 | 0 | 369 | 0 |
+| aprendizados | 370 | 0 | 0 | 370 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **369**
+- 🟥 Faltando no Notion: **370**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -417,4 +417,5 @@
 - 335. Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval
 - 336. Update do Hermes faz git reset --hard e stasha os patches locais
 - 337. Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR)
+- 338. Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código
 </details>

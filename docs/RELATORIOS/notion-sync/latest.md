@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-21T01:09:42.867Z
+# 🧠 Notion Sync — 2026-07-21T01:21:52.081Z
 
-- **Commit fonte:** `66088c66f428ca3eae3f4b6cc7f594b608fbc1ea`
+- **Commit fonte:** `2a2a5cd26199aebc180e28be80fc8c796086d51a`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 382 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 383 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 339 | 1 | 338 | 0 | 0 |
+| aprendizados | 340 | 1 | 339 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -404,7 +404,8 @@
 | aprendizados | atualizado | #334 — Regras aprovadas pelo Pivete: pessoa ≠ ideia + preservação sem v2 (incidentes reais com IA) |
 | aprendizados | atualizado | #335 — Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval |
 | aprendizados | atualizado | #336 — Update do Hermes faz git reset --hard e stasha os patches locais |
-| aprendizados | criado | #337 — Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR) |
+| aprendizados | atualizado | #337 — Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR) |
+| aprendizados | criado | #338 — Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
