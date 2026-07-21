@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-21T01:39:17.966Z
+# 🧠 Notion Sync — 2026-07-21T09:31:32.577Z
 
-- **Commit fonte:** `32c189bb51cdc18d2c320ded29aba01609cdc29b`
+- **Commit fonte:** `fe4730a27ec1bab6c317d4ae98ed5113deff79bd`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 384 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 385 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 341 | 1 | 340 | 0 | 0 |
+| aprendizados | 342 | 1 | 341 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -406,7 +406,8 @@
 | aprendizados | atualizado | #336 — Update do Hermes faz git reset --hard e stasha os patches locais |
 | aprendizados | atualizado | #337 — Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR) |
 | aprendizados | atualizado | #338 — Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código |
-| aprendizados | criado | #339 — api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA |
+| aprendizados | atualizado | #339 — api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA |
+| aprendizados | criado | #340 — Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
