@@ -84,8 +84,12 @@ export function evaluateAdminConfirmation(confirmAdmin) {
     return { decision: "blocked", confirmationMode: null, reason: "confirmacao_ausente" };
   }
   const trimmed = confirmAdmin.trim();
-  const mode = ADMIN_CONFIRMATIONS[trimmed];
-  if (mode) return { decision: "released", confirmationMode: mode, reason: "confirmacao_valida" };
+  const mode = Object.hasOwn(ADMIN_CONFIRMATIONS, trimmed)
+    ? ADMIN_CONFIRMATIONS[trimmed]
+    : undefined;
+  if (typeof mode === "string") {
+    return { decision: "released", confirmationMode: mode, reason: "confirmacao_valida" };
+  }
   return { decision: "blocked", confirmationMode: null, reason: "confirmacao_invalida" };
 }
 
@@ -134,23 +138,77 @@ export function reconcileCatalog(runtimeTools, expectation = {}) {
   };
 }
 
-// ── Mutex de escrita intra-processo ────────────────────────────────────────
-// Serializa APENAS append+chain-head. Leitura e não-destrutivas não passam por aqui.
+// ── Locks de escrita intra + interprocesso ──────────────────────────────────
+// O mutex em memória evita corrida no mesmo processo. O lock de arquivo evita
+// que dois workers/PM2 escrevam a mesma sequência simultaneamente.
 let auditWriteChain = Promise.resolve();
 function withAuditLock(fn) {
   const prev = auditWriteChain;
-  const next = prev.then(() => fn()).catch(() => fn());
+  const next = prev.then(() => fn(), () => fn());
   auditWriteChain = next.then(() => undefined, () => undefined);
   return next;
 }
 
-function readChainHeadSync() {
+const FILE_LOCK = `${CHAIN_STATE}.lock`;
+const FILE_LOCK_TIMEOUT_MS = 5_000;
+const FILE_LOCK_STALE_MS = 30_000;
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function acquireFileLock() {
+  const started = Date.now();
+  fs.mkdirSync(path.dirname(FILE_LOCK), { recursive: true });
+  while (Date.now() - started < FILE_LOCK_TIMEOUT_MS) {
+    try {
+      const handle = await fsp.open(FILE_LOCK, "wx", 0o600);
+      await handle.writeFile(JSON.stringify({ pid: PID, hostname: HOSTNAME, at: new Date().toISOString() }));
+      return handle;
+    } catch (error) {
+      if (error?.code !== "EEXIST") throw error;
+      try {
+        const stat = await fsp.stat(FILE_LOCK);
+        if (Date.now() - stat.mtimeMs > FILE_LOCK_STALE_MS) {
+          await fsp.unlink(FILE_LOCK);
+          continue;
+        }
+      } catch (statError) {
+        if (statError?.code !== "ENOENT") throw statError;
+      }
+      await delay(25);
+    }
+  }
+  throw new Error("audit_lock_timeout");
+}
+
+async function releaseFileLock(handle) {
+  try { await handle?.close(); } catch {}
+  try { await fsp.unlink(FILE_LOCK); } catch {}
+}
+
+function auditFileForDay(day) {
+  return path.join(AUDIT_DIR, `mcp-admin-audit-${day}.jsonl`);
+}
+
+function readChainHeadSync(day) {
+  const file = auditFileForDay(day);
+  if (fs.existsSync(file)) {
+    const raw = fs.readFileSync(file, "utf8").trim();
+    if (raw) {
+      const verified = verifyChain(file);
+      if (!verified.ok) throw new Error(`existing_audit_chain_invalid:${verified.reason || verified.error}`);
+      const last = JSON.parse(raw.split("\n").at(-1));
+      return { day, hash: last.hash, seq: last.seq };
+    }
+  }
   try {
-    const raw = fs.readFileSync(CHAIN_STATE, "utf8");
-    const parsed = JSON.parse(raw);
-    if (parsed && typeof parsed.hash === "string") return parsed;
-  } catch { /* primeira execução */ }
-  return { hash: "GENESIS", seq: 0 };
+    const parsed = JSON.parse(fs.readFileSync(CHAIN_STATE, "utf8"));
+    if (parsed?.day === day && typeof parsed.hash === "string" && Number.isInteger(parsed.seq)) {
+      return parsed;
+    }
+  } catch { /* primeira execução do dia */ }
+  return { day, hash: "GENESIS", seq: 0 };
 }
 
 function saveChainHeadAtomic(next) {
@@ -166,22 +224,31 @@ function saveChainHeadAtomic(next) {
   }
 }
 
-function appendAuditLine(dia, linha) {
+function appendAuditLine(day, line) {
   fs.mkdirSync(AUDIT_DIR, { recursive: true });
-  const arquivo = path.join(AUDIT_DIR, `mcp-admin-audit-${dia}.jsonl`);
-  const fd = fs.openSync(arquivo, "a", 0o600);
-  try { fs.writeSync(fd, linha); } finally { fs.closeSync(fd); }
-  return arquivo;
+  const file = auditFileForDay(day);
+  const fd = fs.openSync(file, "a", 0o600);
+  try {
+    fs.writeSync(fd, line);
+    fs.fsyncSync(fd);
+  } finally {
+    fs.closeSync(fd);
+  }
+  return file;
 }
 
 /**
- * Grava evento na auditoria com hash chain. Serializada intra-processo.
+ * Grava evento na auditoria com hash chain. Serializada dentro e entre processos.
+ * Cada arquivo diário inicia em GENESIS e é verificável isoladamente.
  */
-export function writeAuditEvent(evento) {
+export function writeAuditEvent(evento, options = {}) {
   return withAuditLock(async () => {
+    let fileLock;
     try {
-      const prev = readChainHeadSync();
-      const timestamp = new Date().toISOString();
+      fileLock = await acquireFileLock();
+      const timestamp = options.timestamp || new Date().toISOString();
+      const day = timestamp.slice(0, 10);
+      const prev = readChainHeadSync(day);
 
       const registro = {
         timestamp,
@@ -211,18 +278,17 @@ export function writeAuditEvent(evento) {
         .digest("hex");
       registro.hash = hash;
 
-      const dia = timestamp.slice(0, 10);
-      appendAuditLine(dia, JSON.stringify(registro) + "\n");
-
-      const persisted = saveChainHeadAtomic({ hash, seq: registro.seq });
+      appendAuditLine(day, JSON.stringify(registro) + "\n");
+      const persisted = saveChainHeadAtomic({ day, hash, seq: registro.seq });
       if (!persisted) return { ok: false, error: "chain_head_persist_failed" };
-      return { ok: true, hash, prevHash: prev.hash, seq: registro.seq };
-    } catch (e) {
-      return { ok: false, error: String(e?.message || e) };
+      return { ok: true, hash, prevHash: prev.hash, seq: registro.seq, day };
+    } catch (error) {
+      return { ok: false, error: sanitizeReason(String(error?.message || error)) };
+    } finally {
+      await releaseFileLock(fileLock);
     }
   });
 }
-
 /**
  * Verifica integridade da cadeia relendo o JSONL do dia.
  */
@@ -252,23 +318,25 @@ export async function auditStartupSnapshot(runtimeTools, options = {}) {
   const key = `${PID}:${snapshot.catalogHash}:${expectation.version ?? "no-version"}`;
 
   try {
-    const raw = fs.readFileSync(STARTUP_LOCK, "utf8");
-    const st = JSON.parse(raw);
-    if (st.key === key) return { skipped: true, reason: "already_registered_this_boot", snapshot };
-  } catch { /* primeira execução */ }
+    const st = JSON.parse(fs.readFileSync(STARTUP_LOCK, "utf8"));
+    if (st.key === key && st.auditOk === true) {
+      return { skipped: true, ready: true, reason: "already_registered_this_boot", snapshot };
+    }
+  } catch { /* primeira execução ou tentativa anterior falhou */ }
 
-  const dia = new Date().toISOString().slice(0, 10);
-  const arqDia = path.join(AUDIT_DIR, `mcp-admin-audit-${dia}.jsonl`);
-  const chainCheck = fs.existsSync(arqDia)
-    ? verifyChain(arqDia)
+  const day = new Date().toISOString().slice(0, 10);
+  const dailyFile = auditFileForDay(day);
+  const chainCheck = fs.existsSync(dailyFile)
+    ? verifyChain(dailyFile)
     : { ok: true, verified: 0, note: "sem_entradas_hoje" };
+  const preconditionsOk = snapshot.ok && chainCheck.ok;
 
   const audit = await writeAuditEvent({
     tool: "__startup__",
-    decision: "released",
+    decision: preconditionsOk ? "released" : "blocked",
     executionStatus: "startup_snapshot",
     confirmationMode: "startup_snapshot",
-    reason: `runtime_boot chain=${chainCheck.ok ? "ok" : "quebrada:" + (chainCheck.reason || chainCheck.error)}`,
+    reason: `runtime_boot chain=${chainCheck.ok ? "ok" : "quebrada"} catalog=${snapshot.ok ? "ok" : "divergente"}`,
     catalogHash: snapshot.catalogHash,
     catalogVersion: expectation.version ?? CATALOG_VERSION,
     totalRuntimeTools: snapshot.totalRuntimeTools,
@@ -276,32 +344,37 @@ export async function auditStartupSnapshot(runtimeTools, options = {}) {
     destructiveTools: snapshot.destructiveTools,
     divergences: snapshot.divergences,
   });
+  const ready = preconditionsOk && audit.ok;
 
-  try {
-    fs.mkdirSync(AUDIT_DIR, { recursive: true });
-    const tmp = STARTUP_LOCK + ".tmp." + PID;
-    fs.writeFileSync(tmp, JSON.stringify({ key, at: new Date().toISOString(), auditOk: !!audit.ok }), { mode: 0o600 });
-    fs.renameSync(tmp, STARTUP_LOCK);
-  } catch { /* best effort */ }
+  if (ready) {
+    try {
+      fs.mkdirSync(AUDIT_DIR, { recursive: true });
+      const tmp = STARTUP_LOCK + ".tmp." + PID;
+      fs.writeFileSync(tmp, JSON.stringify({ key, at: new Date().toISOString(), auditOk: true }), { mode: 0o600 });
+      fs.renameSync(tmp, STARTUP_LOCK);
+    } catch {
+      return { skipped: false, ready: false, snapshot, audit, chainCheck, error: "startup_lock_persist_failed" };
+    }
+  }
 
-  return { skipped: false, snapshot, audit, chainCheck };
+  return { skipped: false, ready, snapshot, audit, chainCheck };
 }
-
 /**
  * Guarda destrutiva: reconciliação + confirmação + auditoria → decisão.
  */
-export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, expectation, inputPayload, actor, correlationId }) {
+export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, expectation, inputPayload, actor, correlationId, adminAuthorized }) {
   const effectiveExpectation = expectation ?? getCanonicalExpectation();
   const recon = reconcileCatalog(runtimeTools, effectiveExpectation);
   const evalRes = evaluateAdminConfirmation(confirmAdmin);
-  const wouldAuthorize = evalRes.decision === "released" && recon.ok;
+  const hasAdminScope = adminAuthorized === true;
+  const wouldAuthorize = hasAdminScope && evalRes.decision === "released" && recon.ok;
 
   const audit = await writeAuditEvent({
     tool: toolName,
     decision: wouldAuthorize ? "released" : "blocked",
     executionStatus: wouldAuthorize ? "authorized" : "blocked",
     confirmationMode: evalRes.confirmationMode,
-    reason: !recon.ok ? "catalog_divergence" : evalRes.reason,
+    reason: !hasAdminScope ? "admin_scope_required" : (!recon.ok ? "catalog_divergence" : evalRes.reason),
     catalogHash: recon.catalogHash,
     catalogVersion: recon.catalogVersion,
     totalRuntimeTools: recon.totalRuntimeTools,
@@ -322,6 +395,9 @@ export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, e
       auditError: audit.error,
       httpSafe: "Auditoria fail-closed: destrutiva bloqueada pontualmente. Leituras seguem livres.",
     };
+  }
+  if (!hasAdminScope) {
+    return { allow: false, status: "ESCOPO_ADMIN_NECESSARIO", executionStatus: "blocked", recon, audit };
   }
   if (!recon.ok) {
     return { allow: false, status: "DIVERGENCIA_CATALOGO", executionStatus: "blocked", recon, audit };
