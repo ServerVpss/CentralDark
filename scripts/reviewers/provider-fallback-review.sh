@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Revisor genérico: Gateway CentralDark primário -> Grok CLI local.
+# Revisor genérico: Gateway CentralDark primário; Grok CLI só quando realmente instalado.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=review-security.sh
 source "$ROOT/review-security.sh"
 
 : "${GITHUB_REPOSITORY:?GITHUB_REPOSITORY ausente}"
@@ -61,13 +60,13 @@ set +e
 rc=$?
 set -e
 
-if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ]; then
+if [ "$rc" -ne 0 ] && [ "${REVIEW_PRIMARY:-gateway}" = "gateway" ] && command -v grok >/dev/null 2>&1; then
   echo "::warning::Gateway CentralDark falhou para ${REVIEWER_NAME}; acionando Grok CLI"
   set +e
   bash scripts/reviewers/grok-review.sh \
     --prompt-file "$PROMPT" \
     --diff-file "$DIFF" \
-    --model "${GROK_REVIEW_MODEL:-grok-2-latest}" > "$OUT" 2> "$ERR"
+    --model "${GROK_REVIEW_MODEL:-grok-2-latest}" > "$OUT" 2>> "$ERR"
   rc=$?
   set -e
 fi
@@ -75,26 +74,40 @@ fi
 provider="$(grep -o 'provider_used=[^;[:space:]]*' "$ERR" | head -1 || echo 'provider_used=none')"
 model="$(grep -o 'model=[^;[:space:]]*' "$ERR" | head -1 || echo "model=${REVIEW_MODEL}")"
 route="$(grep -o 'route=[^;[:space:]]*' "$ERR" | head -1 || echo 'route=unreported')"
-if [ "$rc" -ne 0 ]; then
-  echo "::error::Revisão ${REVIEWER_NAME} falhou (${provider})"
-  exit 1
-fi
-
+failure="$(grep -o 'review_failure=[a-zA-Z0-9_-]*' "$ERR" | tail -1 || true)"
+failure="${failure#review_failure=}"
+failure="${failure:-unknown_failure}"
 marker="<!-- ${REVIEW_MARKER} -->"
-{
-  echo "$marker"
-  echo "## ${REVIEWER_NAME} — revisão"
-  echo "_head=${HEAD_SHA}; ${provider}; ${model}; ${route}_"
-  echo
-  cat "$OUT"
-} > "$BODY"
+
+if [ "$rc" -ne 0 ]; then
+  {
+    echo "$marker"
+    echo "## ${REVIEWER_NAME} — revisão bloqueada"
+    echo "_head=${HEAD_SHA}; status=BLOCKED; reason=${failure}; model=${REVIEW_MODEL}_"
+    echo
+    echo "O revisor não produziu parecer. Nenhum verde foi simulado."
+  } > "$BODY"
+else
+  {
+    echo "$marker"
+    echo "## ${REVIEWER_NAME} — revisão"
+    echo "_head=${HEAD_SHA}; ${provider}; ${model}; ${route}_"
+    echo
+    cat "$OUT"
+  } > "$BODY"
+fi
 
 existing="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
   --jq ".[] | select(.body | contains(\"$marker\")) | .id" | head -1 || true)"
 if [ -n "$existing" ]; then
   gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${existing}" -F body=@"$BODY" >/dev/null
-  echo "revisão de ${REVIEWER_NAME} atualizada (${provider})"
 else
   gh api -X POST "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" -F body=@"$BODY" >/dev/null
-  echo "revisão de ${REVIEWER_NAME} criada (${provider})"
 fi
+
+if [ "$rc" -ne 0 ]; then
+  echo "::error title=${REVIEWER_NAME} bloqueado::reason=${failure}"
+  exit 1
+fi
+
+echo "revisão de ${REVIEWER_NAME} publicada (${provider})"
