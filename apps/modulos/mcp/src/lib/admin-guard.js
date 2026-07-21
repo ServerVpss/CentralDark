@@ -183,7 +183,8 @@ async function acquireFileLock() {
 }
 
 async function releaseFileLock(handle) {
-  try { await handle?.close(); } catch {}
+  if (!handle) return;
+  try { await handle.close(); } catch {}
   try { await fsp.unlink(FILE_LOCK); } catch {}
 }
 
