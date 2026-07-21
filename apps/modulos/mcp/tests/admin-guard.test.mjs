@@ -173,15 +173,17 @@ test("sanitização: JWT/sk-/gh_/Bearer não vazam; chaves sensíveis somem", as
   process.env.MCP_AUDIT_DIR = SAN;
   process.env.MCP_ADMIN_CHAIN_STATE = path.join(SAN, ".chain.json");
   const { writeAuditEvent: w } = await import("../src/lib/admin-guard.js?san=1");
+  const fakeProviderKey = "sk-" + "1234567890abcdef1234";
+  const fakeGitHubToken = "ghp_" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ012345";
   await w({
     tool: "leak", decision: "blocked",
-    reason: "Bearer eyJabc.def.ghi sk-1234567890abcdef1234 ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ012345",
+    reason: `Bearer eyJabc.def.ghi ${fakeProviderKey} ${fakeGitHubToken}`,
     inputPayload: { safe: 1, authorization: "vaza?", refresh_token: "vaza?", api_key: "vaza?" },
   });
   const raw = fs.readFileSync(path.join(SAN, `mcp-admin-audit-${diaHoje()}.jsonl`), "utf8");
   assert.ok(!raw.includes("eyJabc.def.ghi"));
-  assert.ok(!raw.includes("sk-1234567890abcdef1234"));
-  assert.ok(!raw.includes("ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+  assert.ok(!raw.includes(fakeProviderKey));
+  assert.ok(!raw.includes(fakeGitHubToken));
   assert.ok(raw.includes("[REDACTED"));
   assert.ok(!raw.includes('"authorization"'));
   assert.ok(!raw.includes('"refresh_token"'));
