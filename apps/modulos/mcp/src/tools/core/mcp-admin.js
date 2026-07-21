@@ -20,7 +20,15 @@ import { supabaseTools } from "../supabase/supabase.js";
 import { vpsFileTools } from "../vps/vps-files.js";
 import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
-const ADMIN_CONFIRM = "CONFIRMO ADMIN";
+// Guarda destrutiva canônica: reconciliação + confirmação + auditoria com hash chain.
+// Adição mínima; não altera contratos públicos nem lista de tools.
+import {
+  ADMIN_CONFIRMATIONS,
+  guardDestructive,
+  auditStartupSnapshot,
+} from "../../lib/admin-guard.js";
+
+const ADMIN_CONFIRM = "CONFIRMO ADMIN"; // preservado por compat de descrição
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
@@ -56,6 +64,11 @@ function safeToolInfo(tool) {
         title: tool.annotations?.title ?? null,
     };
 }
+
+// Snapshot idempotente na inicialização do módulo. Sem polling, sem loop.
+// Falha silenciosa aqui não trava o dispatcher (fail-open só pro startup log).
+try { auditStartupSnapshot(runtimeTools); } catch { /* startup best-effort */ }
+
 export const mcpAdminTools = [
     codeReviewerToolDefinition,
     {
@@ -97,6 +110,7 @@ export const mcpAdminTools = [
                 totalRuntimeTools: runtimeTools.length,
                 returned: tools.length,
                 confirmForDestructive: ADMIN_CONFIRM,
+                acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
                 tools,
             });
         },
@@ -116,12 +130,12 @@ export const mcpAdminTools = [
     },
     {
         name: "mcp_admin_call",
-        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmAdmin='CONFIRMO ADMIN'. Para escrever em /root/CentralDark/secrets/, use tool='admin_vault_write' com input={name, content, overwrite:true}; não use vps_write_file_safe.",
+        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmAdmin='CONFIRMO ADMIN' ou 'PERMITO PIVETE'. Para escrever em <caminho-vps>, use tool='admin_vault_write' com input={name, content, overwrite:true}; não use vps_write_file_safe.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
         inputSchema: z.object({
             tool: z.string().min(1).describe("Nome exato da tool interna"),
             input: z.record(z.string(), z.unknown()).optional().describe("Payload da tool interna"),
-            confirmAdmin: z.string().optional().describe("Para tools destrutivas, precisa ser CONFIRMO ADMIN"),
+            confirmAdmin: z.string().optional().describe("Para tools destrutivas, use 'CONFIRMO ADMIN' ou 'PERMITO PIVETE'"),
         }),
         handler: async (input, ctx) => {
             const tool = registry.get(input.tool);
@@ -134,14 +148,35 @@ export const mcpAdminTools = [
                 });
             }
             const destructive = tool.annotations?.destructiveHint === true;
-            if (destructive && input.confirmAdmin !== ADMIN_CONFIRM) {
+            if (!destructive) {
+                // Não destrutiva: caminho livre, sem auditoria admin.
+                return tool.handler(input.input ?? {}, ctx);
+            }
+            // Destrutiva: passa pela guarda canônica (reconciliação + confirmação + auditoria hash-chain).
+            const decision = guardDestructive({
+                toolName: input.tool,
+                confirmAdmin: input.confirmAdmin,
+                runtimeTools,
+                inputPayload: input.input,
+                actor: ctx?.callerUser ?? undefined,
+                correlationId: ctx?.correlationId ?? undefined,
+            });
+            if (!decision.allow) {
                 return ok({
                     ok: false,
-                    status: "CONFIRMACAO_ADMIN_NECESSARIA",
+                    status: decision.status,
                     tool: input.tool,
                     destructive: true,
                     requiredConfirmAdmin: ADMIN_CONFIRM,
-                    observacao: "Nada foi executado. Para secrets, use mcp_admin_call com tool='admin_vault_write', confirmAdmin='CONFIRMO ADMIN' e input={name, content, overwrite:true}. Outras tools podem exigir confirmação específica, como CONFIRMO DELETAR ou CONFIRMO LIMPAR.",
+                    acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
+                    reconciliation: decision.recon,
+                    auditSeq: decision.audit?.seq ?? null,
+                    auditHash: decision.audit?.hash ?? null,
+                    observacao: decision.status === "AUDITORIA_INDISPONIVEL"
+                        ? "Auditoria fail-closed: destrutiva bloqueada. Leituras e não-destrutivas seguem livres."
+                        : (decision.status === "DIVERGENCIA_CATALOGO"
+                            ? "Divergência de catálogo detectada. Somente esta destrutiva foi bloqueada; demais operações continuam livres."
+                            : "Nada foi executado. Passe confirmAdmin='CONFIRMO ADMIN' ou 'PERMITO PIVETE'."),
                 });
             }
             return tool.handler(input.input ?? {}, ctx);
