@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 concurrency:
   group: centraldark-mcp-production
@@ -31,6 +32,7 @@ jobs:
       AUDIT_DIR: /root/CentralDark/logs
     steps:
       - name: Validar SHA, construir isolado, promover e comprovar
+        id: deploy
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -173,7 +175,7 @@ jobs:
             curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "MCP_HEALTH_UNSTABLE"; exit 51; }
           done
 
-          STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.$"
+          STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.${BASHPID}"
           jq -n --arg sha "$TARGET_SHA" --arg repo_sha "$(git rev-parse HEAD)" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
             '{validatedSha:$sha,repositorySha:$repo_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok"}' > "$STATE_TMP"
           mv "$STATE_TMP" "$AUDIT_DIR/mcp-last-known-good.json"
@@ -193,3 +195,23 @@ jobs:
           echo "port_9300=retired"
           echo "health=ok"
           echo "startup_audit=ok"
+
+      - name: Publicar status sanitizado no SHA
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          DEPLOY_OUTCOME: ${{ steps.deploy.outcome }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const success = process.env.DEPLOY_OUTCOME === 'success';
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              state: success ? 'success' : 'failure',
+              context: 'centraldark/mcp-deploy',
+              description: success
+                ? 'worktree, PM2, health, audit e porta 9300 comprovados'
+                : 'deploy bloqueado em fail-closed; consultar job sanitizado',
+            });
