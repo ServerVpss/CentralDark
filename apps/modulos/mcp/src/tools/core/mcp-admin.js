@@ -65,10 +65,14 @@ function safeToolInfo(tool) {
     };
 }
 
-// Snapshot idempotente na inicialização — assíncrono, fire-and-forget.
-Promise.resolve()
-    .then(() => auditStartupSnapshot(runtimeTools))
-    .catch(() => { /* startup best-effort */ });
+// Snapshot de startup é aguardado. Leituras continuam disponíveis em falha,
+// porém toda destrutiva permanece fail-closed e tenta reconciliar novamente.
+let startupAuditState = await auditStartupSnapshot(runtimeTools);
+async function ensureStartupAuditReady() {
+    if (startupAuditState?.ready === true) return startupAuditState;
+    startupAuditState = await auditStartupSnapshot(runtimeTools);
+    return startupAuditState;
+}
 
 export const mcpAdminTools = [
     codeReviewerToolDefinition,
@@ -81,7 +85,10 @@ export const mcpAdminTools = [
             ok: true, dispatcher: "mcp_admin_call",
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
-            catalogVersion: CATALOG_VERSION, time: new Date().toISOString(),
+            catalogVersion: CATALOG_VERSION,
+            auditStartupReady: startupAuditState?.ready === true,
+            catalogScope: "mcp_admin_dispatcher",
+            time: new Date().toISOString(),
         }),
     },
     {
@@ -104,7 +111,10 @@ export const mcpAdminTools = [
                 .sort((a, b) => a.name.localeCompare(b.name));
             return ok({
                 ok: true, dispatcher: "mcp_admin_call",
-                totalRuntimeTools: runtimeTools.length, returned: tools.length,
+                totalRuntimeTools: runtimeTools.length,
+                totalDispatchableTools: runtimeTools.length,
+                returned: tools.length,
+                catalogScope: "mcp_admin_dispatcher",
                 catalogVersion: CATALOG_VERSION,
                 confirmForDestructive: ADMIN_CONFIRM,
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
@@ -121,7 +131,10 @@ export const mcpAdminTools = [
             ok: true, dispatcher: "mcp_admin_call",
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
-            catalogVersion: CATALOG_VERSION, time: new Date().toISOString(),
+            catalogVersion: CATALOG_VERSION,
+            auditStartupReady: startupAuditState?.ready === true,
+            catalogScope: "mcp_admin_dispatcher",
+            time: new Date().toISOString(),
         }),
     },
     {
@@ -134,6 +147,29 @@ export const mcpAdminTools = [
             confirmAdmin: z.string().optional(),
         }),
         handler: async (input, ctx) => {
+            const scopes = new Set(String(ctx?.oauthScope || "").split(/\s+/).filter(Boolean));
+            const hasAdminContext = ctx?.admin === true && scopes.has("admin");
+            const hasAuditIdentity = Boolean(ctx?.callerUser && ctx?.correlationId);
+            if (!hasAdminContext || !hasAuditIdentity) {
+                const denied = await guardDestructive({
+                    toolName: input.tool,
+                    confirmAdmin: input.confirmAdmin,
+                    runtimeTools,
+                    expectation: getCanonicalExpectation(),
+                    inputPayload: input.input,
+                    actor: ctx?.callerUser ?? undefined,
+                    correlationId: ctx?.correlationId ?? undefined,
+                    adminAuthorized: false,
+                });
+                return ok({
+                    ok: false,
+                    status: !hasAdminContext ? "ESCOPO_ADMIN_NECESSARIO" : "CONTEXTO_ADMIN_INCOMPLETO",
+                    executionStatus: "blocked",
+                    tool: input.tool,
+                    auditSeq: denied.audit?.seq ?? null,
+                    auditHash: denied.audit?.hash ?? null,
+                });
+            }
             const tool = registry.get(input.tool);
             if (!tool) {
                 return ok({
@@ -146,7 +182,16 @@ export const mcpAdminTools = [
             if (!destructive) {
                 return tool.handler(input.input ?? {}, ctx);
             }
-            // Destrutiva: guarda canônica com expectativa REAL (baseline versionado).
+            // Destrutiva: startup auditável + guarda canônica versionada.
+            const startup = await ensureStartupAuditReady();
+            if (startup?.ready !== true) {
+                return ok({
+                    ok: false,
+                    status: "AUDITORIA_STARTUP_INDISPONIVEL",
+                    executionStatus: "blocked",
+                    tool: input.tool,
+                });
+            }
             const decision = await guardDestructive({
                 toolName: input.tool,
                 confirmAdmin: input.confirmAdmin,
@@ -155,6 +200,7 @@ export const mcpAdminTools = [
                 inputPayload: input.input,
                 actor: ctx?.callerUser ?? undefined,
                 correlationId: ctx?.correlationId ?? undefined,
+                adminAuthorized: true,
             });
             if (!decision.allow) {
                 return ok({
