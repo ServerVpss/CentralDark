@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-21T01:10:01.552Z",
-  "updatedAtBR": "20/07/2026, 22:10:01 BRT",
+  "updatedAt": "2026-07-21T01:22:15.515Z",
+  "updatedAtBR": "20/07/2026, 22:22:15 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#337): Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR)",
+    "lastCommit": "aprendizado(#338): Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-21T01:22:15.515Z",
+      "titulo": "Push na main · 2a2a5cd26199aebc180e28be80fc8c796086d51a",
+      "detalhe": "aprendizado(#338): Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código",
+      "area": "Repositório",
+      "sha": "2a2a5cd",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-21T01:10:01.552Z",
       "titulo": "Push na main · 66088c66f428ca3eae3f4b6cc7f594b608fbc1ea",
       "detalhe": "aprendizado(#337): Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR)",
@@ -986,14 +994,6 @@
       "detalhe": "fix(gateway): sincroniza aliases compatíveis no adapter",
       "area": "Repositório",
       "sha": "846e072",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-10T03:15:49.713Z",
-      "titulo": "Push na main · e0d17e485d729856ccaa0e64c710b442bfeba234",
-      "detalhe": "docs(arsenal): registra prova do catálogo compatível",
-      "area": "Repositório",
-      "sha": "e0d17e4",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-21T01:22:15.515Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2a2a5cd26199aebc180e28be80fc8c796086d51a (2a2a5cd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-21T01:10:01.552Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 66088c66f428ca3eae3f4b6cc7f594b608fbc1ea (66088c6)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-10T03:24:25.859Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 846e0720c6ddbe8bc22e111132d4cee80aaf8526 (846e072)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-10T03:15:49.713Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e0d17e485d729856ccaa0e64c710b442bfeba234 (e0d17e4)",
       "area": "Repositório",
       "status": "sucesso"
     }
