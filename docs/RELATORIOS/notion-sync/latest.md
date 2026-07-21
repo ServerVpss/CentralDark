@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-21T01:21:52.081Z
+# 🧠 Notion Sync — 2026-07-21T01:39:17.966Z
 
-- **Commit fonte:** `2a2a5cd26199aebc180e28be80fc8c796086d51a`
+- **Commit fonte:** `32c189bb51cdc18d2c320ded29aba01609cdc29b`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 383 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 384 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 340 | 1 | 339 | 0 | 0 |
+| aprendizados | 341 | 1 | 340 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -405,7 +405,8 @@
 | aprendizados | atualizado | #335 — Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval |
 | aprendizados | atualizado | #336 — Update do Hermes faz git reset --hard e stasha os patches locais |
 | aprendizados | atualizado | #337 — Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR) |
-| aprendizados | criado | #338 — Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código |
+| aprendizados | atualizado | #338 — Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código |
+| aprendizados | criado | #339 — api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

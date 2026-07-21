@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-21T01:21:57.429Z
-- **Commit:** `2a2a5cd26199aebc180e28be80fc8c796086d51a`
+- **Gerado:** 2026-07-21T01:39:20.805Z
+- **Commit:** `32c189bb51cdc18d2c320ded29aba01609cdc29b`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 370 | 0 | 0 | 370 | 0 |
+| aprendizados | 371 | 0 | 0 | 371 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **370**
+- 🟥 Faltando no Notion: **371**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -418,4 +418,5 @@
 - 336. Update do Hermes faz git reset --hard e stasha os patches locais
 - 337. Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR)
 - 338. Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código
+- 339. api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA
 </details>
