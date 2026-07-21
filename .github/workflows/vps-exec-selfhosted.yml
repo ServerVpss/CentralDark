@@ -6,6 +6,7 @@ on:
     paths:
       - "apps/modulos/mcp/**"
       - ".github/workflows/vps-exec-selfhosted.yml"
+      - "scripts/webhook/github-webhook-deploy.mjs"
   workflow_dispatch:
 
 permissions:
@@ -20,180 +21,157 @@ jobs:
     name: Deploy canônico do CentralDark-MCP
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       REPO_DIR: /root/CentralDark
       MCP_DIR: /root/CentralDark/apps/modulos/mcp
       PM2_APP: CentralDark-MCP
+      WEBHOOK_APP: CentralDark-WebhookDeploy
       HEALTH_URL: http://127.0.0.1:9100/health
       AUDIT_DIR: /root/CentralDark/logs
     steps:
-      - name: Fast-forward, validar, reiniciar e comprovar
+      - name: Validar SHA, construir isolado, promover e comprovar
         shell: bash
         run: |
           set -Eeuo pipefail
-
+          umask 077
           exec 9>/tmp/centraldark-mcp-deploy.lock
-          flock -w 60 9 || {
-            echo "DEPLOY_LOCK_TIMEOUT"
-            exit 21
-          }
+          flock -w 90 9 || { echo "DEPLOY_LOCK_TIMEOUT"; exit 21; }
 
           TARGET_SHA='${{ github.sha }}'
-          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || {
-            echo "TARGET_SHA_INVALID"
-            exit 22
-          }
-
-          test -d "$REPO_DIR/.git" || {
-            echo "REPO_DIR_INVALID"
-            exit 23
-          }
-
+          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 22; }
+          [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 23; }
           cd "$REPO_DIR"
-          git fetch --prune origin main
+          [[ "$(git symbolic-ref --short HEAD)" == "main" ]] || { echo "LOCAL_BRANCH_NOT_MAIN"; exit 24; }
+          ORIGIN_URL="$(git remote get-url origin)"
+          [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || { echo "ORIGIN_REPOSITORY_MISMATCH"; exit 25; }
+          [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "TRACKED_TREE_DIRTY"; exit 26; }
 
+          # A porta 9300 só pode pertencer ao webhook legado conhecido. Ele é
+          # aposentado antes de qualquer mutação Git para eliminar a corrida.
+          WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
+          if [[ -n "$WEBHOOK_JSON" ]]; then
+            WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
+            WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
+            [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
+            PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
+            [[ -z "$PORT_PID" || "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 28; }
+            pm2 stop "$WEBHOOK_APP" >/dev/null
+            pm2 save --force >/dev/null
+          fi
+          for _ in $(seq 1 20); do
+            ss -ltn 'sport = :9300' | grep -q LISTEN || break
+            sleep 1
+          done
+          ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_STILL_LISTENING"; exit 29; }
+
+          git fetch --prune origin main
           ORIGIN_SHA="$(git rev-parse origin/main)"
           CURRENT_SHA="$(git rev-parse HEAD)"
-          git merge-base --is-ancestor "$TARGET_SHA" "$ORIGIN_SHA" || {
-            echo "EVENT_SHA_NOT_ANCESTOR_OF_ORIGIN_MAIN"
-            echo "target=$TARGET_SHA"
-            echo "origin=$ORIGIN_SHA"
-            exit 24
-          }
-          git diff --quiet "$TARGET_SHA" "$ORIGIN_SHA" -- apps/modulos/mcp || {
-            echo "MCP_CHANGED_AFTER_EVENT_SHA"
-            exit 25
-          }
-          DEPLOY_SHA="$ORIGIN_SHA"
+          git merge-base --is-ancestor "$TARGET_SHA" "$ORIGIN_SHA" || { echo "EVENT_SHA_NOT_IN_MAIN"; exit 30; }
+          git diff --quiet "$TARGET_SHA" "$ORIGIN_SHA" -- \
+            apps/modulos/mcp \
+            .github/workflows/vps-exec-selfhosted.yml \
+            scripts/webhook/github-webhook-deploy.mjs || { echo "DEPLOY_SCOPE_ADVANCED_AFTER_EVENT"; exit 31; }
+          git merge-base --is-ancestor "$CURRENT_SHA" "$ORIGIN_SHA" || { echo "LOCAL_HEAD_DIVERGED"; exit 32; }
 
-          git diff --quiet
-          git diff --cached --quiet
-          git merge-base --is-ancestor "$CURRENT_SHA" "$DEPLOY_SHA" || {
-            echo "LOCAL_HEAD_NOT_ANCESTOR_OF_MAIN"
-            exit 26
-          }
-
-          if [[ "$CURRENT_SHA" != "$DEPLOY_SHA" ]]; then
-            git merge --ff-only "$DEPLOY_SHA"
-          fi
-
-          [[ "$(git rev-parse HEAD)" == "$DEPLOY_SHA" ]] || {
-            echo "LOCAL_HEAD_SHA_MISMATCH"
-            exit 27
-          }
-
-          CHANGE_SHA="$(git rev-list --first-parent -1 "$DEPLOY_SHA" -- apps/modulos/mcp || true)"
-          [[ -n "$CHANGE_SHA" ]] || {
-            echo "MCP_CHANGE_SHA_NOT_FOUND"
-            exit 28
-          }
-          ROLLBACK_SHA="$(git rev-parse "$CHANGE_SHA^1")"
-          git merge-base --is-ancestor "$ROLLBACK_SHA" "$TARGET_SHA" || {
-            echo "ROLLBACK_SHA_INVALID"
-            exit 29
-          }
-
+          BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/centraldark-mcp-build.XXXXXX")"
           restart_attempted=0
-          rollback() {
+          cleanup() {
             rc=$?
-            trap - ERR
-            if [[ "$restart_attempted" == "1" ]]; then
-              echo "DEPLOY_FAILED_ROLLBACK_START"
-              cd "$REPO_DIR"
-              git reset --hard "$ROLLBACK_SHA"
-              cd "$MCP_DIR"
-              npm ci --ignore-scripts
-              npm run build
-              pm2 restart "$PM2_APP"
-              for _ in $(seq 1 20); do
-                if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
-                  echo "ROLLBACK_HEALTHY"
-                  break
-                fi
-                sleep 1
-              done
-              echo "rollback_sha=$ROLLBACK_SHA"
-            fi
+            trap - EXIT ERR
+            git -C "$REPO_DIR" worktree remove --force "$BUILD_DIR" >/dev/null 2>&1 || true
+            if [[ "$rc" -ne 0 && "$restart_attempted" == "1" ]]; then echo "DEPLOY_BLOCKED_AFTER_RESTART"; fi
             exit "$rc"
           }
-          trap rollback ERR
-
-          cd "$MCP_DIR"
-          npm ci --ignore-scripts
+          trap cleanup EXIT ERR
+          rmdir "$BUILD_DIR"
+          git worktree add --detach "$BUILD_DIR" "$TARGET_SHA" >/dev/null
+          BUILD_MCP="$BUILD_DIR/apps/modulos/mcp"
+          cd "$BUILD_MCP"
+          npm ci --ignore-scripts --no-audit --no-fund
           npm run typecheck
-          node --test tests/admin-guard.test.mjs
+          node --test tests/*.test.mjs
           npm run build
-          git -C "$REPO_DIR" diff --exit-code -- apps/modulos/mcp/dist
+          git -C "$BUILD_DIR" diff --exit-code -- apps/modulos/mcp/dist
 
-          restart_attempted=1
+          # Dependências novas exigem release-dir atômico; código puro segue
+          # automaticamente. Nunca altera node_modules do processo vivo.
+          git -C "$REPO_DIR" diff --quiet "$CURRENT_SHA" "$TARGET_SHA" -- \
+            apps/modulos/mcp/package.json apps/modulos/mcp/package-lock.json || {
+              echo "MCP_DEPENDENCIES_CHANGED_RELEASE_DIR_REQUIRED"
+              exit 33
+            }
+
+          # Consulta adicional; nunca é gate e nunca recebe diff ou segredo.
+          DARKAI_BIN="$(bash -lc 'command -v darkai' 2>/dev/null || true)"
+          if [[ -n "$DARKAI_BIN" ]]; then
+            if timeout 120 "$DARKAI_BIN" --model google/gemini-2.5-pro \
+              "Revisão consultiva somente leitura: um deploy MCP passou typecheck, testes completos, build sem drift e gates Git. Liste em JSON até três riscos operacionais residuais. Não execute ações." \
+              > "$RUNNER_TEMP/darkai-deploy-review.json" 2>/dev/null; then
+              echo "darkai_consult=ok"
+            else
+              echo "darkai_consult=unavailable_script_gates_used"
+            fi
+          else
+            echo "darkai_consult=unavailable_script_gates_used"
+          fi
+
+          MCP_JSON="$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)' | head -n1)"
+          [[ -n "$MCP_JSON" ]] || { echo "MCP_PM2_APP_NOT_FOUND"; exit 34; }
+          [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
+          [[ "$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")" == "$MCP_DIR/dist/index.js" ]] || { echo "MCP_PM2_EXEC_MISMATCH"; exit 36; }
+          curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
+
+          cd "$REPO_DIR"
+          git merge --ff-only "$ORIGIN_SHA"
+          [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "POST_FF_TRACKED_TREE_DIRTY"; exit 38; }
+          git diff --quiet "$TARGET_SHA" HEAD -- apps/modulos/mcp || { echo "RUNTIME_TREE_NOT_VALIDATED_TREE"; exit 39; }
+
           OLD_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
-          pm2 restart "$PM2_APP"
+          RESTART_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
+          restart_attempted=1
+          pm2 restart "$PM2_APP" >/dev/null
 
           HEALTH_OK=false
           for _ in $(seq 1 30); do
-            if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
-              HEALTH_OK=true
-              break
-            fi
+            if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then HEALTH_OK=true; break; fi
             sleep 1
           done
-          [[ "$HEALTH_OK" == "true" ]] || {
-            echo "MCP_HEALTH_FAILED"
-            exit 30
-          }
-
+          [[ "$HEALTH_OK" == "true" ]] || { echo "MCP_HEALTH_FAILED"; exit 40; }
           NEW_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
-          [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 ]] || {
-            echo "MCP_PM2_PID_INVALID"
-            exit 31
-          }
-          [[ "$NEW_PID" != "$OLD_PID" ]] || {
-            echo "MCP_PM2_PID_DID_NOT_CHANGE"
-            exit 32
-          }
-
-          pm2 jlist | jq -e --arg app "$PM2_APP" '
-            any(.[]; .name == $app and .pm2_env.status == "online" and (.pid | tonumber) > 0)
-          ' >/dev/null
+          [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || { echo "MCP_PM2_PID_NOT_REPLACED"; exit 41; }
+          pm2 jlist | jq -e --arg app "$PM2_APP" --arg cwd "$MCP_DIR" --arg exec "$MCP_DIR/dist/index.js" '
+            any(.[]; .name == $app and .pm2_env.status == "online" and .pm2_env.pm_cwd == $cwd and .pm2_env.pm_exec_path == $exec and (.pid | tonumber) > 0)
+          ' >/dev/null || { echo "MCP_PM2_STATE_INVALID"; exit 42; }
 
           AUDIT_FILE="$AUDIT_DIR/mcp-admin-audit-$(date -u +%F).jsonl"
           AUDIT_OK=false
           for _ in $(seq 1 20); do
-            if [[ -s "$AUDIT_FILE" ]] && jq -e --argjson pid "$NEW_PID" '
-              select(
-                .tool == "__startup__"
-                and .pid == $pid
-                and .decision == "released"
-                and .executionStatus == "startup_snapshot"
-              )
-            ' "$AUDIT_FILE" >/dev/null; then
-              AUDIT_OK=true
-              break
-            fi
+            if [[ -s "$AUDIT_FILE" ]] && jq -e --argjson pid "$NEW_PID" --arg restart_at "$RESTART_AT" '
+              select(.tool == "__startup__" and .pid == $pid and .timestamp >= $restart_at and .decision == "released" and .executionStatus == "startup_snapshot")
+            ' "$AUDIT_FILE" >/dev/null; then AUDIT_OK=true; break; fi
             sleep 1
           done
-          [[ "$AUDIT_OK" == "true" ]] || {
-            echo "MCP_STARTUP_AUDIT_NOT_PROVEN"
-            exit 33
-          }
+          [[ "$AUDIT_OK" == "true" ]] || { echo "MCP_STARTUP_AUDIT_NOT_PROVEN"; exit 43; }
 
-          [[ "$(git -C "$REPO_DIR" rev-parse HEAD)" == "$DEPLOY_SHA" ]]
-          git -C "$REPO_DIR" diff --quiet
-          git -C "$REPO_DIR" diff --cached --quiet
+          STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.$$"
+          jq -n --arg sha "$TARGET_SHA" --arg repo_sha "$(git rev-parse HEAD)" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
+            '{validatedSha:$sha,repositorySha:$repo_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok"}' > "$STATE_TMP"
+          mv "$STATE_TMP" "$AUDIT_DIR/mcp-last-known-good.json"
 
-          git -C "$REPO_DIR" fetch --prune origin main
-          FINAL_MAIN_SHA="$(git -C "$REPO_DIR" rev-parse origin/main)"
-          git -C "$REPO_DIR" merge-base --is-ancestor "$DEPLOY_SHA" "$FINAL_MAIN_SHA"
-          git -C "$REPO_DIR" diff --quiet "$DEPLOY_SHA" "$FINAL_MAIN_SHA" -- apps/modulos/mcp
-          if [[ "$DEPLOY_SHA" != "$FINAL_MAIN_SHA" ]]; then
-            git -C "$REPO_DIR" merge --ff-only "$FINAL_MAIN_SHA"
-          fi
+          git fetch --prune origin main
+          FINAL_MAIN_SHA="$(git rev-parse origin/main)"
+          git merge-base --is-ancestor "$TARGET_SHA" "$FINAL_MAIN_SHA" || { echo "VALIDATED_SHA_LEFT_MAIN"; exit 44; }
+          git diff --quiet "$TARGET_SHA" "$FINAL_MAIN_SHA" -- apps/modulos/mcp || { echo "MCP_ADVANCED_DURING_DEPLOY"; exit 45; }
+          ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_REOPENED"; exit 46; }
 
-          trap - ERR
+          restart_attempted=0
           echo "DEPLOYED_TO_MAIN"
-          echo "event_sha=$TARGET_SHA"
-          echo "deployed_sha=$FINAL_MAIN_SHA"
+          echo "validated_sha=$TARGET_SHA"
+          echo "repository_sha=$(git rev-parse HEAD)"
+          echo "main_sha=$FINAL_MAIN_SHA"
           echo "pm2_app=$PM2_APP"
+          echo "port_9300=retired"
           echo "health=ok"
           echo "startup_audit=ok"
