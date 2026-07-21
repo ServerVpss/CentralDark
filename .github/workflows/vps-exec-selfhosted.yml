@@ -1,26 +1,185 @@
-name: VPS Exec (self-hosted)
+name: VPS Deploy MCP (self-hosted)
+
 on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/modulos/mcp/**"
+      - ".github/workflows/vps-exec-selfhosted.yml"
   workflow_dispatch:
-    inputs:
-      commands:
-        description: 'Comandos pra rodar direto na VPS'
-        required: true
-        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: centraldark-mcp-production
+  cancel-in-progress: false
 
 jobs:
-  exec:
+  deploy-mcp:
+    name: Deploy canônico do CentralDark-MCP
+    if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
-    timeout-minutes: 10
+    timeout-minutes: 20
+    env:
+      REPO_DIR: /root/CentralDark
+      MCP_DIR: /root/CentralDark/apps/modulos/mcp
+      PM2_APP: CentralDark-MCP
+      HEALTH_URL: http://127.0.0.1:9100/health
+      AUDIT_DIR: /root/CentralDark/logs
     steps:
-      - name: Executar na VPS
+      - name: Fast-forward, validar, reiniciar e comprovar
         shell: bash
-        env:
-          CMDS: ${{ inputs.commands }}
         run: |
-          set -o pipefail
-          echo "========== INÍCIO =========="
-          echo "host=$(hostname)  user=$(whoami)  data=$(date '+%F %T')"
-          bash -lc "$CMDS"
-          rc=$?
-          echo "========== FIM (exit=$rc) =========="
-          exit $rc
+          set -Eeuo pipefail
+
+          exec 9>/tmp/centraldark-mcp-deploy.lock
+          flock -w 60 9 || {
+            echo "DEPLOY_LOCK_TIMEOUT"
+            exit 21
+          }
+
+          TARGET_SHA='${{ github.sha }}'
+          [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || {
+            echo "TARGET_SHA_INVALID"
+            exit 22
+          }
+
+          test -d "$REPO_DIR/.git" || {
+            echo "REPO_DIR_INVALID"
+            exit 23
+          }
+
+          cd "$REPO_DIR"
+          git fetch --prune origin main
+
+          ORIGIN_SHA="$(git rev-parse origin/main)"
+          CURRENT_SHA="$(git rev-parse HEAD)"
+          [[ "$ORIGIN_SHA" == "$TARGET_SHA" ]] || {
+            echo "ORIGIN_MAIN_SHA_MISMATCH"
+            echo "target=$TARGET_SHA"
+            echo "origin=$ORIGIN_SHA"
+            exit 24
+          }
+
+          git diff --quiet
+          git diff --cached --quiet
+          git merge-base --is-ancestor "$CURRENT_SHA" "$ORIGIN_SHA" || {
+            echo "LOCAL_HEAD_NOT_ANCESTOR_OF_MAIN"
+            exit 25
+          }
+
+          if [[ "$CURRENT_SHA" != "$ORIGIN_SHA" ]]; then
+            git merge --ff-only "$ORIGIN_SHA"
+          fi
+
+          [[ "$(git rev-parse HEAD)" == "$TARGET_SHA" ]] || {
+            echo "LOCAL_HEAD_SHA_MISMATCH"
+            exit 26
+          }
+
+          CHANGE_SHA="$(git rev-list --first-parent -1 "$TARGET_SHA" -- apps/modulos/mcp || true)"
+          [[ -n "$CHANGE_SHA" ]] || {
+            echo "MCP_CHANGE_SHA_NOT_FOUND"
+            exit 27
+          }
+          ROLLBACK_SHA="$(git rev-parse "$CHANGE_SHA^1")"
+          git merge-base --is-ancestor "$ROLLBACK_SHA" "$TARGET_SHA" || {
+            echo "ROLLBACK_SHA_INVALID"
+            exit 28
+          }
+
+          restart_attempted=0
+          rollback() {
+            rc=$?
+            trap - ERR
+            if [[ "$restart_attempted" == "1" ]]; then
+              echo "DEPLOY_FAILED_ROLLBACK_START"
+              cd "$REPO_DIR"
+              git reset --hard "$ROLLBACK_SHA"
+              cd "$MCP_DIR"
+              npm ci --ignore-scripts
+              npm run build
+              pm2 restart "$PM2_APP"
+              for _ in $(seq 1 20); do
+                if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
+                  echo "ROLLBACK_HEALTHY"
+                  break
+                fi
+                sleep 1
+              done
+              echo "rollback_sha=$ROLLBACK_SHA"
+            fi
+            exit "$rc"
+          }
+          trap rollback ERR
+
+          cd "$MCP_DIR"
+          npm ci --ignore-scripts
+          npm run typecheck
+          node --test tests/admin-guard.test.mjs
+          npm run build
+          git -C "$REPO_DIR" diff --exit-code -- apps/modulos/mcp/dist
+
+          restart_attempted=1
+          OLD_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
+          pm2 restart "$PM2_APP"
+
+          HEALTH_OK=false
+          for _ in $(seq 1 30); do
+            if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
+              HEALTH_OK=true
+              break
+            fi
+            sleep 1
+          done
+          [[ "$HEALTH_OK" == "true" ]] || {
+            echo "MCP_HEALTH_FAILED"
+            exit 29
+          }
+
+          NEW_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
+          [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 ]] || {
+            echo "MCP_PM2_PID_INVALID"
+            exit 30
+          }
+          [[ "$NEW_PID" != "$OLD_PID" ]] || {
+            echo "MCP_PM2_PID_DID_NOT_CHANGE"
+            exit 31
+          }
+
+          pm2 jlist | jq -e --arg app "$PM2_APP" '
+            any(.[]; .name == $app and .pm2_env.status == "online" and (.pid | tonumber) > 0)
+          ' >/dev/null
+
+          AUDIT_FILE="$AUDIT_DIR/mcp-admin-audit-$(date -u +%F).jsonl"
+          AUDIT_OK=false
+          for _ in $(seq 1 20); do
+            if [[ -s "$AUDIT_FILE" ]] && jq -e --argjson pid "$NEW_PID" '
+              select(
+                .tool == "__startup__"
+                and .pid == $pid
+                and .decision == "released"
+                and .executionStatus == "startup_snapshot"
+              )
+            ' "$AUDIT_FILE" >/dev/null; then
+              AUDIT_OK=true
+              break
+            fi
+            sleep 1
+          done
+          [[ "$AUDIT_OK" == "true" ]] || {
+            echo "MCP_STARTUP_AUDIT_NOT_PROVEN"
+            exit 32
+          }
+
+          [[ "$(git -C "$REPO_DIR" rev-parse HEAD)" == "$TARGET_SHA" ]]
+          git -C "$REPO_DIR" diff --quiet
+          git -C "$REPO_DIR" diff --cached --quiet
+
+          trap - ERR
+          echo "DEPLOYED_TO_MAIN"
+          echo "sha=$TARGET_SHA"
+          echo "pm2_app=$PM2_APP"
+          echo "health=ok"
+          echo "startup_audit=ok"
