@@ -42,9 +42,10 @@ jobs:
       - name: Detectar arquivos alterados
         id: diff
         run: |
-          BASE='${{ github.event.pull_request.base.sha }}'
+          BASE_REF='${{ github.event.pull_request.base.sha }}'
           HEAD='${{ github.event.pull_request.head.sha }}'
-          git fetch origin "$BASE" --depth=1 || true
+          git fetch origin "$BASE_REF" --depth=1 || true
+          BASE="$(git merge-base "$BASE_REF" "$HEAD")"
           CHANGED=$(git diff --name-only "$BASE" "$HEAD" || true)
           echo "$CHANGED" > /tmp/changed.txt
           echo "lista alterada:"; cat /tmp/changed.txt
@@ -100,8 +101,9 @@ jobs:
       - name: Conferir trailer Co-authored-by
         id: trailer
         run: |
-          BASE='${{ github.event.pull_request.base.sha }}'
+          BASE_REF='${{ github.event.pull_request.base.sha }}'
           HEAD='${{ github.event.pull_request.head.sha }}'
+          BASE="$(git merge-base "$BASE_REF" "$HEAD")"
           MISS=0; TOTAL=0
           for c in $(git rev-list "$BASE..$HEAD"); do
             TOTAL=$((TOTAL+1))
