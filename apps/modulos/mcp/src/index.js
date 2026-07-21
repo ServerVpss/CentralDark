@@ -310,7 +310,11 @@ function resolveGhToken(req) {
                 return { error: "Token interno do servidor não configurado." };
             }
             logAuth("direct_token_ok");
-            return { token: internal };
+            return {
+                token: internal,
+                callerUser: process.env.MCP_CALLER_USER || "mcp-direct-token",
+                oauthScope: "",
+            };
         }
         // Fluxo OAuth normal (ChatGPT / clientes externos)
         const at = getAccessToken(bearer);
@@ -320,7 +324,11 @@ function resolveGhToken(req) {
             return { error: "Access token inválido ou expirado." };
         }
         logAuth("found_in_store", { ttl_ms: at.expiresAt - Date.now(), gh_login: at.gh_login });
-        return { token: at.gh_token };
+        return {
+            token: at.gh_token,
+            callerUser: at.gh_login || "github-oauth",
+            oauthScope: String(at.oauth_scope || ""),
+        };
     }
     // Retrocompatibilidade: header x-mcp-session
     const sid = String(req.header("x-mcp-session") ?? "");
@@ -331,7 +339,11 @@ function resolveGhToken(req) {
             return { error: "Sessão inválida ou expirada." };
         }
         logAuth("session_header_ok");
-        return { token: s.githubAccessToken };
+        return {
+            token: s.githubAccessToken,
+            callerUser: s.githubLogin || "mcp-session",
+            oauthScope: "",
+        };
     }
     logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
@@ -345,7 +357,12 @@ app.post("/mcp", (req, res) => {
         return;
     }
     l.info("mcp_request_authorized", { method: req.body?.method || "unknown" });
-    handleMcpRequest(req, res, r.token, { cid: req.cid }).catch((err) => {
+    handleMcpRequest(req, res, r.token, {
+        cid: req.cid,
+        admin: false,
+        callerUser: r.callerUser,
+        oauthScope: r.oauthScope,
+    }).catch((err) => {
         l.error("mcp_handler_unhandled", { error: String(err) });
         if (!res.headersSent) {
             res.status(500).json({
@@ -372,14 +389,23 @@ function requireAdminScope(req, res) {
         unauthorizedAdmin(req, res, "escopo admin obrigatório", 403);
         return null;
     }
-    return at.gh_token;
+    return {
+        token: at.gh_token,
+        callerUser: at.gh_login || "github-admin",
+        oauthScope: scope,
+    };
 }
 app.post("/admin/mcp", (req, res) => {
     const l = withCid(req.cid);
-    const tok = requireAdminScope(req, res);
-    if (!tok) return;
-    l.info("mcp_admin_request_authorized", { method: req.body?.method || "unknown" });
-    handleMcpRequest(req, res, tok, { cid: req.cid, admin: true }).catch((err) => {
+    const auth = requireAdminScope(req, res);
+    if (!auth) return;
+    l.info("mcp_admin_request_authorized", { method: req.body?.method || "unknown", actor: auth.callerUser });
+    handleMcpRequest(req, res, auth.token, {
+        cid: req.cid,
+        admin: true,
+        callerUser: auth.callerUser,
+        oauthScope: auth.oauthScope,
+    }).catch((err) => {
         l.error("mcp_admin_handler_unhandled", { error: String(err) });
         if (!res.headersSent) {
             res.status(500).json({

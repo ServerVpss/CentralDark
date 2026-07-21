@@ -20,6 +20,14 @@ import { supabaseTools } from "../supabase/supabase.js";
 import { vpsFileTools } from "../vps/vps-files.js";
 import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
+import {
+    ADMIN_CONFIRMATIONS,
+    CATALOG_VERSION,
+    guardDestructive,
+    auditStartupSnapshot,
+    getCanonicalExpectation,
+} from "../../lib/admin-guard.js";
+
 const ADMIN_CONFIRM = "CONFIRMO ADMIN";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
@@ -56,6 +64,16 @@ function safeToolInfo(tool) {
         title: tool.annotations?.title ?? null,
     };
 }
+
+// Snapshot de startup é aguardado. Leituras continuam disponíveis em falha,
+// porém toda destrutiva permanece fail-closed e tenta reconciliar novamente.
+let startupAuditState = await auditStartupSnapshot(runtimeTools);
+async function ensureStartupAuditReady() {
+    if (startupAuditState?.ready === true) return startupAuditState;
+    startupAuditState = await auditStartupSnapshot(runtimeTools);
+    return startupAuditState;
+}
+
 export const mcpAdminTools = [
     codeReviewerToolDefinition,
     {
@@ -64,10 +82,12 @@ export const mcpAdminTools = [
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Status MCP" },
         inputSchema: z.object({}),
         handler: async () => ok({
-            ok: true,
-            dispatcher: "mcp_admin_call",
+            ok: true, dispatcher: "mcp_admin_call",
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
+            catalogVersion: CATALOG_VERSION,
+            auditStartupReady: startupAuditState?.ready === true,
+            catalogScope: "mcp_admin_dispatcher",
             time: new Date().toISOString(),
         }),
     },
@@ -76,8 +96,8 @@ export const mcpAdminTools = [
         description: "Lista o catálogo interno do MCP usado pelo dispatcher fixo mcp_admin_call. Use para descobrir ações disponíveis sem reconectar.",
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Catálogo admin MCP" },
         inputSchema: z.object({
-            filter: z.string().optional().describe("Filtra por trecho do nome ou descrição"),
-            includeDestructive: z.boolean().optional().describe("Se true, inclui também tools destrutivas"),
+            filter: z.string().optional(),
+            includeDestructive: z.boolean().optional(),
         }),
         handler: async (input) => {
             const filter = (input.filter ?? "").toString().toLowerCase().trim();
@@ -85,18 +105,19 @@ export const mcpAdminTools = [
             const tools = runtimeTools
                 .map(safeToolInfo)
                 .filter((tool) => includeDestructive || !tool.destructive)
-                .filter((tool) => {
-                if (!filter)
-                    return true;
-                return String(tool.name || "").toLowerCase().includes(filter) || String(tool.description || "").toLowerCase().includes(filter);
-            })
+                .filter((tool) => !filter ||
+                    String(tool.name || "").toLowerCase().includes(filter) ||
+                    String(tool.description || "").toLowerCase().includes(filter))
                 .sort((a, b) => a.name.localeCompare(b.name));
             return ok({
-                ok: true,
-                dispatcher: "mcp_admin_call",
+                ok: true, dispatcher: "mcp_admin_call",
                 totalRuntimeTools: runtimeTools.length,
+                totalDispatchableTools: runtimeTools.length,
                 returned: tools.length,
+                catalogScope: "mcp_admin_dispatcher",
+                catalogVersion: CATALOG_VERSION,
                 confirmForDestructive: ADMIN_CONFIRM,
+                acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
                 tools,
             });
         },
@@ -107,45 +128,98 @@ export const mcpAdminTools = [
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Status admin MCP" },
         inputSchema: z.object({}),
         handler: async () => ok({
-            ok: true,
-            dispatcher: "mcp_admin_call",
+            ok: true, dispatcher: "mcp_admin_call",
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
+            catalogVersion: CATALOG_VERSION,
+            auditStartupReady: startupAuditState?.ready === true,
+            catalogScope: "mcp_admin_dispatcher",
             time: new Date().toISOString(),
         }),
     },
     {
         name: "mcp_admin_call",
-        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmAdmin='CONFIRMO ADMIN'. Para escrever em /root/CentralDark/secrets/, use tool='admin_vault_write' com input={name, content, overwrite:true}; não use vps_write_file_safe.",
+        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmAdmin='CONFIRMO ADMIN' ou 'PERMITO PIVETE'. Para escrever em <caminho-vps>, use tool='admin_vault_write' com input={name, content, overwrite:true}; não use vps_write_file_safe.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
         inputSchema: z.object({
-            tool: z.string().min(1).describe("Nome exato da tool interna"),
-            input: z.record(z.string(), z.unknown()).optional().describe("Payload da tool interna"),
-            confirmAdmin: z.string().optional().describe("Para tools destrutivas, precisa ser CONFIRMO ADMIN"),
+            tool: z.string().min(1),
+            input: z.record(z.string(), z.unknown()).optional(),
+            confirmAdmin: z.string().optional(),
         }),
         handler: async (input, ctx) => {
+            const scopes = new Set(String(ctx?.oauthScope || "").split(/\s+/).filter(Boolean));
+            const hasAdminContext = ctx?.admin === true && scopes.has("admin");
+            const hasAuditIdentity = Boolean(ctx?.callerUser && ctx?.correlationId);
+            if (!hasAdminContext || !hasAuditIdentity) {
+                const denied = await guardDestructive({
+                    toolName: input.tool,
+                    confirmAdmin: input.confirmAdmin,
+                    runtimeTools,
+                    expectation: getCanonicalExpectation(),
+                    inputPayload: input.input,
+                    actor: ctx?.callerUser ?? undefined,
+                    correlationId: ctx?.correlationId ?? undefined,
+                    adminAuthorized: false,
+                });
+                return ok({
+                    ok: false,
+                    status: !hasAdminContext ? "ESCOPO_ADMIN_NECESSARIO" : "CONTEXTO_ADMIN_INCOMPLETO",
+                    executionStatus: "blocked",
+                    tool: input.tool,
+                    auditSeq: denied.audit?.seq ?? null,
+                    auditHash: denied.audit?.hash ?? null,
+                });
+            }
             const tool = registry.get(input.tool);
             if (!tool) {
                 return ok({
-                    ok: false,
-                    status: "TOOL_NAO_ENCONTRADA",
+                    ok: false, status: "TOOL_NAO_ENCONTRADA",
                     requested: input.tool,
                     sugestao: "Use mcp_admin_catalog para listar as tools disponíveis.",
                 });
             }
             const destructive = tool.annotations?.destructiveHint === true;
-            if (destructive && input.confirmAdmin !== ADMIN_CONFIRM) {
+            if (!destructive) {
+                return tool.handler(input.input ?? {}, ctx);
+            }
+            // Destrutiva: startup auditável + guarda canônica versionada.
+            const startup = await ensureStartupAuditReady();
+            if (startup?.ready !== true) {
                 return ok({
                     ok: false,
-                    status: "CONFIRMACAO_ADMIN_NECESSARIA",
+                    status: "AUDITORIA_STARTUP_INDISPONIVEL",
+                    executionStatus: "blocked",
                     tool: input.tool,
-                    destructive: true,
+                });
+            }
+            const decision = await guardDestructive({
+                toolName: input.tool,
+                confirmAdmin: input.confirmAdmin,
+                runtimeTools,
+                expectation: getCanonicalExpectation(),
+                inputPayload: input.input,
+                actor: ctx?.callerUser ?? undefined,
+                correlationId: ctx?.correlationId ?? undefined,
+                adminAuthorized: true,
+            });
+            if (!decision.allow) {
+                return ok({
+                    ok: false, status: decision.status,
+                    executionStatus: decision.executionStatus,
+                    tool: input.tool, destructive: true,
                     requiredConfirmAdmin: ADMIN_CONFIRM,
-                    observacao: "Nada foi executado. Para secrets, use mcp_admin_call com tool='admin_vault_write', confirmAdmin='CONFIRMO ADMIN' e input={name, content, overwrite:true}. Outras tools podem exigir confirmação específica, como CONFIRMO DELETAR ou CONFIRMO LIMPAR.",
+                    acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
+                    reconciliation: decision.recon,
+                    auditSeq: decision.audit?.seq ?? null,
+                    auditHash: decision.audit?.hash ?? null,
+                    observacao: decision.status === "AUDITORIA_INDISPONIVEL"
+                        ? "Auditoria fail-closed: destrutiva bloqueada."
+                        : (decision.status === "DIVERGENCIA_CATALOGO"
+                            ? "Divergência de catálogo detectada. Somente esta destrutiva foi bloqueada."
+                            : "Nada foi executado. Passe confirmAdmin='CONFIRMO ADMIN' ou 'PERMITO PIVETE'."),
                 });
             }
             return tool.handler(input.input ?? {}, ctx);
         },
     },
 ];
-//# sourceMappingURL=mcp-admin.js.map

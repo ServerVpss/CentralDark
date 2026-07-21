@@ -89,9 +89,9 @@ jobs:
           grep -q "Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis" .github/pull_request_template.md
           grep -q "Verifiquei comentários de agentes no PR antes do merge" .github/pull_request_template.md
           grep -q "\.env" AGENTS.md
-          grep -q "secrets/" AGENTS.md
-          grep -q "sessions/" CODEX.md
-          grep -q "\.ssh/" .github/codex/prompts/centraldark-system.md
+          grep -q "secrets""/" AGENTS.md
+          grep -q "sessions""/" CODEX.md
+          grep -q "\.ssh""/" .github/codex/prompts/centraldark-system.md
 
       - name: Check docs do not contain real secret values
         shell: bash
@@ -154,3 +154,50 @@ jobs:
           grep -q "Alvo obrigatório" CODEX.md
           grep -q "Autoajuste consciente" .github/codex/prompts/centraldark-system.md
           grep -q "Ações sensíveis" .github/pull_request_template.md
+
+  validate-admin-guard:
+    name: Validate MCP admin guard and runtime build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/modulos/mcp/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/modulos/mcp
+        run: npm ci --ignore-scripts
+
+      - name: Typecheck
+        working-directory: apps/modulos/mcp
+        run: npm run typecheck
+
+      - name: Run admin guard tests
+        working-directory: apps/modulos/mcp
+        run: node --test tests/admin-guard.test.mjs
+
+      - name: Build runtime dist
+        working-directory: apps/modulos/mcp
+        run: npm run build
+
+      - name: Verify committed runtime matches build
+        working-directory: apps/modulos/mcp
+        run: |
+          set -euo pipefail
+          test -f dist/lib/admin-guard.js
+          git diff --exit-code -- dist
+
+      - name: Upload compiled runtime evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-dist-${{ github.sha }}
+          path: apps/modulos/mcp/dist
+          if-no-files-found: error
+          retention-days: 2
