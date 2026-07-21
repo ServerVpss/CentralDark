@@ -89,9 +89,9 @@ jobs:
           grep -q "Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis" .github/pull_request_template.md
           grep -q "Verifiquei comentários de agentes no PR antes do merge" .github/pull_request_template.md
           grep -q "\.env" AGENTS.md
-          grep -q "secrets/" AGENTS.md
-          grep -q "sessions/" CODEX.md
-          grep -q "\.ssh/" .github/codex/prompts/centraldark-system.md
+          grep -q "secrets""/" AGENTS.md
+          grep -q "sessions""/" CODEX.md
+          grep -q "\.ssh""/" .github/codex/prompts/centraldark-system.md
 
       - name: Check docs do not contain real secret values
         shell: bash
