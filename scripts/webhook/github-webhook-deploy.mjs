@@ -1,78 +1,39 @@
 import http from 'http';
-import { safeResetToOrigin } from './lib/safe-git-deploy.mjs';
-import { getHeadInfo, isAutoCommit, notifyVpsUpdated } from './lib/notify-telegram.mjs';
 
-const port = process.env.WEBHOOK_DEPLOY_PORT || 9300;
-const REPO_PATH = process.env.REPO_PATH || '/root/CentralDark';
+const port = Number(process.env.WEBHOOK_DEPLOY_PORT || 9300);
 
-function log(msg) {
-  console.log(`[${new Date().toISOString()}] ${msg}`);
-}
-
-// CORS global pro painel status.centralldark.com (e qualquer painel público).
-function applyCors(res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', '*');
-  res.setHeader('Access-Control-Max-Age', '86400');
-  res.setHeader('Vary', 'Origin');
+function json(res, status, body) {
+  res.writeHead(status, {
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-store',
+  });
+  res.end(JSON.stringify(body));
 }
 
 const server = http.createServer((req, res) => {
-  applyCors(res);
-
-  // Preflight responde 204 imediato.
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204);
-    res.end();
-    return;
-  }
-
   if (req.method === 'POST' && req.url === '/webhook') {
-    log('[deploy] gatilho do GitHub recebido — iniciando atualização segura…');
-    // Responde já e roda o deploy em background (igual ao comportamento anterior).
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'Deploy iniciado na VPS' }));
-
-    (async () => {
-      const before = await getHeadInfo(REPO_PATH);
-      const r = await safeResetToOrigin({ repoPath: REPO_PATH, branch: 'main', log });
-      if (!r.ok) {
-        log('[deploy] FALHOU — ver mensagens [safe-deploy] acima');
-        return;
-      }
-      log(`[deploy] OK (stash=${r.stashed} conflito=${r.stashConflict} backup=${r.backupRef || 'nenhum'})`);
-
-      const after = await getHeadInfo(REPO_PATH);
-      // Notifica só quando o HEAD mudou de verdade e o commit não é automático
-      // (painel-auto-update/pipeline/sentinela fazem push constante → seria spam).
-      if (after.sha && after.sha !== before.sha && !isAutoCommit(after.msg)) {
-        const n = await notifyVpsUpdated(after);
-        log(`[deploy] Telegram VPS ATUALIZADA: ${n.ok ? 'enviado' : 'pulado (' + (n.reason || '?') + ')'}`);
-      } else {
-        log('[deploy] sem notificação (sem mudança ou commit automático)');
-      }
-    })().catch((e) => log(`[deploy] erro inesperado: ${e.message}`));
+    json(res, 410, {
+      status: 'retired',
+      canonicalDeploy: 'github-actions',
+      mutatesRepository: false,
+    });
     return;
   }
 
-  if (req.url === '/health' || req.url === '/health/') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(
-      JSON.stringify({
-        status: 'UP',
-        service: 'centraldark-webhook-deploy',
-        port,
-        timestamp: new Date().toISOString(),
-      }),
-    );
+  if (req.method === 'GET' && (req.url === '/health' || req.url === '/health/')) {
+    json(res, 200, {
+      status: 'RETIRED',
+      service: 'centraldark-webhook-deploy',
+      canonicalDeploy: 'github-actions',
+      mutatesRepository: false,
+      timestamp: new Date().toISOString(),
+    });
     return;
   }
 
-  res.writeHead(404, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ error: 'not_found' }));
+  json(res, 404, { error: 'not_found' });
 });
 
 server.listen(port, '127.0.0.1', () => {
-  console.log(`[deploy] webhook escutando em http://127.0.0.1:${port}`);
+  console.log(`[deploy] webhook legado em modo inerte em 127.0.0.1:${port}`);
 });
