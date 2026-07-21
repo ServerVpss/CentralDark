@@ -66,7 +66,7 @@ jobs:
               re.I,
           )
           operational_path = re.compile(
-              r'(^|/)(Dockerfile|docker-compose|Caddyfile|wuzapi|whatsapp|crm|migrations|prisma/migrations)(/|$)',
+              r'(^|/)(\.github/workflows|scripts/webhook|Dockerfile|docker-compose|Caddyfile|wuzapi|whatsapp|crm|migrations|prisma/migrations)(/|$)',
               re.I,
           )
 
