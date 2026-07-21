@@ -15,3 +15,4 @@ Este diretório contém o conjunto de habilidades (skills) e metodologias que go
 - [/skills/code-review/SKILL.md](./code-review/SKILL.md): Revisão de áreas sensíveis.
 - [/skills/runtime-error-prevention/SKILL.md](./runtime-error-prevention/SKILL.md): Blindagem contra quebras de sistema.
 - [/skills/documentation-memory/SKILL.md](./documentation-memory/SKILL.md): Gestão de memória contínua.
+- [/skills/tecnica-da-lupa-premium/SKILL.md](./tecnica-da-lupa-premium/SKILL.md): Revisão crítica com evidência, cenários, rollback e decisão proporcional ao risco.

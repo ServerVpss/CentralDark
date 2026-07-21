@@ -40,14 +40,12 @@ jobs:
         working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
-
           required=(
             "AGENTS.md"
             "CODEX.md"
             ".github/codex/prompts/centraldark-system.md"
             ".github/pull_request_template.md"
           )
-
           for file in "${required[@]}"; do
             test -f "$file" || {
               echo "Missing required file: $file"
@@ -60,7 +58,6 @@ jobs:
         working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
-
           grep -q "ServerVpss/CentralDark" AGENTS.md
           grep -q "ServerVpss/CentralDark" CODEX.md
           grep -q "ServerVpss/CentralDark" .github/codex/prompts/centraldark-system.md
@@ -71,21 +68,18 @@ jobs:
         working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
-
           docs=(
             "AGENTS.md"
             "CODEX.md"
             ".github/codex/prompts/centraldark-system.md"
             ".github/pull_request_template.md"
           )
-
           for file in "${docs[@]}"; do
             grep -q "arquivos sensíveis\|Arquivos sensíveis" "$file" || {
               echo "Missing sensitive-file guardrail wording in $file"
               exit 1
             }
           done
-
           grep -q "Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis" .github/pull_request_template.md
           grep -q "Verifiquei comentários de agentes no PR antes do merge" .github/pull_request_template.md
           grep -q "\.env" AGENTS.md
@@ -98,7 +92,6 @@ jobs:
         working-directory: .ci-codex-validate
         run: |
           set -euo pipefail
-
           python3 - <<'PY'
           from pathlib import Path
           import re
@@ -125,7 +118,6 @@ jobs:
           }
 
           findings = []
-
           for file in files:
               text = file.read_text(encoding="utf-8")
               for pattern in patterns:
@@ -154,3 +146,18 @@ jobs:
           grep -q "Alvo obrigatório" CODEX.md
           grep -q "Autoajuste consciente" .github/codex/prompts/centraldark-system.md
           grep -q "Ações sensíveis" .github/pull_request_template.md
+
+  validate-lupa-inventario:
+    name: Validate Lupa + inventário (offline)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: false
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+      - name: Validar skill, loader e prompt canônico
+        run: node scripts/validate-lupa-inventario.mjs

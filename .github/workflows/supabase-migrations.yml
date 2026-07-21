@@ -1,0 +1,41 @@
+name: Supabase Migrations CI
+
+on:
+  pull_request:
+    paths:
+      - "supabase/migrations/**"
+      - "scripts/migrations/**"
+      - ".github/workflows/supabase-migrations.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-migrations-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validar migrations sem producao
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Supabase CLI
+        uses: supabase/setup-cli@3c2f5e2ae34c34e428e8e206e2c4d21fa2d20fbf # v2.1.1
+        with:
+          version: 2.109.1
+
+      - name: Validar scripts e migrations
+        shell: bash
+        run: |
+          bash -n scripts/migrations/validate-migrations.sh
+          bash -n scripts/migrations/apply-migrations-vps.sh
+          bash scripts/migrations/validate-migrations.sh
+
+      - name: Aplicar migrations somente no banco local do runner
+        run: supabase db start

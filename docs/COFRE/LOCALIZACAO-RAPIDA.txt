@@ -1,0 +1,19 @@
+COFRE DO PIVETE
+
+Abra primeiro:
+docs/COFRE/README.md
+
+Porta de qualquer IA:
+00-COMECE-AQUI-IA.md
+
+Constituição universal de todas as IAs:
+CLAUDE.md
+
+Adaptador operacional:
+AGENTS.md
+
+Guia daqui pra frente:
+docs/COFRE/DAQUI-PRA-FRENTE.md
+
+Frase curta:
+Antes de tocar no CentralDark, abra ou inspecione pivete/dev, leia 00-COMECE-AQUI-IA.md e leia integralmente CLAUDE.md. Depois siga AGENTS.md, execute o BOOT e confirme workspace, ref, SHA, ambiente, escopo, riscos, testes, prova e rollback.

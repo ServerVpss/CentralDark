@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "lastUpdated": "2026-07-03",
+  "lastUpdated": "2026-07-17",
   "note": "Skills .md (metodologia) coexistem com .js (executáveis). NÃO remover .md existentes.",
   "methodology": {
     "description": "Skills de metodologia (leitura obrigatória para IAs)",
@@ -44,6 +44,12 @@
       {
         "slug": "writing-plans",
         "path": "writing-plans/SKILL.md",
+        "type": "methodology",
+        "active": true
+      },
+      {
+        "slug": "tecnica-da-lupa-premium",
+        "path": "tecnica-da-lupa-premium/SKILL.md",
         "type": "methodology",
         "active": true
       }

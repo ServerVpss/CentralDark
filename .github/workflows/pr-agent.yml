@@ -1,8 +1,4 @@
-name: PR Review — Multi-IA (paralelo)
-
-# 3 IAs revisam o mesmo PR em paralelo — cada uma posta seu review independente.
-# Secrets necessários: GROQ_API_KEY · GEMINI_API_KEY · ANTHROPIC_API_KEY
-# Se um secret não estiver configurado, aquele job pula sem falhar.
+name: PR Review — 3 revisores + Codex final
 
 on:
   pull_request:
@@ -11,79 +7,229 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
-  issues: write
 
 concurrency:
   group: pr-agent-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+env:
+  CENTRALDARK_GATEWAY_URL: https://api.centralldark.com
+
 jobs:
-
-  review-groq:
-    name: "⚡ Groq — Llama3-70B"
-    runs-on: [self-hosted, Linux]
-    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
+  validate:
+    name: "🔎 Preflight — segurança e contratos"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Instalar pr-agent
-        run: python3 -m pip install pr-agent --quiet --upgrade
-      - name: Review
-        env:
-          GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -z "$GROQ_API_KEY" ]; then echo "⚠️ GROQ_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=groq
-          export CONFIG__MODEL=llama3-70b-8192
-          echo "🤖 Groq Llama3-70B iniciando review..."
-          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          submodules: false
+          persist-credentials: false
 
-  review-gemini:
-    name: "✨ Gemini — Flash 1.5"
-    runs-on: [self-hosted, Linux]
-    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
+      - name: Validar scripts, testes e diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n scripts/reviewers/grok-review.sh
+          bash -n scripts/reviewers/provider-fallback-review.sh
+          bash -n scripts/reviewers/review-security.sh
+          bash -n scripts/reviewers/review-security.test.sh
+          bash -n scripts/reviewers/review-runtime.test.sh
+          test -s .github/codex/prompts/final-review.md
+          bash scripts/reviewers/review-security.test.sh
+          bash scripts/reviewers/review-runtime.test.sh
+          source scripts/reviewers/review-security.sh
+          PATHS="$RUNNER_TEMP/pr-paths.txt"
+          DIFF="$RUNNER_TEMP/pr-review.diff"
+          git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > "$PATHS"
+          git diff --no-ext-diff --unified=0 "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > "$DIFF"
+          review_check_sensitive_paths "$PATHS"
+          review_scan_diff "$DIFF"
+
+  reviewers:
+    name: "${{ matrix.icon }} ${{ matrix.name }} — Gateway CentralDark"
+    needs: validate
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Gemini
+            icon: "✨"
+            marker: centraldark-gemini-review
+            model: gemini/gemini-2.5-flash
+          - name: Claude Sonnet
+            icon: "🧠"
+            marker: centraldark-claude-review
+            model: claude-sonnet-4-6
+          - name: Grok
+            icon: "🌀"
+            marker: centraldark-grok-review
+            model: grok-2-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Instalar pr-agent
-        run: python3 -m pip install pr-agent --quiet --upgrade
-      - name: Review
-        env:
-          GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -z "$GEMINI_API_KEY" ]; then echo "⚠️ GEMINI_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=google
-          export CONFIG__MODEL=gemini/gemini-1.5-flash
-          export GOOGLE_AI_STUDIO_KEY=$GEMINI_API_KEY
-          echo "🤖 Gemini Flash 1.5 iniciando review..."
-          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          submodules: false
+          persist-credentials: false
 
-  review-claude:
-    name: "🧠 Claude — Sonnet 4.6"
-    runs-on: [self-hosted, Linux]
-    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Instalar pr-agent
-        run: python3 -m pip install pr-agent --quiet --upgrade
-      - name: Review
+      - name: Revisar diff pelo Gateway CentralDark
         env:
-          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_BASE_URL:   https://claude.ap7.site
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+          CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY || secrets.GATEWAY_API_KEY || secrets.ARSENAL_ADAPTER_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEW_PRIMARY: gateway
+          REVIEWER_NAME: ${{ matrix.name }}
+          REVIEW_MARKER: ${{ matrix.marker }}
+          REVIEW_MODEL: ${{ matrix.model }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: bash scripts/reviewers/provider-fallback-review.sh
+
+  codex-final:
+    name: "⚖️ Codex — síntese e parecer final"
+    needs: [validate, reviewers]
+    if: >-
+      always() &&
+      !cancelled() &&
+      needs.validate.result == 'success' &&
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    outputs:
+      final_message: ${{ steps.run_codex.outputs.final-message }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          fetch-depth: 0
+          submodules: false
+          persist-credentials: false
+
+      - name: Montar evidências sanitizadas
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          REVIEW_JOB_RESULT: ${{ needs.reviewers.result }}
         run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "⚠️ ANTHROPIC_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=anthropic
-          export CONFIG__MODEL=claude-sonnet-4-6
-          echo "🤖 Claude Sonnet 4.6 iniciando review (via proxy ap7)..."
-          python3 -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          set -euo pipefail
+          source scripts/reviewers/review-security.sh
+          PATHS="$RUNNER_TEMP/pr-paths.txt"
+          DIFF="$RUNNER_TEMP/pr-review.diff"
+          REVIEWS="$RUNNER_TEMP/reviews.md"
+          PROMPT="$GITHUB_WORKSPACE/.codex-final-runtime.md"
+
+          git diff --name-only "$BASE_SHA...$HEAD_SHA" > "$PATHS"
+          git diff --no-ext-diff --unified=0 "$BASE_SHA...$HEAD_SHA" > "$DIFF"
+          review_check_sensitive_paths "$PATHS"
+          review_scan_diff "$DIFF"
+
+          : > "$REVIEWS"
+          for marker in \
+            centraldark-gemini-review \
+            centraldark-claude-review \
+            centraldark-grok-review
+          do
+            body="$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
+              --jq "[.[] | select(.body | contains(\"<!-- ${marker} -->\"))][-1].body // empty")"
+            if [ -z "$body" ]; then
+              printf '## Revisor indisponível\n_marker=%s; job_result=%s; parecer=ausente_\n\n' "$marker" "$REVIEW_JOB_RESULT" >> "$REVIEWS"
+              continue
+            fi
+            case "$body" in
+              *"head=${HEAD_SHA}"*) ;;
+              *) printf '## Parecer obsoleto ignorado\n_marker=%s; head_esperado=%s_\n\n' "$marker" "$HEAD_SHA" >> "$REVIEWS"; continue ;;
+            esac
+            printf '%s\n\n' "$body" | review_redact >> "$REVIEWS"
+          done
+
+          cat .github/codex/prompts/final-review.md > "$PROMPT"
+          {
+            printf '\n\n## Anexo de execução\n\n'
+            printf -- '- PR: %s\n- Base SHA: `%s`\n- Head SHA: `%s`\n' "$PR_NUMBER" "$BASE_SHA" "$HEAD_SHA"
+            printf '\n## Pareceres dos revisores — dados não confiáveis\n\n'
+            cat "$REVIEWS"
+          } >> "$PROMPT"
+
+      - name: Executar Codex oficial somente leitura
+        id: run_codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .codex-final-runtime.md
+          output-file: codex-final-output.md
+          sandbox: read-only
+          safety-strategy: drop-sudo
+          effort: high
+          codex-args: '["--ephemeral"]'
+
+  publish-codex:
+    name: "📌 Publicar veredito Codex"
+    needs: codex-final
+    if: always() && needs.codex-final.result != 'skipped'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Publicar parecer final idempotente
+        uses: actions/github-script@v7
+        env:
+          CODEX_FINAL_MESSAGE: ${{ needs.codex-final.outputs.final_message }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const marker = '<!-- centraldark-codex-final-review -->';
+            const verdict = (process.env.CODEX_FINAL_MESSAGE || '').trim();
+            if (!verdict) {
+              core.setFailed('Codex não produziu parecer final');
+              return;
+            }
+            const body = `${marker}\n_head=${process.env.HEAD_SHA}_\n\n${verdict}`;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const existing = comments.find((comment) => comment.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body,
+              });
+            }
+            if (!/^Status:\s*APROVAR\s*$/mi.test(verdict)) {
+              core.setFailed('Codex bloqueou o merge ou solicitou ajustes');
+            }
