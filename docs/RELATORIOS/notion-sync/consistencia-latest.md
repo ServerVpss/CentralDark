@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-21T09:31:35.374Z
-- **Commit:** `fe4730a27ec1bab6c317d4ae98ed5113deff79bd`
+- **Gerado:** 2026-07-21T10:28:21.125Z
+- **Commit:** `ae522f8fe1e77158f33d52fd4aa123d6f4bbe188`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 372 | 0 | 0 | 372 | 0 |
+| aprendizados | 373 | 0 | 0 | 373 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **372**
+- 🟥 Faltando no Notion: **373**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -420,4 +420,5 @@
 - 338. Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código
 - 339. api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA
 - 340. Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY)
+- 341. Delegação de cima pra baixo: o topo AGE e delega pra quem ele controla — nada de "espera estéril"
 </details>

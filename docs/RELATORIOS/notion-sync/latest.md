@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-21T09:31:32.577Z
+# 🧠 Notion Sync — 2026-07-21T10:28:17.445Z
 
-- **Commit fonte:** `fe4730a27ec1bab6c317d4ae98ed5113deff79bd`
+- **Commit fonte:** `ae522f8fe1e77158f33d52fd4aa123d6f4bbe188`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 385 atualizadas · ❌ 459 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 386 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 342 | 1 | 341 | 0 | 0 |
+| aprendizados | 343 | 1 | 342 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -407,7 +407,8 @@
 | aprendizados | atualizado | #337 — Fórmula de restart do gateway Hermes sem deixar cair (matar → subir → PROVAR) |
 | aprendizados | atualizado | #338 — Hermes tem Gemini NATIVO (adapter + function-calling testado) — ativar é config, NUNCA código |
 | aprendizados | atualizado | #339 — api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA |
-| aprendizados | criado | #340 — Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY) |
+| aprendizados | atualizado | #340 — Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY) |
+| aprendizados | criado | #341 — Delegação de cima pra baixo: o topo AGE e delega pra quem ele controla — nada de "espera estéril" |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
