@@ -8,7 +8,6 @@ review_check_sensitive_paths() {
   local paths_file="$1"
   local path_regex='(^|/)(\.env($|\.)|secrets?(/|$)|tokens?(/|$)|sessions?(/|$)|\.ssh(/|$)|id_(rsa|ed25519)$)|\.(pem|key|p12|pfx)$'
 
-  # Nunca imprimir o match: a própria linha pode revelar nome ou conteúdo sensível.
   if LC_ALL=C grep -Eiq -- "$path_regex" "$paths_file"; then
     echo "ERRO: PR contém caminho sensível; revisão externa bloqueada" >&2
     return 1
@@ -24,7 +23,6 @@ review_scan_diff() {
     return 1
   fi
 
-  # Prefixos são montados em runtime para o próprio scanner não disparar em si mesmo.
   local xai_prefix="x""ai-"
   local groq_prefix="g""sk_"
   local openai_prefix="s""k-"
@@ -33,17 +31,30 @@ review_scan_diff() {
   local google_prefix="A""Iza"
   local aws_prefix="A""KIA"
   local centraldark_prefix="cdk_""live_"
-  local private_begin='-----BE'
-  private_begin+='GIN '
-  local private_kind='PRIVATE'
-  private_kind+=' KEY-----'
-  local private_key_marker="${private_begin}.*${private_kind}"
   local secret_regex
-  secret_regex="(${xai_prefix}[A-Za-z0-9_-]{20,}|${groq_prefix}[A-Za-z0-9_-]{20,}|${openai_prefix}[A-Za-z0-9_-]{20,}|${github_prefix}[A-Za-z0-9_-]{20,}|${github_pat_prefix}[A-Za-z0-9_-]{20,}|${google_prefix}[A-Za-z0-9_-]{30,}|${aws_prefix}[A-Z0-9]{16}|${centraldark_prefix}[A-Za-z0-9_-]{16,}|${private_key_marker}|(postgres(ql)?|mysql|mongodb(\+srv)?):\/\/[^[:space:]/:@]+:[^[:space:]@]+@)"
+  secret_regex="(${xai_prefix}[A-Za-z0-9_-]{20,}|${groq_prefix}[A-Za-z0-9_-]{20,}|${openai_prefix}[A-Za-z0-9_-]{20,}|${github_prefix}[A-Za-z0-9_-]{20,}|${github_pat_prefix}[A-Za-z0-9_-]{20,}|${google_prefix}[A-Za-z0-9_-]{30,}|${aws_prefix}[A-Z0-9]{16}|${centraldark_prefix}[A-Za-z0-9_-]{16,}|(postgres(ql)?|mysql|mongodb(\+srv)?):\/\/[^[:space:]/:@]+:[^[:space:]@]+@)"
 
-  # grep -q é uma trava de segurança: o valor detectado nunca pode ir ao log.
   if LC_ALL=C grep -Eiq -- "$secret_regex" "$diff_file"; then
     echo "ERRO: padrão de credencial detectado; revisão externa bloqueada" >&2
+    return 1
+  fi
+
+  # Um texto explicando "BEGIN PRIVATE KEY" não é uma chave.
+  # Só bloqueia quando o cabeçalho vem acompanhado de corpo codificado.
+  if ! python3 - "$diff_file" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+text = Path(sys.argv[1]).read_text(encoding="utf-8", errors="ignore")
+pattern = re.compile(
+    r"(?m)^[+-]?-----BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----\r?$"
+    r"\n^[+-]?[A-Za-z0-9+/=]{20,}\r?$"
+)
+sys.exit(1 if pattern.search(text) else 0)
+PY
+  then
+    echo "ERRO: conteúdo de chave privada detectado; revisão externa bloqueada" >&2
     return 1
   fi
 }
