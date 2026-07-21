@@ -192,26 +192,13 @@ function auditFileForDay(day) {
   return path.join(AUDIT_DIR, `mcp-admin-audit-${day}.jsonl`);
 }
 
-function readChainHeadSync(day) {
-  const file = auditFileForDay(day);
-  if (fs.existsSync(file)) {
-    const raw = fs.readFileSync(file, "utf8").trim();
-    if (raw) {
-      const verified = verifyChain(file);
-      if (!verified.ok) throw new Error(`existing_audit_chain_invalid:${verified.reason || verified.error}`);
-      const last = JSON.parse(raw.split("\n").at(-1));
-      return { day, hash: last.hash, seq: last.seq };
-    }
+function readChainHeadSync() {
+  const verified = verifyAuditDirectory(AUDIT_DIR);
+  if (!verified.ok) {
+    throw new Error(`existing_audit_chain_invalid:${verified.reason || verified.error}`);
   }
-  try {
-    const parsed = JSON.parse(fs.readFileSync(CHAIN_STATE, "utf8"));
-    if (parsed?.day === day && typeof parsed.hash === "string" && Number.isInteger(parsed.seq)) {
-      return parsed;
-    }
-  } catch { /* primeira execução do dia */ }
-  return { day, hash: "GENESIS", seq: 0 };
+  return { hash: verified.lastHash, seq: verified.lastSeq };
 }
-
 function saveChainHeadAtomic(next) {
   const tmp = CHAIN_STATE + ".tmp." + process.pid + "." + randomUUID().slice(0, 8);
   try {
@@ -240,7 +227,7 @@ function appendAuditLine(day, line) {
 
 /**
  * Grava evento na auditoria com hash chain. Serializada dentro e entre processos.
- * Cada arquivo diário inicia em GENESIS e é verificável isoladamente.
+ * Os arquivos diários formam uma única cadeia contínua e verificável em ordem cronológica.
  */
 export function writeAuditEvent(evento, options = {}) {
   return withAuditLock(async () => {
@@ -249,7 +236,7 @@ export function writeAuditEvent(evento, options = {}) {
       fileLock = await acquireFileLock();
       const timestamp = options.timestamp || new Date().toISOString();
       const day = timestamp.slice(0, 10);
-      const prev = readChainHeadSync(day);
+      const prev = readChainHeadSync();
 
       const registro = {
         timestamp,
@@ -293,25 +280,52 @@ export function writeAuditEvent(evento, options = {}) {
 /**
  * Verifica integridade da cadeia relendo o JSONL do dia.
  */
-export function verifyChain(filePath) {
+export function verifyChain(filePath, options = {}) {
   try {
     const raw = fs.readFileSync(filePath, "utf8");
-    const linhas = raw.trim().split("\n").filter(Boolean);
-    let prev = "GENESIS";
-    for (const linha of linhas) {
-      const reg = JSON.parse(linha);
+    const lines = raw.trim().split("\n").filter(Boolean);
+    let prev = options.initialPrevHash ?? "GENESIS";
+    let seq = options.initialSeq ?? 0;
+    for (const line of lines) {
+      const reg = JSON.parse(line);
       if (reg.prevHash !== prev) return { ok: false, brokenAt: reg.seq, reason: "prev_hash_mismatch" };
+      if (reg.seq !== seq + 1) return { ok: false, brokenAt: reg.seq, reason: "seq_mismatch" };
       const { hash, ...body } = reg;
       const recomputed = createHash("sha256")
         .update(prev + JSON.stringify(body))
         .digest("hex");
       if (recomputed !== hash) return { ok: false, brokenAt: reg.seq, reason: "hash_mismatch" };
       prev = hash;
+      seq = reg.seq;
     }
-    return { ok: true, verified: linhas.length };
-  } catch (e) { return { ok: false, error: String(e?.message || e) }; }
+    return { ok: true, verified: lines.length, lastHash: prev, lastSeq: seq };
+  } catch (error) {
+    return { ok: false, error: sanitizeReason(String(error?.message || error)) };
+  }
 }
 
+/** Verifica todos os JSONL diários como uma cadeia contínua. */
+export function verifyAuditDirectory(dirPath = AUDIT_DIR) {
+  try {
+    if (!fs.existsSync(dirPath)) return { ok: true, verified: 0, files: 0, lastHash: "GENESIS", lastSeq: 0 };
+    const files = fs.readdirSync(dirPath)
+      .filter((name) => /^mcp-admin-audit-\d{4}-\d{2}-\d{2}\.jsonl$/.test(name))
+      .sort();
+    let lastHash = "GENESIS";
+    let lastSeq = 0;
+    let verified = 0;
+    for (const name of files) {
+      const check = verifyChain(path.join(dirPath, name), { initialPrevHash: lastHash, initialSeq: lastSeq });
+      if (!check.ok) return { ...check, file: name, verified, files: files.length };
+      lastHash = check.lastHash;
+      lastSeq = check.lastSeq;
+      verified += check.verified;
+    }
+    return { ok: true, verified, files: files.length, lastHash, lastSeq };
+  } catch (error) {
+    return { ok: false, error: sanitizeReason(String(error?.message || error)) };
+  }
+}
 // ── Startup snapshot idempotente ───────────────────────────────────────────
 export async function auditStartupSnapshot(runtimeTools, options = {}) {
   const expectation = options.expectation ?? getCanonicalExpectation();
@@ -325,11 +339,7 @@ export async function auditStartupSnapshot(runtimeTools, options = {}) {
     }
   } catch { /* primeira execução ou tentativa anterior falhou */ }
 
-  const day = new Date().toISOString().slice(0, 10);
-  const dailyFile = auditFileForDay(day);
-  const chainCheck = fs.existsSync(dailyFile)
-    ? verifyChain(dailyFile)
-    : { ok: true, verified: 0, note: "sem_entradas_hoje" };
+  const chainCheck = verifyAuditDirectory(AUDIT_DIR);
   const preconditionsOk = snapshot.ok && chainCheck.ok;
 
   const audit = await writeAuditEvent({
