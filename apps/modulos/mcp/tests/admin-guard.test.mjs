@@ -90,12 +90,22 @@ test("hash chain: 3 escritas sequenciais encadeiam", async () => {
   assert.equal(b.prevHash, a.hash); assert.equal(c.prevHash, b.hash);
   assert.equal(verifyChain(arqDia()).ok, true);
 });
-test("hash chain: adulteração no meio é detectada", () => {
-  const linhas = fs.readFileSync(arqDia(), "utf8").trim().split("\n");
-  const alvo = JSON.parse(linhas[1]); alvo.reason = "ADULTERADO";
-  linhas[1] = JSON.stringify(alvo);
-  fs.writeFileSync(arqDia(), linhas.join("\n") + "\n");
-  assert.equal(verifyChain(arqDia()).ok, false);
+test("hash chain: adulteração no meio é detectada sem contaminar os demais testes", async () => {
+  const TAMPER = fs.mkdtempSync(path.join(os.tmpdir(), "mcp-tamper-"));
+  process.env.MCP_AUDIT_DIR = TAMPER;
+  process.env.MCP_ADMIN_CHAIN_STATE = path.join(TAMPER, ".chain.json");
+  const { writeAuditEvent: writeTamper } = await import("../src/lib/admin-guard.js?tamper=1");
+  await writeTamper({ tool: "t1", decision: "released" });
+  await writeTamper({ tool: "t2", decision: "released" });
+  await writeTamper({ tool: "t3", decision: "released" });
+  const file = path.join(TAMPER, `mcp-admin-audit-${diaHoje()}.jsonl`);
+  const lines = fs.readFileSync(file, "utf8").trim().split("\n");
+  const target = JSON.parse(lines[1]); target.reason = "ADULTERADO";
+  lines[1] = JSON.stringify(target);
+  fs.writeFileSync(file, lines.join("\n") + "\n");
+  assert.equal(verifyChain(file).ok, false);
+  process.env.MCP_AUDIT_DIR = TMP;
+  process.env.MCP_ADMIN_CHAIN_STATE = path.join(TMP, ".chain.json");
 });
 
 test("hash chain: 20 processos preservam sequência única", async () => {
