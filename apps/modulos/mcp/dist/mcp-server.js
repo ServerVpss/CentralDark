@@ -108,7 +108,7 @@ function buildServer(options) {
     // Endpoint comum nunca anuncia nem executa destrutivas. No endpoint admin,
     // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
     const visibleTools = options.admin === true
-        ? requestedVisibleTools
+        ? requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true);
     const requestedCallableTools = options.callableTools ?? visibleTools;
     const callableTools = options.admin === true
