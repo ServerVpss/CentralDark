@@ -139,6 +139,125 @@ jobs:
           [ $FAIL -eq 0 ] && echo "ok=true" >> "$GITHUB_OUTPUT" || echo "ok=false" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Reviewer Gemini via darkai (fallback determinístico)
+        id: darkai
+        if: steps.diff.outputs.secret_suspect == 'false'
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -Eeuo pipefail
+          BASE="$(git merge-base "$BASE_SHA" "$HEAD_SHA")"
+          DIFF_FILE="$RUNNER_TEMP/darkai-pr-${PR_NUMBER}.diff"
+          REVIEW_FILE="$RUNNER_TEMP/darkai-review.txt"
+
+          git diff --no-ext-diff --unified=2 "$BASE" "$HEAD_SHA" -- . \
+            ':(exclude)**/*.md' ':(exclude)*.md' \
+            ':(exclude)**/package-lock.json' > "$DIFF_FILE"
+
+          python3 - "$DIFF_FILE" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          path = Path(sys.argv[1])
+          text = path.read_text(encoding="utf-8", errors="replace")[:60000]
+          patterns = [
+              (r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]{8,}", "Bearer [REDACTED]"),
+              (r"\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\b", "[REDACTED_JWT]"),
+              (r"\bsk-[A-Za-z0-9_-]{16,}\b", "[REDACTED_KEY]"),
+              (r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b", "[REDACTED_GH]"),
+              (r"(?i)((?:password|passwd|secret|api[_-]?key|token)\s*[:=]\s*['\"]?)[^'\"\s]{8,}", r"\1[REDACTED]"),
+          ]
+          for pattern, replacement in patterns:
+              text = re.sub(pattern, replacement, text)
+          path.write_text(text, encoding="utf-8")
+          PY
+
+          fallback_review() {
+            git diff --check "$BASE" "$HEAD_SHA" -- .
+            cat > "$REVIEW_FILE" <<'EOF'
+          VERDICT: FALLBACK_PASS
+          Gemini/darkai indisponível ou resposta inválida.
+          Fallback determinístico: diff sem erro de whitespace; demais gates continuam obrigatórios.
+          EOF
+            provider="script_fallback"
+            verdict="FALLBACK_PASS"
+          }
+
+          provider="script_fallback"
+          verdict="FALLBACK_PASS"
+          if command -v darkai >/dev/null 2>&1; then
+            PROMPT="$(printf '%s\n\n%s' \
+              'Você é reviewer somente leitura. Analise o diff por bypass de autenticação, command injection, secrets, falso verde, rollback inseguro e ações destrutivas. Primeira linha EXATA: VERDICT: APPROVE ou VERDICT: BLOCK. Depois, no máximo 8 bullets técnicos em PT-BR. Em dúvida, BLOCK.' \
+              "$(cat "$DIFF_FILE")")"
+            if timeout 180 darkai --model google/gemini-2.5-pro "$PROMPT" > "$REVIEW_FILE.raw" 2>/dev/null; then
+              unset PROMPT
+              python3 - "$REVIEW_FILE.raw" "$REVIEW_FILE" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          raw = Path(sys.argv[1]).read_text(encoding="utf-8", errors="replace")[:12000]
+          raw = re.sub(r"(?i)\bBearer\s+[A-Za-z0-9._~+/=-]{8,}", "Bearer [REDACTED]", raw)
+          raw = re.sub(r"\bsk-[A-Za-z0-9_-]{16,}\b", "[REDACTED_KEY]", raw)
+          raw = re.sub(r"\bgh[pousr]_[A-Za-z0-9_]{20,}\b", "[REDACTED_GH]", raw)
+          Path(sys.argv[2]).write_text(raw, encoding="utf-8")
+          PY
+              verdict="$(sed -n 's/^VERDICT: \(APPROVE\|BLOCK\)$/\1/p' "$REVIEW_FILE" | head -n1)"
+              if [[ -n "$verdict" ]]; then
+                provider="darkai_gemini"
+              else
+                fallback_review
+              fi
+            else
+              unset PROMPT || true
+              fallback_review
+            fi
+          else
+            fallback_review
+          fi
+
+          echo "provider=$provider" >> "$GITHUB_OUTPUT"
+          echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
+
+      - name: Publicar revisão Gemini/fallback
+        if: steps.diff.outputs.secret_suspect == 'false'
+        uses: actions/github-script@v7
+        env:
+          REVIEW_PROVIDER: ${{ steps.darkai.outputs.provider }}
+          REVIEW_VERDICT: ${{ steps.darkai.outputs.verdict }}
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request.number;
+            const marker = '<!-- pr-darkai-review -->';
+            const reviewPath = path.join(process.env.RUNNER_TEMP, 'darkai-review.txt');
+            const review = fs.existsSync(reviewPath)
+              ? fs.readFileSync(reviewPath, 'utf8').slice(0, 12000)
+              : 'VERDICT: FALLBACK_PASS\nResultado não persistido; gates determinísticos permanecem obrigatórios.';
+            const body = [
+              marker,
+              '## 🔎 Reviewer Gemini / fallback',
+              '',
+              `Provider: \`${process.env.REVIEW_PROVIDER || 'script_fallback'}\``,
+              `Gate: \`${process.env.REVIEW_VERDICT || 'FALLBACK_PASS'}\``,
+              '',
+              review,
+              '',
+              `_HEAD ${context.payload.pull_request.head.sha}_`,
+            ].join('\n');
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number: pr, per_page: 100 });
+            const existing = comments.data.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr, body });
+            }
       # ---------- Label + checklist atualizado ----------
 
       - name: Aplicar label Codex
@@ -274,3 +393,10 @@ jobs:
             await github.rest.reactions.createForIssue({
               owner, repo, issue_number: pr, content: 'heart'
             });
+
+      - name: Bloquear quando Gemini comprovar finding crítico
+        if: steps.darkai.outputs.verdict == 'BLOCK'
+        shell: bash
+        run: |
+          echo "DARKAI_REVIEW_BLOCKED"
+          exit 1
