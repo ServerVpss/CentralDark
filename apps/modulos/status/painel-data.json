@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-21T09:22:53.518Z",
-  "updatedAtBR": "21/07/2026, 06:22:53 BRT",
+  "updatedAt": "2026-07-21T10:28:35.935Z",
+  "updatedAtBR": "21/07/2026, 07:28:35 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#340): Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY)",
+    "lastCommit": "aprendizado(#341): Delegação de cima pra baixo: o topo AGE e delega pra quem ele controla — nada de \"espera estéril\"",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-21T10:28:35.935Z",
+      "titulo": "Push na main · ae522f8fe1e77158f33d52fd4aa123d6f4bbe188",
+      "detalhe": "aprendizado(#341): Delegação de cima pra baixo: o topo AGE e delega pra quem ele controla — nada de \"espera estéril\"",
+      "area": "Repositório",
+      "sha": "ae522f8",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-21T09:22:53.518Z",
       "titulo": "Push na main · fe4730a27ec1bab6c317d4ae98ed5113deff79bd",
       "detalhe": "aprendizado(#340): Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY)",
@@ -987,14 +995,6 @@
       "area": "Repositório",
       "sha": "2cdd72c",
       "actor": "lovable-dev[bot]"
-    },
-    {
-      "time": "2026-07-10T04:26:25.014Z",
-      "titulo": "Push na main · ac01f39819ea14b866a441e9f88bdc519bf77ae2",
-      "detalhe": "chore(arsenal-adapter): npm test roda tests/models.test.mjs",
-      "area": "Repositório",
-      "sha": "ac01f39",
-      "actor": "segredounlock"
     }
   ],
   "agents": [
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-21T10:28:35.935Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ae522f8fe1e77158f33d52fd4aa123d6f4bbe188 (ae522f8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-21T09:22:53.518Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · fe4730a27ec1bab6c317d4ae98ed5113deff79bd (fe4730a)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-10T05:51:14.132Z",
       "ia": "@lovable-dev[bot]",
       "action": "📌 Push na main · 2cdd72cef794f4ad95f6a103d76f37d836625a7b (2cdd72c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-10T04:26:25.014Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ac01f39819ea14b866a441e9f88bdc519bf77ae2 (ac01f39)",
       "area": "Repositório",
       "status": "sucesso"
     }
