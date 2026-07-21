@@ -93,7 +93,10 @@ jobs:
           npm run typecheck
           node --test tests/*.test.mjs
           npm run build
-          git -C "$BUILD_DIR" diff --exit-code -- apps/modulos/mcp/dist
+          [[ -z "$(git -C "$BUILD_DIR" status --porcelain --untracked-files=all -- apps/modulos/mcp/dist)" ]] || {
+            echo "MCP_DIST_DRIFT"
+            exit 47
+          }
 
           # Dependências novas exigem release-dir atômico; código puro segue
           # automaticamente. Nunca altera node_modules do processo vivo.
@@ -127,6 +130,10 @@ jobs:
           git merge --ff-only "$ORIGIN_SHA"
           [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "POST_FF_TRACKED_TREE_DIRTY"; exit 38; }
           git diff --quiet "$TARGET_SHA" HEAD -- apps/modulos/mcp || { echo "RUNTIME_TREE_NOT_VALIDATED_TREE"; exit 39; }
+          [[ -z "$(git status --porcelain --untracked-files=all -- apps/modulos/mcp/dist)" ]] || {
+            echo "RUNTIME_DIST_NOT_CLEAN"
+            exit 48
+          }
 
           OLD_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
           RESTART_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
@@ -155,7 +162,18 @@ jobs:
           done
           [[ "$AUDIT_OK" == "true" ]] || { echo "MCP_STARTUP_AUDIT_NOT_PROVEN"; exit 43; }
 
-          STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.$$"
+          # Evita verde de processo efêmero: exige o mesmo PID online e
+          # health válido em cinco amostras durante vinte segundos.
+          for _ in $(seq 1 5); do
+            sleep 4
+            [[ "$(pm2 pid "$PM2_APP" | tail -n1)" == "$NEW_PID" ]] || { echo "MCP_PID_CHANGED_DURING_STABILITY"; exit 49; }
+            pm2 jlist | jq -e --arg app "$PM2_APP" --argjson pid "$NEW_PID" '
+              any(.[]; .name == $app and .pm2_env.status == "online" and .pid == $pid)
+            ' >/dev/null || { echo "MCP_PM2_UNSTABLE"; exit 50; }
+            curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "MCP_HEALTH_UNSTABLE"; exit 51; }
+          done
+
+          STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.$"
           jq -n --arg sha "$TARGET_SHA" --arg repo_sha "$(git rev-parse HEAD)" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
             '{validatedSha:$sha,repositorySha:$repo_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok"}' > "$STATE_TMP"
           mv "$STATE_TMP" "$AUDIT_DIR/mcp-last-known-good.json"
