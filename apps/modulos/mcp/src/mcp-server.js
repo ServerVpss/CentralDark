@@ -104,8 +104,16 @@ Cumprimente curto ("E aí Pivete, tô calibrado — o que manda?"), NÃO liste t
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
 function buildServer(options) {
-    const visibleTools = options.visibleTools ?? ALL_TOOLS;
-    const callableTools = options.callableTools ?? visibleTools;
+    const requestedVisibleTools = options.visibleTools ?? ALL_TOOLS;
+    // Endpoint comum nunca anuncia nem executa destrutivas. No endpoint admin,
+    // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
+    const visibleTools = options.admin === true
+        ? requestedVisibleTools
+        : requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true);
+    const requestedCallableTools = options.callableTools ?? visibleTools;
+    const callableTools = options.admin === true
+        ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
+        : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
     const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
@@ -172,7 +180,14 @@ function buildServer(options) {
             return result;
         }
         try {
-            const raw = await tool.handler(parsed.data, { token: options.token });
+            const toolContext = Object.freeze({
+                token: options.token,
+                admin: options.admin === true,
+                callerUser: options.callerUser ?? null,
+                oauthScope: String(options.oauthScope || ""),
+                correlationId: options.cid ?? null,
+            });
+            const raw = await tool.handler(parsed.data, toolContext);
             const result = sanitizeOutgoingDeep(raw);
             auditToolExecution({
                 method: "tools/call",
