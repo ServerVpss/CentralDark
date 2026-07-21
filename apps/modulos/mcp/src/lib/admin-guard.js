@@ -169,7 +169,12 @@ async function acquireFileLock() {
       if (error?.code !== "EEXIST") throw error;
       try {
         const stat = await fsp.stat(FILE_LOCK);
-        if (Date.now() - stat.mtimeMs > FILE_LOCK_STALE_MS) {
+        let owner = null;
+        try { owner = JSON.parse(await fsp.readFile(FILE_LOCK, "utf8")); } catch {}
+        const ownerAlive = owner?.hostname === HOSTNAME
+          && Number.isInteger(owner?.pid)
+          && fs.existsSync(`/proc/${owner.pid}`);
+        if (Date.now() - stat.mtimeMs > FILE_LOCK_STALE_MS && !ownerAlive) {
           await fsp.unlink(FILE_LOCK);
           continue;
         }
