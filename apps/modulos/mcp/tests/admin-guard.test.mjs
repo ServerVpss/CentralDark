@@ -12,7 +12,7 @@ process.env.MCP_ADMIN_CHAIN_STATE = path.join(TMP, ".chain.json");
 process.env.MCP_ADMIN_STARTUP_LOCK = path.join(TMP, ".startup.json");
 
 const {
-  evaluateAdminConfirmation, reconcileCatalog, writeAuditEvent, verifyChain,
+  evaluateAdminConfirmation, reconcileCatalog, writeAuditEvent, verifyChain, verifyAuditDirectory,
   guardDestructive, auditStartupSnapshot, getCanonicalExpectation,
   CANONICAL_DESTRUCTIVE_TOOLS, CATALOG_VERSION,
 } = await import("../src/lib/admin-guard.js");
@@ -136,7 +136,8 @@ test("hash chain: 20 processos preservam sequência única", async () => {
   const seqs = results.map((result) => result.seq).sort((a, b) => a - b);
   assert.deepEqual(seqs, Array.from({ length: 20 }, (_, i) => i + 1));
   const file = path.join(CONC, `mcp-admin-audit-${diaHoje()}.jsonl`);
-  assert.deepEqual(verifyChain(file), { ok: true, verified: 20 });
+  const verified = verifyChain(file);
+  assert.equal(verified.ok, true); assert.equal(verified.verified, 20); assert.equal(verified.lastSeq, 20);
 });
 
 test("rollover diário inicia cadeia verificável em GENESIS", async () => {
@@ -147,9 +148,13 @@ test("rollover diário inicia cadeia verificável em GENESIS", async () => {
   const first = await writeAt({ tool: "day_one", decision: "released" }, { timestamp: "2026-07-20T23:59:59.000Z" });
   const second = await writeAt({ tool: "day_two", decision: "released" }, { timestamp: "2026-07-21T00:00:01.000Z" });
   assert.equal(first.prevHash, "GENESIS");
-  assert.equal(second.prevHash, "GENESIS");
+  assert.equal(second.prevHash, first.hash);
+  const globalCheck = verifyAuditDirectory(ROLL);
+  assert.equal(globalCheck.ok, true); assert.equal(globalCheck.verified, 2); assert.equal(globalCheck.lastSeq, 2);
   assert.equal(verifyChain(path.join(ROLL, "mcp-admin-audit-2026-07-20.jsonl")).ok, true);
-  assert.equal(verifyChain(path.join(ROLL, "mcp-admin-audit-2026-07-21.jsonl")).ok, true);
+  assert.equal(verifyChain(path.join(ROLL, "mcp-admin-audit-2026-07-21.jsonl"), {
+    initialPrevHash: first.hash, initialSeq: 1,
+  }).ok, true);
   process.env.MCP_AUDIT_DIR = TMP;
   process.env.MCP_ADMIN_CHAIN_STATE = path.join(TMP, ".chain.json");
 });
