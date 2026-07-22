@@ -56,10 +56,20 @@ cleanup() {
   set +e
   if [[ "$rc" -ne 0 && "$verifier_promoted" == "1" && -d "$VERIFIER_BACKUP" ]]; then
     failed="$VERIFIER_DIR.failed.${TARGET_SHA:0:12}.${BASHPID}"
+    rollback_ok=false
     [[ -e "$failed" ]] || mv -- "$VERIFIER_DIR" "$failed"
     mv -- "$VERIFIER_BACKUP" "$VERIFIER_DIR"
-    pm2 restart "$PM2_APP" >/dev/null || true
-    echo "VERIFIER_ROLLBACK_ATTEMPTED"
+    if pm2 restart "$PM2_APP" >/dev/null; then
+      for _ in $(seq 1 20); do
+        if pm2 jlist | jq -e --arg app "$PM2_APP" \
+          'any(.[]; .name == $app and .pm2_env.status == "online" and (.pid | tonumber) > 0)' >/dev/null; then
+          rollback_ok=true
+          break
+        fi
+        sleep 1
+      done
+    fi
+    if [[ "$rollback_ok" == "true" ]]; then echo "VERIFIER_ROLLBACK_OK"; else echo "VERIFIER_ROLLBACK_FAILED"; fi
   fi
   if [[ "$rc" -ne 0 && "$map_promoted" == "1" && -d "$MAP_BACKUP" ]]; then
     failed="$MAP_DIR.failed.${TARGET_SHA:0:12}.${BASHPID}"
