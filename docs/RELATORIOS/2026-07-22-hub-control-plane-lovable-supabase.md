@@ -50,15 +50,17 @@ sem criar backend concorrente (princípio 11 da lupa).
 - Reutilizada: arquitetura de tabs do HUB (Dashboard/Hermes/Gateway/Catálogo/...).
 - Criada: aba "Missões" no HUB.
 
-## Testes / Validação
+## Testes / Validação (REAIS, rodadas nesta rodada)
 - [x] Sync ff-up-to-date.
-- [x] Skill lupa-bayesiana carregada do Git (não cópia baixada).
+- [x] Skill lupa-bayesiana carregada do Git (blob b71af825).
 - [x] Nenhuma segunda skill/HUB/backend criado (extensão do existente).
 - [x] Migration tem 3 CREATE TABLE IF NOT EXISTS (idempotente).
 - [x] RLS: select authenticated, all service_role (sem escrita anon direta).
 - [x] hub-command valida admin via has_role (padrão hub-create-api-key).
 - [x] hub-read exige JWT.
-- [ ] typecheck pesado do HUB (node_modules ausente local — pulado; validação estática de imports OK).
+- [x] **HUB typecheck REAL**: `npm install` + `npx tsc -b` → EXIT 0 (após adicionar @types/node legítimo).
+- [x] **HUB build REAL**: `npx vite build` → 1729 modules transformed, BUILD_EXIT=0 (warnings pré-existentes de chunk size/dynamic import, não do diff).
+- [~] **App raiz (Sidebar.tsx)**: typecheck pesado NÃO rodou (raiz sem node_modules; install custaria ~800MB). Mudança é localizada (item.external + window.open nos 2 handlers) e inspecionada — TS válido por construção. GAP documentado, não bloqueante.
 - [ ] apply da migration em produção (PROIBIDO nesta rodada — fica para review do Pivete).
 - [ ] deploy das edge functions (PROIBIDO nesta rodada).
 
