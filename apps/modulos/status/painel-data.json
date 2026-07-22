@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-22T00:26:12.172Z",
-  "updatedAtBR": "21/07/2026, 21:26:12 BRT",
+  "updatedAt": "2026-07-22T01:02:09.106Z",
+  "updatedAtBR": "21/07/2026, 22:02:09 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Merge PR #294: diagnosticar estabilidade PM2",
+    "lastCommit": "Merge PR #295: selar operacao V-REALTIME",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-22T01:02:09.106Z",
+      "titulo": "Push na main · 932edeb8a3053c1ebead86a9619a5c56f4caf873",
+      "detalhe": "Merge PR #295: selar operacao V-REALTIME",
+      "area": "Repositório",
+      "sha": "932edeb",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-22T00:26:12.172Z",
       "titulo": "Push na main · b91433122f815d915c490157d6edf856ed4ee5d7",
       "detalhe": "Merge PR #294: diagnosticar estabilidade PM2",
@@ -986,14 +994,6 @@
       "detalhe": "lembranca: Pivete: honestidade mútua desde o início",
       "area": "Repositório",
       "sha": "9bc7347",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-14T10:07:35.835Z",
-      "titulo": "Push na main · 40e25b82e43af7b5ceb89a04486a280f59ed504b",
-      "detalhe": "docs: corrige registro — carga mental Pivete, sem inventar 'skill oficial'",
-      "area": "Repositório",
-      "sha": "40e25b8",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-22T01:02:09.106Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 932edeb8a3053c1ebead86a9619a5c56f4caf873 (932edeb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-22T00:26:12.172Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b91433122f815d915c490157d6edf856ed4ee5d7 (b914331)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-14T10:19:32.401Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9bc7347a5b363658684267d9262fb6ce13cf7009 (9bc7347)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-14T10:07:35.835Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 40e25b82e43af7b5ceb89a04486a280f59ed504b (40e25b8)",
       "area": "Repositório",
       "status": "sucesso"
     }
