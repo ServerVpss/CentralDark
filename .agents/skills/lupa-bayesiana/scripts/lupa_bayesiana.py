@@ -119,7 +119,11 @@ def sanitize(text: str) -> tuple[str, bool]:
 
 
 def _record_hash(rec: dict) -> str:
-    payload = json.dumps(rec, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    # exclui campos volateis (timestamps, proprio hash) para que idempotencia
+    # seja por conteudo semantico, nao por hora de gravacao
+    volatile = {"started_at_utc", "finished_at_utc", "record_hash"}
+    payload = {k: v for k, v in rec.items() if k not in volatile}
+    payload = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
