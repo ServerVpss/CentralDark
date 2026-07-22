@@ -44,7 +44,8 @@ jobs:
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 22; }
           [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 23; }
           cd "$REPO_DIR"
-          [[ "$(git symbolic-ref --short HEAD)" == "main" ]] || { echo "LOCAL_BRANCH_NOT_MAIN"; exit 24; }
+          CURRENT_BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
+          [[ -n "$CURRENT_BRANCH" ]] || { echo "LOCAL_CHECKOUT_DETACHED"; exit 24; }
           ORIGIN_URL="$(git remote get-url origin)"
           [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || { echo "ORIGIN_REPOSITORY_MISMATCH"; exit 25; }
           [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "TRACKED_TREE_DIRTY"; exit 26; }
@@ -75,7 +76,13 @@ jobs:
             apps/modulos/mcp \
             .github/workflows/vps-exec-selfhosted.yml \
             scripts/webhook/github-webhook-deploy.mjs || { echo "DEPLOY_SCOPE_ADVANCED_AFTER_EVENT"; exit 31; }
-          git merge-base --is-ancestor "$CURRENT_SHA" "$ORIGIN_SHA" || { echo "LOCAL_HEAD_DIVERGED"; exit 32; }
+          if [[ "$CURRENT_BRANCH" == "main" ]]; then
+            git merge-base --is-ancestor "$CURRENT_SHA" "$ORIGIN_SHA" || { echo "LOCAL_MAIN_DIVERGED"; exit 32; }
+          else
+            git show-ref --verify --quiet refs/heads/main || { echo "LOCAL_MAIN_MISSING"; exit 52; }
+            LOCAL_MAIN_SHA="$(git rev-parse refs/heads/main)"
+            git merge-base --is-ancestor "$LOCAL_MAIN_SHA" "$ORIGIN_SHA" || { echo "LOCAL_MAIN_DIVERGED"; exit 53; }
+          fi
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/centraldark-mcp-build.XXXXXX")"
           restart_attempted=0
@@ -129,6 +136,11 @@ jobs:
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
 
           cd "$REPO_DIR"
+          if [[ "$CURRENT_BRANCH" != "main" ]]; then
+            git switch main
+          fi
+          [[ "$(git symbolic-ref --quiet --short HEAD)" == "main" ]] || { echo "LOCAL_MAIN_SWITCH_FAILED"; exit 54; }
+          [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "LOCAL_MAIN_TRACKED_TREE_DIRTY"; exit 55; }
           git merge --ff-only "$ORIGIN_SHA"
           [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "POST_FF_TRACKED_TREE_DIRTY"; exit 38; }
           git diff --quiet "$TARGET_SHA" HEAD -- apps/modulos/mcp || { echo "RUNTIME_TREE_NOT_VALIDATED_TREE"; exit 39; }
