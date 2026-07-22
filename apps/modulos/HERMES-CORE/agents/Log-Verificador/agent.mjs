@@ -11,6 +11,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { detectarEventosProvedor, sanitizarLinhaLog } from './provider-health.mjs';
 
 const LOG_DIR = join(homedir(), '.pm2/logs');
 
@@ -53,14 +54,15 @@ function lerTail(caminho, linhas = 80) {
   } catch { return ''; }
 }
 
-function analisarTexto(txt) {
-  if (!txt) return { hits: [], ruidoErro: 0 };
+export function analisarTexto(txt) {
+  if (!txt) return { hits: [], ruidoErro: 0, eventosProvedor: [] };
   const linhas = txt.split('\n');
+  const eventosProvedor = detectarEventosProvedor(linhas);
   const hits = [];
   let ruido = 0;
   for (const l of linhas) {
     for (const p of PADROES_ALERTA) {
-      if (p.test(l)) { hits.push(l.slice(0, 240)); break; }
+      if (p.test(l)) { hits.push(sanitizarLinhaLog(l)); break; }
     }
     for (const p of RUIDO_ERRO) { if (p.test(l)) { ruido++; break; } }
   }
@@ -72,7 +74,7 @@ function analisarTexto(txt) {
     if (!vistos.has(chave)) { vistos.add(chave); unicos.push(h); }
     if (unicos.length >= 5) break;
   }
-  return { hits: unicos.reverse(), ruidoErro: ruido };
+  return { hits: unicos.reverse(), ruidoErro: ruido, eventosProvedor };
 }
 
 // ─── Escaneia TODOS os processos PM2 ──────────────────────────────────
@@ -96,6 +98,10 @@ export function escanear({ ignorarPmIds = [1] } = {}) {
     const tailOut = lerTail(outPath, 40);
     const analErr = analisarTexto(tailErr);
     const analOut = analisarTexto(tailOut);
+    const eventosProvedor = [...new Map(
+      [...analErr.eventosProvedor, ...analOut.eventosProvedor].map(event => [event.fingerprint, event]),
+    ).values()];
+    const providerError = eventosProvedor.some(event => event.severity === 'error');
 
     // Heurística de crash-loop: uptime < 5min E restarts > 20
     const crashLoop = st === 'online' && uptimeMs < 5 * 60_000 && restarts > 20;
@@ -104,11 +110,12 @@ export function escanear({ ignorarPmIds = [1] } = {}) {
       errored ||
       crashLoop ||
       analErr.hits.length > 0 ||
-      analErr.ruidoErro >= LIMITE_ERRO;
+      analErr.ruidoErro >= LIMITE_ERRO ||
+      eventosProvedor.length > 0;
 
     let nivel = 'ok';
-    if (errored || crashLoop || analErr.hits.length > 0) nivel = 'erro';
-    else if (analErr.ruidoErro >= LIMITE_ERRO || analOut.ruidoErro >= LIMITE_ERRO) nivel = 'aviso';
+    if (errored || crashLoop || analErr.hits.length > 0 || providerError) nivel = 'erro';
+    else if (analErr.ruidoErro >= LIMITE_ERRO || analOut.ruidoErro >= LIMITE_ERRO || eventosProvedor.length > 0) nivel = 'aviso';
 
     servicos.push({
       nome,
@@ -121,6 +128,7 @@ export function escanear({ ignorarPmIds = [1] } = {}) {
       alerta,
       hits: analErr.hits,
       ruido_erro: analErr.ruidoErro,
+      eventos_provedor: eventosProvedor,
     });
   }
 
