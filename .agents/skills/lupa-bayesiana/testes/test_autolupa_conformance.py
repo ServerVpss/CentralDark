@@ -4,18 +4,15 @@ Regras:
 1. Falha se o relatório AutoLupa não contiver as 15 verificações obrigatórias.
 2. Falha se qualquer verificação estiver marcada como GAP / PENDENTE / NAO_VERIFICADO.
 3. Falha se o veredito for APROVAR quando houver qualquer gap.
-4. Falha se o registro de convocação do comitê XP-3 estiver ausente.
-5. Falha se o hash canônico da Lupa não bater com o SHA gravado no arquivo.
+4. Falha se a convocação do comitê independente (XP-3) e seu resultado estiverem ausentes.
+5. Falha se o git-blob SHA1 do SKILL.md local divergir do guard canônico.
 
 Uso:
-    pytest .agents/skills/lupa-bayesiana/testes/test_autolupa_conformance.py -v
-
-Entrada esperada: variável de ambiente AUTOLUPA_REPORT apontando para o
-relatório markdown/tex gerado. Se ausente, os testes usam o fixture mínimo
-em testes/fixtures/ para validar o próprio harness.
+    AUTOLUPA_REPORT=caminho.md pytest .agents/skills/lupa-bayesiana/testes/ -v
 """
 from __future__ import annotations
 
+import hashlib
 import os
 import re
 from pathlib import Path
@@ -36,10 +33,15 @@ CHECKS_OBRIGATORIAS = [
 GAP_TOKENS = ("GAP", "PENDENTE", "NAO_VERIFICADO", "NÃO VERIFICADO", "MISSING")
 
 
+def _git_blob_sha1(data: bytes) -> str:
+    header = f"blob {len(data)}\0".encode()
+    return hashlib.sha1(header + data).hexdigest()
+
+
 def _load_report() -> str:
     path = os.environ.get("AUTOLUPA_REPORT")
     if not path:
-        pytest.skip("AUTOLUPA_REPORT não definido — rode com AUTOLUPA_REPORT=caminho.tex pytest ...")
+        pytest.skip("AUTOLUPA_REPORT não definido")
     p = Path(path)
     if not p.exists():
         pytest.fail(f"Relatório AutoLupa não encontrado: {path}")
@@ -53,15 +55,12 @@ def test_report_contem_15_verificacoes():
 
 
 def test_report_sem_gaps_de_evidencia():
-    report = _load_report().upper()
-    achados = [tok for tok in GAP_TOKENS if tok in report]
-    if achados:
-        # Permite menção apenas em bloco 'RISCO RESIDUAL' explícito.
-        for tok in achados:
-            for match in re.finditer(re.escape(tok), report):
-                janela = report[max(0, match.start()-80):match.start()]
-                if "RISCO RESIDUAL" not in janela and "AUTOLUPA" not in janela:
-                    pytest.fail(f"Gap de evidência detectado sem justificativa: {tok}")
+    report_upper = _load_report().upper()
+    for tok in GAP_TOKENS:
+        for m in re.finditer(re.escape(tok), report_upper):
+            janela = report_upper[max(0, m.start()-80):m.start()]
+            if "RISCO RESIDUAL" not in janela and "AUTOLUPA" not in janela:
+                pytest.fail(f"Gap de evidência detectado sem justificativa: {tok}")
 
 
 def test_veredito_coerente_com_gaps():
@@ -69,32 +68,27 @@ def test_veredito_coerente_com_gaps():
     tem_gap = any(tok in report.upper() for tok in GAP_TOKENS)
     m = re.search(r"VEREDITO\s*:\s*(APROVAR|CONDICIONAR|CORRIGIR|BLOQUEAR)", report, re.IGNORECASE)
     assert m, "VEREDITO ausente no relatório"
-    veredito = m.group(1).upper()
-    if tem_gap and veredito == "APROVAR":
-        pytest.fail("Veredito APROVAR incompatível com gaps presentes — deve ser CONDICIONAR/CORRIGIR/BLOQUEAR")
+    if tem_gap and m.group(1).upper() == "APROVAR":
+        pytest.fail("Veredito APROVAR incompatível com gaps presentes")
 
 
 def test_convocacao_comite_xp3_registrada():
     report = _load_report()
-    padrao = re.compile(r"COMIT[ÊE]\s+INDEPENDENTE|XP-3.*(CONVOCADO|CONVOCACAO|CONVOCAÇÃO)", re.IGNORECASE)
-    assert padrao.search(report), (
-        "Convocação do comitê independente (XP-3) não registrada. "
-        "Rode scripts/lupa/convocar_comite_xp3.py antes de finalizar o TEX."
-    )
-    resultado = re.search(r"COMIT[ÊE]\s+RESULTADO\s*:\s*(APROVA|REJEITA|CONDICIONA|PENDENTE)", report, re.IGNORECASE)
-    assert resultado, "Resultado do comitê XP-3 ausente — registrar APROVA/REJEITA/CONDICIONA."
-    assert resultado.group(1).upper() != "PENDENTE", "Comitê XP-3 pendente — bloqueia veredito."
+    conv = re.search(r"COMIT[ÊE]\s+INDEPENDENTE|XP-3.*(CONVOCADO|CONVOCA[ÇC][ÃA]O)", report, re.IGNORECASE)
+    assert conv, "Convocação do comitê independente (XP-3) não registrada. Use scripts/lupa/convocar_comite_xp3.py."
+    res = re.search(r"COMIT[ÊE]\s+RESULTADO\s*:\s*(APROVA|REJEITA|CONDICIONA|PENDENTE)", report, re.IGNORECASE)
+    assert res, "Resultado do comitê XP-3 ausente"
+    assert res.group(1).upper() != "PENDENTE", "Comitê XP-3 pendente — bloqueia veredito"
 
 
 def test_hash_canonico_lupa_bate():
     if not HASH_GUARD.exists():
-        pytest.fail(f"Arquivo de guarda ausente: {HASH_GUARD}. Rode scripts/lupa/validar_autolupa_hash.py --update")
+        pytest.fail(f"Guarda ausente: {HASH_GUARD}")
     if not SKILL_PATH.exists():
-        pytest.skip("SKILL.md não presente neste checkout")
-    import hashlib
-    atual = hashlib.sha256(SKILL_PATH.read_bytes()).hexdigest()
+        pytest.skip("SKILL.md não presente")
+    atual = _git_blob_sha1(SKILL_PATH.read_bytes())
     esperado = HASH_GUARD.read_text(encoding="utf-8").strip().split()[0]
     assert atual == esperado, (
         f"Hash da Lupa divergente do canônico.\n  esperado: {esperado}\n  atual:    {atual}\n"
-        "Se a mudança é intencional, rode scripts/lupa/validar_autolupa_hash.py --update e reabra o PR."
+        "Se intencional, rode scripts/lupa/validar_autolupa_hash.py --update com PERMITO_PIVETE=1."
     )
