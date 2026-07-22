@@ -43,8 +43,8 @@
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-rows: 44px 1fr 160px;
-  grid-template-columns: 180px 1fr 300px;
+  grid-template-rows: 56px 1fr 160px;
+  grid-template-columns: 220px 1fr 300px;
   grid-template-areas:
     "head head head"
     "nav  map  feed"
@@ -52,6 +52,12 @@
   height: 100vh;
   gap: 1px;
   background: var(--sc-line);
+
+  /* tokens de cor dos panes coloridos */
+  --pane-em:     #10b981;
+  --pane-amber:  #fbbf24;
+  --pane-purple: #a78bfa;
+  --pane-cyan:   #22d3ee;
 }
 
 .sc-cell {
