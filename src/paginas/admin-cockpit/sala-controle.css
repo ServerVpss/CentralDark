@@ -2,21 +2,23 @@
    Paleta esmeralda oficial CentralDark. */
 
 .sc-root {
-  --sc-bg:      #052e2b;
-  --sc-bg2:     #0a3d38;
-  --sc-line:    #10b98133;
-  --sc-line-2:  #10b98166;
+  /* fundo obsidiana neutro — esmeralda vira só acento */
+  --sc-bg:      #0b0f14;
+  --sc-bg2:     #12181f;
+  --sc-bg3:     #0a0e13;
+  --sc-line:    #ffffff10;
+  --sc-line-2:  #ffffff1f;
   --sc-em:      #10b981;
   --sc-em-hi:   #34d399;
-  --sc-txt:     #d1fae5;
-  --sc-mut:     #6ee7b799;
+  --sc-txt:     #e5e7eb;
+  --sc-mut:     #94a3b8;
   --sc-warn:    #fbbf24;
   --sc-err:     #f87171;
   --sc-idle:    #64748b;
 
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at top, var(--sc-bg2), var(--sc-bg) 60%, #041f1d 100%);
+  background: radial-gradient(ellipse at top, var(--sc-bg2), var(--sc-bg) 60%, #05080c 100%);
   color: var(--sc-txt);
   font-family: "Inter", system-ui, sans-serif;
   overflow: hidden;
@@ -33,7 +35,7 @@
   background: repeating-linear-gradient(
     to bottom,
     transparent 0 3px,
-    #10b98108 3px 4px
+    #ffffff05 3px 4px
   );
   pointer-events: none;
   z-index: 2;
@@ -58,10 +60,11 @@
   --pane-amber:  #fbbf24;
   --pane-purple: #a78bfa;
   --pane-cyan:   #22d3ee;
+  --pane-rose:   #f472b6;
 }
 
 .sc-cell {
-  background: linear-gradient(180deg, #061f1d, #041a18);
+  background: linear-gradient(180deg, #10151c, #0a0e13);
   border: 1px solid var(--sc-line);
   overflow: hidden;
 }
@@ -115,9 +118,9 @@
   color: var(--sc-txt); opacity: .72;
   border-left: 2px solid transparent;
 }
-.sc-nav button:hover { opacity: 1; background: #10b98111; }
+.sc-nav button:hover { opacity: 1; background: #ffffff08; }
 .sc-nav button.on {
-  opacity: 1; background: #10b98122; color: var(--sc-em-hi);
+  opacity: 1; background: #10b9811a; color: var(--sc-em-hi);
   border-left-color: var(--sc-em);
 }
 .sc-nav-hermes {
@@ -142,7 +145,7 @@
   transform: translate(-50%, -50%);
   padding: 6px 10px;
   border: 1px solid var(--sc-line-2);
-  background: #041a18ee;
+  background: #0a0e13ee;
   border-radius: 6px;
   font-size: 11px;
   min-width: 110px;
@@ -191,7 +194,7 @@
   margin-bottom: 8px;
 }
 .sc-term-line {
-  color: var(--sc-em-hi); padding: 2px 0;
+  color: var(--sc-txt); padding: 2px 0;
   white-space: pre-wrap;
 }
 .sc-term-line span { color: var(--sc-mut); margin-right: 8px; }
@@ -212,7 +215,7 @@
 }
 .sc-ev {
   padding: 8px 14px;
-  border-bottom: 1px dashed #10b98122;
+  border-bottom: 1px dashed #ffffff0c;
   font-size: 11.5px;
 }
 .sc-ev-top {
@@ -250,8 +253,9 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.18;
+  opacity: 0.07;
   pointer-events: none;
+  filter: saturate(0.6);
 }
 .sc-matrix canvas.cockpit-canvas {
   width: 100%;
@@ -296,7 +300,7 @@
   padding: 4px 10px;
   border: 1px solid var(--sc-line-2);
   border-left-width: 3px;
-  background: #041a18cc;
+  background: #0a0e13cc;
   border-radius: 3px;
   min-width: 62px;
   line-height: 1.15;
@@ -311,6 +315,8 @@
 .hblk-purple .hblk-v { color: var(--pane-purple); }
 .hblk-cyan   { border-left-color: var(--pane-cyan);   }
 .hblk-cyan   .hblk-v { color: var(--pane-cyan); }
+.hblk-rose   { border-left-color: var(--pane-rose);   }
+.hblk-rose   .hblk-v { color: var(--pane-rose); }
 .hblk-mut    { border-left-color: var(--sc-mut);      }
 
 /* ============ NAV — bloco missões ============ */
@@ -344,7 +350,7 @@
 .ops-pane {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #061f1d, #041a18);
+  background: linear-gradient(180deg, #10151c, #0a0e13);
   overflow: hidden;
   min-height: 0;
 }
@@ -356,7 +362,7 @@
   font-size: 10.5px;
   letter-spacing: .18em;
   border-bottom: 1px solid var(--sc-line);
-  background: #04211ecc;
+  background: #0a0e13cc;
 }
 .pane-title { font-weight: 600; }
 .pane-cost {
@@ -375,18 +381,21 @@
 }
 .pane-body-scroll { overflow-y: auto; }
 
-/* headers coloridos por pane */
-.pane-emerald .pane-head { border-top: 2px solid var(--pane-em);     }
+/* headers coloridos por pane — tinta suave da cor no header inteiro */
+.pane-emerald .pane-head { border-top: 2px solid var(--pane-em);     background: linear-gradient(180deg, #10b98122, #0a0e13cc); }
 .pane-emerald .pane-title { color: var(--pane-em); }
-.pane-amber   .pane-head { border-top: 2px solid var(--pane-amber);  }
+.pane-amber   .pane-head { border-top: 2px solid var(--pane-amber);  background: linear-gradient(180deg, #fbbf2422, #0a0e13cc); }
 .pane-amber   .pane-title { color: var(--pane-amber); }
 .pane-amber   .pane-cost  { background: #fbbf2422; color: var(--pane-amber); }
-.pane-purple  .pane-head { border-top: 2px solid var(--pane-purple); }
+.pane-purple  .pane-head { border-top: 2px solid var(--pane-purple); background: linear-gradient(180deg, #a78bfa22, #0a0e13cc); }
 .pane-purple  .pane-title { color: var(--pane-purple); }
 .pane-purple  .pane-cost  { background: #a78bfa22; color: var(--pane-purple); }
-.pane-cyan    .pane-head { border-top: 2px solid var(--pane-cyan);   }
+.pane-cyan    .pane-head { border-top: 2px solid var(--pane-cyan);   background: linear-gradient(180deg, #22d3ee22, #0a0e13cc); }
 .pane-cyan    .pane-title { color: var(--pane-cyan); }
 .pane-cyan    .pane-cost  { background: #22d3ee22; color: var(--pane-cyan); }
+.pane-rose    .pane-head { border-top: 2px solid var(--pane-rose);   background: linear-gradient(180deg, #f472b622, #0a0e13cc); }
+.pane-rose    .pane-title { color: var(--pane-rose); }
+.pane-rose    .pane-cost  { background: #f472b622; color: var(--pane-rose); }
 
 /* linhas dos panes */
 .ops-missao {
