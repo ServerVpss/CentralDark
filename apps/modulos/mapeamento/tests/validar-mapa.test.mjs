@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
-import { validarDocumentoMapa, validarMudanca } from '../core/validar-mapa.mjs';
+import { normalizarCaminho, validarDocumentoMapa, validarMudanca } from '../core/validar-mapa.mjs';
 
 const baseMap = {
   schema_version: 1,
@@ -31,6 +31,10 @@ function repoTemporario() {
   git(root, 'commit', '-qm', 'base');
   return root;
 }
+
+test('rejeita travessia mesmo quando normalize produziria caminho interno', () => {
+  assert.throws(() => normalizarCaminho('apps/modulos/a/../b/'), /inválido/);
+});
 
 test('rejeita caminho duplicado no mapa', () => {
   const map = structuredClone(baseMap);
