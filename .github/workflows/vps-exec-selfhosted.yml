@@ -53,8 +53,8 @@ jobs:
           ORIGIN_URL="$(git remote get-url origin)"
           [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || { echo "ORIGIN_REPOSITORY_MISMATCH"; exit 25; }
           if [[ "${GITHUB_EVENT_NAME:-}" == "push" && "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}$ && ! "${BEFORE_SHA}" =~ ^0{40}$ ]]; then
-            git fetch --no-tags origin "$BEFORE_SHA" "$TARGET_SHA"
-            if git diff --quiet "$BEFORE_SHA" "$TARGET_SHA" -- \
+            git fetch --no-tags origin main
+            if git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null && git diff --quiet "$BEFORE_SHA" "$TARGET_SHA" -- \
               apps/modulos/mcp \
               .github/workflows/vps-exec-selfhosted.yml \
               scripts/webhook/github-webhook-deploy.mjs; then
