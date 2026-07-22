@@ -1,52 +1,76 @@
-# Plano — Validar a MetaLupa canônica antes de renomear a skill
+## Missão
 
-Pivete, você tá certo em desconfiar. Antes de mexer em qualquer arquivo, eu preciso ir no repositório de verdade, olhar PRs, issues e comparar com o `METALUPA-BAYESIANA-CANONICA.md` que você me mandou. Sem chute, sem "acho que". Só depois disso decido se renomeio a skill ou não.
+Auditar VPS (`/root/CentralDark/`) + repositório `ServerVpss/CentralDark` aplicando a Lupa Bayesiana, cruzar com o conteúdo do `MARKDOWN.zip` (que descreve o cockpit/overclock antigo e a estrutura que a gente pode reaproveitar), listar inconsistências, ouro, lixo e melhorias — e SÓ ENTÃO propor o plano de fusão Overclock + Sala de Controle. Fase 1 é 100% read-only: nenhum arquivo do cockpit vai ser mexido antes de você aprovar a fusão.
 
-## O que vou fazer (tudo em modo leitura)
+## Como vou aplicar a Lupa (Fase 1 — só investigação)
 
-**1. Repositório `ServerVpss/CentralDark` — evidência primeiro**
-- Listar PRs recentes (abertos e fechados) com foco nos que citam Lupa, MetaLupa, skill, admin-guard, PR #285, #286, #293, #296, #297.
-- Ler os commits mais novos da `main` e `pivete/dev` pra achar o rastro real da última evolução da Lupa.
-- Buscar no repo por arquivos com nome ou conteúdo mencionando `lupa-bayesiana`, `metalupa`, `tecnica-da-lupa` — descobrir qual é o nome canônico *que o repositório já usa*, não o que eu presumi.
+### Passo 1 — Fixar a fonte da verdade
+Ler o HEAD atual do `ServerVpss/CentralDark` (branch `pivete/dev` e `main`), registrar o SHA, confirmar que bate com o que a VPS tem em `/root/CentralDark/`. Se divergir, isso já é a primeira inconsistência.
 
-**2. Comparar com o arquivo que você mandou agora**
-- Reler o `METALUPA-BAYESIANA-CANONICA.md` (upload de agora + o que tá em `/mnt/user-uploads/`).
-- Comparar linha a linha com a versão que está viva em `.agents/skills/tecnica-da-lupa/SKILL.md` no workspace Lovable.
-- Registrar diferenças reais (se houver): 14 princípios, gates, AutoLupa, ponto fixo, camada de tradução, saída obrigatória.
+### Passo 2 — Ler o que o zip realmente traz
+Já extraí o `MARKDOWN.zip` no sandbox. Ele contém:
 
-**3. Aplicar a MetaLupa sobre a própria decisão**
-Seguindo os gates do arquivo canônico:
-- **Mapa Único:** já existe skill com esse papel? Onde? Qual o nome canônico registrado no repo?
-- **Encaixe:** `ENCAIXE_EXISTENTE` (só renomear), `EXTENSAO_CANONICA` (atualizar conteúdo) ou `NOVO_CAMINHO_JUSTIFICADO` (nada disso, é caminho novo)?
-- **Falsificador:** o que provaria que renomear pra `lupa-bayesiana` está errado? Ex.: se o repositório oficial já grava a skill com outro nome, ou se PR aberto está movendo pra caminho diferente.
-- **AutoLupa:** rodar sobre o próprio veredito até ponto fixo antes de propor ação.
+```text
+MARKDOWN/
+├── 01-humano/    → visão, árvore, negócio, fluxos
+├── 02-ia/        → AI-CONTEXT-MASTER, AI-SCHEMA.json, AI-SWARM-PROMPT
+├── 03-central-dark/ → mapa das 5 páginas + roadmap Sonnet + MVP mínimo
+└── Screenshot_1..32.png (referências visuais do overclock antigo)
+```
 
-**4. Devolver evidência crua, não opinião**
-Vou te entregar:
-- Lista de PRs relevantes com número, título, status e SHA.
-- Diff real (ou "idêntico") entre o arquivo canônico e a skill do workspace.
-- Nome canônico que o repositório reconhece hoje.
-- Veredito da MetaLupa: `APROVAR | CONDICIONAR | CORRIGIR | BLOQUEAR` sobre renomear a skill.
-- Próximo passo único, autorizado por você.
+Vou ler integralmente: `10-mapa-paginas-site.md`, `12-MVP-MINIMO-VIABLE.md`, `11-ROADMAP-COMPLETO-PARA-SONNET.md`, `AI-CONTEXT-MASTER.md` e conferir cada Screenshot pra identificar quais blocos visuais do overclock a gente ainda não trouxe pra `SalaControle`.
 
-## O que NÃO vou fazer nessa fase
+### Passo 3 — Mapear o cockpit atual (SalaControle)
+- `src/paginas/admin-cockpit/SalaControle.tsx` (183 linhas)
+- `sala-controle.css` (278 linhas)
+- `MatrixRain.tsx`, `HermesMascote.tsx`, `hooks/useCockpitLive.ts`
+- Rota: `/admin/cockpit`
+- Abas atuais: MAPA · MCP · HUB · INFRA · IAs · GROK · LOGS
 
-- Não renomeio pasta.
-- Não sobrescrevo `SKILL.md`.
-- Não aplico skill nenhuma.
-- Não mexo em cockpit, rota, componente.
-- Não abro PR, não faço commit, não faço push.
+Registrar o que existe hoje pra saber o que falta.
 
-Tudo read-only até você olhar a evidência e mandar seguir.
+### Passo 4 — Ledger de inconsistências (Lupa)
+Pra cada item, registro: `OBSERVAÇÃO · PROVENIÊNCIA · FAVORECE OURO/LIXO/PENDÊNCIA · LIMITAÇÃO`. Alvos que já sei que precisam entrar no ledger:
 
-## Ferramentas que vou usar (só leitura)
+- Headers coloridos por pane (referência `image-974.png`) — ausente na SalaControle atual.
+- Badges de custo `$` em tempo real — ausente.
+- Densidade de logs (feed alto, monoespaçado) — parcial.
+- `HERMES-CORE/missions/` vazio na VPS — barramento não escreve.
+- Screenshots do zip vs SalaControle real — diff visual.
+- Roadmap 5 páginas (DASHBOARD · PLANOS · BAIXAR · DIREÇÃO · AJUDA) vs rotas do repo — o que existe, o que falta.
+- Duplicação: `apps/modulos/status/` (painel vivo) vs `SalaControle` — quem é canônico?
+- Skill workspace: `lupa-bayesiana` ativa localmente, ausente no repo — versionar ou não?
 
-- `github_list_pull_requests`, `github_list_commits`, `github_read`, `github_search_code` no repo `ServerVpss/CentralDark`.
-- `code--view` no arquivo local `.agents/skills/tecnica-da-lupa/SKILL.md` e no upload `user-uploads://METALUPA-BAYESIANA-CANONICA.md`.
-- `vps_git_status` e `vps_read_file_safe` se precisar cruzar com a VPS.
+### Passo 5 — Falsificação e AutoLupa
+Antes de fechar o relatório, pergunto: que evidência derruba a fusão? O que eu tô contando duas vezes (ex.: painel vivo + cockpit)? A promoção de algum bloco cria módulo paralelo (viola Mapa Único)?
 
-## Critério de sucesso
+## Entregável da Fase 1
 
-Você bate o olho no relatório e consegue dizer sozinho: "renomeia" ou "não renomeia" — sem depender da minha palavra. A decisão vem da evidência do repo + do arquivo que você mandou, não do meu palpite.
+Um único relatório curto (não vou implementar nada), no formato:
 
-Aprova essa auditoria read-only?
+```text
+🟢 OURO (manter/reaproveitar)
+🟡 PENDÊNCIA (falta fazer)
+🔴 LIXO (remover/consolidar)
+🛠️ MELHORIAS (evoluções propostas)
+```
+
+Cada linha com: caminho canônico · evidência · próximo passo único.
+
+## Fase 2 (só depois da sua aprovação)
+
+Com o relatório na mão, monto o **plano de fusão Overclock + SalaControle**, respeitando:
+
+- Mapa Único: extensão dentro de `src/paginas/admin-cockpit/`, sem criar rota/pasta paralela.
+- Trava das áreas 🔒 do `CLAUDE.md`.
+- Nada de deploy, nada de mexer em VPS/PM2 sem "PERMITO PIVETE".
+- Registro em `docs/ENTREGAS-LOVABLE.md` no fim.
+
+## O que eu NÃO vou fazer nesta fase
+
+- Não vou editar `SalaControle.tsx`, CSS, componentes ou skill.
+- Não vou renomear pasta nenhuma.
+- Não vou tocar em VPS, PM2, HUB, Supabase.
+- Não vou abrir PR nem commit.
+
+Aprova essa Fase 1 (auditoria com Lupa + leitura completa do zip + relatório organizado) pra eu seguir?
