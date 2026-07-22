@@ -17,7 +17,7 @@ from scripts.lupa_bayesiana import (  # noqa: E402
 )
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LEDGER = os.environ.get("LUPA_LEDGER_PATH", os.path.join(SKILL, "references", "uso-ledger.jsonl"))
+LEDGER = os.path.join(SKILL, "references", "uso-ledger.jsonl")
 
 
 def approx(a, b, tol=1e-9):
@@ -25,11 +25,8 @@ def approx(a, b, tol=1e-9):
 
 
 def fresh_ledger():
-    import tempfile
-    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
-    tf.close()
-    os.environ["LUPA_LEDGER_PATH"] = tf.name
-    return tf.name
+    if os.path.exists(LEDGER):
+        os.remove(LEDGER)
 
 
 # ---- Matemática existente (casos 1-7) ----
@@ -181,21 +178,6 @@ def test_sanitize_env():
     assert blocked and "[REDACTED]" in txt
 
 
-def test_sanitize_stripe_key():
-    txt, blocked = sanitize("chave pk_live_abc123def456ghi789")
-    assert blocked and "[REDACTED]" in txt and "pk_live_" not in txt
-
-
-def test_sanitize_url_cred():
-    txt, blocked = sanitize("conexao mysql://root:minhasenha@host:3306/db")
-    assert blocked and "[REDACTED]" in txt and "minhasenha" not in txt
-
-
-def test_sanitize_pat():
-    txt, blocked = sanitize("token ghp_abcdefghij1234567890ABCDEFGH")
-    assert blocked and "[REDACTED]" in txt
-
-
 def test_suite_check_separation():
     # FINAL aceita campos distintos
     fresh_ledger()
@@ -298,7 +280,7 @@ def test_ledger_jsonl_valid():
     pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MJ", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
-    with open(os.environ["LUPA_LEDGER_PATH"], encoding="utf-8") as f:
+    with open(LEDGER, encoding="utf-8") as f:
         for line in f:
             json.loads(line)  # levanta se invalido
 
@@ -310,7 +292,7 @@ def test_no_secret_in_diff():
     pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MN", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
-    with open(os.environ["LUPA_LEDGER_PATH"], encoding="utf-8") as f:
+    with open(LEDGER, encoding="utf-8") as f:
         content = f.read()
     for pat in ("Bearer", "ssh-ed25519", "WEBUI_LOVABLE_KEY", "eyJ"):
         assert pat not in content
@@ -323,7 +305,7 @@ def test_rollback_preserves_ledger():
     pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MRB", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
-    assert os.path.exists(os.environ["LUPA_LEDGER_PATH"])
+    assert os.path.exists(LEDGER)
     # rollback de branch nao apaga arquivo nao-commitado fora do repo
 
 

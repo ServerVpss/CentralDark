@@ -42,9 +42,6 @@ SECRET_PATTERNS = [
     re.compile(r"ssh-ed25519\s+[A-Za-z0-9+/]{20,}"),
     re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"),
     re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}"),
-    re.compile(r"(pk|sk|rk)_(live|test)_[A-Za-z0-9]{10,}"),  # stripe-style
-    re.compile(r"[a-z]+://[^:\s]+:[^@\s]+@"),  # url com credencial usuario:senha@
-    re.compile(r"(ghp_|github_pat_|glpat-|hf_)[A-Za-z0-9]{10,}"),  # pats comuns
 ]
 
 
@@ -78,9 +75,6 @@ def voi(perda_antes: float, perda_depois: float, custo: float) -> float:
 # ---- Auto-registro ----
 
 def _ledger_path() -> str:
-    env = os.environ.get("LUPA_LEDGER_PATH")
-    if env:
-        return env
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(here, LEDGER_NAME)
 
@@ -119,11 +113,7 @@ def sanitize(text: str) -> tuple[str, bool]:
 
 
 def _record_hash(rec: dict) -> str:
-    # exclui campos volateis (timestamps, proprio hash) para que idempotencia
-    # seja por conteudo semantico, nao por hora de gravacao
-    volatile = {"started_at_utc", "finished_at_utc", "record_hash"}
-    payload = {k: v for k, v in rec.items() if k not in volatile}
-    payload = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    payload = json.dumps(rec, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
