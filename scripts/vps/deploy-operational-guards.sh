@@ -14,17 +14,19 @@ PM2_APP="CentralDark-HermesVerificador"
 
 [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 61; }
 [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 62; }
+[[ "$BACKUP_ROOT" == /* ]] || { echo "BACKUP_ROOT_NOT_ABSOLUTE"; exit 80; }
+[[ ! -L "$BACKUP_ROOT" ]] || { echo "BACKUP_ROOT_SYMLINK_BLOCKED"; exit 81; }
 REPO_REAL="$(realpath -e "$REPO_DIR")"
 BACKUP_ROOT_REAL="$(realpath -m "$BACKUP_ROOT")"
 case "$BACKUP_ROOT_REAL" in
-  "$REPO_REAL"|"$REPO_REAL"/*) echo "BACKUP_ROOT_INSIDE_REPOSITORY"; exit 80 ;;
+  "$REPO_REAL"|"$REPO_REAL"/*) echo "BACKUP_ROOT_INSIDE_REPOSITORY"; exit 82 ;;
 esac
 mkdir -p -- "$BACKUP_ROOT_REAL"
 chmod 700 -- "$BACKUP_ROOT_REAL"
-[[ ! -L "$BACKUP_ROOT_REAL" ]] || { echo "BACKUP_ROOT_SYMLINK_BLOCKED"; exit 81; }
+[[ ! -L "$BACKUP_ROOT" ]] || { echo "BACKUP_ROOT_SYMLINK_BLOCKED"; exit 81; }
 [[ "$(stat -c '%d' "$REPO_REAL")" == "$(stat -c '%d' "$BACKUP_ROOT_REAL")" ]] || {
   echo "BACKUP_ROOT_CROSS_DEVICE"
-  exit 82
+  exit 86
 }
 
 exec 8>/tmp/centraldark-operational-guards-deploy.lock
