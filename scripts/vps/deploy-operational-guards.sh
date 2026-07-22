@@ -6,6 +6,7 @@ umask 077
 : "${REPO_DIR:=/root/CentralDark}"
 : "${RUNNER_TEMP:=/tmp}"
 : "${GITHUB_OUTPUT:=/dev/null}"
+: "${BACKUP_ROOT:=/root/CentralDark-Recovery/operational-guards}"
 
 MAP_DIR="$REPO_DIR/apps/modulos/mapeamento"
 VERIFIER_DIR="$REPO_DIR/apps/modulos/HERMES-CORE/agents/Log-Verificador"
@@ -13,6 +14,18 @@ PM2_APP="CentralDark-HermesVerificador"
 
 [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "TARGET_SHA_INVALID"; exit 61; }
 [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 62; }
+REPO_REAL="$(realpath -e "$REPO_DIR")"
+BACKUP_ROOT_REAL="$(realpath -m "$BACKUP_ROOT")"
+case "$BACKUP_ROOT_REAL" in
+  "$REPO_REAL"|"$REPO_REAL"/*) echo "BACKUP_ROOT_INSIDE_REPOSITORY"; exit 80 ;;
+esac
+mkdir -p -- "$BACKUP_ROOT_REAL"
+chmod 700 -- "$BACKUP_ROOT_REAL"
+[[ ! -L "$BACKUP_ROOT_REAL" ]] || { echo "BACKUP_ROOT_SYMLINK_BLOCKED"; exit 81; }
+[[ "$(stat -c '%d' "$REPO_REAL")" == "$(stat -c '%d' "$BACKUP_ROOT_REAL")" ]] || {
+  echo "BACKUP_ROOT_CROSS_DEVICE"
+  exit 82
+}
 
 exec 8>/tmp/centraldark-operational-guards-deploy.lock
 flock -w 90 8 || { echo "GUARDS_DEPLOY_LOCK_TIMEOUT"; exit 63; }
@@ -46,6 +59,7 @@ MAP_STAGE=""
 MAP_BACKUP=""
 VERIFIER_STAGE=""
 VERIFIER_BACKUP=""
+RELEASE_BACKUP_DIR=""
 map_promoted=0
 verifier_promoted=0
 restart_attempted=0
@@ -55,8 +69,9 @@ cleanup() {
   trap - EXIT ERR
   set +e
   if [[ "$rc" -ne 0 && "$verifier_promoted" == "1" && -d "$VERIFIER_BACKUP" ]]; then
-    failed="$VERIFIER_DIR.failed.${TARGET_SHA:0:12}.${BASHPID}"
+    failed="$RELEASE_BACKUP_DIR/failed/Log-Verificador"
     rollback_ok=false
+    mkdir -p -- "$(dirname "$failed")"
     [[ -e "$failed" ]] || mv -- "$VERIFIER_DIR" "$failed"
     mv -- "$VERIFIER_BACKUP" "$VERIFIER_DIR"
     if pm2 restart "$PM2_APP" >/dev/null; then
@@ -72,7 +87,8 @@ cleanup() {
     if [[ "$rollback_ok" == "true" ]]; then echo "VERIFIER_ROLLBACK_OK"; else echo "VERIFIER_ROLLBACK_FAILED"; fi
   fi
   if [[ "$rc" -ne 0 && "$map_promoted" == "1" && -d "$MAP_BACKUP" ]]; then
-    failed="$MAP_DIR.failed.${TARGET_SHA:0:12}.${BASHPID}"
+    failed="$RELEASE_BACKUP_DIR/failed/mapeamento"
+    mkdir -p -- "$(dirname "$failed")"
     [[ -e "$failed" ]] || mv -- "$MAP_DIR" "$failed"
     mv -- "$MAP_BACKUP" "$MAP_DIR"
     echo "MAP_ROLLBACK_OK"
@@ -103,6 +119,35 @@ PM2_JSON="$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)'
 
 MAP_PARENT="$(dirname "$MAP_DIR")"
 VERIFIER_PARENT="$(dirname "$VERIFIER_DIR")"
+
+migrate_legacy_backups() {
+  local parent="$1"
+  local prefix="$2"
+  local pattern="$3"
+  local group="$4"
+  local candidate base destination
+  mkdir -p -- "$BACKUP_ROOT_REAL/legacy-layout/$group"
+  for candidate in "$parent"/"$prefix"*; do
+    [[ -e "$candidate" ]] || continue
+    base="${candidate##*/}"
+    [[ "$base" =~ $pattern ]] || { echo "LEGACY_BACKUP_NAME_INVALID $group"; exit 83; }
+    [[ -d "$candidate" && ! -L "$candidate" ]] || { echo "LEGACY_BACKUP_TYPE_INVALID $group"; exit 84; }
+    destination="$BACKUP_ROOT_REAL/legacy-layout/$group/$base"
+    [[ ! -e "$destination" ]] || { echo "LEGACY_BACKUP_COLLISION $group"; exit 85; }
+    mv -- "$candidate" "$destination"
+    echo "LEGACY_BACKUP_MIGRATED $group/$base"
+  done
+}
+
+migrate_legacy_backups \
+  "$MAP_PARENT" ".mapeamento-backup." \
+  '^\.mapeamento-backup\.[0-9a-f]{12}\.[0-9]+$' \
+  "mapeamento"
+migrate_legacy_backups \
+  "$VERIFIER_PARENT" ".Log-Verificador-backup." \
+  '^\.Log-Verificador-backup\.[0-9a-f]{12}\.[0-9]+$' \
+  "Log-Verificador"
+
 MAP_STAGE="$(mktemp -d "$MAP_PARENT/.mapeamento-release.${TARGET_SHA:0:12}.XXXXXX")"
 VERIFIER_STAGE="$(mktemp -d "$VERIFIER_PARENT/.Log-Verificador-release.${TARGET_SHA:0:12}.XXXXXX")"
 cp -a -- "$MAP_DIR/." "$MAP_STAGE/"
@@ -140,9 +185,11 @@ for rel in "${verifier_files[@]}"; do
   cmp -s "$src" "$dst" || { echo "VERIFIER_STAGE_MISMATCH $rel"; exit 73; }
 done
 
-MAP_BACKUP="$MAP_PARENT/.mapeamento-backup.${TARGET_SHA:0:12}.${BASHPID}"
-VERIFIER_BACKUP="$VERIFIER_PARENT/.Log-Verificador-backup.${TARGET_SHA:0:12}.${BASHPID}"
-[[ ! -e "$MAP_BACKUP" && ! -e "$VERIFIER_BACKUP" ]] || { echo "GUARDS_BACKUP_COLLISION"; exit 74; }
+RELEASE_BACKUP_DIR="$BACKUP_ROOT_REAL/releases/${TARGET_SHA:0:12}.${BASHPID}"
+MAP_BACKUP="$RELEASE_BACKUP_DIR/mapeamento"
+VERIFIER_BACKUP="$RELEASE_BACKUP_DIR/Log-Verificador"
+[[ ! -e "$RELEASE_BACKUP_DIR" ]] || { echo "GUARDS_BACKUP_COLLISION"; exit 74; }
+mkdir -p -- "$RELEASE_BACKUP_DIR"
 
 mv -- "$MAP_DIR" "$MAP_BACKUP"
 map_promoted=1
