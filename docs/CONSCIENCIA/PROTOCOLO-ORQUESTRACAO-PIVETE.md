@@ -2,7 +2,7 @@
 title: "PROTOCOLO DE ORQUESTRACAO PIVETE"
 date: 2026-07-07
 tags: ["consciencia", "orquestracao", "ia", "pivete", "centraldark"]
-updated: 2026-07-18
+updated: 2026-07-22
 ---
 
 # Protocolo de Orquestracao Pivete
@@ -116,6 +116,7 @@ Antes de agir, a IA deve declarar o modo:
 | Read-only | Ler, diagnosticar e propor sem alterar nada |
 | Edicao controlada | Editar somente dentro do escopo autorizado |
 | Execucao com travas | Rodar comandos/acoes permitidas, parar antes de risco |
+| V-REALTIME desenvolvimento | Executar o fluxo permanente GitHub -> Actions/scripts -> VPS -> prova, corrigindo e repetindo sem pedir a mesma autorizacao novamente |
 
 ## Boot universal
 
@@ -155,27 +156,73 @@ Se houver MCP CentralDark disponivel, usar o kit de boas-vindas antes das leitur
 
 ## Regras de autorizacao
 
-Nao fazer sem autorizacao explicita de Pivete:
+### Autorizacao operacional permanente — V-REALTIME
 
-- secrets, tokens, chaves, sessoes ou `.env`;
-- Docker, WuzAPI, WhatsApp, Caddy, DNS, dominio publico ou gateway;
-- banco real, migracao destrutiva ou dados de producao;
-- CRM, restart sensivel, deploy ou alteracao de producao;
-- apagar definitivo, reset, force-push ou acao irreversivel.
+Pivete selou em 2026-07-22: enquanto a VPS estiver em **producao de desenvolvimento, sem clientes e sem volume real**, a autorizacao operacional cobre o fluxo oficial completo. A mesma permissao nao deve ser solicitada a cada entrega.
 
-Em caso de duvida, ficar em read-only e perguntar.
+```text
+GitHub audita e registra
+-> IA revisa e amplia a analise
+-> Actions e scripts deterministicos provam
+-> VPS recebe somente o SHA aprovado
+-> reviewer valida GitHub e VPS
+-> health/auditoria confirmam
+-> falha retorna para diagnostico, correcao e nova prova
+```
+
+Sem nova pergunta, o sistema pode:
+
+- criar branch e PR sobre a `main` remota atual;
+- commitar e atualizar a branch da missao;
+- revisar diff, HEAD_SHA, checks, logs sanitizados, health e estado do runtime;
+- mesclar com `expected_head_sha` depois dos gates do mesmo SHA;
+- executar deploy pelo workflow oficial aprovado;
+- reiniciar somente o servico afetado e comprovado;
+- aplicar rollback cirurgico e recuperavel quando um gate falhar;
+- inventariar legado/lixo, absorver o ouro util e remover somente o alvo comprovadamente descartavel com recuperacao;
+- corrigir no mesmo fluxo e repetir ate fechar o criterio de aceite;
+- encerrar PRs redundantes ou regressivos com veredito registrado e commits preservados.
+
+Fallback operacional:
+
+1. IA principal analisa e implementa.
+2. Reviewer independente tenta falsificar a solucao.
+3. Se IA/provedor falhar, o script deterministico assume os gates objetivos.
+4. Falha de IA nunca vira falso verde.
+5. Falha de script fecha somente a tentativa: aciona diagnostico, correcao minima, rollback quando necessario e nova execucao.
+6. GitHub registra; Actions provam; VPS executa; o resultado volta ao mesmo fio.
+
+**Forca maxima** significa usar os recursos, revisores, calculadores, testes e retries controlados necessarios. Nao significa ignorar evidencia, mascarar falha ou destruir ouro.
+
+Continuam proibidos, mesmo no V-REALTIME:
+
+- ler, pedir ou expor secrets, tokens, chaves, sessoes ou `.env`;
+- force-push, push da `main` local suja, `git reset --hard` ou `git clean`;
+- falso verde, bypass de check ou deploy de SHA diferente do aprovado;
+- exclusao definitiva sem alvo exato, inventario, prova e recuperacao;
+- migracao destrutiva, apagamento de banco ou dados;
+- alteracao ampla de Docker, Caddy, DNS, dominio, gateway ou rede fora do alvo validado;
+- qualquer acao irreversivel fora do escopo comprovado.
+
+O bloqueio `fail-closed` nao encerra a missao: ele impede a tentativa defeituosa, preserva o estado e devolve o problema para correcao e nova prova.
+
+Quando Pivete declarar **producao real, clientes ou volume**, o regime muda imediatamente. Deploy, restart, banco, rede e operacoes destrutivas passam a exigir gate especifico da nova fase.
+
+Perguntar novamente apenas quando o alvo exato nao puder ser resolvido, faltar autoridade para um escopo novo ou a acao sair da autorizacao permanente acima.
 
 ## Ciclo de trabalho
 
 ```text
-Ler -> Perguntar -> Agir -> Provar -> Registrar
+Ler -> Fixar alvo/SHA -> Agir -> Revisar -> Provar -> Corrigir/repetir -> Registrar
 ```
 
-1. Ler o contexto real.
-2. Perguntar quando houver risco, lacuna ou permissao sensivel.
-3. Agir com a menor mudanca segura.
-4. Provar com evidencia.
-5. Registrar o ouro antes de encerrar.
+1. Ler o contexto e fixar a Fonte da Verdade, o alvo e o `HEAD_SHA`.
+2. Agir dentro da autorizacao vigente sem devolver ao Pivete decisoes operacionais ja delegadas.
+3. Aplicar a menor mudanca estrutural que resolva a causa.
+4. Revisar nos dois lados: GitHub/diff/CI e VPS/runtime/health.
+5. Provar com evidencia reproduzivel do mesmo alvo e SHA.
+6. Se falhar, diagnosticar, corrigir e repetir; indisponibilidade de uma IA aciona fallback, nao abandono.
+7. Registrar o ouro e retomar o proximo passo unico.
 
 ## Deposito de saida
 
@@ -207,5 +254,5 @@ Use o prompt universal quando a IA nao conseguir ler imagem. Use o SVG/PNG como 
 ## Frase curta para colar em qualquer IA
 
 ```text
-Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam, IAs variam. Preserve a MISSION_ID. Em !CALIBRAR, deposite o checkpoint nos documentos canonicos; em !RELOAD, releia a Fonte da Verdade em read-only, valide as evidencias e retome somente o proximo passo comprovado. Nao crie memoria, missao ou documentacao paralela.
+Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam e IAs variam. Em producao de desenvolvimento sem clientes, use a autorizacao V-REALTIME permanente: GitHub audita e registra; IA revisa; scripts/Actions provam; VPS executa somente o SHA aprovado; reviewer valida os dois lados; falha retorna para correcao e nova prova. IA indisponivel aciona fallback deterministico. Nao repita pedidos ja cobertos, nao exponha secrets, nao aceite falso verde e nao crie memoria, regra, missao ou versao paralela. Producao real so quando Pivete declarar.
 ```
