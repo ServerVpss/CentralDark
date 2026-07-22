@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-21T11:12:06.055Z
+# 🧠 Notion Sync — 2026-07-22T01:01:12.111Z
 
-- **Commit fonte:** `a6005d048650ce1f99c56f1b8173b0ae9a79f38a`
+- **Commit fonte:** `932edeb8a3053c1ebead86a9619a5c56f4caf873`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 386 atualizadas · ❌ 460 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 388 atualizadas · ❌ 459 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 344 | 1 | 342 | 0 | 1 |
+| aprendizados | 344 | 0 | 344 | 0 | 0 |
 | estrutura | 459 | 0 | 0 | 0 | 459 |
 
 ## Operações
@@ -319,7 +319,7 @@
 | aprendizados | atualizado | #249 — Guardião da Consciência — modo "propor" obrigatório por 10 dias (Regra Oficial) |
 | aprendizados | atualizado | #250 — Regra Oficial — Gestão de Secrets com Autorização Prévia |
 | aprendizados | atualizado | #251 — Regra Oficial — Hierarquia de Memória (docs/CONSCIENCIA/ é a fonte da verdade) |
-| aprendizados | erro | #252 — notify-telegram exige header x-notify-key, não Authorization Bearer |
+| aprendizados | atualizado | #252 — notify-telegram exige header x-notify-key, não Authorization Bearer |
 | aprendizados | atualizado | #253 — MCP OAuth: aceitar client_id CIMD com query string (conector ChatGPT) |
 | aprendizados | atualizado | #254 — mcp.centralldark.com em DNS-only usa cert Let's Encrypt explícito, não CF-Origin |
 | aprendizados | atualizado | #255 — Fonte da verdade Supabase CentralDark consolidada |
@@ -409,7 +409,7 @@
 | aprendizados | atualizado | #339 — api.centralldark.com é o Arsenal Council (OpenAI-compat) — /v1/models abre com WEBUI key, mas /v1/chat/completions tem auth PRÓPRIA |
 | aprendizados | atualizado | #340 — Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY) |
 | aprendizados | atualizado | #341 — Delegação de cima pra baixo: o topo AGE e delega pra quem ele controla — nada de "espera estéril" |
-| aprendizados | criado | #342 — Regra de Ouro — mudança segura: nenhuma IA altera área protegida sozinha (mostra caminho, impacto, espera PERMITO) |
+| aprendizados | atualizado | #342 — Regra de Ouro — mudança segura: nenhuma IA altera área protegida sozinha (mostra caminho, impacto, espera PERMITO) |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
