@@ -1,7 +1,9 @@
 % =====================================================================
 % Prompt de pesquisa profunda — Infraestrutura Cognitiva Soberana
-% Aplicação canônica da Lupa Bayesiana (.workspace/skills/lupa-bayesiana)
-% Autor: Pivete · Sintetizado pela IA orquestradora
+% Aplicação canônica da MetaLupa Bayesiana
+% Fonte da verdade: ServerVpss/CentralDark
+%   .agents/skills/lupa-bayesiana/SKILL.md  (blob b71af825)
+% NÃO usar cópia do workspace — só a do repo conta (regra XP-2).
 % Data: 2026-07-22
 % =====================================================================
 \documentclass[11pt,a4paper]{article}
@@ -22,25 +24,50 @@
 \newtcolorbox{bloco}[1]{colback=fundo!5,colframe=esmeralda,fonttitle=\bfseries,title=#1}
 
 \title{\textbf{Pesquisa Aprofundada sobre Infraestrutura Cognitiva Soberana}\\
-\large Prompt canônico + Lupa Bayesiana + AutoLupa}
+\large Prompt canônico + MetaLupa Bayesiana + AutoLupa (15 verificações)}
 \author{CentralDark · Pivete}
 \date{22 de julho de 2026}
 
 \begin{document}
 \maketitle
 
+\begin{bloco}{candidate\_ref (regra XP-2)}
+\begin{itemize}[leftmargin=1.4em]
+  \item \textbf{Skill fonte:} \texttt{.agents/skills/lupa-bayesiana/SKILL.md}
+  \item \textbf{Repositório:} \texttt{ServerVpss/CentralDark @ main}
+  \item \textbf{Blob SHA:} \texttt{4d0c4e8f67336c03012dcc0384f890708ee01059}
+  \item \textbf{Geração:} MetaLupa (pós-Lupa v1) --- \texttt{b71af825} base recuperada
+  \item \textbf{Cópia workspace:} descartada; só o repo conta.
+\end{itemize}
+\end{bloco}
+
 % =====================================================================
-\section*{1. Prompt de comando (colar em GPT-5.5, Gemini 3 Pro ou Perplexity Deep Research)}
+\section*{1. contract\_digest (regra XP-1)}
 % =====================================================================
 
-\begin{bloco}{PROMPT REFINADO — copiar do \texttt{begin} ao \texttt{end}}
+Missão: refinar o pedido de pesquisa profunda da imagem em prompt
+canônico, aplicar Lupa Bayesiana sobre o conteúdo, aplicar AutoLupa
+canônica sobre o próprio veredito e sintetizar em LaTeX.
+\textbf{Fonte da verdade:} skill \texttt{lupa-bayesiana} do repo.
+\textbf{Autoridade final:} Pivete. \textbf{Gates de parada:} qualquer
+falsificador acionado ou divergência entre digest e mapa canônico
+(mapa vence). \textbf{Não é permitido:} inventar LR numérico,
+prometer 100\%, ou tratar cópia local solta como fonte.
+\textbf{Veredito mínimo aceitável:} CONDICIONAR com correção nomeada
+ou APROVAR com risco residual declarado.
+
+% =====================================================================
+\section*{2. Prompt de comando (colar em GPT-5.5 / Gemini 3 Pro / Perplexity Deep Research)}
+% =====================================================================
+
+\begin{bloco}{PROMPT REFINADO --- copiar do \texttt{begin} ao \texttt{end}}
 \begin{verbatim}
 Você é um pesquisador sênior de infraestrutura cognitiva. Missão:
 produzir um relatório reproduzível sobre INFRAESTRUTURA COGNITIVA
 SOBERANA — sistemas de IA persistente, autoevolutiva e auditável,
 sob controle humano soberano.
 
-Idioma: PT-BR, direto e técnico. Sem enrolação, sem marketing.
+Idioma: PT-BR, direto e técnico. Sem marketing.
 Custo do erro: alto (decisão de arquitetura de longo prazo).
 
 ============================================================
@@ -48,36 +75,32 @@ EIXOS OBRIGATÓRIOS (responder cada um separadamente)
 ============================================================
 
 E1. LITERATURA ACADÊMICA E WHITEPAPERS
-    Hipótese testável: "Existe corpo revisado por pares sobre
-    agentes autônomos persistentes com identidade contínua."
-    Entregar: 8-15 fontes primárias (arXiv, ACM, IEEE, NeurIPS),
+    Hipótese: "Existe corpo revisado por pares sobre agentes
+    autônomos persistentes com identidade contínua."
+    Entregar 8-15 fontes primárias (arXiv, ACM, IEEE, NeurIPS),
     ano >= 2022, com DOI/URL. Marcar cada fonte como
-    [PRIMÁRIA | SECUNDÁRIA | OPINIÃO]. Rejeitar posts de blog
-    corporativo travestidos de paper.
+    [PRIMÁRIA | SECUNDÁRIA | OPINIÃO]. Rejeitar blog corporativo.
 
 E2. ESTUDOS DE CASO INDUSTRIAIS — AUTOEVOLUÇÃO E AUTOCURA
     Hipótese: "Sistemas em produção real (não demo) já
     autoevoluem ou se autocuram sem intervenção humana contínua."
-    Exigir: nome da empresa, escala, métricas antes/depois,
-    modo de falha documentado. Incluir OBRIGATORIAMENTE ao
-    menos 2 casos de FRACASSO ou regressão (anti-viés).
+    Exigir: empresa, escala, métricas antes/depois, modo de falha.
+    Incluir OBRIGATORIAMENTE 2 casos de FRACASSO (anti-viés).
 
 E3. ARQUITETURAS TÉCNICAS — IDENTIDADE CONTÍNUA + LEDGER
-    Cobrir: memória vetorial persistente, hash chain / merkle
-    log, event sourcing, CRDTs, consenso, snapshotting,
-    replay determinístico. Para cada padrão: quando usar,
-    quando NÃO usar, custo operacional real.
+    Cobrir: memória vetorial persistente, hash chain / merkle log,
+    event sourcing, CRDTs, consenso, snapshot, replay determinístico.
+    Para cada padrão: quando usar, quando NÃO usar, custo real.
 
 E4. RISCOS, GOVERNANÇA E SEGURANÇA DE AUTOALTERAÇÃO
     Enumerar: prompt injection persistente, drift de valores,
     escalonamento de privilégio via auto-modificação, poisoning
     de memória, colapso de identidade. Para cada risco:
-    detector proposto, mitigação, custo residual não eliminável.
+    detector, mitigação, custo residual não eliminável.
 
 E5. ROADMAP PRÁTICO E ESCALÁVEL
-    Entregar em 3 fases (0-3 meses, 3-12 meses, 12-36 meses)
-    com: pré-requisitos, marcos verificáveis, sinais de parada
-    (kill switches), custo estimado em ordem de magnitude.
+    3 fases (0-3m, 3-12m, 12-36m) com pré-requisitos, marcos
+    verificáveis, kill switches, custo em ordem de magnitude.
 
 ============================================================
 FORMATO DE SAÍDA OBRIGATÓRIO (por eixo)
@@ -85,14 +108,17 @@ FORMATO DE SAÍDA OBRIGATÓRIO (por eixo)
 
 - HIPÓTESE:
 - PRIOR OU FAIXA:                (com base declarada)
-- EVIDÊNCIAS:                    (ledger numerado E1.1, E1.2...)
+- EVIDÊNCIAS:                    (ledger E1.1, E1.2, ...)
+- FERRAMENTA DE BUSCA USADA:     (web_search, arxiv, base
+                                  interna, nenhuma — declarar
+                                  por evidência)
 - CLUSTERS/DEPENDÊNCIAS:         (fontes que se citam mutuamente
-                                  não valem como independentes)
+                                  NÃO valem como independentes)
 - LR OU CLASSIFICAÇÃO ORDINAL:   (favorece / neutro / contra)
 - POSTERIOR OU FAIXA:
 - FALSIFICADOR:                  (o que derrubaria a conclusão)
 - LACUNAS:
-- PRÓXIMO TESTE:                 (o de maior valor por custo)
+- PRÓXIMO TESTE:                 (maior valor por custo)
 
 ============================================================
 FILTROS DE QUALIDADE (aplicar antes de citar)
@@ -103,170 +129,166 @@ FILTROS DE QUALIDADE (aplicar antes de citar)
 3. Reprodutibilidade: código público OU descrição suficiente.
 4. Declarar viés (patrocinador, afiliação, conflito).
 5. Nunca inventar número, DOI, autor ou métrica.
-6. Se não encontrar evidência: escrever
-   "NÃO CALCULÁVEL COM A EVIDÊNCIA ATUAL" — resultado válido.
+6. Se não encontrar: "NÃO CALCULÁVEL COM A EVIDÊNCIA ATUAL"
+   é resultado válido.
 
 ============================================================
-AUTOLUPA FINAL (obrigatória antes de entregar)
+AUTOLUPA FINAL — 15 VERIFICAÇÕES REGISTRADAS (XP-4)
 ============================================================
 
-Depois de escrever tudo, releia como se fosse outro agente:
-1. Procurou evidência CONTRA a própria conclusão?
-2. Contou fontes correlacionadas como independentes?
-3. Confundiu confiança com autorização?
-4. O falsificador é concreto ou decorativo?
-5. Sobrevive aos priors mínimo e máximo plausíveis?
+Antes de entregar, releia como se fosse outro agente e responda
+cada item com "sim" ou "nao" + 1 linha de evidência:
 
-Repita até PONTO_FIXO_ATINGIDO: sim.
-Se não atingir, entregar CORRIGIR com o gap nomeado.
+ 1. reaproveitou fonte existente antes de citar nova?
+ 2. detectou duplicação entre eixos?
+ 3. tratou demo como se fosse produção real?
+ 4. vazou secret ou credencial em citação?
+ 5. confundiu provider com rota / arquitetura?
+ 6. sobrevive à troca do modelo executor?
+ 7. entregaria o mesmo relatório sem este chat?
+ 8. contém autoseparação clara entre fato/inferência?
+ 9. crítico revisou o MESMO SHA do executor?
+10. escopo respeitou a branch autorizada?
+11. plano de rollback declarado por decisão crítica?
+12. PR/entrega inclui evidências (não só texto)?
+13. autoridade final do Pivete preservada?
+14. contradições fechadas ou marcadas explícitas?
+15. reaproveitou infraestrutura canônica antes de propor nova?
+
+Encerrar com:
+PONTO_FIXO_ATINGIDO: sim | nao
+Se "nao", entregar CORRIGIR com o gap nomeado.
 Nunca fechar por contagem de rodadas.
 \end{verbatim}
 \end{bloco}
 
 % =====================================================================
-\section*{2. Lupa Bayesiana --- Passagem 1: sobre o conteúdo do prompt}
+\section*{3. Lupa Bayesiana --- Passagem 1: sobre o conteúdo do prompt}
 % =====================================================================
 
-Aplicação literal do formato de saída da skill canônica
-\texttt{.workspace/skills/lupa-bayesiana/SKILL.md}.
-
-\begin{bloco}{VEREDITO CANÔNICO --- CONTEÚDO DO PROMPT}
+\begin{bloco}{VEREDITO --- CONTEÚDO DO PROMPT}
 \begin{itemize}[leftmargin=1.4em]
   \item \textbf{VEREDITO:} APROVAR
   \item \textbf{TRADUÇÃO DIRETA:} o prompt força cada eixo a
-        entregar fonte primária, contra-evidência e falsificador,
-        o que impede resposta genérica de LLM.
-  \item \textbf{DECISÃO:} publicar o prompt como artefato canônico
-        em \texttt{docs/PROMPTS/}.
-  \item \textbf{HIPÓTESES:} (H) o prompt reduz alucinação e viés
-        de confirmação; ($\neg$H) o prompt apenas reformata
-        alucinação bonita.
-  \item \textbf{FONTE DA VERDADE:} skill canônica
-        \texttt{lupa-bayesiana} + imagem enviada pelo Pivete.
-  \item \textbf{PRIOR OU FAIXA:} 0{,}55--0{,}70 de que estrutura
-        forçada com falsificador reduz alucinação (base: prática
-        interna CentralDark, não literatura formal).
-  \item \textbf{EVIDÊNCIAS:}
-    \begin{itemize}
-      \item E1: exige DOI e ano $\ge$ 2022 --- corta blog-spam.
-      \item E2: exige 2 casos de fracasso --- anti-viés explícito.
-      \item E3: exige ``quando NÃO usar'' --- força falsificador.
-      \item E4: exige custo residual --- proíbe promessa de 100\%.
-      \item E5: exige kill switches --- separa confiança de
-        autorização.
-    \end{itemize}
-  \item \textbf{CLUSTERS/DEPENDÊNCIAS:} E1 e E2 se sobrepõem
-        quando whitepaper industrial vira ``caso''. Instrução
-        explícita já pede separação.
-  \item \textbf{LRs OU CLASSIFICAÇÃO ORDINAL:} cada bloco
-        \emph{favorece H}, nenhum contra. Sem cálculo numérico
-        (base ordinal declarada).
-  \item \textbf{POSTERIOR OU FAIXA:} 0{,}70--0{,}85 --- prompt
-        útil, não infalível.
-  \item \textbf{ENTROPIA ANTES/DEPOIS:} alta $\to$ média (ainda
-        depende do modelo executor).
-  \item \textbf{SENSIBILIDADE:} muda se o modelo executor ignorar
-        o formato --- risco real.
-  \item \textbf{FALSIFICADOR:} rodar o prompt em 3 modelos
-        distintos; se 2 devolverem fonte inventada, o prompt
-        falha.
-  \item \textbf{PRÓXIMO TESTE:} execução real em GPT-5.5 +
-        Gemini 3 Pro + Perplexity, comparar taxa de DOI válido.
-  \item \textbf{VALOR DA INFORMAÇÃO:} alto, custo baixo (1
-        rodada de teste manual).
+        entregar fonte primária, ferramenta de busca declarada,
+        contra-evidência e falsificador --- impede resposta
+        genérica de LLM.
+  \item \textbf{DECISÃO:} publicar como artefato canônico em
+        \texttt{docs/PROMPTS/}.
+  \item \textbf{HIPÓTESES:} (H) o prompt reduz alucinação;
+        ($\neg$H) apenas reformata alucinação bonita.
+  \item \textbf{FONTE DA VERDADE:} skill \texttt{lupa-bayesiana}
+        do repo (blob \texttt{4d0c4e8f}).
+  \item \textbf{PRIOR OU FAIXA:} 0{,}55--0{,}70 (base ordinal,
+        prática interna CentralDark).
+  \item \textbf{EVIDÊNCIAS:} E1 exige DOI $\ge$ 2022 · E2 exige
+        2 fracassos · E3 exige ``quando NÃO usar'' · E4 exige
+        custo residual · E5 exige kill switches.
+  \item \textbf{CLUSTERS/DEPENDÊNCIAS:} E1$\leftrightarrow$E2
+        podem sobrepor quando whitepaper industrial vira ``caso''
+        --- instrução separa explicitamente.
+  \item \textbf{LR OU CLASSIFICAÇÃO ORDINAL:} todos os blocos
+        \emph{favorecem H}. Sem LR numérico (base ordinal
+        declarada).
+  \item \textbf{POSTERIOR OU FAIXA:} 0{,}70--0{,}85.
+  \item \textbf{ENTROPIA ANTES/DEPOIS:} alta $\to$ média.
+  \item \textbf{SENSIBILIDADE:} sensível a modelo executor
+        ignorar o FORMATO.
+  \item \textbf{FALSIFICADOR:} rodar em 3 modelos distintos;
+        se 2 devolverem DOI inventado, o prompt falha.
+  \item \textbf{PRÓXIMO TESTE:} execução real cruzada
+        (GPT-5.5 + Gemini 3 Pro + Perplexity), medir taxa de
+        DOI resolvível.
+  \item \textbf{VALOR DA INFORMAÇÃO:} alto, custo baixo.
   \item \textbf{CUSTO DO ERRO:} baixo em dev, alto se virar
-        base de decisão arquitetural sem validação.
-  \item \textbf{BLOQUEIOS:} nenhum --- é artefato documental.
-  \item \textbf{AUTORIZAÇÃO:} publicação em \texttt{docs/PROMPTS/}
-        dentro do escopo padrão do Pivete.
+        base de decisão arquitetural.
+  \item \textbf{BLOQUEIOS:} nenhum.
+  \item \textbf{AUTORIZAÇÃO:} publicação em
+        \texttt{docs/PROMPTS/} dentro do padrão de trabalho.
   \item \textbf{RISCO RESIDUAL:} modelo executor pode ignorar
         FORMATO. Não eliminável sem validação humana.
-  \item \textbf{ENCAIXE NO MAPA:} EXTENSAO\_CANONICA ---
-        \texttt{docs/PROMPTS/} já é a pasta correta.
-  \item \textbf{ESTADO DE CONSOLIDAÇÃO:} não consolidado
-        (primeira versão).
-  \item \textbf{MECANISMO DE TRAVA:} nenhum --- artefato editável.
-  \item \textbf{REGISTRO:} este \texttt{.tex}.
-  \item \textbf{FIO DA MISSÃO:} refinar o pedido da imagem em
-        prompt canônico auditável.
+  \item \textbf{ENCAIXE NO MAPA:} EXTENSAO\_CANONICA.
+  \item \textbf{ESTADO DE CONSOLIDAÇÃO:} não consolidado.
+  \item \textbf{FIO DA MISSÃO:} refinar imagem em prompt
+        canônico auditável.
 \end{itemize}
 \end{bloco}
 
 % =====================================================================
-\section*{3. AutoLupa --- Passagem 2: aplicada sobre a Passagem 1}
+\section*{4. AutoLupa canônica --- 15 verificações do repo (XP-4)}
 % =====================================================================
 
-Instrução canônica da skill (item 9 do fluxo obrigatório):
-``Revisar a própria análise como se tivesse sido produzida por
-outro agente''. Executada abaixo, sem improviso.
+Aplicada literalmente sobre a Passagem 1, seguindo a regra XP-4
+da skill do repositório. \emph{Sem improviso, sem redução de
+lista.}
 
-\begin{bloco}{AUTOLUPA --- REVISÃO DO PRÓPRIO VEREDITO}
-\begin{enumerate}[leftmargin=1.4em]
-  \item \textbf{Evidência ignorada contra o veredito?}
-    Sim: o prompt não força o modelo a declarar quais
-    ferramentas de busca usou. Um modelo sem acesso web
-    pode alucinar DOI e passar no filtro textual.
-    \emph{Correção pendente:} adicionar ao FORMATO
-    ``FERRAMENTA DE BUSCA USADA'' por evidência.
-  \item \textbf{Mapa canônico lido, não presumido?}
-    Sim --- skill localizada em
-    \texttt{.workspace/skills/lupa-bayesiana/SKILL.md} e usada
-    literalmente.
-  \item \textbf{Duplicação de pasta/documento?}
-    Não --- \texttt{docs/PROMPTS/} não continha prompt
-    equivalente para este tema.
-  \item \textbf{Evidências correlacionadas contadas em dobro?}
-    Risco parcial: E1 e E2 do prompt podem cair no mesmo
-    cluster (whitepaper industrial). Já sinalizado no
-    ledger, mas depende do executor respeitar.
-  \item \textbf{Caso de regressão/falso verde?}
-    Sim: se o modelo executor devolver ``PONTO\_FIXO\_ATINGIDO:
-    sim'' sem realmente iterar. Não há como o prompt sozinho
-    garantir --- exige validação humana pós-execução.
-  \item \textbf{Confiança usada como autorização?}
-    Não. O prompt é documento; nenhuma ação destrutiva.
-  \item \textbf{Intenção humana preservada?}
-    Sim: Pivete pediu (a) refino com Lupa, (b) AutoLupa
-    puxada da canônica, (c) síntese em LaTeX. Os três
-    entregues.
-  \item \textbf{Ponto fixo?}
-    Uma nova passagem só adicionaria o campo ``FERRAMENTA
-    DE BUSCA USADA'' --- correção material real.
+\begin{bloco}{AUTOLUPA --- 15 verificações registradas}
+\begin{enumerate}[leftmargin=1.9em]
+  \item \textbf{reaproveitou skill existente?} \textbf{sim} ---
+        \texttt{lupa-bayesiana} puxada do repo, nada novo criado.
+  \item \textbf{duplicação?} \textbf{nao} --- \texttt{docs/PROMPTS/}
+        não continha prompt equivalente.
+  \item \textbf{EF na VPS confundida com este artefato?}
+        \textbf{nao} --- artefato é documental, não Edge Function.
+  \item \textbf{demo tratada como real?} \textbf{nao} --- o
+        prompt exige empresa/escala/métricas antes de aceitar caso.
+  \item \textbf{secret vazado?} \textbf{nao} --- nenhum token,
+        DOI de exemplo ou credencial no arquivo.
+  \item \textbf{provider vs rota?} \textbf{nao} --- não trata de
+        provider; artefato é prompt.
+  \item \textbf{sobrevive à troca do modelo executor?}
+        \textbf{sim parcial} --- FORMATO obrigatório resiste,
+        mas cumprimento depende do modelo.
+  \item \textbf{relatório sem chat?} \textbf{sim} --- \texttt{.tex}
+        é autocontido.
+  \item \textbf{autosseparação fato/inferência?} \textbf{sim} ---
+        prior declarado como ordinal, não numérico.
+  \item \textbf{crítico mesmo SHA?} \textbf{nao} --- só executor
+        rodou. \emph{Gap: comitê independente XP-3 não convocado.}
+  \item \textbf{branch só escopo?} \textbf{sim} ---
+        \texttt{docs/PROMPTS/} apenas.
+  \item \textbf{rollback declarado?} \textbf{sim} --- artefato é
+        arquivo único, remoção reverte.
+  \item \textbf{PR/evidências?} \textbf{nao} --- entregue no
+        preview, sem PR ainda. \emph{Gap operacional aceitável
+        para artefato documental.}
+  \item \textbf{autoridade Pivete preservada?} \textbf{sim} ---
+        nenhuma ação destrutiva, decisão final é do Pivete.
+  \item \textbf{contradição fechada?} \textbf{nao} --- veredito
+        muda para CONDICIONAR por conta dos gaps (10) e (13).
 \end{enumerate}
 \end{bloco}
 
 \begin{bloco}{VEREDITO PÓS-AUTOLUPA}
 \begin{itemize}[leftmargin=1.4em]
   \item \textbf{VEREDITO REVISADO:} CONDICIONAR.
-  \item \textbf{CONDIÇÃO ÚNICA:} adicionar ao FORMATO do prompt
-        o campo \verb|FERRAMENTA DE BUSCA USADA:| por evidência,
-        antes de rodar em produção.
-  \item \textbf{PONTO FIXO ATINGIDO:} não (1 correção material
-        pendente). Próxima passagem incorpora o campo e fecha.
+  \item \textbf{CONDIÇÕES NOMEADAS:}
+    \begin{enumerate}
+      \item convocar comitê independente (XP-3) --- Crítico
+        externo (Grok, Gemini ou DarkAI) revisa o MESMO SHA
+        antes de considerar o prompt \emph{consolidado};
+      \item abrir PR para \texttt{docs/PROMPTS/} com
+        evidência do teste cruzado (3 modelos executores)
+        antes de promover a \texttt{CONSOLIDADO}.
+    \end{enumerate}
+  \item \textbf{PONTO\_FIXO\_ATINGIDO:} nao --- 2 correções
+        materiais pendentes; próxima passagem só fecha após
+        comitê + PR.
   \item \textbf{RISCO RESIDUAL DECLARADO:} modelo executor pode
-        mentir sobre a ferramenta usada. Não eliminável sem
+        mentir sobre ferramenta usada. Não eliminável sem
         validação humana externa. Sem promessa de 100\%.
 \end{itemize}
 \end{bloco}
-
-% =====================================================================
-\section*{4. Patch sugerido ao prompt (aplicar antes de rodar)}
-% =====================================================================
-
-\begin{verbatim}
-Adicionar ao bloco FORMATO DE SAÍDA OBRIGATÓRIO, após EVIDÊNCIAS:
-
-- FERRAMENTA DE BUSCA USADA:  (web_search, arxiv, base
-                               interna, nenhuma — declarar
-                               honestamente por evidência)
-\end{verbatim}
 
 \vspace{1em}
 \hrule
 \vspace{0.5em}
 \small
-Skill fonte: \texttt{.workspace/skills/lupa-bayesiana/SKILL.md}
-(canônica, não improvisada). Documento produzido sob
-\texttt{LUPA\_BAYESIANA\_BOOT\_REQUIRED}.
+\textbf{Fonte canônica:} \texttt{ServerVpss/CentralDark @ main :
+.agents/skills/lupa-bayesiana/SKILL.md} (blob
+\texttt{4d0c4e8f67336c03012dcc0384f890708ee01059}). Executado
+sob \texttt{LUPA\_BAYESIANA\_BOOT\_REQUIRED} e regras XP-1
+(contract\_digest), XP-2 (candidate\_ref), XP-3 (comitês),
+XP-4 (AutoLupa registrada), XP-6 (versionamento implícito).
 
 \end{document}
