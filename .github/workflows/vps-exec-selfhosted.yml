@@ -70,7 +70,7 @@ jobs:
               print(f'TRACKED_DIRTY_PRESERVED {code} {shown}')
               in_runtime_dist = path == 'apps/modulos/mcp/dist' or path.startswith(runtime_dist)
               if path.startswith(mcp_root) and not in_runtime_dist:
-                  Path(sys.argv[2]).touch()
+                  Path(sys.argv[2]).write_text('dirty', encoding='utf-8')
           PY
             if [[ -s "$DIRTY_MCP_FLAG" ]]; then
               echo "MCP_TRACKED_SOURCE_DIRTY"
