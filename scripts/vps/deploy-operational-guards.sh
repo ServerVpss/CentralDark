@@ -18,6 +18,7 @@ PM2_APP="CentralDark-HermesVerificador"
 [[ ! -L "$BACKUP_ROOT" ]] || { echo "BACKUP_ROOT_SYMLINK_BLOCKED"; exit 81; }
 REPO_REAL="$(realpath -e "$REPO_DIR")"
 BACKUP_ROOT_REAL="$(realpath -m "$BACKUP_ROOT")"
+[[ "$BACKUP_ROOT_REAL" == "$BACKUP_ROOT" ]] || { echo "BACKUP_ROOT_NOT_CANONICAL"; exit 87; }
 case "$BACKUP_ROOT_REAL" in
   "$REPO_REAL"|"$REPO_REAL"/*) echo "BACKUP_ROOT_INSIDE_REPOSITORY"; exit 82 ;;
 esac
@@ -74,9 +75,10 @@ cleanup() {
     failed="$RELEASE_BACKUP_DIR/failed/Log-Verificador"
     rollback_ok=false
     mkdir -p -- "$(dirname "$failed")"
-    [[ -e "$failed" ]] || mv -- "$VERIFIER_DIR" "$failed"
-    mv -- "$VERIFIER_BACKUP" "$VERIFIER_DIR"
-    if pm2 restart "$PM2_APP" >/dev/null; then
+    if [[ ! -e "$failed" ]] && \
+      mv -- "$VERIFIER_DIR" "$failed" && \
+      mv -- "$VERIFIER_BACKUP" "$VERIFIER_DIR" && \
+      pm2 restart "$PM2_APP" >/dev/null; then
       for _ in $(seq 1 20); do
         if pm2 jlist | jq -e --arg app "$PM2_APP" \
           'any(.[]; .name == $app and .pm2_env.status == "online" and (.pid | tonumber) > 0)' >/dev/null; then
@@ -90,10 +92,15 @@ cleanup() {
   fi
   if [[ "$rc" -ne 0 && "$map_promoted" == "1" && -d "$MAP_BACKUP" ]]; then
     failed="$RELEASE_BACKUP_DIR/failed/mapeamento"
+    map_rollback_ok=false
     mkdir -p -- "$(dirname "$failed")"
-    [[ -e "$failed" ]] || mv -- "$MAP_DIR" "$failed"
-    mv -- "$MAP_BACKUP" "$MAP_DIR"
-    echo "MAP_ROLLBACK_OK"
+    if [[ ! -e "$failed" ]] && \
+      mv -- "$MAP_DIR" "$failed" && \
+      mv -- "$MAP_BACKUP" "$MAP_DIR" && \
+      node "$MAP_DIR/core/validar-mapa.mjs" --repo-root "$REPO_DIR" >/dev/null; then
+      map_rollback_ok=true
+    fi
+    if [[ "$map_rollback_ok" == "true" ]]; then echo "MAP_ROLLBACK_OK"; else echo "MAP_ROLLBACK_FAILED"; fi
   fi
   git -C "$REPO_DIR" worktree remove --force "$BUILD_DIR" >/dev/null 2>&1 || true
   [[ "$rc" -eq 0 ]] || echo "GUARDS_DEPLOY_BLOCKED"
