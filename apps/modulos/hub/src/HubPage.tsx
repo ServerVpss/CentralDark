@@ -8,6 +8,7 @@ import { ConnectorsTab } from './components/connectors/ConnectorsTab';
 import { AbacusTab } from './components/abacus/AbacusTab';
 import { GatewayTab } from './components/gateway/GatewayTab';
 import { HermesTab } from './components/hermes/HermesTab';
+import { MissionsTab } from './components/missions/MissionsTab';
 import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
@@ -93,6 +94,7 @@ export default function HubPage() {
             <TabsTrigger value="connectors" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Conectores</TabsTrigger>
             <TabsTrigger value="abacus" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Abacus</TabsTrigger>
             <TabsTrigger value="audit" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Auditoria</TabsTrigger>
+            <TabsTrigger value="missions" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">Missões</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard"><DashboardTab /></TabsContent>
@@ -105,6 +107,7 @@ export default function HubPage() {
           <TabsContent value="connectors"><ConnectorsTab /></TabsContent>
           <TabsContent value="abacus"><AbacusTab /></TabsContent>
           <TabsContent value="audit"><AuditTab /></TabsContent>
+          <TabsContent value="missions"><MissionsTab /></TabsContent>
         </Tabs>
       </main>
       <ButtonLogDrawer />

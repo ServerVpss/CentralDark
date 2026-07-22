@@ -76,7 +76,7 @@ const menuGroups = [
     icon: Cpu,
     items: [
       { title: "Mega Painel", icon: Radio, path: "/mega-painel" },
-      { title: "Hub Segurança", icon: ShieldCheck, path: "/hub" },
+      { title: "HUB CentralDark", icon: ShieldCheck, path: "https://hub.centralldark.com", external: true },
       { title: "Cofre (ADM)", icon: ShieldAlert, path: "/cofre" },
       { title: "Status", icon: Activity, path: "/status" },
       { title: "Teste de Módulos", icon: FlaskConical, path: "/teste-modulos" },
@@ -173,6 +173,7 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                           <li>
                             <button
                               onClick={() => {
+                                if (item.external) { window.open(item.path, '_blank', 'noopener,noreferrer'); onClose?.(); return; }
                                 navigate(item.path);
                                 onClose?.();
                               }}
@@ -245,6 +246,7 @@ export function Sidebar({ isOpen = true, onClose, collapsed = false, onCollapsed
                       <li key={item.path}>
                         <button
                           onClick={() => {
+                            if (item.external) { window.open(item.path, '_blank', 'noopener,noreferrer'); onClose?.(); return; }
                             navigate(item.path);
                             onClose?.();
                           }}
