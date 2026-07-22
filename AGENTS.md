@@ -4,6 +4,18 @@
 
 `ServerVpss/CentralDark` é o repositório oficial e fonte da verdade do projeto.
 
+## 🔒 BOOT OBRIGATÓRIO — LUPA BAYESIANA
+
+```text
+LUPA_BAYESIANA_BOOT_REQUIRED: SIM
+LUPA_USE_RECEIPT_REQUIRED: SIM
+SKILL_PATH: .agents/skills/lupa-bayesiana/SKILL.md
+SKILL_REF: origin/main
+SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
+```
+
+Antes de alterar qualquer arquivo, carregar a skill `lupa-bayesiana` e registrar o uso (BEGIN+FINAL) no ledger da skill. Sem BEGIN → `BOOT_BLOQUEADO`.
+
 ## Doutrina
 
 ```txt
