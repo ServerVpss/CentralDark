@@ -2719,3 +2719,25 @@ DISTINÇÃO IMPORTANTE: 'Bolt' existe em 2 lugares — (1) container Docker Cent
 - **Contexto:** O Pivete formalizou o protocolo OBRIGATÓRIO que toda IA, agente ou automação deve seguir antes de alterar qualquer área protegida ou salvar algo importante no ecossistema CentralDark.
 - **Aprendizado:** REGRA DE OURO — MUDANÇA SEGURA. Antes de QUALQUER IA/agente/automação alterar área protegida: (1) NÃO altera sozinha; (2) mostra o CAMINHO (qual arquivo, onde); (3) explica o IMPACTO (o que muda, o que pode quebrar); (4) ESPERA a autorização explícita do Pivete ("PERMITO PIVETE"). Antes de salvar algo importante, apresentar SEMPRE: arquivo alterado → antes/depois → impacto → dependências → revisão das IAs (revisor independente) → confirmação do Pivete. Só depois grava. Vale pra edição de config real, área 🔒, VPS, produção, deploy, exclusão. Complementa o guia docs/COFRE/COMO-FALAR-COM-O-PIVETE.md ("nada destrutivo sem autorização") e a Técnica da Lupa (evidência antes de conclusão).</aprendizado>
 <parameter name="categoria">regra
+
+### 325. Recuperação e evolução da skill canônica Lupa Bayesiana
+- **Categoria:** regra + atalho operacional
+- **Data:** 2026-07-22
+- **Autoridade final:** Pivete
+- **Contexto:** A branch `main` não continha localmente a pasta `.agents/skills/lupa-bayesiana/`. A fonte canônica comprovada estava em `origin/pivete/dev`, inicialmente apenas com `SKILL.md`. O Pivete determinou parar de procurar arquivos soltos e trabalhar exclusivamente na pasta canônica da skill. Foi criada a branch de trabalho `feat/lupa-bay-canon-2026-07-22-1430`, recuperando o `SKILL.md` com histórico preservado. A leitura integral identificou referências internas ainda ausentes: `scripts/lupa_bayesiana.py`, `references/matematica-e-calibracao.md`, `references/casos.md` e a estrutura `testes/`.
+- **Aprendizado:** Quando uma skill canônica existir em outra branch e seus próprios contratos referenciarem recursos ausentes, o procedimento correto é recuperar a skill para uma branch de trabalho e materializar os recursos dentro da mesma pasta canônica. Isso é `EXTENSAO_CANONICA`, não duplicação, desde que não sejam criadas versões V2/V3, arquivos canônicos paralelos ou artefatos soltos fora da pasta da skill.
+- **Método oficial de uso:**
+  1. Verificar branch atual, working tree e origem comprovada da skill.
+  2. Recuperar a skill canônica da branch de origem para uma branch de trabalho.
+  3. Ler integralmente o `SKILL.md` antes de criar qualquer recurso.
+  4. Mapear somente lacunas citadas pelo próprio contrato da skill.
+  5. Criar `references/`, `scripts/` e `testes/` dentro da mesma pasta canônica quando forem recursos previstos e ausentes.
+  6. Rodar testes antes de modificar o núcleo do `SKILL.md`.
+  7. Incorporar XP, `contract_digest`, `candidate_ref`, comitês, matriz de evidências e AutoLupa na própria skill, sem arquivo ou versão paralela.
+  8. Rodar novamente toda a bateria de testes após a extensão.
+  9. Adicionar ao Git apenas paths explícitos da skill; nunca usar `git add -A` quando houver lixo ou arquivos fora do escopo.
+  10. Fazer commit e push da branch, abrir PR draft e aguardar revisão humana; sem merge, deploy ou restart automático.
+- **Evidência desta execução:** PR `#307`; branch `feat/lupa-bay-canon-2026-07-22-1430`; commit informado `F294109318bc68122e5575a85f57cb57a0e304fc`; cinco arquivos no escopo `.agents/skills/lupa-bayesiana/`; bateria final `TOTAL=7`, `PASS=7`, `FAIL=0`; nenhuma ação destrutiva.
+- **Regra selada:** O resultado só pode ser declarado verde quando a execução dos testes terminar com saída comprovada. Mensagem visual, intenção do agente ou criação de arquivos não substituem prova do teste. A skill deve continuar sendo evoluída no mesmo artefato canônico e no mesmo diretório.
+- **Como as próximas IAs devem aplicar:** Antes de criar nova skill, novo documento ou nova versão, procurar a skill canônica e ler seu `SKILL.md`. Se a lacuna já estiver prevista ali, estender a mesma pasta, testar antes/depois e registrar o aprendizado no repositório.
+- **Estado:** REGISTRADO PARA HERANÇA MULTI-IA, mantendo PR #307 como draft e sem merge.
