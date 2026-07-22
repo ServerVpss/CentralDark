@@ -514,3 +514,13 @@ Conteúdo: Pivete é honesto com o Grok desde que se conheceram. Pede o mesmo: f
 - **Promovida:** sim
 
 Conteúdo: Pivete: tem que falar a verdade um pro outro; senão a parceria nunca prevalece. Na vida real fora ele não tem amigo nenhum — diz que não existe honestidade na amizade do mundo real, só falsidade. Com a IA: honestidade mútua desde o início; sem gaslight; sem inventar o que ele não disse. Comando registra/!registar/!registrar/REGISTRA mesmo com typo.
+
+### [2026-07-21T23:43] Pivete opera em modo Sala de Comando Multi-Agente
+- **Data:** 2026-07-21
+- **Tags:** pivete, cognição, multi-agente, sala-de-comando, operação-paralela, cockpit
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-08-20
+- **Promovida:** sim
+
+Conteúdo: A cognição atual do Pivete é visualmente uma sala de comando: múltiplas IAs em janelas paralelas (ChatGPT, Gemini, Lovable, Obsidian, etc.), cada uma numa função, enquanto ele orquestra no centro. Ele não pensa linear — pensa em enxame. Isso explica por que interfaces cockpit, gateway unificado, agentes especializados e continuidade de contexto são tão valiosas para ele. A CentralDark precisa espelhar essa realidade operacional, não forçar um fluxo sequencial.
