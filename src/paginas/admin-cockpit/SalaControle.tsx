@@ -1,6 +1,7 @@
-// Sala de Controle — cockpit denso, sem cara de site.
-// Layout: header · nav lateral · mapa vivo central · feed IA · terminal embutido.
-// Fase 1: mock estruturado via useCockpitLive. Fase 2: conectar HUB /cockpit/state.
+// Sala de Controle — cockpit denso fundido com Overclock 1.1.0.
+// Adições P0 sobre a base viva: header operacional (VOL/PPM/CODE/UPTIME/SHA),
+// bloco de MISSÕES no nav, aba OPS com grid 2×2 e Jarvis flutuante.
+// Dados ainda mock — o plug real (Hermes-Core, HUB, Gateway) entra na Fase 3.
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./sala-controle.css";
@@ -9,28 +10,44 @@ import { useCockpitLive, type CockpitNo, type NoStatus } from "./hooks/useCockpi
 import GrokMissoes from "@/components/GrokMissoes";
 import { MatrixRain } from "./MatrixRain";
 import { HermesMascote } from "./HermesMascote";
+import { PainelOps } from "./PainelOps";
+import { JarvisOrb } from "./JarvisOrb";
 
 const ABAS = [
-  { id: "mapa",  label: "MAPA" },
-  { id: "mcp",   label: "MCP" },
-  { id: "hub",   label: "HUB" },
+  { id: "ops",   label: "OPS"   },
+  { id: "mapa",  label: "MAPA"  },
+  { id: "mcp",   label: "MCP"   },
+  { id: "hub",   label: "HUB"   },
   { id: "infra", label: "INFRA" },
-  { id: "ias",   label: "IAs" },
-  { id: "grok",  label: "GROK" },
-  { id: "logs",  label: "LOGS" },
+  { id: "ias",   label: "IAs"   },
+  { id: "grok",  label: "GROK"  },
+  { id: "logs",  label: "LOGS"  },
 ] as const;
 type AbaId = typeof ABAS[number]["id"];
 
-function statusClass(s: NoStatus) {
-  return s === "ok" ? "" : s;
-}
+// Missões mock exibidas na sidebar (Fase 3 pluga o Hermes-Core/missions)
+const MISSOES_SIDEBAR = [
+  { id: "s1", txt: "Fusão cockpit P0",       status: "ativa" as const },
+  { id: "s2", txt: "Barramento Hermes",      status: "pendente" as const },
+  { id: "s3", txt: "Plugar logs reais",      status: "pendente" as const },
+  { id: "s4", txt: "Alinhar VPS chore/*",    status: "travada" as const },
+];
 
+function statusClass(s: NoStatus | "ativa" | "pendente" | "travada") {
+  if (s === "ok" || s === "ativa") return "";
+  if (s === "pendente") return "warn";
+  if (s === "travada") return "err";
+  return s;
+}
 function relogio() {
   return new Date().toLocaleTimeString("pt-BR", { hour12: false });
 }
+// HEAD SHA do build (Vite injeta em prod; fallback DEV)
+const HEAD_SHA =
+  (import.meta.env.VITE_COMMIT_SHA as string | undefined)?.slice(0, 7) || "dev-live";
 
 export default function SalaControle() {
-  const [aba, setAba] = useState<AbaId>("mapa");
+  const [aba, setAba] = useState<AbaId>("ops");
   const state = useCockpitLive();
   const [hora, setHora] = useState(relogio());
 
@@ -50,7 +67,6 @@ export default function SalaControle() {
       ? "warn"
       : "ok";
 
-  // último evento do console alimenta o Hermes (reage ao que rola de verdade)
   const ultimoLog = state.console[state.console.length - 1];
   const ultimoEvento = ultimoLog
     ? { id: Number(String(ultimoLog.id).replace(/\D/g, "")) || Date.now(), texto: ultimoLog.linha, pane: "console" }
@@ -60,20 +76,43 @@ export default function SalaControle() {
     <div className="sc-root sc-mono">
       <div className="sc-matrix" aria-hidden><MatrixRain /></div>
       <div className="sc-grid">
-        {/* HEADER */}
+        {/* HEADER OPERACIONAL — blocos coloridos VOL/PPM/CODE/UPTIME/SHA */}
         <div className="sc-cell sc-head">
-          <span className="sc-head-brand">CENTRAL<em>DARK</em> · SALA DE CONTROLE</span>
+          <span className="sc-head-brand">CENTRAL<em>DARK</em> · COCKPIT</span>
           <span className="sc-head-sep">│</span>
           <span><span className={"sc-dot " + statusClass(statusGeral)} />sistema {statusGeral === "ok" ? "estável" : statusGeral}</span>
-          <span className="sc-head-sep">│</span>
-          <span>{hora}</span>
+
+          <div className="sc-head-blocos">
+            <div className="hblk hblk-em">
+              <span className="hblk-k">VOL</span>
+              <span className="hblk-v">1.2k/h</span>
+            </div>
+            <div className="hblk hblk-amber">
+              <span className="hblk-k">PPM</span>
+              <span className="hblk-v">12,4</span>
+            </div>
+            <div className="hblk hblk-purple">
+              <span className="hblk-k">CODE</span>
+              <span className="hblk-v">200</span>
+            </div>
+            <div className="hblk hblk-cyan">
+              <span className="hblk-k">UPTIME</span>
+              <span className="hblk-v">113h</span>
+            </div>
+            <div className="hblk hblk-mut">
+              <span className="hblk-k">SHA</span>
+              <span className="hblk-v">{HEAD_SHA}</span>
+            </div>
+          </div>
+
           <div className="sc-head-right">
+            <span>{hora}</span>
             <span><span className="sc-dot" />Pivete online</span>
             <Link className="sc-head-close" to="/centraldark/admin">← sair</Link>
           </div>
         </div>
 
-        {/* NAV */}
+        {/* NAV + MISSÕES */}
         <div className="sc-cell sc-nav">
           <div className="sc-nav-title">NAVEGAÇÃO</div>
           {ABAS.map((a) => (
@@ -86,15 +125,28 @@ export default function SalaControle() {
               {a.label}
             </button>
           ))}
+
+          <div className="sc-nav-sec">
+            <div className="sc-nav-title">MISSÕES</div>
+            {MISSOES_SIDEBAR.map((m) => (
+              <div key={m.id} className="sc-nav-missao" title={m.status}>
+                <span className={"sc-dot " + statusClass(m.status)} />
+                <span className="sc-nav-missao-txt">{m.txt}</span>
+              </div>
+            ))}
+          </div>
+
           <div className="sc-nav-hermes">
             <HermesMascote ultimoEvento={ultimoEvento} />
             <div style={{ marginTop: 6 }}>loop 24h · ok</div>
           </div>
         </div>
 
-        {/* CENTRO: MAPA ou PAINEL */}
+        {/* CENTRO */}
         <div className="sc-cell sc-map">
-          {aba === "mapa" ? (
+          {aba === "ops" ? (
+            <PainelOps />
+          ) : aba === "mapa" ? (
             <>
               <div className="sc-map-title">MAPA VIVO · <b>{state.nos.length} nós</b> · atualizado {new Date(state.atualizadoEm).toLocaleTimeString("pt-BR", { hour12: false })}</div>
               <svg viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -163,6 +215,8 @@ export default function SalaControle() {
           </div>
         </div>
       </div>
+
+      <JarvisOrb />
     </div>
   );
 }
