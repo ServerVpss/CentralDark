@@ -8,6 +8,22 @@
 > 🎴 **PADRÃO OFICIAL DE NOTIFICAÇÃO TELEGRAM: Card Hermes v1.2**
 >
 > Toda ação relevante do sistema (deploy, migration, bug corrigido, nova feature, alerta) **DEVE** notificar no Telegram usando o Card Hermes v1.2 — bloco único `<pre>` monoespaçado, fundo preto, enviado pelo connector Telegram (`@srver1bot` → admin `1901426549`).
+
+---
+
+## 🔒 BOOT OBRIGATÓRIO — LUPA BAYESIANA
+
+```text
+LUPA_BAYESIANA_BOOT_REQUIRED: SIM
+LUPA_USE_RECEIPT_REQUIRED: SIM
+SKILL_PATH: .agents/skills/lupa-bayesiana/SKILL.md
+SKILL_REF: origin/main
+SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
+```
+
+A skill `lupa-bayesiana` deve ser carregada e seu uso registrado (BEGIN+FINAL) antes de qualquer trabalho neste repo. Sem BEGIN → `BOOT_BLOQUEADO`.
+
+---
 > 📖 Especificação completa: [`docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`](docs/CONSCIENCIA/PADRAO-CARD-HERMES.md)
 > ❌ Nunca usar `notify-telegram`. ❌ Nunca mandar texto fora do `<pre>`.
 

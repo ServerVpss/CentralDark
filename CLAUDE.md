@@ -9,6 +9,20 @@
 
 ---
 
+## 🔒 BOOT OBRIGATÓRIO — LUPA BAYESIANA
+
+```text
+LUPA_BAYESIANA_BOOT_REQUIRED: SIM
+LUPA_USE_RECEIPT_REQUIRED: SIM
+SKILL_PATH: .agents/skills/lupa-bayesiana/SKILL.md
+SKILL_REF: origin/main
+SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
+```
+
+Antes de qualquer ação neste repositório, a skill `lupa-bayesiana` deve ser carregada e seu uso registrado (BEGIN+FINAL) no ledger canônico da skill. Sem BEGIN válido → `BOOT_BLOQUEADO`.
+
+---
+
 ## 🧠 CÉREBRO COMPARTILHADO DAS IAs — `docs/CONSCIENCIA/DARKAI/`
 
 **Qualquer IA que abrir este repo deve ler PRIMEIRO:** [`docs/CONSCIENCIA/DARKAI/README.md`](docs/CONSCIENCIA/DARKAI/README.md)
