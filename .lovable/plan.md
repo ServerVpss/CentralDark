@@ -1,26 +1,33 @@
-# Trocar skill `tecnica-da-lupa` pela MetaLupa Bayesiana
+# Rota temporária pra você ver o Overclock
 
-## Objetivo
-Sobrescrever o conteúdo da skill ativa `tecnica-da-lupa` com o texto integral do arquivo `METALUPA-BAYESIANA-CANONICA.md` que o Pivete forneceu. Mesmo nome canônico, sem paralelo, sem duplicata.
+## O que vou fazer (exatamente isto, nada mais)
 
-## Regra de Ouro respeitada
-Evolução do artefato existente. Nenhuma skill nova, nenhuma pasta `v2`, nenhuma cópia lateral.
+1. Editar **um único arquivo** — `src/app/rotas/rotas-admin.tsx` — adicionando 1 linha:
+   ```tsx
+   import CockpitOverclock from "@/admin/cockpit";
+   // dentro do <Routes>:
+   <Route path="/admin/cockpit-overclock" element={<CockpitOverclock />} />
+   ```
+2. Abrir `http://localhost:8080/admin/cockpit-overclock` no Playwright headless.
+3. Tirar screenshot em 1440×900.
+4. Te mostrar a imagem inline aqui no chat.
 
-## Passos
-1. Criar draft em `.agents/skills/tecnica-da-lupa/SKILL.md` com:
-   - Frontmatter mantendo `name: tecnica-da-lupa` (nome canônico ativo hoje, evita quebrar referências espalhadas).
-   - Description atualizada refletindo MetaLupa Bayesiana (Bayes + entropia + VOI + mapa único + consolidação + AutoLupa).
-   - Corpo = conteúdo integral das 274 linhas do arquivo `METALUPA-BAYESIANA-CANONICA.md` fornecido, preservado sem edição de conteúdo.
-2. Aplicar o draft via `skills--apply_draft` apontando para `.agents/skills/tecnica-da-lupa`. Isso substitui a skill ativa no lugar.
-3. Confirmar ao Pivete que a skill foi atualizada com o mesmo nome.
+## O que NÃO vou fazer
 
-## Detalhes técnicos
-- Nome mantido: `tecnica-da-lupa` (não renomeio pra `lupa-bayesiana` pra não quebrar referências no CLAUDE.md, workspace-knowledge, e histórico de conversas).
-- O arquivo canônico declara `name: lupa-bayesiana` internamente — vou ajustar essa linha do frontmatter pra `tecnica-da-lupa` mantendo TODO o resto do conteúdo (princípios, gates, fluxo, saída obrigatória, recursos) intacto.
-- Não vou criar `references/` nem `scripts/` mencionados no final do arquivo (Recursos) porque esses arquivos não me foram fornecidos — deixo a menção no texto mas sem materializar arquivos inexistentes.
+- Não toco em `SalaControle` nem no arquivo `src/admin/cockpit/index.tsx`.
+- Não mexo em `useCockpitLive`, HERMES-CORE, HUB Supabase, PENDENCIAS.md, ou qualquer outra rota.
+- Não removo, não movo, não renomeio nada.
+- Não faço commit, push ou PR.
+- A rota fica lá até você decidir: se escolher SalaControle como canônico, eu removo a rota temporária e você me diz o que fazer com o arquivo órfão. Se escolher Overclock, promovemos ele.
+
+## Resultado esperado
+
+Você vê os 2 designs lado a lado (SalaControle já tá capturado, Overclock vai pra imagem nova) e me diz qual é o canônico. Depois disso a gente decide os próximos passos das Extensões 1/2/3.
 
 ## Rollback
-Skill anterior fica no histórico do workspace; se der ruim, aplico draft com a versão antiga.
 
-## Fora de escopo
-Sem mexer em código do app, sem tocar em `mem://`, sem PR, sem VPS, sem Supabase.
+Reverter a rota é apagar as 2 linhas que adicionei em `rotas-admin.tsx`. Zero impacto em outros lugares.
+
+## Próximo passo único
+
+Aprovar este plano mínimo → aplicar → capturar → mostrar screenshot.
