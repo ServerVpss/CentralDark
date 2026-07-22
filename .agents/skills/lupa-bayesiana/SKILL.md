@@ -1,5 +1,5 @@
 ---
-name: lupa-bayesiana
+name: tecnica-da-lupa
 description: Aplicar a MetaLupa Bayesiana — raciocínio bayesiano, entropia, valor da informação, preservação do existente, mapa canônico, consolidação e AutoLupa — para calibrar confiança, impedir duplicações e decidir o próximo teste. Usar em auditorias, investigações, decisões arquiteturais, fusões de arquivos, incidentes, avaliações de agentes, alegações conflitantes, criação de pastas/rotas/serviços ou qualquer situação em que evidências devam alterar uma hipótese sem transformar confiança em autorização.
 ---
 
