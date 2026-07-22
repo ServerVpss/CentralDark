@@ -1,76 +1,68 @@
-## Missão
 
-Auditar VPS (`/root/CentralDark/`) + repositório `ServerVpss/CentralDark` aplicando a Lupa Bayesiana, cruzar com o conteúdo do `MARKDOWN.zip` (que descreve o cockpit/overclock antigo e a estrutura que a gente pode reaproveitar), listar inconsistências, ouro, lixo e melhorias — e SÓ ENTÃO propor o plano de fusão Overclock + Sala de Controle. Fase 1 é 100% read-only: nenhum arquivo do cockpit vai ser mexido antes de você aprovar a fusão.
+# Fase 2 P0 — Deixar o Cockpit Pronto (parte visual/estrutural)
 
-## Como vou aplicar a Lupa (Fase 1 — só investigação)
+Você tá certo: o P0 é montar a **carcaça visual e estrutural** do cockpit no jeito Overclock 1.1.0, mantendo o que já funciona da SalaControle. Depois disso sobra só **plugar dados reais** (Hermes-Core, Gateway, missões, providers) — que é a Fase 3.
 
-### Passo 1 — Fixar a fonte da verdade
-Ler o HEAD atual do `ServerVpss/CentralDark` (branch `pivete/dev` e `main`), registrar o SHA, confirmar que bate com o que a VPS tem em `/root/CentralDark/`. Se divergir, isso já é a primeira inconsistência.
+## Escopo desta entrega (só frontend, rota `/admin/cockpit`)
 
-### Passo 2 — Ler o que o zip realmente traz
-Já extraí o `MARKDOWN.zip` no sandbox. Ele contém:
+Trabalho em `pivete/dev`, sem tocar VPS, sem tocar backend, sem mexer em área 🔒.
 
-```text
-MARKDOWN/
-├── 01-humano/    → visão, árvore, negócio, fluxos
-├── 02-ia/        → AI-CONTEXT-MASTER, AI-SCHEMA.json, AI-SWARM-PROMPT
-├── 03-central-dark/ → mapa das 5 páginas + roadmap Sonnet + MVP mínimo
-└── Screenshot_1..32.png (referências visuais do overclock antigo)
-```
+### 1. Sidebar fixa de Missões (esquerda)
+- Coluna fixa ~260px, fundo obsidiana com borda esmeralda.
+- Lista de missões com status (🟢 ativa / 🟡 pendente / 🔴 travada) e badge de agente responsável.
+- Ainda com dados mock — o plug real do Hermes-Core entra na Fase 3.
 
-Vou ler integralmente: `10-mapa-paginas-site.md`, `12-MVP-MINIMO-VIABLE.md`, `11-ROADMAP-COMPLETO-PARA-SONNET.md`, `AI-CONTEXT-MASTER.md` e conferir cada Screenshot pra identificar quais blocos visuais do overclock a gente ainda não trouxe pra `SalaControle`.
+### 2. Header operacional (topo)
+- Barra fina no topo com blocos `VOL`, `PPM`, `CODE`, `UPTIME`, `HEAD SHA`.
+- Tipografia mono, headers coloridos por bloco (verde/âmbar/roxo/ciano) como na foto de referência.
+- HEAD SHA já pode vir real do build; o resto fica mock até plugar.
 
-### Passo 3 — Mapear o cockpit atual (SalaControle)
-- `src/paginas/admin-cockpit/SalaControle.tsx` (183 linhas)
-- `sala-controle.css` (278 linhas)
-- `MatrixRain.tsx`, `HermesMascote.tsx`, `hooks/useCockpitLive.ts`
-- Rota: `/admin/cockpit`
-- Abas atuais: MAPA · MCP · HUB · INFRA · IAs · GROK · LOGS
+### 3. Grid Multi-Pane 2×2 (centro)
+- 4 painéis densos com header colorido cada:
+  - **Missões ativas** (esmeralda)
+  - **Logs Hermes** (âmbar)
+  - **Providers/Gateway** (roxo)
+  - **Custos $ / PPM** (ciano)
+- Cada painel com badge de custo `$` no canto e scroll interno.
+- Preserva MatrixRain de fundo e HermesMascote reativo (que já tá lá).
 
-Registrar o que existe hoje pra saber o que falta.
+### 4. Jarvis flutuante (canto inferior direito)
+- Botão orbe pulsante esmeralda, abre painel lateral de comando rápido.
+- Só a casca visual + input; sem executar nada ainda.
 
-### Passo 4 — Ledger de inconsistências (Lupa)
-Pra cada item, registro: `OBSERVAÇÃO · PROVENIÊNCIA · FAVORECE OURO/LIXO/PENDÊNCIA · LIMITAÇÃO`. Alvos que já sei que precisam entrar no ledger:
+### 5. Aba de Providers (dentro do pane roxo)
+- Tabs: `Lovable AI` · `Gateway` · `HUB` · `Local`.
+- Cards com status mock (🟢/🟡/🔴) e latência fake.
 
-- Headers coloridos por pane (referência `image-974.png`) — ausente na SalaControle atual.
-- Badges de custo `$` em tempo real — ausente.
-- Densidade de logs (feed alto, monoespaçado) — parcial.
-- `HERMES-CORE/missions/` vazio na VPS — barramento não escreve.
-- Screenshots do zip vs SalaControle real — diff visual.
-- Roadmap 5 páginas (DASHBOARD · PLANOS · BAIXAR · DIREÇÃO · AJUDA) vs rotas do repo — o que existe, o que falta.
-- Duplicação: `apps/modulos/status/` (painel vivo) vs `SalaControle` — quem é canônico?
-- Skill workspace: `lupa-bayesiana` ativa localmente, ausente no repo — versionar ou não?
+### 6. Ajustes de brilho/cor
+- Restaurar os headers coloridos por painel (o verde monocromático que ficou ontem some).
+- Manter paleta oficial: esmeralda dominante, obsidiana de fundo, off-white no texto. Nada de preto puro nem branco puro.
 
-### Passo 5 — Falsificação e AutoLupa
-Antes de fechar o relatório, pergunto: que evidência derruba a fusão? O que eu tô contando duas vezes (ex.: painel vivo + cockpit)? A promoção de algum bloco cria módulo paralelo (viola Mapa Único)?
+## O que NÃO entra agora (fica pra Fase 3 — "plugar")
 
-## Entregável da Fase 1
+Essas são as pendências que sobram depois do P0, e são exatamente o que você falou — "plugar o resto":
 
-Um único relatório curto (não vou implementar nada), no formato:
+- Plugar **missões reais** vindas do `HERMES-CORE/missions/` (barramento hoje vazio).
+- Plugar **logs Hermes** reais via edge/HUB.
+- Plugar **Providers** com status real do Gateway `api.centralldark.com`.
+- Plugar **custos/PPM** reais do `ai_requests` no HUB.
+- Plugar **Jarvis** no dispatcher MCP interno.
+- Alinhar VPS `chore/gateway-providers-routes` (27 arquivos divergentes) com `pivete/dev`.
 
-```text
-🟢 OURO (manter/reaproveitar)
-🟡 PENDÊNCIA (falta fazer)
-🔴 LIXO (remover/consolidar)
-🛠️ MELHORIAS (evoluções propostas)
-```
+## Como vou entregar
+- Branch: `pivete/dev` (sub-branch `pivete/dev-cockpit-fusao-p0` se preferir PR limpo).
+- Só mexo em `src/` do cockpit e componentes filhos.
+- Screenshot antes/depois em cada passo pra você aprovar visualmente.
+- Sem deploy, sem merge em `main`, sem tocar áreas 🔒.
 
-Cada linha com: caminho canônico · evidência · próximo passo único.
+## Ordem de execução
+1. Header operacional + ajuste de cores dos headers.
+2. Sidebar de missões (mock).
+3. Grid 2×2 com os 4 panes coloridos.
+4. Aba Providers dentro do pane roxo.
+5. Jarvis flutuante (casca).
+6. Screenshot final lado-a-lado com a foto de referência que você mandou.
 
-## Fase 2 (só depois da sua aprovação)
-
-Com o relatório na mão, monto o **plano de fusão Overclock + SalaControle**, respeitando:
-
-- Mapa Único: extensão dentro de `src/paginas/admin-cockpit/`, sem criar rota/pasta paralela.
-- Trava das áreas 🔒 do `CLAUDE.md`.
-- Nada de deploy, nada de mexer em VPS/PM2 sem "PERMITO PIVETE".
-- Registro em `docs/ENTREGAS-LOVABLE.md` no fim.
-
-## O que eu NÃO vou fazer nesta fase
-
-- Não vou editar `SalaControle.tsx`, CSS, componentes ou skill.
-- Não vou renomear pasta nenhuma.
-- Não vou tocar em VPS, PM2, HUB, Supabase.
-- Não vou abrir PR nem commit.
-
-Aprova essa Fase 1 (auditoria com Lupa + leitura completa do zip + relatório organizado) pra eu seguir?
+## Confirmação que preciso de você
+- Aprova o P0 desse jeito?
+- Faço direto em `pivete/dev` ou abro sub-branch com PR pra você revisar antes?
