@@ -231,16 +231,17 @@ jobs:
             curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "MCP_HEALTH_UNSTABLE"; exit 51; }
           done
 
-          STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.${BASHPID}"
-          jq -n --arg sha "$TARGET_SHA" --arg checkout_sha "$CURRENT_SHA" --arg backup "$RUNTIME_BACKUP" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
-            '{validatedSha:$sha,localCheckoutSha:$checkout_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok",deploymentMode:"atomic_dist",runtimeBackup:$backup}' > "$STATE_TMP"
-          mv "$STATE_TMP" "$AUDIT_DIR/mcp-last-known-good.json"
 
           git fetch --prune origin main
           FINAL_MAIN_SHA="$(git rev-parse origin/main)"
           git merge-base --is-ancestor "$TARGET_SHA" "$FINAL_MAIN_SHA" || { echo "VALIDATED_SHA_LEFT_MAIN"; exit 44; }
           git diff --quiet "$TARGET_SHA" "$FINAL_MAIN_SHA" -- apps/modulos/mcp || { echo "MCP_ADVANCED_DURING_DEPLOY"; exit 45; }
           ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_REOPENED"; exit 46; }
+
+          STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.${BASHPID}"
+          jq -n --arg sha "$TARGET_SHA" --arg checkout_sha "$CURRENT_SHA" --arg backup "$RUNTIME_BACKUP" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
+            '{validatedSha:$sha,localCheckoutSha:$checkout_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok",deploymentMode:"atomic_dist",runtimeBackup:$backup}' > "$STATE_TMP"
+          mv "$STATE_TMP" "$AUDIT_DIR/mcp-last-known-good.json"
 
           artifact_promoted=0
           restart_attempted=0
