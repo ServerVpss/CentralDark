@@ -146,6 +146,36 @@ Quando a missao for no projeto CentralDark, executar tambem:
 
 Se houver MCP CentralDark disponivel, usar o kit de boas-vindas antes das leituras manuais.
 
+## Mapa unico, encaixe e consolidacao
+
+A estrutura nao "se ajeita sozinha". Ela evolui automaticamente somente guiada pelo mapa executavel `apps/modulos/mapeamento/config/mapa-canonico.json`.
+
+Antes de criar pasta, rota, servico, workflow, regra ou documento:
+
+1. ler o mapa e buscar funcao equivalente;
+2. encaixar no componente existente quando a responsabilidade for a mesma;
+3. estender o canônico com a menor mudanca compativel;
+4. criar caminho novo somente quando o encaixe for comprovadamente impossivel;
+5. usar nome humano, estavel e coerente;
+6. atualizar o mapa na mesma mudanca.
+
+Uma area somente vira `CONSOLIDADA` depois de teste, revisao/falsificacao, autorizacao do Pivete, GitHub/SHA e trava deterministica reconhecendo o caminho. Depois disso, falha fechado por padrao. O restante continua operavel no V-REALTIME.
+
+`CODEOWNERS`, tabela ou cadeado visual sinalizam; o check `Validate canonical map and consolidated areas` executa a trava.
+
+## Observabilidade de provedores
+
+O vigia canônico de provedores e o `HERMES-CORE/agents/Log-Verificador`. Nao criar outro monitor para a mesma funcao.
+
+Ordem do alerta:
+
+1. classificador deterministico sanitiza e identifica `credits_exhausted`, `billing_blocked`, `credits_low` ou `rate_limited`;
+2. Card Hermes avisa no Telegram sem depender de IA;
+3. DarkAI pode analisar como camada consultiva;
+4. se a IA falhar, o alerta deterministico permanece;
+5. porcentagem somente e exibida quando vier explicitamente do provedor;
+6. `429` significa limite temporario ate prova contraria, nunca credito esgotado por inferencia.
+
 ## Regras de evidencia
 
 - Nao inventar historico.
@@ -254,5 +284,5 @@ Use o prompt universal quando a IA nao conseguir ler imagem. Use o SVG/PNG como 
 ## Frase curta para colar em qualquer IA
 
 ```text
-Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam e IAs variam. Em producao de desenvolvimento sem clientes, use a autorizacao V-REALTIME permanente: GitHub audita e registra; IA revisa; scripts/Actions provam; VPS executa somente o SHA aprovado; reviewer valida os dois lados; falha retorna para correcao e nova prova. IA indisponivel aciona fallback deterministico. Nao repita pedidos ja cobertos, nao exponha secrets, nao aceite falso verde e nao crie memoria, regra, missao ou versao paralela. Producao real so quando Pivete declarar.
+Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam e IAs variam. Em producao de desenvolvimento sem clientes, use a autorizacao V-REALTIME permanente: GitHub audita e registra; IA revisa; scripts/Actions provam; VPS executa somente o SHA aprovado; reviewer valida os dois lados; falha retorna para correcao e nova prova. IA indisponivel aciona fallback deterministico. Nao repita pedidos ja cobertos, nao exponha secrets, nao aceite falso verde e nao crie memoria, regra, missao ou versao paralela. Toda evolucao segue o mapa unico; area consolidada fica travada. Producao real so quando Pivete declarar.
 ```

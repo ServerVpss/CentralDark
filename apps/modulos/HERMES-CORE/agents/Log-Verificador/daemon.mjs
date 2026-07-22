@@ -71,7 +71,8 @@ let estado = carregarEstado();
 function chaveAlerta(s) {
   // Alerta é considerado "o mesmo" se serviço + nível + primeira hit não mudaram
   const hit = (s.hits[0] || '').replace(/\d/g, '#').slice(0, 80);
-  return `${s.nome}|${s.nivel}|${hit}`;
+  const provider = s.eventos_provedor?.[0]?.fingerprint || '';
+  return `${s.nome}|${s.nivel}|${provider}|${hit}`;
 }
 
 async function ciclo() {
@@ -102,6 +103,10 @@ async function ciclo() {
     const icon = s.nivel === 'erro' ? '❌' : '⚠️';
     let corpo = `${icon} <b>${s.nome}</b>\nstatus: ${s.status} | restarts: ${s.restarts} | uptime: ${s.uptime_min}min`;
     if (s.crash_loop) corpo += `\n💥 <b>CRASH-LOOP detectado</b>`;
+    for (const event of s.eventos_provedor || []) {
+      const remaining = event.remaining_percent === null ? 'não informado pelo provedor' : `${event.remaining_percent}%`;
+      corpo += `\n📡 provedor: <b>${event.provider}</b> | evento: ${event.kind} | restante: ${remaining}`;
+    }
     if (s.hits.length) corpo += `\n\n<pre>${s.hits.slice(0, 3).map(h => h.replace(/</g, '&lt;')).join('\n')}</pre>`;
 
     // IA

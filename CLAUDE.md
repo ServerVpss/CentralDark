@@ -175,6 +175,8 @@ Se o Pivete pedir uma ação que quebra o fluxo, avise:
 
 ## 9. Áreas Protegidas — Trava Obrigatória 🔒
 
+> **Fonte executável única:** `apps/modulos/mapeamento/config/mapa-canonico.json`. Esta seção é a visão humana; `.github/CODEOWNERS` sinaliza propriedade; o check `Validate canonical map and consolidated areas` bloqueia alteração e módulo duplicado. Divergência entre as três superfícies é falha, nunca autorização para escolher uma quarta fonte.
+
 > 🛡️ **SELO DOUTRINA:** áreas 🔒 são intocáveis sem autorização EXPLÍCITA ("PERMITO PIVETE"). Ver [`docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md`](docs/GOVERNANCA/DOUTRINA-PROTECAO-ESTRATEGICA.md) e [`.github/CODEOWNERS`](.github/CODEOWNERS). Lógica estratégica do Pivete (arquitetura, gateway, secrets, fluxo, governança) NÃO pode ser alterada por nenhuma IA sem autorização nominal.
 
 **Estas áreas foram consolidadas e testadas. Nenhuma IA pode modificá-las sem:**

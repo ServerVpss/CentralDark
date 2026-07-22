@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import { validarArvore } from './validar-mapa.mjs';
 
 const RAIZ = '/root/CentralDark';
 
@@ -49,6 +50,7 @@ export async function escanear() {
     modulos: await listarModulos(),
     pm2: listarPm2(),
     git: gitInfo(),
+    mapa: validarArvore({ repoRoot: RAIZ }),
   };
 }
 
@@ -67,6 +69,10 @@ export function diff(anterior, atual) {
     if (!a) drift.push({ tipo: 'pm2-novo', detalhe: p.nome });
     else if (a.status !== p.status) drift.push({ tipo: 'pm2-status-mudou', detalhe: `${p.nome}: ${a.status} → ${p.status}` });
     else if ((p.restarts - a.restarts) > 5) drift.push({ tipo: 'pm2-instavel', detalhe: `${p.nome}: +${p.restarts - a.restarts} restarts` });
+  }
+
+  for (const erro of atual.mapa?.erros || []) {
+    drift.push({ tipo: 'mapa-violacao', detalhe: erro });
   }
 
   if (anterior.git?.commit && atual.git?.commit && anterior.git.commit !== atual.git.commit) {

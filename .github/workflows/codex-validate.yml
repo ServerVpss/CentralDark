@@ -2,6 +2,7 @@ name: codex-validate
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     branches:
       - main
   workflow_dispatch:
@@ -14,6 +15,37 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate-canonical-map:
+    name: Validate canonical map and consolidated areas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR HEAD
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          submodules: false
+
+      - name: Test deterministic map and provider guards
+        run: |
+          set -euo pipefail
+          node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
+          node --test apps/modulos/HERMES-CORE/agents/Log-Verificador/provider-health.test.mjs
+          bash -n scripts/vps/deploy-operational-guards.sh
+
+      - name: Enforce unique map and consolidated locks
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') }}
+        run: |
+          set -euo pipefail
+          node apps/modulos/mapeamento/core/validar-mapa.mjs \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --base-sha "$BASE_SHA" \
+            --head-sha "$HEAD_SHA" \
+            --approved "$PIVETE_APPROVED"
+
   validate:
     name: Validate Codex operational kit
     runs-on: [self-hosted, Linux]
