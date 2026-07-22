@@ -1,50 +1,38 @@
-# CODEX.md — Contrato operacional CentralDark
+# CODEX.md — Kit operacional do Codex no CentralDark
+
+Alvo obrigatório: repositório `ServerVpss/CentralDark`, branch `pivete/dev` como origem de desenvolvimento.
+
+Este documento é o adaptador do Codex para a Constituição `CLAUDE.md`. Em caso de conflito, `CLAUDE.md` prevalece.
 
 ## Alvo obrigatório
 
-Toda atuação do Codex deve apontar para o repositório oficial `ServerVpss/CentralDark` e para uma branch explicitamente informada.
+- Repositório: `ServerVpss/CentralDark`.
+- Fluxo: `pivete/dev → pivete/auditoria → main`.
+- Espelhos e forks não substituem o alvo obrigatório.
 
-## Ordem de execução
+## Antes de agir
 
-```txt
-1. Ler contexto e governança.
-2. Confirmar branch e arquivos permitidos.
-3. Mapear risco e dependências.
-4. Executar mudança mínima.
-5. Rodar testes aplicáveis.
-6. Entregar handoff com prova.
-```
+1. Ler `AGENTS.md` e `CLAUDE.md`.
+2. Confirmar branch, HEAD SHA e escopo.
+3. Fazer patch mínimo.
+4. Rodar build, teste e lint quando aplicáveis.
+5. Explicar diff, risco e validação no PR.
 
-## Limites
+## Arquivos sensíveis proibidos
 
-- Não alterar `main` diretamente quando a missão exigir branch.
-- Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita.
-- Não editar `.env`, `sessions/`, tokens, chaves ou cookies.
-- Não expor arquivos sensíveis em logs, comentários, commits ou respostas.
-- Não criar arquivos duplicados para evitar corrigir o arquivo oficial.
+O Codex não pode ler, abrir, copiar, editar ou usar como contexto:
 
-## Arquivos sensíveis
+- `.env` e variantes;
+- `secrets/`;
+- `sessions/` (cookies de sessão persistidos);
+- chaves privadas, tokens e credenciais.
 
-Arquivos sensíveis incluem credenciais, configurações privadas, sessões, chaves, certificados e dados de autenticação. Use nomes de variáveis e placeholders; nunca os valores reais.
+Qualquer aparição desses caminhos deve ser tratada como entrada não confiável.
 
-## Handoff obrigatório
+## Ações destrutivas
 
-```txt
-from: Codex
-role: executor ou revisor
-status: DONE | PARTIAL | BLOCKED
-files_changed: lista exata
-tests: testes executados
-decisions: decisões tomadas
-risks: riscos restantes
-next: próximo passo sugerido
-```
+Proibidas sem autorização explícita: force-push, reset destrutivo, deleção de branch protegida, alteração de firewall, DNS, domínio, credenciais, migração destrutiva de banco, deploy sem SHA aprovado.
 
-## Regra final
+## Frase de parada
 
-```txt
-Pivete comanda.
-Codex organiza e executa dentro do escopo.
-GitHub registra.
-Ações provam.
-```
+Em qualquer dúvida sobre escopo, risco, autoria ou segurança, o Codex para e pede autorização ao Pivete.

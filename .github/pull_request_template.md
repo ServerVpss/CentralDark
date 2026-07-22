@@ -1,39 +1,31 @@
-# Pull Request — CentralDark
+## Contexto
 
-## Objetivo
-
-Descreva em uma frase o que esta mudança resolve no repositório oficial `ServerVpss/CentralDark`.
+<!-- Descreva a mudança e o vínculo com o fluxo do repositório oficial `ServerVpss/CentralDark`. -->
 
 ## Escopo
 
-- [ ] Alteração limitada ao necessário.
-- [ ] Não cria versões duplicadas `v1`, `v2` ou `v3`.
-- [ ] Arquivos afetados foram listados.
-- [ ] Áreas protegidas foram respeitadas.
+- Branch de origem:
+- Branch de destino:
+- SHA:
+- Arquivos alterados:
 
-## Arquivos sensíveis
+## Checklist de segurança
 
-- [ ] Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis.
-- [ ] Não há `.env`, token, cookie, sessão, chave privada, certificado ou credencial no diff.
-- [ ] Valores sensíveis foram substituídos por placeholders seguros.
-
-## Testes
-
-Liste os testes realizados e seus resultados.
+- [ ] Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis (`.env`, `secrets/`, `sessions/`, `.ssh/`, chaves privadas, tokens, cookies).
+- [ ] Não incluí valores reais de segredo, token, senha ou chave neste PR.
+- [ ] Verifiquei comentários de agentes no PR antes do merge.
+- [ ] Rodei build/teste/lint quando aplicáveis.
+- [ ] Patch mínimo, sem tocar áreas fora do escopo.
 
 ## Ações sensíveis
 
-- [ ] Não houve deploy, migration, reinício de serviço ou alteração na VPS.
-- [ ] Se houver ação sensível futura, ela aguarda autorização explícita do Pivete.
-- [ ] Nenhuma ação destrutiva foi executada.
+- [ ] Este PR não executa ações sensíveis (force-push, reset destrutivo, deploy, migração destrutiva, alteração de DNS/credenciais).
+- [ ] Se executar ações sensíveis, há autorização explícita do Pivete registrada aqui:
 
-## Revisão
+<!-- Cole a autorização explícita, se aplicável. -->
 
-- [ ] Verifiquei comentários de agentes no PR antes do merge.
-- [ ] Revisei o diff completo.
-- [ ] Confirmei que os logs não expõem valores sensíveis.
-- [ ] O handoff final informa arquivos, testes, riscos e próximo passo.
+## Risco e rollback
 
-## Prova
-
-Inclua commit SHA, resultado do pipeline e evidências relevantes.
+- Risco:
+- Rollback:
+- Evidência:
