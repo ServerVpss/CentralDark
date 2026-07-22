@@ -12,6 +12,9 @@ e reage sozinho a padrões de erro. Plugado na mesma rede especialista do Hermes
   `EACCES`, `ECONNREFUSED`, `ETIMEDOUT`, `Segmentation fault`, `out of memory`,
   `permission denied`.
 - **Detecta crash-loop**: processo `online` com uptime < 5min E restarts > 20.
+- **Detecta provedores degradados** por classificador determinístico: créditos esgotados, bloqueio de cobrança, saldo explícito ≤20% e rate limit temporário.
+- **Nunca confunde `429` com fim de créditos**; porcentagem só aparece quando o próprio provedor a informa.
+- **Sanitiza antes de notificar ou consultar IA**: Bearer, API key, token, secret, cookie, sessão, JWT e assinatura de URL são ocultados.
 - **Notifica só o que mudou** (não repete o mesmo alerta) — Card Hermes no admin.
 - **Envia trecho suspeito pro DarkAI** (Gemini flash) e junta a análise no card.
 - **Auto-restart inteligente**: em crash-loop ou `errored` roda `pm2 restart` **uma vez**,
@@ -25,6 +28,8 @@ e reage sozinho a padrões de erro. Plugado na mesma rede especialista do Hermes
 | Arquivo | Papel |
 |---------|-------|
 | `agent.mjs`   | Funções puras: `escanear()`, `autoRestart()`, `analisarComIA()`, `resumoHorario()`. Testável isolada. |
+| `provider-health.mjs` | Classificador determinístico e sanitizador de eventos de cota/limite. |
+| `provider-health.test.mjs` | Prova que alerta corretamente e não vaza payload sensível. |
 | `daemon.mjs`  | Loop PM2 que orquestra as funções acima. Notifica via `HERMES-CORE/utils/notify.mjs`. |
 | `.estado.json`| Persistido pelo daemon (alertas ativos, timestamps) — sobrevive a restart. |
 
@@ -70,3 +75,5 @@ node .../agent.mjs restart CentralDark-EliteAnthropic
 - `DARKAI_URL` e `DARKAI_ANON_KEY` no `/root/CentralDark/.env` (opcional — sem eles,
   a análise IA é pulada, resto funciona normal).
 - `HERMES-CORE/utils/notify.mjs` presente (fallback pra `console.log` se ausente).
+
+O alerta de provedor funciona sem IA. DarkAI é consultivo; se estiver indisponível, o classificador e o Card Hermes continuam ativos.
