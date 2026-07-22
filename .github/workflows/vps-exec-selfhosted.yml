@@ -179,6 +179,19 @@ jobs:
 
           MCP_JSON="$(pm2 jlist | jq -c --arg app "$PM2_APP" '.[] | select(.name == $app)' | head -n1)"
           [[ -n "$MCP_JSON" ]] || { echo "MCP_PM2_APP_NOT_FOUND"; exit 34; }
+          PM2_BASELINE_RESTARTS="$(jq -r '.pm2_env.restart_time // 0' <<<"$MCP_JSON")"
+          echo "PM2_BASELINE_RESTARTS=$PM2_BASELINE_RESTARTS"
+          emit_pm2_diagnostic() {
+            pm2 jlist | jq -c --arg app "$PM2_APP" '
+              [.[] | select(.name == $app) | {
+                status: .pm2_env.status,
+                pid: .pid,
+                restartTime: (.pm2_env.restart_time // 0),
+                unstableRestarts: (.pm2_env.unstable_restarts // 0),
+                exitCode: (.pm2_env.exit_code // null)
+              }] | first
+            ' || echo "MCP_PM2_DIAGNOSTIC_UNAVAILABLE"
+          }
           [[ "$(jq -r '.pm2_env.pm_cwd // ""' <<<"$MCP_JSON")" == "$MCP_DIR" ]] || { echo "MCP_PM2_CWD_MISMATCH"; exit 35; }
           [[ "$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")" == "$MCP_DIR/dist/index.js" ]] || { echo "MCP_PM2_EXEC_MISMATCH"; exit 36; }
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
@@ -224,11 +237,24 @@ jobs:
           # health válido em cinco amostras durante vinte segundos.
           for _ in $(seq 1 5); do
             sleep 4
-            [[ "$(pm2 pid "$PM2_APP" | tail -n1)" == "$NEW_PID" ]] || { echo "MCP_PID_CHANGED_DURING_STABILITY"; exit 49; }
-            pm2 jlist | jq -e --arg app "$PM2_APP" --argjson pid "$NEW_PID" '
+            STABLE_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
+            if [[ "$STABLE_PID" != "$NEW_PID" ]]; then
+              emit_pm2_diagnostic
+              echo "MCP_PID_CHANGED_DURING_STABILITY"
+              exit 49
+            fi
+            if ! pm2 jlist | jq -e --arg app "$PM2_APP" --argjson pid "$NEW_PID" '
               any(.[]; .name == $app and .pm2_env.status == "online" and .pid == $pid)
-            ' >/dev/null || { echo "MCP_PM2_UNSTABLE"; exit 50; }
-            curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "MCP_HEALTH_UNSTABLE"; exit 51; }
+            ' >/dev/null; then
+              emit_pm2_diagnostic
+              echo "MCP_PM2_UNSTABLE"
+              exit 50
+            fi
+            if ! curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
+              emit_pm2_diagnostic
+              echo "MCP_HEALTH_UNSTABLE"
+              exit 51
+            fi
           done
 
 
