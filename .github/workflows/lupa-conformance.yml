@@ -1,0 +1,26 @@
+name: lupa-conformance
+
+on:
+  pull_request:
+    paths:
+      - '.agents/skills/lupa-bayesiana/**'
+      - 'scripts/lupa/**'
+      - 'docs/PROMPTS/**.tex'
+      - '.github/workflows/lupa-conformance.yml'
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar pytest
+        run: pip install pytest
+      - name: Validar hash canônico da Lupa
+        run: python scripts/lupa/validar_autolupa_hash.py
+      - name: Rodar testes de conformidade (fixture PASS)
+        env:
+          AUTOLUPA_REPORT: .agents/skills/lupa-bayesiana/testes/fixtures/exemplo_ok.md
+        run: pytest .agents/skills/lupa-bayesiana/testes/test_autolupa_conformance.py -v
