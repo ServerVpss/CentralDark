@@ -1,10 +1,13 @@
-name: VPS Deploy MCP (self-hosted)
+name: VPS Deploy canônico (self-hosted)
 
 on:
   push:
     branches: [main]
     paths:
       - "apps/modulos/mcp/**"
+      - "apps/modulos/mapeamento/**"
+      - "apps/modulos/HERMES-CORE/agents/Log-Verificador/**"
+      - "scripts/vps/deploy-operational-guards.sh"
       - ".github/workflows/vps-exec-selfhosted.yml"
       - "scripts/webhook/github-webhook-deploy.mjs"
   workflow_dispatch:
@@ -14,7 +17,7 @@ permissions:
   statuses: write
 
 concurrency:
-  group: centraldark-mcp-production
+  group: centraldark-vps-production
   cancel-in-progress: false
 
 jobs:
@@ -301,4 +304,62 @@ jobs:
               description: success
                 ? 'worktree, PM2, health, audit e porta 9300 comprovados'
                 : 'deploy bloqueado em fail-closed; consultar job sanitizado',
+            });
+
+
+  deploy-operational-guards:
+    name: Deploy atômico do mapa e Hermes-Verificador
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 15
+    env:
+      REPO_DIR: /root/CentralDark
+    steps:
+      - name: Prepare isolated deploy script checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          checkout_dir="$GITHUB_WORKSPACE/.ci-operational-guards"
+          [[ "$checkout_dir" == "$GITHUB_WORKSPACE/.ci-operational-guards" ]]
+          rm -rf "$checkout_dir"
+
+      - name: Checkout exact event SHA
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-operational-guards
+          fetch-depth: 1
+          submodules: false
+
+      - name: Validate, promote, restart and prove
+        id: guards
+        shell: bash
+        env:
+          TARGET_SHA: ${{ github.sha }}
+          BEFORE_SHA: ${{ github.event.before || '' }}
+        run: |
+          set -euo pipefail
+          bash "$GITHUB_WORKSPACE/.ci-operational-guards/scripts/vps/deploy-operational-guards.sh"
+
+      - name: Publish sanitized operational guards status
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          DEPLOY_OUTCOME: ${{ steps.guards.outcome }}
+          DEPLOYED: ${{ steps.guards.outputs.deployed }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const success = process.env.DEPLOY_OUTCOME === 'success';
+            const deployed = process.env.DEPLOYED === 'true';
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              state: success ? 'success' : 'failure',
+              context: 'centraldark/operational-guards-deploy',
+              target_url: `https://github.com/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+              description: success
+                ? (deployed ? 'mapa e Hermes-Verificador promovidos e estáveis' : 'escopo sem mudança; runtime preservado')
+                : 'promoção bloqueada em fail-closed; consultar job sanitizado',
             });
