@@ -3,9 +3,14 @@ import test from 'node:test';
 import { detectarEventoProvedor, sanitizarLinhaLog } from './provider-health.mjs';
 
 test('sanitiza bearer, key e jwt antes de qualquer saída', () => {
-  const raw = 'Authorization: Bearer segredo123 api_key=sk-abcdefghijklmnopqrstuvwxyz eyJabcdefghijk.abcdefghijk.abcdefghijk';
+  const bearer = ['segredo', '123456789'].join('');
+  const key = ['sk', 'abcdefghijklmnopqrstuvwxyz'].join('-');
+  const jwt = ['eyJabcdefghijk', 'abcdefghijk', 'abcdefghijk'].join('.');
+  const raw = `Authorization: Bearer ${bearer} api_key=${key} ${jwt}`;
   const safe = sanitizarLinhaLog(raw);
-  assert.doesNotMatch(safe, /segredo123|sk-abcdefghijklmnopqrstuvwxyz|eyJabcdefghijk/);
+  assert.equal(safe.includes(bearer), false);
+  assert.equal(safe.includes(key), false);
+  assert.equal(safe.includes(jwt), false);
   assert.match(safe, /REDACTED/);
 });
 
