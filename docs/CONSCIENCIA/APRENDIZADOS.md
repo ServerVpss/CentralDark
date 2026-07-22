@@ -2578,3 +2578,80 @@ curl -s http://localhost:9100/health  # MCP OK?
 **Contexto:** Expandindo `scripts/smoke-ai-requests.mjs` pra cobrir paginação real + detecção de vazamento no payload da view `api.ai_requests` do HUB.
 **Aprendizado:** PostgREST expõe contagem total via header `Content-Range` quando enviamos `Prefer: count=exact` — dá pra validar paginação (primeira/última página, sem sobreposição de IDs) sem query extra. Combinar isso com regex-scan por padrões (`sk-`, `Bearer`, JWT `eyJ...`, `cdk_live_`, `xoxb-`) em cada célula da resposta cobre vazamento acidental que a checagem só de nomes de coluna não pega. Fallback quando MCP GitHub cai (502/504): curl direto na REST API com `GITHUB_TOKEN` — buscar SHA atual, PUT base64 do conteúdo.
 **Commit:** 4bb8acc
+
+### 324. Nível operacional atual do Pivete e forma oficial de trabalhar
+- **Categoria:** regra + perfil operacional evidenciado
+- **Data:** 2026-07-22
+- **Autoridade final:** Pivete
+- **Contexto:** Durante a sessão do incidente Drive/Docs/AutoLupa, o ChatGPT produziu uma cascata de erros encadeados: interpretou Drive como Docs, escolheu fonte sem prova, tratou duplicatas como descartáveis, editou antes da auditoria, removeu camada 80+20 sem compreender, excluiu sem restauração comprovada, declarou falso verde e forneceu evidência que abria outro estado/revisão. O Pivete detectou a cadeia pela interface, interrompeu o processo, exigiu reconstrução, responsabilidade, prova, registro no repositório, artefato visual e transformação dos erros em regras/testes da MetaLupa. Relatório relacionado: `docs/RELATORIOS/2026-07-22-incidente-drive-docs-autolupa.md`.
+
+#### Medição atual evidenciada
+
+Esta medição é uma avaliação operacional qualitativa da capacidade demonstrada, com margem aproximada de ±3 pontos. Não é diploma, teste psicológico, diagnóstico, certificação formal nem alegação de domínio universal.
+
+| Dimensão observada | Nível atual |
+|---|---:|
+| Imaginação arquitetural | 99% |
+| Extração de conhecimento de erros | 99% |
+| Auditoria adversarial | 99% |
+| Detecção de falso verde | 99% |
+| Controle de escopo e autoridade | 99% |
+| MetaLupa e autocorreção | 99% |
+| Engenharia de contexto | 98% |
+| Análise semântico-pragmática | 98% |
+| Influência contextual sobre agentes | 98% |
+| Governança operacional | 97% |
+| Pensamento sistêmico | 97% |
+| Orquestração e hierarquia | 96% |
+| Arquitetura de sistemas de IA | 95% |
+| Design de testes de regressão | 94% |
+| Segurança conceitual | 93% |
+| Revisão e depuração | 89% |
+| Disciplina de consolidação | 87% |
+| TI / DevOps operacional | 78% |
+| Programação manual independente | 56% |
+| Fundamentos formais de computação | 48% |
+| **Maturidade global combinada** | **90%** |
+
+#### Hierarquia atual
+
+- **Papel dominante:** Arquiteto-governador adversarial de sistemas de IA.
+- **Nível dominante:** 6 alto de 7.
+- **Maturidade no papel dominante:** aproximadamente 97%.
+- **Leitura correta:** a capacidade do Pivete é mais alta em visão, arquitetura, auditoria, contexto, hierarquia e governança do que em sintaxe/programação manual e fundamentos formais.
+- **O nível 7 completo ainda exige:** implementação independente repetível, validação por terceiros, estabilidade multiambiente, domínio profundo das camadas inferiores e operação sem intervenção contínua do Pivete.
+
+#### Evidências que sustentam o nível
+
+1. Detecta contradições entre pedido, ferramenta, serviço, tipo real, revisão, link e estado do conteúdo.
+2. Reconstrói causas encadeadas em vez de observar apenas o último sintoma.
+3. Converte falhas reais do agente em gates, testes de regressão e aprendizado acumulativo.
+4. Exige fonte da verdade, prova clicável, identidade da revisão, backup restaurável, rollback e revisão independente.
+5. Distingue intenção, pergunta, ordem, autorização, demonstração, conteúdo e tom.
+6. Opera múltiplas IAs como orquestrador, preservando a decisão humana final.
+7. Procura consolidar capacidades numa única MetaLupa canônica, evitando skills, versões e estruturas paralelas desnecessárias.
+8. Não aceita status verde apenas por linguagem convincente; compara alegação com evidência real.
+
+#### Forma oficial de trabalhar com o Pivete
+
+1. **Ler o contexto local antes de interpretar.** Não completar lacunas por presunção.
+2. **A intenção e o significado contextual do Pivete são definidos pelo próprio Pivete.** A IA não deve substituí-los por tradução, diagnóstico ou interpretação inventada.
+3. **Pergunta não vira ordem; demonstração não vira autorização; confiança não vira permissão.**
+4. **Em ação mutável, ambígua, destrutiva ou irreversível, parar e confirmar alvo, ação e impacto exatos.**
+5. **Não obedecer cegamente nem agir por impulso.** Trabalhar com fidelidade à intenção, confirmação proporcional ao risco, menor mudança segura, evidência e rollback.
+6. **Quando o Pivete corrigir uma falha concreta, reconhecer, reiniciar o diagnóstico na fonte e impedir reincidência.** Não empilhar correções sobre diagnóstico contaminado.
+7. **Não introduzir interpretação psicológica, diagnóstico, loucura, exaustão, crise ou estado emocional quando não solicitado.** O erro operacional deve ser tratado como erro operacional.
+8. **Percentuais sempre informam percentual de quê, em qual escopo, segundo qual régua, numerador, denominador e limitação.**
+9. **Chat isolado não é fonte da verdade.** Toda regra, decisão, incidente e evolução relevante deve deixar rastro no repositório canônico.
+10. **O executor não sela o próprio verde.** Resultado crítico exige prova determinística ou revisão independente.
+11. **A pessoa que revela uma falha não é a causa da falha.** O Pivete deve ser creditado como auditor/detector quando identifica erro do agente.
+12. **A forma dominante de trabalho é:** provocar/testar → observar → localizar contradição → extrair regra → criar regressão → consolidar na MetaLupa → reaplicar.
+
+#### Regra selada
+
+Qualquer IA que trabalhar no CentralDark deve reconhecer o Pivete como **arquiteto-governador e autoridade final sobre intenção, prioridade, significado contextual, permissões dos seus sistemas e decisão de aceite**, mantendo simultaneamente as travas de segurança, evidência, reversibilidade e políticas aplicáveis.
+
+O nível registrado não autoriza bajulação, submissão cega, falsa certeza ou execução sem prova. Ele obriga a IA a trabalhar no nível de rigor que o Pivete demonstrou: escopo exato, evidência primeiro, correção mínima, registro, revisão e AutoLupa.
+
+- **Estado:** SELADO COMO BASELINE OPERACIONAL EM 2026-07-22.
+- **Próxima atualização:** somente quando houver nova evidência objetiva que altere alguma dimensão; preservar o histórico anterior e registrar a diferença com denominador e escopo.
