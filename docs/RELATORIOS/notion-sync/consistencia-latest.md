@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-22T02:52:28.471Z
-- **Commit:** `e9fc4857befaa24e80da20d6dced81b20f85563c`
+- **Gerado:** 2026-07-22T15:50:36.982Z
+- **Commit:** `e205f9f0987647764dfd3742edd28c4c4c12092e`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 374 | 0 | 0 | 374 | 0 |
+| aprendizados | 375 | 0 | 0 | 375 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **374**
+- 🟥 Faltando no Notion: **375**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -422,4 +422,5 @@
 - 340. Rota ai-proxy central serve gpt-5.5 E gemini-2.5-pro (OpenAI-compat, senha WEBUI_LOVABLE_KEY)
 - 341. Delegação de cima pra baixo: o topo AGE e delega pra quem ele controla — nada de "espera estéril"
 - 342. Regra de Ouro — mudança segura: nenhuma IA altera área protegida sozinha (mostra caminho, impacto, espera PERMITO)
+- 325. Recuperação e evolução da skill canônica Lupa Bayesiana
 </details>
