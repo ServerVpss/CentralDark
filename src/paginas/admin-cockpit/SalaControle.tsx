@@ -53,7 +53,7 @@ export default function SalaControle() {
   // último evento do console alimenta o Hermes (reage ao que rola de verdade)
   const ultimoLog = state.console[state.console.length - 1];
   const ultimoEvento = ultimoLog
-    ? { id: ultimoLog.id, texto: ultimoLog.linha, pane: "console" }
+    ? { id: Number(String(ultimoLog.id).replace(/\D/g, "")) || Date.now(), texto: ultimoLog.linha, pane: "console" }
     : null;
 
   return (
