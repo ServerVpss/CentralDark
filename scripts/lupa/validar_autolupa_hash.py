@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
 """Guarda de integridade da Lupa Bayesiana canônica.
 
-Antes de gerar qualquer TEX/relatório AutoLupa, este script:
-1. Lê o SHA canônico gravado em .agents/skills/lupa-bayesiana/AUTOLUPA_CANONICAL_SHA.
-2. Recalcula o SHA256 do arquivo SKILL.md local.
-3. Falha (exit 2) se divergir — bloqueia geração do TEX com Lupa não canônica.
-4. Opcional: --fetch baixa o blob do GitHub e compara também com o repositório.
-5. Opcional: --update reescreve o guard (exige PERMITO_PIVETE=1 no ambiente).
+Usa git-blob SHA1 (mesmo hash exibido pelo GitHub) para comparar o SKILL.md
+local contra o guard e, opcionalmente, contra o blob remoto no repositório.
 
 Uso:
-    python scripts/lupa/validar_autolupa_hash.py            # valida local vs guard
-    python scripts/lupa/validar_autolupa_hash.py --fetch    # + valida contra GitHub
+    python scripts/lupa/validar_autolupa_hash.py            # local vs guard
+    python scripts/lupa/validar_autolupa_hash.py --fetch    # + valida remoto
     PERMITO_PIVETE=1 python scripts/lupa/validar_autolupa_hash.py --update
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import os
 import sys
 import urllib.request
@@ -25,11 +22,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SKILL = ROOT / ".agents/skills/lupa-bayesiana/SKILL.md"
 GUARD = ROOT / ".agents/skills/lupa-bayesiana/AUTOLUPA_CANONICAL_SHA"
-RAW_URL = "https://raw.githubusercontent.com/ServerVpss/CentralDark/main/.agents/skills/lupa-bayesiana/SKILL.md"
+API_URL = "https://api.github.com/repos/ServerVpss/CentralDark/contents/.agents/skills/lupa-bayesiana/SKILL.md?ref=main"
 
 
-def sha256_bytes(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
+def git_blob_sha1(data: bytes) -> str:
+    header = f"blob {len(data)}\0".encode()
+    return hashlib.sha1(header + data).hexdigest()
 
 
 def read_guard() -> str:
@@ -41,15 +39,15 @@ def read_guard() -> str:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--fetch", action="store_true", help="comparar também com blob do GitHub")
-    ap.add_argument("--update", action="store_true", help="reescrever o guard (requer PERMITO_PIVETE=1)")
+    ap.add_argument("--fetch", action="store_true")
+    ap.add_argument("--update", action="store_true")
     args = ap.parse_args()
 
     if not SKILL.exists():
         print(f"[FAIL] SKILL.md ausente: {SKILL}", file=sys.stderr)
         return 2
 
-    local = sha256_bytes(SKILL.read_bytes())
+    local = git_blob_sha1(SKILL.read_bytes())
 
     if args.update:
         if os.environ.get("PERMITO_PIVETE") != "1":
@@ -57,7 +55,7 @@ def main() -> int:
             return 3
         GUARD.write_text(
             f"{local}  .agents/skills/lupa-bayesiana/SKILL.md\n"
-            "# Atualizado via --update com autorização PERMITO PIVETE.\n",
+            "# git-blob SHA1 canônico. Atualize somente com PERMITO PIVETE.\n",
             encoding="utf-8",
         )
         print(f"[OK] guard atualizado -> {local}")
@@ -71,10 +69,11 @@ def main() -> int:
 
     if args.fetch:
         try:
-            with urllib.request.urlopen(RAW_URL, timeout=10) as r:
-                remoto = sha256_bytes(r.read())
+            req = urllib.request.Request(API_URL, headers={"Accept": "application/vnd.github+json"})
+            with urllib.request.urlopen(req, timeout=10) as r:
+                remoto = json.loads(r.read())["sha"]
         except Exception as exc:
-            print(f"[WARN] não foi possível baixar remoto: {exc}", file=sys.stderr)
+            print(f"[WARN] não foi possível consultar remoto: {exc}", file=sys.stderr)
             return 0
         if remoto != esperado:
             print(f"[FAIL] guard diverge do remoto\n  guard:  {esperado}\n  remoto: {remoto}", file=sys.stderr)
