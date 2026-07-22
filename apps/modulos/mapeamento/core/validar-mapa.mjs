@@ -11,7 +11,8 @@ const DEFAULT_MAP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export function normalizarCaminho(value) {
   const raw = String(value || '').replaceAll('\\', '/').replace(/^\.\//, '');
   const normalized = path.posix.normalize(raw);
-  if (!raw || normalized === '.' || normalized.startsWith('/') || normalized === '..' || normalized.startsWith('../')) {
+  const hasTraversal = raw.split('/').includes('..');
+  if (!raw || hasTraversal || normalized === '.' || normalized.startsWith('/') || normalized === '..' || normalized.startsWith('../')) {
     throw new Error(`caminho inválido no mapa: ${value}`);
   }
   return normalized.replace(/\/+$/, '') + (raw.endsWith('/') ? '/' : '');
