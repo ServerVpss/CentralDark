@@ -238,3 +238,41 @@
   padding: 40px 20px; text-align: center; border-radius: 6px;
   color: var(--sc-mut);
 }
+
+/* Chuva de código (Matrix) — pano de fundo bem sutil, atrás de tudo */
+.sc-matrix {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.18;
+  pointer-events: none;
+}
+.sc-matrix canvas.cockpit-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Hermes mascote encaixado no rodapé da nav (slot 180px) */
+.sc-nav-hermes .hermes-glow {
+  width: 120px;
+  height: 120px;
+}
+.sc-nav-hermes .hermes-plaqueta {
+  font-size: 10px;
+  color: var(--sc-mut);
+  letter-spacing: .08em;
+}
+.sc-nav-hermes .hermes-plaqueta em {
+  color: var(--sc-em-hi);
+  font-style: normal;
+}
+.sc-nav-hermes .hermes-balao {
+  font-size: 9px;
+  max-width: 160px;
+  padding: 4px 6px;
+  color: var(--sc-txt);
+  background: #041a18ee;
+  border: 1px solid var(--sc-line-2);
+  border-radius: 4px;
+}

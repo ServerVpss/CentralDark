@@ -1,11 +1,14 @@
 // Sala de Controle — cockpit denso, sem cara de site.
 // Layout: header · nav lateral · mapa vivo central · feed IA · terminal embutido.
 // Fase 1: mock estruturado via useCockpitLive. Fase 2: conectar HUB /cockpit/state.
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./sala-controle.css";
+import "./hermes.css";
 import { useCockpitLive, type CockpitNo, type NoStatus } from "./hooks/useCockpitLive";
 import GrokMissoes from "@/components/GrokMissoes";
+import { MatrixRain } from "./MatrixRain";
+import { HermesMascote } from "./HermesMascote";
 
 const ABAS = [
   { id: "mapa",  label: "MAPA" },
@@ -31,7 +34,7 @@ export default function SalaControle() {
   const state = useCockpitLive();
   const [hora, setHora] = useState(relogio());
 
-  useMemo(() => {
+  useEffect(() => {
     const t = setInterval(() => setHora(relogio()), 1000);
     return () => clearInterval(t);
   }, []);
@@ -47,8 +50,15 @@ export default function SalaControle() {
       ? "warn"
       : "ok";
 
+  // último evento do console alimenta o Hermes (reage ao que rola de verdade)
+  const ultimoLog = state.console[state.console.length - 1];
+  const ultimoEvento = ultimoLog
+    ? { id: Number(String(ultimoLog.id).replace(/\D/g, "")) || Date.now(), texto: ultimoLog.linha, pane: "console" }
+    : null;
+
   return (
     <div className="sc-root sc-mono">
+      <div className="sc-matrix" aria-hidden><MatrixRain /></div>
       <div className="sc-grid">
         {/* HEADER */}
         <div className="sc-cell sc-head">
@@ -77,9 +87,8 @@ export default function SalaControle() {
             </button>
           ))}
           <div className="sc-nav-hermes">
-            <div>◉ operador</div>
-            <b>Hermes</b>
-            <div style={{ marginTop: 4 }}>loop 24h · ok</div>
+            <HermesMascote ultimoEvento={ultimoEvento} />
+            <div style={{ marginTop: 6 }}>loop 24h · ok</div>
           </div>
         </div>
 
