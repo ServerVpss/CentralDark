@@ -45,18 +45,21 @@ jobs:
           [[ -d "$REPO_DIR/.git" ]] || { echo "REPO_DIR_INVALID"; exit 23; }
           cd "$REPO_DIR"
           CURRENT_BRANCH="$(git symbolic-ref --quiet --short HEAD || true)"
-          [[ -n "$CURRENT_BRANCH" ]] || { echo "LOCAL_CHECKOUT_DETACHED"; exit 24; }
+          [[ -n "$CURRENT_BRANCH" ]] || CURRENT_BRANCH="DETACHED"
           ORIGIN_URL="$(git remote get-url origin)"
           [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || { echo "ORIGIN_REPOSITORY_MISMATCH"; exit 25; }
           DIRTY_TRACKED_FILE="$(mktemp "$RUNNER_TEMP/centraldark-dirty.XXXXXX")"
-          chmod 600 "$DIRTY_TRACKED_FILE"
+          DIRTY_MCP_FLAG="$(mktemp "$RUNNER_TEMP/centraldark-mcp-dirty.XXXXXX")"
+          chmod 600 "$DIRTY_TRACKED_FILE" "$DIRTY_MCP_FLAG"
           git status --porcelain=v1 -z --untracked-files=no > "$DIRTY_TRACKED_FILE"
           if [[ -s "$DIRTY_TRACKED_FILE" ]]; then
-            python3 - "$DIRTY_TRACKED_FILE" <<'PY'
+            python3 - "$DIRTY_TRACKED_FILE" "$DIRTY_MCP_FLAG" <<'PY'
           from pathlib import Path
           import re
           import sys
           denied = re.compile(r'(^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)', re.I)
+          mcp_root = 'apps/modulos/mcp/'
+          runtime_dist = 'apps/modulos/mcp/dist/'
           for raw in Path(sys.argv[1]).read_bytes().split(b'\0'):
               if not raw:
                   continue
@@ -64,10 +67,16 @@ jobs:
               code = item[:2] if len(item) >= 2 else '??'
               path = item[3:] if len(item) >= 4 else item
               shown = 'SENSITIVE_TRACKED_PATH_REDACTED' if denied.search(path) else path
-              print(f'TRACKED_DIRTY {code} {shown}')
+              print(f'TRACKED_DIRTY_PRESERVED {code} {shown}')
+              in_runtime_dist = path == 'apps/modulos/mcp/dist' or path.startswith(runtime_dist)
+              if path.startswith(mcp_root) and not in_runtime_dist:
+                  Path(sys.argv[2]).touch()
           PY
-            echo "TRACKED_TREE_DIRTY"
-            exit 26
+            if [[ -s "$DIRTY_MCP_FLAG" ]]; then
+              echo "MCP_TRACKED_SOURCE_DIRTY"
+              exit 26
+            fi
+            echo "NON_MCP_DIRTY_TREE_PRESERVED"
           fi
 
           # A porta 9300 só pode pertencer ao webhook legado conhecido. Ele é
@@ -96,19 +105,38 @@ jobs:
             apps/modulos/mcp \
             .github/workflows/vps-exec-selfhosted.yml \
             scripts/webhook/github-webhook-deploy.mjs || { echo "DEPLOY_SCOPE_ADVANCED_AFTER_EVENT"; exit 31; }
-          if [[ "$CURRENT_BRANCH" == "main" ]]; then
-            git merge-base --is-ancestor "$CURRENT_SHA" "$ORIGIN_SHA" || { echo "LOCAL_MAIN_DIVERGED"; exit 32; }
-          else
-            git show-ref --verify --quiet refs/heads/main || { echo "LOCAL_MAIN_MISSING"; exit 52; }
-            LOCAL_MAIN_SHA="$(git rev-parse refs/heads/main)"
-            git merge-base --is-ancestor "$LOCAL_MAIN_SHA" "$ORIGIN_SHA" || { echo "LOCAL_MAIN_DIVERGED"; exit 53; }
-          fi
+          echo "LOCAL_CHECKOUT_PRESERVED"
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/centraldark-mcp-build.XXXXXX")"
           restart_attempted=0
+          artifact_promoted=0
+          RUNTIME_STAGE=""
+          RUNTIME_BACKUP=""
           cleanup() {
             rc=$?
             trap - EXIT ERR
+            set +e
+            if [[ "$rc" -ne 0 && "$artifact_promoted" == "1" ]]; then
+              rollback_ok=false
+              FAILED_DIST="$MCP_DIR/.dist-failed.${TARGET_SHA:0:12}.${BASHPID}"
+              if [[ -d "$RUNTIME_BACKUP" ]]; then
+                if [[ -d "$MCP_DIR/dist" && ! -e "$FAILED_DIST" ]]; then
+                  mv -- "$MCP_DIR/dist" "$FAILED_DIST"
+                fi
+                if [[ ! -e "$MCP_DIR/dist" ]] && mv -- "$RUNTIME_BACKUP" "$MCP_DIR/dist"; then
+                  if pm2 restart "$PM2_APP" >/dev/null; then
+                    for _ in $(seq 1 20); do
+                      if curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null; then
+                        rollback_ok=true
+                        break
+                      fi
+                      sleep 1
+                    done
+                  fi
+                fi
+              fi
+              if [[ "$rollback_ok" == "true" ]]; then echo "RUNTIME_ROLLBACK_OK"; else echo "RUNTIME_ROLLBACK_FAILED"; fi
+            fi
             git -C "$REPO_DIR" worktree remove --force "$BUILD_DIR" >/dev/null 2>&1 || true
             if [[ "$rc" -ne 0 && "$restart_attempted" == "1" ]]; then echo "DEPLOY_BLOCKED_AFTER_RESTART"; fi
             exit "$rc"
@@ -155,19 +183,15 @@ jobs:
           [[ "$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$MCP_JSON")" == "$MCP_DIR/dist/index.js" ]] || { echo "MCP_PM2_EXEC_MISMATCH"; exit 36; }
           curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "PRE_DEPLOY_HEALTH_FAILED"; exit 37; }
 
-          cd "$REPO_DIR"
-          if [[ "$CURRENT_BRANCH" != "main" ]]; then
-            git switch main
-          fi
-          [[ "$(git symbolic-ref --quiet --short HEAD)" == "main" ]] || { echo "LOCAL_MAIN_SWITCH_FAILED"; exit 54; }
-          [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "LOCAL_MAIN_TRACKED_TREE_DIRTY"; exit 55; }
-          git merge --ff-only "$ORIGIN_SHA"
-          [[ -z "$(git status --porcelain --untracked-files=no)" ]] || { echo "POST_FF_TRACKED_TREE_DIRTY"; exit 38; }
-          git diff --quiet "$TARGET_SHA" HEAD -- apps/modulos/mcp || { echo "RUNTIME_TREE_NOT_VALIDATED_TREE"; exit 39; }
-          [[ -z "$(git status --porcelain --untracked-files=all -- apps/modulos/mcp/dist)" ]] || {
-            echo "RUNTIME_DIST_NOT_CLEAN"
-            exit 48
-          }
+          RUNTIME_STAGE="$MCP_DIR/.dist-release.${TARGET_SHA:0:12}.${BASHPID}"
+          RUNTIME_BACKUP="$MCP_DIR/.dist-backup.${CURRENT_SHA:0:12}.${BASHPID}"
+          [[ ! -e "$RUNTIME_STAGE" && ! -e "$RUNTIME_BACKUP" ]] || { echo "RUNTIME_RELEASE_PATH_COLLISION"; exit 54; }
+          [[ -d "$MCP_DIR/dist" && -f "$MCP_DIR/dist/index.js" ]] || { echo "RUNTIME_DIST_INVALID"; exit 55; }
+          cp -a -- "$BUILD_MCP/dist" "$RUNTIME_STAGE"
+          diff -qr "$BUILD_MCP/dist" "$RUNTIME_STAGE" >/dev/null || { echo "RUNTIME_STAGE_MISMATCH"; exit 56; }
+          mv -- "$MCP_DIR/dist" "$RUNTIME_BACKUP"
+          artifact_promoted=1
+          mv -- "$RUNTIME_STAGE" "$MCP_DIR/dist"
 
           OLD_PID="$(pm2 pid "$PM2_APP" | tail -n1)"
           RESTART_AT="$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
@@ -208,8 +232,8 @@ jobs:
           done
 
           STATE_TMP="$AUDIT_DIR/.mcp-last-known-good.${BASHPID}"
-          jq -n --arg sha "$TARGET_SHA" --arg repo_sha "$(git rev-parse HEAD)" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
-            '{validatedSha:$sha,repositorySha:$repo_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok"}' > "$STATE_TMP"
+          jq -n --arg sha "$TARGET_SHA" --arg checkout_sha "$CURRENT_SHA" --arg backup "$RUNTIME_BACKUP" --argjson pid "$NEW_PID" --arg at "$RESTART_AT" \
+            '{validatedSha:$sha,localCheckoutSha:$checkout_sha,pid:$pid,restartedAt:$at,health:"ok",startupAudit:"ok",deploymentMode:"atomic_dist",runtimeBackup:$backup}' > "$STATE_TMP"
           mv "$STATE_TMP" "$AUDIT_DIR/mcp-last-known-good.json"
 
           git fetch --prune origin main
@@ -218,12 +242,15 @@ jobs:
           git diff --quiet "$TARGET_SHA" "$FINAL_MAIN_SHA" -- apps/modulos/mcp || { echo "MCP_ADVANCED_DURING_DEPLOY"; exit 45; }
           ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_REOPENED"; exit 46; }
 
+          artifact_promoted=0
           restart_attempted=0
           echo "DEPLOYED_TO_MAIN"
           echo "validated_sha=$TARGET_SHA"
-          echo "repository_sha=$(git rev-parse HEAD)"
+          echo "local_checkout_sha=$CURRENT_SHA"
+          echo "local_checkout_preserved=$CURRENT_BRANCH"
           echo "main_sha=$FINAL_MAIN_SHA"
           echo "pm2_app=$PM2_APP"
+          echo "runtime_mode=atomic_dist"
           echo "port_9300=retired"
           echo "health=ok"
           echo "startup_audit=ok"
