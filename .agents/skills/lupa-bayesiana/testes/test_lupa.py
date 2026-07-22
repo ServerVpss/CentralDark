@@ -69,6 +69,24 @@ def test_falsification_gate_detects_fake_green():
     assert resultado == "BLOQUEAR", "gate deveria bloquear sem falsificador definido"
 
 
+def test_marker_present_in_entry_files():
+    """LUPA_BAYESIANA_BOOT_REQUIRED deve constar nos arquivos de entrada presentes.
+
+    Arquivos ausentes na branch atual sao registrados como AUSENTE no aprendizado
+    e nao entram na validacao (regra: nao inventar substituto).
+    """
+    import os as _os
+    root = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..", "..", "..", ".."))
+    marcador = "LUPA_BAYESIANA_BOOT_REQUIRED"
+    obrigatorios = ["CLAUDE.md", "AGENTS.md", "README.md"]
+    for rel in obrigatorios:
+        caminho = _os.path.join(root, rel)
+        assert _os.path.isfile(caminho), f"arquivo de entrada ausente: {rel}"
+        with open(caminho, "r", encoding="utf-8") as fh:
+            conteudo = fh.read()
+        assert marcador in conteudo, f"marcador {marcador} ausente em {rel}"
+
+
 if __name__ == "__main__":
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     falhas = 0

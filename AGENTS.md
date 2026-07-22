@@ -51,3 +51,9 @@ Use somente placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BA
 - Não registrar Authorization header, token ou valor de chave.
 - Não transformar preview em fonte oficial.
 - GitHub registra; VPS apenas executa o que foi aprovado.
+
+---
+
+## 🔒 LUPA_BAYESIANA_BOOT_REQUIRED
+
+Antes de qualquer análise, plano, comando ou alteração, toda IA/agente/CLI/bot DEVE localizar e ler integralmente `.agents/skills/lupa-bayesiana/SKILL.md`, registrar `SKILL_PATH`, `SKILL_REF` e `SKILL_COMMIT_SHA` no BOOT, aplicar a Lupa durante a missão e executar AutoLupa no encerramento. Se a skill não estiver no checkout, buscar em `origin/pivete/dev`. Ausência da skill = BLOQUEIO DE BOOT. Proibido V2, skill paralela ou cópia solta como fonte primária. Definição autoritativa completa: `CLAUDE.md` (seção `LUPA_BAYESIANA_BOOT_REQUIRED`).

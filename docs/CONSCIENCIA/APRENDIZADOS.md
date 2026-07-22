@@ -2741,3 +2741,31 @@ DISTINÇÃO IMPORTANTE: 'Bolt' existe em 2 lugares — (1) container Docker Cent
 - **Regra selada:** O resultado só pode ser declarado verde quando a execução dos testes terminar com saída comprovada. Mensagem visual, intenção do agente ou criação de arquivos não substituem prova do teste. A skill deve continuar sendo evoluída no mesmo artefato canônico e no mesmo diretório.
 - **Como as próximas IAs devem aplicar:** Antes de criar nova skill, novo documento ou nova versão, procurar a skill canônica e ler seu `SKILL.md`. Se a lacuna já estiver prevista ali, estender a mesma pasta, testar antes/depois e registrar o aprendizado no repositório.
 - **Estado:** REGISTRADO PARA HERANÇA MULTI-IA, mantendo PR #307 como draft e sem merge.
+
+### 343. Lupa Bayesiana obrigatória no BOOT de toda IA
+- **Categoria:** regra
+- **Data:** 2026-07-22
+- **Autoridade final:** Pivete (`PERMITO PIVETE — SEM AÇÃO DESTRUTIVA`)
+- **Contexto:** Regra de entrada explícita, obrigatória e herdável: toda IA/agente/CLI/bot que entrar em `ServerVpss/CentralDark` DEVE localizar e ler integralmente a skill canônica `.agents/skills/lupa-bayesiana/SKILL.md` antes de qualquer análise, plano, comando ou alteração. Deve registrar `SKILL_PATH`, `SKILL_REF` e `SKILL_COMMIT_SHA`; aplicar a Lupa durante a missão; executar AutoLupa no encerramento; corrigir e retestar quando a AutoLupa achar erro próprio; e nunca alegar uso sem prova. Ausência da skill = BLOQUEIO DE BOOT, não autorização para improvisar. Fallback autorizado: buscar em `origin/pivete/dev` (ou ref canônica vigente), sem fingir troca de branch e sem usar cópia solta/cache como fonte primária quando Git estiver disponível. Proibido criar V2, skill paralela ou documento concorrente.
+- **Marcador de auditoria:** `LUPA_BAYESIANA_BOOT_REQUIRED` (grep determinístico).
+- **Arquivos de entrada atualizados nesta branch:**
+  - PRESENTE — `CLAUDE.md` (definição autoritativa completa, já que `00-COMECE-AQUI-IA.md` está AUSENTE nesta branch)
+  - PRESENTE — `AGENTS.md` (versão curta apontando para `CLAUDE.md` e para a skill)
+  - PRESENTE — `README.md` (versão curta apontando para `CLAUDE.md` e para a skill)
+- **Arquivos de entrada AUSENTES nesta branch (não inventar substituto, conforme ordem):**
+  - AUSENTE — `00-COMECE-AQUI-IA.md`
+  - AUSENTE — `docs/GOVERNANCA/BOOT-IA.md`
+  - AUSENTE — `.claude/BOOT-PIVETE.md`
+  - AUSENTE — `.github/copilot-instructions.md`
+  - AUSENTE — `GEMINI.md`
+  - AUSENTE — `GROK.md`
+  Registrar como AUSENTE nesta branch de trabalho; a propagação para esses arquivos deve ocorrer quando eles retornarem ou em PR próprio contra a branch que os contém, sem duplicação canônica.
+- **Skill canônica lida nesta execução:**
+  - `SKILL_PATH`: `.agents/skills/lupa-bayesiana/SKILL.md`
+  - `SKILL_REF`: `feat/lupa-bayesiana-canon-2026-07-22-1430`
+  - `SKILL_COMMIT_SHA` (último commit que tocou o arquivo): `b294109318bc68122e5575a85f57cb57a0e304fc`
+  - Blob SHA lido: `4d0c4e8f67336c03012dcc0384f890708ee01059`
+- **Prova de teste:** `.agents/skills/lupa-bayesiana/testes/test_lupa.py` — `TOTAL=8 PASS=8 FAIL=0` (inclui `test_marker_present_in_entry_files`, novo teste que valida presença do marcador nos 3 arquivos presentes; encaixe canônico dentro da própria skill, sem workflow novo).
+- **AutoLupa desta execução:** procurou (a) invenção de substituto para arquivos ausentes — não ocorreu; (b) duplicação/V2 — não ocorreu, extensão dentro da mesma pasta canônica; (c) commit fora do escopo declarado — não ocorreu, `git add` só por path; (d) força/destrutivo — não ocorreu; (e) prova sem execução — não ocorreu, teste rodado com saída registrada. Ponto fixo evidencial atingido.
+- **Ordens preservadas:** autoridade final do Pivete, permissões via `PERMITO PIVETE`, proibição de merge/deploy/restart/edição de secrets/VPS, PR #307 continua draft.
+- **Como as próximas IAs devem aplicar:** ao abrir o repositório, ler primeiro `CLAUDE.md` até a seção `LUPA_BAYESIANA_BOOT_REQUIRED`, seguir para a skill, registrar as três provas de leitura e só então iniciar qualquer missão.

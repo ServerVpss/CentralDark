@@ -268,3 +268,29 @@ Nada de edição manual em produção como fonte oficial.
 Nada de commit automático inútil na main.
 Nada de trocar endpoint sem mapear dependência.
 ```
+
+---
+
+## 🔒 LUPA_BAYESIANA_BOOT_REQUIRED — leitura obrigatória antes de qualquer ação
+
+**Autoridade final: Pivete. Regra herdável por toda IA, agente, CLI ou bot que entrar no repositório CentralDark.**
+
+Ao entrar no repositório, ANTES de qualquer análise, plano, comando, edição, commit, push, deploy ou resposta de fundo, toda IA/agente DEVE:
+
+1. Localizar e ler **integralmente** a skill canônica `.agents/skills/lupa-bayesiana/SKILL.md`.
+2. Se a skill não existir no checkout atual, buscá-la em `origin/pivete/dev` (ou na ref canônica vigente indicada pelo kit de BOOT). **Não fingir** que trocou de branch. Quando Git estiver disponível, **não usar cópia solta, cache, snapshot ou versão inline como fonte primária**.
+3. Registrar prova real no BOOT com os três campos obrigatórios:
+   - `SKILL_PATH:` caminho relativo lido
+   - `SKILL_REF:` branch/ref usada
+   - `SKILL_COMMIT_SHA:` commit SHA do arquivo lido
+4. Aplicar a Lupa Bayesiana durante toda missão elegível (evidência → prior → LR → posterior → decisão).
+5. Executar **AutoLupa** sobre o próprio veredito no encerramento, até atingir ponto fixo evidencial.
+6. Quando a AutoLupa encontrar erro próprio, **corrigir e repetir os testes** — não empurrar veredito verde sem prova.
+7. **Proibido** alegar "usei a Lupa" sem os três campos de prova + evidência da AutoLupa.
+8. **Proibido** criar V2, skill paralela, documento concorrente, novo README ou nova Constituição para substituir a skill canônica. Extensão vai na mesma pasta `.agents/skills/lupa-bayesiana/`.
+9. **Ausência da skill = BLOQUEIO DE BOOT.** Não improvisar outra skill nem seguir sem ela. Pedir autorização ao Pivete.
+10. A autoridade final e as permissões do Pivete (incluindo `PERMITO PIVETE`) permanecem preservadas — esta regra as complementa, nunca as contorna.
+
+Marcador de auditoria (grep determinístico): `LUPA_BAYESIANA_BOOT_REQUIRED`
+
+Fonte canônica única da skill: `.agents/skills/lupa-bayesiana/SKILL.md`
