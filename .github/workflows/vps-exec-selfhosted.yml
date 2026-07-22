@@ -211,6 +211,7 @@ jobs:
               sha: context.sha,
               state: success ? 'success' : 'failure',
               context: 'centraldark/mcp-deploy',
+              target_url: `https://github.com/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`,
               description: success
                 ? 'worktree, PM2, health, audit e porta 9300 comprovados'
                 : 'deploy bloqueado em fail-closed; consultar job sanitizado',
