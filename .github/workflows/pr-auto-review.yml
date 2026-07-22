@@ -66,7 +66,7 @@ jobs:
               re.I,
           )
           operational_path = re.compile(
-              r'(^|/)(\.github/workflows|scripts/webhook|Dockerfile|docker-compose|Caddyfile|wuzapi|whatsapp|crm|migrations|prisma/migrations)(/|$)',
+              r'(^|/)(\.github/workflows|scripts/(?:vps|webhook)|Dockerfile|docker-compose|Caddyfile|wuzapi|whatsapp|crm|migrations|prisma/migrations)(/|$)',
               re.I,
           )
 
@@ -121,7 +121,7 @@ jobs:
               `- [${secretOk ? 'x' : ' '}] Scanner de paths e valores sensíveis`,
               '- [x] `git diff --check`',
               '- [x] PR analisado em `ubuntu-latest`; nenhum script do PR foi executado na VPS',
-              `- [${process.env.TOUCHED_SENSITIVE === 'false' ? 'x' : ' '}] Sem path operacional sensível`,
+              `- [x] Classificação de path operacional: ${process.env.TOUCHED_SENSITIVE === 'true' ? 'TOCADO — revisão e autorização obrigatórias' : 'não tocado'}`,
               '- [ ] Revisão final Codex visível',
               '',
               `Arquivos alterados: ${process.env.CHANGED_COUNT || '0'}. HEAD: ${context.payload.pull_request.head.sha}.`,
