@@ -1,51 +1,79 @@
-# Plano — Nemotron 3 Ultra como cérebro padrão + GPT-5.6 Sol como segunda voz
 
-## Contexto (com os números certos agora)
+# 📌 Consolidação no PR #316 — Supermemory + Embeddings Locais
 
-Puxei o preço público real do OpenRouter agora. **Nemotron 3 Ultra 550B é 10× mais barato que o GPT-5.6 Sol**, e mesmo assim joga no mesmo tier de potência. Isso muda a decisão inteira: dá pra rodar o cérebro pesado como padrão sem estourar orçamento.
+> **Regra herdada:** tudo que você entrega vira **extensão** do plano vivo no PR #316 (`feat/lupa-conformance-tests-2026-07-22-2130`). Nada de PR novo, nada de duplicata. Melhora o que já existe.
+> **Escopo:** só GitHub (repo `ServerVpss/CentralDark`). Zero toque no app Lovable, VPS, HUB, Hermes-Core ou áreas 🔒.
+> **Status:** planejamento — decisor final = Pivete ou Sol.
 
-Valores confirmados (USD por 1M tokens):
-- Nemotron Ultra: $0,50 in / $2,20 out
-- Sol: $5,00 in / $30,00 out
-- Terra: $2,50 in / $15,00 out
-- Luna: $1,00 in / $6,00 out
+---
 
-## Papéis no CentralDark
+## 1. O que entra no mesmo PR #316
 
-| Papel | Modelo | Justificativa |
-|---|---|---|
-| Cérebro principal (cockpit, /refinar, missões) | `nvidia/nemotron-3-ultra-550b-a55b` | Topo de potência pelo menor custo |
-| Segunda voz (revisão cruzada, "duelo") | `openai/gpt-5.6-sol` | Voz OpenAI para diversidade de perspectiva |
-| Fallback balanceado | `openai/gpt-5.6-terra` | Se topo cair, mantém qualidade |
-| Fallback rápido / UI-fluff | `openai/gpt-5.6-luna` | Tooltips, tarefas curtas |
-| Chat model do gateway atual | `openai/gpt-5.5` (fica) | Rota já existente, não mexer sem necessidade |
+**Um único commit atômico** anexando a análise Supermemory ao documento mestre já existente (`docs/RELATORIOS/2026-07-23-arquitetura-cascata-freetier-sol-decisor.md`) + expansão do `rotas.json` com camada de embeddings.
 
-## O que muda no repo (branch `pivete/dev`)
+### 1.1. Extensão do documento mestre (append, não sobrescrita)
+Adicionar seção nova ao final:
 
-1. **`apps/modulos/HERMES-CORE/core/cadeia.json`** — reordenar: Nemotron Ultra em posição 1, Sol em posição 2, Terra 3, Luna 4. Deixar os Gemini/GPT-5 antigos como fallback tardio.
-2. **`docs/CONSCIENCIA/ARSENAL/regras.json`** — trocar:
-   - `analista_profundo` → `nvidia/nemotron-3-ultra-550b-a55b`
-   - `mestre_sabio` → `openai/gpt-5.6-sol`
-   - `executor_rapido` → `openai/gpt-5.6-luna`
-3. **`docs/CONSCIENCIA/DARKAI/03-CATALOGO-DE-MODELOS.md`** — adicionar seção "Modelos de topo com preço real (jul/2026)" com a tabela acima. Sem apagar nada.
-4. **`docs/ENTREGAS-LOVABLE.md`** — item no topo registrando a mudança.
+```
+## 6. Camada de Memória Semântica (Embeddings + RAG)
+### 6.1. Comparativo modelos open-source (fonte: supermemory.ai/blog, 23/07/2026)
+### 6.2. Análise do app.supermemory.ai vs CentralDark
+### 6.3. Decisão arquitetural: BGE/Nomic local + pgvector no HUB
+### 6.4. Integração com a cascata Luna→Terra→Nemotron
+### 6.5. Checklist [ ] refinamento
+```
 
-## O que NÃO muda (áreas 🔒)
+Conteúdo: tabelas de latência/acurácia (MiniLM 68ms/78% → Nomic 110ms/86%), preços do app Supermemory ($0/$19/$100/$399), veredito Lupa e razão de rejeitar a assinatura ($0 local vs $19+/mês recorrente com lock-in).
 
-- Nada em `apps/modulos/hub/`, `apps/modulos/proxy/`, `apps/modulos/elite-gateway/` — são áreas travadas.
-- Nada em VPS/PM2/Caddy.
-- Nada de secrets novos (Nemotron via OpenRouter usa key que já existe no cofre; se não existir, aviso e paro).
+### 1.2. Expansão do `scripts/router/rotas.json`
+Adicionar bloco `embeddings` ao lado das rotas de chat existentes:
 
-## Duelo de modelos no cockpit (opcional, só se quiser)
+```json
+"embeddings": {
+  "primario": "nomic-embed-text-v1",
+  "leve": "all-MiniLM-L6-v2",
+  "producao": "bge-base-en-v1.5",
+  "provider": "local-vps",
+  "custo_por_1m_tokens_usd": 0,
+  "storage": "pgvector@hub-supabase"
+}
+```
 
-Se você quiser ver a "potência entre os dois" na tela, adiciono um botão "Segunda opinião" na SalaControle que dispara Nemotron + Sol em paralelo e mostra as duas respostas lado a lado. Custo real: ~$0,50 por debate de 1000 tokens de saída de cada. Deixo essa parte como opcional pra você aprovar depois.
+### 1.3. Aprendizado #344 em `docs/CONSCIENCIA/APRENDIZADOS.md`
+Bloco sequencial documentando: "Supermemory app avaliado e rejeitado — CentralDark já cobre o caso de uso com embeddings locais + pgvector, com custo $0 e soberania total dos dados."
 
-## Aplicação da Lupa Bayesiana no próprio plano
+### 1.4. Checklist atualizado no PR #316
+Adicionar caixinhas `[ ]`:
+- [ ] Confirmar ativação do `pgvector` no HUB Supabase
+- [ ] Escolher modelo de embedding padrão (BGE vs Nomic vs Gemini via Gateway Lovable)
+- [ ] Definir tabela `documents_hermes` no HUB (schema + RLS)
+- [ ] Integrar embeddings no fluxo de memória do Hermes-Core (só depois da aprovação)
 
-- **Falsificador:** se em 48h de uso real o Nemotron Ultra der taxa de erro > 5% ou p95 > 8s, cai automático pro Terra e me avisa.
-- **XP-1 contract_digest:** os 4 arquivos acima são o escopo total. Nada fora disso.
-- **Risco residual:** OpenRouter pode subir preço; monitoro semanalmente e reporto se mudar >20%.
+---
 
-## O que preciso de você
+## 2. Regras de execução (herdadas)
 
-Só confirmar: **"pode aplicar"** → executo os 4 arquivos, abro PR de `pivete/dev` → `pivete/auditoria` com labels `frontend`, `assign:lovable`, `revisao-humana`, e te mando o link.
+- ✅ **Um commit único** na branch `feat/lupa-conformance-tests-2026-07-22-2130`
+- ✅ **Append, nunca overwrite** — preservar todo conteúdo anterior do relatório mestre e do APRENDIZADOS.md (recuperar via API GitHub antes de escrever)
+- ✅ **Nada de v2, v3, paralelo** — mesma pasta, mesmo arquivo, extensão contínua
+- ✅ **AutoLupa canônica** (skill do repo, blob `4d0c4e8f`) aplicada antes do commit
+- ❌ **Zero** mudança em Hermes-Core, Bot Central, Elite Gateway (áreas 🔒)
+- ❌ **Zero** implementação real — só documentação e config declarativa (`rotas.json`)
+
+---
+
+## 3. Entregável no fim
+
+- 1 commit novo no PR #316 (SHA a informar)
+- Link atualizado do PR
+- Placar padrão: 🟢 anexado / 🟡 aguarda revisão Sol/Pivete / 🔴 nenhum
+- Fio da missão: "Supermemory pesquisado, embeddings open-source integrados ao plano cascata, decisão de não assinar SaaS externo registrada — tudo no mesmo PR vivo."
+
+---
+
+## 4. Próximo passo (aguardando seu OK)
+
+Confirma que eu executo os 4 itens acima **no mesmo PR #316**, em **um commit único**, preservando tudo que já está lá?
+
+Se sim → saio do plan mode e commito.
+Se quiser refinar antes → me diz o que ajustar (ex: trocar modelo padrão, adicionar/remover checkbox, mudar tom).
