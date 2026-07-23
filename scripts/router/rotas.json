@@ -1,0 +1,80 @@
+{
+  "_comentario": "Tabela de roteamento por intenção. Hot-reload no intent_router. Preços em USD por 1M tokens (in/out) puxados do OpenRouter em 23/07/2026.",
+  "versao": 1,
+  "atualizado_em": "2026-07-23",
+  "modelos": {
+    "luna": {
+      "id": "openai/gpt-5.6-luna",
+      "papel": "chat curto, respostas rápidas, classificação leve",
+      "custo_in_1m": 0.15,
+      "custo_out_1m": 0.60,
+      "latencia_ms_alvo": 800,
+      "contexto_max": 128000
+    },
+    "terra": {
+      "id": "openai/gpt-5.6-terra",
+      "papel": "código, revisão, análise média, sub-agentes",
+      "custo_in_1m": 1.25,
+      "custo_out_1m": 5.00,
+      "latencia_ms_alvo": 2500,
+      "contexto_max": 256000
+    },
+    "nemotron": {
+      "id": "nvidia/nemotron-3-ultra-550b",
+      "papel": "raciocínio pesado, arquitetura, estratégia, contexto gigante",
+      "custo_in_1m": 0.50,
+      "custo_out_1m": 2.20,
+      "latencia_ms_alvo": 6000,
+      "contexto_max": 1000000
+    }
+  },
+  "regras": [
+    {
+      "categoria": "raciocinio_pesado",
+      "modelo": "nemotron",
+      "keywords": ["arquitet", "refator", "estrat[eé]gi", "projet(a|ar|o)", "planeja", "analis(e|ar) profund", "raciocin", "debate", "conselho", "hermes"],
+      "min_chars": 0,
+      "prioridade": 10
+    },
+    {
+      "categoria": "contexto_grande",
+      "modelo": "nemotron",
+      "keywords": [],
+      "min_chars": 4000,
+      "prioridade": 9
+    },
+    {
+      "categoria": "codigo",
+      "modelo": "terra",
+      "keywords": ["python", "typescript", "javascript", "bash", "regex", "sql", "\\bapi\\b", "função", "function", "classe", "import ", "def ", "async ", "await ", "docker", "kubernetes", "supabase", "edge function"],
+      "min_chars": 0,
+      "prioridade": 8
+    },
+    {
+      "categoria": "revisao_media",
+      "modelo": "terra",
+      "keywords": ["revis(a|ar|e)", "explic(a|ar|e)", "resum(a|ir|o)", "compar(a|ar|e)", "auditor"],
+      "min_chars": 200,
+      "prioridade": 6
+    },
+    {
+      "categoria": "chat_curto",
+      "modelo": "luna",
+      "keywords": [],
+      "min_chars": 0,
+      "max_chars": 200,
+      "prioridade": 4
+    },
+    {
+      "categoria": "default",
+      "modelo": "terra",
+      "keywords": [],
+      "min_chars": 0,
+      "prioridade": 0
+    }
+  ],
+  "fallback": {
+    "ordem": ["terra", "nemotron", "luna"],
+    "nota": "Se o modelo escolhido falhar (timeout ou 5xx), tenta o próximo da ordem."
+  }
+}
