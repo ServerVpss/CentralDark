@@ -1,67 +1,79 @@
 
-# Auditoria read-only — PR #315 (ServerVpss/CentralDark)
+# 📌 Consolidação no PR #316 — Supermemory + Embeddings Locais
 
-Fonte independente: GitHub REST API via conector oficial (ServerVpss/CentralDark). Nada foi editado, commitado, publicado ou implantado.
-
----
-
-## PROVADO (com evidência da API)
-
-**1. State do PR**
-- `state: open`
-- `merged: false` · `merged_at: null` · `closed_at: null`
-
-**2. Draft ou ready**
-- `draft: true` (permanece como rascunho)
-
-**3. Base e head**
-- Base: `ServerVpss:main` @ `4311499c6285377e0f44bd2fe26f9dcdb06b7995`
-- Head: `ServerVpss:test/desafio-omega-autolupa-2026-07-22` @ `2d4acb9c38189a978bc2123c095e294574182f71`
-- Título: `[BENCHMARK] Desafio Omega — autocorreção com prova`
-- Autor: `segredounlock` · Criado: `2026-07-22T19:30:09Z` · Atualizado: `2026-07-22T19:34:55Z`
-
-**4. Labels atuais (4)**
-- `🤖 IA-VALIDAR` ✅
-- `🧠 AGENTE-HERMES` ✅
-- `🔄 GIT` ✅
-- `permito-pivete` ✅
-
-**5. Commits visíveis na head branch (ordem: mais recente → mais antigo)**
-- `2d4acb9c38189a978bc2123c095e294574182f71` — `feat(omega): resolve benchmark com solver deterministico + ledger (25/25)` — Hermes Pivete, 2026-07-22T19:29:35Z (HEAD do PR)
-- `d9f45b258e518287717e54004409d381d0b14859` — `test(omega): arma benchmark adversarial de autocorrecao` — Hermes Pivete, 2026-07-22T19:17:46Z (baseline vermelho)
-- Pai anterior à baseline: `5caeb7271f6497e9b7091ca86efa859dfe638248` (commit painel automático, fora do escopo do PR)
-
-Ou seja, o PR contém **2 commits novos** sobre `main`: baseline (Fase A) + solver (Fase B).
-
-**7. Checks/CI no HEAD `2d4acb9c…`**
-- Único workflow disparado: `codex-validate` (`.github/workflows/codex-validate.yml`).
-- Últimas execuções para este SHA:
-  - run #190 (id 29951570381) → `status: completed`, `conclusion: success` (2026-07-22T19:35:29Z)
-  - run #187 (id 29951569557) → `status: completed`, `conclusion: cancelled` (superseded pelo #190)
-- Total de runs listados para a branch: 10 (todos do mesmo workflow codex-validate; não há evidência de outros workflows terem sido disparados por este PR na janela consultada).
-
-**8. Sem merge / deploy / restart**
-- `merged=false`, `merge_commit_sha` é apenas o candidato calculado pelo GitHub (`246a86fc…`), não commit efetivado. Nenhuma ação de deploy ou restart foi executada por esta sessão (somente chamadas GET à API).
+> **Regra herdada:** tudo que você entrega vira **extensão** do plano vivo no PR #316 (`feat/lupa-conformance-tests-2026-07-22-2130`). Nada de PR novo, nada de duplicata. Melhora o que já existe.
+> **Escopo:** só GitHub (repo `ServerVpss/CentralDark`). Zero toque no app Lovable, VPS, HUB, Hermes-Core ou áreas 🔒.
+> **Status:** planejamento — decisor final = Pivete ou Sol.
 
 ---
 
-## NÃO PROVADO (falta de acesso a metadado específico nesta sessão)
+## 1. O que entra no mesmo PR #316
 
-**6. Arquivos alterados / escopo restrito a `desafios/omega_autolupa/omega_solver.py`**
-- As ferramentas GitHub disponíveis nesta sessão não expõem endpoint `/pulls/{n}/files` nem `/compare`. Só o texto do PR e a mensagem do commit `2d4acb9c…` afirmam “Diff limitado a omega_solver.py” e “Testes/contrato/gerador intactos (SHA-256 == MANIFEST)”. **Isso é declaração do autor, não prova independente.** Para confirmar de forma read-only, seria preciso consultar `GET /repos/ServerVpss/CentralDark/pulls/315/files` ou o `compare` entre `4311499c…` e `2d4acb9c…`.
+**Um único commit atômico** anexando a análise Supermemory ao documento mestre já existente (`docs/RELATORIOS/2026-07-23-arquitetura-cascata-freetier-sol-decisor.md`) + expansão do `rotas.json` com camada de embeddings.
 
-**9. Status verification de outros checks (branch protection, CodeQL, sentinela etc.)**
-- A listagem de workflow_runs mostra somente `codex-validate` para o SHA do HEAD. Não é possível afirmar que “não há outros checks obrigatórios exigidos”, apenas que “nenhum outro workflow foi executado neste HEAD dentro do batch retornado (10 runs)”. Um `GET /repos/.../commits/{sha}/check-runs` daria a lista consolidada — não disponível aqui.
+### 1.1. Extensão do documento mestre (append, não sobrescrita)
+Adicionar seção nova ao final:
+
+```
+## 6. Camada de Memória Semântica (Embeddings + RAG)
+### 6.1. Comparativo modelos open-source (fonte: supermemory.ai/blog, 23/07/2026)
+### 6.2. Análise do app.supermemory.ai vs CentralDark
+### 6.3. Decisão arquitetural: BGE/Nomic local + pgvector no HUB
+### 6.4. Integração com a cascata Luna→Terra→Nemotron
+### 6.5. Checklist [ ] refinamento
+```
+
+Conteúdo: tabelas de latência/acurácia (MiniLM 68ms/78% → Nomic 110ms/86%), preços do app Supermemory ($0/$19/$100/$399), veredito Lupa e razão de rejeitar a assinatura ($0 local vs $19+/mês recorrente com lock-in).
+
+### 1.2. Expansão do `scripts/router/rotas.json`
+Adicionar bloco `embeddings` ao lado das rotas de chat existentes:
+
+```json
+"embeddings": {
+  "primario": "nomic-embed-text-v1",
+  "leve": "all-MiniLM-L6-v2",
+  "producao": "bge-base-en-v1.5",
+  "provider": "local-vps",
+  "custo_por_1m_tokens_usd": 0,
+  "storage": "pgvector@hub-supabase"
+}
+```
+
+### 1.3. Aprendizado #344 em `docs/CONSCIENCIA/APRENDIZADOS.md`
+Bloco sequencial documentando: "Supermemory app avaliado e rejeitado — CentralDark já cobre o caso de uso com embeddings locais + pgvector, com custo $0 e soberania total dos dados."
+
+### 1.4. Checklist atualizado no PR #316
+Adicionar caixinhas `[ ]`:
+- [ ] Confirmar ativação do `pgvector` no HUB Supabase
+- [ ] Escolher modelo de embedding padrão (BGE vs Nomic vs Gemini via Gateway Lovable)
+- [ ] Definir tabela `documents_hermes` no HUB (schema + RLS)
+- [ ] Integrar embeddings no fluxo de memória do Hermes-Core (só depois da aprovação)
 
 ---
 
-## DIVERGÊNCIA
+## 2. Regras de execução (herdadas)
 
-Nenhuma divergência entre metadados do PR e as alegações **verificáveis**. Divergências não podem ser afirmadas nem descartadas para o item 6 (arquivos) enquanto a lista real de arquivos alterados não for consultada.
+- ✅ **Um commit único** na branch `feat/lupa-conformance-tests-2026-07-22-2130`
+- ✅ **Append, nunca overwrite** — preservar todo conteúdo anterior do relatório mestre e do APRENDIZADOS.md (recuperar via API GitHub antes de escrever)
+- ✅ **Nada de v2, v3, paralelo** — mesma pasta, mesmo arquivo, extensão contínua
+- ✅ **AutoLupa canônica** (skill do repo, blob `4d0c4e8f`) aplicada antes do commit
+- ❌ **Zero** mudança em Hermes-Core, Bot Central, Elite Gateway (áreas 🔒)
+- ❌ **Zero** implementação real — só documentação e config declarativa (`rotas.json`)
 
 ---
 
-## Estado final
+## 3. Entregável no fim
 
-- Nenhum arquivo alterado, nenhum commit criado, nenhum push, nenhum merge, nenhum deploy, nenhum restart nesta sessão.
-- PR #315 permanece: `open · draft · base main · head test/desafio-omega-autolupa-2026-07-22 @ 2d4acb9c` com 4 labels incluindo `permito-pivete` e `codex-validate = success` no HEAD.
+- 1 commit novo no PR #316 (SHA a informar)
+- Link atualizado do PR
+- Placar padrão: 🟢 anexado / 🟡 aguarda revisão Sol/Pivete / 🔴 nenhum
+- Fio da missão: "Supermemory pesquisado, embeddings open-source integrados ao plano cascata, decisão de não assinar SaaS externo registrada — tudo no mesmo PR vivo."
+
+---
+
+## 4. Próximo passo (aguardando seu OK)
+
+Confirma que eu executo os 4 itens acima **no mesmo PR #316**, em **um commit único**, preservando tudo que já está lá?
+
+Se sim → saio do plan mode e commito.
+Se quiser refinar antes → me diz o que ajustar (ex: trocar modelo padrão, adicionar/remover checkbox, mudar tom).
