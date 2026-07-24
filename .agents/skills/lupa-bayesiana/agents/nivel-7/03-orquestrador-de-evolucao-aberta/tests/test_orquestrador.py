@@ -10,26 +10,17 @@ BASELINE_GLOBS = ["contracts", "01-observador-de-padroes/tests",
                   "03-orquestrador-de-evolucao-aberta/tests",
                   "evidence/ledger.jsonl"]
 
-def _walk(paths):
-    for p in paths:
-        base = PKG / p
-        if base.is_file():
-            yield base
-        elif base.is_dir():
-            for f in sorted(base.rglob("*")):
-                if f.is_file(): yield f
-
 def test_baseline_files_have_stable_hashes_recorded():
+    """Verifica somente entradas do manifest (anti-drift por artefatos de runtime)."""
     manifest = PKG / "evidence" / "reports" / "baseline_hashes.json"
-    # se o arquivo existir (após BASELINE), rehash e comparar
     if not manifest.exists():
-        # baseline ainda não gravada — permitido no ciclo inicial
         return
     esperado = json.loads(manifest.read_text())
-    for f in _walk(BASELINE_GLOBS):
+    for rel, sha in esperado.items():
+        f = PKG / rel
+        assert f.exists(), f"arquivo da baseline sumiu: {rel}"
         h = hashlib.sha256(f.read_bytes()).hexdigest()
-        rel = str(f.relative_to(PKG))
-        assert esperado.get(rel) == h, f"baseline alterada: {rel}"
+        assert h == sha, f"baseline alterada: {rel}"
 
 # ----- Ponto fixo não pode ser forjado só por número de rodadas -----
 def test_ponto_fixo_exige_delta_zero_material():
