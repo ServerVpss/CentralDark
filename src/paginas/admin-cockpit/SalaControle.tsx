@@ -74,42 +74,45 @@ export default function SalaControle() {
     ? { id: Number(String(ultimoLog.id).replace(/\D/g, "")) || Date.now(), texto: ultimoLog.linha, pane: "console" }
     : null;
 
+  // RCD — quantos "loops abertos" existem (Zeigarnik nudge)
+  const missoesAbertas = MISSOES_SIDEBAR.filter((m) => m.status !== "ativa").length;
+  const respostaHero =
+    statusGeral === "ok" ? "Tudo verde" : statusGeral === "warn" ? "Atenção" : "Alerta";
+  const segundosDesdeUltimo = ultimoLog
+    ? Math.max(0, Math.round((Date.now() - new Date(ultimoLog.ts).getTime()) / 1000))
+    : null;
+
   return (
     <div className="sc-root sc-mono">
       <div className="sc-matrix" aria-hidden><MatrixRain /></div>
       <div className="sc-grid">
-        {/* HEADER OPERACIONAL — blocos coloridos VOL/PPM/CODE/UPTIME/SHA */}
+        {/* HEADER OPERACIONAL — RCD: UMA resposta dominante + CTA primário.
+            Métricas secundárias viram linha fina que não briga por atenção. */}
         <div className="sc-cell sc-head">
-          <span className="sc-head-brand">CENTRAL<em>DARK</em> · COCKPIT</span>
-          <span className="sc-head-sep">│</span>
-          <span><span className={"sc-dot " + statusClass(statusGeral)} />sistema {statusGeral === "ok" ? "estável" : statusGeral}</span>
+          <div className="sc-head-hero">
+            <span className="sc-head-brand">CENTRAL<em>DARK</em></span>
+            <span className={"sc-hero-answer " + statusClass(statusGeral)}>
+              <span className={"sc-dot " + statusClass(statusGeral)} />
+              {respostaHero}
+            </span>
+            <span className="sc-hero-sub">
+              200 OK · {segundosDesdeUltimo !== null ? `última ação ${segundosDesdeUltimo}s atrás` : "aguardando eventos"}
+            </span>
+          </div>
 
-          <div className="sc-head-blocos">
-            <div className="hblk hblk-em">
-              <span className="hblk-k">VOL</span>
-              <span className="hblk-v">1.2k/h</span>
-            </div>
-            <div className="hblk hblk-amber">
-              <span className="hblk-k">PPM</span>
-              <span className="hblk-v">12,4</span>
-            </div>
-            <div className="hblk hblk-purple">
-              <span className="hblk-k">CODE</span>
-              <span className="hblk-v">200</span>
-            </div>
-            <div className="hblk hblk-cyan">
-              <span className="hblk-k">UPTIME</span>
-              <span className="hblk-v">113h</span>
-            </div>
-            <div className="hblk hblk-mut">
-              <span className="hblk-k">SHA</span>
-              <span className="hblk-v">{HEAD_SHA}</span>
-            </div>
+          <div className="sc-head-metrics" title="métricas operacionais">
+            <span><b>1.2k/h</b> vol</span>
+            <span><b>12,4</b> ppm</span>
+            <span><b>113h</b> up</span>
+            <span className="sc-head-sha">sha <b>{HEAD_SHA}</b></span>
           </div>
 
           <div className="sc-head-right">
-            <span>{hora}</span>
-            <span><span className="sc-dot" />Pivete online</span>
+            <button className="sc-cta-primary" onClick={() => setAba("ops")}>
+              + Nova missão
+              {missoesAbertas > 0 && <span className="sc-cta-badge">{missoesAbertas}</span>}
+            </button>
+            <span className="sc-head-clock">{hora}</span>
             <Link className="sc-head-close" to="/centraldark/admin">← sair</Link>
           </div>
         </div>
