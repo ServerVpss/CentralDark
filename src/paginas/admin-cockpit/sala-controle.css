@@ -372,7 +372,7 @@
   white-space: nowrap;
 }
 
-/* ============ PAINEL OPS — grid 2×2 denso ============ */
+/* ============ PAINEL OPS — grid 2×2 denso + hero RCD no topo ============ */
 .ops-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -381,6 +381,76 @@
   height: 100%;
   background: var(--sc-line);
 }
+.ops-grid-hero {
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas:
+    "hero hero"
+    "p1   p2"
+    "p3   p4";
+}
+.ops-grid-hero .ops-hero { grid-area: hero; }
+.ops-grid-hero .ops-pane:nth-of-type(1) { grid-area: p1; }
+.ops-grid-hero .ops-pane:nth-of-type(2) { grid-area: p2; }
+.ops-grid-hero .ops-pane:nth-of-type(3) { grid-area: p3; }
+.ops-grid-hero .ops-pane:nth-of-type(4) { grid-area: p4; }
+
+/* HERO — resposta direta, dominante. RCD: value first, ask later. */
+.ops-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 18px;
+  background:
+    radial-gradient(ellipse at left, #10b98122, transparent 60%),
+    linear-gradient(180deg, #10151c, #0a0e13);
+  border-bottom: 1px solid var(--sc-line);
+}
+.ops-hero-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ops-hero-label { font-size: 9px; letter-spacing: .22em; color: var(--sc-mut); }
+.ops-hero-value {
+  font-size: 22px; font-weight: 800; letter-spacing: -.01em;
+  color: var(--sc-em-hi);
+  text-shadow: 0 0 18px #10b98166;
+  line-height: 1;
+}
+.ops-hero-sub {
+  font-size: 10.5px; color: var(--sc-mut);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 42ch;
+}
+.ops-hero-stats {
+  display: flex; gap: 22px;
+  margin-left: auto;
+  padding-left: 20px; border-left: 1px solid var(--sc-line);
+}
+.ops-hero-stat { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.ops-hero-stat-v {
+  font-size: 18px; font-weight: 700; color: var(--sc-txt);
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.ops-hero-stat-v em {
+  font-style: normal; color: var(--sc-mut); font-size: 12px; font-weight: 500;
+}
+.ops-hero-stat-k { font-size: 9px; letter-spacing: .14em; color: var(--sc-mut); text-transform: uppercase; }
+.ops-hero-cta {
+  all: unset;
+  cursor: pointer;
+  padding: 10px 16px;
+  background: linear-gradient(180deg, #10b981, #059669);
+  color: #052e2b;
+  font-weight: 700; font-size: 11px; letter-spacing: .06em;
+  border-radius: 4px;
+  box-shadow: 0 0 14px #10b98166, inset 0 1px 0 #34d39955;
+  transition: transform .12s;
+}
+.ops-hero-cta:hover { transform: translateY(-1px); }
+
+@media (max-width: 900px) {
+  .ops-hero { flex-wrap: wrap; gap: 12px; padding: 10px 12px; }
+  .ops-hero-value { font-size: 18px; }
+  .ops-hero-stats { margin-left: 0; padding-left: 0; border-left: none; }
+}
+
 .ops-pane {
   display: flex;
   flex-direction: column;
