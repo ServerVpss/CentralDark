@@ -1,0 +1,27 @@
+{
+  "pacote": "lupa-bayesiana-nivel-7",
+  "versao": "1.0.0-rc1",
+  "descricao": "Pacote reprodutivel do Desafio Nivel 7 - Lupa Bayesiana (3 agentes read-only + runner isolado).",
+  "branch": "feat/lupa-n7-reconciliacao-2026-07-24",
+  "commits": {
+    "baseline": "cef4e045af495e6c953f270ab698434629bac3d1",
+    "solucao": "0982cebb9c4cc913bb4272d52ae37ce428cb2536"
+  },
+  "arquivo": "public/downloads/lupa-bayesiana-nivel-7.zip",
+  "sha256": "8a73e1527aec5e7e367dcab8ed0b2dd3a3240b0d7d89dd464053a11759b6d089",
+  "tamanho_bytes": 9831,
+  "arquivos_incluidos": 19,
+  "reprodutivel": true,
+  "source_date_epoch": 1700000000,
+  "exclusoes": ["__pycache__", ".pytest_cache", "*.pyc", ".DS_Store", "*.tmp"],
+  "build_script": "scripts/nivel-7/build-deterministic.sh",
+  "workflow_ci": ".github/workflows/nivel-7-tests.yml",
+  "verificacao_local": "cd .agents/skills/lupa-bayesiana/agents/nivel-7 && python3 runner.py",
+  "autorlupa": {
+    "contratos_imutaveis": true,
+    "testes_byte_identicos_a_solucao": true,
+    "lock_byte_identico_a_solucao": true,
+    "duas_builds_sha_igual": true,
+    "conteudo_inesperado_no_zip": false
+  }
+}
