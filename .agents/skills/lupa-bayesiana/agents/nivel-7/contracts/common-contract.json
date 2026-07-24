@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lupa/nivel-7/common-contract",
+  "type": "object",
+  "required": ["agent_id", "input", "output", "invariants"],
+  "properties": {
+    "agent_id": { "type": "string", "enum": [
+      "01-observador-de-padroes",
+      "02-conversor-de-erro-em-teste",
+      "03-orquestrador-de-evolucao-aberta"
+    ] },
+    "input":  { "type": "object" },
+    "output": { "type": "object" },
+    "invariants": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  }
+}

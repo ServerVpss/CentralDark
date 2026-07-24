@@ -272,3 +272,17 @@ Se faltarem dados para números honestos, emitir análise qualitativa e especifi
 - Ler `references/matematica-e-calibracao.md` para fórmulas, dependência, sensibilidade, múltiplas hipóteses e interpretação correta.
 - Ler `references/casos.md` para padrões aplicados a arquivos, agentes e mudanças críticas.
 - Executar `scripts/lupa_bayesiana.py --help` para cálculos determinísticos.
+
+## Módulos internos (carregamento sob demanda)
+
+- `modules/precedencia-epistemologica.md` — precedência `fato > resultado > inferência > hipótese`.
+- `modules/erro-orientado-a-evolucao.md` — pipeline `erro + rastro + causa + correção + teste + promoção`.
+- `modules/avaliacao-nivel-6-para-7.md` — critérios do desafio nível 7.
+- `modules/validacao-agentes-nivel-7.md` — tabela mensurável de validação.
+- `agents/nivel-7/` — pacote de 3 agentes adversariais (Observador, Conversor, Orquestrador). Ver `agents/nivel-7/README.md`.
+
+Roteamento: em contexto de auto-avaliação ou avaliação de agentes, carregar o módulo relevante; não duplicar conteúdo. Fonte canônica externa: `docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md`.
+
+## Lacuna registrada
+
+O clone Lovable desta skill não contém `references/`, `scripts/` nem `tests/` presentes em outras cópias históricas. Módulos e pacote foram criados no mesmo artefato sem recriar recursos ausentes. Ao sincronizar com `origin/main`, mesclar sem sobrescrever.

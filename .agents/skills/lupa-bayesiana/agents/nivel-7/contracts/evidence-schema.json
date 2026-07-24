@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lupa/nivel-7/evidence-schema",
+  "type": "object",
+  "required": ["ts", "kind", "source", "content", "provenance"],
+  "properties": {
+    "ts":     { "type": "string", "description": "ISO-8601 UTC" },
+    "kind":   { "type": "string", "enum": ["fato", "resultado", "inferencia", "hipotese"] },
+    "source": { "type": "string", "description": "pivete | tool:<name> | log:<path> | sha:<hex>" },
+    "content":{ "type": "string" },
+    "provenance": {
+      "type": "object",
+      "required": ["path_or_command"],
+      "properties": {
+        "path_or_command": { "type": "string" },
+        "hash":            { "type": "string" }
+      }
+    },
+    "correlates_with": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs de outras evidências correlacionadas. Contam UMA vez."
+    }
+  }
+}

@@ -12,6 +12,7 @@ import { MatrixRain } from "./MatrixRain";
 import { HermesMascote } from "./HermesMascote";
 import { PainelOps } from "./PainelOps";
 import { JarvisOrb } from "./JarvisOrb";
+import { PainelNivel7 } from "./PainelNivel7";
 
 const ABAS = [
   { id: "ops",   label: "OPS"   },
@@ -21,6 +22,7 @@ const ABAS = [
   { id: "infra", label: "INFRA" },
   { id: "ias",   label: "IAs"   },
   { id: "grok",  label: "GROK"  },
+  { id: "n7",    label: "N7"    },
   { id: "logs",  label: "LOGS"  },
 ] as const;
 type AbaId = typeof ABAS[number]["id"];
@@ -172,6 +174,8 @@ export default function SalaControle() {
             <div style={{ overflow: "auto", maxHeight: "100%" }}>
               <GrokMissoes />
             </div>
+          ) : aba === "n7" ? (
+            <PainelNivel7 />
           ) : (
             <div className="sc-panel">
               <h2>{aba}</h2>

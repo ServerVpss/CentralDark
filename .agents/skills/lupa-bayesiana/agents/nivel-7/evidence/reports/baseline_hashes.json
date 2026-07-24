@@ -1,0 +1,11 @@
+{
+  "01-observador-de-padroes/tests/conftest.py": "50f8356a521741453bf6d671d3bcc36e96e0768c30c3ea4af56e3358db24ee66",
+  "01-observador-de-padroes/tests/test_observador.py": "6e36fabc49fbbac6017e947ee44a2228fc4ffe277a1343946a69b055a1cb01ca",
+  "02-conversor-de-erro-em-teste/tests/conftest.py": "50f8356a521741453bf6d671d3bcc36e96e0768c30c3ea4af56e3358db24ee66",
+  "02-conversor-de-erro-em-teste/tests/test_conversor.py": "23466330deedda11f1f87daa2379102541084c6cdb7c55aef4b2f2d4f17e3b97",
+  "03-orquestrador-de-evolucao-aberta/tests/conftest.py": "50f8356a521741453bf6d671d3bcc36e96e0768c30c3ea4af56e3358db24ee66",
+  "03-orquestrador-de-evolucao-aberta/tests/test_orquestrador.py": "5448478abac3587027103248361794f96208523937c6b12311544aab37e3af28",
+  "contracts/common-contract.json": "8ae078a1e0f008f13135522780818fd3e8fc058c39c5a91ad9874a1f1be7ac54",
+  "contracts/evidence-schema.json": "369858692b4868e8b10004ea8d2d8f7adc6a5102a1bb7619e3952d1cf81508d7",
+  "evidence/ledger.jsonl": "b82eccf64b330419575fb9ecb6ff1f94fa8ef3980992082e01495a20d6ad04b7"
+}
