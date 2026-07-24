@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "centraldark://lupa/n7/observador",
+  "title": "ObservadorN7Response",
+  "frozen": true,
+  "type": "object",
+  "required": ["agent", "precedence", "evidence_refs", "verdict", "lupa_trace"],
+  "properties": {
+    "agent": {"const": "observador"},
+    "precedence": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "verdict": {"enum": ["APROVAR", "CONDICIONAR", "REPROVAR", "ABSTER"]},
+    "lupa_trace": {"type": "array", "items": {"type": "object"}, "minItems": 3}
+  },
+  "additionalProperties": false
+}
