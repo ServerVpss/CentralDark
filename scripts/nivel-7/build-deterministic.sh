@@ -33,8 +33,12 @@ rsync -a \
 # Normaliza timestamps para SOURCE_DATE_EPOCH
 find "$STAGE/nivel-7" -exec touch -h -d "@$SDE" {} +
 
-mkdir -p "$(dirname "$ROOT/$OUT")"
-ABS_OUT="$ROOT/$OUT"
+# Se OUT for absoluto, usa direto; senao prefixa ROOT
+case "$OUT" in
+  /*) ABS_OUT="$OUT" ;;
+  *)  ABS_OUT="$ROOT/$OUT" ;;
+esac
+mkdir -p "$(dirname "$ABS_OUT")"
 rm -f "$ABS_OUT"
 
 # Zip determinístico: -X remove uid/gid/extra, ordem estável via find|sort
