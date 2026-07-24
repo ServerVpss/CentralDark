@@ -774,16 +774,16 @@
   .ops-hero-stat { align-items: flex-start; }
   .ops-hero-cta { width: 100%; text-align: center; padding: 12px; }
 
-  /* Grid 2×2 → 1 coluna */
+  /* Grid 2×2 → coluna única via flex (evita conflito com áreas nomeadas) */
   .ops-grid,
   .ops-grid-hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: none;
+    display: flex !important;
+    flex-direction: column;
     height: auto;
+    grid-template: none !important;
   }
   .ops-grid-hero .ops-hero,
-  .ops-grid-hero .ops-pane { grid-area: auto; }
+  .ops-grid-hero .ops-pane { grid-area: auto !important; }
   .ops-pane { min-height: 220px; }
 
   /* Jarvis orb — sobe pra não brigar com bottom-nav do app */
