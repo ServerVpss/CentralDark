@@ -67,6 +67,8 @@ function dotClass(s: MissaoStatus | "ok" | "warn" | "err") {
 
 export function PainelOps() {
   const [aba, setAba] = useState<ProviderTab>("lovable");
+  const [logsPag, setLogsPag] = useState(1);
+  const [provPag, setProvPag] = useState(1);
 
   // RCD — Hero pane: UMA resposta ("está tudo rodando?") + gancho Zeigarnik.
   const totalMissoes = MISSOES.length;
@@ -74,6 +76,12 @@ export function PainelOps() {
   const gastoHoje = CUSTOS[0]?.usd ?? "$ 0";
   const deltaHoje = CUSTOS[0]?.delta ?? "flat";
   const ultimoOk = LOGS.find((l) => l.tom === "ok");
+
+  const logsVisiveis = LOGS.slice(0, logsPag * LOGS_POR_PAGINA);
+  const logsRestantes = Math.max(0, LOGS.length - logsVisiveis.length);
+  const providersAba = PROVIDERS[aba];
+  const provVisiveis = providersAba.slice(0, provPag * PROVIDERS_POR_PAGINA);
+  const provRestantes = Math.max(0, providersAba.length - provVisiveis.length);
 
   return (
     <div className="ops-grid ops-grid-hero">
