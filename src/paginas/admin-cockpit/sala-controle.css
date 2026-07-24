@@ -664,13 +664,41 @@
 
 /* ============ RESPONSIVO — tablet + mobile ============ */
 
-/* Tablet: encolhe nav + feed */
+/* Tablet médio: encolhe nav + feed sem quebrar o grid */
 @media (max-width: 1180px) {
   .sc-grid {
     grid-template-columns: 180px 1fr 240px;
   }
   .sc-head-metrics { gap: 10px; }
   .sc-hero-sub { display: none; }
+}
+
+/* Tablet estreito (portrait): sidebar recolhe, feed empilha embaixo */
+@media (max-width: 960px) and (min-width: 861px) {
+  .sc-grid {
+    grid-template-columns: 64px 1fr;
+    grid-template-rows: auto 1fr auto auto;
+    grid-template-areas:
+      "head head"
+      "nav  map"
+      "nav  term"
+      "feed feed";
+  }
+  .sc-head { grid-area: head; }
+  .sc-nav  { grid-area: nav; }
+  .sc-map  { grid-area: map; }
+  .sc-term { grid-area: term; max-height: 200px; }
+  .sc-feed { grid-area: feed; max-height: 240px; }
+  .sc-nav-title,
+  .sc-nav-sec,
+  .sc-nav-hermes { display: none; }
+  .sc-nav button {
+    justify-content: center;
+    padding: 12px 6px;
+    font-size: 9px;
+    min-height: 44px;
+  }
+  .sc-nav button .sc-dot { display: none; }
 }
 
 /* Mobile: colapsa tudo em coluna única com scroll natural */
@@ -704,41 +732,52 @@
   .sc-head-brand { font-size: 10px; }
   .sc-hero-answer { font-size: 13px; }
   .sc-hero-sub { display: block; font-size: 10px; width: 100%; white-space: normal; }
-  .sc-head-metrics {
-    display: none; /* métricas ficam no OPS hero */
-  }
+  .sc-head-metrics { display: none; }
   .sc-head-right {
     width: 100%;
     justify-content: space-between;
     gap: 8px;
     font-size: 10px;
   }
-  .sc-cta-primary { padding: 8px 12px; font-size: 11px; }
+  .sc-cta-primary {
+    padding: 10px 14px;
+    font-size: 12px;
+    min-height: 40px;
+  }
 
-  /* NAV — barra horizontal com scroll */
+  /* NAV — barra horizontal com scroll-snap, touch targets 44px, fade nas bordas */
   .sc-nav {
     flex-direction: row;
     align-items: center;
     overflow-x: auto;
-    padding: 6px 8px;
+    overflow-y: hidden;
+    padding: 6px 12px;
     gap: 6px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+    min-height: 52px;
   }
   .sc-nav::-webkit-scrollbar { display: none; }
   .sc-nav-title { display: none; }
   .sc-nav button {
     flex: 0 0 auto;
-    padding: 8px 12px;
+    padding: 10px 14px;
+    min-height: 44px;
+    min-width: 60px;
     border-left: none;
     border-bottom: 2px solid transparent;
-    border-radius: 4px;
-    font-size: 11px;
+    border-radius: 6px;
+    font-size: 12px;
     white-space: nowrap;
+    scroll-snap-align: center;
   }
   .sc-nav button.on {
     border-left: none;
     border-bottom-color: var(--sc-em);
+    background: #10b98118;
   }
   .sc-nav-sec,
   .sc-nav-hermes {
@@ -759,9 +798,9 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    padding: 12px 14px;
+    padding: 14px;
   }
-  .ops-hero-value { font-size: 20px; }
+  .ops-hero-value { font-size: 22px; }
   .ops-hero-sub { white-space: normal; max-width: 100%; }
   .ops-hero-stats {
     width: 100%;
@@ -772,7 +811,13 @@
     gap: 12px;
   }
   .ops-hero-stat { align-items: flex-start; }
-  .ops-hero-cta { width: 100%; text-align: center; padding: 12px; }
+  .ops-hero-cta {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    min-height: 48px;
+    font-size: 13px;
+  }
 
   /* Grid 2×2 → coluna única via flex (evita conflito com áreas nomeadas) */
   .ops-grid,
@@ -784,26 +829,142 @@
   }
   .ops-grid-hero .ops-hero,
   .ops-grid-hero .ops-pane { grid-area: auto !important; }
-  .ops-pane { min-height: 220px; }
+  .ops-pane {
+    min-height: 0;
+    border-top: 1px solid var(--sc-line);
+  }
+  .pane-body { padding: 4px 0; }
+  .pane-body-scroll { max-height: none; overflow: visible; }
+
+  /* LOGS empilhados como cards — sem grid, cada linha é um card com truncamento */
+  .ops-log {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #ffffff08;
+    font-size: 11px;
+  }
+  .ops-log-ts,
+  .ops-log-tag {
+    font-size: 10px;
+    opacity: .7;
+    display: inline;
+    width: auto;
+  }
+  .ops-log-tag { margin-left: 6px; color: var(--sc-em); }
+  .ops-log-msg {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  /* PROVIDERS empilhados como cards */
+  .ops-prov {
+    display: grid;
+    grid-template-columns: 12px 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    row-gap: 2px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #ffffff08;
+    align-items: center;
+  }
+  .ops-prov .sc-dot { grid-row: 1 / span 2; }
+  .ops-prov-nome {
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ops-prov-lat { font-size: 11px; opacity: .8; }
+  .ops-prov-obs {
+    grid-column: 2 / span 2;
+    display: block;
+    font-size: 10px;
+    opacity: .6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Abas providers com touch target */
+  .ops-tabs button {
+    min-height: 40px;
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  /* CUSTOS empilhados */
+  .ops-custo {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    column-gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #ffffff08;
+    align-items: center;
+    font-size: 12px;
+  }
+  .ops-custo-ppm { display: none; }
+
+  /* MISSÕES */
+  .ops-missao {
+    padding: 10px 14px;
+    border-bottom: 1px solid #ffffff08;
+    font-size: 12px;
+  }
+
+  /* Botão paginar — CTA claro, touch-friendly */
+  .ops-paginar {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 0;
+    border-top: 1px dashed var(--sc-line);
+    color: var(--sc-em);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    min-height: 44px;
+  }
+  .ops-paginar:hover,
+  .ops-paginar:active { background: #10b98110; }
 
   /* Jarvis orb — sobe pra não brigar com bottom-nav do app */
   .jarvis-root { right: 14px; bottom: 88px; }
   .jarvis-orb { width: 48px; height: 48px; }
   .jarvis-painel { width: calc(100vw - 28px); max-width: 320px; }
-
-  /* Logs mais compactos */
-  .ops-log { grid-template-columns: 62px 56px 1fr; font-size: 10px; }
-  .ops-prov { grid-template-columns: 10px 1fr 48px; }
-  .ops-prov-obs { display: none; }
-  .ops-custo { grid-template-columns: 1fr 1fr auto; }
-  .ops-custo-ppm { display: none; }
 }
 
-/* Telas bem pequenas — encolhe ainda mais */
+/* Botão paginar visível em qualquer largura (mesmo desktop se listas crescerem) */
+.ops-paginar {
+  width: 100%;
+  padding: 8px;
+  background: transparent;
+  border: 0;
+  border-top: 1px dashed var(--sc-line);
+  color: var(--sc-em);
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.ops-paginar:hover { background: #10b98110; }
+
+/* Telas bem pequenas — encolhe ainda mais mas mantém toque acessível */
 @media (max-width: 420px) {
   .sc-head { padding: 8px 10px; }
   .sc-hero-answer { font-size: 12px; }
-  .sc-cta-primary { padding: 7px 10px; font-size: 10px; }
-  .ops-hero-value { font-size: 17px; }
+  .sc-cta-primary { padding: 9px 12px; font-size: 11px; }
+  .ops-hero-value { font-size: 18px; }
   .ops-hero-stat-v { font-size: 15px; }
+  .sc-nav button { min-width: 54px; padding: 10px 10px; font-size: 11px; }
 }
