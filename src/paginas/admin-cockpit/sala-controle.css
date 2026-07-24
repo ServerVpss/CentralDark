@@ -661,3 +661,149 @@
   background: #10b98111;
   border-radius: 3px;
 }
+
+/* ============ RESPONSIVO — tablet + mobile ============ */
+
+/* Tablet: encolhe nav + feed */
+@media (max-width: 1180px) {
+  .sc-grid {
+    grid-template-columns: 180px 1fr 240px;
+  }
+  .sc-head-metrics { gap: 10px; }
+  .sc-hero-sub { display: none; }
+}
+
+/* Mobile: colapsa tudo em coluna única com scroll natural */
+@media (max-width: 860px) {
+  .sc-root {
+    position: static;
+    inset: auto;
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+  }
+  .sc-root::before { display: none; } /* scanline atrapalha no mobile */
+
+  .sc-grid {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    gap: 1px;
+  }
+
+  /* HEADER — empilha em 2 linhas, sem métricas laterais */
+  .sc-head {
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    gap: 8px 12px;
+    min-height: 56px;
+    height: auto;
+  }
+  .sc-head-hero { flex-wrap: wrap; gap: 6px 10px; width: 100%; }
+  .sc-head-brand { font-size: 10px; }
+  .sc-hero-answer { font-size: 13px; }
+  .sc-hero-sub { display: block; font-size: 10px; width: 100%; white-space: normal; }
+  .sc-head-metrics {
+    display: none; /* métricas ficam no OPS hero */
+  }
+  .sc-head-right {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 10px;
+  }
+  .sc-cta-primary { padding: 8px 12px; font-size: 11px; }
+
+  /* NAV — barra horizontal com scroll */
+  .sc-nav {
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    padding: 6px 8px;
+    gap: 6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sc-nav::-webkit-scrollbar { display: none; }
+  .sc-nav-title { display: none; }
+  .sc-nav button {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .sc-nav button.on {
+    border-left: none;
+    border-bottom-color: var(--sc-em);
+  }
+  .sc-nav-sec,
+  .sc-nav-hermes {
+    display: none; /* missões e mascote ficam no OPS pra não poluir */
+  }
+
+  /* Painel central com altura mínima usável */
+  .sc-map,
+  .sc-term,
+  .sc-feed {
+    min-height: 320px;
+  }
+  .sc-term { max-height: 260px; }
+  .sc-feed { max-height: 380px; }
+
+  /* HERO OPS — empilha */
+  .ops-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+  .ops-hero-value { font-size: 20px; }
+  .ops-hero-sub { white-space: normal; max-width: 100%; }
+  .ops-hero-stats {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .ops-hero-stat { align-items: flex-start; }
+  .ops-hero-cta { width: 100%; text-align: center; padding: 12px; }
+
+  /* Grid 2×2 → 1 coluna */
+  .ops-grid,
+  .ops-grid-hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: none;
+    height: auto;
+  }
+  .ops-grid-hero .ops-hero,
+  .ops-grid-hero .ops-pane { grid-area: auto; }
+  .ops-pane { min-height: 220px; }
+
+  /* Jarvis orb — sobe pra não brigar com bottom-nav do app */
+  .jarvis-root { right: 14px; bottom: 88px; }
+  .jarvis-orb { width: 48px; height: 48px; }
+  .jarvis-painel { width: calc(100vw - 28px); max-width: 320px; }
+
+  /* Logs mais compactos */
+  .ops-log { grid-template-columns: 62px 56px 1fr; font-size: 10px; }
+  .ops-prov { grid-template-columns: 10px 1fr 48px; }
+  .ops-prov-obs { display: none; }
+  .ops-custo { grid-template-columns: 1fr 1fr auto; }
+  .ops-custo-ppm { display: none; }
+}
+
+/* Telas bem pequenas — encolhe ainda mais */
+@media (max-width: 420px) {
+  .sc-head { padding: 8px 10px; }
+  .sc-hero-answer { font-size: 12px; }
+  .sc-cta-primary { padding: 7px 10px; font-size: 10px; }
+  .ops-hero-value { font-size: 17px; }
+  .ops-hero-stat-v { font-size: 15px; }
+}
