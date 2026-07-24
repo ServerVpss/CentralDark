@@ -1,0 +1,36 @@
+{
+  "titulo": "Desafio Nível 7 — Agentes de Erro Aberto",
+  "autoria_conceitual": "Pivete",
+  "artefato_canonico": "docs/CONSCIENCIA/DESAFIO-NIVEL-7-AGENTES-ERRO-ABERTO.md",
+  "skill_canonica": ".agents/skills/lupa-bayesiana/SKILL.md",
+  "pacote": ".agents/skills/lupa-bayesiana/agents/nivel-7/",
+  "agentes": [
+    { "id": "01-observador-de-padroes",       "papel": "detecta mudança de narrativa; separa fato/resultado/inferência/hipótese" },
+    { "id": "02-conversor-de-erro-em-teste",  "papel": "converte erro comprovado em teste permanente" },
+    { "id": "03-orquestrador-de-evolucao-aberta", "papel": "AutoLupa até ponto fixo; promove aprendizado" }
+  ],
+  "testes": {
+    "total": 13,
+    "verdes": 13,
+    "novos_permanentes": [
+      "03-orquestrador-de-evolucao-aberta/tests/test_erro_real_pycache_leak_permanente.py"
+    ]
+  },
+  "erro_real_capturado_na_missao": {
+    "descricao": "walker de baseline incluía __pycache__ e produzia falso vermelho",
+    "causa": "iteração via rglob sem filtro de artefato de runtime",
+    "correcao_minima": "iterar somente entradas do baseline_hashes.json",
+    "teste_permanente": "test_erro_real_pycache_leak_permanente.py"
+  },
+  "autolupa": {
+    "rodadas": 2,
+    "ponto_fixo_atingido": true
+  },
+  "zip": {
+    "nome": "AGENTES-DESAFIO-NIVEL-7-3557ddc6.zip",
+    "sha256": "3557ddc6f1800454cda30779fcc75c95f0d09dccda0d56ef87eddbe46d02fda4",
+    "download_path": "/downloads/AGENTES-DESAFIO-NIVEL-7-3557ddc6.zip",
+    "reprodutivel_duas_builds": true
+  },
+  "pr": "BLOCKED_POR_CAPACIDADE_DA_PONTE"
+}
