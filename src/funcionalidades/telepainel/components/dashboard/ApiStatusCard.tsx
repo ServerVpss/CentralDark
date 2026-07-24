@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shield } from "lucide-react";
+import { Shield, KeyRound, Mail } from "lucide-react";
 import { Progress } from "@/compartilhado/ui/progress";
 import { Button } from "@/compartilhado/ui/button";
 import { Skeleton } from "@/compartilhado/ui/skeleton";
@@ -15,8 +15,13 @@ const PERIODS: { key: ApiUsagePeriod; label: string }[] = [
   { key: "30d", label: "30d" },
 ];
 
+const ADMIN_MAILTO =
+  "mailto:contacobra3467@gmail.com" +
+  "?subject=" + encodeURIComponent("CentralDark — Chave da VeiculosAPI expirada") +
+  "&body=" + encodeURIComponent("Oi, a chave da VeiculosAPI foi rejeitada (não autorizada). Precisa renovar o secret ISEEK_API_KEY.");
+
 export function ApiStatusCard() {
-  const { data, loading, error, refresh } = useApiStatus();
+  const { data, loading, errorKind, refresh } = useApiStatus();
   const [period, setPeriod] = useState<ApiUsagePeriod>("today");
   const { data: history, isLoading: historyLoading } = useApiUsageHistory(period);
 
@@ -30,7 +35,44 @@ export function ApiStatusCard() {
     );
   }
 
-  if (error || !data) {
+  if (errorKind === "expired_key") {
+    return (
+      <div className="rounded-xl border border-amber-500/40 bg-card p-4 space-y-2">
+        <div className="flex items-center gap-2 text-sm">
+          <KeyRound className="h-3.5 w-3.5 text-amber-500" />
+          <span className="text-xs font-semibold text-amber-500">Chave da API expirada</span>
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          A chave da VeiculosAPI foi rejeitada (não autorizada). Renove a chave para
+          voltar a operar — as consultas ficam pausadas até lá.
+        </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <Button
+            asChild
+            size="sm"
+            className="h-7 text-xs gap-1"
+          >
+            <a href={ADMIN_MAILTO}>
+              <Mail className="h-3 w-3" />
+              Falar com admin
+            </a>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 text-xs gap-1"
+            onClick={refresh}
+            aria-label="Verificar novamente"
+          >
+            <SyncStatusIcon status="error" size={12} withTooltip={false} />
+            Tentar de novo
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (errorKind || !data) {
     return (
       <div className="rounded-xl border border-destructive/30 bg-card p-4">
         <div className="flex items-center gap-2 text-sm">
@@ -50,6 +92,8 @@ export function ApiStatusCard() {
       </div>
     );
   }
+
+
 
   const usagePercent = data.total_diario > 0
     ? Math.round((data.consumo_hoje / data.total_diario) * 100)
