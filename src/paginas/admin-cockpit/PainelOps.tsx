@@ -3,6 +3,9 @@
 // o plug real (Hermes-Core, Gateway, HUB) entra na Fase 3.
 import { useState } from "react";
 
+const LOGS_POR_PAGINA = 4;
+const PROVIDERS_POR_PAGINA = 4;
+
 type MissaoStatus = "ativa" | "pendente" | "travada";
 interface Missao {
   id: string;
@@ -64,6 +67,8 @@ function dotClass(s: MissaoStatus | "ok" | "warn" | "err") {
 
 export function PainelOps() {
   const [aba, setAba] = useState<ProviderTab>("lovable");
+  const [logsPag, setLogsPag] = useState(1);
+  const [provPag, setProvPag] = useState(1);
 
   // RCD — Hero pane: UMA resposta ("está tudo rodando?") + gancho Zeigarnik.
   const totalMissoes = MISSOES.length;
@@ -71,6 +76,12 @@ export function PainelOps() {
   const gastoHoje = CUSTOS[0]?.usd ?? "$ 0";
   const deltaHoje = CUSTOS[0]?.delta ?? "flat";
   const ultimoOk = LOGS.find((l) => l.tom === "ok");
+
+  const logsVisiveis = LOGS.slice(0, logsPag * LOGS_POR_PAGINA);
+  const logsRestantes = Math.max(0, LOGS.length - logsVisiveis.length);
+  const providersAba = PROVIDERS[aba];
+  const provVisiveis = providersAba.slice(0, provPag * PROVIDERS_POR_PAGINA);
+  const provRestantes = Math.max(0, providersAba.length - provVisiveis.length);
 
   return (
     <div className="ops-grid ops-grid-hero">
@@ -112,49 +123,70 @@ export function PainelOps() {
         </div>
       </section>
 
-      {/* PANE 2 — LOGS HERMES (âmbar) */}
+      {/* PANE 2 — LOGS HERMES (âmbar) — stack + paginação no mobile */}
       <section className="ops-pane pane-amber">
         <header className="pane-head">
           <span className="pane-title">◇ LOGS HERMES</span>
           <span className="pane-cost">$ 0,02</span>
         </header>
         <div className="pane-body pane-body-scroll">
-          {LOGS.map((l, i) => (
+          {logsVisiveis.map((l, i) => (
             <div key={i} className="ops-log">
               <span className="ops-log-ts">[{l.ts}]</span>
               <span className="ops-log-tag">{l.tag}</span>
-              <span className={"ops-log-msg tom-" + l.tom}>{l.msg}</span>
+              <span className={"ops-log-msg tom-" + l.tom} title={l.msg}>{l.msg}</span>
             </div>
           ))}
+          {logsRestantes > 0 && (
+            <button
+              className="ops-paginar"
+              onClick={() => setLogsPag((p) => p + 1)}
+              aria-label={`Ver mais ${logsRestantes} logs`}
+            >
+              ver mais {logsRestantes} logs ↓
+            </button>
+          )}
+          {logsRestantes === 0 && logsPag > 1 && (
+            <button className="ops-paginar" onClick={() => setLogsPag(1)}>
+              recolher ↑
+            </button>
+          )}
         </div>
       </section>
 
-      {/* PANE 3 — PROVIDERS (roxo) */}
+      {/* PANE 3 — PROVIDERS (roxo) — abas com scroll e paginação */}
       <section className="ops-pane pane-purple">
         <header className="pane-head">
           <span className="pane-title">◇ PROVIDERS / GATEWAY</span>
           <span className="pane-cost">$ 0,58</span>
         </header>
-        <div className="ops-tabs">
+        <div className="ops-tabs" role="tablist">
           {(["lovable", "gateway", "hub", "local"] as ProviderTab[]).map((k) => (
             <button
               key={k}
+              role="tab"
+              aria-selected={aba === k}
               className={aba === k ? "on" : ""}
-              onClick={() => setAba(k)}
+              onClick={() => { setAba(k); setProvPag(1); }}
             >
               {k.toUpperCase()}
             </button>
           ))}
         </div>
         <div className="pane-body pane-body-scroll">
-          {PROVIDERS[aba].map((p, i) => (
+          {provVisiveis.map((p, i) => (
             <div key={i} className="ops-prov">
               <span className={"sc-dot " + dotClass(p.status)} />
-              <span className="ops-prov-nome">{p.nome}</span>
+              <span className="ops-prov-nome" title={p.nome}>{p.nome}</span>
               <span className="ops-prov-lat">{p.latMs}ms</span>
               <span className="ops-prov-obs">{p.obs}</span>
             </div>
           ))}
+          {provRestantes > 0 && (
+            <button className="ops-paginar" onClick={() => setProvPag((p) => p + 1)}>
+              ver mais {provRestantes} ↓
+            </button>
+          )}
         </div>
       </section>
 
