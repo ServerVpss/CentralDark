@@ -3,6 +3,9 @@
 // o plug real (Hermes-Core, Gateway, HUB) entra na Fase 3.
 import { useState } from "react";
 
+const LOGS_POR_PAGINA = 4;
+const PROVIDERS_POR_PAGINA = 4;
+
 type MissaoStatus = "ativa" | "pendente" | "travada";
 interface Missao {
   id: string;
