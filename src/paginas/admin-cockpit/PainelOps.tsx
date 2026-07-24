@@ -65,8 +65,36 @@ function dotClass(s: MissaoStatus | "ok" | "warn" | "err") {
 export function PainelOps() {
   const [aba, setAba] = useState<ProviderTab>("lovable");
 
+  // RCD — Hero pane: UMA resposta ("está tudo rodando?") + gancho Zeigarnik.
+  const totalMissoes = MISSOES.length;
+  const abertas = MISSOES.filter((m) => m.status !== "ativa").length;
+  const gastoHoje = CUSTOS[0]?.usd ?? "$ 0";
+  const deltaHoje = CUSTOS[0]?.delta ?? "flat";
+  const ultimoOk = LOGS.find((l) => l.tom === "ok");
+
   return (
-    <div className="ops-grid">
+    <div className="ops-grid ops-grid-hero">
+      {/* HERO — resposta direta pro Pivete antes de qualquer painel */}
+      <section className="ops-hero">
+        <div className="ops-hero-main">
+          <span className="ops-hero-label">SISTEMA</span>
+          <span className="ops-hero-value">Rodando</span>
+          <span className="ops-hero-sub">{ultimoOk ? `${ultimoOk.tag} · ${ultimoOk.msg}` : "aguardando"}</span>
+        </div>
+        <div className="ops-hero-stats">
+          <div className="ops-hero-stat">
+            <span className="ops-hero-stat-v">{abertas}<em>/{totalMissoes}</em></span>
+            <span className="ops-hero-stat-k">missões abertas</span>
+          </div>
+          <div className="ops-hero-stat">
+            <span className="ops-hero-stat-v">{gastoHoje}</span>
+            <span className="ops-hero-stat-k">hoje · {deltaHoje}</span>
+          </div>
+        </div>
+        <button className="ops-hero-cta">Fechar 1 missão →</button>
+      </section>
+
+
       {/* PANE 1 — MISSÕES (esmeralda) */}
       <section className="ops-pane pane-emerald">
         <header className="pane-head">
