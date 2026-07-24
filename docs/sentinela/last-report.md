@@ -1,4 +1,4 @@
-# Sentinela — 2026-07-23T19:22:21.966Z
+# Sentinela — 2026-07-24T02:51:40.641Z
 
 | Métrica | Valor |
 |---|---|
@@ -6,18 +6,18 @@
 | Endpoints fora | 1 |
 | Workflows vermelhos 24h | 20 |
 | Divergências detectadas | 21 |
-| Issues novas | 6 |
-| Issues já abertas (dedupe) | 15 |
+| Issues novas | 2 |
+| Issues já abertas (dedupe) | 19 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 309ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 284ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 121ms · CORS=`*`
-- 🔴 **Install status** — `503` em 114ms
-- 🟢 **Painel** — `200` em 123ms · CORS=`*`
-- 🟢 **API** — `200` em 128ms · CORS=`*`
+- 🟢 **MCP health** — `200` em 243ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 180ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 110ms · CORS=`*`
+- 🔴 **Install status** — `503` em 88ms
+- 🟢 **Painel** — `200` em 95ms · CORS=`*`
+- 🟢 **API** — `200` em 88ms · CORS=`*`
 
 ## Divergências
 
