@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-25T20:55:04.283Z",
-  "updatedAtBR": "25/07/2026, 17:55:04 BRT",
+  "updatedAt": "2026-07-25T21:01:11.051Z",
+  "updatedAtBR": "25/07/2026, 18:01:11 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "test(lupa): conformidade AutoLupa 15-checks + XP-3 comitê + hash-guard canônico (#316)",
+    "lastCommit": "Turno C — Nível 7: build determinístico + workflow CI (DRAFT) (#340)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-25T21:01:11.051Z",
+      "titulo": "Push na main · f577e4d5a7ce25c5f0cb0ed3b0f7bdaf6df5e253",
+      "detalhe": "Turno C — Nível 7: build determinístico + workflow CI (DRAFT) (#340)",
+      "area": "Repositório",
+      "sha": "f577e4d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-25T20:55:04.283Z",
       "titulo": "Push na main · 531c4cca6f1a15c4b62e13cac479183fb106d114",
       "detalhe": "test(lupa): conformidade AutoLupa 15-checks + XP-3 comitê + hash-guard canônico (#316)",
@@ -986,14 +994,6 @@
       "detalhe": "feat(grafo): restaura celestial.html — sumiu do repo/VPS após reset de push anterior",
       "area": "Repositório",
       "sha": "3d3c776",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-14T15:34:41.206Z",
-      "titulo": "Push na main · ad76e2c2cd74c863b98906df96d2cb5e66016820",
-      "detalhe": "chore(labels): só emoji — remove assign:/bug/p1 (Pivete)",
-      "area": "Repositório",
-      "sha": "ad76e2c",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-25T21:01:11.051Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f577e4d5a7ce25c5f0cb0ed3b0f7bdaf6df5e253 (f577e4d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-25T20:55:04.283Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 531c4cca6f1a15c4b62e13cac479183fb106d114 (531c4cc)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-15T19:45:51.176Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 3d3c77643eca6d821e6bf0298dda6f7b01e57c99 (3d3c776)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-14T15:34:41.206Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ad76e2c2cd74c863b98906df96d2cb5e66016820 (ad76e2c)",
       "area": "Repositório",
       "status": "sucesso"
     }
