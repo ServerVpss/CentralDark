@@ -1,0 +1,29 @@
+{
+  "pacote": "lupa-bayesiana-nivel-7",
+  "versao": "1.0.1-errata",
+  "descricao": "Pacote reprodutivel do Desafio Nivel 7 - Lupa Bayesiana (3 agentes read-only + runner isolado).",
+  "branch": "feat/lupa-n7-reconciliacao-2026-07-24",
+  "commits": {
+    "baseline": "cef4e045af495e6c953f270ab698434629bac3d1",
+    "solucao": "0982cebb9c4cc913bb4272d52ae37ce428cb2536",
+    "turno_c": "ab218ff2b4078d9c1772535985c2e44aa14d5ce5"
+  },
+  "arquivo": "public/downloads/lupa-bayesiana-nivel-7.zip",
+  "sha256": "21bc545af03b28e5305b02d94813c879a53b819e638e59eda40bd577775ea8ce",
+  "tamanho_bytes": 10186,
+  "arquivos_incluidos": 19,
+  "reprodutivel": true,
+  "source_date_epoch": 1700000000,
+  "exclusoes": ["__pycache__", ".pytest_cache", "*.pyc", ".DS_Store", "*.tmp"],
+  "build_script": "scripts/nivel-7/build-deterministic.sh",
+  "workflow_ci": ".github/workflows/nivel-7-tests.yml",
+  "verificacao_local": "cd .agents/skills/lupa-bayesiana/agents/nivel-7 && PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider",
+  "autolupa": {
+    "contratos_imutaveis": true,
+    "testes_byte_identicos_baseline_solucao_turnoC": true,
+    "lock_corrigido_turno_d": true,
+    "duas_builds_sha_igual": true,
+    "conteudo_inesperado_no_zip": false
+  },
+  "errata": "LOCK.json Turno A tinha hash incorreto para tests/test_read_only_contract.py; corrigido no Turno D sem alterar contracts/tests. Ver evidence/BASELINE-ERRATA.md."
+}
