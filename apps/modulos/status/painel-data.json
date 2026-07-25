@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-24T23:30:25.846Z",
-  "updatedAtBR": "24/07/2026, 20:30:25 BRT",
+  "updatedAt": "2026-07-25T20:55:04.283Z",
+  "updatedAtBR": "25/07/2026, 17:55:04 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "🔧 fix(ci): bump actions/checkout@v4→v5 + adiciona .gitmodules do Bolt/source (#341)",
+    "lastCommit": "test(lupa): conformidade AutoLupa 15-checks + XP-3 comitê + hash-guard canônico (#316)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-25T20:55:04.283Z",
+      "titulo": "Push na main · 531c4cca6f1a15c4b62e13cac479183fb106d114",
+      "detalhe": "test(lupa): conformidade AutoLupa 15-checks + XP-3 comitê + hash-guard canônico (#316)",
+      "area": "Repositório",
+      "sha": "531c4cc",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-24T23:30:25.846Z",
       "titulo": "Push na main · da64364f14af83a79fb8d5e986ff1b4568359698",
       "detalhe": "🔧 fix(ci): bump actions/checkout@v4→v5 + adiciona .gitmodules do Bolt/source (#341)",
@@ -986,14 +994,6 @@
       "detalhe": "chore(labels): só emoji — remove assign:/bug/p1 (Pivete)",
       "area": "Repositório",
       "sha": "ad76e2c",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-14T15:34:07.395Z",
-      "titulo": "Push na main · 14aaea9aff0177e141b704263c5db57b6fa6b699",
-      "detalhe": "chore(labels): só emoji — remove assign:/bug/p1 (Pivete)",
-      "area": "Repositório",
-      "sha": "14aaea9",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-25T20:55:04.283Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 531c4cca6f1a15c4b62e13cac479183fb106d114 (531c4cc)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-24T23:30:25.846Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · da64364f14af83a79fb8d5e986ff1b4568359698 (da64364)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-14T15:34:41.206Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · ad76e2c2cd74c863b98906df96d2cb5e66016820 (ad76e2c)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-14T15:34:07.395Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 14aaea9aff0177e141b704263c5db57b6fa6b699 (14aaea9)",
       "area": "Repositório",
       "status": "sucesso"
     }
