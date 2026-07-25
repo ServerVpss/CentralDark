@@ -997,3 +997,53 @@
 .sc-root .sc-nav button:active {
   transform: translateY(1px);
 }
+
+/* ── AVANÇO ── painel único de acompanhamento do cockpit ── */
+.sc-avanco { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+.sc-av-head { display: flex; justify-content: space-between; align-items: baseline; }
+.sc-av-titulo { color: var(--sc-em-hi); font-size: 13px; letter-spacing: 1px; }
+.sc-av-sub { color: var(--sc-mut); font-size: 10px; }
+.sc-av-progresso { display: flex; align-items: center; gap: 10px; }
+.sc-av-barra { flex: 1; height: 10px; background: var(--sc-bg3); border: 1px solid var(--sc-line); border-radius: 999px; overflow: hidden; }
+.sc-av-barra-fill { height: 100%; background: linear-gradient(90deg, var(--sc-em), var(--sc-em-hi)); transition: width 400ms ease; }
+.sc-av-num { color: var(--sc-em-hi); font-weight: 700; min-width: 44px; text-align: right; }
+.sc-av-stats { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--sc-mut); }
+.sc-av-stats b { color: var(--sc-txt); }
+.sc-av-stats .warn b { color: var(--sc-warn); }
+.sc-av-stats .err b { color: var(--sc-err); }
+.sc-av-filtros { display: flex; gap: 6px; flex-wrap: wrap; }
+.sc-av-filtros button { background: transparent; color: var(--sc-mut); border: 1px solid var(--sc-line); padding: 4px 10px; border-radius: 4px; font-size: 10px; text-transform: uppercase; cursor: pointer; }
+.sc-av-filtros button.on { color: var(--sc-em-hi); border-color: var(--sc-em); background: hsl(var(--primary) / 0.08); }
+.sc-av-lista { display: flex; flex-direction: column; gap: 6px; }
+.sc-av-item { border: 1px solid var(--sc-line); border-radius: 6px; background: var(--sc-bg2); }
+.sc-av-item.on { border-color: var(--sc-em); }
+.sc-av-item-head { width: 100%; display: grid; grid-template-columns: 14px 1fr auto auto auto; gap: 10px; align-items: center; padding: 10px 12px; background: transparent; border: 0; color: var(--sc-txt); cursor: pointer; text-align: left; }
+.sc-av-item-titulo { font-size: 12px; }
+.sc-av-item-pct { color: var(--sc-em-hi); font-size: 11px; font-weight: 700; }
+.sc-av-item-status { font-size: 10px; text-transform: uppercase; color: var(--sc-mut); }
+.sc-av-item-status.warn { color: var(--sc-warn); }
+.sc-av-item-status.err { color: var(--sc-err); }
+.sc-av-item-parado { font-size: 10px; color: var(--sc-warn); }
+.sc-av-motivo { padding: 0 12px 10px; font-size: 11px; color: var(--sc-warn); }
+.sc-av-corpo { padding: 12px; border-top: 1px dashed var(--sc-line); background: var(--sc-bg3); }
+.sc-av-rodape { margin-top: 6px; font-size: 10px; color: var(--sc-mut); }
+.sc-av-rodape code { color: var(--sc-em-hi); }
+
+/* Card Pivete */
+.sc-cardpivete { display: flex; flex-direction: column; gap: 10px; font-size: 11px; }
+.sc-cp-block { border: 1px solid var(--sc-line); border-radius: 4px; padding: 8px 10px; background: var(--sc-bg2); }
+.sc-cp-label { color: var(--sc-em-hi); font-size: 10px; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+.sc-cp-row { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+.sc-cp-row span { color: var(--sc-mut); }
+.sc-cp-row b { color: var(--sc-txt); font-weight: 500; word-break: break-all; text-align: right; }
+.sc-cp-p { color: var(--sc-txt); line-height: 1.5; padding: 2px 0; }
+.sc-cp-p b { color: var(--sc-em-hi); font-weight: 600; }
+.sc-cp-list { margin: 0; padding-left: 18px; color: var(--sc-txt); }
+.sc-cp-list li { padding: 2px 0; word-break: break-word; }
+
+@media (max-width: 640px) {
+  .sc-av-item-head { grid-template-columns: 14px 1fr auto; }
+  .sc-av-item-status, .sc-av-item-parado { display: none; }
+  .sc-cp-row { flex-direction: column; }
+  .sc-cp-row b { text-align: left; }
+}
