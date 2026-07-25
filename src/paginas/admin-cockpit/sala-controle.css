@@ -979,3 +979,21 @@
   .ops-hero-stat-v { font-size: 15px; }
   .sc-nav button { min-width: 54px; padding: 10px 10px; font-size: 11px; }
 }
+
+/* ── Reconciliação Esmeralda: feedback tátil (active:translate-y-[1px]) ── */
+.sc-root button,
+.sc-root .sc-cta-primary,
+.sc-root .sc-cta-ghost,
+.sc-root .sc-head-close,
+.sc-root .sc-nav a,
+.sc-root .sc-nav button {
+  transition: transform 120ms ease, box-shadow 120ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.sc-root button:active,
+.sc-root .sc-cta-primary:active,
+.sc-root .sc-cta-ghost:active,
+.sc-root .sc-head-close:active,
+.sc-root .sc-nav a:active,
+.sc-root .sc-nav button:active {
+  transform: translateY(1px);
+}
