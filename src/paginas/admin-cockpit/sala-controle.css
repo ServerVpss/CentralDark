@@ -69,6 +69,9 @@
   /* tokens de cor dos panes coloridos */
   --pane-em:     #10b981;
   --pane-amber:  #fbbf24;
+  /* tokens de cor dos panes coloridos — --pane-em amarra na paleta oficial */
+  --pane-em:     hsl(var(--primary));
+  --pane-amber:  hsl(var(--warning));
   --pane-purple: #a78bfa;
   --pane-cyan:   #22d3ee;
   --pane-rose:   #f472b6;
