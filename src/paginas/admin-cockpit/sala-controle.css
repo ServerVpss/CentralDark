@@ -2,30 +2,41 @@
    Paleta esmeralda oficial CentralDark. */
 
 .sc-root {
-  /* fundo obsidiana neutro — esmeralda vira só acento */
-  --sc-bg:      #0b0f14;
-  --sc-bg2:     #12181f;
-  --sc-bg3:     #0a0e13;
-  --sc-line:    #ffffff10;
-  --sc-line-2:  #ffffff1f;
-  --sc-em:      #10b981;
-  --sc-em-hi:   #34d399;
-  --sc-txt:     #e5e7eb;
-  --sc-mut:     #94a3b8;
-  --sc-warn:    #fbbf24;
-  --sc-err:     #f87171;
-  --sc-idle:    #64748b;
+  /* Cockpit sempre em escala escura, independente do tema global.
+     Mapeia os apelidos --sc-* aos tokens semânticos Esmeralda (index.css).
+     Se index.css mudar, o cockpit acompanha. */
+  color-scheme: dark;
+
+  /* superfícies (dark scheme fixo do tema Esmeralda) */
+  --sc-bg:      hsl(0 0% 4%);            /* --background dark */
+  --sc-bg2:     hsl(0 0% 6%);            /* --card dark */
+  --sc-bg3:     hsl(0 0% 3%);
+  --sc-line:    hsl(0 0% 100% / 0.06);   /* --border traduzido pra alpha */
+  --sc-line-2:  hsl(0 0% 100% / 0.12);
+
+  /* acento esmeralda oficial (--primary / --primary-glow dark) */
+  --sc-em:      hsl(var(--primary));
+  --sc-em-hi:   hsl(var(--primary-glow));
+
+  /* texto */
+  --sc-txt:     hsl(0 0% 92%);
+  --sc-mut:     hsl(0 0% 55%);
+
+  /* estados */
+  --sc-warn:    hsl(var(--warning));
+  --sc-err:     hsl(var(--destructive));
+  --sc-idle:    hsl(0 0% 40%);
 
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at top, var(--sc-bg2), var(--sc-bg) 60%, #05080c 100%);
+  background: radial-gradient(ellipse at top, var(--sc-bg2), var(--sc-bg) 60%, hsl(0 0% 2%) 100%);
   color: var(--sc-txt);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Geist", "Inter", system-ui, sans-serif;
   overflow: hidden;
   z-index: 1;
 }
 
-.sc-mono { font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace; }
+.sc-mono { font-family: "Geist Mono", "JetBrains Mono", ui-monospace, monospace; }
 
 /* Scanline sutil */
 .sc-root::before {
