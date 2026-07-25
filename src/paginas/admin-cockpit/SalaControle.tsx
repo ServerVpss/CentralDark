@@ -51,7 +51,7 @@ const HEAD_SHA =
   (import.meta.env.VITE_COMMIT_SHA as string | undefined)?.slice(0, 7) || "dev-live";
 
 export default function SalaControle() {
-  const [aba, setAba] = useState<AbaId>("ops");
+  const [aba, setAba] = useState<AbaId>("avanco");
   const state = useCockpitLive();
   const [hora, setHora] = useState(relogio());
 
@@ -151,7 +151,11 @@ export default function SalaControle() {
 
         {/* CENTRO */}
         <div className="sc-cell sc-map">
-          {aba === "ops" ? (
+          {aba === "avanco" ? (
+            <div style={{ overflow: "auto", maxHeight: "100%" }}>
+              <PainelAvanco />
+            </div>
+          ) : aba === "ops" ? (
             <PainelOps />
           ) : aba === "mapa" ? (
             <>
