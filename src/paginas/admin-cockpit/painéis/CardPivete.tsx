@@ -18,12 +18,25 @@ export interface CardPiveteData {
   tutorial?: string[];
 }
 
+export interface DependenciaResumo {
+  id: string;
+  titulo: string;
+  status: string;
+}
+
 function v(x?: string) {
   const t = (x ?? "").trim();
   return t.length ? t : "N/A";
 }
 
-export function CardPivete({ card }: { card: CardPiveteData }) {
+interface Props {
+  card: CardPiveteData;
+  dependencias?: DependenciaResumo[];
+  bloqueando?: DependenciaResumo[];
+  onIrPara?: (id: string) => void;
+}
+
+export function CardPivete({ card, dependencias = [], bloqueando = [], onIrPara }: Props) {
   const arquivos = card.arquivos_modificados?.length ? card.arquivos_modificados : ["N/A"];
   const tutorial = card.tutorial?.length ? card.tutorial : ["N/A"];
 
@@ -43,6 +56,46 @@ export function CardPivete({ card }: { card: CardPiveteData }) {
           {arquivos.map((a, i) => <li key={i}>{a}</li>)}
         </ul>
       </div>
+
+      {(dependencias.length > 0 || bloqueando.length > 0) && (
+        <div className="sc-cp-block">
+          <div className="sc-cp-label">DEPENDÊNCIAS</div>
+          {dependencias.length > 0 && (
+            <div className="sc-cp-p">
+              <b>Depende de:</b>
+              <ul className="sc-cp-deplist">
+                {dependencias.map((d) => (
+                  <li key={d.id}>
+                    <button
+                      className={"sc-cp-deplink st-" + d.status}
+                      onClick={() => onIrPara?.(d.id)}
+                    >
+                      [{d.status}] {d.titulo}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {bloqueando.length > 0 && (
+            <div className="sc-cp-p">
+              <b>Está bloqueando:</b>
+              <ul className="sc-cp-deplist">
+                {bloqueando.map((d) => (
+                  <li key={d.id}>
+                    <button
+                      className={"sc-cp-deplink st-" + d.status}
+                      onClick={() => onIrPara?.(d.id)}
+                    >
+                      [{d.status}] {d.titulo}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="sc-cp-block">
         <div className="sc-cp-label">ONDE / POR QUÊ / PRA QUÊ</div>
