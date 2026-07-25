@@ -1,89 +1,75 @@
-## O que você pediu (em uma linha)
 
-Um **único menu dentro do cockpit** que mostra o avanço real do próprio cockpit: o que já foi feito, o que falta, o que travou e por quê, com % de progresso e o Card Pivete de cada entrega. Sem v1/v2/v3. Fonte única, viva, dentro de `/admin/cockpit`.
+# Plano — Evolução do Painel AVANÇO no /admin/cockpit
 
-## O que vai existir (só isso)
+Aplicando a Lupa Bayesiana (evidência primeiro, correção mínima, fonte única no Git, sem v2/v3): tudo abaixo estende o painel AVANÇO que já existe, sem duplicar arquivos e sem inventar backend novo pra parte que não precisa.
 
-**1 aba nova no menu do cockpit:** `📋 AVANÇO` (entra na barra que hoje tem HUB · INFRA · IAs · GROK · N7).
+## O que muda pra você (leigo)
 
-Ao clicar, abre **um painel só**, dividido em 4 blocos empilhados (mobile-first, já que você usa no celular):
+1. Uma barrinha de busca no topo do AVANÇO — digita "hub", "pix", "hermes" e filtra na hora.
+2. Filtros novos ao lado do status: **área** (cockpit, hub, hermes, segurança, infra) e **severidade** (p0/p1/p2/p3).
+3. Cada item passa a mostrar **do que ele depende** e **quem está travando ele**. Se algo trava outro, aparece um selo vermelho "🔒 bloqueando X itens" com o motivo.
+4. Um botão **"Editar item"** abre um formulário dentro do cockpit pra você mudar status, %, motivo e colar evidência — sem abrir o JSON na mão.
+5. Toda entrega passa a registrar **SHA256 antes/depois, arquivos modificados e data** automaticamente, virando prova no próprio card.
+
+## Escopo técnico
+
+### 1. Estender o schema de `docs/CONSCIENCIA/COCKPIT-AVANCO.json`
+Campos novos por item (opcionais, retrocompatível):
+- `area`: `cockpit | hub | hermes | seguranca | infra | ia`
+- `severidade`: `p0 | p1 | p2 | p3`
+- `palavras_chave`: `string[]`
+- `depende_de`: `string[]` (ids de outros itens)
+- `bloqueia`: derivado em runtime a partir de `depende_de` (não gravado).
+
+### 2. `PainelAvanco.tsx` — busca + filtros + grafo de dependências
+- Input de busca (título + palavras_chave + card.onde/por_que).
+- Dropdowns de **área** e **severidade** ao lado do filtro de status.
+- Cálculo do mapa reverso `bloqueia`: para cada item, listar quem depende dele.
+- No item expandido: seção **Dependências** (lista clicável que rola até o item alvo) e **Bloqueando** (selo vermelho quando `bloqueia.length > 0`).
+- Selo "🔒 bloqueando N" no cabeçalho quando aplicável.
+
+### 3. Editor inline `EditorItem.tsx` (novo, dentro de `painéis/`)
+- Botão "Editar" em cada item abre um modal/drawer.
+- Form: status, %, motivo_bloqueio, prova, depende_de (multi-select), área, severidade, palavras_chave.
+- Persistência: como o JSON vive no Git e não temos backend dedicado pro cockpit, o editor tem 2 modos:
+  - **Modo leitura+cópia (default)**: monta o novo bloco JSON pronto e oferece botão "Copiar patch" — você cola no arquivo/PR. Zero backend, funciona já.
+  - **Modo salvar direto (opcional, se você autorizar)**: chama uma Edge Function `cockpit-avanco-write` no HUB Supabase que valida admin (super_admin lock existente) e commita via GitHub API na branch `pivete/dev`. Só implemento se você mandar — respeita a trava "não mexer no Supabase Lovable atual".
+- Entrego já com **Modo leitura+cópia** ativo. Modo salvar direto fica como pendência no próprio AVANÇO.
+
+### 4. Trilha automática de prova (SHA256 + arquivos + data)
+- Script Node em `scripts/cockpit-avanco/registrar-entrega.mjs`:
+  - Recebe `--id <item>` e lista de arquivos.
+  - Lê SHA256 do `git show HEAD~1:<arquivo>` (antes) e do working tree (depois).
+  - Atualiza o item no JSON com `arquivos_modificados`, `antes_sha256`, `depois_sha256`, `atualizado_em`.
+- Hook opcional em `.husky/pre-commit` (só cria se você autorizar) que lê `.cockpit-avanco.pending` e roda o script.
+- Sem hook: rodo o script manualmente ao fechar cada entrega — a prova entra no mesmo commit.
+
+### 5. CSS
+- Ajustes mínimos em `sala-controle.css`: input de busca, chips de área/severidade, selo "bloqueando", estilos do drawer editor. Mantém tokens Esmeralda e o padrão tátil `active:translate-y-[1px]`.
+
+## Arquivos tocados
 
 ```text
-┌─ AVANÇO DO COCKPIT ──────────────────────────┐
-│  Progresso geral: ██████████░░░░  62%         │
-│  12 feitas · 4 em andamento · 5 pendentes · 2 bloqueadas
-├───────────────────────────────────────────────┤
-│  [Filtro: Todas | ✅ Feitas | 🟡 Andando | 🔴 Pendentes | ⛔ Bloqueadas]
-├───────────────────────────────────────────────┤
-│  ✅ Reconciliação Esmeralda do cockpit         │
-│     └ clique → abre Card Pivete completo       │
-│  🟡 Menu AVANÇO (esta tela)      45%           │
-│  🔴 Plugar logs reais no painel                │
-│     └ Por que não foi: falta endpoint no HUB   │
-│  ⛔ Alinhar VPS chore/*                        │
-│     └ Bloqueado por: aguarda seu OK            │
-└───────────────────────────────────────────────┘
+docs/CONSCIENCIA/COCKPIT-AVANCO.json           (schema estendido, retrocompatível)
+docs/CONSCIENCIA/COCKPIT-AVANCO.README.md      (documenta novos campos)
+src/paginas/admin-cockpit/painéis/PainelAvanco.tsx     (busca, filtros, deps)
+src/paginas/admin-cockpit/painéis/EditorItem.tsx       (novo — drawer editor)
+src/paginas/admin-cockpit/painéis/CardPivete.tsx       (mostra deps + bloqueia)
+src/paginas/admin-cockpit/sala-controle.css            (estilos novos)
+scripts/cockpit-avanco/registrar-entrega.mjs           (novo — SHA256 auto)
 ```
 
-**Cada item, ao clicar, abre o Card Pivete** com todos os campos que você mandou:
-`ANTES_SHA256`, `DEPOIS_SHA256`, `ARQUIVOS_MODIFICADOS`, `OUTROS_ARQUIVOS_TOCADOS`, `RESTART_EXECUTED`, `INSTALADO_NO_HERMES`, `ONDE / POR QUE / PRA QUE`, `COMO / QUANDO / POR QUÊ USAR`, `PROVA (link)`, `TUTORIAL`. Campo vazio = `N/A`. Sem inventar.
+## O que NÃO faço sem sua ordem
 
-## Fonte de dados (única, canônica — Lupa aplicada)
+- Não mexo em `.github/workflows/`.
+- Não crio Edge Function nova no Supabase Lovable atual (trava ativa).
+- Não instalo husky nem hook de commit sem "PERMITO PIVETE".
+- Não toco em áreas 🔒 (HERMES-CORE, mapeamento, hub, etc).
 
-Um único arquivo JSON versionado no repo:
+## Prova de entrega (Card Pivete por item)
 
-```text
-docs/CONSCIENCIA/COCKPIT-AVANCO.json
-```
+Cada item novo/atualizado no AVANÇO vem com: ANTES_SHA256, DEPOIS_SHA256, arquivos, restart, onde/por_que/pra_que, como/quando usar, prova (commit), tutorial passo a passo.
 
-- **Uma fonte só.** Sem v1/v2. Sem cópia em outro lugar.
-- Formato simples (array de itens com `id`, `titulo`, `status`, `porcentagem`, `motivo_bloqueio`, e o `card_pivete` inteiro).
-- O painel lê esse JSON via `fetch('/docs/CONSCIENCIA/COCKPIT-AVANCO.json')` no build/dev — sem backend novo, sem edge, sem migration.
-- Atualizar = editar o JSON e commitar. Simples, rastreável no Git.
+## Próximo passo se você aprovar
 
-**Por que JSON no repo e não Supabase:** você pediu Lupa canônica e "não misturar assuntos alheios". Backend/tabela nova é escopo de outro pedido. JSON no repo mostra o avanço **do próprio código do cockpit** direto do Git — que é onde o avanço real acontece.
-
-## Aplicação da Técnica da Lupa (canônica)
-
-Antes de escrever qualquer item novo no JSON, o Lupa Check obriga:
-- **Zoom out:** o item pertence ao cockpit? Se não, não entra.
-- **Zoom in:** existe evidência (commit, arquivo, print, log)? Se não, marca `🔴 pendente` sem inventar prova.
-- **Feynman:** dá pra explicar em 3 linhas leigas? Se não, o item volta pro rascunho.
-- **AutoLupa:** se um item ficar > 7 dias sem mudança, aparece um selo `⚠️ parado — reavaliar` no painel.
-
-Documento: `docs/CONSCIENCIA/COCKPIT-AVANCO.README.md` — 1 página só, explicando o formato e as 4 checagens acima.
-
-## Arquivos que vou criar/editar (fechado — só isso)
-
-1. `docs/CONSCIENCIA/COCKPIT-AVANCO.json` — fonte de verdade (já semeada com as ~20 tarefas reais conhecidas desta conversa).
-2. `docs/CONSCIENCIA/COCKPIT-AVANCO.README.md` — 1 página: formato + Lupa Check.
-3. `src/paginas/admin-cockpit/painéis/PainelAvanco.tsx` — o painel novo (leitor do JSON, filtros, barra de progresso, card expandido).
-4. `src/paginas/admin-cockpit/painéis/CardPivete.tsx` — componente que renderiza o Card Pivete completo de um item.
-5. `src/paginas/admin-cockpit/SalaControle.tsx` — adiciona a aba `AVANÇO` na `sc-nav` e faz o roteamento interno.
-6. `src/paginas/admin-cockpit/sala-controle.css` — 20-30 linhas: estilos da barra de progresso, do card expandido e dos selos de status. Usa tokens Esmeralda que já reconciliamos.
-
-## O que NÃO vou fazer neste plano
-
-- Não crio tabela nova no HUB.
-- Não crio edge function.
-- Não mexo em áreas 🔒.
-- Não mexo em VPS/PM2.
-- Não mudo nenhuma outra aba do cockpit.
-- Não crio "cockpit v2" nem duplicata em outra rota.
-
-## Como você vai usar
-
-1. Abre `/admin/cockpit` no celular ou desktop.
-2. Toca em **AVANÇO** na barra do topo.
-3. Vê a barra de % + contagem por status.
-4. Filtra por status ou rola a lista.
-5. Toca em qualquer item → abre o Card Pivete completo com prova, tutorial e motivo do bloqueio (se estiver 🔴 ou ⛔).
-6. Quer atualizar? Me pede: "marca X como feito com Card Pivete Y" — eu edito o JSON e commito. Você vê a mudança no próximo reload.
-
-## Progresso deste próprio menu
-
-Vou registrar o item `#1: Menu AVANÇO` no JSON já semeado, começando em `🟡 45% — implementação inicial`. Quando terminar de plugar, viro pra `✅ 100%` com o Card Pivete preenchido — meta-prova de que o padrão funciona.
-
-## Próximo passo depois de você aprovar
-
-Executo os 6 arquivos acima em uma leva só, semeio o JSON com o inventário real desta conversa (ações concluídas + pendências + bloqueios que apareceram nos últimos turnos) e te devolvo o Card Pivete do próprio menu como primeira entrega no formato novo.
+Implemento em 1 commit único na `pivete/dev` (schema + PainelAvanco + Editor modo cópia + CardPivete + CSS + script SHA256), registro no próprio AVANÇO como meta-prova, e te entrego o Card Pivete completo.
