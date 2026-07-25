@@ -75,7 +75,7 @@
 }
 
 .sc-cell {
-  background: linear-gradient(180deg, #10151c, #0a0e13);
+  background: linear-gradient(180deg, var(--sc-bg2), var(--sc-bg3));
   border: 1px solid var(--sc-line);
   overflow: hidden;
 }
