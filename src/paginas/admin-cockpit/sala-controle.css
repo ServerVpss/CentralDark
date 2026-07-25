@@ -1011,6 +1011,18 @@
 .sc-av-stats b { color: var(--sc-txt); }
 .sc-av-stats .warn b { color: var(--sc-warn); }
 .sc-av-stats .err b { color: var(--sc-err); }
+
+/* Card Pivete */
+.sc-cardpivete { display: flex; flex-direction: column; gap: 10px; font-size: 11px; }
+.sc-cp-block { border: 1px solid var(--sc-line); border-radius: 4px; padding: 8px 10px; background: var(--sc-bg2); }
+.sc-cp-label { color: var(--sc-em-hi); font-size: 10px; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+.sc-cp-row { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+.sc-cp-row span { color: var(--sc-mut); }
+.sc-cp-row b { color: var(--sc-txt); font-weight: 500; word-break: break-all; text-align: right; }
+.sc-cp-p { color: var(--sc-txt); line-height: 1.5; padding: 2px 0; }
+.sc-cp-p b { color: var(--sc-em-hi); font-weight: 600; }
+.sc-cp-list { margin: 0; padding-left: 18px; color: var(--sc-txt); }
+.sc-cp-list li { padding: 2px 0; word-break: break-word; }
 /* busca + chips de filtro */
 .sc-av-busca { display: flex; gap: 6px; align-items: center; }
 .sc-av-busca input {
