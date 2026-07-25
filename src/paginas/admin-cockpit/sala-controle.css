@@ -2,30 +2,41 @@
    Paleta esmeralda oficial CentralDark. */
 
 .sc-root {
-  /* fundo obsidiana neutro — esmeralda vira só acento */
-  --sc-bg:      #0b0f14;
-  --sc-bg2:     #12181f;
-  --sc-bg3:     #0a0e13;
-  --sc-line:    #ffffff10;
-  --sc-line-2:  #ffffff1f;
-  --sc-em:      #10b981;
-  --sc-em-hi:   #34d399;
-  --sc-txt:     #e5e7eb;
-  --sc-mut:     #94a3b8;
-  --sc-warn:    #fbbf24;
-  --sc-err:     #f87171;
-  --sc-idle:    #64748b;
+  /* Cockpit sempre em escala escura, independente do tema global.
+     Mapeia os apelidos --sc-* aos tokens semânticos Esmeralda (index.css).
+     Se index.css mudar, o cockpit acompanha. */
+  color-scheme: dark;
+
+  /* superfícies (dark scheme fixo do tema Esmeralda) */
+  --sc-bg:      hsl(0 0% 4%);            /* --background dark */
+  --sc-bg2:     hsl(0 0% 6%);            /* --card dark */
+  --sc-bg3:     hsl(0 0% 3%);
+  --sc-line:    hsl(0 0% 100% / 0.06);   /* --border traduzido pra alpha */
+  --sc-line-2:  hsl(0 0% 100% / 0.12);
+
+  /* acento esmeralda oficial (--primary / --primary-glow dark) */
+  --sc-em:      hsl(var(--primary));
+  --sc-em-hi:   hsl(var(--primary-glow));
+
+  /* texto */
+  --sc-txt:     hsl(0 0% 92%);
+  --sc-mut:     hsl(0 0% 55%);
+
+  /* estados */
+  --sc-warn:    hsl(var(--warning));
+  --sc-err:     hsl(var(--destructive));
+  --sc-idle:    hsl(0 0% 40%);
 
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at top, var(--sc-bg2), var(--sc-bg) 60%, #05080c 100%);
+  background: radial-gradient(ellipse at top, var(--sc-bg2), var(--sc-bg) 60%, hsl(0 0% 2%) 100%);
   color: var(--sc-txt);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Geist", "Inter", system-ui, sans-serif;
   overflow: hidden;
   z-index: 1;
 }
 
-.sc-mono { font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace; }
+.sc-mono { font-family: "Geist Mono", "JetBrains Mono", ui-monospace, monospace; }
 
 /* Scanline sutil */
 .sc-root::before {
@@ -55,16 +66,16 @@
   gap: 1px;
   background: var(--sc-line);
 
-  /* tokens de cor dos panes coloridos */
-  --pane-em:     #10b981;
-  --pane-amber:  #fbbf24;
+  /* tokens de cor dos panes coloridos — --pane-em amarra na paleta oficial */
+  --pane-em:     hsl(var(--primary));
+  --pane-amber:  hsl(var(--warning));
   --pane-purple: #a78bfa;
   --pane-cyan:   #22d3ee;
   --pane-rose:   #f472b6;
 }
 
 .sc-cell {
-  background: linear-gradient(180deg, #10151c, #0a0e13);
+  background: linear-gradient(180deg, var(--sc-bg2), var(--sc-bg3));
   border: 1px solid var(--sc-line);
   overflow: hidden;
 }
@@ -321,7 +332,7 @@
   border-right: 1px solid var(--sc-line);
 }
 .sc-head-metrics b { color: var(--sc-txt); font-weight: 600; letter-spacing: 0; }
-.sc-head-sha b { color: var(--sc-em-hi); font-family: "JetBrains Mono", monospace; }
+.sc-head-sha b { color: var(--sc-em-hi); font-family: "Geist Mono", "JetBrains Mono", monospace; }
 
 .sc-head-right {
   display: flex; gap: 10px; align-items: center;
@@ -333,7 +344,7 @@
   cursor: pointer;
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 12px;
-  background: linear-gradient(180deg, #10b981, #059669);
+  background: linear-gradient(180deg, var(--sc-em), #059669);
   color: #052e2b;
   font-weight: 700;
   font-size: 11px;
@@ -345,7 +356,7 @@
 .sc-cta-primary:hover { transform: translateY(-1px); box-shadow: 0 0 18px #10b98188, inset 0 1px 0 #34d39988; }
 .sc-cta-badge {
   background: #052e2b;
-  color: #34d399;
+  color: var(--sc-em-hi);
   font-size: 9px;
   padding: 1px 5px;
   border-radius: 8px;
@@ -436,7 +447,7 @@
   all: unset;
   cursor: pointer;
   padding: 10px 16px;
-  background: linear-gradient(180deg, #10b981, #059669);
+  background: linear-gradient(180deg, var(--sc-em), #059669);
   color: #052e2b;
   font-weight: 700; font-size: 11px; letter-spacing: .06em;
   border-radius: 4px;
@@ -595,8 +606,8 @@
   width: 54px; height: 54px;
   border-radius: 50%;
   display: grid; place-items: center;
-  background: radial-gradient(circle at 35% 30%, #34d399, #10b981 55%, #052e2b 100%);
-  box-shadow: 0 0 24px #10b98188, 0 0 6px #34d399;
+  background: radial-gradient(circle at 35% 30%, var(--sc-em-hi), var(--sc-em) 55%, #052e2b 100%);
+  box-shadow: 0 0 24px #10b98188, 0 0 6px var(--sc-em-hi);
 }
 .jarvis-orb-core {
   width: 10px; height: 10px; border-radius: 50%;
@@ -610,7 +621,7 @@
   border: 1px solid #10b98166;
   animation: jarvis-ring 2.4s ease-out infinite;
 }
-.jarvis-orb.ativo { box-shadow: 0 0 32px #34d399cc, 0 0 8px #34d399; }
+.jarvis-orb.ativo { box-shadow: 0 0 32px #34d399cc, 0 0 8px var(--sc-em-hi); }
 @keyframes jarvis-ring {
   0%   { transform: scale(1);   opacity: .8; }
   100% { transform: scale(1.5); opacity: 0;  }
@@ -967,4 +978,22 @@
   .ops-hero-value { font-size: 18px; }
   .ops-hero-stat-v { font-size: 15px; }
   .sc-nav button { min-width: 54px; padding: 10px 10px; font-size: 11px; }
+}
+
+/* ── Reconciliação Esmeralda: feedback tátil (active:translate-y-[1px]) ── */
+.sc-root button,
+.sc-root .sc-cta-primary,
+.sc-root .sc-cta-ghost,
+.sc-root .sc-head-close,
+.sc-root .sc-nav a,
+.sc-root .sc-nav button {
+  transition: transform 120ms ease, box-shadow 120ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.sc-root button:active,
+.sc-root .sc-cta-primary:active,
+.sc-root .sc-cta-ghost:active,
+.sc-root .sc-head-close:active,
+.sc-root .sc-nav a:active,
+.sc-root .sc-nav button:active {
+  transform: translateY(1px);
 }
