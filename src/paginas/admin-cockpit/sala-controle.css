@@ -332,7 +332,7 @@
   border-right: 1px solid var(--sc-line);
 }
 .sc-head-metrics b { color: var(--sc-txt); font-weight: 600; letter-spacing: 0; }
-.sc-head-sha b { color: var(--sc-em-hi); font-family: "JetBrains Mono", monospace; }
+.sc-head-sha b { color: var(--sc-em-hi); font-family: "Geist Mono", "JetBrains Mono", monospace; }
 
 .sc-head-right {
   display: flex; gap: 10px; align-items: center;
@@ -344,7 +344,7 @@
   cursor: pointer;
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 12px;
-  background: linear-gradient(180deg, #10b981, #059669);
+  background: linear-gradient(180deg, var(--sc-em), #059669);
   color: #052e2b;
   font-weight: 700;
   font-size: 11px;
@@ -356,7 +356,7 @@
 .sc-cta-primary:hover { transform: translateY(-1px); box-shadow: 0 0 18px #10b98188, inset 0 1px 0 #34d39988; }
 .sc-cta-badge {
   background: #052e2b;
-  color: #34d399;
+  color: var(--sc-em-hi);
   font-size: 9px;
   padding: 1px 5px;
   border-radius: 8px;
@@ -447,7 +447,7 @@
   all: unset;
   cursor: pointer;
   padding: 10px 16px;
-  background: linear-gradient(180deg, #10b981, #059669);
+  background: linear-gradient(180deg, var(--sc-em), #059669);
   color: #052e2b;
   font-weight: 700; font-size: 11px; letter-spacing: .06em;
   border-radius: 4px;
@@ -606,8 +606,8 @@
   width: 54px; height: 54px;
   border-radius: 50%;
   display: grid; place-items: center;
-  background: radial-gradient(circle at 35% 30%, #34d399, #10b981 55%, #052e2b 100%);
-  box-shadow: 0 0 24px #10b98188, 0 0 6px #34d399;
+  background: radial-gradient(circle at 35% 30%, var(--sc-em-hi), var(--sc-em) 55%, #052e2b 100%);
+  box-shadow: 0 0 24px #10b98188, 0 0 6px var(--sc-em-hi);
 }
 .jarvis-orb-core {
   width: 10px; height: 10px; border-radius: 50%;
@@ -621,7 +621,7 @@
   border: 1px solid #10b98166;
   animation: jarvis-ring 2.4s ease-out infinite;
 }
-.jarvis-orb.ativo { box-shadow: 0 0 32px #34d399cc, 0 0 8px #34d399; }
+.jarvis-orb.ativo { box-shadow: 0 0 32px #34d399cc, 0 0 8px var(--sc-em-hi); }
 @keyframes jarvis-ring {
   0%   { transform: scale(1);   opacity: .8; }
   100% { transform: scale(1.5); opacity: 0;  }
