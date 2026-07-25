@@ -13,8 +13,10 @@ import { HermesMascote } from "./HermesMascote";
 import { PainelOps } from "./PainelOps";
 import { JarvisOrb } from "./JarvisOrb";
 import { PainelNivel7 } from "./PainelNivel7";
+import { PainelAvanco } from "./painéis/PainelAvanco";
 
 const ABAS = [
+  { id: "avanco",label: "AVANÇO"},
   { id: "ops",   label: "OPS"   },
   { id: "mapa",  label: "MAPA"  },
   { id: "mcp",   label: "MCP"   },
