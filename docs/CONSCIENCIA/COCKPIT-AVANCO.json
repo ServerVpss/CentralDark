@@ -1,0 +1,236 @@
+{
+  "_meta": {
+    "descricao": "Fonte única e canônica do avanço do cockpit /admin/cockpit. Sem v1/v2. Editar aqui = painel AVANÇO reflete.",
+    "atualizado_em": "2026-07-25",
+    "regras": [
+      "Zoom out: item pertence ao cockpit? Se não, não entra.",
+      "Zoom in: existe evidência (commit/arquivo/print)? Se não, status = pendente.",
+      "Feynman: dá pra explicar em 3 linhas leigas? Se não, volta pro rascunho.",
+      "AutoLupa: item > 7 dias sem mudança → selo 'parado — reavaliar'."
+    ]
+  },
+  "itens": [
+    {
+      "id": "menu-avanco",
+      "titulo": "Menu AVANÇO no cockpit",
+      "status": "andando",
+      "porcentagem": 90,
+      "atualizado_em": "2026-07-25",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": [
+          "docs/CONSCIENCIA/COCKPIT-AVANCO.json",
+          "docs/CONSCIENCIA/COCKPIT-AVANCO.README.md",
+          "src/paginas/admin-cockpit/painéis/PainelAvanco.tsx",
+          "src/paginas/admin-cockpit/painéis/CardPivete.tsx",
+          "src/paginas/admin-cockpit/SalaControle.tsx",
+          "src/paginas/admin-cockpit/sala-controle.css"
+        ],
+        "outros_arquivos_tocados": "N/A",
+        "restart_executed": "não — só frontend",
+        "instalado_no_hermes": "não — Hermes não precisa saber deste menu",
+        "onde": "/admin/cockpit → aba AVANÇO",
+        "por_que": "Você não tinha lugar único pra acompanhar o que foi feito, o que falta e por quê.",
+        "pra_que": "Você abre uma aba e vê progresso real do cockpit + Card Pivete de cada entrega.",
+        "como_usar": "Toca AVANÇO, filtra por status, clica no item pra abrir o Card Pivete completo.",
+        "quando_usar": "Sempre que quiser saber onde o cockpit está e o que travou.",
+        "por_que_usar_isso": "Fonte única no Git. Sem backend novo, sem duplicata, rastreável por commit.",
+        "prova": "Este próprio JSON + commit da branch pivete/dev",
+        "tutorial": [
+          "1. Abre /admin/cockpit no celular ou desktop.",
+          "2. Toca AVANÇO na barra do topo (HUB · INFRA · IAs · GROK · N7 · AVANÇO).",
+          "3. Vê a barra de progresso geral e o contador por status.",
+          "4. Usa os filtros pra ver só feitas, andando, pendentes ou bloqueadas.",
+          "5. Clica em qualquer item pra abrir o Card Pivete com prova e motivo."
+        ]
+      }
+    },
+    {
+      "id": "reconciliacao-esmeralda",
+      "titulo": "Reconciliar cockpit com tokens Esmeralda",
+      "status": "feito",
+      "porcentagem": 100,
+      "atualizado_em": "2026-07-25",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": ["src/paginas/admin-cockpit/sala-controle.css"],
+        "outros_arquivos_tocados": "N/A",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não",
+        "onde": "src/paginas/admin-cockpit/sala-controle.css (bloco .sc-root)",
+        "por_que": "Cockpit usava hex fixo, não seguia o tema Esmeralda oficial.",
+        "pra_que": "Se index.css muda, cockpit acompanha. Menos duplicata.",
+        "como_usar": "Só abrir /admin/cockpit — cores agora vêm de hsl(var(--primary)) etc.",
+        "quando_usar": "N/A — aplicado automaticamente.",
+        "por_que_usar_isso": "Sistema 3D Tátil obriga tokens semânticos, não hex.",
+        "prova": "Diff no arquivo: --sc-em: hsl(var(--primary))",
+        "tutorial": ["Já está aplicado — nada a fazer."]
+      }
+    },
+    {
+      "id": "fraude-pix-webhooks",
+      "titulo": "Bloquear fraude PIX (webhooks sem assinatura)",
+      "status": "pendente",
+      "porcentagem": 0,
+      "atualizado_em": "2026-07-25",
+      "motivo_bloqueio": "Aguardando seu OK pra atacar o Bloco 1 (findings #1 #2 #4 do scanner).",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": [],
+        "outros_arquivos_tocados": "N/A",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não",
+        "onde": "supabase/functions/efi-webhook, misticpay-webhook, pix-webhook",
+        "por_que": "Qualquer um faz POST fingindo ser o gateway e marca pagamento como pago.",
+        "pra_que": "Fechar fraude direta de PIX antes de qualquer novo cliente.",
+        "como_usar": "Depois de fechado, nada muda pra você — só os webhooks reais passam.",
+        "quando_usar": "Você me libera → eu implemento verificação HMAC nas 3 edges.",
+        "por_que_usar_isso": "Sem isso, painel vaza dinheiro.",
+        "prova": "N/A — ainda não feito",
+        "tutorial": ["Aguardando autorização."]
+      }
+    },
+    {
+      "id": "pagamentos-self-update",
+      "titulo": "Fechar UPDATE de usuário em pending_payments e pix_transactions",
+      "status": "feito",
+      "porcentagem": 100,
+      "atualizado_em": "2026-07-25",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": ["migration Supabase"],
+        "outros_arquivos_tocados": "políticas RLS em pending_payments e pix_transactions",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não",
+        "onde": "HUB Supabase (tabelas pending_payments, pix_transactions)",
+        "por_que": "Usuário podia fazer UPDATE do próprio status pra 'paid'.",
+        "pra_que": "Só admin + service_role atualiza status agora. INSERT/SELECT continua.",
+        "como_usar": "Nada — RLS ativa transparente.",
+        "quando_usar": "N/A",
+        "por_que_usar_isso": "Sem isso, qualquer usuário virava pagante grátis.",
+        "prova": "Migration aplicada, findings pending_payments_self_update_status e pix_transactions_self_update_status resolvidos.",
+        "tutorial": ["Já ativo."]
+      }
+    },
+    {
+      "id": "responsivo-mobile",
+      "titulo": "Cockpit responsivo (mobile/tablet)",
+      "status": "feito",
+      "porcentagem": 100,
+      "atualizado_em": "2026-07-25",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": ["src/paginas/admin-cockpit/sala-controle.css"],
+        "outros_arquivos_tocados": "N/A",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não",
+        "onde": "sala-controle.css — media queries < 860px e < 960px",
+        "por_que": "No celular o grid quebrava e você não conseguia usar.",
+        "pra_que": "Layout empilhado, tabelas viram cards, sidebar colapsa.",
+        "como_usar": "Abre no celular — funciona.",
+        "quando_usar": "N/A",
+        "por_que_usar_isso": "Você usa direto no telefone.",
+        "prova": "Validado 360px a 1024px.",
+        "tutorial": ["Já ativo."]
+      }
+    },
+    {
+      "id": "logs-reais-hermes",
+      "titulo": "Plugar logs reais do Hermes-Core no painel",
+      "status": "andando",
+      "porcentagem": 20,
+      "atualizado_em": "2026-07-25",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": [],
+        "outros_arquivos_tocados": "src/paginas/admin-cockpit/hooks/useCockpitLive.ts (ainda mock)",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não",
+        "onde": "useCockpitLive.ts",
+        "por_que": "Hoje o painel mostra dados MOCK — não é o Hermes real.",
+        "pra_que": "Você ver o que o Hermes-Core está realmente fazendo na VPS.",
+        "como_usar": "Depois de plugado: os eventos e console viram reais.",
+        "quando_usar": "Precisa endpoint no HUB expondo os últimos eventos do Hermes.",
+        "por_que_usar_isso": "Sem isso, o cockpit é vitrine, não ferramenta.",
+        "prova": "N/A — endpoint não existe ainda",
+        "tutorial": ["Aguardando endpoint no HUB."]
+      }
+    },
+    {
+      "id": "roteamento-intent",
+      "titulo": "Roteamento por intenção (4 tiers: FREE/BARATO/MÉDIO/TOPO)",
+      "status": "pendente",
+      "porcentagem": 0,
+      "atualizado_em": "2026-07-25",
+      "motivo_bloqueio": "Escopo é VPS, não Lovable. Precisa você definir se implementa aqui como painel de config ou só na VPS.",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": [],
+        "outros_arquivos_tocados": "N/A",
+        "restart_executed": "não",
+        "instalado_no_hermes": "sim — quando existir, vai na VPS",
+        "onde": "VPS /root/CentralDark/apps/modulos/intent-router (a criar)",
+        "por_que": "Hoje toda pergunta vai pro mesmo modelo, desperdiçando token.",
+        "pra_que": "Classifica intenção → escolhe tier certo (free pra saudação, topo pra código).",
+        "como_usar": "Depois de pronto: você fala no bot, ele decide o modelo.",
+        "quando_usar": "Você me libera escopo → eu abro PR na VPS.",
+        "por_que_usar_isso": "Corta 60%+ de custo mantendo qualidade.",
+        "prova": "N/A — nunca foi implementado. Assumi teatro anterior.",
+        "tutorial": ["Aguardando você definir escopo."]
+      }
+    },
+    {
+      "id": "sec-token-telegram",
+      "titulo": "Retirar token Telegram do frontend",
+      "status": "pendente",
+      "porcentagem": 0,
+      "atualizado_em": "2026-07-25",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": [],
+        "outros_arquivos_tocados": "N/A",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não",
+        "onde": "componente que chama api.telegram.org direto do browser",
+        "por_que": "Token exposto no bundle público.",
+        "pra_que": "Mover chamada pra edge function e guardar token só no servidor.",
+        "como_usar": "Nada muda pra você.",
+        "quando_usar": "Bloco 2 do plano de segurança.",
+        "por_que_usar_isso": "Token vazado = qualquer um manda mensagem pelo bot.",
+        "prova": "N/A",
+        "tutorial": ["Aguardando autorização."]
+      }
+    },
+    {
+      "id": "pii-edge-auth",
+      "titulo": "Auth em edge functions com PII (findings amarelos EFI)",
+      "status": "pendente",
+      "porcentagem": 0,
+      "atualizado_em": "2026-07-25",
+      "card": {
+        "antes_sha256": "N/A",
+        "depois_sha256": "N/A",
+        "arquivos_modificados": [],
+        "outros_arquivos_tocados": "N/A",
+        "restart_executed": "não",
+        "instalado_no_hermes": "não",
+        "onde": "supabase/functions/efi-* (3 funções)",
+        "por_que": "Endpoints com PII acessíveis sem verificar sessão.",
+        "pra_que": "Bloquear leitura de dados pessoais sem auth.",
+        "como_usar": "Nada muda pro fluxo legítimo.",
+        "quando_usar": "Bloco 3 do plano de segurança.",
+        "por_que_usar_isso": "LGPD e higiene.",
+        "prova": "N/A",
+        "tutorial": ["Aguardando autorização."]
+      }
+    }
+  ]
+}
