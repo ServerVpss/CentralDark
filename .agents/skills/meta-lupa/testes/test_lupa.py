@@ -14,6 +14,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.meta_lupa import (  # noqa: E402
     odds, prob, posterior, entropia, voi, usage_id, _read_ledger,
     _ledger_path, _record_hash, sanitize, REGISTRATION_ENV,
+    calculate_evolution, evolution_fingerprint, level_from_xp,
+    tier_for_level, xp_next,
 )
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -259,11 +261,19 @@ def test_absence_blocks_boot():
 
 
 def test_cache_does_not_beat_git():
-    # blob no git == hash do arquivo no disco (prova que fonte eh git, nao cache)
+    # O blob deve ser derivado do arquivo atual; constante antiga quebraria toda evolucao legitima.
+    # --path faz o --stdin aplicar o mesmo filtro de gitattributes/autocrlf que "hash-object <path>"
+    # usaria; sem isso, repos com core.autocrlf=true divergem so por normalizacao de linha.
     import subprocess
+    rel_path = os.path.relpath(os.path.join(SKILL, "SKILL.md"), os.path.dirname(SKILL))
     blob = subprocess.run(["git", "hash-object", os.path.join(SKILL, "SKILL.md")],
                           capture_output=True, text=True, cwd=os.path.dirname(SKILL)).stdout.strip()
-    assert blob == "f1aa30c6bf8b999171a5181fd90d724390b7f805"
+    with open(os.path.join(SKILL, "SKILL.md"), "rb") as handle:
+        expected = subprocess.run(
+            ["git", "hash-object", "--stdin", "--path", rel_path],
+            input=handle.read(), capture_output=True, cwd=os.path.dirname(SKILL),
+        ).stdout.decode().strip()
+    assert blob and blob == expected
 
 
 def test_duplicate_learning_no_xp():
@@ -325,6 +335,57 @@ def test_rollback_preserves_ledger():
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     assert os.path.exists(os.environ["LUPA_LEDGER_PATH"])
     # rollback de branch nao apaga arquivo nao-commitado fora do repo
+
+
+def test_xp_formula_and_multiple_level_up():
+    assert xp_next(1) == 100
+    assert xp_next(2) == 115
+    level, progress, next_cost = level_from_xp(215)
+    assert (level, progress, next_cost) == (3, 0, 133)
+
+
+def test_tier_boundaries():
+    assert tier_for_level(1) == "OPACA"
+    assert tier_for_level(9) == "OPACA"
+    assert tier_for_level(10) == "MONOCULO"
+    assert tier_for_level(30) == "PRISMATICA"
+    assert tier_for_level(50) == "OMNIVISOR"
+
+
+def test_evolution_xp_and_deduplication():
+    kwargs = dict(
+        mission_id="M-XP",
+        head_sha="abc123",
+        root_cause="drift",
+        test="test_drift",
+        evidence="hash:123",
+        achievements=["causa_raiz_provada", "falso_verde_bloqueado"],
+        penalties=[],
+    )
+    first = calculate_evolution([], **kwargs)
+    assert first["xp_gained"] == 30
+    recorded = [{"event": "FINAL", **first}]
+    duplicate = calculate_evolution(recorded, **kwargs)
+    assert duplicate["xp_gained"] == 0
+    assert duplicate["no_xp_reason"] == "EVENTO_JA_REGISTRADO"
+    assert duplicate["evolution_fingerprint"] == evolution_fingerprint(
+        "M-XP", "drift", "test_drift", "hash:123", "abc123"
+    )
+
+
+def test_evolution_penalties_and_floor_zero():
+    result = calculate_evolution(
+        [],
+        mission_id="M-PENALTY",
+        head_sha="def456",
+        root_cause="",
+        test="",
+        evidence="",
+        achievements=[],
+        penalties=["evidencia_inventada", "sucesso_sem_teste"],
+    )
+    assert result["xp_gained"] == -60
+    assert result["xp_after"] == 0
 
 
 if __name__ == "__main__":

@@ -36,6 +36,28 @@ LEDGER_NAME = "references/uso-ledger.jsonl"
 SCHEMA_VERSION = 1
 REGISTRATION_ENV = "LUPA_REGISTRATION_MODE"
 
+XP_AWARDS = {
+    "erro_reproduzido": 5,
+    "causa_raiz_provada": 10,
+    "prova_contraria_encontrada": 10,
+    "falso_verde_bloqueado": 20,
+    "teste_negativo_criado": 15,
+    "regressao_criada": 20,
+    "guardrail_novo": 20,
+    "rollback_provado": 20,
+    "risco_critico_evitado": 30,
+    "duplicacao_real_removida": 15,
+    "ponto_fixo_atingido": 25,
+}
+
+XP_PENALTIES = {
+    "falso_verde_declarado": -25,
+    "evidencia_inventada": -50,
+    "ledger_orfao": -15,
+    "sucesso_sem_teste": -10,
+    "alteracao_sem_autorizacao": -30,
+}
+
 SECRET_PATTERNS = [
     re.compile(r"Authorization:\s*Bearer\s+\S+", re.I),
     re.compile(r"(WEBUI_LOVABLE_KEY|SUPABASE_KEY|SERVICE_ROLE|API_KEY|TOKEN|SECRET)\s*[=:]\s*\S+", re.I),
@@ -208,6 +230,89 @@ def usage_id(schema_version: int, repo: str, mission_id: str, skill_commit_sha: 
     return hashlib.sha256(canonical).hexdigest()
 
 
+def evolution_fingerprint(mission_id: str, root_cause: str, test: str, evidence: str, head_sha: str) -> str:
+    payload = {
+        "mission_id": mission_id,
+        "root_cause": root_cause,
+        "test": test,
+        "evidence": evidence,
+        "head_sha": head_sha,
+    }
+    return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+
+
+def xp_next(level: int) -> int:
+    if level < 1:
+        raise ValueError("level deve ser >= 1")
+    return math.ceil(100 * (1.15 ** (level - 1)))
+
+
+def level_from_xp(total_xp: int) -> tuple[int, int, int]:
+    total = max(0, total_xp)
+    level = 1
+    consumed = 0
+    while total >= consumed + xp_next(level):
+        consumed += xp_next(level)
+        level += 1
+    return level, total - consumed, xp_next(level)
+
+
+def tier_for_level(level: int) -> str:
+    if level >= 50:
+        return "OMNIVISOR"
+    if level >= 30:
+        return "PRISMATICA"
+    if level >= 10:
+        return "MONOCULO"
+    return "OPACA"
+
+
+def _ledger_total_xp(records: list[dict]) -> int:
+    return max(0, sum(int(rec.get("xp_gained", 0)) for rec in records if rec.get("event") == "FINAL"))
+
+
+def calculate_evolution(
+    records: list[dict],
+    mission_id: str,
+    head_sha: str,
+    root_cause: str,
+    test: str,
+    evidence: str,
+    achievements: list[str],
+    penalties: list[str],
+) -> dict:
+    unknown_awards = sorted(set(achievements) - set(XP_AWARDS))
+    unknown_penalties = sorted(set(penalties) - set(XP_PENALTIES))
+    if unknown_awards or unknown_penalties:
+        raise ValueError(f"eventos XP desconhecidos: {unknown_awards + unknown_penalties}")
+
+    fingerprint = evolution_fingerprint(mission_id, root_cause, test, evidence, head_sha)
+    duplicate = any(
+        rec.get("event") == "FINAL" and rec.get("evolution_fingerprint") == fingerprint
+        for rec in records
+    )
+    before = _ledger_total_xp(records)
+    level_before, _, _ = level_from_xp(before)
+    tier_before = tier_for_level(level_before)
+    gained = 0 if duplicate else sum(XP_AWARDS[item] for item in set(achievements))
+    gained += sum(XP_PENALTIES[item] for item in set(penalties))
+    after = max(0, before + gained)
+    level_after, progress, next_cost = level_from_xp(after)
+    return {
+        "evolution_fingerprint": fingerprint,
+        "xp_before": before,
+        "xp_gained": gained,
+        "xp_after": after,
+        "level_before": level_before,
+        "level_after": level_after,
+        "tier_before": tier_before,
+        "tier_after": tier_for_level(level_after),
+        "level_up": level_after > level_before,
+        "next_level_xp": next_cost - progress,
+        "no_xp_reason": "EVENTO_JA_REGISTRADO" if duplicate else "",
+    }
+
+
 def sanitize(text: str) -> tuple[str, bool]:
     blocked = False
     out = text
@@ -219,6 +324,42 @@ def sanitize(text: str) -> tuple[str, bool]:
     out = re.sub(r"[A-Za-z]:\\Users\\[^\\ ]+", "[REDACTED_USER]", out)
     out = re.sub(r"/home/[^/ ]+/", "[REDACTED_USER]/", out)
     return out, blocked
+
+
+def _sanitize_value(value):
+    if isinstance(value, str):
+        return sanitize(value)[0]
+    if isinstance(value, list):
+        return [_sanitize_value(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _sanitize_value(item) for key, item in value.items()}
+    return value
+
+
+def _validate_achievements(args) -> list[str]:
+    achievements = set(args.achievement or [])
+    failures = []
+    if achievements and not args.evidence:
+        failures.append("XP_REQUIRES_EVIDENCE")
+    requirements = {
+        "erro_reproduzido": bool(args.error_found),
+        "causa_raiz_provada": bool(args.root_cause),
+        "prova_contraria_encontrada": bool(args.counter_evidence),
+        "falso_verde_bloqueado": args.false_green_blocked,
+        "teste_negativo_criado": bool(args.test_created),
+        "regressao_criada": bool(args.regression_created),
+        "guardrail_novo": bool(args.guardrail_added),
+        "rollback_provado": args.rollback_proven,
+        "risco_critico_evitado": bool(args.risk),
+        "duplicacao_real_removida": bool(args.improvements),
+        "ponto_fixo_atingido": args.point_fixed == "sim",
+    }
+    failures.extend(
+        f"XP_REQUIREMENT_MISSING:{name}"
+        for name in achievements
+        if not requirements[name]
+    )
+    return sorted(failures)
 
 
 def _record_hash(rec: dict) -> str:
@@ -311,6 +452,7 @@ def cmd_begin_use(args) -> int:
         "authorization": "PERMITO PIVETE SEM AÇÃO DESTRUTIVA",
         "source": "git",
     }
+    rec = _sanitize_value(rec)
     rec["record_hash"] = _record_hash({k: v for k, v in rec.items() if k != "record_hash"})
     _append_atomic(rec)
     print(f"BEGIN_RECORDED usage_id={uid}")
@@ -330,8 +472,39 @@ def cmd_finish_use(args) -> int:
     if not uid:
         print("NO_BEGIN_FOUND", file=sys.stderr)
         return 1
+    ledger_records = _read_ledger()
+    begin = next((r for r in ledger_records if r.get("usage_id") == uid and r.get("event") == "BEGIN"), {})
+    if not begin:
+        print(f"FINAL_WITHOUT_BEGIN usage_id={uid}", file=sys.stderr)
+        return 2
+    achievement_failures = _validate_achievements(args)
+    if achievement_failures:
+        print(" ".join(achievement_failures), file=sys.stderr)
+        return 2
     # idempotencia: FINAL existente
-    existing = [r for r in _read_ledger() if r.get("usage_id") == uid and r.get("event") == "FINAL"]
+    existing = [r for r in ledger_records if r.get("usage_id") == uid and r.get("event") == "FINAL"]
+    if existing:
+        same_request = (
+            existing[0].get("verdict") == args.verdict
+            and existing[0].get("autolupa_executed") == (args.autolupa == "sim")
+            and existing[0].get("point_fixed_evidential") == (args.point_fixed == "sim")
+            and existing[0].get("result") == args.result
+        )
+        if same_request:
+            print(f"FINAL_IDEMPOTENT usage_id={uid}")
+            return 0
+        print(f"FINAL_CONFLICT usage_id={uid}", file=sys.stderr)
+        return 2
+    evolution = calculate_evolution(
+        ledger_records,
+        args.mission_id,
+        begin.get("workspace_head", ""),
+        args.root_cause,
+        args.test_created,
+        "|".join(args.evidence or []),
+        args.achievement or [],
+        args.penalty or [],
+    )
     rec = {
         "schema_version": SCHEMA_VERSION,
         "event": "FINAL",
@@ -357,14 +530,27 @@ def cmd_finish_use(args) -> int:
         "xp_rejected": args.xp_rejected,
         "residual_risk": args.residual_risk or [],
         "result": args.result,
+        "mission_id": args.mission_id,
+        "head_sha": begin.get("workspace_head", ""),
+        "mode_used": args.mode_used,
+        "triggers": args.triggers or [],
+        "risk": args.risk or [],
+        "error_found": args.error_found,
+        "root_cause": args.root_cause,
+        "counter_evidence": args.counter_evidence,
+        "test_created": args.test_created,
+        "regression_created": args.regression_created,
+        "false_green_blocked": args.false_green_blocked,
+        "guardrail_added": args.guardrail_added,
+        "rollback_proven": args.rollback_proven,
+        "improvements": args.improvements or [],
+        "evidence_hash": hashlib.sha256("|".join(args.evidence or []).encode("utf-8")).hexdigest(),
+        "achievements": sorted(set(args.achievement or [])),
+        "penalties": sorted(set(args.penalty or [])),
     }
+    rec.update(evolution)
+    rec = _sanitize_value(rec)
     rec["record_hash"] = _record_hash({k: v for k, v in rec.items() if k != "record_hash"})
-    if existing:
-        if existing[0]["record_hash"] == rec["record_hash"]:
-            print(f"FINAL_IDEMPOTENT usage_id={uid}")
-            return 0
-        print(f"FINAL_CONFLICT usage_id={uid}", file=sys.stderr)
-        return 2
     _append_atomic(rec)
     print(f"FINAL_RECORDED usage_id={uid}")
     return 0
@@ -374,11 +560,25 @@ def cmd_verify_ledger(args) -> int:
     recs = _read_ledger()
     begins = [r for r in recs if r.get("event") == "BEGIN"]
     finals = [r for r in recs if r.get("event") == "FINAL"]
-    orphan = [b["usage_id"] for b in begins if b["usage_id"] not in {f["usage_id"] for f in finals}]
-    print(f"TOTAL={len(recs)} BEGIN={len(begins)} FINAL={len(finals)} ORPHAN_BEGIN={len(orphan)}")
+    begin_ids = {b["usage_id"] for b in begins}
+    final_ids = {f["usage_id"] for f in finals}
+    orphan = [b["usage_id"] for b in begins if b["usage_id"] not in final_ids]
+    orphan_final = [f["usage_id"] for f in finals if f["usage_id"] not in begin_ids]
+    bad_hash = [
+        index for index, rec in enumerate(recs, start=1)
+        if rec.get("record_hash") != _record_hash(rec)
+    ]
+    print(
+        f"TOTAL={len(recs)} BEGIN={len(begins)} FINAL={len(finals)} "
+        f"ORPHAN_BEGIN={len(orphan)} ORPHAN_FINAL={len(orphan_final)} BAD_HASH={len(bad_hash)}"
+    )
     for o in orphan:
         print(f"ORPHAN_BEGIN usage_id={o}")
-    return 0
+    for o in orphan_final:
+        print(f"ORPHAN_FINAL usage_id={o}")
+    for line in bad_hash:
+        print(f"BAD_HASH line={line}")
+    return 1 if orphan or orphan_final or bad_hash else 0
 
 
 def cmd_promote_learning(args) -> int:
@@ -449,6 +649,20 @@ def main() -> None:
     f.add_argument("--xp-rejected", type=int, default=0)
     f.add_argument("--residual-risk", nargs="*", default=[])
     f.add_argument("--result", default="CONCLUIDO")
+    f.add_argument("--mode-used", default="ULTRA + META LUPA")
+    f.add_argument("--triggers", nargs="*", default=[])
+    f.add_argument("--risk", nargs="*", default=[])
+    f.add_argument("--error-found", default="")
+    f.add_argument("--root-cause", default="")
+    f.add_argument("--counter-evidence", default="")
+    f.add_argument("--test-created", default="")
+    f.add_argument("--regression-created", default="")
+    f.add_argument("--false-green-blocked", action="store_true")
+    f.add_argument("--guardrail-added", default="")
+    f.add_argument("--rollback-proven", action="store_true")
+    f.add_argument("--improvements", nargs="*", default=[])
+    f.add_argument("--achievement", action="append", choices=sorted(XP_AWARDS), default=[])
+    f.add_argument("--penalty", action="append", choices=sorted(XP_PENALTIES), default=[])
     f.set_defaults(func=cmd_finish_use)
 
     v = sub.add_parser("verify-ledger")

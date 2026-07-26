@@ -302,6 +302,49 @@ Se faltarem dados para números honestos, emitir análise qualitativa e especifi
 - Executar `scripts/meta_lupa.py --help` para cálculos e gates determinísticos.
 - Executar `testes/test_lupa.py` para validar o motor antes de cada uso crítico.
 
+## Modo ULTRA + META LUPA e evolução contínua
+
+`ULTRA + META LUPA` é um modo interno da skill única. Ele combina as três
+temperaturas, prova contrária, antes/depois, delta de runtime, regressão,
+AutoLupa e revisão até ponto fixo. Não cria outra skill, versão ou ledger.
+
+Toda execução abre `BEGIN` e encerra `FINAL` no ledger canônico
+`references/uso-ledger.jsonl`. O `FINAL` deve registrar missão, HEAD, modo,
+gatilhos, risco, erro, causa raiz, prova contrária, teste/regressão, falso
+verde, guardrail, rollback, melhorias, risco residual, arquivos, hash de
+evidência, XP, nível, tier, ponto fixo e veredito.
+
+XP só é concedido a fatos comprovados e declarados por `--achievement`:
+
+```text
+erro_reproduzido=5
+causa_raiz_provada=10
+prova_contraria_encontrada=10
+falso_verde_bloqueado=20
+teste_negativo_criado=15
+regressao_criada=20
+guardrail_novo=20
+rollback_provado=20
+risco_critico_evitado=30
+duplicacao_real_removida=15
+ponto_fixo_atingido=25
+```
+
+Penalidades explícitas usam `--penalty`: `falso_verde_declarado=-25`,
+`evidencia_inventada=-50`, `ledger_orfao=-15`, `sucesso_sem_teste=-10` e
+`alteracao_sem_autorizacao=-30`. O total nunca fica abaixo de zero.
+
+O fingerprint determinístico é SHA-256 de `MISSION_ID + causa raiz + teste +
+evidência + HEAD_SHA`. Se já existir em um `FINAL`, `XP_GAINED=0` e
+`NO_XP_REASON=EVENTO_JA_REGISTRADO`. Tempo ligado, texto, número de agentes,
+repetição, HTTP 200 ou painel verde não geram XP.
+
+O custo do próximo nível é `ceil(100 * 1.15^(LEVEL - 1))`; o cálculo consome
+sucessivamente cada limiar e permite múltiplos níveis no mesmo evento. Tiers:
+níveis 1-9 `OPACA`, 10-29 `MONOCULO`, 30-49 `PRISMATICA`, 50+
+`OMNIVISOR`. A AutoLupa deve validar cálculo, deduplicação, BEGIN/FINAL e
+proveniência antes de selar o recibo.
+
 ---
 
 ## Camada XP Consolidada (evolução no mesmo artefato)
