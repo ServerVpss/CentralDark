@@ -12,9 +12,9 @@ Uso:
 """
 from __future__ import annotations
 
-import hashlib
 import os
 import re
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -33,9 +33,17 @@ CHECKS_OBRIGATORIAS = [
 GAP_TOKENS = ("GAP", "PENDENTE", "NAO_VERIFICADO", "NÃO VERIFICADO", "MISSING")
 
 
-def _git_blob_sha1(data: bytes) -> str:
-    header = f"blob {len(data)}\0".encode()
-    return hashlib.sha1(header + data).hexdigest()
+def _git_blob_sha1(path: Path) -> str:
+    """Calcula o blob após os filtros Git, independente do EOL do checkout."""
+    relative = path.relative_to(REPO_ROOT).as_posix()
+    result = subprocess.run(
+        ["git", "hash-object", "--stdin", f"--path={relative}"],
+        cwd=REPO_ROOT,
+        input=path.read_bytes(),
+        capture_output=True,
+        check=True,
+    )
+    return result.stdout.decode("ascii").strip()
 
 
 def _load_report() -> str:
@@ -86,7 +94,7 @@ def test_hash_canonico_lupa_bate():
         pytest.fail(f"Guarda ausente: {HASH_GUARD}")
     if not SKILL_PATH.exists():
         pytest.skip("SKILL.md não presente")
-    atual = _git_blob_sha1(SKILL_PATH.read_bytes())
+    atual = _git_blob_sha1(SKILL_PATH)
     esperado = HASH_GUARD.read_text(encoding="utf-8").strip().split()[0]
     assert atual == esperado, (
         f"Hash da Lupa divergente do canônico.\n  esperado: {esperado}\n  atual:    {atual}\n"

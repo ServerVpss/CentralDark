@@ -1,5 +1,0 @@
-[submodule "apps/modulos/Bolt/source"]
-	path = apps/modulos/Bolt/source
-	url = https://github.com/ServerVpss/CentralDark-Bolt-Source.git
-	update = none
-	ignore = all

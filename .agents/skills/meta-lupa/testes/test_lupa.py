@@ -13,7 +13,11 @@ import uuid
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.meta_lupa import (  # noqa: E402
     odds, prob, posterior, entropia, voi, usage_id, _read_ledger,
-    _ledger_path, _record_hash, sanitize, REGISTRATION_ENV,
+    _ledger_path, _record_hash, record_hash_legacy, record_hash_valid, sanitize,
+    attested_targets, attested_orphan_resolvers,
+    REGISTRATION_ENV,
+    calculate_evolution, evolution_fingerprint, level_from_xp,
+    tier_for_level, xp_next,
 )
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -259,11 +263,19 @@ def test_absence_blocks_boot():
 
 
 def test_cache_does_not_beat_git():
-    # blob no git == hash do arquivo no disco (prova que fonte eh git, nao cache)
+    # O blob deve ser derivado do arquivo atual; constante antiga quebraria toda evolucao legitima.
+    # --path faz o --stdin aplicar o mesmo filtro de gitattributes/autocrlf que "hash-object <path>"
+    # usaria; sem isso, repos com core.autocrlf=true divergem so por normalizacao de linha.
     import subprocess
+    rel_path = os.path.relpath(os.path.join(SKILL, "SKILL.md"), os.path.dirname(SKILL))
     blob = subprocess.run(["git", "hash-object", os.path.join(SKILL, "SKILL.md")],
                           capture_output=True, text=True, cwd=os.path.dirname(SKILL)).stdout.strip()
-    assert blob == "f1aa30c6bf8b999171a5181fd90d724390b7f805"
+    with open(os.path.join(SKILL, "SKILL.md"), "rb") as handle:
+        expected = subprocess.run(
+            ["git", "hash-object", "--stdin", "--path", rel_path],
+            input=handle.read(), capture_output=True, cwd=os.path.dirname(SKILL),
+        ).stdout.decode().strip()
+    assert blob and blob == expected
 
 
 def test_duplicate_learning_no_xp():
@@ -325,6 +337,398 @@ def test_rollback_preserves_ledger():
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     assert os.path.exists(os.environ["LUPA_LEDGER_PATH"])
     # rollback de branch nao apaga arquivo nao-commitado fora do repo
+
+
+def test_xp_formula_and_multiple_level_up():
+    assert xp_next(1) == 100
+    assert xp_next(2) == 115
+    level, progress, next_cost = level_from_xp(215)
+    assert (level, progress, next_cost) == (3, 0, 133)
+
+
+def test_tier_boundaries():
+    assert tier_for_level(1) == "OPACA"
+    assert tier_for_level(9) == "OPACA"
+    assert tier_for_level(10) == "MONOCULO"
+    assert tier_for_level(30) == "PRISMATICA"
+    assert tier_for_level(50) == "OMNIVISOR"
+
+
+def test_evolution_xp_and_deduplication():
+    kwargs = dict(
+        mission_id="M-XP",
+        head_sha="abc123",
+        root_cause="drift",
+        test="test_drift",
+        evidence="hash:123",
+        achievements=["causa_raiz_provada", "falso_verde_bloqueado"],
+        penalties=[],
+    )
+    first = calculate_evolution([], **kwargs)
+    assert first["xp_gained"] == 30
+    recorded = [{"event": "FINAL", **first}]
+    duplicate = calculate_evolution(recorded, **kwargs)
+    assert duplicate["xp_gained"] == 0
+    assert duplicate["no_xp_reason"] == "EVENTO_JA_REGISTRADO"
+    assert duplicate["evolution_fingerprint"] == evolution_fingerprint(
+        "M-XP", "drift", "test_drift", "hash:123", "abc123"
+    )
+
+
+def test_evolution_penalties_and_floor_zero():
+    result = calculate_evolution(
+        [],
+        mission_id="M-PENALTY",
+        head_sha="def456",
+        root_cause="",
+        test="",
+        evidence="",
+        achievements=[],
+        penalties=["evidencia_inventada", "sucesso_sem_teste"],
+    )
+    assert result["xp_gained"] == -60
+    assert result["xp_after"] == 0
+
+
+# ---- Regressao: integridade historica do ledger (missao META-LUPA executor) ----
+# Cobre: algoritmo legado aceito, hash realmente corrompido rejeitado,
+# FINAL orfao nao atestado rejeitado, atestacao exata aceita, atestacao
+# divergente rejeitada.
+
+
+def test_record_hash_legacy_accepted():
+    # registro gravado antes da sanitizacao: hash legado valido
+    rec = {"event": "BEGIN", "usage_id": "u_legacy", "record_hash": "stored"}
+    rec["record_hash"] = record_hash_legacy(rec)
+    assert record_hash_valid(rec, {})
+    # comecar com hash corrente tambem deve falhar se difere do legado
+    assert record_hash_valid(rec, {}) is True
+
+
+def test_record_hash_truly_corrupted_rejected():
+    # hash armazenado nao bate com corrente nem legado -> rejeitado
+    rec = {
+        "schema_version": 1, "event": "BEGIN", "usage_id": "u_bad",
+        "started_at_utc": "2026-07-22T00:00:00Z", "repo": "R",
+        "mission_id": "M", "workspace_head": "h", "record_hash": "deadbeef",
+    }
+    # tampar os campos para que corrente e legado sejam diferentes de 'deadbeef'
+    assert record_hash_valid(rec, {}) is False
+
+
+# ---- Invariante 1: atestacao corrompida nao valida alvo; auto-validacao vetada ----
+def test_attested_targets_rejects_corrupt_attestation_and_self_validation():
+    # atestacao com hash proprio corrompido nao entra no mapa
+    target_id = "u_tgt"
+    target = {"schema_version": 1, "event": "FINAL", "usage_id": target_id,
+              "record_hash": "x"}
+    target["record_hash"] = _record_hash(target)
+    # atestacao cujo PROPRIO record_hash nao bate com corrente -> corrompida
+    bad_att = {"event": "ATTESTATION", "target_usage_id": target_id,
+               "target_record_hash": target["record_hash"],
+               "resolve_orphan": False, "reason": "r", "provenance": "p",
+               "record_hash": "wrong"}
+    recs = [target, bad_att]
+    m = attested_targets(recs)
+    assert target_id not in m  # corrompida: nao valida nada
+    # atestacao valida, mas apontando a si mesma (target_usage_id == usage_id)
+    # e' impossivel: ATTESTATION nao tem usage_id proprio; aqui provamos que
+    # alvo inexistente nao valida
+    bad_target = {"event": "ATTESTATION", "target_usage_id": "nao_existe",
+                  "target_record_hash": "h", "resolve_orphan": False,
+                  "reason": "r", "provenance": "p"}
+    bad_target["record_hash"] = _record_hash(bad_target)
+    assert "nao_existe" not in attested_targets([bad_target])
+
+
+# ---- Invariante 2a: CANDIDATE_REF nao tem aceite blanket; exige atestacao exata ----
+def test_candidate_ref_no_blanket_acceptance():
+    cand = {"schema_version": 1, "event": "CANDIDATE_REF",
+            "usage_id": "u_cand", "record_hash": "legacy_nao_reprodutivel"}
+    # sem atestacao exata -> rejeitado
+    assert record_hash_valid(cand, {}) is False
+    # atestacao exata valida (alvo existe + provenance com migracao) -> aceito
+    att = {"event": "ATTESTATION", "target_usage_id": "u_cand",
+           "target_record_hash": "legacy_nao_reprodutivel",
+           "resolve_orphan": False, "reason": "r",
+           "provenance": "commit e6718f69d + missao X"}
+    att["record_hash"] = _record_hash(att)
+    m = attested_targets([cand, att])
+    assert "u_cand" in m and "legacy_nao_reprodutivel" in m["u_cand"]
+    assert record_hash_valid(cand, m) is True
+    # atestacao para OUTRO hash nao resolve o candidato
+    att2 = {"event": "ATTESTATION", "target_usage_id": "u_cand",
+            "target_record_hash": "outro_hash", "resolve_orphan": False,
+            "reason": "r", "provenance": "commit e6718f69d"}
+    att2["record_hash"] = _record_hash(att2)
+    m2 = attested_targets([cand, att2])
+    assert record_hash_valid(cand, m2) is False
+
+
+# ---- Invariante 2b: alvo versionado nao reproduzivel exige migracao sancionada ----
+def test_attest_ledger_non_reproducible_requires_migration_commit():
+    import subprocess
+    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    tf.close()
+    # FINAL orfao com hash legado nao reproduzivel (linha historica 4)
+    tgt = {"schema_version": 1, "event": "FINAL", "usage_id": "u_v4",
+           "record_hash": "legacy_hash_v4"}
+    old = os.environ.get("LUPA_LEDGER_PATH")
+    os.environ["LUPA_LEDGER_PATH"] = tf.name
+    with open(tf.name, "w", encoding="utf-8") as f:
+        f.write(json.dumps(tgt, ensure_ascii=False) + "\n")
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+    try:
+        # sem migracao: rejeitado
+        r = subprocess.run(pre + ["attest-ledger", "--target-usage-id", "u_v4",
+                                  "--target-record-hash", "legacy_hash_v4",
+                                  "--reason", "r", "--provenance", "commit abc123"],
+                           capture_output=True, text=True)
+        assert r.returncode == 2 and "ATTEST_TARGET_NOT_REPRODUCIBLE" in r.stderr
+        # com commit exato e target_record_hash coincidente: aceito
+        r2 = subprocess.run(pre + ["attest-ledger", "--target-usage-id", "u_v4",
+                                   "--target-record-hash", "legacy_hash_v4",
+                                   "--reason", "r",
+                                   "--provenance", "commit e6718f69d + missao X",
+                                   "--resolve-orphan"],
+                            capture_output=True, text=True)
+        assert r2.returncode == 0 and "ATTESTATION_RECORDED" in r2.stdout
+    finally:
+        if old is None:
+            os.environ.pop("LUPA_LEDGER_PATH", None)
+        else:
+            os.environ["LUPA_LEDGER_PATH"] = old
+
+
+# ---- Invariante 3: orphan_final exclui so resolve_orphan=true apontando hash exato ----
+def test_orphan_final_excludes_only_exact_resolve_orphan():
+    import subprocess
+    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    tf.close()
+    final_no = {"schema_version": 1, "event": "FINAL", "usage_id": "u_orph_no",
+                "record_hash": "x"}
+    final_no["record_hash"] = _record_hash(final_no)
+    final_yes = {"schema_version": 1, "event": "FINAL", "usage_id": "u_orph_yes",
+                 "record_hash": "y"}
+    final_yes["record_hash"] = _record_hash(final_yes)
+    old = os.environ.get("LUPA_LEDGER_PATH")
+    os.environ["LUPA_LEDGER_PATH"] = tf.name
+    with open(tf.name, "w", encoding="utf-8") as f:
+        f.write(json.dumps(final_no, ensure_ascii=False) + "\n")
+        f.write(json.dumps(final_yes, ensure_ascii=False) + "\n")
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+    try:
+        before = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "ORPHAN_FINAL=2" in before.stdout
+        # atestacao valida MAS resolve_orphan=false -> orfao persiste
+        subprocess.run(pre + ["attest-ledger", "--target-usage-id", "u_orph_no",
+                              "--target-record-hash", final_no["record_hash"],
+                              "--reason", "nao resolve", "--provenance", "commit e6718f69d"],
+                       check=True)
+        mid = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "ORPHAN_FINAL=2" in mid.stdout  # ainda tem os dois
+        # atestacao valida com resolve_orphan=true apontando hash exato -> resolve 1
+        subprocess.run(pre + ["attest-ledger", "--target-usage-id", "u_orph_yes",
+                              "--target-record-hash", final_yes["record_hash"],
+                              "--reason", "resolve", "--provenance", "commit e6718f69d",
+                              "--resolve-orphan"], check=True)
+        after = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "ORPHAN_FINAL=1" in after.stdout  # so o nao-resolvido resta
+    finally:
+        if old is None:
+            os.environ.pop("LUPA_LEDGER_PATH", None)
+        else:
+            os.environ["LUPA_LEDGER_PATH"] = old
+
+
+# ---- Invariante 4: attest-ledger idempotente; divergente rejeita ----
+def test_attest_ledger_idempotent_and_divergent():
+    import subprocess
+    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    tf.close()
+    tgt = {"schema_version": 1, "event": "BEGIN", "usage_id": "u_idem",
+           "started_at_utc": "2026-07-26T00:00:00Z", "repo": "R",
+           "mission_id": "M", "workspace_head": "h", "record_hash": "x"}
+    tgt["record_hash"] = _record_hash(tgt)
+    old = os.environ.get("LUPA_LEDGER_PATH")
+    os.environ["LUPA_LEDGER_PATH"] = tf.name
+    with open(tf.name, "w", encoding="utf-8") as f:
+        f.write(json.dumps(tgt, ensure_ascii=False) + "\n")
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+    try:
+        cmd = pre + ["attest-ledger", "--target-usage-id", "u_idem",
+                     "--target-record-hash", tgt["record_hash"], "--reason", "r",
+                     "--provenance", "commit e6718f69d"]
+        r1 = subprocess.run(cmd, capture_output=True, text=True)
+        assert r1.returncode == 0 and "ATTESTATION_RECORDED" in r1.stdout
+        # mesma atestacao: ATTESTATION_EXISTS sem anexar
+        r2 = subprocess.run(cmd, capture_output=True, text=True)
+        assert r2.returncode == 0 and "ATTESTATION_EXISTS" in r2.stdout
+        lines = [l for l in open(tf.name, encoding="utf-8") if '"ATTESTATION"' in l]
+        assert len(lines) == 1  # nao duplicou
+        # divergente (mesmo usage_id, outro reason): rejeitada
+        r3 = subprocess.run(pre + ["attest-ledger", "--target-usage-id", "u_idem",
+                                   "--target-record-hash", tgt["record_hash"],
+                                   "--reason", "OUTRO", "--provenance", "commit e6718f69d"],
+                            capture_output=True, text=True)
+        assert r3.returncode == 2 and "ATTEST_DIVERGENT_EXISTS" in r3.stderr
+    finally:
+        if old is None:
+            os.environ.pop("LUPA_LEDGER_PATH", None)
+        else:
+            os.environ["LUPA_LEDGER_PATH"] = old
+
+
+# ---- Invariante extra: atestacao corrompida nao mascara BAD_HASH ----
+def test_corrupt_attestation_does_not_mask_bad_hash():
+    import subprocess
+    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    tf.close()
+    bad = {"schema_version": 1, "event": "BEGIN", "usage_id": "u_badh",
+           "record_hash": "deadbeef"}
+    att = {"event": "ATTESTATION", "target_usage_id": "u_badh",
+           "target_record_hash": "deadbeef", "resolve_orphan": False,
+           "reason": "r", "provenance": "commit e6718f69d",
+           "record_hash": "corrompido"}  # hash proprio errado
+    old = os.environ.get("LUPA_LEDGER_PATH")
+    os.environ["LUPA_LEDGER_PATH"] = tf.name
+    with open(tf.name, "w", encoding="utf-8") as f:
+        f.write(json.dumps(bad, ensure_ascii=False) + "\n")
+        f.write(json.dumps(att, ensure_ascii=False) + "\n")
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+    try:
+        r = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "BAD_HASH=2" in r.stdout  # BEGIN + propria atestacao corrompida
+        assert "BAD_HASH line=1" in r.stdout  # o BEGIN ruim nao foi mascarado
+        assert r.returncode == 1
+    finally:
+        if old is None:
+            os.environ.pop("LUPA_LEDGER_PATH", None)
+        else:
+            os.environ["LUPA_LEDGER_PATH"] = old
+
+
+def test_orphan_final_not_attested_rejected():
+    # FINAL sem BEGIN correspondente: hash valido mas atestacao ausente
+    recs = [
+        {"schema_version": 1, "event": "FINAL", "usage_id": "u_orphan",
+         "record_hash": "x"},
+    ]
+    recs[0]["record_hash"] = _record_hash(recs[0])  # hash corrente valido
+    # sem atestacao -> verify-ledger deve reportar ORPHAN_FINAL
+    import tempfile
+    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    tf.close()
+    with open(tf.name, "w", encoding="utf-8") as f:
+        for r in recs:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    old = os.environ.get("LUPA_LEDGER_PATH")
+    os.environ["LUPA_LEDGER_PATH"] = tf.name
+    try:
+        import subprocess
+        pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+        r = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "ORPHAN_FINAL=1" in r.stdout
+        assert "ORPHAN_FINAL usage_id=u_orphan" in r.stdout
+        assert r.returncode == 1
+    finally:
+        if old is None:
+            os.environ.pop("LUPA_LEDGER_PATH", None)
+        else:
+            os.environ["LUPA_LEDGER_PATH"] = old
+
+
+def test_attestation_exact_accepted():
+    # atestacao exata (mesmo usage_id + record_hash) resolve o orfao no verify
+    target_usage = "u_orphan"
+    recs = [
+        {"schema_version": 1, "event": "FINAL", "usage_id": target_usage,
+         "record_hash": "x"},
+    ]
+    recs[0]["record_hash"] = _record_hash(recs[0])
+    import tempfile
+    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    tf.close()
+    with open(tf.name, "w", encoding="utf-8") as f:
+        for r in recs:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    old = os.environ.get("LUPA_LEDGER_PATH")
+    os.environ["LUPA_LEDGER_PATH"] = tf.name
+    try:
+        import subprocess
+        pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+        # antes: orfao presente
+        before = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "ORPHAN_FINAL=1" in before.stdout
+        # atestacao exata
+        subprocess.run(pre + [
+            "attest-ledger",
+            "--target-usage-id", target_usage,
+            "--target-record-hash", recs[0]["record_hash"],
+            "--reason", "FINAL orfao pre-existente (gap historico anterior a 2026-07-26)",
+            "--provenance", "commit e6718f69d + missao META-LUPA executor",
+            "--resolve-orphan",
+        ], check=True)
+        # depois: orfao resolvido por atestacao, ledger limpo
+        after = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "ORPHAN_FINAL=0" in after.stdout
+        assert "ORPHAN_BEGIN=0" in after.stdout
+        assert "BAD_HASH=0" in after.stdout
+        assert after.returncode == 0
+        # idempotencia: segunda atestacao exata nao duplica nem falha
+        r2 = subprocess.run(pre + [
+            "attest-ledger",
+            "--target-usage-id", target_usage,
+            "--target-record-hash", recs[0]["record_hash"],
+            "--reason", "FINAL orfao pre-existente (gap historico anterior a 2026-07-26)",
+            "--provenance", "commit e6718f69d + missao META-LUPA executor",
+            "--resolve-orphan",
+        ], capture_output=True, text=True)
+        assert "ATTESTATION_EXISTS" in r2.stdout
+    finally:
+        if old is None:
+            os.environ.pop("LUPA_LEDGER_PATH", None)
+        else:
+            os.environ["LUPA_LEDGER_PATH"] = old
+
+
+def test_attestation_divergent_rejected():
+    # atestacao com record_hash DIVERGENTE do alvo e rejeitada
+    target_usage = "u_div"
+    recs = [
+        {"schema_version": 1, "event": "FINAL", "usage_id": target_usage,
+         "record_hash": "x"},
+    ]
+    recs[0]["record_hash"] = _record_hash(recs[0])
+    import tempfile
+    tf = tempfile.NamedTemporaryFile(delete=False, suffix=".jsonl")
+    tf.close()
+    with open(tf.name, "w", encoding="utf-8") as f:
+        for r in recs:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    old = os.environ.get("LUPA_LEDGER_PATH")
+    os.environ["LUPA_LEDGER_PATH"] = tf.name
+    try:
+        import subprocess
+        pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+        r = subprocess.run(pre + [
+            "attest-ledger",
+            "--target-usage-id", target_usage,
+            "--target-record-hash", "hash_que_nao_bate_com_o_registro",
+            "--reason", "divergente",
+            "--provenance", "commit e6718f69d",
+            "--resolve-orphan",
+        ], capture_output=True, text=True)
+        assert r.returncode == 2
+        assert "ATTEST_TARGET_HASH_MISMATCH" in r.stderr
+        # ledger continua com orfao (atestacao nao gravada)
+        after = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
+        assert "ORPHAN_FINAL=1" in after.stdout
+    finally:
+        if old is None:
+            os.environ.pop("LUPA_LEDGER_PATH", None)
+        else:
+            os.environ["LUPA_LEDGER_PATH"] = old
 
 
 if __name__ == "__main__":

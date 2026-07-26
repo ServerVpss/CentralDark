@@ -12,9 +12,9 @@ Uso:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
+import subprocess
 import sys
 import urllib.request
 from pathlib import Path
@@ -25,9 +25,17 @@ GUARD = ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
 API_URL = "https://api.github.com/repos/ServerVpss/CentralDark/contents/.agents/skills/meta-lupa/SKILL.md?ref=main"
 
 
-def git_blob_sha1(data: bytes) -> str:
-    header = f"blob {len(data)}\0".encode()
-    return hashlib.sha1(header + data).hexdigest()
+def git_blob_sha1(path: Path) -> str:
+    """Calcula o blob após os filtros Git, independente do EOL do checkout."""
+    relative = path.relative_to(ROOT).as_posix()
+    result = subprocess.run(
+        ["git", "hash-object", "--stdin", f"--path={relative}"],
+        cwd=ROOT,
+        input=path.read_bytes(),
+        capture_output=True,
+        check=True,
+    )
+    return result.stdout.decode("ascii").strip()
 
 
 def read_guard() -> str:
@@ -47,7 +55,7 @@ def main() -> int:
         print(f"[FAIL] SKILL.md ausente: {SKILL}", file=sys.stderr)
         return 2
 
-    local = git_blob_sha1(SKILL.read_bytes())
+    local = git_blob_sha1(SKILL)
 
     if args.update:
         if os.environ.get("PERMITO_PIVETE") != "1":
