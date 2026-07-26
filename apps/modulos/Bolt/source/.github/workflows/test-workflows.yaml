@@ -202,43 +202,43 @@ jobs:
         run: |
           echo "🧪 Workflow Testing Results Summary"
           echo "=================================="
-          
+
           if [[ "${{ needs.test-basic-setup.result }}" == "success" ]]; then
             echo "✅ Basic Setup: PASSED"
           else
             echo "❌ Basic Setup: FAILED"
           fi
-          
+
           if [[ "${{ needs.test-linting.result }}" == "success" ]]; then
             echo "✅ Linting Tests: PASSED"
           else
             echo "❌ Linting Tests: FAILED"
           fi
-          
+
           if [[ "${{ needs.test-caching.result }}" == "success" ]]; then
             echo "✅ Caching Tests: PASSED"
           else
             echo "❌ Caching Tests: FAILED"
           fi
-          
+
           if [[ "${{ needs.test-security-tools.result }}" == "success" ]]; then
             echo "✅ Security Tools: PASSED"
           else
             echo "❌ Security Tools: FAILED"
           fi
-          
+
           if [[ "${{ needs.test-quality-checks.result }}" == "success" ]]; then
             echo "✅ Quality Checks: PASSED"
           else
             echo "❌ Quality Checks: FAILED"
           fi
-          
+
           if [[ "${{ needs.validate-docker-config.result }}" == "success" ]]; then
             echo "✅ Docker Config: PASSED"
           else
             echo "❌ Docker Config: FAILED"
           fi
-          
+
           echo ""
           echo "Next steps:"
           echo "1. Review any failures above"

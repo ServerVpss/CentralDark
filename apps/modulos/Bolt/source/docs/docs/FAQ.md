@@ -189,7 +189,7 @@ bolt.diy provides comprehensive Git and GitHub integration:
 Check out our [Contribution Guide](CONTRIBUTING.md) for more details on how to get involved!
 
 ??? question "What are the future plans for bolt.diy?"
-Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.  
+Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.
  New features and improvements are on the way!
 
 ??? question "Why are there so many open issues/pull requests?"

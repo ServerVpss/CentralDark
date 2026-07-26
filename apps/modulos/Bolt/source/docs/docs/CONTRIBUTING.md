@@ -99,7 +99,7 @@ Interested in maintaining and growing the project? Fill out our [Contributor App
      ```bash
      # Option 1: Use the setup script
      ./scripts/setup-env.sh
-     
+
      # Option 2: Manual copy
      cp .env.local .env
      ```

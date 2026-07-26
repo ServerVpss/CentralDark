@@ -18,17 +18,17 @@ For the best experience with bolt.diy, we recommend using the following models:
 <details>
 <summary><strong>How do I get the best results with bolt.diy?</strong></summary>
 
-- **Be specific about your stack**:  
+- **Be specific about your stack**:
   Mention the frameworks or libraries you want to use (e.g., Astro, Tailwind, ShadCN) in your initial prompt. This ensures that bolt.diy scaffolds the project according to your preferences.
 
-- **Use the enhance prompt icon**:  
+- **Use the enhance prompt icon**:
   Before sending your prompt, click the _enhance_ icon to let the AI refine your prompt. You can edit the suggested improvements before submitting.
 
-- **Scaffold the basics first, then add features**:  
+- **Scaffold the basics first, then add features**:
   Ensure the foundational structure of your application is in place before introducing advanced functionality. This helps bolt.diy establish a solid base to build on.
 
-- **Batch simple instructions**:  
- Combine simple tasks into a single prompt to save time and reduce API credit consumption. For example:  
+- **Batch simple instructions**:
+ Combine simple tasks into a single prompt to save time and reduce API credit consumption. For example:
  _"Change the color scheme, add mobile responsiveness, and restart the dev server."_
 </details>
 
@@ -42,7 +42,7 @@ Check out our [Contribution Guide](CONTRIBUTING.md) for more details on how to g
 <details>
 <summary><strong>What are the future plans for bolt.diy?</strong></summary>
 
-Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.  
+Visit our [Roadmap](https://roadmap.sh/r/ottodev-roadmap-2ovzo) for the latest updates.
 New features and improvements are on the way!
 
 </details>
@@ -75,12 +75,12 @@ This generic error message means something went wrong. Check both:
 
 ### **"x-api-key header missing"**
 
-This error is sometimes resolved by restarting the Docker container.  
+This error is sometimes resolved by restarting the Docker container.
 If that doesn't work, try switching from Docker to `pnpm` or vice versa. We're actively investigating this issue.
 
 ### **Blank preview when running the app**
 
-A blank preview often occurs due to hallucinated bad code or incorrect commands.  
+A blank preview often occurs due to hallucinated bad code or incorrect commands.
 To troubleshoot:
 
 - Check the developer console for errors.

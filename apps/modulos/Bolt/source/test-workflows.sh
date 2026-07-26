@@ -51,7 +51,7 @@ check_auth() {
 # Create test branch
 create_test_branch() {
     print_status "Creating test branch 'workflow-testing'..."
-    
+
     if git show-branch workflow-testing &> /dev/null; then
         print_warning "Branch 'workflow-testing' already exists. Switching to it..."
         git checkout workflow-testing
@@ -66,11 +66,11 @@ create_test_branch() {
 run_test() {
     local test_type=$1
     print_status "Running workflow test: $test_type"
-    
+
     gh workflow run "Test Workflows" \
         --ref workflow-testing \
         -f test_type="$test_type"
-    
+
     print_success "Triggered workflow test: $test_type"
     print_status "Monitor progress at: https://github.com/$(gh repo view --json owner,name -q '.owner.login + "/" + .name')/actions"
 }
@@ -78,9 +78,9 @@ run_test() {
 # Monitor latest workflow run
 monitor_run() {
     print_status "Finding latest workflow run..."
-    
+
     local run_id=$(gh run list --workflow="Test Workflows" --limit=1 --json databaseId -q '.[0].databaseId')
-    
+
     if [ -n "$run_id" ]; then
         print_status "Monitoring run ID: $run_id"
         gh run watch "$run_id"
@@ -92,13 +92,13 @@ monitor_run() {
 # Create test PR
 create_test_pr() {
     print_status "Creating test PR..."
-    
+
     # Make a small change to trigger workflows
     echo "# Workflow Testing - $(date)" >> WORKFLOW_TESTING.md
     git add WORKFLOW_TESTING.md
     git commit -m "test: trigger workflow validation"
     git push origin workflow-testing
-    
+
     # Create PR
     gh pr create \
         --title "Test: Workflow Validation - $(date +%Y-%m-%d)" \
@@ -106,7 +106,7 @@ create_test_pr() {
 
 This PR tests:
 - [x] PR validation workflows
-- [x] Quality gates 
+- [x] Quality gates
 - [x] Security scanning
 - [x] Preview deployment
 - [x] Semantic PR validation
@@ -124,25 +124,25 @@ This PR tests:
 3. Test any failing workflows
 4. Close this PR when testing is complete" \
         --draft
-    
+
     print_success "Created test PR (draft)"
 }
 
 # Clean up test resources
 cleanup() {
     print_status "Cleaning up test resources..."
-    
+
     # Close any open test PRs
     local test_prs=$(gh pr list --state=open --search="Test: Workflow Validation" --json number -q '.[].number')
-    
+
     for pr in $test_prs; do
         print_status "Closing test PR #$pr"
         gh pr close "$pr" --comment "Workflow testing completed - closing test PR"
     done
-    
+
     # Switch back to main branch
     git checkout main
-    
+
     print_warning "Test branch 'workflow-testing' preserved for future testing"
     print_success "Cleanup completed"
 }
@@ -185,18 +185,18 @@ view_guide() {
 # Main script
 main() {
     print_status "Starting GitHub Workflow Testing Script"
-    
+
     # Check prerequisites
     check_gh_cli
     check_auth
-    
+
     # Create test branch if it doesn't exist
     create_test_branch
-    
+
     while true; do
         show_menu
         read -p "Enter your choice (1-9): " choice
-        
+
         case $choice in
             1)
                 run_test "all"
@@ -230,7 +230,7 @@ main() {
                 print_error "Invalid option. Please choose 1-9."
                 ;;
         esac
-        
+
         echo
         read -p "Press Enter to continue..."
     done

@@ -8,7 +8,7 @@ echo "🔧 Setting up environment files for Docker..."
 # Check if .env.local exists
 if [ -f ".env.local" ]; then
     echo "✅ Found .env.local file"
-    
+
     # Create symlink or copy to .env for Docker Compose
     if [ ! -f ".env" ] || [ ".env" -ot ".env.local" ]; then
         echo "📋 Copying .env.local to .env for Docker Compose compatibility..."
@@ -19,7 +19,7 @@ if [ -f ".env.local" ]; then
     fi
 else
     echo "⚠️  No .env.local file found"
-    
+
     # Check if .env.example exists and offer to copy it
     if [ -f ".env.example" ]; then
         echo "📋 Found .env.example file"
