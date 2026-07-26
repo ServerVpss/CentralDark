@@ -17,7 +17,7 @@
   "exclusoes": ["__pycache__", ".pytest_cache", "*.pyc", ".DS_Store", "*.tmp"],
   "build_script": "scripts/nivel-7/build-deterministic.sh",
   "workflow_ci": ".github/workflows/nivel-7-tests.yml",
-  "verificacao_local": "cd .agents/skills/lupa-bayesiana/agents/nivel-7 && PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider",
+  "verificacao_local": "cd .agents/skills/meta-lupa/agents/nivel-7 && PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider",
   "autolupa": {
     "contratos_imutaveis": true,
     "testes_byte_identicos_baseline_solucao_turnoC": true,

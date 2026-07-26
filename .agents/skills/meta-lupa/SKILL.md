@@ -1,13 +1,41 @@
 ---
-name: lupa-bayesiana
-description: Aplicar a MetaLupa Bayesiana (camada XP consolidada) — raciocínio bayesiano, entropia, valor da informação, preservação do existente, mapa canônico, consolidação, AutoLupa, contract_digest, candidate_ref e comitês independentes — para calibrar confiança, impedir duplicações e decidir o próximo teste. Usar em auditorias, investigações, decisões arquiteturais, fusões de arquivos, incidentes, avaliações de agentes, alegações conflitantes, criação de pastas/rotas/serviços ou qualquer situação em que evidências devam alterar uma hipótese sem transformar confiança em autorização.
+name: meta-lupa
+description: Aplicar a META LUPA com três temperaturas operacionais — FRIA, MÉDIA e QUENTE — preservando Bayes, entropia, valor da informação, mapa canônico, AutoLupa, contract_digest, candidate_ref, comitês independentes, registro auditável e autorização humana. Usar em auditorias, investigações, debugging multimodal, decisões arquiteturais, incidentes, avaliações de agentes, alegações conflitantes ou situações em que evidência deva alterar uma hipótese sem transformar confiança em autorização.
 ---
 
-# MetaLupa Bayesiana
+# META LUPA
 
 Transformar a sequência `mapa → evidência → crença → teste → decisão → AutoLupa → consolidação` em análise explícita, reproduzível e proporcional ao custo do erro.
 
-MetaLupa é a evolução da mesma Lupa Bayesiana, não outra técnica concorrente. Preservar o nome canônico `lupa-bayesiana`, seus cálculos e recursos; incorporar melhorias no mesmo artefato.
+META LUPA é a evolução do mesmo artefato e mantém o motor bayesiano. FRIA, MÉDIA e QUENTE são modos internos, não skills concorrentes.
+
+## Invariante de falsificação
+
+Uma alegação de sucesso apoiada apenas por painel verde, status `Scheduled`, HTTP 200, ausência de erro ou listagem de recurso é evidência insuficiente do funcionamento ponta a ponta.
+
+Nesse caso, a saída obrigatória é `VEREDITO=BLOQUEAR` (ou `CORRIGIR` quando o formato não admitir bloqueio), `FALSO_VERDE_BLOQUEADO=SIM`, e uma prova contrária ou próximo teste concreto. É proibido combinar `VEREDITO=APROVAR/APROVADA` com evidência insuficiente. Se isso ocorrer, a própria saída é inválida e a AutoLupa deve corrigi-la antes de responder.
+
+## Três temperaturas operacionais
+
+### FRIA — provar o que aconteceu
+
+Use para R0/R1 e fatos locais. Separe SIM/NÃO, antes/depois, mudou/não mudou. Não explique mecanismo invisível.
+
+Saída mínima: `MODO=FRIA`, fato, resultado, prova e lacuna.
+
+### MÉDIA — localizar por que aconteceu
+
+Ative em 401, 404, 429, timeout, contradição, evidência fraca, drift, falso verde ou R2. Formule hipóteses distinguíveis, mude uma variável por vez, use o canal correto, busque prova contrária e capture o delta do runtime.
+
+Saída mínima: `MODO=MEDIA`, hipótese, variável alterada, canal, resultado binário, delta, prova contrária e camada localizada.
+
+### QUENTE — tornar o achado repetível
+
+Ative em R3/R4, produção, autenticação, dados, merge, alteração da própria skill, recorrência ou CAÇA_AO_ERRO. Fixe alvo e SHA; combine tela, log, processo e ação; use revisão adversarial; execute positivo, negativo, limite e rollback; valide autorização; registre BEGIN/FINAL e AutoLupa.
+
+Saída mínima: `MODO=QUENTE`, contratos, observadores, testes, rollback, registro, autorização e ponto fixo.
+
+Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recorrência ou promoção escala para QUENTE; ponto fixo resfria e encerra.
 
 ## Princípios inegociáveis
 
@@ -157,7 +185,7 @@ odds_posterior = odds_prior × LR1 × LR2 × ... × LRn
 p_posterior = odds_posterior / (1 + odds_posterior)
 ```
 
-Para cálculos numéricos, executar `scripts/lupa_bayesiana.py` em vez de calcular manualmente. Ler `references/matematica-e-calibracao.md` quando houver múltiplas hipóteses, dependência, sensibilidade ou necessidade de justificar o LR.
+Para cálculos e gates determinísticos, executar `scripts/meta_lupa.py`. Ler `references/matematica-e-calibracao.md` quando houver múltiplas hipóteses, dependência, sensibilidade ou necessidade de justificar o LR.
 
 ### 6. Medir incerteza e escolher o próximo teste
 
@@ -271,7 +299,7 @@ Se faltarem dados para números honestos, emitir análise qualitativa e especifi
 
 - Ler `references/matematica-e-calibracao.md` para fórmulas, dependência, sensibilidade, múltiplas hipóteses e interpretação correta.
 - Ler `references/casos.md` para padrões aplicados a arquivos, agentes e mudanças críticas.
-- Executar `scripts/lupa_bayesiana.py --help` para cálculos determinísticos.
+- Executar `scripts/meta_lupa.py --help` para cálculos e gates determinísticos.
 - Executar `testes/test_lupa.py` para validar o motor antes de cada uso crítico.
 
 ---
@@ -294,7 +322,7 @@ Toda skill/arquivo citado por nome deve resolver para um caminho Git real
 com `blob SHA`. Se houver duas candidatas conflitantes → `BLOCKED_SKILL_IDENTITY`.
 Regra da missão: cópia baixada solta (ex: `METALUPA-BAYESIANA-CANONICA.md.lnk`)
 NUNCA é fonte da verdade; só o repo conectado conta. Destino local canônico
-desta skill: `E:\CentralDark\Pivete\CentralDark\.agents\skills\lupa-bayesiana\`.
+desta skill: `.agents/skills/meta-lupa/`.
 
 ### XP-3. Comitês independentes
 
@@ -318,7 +346,10 @@ Pivete / contradição fechada). Sem o bloco, veredito não sela.
 
 | Recurso | Caminho | Estado |
 |---|---|---|
-| script cálculo | `scripts/lupa_bayesiana.py` | CRIADO |
+| motor 3T e cálculo | `scripts/meta_lupa.py` | PRESENTE |
+| guardrail | `guardrails/validar_meta_lupa.py` | PRESENTE |
+| política | `approvals/politica.json` | PRESENTE |
+| regressão 3T | `testes/test_meta_lupa_3t.py` | PRESENTE |
 | ref math | `references/matematica-e-calibracao.md` | CRIADO |
 | ref casos | `references/casos.md` | CRIADO |
 | testes | `testes/test_lupa.py` | CRIADO (7/7) |
@@ -328,4 +359,3 @@ Pivete / contradição fechada). Sem o bloco, veredito não sela.
 Esta skill não usa semver. Maturidade = geração MetaLupa (pós-Lupa v1).
 Toda evolução é correção mínima neste arquivo + recursos citados, nunca
 novo arquivo paralelo. Blob atual de referência: `b71af825` (base recuperada).
-

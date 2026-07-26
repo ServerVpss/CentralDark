@@ -7,14 +7,14 @@ updated: 2026-07-23
 
 # 🔍 Contrato da `lupa-bayesiana` — canônica única
 
-> **Fonte da verdade:** `.agents/skills/lupa-bayesiana/SKILL.md` no repo `ServerVpss/CentralDark`.
+> **Fonte da verdade:** `.agents/skills/meta-lupa/SKILL.md` no repo `ServerVpss/CentralDark`.
 > **Não existem** `tecnica-da-lupa`, `MetaLupa`, `lupa-premium` ou qualquer variante paralela. "MetaLupa" é o nome interno que a própria skill canônica usa para se descrever como evolução — **é o mesmo artefato**.
 
 ## Identidade
 
 | Campo | Valor |
 |---|---|
-| Caminho canônico | `.agents/skills/lupa-bayesiana/SKILL.md` |
+| Caminho canônico | `.agents/skills/meta-lupa/SKILL.md` |
 | Nome | `lupa-bayesiana` |
 | Duplicatas proibidas | `tecnica-da-lupa`, `metalupa-bayesiana-canonica`, `lupa-premium`, `meta-lupa` |
 | Guard automatizado | `.github/workflows/lupa-drift-guard.yml` |
@@ -61,7 +61,7 @@ Vereditos permitidos: `APROVAR | CONDICIONAR | CORRIGIR | BLOQUEAR`.
 - **`.github/workflows/lupa-drift-guard.yml`** — roda em todo PR para `main`, `pivete/dev`, `pivete/auditoria`:
   1. `python scripts/lupa/inventario_skills.py` (gera artifact `inventario-skills.json`)
   2. `python scripts/lupa/detectar_drift.py` (falha se drift)
-  3. Assert `.agents/skills/lupa-bayesiana/SKILL.md` existe e nenhum dir paralelo
+  3. Assert `.agents/skills/meta-lupa/SKILL.md` existe e nenhum dir paralelo
 
 - **`.github/workflows/lupa-conformance.yml`** (PR #316) — 15 verificações da AutoLupa + XP-3 + hash-guard canônico.
 
@@ -87,7 +87,7 @@ python scripts/lupa/inventario_skills.py | jq '.skills[] | {nome, caminho, canon
 python scripts/lupa/detectar_drift.py
 
 # 3. hash canônico atual (deve bater com o do repo)
-git hash-object .agents/skills/lupa-bayesiana/SKILL.md
+git hash-object .agents/skills/meta-lupa/SKILL.md
 ```
 
 Se qualquer um dos três divergir, o PR já quebra no CI antes de chegar em revisão humana.
@@ -96,6 +96,6 @@ Se qualquer um dos três divergir, o PR já quebra no CI antes de chegar em revi
 
 ## Conexões
 
-- [[SKILL.md]] — `.agents/skills/lupa-bayesiana/SKILL.md`
+- [[SKILL.md]] — `.agents/skills/meta-lupa/SKILL.md`
 - [[CLAUDE.md]] §9 — áreas protegidas 🔒
 - [[APRENDIZADOS.md]] — #325, #343 (recuperação e cooperação)

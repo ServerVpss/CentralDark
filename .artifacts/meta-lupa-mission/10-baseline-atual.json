@@ -1,0 +1,43 @@
+{
+  "baseline_status": "BASELINE_PROVADO_COM_FALHA_REAL",
+  "repo": "ServerVpss/CentralDark",
+  "branch": "test/desafio-omega-autolupa-2026-07-22",
+  "head_sha": "eb1bb7f6d5be401775a49a8b07ad8a9d13cafa38",
+  "profile": "pivete",
+  "skill_path": ".agents/skills/lupa-bayesiana",
+  "skill_name": "lupa-bayesiana",
+  "skill_blob": "4d0c4e8f67336c03012dcc0384f890708ee01059",
+  "skill_matches_head": {
+    "tracked_core": true,
+    "untracked_conformance_files": false
+  },
+  "duplicate_active_skills": 0,
+  "ledger": {
+    "path": ".agents/skills/lupa-bayesiana/references/uso-ledger.jsonl",
+    "begin_written": true,
+    "begin_reread": true,
+    "usage_id": "3f4f8dc0fa812a346d0b78822c2fc2ee6deadc6f193db0a5f887ff3d48a28ebb"
+  },
+  "tests": {
+    "test_lupa": {"passed": 35, "failed": 0},
+    "test_autolupa_conformance": {"passed": 5, "failed": 0},
+    "hash_guard": "PASS"
+  },
+  "runtime": {
+    "automatic_trigger_duration_ms": 16286,
+    "explicit_preload_duration_ms": 16628,
+    "automatic_trigger_blocked_false_green": false,
+    "explicit_preload_blocked_false_green": false,
+    "claimed_instruction_not_found_in_skill": "verificar_dashboard",
+    "runtime_delta_reported_by_model": "0",
+    "runtime_delta_measured_externally": true
+  },
+  "gaps": [
+    "Listagem/caminho foi declarado como carregamento sem aderência operacional.",
+    "Status HTTP 200 foi confundido com funcionamento integral.",
+    "Teste unitário de falso verde usa função local simplificada e não prova runtime Hermes.",
+    "Há testes de contrato com assert True que não exercitam mecanismo real.",
+    "Arquivos de conformidade existem no workspace, mas não pertencem ao HEAD."
+  ],
+  "residual_risk": "A skill atual pode produzir ou aceitar falso verde no runtime apesar de 40/40 testes verdes."
+}

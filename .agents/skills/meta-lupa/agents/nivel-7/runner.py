@@ -1,5 +1,5 @@
 """Runner isolado (fora de tests/): roda a suite sem gerar __pycache__.
-Uso: python .agents/skills/lupa-bayesiana/agents/nivel-7/runner.py
+Uso: python .agents/skills/meta-lupa/agents/nivel-7/runner.py
 """
 import os, sys, shutil, subprocess, pathlib
 

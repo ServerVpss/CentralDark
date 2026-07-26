@@ -8,7 +8,7 @@ Regras:
 5. Falha se o git-blob SHA1 do SKILL.md local divergir do guard canônico.
 
 Uso:
-    AUTOLUPA_REPORT=caminho.md pytest .agents/skills/lupa-bayesiana/testes/ -v
+    AUTOLUPA_REPORT=caminho.md pytest .agents/skills/meta-lupa/testes/ -v
 """
 from __future__ import annotations
 
@@ -20,8 +20,8 @@ from pathlib import Path
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-SKILL_PATH = REPO_ROOT / ".agents/skills/lupa-bayesiana/SKILL.md"
-HASH_GUARD = REPO_ROOT / ".agents/skills/lupa-bayesiana/AUTOLUPA_CANONICAL_SHA"
+SKILL_PATH = REPO_ROOT / ".agents/skills/meta-lupa/SKILL.md"
+HASH_GUARD = REPO_ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
 
 CHECKS_OBRIGATORIAS = [
     "XP-1", "XP-2", "XP-3", "XP-4",

@@ -14,14 +14,14 @@
 ## 🔒 BOOT OBRIGATÓRIO — LUPA BAYESIANA
 
 ```text
-LUPA_BAYESIANA_BOOT_REQUIRED: SIM
+META_LUPA_BOOT_REQUIRED: SIM
 LUPA_USE_RECEIPT_REQUIRED: SIM
-SKILL_PATH: .agents/skills/lupa-bayesiana/SKILL.md
+SKILL_PATH: .agents/skills/meta-lupa/SKILL.md
 SKILL_REF: origin/main
 SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
 ```
 
-A skill `lupa-bayesiana` deve ser carregada e seu uso registrado (BEGIN+FINAL) antes de qualquer trabalho neste repo. Sem BEGIN → `BOOT_BLOQUEADO`.
+A skill `meta-lupa` deve ser carregada e seu uso registrado (BEGIN+FINAL) antes de qualquer trabalho neste repo. Sem BEGIN → `BOOT_BLOQUEADO`.
 
 ---
 > 📖 Especificação completa: [`docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`](docs/CONSCIENCIA/PADRAO-CARD-HERMES.md)

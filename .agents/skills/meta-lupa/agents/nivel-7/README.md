@@ -11,5 +11,5 @@ contratos nem testes.
 Rodar testes:
 
 ```
-pytest .agents/skills/lupa-bayesiana/agents/nivel-7/tests -q
+pytest .agents/skills/meta-lupa/agents/nivel-7/tests -q
 ```

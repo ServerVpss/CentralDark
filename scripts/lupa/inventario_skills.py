@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SAIDA = ROOT / "docs/RELATORIOS/inventario-skills.json"
 BASES = [".agents/skills", ".claude/skills", ".workspace/skills"]
-CANONICA = ".agents/skills/lupa-bayesiana/SKILL.md"
+CANONICA = ".agents/skills/meta-lupa/SKILL.md"
 
 
 def git_blob_sha(data: bytes) -> str:

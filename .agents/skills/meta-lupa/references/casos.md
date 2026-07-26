@@ -33,3 +33,19 @@ o executor da mudança. Separação de papéis > modelo específico.
 
 Se nova passagem gera SHA divergente, rollback falho ou falso verde →
 CORRIGIR mínimo e repetir. Nunca fechar por contagem de rodadas.
+
+## Caso G — Prova forte não é perfeição do modelo
+
+A evidência de competência não é "o modelo acertou de primeira". É a
+arquitetura (lupa + AutoLupa + gates) obrigar: localizar erro → corrigir →
+conferir o conjunto inteiro → só então encerrar. Mesmo modelo que erraria
+sozinho fica forçado a consertar. Relato do Pivete (2026-07-22): "você
+reclamou, ele ouviu, rastreou, corrigiu e provou".
+
+## Caso H — Separar denominadores de contagem
+
+Ao reportar contagens, não misturar subconjunto explícito com panorama
+maior. Exemplo real: subconjunto higienizado = 6 BLOQUEADA + 16 PRECISA_PR;
+panorama das 34 restantes = 14 BLOQUEADAS + 20 ARQUITETURA. São
+denominadores diferentes. Citar os dois sem misturar; se somar, explicar
+de onde vem cada fração.

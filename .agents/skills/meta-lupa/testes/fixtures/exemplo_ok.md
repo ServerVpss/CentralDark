@@ -5,8 +5,8 @@ VEREDITO: CONDICIONAR
 ## Verificações canônicas
 - XP-1 contract_digest: ok
 - XP-2 candidate_ref: ok
-- XP-3 COMITÊ INDEPENDENTE CONVOCADO: sim
-- XP-3 COMITÊ RESULTADO: CONDICIONA
+- XP-3 COMITÊ INDEP CONVOCADO: sim
+- XP-3 COMITÊ RESULTADO: APROVA
 - XP-4 AutoLupa 15-checks aplicada
 - AL-1 fontes primárias declaradas
 - AL-2 falsificadores explícitos

@@ -11,7 +11,7 @@ OUT="${1:-public/downloads/lupa-bayesiana-nivel-7.zip}"
 SDE="${SOURCE_DATE_EPOCH:-1700000000}"
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-SRC="$ROOT/.agents/skills/lupa-bayesiana/agents/nivel-7"
+SRC="$ROOT/.agents/skills/meta-lupa/agents/nivel-7"
 
 if [ ! -d "$SRC" ]; then
   echo "fonte nao encontrada: $SRC" >&2
