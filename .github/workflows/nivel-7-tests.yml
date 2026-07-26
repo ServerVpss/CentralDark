@@ -1,0 +1,99 @@
+name: nivel-7-tests
+
+on:
+  push:
+    branches:
+      - "feat/lupa-n7-**"
+  pull_request:
+    paths:
+      - ".agents/skills/meta-lupa/agents/nivel-7/**"
+      - "scripts/nivel-7/**"
+      - "public/downloads/lupa-bayesiana-nivel-7.zip"
+      - "public/downloads/nivel-7-manifest.json"
+      - ".github/workflows/nivel-7-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  runner-e-imutabilidade:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      SOURCE_DATE_EPOCH: "1700000000"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias minimas
+        run: python -m pip install --upgrade pip pytest jsonschema
+
+      - name: Rodar runner isolado (agents read-only + testes)
+        working-directory: .agents/skills/meta-lupa/agents/nivel-7
+        run: python runner.py
+
+      - name: Auditar ausencia de __pycache__
+        working-directory: .agents/skills/meta-lupa/agents/nivel-7
+        run: |
+          if find . -name "__pycache__" -o -name "*.pyc" | grep -q .; then
+            echo "cache detectado apos runner" >&2
+            find . -name "__pycache__" -o -name "*.pyc"
+            exit 1
+          fi
+          echo "sem cache"
+
+  build-dupla-reprodutivel:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_DATE_EPOCH: "1700000000"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar ferramentas
+        run: sudo apt-get update && sudo apt-get install -y zip rsync
+
+      - name: Build 1
+        run: |
+          bash scripts/nivel-7/build-deterministic.sh /tmp/nivel-7-b1.zip
+          sha256sum /tmp/nivel-7-b1.zip
+
+      - name: Build 2 (diretorio isolado)
+        run: |
+          cp -r . /tmp/repo-b2
+          cd /tmp/repo-b2
+          bash scripts/nivel-7/build-deterministic.sh /tmp/nivel-7-b2.zip
+          sha256sum /tmp/nivel-7-b2.zip
+
+      - name: Comparar SHA das duas builds (determinismo intra-ambiente)
+        run: |
+          SHA1=$(sha256sum /tmp/nivel-7-b1.zip | awk '{print $1}')
+          SHA2=$(sha256sum /tmp/nivel-7-b2.zip | awk '{print $1}')
+          echo "SHA1=$SHA1"
+          echo "SHA2=$SHA2"
+          if [ "$SHA1" != "$SHA2" ]; then
+            echo "build nao reproduzivel dentro do mesmo ambiente" >&2
+            exit 1
+          fi
+          echo "reprodutibilidade intra-ambiente confirmada"
+
+      - name: Verificar coerencia local (manifest x zip commitado)
+        run: |
+          COMMITTED_SHA=$(sha256sum public/downloads/lupa-bayesiana-nivel-7.zip | awk '{print $1}')
+          MSHA=$(python3 -c "import json;print(json.load(open('public/downloads/nivel-7-manifest.json'))['sha256'])")
+          echo "COMMITTED_SHA=$COMMITTED_SHA"
+          echo "MANIFEST_SHA=$MSHA"
+          if [ "$COMMITTED_SHA" != "$MSHA" ]; then
+            echo "manifest divergente do ZIP commitado" >&2
+            exit 1
+          fi
+          echo "manifest coerente com ZIP commitado (build cross-env pode diferir de zip runtime)"
+
+      - name: Publicar artefato CI (build reprodutivel do runner)
+        uses: actions/upload-artifact@v4
+        with:
+          name: nivel-7-ci-build
+          path: /tmp/nivel-7-b1.zip
+          if-no-files-found: error

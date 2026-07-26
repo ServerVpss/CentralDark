@@ -2,6 +2,50 @@
 
 > Histórico cronológico de cada execução do workflow `notion-sync.yml`.
 
+## 2026-07-25T20:58:41.481Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `531c4cca6f1a15c4b62e13cac479183fb106d114`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 0 atualizadas · 0 ignoradas · 0 erros (Git: 0)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 461 erros (Git: 461)
+
+## 2026-07-24T23:39:16.002Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `da64364f14af83a79fb8d5e986ff1b4568359698`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 346 atualizadas · 0 ignoradas · 0 erros (Git: 346)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 460 erros (Git: 460)
+
+## 2026-07-23T22:22:49.326Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `6362c55443c7dc8ed4a74d5d682b7bdef0a7472b`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 346 atualizadas · 0 ignoradas · 0 erros (Git: 346)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 460 erros (Git: 460)
+
+## 2026-07-22T20:05:54.297Z · EXEC · target=all · por @segredounlock
+
+- Commit fonte: `f1fd903a9bc188d48c060b433aacd6c8774cbff3`
+- Bases atualizadas: regras, pendencias, decisoes, aprendizados, estrutura
+- Bases ignoradas: —
+  - **regras**: 0 criadas · 4 atualizadas · 0 ignoradas · 0 erros (Git: 4)
+  - **pendencias**: 0 criadas · 1 atualizadas · 0 ignoradas · 0 erros (Git: 1)
+  - **decisoes**: 0 criadas · 39 atualizadas · 0 ignoradas · 0 erros (Git: 39)
+  - **aprendizados**: 0 criadas · 0 atualizadas · 0 ignoradas · 0 erros (Git: 0)
+  - **estrutura**: 0 criadas · 0 atualizadas · 0 ignoradas · 459 erros (Git: 459)
+
 ## 2026-07-22T15:50:34.040Z · EXEC · target=all · por @segredounlock
 
 - Commit fonte: `e205f9f0987647764dfd3742edd28c4c4c12092e`

@@ -24,7 +24,7 @@ jobs:
       tag: ${{ steps.info.outputs.tag }}
       skip: ${{ steps.info.outputs.skip }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -50,7 +50,7 @@ jobs:
     if: needs.detect.outputs.skip == 'false'
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Validar SHA-256 dos assets contra checksums.json
         working-directory: apps/modulos/obsidian-plugin-grafo-vivo
@@ -83,7 +83,7 @@ jobs:
     if: needs.detect.outputs.skip == 'false'
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Extrair notas do changelog.json
         id: notas
