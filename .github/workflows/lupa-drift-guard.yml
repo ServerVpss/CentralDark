@@ -30,7 +30,7 @@ jobs:
         run: |
           set -e
           test -f .agents/skills/meta-lupa/SKILL.md || { echo "❌ canônica ausente"; exit 1; }
-          for proibido in tecnica-da-lupa metalupa-bayesiana-canonica lupa-premium meta-lupa; do
+          for proibido in tecnica-da-lupa metalupa-bayesiana-canonica lupa-premium; do
             for base in .agents/skills .claude/skills .workspace/skills; do
               if [ -d "$base/$proibido" ]; then
                 echo "❌ skill removida reapareceu: $base/$proibido"

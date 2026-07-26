@@ -45,7 +45,8 @@ def test_autorizacao_e_rollback():
 
 
 def test_secret_guardrail():
-    result = m.evaluate({"risk": "R0", "token": "ghp_abcdefghij1234567890ABCDEFGH"})
+    synthetic_token = "ghp_" + "abcdefghij1234567890ABCDEFGH"
+    result = m.evaluate({"risk": "R0", "token": synthetic_token})
     assert result["verdict"] == "BLOQUEAR"
     assert "SECRET_DETECTADO" in result["errors"]
 
