@@ -1,4 +1,4 @@
-# Sentinela — 2026-07-26T08:30:30.585Z
+# Sentinela — 2026-07-26T13:27:42.358Z
 
 | Métrica | Valor |
 |---|---|
@@ -12,32 +12,32 @@
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 484ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 292ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 167ms · CORS=`*`
-- 🔴 **Install status** — `503` em 146ms
-- 🟢 **Painel** — `200` em 172ms · CORS=`*`
-- 🟢 **API** — `200` em 166ms · CORS=`*`
+- 🟢 **MCP health** — `200` em 294ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 250ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 144ms · CORS=`*`
+- 🔴 **Install status** — `503` em 132ms
+- 🟢 **Painel** — `200` em 137ms · CORS=`*`
+- 🟢 **API** — `200` em 113ms · CORS=`*`
 
 ## Divergências
 
 - **[p2]** Endpoints → Endpoint Install status fora do ar (HTTP 503) (bot: `claude`)
 - **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: painel-validacao (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
