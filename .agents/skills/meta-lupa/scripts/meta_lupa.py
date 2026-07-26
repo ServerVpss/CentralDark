@@ -35,6 +35,8 @@ from datetime import datetime, timezone
 LEDGER_NAME = "references/uso-ledger.jsonl"
 SCHEMA_VERSION = 1
 REGISTRATION_ENV = "LUPA_REGISTRATION_MODE"
+# commit sancionado para migracao de alvo versionado nao reproduzivel (linha 4 / CANDIDATE_REF)
+MIGRATION_COMMIT = "e6718f69d"
 
 XP_AWARDS = {
     "erro_reproduzido": 5,
@@ -365,10 +367,95 @@ def _validate_achievements(args) -> list[str]:
 def _record_hash(rec: dict) -> str:
     # exclui campos volateis (timestamps, proprio hash) para que idempotencia
     # seja por conteudo semantico, nao por hora de gravacao
-    volatile = {"started_at_utc", "finished_at_utc", "record_hash"}
+    volatile = {"started_at_utc", "finished_at_utc", "attested_at_utc", "record_hash"}
     payload = {k: v for k, v in rec.items() if k not in volatile}
     payload = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def record_hash_legacy(rec: dict) -> str:
+    # algoritmo legado (pre-sanitizacao): SHA256 do JSON ordenado removendo
+    # APENAS record_hash. Registros de 2026-07-22 (linhas 1,2) e o par
+    # BEGIN/FINAL 31/32 foram gravados com este algoritmo; aceitos por
+    # retrocompatibilidade sem reescrever o ledger.
+    payload = {k: v for k, v in rec.items() if k != "record_hash"}
+    payload = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def attested_targets(records: list[dict]) -> dict:
+    """Mapa target_usage_id -> conjunto de target_record_hash de ATESTATIONs validas.
+
+    Uma ATESTATION so entra no mapa quando:
+      - seu PROPRIO record_hash e valido pelo algoritmo corrente (_record_hash);
+      - o alvo (target_usage_id) existe EXATAMENTE no ledger;
+      - o alvo aponta para um hash reproduzivel (corrente ou legado) OU a
+        atestacao carrega a migracao sancionada (provenance com MIGRATION_COMMIT).
+
+    Isso impede que uma atestacao corrompida valide qualquer alvo, e impede
+    que uma atestacao "auto-valide" a si mesma (ela nao tem usage_id proprio).
+    """
+    out = {}
+    by_id = {r.get("usage_id"): r for r in records if r.get("usage_id")}
+    for r in records:
+        if r.get("event") != "ATTESTATION":
+            continue
+        if r.get("record_hash") != _record_hash(r):
+            # atestacao com hash proprio corrompido: nao conta
+            continue
+        tgt_id = r.get("target_usage_id")
+        tgt = by_id.get(tgt_id)
+        if tgt is None:
+            # alvo exato inexistente: nao conta
+            continue
+        stored = tgt.get("record_hash")
+        reproducible = (stored == _record_hash(tgt) or stored == record_hash_legacy(tgt))
+        migration = MIGRATION_COMMIT in (r.get("provenance") or "")
+        if not reproducible and not migration:
+            # so valida alvo nao reproduzivel mediante migracao sancionada
+            continue
+        out.setdefault(tgt_id, set()).add(r.get("target_record_hash"))
+    return out
+
+
+def attested_orphan_resolvers(records: list[dict]) -> dict:
+    """usage_id -> conjunto de target_record_hash resolvidos por ATESTATION valida
+    com resolve_orphan=true apontando ao hash exato do FINAL orfao."""
+    out = {}
+    valid_targets = attested_targets(records)
+    for r in records:
+        if r.get("event") != "ATTESTATION":
+            continue
+        if not r.get("resolve_orphan"):
+            continue
+        tgt = r.get("target_usage_id")
+        target_hash = r.get("target_record_hash")
+        if target_hash not in valid_targets.get(tgt, set()):
+            continue
+        out.setdefault(tgt, set()).add(target_hash)
+    return out
+
+
+def record_hash_valid(rec: dict, attested: dict) -> bool:
+    """Verificacao retrocompativel de record_hash.
+
+    Aceita quando o hash armazenado bate com:
+      - algoritmo corrente (_record_hash), OU
+      - algoritmo legado (somente record_hash removido), OU
+      - atestacao EXATA (valida) que aponta exatamente este usage_id + record_hash.
+
+    CANDIDATE_REF NAO tem aceite blanket: exige atestacao exata como qualquer
+    registro, mesmo com hash legado nao reproduzivel.
+    """
+    stored = rec.get("record_hash")
+    if stored == _record_hash(rec):
+        return True
+    if stored == record_hash_legacy(rec):
+        return True
+    targets = attested.get(rec.get("usage_id"))
+    if targets and stored in targets:
+        return True
+    return False
 
 
 def _read_ledger() -> list[dict]:
@@ -558,19 +645,36 @@ def cmd_finish_use(args) -> int:
 
 def cmd_verify_ledger(args) -> int:
     recs = _read_ledger()
+    attested = attested_targets(recs)
+    orphan_resolvers = attested_orphan_resolvers(recs)
     begins = [r for r in recs if r.get("event") == "BEGIN"]
     finals = [r for r in recs if r.get("event") == "FINAL"]
     begin_ids = {b["usage_id"] for b in begins}
     final_ids = {f["usage_id"] for f in finals}
     orphan = [b["usage_id"] for b in begins if b["usage_id"] not in final_ids]
-    orphan_final = [f["usage_id"] for f in finals if f["usage_id"] not in begin_ids]
+    # orphan_final: FINAL sem BEGIN correspondente. So e excluido quando existe
+    # ATESTATION valida com resolve_orphan=true apontando ao hash EXATO desse FINAL.
+    orphan_final = []
+    for f in finals:
+        if f["usage_id"] in begin_ids:
+            continue
+        solved = (f["usage_id"] in orphan_resolvers
+                  and f.get("record_hash") in orphan_resolvers[f["usage_id"]])
+        if not solved:
+            orphan_final.append(f["usage_id"])
+    # verificacao retrocompativel: aceita hash corrente, legado ou atestacao exata.
     bad_hash = [
         index for index, rec in enumerate(recs, start=1)
-        if rec.get("record_hash") != _record_hash(rec)
+        if not record_hash_valid(rec, attested)
+    ]
+    attested_lines = [
+        index for index, rec in enumerate(recs, start=1)
+        if rec.get("event") == "ATTESTATION"
     ]
     print(
         f"TOTAL={len(recs)} BEGIN={len(begins)} FINAL={len(finals)} "
-        f"ORPHAN_BEGIN={len(orphan)} ORPHAN_FINAL={len(orphan_final)} BAD_HASH={len(bad_hash)}"
+        f"ORPHAN_BEGIN={len(orphan)} ORPHAN_FINAL={len(orphan_final)} "
+        f"BAD_HASH={len(bad_hash)} ATTESTED={len(attested_lines)}"
     )
     for o in orphan:
         print(f"ORPHAN_BEGIN usage_id={o}")
@@ -578,7 +682,120 @@ def cmd_verify_ledger(args) -> int:
         print(f"ORPHAN_FINAL usage_id={o}")
     for line in bad_hash:
         print(f"BAD_HASH line={line}")
+    for line in attested_lines:
+        print(f"ATTESTED line={line}")
     return 1 if orphan or orphan_final or bad_hash else 0
+
+
+def cmd_attest_ledger(args) -> int:
+    """Mecanismo explicito e append-only de atestacao/migracao de anomalia historica.
+
+    Resolve um alvo EXATO por usage_id + record_hash. Nao reescreve nem remove
+    linhas antigas: acrescenta um evento ATTESTATION com hash corrente valido e
+    proveniencia.
+
+    Idempotencia: mesma atestacao (mesmo usage_id + record_hash + reason +
+    provenance + resolve_orphan) retorna ATTESTATION_EXISTS sem anexar; uma
+    atestacao DIVERGENTE (mesmo usage_id com outro record_hash/resolve_orphan)
+    e rejeitada com ATTEST_DIVERGENT_EXISTS.
+
+    Aceite de alvo:
+      - usage_id alvo existe no ledger;
+      - record_hash alvo coincide com o informado (target_record_hash);
+      - E um dos dois:
+          (a) hash do alvo e reproduzivel (corrente ou legado); OU
+          (b) alvo versionado nao reproduzivel SOMENTE quando provenance contem
+              o commit exato MIGRATION_COMMIT e target_record_hash coincide.
+      - nao ha atestacao divergente ja gravada.
+    Nao permite atestar alvo arbitrario nem auto-validar.
+    """
+    if _registration_active():
+        return 0
+    recs = _read_ledger()
+    target = next(
+        (r for r in recs if r.get("usage_id") == args.target_usage_id),
+        None,
+    )
+    if target is None:
+        print(f"ATTEST_TARGET_NOT_FOUND usage_id={args.target_usage_id}", file=sys.stderr)
+        return 2
+    stored = target.get("record_hash")
+    if args.target_record_hash != stored:
+        print(
+            f"ATTEST_TARGET_HASH_MISMATCH usage_id={args.target_usage_id}",
+            file=sys.stderr,
+        )
+        return 2
+    current_ok = stored == _record_hash(target)
+    legacy_ok = stored == record_hash_legacy(target)
+    reproducible = current_ok or legacy_ok
+    migration = MIGRATION_COMMIT in (args.provenance or "")
+    if not (reproducible or migration):
+        # alvo versionado nao reproduzivel exige migracao sancionada
+        print(
+            f"ATTEST_TARGET_NOT_REPRODUCIBLE usage_id={args.target_usage_id} "
+            f"(requer provenance com commit {MIGRATION_COMMIT})",
+            file=sys.stderr,
+        )
+        return 2
+    if not args.reason or not args.provenance:
+        print("ATTEST_REQUIRES_REASON_AND_PROVENANCE", file=sys.stderr)
+        return 2
+    if args.resolve_orphan:
+        # o uso_id alvo deve ser de fato um orfao FINAL (sem BEGIN) para resolver orfao
+        is_final = target.get("event") == "FINAL"
+        has_begin = any(
+            r.get("event") == "BEGIN" and r.get("usage_id") == args.target_usage_id
+            for r in recs
+        )
+        if not (is_final and not has_begin):
+            print(
+                f"ATTEST_NOT_ORPHAN_FINAL usage_id={args.target_usage_id}",
+                file=sys.stderr,
+            )
+            return 2
+    # checagem de idempotencia / divergencia
+    for e in recs:
+        if e.get("event") != "ATTESTATION":
+            continue
+        if e.get("target_usage_id") != args.target_usage_id:
+            continue
+        same = (
+            e.get("target_record_hash") == args.target_record_hash
+            and e.get("reason") == args.reason
+            and e.get("provenance") == args.provenance
+            and bool(e.get("resolve_orphan")) == bool(args.resolve_orphan)
+        )
+        if same:
+            print(
+                f"ATTESTATION_EXISTS usage_id={args.target_usage_id} "
+                f"resolve_orphan={'sim' if args.resolve_orphan else 'nao'}"
+            )
+            return 0
+        # divergencia: mesmo uso_id com hash/outros campos distintos
+        print(
+            f"ATTEST_DIVERGENT_EXISTS usage_id={args.target_usage_id}",
+            file=sys.stderr,
+        )
+        return 2
+    rec = {
+        "event": "ATTESTATION",
+        "target_usage_id": args.target_usage_id,
+        "target_record_hash": args.target_record_hash,
+        "resolve_orphan": bool(args.resolve_orphan),
+        "reason": args.reason,
+        "provenance": args.provenance,
+        "attested_at_utc": _now_utc(),
+        "record_hash": "",
+    }
+    rec = _sanitize_value(rec)
+    rec["record_hash"] = _record_hash(rec)
+    _append_atomic(rec)
+    print(
+        f"ATTESTATION_RECORDED usage_id={args.target_usage_id} "
+        f"resolve_orphan={'sim' if args.resolve_orphan else 'nao'}"
+    )
+    return 0
 
 
 def cmd_promote_learning(args) -> int:
@@ -667,6 +884,19 @@ def main() -> None:
 
     v = sub.add_parser("verify-ledger")
     v.set_defaults(func=cmd_verify_ledger)
+
+    a = sub.add_parser("attest-ledger")
+    a.add_argument("--target-usage-id", required=True,
+                   help="usage_id exato do registro a ser atestado/migrado")
+    a.add_argument("--target-record-hash", required=True,
+                   help="record_hash exato do registro alvo (corrente ou legado)")
+    a.add_argument("--reason", required=True,
+                   help="motivo da anomalia historica (ex: orfao FINAL pre-existente)")
+    a.add_argument("--provenance", required=True,
+                   help="proveniencia da resolucao (ex: commit e6718f69d, missao X)")
+    a.add_argument("--resolve-orphan", action="store_true",
+                   help="marca a atestacao como resolucao de orfao FINAL (exige FINAL sem BEGIN)")
+    a.set_defaults(func=cmd_attest_ledger)
 
     p = sub.add_parser("promote-learning")
     p.add_argument("--usage-id", required=True)
