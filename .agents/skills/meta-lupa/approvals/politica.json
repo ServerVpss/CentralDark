@@ -1,0 +1,7 @@
+{
+  "R0": "leitura e prova curta",
+  "R1": "mudanca local reversivel dentro da autorizacao",
+  "R2": "backup, diff, teste e autorizacao aplicavel",
+  "R3": "proposta, rollback, revisao independente e ordem explicita",
+  "R4": "ordem explicita atual para producao, dinheiro, dados criticos, exclusao, segredo, merge ou restart"
+}

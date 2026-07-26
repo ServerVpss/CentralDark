@@ -5,20 +5,20 @@ Substitui cálculo manual (SKILL.md Fase 5). Todos os cálculos são
 reprodutíveis e sem dependências externas.
 
 Uso (cálculo):
-  python lupa_bayesiana.py --prior 0.3 --lr 5 2
-  python lupa_bayesiana.py --entropia 0.5
-  python lupa_bayesiana.py --voi 10 2 1
+  python meta_lupa.py --prior 0.3 --lr 5 2
+  python meta_lupa.py --entropia 0.5
+  python meta_lupa.py --voi 10 2 1
 
 Uso (auto-registro obrigatório de uso da skill - BOOT):
-  python lupa_bayesiana.py begin-use --repo ServerVpss/CentralDark \
-      --mission-id <id> --skill-path .agents/skills/lupa-bayesiana/SKILL.md \
+  python meta_lupa.py begin-use --repo ServerVpss/CentralDark \
+      --mission-id <id> --skill-path .agents/skills/meta-lupa/SKILL.md \
       --skill-ref <ref> --skill-commit-sha <sha> --workspace-head <sha> \
       --mode read-only
-  python lupa_bayesiana.py finish-use --mission-id <id> \
+  python meta_lupa.py finish-use --mission-id <id> \
       --verdict APROVAR --autolupa sim --point-fixed sim \
       --tests-manifest <json> --evidence-manifest <json>
-  python lupa_bayesiana.py verify-ledger
-  python lupa_bayesiana.py promote-learning --usage-id <id>
+  python meta_lupa.py verify-ledger
+  python meta_lupa.py promote-learning --usage-id <id>
 
 LUPA_REGISTRATION_MODE=1 desliga a abertura de recibo aninhado (anti-recursão).
 """
@@ -46,6 +46,109 @@ SECRET_PATTERNS = [
     re.compile(r"[a-z]+://[^:\s]+:[^@\s]+@"),  # url com credencial usuario:senha@
     re.compile(r"(ghp_|github_pat_|glpat-|hf_)[A-Za-z0-9]{10,}"),  # pats comuns
 ]
+
+HOT_TRIGGERS = {
+    "R3", "R4", "PRODUCAO", "VPS", "MERGE", "MAIN", "IDENTIDADE",
+    "MEMORIA", "AUTENTICACAO", "DADOS", "ROTEAMENTO", "FALLBACK",
+    "FALSO_VERDE_RECORRENTE", "AGENTES_DISCORDANDO", "CACA_AO_ERRO",
+    "ALTERAR_LUPA",
+}
+WARM_TRIGGERS = {
+    "R2", "404", "401", "429", "TIMEOUT", "CONTRADICAO",
+    "EVIDENCIA_FRACA", "MECANISMO_DESCONHECIDO", "FALSO_VERDE",
+    "RUNTIME_DIVERGENTE", "DRIFT",
+}
+
+
+def canonical_json(data) -> str:
+    return json.dumps(data, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+
+
+def contract_digest(data: dict) -> str:
+    contract = {
+        "objective": data.get("objective"),
+        "target": data.get("target"),
+        "scope": data.get("scope"),
+        "constraints": data.get("constraints", []),
+        "source_truth": data.get("source_truth"),
+        "head_sha": data.get("head_sha"),
+        "authorization": data.get("authorization"),
+        "acceptance": data.get("acceptance", []),
+    }
+    return hashlib.sha256(canonical_json(contract).encode("utf-8")).hexdigest()
+
+
+def select_mode(data: dict) -> str:
+    explicit = str(data.get("mode", "")).upper()
+    if explicit in {"FRIA", "MEDIA", "QUENTE"}:
+        return explicit
+    triggers = {str(item).upper() for item in data.get("triggers", [])}
+    triggers.add(str(data.get("risk", "R0")).upper())
+    if triggers & HOT_TRIGGERS:
+        return "QUENTE"
+    if triggers & WARM_TRIGGERS:
+        return "MEDIA"
+    return "FRIA"
+
+
+def validate(data: dict) -> list[str]:
+    errors = []
+    risk = str(data.get("risk", "R0")).upper()
+    mode = select_mode(data)
+    if sanitize(canonical_json(data))[1]:
+        errors.append("SECRET_DETECTADO")
+    if risk in {"R2", "R3", "R4"} and not data.get("source_truth"):
+        errors.append("FONTE_DA_VERDADE_AUSENTE")
+    if risk in {"R3", "R4"} and not data.get("authorization"):
+        errors.append("AUTORIZACAO_AUSENTE")
+    if len(data.get("variables_changed", [])) > 1 and not data.get("factorial_test_declared"):
+        errors.append("MULTIPLAS_VARIAVEIS_NO_MESMO_TESTE")
+    if data.get("claims_runtime_change") and not data.get("runtime_delta"):
+        errors.append("DELTA_RUNTIME_AUSENTE")
+    if data.get("promote") and not data.get("regression_passed"):
+        errors.append("PROMOCAO_SEM_REGRESSAO")
+    if data.get("promote") and not data.get("registry_target_proven"):
+        errors.append("REGISTRO_DESTINO_NAO_PROVADO")
+    if data.get("claims_pivete_authorship") and not data.get("pivete_approved"):
+        errors.append("AUTORIA_DO_PIVETE_NAO_APROVADA")
+    if mode == "FRIA" and data.get("mechanism_claimed") and not data.get("mechanism_proven"):
+        errors.append("MECANISMO_INVISIVEL_TRATADO_COMO_FATO")
+    if data.get("evidence_sufficient") is False and data.get("success_claimed"):
+        errors.append("FALSO_VERDE")
+    if data.get("evidence_head") and data.get("head_sha") and data["evidence_head"] != data["head_sha"]:
+        errors.append("EVIDENCIA_DE_OUTRO_SHA")
+    if risk in {"R2", "R3", "R4"} and not data.get("rollback"):
+        errors.append("ROLLBACK_AUSENTE")
+    return errors
+
+
+def evaluate(data: dict) -> dict:
+    errors = validate(data)
+    blockers = {
+        "SECRET_DETECTADO", "AUTORIZACAO_AUSENTE",
+        "AUTORIA_DO_PIVETE_NAO_APROVADA", "FALSO_VERDE",
+        "EVIDENCIA_DE_OUTRO_SHA",
+    }
+    if blockers & set(errors):
+        verdict = "BLOQUEAR"
+    elif errors:
+        verdict = "CORRIGIR"
+    elif data.get("evidence_sufficient") is False:
+        verdict = "CONDICIONAR"
+    else:
+        verdict = "APROVAR"
+    return {
+        "mode_used": select_mode(data),
+        "trigger": data.get("triggers", []),
+        "risk": data.get("risk", "R0"),
+        "contract_digest": contract_digest(data),
+        "candidate_ref": data.get("candidate_ref"),
+        "errors": errors,
+        "verdict": verdict,
+        "runtime_delta": data.get("runtime_delta"),
+        "counter_evidence": data.get("counter_evidence"),
+        "point_fixed": bool(data.get("point_fixed", False)),
+    }
 
 
 def odds(p: float) -> float:
@@ -290,6 +393,20 @@ def cmd_promote_learning(args) -> int:
     return 0
 
 
+def cmd_evaluate(args) -> int:
+    with open(args.input, encoding="utf-8") as handle:
+        data = json.load(handle)
+    print(json.dumps(evaluate(data), indent=2, ensure_ascii=False))
+    return 0
+
+
+def cmd_select_mode(args) -> int:
+    with open(args.input, encoding="utf-8") as handle:
+        data = json.load(handle)
+    print(select_mode(data))
+    return 0
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="MetaLupa Bayesiana - calculo deterministico + auto-registro")
     ap.add_argument("--prior", type=float, help="probabilidade prior em (0,1)")
@@ -340,6 +457,14 @@ def main() -> None:
     p = sub.add_parser("promote-learning")
     p.add_argument("--usage-id", required=True)
     p.set_defaults(func=cmd_promote_learning)
+
+    e = sub.add_parser("evaluate")
+    e.add_argument("--input", required=True)
+    e.set_defaults(func=cmd_evaluate)
+
+    s = sub.add_parser("select-mode")
+    s.add_argument("--input", required=True)
+    s.set_defaults(func=cmd_select_mode)
 
     args = ap.parse_args()
 

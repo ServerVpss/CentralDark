@@ -1,7 +1,7 @@
 """Motor de reconciliação Desafio Omega (solução free tier).
 
 Implementa apenas este arquivo. Não altera contrato, testes ou gerador.
-Segue CONTRACT.md e a lupa-bayesiana: separar autoridade por domínio,
+Segue CONTRACT.md e a meta-lupa: separar autoridade por domínio,
 precedência temporal, deduplicação por correlation_id, sanitização de
 segredos, saída canônica determinística, ledger encadeado e ponto fixo.
 """

@@ -1,0 +1,10 @@
+Primeira tentativa de execução falhou antes da inferência:
+EXIT_CODE=2
+CAUSA=Método PowerShell fragmentou um here-string multiline como argumentos.
+CORRECAO_DE_METODO=usar --oneshot=<prompt em argumento único>.
+
+Nenhum erro de runtime foi emitido nas duas execuções válidas.
+
+FALHA_SEMANTICA:
+As respostas válidas aprovaram o falso verde apesar dos testes automatizados
+estarem verdes.

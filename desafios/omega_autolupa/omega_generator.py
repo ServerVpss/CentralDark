@@ -104,7 +104,7 @@ def make_bundle(seed: int) -> tuple[dict, dict]:
         },
         {
             "domain": "filesystem", "kind": "path", "key": "skill",
-            "value": r"E:\CentralDark\Pivete\CentralDark\.agents\skills\lupa-bayesiana\SKILL.md",
+            "value": r"E:\CentralDark\Pivete\CentralDark\.agents\skills\meta-lupa\SKILL.md",
             "timestamp": base.isoformat(), "correlation_id": "path-skill", "source_id": "fs-win",
         },
     ])
@@ -134,6 +134,6 @@ def make_bundle(seed: int) -> tuple[dict, dict]:
             "allowed": ["comment_issue"],
             "blocked": ["deploy", "merge", "restart"],
         },
-        "paths": {"skill": ".agents/skills/lupa-bayesiana/SKILL.md"},
+        "paths": {"skill": ".agents/skills/meta-lupa/SKILL.md"},
     }
     return bundle, expected

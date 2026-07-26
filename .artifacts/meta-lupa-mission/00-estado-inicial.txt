@@ -1,0 +1,23 @@
+REPO_PATH=E:\CentralDark\Pivete\CentralDark
+REPO_REMOTE=https://github.com/ServerVpss/CentralDark.git
+BRANCH=test/desafio-omega-autolupa-2026-07-22
+HEAD_SHA_INICIAL=eb1bb7f6d5be401775a49a8b07ad8a9d13cafa38
+PROFILE_HERMES=pivete
+HERMES_HOME=C:\Users\danda\AppData\Local\hermes\profiles\pivete
+GATEWAY_STATUS=RUNNING PID 60004
+CODEX_MODEL=openai-codex/gpt-5.6-sol
+FREE_COUNCIL_PRESENT=SIM
+CONFIG_SHA=F5DC63370BAF4AB7723F63C07EC0B641F7CA9230246AA32E61C4D0B1B6980942
+AUTH_STATUS_SANITIZADO=openai-codex OAuth presente; marcador local 429 existente; chamada direta SOL OK já comprovada
+
+CLASSIFICACAO_PREEXISTENTE:
+- DENTRO_DA_MISSAO: .agents/skills/lupa-bayesiana/AUTOLUPA_CANONICAL_SHA
+- DENTRO_DA_MISSAO: .agents/skills/lupa-bayesiana/testes/fixtures/
+- DENTRO_DA_MISSAO: .agents/skills/lupa-bayesiana/testes/test_autolupa_conformance.py
+- FORA_DA_MISSAO: .hermes/desktop-attachments/
+- FORA_DA_MISSAO: supabase/.temp/
+- DESCONHECIDA_PRESERVADA: apps/modulos/hub/LEMBRANÇAS DE NOVO E UTIL.txt
+
+NOTA_CONCORRENCIA:
+O commit eb1bb7f6 foi criado e enviado antes da fixacao deste estado inicial.
+Nenhum processo Git escritor permaneceu ativo na inspeção.

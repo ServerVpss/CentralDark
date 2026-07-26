@@ -71,7 +71,7 @@ class OmegaReconciliationTests(unittest.TestCase):
         bundle, _ = make_bundle(8)
         self.assertEqual(
             solve(bundle)["paths"]["skill"],
-            ".agents/skills/lupa-bayesiana/SKILL.md"
+            ".agents/skills/meta-lupa/SKILL.md"
         )
 
     def test_010_correlated_duplicates_do_not_change_result(self):

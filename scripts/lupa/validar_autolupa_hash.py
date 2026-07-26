@@ -20,9 +20,9 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SKILL = ROOT / ".agents/skills/lupa-bayesiana/SKILL.md"
-GUARD = ROOT / ".agents/skills/lupa-bayesiana/AUTOLUPA_CANONICAL_SHA"
-API_URL = "https://api.github.com/repos/ServerVpss/CentralDark/contents/.agents/skills/lupa-bayesiana/SKILL.md?ref=main"
+SKILL = ROOT / ".agents/skills/meta-lupa/SKILL.md"
+GUARD = ROOT / ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
+API_URL = "https://api.github.com/repos/ServerVpss/CentralDark/contents/.agents/skills/meta-lupa/SKILL.md?ref=main"
 
 
 def git_blob_sha1(data: bytes) -> str:
@@ -54,7 +54,7 @@ def main() -> int:
             print("[FAIL] --update requer PERMITO_PIVETE=1", file=sys.stderr)
             return 3
         GUARD.write_text(
-            f"{local}  .agents/skills/lupa-bayesiana/SKILL.md\n"
+            f"{local}  .agents/skills/meta-lupa/SKILL.md\n"
             "# git-blob SHA1 canônico. Atualize somente com PERMITO PIVETE.\n",
             encoding="utf-8",
         )

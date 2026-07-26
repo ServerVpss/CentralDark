@@ -11,7 +11,7 @@ import tempfile
 import uuid
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.lupa_bayesiana import (  # noqa: E402
+from scripts.meta_lupa import (  # noqa: E402
     odds, prob, posterior, entropia, voi, usage_id, _read_ledger,
     _ledger_path, _record_hash, sanitize, REGISTRATION_ENV,
 )
@@ -102,7 +102,7 @@ def test_record_hash_reproducible():
 def test_begin_unique():
     fresh_ledger()
     import subprocess
-    base = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py"),
+    base = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py"),
             "begin-use", "--repo", "ServerVpss/CentralDark", "--mission-id", "MB",
             "--skill-path", "p", "--skill-ref", "r", "--skill-commit-sha", "c",
             "--workspace-head", "h", "--mode", "read-only"]
@@ -116,7 +116,7 @@ def test_begin_unique():
 def test_final_unique():
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MF", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     fin = pre + ["finish-use", "--mission-id", "MF", "--verdict", "APROVAR", "--autolupa", "sim",
@@ -135,7 +135,7 @@ def test_replay_idempotent():
 def test_final_conflict_divergent():
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MC", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     subprocess.run(pre + ["finish-use", "--mission-id", "MC", "--verdict", "APROVAR", "--autolupa", "sim",
@@ -149,7 +149,7 @@ def test_final_conflict_divergent():
 def test_orphan_begin_detected():
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MO", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     r = subprocess.run(pre + ["verify-ledger"], capture_output=True, text=True)
@@ -160,7 +160,7 @@ def test_interruption_recovery():
     # BEGIN orfao -> recover via finish-use com result=BLOQUEADO
     test_orphan_begin_detected()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     r = subprocess.run(pre + ["finish-use", "--mission-id", "MO", "--verdict", "BLOQUEAR",
                               "--autolupa", "nao", "--point-fixed", "nao", "--result", "BLOQUEADO"], check=True)
     assert r.returncode == 0
@@ -200,7 +200,7 @@ def test_suite_check_separation():
     # FINAL aceita campos distintos
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MS", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     subprocess.run(pre + ["finish-use", "--mission-id", "MS", "--verdict", "APROVAR", "--autolupa", "sim",
@@ -215,7 +215,7 @@ def test_anti_recursion():
     os.environ[REGISTRATION_ENV] = "1"
     try:
         import subprocess
-        pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+        pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
         r = subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MR", "--skill-path", "p",
                                   "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"],
                           capture_output=True, text=True, env={**os.environ, REGISTRATION_ENV: "1"})
@@ -229,7 +229,7 @@ def test_anti_recursion():
 def test_commit_trailers_present():
     # parser dos trailers validado por regex
     import re
-    sample = "Lupa-Used: true\nLupa-Usage-ID: abc\nLupa-Skill-Path: .agents/skills/lupa-bayesiana/SKILL.md\n"
+    sample = "Lupa-Used: true\nLupa-Usage-ID: abc\nLupa-Skill-Path: .agents/skills/meta-lupa/SKILL.md\n"
     assert re.search(r"^Lupa-Used: true$", sample, re.M)
     assert re.search(r"^Lupa-Usage-ID: \w+$", sample, re.M)
 
@@ -242,7 +242,7 @@ def test_boot_marker_in_entry_files():
         p = os.path.join(repo, fn)
         if os.path.exists(p):
             with open(p, encoding="utf-8") as f:
-                assert "LUPA_BAYESIANA_BOOT_REQUIRED" in f.read(), fn
+                assert "META_LUPA_BOOT_REQUIRED" in f.read(), fn
 
 
 def test_absence_blocks_boot():
@@ -263,7 +263,7 @@ def test_cache_does_not_beat_git():
     import subprocess
     blob = subprocess.run(["git", "hash-object", os.path.join(SKILL, "SKILL.md")],
                           capture_output=True, text=True, cwd=os.path.dirname(SKILL)).stdout.strip()
-    assert blob == "4d0c4e8f67336c03012dcc0384f890708ee01059"
+    assert blob == "f1aa30c6bf8b999171a5181fd90d724390b7f805"
 
 
 def test_duplicate_learning_no_xp():
@@ -274,7 +274,7 @@ def test_duplicate_learning_no_xp():
 def test_simple_use_no_skill_change():
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     before = open(os.path.join(SKILL, "SKILL.md"), encoding="utf-8").read()
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MU", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
@@ -295,7 +295,7 @@ def test_contract_digest_changes():
 def test_ledger_jsonl_valid():
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MJ", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     with open(os.environ["LUPA_LEDGER_PATH"], encoding="utf-8") as f:
@@ -307,7 +307,7 @@ def test_no_secret_in_diff():
     # nenhum secret pattern no ledger apos operacao sanitizada
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MN", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     with open(os.environ["LUPA_LEDGER_PATH"], encoding="utf-8") as f:
@@ -320,7 +320,7 @@ def test_rollback_preserves_ledger():
     # ledger eh append-only; apagar nao ocorre em rollback de missao
     fresh_ledger()
     import subprocess
-    pre = [sys.executable, os.path.join(SKILL, "scripts", "lupa_bayesiana.py")]
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MRB", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     assert os.path.exists(os.environ["LUPA_LEDGER_PATH"])
