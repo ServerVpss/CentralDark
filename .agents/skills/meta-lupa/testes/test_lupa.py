@@ -18,6 +18,8 @@ from scripts.meta_lupa import (  # noqa: E402
     REGISTRATION_ENV,
     calculate_evolution, evolution_fingerprint, level_from_xp,
     tier_for_level, xp_next,
+    LedgerMutationDenied, append_record_atomic, guarded_destructive_operation,
+    ledger_integrity,
 )
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,6 +36,35 @@ def fresh_ledger():
     tf.close()
     os.environ["LUPA_LEDGER_PATH"] = tf.name
     return tf.name
+
+
+def test_writer_real_blocks_destructive_mutations_before_change():
+    path = fresh_ledger()
+    begin = {"event": "BEGIN", "usage_id": "writer-real"}
+    begin["record_hash"] = _record_hash(begin)
+    append_record_atomic(path, begin)
+    before = open(path, "rb").read()
+    for operation in ("delete", "truncate", "overwrite", "rename-replacement"):
+        try:
+            guarded_destructive_operation(path, operation)
+            assert False, operation
+        except LedgerMutationDenied:
+            pass
+        assert open(path, "rb").read() == before
+
+
+def test_writer_real_allows_matching_final_only_by_append():
+    path = fresh_ledger()
+    begin = {"event": "BEGIN", "usage_id": "writer-pair"}
+    begin["record_hash"] = _record_hash(begin)
+    final = {"event": "FINAL", "usage_id": "writer-pair"}
+    final["record_hash"] = _record_hash(final)
+    append_record_atomic(path, begin)
+    prefix = open(path, "rb").read()
+    append_record_atomic(path, final)
+    result = open(path, "rb").read()
+    assert result.startswith(prefix)
+    assert ledger_integrity([begin, final])["ok"]
 
 
 # ---- Matemática existente (casos 1-7) ----
