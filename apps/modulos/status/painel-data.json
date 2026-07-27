@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-27T07:14:32.556Z",
-  "updatedAtBR": "27/07/2026, 04:14:32 BRT",
+  "updatedAt": "2026-07-27T17:30:53.653Z",
+  "updatedAtBR": "27/07/2026, 14:30:53 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(pendencias): fecha #53",
+    "lastCommit": "Merge pull request #409 from ServerVpss/evol/meta-lupa-falso-verde-20260727",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-27T17:30:53.653Z",
+      "titulo": "Push na main · 354f74d70618bf57806bd451949aba292cac3e11",
+      "detalhe": "Merge pull request #409 from ServerVpss/evol/meta-lupa-falso-verde-20260727",
+      "area": "Repositório",
+      "sha": "354f74d",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-27T07:14:32.556Z",
       "titulo": "Push na main · 76daaf98e9e29422d922576fa7daeb8d25d813c7",
       "detalhe": "docs(pendencias): fecha #53",
@@ -986,14 +994,6 @@
       "detalhe": "docs(consciencia): registra autoevolucao mental e jornada Hermes do Pivete",
       "area": "Repositório",
       "sha": "b97419a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-17T06:45:49.666Z",
-      "titulo": "Push na main · 02d9aa891431c16714dcff24e0be79fb937f0116",
-      "detalhe": "docs(consciencia): Seção 21 — Lei do Juiz (Hermes) (#237)",
-      "area": "Repositório",
-      "sha": "02d9aa8",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-27T17:30:53.653Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 354f74d70618bf57806bd451949aba292cac3e11 (354f74d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-27T07:14:32.556Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 76daaf98e9e29422d922576fa7daeb8d25d813c7 (76daaf9)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-18T17:54:42.827Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b97419a3461bd9c09513432b5a40c99f209a10a1 (b97419a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-17T06:45:49.666Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 02d9aa891431c16714dcff24e0be79fb937f0116 (02d9aa8)",
       "area": "Repositório",
       "status": "sucesso"
     }
