@@ -1,4 +1,4 @@
-# Sentinela — 2026-07-27T03:24:30.561Z
+# Sentinela — 2026-07-27T09:56:49.986Z
 
 | Métrica | Valor |
 |---|---|
@@ -12,17 +12,27 @@
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 290ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 219ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 96ms · CORS=`*`
-- 🔴 **Install status** — `503` em 113ms
-- 🟢 **Painel** — `200` em 101ms · CORS=`*`
-- 🟢 **API** — `200` em 111ms · CORS=`*`
+- 🟢 **MCP health** — `200` em 246ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 209ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 93ms · CORS=`*`
+- 🔴 **Install status** — `503` em 98ms
+- 🟢 **Painel** — `200` em 105ms · CORS=`*`
+- 🟢 **API** — `200` em 92ms · CORS=`*`
 
 ## Divergências
 
 - **[p2]** Endpoints → Endpoint Install status fora do ar (HTTP 503) (bot: `claude`)
 - **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: PR auto-review (Codex + checklist) (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: PR auto-review (Codex + checklist) (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
+- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: PR auto-review (Codex + checklist) (bot: `codex`)
@@ -32,13 +42,3 @@
 - **[p2]** Workflows → Workflow vermelho: lupa-conformance (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: PR auto-review (Codex + checklist) (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: Lupa Drift Guard (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: PR auto-review (Codex + checklist) (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: lupa-conformance (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: PR auto-review (Codex + checklist) (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: supabase-bot (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: painel-validacao (bot: `codex`)
