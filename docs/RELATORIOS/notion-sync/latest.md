@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-27T20:24:09.757Z
+# 🧠 Notion Sync — 2026-07-27T20:48:12.695Z
 
-- **Commit fonte:** `1bef425e3f58067b94392efcfb4fb20b764edcf1`
+- **Commit fonte:** `a5f27ec90b52564b0118117c37a2b08647eddd89`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 49 atualizadas · ❌ 461 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 50 atualizadas · ❌ 461 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 6 | 1 | 5 | 0 | 0 |
+| aprendizados | 7 | 1 | 6 | 0 | 0 |
 | estrutura | 461 | 0 | 0 | 0 | 461 |
 
 ## Operações
@@ -71,7 +71,8 @@
 | aprendizados | atualizado | #3 — Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída |
 | aprendizados | atualizado | #4 — Auditoria não vale sem HEAD_SHA declarado: 4 escopos, 3 lacunas falsas no PR #410 |
 | aprendizados | atualizado | #5 — Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou |
-| aprendizados | criado | #6 — A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa |
+| aprendizados | atualizado | #6 — A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa |
+| aprendizados | criado | #7 — github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
