@@ -30,6 +30,7 @@ import os
 import re
 import sys
 import tempfile
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 LEDGER_NAME = "references/uso-ledger.jsonl"
@@ -458,6 +459,227 @@ def record_hash_valid(rec: dict, attested: dict) -> bool:
     return False
 
 
+class LedgerMutationDenied(Exception):
+    def __init__(self, code: str, message: str, detail: dict | None = None):
+        super().__init__(f"{code}: {message}")
+        self.code = code
+        self.message = message
+        self.detail = detail or {}
+
+
+@dataclass
+class MutationDecision:
+    allowed: bool
+    code: str
+    message: str
+    detail: dict = field(default_factory=dict)
+
+    @property
+    def denied(self) -> bool:
+        return not self.allowed
+
+
+def ledger_integrity(records: list[dict]) -> dict:
+    attested = attested_targets(records)
+    orphan_resolvers = attested_orphan_resolvers(records)
+    begins = [r for r in records if r.get("event") == "BEGIN"]
+    finals = [r for r in records if r.get("event") == "FINAL"]
+    begin_ids = {r.get("usage_id") for r in begins}
+    final_ids = {r.get("usage_id") for r in finals}
+    orphan_begin = sum(1 for row in begins if row.get("usage_id") not in final_ids)
+    orphan_final = 0
+    for row in finals:
+        usage_id = row.get("usage_id")
+        if usage_id in begin_ids:
+            continue
+        solved = (
+            usage_id in orphan_resolvers
+            and row.get("record_hash") in orphan_resolvers[usage_id]
+        )
+        if not solved:
+            orphan_final += 1
+    bad_hash = sum(1 for row in records if not record_hash_valid(row, attested))
+    exact_records = {
+        (row.get("usage_id"), row.get("record_hash"))
+        for row in records
+        if row.get("usage_id") and row.get("record_hash")
+    }
+    dangling_refs = sum(
+        1
+        for row in records
+        if row.get("event") == "ATTESTATION"
+        and (row.get("target_usage_id"), row.get("target_record_hash"))
+        not in exact_records
+    )
+    return {
+        "orphan_begin": orphan_begin,
+        "orphan_final": orphan_final,
+        "bad_hash": bad_hash,
+        "dangling_refs": dangling_refs,
+        "ok": not (orphan_begin or orphan_final or bad_hash or dangling_refs),
+    }
+
+
+def propose_ledger_mutation(existing_raw: list[str], proposed_raw: list[str]) -> MutationDecision:
+    old_count, new_count = len(existing_raw), len(proposed_raw)
+    for index in range(min(old_count, new_count)):
+        if existing_raw[index] != proposed_raw[index]:
+            row = json.loads(existing_raw[index])
+            return MutationDecision(
+                False,
+                "DENY_REWRITE",
+                f"line {index} content changed; ledger history is immutable",
+                {"index": index, "event": row.get("event")},
+            )
+    if new_count < old_count:
+        return MutationDecision(
+            False,
+            "DENY_DELETE",
+            f"proposed has {new_count} lines; existing has {old_count}",
+            {"missing_count": old_count - new_count},
+        )
+    return MutationDecision(
+        True,
+        "ALLOW_APPEND" if new_count > old_count else "ALLOW_NOOP",
+        f"append {new_count - old_count} line(s)",
+        {"appended": new_count - old_count},
+    )
+
+
+def _validate_canonical_append(existing: list[dict], rec: dict) -> MutationDecision:
+    before = ledger_integrity(existing)
+    event = rec.get("event")
+    usage_id = rec.get("usage_id")
+    existing_transient = (
+        before["orphan_begin"] == 1
+        and before["orphan_final"] == 0
+        and before["bad_hash"] == 0
+        and before["dangling_refs"] == 0
+    )
+    attestation_recovery = (
+        event == "ATTESTATION"
+        and before["orphan_begin"] == 0
+        and before["orphan_final"] >= 1
+        and before["dangling_refs"] == 0
+        and (
+            before["bad_hash"] == 0
+            or (
+                before["bad_hash"] == 1
+                and MIGRATION_COMMIT in (rec.get("provenance") or "")
+                and any(
+                    row.get("usage_id") == rec.get("target_usage_id")
+                    and row.get("record_hash") == rec.get("target_record_hash")
+                    for row in existing
+                )
+            )
+        )
+    )
+    if not before["ok"] and not existing_transient and not attestation_recovery:
+        return MutationDecision(False, "DENY_INVALID_EXISTING", "ledger existing is invalid", before)
+    if rec.get("record_hash") != _record_hash(rec):
+        return MutationDecision(False, "DENY_BAD_RECORD_HASH", "new record_hash is invalid")
+    if event == "BEGIN":
+        if existing_transient:
+            return MutationDecision(
+                False, "DENY_CONCURRENT_BEGIN", "one transient BEGIN is already open"
+            )
+        if any(
+            row.get("event") == "BEGIN" and row.get("usage_id") == usage_id
+            for row in existing
+        ):
+            return MutationDecision(False, "DENY_DUPLICATE_BEGIN", "BEGIN already exists")
+    elif event == "FINAL":
+        if not any(
+            row.get("event") == "BEGIN" and row.get("usage_id") == usage_id
+            for row in existing
+        ):
+            return MutationDecision(False, "DENY_FINAL_WITHOUT_BEGIN", "FINAL has no BEGIN")
+        if any(
+            row.get("event") == "FINAL" and row.get("usage_id") == usage_id
+            for row in existing
+        ):
+            return MutationDecision(False, "DENY_DUPLICATE_FINAL", "FINAL already exists")
+    elif event == "ATTESTATION":
+        target = (rec.get("target_usage_id"), rec.get("target_record_hash"))
+        exact = {
+            (row.get("usage_id"), row.get("record_hash"))
+            for row in existing
+            if row.get("usage_id") and row.get("record_hash")
+        }
+        if target not in exact:
+            return MutationDecision(
+                False, "DENY_DANGLING_ATTESTATION", "ATTESTATION target is missing"
+            )
+    else:
+        return MutationDecision(False, "DENY_INVALID_EVENT", f"unsupported event: {event}")
+    after = ledger_integrity(existing + [rec])
+    transient_begin = (
+        event == "BEGIN"
+        and after["orphan_begin"] == 1
+        and after["orphan_final"] == 0
+        and after["bad_hash"] == 0
+        and after["dangling_refs"] == 0
+    )
+    attestation_not_worse = (
+        event == "ATTESTATION"
+        and after["orphan_begin"] == before["orphan_begin"]
+        and after["orphan_final"] <= before["orphan_final"]
+        and after["bad_hash"] == 0
+        and after["dangling_refs"] == 0
+    )
+    if not after["ok"] and not transient_begin and not attestation_not_worse:
+        return MutationDecision(False, "DENY_INVALID_RESULT", "append result is invalid", after)
+    return MutationDecision(True, "ALLOW_VALID_APPEND", "canonical append validated")
+
+
+def guarded_destructive_operation(path: str, operation: str, replacement: str | None = None) -> MutationDecision:
+    if not os.path.exists(path):
+        raise LedgerMutationDenied("DENY_LEDGER_MISSING", "canonical ledger is missing")
+    if operation == "rename-replacement":
+        raise LedgerMutationDenied(
+            "DENY_RENAME_REPLACEMENT",
+            "ledger replacement by rename is forbidden; use canonical append",
+        )
+    existing_raw = []
+    records = []
+    with open(path, "r", encoding="utf-8") as handle:
+        for line in handle:
+            raw = line.rstrip("\r\n")
+            if raw.strip():
+                existing_raw.append(raw)
+                records.append(json.loads(raw))
+    if operation == "delete-attested":
+        target = next(
+            (row for row in records if row.get("event") == "ATTESTATION"),
+            None,
+        )
+        if target is None:
+            raise LedgerMutationDenied("DENY_NO_ATTESTATION", "no attested receipt exists")
+        raise LedgerMutationDenied(
+            "DENY_ATTESTED_DELETE",
+            "attested receipt is immutable",
+            {"event": "ATTESTATION", "target_usage_id": target.get("target_usage_id")},
+        )
+    if operation in {"delete", "truncate"}:
+        proposed_raw = []
+    elif operation == "overwrite":
+        proposed_raw = [
+            json.dumps(row, ensure_ascii=False, separators=(",", ":"))
+            for row in records
+        ]
+        if not proposed_raw:
+            raise LedgerMutationDenied("DENY_EMPTY_LEDGER", "nothing exists to overwrite")
+        changed = dict(records[0])
+        changed["writer_attack"] = True
+        proposed_raw[0] = json.dumps(changed, ensure_ascii=False, separators=(",", ":"))
+    else:
+        raise LedgerMutationDenied("DENY_UNKNOWN_OPERATION", operation)
+    decision = propose_ledger_mutation(existing_raw, proposed_raw)
+    if decision.denied:
+        raise LedgerMutationDenied(decision.code, decision.message, decision.detail)
+    raise LedgerMutationDenied("DENY_DESTRUCTIVE_DEFAULT", "destructive mutation denied")
+
+
 def _read_ledger() -> list[dict]:
     path = _ledger_path()
     if not os.path.exists(path):
@@ -472,8 +694,7 @@ def _read_ledger() -> list[dict]:
     return out
 
 
-def _append_atomic(rec: dict) -> None:
-    path = _ledger_path()
+def append_record_atomic(path: str, rec: dict) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     data = json.dumps(rec, ensure_ascii=False) + "\n"
     # lock exclusivo simples cross-platform (evita corrida de escrita - caso 11)
@@ -488,15 +709,38 @@ def _append_atomic(rec: dict) -> None:
             fcntl.flock(lf.fileno(), fcntl.LOCK_EX)
         # APPEND real: reler conteudo existente + acrescentar
         existing = ""
+        existing_raw = []
+        existing_records = []
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 existing = f.read()
+            existing_raw = [
+                line.rstrip("\r\n")
+                for line in existing.splitlines()
+                if line.strip()
+            ]
+            existing_records = [json.loads(line) for line in existing_raw]
+        validation = _validate_canonical_append(existing_records, rec)
+        if validation.denied:
+            raise LedgerMutationDenied(
+                validation.code, validation.message, validation.detail
+            )
+        proposed_raw = existing_raw + [data.rstrip("\n")]
+        mutation = propose_ledger_mutation(existing_raw, proposed_raw)
+        if mutation.denied:
+            raise LedgerMutationDenied(
+                mutation.code, mutation.message, mutation.detail
+            )
         fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), suffix=".tmp")
-        with os.fdopen(fd, "w", encoding="utf-8") as f:
-            f.write(existing + data)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(tmp, path)
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                f.write(existing + data)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp, path)
+        finally:
+            if os.path.exists(tmp):
+                os.remove(tmp)
     finally:
         try:
             lf.close()
@@ -507,6 +751,10 @@ def _append_atomic(rec: dict) -> None:
                 os.remove(lock)
             except Exception:
                 pass
+
+
+def _append_atomic(rec: dict) -> None:
+    append_record_atomic(_ledger_path(), rec)
 
 
 def _registration_active() -> bool:
@@ -824,6 +1072,23 @@ def cmd_select_mode(args) -> int:
     return 0
 
 
+def cmd_writer_attack(args) -> int:
+    path = os.path.abspath(args.ledger or _ledger_path())
+    try:
+        guarded_destructive_operation(path, args.operation, args.replacement)
+    except LedgerMutationDenied as exc:
+        print(json.dumps({
+            "blocked": True,
+            "code": exc.code,
+            "message": str(exc),
+            "detail": exc.detail,
+            "ledger": path,
+        }, ensure_ascii=False, sort_keys=True))
+        return 13
+    print(json.dumps({"blocked": False, "ledger": path}, sort_keys=True))
+    return 0
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="MetaLupa Bayesiana - calculo deterministico + auto-registro")
     ap.add_argument("--prior", type=float, help="probabilidade prior em (0,1)")
@@ -909,6 +1174,16 @@ def main() -> None:
     s = sub.add_parser("select-mode")
     s.add_argument("--input", required=True)
     s.set_defaults(func=cmd_select_mode)
+
+    w = sub.add_parser("writer-attack")
+    w.add_argument(
+        "--operation",
+        required=True,
+        choices=("delete", "truncate", "overwrite", "rename-replacement", "delete-attested"),
+    )
+    w.add_argument("--ledger", default="")
+    w.add_argument("--replacement", default="")
+    w.set_defaults(func=cmd_writer_attack)
 
     args = ap.parse_args()
 
