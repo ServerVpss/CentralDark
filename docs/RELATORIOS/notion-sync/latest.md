@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-27T19:54:18.976Z
+# 🧠 Notion Sync — 2026-07-27T20:24:09.757Z
 
-- **Commit fonte:** `ff26701471b5615f92ce5f0cf85dca89f2b7d53e`
+- **Commit fonte:** `1bef425e3f58067b94392efcfb4fb20b764edcf1`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 1 criadas · ♻️ 48 atualizadas · ❌ 461 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 49 atualizadas · ❌ 461 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 5 | 1 | 4 | 0 | 0 |
+| aprendizados | 6 | 1 | 5 | 0 | 0 |
 | estrutura | 461 | 0 | 0 | 0 | 461 |
 
 ## Operações
@@ -70,7 +70,8 @@
 | aprendizados | atualizado | #2 — git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone |
 | aprendizados | atualizado | #3 — Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída |
 | aprendizados | atualizado | #4 — Auditoria não vale sem HEAD_SHA declarado: 4 escopos, 3 lacunas falsas no PR #410 |
-| aprendizados | criado | #5 — Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou |
+| aprendizados | atualizado | #5 — Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou |
+| aprendizados | criado | #6 — A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |

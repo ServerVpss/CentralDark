@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-27T19:54:22.236Z
-- **Commit:** `ff26701471b5615f92ce5f0cf85dca89f2b7d53e`
+- **Gerado:** 2026-07-27T20:24:12.583Z
+- **Commit:** `1bef425e3f58067b94392efcfb4fb20b764edcf1`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 5 | 0 | 0 | 5 | 0 |
+| aprendizados | 6 | 0 | 0 | 6 | 0 |
 
 ## Detalhes
 
@@ -43,7 +43,7 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **5**
+- 🟥 Faltando no Notion: **6**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
@@ -53,4 +53,5 @@
 - 3. Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída
 - 4. Auditoria não vale sem HEAD_SHA declarado: 4 escopos, 3 lacunas falsas no PR #410
 - 5. Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou
+- 6. A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa
 </details>
