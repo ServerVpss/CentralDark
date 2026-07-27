@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-27T06:35:00.915Z
+# 🧠 Notion Sync — 2026-07-27T07:14:13.325Z
 
-- **Commit fonte:** `aa901e220cf0cae28fd507bc1436c36255dd1577`
+- **Commit fonte:** `76daaf98e9e29422d922576fa7daeb8d25d813c7`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 2 criadas · ♻️ 44 atualizadas · ❌ 461 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 46 atualizadas · ❌ 461 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 2 | 2 | 0 | 0 | 0 |
+| aprendizados | 2 | 0 | 2 | 0 | 0 |
 | estrutura | 461 | 0 | 0 | 0 | 461 |
 
 ## Operações
@@ -66,8 +66,8 @@
 | decisoes | atualizado | Sessão 2026-07-11/12 (continuação) — Central de Notificações, trava aplicada |
 | decisoes | atualizado | Sessão 2026-07-12 — Fixes de notificação + Condefonte Universal + grupo Evolução silenciado (Abacus sem crédito) |
 | decisoes | atualizado | Sessão 2026-07-12 (continuação) — Contenção ativa: Circuit Breaker, DISCOVERY_MODELS, PM2 id, hub-status |
-| aprendizados | criado | #1 — Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo |
-| aprendizados | criado | #2 — git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone |
+| aprendizados | atualizado | #1 — Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo |
+| aprendizados | atualizado | #2 — git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
