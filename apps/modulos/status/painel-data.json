@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-27T17:30:53.653Z",
-  "updatedAtBR": "27/07/2026, 14:30:53 BRT",
+  "updatedAt": "2026-07-27T18:16:08.455Z",
+  "updatedAtBR": "27/07/2026, 15:16:08 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Merge pull request #409 from ServerVpss/evol/meta-lupa-falso-verde-20260727",
+    "lastCommit": "aprendizado(#3): Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-27T18:16:08.455Z",
+      "titulo": "Push na main · bc8dd9ec6b2cb72bd210236793651d10538154cb",
+      "detalhe": "aprendizado(#3): Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída",
+      "area": "Repositório",
+      "sha": "bc8dd9e",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-27T17:30:53.653Z",
       "titulo": "Push na main · 354f74d70618bf57806bd451949aba292cac3e11",
       "detalhe": "Merge pull request #409 from ServerVpss/evol/meta-lupa-falso-verde-20260727",
@@ -986,14 +994,6 @@
       "detalhe": "docs: integrar ponte !CALIBRAR !RELOAD na regra multi-agente",
       "area": "Repositório",
       "sha": "c0210b9",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-18T17:54:42.827Z",
-      "titulo": "Push na main · b97419a3461bd9c09513432b5a40c99f209a10a1",
-      "detalhe": "docs(consciencia): registra autoevolucao mental e jornada Hermes do Pivete",
-      "area": "Repositório",
-      "sha": "b97419a",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-27T18:16:08.455Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bc8dd9ec6b2cb72bd210236793651d10538154cb (bc8dd9e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-27T17:30:53.653Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 354f74d70618bf57806bd451949aba292cac3e11 (354f74d)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-18T21:39:01.385Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · c0210b9064da87aa8028d5c5a82ec4a2c68e8208 (c0210b9)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-18T17:54:42.827Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b97419a3461bd9c09513432b5a40c99f209a10a1 (b97419a)",
       "area": "Repositório",
       "status": "sucesso"
     }
