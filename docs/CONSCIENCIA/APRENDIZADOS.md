@@ -1,1 +1,7 @@
 {{FILE:/tmp/pr316/aprendizados.md}}
+
+### 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo
+- **Categoria:** armadilha
+- **Data:** 2026-07-27
+- **Contexto:** Ao restaurar o módulo Bolt, criei um arquivo .env.example com as 15 variáveis do módulo, TODAS sem valor (verificado por grep). O CI reprovou com SECRET_SUSPECT_BLOCKED. Investigando o workflow "Gates determinísticos", a regra é: sensitive_path = (^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|...) e suspect = any(sensitive_path.search(name) for name in names). Esse teste roda ANTES de qualquer análise de valor — bloqueia pelo NOME do arquivo. Isso explicou retroativamente o commit 958666567 ("remover caminhos env bloqueados"): os .env.example e .env.production originais do Bolt tinham sido apagados por este mesmo gate, não por conterem segredo. Eu repeti o erro histórico sem saber.
+- **Aprendizado:** Nunca criar arquivo .env.example, .env.production ou qualquer .env.* neste repositório — o gate de CI rejeita pelo nome, mesmo com o arquivo 100% vazio de valores. Documente as variáveis em README.md do módulo. Atenção: há contradição interna no repo — o .gitignore (linha 60, !*.env.example) PERMITE esses arquivos, enquanto o gate de CI os REJEITA. Na prática vale a regra mais restritiva, que é o gate. Antes de recriar um arquivo que aparece como deletado no histórico, leia a mensagem do commit que o removeu: ela costuma dizer o motivo e evita repetir o ciclo.
