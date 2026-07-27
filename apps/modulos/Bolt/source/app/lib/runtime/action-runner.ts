@@ -6,8 +6,36 @@ import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';
 import type { ActionCallbackData } from './message-parser';
 import type { BoltShell } from '~/utils/shell';
+import { diagnoseError } from './error-classifier';
 
 const logger = createScopedLogger('ActionRunner');
+
+/**
+ * Monta o alerta de falha do dev server com o diagnóstico do erro.
+ *
+ * Antes, qualquer falha virava o mesmo alerta genérico. Agora a descrição
+ * começa com a causa em linguagem comum e, quando é pacote ausente, já diz
+ * quais instalar — sem alterar `content`, que segue sendo a saída técnica
+ * completa que os consumidores do alerta esperam.
+ */
+function buildDevServerAlert(error: ActionCommandError): ActionAlert {
+  const diagnosis = diagnoseError(`${error.header}\n${error.output}`);
+
+  const parts = [diagnosis.humanHint];
+
+  if (diagnosis.missingPackages.length > 0) {
+    parts.push(`Pacote(s): ${diagnosis.missingPackages.join(', ')}.`);
+  }
+
+  parts.push(error.header);
+
+  return {
+    type: 'error',
+    title: 'Dev Server Failed',
+    description: parts.filter(Boolean).join(' '),
+    content: error.output,
+  };
+}
 
 export type ActionStatus = 'pending' | 'running' | 'complete' | 'aborted' | 'failed';
 
@@ -202,12 +230,7 @@ export class ActionRunner {
                 return;
               }
 
-              this.onAlert?.({
-                type: 'error',
-                title: 'Dev Server Failed',
-                description: err.header,
-                content: err.output,
-              });
+              this.onAlert?.(buildDevServerAlert(err));
             });
 
           /*
@@ -235,12 +258,7 @@ export class ActionRunner {
         return;
       }
 
-      this.onAlert?.({
-        type: 'error',
-        title: 'Dev Server Failed',
-        description: error.header,
-        content: error.output,
-      });
+      this.onAlert?.(buildDevServerAlert(error));
 
       // re-throw the error to be caught in the promise chain
       throw error;
