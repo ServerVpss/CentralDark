@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-27T06:36:20.821Z",
-  "updatedAtBR": "27/07/2026, 03:36:20 BRT",
+  "updatedAt": "2026-07-27T07:07:23.439Z",
+  "updatedAtBR": "27/07/2026, 04:07:23 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#2): git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone",
+    "lastCommit": "Merge pull request #396 from ServerVpss/feat/bolt-ligar-classificador-20260727",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-27T07:07:23.439Z",
+      "titulo": "Push na main · 50bcc613c8ee98b50d69f5896ce5ae68c03b279b",
+      "detalhe": "Merge pull request #396 from ServerVpss/feat/bolt-ligar-classificador-20260727",
+      "area": "Repositório",
+      "sha": "50bcc61",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-27T06:36:20.821Z",
       "titulo": "Push na main · 94f993c13069a82005b35cfcb27ca66f5adef67f",
       "detalhe": "aprendizado(#2): git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#333): Hermes morto 12 dias com PM2 verde: contrato quebrado entre módulo e Core",
       "area": "Repositório",
       "sha": "25f78a4",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-17T06:19:02.319Z",
-      "titulo": "Push na main · 935e89654892c693d64d2e96451508b5d7b43627",
-      "detalhe": "aprendizado(#332): Enxame multi-IA sem juiz: 19 comentários, 0 vereditos, 0 execução",
-      "area": "Repositório",
-      "sha": "935e896",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-27T07:07:23.439Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 50bcc613c8ee98b50d69f5896ce5ae68c03b279b (50bcc61)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-27T06:36:20.821Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 94f993c13069a82005b35cfcb27ca66f5adef67f (94f993c)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-17T06:37:03.239Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 25f78a4cc9c02abf5dacc256d678eb80b2d2d5dc (25f78a4)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-17T06:19:02.319Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 935e89654892c693d64d2e96451508b5d7b43627 (935e896)",
       "area": "Repositório",
       "status": "sucesso"
     }
