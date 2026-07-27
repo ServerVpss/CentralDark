@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 0 | 0 | 0 | 0 | 0 |
+| aprendizados | 2 | 0 | 0 | 2 | 0 |
 
 ## Detalhes
 
@@ -43,5 +43,11 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **0**
+- 🟥 Faltando no Notion: **2**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
+
+<details><summary>🟥 Itens a espelhar</summary>
+
+- 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo
+- 2. git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone
+</details>
