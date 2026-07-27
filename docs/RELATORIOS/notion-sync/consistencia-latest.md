@@ -1,7 +1,7 @@
 # 📊 Relatório de Consistência — Git ↔ Notion
 
-- **Gerado:** 2026-07-27T07:14:15.970Z
-- **Commit:** `76daaf98e9e29422d922576fa7daeb8d25d813c7`
+- **Gerado:** 2026-07-27T18:20:18.517Z
+- **Commit:** `bc8dd9ec6b2cb72bd210236793651d10538154cb`
 - **Disparado por:** segredounlock
 
 > Git é fonte da verdade. Notion é painel humano. Divergências aqui = ação necessária.
@@ -13,7 +13,7 @@
 | regras | 4 | 5 | 4 | 0 | 1 |
 | pendencias | 1 | 1 | 1 | 0 | 0 |
 | decisoes | 39 | 39 | 39 | 0 | 0 |
-| aprendizados | 2 | 0 | 0 | 2 | 0 |
+| aprendizados | 3 | 0 | 0 | 3 | 0 |
 
 ## Detalhes
 
@@ -43,11 +43,12 @@
 ### aprendizados
 
 - 🟩 OK: **0**
-- 🟥 Faltando no Notion: **2**
+- 🟥 Faltando no Notion: **3**
 - 🟧 Órfãos no Notion (não existem no Git): **0**
 
 <details><summary>🟥 Itens a espelhar</summary>
 
 - 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo
 - 2. git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone
+- 3. Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída
 </details>

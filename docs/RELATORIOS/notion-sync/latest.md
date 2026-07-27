@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-27T07:14:13.325Z
+# 🧠 Notion Sync — 2026-07-27T18:20:14.834Z
 
-- **Commit fonte:** `76daaf98e9e29422d922576fa7daeb8d25d813c7`
+- **Commit fonte:** `bc8dd9ec6b2cb72bd210236793651d10538154cb`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 46 atualizadas · ❌ 461 erros
+- **Resumo:** ✨ 1 criadas · ♻️ 46 atualizadas · ❌ 461 erros
 
 ## Por base
 
@@ -15,7 +15,7 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
-| aprendizados | 2 | 0 | 2 | 0 | 0 |
+| aprendizados | 3 | 1 | 2 | 0 | 0 |
 | estrutura | 461 | 0 | 0 | 0 | 461 |
 
 ## Operações
@@ -68,6 +68,7 @@
 | decisoes | atualizado | Sessão 2026-07-12 (continuação) — Contenção ativa: Circuit Breaker, DISCOVERY_MODELS, PM2 id, hub-status |
 | aprendizados | atualizado | #1 — Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo |
 | aprendizados | atualizado | #2 — git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone |
+| aprendizados | criado | #3 — Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | erro | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | erro | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
