@@ -15,6 +15,34 @@ Uma alegação de sucesso apoiada apenas por painel verde, status `Scheduled`, H
 
 Nesse caso, a saída obrigatória é `VEREDITO=BLOQUEAR` (ou `CORRIGIR` quando o formato não admitir bloqueio), `FALSO_VERDE_BLOQUEADO=SIM`, e uma prova contrária ou próximo teste concreto. É proibido combinar `VEREDITO=APROVAR/APROVADA` com evidência insuficiente. Se isso ocorrer, a própria saída é inválida e a AutoLupa deve corrigi-la antes de responder.
 
+### Falso verde de instrumento
+
+O instrumento que observa também mente. Um resultado vazio, um `404` ou um
+"nenhuma ocorrência" descrevem **o que a ferramenta devolveu**, não o que
+existe no sistema. Antes de concluir ausência, identificar se a ferramenta
+tem allowlist, filtro de caminho sensível, escopo padrão, paginação ou índice
+defasado — e repetir a busca por um segundo canal independente.
+
+Regra: **ausência de resultado em um instrumento não é evidência de ausência
+no sistema.** Só vale como prova quando dois canais de proveniência distinta
+concordarem.
+
+### Falso verde de versionamento
+
+Casos em que o Git aparenta saúde e esconde o defeito. Cada linha traz o
+teste que efetivamente separa as hipóteses:
+
+| Aparência | O que pode estar por trás | Teste que resolve |
+|---|---|---|
+| `git status` limpo | gitlink órfão: submódulo sem `.gitmodules` apontando para commit inexistente — a pasta chega vazia em todo clone | `git ls-tree <ref> <caminho>`; modo `160000` é gitlink, `100644` é arquivo |
+| blob local igual ao da ref remota | a ref remota é cache local, podendo estar defasada ou já deletada no servidor | `git ls-remote origin <branch>`; ou `git fetch` e reler |
+| merge sem conflito, `exit=0` | conteúdo de um dos lados descartado silenciosamente | `git diff <merge-base> <outro-lado> -- <arquivo>`; se vazio, aquele lado nada trouxe |
+| verificação passa no código novo | a checagem podia já falhar antes — não mede regressão | rodar a **mesma** checagem no código original e comparar contagem e identidade dos erros |
+| arquivo existe no disco | pode não estar versionado nem alcançável por outros | checkout limpo em worktree detached e contagem dos arquivos entregues |
+
+Regra: para provar que algo está versionado, medir **o que um checkout limpo
+entrega** — não o que a árvore de trabalho exibe.
+
 ## Três temperaturas operacionais
 
 ### FRIA — provar o que aconteceu
