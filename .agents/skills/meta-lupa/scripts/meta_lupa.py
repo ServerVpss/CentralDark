@@ -888,7 +888,38 @@ def cmd_finish_use(args) -> int:
     rec["record_hash"] = _record_hash({k: v for k, v in rec.items() if k != "record_hash"})
     _append_atomic(rec)
     print(f"FINAL_RECORDED usage_id={uid}")
+    print(_final_receipt_line(rec))
     return 0
+
+
+def _final_receipt_line(rec: dict) -> str:
+    """Recibo de XP na saida do finish-use.
+
+    O registro sempre gravou xp/level/tier no ledger, mas o comando so
+    imprimia o usage_id. Quem executava precisava abrir o JSONL para saber se
+    houve XP — e, sem isso, era facil declarar 'XP acionado' sem antes/depois.
+    Esta linha expoe os campos que ja existem; nao calcula nada novo.
+    """
+    parts = [
+        f"XP={rec.get('xp_before')}->{rec.get('xp_after')}",
+        f"GANHO={rec.get('xp_gained')}",
+        f"LEVEL={rec.get('level_before')}->{rec.get('level_after')}",
+        f"TIER={rec.get('tier_before')}->{rec.get('tier_after')}",
+    ]
+
+    if rec.get("next_level_xp") is not None:
+        parts.append(f"FALTAM={rec['next_level_xp']}")
+
+    accepted = rec.get("achievements") or []
+    parts.append(f"ACHIEVEMENTS={len(accepted)}")
+
+    if rec.get("penalties"):
+        parts.append(f"PENALTIES={len(rec['penalties'])}")
+
+    if rec.get("no_xp_reason"):
+        parts.append(f"NO_XP_REASON={rec['no_xp_reason']}")
+
+    return "FINAL_XP " + " ".join(parts)
 
 
 def cmd_verify_ledger(args) -> int:
