@@ -212,5 +212,5 @@ L.push("aqui ainda pode estar quebrado em execucao.");
 L.push("");
 
 mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, L.join("\n") + "\n", "utf8");
+writeFileSync(OUT, L.join("\n").replace(/\n+$/, "\n"), "utf8");
 console.log(`ESTADO_GERADO out=${OUT} fases_ok=${feitas} fases_faltando=${faltando} sem_prova=${semProva}`);
