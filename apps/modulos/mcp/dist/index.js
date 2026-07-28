@@ -87,6 +87,54 @@ app.get("/health", (_req, res) => {
 });
 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)
 app.get("/health/deep", healthDeep);
+// ─────────────── #148: rotas que o dossie apontou como 404 mudo ───────────
+// MOTIVO  > a varredura da issue #148 achou 404 generico em /favicon.ico,
+//           /sse, GET /token e GET /register. 404 nao diz ao cliente se a
+//           rota nunca existiu, se mudou de metodo ou se foi aposentada.
+// ONDE    > issue #148, itens 2, 4 e 7 da secao "Falhas / atritos".
+// RESOLVE > cada uma passa a responder o codigo que descreve o fato:
+//           favicon 200, transporte aposentado 410, metodo errado 405.
+// Favicon 32x32 (PNG embutido em base64 — sem arquivo binario no repo).
+// Existe porque a UI /admin e mantida; sem ele o conector fica com icone
+// generico na lista do cliente.
+const FAVICON_PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAdElEQVR42mNgkxShKWIYARYI7GzEgyiyAL/RRFrDQLnp+O1goNxo/NYQZQHxviRsAalxSFALA4WmE9SI0wJS0zthC8h2PrH5gBamj1owasFQtoAmGY3mRQU9CjuaF9f0qHDoUWXSvNKnU7OFHg2v0cYvGAEAow7TzjWyeR0AAAAASUVORK5CYII=", "base64");
+const serveFavicon = (_req, res) => {
+    res.setHeader("Content-Type", "image/png");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    res.status(200).end(FAVICON_PNG);
+};
+app.get("/favicon.ico", serveFavicon);
+app.get("/favicon.png", serveFavicon);
+// Transporte SSE foi aposentado: este servidor fala Streamable HTTP em /mcp.
+// MOTIVO  > conector antigo tenta /sse e recebia 404, que ele interpreta como
+//           "servidor errado" em vez de "transporte trocado".
+// ONDE    > issue #148, item 2.
+// RESOLVE > 410 Gone e definitivo e carrega a rota substituta no corpo.
+app.all("/sse", (_req, res) => {
+    res.status(410).json({
+        ok: false,
+        error: "sse_transport_gone",
+        message: "O transporte SSE foi aposentado. Use POST /mcp (MCP Streamable HTTP, protocolo 2025-06-18).",
+        replacement: "/mcp",
+        documentation: "/.well-known/oauth-protected-resource",
+    });
+});
+// Metodo errado responde 405 com Allow, nao 404.
+// MOTIVO  > GET /token e GET /register caiam no 404 generico, escondendo que
+//           a rota existe e so aceita POST. Confunde diagnostico de OAuth.
+// ONDE    > issue #148, item 7.
+// RESOLVE > 405 + header Allow: POST, como manda o RFC 9110 secao 15.5.6.
+const somentePost = (rota) => (_req, res) => {
+    res.setHeader("Allow", "POST");
+    res.status(405).json({
+        ok: false,
+        error: "method_not_allowed",
+        message: `${rota} aceita somente POST.`,
+        allow: ["POST"],
+    });
+};
+app.get("/token", somentePost("/token"));
+app.get("/register", somentePost("/register"));
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
 app.get("/admin", adminGet);
 app.post("/admin/login", adminLogin);
@@ -111,22 +159,71 @@ app.get("/tools.json", (_req, res) => {
 app.get("/openapi.json", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
     const summary = getCatalogSummary();
-    const paths = {};
-    for (const tool of summary.tools) {
-        paths[`/mcp-tools/${tool.name}`] = {
-            post: {
-                summary: tool.title ?? tool.name,
-                description: tool.description ?? "",
-                operationId: tool.name,
-                "x-openwebui-tool": true,
-                requestBody: {
-                    required: true,
-                    content: { "application/json": { schema: { type: "object" } } },
+    // ─────────────── #148 item 5: OpenAPI so anuncia o que serve ──────────
+    // MOTIVO  > este gerador criava um path POST /mcp-tools/<nome> para cada
+    //           tool do catalogo (102 paths), mas NAO existe nenhum handler
+    //           app.post("/mcp-tools/...") neste servidor. Todos os 102
+    //           respondiam 404. Provado em 2026-07-28:
+    //             POST https://mcp.centralldark.com/mcp-tools/adicionar_pendencia -> 404
+    //           O host alternativo api.centralldark.com responde 401 ate para
+    //           rota inventada, entao tambem nao prova que a rota exista la.
+    // ONDE    > issue #148, item 5 da secao "Falhas / atritos".
+    // RESOLVE > o spec passa a declarar as rotas HTTP que existem de verdade.
+    //           O catalogo de tools NAO se perde: continua em /tools.json e
+    //           agora tambem na extensao x-mcp-tools abaixo, que e informativa
+    //           e nao promete rota HTTP nenhuma.
+    //           Se um dia houver cliente Open WebUI real precisando de
+    //           /mcp-tools/<nome>, o caminho e IMPLEMENTAR o handler e so
+    //           entao voltar a declarar o path — nunca o contrario.
+    const jsonRpcBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    type: "object",
+                    required: ["jsonrpc", "method"],
+                    properties: {
+                        jsonrpc: { type: "string", const: "2.0" },
+                        id: { type: ["string", "number", "null"] },
+                        method: { type: "string", examples: ["initialize", "tools/list", "tools/call"] },
+                        params: { type: "object" },
+                    },
                 },
-                responses: { "200": { description: "Tool result", content: { "application/json": { schema: { type: "object" } } } } },
             },
-        };
-    }
+        },
+    };
+    const respostaJson = { "200": { description: "Resposta JSON-RPC", content: { "application/json": { schema: { type: "object" } } } } };
+    const paths = {
+        "/mcp": {
+            post: {
+                summary: "Endpoint MCP publico (JSON-RPC 2.0, Streamable HTTP)",
+                description: "Exige Authorization: Bearer com escopo mcp. Nao anuncia nem executa ferramentas destrutivas.",
+                operationId: "mcpJsonRpc",
+                security: [{ oauth2: ["mcp"] }],
+                requestBody: jsonRpcBody,
+                responses: { ...respostaJson, "401": { description: "Bearer ausente ou invalido (ver header WWW-Authenticate)" } },
+            },
+        },
+        "/admin/mcp": {
+            post: {
+                summary: "Endpoint MCP administrativo (JSON-RPC 2.0)",
+                description: "Exige Authorization: Bearer com escopo admin. Toda destrutiva passa pelo dispatcher auditado mcp_admin_call.",
+                operationId: "mcpAdminJsonRpc",
+                security: [{ oauth2: ["admin"] }],
+                requestBody: jsonRpcBody,
+                responses: { ...respostaJson, "401": { description: "Bearer com escopo admin ausente" }, "403": { description: "Token sem escopo admin" } },
+            },
+        },
+        "/tools.json": { get: { summary: "Manifesto publico do catalogo de tools", operationId: "toolsCatalog", responses: respostaJson } },
+        "/health": { get: { summary: "Healthcheck", operationId: "health", responses: respostaJson } },
+        "/health/deep": { get: { summary: "Healthcheck profundo", operationId: "healthDeep", responses: respostaJson } },
+        "/status.json": { get: { summary: "Status dos conectores", operationId: "statusJson", responses: respostaJson } },
+        "/register": { post: { summary: "OAuth 2.1 Dynamic Client Registration", operationId: "oauthRegister", responses: respostaJson } },
+        "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } } },
+        "/token": { post: { summary: "OAuth 2.1 token endpoint", operationId: "oauthToken", responses: respostaJson } },
+        "/.well-known/oauth-protected-resource": { get: { summary: "RFC 9728 protected resource metadata", operationId: "protectedResourceMetadata", responses: respostaJson } },
+        "/.well-known/oauth-authorization-server": { get: { summary: "RFC 8414 authorization server metadata", operationId: "authorizationServerMetadata", responses: respostaJson } },
+    };
     res.json({
         openapi: "3.1.0",
         info: {
@@ -136,9 +233,32 @@ app.get("/openapi.json", (_req, res) => {
         },
         servers: [
             { url: "https://mcp.centralldark.com", description: "MCP público" },
-            { url: "https://api.centralldark.com", description: "Elite Proxy (OpenAI-compat)" },
         ],
+        components: {
+            securitySchemes: {
+                oauth2: {
+                    type: "oauth2",
+                    description: "OAuth 2.1 + PKCE S256 + Dynamic Client Registration",
+                    flows: {
+                        authorizationCode: {
+                            authorizationUrl: "https://mcp.centralldark.com/authorize",
+                            tokenUrl: "https://mcp.centralldark.com/token",
+                            scopes: { mcp: "Ferramentas nao destrutivas", admin: "Dispatcher administrativo auditado" },
+                        },
+                    },
+                },
+            },
+        },
         paths,
+        // Catalogo informativo. NAO e rota HTTP — as tools sao chamadas por
+        // JSON-RPC tools/call em /mcp. Ver MOTIVO no bloco acima.
+        "x-mcp-tools": summary.tools.map((tool) => ({
+            name: tool.name,
+            title: tool.title ?? tool.name,
+            description: tool.description ?? "",
+            destructive: tool.annotations?.destructiveHint === true,
+        })),
+        "x-mcp-tool-count": summary.toolCount,
     });
 });
 // ───────────────────────── Status dos conectores ─────────────────────────
