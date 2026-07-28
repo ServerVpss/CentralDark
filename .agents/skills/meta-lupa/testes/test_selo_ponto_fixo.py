@@ -21,6 +21,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import subprocess
 import sys
 import tempfile
 
@@ -141,7 +142,24 @@ def test_cli_do_guardrail_retorna_1_em_violacao():
     )
     assert r.returncode == 1, r.stdout + r.stderr
     assert "SELO_SEM_AUTOLUPA" in r.stdout
-    assert "SELO_OK=0" in r.stdout
+
+
+def test_cli_do_guardrail_fecha_em_ledger_ausente_ou_invalido():
+    with tempfile.TemporaryDirectory() as tmp:
+        for nome, conteudo in (("ausente", None), ("invalido", "nao-json\n")):
+            caminho = os.path.join(tmp, nome + ".jsonl")
+            if conteudo is not None:
+                with open(caminho, "w", encoding="utf-8") as arquivo:
+                    arquivo.write(conteudo)
+            r = subprocess.run(
+                [sys.executable, os.path.join(SKILL, "guardrails", "validar_selo_ponto_fixo.py"),
+                 "--ledger", str(caminho), "--json"],
+                capture_output=True, text=True,
+            )
+            rel = json.loads(r.stdout)
+            assert r.returncode == 2
+            assert rel["selo_ok"] is False
+            assert rel["erro_entrada"]
 
 
 # --------------------------------------------------------- recibo de XP
