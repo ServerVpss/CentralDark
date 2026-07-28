@@ -59,4 +59,3 @@ Totais no mapa: 21 caminhos de setor, 30 areas consolidadas.
 
 Existir no Git e condicao necessaria, nunca suficiente. Um caminho presente
 aqui ainda pode estar quebrado em execucao.
-
