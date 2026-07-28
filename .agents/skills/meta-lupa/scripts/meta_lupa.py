@@ -84,6 +84,188 @@ WARM_TRIGGERS = {
     "RUNTIME_DIVERGENTE", "DRIFT",
 }
 
+UNKNOWN = "UNKNOWN"
+RECEIPT_REQUIRED_FIELDS = {
+    "process_started", "pid_observed", "pid", "process_exited", "exit_code",
+    "log_sha256", "log_fresh", "stream_complete", "final_result_receipt",
+    "fixture_sha", "fixture_sha_match", "prompt_sha", "prompt_sha_match",
+    "tests_executed", "tests_cwd_correct", "tests_before", "tests_after",
+    "tests_after_pass", "model_requested", "model_actual", "model_actual_proof",
+    "model_match", "seeded_failures_total", "tests_total", "failures_found",
+    "failure_recall_percent", "output_chars", "input_tokens", "output_tokens",
+    "total_tokens", "timeout_seconds", "budget_sha", "test_manifest_sha", "arm", "seed",
+}
+HEX64 = re.compile(r"^[0-9a-f]{64}$", re.I)
+
+
+def parse_stream_json(raw: str) -> tuple[list[dict], list[str]]:
+    """Parse a JSONL stream fail-closed: every non-empty line must be an object."""
+    events = []
+    errors = []
+    for line_no, line in enumerate(raw.splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            errors.append(f"STREAM_JSON_INVALID:{line_no}")
+            continue
+        if not isinstance(event, dict):
+            errors.append(f"STREAM_EVENT_NOT_OBJECT:{line_no}")
+            continue
+        events.append(event)
+    if not events:
+        errors.append("STREAM_EMPTY")
+    return events, errors
+
+
+def model_actual_from_stream(events: list[dict]) -> str:
+    """Return a model only from assistant/modelUsage fields, never from a request."""
+    models = set()
+    for event in events:
+        message = event.get("message")
+        if event.get("type") == "assistant" and isinstance(message, dict):
+            model = message.get("model")
+            if isinstance(model, str) and model.strip():
+                models.add(model.strip())
+        usage = event.get("modelUsage")
+        if isinstance(usage, dict):
+            models.update(k for k in usage if isinstance(k, str) and k.strip())
+    return next(iter(models)) if len(models) == 1 else UNKNOWN
+
+
+def token_usage_from_stream(events: list[dict]) -> dict:
+    """Extract real modelUsage counts; never convert character counts to tokens."""
+    usages = []
+    for event in events:
+        usage = event.get("modelUsage")
+        if isinstance(usage, dict):
+            usages.extend(v for v in usage.values() if isinstance(v, dict))
+    if not usages:
+        return {"input_tokens": UNKNOWN, "output_tokens": UNKNOWN, "total_tokens": UNKNOWN}
+    inputs = [u.get("inputTokens") for u in usages if isinstance(u.get("inputTokens"), int)]
+    outputs = [u.get("outputTokens") for u in usages if isinstance(u.get("outputTokens"), int)]
+    if not inputs or not outputs:
+        return {"input_tokens": UNKNOWN, "output_tokens": UNKNOWN, "total_tokens": UNKNOWN}
+    return {"input_tokens": max(inputs), "output_tokens": max(outputs), "total_tokens": max(inputs) + max(outputs)}
+
+
+def _valid_token_value(value) -> bool:
+    return value == UNKNOWN or (isinstance(value, int) and value >= 0)
+
+
+def validate_execution_receipt(
+    receipt: dict,
+    *,
+    arm: str = "",
+    expected_model: str | None = None,
+    expected_fixture_sha: str | None = None,
+    expected_prompt_sha: str | None = None,
+) -> list[str]:
+    """Validate an executor receipt before it can support a scientific claim."""
+    errors = [f"RECEIPT_FIELD_MISSING:{name}" for name in sorted(RECEIPT_REQUIRED_FIELDS - set(receipt))]
+    if errors:
+        return errors
+    for field in ("process_started", "pid_observed", "process_exited", "log_fresh",
+                  "stream_complete", "final_result_receipt", "fixture_sha_match",
+                  "prompt_sha_match", "tests_executed", "tests_cwd_correct", "tests_after_pass",
+                  "model_actual_proof", "model_match"):
+        if receipt[field] is not True:
+            errors.append(f"{field.upper()}_REQUIRED")
+    if not isinstance(receipt["pid"], int) or receipt["pid"] <= 0:
+        errors.append("PID_INVALID")
+    if receipt["exit_code"] != 0:
+        errors.append("EXIT_CODE_NONZERO")
+    if not isinstance(receipt["timeout_seconds"], (int, float)) or receipt["timeout_seconds"] <= 0:
+        errors.append("TIMEOUT_INVALID")
+    for field in ("budget_sha", "test_manifest_sha"):
+        if not HEX64.fullmatch(str(receipt[field])):
+            errors.append(f"{field.upper()}_INVALID")
+    if not isinstance(receipt["arm"], str) or not receipt["arm"].strip():
+        errors.append("ARM_INVALID")
+    elif arm and receipt["arm"].upper() != arm.upper():
+        errors.append("ARM_MISMATCH")
+    if not isinstance(receipt["seed"], int) or receipt["seed"] <= 0:
+        errors.append("SEED_INVALID")
+    if not HEX64.fullmatch(str(receipt["log_sha256"])):
+        errors.append("LOG_SHA256_INVALID")
+    if not HEX64.fullmatch(str(receipt["fixture_sha"])):
+        errors.append("FIXTURE_SHA_INVALID")
+    if not HEX64.fullmatch(str(receipt["prompt_sha"])):
+        errors.append("PROMPT_SHA_INVALID")
+    if expected_fixture_sha and receipt["fixture_sha"] != expected_fixture_sha:
+        errors.append("FIXTURE_SHA_MISMATCH")
+    if expected_prompt_sha and receipt["prompt_sha"] != expected_prompt_sha:
+        errors.append("PROMPT_SHA_MISMATCH")
+    if receipt["model_actual"] == UNKNOWN or not receipt["model_actual_proof"]:
+        errors.append("MODEL_ACTUAL_UNPROVEN")
+    if expected_model and receipt["model_actual"] != expected_model:
+        errors.append("MODEL_SUBSTITUTION_INVALID")
+    if receipt["model_requested"] != receipt["model_actual"] or not receipt["model_match"]:
+        errors.append("MODEL_REQUESTED_ACTUAL_MISMATCH")
+    if receipt["seeded_failures_total"] != 4 or receipt["tests_total"] != 5:
+        errors.append("FAILURE_DENOMINATOR_INVALID")
+    if not isinstance(receipt["failures_found"], int) or not 0 <= receipt["failures_found"] <= 4:
+        errors.append("FAILURES_FOUND_INVALID")
+    expected_recall = receipt["failures_found"] / 4 * 100 if isinstance(receipt["failures_found"], int) else None
+    if receipt["failure_recall_percent"] != expected_recall:
+        errors.append("FAILURE_RECALL_INVALID")
+    if not isinstance(receipt["output_chars"], int) or receipt["output_chars"] < 0:
+        errors.append("OUTPUT_CHARS_INVALID")
+    for field in ("input_tokens", "output_tokens", "total_tokens"):
+        value = receipt[field]
+        if isinstance(value, str) and value.endswith("c"):
+            errors.append("TOKEN_USAGE_IS_CHAR_COUNT")
+        elif not _valid_token_value(value):
+            errors.append(f"{field.upper()}_INVALID")
+    if receipt["tests_before"] != {"failures": 4, "total": 5}:
+        errors.append("TESTS_BEFORE_INVALID")
+    if receipt["tests_after"] != {"failures": 0, "total": 5}:
+        errors.append("TESTS_AFTER_INVALID")
+    if arm.upper() in {"C", "D"}:
+        for field in ("fable_plugin_enabled", "fable_loop_mentioned", "stages_started", "task_calls", "subagents_called"):
+            if not receipt.get(field):
+                errors.append(f"FABLE_{field.upper()}_REQUIRED")
+    return sorted(set(errors))
+
+
+def validate_outcome_evidence(receipt: dict) -> list[str]:
+    """Require discriminative, oracle-backed evidence for a promotion claim."""
+    required = {
+        "oracle_independent": True,
+        "discriminative_test_before": True,
+        "correct_action_score": 2,
+        "correct_action_score_max": 2,
+        "hidden_failures_reported": True,
+        "modules_correct_preserved": True,
+        "authorization_confidence_separated": True,
+    }
+    return [f"OUTCOME_EVIDENCE_INVALID:{key}" for key, expected in required.items() if receipt.get(key) != expected]
+
+
+def fable_causal_promotion_allowed(receipts: list[dict], control_arm: str = "A") -> bool:
+    """Fable cannot enter default routing without a valid same-control comparison."""
+    by_arm = {}
+    for receipt in receipts:
+        arm = str(receipt.get("arm", "")).upper()
+        if not arm:
+            continue
+        if validate_execution_receipt(receipt, arm=arm):
+            continue
+        if validate_outcome_evidence(receipt):
+            continue
+        by_arm.setdefault(arm, []).append(receipt)
+    if len(by_arm.get(control_arm.upper(), [])) < 2:
+        return False
+    if not all(len(by_arm.get(arm, [])) >= 2 for arm in ("B", "C", "D")):
+        return False
+    valid = [receipt for arm in (control_arm.upper(), "B", "C", "D") for receipt in by_arm[arm]]
+    control = valid[0]
+    same_control_fields = ("model_actual", "fixture_sha", "prompt_sha", "timeout_seconds", "budget_sha", "test_manifest_sha")
+    if not all(all(receipt[field] == control[field] for field in same_control_fields) for receipt in valid):
+        return False
+    return all(len({receipt["seed"] for receipt in by_arm[arm]}) >= 2 for arm in (control_arm.upper(), "B", "C", "D"))
+
 
 def canonical_json(data) -> str:
     return json.dumps(data, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
@@ -144,6 +326,16 @@ def validate(data: dict) -> list[str]:
         errors.append("EVIDENCIA_DE_OUTRO_SHA")
     if risk in {"R2", "R3", "R4"} and not data.get("rollback"):
         errors.append("ROLLBACK_AUSENTE")
+    if data.get("execution_receipt") is not None:
+        errors.extend(validate_execution_receipt(
+            data["execution_receipt"],
+            arm=str(data.get("arm", data["execution_receipt"].get("arm", ""))),
+            expected_model=data.get("expected_model"),
+            expected_fixture_sha=data.get("expected_fixture_sha"),
+            expected_prompt_sha=data.get("expected_prompt_sha"),
+        ))
+    if data.get("promotion_receipts") is not None and not fable_causal_promotion_allowed(data["promotion_receipts"]):
+        errors.append("FABLE_CAUSAL_CONTROL_MISSING")
     return errors
 
 
@@ -154,7 +346,12 @@ def evaluate(data: dict) -> dict:
         "AUTORIA_DO_PIVETE_NAO_APROVADA", "FALSO_VERDE",
         "EVIDENCIA_DE_OUTRO_SHA",
     }
-    if blockers & set(errors):
+    fail_closed_prefixes = (
+        "RECEIPT_", "MODEL_", "TOKEN_", "STREAM_", "PROCESS_", "PID_",
+        "EXIT_CODE_", "TIMEOUT_", "FIXTURE_", "PROMPT_", "TESTS_",
+        "FAILURE_", "FAILURES_", "FABLE_", "FINAL_RESULT_", "LOG_",
+    )
+    if blockers & set(errors) or any(error.startswith(fail_closed_prefixes) for error in errors):
         verdict = "BLOQUEAR"
     elif errors:
         verdict = "CORRIGIR"
