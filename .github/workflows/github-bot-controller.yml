@@ -52,7 +52,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
+          BOT_EVENT_NAME: ${{ github.event_name }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'auto' }}
           BOT_MERGED_PR: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr || '' }}
           BOT_SUPERSEDES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.supersedes || '' }}
-        run: node CentralDark/scripts/github-bot-controller.mjs
+        # O runner self-hosted ja posiciona GITHUB_WORKSPACE na raiz do repo
+        # (_work/CentralDark/CentralDark). Prefixar "CentralDark/" aqui produzia
+        # _work/CentralDark/CentralDark/CentralDark/scripts/... e MODULE_NOT_FOUND.
+        run: node scripts/github-bot-controller.mjs
