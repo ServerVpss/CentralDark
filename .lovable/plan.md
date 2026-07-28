@@ -1,75 +1,68 @@
+# Pacote "Fluxo Seguro CentralDark" — explicação leiga + 2 artefatos visuais + ZIP
 
-# Plano — Evolução do Painel AVANÇO no /admin/cockpit
+## O que vou entregar
 
-Aplicando a Lupa Bayesiana (evidência primeiro, correção mínima, fonte única no Git, sem v2/v3): tudo abaixo estende o painel AVANÇO que já existe, sem duplicar arquivos e sem inventar backend novo pra parte que não precisa.
+Um único pacote em `/mnt/documents/fluxo-seguro-centraldark.zip` contendo:
 
-## O que muda pra você (leigo)
+1. `01-EXPLICACAO-LEIGA-AUDITORIA.md` — versão humana da auditoria read-only anterior (o "raio-X" do fluxo GitHub ↔ Lovable ↔ produção que já rodei).
+2. `02-EXPLICACAO-LEIGA-FLUXO-PROMOCAO.md` — versão humana do fluxo novo que você pediu agora (promoção travada + ambiente protegido + artefato imutável + rollback).
+3. `diagrama-01-auditoria-atual.png` — infográfico do estado atual (o que existe, o que falha, onde vaza).
+4. `diagrama-02-fluxo-alvo.png` — infográfico do fluxo alvo (dev → auditoria → main → produção com trava de SHA, artefato imutável e rollback).
+5. `README.md` — índice do pacote, como ler e o que fazer depois.
 
-1. Uma barrinha de busca no topo do AVANÇO — digita "hub", "pix", "hermes" e filtra na hora.
-2. Filtros novos ao lado do status: **área** (cockpit, hub, hermes, segurança, infra) e **severidade** (p0/p1/p2/p3).
-3. Cada item passa a mostrar **do que ele depende** e **quem está travando ele**. Se algo trava outro, aparece um selo vermelho "🔒 bloqueando X itens" com o motivo.
-4. Um botão **"Editar item"** abre um formulário dentro do cockpit pra você mudar status, %, motivo e colar evidência — sem abrir o JSON na mão.
-5. Toda entrega passa a registrar **SHA256 antes/depois, arquivos modificados e data** automaticamente, virando prova no próprio card.
+Sem editar nada do código do projeto. Sem PR, sem commit, sem deploy. Só pacote de apresentação em `/mnt/documents/`.
 
-## Escopo técnico
+## Como as explicações leigas serão escritas
 
-### 1. Estender o schema de `docs/CONSCIENCIA/COCKPIT-AVANCO.json`
-Campos novos por item (opcionais, retrocompatível):
-- `area`: `cockpit | hub | hermes | seguranca | infra | ia`
-- `severidade`: `p0 | p1 | p2 | p3`
-- `palavras_chave`: `string[]`
-- `depende_de`: `string[]` (ids de outros itens)
-- `bloqueia`: derivado em runtime a partir de `depende_de` (não gravado).
+Linguagem de conversa, sem jargão. Cada documento segue esta estrutura curta:
 
-### 2. `PainelAvanco.tsx` — busca + filtros + grafo de dependências
-- Input de busca (título + palavras_chave + card.onde/por_que).
-- Dropdowns de **área** e **severidade** ao lado do filtro de status.
-- Cálculo do mapa reverso `bloqueia`: para cada item, listar quem depende dele.
-- No item expandido: seção **Dependências** (lista clicável que rola até o item alvo) e **Bloqueando** (selo vermelho quando `bloqueia.length > 0`).
-- Selo "🔒 bloqueando N" no cabeçalho quando aplicável.
+- **O que é isso, em uma frase.**
+- **Por que existe (o problema real que resolve).**
+- **Como funciona, passo a passo, contado como história.**
+- **O que muda pra você no dia a dia.**
+- **Onde pode dar ruim e o que o sistema faz sozinho.**
 
-### 3. Editor inline `EditorItem.tsx` (novo, dentro de `painéis/`)
-- Botão "Editar" em cada item abre um modal/drawer.
-- Form: status, %, motivo_bloqueio, prova, depende_de (multi-select), área, severidade, palavras_chave.
-- Persistência: como o JSON vive no Git e não temos backend dedicado pro cockpit, o editor tem 2 modos:
-  - **Modo leitura+cópia (default)**: monta o novo bloco JSON pronto e oferece botão "Copiar patch" — você cola no arquivo/PR. Zero backend, funciona já.
-  - **Modo salvar direto (opcional, se você autorizar)**: chama uma Edge Function `cockpit-avanco-write` no HUB Supabase que valida admin (super_admin lock existente) e commita via GitHub API na branch `pivete/dev`. Só implemento se você mandar — respeita a trava "não mexer no Supabase Lovable atual".
-- Entrego já com **Modo leitura+cópia** ativo. Modo salvar direto fica como pendência no próprio AVANÇO.
+Doc 1 (auditoria) traduz os achados críticos: `main` desprotegida, 2953 commits de bots inflando histórico, workflows que só rodam em PR e não protegem push direto, ausência de rollback e de artefato imutável, Lupa sem veto real no CI.
 
-### 4. Trilha automática de prova (SHA256 + arquivos + data)
-- Script Node em `scripts/cockpit-avanco/registrar-entrega.mjs`:
-  - Recebe `--id <item>` e lista de arquivos.
-  - Lê SHA256 do `git show HEAD~1:<arquivo>` (antes) e do working tree (depois).
-  - Atualiza o item no JSON com `arquivos_modificados`, `antes_sha256`, `depois_sha256`, `atualizado_em`.
-- Hook opcional em `.husky/pre-commit` (só cria se você autorizar) que lê `.cockpit-avanco.pending` e roda o script.
-- Sem hook: rodo o script manualmente ao fechar cada entrega — a prova entra no mesmo commit.
+Doc 2 (fluxo alvo) traduz os 3 pedidos técnicos:
+- **Trava de SHA na promoção**: por que `expected_head_sha` impede "merge fantasma" quando alguém empurra commit no meio do caminho.
+- **Ambiente `production` protegido**: reviewers obrigatórios + timer de espera + checks verdes no SHA candidato antes de qualquer deploy.
+- **Artefato imutável**: build UMA vez, assina, guarda, e o deploy só reusa esse mesmo pacote — nunca reconstrói na VPS.
+- **Rollback automático**: se `/health` ou smoke test falhar depois do deploy, a VPS volta sozinha pro último SHA saudável e registra o `run_id` + resultado.
 
-### 5. CSS
-- Ajustes mínimos em `sala-controle.css`: input de busca, chips de área/severidade, selo "bloqueando", estilos do drawer editor. Mantém tokens Esmeralda e o padrão tátil `active:translate-y-[1px]`.
+## Como os 2 diagramas serão gerados
 
-## Arquivos tocados
+Vou usar `imagegen` no tier **premium** (texto legível é obrigatório em infográfico), 1536×1024, fundo escuro esmeralda (`#052e2b` / `#0a3d38`), destaques `#10b981` / `#34d399`, tipografia limpa estilo Linear/Vercel. Sem roxo, sem branco puro, sem preto puro — respeitando o padrão visual oficial do projeto.
+
+**Diagrama 01 — Auditoria (estado atual):**
+Três colunas conectadas — GitHub · Lovable · VPS Produção. Marcadores vermelhos onde há furo (main desprotegida, bots escrevendo direto, sem artefato imutável, sem rollback, workflows só em PR). Legenda 🟢 OK / 🟡 parcial / 🔴 furo. Números-chave da auditoria (2953 commits à frente, 22 workflows, X% ausentes).
+
+**Diagrama 02 — Fluxo alvo (promoção segura):**
+Trilho horizontal em 5 estações:
+`pivete/dev` → `pivete/auditoria` → `main` → `Artefato Imutável (SHA+assinatura)` → `Environment: production (reviewers + timer)` → `Deploy VPS` → `Health/Smoke` → (✅ segue | ❌ rollback automático pro último SHA saudável).
+Cada estação com ícone, 1 linha explicando e selo do check obrigatório. Caixa lateral "Trava expected_head_sha" mostrando como bloqueia merge se HEAD mudou.
+
+## Como o ZIP é montado
 
 ```text
-docs/CONSCIENCIA/COCKPIT-AVANCO.json           (schema estendido, retrocompatível)
-docs/CONSCIENCIA/COCKPIT-AVANCO.README.md      (documenta novos campos)
-src/paginas/admin-cockpit/painéis/PainelAvanco.tsx     (busca, filtros, deps)
-src/paginas/admin-cockpit/painéis/EditorItem.tsx       (novo — drawer editor)
-src/paginas/admin-cockpit/painéis/CardPivete.tsx       (mostra deps + bloqueia)
-src/paginas/admin-cockpit/sala-controle.css            (estilos novos)
-scripts/cockpit-avanco/registrar-entrega.mjs           (novo — SHA256 auto)
+/mnt/documents/fluxo-seguro-centraldark/
+  README.md
+  01-EXPLICACAO-LEIGA-AUDITORIA.md
+  02-EXPLICACAO-LEIGA-FLUXO-PROMOCAO.md
+  diagrama-01-auditoria-atual.png
+  diagrama-02-fluxo-alvo.png
 ```
 
-## O que NÃO faço sem sua ordem
+Depois `zip -r fluxo-seguro-centraldark.zip fluxo-seguro-centraldark/` no mesmo diretório. Devolvo o caminho final do zip pronto pra baixar.
 
-- Não mexo em `.github/workflows/`.
-- Não crio Edge Function nova no Supabase Lovable atual (trava ativa).
-- Não instalo husky nem hook de commit sem "PERMITO PIVETE".
-- Não toco em áreas 🔒 (HERMES-CORE, mapeamento, hub, etc).
+## Detalhes técnicos (pra quem quiser conferir)
 
-## Prova de entrega (Card Pivete por item)
+- Nada toca o repositório do projeto — só escrita em `/mnt/documents/`.
+- Imagens geradas com `imagegen--generate_image` model `premium` (texto legível), sem transparência, `.png`.
+- Markdown 100% PT-BR, tom conversacional conforme `mem://~user`.
+- Não incluo secrets, tokens, nomes reais, nem SHAs de commits privados sensíveis — só os públicos já citados na auditoria anterior.
+- Se qualquer imagem sair com texto ilegível, refaço com prompt ajustado antes de fechar o zip.
 
-Cada item novo/atualizado no AVANÇO vem com: ANTES_SHA256, DEPOIS_SHA256, arquivos, restart, onde/por_que/pra_que, como/quando usar, prova (commit), tutorial passo a passo.
+## O que NÃO faço neste pacote
 
-## Próximo passo se você aprovar
-
-Implemento em 1 commit único na `pivete/dev` (schema + PainelAvanco + Editor modo cópia + CardPivete + CSS + script SHA256), registro no próprio AVANÇO como meta-prova, e te entrego o Card Pivete completo.
+- Não implemento o workflow de promoção, não altero branch protection, não mexo em environment `production`, não escrevo o script de rollback. Isso fica pra uma missão de execução separada, com "PERMITO PIVETE" explícito, seguindo o Fluxo de Ouro. Este pacote é só a apresentação leiga + visual, pra você aprovar o desenho antes de mandar construir.
