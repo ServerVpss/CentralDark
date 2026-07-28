@@ -430,3 +430,26 @@ Pivete / contradição fechada). Sem o bloco, veredito não sela.
 Esta skill não usa semver. Maturidade = geração MetaLupa (pós-Lupa v1).
 Toda evolução é correção mínima neste arquivo + recursos citados, nunca
 novo arquivo paralelo. Blob atual de referência: `b71af825` (base recuperada).
+
+## Guardrails de evidência experimental (Opus 5, 2026-07-28)
+
+O ganho replicado de Opus 5 + Meta Lupa só pode ser promovido quando cada
+execução apresenta recibo verificável: processo iniciado, PID observado,
+processo encerrado com `exit_code=0`, log novo com SHA, stream completo,
+recibo final, hashes de fixture e prompt, testes antes/depois no diretório
+correto e `MODEL_ACTUAL` comprovado pelo stream real. Modelo solicitado nunca
+substitui prova do modelo efetivamente usado; fallback silencioso é rejeitado.
+
+Contagens de caracteres ficam separadas de tokens. `OUTPUT_CHARS` não é
+`TOKEN_USAGE`; tokens só podem ser preenchidos por `modelUsage` real e, na
+ausência dessa fonte, permanecem `UNKNOWN`. JSON primitivo, stream parcial,
+log antigo, timeout, fixture contaminada, recibo incompleto, `exit 0` sem
+execução e denominador que confunde falhas com testes são inválidos.
+
+O denominador do laboratório congelado é `SEEDED_FAILURES_TOTAL=4` e
+`TESTS_TOTAL=5`. O resultado é pontuado por ação correta e oráculo
+independente, preservando módulos corretos e distinguindo falha encontrada de
+falha apenas citada. Fable permanece `EXPERIMENTAL_FAIL_CLOSED`, fora do
+roteamento padrão, até existir controle comparativo válido com a mesma
+fixture, prompt, modelo, timeout, orçamento e manifesto de testes, com pelo
+menos duas seeds válidas por braço.

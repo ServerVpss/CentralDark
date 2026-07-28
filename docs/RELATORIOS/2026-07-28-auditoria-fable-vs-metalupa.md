@@ -230,3 +230,86 @@ OPUS_A_VALID_MAX=2 provisórias conforme o relato, mas 0 confirmadas pelo parser
 Hermes Casa continua sem sessão independente: TLS falhou antes da sessão nas tentativas anteriores. HERMES_INDEPENDENT=NAO.
 
 PR permanece Draft. Retomada determinística: montar o namespace que contém /tmp/fable-eval ou fornecer os logs Opus preservados; congelar A1/A2/C/D, gerar hashes, extrair MODEL_ACTUAL somente do stream, validar fixture 4 defeitos/5 testes, e só então decidir.
+
+## FASE 9 — Resultado Opus 5 recebido e consolidação autorizada
+
+Esta seção supersede o veredito provisório da Fase 8. A evidência estruturada
+recebida do executor Claude informa `MODEL_ACTUAL=claude-opus-5` comprovado e
+duas execuções válidas do braço A (Meta Lupa sem Fable): seed1 e seed2,
+ambas com `CORRECT_ACTION_SCORE=2/2`, sweep completo, preservação dos
+módulos corretos, testes finais verdes e tempos de 117s/141s. A3 e B1/B2/B3
+foram invalidadas por `SPEND_LIMIT`; C e D não possuem controle suficiente.
+
+### Veredito científico
+
+```
+OPUS5_META_LUPA_GAIN_PROVEN=SIM
+SCORE_REPLICATED=2/2
+FABLE_CAUSAL_GAIN_PROVEN=NAO
+FABLE_CAUSALITY=INDETERMINADA
+MECHANISM_TRANSFERABLE=AINDA_NAO_PROVADO
+BLOCKING_EXTERNAL=SPEND_LIMIT
+```
+
+O ganho promovível nesta rodada é o conjunto de guardrails e o método de
+prova da META LUPA. Não é uma prova causal de que Fable melhora o controle.
+Nenhuma execução com `SPEND_LIMIT` entra em média ou veredito, e C/D sem
+recibo completo não podem ser tratados como `SEM_GANHO`.
+
+### Ganhos absorvidos no artefato canônico existente
+
+- `MODEL_ACTUAL` é aceito somente quando extraído do stream real; modelo
+  solicitado não é prova e fallback silencioso é rejeitado.
+- `OUTPUT_CHARS` fica separado de tokens; tokens só vêm de `modelUsage` real,
+  ou permanecem `UNKNOWN`.
+- JSON primitivo, stream parcial, log antigo, timeout, recibo final ausente,
+  `exit 0` sem execução, fixture/prompt sem hash e C/D sem fan-out real são
+  bloqueados fail-closed.
+- O denominador é fixado em `SEEDED_FAILURES_TOTAL=4` e `TESTS_TOTAL=5`;
+  falhas semeadas não podem ser confundidas com quantidade de testes.
+- A pontuação usa oráculo independente, teste discriminativo antes da
+  correção, ação correta, falhas ocultas reportadas e preservação explícita
+  dos módulos corretos.
+- Promoção causal do Fable exige no mínimo duas seeds válidas por braço e o
+  mesmo modelo real, fixture, prompt, timeout, orçamento e manifesto de
+  testes entre A/B/C/D. Sem isso, `FABLE_CAUSAL_CONTROL_MISSING` bloqueia.
+
+### Estado de roteamento e retomada
+
+```
+FABLE_STATUS=EXPERIMENTAL_FAIL_CLOSED
+FABLE_DEFAULT_ROUTING=NAO
+FABLE_SILENT_FALLBACK=PROIBIDO
+MODEL_PRIMARY=claude-fable-5
+MODEL_ACTUAL_PROOF=OBRIGATORIA
+FALLBACK=NAO
+MAX_CAPABILITY=SIM
+```
+
+Retomada determinística: OPUS puro (B, seeds 1–3), Fable máximo (C,
+seeds 1–3), e Fable máximo + META LUPA (D, seeds 1–3), usando a mesma
+fixture, prompt, timeout, orçamento, manifesto e gabarito. Fable só entra no
+roteamento canônico se superar o controle Opus puro com métrica reproduzível,
+sem aumento material de falsos positivos e com pelo menos duas seeds válidas.
+
+### Estado do PR
+
+O título do PR passa a refletir o resultado real: `test(meta-lupa): Opus 5
+alcança score 2; efeito causal do Fable pendente`. A alteração de código é
+somente no pacote canônico `.agents/skills/meta-lupa/` e sua regressão; este
+relatório e o JSON de resultados continuam sendo os dois artefatos de
+evidência do PR. Nenhum roteamento Fable, Clone Deck, SOUL, VPS, produção ou
+secret foi tocado.
+
+### Hermes Casa — saída inválida bloqueada
+
+O launcher oficial único foi mantido em `C:\Users\danda\.local\bin\pivete.bat`.
+A tentativa inicial com `-p pivete` foi rejeitada pelo parser atual; o guard
+foi corrigido para usar `HERMES_HOME` do profile pivete, separar stdout/stderr,
+validar UTF-8 sem BOM, normalizar quebras de linha, remover ANSI e rejeitar
+JSON incompleto/primitivo, bytes binários, caracteres de substituição e recibo
+de executor falho. A última chamada funcional alcançou `TLS_VALID=UNKNOWN`
+no recibo final porque o usage-file marcou falha do executor; `MODEL_ACTUAL`
+e `PROVIDER_ACTUAL` permaneceram `UNKNOWN`, `HERMES_INDEPENDENT=NAO` e nenhum
+texto bruto foi incorporado. Os bytes brutos permanecem somente nos caminhos
+temporários registrados no recibo da execução.

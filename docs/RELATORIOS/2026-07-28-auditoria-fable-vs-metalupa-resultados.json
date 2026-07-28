@@ -622,5 +622,39 @@
       "B-seed3"
     ],
     "resume_manifest": "mount /tmp/fable-eval; freeze A1/A2/C/D; hash raw/tree; parse MODEL_ACTUAL from stream"
+  },
+  {
+    "run": "opus-5-consolidation-and-hermes-output-guard-20260728",
+    "opus5_meta_lupa_gain_proven": true,
+    "score_replicated": "2/2",
+    "fable_causal_gain_proven": false,
+    "fable_causality": "INDETERMINADA",
+    "mechanism_transferable": "AINDA_NAO_PROVADO",
+    "spend_limit_runs": ["A-seed3", "B-seed1", "B-seed2", "B-seed3"],
+    "haiku_result": "BASELINE_SEPARADO; nao usado para causalidade Opus",
+    "gains_promoted": [
+      "MODEL_ACTUAL comprovado somente pelo stream real",
+      "fallback silencioso rejeitado",
+      "OUTPUT_CHARS separado de tokens reais",
+      "JSON nao-objeto e stream incompleto rejeitados",
+      "recibo final, processo, PID, log fresco e hashes obrigatorios",
+      "denominador fixo 4 falhas semeadas e 5 testes",
+      "oraculo independente, teste discriminativo e preservacao de modulos corretos",
+      "gate causal A/B/C/D com mesma fixture, prompt, modelo, timeout, orcamento e manifesto"
+    ],
+    "meta_lupa_tests": "128 passed, 4 skipped; receipt regressions 11 passed",
+    "fable_status": "EXPERIMENTAL_FAIL_CLOSED",
+    "fable_default_routing": "NAO",
+    "fable_silent_fallback": "PROIBIDO",
+    "hermes_profile": "pivete",
+    "hermes_result": "EXECUTOR_FAILURE_OUTPUT_BLOCKED",
+    "hermes_tls": "UNKNOWN_NO_SESSION_RECEIPT",
+    "hermes_provider_actual": "UNKNOWN",
+    "hermes_model_actual": "UNKNOWN",
+    "hermes_independent": "NAO",
+    "hermes_raw_stdout_sha256": "2218e60e1aaee5e0050c75b4cd085fe62802d717d7aa9d60635244d7c3bad8d1",
+    "hermes_raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "false_green_blocked": true,
+    "resume_manifest": "B/C/D com Opus puro, mesma fixture/prompt/timeout/orcamento/manifesto, duas seeds validas por braco"
   }
 ]
