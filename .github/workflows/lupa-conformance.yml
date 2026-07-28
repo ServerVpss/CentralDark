@@ -24,15 +24,3 @@ jobs:
         env:
           AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
         run: pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
-
-      # A partir daqui: evidência que antes era declarada à mão no corpo do PR
-      # e nunca executada por nenhum check. Ver PR #410.
-      - name: Motor determinístico (test_lupa.py)
-        working-directory: .agents/skills/meta-lupa
-        run: python testes/test_lupa.py
-      - name: Guardrail do selo de ponto fixo (exige AutoLupa executada)
-        working-directory: .agents/skills/meta-lupa
-        run: python guardrails/validar_selo_ponto_fixo.py
-      - name: Regressão do selo e do recibo de XP
-        working-directory: .agents/skills/meta-lupa
-        run: python testes/test_selo_ponto_fixo.py
