@@ -210,3 +210,23 @@ FABLE_ACTIVATION_MISS permanece um padrão real e reproduzível da sonda, mas n�
 Hermes Casa foi chamado pela forma oficial instalada (C:\\Users\\danda\\.local\\bin\\pivete.bat -> hermes -p pivete, modo -z) em duas tentativas, incluindo a rota configurada OpenRouter; ambas falharam antes de criar sessão por CERTIFICATE_VERIFY_FAILED. Não houve bypass de TLS, reinício de gateway ou exposição de credenciais. HERMES_SESSION=NONE, HERMES_RESULT=BLOCKED_EXTERNAL_TLS, HERMES_INDEPENDENT=NAO.
 
 VEREDITO ATUAL: TRATAMENTO_INVALIDO. Não promover Fable, não alterar o roteamento canônico e não fechar este PR como SEM_GANHO enquanto a rodada Opus com recibo completo não existir.
+## FASE 8 — Auditoria parcial da rodada OPUS 5
+
+Os resultados A/seed1, A/seed2 e os estados SPEND_LIMIT foram fornecidos para esta continuação, mas o namespace /tmp/fable-eval não está montado neste host Codex. Nenhum hash dos logs Opus reais, PID, CWD, fixture ou stream Opus pôde ser verificado localmente.
+
+Os únicos diretórios A-seed1/A-seed2 acessíveis são do baseline HAIKU já preservado:
+
+- A-seed1: raw SHA256 83af3c69b9f3307f88e44619463beaa8b327e36f42629833fbc3637c9e8e474f; tree SHA256 6d2b6f51effa443804e9010c7ba5aea9297f23f14248289ebd47a38c0a46a9b8; MODEL_ACTUAL=claude-haiku-4-5-20251001.
+- A-seed2: raw SHA256 c1c22c5e58193029a045b900b635b1ced71a5fd597122cadc00a9e8d02a80465; tree SHA256 decdbd6245246367fa596d011ac4ba9dc6df6a155f37313c85a107c35cc5915f; MODEL_ACTUAL=claude-haiku-4-5-20251001.
+
+Esses hashes são explicitamente HAIKU_BASELINE, não podem ser usados como hashes Opus. O parser independente rejeita ambos contra MODEL_REQUESTED=OPUS_5. Logo A1_VALID_AFTER_AUDIT=NAO_PROVADO e A2_VALID_AFTER_AUDIT=NAO_PROVADO neste host, sem concluir que os workers Opus falharam.
+
+A contradição informada FAILURE_FOUND=0 com TESTS_AFTER=PASS não foi auditável sem os logs/fixture Opus. O diagnóstico fica UNVERIFIED; não há base para classificar TEST_TAMPERING, FIXTURE_CONTAMINATION ou FAILURE_COUNTER_BUG. A sonda TEMP, entretanto, bloqueia denominador diferente de 4, teste total diferente de 5, modelo real ausente e tokens terminados em c.
+
+SPEND_LIMIT: A/seed3 e B/seed1..3 são inválidos, não entram em médias nem em ganho. C/D permanecem desconhecidos no namespace Codex; não foram repetidos.
+
+OPUS_A_VALID_MAX=2 provisórias conforme o relato, mas 0 confirmadas pelo parser independente neste host. OPUS_B_VALID=0. OPUS_C_VALID=desconhecido. OPUS_D_VALID=desconhecido. GAIN_PROVEN=NAO; SEM_GANHO_PROVEN=NAO; BEST_ARM=INDETERMINADO.
+
+Hermes Casa continua sem sessão independente: TLS falhou antes da sessão nas tentativas anteriores. HERMES_INDEPENDENT=NAO.
+
+PR permanece Draft. Retomada determinística: montar o namespace que contém /tmp/fable-eval ou fornecer os logs Opus preservados; congelar A1/A2/C/D, gerar hashes, extrair MODEL_ACTUAL somente do stream, validar fixture 4 defeitos/5 testes, e só então decidir.
