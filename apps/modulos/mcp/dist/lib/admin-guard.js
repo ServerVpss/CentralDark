@@ -14,6 +14,7 @@ import fsp from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 import { createHash, randomUUID } from "node:crypto";
+import { fileURLToPath } from "node:url";
 const AUDIT_DIR = process.env.MCP_AUDIT_DIR || "/root/CentralDark/logs";
 const CHAIN_STATE = process.env.MCP_ADMIN_CHAIN_STATE
     || path.join(AUDIT_DIR, ".mcp-admin-chain.json");
@@ -21,29 +22,103 @@ const STARTUP_LOCK = process.env.MCP_ADMIN_STARTUP_LOCK
     || path.join(AUDIT_DIR, ".mcp-admin-startup.json");
 const HOSTNAME = os.hostname();
 const PID = process.pid;
-export const CATALOG_VERSION = "v1-2026-07-21";
+// ─────────────────── manifesto aprovado de destrutivas ────────────────────
+// MOTIVO  > antes existia aqui uma lista escrita a mao, e o comentario dela
+//           confessava a origem: "derivada 1x do runtime real em 2026-07-21,
+//           congelada aqui como baseline". Uma foto de um dia virou lei.
+//           Quando o dispatcher ganhou grupos novos, o runtime passou a ter
+//           mais destrutivas que a lista e o guard bloqueou TODAS por
+//           divergencia — inclusive as que sempre foram legitimas.
+//           A versao do catalogo tambem era uma string fixa ("v1-2026-07-21")
+//           que nao mudava quando o conteudo mudava.
+// ONDE    > apps/modulos/mcp/src/lib/admin-guard.js, linhas 26 e 37-50.
+// RESOLVE > a lista aprovada mora em manifesto-destrutivas.json, versionado e
+//           revisado no PR. Este modulo apenas LE. A versao passa a ser
+//           derivada do conteudo, entao qualquer mudanca de lista muda a
+//           versao sozinha — sem ninguem lembrar de atualizar numero nenhum.
+const MANIFESTO_PATH = process.env.MCP_MANIFESTO_DESTRUTIVAS
+    || path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "manifesto-destrutivas.json");
+function lerManifesto() {
+    // Fail-closed no boot: um guard que nao consegue carregar a propria politica
+    // NAO deve aceitar trafego. Mas o erro precisa dizer o que houve — um ENOENT
+    // ou SyntaxError cru na pilha manda o operador cacar no escuro.
+    let bruto;
+    try {
+        bruto = fs.readFileSync(MANIFESTO_PATH, "utf8");
+    }
+    catch (erro) {
+        throw new Error(`admin-guard: manifesto de destrutivas ilegivel em ${MANIFESTO_PATH}. `
+            + `O servico NAO sobe sem a politica de seguranca. Causa: ${erro?.code ?? erro?.message}`);
+    }
+    let cru;
+    try {
+        cru = JSON.parse(bruto);
+    }
+    catch (erro) {
+        throw new Error(`admin-guard: manifesto de destrutivas com JSON invalido em ${MANIFESTO_PATH}. `
+            + `O servico NAO sobe com politica corrompida. Causa: ${erro?.message}`);
+    }
+    // SO destrutivasAprovadas entra. destrutivasEmRevisao existe no arquivo de
+    // proposito, para ficar visivel, mas NAO autoriza nada: essas tools caem em
+    // quarentena pontual ate passarem nos gates.
+    const entradas = Array.isArray(cru?.destrutivasAprovadas) ? cru.destrutivasAprovadas : [];
+    const emRevisao = Array.isArray(cru?.destrutivasEmRevisao) ? cru.destrutivasEmRevisao : [];
+    const nomes = [...new Set(entradas.map((e) => e?.nome).filter((n) => typeof n === "string" && n))].sort();
+    if (nomes.length !== entradas.length) {
+        throw new Error("manifesto-destrutivas.json tem entrada duplicada ou sem nome");
+    }
+    const cruzadas = nomes.filter((n) => emRevisao.some((e) => e?.nome === n));
+    if (cruzadas.length) {
+        throw new Error(`manifesto-destrutivas.json: ${cruzadas.join(", ")} esta em aprovadas E em revisao`);
+    }
+    return { revisadoEm: String(cru?.revisadoEm ?? "sem-data"), nomes, entradas, emRevisao };
+}
+const MANIFESTO = lerManifesto();
+/** Hash do conteudo aprovado. Muda sozinho quando a lista muda. */
+// MOTIVO  > a primeira versao deste hash incluia revisadoEm. Com isso, o
+//           MESMO conjunto de destrutivas aprovadas produzia identificadores
+//           diferentes so por ter sido revisado em outro dia. Dois builds no
+//           mesmo dia batiam, o que parecia determinismo — mas era apenas
+//           repetibilidade local: a data ainda mandava no identificador.
+// ONDE    > apps/modulos/mcp/src/lib/admin-guard.js, MANIFEST_HASH.
+// RESOLVE > o identificador canonico passa a depender EXCLUSIVAMENTE do
+//           conteudo aprovado. A data continua existindo, mas como metadado
+//           separado (MANIFEST_REVIEWED_AT), fora do ID.
+//           Consequencia desejada: mesmo conteudo -> mesmo CATALOG_VERSION,
+//           em qualquer dia, maquina ou build.
+// A revisao independente pegou aqui: JSON.stringify preserva a ordem de
+// insercao das chaves. Um formatador que reordene os campos de uma entrada, ou
+// um checkout que reordene o array, mudaria o hash sem que NENHUMA regra
+// tivesse mudado — e o cliente reconectaria a toa achando que o catalogo mudou.
+// Serializacao canonica: chaves ordenadas e entradas ordenadas por nome.
+function canonico(valor) {
+    if (Array.isArray(valor))
+        return valor.map(canonico);
+    if (valor && typeof valor === "object") {
+        return Object.keys(valor).sort().reduce((acc, k) => { acc[k] = canonico(valor[k]); return acc; }, {});
+    }
+    return valor;
+}
+export const MANIFEST_HASH = createHash("sha256")
+    .update(JSON.stringify(canonico([...MANIFESTO.entradas].sort((a, b) => String(a?.nome).localeCompare(String(b?.nome))))))
+    .digest("hex")
+    .slice(0, 12);
+/** Metadado, NAO faz parte do identificador canonico. */
+export const MANIFEST_REVIEWED_AT = MANIFESTO.revisadoEm;
+/** Destrutivas que existem no codigo mas reprovaram em algum gate. */
+export const DESTRUTIVAS_EM_REVISAO = Object.freeze(MANIFESTO.emRevisao ?? []);
+/** Identificador canonico: v1-<hash do conteudo aprovado>. Sem data, sem
+ * relogio, sem aleatorio. Mesmo conteudo produz o mesmo valor sempre. */
+export const CATALOG_VERSION = `v1-${MANIFEST_HASH}`;
+/** Ficha completa de cada destrutiva aprovada (origem, arquivo, se e publica). */
+export const MANIFESTO_DESTRUTIVAS = Object.freeze(MANIFESTO.entradas);
 export const ADMIN_CONFIRMATIONS = Object.freeze({
     "CONFIRMO ADMIN": "confirmo_admin",
     "PERMITO PIVETE": "permito_pivete",
 });
-// Fonte única da verdade da expectativa canônica de destrutivas.
-// Usada pelo dispatcher (via getCanonicalExpectation) e pelos testes.
-// Extração: derivada 1x do runtime real (mcp_admin_catalog em 2026-07-21, 12 tools com destructiveHint=true),
-// congelada aqui como baseline versionado. Divergência com runtime bloqueia a destrutiva.
-export const CANONICAL_DESTRUCTIVE_TOOLS = Object.freeze([
-    "admin_git_pull",
-    "admin_pm2_restart",
-    "admin_shell_exec",
-    "admin_vault_write",
-    "atualizar_consciencia",
-    "execute_command",
-    "github_delete_branch_safe",
-    "github_delete_file_safe",
-    "github_delete_workflow_run",
-    "github_merge_pull_request",
-    "vps_run_once_script",
-    "vps_write_file_safe",
-]);
+// Fonte unica da verdade: o manifesto aprovado. Este modulo nao guarda
+// copia propria da lista — le de manifesto-destrutivas.json (ver acima).
+export const CANONICAL_DESTRUCTIVE_TOOLS = Object.freeze(MANIFESTO.nomes);
 export function getCanonicalExpectation() {
     return {
         expectedDestructiveCount: CANONICAL_DESTRUCTIVE_TOOLS.length,
@@ -108,14 +183,26 @@ export function reconcileCatalog(runtimeTools, expectation = {}) {
             actual: destructiveCount,
         });
     }
+    // MOTIVO  > antes qualquer divergencia deixava recon.ok = false, e o
+    //           guardDestructive bloqueava TODA destrutiva por isso — inclusive
+    //           as aprovadas, que nao tinham nada a ver com o problema. Uma tool
+    //           nova e desconhecida derrubava o conjunto inteiro.
+    // ONDE    > apps/modulos/mcp/src/lib/admin-guard.js, reconcileCatalog.
+    // RESOLVE > a divergencia passa a ser NOMEADA. quarantined = destrutiva que
+    //           apareceu no runtime e nao esta no manifesto aprovado; missing =
+    //           aprovada que sumiu do runtime. Quem decide bloquear e o
+    //           guardDestructive, e so para a tool que estiver nessas listas.
+    //           Leitura e destrutiva aprovada seguem livres.
+    let quarantined = [];
+    let missing = [];
     if (Array.isArray(expectation.expectedDestructiveNames)) {
         const expected = [...expectation.expectedDestructiveNames].sort();
-        const missing = expected.filter((n) => !destructiveTools.includes(n));
-        const extra = destructiveTools.filter((n) => !expected.includes(n));
+        missing = expected.filter((n) => !destructiveTools.includes(n));
+        quarantined = destructiveTools.filter((n) => !expected.includes(n));
         if (missing.length)
             divergences.push({ kind: "missing_destructive", names: missing });
-        if (extra.length)
-            divergences.push({ kind: "extra_destructive", names: extra });
+        if (quarantined.length)
+            divergences.push({ kind: "extra_destructive", names: quarantined });
     }
     return {
         ok: divergences.length === 0,
@@ -125,6 +212,8 @@ export function reconcileCatalog(runtimeTools, expectation = {}) {
         catalogHash,
         catalogVersion: expectation.version ?? null,
         divergences,
+        quarantined,
+        missing,
         checkedAt: new Date().toISOString(),
     };
 }
@@ -387,13 +476,39 @@ export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, e
     const recon = reconcileCatalog(runtimeTools, effectiveExpectation);
     const evalRes = evaluateAdminConfirmation(confirmAdmin);
     const hasAdminScope = adminAuthorized === true;
-    const wouldAuthorize = hasAdminScope && evalRes.decision === "released" && recon.ok;
+    // Fail-closed PONTUAL: so bloqueia por catalogo se a tool PEDIDA for a
+    // divergente. Divergencia em outra tool nao derruba esta. Ver MOTIVO em
+    // reconcileCatalog.
+    const emQuarentena = (recon.quarantined ?? []).includes(toolName);
+    const sumiuDoRuntime = (recon.missing ?? []).includes(toolName);
+    // A revisao independente pegou um fail-OPEN: uma toolName que nao existe em
+    // runtimeTools NEM no manifesto nao caia em quarantined (que so lista
+    // destrutivas VISTAS no runtime) nem em missing (que so lista aprovadas), e
+    // por isso escapava das duas checagens de catalogo.
+    // Listas sao arrays e a busca e por .includes(), entao nome herdado de
+    // Object.prototype ("__proto__", "constructor", "toString") nao casa com
+    // nada — mas isso agora esta travado por teste, nao por argumento.
+    const nomeValido = typeof toolName === "string" && toolName.length > 0;
+    const existeNoRuntime = Array.isArray(runtimeTools)
+        && runtimeTools.some((t) => t?.name === toolName);
+    // PRECEDENCIA: uma tool APROVADA que sumiu do runtime tambem "nao existe no
+    // runtime", mas ela nao e desconhecida — ela esta no manifesto. Merece o
+    // status proprio APROVADA_AUSENTE_NO_RUNTIME, que diz ao operador que a
+    // tool sumiu do codigo, e nao que alguem chamou um nome inventado.
+    // Os testes 22 e 34 pegaram exatamente essa inversao.
+    const desconhecidaDeTodo = !nomeValido || (!existeNoRuntime && !sumiuDoRuntime);
+    const catalogoOkParaEstaTool = !emQuarentena && !sumiuDoRuntime && !desconhecidaDeTodo;
+    const wouldAuthorize = hasAdminScope && evalRes.decision === "released" && catalogoOkParaEstaTool;
     const audit = await writeAuditEvent({
         tool: toolName,
         decision: wouldAuthorize ? "released" : "blocked",
         executionStatus: wouldAuthorize ? "authorized" : "blocked",
         confirmationMode: evalRes.confirmationMode,
-        reason: !hasAdminScope ? "admin_scope_required" : (!recon.ok ? "catalog_divergence" : evalRes.reason),
+        reason: !hasAdminScope
+            ? "admin_scope_required"
+            : (desconhecidaDeTodo ? "tool_desconhecida"
+                : (emQuarentena ? "destrutiva_em_quarentena"
+                    : (sumiuDoRuntime ? "aprovada_ausente_no_runtime" : evalRes.reason))),
         catalogHash: recon.catalogHash,
         catalogVersion: recon.catalogVersion,
         totalRuntimeTools: recon.totalRuntimeTools,
@@ -417,8 +532,25 @@ export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, e
     if (!hasAdminScope) {
         return { allow: false, status: "ESCOPO_ADMIN_NECESSARIO", executionStatus: "blocked", recon, audit };
     }
-    if (!recon.ok) {
-        return { allow: false, status: "DIVERGENCIA_CATALOGO", executionStatus: "blocked", recon, audit };
+    if (desconhecidaDeTodo) {
+        return {
+            allow: false, status: "TOOL_DESCONHECIDA", executionStatus: "blocked", recon, audit,
+            httpSafe: "Ferramenta desconhecida: nao existe no runtime carregado. Bloqueada por padrao.",
+        };
+    }
+    if (emQuarentena) {
+        return {
+            allow: false, status: "DESTRUTIVA_EM_QUARENTENA", executionStatus: "blocked", recon, audit,
+            httpSafe: `A ferramenta "${toolName}" e destrutiva e nao consta no manifesto aprovado. `
+                + "Quarentena pontual: as demais ferramentas seguem liberadas. Para aprova-la, rode "
+                + "scripts/gerar-manifesto-destrutivas.mjs --revisar e acrescente a entrada no PR.",
+        };
+    }
+    if (sumiuDoRuntime) {
+        return {
+            allow: false, status: "APROVADA_AUSENTE_NO_RUNTIME", executionStatus: "blocked", recon, audit,
+            httpSafe: `A ferramenta "${toolName}" esta no manifesto aprovado mas nao foi encontrada no runtime.`,
+        };
     }
     if (evalRes.decision === "blocked") {
         return { allow: false, status: "CONFIRMACAO_ADMIN_NECESSARIA", executionStatus: "blocked", recon, audit, confirmationEval: evalRes };
