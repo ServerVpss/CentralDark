@@ -178,3 +178,35 @@ O Chefe apontou de volta os 4 pontos que minha própria AutoLupa levantou. Nenhu
 2. **Rollback não foi literal.** Corrigido na Fase 6 acima: `MAIN_UNTOUCHED_PROVED=SIM` (provado por API), `ROLLBACK_LITERAL_PROVED=NAO` (não executado).
 3. **E-mail do coautor presumido.** O trailer usado nos 2 primeiros commits deste PR (`segredounlock@users.noreply.github.com`) foi um chute. Conferido agora no histórico real do repo: o e-mail correto de `Co-authored-by: SegredoiDev` é `bot@centralldark.com`. Os commits antigos deste PR não foram reescritos (reescrever histórico é ação destrutiva não autorizada para um PR de documentação); o commit desta revisão já usa o e-mail correto.
 4. **Amostra pequena na invocação explícita.** Expandida de 1 para 2 seeds por config (B-explicit e C-explicit) nesta revisão — ver tabela na Fase 3.
+
+## FASE 7 — Auditoria adversarial do medidor e rodada HAIKU preservada
+
+LAB_ATIVO=C:\\Users\\danda\\AppData\\Local\\Temp\\meta-lupa-fable-activation-20260728
+METER_PROBE=C:\\Users\\danda\\AppData\\Local\\Temp\\meta-lupa-fable-meter-attacker-20260728
+ROUND_MODEL=claude-haiku-4-5-20251001
+OPUS_RUNS_OBSERVED=0
+RAW_LOGS_PRESERVED=12
+
+Os 12 diretórios A/B/C/D x seed1..3 foram criados a partir da mesma fixture congelada; o manifesto dos arquivos de entrada compartilhados (README.md, TASK.md, tests/) é 40b481ec8f1dde7d8f7146a87603a857ff7bf1eb9242b1ad52fdcde1b9ea6326 e permaneceu igual nos 12 diretórios. Os diretórios de execução são separados. Isso prova a igualdade dos inputs preservados, mas não substitui o hash do prompt capturado antes do processo.
+
+A inspeção dos streams reais mostra o modelo Haiku solicitado/relatado e, em C/D, evidência textual de stages e chamadas Task/subagentes. Ainda assim, os recibos não registram de forma verificável, por execução, todos os gates exigidos: PROCESS_STARTED, PID_OBSERVED, PROCESS_EXITED, EXIT_CODE, LOG_FRESH, FIXTURE_SHA_MATCH e PROMPT_SHA_MATCH. Portanto:
+
+- CLAUDE_EXECUTIONS_OBSERVED=12 (logs reais preservados);
+- HAIKU_RUNS_VALID=0 para promoção (recibo incompleto; não confundir com executor não executado);
+- OPUS_RUNS_VALID=0 e OPUS_RUNS_OBSERVED=0;
+- C/D_FANOUT_OBSERVED=SIM nos logs, mas não transforma o recibo incompleto em tratamento válido;
+- TREATMENT_VALID=NAO para a rodada medida;
+- GAIN_EVIDENCE=NAO;
+- CLASSIFICACAO=TRATAMENTO_INVALIDO, não SEM_GANHO.
+
+A sonda isolada foi endurecida para exigir processo iniciado/observado/encerrado, exit 0, log fresco, stream completo, JSON válido, recibo final, fixture/prompt/seed/modelo/CWD/testes e, para C/D, Fable habilitado + fable-loop + stages + Task/subagents. Os 12 ataques previstos foram bloqueados; a suíte da sonda terminou com Ran 4 tests ... OK.
+
+Os bloqueios cobrem: FALSE_GREEN_EXECUTOR_NOT_RUN, STALE_LOG_FALSE_GREEN, MODEL_SUBSTITUTION_INVALID, TIMEOUT_TREATMENT_INVALID, INCOMPLETE_STREAM_INVALID, FABLE_ACTIVATION_MISS, fixture contaminada, seed divergente, CWD incorreto, JSON corrompido e recibo ausente.
+
+Métricas de token só são aceitas quando o stream fornece inputTokens/outputTokens; tamanho de log nunca é usado como token. Para C/seed2 e C/seed3, os logs preservados não têm modelUsage completo, então tokens ficam UNKNOWN.
+
+FABLE_ACTIVATION_MISS permanece um padrão real e reproduzível da sonda, mas não pode ser usado para declarar ausência de ganho nesta rodada porque C/D tiveram evidência de fan-out em seus logs. A comparação Opus A/B/C/D ainda não começou; Haiku permanece apenas baseline separado. O ponto determinístico de retomada é executar A/B/C/D com o mesmo Opus, três seeds e os gates completos acima, sem fallback silencioso.
+
+Hermes Casa foi chamado pela forma oficial instalada (C:\\Users\\danda\\.local\\bin\\pivete.bat -> hermes -p pivete, modo -z) em duas tentativas, incluindo a rota configurada OpenRouter; ambas falharam antes de criar sessão por CERTIFICATE_VERIFY_FAILED. Não houve bypass de TLS, reinício de gateway ou exposição de credenciais. HERMES_SESSION=NONE, HERMES_RESULT=BLOCKED_EXTERNAL_TLS, HERMES_INDEPENDENT=NAO.
+
+VEREDITO ATUAL: TRATAMENTO_INVALIDO. Não promover Fable, não alterar o roteamento canônico e não fechar este PR como SEM_GANHO enquanto a rodada Opus com recibo completo não existir.
