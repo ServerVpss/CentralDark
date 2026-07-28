@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-28T19:46:40.417Z",
-  "updatedAtBR": "28/07/2026, 16:46:40 BRT",
+  "updatedAt": "2026-07-28T19:51:16.733Z",
+  "updatedAtBR": "28/07/2026, 16:51:16 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "fix(ci): consertar agentes autonomos e porta canonica",
+    "lastCommit": "feat(skills): auditoria-pr e selo-xp",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-28T19:51:16.733Z",
+      "titulo": "Push na main · 49f91866cb32c5ccc24a80612d401308b8a0f733",
+      "detalhe": "feat(skills): auditoria-pr e selo-xp",
+      "area": "Repositório",
+      "sha": "49f9186",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-28T19:46:40.417Z",
       "titulo": "Push na main · b422a0d4321ccc34fb4ed7b4c44eac82fb725da2",
       "detalhe": "fix(ci): consertar agentes autonomos e porta canonica",
@@ -986,14 +994,6 @@
       "detalhe": "Merge PR #287: selar deploy MCP e aposentar webhook 9300",
       "area": "Repositório",
       "sha": "e811ed1",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-21T23:18:19.300Z",
-      "titulo": "Push na main · b0538bcb501b1fca5b870daaf0c4e1d8c93511b2",
-      "detalhe": "Merge PR #286: MCP admin guard auditável",
-      "area": "Repositório",
-      "sha": "b0538bc",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-28T19:51:16.733Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 49f91866cb32c5ccc24a80612d401308b8a0f733 (49f9186)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-28T19:46:40.417Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b422a0d4321ccc34fb4ed7b4c44eac82fb725da2 (b422a0d)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-21T23:56:57.235Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · e811ed17a98b1a1e3c7491c9a35d56ad6d33d08a (e811ed1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-21T23:18:19.300Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b0538bcb501b1fca5b870daaf0c4e1d8c93511b2 (b0538bc)",
       "area": "Repositório",
       "status": "sucesso"
     }
