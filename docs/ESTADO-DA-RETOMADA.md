@@ -3,7 +3,7 @@
 > Gerado por `scripts/estado/gerar-estado-retomada.mjs`. **Nao edite a mao** —
 > a proxima execucao sobrescreve. Para mudar o que e medido, mude o script.
 
-Ultima geracao: `2026-07-27T19:44:24.806Z`
+Ultima geracao: `2026-07-28T19:46:10.371Z`
 
 Fonte da intencao: `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md`
 Fonte da verdade estrutural: `apps/modulos/mapeamento/config/mapa-canonico.json`
@@ -59,3 +59,4 @@ Totais no mapa: 21 caminhos de setor, 30 areas consolidadas.
 
 Existir no Git e condicao necessaria, nunca suficiente. Um caminho presente
 aqui ainda pode estar quebrado em execucao.
+
