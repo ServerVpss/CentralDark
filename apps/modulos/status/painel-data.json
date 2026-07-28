@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-27T20:48:49.164Z",
-  "updatedAtBR": "27/07/2026, 17:48:49 BRT",
+  "updatedAt": "2026-07-28T02:18:58.788Z",
+  "updatedAtBR": "27/07/2026, 23:18:58 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "aprendizado(#7): github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot",
+    "lastCommit": "Merge pull request #421 from ServerVpss/chore/eliminar-duplicatas-consciencia-brain-20260727",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-28T02:18:58.788Z",
+      "titulo": "Push na main · 4171ccb0c6fecf6b75bc32405e4d95ffa511042e",
+      "detalhe": "Merge pull request #421 from ServerVpss/chore/eliminar-duplicatas-consciencia-brain-20260727",
+      "area": "Repositório",
+      "sha": "4171ccb",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-27T20:48:49.164Z",
       "titulo": "Push na main · a5f27ec90b52564b0118117c37a2b08647eddd89",
       "detalhe": "aprendizado(#7): github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot",
@@ -986,14 +994,6 @@
       "detalhe": "fix(ci): isolar checkout do codex-validate no runner",
       "area": "Repositório",
       "sha": "eb45b38",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-19T10:12:11.948Z",
-      "titulo": "Push na main · 569e2a888e9348fe9d9a70677eee5efac4c484e2",
-      "detalhe": "aprendizado(#335): Regra pessoa≠ideia (crédito Segredo) + pacote lupa-react + alavancas GDPval",
-      "area": "Repositório",
-      "sha": "569e2a8",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-28T02:18:58.788Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4171ccb0c6fecf6b75bc32405e4d95ffa511042e (4171ccb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-27T20:48:49.164Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · a5f27ec90b52564b0118117c37a2b08647eddd89 (a5f27ec)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-19T16:53:54.944Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · eb45b38b1cdb7c975d2f7a8c63db1011d9cd14c0 (eb45b38)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-19T10:12:11.948Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 569e2a888e9348fe9d9a70677eee5efac4c484e2 (569e2a8)",
       "area": "Repositório",
       "status": "sucesso"
     }
