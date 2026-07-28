@@ -39,7 +39,25 @@ const PID = process.pid;
 const MANIFESTO_PATH = process.env.MCP_MANIFESTO_DESTRUTIVAS
     || path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "manifesto-destrutivas.json");
 function lerManifesto() {
-    const cru = JSON.parse(fs.readFileSync(MANIFESTO_PATH, "utf8"));
+    // Fail-closed no boot: um guard que nao consegue carregar a propria politica
+    // NAO deve aceitar trafego. Mas o erro precisa dizer o que houve — um ENOENT
+    // ou SyntaxError cru na pilha manda o operador cacar no escuro.
+    let bruto;
+    try {
+        bruto = fs.readFileSync(MANIFESTO_PATH, "utf8");
+    }
+    catch (erro) {
+        throw new Error(`admin-guard: manifesto de destrutivas ilegivel em ${MANIFESTO_PATH}. `
+            + `O servico NAO sobe sem a politica de seguranca. Causa: ${erro?.code ?? erro?.message}`);
+    }
+    let cru;
+    try {
+        cru = JSON.parse(bruto);
+    }
+    catch (erro) {
+        throw new Error(`admin-guard: manifesto de destrutivas com JSON invalido em ${MANIFESTO_PATH}. `
+            + `O servico NAO sobe com politica corrompida. Causa: ${erro?.message}`);
+    }
     // SO destrutivasAprovadas entra. destrutivasEmRevisao existe no arquivo de
     // proposito, para ficar visivel, mas NAO autoriza nada: essas tools caem em
     // quarentena pontual ate passarem nos gates.
@@ -68,8 +86,21 @@ const MANIFESTO = lerManifesto();
 //           separado (MANIFEST_REVIEWED_AT), fora do ID.
 //           Consequencia desejada: mesmo conteudo -> mesmo CATALOG_VERSION,
 //           em qualquer dia, maquina ou build.
+// A revisao independente pegou aqui: JSON.stringify preserva a ordem de
+// insercao das chaves. Um formatador que reordene os campos de uma entrada, ou
+// um checkout que reordene o array, mudaria o hash sem que NENHUMA regra
+// tivesse mudado — e o cliente reconectaria a toa achando que o catalogo mudou.
+// Serializacao canonica: chaves ordenadas e entradas ordenadas por nome.
+function canonico(valor) {
+    if (Array.isArray(valor))
+        return valor.map(canonico);
+    if (valor && typeof valor === "object") {
+        return Object.keys(valor).sort().reduce((acc, k) => { acc[k] = canonico(valor[k]); return acc; }, {});
+    }
+    return valor;
+}
 export const MANIFEST_HASH = createHash("sha256")
-    .update(JSON.stringify(MANIFESTO.entradas))
+    .update(JSON.stringify(canonico([...MANIFESTO.entradas].sort((a, b) => String(a?.nome).localeCompare(String(b?.nome))))))
     .digest("hex")
     .slice(0, 12);
 /** Metadado, NAO faz parte do identificador canonico. */
@@ -450,7 +481,23 @@ export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, e
     // reconcileCatalog.
     const emQuarentena = (recon.quarantined ?? []).includes(toolName);
     const sumiuDoRuntime = (recon.missing ?? []).includes(toolName);
-    const catalogoOkParaEstaTool = !emQuarentena && !sumiuDoRuntime;
+    // A revisao independente pegou um fail-OPEN: uma toolName que nao existe em
+    // runtimeTools NEM no manifesto nao caia em quarantined (que so lista
+    // destrutivas VISTAS no runtime) nem em missing (que so lista aprovadas), e
+    // por isso escapava das duas checagens de catalogo.
+    // Listas sao arrays e a busca e por .includes(), entao nome herdado de
+    // Object.prototype ("__proto__", "constructor", "toString") nao casa com
+    // nada — mas isso agora esta travado por teste, nao por argumento.
+    const nomeValido = typeof toolName === "string" && toolName.length > 0;
+    const existeNoRuntime = Array.isArray(runtimeTools)
+        && runtimeTools.some((t) => t?.name === toolName);
+    // PRECEDENCIA: uma tool APROVADA que sumiu do runtime tambem "nao existe no
+    // runtime", mas ela nao e desconhecida — ela esta no manifesto. Merece o
+    // status proprio APROVADA_AUSENTE_NO_RUNTIME, que diz ao operador que a
+    // tool sumiu do codigo, e nao que alguem chamou um nome inventado.
+    // Os testes 22 e 34 pegaram exatamente essa inversao.
+    const desconhecidaDeTodo = !nomeValido || (!existeNoRuntime && !sumiuDoRuntime);
+    const catalogoOkParaEstaTool = !emQuarentena && !sumiuDoRuntime && !desconhecidaDeTodo;
     const wouldAuthorize = hasAdminScope && evalRes.decision === "released" && catalogoOkParaEstaTool;
     const audit = await writeAuditEvent({
         tool: toolName,
@@ -459,8 +506,9 @@ export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, e
         confirmationMode: evalRes.confirmationMode,
         reason: !hasAdminScope
             ? "admin_scope_required"
-            : (emQuarentena ? "destrutiva_em_quarentena"
-                : (sumiuDoRuntime ? "aprovada_ausente_no_runtime" : evalRes.reason)),
+            : (desconhecidaDeTodo ? "tool_desconhecida"
+                : (emQuarentena ? "destrutiva_em_quarentena"
+                    : (sumiuDoRuntime ? "aprovada_ausente_no_runtime" : evalRes.reason))),
         catalogHash: recon.catalogHash,
         catalogVersion: recon.catalogVersion,
         totalRuntimeTools: recon.totalRuntimeTools,
@@ -483,6 +531,12 @@ export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, e
     }
     if (!hasAdminScope) {
         return { allow: false, status: "ESCOPO_ADMIN_NECESSARIO", executionStatus: "blocked", recon, audit };
+    }
+    if (desconhecidaDeTodo) {
+        return {
+            allow: false, status: "TOOL_DESCONHECIDA", executionStatus: "blocked", recon, audit,
+            httpSafe: "Ferramenta desconhecida: nao existe no runtime carregado. Bloqueada por padrao.",
+        };
     }
     if (emQuarentena) {
         return {

@@ -31,34 +31,47 @@ const BASE = process.env.MCP_DIST_DIR || path.join(RAIZ, "dist");
 // Mesmos grupos que o dispatcher carrega em runtimeTools (tools/core/mcp-admin.js).
 // mcpDiagnosticsTools e mcpPolicyTools ficam de fora de proposito: importam
 // mcpAdminTools de volta e formam ciclo.
-const GRUPOS = [
-  ["code-reviewer", "tools/code-reviewer.js"],
-  ["aprendizado", "tools/aprendizado/aprendizado.js"],
-  ["consciencia", "tools/consciencia/consciencia.js"],
-  ["skills", "tools/skills/skill.js"],
-  ["github-read", "tools/github/github-read.js"],
-  ["github-write", "tools/github/github-write.js"],
-  ["github-admin", "tools/github/github-admin.js"],
-  ["github-tools", "tools/github/github-tools.js"],
-  ["vps-run-once", "tools/vps/vps-run-once.js"],
-  ["vps-files", "tools/vps/vps-files.js"],
-  ["vps-lazy", "tools/vps/vps-lazy.js"],
-  ["pendencias", "tools/pendencias/pendencias.js"],
-  ["deploy", "tools/deploy/deploy.js"],
-  ["supabase", "tools/supabase/supabase.js"],
-  ["admin-vault", "modes/admin/tools/admin-vault.js"],
-  ["admin-files", "modes/admin/tools/admin-files.js"],
-  ["admin-pm2", "modes/admin/tools/admin-pm2.js"],
-  ["admin-shell", "modes/admin/tools/admin-shell.js"],
-  ["admin-vault-rw", "modes/admin/tools/admin-vault-rw.js"],
-  ["admin-git", "modes/admin/tools/admin-git.js"],
-  ["cognitivo", "tools/cognitivo/cognitivo.js"],
-  ["elite", "tools/elite/elite-gateway.js"],
-  ["gemini", "tools/gemini/gemini.js"],
-  ["integrations", "tools/integrations.js"],
-  ["painel", "tools/painel/painel.js"],
-  ["pivete", "tools/pivete/pivete-tools.js"],
-];
+// MOTIVO  > este script mantinha a propria copia da lista de grupos. Um grupo
+//           novo adicionado ao dispatcher e esquecido aqui deixaria todas as
+//           destrutivas dele INVISIVEIS para o gate — o CI passaria verde
+//           justamente no caso que ele existe para pegar.
+// ONDE    > scripts/gerar-manifesto-destrutivas.mjs.
+// RESOLVE > a lista e lida do proprio tools/core/mcp-admin.js, que e a fonte
+//           da verdade do dispatcher. Se o gate nao conseguir extrair a lista,
+//           ele FALHA — nunca cai num default silencioso.
+const GRUPOS_DECLARADOS_NO_DISPATCHER = (() => {
+  const alvo = path.join(RAIZ, "src", "tools", "core", "mcp-admin.js");
+  const fonte = fs.readFileSync(alvo, "utf8");
+  const bloco = fonte.match(/const runtimeTools = \[([\s\S]*?)\n\];/);
+  if (!bloco) {
+    throw new Error(`gate: nao consegui ler runtimeTools de ${alvo}. Sem a lista de grupos o gate seria cego.`);
+  }
+  const usados = [...bloco[1].matchAll(/^\s*\.\.\.(\w+),/gm)].map((m) => m[1]);
+  // Aceita tambem `import { original as alias }`: o nome que aparece em
+  // runtimeTools e o ALIAS, entao e ele que precisa virar a chave do mapa.
+  // Sem isso, um grupo importado com alias seria reportado como "sem import".
+  const importados = new Map(
+    [...fonte.matchAll(/import\s*\{\s*(\w+)(?:\s+as\s+(\w+))?\s*\}\s*from\s*"([^"]+)"/g)]
+      .map((m) => [m[2] ?? m[1], m[3]]));
+  const faltando = usados.filter((n) => !importados.has(n));
+  if (faltando.length) {
+    throw new Error(`gate: grupos usados em runtimeTools sem import correspondente: ${faltando.join(", ")}`);
+  }
+  // O caminho do import e relativo a mcp-admin.js, que mora em
+  // src/tools/core/. Tirar o "../" na unha (tentativa anterior) transformava
+  // "../cognitivo/cognitivo.js" em "cognitivo/cognitivo.js" em vez de
+  // "tools/cognitivo/cognitivo.js" — o import falhava, DESCOBERTO virava 0 e
+  // o gate acusava 12 aprovadas sumidas. Falhou barulhento, como devia, mas o
+  // certo e resolver relativo ao diretorio do modulo.
+  const dirDoDispatcher = path.dirname(alvo);
+  const raizSrc = path.join(RAIZ, "src");
+  return usados.map((n) => {
+    const abs = path.resolve(dirDoDispatcher, importados.get(n));
+    return [n.replace(/Tools$/, ""), path.relative(raizSrc, abs).split(path.sep).join("/")];
+  });
+})();
+
+const GRUPOS = GRUPOS_DECLARADOS_NO_DISPATCHER;
 
 async function descobrir() {
   const tools = new Map();
@@ -164,11 +177,40 @@ const a = lerAprovadas();
 const CAMPOS_OBRIGATORIOS_PENDENTE = [
   "porQueNaoPassa", "compensacaoAConstruir", "responsavel", "ultimoTeste", "proximoExperimento",
 ];
+// MOTIVO  > exigir que os 5 campos existam nao impede preenche-los com lixo
+//           ("todo", "tbd", "-") so para o CI ficar verde, nem impede uma
+//           pendencia ficar parada por um ano com ultimoTeste antigo. Nos dois
+//           casos o gate aprovaria achando que existe plano.
+// ONDE    > scripts/gerar-manifesto-destrutivas.mjs, modo verificar.
+// RESOLVE > alem de existir, cada campo precisa ter conteudo de verdade, e a
+//           pendencia precisa ter sido testada dentro da janela.
+const PLACEHOLDERS = /^(todo|tbd|to ?do|n\/?a|-+|\?+|pendente|fazer|xxx+)$/i;
+const JANELA_DIAS = Number(process.env.MCP_PENDENCIA_TTL_DIAS ?? 90);
+const HOJE = process.env.MCP_HOJE ?? new Date().toISOString().slice(0, 10);
+
+function problemasDoPendente(e) {
+  const p = [];
+  for (const c of CAMPOS_OBRIGATORIOS_PENDENTE) {
+    const v = e?.[c];
+    if (!v) { p.push(`falta ${c}`); continue; }
+    const txt = String(v).trim();
+    if (PLACEHOLDERS.test(txt)) { p.push(`${c} preenchido com placeholder ("${txt}")`); continue; }
+    if (txt.length < 12) p.push(`${c} curto demais (${txt.length} chars)`);
+  }
+  const m = String(e?.ultimoTeste ?? "").match(/(\d{4}-\d{2}-\d{2})/);
+  if (!m) {
+    p.push("ultimoTeste sem data no formato AAAA-MM-DD");
+  } else {
+    const dias = Math.floor((Date.parse(HOJE) - Date.parse(m[1])) / 86400000);
+    if (dias > JANELA_DIAS) {
+      p.push(`ultimoTeste ha ${dias} dias (limite ${JANELA_DIAS}) — pendencia parada virou divida`);
+    }
+  }
+  return p;
+}
+
 const pendentesSemPlano = (a.cru?.destrutivasEmRevisao ?? [])
-  .map((e) => ({
-    nome: e?.nome ?? "(sem nome)",
-    faltando: CAMPOS_OBRIGATORIOS_PENDENTE.filter((c) => !e?.[c]),
-  }))
+  .map((e) => ({ nome: e?.nome ?? "(sem nome)", faltando: problemasDoPendente(e) }))
   .filter((x) => x.faltando.length);
 
 // Uma aprovada nao pode existir sem registro de quando e por quem foi aprovada.
@@ -211,6 +253,20 @@ if (modo === "revisar") {
 }
 
 if (modo === "escrever") {
+  // A flag e declarativa e, sozinha, vira linha fixa no package.json — a trava
+  // humana some. Por isso o gate tambem recusa se ela estiver escrita em algum
+  // script do package.json: la ela nao representa decisao nenhuma.
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(RAIZ, "package.json"), "utf8"));
+    const fixada = Object.entries(pkg.scripts ?? {})
+      .filter(([, cmd]) => String(cmd).includes("--eu-revisei-cada-uma"))
+      .map(([nome]) => nome);
+    if (fixada.length) {
+      console.error(`Recusado: --eu-revisei-cada-uma esta fixada no package.json (script: ${fixada.join(", ")}).`);
+      console.error("Uma trava humana escrita em script deixa de ser trava. Remova de la e rode a mao.");
+      process.exit(2);
+    }
+  } catch { /* sem package.json legivel: segue para a checagem da flag */ }
   if (!process.argv.includes("--eu-revisei-cada-uma")) {
     console.error("\nRecusado. --escrever faz o manifesto copiar o que o codigo tem, o que e");
     console.error("exatamente o runtime se autoautorizando. Rode antes:");

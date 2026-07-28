@@ -5,6 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), "mcp-guard-"));
 process.env.MCP_AUDIT_DIR = TMP;
@@ -517,4 +518,94 @@ test("cenario C: aprovada ausente do runtime avisa, sem falso verde", async () =
   });
   assert.equal(r.allow, false);
   assert.equal(r.status, "APROVADA_AUSENTE_NO_RUNTIME");
+});
+
+// ══════════ achados da revisao independente, travados como teste ══════════
+// Cada um destes reproduz um buraco REAL apontado por revisor externo e que
+// so foi descoberto depois do codigo estar escrito e "verde". Ficam aqui para
+// que a correcao nao possa ser desfeita em silencio.
+
+test("achado B: ordem de chaves e de entradas NAO pode mudar o identificador", () => {
+  // JSON.stringify preserva ordem de insercao. Um formatador que reordene os
+  // campos, ou um checkout que reordene o array, mudaria o hash sem nenhuma
+  // regra ter mudado — e o cliente reconectaria a toa.
+  const bruto = JSON.parse(
+    fs.readFileSync(new URL("../manifesto-destrutivas.json", import.meta.url), "utf8"));
+
+  const canon = (v) => Array.isArray(v) ? v.map(canon)
+    : (v && typeof v === "object"
+      ? Object.keys(v).sort().reduce((a, k) => { a[k] = canon(v[k]); return a; }, {})
+      : v);
+  const hashDe = (entradas) => createHash("sha256")
+    .update(JSON.stringify(canon([...entradas].sort((a, b) => String(a?.nome).localeCompare(String(b?.nome))))))
+    .digest("hex").slice(0, 12);
+
+  const original = bruto.destrutivasAprovadas;
+  const embaralhado = [...original].reverse().map((e) => Object.fromEntries(Object.entries(e).reverse()));
+
+  assert.equal(hashDe(embaralhado), hashDe(original), "ordem não pode afetar o hash");
+  assert.equal(hashDe(original), MANIFEST_HASH, "o guard usa a mesma serialização canônica");
+
+  const alterado = structuredClone(original);
+  alterado[0].escopoExigido = "outro_escopo";
+  assert.notEqual(hashDe(alterado), MANIFEST_HASH, "mudança semântica TEM que mudar o hash");
+});
+
+test("achado C: nome inexistente ou herdado de Object.prototype é bloqueado", async () => {
+  const rt = CANONICAL_DESTRUCTIVE_TOOLS.map((name) => ({ name, annotations: { destructiveHint: true } }));
+  for (const nome of ["nao_existe_xyz", "__proto__", "constructor", "toString", "hasOwnProperty", ""]) {
+    const r = await guardDestructive({
+      toolName: nome, adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN", runtimeTools: rt,
+    });
+    assert.equal(r.allow, false, `"${nome}" não pode ser autorizada`);
+    assert.equal(r.status, "TOOL_DESCONHECIDA", `"${nome}" deve cair como desconhecida`);
+  }
+});
+
+test("achado C: aprovada ausente NÃO vira TOOL_DESCONHECIDA (precedência)", async () => {
+  // O status generico engolindo o especifico esconderia do operador que a
+  // tool sumiu do CODIGO — ele acharia que alguem chamou um nome inventado.
+  const alvo = CANONICAL_DESTRUCTIVE_TOOLS[0];
+  const semAlvo = makeRuntime().tools.filter((t) => t.name !== alvo);
+  const r = await guardDestructive({
+    toolName: alvo, adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN", runtimeTools: semAlvo,
+  });
+  assert.equal(r.status, "APROVADA_AUSENTE_NO_RUNTIME");
+  assert.notEqual(r.status, "TOOL_DESCONHECIDA");
+});
+
+test("achado D: TTL das pendências NÃO entra no identificador canônico", () => {
+  // ultimoTeste vive em destrutivasEmRevisao. Se ele influenciasse o hash,
+  // atualizar a data de um teste mudaria a versao do catalogo e forcaria
+  // reconexao de todos os clientes sem nenhuma regra ter mudado.
+  const bruto = JSON.parse(
+    fs.readFileSync(new URL("../manifesto-destrutivas.json", import.meta.url), "utf8"));
+  const nomesAprovados = bruto.destrutivasAprovadas.map((e) => e.nome);
+  for (const e of bruto.destrutivasEmRevisao ?? []) {
+    assert.ok(!nomesAprovados.includes(e.nome), `${e.nome} não pode estar nas duas listas`);
+    assert.ok(e.ultimoTeste, "pendência precisa declarar ultimoTeste");
+  }
+  assert.ok(!JSON.stringify(bruto.destrutivasAprovadas).includes("ultimoTeste"),
+    "ultimoTeste não pode viver dentro das aprovadas (entraria no hash)");
+});
+
+test("achado F: manifesto ausente ou corrompido derruba o boot com erro nomeado", async () => {
+  const ruim = path.join(TMP, "manifesto-ruim.json");
+  fs.writeFileSync(ruim, "{ isto nao e json");
+  const antes = process.env.MCP_MANIFESTO_DESTRUTIVAS;
+
+  process.env.MCP_MANIFESTO_DESTRUTIVAS = ruim;
+  await assert.rejects(
+    () => import("../src/lib/admin-guard.js?manifesto=corrompido"),
+    (e) => /JSON invalido/.test(e.message) && /NAO sobe/.test(e.message),
+    "JSON inválido tem que dar erro nomeado, não SyntaxError cru");
+
+  process.env.MCP_MANIFESTO_DESTRUTIVAS = path.join(TMP, "nao-existe.json");
+  await assert.rejects(
+    () => import("../src/lib/admin-guard.js?manifesto=ausente"),
+    (e) => /ilegivel/.test(e.message) && /NAO sobe/.test(e.message),
+    "manifesto ausente tem que dar erro nomeado, não ENOENT cru");
+
+  if (antes === undefined) delete process.env.MCP_MANIFESTO_DESTRUTIVAS;
+  else process.env.MCP_MANIFESTO_DESTRUTIVAS = antes;
 });
