@@ -28,6 +28,7 @@ import json
 import math
 import os
 import re
+import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass, field
@@ -1300,6 +1301,236 @@ def cmd_select_mode(args) -> int:
     return 0
 
 
+# ---- Gate operacional canônico -------------------------------------------
+
+GATE_MAX_AGE_SECONDS = 15 * 60
+GATE_CANONICAL_PATH = ".agents/skills/meta-lupa"
+
+
+def _git_value(repo_root: str, *git_args: str) -> str:
+    """Read a Git fact without invoking a shell; failure is fail-closed."""
+    result = subprocess.run(
+        ["git", "-C", os.path.abspath(repo_root), *git_args],
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="strict",
+    )
+    if result.returncode != 0:
+        raise ValueError("GIT_PROOF_UNAVAILABLE")
+    value = result.stdout.strip()
+    if not value:
+        raise ValueError("GIT_PROOF_EMPTY")
+    return value
+
+
+def canonical_identity(repo_root: str, canonical_ref: str = "") -> dict:
+    """Return the canonical tree and SKILL hash from a Git target/ref."""
+    root = os.path.abspath(repo_root)
+    skill_path = os.path.join(root, GATE_CANONICAL_PATH, "SKILL.md")
+    if canonical_ref:
+        result = subprocess.run(
+            ["git", "-C", root, "show", f"{canonical_ref}:{GATE_CANONICAL_PATH}/SKILL.md"],
+            check=False,
+            capture_output=True,
+        )
+        if result.returncode != 0 or not result.stdout:
+            raise ValueError("META_LUPA_CANONICAL_MISSING")
+        skill_bytes = result.stdout
+        tree_sha = _git_value(root, "rev-parse", f"{canonical_ref}:{GATE_CANONICAL_PATH}")
+    else:
+        if not os.path.isfile(skill_path):
+            raise ValueError("META_LUPA_CANONICAL_MISSING")
+        with open(skill_path, "rb") as handle:
+            skill_bytes = handle.read()
+        tree_sha = _git_value(root, "rev-parse", "HEAD:" + GATE_CANONICAL_PATH)
+    skill_sha256 = hashlib.sha256(skill_bytes).hexdigest()
+    head_sha = _git_value(root, "rev-parse", "HEAD")
+    return {
+        "tree_sha": tree_sha,
+        "skill_sha256": skill_sha256,
+        "head_sha": head_sha,
+        "path": GATE_CANONICAL_PATH,
+    }
+
+
+def _gate_digest(receipt: dict) -> str:
+    payload = {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+    return hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+
+
+def _gate_result(status: str, reason: str = "", **extra) -> dict:
+    result = {
+        "META_LUPA_LOADED": "SIM" if status == "ALLOWED" else "NAO",
+        "META_LUPA_RECEIPT_VALID": "SIM" if status == "ALLOWED" else "NAO",
+        "META_LUPA_GATE": "PASS" if status == "ALLOWED" else "BLOCKED",
+        "STATUS": status,
+    }
+    if reason:
+        result["REASON"] = reason
+    result.update(extra)
+    return result
+
+
+def _read_gate_input(path: str) -> dict:
+    try:
+        with open(path, encoding="utf-8-sig") as handle:
+            value = json.load(handle)
+    except FileNotFoundError as exc:
+        raise ValueError("META_LUPA_RECEIPT_MISSING") from exc
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError("META_LUPA_RECEIPT_INVALID") from exc
+    if not isinstance(value, dict):
+        raise ValueError("META_LUPA_RECEIPT_NOT_OBJECT")
+    return value
+
+
+def validate_gate_receipt(
+    receipt: dict,
+    *,
+    repo_root: str,
+    canonical_ref: str = "",
+    expected_canonical_sha: str = "",
+    expected_head_sha: str = "",
+    now: datetime | None = None,
+) -> tuple[bool, str, dict]:
+    """Validate the mandatory proof used before promotion or green status."""
+    required = {
+        "META_LUPA_LOADED", "META_LUPA_CANONICAL_SHA", "META_LUPA_RECEIPT_VALID",
+        "META_LUPA_USAGE_ID", "META_LUPA_GATE", "repo", "mission_id",
+        "workspace_head", "issued_at_utc", "canonical_skill_sha256", "receipt_sha256",
+    }
+    if "META_LUPA_LOADED" not in receipt:
+        return False, "META_LUPA_NOT_LOADED", {}
+    missing = sorted(required - set(receipt))
+    if missing:
+        return False, "META_LUPA_RECEIPT_MISSING", {"missing": missing}
+    if receipt.get("META_LUPA_LOADED") != "SIM":
+        return False, "META_LUPA_NOT_LOADED", {}
+    if receipt.get("META_LUPA_RECEIPT_VALID") != "SIM":
+        return False, "META_LUPA_RECEIPT_INVALID", {}
+    if receipt.get("META_LUPA_GATE") != "PASS":
+        return False, "META_LUPA_GATE_NOT_PASS", {}
+    if receipt.get("repo") != "ServerVpss/CentralDark":
+        return False, "META_LUPA_REPOSITORY_MISMATCH", {}
+    if not isinstance(receipt.get("mission_id"), str) or not receipt["mission_id"].strip():
+        return False, "META_LUPA_MISSION_MISSING", {}
+    try:
+        identity = canonical_identity(repo_root, canonical_ref)
+    except (OSError, ValueError):
+        return False, "META_LUPA_CANONICAL_UNPROVEN", {}
+    canonical_sha = str(receipt.get("META_LUPA_CANONICAL_SHA", ""))
+    if canonical_sha != identity["tree_sha"]:
+        return False, "META_LUPA_SHA_MISMATCH", {"expected": identity["tree_sha"]}
+    if expected_canonical_sha and canonical_sha != expected_canonical_sha:
+        return False, "META_LUPA_SHA_MISMATCH", {"expected": expected_canonical_sha}
+    if receipt.get("canonical_skill_sha256") != identity["skill_sha256"]:
+        return False, "META_LUPA_SKILL_SHA_MISMATCH", {}
+    workspace_head = str(receipt.get("workspace_head", ""))
+    target_head = expected_head_sha or identity["head_sha"]
+    if workspace_head != target_head:
+        return False, "META_LUPA_HEAD_MISMATCH", {"expected": target_head}
+    expected_usage = usage_id(
+        SCHEMA_VERSION,
+        receipt["repo"],
+        receipt["mission_id"],
+        canonical_sha,
+        workspace_head,
+    )
+    if receipt.get("META_LUPA_USAGE_ID") != expected_usage:
+        return False, "META_LUPA_USAGE_ID_MISMATCH", {}
+    if not HEX64.fullmatch(str(receipt.get("receipt_sha256", ""))):
+        return False, "META_LUPA_RECEIPT_HASH_INVALID", {}
+    if receipt["receipt_sha256"] != _gate_digest(receipt):
+        return False, "META_LUPA_RECEIPT_HASH_MISMATCH", {}
+    try:
+        issued = datetime.fromisoformat(str(receipt["issued_at_utc"]).replace("Z", "+00:00"))
+        if issued.tzinfo is None:
+            raise ValueError
+        current = now or datetime.now(timezone.utc)
+        age = (current - issued).total_seconds()
+    except (TypeError, ValueError, OverflowError):
+        return False, "META_LUPA_RECEIPT_TIME_INVALID", {}
+    if age < -60 or age > GATE_MAX_AGE_SECONDS:
+        return False, "STALE_META_LUPA_RECEIPT", {"age_seconds": int(age)}
+    return True, "", {
+        "META_LUPA_CANONICAL_SHA": canonical_sha,
+        "META_LUPA_USAGE_ID": expected_usage,
+        "workspace_head": workspace_head,
+        "canonical_skill_sha256": identity["skill_sha256"],
+    }
+
+
+def cmd_issue_gate_receipt(args) -> int:
+    try:
+        if args.repo != "ServerVpss/CentralDark":
+            raise ValueError("META_LUPA_REPOSITORY_MISMATCH")
+        identity = canonical_identity(args.repo_root, args.canonical_ref)
+        head = args.workspace_head or identity["head_sha"]
+        expected = args.expected_canonical_sha or identity["tree_sha"]
+        if identity["tree_sha"] != expected:
+            raise ValueError("META_LUPA_SHA_MISMATCH")
+        receipt = {
+            "META_LUPA_LOADED": "SIM",
+            "META_LUPA_CANONICAL_SHA": identity["tree_sha"],
+            "META_LUPA_RECEIPT_VALID": "SIM",
+            "META_LUPA_GATE": "PASS",
+            "repo": args.repo,
+            "mission_id": args.mission_id,
+            "workspace_head": head,
+            "issued_at_utc": _now_utc(),
+            "canonical_skill_sha256": identity["skill_sha256"],
+            "META_LUPA_USAGE_ID": usage_id(
+                SCHEMA_VERSION, args.repo, args.mission_id, identity["tree_sha"], head
+            ),
+        }
+        receipt["receipt_sha256"] = _gate_digest(receipt)
+        with open(args.output, "w", encoding="utf-8", newline="\n") as handle:
+            json.dump(receipt, handle, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            handle.write("\n")
+        print(json.dumps(_gate_result("ALLOWED", **{
+            "META_LUPA_CANONICAL_SHA": identity["tree_sha"],
+            "META_LUPA_USAGE_ID": receipt["META_LUPA_USAGE_ID"],
+            "RECEIPT_PATH": os.path.abspath(args.output),
+        }), ensure_ascii=False, sort_keys=True))
+        return 0
+    except (OSError, ValueError) as exc:
+        print(json.dumps(_gate_result("BLOCKED", str(exc)), ensure_ascii=False, sort_keys=True))
+        return 13
+
+
+def cmd_gate(args) -> int:
+    try:
+        receipt = _read_gate_input(args.input)
+        allowed, reason, details = validate_gate_receipt(
+            receipt,
+            repo_root=args.repo_root,
+            expected_canonical_sha=args.expected_canonical_sha,
+            expected_head_sha=args.expected_head_sha,
+            canonical_ref=args.canonical_ref,
+        )
+        if not allowed:
+            if args.operation in {"green", "workflow", "workflow-dispatch"} and reason in {
+                "META_LUPA_NOT_LOADED", "META_LUPA_RECEIPT_MISSING", "META_LUPA_RECEIPT_INVALID",
+                "META_LUPA_RECEIPT_NOT_OBJECT", "META_LUPA_RECEIPT_HASH_MISMATCH",
+            }:
+                reason = "BLOCKED_FALSE_GREEN"
+            print(json.dumps(_gate_result("BLOCKED", reason, **details), ensure_ascii=False, sort_keys=True))
+            return 13
+        print(json.dumps(_gate_result("ALLOWED", **details), ensure_ascii=False, sort_keys=True))
+        return 0
+    except ValueError as exc:
+        reason = str(exc)
+        if args.operation in {"green", "workflow", "workflow-dispatch"} and reason in {
+            "META_LUPA_NOT_LOADED", "META_LUPA_RECEIPT_MISSING", "META_LUPA_RECEIPT_INVALID",
+            "META_LUPA_RECEIPT_NOT_OBJECT",
+        }:
+            reason = "BLOCKED_FALSE_GREEN"
+        print(json.dumps(_gate_result("BLOCKED", reason), ensure_ascii=False, sort_keys=True))
+        return 13
+
+
 def cmd_writer_attack(args) -> int:
     path = os.path.abspath(args.ledger or _ledger_path())
     try:
@@ -1402,6 +1633,25 @@ def main() -> None:
     s = sub.add_parser("select-mode")
     s.add_argument("--input", required=True)
     s.set_defaults(func=cmd_select_mode)
+
+    ir = sub.add_parser("issue-gate-receipt")
+    ir.add_argument("--repo-root", default=".")
+    ir.add_argument("--repo", required=True)
+    ir.add_argument("--mission-id", required=True)
+    ir.add_argument("--workspace-head", default="")
+    ir.add_argument("--canonical-ref", default="")
+    ir.add_argument("--expected-canonical-sha", default="")
+    ir.add_argument("--output", required=True)
+    ir.set_defaults(func=cmd_issue_gate_receipt)
+
+    g = sub.add_parser("gate")
+    g.add_argument("--repo-root", default=".")
+    g.add_argument("--input", required=True)
+    g.add_argument("--expected-canonical-sha", default="")
+    g.add_argument("--expected-head-sha", default="")
+    g.add_argument("--canonical-ref", default="")
+    g.add_argument("--operation", default="operation")
+    g.set_defaults(func=cmd_gate)
 
     w = sub.add_parser("writer-attack")
     w.add_argument(

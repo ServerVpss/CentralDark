@@ -323,6 +323,37 @@ FIO DA MISSÃO:
 
 Se faltarem dados para números honestos, emitir análise qualitativa e especificar o experimento necessário. `NÃO CALCULÁVEL COM A EVIDÊNCIA ATUAL` é um resultado válido.
 
+## Gate operacional obrigatorio
+
+Qualquer operacao que altere, promova ou declare estado do repositorio deve
+carregar esta META LUPA e apresentar um recibo fresco, amarrado ao HEAD e a
+identidade canonica da arvore. A prova minima e:
+
+```text
+META_LUPA_LOADED=SIM
+META_LUPA_CANONICAL_SHA=<tree SHA de .agents/skills/meta-lupa>
+META_LUPA_RECEIPT_VALID=SIM
+META_LUPA_USAGE_ID=<usage_id deterministico>
+META_LUPA_GATE=PASS
+```
+
+O gate executavel vive no motor existente, sem criar outra Lupa:
+
+```text
+python .agents/skills/meta-lupa/scripts/meta_lupa.py issue-gate-receipt \
+  --repo-root . --repo ServerVpss/CentralDark --mission-id <id> \
+  --workspace-head <HEAD> --output <TEMP>/meta-lupa-gate.json
+python .agents/skills/meta-lupa/scripts/meta_lupa.py gate \
+  --repo-root . --input <TEMP>/meta-lupa-gate.json --operation <operacao>
+```
+
+O recibo e rejeitado quando falta carregamento, SHA/skill divergente, HEAD
+divergente, `usage_id` incorreto, hash do recibo invalido ou idade acima de
+15 minutos. Operacoes, workflows e declaracoes verdes devem tratar qualquer
+falha como `STATUS=BLOCKED`; uma declaracao verde sem recibo recebe
+`REASON=BLOCKED_FALSE_GREEN`. A ausencia de branch protection auditavel no
+GitHub nao autoriza relaxar este gate local ou no CI.
+
 ## Recursos
 
 - Ler `references/matematica-e-calibracao.md` para fórmulas, dependência, sensibilidade, múltiplas hipóteses e interpretação correta.
