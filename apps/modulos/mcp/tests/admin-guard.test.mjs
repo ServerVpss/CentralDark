@@ -609,3 +609,36 @@ test("achado F: manifesto ausente ou corrompido derruba o boot com erro nomeado"
   if (antes === undefined) delete process.env.MCP_MANIFESTO_DESTRUTIVAS;
   else process.env.MCP_MANIFESTO_DESTRUTIVAS = antes;
 });
+
+test("boot não pode ficar não-pronto por quarentena REGISTRADA", async () => {
+  // Regressao encontrada EM PRODUCAO em 2026-07-28, e que nenhum teste
+  // unitario tinha pego: o bloqueio global foi tirado do guardDestructive mas
+  // continuava um nivel acima, em auditStartupSnapshot. Com 17 destrutivas no
+  // runtime e 12 no manifesto, auditStartupReady virava false e TODA
+  // destrutiva respondia AUDITORIA_STARTUP_INDISPONIVEL — inclusive as 12
+  // aprovadas, que nao tinham nada a ver com a divergencia.
+  const BOOT = fs.mkdtempSync(path.join(os.tmpdir(), "mcp-boot2-"));
+  process.env.MCP_AUDIT_DIR = BOOT;
+  process.env.MCP_ADMIN_CHAIN_STATE = path.join(BOOT, ".chain.json");
+  process.env.MCP_ADMIN_STARTUP_LOCK = path.join(BOOT, ".startup.json");
+  const g = await import("../src/lib/admin-guard.js?boot2=1");
+
+  const aprovadas = g.CANONICAL_DESTRUCTIVE_TOOLS
+    .map((name) => ({ name, annotations: { destructiveHint: true } }));
+  const quarentena = g.DESTRUTIVAS_EM_REVISAO
+    .map((e) => ({ name: e.nome, annotations: { destructiveHint: true } }));
+  const leitura = Array.from({ length: 70 }, (_, i) => ({ name: `ro_${i}`, annotations: { destructiveHint: false } }));
+  const runtimeReal = [...aprovadas, ...quarentena, ...leitura];
+
+  const ok = await g.auditStartupSnapshot(runtimeReal);
+  assert.equal(ok.ready, true,
+    "quarentena registrada é estado esperado: não pode deixar o boot não-pronto");
+
+  fs.rmSync(path.join(BOOT, ".startup.json"), { force: true });
+  const comIntrusa = await g.auditStartupSnapshot(
+    [...runtimeReal, { name: "intrusa_nao_registrada", annotations: { destructiveHint: true } }]);
+  assert.equal(comIntrusa.ready, false,
+    "destrutiva DESCONHECIDA tem que deixar o boot não-pronto");
+
+  process.env.MCP_AUDIT_DIR = TMP;
+});
