@@ -435,7 +435,18 @@ conectarLogs();
 // ─── Rotas ────────────────────────────────────────────────────────────
 export function adminGet(req, res) {
     if (!isAdmin(req)) {
-        res.status(401).type("text/html").send(LOGIN_HTML.replace("__ERR__", ""));
+        // #148 item 3: a tela de login e entregue com sucesso -> 200.
+        // MOTIVO  > devolver 401 junto com o HTML completo do login fazia
+        //           cliente MCP generico ler "unauthorized" e desistir, sem
+        //           descobrir que existe UI de login. Provado em 2026-07-28:
+        //           GET /admin -> 401 text/html 2760 bytes, sem
+        //           WWW-Authenticate, ou seja 401 sem challenge nenhum.
+        // ONDE    > issue #148, item 3 da secao "Falhas / atritos".
+        // RESOLVE > 200 para a tela de login (contrato explicito "SPA login").
+        //           As rotas protegidas de verdade (/admin/api/*) seguem 401
+        //           JSON, e senha errada em POST /admin/login segue 401.
+        res.setHeader("Cache-Control", "no-store");
+        res.status(200).type("text/html").send(LOGIN_HTML.replace("__ERR__", ""));
         return;
     }
     res.type("text/html").send(NOC_HTML);

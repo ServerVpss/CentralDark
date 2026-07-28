@@ -2,7 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-const LOG_DIR = process.env.MCP_LOG_DIR || "/root/CentralDark/apps/mcp/logs";
+// MOTIVO  > este caminho hardcoded criou uma pasta paralela de logs
+//           (apps/mcp/logs) porque o PM2 define LOG_DIR, e nao MCP_LOG_DIR.
+//           O codigo lia so MCP_LOG_DIR, caia no default e escrevia fora do
+//           lugar canonico. Provado em 2026-07-27: 216 MB duplicados.
+// ONDE    > apps/modulos/mcp/src/audit-logger.js linha 5.
+// RESOLVE > aceita MCP_LOG_DIR (preferido) e LOG_DIR (o que o PM2 ja define),
+//           e o default aponta para o diretorio canonico.
+const LOG_DIR = process.env.MCP_LOG_DIR || process.env.LOG_DIR || "/root/CentralDark/logs/mcp";
+if (!process.env.MCP_LOG_DIR && process.env.LOG_DIR) {
+    // Aviso explicito: esta rodando pelo fallback, nao pela variavel oficial.
+    console.warn("[audit-logger] MCP_LOG_DIR ausente; usando LOG_DIR como fallback:", LOG_DIR);
+}
 const MAX_STRING_LENGTH = 8_000;
 const MAX_ARRAY_ITEMS = 100;
 const MAX_OBJECT_KEYS = 120;
