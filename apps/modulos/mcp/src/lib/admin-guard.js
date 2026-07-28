@@ -441,14 +441,34 @@ export async function auditStartupSnapshot(runtimeTools, options = {}) {
   } catch { /* primeira execução ou tentativa anterior falhou */ }
 
   const chainCheck = verifyAuditDirectory(AUDIT_DIR);
-  const preconditionsOk = snapshot.ok && chainCheck.ok;
+  // MOTIVO  > a prontidao do boot usava snapshot.ok, que fica false com
+  //           QUALQUER divergencia — inclusive a quarentena que agora e
+  //           esperada e registrada. Resultado observado em producao em
+  //           2026-07-28: com 17 destrutivas no runtime e 12 no manifesto,
+  //           auditStartupReady virou false e TODA destrutiva passou a
+  //           responder AUDITORIA_STARTUP_INDISPONIVEL, inclusive as 12
+  //           aprovadas. O bloqueio global tinha sido tirado do
+  //           guardDestructive mas continuava aqui, um nivel acima.
+  // ONDE    > apps/modulos/mcp/src/lib/admin-guard.js, auditStartupSnapshot.
+  // RESOLVE > o boot so fica NAO-pronto quando a divergencia e DESCONHECIDA,
+  //           isto e, uma destrutiva que nao esta nem nas aprovadas nem em
+  //           destrutivasEmRevisao. Quarentena registrada e estado esperado:
+  //           nao derruba o boot, e cada tool segue sendo decidida
+  //           individualmente pelo guardDestructive.
+  const nomesEmRevisao = (MANIFESTO.emRevisao ?? []).map((e) => e?.nome);
+  const desconhecidas = (snapshot.quarantined ?? []).filter((n) => !nomesEmRevisao.includes(n));
+  const divergenciaDesconhecida = desconhecidas.length > 0 || (snapshot.missing ?? []).length > 0;
+  const preconditionsOk = !divergenciaDesconhecida && chainCheck.ok;
 
   const audit = await writeAuditEvent({
     tool: "__startup__",
     decision: preconditionsOk ? "released" : "blocked",
     executionStatus: "startup_snapshot",
     confirmationMode: "startup_snapshot",
-    reason: `runtime_boot chain=${chainCheck.ok ? "ok" : "quebrada"} catalog=${snapshot.ok ? "ok" : "divergente"}`,
+    reason: `runtime_boot chain=${chainCheck.ok ? "ok" : "quebrada"}`
+      + ` catalog=${snapshot.ok ? "ok" : (divergenciaDesconhecida ? "divergente_desconhecida" : "quarentena_registrada")}`
+      + (desconhecidas.length ? ` desconhecidas=${desconhecidas.join(",")}` : "")
+      + ((snapshot.missing ?? []).length ? ` ausentes=${snapshot.missing.join(",")}` : ""),
     catalogHash: snapshot.catalogHash,
     catalogVersion: expectation.version ?? CATALOG_VERSION,
     totalRuntimeTools: snapshot.totalRuntimeTools,
