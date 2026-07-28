@@ -560,5 +560,67 @@
     "hermes_result": "BLOCKED_EXTERNAL_TLS",
     "hermes_independent": "NAO",
     "resume_point": "Opus A/B/C/D same model, 3 seeds, complete process receipts; no silent fallback"
+  },
+  {
+    "run": "opus-5-partial-audit-20260728",
+    "model_requested": "OPUS_5",
+    "model_actual": "UNKNOWN_ON_CODEX_HOST",
+    "codex_log_namespace": "/tmp/fable-eval unavailable",
+    "reported_results": {
+      "A-seed1": {
+        "execution_valid": "REPORTED_SIM",
+        "failures_found": 0,
+        "tests_after": "PASS",
+        "modules_inspected": "8/10",
+        "time_seconds": 117
+      },
+      "A-seed2": {
+        "execution_valid": "REPORTED_SIM",
+        "failures_found": 0,
+        "tests_after": "PASS",
+        "modules_inspected": "7/10",
+        "time_seconds": 141
+      },
+      "A-seed3": {
+        "treatment_valid": "NAO",
+        "invalid_reason": "SPEND_LIMIT"
+      },
+      "B-seed1": {
+        "treatment_valid": "NAO",
+        "invalid_reason": "SPEND_LIMIT"
+      },
+      "B-seed2": {
+        "treatment_valid": "NAO",
+        "invalid_reason": "SPEND_LIMIT"
+      },
+      "B-seed3": {
+        "treatment_valid": "NAO",
+        "invalid_reason": "SPEND_LIMIT"
+      }
+    },
+    "codex_verification": {
+      "A-seed1": "NAO_PROVADO_LOG_OPUS_INACESSIVEL",
+      "A-seed2": "NAO_PROVADO_LOG_OPUS_INACESSIVEL",
+      "C": "DESCONHECIDO",
+      "D": "DESCONHECIDO"
+    },
+    "accessible_files_are": "HAIKU_BASELINE_ONLY",
+    "accessible_a1_raw_sha256": "83af3c69b9f3307f88e44619463beaa8b327e36f42629833fbc3637c9e8e474f",
+    "accessible_a2_raw_sha256": "c1c22c5e58193029a045b900b635b1ced71a5fd597122cadc00a9e8d02a80465",
+    "contradiction": "FAILURES_FOUND=0 with TESTS_AFTER=PASS",
+    "contradiction_root_cause": "UNVERIFIED_OPUS_LOGS",
+    "seeded_failures_total": "UNPROVEN_FOR_OPUS; baseline=4",
+    "tests_total": "UNPROVEN_FOR_OPUS; baseline=5",
+    "token_usage": "UNKNOWN unless real stream usage; suffix c rejected as characters",
+    "gain_proven": "NAO",
+    "sem_ganho_proven": "NAO",
+    "best_arm": "INDETERMINADO",
+    "spend_limit_runs": [
+      "A-seed3",
+      "B-seed1",
+      "B-seed2",
+      "B-seed3"
+    ],
+    "resume_manifest": "mount /tmp/fable-eval; freeze A1/A2/C/D; hash raw/tree; parse MODEL_ACTUAL from stream"
   }
 ]
