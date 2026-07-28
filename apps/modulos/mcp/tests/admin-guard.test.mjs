@@ -14,8 +14,14 @@ process.env.MCP_ADMIN_STARTUP_LOCK = path.join(TMP, ".startup.json");
 const {
   evaluateAdminConfirmation, reconcileCatalog, writeAuditEvent, verifyChain, verifyAuditDirectory,
   guardDestructive, auditStartupSnapshot, getCanonicalExpectation,
-  CANONICAL_DESTRUCTIVE_TOOLS, CATALOG_VERSION,
+  CANONICAL_DESTRUCTIVE_TOOLS, CATALOG_VERSION, MANIFEST_HASH,
 } = await import("../src/lib/admin-guard.js");
+
+// O manifesto aprovado e lido do MESMO arquivo que o guard le. Nenhuma
+// contagem escrita a mao nos testes: tudo deriva daqui.
+const MANIFESTO_NOMES = JSON.parse(
+  fs.readFileSync(new URL("../manifesto-destrutivas.json", import.meta.url), "utf8"),
+).destrutivasAprovadas.map((e) => e.nome).sort();
 
 function makeRuntime() {
   const tools = CANONICAL_DESTRUCTIVE_TOOLS.map((name) => ({ name, annotations: { destructiveHint: true } }));
@@ -45,22 +51,47 @@ test("nomes herdados de Object.prototype nunca autorizam", () => {
   }
 });
 
-test("baseline canônico tem 12 destrutivas exatas (inclui vps_write_file_safe)", () => {
-  assert.equal(CANONICAL_DESTRUCTIVE_TOOLS.length, 12);
+// MOTIVO  > este teste cravava "12 destrutivas exatas". Quando o dispatcher
+//           ganhou grupos novos o runtime foi para 17 e o teste ficou
+//           vermelho — mas trocar 12 por 17 so moveria o numero magico de
+//           lugar e esconderia a proxima divergencia do mesmo jeito.
+// ONDE    > apps/modulos/mcp/tests/admin-guard.test.mjs.
+// RESOLVE > o teste passa a validar PROPRIEDADE contra o manifesto
+//           aprovado, nao contagem. Se o manifesto mudar, o teste continua
+//           valendo; se o codigo divergir do manifesto, ele acusa.
+test("baseline canônico é exatamente o manifesto aprovado", () => {
+  assert.deepEqual([...CANONICAL_DESTRUCTIVE_TOOLS], [...MANIFESTO_NOMES]);
+  assert.ok(CANONICAL_DESTRUCTIVE_TOOLS.length > 0, "manifesto não pode ser vazio");
+  assert.equal(new Set(CANONICAL_DESTRUCTIVE_TOOLS).size, CANONICAL_DESTRUCTIVE_TOOLS.length,
+    "manifesto não pode ter nome duplicado");
+  assert.deepEqual([...CANONICAL_DESTRUCTIVE_TOOLS], [...CANONICAL_DESTRUCTIVE_TOOLS].sort(),
+    "manifesto deve estar ordenado (diff estável no PR)");
   assert.ok(CANONICAL_DESTRUCTIVE_TOOLS.includes("vps_write_file_safe"));
-  assert.ok(!CANONICAL_DESTRUCTIVE_TOOLS.includes("mcp_admin_call"));
+  assert.ok(!CANONICAL_DESTRUCTIVE_TOOLS.includes("mcp_admin_call"),
+    "mcp_admin_call é o próprio dispatcher: não se despacha a si mesmo");
+});
+test("catalogVersion é derivada do conteúdo, não escrita à mão", () => {
+  assert.match(CATALOG_VERSION, /^v1-[0-9a-f]{12}$/,
+    "o identificador canônico não pode conter data: só o hash do conteúdo");
+  assert.ok(CATALOG_VERSION.endsWith(MANIFEST_HASH));
+  assert.ok(!/\d{4}-\d{2}-\d{2}/.test(CATALOG_VERSION),
+    "data no identificador quebraria o determinismo por conteúdo");
 });
 test("getCanonicalExpectation devolve versão e lista congelada", () => {
   const exp = getCanonicalExpectation();
-  assert.equal(exp.expectedDestructiveCount, 12);
+  assert.equal(exp.expectedDestructiveCount, MANIFESTO_NOMES.length);
   assert.equal(exp.version, CATALOG_VERSION);
   assert.deepEqual([...exp.expectedDestructiveNames].sort(), [...CANONICAL_DESTRUCTIVE_TOOLS].sort());
 });
 
 test("reconcileCatalog: runtime = baseline → ok", () => {
   const rec = reconcileCatalog(makeRuntime().tools, getCanonicalExpectation());
-  assert.equal(rec.ok, true); assert.equal(rec.destructiveCount, 12);
-  assert.equal(rec.totalRuntimeTools, 83); assert.equal(rec.catalogVersion, CATALOG_VERSION);
+  assert.equal(rec.ok, true);
+  assert.equal(rec.destructiveCount, MANIFESTO_NOMES.length);
+  assert.equal(rec.totalRuntimeTools, makeRuntime().tools.length);
+  assert.equal(rec.catalogVersion, CATALOG_VERSION);
+  assert.deepEqual(rec.quarantined, []);
+  assert.deepEqual(rec.missing, []);
 });
 test("reconcileCatalog: contagem divergente → block", () => {
   const rec = reconcileCatalog(makeRuntime().tools, { expectedDestructiveCount: 10 });
@@ -217,14 +248,91 @@ test("guardDestructive: escopo admin ausente bloqueia e audita", async () => {
   assert.equal(g.audit.ok, true);
 });
 
-test("guardDestructive: divergência bloqueia mesmo com confirmação válida", async () => {
-  const semUma = makeRuntime().tools.filter((t) => t.name !== "vps_write_file_safe");
-  const g = await guardDestructive({
-    toolName: "admin_pm2_restart", adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN",
-    runtimeTools: semUma, expectation: getCanonicalExpectation(),
+// MOTIVO  > este teste travava o comportamento antigo: QUALQUER divergencia
+//           bloqueava TODA destrutiva. Uma tool desconhecida derrubava o
+//           conjunto inteiro, inclusive as aprovadas sem relacao com ela.
+// ONDE    > guardDestructive, via reconcileCatalog.
+// RESOLVE > vira uma MATRIZ de contrato. A divergencia continua sendo
+//           detectada e registrada na auditoria — a prova nao se perde — mas
+//           o bloqueio passa a ser pontual, so na tool divergente.
+test("matriz do contrato: quem passa, quem cai, e por quê", async () => {
+  const APROVADA = CANONICAL_DESTRUCTIVE_TOOLS[0];
+  const base = makeRuntime().tools;
+  const exp = getCanonicalExpectation();
+
+  // 1. aprovada + escopo admin + confirmação válida -> PERMITE
+  const ok = await guardDestructive({
+    toolName: APROVADA, adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: base, expectation: exp,
   });
-  assert.equal(g.allow, false); assert.equal(g.status, "DIVERGENCIA_CATALOGO");
-  assert.equal(g.executionStatus, "blocked");
+  assert.equal(ok.allow, true, "aprovada com tudo em ordem deve passar");
+
+  // 2. aprovada SEM confirmação -> BLOQUEIA
+  const semConf = await guardDestructive({
+    toolName: APROVADA, adminAuthorized: true, runtimeTools: base, expectation: exp,
+  });
+  assert.equal(semConf.allow, false);
+  assert.equal(semConf.status, "CONFIRMACAO_ADMIN_NECESSARIA");
+
+  // 3. aprovada SEM escopo admin -> BLOQUEIA
+  const semEscopo = await guardDestructive({
+    toolName: APROVADA, adminAuthorized: false, confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: base, expectation: exp,
+  });
+  assert.equal(semEscopo.allow, false);
+  assert.equal(semEscopo.status, "ESCOPO_ADMIN_NECESSARIO");
+
+  // 4. destrutiva DESCONHECIDA, mesmo com confirmação válida -> QUARENTENA
+  const comIntrusa = [...base, { name: "intrusa_x", annotations: { destructiveHint: true } }];
+  const intrusa = await guardDestructive({
+    toolName: "intrusa_x", adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: comIntrusa, expectation: exp,
+  });
+  assert.equal(intrusa.allow, false, "confirmação válida não aprova o que não está no manifesto");
+  assert.equal(intrusa.status, "DESTRUTIVA_EM_QUARENTENA");
+
+  // 5. na MESMA rodada da intrusa, a aprovada continua passando
+  const convive = await guardDestructive({
+    toolName: APROVADA, adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: comIntrusa, expectation: exp,
+  });
+  assert.equal(convive.allow, true, "divergência em OUTRA tool não pode derrubar esta");
+
+  // 6. a divergência NÃO some do radar: fica registrada no estado de auditoria
+  assert.deepEqual(convive.recon.quarantined, ["intrusa_x"]);
+  assert.equal(convive.recon.ok, false, "recon.ok segue false: a divergência é real");
+  assert.ok(convive.recon.divergences.some((d) => d.kind === "extra_destructive"));
+});
+
+test("aprovada que sumiu do runtime bloqueia a si mesma, e só a si mesma", async () => {
+  const alvo = CANONICAL_DESTRUCTIVE_TOOLS[0];
+  const outra = CANONICAL_DESTRUCTIVE_TOOLS[1];
+  const semAlvo = makeRuntime().tools.filter((t) => t.name !== alvo);
+  const exp = getCanonicalExpectation();
+
+  const g = await guardDestructive({
+    toolName: alvo, adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: semAlvo, expectation: exp,
+  });
+  assert.equal(g.allow, false);
+  assert.equal(g.status, "APROVADA_AUSENTE_NO_RUNTIME");
+  assert.deepEqual(g.recon.missing, [alvo]);
+
+  const vizinha = await guardDestructive({
+    toolName: outra, adminAuthorized: true, confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: semAlvo, expectation: exp,
+  });
+  assert.equal(vizinha.allow, true, "o sumiço de uma não pode bloquear a outra");
+});
+
+test("a fonte da aprovação é o manifesto, não o /tools.json nem o runtime", () => {
+  // Uma tool destrutiva presente no runtime e ate publicada no catalogo, mas
+  // ausente do manifesto aprovado, NAO e autorizada.
+  const comPublicada = [...makeRuntime().tools,
+    { name: "publicada_mas_nao_aprovada", annotations: { destructiveHint: true } }];
+  const rec = reconcileCatalog(comPublicada, getCanonicalExpectation());
+  assert.ok(rec.quarantined.includes("publicada_mas_nao_aprovada"));
+  assert.ok(!CANONICAL_DESTRUCTIVE_TOOLS.includes("publicada_mas_nao_aprovada"));
 });
 test("guardDestructive: sem confirmação → blocked (executionStatus blocked)", async () => {
   const g = await guardDestructive({
@@ -234,13 +342,24 @@ test("guardDestructive: sem confirmação → blocked (executionStatus blocked)"
   assert.equal(g.allow, false); assert.equal(g.status, "CONFIRMACAO_ADMIN_NECESSARIA");
   assert.equal(g.executionStatus, "blocked");
 });
-test("guardDestructive: usa expectativa canônica quando omitida (não deixa passar)", async () => {
-  const semUma = makeRuntime().tools.filter((t) => t.name !== "vps_write_file_safe");
+// MOTIVO  > o teste antigo provava que, sem `expectation`, o guard usava o
+//           baseline canonico — mas provava isso pelo efeito colateral do
+//           bloqueio GLOBAL, que deixou de existir. A propriedade que importa
+//           (nao confiar em expectativa vazia) continua valendo.
+// ONDE    > guardDestructive, parametro `expectation` omitido.
+// RESOLVE > provar a mesma propriedade pelo caminho direto: sem expectation,
+//           uma destrutiva DESCONHECIDA tem de cair em quarentena do mesmo
+//           jeito. Se o guard caisse para uma expectativa vazia, ela passaria.
+test("sem `expectation`, o guard usa o manifesto — não uma expectativa vazia", async () => {
+  const comIntrusa = [...makeRuntime().tools,
+    { name: "intrusa_sem_expectation", annotations: { destructiveHint: true } }];
   const g = await guardDestructive({
-    toolName: "admin_pm2_restart", adminAuthorized: true, confirmAdmin: "PERMITO PIVETE", runtimeTools: semUma,
+    toolName: "intrusa_sem_expectation", adminAuthorized: true,
+    confirmAdmin: "PERMITO PIVETE", runtimeTools: comIntrusa,
   });
-  assert.equal(g.allow, false, "sem expectation deveria usar baseline canônico");
-  assert.equal(g.status, "DIVERGENCIA_CATALOGO");
+  assert.equal(g.allow, false, "expectativa vazia deixaria passar — não pode");
+  assert.equal(g.status, "DESTRUTIVA_EM_QUARENTENA");
+  assert.equal(g.recon.catalogVersion, CATALOG_VERSION, "usou o manifesto, não um objeto vazio");
 });
 test("guardDestructive: input keys sensíveis sanitizadas em disco", async () => {
   const SEN = fs.mkdtempSync(path.join(os.tmpdir(), "mcp-sen-"));
@@ -272,13 +391,13 @@ test("startup snapshot: lista ordenada + chainCheck + idempotente", async () => 
   const a = await boot(tools); const b = await boot(tools);
   assert.equal(a.skipped, false); assert.equal(a.ready, true);
   assert.equal(b.skipped, true); assert.equal(b.ready, true);
-  assert.equal(a.snapshot.destructiveCount, 12);
+  assert.equal(a.snapshot.destructiveCount, MANIFESTO_NOMES.length);
   assert.ok(a.chainCheck);
   const arq = path.join(BOOT, `mcp-admin-audit-${diaHoje()}.jsonl`);
   const startup = JSON.parse(fs.readFileSync(arq, "utf8").trim().split("\n")[0]);
   assert.equal(startup.tool, "__startup__");
   assert.equal(startup.executionStatus, "startup_snapshot");
-  assert.equal(startup.destructiveTools.length, 12);
+  assert.equal(startup.destructiveTools.length, MANIFESTO_NOMES.length);
   assert.deepEqual(startup.destructiveTools, [...CANONICAL_DESTRUCTIVE_TOOLS].sort());
   assert.equal(startup.catalogVersion, CATALOG_VERSION);
   assert.ok(startup.reason.startsWith("runtime_boot chain="));
@@ -336,4 +455,66 @@ test("transporte propaga identidade e impede destrutiva direta", () => {
   assert.ok(index.includes("callerUser: at.gh_login"));
   assert.ok(index.includes("oauthScope: scope"));
   assert.ok(index.includes("admin: true"));
+});
+
+
+// ─────────── cenarios de quarentena (laboratorio A/B/C da missao) ──────────
+// MOTIVO  > antes, qualquer divergencia bloqueava TODA destrutiva. Uma tool
+//           nova e desconhecida derrubava o conjunto inteiro, inclusive as
+//           aprovadas e sem relacao com o problema.
+// ONDE    > guardDestructive, via reconcileCatalog.
+// RESOLVE > estes tres cenarios travam o comportamento novo: quarentena
+//           pontual, sem falso verde e sem bloqueio coletivo.
+test("cenario A: tool de leitura nova nao afeta destrutiva aprovada", () => {
+  const base = makeRuntime().tools;
+  const comLeituraNova = [...base, {
+    name: "tool_de_leitura_nova",
+    annotations: { readOnlyHint: true, destructiveHint: false },
+  }];
+  const rec = reconcileCatalog(comLeituraNova, getCanonicalExpectation());
+  assert.equal(rec.ok, true, "tool de leitura nova nao pode gerar divergencia");
+  assert.deepEqual(rec.quarantined, []);
+  assert.equal(rec.totalRuntimeTools, base.length + 1);
+});
+
+test("cenario B: destrutiva desconhecida entra em quarentena sozinha", async () => {
+  const base = makeRuntime().tools;
+  const comIntrusa = [...base, {
+    name: "tool_destrutiva_intrusa",
+    annotations: { destructiveHint: true },
+  }];
+  const rec = reconcileCatalog(comIntrusa, getCanonicalExpectation());
+  assert.deepEqual(rec.quarantined, ["tool_destrutiva_intrusa"]);
+  assert.deepEqual(rec.missing, []);
+
+  // a intrusa e bloqueada...
+  const bloqueada = await guardDestructive({
+    toolName: "tool_destrutiva_intrusa", confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: comIntrusa, adminAuthorized: true,
+  });
+  assert.equal(bloqueada.allow, false);
+  assert.equal(bloqueada.status, "DESTRUTIVA_EM_QUARENTENA");
+
+  // ...e uma aprovada, na MESMA rodada, segue liberada
+  const aprovada = await guardDestructive({
+    toolName: CANONICAL_DESTRUCTIVE_TOOLS[0], confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: comIntrusa, adminAuthorized: true,
+  });
+  assert.equal(aprovada.allow, true,
+    "divergencia em OUTRA tool nao pode bloquear esta");
+});
+
+test("cenario C: aprovada ausente do runtime avisa, sem falso verde", async () => {
+  const alvo = CANONICAL_DESTRUCTIVE_TOOLS[0];
+  const semEla = makeRuntime().tools.filter((t) => t.name !== alvo);
+  const rec = reconcileCatalog(semEla, getCanonicalExpectation());
+  assert.deepEqual(rec.missing, [alvo]);
+  assert.equal(rec.ok, false, "sumico de aprovada nao pode passar como ok");
+
+  const r = await guardDestructive({
+    toolName: alvo, confirmAdmin: "CONFIRMO ADMIN",
+    runtimeTools: semEla, adminAuthorized: true,
+  });
+  assert.equal(r.allow, false);
+  assert.equal(r.status, "APROVADA_AUSENTE_NO_RUNTIME");
 });

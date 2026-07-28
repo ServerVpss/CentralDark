@@ -7,6 +7,12 @@ import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
 
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
+import { cognitivoTools } from "../cognitivo/cognitivo.js";
+import { eliteGatewayTools } from "../elite/elite-gateway.js";
+import { geminiTools } from "../gemini/gemini.js";
+import { integrationsTools } from "../integrations.js";
+import { painelTools } from "../painel/painel.js";
+import { piveteTools } from "../pivete/pivete-tools.js";
 import { aprendizadoTools } from "../aprendizado/aprendizado.js";
 import { conscienciaTools } from "../consciencia/consciencia.js";
 import { deployTools } from "../deploy/deploy.js";
@@ -53,6 +59,22 @@ const runtimeTools = [
     ...adminShellTools,
     ...adminVaultRwTools,
     ...adminGitTools,
+    // MOTIVO  > estes 6 grupos existem no catalogo mas nao entravam em
+    //           runtimeTools, entao 24 tools ficavam INALCANCAVEIS pelo
+    //           dispatcher mcp_admin_call, entre elas as integracoes.
+    // ONDE    > apps/modulos/mcp/src/tools/core/mcp-admin.js, runtimeTools.
+    // RESOLVE > incluidos aqui. NAO incluir mcpDiagnosticsTools nem
+    //           mcpPolicyTools: os dois importam mcpAdminTools de volta deste
+    //           arquivo e formam ciclo — tentativa anterior derrubou o
+    //           servico com 'Cannot access mcpAdminTools before
+    //           initialization'. Nao ha perda: as 4 tools desses grupos ja
+    //           sao expostas direto no catalogo.
+    ...cognitivoTools,
+    ...eliteGatewayTools,
+    ...geminiTools,
+    ...integrationsTools,
+    ...painelTools,
+    ...piveteTools,
 ];
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
 function safeToolInfo(tool) {
