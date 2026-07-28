@@ -652,6 +652,7 @@
     "hermes_provider_actual": "UNKNOWN",
     "hermes_model_actual": "UNKNOWN",
     "hermes_independent": "NAO",
+    "hermes_wrapper_regression_tests": "10 passed",
     "hermes_raw_stdout_sha256": "2218e60e1aaee5e0050c75b4cd085fe62802d717d7aa9d60635244d7c3bad8d1",
     "hermes_raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "false_green_blocked": true,
