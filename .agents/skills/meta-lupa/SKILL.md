@@ -283,6 +283,59 @@ Revisar a própria análise como se tivesse sido produzida por outro agente:
 
 Encerrar em ponto fixo quando uma nova passagem não alterar materialmente hipóteses, bloqueios, risco residual, próximo teste ou veredito. Registrar `PONTO_FIXO_ATINGIDO: sim | não`. Se não atingir, manter `CORRIGIR` ou `BLOQUEAR`; nunca forçar fechamento por contagem de rodadas.
 
+### 9.1 Cerco adversarial até ponto fixo
+
+Quando o modo QUENTE for usado para `CAÇA_AO_ERRO`, avaliação da própria MetaLupa ou disputa adversarial, a intenção não é proteger a reputação do método: é atacá-lo até esgotar as saídas conhecidas do espaço de testes atual.
+
+Papéis separados e obrigatórios:
+
+- **Atacante:** cria desafios difíceis sem acessar a MetaLupa, respostas do defensor, patches ou relatórios privados.
+- **Defensor/Executor:** usa somente a MetaLupa canônica, reproduz a falha e propõe correção mínima no mesmo artefato.
+- **Crítico/Fiscal:** tenta falsificar reprodução, causa-raiz, patch, teste, oráculo e risco residual sem editar o alvo.
+- **Síntese:** resolve contradições por evidência reproduzível; votação ou autoridade não substituem teste.
+- **Pivete:** mantém a autoridade final sobre aplicação, promoção, merge e encerramento.
+
+Ciclo obrigatório:
+
+```text
+congelar desafio e hash
+→ reproduzir
+→ procurar prova contrária
+→ confirmar ou rejeitar a falha
+→ propor correção mínima no canônico
+→ executar teste negativo, regressão e mutação
+→ atacar a correção
+→ repetir
+```
+
+Uma execução é `DIAGNOSTIC_ONLY` e não recebe pontuação oficial quando o atacante teve ou pode ter tido acesso ao conteúdo, caminho, contexto ou resposta da MetaLupa. Ocultar, renomear ou mover arquivos depois de o atacante iniciar não prova isolamento.
+
+Continuar o cerco enquanto qualquer rodada produzir falha nova, contradição, classe de ataque inédita, falso verde, autosselagem, evidência insuficiente ou risco residual material. Correção encontrada não encerra a arena: ela se torna o próximo alvo.
+
+Declarar `ADVERSARIAL_FIXED_POINT_REACHED` somente quando:
+
+1. todas as falhas anteriores foram reproduzidas ou rejeitadas com prova;
+2. toda correção candidata sobreviveu ao crítico, ao teste de mutação e à regressão;
+3. baseline, hashes, desafio e skill permaneceram íntegros;
+4. ocorreram três rodadas consecutivas sem informação verificável nova;
+5. o risco residual e as classes ainda não testadas foram registrados;
+6. o Pivete recebeu a evidência e decidiu encerrar.
+
+Três rodadas sem novidade significam ponto fixo adversarial no espaço observado, nunca perfeição absoluta ou impossibilidade de falha futura.
+
+Vereditos permitidos:
+
+```text
+METALUPA_BROKEN
+METALUPA_PATCH_REQUIRED
+PATCH_REJECTED
+PATCH_SURVIVED_ADVERSARIAL_REVIEW
+ADVERSARIAL_FIXED_POINT_REACHED
+BLOCKED_BY_MISSING_EVIDENCE
+```
+
+É proibido declarar `METALUPA_PERFECT`, `100_PERCENT_SECURE` ou equivalente. Nenhuma arena finita prova ausência universal de novas saídas.
+
 ### 10. Selecionar revisão proporcional ao ambiente
 
 - Em desenvolvimento sem clientes, automatizar teste, revisão, fallback determinístico, correção mínima e nova tentativa dentro da autorização vigente.
