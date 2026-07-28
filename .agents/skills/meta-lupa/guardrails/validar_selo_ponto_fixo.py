@@ -45,6 +45,10 @@ LEDGER_PADRAO = SKILL / "references" / "uso-ledger.jsonl"
 
 ACHIEVEMENT = "ponto_fixo_atingido"
 
+
+class LedgerInputError(ValueError):
+    """Falha de entrada que deve bloquear o guardrail, nunca virar verde."""
+
 # record_hash de FINAIS que ja estavam no ledger canonico quando este
 # guardrail nasceu. Divida conhecida, nao apagada.
 LEGADO_CONHECIDO = {
@@ -63,22 +67,24 @@ def _xp_do_ponto_fixo() -> int:
         assert spec and spec.loader
         spec.loader.exec_module(module)
         return int(module.XP_AWARDS[ACHIEVEMENT])
-    except Exception:
-        return 0
+    except Exception as exc:
+        raise LedgerInputError("nao foi possivel carregar o motor META LUPA") from exc
 
 
 def ler_ledger(caminho: Path) -> list[dict]:
     if not caminho.exists():
-        return []
+        raise LedgerInputError("ledger ausente: %s" % caminho)
     registros = []
-    for linha in caminho.read_text(encoding="utf-8").splitlines():
+    for numero, linha in enumerate(caminho.read_text(encoding="utf-8").splitlines(), 1):
         linha = linha.strip()
         if not linha:
             continue
         try:
             registros.append(json.loads(linha))
-        except json.JSONDecodeError:
-            continue
+        except json.JSONDecodeError as exc:
+            raise LedgerInputError(
+                "ledger invalido na linha %d: %s" % (numero, caminho)
+            ) from exc
     return registros
 
 
@@ -127,7 +133,19 @@ def main() -> int:
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
-    rel = auditar(ler_ledger(Path(args.ledger)))
+    try:
+        rel = auditar(ler_ledger(Path(args.ledger)))
+    except LedgerInputError as exc:
+        rel = {
+            "guardrail": "validar_selo_ponto_fixo",
+            "erro_entrada": str(exc),
+            "selo_ok": False,
+        }
+        if args.json:
+            print(json.dumps(rel, indent=2, ensure_ascii=False))
+        else:
+            print("SELO_OK=0 ERRO_ENTRADA=%s" % exc)
+        return 2
 
     if args.json:
         print(json.dumps(rel, indent=2, ensure_ascii=False))
