@@ -23,7 +23,7 @@
 import { writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
-const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+const githubCredential = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
 const REPO = process.env.GITHUB_REPOSITORY || "";
 const EXPECTED = process.env.BOT_EXPECTED_REPOSITORY || "";
 const EVENT = process.env.BOT_EVENT_NAME || "unknown";
@@ -31,7 +31,7 @@ const DRY_RUN = (process.env.DRY_RUN ?? "true") !== "false";
 const MERGED_PR = (process.env.BOT_MERGED_PR || "").trim();
 const SUPERSEDES = (process.env.BOT_SUPERSEDES || "").trim();
 
-if (!TOKEN) {
+if (!githubCredential) {
   console.error("[controller] faltando GITHUB_TOKEN — abortando");
   process.exit(1);
 }
@@ -49,7 +49,7 @@ async function gh(method, path, body) {
   const res = await fetch(`${API}${path}`, {
     method,
     headers: {
-      Authorization: `Bearer ${TOKEN}`,
+      Authorization: `Bearer ${githubCredential}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
       "User-Agent": "centraldark-controller/1.0",
