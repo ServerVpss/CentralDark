@@ -29,6 +29,25 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Gate obrigatório da META LUPA
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git fetch --no-tags origin main
+          base_ref="$(git rev-parse origin/main)"
+          base_sha="$(git rev-parse "$base_ref:.agents/skills/meta-lupa")"
+          head_sha="$(git rev-parse HEAD)"
+          trusted="$RUNNER_TEMP/meta_lupa_gate.py"
+          git show "$base_ref:.agents/skills/meta-lupa/scripts/meta_lupa.py" > "$trusted"
+          receipt="$RUNNER_TEMP/meta-lupa-gate.json"
+          python3 "$trusted" issue-gate-receipt --repo-root "$GITHUB_WORKSPACE" --repo ServerVpss/CentralDark \
+            --mission-id "${GITHUB_WORKFLOW}-${GITHUB_RUN_ID}" --workspace-head "$head_sha" --canonical-ref "$base_ref" \
+            --expected-canonical-sha "$base_sha" --output "$receipt"
+          python3 "$trusted" gate --repo-root "$GITHUB_WORKSPACE" --input "$receipt" \
+            --canonical-ref "$base_ref" --expected-canonical-sha "$base_sha" --expected-head-sha "$head_sha" --operation push
 
       - uses: actions/setup-node@v6
         with:

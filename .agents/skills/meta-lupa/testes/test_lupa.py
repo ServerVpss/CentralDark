@@ -6,9 +6,11 @@ CobRE os 25 casos obrigatórios do contrato de auto-registro.
 """
 import json
 import os
+import subprocess
 import sys
 import tempfile
 import uuid
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.meta_lupa import (  # noqa: E402
@@ -19,10 +21,11 @@ from scripts.meta_lupa import (  # noqa: E402
     calculate_evolution, evolution_fingerprint, level_from_xp,
     tier_for_level, xp_next,
     LedgerMutationDenied, append_record_atomic, guarded_destructive_operation,
-    ledger_integrity,
+    ledger_integrity, canonical_identity, _gate_digest,
 )
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(SKILL)))
 LEDGER = os.environ.get("LUPA_LEDGER_PATH", os.path.join(SKILL, "references", "uso-ledger.jsonl"))
 
 
@@ -113,6 +116,73 @@ def test_falsification_gate_detects_fake_green():
         return veredito
     resultado = gate("APROVAR", None)
     assert resultado == "BLOQUEAR"
+
+
+# ---- Gate obrigatório da META LUPA (casos A-H) -----------------------------
+def _valid_gate_receipt():
+    identity = canonical_identity(REPO_ROOT)
+    mission = "gate-tests"
+    head = identity["head_sha"]
+    rec = {
+        "META_LUPA_LOADED": "SIM",
+        "META_LUPA_CANONICAL_SHA": identity["tree_sha"],
+        "META_LUPA_RECEIPT_VALID": "SIM",
+        "META_LUPA_GATE": "PASS",
+        "repo": "ServerVpss/CentralDark",
+        "mission_id": mission,
+        "workspace_head": head,
+        "issued_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "canonical_skill_sha256": identity["skill_sha256"],
+    }
+    rec["META_LUPA_USAGE_ID"] = usage_id(1, rec["repo"], mission, identity["tree_sha"], head)
+    rec["receipt_sha256"] = _gate_digest(rec)
+    return rec
+
+
+def _run_gate(receipt, operation="operation", missing=False):
+    path = os.path.join(tempfile.gettempdir(), f"meta-lupa-gate-{uuid.uuid4().hex}.json")
+    if not missing:
+        with open(path, "w", encoding="utf-8", newline="\n") as handle:
+            json.dump(receipt, handle, ensure_ascii=False, sort_keys=True)
+    try:
+        command = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py"), "gate",
+                   "--repo-root", REPO_ROOT, "--input", path, "--operation", operation]
+        result = subprocess.run(command, capture_output=True, text=True, check=False)
+        return result.returncode, json.loads(result.stdout)
+    finally:
+        if os.path.exists(path):
+            os.unlink(path)
+
+
+def test_gate_cases_a_h_fail_closed_and_positive():
+    # A: nenhum carregamento; B: carregamento sem recibo completo.
+    code, result = _run_gate({}, "commit")
+    assert code != 0 and result["REASON"] == "META_LUPA_NOT_LOADED"
+    code, result = _run_gate({"META_LUPA_LOADED": "SIM"}, "push")
+    assert code != 0 and result["REASON"] == "META_LUPA_RECEIPT_MISSING"
+
+    # C: o recibo aponta para outra árvore; D: recibo antigo não pode ser reusado.
+    wrong_sha = _valid_gate_receipt()
+    wrong_sha["META_LUPA_CANONICAL_SHA"] = "0" * 40
+    code, result = _run_gate(wrong_sha, "pr")
+    assert code != 0 and result["REASON"] == "META_LUPA_SHA_MISMATCH"
+    stale = _valid_gate_receipt()
+    stale["issued_at_utc"] = (datetime.now(timezone.utc) - timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    stale["receipt_sha256"] = _gate_digest(stale)
+    code, result = _run_gate(stale, "merge")
+    assert code != 0 and result["REASON"] == "STALE_META_LUPA_RECEIPT"
+
+    # E: prova válida; F: commit/push/PR sem prova.
+    code, result = _run_gate(_valid_gate_receipt(), "operation")
+    assert code == 0 and result["STATUS"] == "ALLOWED" and result["META_LUPA_GATE"] == "PASS"
+    code, result = _run_gate(None, "commit", missing=True)
+    assert code != 0 and result["REASON"] == "META_LUPA_RECEIPT_MISSING"
+
+    # G/H: declarações verdes e dispatch/bot/fork sem prova são bloqueados.
+    code, result = _run_gate(None, "green", missing=True)
+    assert code != 0 and result["REASON"] == "BLOCKED_FALSE_GREEN"
+    code, result = _run_gate(None, "workflow-dispatch", missing=True)
+    assert code != 0 and result["STATUS"] == "BLOCKED"
 
 
 # ---- Auto-registro (casos 8-32 do contrato) ----

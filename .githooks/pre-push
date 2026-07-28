@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+set -eu
+
+ROOT="$(git rev-parse --show-toplevel)"
+RECEIPT="${META_LUPA_RECEIPT_PATH:-}"
+if [ -z "$RECEIPT" ]; then
+  echo "META_LUPA_RECEIPT_MISSING" >&2
+  exit 13
+fi
+python3 "$ROOT/.agents/skills/meta-lupa/scripts/meta_lupa.py" gate \
+  --repo-root "$ROOT" --input "$RECEIPT" --operation push

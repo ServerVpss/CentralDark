@@ -16,7 +16,9 @@ META_LUPA_BOOT_REQUIRED: SIM
 LUPA_USE_RECEIPT_REQUIRED: SIM
 SKILL_PATH: .agents/skills/meta-lupa/SKILL.md
 SKILL_REF: origin/main
-SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
+SKILL_COMMIT_SHA: runtime-validated-by-meta-lupa-gate
+SKILL_SHA_POLICY: derive META_LUPA_CANONICAL_SHA from the checked-out canonical tree
+HOOKS_POLICY: configure `git config core.hooksPath .githooks`; hooks fail closed without META_LUPA_RECEIPT_PATH
 ```
 
 Antes de qualquer ação neste repositório, a skill `meta-lupa` deve ser carregada e seu uso registrado (BEGIN+FINAL) no ledger canônico da skill. Sem BEGIN válido → `BOOT_BLOQUEADO`.
