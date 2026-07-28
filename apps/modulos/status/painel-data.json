@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-28T02:18:58.788Z",
-  "updatedAtBR": "27/07/2026, 23:18:58 BRT",
+  "updatedAt": "2026-07-28T02:20:05.784Z",
+  "updatedAtBR": "27/07/2026, 23:20:05 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "Merge pull request #421 from ServerVpss/chore/eliminar-duplicatas-consciencia-brain-20260727",
+    "lastCommit": "Merge pull request #410 from ServerVpss/fix/meta-lupa-recibo-xp-20260727",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-28T02:20:05.784Z",
+      "titulo": "Push na main · 061b6822e06c2bd81186f8dbaf982724f01fd8e0",
+      "detalhe": "Merge pull request #410 from ServerVpss/fix/meta-lupa-recibo-xp-20260727",
+      "area": "Repositório",
+      "sha": "061b682",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-28T02:18:58.788Z",
       "titulo": "Push na main · 4171ccb0c6fecf6b75bc32405e4d95ffa511042e",
       "detalhe": "Merge pull request #421 from ServerVpss/chore/eliminar-duplicatas-consciencia-brain-20260727",
@@ -986,14 +994,6 @@
       "detalhe": "aprendizado(#336): Update do Hermes faz git reset --hard e stasha os patches locais",
       "area": "Repositório",
       "sha": "9bf0a1e",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-19T16:53:54.944Z",
-      "titulo": "Push na main · eb45b38b1cdb7c975d2f7a8c63db1011d9cd14c0",
-      "detalhe": "fix(ci): isolar checkout do codex-validate no runner",
-      "area": "Repositório",
-      "sha": "eb45b38",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-28T02:20:05.784Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 061b6822e06c2bd81186f8dbaf982724f01fd8e0 (061b682)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-28T02:18:58.788Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4171ccb0c6fecf6b75bc32405e4d95ffa511042e (4171ccb)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-21T00:51:55.182Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 9bf0a1e836d3b8adcec264436d379f53c7d3a4d5 (9bf0a1e)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-19T16:53:54.944Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · eb45b38b1cdb7c975d2f7a8c63db1011d9cd14c0 (eb45b38)",
       "area": "Repositório",
       "status": "sucesso"
     }
