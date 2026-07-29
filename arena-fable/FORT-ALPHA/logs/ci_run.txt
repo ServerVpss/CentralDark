@@ -1,0 +1,28 @@
+$ python -m unittest discover -s tests -p 'test_*.py' -v
+test_known_even_splits (test_allocate.TestAllocate.test_known_even_splits) ... ok
+test_matches_reference_on_random_inputs (test_allocate.TestAllocate.test_matches_reference_on_random_inputs) ... ok
+test_rejects_bad_input (test_allocate.TestAllocate.test_rejects_bad_input) ... ok
+test_sum_is_preserved (test_allocate.TestAllocate.test_sum_is_preserved) ... ok
+test_admin_can_release_others_settlement (test_authz.TestAuthz.test_admin_can_release_others_settlement) ... ok
+test_empty_roles_denied (test_authz.TestAuthz.test_empty_roles_denied) ... ok
+test_four_eyes_operator_cannot_release_own (test_authz.TestAuthz.test_four_eyes_operator_cannot_release_own) ... ok
+test_no_role_is_denied (test_authz.TestAuthz.test_no_role_is_denied) ... ok
+test_operator_can_release_others_settlement (test_authz.TestAuthz.test_operator_can_release_others_settlement) ... ok
+test_known_values (test_fees.TestFees.test_known_values) ... ok
+test_net_plus_fee_equals_amount (test_fees.TestFees.test_net_plus_fee_equals_amount) ... ok
+test_rejects_bad_input (test_fees.TestFees.test_rejects_bad_input) ... ok
+test_expiry_at_far_edge (test_idempotency.TestIdempotency.test_expiry_at_far_edge) ... ok
+test_hit_within_window (test_idempotency.TestIdempotency.test_hit_within_window) ... ok
+test_miss_when_absent (test_idempotency.TestIdempotency.test_miss_when_absent) ... ok
+test_rejects_bad_ttl (test_idempotency.TestIdempotency.test_rejects_bad_ttl) ... ok
+test_reput_refreshes_window (test_idempotency.TestIdempotency.test_reput_refreshes_window) ... ok
+test_capacity_cap (test_ratelimit.TestRateLimit.test_capacity_cap) ... ok
+test_clock_regression_does_not_drain (test_ratelimit.TestRateLimit.test_clock_regression_does_not_drain) ... ok
+test_fractional_tokens_are_carried (test_ratelimit.TestRateLimit.test_fractional_tokens_are_carried) ... ok
+test_initial_burst_up_to_capacity (test_ratelimit.TestRateLimit.test_initial_burst_up_to_capacity) ... ok
+test_refill_over_time (test_ratelimit.TestRateLimit.test_refill_over_time) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.007s
+
+OK
