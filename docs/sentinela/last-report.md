@@ -1,23 +1,23 @@
-# Sentinela — 2026-07-29T14:14:31.779Z
+# Sentinela — 2026-07-29T19:20:45.743Z
 
 | Métrica | Valor |
 |---|---|
 | Endpoints checados | 6 |
 | Endpoints fora | 1 |
-| Workflows vermelhos 24h | 15 |
-| Divergências detectadas | 16 |
-| Issues novas | 9 |
-| Issues já abertas (dedupe) | 7 |
+| Workflows vermelhos 24h | 12 |
+| Divergências detectadas | 13 |
+| Issues novas | 8 |
+| Issues já abertas (dedupe) | 5 |
 | Dry-run? | não |
 
 ## Endpoints
 
-- 🟢 **MCP health** — `200` em 375ms · CORS=`*`
-- 🟢 **MCP status** — `200` em 286ms · CORS=`*`
-- 🟢 **MCP tools** — `200` em 144ms · CORS=`*`
-- 🔴 **Install status** — `503` em 129ms
-- 🟢 **Painel** — `200` em 145ms · CORS=`*`
-- 🟢 **API** — `200` em 140ms · CORS=`*`
+- 🟢 **MCP health** — `200` em 548ms · CORS=`*`
+- 🟢 **MCP status** — `200` em 390ms · CORS=`*`
+- 🟢 **MCP tools** — `200` em 208ms · CORS=`*`
+- 🔴 **Install status** — `503` em 198ms
+- 🟢 **Painel** — `200` em 255ms · CORS=`*`
+- 🟢 **API** — `200` em 241ms · CORS=`*`
 
 ## Divergências
 
@@ -34,6 +34,3 @@
 - **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
 - **[p2]** Workflows → Workflow vermelho: PR auto-review (Codex + checklist) (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: GitHub Bot Controller (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: codex-validate (bot: `codex`)
-- **[p2]** Workflows → Workflow vermelho: lupa-conformance (bot: `codex`)
