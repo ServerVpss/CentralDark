@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-28T09:30:12.066Z
+# 🧠 Notion Sync — 2026-07-30T09:15:11.230Z
 
-- **Commit fonte:** `699c98467e5eb2345c792241624de233ffe21850`
+- **Commit fonte:** `2f114a94aef72c5193cdc0652b83af10e7eb5eb6`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 51 atualizadas · ❌ 461 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 51 atualizadas · ❌ 462 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 7 | 0 | 7 | 0 | 0 |
-| estrutura | 461 | 0 | 0 | 0 | 461 |
+| estrutura | 462 | 0 | 0 | 0 | 462 |
 
 ## Operações
 
@@ -383,6 +383,7 @@
 | estrutura | erro | docs/CONSCIENCIA/INSTALADOR/backup/README.md |
 | estrutura | erro | docs/CONSCIENCIA/INVENTARIO-PM2-VPS.md |
 | estrutura | erro | docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md |
+| estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/2026-07-30-VIVER-EM-PAZ.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/AUTO-EVOLUCAO-MENTAL-PIVETE.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
 | estrutura | erro | docs/CONSCIENCIA/LEMBRANCAS/README.md |
