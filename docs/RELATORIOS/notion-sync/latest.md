@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-30T16:20:24.797Z
+# 🧠 Notion Sync — 2026-07-30T17:21:44.242Z
 
-- **Commit fonte:** `9b63e3bc50cfc1ef31d164875e23fb62b1bbe1d7`
+- **Commit fonte:** `e804fea58134bace70988d75d821178902a01507`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 51 atualizadas · ❌ 462 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 51 atualizadas · ❌ 330 erros
 
 ## Por base
 
@@ -16,7 +16,7 @@
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
 | aprendizados | 7 | 0 | 7 | 0 | 0 |
-| estrutura | 462 | 0 | 0 | 0 | 462 |
+| estrutura | 330 | 0 | 0 | 0 | 330 |
 
 ## Operações
 
@@ -206,142 +206,10 @@
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
 | estrutura | erro | docs/CONSCIENCIA/ARTEFATOS/centraldark-prompt-universal.md |
 | estrutura | erro | docs/CONSCIENCIA/BOT_COMMANDS.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/00 - Mapa do Sistema/00-POSTURA-PIVETE.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/00 - Mapa do Sistema/INDEX.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/00 - Mapa do Sistema/MAPA-DOS-BOTS.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/00 - Mapa do Sistema/PROTOCOLO-INICIALIZACAO.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/00-MAPA.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/01-PENDENCIAS.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/02-ARQUITETURA.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/00-AGENTS-INDEX.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/00-PROMPT-MASTER-SKILLS.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/00-TEMPLATE-SKILL.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/ARCHITECTURE-REVIEWER.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/CODE-INVESTIGATOR.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/DAILY-REVIEWER.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/DECISION-RECORDER.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/GRAPH-INVESTIGATOR.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/ISSUE-ANALYZER.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/MEMORY-REGISTRAR.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/PROMPT-ENGINEER.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/PROMPT-MASTER-CENTRALDARK.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/SEMANTIC-LINKER.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/AGENTS-LIBRARY/SWARM-INVESTIGADOR-GRAFO.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/DIAGRAMAS-CENTRALDARK.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/GUIA-PROMPTS.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/PLUGINS-OBSIDIAN-RECOMENDADOS.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/05 - Documentacao/TUTORIAL-OBSIDIAN.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/06 - Decisoes/README.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/06 - Devedores & Contatos/DEVEDORES.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/06 - Devedores & Contatos/README.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/06-DECISOES.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/07 - Reuniões & Notas/README.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/08 - Aprendizados & Memórias/README.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/09-IDEIAS-VISUAIS.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/BRAIN.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/INDEX.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/MOC-CentralDark-HubBot.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/MOC-GitHub.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/MOC-MCP.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/MOC-PM2.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/MOC-Skills.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/PLANO.md |
-| estrutura | erro | docs/CONSCIENCIA/BRAIN/README.md |
 | estrutura | erro | docs/CONSCIENCIA/CODEX-INTEGRADO.md |
 | estrutura | erro | docs/CONSCIENCIA/CODEX-REVISAO-PRS.md |
 | estrutura | erro | docs/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
 | estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/01-IDENTIDADE.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/01-REGRAS-DA-EQUIPE-IA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/02-PERMISSOES.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/03-FLUXO-DEPLOY.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/04-MCP-E-CONECTORES/ferramentas-cognitivas-e-comandos.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/06-MCP-CENTRALDARK.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/08-HISTORICO-DECISOES.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/09-ESTADO-ATUAL.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/10-FALLBACK-LOVABLE.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/11-MULTI-IA-FLUXO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/11-SKIL-SH.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/12-GUIA-PIVETE.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/12-PASTA-OFICIAL-BOT.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/13-COMANDO-UNICO-VPS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/20-COLABORACAO-MULTI-IA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/21-METODO-DIAGNOSTICO-FUNIL.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/21-PADRAO-APRESENTACAO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/22-METODO-DEPLOY-VPS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/22-PADRAO-STATUS-VISUAL.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/23-MISSAO-REPARO-PM2-SEM-REESTRUTURAR-APPS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/APRENDIZADO-99-bot-server-consolidacao.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/APRENDIZADOS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/ARTEFATOS/README.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/CODEX-INTEGRADO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/CODEX-REVISAO-PRS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/CONECTOR-LIBERDADE-SEGURA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/CONSCIENCIA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/CUSTOM-GPT-SETUP.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/00-COMECE-AQUI.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/01-O-QUE-E-DARKAI.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/02-COMO-FUNCIONA-POR-DENTRO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/03-CATALOGO-DE-MODELOS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/04-USANDO-NO-TERMINAL-LOCAL.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/05-USANDO-NA-VPS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/06-ENSINANDO-OUTRAS-IAS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/07-EXEMPLOS-PRATICOS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/08-TECNICAS-QUE-USO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/09-ARQUITETURA-E-ORQUESTRACAO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/10-TROUBLESHOOTING.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/COMO-ENSINAR-OUTRA-IA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/COMO-USAR.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/INSTALAR-NA-VPS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/PROMPT-MEGA-ESTABILIZAR.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/PROMPT-UNIVERSAL.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/QUICKSTART.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/DARKAI/README.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/GITHUB-PR-OBSERVAR-CODEX.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/GRUPO-EVOLUCAO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/GUARDIAO-DA-CONSCIENCIA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/LEMBRANCAS/README.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/LEMBRANCAS/lembrancas-202606.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/MAPA-DO-CEREBRO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/MAPA-DOS-BOTS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/MODO-SEGREDO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/NOTION-MAPA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/PLANO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/PROMPT-MESTRE-MULTI-IA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/README.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-MODO-PROPOR.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/REGRA-OFICIAL-GUARDIAO-V2-ANALISTA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/REGRA-OFICIAL-HIERARQUIA-MEMORIA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/REPOSITORIO-OFICIAL.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/RETOMADA-Arsenal-TelePainel.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/RETOMADA-Issues-Agent.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/SCRIPTING-STANDARDS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/TESTE-CODEX-TRIGGER-HANDLERS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/WEBHOOK-DEPLOY-SEGURO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/relatorios/00_RESUMO_EXECUTIVO.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/relatorios/01_MAPEAMENTO_ESTRUTURA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/relatorios/02_LIXO_PARA_DELETAR.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/relatorios/03_LIXO_PARA_ARQUIVAR.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/relatorios/04_DUPLICATAS_ENCONTRADAS.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/relatorios/05_PROPOSTA_ESTRUTURA_NOVA.md |
-| estrutura | erro | docs/CONSCIENCIA/CONSCIENCIA/relatorios/06_ESTATISTICAS.md |
 | estrutura | erro | docs/CONSCIENCIA/CONSOLIDACAO-CENTRALDARK-V2.md |
 | estrutura | erro | docs/CONSCIENCIA/CONSOLIDACAO-CENTRALDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/CONTINUIDADE/proxima-ia.md |
