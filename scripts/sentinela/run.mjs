@@ -71,13 +71,23 @@ function workflowFailures() {
       'run', 'list', '-R', REPO,
       '--status', 'failure',
       '--json', 'name,databaseId,conclusion,headBranch,createdAt,url',
-      '--limit', '20',
+      '--limit', '50',
     ], { encoding: 'utf8', timeout: 30000 });
-    const rows = JSON.parse(raw);
     const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    const rows = JSON.parse(raw).filter((row) => Date.parse(row.createdAt || 0) >= cutoff);
+    const latestByWorkflowBranch = new Map();
+    for (const row of rows) {
+      const key = `${row.name}|${row.headBranch || 'sem-branch'}`;
+      const current = latestByWorkflowBranch.get(key);
+      if (!current || Date.parse(row.createdAt || 0) > Date.parse(current.createdAt || 0)) {
+        latestByWorkflowBranch.set(key, row);
+      }
+    }
     return {
       ok: true,
-      rows: rows.filter((row) => Date.parse(row.createdAt || 0) >= cutoff),
+      rows: [...latestByWorkflowBranch.values()].sort((a, b) =>
+        `${a.name}|${a.headBranch}`.localeCompare(`${b.name}|${b.headBranch}`)
+      ),
       error: '',
     };
   } catch (error) {
@@ -137,10 +147,11 @@ if (!workflows.ok) {
   findings.push(finding('SENT-GITHUB-ACTIONS-UNPROVEN', 'p1', 'workflows', 'Consulta de workflows falhou', workflows.error));
 } else {
   for (const row of workflows.rows) {
+    const identity = `${row.name}|${row.headBranch || 'sem-branch'}`;
     findings.push(finding(
-      `SENT-WORKFLOW-${row.databaseId}`,
+      `SENT-WORKFLOW-${hash(identity).slice(0, 10)}`,
       'p2', 'workflows', `Workflow vermelho: ${row.name}`,
-      `run_id=${row.databaseId};branch=${row.headBranch};url=${row.url || ''}`,
+      `latest_run_id=${row.databaseId};branch=${row.headBranch};url=${row.url || ''}`,
     ));
   }
 }
