@@ -128,6 +128,15 @@
     }
   ],
   "consolidated_areas": [
+    { "path": "LEIA-ME-IA.md", "since": "2026-07-30", "reason": "Porta universal canônica" },
+    { "path": "AGENTS.md", "since": "2026-07-30", "reason": "Contrato geral dos agentes" },
+    { "path": "CLAUDE.md", "since": "2026-07-30", "reason": "Adaptador operacional Claude" },
+    { "path": "README.md", "since": "2026-07-30", "reason": "Entrada humana do projeto" },
+    { "path": "CODEX.md", "since": "2026-07-30", "reason": "Adaptador operacional Codex" },
+    { "path": "GEMINI.md", "since": "2026-07-30", "reason": "Adaptador operacional Gemini" },
+    { "path": ".windsurfrules", "since": "2026-07-30", "reason": "Adaptador operacional Windsurf" },
+    { "path": ".github/copilot-instructions.md", "since": "2026-07-30", "reason": "Adaptador operacional Copilot" },
+    { "path": ".cursor/rules/", "since": "2026-07-30", "reason": "Adaptadores operacionais Cursor" },
     { "path": "apps/bot-telegram/", "since": "2026-06-28", "reason": "Bot central restaurado e testado" },
     { "path": "apps/modulos/status/", "since": "2026-07-02", "reason": "Página oficial de status consolidada" },
     { "path": "apps/modulos/Bolt/", "since": "2026-07-02", "reason": "Construtor oficial" },
