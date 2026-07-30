@@ -1,6 +1,5 @@
 # DESATIVADO — reativar quando voltar a mexer com WhatsApp/WuzAPI.
-# Schedule e dispatch removidos pra parar de gritar erro no repositório.
-# Ver pendência em docs/PENDENCIAS.md.
+# Schedule removido para não gerar ruído enquanto o serviço está fora de escopo.
 name: wuzapi-sessions-monitor
 
 on:
@@ -8,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   issues: write
 
 concurrency:
@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Baixar repo
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Preparar chave SSH
         id: ssh
@@ -29,13 +31,18 @@ jobs:
           VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
         run: |
           if [ -z "$VPS_SSH_KEY_LOVABLE" ]; then
-            echo "⚠️ Secret VPS_SSH_KEY_LOVABLE ausente — pulando sem falhar."
-            echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
+            echo "❌ Secret VPS_SSH_KEY_LOVABLE ausente."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
           KEY=/tmp/vps_lovable_key
           printf '%s\n' "$VPS_SSH_KEY_LOVABLE" > "$KEY"
           chmod 600 "$KEY"
-          ssh-keygen -y -f "$KEY" >/dev/null 2>&1 || { echo "❌ chave inválida"; echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0; }
+          if ! ssh-keygen -y -f "$KEY" >/dev/null 2>&1; then
+            echo "❌ chave inválida"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           echo "skip=false" >> "$GITHUB_OUTPUT"
           echo "key=$KEY" >> "$GITHUB_OUTPUT"
 
@@ -52,24 +59,37 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: node scripts/bots/wuzapi-sessions-monitor.mjs
 
-
-      - name: Commitar JSON se mudou
+      - name: Commitar JSON e publicar PR se mudou
         if: steps.ssh.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           FILE=CentralDark/apps/projeto-dashboard/wuzapi-sessions.json
           if git diff --quiet -- "$FILE"; then
-            echo "sem mudanças"; exit 0
+            echo "sem mudanças"
+            exit 0
           fi
           git config user.name "wuzapi-sessions-bot"
           git config user.email "bot@centralldark.local"
           git add "$FILE"
           git commit -m "chore(painel): snapshot wuzapi-sessions [skip ci]"
           for i in 1 2 3; do
-            git pull --rebase origin "${GITHUB_REF_NAME}" || true
-            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            if bash scripts/evolucao/publicar-pr-automatico.sh; then
+              exit 0
+            fi
             sleep 3
           done
-          echo "⚠️ push falhou (não bloqueia o monitor)"
+          echo "❌ publicação em PR falhou após 3 tentativas"
+          exit 1
+
+      - name: Gate da chave
+        if: always()
+        run: |
+          if [ "${{ steps.ssh.outputs.skip }}" = "true" ]; then
+            echo 'BLOCKED: chave SSH ausente ou inválida.'
+            exit 1
+          fi
 
       - name: Limpar chave
         if: always()
