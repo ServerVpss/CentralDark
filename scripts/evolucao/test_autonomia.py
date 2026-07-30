@@ -24,6 +24,8 @@ audit = load("audit_autonomia", "auditar-autonomia.py")
 autofix = load("autofix_autonomia", "aplicar-autofix.py")
 review = load("review_autonomia", "revisar-com-ia.py")
 score = load("score_autonomia", "gerar-placar.py")
+legacy_xp = load("legacy_xp_correction", "corrigir-xp-legado.py")
+register_xp = load("register_xp_ci", "registrar-xp-ci.py")
 
 
 def test_workflow_exige_componentes_e_bloqueia_push_direto():
@@ -146,6 +148,60 @@ def test_auto_fix_meta_lupa_exige_as_duas_condicoes():
             autofix.ROOT = old_root
         assert "args.autolupa == \"sim\"" in path.read_text(encoding="utf-8")
         assert len(fixes) == 1
+
+
+def test_divida_xp_legada_e_detectada_e_some_apos_append():
+    invalid_rows = [
+        {
+            "event": "FINAL",
+            "record_hash": record_hash,
+            "autolupa_executed": False,
+            "point_fixed_evidential": True,
+            "achievements": ["ponto_fixo_atingido"],
+        }
+        for record_hash in sorted(audit.LEGACY_XP_TARGET_HASHES)
+    ]
+    with tempfile.TemporaryDirectory() as tmp:
+        ledger = Path(tmp) / "ledger.jsonl"
+        ledger.write_text("".join(json.dumps(row) + "\n" for row in invalid_rows), encoding="utf-8")
+        findings = []
+        audit.legacy_xp_findings(findings, ledger)
+        assert [item.id for item in findings] == ["CD-AUTO-LUPA-XP-LEGACY"]
+
+        correction = {
+            "event": "FINAL",
+            "mission_id": audit.LEGACY_XP_CORRECTION_MISSION,
+            "xp_gained": -50,
+            "penalties": ["evidencia_inventada"],
+        }
+        with ledger.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(correction) + "\n")
+        findings = []
+        audit.legacy_xp_findings(findings, ledger)
+        assert findings == []
+
+
+def test_correcao_xp_legado_e_idempotente_e_sem_recompensa():
+    rows = [
+        {
+            "event": "FINAL",
+            "record_hash": record_hash,
+            "autolupa_executed": False,
+            "point_fixed_evidential": True,
+            "achievements": ["ponto_fixo_atingido"],
+        }
+        for record_hash in sorted(legacy_xp.TARGET_HASHES)
+    ]
+    assert legacy_xp.invalid_targets(rows) == legacy_xp.TARGET_HASHES
+    assert legacy_xp.correction_exists(rows) is False
+    rows.append({
+        "event": "FINAL",
+        "mission_id": legacy_xp.MISSION,
+        "xp_gained": -50,
+        "penalties": ["evidencia_inventada"],
+    })
+    assert legacy_xp.correction_exists(rows) is True
+    assert legacy_xp.FINDING_ID in register_xp.NON_REWARDING_FIX_IDS
 
 
 def test_fallback_da_revisao_declara_modo_script():
