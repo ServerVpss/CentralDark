@@ -84,6 +84,10 @@ def scan(names: list[str], patch: str) -> dict[str, str]:
     }
 
 
+def _as_added_patch(path: Path) -> str:
+    return "\n".join(f"+{line}" for line in path.read_text(encoding="utf-8").splitlines())
+
+
 def self_test() -> None:
     safe_patch = "\n".join((
         "+const BOT_TOKEN = process.env.BOT_TOKEN_CLAUDE || '';",
@@ -93,11 +97,18 @@ def self_test() -> None:
     assert scan([], safe_patch)["secret_suspect"] == "false"
 
     telegram = "123456789:" + ("A" * 35)
-    assert scan([], f"+const BOT_TOKEN = '{telegram}';")["secret_suspect"] == "true"
-    assert scan([], "+token = ghp_abcdefghijklmnopqrstuvwxyz123456")["secret_suspect"] == "true"
-    assert scan([], "+password = '0123456789abcdefghijklmnop'")["secret_suspect"] == "true"
+    github_token = "gh" + "p_" + ("a" * 30)
+    password_value = "0123456789" + ("a" * 16)
+    assert scan([], "+const BOT_TOKEN = '" + telegram + "';")["secret_suspect"] == "true"
+    assert scan([], "+token = " + github_token)["secret_suspect"] == "true"
+    assert scan([], "+password = '" + password_value + "'")["secret_suspect"] == "true"
     assert scan(["secrets/agent.env"], "+SAFE=value")["secret_suspect"] == "true"
-    print("PR_SECRET_SCAN_SELF_TEST_OK cases=5")
+
+    repo_root = Path(__file__).resolve().parents[2]
+    assert scan(["scripts/lupa/pr_secret_scan.py"], _as_added_patch(Path(__file__)))["secret_suspect"] == "false"
+    workflow = repo_root / ".github/workflows/pr-auto-review.yml"
+    assert scan([".github/workflows/pr-auto-review.yml"], _as_added_patch(workflow))["secret_suspect"] == "false"
+    print("PR_SECRET_SCAN_SELF_TEST_OK cases=7")
 
 
 def main() -> int:
