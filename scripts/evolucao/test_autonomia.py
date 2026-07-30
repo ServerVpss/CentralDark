@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -42,6 +43,46 @@ def test_workflow_exige_componentes_e_bloqueia_push_direto():
         assert not any("SCHEMA" in item.id for item in findings)
 
 
+def test_auto_fix_workflow_troca_push_por_branch_e_pr():
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        workflows = root / ".github/workflows"
+        workflows.mkdir(parents=True)
+        workflow = workflows / "writer.yml"
+        workflow.write_text(
+            "name: writer\non:\n  workflow_dispatch:\npermissions:\n  contents: write\njobs:\n  x:\n    runs-on: ubuntu-latest\n    steps:\n      - run: git push || true\n",
+            encoding="utf-8",
+        )
+        old_autofix_root = autofix.ROOT
+        old_audit_root, old_audit_workflows = audit.ROOT, audit.WORKFLOWS
+        try:
+            autofix.ROOT = root
+            fixes = []
+            autofix.convert_workflow_push_to_pr(workflow, fixes)
+            audit.ROOT, audit.WORKFLOWS = root, workflows
+            findings = []
+            audit.workflow_findings(findings)
+        finally:
+            autofix.ROOT = old_autofix_root
+            audit.ROOT, audit.WORKFLOWS = old_audit_root, old_audit_workflows
+        text = workflow.read_text(encoding="utf-8")
+        assert "git push" not in text
+        assert "publicar-pr-automatico.sh" in text
+        assert "pull-requests: write" in text
+        assert fixes and fixes[0]["id"].startswith("CD-AUTO-WF-DIRECT-")
+        assert not any("WF-DIRECT" in item.id for item in findings)
+
+
+def test_publicador_bash_tem_sintaxe_valida():
+    result = subprocess.run(
+        ["bash", "-n", str(HERE / "publicar-pr-automatico.sh")],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+
+
 def test_evolucao_bloqueia_segredo_e_aprendizado_simulado():
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -76,7 +117,7 @@ def test_auto_fix_remove_token_sem_expor_valor():
         try:
             autofix.ROOT = root
             fixes = []
-            autofix.remove_telegram_literal(path, fixes)
+            autofix.remove_telegram_literal(path, fixes, "CD-AUTO-EVOL-SECRET")
         finally:
             autofix.ROOT = old_root
         text = path.read_text(encoding="utf-8")
