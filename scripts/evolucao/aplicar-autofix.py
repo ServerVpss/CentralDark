@@ -83,6 +83,18 @@ def main() -> int:
     ):
         replace_exact(candidate, gate_old, gate_new, "CD-AUTO-LUPA-AUTOLUPA", fixes)
 
+    auditor = ROOT / "scripts/evolucao/auditar-autonomia.py"
+    auditor_import_old = (
+        "        module = importlib.util.module_from_spec(spec)\n"
+        "        spec.loader.exec_module(module)"
+    )
+    auditor_import_new = (
+        "        module = importlib.util.module_from_spec(spec)\n"
+        "        sys.modules[spec.name] = module\n"
+        "        spec.loader.exec_module(module)"
+    )
+    replace_exact(auditor, auditor_import_old, auditor_import_new, "CD-AUTO-LUPA-EXEC", fixes)
+
     remove_telegram_literal(ROOT / "apps/bot-telegram/evolucao-ias.cjs", fixes)
     ensure_response_rule_link(ROOT / "LEIA-ME-IA.md", fixes)
 
