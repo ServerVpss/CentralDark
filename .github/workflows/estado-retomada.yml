@@ -1,7 +1,7 @@
 name: estado-retomada
 
-# Regenera docs/ESTADO-DA-RETOMADA.md a partir de evidencia real do checkout.
-# Ninguem edita o arquivo a mao; quem quiser mudar o que e medido muda o script.
+# Regenera docs/ESTADO-DA-RETOMADA.md a partir de evidência real do checkout.
+# Ninguém edita o arquivo à mão; quem quiser mudar o que é medido muda o script.
 
 on:
   schedule:
@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: estado-retomada
@@ -28,6 +29,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -36,15 +39,17 @@ jobs:
       - name: Gerar estado
         run: node scripts/estado/gerar-estado-retomada.mjs
 
-      - name: Commitar apenas se houver diferenca real
+      - name: Commitar e publicar PR apenas se houver diferença real
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           if git diff --quiet -- docs/ESTADO-DA-RETOMADA.md; then
-            echo "ESTADO_INALTERADO=1 - nada a commitar"
+            echo "ESTADO_INALTERADO=1 - nada a publicar"
             exit 0
           fi
-          git config user.name  "github-actions[bot]"
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/ESTADO-DA-RETOMADA.md
           git commit -m "chore(estado): regenerar ESTADO DA RETOMADA [skip ci]"
-          git push
+          bash scripts/evolucao/publicar-pr-automatico.sh
