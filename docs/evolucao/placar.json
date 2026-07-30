@@ -1,0 +1,14 @@
+{
+  "agents": [
+    {
+      "agent": "script",
+      "level": 1,
+      "tier": "OPACA",
+      "validated_missions": 1,
+      "xp": 35,
+      "xp_to_next_level": 65
+    }
+  ],
+  "schema": 1,
+  "source": ".agents/skills/meta-lupa/references/uso-ledger.jsonl"
+}
