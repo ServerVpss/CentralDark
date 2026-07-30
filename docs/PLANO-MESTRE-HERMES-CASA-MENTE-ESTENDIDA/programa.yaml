@@ -7,10 +7,10 @@ program:
   parent_plan: docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md
   operational_contract: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
   opened_at: 2026-07-30T07:55:00-03:00
-  status: PLANNING
+  status: PLANNING_PR_OPEN
   phase: F0_MAPEAMENTO
   branch: plan/hermes-casa-mente-estendida-20260730
-  pr: null
+  pr: 554
   writer:
     role: COORDINATOR
     agent: SOL_CHATGPT_GITHUB
