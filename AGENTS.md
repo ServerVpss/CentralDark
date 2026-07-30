@@ -16,6 +16,30 @@ SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
 
 Antes de alterar qualquer arquivo, carregar a skill `meta-lupa` e registrar o uso (BEGIN+FINAL) no ledger da skill. Sem BEGIN → `BOOT_BLOQUEADO`.
 
+## Boot universal de qualquer IA
+
+Este arquivo vale para qualquer IA, agente, plugin, hub ou modelo presente ou futuro.
+O nome comercial do modelo não concede papel, autoridade ou permissão especial.
+
+Antes de responder ou agir:
+
+1. Ler `LEIA-ME-IA.md` integralmente.
+2. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
+3. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
+4. Confirmar a fonte da verdade e o estado atual por ferramenta.
+5. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+
+Regras automáticas:
+
+- leitores podem investigar em paralelo;
+- existe somente um escritor por escopo;
+- mensagem atrasada não reinicia missão;
+- estado novo comprovado vence contexto antigo;
+- agentes enviam deltas curtos, não repetem o histórico inteiro;
+- nenhum executor aprova a si mesmo;
+- troca de escritor exige handoff explícito;
+- Pivete permanece autoridade final.
+
 ## Doutrina
 
 ```txt
