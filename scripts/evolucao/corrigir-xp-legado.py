@@ -81,6 +81,15 @@ def git(*args: str) -> str:
     return proc.stdout.strip()
 
 
+def workspace_branch() -> str:
+    for key in ("GITHUB_HEAD_REF", "GITHUB_REF_NAME"):
+        value = os.environ.get(key, "").strip()
+        if value:
+            return value
+    value = git("rev-parse", "--abbrev-ref", "HEAD")
+    return "detached-head" if value == "HEAD" else value
+
+
 def run(command: list[str]) -> str:
     proc = subprocess.run(
         command,
@@ -123,7 +132,7 @@ def main() -> int:
         return 2
 
     head = git("rev-parse", "HEAD")
-    branch = git("branch", "--show-current")
+    branch = workspace_branch()
     skill_blob = git("rev-parse", f"HEAD:{SKILL}")
     run_url = os.environ.get("RUN_URL", "https://github.com/ServerVpss/CentralDark/pull/499")
 
