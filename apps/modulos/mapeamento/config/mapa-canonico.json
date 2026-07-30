@@ -161,7 +161,7 @@
     { "path": "apps/modulos/artifacts-builder/", "since": "2026-07-05", "reason": "Builder consolidado" },
     { "path": "apps/modulos/proxy/", "since": "2026-07-05", "reason": "Proxy de IA consolidado" },
     { "path": "apps/modulos/lovable-proxy/", "since": "2026-07-05", "reason": "Proxy Lovable consolidado" },
-    { "path": "apps/modulos/telepainel/", "since": "2026-07-05", "reason": "TelePainel consolidado" },
+    { "path": "src/apps/modulos/telepainel/", "since": "2026-07-05", "reason": "TelePainel consolidado (caminho real; a casca apps/modulos/telepainel era gitlink orfao)" },
     { "path": "apps/modulos/hub/", "since": "2026-07-05", "reason": "HUB consolidado" },
     { "path": "apps/modulos/clone-deck/", "since": "2026-07-05", "reason": "Clone-deck consolidado" },
     { "path": "apps/modulos/pivete-sync/", "since": "2026-07-05", "reason": "Sincronizador consolidado" },

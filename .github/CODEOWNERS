@@ -39,7 +39,7 @@
 /apps/modulos/artifacts-builder/**      @ServerVpss
 /apps/modulos/proxy/**                  @ServerVpss
 /apps/modulos/lovable-proxy/**          @ServerVpss
-/apps/modulos/telepainel/**             @ServerVpss
+/src/apps/modulos/telepainel/**         @ServerVpss
 /apps/modulos/hub/**                    @ServerVpss
 /apps/modulos/clone-deck/**             @ServerVpss
 /apps/modulos/pivete-sync/**            @ServerVpss
