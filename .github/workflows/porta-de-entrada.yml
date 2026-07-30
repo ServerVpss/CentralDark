@@ -37,6 +37,9 @@ jobs:
       - name: Testar falsificadores do mapa global
         run: node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
 
+      - name: Testar política de promoção autônoma
+        run: node --test scripts/github-autonomia-promocao.test.mjs
+
       - name: Validar mapa e contratos do repositório inteiro
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
