@@ -99,6 +99,7 @@ Duas extensões dela, para casos específicos, quando estiverem instaladas:
 |---|---|
 | o que está pendente | `docs/PENDENCIAS.md` |
 | o que já aprendemos errando | `docs/CONSCIENCIA/APRENDIZADOS.md` |
+| o contrato de script + IA + XP | `docs/CONSCIENCIA/GRUPO-EVOLUCAO.md` |
 | o documento mestre | `docs/CONSCIENCIA/CONSCIENCIA.md` |
 | o que pode e o que não pode | `docs/CONSCIENCIA/02-PERMISSOES.md` |
 | estado atual da VPS | `docs/CONSCIENCIA/09-ESTADO-ATUAL.md` |
@@ -107,6 +108,10 @@ Duas extensões dela, para casos específicos, quando estiverem instaladas:
 | como o Pivete evolui o próprio método | `docs/CONSCIENCIA/LEMBRANCAS/AUTO-EVOLUCAO-MENTAL-PIVETE.md` |
 | o que o Pivete quer construir | `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md` |
 | o que já foi feito e o que falta | `docs/ESTADO-DA-RETOMADA.md` |
+
+A autonomia técnica termina onde começa uma permissão externa da plataforma. Quando
+o GitHub exigir identidade diferente do `GITHUB_TOKEN`, declare a dependência do PAT
+ou GitHub App; nunca substitua isso por push direto, segredo no código ou falso verde.
 
 ---
 
