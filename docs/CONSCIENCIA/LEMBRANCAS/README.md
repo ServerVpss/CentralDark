@@ -2,7 +2,7 @@
 title: "Lembranças — memória de curto prazo do Pivete"
 date: 2026-06-30
 tags: ["consciencia", "lembrancas", "memoria", "cognitivo", "mcp"]
-updated: 2026-06-30
+updated: 2026-07-30
 ---
 
 # 🧠 Lembranças — por onde toda IA passa primeiro
@@ -66,6 +66,10 @@ Você conversa com qualquer IA (via conector MCP)
 | `analise_de_estado_cognitivo` | Lê as últimas lembranças e diz o foco atual do Pivete |
 
 > O conteúdo real fica em [`LEMBRANCAS.md`](LEMBRANCAS.md).
+
+## Artefatos pessoais preservados
+
+- [`2026-07-30-VIVER-EM-PAZ.md`](2026-07-30-VIVER-EM-PAZ.md) — memória afetiva sobre paz, família, SOL, Hermes e o motivo humano por trás da Casa. Não é regra operacional.
 
 ## Conexões Rápidas
 
