@@ -60,7 +60,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -122,7 +122,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/evolucao/test_autonomia.py
-          python3 scripts/lupa/test_validar_resposta_pivete.py
+          python3 scripts/lupa/test_validar-resposta-pivete.py
           python3 .agents/skills/meta-lupa/testes/test_selo_ponto_fixo.py
           node --check scripts/sentinela/run.mjs
           node --check apps/bot-telegram/evolucao-ias.cjs
@@ -191,7 +191,7 @@ jobs:
         if: ${{ steps.commit_fix.outputs.has_fix == 'true' && steps.commit_fix.outputs.writable == 'true' }}
         env:
           TESTS_PASS: 'true'
-          EVOLUCAO_TEST_CASES: '26'
+          EVOLUCAO_TEST_CASES: '28'
         shell: bash
         run: |
           set -euo pipefail
@@ -222,11 +222,19 @@ jobs:
         if: ${{ steps.commit_fix.outputs.has_fix == 'true' && steps.commit_fix.outputs.writable == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUSH_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
           EVENT_NAME: ${{ github.event_name }}
         shell: bash
         run: |
           set -euo pipefail
           target_branch="${{ steps.commit_fix.outputs.branch }}"
+          if grep -q '^\.github/workflows/' "$ARTIFACT_DIR/changed-files.txt"; then
+            if [ -z "$PUSH_TOKEN" ]; then
+              echo 'WORKFLOW_PUSH_BLOCKED: GITHUB_PAT_PERFIL ausente.'
+              exit 14
+            fi
+            git remote set-url origin "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          fi
           git push origin "HEAD:${target_branch}"
 
           if [ "$EVENT_NAME" != 'pull_request' ]; then
