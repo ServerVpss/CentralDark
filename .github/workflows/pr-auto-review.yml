@@ -32,6 +32,9 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Testar scanner de segredo
+        run: python3 scripts/lupa/pr_secret_scan.py --self-test
+
       - name: Analisar diff sem executar código do PR
         id: scan
         env:
@@ -48,58 +51,10 @@ jobs:
           git diff --name-only -z "$BASE" "$HEAD_SHA" > "$CHANGED_FILE"
           git diff --no-ext-diff --unified=0 "$BASE" "$HEAD_SHA" -- . > "$PATCH_FILE"
           git diff --check "$BASE" "$HEAD_SHA" -- .
-
-          python3 - "$CHANGED_FILE" "$PATCH_FILE" "$GITHUB_OUTPUT" <<'PY'
-          from pathlib import Path
-          import re
-          import sys
-
-          names = [p.decode('utf-8', 'replace') for p in Path(sys.argv[1]).read_bytes().split(b'\0') if p]
-          patch = Path(sys.argv[2]).read_text(encoding='utf-8', errors='replace')
-          added = '\n'.join(
-              line[1:] for line in patch.splitlines()
-              if line.startswith('+') and not line.startswith('+++')
-          )
-
-          sensitive_path = re.compile(
-              r'(^|/)(\.env(?:\.|$)|secrets?(?:/|$)|tokens?(?:/|$)|sessions?(?:/|$)|\.ssh(?:/|$)|[^/]+\.(?:pem|key)$)',
-              re.I,
-          )
-          operational_path = re.compile(
-              r'(^|/)(\.github/workflows|scripts/(?:vps|webhook)|Dockerfile|docker-compose|Caddyfile|wuzapi|whatsapp|crm|migrations|prisma/migrations)(/|$)',
-              re.I,
-          )
-
-          fragments = {
-              'bearer': r'\bBea' + r'rer\s+[A-Za-z0-9._~+/=-]{12,}',
-              'jwt': r'\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\b',
-              'private': r'-----BEGIN ' + r'[A-Z0-9 ]*PRIVATE KEY-----',
-              'github': r'\bgh' + r'[pousr]_[A-Za-z0-9_]{20,}\b',
-              'openai': r'\bsk' + r'-[A-Za-z0-9_-]{16,}\b',
-              'assignment': r'(?i)(?:api[_-]?key|secret|password|passwd|token)\s*[:=]\s*[\"\']?([A-Za-z0-9._~+/=-]{16,})',
-          }
-          placeholders = re.compile(r'(?i)^(?:example|changeme|replace_me|redacted|placeholder|dummy|test|x+)$')
-
-          suspect = any(sensitive_path.search(name) for name in names)
-          if not suspect:
-              for key, pattern in fragments.items():
-                  for match in re.finditer(pattern, added):
-                      value = match.group(1) if key == 'assignment' else match.group(0)
-                      normalized = re.sub(r'[^A-Za-z0-9]+', '', value)
-                      if not placeholders.fullmatch(normalized):
-                          suspect = True
-                          break
-                  if suspect:
-                      break
-
-          touched_sensitive = any(operational_path.search(name) for name in names)
-          touched_bot = any(name.startswith('CentralDark/apps/bot-server/') for name in names)
-          with open(sys.argv[3], 'a', encoding='utf-8') as out:
-              out.write(f'secret_suspect={str(suspect).lower()}\n')
-              out.write(f'touched_sensitive={str(touched_sensitive).lower()}\n')
-              out.write(f'touched_bot={str(touched_bot).lower()}\n')
-              out.write(f'changed_count={len(names)}\n')
-          PY
+          python3 scripts/lupa/pr_secret_scan.py \
+            --changed-file "$CHANGED_FILE" \
+            --patch-file "$PATCH_FILE" \
+            --github-output "$GITHUB_OUTPUT"
 
       - name: Publicar checklist auditável
         uses: actions/github-script@v7
@@ -183,7 +138,8 @@ jobs:
               /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\b/,
               /\bgh[pousr]_[A-Za-z0-9_]{20,}\b/,
               /\bsk-[A-Za-z0-9_-]{16,}\b/,
-              new RegExp('(?:api[_-]?key|secret|password|passwd|token)\\s*[:=]\\s*[\\"\\\']?[A-Za-z0-9._~+/=-]{16,}', 'i'),
+              /\b\d{8,12}:[A-Za-z0-9_-]{30,}\b/,
+              new RegExp('(?:api[_-]?key|secret|password|passwd|token)\\s*[:=]\\s*[\\"\\\']?(?!(?:process\\.env(?:\\.|$)|os\\.environ(?:\\.|$)|env\\.|secrets\\.|github\\.|vars\\.))[A-Za-z0-9._~+/=-]{16,}', 'i'),
             ];
             if (valuePatterns.some(pattern => pattern.test(text))) {
               status = 'NEEDS_HUMAN';
