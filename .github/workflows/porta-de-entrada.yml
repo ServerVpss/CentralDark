@@ -1,11 +1,7 @@
 name: porta-de-entrada
 
-# Impede que a porta de entrada volte a ser murada.
-#
-# Em 2026-07-27 o LEIA-ME-IA.md, listado como item 1 do kit_boas_vindas e lido
-# por ler_regras_inviolaveis, nao existia em commit nenhum. Toda IA que chegava
-# entrava por uma porta 404 e caia direto nos documentos tecnicos, sem nunca
-# passar pelo jeito de conversar com o Pivete.
+# Impede que a porta de entrada volte a ser murada e que a IA volte a entregar
+# materia tecnica sem a sequencia tecnico -> papo reto do Pivete.
 
 on:
   pull_request:
@@ -23,7 +19,7 @@ concurrency:
 
 jobs:
   validar:
-    name: A porta abre e leva aos canonicos?
+    name: Porta, canonicos e resposta do Pivete
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -33,8 +29,15 @@ jobs:
         with:
           node-version: 22
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Validar porta de entrada e canonicos alcancaveis
         run: node scripts/lupa/validar-porta-de-entrada.mjs
+
+      - name: Testar gate da resposta dupla do Pivete
+        run: python3 scripts/lupa/test_validar_resposta_pivete.py
 
       - name: Relatorio completo
         if: always()
