@@ -2,7 +2,7 @@
 title: "PROMPT MEGA ESTABILIZAR"
 date: 2026-07-02
 tags: ["consciencia"]
-updated: 2026-07-02
+updated: 2026-07-30
 ---
 
 # 🚀 PROMPT MEGA — Estabilizar Tudo numa Tacada Só
@@ -51,7 +51,7 @@ FASE 2 — DIAGNÓSTICO (me dá um retrato antes de mexer)
 Faz um placar visual (formato monospace com ▓░ e ✅⚠️❌) mostrando:
 - Status do Graphify (pipeline, .graphifyignore, labels)
 - Status do darkai (CLI instalado? edge function ai-proxy viva?)
-- Status do Grupo Evolução (PM2 rodando? IAs conversando sobre CentralDark?)
+- Status do Grupo Evolução (PM2 rodando? IAs conversando sobre CentralDark real?)
 - Status do MCP (dist/ íntegro? tools cognitivas OK?)
 - Sincronia 4-Point: Lovable ↔ GitHub ↔ VPS ↔ Cérebro Vivo bate?
 - Pendências abertas em docs/PENDENCIAS.md (contagem por prioridade)
@@ -192,4 +192,10 @@ qual o próximo passo?
 Sempre que precisar estabilizar tudo de novo, é só voltar aqui e colar
 o prompt mega no chat da IA.
 
-**Última atualização:** 02/07/2026
+## Conexões rápidas
+
+- [[00-LEIA-PRIMEIRO]] — portão de entrada
+- [[MAPA-DO-CEREBRO]] — visão geral
+- [[CONSCIENCIA]] — documento mestre
+
+**Última atualização:** 30/07/2026
