@@ -95,6 +95,10 @@ def main() -> int:
     )
     replace_exact(auditor, auditor_import_old, auditor_import_new, "CD-AUTO-LUPA-EXEC", fixes)
 
+    detector_old = '        if re.search(r"(?m)^\\s*git\\s+push(?:\\s|$)", text) and "gh pr create" not in text:'
+    detector_new = '        if re.search(r"(?m)^(?!\\s*#).*?\\bgit\\s+push(?:\\s|$)", text) and "gh pr create" not in text:'
+    replace_exact(auditor, detector_old, detector_new, "CD-AUTO-WF-DIRECT-DETECTOR", fixes)
+
     remove_telegram_literal(ROOT / "apps/bot-telegram/evolucao-ias.cjs", fixes)
     ensure_response_rule_link(ROOT / "LEIA-ME-IA.md", fixes)
 
