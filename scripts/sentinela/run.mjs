@@ -2,10 +2,11 @@
 // Sentinela 24/7 — varre divergências e abre Issues com dedupe.
 // Read-only no repo/VPS (não toca em produção). Usa apenas HTTPS público + gh CLI.
 
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { evaluateDrift, toDivergencia, describeRecovery } from './drift.mjs';
 
 const DRY_RUN = String(process.env.DRY_RUN || 'false').toLowerCase() === 'true';
 const REPO = process.env.REPO_ALVO || 'ServerVpss/CentralDark';
@@ -14,6 +15,10 @@ const SNAPSHOT_FILE = path.join(SNAPSHOT_DIR, 'last-snapshot.json');
 const REPORT_FILE = path.join(SNAPSHOT_DIR, 'last-report.md');
 
 mkdirSync(SNAPSHOT_DIR, { recursive: true });
+
+const previousSnapshot = existsSync(SNAPSHOT_FILE)
+  ? JSON.parse(readFileSync(SNAPSHOT_FILE, 'utf8'))
+  : null;
 
 const ENDPOINTS = [
   { name: 'MCP health', url: 'https://mcp.centralldark.com/health', bot: 'grok' },
@@ -148,17 +153,43 @@ async function checkWorkflowsRuins() {
   }
 }
 
+function realGit(args) {
+  return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+}
+
+// Drift GitHub <-> checkout implantado. Caminho vem só da fonte canônica
+// (secret CENTRALDARK_ROOT, mapeado pelo workflow em VPS_REPO_PATH) — nunca
+// inventado aqui. Ausência do secret é ERROR explícito, nunca skip silencioso.
+function checkVpsDrift() {
+  const repoPath = process.env.VPS_REPO_PATH || '';
+  if (!repoPath) {
+    return {
+      status: 'ERROR',
+      code: 'CAMINHO_AUSENTE',
+      motivo: 'VPS_REPO_PATH (secrets.CENTRALDARK_ROOT) ausente no runner — falhando fechado, sem adivinhar caminho',
+      at: new Date().toISOString(),
+      repository: REPO,
+    };
+  }
+  return evaluateDrift({ repoPath, expectedRepo: REPO, branch: 'main', git: realGit });
+}
+
 // === Run ===
 
 ensureLabels();
 const endpointsResult = await checkEndpoints();
 const wfCount = await checkWorkflowsRuins();
+const driftEvidence = checkVpsDrift();
+const driftDivergencia = toDivergencia(driftEvidence);
+if (driftDivergencia) divergencias.push(driftDivergencia);
+const recoveryNote = describeRecovery(previousSnapshot, driftEvidence);
 
 // Snapshot
 const snapshot = {
   at: new Date().toISOString(),
   endpoints: endpointsResult,
   workflowsFailures24h: wfCount,
+  vpsDrift: driftEvidence,
   divergencias: divergencias.length,
 };
 writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
@@ -223,6 +254,12 @@ ${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '
 ## Divergências
 
 ${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergencias.map((d, i) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (bot: \`${d.bot}\`)`).join('\n')}
+
+## Drift GitHub <-> VPS
+
+- Status: \`${driftEvidence.status}\` (${driftEvidence.code})
+- ${driftEvidence.motivo}
+${recoveryNote ? `- ${recoveryNote}` : ''}
 `;
 writeFileSync(REPORT_FILE, report);
 

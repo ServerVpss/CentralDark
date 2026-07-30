@@ -31,7 +31,6 @@
 /apps/modulos/graph-panel/**            @ServerVpss
 /apps/modulos/elite-anthropic-proxy/**  @ServerVpss
 /apps/modulos/HERMES-CORE/**            @ServerVpss
-/apps/modulos/Monitoramento24h/**       @ServerVpss
 /apps/modulos/mapeamento/**             @ServerVpss
 /apps/modulos/memoria-api/**            @ServerVpss
 /apps/modulos/oauth-broker/**           @ServerVpss

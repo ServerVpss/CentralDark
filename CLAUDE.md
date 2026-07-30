@@ -235,7 +235,6 @@ apps/
 | 🔒 `docs/CONSCIENCIA/PADRAO-CARD-HERMES.md` | **Padrão OFICIAL de notificação Telegram (Card Hermes v1.3)** — travado. Toda ação relevante notifica seguindo esse formato. Só o Pivete altera. Envio SEMPRE via connector Telegram `sendMessage` (bot `@srver1bot`, `connection_id std_01kvw4jkcbekyr1t33vs4p5e9w`, admin `1901426549`). PROIBIDO usar `notify-telegram`. PROIBIDO texto fora do `<pre>`. | 04/07/2026 |
 | 🔒 `apps/modulos/HERMES-CORE/` | Núcleo Hermes (core, agents, missions, logs). Loop autônomo + rede especialista (Executor, Critic, Knowledge-Collector, Auto-Diagnostico, Deploy-Watcher). Não mexer sem ordem. | 05/07/2026 |
 | 🔒 `apps/modulos/HERMES-CORE/agents/Log-Verificador/` | Hermes-Verificador 24h (PM2 id 77) — vigia todos processos PM2, auto-restart travado 3/24h, análise IA. | 05/07/2026 |
-| 🔒 `apps/modulos/Monitoramento24h/` | Monitoramento 24h consolidado — não mexer sem ordem. | 05/07/2026 |
 | 🔒 `apps/modulos/mapeamento/` | Módulo de mapeamento do ecossistema — fonte oficial do mapa vivo. | 05/07/2026 |
 | 🔒 `apps/modulos/memoria-api/` | API de memória (PM2 `CentralDark-Memoria`) — consumida pelo Hermes e Arsenal. | 05/07/2026 |
 | 🔒 `apps/modulos/oauth-broker/` | OAuth Broker (PM2 `CentralDark-OAuthBroker`) — consolidado. | 05/07/2026 |
