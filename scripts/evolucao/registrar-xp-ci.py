@@ -25,6 +25,9 @@ FALSE_GREEN_IDS = {
     "CD-AUTO-EVOL-FAKE-FALLBACK",
     "CD-AUTO-LUPA-AUTOLUPA",
 }
+NON_REWARDING_FIX_IDS = {
+    "CD-AUTO-LUPA-XP-LEGACY",
+}
 
 
 def load(path: str) -> dict:
@@ -130,7 +133,16 @@ def main() -> int:
     after_ids = {item["id"] for item in after.get("findings", [])}
     applied_ids = {item["id"] for item in autofix.get("fixes", [])}
     fixed_ids = sorted((before_ids - after_ids) & applied_ids)
-    payload = {"schema": 1, "fixed_ids": fixed_ids, "contributors": [], "awarded": False}
+    non_rewarding = sorted(set(fixed_ids) & NON_REWARDING_FIX_IDS)
+    rewardable_ids = sorted(set(fixed_ids) - NON_REWARDING_FIX_IDS)
+    payload = {
+        "schema": 1,
+        "fixed_ids": fixed_ids,
+        "rewardable_fixed_ids": rewardable_ids,
+        "non_rewarding_fixed_ids": non_rewarding,
+        "contributors": [],
+        "awarded": False,
+    }
     output = ROOT / args.output
     output.parent.mkdir(parents=True, exist_ok=True)
 
@@ -140,10 +152,15 @@ def main() -> int:
         return 0
     if os.environ.get("TESTS_PASS") != "true":
         raise RuntimeError("XP_BLOCKED_TESTS_NOT_PROVEN")
+    if not rewardable_ids:
+        payload["reason"] = "ACCOUNTING_CORRECTION_DOES_NOT_EARN_XP"
+        output.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        print("XP_SKIPPED_ACCOUNTING_CORRECTION")
+        return 0
 
     contributors = [("script", False)]
     confirmed = set(review.get("confirmed_finding_ids", []))
-    if review.get("mode") == "IA" and confirmed.intersection(fixed_ids):
+    if review.get("mode") == "IA" and confirmed.intersection(rewardable_ids):
         contributors.append((safe_agent(review.get("agent", "ia")), True))
 
     workspace_head = git("rev-parse", "HEAD")
@@ -155,12 +172,11 @@ def main() -> int:
         mission = f"AUTO-EVOLUCAO-{agent.upper()}-{args.run_id}"
         command_sets.append((agent, ai_contribution, *commands_for(
             agent=agent, mission_id=mission, workspace_head=workspace_head,
-            branch=args.branch, fixed_ids=fixed_ids, before=before, after=after,
+            branch=args.branch, fixed_ids=rewardable_ids, before=before, after=after,
             run_url=args.run_url, files_changed=files_changed,
             ai_contribution=ai_contribution,
         )))
 
-    # Pré-validação em cópia do ledger: impede BEGIN órfão no arquivo real.
     with tempfile.TemporaryDirectory() as tmp:
         temp_ledger = Path(tmp) / "uso-ledger.jsonl"
         if LEDGER.exists():
