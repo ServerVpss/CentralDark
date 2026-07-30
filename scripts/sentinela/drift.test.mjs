@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluateDrift, driftDedupeKey, describeRecovery, sanitizeForLog, isFullSha } from './drift.mjs';
+import { evaluateDrift, toDivergencia, describeRecovery, sanitizeForLog, isFullSha } from './drift.mjs';
 
 const SHA_A = 'a'.repeat(40);
 const SHA_B = 'b'.repeat(40);
@@ -113,11 +113,13 @@ test('10. saída com dados incompletos -> rejeitar (SHA inválido)', () => {
   assert.equal(r.code, 'DADOS_INCOMPLETOS');
 });
 
-test('11. alerta repetido idêntico -> chave de dedupe estável', () => {
+test('11. alerta repetido idêntico -> mesma chave real de dedupe (run.mjs hasheia area+titulo)', () => {
   const git = makeGit(baseResponses({ localSha: SHA_A, originSha: SHA_B, counts: '0 1' }));
-  const r1 = evaluateDrift({ repoPath: '/repo', git });
-  const r2 = evaluateDrift({ repoPath: '/repo', git });
-  assert.equal(driftDedupeKey(r1), driftDedupeKey(r2));
+  const r1 = toDivergencia(evaluateDrift({ repoPath: '/repo', git }));
+  const r2 = toDivergencia(evaluateDrift({ repoPath: '/repo', git }));
+  assert.equal(r1.area, r2.area);
+  assert.equal(r1.titulo, r2.titulo);
+  assert.doesNotMatch(r1.titulo, /\d{4}-\d{2}-\d{2}T/, 'titulo não pode conter timestamp — quebraria o dedupe');
 });
 
 test('12. estado volta ao normal -> registra recuperação', () => {
@@ -160,6 +162,35 @@ test('isFullSha rejeita valores curtos ou não-hex', () => {
 
 test('evaluateDrift exige git() injetado (fail-closed por design)', () => {
   assert.throws(() => evaluateDrift({ repoPath: '/repo' }), /git runner obrigatório/);
+});
+
+test('git status --porcelain falhando -> ERROR rastreável, não derruba o script inteiro', () => {
+  const git = makeGit([
+    ['rev-parse --is-inside-work-tree', 'true\n'],
+    ['fetch --quiet', ''],
+    ['symbolic-ref --quiet --short HEAD', 'main\n'],
+    [/rev-parse HEAD$/, `${SHA_A}\n`],
+    [/rev-parse origin\/main$/, `${SHA_A}\n`],
+    ['status --porcelain', new Error('fatal: index file corrupt')],
+  ]);
+  const r = evaluateDrift({ repoPath: '/repo', git });
+  assert.equal(r.status, 'ERROR');
+  assert.equal(r.code, 'DADOS_INCOMPLETOS');
+});
+
+test('git rev-list --left-right falhando -> ERROR rastreável, não derruba o script inteiro', () => {
+  const git = makeGit([
+    ['rev-parse --is-inside-work-tree', 'true\n'],
+    ['fetch --quiet', ''],
+    ['symbolic-ref --quiet --short HEAD', 'main\n'],
+    [/rev-parse HEAD$/, `${SHA_A}\n`],
+    [/rev-parse origin\/main$/, `${SHA_A}\n`],
+    ['status --porcelain', ''],
+    ['rev-list --left-right --count', new Error('fatal: bad revision')],
+  ]);
+  const r = evaluateDrift({ repoPath: '/repo', git });
+  assert.equal(r.status, 'ERROR');
+  assert.equal(r.code, 'DADOS_INCOMPLETOS');
 });
 
 test('evaluateDrift falha fechado quando repoPath ausente (sem inventar caminho)', () => {

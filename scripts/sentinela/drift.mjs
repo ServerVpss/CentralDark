@@ -77,10 +77,20 @@ export function evaluateDrift({ repoPath, expectedRepo = 'ServerVpss/CentralDark
     return { ...base, status: 'ERROR', code: 'DADOS_INCOMPLETOS', motivo: 'HEAD local ou origin/main não retornaram SHA válido' };
   }
 
-  const statusPorcelain = git(['-C', repoPath, 'status', '--porcelain']);
+  let statusPorcelain;
+  try {
+    statusPorcelain = git(['-C', repoPath, 'status', '--porcelain']);
+  } catch (error) {
+    return { ...base, status: 'ERROR', code: 'DADOS_INCOMPLETOS', motivo: `git status falhou: ${sanitizeForLog(String(error.message || error))}` };
+  }
   const dirty = statusPorcelain.trim().length > 0;
 
-  const countsRaw = git(['-C', repoPath, 'rev-list', '--left-right', '--count', `${localSha}...${originSha}`]).trim();
+  let countsRaw;
+  try {
+    countsRaw = git(['-C', repoPath, 'rev-list', '--left-right', '--count', `${localSha}...${originSha}`]).trim();
+  } catch (error) {
+    return { ...base, status: 'ERROR', code: 'DADOS_INCOMPLETOS', motivo: `git rev-list falhou: ${sanitizeForLog(String(error.message || error))}` };
+  }
   const [aheadStr, behindStr] = countsRaw.split(/\s+/);
   const ahead = Number(aheadStr);
   const behind = Number(behindStr);
@@ -129,12 +139,13 @@ export function evaluateDrift({ repoPath, expectedRepo = 'ServerVpss/CentralDark
   return { ...evidence, status: 'OK', code: 'ESTADO_OK', motivo: 'VPS sincronizada com origin/main' };
 }
 
-/** Chave estável de dedupe — mesma condição não abre Issue duplicada. */
-export function driftDedupeKey(evidence) {
-  return `drift|${evidence.code}|${evidence.branchLocal || ''}`;
-}
-
-/** Converte o resultado do drift no formato de divergência já usado pelo run.mjs. */
+/**
+ * Converte o resultado do drift no formato de divergência já usado pelo
+ * run.mjs. O `titulo` é a chave real de dedupe (run.mjs faz
+ * hash(`${area}|${titulo}`) pra deduplicar Issues) — por isso não inclui
+ * timestamp nem SHA aqui: mesma condição de drift precisa gerar o mesmo
+ * título sempre, senão a mesma divergência abriria Issue nova a cada rodada.
+ */
 export function toDivergencia(evidence) {
   if (evidence.status === 'OK') return null;
   const sev = evidence.status === 'ERROR' ? 'p1' : evidence.code === 'DIVERGENCIA_DUPLA' ? 'p1' : 'p2';
