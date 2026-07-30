@@ -4,16 +4,36 @@
 
 Toda atuação do Codex deve apontar para o repositório oficial `ServerVpss/CentralDark` e para uma branch explicitamente informada.
 
+Antes de qualquer atuação, o Codex deve carregar:
+
+1. `LEIA-ME-IA.md`;
+2. `AGENTS.md`;
+3. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`;
+4. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica.
+
+O Codex é um especialista substituível dentro do método universal. Ele pode atuar como executor, debugger, revisor ou judge, mas não assume autoridade do Pivete nem cria memória paralela.
+
 ## Ordem de execução
 
 ```txt
-1. Ler contexto e governança.
-2. Confirmar branch e arquivos permitidos.
-3. Mapear risco e dependências.
-4. Executar mudança mínima.
-5. Rodar testes aplicáveis.
-6. Entregar handoff com prova.
+1. Carregar boot universal e emitir CENTRALDARK_AI_BOOT uma vez.
+2. Ler contexto e governança.
+3. Confirmar branch, HEAD, escritor atual e arquivos permitidos.
+4. Mapear risco e dependências.
+5. Executar mudança mínima quando for o escritor autorizado.
+6. Rodar testes aplicáveis.
+7. Entregar apenas o delta, o handoff e a prova.
 ```
+
+## Método delta
+
+- Mensagem atrasada é contexto auxiliar, não ordem automática.
+- Evidência atual vence relato antigo.
+- Não reiniciar etapa concluída.
+- Não repetir investigação já comprovada.
+- Incorporar apenas fato, risco, correção, autorização, resultado ou bloqueador ainda relevante.
+- Leitores podem trabalhar em paralelo; somente um agente escreve por escopo.
+- Nenhum executor valida a si mesmo como revisão independente.
 
 ## Limites
 
@@ -22,6 +42,7 @@ Toda atuação do Codex deve apontar para o repositório oficial `ServerVpss/Cen
 - Não editar `.env`, `sessions/`, tokens, chaves ou cookies.
 - Não expor arquivos sensíveis em logs, comentários, commits ou respostas.
 - Não criar arquivos duplicados para evitar corrigir o arquivo oficial.
+- Não assumir posse de escrita sem handoff explícito quando já existir outro escritor.
 
 ## Arquivos sensíveis
 
@@ -29,22 +50,25 @@ Arquivos sensíveis incluem credenciais, configurações privadas, sessões, cha
 
 ## Handoff obrigatório
 
-```txt
-from: Codex
-role: executor ou revisor
-status: DONE | PARTIAL | BLOCKED
-files_changed: lista exata
-tests: testes executados
-decisions: decisões tomadas
-risks: riscos restantes
-next: próximo passo sugerido
+```yaml
+WRITER_HANDOFF:
+  from: "Codex"
+  role: "EXECUTOR|DEBUGGER|REVIEWER|JUDGE"
+  status: "DONE|PARTIAL|BLOCKED"
+  head_sha: "SHA completo"
+  files_changed: []
+  tests: []
+  decisions: []
+  risks: []
+  next_gate: "próxima prova objetiva"
 ```
 
 ## Regra final
 
 ```txt
 Pivete comanda.
-Codex organiza e executa dentro do escopo.
+SOL ou o coordenador ativo preserva o fio.
+Codex atua como especialista dentro do escopo.
 GitHub registra.
 Ações provam.
 ```
