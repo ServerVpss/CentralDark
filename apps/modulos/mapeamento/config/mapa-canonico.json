@@ -6,8 +6,78 @@
     "new_module_requires_map": true,
     "protected_changes_fail_closed": true,
     "case_insensitive_duplicates_forbidden": true,
-    "parallel_versions_forbidden": true
+    "parallel_versions_forbidden": true,
+    "adjacent_repeated_directory_forbidden": true,
+    "canonical_contracts_fail_closed": true,
+    "validation_failure_masking_forbidden": true
   },
+  "canonical_contracts": [
+    {
+      "id": "ai-universal-entrypoint",
+      "source": "LEIA-ME-IA.md",
+      "consumers": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "README.md",
+        "CODEX.md",
+        ".claude/rules/00-centraldark-boot-universal.md",
+        ".github/copilot-instructions.md",
+        "GEMINI.md",
+        ".cursor/rules/centraldark-governanca.mdc",
+        ".windsurfrules"
+      ],
+      "required_tokens": [
+        "LEIA-ME-IA.md",
+        "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+        "CENTRALDARK_AI_BOOT"
+      ]
+    },
+    {
+      "id": "meta-lupa-identity",
+      "source": ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+      "target": ".agents/skills/meta-lupa/SKILL.md",
+      "identity": "git_blob_sha1",
+      "consumers": [
+        "LEIA-ME-IA.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "README.md",
+        "CODEX.md",
+        ".claude/rules/00-centraldark-boot-universal.md",
+        ".github/copilot-instructions.md",
+        "GEMINI.md",
+        ".cursor/rules/centraldark-governanca.mdc",
+        ".windsurfrules"
+      ],
+      "required_tokens": [
+        ".agents/skills/meta-lupa/SKILL.md",
+        ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
+      ],
+      "forbidden_tokens": [
+        "SKILL_COMMIT_SHA:"
+      ]
+    }
+  ],
+  "forbidden_roots": [
+    {
+      "path": "docs/CONSCIENCIA/CONSCIENCIA/",
+      "canonical": "docs/CONSCIENCIA/",
+      "reason": "prefixo duplicado criado por automação antiga"
+    },
+    {
+      "path": "docs/CONSCIENCIA/BRAIN/",
+      "canonical": "docs/BRAIN/",
+      "reason": "segunda árvore de memória sem consumidores ativos"
+    }
+  ],
+  "historical_roots": [
+    "docs/RELATORIOS/",
+    "docs/_LEGADO_ROOT_DOCS_CONFLITOS/"
+  ],
+  "validation_entrypoints": [
+    "scripts/lupa/validar-porta-de-entrada.mjs",
+    "apps/modulos/mapeamento/core/validar-mapa.mjs"
+  ],
   "sectors": [
     {
       "id": "comando",
