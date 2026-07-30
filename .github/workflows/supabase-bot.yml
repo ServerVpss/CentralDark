@@ -1,7 +1,7 @@
 name: supabase-bot
 
 # Bot Supabase — read-only por padrão. Roda checks de schema/RLS/migrations
-# e posta relatório. Escrita exige label adicional `confirm:write` na Issue.
+# e publica relatório em branch automática + PR.
 
 on:
   schedule:
@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   issues: write
 
 jobs:
@@ -25,6 +26,8 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
@@ -42,12 +45,19 @@ jobs:
           ISSUE_NUM: ${{ github.event.issue.number || '' }}
         run: node CentralDark/apps/supabase-bot/src/index.mjs
 
-      - name: Commit relatório
+      - name: Commitar relatório e publicar PR
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           git config user.name 'CentralDark Supabase Bot'
           git config user.email 'actions@github.com'
           git add -- docs/RELATORIOS/supabase-bot 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo 'Relatório sem alteração.'
+            exit 0
+          fi
           git commit -m "chore(supabase-bot): relatório ${{ github.run_id }}
 
-          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
-          git push || true
+          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
+          bash scripts/evolucao/publicar-pr-automatico.sh
