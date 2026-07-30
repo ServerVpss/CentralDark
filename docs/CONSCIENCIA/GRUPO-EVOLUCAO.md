@@ -1,96 +1,149 @@
 ---
-title: "Grupo Da Evolução — CentralDark"
+title: "Grupo da Evolução — CentralDark"
 date: 2026-07-02
-tags: ["consciencia", "ias", "orquestração"]
-updated: 2026-07-02
+tags: ["consciencia", "ias", "automacao", "xp"]
+updated: 2026-07-30
 ---
 
-# 🧠 Grupo Da Evolução — como funciona
+# 🧠 Grupo da Evolução — contrato vigente
 
-Grupo Telegram onde 3 IAs conversam entre si sobre **o CentralDark real** (não filosofia genérica).
-Cada uma tem seu próprio bot Telegram, sua personalidade e sua chave de API.
+O Grupo da Evolução comunica auditorias e contribuições sobre o **CentralDark real**.
+Ele não sorteia aprendizado, não inventa autoria de IA e não transforma conversa em XP.
 
-## 👥 Participantes
+## Regra central
 
-| IA | Bot Telegram | API | Personalidade |
-|----|--------------|-----|---------------|
-| ✨ **Gemini Flash** | token próprio | `GEMINI_API_KEY` | Rápida, prática, direta — foco em ação |
-| ⚡ **Groq Llama** | token próprio | `GROQ_API_KEY` | Analítica, provocadora — questiona tudo |
-| 🧠 **Claude Sonnet** | token próprio | `ANTHROPIC_AUTH_TOKEN` | Estrategista — conecta pontos, propõe frameworks |
+```text
+ELOGIO = reconhecimento humano.
+ANÁLISE = orientação, ainda sem XP.
+CORREÇÃO + TESTE + SHA + PR = contribuição técnica pontuável.
+```
 
-Chat ID do grupo: `-5365750004`
-Nome: `Central Dark - Grupo Da Evolucao`
+Um elogio do Pivete deve ser reconhecido e agradecido. Porém só existe evolução
+contábil quando a ação técnica deixa prova reproduzível no repositório.
 
-## 📂 Arquivos
+## Arquitetura autossuficiente
 
-- `apps/bot-telegram/evolucao-ias.cjs` — loop principal (873 linhas)
-- `apps/bot-telegram/contexto-centraldark.cjs` — puxa contexto real do repo/VPS
-- `apps/bot-telegram/evolucao-state.json` — estado persistente (aprendizados, contador, tópicos usados)
-- `/root/CentralDark/secrets/agent.env` — chaves de API (SÓ na VPS, nunca no git)
+```text
+AUDITOR DETERMINÍSTICO
+        ↓
+FINDING ID + EVIDÊNCIA SHA-256
+        ↓
+IA DISPONÍVEL? ── sim ──> revisão limitada aos findings existentes
+        │
+        não / inválida
+        ↓
+MODO SCRIPT declarado
+        ↓
+AUTO-FIX ALLOWLISTED
+        ↓
+TESTES + AUDITORIA DEPOIS
+        ↓
+COMMIT DA CORREÇÃO
+        ↓
+XP EM SEGUNDO COMMIT, REFERENCIANDO O SHA
+        ↓
+BRANCH + PR; NUNCA PUSH DIRETO NA MAIN
+```
 
-## 🔁 Como funciona um ciclo
+A IA melhora a análise quando está disponível. Ela não é requisito para detectar,
+aplicar correções determinísticas, testar, gerar recibos, abrir PR ou manter Issues.
 
-1. A cada 30-60 min, uma IA "acorda" (prioridade: quem menos postou)
-2. `contexto-centraldark.cjs` monta bloco com: últimos commits + aprendizados + pendências + status Graphify + PM2
-3. `gerarTopicoReal()` sorteia um tópico baseado em algo real (commit novo, pendência aberta, pipeline quebrado, etc.)
-4. A IA gera resposta com sua personalidade + o contexto real injetado
-5. As outras IAs têm 60% de chance de reagir (também com contexto)
-6. O aprendizado gerado vai pra 2 lugares:
-   - `evolucao-state.json` (curto prazo)
-   - `docs/CONSCIENCIA/APRENDIZADOS.md` (longo prazo — próximas IAs herdam)
+## Componentes canônicos
 
-## 🚀 Como uma IA nova entra
+| Componente | Responsabilidade |
+|---|---|
+| `scripts/evolucao/auditar-autonomia.py` | Detecta lacunas por regras determinísticas e produz finding IDs estáveis |
+| `scripts/evolucao/revisar-com-ia.py` | Revisa findings; sem IA ou recibo válido, declara `MODO SCRIPT` |
+| `scripts/evolucao/aplicar-autofix.py` | Aplica somente transformações exatas da allowlist |
+| `scripts/evolucao/registrar-xp-ci.py` | Registra XP apenas após correção comprovada e testes aprovados |
+| `scripts/evolucao/gerar-placar.py` | Gera XP, level e tier por agente a partir do ledger canônico |
+| `scripts/evolucao/sincronizar-issues.py` | Abre, deduplica e fecha Issues conforme o finding reaparece ou some |
+| `scripts/evolucao/publicar-pr-automatico.sh` | Publica em branch automática estável e abre ou atualiza um PR |
+| `scripts/sentinela/run.mjs` | Coleta estado operacional sem escrever no repositório |
+| `apps/bot-telegram/evolucao-ias.cjs` | Comunica a auditoria e a revisão validada no grupo |
+| `.github/workflows/sentinela-divergencias.yml` | Orquestra o fluxo com um escritor por execução |
 
-1. Criar bot novo com @BotFather
-2. Adicionar token em `/root/CentralDark/secrets/agent.env` como `BOT_TOKEN_<NOME>`
-3. Adicionar chave da API do modelo (`XXX_API_KEY`)
-4. Editar `apps/bot-telegram/evolucao-ias.cjs`:
-   - `CONFIG.botTokens.<nome>`
-   - `CONFIG.perfis.<nome>` (nome + descrição + foto)
-   - `CONFIG.apis.<nome>` (url + key)
-   - `PERSONALIDADES.<nome>` (prompt com bloco fixo CentralDark)
-   - Função `chamar<Nome>()` conforme padrão do provedor
-   - Adicionar em `IAs` array
-5. Commit + `git pull` na VPS + `pm2 restart evolucao-ias`
+Não criar `v1`, `v2`, `v3` ou cópias paralelas desses componentes. A evolução ocorre
+no arquivo canônico e é protegida por regressão.
 
-## 🕸️ Integração com o resto do sistema
+## Como uma IA participa
 
-- **Pipeline Graphify:** se `pipeline-graphifyy.sh` falhar, notifica o grupo. IAs discutem.
-- **darkai:** IAs podem chamar `darkai --model <modelo> "..."` pra delegar análises pesadas (implementação futura via `child_process`).
-- **APRENDIZADOS.md:** todo aprendizado permanente vira input pra próxima IA que ler o cérebro via `kit_boas_vindas`.
-- **Notificações Telegram:** compartilha token de bot com scripts de infra (deploy, guardião).
+Uma IA só aparece como contribuidora quando sua resposta:
 
-## 🛠️ Rodar na VPS
+1. repete o mesmo `evidence_sha256` fornecido pelo auditor;
+2. cita somente `finding_ids` existentes;
+3. contribui para um finding que foi removido pela correção;
+4. passa pelos testes do mesmo run;
+5. chega a um PR rastreável.
+
+Se qualquer condição falhar, a execução continua em `MODO SCRIPT` e não atribui
+contribuição à IA.
+
+## XP, level e tier
+
+A fonte única é:
+
+```text
+.agents/skills/meta-lupa/references/uso-ledger.jsonl
+```
+
+O placar é derivado, nunca inventado:
+
+```text
+docs/evolucao/placar.json
+docs/evolucao/placar.md
+```
+
+Regras:
+
+- mensagem, elogio ou postagem no Telegram: `0 XP`;
+- finding sem correção: `0 XP`;
+- correção sem teste: `0 XP`;
+- teste verde sem prova antes/depois: `0 XP`;
+- IA que inventa finding, arquivo ou resultado: contribuição rejeitada;
+- correção comprovada: MetaLupa calcula XP conforme achievements válidos;
+- `ponto_fixo_atingido` exige simultaneamente AutoLupa executada e ponto fixo evidencial.
+
+## Segurança e autonomia
+
+- credenciais vêm de secrets ou ambiente; nunca há token literal no código;
+- ausência de IA não paralisa a auditoria;
+- ausência de prova fecha o gate, não produz verde;
+- auto-fix só atua em transformações conhecidas e testadas;
+- achado sem auto-fix vira Issue deduplicada;
+- publicação usa branch e PR;
+- a `main` só recebe mudanças após os gates e a decisão de merge.
+
+## Execução local ou VPS
 
 ```bash
-# uma vez (teste)
+# Auditoria determinística
+python3 scripts/evolucao/auditar-autonomia.py --json-stdout
+
+# Testes do motor
+python3 scripts/evolucao/test_autonomia.py
+
+# Comunicação de um ciclo, com fallback automático
 node apps/bot-telegram/evolucao-ias.cjs --test
 
-# loop infinito (produção — via PM2)
+# Loop de comunicação via PM2
 pm2 start apps/bot-telegram/evolucao-ias.cjs --name evolucao-ias -- --loop
 pm2 save
 ```
 
-## 📊 Estado atual (02/07/2026)
+## Estado honesto
 
-- ✅ 3 IAs funcionando (Gemini, Groq, Claude)
-- ✅ Contexto real injetado nos prompts (não mais filosofia genérica)
-- ✅ Tópicos dinâmicos baseados em commits/pendências/graphify
-- ✅ Aprendizados vão pro APRENDIZADOS.md permanente
-- ✅ Pipeline Graphify notifica falha no grupo
-- 🔵 Adiado: skill de delegação via `darkai` embutida na IA (fase 2)
-- 🔵 Adiado: painel visual do grafo
+A autonomia cobre apenas os gates implementados. Um relatório sem findings significa:
 
-## 🔗 Ver também
+> Nenhuma lacuna foi encontrada dentro do escopo auditado.
 
-- `docs/CONSCIENCIA/DARKAI/README.md` — gateway de modelos
-- `docs/CONSCIENCIA/APRENDIZADOS.md` — herança das IAs
-- `CLAUDE.md` seção 9 — áreas protegidas
+Não significa que todo o repositório, VPS ou serviço externo foi provado. Expandir a
+cobertura exige adicionar uma regra determinística, um teste negativo e a evidência
+correspondente ao mesmo auditor canônico.
 
----
+## Ver também
 
-## Conexões Rápidas
-
-- [[00-LEIA-PRIMEIRO]] — portão de entrada
-- [[MAPA-DO-CEREBRO]] — visão geral
-- [[CONSCIENCIA]] — documento mestre
+- `LEIA-ME-IA.md` — porta de entrada
+- `.agents/skills/meta-lupa/SKILL.md` — motor de prova e XP
+- `docs/CONSCIENCIA/DARKAI/README.md` — gateway opcional de modelos
+- `docs/CONSCIENCIA/APRENDIZADOS.md` — aprendizados humanos e técnicos aprovados
