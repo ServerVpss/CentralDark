@@ -18,8 +18,10 @@ META_LUPA_BOOT_REQUIRED: SIM
 LUPA_USE_RECEIPT_REQUIRED: SIM
 SKILL_PATH: .agents/skills/meta-lupa/SKILL.md
 SKILL_REF: origin/main
-SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
+SKILL_IDENTITY_FILE: .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 ```
+
+A identidade vigente da skill é resolvida pelo arquivo canônico acima e validada contra o blob Git real. É proibido copiar um SHA fixo para este adaptador.
 
 A skill `meta-lupa` deve ser carregada e seu uso registrado (BEGIN+FINAL) antes de qualquer trabalho neste repo. Sem BEGIN → `BOOT_BLOQUEADO`.
 
@@ -78,44 +80,3 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 - **Domínio oficial**: https://centralldark.com
 - **Painel de status**: https://status.centralldark.com
 - **Repositório**: `ServerVpss/CentralDark` (sincroniza automaticamente com a VPS em `/root/CentralDark/`)
-
-## Stack
-
-- Vite + React 18 + TypeScript
-- Tailwind CSS v3 + shadcn-ui (frontend TelePanel)
-- Node.js + PM2 na VPS (microsserviços CentralDark)
-- Supabase gerenciado — Auth, DB, Edge Functions, Storage, Realtime
-- PWA habilitado
-
-## Como editar
-
-- **Editor assistido por IA**: qualquer alteração feita pelo agente é comitada no repo e sincronizada pra VPS automaticamente
-- **Local**: `git clone` → `npm i` → `npm run dev`
-- **GitHub**: edição direta + sync bidirecional
-
-## Deploy
-
-Push na `main` → webhook na VPS (`/root/CentralDark/scripts/webhook/`) faz `git pull` + `pm2 reload` do serviço afetado.
-
----
-
-## 🎖️ Taxonomia Arsenal 2026 (nomenclatura oficial dos setores)
-
-Pra evitar cada IA nova inventar nome próprio pros módulos, adotamos a doutrina do zip `CentralDark_Arsenal_2026` — 7 setores militares. **O zip é só nomenclatura**; o código real já roda em PM2 na VPS. Use esta tabela como dicionário oficial:
-
-| Setor Arsenal | Função | Módulos reais que cobrem o setor |
-|---|---|---|
-| **COMANDO** | Decisão, orquestração, roteamento neural | `apps/modulos/HERMES-CORE/` (loop autônomo + rede especialista) |
-| **ARSENAL** | Conselho de IAs (Router / Parallel / Debate) | `apps/modulos/arsenal-openai-adapter/` + `docs/CONSCIENCIA/ARSENAL/` |
-| **ESCUDO** | Auto-healing, vigia, fallback, resiliência | `HERMES-CORE/agents/Log-Verificador/` (PM2 id 77) |
-| **INTELIGÊNCIA** | Grafo, análise de código, mapa vivo | `apps/modulos/graph-panel/` + `apps/modulos/mapeamento/` + `apps/modulos/obsidian-plugin-grafo-vivo/` |
-| **MEMÓRIA** | Consciência, lembranças, aprendizados | `apps/modulos/memoria-api/` + `docs/CONSCIENCIA/` + `docs/CONSCIENCIA/LEMBRANCAS/` |
-| **EXECUÇÃO** | Braços do sistema — MCP, gateways, proxies | `apps/modulos/elite-gateway/` + `elite-anthropic-proxy/` + `proxy/` + `lovable-proxy/` + `artifacts-builder/` + MCP |
-| **LOGÍSTICA** | Deploy, backup, webhook, sync, status | `scripts/webhook/` + `apps/modulos/pivete-sync/` + `oauth-broker/` + `apps/modulos/status/` |
-
-### Regra de nomenclatura
-
-- Ao **falar de estratégia / arquitetura**: usar o nome do setor (ex.: "reforçar o Escudo", "melhorar a Memória").
-- Ao **falar de código / deploy**: usar o nome do módulo real (ex.: "mexer no `HERMES-CORE/agents/Log-Verificador/`").
-- **Nunca** criar um novo nome pra um setor que já tem módulo real cobrindo — evita divergência.
-- Referência viva: pendência **#51** em `docs/PENDENCIAS.md` + (opcional) `docs/CONSCIENCIA/ARSENAL/MAPA-SETORES.md`.

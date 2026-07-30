@@ -9,7 +9,8 @@ Antes de qualquer atuação, o Codex deve carregar:
 1. `LEIA-ME-IA.md`;
 2. `AGENTS.md`;
 3. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`;
-4. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica.
+4. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
+5. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para provar a identidade vigente da skill.
 
 O Codex é um especialista substituível dentro do método universal. Ele pode atuar como executor, debugger, revisor ou judge, mas não assume autoridade do Pivete nem cria memória paralela.
 
@@ -39,14 +40,15 @@ O Codex é um especialista substituível dentro do método universal. Ele pode a
 
 - Não alterar `main` diretamente quando a missão exigir branch.
 - Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita.
-- Não editar `.env`, `sessions/`, tokens, chaves ou cookies.
+- Não editar `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, credenciais ou cookies.
 - Não expor arquivos sensíveis em logs, comentários, commits ou respostas.
 - Não criar arquivos duplicados para evitar corrigir o arquivo oficial.
 - Não assumir posse de escrita sem handoff explícito quando já existir outro escritor.
+- Não copiar SHA canônico para adaptadores; resolver pelo arquivo de identidade e validar contra o Git.
 
 ## Arquivos sensíveis
 
-Arquivos sensíveis incluem credenciais, configurações privadas, sessões, chaves, certificados e dados de autenticação. Use nomes de variáveis e placeholders; nunca os valores reais.
+Arquivos sensíveis incluem `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, credenciais, configurações privadas, chaves, certificados e dados de autenticação. Use apenas placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BASE_URL>`; nunca valores reais.
 
 ## Handoff obrigatório
 

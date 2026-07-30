@@ -8,8 +8,9 @@ Antes de responder ou agir:
 2. Leia `AGENTS.md`.
 3. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
 4. Carregue `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica.
-5. Confirme estado atual, branch, HEAD, escopo, escritor e próxima prova.
-6. Emita uma vez o recibo `CENTRALDARK_AI_BOOT` definido na porta universal.
+5. Resolva a identidade vigente por `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`; não copie SHA para este adaptador.
+6. Confirme estado atual, branch, HEAD, escopo, escritor e próxima prova.
+7. Emita uma vez o recibo `CENTRALDARK_AI_BOOT` definido na porta universal.
 
 Regras permanentes:
 

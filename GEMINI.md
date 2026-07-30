@@ -9,7 +9,8 @@ Ao abrir ou retomar uma missão:
 3. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
 4. Confirme branch, HEAD, escopo, escritor atual e próxima prova.
 5. Use `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica.
-6. Emita uma vez o recibo `CENTRALDARK_AI_BOOT`.
+6. Resolva a identidade vigente por `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`; não copie SHA neste adaptador.
+7. Emita uma vez o recibo `CENTRALDARK_AI_BOOT`.
 
 Regras:
 

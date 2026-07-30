@@ -7,7 +7,8 @@ Antes de sugerir, editar, revisar ou executar qualquer mudança neste repositór
 3. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
 4. Confirme a fonte da verdade, branch, HEAD, escopo, escritor atual e evidência recente.
 5. Use `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica.
-6. Emita uma vez o recibo `CENTRALDARK_AI_BOOT` quando iniciar trabalho técnico ou retomar contexto.
+6. Resolva a identidade vigente por `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`; não copie SHA neste adaptador.
+7. Emita uma vez o recibo `CENTRALDARK_AI_BOOT` quando iniciar trabalho técnico ou retomar contexto.
 
 Aplique sempre:
 

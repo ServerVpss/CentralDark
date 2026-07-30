@@ -34,7 +34,8 @@ Qualquer IA que receba contexto deste repositório deve carregar também, antes 
 1. `AGENTS.md` — contrato geral dos agentes;
 2. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — método de coordenação;
 3. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
-4. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.
+4. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para provar a identidade vigente da skill;
+5. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.
 
 Nome de modelo não muda a regra. Claude, Sonnet, Opus, GPT, Codex, Gemini, Grok,
 Copilot, Cursor, Windsurf, Hermes ou qualquer modelo futuro entra como um papel
@@ -91,6 +92,8 @@ Para credencial, só validação de presença — nunca o valor.
 ## 4. Quando a tarefa for crítica, use a lupa
 
 `.agents/skills/meta-lupa/SKILL.md` é o motor de auditoria da casa.
+A identidade vigente é declarada somente em `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA`
+e deve coincidir com o blob Git real; adaptadores não copiam SHA.
 Ela vale para deploy, consolidação, merge, migração, segurança e regressão —
 não para toda conversa.
 
@@ -136,7 +139,7 @@ Conversa que não muda nada não polui o canônico.
 
 ---
 
-> Esta porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs`.
-> Se algum caminho citado aqui ou algum adaptador universal deixar de existir, o CI fica vermelho.
+> Esta porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs` e pelo mapa global em `apps/modulos/mapeamento/core/validar-mapa.mjs`.
+> Se algum caminho citado, contrato ou adaptador universal deixar de existir, o CI fica vermelho.
 > Documento canônico que ninguém alcança não governa nada — foi assim que o
 > JEITO-CORRETO-DO-PIVETE ficou meses escrito e ignorado.

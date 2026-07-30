@@ -1,15 +1,9 @@
 name: porta-de-entrada
 
-# Impede que a porta de entrada e os adaptadores automaticos voltem a ser murados.
-#
-# Em 2026-07-27 o LEIA-ME-IA.md, listado como item 1 do kit_boas_vindas e lido
-# por ler_regras_inviolaveis, nao existia em commit nenhum. Toda IA que chegava
-# entrava por uma porta 404 e caia direto nos documentos tecnicos, sem nunca
-# passar pelo jeito de conversar com o Pivete.
-#
-# Em 2026-07-30 a mesma protecao passou a cobrir Claude, Codex/OpenAI, Copilot,
-# Gemini, Cursor e Windsurf. Todos os adaptadores devem apontar para a mesma
-# porta universal e para o contrato de orquestracao em delta.
+# Protege a porta universal e o mapa canônico do repositório inteiro.
+# O gate verifica alcance, contratos, identidade Git, raízes duplicadas,
+# novos caminhos paralelos e validações mascaradas. Nenhum adaptador guarda
+# uma cópia manual da governança e nenhum relatório transforma falha em verde.
 
 on:
   pull_request:
@@ -27,19 +21,48 @@ concurrency:
 
 jobs:
   validar:
-    name: Porta, canonicos e autoloaders universais estao integros?
+    name: Porta e governança canônica estão íntegras?
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Validar porta, canonicos e adaptadores de IA
+      - name: Testar falsificadores do mapa global
+        run: node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
+
+      - name: Validar mapa e contratos do repositório inteiro
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') }}
+        run: |
+          set -euo pipefail
+          node apps/modulos/mapeamento/core/validar-mapa.mjs \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --base-sha "$BASE_SHA" \
+            --head-sha "$HEAD_SHA" \
+            --approved "$PIVETE_APPROVED"
+
+      - name: Validar porta e adaptadores universais
         run: node scripts/lupa/validar-porta-de-entrada.mjs
 
-      - name: Relatorio completo
+      - name: Emitir relatório reproduzível
         if: always()
-        run: node scripts/lupa/validar-porta-de-entrada.mjs --json || true
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') }}
+        run: |
+          set -euo pipefail
+          node apps/modulos/mapeamento/core/validar-mapa.mjs \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --base-sha "$BASE_SHA" \
+            --head-sha "$HEAD_SHA" \
+            --approved "$PIVETE_APPROVED"
+          node scripts/lupa/validar-porta-de-entrada.mjs --json

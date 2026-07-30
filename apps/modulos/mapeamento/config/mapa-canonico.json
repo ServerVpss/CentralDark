@@ -6,8 +6,78 @@
     "new_module_requires_map": true,
     "protected_changes_fail_closed": true,
     "case_insensitive_duplicates_forbidden": true,
-    "parallel_versions_forbidden": true
+    "parallel_versions_forbidden": true,
+    "adjacent_repeated_directory_forbidden": true,
+    "canonical_contracts_fail_closed": true,
+    "validation_failure_masking_forbidden": true
   },
+  "canonical_contracts": [
+    {
+      "id": "ai-universal-entrypoint",
+      "source": "LEIA-ME-IA.md",
+      "consumers": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "README.md",
+        "CODEX.md",
+        ".claude/rules/00-centraldark-boot-universal.md",
+        ".github/copilot-instructions.md",
+        "GEMINI.md",
+        ".cursor/rules/centraldark-governanca.mdc",
+        ".windsurfrules"
+      ],
+      "required_tokens": [
+        "LEIA-ME-IA.md",
+        "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md",
+        "CENTRALDARK_AI_BOOT"
+      ]
+    },
+    {
+      "id": "meta-lupa-identity",
+      "source": ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA",
+      "target": ".agents/skills/meta-lupa/SKILL.md",
+      "identity": "git_blob_sha1",
+      "consumers": [
+        "LEIA-ME-IA.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "README.md",
+        "CODEX.md",
+        ".claude/rules/00-centraldark-boot-universal.md",
+        ".github/copilot-instructions.md",
+        "GEMINI.md",
+        ".cursor/rules/centraldark-governanca.mdc",
+        ".windsurfrules"
+      ],
+      "required_tokens": [
+        ".agents/skills/meta-lupa/SKILL.md",
+        ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA"
+      ],
+      "forbidden_tokens": [
+        "SKILL_COMMIT_SHA:"
+      ]
+    }
+  ],
+  "forbidden_roots": [
+    {
+      "path": "docs/CONSCIENCIA/CONSCIENCIA/",
+      "canonical": "docs/CONSCIENCIA/",
+      "reason": "prefixo duplicado criado por automação antiga"
+    },
+    {
+      "path": "docs/CONSCIENCIA/BRAIN/",
+      "canonical": "docs/BRAIN/",
+      "reason": "segunda árvore de memória sem consumidores ativos"
+    }
+  ],
+  "historical_roots": [
+    "docs/RELATORIOS/",
+    "docs/_LEGADO_ROOT_DOCS_CONFLITOS/"
+  ],
+  "validation_entrypoints": [
+    "scripts/lupa/validar-porta-de-entrada.mjs",
+    "apps/modulos/mapeamento/core/validar-mapa.mjs"
+  ],
   "sectors": [
     {
       "id": "comando",
@@ -58,6 +128,15 @@
     }
   ],
   "consolidated_areas": [
+    { "path": "LEIA-ME-IA.md", "since": "2026-07-30", "reason": "Porta universal canônica" },
+    { "path": "AGENTS.md", "since": "2026-07-30", "reason": "Contrato geral dos agentes" },
+    { "path": "CLAUDE.md", "since": "2026-07-30", "reason": "Adaptador operacional Claude" },
+    { "path": "README.md", "since": "2026-07-30", "reason": "Entrada humana do projeto" },
+    { "path": "CODEX.md", "since": "2026-07-30", "reason": "Adaptador operacional Codex" },
+    { "path": "GEMINI.md", "since": "2026-07-30", "reason": "Adaptador operacional Gemini" },
+    { "path": ".windsurfrules", "since": "2026-07-30", "reason": "Adaptador operacional Windsurf" },
+    { "path": ".github/copilot-instructions.md", "since": "2026-07-30", "reason": "Adaptador operacional Copilot" },
+    { "path": ".cursor/rules/", "since": "2026-07-30", "reason": "Adaptadores operacionais Cursor" },
     { "path": "apps/bot-telegram/", "since": "2026-06-28", "reason": "Bot central restaurado e testado" },
     { "path": "apps/modulos/status/", "since": "2026-07-02", "reason": "Página oficial de status consolidada" },
     { "path": "apps/modulos/Bolt/", "since": "2026-07-02", "reason": "Construtor oficial" },
