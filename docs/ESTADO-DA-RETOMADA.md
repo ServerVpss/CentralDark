@@ -3,7 +3,7 @@
 > Gerado por `scripts/estado/gerar-estado-retomada.mjs`. **Nao edite a mao** —
 > a proxima execucao sobrescreve. Para mudar o que e medido, mude o script.
 
-Ultima geracao: `2026-07-30T09:08:20.761Z`
+Ultima geracao: `2026-07-30T09:35:17.747Z`
 
 Fonte da intencao: `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md`
 Fonte da verdade estrutural: `apps/modulos/mapeamento/config/mapa-canonico.json`
@@ -37,8 +37,6 @@ artefato minimo existe e esta versionado. Conclusao exige teste operacional.
 
 | Caminho | Declarado como | Acao |
 |---|---|---|
-| `apps/modulos/Monitoramento24h/` | setor ESCUDO | abrir PR: criar o modulo ou remover a declaracao |
-| `apps/modulos/Monitoramento24h/` | area consolidada — Monitoramento 24h consolidado | abrir PR: criar o modulo ou remover a declaracao |
 | `apps/modulos/clone-deck/` | area consolidada — Clone-deck consolidado | abrir PR: criar o modulo ou remover a declaracao |
 
 ### Ausencia esperada (nao e lacuna)
@@ -49,7 +47,7 @@ Estes caminhos geram aviso em todo PR. Aviso permanente treina o time a
 ignorar aviso: ou o mapa passa a marcar `expected_absent: true`, ou a
 declaracao sai. Enquanto isso, o ruido continua.
 
-Totais no mapa: 21 caminhos de setor, 30 areas consolidadas.
+Totais no mapa: 20 caminhos de setor, 29 areas consolidadas.
 
 ## O que este arquivo nao mede
 
