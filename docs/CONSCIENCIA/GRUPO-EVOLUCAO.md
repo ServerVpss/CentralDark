@@ -102,7 +102,8 @@ Regras:
 - teste verde sem prova antes/depois: `0 XP`;
 - IA que inventa finding, arquivo ou resultado: contribuição rejeitada;
 - correção comprovada: MetaLupa calcula XP conforme achievements válidos;
-- `ponto_fixo_atingido` exige simultaneamente AutoLupa executada e ponto fixo evidencial.
+- `ponto_fixo_atingido` exige simultaneamente AutoLupa executada e ponto fixo evidencial;
+- correção de contabilidade histórica desconta o valor devido e não gera prêmio positivo.
 
 ## Segurança e autonomia
 
@@ -113,6 +114,32 @@ Regras:
 - achado sem auto-fix vira Issue deduplicada;
 - publicação usa branch e PR;
 - a `main` só recebe mudanças após os gates e a decisão de merge.
+
+## Fronteira de identidade do GitHub
+
+O `GITHUB_TOKEN` interno consegue criar commits e atualizar a branch, mas o GitHub
+coloca os novos workflows de um PR atualizado por esse token em estado de aprovação
+obrigatória. Isso é uma barreira da plataforma contra recursão e abuso, não uma falha
+que possa ser apagada por script.
+
+Para autonomia sem intervenção nesse ponto, configure uma destas identidades externas:
+
+```text
+GITHUB_PAT_PERFIL com Contents + Pull requests + Workflows
+ou
+GitHub App instalada com permissões equivalentes
+```
+
+Sem essa identidade, o sistema continua seguro e fail-closed:
+
+```text
+detecta → corrige → testa → commita na branch
+mas declara ACTION_REQUIRED para os novos checks
+```
+
+Nunca trocar essa barreira por `pull_request_target` executando código não confiável,
+por push direto na `main` ou por ocultação do status. A pendência externa deve permanecer
+visível até a credencial autorizada existir.
 
 ## Execução local ou VPS
 
