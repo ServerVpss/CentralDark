@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Registra XP na MetaLupa somente para correções comprovadas no mesmo run.
 
-O ledger é alterado na branch automática; portanto o XP só chega à main quando o PR
-é revisado e mergeado. Mensagem, elogio ou análise sem correção não pontuam.
+O ledger é alterado em um segundo commit da branch automática. O primeiro commit
+contém a correção testada; o recibo de XP aponta para esse SHA exato. Mensagem,
+elogio ou análise sem correção não pontuam.
 """
 from __future__ import annotations
 
@@ -71,6 +72,7 @@ def commands_for(
 
     evidence = [
         f"run={run_url}",
+        f"correction_sha={workspace_head}",
         f"audit_before={before.get('evidence_sha256', '')}",
         f"audit_after={after.get('evidence_sha256', '')}",
         f"fixed_ids={','.join(fixed_ids)}",
@@ -119,6 +121,7 @@ def main() -> int:
     parser.add_argument("--run-url", required=True)
     parser.add_argument("--branch", required=True)
     parser.add_argument("--run-id", required=True)
+    parser.add_argument("--files-changed", nargs="*", default=[])
     parser.add_argument("--output", default=".artifacts/evolucao/xp.json")
     args = parser.parse_args()
 
@@ -144,7 +147,9 @@ def main() -> int:
         contributors.append((safe_agent(review.get("agent", "ia")), True))
 
     workspace_head = git("rev-parse", "HEAD")
-    files_changed = [line for line in git("diff", "--name-only").splitlines() if line]
+    files_changed = [item for item in args.files_changed if item]
+    if not files_changed:
+        files_changed = [line for line in git("diff", "--name-only", "HEAD^", "HEAD").splitlines() if line]
     command_sets = []
     for agent, ai_contribution in contributors:
         mission = f"AUTO-EVOLUCAO-{agent.upper()}-{args.run_id}"
@@ -173,6 +178,7 @@ def main() -> int:
         run(finish, real_env)
         payload["contributors"].append({"agent": agent, "type": "IA" if ai_contribution else "SCRIPT"})
     payload["awarded"] = True
+    payload["correction_sha"] = workspace_head
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return 0
 
