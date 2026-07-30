@@ -3,7 +3,7 @@
 > Gerado por `scripts/estado/gerar-estado-retomada.mjs`. **Nao edite a mao** —
 > a proxima execucao sobrescreve. Para mudar o que e medido, mude o script.
 
-Ultima geracao: `2026-07-29T09:16:55.521Z`
+Ultima geracao: `2026-07-30T09:08:20.761Z`
 
 Fonte da intencao: `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md`
 Fonte da verdade estrutural: `apps/modulos/mapeamento/config/mapa-canonico.json`
