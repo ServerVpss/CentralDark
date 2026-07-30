@@ -7,8 +7,8 @@ program:
   parent_plan: docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md
   operational_contract: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
   opened_at: 2026-07-30T07:55:00-03:00
-  status: PLANNING_PR_OPEN
-  phase: F0_MAPEAMENTO
+  status: PROGRAM_ACTIVE_DRAFT
+  phase: F1_CONTRATO_INVENTARIO_READ_ONLY
   branch: plan/hermes-casa-mente-estendida-20260730
   pr: 554
   writer:
@@ -28,6 +28,7 @@ program:
       - docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md
       - docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
       - docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/
+      - docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/05-CONTRATO-COLETOR-READ-ONLY.md
     user_observed:
       - E:\CentralDark\Pivete\NUCLEO\motor\03-memoria
       - E:\CentralDark\Pivete\NUCLEO\motor\10-observabilidade\LABORATORIO
@@ -74,14 +75,19 @@ program:
   phases:
     - id: F0
       name: map_and_plan
-      status: IN_PROGRESS
+      status: COMPLETE
       child_pr: null
       gate: docs_and_sources_registered_no_mutation
+      evidence:
+        - PR_554
+        - docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/README.md
+        - docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/programa.yaml
     - id: F1
       name: read_only_local_inventory
-      status: BLOCKED_BY_F0
+      status: CONTRACT_DEFINED_IMPLEMENTATION_PENDING
       child_pr: null
       gate: sanitized_manifest_zero_mutation
+      contract: docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/05-CONTRATO-COLETOR-READ-ONLY.md
     - id: F2
       name: hermes_home_and_agent_one_lab
       status: BLOCKED_BY_F1
@@ -122,9 +128,24 @@ program:
       status: PLANNED
       child_pr: null
       gate: deduplicated_report_no_automatic_promotion
+  latest_delta:
+    date: 2026-07-30
+    phase: F1
+    fact: contrato fail-closed do inventario local read-only definido
+    evidence:
+      - docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/05-CONTRATO-COLETOR-READ-ONLY.md
+      - PR_566_MERGED_e804fea58134bace70988d75d821178902a01507
+      - PR_568_MERGED_f39b6384e42830044f0d9e9e0e942246ab02513b
+      - PR_569_MERGED_2e55133db8015c936816affd8f4534b3beae7a0a
+      - PR_571_MERGED_be2505183a0d69f2f6c874072a180f426b8d2d8d
+    decision: iniciar somente o contrato F1; nenhuma varredura local executada
+    risk: coletor ainda nao implementado nem testado em fixtures
+    child_pr: null
+    next_gate: abrir PR-filho da implementacao do coletor sobre fixtures artificiais
+    do_not_rewind: true
   next_gate:
-    id: F1_CONTRACT
-    action: define_and_review_read_only_inventory_contract
+    id: F1_CHILD_PR
+    action: implement_read_only_collector_against_artificial_fixtures
     mutation: false
   delta_protocol:
     required_fields:
