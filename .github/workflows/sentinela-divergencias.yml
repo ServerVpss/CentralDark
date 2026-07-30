@@ -1,60 +1,310 @@
 name: sentinela-divergencias
 
-# Sentinela 24/7 — varre divergências no repo, workflows, endpoints públicos
-# e PM2/MCP, e abre Issue automática (com dedupe por hash) pra cada uma.
-# Roda a cada 6h e sob demanda.
+# Um único escritor por execução:
+# auditoria script -> revisão IA opcional -> auto-fix allowlisted -> testes ->
+# commit da correção -> XP em segundo commit -> push na branch -> PR/Issues.
+# Nunca faz push direto na main e não depende do runner da VPS.
 
 on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/**'
+      - '.agents/skills/meta-lupa/**'
+      - '.claude/**'
+      - 'apps/bot-telegram/evolucao-ias.cjs'
+      - 'scripts/evolucao/**'
+      - 'scripts/sentinela/**'
+      - 'scripts/lupa/**'
+      - 'LEIA-ME-IA.md'
   schedule:
     - cron: '0 */6 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Só relata, não abre Issue'
+        description: 'Só audita e relata; não escreve branch, PR, Issue ou XP'
         required: false
-        default: 'false'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+  pull-requests: write
   issues: write
   actions: read
 
 concurrency:
-  group: sentinela-divergencias
+  group: sentinela-divergencias-${{ github.event.pull_request.number || 'agendado' }}
   cancel-in-progress: false
 
 jobs:
-  varredura:
-    runs-on: [self-hosted, Linux]
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v6
+  autonomia:
+    name: Script + IA fallback + correção + prova
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      REPO_ALVO: ${{ github.repository }}
+      RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      ARTIFACT_DIR: .artifacts/evolucao
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
 
-      - uses: actions/setup-node@v6
+    steps:
+      - name: Checkout do SHA auditado
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Rodar sentinela
-        id: run
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Preparar recibos
+        run: mkdir -p "$ARTIFACT_DIR" .artifacts/sentinela
+
+      - name: Auditoria antes da correção
+        id: audit_before
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/evolucao/auditar-autonomia.py \
+            --json-output "$ARTIFACT_DIR/before.json" \
+            --markdown-output "$ARTIFACT_DIR/before.md"
+          code=$?
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          test -s "$ARTIFACT_DIR/before.json"
+
+      - name: Revisão por IA com fallback para script
+        env:
+          DARKAI_URL: ${{ secrets.DARKAI_URL }}
+          DARKAI_ANON_KEY: ${{ secrets.DARKAI_ANON_KEY }}
+          DARKAI_BIN: docs/CONSCIENCIA/DARKAI/darkai.sh
+          DARKAI_REVIEW_MODEL: ${{ vars.DARKAI_REVIEW_MODEL || 'openai/gpt-5.4' }}
+          DARKAI_REVIEW_AGENT: darkai
+        run: |
+          chmod +x docs/CONSCIENCIA/DARKAI/darkai.sh 2>/dev/null || true
+          python3 scripts/evolucao/revisar-com-ia.py \
+            --input "$ARTIFACT_DIR/before.json" \
+            --output "$ARTIFACT_DIR/review.json"
+
+      - name: Aplicar somente auto-fix allowlisted
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        run: python3 scripts/evolucao/aplicar-autofix.py --output "$ARTIFACT_DIR/autofix.json"
+
+      - name: Recibo vazio no dry-run
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: printf '%s\n' '{"schema":1,"count":0,"fixes":[]}' > "$ARTIFACT_DIR/autofix.json"
+
+      - name: Auditoria depois da correção
+        id: audit_after
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/evolucao/auditar-autonomia.py \
+            --json-output "$ARTIFACT_DIR/after.json" \
+            --markdown-output "$ARTIFACT_DIR/after.md"
+          code=$?
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          test -s "$ARTIFACT_DIR/after.json"
+
+      - name: Testes de regressão e sintaxe
+        id: tests
+        run: |
+          set -euo pipefail
+          python3 scripts/evolucao/test_autonomia.py
+          python3 scripts/lupa/test_validar_resposta_pivete.py
+          python3 .agents/skills/meta-lupa/testes/test_selo_ponto_fixo.py
+          node --check scripts/sentinela/run.mjs
+          node --check apps/bot-telegram/evolucao-ias.cjs
+          echo 'pass=true' >> "$GITHUB_OUTPUT"
+
+      - name: Coletar estado operacional sem mascarar falha
+        if: always()
+        id: sentinela
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_PAT_PERFIL: ${{ secrets.GITHUB_PAT_PERFIL }}
-          DRY_RUN: ${{ inputs.dry_run || 'false' }}
-          REPO_ALVO: ${{ github.repository }}
-        run: node scripts/sentinela/run.mjs
-
-      - name: Commit snapshot
+          SENTINELA_OUTPUT_DIR: .artifacts/sentinela
+        shell: bash
         run: |
-          git config user.name 'CentralDark Sentinela'
+          set +e
+          node scripts/sentinela/run.mjs
+          code=$?
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          test -s .artifacts/sentinela/report.json
+
+      - name: Criar commit técnico isolado
+        if: ${{ steps.tests.outputs.pass == 'true' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        id: commit_fix
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+          PR_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name || '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'CentralDark Autonomia'
           git config user.email 'actions@github.com'
-          git add -- docs/sentinela/last-snapshot.json docs/sentinela/last-report.md 2>/dev/null || true
-          git commit -m "chore(sentinela): snapshot ${{ github.run_id }}
 
-          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
-          git push || true
+          git diff --name-only -- . ':!.artifacts' > "$ARTIFACT_DIR/changed-files.txt"
+          if [ ! -s "$ARTIFACT_DIR/changed-files.txt" ]; then
+            echo 'has_fix=false' >> "$GITHUB_OUTPUT"
+            echo 'writable=true' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
-      # NOTA: o step "Atualizar Mega Painel" foi removido em 25/06/2026.
-      # Motivo: race condition com painel-auto-update.yml e com o auto-commit
-      # da VPS — três escritores no mesmo arquivo (painel-data.json) causavam
-      # rejeição de push (non-fast-forward) na main. Agora só o
-      # painel-auto-update.yml mantém o painel-data.json.
+          if [ "$EVENT_NAME" = 'pull_request' ] && [ "$PR_HEAD_REPO" != "$GITHUB_REPOSITORY" ]; then
+            echo 'has_fix=true' >> "$GITHUB_OUTPUT"
+            echo 'writable=false' >> "$GITHUB_OUTPUT"
+            echo 'Fork externo: correção provada, mas escrita bloqueada.'
+            exit 0
+          fi
+
+          if [ "$EVENT_NAME" = 'pull_request' ]; then
+            target_branch="$HEAD_BRANCH"
+          else
+            target_branch="auto/autonomia-${GITHUB_RUN_ID}"
+          fi
+          git switch -C "$target_branch"
+          mapfile -t changed < "$ARTIFACT_DIR/changed-files.txt"
+          git add -- "${changed[@]}"
+          git commit -m "fix(autonomia): aplicar correções allowlisted
+
+          Run: ${RUN_URL}"
+          correction_sha="$(git rev-parse HEAD)"
+          echo 'has_fix=true' >> "$GITHUB_OUTPUT"
+          echo 'writable=true' >> "$GITHUB_OUTPUT"
+          echo "branch=$target_branch" >> "$GITHUB_OUTPUT"
+          echo "correction_sha=$correction_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Registrar XP comprovado e atualizar placar
+        if: ${{ steps.commit_fix.outputs.has_fix == 'true' && steps.commit_fix.outputs.writable == 'true' }}
+        env:
+          TESTS_PASS: 'true'
+          EVOLUCAO_TEST_CASES: '26'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t changed < "$ARTIFACT_DIR/changed-files.txt"
+          python3 scripts/evolucao/registrar-xp-ci.py \
+            --before "$ARTIFACT_DIR/before.json" \
+            --after "$ARTIFACT_DIR/after.json" \
+            --autofix "$ARTIFACT_DIR/autofix.json" \
+            --review "$ARTIFACT_DIR/review.json" \
+            --run-url "$RUN_URL" \
+            --branch "${{ steps.commit_fix.outputs.branch }}" \
+            --run-id "$GITHUB_RUN_ID" \
+            --files-changed "${changed[@]}" \
+            --output "$ARTIFACT_DIR/xp.json"
+          python3 scripts/evolucao/gerar-placar.py
+          git add -- \
+            .agents/skills/meta-lupa/references/uso-ledger.jsonl \
+            docs/evolucao/placar.json \
+            docs/evolucao/placar.md
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(evolução): registrar XP comprovado
+
+            Correction-SHA: ${{ steps.commit_fix.outputs.correction_sha }}
+            Run: ${RUN_URL}"
+          fi
+
+      - name: Publicar somente na branch de trabalho
+        if: ${{ steps.commit_fix.outputs.has_fix == 'true' && steps.commit_fix.outputs.writable == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          target_branch="${{ steps.commit_fix.outputs.branch }}"
+          git push origin "HEAD:${target_branch}"
+
+          if [ "$EVENT_NAME" != 'pull_request' ]; then
+            cat > "$ARTIFACT_DIR/pr-body.md" <<EOF
+          ## Diagnóstico técnico
+
+          A Sentinela encontrou lacunas reproduzíveis, aplicou somente transformações allowlisted, executou regressões e registrou XP em um segundo commit apontando para o SHA da correção.
+
+          - Correção: \`${{ steps.commit_fix.outputs.correction_sha }}\`
+          - Run: ${RUN_URL}
+          - Relatório antes: \`$ARTIFACT_DIR/before.json\`
+          - Relatório depois: \`$ARTIFACT_DIR/after.json\`
+
+          ## Papo reto do Pivete
+
+          O script achou, corrigiu o que era seguro, testou e abriu este PR. O que não tinha correção determinística ficou em Issue; nada foi empurrado direto na main.
+          EOF
+            gh pr create \
+              --repo "$GITHUB_REPOSITORY" \
+              --base main \
+              --head "$target_branch" \
+              --title 'fix(autonomia): correções automáticas comprovadas' \
+              --body-file "$ARTIFACT_DIR/pr-body.md"
+          fi
+
+      - name: Sincronizar Issues dos achados restantes
+        if: ${{ always() && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 scripts/evolucao/sincronizar-issues.py \
+            --report .artifacts/sentinela/report.json \
+            --repo "$GITHUB_REPOSITORY" \
+            --run-url "$RUN_URL" \
+            --output "$ARTIFACT_DIR/issues.json"
+
+      - name: Resumo visível na aba Actions
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo '## Autonomia CentralDark'
+            echo
+            if [ -f "$ARTIFACT_DIR/after.md" ]; then cat "$ARTIFACT_DIR/after.md"; fi
+            echo
+            echo '## Modo da revisão'
+            if [ -f "$ARTIFACT_DIR/review.json" ]; then jq -r '"- Modo: **\(.mode)**\n- Agente: `\(.agent)`\n- Motivo do fallback: `\(.reason // "")`"' "$ARTIFACT_DIR/review.json"; fi
+            echo
+            echo '## Escrita'
+            echo "- Auto-fix: \`${{ steps.commit_fix.outputs.has_fix || 'false' }}\`"
+            echo "- Branch: \`${{ steps.commit_fix.outputs.branch || 'nenhuma' }}\`"
+            echo "- SHA da correção: \`${{ steps.commit_fix.outputs.correction_sha || 'nenhum' }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload dos recibos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autonomia-${{ github.run_id }}
+          if-no-files-found: error
+          path: |
+            .artifacts/evolucao/
+            .artifacts/sentinela/
+
+      - name: Gate final sem falso verde
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s "$ARTIFACT_DIR/after.json"
+          test -s .artifacts/sentinela/report.json
+          blockers="$(jq -r '.summary.blockers' "$ARTIFACT_DIR/after.json")"
+          workflow_query_ok="$(jq -r '.workflow_query_ok' .artifacts/sentinela/report.json)"
+          autonomy_audit_ok="$(jq -r '.autonomy_audit_ok' .artifacts/sentinela/report.json)"
+          test "$workflow_query_ok" = 'true'
+          test "$autonomy_audit_ok" = 'true'
+          if [ "$blockers" -ne 0 ]; then
+            echo "BLOCKED: $blockers lacuna(s) de autonomia continuam reproduzíveis."
+            exit 1
+          fi
+          echo 'PASS: auditor executou, regressões passaram e nenhum blocker permaneceu.'
