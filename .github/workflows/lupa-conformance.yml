@@ -2,11 +2,16 @@ name: lupa-conformance
 
 on:
   pull_request:
-    paths:
-      - '.agents/skills/meta-lupa/**'
-      - 'scripts/lupa/**'
-      - 'docs/PROMPTS/**.tex'
-      - '.github/workflows/lupa-conformance.yml'
+    branches: [main]
+    types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lupa-conformance-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   guard:
@@ -25,8 +30,8 @@ jobs:
           AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
         run: pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
 
-      # A partir daqui: evidência que antes era declarada à mão no corpo do PR
-      # e nunca executada por nenhum check. Ver PR #410.
+      # Evidência executada para todo PR; promoção autônoma nunca espera um
+      # workflow que pode não existir por filtro de path.
       - name: Motor determinístico (test_lupa.py)
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_lupa.py
