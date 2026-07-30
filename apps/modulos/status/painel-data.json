@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-30T09:33:27.305Z",
-  "updatedAtBR": "30/07/2026, 06:33:27 BRT",
+  "updatedAt": "2026-07-30T09:36:27.257Z",
+  "updatedAtBR": "30/07/2026, 06:36:27 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "docs(arquitetura): registrar Jarvis em delta e escritor único (#552)",
+    "lastCommit": "fix(sentinela): automatizar drift GitHub-VPS e remover entrada vazia do mapa (#551)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-30T09:36:27.257Z",
+      "titulo": "Push na main · f251e315a70454fe98850fbcd6fcc712cbeb01ff",
+      "detalhe": "fix(sentinela): automatizar drift GitHub-VPS e remover entrada vazia do mapa (#551)",
+      "area": "Repositório",
+      "sha": "f251e31",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-30T09:33:27.305Z",
       "titulo": "Push na main · 4c2179ec9d81b35cdd5eddb83623226ad4ed37f9",
       "detalhe": "docs(arquitetura): registrar Jarvis em delta e escritor único (#552)",
@@ -986,14 +994,6 @@
       "detalhe": "Merge PR #294: diagnosticar estabilidade PM2",
       "area": "Repositório",
       "sha": "b914331",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-22T00:20:46.162Z",
-      "titulo": "Push na main · dad15c76ef1c4c7eb6c6b6ce25e26d017a11e9e1",
-      "detalhe": "Merge PR #292: promover dist atômico preservando checkout",
-      "area": "Repositório",
-      "sha": "dad15c7",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-30T09:36:27.257Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f251e315a70454fe98850fbcd6fcc712cbeb01ff (f251e31)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-30T09:33:27.305Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 4c2179ec9d81b35cdd5eddb83623226ad4ed37f9 (4c2179e)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-22T00:26:12.172Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · b91433122f815d915c490157d6edf856ed4ee5d7 (b914331)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-22T00:20:46.162Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · dad15c76ef1c4c7eb6c6b6ce25e26d017a11e9e1 (dad15c7)",
       "area": "Repositório",
       "status": "sucesso"
     }
