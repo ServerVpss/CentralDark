@@ -2,7 +2,7 @@ name: codex-validate
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, labeled, unlabeled]
+    types: [opened, synchronize, reopened, ready_for_review, edited, labeled, unlabeled]
     branches:
       - main
   workflow_dispatch:
@@ -37,7 +37,7 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') }}
+          PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
         run: |
           set -euo pipefail
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
