@@ -21,6 +21,12 @@ ROOT = Path(__file__).resolve().parents[2]
 WORKFLOWS = ROOT / ".github" / "workflows"
 EVOLUTION_ENGINE = ROOT / "apps" / "bot-telegram" / "evolucao-ias.cjs"
 META_LUPA = ROOT / ".agents" / "skills" / "meta-lupa" / "scripts" / "meta_lupa.py"
+META_LUPA_LEDGER = ROOT / ".agents" / "skills" / "meta-lupa" / "references" / "uso-ledger.jsonl"
+LEGACY_XP_CORRECTION_MISSION = "CORRECAO-XP-LEGADO-AUTOLUPA-20260730"
+LEGACY_XP_TARGET_HASHES = {
+    "6c0eb4a383c69221e5027e2bab20557cfd37b199516c7b198bab5bf0c7d5c1bb",
+    "971f1efea856f84ef9056eb1725c869abcd1e61e331f0f64abcb8443e59c18d8",
+}
 CANONICAL_DIRS = (
     ROOT / ".claude",
     ROOT / ".agents",
@@ -167,6 +173,59 @@ def meta_lupa_findings(findings: list[Finding]) -> None:
         ))
 
 
+def ledger_records(path: Path | None = None) -> list[dict]:
+    target = path or META_LUPA_LEDGER
+    if not target.is_file():
+        raise FileNotFoundError(target)
+    records = []
+    for line_number, line in enumerate(target.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        value = json.loads(line)
+        if not isinstance(value, dict):
+            raise ValueError(f"LEDGER_RECORD_NOT_OBJECT:{line_number}")
+        records.append(value)
+    return records
+
+
+def legacy_xp_findings(findings: list[Finding], path: Path | None = None) -> None:
+    target = path or META_LUPA_LEDGER
+    try:
+        records = ledger_records(target)
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+        add(findings, Finding(
+            "CD-AUTO-LUPA-LEDGER-READ", "blocker", rel(target),
+            "Ledger de XP não pôde ser auditado", type(exc).__name__,
+        ))
+        return
+
+    correction = any(
+        row.get("event") == "FINAL"
+        and row.get("mission_id") == LEGACY_XP_CORRECTION_MISSION
+        and row.get("xp_gained") == -50
+        and "evidencia_inventada" in (row.get("penalties") or [])
+        for row in records
+    )
+    if correction:
+        return
+
+    invalid = {
+        row.get("record_hash")
+        for row in records
+        if row.get("record_hash") in LEGACY_XP_TARGET_HASHES
+        and row.get("event") == "FINAL"
+        and row.get("autolupa_executed") is False
+        and row.get("point_fixed_evidential") is True
+        and "ponto_fixo_atingido" in (row.get("achievements") or [])
+    }
+    if invalid == LEGACY_XP_TARGET_HASHES:
+        add(findings, Finding(
+            "CD-AUTO-LUPA-XP-LEGACY", "blocker", rel(target),
+            "Dois achievements legados somam 50 XP sem AutoLupa executada",
+            "2 registros x 25 XP; correção exigida por append imutável", True,
+        ))
+
+
 def tracked_source_files() -> list[Path]:
     result = subprocess.run(
         ["git", "-C", str(ROOT), "ls-files", "-z"],
@@ -213,6 +272,7 @@ def build_report() -> dict:
     workflow_findings(findings)
     evolution_findings(findings)
     meta_lupa_findings(findings)
+    legacy_xp_findings(findings)
     secret_and_duplicate_findings(findings)
     findings = sorted(findings, key=lambda item: (item.severity != "blocker", item.id, item.path))
     blockers = sum(item.severity == "blocker" for item in findings)
