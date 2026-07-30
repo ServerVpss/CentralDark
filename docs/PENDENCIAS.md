@@ -752,7 +752,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Resultado do mapeamento (7/7 cobertos por código real já em PM2):**
   - **COMANDO** → `apps/modulos/HERMES-CORE/` (loop + rede especialista)
   - **ARSENAL** → `apps/modulos/arsenal-openai-adapter/` + `docs/CONSCIENCIA/ARSENAL/`
-  - **ESCUDO** → `HERMES-CORE/agents/Log-Verificador/` (PM2 id 77) + `apps/modulos/Monitoramento24h/`
+  - **ESCUDO** → `HERMES-CORE/agents/Log-Verificador/` (PM2 id 77)
   - **INTELIGÊNCIA** → `apps/modulos/graph-panel/` + `apps/modulos/mapeamento/` + `apps/modulos/obsidian-plugin-grafo-vivo/`
   - **MEMÓRIA** → `apps/modulos/memoria-api/` + `docs/CONSCIENCIA/` + `LEMBRANCAS/`
   - **EXECUÇÃO** → `apps/modulos/elite-gateway/` + `elite-anthropic-proxy/` + `proxy/` + `lovable-proxy/` + `artifacts-builder/` + MCP

@@ -107,7 +107,7 @@ Pra evitar cada IA nova inventar nome próprio pros módulos, adotamos a doutrin
 |---|---|---|
 | **COMANDO** | Decisão, orquestração, roteamento neural | `apps/modulos/HERMES-CORE/` (loop autônomo + rede especialista) |
 | **ARSENAL** | Conselho de IAs (Router / Parallel / Debate) | `apps/modulos/arsenal-openai-adapter/` + `docs/CONSCIENCIA/ARSENAL/` |
-| **ESCUDO** | Auto-healing, vigia, fallback, resiliência | `HERMES-CORE/agents/Log-Verificador/` (PM2 id 77) + `apps/modulos/Monitoramento24h/` |
+| **ESCUDO** | Auto-healing, vigia, fallback, resiliência | `HERMES-CORE/agents/Log-Verificador/` (PM2 id 77) |
 | **INTELIGÊNCIA** | Grafo, análise de código, mapa vivo | `apps/modulos/graph-panel/` + `apps/modulos/mapeamento/` + `apps/modulos/obsidian-plugin-grafo-vivo/` |
 | **MEMÓRIA** | Consciência, lembranças, aprendizados | `apps/modulos/memoria-api/` + `docs/CONSCIENCIA/` + `docs/CONSCIENCIA/LEMBRANCAS/` |
 | **EXECUÇÃO** | Braços do sistema — MCP, gateways, proxies | `apps/modulos/elite-gateway/` + `elite-anthropic-proxy/` + `proxy/` + `lovable-proxy/` + `artifacts-builder/` + MCP |
