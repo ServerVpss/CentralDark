@@ -76,7 +76,8 @@ jobs:
               'private': r'-----BEGIN ' + r'[A-Z0-9 ]*PRIVATE KEY-----',
               'github': r'\bgh' + r'[pousr]_[A-Za-z0-9_]{20,}\b',
               'openai': r'\bsk' + r'-[A-Za-z0-9_-]{16,}\b',
-              'assignment': r'(?i)(?:api[_-]?key|secret|password|passwd|token)\s*[:=]\s*[\"\']?([A-Za-z0-9._~+/=-]{16,})',
+              'telegram': r'\b\d{8,12}:[A-Za-z0-9_-]{30,}\b',
+              'assignment': r'(?i)(?:api[_-]?key|secret|password|passwd|token)\s*[:=]\s*["\']?(?!(?:process\.env\.|os\.environ|env\.|secrets\.|github\.|vars\.))([A-Za-z0-9._~+/=-]{16,})',
           }
           placeholders = re.compile(r'(?i)^(?:example|changeme|replace_me|redacted|placeholder|dummy|test|x+)$')
 
@@ -183,7 +184,8 @@ jobs:
               /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\b/,
               /\bgh[pousr]_[A-Za-z0-9_]{20,}\b/,
               /\bsk-[A-Za-z0-9_-]{16,}\b/,
-              new RegExp('(?:api[_-]?key|secret|password|passwd|token)\\s*[:=]\\s*[\\"\\\']?[A-Za-z0-9._~+/=-]{16,}', 'i'),
+              /\b\d{8,12}:[A-Za-z0-9_-]{30,}\b/,
+              new RegExp('(?:api[_-]?key|secret|password|passwd|token)\\s*[:=]\\s*[\\"\\\']?(?!(?:process\\.env\\.|os\\.environ|env\\.|secrets\\.|github\\.|vars\\.))[A-Za-z0-9._~+/=-]{16,}', 'i'),
             ];
             if (valuePatterns.some(pattern => pattern.test(text))) {
               status = 'NEEDS_HUMAN';
