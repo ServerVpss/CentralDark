@@ -3,20 +3,19 @@ name: Lupa Drift Guard
 on:
   pull_request:
     branches: [main, pivete/dev, pivete/auditoria]
-    paths:
-      - '.agents/skills/**'
-      - '.claude/skills/**'
-      - '.workspace/skills/**'
-      - 'docs/**/*.md'
-      - 'scripts/lupa/**'
-      - '.github/workflows/lupa-drift-guard.yml'
+    types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lupa-drift-guard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   drift-guard:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
