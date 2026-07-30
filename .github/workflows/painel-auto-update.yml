@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: painel-auto-update
@@ -28,7 +29,7 @@ jobs:
           submodules: false
           fetch-depth: 0
 
-      - name: 🔄 Regerar + commitar + push (retry loop)
+      - name: 🔄 Regerar + commitar + publicar PR
         env:
           PAINEL_EVENTO: "Push na main · ${{ github.sha }}"
           PAINEL_EVENTO_DETALHE: "${{ github.event.head_commit.message }}"
@@ -36,8 +37,9 @@ jobs:
           SHA: ${{ github.sha }}
           ACTOR: ${{ github.actor }}
           MSG: ${{ github.event.head_commit.message }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          set -e
+          set -euo pipefail
           git config user.name 'CentralDark Bot'
           git config user.email 'bot@centralldark.com'
 
@@ -55,14 +57,14 @@ jobs:
             git commit -m "chore(painel): registrar push ${GITHUB_SHA:0:7}
 
           Co-authored-by: SegredoiDev <bot@centralldark.com>"
-            if git push origin HEAD:main; then
-              echo "✅ Painel atualizado (tentativa $TRY)."
+            if bash scripts/evolucao/publicar-pr-automatico.sh; then
+              echo "✅ PR do painel atualizado (tentativa $TRY)."
               exit 0
             fi
-            echo "⚠️ Push rejeitado (concorrência), retry..."
+            echo "⚠️ Publicação em PR falhou, retry..."
             sleep 2
           done
-          echo "❌ Falhou após $MAX_TRIES tentativas."
+          echo "❌ Publicação em PR falhou após $MAX_TRIES tentativas."
           exit 1
 
       - name: 📢 Notificar Telegram
@@ -71,7 +73,11 @@ jobs:
           BOT: ${{ secrets.SRVER1_BOT_TOKEN }}
           CHAT: ${{ secrets.TELEGRAM_CHANNEL_ID }}
         run: |
-          MSG="📊 <b>Painel atualizado</b>\n▸ Commit: <code>${GITHUB_SHA:0:7}</code>\n▸ <a href=\"https://status.centralldark.com\">Ver painel</a>"
-          curl -s -X POST "https://api.telegram.org/bot${BOT}/sendMessage" \
+          if [ -z "$BOT" ] || [ -z "$CHAT" ]; then
+            echo "Telegram não configurado; PR permanece como recibo."
+            exit 0
+          fi
+          MSG="📊 <b>Painel atualizado em PR</b>\n▸ Origem: <code>${GITHUB_SHA:0:7}</code>\n▸ <a href=\"https://github.com/${GITHUB_REPOSITORY}/pulls\">Ver PR</a>"
+          curl --fail-with-body --silent --show-error -X POST "https://api.telegram.org/bot${BOT}/sendMessage" \
             -H "Content-Type: application/json" \
-            -d "{\"chat_id\":\"${CHAT}\",\"parse_mode\":\"HTML\",\"text\":\"${MSG}\",\"disable_web_page_preview\":true}" > /dev/null || true
+            -d "{\"chat_id\":\"${CHAT}\",\"parse_mode\":\"HTML\",\"text\":\"${MSG}\",\"disable_web_page_preview\":true}"
