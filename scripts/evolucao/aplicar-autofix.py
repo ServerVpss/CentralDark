@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -139,6 +140,38 @@ def convert_workflow_push_to_pr(path: Path, fixes: list[dict]) -> None:
     })
 
 
+def correct_legacy_xp(fixes: list[dict]) -> None:
+    script = ROOT / "scripts/evolucao/corrigir-xp-legado.py"
+    if not script.is_file():
+        return
+    proc = subprocess.run(
+        ["python3", str(script)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"LEGACY_XP_CORRECTION_FAILED:{proc.returncode}:"
+            f"{proc.stdout.strip()}:{proc.stderr.strip()}"
+        )
+    try:
+        payload = json.loads(proc.stdout.splitlines()[-1])
+    except (IndexError, json.JSONDecodeError) as exc:
+        raise RuntimeError("LEGACY_XP_CORRECTION_RECEIPT_INVALID") from exc
+    if payload.get("changed") is True:
+        fixes.append({
+            "id": "CD-AUTO-LUPA-XP-LEGACY",
+            "path": ".agents/skills/meta-lupa/references/uso-ledger.jsonl",
+            "method": "append-only-penalty",
+            "xp_gained": payload.get("xp_gained"),
+            "record_hash": payload.get("record_hash"),
+        })
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default=".artifacts/evolucao/autofix.json")
@@ -182,6 +215,7 @@ def main() -> int:
         convert_workflow_push_to_pr(workflow, fixes)
 
     ensure_response_rule_link(ROOT / "LEIA-ME-IA.md", fixes)
+    correct_legacy_xp(fixes)
 
     output = ROOT / args.output
     output.parent.mkdir(parents=True, exist_ok=True)
