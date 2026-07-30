@@ -21,6 +21,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "python3 /root/CentralDark/scripts/lupa/validar-resposta-pivete.py"
+          },
+          {
+            "type": "command",
             "command": "bash /root/CentralDark/scripts/notify-claude/notify-telegram.sh '🤖' 'Claude Code — CentralDark' 'Resposta concluída. Aguardando próxima instrução do Pivete.'"
           }
         ]
