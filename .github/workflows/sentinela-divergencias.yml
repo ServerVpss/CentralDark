@@ -122,7 +122,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/evolucao/test_autonomia.py
-          python3 scripts/lupa/test_validar-resposta-pivete.py
+          python3 scripts/lupa/test_validar_resposta_pivete.py
           python3 .agents/skills/meta-lupa/testes/test_selo_ponto_fixo.py
           node --check scripts/sentinela/run.mjs
           node --check apps/bot-telegram/evolucao-ias.cjs
