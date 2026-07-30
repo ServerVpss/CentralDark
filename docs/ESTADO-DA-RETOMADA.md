@@ -3,7 +3,7 @@
 > Gerado por `scripts/estado/gerar-estado-retomada.mjs`. **Nao edite a mao** —
 > a proxima execucao sobrescreve. Para mudar o que e medido, mude o script.
 
-Ultima geracao: `2026-07-30T09:35:17.747Z`
+Ultima geracao: `2026-07-30T17:18:43.567Z`
 
 Fonte da intencao: `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md`
 Fonte da verdade estrutural: `apps/modulos/mapeamento/config/mapa-canonico.json`
@@ -47,7 +47,7 @@ Estes caminhos geram aviso em todo PR. Aviso permanente treina o time a
 ignorar aviso: ou o mapa passa a marcar `expected_absent: true`, ou a
 declaracao sai. Enquanto isso, o ruido continua.
 
-Totais no mapa: 20 caminhos de setor, 29 areas consolidadas.
+Totais no mapa: 20 caminhos de setor, 38 areas consolidadas.
 
 ## O que este arquivo nao mede
 
