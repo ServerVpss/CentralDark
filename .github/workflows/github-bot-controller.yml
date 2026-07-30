@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Rodar em dry-run?"
+        description: "Rodar auditoria legada em dry-run?"
         required: true
         default: "true"
         type: choice
@@ -20,17 +20,9 @@ on:
         required: false
         default: ""
   pull_request:
-    types:
-      - closed
+    types: [closed]
   pull_request_target:
-    types:
-      - opened
-      - reopened
-      - ready_for_review
-      - synchronize
-      - edited
-      - labeled
-      - unlabeled
+    types: [opened, reopened, ready_for_review, synchronize, edited, labeled, unlabeled]
   workflow_run:
     workflows:
       - porta-de-entrada
@@ -39,10 +31,9 @@ on:
       - Lupa Drift Guard
       - PR auto-review (Codex + checklist)
       - Pipeline — Telegram + Painel
-    types:
-      - completed
+    types: [completed]
   schedule:
-    - cron: "17 9 * * *"
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: read
@@ -82,7 +73,7 @@ jobs:
       - name: Validar runtime Node
         run: node --version
 
-      - name: Executar GitHub Bot Controller
+      - name: Executar GitHub Bot Controller legado
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BOT_EVENT_NAME: ${{ github.event_name }}
@@ -91,55 +82,13 @@ jobs:
           BOT_SUPERSEDES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.supersedes || '' }}
         run: node scripts/github-bot-controller.mjs
 
-  autonomy-judge:
-    name: Juiz autônomo read-only
-    if: github.event_name == 'workflow_run' || github.event_name == 'pull_request_target'
+  autonomy-sweep:
+    name: Juiz + promotor autônomo com recibo
+    if: github.event_name == 'workflow_run' || github.event_name == 'pull_request_target' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     permissions:
       contents: read
-      pull-requests: read
-      issues: read
-      actions: read
-      checks: read
-
-    steps:
-      - name: Checkout exclusivo da main confiável
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 1
-          persist-credentials: false
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Testar política de promoção
-        run: node --test scripts/github-autonomia-promocao.test.mjs
-
-      - name: Produzir recibo preso ao HEAD e à base
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BOT_RECEIPT_PATH: ${{ runner.temp }}/autonomia-promotion-receipt.json
-        run: node scripts/github-autonomia-promocao.mjs judge
-
-      - name: Publicar recibo imutável do juiz
-        uses: actions/upload-artifact@v4
-        with:
-          name: autonomia-promotion-receipt-${{ github.run_id }}
-          path: ${{ runner.temp }}/autonomia-promotion-receipt.json
-          if-no-files-found: error
-          retention-days: 14
-
-  autonomy-promote:
-    name: Promotor autônomo fail-closed
-    needs: autonomy-judge
-    if: needs.autonomy-judge.result == 'success'
-    runs-on: ubuntu-latest
-    timeout-minutes: 8
-    permissions:
-      contents: write
       pull-requests: write
       issues: write
       actions: read
@@ -157,24 +106,24 @@ jobs:
         with:
           node-version: 22
 
-      - name: Baixar recibo do juiz read-only
-        uses: actions/download-artifact@v4
-        with:
-          name: autonomia-promotion-receipt-${{ github.run_id }}
-          path: ${{ runner.temp }}/autonomia-receipt
-
-      - name: Exigir credencial que preserve os gatilhos pós-merge
-        env:
-          PROMOTION_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
+      - name: Testar juiz, promotor e filtro da varredura
         run: |
           set -euo pipefail
-          test -n "${PROMOTION_TOKEN:-}" || {
-            echo "::error::GITHUB_PAT_PERFIL ausente — promoção bloqueada; GITHUB_TOKEN não pode substituir porque suprimiria workflows pós-merge"
-            exit 41
-          }
+          node --test scripts/github-autonomia-promocao.test.mjs
+          node --test scripts/github-autonomia-varredura.test.mjs
 
-      - name: Revalidar estado vivo, atualizar branch ou fazer squash merge
+      - name: Varrer PRs autorizados e promover somente estado comprovado
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
-          BOT_RECEIPT_PATH: ${{ runner.temp }}/autonomia-receipt/autonomia-promotion-receipt.json
-        run: node scripts/github-autonomia-promocao.mjs promote
+          JUDGE_TOKEN: ${{ github.token }}
+          PROMOTION_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        run: node scripts/github-autonomia-varredura.mjs
+
+      - name: Publicar recibos e eventos sanitizados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autonomia-sweep-${{ github.run_id }}
+          path: ${{ runner.temp }}/centraldark-autonomia
+          if-no-files-found: warn
+          retention-days: 14
