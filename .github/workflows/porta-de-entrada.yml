@@ -1,11 +1,15 @@
 name: porta-de-entrada
 
-# Impede que a porta de entrada volte a ser murada.
+# Impede que a porta de entrada e os adaptadores automaticos voltem a ser murados.
 #
 # Em 2026-07-27 o LEIA-ME-IA.md, listado como item 1 do kit_boas_vindas e lido
 # por ler_regras_inviolaveis, nao existia em commit nenhum. Toda IA que chegava
 # entrava por uma porta 404 e caia direto nos documentos tecnicos, sem nunca
 # passar pelo jeito de conversar com o Pivete.
+#
+# Em 2026-07-30 a mesma protecao passou a cobrir Claude, Codex/OpenAI, Copilot,
+# Gemini, Cursor e Windsurf. Todos os adaptadores devem apontar para a mesma
+# porta universal e para o contrato de orquestracao em delta.
 
 on:
   pull_request:
@@ -23,7 +27,7 @@ concurrency:
 
 jobs:
   validar:
-    name: A porta abre e leva aos canonicos?
+    name: Porta, canonicos e autoloaders universais estao integros?
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -33,7 +37,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Validar porta de entrada e canonicos alcancaveis
+      - name: Validar porta, canonicos e adaptadores de IA
         run: node scripts/lupa/validar-porta-de-entrada.mjs
 
       - name: Relatorio completo

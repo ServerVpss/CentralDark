@@ -23,6 +23,16 @@ SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
 
 A skill `meta-lupa` deve ser carregada e seu uso registrado (BEGIN+FINAL) antes de qualquer trabalho neste repo. Sem BEGIN → `BOOT_BLOQUEADO`.
 
+## 🤖 BOOT UNIVERSAL — QUALQUER IA
+
+Qualquer IA, agente, plugin ou hub que abrir este repositório deve começar por:
+
+1. [`LEIA-ME-IA.md`](LEIA-ME-IA.md);
+2. [`AGENTS.md`](AGENTS.md);
+3. [`docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`](docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md).
+
+O método ativo é: leitores paralelos, escritor único por escopo, mensagens em delta, histórico preservado, revisão independente e Pivete como autoridade final. Ao iniciar trabalho técnico ou retomar contexto, a IA emite uma vez o recibo `CENTRALDARK_AI_BOOT` definido na porta universal.
+
 ---
 > 📖 Especificação completa: [`docs/CONSCIENCIA/PADRAO-CARD-HERMES.md`](docs/CONSCIENCIA/PADRAO-CARD-HERMES.md)
 > ❌ Nunca usar `notify-telegram`. ❌ Nunca mandar texto fora do `<pre>`.

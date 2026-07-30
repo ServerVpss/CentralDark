@@ -1,0 +1,23 @@
+# Windsurf — boot universal CentralDark
+
+Antes de responder, sugerir ou alterar:
+
+1. Leia `LEIA-ME-IA.md`.
+2. Leia `AGENTS.md`.
+3. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
+4. Confirme branch, HEAD, escopo, escritor atual e evidência recente.
+5. Use `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica.
+6. Emita uma vez o recibo `CENTRALDARK_AI_BOOT`.
+
+Regras permanentes:
+
+- Pivete é a autoridade final.
+- Qualquer IA atua como especialista no mesmo contrato.
+- Leitores podem operar em paralelo; somente um escritor por escopo.
+- Mensagem atrasada não reinicia missão.
+- Evidência atual vence contexto antigo.
+- Trabalhe em delta e não repita histórico já comprovado.
+- Nenhum executor aprova a si mesmo.
+- Não crie memória, versão ou doutrina paralela.
+
+Este arquivo é um adaptador. As fontes canônicas são os arquivos citados acima.

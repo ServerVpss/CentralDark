@@ -7,8 +7,8 @@ source_of_truth: "Este arquivo"
 
 # LEIA-ME-IA — comece por aqui
 
-Você é uma IA que acabou de chegar no CentralDark. Esta é a porta.
-Leia isto inteiro antes de responder qualquer coisa. São dois minutos.
+Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Esta é a porta universal.
+Leia isto inteiro antes de responder ou executar qualquer ação. São dois minutos.
 
 ---
 
@@ -26,6 +26,39 @@ Duas leituras obrigatórias, nesta ordem. Não são opcionais e não são teoria
 
 Se você pular estas duas, você vai acertar a técnica e errar a entrega.
 Já aconteceu. Está registrado em `docs/CONSCIENCIA/APRENDIZADOS.md`.
+
+### 1.1 Boot universal automático
+
+Qualquer IA que receba contexto deste repositório deve carregar também, antes de agir:
+
+1. `AGENTS.md` — contrato geral dos agentes;
+2. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — método de coordenação;
+3. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
+4. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.
+
+Nome de modelo não muda a regra. Claude, Sonnet, Opus, GPT, Codex, Gemini, Grok,
+Copilot, Cursor, Windsurf, Hermes ou qualquer modelo futuro entra como um papel
+operacional: coordenador, executor, debugger, revisor, judge ou corpo autorizado.
+
+Ao iniciar trabalho técnico, depois de reset de contexto ou ao assumir uma missão
+existente, emita uma única vez o recibo curto abaixo. Não repita em toda mensagem:
+
+```yaml
+CENTRALDARK_AI_BOOT:
+  governance: LOADED
+  delta_method: LOADED
+  history_preservation: ACTIVE
+  source_of_truth: "ServerVpss/CentralDark + evidência atual"
+  alignment: "PIVETE > COORDENADOR > ESPECIALISTAS"
+  role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
+  writer: "NONE|nome-do-escritor-atual"
+```
+
+Este recibo prova carregamento do contrato. Ele não prova identidade pessoal, não
+concede permissão e não substitui teste, log, diff, check ou autorização do Pivete.
+
+Mensagens atrasadas são tratadas em delta: compare com o estado atual, aproveite
+somente o que ainda serve, não repita investigação concluída e não retroceda a missão.
 
 ---
 
@@ -63,8 +96,8 @@ não para toda conversa.
 
 Duas extensões dela, para casos específicos, quando estiverem instaladas:
 
-- **auditoria-pr** — antes de dar veredito sobre um PR
-- **selo-xp** — antes de fechar missão e reivindicar XP
+- **auditoria-pr** — antes de dar veredito sobre um PR;
+- **selo-xp** — antes de fechar missão e reivindicar XP.
 
 ---
 
@@ -72,6 +105,7 @@ Duas extensões dela, para casos específicos, quando estiverem instaladas:
 
 | Preciso de… | Vá para |
 |---|---|
+| método universal de coordenação em delta | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | o que está pendente | `docs/PENDENCIAS.md` |
 | o que já aprendemos errando | `docs/CONSCIENCIA/APRENDIZADOS.md` |
 | o documento mestre | `docs/CONSCIENCIA/CONSCIENCIA.md` |
@@ -103,6 +137,6 @@ Conversa que não muda nada não polui o canônico.
 ---
 
 > Esta porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs`.
-> Se algum caminho citado aqui deixar de existir, o CI fica vermelho.
+> Se algum caminho citado aqui ou algum adaptador universal deixar de existir, o CI fica vermelho.
 > Documento canônico que ninguém alcança não governa nada — foi assim que o
 > JEITO-CORRETO-DO-PIVETE ficou meses escrito e ignorado.
