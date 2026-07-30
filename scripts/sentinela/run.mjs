@@ -1,229 +1,194 @@
 #!/usr/bin/env node
-// Sentinela 24/7 — varre divergências e abre Issues com dedupe.
-// Read-only no repo/VPS (não toca em produção). Usa apenas HTTPS público + gh CLI.
-
-import { execSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+/**
+ * Sentinela — coletor determinístico e read-only.
+ *
+ * Este processo não cria Issue, não faz commit e não executa `git push`.
+ * O workflow é o escritor único: decide entre auto-fix + PR ou Issue deduplicada.
+ */
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
-const DRY_RUN = String(process.env.DRY_RUN || 'false').toLowerCase() === 'true';
 const REPO = process.env.REPO_ALVO || 'ServerVpss/CentralDark';
-const SNAPSHOT_DIR = 'docs/sentinela';
-const SNAPSHOT_FILE = path.join(SNAPSHOT_DIR, 'last-snapshot.json');
-const REPORT_FILE = path.join(SNAPSHOT_DIR, 'last-report.md');
-
-mkdirSync(SNAPSHOT_DIR, { recursive: true });
+const OUTPUT_DIR = process.env.SENTINELA_OUTPUT_DIR || '.artifacts/sentinela';
+const JSON_FILE = path.join(OUTPUT_DIR, 'report.json');
+const MARKDOWN_FILE = path.join(OUTPUT_DIR, 'report.md');
+const TIMEOUT_MS = Number(process.env.SENTINELA_TIMEOUT_MS || 8000);
 
 const ENDPOINTS = [
-  { name: 'MCP health', url: 'https://mcp.centralldark.com/health', bot: 'grok' },
-  { name: 'MCP status', url: 'https://mcp.centralldark.com/status.json', bot: 'grok' },
-  { name: 'MCP tools', url: 'https://mcp.centralldark.com/tools.json', bot: 'codex' },
-  { name: 'Install status', url: 'https://install.centralldark.com/status.json', bot: 'claude' },
-  { name: 'Painel', url: 'https://status.centralldark.com/', bot: 'claude' },
-  { name: 'API', url: 'https://api.centralldark.com/health', bot: 'codex' },
+  { name: 'MCP health', url: 'https://mcp.centralldark.com/health' },
+  { name: 'MCP status', url: 'https://mcp.centralldark.com/status.json' },
+  { name: 'MCP tools', url: 'https://mcp.centralldark.com/tools.json' },
+  { name: 'Install status', url: 'https://install.centralldark.com/status.json' },
+  { name: 'Painel', url: 'https://status.centralldark.com/' },
+  { name: 'API', url: 'https://api.centralldark.com/health' },
 ];
 
-const divergencias = [];
+function canonical(value) {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
 
-async function checkEndpoint(ep) {
-  const t0 = Date.now();
+function hash(value) {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+async function checkEndpoint(endpoint) {
+  const started = Date.now();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 5000);
-    const r = await fetch(ep.url, { signal: ctrl.signal });
-    clearTimeout(to);
-    const dt = Date.now() - t0;
-    const cors = r.headers.get('access-control-allow-origin');
-    return { ...ep, status: r.status, latencyMs: dt, cors };
-  } catch (e) {
-    return { ...ep, status: 0, latencyMs: Date.now() - t0, error: String(e.message || e) };
+    const response = await fetch(endpoint.url, { signal: controller.signal });
+    return {
+      ...endpoint,
+      status: response.status,
+      ok: response.status >= 200 && response.status < 400,
+      latency_ms: Date.now() - started,
+      cors: response.headers.get('access-control-allow-origin') || '',
+      error: '',
+    };
+  } catch (error) {
+    return {
+      ...endpoint,
+      status: 0,
+      ok: false,
+      latency_ms: Date.now() - started,
+      cors: '',
+      error: error?.name === 'AbortError' ? 'TIMEOUT' : String(error?.message || error),
+    };
+  } finally {
+    clearTimeout(timer);
   }
 }
 
-function hash(s) {
-  return createHash('sha1').update(s).digest('hex').slice(0, 10);
-}
-
-function ghIssueExists(titleHash) {
+function workflowFailures() {
   try {
-    const out = execSync(
-      `gh issue list -R "${REPO}" --state open --search "in:title sentinela-${titleHash}" --json number,title --limit 5`,
-      { encoding: 'utf8' }
-    );
-    const arr = JSON.parse(out);
-    return arr.find((i) => i.title.includes(titleHash));
-  } catch {
-    return null;
+    const raw = execFileSync('gh', [
+      'run', 'list', '-R', REPO,
+      '--status', 'failure',
+      '--json', 'name,databaseId,conclusion,headBranch,createdAt,url',
+      '--limit', '20',
+    ], { encoding: 'utf8', timeout: 30000 });
+    const rows = JSON.parse(raw);
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    return {
+      ok: true,
+      rows: rows.filter((row) => Date.parse(row.createdAt || 0) >= cutoff),
+      error: '',
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      rows: [],
+      error: `GITHUB_ACTIONS_QUERY_FAILED:${String(error?.message || error).slice(0, 200)}`,
+    };
   }
 }
 
-function ghOpenIssue({ title, body, labels }) {
-  if (DRY_RUN) return { number: 0, dry: true };
-  const labelArgs = labels.map((l) => `--label "${l}"`).join(' ');
-  const tmpBody = path.join('/tmp', `sent-${Date.now()}.md`);
-  writeFileSync(tmpBody, body);
+function autonomyAudit() {
   try {
-    const out = execSync(
-      `gh issue create -R "${REPO}" --title "${title.replace(/"/g, '\\"')}" --body-file "${tmpBody}" ${labelArgs}`,
-      { encoding: 'utf8' }
-    );
-    const m = out.match(/\/issues\/(\d+)/);
-    return { number: m ? Number(m[1]) : 0 };
-  } catch (e) {
-    return { error: String(e.message || e) };
-  }
-}
-
-function ensureLabels() {
-  if (DRY_RUN) return;
-  const labels = [
-    ['sentinela', 'B60205', 'Aberta automaticamente pela sentinela'],
-    ['auto', 'CCCCCC', 'Criada por bot'],
-    ['p1', 'FF0000', 'Alta prioridade'],
-    ['p2', 'FFA500', 'Média'],
-    ['p3', 'FFFF00', 'Baixa'],
-    ['assign:codex', '5319E7', 'Bot responsável: Codex'],
-    ['assign:supabase-bot', '3ECF8E', 'Bot responsável: Supabase'],
-    ['assign:claude', 'FF80B0', 'Bot responsável: Claude'],
-    ['assign:grok', '1F6FEB', 'Bot responsável: Grok'],
-    ['assign:chatgpt', '10A37F', 'Bot responsável: ChatGPT'],
-    ['stale', '6E6E6E', 'Passou do TTL'],
-  ];
-  for (const [name, color, desc] of labels) {
-    try {
-      execSync(`gh label create "${name}" -R "${REPO}" -c "${color}" -d "${desc}" --force`, { stdio: 'ignore' });
-    } catch {}
-  }
-}
-
-// === Checks ===
-
-async function checkEndpoints() {
-  const out = await Promise.all(ENDPOINTS.map(checkEndpoint));
-  for (const r of out) {
-    if (r.status >= 200 && r.status < 400) continue;
-    divergencias.push({
-      area: 'Endpoints',
-      bot: r.bot,
-      sev: r.status === 0 ? 'p1' : 'p2',
-      titulo: `Endpoint ${r.name} fora do ar (HTTP ${r.status})`,
-      detalhe: `URL: ${r.url}\nStatus: ${r.status}\nLatência: ${r.latencyMs}ms\nErro: ${r.error || '-'}`,
-    });
-  }
-  // CORS check
-  for (const r of out) {
-    if (r.url.includes('mcp.centralldark.com') && r.status >= 200 && r.status < 400 && !r.cors) {
-      divergencias.push({
-        area: 'CORS',
-        bot: 'grok',
-        sev: 'p2',
-        titulo: `MCP sem CORS no painel: ${r.name}`,
-        detalhe: `${r.url} responde 200 mas não envia Access-Control-Allow-Origin. O painel status.centralldark.com não consegue ler.`,
-      });
+    const raw = execFileSync('python3', [
+      'scripts/evolucao/auditar-autonomia.py', '--json-stdout',
+    ], { encoding: 'utf8', timeout: 120000 });
+    return { ok: true, report: JSON.parse(raw), error: '' };
+  } catch (error) {
+    // Exit 1 significa achados, não falha do auditor. stdout ainda é a prova.
+    const stdout = String(error?.stdout || '');
+    if (stdout.trim()) {
+      try { return { ok: true, report: JSON.parse(stdout), error: '' }; } catch {}
     }
-  }
-  return out;
-}
-
-async function checkWorkflowsRuins() {
-  try {
-    const out = execSync(
-      `gh run list -R "${REPO}" --status failure --created ">=$(date -u -d '-24 hours' +%Y-%m-%dT%H:%M:%SZ)" --json name,databaseId,conclusion,headBranch --limit 20`,
-      { encoding: 'utf8' }
-    );
-    const arr = JSON.parse(out);
-    for (const r of arr) {
-      divergencias.push({
-        area: 'Workflows',
-        bot: 'codex',
-        sev: 'p2',
-        titulo: `Workflow vermelho: ${r.name}`,
-        detalhe: `Run ID: ${r.databaseId}\nBranch: ${r.headBranch}\nLink: https://github.com/${REPO}/actions/runs/${r.databaseId}`,
-      });
-    }
-    return arr.length;
-  } catch (e) {
-    return 0;
+    return { ok: false, report: null, error: `AUTONOMY_AUDIT_FAILED:${String(error?.message || error).slice(0, 200)}` };
   }
 }
 
-// === Run ===
+function finding(id, severity, area, title, evidence, autofix = false) {
+  return { id, severity, area, title, evidence, autofix };
+}
 
-ensureLabels();
-const endpointsResult = await checkEndpoints();
-const wfCount = await checkWorkflowsRuins();
+const endpointResults = await Promise.all(ENDPOINTS.map(checkEndpoint));
+const workflows = workflowFailures();
+const autonomy = autonomyAudit();
+const findings = [];
 
-// Snapshot
-const snapshot = {
-  at: new Date().toISOString(),
-  endpoints: endpointsResult,
-  workflowsFailures24h: wfCount,
-  divergencias: divergencias.length,
+for (const result of endpointResults) {
+  if (!result.ok) {
+    findings.push(finding(
+      `SENT-ENDPOINT-${hash(result.url).slice(0, 10)}`,
+      result.status === 0 ? 'p1' : 'p2',
+      'endpoints',
+      `${result.name} indisponível`,
+      `status=${result.status};latency_ms=${result.latency_ms};error=${result.error || '-'}`,
+    ));
+  }
+  if (result.ok && result.url.includes('mcp.centralldark.com') && !result.cors) {
+    findings.push(finding(
+      `SENT-CORS-${hash(result.url).slice(0, 10)}`,
+      'p2', 'cors', `${result.name} sem CORS`,
+      'resposta saudável sem access-control-allow-origin',
+    ));
+  }
+}
+
+if (!workflows.ok) {
+  findings.push(finding('SENT-GITHUB-ACTIONS-UNPROVEN', 'p1', 'workflows', 'Consulta de workflows falhou', workflows.error));
+} else {
+  for (const row of workflows.rows) {
+    findings.push(finding(
+      `SENT-WORKFLOW-${row.databaseId}`,
+      'p2', 'workflows', `Workflow vermelho: ${row.name}`,
+      `run_id=${row.databaseId};branch=${row.headBranch};url=${row.url || ''}`,
+    ));
+  }
+}
+
+if (!autonomy.ok) {
+  findings.push(finding('SENT-AUTONOMY-UNPROVEN', 'p1', 'autonomia', 'Auditoria de autonomia não executou', autonomy.error));
+} else {
+  for (const item of autonomy.report.findings || []) {
+    findings.push(finding(item.id, item.severity === 'blocker' ? 'p1' : 'p3', 'autonomia', item.title, `${item.path}:${item.evidence}`, Boolean(item.autofix)));
+  }
+}
+
+findings.sort((a, b) => a.id.localeCompare(b.id));
+const stable = {
+  schema: 2,
+  repository: REPO,
+  summary: {
+    endpoints_checked: endpointResults.length,
+    endpoints_failed: endpointResults.filter((item) => !item.ok).length,
+    workflow_failures_24h: workflows.rows.length,
+    findings: findings.length,
+    autofix_candidates: findings.filter((item) => item.autofix).length,
+  },
+  endpoints: endpointResults,
+  workflow_query_ok: workflows.ok,
+  autonomy_audit_ok: autonomy.ok,
+  findings,
 };
-writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2));
+stable.evidence_sha256 = hash(canonical(stable));
+const report = { ...stable, generated_at_utc: new Date().toISOString(), github_run_id: process.env.GITHUB_RUN_ID || '' };
 
-// Abrir issues com dedupe
-const abertas = [];
-for (const d of divergencias) {
-  const h = hash(`${d.area}|${d.titulo}`);
-  const title = `[SENTINELA sentinela-${h}] ${d.area}: ${d.titulo}`;
-  const existing = ghIssueExists(h);
-  if (existing) {
-    abertas.push({ ...d, hash: h, ja: existing.number });
-    continue;
-  }
-  const body = `> Aberta automaticamente pela **sentinela** (run ${process.env.GITHUB_RUN_ID || 'local'}).
-> Hash de dedupe: \`sentinela-${h}\` — não reabre se já existir.
-
-## Área
-${d.area}
-
-## Severidade
-${d.sev}
-
-## Bot responsável
-\`assign:${d.bot}\`
-
-## Detalhe (sanitizado)
-\`\`\`
-${d.detalhe}
-\`\`\`
-
-## Critério pra fechar
-- Endpoint volta 200 / workflow verde / CORS configurado / pendência registrada.
-- Bot dono comenta com PR ou justificativa.
-- Após 7 dias sem ação, sentinela-stale escala.
-
----
-_Anti-loop: só o bot com label \`assign:${d.bot}\` deve agir._
-`;
-  const labels = ['sentinela', 'auto', d.sev, `assign:${d.bot}`];
-  const r = ghOpenIssue({ title, body, labels });
-  abertas.push({ ...d, hash: h, nova: r.number, erro: r.error });
-}
-
-// Relatório
-const report = `# Sentinela — ${snapshot.at}
-
-| Métrica | Valor |
-|---|---|
-| Endpoints checados | ${endpointsResult.length} |
-| Endpoints fora | ${endpointsResult.filter((r) => r.status < 200 || r.status >= 400).length} |
-| Workflows vermelhos 24h | ${wfCount} |
-| Divergências detectadas | ${divergencias.length} |
-| Issues novas | ${abertas.filter((a) => a.nova).length} |
-| Issues já abertas (dedupe) | ${abertas.filter((a) => a.ja).length} |
-| Dry-run? | ${DRY_RUN ? 'sim' : 'não'} |
-
-## Endpoints
-
-${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '🔴'} **${r.name}** — \`${r.status}\` em ${r.latencyMs}ms${r.cors ? ` · CORS=\`${r.cors}\`` : ''}${r.error ? ` · erro: ${r.error}` : ''}`).join('\n')}
-
-## Divergências
-
-${divergencias.length === 0 ? '_Nenhuma divergência. Tudo verde._' : divergencias.map((d, i) => `- **[${d.sev}]** ${d.area} → ${d.titulo} (bot: \`${d.bot}\`)`).join('\n')}
-`;
-writeFileSync(REPORT_FILE, report);
-
-console.log(`Sentinela rodou. Divergências: ${divergencias.length}. Issues novas: ${abertas.filter((a) => a.nova).length}.`);
+mkdirSync(OUTPUT_DIR, { recursive: true });
+writeFileSync(JSON_FILE, `${JSON.stringify(report, null, 2)}\n`);
+const markdown = [
+  '# Sentinela', '',
+  `- Evidência SHA-256: \`${report.evidence_sha256}\``,
+  `- Endpoints com falha: **${report.summary.endpoints_failed}**`,
+  `- Workflows vermelhos em 24h: **${report.summary.workflow_failures_24h}**`,
+  `- Achados totais: **${report.summary.findings}**`,
+  `- Candidatos a auto-fix: **${report.summary.autofix_candidates}**`, '',
+  '| ID | Prioridade | Área | Achado | Auto-fix |',
+  '|---|---|---|---|---|',
+  ...(findings.length
+    ? findings.map((item) => `| \`${item.id}\` | ${item.severity} | ${item.area} | ${item.title} | ${item.autofix ? 'sim' : 'não'} |`)
+    : ['| _nenhum_ | - | - | Nenhum achado dentro do escopo auditado | - |']),
+  '',
+  '> Ausência de achado não prova componentes fora do escopo. Falha de coleta vira achado p1.',
+].join('\n');
+writeFileSync(MARKDOWN_FILE, `${markdown}\n`);
+console.log(JSON.stringify({ summary: report.summary, evidence_sha256: report.evidence_sha256 }));
+process.exitCode = findings.length ? 1 : 0;
