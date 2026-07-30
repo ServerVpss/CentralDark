@@ -24,7 +24,13 @@ Duas leituras obrigatórias, nesta ordem. Não são opcionais e não são teoria
    O formato. Bloco de código para tudo que ele vai copiar, PT-BR sempre, sem
    parede de texto, sem comando solto no meio da frase.
 
-Se você pular estas duas, você vai acertar a técnica e errar a entrega.
+Regra automática carregada pelo Claude Code:
+
+3. **[Resposta dupla do Pivete](.claude/rules/00-resposta-dupla-pivete.md)**
+   Toda matéria técnica sai em dois blocos, nesta ordem: `DIAGNÓSTICO TÉCNICO`
+   e depois `PAPO RETO DO PIVETE`. O hook `Stop` valida antes de encerrar.
+
+Se você pular estas leituras, você vai acertar a técnica e errar a entrega.
 Já aconteceu. Está registrado em `docs/CONSCIENCIA/APRENDIZADOS.md`.
 
 ---
@@ -41,7 +47,26 @@ AÇÕES PROVAM.         nada é "pronto" sem evidência que outro possa repetir
 
 ---
 
-## 3. O que você nunca faz sem ordem escrita
+## 3. Formato técnico obrigatório
+
+Quando a resposta envolver código, função, CLI, GitHub, PR, workflow, VPS, MCP,
+bot, API, banco, deploy, diagnóstico, governança, teste, automação ou correção:
+
+```text
+1. DIAGNÓSTICO TÉCNICO
+   erro exato + arquivo/função + alteração + conta + prova
+
+2. PAPO RETO DO PIVETE
+   melhoria + perda + direção + motivo da pendência + decisão
+```
+
+O técnico vem primeiro para preservar precisão. O papo reto vem imediatamente
+depois para economizar tempo e aumentar autonomia. Não escolher um ou outro:
+os dois são obrigatórios.
+
+---
+
+## 4. O que você nunca faz sem ordem escrita
 
 ```text
 merge na main            deploy            restart de serviço
@@ -55,7 +80,7 @@ Para credencial, só validação de presença — nunca o valor.
 
 ---
 
-## 4. Quando a tarefa for crítica, use a lupa
+## 5. Quando a tarefa for crítica, use a lupa
 
 `.agents/skills/meta-lupa/SKILL.md` é o motor de auditoria da casa.
 Ela vale para deploy, consolidação, merge, migração, segurança e regressão —
@@ -68,7 +93,7 @@ Duas extensões dela, para casos específicos, quando estiverem instaladas:
 
 ---
 
-## 5. Onde está o resto
+## 6. Onde está o resto
 
 | Preciso de… | Vá para |
 |---|---|
@@ -85,7 +110,7 @@ Duas extensões dela, para casos específicos, quando estiverem instaladas:
 
 ---
 
-## 6. Antes de encerrar
+## 7. Antes de encerrar
 
 Deixe o próximo no lugar em que você gostaria de ter chegado:
 
@@ -103,6 +128,7 @@ Conversa que não muda nada não polui o canônico.
 ---
 
 > Esta porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs`.
+> A resposta é verificada por `scripts/lupa/validar-resposta-pivete.py`.
 > Se algum caminho citado aqui deixar de existir, o CI fica vermelho.
 > Documento canônico que ninguém alcança não governa nada — foi assim que o
 > JEITO-CORRETO-DO-PIVETE ficou meses escrito e ignorado.
