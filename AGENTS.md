@@ -11,8 +11,10 @@ META_LUPA_BOOT_REQUIRED: SIM
 LUPA_USE_RECEIPT_REQUIRED: SIM
 SKILL_PATH: .agents/skills/meta-lupa/SKILL.md
 SKILL_REF: origin/main
-SKILL_COMMIT_SHA: e205f9f0987647764dfd3742edd28c4c4c12092e
+SKILL_IDENTITY_FILE: .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 ```
+
+A identidade vigente da skill é resolvida pelo arquivo canônico acima e validada contra o blob Git real. É proibido copiar um SHA fixo para este adaptador.
 
 Antes de alterar qualquer arquivo, carregar a skill `meta-lupa` e registrar o uso (BEGIN+FINAL) no ledger da skill. Sem BEGIN → `BOOT_BLOQUEADO`.
 
