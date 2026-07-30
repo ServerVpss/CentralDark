@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-07-28T22:19:23.458Z",
-  "updatedAtBR": "28/07/2026, 19:19:23 BRT",
+  "updatedAt": "2026-07-30T09:11:19.329Z",
+  "updatedAtBR": "30/07/2026, 06:11:19 BRT",
   "project": {
     "name": "CentralDark",
     "subtitle": "Mega painel vivo do projeto",
     "phase": "Open WebUI conectado ao bridge Lovable com /models 200, 29 modelos e chat HTTP 200.",
     "currentTask": "Correção do erro vermelho no conector ChatGPT MCP",
     "branch": "main",
-    "lastCommit": "feat(meta-lupa): add canonical gate validation",
+    "lastCommit": "docs(memoria): preservar lembrança pessoal Viver em Paz (#550)",
     "lastPR": "#103 mergeado · #106 mergeado",
     "lastDeploy": "2026-06-29T00:00:00Z — Cérebro Vivo + Skills + Bot /arsenal + Obsidian-writer",
     "lastReport": "docs/agente/elite-mapper/relatorios/",
@@ -597,6 +597,14 @@
   ],
   "events": [
     {
+      "time": "2026-07-30T09:11:19.329Z",
+      "titulo": "Push na main · 2f114a94aef72c5193cdc0652b83af10e7eb5eb6",
+      "detalhe": "docs(memoria): preservar lembrança pessoal Viver em Paz (#550)",
+      "area": "Repositório",
+      "sha": "2f114a9",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-07-28T22:19:23.458Z",
       "titulo": "Push na main · beeb17b075497f1b006b9a97b04aa5bddb9b1ce2",
       "detalhe": "feat(meta-lupa): add canonical gate validation",
@@ -986,14 +994,6 @@
       "detalhe": "Merge PR #291: inventariar dirty tree sanitizada",
       "area": "Repositório",
       "sha": "46e203a",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-07-22T00:09:02.715Z",
-      "titulo": "Push na main · 9f3fa077fd8a09920af9c364081769a359ca0490",
-      "detalhe": "Merge PR #290: normalizar checkout limpo para main",
-      "area": "Repositório",
-      "sha": "9f3fa07",
       "actor": "segredounlock"
     }
   ],
@@ -1409,6 +1409,13 @@
   ],
   "iaTimeline": [
     {
+      "time": "2026-07-30T09:11:19.329Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2f114a94aef72c5193cdc0652b83af10e7eb5eb6 (2f114a9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
       "time": "2026-07-28T22:19:23.458Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · beeb17b075497f1b006b9a97b04aa5bddb9b1ce2 (beeb17b)",
@@ -1748,13 +1755,6 @@
       "time": "2026-07-22T00:12:27.317Z",
       "ia": "@segredounlock",
       "action": "📌 Push na main · 46e203a6146907f673d9ba340dccc3c05e2c35c9 (46e203a)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-07-22T00:09:02.715Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9f3fa077fd8a09920af9c364081769a359ca0490 (9f3fa07)",
       "area": "Repositório",
       "status": "sucesso"
     }
