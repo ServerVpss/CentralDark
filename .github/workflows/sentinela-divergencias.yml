@@ -1,8 +1,8 @@
 name: sentinela-divergencias
 
-# Sentinela 24/7 — varre divergências no repo, workflows, endpoints públicos
-# e PM2/MCP, e abre Issue automática (com dedupe por hash) pra cada uma.
-# Roda a cada 6h e sob demanda.
+# Sentinela 24/7 — varre divergências no repo, workflows, endpoints públicos,
+# PM2/MCP e drift de commit GitHub<->VPS, e abre Issue automática (com dedupe
+# por hash) pra cada uma. Roda a cada 6h e sob demanda.
 
 on:
   schedule:
@@ -34,6 +34,18 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Rodar testes determinísticos do drift GitHub<->VPS
+        run: node --test scripts/sentinela/drift.test.mjs
+
+      - name: Validar CENTRALDARK_ROOT (fail-closed, sem imprimir valor)
+        env:
+          CENTRALDARK_ROOT: ${{ secrets.CENTRALDARK_ROOT }}
+        run: |
+          test -n "${CENTRALDARK_ROOT:-}" || {
+            echo "::error::CENTRALDARK_ROOT ausente — drift GitHub<->VPS falhando fechado, sem adivinhar caminho"
+            exit 1
+          }
+
       - name: Rodar sentinela
         id: run
         env:
@@ -41,6 +53,7 @@ jobs:
           GITHUB_PAT_PERFIL: ${{ secrets.GITHUB_PAT_PERFIL }}
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
           REPO_ALVO: ${{ github.repository }}
+          VPS_REPO_PATH: ${{ secrets.CENTRALDARK_ROOT }}
         run: node scripts/sentinela/run.mjs
 
       - name: Commit snapshot

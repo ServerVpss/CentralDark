@@ -22,7 +22,7 @@
     {
       "id": "escudo",
       "label": "ESCUDO",
-      "paths": ["apps/modulos/HERMES-CORE/agents/Log-Verificador/", "apps/modulos/Monitoramento24h/"]
+      "paths": ["apps/modulos/HERMES-CORE/agents/Log-Verificador/"]
     },
     {
       "id": "inteligencia",
@@ -74,7 +74,6 @@
     { "path": "secrets/", "since": null, "reason": "Material sensível proibido no Git" },
     { "path": "docs/CONSCIENCIA/", "since": null, "reason": "Cérebro Vivo" },
     { "path": "apps/modulos/HERMES-CORE/", "since": "2026-07-05", "reason": "Núcleo Hermes consolidado" },
-    { "path": "apps/modulos/Monitoramento24h/", "since": "2026-07-05", "reason": "Monitoramento 24h consolidado" },
     { "path": "apps/modulos/mapeamento/", "since": "2026-07-05", "reason": "Fonte oficial do mapa vivo" },
     { "path": "apps/modulos/memoria-api/", "since": "2026-07-05", "reason": "API de memória consolidada" },
     { "path": "apps/modulos/oauth-broker/", "since": "2026-07-05", "reason": "OAuth Broker consolidado" },
