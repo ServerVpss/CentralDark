@@ -1,0 +1,139 @@
+program:
+  id: HERMES-CASA-MENTE-ESTENDIDA-01
+  title: Hermes Casa + Mente Estendida
+  authority: PIVETE
+  coordinator: SOL
+  repository: ServerVpss/CentralDark
+  parent_plan: docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md
+  operational_contract: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+  opened_at: 2026-07-30T07:55:00-03:00
+  status: PLANNING
+  phase: F0_MAPEAMENTO
+  branch: plan/hermes-casa-mente-estendida-20260730
+  pr: null
+  writer:
+    role: COORDINATOR
+    agent: SOL_CHATGPT_GITHUB
+  mutation_authorization:
+    local_files: false
+    local_processes: false
+    local_gateway: false
+    vps: false
+    github_plan_branch: true
+    github_main: false
+    deletion: false
+    reinstall: false
+  sources:
+    confirmed_repo:
+      - docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md
+      - docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+      - docs/CONSCIENCIA/AGENTES-AUTONOMOS/HERMES/
+    user_observed:
+      - E:\CentralDark\Pivete\NUCLEO\motor\03-memoria
+      - E:\CentralDark\Pivete\NUCLEO\motor\10-observabilidade\LABORATORIO
+      - E:\CentralDark\Pivete\TEMP
+      - E:\CentralDark\Pivete\worktrees
+      - E:\CentralDark\Sol
+      - C:\Users\danda\AppData\Local\hermes
+      - C:\Users\danda\AppData\Local\hermes\profiles\pivete
+      - C:\Users\danda\AppData\Local\hermes\profiles\sol
+      - https://ui.centralldark.com/
+      - https://builder.centralldark.com/
+      - https://status.centralldark.com/
+    capsule:
+      name: SOL-SESSION-CAPSULE-20260729
+      mission: INVENTARIO-TOTAL-HERMES-01
+      captured_profile: pivete
+      captured_hermes_version: 0.19.0
+    upstream:
+      - https://github.com/NousResearch/hermes-agent
+      - https://hermesone.org/docs
+      - https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/messaging/telegram.md
+      - https://hermes-agent.ai/blog/hermes-agent-gateway-troubleshooting
+  invariants:
+    - no_destructive_action_before_inventory
+    - no_windows_home_change
+    - no_subfolder_link_forest
+    - one_writer_per_scope
+    - no_shared_live_sqlite_without_coordination
+    - no_secret_in_repo_or_logs
+    - no_telegram_green_without_end_to_end_test
+    - no_upstream_auto_update_to_production
+    - preserve_existing_sol_profile
+    - keep_personal_memory_in_house_by_default
+  target:
+    authority: PIVETE
+    visible_identity: SOL_JARVIS
+    local_engine: HERMES_AGENT
+    local_gui: HERMES_ONE
+    canonical_memory: E:\CentralDark\Pivete\NUCLEO\motor\03-memoria
+    web_surfaces:
+      operations: ui.centralldark.com
+      builder: builder.centralldark.com
+      status: status.centralldark.com
+  phases:
+    - id: F0
+      name: map_and_plan
+      status: IN_PROGRESS
+      child_pr: null
+      gate: docs_and_sources_registered_no_mutation
+    - id: F1
+      name: read_only_local_inventory
+      status: BLOCKED_BY_F0
+      child_pr: null
+      gate: sanitized_manifest_zero_mutation
+    - id: F2
+      name: hermes_home_and_agent_one_lab
+      status: BLOCKED_BY_F1
+      child_pr: null
+      gate: same_runtime_profile_restart_export_restore
+    - id: F3
+      name: canonical_memory_three_temperatures
+      status: BLOCKED_BY_F1
+      child_pr: null
+      gate: single_writer_dedupe_restore
+    - id: F4
+      name: align_pivete_and_sol_profiles
+      status: BLOCKED_BY_F2_F3
+      child_pr: null
+      gate: shared_canonical_memory_without_live_db_sharing
+    - id: F5
+      name: telegram_end_to_end
+      status: BLOCKED_BY_F2_F4
+      child_pr: null
+      gate: exact_destination_reply_and_duplicate_detection
+    - id: F6
+      name: temp_worktrees_cleanup
+      status: BLOCKED_BY_F1
+      child_pr: null
+      gate: no_unique_commit_or_live_consumer_lost
+    - id: F7
+      name: ui_builder_status_obsidian
+      status: BLOCKED_BY_F3_F4
+      child_pr: null
+      gate: one_surface_per_function_and_recoverable_state
+    - id: F8
+      name: vps_and_cloud_promotion
+      status: BLOCKED_BY_F2_F3_F7
+      child_pr: null
+      gate: encrypted_restore_offline_and_rollback
+    - id: F9
+      name: upstream_hermes_radar
+      status: PLANNED
+      child_pr: null
+      gate: deduplicated_report_no_automatic_promotion
+  next_gate:
+    id: F1_CONTRACT
+    action: define_and_review_read_only_inventory_contract
+    mutation: false
+  delta_protocol:
+    required_fields:
+      - date
+      - phase
+      - fact
+      - evidence
+      - decision
+      - risk
+      - child_pr
+      - next_gate
+    do_not_rewind: true
