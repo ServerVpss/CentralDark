@@ -40,7 +40,7 @@ O Codex é um especialista substituível dentro do método universal. Ele pode a
 
 - Não alterar `main` diretamente quando a missão exigir branch.
 - Não tocar na VPS, PM2, Caddy, banco ou produção sem autorização explícita.
-- Não editar arquivos privados de ambiente, sessões, credenciais ou cookies.
+- Não editar `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, credenciais ou cookies.
 - Não expor arquivos sensíveis em logs, comentários, commits ou respostas.
 - Não criar arquivos duplicados para evitar corrigir o arquivo oficial.
 - Não assumir posse de escrita sem handoff explícito quando já existir outro escritor.
@@ -48,7 +48,7 @@ O Codex é um especialista substituível dentro do método universal. Ele pode a
 
 ## Arquivos sensíveis
 
-Arquivos sensíveis incluem credenciais, configurações privadas, sessões, chaves, certificados e dados de autenticação. Use nomes de variáveis e placeholders; nunca os valores reais.
+Arquivos sensíveis incluem `.env`, `secrets/`, `tokens/`, `sessions/`, `.ssh/`, credenciais, configurações privadas, chaves, certificados e dados de autenticação. Use apenas placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BASE_URL>`; nunca valores reais.
 
 ## Handoff obrigatório
 
