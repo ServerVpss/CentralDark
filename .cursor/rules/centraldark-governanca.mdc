@@ -1,0 +1,28 @@
+---
+description: Governança universal CentralDark, método delta e escritor único
+alwaysApply: true
+---
+
+# Cursor — boot universal CentralDark
+
+Antes de sugerir ou aplicar qualquer mudança:
+
+1. Leia `LEIA-ME-IA.md`.
+2. Leia `AGENTS.md`.
+3. Leia `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
+4. Confirme branch, HEAD, escopo, escritor atual e evidência recente.
+5. Use `.agents/skills/meta-lupa/SKILL.md` em tarefa crítica.
+6. Emita uma vez o recibo `CENTRALDARK_AI_BOOT`.
+
+Aplique sempre:
+
+- Pivete comanda.
+- Qualquer modelo é especialista dentro do mesmo contrato.
+- Leitores podem trabalhar em paralelo; somente um escritor por escopo.
+- Mensagem atrasada não reinicia missão.
+- Evidência atual vence contexto antigo.
+- Use deltas curtos e não repita investigação fechada.
+- Nenhum executor aprova o próprio trabalho.
+- Não crie versões, memórias ou regras paralelas.
+
+Este arquivo é somente adaptador automático. As fontes canônicas são os arquivos citados acima.
