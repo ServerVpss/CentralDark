@@ -33,12 +33,15 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   atualizar-painel:
     runs-on: [self-hosted, Linux]
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Atualizar painel vivo
         env:
@@ -51,10 +54,17 @@ jobs:
           PAINEL_MARCO_STATUS: ${{ inputs.marco_status }}
         run: node CentralDark/apps/projeto-dashboard/atualizar-painel-vivo.mjs
 
-      - name: Commit painel vivo
+      - name: Commitar e publicar PR do painel vivo
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           git config user.name 'CentralDark Bot'
           git config user.email 'actions@github.com'
           git add -- CentralDark/apps/projeto-dashboard/painel-data.json
-          git commit -m "chore(painel): atualizar mapa vivo" || exit 0
-          git push
+          if git diff --cached --quiet; then
+            echo 'Painel sem mudança; nada a publicar.'
+            exit 0
+          fi
+          git commit -m "chore(painel): atualizar mapa vivo"
+          bash scripts/evolucao/publicar-pr-automatico.sh
