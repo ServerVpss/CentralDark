@@ -1,9 +1,9 @@
 # JARVIS — ORQUESTRAÇÃO EM DELTA E ESCRITOR ÚNICO
 
-> **Data:** 2026-07-30  
-> **Autoria da intenção:** Pivete  
-> **Organização técnica:** SOL/ChatGPT  
-> **Tipo:** contrato arquitetural complementar  
+> **Data:** 2026-07-30
+> **Autoria da intenção:** Pivete
+> **Organização técnica:** SOL/ChatGPT
+> **Tipo:** contrato arquitetural complementar
 > **Status:** canônico após merge na `main`
 
 ## 1. Encaixe e precedência
