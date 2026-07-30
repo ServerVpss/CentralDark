@@ -15,7 +15,7 @@ on:
         default: 'false'
 
 permissions:
-  contents: write
+  contents: read
   issues: write
   actions: read
 
@@ -29,6 +29,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v6
         with:
@@ -41,6 +43,7 @@ jobs:
         env:
           CENTRALDARK_ROOT: ${{ secrets.CENTRALDARK_ROOT }}
         run: |
+          set -euo pipefail
           test -n "${CENTRALDARK_ROOT:-}" || {
             echo "::error::CENTRALDARK_ROOT ausente — drift GitHub<->VPS falhando fechado, sem adivinhar caminho"
             exit 1
@@ -56,18 +59,17 @@ jobs:
           VPS_REPO_PATH: ${{ secrets.CENTRALDARK_ROOT }}
         run: node scripts/sentinela/run.mjs
 
-      - name: Commit snapshot
-        run: |
-          git config user.name 'CentralDark Sentinela'
-          git config user.email 'actions@github.com'
-          git add -- docs/sentinela/last-snapshot.json docs/sentinela/last-report.md 2>/dev/null || true
-          git commit -m "chore(sentinela): snapshot ${{ github.run_id }}
+      - name: Publicar snapshot como artifact imutável
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentinela-snapshot-${{ github.run_id }}
+          path: |
+            docs/sentinela/last-snapshot.json
+            docs/sentinela/last-report.md
+          if-no-files-found: error
+          retention-days: 30
 
-          Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>" || exit 0
-          git push || true
-
-      # NOTA: o step "Atualizar Mega Painel" foi removido em 25/06/2026.
-      # Motivo: race condition com painel-auto-update.yml e com o auto-commit
-      # da VPS — três escritores no mesmo arquivo (painel-data.json) causavam
-      # rejeição de push (non-fast-forward) na main. Agora só o
-      # painel-auto-update.yml mantém o painel-data.json.
+      # Estado transitório não faz commit nem push na main. Issues deduplicadas,
+      # job summary e artifact são os canais operacionais; Git permanece como
+      # fonte de código e decisões aprovadas, não banco de telemetria viva.

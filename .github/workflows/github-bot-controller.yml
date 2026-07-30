@@ -22,28 +22,62 @@ on:
   pull_request:
     types:
       - closed
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - synchronize
+      - edited
+      - labeled
+      - unlabeled
+  workflow_run:
+    workflows:
+      - porta-de-entrada
+      - codex-validate
+      - lupa-conformance
+      - Lupa Drift Guard
+      - PR auto-review (Codex + checklist)
+      - Pipeline — Telegram + Painel
+    types:
+      - completed
   schedule:
     - cron: "17 9 * * *"
 
 permissions:
   contents: read
-  pull-requests: write
-  issues: write
+  pull-requests: read
+  issues: read
   actions: read
+  checks: read
 
 concurrency:
-  group: github-bot-controller-${{ github.ref }}
-  cancel-in-progress: false
+  group: github-bot-controller-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.ref }}
+  cancel-in-progress: true
+
+env:
+  BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
+  BOT_TRUSTED_AUTHORS: segredounlock
+  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
 
 jobs:
   controller:
     name: Auditar PRs e fechar substituídas com segurança
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request' || github.event_name == 'schedule'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      actions: read
 
     steps:
-      - name: Checkout
+      - name: Checkout confiável da main
         uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: false
 
       - name: Validar runtime Node
         run: node --version
@@ -51,12 +85,96 @@ jobs:
       - name: Executar GitHub Bot Controller
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BOT_EXPECTED_REPOSITORY: ServerVpss/CentralDark
           BOT_EVENT_NAME: ${{ github.event_name }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || 'auto' }}
           BOT_MERGED_PR: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.merged_pr || '' }}
           BOT_SUPERSEDES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.supersedes || '' }}
-        # O runner self-hosted ja posiciona GITHUB_WORKSPACE na raiz do repo
-        # (_work/CentralDark/CentralDark). Prefixar "CentralDark/" aqui produzia
-        # _work/CentralDark/CentralDark/CentralDark/scripts/... e MODULE_NOT_FOUND.
         run: node scripts/github-bot-controller.mjs
+
+  autonomy-judge:
+    name: Juiz autônomo read-only
+    if: github.event_name == 'workflow_run' || github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      actions: read
+      checks: read
+
+    steps:
+      - name: Checkout exclusivo da main confiável
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Testar política de promoção
+        run: node --test scripts/github-autonomia-promocao.test.mjs
+
+      - name: Produzir recibo preso ao HEAD e à base
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_RECEIPT_PATH: ${{ runner.temp }}/autonomia-promotion-receipt.json
+        run: node scripts/github-autonomia-promocao.mjs judge
+
+      - name: Publicar recibo imutável do juiz
+        uses: actions/upload-artifact@v4
+        with:
+          name: autonomia-promotion-receipt-${{ github.run_id }}
+          path: ${{ runner.temp }}/autonomia-promotion-receipt.json
+          if-no-files-found: error
+          retention-days: 14
+
+  autonomy-promote:
+    name: Promotor autônomo fail-closed
+    needs: autonomy-judge
+    if: needs.autonomy-judge.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: read
+      checks: read
+
+    steps:
+      - name: Checkout exclusivo da main confiável
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Baixar recibo do juiz read-only
+        uses: actions/download-artifact@v4
+        with:
+          name: autonomia-promotion-receipt-${{ github.run_id }}
+          path: ${{ runner.temp }}/autonomia-receipt
+
+      - name: Exigir credencial que preserve os gatilhos pós-merge
+        env:
+          PROMOTION_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
+        run: |
+          set -euo pipefail
+          test -n "${PROMOTION_TOKEN:-}" || {
+            echo "::error::GITHUB_PAT_PERFIL ausente — promoção bloqueada; GITHUB_TOKEN não pode substituir porque suprimiria workflows pós-merge"
+            exit 41
+          }
+
+      - name: Revalidar estado vivo, atualizar branch ou fazer squash merge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
+          BOT_RECEIPT_PATH: ${{ runner.temp }}/autonomia-receipt/autonomia-promotion-receipt.json
+        run: node scripts/github-autonomia-promocao.mjs promote
