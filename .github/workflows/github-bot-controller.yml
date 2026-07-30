@@ -19,6 +19,8 @@ on:
         description: "Lista de PRs substituídas. Exemplo: #14 #16 #11"
         required: false
         default: ""
+  push:
+    branches: [main]
   pull_request:
     types: [closed]
   pull_request_target:
@@ -84,7 +86,7 @@ jobs:
 
   autonomy-sweep:
     name: Juiz + promotor autônomo com recibo
-    if: github.event_name == 'workflow_run' || github.event_name == 'pull_request_target' || github.event_name == 'schedule'
+    if: github.event_name == 'workflow_run' || github.event_name == 'pull_request_target' || github.event_name == 'schedule' || github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
