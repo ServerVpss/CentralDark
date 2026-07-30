@@ -553,7 +553,9 @@ def _validate_achievements(args) -> list[str]:
         "rollback_provado": args.rollback_proven,
         "risco_critico_evitado": bool(args.risk),
         "duplicacao_real_removida": bool(args.improvements),
-        "ponto_fixo_atingido": args.point_fixed == "sim",
+        "ponto_fixo_atingido": (
+            args.point_fixed == "sim" and args.autolupa == "sim"
+        ),
     }
     failures.extend(
         f"XP_REQUIREMENT_MISSING:{name}"

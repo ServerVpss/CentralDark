@@ -82,7 +82,7 @@ def workflow_findings(findings: list[Finding]) -> None:
                 "blocker", p, "Workflow sem componentes obrigatórios",
                 "ausentes=" + ",".join(missing),
             ))
-        if re.search(r"(?m)^\s*git\s+push(?:\s|$)", text) and "gh pr create" not in text:
+        if re.search(r"(?m)^(?!\s*#).*?\bgit\s+push(?:\s|$)", text) and "gh pr create" not in text:
             add(findings, Finding(
                 f"CD-AUTO-WF-DIRECT-{hashlib.sha1(p.encode()).hexdigest()[:8]}",
                 "blocker", p, "Workflow faz push direto sem PR",
@@ -146,6 +146,7 @@ def meta_lupa_findings(findings: list[Finding]) -> None:
         return
     try:
         module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module
         spec.loader.exec_module(module)
         args = SimpleNamespace(
             achievement=["ponto_fixo_atingido"], evidence=["prova"],
