@@ -6,6 +6,7 @@ import json
 import subprocess
 import sys
 import tempfile
+import textwrap
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -227,6 +228,46 @@ def test_meta_lupa_rejeita_ponto_fixo_sem_autolupa():
     findings = []
     audit.meta_lupa_findings(findings)
     assert not any(item.id == "CD-AUTO-LUPA-AUTOLUPA" for item in findings), findings
+
+
+def _run_embedded_pr_scanner(added_lines: list[str]) -> dict[str, str]:
+    workflow_path = HERE.parent.parent / ".github/workflows/pr-auto-review.yml"
+    workflow = workflow_path.read_text(encoding="utf-8")
+    marker = "          python3 - \"$CHANGED_FILE\" \"$PATCH_FILE\" \"$GITHUB_OUTPUT\" <<'PY'\n"
+    start = workflow.index(marker) + len(marker)
+    end = workflow.index("\n          PY", start)
+    code = textwrap.dedent(workflow[start:end])
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        changed = root / "changed.bin"
+        patch = root / "patch.diff"
+        output = root / "output.txt"
+        changed.write_bytes(b"")
+        patch.write_text("\n".join(f"+{line}" for line in added_lines) + "\n", encoding="utf-8")
+        result = subprocess.run(
+            [sys.executable, "-c", code, str(changed), str(patch), str(output)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0, result.stderr
+        return dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines())
+
+
+def test_scanner_distingue_env_de_segredo_literal():
+    safe = _run_embedded_pr_scanner([
+        "const BOT_TOKEN = process.env.BOT_TOKEN_CLAUDE || '';",
+        "let token = process.env[agente.tokenEnv] || process.env.BOT_TOKEN_AUTONOMIA || '';",
+    ])
+    assert safe["secret_suspect"] == "false"
+
+    telegram = "123456789:" + ("A" * 35)
+    literal = _run_embedded_pr_scanner([f"const BOT_TOKEN = '{telegram}';"])
+    assert literal["secret_suspect"] == "true"
+
+    github_key = _run_embedded_pr_scanner(["token = ghp_abcdefghijklmnopqrstuvwxyz123456"])
+    assert github_key["secret_suspect"] == "true"
 
 
 def test_relatorio_json_estavel():
