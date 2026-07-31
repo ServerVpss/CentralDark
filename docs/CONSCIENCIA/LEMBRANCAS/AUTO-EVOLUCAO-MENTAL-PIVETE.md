@@ -498,7 +498,8 @@ Antes de expandir para novas integrações:
 ## 16. Marco canônico — da intuição em várias frentes à depuração adversarial contida
 
 **Data:** 31/07/2026, 17:52 BRT  
-**Autor da intenção:** SEGREDO/CHEFE  
+**Fonte da intenção e autoridade final:** SEGREDO/CHEFE  
+**Registro e organização:** SOL  
 **Contexto observado:** Guardião, HubBot, Grok, PM2, Casa e VPS
 
 ### O que mudou
