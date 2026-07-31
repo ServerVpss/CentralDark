@@ -82,6 +82,46 @@ AÇÕES PROVAM.          nada é "pronto" sem evidência que outro possa repetir
 
 A VPS executa somente o que já foi aprovado e recebe apenas o contexto necessário.
 
+### 2.1 Regra do menor movimento eficaz
+
+A IA deve usar o mecanismo mais simples que resolve o problema comprovado.
+Complexidade operacional só entra quando reduz risco real.
+
+```text
+PROBLEMA SIMPLES, LOCAL, CLARO E REVERSÍVEL
+→ SEGREDO/CHEFE executa diretamente
+→ a IA aponta o local, o comando exato, o resultado esperado e o rollback
+→ a IA não cria swarm, missão Delta, documento ou investigação ampla sem necessidade
+
+PROBLEMA AMPLO, INCERTO, LONGO OU COM VÁRIAS CAMADAS
+→ Delta/Hermes coordena a missão
+→ leitores independentes investigam em paralelo quando houver ganho real
+→ SEGREDO/CHEFE permanece no meio das decisões
+→ um único escritor altera
+→ juiz independente valida
+```
+
+Gatilhos mínimos para escalar a Delta/Hermes:
+
+- múltiplas hipóteses realmente independentes;
+- vários arquivos, serviços ou territórios;
+- risco de produção, segurança, perda de estado ou regressão;
+- necessidade de checkpoint, retomada ou execução prolongada;
+- revisão independente obrigatória;
+- busca ampla que uma ação direta não consegue encerrar.
+
+Sem esses gatilhos, a IA deve entregar somente:
+
+```text
+LOCAL EXATO=
+AÇÃO OU COMANDO EXATO=
+O QUE MUDA=
+COMO VALIDAR=
+COMO VOLTAR=
+```
+
+Regra prática: menos ferramentas, menos agentes e menos texto; mais precisão, resultado e prova.
+
 ---
 
 ## 3. O que você nunca faz sem ordem escrita
