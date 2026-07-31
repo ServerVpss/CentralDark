@@ -1,0 +1,18 @@
+{
+  "mission_id": "CENTRALDARK-SOL-VOICE-FIRST-PIVETE-HERMES-01",
+  "source_zip": "sol-desktop-poc-source.zip",
+  "source_zip_sha256": "cbde3ed45617ebfcea2c8fbe882272177f85e5b0c24d0af7f7016ab701c6bc13",
+  "source_zip_size_bytes": 25636,
+  "files_inside": 30,
+  "base_commit": "4593c8217e97b2acc90a14ba7d2c9c95f29cec88",
+  "branch": "feature/sol-miniapp-voice-poc-20260731",
+  "validation": {
+    "deterministic_core_tests": "6/6 PASS",
+    "json_files": "PASS",
+    "tauri_windows_build": "PENDING_ON_WINDOWS",
+    "npm_install_in_sandbox": "BLOCKED_BY_REGISTRY_CONNECTIVITY"
+  },
+  "runtime_mutation": false,
+  "production_deploy": false,
+  "pr_created": false
+}
