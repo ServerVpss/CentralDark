@@ -1,12 +1,12 @@
-# 🧠 Notion Sync — 2026-07-30T19:06:10.104Z
+# 🧠 Notion Sync — 2026-07-31T19:04:04.869Z
 
-- **Commit fonte:** `749077ad694babc494f9b0f2e9d713d92bdd0360`
+- **Commit fonte:** `9d95fda9139dfb65ff1df730d15b3f42fcfc8f8e`
 - **Disparado por:** segredounlock
 - **Modo:** 🟢 EXECUÇÃO
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
-- **Resumo:** ✨ 0 criadas · ♻️ 51 atualizadas · ❌ 330 erros
+- **Resumo:** ✨ 0 criadas · ♻️ 50 atualizadas · ❌ 332 erros
 
 ## Por base
 
@@ -14,9 +14,9 @@
 |---|---:|---:|---:|---:|---:|
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
-| decisoes | 39 | 0 | 39 | 0 | 0 |
+| decisoes | 39 | 0 | 38 | 0 | 1 |
 | aprendizados | 7 | 0 | 7 | 0 | 0 |
-| estrutura | 330 | 0 | 0 | 0 | 330 |
+| estrutura | 331 | 0 | 0 | 0 | 331 |
 
 ## Operações
 
@@ -39,7 +39,7 @@
 | decisoes | atualizado | Instalador + doc viva |
 | decisoes | atualizado | Setor único de pendências |
 | decisoes | atualizado | Central de horário |
-| decisoes | atualizado | Docs por pasta |
+| decisoes | erro | Docs por pasta |
 | decisoes | atualizado | MCP CentralDark |
 | decisoes | atualizado | Memória eterna do agente ChatGPT |
 | decisoes | atualizado | GitHub Achievements |
@@ -236,6 +236,7 @@
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/QUICKSTART.md |
 | estrutura | erro | docs/CONSCIENCIA/DARKAI/README.md |
 | estrutura | erro | docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md |
+| estrutura | erro | docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md |
 | estrutura | erro | docs/CONSCIENCIA/DNS-WILDCARD-CENTRALLDARK.md |
 | estrutura | erro | docs/CONSCIENCIA/EDGE_FUNCTIONS.md |
 | estrutura | erro | docs/CONSCIENCIA/ESPELHO-CLONE-DECK-PASSIVO.md |
