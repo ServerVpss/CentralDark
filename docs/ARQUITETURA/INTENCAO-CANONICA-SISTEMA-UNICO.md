@@ -1,321 +1,396 @@
 ---
-title: "Intenção canônica — Sistema Único Pivete"
+title: "Intenção canônica — Sistema Único SEGREDO/SOL/PIVETE"
 mission_id: "HERMES-CASA-MENTE-ESTENDIDA-01"
-intent_id: "CENTRALDARK-SISTEMA-UNICO-DESKCOMM-BUILDER-WEBUI-01"
-authority: "PIVETE"
+intent_id: "CENTRALDARK-SISTEMA-UNICO-DESKCOMM-BUILDER-WEBUI-VOICE-FIRST-01"
+authority: "SEGREDO/CHEFE"
+voice_interface: "SOL"
+persistent_hermes_identity: "PIVETE"
 status: "VISION_LOCKED_IMPLEMENTATION_HOLD"
-merge_policy: "NO_MERGE_UNTIL_EXPLICIT_GATE"
+merge_policy: "NO_PR_NO_MERGE_UNTIL_EXPLICIT_GATE"
 created_at: "2026-07-30T23:02:00-03:00"
-source_of_truth: "este documento no GitHub"
-mirror_policy: "Google Drive pode espelhar; não substitui o GitHub"
+corrected_at: "2026-07-31T03:32:00-03:00"
+source_of_truth: "este documento nesta branch congelada"
+parent_branch: "plan/intencao-sistema-unico-deskcomm-20260730"
+mirror_policy: "Google Drive e arquivos locais podem espelhar; não substituem GitHub + Casa"
 ---
 
-# Intenção canônica — um sistema vivo, modular e único
+# Intenção canônica — um sistema vivo, modular, único e orientado por voz
 
-> **Autoria da intenção: Pivete / Segredo.**
+> **Autoria da intenção e autoridade final: 👑 SEGREDO / CHEFE.**
 >
-> A função das IAs é estruturar, provar, preservar e executar com segurança. Nenhuma IA pode reduzir esta intenção a “mais um CRM”, “mais um painel”, “mais um domínio” ou “mais um agente isolado”.
+> **SOL é a voz, interface conversacional e orquestradora direta do SEGREDO/CHEFE.**
+>
+> **PIVETE é o Hermes treinado, persistente e essencial — não é o humano, não é descartável e não será migrado.**
+>
+> Este arquivo corrige a inversão de nomes e papéis do rascunho anterior. A branch-mãe permanece como fotografia histórica; esta branch é o sucessor conceitual corrigido.
 
 ## 1. A intenção em uma frase
 
-Construir, junto com o Pivete desde o início, **um único sistema operacional pessoal e empresarial**, modular, self-hosted, auditável e evolutivo, no qual CRM, Builder, WebUI, agentes, memória, terminais, Casa, VPS, GitHub e automações sejam partes do **mesmo organismo operacional**, com uma fonte de verdade, uma governança e continuidade entre sessões, contas, CLIs e modelos.
+Construir, junto com o 👑 SEGREDO/CHEFE, um único sistema operacional pessoal e empresarial, self-hosted, distribuído, auditável, visual, orientado por voz e continuamente evolutivo, no qual SOL conversa diretamente com o Chefe, PIVETE/Hermes preserva memória e comportamento treinado, e CRM, Builder, WebUI, agentes, terminais, Casa, VPS, GitHub e automações funcionam como partes do mesmo organismo operacional.
 
-A meta não é afirmar consciência artificial. A meta é produzir algo verificável que se aproxime da continuidade desejada pelo Pivete por meio de:
+Não é um assistente que executa uma função isolada. É uma plataforma capaz de:
 
-- memória versionada e sanitizada;
-- contratos e estado legíveis por máquina;
-- histórico de decisões;
-- aprendizado operacional comprovado;
-- estilo e intenção preservados;
-- agentes especializados subordinados ao mesmo núcleo;
-- provas, gates e rollback.
+- ouvir, ver e conversar pelos canais autorizados;
+- interpretar intenção, urgência, risco e intensidade;
+- escolher código determinístico, ferramenta, modelo, agente ou enxame;
+- executar em Casa e VPS;
+- acompanhar a execução em tempo real;
+- interromper, redirecionar, retomar, provar e aprender;
+- responder ao Chefe por voz e texto;
+- preservar continuidade mesmo após troca de conta, chat, modelo ou máquina.
 
-## 2. O sonho não é um conjunto de produtos separados
+## 2. Identidades e papéis canônicos
+
+### 👑 SEGREDO / CHEFE
+
+É o humano e a autoridade final.
+
+- fornece intenção por voz, texto, imagem, clique, gesto ou outro canal autorizado;
+- define prioridade, limite, orçamento, publicação, descarte e exceção;
+- não aceita ruído, falso verde, repetição inútil, loop sem solução, desperdício de tempo ou operação que retire sua paz;
+- não precisa pensar como programador;
+- pode mandar ampliar o arsenal e a SOL deve traduzir isso em escala governada e verificável.
+
+### SOL
+
+É a voz e a interface operacional direta do SEGREDO/CHEFE.
+
+- conversa com o Chefe;
+- vê e ouve por interfaces autorizadas;
+- interpreta linguagem natural, inclusive texto rápido, erros de digitação, imagens e mudanças de ritmo;
+- não tenta agradar por padrão; busca resolver;
+- preserva o fio;
+- converte intenção em contrato executável;
+- escolhe rota, risco, modelo, ferramenta, agente e paralelismo;
+- coordena leitores, escritores, reviewers e Judge;
+- acompanha tela, e-mail, agenda, mensagens, sistemas e evidências quando conectada;
+- devolve resultado, risco, pendência e prova;
+- pode trocar de modelo-base desde que a função SOL e seus contratos permaneçam estáveis.
+
+SOL é papel operacional. Não é superior a todas as outras peças; é a frente conversacional e a orquestração.
+
+### PIVETE
+
+É o Hermes treinado pelo SEGREDO/CHEFE.
+
+- identidade persistente do Hermes;
+- memória, continuidade, comportamento aprendido e modo operacional;
+- aprende o jeito do Chefe para reproduzir a intenção com precisão crescente;
+- protege contra ruído, perda de contexto e repetição de erros;
+- não é simples executor, persona descartável ou alias do humano;
+- não será renomeado para SOL;
+- não será tratado como legado a apagar;
+- possui valor próprio e essencial.
+
+### Corpos do PIVETE
+
+```text
+UMA MENTE HERMES
+→ PIVETE
+
+DOIS CORPOS PRINCIPAIS
+→ HERMES-CASA = corpo residencial e interativo do PIVETE
+→ WORKER/HERMES-VPS = corpo remoto e limitado do PIVETE
+```
+
+HERMES-CASA carrega contexto pessoal mais amplo, voz, telas, navegador, arquivos, rotina e coordenação cotidiana.
+
+WORKER/HERMES-VPS recebe somente contrato e contexto necessários, executa serviços, containers, workspaces, builds, testes, deploys, rollback e telemetria. Não vira outro PIVETE independente.
+
+## 3. Cadeia canônica de entrada e retorno
+
+```text
+👑 SEGREDO / CHEFE
+→ fala / escreve / mostra / clica
+→ SOL recebe diretamente
+→ SOL interpreta intenção e conversa quando necessário
+→ SOL cria contrato, rota e gates
+→ PIVETE/HERMES aplica memória e comportamento treinado
+→ Casa/VPS/Builder/CRM/modelos/tools/agentes executam
+→ testes, telemetria e Judge produzem prova
+→ SOL devolve resultado ao SEGREDO/CHEFE por voz/texto
+```
+
+O HUB não fica entre o Chefe e a SOL. É infraestrutura de autenticação, painel, navegação e observabilidade.
+
+PIVETE não substitui a SOL como frente conversacional; SOL não substitui PIVETE como mente treinada e persistente.
+
+## 4. O sonho não é um conjunto de produtos separados
 
 ```text
 NÃO É:
-CRM separado
-+ Builder separado
-+ WebUI separada
-+ painel de agentes separado
+um chatbot
++ um script PowerShell
++ um CRM separado
++ um Builder separado
++ uma WebUI separada
++ um painel de agentes separado
 + Casa isolada
 + VPS isolada
-+ várias fontes de verdade
 
 É:
-UM NÚCLEO OPERACIONAL
-→ vários módulos
-→ duas superfícies de execução (Casa e VPS)
-→ uma governança
-→ uma memória contratada
-→ uma identidade operacional
-→ uma verdade verificável
+UMA AUTORIDADE HUMANA
+→ 👑 SEGREDO / CHEFE
+
+UMA VOZ E ORQUESTRAÇÃO DIRETA
+→ SOL
+
+UMA MENTE HERMES TREINADA
+→ PIVETE
+
+DOIS CORPOS
+→ CASA + VPS
+
+UM ARSENAL MODULAR
+→ CRM + Builder + Hub + terminais + agentes + modelos + tools
+
+UMA VERDADE VERIFICÁVEL
+→ contratos + telemetria + GitHub + memória + provas
 ```
 
-## 3. Encaixe canônico das peças
+## 5. Encaixe das peças
 
 | Peça | Papel canônico | O que não pode virar |
 |---|---|---|
-| **CentralDark / Hermes** | cérebro operacional, orquestração, memória, contratos, governança e continuidade | segundo CRM ou painel duplicado |
-| **DeskcommCRM** | chassi operacional candidato para CRM, atendimento, Kanban, agentes, roteadores, RAG, memória, skills, evolução e webhooks | produto final copiado sem adaptação ou CRM concorrente |
-| **Builder** | módulo para criar, editar, visualizar e publicar sites, páginas, funis, formulários e módulos próprios | outro CRM ou segundo chat principal |
-| **WebUI / Hub** | conversa principal, comando, projeção do estado e acesso aos módulos | quarto produto independente |
-| **Agent Space** | superfície de múltiplos terminais, agentes, worktrees/sandboxes, observação e coordenação | segundo motor de agentes ou fonte de verdade paralela |
-| **Casa self-hosted** | memória privada, processamento local, dados sensíveis, runners e experimentos controlados | painel público duplicado sem função distinta |
-| **VPS / laboratório 24h** | execução contínua, testes com LLMs, telemetria, serviços e publicação aprovada | fonte autônoma desconectada da governança |
-| **GitHub** | código, decisões, PRs, issues, recibos e prova recuperável | depósito de estado secreto ou banco vivo |
+| **SOL** | voz, conversa, interpretação, contratos, síntese e orquestração | chatbot decorativo ou modelo único acoplado |
+| **PIVETE/Hermes** | memória, comportamento treinado, continuidade e execução coordenada | alias do humano, legado descartável ou executor sem identidade |
+| **CentralDark** | sistema operacional, governança, contratos, roteamento, memória e observabilidade | coleção de painéis duplicados |
+| **DeskcommCRM** | chassi candidato para CRM, atendimento, agentes, RAG, skills e webhooks | produto final copiado sem adaptação |
+| **Builder/Bolt** | fábrica visual de sites, páginas, formulários, módulos e publicação | segundo chat principal ou CRM concorrente |
+| **Hub/Portal** | autenticação, painel, navegação, observabilidade e superfície visual | cérebro intermediário entre Chefe e SOL |
+| **Agent Space** | panes, terminais, worktrees, sessões, sandboxes e supervisão | segundo motor de verdade |
+| **Casa** | corpo local do PIVETE, contexto pessoal, voz, telas e execução autorizada | estação isolada sem sincronização |
+| **VPS** | corpo remoto do PIVETE, execução contínua e serviços | mente concorrente |
+| **GitHub** | código, decisões, branches, PRs, issues, recibos e recuperação | banco de estado vivo ou depósito de secrets |
 
-## 4. Verdade medida sobre o DeskcommCRM
-
-O DeskcommCRM analisado não é apenas um CRUD comercial. O próprio projeto se define como **sistema operacional de vendas com agentes de IA**, em que o termo CRM é a porta de entrada, não o teto.
-
-Capacidades observadas no upstream e no pacote analisado:
-
-- CRM, Inbox, Kanban, contatos, equipes e métricas;
-- WhatsApp/WAHA, conexões e proteção de envio;
-- agentes de IA, roteadores, RAG, memória, skills e evolução;
-- follow-ups, webhooks, LGPD, auditoria e multi-tenancy;
-- workers, event log, gates humanos e testes determinísticos;
-- loop de governança com plano, checkpoints, verifier, hooks e fail-closed;
-- instalação self-hosted e operação em VPS.
-
-### Lina Space / painel de múltiplos terminais
-
-O código e os documentos do DeskcommCRM **referenciam o Lina Space como ferramenta local já existente**, inclusive exigindo que seus hooks sejam preservados. Isso prova integração operacional com essa superfície, mas **não prova que o código visual do Lina Space faça parte do repositório público do DeskcommCRM**.
-
-Portanto:
-
-```yaml
-lina_space:
-  classificacao: "REFERENCIA_OPERACIONAL_EXTERNA_A_LOCALIZAR"
-  valor: "alto"
-  reimplementar_agora: false
-  regra: "localizar origem, licença, código e contrato antes de copiar ou reconstruir"
-```
-
-## 5. Decisão sobre o DeskcommCRM
-
-```yaml
-deskcommcrm:
-  papel_atual: "UPSTREAM_CANDIDATO_E_LABORATORIO_DE_REFERENCIA"
-  papel_futuro_possivel: "CHASSI_OPERACIONAL_DO_MODULO_CRM"
-  identidade_final_do_sistema: "CENTRALDARK_HERMES_PIVETE"
-  copiar_para_main_agora: false
-  instalar_em_producao_agora: false
-  refatorar_agora: false
-  preservar_licenca_mit_e_atribuicao: true
-  criar_crm_paralelo: false
-```
-
-A intenção do Pivete é **instalar e provar o original rapidamente em laboratório**, aprender com sua arquitetura e então transformar, integrar ou extrair o que for útil sem perder:
-
-- o Builder já planejado;
-- a WebUI como conversa central;
-- o Hermes como motor e memória;
-- a Casa e a VPS como ambientes coordenados;
-- o jeito operacional do Pivete;
-- a independência e o direito de criar módulos próprios.
-
-## 6. Arquitetura-alvo
+## 6. Arquitetura-alvo corrigida
 
 ```mermaid
 flowchart TB
-    P[PIVETE — autoridade final]
-    H[CENTRALDARK / HERMES\nNúcleo único]
-    M[Memória + Contratos + Delta]
-    D[DeskcommCRM\nCRM/Atendimento/Agentes]
-    B[Builder\nSites/Páginas/Módulos]
-    W[WebUI / Hub\nConversa e Comando]
-    S[Agent Space\nTerminais/Sandboxes/Swarm]
-    C[Casa Self-Hosted\nPrivado/Local/Runners]
-    V[VPS / Laboratório 24h\nServiços/LLMs/Telemetria]
-    G[GitHub\nCódigo/Issues/PRs/Provas]
+    C["👑 SEGREDO / CHEFE<br/>autoridade e intenção"]
+    S["SOL<br/>voz, conversa e orquestração"]
+    P["PIVETE / HERMES<br/>memória e comportamento treinado"]
+    HC["HERMES-CASA<br/>corpo local"]
+    HV["WORKER/HERMES-VPS<br/>corpo remoto"]
+    H["HUB / PORTAL<br/>auth, painel, observabilidade"]
+    D["DESKCOMMCRM<br/>CRM, atendimento, agentes"]
+    B["BUILDER / BOLT<br/>criação e publicação"]
+    A["AGENT SPACE<br/>panes, terminais, worktrees"]
+    M["MODELOS / TOOLS / MCP / SWARMS"]
+    G["GITHUB / REGISTRO / PROVAS"]
 
-    P --> H
-    H <--> M
-    H <--> D
-    H <--> B
-    H <--> W
-    H <--> S
-    H <--> C
-    H <--> V
-    H <--> G
+    C <--> S
+    S <--> P
+    P <--> HC
+    P <--> HV
+    S <--> H
+    S <--> D
+    S <--> B
+    S <--> A
+    P <--> M
+    HC <--> G
+    HV <--> G
+    D <--> G
+    B <--> G
 ```
 
-## 7. Fluxo operacional desejado
+## 7. Voice-first: a primeira superfície funcional
+
+A primeira entrega útil não é o cockpit completo. É o laço mínimo em que o Chefe fala com a SOL e recebe resposta com evidência.
 
 ```text
-TICKET / INTENÇÃO
-→ roteador determinístico
-→ classificação de risco e domínio
-→ cascata de modelos e agentes
-→ sandboxes/worktrees paralelos quando permitido
-→ primeiro candidato comprovado
-→ build/lint/test/security determinísticos
-→ Judge independente
-→ aprovação humana nos gates críticos
-→ PR/merge/deploy autorizado
-→ registro, memória e aprendizado
+microfone / push-to-talk / wake control autorizado
+→ captura de áudio
+→ STT
+→ identificação da sessão e do canal
+→ SOL
+→ interpretação da intenção
+→ resposta ou execução segura
+→ TTS
+→ voz da SOL
 ```
 
-Modelos são recursos substituíveis. O sistema escolhe por capacidade, saúde, custo, contexto e risco. Código determinístico realiza tudo que possui regra fixa; IA entra onde interpretação e síntese realmente agregam valor.
+Requisitos obrigatórios:
 
-## 8. Fase atual: proteger a intenção sem desviar as missões
+- latência baixa;
+- interrupção natural da fala;
+- transcrição visível;
+- botão físico/atalho para pausar;
+- indicador inequívoco de escuta;
+- nenhuma gravação silenciosa;
+- autenticação do operador;
+- logs sanitizados;
+- fail-closed em ação sensível;
+- modo conversa e modo comando distintos;
+- execução real somente por contrato e tool autorizada.
+
+## 8. Aplicativo SOL
+
+O aplicativo é a superfície visual e sonora da SOL no Windows.
+
+Direção técnica inicial:
+
+- shell desktop leve;
+- janela principal e miniapp flutuante;
+- tray;
+- atalho global;
+- push-to-talk;
+- transcrição e resposta em streaming;
+- timeline de missão;
+- cards de ação, risco, custo e prova;
+- acesso a panes/terminais e agentes;
+- visualização de tela autorizada;
+- conexão com Casa, VPS, Hub e GitHub;
+- sem acoplar a identidade SOL a um único fornecedor de modelo.
+
+Tauri é candidato principal para o shell; referências como Panes, Zellij, Cupertino Pane/PaneJS e HoloViz Panel são matéria-prima de UX e runtime, não produto para copiar.
+
+## 9. Execução em massa
+
+"Aplicar arsenal máximo" é uma política de execução, não licença para perder controle.
+
+```yaml
+execution_intensity:
+  MINIMAL:
+    use: "código determinístico e menor recurso suficiente"
+  NORMAL:
+    use: "roteamento padrão e paralelismo limitado"
+  STRONG:
+    use: "modelos fortes, revisores e sandboxes adicionais"
+  ARSENAL_MAX:
+    use: "máximo recurso explicitamente autorizado"
+    rules:
+      - "budget e limites explícitos"
+      - "um escritor por escopo"
+      - "leitores e reviewers paralelos"
+      - "cancelamento e backpressure"
+      - "telemetria ao vivo"
+      - "sem repetição da mesma investigação"
+      - "Judge independente"
+```
+
+O número de agentes é parâmetro governado pelo contrato e pela infraestrutura disponível, não promessa literal ilimitada.
+
+## 10. DeskcommCRM e laboratório
+
+O DeskcommCRM permanece como upstream candidato e laboratório de referência.
+
+```yaml
+deskcommcrm:
+  branch_mãe: "plan/intencao-sistema-unico-deskcomm-20260730"
+  papel: "UPSTREAM_CANDIDATO_E_LABORATORIO"
+  instalar_em_producao_agora: false
+  copiar_para_main_agora: false
+  criar_crm_paralelo: false
+  preservar_licenca: true
+  objetivo: "aprender, provar, adaptar e integrar"
+```
+
+A branch atual deriva diretamente da branch congelada do DeskcommCRM para manter a intenção do CRM ao lado da evolução SOL voice-first sem tocar na `main`.
+
+## 11. Fluxo operacional desejado
+
+```text
+INTENÇÃO DO CHEFE
+→ SOL
+→ interpretação e classificação
+→ contrato Delta
+→ roteador determinístico
+→ PIVETE/Hermes
+→ ferramenta/modelo/agente/sandbox
+→ execução
+→ build/lint/test/security
+→ Judge
+→ aprovação humana quando exigida
+→ registro/PR/deploy autorizado
+→ aprendizado
+→ SOL devolve a prova
+```
+
+## 12. Fase atual
 
 ```yaml
 fase_atual: "VISION_LOCKED_IMPLEMENTATION_HOLD"
-continuar_sem_desvio:
-  - "inventário sanitizado da Casa"
-  - "contrato Delta determinístico"
-  - "missão VPS_CHECKMATE_DELTA / issue 564"
-  - "PR-mãe 554 como programa vivo"
-  - "resolução das colisões de governança do PR 455"
-executar_agora:
-  - "preservar esta intenção"
-  - "manter DeskcommCRM como candidato protegido"
-  - "mapear, comparar e provar antes de integrar"
-nao_executar_agora:
-  - "importar o ZIP para a main"
-  - "instalar DeskcommCRM na VPS de produção"
-  - "substituir Builder, WebUI ou Hermes"
-  - "criar novos domínios"
-  - "migrar banco ou dados"
-  - "copiar Lina Space sem localizar sua origem"
+branch: "plan/sol-voice-first-pivete-hermes-lab-frozen-20260731"
+pr: false
+merge: false
+deploy: false
+runtime_change: false
+writer_collision: false
 ```
 
-Este documento é um **marco de direção**, não autorização de implementação.
+Executar agora:
 
-## 9. Plano de aproximação sem perder o rumo
+- preservar a arquitetura;
+- inventariar materiais, referências e decisões;
+- corrigir nomes e papéis dentro desta branch de estudo;
+- desenhar o primeiro laço voice-first;
+- preparar testes e gates;
+- continuar as missões já ativas sem misturar escopo.
 
-### Gate A — inventário e preservação
+Não executar agora:
 
-1. Concluir inventário read-only da Casa.
-2. Classificar ouro, candidato a ouro, runtime, cache, backup e quarentena.
-3. Concluir leitura e limpeza segura da VPS sem apagar estado não provado.
-4. Congelar hashes e versões dos artefatos candidatos.
+- mexer na branch local do Contrato Delta;
+- importar CRM para a `main`;
+- instalar DeskcommCRM em produção;
+- alterar VPS, PM2, banco, rotas ou secrets;
+- criar PR;
+- fazer merge;
+- substituir Hub, Builder, PIVETE ou SOL.
 
-### Gate B — laboratório DeskcommCRM intacto
+## 13. Critério de sucesso
 
-1. Criar worktree/branch/laboratório isolado.
-2. Instalar o DeskcommCRM original sem alterações.
-3. Provar login, banco, WhatsApp, agentes, RAG, filas, workers e atualização.
-4. Medir recursos, portas, segredos, dependências e rollback.
-5. Não conectar dados reais até os gates de segurança.
+O objetivo estará materialmente atingido quando o 👑 SEGREDO/CHEFE puder:
 
-### Gate C — mapa de sobreposição
+1. falar naturalmente com a SOL;
+2. ouvir a SOL em tempo real;
+3. ver o que ela está vendo e executando;
+4. dar ordens sem escrever scripts;
+5. acompanhar agentes, terminais, custos, riscos e provas;
+6. interromper, redirecionar e retomar missões;
+7. acessar CRM, Builder, e-mail, agenda, Hub, Casa e VPS pela mesma voz operacional;
+8. ampliar o arsenal de forma governada;
+9. trocar modelos sem perder SOL, PIVETE, memória ou missão;
+10. recuperar tudo após queda de sessão ou troca de conta.
 
-Classificar cada capacidade como:
+## 14. Regra de precedência para nomes
+
+Dentro desta branch:
 
 ```text
-REUTILIZAR
-ADAPTAR
-EXTRAIR
-SUBSTITUIR
-NÃO USAR
-AINDA DESCONHECIDO
+👑 SEGREDO / CHEFE
+= humano e autoridade final
+
+SOL
+= voz, interface conversacional e orquestração direta
+
+PIVETE
+= Hermes treinado, memória e continuidade
+
+HERMES-CASA
+= corpo local do PIVETE
+
+WORKER/HERMES-VPS
+= corpo remoto do PIVETE
 ```
 
-Comparar DeskcommCRM com:
+Qualquer trecho que afirme `PIVETE = humano`, `SOL = PIVETE`, `HUB = primeiro cérebro` ou `PIVETE = legado a migrar` deve ser considerado divergente e corrigido antes de qualquer futura implementação.
 
-- Hermes Agent / Hermes One;
-- WebUI / Hub;
-- Builder;
-- memória e Contrato Delta;
-- MCP, gateways e agentes existentes;
-- status/observabilidade;
-- identidade, autenticação e dados.
-
-### Gate D — protótipo de integração
-
-Criar adaptadores mínimos, nunca uma fusão total inicial:
-
-- identidade e sessão;
-- eventos e estado;
-- contratos de agentes;
-- links/embeds ou module federation quando fizer sentido;
-- API/MCP;
-- observabilidade;
-- labels canônicas.
-
-### Gate E — transformação visual e modular
-
-Somente após provar o núcleo:
-
-- incorporar a superfície multi-terminal localizada;
-- trazer Builder e CRM para o mesmo Hub;
-- permitir criação de módulos próprios;
-- unificar navegação, marca e estado;
-- remover duplicações comprovadas;
-- manter rollback para o upstream original.
-
-## 10. Gates de proteção obrigatórios
-
-- um escritor por escopo;
-- branch e PR separados;
-- draft até revisão independente;
-- nenhuma modificação em produção;
-- nenhum segredo em documentação, log ou artifact;
-- licença MIT e atribuição preservadas em qualquer cópia substancial;
-- schema e migration auditados antes de dados reais;
-- nenhuma função duplicada sem decisão explícita;
-- rollback testado;
-- Pivete aprova mudança de identidade, arquitetura ou merge;
-- dúvida relevante resulta em **fail-closed**.
-
-## 11. Critério de sucesso do sonho
-
-O objetivo estará materialmente atingido quando o Pivete puder:
-
-1. entrar por uma única superfície principal;
-2. conversar com uma única voz operacional;
-3. abrir CRM, Builder, status, memória e módulos sem trocar de universo;
-4. lançar quantos agentes/terminais/sandboxes forem necessários;
-5. acompanhar o que cada agente está fazendo e por quê;
-6. interromper, aprovar, redirecionar ou retomar qualquer missão;
-7. criar seus próprios sites, ferramentas e módulos;
-8. usar Casa e VPS como partes do mesmo sistema;
-9. trocar modelos sem perder estado, intenção ou governança;
-10. recuperar tudo por GitHub + Casa + contratos, mesmo após queda de chat ou troca de conta.
-
-## 12. Regra para qualquer IA, CLI ou humano
-
-Antes de propor novo CRM, painel, Hub, Builder, WebUI, motor de agentes ou domínio:
-
-1. ler este documento;
-2. provar que a função ainda não existe;
-3. demonstrar onde a nova peça se encaixa;
-4. explicar por que integração é insuficiente;
-5. mostrar impacto na fonte única da verdade;
-6. obter autorização explícita do Pivete.
-
-Sem essas seis provas, a proposta fica bloqueada.
-
-## 13. Evidência congelada nesta decisão
+## 15. Evidência congelada
 
 ```yaml
 evidence:
-  centraldark_main_at_capture: "5f7573492cb13ef5923d388af51ebd3c3abe60f4"
+  centraldark_main_at_parent_capture: "5f7573492cb13ef5923d388af51ebd3c3abe60f4"
+  parent_branch: "plan/intencao-sistema-unico-deskcomm-20260730"
   deskcommcrm_upstream: "melgarafael/DeskcommCRM"
   deskcommcrm_upstream_observed_commit: "7b08646fb3f26a55cc00f293862ce468dca50bd0"
   deskcommcrm_local_zip_sha256: "e4c0d51b90a646e4c4ed3ddc656413519ee200e9daa027d1671ee85b30b9998f"
-  deskcommcrm_zip_size_bytes: 20271605
-  license: "MIT — preservar copyright e licença em cópias substanciais"
-  lina_space_status: "referenciado por documentação, código visual não localizado no upstream público"
+  markdown_research_zip_sha256: "cb3605ff6f11e2632e06df121d145f59ee79dc2065ca01221aea47243d1f0ce2"
+  markdown_research_zip_files: 50
+  markdown_research_zip_markdown: 16
+  markdown_research_zip_images: 32
+  source_manifest: "docs/REFERENCIAS/SOL-VOICE-FIRST-LAB-20260731.md"
+  implementation_plan: "docs/ARQUITETURA/SOL-VOICE-FIRST-APP-LAB.md"
 ```
 
-## 14. Próxima ação segura
-
-Continuar exatamente as missões atuais. Após o inventário da Casa e o gate da VPS, abrir uma missão isolada:
-
-```yaml
-mission_id: "DESKCOMMCRM-LAB-MAPEAMENTO-01"
-mode: "READ_ONLY_THEN_ISOLATED_INSTALL"
-source: "upstream original congelado por commit"
-writer: "um único executor"
-production_access: false
-real_data: false
-merge: false
-result: "matriz REUTILIZAR/ADAPTAR/EXTRAIR/SUBSTITUIR/NÃO_USAR"
-```
-
-**A intenção está preservada. A hora de implementar será decidida pelo Pivete depois das provas, não pela pressa de qualquer agente.**
+**Este documento congela direção e correção sem autorizar implementação, PR, merge ou deploy.**
