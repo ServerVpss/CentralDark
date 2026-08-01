@@ -33,6 +33,7 @@ import sys
 import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path, PurePosixPath
 
 LEDGER_NAME = "references/uso-ledger.jsonl"
 SCHEMA_VERSION = 1
@@ -70,7 +71,7 @@ SECRET_PATTERNS = [
     re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}"),
     re.compile(r"(pk|sk|rk)_(live|test)_[A-Za-z0-9]{10,}"),  # stripe-style
     re.compile(r"[a-z]+://[^:\s]+:[^@\s]+@"),  # url com credencial usuario:senha@
-    re.compile(r"(ghp_|github_pat_|glpat-|hf_)[A-Za-z0-9]{10,}"),  # pats comuns
+    re.compile(r"(ghp_|github_pat_|glpat-|hf_)[A-Za-z0-9]{10,}", re.I),  # pats comuns
 ]
 
 HOT_TRIGGERS = {
@@ -1587,21 +1588,122 @@ def _git_commit_exists(repo_root: str, sha: str) -> bool:
     return result.returncode == 0
 
 
+def _git_value(repo_root: str, *args: str) -> str | None:
+    result = subprocess.run(
+        ["git", "-C", os.path.abspath(repo_root), *args],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return None
+    return result.stdout.strip()
+
+
+def _git_target_exists(repo_root: str, target: str) -> bool:
+    normalized = target.replace("\\", "/")
+    target_path = PurePosixPath(normalized)
+    if target_path.is_absolute() or ".." in target_path.parts:
+        return False
+    result = subprocess.run(
+        ["git", "-C", os.path.abspath(repo_root), "cat-file", "-e", f"HEAD:{normalized}"],
+        check=False,
+        capture_output=True,
+    )
+    return result.returncode == 0
+
+
 _DEFINITIVE_STATUSES = {"PASS", "FAIL"}
 
+# Valores que um Writer preguicoso (ou malicioso) usa no lugar de um judge
+# real. Tratados como ausencia de judge, nunca como prova de independencia.
+_JUDGE_PLACEHOLDER_VALUES = {"none", "n/a", "na", "tbd", "pending", "-", "null"}
 
-def validate_operation_receipt(receipt: dict, *, repo_root: str | None = None) -> tuple[bool, str, dict]:
+
+def _real_judge_name(raw_judge) -> str:
+    """Normaliza `judge`: string vazia ou placeholder viram "" (ausente)."""
+    value = str(raw_judge or "").strip()
+    if value.casefold() in _JUDGE_PLACEHOLDER_VALUES:
+        return ""
+    return value
+
+
+def _resolve_within_root(root: str, candidate: str) -> Path | None:
+    """Resolve `candidate` (absoluto ou relativo a `root`) e confirma que o
+    caminho real fica dentro de `root` apos resolver symlinks. Retorna None
+    em qualquer tentativa de escape (symlink ou `..` para fora da raiz)."""
+    root_real = Path(root).resolve()
+    raw = Path(candidate)
+    target = raw if raw.is_absolute() else root_real / raw
+    try:
+        target_real = target.resolve(strict=True)
+    except OSError:
+        return None
+    try:
+        target_real.relative_to(root_real)
+    except ValueError:
+        return None
+    return target_real
+
+
+def _compute_evidence_digest(path: Path) -> str:
+    """Hash determinístico da evidencia real nos bytes atuais.
+
+    Arquivo: sha256 dos bytes. Diretorio: manifesto ordenado por caminho
+    relativo (sha256 de cada arquivo), sem timestamps/metadados, depois
+    sha256 do manifesto serializado -- conteudo alterado depois do receipt
+    sempre produz um digest diferente.
+    """
+    path_real = path.resolve(strict=True)
+    if path.is_file():
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    entries = []
+    for candidate in path.rglob("*"):
+        candidate_real = candidate.resolve(strict=True)
+        try:
+            candidate_real.relative_to(path_real)
+        except ValueError as exc:
+            raise ValueError("OPERATION_RECEIPT_EVIDENCE_PATH_ESCAPE") from exc
+    for file_path in sorted(p for p in path.rglob("*") if p.is_file()):
+        rel = file_path.relative_to(path).as_posix()
+        file_hash = hashlib.sha256(file_path.read_bytes()).hexdigest()
+        entries.append(f"{rel}:{file_hash}")
+    manifest = "\n".join(entries)
+    return hashlib.sha256(manifest.encode("utf-8")).hexdigest()
+
+
+def validate_operation_receipt(
+    receipt: dict,
+    *,
+    repo_root: str | None = None,
+    expected_head: str | None = None,
+    expected_branch: str | None = None,
+    expected_target: str | None = None,
+    evidence_root: str | None = None,
+) -> tuple[bool, str, dict]:
     """Valida um OPERATION_RECEIPT contra o contrato da secao 10 de
     docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md.
 
     Rejeita enum invalido, BLOCKED sem reason, head_sha/evidence_sha256 mal
-    formado, autoaprovacao (writer == judge) e conteudo com padrao de segredo.
-    status=PASS nao e tratado como aprovacao: aprovacao exige chief_decision
-    == APPROVED, um judge distinto do writer e evidence_sha256 valido no
-    mesmo receipt. Quando repo_root e informado, head_sha e verificado contra
-    o Git real (nao apenas o formato); sem repo_root, a checagem fica so no
-    formato e approved_for_promotion nunca fica true (nao ha aprovacao sem
-    prova de HEAD real).
+    formado, autoaprovacao (writer == judge, incluindo placeholders como
+    "NONE"/"TBD"/"-") e conteudo com padrao de segredo. status=PASS nao e
+    tratado como aprovacao: approved_for_promotion so fica true quando TODAS
+    as condicoes abaixo sao verdadeiras no mesmo receipt E no mesmo chamado:
+
+    - status == PASS e chief_decision == APPROVED;
+    - judge real (nao vazio, nao placeholder) e diferente do writer;
+    - expected_head/expected_branch/expected_target foram informados E
+      cada um bate exatamente (igualdade de string, nao so "existe no Git")
+      com head_sha/branch/target do receipt;
+    - head_sha_verified: o commit existe de fato no repo_root informado;
+    - evidence_verified: evidence_root foi informado, o evidence_path
+      resolve para dentro dele (sem escape por symlink) e o hash real dos
+      bytes atuais (arquivo ou manifesto determinístico de diretório) bate
+      com evidence_sha256.
+
+    Sem repo_root/evidence_root/expected_*, a validacao de forma ainda roda,
+    mas approved_for_promotion nunca fica true -- nao ha promocao sem prova
+    de HEAD, branch, target e evidencia reais.
     """
     if not isinstance(receipt, dict):
         return False, "OPERATION_RECEIPT_NOT_OBJECT", {}
@@ -1637,14 +1739,48 @@ def validate_operation_receipt(receipt: dict, *, repo_root: str | None = None) -
             return False, "OPERATION_RECEIPT_HEAD_SHA_NOT_FOUND", {}
         head_sha_verified = True
 
+    if expected_head is not None and receipt["head_sha"] != expected_head:
+        return False, "OPERATION_RECEIPT_HEAD_MISMATCH", {"expected": expected_head}
+    if expected_branch is not None and receipt.get("branch") != expected_branch:
+        return False, "OPERATION_RECEIPT_BRANCH_MISMATCH", {"expected": expected_branch}
+    if expected_target is not None and receipt.get("target") != expected_target:
+        return False, "OPERATION_RECEIPT_TARGET_MISMATCH", {"expected": expected_target}
+
+    if repo_root is not None and expected_head is not None:
+        current_head = _git_value(repo_root, "rev-parse", "HEAD")
+        if current_head != expected_head:
+            return False, "OPERATION_RECEIPT_EXPECTED_HEAD_NOT_CURRENT", {"current": current_head}
+    if repo_root is not None and expected_branch is not None:
+        current_branch = _git_value(repo_root, "branch", "--show-current")
+        if current_branch != expected_branch:
+            return False, "OPERATION_RECEIPT_EXPECTED_BRANCH_NOT_CURRENT", {"current": current_branch}
+    if repo_root is not None and expected_target is not None:
+        if not _git_target_exists(repo_root, expected_target):
+            return False, "OPERATION_RECEIPT_TARGET_NOT_FOUND", {"target": expected_target}
+
     evidence_sha256 = receipt.get("evidence_sha256", "")
     if evidence_sha256 and not HEX64.fullmatch(str(evidence_sha256)):
         return False, "OPERATION_RECEIPT_EVIDENCE_SHA_INVALID", {}
     if status in _DEFINITIVE_STATUSES and not evidence_sha256:
         return False, "OPERATION_RECEIPT_EVIDENCE_SHA_MISSING", {"status": status}
 
+    evidence_verified = False
+    if evidence_root is not None:
+        evidence_path = str(receipt.get("evidence_path", ""))
+        resolved = _resolve_within_root(evidence_root, evidence_path) if evidence_path else None
+        if resolved is None:
+            return False, "OPERATION_RECEIPT_EVIDENCE_PATH_NOT_FOUND", {}
+        try:
+            digest = _compute_evidence_digest(resolved)
+        except (OSError, RuntimeError, ValueError) as exc:
+            reason = str(exc) or "OPERATION_RECEIPT_EVIDENCE_PATH_NOT_FOUND"
+            return False, reason, {}
+        if digest != evidence_sha256:
+            return False, "OPERATION_RECEIPT_EVIDENCE_HASH_MISMATCH", {}
+        evidence_verified = True
+
     writer = str(receipt.get("writer", "")).strip()
-    judge = str(receipt.get("judge", "")).strip()
+    judge = _real_judge_name(receipt.get("judge"))
     if not writer:
         return False, "OPERATION_RECEIPT_WRITER_MISSING", {}
     if judge and judge.casefold() == writer.casefold():
@@ -1663,14 +1799,18 @@ def validate_operation_receipt(receipt: dict, *, repo_root: str | None = None) -
         status == "PASS"
         and chief_decision == "APPROVED"
         and bool(judge)
-        and bool(evidence_sha256)
+        and expected_head is not None
+        and expected_branch is not None
+        and expected_target is not None
         and head_sha_verified
+        and evidence_verified
     )
 
     return True, "", {
         "status": status,
         "chief_decision": chief_decision,
         "head_sha_verified": head_sha_verified,
+        "evidence_verified": evidence_verified,
         "approved_for_promotion": approved_for_promotion,
     }
 
@@ -1681,9 +1821,47 @@ def cmd_validate_operation_receipt(args) -> int:
     except ValueError as exc:
         print(json.dumps(_operation_receipt_result(False, str(exc)), ensure_ascii=False, sort_keys=True))
         return 13
-    ok, reason, details = validate_operation_receipt(receipt, repo_root=args.repo_root)
+    ok, reason, details = validate_operation_receipt(
+        receipt,
+        repo_root=args.repo_root,
+        expected_head=args.expected_head,
+        expected_branch=args.expected_branch,
+        expected_target=args.expected_target,
+        evidence_root=args.evidence_root,
+    )
     print(json.dumps(_operation_receipt_result(ok, reason, **details), ensure_ascii=False, sort_keys=True))
     return 0 if ok else 13
+
+
+def cmd_promote_operation_receipt(args) -> int:
+    """Unico caminho de codigo que pode marcar um OPERATION_RECEIPT como
+    PROMOTED. Nao duplica regra nenhuma: delega 100% para
+    validate_operation_receipt e so promove quando approved_for_promotion
+    voltar true (o que exige, por sua vez, contexto real completo: HEAD,
+    branch e target exatos, judge distinto do writer, e evidencia com hash
+    verificado). Todo argumento de contexto e obrigatorio aqui -- nao ha
+    'promocao sem contexto' possivel atraves deste comando."""
+    try:
+        receipt = _read_gate_input(args.input)
+    except ValueError as exc:
+        print(json.dumps(_operation_receipt_result(False, str(exc)), ensure_ascii=False, sort_keys=True))
+        return 13
+    ok, reason, details = validate_operation_receipt(
+        receipt,
+        repo_root=args.repo_root,
+        expected_head=args.expected_head,
+        expected_branch=args.expected_branch,
+        expected_target=args.expected_target,
+        evidence_root=args.evidence_root,
+    )
+    if not ok:
+        print(json.dumps(_operation_receipt_result(False, reason, **details), ensure_ascii=False, sort_keys=True))
+        return 13
+    if not details.get("approved_for_promotion"):
+        print(json.dumps(_operation_receipt_result(False, "OPERATION_RECEIPT_NOT_PROMOTABLE", **details), ensure_ascii=False, sort_keys=True))
+        return 13
+    print(json.dumps(_operation_receipt_result(True, "", PROMOTED=True, **details), ensure_ascii=False, sort_keys=True))
+    return 0
 
 
 def main() -> None:
@@ -1794,8 +1972,28 @@ def main() -> None:
     orv = sub.add_parser("validate-operation-receipt")
     orv.add_argument("--input", required=True)
     orv.add_argument("--repo-root", default=None,
-                      help="quando informado, verifica head_sha contra o Git real; sem isso, approved_for_promotion nunca fica true")
+                      help="quando informado, verifica head_sha contra o Git real")
+    orv.add_argument("--expected-head", default=None,
+                      help="head_sha exigido; sem isso, approved_for_promotion nunca fica true")
+    orv.add_argument("--expected-branch", default=None,
+                      help="branch exigida; sem isso, approved_for_promotion nunca fica true")
+    orv.add_argument("--expected-target", default=None,
+                      help="target exigido; sem isso, approved_for_promotion nunca fica true")
+    orv.add_argument("--evidence-root", default=None,
+                      help="raiz autorizada da evidencia; sem isso, o hash real nunca e verificado e approved_for_promotion nunca fica true")
     orv.set_defaults(func=cmd_validate_operation_receipt)
+
+    porv = sub.add_parser(
+        "promote-operation-receipt",
+        help="unico caminho de codigo que pode marcar PROMOTED=true; delega para validate-operation-receipt, todo contexto e obrigatorio",
+    )
+    porv.add_argument("--input", required=True)
+    porv.add_argument("--repo-root", required=True)
+    porv.add_argument("--expected-head", required=True)
+    porv.add_argument("--expected-branch", required=True)
+    porv.add_argument("--expected-target", required=True)
+    porv.add_argument("--evidence-root", required=True)
+    porv.set_defaults(func=cmd_promote_operation_receipt)
 
     w = sub.add_parser("writer-attack")
     w.add_argument(

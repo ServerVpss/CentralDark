@@ -35,6 +35,8 @@ jobs:
       - name: Motor determinístico (test_lupa.py)
         working-directory: .agents/skills/meta-lupa
         run: python testes/test_lupa.py
+      - name: Validador do OPERATION_RECEIPT (LOOP)
+        run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
       - name: Guardrail do selo de ponto fixo (exige AutoLupa executada)
         working-directory: .agents/skills/meta-lupa
         run: python guardrails/validar_selo_ponto_fixo.py
