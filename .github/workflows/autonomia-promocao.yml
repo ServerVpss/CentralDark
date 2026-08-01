@@ -61,7 +61,7 @@ jobs:
       - name: Varrer PRs autorizados e promover somente estado comprovado
         env:
           JUDGE_TOKEN: ${{ github.token }}
-          PROMOTION_TOKEN: ${{ secrets.GITHUB_PAT_PERFIL }}
+          PROMOTION_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
           BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
         run: node scripts/github-autonomia-varredura.mjs
 
