@@ -20,6 +20,12 @@ const PROTOCOLOS_REAIS = {
     fileURLToPath(new URL("../../docs/PROTOCOLO-BOOT.md", import.meta.url)),
     "utf8",
   ),
+  "docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md": readFileSync(
+    fileURLToPath(
+      new URL("../../docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md", import.meta.url),
+    ),
+    "utf8",
+  ),
   "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md": readFileSync(
     fileURLToPath(
       new URL("../../docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md", import.meta.url),
@@ -238,11 +244,12 @@ for (const mutacao of mutacoes) {
   });
 }
 
-test("aceita protocolos ativos quando todos delegam à seção 1.2", () => {
+test("aceita os quatro protocolos ativos quando todos delegam à seção 1.2", () => {
   const result = executarProtocolos(PROTOCOLOS_REAIS);
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.equal(result.report.protocolos.ok, true);
-  assert.equal(result.report.protocolos.documentos.length, 3);
+  assert.equal(result.report.protocolos.documentos.length, 4);
+  assert.equal(result.report.protocolos.obrigatorios.length, 4);
 });
 
 test("rejeita definição operacional concorrente de !CALIBRAR", () => {
@@ -272,6 +279,29 @@ test("rejeita protocolo ativo sem delegação canônica", () => {
   assert.notEqual(result.status, 0, "o protocolo sem delegação recebeu falso PASS");
   assert.ok(
     result.report.errors.includes(`PROTOCOLO_SEM_DELEGACAO_CANONICA:${path}`),
+    JSON.stringify(result.report, null, 2),
+  );
+});
+
+test("descobre e bloqueia uma quinta definição concorrente fora do registro", () => {
+  const path = "docs/CONSCIENCIA/PORTA-FANTASMA.md";
+  const mutante = {
+    ...PROTOCOLOS_REAIS,
+    [path]: [
+      "# Porta fantasma",
+      "",
+      "### `!CALIBRAR`",
+      "",
+      "Quando Pivete disser `!CALIBRAR`:",
+      "",
+      "1. devolver formato próprio",
+    ].join("\n"),
+  };
+  const result = executarProtocolos(mutante);
+  assert.notEqual(result.status, 0, "a quinta definição recebeu falso PASS");
+  assert.ok(result.report.protocolos.descobertos.includes(path));
+  assert.ok(
+    result.report.errors.includes(`PROTOCOLO_DEFINICAO_CONCORRENTE:${path}`),
     JSON.stringify(result.report, null, 2),
   );
 });
