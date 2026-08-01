@@ -59,6 +59,7 @@ jobs:
           node --test scripts/github-autonomia-varredura.test.mjs
 
       - name: Varrer PRs autorizados e promover somente estado comprovado
+        # O secret válido no Actions é PROMOTION_TOKEN; prefixo GITHUB_ é reservado.
         env:
           JUDGE_TOKEN: ${{ github.token }}
           PROMOTION_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
