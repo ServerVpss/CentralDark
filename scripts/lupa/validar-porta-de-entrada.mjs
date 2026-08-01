@@ -17,12 +17,16 @@ const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UN
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 const CALIBRATION_START = "### 1.2 Recalibração canônica por gatilho";
 const CALIBRATION_END = "\n---\n\n## 2. As cinco coisas que não mudam";
+const EXPECTED_SOURCE_OF_TRUTH = "ServerVpss/CentralDark";
+const EXPECTED_OBSERVED_STATE = "evidência atual medida e separada da fonte canônica";
+
 const CALIBRATION_TOKENS = [
   CALIBRATION_START,
   "#ACORDA",
   "!CALIBRAR",
-  "BLOCKED_GITHUB_UNAVAILABLE",
-  "STATE_DRIFT",
+  "MISSION_ID=UNRESOLVED",
+  "STATUS=BLOCKED_GITHUB_UNAVAILABLE",
+  "STATUS=STATE_DRIFT",
   "THIS_CHAT_ROLE",
   "COMMITS_SINCE_LAST_PROOF",
   "AUTONOMY_STATUS",
@@ -30,6 +34,7 @@ const CALIBRATION_TOKENS = [
   "VPS_STATE",
   "REENTRY_GUARD=ONE_SHOT",
 ];
+
 const CALIBRATION_RULES = [
   {
     id: "REENTRY_FAIL_CLOSED",
@@ -37,9 +42,14 @@ const CALIBRATION_RULES = [
       /O carregamento desta seção \*\*não dispara uma nova recalibração\*\*[\s\S]{0,260}`REENTRY_GUARD=ONE_SHOT`, evitando recursão entre adaptadores\./,
   },
   {
-    id: "GITHUB_UNAVAILABLE_FAIL_CLOSED",
+    id: "GITHUB_UNAVAILABLE_SERIALIZATION",
     pattern:
-      /Se o GitHub estiver indisponível:[\s\S]{0,180}STATUS=BLOCKED_GITHUB_UNAVAILABLE[\s\S]{0,220}Não apresente estado antigo como atual e não continue por suposição\./,
+      /Se o GitHub estiver indisponível, a resposta deve começar exatamente com:[\s\S]{0,120}MISSION_ID=UNRESOLVED\nSTATUS=BLOCKED_GITHUB_UNAVAILABLE[\s\S]{0,180}Não apresente estado antigo como atual e não continue por suposição\./,
+  },
+  {
+    id: "EXTERNAL_TRIGGER_GITHUB_FAILURE_SERIALIZATION",
+    pattern:
+      /Se o GitHub estiver indisponível,[\s\S]{0,180}comece a resposta com MISSION_ID=UNRESOLVED e STATUS=BLOCKED_GITHUB_UNAVAILABLE;[\s\S]{0,100}não use estado antigo como atual\./,
   },
   {
     id: "DRIFT_RECONCILIATION",
@@ -59,6 +69,11 @@ const CALIBRATION_RULES = [
   {
     id: "STALE_REVIEW_BLOCKED",
     pattern: /Review em SHA antigo é `STALE_REVIEW`, nunca `PASS` para o HEAD atual\./,
+  },
+  {
+    id: "CHECK_STATE_RELATIONS",
+    pattern:
+      /Relações obrigatórias de estado:[\s\S]{0,120}CHECK_SUCCESS != ZERO_FINDINGS\nSKIPPED != PASS\nBOT_COMMENTED != BOT_APPROVED\nUNKNOWN != PASS\nTIMEOUT != PASS\nREVIEWED_HEAD_OLD != REVIEWED_HEAD_CURRENT/,
   },
   {
     id: "PASS_REQUIRES_FRESH_PROOF",
@@ -164,6 +179,15 @@ const portaContent = ler(PORTA);
 const calibrationSection = extrairSecao(portaContent, CALIBRATION_START, CALIBRATION_END);
 const calibrationTokensPresent = CALIBRATION_TOKENS.filter((token) => calibrationSection.includes(token));
 const calibrationRulesPresent = CALIBRATION_RULES.filter((rule) => rule.pattern.test(calibrationSection));
+const tokensOk = calibrationTokensPresent.length === CALIBRATION_TOKENS.length;
+const regrasOk = calibrationRulesPresent.length === CALIBRATION_RULES.length;
+const sourceOfTruthOk = new RegExp(
+  `^source_of_truth:\\s*"${EXPECTED_SOURCE_OF_TRUTH.replace("/", "\\/")}"\\s*$`,
+  "m",
+).test(portaContent.slice(0, 700));
+const observedStateOk = portaContent.includes(
+  `observed_state: "${EXPECTED_OBSERVED_STATE}"`,
+);
 
 for (const token of CALIBRATION_TOKENS) {
   if (!calibrationSection.includes(token)) errors.push(`PORTA_SEM_CALIBRACAO:${token}`);
@@ -171,24 +195,22 @@ for (const token of CALIBRATION_TOKENS) {
 for (const rule of CALIBRATION_RULES) {
   if (!rule.pattern.test(calibrationSection)) errors.push(`PORTA_REGRA_CALIBRACAO_INVALIDA:${rule.id}`);
 }
-if (!/^source_of_truth:\s*"ServerVpss\/CentralDark"\s*$/m.test(portaContent.slice(0, 700))) {
-  errors.push("PORTA_SOURCE_OF_TRUTH_DIVERGENTE");
-}
-if (!portaContent.includes('observed_state: "evidência atual medida e separada da fonte canônica"')) {
-  errors.push("PORTA_SEM_ESTADO_OBSERVADO_SEPARADO");
-}
+if (!sourceOfTruthOk) errors.push("PORTA_SOURCE_OF_TRUTH_DIVERGENTE");
+if (!observedStateOk) errors.push("PORTA_SEM_ESTADO_OBSERVADO_SEPARADO");
 
 const calibrationReport = {
   gatilhos: ["#ACORDA", "!CALIBRAR"],
   reentry_guard: "ONE_SHOT",
+  tokens_ok: tokensOk,
+  regras_ok: regrasOk,
+  source_of_truth_ok: sourceOfTruthOk,
+  observed_state_ok: observedStateOk,
   tokens_presentes: calibrationTokensPresent.length,
   tokens_obrigatorios: CALIBRATION_TOKENS.length,
   regras_presentes: calibrationRulesPresent.length,
   regras_obrigatorias: CALIBRATION_RULES.length,
   regras: CALIBRATION_RULES.map((rule) => ({ id: rule.id, ok: rule.pattern.test(calibrationSection) })),
-  ok:
-    calibrationTokensPresent.length === CALIBRATION_TOKENS.length &&
-    calibrationRulesPresent.length === CALIBRATION_RULES.length,
+  ok: tokensOk && regrasOk && sourceOfTruthOk && observedStateOk,
 };
 
 if (CALIBRATION_ONLY) {
@@ -199,7 +221,7 @@ if (CALIBRATION_ONLY) {
     calibracao: calibrationReport,
     errors,
     warnings,
-    ok: errors.length === 0,
+    ok: errors.length === 0 && calibrationReport.ok,
   };
   if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
   else {
@@ -208,6 +230,8 @@ if (CALIBRATION_ONLY) {
       `CALIBRACAO_OK=${report.ok ? 1 : 0} ` +
         `TOKENS=${calibrationReport.tokens_presentes}/${calibrationReport.tokens_obrigatorios} ` +
         `REGRAS=${calibrationReport.regras_presentes}/${calibrationReport.regras_obrigatorias} ` +
+        `SOURCE=${calibrationReport.source_of_truth_ok ? 1 : 0} ` +
+        `OBSERVED=${calibrationReport.observed_state_ok ? 1 : 0} ` +
         `ERROS=${errors.length}`,
     );
   }
@@ -267,7 +291,7 @@ const report = {
   errors,
   warnings,
   known_debt_exceptions: 0,
-  ok: errors.length === 0,
+  ok: errors.length === 0 && calibrationReport.ok,
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
@@ -278,6 +302,8 @@ else {
     `PORTA_OK=${report.ok ? 1 : 0} ` +
       `CALIBRACAO_TOKENS=${report.calibracao.tokens_presentes}/${report.calibracao.tokens_obrigatorios} ` +
       `CALIBRACAO_REGRAS=${report.calibracao.regras_presentes}/${report.calibracao.regras_obrigatorias} ` +
+      `SOURCE=${report.calibracao.source_of_truth_ok ? 1 : 0} ` +
+      `OBSERVED=${report.calibracao.observed_state_ok ? 1 : 0} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +
