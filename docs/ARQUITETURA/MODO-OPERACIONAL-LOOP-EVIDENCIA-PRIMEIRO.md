@@ -74,7 +74,7 @@ A captura pode escrever somente sua própria evidência em diretório restrito. 
 Uma captura nova permanece `BASELINE_EXPERIMENTAL` até provar os quatro gates:
 
 1. tarball revisado contra vazamento de segredo;
-2. falha crítica gera `CAPTURE_DEGRADED`, nunca falso PASS;
+2. falha crítica gera `status: BLOCKED` com `reason: CAPTURE_DEGRADED`, nunca falso PASS;
 3. duas execuções produzem estrutura equivalente e explicam diferenças voláteis;
 4. zero mutação em PM2, Docker, UFW, systemd e Git.
 
@@ -119,6 +119,7 @@ Estados permitidos:
 
 | Situação | `status` | `reason` |
 |---|---|---|
+| falha crítica de gate na captura | `BLOCKED` | `CAPTURE_DEGRADED` |
 | segredo suspeito no pacote | `BLOCKED` | `SECRET_EXPOSURE` |
 | sanitização falhou/não garantida | `BLOCKED` | `SANITIZE_FAILED` |
 | etapa não executada (cota, ferramenta ausente, revisão não rodada) | `BLOCKED` | `SKIPPED` |
@@ -203,8 +204,8 @@ OPERATION_RECEIPT:
   evidence_sha256: ""
   writer: ""
   judge: ""
-  status: "PASS|FAIL|UNKNOWN|ANOMALY|BLOCKED"
-  reason: "SECRET_EXPOSURE|SANITIZE_FAILED|SKIPPED|GATE_FAILED|AUTH_MISSING|"
+  status: "PASS|FAIL|UNKNOWN|ANOMALY|ACHADO_PENDENTE|BLOCKED"
+  reason: "CAPTURE_DEGRADED|SECRET_EXPOSURE|SANITIZE_FAILED|SKIPPED|GATE_FAILED|AUTH_MISSING|"
   impact: ""
   mutations: []
   tests: []

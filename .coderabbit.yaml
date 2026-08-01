@@ -28,6 +28,21 @@ reviews:
     drafts: true
     auto_incremental_review: true
     auto_pause_after_reviewed_commits: 0
+  # Recursos capazes de ESCREVER (commit, PR, alteracao de codigo) ficam
+  # desligados explicitamente: por omissao vinham habilitados, o que viola o
+  # modo somente leitura do revisor e contorna o WRITER_HANDOFF (writer unico
+  # por escopo). Revisor le e aponta; quem escreve e o Writer autorizado.
+  finishing_touches:
+    docstrings:
+      enabled: false
+    autofix:
+      enabled: false
+    fix_ci:
+      enabled: false
+    resolve_merge_conflict:
+      enabled: false
+    unit_tests:
+      enabled: false
   path_instructions:
     - path: "AGENTS.md"
       instructions: >-
@@ -71,6 +86,10 @@ reviews:
         INFERENCE ou UNKNOWN e priorize apenas lacunas consequenciais.
 
 chat:
+  # Usuario externo a organizacao nao interage com o revisor deste repositorio.
+  # allow_non_org_members vinha true por padrao; explicitado como false para
+  # nao depender de heranca nem de default do fornecedor.
+  allow_non_org_members: false
   auto_reply: true
 
 knowledge_base:
