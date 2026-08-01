@@ -13,21 +13,10 @@
     "png_clean_sha256": "c0eb9b21b1961e4321e34aed708d920e025763e9d47cfa81ddb6cbfa391f5c4c",
     "svg_sha256": "c093ea23945d68781366dbdaebd95331ef786645e8eb73e0e76ad25a09d55c47",
     "readme_sha256": "ef97498b3f88c038fd4a266860fd2d5c3d170bdae10ef309ac23e00a3278b3f8",
-    "visual_zip_base64_parts": [
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part00",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part01",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part02",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part03",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part04",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part05",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part06",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part07",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part08",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part09",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part10",
-      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part11"
-    ],
-    "course_txt_gzip_base64_path": ".agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64"
+    "course_txt_gzip_base64_path": ".agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64",
+    "visual_source_svg_path": "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/centraldark-agentic-loop-editavel.svg",
+    "visual_readme_path": "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/LEIA-ME.txt",
+    "visual_binary_storage": "ATTACHMENT_VALIDATED_NOT_VERSIONED_BY_TEXT_CONNECTOR"
   },
   "tasks": {
     "critical-refactor": [
