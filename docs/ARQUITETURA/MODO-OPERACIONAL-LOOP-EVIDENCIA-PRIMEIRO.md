@@ -1,0 +1,233 @@
+---
+title: "Modo Operacional — LOOP com evidência primeiro"
+status: "CANDIDATO_CANONICO"
+date: "2026-07-31"
+source_of_truth: "ServerVpss/CentralDark + evidência atual do alvo"
+scope: "Operações críticas, segurança, VPS, GitHub, deploy, automação e evolução do CentralDark/Hermes"
+---
+
+# Modo Operacional — LOOP com evidência primeiro
+
+Este documento registra o modo de operação aprovado por **SEGREDO/CHEFE** durante a captura defensiva da VPS em 2026-07-31.
+
+Ele não autoriza mutação por si só. Ele define a ordem, os papéis, os gates e a forma de aprender sem depender do chat.
+
+## 1. Autoridade e papéis
+
+```text
+SEGREDO/CHEFE = autoridade humana final; define intenção, autoriza promoção e encerra o LOOP
+SOL           = coordenador; preserva o fio, organiza papéis, confronta hipóteses e exige prova
+PIVETE/HERMES = mente treinada e executora; preserva aprendizado e continuidade operacional
+SCOUT/REVIEWER= leitor adversarial e somente leitura; procura lacunas e ruído
+WRITER        = único executor autorizado a alterar o escopo atual
+JUDGE         = validador independente; tenta falsificar a entrega e não aprova o próprio trabalho
+```
+
+Nome comercial de modelo não altera autoridade. GPT, Grok, Claude, Codex, Gemini ou qualquer modelo futuro recebem apenas um papel operacional.
+
+## 2. Circuito canônico
+
+```text
+INTENÇÃO DO CHEFE
+  → CAPTURE
+  → SANITIZE + HASH
+  → DECIDE
+  → APPLY
+  → JUDGE
+  → CHEFE
+  → RECEIPT + LEARNING
+  → LOOP até fechar a conta
+```
+
+O LOOP só encerra quando o resultado, a contraprova, o estado final e o rollback estiverem registrados.
+
+## 3. CAPTURE — medir antes de interpretar
+
+A captura é determinística, read-only e produz um pacote reproduzível.
+
+Deve medir, quando aplicável:
+
+- host, timestamp UTC, branch, HEAD e origem;
+- sistema, listeners, PID, binário, CWD e cgroup;
+- UFW, nftables, iptables e regras Docker;
+- SSH e Fail2ban;
+- systemd, Docker, Compose, PM2 e Caddy;
+- estado Git e referências de bind/porta no código;
+- logs recentes sanitizados;
+- nomes de possíveis credenciais, nunca os valores;
+- manifesto de arquivos e SHA-256 do pacote.
+
+Durante CAPTURE:
+
+```text
+NINGUÉM ESCREVE
+NINGUÉM FECHA PORTA
+NINGUÉM REINICIA SERVIÇO
+NINGUÉM PROMOVE
+```
+
+A captura pode escrever somente sua própria evidência em diretório restrito. Ela não altera PM2, Docker, UFW, systemd, aplicação ou repositório.
+
+## 4. Baseline experimental não é cânone
+
+Uma captura nova permanece `BASELINE_EXPERIMENTAL` até provar os quatro gates:
+
+1. tarball revisado contra vazamento de segredo;
+2. falha crítica gera `CAPTURE_DEGRADED`, nunca falso PASS;
+3. duas execuções produzem estrutura equivalente e explicam diferenças voláteis;
+4. zero mutação em PM2, Docker, UFW, systemd e Git.
+
+Somente depois ela pode ser promovida a coletor canônico versionado.
+
+## 5. SANITIZE + HASH — pacote seguro antes de IA
+
+Nenhum tarball cru entra em prompt.
+
+Regras:
+
+- `umask 077`;
+- redação antes da gravação quando possível;
+- PM2 filtrado por allowlist de campos; proibido despejar ambiente completo;
+- tokens, headers, cookies, chaves, connection strings e certificados nunca são registrados;
+- manifesto por arquivo + SHA-256 do pacote;
+- segredo suspeito encontrado transforma o estado em `BLOCKED_SECRET_EXPOSURE`.
+
+Sanitização reduz risco, mas não é assumida como prova matemática: o pacote passa por verificação antes de ser entregue a outro agente.
+
+## 6. DECIDE — código primeiro, modelo no residual
+
+```text
+CÓDIGO MEDE
+REGRAS CLASSIFICAM O CONHECIDO
+MODELO INTERPRETA UNKNOWN OU ANOMALY
+```
+
+Porta, PID, bind, hash, diff, regra de firewall e estado de serviço não devem consumir modelo para serem descobertos.
+
+Estados permitidos:
+
+- `PASS` — prova positiva e reproduzível;
+- `FAIL` — violação comprovada;
+- `UNKNOWN` — informação insuficiente;
+- `ANOMALY` — divergência fora do padrão esperado;
+- `ACHADO_PENDENTE` — suspeita ainda sem arquivo, linha, commit e evidência sanitizada;
+- `BLOCKED` — gate falhou ou autorização ausente.
+
+`UNKNOWN`, `ANOMALY`, `SKIPPED` e `ACHADO_PENDENTE` nunca equivalem a PASS.
+
+## 7. APPLY — uma cirurgia, um escritor
+
+APPLY só começa depois de baseline, backup, escopo e rollback definidos.
+
+Regras:
+
+- vários leitores podem investigar em paralelo;
+- existe um único writer por escopo/branch/worktree;
+- correção automática somente dentro de allowlist conhecida;
+- menor movimento eficaz;
+- arquivos exatos e resultado esperado declarados antes da escrita;
+- segurança, firewall, Docker, PM2 e systemd exigem contraprova pós-mudança;
+- falhou qualquer gate: rollback automático quando seguro e status `BLOCKED`;
+- nenhuma promoção automática por texto bonito ou conclusão do executor.
+
+## 8. JUDGE — independência real
+
+Judge e Writer devem possuir:
+
+- papéis separados;
+- contexto separado;
+- permissões separadas;
+- credenciais separadas;
+- execução independente no mesmo HEAD alvo.
+
+Label, nome de job ou prompt diferente não prova independência.
+
+O executor nunca aprova o próprio trabalho. Cota esgotada, ferramenta ausente ou revisão não executada permanece bloqueio visível.
+
+## 9. CHEFE — gates no meio e no fim
+
+SEGREDO/CHEFE permanece:
+
+- no início, definindo intenção e limites;
+- no meio, decidindo mudanças de direção, risco e autorização;
+- no fim, aceitando ou recusando promoção.
+
+PIVETE/HERMES executa e preserva aprendizado, mas não sela promoção sozinho.
+
+## 10. RECEIPT — fechar sem perder o fio
+
+Todo ciclo termina com receipt auditável:
+
+```yaml
+OPERATION_RECEIPT:
+  mission_id: ""
+  host: ""
+  timestamp_utc: ""
+  repository: "ServerVpss/CentralDark"
+  branch: ""
+  head_sha: ""
+  evidence_path: ""
+  evidence_sha256: ""
+  writer: ""
+  judge: ""
+  status: "PASS|FAIL|UNKNOWN|ANOMALY|BLOCKED"
+  mutations: []
+  tests: []
+  counterproof: []
+  rollback: ""
+  chief_decision: "PENDING|APPROVED|REJECTED"
+  next_step: ""
+```
+
+Receipt sem HEAD, hash, alvo e estado comprovado é incompleto.
+
+## 11. Aprendizado e evolução
+
+O LOOP devolve evidência ao sistema:
+
+```text
+ERRO OBSERVADO
+  → causa comprovada
+  → correção mínima
+  → teste que falha antes e passa depois
+  → contraprova adversarial
+  → receipt
+  → regra reutilizável
+  → boot dos próximos agentes
+```
+
+Não registrar como fato:
+
+- causa interna não medida;
+- secret versionado sem arquivo, linha e commit;
+- exposição pública inferida apenas por bind `0.0.0.0` sem regra de firewall e teste externo;
+- aprovação de Judge que não executou;
+- sucesso baseado somente na saída do próprio Writer.
+
+## 12. Comando operacional `!REGISTRA`
+
+Quando SEGREDO/CHEFE emitir `!REGISTRA`:
+
+1. identificar o comportamento que realmente mudou;
+2. separar fato, evidência, inferência e hipótese;
+3. registrar em branch isolada, nunca diretamente na `main`;
+4. não alterar área protegida sem autorização literal aplicável;
+5. criar commit e PR auditável;
+6. não fazer merge sem autorização do CHEFE e gates válidos;
+7. deixar o novo aprendizado alcançável pelo boot universal.
+
+`!REGISTRA` não significa inventar documento para cada conversa. Significa preservar somente aprendizado operacional reutilizável que muda comportamento futuro.
+
+## 13. Regra resumida
+
+```text
+CAPTURA PRIMEIRO.
+SEGREDO NUNCA.
+CÓDIGO MEDE.
+IA INTERPRETA.
+UM WRITER ALTERA.
+JUDGE TENTA QUEBRAR.
+CHEFE DECIDE.
+RECEIPT PROVA.
+LOOP ATÉ FECHAR A CONTA.
+```
