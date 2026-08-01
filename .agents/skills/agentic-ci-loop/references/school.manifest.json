@@ -15,7 +15,9 @@
     "readme_sha256": "ef97498b3f88c038fd4a266860fd2d5c3d170bdae10ef309ac23e00a3278b3f8",
     "course_txt_gzip_base64_path": ".agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64",
     "visual_source_svg_path": "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/centraldark-agentic-loop-editavel.svg",
+    "visual_source_svg_sha256": "04ffa545a53042a8508dba02ff977c341934bbd59818fe033a1b66167fffc212",
     "visual_readme_path": "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/LEIA-ME.txt",
+    "visual_readme_source_sha256": "ef97498b3f88c038fd4a266860fd2d5c3d170bdae10ef309ac23e00a3278b3f8",
     "visual_binary_storage": "ATTACHMENT_VALIDATED_NOT_VERSIONED_BY_TEXT_CONNECTOR"
   },
   "tasks": {
