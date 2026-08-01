@@ -119,8 +119,8 @@ export function validateManifest(root, manifest) {
   assert(fs.existsSync(path.join(root, artifacts.course_txt_gzip_base64_path)), `COURSE_SOURCE_MISSING:${artifacts.course_txt_gzip_base64_path}`);
   assert(fs.existsSync(path.join(root, artifacts.visual_source_svg_path)), `VISUAL_SOURCE_MISSING:${artifacts.visual_source_svg_path}`);
   assert(fs.existsSync(path.join(root, artifacts.visual_readme_path)), `VISUAL_README_MISSING:${artifacts.visual_readme_path}`);
-  assert(sha256File(root, artifacts.visual_source_svg_path) === artifacts.svg_sha256, 'VISUAL_SOURCE_SHA_MISMATCH');
-  assert(sha256File(root, artifacts.visual_readme_path) === artifacts.readme_sha256, 'VISUAL_README_SHA_MISMATCH');
+  assert(sha256File(root, artifacts.visual_source_svg_path) === artifacts.visual_source_svg_sha256, 'VISUAL_SOURCE_SHA_MISMATCH');
+  assert(sha256File(root, artifacts.visual_readme_path) === artifacts.visual_readme_source_sha256, 'VISUAL_README_SHA_MISMATCH');
   const courseCompressed = Buffer.from(readText(root, artifacts.course_txt_gzip_base64_path).replace(/\s+/g, ''), 'base64');
   let courseDecoded;
   try { courseDecoded = zlib.gunzipSync(courseCompressed); }
