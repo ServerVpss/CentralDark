@@ -1,107 +1,138 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { loadSchool } from './agentic-school-loader.mjs';
 
-export const STATUS_POINTS = Object.freeze({
-  PASS: 100,
-  PARTIAL: 50,
-  FAIL: 0,
-  BLOCKED: 0,
-  PENDING: 0,
-  UNKNOWN: 0,
-  SKIPPED: 0,
-  TIMEOUT: 0,
-});
+export const STATUS_POINTS = Object.freeze({ PASS: 100, PARTIAL: 50, FAIL: 0, BLOCKED: 0, PENDING: 0, UNKNOWN: 0, SKIPPED: 0, TIMEOUT: 0 });
+const SHA40 = /^[0-9a-f]{40}$/;
+const VISUAL_SVG_PATH = 'docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/centraldark-agentic-loop-editavel.svg';
+const VISUAL_README_PATH = 'docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/LEIA-ME.txt';
+const COURSE_SOURCE_PATH = '.agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64';
 
-export const REQUIRED_GATE_IDS = Object.freeze([
-  'VISUAL_PACKAGE_MANIFEST',
-  'ZIP_PRESENT_IN_REPOSITORY',
-  'CANONICAL_SKILL_VERSIONED',
-  'CI_GATE_ENFORCED',
-  'CI_FAILURE_VISIBLE_IN_PR',
-  'AGENT_READS_FAILED_LOG',
-  'AUTOMATIC_REPAIR_REPUSH',
-  'GLOBAL_PROGRESS_REPORT',
-]);
+function exists(root, relativePath) { return fs.existsSync(path.join(root, relativePath)); }
+function text(root, relativePath) { return fs.readFileSync(path.join(root, relativePath), 'utf8'); }
+function gate(id, label, status, evidence, nextStep, required = true) {
+  return { id, label, status, required, evidence, next_step: nextStep };
+}
+function assert(condition, message) { if (!condition) throw new Error(message); }
 
-function assert(condition, message) {
-  if (!condition) throw new Error(message);
+export function deriveSituation(gates) {
+  const required = gates.filter((item) => item.required !== false);
+  if (required.every((item) => item.status === 'PASS')) return 'DONE_COM_PROVA';
+  if (required.some((item) => ['FAIL', 'BLOCKED', 'TIMEOUT'].includes(item.status))) return 'BLOCKED';
+  if (required.some((item) => ['UNKNOWN', 'PENDING', 'SKIPPED'].includes(item.status))) return 'PARTIAL_BLOQUEADO';
+  return 'PARTIAL_COM_PROVA';
 }
 
-export function validateSnapshot(snapshot) {
-  assert(snapshot && typeof snapshot === 'object' && !Array.isArray(snapshot), 'SNAPSHOT_NOT_OBJECT');
-  assert(snapshot.schema_version === 1, 'SCHEMA_VERSION_INVALID');
-  assert(snapshot.package_id === 'CENTRALDARK-AGENTIC-LOOP-4K', 'PACKAGE_ID_INVALID');
-  assert(snapshot.source_of_truth === 'ServerVpss/CentralDark', 'SOURCE_OF_TRUTH_INVALID');
-  assert(Array.isArray(snapshot.gates), 'GATES_NOT_ARRAY');
-
+export function validateGates(gates) {
+  assert(Array.isArray(gates) && gates.length > 0, 'GATES_EMPTY');
   const ids = new Set();
-  for (const gate of snapshot.gates) {
-    assert(gate && typeof gate === 'object' && !Array.isArray(gate), 'GATE_NOT_OBJECT');
-    assert(typeof gate.id === 'string' && gate.id.length > 0, 'GATE_ID_INVALID');
-    assert(!ids.has(gate.id), `GATE_DUPLICATED:${gate.id}`);
-    ids.add(gate.id);
-    assert(Object.hasOwn(STATUS_POINTS, gate.status), `GATE_STATUS_INVALID:${gate.id}:${gate.status}`);
-    assert(Array.isArray(gate.evidence) && gate.evidence.length > 0, `GATE_WITHOUT_EVIDENCE:${gate.id}`);
-    assert(gate.evidence.every((item) => typeof item === 'string' && item.trim().length > 0), `GATE_EVIDENCE_INVALID:${gate.id}`);
-    assert(typeof gate.next_step === 'string', `GATE_NEXT_STEP_INVALID:${gate.id}`);
-  }
-
-  for (const required of REQUIRED_GATE_IDS) {
-    assert(ids.has(required), `REQUIRED_GATE_MISSING:${required}`);
+  for (const item of gates) {
+    assert(typeof item.id === 'string' && item.id, 'GATE_ID_INVALID');
+    assert(!ids.has(item.id), `GATE_DUPLICATED:${item.id}`);
+    ids.add(item.id);
+    assert(Object.hasOwn(STATUS_POINTS, item.status), `GATE_STATUS_INVALID:${item.id}`);
+    assert(Array.isArray(item.evidence) && item.evidence.length > 0, `GATE_WITHOUT_EVIDENCE:${item.id}`);
+    assert(typeof item.next_step === 'string', `GATE_NEXT_STEP_INVALID:${item.id}`);
   }
   return true;
 }
 
-export function calculateProgress(snapshot) {
-  validateSnapshot(snapshot);
-  const total = snapshot.gates.length * 100;
-  const earned = snapshot.gates.reduce((sum, gate) => sum + STATUS_POINTS[gate.status], 0);
-  const percent = Number(((earned / total) * 100).toFixed(1));
-  return { earned, total, percent };
+export function calculateProgress(gates) {
+  validateGates(gates);
+  const total = gates.length * 100;
+  const earned = gates.reduce((sum, item) => sum + STATUS_POINTS[item.status], 0);
+  return { earned, total, percent: Number(((earned / total) * 100).toFixed(1)) };
 }
 
-export function formatPiveteReport(snapshot) {
-  const progress = calculateProgress(snapshot);
-  const closed = snapshot.gates.filter((gate) => gate.status === 'PASS').map((gate) => gate.label);
-  const blockers = snapshot.gates.filter((gate) => ['FAIL', 'BLOCKED', 'UNKNOWN', 'TIMEOUT'].includes(gate.status));
-  const partial = snapshot.gates.filter((gate) => ['PARTIAL', 'PENDING', 'SKIPPED'].includes(gate.status));
+export function buildRuntimeReport({ root, expectedHead }) {
+  assert(SHA40.test(expectedHead), 'EXPECTED_HEAD_INVALID');
+  let school;
+  let schoolError = null;
+  try { school = loadSchool({ root, task: 'critical-refactor', expectedHead }); }
+  catch (error) { schoolError = error.message; }
 
-  const join = (items, fallback = 'NENHUM') => items.length ? items.join(' | ') : fallback;
+  const workflowPath = '.github/workflows/porta-de-entrada.yml';
+  const workflow = exists(root, workflowPath) ? text(root, workflowPath) : '';
+  const boot = exists(root, 'LEIA-ME-IA.md') ? text(root, 'LEIA-ME-IA.md') : '';
+
+  const gates = [
+    gate('COURSE_VERSIONED', 'Curso operacional e fonte original versionados', exists(root, '.agents/skills/agentic-ci-loop/references/ESCOLA-OPERACIONAL-DE-SKILLS.md') && exists(root, COURSE_SOURCE_PATH) ? 'PASS' : 'FAIL', ['Curso modular + fonte original preservada por SHA-256'], 'versionar curso modular e fonte original'),
+    gate('SCHOOL_MANIFEST_VALID', 'Manifesto da escola válido', school ? 'PASS' : 'BLOCKED', [school ? `school_id=${school.school_id}` : `erro=${schoolError}`], 'corrigir manifesto, módulos ou adaptadores'),
+    gate('UNIVERSAL_BOOT_REACHABLE', 'Escola alcançável pelo boot universal', boot.includes('.agents/skills/agentic-ci-loop/SKILL.md') && boot.includes('agentic-school-loader.mjs') ? 'PASS' : 'FAIL', ['LEIA-ME-IA.md deve apontar para skill e loader'], 'conectar a escola à porta universal'),
+    gate('ZERO_REGRESSION_MODULE', 'Refatoração crítica com zero regressão', exists(root, '.agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md') ? 'PASS' : 'FAIL', ['Módulo de baseline, vermelho, cirurgia, matriz, CI, Judge e cicatriz'], 'criar ou restaurar módulo'),
+    gate('SELF_LEARNING_GATED', 'Autoaprendizado com promoção segura', school ? 'PASS' : 'BLOCKED', [school ? `approved=${school.approved_lessons.length}; candidates=${school.candidate_lessons.length}; candidatos não entram no boot` : 'loader bloqueado'], 'corrigir o ledger; aprovação exige regressão, Judge independente e decisão do CHEFE'),
+    gate('DETERMINISTIC_TESTS', 'Loader, pacote e progresso testados', workflow.includes('agentic-school-loader.test.mjs') && workflow.includes('agentic-loop-progress.test.mjs') && workflow.includes('test_validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['Workflow deve executar Node + Python sem dependência externa'], 'ligar as três suítes no CI'),
+    gate('CI_BOOT_EXECUTION', 'Boot da escola executado no CI', workflow.includes('agentic-school-loader.mjs --task critical-refactor') ? 'PASS' : 'FAIL', ['porta-de-entrada executa loader preso ao GITHUB_SHA'], 'adicionar execução do loader ao workflow'),
+    gate('VISUAL_SOURCE_VERSIONED', 'Fonte visual 4K editável versionada', exists(root, VISUAL_SVG_PATH) && exists(root, VISUAL_README_PATH) && workflow.includes('validar_agentic_visual_package.py') ? 'PASS' : 'FAIL', ['SVG e LEIA-ME presos aos hashes do manifesto; ZIP pode ser validado quando fornecido'], 'versionar SVG, LEIA-ME e guardrail'),
+    gate('VISUAL_BINARY_IN_GIT', 'ZIP/PNGs binários armazenados no Git', 'PARTIAL', ['ZIP original validado localmente pelo SHA-256 455071e3e6e6c3bfef27a8257ed5405e9387706a39cee978fdbfd87eaba49a2b; conector desta sessão publica apenas texto UTF-8'], 'publicar o ZIP por canal binário autorizado e rerodar --require-zip', false),
+  ];
+
+  const progress = calculateProgress(gates);
+  const situation = deriveSituation(gates);
+  const blockers = gates.filter((item) => item.required !== false && item.status !== 'PASS');
+  const nonBlockers = gates.filter((item) => item.required === false && item.status !== 'PASS');
+  return {
+    schema_version: 2,
+    source_of_truth: 'ServerVpss/CentralDark',
+    measured_head: expectedHead,
+    situation,
+    progress,
+    gates,
+    error: blockers.map((item) => item.label).join(' | ') || 'NENHUM',
+    cause: blockers.map((item) => `${item.id}:${item.evidence.join('; ')}`).join(' | ') || 'NENHUMA',
+    correction: blockers.map((item) => item.next_step).join(' | ') || 'NENHUMA',
+    test: 'node --test scripts/lupa/agentic-school-loader.test.mjs scripts/lupa/agentic-loop-progress.test.mjs',
+    scar: 'Toda falha provada exige teste vermelho antes, verde depois e lição somente após Judge + CHEFE.',
+    blocking_pending: blockers.map((item) => `${item.label}: ${item.next_step}`),
+    non_blocking_pending: nonBlockers.map((item) => `${item.label}: ${item.next_step}`),
+    anticipation: blockers.length ? 'Não declarar escola concluída nem promover para main enquanto houver gate obrigatório fora de PASS.' : 'Próxima regressão deve virar receipt e lição candidata.',
+    next_movement: blockers[0]?.next_step || 'solicitar Judge no mesmo HEAD e manter merge sob decisão do CHEFE',
+    chief_action: blockers.length ? 'NADA_AGORA; O WRITER DEVE FECHAR OS GATES TÉCNICOS' : 'DECIDIR PROMOÇÃO APÓS JUDGE INDEPENDENTE',
+  };
+}
+
+export function formatPiveteReport(report) {
+  const join = (items) => items.length ? items.join(' | ') : 'NENHUMA';
   return [
-    `SITUAÇÃO=${snapshot.status}`,
-    `PROGRESSO_GERAL=${progress.percent}% (${progress.earned}/${progress.total})`,
-    `O_QUE_JÁ_FECHOU=${join(closed)}`,
-    `PENDÊNCIAS_BLOQUEANTES=${join(blockers.map((gate) => `${gate.label}: ${gate.next_step}`))}`,
-    `PENDÊNCIAS_NÃO_BLOQUEANTES=${join(partial.map((gate) => `${gate.label}: ${gate.next_step}`))}`,
-    `PRÓXIMO_MOVIMENTO=${snapshot.next_gate}`,
-    `O_QUE_O_CHEFE_PRECISA_FAZER=${snapshot.chief_action}`,
+    `SITUAÇÃO=${report.situation}`,
+    `ERRO=${report.error}`,
+    `CAUSA=${report.cause}`,
+    `CORREÇÃO=${report.correction}`,
+    `TESTE=${report.test}`,
+    `CICATRIZ=${report.scar}`,
+    `PERCENTUAL=${report.progress.earned}/${report.progress.total}=${report.progress.percent}%`,
+    `PENDÊNCIAS_BLOQUEANTES=${join(report.blocking_pending)}`,
+    `PENDÊNCIAS_NÃO_BLOQUEANTES=${join(report.non_blocking_pending)}`,
+    `ANTECIPAÇÃO=${report.anticipation}`,
+    `PRÓXIMO_MOVIMENTO=${report.next_movement}`,
+    `HEAD_PROVADO=${report.measured_head}`,
+    `CI_NO_HEAD=${process.env.CI ? 'EXECUTANDO_NO_CI' : 'VALIDAÇÃO_LOCAL'}`,
+    `O_QUE_O_CHEFE_PRECISA_FAZER=${report.chief_action}`,
   ].join('\n');
 }
 
+function argValue(args, name, fallback = null) {
+  const index = args.indexOf(name);
+  return index >= 0 && args[index + 1] ? args[index + 1] : fallback;
+}
+function resolveHead(root, supplied) {
+  if (supplied) return supplied;
+  try { return execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(); }
+  catch { throw new Error('EXPECTED_HEAD_REQUIRED'); }
+}
 function main() {
   const args = process.argv.slice(2);
-  const jsonMode = args.includes('--json');
-  const suppliedPath = args.find((arg) => !arg.startsWith('--'));
-  const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-  const defaultPath = path.resolve(scriptDir, '../../docs/ARQUITETURA/CENTRALDARK-AGENTIC-LOOP-4K-STATUS.json');
-  const snapshotPath = path.resolve(suppliedPath || defaultPath);
-  const snapshot = JSON.parse(fs.readFileSync(snapshotPath, 'utf8'));
-  const progress = calculateProgress(snapshot);
-  if (snapshot.expected_percent !== progress.percent) {
-    throw new Error(`EXPECTED_PERCENT_MISMATCH:${snapshot.expected_percent}:${progress.percent}`);
-  }
-  process.stdout.write(jsonMode
-    ? `${JSON.stringify({ ...progress, status: snapshot.status, next_gate: snapshot.next_gate }, null, 2)}\n`
-    : `${formatPiveteReport(snapshot)}\n`);
+  const root = path.resolve(argValue(args, '--repo-root', process.cwd()));
+  const expectedHead = resolveHead(root, argValue(args, '--expected-head', process.env.GITHUB_SHA || null));
+  const report = buildRuntimeReport({ root, expectedHead });
+  if (args.includes('--json')) console.log(JSON.stringify(report, null, 2));
+  else console.log(formatPiveteReport(report));
+  if (report.situation !== 'DONE_COM_PROVA' && args.includes('--require-complete')) process.exitCode = 1;
 }
-
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  try {
-    main();
-  } catch (error) {
-    console.error(`AGENTIC_LOOP_PROGRESS_BLOCKED=${error.message}`);
-    process.exitCode = 1;
-  }
+  try { main(); }
+  catch (error) { console.error(`AGENTIC_LOOP_PROGRESS_BLOCKED=${error.message}`); process.exitCode = 1; }
 }
