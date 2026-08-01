@@ -1,92 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "package_id": "CENTRALDARK-AGENTIC-LOOP-4K",
   "source_of_truth": "ServerVpss/CentralDark",
-  "measured_at_utc": "2026-08-01T22:41:00Z",
-  "status": "PARTIAL_COM_PROVA",
-  "expected_percent": 75,
-  "next_gate": "localizar ou publicar o ZIP no GitHub e provar o controlador lendo o log vermelho, corrigindo e reenviando sem transporte manual do CHEFE",
-  "chief_action": "NADA_AGORA",
-  "measurement_rule": "PASS=100; PARTIAL=50 com prova; FAIL/BLOCKED/PENDING/UNKNOWN/SKIPPED/TIMEOUT=0",
-  "scope_note": "Este percentual mede o contrato AGENTIC LOOP 4K abaixo. Não mede saúde viva da Casa ou VPS sem captura atual.",
-  "gates": [
-    {
-      "id": "VISUAL_PACKAGE_MANIFEST",
-      "label": "Pacote visual 4K especificado",
-      "status": "PASS",
-      "evidence": [
-        "File Library LEIA-ME: PNG completo 3840x2160, PNG clean 3840x2160 e SVG editável",
-        "Ciclo declarado: LER -> PERGUNTAR -> AGIR -> PROVAR -> REGISTRAR"
-      ],
-      "next_step": ""
-    },
-    {
-      "id": "ZIP_PRESENT_IN_REPOSITORY",
-      "label": "CENTRALDARK-AGENTIC-LOOP-4K.zip localizado no GitHub",
-      "status": "UNKNOWN",
-      "evidence": [
-        "Busca de código, commits e issues pelo nome exato não retornou resultado",
-        "Fetch no caminho raiz CENTRALDARK-AGENTIC-LOOP-4K.zip retornou 404"
-      ],
-      "next_step": "localizar o caminho/branch exato ou publicar novamente o pacote com manifesto SHA-256"
-    },
-    {
-      "id": "CANONICAL_SKILL_VERSIONED",
-      "label": "Skill agentic-ci-loop versionada",
-      "status": "PASS",
-      "evidence": [
-        ".agents/skills/agentic-ci-loop/SKILL.md na branch do Draft PR #611"
-      ],
-      "next_step": ""
-    },
-    {
-      "id": "CI_GATE_ENFORCED",
-      "label": "CI valida a skill e a porcentagem",
-      "status": "PASS",
-      "evidence": [
-        "porta-de-entrada executa agentic-loop-progress.test.mjs e agentic-loop-progress.mjs"
-      ],
-      "next_step": ""
-    },
-    {
-      "id": "CI_FAILURE_VISIBLE_IN_PR",
-      "label": "Erro do CI aparece no PR e no HEAD exato",
-      "status": "PASS",
-      "evidence": [
-        "PR #585 mostrou falha do lupa-conformance no HEAD 6a3c6e16",
-        "Correção mínima e execução fresca passaram no HEAD eebcb0f9"
-      ],
-      "next_step": ""
-    },
-    {
-      "id": "AGENT_READS_FAILED_LOG",
-      "label": "Agente busca sozinho o job e o log vermelho",
-      "status": "PARTIAL",
-      "evidence": [
-        "Conectores e CLI existentes conseguem consultar checks e logs",
-        "Ainda não há prova única de um controlador repo-wide acionando automaticamente a correção para todo workflow"
-      ],
-      "next_step": "ligar o fetch do job falho ao Writer autorizado, com dedupe por HEAD+check"
-    },
-    {
-      "id": "AUTOMATIC_REPAIR_REPUSH",
-      "label": "Agente corrige, testa e reenvia sem transporte manual",
-      "status": "PARTIAL",
-      "evidence": [
-        "Motores de autonomia e promoção existem",
-        "PR #584 ainda está aberto e o canário #570 ainda não comprova a cadeia final no estado atual"
-      ],
-      "next_step": "concluir #584, reexecutar o canário #570 e registrar receipt do mesmo HEAD"
-    },
-    {
-      "id": "GLOBAL_PROGRESS_REPORT",
-      "label": "Relatório em porcentagem no Jeito Pivete",
-      "status": "PASS",
-      "evidence": [
-        "scripts/lupa/agentic-loop-progress.mjs usa fórmula determinística e lista todos os gates",
-        "Estados incertos valem zero e não viram PASS"
-      ],
-      "next_step": ""
-    }
-  ]
+  "static_snapshot": false,
+  "live_status_command": "node scripts/lupa/agentic-loop-progress.mjs --expected-head <GITHUB_SHA> --json",
+  "completion_command": "node scripts/lupa/agentic-loop-progress.mjs --expected-head <GITHUB_SHA> --require-complete",
+  "note": "Este arquivo define como medir. O estado atual é derivado do checkout e preso ao HEAD em runtime; não armazena percentual estático."
 }
