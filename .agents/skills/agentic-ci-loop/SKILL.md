@@ -80,4 +80,4 @@ Sem autorização aplicável ao alvo exato, não fazer merge, Ready for Review, 
 - Refatoração crítica sem regressão: `references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md`.
 - Manifesto de roteamento: `references/school.manifest.json`.
 - Aprendizados candidatos/aprovados: `references/learning-ledger.jsonl`. Somente `APPROVED` entra no boot.
-- Pacote visual reproduzível: `docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part00..part11`, reconstruído e verificado por `scripts/lupa/validar_agentic_visual_package.py`.
+- Fonte visual editável e LEIA-ME: `docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/`; o ZIP recebido é validado por hash e membros com `scripts/lupa/validar_agentic_visual_package.py --source-zip <arquivo>`.
