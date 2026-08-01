@@ -27,9 +27,10 @@ Antes de responder ou agir:
 
 1. Ler `LEIA-ME-IA.md` integralmente.
 2. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-3. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
-4. Confirmar a fonte da verdade e o estado atual por ferramenta.
-5. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
+3. Ler `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` quando houver operação crítica, segurança, VPS, GitHub, deploy, automação ou evolução.
+4. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
+5. Confirmar a fonte da verdade e o estado atual por ferramenta.
+6. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
 
 Regras automáticas:
 
@@ -40,13 +41,15 @@ Regras automáticas:
 - agentes enviam deltas curtos, não repetem o histórico inteiro;
 - nenhum executor aprova a si mesmo;
 - troca de escritor exige handoff explícito;
-- Pivete permanece autoridade final.
+- SEGREDO/CHEFE permanece autoridade humana final;
+- SOL coordena, PIVETE/HERMES preserva e executa, Judge valida de forma independente.
 
 ## Doutrina
 
 ```txt
-PIVETE COMANDA.
-IA ORGANIZA.
+SEGREDO/CHEFE COMANDA.
+SOL ORGANIZA.
+PIVETE/HERMES PRESERVA E EXECUTA.
 GITHUB REGISTRA.
 VPS EXECUTA.
 SUPABASE GUARDA ESTADO VIVO.
@@ -54,6 +57,24 @@ GATEWAY CENTRALDARK ROTEIA.
 AÇÕES PROVAM.
 NADA NO ESCURO.
 ```
+
+## Modo operacional para missões críticas
+
+```text
+CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP
+```
+
+Regras mínimas:
+
+- durante CAPTURE ninguém altera, fecha porta, reinicia serviço ou promove;
+- código mede e classifica o conhecido; modelo interpreta apenas UNKNOWN ou ANOMALY;
+- `UNKNOWN`, `SKIPPED`, `ANOMALY` e `ACHADO_PENDENTE` nunca equivalem a PASS;
+- APPLY exige baseline, backup, rollback e um único writer por escopo;
+- Judge e Writer precisam de contexto, permissões e credenciais separados;
+- falha de gate produz `BLOCKED`, nunca falso verde;
+- o LOOP termina somente com contraprova, receipt e decisão de SEGREDO/CHEFE.
+
+Contrato completo: `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md`.
 
 ## Trabalho dos agentes
 
