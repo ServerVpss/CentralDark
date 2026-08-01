@@ -11,11 +11,14 @@ const valueAfter = (name, fallback) => {
 
 const ROOT = resolve(valueAfter("--repo-root", process.cwd()));
 const JSON_OUT = argv.includes("--json");
+const CALIBRATION_ONLY = argv.includes("--calibration-only");
 const PORTA = "LEIA-ME-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
+const CALIBRATION_START = "### 1.2 Recalibração canônica por gatilho";
+const CALIBRATION_END = "\n---\n\n## 2. As cinco coisas que não mudam";
 const CALIBRATION_TOKENS = [
-  "### 1.2 Recalibração canônica por gatilho",
+  CALIBRATION_START,
   "#ACORDA",
   "!CALIBRAR",
   "BLOCKED_GITHUB_UNAVAILABLE",
@@ -26,6 +29,42 @@ const CALIBRATION_TOKENS = [
   "CASA_STATE",
   "VPS_STATE",
   "REENTRY_GUARD=ONE_SHOT",
+];
+const CALIBRATION_RULES = [
+  {
+    id: "REENTRY_FAIL_CLOSED",
+    pattern:
+      /O carregamento desta seção \*\*não dispara uma nova recalibração\*\*[\s\S]{0,260}`REENTRY_GUARD=ONE_SHOT`, evitando recursão entre adaptadores\./,
+  },
+  {
+    id: "GITHUB_UNAVAILABLE_FAIL_CLOSED",
+    pattern:
+      /Se o GitHub estiver indisponível:[\s\S]{0,180}STATUS=BLOCKED_GITHUB_UNAVAILABLE[\s\S]{0,220}Não apresente estado antigo como atual e não continue por suposição\./,
+  },
+  {
+    id: "DRIFT_RECONCILIATION",
+    pattern:
+      /Compare:[\s\S]{0,180}GitHub remoto;[\s\S]{0,180}estado canônico;[\s\S]{0,180}provas locais fornecidas;[\s\S]{0,180}conversa\.[\s\S]{0,180}O estado comprovado mais recente vence\.[\s\S]{0,140}STATUS=STATE_DRIFT/,
+  },
+  {
+    id: "WRITER_COLLISION_FAIL_CLOSED",
+    pattern:
+      /Se outro chat, CLI ou agente estiver escrevendo no mesmo escopo:[\s\S]{0,180}THIS_CHAT_ROLE=READ_ONLY[\s\S]{0,160}STATUS=WAITING_ACTIVE_WRITER\|BLOCKED_WRITER_COLLISION[\s\S]{0,180}não editar, commitar, publicar ou resolver threads\./,
+  },
+  {
+    id: "CASA_VPS_UNKNOWN_FAIL_CLOSED",
+    pattern:
+      /CASA_STATE=UNKNOWN_PENDING_LOCAL_EVIDENCE[\s\S]{0,120}VPS_STATE=UNKNOWN_PENDING_SANITIZED_CAPTURE[\s\S]{0,220}Nunca reutilize captura antiga como estado vivo\./,
+  },
+  {
+    id: "STALE_REVIEW_BLOCKED",
+    pattern: /Review em SHA antigo é `STALE_REVIEW`, nunca `PASS` para o HEAD atual\./,
+  },
+  {
+    id: "PASS_REQUIRES_FRESH_PROOF",
+    pattern:
+      /Só use `PASS` quando houver HEAD exato, teste fresco, prova verificável, escopo conhecido,[\s\S]{0,180}ausência de colisão de Writer e Judge independente quando exigido\./,
+  },
 ];
 
 const ADAPTADORES = [
@@ -56,6 +95,13 @@ const ler = (relativePath) => {
   }
 };
 const ehGerado = (relativePath) => GERADOS.some((pattern) => pattern.test(relativePath));
+
+function extrairSecao(texto, inicio, fim) {
+  const start = texto.indexOf(inicio);
+  if (start < 0) return "";
+  const end = texto.indexOf(fim, start);
+  return end < 0 ? texto.slice(start) : texto.slice(start, end);
+}
 
 function caminhosCitados(texto) {
   const encontrados = new Set();
@@ -111,19 +157,61 @@ const errors = [];
 const warnings = [];
 
 if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
-if (!existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
-if (!existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
+if (!CALIBRATION_ONLY && !existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
+if (!CALIBRATION_ONLY && !existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
 
 const portaContent = ler(PORTA);
-const calibrationTokensPresent = CALIBRATION_TOKENS.filter((token) => portaContent.includes(token));
+const calibrationSection = extrairSecao(portaContent, CALIBRATION_START, CALIBRATION_END);
+const calibrationTokensPresent = CALIBRATION_TOKENS.filter((token) => calibrationSection.includes(token));
+const calibrationRulesPresent = CALIBRATION_RULES.filter((rule) => rule.pattern.test(calibrationSection));
+
 for (const token of CALIBRATION_TOKENS) {
-  if (!portaContent.includes(token)) errors.push(`PORTA_SEM_CALIBRACAO:${token}`);
+  if (!calibrationSection.includes(token)) errors.push(`PORTA_SEM_CALIBRACAO:${token}`);
+}
+for (const rule of CALIBRATION_RULES) {
+  if (!rule.pattern.test(calibrationSection)) errors.push(`PORTA_REGRA_CALIBRACAO_INVALIDA:${rule.id}`);
 }
 if (!/^source_of_truth:\s*"ServerVpss\/CentralDark"\s*$/m.test(portaContent.slice(0, 700))) {
   errors.push("PORTA_SOURCE_OF_TRUTH_DIVERGENTE");
 }
 if (!portaContent.includes('observed_state: "evidência atual medida e separada da fonte canônica"')) {
   errors.push("PORTA_SEM_ESTADO_OBSERVADO_SEPARADO");
+}
+
+const calibrationReport = {
+  gatilhos: ["#ACORDA", "!CALIBRAR"],
+  reentry_guard: "ONE_SHOT",
+  tokens_presentes: calibrationTokensPresent.length,
+  tokens_obrigatorios: CALIBRATION_TOKENS.length,
+  regras_presentes: calibrationRulesPresent.length,
+  regras_obrigatorias: CALIBRATION_RULES.length,
+  regras: CALIBRATION_RULES.map((rule) => ({ id: rule.id, ok: rule.pattern.test(calibrationSection) })),
+  ok:
+    calibrationTokensPresent.length === CALIBRATION_TOKENS.length &&
+    calibrationRulesPresent.length === CALIBRATION_RULES.length,
+};
+
+if (CALIBRATION_ONLY) {
+  const report = {
+    guardrail: "validar-porta-de-entrada",
+    mode: "calibration-only",
+    porta: PORTA,
+    calibracao: calibrationReport,
+    errors,
+    warnings,
+    ok: errors.length === 0,
+  };
+  if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
+  else {
+    for (const error of errors) console.error(`ERRO ${error}`);
+    console.log(
+      `CALIBRACAO_OK=${report.ok ? 1 : 0} ` +
+        `TOKENS=${calibrationReport.tokens_presentes}/${calibrationReport.tokens_obrigatorios} ` +
+        `REGRAS=${calibrationReport.regras_presentes}/${calibrationReport.regras_obrigatorias} ` +
+        `ERROS=${errors.length}`,
+    );
+  }
+  process.exit(report.ok ? 0 : 1);
 }
 
 for (const adapter of ADAPTADORES) {
@@ -171,13 +259,7 @@ const report = {
   porta: PORTA,
   contrato_delta: CONTRATO_DELTA,
   identidade_lupa: IDENTIDADE_LUPA,
-  calibracao: {
-    gatilhos: ["#ACORDA", "!CALIBRAR"],
-    reentry_guard: "ONE_SHOT",
-    tokens_presentes: calibrationTokensPresent.length,
-    tokens_obrigatorios: CALIBRATION_TOKENS.length,
-    ok: calibrationTokensPresent.length === CALIBRATION_TOKENS.length,
-  },
+  calibracao: calibrationReport,
   adaptadores_obrigatorios: ADAPTADORES,
   adaptadores_encontrados: ADAPTADORES.filter(existe),
   canonicos_encontrados: canonicalDocuments.length,
@@ -194,7 +276,8 @@ else {
   for (const error of errors) console.error(`ERRO ${error}`);
   console.log(
     `PORTA_OK=${report.ok ? 1 : 0} ` +
-      `CALIBRACAO=${report.calibracao.tokens_presentes}/${report.calibracao.tokens_obrigatorios} ` +
+      `CALIBRACAO_TOKENS=${report.calibracao.tokens_presentes}/${report.calibracao.tokens_obrigatorios} ` +
+      `CALIBRACAO_REGRAS=${report.calibracao.regras_presentes}/${report.calibracao.regras_obrigatorias} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +
