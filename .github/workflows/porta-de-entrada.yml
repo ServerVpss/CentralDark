@@ -43,6 +43,12 @@ jobs:
       - name: Testar falsificações semânticas do protocolo ACORDA
         run: node --test scripts/lupa/validar-porta-de-entrada.test.mjs
 
+      - name: Testar loop agentic de CI e porcentagem
+        run: node --test scripts/lupa/agentic-loop-progress.test.mjs
+
+      - name: Validar status AGENTIC LOOP 4K
+        run: node scripts/lupa/agentic-loop-progress.mjs
+
       - name: Validar mapa e contratos do repositório inteiro
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
