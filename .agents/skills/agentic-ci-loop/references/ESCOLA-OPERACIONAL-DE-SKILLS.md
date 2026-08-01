@@ -132,7 +132,7 @@ NUNCA PROMOVA SEM PROVA.
 ## Preservação da fonte e do visual
 
 O curso integral fornecido pelo CHEFE permanece em
-`SOURCE-CURSO-SKILLS-ORIGINAL.txt`, preso ao SHA-256 registrado no manifesto.
+`SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64`, preso ao SHA-256 registrado no manifesto.
 Ele é fonte de estudo, não contexto obrigatório de toda tarefa.
 
 O pacote visual original é versionado em partes Base64 reversíveis para não depender
