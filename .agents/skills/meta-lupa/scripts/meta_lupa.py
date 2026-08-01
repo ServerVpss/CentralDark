@@ -97,6 +97,25 @@ RECEIPT_REQUIRED_FIELDS = {
     "total_tokens", "timeout_seconds", "budget_sha", "test_manifest_sha", "arm", "seed",
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$", re.I)
+# minusculo estrito: convencao canonica do Git, nao a mesma tolerancia de HEX64
+# (usado pelo gate META_LUPA existente, que nao deve mudar de comportamento).
+HEAD_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+
+# Contrato definido em
+# docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md secao 10
+# (OPERATION_RECEIPT). Mudou junto do schema; nao duplicar em outro lugar.
+OPERATION_RECEIPT_REQUIRED_FIELDS = (
+    "mission_id", "host", "timestamp_utc", "repository", "target", "branch",
+    "head_sha", "evidence_path", "evidence_sha256", "writer", "judge",
+    "status", "reason", "impact", "mutations", "tests", "counterproof",
+    "rollback", "chief_decision", "next_step",
+)
+OPERATION_RECEIPT_STATUS = {"PASS", "FAIL", "UNKNOWN", "ANOMALY", "ACHADO_PENDENTE", "BLOCKED"}
+OPERATION_RECEIPT_REASON = {
+    "", "CAPTURE_DEGRADED", "SECRET_EXPOSURE", "SANITIZE_FAILED", "SKIPPED",
+    "GATE_FAILED", "AUTH_MISSING",
+}
+OPERATION_RECEIPT_CHIEF_DECISION = {"PENDING", "APPROVED", "REJECTED"}
 
 
 def parse_stream_json(raw: str) -> tuple[list[dict], list[str]]:
@@ -1548,6 +1567,125 @@ def cmd_writer_attack(args) -> int:
     return 0
 
 
+def _operation_receipt_result(ok: bool, reason: str = "", **extra) -> dict:
+    result = {
+        "OPERATION_RECEIPT_VALID": "SIM" if ok else "NAO",
+        "STATUS": "ALLOWED" if ok else "BLOCKED",
+    }
+    if reason:
+        result["REASON"] = reason
+    result.update(extra)
+    return result
+
+
+def _git_commit_exists(repo_root: str, sha: str) -> bool:
+    result = subprocess.run(
+        ["git", "-C", os.path.abspath(repo_root), "cat-file", "-e", f"{sha}^{{commit}}"],
+        check=False,
+        capture_output=True,
+    )
+    return result.returncode == 0
+
+
+_DEFINITIVE_STATUSES = {"PASS", "FAIL"}
+
+
+def validate_operation_receipt(receipt: dict, *, repo_root: str | None = None) -> tuple[bool, str, dict]:
+    """Valida um OPERATION_RECEIPT contra o contrato da secao 10 de
+    docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md.
+
+    Rejeita enum invalido, BLOCKED sem reason, head_sha/evidence_sha256 mal
+    formado, autoaprovacao (writer == judge) e conteudo com padrao de segredo.
+    status=PASS nao e tratado como aprovacao: aprovacao exige chief_decision
+    == APPROVED, um judge distinto do writer e evidence_sha256 valido no
+    mesmo receipt. Quando repo_root e informado, head_sha e verificado contra
+    o Git real (nao apenas o formato); sem repo_root, a checagem fica so no
+    formato e approved_for_promotion nunca fica true (nao ha aprovacao sem
+    prova de HEAD real).
+    """
+    if not isinstance(receipt, dict):
+        return False, "OPERATION_RECEIPT_NOT_OBJECT", {}
+
+    missing = sorted(f for f in OPERATION_RECEIPT_REQUIRED_FIELDS if f not in receipt)
+    if missing:
+        return False, "OPERATION_RECEIPT_FIELD_MISSING", {"missing": missing}
+
+    if receipt.get("repository") != "ServerVpss/CentralDark":
+        return False, "OPERATION_RECEIPT_REPOSITORY_MISMATCH", {}
+
+    if not isinstance(receipt.get("target"), str) or not receipt["target"].strip():
+        return False, "OPERATION_RECEIPT_TARGET_MISSING", {}
+
+    status = receipt.get("status")
+    if status not in OPERATION_RECEIPT_STATUS:
+        return False, "OPERATION_RECEIPT_STATUS_INVALID", {"status": status}
+
+    reason = receipt.get("reason", "")
+    if reason not in OPERATION_RECEIPT_REASON:
+        return False, "OPERATION_RECEIPT_REASON_INVALID", {"reason": reason}
+    if status == "BLOCKED" and not reason:
+        return False, "OPERATION_RECEIPT_BLOCKED_WITHOUT_REASON", {}
+    if status != "BLOCKED" and reason:
+        return False, "OPERATION_RECEIPT_REASON_WITHOUT_BLOCKED", {"status": status, "reason": reason}
+
+    if not HEAD_SHA_RE.fullmatch(str(receipt.get("head_sha", ""))):
+        return False, "OPERATION_RECEIPT_HEAD_SHA_INVALID", {}
+
+    head_sha_verified = False
+    if repo_root is not None:
+        if not _git_commit_exists(repo_root, receipt["head_sha"]):
+            return False, "OPERATION_RECEIPT_HEAD_SHA_NOT_FOUND", {}
+        head_sha_verified = True
+
+    evidence_sha256 = receipt.get("evidence_sha256", "")
+    if evidence_sha256 and not HEX64.fullmatch(str(evidence_sha256)):
+        return False, "OPERATION_RECEIPT_EVIDENCE_SHA_INVALID", {}
+    if status in _DEFINITIVE_STATUSES and not evidence_sha256:
+        return False, "OPERATION_RECEIPT_EVIDENCE_SHA_MISSING", {"status": status}
+
+    writer = str(receipt.get("writer", "")).strip()
+    judge = str(receipt.get("judge", "")).strip()
+    if not writer:
+        return False, "OPERATION_RECEIPT_WRITER_MISSING", {}
+    if judge and judge.casefold() == writer.casefold():
+        return False, "OPERATION_RECEIPT_SELF_APPROVAL", {"writer": writer, "judge": judge}
+
+    chief_decision = receipt.get("chief_decision")
+    if chief_decision not in OPERATION_RECEIPT_CHIEF_DECISION:
+        return False, "OPERATION_RECEIPT_CHIEF_DECISION_INVALID", {"chief_decision": chief_decision}
+
+    blob = json.dumps(receipt, ensure_ascii=False, sort_keys=True)
+    for pattern in SECRET_PATTERNS:
+        if pattern.search(blob):
+            return False, "OPERATION_RECEIPT_SECRET_DETECTED", {}
+
+    approved_for_promotion = (
+        status == "PASS"
+        and chief_decision == "APPROVED"
+        and bool(judge)
+        and bool(evidence_sha256)
+        and head_sha_verified
+    )
+
+    return True, "", {
+        "status": status,
+        "chief_decision": chief_decision,
+        "head_sha_verified": head_sha_verified,
+        "approved_for_promotion": approved_for_promotion,
+    }
+
+
+def cmd_validate_operation_receipt(args) -> int:
+    try:
+        receipt = _read_gate_input(args.input)
+    except ValueError as exc:
+        print(json.dumps(_operation_receipt_result(False, str(exc)), ensure_ascii=False, sort_keys=True))
+        return 13
+    ok, reason, details = validate_operation_receipt(receipt, repo_root=args.repo_root)
+    print(json.dumps(_operation_receipt_result(ok, reason, **details), ensure_ascii=False, sort_keys=True))
+    return 0 if ok else 13
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="MetaLupa Bayesiana - calculo deterministico + auto-registro")
     ap.add_argument("--prior", type=float, help="probabilidade prior em (0,1)")
@@ -1652,6 +1790,12 @@ def main() -> None:
     g.add_argument("--canonical-ref", default="")
     g.add_argument("--operation", default="operation")
     g.set_defaults(func=cmd_gate)
+
+    orv = sub.add_parser("validate-operation-receipt")
+    orv.add_argument("--input", required=True)
+    orv.add_argument("--repo-root", default=None,
+                      help="quando informado, verifica head_sha contra o Git real; sem isso, approved_for_promotion nunca fica true")
+    orv.set_defaults(func=cmd_validate_operation_receipt)
 
     w = sub.add_parser("writer-attack")
     w.add_argument(

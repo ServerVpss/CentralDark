@@ -56,7 +56,8 @@ CENTRALDARK_AI_BOOT:
   github_dictionary: LOADED
   delta_method: LOADED
   history_preservation: ACTIVE
-  source_of_truth: "ServerVpss/CentralDark + evidência atual"
+  source_of_truth: "ServerVpss/CentralDark"
+  observed_evidence: "estado medido agora (branch, HEAD, PR, worktree) — insumo operacional, nunca autoridade canônica"
   alignment: "SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES + ESPECIALISTAS"
   role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
   writer: "NONE|nome-do-escritor-atual"

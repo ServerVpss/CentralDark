@@ -9,7 +9,7 @@ scope: "Operações críticas, segurança, VPS, GitHub, deploy, automação e ev
 
 # Modo Operacional — LOOP com evidência primeiro
 
-Este documento registra o modo de operação aprovado por **SEGREDO/CHEFE** durante a captura defensiva da VPS em 2026-07-31.
+Este documento registra o modo de operação **proposto para avaliação por SEGREDO/CHEFE**, elaborado durante a captura defensiva da VPS em 2026-07-31. Permanece `CANDIDATO_CANONICO`: sem um `OPERATION_RECEIPT` terminal com `chief_decision: APPROVED` preso ao mesmo HEAD, nenhuma seção abaixo prova aprovação — apenas descreve a proposta.
 
 Ele não autoriza mutação por si só. Ele define a ordem, os papéis, os gates e a forma de aprender sem depender do chat.
 
@@ -48,7 +48,7 @@ A captura é determinística, read-only e produz um pacote reproduzível.
 
 Deve medir, quando aplicável:
 
-- host, timestamp UTC, branch, HEAD e origem;
+- host, timestamp UTC, branch, HEAD e origem (normalizada: somente `scheme://host/path`; nunca `userinfo`, `query`, `fragment` ou credenciais embutidas na URL);
 - sistema, listeners, PID, binário, CWD e cgroup;
 - UFW, nftables, iptables e regras Docker;
 - SSH e Fail2ban;
@@ -92,7 +92,7 @@ Regras:
 - PM2 filtrado por allowlist de campos; proibido despejar ambiente completo;
 - tokens, headers, cookies, chaves, connection strings e certificados nunca são registrados;
 - manifesto por arquivo + SHA-256 do pacote;
-- segredo suspeito encontrado resulta em `status: BLOCKED` com `reason: SECRET_EXPOSURE`.
+- **se um segredo suspeito for encontrado, mesmo após a sanitização: não persistir, não enviar, interromper a captura e retornar `status: BLOCKED` com `reason: SECRET_EXPOSURE`** — a mesma regra fail-closed da sanitização, aplicada de novo aqui porque a detecção de segredo pode ocorrer depois que um artefato já foi criado.
 
 Sanitização reduz risco, mas não é assumida como prova matemática: o pacote passa por verificação antes de ser entregue a outro agente.
 
@@ -198,6 +198,7 @@ OPERATION_RECEIPT:
   host: ""
   timestamp_utc: ""
   repository: "ServerVpss/CentralDark"
+  target: ""
   branch: ""
   head_sha: ""
   evidence_path: ""
@@ -215,7 +216,9 @@ OPERATION_RECEIPT:
   next_step: ""
 ```
 
-`reason` é obrigatório sempre que `status` for `BLOCKED` (valores do enum acima) e fica vazio nos demais estados. `impact` descreve o efeito real observado — o que ficou sem prova, sem execução ou sem cobertura.
+`reason` é obrigatório sempre que `status` for `BLOCKED` (valores do enum acima) e fica vazio nos demais estados. `impact` descreve o efeito real observado — o que ficou sem prova, sem execução ou sem cobertura. `target` é obrigatório e deve identificar o serviço, VPS, worktree ou escopo alterado de forma coerente com `head_sha` e `evidence_path` — `host` e `repository` sozinhos não bastam.
+
+**`status: PASS` é resultado técnico, não aprovação.** Só vale como decisão de promoção quando `chief_decision: APPROVED` também estiver presente no mesmo receipt; `chief_decision: PENDING` mantém a entrega em avaliação mesmo com `status: PASS`.
 
 Receipt sem HEAD, hash, alvo e estado comprovado é incompleto.
 

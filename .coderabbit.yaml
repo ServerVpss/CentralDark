@@ -13,6 +13,9 @@ reviews:
   review_status: true
   review_details: true
   review_progress: true
+  # review_progress sozinho nao garante que uma falha do mecanismo de revisao
+  # vire falha visivel no commit status; fail_commit_status fecha esse gap.
+  fail_commit_status: true
   changed_files_summary: true
   sequence_diagrams: true
   estimate_code_review_effort: true
@@ -58,7 +61,7 @@ reviews:
         Confronte a documentação com AGENTS.md, LEIA-ME-IA.md e o mapa canônico.
         Sinalize contradições de autoridade, entrypoints concorrentes e versões
         paralelas V2/V3/NOVO/FINAL/COPY/BACKUP.
-    - path: "docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/**"
+    - path: "docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md"
       instructions: >-
         Verifique se o delta respeita o programa vivo, as dependências entre
         PRs-filhos, a separação Casa/VPS/GitHub e os gates humanos existentes.
@@ -101,7 +104,7 @@ knowledge_base:
     filePatterns:
       - "LEIA-ME-IA.md"
       - "docs/ARQUITETURA/**/*.md"
-      - "docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/**/*.md"
+      - "docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md"
   learnings:
     scope: "local"
   issues:
@@ -118,12 +121,15 @@ knowledge_base:
     disabled_servers: []
 
 issue_enrichment:
+  # Publicacao automatica de enrichment fica desligada por padrao (revisor
+  # somente-leitura); planning.enabled continua true, mas auto_planning fica
+  # desligado ate existir aprovacao explicita para o revisor abrir plano sozinho.
   auto_enrich:
-    enabled: true
+    enabled: false
   planning:
     enabled: true
     auto_planning:
-      enabled: true
+      enabled: false
       labels:
         - "plan-me"
         - "!no-plan"

@@ -20,6 +20,21 @@ Ele detalha uma regra operacional já subordinada a:
 
 Em caso de conflito, vencem as fontes superiores e este contrato deve ser corrigido.
 
+**Nota de precedência (fecha ambiguidade de autoridade):** onde este documento usa
+"Pivete" como autoridade final (Seção 3 "Papéis" e o critério de aceitação 10 da
+Seção 11), trata-se do mesmo humano designado `SEGREDO/CHEFE` na pilha canônica de
+`LEIA-ME-IA.md` e `AGENTS.md`: `SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES >
+Writer/Judge/Promotor`. Quando "Pivete/Hermes" aparece como papel de execução e
+preservação (não como autoridade final), ele permanece subordinado a
+`SEGREDO/CHEFE`, sem alteração de sentido no restante do documento.
+
+**Pendência registrada, fora do escopo desta correção:** a mesma ambiguidade
+("Pivete" citado como autoridade final sem referência a `SEGREDO/CHEFE`) também
+existe, sem alteração nesta rodada, em `.claude/rules/00-centraldark-boot-universal.md`,
+`GEMINI.md`, `README.md` e `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md`. Corrigir
+esses quatro arquivos é uma trilha separada — decisão de escopo e redação cabe a
+SEGREDO/CHEFE, não a este PR.
+
 ## 2. Objetivo
 
 Entregar ao Pivete uma experiência única:
