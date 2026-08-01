@@ -71,8 +71,10 @@ somente o que ainda serve, não repita investigação concluída e não retroced
 
 ### 1.2 Recalibração canônica por gatilho (`#ACORDA` / `!CALIBRAR`)
 
-Esta seção é o protocolo integral de recalibração do repositório. Ela existe para que
-personalizações externas mantenham apenas um gatilho curto, sem copiar a governança inteira.
+Esta seção é a definição comportamental única de `#ACORDA` e `!CALIBRAR` no CentralDark.
+Outros documentos podem apontar para ela, mas não redefinir seus passos ou sua saída.
+Ela existe para que personalizações externas mantenham apenas um gatilho curto, sem copiar
+a governança inteira.
 
 **Gatilho mínimo externo para qualquer chat, agente ou CLI:**
 
@@ -80,7 +82,8 @@ personalizações externas mantenham apenas um gatilho curto, sem copiar a gover
 Quando minha mensagem começar com #ACORDA ou !CALIBRAR, ignorando maiúsculas/minúsculas,
 consulte o GitHub remoto ServerVpss/CentralDark, leia LEIA-ME-IA.md na branch padrão vigente
 e execute integralmente a seção 1.2 antes de responder. Se o GitHub estiver indisponível,
-responda BLOCKED_GITHUB_UNAVAILABLE e não use estado antigo como atual.
+comece a resposta com MISSION_ID=UNRESOLVED e STATUS=BLOCKED_GITHUB_UNAVAILABLE;
+não use estado antigo como atual.
 ```
 
 O carregamento desta seção **não dispara uma nova recalibração**. Cada mensagem-gatilho executa
@@ -101,9 +104,10 @@ Consulte `ServerVpss/CentralDark` e identifique:
 - missão, escopo, autoridade, Writer, branch, HEAD, PR, issue, bloqueadores, última prova e próximo gate;
 - PRs, branches, commits, workflows, bots e componentes de autonomia relacionados.
 
-Se o GitHub estiver indisponível:
+Se o GitHub estiver indisponível, a resposta deve começar exatamente com:
 
 ```text
+MISSION_ID=UNRESOLVED
 STATUS=BLOCKED_GITHUB_UNAVAILABLE
 ```
 
@@ -180,7 +184,7 @@ Para cada componente, informe:
 - bloqueio;
 - dependência humana.
 
-Regras obrigatórias:
+Relações obrigatórias de estado:
 
 ```text
 CHECK_SUCCESS != ZERO_FINDINGS
