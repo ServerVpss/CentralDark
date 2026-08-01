@@ -13,6 +13,7 @@ const ROOT = resolve(valueAfter("--repo-root", process.cwd()));
 const JSON_OUT = argv.includes("--json");
 const CALIBRATION_ONLY = argv.includes("--calibration-only");
 const PROTOCOL_ONLY = argv.includes("--protocol-only");
+
 const PORTA = "LEIA-ME-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
@@ -84,8 +85,9 @@ const CALIBRATION_RULES = [
   },
 ];
 
-const PROTOCOLOS_ATIVOS = [
+const PROTOCOLOS_OBRIGATORIOS = [
   "docs/PROTOCOLO-BOOT.md",
+  "docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md",
   "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md",
   "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md",
 ];
@@ -107,6 +109,11 @@ const GERADOS = [
   /^docs\/RELATORIOS\//,
   /^apps\/modulos\/status\//,
   /^docs\/ESTADO-DA-RETOMADA\.md$/,
+];
+const IGNORAR_SCAN_PROTOCOLOS = [
+  /^docs\/_LEGADO_ROOT_DOCS_CONFLITOS\//,
+  /^docs\/RELATORIOS\//,
+  /^docs\/CONSCIENCIA\/ARTEFATOS\//,
 ];
 
 const existe = (relativePath) => existsSync(join(ROOT, relativePath));
@@ -134,6 +141,31 @@ function extrairBlocoCodigo(texto, inicio) {
   return end < 0 ? "" : texto.slice(start, end + 4);
 }
 
+function listarArquivos(directory, predicate = () => true) {
+  const output = [];
+  const walk = (relativeDirectory) => {
+    let entries = [];
+    try {
+      entries = readdirSync(join(ROOT, relativeDirectory), { withFileTypes: true });
+    } catch {
+      return;
+    }
+
+    for (const entry of entries) {
+      const relativePath = posix.join(relativeDirectory, entry.name);
+      if (entry.isSymbolicLink()) continue;
+      if (entry.isDirectory()) {
+        if (!/^(?:node_modules|\.git)$/.test(entry.name)) walk(relativePath);
+        continue;
+      }
+      if (predicate(relativePath)) output.push(relativePath);
+    }
+  };
+
+  walk(directory);
+  return output;
+}
+
 function validarContradicoes(secao, errors) {
   const linhasPermitidas = new Set([
     "não use estado antigo como atual.",
@@ -152,9 +184,28 @@ function validarContradicoes(secao, errors) {
   return { ok: contradicoes.length === 0, linhas: contradicoes };
 }
 
-function validarDelegacoes(errors) {
+function temDefinicaoOperacionalConcorrente(content) {
+  const patterns = [
+    /^#{2,6}\s+`?!CALIBRAR`?\s*$/im,
+    /Quando (?:Pivete disser|o agente receber) `!CALIBRAR`\s*:/i,
+    /Ao receber `!CALIBRAR`, o agente deve\s*:/i,
+    /-\s+\*\*`!CALIBRAR`\*\*[\s\S]{0,700}\b(?:Interrompa|Compare|Atualize|Devolva|Execute|Retorne)\b/i,
+  ];
+  return patterns.some((pattern) => pattern.test(content));
+}
+
+function validarProtocolos(errors) {
   const detalhes = [];
-  for (const protocolo of PROTOCOLOS_ATIVOS) {
+  const candidatos = new Set(PROTOCOLOS_OBRIGATORIOS);
+
+  for (const path of listarArquivos("docs", (item) => item.endsWith(".md"))) {
+    if (IGNORAR_SCAN_PROTOCOLOS.some((pattern) => pattern.test(path))) continue;
+    if (path === PORTA) continue;
+    const content = ler(path);
+    if (temDefinicaoOperacionalConcorrente(content)) candidatos.add(path);
+  }
+
+  for (const protocolo of [...candidatos].sort()) {
     if (!existe(protocolo)) {
       errors.push(`PROTOCOLO_ATIVO_AUSENTE:${protocolo}`);
       detalhes.push({ path: protocolo, exists: false, delegates: false, concurrent: false });
@@ -164,18 +215,20 @@ function validarDelegacoes(errors) {
     const content = ler(protocolo);
     const delegates =
       content.includes("LEIA-ME-IA.md") && /(?:seção|secao|§)\s*1\.2/i.test(content);
-    const concurrent =
-      /^#{2,6}\s+`?!CALIBRAR`?\s*$/im.test(content) ||
-      /Quando (?:Pivete disser|o agente receber) `!CALIBRAR`\s*:/i.test(content) ||
-      /Ao receber `!CALIBRAR`, o agente deve\s*:/i.test(content);
+    const concurrent = temDefinicaoOperacionalConcorrente(content);
 
     if (!delegates) errors.push(`PROTOCOLO_SEM_DELEGACAO_CANONICA:${protocolo}`);
     if (concurrent) errors.push(`PROTOCOLO_DEFINICAO_CONCORRENTE:${protocolo}`);
     detalhes.push({ path: protocolo, exists: true, delegates, concurrent });
   }
+
   return {
+    obrigatorios: PROTOCOLOS_OBRIGATORIOS,
+    descobertos: [...candidatos].sort(),
     documentos: detalhes,
-    ok: detalhes.length === PROTOCOLOS_ATIVOS.length && detalhes.every((item) => item.exists && item.delegates && !item.concurrent),
+    ok:
+      detalhes.length >= PROTOCOLOS_OBRIGATORIOS.length &&
+      detalhes.every((item) => item.exists && item.delegates && !item.concurrent),
   };
 }
 
@@ -203,38 +256,24 @@ function caminhosCitados(texto) {
 }
 
 function canonicos() {
-  const output = [];
-  const walk = (directory) => {
-    let entries = [];
-    try {
-      entries = readdirSync(join(ROOT, directory), { withFileTypes: true });
-    } catch {
-      return;
-    }
-
-    for (const entry of entries) {
-      const relativePath = posix.join(directory, entry.name);
-      if (entry.isSymbolicLink()) continue;
-      if (entry.isDirectory()) {
-        if (!/^(?:node_modules|\.git)$/.test(entry.name)) walk(relativePath);
-        continue;
-      }
-      if (!entry.name.endsWith(".md") || ehGerado(relativePath)) continue;
-      if (/^status:\s*"?CAN[OÔ]NICO"?/im.test(ler(relativePath).slice(0, 700))) output.push(relativePath);
-    }
-  };
-
-  walk("docs");
-  walk(".agents");
-  return output;
+  return ["docs", ".agents"].flatMap((directory) =>
+    listarArquivos(directory, (relativePath) => {
+      if (!relativePath.endsWith(".md") || ehGerado(relativePath)) return false;
+      return /^status:\s*"?CAN[OÔ]NICO"?/im.test(ler(relativePath).slice(0, 700));
+    }),
+  );
 }
 
 const errors = [];
 const warnings = [];
 
 if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
-if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
-if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
+if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(CONTRATO_DELTA)) {
+  errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
+}
+if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(IDENTIDADE_LUPA)) {
+  errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
+}
 
 const portaContent = ler(PORTA);
 const calibrationSection = extrairSecao(portaContent, CALIBRATION_START, CALIBRATION_END);
@@ -243,14 +282,12 @@ const calibrationTokensPresent = CALIBRATION_TOKENS.filter((token) => calibratio
 const calibrationRulesPresent = CALIBRATION_RULES.filter((rule) => rule.pattern.test(calibrationSection));
 const tokensOk = calibrationTokensPresent.length === CALIBRATION_TOKENS.length;
 const regrasOk = calibrationRulesPresent.length === CALIBRATION_RULES.length;
-const sourceFrontmatterOk = new RegExp(
-  `^source_of_truth:\\s*"${EXPECTED_SOURCE_OF_TRUTH.replace("/", "\\/")}"\\s*$`,
-  "m",
-).test(portaContent.slice(0, 700));
-const sourceBootOk = new RegExp(
-  `^\\s{2}source_of_truth:\\s*"${EXPECTED_SOURCE_OF_TRUTH.replace("/", "\\/")}"\\s*$`,
-  "m",
-).test(bootReceipt);
+const sourceFrontmatterOk = /^source_of_truth:\s*"ServerVpss\/CentralDark"\s*$/m.test(
+  portaContent.slice(0, 700),
+);
+const sourceBootOk = /^\s{2}source_of_truth:\s*"ServerVpss\/CentralDark"\s*$/m.test(
+  bootReceipt,
+);
 const sourceOfTruthOk = sourceFrontmatterOk && sourceBootOk;
 const observedStateOk = new RegExp(
   `^\\s{2}observed_state:\\s*"${EXPECTED_OBSERVED_STATE}"\\s*$`,
@@ -262,7 +299,9 @@ for (const token of CALIBRATION_TOKENS) {
   if (!calibrationSection.includes(token)) errors.push(`PORTA_SEM_CALIBRACAO:${token}`);
 }
 for (const rule of CALIBRATION_RULES) {
-  if (!rule.pattern.test(calibrationSection)) errors.push(`PORTA_REGRA_CALIBRACAO_INVALIDA:${rule.id}`);
+  if (!rule.pattern.test(calibrationSection)) {
+    errors.push(`PORTA_REGRA_CALIBRACAO_INVALIDA:${rule.id}`);
+  }
 }
 if (!sourceOfTruthOk) errors.push("PORTA_SOURCE_OF_TRUTH_DIVERGENTE");
 if (!observedStateOk) errors.push("PORTA_SEM_ESTADO_OBSERVADO_SEPARADO");
@@ -287,8 +326,8 @@ const calibrationReport = {
 };
 
 const protocolReport = CALIBRATION_ONLY
-  ? { documentos: [], ok: true, skipped: true }
-  : validarDelegacoes(errors);
+  ? { obrigatorios: [], descobertos: [], documentos: [], ok: true, skipped: true }
+  : validarProtocolos(errors);
 
 if (CALIBRATION_ONLY || PROTOCOL_ONLY) {
   const mode = CALIBRATION_ONLY ? "calibration-only" : "protocol-only";
@@ -325,11 +364,19 @@ for (const adapter of ADAPTADORES) {
     continue;
   }
   const content = ler(adapter);
-  const required = [PORTA, CONTRATO_DELTA, "CENTRALDARK_AI_BOOT", ".agents/skills/meta-lupa/SKILL.md", IDENTIDADE_LUPA];
+  const required = [
+    PORTA,
+    CONTRATO_DELTA,
+    "CENTRALDARK_AI_BOOT",
+    ".agents/skills/meta-lupa/SKILL.md",
+    IDENTIDADE_LUPA,
+  ];
   for (const token of required) {
     if (!content.includes(token)) errors.push(`ADAPTADOR_SEM_TOKEN:${adapter}:${token}`);
   }
-  if (/SKILL_COMMIT_SHA\s*:/i.test(content)) errors.push(`ADAPTADOR_COM_SHA_COPIADO:${adapter}`);
+  if (/SKILL_COMMIT_SHA\s*:/i.test(content)) {
+    errors.push(`ADAPTADOR_COM_SHA_COPIADO:${adapter}`);
+  }
 }
 
 for (const entrypoint of ENTRADAS) {
@@ -384,7 +431,7 @@ else {
     `PORTA_OK=${report.ok ? 1 : 0} ` +
       `CALIBRACAO_TOKENS=${report.calibracao.tokens_presentes}/${report.calibracao.tokens_obrigatorios} ` +
       `CALIBRACAO_REGRAS=${report.calibracao.regras_presentes}/${report.calibracao.regras_obrigatorias} ` +
-      `PROTOCOLOS=${report.protocolos.documentos.filter((item) => item.delegates && !item.concurrent).length}/${PROTOCOLOS_ATIVOS.length} ` +
+      `PROTOCOLOS=${report.protocolos.documentos.filter((item) => item.delegates && !item.concurrent).length}/${report.protocolos.descobertos.length} ` +
       `SOURCE=${report.calibracao.source_of_truth_ok ? 1 : 0} ` +
       `OBSERVED=${report.calibracao.observed_state_ok ? 1 : 0} ` +
       `CONTRADICTIONS=${report.calibracao.contradictions.length} ` +
