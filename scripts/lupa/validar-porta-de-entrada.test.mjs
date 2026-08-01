@@ -35,6 +35,10 @@ test("aceita o protocolo canônico completo", () => {
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.equal(result.report.ok, true);
   assert.equal(result.report.calibracao.reentry_guard, "ONE_SHOT");
+  assert.equal(result.report.calibracao.tokens_ok, true);
+  assert.equal(result.report.calibracao.regras_ok, true);
+  assert.equal(result.report.calibracao.source_of_truth_ok, true);
+  assert.equal(result.report.calibracao.observed_state_ok, true);
   assert.equal(
     result.report.calibracao.regras_presentes,
     result.report.calibracao.regras_obrigatorias,
@@ -44,7 +48,7 @@ test("aceita o protocolo canônico completo", () => {
 const mutacoes = [
   {
     nome: "reentrada recursiva",
-    esperado: "REENTRY_FAIL_CLOSED",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:REENTRY_FAIL_CLOSED",
     aplicar: (texto) =>
       texto.replace(
         "**não dispara uma nova recalibração**",
@@ -52,17 +56,27 @@ const mutacoes = [
       ),
   },
   {
-    nome: "continuação com estado antigo sem GitHub",
-    esperado: "GITHUB_UNAVAILABLE_FAIL_CLOSED",
+    nome: "saída isolada quando GitHub está indisponível",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:GITHUB_UNAVAILABLE_SERIALIZATION",
     aplicar: (texto) =>
       texto.replace(
-        "Não apresente estado antigo como atual e não continue por suposição.",
-        "Apresente o estado antigo como atual e continue por suposição.",
+        "MISSION_ID=UNRESOLVED\nSTATUS=BLOCKED_GITHUB_UNAVAILABLE",
+        "BLOCKED_GITHUB_UNAVAILABLE",
+      ),
+  },
+  {
+    nome: "gatilho externo sem serialização obrigatória",
+    erroEsperado:
+      "PORTA_REGRA_CALIBRACAO_INVALIDA:EXTERNAL_TRIGGER_GITHUB_FAILURE_SERIALIZATION",
+    aplicar: (texto) =>
+      texto.replace(
+        "comece a resposta com MISSION_ID=UNRESOLVED e STATUS=BLOCKED_GITHUB_UNAVAILABLE;",
+        "responda apenas BLOCKED_GITHUB_UNAVAILABLE;",
       ),
   },
   {
     nome: "drift sem reconciliação de fontes",
-    esperado: "DRIFT_RECONCILIATION",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:DRIFT_RECONCILIATION",
     aplicar: (texto) =>
       texto.replace(
         "O estado comprovado mais recente vence.",
@@ -71,11 +85,41 @@ const mutacoes = [
   },
   {
     nome: "Writer concorrente autorizado a escrever",
-    esperado: "WRITER_COLLISION_FAIL_CLOSED",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:WRITER_COLLISION_FAIL_CLOSED",
     aplicar: (texto) =>
       texto.replace(
         "Nesse estado, não editar, commitar, publicar ou resolver threads.",
         "Nesse estado, editar e publicar normalmente.",
+      ),
+  },
+  ...[
+    "CHECK_SUCCESS != ZERO_FINDINGS",
+    "SKIPPED != PASS",
+    "BOT_COMMENTED != BOT_APPROVED",
+    "UNKNOWN != PASS",
+    "TIMEOUT != PASS",
+    "REVIEWED_HEAD_OLD != REVIEWED_HEAD_CURRENT",
+  ].map((relacao) => ({
+    nome: `relação de estado removida: ${relacao}`,
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:CHECK_STATE_RELATIONS",
+    aplicar: (texto) => texto.replace(`${relacao}\n`, ""),
+  })),
+  {
+    nome: "fonte canônica divergente",
+    erroEsperado: "PORTA_SOURCE_OF_TRUTH_DIVERGENTE",
+    aplicar: (texto) =>
+      texto.replace(
+        'source_of_truth: "ServerVpss/CentralDark"',
+        'source_of_truth: "Este arquivo"',
+      ),
+  },
+  {
+    nome: "estado observado misturado à fonte canônica",
+    erroEsperado: "PORTA_SEM_ESTADO_OBSERVADO_SEPARADO",
+    aplicar: (texto) =>
+      texto.replace(
+        'observed_state: "evidência atual medida e separada da fonte canônica"',
+        'observed_state: "ServerVpss/CentralDark + evidência atual"',
       ),
   },
 ];
@@ -89,9 +133,7 @@ for (const mutacao of mutacoes) {
     assert.notEqual(result.status, 0, "o mutante recebeu falso PASS");
     assert.equal(result.report.ok, false);
     assert.ok(
-      result.report.errors.includes(
-        `PORTA_REGRA_CALIBRACAO_INVALIDA:${mutacao.esperado}`,
-      ),
+      result.report.errors.includes(mutacao.erroEsperado),
       JSON.stringify(result.report, null, 2),
     );
   });
