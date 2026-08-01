@@ -35,8 +35,8 @@ def validate_sources(repo_root:Path, manifest_path:Path=DEFAULT_MANIFEST)->dict[
     svg=repo_root/svg_rel; readme=repo_root/readme_rel
     if not svg.is_file(): raise ValueError(f'VISUAL_SVG_MISSING:{svg_rel}')
     if not readme.is_file(): raise ValueError(f'VISUAL_README_MISSING:{readme_rel}')
-    if sha256_file(svg)!=a.get('svg_sha256'): raise ValueError('VISUAL_SVG_SHA_MISMATCH')
-    if sha256_file(readme)!=a.get('readme_sha256'): raise ValueError('VISUAL_README_SHA_MISMATCH')
+    if sha256_file(svg)!=a.get('visual_source_svg_sha256'): raise ValueError('VISUAL_SVG_SHA_MISMATCH')
+    if sha256_file(readme)!=a.get('visual_readme_source_sha256'): raise ValueError('VISUAL_README_SHA_MISMATCH')
     return {'source_status':'PASS','svg_sha256':sha256_file(svg),'readme_sha256':sha256_file(readme),'binary_storage':a.get('visual_binary_storage')}
 
 def validate_zip(source_zip:Path, artifacts:dict[str,Any])->dict[str,Any]:
