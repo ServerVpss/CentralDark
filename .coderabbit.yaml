@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "pt-BR"
+early_access: false
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  review_details: true
+  poem: false
+  auto_review:
+    enabled: true
+    drafts: true
+  path_instructions:
+    - path: "AGENTS.md"
+      instructions: >-
+        Verifique autoridade, ordem de boot, escritor único por escopo,
+        separação Writer/Judge, fail-closed e compatibilidade com LEIA-ME-IA.md.
+        Não aceite UNKNOWN, SKIPPED ou ausência de prova como PASS.
+    - path: "docs/ARQUITETURA/**"
+      instructions: >-
+        Confronte a documentação com AGENTS.md, LEIA-ME-IA.md e o mapa canônico.
+        Sinalize contradições de autoridade, entrypoints concorrentes e versões
+        paralelas V2/V3/NOVO/FINAL.
+    - path: ".github/workflows/**"
+      instructions: >-
+        Verifique princípio do menor privilégio, separação de credenciais entre
+        Judge e Promotor, checkout preso ao SHA esperado, ausência de execução
+        de código não confiável com token privilegiado e nenhum fallback silencioso.
+    - path: "scripts/**"
+      instructions: >-
+        Exija evidência reproduzível, timeout explícito, erro fail-closed,
+        sanitização de secrets, rollback e receipt preso ao HEAD testado.
+    - path: "apps/**"
+      instructions: >-
+        Sinalize duplicação de módulos ou entrypoints, mudança fora do mapa,
+        efeitos colaterais sem autorização e regressões de compatibilidade.
+
+chat:
+  auto_reply: true
