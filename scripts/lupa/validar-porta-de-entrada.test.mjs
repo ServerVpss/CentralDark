@@ -1,307 +1,171 @@
-import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-import test from "node:test";
+import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
-const SCRIPT = fileURLToPath(new URL("./validar-porta-de-entrada.mjs", import.meta.url));
-const PORTA_REAL = fileURLToPath(new URL("../../LEIA-ME-IA.md", import.meta.url));
-const CONTEUDO_VALIDO = readFileSync(PORTA_REAL, "utf8");
-const PROTOCOLOS_REAIS = {
-  "docs/PROTOCOLO-BOOT.md": readFileSync(
-    fileURLToPath(new URL("../../docs/PROTOCOLO-BOOT.md", import.meta.url)),
-    "utf8",
-  ),
-  "docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md": readFileSync(
-    fileURLToPath(
-      new URL("../../docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md", import.meta.url),
-    ),
-    "utf8",
-  ),
-  "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md": readFileSync(
-    fileURLToPath(
-      new URL("../../docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md", import.meta.url),
-    ),
-    "utf8",
-  ),
-  "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md":
-    readFileSync(
-      fileURLToPath(
-        new URL(
-          "../../docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md",
-          import.meta.url,
-        ),
-      ),
-      "utf8",
-    ),
-};
-
-function executar(conteudo) {
-  const root = mkdtempSync(join(tmpdir(), "centraldark-calibracao-"));
-  try {
-    writeFileSync(join(root, "LEIA-ME-IA.md"), conteudo, "utf8");
-    const result = spawnSync(
-      process.execPath,
-      [SCRIPT, "--repo-root", root, "--calibration-only", "--json"],
-      { encoding: "utf8" },
-    );
-    return normalizar(result);
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-}
-
-function executarProtocolos(protocolos) {
-  const root = mkdtempSync(join(tmpdir(), "centraldark-protocolos-"));
-  try {
-    writeFileSync(join(root, "LEIA-ME-IA.md"), CONTEUDO_VALIDO, "utf8");
-    for (const [relativePath, content] of Object.entries(protocolos)) {
-      const target = join(root, relativePath);
-      mkdirSync(dirname(target), { recursive: true });
-      writeFileSync(target, content, "utf8");
-    }
-    const result = spawnSync(
-      process.execPath,
-      [SCRIPT, "--repo-root", root, "--protocol-only", "--json"],
-      { encoding: "utf8" },
-    );
-    return normalizar(result);
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-}
-
-function normalizar(result) {
-  return {
-    status: result.status,
-    stdout: result.stdout,
-    stderr: result.stderr,
-    report: result.stdout ? JSON.parse(result.stdout) : null,
-  };
-}
-
-test("aceita o protocolo canônico completo", () => {
-  const result = executar(CONTEUDO_VALIDO);
-  assert.equal(result.status, 0, result.stderr || result.stdout);
-  assert.equal(result.report.ok, true);
-  assert.equal(result.report.calibracao.reentry_guard, "ONE_SHOT");
-  assert.equal(result.report.calibracao.tokens_ok, true);
-  assert.equal(result.report.calibracao.regras_ok, true);
-  assert.equal(result.report.calibracao.source_of_truth_ok, true);
-  assert.equal(result.report.calibracao.observed_state_ok, true);
-  assert.equal(result.report.calibracao.contradictions_ok, true);
-  assert.equal(
-    result.report.calibracao.regras_presentes,
-    result.report.calibracao.regras_obrigatorias,
-  );
-});
-
-const mutacoes = [
-  {
-    nome: "reentrada recursiva",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:REENTRY_FAIL_CLOSED",
-    aplicar: (texto) =>
-      texto.replace(
-        "**não dispara uma nova recalibração**",
-        "**dispara uma nova recalibração**",
-      ),
-  },
-  {
-    nome: "saída isolada quando GitHub está indisponível",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:GITHUB_UNAVAILABLE_SERIALIZATION",
-    aplicar: (texto) =>
-      texto.replace(
-        "MISSION_ID=UNRESOLVED\nSTATUS=BLOCKED_GITHUB_UNAVAILABLE",
-        "BLOCKED_GITHUB_UNAVAILABLE",
-      ),
-  },
-  {
-    nome: "gatilho externo sem serialização obrigatória",
-    erroEsperado:
-      "PORTA_REGRA_CALIBRACAO_INVALIDA:EXTERNAL_TRIGGER_GITHUB_FAILURE_SERIALIZATION",
-    aplicar: (texto) =>
-      texto.replace(
-        "comece a resposta com MISSION_ID=UNRESOLVED e STATUS=BLOCKED_GITHUB_UNAVAILABLE;",
-        "responda apenas BLOCKED_GITHUB_UNAVAILABLE;",
-      ),
-  },
-  {
-    nome: "diretiva contraditória preservando o texto canônico",
-    erroEsperado: "PORTA_DIRETIVA_CONTRADITORIA",
-    aplicar: (texto) =>
-      texto.replace(
-        "Não apresente estado antigo como atual e não continue por suposição.",
-        "Não apresente estado antigo como atual e não continue por suposição.\nApresente estado antigo como atual e continue por suposição.",
-      ),
-  },
-  {
-    nome: "drift sem reconciliação de fontes",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:DRIFT_RECONCILIATION",
-    aplicar: (texto) =>
-      texto.replace(
-        "O estado comprovado mais recente vence.",
-        "A conversa anterior vence mesmo sem prova recente.",
-      ),
-  },
-  {
-    nome: "Writer concorrente autorizado a escrever",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:WRITER_COLLISION_FAIL_CLOSED",
-    aplicar: (texto) =>
-      texto.replace(
-        "Nesse estado, não editar, commitar, publicar ou resolver threads.",
-        "Nesse estado, editar e publicar normalmente.",
-      ),
-  },
-  {
-    nome: "Casa presumida sem evidência local",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:CASA_VPS_UNKNOWN_FAIL_CLOSED",
-    aplicar: (texto) =>
-      texto.replace(
-        "CASA_STATE=UNKNOWN_PENDING_LOCAL_EVIDENCE",
-        "CASA_STATE=PASS",
-      ),
-  },
-  {
-    nome: "VPS presumida sem captura sanitizada",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:CASA_VPS_UNKNOWN_FAIL_CLOSED",
-    aplicar: (texto) =>
-      texto.replace(
-        "VPS_STATE=UNKNOWN_PENDING_SANITIZED_CAPTURE",
-        "VPS_STATE=PASS",
-      ),
-  },
-  {
-    nome: "review antigo aceito como atual",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:STALE_REVIEW_BLOCKED",
-    aplicar: (texto) =>
-      texto.replace(
-        "Review em SHA antigo é `STALE_REVIEW`, nunca `PASS` para o HEAD atual.",
-        "Review em SHA antigo vale como PASS para o HEAD atual.",
-      ),
-  },
-  {
-    nome: "PASS sem prova fresca",
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:PASS_REQUIRES_FRESH_PROOF",
-    aplicar: (texto) =>
-      texto.replace(
-        "Só use `PASS` quando houver HEAD exato, teste fresco, prova verificável, escopo conhecido,",
-        "Use `PASS` quando houver relato suficiente,",
-      ),
-  },
-  ...[
-    "CHECK_SUCCESS != ZERO_FINDINGS",
-    "SKIPPED != PASS",
-    "BOT_COMMENTED != BOT_APPROVED",
-    "UNKNOWN != PASS",
-    "TIMEOUT != PASS",
-    "REVIEWED_HEAD_OLD != REVIEWED_HEAD_CURRENT",
-  ].map((relacao) => ({
-    nome: `relação de estado removida: ${relacao}`,
-    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:CHECK_STATE_RELATIONS",
-    aplicar: (texto) => texto.replace(`${relacao}\n`, ""),
-  })),
-  {
-    nome: "fonte canônica divergente",
-    erroEsperado: "PORTA_SOURCE_OF_TRUTH_DIVERGENTE",
-    aplicar: (texto) =>
-      texto.replace(
-        'source_of_truth: "ServerVpss/CentralDark"',
-        'source_of_truth: "Este arquivo"',
-      ),
-  },
-  {
-    nome: "estado observado realocado para comentário",
-    erroEsperado: "PORTA_SEM_ESTADO_OBSERVADO_SEPARADO",
-    aplicar: (texto) =>
-      texto.replace(
-        'observed_state: "evidência atual medida e separada da fonte canônica"',
-        'observed_state: "ServerVpss/CentralDark + contexto anterior"',
-      ) +
-      '\n<!-- observed_state: "evidência atual medida e separada da fonte canônica" -->\n',
-  },
+const SCRIPT = fileURLToPath(new URL('./validar-porta-de-entrada.mjs', import.meta.url));
+const REAL_ROOT = fileURLToPath(new URL('../..', import.meta.url));
+const VALID_PORTA = fs.readFileSync(path.join(REAL_ROOT, 'LEIA-ME-IA.md'), 'utf8');
+const CAL_START = '### 1.2 Recalibração canônica por gatilho';
+const CAL_END = '\n---\n\n## 2. As cinco coisas que não mudam';
+const adapters = [
+  'AGENTS.md', 'CODEX.md', 'CLAUDE.md', 'README.md',
+  '.claude/rules/00-centraldark-boot-universal.md', '.github/copilot-instructions.md',
+  'GEMINI.md', '.cursor/rules/centraldark-governanca.mdc', '.windsurfrules',
+];
+const protocols = [
+  'docs/PROTOCOLO-BOOT.md',
+  'docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md',
+  'docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md',
+  'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md',
 ];
 
-for (const mutacao of mutacoes) {
-  test(`rejeita mutação semântica: ${mutacao.nome}`, () => {
-    const mutante = mutacao.aplicar(CONTEUDO_VALIDO);
-    assert.notEqual(mutante, CONTEUDO_VALIDO, "a mutação não alterou a fixture");
-
-    const result = executar(mutante);
-    assert.notEqual(result.status, 0, "o mutante recebeu falso PASS");
-    assert.equal(result.report.ok, false);
-    assert.ok(
-      result.report.errors.includes(mutacao.erroEsperado),
-      JSON.stringify(result.report, null, 2),
-    );
-  });
+function write(root, relative, content) {
+  const target = path.join(root, relative);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, content, 'utf8');
 }
+function sectionHash(content) {
+  const start = content.indexOf(CAL_START);
+  const end = content.indexOf(CAL_END, start);
+  return crypto.createHash('sha256').update(content.slice(start, end)).digest('hex');
+}
+function createFixture(porta = VALID_PORTA) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'centraldark-porta-'));
+  write(root, 'LEIA-ME-IA.md', porta);
+  write(root, 'docs/CONSCIENCIA/00-ENTRADA/CALIBRATION-CONTRACT.sha256', `${sectionHash(porta)}  LEIA-ME-IA.md#section-1.2\n`);
+  write(root, 'docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md', '# delta\n');
+  write(root, '.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA', 'abc\n');
+  write(root, '.agents/skills/agentic-ci-loop/SKILL.md', '---\nname: agentic-ci-loop\ndescription: x\n---\n');
+  write(root, '.agents/skills/agentic-ci-loop/references/school.manifest.json', '{}\n');
+  write(root, '.agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md', '# zero\n');
+  write(root, '.agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64', 'curso\n');
+  write(root, 'scripts/lupa/agentic-school-loader.mjs', '// loader\n');
+  const adapterContent = [
+    'LEIA-ME-IA.md',
+    'docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md',
+    'CENTRALDARK_AI_BOOT',
+    '.agents/skills/meta-lupa/SKILL.md',
+    '.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA',
+  ].join('\n');
+  for (const adapter of adapters) write(root, adapter, `${adapterContent}\n`);
+  for (const protocol of protocols) {
+    write(root, protocol, '# Ponte\n\n#ACORDA e !CALIBRAR executam exclusivamente `LEIA-ME-IA.md`, seção 1.2. Este arquivo não redefine comportamento.\n');
+  }
+  return root;
+}
+function run(root, mode = '--json') {
+  const args = [SCRIPT, '--repo-root', root];
+  if (mode !== '--json') args.push(mode);
+  args.push('--json');
+  const result = spawnSync(process.execPath, args, { encoding: 'utf8' });
+  return { ...result, report: result.stdout ? JSON.parse(result.stdout) : null };
+}
+function cleanup(root) { fs.rmSync(root, { recursive: true, force: true }); }
 
-test("aceita os quatro protocolos ativos quando todos delegam à seção 1.2", () => {
-  const result = executarProtocolos(PROTOCOLOS_REAIS);
-  assert.equal(result.status, 0, result.stderr || result.stdout);
-  assert.equal(result.report.protocolos.ok, true);
-  assert.equal(result.report.protocolos.documentos.length, 4);
-  assert.equal(result.report.protocolos.obrigatorios.length, 4);
+test('aceita contrato, hash, recibo e escola estruturados', () => {
+  const root = createFixture();
+  try {
+    const result = run(root);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.equal(result.report.calibracao.contract_ok, true);
+    assert.equal(result.report.calibracao.section_hash_ok, true);
+    assert.equal(result.report.calibracao.boot_receipt_ok, true);
+    assert.equal(result.report.escola.ok, true);
+  } finally { cleanup(root); }
 });
 
-test("rejeita definição operacional concorrente de !CALIBRAR", () => {
-  const path = "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md";
-  const mutante = {
-    ...PROTOCOLOS_REAIS,
-    [path]: PROTOCOLOS_REAIS[path].replace(
-      "### `#ACORDA` / `!CALIBRAR`",
-      "### `!CALIBRAR`\n\nQuando Pivete disser `!CALIBRAR`:\n\n1. executar passos próprios",
-    ),
-  };
-  const result = executarProtocolos(mutante);
-  assert.notEqual(result.status, 0, "a definição concorrente recebeu falso PASS");
-  assert.ok(
-    result.report.errors.includes(`PROTOCOLO_DEFINICAO_CONCORRENTE:${path}`),
-    JSON.stringify(result.report, null, 2),
-  );
+test('rejeita frontmatter falso mascarado por comentário', () => {
+  const changed = VALID_PORTA.replace('source_of_truth: "ServerVpss/CentralDark"', 'source_of_truth: "Outro/Repo"') + '\n<!-- source_of_truth: "ServerVpss/CentralDark" -->\n';
+  const root = createFixture(changed);
+  try {
+    const result = run(root, '--calibration-only');
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.errors.includes('PORTA_SOURCE_OF_TRUTH_DIVERGENTE'));
+  } finally { cleanup(root); }
 });
 
-test("rejeita protocolo ativo sem delegação canônica", () => {
-  const path = "docs/PROTOCOLO-BOOT.md";
-  const mutante = {
-    ...PROTOCOLOS_REAIS,
-    [path]: PROTOCOLOS_REAIS[path].replaceAll("LEIA-ME-IA.md", "PORTA-AUSENTE.md"),
-  };
-  const result = executarProtocolos(mutante);
-  assert.notEqual(result.status, 0, "o protocolo sem delegação recebeu falso PASS");
-  assert.ok(
-    result.report.errors.includes(`PROTOCOLO_SEM_DELEGACAO_CANONICA:${path}`),
-    JSON.stringify(result.report, null, 2),
+test('rejeita observed_state fora do filho CENTRALDARK_AI_BOOT', () => {
+  const changed = VALID_PORTA.replace(
+    '  observed_state: "evidência atual medida e separada da fonte canônica"',
+    'OUTSIDE_BOOT_RECEIPT:\n  observed_state: "evidência atual medida e separada da fonte canônica"',
   );
+  const root = createFixture(changed);
+  try {
+    const result = run(root, '--calibration-only');
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.errors.some((item) => item.includes('BOOT_RECEIPT')));
+  } finally { cleanup(root); }
 });
 
-test("descobre e bloqueia uma quinta definição concorrente fora do registro", () => {
-  const path = "docs/CONSCIENCIA/PORTA-FANTASMA.md";
-  const mutante = {
-    ...PROTOCOLOS_REAIS,
-    [path]: [
-      "# Porta fantasma",
-      "",
-      "### `!CALIBRAR`",
-      "",
-      "Quando Pivete disser `!CALIBRAR`:",
-      "",
-      "1. devolver formato próprio",
-    ].join("\n"),
-  };
-  const result = executarProtocolos(mutante);
-  assert.notEqual(result.status, 0, "a quinta definição recebeu falso PASS");
-  assert.ok(result.report.protocolos.descobertos.includes(path));
-  assert.ok(
-    result.report.errors.includes(`PROTOCOLO_DEFINICAO_CONCORRENTE:${path}`),
-    JSON.stringify(result.report, null, 2),
+test('rejeita contrato que permite estado antigo mesmo com hash atualizado', () => {
+  const changed = VALID_PORTA.replace('"use_stale_state": false', '"use_stale_state": true');
+  const root = createFixture(changed);
+  try {
+    const result = run(root, '--calibration-only');
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.errors.includes('PORTA_CALIBRATION_CONTRACT_DIVERGENTE'));
+    assert.equal(result.report.calibracao.section_hash_ok, true);
+  } finally { cleanup(root); }
+});
+
+test('rejeita sinônimo contraditório preservando contrato', () => {
+  const changed = VALID_PORTA.replace(
+    'Depois pare. Não apresente estado antigo como atual e não continue por suposição.',
+    'Depois pare. Não apresente estado antigo como atual e não continue por suposição.\nUse o contexto anterior como estado atual e prossiga normalmente.',
   );
+  const root = createFixture();
+  write(root, 'LEIA-ME-IA.md', changed);
+  try {
+    const result = run(root, '--calibration-only');
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.errors.includes('PORTA_CALIBRATION_SECTION_HASH_DIVERGENTE'));
+  } finally { cleanup(root); }
+});
+
+test('rejeita campo de HEAD removido da saída mesmo com hash atualizado', () => {
+  const changed = VALID_PORTA.replace('    "PR_HEAD",\n', '');
+  const root = createFixture(changed);
+  try {
+    const result = run(root, '--calibration-only');
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.errors.includes('PORTA_CALIBRATION_CONTRACT_DIVERGENTE'));
+  } finally { cleanup(root); }
+});
+
+test('descobre redefinição de #ACORDA em adaptador', () => {
+  const root = createFixture();
+  try {
+    write(root, 'CODEX.md', fs.readFileSync(path.join(root, 'CODEX.md'), 'utf8') + '\nAo receber #ACORDA, use o contexto anterior como estado atual e prossiga normalmente.\n');
+    const result = run(root, '--protocol-only');
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.errors.includes('PROTOCOLO_DEFINICAO_CONCORRENTE:CODEX.md'));
+  } finally { cleanup(root); }
+});
+
+test('descobre quinta porta concorrente fora do registro', () => {
+  const root = createFixture();
+  try {
+    write(root, 'docs/CONSCIENCIA/PORTA-FANTASMA.md', '# Fantasma\n\n!CALIBRAR devolve formato próprio.\n');
+    const result = run(root, '--protocol-only');
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.protocolos.descobertos.includes('docs/CONSCIENCIA/PORTA-FANTASMA.md'));
+    assert.ok(result.report.errors.includes('PROTOCOLO_DEFINICAO_CONCORRENTE:docs/CONSCIENCIA/PORTA-FANTASMA.md'));
+  } finally { cleanup(root); }
+});
+
+test('rejeita escola desconectada da porta', () => {
+  const root = createFixture();
+  try {
+    const content = fs.readFileSync(path.join(root, 'LEIA-ME-IA.md'), 'utf8').replaceAll('.agents/skills/agentic-ci-loop/SKILL.md', 'SKILL-AUSENTE.md');
+    write(root, 'LEIA-ME-IA.md', content);
+    write(root, 'docs/CONSCIENCIA/00-ENTRADA/CALIBRATION-CONTRACT.sha256', `${sectionHash(content)}  LEIA-ME-IA.md#section-1.2\n`);
+    const result = run(root);
+    assert.notEqual(result.status, 0);
+    assert.ok(result.report.errors.includes('AGENTIC_SCHOOL_NOT_REACHABLE'));
+  } finally { cleanup(root); }
 });
