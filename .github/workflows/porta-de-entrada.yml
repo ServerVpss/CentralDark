@@ -1,9 +1,7 @@
 name: porta-de-entrada
 
-# Protege a porta universal e o mapa canônico do repositório inteiro.
-# O gate verifica alcance, contratos, identidade Git, raízes duplicadas,
-# novos caminhos paralelos e validações mascaradas. Nenhum adaptador guarda
-# uma cópia manual da governança e nenhum relatório transforma falha em verde.
+# Protege a porta universal, a escola agentic e o mapa canônico do repositório inteiro.
+# Nenhum adaptador guarda cópia manual da governança e nenhum estado incerto vira verde.
 
 on:
   pull_request:
@@ -22,9 +20,9 @@ concurrency:
 
 jobs:
   validar:
-    name: Porta e governança canônica estão íntegras?
+    name: Porta, escola e governança canônica estão íntegras?
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,11 +41,22 @@ jobs:
       - name: Testar falsificações semânticas do protocolo ACORDA
         run: node --test scripts/lupa/validar-porta-de-entrada.test.mjs
 
-      - name: Testar loop agentic de CI e porcentagem
-        run: node --test scripts/lupa/agentic-loop-progress.test.mjs
+      - name: Testar escola agentic e relatório de progresso
+        run: node --test scripts/lupa/agentic-school-loader.test.mjs scripts/lupa/agentic-loop-progress.test.mjs
 
-      - name: Validar status AGENTIC LOOP 4K
-        run: node scripts/lupa/agentic-loop-progress.mjs
+      - name: Testar fontes e pacote visual
+        env:
+          PYTHONPATH: scripts/lupa
+        run: python3 -m unittest scripts/lupa/test_validar_agentic_visual_package.py
+
+      - name: Provar fontes visuais versionadas
+        run: python3 scripts/lupa/validar_agentic_visual_package.py --json
+
+      - name: Bootar escola de refatoração crítica no HEAD exato
+        run: node scripts/lupa/agentic-school-loader.mjs --task critical-refactor --expected-head "$GITHUB_SHA" --json
+
+      - name: Validar progresso dinâmico da escola no HEAD exato
+        run: node scripts/lupa/agentic-loop-progress.mjs --expected-head "$GITHUB_SHA" --require-complete
 
       - name: Validar mapa e contratos do repositório inteiro
         env:
@@ -79,3 +88,4 @@ jobs:
             --head-sha "$HEAD_SHA" \
             --approved "$PIVETE_APPROVED"
           node scripts/lupa/validar-porta-de-entrada.mjs --json
+          node scripts/lupa/agentic-loop-progress.mjs --expected-head "$GITHUB_SHA" --json
