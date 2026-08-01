@@ -135,7 +135,8 @@ O curso integral fornecido pelo CHEFE permanece em
 `SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64`, preso ao SHA-256 registrado no manifesto.
 Ele é fonte de estudo, não contexto obrigatório de toda tarefa.
 
-O pacote visual original é versionado em partes Base64 reversíveis para não depender
-de suporte binário do agente. O CI reconstrói o ZIP, verifica SHA-256, os quatro
-membros, os hashes internos e as dimensões 3840×2160 dos dois PNGs. Uma imagem
-bonita sem pacote reproduzível não recebe `PASS`.
+A fonte SVG editável e o LEIA-ME do pacote ficam versionados. O ZIP recebido é
+validado contra SHA-256, quatro membros, hashes internos e dimensões 3840×2160
+dos dois PNGs quando fornecido ao guardrail. Como o conector de texto não publica
+bytes binários, o receipt registra essa limitação; ela nunca é convertida em `PASS`
+de armazenamento binário no Git.
