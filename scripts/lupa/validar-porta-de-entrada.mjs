@@ -12,6 +12,7 @@ const valueAfter = (name, fallback) => {
 const ROOT = resolve(valueAfter("--repo-root", process.cwd()));
 const JSON_OUT = argv.includes("--json");
 const CALIBRATION_ONLY = argv.includes("--calibration-only");
+const PROTOCOL_ONLY = argv.includes("--protocol-only");
 const PORTA = "LEIA-ME-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
@@ -82,6 +83,12 @@ const CALIBRATION_RULES = [
   },
 ];
 
+const PROTOCOLOS_ATIVOS = [
+  "docs/PROTOCOLO-BOOT.md",
+  "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md",
+  "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md",
+];
+
 const ADAPTADORES = [
   "AGENTS.md",
   "CODEX.md",
@@ -116,6 +123,33 @@ function extrairSecao(texto, inicio, fim) {
   if (start < 0) return "";
   const end = texto.indexOf(fim, start);
   return end < 0 ? texto.slice(start) : texto.slice(start, end);
+}
+
+function validarDelegacoes(errors) {
+  const detalhes = [];
+  for (const protocolo of PROTOCOLOS_ATIVOS) {
+    if (!existe(protocolo)) {
+      errors.push(`PROTOCOLO_ATIVO_AUSENTE:${protocolo}`);
+      detalhes.push({ path: protocolo, exists: false, delegates: false, concurrent: false });
+      continue;
+    }
+
+    const content = ler(protocolo);
+    const delegates =
+      content.includes("LEIA-ME-IA.md") && /(?:seção|secao|§)\s*1\.2/i.test(content);
+    const concurrent =
+      /^#{2,6}\s+`?!CALIBRAR`?\s*$/im.test(content) ||
+      /Quando (?:Pivete disser|o agente receber) `!CALIBRAR`\s*:/i.test(content) ||
+      /Ao receber `!CALIBRAR`, o agente deve\s*:/i.test(content);
+
+    if (!delegates) errors.push(`PROTOCOLO_SEM_DELEGACAO_CANONICA:${protocolo}`);
+    if (concurrent) errors.push(`PROTOCOLO_DEFINICAO_CONCORRENTE:${protocolo}`);
+    detalhes.push({ path: protocolo, exists: true, delegates, concurrent });
+  }
+  return {
+    documentos: detalhes,
+    ok: detalhes.length === PROTOCOLOS_ATIVOS.length && detalhes.every((item) => item.exists && item.delegates && !item.concurrent),
+  };
 }
 
 function caminhosCitados(texto) {
@@ -172,8 +206,8 @@ const errors = [];
 const warnings = [];
 
 if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
-if (!CALIBRATION_ONLY && !existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
-if (!CALIBRATION_ONLY && !existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
+if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
+if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
 
 const portaContent = ler(PORTA);
 const calibrationSection = extrairSecao(portaContent, CALIBRATION_START, CALIBRATION_END);
@@ -213,21 +247,28 @@ const calibrationReport = {
   ok: tokensOk && regrasOk && sourceOfTruthOk && observedStateOk,
 };
 
-if (CALIBRATION_ONLY) {
+const protocolReport = CALIBRATION_ONLY
+  ? { documentos: [], ok: true, skipped: true }
+  : validarDelegacoes(errors);
+
+if (CALIBRATION_ONLY || PROTOCOL_ONLY) {
+  const mode = CALIBRATION_ONLY ? "calibration-only" : "protocol-only";
   const report = {
     guardrail: "validar-porta-de-entrada",
-    mode: "calibration-only",
+    mode,
     porta: PORTA,
     calibracao: calibrationReport,
+    protocolos: protocolReport,
     errors,
     warnings,
-    ok: errors.length === 0 && calibrationReport.ok,
+    ok: errors.length === 0 && calibrationReport.ok && protocolReport.ok,
   };
   if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
   else {
     for (const error of errors) console.error(`ERRO ${error}`);
     console.log(
-      `CALIBRACAO_OK=${report.ok ? 1 : 0} ` +
+      `CALIBRACAO_OK=${calibrationReport.ok ? 1 : 0} ` +
+        `PROTOCOLOS_OK=${protocolReport.ok ? 1 : 0} ` +
         `TOKENS=${calibrationReport.tokens_presentes}/${calibrationReport.tokens_obrigatorios} ` +
         `REGRAS=${calibrationReport.regras_presentes}/${calibrationReport.regras_obrigatorias} ` +
         `SOURCE=${calibrationReport.source_of_truth_ok ? 1 : 0} ` +
@@ -284,6 +325,7 @@ const report = {
   contrato_delta: CONTRATO_DELTA,
   identidade_lupa: IDENTIDADE_LUPA,
   calibracao: calibrationReport,
+  protocolos: protocolReport,
   adaptadores_obrigatorios: ADAPTADORES,
   adaptadores_encontrados: ADAPTADORES.filter(existe),
   canonicos_encontrados: canonicalDocuments.length,
@@ -291,7 +333,7 @@ const report = {
   errors,
   warnings,
   known_debt_exceptions: 0,
-  ok: errors.length === 0 && calibrationReport.ok,
+  ok: errors.length === 0 && calibrationReport.ok && protocolReport.ok,
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
@@ -302,6 +344,7 @@ else {
     `PORTA_OK=${report.ok ? 1 : 0} ` +
       `CALIBRACAO_TOKENS=${report.calibracao.tokens_presentes}/${report.calibracao.tokens_obrigatorios} ` +
       `CALIBRACAO_REGRAS=${report.calibracao.regras_presentes}/${report.calibracao.regras_obrigatorias} ` +
+      `PROTOCOLOS=${report.protocolos.documentos.filter((item) => item.delegates && !item.concurrent).length}/${PROTOCOLOS_ATIVOS.length} ` +
       `SOURCE=${report.calibracao.source_of_truth_ok ? 1 : 0} ` +
       `OBSERVED=${report.calibracao.observed_state_ok ? 1 : 0} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
