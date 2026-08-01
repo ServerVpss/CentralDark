@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "school_id": "CENTRALDARK-AGENTIC-SCHOOL",
+  "source_of_truth": "ServerVpss/CentralDark",
+  "core_skill": ".agents/skills/agentic-ci-loop/SKILL.md",
+  "course": ".agents/skills/agentic-ci-loop/references/ESCOLA-OPERACIONAL-DE-SKILLS.md",
+  "lessons_ledger": ".agents/skills/agentic-ci-loop/references/learning-ledger.jsonl",
+  "source_artifacts": {
+    "course_txt_sha256": "5c6278447f026af115f940a5c5b3e55ebe2a6b1a7bc0a116a78872142005ad62",
+    "visual_zip_sha256": "455071e3e6e6c3bfef27a8257ed5405e9387706a39cee978fdbfd87eaba49a2b",
+    "visual_zip_bytes": 516097,
+    "png_complete_sha256": "fdfbfa472a860ebeeb28b8f4e91ea58d16509455a86a553f563bc3b588828967",
+    "png_clean_sha256": "c0eb9b21b1961e4321e34aed708d920e025763e9d47cfa81ddb6cbfa391f5c4c",
+    "svg_sha256": "c093ea23945d68781366dbdaebd95331ef786645e8eb73e0e76ad25a09d55c47",
+    "readme_sha256": "ef97498b3f88c038fd4a266860fd2d5c3d170bdae10ef309ac23e00a3278b3f8",
+    "course_txt_path": ".agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt",
+    "visual_zip_base64_parts": [
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part00",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part01",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part02",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part03",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part04",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part05",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part06",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part07",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part08",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part09",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part10",
+      "docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K.zip.base64.part11"
+    ]
+  },
+  "tasks": {
+    "critical-refactor": [
+      ".agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md"
+    ],
+    "debug": [
+      ".agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md"
+    ],
+    "feature": [
+      ".agents/skills/agentic-ci-loop/references/ESCOLA-OPERACIONAL-DE-SKILLS.md"
+    ],
+    "review": [
+      ".agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md"
+    ],
+    "skill-evolution": [
+      ".agents/skills/agentic-ci-loop/references/ESCOLA-OPERACIONAL-DE-SKILLS.md"
+    ]
+  },
+  "adapters": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "CODEX.md",
+    "GEMINI.md",
+    ".github/copilot-instructions.md",
+    ".cursor/rules/centraldark-governanca.mdc",
+    ".windsurfrules",
+    ".claude/rules/00-centraldark-boot-universal.md"
+  ],
+  "required_boot_tokens": [
+    "LEIA-ME-IA.md"
+  ]
+}
