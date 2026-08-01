@@ -27,7 +27,7 @@ Antes de responder ou agir:
 
 1. Ler `LEIA-ME-IA.md` integralmente.
 2. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-3. Ler `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` quando houver operação crítica, segurança, VPS, GitHub, deploy, automação ou evolução.
+3. Ler `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` quando a missão referenciá-lo explicitamente ou quando ele estiver em validação. Enquanto marcado `CANDIDATO_CANONICO`, ele é referência operacional em avaliação — não substitui os contratos já promovidos dos itens 1 e 2.
 4. Identificar o papel atual: coordenador, executor, debugger, revisor, judge, Hermes ou somente leitura.
 5. Confirmar a fonte da verdade e o estado atual por ferramenta.
 6. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
@@ -68,13 +68,13 @@ Regras mínimas:
 
 - durante CAPTURE ninguém altera, fecha porta, reinicia serviço ou promove;
 - código mede e classifica o conhecido; modelo interpreta apenas UNKNOWN ou ANOMALY;
-- `UNKNOWN`, `SKIPPED`, `ANOMALY` e `ACHADO_PENDENTE` nunca equivalem a PASS;
+- `UNKNOWN`, `ANOMALY`, `BLOCKED` (inclusive com `reason: SKIPPED`) e `ACHADO_PENDENTE` nunca equivalem a PASS;
 - APPLY exige baseline, backup, rollback e um único writer por escopo;
 - Judge e Writer precisam de contexto, permissões e credenciais separados;
 - falha de gate produz `BLOCKED`, nunca falso verde;
 - o LOOP termina somente com contraprova, receipt e decisão de SEGREDO/CHEFE.
 
-Contrato completo: `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md`.
+Detalhamento operacional (candidato, ainda não promovido): `docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md` — status `CANDIDATO_CANONICO`. A autoridade canônica permanece em `LEIA-ME-IA.md` e `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` até promoção explícita de SEGREDO/CHEFE.
 
 ## Trabalho dos agentes
 
@@ -122,7 +122,7 @@ Use somente placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BA
 
 ### Evidência e falso verde
 
-- `UNKNOWN`, `SKIPPED`, timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
+- `UNKNOWN`, `BLOCKED` com `reason: SKIPPED`, timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
 - Exigir causa, impacto, teste, contraprova, rollback e receipt presos ao mesmo HEAD.
 - Sinalizar fallback silencioso, resultado simulado, lista estática tratada como disponibilidade real ou aprovação sem prova.
 

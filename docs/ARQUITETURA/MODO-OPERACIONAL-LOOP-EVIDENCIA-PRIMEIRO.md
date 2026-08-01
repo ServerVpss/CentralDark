@@ -2,7 +2,8 @@
 title: "Modo Operacional — LOOP com evidência primeiro"
 status: "CANDIDATO_CANONICO"
 date: "2026-07-31"
-source_of_truth: "ServerVpss/CentralDark + evidência atual do alvo"
+source_of_truth: "ServerVpss/CentralDark"
+observed_target_evidence: "Estado observado do alvo (VPS, runtime, serviços). É insumo operacional, NÃO fonte canônica: nunca promove estado divergente ou não aprovado a cânone."
 scope: "Operações críticas, segurança, VPS, GitHub, deploy, automação e evolução do CentralDark/Hermes"
 ---
 
@@ -86,11 +87,12 @@ Nenhum tarball cru entra em prompt.
 Regras:
 
 - `umask 077`;
-- redação antes da gravação quando possível;
+- **a sanitização é obrigatória ANTES de gravar em disco e ANTES de enviar a qualquer agente** — não existe "quando possível";
+- **se a sanitização falhar ou não puder ser garantida: não persistir, não enviar, interromper a captura e retornar `status: BLOCKED` com `reason: SANITIZE_FAILED`**;
 - PM2 filtrado por allowlist de campos; proibido despejar ambiente completo;
 - tokens, headers, cookies, chaves, connection strings e certificados nunca são registrados;
 - manifesto por arquivo + SHA-256 do pacote;
-- segredo suspeito encontrado transforma o estado em `BLOCKED_SECRET_EXPOSURE`.
+- segredo suspeito encontrado resulta em `status: BLOCKED` com `reason: SECRET_EXPOSURE`.
 
 Sanitização reduz risco, mas não é assumida como prova matemática: o pacote passa por verificação antes de ser entregue a outro agente.
 
@@ -111,9 +113,21 @@ Estados permitidos:
 - `UNKNOWN` — informação insuficiente;
 - `ANOMALY` — divergência fora do padrão esperado;
 - `ACHADO_PENDENTE` — suspeita ainda sem arquivo, linha, commit e evidência sanitizada;
-- `BLOCKED` — gate falhou ou autorização ausente.
+- `BLOCKED` — gate falhou, autorização ausente, execução pulada ou exposição de segredo.
 
-`UNKNOWN`, `ANOMALY`, `SKIPPED` e `ACHADO_PENDENTE` nunca equivalem a PASS.
+`BLOCKED` é o único estado de bloqueio. O motivo vai no campo `reason`, nunca no nome do estado:
+
+| Situação | `status` | `reason` |
+|---|---|---|
+| segredo suspeito no pacote | `BLOCKED` | `SECRET_EXPOSURE` |
+| sanitização falhou/não garantida | `BLOCKED` | `SANITIZE_FAILED` |
+| etapa não executada (cota, ferramenta ausente, revisão não rodada) | `BLOCKED` | `SKIPPED` |
+| gate falhou | `BLOCKED` | `GATE_FAILED` |
+| autorização ausente | `BLOCKED` | `AUTH_MISSING` |
+
+Não existe estado `BLOCKED_SECRET_EXPOSURE` nem estado `SKIPPED`: um produtor jamais emite valor que o consumidor não saiba interpretar.
+
+`UNKNOWN`, `ANOMALY`, `BLOCKED` e `ACHADO_PENDENTE` nunca equivalem a PASS.
 
 ## 7. APPLY — uma cirurgia, um escritor
 
@@ -123,12 +137,31 @@ Regras:
 
 - vários leitores podem investigar em paralelo;
 - existe um único writer por escopo/branch/worktree;
+- a troca de writer exige handoff explícito e registrado (bloco abaixo); sem ele, o novo writer não atua;
 - correção automática somente dentro de allowlist conhecida;
 - menor movimento eficaz;
 - arquivos exatos e resultado esperado declarados antes da escrita;
 - segurança, firewall, Docker, PM2 e systemd exigem contraprova pós-mudança;
 - falhou qualquer gate: rollback automático quando seguro e status `BLOCKED`;
 - nenhuma promoção automática por texto bonito ou conclusão do executor.
+
+### 7.1 Handoff de Writer
+
+Writer único não basta: a autoridade de escrita precisa ser transferida de forma explícita e auditável. Antes de outro writer atuar no mesmo escopo, registre:
+
+```yaml
+WRITER_HANDOFF:
+  previous_writer: ""
+  new_writer: ""
+  scope: ""
+  branch: ""
+  head_sha: ""
+  state: "DONE|PARTIAL|BLOCKED"
+  authorization: ""
+  receipt: ""
+```
+
+Handoff ausente ou incompleto mantém o escopo com o writer anterior. Assumir escrita sem handoff registrado é violação de contrato, não iniciativa.
 
 ## 8. JUDGE — independência real
 
@@ -171,6 +204,8 @@ OPERATION_RECEIPT:
   writer: ""
   judge: ""
   status: "PASS|FAIL|UNKNOWN|ANOMALY|BLOCKED"
+  reason: "SECRET_EXPOSURE|SANITIZE_FAILED|SKIPPED|GATE_FAILED|AUTH_MISSING|"
+  impact: ""
   mutations: []
   tests: []
   counterproof: []
@@ -178,6 +213,8 @@ OPERATION_RECEIPT:
   chief_decision: "PENDING|APPROVED|REJECTED"
   next_step: ""
 ```
+
+`reason` é obrigatório sempre que `status` for `BLOCKED` (valores do enum acima) e fica vazio nos demais estados. `impact` descreve o efeito real observado — o que ficou sem prova, sem execução ou sem cobertura.
 
 Receipt sem HEAD, hash, alvo e estado comprovado é incompleto.
 

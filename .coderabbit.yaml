@@ -89,8 +89,13 @@ knowledge_base:
     scope: "local"
   pull_requests:
     scope: "local"
+  # MCP desativado por decisao de seguranca (finding do PR 585).
+  # "enabled" com disabled_servers vazio herda TODOS os servidores MCP —
+  # incluindo ferramentas mutaveis (execute_command, escrita, deploy, PM2).
+  # Permanece desativado ate existir allowlist explicita, versionada, testada
+  # e deny-by-default. Nao reativar sem esse gate.
   mcp:
-    usage: "enabled"
+    usage: "disabled"
     disabled_servers: []
 
 issue_enrichment:
