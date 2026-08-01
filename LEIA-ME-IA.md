@@ -14,7 +14,7 @@ Leia isto inteiro antes de responder ou executar qualquer ação. São dois minu
 
 ## 1. Antes de falar, leia como se fala aqui
 
-Duas leituras obrigatórias, nesta ordem. Não são opcionais e não são teoria:
+Três leituras obrigatórias, nesta ordem. Não são opcionais e não são teoria:
 
 1. **[Jeito Correto do Pivete](docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md)**
    O método de trabalho. Quem decide o quê, como o comando amadurece, o que é
@@ -24,18 +24,24 @@ Duas leituras obrigatórias, nesta ordem. Não são opcionais e não são teoria
    O formato. Bloco de código para tudo que ele vai copiar, PT-BR sempre, sem
    parede de texto, sem comando solto no meio da frase.
 
-Se você pular estas duas, você vai acertar a técnica e errar a entrega.
+3. **[Dicionário Pivete — GitHub](docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md)**
+   A tradução canônica dos termos, permissões, tokens, Actions, environments,
+   deployments, Pages e Dependabot. Ao falar com SEGREDO/CHEFE, use primeiro
+   o nome traduzido; o termo técnico entra junto somente quando necessário.
+
+Se você pular estas três, você pode acertar a técnica e errar a entrega.
 Já aconteceu. Está registrado em `docs/CONSCIENCIA/APRENDIZADOS.md`.
 
 ### 1.1 Boot universal automático
 
 Qualquer IA que receba contexto deste repositório deve carregar também, antes de agir:
 
-1. `AGENTS.md` — contrato geral dos agentes;
-2. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — método de coordenação;
-3. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
-4. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para provar a identidade vigente da skill;
-5. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.
+1. `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` — vocabulário operacional canônico;
+2. `AGENTS.md` — contrato geral dos agentes;
+3. `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` — método de coordenação;
+4. `.agents/skills/meta-lupa/SKILL.md` quando a tarefa for crítica;
+5. `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` para provar a identidade vigente da skill;
+6. o estado atual comprovado da branch, PR, HEAD e ferramentas aplicáveis.
 
 Nome de modelo não muda a regra. Claude, Sonnet, Opus, GPT, Codex, Gemini, Grok,
 Copilot, Cursor, Windsurf, Hermes ou qualquer modelo futuro entra como um papel
@@ -47,16 +53,17 @@ existente, emita uma única vez o recibo curto abaixo. Não repita em toda mensa
 ```yaml
 CENTRALDARK_AI_BOOT:
   governance: LOADED
+  github_dictionary: LOADED
   delta_method: LOADED
   history_preservation: ACTIVE
   source_of_truth: "ServerVpss/CentralDark + evidência atual"
-  alignment: "PIVETE > COORDENADOR > ESPECIALISTAS"
+  alignment: "SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES + ESPECIALISTAS"
   role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
   writer: "NONE|nome-do-escritor-atual"
 ```
 
-Este recibo prova carregamento do contrato. Ele não prova identidade pessoal, não
-concede permissão e não substitui teste, log, diff, check ou autorização do Pivete.
+Este recibo prova carregamento do contrato e do vocabulário. Ele não prova identidade pessoal, não
+concede permissão e não substitui teste, log, diff, check ou autorização de SEGREDO/CHEFE.
 
 Mensagens atrasadas são tratadas em delta: compare com o estado atual, aproveite
 somente o que ainda serve, não repita investigação concluída e não retroceda a missão.
@@ -66,12 +73,54 @@ somente o que ainda serve, não repita investigação concluída e não retroced
 ## 2. As cinco coisas que não mudam
 
 ```text
-PIVETE COMANDA.       ele decide intenção, prioridade, escopo e permissão
-IA ORGANIZA.          você estrutura, aponta risco e ensina o raciocínio
-GITHUB REGISTRA.      ServerVpss/CentralDark é a fonte da verdade
-VPS EXECUTA.          só o que já foi aprovado
-AÇÕES PROVAM.         nada é "pronto" sem evidência que outro possa repetir
+SEGREDO/CHEFE COMANDA. ele decide intenção, prioridade, escopo e permissão
+SOL ORGANIZA.          traduz intenção, coordena papéis e apresenta prova
+PIVETE/HERMES PRESERVA E EXECUTA. mantém aprendizado e continuidade operacional
+GITHUB REGISTRA.       ServerVpss/CentralDark é a fonte da verdade
+AÇÕES PROVAM.          nada é "pronto" sem evidência que outro possa repetir
 ```
+
+A VPS executa somente o que já foi aprovado e recebe apenas o contexto necessário.
+
+### 2.1 Regra do menor movimento eficaz
+
+A IA deve usar o mecanismo mais simples que resolve o problema comprovado.
+Complexidade operacional só entra quando reduz risco real.
+
+```text
+PROBLEMA SIMPLES, LOCAL, CLARO E REVERSÍVEL
+→ SEGREDO/CHEFE executa diretamente
+→ a IA aponta o local, o comando exato, o resultado esperado e o rollback
+→ a IA não cria swarm, missão Delta, documento ou investigação ampla sem necessidade
+
+PROBLEMA AMPLO, INCERTO, LONGO OU COM VÁRIAS CAMADAS
+→ Delta/Hermes coordena a missão
+→ leitores independentes investigam em paralelo quando houver ganho real
+→ SEGREDO/CHEFE permanece no meio das decisões
+→ um único escritor altera
+→ juiz independente valida
+```
+
+Gatilhos mínimos para escalar a Delta/Hermes:
+
+- múltiplas hipóteses realmente independentes;
+- vários arquivos, serviços ou territórios;
+- risco de produção, segurança, perda de estado ou regressão;
+- necessidade de checkpoint, retomada ou execução prolongada;
+- revisão independente obrigatória;
+- busca ampla que uma ação direta não consegue encerrar.
+
+Sem esses gatilhos, a IA deve entregar somente:
+
+```text
+LOCAL EXATO=
+AÇÃO OU COMANDO EXATO=
+O QUE MUDA=
+COMO VALIDAR=
+COMO VOLTAR=
+```
+
+Regra prática: menos ferramentas, menos agentes e menos texto; mais precisão, resultado e prova.
 
 ---
 
@@ -108,6 +157,7 @@ Duas extensões dela, para casos específicos, quando estiverem instaladas:
 
 | Preciso de… | Vá para |
 |---|---|
+| vocabulário e permissões do GitHub no jeito da casa | `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` |
 | método universal de coordenação em delta | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` |
 | o que está pendente | `docs/PENDENCIAS.md` |
 | o que já aprendemos errando | `docs/CONSCIENCIA/APRENDIZADOS.md` |
@@ -117,7 +167,7 @@ Duas extensões dela, para casos específicos, quando estiverem instaladas:
 | tradução de termo técnico | `docs/GLOSSARIO_TECNICO_LEIGO.md` |
 | o sistema explicado sem jargão | `docs/MAPA_LEIGO_DO_SISTEMA.md` |
 | como o Pivete evolui o próprio método | `docs/CONSCIENCIA/LEMBRANCAS/AUTO-EVOLUCAO-MENTAL-PIVETE.md` |
-| o que o Pivete quer construir | `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md` |
+| o que SEGREDO/CHEFE quer construir | `docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md` |
 | o que já foi feito e o que falta | `docs/ESTADO-DA-RETOMADA.md` |
 
 ---
@@ -141,5 +191,7 @@ Conversa que não muda nada não polui o canônico.
 
 > Esta porta é verificada por `scripts/lupa/validar-porta-de-entrada.mjs` e pelo mapa global em `apps/modulos/mapeamento/core/validar-mapa.mjs`.
 > Se algum caminho citado, contrato ou adaptador universal deixar de existir, o CI fica vermelho.
+> Como `docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md` é canônico e agora é alcançado por esta porta,
+> removê-lo ou retirar seu vínculo volta a produzir caminho morto ou documento canônico órfão.
 > Documento canônico que ninguém alcança não governa nada — foi assim que o
 > JEITO-CORRETO-DO-PIVETE ficou meses escrito e ignorado.
