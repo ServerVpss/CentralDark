@@ -2,7 +2,7 @@
 title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
-source_of_truth: "Este arquivo"
+source_of_truth: "ServerVpss/CentralDark"
 ---
 
 # LEIA-ME-IA — comece por aqui
@@ -56,7 +56,8 @@ CENTRALDARK_AI_BOOT:
   github_dictionary: LOADED
   delta_method: LOADED
   history_preservation: ACTIVE
-  source_of_truth: "ServerVpss/CentralDark + evidência atual"
+  source_of_truth: "ServerVpss/CentralDark"
+  observed_state: "evidência atual medida e separada da fonte canônica"
   alignment: "SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES + ESPECIALISTAS"
   role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
   writer: "NONE|nome-do-escritor-atual"
@@ -67,6 +68,267 @@ concede permissão e não substitui teste, log, diff, check ou autorização de 
 
 Mensagens atrasadas são tratadas em delta: compare com o estado atual, aproveite
 somente o que ainda serve, não repita investigação concluída e não retroceda a missão.
+
+### 1.2 Recalibração canônica por gatilho (`#ACORDA` / `!CALIBRAR`)
+
+Esta seção é o protocolo integral de recalibração do repositório. Ela existe para que
+personalizações externas mantenham apenas um gatilho curto, sem copiar a governança inteira.
+
+**Gatilho mínimo externo para qualquer chat, agente ou CLI:**
+
+```text
+Quando minha mensagem começar com #ACORDA ou !CALIBRAR, ignorando maiúsculas/minúsculas,
+consulte o GitHub remoto ServerVpss/CentralDark, leia LEIA-ME-IA.md na branch padrão vigente
+e execute integralmente a seção 1.2 antes de responder. Se o GitHub estiver indisponível,
+responda BLOCKED_GITHUB_UNAVAILABLE e não use estado antigo como atual.
+```
+
+O carregamento desta seção **não dispara uma nova recalibração**. Cada mensagem-gatilho executa
+uma única passagem completa com `REENTRY_GUARD=ONE_SHOT`, evitando recursão entre adaptadores.
+
+#### 1.2.1 Não confiar no contexto anterior
+
+- Não trate conversa, memória, resumo, screenshot ou relatório antigo como estado atual.
+- Use conteúdo anterior somente como pista até confirmação por prova recente.
+- Nunca transforme relato, silêncio, timeout, `SKIPPED` ou ausência de evidência em `PASS`.
+
+#### 1.2.2 Consultar o GitHub remoto primeiro
+
+Consulte `ServerVpss/CentralDark` e identifique:
+
+- branch padrão e `MAIN_HEAD`;
+- `LEIA-ME-IA.md`, `AGENTS.md` e a fonte canônica da missão atual;
+- missão, escopo, autoridade, Writer, branch, HEAD, PR, issue, bloqueadores, última prova e próximo gate;
+- PRs, branches, commits, workflows, bots e componentes de autonomia relacionados.
+
+Se o GitHub estiver indisponível:
+
+```text
+STATUS=BLOCKED_GITHUB_UNAVAILABLE
+```
+
+Não apresente estado antigo como atual e não continue por suposição.
+
+#### 1.2.3 Radar global leve e aprofundamento do escopo ativo
+
+Faça primeiro uma varredura global leve do repositório e aprofunde somente:
+
+- missão ativa;
+- PR e branch ativos;
+- branches e PRs relacionados;
+- componentes de autonomia capazes de alterar o resultado;
+- qualquer área com drift, colisão, risco ou prova vencida.
+
+O radar global deve levantar, quando acessível:
+
+- PRs abertos e Drafts;
+- issues de missão abertas;
+- commits recentes relevantes;
+- workflows, required checks e branch protection;
+- CodeRabbit, Codex e demais revisores;
+- Writer, Judge, Promotor, Sentinela e controladores;
+- caminhos canônicos mortos e PRs substituídos, abandonados ou concorrentes.
+
+Não audite cegamente todo o histórico quando uma análise dirigida resolve.
+
+#### 1.2.4 Reconciliar o grafo de commits
+
+Para o escopo ativo, medir:
+
+```text
+MAIN_HEAD=
+LOCAL_HEAD=
+REMOTE_BRANCH_HEAD=
+PR_HEAD=
+MERGE_BASE=
+AHEAD_BY=
+BEHIND_BY=
+COMMITS_UNIQUE_TO_MAIN=
+COMMITS_UNIQUE_TO_BRANCH=
+COMMITS_SINCE_LAST_PROOF=
+```
+
+`LOCAL_HEAD` só pode ser preenchido quando houver acesso local comprovado.
+Review em SHA antigo é `STALE_REVIEW`, nunca `PASS` para o HEAD atual.
+
+#### 1.2.5 Reconciliar PRs, issues e review threads
+
+- Leia corpo, commits, checks, reviews e threads do PR ativo.
+- Use GraphQL para obter `isResolved` e `isOutdated` quando disponível.
+- Não confie na contagem escrita no corpo do PR.
+- Classifique cada thread como:
+  - `VALID_CURRENT`;
+  - `ALREADY_FIXED_UNRESOLVED`;
+  - `DUPLICATE`;
+  - `OUTDATED`;
+  - `INVALID_WITH_PROOF`;
+  - `BLOCKED_NEEDS_SCOPE`.
+- Não resolva thread sem contraprova no HEAD atual.
+
+#### 1.2.6 Verificar bots, workflows e autonomia
+
+Crie uma matriz para CodeRabbit, Codex, GitHub Actions, Meta Lupa, Writer, Judge,
+Promotor, Sentinela, bot controller e workflows de autonomia.
+
+Para cada componente, informe:
+
+- habilitado;
+- executou;
+- conclusão;
+- HEAD analisado;
+- pendência;
+- bloqueio;
+- dependência humana.
+
+Regras obrigatórias:
+
+```text
+CHECK_SUCCESS != ZERO_FINDINGS
+SKIPPED != PASS
+BOT_COMMENTED != BOT_APPROVED
+UNKNOWN != PASS
+TIMEOUT != PASS
+REVIEWED_HEAD_OLD != REVIEWED_HEAD_CURRENT
+```
+
+Autonomia só pode ser declarada ponta a ponta quando houver prova executável de quem lê,
+quem escreve, quem julga, quem promove e quais gates ainda dependem do CHEFE.
+
+Classificação permitida:
+
+```text
+AUTONOMY_DISCOVERED
+AUTONOMY_PARTIAL
+AUTONOMY_BLOCKED
+AUTONOMY_PROVED_END_TO_END
+```
+
+#### 1.2.7 Casa e VPS falham fechadas
+
+Só declare estado da Casa ou VPS com acesso direto ou evidência sanitizada recente.
+Sem prova atual, use exatamente:
+
+```text
+CASA_STATE=UNKNOWN_PENDING_LOCAL_EVIDENCE
+VPS_STATE=UNKNOWN_PENDING_SANITIZED_CAPTURE
+```
+
+Nunca reutilize captura antiga como estado vivo. Nunca leia, revele ou reproduza secrets.
+Não faça deploy, restart ou mutação de PM2, Docker, systemd, Caddy, firewall ou produção
+sem autorização explícita para o alvo exato.
+
+#### 1.2.8 Preservar um Writer por escopo
+
+- Muitos leitores podem investigar em paralelo.
+- Existe somente um Writer por branch, worktree e escopo.
+- Judge deve ser separado do Writer.
+- Troca de Writer exige handoff explícito e comprovado.
+- Se outro chat, CLI ou agente estiver escrevendo no mesmo escopo:
+
+```text
+THIS_CHAT_ROLE=READ_ONLY
+STATUS=WAITING_ACTIVE_WRITER|BLOCKED_WRITER_COLLISION
+```
+
+Nesse estado, não editar, commitar, publicar ou resolver threads.
+
+#### 1.2.9 Autorizações e método
+
+Sem autorização específica para o alvo exato, não executar:
+
+- push;
+- criação de PR;
+- merge;
+- Ready for Review;
+- deploy;
+- restart;
+- exclusão;
+- force-push;
+- reset destrutivo;
+- alteração em `main`;
+- mudança em produção.
+
+Problema simples, claro e reversível usa o menor movimento eficaz.
+Problema amplo, incerto ou longo usa Delta/Hermes, leitores paralelos úteis,
+Writer único, Judge independente, teste e contraprova.
+
+#### 1.2.10 Detectar e explicar drift
+
+Compare:
+
+- GitHub remoto;
+- estado canônico;
+- provas locais fornecidas;
+- conversa.
+
+O estado comprovado mais recente vence. Quando houver divergência:
+
+```text
+STATUS=STATE_DRIFT
+```
+
+Mostre valor anterior, valor atual, fonte de cada valor, impacto e próximo movimento seguro.
+
+#### 1.2.11 Regra de PASS
+
+Só use `PASS` quando houver HEAD exato, teste fresco, prova verificável, escopo conhecido,
+ausência de colisão de Writer e Judge independente quando exigido.
+
+Não aceite como `PASS`:
+
+- texto bonito;
+- status verde isolado;
+- grep vazio;
+- relato do próprio Writer;
+- `SKIPPED`;
+- `UNKNOWN`;
+- timeout;
+- ausência de evidência.
+
+#### 1.2.12 Saída obrigatória da recalibração
+
+A resposta deve começar, sem introdução, com:
+
+```text
+MISSION_ID=
+STATUS=
+THIS_CHAT_ROLE=
+WRITER=
+SCOPE=
+DEFAULT_BRANCH=
+MAIN_HEAD=
+BRANCH=
+HEAD=
+REMOTE_BRANCH_HEAD=
+ACTIVE_PR=
+ACTIVE_ISSUE=
+MERGE_BASE=
+AHEAD_BY=
+BEHIND_BY=
+COMMITS_SINCE_LAST_PROOF=
+RELATED_PRS=
+LAST_PROOF=
+WORKFLOW_STATUS=
+BOT_STATUS=
+AUTONOMY_STATUS=
+CASA_STATE=
+VPS_STATE=
+P0_OPEN=
+P1_OPEN=
+UNKNOWN_CRITICAL=
+BLOCKERS=
+NEXT_GATE=
+DRIFT=
+REENTRY_GUARD=ONE_SHOT
+```
+
+Depois do bloco:
+
+- explique somente fatos que mudam decisão;
+- separe `PROVADO`, `INFERÊNCIA` e `UNKNOWN`;
+- informe o próximo movimento exato;
+- não repita histórico inteiro;
+- continue somente sobre pendências abertas.
 
 ---
 
