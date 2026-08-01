@@ -1,41 +1,133 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+inheritance: true
 language: "pt-BR"
-early_access: false
+tone_instructions: "Direto, técnico e orientado a evidência. Priorize P0/P1, causa, impacto, teste, contraprova, rollback e receipt. Não transforme UNKNOWN, SKIPPED ou ausência de prova em PASS."
+early_access: true
+enable_free_tier: true
 
 reviews:
   profile: "assertive"
   request_changes_workflow: false
   high_level_summary: true
+  high_level_summary_in_walkthrough: true
   review_status: true
   review_details: true
+  review_progress: true
+  changed_files_summary: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  suggested_reviewers: true
   poem: false
+  enable_prompt_for_ai_agents: true
   auto_review:
     enabled: true
     drafts: true
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 0
   path_instructions:
     - path: "AGENTS.md"
       instructions: >-
         Verifique autoridade, ordem de boot, escritor único por escopo,
-        separação Writer/Judge, fail-closed e compatibilidade com LEIA-ME-IA.md.
-        Não aceite UNKNOWN, SKIPPED ou ausência de prova como PASS.
+        separação Writer/Judge/Promotor, fail-closed e compatibilidade com
+        LEIA-ME-IA.md. Não aceite UNKNOWN, SKIPPED ou ausência de prova como PASS.
+    - path: "LEIA-ME-IA.md"
+      instructions: >-
+        Trate como contrato canônico de entrada. Sinalize qualquer mudança que
+        crie autoridade concorrente, fallback silencioso ou desvio do mapa atual.
     - path: "docs/ARQUITETURA/**"
       instructions: >-
         Confronte a documentação com AGENTS.md, LEIA-ME-IA.md e o mapa canônico.
         Sinalize contradições de autoridade, entrypoints concorrentes e versões
-        paralelas V2/V3/NOVO/FINAL.
+        paralelas V2/V3/NOVO/FINAL/COPY/BACKUP.
+    - path: "docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/**"
+      instructions: >-
+        Verifique se o delta respeita o programa vivo, as dependências entre
+        PRs-filhos, a separação Casa/VPS/GitHub e os gates humanos existentes.
     - path: ".github/workflows/**"
       instructions: >-
-        Verifique princípio do menor privilégio, separação de credenciais entre
-        Judge e Promotor, checkout preso ao SHA esperado, ausência de execução
-        de código não confiável com token privilegiado e nenhum fallback silencioso.
+        Verifique menor privilégio, separação de credenciais entre Writer, Judge
+        e Promotor, checkout preso ao SHA esperado, ausência de código não
+        confiável com token privilegiado e nenhum fallback silencioso.
     - path: "scripts/**"
       instructions: >-
         Exija evidência reproduzível, timeout explícito, erro fail-closed,
-        sanitização de secrets, rollback e receipt preso ao HEAD testado.
+        sanitização de secrets, dry-run, rollback e receipt preso ao HEAD testado.
     - path: "apps/**"
       instructions: >-
         Sinalize duplicação de módulos ou entrypoints, mudança fora do mapa,
         efeitos colaterais sem autorização e regressões de compatibilidade.
+    - path: "src/apps/modulos/crm/**"
+      instructions: >-
+        Trate CRM como módulo do sistema único, não como produto concorrente.
+        Exija contratos de integração, migração reversível e ausência de duplicação.
+    - path: "**/*"
+      instructions: >-
+        Antes de concluir, confronte os Learnings aplicáveis, issues relacionadas,
+        PRs anteriores e guidelines canônicas. Classifique achados como FACT,
+        INFERENCE ou UNKNOWN e priorize apenas lacunas consequenciais.
 
 chat:
   auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  web_search:
+    enabled: true
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "LEIA-ME-IA.md"
+      - "docs/ARQUITETURA/**/*.md"
+      - "docs/PLANO-MESTRE-HERMES-CASA-MENTE-ESTENDIDA/**/*.md"
+  learnings:
+    scope: "local"
+  issues:
+    scope: "local"
+  pull_requests:
+    scope: "local"
+  mcp:
+    usage: "enabled"
+    disabled_servers: []
+
+issue_enrichment:
+  auto_enrich:
+    enabled: true
+  planning:
+    enabled: true
+    auto_planning:
+      enabled: true
+      labels:
+        - "plan-me"
+        - "!no-plan"
+        - "!blocked"
+  labeling:
+    auto_apply_labels: false
+    labeling_instructions:
+      - label: "plan-me"
+        instructions: >-
+          Missão ou mudança ampla que exige pesquisa do repositório, decomposição,
+          ownership por escopo, dependências e plano agent-ready antes da escrita.
+      - label: "blocked"
+        instructions: >-
+          Existe dependência, conflito de writer, ausência de prova crítica ou gate
+          humano obrigatório que impede avanço seguro.
+      - label: "security"
+        instructions: >-
+          Mudança ou achado relacionado a credenciais, permissões, exposição,
+          autenticação, sandbox, secret scan ou menor privilégio.
+      - label: "sol"
+        instructions: >-
+          Mudança relacionada ao SOL Desktop, voz, Codex, bridge, interface ou
+          experiência voice-first.
+      - label: "vps"
+        instructions: >-
+          Mudança relacionada a Linux, Docker, PM2, systemd, Caddy, firewall,
+          Portainer, observabilidade ou execução na VPS.
+      - label: "delta"
+        instructions: >-
+          Mudança relacionada ao contrato Delta, ledger append-only, handoff,
+          receipts, memória ou reverificação independente.
