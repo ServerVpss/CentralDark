@@ -1,0 +1,76 @@
+name: Autonomia — promoção segura
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request_target:
+    types: [opened, reopened, ready_for_review, synchronize, edited, labeled, unlabeled]
+    branches: [main]
+  workflow_run:
+    workflows:
+      - porta-de-entrada
+      - codex-validate
+      - lupa-conformance
+      - Lupa Drift Guard
+      - PR auto-review (Codex + checklist)
+      - Pipeline — Telegram + Painel
+    types: [completed]
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  actions: read
+  checks: read
+
+concurrency:
+  group: autonomia-promocao-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.ref }}
+  cancel-in-progress: true
+
+env:
+  BOT_TRUSTED_AUTHORS: segredounlock
+  BOT_REQUIRED_WORKFLOWS: porta-de-entrada,codex-validate,lupa-conformance,Lupa Drift Guard,PR auto-review (Codex + checklist),Pipeline — Telegram + Painel
+
+jobs:
+  sweep:
+    name: Juiz + promotor com recibo SHA-256
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout exclusivo da main confiável
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Testar juiz, promotor e filtro da varredura
+        run: |
+          set -euo pipefail
+          node --test scripts/github-autonomia-promocao.test.mjs
+          node --test scripts/github-autonomia-varredura.test.mjs
+
+      - name: Varrer PRs autorizados e promover somente estado comprovado
+        # Secret válido no Actions: PROMOTION_TOKEN. Prefixo GITHUB_ é reservado.
+        env:
+          JUDGE_TOKEN: ${{ github.token }}
+          PROMOTION_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
+          BOT_SWEEP_DIR: ${{ runner.temp }}/centraldark-autonomia
+        run: node scripts/github-autonomia-varredura.mjs
+
+      - name: Publicar recibos e eventos sanitizados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autonomia-sweep-${{ github.run_id }}
+          path: ${{ runner.temp }}/centraldark-autonomia
+          if-no-files-found: warn
+          retention-days: 14
