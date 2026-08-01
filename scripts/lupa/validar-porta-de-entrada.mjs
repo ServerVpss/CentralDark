@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { join, posix, resolve } from "node:path";
+import crypto from 'node:crypto';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join, posix, resolve } from 'node:path';
 
 const argv = process.argv.slice(2);
 const valueAfter = (name, fallback) => {
@@ -9,437 +10,318 @@ const valueAfter = (name, fallback) => {
   return index >= 0 && argv[index + 1] ? argv[index + 1] : fallback;
 };
 
-const ROOT = resolve(valueAfter("--repo-root", process.cwd()));
-const JSON_OUT = argv.includes("--json");
-const CALIBRATION_ONLY = argv.includes("--calibration-only");
-const PROTOCOL_ONLY = argv.includes("--protocol-only");
+const ROOT = resolve(valueAfter('--repo-root', process.cwd()));
+const JSON_OUT = argv.includes('--json');
+const CALIBRATION_ONLY = argv.includes('--calibration-only');
+const PROTOCOL_ONLY = argv.includes('--protocol-only');
 
-const PORTA = "LEIA-ME-IA.md";
-const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
-const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
-const CALIBRATION_START = "### 1.2 Recalibração canônica por gatilho";
-const CALIBRATION_END = "\n---\n\n## 2. As cinco coisas que não mudam";
-const BOOT_BLOCK_START = "```yaml\nCENTRALDARK_AI_BOOT:";
-const EXPECTED_SOURCE_OF_TRUTH = "ServerVpss/CentralDark";
-const EXPECTED_OBSERVED_STATE = "evidência atual medida e separada da fonte canônica";
+const PORTA = 'LEIA-ME-IA.md';
+const CONTRATO_DELTA = 'docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md';
+const IDENTIDADE_LUPA = '.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA';
+const SCHOOL_SKILL = '.agents/skills/agentic-ci-loop/SKILL.md';
+const SCHOOL_LOADER = 'scripts/lupa/agentic-school-loader.mjs';
+const CALIBRATION_HASH = 'docs/CONSCIENCIA/00-ENTRADA/CALIBRATION-CONTRACT.sha256';
+const CALIBRATION_START = '### 1.2 Recalibração canônica por gatilho';
+const CALIBRATION_END = '\n---\n\n## 2. As cinco coisas que não mudam';
+const CONTRACT_START = '<!-- CENTRALDARK_CALIBRATION_CONTRACT_START -->';
+const CONTRACT_END = '<!-- CENTRALDARK_CALIBRATION_CONTRACT_END -->';
+const EXPECTED_SOURCE = 'ServerVpss/CentralDark';
+const EXPECTED_OBSERVED = 'evidência atual medida e separada da fonte canônica';
+const SHA256 = /^[0-9a-f]{64}$/;
 
-const CALIBRATION_TOKENS = [
-  CALIBRATION_START,
-  "#ACORDA",
-  "!CALIBRAR",
-  "MISSION_ID=UNRESOLVED",
-  "STATUS=BLOCKED_GITHUB_UNAVAILABLE",
-  "STATUS=STATE_DRIFT",
-  "THIS_CHAT_ROLE",
-  "COMMITS_SINCE_LAST_PROOF",
-  "AUTONOMY_STATUS",
-  "CASA_STATE",
-  "VPS_STATE",
-  "REENTRY_GUARD=ONE_SHOT",
+const REQUIRED_OUTPUT_FIELDS = [
+  'MISSION_ID', 'STATUS', 'THIS_CHAT_ROLE', 'WRITER', 'SCOPE', 'DEFAULT_BRANCH',
+  'MAIN_HEAD', 'LOCAL_HEAD', 'BRANCH', 'HEAD', 'REMOTE_BRANCH_HEAD', 'PR_HEAD',
+  'ACTIVE_PR', 'ACTIVE_ISSUE', 'MERGE_BASE', 'AHEAD_BY', 'BEHIND_BY',
+  'COMMITS_UNIQUE_TO_MAIN', 'COMMITS_UNIQUE_TO_BRANCH', 'COMMITS_SINCE_LAST_PROOF',
+  'RELATED_PRS', 'LAST_PROOF', 'WORKFLOW_STATUS', 'BOT_STATUS', 'AUTONOMY_STATUS',
+  'CASA_STATE', 'VPS_STATE', 'P0_OPEN', 'P1_OPEN', 'UNKNOWN_CRITICAL', 'BLOCKERS',
+  'NEXT_GATE', 'DRIFT', 'REENTRY_GUARD',
 ];
-
-const CALIBRATION_RULES = [
-  {
-    id: "REENTRY_FAIL_CLOSED",
-    pattern:
-      /O carregamento desta seção \*\*não dispara uma nova recalibração\*\*[\s\S]{0,260}`REENTRY_GUARD=ONE_SHOT`, evitando recursão entre adaptadores\./,
-  },
-  {
-    id: "GITHUB_UNAVAILABLE_SERIALIZATION",
-    pattern:
-      /Se o GitHub estiver indisponível, a resposta deve começar exatamente com:[\s\S]{0,120}MISSION_ID=UNRESOLVED\nSTATUS=BLOCKED_GITHUB_UNAVAILABLE[\s\S]{0,180}Não apresente estado antigo como atual e não continue por suposição\./,
-  },
-  {
-    id: "EXTERNAL_TRIGGER_GITHUB_FAILURE_SERIALIZATION",
-    pattern:
-      /Se o GitHub estiver indisponível,[\s\S]{0,180}comece a resposta com MISSION_ID=UNRESOLVED e STATUS=BLOCKED_GITHUB_UNAVAILABLE;[\s\S]{0,100}não use estado antigo como atual\./,
-  },
-  {
-    id: "DRIFT_RECONCILIATION",
-    pattern:
-      /Compare:[\s\S]{0,180}GitHub remoto;[\s\S]{0,180}estado canônico;[\s\S]{0,180}provas locais fornecidas;[\s\S]{0,180}conversa\.[\s\S]{0,180}O estado comprovado mais recente vence\.[\s\S]{0,140}STATUS=STATE_DRIFT/,
-  },
-  {
-    id: "WRITER_COLLISION_FAIL_CLOSED",
-    pattern:
-      /Se outro chat, CLI ou agente estiver escrevendo no mesmo escopo:[\s\S]{0,180}THIS_CHAT_ROLE=READ_ONLY[\s\S]{0,160}STATUS=WAITING_ACTIVE_WRITER\|BLOCKED_WRITER_COLLISION[\s\S]{0,180}não editar, commitar, publicar ou resolver threads\./,
-  },
-  {
-    id: "CASA_VPS_UNKNOWN_FAIL_CLOSED",
-    pattern:
-      /CASA_STATE=UNKNOWN_PENDING_LOCAL_EVIDENCE[\s\S]{0,120}VPS_STATE=UNKNOWN_PENDING_SANITIZED_CAPTURE[\s\S]{0,220}Nunca reutilize captura antiga como estado vivo\./,
-  },
-  {
-    id: "STALE_REVIEW_BLOCKED",
-    pattern: /Review em SHA antigo é `STALE_REVIEW`, nunca `PASS` para o HEAD atual\./,
-  },
-  {
-    id: "CHECK_STATE_RELATIONS",
-    pattern:
-      /Relações obrigatórias de estado:[\s\S]{0,120}CHECK_SUCCESS != ZERO_FINDINGS\nSKIPPED != PASS\nBOT_COMMENTED != BOT_APPROVED\nUNKNOWN != PASS\nTIMEOUT != PASS\nREVIEWED_HEAD_OLD != REVIEWED_HEAD_CURRENT/,
-  },
-  {
-    id: "PASS_REQUIRES_FRESH_PROOF",
-    pattern:
-      /Só use `PASS` quando houver HEAD exato, teste fresco, prova verificável, escopo conhecido,[\s\S]{0,180}ausência de colisão de Writer e Judge independente quando exigido\./,
-  },
+const STATE_RELATIONS = [
+  'CHECK_SUCCESS != ZERO_FINDINGS', 'SKIPPED != PASS', 'BOT_COMMENTED != BOT_APPROVED',
+  'UNKNOWN != PASS', 'TIMEOUT != PASS', 'REVIEWED_HEAD_OLD != REVIEWED_HEAD_CURRENT',
 ];
+const PASS_REQUIRES = [
+  'EXACT_HEAD', 'FRESH_TEST', 'VERIFIABLE_EVIDENCE', 'KNOWN_SCOPE',
+  'NO_WRITER_COLLISION', 'INDEPENDENT_JUDGE_WHEN_REQUIRED',
+];
+const EXPECTED_CONTRACT = {
+  schema_version: 1,
+  contract_id: 'CENTRALDARK_CALIBRATION_CONTRACT',
+  source_of_truth: EXPECTED_SOURCE,
+  triggers: ['#ACORDA', '!CALIBRAR'],
+  case_insensitive_prefix_match: true,
+  reentry_guard: 'ONE_SHOT',
+  github_first: true,
+  github_unavailable: {
+    mission_id: 'UNRESOLVED', status: 'BLOCKED_GITHUB_UNAVAILABLE',
+    use_stale_state: false, continue_by_assumption: false,
+  },
+  drift: {
+    status: 'STATE_DRIFT', newest_proved_state_wins: true,
+    compare: ['GITHUB_REMOTE', 'CANONICAL_STATE', 'LOCAL_EVIDENCE', 'CONVERSATION'],
+  },
+  writer_collision: {
+    role: 'READ_ONLY', statuses: ['WAITING_ACTIVE_WRITER', 'BLOCKED_WRITER_COLLISION'],
+    may_write: false,
+  },
+  unknown_states: {
+    casa: 'UNKNOWN_PENDING_LOCAL_EVIDENCE', vps: 'UNKNOWN_PENDING_SANITIZED_CAPTURE',
+  },
+  state_relations: STATE_RELATIONS,
+  pass_requires: PASS_REQUIRES,
+  required_output_fields: REQUIRED_OUTPUT_FIELDS,
+};
 
 const PROTOCOLOS_OBRIGATORIOS = [
-  "docs/PROTOCOLO-BOOT.md",
-  "docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md",
-  "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md",
-  "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md",
+  'docs/PROTOCOLO-BOOT.md',
+  'docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md',
+  'docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md',
+  'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md',
 ];
-
 const ADAPTADORES = [
-  "AGENTS.md",
-  "CODEX.md",
-  "CLAUDE.md",
-  "README.md",
-  ".claude/rules/00-centraldark-boot-universal.md",
-  ".github/copilot-instructions.md",
-  "GEMINI.md",
-  ".cursor/rules/centraldark-governanca.mdc",
-  ".windsurfrules",
+  'AGENTS.md', 'CODEX.md', 'CLAUDE.md', 'README.md',
+  '.claude/rules/00-centraldark-boot-universal.md', '.github/copilot-instructions.md',
+  'GEMINI.md', '.cursor/rules/centraldark-governanca.mdc', '.windsurfrules',
 ];
-
-const ENTRADAS = [PORTA, ...ADAPTADORES];
-const GERADOS = [
-  /^docs\/RELATORIOS\//,
-  /^apps\/modulos\/status\//,
-  /^docs\/ESTADO-DA-RETOMADA\.md$/,
-];
-const IGNORAR_SCAN_PROTOCOLOS = [
+const IGNORE_TRIGGER_SCAN = [
   /^docs\/_LEGADO_ROOT_DOCS_CONFLITOS\//,
   /^docs\/RELATORIOS\//,
   /^docs\/CONSCIENCIA\/ARTEFATOS\//,
+  /^\.agents\/skills\/agentic-ci-loop\/references\/SOURCE-/,
 ];
 
-const existe = (relativePath) => existsSync(join(ROOT, relativePath));
-const ler = (relativePath) => {
-  try {
-    return readFileSync(join(ROOT, relativePath), "utf8");
-  } catch {
-    return "";
-  }
+const exists = (relativePath) => existsSync(join(ROOT, relativePath));
+const read = (relativePath) => {
+  try { return readFileSync(join(ROOT, relativePath), 'utf8'); }
+  catch { return ''; }
 };
-const ehGerado = (relativePath) => GERADOS.some((pattern) => pattern.test(relativePath));
+const hash = (text) => crypto.createHash('sha256').update(text, 'utf8').digest('hex');
+const assertEqual = (actual, expected) => JSON.stringify(actual) === JSON.stringify(expected);
 
-function extrairSecao(texto, inicio, fim) {
-  const start = texto.indexOf(inicio);
-  if (start < 0) return "";
-  const end = texto.indexOf(fim, start);
-  return end < 0 ? texto.slice(start) : texto.slice(start, end);
-}
-
-function extrairBlocoCodigo(texto, inicio) {
-  const start = texto.indexOf(inicio);
-  if (start < 0) return "";
-  const contentStart = start + inicio.length;
-  const end = texto.indexOf("\n```", contentStart);
-  return end < 0 ? "" : texto.slice(start, end + 4);
-}
-
-function listarArquivos(directory, predicate = () => true) {
-  const output = [];
-  const walk = (relativeDirectory) => {
-    let entries = [];
-    try {
-      entries = readdirSync(join(ROOT, relativeDirectory), { withFileTypes: true });
-    } catch {
-      return;
+function parseFlatYamlBlock(content, blockName = null) {
+  const lines = content.split(/\r?\n/).filter((line) => line.trim() !== '');
+  let body = lines;
+  if (blockName !== null) {
+    if (lines[0] !== `${blockName}:`) throw new Error(`YAML_ROOT_INVALID:${blockName}`);
+    body = lines.slice(1);
+  }
+  const result = {};
+  for (const line of body) {
+    const expectedIndent = blockName === null ? '' : '  ';
+    if (!line.startsWith(expectedIndent) || (blockName !== null && /^\S/.test(line))) {
+      throw new Error(`YAML_STRUCTURE_INVALID:${line}`);
     }
+    const trimmed = line.slice(expectedIndent.length);
+    const match = trimmed.match(/^([A-Za-z0-9_]+):\s*(.*)$/);
+    if (!match) throw new Error(`YAML_LINE_INVALID:${line}`);
+    const [, key, raw] = match;
+    if (Object.hasOwn(result, key)) throw new Error(`YAML_DUPLICATE_KEY:${key}`);
+    result[key] = raw.replace(/^"|"$/g, '');
+  }
+  return result;
+}
 
+function parseFrontmatter(content) {
+  if (!content.startsWith('---\n')) throw new Error('FRONTMATTER_MISSING');
+  const end = content.indexOf('\n---\n', 4);
+  if (end < 0) throw new Error('FRONTMATTER_UNCLOSED');
+  return parseFlatYamlBlock(content.slice(4, end));
+}
+
+function extractSection(content) {
+  const start = content.indexOf(CALIBRATION_START);
+  const end = content.indexOf(CALIBRATION_END, start);
+  if (start < 0 || end < 0) throw new Error('CALIBRATION_SECTION_MISSING');
+  return content.slice(start, end);
+}
+
+function extractMarkedJson(section) {
+  const start = section.indexOf(CONTRACT_START);
+  const end = section.indexOf(CONTRACT_END, start);
+  if (start < 0 || end < 0) throw new Error('CALIBRATION_CONTRACT_MARKERS_MISSING');
+  const fragment = section.slice(start + CONTRACT_START.length, end);
+  const match = fragment.match(/```json\s*([\s\S]*?)\s*```/);
+  if (!match) throw new Error('CALIBRATION_CONTRACT_BLOCK_MISSING');
+  try { return JSON.parse(match[1]); }
+  catch { throw new Error('CALIBRATION_CONTRACT_JSON_INVALID'); }
+}
+
+function extractBootReceipt(content) {
+  const marker = '```yaml\nCENTRALDARK_AI_BOOT:';
+  const start = content.indexOf(marker);
+  if (start < 0) throw new Error('BOOT_RECEIPT_MISSING');
+  const end = content.indexOf('\n```', start + marker.length);
+  if (end < 0) throw new Error('BOOT_RECEIPT_UNCLOSED');
+  return parseFlatYamlBlock(content.slice(start + '```yaml\n'.length, end), 'CENTRALDARK_AI_BOOT');
+}
+
+function listFiles(relativeDirectory = '.') {
+  const output = [];
+  const walk = (relative) => {
+    let entries;
+    try { entries = readdirSync(join(ROOT, relative), { withFileTypes: true }); }
+    catch { return; }
     for (const entry of entries) {
-      const relativePath = posix.join(relativeDirectory, entry.name);
-      if (entry.isSymbolicLink()) continue;
-      if (entry.isDirectory()) {
-        if (!/^(?:node_modules|\.git)$/.test(entry.name)) walk(relativePath);
-        continue;
-      }
-      if (predicate(relativePath)) output.push(relativePath);
+      if (entry.isSymbolicLink() || ['.git', 'node_modules', 'dist', 'build'].includes(entry.name)) continue;
+      const candidate = posix.join(relative === '.' ? '' : relative, entry.name);
+      if (entry.isDirectory()) walk(candidate);
+      else output.push(candidate);
     }
   };
-
-  walk(directory);
+  walk(relativeDirectory);
   return output;
 }
 
-function validarContradicoes(secao, errors) {
-  const linhasPermitidas = new Set([
-    "não use estado antigo como atual.",
-    "não apresente estado antigo como atual e não continue por suposição.",
-  ]);
-  const contradicoes = secao
-    .split(/\r?\n/)
-    .map((line) => line.trim().toLocaleLowerCase("pt-BR"))
-    .filter(
-      (line) =>
-        (line.includes("estado antigo") || line.includes("por suposição")) &&
-        !linhasPermitidas.has(line),
-    );
-
-  if (contradicoes.length > 0) errors.push("PORTA_DIRETIVA_CONTRADITORIA");
-  return { ok: contradicoes.length === 0, linhas: contradicoes };
+function hasTrigger(content) { return content.includes('#ACORDA') || content.includes('!CALIBRAR'); }
+function looksOperationalTrigger(content) {
+  if (!hasTrigger(content)) return false;
+  return unsafeTriggerDirective(content) ||
+    /^#{2,6}[^\n]*(?:#ACORDA|!CALIBRAR)/im.test(content) ||
+    /(?:quando|ao receber|se receber)[^\n]{0,120}(?:#ACORDA|!CALIBRAR)/i.test(content) ||
+    /(?:#ACORDA|!CALIBRAR)[^\n]{0,160}(?:execute|executar|devolva|retorne|use|continue|ignore|formato)/i.test(content);
 }
-
-function temDefinicaoOperacionalConcorrente(content) {
+function hasDelegationNearby(lines, index) {
+  const window = lines.slice(Math.max(0, index - 2), Math.min(lines.length, index + 7)).join('\n');
+  return /LEIA-ME-IA\.md/i.test(window) && /(?:se[cç][aã]o|secao|§)\s*1\.2/i.test(window);
+}
+function unsafeTriggerDirective(content) {
   const patterns = [
-    /^#{2,6}\s+`?!CALIBRAR`?\s*$/im,
-    /Quando (?:Pivete disser|o agente receber) `!CALIBRAR`\s*:/i,
-    /Ao receber `!CALIBRAR`, o agente deve\s*:/i,
-    /-\s+\*\*`!CALIBRAR`\*\*[\s\S]{0,700}\b(?:Interrompa|Compare|Atualize|Devolva|Execute|Retorne)\b/i,
+    /(?:use|utilize|reutilize|trate)\s+(?:o\s+)?(?:contexto|mem[oó]ria|estado)\s+(?:anterior|antigo)\s+como\s+estado\s+atual/i,
+    /ignore\s+(?:a\s+)?(?:delega[cç][aã]o|se[cç][aã]o\s*1\.2|LEIA-ME-IA)/i,
+    /(?:sa[ií]da|serializa[cç][aã]o|formato)\s+(?:pr[oó]prio|alternativo|diferente)/i,
+    /(?<!n[aã]o\s)continue\s+(?:normalmente|por\s+suposi[cç][aã]o)/i,
   ];
   return patterns.some((pattern) => pattern.test(content));
 }
 
-function validarProtocolos(errors) {
-  const detalhes = [];
-  const candidatos = new Set(PROTOCOLOS_OBRIGATORIOS);
-
-  for (const path of listarArquivos("docs", (item) => item.endsWith(".md"))) {
-    if (IGNORAR_SCAN_PROTOCOLOS.some((pattern) => pattern.test(path))) continue;
-    if (path === PORTA) continue;
-    const content = ler(path);
-    if (temDefinicaoOperacionalConcorrente(content)) candidatos.add(path);
+function validateTriggerDocuments(errors) {
+  const candidates = new Set(PROTOCOLOS_OBRIGATORIOS);
+  for (const adapter of ADAPTADORES) if (exists(adapter) && hasTrigger(read(adapter))) candidates.add(adapter);
+  for (const file of listFiles()) {
+    if (!/\.(?:md|mdc)$/.test(file) && file !== '.windsurfrules') continue;
+    if (file === PORTA || IGNORE_TRIGGER_SCAN.some((pattern) => pattern.test(file))) continue;
+    if (looksOperationalTrigger(read(file))) candidates.add(file);
   }
 
-  for (const protocolo of [...candidatos].sort()) {
-    if (!existe(protocolo)) {
-      errors.push(`PROTOCOLO_ATIVO_AUSENTE:${protocolo}`);
-      detalhes.push({ path: protocolo, exists: false, delegates: false, concurrent: false });
+  const documents = [];
+  for (const file of [...candidates].sort()) {
+    if (!exists(file)) {
+      errors.push(`PROTOCOLO_ATIVO_AUSENTE:${file}`);
+      documents.push({ path: file, exists: false, delegates: false, concurrent: false });
       continue;
     }
-
-    const content = ler(protocolo);
-    const delegates =
-      content.includes("LEIA-ME-IA.md") && /(?:seção|secao|§)\s*1\.2/i.test(content);
-    const concurrent = temDefinicaoOperacionalConcorrente(content);
-
-    if (!delegates) errors.push(`PROTOCOLO_SEM_DELEGACAO_CANONICA:${protocolo}`);
-    if (concurrent) errors.push(`PROTOCOLO_DEFINICAO_CONCORRENTE:${protocolo}`);
-    detalhes.push({ path: protocolo, exists: true, delegates, concurrent });
+    const content = read(file);
+    const lines = content.split(/\r?\n/);
+    const triggerIndexes = lines.map((line, index) => hasTrigger(line) ? index : -1).filter((index) => index >= 0);
+    const delegates = triggerIndexes.length > 0 && triggerIndexes.every((index) => hasDelegationNearby(lines, index));
+    const concurrent = unsafeTriggerDirective(content) || !delegates;
+    if (!delegates) errors.push(`PROTOCOLO_SEM_DELEGACAO_CANONICA:${file}`);
+    if (concurrent) errors.push(`PROTOCOLO_DEFINICAO_CONCORRENTE:${file}`);
+    documents.push({ path: file, exists: true, delegates, concurrent, trigger_lines: triggerIndexes.map((i) => i + 1) });
   }
+  return { obrigatorios: PROTOCOLOS_OBRIGATORIOS, descobertos: [...candidates].sort(), documentos: documents, ok: documents.every((item) => item.exists && item.delegates && !item.concurrent) };
+}
+
+function validateCalibration(errors) {
+  const content = read(PORTA);
+  let frontmatter = {};
+  let boot = {};
+  let contract = {};
+  let section = '';
+  let sectionHash = '';
+  let expectedHash = '';
+  try { frontmatter = parseFrontmatter(content); }
+  catch (error) { errors.push(`PORTA_${error.message}`); }
+  try { boot = extractBootReceipt(content); }
+  catch (error) { errors.push(`PORTA_${error.message}`); }
+  try {
+    section = extractSection(content);
+    contract = extractMarkedJson(section);
+  } catch (error) { errors.push(`PORTA_${error.message}`); }
+
+  if (section) sectionHash = hash(section);
+  const identity = read(CALIBRATION_HASH).trim().split(/\s+/)[0] || '';
+  if (SHA256.test(identity)) expectedHash = identity;
+  else errors.push('CALIBRATION_HASH_INVALID');
+
+  const frontmatterOk = frontmatter.source_of_truth === EXPECTED_SOURCE;
+  const bootOk = boot.source_of_truth === EXPECTED_SOURCE && boot.observed_state === EXPECTED_OBSERVED && boot.agentic_school === 'LOADED';
+  const contractOk = assertEqual(contract, EXPECTED_CONTRACT);
+  const hashOk = Boolean(sectionHash && expectedHash && sectionHash === expectedHash);
+  if (!frontmatterOk) errors.push('PORTA_SOURCE_OF_TRUTH_DIVERGENTE');
+  if (!bootOk) errors.push('PORTA_BOOT_RECEIPT_INVALID');
+  if (!contractOk) errors.push('PORTA_CALIBRATION_CONTRACT_DIVERGENTE');
+  if (!hashOk) errors.push('PORTA_CALIBRATION_SECTION_HASH_DIVERGENTE');
 
   return {
-    obrigatorios: PROTOCOLOS_OBRIGATORIOS,
-    descobertos: [...candidatos].sort(),
-    documentos: detalhes,
-    ok:
-      detalhes.length >= PROTOCOLOS_OBRIGATORIOS.length &&
-      detalhes.every((item) => item.exists && item.delegates && !item.concurrent),
+    triggers: contract.triggers || [], reentry_guard: contract.reentry_guard || null,
+    frontmatter_ok: frontmatterOk, boot_receipt_ok: bootOk, contract_ok: contractOk,
+    section_sha256: sectionHash, expected_section_sha256: expectedHash, section_hash_ok: hashOk,
+    output_fields: contract.required_output_fields || [], ok: frontmatterOk && bootOk && contractOk && hashOk,
   };
 }
 
-function caminhosCitados(texto) {
-  const encontrados = new Set();
-  const padroes = [
-    /\[[^\]]*\]\(([^)\s#]+)\)/g,
-    /`([^`\n]+\.(?:md|mdc|mjs|js|json|py|sh|ps1|yml|yaml))`/g,
-    /(?:^|[\s(>])((?:docs|scripts|apps|infra|conexao-ia|\.agents|\.github|\.claude|\.cursor)\/[^\s`)"',;]+)/gm,
-  ];
-
-  for (const pattern of padroes) {
-    let match;
-    while ((match = pattern.exec(texto)) !== null) {
-      let candidate = match[1].trim().replace(/^\.\//, "").replace(/[.,;:]+$/, "");
-      if (!candidate || candidate.startsWith("http") || candidate.startsWith("#")) continue;
-      if (!candidate.includes("/") && !ENTRADAS.includes(candidate)) continue;
-      candidate = posix.normalize(candidate);
-      if (candidate.startsWith("../") || candidate.startsWith("/")) continue;
-      encontrados.add(candidate);
+function validateAdapters(errors) {
+  const required = [PORTA, CONTRATO_DELTA, 'CENTRALDARK_AI_BOOT', '.agents/skills/meta-lupa/SKILL.md', IDENTIDADE_LUPA];
+  const details = [];
+  for (const adapter of ADAPTADORES) {
+    if (!exists(adapter)) {
+      errors.push(`ADAPTADOR_AUSENTE:${adapter}`);
+      details.push({ path: adapter, exists: false, ok: false });
+      continue;
     }
+    const content = read(adapter);
+    const missing = required.filter((token) => !content.includes(token));
+    for (const token of missing) errors.push(`ADAPTADOR_SEM_TOKEN:${adapter}:${token}`);
+    if (/SKILL_COMMIT_SHA\s*:/i.test(content)) errors.push(`ADAPTADOR_COM_SHA_COPIADO:${adapter}`);
+    details.push({ path: adapter, exists: true, missing, ok: missing.length === 0 });
   }
-
-  return [...encontrados];
+  return details;
 }
 
-function canonicos() {
-  return ["docs", ".agents"].flatMap((directory) =>
-    listarArquivos(directory, (relativePath) => {
-      if (!relativePath.endsWith(".md") || ehGerado(relativePath)) return false;
-      return /^status:\s*"?CAN[OÔ]NICO"?/im.test(ler(relativePath).slice(0, 700));
-    }),
-  );
+function validateSchool(errors) {
+  const required = [SCHOOL_SKILL, SCHOOL_LOADER,
+    '.agents/skills/agentic-ci-loop/references/school.manifest.json',
+    '.agents/skills/agentic-ci-loop/references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md',
+    '.agents/skills/agentic-ci-loop/references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64'];
+  const missing = required.filter((path) => !exists(path));
+  for (const path of missing) errors.push(`AGENTIC_SCHOOL_PATH_MISSING:${path}`);
+  const boot = read(PORTA);
+  if (!boot.includes(SCHOOL_SKILL) || !boot.includes(SCHOOL_LOADER)) errors.push('AGENTIC_SCHOOL_NOT_REACHABLE');
+  return { required, missing, ok: missing.length === 0 && boot.includes(SCHOOL_SKILL) && boot.includes(SCHOOL_LOADER) };
 }
 
 const errors = [];
 const warnings = [];
+if (!exists(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
+if (!exists(CALIBRATION_HASH)) errors.push(`CALIBRATION_HASH_AUSENTE:${CALIBRATION_HASH}`);
+if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !exists(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
+if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !exists(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
 
-if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
-if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(CONTRATO_DELTA)) {
-  errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
-}
-if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(IDENTIDADE_LUPA)) {
-  errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
-}
-
-const portaContent = ler(PORTA);
-const calibrationSection = extrairSecao(portaContent, CALIBRATION_START, CALIBRATION_END);
-const bootReceipt = extrairBlocoCodigo(portaContent, BOOT_BLOCK_START);
-const calibrationTokensPresent = CALIBRATION_TOKENS.filter((token) => calibrationSection.includes(token));
-const calibrationRulesPresent = CALIBRATION_RULES.filter((rule) => rule.pattern.test(calibrationSection));
-const tokensOk = calibrationTokensPresent.length === CALIBRATION_TOKENS.length;
-const regrasOk = calibrationRulesPresent.length === CALIBRATION_RULES.length;
-const sourceFrontmatterOk = /^source_of_truth:\s*"ServerVpss\/CentralDark"\s*$/m.test(
-  portaContent.slice(0, 700),
-);
-const sourceBootOk = /^\s{2}source_of_truth:\s*"ServerVpss\/CentralDark"\s*$/m.test(
-  bootReceipt,
-);
-const sourceOfTruthOk = sourceFrontmatterOk && sourceBootOk;
-const observedStateOk = new RegExp(
-  `^\\s{2}observed_state:\\s*"${EXPECTED_OBSERVED_STATE}"\\s*$`,
-  "m",
-).test(bootReceipt);
-const contradictions = validarContradicoes(calibrationSection, errors);
-
-for (const token of CALIBRATION_TOKENS) {
-  if (!calibrationSection.includes(token)) errors.push(`PORTA_SEM_CALIBRACAO:${token}`);
-}
-for (const rule of CALIBRATION_RULES) {
-  if (!rule.pattern.test(calibrationSection)) {
-    errors.push(`PORTA_REGRA_CALIBRACAO_INVALIDA:${rule.id}`);
-  }
-}
-if (!sourceOfTruthOk) errors.push("PORTA_SOURCE_OF_TRUTH_DIVERGENTE");
-if (!observedStateOk) errors.push("PORTA_SEM_ESTADO_OBSERVADO_SEPARADO");
-
-const calibrationReport = {
-  gatilhos: ["#ACORDA", "!CALIBRAR"],
-  reentry_guard: "ONE_SHOT",
-  tokens_ok: tokensOk,
-  regras_ok: regrasOk,
-  source_of_truth_ok: sourceOfTruthOk,
-  source_frontmatter_ok: sourceFrontmatterOk,
-  source_boot_ok: sourceBootOk,
-  observed_state_ok: observedStateOk,
-  contradictions_ok: contradictions.ok,
-  contradictions: contradictions.linhas,
-  tokens_presentes: calibrationTokensPresent.length,
-  tokens_obrigatorios: CALIBRATION_TOKENS.length,
-  regras_presentes: calibrationRulesPresent.length,
-  regras_obrigatorias: CALIBRATION_RULES.length,
-  regras: CALIBRATION_RULES.map((rule) => ({ id: rule.id, ok: rule.pattern.test(calibrationSection) })),
-  ok: tokensOk && regrasOk && sourceOfTruthOk && observedStateOk && contradictions.ok,
-};
-
-const protocolReport = CALIBRATION_ONLY
-  ? { obrigatorios: [], descobertos: [], documentos: [], ok: true, skipped: true }
-  : validarProtocolos(errors);
-
-if (CALIBRATION_ONLY || PROTOCOL_ONLY) {
-  const mode = CALIBRATION_ONLY ? "calibration-only" : "protocol-only";
-  const report = {
-    guardrail: "validar-porta-de-entrada",
-    mode,
-    porta: PORTA,
-    calibracao: calibrationReport,
-    protocolos: protocolReport,
-    errors,
-    warnings,
-    ok: errors.length === 0 && calibrationReport.ok && protocolReport.ok,
-  };
-  if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
-  else {
-    for (const error of errors) console.error(`ERRO ${error}`);
-    console.log(
-      `CALIBRACAO_OK=${calibrationReport.ok ? 1 : 0} ` +
-        `PROTOCOLOS_OK=${protocolReport.ok ? 1 : 0} ` +
-        `TOKENS=${calibrationReport.tokens_presentes}/${calibrationReport.tokens_obrigatorios} ` +
-        `REGRAS=${calibrationReport.regras_presentes}/${calibrationReport.regras_obrigatorias} ` +
-        `SOURCE=${calibrationReport.source_of_truth_ok ? 1 : 0} ` +
-        `OBSERVED=${calibrationReport.observed_state_ok ? 1 : 0} ` +
-        `CONTRADICTIONS=${calibrationReport.contradictions.length} ` +
-        `ERROS=${errors.length}`,
-    );
-  }
-  process.exit(report.ok ? 0 : 1);
-}
-
-for (const adapter of ADAPTADORES) {
-  if (!existe(adapter)) {
-    errors.push(`ADAPTADOR_AUSENTE:${adapter}`);
-    continue;
-  }
-  const content = ler(adapter);
-  const required = [
-    PORTA,
-    CONTRATO_DELTA,
-    "CENTRALDARK_AI_BOOT",
-    ".agents/skills/meta-lupa/SKILL.md",
-    IDENTIDADE_LUPA,
-  ];
-  for (const token of required) {
-    if (!content.includes(token)) errors.push(`ADAPTADOR_SEM_TOKEN:${adapter}:${token}`);
-  }
-  if (/SKILL_COMMIT_SHA\s*:/i.test(content)) {
-    errors.push(`ADAPTADOR_COM_SHA_COPIADO:${adapter}`);
-  }
-}
-
-for (const entrypoint of ENTRADAS) {
-  if (!existe(entrypoint)) continue;
-  for (const cited of caminhosCitados(ler(entrypoint))) {
-    if (/[*<>]/.test(cited)) continue;
-    if (!existe(cited)) errors.push(`CAMINHO_MORTO:${entrypoint}:${cited}`);
-  }
-}
-
-const canonicalDocuments = canonicos();
-const reachable = new Set();
-let currentLevel = ENTRADAS.filter(existe);
-for (let depth = 0; depth < 2; depth += 1) {
-  const nextLevel = [];
-  for (const document of currentLevel) {
-    for (const cited of caminhosCitados(ler(document))) {
-      if (ehGerado(cited) || reachable.has(cited) || !existe(cited)) continue;
-      reachable.add(cited);
-      if (/\.mdc?$/.test(cited)) nextLevel.push(cited);
-    }
-  }
-  currentLevel = nextLevel;
-}
-
-for (const canonical of canonicalDocuments) {
-  if (!reachable.has(canonical)) errors.push(`CANONICO_ORFAO:${canonical}`);
-}
-
+const calibration = validateCalibration(errors);
+const protocols = CALIBRATION_ONLY ? { obrigatorios: [], descobertos: [], documentos: [], ok: true, skipped: true } : validateTriggerDocuments(errors);
+const adapters = CALIBRATION_ONLY || PROTOCOL_ONLY ? [] : validateAdapters(errors);
+const school = CALIBRATION_ONLY || PROTOCOL_ONLY ? { ok: true, skipped: true } : validateSchool(errors);
 const report = {
-  guardrail: "validar-porta-de-entrada",
+  schema_version: 2,
+  guardrail: 'validar-porta-de-entrada',
+  mode: CALIBRATION_ONLY ? 'calibration-only' : PROTOCOL_ONLY ? 'protocol-only' : 'full',
   porta: PORTA,
-  contrato_delta: CONTRATO_DELTA,
-  identidade_lupa: IDENTIDADE_LUPA,
-  calibracao: calibrationReport,
-  protocolos: protocolReport,
-  adaptadores_obrigatorios: ADAPTADORES,
-  adaptadores_encontrados: ADAPTADORES.filter(existe),
-  canonicos_encontrados: canonicalDocuments.length,
-  canonicos_alcancaveis: canonicalDocuments.filter((item) => reachable.has(item)).length,
+  calibracao: calibration,
+  protocolos: protocols,
+  adaptadores: adapters,
+  escola: school,
   errors,
   warnings,
-  known_debt_exceptions: 0,
-  ok: errors.length === 0 && calibrationReport.ok && protocolReport.ok,
+  ok: errors.length === 0 && calibration.ok && protocols.ok && school.ok,
 };
 
 if (JSON_OUT) console.log(JSON.stringify(report, null, 2));
 else {
   for (const warning of warnings) console.log(`AVISO ${warning}`);
   for (const error of errors) console.error(`ERRO ${error}`);
-  console.log(
-    `PORTA_OK=${report.ok ? 1 : 0} ` +
-      `CALIBRACAO_TOKENS=${report.calibracao.tokens_presentes}/${report.calibracao.tokens_obrigatorios} ` +
-      `CALIBRACAO_REGRAS=${report.calibracao.regras_presentes}/${report.calibracao.regras_obrigatorias} ` +
-      `PROTOCOLOS=${report.protocolos.documentos.filter((item) => item.delegates && !item.concurrent).length}/${report.protocolos.descobertos.length} ` +
-      `SOURCE=${report.calibracao.source_of_truth_ok ? 1 : 0} ` +
-      `OBSERVED=${report.calibracao.observed_state_ok ? 1 : 0} ` +
-      `CONTRADICTIONS=${report.calibracao.contradictions.length} ` +
-      `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
-      `CANONICOS=${report.canonicos_encontrados} ` +
-      `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +
-      `DIVIDA=0 ERROS=${errors.length}`,
-  );
+  console.log(`PORTA_OK=${report.ok ? 1 : 0} CALIBRACAO=${calibration.ok ? 1 : 0} HASH=${calibration.section_hash_ok ? 1 : 0} PROTOCOLOS=${protocols.ok ? 1 : 0} ESCOLA=${school.ok ? 1 : 0} ERROS=${errors.length}`);
 }
-
 process.exit(report.ok ? 0 : 1);
