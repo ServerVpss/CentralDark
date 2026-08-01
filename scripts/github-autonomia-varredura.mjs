@@ -4,7 +4,7 @@
  *
  * Reutiliza o juiz/promotor canônico em subprocessos separados:
  * - juiz recebe apenas GITHUB_TOKEN read-only;
- * - promotor recebe somente GITHUB_PAT_PERFIL;
+ * - promotor recebe somente PROMOTION_TOKEN;
  * - cada decisão é presa a recibo SHA-256 e revalidada pelo motor canônico.
  */
 import { spawnSync } from "node:child_process";
@@ -71,9 +71,14 @@ async function upsertDiagnostic(token, repository, number, code, detail) {
 }
 
 function runEngine(mode, env) {
+  // Build clean env excluding PROMOTION_TOKEN for judge subprocess security
+  const baseEnv = { ...process.env };
+  if (mode === "judge") {
+    delete baseEnv.PROMOTION_TOKEN;
+  }
   return spawnSync(process.execPath, [ENGINE, mode], {
     cwd: ROOT,
-    env: { ...process.env, ...env },
+    env: { ...baseEnv, ...env },
     encoding: "utf8",
     maxBuffer: 4 * 1024 * 1024,
   });
@@ -123,7 +128,7 @@ async function main() {
         repository,
         pr.number,
         "PROMOTION_TOKEN_MISSING",
-        "O secret GITHUB_PAT_PERFIL não está disponível para o workflow. O fallback com GITHUB_TOKEN é proibido porque suprimiria gatilhos pós-merge.",
+        "O secret PROMOTION_TOKEN não está disponível para o workflow. O fallback com GITHUB_TOKEN é proibido porque suprimiria gatilhos pós-merge.",
       );
       continue;
     }
