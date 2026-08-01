@@ -27,6 +27,31 @@ def _current_branch() -> str:
     return _git("branch", "--show-current")
 
 
+def _temporary_git_history(tmp_path: Path) -> tuple[Path, str, str]:
+    repo = tmp_path / "git-history"
+    repo.mkdir()
+
+    def run(*args: str) -> str:
+        return subprocess.run(
+            ["git", "-C", str(repo), *args],
+            check=True,
+            capture_output=True,
+        ).stdout.decode("utf-8").strip()
+
+    run("init", "-b", "main")
+    run("config", "user.name", "Meta Lupa Test")
+    run("config", "user.email", "meta-lupa-test@example.invalid")
+    (repo / "target.md").write_text("primeira revisao", encoding="utf-8")
+    run("add", "target.md")
+    run("commit", "-m", "first")
+    first = run("rev-parse", "HEAD")
+    (repo / "target.md").write_text("segunda revisao", encoding="utf-8")
+    run("add", "target.md")
+    run("commit", "-m", "second")
+    second = run("rev-parse", "HEAD")
+    return repo, first, second
+
+
 def _valid_receipt(**overrides) -> dict:
     receipt = {
         "mission_id": "CENTRALDARK-PR585-AND-UNIVERSAL-AGENT-GATE-01",
@@ -300,34 +325,36 @@ def test_promotion_requires_all_three_expected_values_explicit() -> None:
     assert details["approved_for_promotion"] is False
 
 
-def test_ancestor_commit_accepted_as_head_is_rejected_by_exact_match() -> None:
+def test_ancestor_commit_accepted_as_head_is_rejected_by_exact_match(tmp_path) -> None:
     """Um commit ancestral real (existe no Git) nao deve ser aceito como o
     HEAD atual so por existir -- precisa bater exatamente com expected_head."""
-    ancestor = _git("rev-parse", "HEAD~1")
-    current = _current_head()
-    assert ancestor != current
+    repo, ancestor, current = _temporary_git_history(tmp_path)
 
     ok, reason, _ = validate_operation_receipt(
-        _valid_receipt(head_sha=ancestor),
-        repo_root=str(REPO_ROOT),
+        _valid_receipt(
+            head_sha=ancestor,
+            branch="main",
+            target="target.md",
+        ),
+        repo_root=str(repo),
         expected_head=current,
+        expected_branch="main",
+        expected_target="target.md",
     )
 
     assert ok is False
     assert reason == "OPERATION_RECEIPT_HEAD_MISMATCH"
 
 
-def test_expected_head_must_match_current_git_head() -> None:
-    ancestor = _git("rev-parse", "HEAD~1")
-    current = _current_head()
-    assert ancestor != current
+def test_expected_head_must_match_current_git_head(tmp_path) -> None:
+    repo, ancestor, current = _temporary_git_history(tmp_path)
 
     ok, reason, _ = validate_operation_receipt(
-        _valid_receipt(head_sha=ancestor, branch=_current_branch()),
-        repo_root=str(REPO_ROOT),
+        _valid_receipt(head_sha=ancestor, branch="main", target="target.md"),
+        repo_root=str(repo),
         expected_head=ancestor,
-        expected_branch=_current_branch(),
-        expected_target="docs/ARQUITETURA/MODO-OPERACIONAL-LOOP-EVIDENCIA-PRIMEIRO.md",
+        expected_branch="main",
+        expected_target="target.md",
     )
 
     assert ok is False
