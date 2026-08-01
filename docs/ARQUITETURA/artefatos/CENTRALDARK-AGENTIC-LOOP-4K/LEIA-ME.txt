@@ -1,0 +1,18 @@
+CENTRALDARK — AGENTIC ENGINEERING LOOP 4K
+
+Conteúdo:
+- centraldark-agentic-loop-4k-completo.png
+- centraldark-agentic-loop-4k-clean.png
+- centraldark-agentic-loop-editavel.svg
+
+Base conceitual:
+- imagens de referência enviadas nesta conversa;
+- fluxo multiagente do repositório ServerVpss/CentralDark;
+- ciclo LER → PERGUNTAR → AGIR → PROVAR → REGISTRAR;
+- papéis funcionais: planejador, executor, revisor/crítico, auditor e notificador;
+- GitHub como fonte da verdade; VPS como executor/runtime;
+- loops de build/lint/format/test/review;
+- worktrees paralelas com merge controlado;
+- Pivete como autoridade final.
+
+Resolução PNG: 3840 × 2160 (4K UHD).
