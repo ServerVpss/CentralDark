@@ -209,12 +209,12 @@ Você escolhe: quais repos + quais permissões. Preferido no CentralDark.
 
 Uma permissão grossa (`repo`) libera quase tudo. Evitar.
 
-### GITHUB_PAT_PERFIL
+### PROMOTION_TOKEN
 → **Chave do promotor autônomo**
 
-Nome do secret que entrega ao promotor a identidade separada usada para atualizar branch e mergear sem reutilizar o `GITHUB_TOKEN` do workflow.
+Nome válido do secret que entrega ao promotor a identidade separada usada para atualizar branch e mergear sem reutilizar o `GITHUB_TOKEN` do workflow.
 
-**Regra:** validar somente a presença e as permissões. Nunca imprimir, copiar ou registrar o valor.
+**Regra:** secrets do Actions não podem começar com `GITHUB_`; por isso `GITHUB_PAT_PERFIL` é inválido. Validar somente a presença e as permissões. Nunca imprimir, copiar ou registrar o valor.
 
 ### action_required
 → **GitHub pedindo identidade**
@@ -322,7 +322,7 @@ Repo access: **Only select repositories** → só o CentralDark (ou os que SEGRE
 
 ### Perfil mínimo do promotor autônomo atual
 
-Para o secret `GITHUB_PAT_PERFIL`, o mínimo operacional do desenho atual é:
+Para o secret `PROMOTION_TOKEN`, o mínimo operacional do desenho atual é:
 
 | Permissão | Nível | Motivo |
 |---|---:|---|
@@ -360,4 +360,4 @@ Nunca criar `DICIONARIO-PIVETE-GITHUB-v2.md`.
 - Glossário de funções da API (código): `docs/GLOSSARIO_TECNICO_LEIGO.md`
 - Este arquivo = **só GitHub + permissões de token**
 
-**Última atualização:** 2026-07-31 — Environments, Pages, Deployments, Dependabot e perfil mínimo do promotor autônomo.
+**Última atualização:** 2026-07-31 — Environments, Pages, Deployments, Dependabot, perfil mínimo do promotor autônomo e nome válido `PROMOTION_TOKEN`.
