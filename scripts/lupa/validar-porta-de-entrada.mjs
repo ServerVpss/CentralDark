@@ -14,6 +14,19 @@ const JSON_OUT = argv.includes("--json");
 const PORTA = "LEIA-ME-IA.md";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
+const CALIBRATION_TOKENS = [
+  "### 1.2 Recalibração canônica por gatilho",
+  "#ACORDA",
+  "!CALIBRAR",
+  "BLOCKED_GITHUB_UNAVAILABLE",
+  "STATE_DRIFT",
+  "THIS_CHAT_ROLE",
+  "COMMITS_SINCE_LAST_PROOF",
+  "AUTONOMY_STATUS",
+  "CASA_STATE",
+  "VPS_STATE",
+  "REENTRY_GUARD=ONE_SHOT",
+];
 
 const ADAPTADORES = [
   "AGENTS.md",
@@ -101,6 +114,18 @@ if (!existe(PORTA)) errors.push(`PORTA_AUSENTE:${PORTA}`);
 if (!existe(CONTRATO_DELTA)) errors.push(`CONTRATO_DELTA_AUSENTE:${CONTRATO_DELTA}`);
 if (!existe(IDENTIDADE_LUPA)) errors.push(`IDENTIDADE_LUPA_AUSENTE:${IDENTIDADE_LUPA}`);
 
+const portaContent = ler(PORTA);
+const calibrationTokensPresent = CALIBRATION_TOKENS.filter((token) => portaContent.includes(token));
+for (const token of CALIBRATION_TOKENS) {
+  if (!portaContent.includes(token)) errors.push(`PORTA_SEM_CALIBRACAO:${token}`);
+}
+if (!/^source_of_truth:\s*"ServerVpss\/CentralDark"\s*$/m.test(portaContent.slice(0, 700))) {
+  errors.push("PORTA_SOURCE_OF_TRUTH_DIVERGENTE");
+}
+if (!portaContent.includes('observed_state: "evidência atual medida e separada da fonte canônica"')) {
+  errors.push("PORTA_SEM_ESTADO_OBSERVADO_SEPARADO");
+}
+
 for (const adapter of ADAPTADORES) {
   if (!existe(adapter)) {
     errors.push(`ADAPTADOR_AUSENTE:${adapter}`);
@@ -146,6 +171,13 @@ const report = {
   porta: PORTA,
   contrato_delta: CONTRATO_DELTA,
   identidade_lupa: IDENTIDADE_LUPA,
+  calibracao: {
+    gatilhos: ["#ACORDA", "!CALIBRAR"],
+    reentry_guard: "ONE_SHOT",
+    tokens_presentes: calibrationTokensPresent.length,
+    tokens_obrigatorios: CALIBRATION_TOKENS.length,
+    ok: calibrationTokensPresent.length === CALIBRATION_TOKENS.length,
+  },
   adaptadores_obrigatorios: ADAPTADORES,
   adaptadores_encontrados: ADAPTADORES.filter(existe),
   canonicos_encontrados: canonicalDocuments.length,
@@ -162,6 +194,7 @@ else {
   for (const error of errors) console.error(`ERRO ${error}`);
   console.log(
     `PORTA_OK=${report.ok ? 1 : 0} ` +
+      `CALIBRACAO=${report.calibracao.tokens_presentes}/${report.calibracao.tokens_obrigatorios} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +
