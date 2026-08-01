@@ -24,7 +24,8 @@ function fixture() {
   const zero = '.agents/skills/agentic-ci-loop/references/ZERO.md';
   const ledger = '.agents/skills/agentic-ci-loop/references/learning-ledger.jsonl';
   const source = '.agents/skills/agentic-ci-loop/references/SOURCE.txt.gz.base64';
-  const visual = 'docs/ARQUITETURA/artefatos/package.zip.base64.part00';
+  const visualSvg = 'docs/ARQUITETURA/artefatos/visual.svg';
+  const visualReadme = 'docs/ARQUITETURA/artefatos/LEIA-ME.txt';
   write(root, 'LEIA-ME-IA.md', `${skill}\nscripts/lupa/agentic-school-loader.mjs\n`);
   for (const adapter of adapters) write(root, adapter, 'LEIA-ME-IA.md\n');
   write(root, skill, '---\nname: agentic-ci-loop\ndescription: test\n---\n');
@@ -32,7 +33,8 @@ function fixture() {
   write(root, course, '# Escola\n');
   write(root, zero, '# Zero\n');
   write(root, source, zlib.gzipSync(Buffer.from('curso fonte'), { mtime: 0 }).toString('base64'));
-  write(root, visual, 'UEsDBAoAAAAAA');
+  write(root, visualSvg, '<svg/>');
+  write(root, visualReadme, 'visual');
   write(root, ledger, JSON.stringify({
     schema_version: 1,
     lesson_id: 'L1',
@@ -56,10 +58,13 @@ function fixture() {
     source_artifacts: {
       course_txt_gzip_base64_path: source,
       course_txt_sha256: '592b0075b27d4a160e015654b40f0813a965f5f84668a97e9535097ac8103521',
-      visual_zip_base64_parts: [visual],
+      visual_source_svg_path: visualSvg,
+      visual_readme_path: visualReadme,
+      visual_binary_storage: 'ATTACHMENT_VALIDATED_NOT_VERSIONED_BY_TEXT_CONNECTOR',
       visual_zip_sha256: 'd'.repeat(64), visual_zip_bytes: 1,
       png_complete_sha256: 'e'.repeat(64), png_clean_sha256: 'f'.repeat(64),
-      svg_sha256: 'a'.repeat(64), readme_sha256: 'b'.repeat(64),
+      svg_sha256: 'd4dc56669143034f31aa309635d4113d9ad76a02b1739da22c965ed2049be9e6',
+      readme_sha256: 'a5961f3f5ac8a594d1c084d5948a7fa0b44d181b67ede0973c6641216ec06920',
     },
     tasks: { 'critical-refactor': [zero], debug: [zero], feature: [course], review: [zero], 'skill-evolution': [course] },
     adapters,
