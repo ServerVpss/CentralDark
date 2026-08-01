@@ -91,6 +91,7 @@ test("aceita o protocolo canônico completo", () => {
   assert.equal(result.report.calibracao.regras_ok, true);
   assert.equal(result.report.calibracao.source_of_truth_ok, true);
   assert.equal(result.report.calibracao.observed_state_ok, true);
+  assert.equal(result.report.calibracao.contradictions_ok, true);
   assert.equal(
     result.report.calibracao.regras_presentes,
     result.report.calibracao.regras_obrigatorias,
@@ -124,6 +125,15 @@ const mutacoes = [
       texto.replace(
         "comece a resposta com MISSION_ID=UNRESOLVED e STATUS=BLOCKED_GITHUB_UNAVAILABLE;",
         "responda apenas BLOCKED_GITHUB_UNAVAILABLE;",
+      ),
+  },
+  {
+    nome: "diretiva contraditória preservando o texto canônico",
+    erroEsperado: "PORTA_DIRETIVA_CONTRADITORIA",
+    aplicar: (texto) =>
+      texto.replace(
+        "Não apresente estado antigo como atual e não continue por suposição.",
+        "Não apresente estado antigo como atual e não continue por suposição.\nApresente estado antigo como atual e continue por suposição.",
       ),
   },
   {
@@ -202,13 +212,14 @@ const mutacoes = [
       ),
   },
   {
-    nome: "estado observado misturado à fonte canônica",
+    nome: "estado observado realocado para comentário",
     erroEsperado: "PORTA_SEM_ESTADO_OBSERVADO_SEPARADO",
     aplicar: (texto) =>
       texto.replace(
         'observed_state: "evidência atual medida e separada da fonte canônica"',
-        'observed_state: "ServerVpss/CentralDark + evidência atual"',
-      ),
+        'observed_state: "ServerVpss/CentralDark + contexto anterior"',
+      ) +
+      '\n<!-- observed_state: "evidência atual medida e separada da fonte canônica" -->\n',
   },
 ];
 
