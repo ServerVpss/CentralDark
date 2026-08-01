@@ -40,6 +40,9 @@ jobs:
       - name: Testar política de promoção autônoma
         run: node --test scripts/github-autonomia-promocao.test.mjs
 
+      - name: Testar falsificações semânticas do protocolo ACORDA
+        run: node --test scripts/lupa/validar-porta-de-entrada.test.mjs
+
       - name: Validar mapa e contratos do repositório inteiro
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
