@@ -1,17 +1,7 @@
 #!/usr/bin/env python3
-"""Reconstrói e valida o pacote visual Agentic Loop usando apenas stdlib."""
-
+"""Valida fontes visuais versionadas e, quando fornecido, o ZIP original."""
 from __future__ import annotations
-
-import argparse
-import base64
-import hashlib
-import gzip
-import json
-import struct
-import sys
-import tempfile
-import zipfile
+import argparse, hashlib, json, struct, sys, zipfile
 from pathlib import Path
 from typing import Any
 
@@ -23,128 +13,69 @@ EXPECTED_MEMBERS = {
     'LEIA-ME.txt': 'readme_sha256',
 }
 
-
-def sha256_bytes(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
-
-
+def sha256_bytes(data: bytes) -> str: return hashlib.sha256(data).hexdigest()
 def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open('rb') as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b''):
-            digest.update(chunk)
-    return digest.hexdigest()
+    h=hashlib.sha256()
+    with path.open('rb') as f:
+        for chunk in iter(lambda:f.read(1024*1024),b''): h.update(chunk)
+    return h.hexdigest()
+def png_dimensions(data: bytes) -> tuple[int,int]:
+    if len(data)<24 or data[:8]!=b'\x89PNG\r\n\x1a\n' or data[12:16]!=b'IHDR': raise ValueError('PNG_HEADER_INVALID')
+    return struct.unpack('>II',data[16:24])
+def load_manifest(path: Path)->dict[str,Any]:
+    m=json.loads(path.read_text(encoding='utf-8'))
+    if m.get('schema_version')!=1: raise ValueError('SCHOOL_SCHEMA_INVALID')
+    if not isinstance(m.get('source_artifacts'),dict): raise ValueError('SOURCE_ARTIFACTS_INVALID')
+    return m
 
+def validate_sources(repo_root:Path, manifest_path:Path=DEFAULT_MANIFEST)->dict[str,Any]:
+    a=load_manifest(repo_root/manifest_path)['source_artifacts']
+    svg_rel=a.get('visual_source_svg_path'); readme_rel=a.get('visual_readme_path')
+    if not isinstance(svg_rel,str) or not isinstance(readme_rel,str): raise ValueError('VISUAL_SOURCE_PATHS_MISSING')
+    svg=repo_root/svg_rel; readme=repo_root/readme_rel
+    if not svg.is_file(): raise ValueError(f'VISUAL_SVG_MISSING:{svg_rel}')
+    if not readme.is_file(): raise ValueError(f'VISUAL_README_MISSING:{readme_rel}')
+    if sha256_file(svg)!=a.get('svg_sha256'): raise ValueError('VISUAL_SVG_SHA_MISMATCH')
+    if sha256_file(readme)!=a.get('readme_sha256'): raise ValueError('VISUAL_README_SHA_MISMATCH')
+    return {'source_status':'PASS','svg_sha256':sha256_file(svg),'readme_sha256':sha256_file(readme),'binary_storage':a.get('visual_binary_storage')}
 
-def png_dimensions(data: bytes) -> tuple[int, int]:
-    if len(data) < 24 or data[:8] != b'\x89PNG\r\n\x1a\n' or data[12:16] != b'IHDR':
-        raise ValueError('PNG_HEADER_INVALID')
-    return struct.unpack('>II', data[16:24])
+def validate_zip(source_zip:Path, artifacts:dict[str,Any])->dict[str,Any]:
+    if not source_zip.is_file(): raise ValueError(f'VISUAL_ZIP_MISSING:{source_zip}')
+    raw=source_zip.read_bytes(); actual=sha256_bytes(raw)
+    if actual!=artifacts.get('visual_zip_sha256'): raise ValueError(f'VISUAL_ZIP_SHA_MISMATCH:{actual}')
+    if len(raw)!=artifacts.get('visual_zip_bytes'): raise ValueError(f'VISUAL_ZIP_SIZE_MISMATCH:{len(raw)}')
+    members=[]
+    with zipfile.ZipFile(source_zip) as z:
+        bad=z.testzip()
+        if bad is not None: raise ValueError(f'VISUAL_ZIP_CORRUPT:{bad}')
+        if sorted(z.namelist())!=sorted(EXPECTED_MEMBERS): raise ValueError(f'VISUAL_ZIP_MEMBERS_INVALID:{z.namelist()}')
+        for name,key in EXPECTED_MEMBERS.items():
+            data=z.read(name); digest=sha256_bytes(data)
+            if digest!=artifacts.get(key): raise ValueError(f'VISUAL_MEMBER_SHA_MISMATCH:{name}:{digest}')
+            item={'name':name,'bytes':len(data),'sha256':digest}
+            if name.endswith('.png'):
+                w,h=png_dimensions(data)
+                if (w,h)!=(3840,2160): raise ValueError(f'VISUAL_PNG_DIMENSIONS_INVALID:{name}:{w}x{h}')
+                item['dimensions']=f'{w}x{h}'
+            members.append(item)
+    return {'zip_status':'PASS','package_sha256':actual,'package_bytes':len(raw),'members':members}
 
+def validate_package(repo_root:Path, manifest_path:Path=DEFAULT_MANIFEST, source_zip:Path|None=None)->dict[str,Any]:
+    manifest=load_manifest(repo_root/manifest_path); report={'schema_version':1,'status':'PARTIAL_SOURCE_ONLY',**validate_sources(repo_root,manifest_path)}
+    if source_zip is not None:
+        report.update(validate_zip(source_zip,manifest['source_artifacts'])); report['status']='PASS'
+    return report
 
-def load_manifest(path: Path) -> dict[str, Any]:
-    manifest = json.loads(path.read_text(encoding='utf-8'))
-    if manifest.get('schema_version') != 1:
-        raise ValueError('SCHOOL_SCHEMA_INVALID')
-    artifacts = manifest.get('source_artifacts')
-    if not isinstance(artifacts, dict):
-        raise ValueError('SOURCE_ARTIFACTS_INVALID')
-    return manifest
-
-
-def validate_package(repo_root: Path, manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, Any]:
-    manifest = load_manifest(repo_root / manifest_path)
-    artifacts = manifest['source_artifacts']
-    b64_parts = artifacts.get('visual_zip_base64_parts')
-    source_relative = artifacts.get('course_txt_gzip_base64_path')
-    if not isinstance(b64_parts, list) or not b64_parts or not all(isinstance(item, str) and item for item in b64_parts):
-        raise ValueError('VISUAL_ZIP_BASE64_PARTS_MISSING')
-    if not isinstance(source_relative, str) or not source_relative:
-        raise ValueError('COURSE_TXT_PATH_MISSING')
-
-    b64_paths = [repo_root / item for item in b64_parts]
-    source_path = repo_root / source_relative
-    for relative, b64_path in zip(b64_parts, b64_paths):
-        if not b64_path.is_file():
-            raise ValueError(f'VISUAL_ZIP_BASE64_MISSING:{relative}')
-    if not source_path.is_file():
-        raise ValueError(f'COURSE_SOURCE_MISSING:{source_relative}')
-
-    expected_course_sha = artifacts.get('course_txt_sha256')
+def main()->int:
+    p=argparse.ArgumentParser(); p.add_argument('--repo-root',default='.'); p.add_argument('--manifest',default=str(DEFAULT_MANIFEST)); p.add_argument('--source-zip'); p.add_argument('--require-zip',action='store_true'); p.add_argument('--json',action='store_true'); a=p.parse_args()
     try:
-        course_bytes = gzip.decompress(base64.b64decode(source_path.read_bytes(), validate=False))
-    except Exception as error:
-        raise ValueError('COURSE_SOURCE_GZIP_INVALID') from error
-    actual_course_sha = sha256_bytes(course_bytes)
-    if actual_course_sha != expected_course_sha:
-        raise ValueError(f'COURSE_SOURCE_SHA_MISMATCH:{actual_course_sha}')
-
-    try:
-        zip_bytes = base64.b64decode(b''.join(item.read_bytes() for item in b64_paths), validate=False)
-    except Exception as error:  # pragma: no cover - implementation-specific exception
-        raise ValueError('VISUAL_ZIP_BASE64_INVALID') from error
-
-    actual_zip_sha = sha256_bytes(zip_bytes)
-    if actual_zip_sha != artifacts.get('visual_zip_sha256'):
-        raise ValueError(f'VISUAL_ZIP_SHA_MISMATCH:{actual_zip_sha}')
-    if len(zip_bytes) != artifacts.get('visual_zip_bytes'):
-        raise ValueError(f'VISUAL_ZIP_SIZE_MISMATCH:{len(zip_bytes)}')
-
-    member_report: list[dict[str, Any]] = []
-    with tempfile.TemporaryDirectory(prefix='centraldark-agentic-visual-') as temp_dir:
-        zip_path = Path(temp_dir) / 'package.zip'
-        zip_path.write_bytes(zip_bytes)
-        with zipfile.ZipFile(zip_path) as archive:
-            bad_member = archive.testzip()
-            if bad_member is not None:
-                raise ValueError(f'VISUAL_ZIP_CORRUPT:{bad_member}')
-            names = archive.namelist()
-            if sorted(names) != sorted(EXPECTED_MEMBERS):
-                raise ValueError(f'VISUAL_ZIP_MEMBERS_INVALID:{names}')
-            for name, hash_key in EXPECTED_MEMBERS.items():
-                content = archive.read(name)
-                actual_hash = sha256_bytes(content)
-                if actual_hash != artifacts.get(hash_key):
-                    raise ValueError(f'VISUAL_MEMBER_SHA_MISMATCH:{name}:{actual_hash}')
-                item: dict[str, Any] = {'name': name, 'bytes': len(content), 'sha256': actual_hash}
-                if name.endswith('.png'):
-                    width, height = png_dimensions(content)
-                    if (width, height) != (3840, 2160):
-                        raise ValueError(f'VISUAL_PNG_DIMENSIONS_INVALID:{name}:{width}x{height}')
-                    item['dimensions'] = f'{width}x{height}'
-                member_report.append(item)
-
-    return {
-        'schema_version': 1,
-        'status': 'PASS',
-        'package_sha256': actual_zip_sha,
-        'package_bytes': len(zip_bytes),
-        'course_sha256': actual_course_sha,
-        'members': member_report,
-    }
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--repo-root', default='.')
-    parser.add_argument('--manifest', default=str(DEFAULT_MANIFEST))
-    parser.add_argument('--json', action='store_true')
-    args = parser.parse_args()
-    try:
-        report = validate_package(Path(args.repo_root).resolve(), Path(args.manifest))
-    except Exception as error:
-        print(f'STATUS=BLOCKED_VISUAL_PACKAGE REASON={error}', file=sys.stderr)
-        return 1
-    if args.json:
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        report=validate_package(Path(a.repo_root).resolve(),Path(a.manifest),Path(a.source_zip).resolve() if a.source_zip else None)
+        if a.require_zip and report['status']!='PASS': raise ValueError('VISUAL_ZIP_REQUIRED_BUT_NOT_PROVIDED')
+    except Exception as e:
+        print(f'STATUS=BLOCKED_VISUAL_PACKAGE REASON={e}',file=sys.stderr); return 1
+    if a.json: print(json.dumps(report,ensure_ascii=False,indent=2))
     else:
-        print(f"VISUAL_PACKAGE_STATUS={report['status']}")
-        print(f"VISUAL_PACKAGE_SHA256={report['package_sha256']}")
-        print(f"VISUAL_PACKAGE_BYTES={report['package_bytes']}")
-        print(f"COURSE_SHA256={report['course_sha256']}")
-        print(f"MEMBERS={len(report['members'])}")
+        print(f"VISUAL_SOURCE_STATUS={report['source_status']}"); print(f"VISUAL_PACKAGE_STATUS={report['status']}")
+        if 'package_sha256' in report: print(f"VISUAL_PACKAGE_SHA256={report['package_sha256']}")
     return 0
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())
+if __name__=='__main__': raise SystemExit(main())
