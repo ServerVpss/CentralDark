@@ -1,14 +1,42 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 const SCRIPT = fileURLToPath(new URL("./validar-porta-de-entrada.mjs", import.meta.url));
 const PORTA_REAL = fileURLToPath(new URL("../../LEIA-ME-IA.md", import.meta.url));
 const CONTEUDO_VALIDO = readFileSync(PORTA_REAL, "utf8");
+const PROTOCOLOS_REAIS = {
+  "docs/PROTOCOLO-BOOT.md": readFileSync(
+    fileURLToPath(new URL("../../docs/PROTOCOLO-BOOT.md", import.meta.url)),
+    "utf8",
+  ),
+  "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md": readFileSync(
+    fileURLToPath(
+      new URL("../../docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md", import.meta.url),
+    ),
+    "utf8",
+  ),
+  "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md":
+    readFileSync(
+      fileURLToPath(
+        new URL(
+          "../../docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO.md",
+          import.meta.url,
+        ),
+      ),
+      "utf8",
+    ),
+};
 
 function executar(conteudo) {
   const root = mkdtempSync(join(tmpdir(), "centraldark-calibracao-"));
@@ -19,15 +47,39 @@ function executar(conteudo) {
       [SCRIPT, "--repo-root", root, "--calibration-only", "--json"],
       { encoding: "utf8" },
     );
-    return {
-      status: result.status,
-      stdout: result.stdout,
-      stderr: result.stderr,
-      report: result.stdout ? JSON.parse(result.stdout) : null,
-    };
+    return normalizar(result);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+}
+
+function executarProtocolos(protocolos) {
+  const root = mkdtempSync(join(tmpdir(), "centraldark-protocolos-"));
+  try {
+    writeFileSync(join(root, "LEIA-ME-IA.md"), CONTEUDO_VALIDO, "utf8");
+    for (const [relativePath, content] of Object.entries(protocolos)) {
+      const target = join(root, relativePath);
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, content, "utf8");
+    }
+    const result = spawnSync(
+      process.execPath,
+      [SCRIPT, "--repo-root", root, "--protocol-only", "--json"],
+      { encoding: "utf8" },
+    );
+    return normalizar(result);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
+
+function normalizar(result) {
+  return {
+    status: result.status,
+    stdout: result.stdout,
+    stderr: result.stderr,
+    report: result.stdout ? JSON.parse(result.stdout) : null,
+  };
 }
 
 test("aceita o protocolo canônico completo", () => {
@@ -92,6 +144,42 @@ const mutacoes = [
         "Nesse estado, editar e publicar normalmente.",
       ),
   },
+  {
+    nome: "Casa presumida sem evidência local",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:CASA_VPS_UNKNOWN_FAIL_CLOSED",
+    aplicar: (texto) =>
+      texto.replace(
+        "CASA_STATE=UNKNOWN_PENDING_LOCAL_EVIDENCE",
+        "CASA_STATE=PASS",
+      ),
+  },
+  {
+    nome: "VPS presumida sem captura sanitizada",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:CASA_VPS_UNKNOWN_FAIL_CLOSED",
+    aplicar: (texto) =>
+      texto.replace(
+        "VPS_STATE=UNKNOWN_PENDING_SANITIZED_CAPTURE",
+        "VPS_STATE=PASS",
+      ),
+  },
+  {
+    nome: "review antigo aceito como atual",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:STALE_REVIEW_BLOCKED",
+    aplicar: (texto) =>
+      texto.replace(
+        "Review em SHA antigo é `STALE_REVIEW`, nunca `PASS` para o HEAD atual.",
+        "Review em SHA antigo vale como PASS para o HEAD atual.",
+      ),
+  },
+  {
+    nome: "PASS sem prova fresca",
+    erroEsperado: "PORTA_REGRA_CALIBRACAO_INVALIDA:PASS_REQUIRES_FRESH_PROOF",
+    aplicar: (texto) =>
+      texto.replace(
+        "Só use `PASS` quando houver HEAD exato, teste fresco, prova verificável, escopo conhecido,",
+        "Use `PASS` quando houver relato suficiente,",
+      ),
+  },
   ...[
     "CHECK_SUCCESS != ZERO_FINDINGS",
     "SKIPPED != PASS",
@@ -138,3 +226,41 @@ for (const mutacao of mutacoes) {
     );
   });
 }
+
+test("aceita protocolos ativos quando todos delegam à seção 1.2", () => {
+  const result = executarProtocolos(PROTOCOLOS_REAIS);
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.equal(result.report.protocolos.ok, true);
+  assert.equal(result.report.protocolos.documentos.length, 3);
+});
+
+test("rejeita definição operacional concorrente de !CALIBRAR", () => {
+  const path = "docs/CONSCIENCIA/PROTOCOLO-ORQUESTRACAO-PIVETE.md";
+  const mutante = {
+    ...PROTOCOLOS_REAIS,
+    [path]: PROTOCOLOS_REAIS[path].replace(
+      "### `#ACORDA` / `!CALIBRAR`",
+      "### `!CALIBRAR`\n\nQuando Pivete disser `!CALIBRAR`:\n\n1. executar passos próprios",
+    ),
+  };
+  const result = executarProtocolos(mutante);
+  assert.notEqual(result.status, 0, "a definição concorrente recebeu falso PASS");
+  assert.ok(
+    result.report.errors.includes(`PROTOCOLO_DEFINICAO_CONCORRENTE:${path}`),
+    JSON.stringify(result.report, null, 2),
+  );
+});
+
+test("rejeita protocolo ativo sem delegação canônica", () => {
+  const path = "docs/PROTOCOLO-BOOT.md";
+  const mutante = {
+    ...PROTOCOLOS_REAIS,
+    [path]: PROTOCOLOS_REAIS[path].replaceAll("LEIA-ME-IA.md", "PORTA-AUSENTE.md"),
+  };
+  const result = executarProtocolos(mutante);
+  assert.notEqual(result.status, 0, "o protocolo sem delegação recebeu falso PASS");
+  assert.ok(
+    result.report.errors.includes(`PROTOCOLO_SEM_DELEGACAO_CANONICA:${path}`),
+    JSON.stringify(result.report, null, 2),
+  );
+});
