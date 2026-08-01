@@ -2,12 +2,16 @@
 title: "PROTOCOLO DE ORQUESTRACAO PIVETE"
 date: 2026-07-07
 tags: ["consciencia", "orquestracao", "ia", "pivete", "centraldark"]
-updated: 2026-07-22
+updated: 2026-08-01
 ---
 
 # Protocolo de Orquestracao Pivete
 
 > Manual fixo para qualquer IA entrar no CentralDark sem perder o fio da meada.
+>
+> A definicao comportamental unica de `#ACORDA` e `!CALIBRAR` esta em
+> [`LEIA-ME-IA.md`](../../LEIA-ME-IA.md), secao 1.2. Este protocolo delega os
+> gatilhos integralmente e nao mantem uma segunda implementacao.
 
 Este protocolo existe porque chat nao e memoria permanente. Toda IA pode trocar, perder contexto, ficar sem token ou entrar no meio da missao. O que permanece e o metodo.
 
@@ -57,26 +61,24 @@ Se a conversa mudar de assunto, a IA responde o assunto paralelo, fecha, retoma 
 
 A Ponte de Continuidade integra agentes, modelos, sessoes e aplicativos sem criar outra memoria.
 
-### `!CALIBRAR`
+### `#ACORDA` / `!CALIBRAR`
 
-Quando Pivete disser `!CALIBRAR`:
+Quando Pivete usar qualquer um desses gatilhos, execute integralmente
+[`LEIA-ME-IA.md`](../../LEIA-ME-IA.md), secao 1.2.
 
-1. interromper novas acoes;
-2. deixar processos em curso em estado seguro;
-3. comparar conversa, Git, PR, Actions, logs e estado vivo;
-4. atualizar somente os documentos canonicos que realmente mudaram;
-5. devolver o Estado de Bordo completo;
-6. nao iniciar outra execucao.
+Este documento nao redefine:
 
-Distribuicao oficial:
+- consulta GitHub-first;
+- serializacao da resposta;
+- reconciliacao de commits, PRs, threads, bots e autonomia;
+- `STATE_DRIFT`;
+- `BLOCKED_GITHUB_UNAVAILABLE`;
+- Writer lock;
+- tratamento fail-closed de Casa e VPS;
+- criterio de `PASS`.
 
-- missao, fase e proximo passo → `docs/PENDENCIAS.md`;
-- estado comprovado → `docs/CONSCIENCIA/09-ESTADO-ATUAL.md`;
-- decisao de caminho → `docs/CONSCIENCIA/08-HISTORICO-DECISOES.md`;
-- aprendizado duravel → `docs/CONSCIENCIA/APRENDIZADOS.md`;
-- evidencia → commit, PR, Actions, teste, log ou relatorio canonico.
-
-Nao copiar o mesmo texto em todos os documentos. Cada local guarda apenas o fragmento de sua responsabilidade.
+A distribuicao dos registros continua obedecendo os destinos canonicos indicados
+pela secao 1.2 e pelo documento responsavel por cada tipo de estado.
 
 ### `!RELOAD`
 
@@ -136,12 +138,13 @@ Proximo passo seguro:
 Quando a missao for no projeto CentralDark, executar tambem:
 
 ```text
-1. Ler docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md
-2. Ler docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md
-3. Ler docs/PENDENCIAS.md
-4. Ler docs/CONSCIENCIA/APRENDIZADOS.md
-5. Ler docs/CONSCIENCIA/09-ESTADO-ATUAL.md
-6. Confirmar modo, riscos e proximo passo antes de agir
+1. Ler LEIA-ME-IA.md
+2. Ler docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md
+3. Ler docs/CONSCIENCIA/PROTOCOLO-INICIALIZACAO.md
+4. Ler docs/PENDENCIAS.md
+5. Ler docs/CONSCIENCIA/APRENDIZADOS.md
+6. Ler docs/CONSCIENCIA/09-ESTADO-ATUAL.md
+7. Confirmar modo, riscos e proximo passo antes de agir
 ```
 
 Se houver MCP CentralDark disponivel, usar o kit de boas-vindas antes das leituras manuais.
@@ -154,7 +157,7 @@ Antes de criar pasta, rota, servico, workflow, regra ou documento:
 
 1. ler o mapa e buscar funcao equivalente;
 2. encaixar no componente existente quando a responsabilidade for a mesma;
-3. estender o canônico com a menor mudanca compativel;
+3. estender o canonico com a menor mudanca compativel;
 4. criar caminho novo somente quando o encaixe for comprovadamente impossivel;
 5. usar nome humano, estavel e coerente;
 6. atualizar o mapa na mesma mudanca.
@@ -165,7 +168,7 @@ Uma area somente vira `CONSOLIDADA` depois de teste, revisao/falsificacao, autor
 
 ## Observabilidade de provedores
 
-O vigia canônico de provedores e o `HERMES-CORE/agents/Log-Verificador`. Nao criar outro monitor para a mesma funcao.
+O vigia canonico de provedores e o `HERMES-CORE/agents/Log-Verificador`. Nao criar outro monitor para a mesma funcao.
 
 Ordem do alerta:
 
@@ -256,19 +259,8 @@ Ler -> Fixar alvo/SHA -> Agir -> Revisar -> Provar -> Corrigir/repetir -> Regist
 
 ## Deposito de saida
 
-No fim de cada sessao importante, executar `!CALIBRAR` ou registrar o equivalente:
-
-```text
-MISSION_ID:
-O que foi decidido:
-O que foi feito:
-Evidencia usada:
-O que ficou pendente:
-Proximo passo unico:
-Travas:
-Divergencias:
-Proxima decisao de Pivete:
-```
+No fim de cada sessao importante, execute `!CALIBRAR` conforme
+[`LEIA-ME-IA.md`](../../LEIA-ME-IA.md), secao 1.2. Nao use um formato paralelo.
 
 Se o aprendizado precisa sobreviver entre sessoes, gravar em `docs/CONSCIENCIA/APRENDIZADOS.md` ou no arquivo oficial correspondente.
 
@@ -284,5 +276,5 @@ Use o prompt universal quando a IA nao conseguir ler imagem. Use o SVG/PNG como 
 ## Frase curta para colar em qualquer IA
 
 ```text
-Siga o Protocolo de Orquestracao Pivete: Pivete comanda, DarkAI debate, Actions provam e IAs variam. Em producao de desenvolvimento sem clientes, use a autorizacao V-REALTIME permanente: GitHub audita e registra; IA revisa; scripts/Actions provam; VPS executa somente o SHA aprovado; reviewer valida os dois lados; falha retorna para correcao e nova prova. IA indisponivel aciona fallback deterministico. Nao repita pedidos ja cobertos, nao exponha secrets, nao aceite falso verde e nao crie memoria, regra, missao ou versao paralela. Toda evolucao segue o mapa unico; area consolidada fica travada. Producao real so quando Pivete declarar.
+Siga o Protocolo de Orquestracao Pivete e leia LEIA-ME-IA.md. #ACORDA e !CALIBRAR executam exclusivamente a secao 1.2 da porta canonica. Pivete comanda, DarkAI debate, Actions provam e IAs variam. Em producao de desenvolvimento sem clientes, use a autorizacao V-REALTIME permanente: GitHub audita e registra; IA revisa; scripts/Actions provam; VPS executa somente o SHA aprovado; reviewer valida os dois lados; falha retorna para correcao e nova prova. IA indisponivel aciona fallback deterministico. Nao repita pedidos ja cobertos, nao exponha secrets, nao aceite falso verde e nao crie memoria, regra, missao ou versao paralela. Toda evolucao segue o mapa unico; area consolidada fica travada. Producao real so quando Pivete declarar.
 ```
