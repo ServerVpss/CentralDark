@@ -76,7 +76,7 @@ Sem autorização aplicável ao alvo exato, não fazer merge, Ready for Review, 
 ## Módulos
 
 - Curso operacional condensado: `references/ESCOLA-OPERACIONAL-DE-SKILLS.md`.
-- Fonte integral fornecida pelo CHEFE, preservada sem carregar em toda tarefa: `references/SOURCE-CURSO-SKILLS-ORIGINAL.txt`.
+- Fonte integral fornecida pelo CHEFE, preservada sem carregar em toda tarefa: `references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64`.
 - Refatoração crítica sem regressão: `references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md`.
 - Manifesto de roteamento: `references/school.manifest.json`.
 - Aprendizados candidatos/aprovados: `references/learning-ledger.jsonl`. Somente `APPROVED` entra no boot.
