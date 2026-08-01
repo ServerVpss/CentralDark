@@ -18,6 +18,7 @@ const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UN
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 const CALIBRATION_START = "### 1.2 Recalibração canônica por gatilho";
 const CALIBRATION_END = "\n---\n\n## 2. As cinco coisas que não mudam";
+const BOOT_BLOCK_START = "```yaml\nCENTRALDARK_AI_BOOT:";
 const EXPECTED_SOURCE_OF_TRUTH = "ServerVpss/CentralDark";
 const EXPECTED_OBSERVED_STATE = "evidência atual medida e separada da fonte canônica";
 
@@ -125,6 +126,32 @@ function extrairSecao(texto, inicio, fim) {
   return end < 0 ? texto.slice(start) : texto.slice(start, end);
 }
 
+function extrairBlocoCodigo(texto, inicio) {
+  const start = texto.indexOf(inicio);
+  if (start < 0) return "";
+  const contentStart = start + inicio.length;
+  const end = texto.indexOf("\n```", contentStart);
+  return end < 0 ? "" : texto.slice(start, end + 4);
+}
+
+function validarContradicoes(secao, errors) {
+  const linhasPermitidas = new Set([
+    "não use estado antigo como atual.",
+    "não apresente estado antigo como atual e não continue por suposição.",
+  ]);
+  const contradicoes = secao
+    .split(/\r?\n/)
+    .map((line) => line.trim().toLocaleLowerCase("pt-BR"))
+    .filter(
+      (line) =>
+        (line.includes("estado antigo") || line.includes("por suposição")) &&
+        !linhasPermitidas.has(line),
+    );
+
+  if (contradicoes.length > 0) errors.push("PORTA_DIRETIVA_CONTRADITORIA");
+  return { ok: contradicoes.length === 0, linhas: contradicoes };
+}
+
 function validarDelegacoes(errors) {
   const detalhes = [];
   for (const protocolo of PROTOCOLOS_ATIVOS) {
@@ -211,17 +238,25 @@ if (!CALIBRATION_ONLY && !PROTOCOL_ONLY && !existe(IDENTIDADE_LUPA)) errors.push
 
 const portaContent = ler(PORTA);
 const calibrationSection = extrairSecao(portaContent, CALIBRATION_START, CALIBRATION_END);
+const bootReceipt = extrairBlocoCodigo(portaContent, BOOT_BLOCK_START);
 const calibrationTokensPresent = CALIBRATION_TOKENS.filter((token) => calibrationSection.includes(token));
 const calibrationRulesPresent = CALIBRATION_RULES.filter((rule) => rule.pattern.test(calibrationSection));
 const tokensOk = calibrationTokensPresent.length === CALIBRATION_TOKENS.length;
 const regrasOk = calibrationRulesPresent.length === CALIBRATION_RULES.length;
-const sourceOfTruthOk = new RegExp(
+const sourceFrontmatterOk = new RegExp(
   `^source_of_truth:\\s*"${EXPECTED_SOURCE_OF_TRUTH.replace("/", "\\/")}"\\s*$`,
   "m",
 ).test(portaContent.slice(0, 700));
-const observedStateOk = portaContent.includes(
-  `observed_state: "${EXPECTED_OBSERVED_STATE}"`,
-);
+const sourceBootOk = new RegExp(
+  `^\\s{2}source_of_truth:\\s*"${EXPECTED_SOURCE_OF_TRUTH.replace("/", "\\/")}"\\s*$`,
+  "m",
+).test(bootReceipt);
+const sourceOfTruthOk = sourceFrontmatterOk && sourceBootOk;
+const observedStateOk = new RegExp(
+  `^\\s{2}observed_state:\\s*"${EXPECTED_OBSERVED_STATE}"\\s*$`,
+  "m",
+).test(bootReceipt);
+const contradictions = validarContradicoes(calibrationSection, errors);
 
 for (const token of CALIBRATION_TOKENS) {
   if (!calibrationSection.includes(token)) errors.push(`PORTA_SEM_CALIBRACAO:${token}`);
@@ -238,13 +273,17 @@ const calibrationReport = {
   tokens_ok: tokensOk,
   regras_ok: regrasOk,
   source_of_truth_ok: sourceOfTruthOk,
+  source_frontmatter_ok: sourceFrontmatterOk,
+  source_boot_ok: sourceBootOk,
   observed_state_ok: observedStateOk,
+  contradictions_ok: contradictions.ok,
+  contradictions: contradictions.linhas,
   tokens_presentes: calibrationTokensPresent.length,
   tokens_obrigatorios: CALIBRATION_TOKENS.length,
   regras_presentes: calibrationRulesPresent.length,
   regras_obrigatorias: CALIBRATION_RULES.length,
   regras: CALIBRATION_RULES.map((rule) => ({ id: rule.id, ok: rule.pattern.test(calibrationSection) })),
-  ok: tokensOk && regrasOk && sourceOfTruthOk && observedStateOk,
+  ok: tokensOk && regrasOk && sourceOfTruthOk && observedStateOk && contradictions.ok,
 };
 
 const protocolReport = CALIBRATION_ONLY
@@ -273,6 +312,7 @@ if (CALIBRATION_ONLY || PROTOCOL_ONLY) {
         `REGRAS=${calibrationReport.regras_presentes}/${calibrationReport.regras_obrigatorias} ` +
         `SOURCE=${calibrationReport.source_of_truth_ok ? 1 : 0} ` +
         `OBSERVED=${calibrationReport.observed_state_ok ? 1 : 0} ` +
+        `CONTRADICTIONS=${calibrationReport.contradictions.length} ` +
         `ERROS=${errors.length}`,
     );
   }
@@ -347,6 +387,7 @@ else {
       `PROTOCOLOS=${report.protocolos.documentos.filter((item) => item.delegates && !item.concurrent).length}/${PROTOCOLOS_ATIVOS.length} ` +
       `SOURCE=${report.calibracao.source_of_truth_ok ? 1 : 0} ` +
       `OBSERVED=${report.calibracao.observed_state_ok ? 1 : 0} ` +
+      `CONTRADICTIONS=${report.calibracao.contradictions.length} ` +
       `ADAPTADORES=${report.adaptadores_encontrados.length}/${report.adaptadores_obrigatorios.length} ` +
       `CANONICOS=${report.canonicos_encontrados} ` +
       `ALCANCAVEIS=${report.canonicos_alcancaveis} ` +
