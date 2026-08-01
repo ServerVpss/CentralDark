@@ -110,3 +110,32 @@ Use somente placeholders como `<REDACTED>`, `<ENV_PROVIDER_KEY>` e `<INTERNAL_BA
 - Não registrar Authorization header, token ou valor de chave.
 - Não transformar preview em fonte oficial.
 - GitHub registra; VPS apenas executa o que foi aprovado.
+
+## Code Review Rules
+
+### Autoridade e escopo
+
+- Revisar o HEAD exato informado no PR; comentário ou receipt de SHA antigo não aprova SHA novo.
+- O revisor opera em modo somente leitura: não faz push, merge, deploy, resolve thread ou promove sozinho.
+- Sinalizar qualquer bypass de SEGREDO/CHEFE, de writer único por escopo ou de Judge independente.
+- Não ampliar o escopo do PR para resolver achados de outra trilha; registrar dependência separada.
+
+### Evidência e falso verde
+
+- `UNKNOWN`, `SKIPPED`, timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
+- Exigir causa, impacto, teste, contraprova, rollback e receipt presos ao mesmo HEAD.
+- Sinalizar fallback silencioso, resultado simulado, lista estática tratada como disponibilidade real ou aprovação sem prova.
+
+### Segurança e credenciais
+
+- Não reproduzir valores de secrets em comentários, logs ou artifacts.
+- Separar credenciais, jobs e permissões de Writer, Judge e Promotor.
+- Código de PR não confiável não pode executar com credencial privilegiada.
+- Alteração em workflow deve usar menor privilégio e checkout preso ao SHA esperado.
+
+### Arquitetura canônica
+
+- Sinalizar novo entrypoint, orquestrador concorrente ou duplicação por nome `V2`, `V3`, `NOVO`, `FINAL`, `COPY` ou `BACKUP`.
+- Preferir adaptação mínima do componente canônico existente.
+- Confrontar mudanças de governança com `LEIA-ME-IA.md`, este `AGENTS.md` e o mapa canônico.
+- Priorizar findings P0/P1 consequenciais; evitar ruído cosmético como bloqueador.
