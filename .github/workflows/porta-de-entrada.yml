@@ -1,6 +1,6 @@
 name: porta-de-entrada
 
-# Protege a porta universal, a escola agentic e o mapa canônico do repositório inteiro.
+# Protege a porta universal, a escola agentic, o contrato de relato e o mapa canônico.
 # Nenhum adaptador guarda cópia manual da governança e nenhum estado incerto vira verde.
 
 on:
@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   validar:
-    name: Porta, escola e governança canônica estão íntegras?
+    name: Porta, escola, relato e governança canônica estão íntegros?
     runs-on: ubuntu-latest
     timeout-minutes: 8
     env:
@@ -44,8 +44,12 @@ jobs:
       - name: Testar falsificações semânticas do protocolo ACORDA
         run: node --test scripts/lupa/validar-porta-de-entrada.test.mjs
 
-      - name: Testar escola agentic e relatório de progresso
-        run: node --test scripts/lupa/agentic-school-loader.test.mjs scripts/lupa/agentic-loop-progress.test.mjs
+      - name: Testar escola, relato Pivete e progresso
+        run: >-
+          node --test
+          scripts/lupa/agentic-school-loader.test.mjs
+          scripts/lupa/agentic-loop-progress.test.mjs
+          scripts/lupa/validar-relato-pivete.test.mjs
 
       - name: Testar fontes e pacote visual
         env:
