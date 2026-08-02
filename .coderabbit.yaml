@@ -1,0 +1,156 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+inheritance: true
+language: "pt-BR"
+tone_instructions: >-
+  Direto, técnico e orientado a evidência. Use o Contrato Unificado de Relato
+  Pivete em .agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md:
+  veredito primeiro, progresso medido separado de estimativa, diagnóstico antes
+  do Papo Reto do Pivete, prova presa ao HEAD, próximo gate e ação exata do CHEFE.
+  Não transforme UNKNOWN, SKIPPED, PENDING, silêncio ou ausência de prova em PASS.
+early_access: true
+enable_free_tier: true
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  review_status: true
+  review_details: true
+  review_progress: true
+  fail_commit_status: true
+  changed_files_summary: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  suggested_reviewers: true
+  poem: false
+  enable_prompt_for_ai_agents: true
+  auto_review:
+    enabled: true
+    drafts: true
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 0
+  finishing_touches:
+    docstrings:
+      enabled: false
+    autofix:
+      enabled: false
+    fix_ci:
+      enabled: false
+    resolve_merge_conflict:
+      enabled: false
+    unit_tests:
+      enabled: false
+  path_instructions:
+    - path: ".agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md"
+      instructions: >-
+        Trate este arquivo como fonte única do formato de relato. Verifique ordem,
+        campos, separação entre percentual medido e estimativa, regra de um único
+        comando/script e autoria SEGREDO/CHEFE. Bloqueie padrões paralelos.
+    - path: ".agents/skills/agentic-ci-loop/**"
+      instructions: >-
+        Confirme que todo boot carrega o contrato unificado, que o validador falha
+        fechado e que modo curto não esconde finding, causa, risco ou pendência.
+    - path: "AGENTS.md"
+      instructions: >-
+        Verifique autoridade, ordem de boot, escritor único por escopo,
+        separação Writer/Judge/Promotor, fail-closed e compatibilidade com
+        LEIA-ME-IA.md. Não aceite UNKNOWN, SKIPPED ou ausência de prova como PASS.
+    - path: "LEIA-ME-IA.md"
+      instructions: >-
+        Trate como contrato canônico de entrada. Sinalize qualquer mudança que
+        crie autoridade concorrente, fallback silencioso ou desvio do mapa atual.
+    - path: "docs/ARQUITETURA/**"
+      instructions: >-
+        Confronte a documentação com AGENTS.md, LEIA-ME-IA.md e o mapa canônico.
+        Sinalize contradições de autoridade, entrypoints concorrentes e versões
+        paralelas V2/V3/NOVO/FINAL/COPY/BACKUP.
+    - path: ".github/workflows/**"
+      instructions: >-
+        Verifique menor privilégio, separação de credenciais entre Writer, Judge
+        e Promotor, checkout preso ao SHA esperado, ausência de código não
+        confiável com token privilegiado e nenhum fallback silencioso.
+    - path: "scripts/**"
+      instructions: >-
+        Exija evidência reproduzível, timeout explícito, erro fail-closed,
+        sanitização de secrets, dry-run, rollback e receipt preso ao HEAD testado.
+    - path: "apps/**"
+      instructions: >-
+        Sinalize duplicação de módulos ou entrypoints, mudança fora do mapa,
+        efeitos colaterais sem autorização e regressões de compatibilidade.
+    - path: "**/*"
+      instructions: >-
+        Antes de concluir, confronte Learnings, issues, PRs anteriores e guidelines
+        canônicas. Classifique achados como FACT, INFERENCE ou UNKNOWN. No resumo
+        final, use MODO_CURTO quando não houver mutação/finding novo e MODO_COMPLETO
+        para auditoria, porcentagem, bloqueio ou fechamento. Se o CHEFE puder
+        resolver mais rápido por acesso local, entregue somente um script completo,
+        read-only por padrão, salvando saída em E:\CentralDark\Pivete\TEMP.
+
+chat:
+  allow_non_org_members: false
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  web_search:
+    enabled: true
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "LEIA-ME-IA.md"
+      - ".agents/skills/agentic-ci-loop/**/*.md"
+      - "docs/ARQUITETURA/**/*.md"
+      - "docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md"
+  learnings:
+    scope: "local"
+  issues:
+    scope: "local"
+  pull_requests:
+    scope: "local"
+  mcp:
+    usage: "disabled"
+    disabled_servers: []
+
+issue_enrichment:
+  auto_enrich:
+    enabled: false
+  planning:
+    enabled: true
+    auto_planning:
+      enabled: false
+      labels:
+        - "plan-me"
+        - "!no-plan"
+        - "!blocked"
+  labeling:
+    auto_apply_labels: false
+    labeling_instructions:
+      - label: "plan-me"
+        instructions: >-
+          Missão ampla que exige pesquisa, decomposição, ownership, dependências
+          e plano agent-ready antes da escrita.
+      - label: "blocked"
+        instructions: >-
+          Existe dependência, colisão de Writer, ausência de prova crítica ou gate
+          humano obrigatório que impede avanço seguro.
+      - label: "security"
+        instructions: >-
+          Mudança relacionada a credenciais, permissões, exposição, autenticação,
+          sandbox, secret scan ou menor privilégio.
+      - label: "sol"
+        instructions: >-
+          Mudança relacionada ao SOL Desktop, voz, bridge, interface ou experiência
+          voice-first.
+      - label: "vps"
+        instructions: >-
+          Mudança relacionada a Linux, Docker, PM2, systemd, Caddy, firewall,
+          Portainer, observabilidade ou execução na VPS.
+      - label: "delta"
+        instructions: >-
+          Mudança relacionada ao contrato Delta, ledger append-only, handoff,
+          receipts, memória ou reverificação independente.
