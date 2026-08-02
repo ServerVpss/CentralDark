@@ -7,6 +7,7 @@ PR recém-aberto; preencher a verdade atual em uma frase.
 
 📊 PROGRESSO=
 ESCOPO_MEDIDO=1 gate inicial do corpo do PR
+GATES_MEDIDOS_JSON=[{"id":"PR_BODY","status":"UNKNOWN","pontos":0,"prova":"template criado; medição ainda pendente"}]
 PERCENTUAL_MEDIDO=0/100=0%
 ESTIMATIVA=NÃO_CALCULADA
 ESCOPO_DA_ESTIMATIVA=NÃO_APLICÁVEL
@@ -45,6 +46,8 @@ CHECKS=UNKNOWN
 TESTES=UNKNOWN
 RECEIPT=UNKNOWN
 FONTE_DA_PROVA=GitHub
+EMISSOR=IA A DEFINIR
+PAPEL_DO_EMISSOR=WRITER
 
 🧭 FLUXO VISUAL=
 DIAGRAMA_OBRIGATÓRIO=NÃO
@@ -102,6 +105,6 @@ Liste os testes frescos e o resultado preso ao HEAD atual.
 
 - Todo texto operacional em português.
 - Fluxo com três ou mais participantes: use `sequenceDiagram` Mermaid.
-- Atualize o HEAD, testes e checks depois de cada mudança relevante.
+- Atualize o HEAD, gates estruturados, testes e checks depois de cada mudança relevante.
 - `UNKNOWN`, `SKIPPED`, `PENDING` e silêncio nunca são `PASS`.
 - Não apague este contrato; evolua os campos com a prova real.
