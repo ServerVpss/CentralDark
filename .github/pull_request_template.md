@@ -87,6 +87,12 @@ AUTORIA_DO_PADRÃO=SEGREDO/CHEFE
 
 Liste os testes frescos e o resultado preso ao HEAD atual.
 
+## Revisão
+
+- [ ] Verifiquei comentários de agentes no PR antes do merge.
+- [ ] Revisei o diff completo e os checks do HEAD atual.
+- [ ] Confirmei que logs e diagramas não expõem valores sensíveis.
+
 ## Regras rápidas
 
 - Todo texto operacional em português.
