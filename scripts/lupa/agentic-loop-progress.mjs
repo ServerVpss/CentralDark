@@ -44,11 +44,19 @@ export function buildCourseCustodyGates({ condensedPresent, receiptPresent, orig
 }
 
 export function deriveSituation(gates) {
+  if (gates.every((item) => item.status === 'PASS')) return 'DONE_COM_PROVA';
   const required = gates.filter((item) => item.required !== false);
-  if (required.every((item) => item.status === 'PASS')) return 'DONE_COM_PROVA';
   if (required.some((item) => ['FAIL', 'BLOCKED', 'TIMEOUT'].includes(item.status))) return 'BLOCKED';
   if (required.some((item) => ['UNKNOWN', 'PENDING', 'SKIPPED'].includes(item.status))) return 'PARTIAL_BLOQUEADO';
   return 'PARTIAL_COM_PROVA';
+}
+
+export function requirementSatisfied(report, mode) {
+  if (mode === 'complete') return report.gates.every((item) => item.status === 'PASS');
+  if (mode === 'operational') {
+    return report.gates.filter((item) => item.required !== false).every((item) => item.status === 'PASS');
+  }
+  throw new Error(`REQUIREMENT_MODE_INVALID:${mode}`);
 }
 
 export function validateGates(gates) {
@@ -109,6 +117,8 @@ export function buildRuntimeReport({ root, expectedHead }) {
     source_of_truth: 'ServerVpss/CentralDark',
     measured_head: expectedHead,
     situation,
+    operational_ready: blockers.length === 0,
+    complete: gates.every((item) => item.status === 'PASS'),
     progress,
     gates,
     error: blockers.map((item) => item.label).join(' | ') || 'NENHUM',
@@ -118,7 +128,7 @@ export function buildRuntimeReport({ root, expectedHead }) {
     scar: 'Toda falha provada exige teste vermelho antes, verde depois e lição somente após Judge + CHEFE.',
     blocking_pending: blockers.map((item) => `${item.label}: ${item.next_step}`),
     non_blocking_pending: nonBlockers.map((item) => `${item.label}: ${item.next_step}`),
-    anticipation: blockers.length ? 'Não declarar escola concluída nem promover para main enquanto houver gate obrigatório fora de PASS.' : 'Próxima regressão deve virar receipt e lição candidata.',
+    anticipation: blockers.length ? 'Não declarar escola operacional nem promover para main enquanto houver gate obrigatório fora de PASS.' : 'A escola está operacional na branch, mas a entrega não é completa enquanto existir gate opcional fora de PASS.',
     next_movement: blockers[0]?.next_step || 'solicitar Judge no mesmo HEAD e manter merge sob decisão do CHEFE',
     chief_action: blockers.length ? 'NADA_AGORA; O WRITER DEVE FECHAR OS GATES TÉCNICOS' : 'DECIDIR PROMOÇÃO APÓS JUDGE INDEPENDENTE',
   };
@@ -134,6 +144,8 @@ export function formatPiveteReport(report) {
     `TESTE=${report.test}`,
     `CICATRIZ=${report.scar}`,
     `PERCENTUAL=${report.progress.earned}/${report.progress.total}=${report.progress.percent}%`,
+    `OPERACIONAL=${report.operational_ready ? 'SIM' : 'NÃO'}`,
+    `COMPLETO=${report.complete ? 'SIM' : 'NÃO'}`,
     `PENDÊNCIAS_BLOQUEANTES=${join(report.blocking_pending)}`,
     `PENDÊNCIAS_NÃO_BLOQUEANTES=${join(report.non_blocking_pending)}`,
     `ANTECIPAÇÃO=${report.anticipation}`,
@@ -160,7 +172,8 @@ function main() {
   const report = buildRuntimeReport({ root, expectedHead });
   if (args.includes('--json')) console.log(JSON.stringify(report, null, 2));
   else console.log(formatPiveteReport(report));
-  if (report.situation !== 'DONE_COM_PROVA' && args.includes('--require-complete')) process.exitCode = 1;
+  if (args.includes('--require-complete') && !requirementSatisfied(report, 'complete')) process.exitCode = 1;
+  if (args.includes('--require-operational') && !requirementSatisfied(report, 'operational')) process.exitCode = 1;
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try { main(); }
