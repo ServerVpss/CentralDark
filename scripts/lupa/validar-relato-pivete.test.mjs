@@ -101,21 +101,16 @@ test('bloqueia porcentagem matemática falsa', () => {
 
 test('bloqueia estimativa sem escopo separado', () => {
   const report = fullReport()
-    .replace('ESTIMATIVA=NÃO_CALCULADA', 'ESTIMATIVA=30%')
-    .replace('ESCOPO_DA_ESTIMATIVA=NÃO_APLICÁVEL', 'ESCOPO_DA_ESTIMATIVA=NÃO_APLICÁVEL');
+    .replace('ESTIMATIVA=NÃO_CALCULADA', 'ESTIMATIVA=30%');
   assert.throws(() => validateReport(report, 'full'), /REPORT_ESTIMATE_SCOPE_NOT_DECLARED/);
 });
 
 test('bloqueia papo reto antes do diagnóstico técnico', () => {
   const report = fullReport();
-  const diagnosisStart = report.indexOf('🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=');
-  const proofStart = report.indexOf('🔎 PROVA=');
-  const papoStart = report.indexOf('🗣️ PAPO RETO DO PIVETE=');
-  const diagnosis = report.slice(diagnosisStart, proofStart);
-  const papo = report.slice(papoStart, report.indexOf('➡️ PRÓXIMO GATE='));
   const bad = report
-    .replace(diagnosis, papo)
-    .replace(papo, diagnosis);
+    .replace('🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=', '__TEMP_HEADER__')
+    .replace('🗣️ PAPO RETO DO PIVETE=', '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=')
+    .replace('__TEMP_HEADER__', '🗣️ PAPO RETO DO PIVETE=');
   assert.throws(() => validateReport(bad, 'full'), /REPORT_HEADER_ORDER_INVALID/);
 });
 
