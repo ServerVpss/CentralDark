@@ -131,9 +131,11 @@ NUNCA PROMOVA SEM PROVA.
 
 ## Preservação da fonte e do visual
 
-O curso integral fornecido pelo CHEFE permanece em
-`SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64`, preso ao SHA-256 registrado no manifesto.
-Ele é fonte de estudo, não contexto obrigatório de toda tarefa.
+O curso integral fornecido pelo CHEFE permanece como anexo externo medido pelo
+SHA-256 do frontmatter. O arquivo `SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64`
+é apenas um receipt compactado com esse SHA e a marca
+`RECEIPT_ONLY_NOT_BOOT_CONTEXT`; não finge conter o artigo inteiro. O contrato
+acionável e bootável é este documento condensado.
 
 A fonte SVG editável e o LEIA-ME do pacote ficam versionados. O ZIP recebido é
 validado contra SHA-256, quatro membros, hashes internos e dimensões 3840×2160
