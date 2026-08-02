@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-import fs from 'node:fs';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const DEFAULT_MANIFEST = '.agents/skills/agentic-ci-loop/references/school.manifest.json';
@@ -12,9 +13,12 @@ const SHA256 = /^[0-9a-f]{64}$/;
 const REQUIRED_REPORT_TOKENS = Object.freeze([
   '🧠 CENTRALDARK — ESTADO DA MISSÃO',
   '🎯 VEREDITO=',
+  'GATES_MEDIDOS_JSON=',
   'PERCENTUAL_MEDIDO=',
   'ESTIMATIVA=',
   '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=',
+  'EMISSOR=',
+  'PAPEL_DO_EMISSOR=',
   '🧭 FLUXO VISUAL=',
   'DIAGRAMA_OBRIGATÓRIO=',
   'sequenceDiagram',
@@ -42,6 +46,19 @@ function sha256File(root, relativePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(path.join(root, relativePath))).digest('hex');
 }
 
+function safeRelative(relativePath, code = 'SCHOOL_PATH_INVALID') {
+  assert(typeof relativePath === 'string' && relativePath.length > 0, code);
+  assert(!path.isAbsolute(relativePath) && !relativePath.split(/[\\/]/).includes('..'), code);
+  return relativePath;
+}
+
+function requireFile(root, relativePath, code = 'SCHOOL_PATH_MISSING') {
+  safeRelative(relativePath, code);
+  const absolute = path.join(root, relativePath);
+  assert(fs.existsSync(absolute) && fs.statSync(absolute).isFile(), `${code}:${relativePath}`);
+  return absolute;
+}
+
 function listFiles(root, relativeDirectory) {
   const base = path.join(root, relativeDirectory);
   if (!fs.existsSync(base)) return [];
@@ -58,15 +75,8 @@ function listFiles(root, relativeDirectory) {
   return output;
 }
 
-function parseSkillName(content, relativePath) {
-  const frontmatter = parseFrontmatter(content, relativePath);
-  assert(typeof frontmatter.name === 'string' && frontmatter.name.length > 0, `SKILL_NAME_MISSING:${relativePath}`);
-  return frontmatter.name;
-}
-
 export function parseFrontmatter(content, relativePath = 'document') {
-  const normalized = String(content).replace(/\r\n/g, '\n');
-  const lines = normalized.split('\n');
+  const lines = String(content).replace(/\r\n/g, '\n').split('\n');
   assert(lines[0]?.trim() === '---', `FRONTMATTER_START_MISSING:${relativePath}`);
   const end = lines.indexOf('---', 1);
   assert(end > 1, `FRONTMATTER_END_MISSING:${relativePath}`);
@@ -85,21 +95,26 @@ export function parseFrontmatter(content, relativePath = 'document') {
   return result;
 }
 
+function parseSkillName(content, relativePath) {
+  const name = parseFrontmatter(content, relativePath).name;
+  assert(typeof name === 'string' && name.length > 0, `SKILL_NAME_MISSING:${relativePath}`);
+  return name;
+}
+
 function extractYamlScalar(content, key) {
   const lines = String(content).replace(/\r\n/g, '\n').split('\n');
-  const keyPattern = new RegExp(`^(\\s*)${key}:\\s*(.*)$`);
+  const pattern = new RegExp(`^(\\s*)${key}:\\s*(.*)$`);
   for (let index = 0; index < lines.length; index += 1) {
-    const match = lines[index].match(keyPattern);
+    const match = lines[index].match(pattern);
     if (!match) continue;
-    const baseIndent = match[1].length;
+    const indent = match[1].length;
     const raw = match[2].trim();
     if (!['>-', '|-', '>', '|'].includes(raw)) return raw.replace(/^['"]|['"]$/g, '');
     const chunks = [];
     for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
       const current = lines[cursor];
       if (!current.trim()) { chunks.push(''); continue; }
-      const indent = current.match(/^\s*/)[0].length;
-      if (indent <= baseIndent) break;
+      if (current.match(/^\s*/)[0].length <= indent) break;
       chunks.push(current.trim());
     }
     return chunks.join(' ').replace(/\s+/g, ' ').trim();
@@ -110,16 +125,13 @@ function extractYamlScalar(content, key) {
 function validateReportContract(root, contractPath, validatorPath) {
   const contract = readText(root, contractPath);
   for (const token of REQUIRED_REPORT_TOKENS) assert(contract.includes(token), `REPORT_CONTRACT_TOKEN_MISSING:${token}`);
-  assert(contract.includes('PR #499'), 'REPORT_CONTRACT_SOURCE_MISSING:499');
-  assert(contract.includes('PR #554'), 'REPORT_CONTRACT_SOURCE_MISSING:554');
-  assert(contract.includes('PR #585'), 'REPORT_CONTRACT_SOURCE_MISSING:585');
-  assert(contract.includes('PR #611'), 'REPORT_CONTRACT_SOURCE_MISSING:611');
+  for (const pr of [499, 554, 585, 611]) assert(contract.includes(`PR #${pr}`), `REPORT_CONTRACT_SOURCE_MISSING:${pr}`);
   assert(contract.includes('E:\\CentralDark\\Pivete\\TEMP'), 'REPORT_CONTRACT_TEMP_PATH_MISSING');
   assert(/todo commit/i.test(contract) && /todo PR/i.test(contract), 'REPORT_CONTRACT_NOT_GLOBAL');
   const validator = readText(root, validatorPath);
-  assert(validator.includes('REPORT_PERCENT_MISMATCH'), 'REPORT_VALIDATOR_PERCENT_GATE_MISSING');
-  assert(validator.includes('REPORT_HEADER_ORDER_INVALID'), 'REPORT_VALIDATOR_ORDER_GATE_MISSING');
-  assert(validator.includes('REPORT_MERMAID_SEQUENCE_MISSING'), 'REPORT_VALIDATOR_DIAGRAM_GATE_MISSING');
+  for (const token of ['REPORT_GATES_PERCENT_MISMATCH', 'REPORT_HEADER_DUPLICATED', 'REPORT_MERMAID_SEQUENCE_MISSING', 'REPORT_AUTHORSHIP_NOT_UNIQUE', 'REPORT_COLLECTION_SINGLE_SCRIPT_REQUIRED']) {
+    assert(validator.includes(token), `REPORT_VALIDATOR_GATE_MISSING:${token}`);
+  }
   assert(validator.includes("'pr'"), 'REPORT_VALIDATOR_PR_MODE_MISSING');
 }
 
@@ -132,39 +144,71 @@ function validateCodeRabbit(root, relativePath, contractPath) {
   assert(/sequence_diagrams:\s*true/i.test(content), 'CODERABBIT_SEQUENCE_DIAGRAMS_DISABLED');
   assert(/drafts:\s*true/i.test(content), 'CODERABBIT_DRAFT_REVIEW_DISABLED');
   assert(content.includes(contractPath), 'CODERABBIT_CONTRACT_POINTER_MISSING');
-  for (const writeFeature of ['docstrings', 'autofix', 'fix_ci', 'resolve_merge_conflict', 'unit_tests']) {
-    const pattern = new RegExp(`${writeFeature}:[\\s\\S]{0,100}?enabled:\\s*false`, 'i');
-    assert(pattern.test(content), `CODERABBIT_WRITE_FEATURE_ENABLED:${writeFeature}`);
+  for (const feature of ['docstrings', 'autofix', 'fix_ci', 'resolve_merge_conflict', 'unit_tests']) {
+    assert(new RegExp(`${feature}:[\\s\\S]{0,100}?enabled:\\s*false`, 'i').test(content), `CODERABBIT_WRITE_FEATURE_ENABLED:${feature}`);
   }
 }
 
 function validatePrTemplate(root, relativePath) {
   const content = readText(root, relativePath);
   for (const token of REQUIRED_REPORT_TOKENS) assert(content.includes(token), `PR_TEMPLATE_TOKEN_MISSING:${token}`);
-  assert(content.includes('## Arquivos sensíveis'), 'PR_TEMPLATE_SENSITIVE_SECTION_MISSING');
-  assert(content.includes('## Testes'), 'PR_TEMPLATE_TESTS_SECTION_MISSING');
+  for (const heading of ['## Arquivos sensíveis', '## Testes', '## Ações sensíveis', '## Revisão']) assert(content.includes(heading), `PR_TEMPLATE_SECTION_MISSING:${heading}`);
 }
 
 function validateGlobalWorkflow(root, relativePath) {
   const content = readText(root, relativePath);
-  const eventBlock = content.match(/^on:\s*\n([\s\S]*?)^permissions:/m)?.[1] || '';
-  assert(/^\s{2}pull_request:\s*$/m.test(eventBlock), 'GLOBAL_WORKFLOW_PULL_REQUEST_MISSING');
-  assert(!/^\s{2}pull_request:\s*\n(?:\s{4}.*\n)*?\s{4}branches:/m.test(eventBlock), 'GLOBAL_WORKFLOW_PR_NARROWED');
-  assert(/^\s{2}push:\s*\n\s{4}branches:\s*\[\s*["']\*\*["']\s*\]/m.test(eventBlock), 'GLOBAL_WORKFLOW_ALL_PUSHES_MISSING');
-  assert(/^\s{2}merge_group:/m.test(eventBlock), 'GLOBAL_WORKFLOW_MERGE_GROUP_MISSING');
-  assert(content.includes('validar-relato-pivete.mjs --mode pr'), 'GLOBAL_WORKFLOW_PR_BODY_GATE_MISSING');
-  assert(content.includes('agentic-school-loader.test.mjs'), 'GLOBAL_WORKFLOW_SCHOOL_TEST_MISSING');
-  assert(content.includes('agentic-loop-progress.test.mjs'), 'GLOBAL_WORKFLOW_PROGRESS_TEST_MISSING');
-  assert(content.includes('validar-relato-pivete.test.mjs'), 'GLOBAL_WORKFLOW_REPORT_TEST_MISSING');
+  const events = content.match(/^on:\s*\n([\s\S]*?)^permissions:/m)?.[1] || '';
+  assert(/^\s{2}pull_request:\s*$/m.test(events), 'GLOBAL_WORKFLOW_PULL_REQUEST_MISSING');
+  assert(!/^\s{2}pull_request:\s*\n(?:\s{4}.*\n)*?\s{4}branches:/m.test(events), 'GLOBAL_WORKFLOW_PR_NARROWED');
+  assert(/^\s{2}push:\s*\n\s{4}branches:\s*\[\s*["']\*\*["']\s*\]/m.test(events), 'GLOBAL_WORKFLOW_ALL_PUSHES_MISSING');
+  assert(/^\s{2}merge_group:/m.test(events), 'GLOBAL_WORKFLOW_MERGE_GROUP_MISSING');
+  for (const token of ['validar-relato-pivete.mjs --mode pr', 'agentic-school-loader.test.mjs', 'agentic-loop-progress.test.mjs', 'validar-relato-pivete.test.mjs', 'issue-gate-receipt', '--test-receipt', '--meta-lupa-receipt']) {
+    assert(content.includes(token), `GLOBAL_WORKFLOW_GATE_MISSING:${token}`);
+  }
 }
 
-export function validateLessonLedger(content) {
-  const approved = [];
-  const candidates = [];
-  const rejected = [];
+function validateTaskModules(root, manifest) {
+  for (const [task, modules] of Object.entries(manifest.tasks)) {
+    assert(Array.isArray(modules), `SCHOOL_TASK_MODULES_INVALID:${task}`);
+    assert(modules.length > 0, `SCHOOL_TASK_WITHOUT_MODULE:${task}`);
+    for (const modulePath of modules) {
+      const content = readText(root, modulePath);
+      assert(!/^##\s+Saída obrigatória\s*$/im.test(content), `SCHOOL_COMPETING_OUTPUT_CONTRACT:${task}:${modulePath}`);
+    }
+  }
+}
+
+function verifyGitCommit(root, sha, lessonId) {
+  try { execFileSync('git', ['-C', root, 'cat-file', '-e', `${sha}^{commit}`], { stdio: 'ignore' }); }
+  catch { throw new Error(`LESSON_HEAD_NOT_IN_GIT:${lessonId}:${sha}`); }
+}
+
+function validateApprovedLessonEvidence(root, lesson) {
+  for (const field of ['regression_test_path', 'regression_test_selector', 'evidence_receipt_path', 'judge_receipt_path', 'judge_receipt_sha256']) {
+    assert(typeof lesson[field] === 'string' && lesson[field].length > 0, `LESSON_APPROVAL_FIELD_MISSING:${lesson.lesson_id}:${field}`);
+  }
+  assert(SHA256.test(lesson.judge_receipt_sha256), `LESSON_JUDGE_SHA_INVALID:${lesson.lesson_id}`);
+  requireFile(root, lesson.regression_test_path, 'LESSON_REGRESSION_PATH_MISSING');
+  requireFile(root, lesson.evidence_receipt_path, 'LESSON_EVIDENCE_RECEIPT_MISSING');
+  requireFile(root, lesson.judge_receipt_path, 'LESSON_JUDGE_RECEIPT_MISSING');
+  assert(readText(root, lesson.regression_test_path).includes(lesson.regression_test_selector), `LESSON_REGRESSION_SELECTOR_MISSING:${lesson.lesson_id}`);
+  assert(sha256File(root, lesson.evidence_receipt_path) === lesson.evidence_sha256, `LESSON_EVIDENCE_RECEIPT_SHA_MISMATCH:${lesson.lesson_id}`);
+  assert(sha256File(root, lesson.judge_receipt_path) === lesson.judge_receipt_sha256, `LESSON_JUDGE_RECEIPT_SHA_MISMATCH:${lesson.lesson_id}`);
+  verifyGitCommit(root, lesson.head_sha, lesson.lesson_id);
+  let judge;
+  try { judge = readJson(root, lesson.judge_receipt_path); }
+  catch { throw new Error(`LESSON_JUDGE_RECEIPT_INVALID:${lesson.lesson_id}`); }
+  assert(judge.status === 'PASS', `LESSON_JUDGE_NOT_PASS:${lesson.lesson_id}`);
+  assert(judge.head_sha === lesson.head_sha, `LESSON_JUDGE_HEAD_MISMATCH:${lesson.lesson_id}`);
+  assert(judge.writer === lesson.writer && judge.judge === lesson.judge, `LESSON_JUDGE_IDENTITY_MISMATCH:${lesson.lesson_id}`);
+  assert(judge.writer !== judge.judge, `LESSON_SELF_APPROVED:${lesson.lesson_id}`);
+  assert(judge.chief_decision === 'APPROVED', `LESSON_JUDGE_WITHOUT_CHIEF_APPROVAL:${lesson.lesson_id}`);
+}
+
+export function validateLessonLedger(content, root = null) {
+  const result = { approved: [], candidates: [], rejected: [] };
   const ids = new Set();
-  const lines = content.split(/\r?\n/).filter((line) => line.trim());
-  for (const [index, line] of lines.entries()) {
+  for (const [index, line] of content.split(/\r?\n/).filter((item) => item.trim()).entries()) {
     let lesson;
     try { lesson = JSON.parse(line); }
     catch { throw new Error(`LESSON_JSON_INVALID:${index + 1}`); }
@@ -184,17 +228,19 @@ export function validateLessonLedger(content) {
     if (lesson.status === 'APPROVED') {
       assert(lesson.chief_decision === 'APPROVED', `LESSON_WITHOUT_CHIEF_APPROVAL:${lesson.lesson_id}`);
       assert(!lesson.judge.startsWith('PENDING_'), `LESSON_WITHOUT_JUDGE:${lesson.lesson_id}`);
-      approved.push(lesson);
+      assert(root, `LESSON_ROOT_REQUIRED:${lesson.lesson_id}`);
+      validateApprovedLessonEvidence(root, lesson);
+      result.approved.push(lesson);
     } else if (lesson.status === 'CANDIDATE') {
       assert(lesson.chief_decision === 'PENDING', `LESSON_CANDIDATE_ALREADY_PROMOTED:${lesson.lesson_id}`);
-      candidates.push(lesson);
-    } else rejected.push(lesson);
+      result.candidates.push(lesson);
+    } else result.rejected.push(lesson);
   }
-  return { approved, candidates, rejected };
+  return result;
 }
 
-export function validateLessons(content) {
-  return validateLessonLedger(content).approved;
+export function validateLessons(content, root = null) {
+  return validateLessonLedger(content, root).approved;
 }
 
 export function validateManifest(root, manifest) {
@@ -212,10 +258,10 @@ export function validateManifest(root, manifest) {
   for (const [task, modules] of Object.entries(manifest.tasks)) {
     assert(Array.isArray(modules), `SCHOOL_TASK_MODULES_INVALID:${task}`);
     assert(modules.length > 0, `SCHOOL_TASK_WITHOUT_MODULE:${task}`);
-    for (const modulePath of modules) requiredPaths.add(modulePath);
+    modules.forEach((modulePath) => requiredPaths.add(modulePath));
   }
-  for (const relativePath of requiredPaths) assert(fs.existsSync(path.join(root, relativePath)), `SCHOOL_PATH_MISSING:${relativePath}`);
-
+  requiredPaths.forEach((relativePath) => requireFile(root, relativePath));
+  validateTaskModules(root, manifest);
   validateReportContract(root, manifest.output_contract, manifest.report_validator);
   validateCodeRabbit(root, manifest.review_adapter, manifest.output_contract);
   validatePrTemplate(root, manifest.pr_template);
@@ -223,47 +269,44 @@ export function validateManifest(root, manifest) {
 
   const artifacts = manifest.source_artifacts || {};
   for (const [key, value] of Object.entries(artifacts)) if (key.endsWith('_sha256')) assert(SHA256.test(value), `SOURCE_SHA_INVALID:${key}`);
-  assert(typeof artifacts.course_source_receipt_gzip_base64_path === 'string', 'COURSE_RECEIPT_PATH_INVALID');
-  assert(typeof artifacts.visual_source_svg_path === 'string', 'VISUAL_SOURCE_SVG_PATH_INVALID');
-  assert(typeof artifacts.visual_readme_path === 'string', 'VISUAL_README_PATH_INVALID');
-  assert(fs.existsSync(path.join(root, artifacts.course_source_receipt_gzip_base64_path)), `COURSE_RECEIPT_MISSING:${artifacts.course_source_receipt_gzip_base64_path}`);
-  assert(fs.existsSync(path.join(root, artifacts.visual_source_svg_path)), `VISUAL_SOURCE_MISSING:${artifacts.visual_source_svg_path}`);
-  assert(fs.existsSync(path.join(root, artifacts.visual_readme_path)), `VISUAL_README_MISSING:${artifacts.visual_readme_path}`);
-  assert(sha256File(root, artifacts.visual_source_svg_path) === artifacts.visual_source_svg_sha256, 'VISUAL_SOURCE_SHA_MISMATCH');
-  assert(sha256File(root, artifacts.visual_readme_path) === artifacts.visual_readme_source_sha256, 'VISUAL_README_SHA_MISMATCH');
+  for (const field of ['course_source_receipt_gzip_base64_path', 'visual_source_svg_path', 'visual_readme_path']) assert(typeof artifacts[field] === 'string', `SOURCE_PATH_INVALID:${field}`);
+  requireFile(root, artifacts.course_source_receipt_gzip_base64_path, 'COURSE_RECEIPT_MISSING');
+  requireFile(root, artifacts.visual_source_svg_path, 'VISUAL_SOURCE_MISSING');
+  requireFile(root, artifacts.visual_readme_path, 'VISUAL_README_MISSING');
+  const svgDigest = sha256File(root, artifacts.visual_source_svg_path);
+  const readmeDigest = sha256File(root, artifacts.visual_readme_path);
+  assert(svgDigest === artifacts.visual_source_svg_sha256, 'VISUAL_SOURCE_SHA_MISMATCH');
+  assert(readmeDigest === artifacts.visual_readme_source_sha256, 'VISUAL_README_SHA_MISMATCH');
+  assert(svgDigest === artifacts.svg_sha256, 'VISUAL_SOURCE_MEMBER_SHA_MISMATCH');
+  assert(readmeDigest === artifacts.readme_sha256, 'VISUAL_README_MEMBER_SHA_MISMATCH');
 
   const courseFrontmatter = parseFrontmatter(readText(root, manifest.course), manifest.course);
   assert(courseFrontmatter.source_sha256 === artifacts.course_txt_sha256, 'COURSE_DOCUMENT_SOURCE_SHA_MISMATCH');
-  const courseReceiptCompressed = Buffer.from(readText(root, artifacts.course_source_receipt_gzip_base64_path).replace(/\s+/g, ''), 'base64');
   let courseReceipt;
-  try { courseReceipt = zlib.gunzipSync(courseReceiptCompressed).toString('utf8'); }
+  try { courseReceipt = zlib.gunzipSync(Buffer.from(readText(root, artifacts.course_source_receipt_gzip_base64_path).replace(/\s+/g, ''), 'base64')).toString('utf8'); }
   catch { throw new Error('COURSE_RECEIPT_GZIP_INVALID'); }
   assert(courseReceipt.includes(`SHA256=${artifacts.course_txt_sha256}`), 'COURSE_RECEIPT_SHA_MISMATCH');
   assert(courseReceipt.includes('STATUS=RECEIPT_ONLY_NOT_BOOT_CONTEXT'), 'COURSE_RECEIPT_STATUS_INVALID');
 
-  assert(fs.existsSync(path.join(root, CORE_BOOT)), `SCHOOL_BOOT_MISSING:${CORE_BOOT}`);
-  const bootContent = readText(root, CORE_BOOT);
-  assert(bootContent.includes(manifest.core_skill), 'SCHOOL_NOT_REACHABLE_FROM_BOOT');
-  assert(bootContent.includes('scripts/lupa/agentic-school-loader.mjs'), 'SCHOOL_LOADER_NOT_REACHABLE_FROM_BOOT');
-
+  requireFile(root, CORE_BOOT, 'SCHOOL_BOOT_MISSING');
+  const boot = readText(root, CORE_BOOT);
+  assert(boot.includes(manifest.core_skill), 'SCHOOL_NOT_REACHABLE_FROM_BOOT');
+  assert(boot.includes('scripts/lupa/agentic-school-loader.mjs'), 'SCHOOL_LOADER_NOT_REACHABLE_FROM_BOOT');
   for (const adapter of manifest.adapters) {
-    assert(fs.existsSync(path.join(root, adapter)), `SCHOOL_ADAPTER_MISSING:${adapter}`);
+    requireFile(root, adapter, 'SCHOOL_ADAPTER_MISSING');
     const content = readText(root, adapter);
     for (const token of manifest.required_boot_tokens) assert(content.includes(token), `SCHOOL_ADAPTER_WITHOUT_BOOT:${adapter}:${token}`);
   }
 
-  const skillPaths = [
-    ...listFiles(root, '.agents/skills').filter((item) => item.endsWith('/SKILL.md')),
-    ...listFiles(root, '.claude/skills').filter((item) => item.endsWith('.md')),
-  ];
   const names = new Map();
+  const skillPaths = [...listFiles(root, '.agents/skills').filter((item) => item.endsWith('/SKILL.md')), ...listFiles(root, '.claude/skills').filter((item) => item.endsWith('.md'))];
   for (const skillPath of skillPaths) {
     const name = parseSkillName(readText(root, skillPath), skillPath);
     if (names.has(name)) throw new Error(`SCHOOL_SKILL_DUPLICATED:${name}:${names.get(name)}:${skillPath}`);
     names.set(name, skillPath);
   }
 
-  const lessons = validateLessonLedger(readText(root, manifest.lessons_ledger));
+  const lessons = validateLessonLedger(readText(root, manifest.lessons_ledger), root);
   return { requiredPaths: [...requiredPaths].sort(), lessons, skillNames: [...names.keys()].sort(), globalSurfaces: [manifest.review_adapter, manifest.pr_template, manifest.global_workflow] };
 }
 
@@ -273,7 +316,6 @@ export function loadSchool({ root, task, expectedHead = null, manifestPath = DEF
   const validation = validateManifest(root, manifest);
   assert(Object.hasOwn(manifest.tasks, task), `SCHOOL_TASK_UNKNOWN:${task}`);
   if (expectedHead !== null) assert(SHA40.test(expectedHead), 'SCHOOL_EXPECTED_HEAD_INVALID');
-
   const loadOrder = [...new Set([manifest.core_skill, manifest.output_contract, ...manifest.tasks[task]])];
   return {
     schema_version: 1,
@@ -284,8 +326,8 @@ export function loadSchool({ root, task, expectedHead = null, manifestPath = DEF
     load_order: loadOrder,
     output_contract: manifest.output_contract,
     report_validator: manifest.report_validator,
-    approved_lessons: validation.lessons.approved.map((lesson) => ({ lesson_id: lesson.lesson_id, trigger: lesson.trigger, rule: lesson.rule, head_sha: lesson.head_sha })),
-    candidate_lessons: validation.lessons.candidates.map((lesson) => ({ lesson_id: lesson.lesson_id, trigger: lesson.trigger, rule: lesson.rule, head_sha: lesson.head_sha })),
+    approved_lessons: validation.lessons.approved.map(({ lesson_id, trigger, rule, head_sha }) => ({ lesson_id, trigger, rule, head_sha })),
+    candidate_lessons: validation.lessons.candidates.map(({ lesson_id, trigger, rule, head_sha }) => ({ lesson_id, trigger, rule, head_sha })),
     rejected_lessons: validation.lessons.rejected.map((lesson) => lesson.lesson_id),
     source_artifacts: manifest.source_artifacts,
     checked_adapters: manifest.adapters,
@@ -302,10 +344,12 @@ function argValue(args, name, fallback = null) {
 function main() {
   const args = process.argv.slice(2);
   const root = path.resolve(argValue(args, '--repo-root', process.cwd()));
-  const task = argValue(args, '--task');
-  const expectedHead = argValue(args, '--expected-head');
-  const manifestPath = argValue(args, '--manifest', DEFAULT_MANIFEST);
-  const result = loadSchool({ root, task, expectedHead, manifestPath });
+  const result = loadSchool({
+    root,
+    task: argValue(args, '--task'),
+    expectedHead: argValue(args, '--expected-head'),
+    manifestPath: argValue(args, '--manifest', DEFAULT_MANIFEST),
+  });
   if (args.includes('--json')) console.log(JSON.stringify(result, null, 2));
   else {
     console.log(`BOOT_STATUS=${result.boot_status}`);
