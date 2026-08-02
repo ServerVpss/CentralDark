@@ -87,6 +87,11 @@ AUTORIA_DO_PADRÃO=SEGREDO/CHEFE
 
 Liste os testes frescos e o resultado preso ao HEAD atual.
 
+## Ações sensíveis
+
+- [ ] Não houve merge, deploy, restart, exclusão, force-push, alteração de VPS ou mudança em produção.
+- [ ] Qualquer ação sensível futura aguarda autorização explícita do SEGREDO/CHEFE para o alvo exato.
+
 ## Revisão
 
 - [ ] Verifiquei comentários de agentes no PR antes do merge.
