@@ -113,19 +113,23 @@ export function validateManifest(root, manifest) {
   for (const [key, value] of Object.entries(artifacts)) {
     if (key.endsWith('_sha256')) assert(SHA256.test(value), `SOURCE_SHA_INVALID:${key}`);
   }
-  assert(typeof artifacts.course_txt_gzip_base64_path === 'string', 'COURSE_SOURCE_PATH_INVALID');
+  assert(typeof artifacts.course_source_receipt_gzip_base64_path === 'string', 'COURSE_RECEIPT_PATH_INVALID');
   assert(typeof artifacts.visual_source_svg_path === 'string', 'VISUAL_SOURCE_SVG_PATH_INVALID');
   assert(typeof artifacts.visual_readme_path === 'string', 'VISUAL_README_PATH_INVALID');
-  assert(fs.existsSync(path.join(root, artifacts.course_txt_gzip_base64_path)), `COURSE_SOURCE_MISSING:${artifacts.course_txt_gzip_base64_path}`);
+  assert(fs.existsSync(path.join(root, artifacts.course_source_receipt_gzip_base64_path)), `COURSE_RECEIPT_MISSING:${artifacts.course_source_receipt_gzip_base64_path}`);
   assert(fs.existsSync(path.join(root, artifacts.visual_source_svg_path)), `VISUAL_SOURCE_MISSING:${artifacts.visual_source_svg_path}`);
   assert(fs.existsSync(path.join(root, artifacts.visual_readme_path)), `VISUAL_README_MISSING:${artifacts.visual_readme_path}`);
   assert(sha256File(root, artifacts.visual_source_svg_path) === artifacts.visual_source_svg_sha256, 'VISUAL_SOURCE_SHA_MISMATCH');
   assert(sha256File(root, artifacts.visual_readme_path) === artifacts.visual_readme_source_sha256, 'VISUAL_README_SHA_MISMATCH');
-  const courseCompressed = Buffer.from(readText(root, artifacts.course_txt_gzip_base64_path).replace(/\s+/g, ''), 'base64');
-  let courseDecoded;
-  try { courseDecoded = zlib.gunzipSync(courseCompressed); }
-  catch { throw new Error('COURSE_SOURCE_GZIP_INVALID'); }
-  assert(crypto.createHash('sha256').update(courseDecoded).digest('hex') === artifacts.course_txt_sha256, 'COURSE_SOURCE_SHA_MISMATCH');
+
+  const courseDocument = readText(root, manifest.course);
+  assert(courseDocument.includes(`source_sha256: "${artifacts.course_txt_sha256}"`), 'COURSE_DOCUMENT_SOURCE_SHA_MISMATCH');
+  const courseReceiptCompressed = Buffer.from(readText(root, artifacts.course_source_receipt_gzip_base64_path).replace(/\s+/g, ''), 'base64');
+  let courseReceipt;
+  try { courseReceipt = zlib.gunzipSync(courseReceiptCompressed).toString('utf8'); }
+  catch { throw new Error('COURSE_RECEIPT_GZIP_INVALID'); }
+  assert(courseReceipt.includes(`SHA256=${artifacts.course_txt_sha256}`), 'COURSE_RECEIPT_SHA_MISMATCH');
+  assert(courseReceipt.includes('STATUS=RECEIPT_ONLY_NOT_BOOT_CONTEXT'), 'COURSE_RECEIPT_STATUS_INVALID');
 
   assert(fs.existsSync(path.join(root, CORE_BOOT)), `SCHOOL_BOOT_MISSING:${CORE_BOOT}`);
   const bootContent = readText(root, CORE_BOOT);
