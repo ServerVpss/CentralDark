@@ -1,14 +1,14 @@
 name: porta-de-entrada
 
 # Protege a porta universal, a escola agentic, o contrato de relato e o mapa canônico.
-# Nenhum adaptador guarda cópia manual da governança e nenhum estado incerto vira verde.
+# Roda em todo commit de qualquer branch, todo PR e merge queue.
 
 on:
   pull_request:
-    branches: [main]
-    types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
+    types: [opened, reopened, synchronize, ready_for_review, converted_to_draft, edited, labeled, unlabeled]
   push:
-    branches: [main]
+    branches: ["**"]
+  merge_group:
   workflow_dispatch:
 
 permissions:
@@ -51,6 +51,14 @@ jobs:
           scripts/lupa/agentic-loop-progress.test.mjs
           scripts/lupa/validar-relato-pivete.test.mjs
 
+      - name: Validar corpo de todo PR no padrão Pivete
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BODY: ${{ github.event.pull_request.body || '' }}
+        run: |
+          printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.md"
+          node scripts/lupa/validar-relato-pivete.mjs --mode pr --input "$RUNNER_TEMP/pr-body.md"
+
       - name: Testar fontes e pacote visual
         env:
           PYTHONPATH: scripts/lupa
@@ -65,10 +73,11 @@ jobs:
       - name: Validar operação da escola no HEAD exato
         run: node scripts/lupa/agentic-loop-progress.mjs --expected-head "$TARGET_HEAD_SHA" --require-operational
 
-      - name: Validar mapa e contratos do repositório inteiro
+      - name: Validar mapa e autorização no contexto do PR
+        if: github.event_name == 'pull_request'
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
         run: |
           set -euo pipefail
@@ -89,10 +98,12 @@ jobs:
           PIVETE_APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'permito-pivete') || contains(github.event.pull_request.body || '', 'PERMITO PIVETE') }}
         run: |
           set -euo pipefail
-          node apps/modulos/mapeamento/core/validar-mapa.mjs \
-            --repo-root "$GITHUB_WORKSPACE" \
-            --base-sha "$BASE_SHA" \
-            --head-sha "$HEAD_SHA" \
-            --approved "$PIVETE_APPROVED"
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            node apps/modulos/mapeamento/core/validar-mapa.mjs \
+              --repo-root "$GITHUB_WORKSPACE" \
+              --base-sha "$BASE_SHA" \
+              --head-sha "$HEAD_SHA" \
+              --approved "$PIVETE_APPROVED"
+          fi
           node scripts/lupa/validar-porta-de-entrada.mjs --json
           node scripts/lupa/agentic-loop-progress.mjs --expected-head "$TARGET_HEAD_SHA" --json
