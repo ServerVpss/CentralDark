@@ -41,7 +41,7 @@ Obrigatório quando houver mudança técnica, erro, auditoria, porcentagem, bloq
 
 ### MODO_CURTO
 
-Permitido somente para atualização sem nova mutação e sem novo finding. Deve conter veredito, progresso, prova, próximo gate e ação do CHEFE.
+Permitido somente para atualização sem nova mutação e sem novo finding. Deve conter veredito, gates estruturados, progresso, prova, emissor/papel, próximo gate e ação do CHEFE.
 
 Não usar o modo curto para esconder causa, falha, risco ou pendência.
 
@@ -57,6 +57,7 @@ Não usar o modo curto para esconder causa, falha, risco ou pendência.
 
 📊 PROGRESSO=
 ESCOPO_MEDIDO=<o que o percentual mede>
+GATES_MEDIDOS_JSON=[{"id":"GATE","status":"PASS|PARTIAL|FAIL|BLOCKED|PENDING|UNKNOWN|SKIPPED|TIMEOUT","pontos":100|50|0,"prova":"evidência curta"}]
 PERCENTUAL_MEDIDO=<pontos>/<total>=<n>%
 ESTIMATIVA=<NÃO_CALCULADA | n%>
 ESCOPO_DA_ESTIMATIVA=<NÃO_APLICÁVEL | escopo explícito>
@@ -103,6 +104,8 @@ CHECKS=
 TESTES=
 RECEIPT=
 FONTE_DA_PROVA=<GitHub | Casa | VPS | arquivo fornecido>
+EMISSOR=<nome do agente, bot ou motor>
+PAPEL_DO_EMISSOR=WRITER | REVIEWER | JUDGE | COORDINATOR | READ_ONLY
 
 🧭 FLUXO VISUAL=
 DIAGRAMA_OBRIGATÓRIO=SIM | NÃO
@@ -119,7 +122,7 @@ MOTIVO=<por que o diagrama é necessário ou não>
 <NENHUM | um único comando completo que resolve o próximo movimento seguro>
 
 🧪 COLETA DO CHEFE=
-<NENHUMA | um único script completo, pronto para executar, que salva a saída em E:\CentralDark\Pivete\TEMP>
+<NENHUMA | um único script completo, read-only, pronto para executar, que salva a saída em E:\CentralDark\Pivete\TEMP>
 
 👑 AÇÃO DO CHEFE=
 NENHUMA | APROVAR | ESCOLHER ENTRE A/B | AUTORIZAR AÇÃO ESPECÍFICA | EXECUTAR COLETA
@@ -139,11 +142,13 @@ AUTORIA_DO_PADRÃO=SEGREDO/CHEFE
 
 ```text
 🎯 VEREDITO=
-📊 PROGRESSO=ESCOPO:<...>; MEDIDO:<pontos>/<total>=<n>%; SITUAÇÃO:<...>
-🔎 PROVA=PR/ISSUE:<...>; HEAD:<...>; CHECKS:<...>
+📊 PROGRESSO=ESCOPO:<...>; GATES_JSON:<JSON compacto>; MEDIDO:<pontos>/<total>=<n>%; SITUAÇÃO:<PASS|PARTIAL_COM_PROVA|BLOCKED|UNKNOWN>
+🔎 PROVA=PR/ISSUE:<...>; HEAD:<...>; CHECKS:<...>; EMISSOR:<...>; PAPEL:<WRITER|REVIEWER|JUDGE|COORDINATOR|READ_ONLY>
 ➡️ PRÓXIMO GATE=
 👑 AÇÃO DO CHEFE=
 ```
+
+No modo curto, `BLOCKED` exige que o veredito ou o próximo gate identifique o bloqueio. `PASS` exige 100% dos gates estruturados.
 
 ## 5. Regra do fluxo visual
 
@@ -178,15 +183,23 @@ Nunca coloque segredo, token, host privado, cookie, credencial ou dado pessoal n
 
 ## 6. Regras da porcentagem
 
-1. `PERCENTUAL_MEDIDO` exige numerador, denominador, fórmula correta e escopo explícito.
-2. `UNKNOWN`, `SKIPPED`, `PENDING`, `TIMEOUT`, silêncio e ausência de prova valem zero.
-3. `PARTIAL` só vale pontuação parcial quando a prova parcial estiver identificada.
-4. Estimativa nunca entra no numerador do progresso medido.
+1. `GATES_MEDIDOS_JSON` é a fonte do numerador e do denominador; cada gate tem ID único, estado, pontos e prova.
+2. `PASS=100`, `PARTIAL=50`; `FAIL`, `BLOCKED`, `PENDING`, `UNKNOWN`, `SKIPPED`, `TIMEOUT`, silêncio e ausência de prova valem zero.
+3. `PERCENTUAL_MEDIDO` deve bater exatamente com a soma dos gates estruturados.
+4. Estimativa nunca entra em `GATES_MEDIDOS_JSON`, no `ESCOPO_MEDIDO` ou no numerador do progresso medido.
 5. `COMPLETO=SIM` exige 100% de todos os gates declarados no escopo.
-6. `OPERACIONAL=SIM` pode coexistir com `COMPLETO=NÃO` quando apenas gates opcionais permanecem parciais.
-7. Não dizer “faltam 70%” sem declarar de qual produto, MVP, fase ou conjunto de gates.
+6. `SITUAÇÃO=BLOCKED|UNKNOWN` exige `OPERACIONAL=NÃO`.
+7. `OPERACIONAL=SIM` pode coexistir com `COMPLETO=NÃO` quando apenas gates opcionais permanecem parciais e isso está provado fora do modo curto.
+8. Não dizer “faltam 70%” sem declarar de qual produto, MVP, fase ou conjunto de gates.
 
-## 7. Regra do comando que resolve
+## 7. Autoridade e papel do emissor
+
+- `AUTORIA_DO_PADRÃO=SEGREDO/CHEFE` aparece uma única vez e nunca pode ser escondida em comentário ou exemplo.
+- `EMISSOR` e `PAPEL_DO_EMISSOR` aparecem uma única vez no relato completo.
+- Reviewer, Judge e READ_ONLY não assumem Writer ou Promotor no próprio relato.
+- Nome de modelo não concede autoridade.
+
+## 8. Regra do comando que resolve
 
 Quando o próximo gate puder ser executado pelo agente com as ferramentas disponíveis:
 
@@ -197,13 +210,13 @@ Quando o próximo gate puder ser executado pelo agente com as ferramentas dispon
 - prenda a operação ao repositório, branch, HEAD e alvo exatos;
 - preserve stop gates de merge, produção, segredo e ação destrutiva.
 
-## 8. Regra da coleta humana cirúrgica
+## 9. Regra da coleta humana cirúrgica
 
 Somente pedir ajuda do CHEFE quando faltar acesso real à Casa, VPS, interface, dispositivo ou autorização humana.
 
 Nesse caso, entregar **um único script completo** que:
 
-1. seja read-only por padrão;
+1. seja read-only por padrão e declare isso no bloco;
 2. tenha caminhos e comandos definidos;
 3. não imprima `.env`, token, cookie, senha, chave ou conteúdo pessoal;
 4. falhe fechado e mostre o erro útil;
@@ -213,15 +226,17 @@ Nesse caso, entregar **um único script completo** que:
 8. não crie vários scripts se um único coletor resolve;
 9. não altere VPS, PM2, Docker, serviço, firewall ou produção sem autorização explícita para o alvo exato.
 
-## 9. Ordem obrigatória para matéria técnica
+O validador aceita `NENHUMA` ou um único bloco de código que prove modo read-only e caminho TEMP. Operação protegida sem autorização explícita torna o relato inválido.
+
+## 10. Ordem obrigatória para matéria técnica
 
 ```text
 VEREDITO
-→ PROGRESSO
+→ PROGRESSO E GATES ESTRUTURADOS
 → PRONTO/PARCIAL/FALTA
 → BLOQUEADORES
 → DIAGNÓSTICO TÉCNICO
-→ PROVA
+→ PROVA E PAPEL DO EMISSOR
 → FLUXO VISUAL
 → PAPO RETO DO PIVETE
 → PRÓXIMO GATE
@@ -232,7 +247,7 @@ VEREDITO
 
 Em review técnico, o diagnóstico vem antes do papo reto. Em conversa curta não técnica, o contrato completo não é exigido.
 
-## 10. Aplicação por superfície
+## 11. Aplicação por superfície
 
 - **Todo commit/push:** o workflow global executa escola, contrato, adaptadores e testes no HEAD exato.
 - **Todo PR:** o template já nasce no padrão e o CI valida o corpo do PR.
@@ -241,12 +256,12 @@ Em review técnico, o diagnóstico vem antes do papo reto. Em conversa curta nã
 - **Claude/Codex/Gemini/Cursor/Windsurf/Copilot:** o boot da escola carrega este contrato antes de relatar resultado técnico.
 - **Painel/Telegram/voz:** podem renderizar os mesmos campos em UI diferente, sem mudar semântica.
 
-## 11. Proibições
+## 12. Proibições
 
 - não esconder finding atrás de texto bonito;
 - não misturar estimativa com prova;
 - não transformar ausência de review em aprovação;
-- não usar porcentagem sem denominador;
+- não usar porcentagem sem gates estruturados;
 - não devolver ao CHEFE tarefa que o agente consegue medir diretamente;
 - não despejar log inteiro quando três linhas identificam a causa;
-- não criar padrão paralelo em comentário, prompt ou documento novo.
+- não criar padrão paralelo em comentário, prompt, módulo ou documento novo.
