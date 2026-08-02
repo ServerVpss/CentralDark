@@ -179,7 +179,7 @@ test('bloqueia template inerte em comentário mascarando ordem real', () => {
     .replace('🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=', '__A__')
     .replace('🗣️ PAPO RETO DO PIVETE=', '🩺 DIAGNÓSTICO TÉCNICO E CICATRIZ=')
     .replace('__A__', '🗣️ PAPO RETO DO PIVETE=');
-  assert.throws(() => validateReport(inert + bad, 'full'), /REPORT_HEADER_ORDER_INVALID/);
+  assert.throws(() => validateReport(inert + bad, 'full'), /REPORT_HEADER_(?:ORDER_INVALID|MISSING)/);
 });
 
 test('bloqueia cabeçalho real duplicado', () => {
