@@ -73,11 +73,11 @@ O_QUE_O_CHEFE_PRECISA_FAZER=
 
 Sem autorização aplicável ao alvo exato, não fazer merge, Ready for Review, deploy, restart, produção, exclusão, force-push, alteração direta da `main` nem promoção de lição global.
 
-## Módulos
+## Módulos e fontes
 
-- Curso operacional condensado: `references/ESCOLA-OPERACIONAL-DE-SKILLS.md`.
-- Fonte integral fornecida pelo CHEFE, preservada sem carregar em toda tarefa: `references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64`.
-- Refatoração crítica sem regressão: `references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md`.
+- Curso operacional condensado e executável: `references/ESCOLA-OPERACIONAL-DE-SKILLS.md`.
+- Receipt da fonte integral fornecida pelo CHEFE: `references/SOURCE-CURSO-SKILLS-ORIGINAL.txt.gz.base64`; ele contém o SHA-256 da fonte externa, não o curso inteiro e não entra no contexto de boot.
+- Refatoração crítica sem regressão conhecida: `references/REFATORACAO-CRITICA-ZERO-REGRESSAO.md`.
 - Manifesto de roteamento: `references/school.manifest.json`.
 - Aprendizados candidatos/aprovados: `references/learning-ledger.jsonl`. Somente `APPROVED` entra no boot.
 - Fonte visual editável e LEIA-ME: `docs/ARQUITETURA/artefatos/CENTRALDARK-AGENTIC-LOOP-4K/`; o ZIP recebido é validado por hash e membros com `scripts/lupa/validar_agentic_visual_package.py --source-zip <arquivo>`.
