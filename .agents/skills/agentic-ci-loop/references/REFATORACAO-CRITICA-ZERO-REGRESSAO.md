@@ -77,9 +77,10 @@ Execute somente itens aplicáveis, mas declare os não aplicáveis com motivo.
 
 O mesmo HEAD deve ter:
 
-- suite local fresca;
+- suíte local fresca;
 - lint/format/typecheck/build aplicáveis;
 - CI remoto;
+- recibo fresco e válido da Meta Lupa;
 - revisão adversarial independente;
 - nenhum finding P0/P1 aberto;
 - rollback executável ou restauração comprovada.
@@ -101,17 +102,12 @@ RISCO_RESIDUAL=
 
 Sem cicatriz, o sistema pode repetir o erro e a escola não aprendeu.
 
-## Saída obrigatória
+## Saída
+
+Este módulo **não define formato de saída próprio**. Registre os dados específicos da cicatriz nos campos `DIAGNÓSTICO TÉCNICO E CICATRIZ`, `PROVA`, `GATES_MEDIDOS_JSON` e `PRÓXIMO GATE` da fonte única:
 
 ```text
-SITUAÇÃO=
-ERRO=
-CAUSA=
-CORREÇÃO=
-TESTE=
-CICATRIZ=
-PERCENTUAL=
-PENDÊNCIAS=
-ANTECIPAÇÃO=
-PRÓXIMO_MOVIMENTO=
+.agents/skills/agentic-ci-loop/references/CONTRATO-UNIFICADO-RELATO-PIVETE.md
 ```
+
+Qualquer bloco `Saída obrigatória` diferente do contrato unificado é uma definição concorrente e deve deixar a escola vermelha.
