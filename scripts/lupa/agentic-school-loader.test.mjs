@@ -10,6 +10,7 @@ const adapters = [
   'AGENTS.md', 'CLAUDE.md', 'CODEX.md', 'GEMINI.md', '.github/copilot-instructions.md',
   '.cursor/rules/centraldark-governanca.mdc', '.windsurfrules', '.claude/rules/00-centraldark-boot-universal.md',
 ];
+const courseSha = '592b0075b27d4a160e015654b40f0813a965f5f84668a97e9535097ac8103521';
 
 function write(root, relative, content) {
   const target = path.join(root, relative);
@@ -23,16 +24,17 @@ function fixture() {
   const course = '.agents/skills/agentic-ci-loop/references/ESCOLA.md';
   const zero = '.agents/skills/agentic-ci-loop/references/ZERO.md';
   const ledger = '.agents/skills/agentic-ci-loop/references/learning-ledger.jsonl';
-  const source = '.agents/skills/agentic-ci-loop/references/SOURCE.txt.gz.base64';
+  const receipt = '.agents/skills/agentic-ci-loop/references/SOURCE.txt.gz.base64';
   const visualSvg = 'docs/ARQUITETURA/artefatos/visual.svg';
   const visualReadme = 'docs/ARQUITETURA/artefatos/LEIA-ME.txt';
   write(root, 'LEIA-ME-IA.md', `${skill}\nscripts/lupa/agentic-school-loader.mjs\n`);
   for (const adapter of adapters) write(root, adapter, 'LEIA-ME-IA.md\n');
   write(root, skill, '---\nname: agentic-ci-loop\ndescription: test\n---\n');
   write(root, '.agents/skills/meta-lupa/SKILL.md', '---\nname: meta-lupa\ndescription: test\n---\n');
-  write(root, course, '# Escola\n');
+  write(root, course, `---\nsource_sha256: "${courseSha}"\n---\n# Escola\n`);
   write(root, zero, '# Zero\n');
-  write(root, source, zlib.gzipSync(Buffer.from('curso fonte'), { mtime: 0 }).toString('base64'));
+  const receiptText = `SOURCE_EXTERNAL_ATTACHMENT\nSHA256=${courseSha}\nSTATUS=RECEIPT_ONLY_NOT_BOOT_CONTEXT\n`;
+  write(root, receipt, zlib.gzipSync(Buffer.from(receiptText), { mtime: 0 }).toString('base64'));
   write(root, visualSvg, '<svg/>');
   write(root, visualReadme, 'visual');
   write(root, ledger, JSON.stringify({
@@ -56,8 +58,9 @@ function fixture() {
     course,
     lessons_ledger: ledger,
     source_artifacts: {
-      course_txt_gzip_base64_path: source,
-      course_txt_sha256: '592b0075b27d4a160e015654b40f0813a965f5f84668a97e9535097ac8103521',
+      course_source_receipt_gzip_base64_path: receipt,
+      course_source_storage: 'EXTERNAL_ATTACHMENT_VALIDATED_CONDENSED_IN_REPO',
+      course_txt_sha256: courseSha,
       visual_source_svg_path: visualSvg,
       visual_source_svg_sha256: 'd4dc56669143034f31aa309635d4113d9ad76a02b1739da22c965ed2049be9e6',
       visual_readme_path: visualReadme,
@@ -106,6 +109,15 @@ test('bloqueia skill duplicada', () => {
   try {
     write(fx.root, '.claude/skills/copia.md', '---\nname: agentic-ci-loop\ndescription: copia\n---\n');
     assert.throws(() => loadSchool({ root: fx.root, task: 'debug' }), /SCHOOL_SKILL_DUPLICATED/);
+  } finally { cleanup(fx.root); }
+});
+
+test('bloqueia receipt com SHA diferente da fonte declarada', () => {
+  const fx = fixture();
+  try {
+    const bad = zlib.gzipSync(Buffer.from(`SOURCE_EXTERNAL_ATTACHMENT\nSHA256=${'c'.repeat(64)}\nSTATUS=RECEIPT_ONLY_NOT_BOOT_CONTEXT\n`), { mtime: 0 }).toString('base64');
+    write(fx.root, '.agents/skills/agentic-ci-loop/references/SOURCE.txt.gz.base64', bad);
+    assert.throws(() => loadSchool({ root: fx.root, task: 'debug' }), /COURSE_RECEIPT_SHA_MISMATCH/);
   } finally { cleanup(fx.root); }
 });
 
