@@ -1,7 +1,7 @@
 ---
 title: "Contrato Unificado de Relato Pivete"
 status: "CANDIDATO_CANONICO_NO_PR_611"
-scope: "comentários de PR, reviews, issues, relatórios de agentes e respostas técnicas"
+scope: "todo commit, push, PR, issue, review, relatório de agente e resposta técnica"
 authority: "SEGREDO/CHEFE"
 source_prs: [499, 554, 585, 611]
 versioning_rule: "evoluir neste arquivo; não criar V2/V3/FINAL/COPY"
@@ -16,13 +16,28 @@ Este contrato combina os pontos maduros já provados no repositório:
 - PR #585: evidência, receipt, Writer/Judge e estado preso ao HEAD;
 - PR #611: boot universal, porcentagem fail-closed e escola carregada por demanda.
 
-O padrão visual observado no CodeRabbit é aproveitado por ser fácil de ler no celular: veredito primeiro, blocos curtos, caminho visual e conclusão objetiva. A correção obrigatória é separar **progresso medido** de **estimativa**.
+O padrão visual observado no CodeRabbit é aproveitado por ser fácil de ler no celular: veredito primeiro, blocos curtos, resumo por camadas, checagens antes de juntar e diagrama de sequência. A correção obrigatória é separar **progresso medido** de **estimativa** e nunca trocar prova por aparência.
 
-## 1. Escolha do modo
+## 1. Alcance permanente
+
+Este padrão não pertence ao PR #611. Depois de entrar na `main`, ele governa qualquer commit, push, PR, issue, review, relatório técnico e agente alcançado pela escola.
+
+```text
+ADAPTADOR DA IA
+→ LEIA-ME-IA.md
+→ AGENTIC CI LOOP
+→ CONTRATO UNIFICADO
+→ VALIDADOR
+→ CI EM TODO COMMIT/PR
+```
+
+Nenhum adaptador copia o contrato. Todos apontam para esta fonte única.
+
+## 2. Escolha do modo
 
 ### MODO_COMPLETO
 
-Obrigatório quando houver mudança técnica, erro, auditoria, porcentagem, bloqueio, decisão, handoff, fechamento de missão ou pedido de estado geral.
+Obrigatório quando houver mudança técnica, erro, auditoria, porcentagem, bloqueio, decisão, handoff, fechamento de missão, pedido de estado geral ou corpo de PR.
 
 ### MODO_CURTO
 
@@ -30,7 +45,7 @@ Permitido somente para atualização sem nova mutação e sem novo finding. Deve
 
 Não usar o modo curto para esconder causa, falha, risco ou pendência.
 
-## 2. Modelo completo obrigatório
+## 3. Modelo completo obrigatório
 
 ```text
 ╔════════════════════════════════════════════╗
@@ -89,6 +104,11 @@ TESTES=
 RECEIPT=
 FONTE_DA_PROVA=<GitHub | Casa | VPS | arquivo fornecido>
 
+🧭 FLUXO VISUAL=
+DIAGRAMA_OBRIGATÓRIO=SIM | NÃO
+MOTIVO=<por que o diagrama é necessário ou não>
+<bloco Mermaid sequenceDiagram em português | NÃO_APLICÁVEL>
+
 🗣️ PAPO RETO DO PIVETE=
 <explicação simples: o que aconteceu, por que importa e onde está o fio>
 
@@ -115,7 +135,7 @@ NENHUMA | APROVAR | ESCOLHER ENTRE A/B | AUTORIZAR AÇÃO ESPECÍFICA | EXECUTAR
 AUTORIA_DO_PADRÃO=SEGREDO/CHEFE
 ```
 
-## 3. Modelo curto obrigatório
+## 4. Modelo curto obrigatório
 
 ```text
 🎯 VEREDITO=
@@ -125,7 +145,38 @@ AUTORIA_DO_PADRÃO=SEGREDO/CHEFE
 👑 AÇÃO DO CHEFE=
 ```
 
-## 4. Regras da porcentagem
+## 5. Regra do fluxo visual
+
+O diagrama de sequência é obrigatório quando houver três ou mais participantes, automação, CI/CD, handoff, Writer/Judge, integração, fila, retry, callback, runtime, Casa, VPS ou mudança de estado em várias etapas.
+
+Use Mermaid e escreva participantes, setas e mensagens em português:
+
+```mermaid
+sequenceDiagram
+  participant Chefe as SEGREDO/CHEFE
+  participant Agente as IA/Agente
+  participant GitHub as GitHub/PR
+  participant CI as CI/CD
+  participant Juiz as Judge
+  Agente->>GitHub: publica a mudança no HEAD exato
+  GitHub->>CI: dispara os gates determinísticos
+  CI-->>Agente: devolve PASS ou erro reproduzível
+  Agente->>GitHub: corrige a causa e publica a cicatriz
+  GitHub->>Juiz: solicita revisão independente
+  Juiz-->>Chefe: entrega veredito e próximo gate
+```
+
+Quando a mudança for local, estática e sem fluxo temporal, use:
+
+```text
+DIAGRAMA_OBRIGATÓRIO=NÃO
+MOTIVO=mudança local sem interação entre componentes
+NÃO_APLICÁVEL
+```
+
+Nunca coloque segredo, token, host privado, cookie, credencial ou dado pessoal no diagrama.
+
+## 6. Regras da porcentagem
 
 1. `PERCENTUAL_MEDIDO` exige numerador, denominador, fórmula correta e escopo explícito.
 2. `UNKNOWN`, `SKIPPED`, `PENDING`, `TIMEOUT`, silêncio e ausência de prova valem zero.
@@ -135,7 +186,7 @@ AUTORIA_DO_PADRÃO=SEGREDO/CHEFE
 6. `OPERACIONAL=SIM` pode coexistir com `COMPLETO=NÃO` quando apenas gates opcionais permanecem parciais.
 7. Não dizer “faltam 70%” sem declarar de qual produto, MVP, fase ou conjunto de gates.
 
-## 5. Regra do comando que resolve
+## 7. Regra do comando que resolve
 
 Quando o próximo gate puder ser executado pelo agente com as ferramentas disponíveis:
 
@@ -146,7 +197,7 @@ Quando o próximo gate puder ser executado pelo agente com as ferramentas dispon
 - prenda a operação ao repositório, branch, HEAD e alvo exatos;
 - preserve stop gates de merge, produção, segredo e ação destrutiva.
 
-## 6. Regra da coleta humana cirúrgica
+## 8. Regra da coleta humana cirúrgica
 
 Somente pedir ajuda do CHEFE quando faltar acesso real à Casa, VPS, interface, dispositivo ou autorização humana.
 
@@ -162,7 +213,7 @@ Nesse caso, entregar **um único script completo** que:
 8. não crie vários scripts se um único coletor resolve;
 9. não altere VPS, PM2, Docker, serviço, firewall ou produção sem autorização explícita para o alvo exato.
 
-## 7. Ordem obrigatória para matéria técnica
+## 9. Ordem obrigatória para matéria técnica
 
 ```text
 VEREDITO
@@ -171,6 +222,7 @@ VEREDITO
 → BLOQUEADORES
 → DIAGNÓSTICO TÉCNICO
 → PROVA
+→ FLUXO VISUAL
 → PAPO RETO DO PIVETE
 → PRÓXIMO GATE
 → COMANDO/COLETA
@@ -180,14 +232,16 @@ VEREDITO
 
 Em review técnico, o diagnóstico vem antes do papo reto. Em conversa curta não técnica, o contrato completo não é exigido.
 
-## 8. Aplicação por superfície
+## 10. Aplicação por superfície
 
+- **Todo commit/push:** o workflow global executa escola, contrato, adaptadores e testes no HEAD exato.
+- **Todo PR:** o template já nasce no padrão e o CI valida o corpo do PR.
 - **PR/Issue:** usar modo completo para estado, auditoria, fechamento e porcentagem; modo curto para atualização sem mutação.
-- **CodeRabbit/Codex:** pedir facts/findings primeiro e, no fechamento, exigir o modelo curto ou completo conforme o caso.
-- **Claude/Codex/Gemini/Cursor/Windsurf/Copilot:** o boot da escola deve carregar este contrato antes de relatar resultado técnico.
+- **CodeRabbit/Codex:** facts/findings primeiro; fechamento no modelo curto ou completo; diagrama em PT-BR quando houver fluxo multi-etapa.
+- **Claude/Codex/Gemini/Cursor/Windsurf/Copilot:** o boot da escola carrega este contrato antes de relatar resultado técnico.
 - **Painel/Telegram/voz:** podem renderizar os mesmos campos em UI diferente, sem mudar semântica.
 
-## 9. Proibições
+## 11. Proibições
 
 - não esconder finding atrás de texto bonito;
 - não misturar estimativa com prova;
